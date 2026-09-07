@@ -1,0 +1,14 @@
+# Deterministic GPT-4.1 monitoring, not the official o4-mini benchmark score.
+eval:
+  defaults:
+    n_samples_per_eval_prompt: 1
+    temperature: 0.0
+    top_p: 1.0
+    top_k: 1
+    max_response_len: 4096
+  datasets:
+    - name: online-mind2web-monitor
+      path: openwebrl/data/eval/online-mind2web.jsonl
+      input_key: task_name
+      metadata_key: metadata
+      custom_generate_function_path: openwebrl.eval_monitor.generate

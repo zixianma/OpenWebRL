@@ -21,12 +21,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
-    parser.add_argument('--profile', choices=['small', 'paper'], default='small')
+    parser.add_argument('--profile', choices=['small', 'paper', 'reference'], default='small')
     parser.add_argument('--rollouts', type=int)
     parser.add_argument('--steps', type=int, default=15)
     parser.add_argument('--wandb-mode', choices=['online', 'offline'], default='online')
     args = parser.parse_args()
-    paper = args.profile == 'paper'
+    paper = args.profile in {'paper', 'reference'}
+    reference = args.profile == 'reference'
+    if reference and not (REPO / 'reference_manifest.json').is_file():
+        raise SystemExit('Use scripts/prepare_reference_baseline.py to isolate the reference recipe first.')
     args.rollouts = (90 if paper else 30) if args.rollouts is None else args.rollouts
     groups, batch, context, concurrency = (48, 256, 32768, 16) if paper else (4, 16, 16384, 4)
     if args.rollouts < 1 or args.steps < 1:
@@ -92,6 +95,13 @@ def main():
                '--eval-prompt-data', 'webvoyager-val' if paper else 'webvoyager-smoke',
                str(REPO / 'openwebrl/data/webvoyager_val.parquet') + ('' if paper else '@[:8]'),
                '--n-samples-per-eval-prompt', '1', '--eval-temperature', '0', '--eval-top-p', '1', '--eval-top-k', '1', '--eval-max-response-len', '1024']
+    if reference:
+        # Replace the small-run eval block with full Online-Mind2Web monitoring.
+        command = command[:command.index('--eval-interval')]
+        command += ['--eval-interval', '10', '--eval-config', str(REPO / 'openwebrl/online_mind2web_monitor.yaml'),
+                    '--rollout-health-check-first-wait', '180', '--use-fault-tolerance']
+        env['SLIME_ADAPTIVE_QUERY_BLACKLIST_PATH'] = str(REPO / 'reference_empty_blacklist.txt')
+        env['SLIME_BROWSER_QUERY_BLACKLIST_PATH'] = env['SLIME_ADAPTIVE_QUERY_BLACKLIST_PATH']
     if env.get('WANDB_ENTITY'):
         command += ['--wandb-team', env['WANDB_ENTITY']]
     manifest = {'kind': f'real-web {args.profile} GRPO baseline', 'job_id': job, 'gpus': 2,
@@ -109,6 +119,20 @@ def main():
                     'Checkpoint every iteration to preserve progress within the current allocation',
                     'Online validation uses released 70-task WebVoyager split at training step limit; not official benchmark evaluation',
                     'Only stage 1 (90 x 15) requested here; stage 2 is 50 x 30 after completion'] if paper else []}
+    if reference:
+        manifest['recipe'] = json.loads((REPO / 'reference_manifest.json').read_text())
+        manifest['evaluation'] = {'dataset': 'Online-Mind2Web', 'tasks': 300,
+            'interval': 10, 'initial': True, 'max_steps': 30, 'max_response_tokens': 4096,
+            'temperature': 0, 'judge': 'gpt-4.1', 'official_score': False}
+        manifest['paper_differences'] = [
+            'Two H200 GPUs, TP2, 16 local browsers; paper TP4 and 80-100 training sandboxes',
+            'Full activation recomputation and SDPA vision attention in our own runtime',
+            'Standard GPU optimizer rather than precision-aware CPU-offloaded launcher optimizer',
+            'SGLang CUDA graphs disabled, smaller KV allocation and prefill chunks',
+            'Synchronous checkpoint every iteration; bounded by existing allocation',
+            'Local browser request/exit behavior differs from Kubernetes',
+            'Online-Mind2Web deterministic GPT-4.1 monitoring, not official o4-mini score',
+            'Live websites and unpinned GPT-4.1 endpoint may differ from paper dates']
     print(json.dumps(manifest, indent=2), flush=True)
     if args.dry_run:
         return
