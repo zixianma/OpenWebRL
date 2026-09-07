@@ -44,11 +44,14 @@ ARGS=("${MODEL_ARGS[@]}"
   --rollout-temperature 0.8 --micro-batch-size 1 --global-batch-size "${GLOBAL_BATCH_SIZE:-8}"
   --advantage-estimator grpo --ppo-epochs 2 --use-rollout-logprobs
   --kl-coef 0 --kl-loss-coef 0 --entropy-coef 0 --eps-clip 0.2 --eps-clip-high 0.28
-  --optimizer adam --lr 5e-7 --lr-decay-style constant --weight-decay 0.1 --adam-beta1 0.9 --adam-beta2 0.98
+  --optimizer adam --lr "${LEARNING_RATE:-5e-7}" --lr-decay-style constant --weight-decay 0.1 --adam-beta1 0.9 --adam-beta2 0.98
   --attention-dropout 0 --hidden-dropout 0 --attention-backend flash
   --rollout-num-gpus-per-engine 1 --sglang-mem-fraction-static 0.4
-  --sglang-server-concurrency 4 --sglang-max-running-requests 4 --sglang-chunked-prefill-size 4096
+  --sglang-server-concurrency "${SGLANG_CONCURRENCY:-4}" --sglang-max-running-requests "${SGLANG_CONCURRENCY:-4}" --sglang-chunked-prefill-size 4096
 )
+if [[ "${RECOMPUTE_ACTIVATIONS:-0}" == 1 ]]; then
+    ARGS+=(--recompute-granularity full --recompute-method uniform --recompute-num-layers 1)
+fi
 if [[ -n "${SLIME_CKPT_STEP:-}" ]]; then ARGS+=(--ckpt-step "$SLIME_CKPT_STEP"); fi
 if [[ "${OVERRIDE_OPT_PARAM_SCHEDULER:-0}" == 1 ]]; then ARGS+=(--override-opt-param-scheduler); fi
 if [[ "${DRY_RUN:-0}" == 1 ]]; then

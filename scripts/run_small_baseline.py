@@ -21,10 +21,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
-    parser.add_argument('--rollouts', type=int, default=30)
+    parser.add_argument('--profile', choices=['small', 'paper'], default='small')
+    parser.add_argument('--rollouts', type=int)
     parser.add_argument('--steps', type=int, default=15)
     parser.add_argument('--wandb-mode', choices=['online', 'offline'], default='online')
     args = parser.parse_args()
+    paper = args.profile == 'paper'
+    args.rollouts = (90 if paper else 30) if args.rollouts is None else args.rollouts
+    groups, batch, context, concurrency = (48, 256, 32768, 16) if paper else (4, 16, 16384, 4)
     if args.rollouts < 1 or args.steps < 1:
         parser.error('--rollouts and --steps must be positive')
     env = os.environ.copy()
@@ -69,34 +73,63 @@ def main():
         seconds = min(seconds, int(end - time.time()) - 300)
         if seconds < 600:
             raise SystemExit('Less than ten minutes remain after the shutdown margin.')
-    name = f'openwebrl-4b-small-{job or "dryrun"}-{time.strftime("%Y%m%dT%H%M%S", time.gmtime())}'
+    name = f'openwebrl-4b-{args.profile}-{job or "dryrun"}-{time.strftime("%Y%m%dT%H%M%S", time.gmtime())}'
     out = RUNTIME / 'runs' / name
     env.update(NUM_GPUS='2', TP_SIZE='2', NUM_ROLLOUT=str(args.rollouts),
-               BROWSER_MAX_STEPS=str(args.steps), ROLLOUT_BATCH_SIZE='4', N_SAMPLES='5',
-               GLOBAL_BATCH_SIZE='16', CONTEXT_LEN='16384', RESPONSE_LEN='1024',
-               BROWSER_CONCURRENCY='4', SAVE_INTERVAL='5', SAVE_DIR=str(out),
+               BROWSER_MAX_STEPS=str(args.steps), ROLLOUT_BATCH_SIZE=str(groups), N_SAMPLES='5',
+               GLOBAL_BATCH_SIZE=str(batch), CONTEXT_LEN=str(context), RESPONSE_LEN='1024',
+               BROWSER_CONCURRENCY=str(concurrency), SGLANG_CONCURRENCY=str(48 if paper else 4),
+               LEARNING_RATE='1e-6' if paper else '5e-7', RECOMPUTE_ACTIVATIONS='1' if paper else '0', SAVE_INTERVAL='5', SAVE_DIR=str(out),
                WANDB_MODE=args.wandb_mode)
+    # A baseline profile always starts from SFT; never inherit pilot resume settings.
+    for key in ['SLIME_LOAD_CHECKPOINT', 'SLIME_CKPT_STEP', 'OVERRIDE_OPT_PARAM_SCHEDULER']:
+        env.pop(key, None)
     command = ['timeout', '--signal=INT', '--kill-after=120', str(seconds),
                'bash', str(REPO / 'scripts/run_h200_browser.sh'),
                '--use-wandb', '--wandb-mode', args.wandb_mode, '--wandb-project', env.get('WANDB_PROJECT', 'openwebrl'),
                '--wandb-group', name, '--disable-wandb-random-suffix', '--wandb-dir', str(out / 'wandb'),
-               '--sglang-disable-cuda-graph', '--eval-interval', '10',
-               '--eval-prompt-data', 'webvoyager-smoke', str(REPO / 'openwebrl/data/webvoyager_val.parquet') + '@[:8]',
-               '--n-samples-per-eval-prompt', '1', '--eval-temperature', '0', '--eval-max-response-len', '1024']
+               '--sglang-disable-cuda-graph', '--eval-interval', '5' if paper else '10',
+               '--eval-prompt-data', 'webvoyager-val' if paper else 'webvoyager-smoke',
+               str(REPO / 'openwebrl/data/webvoyager_val.parquet') + ('' if paper else '@[:8]'),
+               '--n-samples-per-eval-prompt', '1', '--eval-temperature', '0', '--eval-top-p', '1', '--eval-top-k', '1', '--eval-max-response-len', '1024']
     if env.get('WANDB_ENTITY'):
         command += ['--wandb-team', env['WANDB_ENTITY']]
-    manifest = {'kind': 'real-web small GRPO baseline', 'job_id': job, 'gpus': 2,
+    manifest = {'kind': f'real-web {args.profile} GRPO baseline', 'job_id': job, 'gpus': 2,
                 'maximum_seconds': seconds, 'rollouts': args.rollouts, 'max_browser_steps': args.steps,
-                'prompt_groups': 4, 'trajectories_per_group': 5, 'global_batch_size': 16,
-                'context_tokens': 16384, 'ppo_epochs': 2, 'save_interval': 5,
+                'prompt_groups': groups, 'trajectories_per_group': 5, 'global_batch_size': batch,
+                'context_tokens': context, 'ppo_epochs': 2, 'save_interval': 5,
                 'wandb_project': env.get('WANDB_PROJECT', 'openwebrl'), 'wandb_mode': args.wandb_mode,
                 'judge_model': env.get('JUDGE_MODEL', 'gpt-4.1'), 'run_name': name,
-                'output': str(out), 'missing_configuration': missing}
+                'output': str(out), 'missing_configuration': missing,
+                'learning_rate': env['LEARNING_RATE'], 'browser_concurrency': concurrency,
+                'fresh_sft_start': True, 'paper_reference': 'https://arxiv.org/pdf/2606.02031',
+                'paper_differences': ['TP2 H200 rather than TP4 B200',
+                    'Local browsers, concurrency 16 rather than Kubernetes sandboxes',
+                    'Activation recomputation; own runtime; strict invalid-judge masking',
+                    'Online validation uses released 70-task WebVoyager split at training step limit; not official benchmark evaluation',
+                    'Only stage 1 (90 x 15) requested here; stage 2 is 50 x 30 after completion'] if paper else []}
     print(json.dumps(manifest, indent=2), flush=True)
     if args.dry_run:
         return
     out.mkdir(parents=True, exist_ok=False)
     (out / 'launch_manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    import hashlib
+    import shutil
+    snapshot = out / 'run_config' / 'source'
+    source_manifest = {}
+    for folder in ['scripts', 'slime', 'openwebrl']:
+        for source in (REPO / folder).rglob('*'):
+            if source.is_file() and source.suffix in {'.py', '.sh', '.yaml'} and not source.is_symlink():
+                relative = source.relative_to(REPO)
+                if any(part in {'data', 'outputs', '__pycache__', '.env', 'checkpoints'} for part in relative.parts):
+                    continue
+                target = snapshot / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
+                source_manifest[str(relative)] = hashlib.sha256(source.read_bytes()).hexdigest()
+    shutil.copy2(REPO / 'train.py', snapshot / 'train.py')
+    source_manifest['train.py'] = hashlib.sha256((REPO / 'train.py').read_bytes()).hexdigest()
+    (out / 'run_config' / 'source_manifest.json').write_text(json.dumps(source_manifest, indent=2) + '\n')
     with (out / 'training.log').open('w') as log:
         result = subprocess.run(command, env=env, cwd=REPO, stdout=log, stderr=subprocess.STDOUT)
     (out / 'exit_status.json').write_text(json.dumps({'exit_code': result.returncode}) + '\n')
