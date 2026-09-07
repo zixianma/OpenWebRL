@@ -33,6 +33,10 @@ def prepare(destination):
                 shutil.copy2(source, target)
     shutil.copy2(REPO / 'train.py', destination / 'train.py')
     (destination / 'openwebrl/data').symlink_to(REPO / 'openwebrl/data', target_is_directory=True)
+    rows = [json.loads(line) for line in (REPO / 'openwebrl/data/eval/online-mind2web.jsonl').read_text().splitlines() if line.strip()]
+    assert len(rows) == 300
+    monitor = [{'prompt': [{'role': 'user', 'content': row['task_name']}], 'metadata': row['metadata']} for row in rows]
+    (destination / 'online_mind2web_monitor.jsonl').write_text(''.join(json.dumps(row) + '\n' for row in monitor))
     hashes = {}
     for name in RECIPE_FILES:
         data = subprocess.check_output(['git', 'show', f'{REFERENCE}:{name}'], cwd=REPO)

@@ -8,7 +8,7 @@ eval:
     max_response_len: 4096
   datasets:
     - name: online-mind2web-monitor
-      path: openwebrl/data/eval/online-mind2web.jsonl
-      input_key: task_name
+      path: online_mind2web_monitor.jsonl
+      input_key: prompt
       metadata_key: metadata
       custom_generate_function_path: openwebrl.eval_monitor.generate
