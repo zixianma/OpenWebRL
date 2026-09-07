@@ -643,7 +643,10 @@ async def generate_rollout_async(
                     f"updated_queries={int(adaptive_metrics.get('rollout/adaptive_query_sampling/updated_queries', 0.0))} "
                     f"select_step={int(adaptive_metrics.get('rollout/adaptive_query_sampling/select_step', 0.0))}",
                 )
+    from slime.utils.trajectory_metrics import collection_metrics
+
     metrics = metric_gatherer.collect()
+    metrics.update(collection_metrics(args, all_samples, data, time.monotonic() - rollout_start))
     if hasattr(data_source, "get_adaptive_query_rollout_metrics"):
         metrics.update(data_source.get_adaptive_query_rollout_metrics())
 

@@ -1364,6 +1364,9 @@ def _log_eval_rollout_data(rollout_id, args, data, extra_metrics: dict[str, Any]
         log_dict[f"eval/{key}"] = sum(rewards) / len(rewards) if rewards else 0.0
 
         if (samples := data[key].get("samples")) is not None:
+            from slime.utils.trajectory_metrics import flat_trajectory_metrics
+
+            log_dict |= dict_add_prefix(flat_trajectory_metrics(args, samples), f"eval/{key}/task/")
             log_dict |= dict_add_prefix(compute_metrics_from_samples(args, samples), f"eval/{key}/")
             non_aborted_samples = [sample for sample in samples if sample.status != Sample.Status.ABORTED]
             non_aborted_rewards = [
@@ -1395,6 +1398,7 @@ def _log_eval_rollout_data(rollout_id, args, data, extra_metrics: dict[str, Any]
 
     step = compute_rollout_step(args, rollout_id)
     log_dict["eval/step"] = step
+    log_dict["eval/iteration"] = rollout_id + 1
     eval_progress_fields = []
     for key in sorted(log_dict):
         value = log_dict[key]
@@ -1427,6 +1431,7 @@ def _log_rollout_data(rollout_id, args, samples, rollout_extra_metrics, rollout_
     logger.info(f"perf {rollout_id}: {log_dict}")
     step = compute_rollout_step(args, rollout_id)
     log_dict["rollout/step"] = step
+    log_dict["rollout/iteration"] = rollout_id + 1
     logging_utils.log(args, log_dict, step_key="rollout/step")
     reward_progress_fields = []
     for key in [

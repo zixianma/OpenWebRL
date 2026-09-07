@@ -41,9 +41,12 @@ def log_perf_data_raw(
         if total_time > 0:
             log_dict["perf/step_time"] = total_time
             log_dict["perf/wait_time_ratio"] = log_dict["perf/train_wait_time"] / total_time
+            # Wall-clock phase share, not GPU utilization or FLOPs utilization.
+            log_dict["perf/training_time_fraction"] = log_dict["perf/train_time"] / total_time
 
     logger.info(f"perf {rollout_id}: {log_dict}")
 
     step = compute_rollout_step(args, rollout_id)
     log_dict["rollout/step"] = step
+    log_dict["rollout/iteration"] = rollout_id + 1
     logging_utils.log(args, log_dict, step_key="rollout/step")
