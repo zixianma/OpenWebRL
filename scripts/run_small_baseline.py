@@ -142,7 +142,7 @@ def main():
     import shutil
     snapshot = out / 'run_config' / 'source'
     source_manifest = {}
-    for folder in ['scripts', 'slime', 'openwebrl']:
+    for folder in ['scripts', 'slime', 'slime_plugins', 'openwebrl']:
         for source in (REPO / folder).rglob('*'):
             if source.is_file() and source.suffix in {'.py', '.sh', '.yaml'} and not source.is_symlink():
                 relative = source.relative_to(REPO)

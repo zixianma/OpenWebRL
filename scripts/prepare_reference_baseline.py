@@ -22,7 +22,7 @@ RECIPE_FILES = [
 def prepare(destination):
     destination = Path(destination).resolve()
     destination.mkdir(parents=True, exist_ok=False)
-    for folder in ['scripts', 'slime', 'openwebrl']:
+    for folder in ['scripts', 'slime', 'slime_plugins', 'openwebrl']:
         for source in (REPO / folder).rglob('*'):
             if source.is_file() and not source.is_symlink() and source.suffix in {'.py', '.sh', '.yaml', '.yml', '.json', '.jinja', '.jinja2'}:
                 relative = source.relative_to(REPO)
