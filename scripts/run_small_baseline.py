@@ -23,6 +23,7 @@ def main():
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
     parser.add_argument('--rollouts', type=int, default=30)
     parser.add_argument('--steps', type=int, default=15)
+    parser.add_argument('--wandb-mode', choices=['online', 'offline'], default='online')
     args = parser.parse_args()
     if args.rollouts < 1 or args.steps < 1:
         parser.error('--rollouts and --steps must be positive')
@@ -32,13 +33,16 @@ def main():
             if value and key.startswith(('JUDGE_', 'WANDB_', 'OPENAI_', 'AZURE_')):
                 env.setdefault(key, value)
     missing = []
+    if env.get('OPENAI_API_KEY') and not any(env.get(k) for k in ['JUDGE_API_MODE', 'JUDGE_API_BASE', 'OPENAI_API_BASE', 'AZURE_RESOURCE_NAME']):
+        env['JUDGE_API_MODE'] = 'served'
+        env['JUDGE_API_BASE'] = 'https://api.openai.com/v1'
     mode = env.get('JUDGE_API_MODE', 'served')
     needed = {'served': ['JUDGE_API_BASE'], 'token': ['AZURE_RESOURCE_NAME', 'AZURE_TOKEN_PATH'],
               'api_key': ['OPENAI_API_BASE', 'OPENAI_API_KEY']}
     if mode not in needed:
         raise SystemExit(f'Unsupported judge mode: {mode}')
     missing.extend(k for k in needed[mode] if not env.get(k))
-    if not env.get('WANDB_API_KEY'):
+    if args.wandb_mode == 'online' and not env.get('WANDB_API_KEY'):
         missing.append('WANDB_API_KEY (or a saved W&B login)')
     job = env.get('SLURM_JOB_ID')
     if not args.dry_run and not job:
@@ -71,10 +75,10 @@ def main():
                BROWSER_MAX_STEPS=str(args.steps), ROLLOUT_BATCH_SIZE='4', N_SAMPLES='5',
                GLOBAL_BATCH_SIZE='16', CONTEXT_LEN='16384', RESPONSE_LEN='1024',
                BROWSER_CONCURRENCY='4', SAVE_INTERVAL='5', SAVE_DIR=str(out),
-               WANDB_MODE='online')
+               WANDB_MODE=args.wandb_mode)
     command = ['timeout', '--signal=INT', '--kill-after=120', str(seconds),
                'bash', str(REPO / 'scripts/run_h200_browser.sh'),
-               '--use-wandb', '--wandb-mode', 'online', '--wandb-project', env.get('WANDB_PROJECT', 'openwebrl'),
+               '--use-wandb', '--wandb-mode', args.wandb_mode, '--wandb-project', env.get('WANDB_PROJECT', 'openwebrl'),
                '--wandb-group', name, '--disable-wandb-random-suffix', '--wandb-dir', str(out / 'wandb'),
                '--sglang-disable-cuda-graph', '--eval-interval', '10',
                '--eval-prompt-data', 'webvoyager-smoke', str(REPO / 'openwebrl/data/webvoyager_val.parquet') + '@[:8]',
@@ -85,7 +89,8 @@ def main():
                 'maximum_seconds': seconds, 'rollouts': args.rollouts, 'max_browser_steps': args.steps,
                 'prompt_groups': 4, 'trajectories_per_group': 5, 'global_batch_size': 16,
                 'context_tokens': 16384, 'ppo_epochs': 2, 'save_interval': 5,
-                'wandb_project': env.get('WANDB_PROJECT', 'openwebrl'), 'run_name': name,
+                'wandb_project': env.get('WANDB_PROJECT', 'openwebrl'), 'wandb_mode': args.wandb_mode,
+                'judge_model': env.get('JUDGE_MODEL', 'gpt-4.1'), 'run_name': name,
                 'output': str(out), 'missing_configuration': missing}
     print(json.dumps(manifest, indent=2), flush=True)
     if args.dry_run:
