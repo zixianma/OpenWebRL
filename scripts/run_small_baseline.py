@@ -79,7 +79,7 @@ def main():
                BROWSER_MAX_STEPS=str(args.steps), ROLLOUT_BATCH_SIZE=str(groups), N_SAMPLES='5',
                GLOBAL_BATCH_SIZE=str(batch), CONTEXT_LEN=str(context), RESPONSE_LEN='1024',
                BROWSER_CONCURRENCY=str(concurrency), SGLANG_CONCURRENCY=str(48 if paper else 4),
-               LEARNING_RATE='1e-6' if paper else '5e-7', RECOMPUTE_ACTIVATIONS='1' if paper else '0', SAVE_INTERVAL='5', SAVE_DIR=str(out),
+               LEARNING_RATE='1e-6' if paper else '5e-7', RECOMPUTE_ACTIVATIONS='1' if paper else '0', SAVE_INTERVAL='1' if paper else '5', SAVE_DIR=str(out),
                WANDB_MODE=args.wandb_mode)
     # A baseline profile always starts from SFT; never inherit pilot resume settings.
     for key in ['SLIME_LOAD_CHECKPOINT', 'SLIME_CKPT_STEP', 'OVERRIDE_OPT_PARAM_SCHEDULER']:
@@ -97,7 +97,7 @@ def main():
     manifest = {'kind': f'real-web {args.profile} GRPO baseline', 'job_id': job, 'gpus': 2,
                 'maximum_seconds': seconds, 'rollouts': args.rollouts, 'max_browser_steps': args.steps,
                 'prompt_groups': groups, 'trajectories_per_group': 5, 'global_batch_size': batch,
-                'context_tokens': context, 'ppo_epochs': 2, 'save_interval': 5,
+                'context_tokens': context, 'ppo_epochs': 2, 'save_interval': 1 if paper else 5,
                 'wandb_project': env.get('WANDB_PROJECT', 'openwebrl'), 'wandb_mode': args.wandb_mode,
                 'judge_model': env.get('JUDGE_MODEL', 'gpt-4.1'), 'run_name': name,
                 'output': str(out), 'missing_configuration': missing,
@@ -106,6 +106,7 @@ def main():
                 'paper_differences': ['TP2 H200 rather than TP4 B200',
                     'Local browsers, concurrency 16 rather than Kubernetes sandboxes',
                     'Activation recomputation; own runtime; strict invalid-judge masking',
+                    'Checkpoint every iteration to preserve progress within the current allocation',
                     'Online validation uses released 70-task WebVoyager split at training step limit; not official benchmark evaluation',
                     'Only stage 1 (90 x 15) requested here; stage 2 is 50 x 30 after completion'] if paper else []}
     print(json.dumps(manifest, indent=2), flush=True)
