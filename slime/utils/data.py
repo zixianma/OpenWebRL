@@ -313,7 +313,8 @@ def get_minimum_num_micro_batch_size(total_lengths, max_tokens_per_gpu):
 
 def process_rollout_data(args, rollout_data_ref, dp_rank, dp_size):
     assert len(rollout_data_ref) == dp_size
-    rollout_data = ray.get(rollout_data_ref[dp_rank].inner)
+    from slime.utils.rollout_transport import decode_multimodal
+    rollout_data = decode_multimodal(ray.get(rollout_data_ref[dp_rank].inner))
 
     partition = rollout_data.pop("partition")
     total_lengths = rollout_data["total_lengths"]

@@ -999,7 +999,8 @@ class RolloutManager:
             # Pass dynamic global_batch_size to training side
             if hasattr(self, "_dynamic_global_batch_size"):
                 rollout_data["dynamic_global_batch_size"] = self._dynamic_global_batch_size
-            rollout_data_refs.append(Box(ray.put(rollout_data)))
+            from slime.utils.rollout_transport import encode_multimodal
+            rollout_data_refs.append(Box(ray.put(encode_multimodal(rollout_data))))
         return rollout_data_refs
 
 
