@@ -344,6 +344,8 @@ def gather_log_data(
         # Calculate step once to avoid duplication
         step = compute_rollout_step(args, rollout_id)
         reduced_log_dict["rollout/step"] = step
+        # Match the one-based collection axis; rollout data carries a zero-based iteration.
+        reduced_log_dict["rollout/iteration"] = rollout_id + 1
         logging_utils.log(args, reduced_log_dict, step_key="rollout/step")
 
         return reduced_log_dict
