@@ -56,8 +56,9 @@ def prepare(destination):
     end = current.index('        if not terminated:', start)
     guard = current[start:end]
     anchor = '        # --- Finalization ---\n'
-    assert data.count(anchor) == 1
-    data = data.replace(anchor, anchor + guard)
+    prefix, turn_impl = data.split('async def _generate_turn_sample_impl(', 1)
+    assert turn_impl.count(anchor) == 1
+    data = prefix + 'async def _generate_turn_sample_impl(' + turn_impl.replace(anchor, anchor + guard)
     (destination / name).write_text(data)
     hashes[name] = hashlib.sha256(data.encode()).hexdigest()
     (destination / 'reference_empty_blacklist.txt').write_text('# Reference baseline: no added host exclusions.\n')
