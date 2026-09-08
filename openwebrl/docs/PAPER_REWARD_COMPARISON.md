@@ -26,13 +26,16 @@ The first collection yielded 2,034 turn samples. Seven full 256-turn minibatches
 
 Two completed collections therefore give x=0 and x=1 on the comparison chart. Seven minibatches are not seven online collection iterations. The third collection yielded 2271 turn samples: eight full minibatches per epoch and two epochs produced 16 optimizer updates, but only one new reward observation. Thus the live run had three reward points while collection 3's optimizer updates were running. Collection 4 adds the next point only after fresh browser collection finishes.
 
+Audited observations as of 2026-09-07 21:51 PDT:
+
 | Zero-based iteration | Collected-turn reward (%) |
 | --- | ---: |
 | 0 | 38.7413962635 |
 | 1 | 33.2581227437 |
 | 2 | 38.8815499780 |
+| 3 | 36.2483602973 |
 
-These are raw observations, not smoothed trend values. Three points are insufficient to establish convergence, divergence, or successful reproduction. Browser access, task sampling, trajectory lengths, and filtering can change the reward independently of policy quality. Inspect completed-task success and invalidity alongside it, and compare held-out evaluation with matching judge and validity conventions before claiming benchmark reproduction.
+These are raw observations, not smoothed trend values. These first four points are insufficient to establish convergence, divergence, or successful reproduction. Browser access, task sampling, trajectory lengths, and filtering can change the reward independently of policy quality. Inspect completed-task success and invalidity alongside it, and compare held-out evaluation with matching judge and validity conventions before claiming benchmark reproduction.
 
 ## Live behavior and provenance
 
