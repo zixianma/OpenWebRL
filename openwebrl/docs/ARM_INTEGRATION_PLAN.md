@@ -78,6 +78,14 @@ The user explicitly assigned the new GPU on `g001` to ARM evaluation. Verified a
 - One initial attempt was stopped to relocate the supervisor out of the older allocation; a clean-shell missing `rg` dependency was fixed before this launch. These earlier attempts are retained separately and will not be merged into the new result denominator.
 - New CLI requires `--dedicated-allocation` and supports `--gpu-count 1`; it refuses a controller tied to a different allocation. No additional allocation or extension was requested.
 
+### Full evaluation progress snapshot
+
+Observed at `2026-09-08T02:37:54.013559+00:00` in allocation `282209` (remaining `2:09:37`). Baseline has completed **273/300** tasks: **88 successes**, **241 valid judged results**, and **32** unavailable outcomes. Full scalar and selection evaluations remain queued; their smoke checks passed. No inference gain is established from the full benchmark yet.
+
+Most audited no-turn failures are website navigation errors, including HTTP/2 failures. Five observed actor request failures exceeded the configured 32768-token context limit; one inference timeout and four environment step errors were also observed. Unavailable tasks remain in the all-scheduled denominator. The allocation has no recorded host-memory OOM kills. Both complete 300-task ARM arms are unlikely to fit before 21:47 PDT; the current sequential order is unchanged and no extra allocation/extension has been requested.
+
+[Latest progress snapshot](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/progress-snapshot.json). Counts are a dated snapshot while execution continues.
+
 ### Selection decoding correction during the dedicated smoke
 
 The initial selection smoke produced some bare-index replies such as `</think>\n\n3`. The minimal released `selection_infer.py` demo uses JSON-only parsing and falls back to candidate 1, matching our initial implementation. The fuller canonical `selection_prompt.py` inference function supplies a **strict JSON schema** under `VISION_NO_COT=1`; its response parser also has more permissive recovery. Omitting that schema was a reproduction discrepancy.
