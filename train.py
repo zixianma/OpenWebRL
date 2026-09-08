@@ -232,6 +232,11 @@ def train(args):
                     label=f"actor_model.async_train({rollout_id})",
                 )
 
+            # Both training roles have finished consuming this batch. Keeping
+            # its Ray references here pins image buffers through the next
+            # collection while the replacement generate() call is pending.
+            del rollout_data_ref
+
             if should_run_periodic_action(rollout_id, args.save_interval, num_rollout_per_epoch, args.num_rollout):
                 _update_train_progress_bar(
                     progress_bar,

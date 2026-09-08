@@ -1,5 +1,33 @@
 # H200 runtime and validation
 
+## Current continuation milestone, 2026-09-07 20:48 PDT
+
+W&B run `qcq7i4ug` is continuing on `g005`, inside existing allocation 282346
+(two H200s; allocation ends 2026-09-08 03:36:15 PDT, launcher stops three
+minutes earlier). The live source snapshot is
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-282346`.
+The run directory is
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T024410`.
+
+Fresh collection 3 accepted 48 of 120 completed prompt groups in 3006.2 seconds,
+after restoring checkpoint 1 with 30 durable optimizer updates. It produced
+2271 turn samples and a saved recovery batch, `rollout_recovery/2.pt` (65.51 GiB).
+W&B history independently confirms `train/reward_iteration=3` and
+`train/reward=0.38881549977983265`. Two PPO epochs use eight global minibatches
+each, for 16 new updates. Five have completed at this snapshot; checkpoint 2
+is not yet saved. The host-memory cap is 419430400000 bytes (390.625 GiB).
+Cache reclamation has occurred, with no OOM or OOM-kill events. The live CUDA
+cache guard released reserved memory from 109.63 to 48.07 GiB during training.
+
+The repository driver now releases `rollout_data_ref` after all applicable
+actor/critic training calls complete. Previously it retained the old batch's
+Ray references while waiting for the next collection. A CPU weak-reference
+probe of the actual loop with fake workers reproduced retention before the
+change and passed after it for actor-only, actor-plus-critic, and critic-only
+paths. This checks reference lifetime and ordering, not distributed memory
+reclamation. This change is **not in the running g005 snapshot**; monitor its
+next collection's memory before deciding whether a restart is needed.
+
 The dedicated environment is `/gpfs/scrubbed/zixianma/openwebrl-runtime/venv`.
 The checkpoint is `/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT`.
 No other user's Python environment or container is required.
