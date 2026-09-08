@@ -11,6 +11,12 @@ tensor samples (32768 bytes, covering two of four shards) were finite; this is
 not a full tensor reload. See `checkpoint_verification_5.json` in the current
 recovery run. The latest actual full GPU resume audit still refers to checkpoint 3.
 
+A subsequent bounded CPU check loaded one serialized tensor extent from every
+shard, reading 20978340 bytes total. All four samples had the expected dtype
+and finite values. See `checkpoint_5_all_shards_cpu_samples.json`. This covers
+all shard files with payload samples, but still does not constitute a full
+model-and-optimizer reload.
+
 W&B history rows 130–143 contain all fourteen collection-6 optimizer records,
 with finite training values. The sixth fresh reward observation is in row 128.
 See `wandb_collection_6_complete_audit.json`. Cgroup OOM and OOM-kill counters
