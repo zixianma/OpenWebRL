@@ -1,5 +1,57 @@
 # H200 runtime and validation
 
+## Final handoff, 2026-09-08 03:34 PDT
+
+The baseline was intentionally paused after collection 7 finished, because its
+14 optimizer updates could not fit before allocation 282346 ended at 03:36 PDT.
+Only baseline step `282346.1` was stopped; no new allocation was submitted.
+Checkpoint 5 contains **90 durable Adam updates** from six fully trained
+collections. Collection 7 completed **zero optimizer updates** before the stop.
+
+Collection 7 took 4064.5 seconds (67.7 minutes): 48 accepted groups, 121 completed
+groups, 23 pending at cutoff, and 144 submitted. Cleanup completed with zero
+pending tasks and no native abort. Its `rollout_recovery/6.pt` is 60440403683 bytes
+and contains 1946 turns across 48 groups. A memory-mapped CPU metadata load
+reproduced reward **0.3987667009249743**, matching W&B history row 145 at
+`train/reward_iteration=7`. See `recovery_batch_6_metadata_audit.json` and
+`rollout_recovery/6.provenance.json` in the current recovery run.
+
+The remaining authorized GPUs were used for a full model-and-optimizer reload
+of checkpoint 5. The verification run
+`openwebrl-4b-resume-check-282346-20260908T102901` passed in about 60 seconds and
+exited with code 0. It loaded iteration 5, selected next rollout ID 6, and ran
+zero optimizer updates or browser collections. It used offline W&B, so it added
+no training observations to the baseline. Both GPUs were confirmed released
+with zero memory use afterward. See `checkpoint_5_full_resume_audit.json` and
+the verification run's `resume_verification.json`.
+
+The final W&B audit confirms seven distinct fresh reward observations. Its raw
+API scan returned 166 optimizer rows: 53 duplicate early rows reduce to 113
+unique history-row IDs. Of those, 23 belong to earlier failed/retried attempts;
+the successful checkpoint lineage accounts for 90. Duplicate training payloads
+agree, all optimizer values are finite, and each reward iteration has a single
+consistent reward value. Do not infer progress from raw API row count or the
+legacy overlapping `train/step` labels. See `final_wandb_audit.json`.
+
+For the next **explicitly authorized allocation**, use the isolated reference
+source and resume checkpoint 5 from the current recovery run. Before any fresh
+collection, replay its saved batch with:
+
+```bash
+export OPENWEBRL_REPLAY_FIRST_BATCH=/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T061434/rollout_recovery/6.pt
+export OPENWEBRL_REPLAY_ROLLOUT_ID=6
+export OPENWEBRL_REPLAY_CONSUMED_GROUPS=144
+```
+
+Pass that run directory to `run_small_baseline.py --profile reference
+--resume-from ... --wandb-run-id qcq7i4ug`, with the main repository's `.env`.
+Verify the checkpoint marker is still 5 before launching. Replaying this batch
+performs 14 updates, so checkpoint 6 should contain 104 Adam updates with the
+existing scheduler offset +1. It is the existing seventh observation, not a new
+eighth reward point. Fresh collection 8 follows after that checkpoint. Always
+use an explicit `srun --jobid=...` step in the allocated job; plain SSH can attach
+to a different allocation through Slurm PAM adoption.
+
 ## Checkpoint 5 validated, 2026-09-08 02:21 PDT
 
 Collection 6 completed all 14 optimizer updates and saved `iter_0000005` before
