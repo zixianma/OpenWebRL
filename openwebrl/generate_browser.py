@@ -1820,14 +1820,23 @@ async def _generate_turn_sample_impl(
             turn_sample.multimodal_inputs = {"images": img_list}
             turn_sample.multimodal_train_inputs = mm_train
 
-            # 7. Run inference ---------------------------------------------
-            llm_response, new_tokens, new_logprobs, finish_type = await _run_inference_step(
-                url,
-                input_text,
-                sampling_params,
-                img_list,
-                timeout_secs=getattr(args, "inference_step_timeout_secs", None),
-            )
+            # 7. Run inference. The optional selector is enabled only by arm_eval.
+            selector = getattr(args, "browser_action_selector", None)
+            if selector is None:
+                llm_response, new_tokens, new_logprobs, finish_type = await _run_inference_step(
+                    url, input_text, sampling_params, img_list,
+                    timeout_secs=getattr(args, "inference_step_timeout_secs", None),
+                )
+            else:
+                selected_output, arm_metadata = await selector(
+                    infer=_run_inference_step, url=url, input_text=input_text,
+                    sampling_params=sampling_params, images=img_list,
+                    observation=observation, history=[ts.response for ts in turn_samples],
+                    task=task_data.get("intent", ""), task_id=task_id, turn=step,
+                    timeout=getattr(args, "inference_step_timeout_secs", None),
+                )
+                llm_response, new_tokens, new_logprobs, finish_type = selected_output
+                turn_sample.metadata["arm"] = arm_metadata
             # --------------------------------------------------------------
             if _should_sample_llm_output(args):
                 logger.info(f"Task {task_id} step {step} llm_response={llm_response[:1000]!r}")
