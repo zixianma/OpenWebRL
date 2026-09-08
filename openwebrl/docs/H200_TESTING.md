@@ -315,3 +315,19 @@ kept separate and each changes fewer than ten files:
 The g005 continuation reached 15/48 accepted groups in collection 3 by about
 20:01 PDT, with no OOM events or runtime errors. This is a progress snapshot,
 not an additional saved checkpoint.
+
+### Explicit tracking shutdown
+
+The previous run and resume check emitted nonfatal W&B BrokenPipeError messages
+during worker teardown; the online audit nevertheless found all 16 final
+optimizer records. The repository now flushes training-worker tracking before
+closing the primary tracker and calls the SDK's explicit teardown operation.
+The running g005 source snapshot is unchanged.
+
+A CPU-only, offline multiprocess test started a primary writer and two child
+writers, closed them in that order of dependency, and read back every expected
+history value (0, 1, 2) from three local W&B files. Both child exit codes were
+zero and no teardown traceback occurred. The reusable check is
+`scripts/check_tracking_shutdown.py --output <new-directory>`; test artifacts
+are preserved and no cloud run or GPU is required. This checks SDK flushing;
+the complete training shutdown path still needs validation on a future run.
