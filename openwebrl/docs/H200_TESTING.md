@@ -1,6 +1,6 @@
 # H200 runtime and validation
 
-## Current continuation milestone, 2026-09-07 21:16 PDT
+## Current continuation milestone, 2026-09-07 22:24 PDT
 
 W&B run `qcq7i4ug` is continuing on `g005`, inside existing allocation 282346
 (two H200s; allocation ends 2026-09-08 03:36:15 PDT, launcher stops three
@@ -21,6 +21,21 @@ cursor exists. All metadata-referenced file extents and a 2048-byte CPU tensor
 sample passed checks; the sample covers only one of the two shards. This is
 not a full tensor reload. See `checkpoint_verification_2.json` in the run.
 Collection 4 began around 21:09 PDT.
+
+Collection 4 finished in 2428.7 seconds with 48 accepted groups out of 90
+completed groups (96 submitted), 2287 turn samples, and
+`train/reward=0.3624836029733275`. It completed another 16 optimizer updates
+and saved `iter_0000003` at about 22:22 PDT. This is now the latest checked
+checkpoint: Adam steps `[62, 62]`, scheduler batches 63 (the same diagnosed
+offset +1), matching dataset cursor, all shard extents, and a finite 2048-byte
+sample from one shard. See `checkpoint_verification_3.json`. W&B history
+contains all 16 optimizer records (legacy labels 48 through 63) and the fourth
+reward observation. Collection 5 is running. OOM and OOM-kill counts remain zero.
+
+Recovery batches `rollout_recovery/2.pt` and `3.pt` have accompanying
+`.provenance.json` files recording the preceding policy checkpoint and exact
+submitted-group counts, 144 and 96 respectively. Do not assume every replay
+should advance the dataset by 144 groups.
 
 The host-memory cap is 419430400000 bytes (390.625 GiB). Cache reclamation
 occurred during training and saving, with no OOM or OOM-kill events. Memory
