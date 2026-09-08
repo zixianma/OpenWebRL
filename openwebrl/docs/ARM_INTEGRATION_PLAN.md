@@ -1,6 +1,6 @@
 # Action reward models for OpenWebRL training
 
-Status: **All three inference smoke arms passed; the full comparison is running in the user-assigned one-H200 allocation 282209 on g001. The prior training allocation is excluded. Training integration remains a draft pending inference results.**
+Status: **Baseline is complete at 90/300 successes (30.0% overall; 33.7% among 267 valid evaluations). The ARM comparison is resuming from 277 saved scalar tasks in user-assigned allocation 282782 on g005, followed by SelectionARM. Training integration remains a draft pending complete inference results.**
 
 Created: 2026-09-07. This is the working document for iterating on the plan originally proposed in conversation.
 
@@ -90,13 +90,21 @@ The first 30-second scalar ARM probe at concurrency 16 measured **84.6% mean GPU
 
 [Handoff and utilization evidence](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/arm-handoff-and-utilization.json). [Pending-stage concurrency settings](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/execution-settings.json).
 
-### Full evaluation progress snapshot
+### Resume on g005 at 22:46 PDT
 
-Observed at `2026-09-08T02:37:54.013559+00:00` in allocation `282209` (remaining `2:09:37`). Baseline has completed **273/300** tasks: **88 successes**, **241 valid judged results**, and **32** unavailable outcomes. Full scalar and selection evaluations remain queued; their smoke checks passed. No inference gain is established from the full benchmark yet.
+The original allocation ended with **277/300 scalar tasks saved**: **112 successes**, **232 valid evaluations**, and **45 unavailable**. The user explicitly assigned the new four-hour GPU session on `zixianma@g005` to continuing these evaluations.
 
-Most audited no-turn failures are website navigation errors, including HTTP/2 failures. Five observed actor request failures exceeded the configured 32768-token context limit; one inference timeout and four environment step errors were also observed. Unavailable tasks remain in the all-scheduled denominator. The allocation has no recorded host-memory OOM kills. Both complete 300-task ARM arms are unlikely to fit before 21:47 PDT; the current sequential order is unchanged and no extra allocation/extension has been requested.
+Verified allocation **282782** has **one H200, 8 CPUs, and 200000 MiB host memory**, ending **2026-09-08 02:37:55 America/Los_Angeles**. The assigned GPU is **`GPU-90ac2a02-abfa-147c-19ff-bbada4033da3`**, physical GRES index **4**, CUDA device **0** inside the step. The other user allocation on g005 is excluded. The new supervisor belongs to `job_282782/step_extern`; the worker runs in **282782.0**.
 
-[Latest progress snapshot](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/progress-snapshot.json). Counts are a dated snapshot while execution continues.
+- Reuse the same run directory and all completed task outcomes, including unavailable outcomes. Baseline does not execute any tasks again. Resume only the **23** unfinished scalar tasks, then run all **300** SelectionARM tasks.
+- Preserve the pinned models, seeds, prompts, image processing, horizons, judge, and strict configuration-match resume check. Concurrency remains **16** for each ARM, with the actor kept resident across their handoff.
+- Archive prior server/evaluation logs under `allocation-history/282209/`. Archive incomplete scalar action traces before restarting those tasks so separate attempts are not mixed in their final traces. Saved task-result hashes are retained for verification.
+- Revalidate the existing successful smoke gate; the new actor and ARM processes must pass service health checks on g005. The same shared runtime is used.
+- Use only the existing user-provided allocation; stop at its expiry. No new allocation or budget extension was requested.
+
+[Resume inventory and result hashes](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/resume-282782.json). [Current controller](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/active-watcher.json). [Progress snapshot](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/progress-snapshot.json).
+
+The run is incomplete. Website navigation failures, actor context-limit errors, and other environment/inference failures remain in the all-scheduled denominator. Resuming on a later node/session adds a time-of-evaluation confound; matched-task statistics do not remove website changes or judge variability.
 
 ### Selection decoding correction during the dedicated smoke
 
@@ -149,7 +157,7 @@ The initial investigation inspected:
 - This OpenWebRL working tree, including existing uncommitted experimental changes.
 - The primary literature linked below.
 
-The actor serving health check has passed on GPU and the live inference smoke is running. No completed benchmark reproduction or ARM training has been performed. The linked dataset returned HTTP 401 on anonymous access; its actual records have not been inspected. Source-code observations and author-reported results are distinguished from proposed experiments throughout this document.
+All three inference smoke arms passed, baseline is complete, and the full ARM comparison is in progress. No completed three-arm benchmark reproduction or ARM training has been performed. The linked dataset returned HTTP 401 on anonymous access; its actual records have not been inspected. Source-code observations and author-reported results are distinguished from proposed experiments throughout this document.
 
 ## 3. What the released models predict
 
@@ -364,7 +372,8 @@ Meaningful verification should cover prompt/pooling parity, coordinate conversio
 | 2026-09-07 | Record the plan in a Markdown file and iterate on that document | This file is the working draft |
 | 2026-09-07 | Validate inference first using SelectionARM and ScalarRM-LoRA on Online-Mind2Web | Models and evaluation implementation prepared; GPU validation pending |
 | 2026-09-07 | Start eval runs when GPUs become available | Smoke started at 17:41 PDT; stopped at 17:44 PDT after the user raised a training-ownership concern |
-| 2026-09-07 | Use the new GPU on g001 for ARM evaluation | Dedicated allocation 282209; all smoke arms passed; full comparison running at concurrency 8 |
+| 2026-09-07 | Use the new GPU on g001 for ARM evaluation | Dedicated allocation 282209; baseline completed; scalar saved 277/300 tasks before expiry; ARM concurrency increased to 16 |
+| 2026-09-07 | Continue evaluations on zixianma@g005 within its four-hour session | Dedicated allocation 282782; resume 23 unfinished scalar tasks, then all 300 SelectionARM tasks; existing outcomes preserved |
 
 ## 13. Self-critique carried forward
 
