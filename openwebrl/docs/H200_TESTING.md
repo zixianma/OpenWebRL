@@ -1,5 +1,83 @@
 # H200 runtime and validation
 
+## Collection 6 reward and cleanup verified, 2026-09-08 01:52 PDT
+
+Collection 6 finished in 4106.0 seconds (68.4 minutes), with 48 accepted groups,
+124 completed groups, and 20 pending groups at cutoff: 144 submitted in total.
+Both inference workers acknowledged cancellation and cleanup ended with zero
+pending tasks. A later process scan found no browser environment servers left
+in allocation 282346 during training. There were no native aborts or OOM events.
+
+The saved `rollout_recovery/5.pt` is 61946877909 bytes. Its memory-mapped CPU
+metadata load verified 1999 turn samples, 48 groups, and mean reward
+0.3426713356678339, exactly matching W&B history row 128 at
+`train/reward_iteration=6`. This checks metadata and rewards, not every image
+payload. See `recovery_batch_5_metadata_audit.json`,
+`rollout_recovery/5.provenance.json`, and `wandb_collection_6_audit.json`.
+
+Training began at 01:49 PDT. Seven full minibatches per epoch and two epochs
+produce 14 updates; after they finish, checkpoint 5 should contain 90 Adam
+updates and the existing scheduler offset +1. At this observation, the latest
+validated checkpoint remains checkpoint 4 with 76 updates. If replay is needed,
+explicitly load checkpoint 4 and advance its restored data cursor by the 144
+submitted groups; replay does not create another fresh reward observation.
+
+## Checkpoint 4 validated, 2026-09-08 00:42 PDT
+
+Collection 5 completed all 14 optimizer updates and saved `iter_0000004` in
+the current recovery run before collection 6 began around 00:40 PDT. Its
+Adam parameter-group counters are `[76, 76]`; scheduler count is 19712/256 = 77,
+so the diagnosed offset remains +1 and the resume fix added no further offset.
+The checkpoint has 1519 state entries, 3507 extents, four shard files totaling
+62134965899 bytes, and a matching dataset cursor. All file extents and 32768
+bytes of sampled CPU tensors passed checks. Samples cover two of four shard
+files; this is not a full tensor reload. See `checkpoint_verification_4.json`.
+The actual full GPU reload already verified in this continuation refers to
+checkpoint 3, as recorded in `resume_load_audit.json`.
+
+W&B history rows 113–126 contain all 14 optimizer records, with finite losses
+and gradients, plus reward observation 5 in row 111. See
+`wandb_collection_5_complete_audit.json`. The successfully cancelled collection
+left no current-run browser servers alive during training. Cgroup OOM counters
+remain zero, and host memory fell to about 145 GiB as collection 6 began.
+
+The shared `project-krishna` fileset reached its 1 TiB quota and blocked the
+initial documentation commit. The edits were preserved in the working tree
+and backed up in the current run as `collection_5_documentation.patch`.
+Scrubbed checkpoint storage was unaffected, and the checkpoint save completed
+successfully. Project-quota availability should be checked before later commits.
+
+## Recollection 5 and cleanup passed, 2026-09-08 00:16 PDT
+
+The resumed run completed collection 5 in 3261.5 seconds: 48 accepted groups,
+104 completed groups, and 40 pending groups at cutoff (144 submitted). Both
+inference workers acknowledged cancellation, and cleanup finished with zero
+pending tasks and no native abort. The saved `rollout_recovery/4.pt` is
+63152215689 bytes. Its memory-mapped CPU metadata check found 2041 turns,
+48 prompt groups, and reward 0.35178833904948553, exactly matching W&B's fifth
+reward observation (history row 111). See `recovery_batch_4_metadata_audit.json`,
+`rollout_recovery/4.provenance.json`, and `wandb_collection_5_audit.json` in the
+current recovery run. Training is underway: seven minibatches per epoch and
+two epochs give 14 new updates, so checkpoint 4 should contain 76 Adam updates
+and the existing scheduler offset +1. It is not yet a saved checkpoint.
+
+The first 12 distinct task starts match the failed collection when original
+worker stdout and stderr are merged by timestamp. The worker also records
+loading `global_dataset_state_dict_3.pt`; see `data_cursor_resume_audit.json`.
+Do not compare task order using only Ray's deduplicated combined driver log.
+
+The shorter batch also exercises the known legacy training-label limitation:
+collection 5 labels its optimizer records 56–69, overlapping collection 4's
+48–63. Use collection identity, history-row identity, and Adam counters when
+auditing updates. The primary reward axis remains one-based collection number
+and is unaffected. No historical optimizer records were removed.
+
+One orphaned router and 12 orphaned browser process groups from the failed
+attempt were identified by exact source snapshot, process identity, and job
+cgroup, then stopped. All 12 old browser servers were verified exited. The
+separate ARM allocation and current recovery workers were excluded. Inventories
+and cleanup records are preserved under the failed run's `failure-collection-5/`.
+
 ## Recovery running, 2026-09-07 23:18 PDT
 
 The same W&B run resumed from checkpoint 3 at 23:14 PDT, using an explicit
