@@ -42,6 +42,19 @@ class Contracts(unittest.TestCase):
         for value in ('3', '{"selection":0}', '{"selection":6}', '{"selection":1,"thought":"extra"}'):
             self.assertFalse(xgr.GrammarMatcher(grammar).accept_string(value), value)
 
+    def test_pending_arm_concurrency_override_preserves_baseline(self):
+        from openwebrl.arm_eval import execution_parallel
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.assertEqual(execution_parallel("scalar", root / "scalar", 8), (8, None))
+            config = root / "execution-settings.json"
+            config.write_text(json.dumps({"parallel_by_mode": {"scalar": 16, "selection": 16}}))
+            self.assertEqual(execution_parallel("baseline", root / "baseline", 8)[0], 8)
+            self.assertEqual(execution_parallel("scalar", root / "scalar", 8)[0], 16)
+            config.write_text(json.dumps({"parallel_by_mode": {"scalar": 99}}))
+            with self.assertRaisesRegex(ValueError, "1 through 16"):
+                execution_parallel("scalar", root / "scalar", 8)
+
     def test_denominator_preserves_unavailable_tasks(self):
         summary = summarize([{"valid": True, "reward": 1},
                              {"valid": True, "reward": 0},

@@ -18,6 +18,18 @@ def summarize(records, scheduled):
     }
 
 
+def execution_parallel(mode, output, requested):
+    """Allow a pending arm to pick up an explicit local concurrency setting."""
+    path = Path(output).parent / "execution-settings.json"
+    if not path.exists():
+        return requested, None
+    settings = json.loads(path.read_text())
+    value = settings.get("parallel_by_mode", {}).get(mode, requested)
+    if type(value) is not int or not 1 <= value <= 16:
+        raise ValueError("Execution concurrency must be an integer from 1 through 16")
+    return value, str(path)
+
+
 async def run(args):
     import httpx
     from dotenv import load_dotenv
@@ -36,6 +48,17 @@ async def run(args):
     os.environ["SLIME_BROWSER_LOCAL_PROCESS_MAX_PROCESSES"] = str(args.parallel)
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
+    from datetime import datetime, timezone
+    execution = {
+        "mode": args.mode, "parallel": args.parallel,
+        "requested_parallel": args.requested_parallel,
+        "settings_file": args.execution_settings,
+        "allocation": os.environ.get("SLURM_JOB_ID"),
+        "started_utc": datetime.now(timezone.utc).isoformat(),
+    }
+    with (output / "execution-history.jsonl").open("a") as stream:
+        stream.write(json.dumps(execution) + "\n")
+    print("EXECUTION " + json.dumps(execution), flush=True)
     # The training generator records navigation-failure hosts; keep evaluation's
     # list inside its own output directory, never modify the training blacklist.
     generation._BROWSER_HOST_BLACKLIST_PATH = str(output / "navigation_failures.txt")
@@ -145,6 +168,8 @@ def main():
     ap.add_argument("--judge-model", default="o4-mini")
     ap.add_argument("--env-file", default=".env")
     args = ap.parse_args()
+    args.requested_parallel = args.parallel
+    args.parallel, args.execution_settings = execution_parallel(args.mode, args.output, args.parallel)
     if args.parallel < 1:
         ap.error("--parallel must be positive")
     # SGLang configures the event-loop policy during import. Do so before

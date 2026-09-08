@@ -50,7 +50,7 @@ The inference path is opt-in and separate from policy training:
 
 Models are downloaded under `/gpfs/scrubbed/zixianma/checkpoints/web/arm`; reference code, manifests, and an isolated serving environment are under `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction`. The actor remains the existing pinned SFT download.
 
-CPU validation completed: eight ARM contract/structured-decoding tests, six watcher allocation/safety/promotion tests, six existing browser-turn tests, o4-mini model access, matching actor/selection vocabularies and templates, and matching shapes for all 713 released selection tensors. The omitted `lm_head.weight` is tied to the embedding. The frozen actor has now loaded on GPU and passed its generation health check. All three baseline and scalar smoke tasks completed with valid judge results. Scalar scores are finite and discriminate candidates. Selection model loading and live inference also passed. The constrained selection smoke completed with 3/3 valid judged tasks and no fallback across 34 actions. Aggregate benchmark performance remains **unvalidated**.
+CPU validation completed: nine ARM contract/structured-decoding/execution tests, six watcher allocation/safety/promotion tests, six existing browser-turn tests, o4-mini model access, matching actor/selection vocabularies and templates, and matching shapes for all 713 released selection tensors. The omitted `lm_head.weight` is tied to the embedding. The frozen actor has now loaded on GPU and passed its generation health check. All three baseline and scalar smoke tasks completed with valid judge results. Scalar scores are finite and discriminate candidates. Selection model loading and live inference also passed. The constrained selection smoke completed with 3/3 valid judged tasks and no fallback across 34 actions. Aggregate benchmark performance remains **unvalidated**.
 
 Compatibility note: the release stores newer Transformers processor/config metadata. Installed Transformers 4.57.1 reads the selection rotary settings as `None` and cannot directly load its processor config. The server uses the original actor config/processor after vocabulary, template, and architecture checks, preserving the frozen ARM weights. Record this compatibility adaptation and the 262144 image-pixel cap in the result manifest. The scalar head uses the reference demo's BF16 projection and last-token pooling.
 
@@ -77,6 +77,18 @@ The user explicitly assigned the new GPU on `g001` to ARM evaluation. Verified a
 - [Live status](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/watcher-status.json); model/browser logs and results are under `smoke/`, then `full/`.
 - One initial attempt was stopped to relocate the supervisor out of the older allocation; a clean-shell missing `rg` dependency was fixed before this launch. These earlier attempts are retained separately and will not be merged into the new result denominator.
 - New CLI requires `--dedicated-allocation` and supports `--gpu-count 1`; it refuses a controller tied to a different allocation. No additional allocation or extension was requested.
+
+### Automatic ARM handoff and utilization at 19:51 PDT
+
+Baseline completed all **300** tasks: **90 successes**, **267 valid outcomes**, **33 unavailable**. Success is **30.0% of all scheduled tasks** and **33.7% among valid outcomes**. These denominators remain distinct from the author-reported reference rate.
+
+The scalar ARM started automatically at **19:49:47 PDT**, **20.7 seconds** after baseline completion. The actor server remained resident. Scalar and selection model files were warmed in cache beforehand. The active queue is **scalar → selection**, without a new resource request or a manual handoff.
+
+A 30-second baseline probe measured **52.6% mean GPU activity**, an empty inference queue, about **3.8 decoding requests**, and **3.2/8 CPU cores** in use. Upcoming ARM concurrency was increased from **8 to 16**, with an explicit settings file and per-arm `execution-history.jsonl`. Task/model/sampling/horizon settings are unchanged. The runner bounds these local concurrency overrides at 16.
+
+The first 30-second scalar ARM probe at concurrency 16 measured **84.6% mean GPU activity (peak 100%)**, **71.5 GiB GPU memory**, **4.9/8 CPU cores**, approximately **1230 decode tokens/sec**, and **23.9 active decoding requests** against a server limit of 24. The maximum observed inference queue was 36. This shows substantially better occupancy; it does not establish optimal throughput or isolate the concurrency effect, because the ARM workload generates five candidates rather than one. Scalar execution at concurrency 16 is verified in its execution record.
+
+[Handoff and utilization evidence](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/arm-handoff-and-utilization.json). [Pending-stage concurrency settings](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/execution-settings.json).
 
 ### Full evaluation progress snapshot
 
