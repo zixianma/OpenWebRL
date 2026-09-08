@@ -751,13 +751,19 @@ def save(
     args = get_args()
     if should_disable_forward_pre_hook(args):
         disable_forward_pre_hook(model)
+    checkpointing_context = None
+    if os.environ.get("OPENWEBRL_STREAMING_CHECKPOINT") == "1":
+        if args.async_save or args.ckpt_format != "torch_dist":
+            raise ValueError("Streaming checkpoint requires synchronous torch_dist saving")
+        from slime.backends.megatron_utils.streaming_checkpoint import StreamingTorchDistSaveStrategy
+        checkpointing_context = {"save_strategy": StreamingTorchDistSaveStrategy()}
     save_checkpoint(
         iteration,
         model,
         optimizer,
         opt_param_scheduler,
         num_floating_point_operations_so_far=0,
-        checkpointing_context=None,
+        checkpointing_context=checkpointing_context,
         train_data_iterator=None,
         preprocess_common_state_dict_fn=None,
     )
