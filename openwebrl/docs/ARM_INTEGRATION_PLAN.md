@@ -1,10 +1,115 @@
 # Action reward models for OpenWebRL training
 
-Status: **Draft for discussion; implementation has not been approved.**
+Status: **All three inference smoke arms passed; the full comparison is running in the user-assigned one-H200 allocation 282209 on g001. The prior training allocation is excluded. Training integration remains a draft pending inference results.**
 
 Created: 2026-09-07. This is the working document for iterating on the plan originally proposed in conversation.
 
-## 1. Objective and recommendation
+## 1. Current priority: reproduce Online-Mind2Web inference gains
+
+The user selected inference validation as the first milestone. Use the frozen actor `OpenWebRL/OpenWebRL-4B-SFT` with these two exact reward model releases:
+
+| Arm | Candidate actions per turn | Selection | README success target |
+| --- | --- | --- | --- |
+| Baseline | 1 | Execute actor sample | 33.8% |
+| Scalar | 5 | `PTeterwak/OpenWebRL-4B-ScalarRM-LoRA` argmax | 46.3% |
+| Selection | 5 | `PTeterwak/OpenWebRL-4B-SelectionARM` | 51.1% |
+
+Use temperature 0.7 for the initial matched comparison, normalized coordinates, the same frozen actor, 300 fixed local task IDs, and the Online-Mind2Web AgentTrek/o4-mini evaluation protocol. Any unknown original setting must be marked as a reconstruction rather than claimed to be exact. A fresh-browser run is required for each arm; candidate sets can be shared for offline same-state audits, but complete interactive trajectories diverge after selection.
+
+Pinned releases resolved on 2026-09-07:
+
+- Actor: `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a` (matches the existing downloaded actor manifest).
+- Selection: `81b452d800d9f859687074f82680dd5257e02d89`.
+- Scalar adapter/head: `71c58489cd7cbaebcd74656df7ef11ba818661b8`.
+- ARM source: `02276b0ff3b9048d34e6a2afdcb9042dd9018c8c`.
+
+### Reproduction sequence
+
+1. Save pinned source/model provenance, prepare model-specific serving in an isolated environment, and verify score/prompt/coordinate contracts.
+2. Run offline scoring and a small live smoke across all three arms.
+3. Run the full fixed 300-task comparison with resumed per-task output, serialized candidate/selection traces, and a shared judge configuration.
+4. Report success over all scheduled tasks, valid-run success, task coverage, infrastructure/judge failures, and paired differences on common evaluable tasks. Do not silently discard different failed tasks in each arm. Repeated runs and paired uncertainty estimates should qualify the observed gains.
+5. Return to the training plan only after assessing inference behavior and resource cost.
+
+### Newly discovered limitations
+
+- The published dashboard does not give exactly the README denominators: its August data include n=1 95/276 and trained ARM 140/282; September reports another aborted-task exclusion. Exact README run manifests and the scalar per-task labels are not present in the inspected release. Record the README values as reported targets, not an established matching protocol.
+- Some exported dashboard ARM prompts ask for an explanation and contain system-prompt text in the action-history field, whereas the released canonical selection builder requires the no-CoT variant. Use the released builder as the reproducible default and retain this discrepancy in the report; do not invent equivalence to the historical runs.
+- The user assigned a separate one-H200 allocation (`282209`) to ARM evaluation after the initial training-handoff correction below. GPU occupancy alone is no longer accepted as an allocation handoff.
+
+### Prepared implementation and current validation
+
+The inference path is opt-in and separate from policy training:
+
+- [Pinned model downloader](../../scripts/prepare_arm_models.py).
+- [Candidate sampling and selection](../arm_inference.py).
+- [Frozen ARM server](../../scripts/serve_arm.py).
+- [Resumable benchmark runner](../arm_eval.py).
+- [Allocation-aware launcher](../../scripts/run_arm_reproduction.sh) and [automatic watcher](../../scripts/watch_arm_reproduction.py).
+- [Paired task report](../../scripts/summarize_arm_reproduction.py).
+
+Models are downloaded under `/gpfs/scrubbed/zixianma/checkpoints/web/arm`; reference code, manifests, and an isolated serving environment are under `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction`. The actor remains the existing pinned SFT download.
+
+CPU validation completed: eight ARM contract/structured-decoding tests, six watcher allocation/safety/promotion tests, six existing browser-turn tests, o4-mini model access, matching actor/selection vocabularies and templates, and matching shapes for all 713 released selection tensors. The omitted `lm_head.weight` is tied to the embedding. The frozen actor has now loaded on GPU and passed its generation health check. All three baseline and scalar smoke tasks completed with valid judge results. Scalar scores are finite and discriminate candidates. Selection model loading and live inference also passed. The constrained selection smoke completed with 3/3 valid judged tasks and no fallback across 34 actions. Aggregate benchmark performance remains **unvalidated**.
+
+Compatibility note: the release stores newer Transformers processor/config metadata. Installed Transformers 4.57.1 reads the selection rotary settings as `None` and cannot directly load its processor config. The server uses the original actor config/processor after vocabulary, template, and architecture checks, preserving the frozen ARM weights. Record this compatibility adaptation and the 262144 image-pixel cap in the result manifest. The scalar head uses the reference demo's BF16 projection and last-token pooling.
+
+Once two assigned GPUs are free, first run a small paired smoke from inside the active Slurm allocation:
+
+```bash
+# On the allocated node; the launcher refuses occupied GPUs.
+ARM_JOB_ID=<active-job-id> \
+srun --jobid=<active-job-id> --overlap --gres=gpu:2 \
+  env TASK_INDICES=0,50,100 N_PARALLEL=1 \
+  bash scripts/run_arm_reproduction.sh
+```
+
+For a manual full run, omit `TASK_INDICES` for all 300 tasks. Set an explicit `OUTPUT_ROOT` to resume the same run. Every output directory has a configuration manifest; the runner rejects mismatched resumes. All tasks remain in the scheduled denominator; valid-only and common-valid paired statistics are secondary reports. Runs occur baseline → scalar → selection, so date/time ordering is a residual confound to address with repeated or interleaved runs if the first comparison suggests a gain.
+
+### Dedicated evaluation allocation provided at 17:47 PDT
+
+The user explicitly assigned the new GPU on `g001` to ARM evaluation. Verified allocation **282209** has **one H200, 8 CPUs, and 200000 MiB host memory**, ending **2026-09-07 21:47:39 America/Los_Angeles**. Its physical GRES index is **7**, GPU UUID **`GPU-74ad27d6-2c55-e7b8-c160-604cbb6f44ff`**; inside its Slurm step it is CUDA device **0**. This UUID differs from both training GPUs in allocation 281697.
+
+- The frozen actor and one frozen ARM share the assigned H200. Actor static memory fraction is **0.4**; scalar and selection servers run sequentially. Model weights, sampling, candidate counts, and evaluation protocol remain as specified above.
+- The controller belongs to `job_282209/step_extern`, and the evaluation worker belongs to Slurm step `282209.11`. Neither lifetime depends on allocation 281697. Inherited Slurm/CUDA settings from other allocations are cleared before launching a step.
+- Smoke uses indices `0,50,100`, concurrency 3. All three arms passed with 3/3 valid judged tasks: baseline 27 action traces, scalar 46, selection 34; no selection fallbacks under constrained decoding. The full 300-task-per-arm comparison uses **concurrency 8** to improve GPU utilization within the remaining allocation. Task seeds, sampling, models, and horizons are unchanged.
+- Current run: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z`.
+- [Live status](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/watcher-status.json); model/browser logs and results are under `smoke/`, then `full/`.
+- One initial attempt was stopped to relocate the supervisor out of the older allocation; a clean-shell missing `rg` dependency was fixed before this launch. These earlier attempts are retained separately and will not be merged into the new result denominator.
+- New CLI requires `--dedicated-allocation` and supports `--gpu-count 1`; it refuses a controller tied to a different allocation. No additional allocation or extension was requested.
+
+### Selection decoding correction during the dedicated smoke
+
+The initial selection smoke produced some bare-index replies such as `</think>\n\n3`. The minimal released `selection_infer.py` demo uses JSON-only parsing and falls back to candidate 1, matching our initial implementation. The fuller canonical `selection_prompt.py` inference function supplies a **strict JSON schema** under `VISION_NO_COT=1`; its response parser also has more permissive recovery. Omitting that schema was a reproduction discrepancy.
+
+The server now uses installed **XGrammar with Hugging Face generation** to enforce the canonical schema (required integer `selection`, bounds 1 through candidate count). This preserves the strict parser and the original zero-fallback smoke gate. The grammar rejects bare numbers, indices 0/6 for five candidates, and extra fields in CPU tests. Generation remains greedy; the original chat-template thinking default is preserved. The serving implementation differs from the reference OpenAI-compatible server, so this is semantic schema parity, not a claim of identical inference-engine numerics.
+
+The unconstrained smoke is archived under `smoke/selection-unconstrained/`, with its logs and comparison preserved separately. Baseline and scalar smoke records were reused unchanged; selection was rerun from fresh browsers and passed. The full comparison uses fresh tasks in all three arms. The completed smoke was revalidated before increasing full-run concurrency from 4 to 8; no smoke outcomes were used to tune the policy or ARM weights. The selection health/manifest records `canonical_no_cot_json_schema/xgrammar` so constrained and unconstrained runs cannot silently resume into one another.
+
+### Automatic launch registered on 2026-09-07
+
+The user authorized starting when GPUs become available. The watcher ran in Slurm step `281697.1` on `g001`, with supervisor PID `86202`. It polled every 30 seconds and required two consecutive checks with no GPU compute processes and less than 1 GiB used on each assigned GPU. It is now stopped.
+
+- Smoke: task indices `0,50,100`, all three arms, concurrency 3.
+- Promotion: each arm must finish with at least one valid judged task and executed-action traces; scalar scores must be finite and selection outputs must parse without fallback. Task success is not a smoke requirement. This gate checks functionality, not performance gains or full scientific validation.
+- Full run after smoke passes: baseline → scalar → selection, 300 tasks per arm, concurrency 4. Per-task results support resumption.
+- Allocation bound: job `281697` ends at **2026-09-07 18:54:27 America/Los_Angeles**. No new allocation or extension is requested. The full comparison may exceed the remaining time; outputs persist if interrupted.
+- Run directory: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/queued-281697-20260908T003731Z`.
+- Live state: [watcher-status.json](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/queued-281697-20260908T003731Z/watcher-status.json). Logs: `supervisor.log`, `allocation-step.log`, then `smoke-launcher.log` and `full-launcher.log`.
+
+At registration both GPUs were occupied. They became free at approximately 17:40 PDT, and the watcher started the smoke at **17:41:02 PDT**. The actor loaded and all three baseline smoke tasks started; the first completed with a valid judge result at 17:42 PDT. No benchmark gain has been established. Source is backed up on scrubbed storage. Initial Git commit attempts were blocked by the project filesystem quota; the validated inference implementation is now committed as `cdbe52a`.
+
+### Training handoff correction at 17:44 PDT
+
+The user reported that RL training was still intended to be running. ARM evaluation and its watcher were stopped; Slurm step `281697.1` disappeared and both GPUs showed no compute processes. Existing unrelated processes were not signaled.
+
+The latest training run, `openwebrl-4b-reference-281697-20260907T225751`, had recorded exit code **1** at **17:40:11 PDT**, before ARM smoke started at **17:41:02 PDT**. Its last phase was checkpoint saving after rollout 2/90; the log reports `CUDA error: invalid argument` while copying checkpoint tensors to CPU. The health log shows an additional host-memory OOM kill near the failure. These observations do not establish a complete root-cause diagnosis.
+
+The original handoff check was insufficient: unused GPU memory can mean a failed or restarting training run. **Do not automatically restart ARM from GPU occupancy alone.** Obtain a deliberate training-to-evaluation handoff or verify successful training completion and that no recovery/restart is pending. The original inference objective remains pending, and partial smoke artifacts are preserved.
+
+Evidence: [training-handoff-check.json](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/queued-281697-20260908T003731Z/training-handoff-check.json).
+
+## 1a. Longer-term training objective and recommendation
 
 Improve held-out browser task completion by the **standalone, one-action policy** using fine-grained action or turn supervision. Measure training efficiency as well as final performance. Evaluate actor-plus-ARM inference separately so that search gains are not mistaken for policy learning.
 
@@ -20,11 +125,11 @@ Validate the released models on our states before committing to either route. Th
 The initial investigation inspected:
 
 - The [action-reward-models repository](https://github.com/piotr-teterwak/action-reward-models/tree/02276b0ff3b9048d34e6a2afdcb9042dd9018c8c), pinned to commit `02276b0ff3b9048d34e6a2afdcb9042dd9018c8c`.
-- Published model configuration files on Hugging Face. Their revisions still need pinning before a reproducible experiment.
+- Published model configuration files on Hugging Face, pinned to the revisions recorded above.
 - This OpenWebRL working tree, including existing uncommitted experimental changes.
 - The primary literature linked below.
 
-No model inference, benchmark reproduction, or ARM training has been performed. The linked dataset returned HTTP 401 on anonymous access; its actual records have not been inspected. Source-code observations and author-reported results are distinguished from proposed experiments throughout this document.
+The actor serving health check has passed on GPU and the live inference smoke is running. No completed benchmark reproduction or ARM training has been performed. The linked dataset returned HTTP 401 on anonymous access; its actual records have not been inspected. Source-code observations and author-reported results are distinguished from proposed experiments throughout this document.
 
 ## 3. What the released models predict
 
@@ -50,14 +155,14 @@ For OpenWebRL-4B-SFT on Online-Mind2Web, the repository reports 33.8% success wi
 
 | Component | Current behavior | Proposed use or change |
 | --- | --- | --- |
-| [generate_browser.py](generate_browser.py), `_generate_turn_sample_impl` | Separate samples carry pre-action context, response, log probabilities, trajectory ID, and turn index | Record ARM state context and candidate metadata; optionally sample alternatives at selected turns |
-| [reward_browser.py](reward_browser.py), `reward_func` | Scores the completed trajectory and broadcasts its reward to every turn | Preserve outcome scoring; keep ARM supervision in separate fields |
-| [slime/ray/rollout.py](../slime/ray/rollout.py), `_post_process_rewards` | Normalizes across trajectories and broadcasts one advantage; unequal turn rewards trigger a warning and the first reward is used | Use a custom postprocessor for distinct turn advantages |
-| [rl_recipe.py](rl_recipe.py), `state_advantages` | Existing experimental hook mixes GRPO with a frozen prefix-state baseline | Reuse the hook contract, not the assumption that an ARM is a success-probability provider |
-| [dynamic_sampling_filters.py](../slime/rollout/filter_hub/dynamic_sampling_filters.py) | Rejects groups with uniform terminal rewards | Allow useful local preference supervision from valid all-failure/all-success groups |
-| [recipe_data.py](recipe_data.py) | Exports finished rollout groups, including dynamically rejected groups when configured | Extend records for offline ARM auditing and preferences |
-| [loss.py](../slime/backends/megatron_utils/loss.py), `compute_advantages_and_returns` | GRPO expands a sample scalar over response tokens; PPO handles returns within a sample | Existing GRPO path supports a turn scalar; cross-turn reward-to-go/GAE needs explicit trajectory handling |
-| [actor.py](../slime/backends/megatron_utils/actor.py) | Multi-epoch global shuffle path is actor-only | True critic training requires additional backend work or a compatible training path |
+| [generate_browser.py](../generate_browser.py), `_generate_turn_sample_impl` | Separate samples carry pre-action context, response, log probabilities, trajectory ID, and turn index | Record ARM state context and candidate metadata; optionally sample alternatives at selected turns |
+| [reward_browser.py](../reward_browser.py), `reward_func` | Scores the completed trajectory and broadcasts its reward to every turn | Preserve outcome scoring; keep ARM supervision in separate fields |
+| [slime/ray/rollout.py](../../slime/ray/rollout.py), `_post_process_rewards` | Normalizes across trajectories and broadcasts one advantage; unequal turn rewards trigger a warning and the first reward is used | Use a custom postprocessor for distinct turn advantages |
+| [rl_recipe.py](../rl_recipe.py), `state_advantages` | Existing experimental hook mixes GRPO with a frozen prefix-state baseline | Reuse the hook contract, not the assumption that an ARM is a success-probability provider |
+| [dynamic_sampling_filters.py](../../slime/rollout/filter_hub/dynamic_sampling_filters.py) | Rejects groups with uniform terminal rewards | Allow useful local preference supervision from valid all-failure/all-success groups |
+| [recipe_data.py](../recipe_data.py) | Exports finished rollout groups, including dynamically rejected groups when configured | Extend records for offline ARM auditing and preferences |
+| [loss.py](../../slime/backends/megatron_utils/loss.py), `compute_advantages_and_returns` | GRPO expands a sample scalar over response tokens; PPO handles returns within a sample | Existing GRPO path supports a turn scalar; cross-turn reward-to-go/GAE needs explicit trajectory handling |
+| [actor.py](../../slime/backends/megatron_utils/actor.py) | Multi-epoch global shuffle path is actor-only | True critic training requires additional backend work or a compatible training path |
 
 The main implementation trap is that **changing only `reward_func` to emit different turn rewards will not yield the intended credit assignment** under the current default normalization.
 
@@ -223,7 +328,7 @@ Meaningful verification should cover prompt/pooling parity, coordinate conversio
 
 ## 11. Open decisions for iteration
 
-- [ ] **Primary scope:** strongest standalone-policy improvement, allowing DPO/SFT, or specifically online-RL reward integration?
+- [x] **First milestone:** reproduce inference gains on Online-Mind2Web with the named selection and scalar ARMs; training choices remain deferred.
 - [ ] **First comparison:** run baseline + hybrid + preference branches, or narrow to one ARM training route after the audit?
 - [ ] **Candidate budget:** five candidates on every turn for initial validation, then how much turn subsampling is affordable in training?
 - [ ] **Evaluation split:** which tasks/sites are development, held-out validation, and final test, and what overlap exists with released ARM training data?
@@ -237,4 +342,15 @@ Meaningful verification should cover prompt/pooling parity, coordinate conversio
 | --- | --- | --- |
 | 2026-09-07 | Investigate ARM and propose integration options before implementation | Source investigation and initial proposal completed; model validation remains pending |
 | 2026-09-07 | Record the plan in a Markdown file and iterate on that document | This file is the working draft |
-| Pending | Choose online-RL-only versus broader policy-improvement scope | Open; the request to save the plan does not resolve this choice |
+| 2026-09-07 | Validate inference first using SelectionARM and ScalarRM-LoRA on Online-Mind2Web | Models and evaluation implementation prepared; GPU validation pending |
+| 2026-09-07 | Start eval runs when GPUs become available | Smoke started at 17:41 PDT; stopped at 17:44 PDT after the user raised a training-ownership concern |
+| 2026-09-07 | Use the new GPU on g001 for ARM evaluation | Dedicated allocation 282209; all smoke arms passed; full comparison running at concurrency 8 |
+
+## 13. Self-critique carried forward
+
+- Initial “medium–high” training likelihoods are hypotheses, not established downstream success probabilities. Inference validation now precedes choosing a training route.
+- Same-state preference is not necessarily incremental progress; all candidates can be bad.
+- Uniform-outcome groups have zero GRPO outcome advantage, so a local bonus can drive their entire update. Retaining those groups must be a separate training ablation.
+- Short ARM context and reasoning/style shortcuts can cause disagreement with a better-informed actor.
+- Filtering, loss weighting, candidate generation, and training objectives should be changed separately for interpretable experiments.
+- Candidate generation and scoring costs must be measured before choosing a training budget.
