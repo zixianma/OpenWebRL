@@ -52,6 +52,8 @@ def finish_tracking(args):
     try:
         if wandb.run is not None:
             wandb.finish()
+        # Ray may stop worker processes before the SDK atexit hook can flush.
+        wandb.teardown()
     except Exception:
         logging.getLogger(__name__).exception("Failed to finish wandb run")
 

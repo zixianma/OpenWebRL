@@ -127,6 +127,10 @@ class RayTrainGroup:
         """Save actor model"""
         return ray.get([actor.save_model.remote(rollout_id, force_sync=force_sync) for actor in self._actor_handlers])
 
+    def finish_tracking(self):
+        """Flush all training workers before the driver closes its W&B service."""
+        return ray.get([actor.finish_tracking.remote() for actor in self._actor_handlers])
+
     def update_weights(self):
         """Broadcast weights from rank 0 to all other ranks."""
         return ray.get([actor.update_weights.remote() for actor in self._actor_handlers])

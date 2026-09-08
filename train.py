@@ -99,6 +99,10 @@ def train(args):
         (Path(args.save) / "resume_verification.json").write_text(json.dumps(report, indent=2) + "\n")
         append_progress_log(args, "[ResumeVerification] " + json.dumps(report))
         _ray_get_with_actor_retry(rollout_manager.dispose.remote(), label="rollout_manager.dispose")
+        if actor_model is not None:
+            actor_model.finish_tracking()
+        if critic_model is not None:
+            critic_model.finish_tracking()
         finish_tracking(args)
         return
     progress_bar = _build_train_progress_bar(args, num_rollout_per_epoch)
@@ -270,6 +274,10 @@ def train(args):
             progress_bar.close()
 
     _ray_get_with_actor_retry(rollout_manager.dispose.remote(), label="rollout_manager.dispose")
+    if actor_model is not None:
+        actor_model.finish_tracking()
+    if critic_model is not None:
+        critic_model.finish_tracking()
     finish_tracking(args)
 
 

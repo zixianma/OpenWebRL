@@ -98,6 +98,11 @@ class TrainRayActor(RayActor):
         clear_memory()
         print_memory("after TrainRayActor.clear_memory")
 
+    def finish_tracking(self):
+        from slime.utils.logging_utils import finish_tracking
+
+        finish_tracking(self.args)
+
     @abc.abstractmethod
     def sleep(self, tags):
         raise NotImplementedError
