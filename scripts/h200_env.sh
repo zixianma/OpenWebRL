@@ -18,6 +18,6 @@ export TRITON_CACHE_DIR="$OPENWEBRL_RUNTIME_ROOT/triton-cache"
 export PLAYWRIGHT_BROWSERS_PATH="$OPENWEBRL_RUNTIME_ROOT/browsers"
 export OMP_NUM_THREADS=4 MAX_JOBS=8 CUDA_DEVICE_MAX_CONNECTIONS=1
 export SLIME_HF_VISION_ATTN_IMPL=sdpa
-# SGLang installs a uvloop policy. A stdlib loop under that policy cannot
-# spawn browser subprocesses on Python 3.12 (get_child_watcher is unsupported).
-export SLIME_ASYNC_USE_STDLIB_LOOP=0
+# Use the stdlib loop and its compatible child-watcher policy for browser
+# subprocesses; uvloop cancellation has caused native rollout-worker aborts.
+export SLIME_ASYNC_USE_STDLIB_LOOP=1

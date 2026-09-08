@@ -1,6 +1,33 @@
 # H200 runtime and validation
 
-## Current continuation milestone, 2026-09-07 22:24 PDT
+## Collection 5 crash and recovery preparation, 2026-09-07 23:11 PDT
+
+The first g005 continuation exited with code 1 after its rollout actor received
+SIGABRT at 23:02:57 during cancellation of surplus browser tasks. The native
+crash stack points to the uvloop background thread; preceding browser errors
+reported a file descriptor already owned by a TCP transport. Cgroup OOM and
+OOM-kill counters remained zero. Ray RPC failures were a consequence of the
+actor abort. Collection 5 had reached 48 accepted groups in 2461.4 seconds,
+with 105 completed and 39 pending groups, but its recovery batch and reward
+metric had not been saved. It added no optimizer updates. Checkpoint 3 with
+62 Adam updates remains valid; recollection is necessary.
+
+The background stdlib loop now also installs a compatible stdlib event-loop
+policy when SGLang has installed uvloop's policy. This fixes the Python 3.12
+child-watcher mismatch that previously forced the browser runtime back onto
+uvloop. The owned H200 environment now selects the stdlib loop. A CPU probe
+reproduced the old NotImplementedError; a regression covering 16 subprocesses,
+32 concurrent HTTP cancellations, and a subsequent subprocess passed. An actual
+browser startup, screenshot, and cleanup test also passed on g005 through the
+fixed background helper after uvloop policy installation. These tests validate
+the replacement setup; they do not reproduce or prove the elimination of every
+native transport race from the long-running failed worker.
+
+Crash diagnostics are preserved under the first continuation's
+`failure-collection-5/` directory. Recovery will use the existing allocation
+and checkpoint 3, with no new paid allocation or budget extension.
+
+## Previous continuation milestone, 2026-09-07 22:24 PDT
 
 W&B run `qcq7i4ug` is continuing on `g005`, inside existing allocation 282346
 (two H200s; allocation ends 2026-09-08 03:36:15 PDT, launcher stops three
@@ -157,10 +184,11 @@ identical rewards and zero advantages. The fixture now uses original trajectory
 IDs; a nonzero-reward browser rerun is still required. The earlier HF image
 test and text Megatron tests did establish nonzero policy updates separately.
 
-The browser run required `SLIME_ASYNC_USE_STDLIB_LOOP=0`: SGLang installs a
+The initial browser workaround used `SLIME_ASYNC_USE_STDLIB_LOOP=0`: SGLang installs a
 uvloop policy, and Python 3.12's stdlib selector loop cannot spawn subprocesses
-under that policy. The runtime now uses the existing active-policy option.
-A CPU subprocess reproducer failed before this change and passed afterward.
+under that policy. A CPU subprocess reproducer passed with the active-policy
+option. This workaround is superseded by the compatible stdlib loop and policy
+fix described above after the later native uvloop cancellation crash.
 
 On 2026-09-07, allocation 281697 reran the corrected browser fixture on two
 H200s. Both PPO epochs completed with nonzero advantages (mean absolute value

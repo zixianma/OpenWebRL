@@ -14,6 +14,12 @@ def _create_background_loop() -> asyncio.AbstractEventLoop:
     """
     use_stdlib_loop = os.environ.get("SLIME_ASYNC_USE_STDLIB_LOOP", "1") == "1"
     if use_stdlib_loop and os.name != "nt" and hasattr(asyncio, "SelectorEventLoop"):
+        # Python 3.12's selector subprocess transport asks the process-wide
+        # policy for a child watcher. SGLang can install uvloop's policy during
+        # import; that policy cannot supply the stdlib subprocess watcher.
+        # Keep the policy consistent with the explicitly requested loop type.
+        if not isinstance(asyncio.get_event_loop_policy(), asyncio.DefaultEventLoopPolicy):
+            asyncio.set_event_loop_policy(asyncio.DefaultEventLoopPolicy())
         return asyncio.SelectorEventLoop()
     return asyncio.new_event_loop()
 
