@@ -358,7 +358,7 @@ Current run: [W&B qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug).
 Run directory:
 
 ```text
-/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-281697-20260907T225751
+/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T024410
 ```
 
 | Local artifact | Contents |
@@ -366,12 +366,12 @@ Run directory:
 | `training.log` | Full training/collection output and detailed metric dictionaries. |
 | `progress.log` | Concise `[GenerateProgress]`, `[RolloutReward]`, `[TrainMetrics]`, evaluation, and phase records. Some float values are rounded for readability. |
 | `health.jsonl` | Periodic cgroup/GPU health records described above. |
-| `training_reward_sync.jsonl` | Exact reward aliases sent by the live auxiliary logger, including collection number and upload time. |
+| `training_reward_sync.jsonl` (earlier run directories) | Exact reward aliases sent by the earlier auxiliary logger. The current continuation logs them natively. |
 | `wandb/` | W&B SDK files; system data and training history need not share the same storage stream. |
 | `launch_manifest.json`, `run_config/` | Effective launch settings and archived source/configuration. Use these to distinguish a running snapshot from later worktree edits. |
-| `iter_0000000/` | First saved distributed training checkpoint, after both PPO epochs and 14 updates. |
+| `iter_<index>/` | Distributed model/optimizer checkpoint after both PPO epochs. The current continuation first saved `iter_0000002/`, containing 46 Adam updates in total. |
 | `latest_checkpointed_iteration.txt` | Latest saved zero-based rollout checkpoint index. |
-| `rollout_recovery/0.pt` | Saved collected samples for replay; not an updated model checkpoint. |
+| `rollout_recovery/<index>.pt` | Saved collected samples for replay; not an updated model checkpoint. |
 
 Checkpoints are saved synchronously **after every completed rollout's training** (`save_interval=1`), not after every optimizer update or at a fixed wall-clock interval. Subsequent checkpoint directories are `iter_0000001/`, etc.
 
@@ -388,5 +388,23 @@ for reward iteration 1 and `0.3325812274368231` for iteration 2. Two recovery
 attempts also emitted iteration 2 with the same measured value. These are two
 distinct browser collections, not four observations. Repeated optimizer records
 from replay likewise do not imply extra completed baseline iterations. Durable
-progress must be checked in the checkpoint marker, dataset cursor, and optimizer
-scheduler state; see `H200_TESTING.md` for recovery outcomes.
+progress must be checked in the checkpoint marker, dataset cursor, and Adam
+optimizer counters, with the scheduler checked separately; see
+`H200_TESTING.md` for recovery outcomes.
+
+At approximately 21:08 PDT, the g005 continuation saved checkpoint 2 with
+Adam parameter-group steps `[46, 46]`, matching 30 restored plus 16 newly
+logged optimizer updates. Its scheduler reports 12032/256 = 47 batches.
+The old initialization code advanced the scheduler again after Megatron had
+restored it, adding one batch when loading checkpoint iteration 1. This is a
+bookkeeping offset, not another optimizer update. Constant LR and weight decay
+make it numerically harmless for this recipe; nonconstant schedules would be
+affected. The repository fix removes the redundant advance for future launches.
+
+The checkpoint inspector rejects scheduler/Adam mismatches by default. For the
+diagnosed offset in this continuation, use
+`--expected-scheduler-offset-updates 1`, alongside the true
+`--expected-updates` count. It reports Adam updates, raw scheduler batches,
+and the offset separately. Do not count durable updates from the scheduler
+alone when Adam counters are available. This change does not rewrite existing
+checkpoint files.

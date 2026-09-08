@@ -20,21 +20,22 @@ Use `train/reward` as the sole primary reward series: 0.3874 corresponds to 38.7
 
 The pinned official repository revision inspected is `9a120949aca3e58a2628f4b4e6edd0474d984873`. Its [collector](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/slime/ray/rollout.py) computes raw reward mean over accepted flattened samples. Its [trainer](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/slime/backends/megatron_utils/data.py) also logs the selected batch's mean raw reward. Both are iteration-level summaries. No figure-export script or curve CSV was found in that revision's file tree. The separate selected-batch chart preserves the distinction instead of silently assuming the two means are identical.
 
-## Why two observations, not seven
+## Why optimizer updates do not add reward observations
 
 The first collection yielded 2,034 turn samples. Seven full 256-turn minibatches fit in each epoch; two epochs made 14 optimizer updates. Those updates reused rewards assigned during that same collection. A per-minibatch mean could be logged, but would describe which stored samples each update consumed. It would not add another collection to the x-axis.
 
-Two completed collections therefore give x=0 and x=1 on the comparison chart. Seven minibatches are not seven online collection iterations. The second collection has its own sample count and can have a different number of optimizer batches.
+Two completed collections therefore give x=0 and x=1 on the comparison chart. Seven minibatches are not seven online collection iterations. The third collection yielded 2271 turn samples: eight full minibatches per epoch and two epochs produced 16 optimizer updates, but only one new reward observation. Thus the live run had three reward points while collection 3's optimizer updates were running. Collection 4 adds the next point only after fresh browser collection finishes.
 
 | Zero-based iteration | Collected-turn reward (%) |
 | --- | ---: |
 | 0 | 38.7413962635 |
 | 1 | 33.2581227437 |
+| 2 | 38.8815499780 |
 
-These are raw observations, not smoothed trend values. A two-point change is insufficient to establish convergence, divergence, or successful reproduction. Browser access, task sampling, trajectory lengths, and filtering can change the reward independently of policy quality. Inspect completed-task success and invalidity alongside it, and compare held-out evaluation with matching judge and validity conventions before claiming benchmark reproduction.
+These are raw observations, not smoothed trend values. Three points are insufficient to establish convergence, divergence, or successful reproduction. Browser access, task sampling, trajectory lengths, and filtering can change the reward independently of policy quality. Inspect completed-task success and invalidity alongside it, and compare held-out evaluation with matching judge and validity conventions before claiming benchmark reproduction.
 
 ## Live behavior and provenance
 
-The duplicate paper writer and native `paper/*` emission are disabled. Existing `paper_reward_sync.jsonl` is retained as provenance. `scripts/sync_training_rewards.py` supplies the current run's `train/reward` alias; updated repository launches emit it directly. These logging changes do not change the training recipe.
+The duplicate paper writer and native `paper/*` emission are disabled. Existing `paper_reward_sync.jsonl` is retained as provenance. `scripts/sync_training_rewards.py` supplied the earlier run's `train/reward` alias; the current g005 continuation emits it directly. These logging changes do not change the training recipe.
 
 See [METRICS.md](METRICS.md) for reward formulas, subset weighting, task denominators, update counts, and known axis limitations. In particular, the current optimizer `train/step` label can jump when minibatch counts change; the paper comparison uses collection identity and is unaffected by that label issue.

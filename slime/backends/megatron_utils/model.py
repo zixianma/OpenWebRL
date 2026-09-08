@@ -841,6 +841,8 @@ def initialize_model_and_optimizer(
     )
     clear_memory()
 
-    opt_param_scheduler.step(increment=iteration * args.global_batch_size)
+    # load_checkpoint already restores the scheduler alongside the optimizer.
+    # A rollout iteration is not an optimizer-update count (each rollout can
+    # contain several minibatches and PPO epochs), so do not advance it again.
 
     return model, optimizer, opt_param_scheduler, iteration

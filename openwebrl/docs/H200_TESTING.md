@@ -1,6 +1,6 @@
 # H200 runtime and validation
 
-## Current continuation milestone, 2026-09-07 20:48 PDT
+## Current continuation milestone, 2026-09-07 21:16 PDT
 
 W&B run `qcq7i4ug` is continuing on `g005`, inside existing allocation 282346
 (two H200s; allocation ends 2026-09-08 03:36:15 PDT, launcher stops three
@@ -14,10 +14,40 @@ after restoring checkpoint 1 with 30 durable optimizer updates. It produced
 2271 turn samples and a saved recovery batch, `rollout_recovery/2.pt` (65.51 GiB).
 W&B history independently confirms `train/reward_iteration=3` and
 `train/reward=0.38881549977983265`. Two PPO epochs use eight global minibatches
-each, for 16 new updates. Five have completed at this snapshot; checkpoint 2
-is not yet saved. The host-memory cap is 419430400000 bytes (390.625 GiB).
-Cache reclamation has occurred, with no OOM or OOM-kill events. The live CUDA
-cache guard released reserved memory from 109.63 to 48.07 GiB during training.
+each, for 16 new updates. All 16 finished, and checkpoint `iter_0000002` was
+saved at about 21:08 PDT. It contains **46 actual Adam updates**, 1519 state
+entries, 3507 stored extents, and 62134965899 shard bytes. Its matching dataset
+cursor exists. All metadata-referenced file extents and a 2048-byte CPU tensor
+sample passed checks; the sample covers only one of the two shards. This is
+not a full tensor reload. See `checkpoint_verification_2.json` in the run.
+Collection 4 began around 21:09 PDT.
+
+The host-memory cap is 419430400000 bytes (390.625 GiB). Cache reclamation
+occurred during training and saving, with no OOM or OOM-kill events. Memory
+fell to about 252 GiB as collection 4 began. The live CUDA cache guard released
+reserved memory from 109.63 to 48.07 GiB during training.
+
+Checkpoint validation exposed a scheduler bookkeeping bug: Megatron restores
+the scheduler, then OpenWebRL used to advance it by `loaded_iteration * GBS`
+again. Loading iteration 1 added 256 to `num_steps`, so checkpoint 2 records
+12032/256 = 47 scheduler batches but both Adam parameter groups record step
+46. The learning rate (1e-6) and weight decay (0.1 for the decay group, 0 for
+the no-decay group) are constant, so that extra scheduler count does not
+change this run's optimization settings or represent an extra Adam update.
+The one-batch offset remains in subsequent saves from this live process.
+
+The repository now removes that redundant advance. Seven focused CPU tests
+passed, including real scheduler restoration with linear decay and mocked
+model setup, unchanged post-load learning rates, and rejection of unexplained
+counter mismatches. The fix prevents new offsets; it does not rewrite existing
+checkpoints or alter the already-running process. The inspector now uses Adam
+group counters when present and separately reports scheduler counts. This
+checkpoint requires an explicit acknowledgment of the diagnosed discrepancy:
+
+```bash
+python scripts/inspect_training_checkpoint.py "$RUN_DIRECTORY" \
+  --expected-updates 46 --expected-scheduler-offset-updates 1 --sample-payloads
+```
 
 The repository driver now releases `rollout_data_ref` after all applicable
 actor/critic training calls complete. Previously it retained the old batch's
@@ -27,6 +57,8 @@ change and passed after it for actor-only, actor-plus-critic, and critic-only
 paths. This checks reference lifetime and ordering, not distributed memory
 reclamation. This change is **not in the running g005 snapshot**; monitor its
 next collection's memory before deciding whether a restart is needed.
+
+## Runtime
 
 The dedicated environment is `/gpfs/scrubbed/zixianma/openwebrl-runtime/venv`.
 The checkpoint is `/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT`.
