@@ -1,8 +1,10 @@
 # Action reward models for OpenWebRL training
 
-Status: **Baseline is complete at 90/300 successes (30.0% overall; 33.7% among 267 valid evaluations). The ARM comparison is resuming from 277 saved scalar tasks in user-assigned allocation 282782 on g005, followed by SelectionARM. Training integration remains a draft pending complete inference results.**
+Status: **Baseline and ScalarRM evaluations are complete: 30.0% versus 38.0% overall success, and 33.7% versus 45.4% valid-only. SelectionARM is running on g005. Action-level filtered SFT is a prepared proposal; no SFT training has launched.**
 
 Created: 2026-09-07. This is the working document for iterating on the plan originally proposed in conversation.
+
+[Inference results, denominators, and retry plan](ARM_INFERENCE_RESULTS.md) · [Action-level filtered SFT pilot](ARM_FILTERED_SFT_PLAN.md).
 
 ## 1. Current priority: reproduce Online-Mind2Web inference gains
 
@@ -374,6 +376,7 @@ Meaningful verification should cover prompt/pooling parity, coordinate conversio
 | 2026-09-07 | Start eval runs when GPUs become available | Smoke started at 17:41 PDT; stopped at 17:44 PDT after the user raised a training-ownership concern |
 | 2026-09-07 | Use the new GPU on g001 for ARM evaluation | Dedicated allocation 282209; baseline completed; scalar saved 277/300 tasks before expiry; ARM concurrency increased to 16 |
 | 2026-09-07 | Continue evaluations on zixianma@g005 within its four-hour session | Dedicated allocation 282782; resume 23 unfinished scalar tasks, then all 300 SelectionARM tasks; existing outcomes preserved |
+| 2026-09-07 | Prepare ARM-filtered SFT and record inference results with both denominators | Results and paired analysis recorded; 128/32/32-task SFT preparation split written on CPU; matched invalid-task retries proposed, not launched |
 
 ## 13. Self-critique carried forward
 
