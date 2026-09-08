@@ -10,6 +10,7 @@ if (( NUM_GPUS < TP_SIZE || NUM_GPUS % TP_SIZE != 0 )); then
     echo 'NUM_GPUS must be a positive multiple of TP_SIZE.' >&2; exit 1
 fi
 export SLIME_BROWSER_ENV_MODE=local_process
+export OPENWEBRL_CUDA_CACHE_LIMIT_GIB="${OPENWEBRL_CUDA_CACHE_LIMIT_GIB:-100}"
 # Avoid staging the full model and optimizer in host memory during synchronous saves.
 export OPENWEBRL_STREAMING_CHECKPOINT="${OPENWEBRL_STREAMING_CHECKPOINT:-1}"
 export SLIME_BROWSER_LOCAL_PROCESS_PYTHON="$OPENWEBRL_RUNTIME_ROOT/venv/bin/python"

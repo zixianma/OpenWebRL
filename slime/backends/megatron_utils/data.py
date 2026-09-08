@@ -12,6 +12,7 @@ from megatron.core.packed_seq_params import PackedSeqParams
 from slime.utils import train_metric_utils
 from slime.utils.data import get_minimum_num_micro_batch_size
 from slime.utils.flops_utils import calculate_fwd_flops
+from slime.utils.memory_utils import release_unused_cuda_cache_under_pressure
 from slime.utils.metric_utils import compute_pass_rate, compute_rollout_step
 from slime.utils.processing_utils import load_tokenizer
 from slime.utils.seqlen_balancing import get_seqlen_balanced_partitions
@@ -52,6 +53,7 @@ def get_batch(
     Plus any other requested keys forwarded from the iterator.
     """
 
+    release_unused_cuda_cache_under_pressure()
     assert "tokens" in keys
     batch = data_iterator.get_next(keys)
 
