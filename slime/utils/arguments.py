@@ -1148,6 +1148,9 @@ def get_slime_extra_args_provider(add_custom_arguments=None):
                 help="Number of consecutive failures before marking a worker as unhealthy.",
             )
             RouterArgs.add_cli_args(parser, use_router_prefix=True, exclude_host_port=True)
+            # Router defaults belong to the parser that owns the router CLI.
+            # Server-parser defaults would overwrite explicit values during merge.
+            parser.set_defaults(router_balance_abs_threshold=10, router_balance_rel_threshold=1.2)
             return parser
 
         # wandb
