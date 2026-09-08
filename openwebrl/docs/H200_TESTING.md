@@ -1,5 +1,27 @@
 # H200 runtime and validation
 
+## Checkpoint 5 validated, 2026-09-08 02:21 PDT
+
+Collection 6 completed all 14 optimizer updates and saved `iter_0000005` before
+fresh collection 7 began around 02:19 PDT. The checkpoint's Adam counters are
+`[90, 90]`, with scheduler count 23296/256 = 91: the existing offset remains +1.
+All 1519 state entries, 3507 stored extents, four shard files totaling
+62134965899 bytes, and the matching dataset cursor passed inspection. Small CPU
+tensor samples (32768 bytes, covering two of four shards) were finite; this is
+not a full tensor reload. See `checkpoint_verification_5.json` in the current
+recovery run. The latest actual full GPU resume audit still refers to checkpoint 3.
+
+W&B history rows 130–143 contain all fourteen collection-6 optimizer records,
+with finite training values. The sixth fresh reward observation is in row 128.
+See `wandb_collection_6_complete_audit.json`. Cgroup OOM and OOM-kill counters
+remained zero through collection, cleanup, training, and checkpoint saving.
+Memory dropped from the cap during training to about 148 GiB in collection 7.
+
+At 02:21 PDT approximately 75 minutes remained in allocation 282346. Whether
+collection 7 can also finish both PPO epochs depends on its browser duration;
+any fully collected recovery batch must be preserved separately from durable
+optimizer progress. No new allocation or budget extension is authorized.
+
 ## Collection 6 reward and cleanup verified, 2026-09-08 01:52 PDT
 
 Collection 6 finished in 4106.0 seconds (68.4 minutes), with 48 accepted groups,
