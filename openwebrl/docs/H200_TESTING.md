@@ -1,5 +1,34 @@
 # H200 runtime and validation
 
+## Recovery running, 2026-09-07 23:18 PDT
+
+The same W&B run resumed from checkpoint 3 at 23:14 PDT, using an explicit
+`srun --jobid=282346` step in the existing allocation. The new run directory is
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T061434`;
+its `training.log`, `progress.log`, and `health.jsonl` are the current logs.
+The new source is `reference-stage1-282346-stdlib-recovery` under the runtime.
+Actual two-GPU model and optimizer loading completed successfully, followed by
+fresh collection 5 at 23:16:42. See `resume_load_audit.json` in the new run.
+The starting durable count remains 62 Adam updates; the existing scheduler
+counter offset +1 was preserved, and the resume fix prevents adding another.
+
+This continuation includes the tested stdlib event-loop fix, restored-scheduler
+fix, consumed-batch-reference release, worker W&B shutdown ordering, and router
+CLI precedence fix. The actual router imbalance threshold is now 2 as requested
+by the launcher. All five recorded baseline recipe files are byte-identical to
+the preceding live snapshot. The copied manifest's stale telemetry hash was
+refreshed against those actual files, with the preceding recorded hashes retained.
+W&B history still has four reward observations; the failed collection emitted no
+fifth point. The allocation deadline is unchanged, 03:36:15 PDT, with launcher
+shutdown three minutes earlier.
+
+**Use an explicit existing job ID for node commands and recovery launches.**
+After a separate user allocation started on g005, plain SSH attached to that
+newer allocation through Slurm's adoption behavior. Its GPU workload was left
+alone. Allocation 282346's two free GPUs were verified in its own `srun` step
+before restarting; setting SLURM_JOB_ID in an arbitrary SSH shell would not
+change that shell's actual resource cgroup.
+
 ## Collection 5 crash and recovery preparation, 2026-09-07 23:11 PDT
 
 The first g005 continuation exited with code 1 after its rollout actor received
