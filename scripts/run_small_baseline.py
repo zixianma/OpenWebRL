@@ -19,6 +19,9 @@ RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--resume-from', type=Path)
+    parser.add_argument('--wandb-run-id')
+    parser.add_argument('--verify-resume-only', action='store_true')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
     parser.add_argument('--profile', choices=['small', 'paper', 'reference'], default='small')
@@ -26,6 +29,10 @@ def main():
     parser.add_argument('--steps', type=int, default=15)
     parser.add_argument('--wandb-mode', choices=['online', 'offline'], default='online')
     args = parser.parse_args()
+    if args.verify_resume_only:
+        if not args.resume_from:
+            parser.error('--verify-resume-only requires --resume-from')
+        args.wandb_mode = 'offline'
     paper = args.profile in {'paper', 'reference'}
     reference = args.profile == 'reference'
     if reference and not (REPO / 'reference_manifest.json').is_file():
@@ -35,6 +42,11 @@ def main():
     if args.rollouts < 1 or args.steps < 1:
         parser.error('--rollouts and --steps must be positive')
     env = os.environ.copy()
+    if args.verify_resume_only:
+        for key in list(env):
+            if key.startswith('OPENWEBRL_REPLAY_') or key in {'OPENWEBRL_STOP_AFTER_SAVED_ROLLOUT', 'WANDB_RUN_ID'}:
+                env.pop(key)
+        env['OPENWEBRL_VERIFY_RESUME_ONLY'] = '1'
     if args.env_file.exists():
         for key, value in dotenv_values(args.env_file).items():
             if value and key.startswith(('JUDGE_', 'WANDB_', 'OPENAI_', 'AZURE_')):
@@ -73,10 +85,12 @@ def main():
         if not match:
             raise SystemExit('Cannot determine allocation end time.')
         end = time.mktime(time.strptime(match.group(1), '%Y-%m-%dT%H:%M:%S'))
-        seconds = min(seconds, int(end - time.time()) - 300)
-        if seconds < 600:
-            raise SystemExit('Less than ten minutes remain after the shutdown margin.')
+        seconds = min(seconds, int(end - time.time()) - (30 if args.verify_resume_only else 300))
+        if seconds < (60 if args.verify_resume_only else 600):
+            raise SystemExit('Insufficient time remains after the shutdown margin.')
     name = f'openwebrl-4b-{args.profile}-{job or "dryrun"}-{time.strftime("%Y%m%dT%H%M%S", time.gmtime())}'
+    if args.verify_resume_only:
+        name = name.replace(f'-{args.profile}-', '-resume-check-')
     out = RUNTIME / 'runs' / name
     env.update(NUM_GPUS='2', TP_SIZE='2', NUM_ROLLOUT=str(args.rollouts),
                BROWSER_MAX_STEPS=str(args.steps), ROLLOUT_BATCH_SIZE=str(groups), N_SAMPLES='5',
@@ -84,10 +98,18 @@ def main():
                BROWSER_CONCURRENCY=str(concurrency), SGLANG_CONCURRENCY=str(48 if paper else 4),
                LEARNING_RATE='1e-6' if paper else '5e-7', RECOMPUTE_ACTIVATIONS='1' if paper else '0', SAVE_INTERVAL='1' if paper else '5', SAVE_DIR=str(out),
                WANDB_MODE=args.wandb_mode)
-    # A baseline profile always starts from SFT; never inherit pilot resume settings.
+    # Start from SFT unless an explicit checkpoint root is supplied; ignore inherited pilot settings.
     for key in ['SLIME_LOAD_CHECKPOINT', 'SLIME_CKPT_STEP', 'OVERRIDE_OPT_PARAM_SCHEDULER']:
         env.pop(key, None)
-    command = ['timeout', '--signal=INT', '--kill-after=120', str(seconds),
+    if args.resume_from:
+        marker = args.resume_from / 'latest_checkpointed_iteration.txt'
+        if not marker.is_file():
+            raise SystemExit(f'Missing resume checkpoint marker: {marker}')
+        env['SLIME_LOAD_CHECKPOINT'] = str(args.resume_from.resolve())
+    if args.wandb_run_id and not args.verify_resume_only:
+        env['WANDB_RUN_ID'] = args.wandb_run_id
+    env.setdefault('RAY_DEFAULT_OBJECT_STORE_MAX_MEMORY_BYTES', str(24 * 1024**3))
+    command = ['timeout', '--signal=INT', '--kill-after=20' if args.verify_resume_only else '--kill-after=120', str(seconds),
                'bash', str(REPO / 'scripts/run_h200_browser.sh'),
                '--use-wandb', '--wandb-mode', args.wandb_mode, '--wandb-project', env.get('WANDB_PROJECT', 'openwebrl'),
                '--wandb-group', name, '--disable-wandb-random-suffix', '--wandb-dir', str(out / 'wandb'),
@@ -102,6 +124,10 @@ def main():
                     '--rollout-health-check-first-wait', '180', '--use-fault-tolerance']
         env['SLIME_ADAPTIVE_QUERY_BLACKLIST_PATH'] = str(REPO / 'reference_empty_blacklist.txt')
         env['SLIME_BROWSER_QUERY_BLACKLIST_PATH'] = env['SLIME_ADAPTIVE_QUERY_BLACKLIST_PATH']
+    if args.verify_resume_only:
+        command += ['--debug-train-only', '--no-offload-train', '--no-offload-rollout']
+    if args.resume_from:
+        command += ['--skip-eval-before-train']
     if env.get('WANDB_ENTITY'):
         command += ['--wandb-team', env['WANDB_ENTITY']]
     manifest = {'kind': f'real-web {args.profile} GRPO baseline', 'job_id': job, 'gpus': 2,
@@ -112,7 +138,7 @@ def main():
                 'judge_model': env.get('JUDGE_MODEL', 'gpt-4.1'), 'run_name': name,
                 'output': str(out), 'missing_configuration': missing,
                 'learning_rate': env['LEARNING_RATE'], 'browser_concurrency': concurrency,
-                'fresh_sft_start': True, 'paper_reference': 'https://arxiv.org/pdf/2606.02031',
+                'fresh_sft_start': args.resume_from is None, 'resume_from': str(args.resume_from) if args.resume_from else None, 'paper_reference': 'https://arxiv.org/pdf/2606.02031',
                 'paper_differences': ['TP2 H200 rather than TP4 B200',
                     'Local browsers, concurrency 16 rather than Kubernetes sandboxes',
                     'Activation recomputation; own runtime; strict invalid-judge masking',
@@ -133,6 +159,9 @@ def main():
             'Local browser request/exit behavior differs from Kubernetes',
             'Online-Mind2Web deterministic GPT-4.1 monitoring, not official o4-mini score',
             'Live websites and unpinned GPT-4.1 endpoint may differ from paper dates']
+    if args.verify_resume_only:
+        manifest['kind'] = 'full model and optimizer checkpoint resume verification only'
+        manifest['resume_verification_only'] = True
     print(json.dumps(manifest, indent=2), flush=True)
     if args.dry_run:
         return

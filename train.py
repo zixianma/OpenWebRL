@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 
 import ray
@@ -85,6 +86,21 @@ def train(args):
 
     # create the actor and critic models
     actor_model, critic_model = create_training_models(args, pgs, rollout_manager)
+    if os.environ.get("OPENWEBRL_VERIFY_RESUME_ONLY") == "1":
+        import json
+        from pathlib import Path
+        assert args.debug_train_only and not args.offload_train
+        expected = int((Path(args.load) / "latest_checkpointed_iteration.txt").read_text()) + 1
+        assert args.start_rollout_id == expected, (args.start_rollout_id, expected)
+        report = {"full_model_and_optimizer_load": "passed", "loaded_iteration": expected - 1,
+                  "next_rollout_id": args.start_rollout_id, "gpus": args.actor_num_gpus_per_node,
+                  "source_checkpoint_root": args.load, "optimizer_updates_executed": 0,
+                  "browser_collections_executed": 0}
+        (Path(args.save) / "resume_verification.json").write_text(json.dumps(report, indent=2) + "\n")
+        append_progress_log(args, "[ResumeVerification] " + json.dumps(report))
+        _ray_get_with_actor_retry(rollout_manager.dispose.remote(), label="rollout_manager.dispose")
+        finish_tracking(args)
+        return
     progress_bar = _build_train_progress_bar(args, num_rollout_per_epoch)
 
     if args.offload_rollout:
