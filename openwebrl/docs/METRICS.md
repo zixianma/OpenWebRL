@@ -358,7 +358,7 @@ Current run: [W&B qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug).
 Run directory:
 
 ```text
-/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T024410
+/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T061434
 ```
 
 | Local artifact | Contents |
