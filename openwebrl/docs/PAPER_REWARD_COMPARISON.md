@@ -37,6 +37,21 @@ Audited observations as of 2026-09-07 21:51 PDT:
 
 These are raw observations, not smoothed trend values. These first four points are insufficient to establish convergence, divergence, or successful reproduction. Browser access, task sampling, trajectory lengths, and filtering can change the reward independently of policy quality. Inspect completed-task success and invalidity alongside it, and compare held-out evaluation with matching judge and validity conventions before claiming benchmark reproduction.
 
+## How much variability is visible after four collections?
+
+A lightweight check on 2026-09-07 reproduced all four W&B means from the saved rollout batches, then resampled the 48 accepted prompt groups in each collection with replacement. Each resampled group retains all its observed turns and trajectories; the statistic is the sum of rewards divided by the number of turns. This preserves the collector's turn weighting and avoids treating correlated turns from the same prompt as independent observations. With 10,000 draws and NumPy seed 7, the percentile intervals were:
+
+| One-based collection | Reward (%) | Conditional 95% bootstrap interval (%) |
+| --- | ---: | ---: |
+| 1 | 38.74 | 31.45–46.24 |
+| 2 | 33.26 | 26.26–40.05 |
+| 3 | 38.88 | 33.50–44.48 |
+| 4 | 36.25 | 29.27–43.36 |
+
+The intervals overlap substantially. Independently resampling adjacent collections also gives difference intervals that include zero for all three adjacent changes. These four observations therefore provide little evidence for interpreting the oscillations as a learning trend. This calculation is conditional on the observed, filtered prompt groups: it does not measure held-out policy performance or account for every source of task selection, browser, or judge variability. Interval overlap alone is not proof that the policy has remained unchanged.
+
+The complete numeric results and source-batch paths are in `/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T024410/reward_cluster_bootstrap.json`. This analysis does not add another W&B reward series or change training.
+
 ## Live behavior and provenance
 
 The duplicate paper writer and native `paper/*` emission are disabled. Existing `paper_reward_sync.jsonl` is retained as provenance. `scripts/sync_training_rewards.py` supplied the earlier run's `train/reward` alias; the current g005 continuation emits it directly. These logging changes do not change the training recipe.
