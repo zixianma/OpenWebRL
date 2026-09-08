@@ -25,6 +25,7 @@ from slime.utils.metric_utils import compute_pass_rate, compute_rollout_step, co
 from slime.utils.misc import Box, group_by, load_function
 from slime.utils.seqlen_balancing import get_seqlen_balanced_partitions
 from slime.utils.types import Sample
+from slime.utils.training_reward_metrics import training_reward_metrics
 
 from ..utils.metric_utils import has_repetition
 from .utils import NOSET_VISIBLE_DEVICES_ENV_VARS_LIST, Lock
@@ -1433,6 +1434,7 @@ def _log_rollout_data(rollout_id, args, samples, rollout_extra_metrics, rollout_
     step = compute_rollout_step(args, rollout_id)
     log_dict["rollout/step"] = step
     log_dict["rollout/iteration"] = rollout_id + 1
+    log_dict.update(training_reward_metrics(log_dict))
     logging_utils.log(args, log_dict, step_key="rollout/step")
     reward_progress_fields = []
     for key in [

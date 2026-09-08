@@ -5,6 +5,8 @@ from copy import deepcopy
 import wandb
 from wandb.errors import CommError
 
+from slime.utils.training_reward_metrics import define_training_reward_metrics
+
 logger = logging.getLogger(__name__)
 
 
@@ -183,6 +185,7 @@ def init_wandb_secondary(args, router_addr=None):
 def _init_wandb_common():
     wandb.define_metric("train/step")
     wandb.define_metric("train/*", step_metric="train/step")
+    define_training_reward_metrics(wandb)
     wandb.define_metric("rollout/iteration")
     wandb.define_metric("eval/iteration")
     wandb.define_metric("rollout/step")
