@@ -1,5 +1,31 @@
 # H200 runtime and validation
 
+## Complete fresh cycle verified, 2026-09-08 21:00 PDT
+
+The quick-resume continuation `openwebrl-4b-reference-283214-20260909T022832`
+loaded checkpoint 6 on both GPUs, then completed fresh collection 8 with the
+collection-time mapping and allocator trim. Collection took 3784.6 seconds:
+116 groups completed, 48 accepted, 28 pending at cutoff, 144 submitted. Abort
+cleanup reached zero pending tasks and all 610 acquired browser slots were
+released. No cgroup OOM or native worker crash occurred.
+
+The batch has 1709 turn samples and reward 0.4640140433. Its portable recovery
+file `rollout_recovery/7.pt` is 52,869,642,689 bytes. Training completed twelve
+optimizer updates in about 22 minutes; the checkpoint save took 33 seconds.
+Checkpoint 7 has **116 durable Adam updates**, the unchanged scheduler offset
+of +1, four intact shards, and finite CPU samples from every shard. The saved
+dataset cursor is 1104 groups / 5520 attempts, advancing by the expected 144
+groups. A full GPU reload of checkpoint 7 has not been performed; checkpoint 6
+was fully reloaded at the start of this continuation.
+
+W&B `qcq7i4ug` contains reward observation 8 and all twelve optimizer records,
+with their numerical values matching the local training log. Reports in the run
+directory include `checkpoint_verification_7.json`,
+`checkpoint_7_all_shards_cpu_samples.json`, `collection_8_transition_audit.json`,
+and `collection_8_complete_wandb_audit.json`. The persistent pointer records
+checkpoint 7 / 116 updates with no pending replay. Collection 9 is running in
+the same allocation, which ends at 02:16:49 PDT; no new compute was requested.
+
 ## Collection-time memory fix, 2026-09-08 19:24 PDT
 
 Fresh collection 8 revealed that `generate_rollout_async` retains every
