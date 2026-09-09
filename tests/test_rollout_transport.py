@@ -73,3 +73,52 @@ print('mapped-reader-ok')
                             second["multimodal_train_inputs"][0]["pixels"].path)
         self.assertEqual(decode_multimodal(first)["multimodal_train_inputs"][0]["pixels"].item(), 1)
         self.assertEqual(decode_multimodal(second)["multimodal_train_inputs"][0]["pixels"].item(), 2)
+
+
+class CollectionMappingTest(unittest.TestCase):
+    def test_nested_completed_groups_keep_identity_and_durable_replay_values(self):
+        import gc
+        from types import SimpleNamespace
+        import weakref
+        from slime.utils.rollout_transport import file_back_completed_group
+
+        directory = Path(tempfile.mkdtemp(prefix='openwebrl-collection-mapping-'))
+        pixels = torch.arange(8192, dtype=torch.bfloat16).reshape(128, 64).t()
+        expected = pixels.clone()
+        original = weakref.ref(pixels)
+        sample = SimpleNamespace(tokens=[1, 2, 3], reward={'reward': 1.0},
+                                 multimodal_train_inputs={'pixels': pixels, 'grid': torch.tensor([[1, 8, 8]])})
+        text_only = SimpleNamespace(tokens=[9], reward=0, multimodal_train_inputs=None)
+        group = [[sample, text_only], [sample]]
+        del pixels
+        with patch.dict(os.environ, OPENWEBRL_MULTIMODAL_STORAGE_DIR=str(directory)):
+            self.assertEqual(file_back_completed_group(group), 1)
+        gc.collect()
+        self.assertIsNone(original())
+        self.assertIs(group[0][0], sample)
+        self.assertIs(group[1][0], sample)
+        self.assertEqual(sample.tokens, [1, 2, 3])
+        self.assertEqual(sample.reward, {'reward': 1.0})
+        self.assertTrue(torch.equal(sample.multimodal_train_inputs['pixels'], expected))
+        self.assertEqual(sample.multimodal_train_inputs['pixels'].dtype, torch.bfloat16)
+        self.assertIsNone(text_only.multimodal_train_inputs)
+        # A saved recovery batch must be portable when the node-local file is gone.
+        checkpoint = directory / 'recovery.pt'
+        torch.save({'samples': [sample.multimodal_train_inputs]}, checkpoint)
+        for binary in directory.glob('*.bin'):
+            binary.rename(binary.with_suffix('.retained'))
+        restored = torch.load(checkpoint, map_location='cpu', weights_only=True)
+        self.assertTrue(torch.equal(restored['samples'][0]['pixels'], expected))
+        # A second transport pass (actual train transfer) also stays lossless.
+        with patch.dict(os.environ, OPENWEBRL_MULTIMODAL_STORAGE_DIR=str(directory)):
+            transferred = decode_multimodal(encode_multimodal({'multimodal_train_inputs': restored['samples']}))
+        self.assertTrue(torch.equal(transferred['multimodal_train_inputs'][0]['pixels'], expected))
+
+    def test_default_transport_does_not_change_completed_groups(self):
+        from types import SimpleNamespace
+        from slime.utils.rollout_transport import file_back_completed_group
+        sample = SimpleNamespace(multimodal_train_inputs={'pixels': torch.ones(3)})
+        inputs = sample.multimodal_train_inputs
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(file_back_completed_group([[sample]]), 0)
+        self.assertIs(sample.multimodal_train_inputs, inputs)

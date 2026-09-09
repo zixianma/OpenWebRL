@@ -98,3 +98,35 @@ def decode_multimodal(data):
         {k: _decode_value(v) for k, v in sample.items()} if sample is not None else None
         for sample in data['multimodal_train_inputs']]
     return result
+
+
+def file_back_completed_group(group):
+    """Replace completed samples' CPU image buffers with lossless mapped views.
+
+    Collection retains accepted AND rejected samples for telemetry. Mapping them
+    at completion bounds non-reclaimable memory before the train-transfer stage.
+    Sample identity, tokens, rewards, and all other fields remain unchanged.
+    torch.save serializes tensor values, so recovery files do not depend on these
+    temporary mappings on the next node. The opt-in directory is required.
+    """
+    directory = os.environ.get("OPENWEBRL_MULTIMODAL_STORAGE_DIR")
+    if not directory:
+        return 0
+
+    def leaves(value):
+        if isinstance(value, (list, tuple)):
+            for child in value:
+                yield from leaves(child)
+        else:
+            yield value
+
+    # Keep identity even if a custom generator returns an aliased sample twice.
+    samples = {id(sample): sample for sample in leaves(group)
+               if getattr(sample, "multimodal_train_inputs", None) is not None}
+    if not samples:
+        return 0
+    data = {"multimodal_train_inputs": [sample.multimodal_train_inputs for sample in samples.values()]}
+    mapped = decode_multimodal(_encode_file_backed(data, directory))
+    for sample, inputs in zip(samples.values(), mapped["multimodal_train_inputs"], strict=True):
+        sample.multimodal_train_inputs = inputs
+    return len(samples)

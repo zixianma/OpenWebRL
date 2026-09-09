@@ -544,6 +544,14 @@ async def generate_rollout_async(
         for task in done:
             group: list[Sample] = task.result()
 
+            # Completed rejected groups are retained for collection telemetry too.
+            # Reclaim their image pages under memory pressure without changing the
+            # samples or filter inputs. Offload file I/O from the browser event loop.
+            if os.environ.get("OPENWEBRL_MULTIMODAL_STORAGE_DIR"):
+                from slime.utils.rollout_transport import file_back_completed_group
+
+                await asyncio.to_thread(file_back_completed_group, group)
+
             if do_print:
                 sample = group[0][0] if isinstance(group[0], list) else group[0]
                 logger.info(

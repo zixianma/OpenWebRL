@@ -1,5 +1,28 @@
 # H200 runtime and validation
 
+## Collection-time memory fix, 2026-09-08 19:24 PDT
+
+Fresh collection 8 revealed that `generate_rollout_async` retains every
+completed group in `all_data`, including groups rejected by the dynamic filter.
+The post-collection transport fix does not cover these live image tensors.
+At 40 completed groups / 18 accepted groups, job usage had reached about
+225 GiB, with substantial growth still expected before the 48-group target.
+
+With the same opt-in file directory, completed groups now have their image
+buffers replaced by read-only tensor views of lossless file mappings **before**
+filtering and telemetry retention. File I/O runs in a thread so the browser loop
+can continue. Tokens, rewards, sample identity, filtering and numerical image
+values are preserved. Both accepted and rejected groups retain their complete
+data; the kernel can reclaim image pages under pressure. Durable torch recovery
+files contain the values themselves, not dependencies on node-local paths.
+
+Six CPU transport tests pass, including nested turn groups, aliased sample
+identity, original buffer release, bfloat16, and recovery-file portability after
+the backing file is renamed. A bounded 64-MiB allocation-local probe checks
+actual anonymous-memory release and exact retained values; its report is
+`openwebrl-runtime/collection-mapping-probe-283214.json`. The fix requires a new
+worker process; checkpoint 6 preserves all 104 completed optimizer updates.
+
 ## Successful continuation on 240 GiB, 2026-09-08 19:02 PDT
 
 Run `openwebrl-4b-reference-283214-20260909T012629` on g021 loaded checkpoint 5,
