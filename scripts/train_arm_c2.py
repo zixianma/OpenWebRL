@@ -32,7 +32,11 @@ def validate_compute(config, allow_resident_eval=False):
     info = command(['scontrol', 'show', 'job', job, '-o'])
     if 'JobState=RUNNING' not in info: raise ValueError('Allocation is not running')
     devices = command(['nvidia-smi', '--query-gpu=uuid', '--format=csv,noheader']).splitlines()
-    if devices != [config['gpu_uuid']]: raise ValueError('Wrong visible GPU')
+    # A two-GPU collection step can hand off the unchanged single-GPU trainer.
+    # Bind by UUID so CUDA cannot select the other allocated GPU accidentally.
+    explicit_binding = os.getenv('CUDA_VISIBLE_DEVICES') == config['gpu_uuid']
+    if devices != [config['gpu_uuid']] and not (config['gpu_uuid'] in devices and explicit_binding):
+        raise ValueError('Wrong visible GPU')
     pids = command(['nvidia-smi', '--id=' + config['gpu_uuid'], '--query-compute-apps=pid', '--format=csv,noheader']).splitlines()
     if pids and not allow_resident_eval:
         raise ValueError('Training requires the assigned GPU to be free of inference servers')

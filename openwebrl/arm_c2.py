@@ -2,6 +2,7 @@
 import argparse
 import asyncio
 import base64
+import copy
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 import difflib
@@ -254,6 +255,24 @@ def load_training_example(row, processor):
     return dict(input_ids=input_ids, labels=labels, attention_mask=torch.ones_like(input_ids), **tensors)
 
 
+def collection_endpoints(config):
+    """Pair each fixed worker with one actor/teacher replica on the same GPU."""
+    replicas = config.get('collection_replicas', [dict(actor_port=19100, selector_port=19101)])
+    if not replicas or config['parallel'] % len(replicas):
+        raise ValueError('Collection concurrency must divide evenly across replicas')
+    ports = [replica[key] for replica in replicas for key in ('actor_port', 'selector_port')]
+    if len(set(ports)) != len(ports) or any(type(p) is not int or not 1024 <= p < 19200 for p in ports):
+        raise ValueError('Actor/teacher ports must be distinct and outside the browser range')
+    return replicas
+
+
+def replica_args(args, replica, selector):
+    value = copy.copy(args)
+    value.sglang_router_port = replica['actor_port']
+    value.browser_action_selector = selector
+    return value
+
+
 async def collect(config_path):
     import httpx
     from dotenv import load_dotenv
@@ -264,6 +283,7 @@ async def collect(config_path):
     from slime.utils.http_utils import init_http_client
     from slime.utils.types import Sample
     q = json.loads(Path(config_path).read_text())
+    replicas = collection_endpoints(q)
     root = Path(q['output'])
     load_dotenv('.env', override=False)
     os.environ.setdefault('JUDGE_API_BASE', 'https://api.openai.com/v1')
@@ -281,7 +301,6 @@ async def collect(config_path):
         path_to_save_generated_samples=str(root / 'samples'))
     sampling = dict(temperature=.7, top_p=.9, max_new_tokens=1024)
     exporter = TurnExporter(root)
-    args.browser_action_selector = ActionSelector(q['teacher'], 'http://127.0.0.1:19101', root / 'selections', seed=q['seed'], exporter=exporter)
     args.rollout_temperature, args.rollout_max_response_len = .7, 1024
     args.browser_async_artifact_io = True
     args.http_connect_timeout_secs = 10.0
@@ -291,16 +310,21 @@ async def collect(config_path):
     transport_handler.setFormatter(logging.Formatter('[http transport] %(message)s'))
     transport_logger.addHandler(transport_handler)
     transport_logger.propagate = False
+    args.rollout_num_gpus = len(replicas)
+    per_replica = [replica_args(args, replica, ActionSelector(q['teacher'],
+        f"http://127.0.0.1:{replica['selector_port']}", root / 'selections', seed=q['seed'], exporter=exporter))
+        for replica in replicas]
     init_http_client(args)
     reward_func = evaluation._load_reward_func('online_mind2web')
     tasks = evaluation.load_tasks_from_jsonl(q['task_file'])
     if len(tasks) != q['task_count'] or sha(Path(q['task_file']).read_bytes()) != q['task_file_sha256']:
         raise ValueError('Collection task inventory changed')
     async with httpx.AsyncClient(timeout=10, trust_env=False) as client:
-        info = await client.get('http://127.0.0.1:19100/get_model_info'); info.raise_for_status()
-        if os.path.realpath(info.json()['model_path']) != os.path.realpath(manifest['actor']): raise ValueError('Wrong actor')
-        info = await client.get('http://127.0.0.1:19101/health'); info.raise_for_status()
-        if info.json() != manifest['selector_health']: raise ValueError('Wrong teacher')
+        for replica in replicas:
+            info = await client.get(f"http://127.0.0.1:{replica['actor_port']}/get_model_info"); info.raise_for_status()
+            if os.path.realpath(info.json()['model_path']) != os.path.realpath(manifest['actor']): raise ValueError('Wrong actor')
+            info = await client.get(f"http://127.0.0.1:{replica['selector_port']}/health"); info.raise_for_status()
+            if info.json() != manifest['selector_health']: raise ValueError('Wrong teacher')
     (root / 'results').mkdir(exist_ok=True)
     deadline = datetime.fromisoformat(q['stop_utc']).timestamp()
     stop = asyncio.Event()
@@ -312,17 +336,17 @@ async def collect(config_path):
     summary_lock = asyncio.Lock()
     pending = asyncio.Queue()
     for task in remaining: pending.put_nowait(task)
-    async def one(task):
+    async def one(task, task_args):
         task_id = task['task_id']
         attempt = await run_artifact_io(exporter.begin, task_id)
-        print('START', task_id, str(attempt), flush=True)
+        print('START', task_id, str(attempt), 'actor_port', task_args.sglang_router_port, flush=True)
         samples = []
         async def trajectory():
             nonlocal samples
             original = Sample(index=task['index'], prompt=task['prompt'], metadata=dict(task_id=task_id,
                               start_url=task['start_url'], intent=task['prompt']))
-            samples = await generation.generate_turn_sample(args, original, sampling)
-            reward = await reward_func(args, samples)
+            samples = await generation.generate_turn_sample(task_args, original, sampling)
+            reward = await reward_func(task_args, samples)
             if isinstance(reward, list): reward = reward[-1] if reward else None
             last = samples[-1]
             valid = reward is not None and 'ABORTED' not in str(last.status)
@@ -348,7 +372,7 @@ async def collect(config_path):
     # full queue. Its completed outcomes remain part of the one-attempt dataset.
     if not (root / 'export-smoke-passed.json').exists():
         smoke_tasks = [pending.get_nowait() for _ in range(min(8, pending.qsize()))]
-        smoke_work = asyncio.gather(*(one(task) for task in smoke_tasks))
+        smoke_work = asyncio.gather(*(one(task, per_replica[i % len(replicas)]) for i, task in enumerate(smoke_tasks)))
         while not smoke_work.done():
             if stop.is_set() or time.time() >= deadline - 30:
                 smoke_work.cancel()
@@ -378,11 +402,11 @@ async def collect(config_path):
         write_json(root / 'export-smoke-passed.json', dict(checked_turns=checked, processor_prefix_and_image_grid_match=True,
                     successful_trajectory_filter='Not applied to this engineering check; applied by dataset builder'))
         del processor
-    async def worker():
+    async def worker(worker_index):
         while not stop.is_set() and time.time() < deadline - 180 and not pending.empty():
             task = pending.get_nowait()
-            await one(task)
-    workers = [asyncio.create_task(worker()) for _ in range(q['parallel'])]
+            await one(task, per_replica[worker_index % len(replicas)])
+    workers = [asyncio.create_task(worker(i)) for i in range(q['parallel'])]
     joined = asyncio.gather(*workers)
     while not joined.done():
         if stop.is_set() or time.time() >= deadline - 30:
