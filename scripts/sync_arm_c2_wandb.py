@@ -34,6 +34,11 @@ def main():
     load_dotenv(args.env_file, override=False)
     root = args.run_root.resolve()
     student = root / "student"
+    wandb_root = student / "wandb"
+    wandb_root.mkdir(parents=True, exist_ok=True)
+    cache = wandb_root / "cache"
+    cache.mkdir(exist_ok=True)
+    os.environ.setdefault("WANDB_CACHE_DIR", str(cache))
     metrics_path = student / "metrics.jsonl"
     if not metrics_path.exists():
         raise ValueError("Student metrics do not exist")
@@ -62,7 +67,7 @@ def main():
         group="arm-c2-filtered-sft",
         job_type="sft",
         tags=["arm", "c2", "action-level-sft", "openwebrl-4b"],
-        dir=str(student / "wandb"),
+        dir=str(wandb_root),
         config={
             **training,
             "examples": audit.get("retained_turns"),
