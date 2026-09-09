@@ -16,11 +16,13 @@ The script **never submits or extends an allocation**. It requires a running, us
 The model/optimizer checkpoint format supports a different tensor-parallel size.
 The prepared four-H200 profile uses TP4/DP1 and 32 browser slots, with conservative
 resource guards of 16 CPUs and 480 GiB RAM on one node. This is a tested CPU
-configuration and workflow, not yet a verified four-GPU model restore. Two
-separate two-GPU allocations do not satisfy this single-node profile.
+configuration and workflow. Checkpoint 14 received a successful full TP4 model
+and optimizer reload in job 284885. Checkpoint 17 and the newer cache-release
+source still require their own restore verification. Two separate two-GPU
+allocations do not satisfy this single-node profile.
 
 A prepared source snapshot is available at:
-`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-ready-20260909`.
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-cache-release-20260909`.
 It preserves all five baseline recipe-file hashes. To recreate such a snapshot
 from a newer preserved baseline (never the experimental working tree):
 
@@ -93,7 +95,7 @@ The default persistent pointer is:
 
 It records the current run directory, checkpoint ancestry, preserved reference source, W&B identity and pending recovery batch. `--state PATH` selects a different recorded lineage. `--source PATH` selects another explicitly prepared reference snapshot; recipe hashes and required resume support are checked. The working repository's experimental recipe files are not copied into the run.
 
-For the current baseline, W&B is [`qcq7i4ug`](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug), and the preserved source is `reference-stage1-283214-collection-mapping` under the runtime root. The credentials come from the repository `.env` and are never included in the preflight plan. `--wandb-run-id qcq7i4ug` can assert the expected identity; it cannot silently change this lineage's W&B ID.
+For the current baseline, W&B is [`qcq7i4ug`](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug), and the preserved source is `reference-stage1-tp4-cache-release-20260909` under the runtime root. The credentials come from the repository `.env` and are never included in the preflight plan. `--wandb-run-id qcq7i4ug` can assert the expected identity; it cannot silently change this lineage's W&B ID.
 
 ## Checkpoint and batch selection
 
@@ -114,7 +116,7 @@ The supervisor prints progress and starts a read-only health recorder. Logs:
 - Run directory `training.log`, `progress.log`, `health.jsonl`: detailed training, phase progress and GPU/cgroup memory samples.
 - Run directory `resume_plan.json` and `resume_checkpoint_validation.json`: startup provenance.
 
-The pointer is updated when the new launch manifest appears. This means **launched**, not verified healthy. After startup, confirm the actual checkpoint-loaded message, optimizer progress and W&B sync. After each save, validate the new checkpoint before reporting durable progress and refresh the pointer's checkpoint/replay fields. A background recorder cannot diagnose or fix failures: the active agent must check status every 30–60 seconds and investigate errors promptly.
+The pointer is updated when the new launch manifest appears. This means **launched**, not verified healthy. After startup, confirm the actual checkpoint-loaded message, optimizer progress and W&B sync. After each save, validate the new checkpoint before reporting durable progress and refresh the pointer's checkpoint/replay fields. A background recorder cannot diagnose or fix failures. While an OpenWebRL run is active, the active agent checks health about every 30 minutes and investigates any observed error immediately.
 
 CPU checks: `python3 -m unittest discover -s tests -p test_resume_baseline.py -v`. The real preflight was exercised against job 283214 and correctly selected checkpoint 5, replay batch 6 with 144 submitted groups, and the existing W&B ID. It identified the already-running trainer and monitor; no duplicate training run was launched for this test.
 
