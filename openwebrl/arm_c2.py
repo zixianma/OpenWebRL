@@ -12,9 +12,12 @@ import os
 from pathlib import Path
 import re
 import signal
+import threading
 import time
 import unicodedata
 from urllib.parse import urlsplit
+
+from openwebrl.artifact_io import run_artifact_io
 
 
 def sha(data):
@@ -102,6 +105,9 @@ class TurnExporter:
     def __init__(self, root):
         self.root = Path(root)
         self.attempts = {}
+        self._image_locks = {}
+        self._image_locks_guard = threading.Lock()
+        (self.root / 'images').mkdir(parents=True, exist_ok=True)
 
     def begin(self, task_id):
         task_root = self.root / 'attempts' / task_key(task_id)
@@ -119,11 +125,13 @@ class TurnExporter:
             raw = base64.b64decode(data.split(',', 1)[-1], validate=True)
             digest = sha(raw)
             image = self.root / 'images' / (digest + '.img')
-            image.parent.mkdir(exist_ok=True)
-            if image.exists():
-                if sha(image.read_bytes()) != digest: raise ValueError('Image content-address collision')
-            else:
-                image.write_bytes(raw)
+            with self._image_locks_guard:
+                image_lock = self._image_locks.setdefault(digest, threading.Lock())
+            with image_lock:
+                if image.exists():
+                    if sha(image.read_bytes()) != digest: raise ValueError('Image content-address collision')
+                else:
+                    image.write_bytes(raw)
             paths.append(dict(path=str(image.resolve()), sha256=digest))
         candidates = [dict(response=o[0], response_token_ids=list(o[1]), finish_type=o[3]) for o in outputs]
         value = dict(record, format_version=1, attempt=str(attempt.resolve()), prompt=prompt,
@@ -274,6 +282,7 @@ async def collect(config_path):
     exporter = TurnExporter(root)
     args.browser_action_selector = ActionSelector(q['teacher'], 'http://127.0.0.1:19101', root / 'selections', seed=q['seed'], exporter=exporter)
     args.rollout_temperature, args.rollout_max_response_len = .7, 1024
+    args.browser_async_artifact_io = True
     init_http_client(args)
     reward_func = evaluation._load_reward_func('online_mind2web')
     tasks = evaluation.load_tasks_from_jsonl(q['task_file'])
@@ -290,11 +299,14 @@ async def collect(config_path):
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGTERM, signal.SIGINT): loop.add_signal_handler(sig, stop.set)
     remaining = [task for task in tasks if not (root / 'results' / (task_key(task['task_id']) + '.json')).exists()]
+    completed_records = {r['task_id']: r for r in
+                         (json.loads(p.read_text()) for p in (root / 'results').glob('*.json'))}
+    summary_lock = asyncio.Lock()
     pending = asyncio.Queue()
     for task in remaining: pending.put_nowait(task)
     async def one(task):
         task_id = task['task_id']
-        attempt = exporter.begin(task_id)
+        attempt = await run_artifact_io(exporter.begin, task_id)
         print('START', task_id, str(attempt), flush=True)
         samples = []
         async def trajectory():
@@ -312,15 +324,18 @@ async def collect(config_path):
         try:
             outcome = await asyncio.wait_for(trajectory(), timeout=args.task_timeout_secs)
         except asyncio.CancelledError:
-            write_json(attempt / 'interrupted.json', dict(task_id=task_id, reason='allocation_or_controller_stop',
-                       utc=datetime.now(timezone.utc).isoformat()))
+            await run_artifact_io(write_json, attempt / 'interrupted.json',
+                                 dict(task_id=task_id, reason='allocation_or_controller_stop',
+                                      utc=datetime.now(timezone.utc).isoformat()))
             raise
         except Exception as exc:
             outcome = dict(task_id=task_id, reward=None, valid=False, error_type=type(exc).__name__, error=str(exc))
-        result = exporter.finish(task_id, samples, outcome)
+        result = await run_artifact_io(exporter.finish, task_id, samples, outcome)
         print('DONE', task_id, 'reward', result.get('reward'), 'valid', result['valid'], 'turns', result['turn_count'], flush=True)
-        records = [json.loads(p.read_text()) for p in (root / 'results').glob('*.json')]
-        write_json(root / 'collection-summary.json', summarize(records, len(tasks)))
+        async with summary_lock:
+            completed_records[task_id] = result
+            await run_artifact_io(write_json, root / 'collection-summary.json',
+                                  summarize(list(completed_records.values()), len(tasks)))
     # Validate a small prefix of the same collection before dispatching the
     # full queue. Its completed outcomes remain part of the one-attempt dataset.
     if not (root / 'export-smoke-passed.json').exists():

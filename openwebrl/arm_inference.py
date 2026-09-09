@@ -149,9 +149,16 @@ class ActionSelector:
                   "prompt_sha256": hashlib.sha256(input_text.encode()).hexdigest(),
                   "screenshot_sha256": hashlib.sha256(observation["screenshot"]).hexdigest()}
         path = self.output / (hashlib.sha256(str(task_id).encode()).hexdigest()[:20] + ".jsonl")
+        if self.exporter is not None:
+            from openwebrl.artifact_io import run_artifact_io
+            await run_artifact_io(self._persist, path, record, input_text, images, outputs)
+        else:
+            self._persist(path, record, input_text, images, outputs)
+        return outputs[index], {"selected_index": index, "mode": self.mode,
+                                "fallback": fallback, "trace_path": str(path)}
+
+    def _persist(self, path, record, input_text, images, outputs):
         with path.open("a") as stream:
             stream.write(json.dumps(record, ensure_ascii=False) + "\n")
         if self.exporter is not None:
             self.exporter(record=record, prompt=input_text, images=images, outputs=outputs)
-        return outputs[index], {"selected_index": index, "mode": self.mode,
-                                "fallback": fallback, "trace_path": str(path)}

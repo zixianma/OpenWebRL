@@ -1261,6 +1261,14 @@ def _save_sample(
     with open(path_to_save, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
+async def _save_rollout_sample(args, **kwargs):
+    if getattr(args, "browser_async_artifact_io", False):
+        from openwebrl.artifact_io import run_artifact_io
+        await run_artifact_io(_save_sample, **kwargs)
+    else:
+        _save_sample(**kwargs)
+
+
 # ---------------------------------------------------------------------------
 # Main generate function
 # ---------------------------------------------------------------------------
@@ -1617,7 +1625,7 @@ async def _generate_trajectory_sample_impl(
         try:
             path_to_save_generated_samples = getattr(args, "path_to_save_generated_samples", "")
             if path_to_save_generated_samples and mm_messages:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=os.path.join(path_to_save_generated_samples, "trajectory", _EXPT_ID),
                     sample_id=sample_id,
                     mm_messages=mm_messages,
@@ -1626,7 +1634,7 @@ async def _generate_trajectory_sample_impl(
             debug_trace_dir = _get_debug_trace_dir(args, "rollout", "trajectory")
             save_debug_trace, trace_id = _get_or_create_debug_trace_info(args, sample)
             if save_debug_trace and trace_id and debug_trace_dir and mm_messages:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=debug_trace_dir,
                     sample_id=trace_id,
                     mm_messages=mm_messages,
@@ -1985,7 +1993,7 @@ async def _generate_turn_sample_impl(
         try:
             path_to_save_generated_samples = getattr(args, "path_to_save_generated_samples", "")
             if path_to_save_generated_samples and mm_messages:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=os.path.join(path_to_save_generated_samples, "turn", _EXPT_ID),
                     sample_id=sample_id,
                     mm_messages=mm_messages,
@@ -1995,7 +2003,7 @@ async def _generate_turn_sample_impl(
             last_turn_sample = turn_samples[-1] if turn_samples else sample
             save_debug_trace, trace_id = _get_or_create_debug_trace_info(args, last_turn_sample)
             if save_debug_trace and trace_id and debug_trace_dir and mm_messages and turn_samples:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=debug_trace_dir,
                     sample_id=trace_id,
                     mm_messages=mm_messages,
