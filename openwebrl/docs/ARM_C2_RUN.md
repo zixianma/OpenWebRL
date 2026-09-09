@@ -2,6 +2,18 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## 1,750-task audit — 2026-09-09 02:30 PDT
+
+The consistent dataset snapshot covers **1772/2091 completed outcomes** and retains **6632 usable turns from 959 successful trajectories**. Three additional outcomes completed while the outcome checksum inventory was being written, so that inventory contains 1775 files. The dataset builder found one otherwise eligible turn without an executed action and excluded it. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **1505 outcomes in the 1,500-task checksum inventory**, all **1634 outcomes present before the memory-reclaim restart**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `afedd2889eb6077495c74586d0d5fc3487d2a8772b22d7e6d27571506a3ef4cb`; evidence: `diagnostics/milestone-1750-audit.json` and `diagnostics/milestone-1750-outcome-sha256.json`.
+
+The preceding full health check recorded **1762 completed, 956 successful, and 126 unavailable**. Both GPUs remained busy at 81% and 90% mean activity during the sample, using 70.6 and 71.5 GiB. Host memory was 86.6 GiB of 240 GiB with no pressure or OOM events. Recent throughput was about **321 tasks/hour**, giving a straight-line collection ETA near **03:30 PDT**. Student optimizer updates/checkpoints remain **0 / 0** pending full-pool completion.
+
+## Proactive inference-service memory refresh — 2026-09-09 02:00 PDT
+
+Host memory had risen to **197.8 GiB of 240 GiB**, primarily because the two long-lived SelectionARM processes had grown to about 54 and 56 GiB RSS. The collector stayed near 32 GiB, no orphaned browser processes were present, and the cgroup reported no memory pressure or OOM events. To preserve enough headroom for the final collection tail, the owned collector received a graceful stop and the controller shut down its four inference services. The restart stayed within allocation 283899 and used the unchanged task queue, models, seeds, judge, and C2 recipe.
+
+The restart audit preserved all **1634 completed outcomes**, including **872 successful trajectories and 5915 eligible turns**, and all original evaluation artifacts. No completed task was rerun. Preview SHA-256: `2866142a2904a91c80e34f3186163b886a1a943ab1c672258649821708e91e47`; evidence: `diagnostics/memory-reclaim-restart-audit.json` and `diagnostics/before-memory-reclaim-results.json`. Host memory fell to about **57 GiB** immediately after teardown and was 85.5 GiB after both replicas had reloaded and resumed collection. The monitor now performs full resource scans every 10–20 minutes, with lightweight phase checks between them to catch the collection-to-SFT handoff.
+
 ## 1,500-task audit — 2026-09-09 01:36 PDT
 
 The consistent dataset snapshot covers **1504/2091 completed outcomes** and retains **5319 usable turns from 797 successful trajectories**. One additional outcome completed while the outcome checksum inventory was being written, so that inventory contains 1505 files. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **1258 outcomes in the 1,250-task checksum inventory**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `3b501c49c0764c712915546bd056a6fca14eb08608227636b85c3d82d356a647`; evidence: `diagnostics/milestone-1500-audit.json` and `diagnostics/milestone-1500-outcome-sha256.json`.
