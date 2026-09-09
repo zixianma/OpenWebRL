@@ -25,6 +25,30 @@ class ResumeTest(unittest.TestCase):
         fields.update(overrides)
         return ' '.join(f'{k}={v}' for k, v in fields.items())
 
+    def test_source_checks_reject_changed_recipe_and_missing_memory_fix(self):
+        import hashlib
+        source = self.root / 'source'
+        (source / 'scripts').mkdir(parents=True)
+        (source / 'slime/rollout').mkdir(parents=True)
+        (source / 'slime/utils').mkdir(parents=True)
+        recipe = source / 'recipe.py'
+        recipe.write_text('reference reward rule')
+        (source / 'reference_manifest.json').write_text(json.dumps({'recipe_files_sha256': {
+            'recipe.py': hashlib.sha256(recipe.read_bytes()).hexdigest()}}))
+        launcher = source / 'scripts/run_small_baseline.py'
+        launcher.write_text("OPENWEBRL_MULTIMODAL_STORAGE_DIR --save-debug-rollout-data --skip-eval-before-train 'shutdown_margin_seconds' 'durable_optimizer_updates_at_start'")
+        (source / 'slime/rollout/sglang_rollout.py').write_text('await asyncio.to_thread(file_back_completed_group, group)')
+        transport = source / 'slime/utils/rollout_transport.py'
+        transport.write_text('malloc_trim')
+        self.assertEqual(m.validate_source(source), hashlib.sha256(launcher.read_bytes()).hexdigest())
+        recipe.write_text('experimental reward rule')
+        with self.assertRaisesRegex(ValueError, 'recipe changed'):
+            m.validate_source(source)
+        recipe.write_text('reference reward rule')
+        transport.write_text('old transport')
+        with self.assertRaisesRegex(ValueError, 'collection-time'):
+            m.validate_source(source)
+
     def test_existing_allocation_limits_and_ownership(self):
         now = m.datetime(2030, 1, 1, 7).timestamp()
         self.assertEqual(m.allocation(self.info(), '42', now)['maximum_seconds'], 3420)

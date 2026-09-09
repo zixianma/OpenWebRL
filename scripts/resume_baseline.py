@@ -123,6 +123,10 @@ def validate_source(source):
                      '--skip-eval-before-train', "'shutdown_margin_seconds'", "'durable_optimizer_updates_at_start'"]:
         if required not in text:
             raise ValueError(f'Preserved launcher lacks required resume support: {required}')
+    collector = (source / 'slime/rollout/sglang_rollout.py').read_text()
+    transport = (source / 'slime/utils/rollout_transport.py').read_text()
+    if 'await asyncio.to_thread(file_back_completed_group, group)' not in collector or 'malloc_trim' not in transport:
+        raise ValueError('Preserved source lacks collection-time image mapping and allocator trim required for 240 GiB.')
     return hashlib.sha256(launcher.read_bytes()).hexdigest()
 
 
