@@ -1,5 +1,20 @@
 # H200 runtime and validation
 
+## Approved continuation submitted, 2026-09-09 16:44 PDT
+
+The user explicitly requested one further four-GPU, eight-hour continuation.
+Job `285546` is running on `g003` with four H200s, 16 CPUs and 480 GiB RAM;
+Slurm estimated $28.80 for 32 H200 GPU-hours. Its deadline is
+2026-09-10 00:44:04 PDT. No additional submission is authorized by this request.
+The preserved cache-release source passed recipe validation, and preflight
+selected checkpoint 17 / 246 Adam updates plus saved rollout 18 (reward
+iteration 19), with a cursor advance of 144 submitted groups. The batch driver
+verifies full TP4 restoration before launching replay and online continuation
+on W&B `qcq7i4ug`. Submission alone does not establish successful restoration
+or validate the cache fix under GPU training.
+
+Batch log: `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/slurm-qcq7i4ug-285546.out`.
+
 ## Four-GPU continuation stopped at host-memory ceiling, 2026-09-09 14:15 PDT
 
 Approved job `284885` ran for 4:49:06 on four H200s and extended the durable
