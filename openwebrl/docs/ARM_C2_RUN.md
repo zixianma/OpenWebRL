@@ -2,6 +2,14 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Latest audited collection — 2026-09-08 21:16 PDT
+
+The post-500-task audit covers **502/2091 outcomes: 440 valid, 261 successful, and 62 unavailable**. The preview retains **1643 usable turns from 261 successful trajectories**. All captured source/image hashes and joins checked by the dataset builder pass; all 413 outcomes from before the I/O fix remain unchanged. Preview SHA-256: `b174a83243ef1aad820f98fcc92bad7d4307c3dd02af9ded1f69aac8541ced5e`. Detailed evidence: `diagnostics/milestone-500-audit.json`; the previous preview and audit are preserved in `preview-history/`.
+
+A real turn collected after the fix also passed the processor-prefix, image-grid, and history-loss-mask check (`diagnostics/async-io-production-export-check.json`: task `webvoyager/88792`, 4142 prefix tokens, 220 target tokens). Student optimizer updates and checkpoints remain **0 / 0**; full-pool collection is still required before SFT.
+
+Subsequent failures include generation timeouts, website navigation failures, a whole-task timeout, and context overflow. There has been no repeat of the local browser startup-health failures by this audit. Context-overflow requests currently pass through the existing generic HTTP retry loop; failing permanent HTTP 400 errors immediately is a future efficiency fix, not a context truncation or filtering change. No additional serving restart was made for it. A resource check found 3.55/4 CPU cores busy, no orphaned Chrome processes, and about 19 GiB of filesystem cache within the reported host memory. No allocation OOM events have occurred.
+
 ## Filesystem stall recovery — 2026-09-08 20:30–20:36 PDT
 
 Collection paused cleanly with **413/2091 completed outcomes, 360 valid, 217 successes, and 53 unavailable**. The audited preview contains **1261 eligible turns**; SHA-256 `7f10b20e46a05b5d21d041c92231d752a28ac8b3f5f42460cde432c76a67158b`. Student optimizer updates and checkpoints remain **0 / 0**.
@@ -100,7 +108,7 @@ The original comparison report was written before C2 started. The first continua
 4. Full collection at concurrency 16, with durable task outcomes and separate attempt directories.
 5. Build the immutable training dataset only when the full task pool is processed. If at least 15 minutes remain, unload the verified inference servers and start/resume the student. Otherwise record that training needs subsequently assigned compute.
 
-Configured controller stop: **2026-09-08 02:32:55 PDT**, five minutes before scheduled allocation expiry. The step actually exited at 02:32:42. That allocation has ended; no new allocation or extension has been requested automatically.
+Original g005 controller stop: **2026-09-08 02:32:55 PDT**, five minutes before scheduled allocation expiry. The step actually exited at 02:32:42. That allocation has ended; no new allocation or extension has been requested automatically.
 
 ## Files and status
 
@@ -119,7 +127,7 @@ Run directory: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/
 
 Restart within an already assigned allocation using [run_arm_c2.sh](../../scripts/run_arm_c2.sh); update the prepared allocation/deadline manifest only after compute is assigned. It rejects occupied or mismatched GPUs.
 
-Implementation: [collection/data builder](../../openwebrl/arm_c2.py), [continuation controller](../../scripts/run_arm_c2.py), [LoRA trainer](../../scripts/train_arm_c2.py).
+Implementation: [collection/data builder](../../openwebrl/arm_c2.py), [continuation controller](../../scripts/run_arm_c2.py), [ARM-branch LoRA trainer](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/action-reward-models-c2/actor_distillation/train_openwebrl_c2.py).
 
 CPU checks: **9 C2 tests, 9 ARM inference tests, and 13 retry tests passed**. The pinned model exposes 252 eligible language projection modules (36 layers × 7 projections), verified on CPU without loading weights onto the evaluation GPU. Live GPU/export validation status is recorded in the run artifacts above.
 
