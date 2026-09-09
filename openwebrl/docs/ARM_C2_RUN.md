@@ -2,11 +2,17 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Training stopped for checkpoint scaling — 2026-09-09 11:53 PDT
+
+At the user's request, the resumed trainer received a graceful interrupt after the loss had largely plateaued. It saved `student/paused-000923-1788980015` at optimizer update **923**, epoch-2 position **6368/8394**. The last 50/100-update mean target-token cross-entropies were **0.1487/0.1490**, and epoch 2 through the stop averaged **0.1474**, versus **0.1550** for epoch 1. The endpoint contains the adapter, optimizer, RNG, processor, and exact dataset cursor. `student/complete.json` remains absent; this is an intentionally truncated run, not a completed two-epoch checkpoint.
+
+The prepared full epoch-2 evaluation waiter was stopped because epoch 2 will not complete. Allocation 285131 now evaluates checkpoints **100, 500, 700, and 923** on the one-time fixed 100-task sample recorded in [the scaling plan](ARM_C2_SCALING_EVAL.md). Update 100 began first; 500, 700, and 923 are queued sequentially. Every checkpoint uses the same sample and matched one-action o4-mini/AgentTrek setup. The original base actor scored 26.0% overall and 30.6% valid-only on that sample, with the historical live-site timing caveat.
+
 ## Training resumed on g022 — 2026-09-09 10:33 PDT
 
 The user assigned existing allocation **285131** on g022: one H200 for five hours, ending at **15:29 PDT**. The assigned GPU was verified free, and the fixed C2 student resumed from `student/paused-000671-1788962743` at optimizer update **671**. The first resumed updates are finite and retain dataset SHA-256 `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`; no fresh adapter was initialized. The training deadline is 15:24 PDT, five minutes before allocation expiry.
 
-Future continuations use the checked-in [C2 resume launcher](ARM_C2_RESUME.md). It follows the durable latest-checkpoint pointer, verifies checkpoint/dataset/trainer lineage, derives the visible GPU and deadline from an already assigned allocation, and records a per-allocation config and receipt. It never submits a job. After epoch 2 completes, this allocation is reserved for a matched 300-task Online-Mind2Web evaluation of the trained student.
+Future continuations use the checked-in [C2 resume launcher](ARM_C2_RESUME.md). It follows the durable latest-checkpoint pointer, verifies checkpoint/dataset/trainer lineage, derives the visible GPU and deadline from an already assigned allocation, and records a per-allocation config and receipt. It never submits a job. Resuming beyond update 923 now requires a new explicit training decision; the checkpoint-scaling study comes first.
 
 The prepared handoff requires `student/complete.json` to identify the fixed `student/epoch-2` adapter and refuses any other checkpoint. It safe-merges that adapter into `student/epoch-2-merged`, records the base path, adapter checksum, dataset checksum, update count, dtype, and weight-file sizes, and serves that immutable path with the same baseline SGLang settings used in the original comparison. A three-task smoke on indices 0, 50, and 100 checks the actor/browser/o4-mini path; all three were valid in the original baseline. The full run then uses the same 300-task file, seed 42, temperature 0.7, top-p 0.9, 1024-token response limit, 30-turn horizon, full history, one current screenshot, concurrency 8, and `online_mind2web/AgentTrek` judge with `o4-mini`. Per-task results are durable and the full output directory can resume without changing its manifest.
 

@@ -38,3 +38,9 @@ dataset SHA-256
 `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`.
 The active run may advance `student/latest-checkpoint.json`; future resumptions
 must follow that pointer rather than copying this historical path.
+
+On 2026-09-09 the user stopped training gracefully at update **923** to evaluate
+the learning curve before choosing a revised recipe. The current durable pointer
+is `student/paused-000923-1788980015`, epoch-2 position 6368/8394. Do not resume
+it merely because compute is available; the checkpoint study now gates any
+further optimization.
