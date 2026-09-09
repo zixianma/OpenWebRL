@@ -3,6 +3,8 @@
 - Put project documents, analysis notes, experiment plans, and metric references in `openwebrl/docs/`, unless the user specifies another location. This preference was explicitly requested on 2026-09-07.
 - Keep this `AGENTS.md` at the repository root so future sessions discover these instructions; it is an agent instruction file, not a project document.
 - Before submitting `sbatch`, requesting a new paid allocation, or extending a compute budget, obtain explicit user approval for the exact resource request and budget. Authorization to test within an existing allocation does not authorize new paid jobs.
+- Once the user explicitly approves an exact resource request, submit it immediately and keep the allocation productive; do not ask for another confirmation or leave approved GPU time idle. Prepare dependent stages in advance and start them promptly when their prerequisites finish. This preference was explicitly requested on 2026-09-09.
+- During long GPU work, monitor often enough to catch a failed process or stage handoff without busy polling; the user's default preference is roughly every 10–20 minutes. Increase cadence briefly around startup, failures, and stage transitions. This preference was explicitly requested on 2026-09-09.
 
 ## Quick baseline resume and supervision
 
