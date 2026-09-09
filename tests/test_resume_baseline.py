@@ -189,7 +189,7 @@ class ResumeTest(unittest.TestCase):
         job = m.allocation(info, '42', now, requested_gpus=4)
         self.assertEqual((job['gpus'], job['cpus'], job['tensor_parallel_size']), (4, 16, 4))
         self.assertEqual(job['maximum_seconds'], 3420)
-        self.assertIn('--gres=gpu:4', m.step_command('42', 16, 4))
+        self.assertIn('--gres=gpu:h200:4', m.step_command('42', 16, 4))
         with self.assertRaises(ValueError):
             m.allocation(self.info(NumCPUs='16', AllocTRES='cpu=16,mem=240G,gres/gpu=4,gres/gpu:h200=4'), '42', now, requested_gpus=4)
 
@@ -234,7 +234,7 @@ class ResumeTest(unittest.TestCase):
             self.assertEqual(m.launch(plan, original, args), 0)
             self.assertEqual(json.loads(args.state.read_text()), original)
             self.assertNotIn('OPENWEBRL_REPLAY_FIRST_BATCH', calls[0][1])
-            self.assertIn('--gres=gpu:4', calls[1][0])
+            self.assertIn('--gres=gpu:h200:4', calls[1][0])
             m.validate_verification_receipt(plan, '42')
             changed = dict(plan, launcher_sha256='changed-source')
             with self.assertRaises(ValueError): m.validate_verification_receipt(changed, '42')
@@ -285,7 +285,7 @@ class ResumeTest(unittest.TestCase):
             return json.dumps(report)
         with patch.object(m, 'capture', side_effect=capture), patch.object(m, 'validate_source', return_value='hash'), patch.object(m, 'lineage', return_value=[root]), patch.object(m, 'checkpoint_root', return_value=(root, 8)), patch.object(m, 'replay_batch') as replay:
             plan, state = m.prepare(args)
-        self.assertIn('--gres=gpu:4', plan['command'])
+        self.assertIn('--gres=gpu:h200:4', plan['command'])
         self.assertIn('--gpus 4 --verify-resume-only', plan['command'][-1])
         self.assertTrue(plan['verify_resume_only'])
         self.assertEqual(plan['other_live_steps'], ['41.3|trainer'])

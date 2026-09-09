@@ -175,8 +175,9 @@ def source_command(source, argv):
 
 
 def step_command(job, cpus, gpus=2):
+    gpu_gres = f'gpu:h200:{gpus}' if gpus == 4 else f'gpu:{gpus}'
     return ['srun', f'--jobid={job}', '--overlap', '--nodes=1', '--ntasks=1',
-            f'--cpus-per-task={cpus}', f'--gres=gpu:{gpus}', '--exact']
+            f'--cpus-per-task={cpus}', f'--gres={gpu_gres}', '--exact']
 
 
 def clean_environment():

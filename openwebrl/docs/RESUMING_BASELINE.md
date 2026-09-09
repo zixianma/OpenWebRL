@@ -80,6 +80,11 @@ approval review subsequently rejected submission pending explicit approval of
 the dollar estimate; no batch job was submitted by that rejected action.
 The script does not grant standing approval to submit paid jobs.
 
+The first approved submission, job `283947`, exited after 46 seconds before any
+model restore because its child `srun` mixed a typed H200 allocation with an
+untyped GPU GRES request. Four-GPU child steps now request `gpu:h200:4`; the
+regression suite checks the typed request. No checkpoint or W&B state changed.
+
 ## State and source
 
 The default persistent pointer is:
