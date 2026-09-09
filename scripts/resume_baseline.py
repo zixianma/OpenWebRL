@@ -284,8 +284,12 @@ def verification_identity(plan):
 
 def validate_verification_receipt(plan, job_id):
     path = verification_receipt(job_id)
-    if not path.is_file() or read_json(path).get('identity') != verification_identity(plan):
+    if not path.is_file():
         raise ValueError('Four-GPU continuation requires a successful --verify-resume-only --launch for this checkpoint, source and allocation first.')
+    receipt = read_json(path)
+    if receipt.get('identity') != verification_identity(plan):
+        raise ValueError('Four-GPU continuation requires a successful --verify-resume-only --launch for this checkpoint, source and allocation first.')
+    return receipt
 
 
 def record_verification(plan, job_id, run):
@@ -317,8 +321,9 @@ def launch(plan, state, args):
                    OPENWEBRL_REPLAY_ROLLOUT_ID=str(replay['rollout_id']),
                    OPENWEBRL_REPLAY_CONSUMED_GROUPS=str(replay['consumed_groups']))
     verification = plan.get('verify_resume_only', False)
+    restore_receipt = None
     if not verification and plan['allocation'].get('gpus', 2) == 4:
-        validate_verification_receipt(plan, args.job_id)
+        restore_receipt = validate_verification_receipt(plan, args.job_id)
     stamp = time.strftime('%Y%m%dT%H%M%S', time.gmtime())
     prefix = RUNTIME / 'logs' / f'resume-{args.job_id}-{stamp}'
     prefix.parent.mkdir(parents=True, exist_ok=True)
@@ -355,6 +360,17 @@ def launch(plan, state, args):
                     updated['last_valid_checkpoint_report'] = str(report_path)
                     verified = state.get('full_resume_verified_checkpoint') == plan['checkpoint_report']['checkpoint']
                     updated['full_resume_verified'] = bool(verified and state.get('full_resume_verified'))
+                    if restore_receipt:
+                        updated.update(
+                            full_resume_verified=True,
+                            full_resume_verified_checkpoint=plan['checkpoint_report']['checkpoint'],
+                            resume_verification_report=str(verification_receipt(args.job_id, plan['allocation']['gpus'])),
+                            resume_verification_directory=restore_receipt['verification_run'],
+                            launch_method=(
+                                f'Explicitly authorized existing job {args.job_id} with '
+                                f'TP{plan["allocation"]["gpus"]} restore verification and online continuation'
+                            ),
+                        )
                     updated['last_valid_checkpoint_full_tensor_reload_verified'] = updated['full_resume_verified']
                     updated['pending_replay_batch'] = plan['replay']['batch'] if plan['replay'] else None
                     updated['pending_replay_provenance'] = None
