@@ -2,6 +2,18 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Selector connection recovery — 2026-09-08 23:33–23:35 PDT
+
+The first two-GPU collection session exposed a connection stall in the **selector client**: task `webvoyager/14758` spent 180 seconds inside HTTPX/AnyIO `connect_tcp` to port 19103, while that SelectionARM server continued answering other requests. Its unavailable outcome remains preserved. The earlier actor transport fix did not cover this separate client. Evidence: `diagnostics/selector-connect-timeout-trace.txt`.
+
+Commit **`299f03f`** gives C2 selector connections a **10-second timeout and up to two retries**, bounded by **180 seconds total**. Retries apply only to connection failures before request submission, using the same candidates and payload. Read failures and HTTP errors are not retried. The standalone inference-evaluation client's default behavior remains unchanged. All **46 ARM tests passed**, including request preservation, total-deadline cancellation, and rejection of read/permanent-error retries.
+
+The collector paused cleanly at **863 completed outcomes: 780 valid, 459 successful, and 83 unavailable**. The refreshed preview contains **3000 usable turns**, SHA-256 `c61d5827049d00e5201969cfd34d315933c0e7e02d46b5bc0ad22853856e137c`. Every outcome in the pre-pause checksum snapshot and all 900 original evaluation outcomes remain unchanged. Both inference service pairs exited cleanly before restart. Audit: `diagnostics/selector-connect-restart-audit.json`; source/config archive: `execution-sessions/283899-selector-connect-source.tar.gz`.
+
+Both replicas resumed collection at **23:35 PDT**, in step **11** of the same allocation, with 16 browser workers each. Model, task pool, judge, filtering, and training recipe remain unchanged.
+
+Before this restart, a real exported turn from each replica passed processor-prefix, image-grid, and history-loss-mask checks: **4146/287** and **4160/323** prefix/target tokens, respectively. Evidence: `diagnostics/parallel-production-export-check.json`. This checks serialization and loss targets; it does not estimate policy improvement. Student optimizer updates/checkpoints remain **0 / 0**.
+
 ## Two-GPU continuation on g007 — 2026-09-08 23:25 PDT
 
 At the user's request, C2 resumed in existing allocation **283899**, step **1**, on **g007**, with **two H200s, 8 CPUs, and 240 GiB RAM**. Both GPUs were verified free before launch. Allocation expiry is **2026-09-09 07:13:27 PDT**; the controller deadline is **07:08:27 PDT**. GPU UUIDs are `GPU-f07dcbbc-c700-31ae-89c2-372e72ed164c` and `GPU-eb0f41fc-737a-bc34-59e1-d6c49527294f`. No new allocation was submitted by the agent.
