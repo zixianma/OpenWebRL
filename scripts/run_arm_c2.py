@@ -16,6 +16,41 @@ from scripts.run_arm_retry import atomic_json, digest, get_health, load_rows, st
 REPO = Path(__file__).resolve().parents[1]
 
 
+def training_command(queue):
+    """Use a pinned local ARM branch when requested; retain the legacy default."""
+    checkout = queue.get('training_checkout')
+    if checkout is None:
+        return [queue['training_python'], str(REPO / 'scripts/train_arm_c2.py')], REPO
+    root = Path(checkout['root']).resolve()
+    entrypoint = (root / checkout['entrypoint']).resolve()
+    if root not in entrypoint.parents:
+        raise ValueError('Training entrypoint must be inside the pinned ARM checkout')
+    revision = subprocess.check_output(['git', '-C', str(root), 'rev-parse', 'HEAD'], text=True).strip()
+    if revision != checkout['commit'] or digest(entrypoint) != checkout['sha256']:
+        raise ValueError('ARM training checkout changed after preflight')
+    return [queue['training_python'], str(entrypoint)], root
+
+
+def freeze_execution_config(output, config):
+    """Keep each execution session and reject a changed dataset/filtering recipe."""
+    path = output / 'frozen-config.json'
+    if path.exists():
+        previous = json.loads(path.read_text())
+        for field in ('source_full', 'output', 'task_file_sha256', 'task_count', 'seed',
+                      'teacher', 'teacher_manifest', 'training'):
+            if previous[field] != config[field]:
+                raise ValueError(f'C2 resume protocol changed: {field}')
+        archive = output / 'execution-sessions' / (digest(path) + '.json')
+        archive.parent.mkdir(exist_ok=True)
+        if not archive.exists():
+            archive.write_bytes(path.read_bytes())
+    atomic_json(path, config)
+    archive = output / 'execution-sessions' / (digest(path) + '.json')
+    archive.parent.mkdir(exist_ok=True)
+    if not archive.exists():
+        archive.write_bytes(path.read_bytes())
+
+
 def choose_teacher(source):
     manifests, rows = {}, {}
     for mode in ('baseline', 'scalar', 'selection'):
@@ -76,7 +111,8 @@ def execute(queue_path):
     if digest(q['task_file']) != q['task_file_sha256']:
         raise ValueError('C2 task manifest changed')
     validate_allocation(q)
-    atomic_json(output / 'frozen-config.json', dict(q, teacher=teacher, teacher_manifest=manifest))
+    training_command(q)
+    freeze_execution_config(output, dict(q, teacher=teacher, teacher_manifest=manifest))
     before = {str(p.relative_to(source)): digest(p) for mode in ('baseline', 'scalar', 'selection')
               for p in (source / mode / 'results').glob('*.json')}
     atomic_json(output / 'original-eval-sha256.json', before)
@@ -133,6 +169,12 @@ def execute(queue_path):
             progress = json.loads((output / 'collection-summary.json').read_text())
             record('collection_complete' if progress['attempted'] == q['task_count'] else 'collection_paused', teacher=teacher, summary=progress)
             if progress['attempted'] == q['task_count'] and time.time() < deadline - 900:
+                # Recheck both the entrypoint and its OpenWebRL dependencies
+                # before releasing the inference services for optimization.
+                train_argv, train_cwd = training_command(q)
+                for name, sha in q['source_sha256'].items():
+                    if digest(REPO / name) != sha:
+                        raise ValueError(f'C2 training dependency changed: {name}')
                 # The full student starts only after the entire fixed task pool
                 # is processed. Free only the verified evaluation services.
                 stop_owned(server); server = None
@@ -156,12 +198,11 @@ def execute(queue_path):
                     raise ValueError('Evaluation GPU did not become free; leave remaining processes untouched')
                 record('training_student', teacher=teacher, synthetic_data_only=False)
                 with (output / 'training.log').open('a') as training_log:
-                    argv = [q['training_python'], str(REPO / 'scripts/train_arm_c2.py'),
-                            '--config', str(output / 'frozen-config.json')]
+                    argv = train_argv + ['--config', str(output / 'frozen-config.json')]
                     latest = output / 'student/latest-checkpoint.json'
                     if latest.exists():
                         argv += ['--resume', json.loads(latest.read_text())['path']]
-                    child = subprocess.Popen(argv, cwd=REPO, stdout=training_log,
+                    child = subprocess.Popen(argv, cwd=train_cwd, stdout=training_log,
                                              stderr=subprocess.STDOUT, start_new_session=True)
                     while child.poll() is None and time.time() < deadline:
                         time.sleep(5)

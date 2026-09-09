@@ -111,6 +111,41 @@ class C2Tests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'grid mismatch'):
                 load_training_example(dict(row,image_grid_thw=[[1,4,4]]),processor)
 
+    def test_arm_training_checkout_rejects_drift_and_path_escape(self):
+        from scripts.run_arm_c2 import training_command
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            entry = root / 'train.py'; entry.write_text('pass\n')
+            checkout = dict(root=str(root), entrypoint='train.py', commit='revision', sha256=sha(entry.read_bytes()))
+            queue = dict(training_python='/python', training_checkout=checkout)
+            with patch('subprocess.check_output', return_value='revision\n'):
+                argv, cwd = training_command(queue)
+                self.assertEqual(argv, ['/python', str(entry)])
+                self.assertEqual(cwd, root)
+                entry.write_text('changed\n')
+                with self.assertRaisesRegex(ValueError, 'changed after preflight'):
+                    training_command(queue)
+                checkout['entrypoint'] = '../outside.py'
+                with self.assertRaisesRegex(ValueError, 'inside the pinned'):
+                    training_command(queue)
+
+    def test_resume_archives_resource_changes_but_rejects_recipe_changes(self):
+        from scripts.run_arm_c2 import freeze_execution_config
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            original = dict(source_full='source', output=str(root), task_file_sha256='hash',
+                            task_count=2091, seed=42, teacher='selection',
+                            teacher_manifest={'judge': 'o4-mini'}, training={'epochs': 2}, allocation='old')
+            freeze_execution_config(root, original)
+            resumed = dict(original, allocation='new')
+            freeze_execution_config(root, resumed)
+            self.assertEqual(len(list((root / 'execution-sessions').glob('*.json'))), 2)
+            for changed in (dict(resumed, training={'epochs': 1}),
+                            dict(resumed, teacher_manifest={'judge': 'gpt-4.1'})):
+                with self.assertRaisesRegex(ValueError, 'resume protocol changed'):
+                    freeze_execution_config(root, changed)
+            self.assertEqual(json.loads((root / 'frozen-config.json').read_text()), resumed)
+
     def test_teacher_choice_requires_completed_original_eval(self):
         from scripts.run_arm_c2 import choose_teacher
         with tempfile.TemporaryDirectory() as d:
