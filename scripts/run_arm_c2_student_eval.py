@@ -11,7 +11,7 @@ import subprocess
 import time
 import urllib.request
 
-from scripts.resume_arm_c2_training import allocation_deadline, parse_job_record, write_json
+from resume_arm_c2_training import allocation_deadline, parse_job_record, write_json
 
 
 REPO = Path(__file__).resolve().parents[1]
