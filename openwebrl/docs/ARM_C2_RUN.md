@@ -2,6 +2,12 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## 1,000-task audit — 2026-09-09 00:07 PDT
+
+The consistent dataset snapshot covers **1007/2091 completed outcomes** and retains **3502 usable turns from 537 successful trajectories**. One additional outcome completed while the outcome checksum inventory was being written, so that inventory contains 1008 files. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **861 outcomes present before the selector connection fix**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `89457d00e0540f1704597b000775ed2c50c66d02343f1cb5bb913dc490d5e737`; evidence: `diagnostics/milestone-1000-audit.json` and `diagnostics/milestone-1000-outcome-sha256.json`.
+
+The live count immediately after the audit was **1008 completed, 537 successful, and 90 unavailable**. Recent 10-, 20-, and 30-minute rates were **276, 279, and 272 tasks/hour**, giving straight-line collection ETAs near **04:00–04:06 PDT**. This improves the earlier forecast but remains sensitive to long final tasks and website failures. Student optimizer updates/checkpoints remain **0 / 0** until the full-pool audit passes.
+
 ## Allocation forecast — 2026-09-08 23:47 PDT
 
 **Forecast, not completed work:** 911/2091 tasks were complete (489 successes, 86 unavailable), leaving 1180. The last five and ten minutes produced **252 and 240 completed tasks/hour**, respectively. Straight-line collection ETAs were 04:28 and 04:42 PDT; allowing for slower final tasks gives a central estimate near **05:00 PDT on September 9**, with a planning range of **04:30–06:00 PDT**. Allocation expiry remains 07:13 PDT, with the controller stopping at 07:08 PDT. Sustaining about **166 tasks/hour** would finish collection before the 06:53 PDT minimum-budget gate for starting SFT.
