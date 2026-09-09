@@ -122,3 +122,29 @@ class CollectionMappingTest(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(file_back_completed_group([[sample]]), 0)
         self.assertIs(sample.multimodal_train_inputs, inputs)
+
+    @unittest.skipUnless(sys.platform == 'linux', 'Linux process memory accounting required')
+    def test_completed_images_release_anonymous_memory(self):
+        import ctypes
+        from types import SimpleNamespace
+        from slime.utils.rollout_transport import file_back_completed_group
+        if not hasattr(ctypes.CDLL(None), 'malloc_trim'):
+            self.skipTest('glibc allocator trim required')
+        directory = tempfile.mkdtemp(prefix='openwebrl-collection-memory-test-')
+        previous_threads = torch.get_num_threads()
+        torch.set_num_threads(1)
+        try:
+            groups = [[SimpleNamespace(multimodal_train_inputs={'pixels': torch.ones(256, 4096)})]
+                      for _ in range(16)]
+            def anonymous_kib():
+                return next(int(line.split()[1]) for line in Path('/proc/self/smaps_rollup').read_text().splitlines()
+                            if line.startswith('Anonymous:'))
+            before = anonymous_kib()
+            with patch.dict(os.environ, OPENWEBRL_MULTIMODAL_STORAGE_DIR=directory):
+                for group in groups:
+                    file_back_completed_group(group)
+            after = anonymous_kib()
+            self.assertGreater(before - after, 48 * 1024)
+            self.assertTrue(all(group[0].multimodal_train_inputs['pixels'].sum().item() == 256 * 4096 for group in groups))
+        finally:
+            torch.set_num_threads(previous_threads)

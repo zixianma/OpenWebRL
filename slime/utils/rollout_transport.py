@@ -4,6 +4,7 @@ Ray shares NumPy arrays between readers; pickled torch tensors instead allocate
 private copies on every training rank. Restored CPU views must remain read-only
 until moved to the GPU by the training materializer.
 """
+import ctypes
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -129,4 +130,12 @@ def file_back_completed_group(group):
     mapped = decode_multimodal(_encode_file_backed(data, directory))
     for sample, inputs in zip(samples.values(), mapped["multimodal_train_inputs"], strict=True):
         sample.multimodal_train_inputs = inputs
+    # Drop our last references before asking glibc to return free arena pages.
+    # Large CPU tensor buffers may otherwise remain anonymous resident memory.
+    del data
+    trim = getattr(ctypes.CDLL(None), "malloc_trim", None)
+    if trim is not None:
+        trim.argtypes = [ctypes.c_size_t]
+        trim.restype = ctypes.c_int
+        trim(0)
     return len(samples)

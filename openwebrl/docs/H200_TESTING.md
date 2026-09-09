@@ -19,7 +19,11 @@ files contain the values themselves, not dependencies on node-local paths.
 Six CPU transport tests pass, including nested turn groups, aliased sample
 identity, original buffer release, bfloat16, and recovery-file portability after
 the backing file is renamed. A bounded 64-MiB allocation-local probe checks
-actual anonymous-memory release and exact retained values; its report is
+actual anonymous-memory release and exact retained values. The first probe
+showed that glibc retained freed buffers, so the helper now releases its original
+references and calls `malloc_trim(0)` when available. The repeated probe released
+65,844 KiB while preserving every value; a Linux memory regression test was added
+(seven transport tests pass). Its report is
 `openwebrl-runtime/collection-mapping-probe-283214.json`. The fix requires a new
 worker process; checkpoint 6 preserves all 104 completed optimizer updates.
 
