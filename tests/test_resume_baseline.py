@@ -181,5 +181,117 @@ class ResumeTest(unittest.TestCase):
         self.assertEqual(env['WANDB_API_KEY'], 'private')
 
 
+    def test_four_gpu_profile_requires_matching_existing_resources(self):
+        now = m.datetime(2030, 1, 1, 7).timestamp()
+        with self.assertRaisesRegex(ValueError, '4 GPUs'):
+            m.allocation(self.info(), '42', now, requested_gpus=4)
+        info = self.info(NumCPUs='16', AllocTRES='cpu=16,mem=480G,node=1,gres/gpu=4,gres/gpu:h200=4')
+        job = m.allocation(info, '42', now, requested_gpus=4)
+        self.assertEqual((job['gpus'], job['cpus'], job['tensor_parallel_size']), (4, 16, 4))
+        self.assertEqual(job['maximum_seconds'], 3420)
+        self.assertIn('--gres=gpu:4', m.step_command('42', 16, 4))
+        with self.assertRaises(ValueError):
+            m.allocation(self.info(NumCPUs='16', AllocTRES='cpu=16,mem=240G,gres/gpu=4,gres/gpu:h200=4'), '42', now, requested_gpus=4)
+
+    def verification_plan(self):
+        return dict(active_steps=[], replay=None, verify_resume_only=True,
+                    command=['srun', '--jobid=42', '--gres=gpu:4'],
+                    allocation=dict(job_id='42', host='g022', gpus=4, maximum_seconds=3600),
+                    source=str(self.root / 'source'), launcher_sha256='source-hash',
+                    resume_from=str(self.root / 'old'),
+                    checkpoint_report=dict(checkpoint=str(self.root / 'old/iter_0000008'), iteration=8, completed_optimizer_updates=130),
+                    wandb_run_id='sameid', wandb_url='https://wandb.ai/test/project/runs/sameid')
+
+    def test_verification_does_not_replace_pointer_or_replay_and_requires_real_report(self):
+        from types import SimpleNamespace
+        runtime = self.root / 'runtime'
+        (runtime / 'runs').mkdir(parents=True)
+        run = runtime / 'runs/openwebrl-4b-resume-check-42-test'
+        args = SimpleNamespace(job_id='42', state=self.root / 'state.json')
+        original = {'run_directory': 'existing-training-run', 'durable_optimizer_updates': 130}
+        args.state.write_text(json.dumps(original))
+        plan = self.verification_plan()
+        calls = []
+        class Process:
+            returncode = None
+            polls = 0
+            def poll(self):
+                self.polls += 1
+                if self.polls > 1: self.returncode = 0
+                return self.returncode
+            def wait(self, timeout): return 0
+        def start(command, **kwargs):
+            calls.append((command, kwargs['env']))
+            if len(calls) == 1:
+                run.mkdir()
+                (run / 'launch_manifest.json').write_text(json.dumps({'resume_from': plan['resume_from']}))
+                (run / 'resume_verification.json').write_text(json.dumps({
+                    'full_model_and_optimizer_load': 'passed', 'loaded_iteration': 8,
+                    'next_rollout_id': 9, 'gpus': 4, 'source_checkpoint_root': plan['resume_from'],
+                    'optimizer_updates_executed': 0, 'browser_collections_executed': 0}))
+            return Process()
+        with patch.object(m, 'RUNTIME', runtime), patch.object(m.subprocess, 'Popen', side_effect=start), patch.object(m.time, 'sleep'):
+            self.assertEqual(m.launch(plan, original, args), 0)
+            self.assertEqual(json.loads(args.state.read_text()), original)
+            self.assertNotIn('OPENWEBRL_REPLAY_FIRST_BATCH', calls[0][1])
+            self.assertIn('--gres=gpu:4', calls[1][0])
+            m.validate_verification_receipt(plan, '42')
+            changed = dict(plan, launcher_sha256='changed-source')
+            with self.assertRaises(ValueError): m.validate_verification_receipt(changed, '42')
+            changed = dict(plan, checkpoint_report=dict(plan['checkpoint_report'], checkpoint='another-checkpoint'))
+            with self.assertRaises(ValueError): m.validate_verification_receipt(changed, '42')
+            report = json.loads((run / 'resume_verification.json').read_text())
+            report['gpus'] = 2
+            (run / 'resume_verification.json').write_text(json.dumps(report))
+            with self.assertRaises(ValueError): m.record_verification(plan, '42', run)
+
+    def test_four_gpu_training_requires_verification_before_launch(self):
+        from types import SimpleNamespace
+        plan = self.verification_plan()
+        plan['verify_resume_only'] = False
+        with patch.object(m, 'RUNTIME', self.root), patch.object(m.subprocess, 'Popen') as process:
+            with self.assertRaisesRegex(ValueError, 'successful --verify-resume-only'):
+                m.launch(plan, {}, SimpleNamespace(job_id='42'))
+            process.assert_not_called()
+
+
+    def test_live_previous_allocation_cannot_fork_training_lineage(self):
+        plan = self.verification_plan()
+        plan.update(verify_resume_only=False, other_live_steps=['41.3|trainer'])
+        with patch.object(m.subprocess, 'Popen') as process:
+            with self.assertRaisesRegex(ValueError, 'still active in another allocation'):
+                m.launch(plan, {}, None)
+            process.assert_not_called()
+
+
+    def test_four_gpu_verification_preflight_forwards_topology_and_skips_replay(self):
+        from types import SimpleNamespace
+        source = self.root / 'source'
+        (source / 'scripts').mkdir(parents=True)
+        (source / 'scripts/run_small_baseline.py').write_text('OPENWEBRL_RESUME_TOPOLOGY_V1 = True')
+        root = self.root / 'run'
+        root.mkdir()
+        state_file = self.root / 'state.json'
+        state_file.write_text(json.dumps({'run_directory': str(root), 'allocation': '41',
+            'source_directory': str(source), 'wandb_run_id': 'sameid',
+            'wandb_url': 'https://wandb.ai/test/project/runs/sameid', 'scheduler_offset_updates': 1}))
+        report = dict(iteration=8, completed_optimizer_updates=130, checkpoint=str(root / 'iter_0000008'))
+        args = SimpleNamespace(state=state_file, source=None, job_id='42', gpus=4,
+                               verify_resume_only=True, wandb_run_id=None, env_file=self.root / '.env')
+        def capture(command):
+            if command[0] == 'scontrol':
+                return self.info(NumCPUs='16', AllocTRES='cpu=16,mem=480G,node=1,gres/gpu=4,gres/gpu:h200=4')
+            if command[0] == 'squeue': return '41.3|trainer' if '--user' in command else ''
+            return json.dumps(report)
+        with patch.object(m, 'capture', side_effect=capture), patch.object(m, 'validate_source', return_value='hash'), patch.object(m, 'lineage', return_value=[root]), patch.object(m, 'checkpoint_root', return_value=(root, 8)), patch.object(m, 'replay_batch') as replay:
+            plan, state = m.prepare(args)
+        self.assertIn('--gres=gpu:4', plan['command'])
+        self.assertIn('--gpus 4 --verify-resume-only', plan['command'][-1])
+        self.assertTrue(plan['verify_resume_only'])
+        self.assertEqual(plan['other_live_steps'], ['41.3|trainer'])
+        self.assertIsNone(plan['replay'])
+        replay.assert_not_called()
+
+
 if __name__ == '__main__':
     unittest.main()

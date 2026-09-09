@@ -9,7 +9,61 @@ python3 scripts/resume_baseline.py --job-id JOB_ID --launch
 
 `--dry-run` is the default. It reads Slurm state, recipe hashes, checkpoint metadata and saved-batch metadata; it does not run models or allocate GPUs. The launch command stays in the foreground. An agent can run it with a persistent exec session; from a terminal, use `nohup` with output redirected to scrubbed storage if it must survive disconnects.
 
-The script **never submits or extends an allocation**. It requires a running, user-owned single-node allocation with at least two H200s, eight CPUs and 240 GiB RAM, and ten usable minutes after the shutdown margin. It uses exactly two GPUs through `srun --jobid=... --overlap --exact`. It refuses launch if any non-interactive/non-extern Slurm steps are already present, and uses a per-job lock to prevent concurrent invocations. Inspect existing steps; do not stop unrelated work to bypass this check.
+The script **never submits or extends an allocation**. It requires a running, user-owned single-node allocation with at least two H200s, eight CPUs and 240 GiB RAM, and ten usable minutes after the shutdown margin. By default it uses two GPUs through `srun --jobid=... --overlap --exact`; the four-GPU profile is described below. It refuses launch if any non-interactive/non-extern Slurm steps are already present, and uses a per-job lock to prevent concurrent invocations. Inspect existing steps; do not stop unrelated work to bypass this check.
+
+## Four-GPU continuation
+
+The model/optimizer checkpoint format supports a different tensor-parallel size.
+The prepared four-H200 profile uses TP4/DP1 and 32 browser slots, with conservative
+resource guards of 16 CPUs and 480 GiB RAM on one node. This is a tested CPU
+configuration and workflow, not yet a verified four-GPU model restore. Two
+separate two-GPU allocations do not satisfy this single-node profile.
+
+A prepared source snapshot is available at:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-ready-20260909`.
+It preserves all five baseline recipe-file hashes. To recreate such a snapshot
+from a newer preserved baseline (never the experimental working tree):
+
+```bash
+python3 scripts/prepare_resume_topology.py --source PRESERVED_SOURCE --output NEW_SOURCE
+```
+
+For an existing four-H200 allocation explicitly authorized by the user:
+
+```bash
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --verify-resume-only --dry-run
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --verify-resume-only --launch
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --dry-run
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --launch
+```
+
+The restore-only pass runs offline, requests zero browser collections and zero
+optimizer updates, and does not replace the current training pointer. Its
+launcher is limited to 15 minutes within the existing allocation. Only an actual
+successful `resume_verification.json` creates a verification receipt. Four-GPU
+training requires a matching receipt for the checkpoint, source launcher and
+allocation. If a newer checkpoint becomes available, repeat the restore check
+for that checkpoint. Inspect the report and released Slurm steps before training.
+
+The old trainer must be stopped at a safe boundary before the new trainer starts;
+the wrapper refuses to fork the same lineage while its recorded old allocation
+still has active steps. Offline verification may run separately while the old
+trainer remains active, inside another explicitly authorized allocation. A
+complete untrained rollout can be replayed after migration, preserving collection
+work. The same W&B ID, dataset cursor, optimizer and scheduler state are retained.
+
+At an evaluation boundary, the checkpoint is saved **before** evaluation. Finish
+the scheduled evaluation before moving on, or migrate the preceding checkpoint
+plus its complete untrained rollout so that replay triggers the due evaluation.
+Do not treat a saved checkpoint alone as proof that its evaluation has completed.
+
+Thirteen CPU resume tests cover resource/ownership checks, topology arguments,
+verification receipts, preservation of the training pointer, replay selection,
+and prevention of concurrent trainers. The prepared inner launcher dry run
+selected checkpoint 8 / 130 Adam updates with four GPUs, TP4, 32 browsers,
+48 groups × five attempts, global batch 256 and two PPO epochs. The live two-GPU
+allocation correctly rejects a four-GPU request. No four-GPU allocation was
+requested or consumed by these tests.
 
 ## State and source
 

@@ -41,8 +41,10 @@ def capture(argv):
     return subprocess.check_output(argv, text=True, stderr=subprocess.PIPE).strip()
 
 
-def allocation(info, job_id, now=None, uid=None):
+def allocation(info, job_id, now=None, uid=None, requested_gpus=2):
     """Validate ownership, capacity, state and the existing paid time boundary."""
+    if requested_gpus not in (2, 4):
+        raise ValueError('Supported profiles use 2 or 4 H200 GPUs.')
     fields = dict(re.findall(r'(\w+)=(\S+)', info))
     uid = os.getuid() if uid is None else uid
     now = time.time() if now is None else now
@@ -56,16 +58,16 @@ def allocation(info, job_id, now=None, uid=None):
     cpus, gpus = int(fields['NumCPUs']), int(tres.get('gres/gpu', '0'))
     memory = re.fullmatch(r'([\d.]+)([KMGT])', tres.get('mem', ''))
     gib = float(memory[1]) * {'K': 2**-20, 'M': 2**-10, 'G': 1, 'T': 1024}[memory[2]] if memory else 0
-    if cpus < 8 or gpus < 2 or gib < 240:
-        raise ValueError('This workflow needs at least 2 GPUs, 8 CPUs and 240 GiB in the existing allocation.')
-    if int(tres.get('gres/gpu:h200', '0')) < 2:
-        raise ValueError('This resume workflow has only been validated on two H200 GPUs.')
+    if cpus < 4 * requested_gpus or gpus < requested_gpus or gib < 120 * requested_gpus:
+        raise ValueError(f'This profile needs {requested_gpus} GPUs, {4 * requested_gpus} CPUs and {120 * requested_gpus} GiB in the existing allocation.')
+    if int(tres.get('gres/gpu:h200', '0')) < requested_gpus:
+        raise ValueError(f'This profile requires {requested_gpus} allocated H200 GPUs.')
     end = datetime.strptime(fields['EndTime'], '%Y-%m-%dT%H:%M:%S').timestamp()
     seconds = min(8 * 3600, int(end - now) - 180)
     if seconds < 600:
         raise ValueError('Less than 10 minutes remain after the three-minute shutdown margin.')
     return {'job_id': job_id, 'host': fields['NodeList'], 'cpus': min(cpus, 16),
-            'gpus': 2, 'allocated_memory_gib': gib, 'end_time': fields['EndTime'],
+            'gpus': requested_gpus, 'tensor_parallel_size': requested_gpus, 'allocated_memory_gib': gib, 'end_time': fields['EndTime'],
             'maximum_seconds': seconds, 'shutdown_margin_seconds': 180}
 
 
@@ -171,9 +173,9 @@ def source_command(source, argv):
     return ['bash', '-c', f'set -euo pipefail\nsource {shlex.quote(str(source / "scripts/h200_env.sh"))}\nexec {shlex.join(argv)}']
 
 
-def step_command(job, cpus):
+def step_command(job, cpus, gpus=2):
     return ['srun', f'--jobid={job}', '--overlap', '--nodes=1', '--ntasks=1',
-            f'--cpus-per-task={cpus}', '--gres=gpu:2', '--exact']
+            f'--cpus-per-task={cpus}', f'--gres=gpu:{gpus}', '--exact']
 
 
 def clean_environment():
@@ -189,10 +191,20 @@ def clean_environment():
 
 def prepare(args):
     state = read_json(args.state)
-    job = allocation(capture(['scontrol', 'show', 'job', args.job_id, '-o']), args.job_id)
+    gpus = getattr(args, 'gpus', 2)
+    verification = getattr(args, 'verify_resume_only', False)
+    job = allocation(capture(['scontrol', 'show', 'job', args.job_id, '-o']), args.job_id, requested_gpus=gpus)
     busy = active_steps(capture(['squeue', '--steps', f'--jobs={args.job_id}', '--noheader', '--format=%i|%j']))
+    other_live_steps = []
+    previous_job = str(state.get('allocation', ''))
+    if previous_job and previous_job != args.job_id and not (Path(state['run_directory']) / 'exit_status.json').exists():
+        own_steps = capture(['squeue', '--steps', '--user', str(os.getuid()), '--noheader', '--format=%i|%j'])
+        other_live_steps = active_steps('\n'.join(line for line in own_steps.splitlines() if line.startswith(previous_job + '.')))
     source = Path(args.source or state['source_directory']).resolve()
     source_hash = validate_source(source)
+    topology_capable = 'OPENWEBRL_RESUME_TOPOLOGY_V1' in (source / 'scripts/run_small_baseline.py').read_text()
+    if gpus != 2 and not topology_capable:
+        raise ValueError('Prepare a topology-capable preserved source with scripts/prepare_resume_topology.py first.')
     roots = lineage(state)
     root, iteration = checkpoint_root(roots)
     offset = state.get('scheduler_offset_updates', 0)
@@ -201,22 +213,62 @@ def prepare(args):
     report = json.loads(capture(inspection))
     if report['iteration'] != iteration:
         raise ValueError('Checkpoint marker changed during preflight; retry after training stops.')
-    replay = replay_batch(state, roots, root, iteration)
+    replay = None if verification else replay_batch(state, roots, root, iteration)
     run_id = state.get('wandb_run_id') or state['wandb_url'].rstrip('/').rsplit('/', 1)[-1]
     if args.wandb_run_id and args.wandb_run_id != run_id:
         raise ValueError('W&B ID differs from the recorded lineage; use a separate state file for another run.')
     if not re.fullmatch(r'[A-Za-z0-9_-]+', run_id):
         raise ValueError('Invalid recorded W&B run ID.')
-    command = step_command(args.job_id, job['cpus']) + source_command(source, [
+    extra = ['--gpus', str(gpus)] if topology_capable else []
+    if verification:
+        extra.append('--verify-resume-only')
+    command = step_command(args.job_id, job['cpus'], gpus) + source_command(source, [
         'python', str(source / 'scripts/run_small_baseline.py'), '--profile', 'reference',
-        '--resume-from', str(root), '--wandb-run-id', run_id, '--env-file', str(args.env_file.resolve())])
-    return {'allocation': job, 'active_steps': busy, 'source': str(source),
+        '--resume-from', str(root), '--wandb-run-id', run_id, '--env-file', str(args.env_file.resolve()), *extra])
+    return {'allocation': job, 'active_steps': busy, 'other_live_steps': other_live_steps, 'source': str(source),
             'launcher_sha256': source_hash, 'resume_from': str(root),
             'checkpoint_report': report, 'replay': replay, 'wandb_run_id': run_id,
-            'wandb_url': state['wandb_url'], 'command': command}, state
+            'wandb_url': state['wandb_url'], 'command': command, 'verify_resume_only': verification}, state
+
+
+def verification_receipt(job_id, gpus=4):
+    return RUNTIME / 'logs' / f'resume-{job_id}-{gpus}gpu-verification.json'
+
+
+def verification_identity(plan):
+    return {key: plan[key] for key in ('source', 'launcher_sha256', 'resume_from')} | {
+        'checkpoint': plan['checkpoint_report']['checkpoint'],
+        'optimizer_updates': plan['checkpoint_report']['completed_optimizer_updates'],
+        'gpus': plan['allocation'].get('gpus', 2),
+        'job_id': plan['allocation']['job_id'],
+    }
+
+
+def validate_verification_receipt(plan, job_id):
+    path = verification_receipt(job_id)
+    if not path.is_file() or read_json(path).get('identity') != verification_identity(plan):
+        raise ValueError('Four-GPU continuation requires a successful --verify-resume-only --launch for this checkpoint, source and allocation first.')
+
+
+def record_verification(plan, job_id, run):
+    report = read_json(run / 'resume_verification.json')
+    expected = plan['checkpoint_report']['iteration']
+    if (report.get('full_model_and_optimizer_load') != 'passed'
+            or report.get('loaded_iteration') != expected
+            or report.get('next_rollout_id') != expected + 1
+            or report.get('gpus') != plan['allocation']['gpus']
+            or report.get('source_checkpoint_root') != plan['resume_from']
+            or report.get('optimizer_updates_executed') != 0
+            or report.get('browser_collections_executed') != 0):
+        raise ValueError('GPU verification report does not match the requested checkpoint/topology.')
+    receipt = verification_receipt(job_id, plan['allocation']['gpus'])
+    write_json(receipt, {'identity': verification_identity(plan), 'verification_run': str(run), 'report': report})
+    print(f'GPU restore verified; receipt: {receipt}', flush=True)
 
 
 def launch(plan, state, args):
+    if plan.get('other_live_steps') and not plan.get('verify_resume_only', False):
+        raise ValueError('The recorded training run is still active in another allocation; stop its trainer at a checkpoint boundary before continuing the same lineage.')
     if plan['active_steps']:
         raise ValueError('Allocation already has active steps; refusing to launch a duplicate trainer: '
                          + ', '.join(plan['active_steps']))
@@ -226,11 +278,16 @@ def launch(plan, state, args):
         env.update(OPENWEBRL_REPLAY_FIRST_BATCH=replay['batch'],
                    OPENWEBRL_REPLAY_ROLLOUT_ID=str(replay['rollout_id']),
                    OPENWEBRL_REPLAY_CONSUMED_GROUPS=str(replay['consumed_groups']))
+    verification = plan.get('verify_resume_only', False)
+    if not verification and plan['allocation'].get('gpus', 2) == 4:
+        validate_verification_receipt(plan, args.job_id)
     stamp = time.strftime('%Y%m%dT%H%M%S', time.gmtime())
     prefix = RUNTIME / 'logs' / f'resume-{args.job_id}-{stamp}'
     prefix.parent.mkdir(parents=True, exist_ok=True)
     write_json(prefix.with_suffix('.json'), plan)
-    before = set((RUNTIME / 'runs').glob(f'openwebrl-4b-reference-{args.job_id}-*'))
+    profile = 'resume-check' if verification else 'reference'
+    pattern = f'openwebrl-4b-{profile}-{args.job_id}-*'
+    before = set((RUNTIME / 'runs').glob(pattern))
     # Foreground supervisor: survives terminal disconnect when invoked with nohup.
     with prefix.with_suffix('.log').open('x') as output:
         proc = subprocess.Popen(plan['command'], env=env, stdout=output, stderr=subprocess.STDOUT)
@@ -240,7 +297,7 @@ def launch(plan, state, args):
         print(f'Launcher log: {prefix.with_suffix(".log")}', flush=True)
         while proc.poll() is None:
             if run is None:
-                found = set((RUNTIME / 'runs').glob(f'openwebrl-4b-reference-{args.job_id}-*')) - before
+                found = set((RUNTIME / 'runs').glob(pattern)) - before
                 ready = [p for p in found if (p / 'launch_manifest.json').exists()]
                 if len(ready) == 1:
                     run = ready[0]
@@ -267,20 +324,28 @@ def launch(plan, state, args):
                         provenance = Path(plan['replay']['batch']).with_suffix('.provenance.json')
                         if provenance.exists():
                             updated['pending_replay_provenance'] = str(provenance)
-                    write_json(args.state, updated)
+                    if not verification:
+                        write_json(args.state, updated)
                     write_json(run / 'resume_plan.json', plan)
                     monitor_log = prefix.with_suffix('.health.log').open('x')
-                    command = step_command(args.job_id, 1) + source_command(Path(plan['source']), [
+                    command = step_command(args.job_id, 1, plan['allocation'].get('gpus', 2)) + source_command(Path(plan['source']), [
                         'python', str(REPO / 'scripts/monitor_baseline.py'), str(run),
                         '--seconds', str(plan['allocation']['maximum_seconds'] + 120)])
                     monitor = subprocess.Popen(command, env=env, stdout=monitor_log, stderr=subprocess.STDOUT)
-                    print(f'Run directory: {run}\nW&B: {plan["wandb_url"]}', flush=True)
+                    tracking = 'Offline checkpoint verification' if verification else f'W&B: {plan["wandb_url"]}'
+                    print(f'Run directory: {run}\n{tracking}', flush=True)
             if run and (run / 'progress.log').exists():
                 lines = (run / 'progress.log').read_text(errors='replace').splitlines()
                 if lines:
                     print(lines[-1], flush=True)
             time.sleep(30)
         write_json(prefix.with_suffix('.exit.json'), {'launcher_exit_code': proc.returncode, 'run_directory': str(run) if run else None})
+        if verification and proc.returncode == 0:
+            if run is None:
+                raise ValueError('Verification exited without a recorded run directory.')
+            record_verification(plan, args.job_id, run)
+            if monitor is not None:
+                monitor.wait(timeout=45)
         if monitor_log:
             monitor_log.close()
         # The read-only recorder exits on exit_status or its own allocation-bounded timer.
@@ -295,6 +360,8 @@ def main():
     parser.add_argument('--source', type=Path, help='Preserved, tested reference source; defaults to persistent pointer')
     parser.add_argument('--wandb-run-id', help='Optional assertion against the recorded W&B ID')
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
+    parser.add_argument('--gpus', type=int, choices=[2, 4], default=2, help='Use TP2 or TP4 in the existing allocation')
+    parser.add_argument('--verify-resume-only', action='store_true', help='Restore on GPUs without training, browsers, online W&B, or changing the run pointer')
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--launch', action='store_true')
     mode.add_argument('--dry-run', action='store_true', help='Read-only preflight (default)')

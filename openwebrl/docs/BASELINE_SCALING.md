@@ -38,11 +38,13 @@ Retain W&B ID `qcq7i4ug`, Adam counters and scheduler state. A topology change
 is not a bitwise-equivalent continuation; the loader may discard incompatible
 RNG state when tensor/pipeline parallelism changes.
 
-The inner `run_h200_browser.sh` already accepts `NUM_GPUS` and `TP_SIZE`, but
-`run_small_baseline.py` and the quick-resume wrapper currently force two GPUs.
-They must be parameterized and their allocation checks and recorded metadata
-updated before a four-GPU launch. Setting only environment variables does not
-currently switch the convenience workflow to four GPUs.
+The quick-resume wrapper now accepts `--gpus 4` with a topology-capable preserved
+source prepared by `scripts/prepare_resume_topology.py`. This profile uses TP4,
+32 browsers, and guards for 16 CPUs / 480 GiB RAM on one node. Thirteen CPU tests
+and the real launcher dry run pass; four-GPU restoration and performance remain
+unverified. See [RESUMING_BASELINE.md](RESUMING_BASELINE.md) for the required
+restore-only pass and migration procedure. Older launchers still force two GPUs;
+setting environment variables alone does not change those launchers.
 
 ## Expected speedup and migration checks
 
