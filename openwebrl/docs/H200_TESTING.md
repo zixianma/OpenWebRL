@@ -1,5 +1,25 @@
 # H200 runtime and validation
 
+## Evaluation image retention guarded, 2026-09-08 21:35 PDT
+
+The next full Online-Mind2Web evaluation retains every completed trajectory
+until metrics and debug data are written. Its custom generator previously
+returned anonymous CPU image tensors, bypassing the training collector's
+file-mapping guard. The evaluation wrapper now applies the same opt-in,
+lossless completed-group mapping after reward calculation, including aborted
+trajectories. It logs `[EvalStorage] mapped_completed_turns=...` so the live
+execution can be verified. Evaluation horizons, sampling, rewards and returned
+sample identity are unchanged.
+
+Three CPU evaluation tests pass, including actual bfloat16 mappings, release
+of the original tensor, completed/aborted reward behavior, preserved metadata
+and isolated evaluation arguments. The full 300-task evaluation has not yet
+run with this change. The preserved source's evaluation module is loaded only
+when its first evaluation task starts; the fix can therefore be installed
+before that import without interrupting collection or training. The runtime
+patch audit records exact source hashes and confirms the training recipe
+files remain unchanged.
+
 ## Complete fresh cycle verified, 2026-09-08 21:00 PDT
 
 The quick-resume continuation `openwebrl-4b-reference-283214-20260909T022832`
