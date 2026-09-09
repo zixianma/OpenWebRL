@@ -163,8 +163,27 @@ class ResumeTest(unittest.TestCase):
         self.assertEqual(saved['run_directory'], str(run))
         self.assertEqual(saved['durable_optimizer_updates'], 90)
         self.assertEqual(saved['wandb_run_id'], 'sameid')
-        self.assertIn('Resume launched', saved['status_note'])
+        self.assertEqual(saved['allocation_status'], 'COMPLETED')
+        self.assertIn('completed normally', saved['status_note'])
         self.assertTrue((run / 'resume_plan.json').is_file())
+
+    def test_planned_online_timeout_is_recorded_as_clean_time_limit(self):
+        state_file = self.root / 'state.json'
+        state_file.write_text(json.dumps({
+            'last_valid_checkpoint': '/checkpoints/iter_0000014',
+            'durable_optimizer_updates': 210,
+        }))
+        normalized, planned = m.classify_launcher_exit(124, verification=False)
+        self.assertEqual(normalized, 0)
+        self.assertTrue(planned)
+        m.record_launcher_outcome(state_file, 124, planned)
+        saved = json.loads(state_file.read_text())
+        self.assertEqual(saved['allocation_status'], 'TIME_LIMIT')
+        self.assertEqual(saved['durable_optimizer_updates'], 210)
+        self.assertIn('incomplete collection', saved['status_note'])
+
+        self.assertEqual(m.classify_launcher_exit(124, verification=True), (124, False))
+        self.assertEqual(m.classify_launcher_exit(7, verification=False), (7, False))
 
     def test_srun_stays_in_exact_existing_job_and_cleans_stale_resume_controls(self):
         command = m.step_command('42', 8)

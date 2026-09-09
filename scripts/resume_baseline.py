@@ -37,6 +37,40 @@ def write_json(path, value):
     temporary.replace(path)
 
 
+def classify_launcher_exit(returncode, verification=False):
+    """Treat the online launcher's allocation-boundary timeout as a clean stop."""
+    planned_timeout = returncode == 124 and not verification
+    return (0 if planned_timeout else returncode), planned_timeout
+
+
+def record_launcher_outcome(path, returncode, planned_timeout):
+    """Persist the terminal allocation state without disturbing checkpoint fields."""
+    path = Path(path)
+    if not path.is_file():
+        return
+    state = read_json(path)
+    if planned_timeout:
+        state.update(
+            allocation_status='TIME_LIMIT',
+            status_note=(
+                'Planned allocation boundary reached; resume from the recorded '
+                'last_valid_checkpoint. Any incomplete collection must be recollected '
+                'unless a complete recovery batch exists.'
+            ),
+        )
+    elif returncode == 0:
+        state.update(
+            allocation_status='COMPLETED',
+            status_note='Launcher completed normally; validate the recorded checkpoint before resuming.',
+        )
+    else:
+        state.update(
+            allocation_status='FAILED',
+            status_note=f'Launcher exited with code {returncode}; inspect logs before resuming.',
+        )
+    write_json(path, state)
+
+
 def capture(argv):
     return subprocess.check_output(argv, text=True, stderr=subprocess.PIPE).strip()
 
@@ -343,7 +377,13 @@ def launch(plan, state, args):
                 if lines:
                     print(lines[-1], flush=True)
             time.sleep(30)
-        write_json(prefix.with_suffix('.exit.json'), {'launcher_exit_code': proc.returncode, 'run_directory': str(run) if run else None})
+        normalized_code, planned_timeout = classify_launcher_exit(proc.returncode, verification)
+        write_json(prefix.with_suffix('.exit.json'), {
+            'launcher_exit_code': proc.returncode,
+            'normalized_exit_code': normalized_code,
+            'planned_allocation_boundary_timeout': planned_timeout,
+            'run_directory': str(run) if run else None,
+        })
         if verification and proc.returncode == 0:
             if run is None:
                 raise ValueError('Verification exited without a recorded run directory.')
@@ -352,9 +392,14 @@ def launch(plan, state, args):
                 monitor.wait(timeout=45)
         if monitor_log:
             monitor_log.close()
+        if not verification:
+            record_launcher_outcome(args.state, proc.returncode, planned_timeout)
         # The read-only recorder exits on exit_status or its own allocation-bounded timer.
-        print(f'Launcher exited {proc.returncode}; inspect logs and validate the latest checkpoint before reporting progress.', flush=True)
-        return proc.returncode
+        if planned_timeout:
+            print('Launcher reached the planned allocation boundary (raw exit 124); recorded TIME_LIMIT and returning success.', flush=True)
+        else:
+            print(f'Launcher exited {proc.returncode}; inspect logs and validate the latest checkpoint before reporting progress.', flush=True)
+        return normalized_code
 
 
 def main():

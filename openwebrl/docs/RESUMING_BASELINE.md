@@ -105,7 +105,7 @@ Example: checkpoint 5 contains 90 Adam updates; saved batch `6.pt` has 1,946 tur
 
 ## Monitoring and limits
 
-The launcher retains the reference recipe (48 accepted groups × five trajectories, global batch 256, two PPO epochs), the tested runtime fixes, lossless file-backed images during collection and training transfer, allocator trimming, and per-iteration checkpointing. Runtime files stay in scrubbed storage or node-local `/tmp`. It stops before the existing allocation ends, with a three-minute margin and a maximum of eight training hours. A collection interrupted by the time boundary may need recollection unless its recovery file finished saving.
+The launcher retains the reference recipe (48 accepted groups × five trajectories, global batch 256, two PPO epochs), the tested runtime fixes, lossless file-backed images during collection and training transfer, allocator trimming, and per-iteration checkpointing. Runtime files stay in scrubbed storage or node-local `/tmp`. It stops before the existing allocation ends, with a three-minute margin and a maximum of eight training hours. GNU `timeout` reports this planned online stop as raw exit code 124; the resume supervisor keeps that raw code in its exit receipt, records the pointer state as `TIME_LIMIT`, and returns success to Slurm. Verification timeouts and other launcher failures remain failures. A collection interrupted by the time boundary may need recollection unless its recovery file finished saving.
 
 The supervisor prints progress and starts a read-only health recorder. Logs:
 
