@@ -2,6 +2,14 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Full collection and SFT handoff — 2026-09-09 03:31 PDT
+
+Collection completed all **2091/2091** deduplicated training tasks: **1151 successful trajectories**, **1956 valid outcomes**, and **135 unavailable outcomes**. Success was **55.0% over all scheduled tasks (1151/2091)** and **58.8% over valid tasks (1151/1956)**. These are C2 training-pool collection rates, not Online-Mind2Web evaluation results.
+
+The complete C2 dataset contains **8394 usable executed actions** from the 1151 successful trajectories. Three otherwise eligible turn records were excluded because no action executed. The immutable dataset SHA-256 is `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`. The final audit verifies 2091 unique scheduled task IDs, exactly one durable outcome per task, all dataset rows, current source hashes, all prior C2 milestone inventories, and all 900 original inference-evaluation outcomes. Evidence: `dataset-audit.json`, `diagnostics/final-collection-audit.json`, and `diagnostics/final-collection-outcome-sha256.json`.
+
+The controller unloaded both actor/SelectionARM pairs and began the approved single-GPU SFT at **03:31 PDT**, leaving the second H200 free. Host memory fell to 18.9 GiB. The first six real optimizer updates had finite losses (**0.155–0.193**) and gradient norms (**0.192–0.226**), and all cite the frozen dataset checksum above. With 8394 rows, effective batch 16, and two epochs, the run requires about **1050 optimizer updates**. Initial steps take roughly 18–24 seconds; the remaining allocation therefore likely reaches approximately **650–700 updates (about 1.25–1.35 epochs)** before the 07:08 PDT controller deadline. This is an early throughput projection; checkpoints every 100 updates and sample-length variation can lower it. The trainer saves periodic and graceful-pause checkpoints for continuation.
+
 ## 1,750-task audit — 2026-09-09 02:30 PDT
 
 The consistent dataset snapshot covers **1772/2091 completed outcomes** and retains **6632 usable turns from 959 successful trajectories**. Three additional outcomes completed while the outcome checksum inventory was being written, so that inventory contains 1775 files. The dataset builder found one otherwise eligible turn without an executed action and excluded it. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **1505 outcomes in the 1,500-task checksum inventory**, all **1634 outcomes present before the memory-reclaim restart**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `afedd2889eb6077495c74586d0d5fc3487d2a8772b22d7e6d27571506a3ef4cb`; evidence: `diagnostics/milestone-1750-audit.json` and `diagnostics/milestone-1750-outcome-sha256.json`.
