@@ -2,13 +2,23 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
-## Latest audited collection — 2026-09-08 21:16 PDT
+## Connection-timeout recovery — 2026-09-08 21:22–21:26 PDT
+
+Collection paused cleanly at **529/2091 outcomes: 462 valid, 277 successes, and 67 unavailable**. The shutdown audit retains **1740 usable turns**, preview SHA-256 `f8e28a4ad075d452464ea1323cfe24478c4bb1ed149f0454ba13260cfa747c3e`. All 529 completed outcome hashes were verified unchanged. Student optimizer updates/checkpoints remain **0 / 0**.
+
+A generation-timeout traceback showed HTTPX/AnyIO still opening a TCP connection to `127.0.0.1:19100`, with its connection timeout set to `None`. The actor was otherwise serving: the listen backlog was empty, and 12 fresh model-info connections succeeded (usually 1–8 ms, one 476 ms). This identifies the phase of the observed stall; it does not establish the underlying network/library cause. The trace is retained at `diagnostics/connect-timeout-trace.txt`.
+
+Commit `6d408aa` gives C2 connection attempts a **10-second timeout**, allowing the existing retry loop to recover within the unchanged **180-second overall generation deadline**. Explicit HTTP 400 context-overflow responses now fail immediately rather than retrying the identical oversized prompt 60 times. Transient HTTP and connection errors remain retryable. The client still leaves its read/write/pool timeouts unset; the enclosing generation deadline controls the total wait. Retry logs now include exception types. **Four focused transport tests and 11 C2 tests passed.** Model, prompts, candidate count, judge, filtering, and training recipe are unchanged.
+
+The controller resumed collection at **21:25:48 PDT**, within allocation **283221**, step **148**. Old configs, source snapshots, completed outcomes, and interrupted attempt directories remain preserved. This transport change still requires observation on the live workload; no success-rate improvement is assumed.
+
+## 500-task audit — 2026-09-08 21:16 PDT
 
 The post-500-task audit covers **502/2091 outcomes: 440 valid, 261 successful, and 62 unavailable**. The preview retains **1643 usable turns from 261 successful trajectories**. All captured source/image hashes and joins checked by the dataset builder pass; all 413 outcomes from before the I/O fix remain unchanged. Preview SHA-256: `b174a83243ef1aad820f98fcc92bad7d4307c3dd02af9ded1f69aac8541ced5e`. Detailed evidence: `diagnostics/milestone-500-audit.json`; the previous preview and audit are preserved in `preview-history/`.
 
 A real turn collected after the fix also passed the processor-prefix, image-grid, and history-loss-mask check (`diagnostics/async-io-production-export-check.json`: task `webvoyager/88792`, 4142 prefix tokens, 220 target tokens). Student optimizer updates and checkpoints remain **0 / 0**; full-pool collection is still required before SFT.
 
-Subsequent failures include generation timeouts, website navigation failures, a whole-task timeout, and context overflow. There has been no repeat of the local browser startup-health failures by this audit. Context-overflow requests currently pass through the existing generic HTTP retry loop; failing permanent HTTP 400 errors immediately is a future efficiency fix, not a context truncation or filtering change. No additional serving restart was made for it. A resource check found 3.55/4 CPU cores busy, no orphaned Chrome processes, and about 19 GiB of filesystem cache within the reported host memory. No allocation OOM events have occurred.
+Subsequent failures include generation timeouts, website navigation failures, a whole-task timeout, and context overflow. There has been no repeat of the local browser startup-health failures by this audit. At this audit, context-overflow requests still passed through the generic retry loop; the subsequent transport recovery above removes those permanent-error retries. A resource check found 3.55/4 CPU cores busy, no orphaned Chrome processes, and about 19 GiB of filesystem cache within the reported host memory. No allocation OOM events have occurred.
 
 ## Filesystem stall recovery — 2026-09-08 20:30–20:36 PDT
 
