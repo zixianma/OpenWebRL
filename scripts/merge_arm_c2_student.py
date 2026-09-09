@@ -24,7 +24,16 @@ def write_json(path, value):
     temporary.replace(path)
 
 
-def completed_checkpoint(run_root):
+def completed_checkpoint(run_root, requested=None):
+    if requested is not None:
+        checkpoint = requested.resolve()
+        if checkpoint.parent != (run_root / "student").resolve():
+            raise ValueError("Requested checkpoint is outside this run's student directory")
+        progress = json.loads((checkpoint / "progress.json").read_text())
+        audit = json.loads((run_root / "dataset-audit.json").read_text())
+        if progress["dataset_sha256"] != audit["dataset_sha256"]:
+            raise ValueError("Checkpoint and training dataset differ")
+        return checkpoint, progress
     completion = json.loads((run_root / "student" / "complete.json").read_text())
     checkpoint = Path(completion["checkpoint"]).resolve()
     if checkpoint.parent != (run_root / "student").resolve() or checkpoint.name != "epoch-2":
@@ -48,9 +57,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-root", required=True, type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--checkpoint", type=Path, help="Explicit intermediate checkpoint")
     args = parser.parse_args()
     run_root = args.run_root.resolve()
-    checkpoint, progress = completed_checkpoint(run_root)
+    checkpoint, progress = completed_checkpoint(run_root, args.checkpoint)
     output = (args.output or (run_root / "student" / "epoch-2-merged")).resolve()
     manifest_path = output / "merge-manifest.json"
     if manifest_path.exists():

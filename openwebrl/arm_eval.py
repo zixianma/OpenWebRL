@@ -43,8 +43,8 @@ async def run(args):
     os.environ.setdefault("JUDGE_API_BASE", "https://api.openai.com/v1")
     os.environ["SLIME_BROWSER_ENV_MODE"] = "local_process"
     os.environ["SLIME_BROWSER_LOCAL_PROCESS_LOG_DIR"] = str(Path(args.output) / "browser_logs")
-    os.environ["SLIME_BROWSER_LOCAL_PROCESS_PORT_START"] = "19200"
-    os.environ["SLIME_BROWSER_LOCAL_PROCESS_PORT_END"] = "19399"
+    os.environ["SLIME_BROWSER_LOCAL_PROCESS_PORT_START"] = str(args.browser_port_start)
+    os.environ["SLIME_BROWSER_LOCAL_PROCESS_PORT_END"] = str(args.browser_port_end)
     os.environ["SLIME_BROWSER_LOCAL_PROCESS_MAX_PROCESSES"] = str(args.parallel)
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
@@ -82,6 +82,7 @@ async def run(args):
         "context_num_screenshots": 1, "history": "full",
         "browser_format": "browser_env", "judge": args.judge_model,
         "judge_protocol": "online_mind2web/AgentTrek", "candidate_count": 1 if args.mode == "baseline" else 5,
+        "browser_port_range": [args.browser_port_start, args.browser_port_end],
         "selector_endpoint": args.selector_endpoint if args.mode != "baseline" else None,
         "task_timeout": args.task_timeout,
     }
@@ -165,6 +166,8 @@ def main():
     ap.add_argument("--max-new-tokens", type=int, default=1024)
     ap.add_argument("--max-steps", type=int, default=30)
     ap.add_argument("--task-timeout", type=int, default=1800)
+    ap.add_argument("--browser-port-start", type=int, default=19200)
+    ap.add_argument("--browser-port-end", type=int, default=19399)
     ap.add_argument("--judge-model", default="o4-mini")
     ap.add_argument("--env-file", default=".env")
     args = ap.parse_args()
@@ -172,6 +175,8 @@ def main():
     args.parallel, args.execution_settings = execution_parallel(args.mode, args.output, args.parallel)
     if args.parallel < 1:
         ap.error("--parallel must be positive")
+    if not 1024 <= args.browser_port_start <= args.browser_port_end <= 65535:
+        ap.error("invalid browser port range")
     # SGLang configures the event-loop policy during import. Do so before
     # creating the loop, otherwise browser subprocesses can lose their watcher.
     from openwebrl import run_evaluate  # noqa: F401
