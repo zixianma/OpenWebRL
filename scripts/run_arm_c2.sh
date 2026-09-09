@@ -36,8 +36,8 @@ PY
 CUDA_VISIBLE_DEVICES=0 "$OPENWEBRL_RUNTIME_ROOT/venv/bin/python" -m sglang.launch_server \
     --model-path /gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT \
     --host 127.0.0.1 --port 19100 --dtype bfloat16 --tp 1 \
-    --mem-fraction-static 0.4 --context-length 32768 --max-running-requests 24 \
-    --chunked-prefill-size 4096 --disable-cuda-graph \
+    --mem-fraction-static 0.4 --context-length 32768 --max-running-requests 48 \
+    --chunked-prefill-size 4096 --cuda-graph-max-bs 48 \
     >>"$C2_OUTPUT/actor-resume.log" 2>&1 &
 C2_ACTOR_PID=$!
 C2_DEADLINE=$((SECONDS+600))
