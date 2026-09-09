@@ -15,6 +15,15 @@ or validate the cache fix under GPU training.
 
 Batch log: `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/slurm-qcq7i4ug-285546.out`.
 
+At 16:51 PDT, full model-and-optimizer restoration of checkpoint 17 passed on
+all four H200s and the verification process exited zero. The supervisor recorded
+`logs/resume-285546-4gpu-verification.json` and started online continuation
+`runs/openwebrl-4b-reference-285546-20260909T235114`. The persistent pointer now
+selects that running continuation, retains the 246 durable updates and pending
+replay, and records the successful restoration. The verification source copy
+took about five minutes on the shared filesystem; restore itself passed in
+about one minute. The online process is preparing its own source snapshot.
+
 ## Four-GPU continuation stopped at host-memory ceiling, 2026-09-09 14:15 PDT
 
 Approved job `284885` ran for 4:49:06 on four H200s and extended the durable
