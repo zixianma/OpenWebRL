@@ -1,10 +1,12 @@
 # Action reward models for OpenWebRL training
 
-Status: **Baseline and ScalarRM evaluations are complete: 30.0% versus 38.0% overall success, and 33.7% versus 45.4% valid-only. SelectionARM is running on g005. Action-level filtered SFT is a prepared proposal; no SFT training has launched.**
+Status: **All three inference evaluations are complete. Overall success: baseline 30.0%, ScalarRM 38.0%, SelectionARM 42.7%; valid-only: 33.7%, 45.4%, 50.0%. C2 paused cleanly when allocation 282782 ended: 220/2091 tasks processed, 123 successful trajectories, and 711 eligible turns saved. Student SFT has not started; see ARM_C2_RUN.md for details. Inference retries remain held.**
 
 Created: 2026-09-07. This is the working document for iterating on the plan originally proposed in conversation.
 
 [Inference results, denominators, and retry plan](ARM_INFERENCE_RESULTS.md) · [Action-level filtered SFT pilot](ARM_FILTERED_SFT_PLAN.md).
+
+[Matched retry pass](ARM_INFERENCE_RETRY_RESULTS.md): **held** pending a cohort decision using the three completed runs; C2 currently has execution priority. The earlier 56-task two-arm inventory is provisional, and automatic launch is disabled. **C2 is the selected first SFT experiment**; C1 is an optional later control and C3 is deferred. The user superseded the 128/32/32 draft with **all 2091 deduplicated tasks** and requested C2 after eval. The [SFT plan](ARM_FILTERED_SFT_PLAN.md) records the revised configuration; [C2 run status](ARM_C2_RUN.md) records execution and artifacts.
 
 ## 1. Current priority: reproduce Online-Mind2Web inference gains
 
@@ -377,6 +379,9 @@ Meaningful verification should cover prompt/pooling parity, coordinate conversio
 | 2026-09-07 | Use the new GPU on g001 for ARM evaluation | Dedicated allocation 282209; baseline completed; scalar saved 277/300 tasks before expiry; ARM concurrency increased to 16 |
 | 2026-09-07 | Continue evaluations on zixianma@g005 within its four-hour session | Dedicated allocation 282782; resume 23 unfinished scalar tasks, then all 300 SelectionARM tasks; existing outcomes preserved |
 | 2026-09-07 | Prepare ARM-filtered SFT and record inference results with both denominators | Results and paired analysis recorded; 128/32/32-task SFT preparation split written on CPU; matched invalid-task retries proposed, not launched |
+| 2026-09-08 | Launch retries after SelectionARM and record separately | Prepared and initially queued a 56-task baseline/ScalarRM pass; superseded by the cohort-review clarification below before any retry started |
+| 2026-09-08 | Reconsider retry queries after SelectionARM; start SFT with C2; explain C3 and the 128 tasks | Automatic retries held; decide from all three completed runs. C2 first, C1 optional later, C3 deferred. Documented the arbitrary pilot size and deterministic hostname sampling; final data budget remains under discussion |
+| 2026-09-08 | Use all ~2K tasks and prepare C2 after eval | All 2091 deduplicated prompts; all eligible successful-trajectory turns; C2-only LoRA for two fixed epochs. Resumable handoff prepared in existing allocation, with retries held and no new compute request |
 
 ## 13. Self-critique carried forward
 
