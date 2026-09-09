@@ -1,7 +1,9 @@
 # C2 update-500/update-700 full evaluation
 
-Status: **prepared; no Slurm job submitted yet**. The next run evaluates both
-checkpoints on all 300 Online-Mind2Web tasks. It starts two isolated SGLang
+Status: **deprioritized by the user on 2026-09-09; no Slurm job was submitted
+and no GPU allocation was created**. This remains a prepared optional
+checkpoint study. It evaluates both checkpoints on all 300 Online-Mind2Web
+tasks and starts two isolated SGLang
 servers on one H200 and gives each checkpoint six browser workers. This is the
 same concurrent layout that completed the 100-task update-500/update-700 pair
 in about one hour.

@@ -1,8 +1,9 @@
 # Next action-level filtered-SFT ablations
 
-Status: **proposal for iteration after the update-500/update-700 full-300
-evaluation**. No new training job is authorized here. The existing C2 run is
-the reference recipe and update 500 is its provisional checkpoint.
+Status: **active training-ablation proposal**. On 2026-09-09 the user
+deprioritized the update-500/update-700 full-300 checkpoint study in favor of
+training ablations compared with the existing C2 baseline. No new training job
+or compute budget is authorized here. Update 500 is the reference policy.
 
 ## What the first C2 curve says
 
@@ -17,54 +18,55 @@ first pass, while update 923 fell to 28/100. Update 500 also had the best retry
 replacement estimate and healthy termination/trajectory diagnostics. Training
 cross-entropy changed only modestly, from 0.1550 in epoch 1 to 0.1474 during
 the observed part of epoch 2. This points first to **stopping around one pass**;
-it does not yet show that LoRA capacity is the bottleneck. The full-300 result
-will decide whether update 500 or 700 is the reference, with the untouched
-200-task stratum carrying the main checkpoint comparison.
+it does not yet show that LoRA capacity is the bottleneck. Update 500 is the
+reference for the next training jobs; the full-300 update-500/update-700 study
+is now optional.
 
 The likelihoods below are subjective priors for beating the current update-500
 standalone policy on held-out task success. They are planning aids, not measured
 probabilities.
 
-## 1. Stabilized one-pass C2 LoRA, with a rank-32 capacity pair
+## 1. Optimizer/exposure and LoRA-rank ablation
 
-**Recommendation: first and cheapest optimizer ablation. Estimated likelihood
-of a real improvement: 35–50%.**
+**Recommendation: run 1A first. If two runs are available, run 1A and the
+combined variant 1AB. A rank-only 1B run is the lowest priority.**
 
-Train on the same immutable 8,394 C2 rows, starting again from
+All variants train on the same immutable 8,394 C2 rows, starting again from
 `OpenWebRL/OpenWebRL-4B-SFT`. Keep the same LoRA modules, loss masking,
-optimizer, and peak learning rate. Change effective batch from 16 to **32** by
-using microbatch 1 and accumulation 32, and stop after exactly **one pass**:
-`ceil(8394 / 32) = 263` updates.
+optimizer, and peak learning rate. For 1A and 1AB, change effective batch from
+16 to **32** by using microbatch 1 and accumulation 32, and stop after exactly
+**one pass**: `ceil(8394 / 32) = 263` updates.
 
-To isolate batch noise from an accidental learning-rate change, parameterize
-the schedule by **examples seen**. Warm up over the first 512 examples and use
-the same first-epoch portion of the old two-epoch cosine curve, so learning
-rate is about `5e-6` at the endpoint rather than decaying to zero. Save updates
-66, 132, 198, 250, and 263 for diagnostics. Predeclare update 263 as the policy
-endpoint; do not choose it using Online-Mind2Web checkpoint results.
+For those two variants, parameterize the schedule by **examples seen** so the
+larger batch does not accidentally change it. Warm up over the first 512
+examples and use the same first-epoch portion of the old two-epoch cosine
+curve, so learning rate is about `5e-6` at the endpoint rather than decaying to
+zero. Save updates 66, 132, 198, 250, and 263 for diagnostics. Predeclare
+update 263 as the policy endpoint; do not choose it using Online-Mind2Web
+checkpoint results.
 
-Make this a two-arm paired capacity test with identical row order, batch,
-schedule, seed, and checkpoints:
+The three possible training runs are:
 
-| Variant | Rank / alpha | Trainable parameters | Purpose |
-| --- | ---: | ---: | --- |
-| **1A: stabilized control** | 16 / 32 | 33,030,144 | Measure the one-pass, batch-32, exposure-matched recipe |
-| **1B: larger adapter** | 32 / 64 | approximately 66.1M | Test adapter capacity while preserving `alpha / rank = 2` |
+| Variant | Rank / alpha | Batch and schedule | Comparison purpose | Estimated chance of beating update 500 |
+| --- | ---: | --- | --- | ---: |
+| **1A: optimizer/exposure** | 16 / 32 | effective batch 32; one-pass exposure-matched schedule | Tests the change most directly supported by the current curve | **40–55%** |
+| **1B: rank only** | 32 / 64 | effective batch 16; original first-pass schedule; stop at update 525 | Isolates adapter capacity against update 500 | **20–35%** |
+| **1AB: combined** | 32 / 64 | effective batch 32; one-pass exposure-matched schedule | Compares directly with 1A to measure added rank capacity | **30–45%** |
 
-Use dropout 0.05 and peak learning rate `1e-5` in both. Rank 32/alpha 64 is
+Use dropout 0.05 and peak learning rate `1e-5` in all variants. Rank 32/alpha 64 is
 also the released OpenWebRL ARM recipe, although that precedent trains a
 reward model and is not evidence that rank 32 is optimal for actor
 distillation. The upstream actor-distillation code defaults to rank 16/alpha
 32. Adapter and optimizer memory roughly double, but remain small relative to
 the frozen 4B base and long-context activations.
 
-Variant 1A tests whether noisier effective-batch-16 updates contributed to the
+Variant 1A tests whether noisy effective-batch-16 updates contributed to the
 shallow loss curve and removes the second pass that coincides with policy
-regression. Variant 1B should be run only as its matched pair: running rank 32
-alone would bundle rank, batch, schedule, and endpoint changes. The conditional
-chance that rank 32 beats the stabilized rank-16 control is **30–45%**. The
-current low training loss and late regression do not look like clear
-under-capacity, but rank 32 is a much cheaper capacity test than full
+regression. The current low training loss and late regression do not look like
+clear under-capacity. Additional rank may instead fit noisy local selections
+more closely, so 1B is less promising. Variant 1AB is useful after 1A because
+their direct comparison isolates rank while holding the improved optimizer
+recipe fixed. Rank 32 remains a much cheaper capacity test than full
 fine-tuning.
 
 If budget allows a third optimizer control, add one-pass batch 16 under the
@@ -147,16 +149,16 @@ update would add more memory cost and could disturb an already useful visual
 representation, so it is a later ablation only if the language-tower run is
 promising.
 
-## Decision order after the full-300 evaluation
+## Training decision order
 
-1. If update 500 leads update 700 on the 200-task holdout without collapse
-   signals, lock **one pass** as the default stopping rule. If update 700 leads,
-   retain a 1.25–1.35-pass window but still reject the 1.76-pass endpoint.
-2. Run ablation 1A and 1B as a matched rank pair. Use their predeclared
-   update-263 endpoints, with intermediate checkpoints for loss/behavior
-   diagnostics only. Promote rank 32 only if it improves task success without
-   degrading termination or loop metrics.
-3. Build the ARM-native retention audit and run selected-target plus matched
+1. Use update 500 as the existing reference and one pass as the default
+   stopping rule. The full-300 update-500/update-700 study remains optional.
+2. Run 1A first. If a second optimizer run is available, run 1AB with the same
+   update-263 endpoint, row order, and schedule. Intermediate checkpoints are
+   for loss and behavior diagnostics. Promote rank 32 only if 1AB improves task
+   success over 1A without degrading termination or loop metrics.
+3. Skip rank-only 1B unless clean factor attribution is worth a third training
+   run. Build the ARM-native retention audit and run selected-target plus matched
    random-target variants. Promote it only if selected targets beat both the
    stabilized C2 run and random-target control.
 4. Run full language-tower fine-tuning only if rank 32 improves over rank 16

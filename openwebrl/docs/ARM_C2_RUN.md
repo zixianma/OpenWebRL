@@ -2,7 +2,7 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
-## Full-300 checkpoint comparison prepared — 2026-09-09
+## Full-300 checkpoint comparison prepared, then deprioritized — 2026-09-09
 
 Updates 500 and 700 are prepared for fresh evaluation on all 300
 Online-Mind2Web tasks. The 200 tasks outside the earlier checkpoint-selection
@@ -12,6 +12,8 @@ four-H200-hour request, and output paths are documented in
 [ARM_C2_FULL300_EVAL.md](ARM_C2_FULL300_EVAL.md). No job has been submitted.
 The optimizer/data/full-fine-tuning candidates to consider after that result
 are in [ARM_FILTERED_SFT_ABLATIONS.md](ARM_FILTERED_SFT_ABLATIONS.md).
+The user subsequently chose to focus compute on new training ablations against
+update 500. No full-300 Slurm job was submitted and no allocation was created.
 
 ## Checkpoint scaling complete — 2026-09-09 15:28 PDT
 
