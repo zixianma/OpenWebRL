@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 import difflib
 import hashlib
 import json
+import logging
 import math
 import os
 from pathlib import Path
@@ -283,6 +284,13 @@ async def collect(config_path):
     args.browser_action_selector = ActionSelector(q['teacher'], 'http://127.0.0.1:19101', root / 'selections', seed=q['seed'], exporter=exporter)
     args.rollout_temperature, args.rollout_max_response_len = .7, 1024
     args.browser_async_artifact_io = True
+    args.http_connect_timeout_secs = 10.0
+    transport_logger = logging.getLogger('slime.utils.http_utils')
+    transport_logger.setLevel(logging.INFO)
+    transport_handler = logging.StreamHandler()
+    transport_handler.setFormatter(logging.Formatter('[http transport] %(message)s'))
+    transport_logger.addHandler(transport_handler)
+    transport_logger.propagate = False
     init_http_client(args)
     reward_func = evaluation._load_reward_func('online_mind2web')
     tasks = evaluation.load_tasks_from_jsonl(q['task_file'])
