@@ -2,6 +2,37 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Two-GPU continuation on g007 — 2026-09-08 23:25 PDT
+
+At the user's request, C2 resumed in existing allocation **283899**, step **1**, on **g007**, with **two H200s, 8 CPUs, and 240 GiB RAM**. Both GPUs were verified free before launch. Allocation expiry is **2026-09-09 07:13:27 PDT**; the controller deadline is **07:08:27 PDT**. GPU UUIDs are `GPU-f07dcbbc-c700-31ae-89c2-372e72ed164c` and `GPU-eb0f41fc-737a-bc34-59e1-d6c49527294f`. No new allocation was submitted by the agent.
+
+One frozen actor plus one SelectionARM server runs on each GPU, using actor/teacher ports **19100/19101** and **19102/19103**. A single collector owns the full task queue and outcome inventory. Its **32 browser workers are split evenly, 16 per replica**; each worker keeps its actor/teacher pairing. The remaining queue is shared, so faster workers can take the next unfinished task. Completed outcomes are skipped. Models, five-candidate sampling, request seeds, full history, context/turn limits, o4-mini/AgentTrek judge, and C2 filtering are unchanged. Sampling is not guaranteed bit-identical across serving schedules.
+
+Both actor and teacher pairs passed their health/model checks, and collection began at **23:25:20 PDT**. Logs confirm 16 initial task starts per actor port. The original 16 interrupted tasks restarted in separate attempt directories. Sustained throughput is still being measured; doubling concurrency alone does not establish a twofold speedup.
+
+The controller automatically releases its four inference services once all **2091** outcomes are recorded and the dataset audit passes, then launches the approved **single-GPU, two-epoch** student recipe if at least 15 minutes remain. The local ARM branch is `openwebrl/c2-filtered-sft`, now pinned to **`adec0ad95f0fe6c6d129c8984308c7e420dd6baa`**. Its only trainer change allows explicit GPU-UUID binding inside the two-GPU Slurm step; optimization, effective batch 16, and checkpoint rules are unchanged. Actual student optimizer updates/checkpoints are still **0 / 0**.
+
+Implementation: `scripts/run_arm_c2_parallel.py`, commit **`8d1328c`**. **15 C2 tests passed**, covering replica isolation, occupied/wrong GPU rejection, explicit training-GPU binding, provenance, filtering, and full-pool gating. Source/config snapshots are under `execution-sessions/283899-parallel-source.tar.gz` and `execution-sessions/283899/`. Current logs: `controller-parallel.log`, `collection.log`, `actor-replica-{0,1}.log`, and `teacher-replica-{0,1}.log`. Active health observations are recorded in `diagnostics/monitor-283899-history.jsonl`.
+
+## Final g022 interruption audit — 2026-09-08 23:16 PDT
+
+Slurm records allocation **283221** as **CANCELLED at 23:12:41 PDT**, before its eight-hour limit. The launcher exited **137** after Slurm terminated the step. The final preview was rebuilt from durable outcomes after cancellation; this was not a clean controller shutdown.
+
+| Metric | Preserved result |
+| --- | ---: |
+| Completed outcomes / full pool | **827 / 2091** |
+| Valid / unavailable outcomes | **745 / 82** |
+| Successful trajectories | **434** |
+| Success among processed tasks | **52.5% (434/827)** |
+| Success among valid processed tasks | **58.3% (434/745)** |
+| Eligible training turns | **2853 from 434 successful tasks** |
+| Remaining tasks | **1264**, including 16 interrupted tasks |
+| Actual student optimizer updates / checkpoints | **0 / 0** |
+
+These are training-pool collection rates, not Online-Mind2Web benchmark results. All **529 pre-transport-fix C2 outcomes and all 900 original evaluation outcomes** remain checksum-identical. There were **zero 180-second generation timeouts among the 298 completed tasks after the connection fix**. The last healthy memory sample was about 89 GiB of 120 GiB, with no allocation OOM events.
+
+Preview SHA-256: `feceebfc4694aae70d7163ad69e95125e6074dca5539db9b35db48647e3e7e0f`. Evidence: `diagnostics/allocation-283221-final-audit.json`, `allocation-283221-final-outcome-sha256.json`, `allocation-283221-unfinished-attempts.json`, and `allocation-283221-final-sacct.txt`. Previous and refreshed preview files remain archived by checksum in `preview-history/`.
+
 ## 750-task audit — 2026-09-08 22:50 PDT
 
 The saved audit covers **755/2091 completed outcomes** and retains **2530 usable turns from 388 successful trajectories**. Captured source/image hashes and dataset joins pass the builder checks. All **529 pre-transport-fix C2 outcome files and all 900 original evaluation outcome files** remain byte-identical to their preserved checksum inventories. Both the previous and refreshed preview/audit files are archived in `preview-history/`. Preview SHA-256: `ee22dc15577486930765e16c4b0aee4a332556449ee834937e8510632c817728`; detailed evidence: `diagnostics/milestone-750-audit.json`.
