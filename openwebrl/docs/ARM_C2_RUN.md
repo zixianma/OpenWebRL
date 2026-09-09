@@ -2,6 +2,12 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Allocation forecast — 2026-09-08 23:47 PDT
+
+**Forecast, not completed work:** 911/2091 tasks were complete (489 successes, 86 unavailable), leaving 1180. The last five and ten minutes produced **252 and 240 completed tasks/hour**, respectively. Straight-line collection ETAs were 04:28 and 04:42 PDT; allowing for slower final tasks gives a central estimate near **05:00 PDT on September 9**, with a planning range of **04:30–06:00 PDT**. Allocation expiry remains 07:13 PDT, with the controller stopping at 07:08 PDT. Sustaining about **166 tasks/hour** would finish collection before the 06:53 PDT minimum-budget gate for starting SFT.
+
+The latest audited retention (3000 turns from 863 processed tasks) extrapolates to approximately **7300 usable turns**, or about **910 optimizer updates for two epochs at effective batch 16**. Task mix can change this estimate. The central collection ETA leaves roughly **two hours for the unchanged single-GPU SFT recipe**. The expected allocation-end state is complete collection plus SFT progress with a resumable checkpoint; completing both epochs is uncertain until real-data update throughput is measured. Actual student updates/checkpoints at this forecast are **0 / 0**. This is not a prediction of the trained student's benchmark success rate.
+
 ## Selector connection recovery — 2026-09-08 23:33–23:35 PDT
 
 The first two-GPU collection session exposed a connection stall in the **selector client**: task `webvoyager/14758` spent 180 seconds inside HTTPX/AnyIO `connect_tcp` to port 19103, while that SelectionARM server continued answering other requests. Its unavailable outcome remains preserved. The earlier actor transport fix did not cover this separate client. Evidence: `diagnostics/selector-connect-timeout-trace.txt`.
