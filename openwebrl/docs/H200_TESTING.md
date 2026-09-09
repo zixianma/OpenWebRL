@@ -1,5 +1,54 @@
 # H200 runtime and validation
 
+## Four-GPU continuation stopped at host-memory ceiling, 2026-09-09 14:15 PDT
+
+Approved job `284885` ran for 4:49:06 on four H200s and extended the durable
+baseline from checkpoint 14 / 210 Adam updates to checkpoint 17 / **246 Adam
+updates**. Checkpoint 17 has four complete shards totaling 62,137,280,293 bytes,
+1,521 state-dictionary entries, consistent optimizer counters `[246, 246]`, the
+known scheduler offset of +1, and a matching dataset cursor. Metadata, shard
+extents and cursor checks pass. The job fully reloaded checkpoint 14 at startup;
+checkpoint 17 has not yet received a full GPU reload.
+
+W&B run `qcq7i4ug` contains synchronized fresh reward observations 16 through
+19: 0.3759063, 0.4331288, 0.4427632 and 0.4029758. Collections 16, 17 and 18
+were trained, adding 14, 12 and 10 updates respectively. Collection 19 completed
+with 48 accepted groups, 117 completed groups, 27 pending groups and 144 total
+submitted groups, but the first PPO step failed before any optimizer update.
+Its reward is therefore a valid collection observation but does not describe an
+updated policy.
+
+The failure was `ncclUnhandledCudaError` / CUDA error 999 in a tensor-parallel
+all-reduce. GPU 3 still had about 100.6 GiB free, while the online Slurm step's
+MaxRSS reached 503,089,316 KiB and cgroup memory reached its exact 480 GiB
+ceiling. `memory.events:max` rose from 0 in collection 16 to 6,714 by collection
+19, with no cgroup OOM or OOM-kill event. The growth came from clean page-cache
+charges for retained node-local image mappings and 47–56 GiB durable recovery
+files. This evidence identifies host page-cache pressure as the cause; it was
+not a model CUDA-memory OOM.
+
+Recovery batch `rollout_recovery/18.pt` is a complete 49,951,567,097-byte torch
+archive with 3,232 members and 1,613 turn samples. Its provenance records
+zero-based rollout ID 18, checkpoint 17 and 144 submitted groups. Replaying it
+will perform `floor(1613 / 256) × 2 = 12` updates and should reach 258 durable
+Adam updates at checkpoint 18. Resume preflight selects checkpoint 17 and this
+batch unambiguously.
+
+The next preserved source is
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-cache-release-20260909`.
+It calls `fsync` and `POSIX_FADV_DONTNEED` after each recovery save, then advises
+the consumed node-local multimodal mappings after training. Files and contents
+remain intact; only clean cache pages become immediately reclaimable. All nine
+transport tests pass, an actual Linux file-advice probe retained and reproduced
+the file exactly, both changed modules compile, and preserved-source recipe hash
+validation passes. The numerical recipe files are unchanged. This fix still
+needs verification in a new GPU allocation; no new job was submitted.
+
+Evidence is in the run directory as `checkpoint_17_validation.json`,
+`rollout_recovery/18.provenance.json`, `training.log`, `progress.log` and
+`health.jsonl`. The persistent pointer now selects checkpoint 17, the pending
+replay batch, and the cache-release source.
+
 ## Second fresh cycle verified, 2026-09-08 22:50 PDT
 
 Collection 9 completed in 3730.8 seconds, with 48 accepted groups from 111

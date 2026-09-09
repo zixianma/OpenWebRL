@@ -10,6 +10,7 @@ from slime.ray.placement_group import create_placement_groups, create_rollout_ma
 from slime.utils.arguments import parse_args
 from slime.utils.logging_utils import append_progress_log, configure_logger, finish_tracking, init_tracking
 from slime.utils.misc import should_run_periodic_action
+from slime.utils.rollout_transport import evict_file_backed_cache, evict_file_cache
 
 logger = logging.getLogger(__name__)
 
@@ -185,6 +186,10 @@ def train(args):
                 rollout_manager.generate.remote(rollout_id),
                 label=f"rollout_manager.generate({rollout_id})",
             )
+            if args.save_debug_rollout_data:
+                recovery_path = args.save_debug_rollout_data.format(rollout_id=rollout_id)
+                advised = evict_file_cache(recovery_path, sync=True)
+                logger.info("Released recovery-file cache after durable save: path=%s bytes=%d", recovery_path, advised)
 
             if args.offload_rollout:
                 _ray_get_with_actor_retry(rollout_manager.offload.remote(), label="rollout_manager.offload")
@@ -236,6 +241,12 @@ def train(args):
             # its Ray references here pins image buffers through the next
             # collection while the replacement generate() call is pending.
             del rollout_data_ref
+            cache_release = evict_file_backed_cache()
+            logger.info(
+                "Released consumed multimodal file cache: files=%d bytes=%d",
+                cache_release["files"],
+                cache_release["bytes"],
+            )
 
             if should_run_periodic_action(rollout_id, args.save_interval, num_rollout_per_epoch, args.num_rollout):
                 _update_train_progress_bar(

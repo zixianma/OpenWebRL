@@ -7,7 +7,12 @@ import sys
 import tempfile
 from pathlib import Path
 import torch
-from slime.utils.rollout_transport import encode_multimodal,decode_multimodal
+from slime.utils.rollout_transport import (
+    encode_multimodal,
+    decode_multimodal,
+    evict_file_backed_cache,
+    evict_file_cache,
+)
 
 class TransportTest(unittest.TestCase):
     def test_lossless_shared_storage(self):
@@ -28,6 +33,29 @@ class TransportTest(unittest.TestCase):
 
 
 class FileBackedTransportTest(unittest.TestCase):
+    def test_cache_eviction_retains_files_and_scopes_multimodal_pattern(self):
+        directory = Path(tempfile.mkdtemp(prefix="openwebrl-transport-cache-"))
+        first = directory / "rollout-first.bin"
+        second = directory / "rollout-second.bin"
+        unrelated = directory / "keep.bin"
+        first.write_bytes(b"a" * 4096)
+        second.write_bytes(b"b" * 8192)
+        unrelated.write_bytes(b"c" * 1024)
+        with patch.object(os, "fsync") as fsync, patch.object(os, "posix_fadvise") as advise:
+            result = evict_file_backed_cache(directory)
+        self.assertEqual(result, {"files": 2, "bytes": 12288})
+        self.assertEqual(fsync.call_count, 2)
+        self.assertEqual(advise.call_count, 2)
+        self.assertTrue(first.is_file() and second.is_file() and unrelated.is_file())
+
+    def test_single_file_cache_eviction_is_best_effort(self):
+        directory = Path(tempfile.mkdtemp(prefix="openwebrl-transport-cache-one-"))
+        path = directory / "recovery.pt"
+        path.write_bytes(b"durable")
+        with patch.object(os, "posix_fadvise", side_effect=OSError("unsupported")):
+            self.assertEqual(evict_file_cache(path, sync=True), 0)
+        self.assertEqual(path.read_bytes(), b"durable")
+
     def test_lossless_mappings_and_metadata_only_transfer(self):
         directory = tempfile.mkdtemp(prefix="openwebrl-transport-test-")
         tensors = {

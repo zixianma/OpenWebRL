@@ -23,6 +23,41 @@ class FileBackedArray:
     bfloat16: bool = False
 
 
+def evict_file_cache(path, *, sync=False):
+    """Make a completed file's clean pages immediately reclaimable by cgroups.
+
+    This retains the file and its contents. ``sync=True`` first makes a durable
+    recovery file clean so ``POSIX_FADV_DONTNEED`` can actually release its
+    page-cache charge.
+    """
+    if not hasattr(os, "posix_fadvise") or not hasattr(os, "POSIX_FADV_DONTNEED"):
+        return 0
+    path = Path(path)
+    try:
+        with path.open("rb") as stream:
+            if sync:
+                os.fsync(stream.fileno())
+            os.posix_fadvise(stream.fileno(), 0, 0, os.POSIX_FADV_DONTNEED)
+        return path.stat().st_size
+    except OSError:
+        return 0
+
+
+def evict_file_backed_cache(directory=None):
+    """Release cache pages for consumed node-local multimodal mappings."""
+    directory = directory or os.environ.get("OPENWEBRL_MULTIMODAL_STORAGE_DIR")
+    if not directory:
+        return {"files": 0, "bytes": 0}
+    files = 0
+    advised_bytes = 0
+    for path in Path(directory).glob("rollout-*.bin"):
+        size = evict_file_cache(path, sync=True)
+        if size:
+            files += 1
+            advised_bytes += size
+    return {"files": files, "bytes": advised_bytes}
+
+
 def _encode_file_backed(data, directory):
     """Share read-only, reclaimable file mappings instead of large Ray objects.
 
