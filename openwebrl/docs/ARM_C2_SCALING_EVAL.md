@@ -66,6 +66,7 @@ Runtime root:
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Original base actor (historical) | 26/100 | 26.0% | 26/85 | 30.6% | 15 |
 | Update 100 | 28/100 | 28.0% | 28/84 | 33.3% | 16 |
+| Update 500 | 33/100 | 33.0% | 33/79 | 41.8% | 21 |
 
 Update 100 completed at 12:55 PDT. Its behavior is close to the base actor on
 the fixed cohort: mean/median trajectory length 17.66/17 versus 17.18/14,
@@ -76,6 +77,17 @@ scroll collapse reported by the upstream failed actor-distillation experiment.
 The small success difference is diagnostic only.
 
 Checkpoints 500, 700, and 923 were safe-merged in advance while update 100 was
-evaluating. Update 500 began at 12:55 PDT; the queue will reuse the validated
-merged artifacts to avoid transition delay. The machine-readable success and
-behavior comparison lives under the runtime root as `behavior-comparison.json`.
+evaluating. Update 500 ran from 12:55 to 14:00 PDT. Its mean/median trajectory
+length fell to 14.24/10, termination rose to 65.1%, 30-step caps fell to 27.9%,
+and scroll-call share fell to 7.9%. Thus its higher success does not carry the
+upstream failure signature; repeated-primary actions remained nearly unchanged
+at 59.4%.
+
+The long tail left insufficient time to run updates 700 and 923 sequentially.
+They therefore use isolated servers on the same H200, separate actor/browser
+ports, six browser workers each, and 30% static server memory each. Both began
+by 14:03 PDT. The model, sampling, task, horizon, context, and judge settings are
+unchanged, and `execution-history.jsonl` records the concurrency change. This is
+an execution-only change to finish the fixed sweep within allocation 285131.
+The machine-readable success and behavior comparison lives under the runtime
+root as `behavior-comparison.json`.

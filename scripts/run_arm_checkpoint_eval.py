@@ -41,7 +41,12 @@ def main():
     parser.add_argument("--actor-port", required=True, type=int)
     parser.add_argument("--browser-port-start", required=True, type=int)
     parser.add_argument("--browser-port-end", required=True, type=int)
+    parser.add_argument("--allow-shared-gpu", action="store_true",
+                        help="Allow another recorded evaluator server on the assigned GPU")
+    parser.add_argument("--mem-fraction-static", type=float, default=0.4)
     args = parser.parse_args()
+    if not 0.1 <= args.mem_fraction_static <= 0.8:
+        parser.error("--mem-fraction-static must be between 0.1 and 0.8")
     if os.getenv("SLURM_JOB_ID") != args.job_id or f"/job_{args.job_id}/" not in Path("/proc/self/cgroup").read_text():
         raise ValueError("Checkpoint evaluation must run in its authorized allocation")
     record = parse_job_record(subprocess.check_output(
@@ -52,12 +57,6 @@ def main():
     ).strip().splitlines()
     if len(devices) != 1:
         raise ValueError("Checkpoint worker requires exactly one visible GPU")
-    pids = subprocess.check_output(
-        ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader"], text=True, timeout=20
-    ).strip()
-    if pids:
-        raise ValueError("Assigned checkpoint-evaluation GPU is occupied")
-
     root = args.run_root.resolve()
     checkpoint = args.checkpoint.resolve()
     while not (checkpoint / "progress.json").exists():
@@ -71,8 +70,33 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     merged = work / "merged-model"
     status = work / "status.json"
+    completed_summary = work / "online-mind2web" / "summary.json"
+    completed_manifest = work / "online-mind2web" / "manifest.json"
+    if completed_summary.exists() and completed_manifest.exists():
+        summary = json.loads(completed_summary.read_text())
+        manifest = json.loads(completed_manifest.read_text())
+        if (
+            summary.get("scheduled") != 100
+            or summary.get("attempted") != 100
+            or manifest.get("task_ids") != sample["task_ids"]
+            or os.path.realpath(manifest.get("actor", "")) != os.path.realpath(merged)
+            or manifest.get("judge") != "o4-mini"
+            or manifest.get("judge_protocol") != "online_mind2web/AgentTrek"
+        ):
+            raise ValueError("Existing completed evaluation does not match the fixed cohort/protocol")
+        write_json(status, {"phase": "complete", "updated_utc": datetime.now(timezone.utc).isoformat(),
+                            "allocation": args.job_id, "completed": 100, "scheduled": 100,
+                            "returncode": 0, "summary": summary, "reused_complete": True})
+        return
+    pids = subprocess.check_output(
+        ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader"], text=True, timeout=20
+    ).strip()
+    if pids and not args.allow_shared_gpu:
+        raise ValueError("Assigned checkpoint-evaluation GPU is occupied")
     write_json(status, {"phase": "merging", "updated_utc": datetime.now(timezone.utc).isoformat(),
-                        "allocation": args.job_id, "gpu_uuid": devices[0], "checkpoint": str(checkpoint)})
+                        "allocation": args.job_id, "gpu_uuid": devices[0], "checkpoint": str(checkpoint),
+                        "allow_shared_gpu": args.allow_shared_gpu,
+                        "mem_fraction_static": args.mem_fraction_static})
     with (work / "merge.log").open("a") as log:
         subprocess.run(
             [str(ARM_PYTHON), str(REPO / "scripts/merge_arm_c2_student.py"),
@@ -83,7 +107,8 @@ def main():
     server = subprocess.Popen(
         [str(SERVER_PYTHON), "-m", "sglang.launch_server", "--model-path", str(merged),
          "--host", "127.0.0.1", "--port", str(args.actor_port), "--dtype", "bfloat16", "--tp", "1",
-         "--mem-fraction-static", "0.4", "--context-length", "32768", "--max-running-requests", "24",
+         "--mem-fraction-static", str(args.mem_fraction_static), "--context-length", "32768",
+         "--max-running-requests", "24",
          "--chunked-prefill-size", "4096", "--disable-cuda-graph"],
         cwd=REPO, stdout=server_log, stderr=subprocess.STDOUT, start_new_session=True)
 
