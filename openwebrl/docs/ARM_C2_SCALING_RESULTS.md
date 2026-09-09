@@ -86,6 +86,12 @@ update 500 and an appropriate base control; the 100-task curve is sufficient to
 reject update 923 as the default candidate but not to claim a statistically
 confirmed improvement over the base.
 
+The prepared follow-up evaluates updates 500 and 700 on all 300 tasks and uses
+the 200 tasks outside this checkpoint-selection sample as its primary stratum:
+[full-300 evaluation plan](ARM_C2_FULL300_EVAL.md). Proposed optimizer, data,
+and full-fine-tuning ablations are recorded in the
+[next SFT ablation plan](ARM_FILTERED_SFT_ABLATIONS.md).
+
 Runtime artifacts are under
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-full-282782-20260908T075414Z/evaluation/checkpoint-scaling-100`:
 `behavior-comparison.json`, `paired-comparison.json`, each checkpoint's original

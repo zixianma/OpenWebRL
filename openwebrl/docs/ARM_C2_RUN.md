@@ -2,6 +2,17 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Full-300 checkpoint comparison prepared — 2026-09-09
+
+Updates 500 and 700 are prepared for fresh evaluation on all 300
+Online-Mind2Web tasks. The 200 tasks outside the earlier checkpoint-selection
+sample are the primary comparison; the earlier 100 are a labeled stability
+stratum. The paired controller, frozen cohort IDs, automatic analysis, exact
+four-H200-hour request, and output paths are documented in
+[ARM_C2_FULL300_EVAL.md](ARM_C2_FULL300_EVAL.md). No job has been submitted.
+The optimizer/data/full-fine-tuning candidates to consider after that result
+are in [ARM_FILTERED_SFT_ABLATIONS.md](ARM_FILTERED_SFT_ABLATIONS.md).
+
 ## Checkpoint scaling complete — 2026-09-09 15:28 PDT
 
 The fixed 100-task evaluation completed for updates 100, 500, 700, and 923.
