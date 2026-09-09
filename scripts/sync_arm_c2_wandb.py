@@ -8,6 +8,7 @@ import json
 import math
 import os
 from pathlib import Path
+import secrets
 import signal
 import time
 
@@ -43,7 +44,7 @@ def main():
         state = json.loads(state_path.read_text())
     else:
         state = {
-            "run_id": wandb.util.generate_id(),
+            "run_id": secrets.token_hex(4),
             "last_logged_update": 0,
             "created_utc": datetime.now(timezone.utc).isoformat(),
         }
