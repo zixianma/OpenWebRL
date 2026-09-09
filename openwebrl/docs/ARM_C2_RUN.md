@@ -22,6 +22,23 @@ The [judge alignment audit](ARM_JUDGE_ALIGNMENT.md) confirms the o4-mini model a
 
 Health samples and errors checked during the active agent session are recorded under `diagnostics/monitor-283221-history.jsonl`; the latest snapshot is `diagnostics/monitor-283221.json`. These records are observations, not an independent recovery agent. At this audit, generation timeouts and browser failures remained task-local; no allocation OOM events had occurred. Runtime dependencies and all 900 original evaluation outcome files passed a post-resume checksum check. A verified source/configuration archive is saved as `execution-sessions/283221-source-and-config.tar.gz`.
 
+### Serving throughput check and restart — 19:42–19:52 PDT
+
+A ten-second CPU sample used 3.77 of four allocated cores, while the actor queued requests. Collection was intentionally paused at 19:42:46 PDT to compare serving configurations. It finished shutdown with **373 completed outcomes, 203 successes, and 40 unavailable outcomes**. All completed files were preserved; interrupted attempts remain separate. The actor's initial graceful shutdown stalled, so its recorded PID/start-time/cgroup identities were verified before force-stopping those owned processes.
+
+The engineering benchmark used 16 saved training states (4144–13298 expanded prompt tokens), five candidate requests per state, and two rounds per configuration. Each request generated 256 tokens with EOS ignored for timing. These outputs never enter C2 training. The benchmark excludes browser interaction and SelectionARM scoring, so its speedup is not an end-to-end collection estimate.
+
+| Actor serving configuration | First-round seconds | Warm-round seconds | Warm output tokens/second |
+| --- | ---: | ---: | ---: |
+| CUDA graphs disabled, max active requests 24 | 19.45 | 16.54 | 1239 |
+| CUDA graphs enabled through batch 48, max active requests 48 | 13.33 | 10.50 | 1950 |
+
+The combined serving change gives **1.57× warm throughput** on this workload. All 320 requests passed expanded-prefix-length and finite-log-probability checks. Each state produced five distinct candidate sequences. Sampled outputs were not bit-identical across repetitions even within either configuration; fixed request seeds are not a promise of bitwise replay in this serving stack.
+
+Collection resumed with CUDA graphs and 48 active requests, keeping task concurrency 16, the frozen actor/teacher, five candidates, temperature 0.7/top-p 0.9, 1024-token generation limit, 32768 context, o4-mini/AgentTrek judge, and the SFT recipe unchanged. This serving change applies to continued C2 collection; the 900 completed inference outcomes remain untouched. The controller archives both execution configurations and retains the pinned ARM-branch SFT handoff. Launcher commit: `49d69bb`.
+
+Benchmark inputs, script, logs, metrics, preserved-outcome hashes, and summary are under `engineering-serving-check/`. The rolling monitor history was reset at the graph-enabled restart so the intentional pause does not enter the subsequent throughput estimate. The earlier monitor history is archived there.
+
 ## Final allocation outcome — 2026-09-08 02:32 PDT
 
 **C2 data collection paused cleanly; student SFT has not started.** The collector saved its summary at 02:32:35 PDT, and Slurm step `282782.1` completed successfully at 02:32:42 with exit code `0:0`. The parent four-hour allocation later reached its time limit at 02:38:18. The C2 step had already exited, preserving its outputs.
