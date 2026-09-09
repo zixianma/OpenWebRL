@@ -25,13 +25,13 @@ The likelihoods below are subjective priors for beating the current update-500
 standalone policy on held-out task success. They are planning aids, not measured
 probabilities.
 
-## 1. Stabilized one-pass C2 LoRA: larger batch, exposure-matched schedule
+## 1. Stabilized one-pass C2 LoRA, with a rank-32 capacity pair
 
 **Recommendation: first and cheapest optimizer ablation. Estimated likelihood
 of a real improvement: 35–50%.**
 
 Train on the same immutable 8,394 C2 rows, starting again from
-`OpenWebRL/OpenWebRL-4B-SFT`. Keep the same LoRA modules, rank, loss masking,
+`OpenWebRL/OpenWebRL-4B-SFT`. Keep the same LoRA modules, loss masking,
 optimizer, and peak learning rate. Change effective batch from 16 to **32** by
 using microbatch 1 and accumulation 32, and stop after exactly **one pass**:
 `ceil(8394 / 32) = 263` updates.
@@ -43,12 +43,34 @@ rate is about `5e-6` at the endpoint rather than decaying to zero. Save updates
 66, 132, 198, 250, and 263 for diagnostics. Predeclare update 263 as the policy
 endpoint; do not choose it using Online-Mind2Web checkpoint results.
 
-This tests whether noisier effective-batch-16 updates contributed to the
-shallow loss curve. It also removes the second pass that coincides with policy
-regression. Because update 500 already approximates a good one-pass result,
-the expected upside is modest. A clean control, if budget allows, is one-pass
-batch 16 under the same example-indexed schedule; without it, the comparison
-bundles batch size with an exact endpoint change.
+Make this a two-arm paired capacity test with identical row order, batch,
+schedule, seed, and checkpoints:
+
+| Variant | Rank / alpha | Trainable parameters | Purpose |
+| --- | ---: | ---: | --- |
+| **1A: stabilized control** | 16 / 32 | 33,030,144 | Measure the one-pass, batch-32, exposure-matched recipe |
+| **1B: larger adapter** | 32 / 64 | approximately 66.1M | Test adapter capacity while preserving `alpha / rank = 2` |
+
+Use dropout 0.05 and peak learning rate `1e-5` in both. Rank 32/alpha 64 is
+also the released OpenWebRL ARM recipe, although that precedent trains a
+reward model and is not evidence that rank 32 is optimal for actor
+distillation. The upstream actor-distillation code defaults to rank 16/alpha
+32. Adapter and optimizer memory roughly double, but remain small relative to
+the frozen 4B base and long-context activations.
+
+Variant 1A tests whether noisier effective-batch-16 updates contributed to the
+shallow loss curve and removes the second pass that coincides with policy
+regression. Variant 1B should be run only as its matched pair: running rank 32
+alone would bundle rank, batch, schedule, and endpoint changes. The conditional
+chance that rank 32 beats the stabilized rank-16 control is **30–45%**. The
+current low training loss and late regression do not look like clear
+under-capacity, but rank 32 is a much cheaper capacity test than full
+fine-tuning.
+
+If budget allows a third optimizer control, add one-pass batch 16 under the
+same example-indexed schedule. That isolates effective batch size; otherwise
+the existing update-500 result remains an approximate, rather than exact,
+batch-16 reference.
 
 ## 2. ARM-native counterfactual data mixed with C2
 
@@ -130,15 +152,16 @@ promising.
 1. If update 500 leads update 700 on the 200-task holdout without collapse
    signals, lock **one pass** as the default stopping rule. If update 700 leads,
    retain a 1.25–1.35-pass window but still reject the 1.76-pass endpoint.
-2. Run ablation 1 to separate batch/schedule stability from data quality. Use
-   its predeclared endpoint, with intermediate checkpoints for loss/behavior
-   diagnostics only.
+2. Run ablation 1A and 1B as a matched rank pair. Use their predeclared
+   update-263 endpoints, with intermediate checkpoints for loss/behavior
+   diagnostics only. Promote rank 32 only if it improves task success without
+   degrading termination or loop metrics.
 3. Build the ARM-native retention audit and run selected-target plus matched
    random-target variants. Promote it only if selected targets beat both the
    stabilized C2 run and random-target control.
-4. Run full language-tower fine-tuning only if the stabilized LoRA endpoint
-   still underfits its target distribution or the ARM-native recipe improves
-   but appears capacity-limited.
+4. Run full language-tower fine-tuning only if rank 32 improves over rank 16
+   but still appears capacity-limited, or the ARM-native recipe improves while
+   its selected-target loss remains materially above the C2 loss.
 
 All final comparisons use one-action inference with no ARM and the same
 `o4-mini` Online-Mind2Web/AgentTrek judge. Use overall success as the primary
