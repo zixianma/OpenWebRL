@@ -312,7 +312,7 @@ async def collect(config_path):
     transport_logger.propagate = False
     args.rollout_num_gpus = len(replicas)
     per_replica = [replica_args(args, replica, ActionSelector(q['teacher'],
-        f"http://127.0.0.1:{replica['selector_port']}", root / 'selections', seed=q['seed'], exporter=exporter))
+        f"http://127.0.0.1:{replica['selector_port']}", root / 'selections', seed=q['seed'], exporter=exporter, connect_timeout=10.0))
         for replica in replicas]
     init_http_client(args)
     reward_func = evaluation._load_reward_func('online_mind2web')

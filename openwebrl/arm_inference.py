@@ -4,6 +4,7 @@ import base64
 import hashlib
 import importlib.util
 import json
+import logging
 import math
 import os
 from pathlib import Path
@@ -92,15 +93,39 @@ def candidate_seed(seed, task_id, turn, candidate):
     return int.from_bytes(hashlib.sha256(key).digest()[:4], "big") % (2**31 - 1)
 
 
+async def request_selection_result(endpoint, payload, timeout, connect_timeout=None):
+    """Retry only connections that failed before submitting a selector request."""
+    import httpx
+    async def request():
+        limits = timeout if connect_timeout is None else httpx.Timeout(timeout, connect=min(timeout, connect_timeout))
+        async with httpx.AsyncClient(timeout=limits, trust_env=False) as client:
+            response = await client.post(endpoint + '/select', json=payload)
+            response.raise_for_status()
+            return response.json()
+    if connect_timeout is None:
+        return await request()
+    async with asyncio.timeout(timeout):
+        for attempt in range(3):
+            try:
+                return await request()
+            except (httpx.ConnectTimeout, httpx.ConnectError) as exc:
+                if attempt == 2: raise
+                logging.getLogger(__name__).warning(
+                    '[selector transport] %s connecting to %s; retry %d/2',
+                    type(exc).__name__, endpoint, attempt + 1)
+                await asyncio.sleep(.2)
+
+
 class ActionSelector:
     """Sample five iid proposals at one live state, score, execute one unchanged."""
-    def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180, exporter=None):
+    def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180, exporter=None, connect_timeout=None):
         if mode not in ("baseline", "selection", "scalar"):
             raise ValueError(mode)
         self.mode, self.endpoint = mode, endpoint.rstrip("/")
         self.output, self.seed = Path(output), seed
         self.candidates = 1 if mode == "baseline" else candidates
         self.timeout = timeout
+        self.connect_timeout = connect_timeout
         self.exporter = exporter
         self.output.mkdir(parents=True, exist_ok=True)
 
@@ -122,10 +147,7 @@ class ActionSelector:
                 "candidates": candidates,
                 "screenshot": base64.b64encode(observation["screenshot"]).decode(),
             }
-            async with httpx.AsyncClient(timeout=self.timeout, trust_env=False) as client:
-                response = await client.post(self.endpoint + "/select", json=payload)
-                response.raise_for_status()
-                result = response.json()
+            result = await request_selection_result(self.endpoint, payload, self.timeout, self.connect_timeout)
             scores, raw = result.get("scores"), result.get("raw")
             if self.mode == "scalar":
                 if len(scores or []) != len(candidates) or not all(math.isfinite(s) for s in scores):
