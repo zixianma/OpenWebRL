@@ -2,6 +2,22 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Resume on g022 — 2026-09-08 18:41 PDT
+
+The user assigned existing allocation **283221** for continued C2 collection followed by SFT. The allocation provides **one H200, 4 CPUs, and 120 GiB RAM** on g022, with scheduled expiry **2026-09-09 02:28:26 PDT**. The assigned GPU UUID is `GPU-b3af7cdf-9d21-56b4-0ad8-de51a96bd329`; it was verified free before launch. Controller stop is **02:23:26 PDT**, preserving a five-minute margin. No new allocation was requested.
+
+The actor and SelectionARM services passed their startup checks; the controller entered `collecting` at **18:41:31 PDT**. Resume starts from **220 preserved outcomes**, with **1871 unfinished tasks**. The dataset, teacher, sampling, judge, and two-epoch recipe are unchanged. Completed failures and unavailable outcomes are not retried. Prior interrupted attempts remain separate from restarted attempts. The results checksum snapshot and old/new configurations are retained in `execution-sessions/`.
+
+The automatic SFT handoff now uses the user's own local ARM branch:
+
+- Checkout: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/action-reward-models-c2`.
+- Branch: **`openwebrl/c2-filtered-sft`**; commit **`9f2998964e28b88f436fd50ff8be0ba473645465`**, based on upstream `4d6dfff869f198f282e4b0e8cf6d429c23dc9fce`.
+- Entrypoint: `actor_distillation/train_openwebrl_c2.py`. This is byte-identical to our already GPU-validated OpenWebRL C2 trainer. It uses the OpenWebRL export/processor loader through the pinned local runtime dependency. The upstream MolmoWeb trainer's chat serialization and model defaults do not directly fit Qwen3-VL captured browser turns.
+- Controller checks the ARM commit, entrypoint checksum, and OpenWebRL dependency checksums before training. CPU tests verify changed entrypoints/recipes are rejected and resource-only resumes preserve old configurations. **11 C2 tests passed**; the branch entrypoint imports successfully.
+- Training begins only after all 2091 outcomes are recorded and the full dataset passes its audit, with at least 15 minutes of allocation time left. Collection/training remain resumable if the existing allocation is insufficient. At resume, actual student optimizer updates and durable student checkpoints remain **0 / 0**.
+
+The [judge alignment audit](ARM_JUDGE_ALIGNMENT.md) confirms the o4-mini model and reported AgentTrek protocol match the author's OpenWebRL setup, while documenting unresolved historical implementation/cohort details and known decoding differences. Original evaluation artifacts remain separate.
+
 ## Final allocation outcome — 2026-09-08 02:32 PDT
 
 **C2 data collection paused cleanly; student SFT has not started.** The collector saved its summary at 02:32:35 PDT, and Slurm step `282782.1` completed successfully at 02:32:42 with exit code `0:0`. The parent four-hour allocation later reached its time limit at 02:38:18. The C2 step had already exited, preserving its outputs.
@@ -45,7 +61,7 @@ The corrected synthetic GPU check passed: finite loss 4.5122, gradient norm 11.1
 
 ## Handoff and compute limit
 
-The original comparison report must be written before C2 starts. The continuation reuses only the verified actor/GPU in allocation **282782**, g005, GPU `GPU-90ac2a02-abfa-147c-19ff-bbada4033da3`.
+The original comparison report was written before C2 started. The first continuation used only the verified actor/GPU in allocation **282782**, g005, GPU `GPU-90ac2a02-abfa-147c-19ff-bbada4033da3`. Current resume resources are recorded above.
 
 1. CPU preflight: full task inventory, terminal filtering, prompt/image/response joins, loss masking, teacher-completion gate, and mutually exclusive retry/C2 handoff.
 2. Synthetic GPU backward and adapter save/reload check. This uses no benchmark records and produces no usable student checkpoint.
