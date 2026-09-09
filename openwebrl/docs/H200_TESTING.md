@@ -1,5 +1,33 @@
 # H200 runtime and validation
 
+## Successful continuation on 240 GiB, 2026-09-08 19:02 PDT
+
+Run `openwebrl-4b-reference-283214-20260909T012629` on g021 loaded checkpoint 5,
+replayed collection 7, completed all fourteen optimizer updates, saved checkpoint
+6, and began fresh collection 8 at about 18:58 PDT. The two PPO epochs took
+about 27 minutes. Both H200s performed training; no cgroup OOM or OOM kill
+occurred. Host usage reached the 240 GiB limit while the kernel reclaimed file
+cache, then fell to roughly 175 GiB at the collection transition. File-backed
+image transport therefore passed this actual training-and-save cycle in the
+smaller allocation; later collections remain under active observation.
+
+Checkpoint 6 has 104 Adam updates (both optimizer groups agree), the known
+scheduler offset of +1, 1,519 state entries and four complete shard extents
+totaling 62,134,965,899 bytes. Its matching dataset cursor advanced from 816 to
+960 groups, exactly the 144 submitted groups in the recovered batch. CPU
+checkpoint validation and sampled payload checks passed. A full GPU reload of
+checkpoint 6 has not been performed; training continues from its in-memory
+state. Runtime reports are `checkpoint_verification_6.json` and
+`replay_6_completion_audit.json` in the run directory.
+
+The [quick resume command](RESUMING_BASELINE.md) is committed as `d1dd5b8`, with
+seven passing CPU tests. Real preflight first selected checkpoint 5 plus replay
+batch 6, then correctly selected checkpoint 6 with no replay after the save.
+The stable run pointer now records 104 durable updates and no pending replay.
+W&B remains `qcq7i4ug`; recovered reward observation 7 is 0.3987667009 and retains
+its original reward-iteration coordinate. New collection 8 will supply the next
+reward observation.
+
 ## Resume preparation for allocation 283214, 2026-09-08 18:26 PDT
 
 The user explicitly assigned job 283214 on g021 for continuing W&B run
