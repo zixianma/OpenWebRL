@@ -2,6 +2,12 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## 1,500-task audit — 2026-09-09 01:36 PDT
+
+The consistent dataset snapshot covers **1504/2091 completed outcomes** and retains **5319 usable turns from 797 successful trajectories**. One additional outcome completed while the outcome checksum inventory was being written, so that inventory contains 1505 files. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **1258 outcomes in the 1,250-task checksum inventory**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `3b501c49c0764c712915546bd056a6fca14eb08608227636b85c3d82d356a647`; evidence: `diagnostics/milestone-1500-audit.json` and `diagnostics/milestone-1500-outcome-sha256.json`.
+
+The accompanying full health check recorded **1504 completed, 797 successful, and 111 unavailable**. Host memory was 181 GiB of 240 GiB with no pressure/OOM events; no new task errors appeared in that monitoring interval. Recent 10–30 minute rates gave a collection ETA near **03:30–03:45 PDT**. Student optimizer updates/checkpoints remain **0 / 0** pending full-pool completion.
+
 ## 1,250-task audit — 2026-09-09 00:52 PDT
 
 The consistent dataset snapshot covers **1254/2091 completed outcomes** and retains **4329 usable turns from 654 successful trajectories**. Four additional outcomes completed while the outcome checksum inventory was being written, so that inventory contains 1258 files. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **1008 outcomes in the 1,000-task checksum inventory**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `2e95612cac70372acbe4d35ea954d2626f118ba97b784ea9c81ead0ee1b7f2ae`; evidence: `diagnostics/milestone-1250-audit.json` and `diagnostics/milestone-1250-outcome-sha256.json`.
