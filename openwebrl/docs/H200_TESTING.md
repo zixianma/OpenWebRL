@@ -1,5 +1,37 @@
 # H200 runtime and validation
 
+## Resume preparation for allocation 283214, 2026-09-08 18:26 PDT
+
+The user explicitly assigned job 283214 on g021 for continuing W&B run
+`qcq7i4ug`. It provides two H200s, eight CPUs, and 240 GiB RAM until
+2026-09-09 02:16:49 PDT. The previous job had 16 CPUs and approximately
+390 GiB RAM, so its in-memory image transfer cannot be assumed to fit.
+
+Added opt-in `OPENWEBRL_MULTIMODAL_STORAGE_DIR` transport: image tensors are
+written losslessly to a unique binary file per shard, and Ray sends path,
+offset, shape, and dtype descriptors. Each training rank uses read-only memory
+mappings; only the current microbatch moves to GPU. These files persist for the
+run lifetime and must be accessible to all consuming ranks. The single-node
+continuation uses `/tmp/openwebrl-283214-multimodal` (3.5 TiB available), while
+recovery batches and checkpoints remain on scrubbed storage. Four CPU tests
+passed, covering bfloat16, non-contiguous/empty/scalar tensors, independent
+process readers, small serialized descriptors, and prior-batch lifetime.
+Two actual Ray readers on g021 also reproduced the data exactly; see
+`transport-ray-check-283214.json` in the runtime directory.
+
+The isolated source is `reference-stage1-283214`. All five numerical-recipe
+files match the preceding reference snapshot. It uses an 8-GiB Ray object
+store and two OpenMP threads per process; the 48 accepted groups, five requested
+attempts, batch size 256, two PPO epochs, learning rate, rewards, filtering, and
+browser concurrency remain unchanged. Launch metadata reads resume counters
+from the actual checkpoint instead of earlier descriptive constants.
+
+Resume checkpoint 5 (90 Adam updates), replay saved batch 6 with 144 consumed
+prompt groups, then continue fresh collection 8. The replay should add fourteen
+updates and save checkpoint 6 with 104 Adam updates. This is still the seventh
+collected reward observation. GPU training memory and checkpoint completion
+must be verified in this smaller allocation before declaring the resume healthy.
+
 ## Final handoff, 2026-09-08 03:34 PDT
 
 The baseline was intentionally paused after collection 7 finished, because its
