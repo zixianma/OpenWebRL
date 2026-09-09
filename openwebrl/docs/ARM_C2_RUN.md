@@ -2,6 +2,19 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Checkpoint scaling complete — 2026-09-09 15:28 PDT
+
+The fixed 100-task evaluation completed for updates 100, 500, 700, and 923.
+First-pass overall rates were **28%, 33%, 33%, and 28%**; valid-only rates were
+**33.3%, 41.8%, 39.3%, and 32.6%**. The separately stored unavailable-task
+retries covered 65/67 task/checkpoint pairs and recovered three additional
+successes, all for update 500. Its replacement estimate is **36/100 overall and
+36/89 valid (40.4%)**. Behavior diagnostics do not show the upstream
+actor-distillation loop-collapse signature. Update **500** is the selected C2
+candidate; do not resume the existing recipe toward update 1050. Full results,
+uncertainty, paired comparisons, and runtime paths are in
+[ARM_C2_SCALING_RESULTS.md](ARM_C2_SCALING_RESULTS.md).
+
 ## Training stopped for checkpoint scaling — 2026-09-09 11:53 PDT
 
 At the user's request, the resumed trainer received a graceful interrupt after the loss had largely plateaued. It saved `student/paused-000923-1788980015` at optimizer update **923**, epoch-2 position **6368/8394**. The last 50/100-update mean target-token cross-entropies were **0.1487/0.1490**, and epoch 2 through the stop averaged **0.1474**, versus **0.1550** for epoch 1. The endpoint contains the adapter, optimizer, RNG, processor, and exact dataset cursor. `student/complete.json` remains absent; this is an intentionally truncated run, not a completed two-epoch checkpoint.

@@ -1,10 +1,9 @@
 # C2 checkpoint scaling evaluation
 
-Status: update 100 is evaluating on allocation **285131** on g022; updates 500,
-700, and 923 are queued to start sequentially as soon as that GPU becomes free.
-The first durable task record was produced at 12:03 PDT on 2026-09-09. The first
-task was unavailable because United.com returned an HTTP/2 navigation error; it
-will count in the overall denominator and be excluded from the valid-only rate.
+Status: **complete**. All four fixed 100-task checkpoint evaluations finished on
+allocation **285131** on g022. The unavailable-task retry pass covered 65/67
+requested task/checkpoint pairs before the allocation's safety cutoff. See the
+[complete results and interpretation](ARM_C2_SCALING_RESULTS.md).
 
 The earlier user-assigned allocation **285189** on g002 provided two H200s, 8
 CPUs, 240 GiB RAM, and a four-hour limit. It was canceled by the user's UID at
@@ -60,13 +59,15 @@ remove live-site time drift. Checkpoint 923 is the stopped-run endpoint.
 Runtime root:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-full-282782-20260908T075414Z/evaluation/checkpoint-scaling-100`.
 
-## Results in progress
+## First-pass results
 
 | Checkpoint | Success / scheduled | Overall | Success / valid | Valid-only | Unavailable |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Original base actor (historical) | 26/100 | 26.0% | 26/85 | 30.6% | 15 |
 | Update 100 | 28/100 | 28.0% | 28/84 | 33.3% | 16 |
 | Update 500 | 33/100 | 33.0% | 33/79 | 41.8% | 21 |
+| Update 700 | 33/100 | 33.0% | 33/84 | 39.3% | 16 |
+| Update 923 | 28/100 | 28.0% | 28/86 | 32.6% | 14 |
 
 Update 100 completed at 12:55 PDT. Its behavior is close to the base actor on
 the fixed cohort: mean/median trajectory length 17.66/17 versus 17.18/14,
