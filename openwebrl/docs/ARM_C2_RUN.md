@@ -2,6 +2,16 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## 750-task audit — 2026-09-08 22:50 PDT
+
+The saved audit covers **755/2091 completed outcomes** and retains **2530 usable turns from 388 successful trajectories**. Captured source/image hashes and dataset joins pass the builder checks. All **529 pre-transport-fix C2 outcome files and all 900 original evaluation outcome files** remain byte-identical to their preserved checksum inventories. Both the previous and refreshed preview/audit files are archived in `preview-history/`. Preview SHA-256: `ee22dc15577486930765e16c4b0aee4a332556449ee834937e8510632c817728`; detailed evidence: `diagnostics/milestone-750-audit.json`.
+
+The **226 tasks completed since the transport restart had zero 180-second generation timeouts**. Retryable connection errors have occurred and recovered. Oversized context requests now fail after one response per candidate rather than repeatedly retrying; their outcomes remain preserved as unavailable. Website and environment failures still occur. No allocation OOM events have been observed. These are operational observations, not a controlled estimate of reward-model gains.
+
+The live check at **22:55 PDT** recorded **772 completed tasks, 397 successes, and 80 unavailable outcomes**. GPU activity averaged 70% over that short sample; GPU memory was 76.5 GiB and host memory 82.7 GiB of the assigned 120 GiB. Collection continued during an agent-session interruption; active supervision resumed after the user's reset. Recent throughput was about 215 tasks/hour, so completing the remaining pool before the 02:28 PDT allocation expiry is unlikely. No additional allocation is requested automatically.
+
+Student optimizer updates and durable student checkpoints remain **0 / 0**. The partial preview is not the final training dataset. SFT still requires all 2091 outcomes and the complete audit before its configured ARM-branch handoff.
+
 ## Connection-timeout recovery — 2026-09-08 21:22–21:26 PDT
 
 Collection paused cleanly at **529/2091 outcomes: 462 valid, 277 successes, and 67 unavailable**. The shutdown audit retains **1740 usable turns**, preview SHA-256 `f8e28a4ad075d452464ea1323cfe24478c4bb1ed149f0454ba13260cfa747c3e`. All 529 completed outcome hashes were verified unchanged. Student optimizer updates/checkpoints remain **0 / 0**.
@@ -10,7 +20,7 @@ A generation-timeout traceback showed HTTPX/AnyIO still opening a TCP connection
 
 Commit `6d408aa` gives C2 connection attempts a **10-second timeout**, allowing the existing retry loop to recover within the unchanged **180-second overall generation deadline**. Explicit HTTP 400 context-overflow responses now fail immediately rather than retrying the identical oversized prompt 60 times. Transient HTTP and connection errors remain retryable. The client still leaves its read/write/pool timeouts unset; the enclosing generation deadline controls the total wait. Retry logs now include exception types. **Four focused transport tests and 11 C2 tests passed.** Model, prompts, candidate count, judge, filtering, and training recipe are unchanged.
 
-The controller resumed collection at **21:25:48 PDT**, within allocation **283221**, step **148**. Old configs, source snapshots, completed outcomes, and interrupted attempt directories remain preserved. This transport change still requires observation on the live workload; no success-rate improvement is assumed.
+The controller resumed collection at **21:25:48 PDT**, within allocation **283221**, step **148**. Old configs, source snapshots, completed outcomes, and interrupted attempt directories remain preserved. The 750-task audit above records the subsequent live transport observations; no success-rate improvement is assumed.
 
 ## 500-task audit — 2026-09-08 21:16 PDT
 
