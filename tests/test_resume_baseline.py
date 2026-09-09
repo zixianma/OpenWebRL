@@ -293,5 +293,12 @@ class ResumeTest(unittest.TestCase):
         replay.assert_not_called()
 
 
+    def test_batch_driver_does_not_ignore_other_compute_steps(self):
+        rows = '42.batch|batch\n42.extern|extern\n42.0|trainer\n'
+        self.assertEqual(m.active_steps(rows), ['42.batch|batch', '42.0|trainer'])
+        self.assertEqual(m.active_steps(rows, allow_batch=True), ['42.0|trainer'])
+        self.assertEqual(m.active_steps('42.batch|batch\n42.extern|extern', allow_batch=True), [])
+
+
 if __name__ == '__main__':
     unittest.main()

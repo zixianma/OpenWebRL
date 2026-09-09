@@ -71,9 +71,10 @@ def allocation(info, job_id, now=None, uid=None, requested_gpus=2):
             'maximum_seconds': seconds, 'shutdown_margin_seconds': 180}
 
 
-def active_steps(output):
+def active_steps(output, *, allow_batch=False):
+    ignored = {'interactive', 'extern'} | ({'batch'} if allow_batch else set())
     return [line.strip() for line in output.splitlines()
-            if line.strip() and line.split('|', 1)[0].rsplit('.', 1)[-1] not in {'interactive', 'extern'}]
+            if line.strip() and line.split('|', 1)[0].rsplit('.', 1)[-1] not in ignored]
 
 
 def lineage(state):
@@ -194,7 +195,9 @@ def prepare(args):
     gpus = getattr(args, 'gpus', 2)
     verification = getattr(args, 'verify_resume_only', False)
     job = allocation(capture(['scontrol', 'show', 'job', args.job_id, '-o']), args.job_id, requested_gpus=gpus)
-    busy = active_steps(capture(['squeue', '--steps', f'--jobs={args.job_id}', '--noheader', '--format=%i|%j']))
+    batch_driver = (os.environ.get('OPENWEBRL_BATCH_DRIVER_JOB') == args.job_id
+                    and os.environ.get('SLURM_JOB_ID') == args.job_id)
+    busy = active_steps(capture(['squeue', '--steps', f'--jobs={args.job_id}', '--noheader', '--format=%i|%j']), allow_batch=batch_driver)
     other_live_steps = []
     previous_job = str(state.get('allocation', ''))
     if previous_job and previous_job != args.job_id and not (Path(state['run_directory']) / 'exit_status.json').exists():

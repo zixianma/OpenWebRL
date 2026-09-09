@@ -12,3 +12,5 @@
 - Actively inspect the authorized job's progress, logs, GPU/memory use, W&B and saves about every 30–60 seconds. Give progress updates and investigate failures promptly; a background health recorder alone is not active supervision. Refresh the pointer after verifying each new durable checkpoint.
 
 - Four-GPU migration: use `--gpus 4` with a topology-capable preserved source (currently `reference-stage1-tp4-ready-20260909`). Run `--verify-resume-only --launch` first in an explicitly authorized single-node four-H200 allocation; CPU dry runs do not prove GPU restoration. The four-GPU profile requires 16 CPUs / 480 GiB RAM conservatively and uses TP4 / 32 browsers. Do not fork the live W&B lineage, combine unrelated allocations, or skip an evaluation due at the saved checkpoint boundary. Follow `openwebrl/docs/RESUMING_BASELINE.md`.
+
+- The four-GPU batch template is `scripts/resume_baseline_4gpu.sbatch` (4 H200s, 16 CPUs, 480 GiB, 8 hours). It verifies restoration, then trains in the same allocation. Each new submission still requires explicit user approval of its resource request and budget.

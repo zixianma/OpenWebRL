@@ -57,13 +57,28 @@ the scheduled evaluation before moving on, or migrate the preceding checkpoint
 plus its complete untrained rollout so that replay triggers the due evaluation.
 Do not treat a saved checkpoint alone as proof that its evaluation has completed.
 
-Thirteen CPU resume tests cover resource/ownership checks, topology arguments,
+Fourteen CPU resume tests cover resource/ownership checks, topology arguments,
 verification receipts, preservation of the training pointer, replay selection,
 and prevention of concurrent trainers. The prepared inner launcher dry run
 selected checkpoint 8 / 130 Adam updates with four GPUs, TP4, 32 browsers,
 48 groups × five attempts, global batch 256 and two PPO epochs. The live two-GPU
 allocation correctly rejects a four-GPU request. No four-GPU allocation was
 requested or consumed by these tests.
+
+## Batch driver
+
+`scripts/resume_baseline_4gpu.sbatch` requests one node, four H200s, sixteen CPUs,
+480 GiB RAM, and eight hours in the normal QoS. Its two sequential stages are
+restore-only verification followed by training/replay. The wrapper recognizes
+its own batch driver while continuing to reject other compute steps and live
+trainers in another allocation. Both stages share the one allocation's time
+boundary; verification does not buy or extend time.
+
+The user requested this resource configuration on 2026-09-08. Slurm's
+`--test-only` accepted it and estimated $28.80 for 32 H200 GPU-hours. Automatic
+approval review subsequently rejected submission pending explicit approval of
+the dollar estimate; no batch job was submitted by that rejected action.
+The script does not grant standing approval to submit paid jobs.
 
 ## State and source
 
