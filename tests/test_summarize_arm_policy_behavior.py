@@ -31,8 +31,10 @@ class PolicyBehaviorTest(unittest.TestCase):
                         {"role": "assistant", "content": '<tool_call>{"name":"scroll"}</tool_call>'},
                     ]},
                 },
-                {"valid": False, "reward": None},
+                {"task_id": "invalid", "valid": False, "reward": None},
             ]
+            rows[0]["task_id"] = "success"
+            rows[1]["task_id"] = "failure"
             for index, row in enumerate(rows):
                 (results / f"{index}.json").write_text(json.dumps(row))
             report = behavior(root)
@@ -41,6 +43,11 @@ class PolicyBehaviorTest(unittest.TestCase):
             self.assertEqual(report["step_cap_30_rate"], 0.5)
             self.assertEqual(report["scroll_call_fraction"], 0.75)
             self.assertEqual(report["repeated_primary_action_rate"], 0.5)
+
+            filtered = behavior(root, ["success", "invalid"])
+            self.assertEqual((filtered["attempted"], filtered["valid"], filtered["successes"]), (2, 1, 1))
+            self.assertEqual(filtered["requested_task_count"], 2)
+            self.assertEqual(filtered["missing_requested_tasks"], 0)
 
 
 if __name__ == "__main__":

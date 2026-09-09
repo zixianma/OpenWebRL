@@ -59,3 +59,23 @@ remove live-site time drift. Checkpoint 923 is the stopped-run endpoint.
 
 Runtime root:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-full-282782-20260908T075414Z/evaluation/checkpoint-scaling-100`.
+
+## Results in progress
+
+| Checkpoint | Success / scheduled | Overall | Success / valid | Valid-only | Unavailable |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Original base actor (historical) | 26/100 | 26.0% | 26/85 | 30.6% | 15 |
+| Update 100 | 28/100 | 28.0% | 28/84 | 33.3% | 16 |
+
+Update 100 completed at 12:55 PDT. Its behavior is close to the base actor on
+the fixed cohort: mean/median trajectory length 17.66/17 versus 17.18/14,
+termination 50.0% versus 52.8%, 30-step caps 41.1% versus 41.6%, scroll-call
+share 11.4% versus 13.7%, and repeated-primary-action rate 59.0% versus 62.0%.
+This first checkpoint does not show the sharp trajectory-length/termination/
+scroll collapse reported by the upstream failed actor-distillation experiment.
+The small success difference is diagnostic only.
+
+Checkpoints 500, 700, and 923 were safe-merged in advance while update 100 was
+evaluating. Update 500 began at 12:55 PDT; the queue will reuse the validated
+merged artifacts to avoid transition delay. The machine-readable success and
+behavior comparison lives under the runtime root as `behavior-comparison.json`.

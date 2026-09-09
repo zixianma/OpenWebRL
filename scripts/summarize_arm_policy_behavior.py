@@ -3,6 +3,7 @@
 
 import argparse
 import collections
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -13,8 +14,12 @@ import statistics
 TOOL_NAME = re.compile(r'"name"\s*:\s*"([^"]+)"')
 
 
-def load_results(directory):
-    return [json.loads(path.read_text()) for path in sorted((directory / "results").glob("*.json"))]
+def load_results(directory, task_ids=None):
+    rows = [json.loads(path.read_text()) for path in sorted((directory / "results").glob("*.json"))]
+    if task_ids is None:
+        return rows
+    wanted = set(task_ids)
+    return [row for row in rows if row.get("task_id") in wanted]
 
 
 def actions(record):
@@ -23,8 +28,8 @@ def actions(record):
             if message.get("role") == "assistant" and isinstance(message.get("content"), str)]
 
 
-def behavior(directory):
-    rows = load_results(directory)
+def behavior(directory, task_ids=None):
+    rows = load_results(directory, task_ids)
     valid = [row for row in rows if row.get("valid")]
     successes = sum(row.get("reward") == 1 for row in valid)
     trajectories = []
@@ -45,6 +50,8 @@ def behavior(directory):
     capped = sum(row["steps"] >= 30 for row in trajectories)
     return {
         "directory": str(directory.resolve()),
+        "requested_task_count": len(task_ids) if task_ids is not None else None,
+        "missing_requested_tasks": len(task_ids) - len(rows) if task_ids is not None else None,
         "attempted": len(rows),
         "valid": len(valid),
         "successes": successes,
@@ -68,16 +75,31 @@ def percent(value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", action="append", required=True, metavar="LABEL=DIR")
+    parser.add_argument("--task-ids-file", type=Path,
+                        help="JSON object with task_ids; apply this fixed cohort to every run")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    task_ids = None
+    task_ids_metadata = None
+    if args.task_ids_file:
+        payload = json.loads(args.task_ids_file.read_text())
+        task_ids = payload["task_ids"]
+        if len(task_ids) != len(set(task_ids)):
+            raise ValueError("Task cohort contains duplicate IDs")
+        task_ids_metadata = {
+            "path": str(args.task_ids_file.resolve()),
+            "sha256": hashlib.sha256(args.task_ids_file.read_bytes()).hexdigest(),
+            "count": len(task_ids),
+        }
     reports = {}
     for item in args.run:
         label, separator, value = item.partition("=")
         if not separator or not label:
             parser.error("--run must be LABEL=DIR")
-        reports[label] = behavior(Path(value))
+        reports[label] = behavior(Path(value), task_ids)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     payload = {
+        "task_cohort": task_ids_metadata,
         "runs": reports,
         "interpretation": [
             "Behavior metrics use saved assistant tool calls; unavailable tasks may lack trajectories.",
