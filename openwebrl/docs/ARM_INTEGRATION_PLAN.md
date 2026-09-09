@@ -1,6 +1,8 @@
 # Action reward models for OpenWebRL training
 
-Status: **All three inference evaluations are complete. Overall success: baseline 30.0%, ScalarRM 38.0%, SelectionARM 42.7%; valid-only: 33.7%, 45.4%, 50.0%. C2 paused cleanly when allocation 282782 ended: 220/2091 tasks processed, 123 successful trajectories, and 711 eligible turns saved. Student SFT has not started; see ARM_C2_RUN.md for details. Inference retries remain held.**
+Status: **All three inference evaluations are complete. Overall success: baseline 30.0%, ScalarRM 38.0%, SelectionARM 42.7%; valid-only: 33.7%, 45.4%, 50.0%. C2 resumed on g022 in allocation 283221 at 18:41 PDT on September 8. The 19:26 PDT audit covers 337/2091 completed tasks and 1044 eligible turns from 181 successful trajectories. Student SFT has not started; its full-pool handoff is configured on local ARM branch `openwebrl/c2-filtered-sft`. Inference retries remain held.**
+
+The [judge alignment audit](ARM_JUDGE_ALIGNMENT.md) confirms the author's OpenWebRL results use o4-mini and describes the matching AgentTrek protocol. It also records the author's separate GPT-4.1 comparison and the known decoding differences. See [C2 run status and live artifacts](ARM_C2_RUN.md) for progress after the timestamp above.
 
 Created: 2026-09-07. This is the working document for iterating on the plan originally proposed in conversation.
 

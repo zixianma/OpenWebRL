@@ -18,6 +18,10 @@ The automatic SFT handoff now uses the user's own local ARM branch:
 
 The [judge alignment audit](ARM_JUDGE_ALIGNMENT.md) confirms the o4-mini model and reported AgentTrek protocol match the author's OpenWebRL setup, while documenting unresolved historical implementation/cohort details and known decoding differences. Original evaluation artifacts remain separate.
 
+**19:26 PDT collection audit:** 337/2091 completed outcomes, 181 successful trajectories, and **1044 eligible turns** in the updated preview. The 711-turn preview and its audit were archived under `preview-history/` before replacement. All 13 previously interrupted tasks have completed outcomes from their separate resumed attempts. Actual student optimizer updates/checkpoints remain **0 / 0**. Preview SHA-256: `ecad5cf0376fc8224054a856229a8822ffdb947ef4e90476bd5073e284c2209f`.
+
+Health samples and errors checked during the active agent session are recorded under `diagnostics/monitor-283221-history.jsonl`; the latest snapshot is `diagnostics/monitor-283221.json`. These records are observations, not an independent recovery agent. At this audit, generation timeouts and browser failures remained task-local; no allocation OOM events had occurred. Runtime dependencies and all 900 original evaluation outcome files passed a post-resume checksum check. A verified source/configuration archive is saved as `execution-sessions/283221-source-and-config.tar.gz`.
+
 ## Final allocation outcome — 2026-09-08 02:32 PDT
 
 **C2 data collection paused cleanly; student SFT has not started.** The collector saved its summary at 02:32:35 PDT, and Slurm step `282782.1` completed successfully at 02:32:42 with exit code `0:0`. The parent four-hour allocation later reached its time limit at 02:38:18. The C2 step had already exited, preserving its outputs.
