@@ -2,6 +2,12 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Epoch 1 complete — 2026-09-09 06:20 PDT
+
+The first full pass over all **8394 action examples** completed at optimizer update **525**. The durable `student/epoch-1` checkpoint contains the LoRA adapter, optimizer state, processor/tokenizer files, and a resume cursor at epoch 2 position 0, all tied to dataset SHA-256 `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`. Training continued directly into epoch 2 and had reached update 531 at the 06:22 health check.
+
+Training remains numerically and operationally stable: losses and gradient norms are finite, no runtime errors or memory events have occurred, and the active H200 used 92.2 GiB at the check. With about 46 minutes remaining before the controller safety deadline, the expected graceful-pause checkpoint is near update **670–675**, roughly 28% through epoch 2. Completing the fixed second epoch requires a later continuation in assigned compute.
+
 ## Full collection and SFT handoff — 2026-09-09 03:31 PDT
 
 Collection completed all **2091/2091** deduplicated training tasks: **1151 successful trajectories**, **1956 valid outcomes**, and **135 unavailable outcomes**. Success was **55.0% over all scheduled tasks (1151/2091)** and **58.8% over valid tasks (1151/1956)**. These are C2 training-pool collection rates, not Online-Mind2Web evaluation results.
