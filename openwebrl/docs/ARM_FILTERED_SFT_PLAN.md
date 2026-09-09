@@ -142,6 +142,14 @@ Before a pilot train, verify image-token expansion, prompt-prefix equality, corr
 
 ## Literature and how it changes this proposal
 
+### Upstream distillation material added since the initial plan
+
+The ARM checkout now includes `actor_distillation/`. At upstream commit `4d6dfff869f198f282e4b0e8cf6d429c23dc9fce`, the [reported MolmoWeb experiments](https://github.com/piotr-teterwak/action-reward-models/blob/4d6dfff869f198f282e4b0e8cf6d429c23dc9fce/actor_distillation/RESULTS.md) include a negative result for streaming trained-SelectionARM distillation (−4.2 percentage points, with scrolling/termination collapse) and a positive result for offline GPT-5.5 PRM-score selection with a 0.7 floor (+8.7 points versus baseline, +7.2 versus random-target SFT). These use a different actor and recipe; they do not establish that our C2 will improve.
+
+Our successful-trajectory filter addresses poor local winners indirectly, while preserving the user's chosen C2 scope. It does not prove every action in a successful trajectory is useful. In particular, the [AgentTrek judge](ARM_JUDGE_ALIGNMENT.md) allows partial completion. Keep termination rate, trajectory length, and scroll frequency alongside success when evaluating the student. The first saved C2 quality diagnostic covers 124 successful trajectories: all end in `done`, none reaches 30 turns, and mean length is 5.77 turns. This is a collection check, not evidence of student generalization.
+
+The user requested training from our own ARM branch. The configured handoff uses `openwebrl/c2-filtered-sft`, commit `9f29989`, with `actor_distillation/train_openwebrl_c2.py`: the validated Qwen3-VL trainer and exact captured-turn loader, retaining the approved learning rate, two epochs, and complete-pool gate. The upstream MolmoWeb trainer remains unchanged. See [run configuration and paths](ARM_C2_RUN.md).
+
 [BOND](https://arxiv.org/html/2407.14622v1#S4) connects winner-only likelihood training to forward KL; its full method combines KL directions. Our first pilot combines winner SFT with successful-trajectory filtering; a later C1 control can isolate the terminal filter. It is not a reproduction of full BOND/J-BOND.
 
 Our application-specific inference: ScalarRM supplies a fixed same-state reward ordering, which better matches the assumptions behind an explicit best-of-N reward distribution. A listwise SelectionARM can still supply imitation targets, but its choices need not correspond to a fixed scalar ordering across candidate sets. Full BOND theory therefore should not be transferred to that selector without checking this assumption.
