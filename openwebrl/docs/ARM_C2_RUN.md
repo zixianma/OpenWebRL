@@ -2,6 +2,16 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Filesystem stall recovery — 2026-09-08 20:30–20:36 PDT
+
+Collection paused cleanly with **413/2091 completed outcomes, 360 valid, 217 successes, and 53 unavailable**. The audited preview contains **1261 eligible turns**; SHA-256 `7f10b20e46a05b5d21d041c92231d752a28ac8b3f5f42460cde432c76a67158b`. Student optimizer updates and checkpoints remain **0 / 0**.
+
+The collector repeatedly blocked in shared-filesystem calls on its event-loop thread. A bounded `strace` measured screenshot and JSON file creation at **4.20, 5.42, and 6.21 seconds**. These stalls delay unrelated browser requests and startup health checks. Several new tasks became unavailable after the local browser server missed its 30-second health deadline; its logs did not show a process crash. This is an infrastructure limitation, not evidence that the ARM chose a bad action.
+
+Commit `c355749` moves C2 selection traces, exact-turn exports, outcome writes, and optional rollout dumps to awaited worker threads. Cancellation drains outstanding writes; identical screenshots use a per-content-hash lock. Summaries use a cached outcome inventory during collection and a full disk audit at shutdown. Writes remain on persistent scrubbed storage. The actor, teacher, sampling, judge, filtering, and SFT recipe are unchanged. All **413 C2 and 900 original evaluation outcomes** passed checksum checks before continuation. Completed unavailable outcomes remain preserved; only unfinished tasks resume in new attempt directories.
+
+Validation: **2 concurrency/cancellation tests, 11 C2 tests, and 9 ARM inference tests passed**, plus syntax checks. Old execution configs and a source snapshot are retained in `execution-sessions/`; the syscall trace is `diagnostics/collector-filesystem-strace-283221.txt`. Collection resumed under the same allocation after source-pin verification. Real workload throughput and browser failures must still be monitored; the code change is not itself evidence of an end-to-end speedup.
+
 ## Resume on g022 — 2026-09-08 18:41 PDT
 
 The user assigned existing allocation **283221** for continued C2 collection followed by SFT. The allocation provides **one H200, 4 CPUs, and 120 GiB RAM** on g022, with scheduled expiry **2026-09-09 02:28:26 PDT**. The assigned GPU UUID is `GPU-b3af7cdf-9d21-56b4-0ad8-de51a96bd329`; it was verified free before launch. Controller stop is **02:23:26 PDT**, preserving a five-minute margin. No new allocation was requested.
