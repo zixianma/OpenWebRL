@@ -2,6 +2,12 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## 1,250-task audit — 2026-09-09 00:52 PDT
+
+The consistent dataset snapshot covers **1254/2091 completed outcomes** and retains **4329 usable turns from 654 successful trajectories**. Four additional outcomes completed while the outcome checksum inventory was being written, so that inventory contains 1258 files. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **1008 outcomes in the 1,000-task checksum inventory**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `2e95612cac70372acbe4d35ea954d2626f118ba97b784ea9c81ead0ee1b7f2ae`; evidence: `diagnostics/milestone-1250-audit.json` and `diagnostics/milestone-1250-outcome-sha256.json`.
+
+The accompanying full health check recorded **1254 completed, 654 successful, and 105 unavailable**. Both GPUs were active, host memory was 150 GiB of the assigned 240 GiB, and no memory-pressure or OOM events had occurred. Recent measured throughput was about **361 tasks/hour**. Selector connection retries have recovered live requests without resampling candidates or creating a new unavailable outcome. Student optimizer updates/checkpoints remain **0 / 0** pending full-pool completion.
+
 ## 1,000-task audit — 2026-09-09 00:07 PDT
 
 The consistent dataset snapshot covers **1007/2091 completed outcomes** and retains **3502 usable turns from 537 successful trajectories**. One additional outcome completed while the outcome checksum inventory was being written, so that inventory contains 1008 files. Captured turn/image hashes and dataset joins pass. All **827 g022 outcomes**, all **861 outcomes present before the selector connection fix**, and all **900 original evaluation outcomes** remain checksum-identical. Current source pins also match. Preview SHA-256: `89457d00e0540f1704597b000775ed2c50c66d02343f1cb5bb913dc490d5e737`; evidence: `diagnostics/milestone-1000-audit.json` and `diagnostics/milestone-1000-outcome-sha256.json`.
