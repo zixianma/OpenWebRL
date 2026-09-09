@@ -56,7 +56,49 @@ def main():
               "reference_limitation": "README task denominators and all historical settings are not fully recovered."}
     text = json.dumps(report, indent=2)
     (root / "comparison.json").write_text(text + "\n")
-    print(text)
+    print(text, flush=True)
+    # The allocation launcher calls this while its actor remains resident, after
+    # all three evaluators and ARM servers have finished. An explicit queued
+    # follow-up can therefore reuse the actor without touching original results.
+    c2_queue = root / "queued-c2.json"
+    if c2_queue.exists() and json.loads(c2_queue.read_text()).get("authorized") is True:
+        import subprocess
+        import sys
+        config = json.loads(c2_queue.read_text())
+        if Path(config["source_full"]).resolve() != root.resolve():
+            raise ValueError("C2 queue belongs to a different source report")
+        retry_queue = root / "queued-retry.json"
+        if retry_queue.exists() and json.loads(retry_queue.read_text()).get("authorized") is True:
+            raise ValueError("C2 and retry continuations cannot both be enabled")
+        target = Path(config["output"]).resolve()
+        if target == root.resolve() or root.resolve().parent in target.parents or target in root.resolve().parents:
+            raise ValueError("C2 output must be separate from the original run")
+        target.mkdir(parents=True, exist_ok=True)
+        with (target / "controller.log").open("a") as log:
+            result = subprocess.run([sys.executable, str(Path(__file__).with_name("run_arm_c2.py")),
+                                     "--queue", str(c2_queue.resolve())], stdout=log, stderr=subprocess.STDOUT)
+        print(f"C2 continuation exited {result.returncode}; see {target / 'status.json'}", flush=True)
+        return
+    queue = root / "queued-retry.json"
+    if queue.exists():
+        import subprocess
+        import sys
+        config = json.loads(queue.read_text())
+        if config.get("authorized") is not True:
+            print("Retry held pending a cohort decision; original report is complete.", flush=True)
+            return
+        target = Path(config["output"]).resolve()
+        from scripts.run_arm_retry import validate_layout
+        validate_layout(config)
+        if Path(config["source_full"]).resolve() != root.resolve():
+            raise ValueError("Retry queue belongs to a different source report")
+        target.mkdir(parents=True, exist_ok=True)
+        with (target / "retry-controller.log").open("a") as log:
+            result = subprocess.run([sys.executable, str(Path(__file__).with_name("run_arm_retry.py")),
+                                     "--queue", str(queue.resolve())], stdout=log, stderr=subprocess.STDOUT)
+        # A retry failure is recorded separately; it does not invalidate the
+        # completed original benchmark or erase its comparison.
+        print(f"Queued retry exited {result.returncode}; see {target / 'retry-status.json'}", flush=True)
 
 
 if __name__ == "__main__":

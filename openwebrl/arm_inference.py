@@ -94,13 +94,14 @@ def candidate_seed(seed, task_id, turn, candidate):
 
 class ActionSelector:
     """Sample five iid proposals at one live state, score, execute one unchanged."""
-    def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180):
+    def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180, exporter=None):
         if mode not in ("baseline", "selection", "scalar"):
             raise ValueError(mode)
         self.mode, self.endpoint = mode, endpoint.rstrip("/")
         self.output, self.seed = Path(output), seed
         self.candidates = 1 if mode == "baseline" else candidates
         self.timeout = timeout
+        self.exporter = exporter
         self.output.mkdir(parents=True, exist_ok=True)
 
     async def __call__(self, *, infer, url, input_text, sampling_params, images,
@@ -150,5 +151,7 @@ class ActionSelector:
         path = self.output / (hashlib.sha256(str(task_id).encode()).hexdigest()[:20] + ".jsonl")
         with path.open("a") as stream:
             stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+        if self.exporter is not None:
+            self.exporter(record=record, prompt=input_text, images=images, outputs=outputs)
         return outputs[index], {"selected_index": index, "mode": self.mode,
                                 "fallback": fallback, "trace_path": str(path)}
