@@ -2,6 +2,12 @@
 
 Prepared 2026-09-08 at the user's request: use all ~2K tasks and launch C2 after the ARM evaluation. The inference retries remain held for a separate cohort decision.
 
+## Training resumed on g022 — 2026-09-09 10:33 PDT
+
+The user assigned existing allocation **285131** on g022: one H200 for five hours, ending at **15:29 PDT**. The assigned GPU was verified free, and the fixed C2 student resumed from `student/paused-000671-1788962743` at optimizer update **671**. The first resumed updates are finite and retain dataset SHA-256 `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`; no fresh adapter was initialized. The training deadline is 15:24 PDT, five minutes before allocation expiry.
+
+Future continuations use the checked-in [C2 resume launcher](ARM_C2_RESUME.md). It follows the durable latest-checkpoint pointer, verifies checkpoint/dataset/trainer lineage, derives the visible GPU and deadline from an already assigned allocation, and records a per-allocation config and receipt. It never submits a job. After epoch 2 completes, this allocation is reserved for a matched 300-task Online-Mind2Web evaluation of the trained student.
+
 ## Graceful training pause — 2026-09-09 07:06 PDT
 
 The allocation-end guard paused SFT cleanly at optimizer update **671**. The run completed one full epoch and **2336/8394 examples (27.8%)** of epoch 2. The resume point is `student/paused-000671-1788962743`: epoch 1 in zero-based trainer state, next position 2336, learning rate `3.047449137624976e-06`, and dataset SHA-256 `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`. `student/complete.json` is intentionally absent because the fixed two-epoch recipe is incomplete.
