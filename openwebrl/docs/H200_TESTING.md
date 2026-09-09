@@ -1,5 +1,28 @@
 # H200 runtime and validation
 
+## Second fresh cycle verified, 2026-09-08 22:50 PDT
+
+Collection 9 completed in 3730.8 seconds, with 48 accepted groups from 111
+completed groups and 33 surplus groups pending at cutoff (144 submitted).
+All pending tasks were cleared and the browser pool reached 1199 acquired /
+1199 released. The batch contains 1860 turn samples; two PPO epochs produced
+14 optimizer updates. The complete collection/training/save cycle took about
+89.7 minutes. No cgroup OOM or OOM kill occurred.
+
+Checkpoint 8 contains **130 durable Adam updates**. Metadata and shard-extent
+checks pass; finite tensor samples were read from all four shards. The dataset
+cursor is 1248 groups / 6240 attempts, advancing by exactly 144 groups. This is
+CPU validation; a full GPU reload of checkpoint 8 has not been performed.
+W&B reward observation 9 is 0.3903225806, and all fourteen optimizer records
+match the local log numerically. The persistent pointer now selects checkpoint
+8, with no pending replay. Iteration 10 is collecting in the existing allocation.
+
+Evidence in the current run directory: `checkpoint_verification_8.json`,
+`checkpoint_8_all_shards_cpu_samples.json`, `collection_9_completion_audit.json`,
+`collection_9_complete_wandb_audit.json`, and `rollout_recovery/8.provenance.json`.
+The four-GPU feasibility and timing estimate are documented in
+[BASELINE_SCALING.md](BASELINE_SCALING.md); no additional allocation was requested.
+
 ## Evaluation image retention guarded, 2026-09-08 21:35 PDT
 
 The next full Online-Mind2Web evaluation retains every completed trajectory
