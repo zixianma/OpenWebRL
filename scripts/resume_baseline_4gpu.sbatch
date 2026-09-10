@@ -15,7 +15,7 @@
 set -euo pipefail
 cd /gpfs/projects/krishna/zixianma/OpenWebRL
 export OPENWEBRL_BATCH_DRIVER_JOB="${SLURM_JOB_ID:?Run this driver through the approved sbatch allocation}"
-resume_source=/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-cache-release-20260909
+resume_source=/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-eval-cache-20260909
 python3 scripts/resume_baseline.py --job-id "$SLURM_JOB_ID" --gpus 4 \
     --source "$resume_source" --wandb-run-id qcq7i4ug --verify-resume-only --launch
 python3 scripts/resume_baseline.py --job-id "$SLURM_JOB_ID" --gpus 4 \

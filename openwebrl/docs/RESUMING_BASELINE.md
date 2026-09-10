@@ -17,12 +17,13 @@ The model/optimizer checkpoint format supports a different tensor-parallel size.
 The prepared four-H200 profile uses TP4/DP1 and 32 browser slots, with conservative
 resource guards of 16 CPUs and 480 GiB RAM on one node. This is a tested CPU
 configuration and workflow. Checkpoint 14 received a successful full TP4 model
-and optimizer reload in job 284885. Checkpoint 17 and the newer cache-release
-source still require their own restore verification. Two separate two-GPU
+and optimizer reload in job 284885. Checkpoint 17 also passed full TP4 restore
+in job 285546. The latest checkpoint and prepared source still require their
+own restore verification in each new allocation. Two separate two-GPU
 allocations do not satisfy this single-node profile.
 
 A prepared source snapshot is available at:
-`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-cache-release-20260909`.
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-eval-cache-20260909`.
 It preserves all five baseline recipe-file hashes. To recreate such a snapshot
 from a newer preserved baseline (never the experimental working tree):
 
@@ -95,7 +96,15 @@ The default persistent pointer is:
 
 It records the current run directory, checkpoint ancestry, preserved reference source, W&B identity and pending recovery batch. `--state PATH` selects a different recorded lineage. `--source PATH` selects another explicitly prepared reference snapshot; recipe hashes and required resume support are checked. The working repository's experimental recipe files are not copied into the run.
 
-For the current baseline, W&B is [`qcq7i4ug`](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug), and the preserved source is `reference-stage1-tp4-cache-release-20260909` under the runtime root. The credentials come from the repository `.env` and are never included in the preflight plan. `--wandb-run-id qcq7i4ug` can assert the expected identity; it cannot silently change this lineage's W&B ID.
+For the current baseline, W&B is [`qcq7i4ug`](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug), and the preserved source for the next resume is `reference-stage1-tp4-eval-cache-20260909` under the runtime root. This snapshot adds post-evaluation file-cache release while preserving the five baseline recipe hashes. The credentials come from the repository `.env` and are never included in the preflight plan. `--wandb-run-id qcq7i4ug` can assert the expected identity; it cannot silently change this lineage's W&B ID.
+
+Job 285546 was canceled at the user's request on 2026-09-10 after 7:24:54.
+Resume from checkpoint 22 at 302 Adam updates. Reward observation 23 and the
+iteration-20 evaluation are complete; collection 24 was unfinished and has no
+saved recovery batch, so it must be collected again. Checkpoint 22 passed CPU
+metadata, shard-extent, cursor, and small finite-payload checks; the batch
+driver must perform its full GPU restore before training. No replacement
+allocation is authorized by this document.
 
 ## Checkpoint and batch selection
 
