@@ -1,5 +1,32 @@
 # H200 runtime and validation
 
+## Replay saved successfully in job 285546, 2026-09-09 17:20 PDT
+
+Saved reward iteration 19 completed all 12 PPO updates. Checkpoint 18 now
+contains 258 durable Adam updates in both parameter groups, with scheduler
+offset +1. The 1,521 metadata entries, 4,957 stored extents, all eight shard
+files totaling 62,137,280,293 bytes, and matching dataset cursor passed CPU
+validation. Small payload samples from two of eight files were finite; this
+is not a full checkpoint-18 reload. Checkpoint 17 was fully restored on all
+four H200s at startup.
+
+All 12 replay optimizer records match W&B history rows 350–361 numerically
+for loss, KL and gradient norm. Their legacy `train/step` labels 216–227 are
+not cumulative Adam counts. Replay does not create a new reward observation.
+Fresh collection 20 has started, with its scheduled evaluation due after
+training/save. Reports are `checkpoint_18_validation.json` and
+`replay_19_wandb_audit.json` in the current run directory.
+
+Recent replay GPU utilization averaged 70.9%. Host usage stayed around
+258 GiB during PPO and fell to 234 GiB after saving; peak through this boundary
+was approximately 289.5 GiB. Memory-limit, OOM and OOM-kill events were zero.
+Both recovery-file and consumed-image cache-advice calls succeeded. This is
+one successful replay/save cycle; prevention of cumulative memory growth
+still needs observation across fresh collections. The persistent pointer
+selects checkpoint 18 / 258 updates, with no pending replay. The user updated
+active supervision and progress reporting to every 15 minutes, with closer
+checks at transitions and on errors.
+
 ## Approved continuation submitted, 2026-09-09 16:44 PDT
 
 The user explicitly requested one further four-GPU, eight-hour continuation.
