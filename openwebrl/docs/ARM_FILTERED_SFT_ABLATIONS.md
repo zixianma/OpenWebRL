@@ -1,9 +1,11 @@
 # Next action-level filtered-SFT ablations
 
-Status: **active training-ablation proposal**. On 2026-09-09 the user
+Status: **ablation 1A is running in Slurm job 285567**. On 2026-09-09 the user
 deprioritized the update-500/update-700 full-300 checkpoint study in favor of
-training ablations compared with the existing C2 baseline. No new training job
-or compute budget is authorized here. Update 500 is the reference policy.
+training ablations compared with the existing C2 baseline. The approved first
+job uses one H200 for five hours and includes fixed-100 validation. Update 500
+is the reference policy. Live configuration and paths are recorded in
+[ARM_C2_ABLATION_1A_RUN.md](ARM_C2_ABLATION_1A_RUN.md).
 
 ## What the first C2 curve says
 
