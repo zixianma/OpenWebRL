@@ -347,13 +347,19 @@ def launch(plan, state, args):
                     manifest = read_json(run / 'launch_manifest.json')
                     if manifest['resume_from'] != plan['resume_from']:
                         raise RuntimeError('Unexpected concurrent launcher detected; inspect allocation manually.')
-                    if not verification and (Path(plan['source']) / 'slime/utils/rollout_archive.py').is_file():
+                    archive_enabled = not verification and (Path(plan['source']) / 'slime/utils/rollout_archive.py').is_file()
+                    if archive_enabled:
                         write_json(run / 'rollout_archive.enabled.json', {
                             'enabled': True,
                             'scope': 'All completed prompt groups, including RL rejections',
                             'purpose': 'Preserve trajectories for future SFT; no change to RL selection',
                         })
                     updated = dict(state)
+                    updated.update(
+                        completed_rollout_archive_enabled=archive_enabled,
+                        completed_rollout_archive=str(run / 'completed_rollout_archive') if archive_enabled else None,
+                        completed_rollout_archive_first_verified_iteration=None,
+                    )
                     updated.update(run_directory=str(run), allocation=args.job_id, host=plan['allocation']['host'],
                                    source_directory=plan['source'], wandb_run_id=plan['wandb_run_id'],
                                    progress=str(run / 'progress.log'), health=str(run / 'health.jsonl'),

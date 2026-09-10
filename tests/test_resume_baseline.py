@@ -127,7 +127,12 @@ class ResumeTest(unittest.TestCase):
         (runtime / 'runs').mkdir(parents=True)
         run = runtime / 'runs/openwebrl-4b-reference-42-test'
         checkpoint = str(self.root / 'old/iter_0000005')
-        state = dict(full_resume_verified_checkpoint=checkpoint, full_resume_verified=True)
+        state = dict(full_resume_verified_checkpoint=checkpoint, full_resume_verified=True,
+                     completed_rollout_archive='/previous/run/archive',
+                     completed_rollout_archive_first_verified_iteration=4)
+        archive_module = self.root / 'slime/utils/rollout_archive.py'
+        archive_module.parent.mkdir(parents=True)
+        archive_module.write_text('# fixture indicating archive support\n')
         args = SimpleNamespace(job_id='42', state=self.root / 'state.json')
         plan = dict(active_steps=[], replay=dict(batch=str(self.root / '6.pt'), rollout_id=6, consumed_groups=144),
                     command=['srun', '--jobid=42'], allocation=dict(host='g021', maximum_seconds=600),
@@ -163,6 +168,10 @@ class ResumeTest(unittest.TestCase):
         self.assertEqual(saved['run_directory'], str(run))
         self.assertEqual(saved['durable_optimizer_updates'], 90)
         self.assertEqual(saved['wandb_run_id'], 'sameid')
+        self.assertTrue(saved['completed_rollout_archive_enabled'])
+        self.assertEqual(saved['completed_rollout_archive'], str(run / 'completed_rollout_archive'))
+        self.assertIsNone(saved['completed_rollout_archive_first_verified_iteration'])
+        self.assertTrue((run / 'rollout_archive.enabled.json').is_file())
         self.assertEqual(saved['allocation_status'], 'COMPLETED')
         self.assertIn('completed normally', saved['status_note'])
         self.assertTrue((run / 'resume_plan.json').is_file())
