@@ -20,7 +20,7 @@ REPO = Path(__file__).resolve().parents[1]
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 
 
-def build_plan(source, checkpoint, output, job_id):
+def build_plan(source, checkpoint, output, job_id, attempt=0):
     source, checkpoint, output = map(lambda p: Path(p).resolve(), (source, checkpoint, output))
     validate_source(source)
     match = re.fullmatch(r'iter_(\d{7})', checkpoint.name)
@@ -38,6 +38,8 @@ def build_plan(source, checkpoint, output, job_id):
     if not output.is_relative_to(RUNTIME / 'evaluations'):
         raise ValueError('Keep evaluations under the runtime evaluations directory')
     run_id = f'qcq7i4ug-eval-after{index+1}-{job_id}'
+    if attempt:
+        run_id += f'-r{attempt}'
     env = {
         'NUM_GPUS': '4', 'TP_SIZE': '4', 'NUM_ROLLOUT': '0',
         'BROWSER_MAX_STEPS': '15', 'ROLLOUT_BATCH_SIZE': '48', 'N_SAMPLES': '5',
@@ -61,6 +63,7 @@ def build_plan(source, checkpoint, output, job_id):
                '--eval-config', str(source / 'openwebrl/online_mind2web_monitor.yaml'),
                '--rollout-health-check-first-wait', '180', '--use-fault-tolerance',
                '--router-balance-abs-threshold', '2', '--skip-eval-before-train',
+               '--lr-decay-iters', '1', '--use-checkpoint-opt-param-scheduler',
                '--save-debug-rollout-data', str(output / 'runtime/rollout_recovery/{rollout_id}.pt')]
     return {'source': str(source), 'checkpoint': str(checkpoint), 'checkpoint_index': index,
             'completed_training_iterations': index+1, 'output': str(output), 'job_id': job_id,
@@ -136,8 +139,9 @@ def main():
     parser.add_argument('--job-id', default='APPROVED_JOB')
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--attempt', type=int, default=0)
     args = parser.parse_args()
-    plan = build_plan(args.source, args.checkpoint, args.output, args.job_id)
+    plan = build_plan(args.source, args.checkpoint, args.output, args.job_id, args.attempt)
     if args.execute:
         run(plan, args.env_file)
     else:

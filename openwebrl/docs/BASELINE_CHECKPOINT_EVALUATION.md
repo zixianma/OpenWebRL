@@ -104,3 +104,23 @@ are `evaluations/qcq7i4ug-287046-after21` and `...-after22`. Each includes an
 `evaluation.log`, checkpoint validation, and separate W&B identity. The
 submission receipt is `logs/submission-baseline-eval-287046.json`. This approval
 does not authorize another submission or an extension.
+
+Job 287046 failed during startup after **2:13**, before any task evaluation:
+the native `num_rollout=0` path initialized an optimizer scheduler with zero
+decay steps. The wrapper now supplies a positive initialization horizon and
+`--use-checkpoint-opt-param-scheduler`; the actual saved scheduler then replaces
+that initialization state. A CPU check using both real checkpoint states
+verified exact scheduler restoration, unchanged Adam counters (280 and 292),
+and zero requested training rollouts. Evidence:
+`evaluations/eval_only_scheduler_cpu_validation.json`. No training source or
+checkpoint was changed.
+
+The batch controller now waits for a per-attempt `retry_after_repair` marker
+after a worker failure, bounded by the original allocation deadline. This lets
+the supervising agent diagnose and repair within paid time; it does not retry
+blindly or extend the allocation. Retry outputs and W&B runs have distinct
+attempt suffixes. Cancel the allocation if a failure requires human input.
+
+A fixed replacement request of 4 H200s for **2:55**, 16 CPUs / 480 GiB, is awaiting
+explicit approval: estimated **$10.50**, plus judge API usage. The failed attempt
+used approximately $0.13 of GPU time. No replacement has yet been submitted.

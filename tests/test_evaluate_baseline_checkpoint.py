@@ -36,6 +36,8 @@ class EvaluationTest(unittest.TestCase):
         self.assertNotEqual(p['wandb_run_id'], 'qcq7i4ug')
         self.assertEqual(p['environment']['RAY_ADDRESS'], 'local')
         self.assertIn('--eval-config', p['command'])
+        self.assertEqual(p['command'][p['command'].index('--lr-decay-iters')+1], '1')
+        self.assertIn('--use-checkpoint-opt-param-scheduler', p['command'])
         self.assertFalse(self.output.exists())
 
     def test_missing_checkpoint_component_rejected(self):
