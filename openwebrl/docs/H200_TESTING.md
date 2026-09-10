@@ -1,5 +1,44 @@
 # H200 runtime and validation
 
+## Job 286094 completed six additional iterations, 2026-09-10
+
+The allocation ended at its planned shutdown boundary around 08:10 PDT after
+7:57:23, with Slurm state COMPLETED. The training launcher's raw timeout code
+124 was normalized to success by the supervisor. Iterations 24–29 completed,
+adding 72 Adam updates and reaching checkpoint 28 / **374 durable updates**.
+All 72 optimizer records and all six reward observations match W&B. The final
+checkpoint passed metadata, shard-extent, cursor and finite CPU-sample checks;
+its full GPU reload is required before the next training continuation.
+
+| Iteration | Train reward | Completed-attempt success |
+| --- | ---: | ---: |
+| 24 | 0.409143 | 39.32% |
+| 25 | 0.484587 | 48.79% |
+| 26 | 0.426119 | 42.32% |
+| 27 | 0.486834 | 53.89% |
+| 28 | 0.456150 | 41.18% |
+| 29 | 0.456683 | 46.87% |
+
+Host memory peaked at 401.03 GiB with zero memory-limit, OOM, or OOM-kill
+events. One finite gradient-norm spike to 12.39 was investigated; the next
+update returned to 1.23 and subsequent iterations saved normally. See
+`GRADIENT_DIAGNOSTICS.md`. Collection 30 was interrupted at 17/48 accepted
+groups and has no complete recovery batch or archive. It must be recollected;
+evaluation 30 remains due after that iteration trains and saves.
+
+The new SFT-oriented archive preserved **608 completed groups / 3,040
+trajectories**, including 107 discarded all-success groups and 86 discarded
+all-failure groups. Every completed archive's group records and image hashes
+were checked, and its independently calculated rewards matched W&B.
+Earlier rejected collections and the unfinished collection 30 are not fully
+archived. See `ROLLOUT_ARCHIVE.md` for schema and coverage.
+
+Evidence and the next-resume handoff are in `allocation_end_audit.json` under
+`openwebrl-runtime/runs/openwebrl-4b-reference-286094-20260910T071441`, and
+`openwebrl-runtime/current_baseline.json`. A new four-H200, eight-hour request
+passed Slurm preflight at an estimated $28.80; preflight does not submit a job
+or authorize further spending.
+
 ## Approved continuation 286094, 2026-09-10 00:17 PDT
 
 The user explicitly approved four H200 GPUs for eight hours, 16 CPUs and
