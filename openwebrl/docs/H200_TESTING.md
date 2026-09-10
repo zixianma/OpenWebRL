@@ -1,5 +1,32 @@
 # H200 runtime and validation
 
+## Approved continuation 286094, 2026-09-10 00:17 PDT
+
+The user explicitly approved four H200 GPUs for eight hours, 16 CPUs and
+480 GiB RAM: 32 GPU-hours, estimated $28.80. Job 286094 is running on g003,
+ending at 08:12 PDT, with a three-minute training shutdown margin. Its batch
+controller completed the full four-GPU model/optimizer restore of checkpoint
+22 at 302 Adam updates, then launched online collection 24 in the same W&B
+lineage `qcq7i4ug`. W&B reports the run as running. The prepared
+`reference-stage1-tp4-eval-cache-20260909` source preserves the recipe and adds
+the post-evaluation cache release described below.
+
+The preceding job 285546 was canceled at the user's request after 7:24:54.
+It trained saved collection 19 and fresh collections 20–23, reaching checkpoint
+22 / 302 durable updates, and completed evaluation 20. Collection 24 stopped
+at 35/48 accepted groups with no saved recovery batch and must be recollected.
+Fresh collection times were 54–64 minutes, with roughly 19–23 minutes for
+training/save. The new allocation is expected to finish another five or six
+iterations, reaching about 28–29; this is an estimate, not a guarantee. The
+next scheduled evaluation is iteration 30.
+
+Current files are under runtime `runs/openwebrl-4b-reference-286094-20260910T071441`;
+submission and restore receipts are `logs/submission-qcq7i4ug-286094.json` and
+`logs/resume-286094-4gpu-verification.json`. Supervise about every 15 minutes,
+audit rewards and optimizer records in W&B at iteration boundaries, validate
+each saved checkpoint, and update `current_baseline.json`. No additional
+allocation or budget extension is authorized.
+
 ## Evaluation cache retention corrected live, 2026-09-09 19:57 PDT
 
 During fresh collection 21, host memory rose to 358 GiB despite zero cgroup
