@@ -283,6 +283,16 @@ def train(args):
                     rollout_manager.eval.remote(rollout_id),
                     label=f"rollout_manager.eval({rollout_id})",
                 )
+                if args.save_debug_rollout_data:
+                    eval_path = args.save_debug_rollout_data.format(rollout_id=f"eval_{rollout_id}")
+                    advised = evict_file_cache(eval_path, sync=True)
+                    logger.info("Advised completed evaluation recovery-file cache: path=%s bytes=%d", eval_path, advised)
+                cache_release = evict_file_backed_cache()
+                logger.info(
+                    "Advised completed evaluation multimodal cache: files=%d bytes=%d",
+                    cache_release["files"],
+                    cache_release["bytes"],
+                )
 
             _advance_train_progress_bar(progress_bar)
     finally:

@@ -1,5 +1,29 @@
 # H200 runtime and validation
 
+## Evaluation cache retention corrected live, 2026-09-09 19:57 PDT
+
+During fresh collection 21, host memory rose to 358 GiB despite zero cgroup
+memory-limit/OOM events. Cgroup accounting showed about 294 GiB in the `file`
+category (including 124 GiB shared memory) and 59 GiB anonymous memory.
+The existing cache-release calls covered training batches but omitted the
+evaluation recovery file and completed evaluation image mappings.
+
+A CPU-only step inside authorized job 285546 applied `fsync` and
+`POSIX_FADV_DONTNEED` to `rollout_recovery/eval_19.pt` and node-local mapping
+files written before collection 21 began at 19:36:55 PDT. It retained all files,
+preserved their sizes, excluded current-collection mappings, and reported no
+errors across 400 files. Immediate cgroup use fell from **358.2 to 219.9 GiB**.
+Advised file lengths total 421.3 GB; that is not the amount of resident memory
+released. Evidence: `evaluation_20_cache_release.json` in the current run.
+
+The working trainer now applies the same recovery-file and mapping advice
+after successful evaluation, before the next collection. Python compilation
+and the evaluation filename convention were checked; the shared cache helpers
+had already passed transport tests and the live cleanup above. This change
+cannot alter the already imported driver, so the one-time live cleanup handles
+this allocation's evaluation 20. Another evaluation is not expected before
+the allocation ends.
+
 ## Iteration 20 trained and evaluated, 2026-09-09 19:40 PDT
 
 Job 285546 completed fresh collection 20 in 3,828.3 seconds: 48 accepted
