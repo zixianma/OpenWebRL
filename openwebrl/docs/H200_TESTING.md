@@ -1,5 +1,23 @@
 # H200 runtime and validation
 
+## Approved continuation 286382, 2026-09-10 09:47 PDT
+
+The user explicitly approved another four H200 GPUs for eight hours, 16 CPUs,
+and 480 GiB RAM: 32 GPU-hours, estimated $28.80. Job 286382 is running on g002
+from 09:41 to 17:41 PDT, with a three-minute shutdown margin. Full four-GPU
+model/optimizer restoration of checkpoint 28 / 374 Adam updates passed before
+the online stage started. W&B `qcq7i4ug` reports running, and collection 30 is
+underway. Evaluation 30 is due after that iteration trains and saves; it must
+not be skipped. The previous evaluation took about 52 minutes.
+
+Completed-group archiving is enabled automatically. The resume wrapper now
+refreshes its archive-directory pointer instead of carrying over the prior
+run's path; 22 CPU checks passed, including that regression. The current run
+directory is `openwebrl-runtime/runs/openwebrl-4b-reference-286382-20260910T164338`.
+The four-GPU restore receipt is `logs/resume-286382-4gpu-verification.json` under
+the runtime root. Preserve the baseline recipe and monitor about every
+15 minutes, with closer checks around failures and stage transitions.
+
 ## Job 286094 completed six additional iterations, 2026-09-10
 
 The allocation ended at its planned shutdown boundary around 08:10 PDT after
