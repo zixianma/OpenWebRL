@@ -29,6 +29,9 @@ def main():
     parser.add_argument("--env-file", type=Path, default=Path(".env"))
     parser.add_argument("--project", default=None)
     parser.add_argument("--entity", default=None)
+    parser.add_argument("--name", default="arm-c2-filtered-sft-openwebrl-4b")
+    parser.add_argument("--group", default="arm-c2-filtered-sft")
+    parser.add_argument("--tag", action="append", default=[])
     parser.add_argument("--poll-seconds", type=float, default=10)
     args = parser.parse_args()
     load_dotenv(args.env_file, override=False)
@@ -63,10 +66,10 @@ def main():
         entity=args.entity,
         id=state["run_id"],
         resume="allow",
-        name="arm-c2-filtered-sft-openwebrl-4b",
-        group="arm-c2-filtered-sft",
+        name=args.name,
+        group=args.group,
         job_type="sft",
-        tags=["arm", "c2", "action-level-sft", "openwebrl-4b"],
+        tags=["arm", "c2", "action-level-sft", "openwebrl-4b", *args.tag],
         dir=str(wandb_root),
         config={
             **training,
