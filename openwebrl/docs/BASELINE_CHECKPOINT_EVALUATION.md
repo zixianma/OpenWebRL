@@ -89,6 +89,18 @@ The prepared `scripts/evaluate_baseline_pair_4gpu.sbatch` requests **4 H200 GPUs
 both until completion. Three hours allows margin beyond the observed 51-minute
 evaluation per checkpoint and restoration/startup overhead.
 
-**This evaluation allocation has not been submitted or approved.** CPU planning
-and safety checks do not substitute for GPU verification of this new wrapper.
-Explicit approval of this resource request and budget is required before sbatch.
+The user explicitly approved this request on 2026-09-10. **Job 287046** started
+at 15:49 PDT on g002, with an allocation deadline of 18:49 PDT. Slurm assigned
+GPUs 4–7 and CPUs 32–47, separate from training job 286382's GPUs 0–3 and CPUs
+0–15. The first evaluation created its own local Ray instance. The wrapper now
+explicitly sets `RAY_ADDRESS=local` for subsequent workers so another local
+training cluster cannot be selected automatically. Four CPU tests and the
+preserved launcher's dry run passed; actual GPU restoration and completed
+evaluation results require live verification.
+
+The current evaluation pointer is runtime `evaluations/current_baseline_eval.json`.
+The Slurm log is `logs/slurm-baseline-eval-287046.out`; per-checkpoint outputs
+are `evaluations/qcq7i4ug-287046-after21` and `...-after22`. Each includes an
+`evaluation.log`, checkpoint validation, and separate W&B identity. The
+submission receipt is `logs/submission-baseline-eval-287046.json`. This approval
+does not authorize another submission or an extension.

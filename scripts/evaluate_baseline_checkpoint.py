@@ -47,6 +47,7 @@ def build_plan(source, checkpoint, output, job_id):
         'SAVE_DIR': str(output / 'runtime'), 'SLIME_LOAD_CHECKPOINT': str(output / 'checkpoint-view'),
         'SLIME_CKPT_STEP': str(index), 'WANDB_MODE': 'online', 'WANDB_RUN_ID': run_id,
         'JUDGE_MODEL': 'gpt-4.1', 'OMP_NUM_THREADS': '2',
+        'RAY_ADDRESS': 'local',
         'RAY_DEFAULT_OBJECT_STORE_MAX_MEMORY_BYTES': str(8 * 1024**3),
         'OPENWEBRL_MULTIMODAL_STORAGE_DIR': f'/tmp/openwebrl-eval-{job_id}-{index}-multimodal',
         'SLIME_ADAPTIVE_QUERY_BLACKLIST_PATH': str(source / 'reference_empty_blacklist.txt'),

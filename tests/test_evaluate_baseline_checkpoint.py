@@ -34,6 +34,7 @@ class EvaluationTest(unittest.TestCase):
         self.assertEqual(p['environment']['NUM_ROLLOUT'], '0')
         self.assertEqual(p['environment']['SLIME_CKPT_STEP'], '21')
         self.assertNotEqual(p['wandb_run_id'], 'qcq7i4ug')
+        self.assertEqual(p['environment']['RAY_ADDRESS'], 'local')
         self.assertIn('--eval-config', p['command'])
         self.assertFalse(self.output.exists())
 
