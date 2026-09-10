@@ -1,0 +1,49 @@
+{
+  "comparison": "OpenWebRL/OpenWebRL-4B-SFT starting actor vs C2 ablation 1A endpoint",
+  "base_run": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/baseline",
+  "sft_runs": [
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-ablation-1a/evaluation/checkpoint-scaling-100/endpoint-000263/online-mind2web",
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-ablation-1a/evaluation/holdout-200-vs-c2/1a-endpoint-000263/online-mind2web"
+  ],
+  "all_scheduled_unavailable_as_failure": {
+    "tasks": 300,
+    "base_successes": 90,
+    "sft_successes": 100,
+    "difference_percentage_points": 3.3333333333333335,
+    "sft_only_wins": 35,
+    "base_only_wins": 25,
+    "mcnemar_exact_two_sided_p": 0.2450608330229457,
+    "paired_bootstrap_95_percent_interval_pp": [
+      -1.6666666666666667,
+      8.333333333333334
+    ]
+  },
+  "common_valid": {
+    "tasks": 245,
+    "base_successes": 83,
+    "sft_successes": 99,
+    "difference_percentage_points": 6.530612244897959,
+    "sft_only_wins": 34,
+    "base_only_wins": 18,
+    "mcnemar_exact_two_sided_p": 0.03648340000835981,
+    "paired_bootstrap_95_percent_interval_pp": [
+      0.8163265306122449,
+      12.244897959183673
+    ]
+  },
+  "marginal": {
+    "base": {
+      "successes": 90,
+      "valid": 267
+    },
+    "sft": {
+      "successes": 100,
+      "valid": 256
+    }
+  },
+  "limitations": [
+    "The same 300 task IDs are used, but the starting-actor and SFT trajectories were collected at different times.",
+    "The 1A result combines a fixed-100 run and a later concurrent holdout-200 run.",
+    "Task-paired inference isolates task identity but does not remove website, judge, sampling-seed, or date variability."
+  ]
+}

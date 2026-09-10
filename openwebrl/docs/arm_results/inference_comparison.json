@@ -1,0 +1,67 @@
+{
+  "summaries": {
+    "baseline": {
+      "scheduled": 300,
+      "attempted": 300,
+      "valid": 267,
+      "successes": 90,
+      "unavailable": 33,
+      "success_rate_all_scheduled": 0.3,
+      "success_rate_valid": 0.33707865168539325
+    },
+    "scalar": {
+      "scheduled": 300,
+      "attempted": 300,
+      "valid": 251,
+      "successes": 114,
+      "unavailable": 49,
+      "success_rate_all_scheduled": 0.38,
+      "success_rate_valid": 0.4541832669322709
+    },
+    "selection": {
+      "scheduled": 300,
+      "attempted": 300,
+      "valid": 256,
+      "successes": 128,
+      "unavailable": 44,
+      "success_rate_all_scheduled": 0.4266666666666667,
+      "success_rate_valid": 0.5
+    }
+  },
+  "paired": {
+    "scalar": {
+      "common_valid_tasks": 244,
+      "baseline_success_rate": 0.36065573770491804,
+      "treatment_success_rate": 0.46311475409836067,
+      "difference_percentage_points": 10.245901639344263,
+      "paired_task_bootstrap_95_percent_interval_pp": [
+        4.098360655737705,
+        16.39344262295082
+      ],
+      "treatment_only_wins": 43,
+      "baseline_only_wins": 18,
+      "mcnemar_exact_two_sided_p": 0.0018681010309752506,
+      "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+    },
+    "selection": {
+      "common_valid_tasks": 247,
+      "baseline_success_rate": 0.3441295546558704,
+      "treatment_success_rate": 0.5101214574898786,
+      "difference_percentage_points": 16.59919028340081,
+      "paired_task_bootstrap_95_percent_interval_pp": [
+        10.121457489878543,
+        22.672064777327936
+      ],
+      "treatment_only_wins": 57,
+      "baseline_only_wins": 16,
+      "mcnemar_exact_two_sided_p": 1.5256583158538737e-06,
+      "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+    }
+  },
+  "reported_reference_rates": {
+    "baseline": 0.338,
+    "scalar": 0.463,
+    "selection": 0.511
+  },
+  "reference_limitation": "README task denominators and all historical settings are not fully recovered."
+}

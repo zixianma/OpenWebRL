@@ -179,11 +179,14 @@ async def _post(client, url, payload, max_retries=60, headers=None):
 
             if isinstance(e, httpx.HTTPStatusError):
                 response_text = e.response.text
+                # The identical oversized prompt cannot become valid on retry.
+                if e.response.status_code == 400 and "maximum context length" in response_text:
+                    raise
             else:
                 response_text = None
 
             logger.info(
-                f"Error: {e}, retrying... (attempt {retry_count}/{max_retries}, url={url}, response={response_text})"
+                f"Error: {type(e).__name__}: {e}, retrying... (attempt {retry_count}/{max_retries}, url={url}, response={response_text})"
             )
             if retry_count >= max_retries:
                 logger.info(f"Max retries ({max_retries}) reached, failing... (url={url})")
@@ -208,7 +211,7 @@ def init_http_client(args):
     if _http_client is None:
         _http_client = httpx.AsyncClient(
             limits=httpx.Limits(max_connections=_client_concurrency),
-            timeout=httpx.Timeout(None),
+            timeout=httpx.Timeout(None, connect=getattr(args, "http_connect_timeout_secs", None)),
         )
 
     # Optionally initialize distributed POST via Ray without changing interfaces

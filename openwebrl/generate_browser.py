@@ -1261,6 +1261,14 @@ def _save_sample(
     with open(path_to_save, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
+async def _save_rollout_sample(args, **kwargs):
+    if getattr(args, "browser_async_artifact_io", False):
+        from openwebrl.artifact_io import run_artifact_io
+        await run_artifact_io(_save_sample, **kwargs)
+    else:
+        _save_sample(**kwargs)
+
+
 # ---------------------------------------------------------------------------
 # Main generate function
 # ---------------------------------------------------------------------------
@@ -1617,7 +1625,7 @@ async def _generate_trajectory_sample_impl(
         try:
             path_to_save_generated_samples = getattr(args, "path_to_save_generated_samples", "")
             if path_to_save_generated_samples and mm_messages:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=os.path.join(path_to_save_generated_samples, "trajectory", _EXPT_ID),
                     sample_id=sample_id,
                     mm_messages=mm_messages,
@@ -1626,7 +1634,7 @@ async def _generate_trajectory_sample_impl(
             debug_trace_dir = _get_debug_trace_dir(args, "rollout", "trajectory")
             save_debug_trace, trace_id = _get_or_create_debug_trace_info(args, sample)
             if save_debug_trace and trace_id and debug_trace_dir and mm_messages:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=debug_trace_dir,
                     sample_id=trace_id,
                     mm_messages=mm_messages,
@@ -1820,14 +1828,23 @@ async def _generate_turn_sample_impl(
             turn_sample.multimodal_inputs = {"images": img_list}
             turn_sample.multimodal_train_inputs = mm_train
 
-            # 7. Run inference ---------------------------------------------
-            llm_response, new_tokens, new_logprobs, finish_type = await _run_inference_step(
-                url,
-                input_text,
-                sampling_params,
-                img_list,
-                timeout_secs=getattr(args, "inference_step_timeout_secs", None),
-            )
+            # 7. Run inference. The optional selector is enabled only by arm_eval.
+            selector = getattr(args, "browser_action_selector", None)
+            if selector is None:
+                llm_response, new_tokens, new_logprobs, finish_type = await _run_inference_step(
+                    url, input_text, sampling_params, img_list,
+                    timeout_secs=getattr(args, "inference_step_timeout_secs", None),
+                )
+            else:
+                selected_output, arm_metadata = await selector(
+                    infer=_run_inference_step, url=url, input_text=input_text,
+                    sampling_params=sampling_params, images=img_list,
+                    observation=observation, history=[ts.response for ts in turn_samples],
+                    task=task_data.get("intent", ""), task_id=task_id, turn=step,
+                    timeout=getattr(args, "inference_step_timeout_secs", None),
+                )
+                llm_response, new_tokens, new_logprobs, finish_type = selected_output
+                turn_sample.metadata["arm"] = arm_metadata
             # --------------------------------------------------------------
             if _should_sample_llm_output(args):
                 logger.info(f"Task {task_id} step {step} llm_response={llm_response[:1000]!r}")
@@ -1976,7 +1993,7 @@ async def _generate_turn_sample_impl(
         try:
             path_to_save_generated_samples = getattr(args, "path_to_save_generated_samples", "")
             if path_to_save_generated_samples and mm_messages:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=os.path.join(path_to_save_generated_samples, "turn", _EXPT_ID),
                     sample_id=sample_id,
                     mm_messages=mm_messages,
@@ -1986,7 +2003,7 @@ async def _generate_turn_sample_impl(
             last_turn_sample = turn_samples[-1] if turn_samples else sample
             save_debug_trace, trace_id = _get_or_create_debug_trace_info(args, last_turn_sample)
             if save_debug_trace and trace_id and debug_trace_dir and mm_messages and turn_samples:
-                _save_sample(
+                await _save_rollout_sample(args,
                     samples_dir=debug_trace_dir,
                     sample_id=trace_id,
                     mm_messages=mm_messages,

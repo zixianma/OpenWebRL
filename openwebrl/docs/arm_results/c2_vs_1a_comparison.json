@@ -1,0 +1,325 @@
+{
+  "cohort_manifest": "/gpfs/projects/krishna/zixianma/OpenWebRL/openwebrl/docs/arm_c2_full300_cohorts.json",
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "fresh_holdout_200_runs": {
+    "c2-update-000500": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-ablation-1a/evaluation/holdout-200-vs-c2/c2-update-000500/online-mind2web",
+    "1a-endpoint-000263": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-ablation-1a/evaluation/holdout-200-vs-c2/1a-endpoint-000263/online-mind2web"
+  },
+  "existing_fixed_100_runs": {
+    "c2-update-000500": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-full-282782-20260908T075414Z/evaluation/checkpoint-scaling-100/update-000500/online-mind2web",
+    "1a-endpoint-000263": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/c2-ablation-1a/evaluation/checkpoint-scaling-100/endpoint-000263/online-mind2web"
+  },
+  "cohorts": {
+    "all_300": {
+      "rates": {
+        "c2-update-000500": {
+          "scheduled": 300,
+          "attempted": 300,
+          "valid": 258,
+          "unavailable": 42,
+          "missing": 0,
+          "successes": 95,
+          "overall": 0.31666666666666665,
+          "overall_wilson_95": [
+            0.26662835068573615,
+            0.37134073876326396
+          ],
+          "valid_only": 0.3682170542635659,
+          "valid_wilson_95": [
+            0.3116980154438409,
+            0.4286028509420068
+          ]
+        },
+        "1a-endpoint-000263": {
+          "scheduled": 300,
+          "attempted": 300,
+          "valid": 256,
+          "unavailable": 44,
+          "missing": 0,
+          "successes": 100,
+          "overall": 0.3333333333333333,
+          "overall_wilson_95": [
+            0.2823934472922627,
+            0.38848754311591926
+          ],
+          "valid_only": 0.390625,
+          "valid_wilson_95": [
+            0.33289789371255574,
+            0.45158607488060365
+          ]
+        }
+      },
+      "paired_common_valid": {
+        "common_valid": 239,
+        "right_wins": 31,
+        "right_losses": 23,
+        "net_wins": 8,
+        "mcnemar_exact_two_sided_p": 0.34089094122009733
+      },
+      "behavior": {
+        "c2-update-000500": {
+          "scheduled": 300,
+          "attempted": 300,
+          "valid": 258,
+          "successes": 95,
+          "mean_steps": 15.876363636363637,
+          "median_steps": 12,
+          "termination_rate": 0.5927272727272728,
+          "step_cap_30_rate": 0.33090909090909093,
+          "scroll_call_fraction": 0.08479479298499368,
+          "repeated_primary_action_rate": 0.5928872250818905,
+          "tool_call_counts": {
+            "click": 2789,
+            "write": 582,
+            "scroll": 469,
+            "press_keys": 373,
+            "goto_url": 292,
+            "go_back": 207,
+            "wait": 204,
+            "new_tab": 198,
+            "done": 168,
+            "switch_tab": 162,
+            "drag": 73,
+            "close_tab": 14
+          }
+        },
+        "1a-endpoint-000263": {
+          "scheduled": 300,
+          "attempted": 300,
+          "valid": 256,
+          "successes": 100,
+          "mean_steps": 15.421245421245422,
+          "median_steps": 13,
+          "termination_rate": 0.608058608058608,
+          "step_cap_30_rate": 0.2967032967032967,
+          "scroll_call_fraction": 0.10602189781021898,
+          "repeated_primary_action_rate": 0.6035559827006247,
+          "tool_call_counts": {
+            "click": 2810,
+            "scroll": 581,
+            "write": 525,
+            "press_keys": 349,
+            "goto_url": 258,
+            "wait": 254,
+            "new_tab": 171,
+            "done": 166,
+            "switch_tab": 158,
+            "go_back": 154,
+            "drag": 51,
+            "close_tab": 2,
+            "go_forward": 1
+          }
+        }
+      }
+    },
+    "checkpoint_selection_holdout_200": {
+      "rates": {
+        "c2-update-000500": {
+          "scheduled": 200,
+          "attempted": 200,
+          "valid": 179,
+          "unavailable": 21,
+          "missing": 0,
+          "successes": 62,
+          "overall": 0.31,
+          "overall_wilson_95": [
+            0.2499894483607809,
+            0.37717177566258037
+          ],
+          "valid_only": 0.3463687150837989,
+          "valid_wilson_95": [
+            0.2805531650724347,
+            0.41863978408284147
+          ]
+        },
+        "1a-endpoint-000263": {
+          "scheduled": 200,
+          "attempted": 200,
+          "valid": 177,
+          "unavailable": 23,
+          "missing": 0,
+          "successes": 67,
+          "overall": 0.335,
+          "overall_wilson_95": [
+            0.2732408697841632,
+            0.40297808792033485
+          ],
+          "valid_only": 0.3785310734463277,
+          "valid_wilson_95": [
+            0.31037399946881006,
+            0.45184866628265974
+          ]
+        }
+      },
+      "paired_common_valid": {
+        "common_valid": 168,
+        "right_wins": 23,
+        "right_losses": 15,
+        "net_wins": 8,
+        "mcnemar_exact_two_sided_p": 0.2558750795433298
+      },
+      "behavior": {
+        "c2-update-000500": {
+          "scheduled": 200,
+          "attempted": 200,
+          "valid": 179,
+          "successes": 62,
+          "mean_steps": 16.61904761904762,
+          "median_steps": 14,
+          "termination_rate": 0.5661375661375662,
+          "step_cap_30_rate": 0.3544973544973545,
+          "scroll_call_fraction": 0.08721078057462497,
+          "repeated_primary_action_rate": 0.5923984272608126,
+          "tool_call_counts": {
+            "click": 1958,
+            "write": 454,
+            "scroll": 343,
+            "press_keys": 257,
+            "goto_url": 208,
+            "go_back": 163,
+            "wait": 146,
+            "new_tab": 137,
+            "done": 111,
+            "switch_tab": 102,
+            "drag": 45,
+            "close_tab": 9
+          }
+        },
+        "1a-endpoint-000263": {
+          "scheduled": 200,
+          "attempted": 200,
+          "valid": 177,
+          "successes": 67,
+          "mean_steps": 15.302702702702703,
+          "median_steps": 13,
+          "termination_rate": 0.6324324324324324,
+          "step_cap_30_rate": 0.2810810810810811,
+          "scroll_call_fraction": 0.10916784203102962,
+          "repeated_primary_action_rate": 0.6108247422680413,
+          "tool_call_counts": {
+            "click": 1828,
+            "scroll": 387,
+            "write": 322,
+            "press_keys": 212,
+            "goto_url": 181,
+            "wait": 136,
+            "new_tab": 122,
+            "done": 117,
+            "switch_tab": 110,
+            "go_back": 104,
+            "drag": 23,
+            "close_tab": 2,
+            "go_forward": 1
+          }
+        }
+      }
+    },
+    "checkpoint_selection_100": {
+      "rates": {
+        "c2-update-000500": {
+          "scheduled": 100,
+          "attempted": 100,
+          "valid": 79,
+          "unavailable": 21,
+          "missing": 0,
+          "successes": 33,
+          "overall": 0.33,
+          "overall_wilson_95": [
+            0.24563122734128034,
+            0.4269465620490947
+          ],
+          "valid_only": 0.4177215189873418,
+          "valid_wilson_95": [
+            0.315266281401218,
+            0.527807462288668
+          ]
+        },
+        "1a-endpoint-000263": {
+          "scheduled": 100,
+          "attempted": 100,
+          "valid": 79,
+          "unavailable": 21,
+          "missing": 0,
+          "successes": 33,
+          "overall": 0.33,
+          "overall_wilson_95": [
+            0.24563122734128034,
+            0.4269465620490947
+          ],
+          "valid_only": 0.4177215189873418,
+          "valid_wilson_95": [
+            0.315266281401218,
+            0.527807462288668
+          ]
+        }
+      },
+      "paired_common_valid": {
+        "common_valid": 71,
+        "right_wins": 8,
+        "right_losses": 8,
+        "net_wins": 0,
+        "mcnemar_exact_two_sided_p": 1.0
+      },
+      "behavior": {
+        "c2-update-000500": {
+          "scheduled": 100,
+          "attempted": 100,
+          "valid": 79,
+          "successes": 33,
+          "mean_steps": 14.244186046511627,
+          "median_steps": 10.0,
+          "termination_rate": 0.6511627906976745,
+          "step_cap_30_rate": 0.27906976744186046,
+          "scroll_call_fraction": 0.07884856070087609,
+          "repeated_primary_action_rate": 0.5941080196399345,
+          "tool_call_counts": {
+            "click": 831,
+            "write": 128,
+            "scroll": 126,
+            "press_keys": 116,
+            "goto_url": 84,
+            "new_tab": 61,
+            "switch_tab": 60,
+            "wait": 58,
+            "done": 57,
+            "go_back": 44,
+            "drag": 28,
+            "close_tab": 5
+          }
+        },
+        "1a-endpoint-000263": {
+          "scheduled": 100,
+          "attempted": 100,
+          "valid": 79,
+          "successes": 33,
+          "mean_steps": 15.670454545454545,
+          "median_steps": 12.0,
+          "termination_rate": 0.5568181818181818,
+          "step_cap_30_rate": 0.32954545454545453,
+          "scroll_call_fraction": 0.10025839793281653,
+          "repeated_primary_action_rate": 0.5899031811894883,
+          "tool_call_counts": {
+            "click": 982,
+            "write": 203,
+            "scroll": 194,
+            "press_keys": 137,
+            "wait": 118,
+            "goto_url": 77,
+            "go_back": 50,
+            "done": 49,
+            "new_tab": 49,
+            "switch_tab": 48,
+            "drag": 28
+          }
+        }
+      }
+    }
+  },
+  "notes": [
+    "The fresh 200-task holdout is the primary comparison because the fixed 100 informed checkpoint selection.",
+    "Both policies run concurrently on the fresh holdout, controlling live-site timing within dispatch waves.",
+    "The all-300 aggregate combines the fresh holdout with earlier fixed-100 evaluations collected at different times.",
+    "McNemar comparisons include only tasks valid in both runs; overall rates retain every scheduled task.",
+    "Unavailable-task retries, if any, must be reported separately."
+  ]
+}
