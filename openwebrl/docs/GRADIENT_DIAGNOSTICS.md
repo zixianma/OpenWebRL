@@ -81,6 +81,30 @@ are under the current run directory
 
 ## Metrics to watch alongside reward
 
+### Additional spike investigated during job 286094
+
+At iteration 26, second PPO epoch, minibatch 1 (zero-based), the norm reached
+12.3879 (W&B history row 459, legacy `train/step=307`). The next update returned
+to 1.2274. PPO KL was 0.001587 and clipped-objective fraction 0.011807 at the
+spike. The configured norm threshold remained 1.0; clipping scales this gradient
+by approximately 0.0807 before Adam, which does not imply the same factor for
+the eventual parameter update.
+
+CPU metadata reconstruction used logged seed 34440 and independently matched
+the spike batch's mean absolute advantage to the trainer. Its 256 turns came
+from 142 trajectories, at most five turns from one trajectory. Mean absolute
+advantage was 0.8091, maximum 1.7889; response lengths ranged from 147 to 644
+tokens (mean 335.3). There were no removed samples or nonfinite stored log
+probabilities. These checks again found no clear metadata pathology, but do
+not identify the causal sample or measure per-sample gradient contributions.
+
+Training continued, all twelve iteration-26 updates matched W&B, and checkpoint
+25 validated at 338 Adam updates. The sample-ID report is
+`openwebrl-runtime/runs/openwebrl-4b-reference-286094-20260910T071441/gradient_spike_iteration26.json`.
+It was collected while the latter half of the epoch was still running, so later
+batch gradient fields in that report are null; the completed optimizer audit is
+`iteration_26_wandb_audit.json`. No samples or recipe settings were changed.
+
 | Existing metric | What to look for |
 |---|---|
 | `eval/online-mind2web-monitor/task/success_rate_all_completed` | Held-out task performance. Compare with invalid rate, not the turn-weighted evaluation reward. |
