@@ -63,4 +63,6 @@ def collection_metrics(args, completed_groups, accepted_groups, elapsed):
         metrics['perf/seconds_per_accepted_group'] = elapsed/accepted
     if elapsed > 0:
         metrics['perf/completed_trajectories_per_second'] = sum(map(len, completed_groups))/elapsed
+    from slime.utils.rollout_archive import maybe_archive_completed_groups
+    metrics.update(maybe_archive_completed_groups(args, completed_groups, accepted_groups))
     return metrics
