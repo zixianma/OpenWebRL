@@ -1,5 +1,30 @@
 # H200 runtime and validation
 
+## Iteration 20 trained and evaluated, 2026-09-09 19:40 PDT
+
+Job 285546 completed fresh collection 20 in 3,828.3 seconds: 48 accepted
+groups from 124 completed, 20 pending at cutoff, 144 submitted. The 1,685 turn
+samples gave reward 0.4326409496, verified at W&B history row 363. All 12 PPO
+updates completed and match W&B loss/KL/gradient-norm records. Checkpoint 19
+has **270 durable Adam updates**, scheduler offset +1, intact metadata and
+all eight shard extents, and its matching dataset cursor. Small CPU payload
+samples from two shards were finite. No full checkpoint-19 reload was done.
+
+The scheduled Online-Mind2Web evaluation completed all 300 tasks in about
+52 minutes. Task-level success was **95/300 = 31.67%**, versus 70/300 = 23.33%
+at iteration 10. There were 68 invalid trajectories (22.67%), versus 66 (22%)
+previously. Success among valid trajectories was 95/232 = 40.95%. These results
+are synchronized in W&B row 378; the task-level rate includes failed/invalid
+attempts in its denominator and should not be confused with turn-weighted
+reward metrics. Browser-evaluation variability remains a limitation.
+
+Training host memory stayed near 346 GiB and dropped to 237 GiB after save;
+there were no memory-limit, OOM or OOM-kill events through evaluation. Fresh
+collection 21 started automatically. Reports in the current run directory:
+`checkpoint_19_validation.json`, `iteration_20_wandb_audit.json`, and
+`iteration_20_eval_wandb_audit.json`. The persistent pointer marks evaluation
+20 complete and has no pending replay or evaluation.
+
 ## Replay saved successfully in job 285546, 2026-09-09 17:20 PDT
 
 Saved reward iteration 19 completed all 12 PPO updates. Checkpoint 18 now
