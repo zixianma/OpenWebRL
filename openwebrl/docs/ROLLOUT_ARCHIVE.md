@@ -23,6 +23,18 @@ probabilities, conversation metadata, and raw multimodal inputs. Group labels
 are `all_success`, `all_failure` (all valid rewards zero), `all_nonpositive`,
 `mixed`, and `contains_invalid`. These labels do not replace the actual rewards.
 
+Trajectory-level `reward` is null for invalid attempts, even when their turns
+retain numeric raw rewards. Recompute `train/reward` from accepted **turn** rewards,
+not the validity-filtered trajectory reward. The preserved reference filter can
+accept a trajectory marked `remove_sample`; training subsequently zeros its loss
+masks, but its raw reward still enters the collection reward and group reward
+normalization. Collection 30 demonstrated this: four masked turns with raw reward
+zero among 1,686 accepted turns. Its complete archive reproduced W&B reward
+`0.43001186239620404` and task success `259/610`. This is existing baseline behavior,
+not an archive-induced change. Evidence: `iteration_30_archive_audit.json` and
+`iteration_30_reward_wandb_audit.json` in
+`openwebrl-runtime/runs/openwebrl-4b-reference-286382-20260910T164338`.
+
 Screenshots are stored once per SHA-256 in the archive's `images/` directory.
 JSON image references contain a relative path, MIME type, byte count and hash;
 resolve them relative to `image_reference_root` in the manifest. Original data

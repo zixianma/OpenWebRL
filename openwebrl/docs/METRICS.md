@@ -139,6 +139,14 @@ Every alias is an exact copy of the source scalar; it does not rescore trajector
 
 For the first collection: `train/reward = 0.3874139626`; completed-attempt success is `202 / 525 = 0.3847619048`; valid-only success is `202 / 484 = 0.4173553719`; invalid rate is `41 / 525 = 0.0780952381`. These similar-looking rewards/rates have different meanings and denominators.
 
+The raw reward mean does not exclude accepted turns marked `remove_sample`. The
+preserved reference filter can admit such trajectories when their terminal raw
+reward exists. Their training loss masks are zeroed, while their rewards still
+enter group normalization and the collection reward mean. In collection 30,
+four of 1,686 accepted turns had this flag and raw reward zero; the archive's
+validity-filtered trajectory reward was null. See [ROLLOUT_ARCHIVE.md](ROLLOUT_ARCHIVE.md)
+for the audited example and the distinction between raw reward and valid outcome.
+
 ## 4. Per-update optimization metrics (`train/*`)
 
 These are computed over the selected optimizer batch, not fresh browser attempts. In the audited run `calculate_per_token_loss=False`, so the reducer first averages valid response tokens **within each turn sample**, then averages those sample means across the global batch. Prompt, observation, padding, and other masked tokens do not contribute.
