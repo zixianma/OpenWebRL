@@ -58,5 +58,19 @@ The hook was installed before collection 24 completed in job 286094. The
 telemetry module is imported at collection completion; no worker restart was
 needed. `rollout_archive_installation.json` and `archive_source_before/` in the
 run preserve installation provenance. All five baseline recipe hashes remain
-unchanged. Confirm the first live manifest before claiming coverage for
-collection 24.
+unchanged.
+
+Collection 24's live archive completed at 01:00 PDT: 88 groups, 440 trajectories,
+3,203 turns, and 2,290 unique images. It includes 11 rejected all-success groups,
+12 rejected all-failure groups, 17 rejected groups containing invalid attempts,
+and all 48 accepted groups. Archiving took 31.2 seconds. Every group JSON and
+image reference passed a subsequent audit, including byte sizes and SHA-256 for
+all images. Storage was 831,557,303 image bytes plus 59,114,630 compressed JSON
+bytes. Evidence: `iteration_24_archive_audit.json` in
+`openwebrl-runtime/runs/openwebrl-4b-reference-286094-20260910T071441`.
+
+The archive independently reproduced W&B history row 420:
+`train/reward=0.40914285714285714` across 1,750 accepted turns, and
+`train/task_success_rate=173/440=0.3931818181818182`. See
+`iteration_24_reward_wandb_audit.json`. Earlier rejected collections remain
+unavailable except any sparse debug traces that happened to be saved.

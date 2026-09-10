@@ -2,6 +2,24 @@
 
 Verified on 2026-09-07 against the running 4B reference baseline (`qcq7i4ug`), its isolated source snapshot, and the repository logging code. This document covers the metrics emitted by that baseline, plus clearly marked optional metric families. It does not imply that every metric exists in every run.
 
+### Completed-rollout archive metrics (enabled from collection 24, 2026-09-10)
+
+These scalars are emitted with collection metrics when the archive is enabled.
+They describe preservation of completed groups, including RL rejections; they
+do not change the reward or training population. See [ROLLOUT_ARCHIVE.md](ROLLOUT_ARCHIVE.md).
+
+| Metric | Calculation |
+| --- | --- |
+| `rollout/archive/groups` | Number of completed groups in the successfully finished archive. |
+| `rollout/archive/trajectories` | Sum of attempt counts across those groups. |
+| `rollout/archive/unique_images` | Distinct raw-image SHA-256 hashes referenced by this collection, including images already present in the shared archive. |
+| `rollout/archive/seconds` | Wall time spent writing the archive and completion manifest. |
+| `rollout/archive/errors` | Zero on successful archival, one on a caught archive failure; the other archive scalars are omitted on failure. |
+
+The first archive logged 88 groups, 440 trajectories, 2,290 images, 31.23 seconds,
+and zero errors, verified against W&B and local files. A collection interrupted
+before archival has no completed archive and no archival success metric.
+
 ## 1. Why one reward measurement can accompany 14 optimizer updates
 
 A **prompt group** is one sampled task with up to five browser attempts. A **trajectory** is one attempt. A **turn sample** is one assistant action within an attempt. A **rollout iteration** collects a training batch, trains on that batch, and then updates the inference model. A **PPO epoch** is one shuffled training pass over the selected turn samples. An **optimizer update** processes a global batch of turn samples, using gradient accumulation where needed.
