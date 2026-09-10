@@ -44,9 +44,12 @@ def main():
     parser.add_argument("--allow-shared-gpu", action="store_true",
                         help="Allow another recorded evaluator server on the assigned GPU")
     parser.add_argument("--mem-fraction-static", type=float, default=0.4)
+    parser.add_argument("--parallel", type=int, default=8)
     args = parser.parse_args()
     if not 0.1 <= args.mem_fraction_static <= 0.8:
         parser.error("--mem-fraction-static must be between 0.1 and 0.8")
+    if args.parallel < 1:
+        parser.error("--parallel must be positive")
     if os.getenv("SLURM_JOB_ID") != args.job_id or f"/job_{args.job_id}/" not in Path("/proc/self/cgroup").read_text():
         raise ValueError("Checkpoint evaluation must run in its authorized allocation")
     record = parse_job_record(subprocess.check_output(
@@ -145,7 +148,7 @@ def main():
         command = ["timeout", "--signal=TERM", "--kill-after=120", str(remaining),
                    str(ARM_PYTHON), "-m", "openwebrl.arm_eval", "--mode", "baseline",
                    "--actor", str(merged), "--actor-port", str(args.actor_port), "--output", str(output),
-                   "--parallel", "8", "--task-indices", ",".join(map(str, sample["indices"])),
+                   "--parallel", str(args.parallel), "--task-indices", ",".join(map(str, sample["indices"])),
                    "--seed", "42", "--temperature", "0.7", "--top-p", "0.9",
                    "--max-new-tokens", "1024", "--max-steps", "30", "--task-timeout", "1800",
                    "--judge-model", "o4-mini", "--env-file", ".env",

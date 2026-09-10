@@ -1,5 +1,7 @@
 # ARM inference results on Online-Mind2Web
 
+[ARM results dashboard](ARM_RESULTS_DASHBOARD.md)
+
 Snapshot: **2026-09-08T08:17:46.840921+00:00**. All three original 300-task evaluations are complete. This is an inference comparison from the frozen `OpenWebRL/OpenWebRL-4B-SFT` actor, not an ARM-trained policy result.
 
 ## Completed results

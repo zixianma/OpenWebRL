@@ -152,6 +152,7 @@ def main():
                 wandb = subprocess.Popen(
                     [str(TRAINING_PYTHON), str(REPO / "scripts/sync_arm_c2_wandb.py"),
                      "--run-root", str(RUN_ROOT), "--env-file", str(REPO / ".env"),
+                     "--project", "openwebrl-arm",
                      "--name", "arm-c2-ablation-1a", "--group", "arm-c2-ablation",
                      "--tag", "ablation-1a", "--poll-seconds", "20"],
                     cwd=REPO, stdout=wandb_log, stderr=subprocess.STDOUT)

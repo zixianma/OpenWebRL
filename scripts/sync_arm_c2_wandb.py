@@ -60,7 +60,9 @@ def main():
 
     training = json.loads((student / "training-config.json").read_text())
     audit = json.loads((root / "dataset-audit.json").read_text())
-    project = args.project or os.getenv("WANDB_PROJECT", "openwebrl")
+    # A resumed run must stay in the project recorded with its durable run ID.
+    # New ARM runs can select their dedicated project with --project.
+    project = state.get("project") or args.project or os.getenv("WANDB_PROJECT", "openwebrl")
     run = wandb.init(
         project=project,
         entity=args.entity,
