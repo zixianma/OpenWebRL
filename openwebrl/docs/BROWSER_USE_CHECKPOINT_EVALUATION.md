@@ -1,25 +1,33 @@
-# Browser Use evaluation of the strongest evaluated checkpoint
+# Browser Use evaluations of checkpoints after iterations 20 and 30
 
 The user requested this follow-up on 2026-09-10 after the intermediate checkpoint
-evaluations. The selected checkpoint is **after training iteration 30**:
+evaluations. The initial selection was **after training iteration 30**:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-286382-20260910T164338/iter_0000029`.
 It scored **96/300 task successes (32%)**, with 52 invalid attempts, on the existing
 GPT-4.1 monitor. After-20 scored 95/300, after-21 89/300, and after-22 86/300.
 This is the best observed score among evaluated checkpoints; its one-task lead
 over after-20 does not establish a statistically reliable ranking.
 
+The user subsequently requested **both after-20 and after-30** on a new
+allocation. After-20 has the best valid-only rate (95/232 = 40.95%); after-30 has
+the best all-task rate (96/300 = 32%). The additional checkpoint is
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-285546-20260909T235114/iter_0000019`.
+The two checkpoints will use the identical 300-task cohort, cloud backend,
+proxy policy, judge, and decoding settings. This replaces the earlier single
+checkpoint job proposal.
+
 ## Prepared execution and budget
 
-`scripts/evaluate_browser_use_4gpu.sbatch` prepares one complete 300-task monitor
-using **4 H200 GPUs, 16 CPUs, 480 GiB RAM, for 2 hours**: **8 GPU-hours**, estimated
-cluster charge **$7.20**. It requires explicit approval before submission. The
+`scripts/evaluate_browser_use_4gpu.sbatch` prepares two sequential 300-task monitors
+using **4 H200 GPUs, 16 CPUs, 480 GiB RAM, for 3 hours**: **12 GPU-hours**, estimated
+cluster charge **$10.80**. It requires explicit approval before submission. The
 previous paired-evaluation job 287370 completed in 1:48:47 and released its GPUs.
 Training job 287371 remains independent on g005.
 
 Browser Use hosting and GPT-4.1 judge usage are additional. The provider currently
 lists **$0.02 per browser-hour**, minute-rounded with unused time refunded. For
-one attempt with 300 sessions, each capped at 12 minutes, hosting is at most
-approximately **$1.20 before refunds**. Actual judge cost depends on tokens.
+one attempt per checkpoint with 600 sessions total, each capped at 12 minutes,
+hosting is at most approximately **$2.40 before refunds**. Actual judge cost depends on tokens.
 Residential proxies are explicitly disabled (`proxy_country_code=None`). See
 [Browser Use browser API](https://docs.browser-use.com/cloud/api-v2/browsers/create-browser-session).
 The cloud browser itself has [stealth enabled by default](https://docs.browser-use.com/cloud/browser/stealth).
@@ -41,7 +49,7 @@ The task cohort, model checkpoint, prompts, GPT-4.1 judge, 30-step limit,
 deterministic decoding, token limits, and 16 concurrent task limit are preserved.
 The evaluation requests zero optimizer updates and validates full checkpoint
 restoration and all 300 outcomes. W&B uses
-`qcq7i4ug-eval-browseruse-after30-JOB`, separate from the training history and the
+`qcq7i4ug-eval-browseruse-after20-JOB` and `qcq7i4ug-eval-browseruse-after30-JOB`, separate from the training history and the
 local-browser evaluation. The manifest identifies the changed browser backend.
 
 The SDK is pinned to **3.11.3** in an isolated runtime import overlay. Its existing
@@ -67,7 +75,8 @@ Preflight evidence is runtime `evaluations/browser-use-preflight-20260910/`:
   setup, screenshot capture, viewport alignment, and confirmed-stop receipt.
 - `concurrency_report.json`: 16 simultaneously created cloud sessions, all 16
   subsequently confirmed stopped, without API errors.
-- `evaluation_plan.json` and `launcher_dry_run.txt`: exact checkpoint index 29,
+- `evaluation_plan_after20.json`, `evaluation_plan.json`, and launcher dry runs:
+  exact checkpoint indices 19 and 29,
   zero training rollouts, and selected cloud-browser environment.
 
 Fourteen CPU tests cover checkpoint and browser identity, missing/incomplete
