@@ -67,6 +67,7 @@ Existing full monitoring evaluations:
 | 30 | 96 / 300 (32.00%) | 52 | 96 / 248 (38.71%) |
 | 38 | 107 / 300 (35.67%) | 72 | 107 / 228 (46.93%) |
 | 39 | 98 / 300 (32.67%) | 72 | 98 / 228 (42.98%) |
+| 40 | 100 / 300 (33.33%) | 69 | 100 / 231 (43.29%) |
 
 Valid-only success is successes divided by `(300 - invalid attempts)`. After-38
 has the highest observed valid-only and all-task success rates.
@@ -222,3 +223,20 @@ Artifacts: runtime `evaluations/qcq7i4ug-record-287596-after39-retry1/`.
 W&B: [after-39 evaluation](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after39-287596-r1).
 After-38 remains the highest observed all-task and valid-only result. **Two of
 four** approved reward-triggered jobs have now been used. Stealth stays paused.
+
+## Scheduled after-40 evaluation recovered in training job 287530
+
+The first after-40 evaluation was interrupted at 201/300 tasks by allocation
+287371's planned timeout and has no valid final score. Job **287530** restored
+the exact after-40 model and optimizer on four GPUs, then ran the full 300-task
+monitor before collecting iteration 41. This completed in **49:31** with
+**100 successes, 69 invalid attempts, and 231 valid attempts**: **33.33% all-task
+success**, **43.29% valid-only**.
+
+All 41 scalar metrics matched main run `qcq7i4ug`, **history row 660,
+`eval/iteration=40`**. The pending-evaluation flag was cleared only after that
+verification and a complete recovery ZIP check. Audit and data:
+runtime `runs/openwebrl-4b-reference-287530-20260911T105645/iteration_40_scheduled_eval_audit.json`
+and `rollout_recovery/eval_39.pt`. This scheduled evaluation used the training
+allocation and does not consume a reward-triggered evaluation job. After-38
+remains the highest observed result; two approved triggered jobs remain.

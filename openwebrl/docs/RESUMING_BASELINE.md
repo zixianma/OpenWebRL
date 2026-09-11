@@ -69,8 +69,12 @@ hashes and launcher hash are unchanged. Only the training driver gains a guarded
 pre-collection evaluation call and the usual post-evaluation cache release.
 The four-GPU restore verification still runs first. Five CPU regression tests
 cover checkpoint identity, evaluation failure, ordinary-resume behavior, source
-integrity, and stale environment controls. Actual GPU recovery remains to be
-verified if this path is needed.
+integrity, and stale environment controls. The complete recovery path passed on
+GPUs in job **287530**: exact after-40 restoration, 300-task evaluation completed
+in 49:31, all 41 metrics matched main-run W&B history row 660 at evaluation
+iteration 40, then collection 41 started. The audit is
+`runs/openwebrl-4b-reference-287530-20260911T105645/iteration_40_scheduled_eval_audit.json`
+under runtime storage.
 
 After recovery, verify the complete 300-task metrics and W&B synchronization,
 then clear the pending field. `[ResumePendingEvaluation] ... status=completed`
