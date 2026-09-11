@@ -100,7 +100,7 @@ def allocation(info, job_id, now=None, uid=None, requested_gpus=2):
     seconds = min(8 * 3600, int(end - now) - 180)
     if seconds < 600:
         raise ValueError('Less than 10 minutes remain after the three-minute shutdown margin.')
-    return {'job_id': job_id, 'host': fields['NodeList'], 'cpus': min(cpus, 16),
+    return {'job_id': job_id, 'host': fields['NodeList'], 'cpus': cpus,
             'gpus': requested_gpus, 'tensor_parallel_size': requested_gpus, 'allocated_memory_gib': gib, 'end_time': fields['EndTime'],
             'maximum_seconds': seconds, 'shutdown_margin_seconds': 180}
 

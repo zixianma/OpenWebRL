@@ -61,6 +61,15 @@ class ResumeTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.allocation(self.info(), '42', now + 3300)
 
+    def test_larger_cpu_allocation_reaches_the_worker(self):
+        info = self.info(NumCPUs='32', AllocTRES='cpu=32,mem=480G,node=1,gres/gpu=4,gres/gpu:h200=4')
+        job = m.allocation(info, '42', m.datetime(2030, 1, 1, 7).timestamp(), requested_gpus=4)
+        self.assertEqual(job['cpus'], 32)
+        command = m.step_command('42', job['cpus'], 4)
+        self.assertIn('--cpus-per-task=32', command)
+        self.assertIn('--gres=gpu:h200:4', command)
+        self.assertEqual(job['maximum_seconds'], 3420)
+
     def lineage(self):
         old, new = self.root / 'old', self.root / 'new'
         old.mkdir(); new.mkdir()
