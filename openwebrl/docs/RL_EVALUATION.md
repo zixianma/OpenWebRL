@@ -18,7 +18,7 @@ _Source record: `BASELINE_CHECKPOINT_EVALUATION.md`. Dated entries retain their 
 
 
 Training lineage: W&B `zixianma/openwebrl/qcq7i4ug`. Inventory checked on
-2026-09-11 while allocation 287371 continued training.
+2026-09-11 through saved iteration 46 in allocation 287949.
 
 <a id="baseline-checkpoint-evaluation--saved-checkpoints-and-reward-timing"></a>
 ### Saved checkpoints and reward timing
@@ -49,6 +49,8 @@ All directories below are under
 | 24–29 | `286094-20260910T071441` |
 | 30–34 | `286382-20260910T164338` |
 | 35–40 | `287371-20260911T025909` |
+| 41–45 | `287530-20260911T105645` |
+| 46 | `287949-20260911T183514` |
 
 `train/reward` at collection N is measured **before** its PPO updates. The policy
 that generated that reward is therefore the checkpoint after N−1 training
@@ -276,7 +278,7 @@ _Source record: `BROWSER_USE_CHECKPOINT_EVALUATION.md`. Dated entries retain the
 
 
 <a id="browser-use-checkpoint-evaluation--checkpoint-38-stealth-job-287879-running--2026-09-11"></a>
-### Checkpoint 38 stealth job 287879 running — 2026-09-11
+### Checkpoint 38 stealth job 287879 completed — 2026-09-11
 
 The user selected **after training iteration 38** for a new stealth evaluation
 and explicitly approved its prepared budget. **Job 287879** started on **g009
@@ -307,8 +309,37 @@ check passed; the exact checkpoint dry-run plan is saved under
 W&B startup confirmed [qcq7i4ug-eval-browseruse-after38-287879](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-browseruse-after38-287879).
 The output is runtime `evaluations/qcq7i4ug-browseruse-287879-after38`; its
 `evaluation.log` contains detailed progress, and the controller log is
-`logs/slurm-stealth-after38-287879.out`. Full GPU restore and all-task evaluation
-results are still pending.
+`logs/slurm-stealth-after38-287879.out`. Full TP2 model/optimizer restoration
+of the TP4 checkpoint passed. The job and worker completed with exit 0 after
+**1:52:14** allocation time; all 300 tasks took **1:48:24**.
+
+| Backend, checkpoint after 38 | Success / all tasks | Success / valid tasks | Invalid tasks |
+| --- | ---: | ---: | ---: |
+| Local browser, job 287588 | 107/300 = **35.67%** | 107/228 = **46.93%** | 72 (24.0%) |
+| Browser Use stealth, job 287879 | 137/300 = **45.67%** | 137/291 = **47.08%** | 9 (3.0%) |
+
+All **41 metrics** match W&B history row 0 (`wandb_audit.json`). The saved
+`runtime/rollout_recovery/eval_0.pt` is 93,803,489,805 bytes; its ZIP central
+directory and metadata entry are complete (`evaluation_artifact_audit.json`).
+This is structural validation, not a full reread of all tensor data.
+
+All-task success increased **10 percentage points**, while valid-only success
+changed by about **0.15 points**. Much lower invalid frequency is the main
+observed difference. These are separate live-web runs with different valid
+subsets and browser concurrency/timeouts; they do not isolate a causal effect
+of stealth or establish a new policy improvement. The unsuffixed scalar
+`eval/online-mind2web-monitor = 0.304037` is a turn-weighted reward, **not** the
+45.67% task success rate. Use `/task/success_rate_all_completed` for that score.
+
+The run recorded **300 confirmed stopped session receipts**, with no unconfirmed
+receipts or runtime provider-limit/SDK-schema/stop errors. The independent
+`browser_shutdown_cost_audit.json` also confirms **300/300 stopped** through
+the provider API. Provider-reported browser cost is **$0.319000**,
+and proxy cost is **$1.425584**, excluding GPU and judge usage.
+These are API-reported amounts, not an official invoice. Proxy charges remain
+nonzero despite the requested null proxy setting. The audit uses paced reads
+after an initial eight-request burst hit the API rate limit; this read-only
+audit limit did not affect evaluation tasks.
 
 A fresh one-browser CDP connectivity probe reached Example Domain and saved
 its screenshot. The session was independently confirmed stopped. The service
