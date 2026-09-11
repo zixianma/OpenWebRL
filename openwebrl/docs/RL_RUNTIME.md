@@ -29,6 +29,34 @@ python3 scripts/resume_baseline.py --job-id JOB_ID --launch
 
 The script **never submits or extends an allocation**. It requires a running, user-owned single-node allocation with at least two H200s, eight CPUs and 240 GiB RAM, and ten usable minutes after the shutdown margin. By default it uses two GPUs through `srun --jobid=... --overlap --exact`; the four-GPU profile is described below. It refuses launch if any non-interactive/non-extern Slurm steps are already present, and uses a per-job lock to prevent concurrent invocations. Inspect existing steps; do not stop unrelated work to bypass this check.
 
+<a id="resuming-baseline--32-cpu-browser-concurrency-20260911"></a>
+### 32-CPU continuation, September 11
+
+Job **287949** was submitted at **11:32 PDT** with explicit approval for
+**4 H200 GPUs, 32 CPUs, 480 GiB, eight hours** (32 GPU-hours, estimated
+**$28.80**, plus judge usage). The user requested an immediate switch; job
+**287530** was canceled after iteration **45 / 550 cumulative Adam updates**.
+Its unfinished collection 46 will be collected again. Stealth evaluation
+287879 continues independently.
+
+Use `scripts/resume_baseline_4gpu_32cpu.sbatch` for this profile, obtaining
+explicit approval for each new allocation. It owns and awaits a full GPU
+restore check followed by training in W&B lineage `qcq7i4ug`. Its preserved
+source is runtime `reference-stage1-browsers32-20260911`, prepared with
+`scripts/prepare_rollout_concurrency.py`; the matching pending-evaluation
+recovery source is `reference-stage1-browsers32-pending-eval-20260911`.
+
+Earlier TP4 runs had **32 browser pool slots but a 16-task concurrency gate**.
+This profile raises the task gate to **32** and passes all 32 allocated CPUs
+to the worker (the old resume wrapper capped this at 16). It retains 48 accepted
+prompt groups × five attempts, reward definitions, GRPO/optimizer settings,
+batches, prompts, decoding, step/time limits and save/evaluation schedules.
+The five existing protected recipe hashes are unchanged, and the changed YAML
+is additionally hashed. Live-web completion order can change with concurrency;
+this does not promise identical trajectories or a twofold speedup. Measure
+collection throughput, browser failures, CPU and host-memory use in the new
+allocation. GPU runtime validation of this profile is pending at submission.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 
@@ -400,13 +428,15 @@ zero browser collections in the verification stage. Receipt:
 `runs/openwebrl-4b-reference-287530-20260911T105645`; its logs and persistent pointer
 retain W&B `qcq7i4ug`.
 
-As of **09:00 PDT**, iterations **41–43** are saved and verified, reaching
-**526 cumulative Adam updates** at `iter_0000042`. Their rewards are 0.480380,
-0.431971 and 0.471503; all three collection rewards and all 36 optimizer records
-match W&B. Complete rollout archives and checkpoint metadata, shard extents,
-cursors and finite CPU tensor samples passed. These new checkpoints have not
-yet undergone a full GPU reload. Collection 44 is running, with no observed
-GPU/backend or host OOM errors.
+At the user-requested cancellation at **11:32 PDT**, iterations **41–45**
+were saved and verified, reaching **550 cumulative Adam updates** at
+`iter_0000044`. Their rewards were 0.480380, 0.431971, 0.471503, 0.431949
+and 0.472973; all five rewards and all 60 optimizer records match W&B.
+Complete archives and checkpoint metadata, shard extents, cursors and finite
+CPU tensor samples passed. The new allocation will perform a full GPU reload
+of checkpoint 45. Collection 46 had 21/48 accepted groups when interrupted;
+no completed recovery batch existed. No GPU/backend or host OOM was observed.
+The allocation-end audit is in this run directory.
 
 The pending after-40 evaluation completed all 300 tasks before collection 41:
 **100/300 (33.33%)**, valid-only **100/231 (43.29%)**. All 41 evaluation scalars
