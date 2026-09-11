@@ -130,3 +130,14 @@ The pointer is updated when the new launch manifest appears. This means **launch
 CPU checks: `python3 -m unittest discover -s tests -p test_resume_baseline.py -v`. The real preflight was exercised against job 283214 and correctly selected checkpoint 5, replay batch 6 with 144 submitted groups, and the existing W&B ID. It identified the already-running trainer and monitor; no duplicate training run was launched for this test.
 
 The command also launched the real continuation `openwebrl-4b-reference-283214-20260909T022832` from checkpoint 6, selecting no replay and starting the health recorder automatically. Source validation rejects older snapshots lacking collection-time image mapping and allocator trimming, which are required for this 240-GiB workflow.
+
+
+## Reward-ranked evaluation queue (2026-09-11)
+
+During supervision, apply the user's top-five `train/reward` evaluation trigger
+after each verified collection. Runtime `reward_eval_queue.json` tracks ranking,
+checkpoint identity and submitted jobs. The user explicitly approved at most
+four standard local-browser evaluation jobs, each two H200s for up to two hours;
+use `reward_eval_approval_20260911.json` and do not re-ask within that cap.
+See `REWARD_RANK_EVALUATION_QUEUE.md` for the exact invocation and accounting.
+Stealth evaluations are paused. Keep monitoring training and these evaluations.

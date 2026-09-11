@@ -102,3 +102,29 @@ At evaluation completion or failure, inspect active receipts and confirm those
 specific sessions stopped via the SDK before declaring cleanup complete. Never
 stop account-wide or unrelated Browser Use sessions. A batch timeout does not
 itself prove that the remote browsers have stopped.
+
+
+## Canceled attempt and current hold, 2026-09-11
+
+The user approved the two-H200 three-hour pair. **Job 287521** started on g004 at
+00:06:50 PDT. The after-20 checkpoint successfully restored from TP4 storage into
+TP2, with durable receipt `evaluations/qcq7i4ug-browseruse-287521-after20/checkpoint_restore_evidence.json`.
+
+The provider then returned **HTTP 429: free-plan limit of 10 concurrent sessions**.
+The burst preflight had accepted 16 session creations, but sustained evaluation
+hit this limit and many tasks aborted before generating a turn. This attempt is
+**invalid for score comparison**. Its GPU worker was stopped for diagnosis, then
+the user explicitly canceled the entire stealth job to choose a checkpoint after
+reviewing evaluations. Slurm reports **CANCELLED after 6:37** (about $0.20 GPU
+cost). The second checkpoint never started. **Do not restart stealth evaluation
+without a new user request and the necessary compute approval.**
+
+All **16 recorded sessions were independently confirmed stopped**. Evidence:
+`evaluations/qcq7i4ug-browseruse-287521-after20/cancellation_session_audit.json`.
+The provider reported **$0.01833 browser hosting and $0.07839 proxy charges**,
+despite the explicit null proxy configuration. SDK inspection shows null is
+preserved in the request body; the unexpected proxy accounting remains
+unresolved and must be investigated before a future paid stealth run.
+A future attempt also needs a sustained concurrency cap at or below the actual
+account limit, with meaningful browser tasks in its preflight. The earlier claim
+of a validated 16-session evaluation capacity was too strong.

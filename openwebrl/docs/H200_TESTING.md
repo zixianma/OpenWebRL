@@ -1,5 +1,19 @@
 # H200 runtime and validation
 
+## Queued continuation 287530, 2026-09-11 00:14 PDT
+
+The user requested and explicitly approved another **4 H200 × 8-hour** training
+allocation, 16 CPUs / 480 GiB, **32 GPU-hours / estimated $28.80**, after job
+287371. **287530** is queued with **`afterok:287371`** and will restore the latest
+verified checkpoint in W&B lineage `qcq7i4ug`. Submission receipt:
+runtime `logs/submission-qcq7i4ug-287530.json`. It has not started or consumed GPU
+time while its dependency is pending. The current allocation remains 287371.
+
+The user also approved up to four separate two-H200 evaluation jobs, each up to
+two hours, triggered by future verified rewards entering the top five. See
+`REWARD_RANK_EVALUATION_QUEUE.md`. Stealth evaluation 287521 was canceled on the
+user's request; its 16 recorded cloud sessions were confirmed stopped.
+
 ## Approved continuation 287371, 2026-09-10 19:57 PDT
 
 The user approved **4 H200 GPUs for 8 hours** (32 GPU-hours, estimated $28.80),
