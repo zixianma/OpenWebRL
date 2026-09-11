@@ -1,0 +1,129 @@
+{
+  "completed_utc": "2026-09-11T08:43:46.867179+00:00",
+  "rates": {
+    "sft": {
+      "scheduled": 300,
+      "attempted": 300,
+      "valid": 270,
+      "unavailable": 30,
+      "missing": 0,
+      "successes": 102,
+      "overall": 0.34,
+      "overall_wilson_95": [
+        0.2887202040964927,
+        0.395325546695362
+      ],
+      "valid_only": 0.37777777777777777,
+      "valid_wilson_95": [
+        0.3220432526929546,
+        0.43694137920233683
+      ]
+    },
+    "dpo": {
+      "scheduled": 300,
+      "attempted": 300,
+      "valid": 254,
+      "unavailable": 46,
+      "missing": 0,
+      "successes": 104,
+      "overall": 0.3466666666666667,
+      "overall_wilson_95": [
+        0.2950585411049252,
+        0.40215197007060216
+      ],
+      "valid_only": 0.4094488188976378,
+      "valid_wilson_95": [
+        0.35076214342166867,
+        0.4708336534280966
+      ]
+    },
+    "historical-base": {
+      "scheduled": 300,
+      "attempted": 300,
+      "valid": 267,
+      "unavailable": 33,
+      "missing": 0,
+      "successes": 90,
+      "overall": 0.3,
+      "overall_wilson_95": [
+        0.2509396637848768,
+        0.35411752470494157
+      ],
+      "valid_only": 0.33707865168539325,
+      "valid_wilson_95": [
+        0.28304478426840296,
+        0.39573408371282137
+      ]
+    }
+  },
+  "paired_comparisons": {
+    "dpo_vs_sft": {
+      "left": "sft",
+      "right": "dpo",
+      "all_scheduled": {
+        "tasks": 300,
+        "right_wins": 32,
+        "right_losses": 30,
+        "net_wins": 2,
+        "difference_pp": 0.6666666666666666,
+        "mcnemar_exact_two_sided_p": 0.899076313652859
+      },
+      "common_valid": {
+        "common_valid": 247,
+        "right_wins": 30,
+        "right_losses": 26,
+        "net_wins": 4,
+        "mcnemar_exact_two_sided_p": 0.6888797607233396
+      }
+    },
+    "sft_vs_historical-base": {
+      "left": "historical-base",
+      "right": "sft",
+      "all_scheduled": {
+        "tasks": 300,
+        "right_wins": 34,
+        "right_losses": 22,
+        "net_wins": 12,
+        "difference_pp": 4.0,
+        "mcnemar_exact_two_sided_p": 0.14089542359848076
+      },
+      "common_valid": {
+        "common_valid": 261,
+        "right_wins": 34,
+        "right_losses": 21,
+        "net_wins": 13,
+        "mcnemar_exact_two_sided_p": 0.10478948242660335
+      }
+    },
+    "dpo_vs_historical-base": {
+      "left": "historical-base",
+      "right": "dpo",
+      "all_scheduled": {
+        "tasks": 300,
+        "right_wins": 34,
+        "right_losses": 20,
+        "net_wins": 14,
+        "difference_pp": 4.666666666666667,
+        "mcnemar_exact_two_sided_p": 0.07590472948910143
+      },
+      "common_valid": {
+        "common_valid": 245,
+        "right_wins": 33,
+        "right_losses": 17,
+        "net_wins": 16,
+        "mcnemar_exact_two_sided_p": 0.032839137564268484
+      }
+    }
+  },
+  "roots": {
+    "sft": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-sft-2gpu-r2",
+    "dpo": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-dpo-2gpu-r2"
+  },
+  "historical_base": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/baseline",
+  "notes": [
+    "One training seed per objective; same matched training data and original actor.",
+    "Overall includes unavailable outcomes as failures; common-valid conditions on availability.",
+    "Base evaluation is historical; live-site drift limits causal attribution.",
+    "Paired p-values are exploratory, without multiple-comparison adjustment."
+  ]
+}

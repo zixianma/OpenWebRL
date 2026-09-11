@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "javascript_errors": [],
+  "examples": 129,
+  "retained_examples_per_source": 32,
+  "checks": [
+    "Offline HTML loads and screenshot decodes",
+    "Source and status filters",
+    "Coordinate quarantine filter",
+    "Screenshot zoom",
+    "Review-note JSON export",
+    "Empty search state",
+    "390px layout without horizontal overflow"
+  ],
+  "html_sha256": "7b4b5cc3eb4bb9862714b0d924ff007b735f056510aeb9551b5d98c11ffe3510"
+}

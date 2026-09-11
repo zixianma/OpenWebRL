@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "counts": {
+    "train:Piotr": 2076,
+    "train:C2": 3464,
+    "validation:C2": 442,
+    "validation:Piotr": 216
+  },
+  "validation_panels": {
+    "C2": {
+      "states": 256,
+      "task_groups": 85,
+      "sha256": "e6f55b04fbbe507caf255757568f3edc4635a62a0bb42c13b385e1a2da97d6de"
+    },
+    "Piotr": {
+      "states": 216,
+      "task_groups": 37,
+      "sha256": "cfb1ebcea95c21dcfff1750b130844c54e9be0a1941635088700b9c3a5cf20b6"
+    }
+  },
+  "task_group_overlap": 0,
+  "hf_image_hashes_matched_download": 2630,
+  "checks": [
+    "Exact chosen-response equality between SFT and paired views",
+    "Unique state IDs across train/validation",
+    "Disjoint task groups",
+    "Eligible action differences",
+    "Response token decode equality",
+    "Exact decoded action mask equals tool-call spans plus end-of-turn token",
+    "32768 context limit",
+    "HF image bytes match checksum-verified download manifest"
+  ],
+  "resources": {
+    "wall_seconds": 3.7721372460073326,
+    "cpu_seconds": 3.1940030000000004,
+    "peak_rss_mib": 178.8984375
+  }
+}

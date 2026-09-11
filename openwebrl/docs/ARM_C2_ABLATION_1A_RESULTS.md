@@ -36,6 +36,8 @@ evaluations in 58:28 on two H200s.
 | Fresh holdout 200 | 1A endpoint update 263 | 67/200 | 33.5% | 67/177 | 37.9% | 23 |
 | Combined all 300 | Original C2 update 500 | 95/300 | 31.7% | 95/258 | 36.8% | 42 |
 | Combined all 300 | 1A endpoint update 263 | 100/300 | 33.3% | 100/256 | 39.1% | 44 |
+| Fresh all 300, Sep 11 | Joint C2 + Piotr SFT update 174 | 102/300 | **34.0%** | 102/270 | **37.8%** | 30 |
+| Fresh all 300, Sep 11 | Joint C2 + Piotr DPO-only update 174 | 104/300 | **34.7%** | 104/254 | **40.9%** | 46 |
 
 On the primary holdout, 1A had 23 wins and 15 losses over 168 tasks that were
 valid for both policies (exact two-sided McNemar p=0.2559). This is a +2.5
@@ -43,6 +45,16 @@ percentage-point overall and +3.2-point valid-only gain, with confidence
 intervals that overlap substantially. The evidence is directionally favorable
 to 1A but does not establish an improvement. The all-300 aggregate combines
 the fresh holdout with fixed-100 evaluations collected at earlier times.
+
+The Sep 11 joint-data runs each trained independently from the starting actor
+on 5,540 matched C2 + Piotr states, then evaluated all 300 tasks afresh. Their
+overall differences from 1A are +0.7 points for SFT and +1.3 points for DPO;
+these are descriptive comparisons across evaluation times and task availability.
+DPO versus joint SFT has 32 wins and 30 losses on all 300 tasks (exact paired
+p=0.8991), so it does not establish a preference-learning advantage. Full
+training settings, paired evidence, overall/valid-only denominators, and
+rollout links are recorded in the same
+[C2/1A full-300 comparison document](ARM_C2_VS_1A_FULL300_EVAL.md#joint-data-sft-and-dpo-only-results-2026-09-11).
 
 ## Direct comparison with the starting base actor
 

@@ -1,0 +1,71 @@
+{
+  "actor": "/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT",
+  "data": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/joint-data-v2-20260910",
+  "seed": 42,
+  "objective": "dpo",
+  "train_examples": 5540,
+  "validation_examples": 658,
+  "batch_size": 32,
+  "epochs": 1,
+  "total_updates": 174,
+  "final_batch_size": 4,
+  "learning_rate": 1e-05,
+  "warmup_examples": 512,
+  "endpoint_lr_factor": 0.5,
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "max_tokens": 32768,
+  "checkpoint_updates": [
+    44,
+    50,
+    87,
+    131,
+    174
+  ],
+  "validation_updates": [
+    0,
+    44,
+    87,
+    131,
+    174
+  ],
+  "wandb_project": "openwebrl-arm",
+  "wandb_group": "arm-joint-v2",
+  "data_hashes": {
+    "joint_sft.train.jsonl": "8912c715bfdd136ef6997fcf72368d1e578d03cfdd72983cdca52483244be26d",
+    "joint_sft.validation.jsonl": "9829658ae839525a3da3d9490d5691476c458dd52e465f507480263a82c174d6",
+    "joint_pairs.train.jsonl": "9e5cc9fe1e262e4116cd29060e082d77fc2c27957b8a181ac2475ecff0d54767",
+    "joint_pairs.validation.jsonl": "544bebbf5375c849321ddb08169caf488740e172b9b8150b82920183db414806",
+    "validation-panel-c2.jsonl": "e6f55b04fbbe507caf255757568f3edc4635a62a0bb42c13b385e1a2da97d6de",
+    "validation-panel-piotr.jsonl": "cfb1ebcea95c21dcfff1750b130844c54e9be0a1941635088700b9c3a5cf20b6",
+    "verification.json": "35bb3eadeba6ad8e78c2792a2037c15582a3a8d5a76104d62582101524666b58"
+  },
+  "model_metadata_hashes": {
+    "config.json": "edac7703329133edfc53e46ac0081835144c99d7eebf28b71c732694d435224d",
+    "tokenizer.json": "a5d85b6dcc535e6b93115a9ef287e6132fdbf30270da6218194ba742261173c7",
+    "tokenizer_config.json": "7b501e639b4d107a23effbe30390ee33d553f722467f7ac8e2744d7ff5d3a7d5",
+    "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+    "chat_template.jinja": "36e042fe45641f067b1f2381fcc8955d10d956a3ed333ecdf7f7eb0916f68956"
+  },
+  "trainer_sha256": "02e0dd47c933ce98e15508d35bfefeb9f4e72b95990958b0e8dd795f9bd12903",
+  "order_sha256": "00c43f39c3b0fb8f50712340586fcccb21388d1f670221b992cb95a05e9da5a3",
+  "output": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-dpo-2gpu",
+  "world_size": 2,
+  "beta": 0.1,
+  "gradient_accumulation_per_rank": 16,
+  "code_hashes": {
+    "train_arm_joint_ddp.py": "bd1934c7e3a7189d9756ef9c88ec3961f1fffd83388f172829afd9b17588aab0",
+    "train_arm_joint_sft.py": "02e0dd47c933ce98e15508d35bfefeb9f4e72b95990958b0e8dd795f9bd12903",
+    "run_arm_joint_pipeline.py": "fbc1840dea97a315c65a1d408573fc6914f2fc3db554f54a16cbb467ed35abb3"
+  },
+  "full_response_score": "sum",
+  "auxiliary_sft_weight": 0,
+  "reference": "original SFT actor with adapters disabled",
+  "dropout_policy": "train: 0.05; validation/reference/rehearsal: disabled",
+  "eval_shards_sha256": "f5bce39eaa9137fdb870081ddc607799142ee5b7bee618b6432c0b17488ee4ff",
+  "handoff_hashes": {
+    "merge_arm_c2_student.py": "ed82948f8ceef7935d0e82df8fa5c1777d1e36a99195bb1c5b7366e3a0bedc11",
+    "run_arm_full300_checkpoint_eval.py": "ca5f0e402b9ff14ad06f0fd76d2e1dd35b0aef73499bc6c9e404c90a5a2bd254"
+  }
+}

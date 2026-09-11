@@ -107,13 +107,16 @@ def main():
             cwd=REPO, stdout=log, stderr=subprocess.STDOUT, check=True)
 
     server_log = (work / "actor-server.log").open("a")
+    server_environment = os.environ.copy()
+    server_environment.setdefault("CUDA_HOME", str(RUNTIME / "cuda"))
+    server_environment["PATH"] = str(RUNTIME / "cuda/bin") + os.pathsep + server_environment.get("PATH", "")
     server = subprocess.Popen(
         [str(SERVER_PYTHON), "-m", "sglang.launch_server", "--model-path", str(merged),
          "--host", "127.0.0.1", "--port", str(args.actor_port), "--dtype", "bfloat16", "--tp", "1",
          "--mem-fraction-static", str(args.mem_fraction_static), "--context-length", "32768",
          "--max-running-requests", "24",
          "--chunked-prefill-size", "4096", "--disable-cuda-graph"],
-        cwd=REPO, stdout=server_log, stderr=subprocess.STDOUT, start_new_session=True)
+        cwd=REPO, env=server_environment, stdout=server_log, stderr=subprocess.STDOUT, start_new_session=True)
 
     def stop(*_ignored):
         if server.poll() is None:
