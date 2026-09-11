@@ -73,7 +73,14 @@ background monitoring service. On completion, retain the job ID in the queue so
 it continues to count against the four-job budget, and add the checkpoint to
 `completed_evaluations` only after results and W&B have been verified.
 
-Ten CPU tests cover top-five qualification below the all-time high, boundary
+Eleven CPU tests cover top-five qualification below the all-time high, boundary
 ties, replay deduplication, completed-checkpoint skipping, invalid rewards,
 checkpoint identity, and submission budget/duplicate guards. No paid job is
-submitted by those tests.
+submitted by those tests. The submitter removes inherited `SLURM_CPU_BIND*`
+variables, and the worker explicitly uses `--cpu-bind=none`: a CPU mask inherited
+from an observer running on another node caused the first step of job 287588 to
+fail before Python started. That evaluation was restarted inside the same paid
+allocation with an explicit binding override. Its original batch controller
+remains waiting; release the allocation after the supervised worker and W&B
+verification finish, before the controller's deadline. This recovery does not
+consume another job from the approved cap.

@@ -29,7 +29,7 @@ PY
 while true; do
     browser_eval_output="$browser_eval_root/qcq7i4ug-record-$SLURM_JOB_ID-after$browser_eval_iteration"
     if (( browser_eval_attempt > 0 )); then browser_eval_output="$browser_eval_output-retry$browser_eval_attempt"; fi
-    if srun --jobid="$SLURM_JOB_ID" --overlap --nodes=1 --ntasks=1 --cpus-per-task=16 --gres=gpu:h200:2 --exact \
+    if srun --jobid="$SLURM_JOB_ID" --overlap --nodes=1 --ntasks=1 --cpus-per-task=16 --gres=gpu:h200:2 --cpu-bind=none --exact \
         /gpfs/scrubbed/zixianma/openwebrl-runtime/venv/bin/python scripts/evaluate_baseline_checkpoint.py \
         --execute --job-id "$SLURM_JOB_ID" --source "$browser_eval_source" \
         --checkpoint "$browser_eval_checkpoint" --output "$browser_eval_output" \

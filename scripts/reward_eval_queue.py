@@ -4,6 +4,7 @@ import argparse
 import fcntl
 import json
 import math
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -131,7 +132,10 @@ def submit_pending(state, approval, state_path):
         entry.update(status='SUBMITTING', submission_command=command)
         state_path.write_text(json.dumps(state, indent=2)+'\n')
         try:
-            result = subprocess.run(command, text=True, capture_output=True, timeout=60)
+            # The observer may run inside a CPU-only step on another node. Its
+            # CPU mask must not constrain workers in the newly allocated job.
+            result = subprocess.run(command, text=True, capture_output=True, timeout=60,
+                                    env=submission_environment())
         except Exception:
             entry['status'] = 'SUBMISSION_UNCERTAIN'
             state_path.write_text(json.dumps(state, indent=2)+'\n')
@@ -147,6 +151,10 @@ def submit_pending(state, approval, state_path):
         state_path.write_text(json.dumps(state, indent=2)+'\n')
         submitted.append(ids[0])
     return submitted
+
+
+def submission_environment():
+    return {k:v for k,v in os.environ.items() if not k.startswith('SLURM_CPU_BIND')}
 
 
 def main():

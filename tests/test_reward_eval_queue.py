@@ -1,11 +1,20 @@
 import importlib.util
+import os
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('record_queue',ROOT/'scripts/reward_eval_queue.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 
 class RewardQueueTest(unittest.TestCase):
+    def test_cpu_mask_from_observer_is_not_exported_to_new_job(self):
+        with patch.dict(os.environ, {'SLURM_CPU_BIND':'mask_cpu:0x80000000',
+                                    'SLURM_CPU_BIND_LIST':'0x80000000',
+                                    'SLURM_CPU_BIND_TYPE':'mask_cpu', 'RAY_ADDRESS':'local'}):
+            env=m.submission_environment()
+        self.assertFalse(any(k.startswith('SLURM_CPU_BIND') for k in env))
+        self.assertEqual(env['RAY_ADDRESS'],'local')
     def setUp(self):
         self.state=m.initialize([{'train/reward':r,'train/reward_iteration':n,'_step':n}
                                  for n,r in [(19,.6),(20,.59),(21,.58),(22,.57),(23,.55)]],'/frozen')
