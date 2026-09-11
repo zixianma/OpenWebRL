@@ -1,4 +1,60 @@
-# Browser Use evaluations of checkpoints after iterations 20 and 30
+# Browser Use checkpoint evaluations
+
+## Checkpoint 38 prepared, awaiting compute approval — 2026-09-11
+
+The user selected **after training iteration 38** for a new stealth evaluation.
+Its checkpoint is runtime
+`runs/openwebrl-4b-reference-287371-20260911T025909/iter_0000037`, with 468 Adam
+updates. Its completed local-browser evaluation scored **107/300 (35.67%)**,
+valid-only **107/228 (46.93%)**, the best observed result among evaluated
+checkpoints through 40. The previous 20/30 stealth pair remains canceled.
+
+The new template is `scripts/evaluate_browser_use_after38_2gpu.sbatch`: **2 H200,
+16 CPUs, 480 GiB, up to 3 hours**, **6 GPU-hours / estimated $5.40**. It owns and
+awaits its worker, uses explicit CPU binding, and permits only supervised retries
+within the same deadline. This three-hour request exceeds the existing top-five
+queue's two-hour-per-job approval and must receive new explicit approval before
+submission. It does not consume or extend the remaining two local-browser queue
+slots unless the user explicitly changes that budget.
+
+The isolated source is `reference-browseruse-eight-decimal-v2-20260911`. Its task gate is
+**eight concurrent browsers**, below the previously observed ten-session account
+limit. The 300 tasks, checkpoint, GPT-4.1 judge, prompts, decoding and maximum
+steps remain the same. Source hashes record the browser backend, timeout and
+concurrency changes. Fifteen CPU preparation/wrapper tests and the shell syntax
+check passed; the exact checkpoint dry-run plan is saved under
+`evaluations/browser-use-preflight-after38-20260911/evaluation_plan.json`.
+W&B will use `qcq7i4ug-eval-browseruse-after38-JOB` (retry suffix if necessary).
+
+A fresh one-browser CDP connectivity probe reached Example Domain and saved
+its screenshot. The session was independently confirmed stopped. The service
+still reported a tiny proxy charge (**$0.00000491**) even with explicit
+`proxyCountryCode: null`; the SDK preserves null through its HTTP serializer.
+The provider documents null as disabling proxies, so this remains a service or
+accounting discrepancy rather than a verified no-proxy run. Do not claim proxy
+cost is zero. Browser hosting for 300 sessions capped at 12 minutes is at most
+**$1.20 before refunds**, plus metered proxy and GPT-4.1 judge usage. These service
+charges are additional to GPU cost. Preflight receipts stay in the same directory.
+
+
+The sustained eight-browser probe found a second issue: the provider can return
+billing values such as `2.8740614652633667968750E-7`, which SDK 3.11.3 rejects
+under its decimal-only schema. The prepared source includes an isolated SDK copy
+whose six browser-session billing-field patterns accept scientific notation.
+Fifty-four actual model-validation checks pass, including rejection of nonfinite
+and malformed values; three session-cleanup CPU tests also pass. The original SDK
+and training sources remain preserved.
+
+After this repair, two waves of eight concurrent browsers each performed repeated
+navigation and screenshots for at least 45 seconds. All **16/16 succeeded and
+were independently confirmed stopped**. Their recorded hosting total was
+**$0.005333**, with **$0.00004568** reported proxy cost. The final SDK schema also
+rechecked all 16 stopped sessions. Evidence:
+`evaluations/browser-use-preflight-after38-20260911-fixed/concurrency_report.json`
+and `final_sdk_shutdown_audit.json`. The earlier failed probe is preserved, and
+its eight sessions were separately confirmed stopped through the raw API.
+
+## Earlier preparation and canceled 20/30 attempt
 
 The user requested this follow-up on 2026-09-10 after the intermediate checkpoint
 evaluations. The initial selection was **after training iteration 30**:
