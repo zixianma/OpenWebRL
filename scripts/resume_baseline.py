@@ -219,7 +219,7 @@ def clean_environment():
     for key in list(env):
         if key.startswith('OPENWEBRL_REPLAY_') or key in {
             'OPENWEBRL_VERIFY_RESUME_ONLY', 'OPENWEBRL_STOP_AFTER_SAVED_ROLLOUT',
-            'WANDB_RUN_ID', 'DRY_RUN', 'SLIME_LOAD_CHECKPOINT', 'SLIME_CKPT_STEP',
+            'WANDB_RUN_ID', 'WANDB_SERVICE', 'DRY_RUN', 'SLIME_LOAD_CHECKPOINT', 'SLIME_CKPT_STEP',
             'OVERRIDE_OPT_PARAM_SCHEDULER', 'OPENWEBRL_PENDING_EVAL_ITERATION'}:
             env.pop(key, None)
     return env

@@ -84,3 +84,10 @@ allocation with an explicit binding override. Its original batch controller
 remains waiting; release the allocation after the supervised worker and W&B
 verification finish, before the controller's deadline. This recovery does not
 consume another job from the approved cap.
+
+Job 287596 exposed another cross-node inheritance issue: the observer's
+`WANDB_SERVICE` points to a node-local service socket. Both submission and the
+worker's `clean_environment()` now discard it while retaining credentials.
+The first attempt failed before task evaluation; the supervised repair marker
+starts a fresh attempt in the same allocation, with a distinct output/W&B suffix.
+Do not copy a W&B service socket between nodes or reuse a failed attempt's score.

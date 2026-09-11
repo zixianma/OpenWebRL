@@ -201,9 +201,11 @@ class ResumeTest(unittest.TestCase):
         self.assertNotIn('sbatch', command)
         self.assertNotIn('salloc', command)
         with patch.dict(os.environ, {'WANDB_RUN_ID': 'old', 'OPENWEBRL_REPLAY_FIRST_BATCH': 'old.pt',
+                                     'WANDB_SERVICE': 'fixture:socket-on-previous-node',
                                      'OPENWEBRL_VERIFY_RESUME_ONLY': '1', 'WANDB_API_KEY': 'private'}):
             env = m.clean_environment()
         self.assertNotIn('WANDB_RUN_ID', env)
+        self.assertNotIn('WANDB_SERVICE', env)
         self.assertNotIn('OPENWEBRL_REPLAY_FIRST_BATCH', env)
         self.assertNotIn('OPENWEBRL_VERIFY_RESUME_ONLY', env)
         self.assertEqual(env['WANDB_API_KEY'], 'private')

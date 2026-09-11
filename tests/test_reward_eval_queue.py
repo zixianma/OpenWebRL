@@ -11,10 +11,12 @@ class RewardQueueTest(unittest.TestCase):
     def test_cpu_mask_from_observer_is_not_exported_to_new_job(self):
         with patch.dict(os.environ, {'SLURM_CPU_BIND':'mask_cpu:0x80000000',
                                     'SLURM_CPU_BIND_LIST':'0x80000000',
-                                    'SLURM_CPU_BIND_TYPE':'mask_cpu', 'RAY_ADDRESS':'local'}):
+                                    'SLURM_CPU_BIND_TYPE':'mask_cpu', 'RAY_ADDRESS':'local',
+                                    'WANDB_SERVICE':'fixture:socket-on-observer-node'}):
             env=m.submission_environment()
         self.assertFalse(any(k.startswith('SLURM_CPU_BIND') for k in env))
         self.assertEqual(env['RAY_ADDRESS'],'local')
+        self.assertNotIn('WANDB_SERVICE',env)
     def setUp(self):
         self.state=m.initialize([{'train/reward':r,'train/reward_iteration':n,'_step':n}
                                  for n,r in [(19,.6),(20,.59),(21,.58),(22,.57),(23,.55)]],'/frozen')

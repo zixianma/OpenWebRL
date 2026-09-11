@@ -154,7 +154,8 @@ def submit_pending(state, approval, state_path):
 
 
 def submission_environment():
-    return {k:v for k,v in os.environ.items() if not k.startswith('SLURM_CPU_BIND')}
+    return {k:v for k,v in os.environ.items()
+            if not k.startswith('SLURM_CPU_BIND') and k != 'WANDB_SERVICE'}
 
 
 def main():
