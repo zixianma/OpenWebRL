@@ -18,9 +18,15 @@ checkpoint job proposal.
 
 ## Prepared execution and budget
 
-`scripts/evaluate_browser_use_4gpu.sbatch` prepares two sequential 300-task monitors
-using **4 H200 GPUs, 16 CPUs, 480 GiB RAM, for 3 hours**: **12 GPU-hours**, estimated
-cluster charge **$10.80**. It requires explicit approval before submission. The
+The recommended lower-cost template is `scripts/evaluate_browser_use_2gpu.sbatch`:
+two sequential 300-task monitors using **2 H200 GPUs, 16 CPUs, 480 GiB RAM, for
+3 hours**: **6 GPU-hours**, estimated cluster charge **$5.40**. The earlier
+four-GPU template remains available but has not been submitted. Four GPUs were
+chosen initially to reuse the verified TP4 loader and four inference workers;
+they are not a minimum model-inference requirement. The wrapper now supports TP2
+as well as TP4. Fifteen CPU tests and both TP2 launch dry runs pass; actual TP4-to-TP2
+checkpoint restoration and paired evaluation duration still require live checks.
+Host RAM and CPUs remain conservative because the task/data workload is unchanged. It requires explicit approval before submission. The
 previous paired-evaluation job 287370 completed in 1:48:47 and released its GPUs.
 Training job 287371 remains independent on g005.
 
@@ -79,7 +85,7 @@ Preflight evidence is runtime `evaluations/browser-use-preflight-20260910/`:
   exact checkpoint indices 19 and 29,
   zero training rollouts, and selected cloud-browser environment.
 
-Fourteen CPU tests cover checkpoint and browser identity, missing/incomplete
+Fifteen CPU tests cover checkpoint and browser identity, missing/incomplete
 results, unexpected optimization, delayed remote shutdown, receipt preservation
 on a stop failure, and concurrent initialization cleanup. Shell syntax passed.
 Full GPU evaluation remains pending an explicitly approved allocation.

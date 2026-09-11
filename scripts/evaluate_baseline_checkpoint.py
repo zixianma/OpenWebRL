@@ -21,7 +21,9 @@ REPO = Path(__file__).resolve().parents[1]
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 
 
-def build_plan(source, checkpoint, output, job_id, attempt=0, browser_env='local_process'):
+def build_plan(source, checkpoint, output, job_id, attempt=0, browser_env='local_process', gpus=4):
+    if gpus not in (2, 4):
+        raise ValueError('Supported evaluation profiles use 2 or 4 H200 GPUs')
     source, checkpoint, output = map(lambda p: Path(p).resolve(), (source, checkpoint, output))
     validate_source(source)
     match = re.fullmatch(r'iter_(\d{7})', checkpoint.name)
@@ -49,7 +51,7 @@ def build_plan(source, checkpoint, output, job_id, attempt=0, browser_env='local
     if attempt:
         run_id += f'-r{attempt}'
     env = {
-        'NUM_GPUS': '4', 'TP_SIZE': '4', 'NUM_ROLLOUT': '0',
+        'NUM_GPUS': str(gpus), 'TP_SIZE': str(gpus), 'NUM_ROLLOUT': '0',
         'BROWSER_MAX_STEPS': '15', 'ROLLOUT_BATCH_SIZE': '48', 'N_SAMPLES': '5',
         'GLOBAL_BATCH_SIZE': '256', 'CONTEXT_LEN': '32768', 'RESPONSE_LEN': '1024',
         'BROWSER_CONCURRENCY': '32', 'SGLANG_CONCURRENCY': '48',
@@ -81,6 +83,7 @@ def build_plan(source, checkpoint, output, job_id, attempt=0, browser_env='local
             'completed_training_iterations': index+1, 'output': str(output), 'job_id': job_id,
             'attempt': attempt,
             'browser_env': browser_env,
+            'gpus': gpus,
             'wandb_run_id': run_id, 'parent_training_run': 'qcq7i4ug',
             'protocol': 'existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks'
                         + ('; browser=browser-use, proxy=disabled' if browser_env == 'browser-use' else ''),
@@ -148,7 +151,7 @@ def run(plan, env_file):
     if os.getenv('SLURM_JOB_ID') != job or f'/job_{job}/' not in Path('/proc/self/cgroup').read_text():
         raise ValueError('Execute inside the explicitly authorized Slurm GPU step')
     record = subprocess.check_output(['scontrol', 'show', 'job', job, '-o'], text=True)
-    resources = allocation(record, job, requested_gpus=4)
+    resources = allocation(record, job, requested_gpus=plan.get('gpus', 4))
     step_id = os.getenv('SLURM_STEP_ID')
     steps = subprocess.check_output(['squeue', '--steps', f'--jobs={job}', '--noheader', '--format=%i'], text=True)
     allowed = {f'{job}.{suffix}' for suffix in ['batch', 'extern', step_id]}
@@ -220,8 +223,9 @@ def main():
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--attempt', type=int, default=0)
     parser.add_argument('--browser-env', choices=['local_process', 'browser-use'], default='local_process')
+    parser.add_argument('--gpus', choices=[2, 4], type=int, default=4)
     args = parser.parse_args()
-    plan = build_plan(args.source, args.checkpoint, args.output, args.job_id, args.attempt, args.browser_env)
+    plan = build_plan(args.source, args.checkpoint, args.output, args.job_id, args.attempt, args.browser_env, args.gpus)
     if args.execute:
         run(plan, args.env_file)
     else:

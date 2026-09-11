@@ -67,6 +67,18 @@ class EvaluationTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'isolated Browser Use'):
                 m.build_plan(source, self.ckpt, self.output, '42', browser_env='browser-use')
 
+    def test_two_gpu_profile_preserves_evaluation_protocol(self):
+        original = self.plan()
+        with patch.object(m, 'RUNTIME', self.root), patch.object(m, 'validate_source'):
+            smaller = m.build_plan(self.root / 'source', self.ckpt, self.output, '42', gpus=2)
+        self.assertEqual(smaller['gpus'], 2)
+        self.assertEqual(smaller['environment']['NUM_GPUS'], '2')
+        self.assertEqual(smaller['environment']['TP_SIZE'], '2')
+        self.assertEqual(smaller['command'], original['command'])
+        self.assertEqual(smaller['protocol'], original['protocol'])
+        for key in ['NUM_ROLLOUT', 'BROWSER_CONCURRENCY', 'SGLANG_CONCURRENCY', 'SLIME_CKPT_STEP']:
+            self.assertEqual(smaller['environment'][key], original['environment'][key])
+
     def test_existing_output_rejected(self):
         self.output.mkdir(parents=True)
         with self.assertRaisesRegex(ValueError, 'new output'):
