@@ -5,7 +5,7 @@ Training lineage: W&B `zixianma/openwebrl/qcq7i4ug`. Inventory checked on
 
 ## Saved checkpoints and reward timing
 
-Checkpoints after every completed training iteration **1–39** remain on disk.
+Checkpoints after every completed training iteration **1–40** remain on disk.
 Directory indices are zero-based: after iteration N is `iter_{N-1:07d}`.
 The complete absolute-path inventory and CPU validation evidence are in
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/qcq7i4ug_checkpoint_inventory.json`.
@@ -30,7 +30,7 @@ All directories below are under
 | 19–23 | `285546-20260909T235114` |
 | 24–29 | `286094-20260910T071441` |
 | 30–34 | `286382-20260910T164338` |
-| 35–39 | `287371-20260911T025909` |
+| 35–40 | `287371-20260911T025909` |
 
 `train/reward` at collection N is measured **before** its PPO updates. The policy
 that generated that reward is therefore the checkpoint after N−1 training

@@ -1,18 +1,61 @@
 # H200 runtime and validation
 
-## Queued continuation 287530, 2026-09-11 00:14 PDT
+## Continuation 287530 started, 2026-09-11 03:54 PDT
 
 The user requested and explicitly approved another **4 H200 × 8-hour** training
 allocation, 16 CPUs / 480 GiB, **32 GPU-hours / estimated $28.80**, after job
-287371. **287530** is queued with **`afterok:287371`** and will restore the latest
-verified checkpoint in W&B lineage `qcq7i4ug`. Submission receipt:
-runtime `logs/submission-qcq7i4ug-287530.json`. It has not started or consumed GPU
-time while its dependency is pending. The current allocation remains 287371.
+287371. **287530** started on **g022 at 03:54:49 PDT**, after its
+`afterok:287371` dependency completed. Its deadline is **11:54:52 PDT**.
+It restores checkpoint after **40 / directory 39 / 490 Adam updates** in W&B
+lineage `qcq7i4ug`. Submission receipt: runtime
+`logs/submission-qcq7i4ug-287530.json`. Full four-GPU restoration verification
+runs first, followed by the pending iteration-40 evaluation and online training.
+The prepared source `reference-stage1-pending-eval-20260911` preserves all five
+recipe hashes and the launcher hash; see `RESUMING_BASELINE.md` for the guarded
+evaluation recovery. An incomplete evaluation starts its 300 tasks afresh.
+
+The actual four-GPU full model/optimizer restore passed with zero updates and
+zero browser collections in the verification stage. Receipt:
+`logs/resume-287530-4gpu-verification.json`. The online continuation directory is
+`runs/openwebrl-4b-reference-287530-20260911T105645`; its logs and persistent pointer
+retain W&B `qcq7i4ug`.
 
 The user also approved up to four separate two-H200 evaluation jobs, each up to
 two hours, triggered by future verified rewards entering the top five. See
 `REWARD_RANK_EVALUATION_QUEUE.md`. Stealth evaluation 287521 was canceled on the
 user's request; its 16 recorded cloud sessions were confirmed stopped.
+
+## Job 287371 completed iterations 35–40
+
+Slurm reports **COMPLETED / 7:57:23 / exit 0**. Its worker reached the planned
+allocation timeout (raw 124), which the controller normalized to success.
+All six reward observations and **62 added optimizer updates** matched W&B.
+The final durable checkpoint is `iter_0000039` with **490 cumulative Adam
+updates**, under runtime `runs/openwebrl-4b-reference-287371-20260911T025909`.
+All checkpoint extents/cursors and finite CPU samples passed validation.
+
+| Iteration | Train reward | Added Adam updates | Cumulative Adam updates |
+| --- | ---: | ---: | ---: |
+| 35 | 0.506224 | 10 | 438 |
+| 36 | 0.493810 | 10 | 448 |
+| 37 | 0.483221 | 10 | 458 |
+| 38 | 0.442043 | 10 | 468 |
+| 39 | 0.487730 | 12 | 480 |
+| 40 | 0.503511 | 10 | 490 |
+
+The scheduled after-40 evaluation stopped at **201/300 tasks** without a final
+metric row; it is not a valid completed score. The pending field remains 40
+for the continuation. Final audit: `allocation_final_audit.json` in that run.
+Peak host memory was **372.34 GiB**, with no host OOM; sampled average GPU
+utilization over the allocation was **41.94%** (utilization, not MFU).
+Completed-group archives include RL rejections and passed image SHA256 checks.
+
+Top-five rewards at collections 39 and 40 triggered evaluations of their
+generating checkpoints after 38 and 39. Job **287588** completed after-38 with
+**107/300 (35.67%)**, valid-only **107/228 (46.93%)**, and all 41 W&B scalars
+verified. Job **287596** is evaluating after-39 in a supervised retry after
+clearing an inherited cross-node W&B service socket. Both startup repairs stayed
+within their original allocations; **2/4 approved evaluation jobs** are used.
 
 ## Approved continuation 287371, 2026-09-10 19:57 PDT
 
