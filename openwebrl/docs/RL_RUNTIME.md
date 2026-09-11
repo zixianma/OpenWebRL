@@ -55,7 +55,26 @@ The five existing protected recipe hashes are unchanged, and the changed YAML
 is additionally hashed. Live-web completion order can change with concurrency;
 this does not promise identical trajectories or a twofold speedup. Measure
 collection throughput, browser failures, CPU and host-memory use in the new
-allocation. GPU runtime validation of this profile is pending at submission.
+allocation.
+
+The job started on **g013 at 11:33:04 PDT**, ending **19:33:07 PDT**.
+Full four-GPU model/optimizer restoration of after-45 passed; receipt:
+runtime `logs/resume-287949-4gpu-verification.json`. Worker arguments show
+32 CPUs and a 32-task gate, and the browser pool reached 32/32 active slots.
+Startup evidence and all new logs are in
+`runs/openwebrl-4b-reference-287949-20260911T183514`.
+
+The first collection (46) completed in **1711.6 seconds / 28.5 minutes**, versus
+2392.2 and 2939.8 seconds for collections 45 and 44. This is an observational
+comparison across different live-web collections, not a controlled speedup.
+It completed 100 groups / 500 trajectories, accepted 48 groups / 1671 turns,
+and preserved all completed trajectories, including rejected groups. Reward
+**0.431478** and task success **246/500 = 49.2%** match the archive and W&B
+row 736. All 12 optimizer records match rows 738–749. After-46 checkpoint
+`iter_0000045` is saved with **562 cumulative Adam updates**; metadata,
+shard extents, cursor and finite CPU tensor samples passed. Its own full GPU
+reload remains untested. Maximum gradient norm was 2.07854 and maximum PPO KL
+0.00408692. Collection 47 started at approximately 12:30 PDT.
 
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
