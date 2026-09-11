@@ -61,6 +61,8 @@ Existing full monitoring evaluations:
 | --- | ---: | ---: |
 | 10 | 70 / 300 (23.33%) | 66 |
 | 20 | 95 / 300 (31.67%) | 68 |
+| 21 | 89 / 300 (29.67%) | 67 |
+| 22 | 86 / 300 (28.67%) | 64 |
 | 30 | 96 / 300 (32.00%) | 52 |
 
 Compare task outcomes on the common cohort and report invalidity alongside
