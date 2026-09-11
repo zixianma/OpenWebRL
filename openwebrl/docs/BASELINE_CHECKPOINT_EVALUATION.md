@@ -121,6 +121,28 @@ the supervising agent diagnose and repair within paid time; it does not retry
 blindly or extend the allocation. Retry outputs and W&B runs have distinct
 attempt suffixes. Cancel the allocation if a failure requires human input.
 
-A fixed replacement request of 4 H200s for **2:55**, 16 CPUs / 480 GiB, is awaiting
-explicit approval: estimated **$10.50**, plus judge API usage. The failed attempt
-used approximately $0.13 of GPU time. No replacement has yet been submitted.
+The failed attempt used approximately $0.13 of GPU time. The user subsequently
+explicitly approved **4 H200s for 3 hours**, 16 CPUs / 480 GiB, estimated **$10.80**
+plus judge API usage. Replacement **287370** started on **g004** at September 10
+**19:57 PDT**, ending **22:57 PDT**. It is isolated from training 287371 on g005.
+
+Its outputs are `evaluations/qcq7i4ug-287370-after21` and `...-after22`, with
+controller log `logs/slurm-baseline-eval-287370.out` and submission receipt
+`logs/submission-baseline-eval-287370.json`. The first evaluation restored the
+selected checkpoint and began the 300-task monitor successfully.
+
+Ray omitted the successful checkpoint-restore stdout line from the forwarded
+evaluation log, although the actor's own stdout contained it. The supervisor now
+captures this evidence directly, checking actor membership in the authorized
+Slurm job and the exact checkpoint path/index, and saves
+`checkpoint_restore_evidence.json`. Final validation accepts that receipt or the
+original forwarded line. Nine CPU tests cover restore identity, incomplete
+outcomes, child failure, and unexpected optimization records.
+
+The already-running first wrapper predates this change. If it fails only during
+final bookkeeping after completing evaluation, the supervising agent can validate
+its results against the captured receipt and W&B before releasing the controller's
+repair marker. A retry recognizes a verified complete result from the same
+checkpoint/source/protocol/job and advances without rerunning its tasks. Future
+workers capture the receipt automatically and save their launcher exit status.
+No evaluation recipe or training source was changed.

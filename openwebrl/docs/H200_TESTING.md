@@ -1,5 +1,29 @@
 # H200 runtime and validation
 
+## Approved continuation 287371, 2026-09-10 19:57 PDT
+
+The user approved **4 H200 GPUs for 8 hours** (32 GPU-hours, estimated $28.80),
+16 CPUs and 480 GiB RAM. Job **287371** runs on **g005**, with an allocation
+ending September 11 at **03:57 PDT** and planned shutdown about three minutes
+earlier. It resumes W&B `qcq7i4ug` using the preserved reference source.
+
+The full TP4 restoration check passed for checkpoint **33 / 428 Adam updates**,
+representing completed training iteration **34**. Its receipt is runtime
+`logs/resume-287371-4gpu-verification.json`. Online training restored the same
+checkpoint and began collection **35**. The next scheduled evaluation is **40**.
+Reaching iteration 40 requires six collections and updates, plus that evaluation;
+the eight-hour budget is tight at recent throughput and is not a guarantee.
+
+Current run: runtime `runs/openwebrl-4b-reference-287371-20260911T025909`.
+Local logs are `training.log`, `progress.log`, and `health.jsonl` there; the
+controller log is `logs/slurm-qcq7i4ug-287371.out`. The submission receipt is
+`logs/submission-qcq7i4ug-287371.json`, and `current_baseline.json` points to this
+run. The first startup inspection found no GPU/backend or host OOM events.
+
+The separately approved intermediate evaluation job **287370** runs on **g004**,
+4 H200s for three hours, comparing checkpoints after iterations 21 and 22.
+Its details and validation fixes are in `BASELINE_CHECKPOINT_EVALUATION.md`.
+
 ## Job 286382 completed five iterations and evaluation 30, 2026-09-10
 
 The approved four-H200 allocation ended at its planned shutdown boundary around
