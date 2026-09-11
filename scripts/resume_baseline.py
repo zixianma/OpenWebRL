@@ -220,9 +220,27 @@ def clean_environment():
         if key.startswith('OPENWEBRL_REPLAY_') or key in {
             'OPENWEBRL_VERIFY_RESUME_ONLY', 'OPENWEBRL_STOP_AFTER_SAVED_ROLLOUT',
             'WANDB_RUN_ID', 'DRY_RUN', 'SLIME_LOAD_CHECKPOINT', 'SLIME_CKPT_STEP',
-            'OVERRIDE_OPT_PARAM_SCHEDULER'}:
+            'OVERRIDE_OPT_PARAM_SCHEDULER', 'OPENWEBRL_PENDING_EVAL_ITERATION'}:
             env.pop(key, None)
     return env
+
+
+def pending_evaluation_source(state, source):
+    """Use a separately prepared source only when a scheduled eval is pending."""
+    pending = state.get('pending_evaluation_iteration_one_based')
+    if pending is None:
+        return source
+    if not isinstance(pending, int) or isinstance(pending, bool) or pending <= 0 or pending % 10:
+        raise ValueError('Invalid pending baseline evaluation boundary')
+    prepared = Path(state.get('pending_evaluation_resume_source', source)).resolve()
+    manifest = read_json(prepared / 'reference_manifest.json').get('pending_evaluation_recovery', {})
+    if prepared != source and Path(manifest.get('source', '')).resolve() != source:
+        raise ValueError('Pending evaluation source was not prepared from this preserved baseline')
+    train = (prepared / 'train.py').read_bytes()
+    if (b'OPENWEBRL_RESUME_PENDING_EVAL_V1' not in train
+            or manifest.get('train_sha256') != hashlib.sha256(train).hexdigest()):
+        raise ValueError('Prepare and verify pending evaluation recovery before resuming')
+    return prepared
 
 
 def prepare(args):
@@ -239,6 +257,7 @@ def prepare(args):
         own_steps = capture(['squeue', '--steps', '--user', str(os.getuid()), '--noheader', '--format=%i|%j'])
         other_live_steps = active_steps('\n'.join(line for line in own_steps.splitlines() if line.startswith(previous_job + '.')))
     source = Path(args.source or state['source_directory']).resolve()
+    source = pending_evaluation_source(state, source)
     source_hash = validate_source(source)
     topology_capable = 'OPENWEBRL_RESUME_TOPOLOGY_V1' in (source / 'scripts/run_small_baseline.py').read_text()
     if gpus != 2 and not topology_capable:
@@ -251,6 +270,9 @@ def prepare(args):
     report = json.loads(capture(inspection))
     if report['iteration'] != iteration:
         raise ValueError('Checkpoint marker changed during preflight; retry after training stops.')
+    pending = state.get('pending_evaluation_iteration_one_based')
+    if pending is not None and pending != iteration + 1:
+        raise ValueError('Pending evaluation does not match the selected checkpoint; inspect before resuming')
     replay = None if verification else replay_batch(state, roots, root, iteration)
     run_id = state.get('wandb_run_id') or state['wandb_url'].rstrip('/').rsplit('/', 1)[-1]
     if args.wandb_run_id and args.wandb_run_id != run_id:
@@ -266,6 +288,7 @@ def prepare(args):
     return {'allocation': job, 'active_steps': busy, 'other_live_steps': other_live_steps, 'source': str(source),
             'launcher_sha256': source_hash, 'resume_from': str(root),
             'checkpoint_report': report, 'replay': replay, 'wandb_run_id': run_id,
+            'pending_evaluation_iteration': None if verification else pending,
             'wandb_url': state['wandb_url'], 'command': command, 'verify_resume_only': verification}, state
 
 
@@ -321,6 +344,8 @@ def launch(plan, state, args):
                    OPENWEBRL_REPLAY_ROLLOUT_ID=str(replay['rollout_id']),
                    OPENWEBRL_REPLAY_CONSUMED_GROUPS=str(replay['consumed_groups']))
     verification = plan.get('verify_resume_only', False)
+    if not verification and plan.get('pending_evaluation_iteration') is not None:
+        env['OPENWEBRL_PENDING_EVAL_ITERATION'] = str(plan['pending_evaluation_iteration'])
     restore_receipt = None
     if not verification and plan['allocation'].get('gpus', 2) == 4:
         restore_receipt = validate_verification_receipt(plan, args.job_id)

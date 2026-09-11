@@ -55,10 +55,28 @@ trainer remains active, inside another explicitly authorized allocation. A
 complete untrained rollout can be replayed after migration, preserving collection
 work. The same W&B ID, dataset cursor, optimizer and scheduler state are retained.
 
-At an evaluation boundary, the checkpoint is saved **before** evaluation. Finish
-the scheduled evaluation before moving on, or migrate the preceding checkpoint
-plus its complete untrained rollout so that replay triggers the due evaluation.
-Do not treat a saved checkpoint alone as proof that its evaluation has completed.
+At an evaluation boundary, the checkpoint is saved **before** evaluation. Do not
+treat a saved checkpoint alone as proof that its evaluation has completed. When
+`pending_evaluation_iteration_one_based` is set, the resume wrapper requires the
+checkpoint at that exact boundary and a verified pending-evaluation source. It
+finishes that evaluation before the next collection, using the original W&B run
+and evaluation iteration. No optimizer updates are replayed for this recovery.
+
+The prepared source is runtime `reference-stage1-pending-eval-20260911`, recorded
+as `pending_evaluation_resume_source` in the pointer. It was copied from the
+preserved source with `scripts/prepare_resume_pending_eval.py`; the five recipe
+hashes and launcher hash are unchanged. Only the training driver gains a guarded
+pre-collection evaluation call and the usual post-evaluation cache release.
+The four-GPU restore verification still runs first. Five CPU regression tests
+cover checkpoint identity, evaluation failure, ordinary-resume behavior, source
+integrity, and stale environment controls. Actual GPU recovery remains to be
+verified if this path is needed.
+
+After recovery, verify the complete 300-task metrics and W&B synchronization,
+then clear the pending field. `[ResumePendingEvaluation] ... status=completed`
+alone is not proof of remote W&B synchronization. This runs inside the already
+approved training allocation and does not submit another job or consume one of
+the four separately approved reward-ranked evaluation jobs.
 
 Fourteen CPU resume tests cover resource/ownership checks, topology arguments,
 verification receipts, preservation of the training pointer, replay selection,
