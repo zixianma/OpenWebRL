@@ -146,3 +146,22 @@ repair marker. A retry recognizes a verified complete result from the same
 checkpoint/source/protocol/job and advances without rerunning its tasks. Future
 workers capture the receipt automatically and save their launcher exit status.
 No evaluation recipe or training source was changed.
+
+
+The after-21 evaluation completed all 300 tasks in **53:10**: **89 successes
+(29.67%)**, 67 invalid attempts (22.33%), and valid-only success 89/233 (38.20%).
+All **41 logged evaluation scalars** matched W&B history row 0; evidence is
+`evaluations/qcq7i4ug-287370-after21/wandb_audit.json`. Ray eventually forwarded
+the restore line during shutdown, so the original worker validated successfully
+without a retry. The batch controller immediately advanced to after-22.
+
+
+Job **287370 completed successfully in 1:48:47**, releasing its allocation.
+The after-22 checkpoint scored **86/300 (28.67%)**, with 64 invalid attempts
+(21.33%) and valid-only success 86/236 (36.44%). All 41 scalars matched its separate
+W&B run; receipt: `evaluations/qcq7i4ug-287370-after22/wandb_audit.json`.
+Thus the training-reward jump from collection 22 to 23 did not correspond to a
+higher task-success score in this paired checkpoint evaluation. After-30 remains
+the best evaluated checkpoint at 96/300 (32%), ahead of after-20 at 95/300.
+The user requested a follow-up evaluation of the best checkpoint using Browser
+Use Cloud's stealth browser; preparation and CPU/CDP checks are in progress.

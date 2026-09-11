@@ -47,6 +47,26 @@ class EvaluationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Missing checkpoint component'):
             self.plan()
 
+    def test_browser_use_has_distinct_identity_and_session_namespace(self):
+        source = self.root / 'source'
+        source.mkdir()
+        (source / 'reference_manifest.json').write_text(json.dumps({'browser_use_evaluation': True}))
+        with patch.object(m, 'RUNTIME', self.root), patch.object(m, 'validate_source'):
+            plan = m.build_plan(source, self.ckpt, self.output, '42', browser_env='browser-use')
+        self.assertEqual(plan['wandb_run_id'], 'qcq7i4ug-eval-browseruse-after22-42')
+        self.assertEqual(plan['environment']['SLIME_BROWSER_ENV_MODE'], 'browser-use')
+        self.assertEqual(plan['environment']['OPENWEBRL_BROWSER_USE_SESSION_DIR'], str(self.output / 'browser_sessions'))
+        self.assertEqual(plan['environment']['NUM_ROLLOUT'], '0')
+        self.assertNotIn('BROWSER_USE_API_KEY', plan['environment'])
+
+    def test_browser_use_rejects_unprepared_source(self):
+        source = self.root / 'source'
+        source.mkdir()
+        (source / 'reference_manifest.json').write_text('{}')
+        with patch.object(m, 'RUNTIME', self.root), patch.object(m, 'validate_source'):
+            with self.assertRaisesRegex(ValueError, 'isolated Browser Use'):
+                m.build_plan(source, self.ckpt, self.output, '42', browser_env='browser-use')
+
     def test_existing_output_rejected(self):
         self.output.mkdir(parents=True)
         with self.assertRaisesRegex(ValueError, 'new output'):

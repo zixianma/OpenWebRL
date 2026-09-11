@@ -30,9 +30,10 @@ _CDP_POLL_INTERVAL = 2
 # marker file per live remote session; remove it on successful stop; sweep
 # leftovers at the start of the next run (or via ``--cleanup`` CLI).
 # ---------------------------------------------------------------------------
-_BROWSER_USE_MANIFEST_DIR = os.path.join(
+_BROWSER_USE_MANIFEST_DIR = os.environ.get("OPENWEBRL_BROWSER_USE_SESSION_DIR") or os.path.join(
     os.path.dirname(os.path.abspath(__file__)), ".browser_use_sessions"
 )
+_CLEANUP_STARTED = False
 print("Browser-Use session manifest directory:", _BROWSER_USE_MANIFEST_DIR)
 
 
@@ -43,8 +44,12 @@ def _save_session_id(session_id: Any) -> None:
 
 
 def _remove_session_id(session_id: Any) -> None:
+    """Retain a receipt after confirmed remote shutdown instead of deleting it."""
     try:
-        os.remove(os.path.join(_BROWSER_USE_MANIFEST_DIR, str(session_id)))
+        stopped = os.path.join(_BROWSER_USE_MANIFEST_DIR, "stopped")
+        os.makedirs(stopped, exist_ok=True)
+        os.rename(os.path.join(_BROWSER_USE_MANIFEST_DIR, str(session_id)),
+                  os.path.join(stopped, str(session_id)))
     except OSError:
         pass
 
@@ -53,15 +58,35 @@ def _list_session_ids() -> List[str]:
     if not os.path.isdir(_BROWSER_USE_MANIFEST_DIR):
         return []
     try:
-        return os.listdir(_BROWSER_USE_MANIFEST_DIR)
+        return [name for name in os.listdir(_BROWSER_USE_MANIFEST_DIR)
+                if os.path.isfile(os.path.join(_BROWSER_USE_MANIFEST_DIR, name))]
     except OSError:
         return []
+
+
+async def _stop_session(client: Any, session_id: Any) -> Any:
+    # Stop can return an active snapshot while shutdown is still in progress.
+    view = await client.browsers.stop(session_id)
+    for attempt in range(6):
+        if getattr(view.status, "value", view.status) == "stopped":
+            _remove_session_id(session_id)
+            return view
+        if attempt < 5:
+            await asyncio.sleep(1)
+            view = await client.browsers.get(session_id)
+    raise RuntimeError(f"Browser-Use session {session_id} did not confirm shutdown")
 
 
 async def cleanup_existing_browser_use_sessions(
     browser_use_cfg: Optional[Dict[str, Any]] = None,
 ) -> None:
     """Stop any leftover sessions recorded in the manifest directory."""
+    global _CLEANUP_STARTED
+    if _CLEANUP_STARTED:
+        return
+    # Set before the first await: concurrent initializations must not sweep
+    # another newly-created session from this same process.
+    _CLEANUP_STARTED = True
     session_ids = _list_session_ids()
     if not session_ids:
         logger.info("No leftover Browser-Use session markers found.")
@@ -80,15 +105,14 @@ async def cleanup_existing_browser_use_sessions(
 
     logger.info(f"Found {len(session_ids)} leftover Browser-Use session(s), stopping...")
 
-    client = AsyncBrowserUse(api_key=api_key)
+    client = AsyncBrowserUse(api_key=api_key, timeout=30, max_retries=0)
     for sid in session_ids:
         try:
-            await client.browsers.stop(sid)
+            await _stop_session(client, sid)
             print(f"♻️  [Stopped Browser-Use session {sid}]")
         except Exception as exc:
-            # session_not_found / already-stopped → same outcome, drop marker too.
-            logger.warning("Stop failed for %s (may already be gone): %s", sid, exc)
-        _remove_session_id(sid)
+            logger.warning("Stop failed for %s; retaining its receipt: %s", sid, type(exc).__name__)
+    await client.close()
 
 
 class BrowserUseWebEnv(WebEnv):
@@ -208,7 +232,7 @@ class BrowserUseWebEnv(WebEnv):
         # Never close context/browser — they live on the remote side. Stop
         # the session first so billing halts even if the cost query later hangs.
         try:
-            await self._bu_client.browsers.stop(self.session_id)
+            await _stop_session(self._bu_client, self.session_id)
             print(f"♻️  [Stopped Browser-Use session {self.session_id}]")
         except Exception as exc:
             logger.warning("Stop failed for %s: %s", self.session_id, exc)
@@ -227,13 +251,12 @@ class BrowserUseWebEnv(WebEnv):
         except Exception as exc:
             logger.warning("Cost query failed for %s: %s", self.session_id, exc)
 
-        _remove_session_id(self.session_id)
-
         if self.playwright:
             try:
                 await self.playwright.stop()
             except Exception as exc:
                 logger.warning("playwright.stop() failed: %s", exc)
+        await self._bu_client.close()
 
 
 # ---------------------------------------------------------------------------
@@ -257,7 +280,9 @@ async def create_browser_use_env(
             "Set BROWSER_USE_API_KEY env var or browser_use.api_key in config.yaml"
         )
 
-    client = AsyncBrowserUse(api_key=api_key)
+    # Do not retry a session-creation POST after an ambiguous network failure;
+    # that can create an untracked second billable browser.
+    client = AsyncBrowserUse(api_key=api_key, timeout=30, max_retries=0)
 
     # Remote screen size is in CSS pixels (pre-DPR).
     dpr = max(1, int(env_config.get("dpr", 1)))
@@ -301,8 +326,7 @@ async def create_browser_use_env(
             raise RuntimeError(
                 f"Browser-Use session {session.id} returned no cdp_url within {_CDP_POLL_TIMEOUT}s"
             )
-        if live_url:
-            print(f"👀 [Browser-Use live view: {live_url}]")
+        # Keep capability-bearing live/CDP URLs out of shared training logs.
 
         env = BrowserUseWebEnv(
             cdp_url=cdp_url,
@@ -329,11 +353,11 @@ async def create_browser_use_env(
     except BaseException:
         if session is not None:
             try:
-                await client.browsers.stop(session.id)
+                await _stop_session(client, session.id)
                 print(f"♻️  [Stopped Browser-Use session {session.id} after failure]")
             except Exception as exc:
                 logger.warning("Stop-on-failure failed: %s", exc)
-            _remove_session_id(session.id)
+        await client.close()
         raise
 
 

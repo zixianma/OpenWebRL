@@ -21,7 +21,7 @@ REPO = Path(__file__).resolve().parents[1]
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 
 
-def build_plan(source, checkpoint, output, job_id, attempt=0):
+def build_plan(source, checkpoint, output, job_id, attempt=0, browser_env='local_process'):
     source, checkpoint, output = map(lambda p: Path(p).resolve(), (source, checkpoint, output))
     validate_source(source)
     match = re.fullmatch(r'iter_(\d{7})', checkpoint.name)
@@ -39,6 +39,13 @@ def build_plan(source, checkpoint, output, job_id, attempt=0):
     if not output.is_relative_to(RUNTIME / 'evaluations'):
         raise ValueError('Keep evaluations under the runtime evaluations directory')
     run_id = f'qcq7i4ug-eval-after{index+1}-{job_id}'
+    if browser_env == 'browser-use':
+        manifest = json.loads((source / 'reference_manifest.json').read_text())
+        if not manifest.get('browser_use_evaluation'):
+            raise ValueError('Prepare an isolated Browser Use evaluation source first')
+        run_id = f'qcq7i4ug-eval-browseruse-after{index+1}-{job_id}'
+    elif browser_env != 'local_process':
+        raise ValueError('Unsupported evaluation browser backend')
     if attempt:
         run_id += f'-r{attempt}'
     env = {
@@ -56,6 +63,10 @@ def build_plan(source, checkpoint, output, job_id, attempt=0):
         'SLIME_ADAPTIVE_QUERY_BLACKLIST_PATH': str(source / 'reference_empty_blacklist.txt'),
         'SLIME_BROWSER_QUERY_BLACKLIST_PATH': str(source / 'reference_empty_blacklist.txt'),
     }
+    if browser_env == 'browser-use':
+        env.update(SLIME_BROWSER_ENV_MODE='browser-use',
+                   OPENWEBRL_BROWSER_USE_SESSION_DIR=str(output / 'browser_sessions'),
+                   PYTHONPATH=str(RUNTIME / 'browser-use-sdk-3.11.3'))
     command = ['bash', str(source / 'scripts/run_h200_browser.sh'),
                '--use-wandb', '--wandb-mode', 'online', '--wandb-project', 'openwebrl',
                '--wandb-team', 'zixianma', '--wandb-group', 'qcq7i4ug-checkpoint-evaluation',
@@ -69,8 +80,10 @@ def build_plan(source, checkpoint, output, job_id, attempt=0):
     return {'source': str(source), 'checkpoint': str(checkpoint), 'checkpoint_index': index,
             'completed_training_iterations': index+1, 'output': str(output), 'job_id': job_id,
             'attempt': attempt,
+            'browser_env': browser_env,
             'wandb_run_id': run_id, 'parent_training_run': 'qcq7i4ug',
-            'protocol': 'existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks',
+            'protocol': 'existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks'
+                        + ('; browser=browser-use, proxy=disabled' if browser_env == 'browser-use' else ''),
             'optimizer_updates_requested': 0, 'environment': env, 'command': command,
             'note': 'Native eval/iteration is 1 in eval-only mode; use checkpoint identity in this manifest.'}
 
@@ -163,10 +176,12 @@ def run(plan, env_file):
     env = clean_environment()
     # Explicit evaluation options take precedence over inherited training options.
     for key, value in dotenv_values(env_file).items():
-        if value and key.startswith(('WANDB_', 'JUDGE_', 'OPENAI_', 'AZURE_')):
+        if value and key.startswith(('WANDB_', 'JUDGE_', 'OPENAI_', 'AZURE_', 'BROWSER_USE_')):
             env.setdefault(key, value)
     if not env.get('WANDB_API_KEY'):
         raise ValueError('WANDB_API_KEY is required')
+    if plan.get('browser_env') == 'browser-use' and not env.get('BROWSER_USE_API_KEY'):
+        raise ValueError('BROWSER_USE_API_KEY is required')
     if env.get('OPENAI_API_KEY') and not env.get('JUDGE_API_BASE'):
         env.update(JUDGE_API_MODE='served', JUDGE_API_BASE='https://api.openai.com/v1')
     env.update(plan['environment'])
@@ -204,8 +219,9 @@ def main():
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--attempt', type=int, default=0)
+    parser.add_argument('--browser-env', choices=['local_process', 'browser-use'], default='local_process')
     args = parser.parse_args()
-    plan = build_plan(args.source, args.checkpoint, args.output, args.job_id, args.attempt)
+    plan = build_plan(args.source, args.checkpoint, args.output, args.job_id, args.attempt, args.browser_env)
     if args.execute:
         run(plan, args.env_file)
     else:
