@@ -102,8 +102,7 @@ def main():
             pending = [row for row in rows if row["updates"] > state["last_logged_update"]]
             for row in pending:
                 epoch_size = audit["retained_turns"]
-                run.log(
-                    {
+                payload = {
                         "optimizer/update": row["updates"],
                         "train/cross_entropy": row["loss"],
                         "train/perplexity": math.exp(row["loss"]),
@@ -113,9 +112,17 @@ def main():
                         "train/epoch_number": row["epoch"] + 1,
                         "train/epoch_position": row["next_position"],
                         "train/epoch_fraction": row["next_position"] / epoch_size,
-                    },
-                    step=row["updates"],
-                )
+                    }
+                for source, target in (
+                    ("sft_loss", "train/sft_loss"),
+                    ("preference_loss", "train/preference_loss"),
+                    ("policy_margin", "train/policy_margin"),
+                    ("reference_margin", "train/reference_margin"),
+                    ("preference_weight", "train/preference_weight"),
+                ):
+                    if source in row:
+                        payload[target] = row[source]
+                run.log(payload, step=row["updates"])
                 state["last_logged_update"] = row["updates"]
                 state["last_logged_utc"] = row["utc"]
                 write_json(state_path, state)

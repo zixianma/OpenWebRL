@@ -1,6 +1,6 @@
 # ARM results dashboard
 
-Last updated: 2026-09-09 PDT.
+Last updated: 2026-09-11 PDT.
 
 This page is the index for Action Reward Model experiments in OpenWebRL. It
 keeps inference-time action selection separate from standalone-policy
@@ -19,6 +19,9 @@ collection and deploys one policy sample per turn.
 | Filtered SFT, fresh holdout 200 | 1A endpoint update 263 | 1 | 67/200 = **33.5%** | 67/177 = **37.9%** | **+2.5 pp overall** |
 | Filtered SFT, combined all 300 | Original C2 update 500 | 1 | 95/300 = **31.7%** | 95/258 = **36.8%** | control |
 | Filtered SFT, combined all 300 | 1A endpoint update 263 | 1 | 100/300 = **33.3%** | 100/256 = **39.1%** | **+1.7 pp overall** |
+| Preference distillation, fixed 100 | Calibrated endpoint update 131 | 1 | 31/100 = **31.0%** | 31/86 = **36.0%** | +5.0 pp vs historical fixed-100 base; −2.0 pp vs C2/1A |
+| Joint C2 + Piotr, fresh all 300 | SFT endpoint update 174 | 1 | 102/300 = **34.0%** | 102/270 = **37.8%** | +4.0 pp vs historical starting actor |
+| Joint C2 + Piotr, fresh all 300 | DPO-only endpoint update 174 | 1 | 104/300 = **34.7%** | 104/254 = **40.9%** | +0.7 pp vs joint SFT; +4.7 pp vs historical starting actor |
 
 The strongest measured effect remains SelectionARM at inference time. On the
 247 tasks valid for both the frozen actor and SelectionARM, SelectionARM gained
@@ -33,6 +36,15 @@ the +12.7-point test-time SelectionARM gain and does not establish an
 improvement over the original C2 recipe. The all-300 SFT row combines the fresh holdout with the
 fixed-100 evaluations collected earlier, so the holdout-200 comparison is the
 primary result.
+
+The joint-data endpoints are also close: DPO has 32 wins and 30 losses against
+SFT across all 300 tasks (exact McNemar p=0.899), or 30 wins and 26 losses on
+247 common-valid tasks (p=0.689). Neither establishes an advantage over the
+other. Against the historical starting actor, the all-300 tests are p=0.141
+for joint SFT and p=0.076 for joint DPO. DPO's common-valid comparison is
+nominally significant (p=0.033), but conditions on availability and uses a
+historical control. These are exploratory, unadjusted comparisons from one
+training seed. [Full joint comparison](ARM_JOINT_SFT_VS_DPO_RESULTS.md).
 
 ## Filtered SFT versus the starting base model
 
@@ -73,6 +85,16 @@ batch and an exposure-matched schedule.
 - [Ablation 1A configuration and run record](ARM_C2_ABLATION_1A_RUN.md)
 - [Checkpoint-scaling study](ARM_C2_SCALING_RESULTS.md)
 - [Next filtered-SFT ablations](ARM_FILTERED_SFT_ABLATIONS.md)
+- [Next experiment: same-state preference distillation](ARM_PREFERENCE_DISTILLATION_PLAN.md)
+- [Calibrated preference run 286384](ARM_PREFERENCE_RUN_286384.md)
+- [Corrected preference viability plan](ARM_PREFERENCE_V2_VIABILITY_PLAN.md)
+- [Joint C2 and Piotr teacher-data training proposal](ARM_JOINT_DATA_TRAINING_PLAN.md)
+- [Joint-data SFT full-300 result and rollouts](ARM_JOINT_SFT_RESULTS.md)
+- [Joint-data DPO full-300 result and rollouts](ARM_JOINT_DPO_RESULTS.md)
+- [Matched joint SFT versus DPO comparison](ARM_JOINT_SFT_VS_DPO_RESULTS.md)
+- [Joint SFT/DPO training curves and current status](ARM_JOINT_TRAINING_MONITOR.md)
+- [Combined data prepared for review: counts and HTML gallery](ARM_JOINT_DATA_REVIEW.md)
+- [Preference v2 CPU audit: retention, label risks, and provisional manifests](ARM_PREFERENCE_V2_CPU_AUDIT.md)
 - [Original C2 W&B training curve](https://wandb.ai/zixianma/openwebrl-arm/runs/57f0384c)
 - [Ablation 1A W&B training curve](https://wandb.ai/zixianma/openwebrl-arm/runs/9ac0cb8a)
 - [Machine-readable C2-vs-1A comparison](arm_results/c2_vs_1a_comparison.json)

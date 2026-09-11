@@ -1,4 +1,9 @@
-# C2 update 500 vs 1A endpoint: full-300 evaluation
+# C2, 1A, and joint-data SFT/DPO: full-300 evaluation
+
+Updated 2026-09-11 PDT with the completed joint C2 + Piotr SFT and DPO-only
+runs. Their results appear alongside C2 and 1A in the table below. The original
+C2/1A evaluation setup and resource record are retained here; the joint runs
+used separate allocations and fresh evaluations of all 300 tasks.
 
 Status: **complete**. Slurm job `285854` ran on `g019` from 2026-09-09
 22:03 to 23:02 PDT and exited successfully after 58:28. Both policies completed
@@ -60,8 +65,11 @@ comparison.
 | --- | --- | ---: | ---: | ---: |
 | Fresh holdout 200 | C2 update 500 | 62/200 = 31.0% | 62/179 = 34.6% | 21 |
 | Fresh holdout 200 | 1A endpoint 263 | 67/200 = 33.5% | 67/177 = 37.9% | 23 |
+| Historical all 300 | Starting OpenWebRL-4B-SFT | 90/300 = 30.0% | 90/267 = 33.7% | 33 |
 | Combined all 300 | C2 update 500 | 95/300 = 31.7% | 95/258 = 36.8% | 42 |
 | Combined all 300 | 1A endpoint 263 | 100/300 = 33.3% | 100/256 = 39.1% | 44 |
+| Fresh all 300, Sep 11 | Joint C2 + Piotr SFT update 174 | **102/300 = 34.0%** | **102/270 = 37.8%** | 30 |
+| Fresh all 300, Sep 11 | Joint C2 + Piotr DPO-only update 174 | **104/300 = 34.7%** | **104/254 = 40.9%** | 46 |
 
 On the primary concurrent holdout, 1A recorded 23 paired wins and 15 paired
 losses over 168 common-valid tasks. The exact two-sided McNemar p-value is
@@ -71,3 +79,54 @@ improvement.
 
 The complete human-readable and machine-readable reports are `comparison.md`
 and `comparison.json` in the runtime output directory above.
+
+## Joint-data SFT and DPO-only results (2026-09-11)
+
+Both runs independently started from the original OpenWebRL-4B-SFT actor and
+used the same 5,540 retained training states: 3,464 C2 and 2,076 Piotr. SFT
+trained on the chosen responses; DPO used the corresponding chosen/rejected
+pairs with the original actor as its frozen reference. Both used full-response
+loss, language-only LoRA rank 16 / alpha 32 / dropout 0.05, effective batch 32,
+and one pass (174 updates). LR warmed up over 512 states to 1e-5 and decayed
+to 5e-6. DPO beta was 0.1, with no auxiliary SFT loss.
+
+Each endpoint received a fresh evaluation of all 300 OM2W tasks under the
+one-candidate, no-inference-ARM, o4-mini/AgentTrek protocol described above.
+Neither reused the old fixed-100 results. Both completed all tasks; unavailable
+outcomes remain in the overall denominator and were not replaced by retries.
+
+Compared with 1A's historical all-300 aggregate, joint SFT is +0.7 percentage
+points overall and joint DPO is +1.3 points. These are descriptive differences,
+not controlled gains: evaluation times and availability differ, and the old
+C2/1A aggregate combines two evaluation stages. Joint SFT's valid-only rate is
+lower than 1A's despite its slightly higher overall rate.
+
+| Paired comparison | All-300 wins / losses | Exact McNemar p | Common-valid tasks | Wins / losses | Exact p |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Joint DPO vs joint SFT | 32 / 30 | 0.8991 | 247 | 30 / 26 | 0.6889 |
+| Joint SFT vs historical starting actor | 34 / 22 | 0.1409 | 261 | 34 / 21 | 0.1048 |
+| Joint DPO vs historical starting actor | 34 / 20 | 0.0759 | 245 | 33 / 17 | 0.0328 |
+
+Wins favor the first named policy. The all-300 tests count unavailable outcomes
+as failures. DPO's two-success lead over SFT does not establish an advantage.
+Neither joint run's primary all-300 comparison establishes a gain over the
+historical starting actor at the 0.05 level. DPO's common-valid result is
+nominally significant, but conditions on availability and uses a historical
+control. All comparisons are exploratory, unadjusted, and use one training seed.
+
+SFT's held-out winner CE improved from 0.1883 to 0.1605 on C2 and from 0.2095
+to 0.1888 on Piotr, with most improvement by update 87. DPO's held-out
+preference loss improved from 0.6931 to 0.6675 / 0.6467, while winner CE rose
+to 0.2005 / 0.2203. The offline improvements therefore produced only modest
+observed task-success differences.
+
+SFT job `287477` on `g006` completed training plus evaluation in 1:53:34
+(3.79 H200-hours); DPO job `287447` on `g003` completed in 3:22:06
+(6.74 H200-hours). Both allocations released automatically. Intermediate
+checkpoints 0/44/50/87/131 and endpoint 174 are retained.
+
+- [Joint training config and recovery record](ARM_JOINT_DATA_TRAINING_PLAN.md)
+- [Training curves and checkpoint diagnostics](ARM_JOINT_TRAINING_MONITOR.md)
+- [SFT results and rollout paths](ARM_JOINT_SFT_RESULTS.md)
+- [DPO results and rollout paths](ARM_JOINT_DPO_RESULTS.md)
+- [Machine-readable joint comparison](arm_results/joint_data_v2/joint-sft-vs-dpo-om2w.json)

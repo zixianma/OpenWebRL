@@ -1,11 +1,10 @@
 # Next action-level filtered-SFT ablations
 
-Status: **ablation 1A is running in Slurm job 285567**. On 2026-09-09 the user
-deprioritized the update-500/update-700 full-300 checkpoint study in favor of
-training ablations compared with the existing C2 baseline. The approved first
-job uses one H200 for five hours and includes fixed-100 validation. Update 500
-is the reference policy. Live configuration and paths are recorded in
-[ARM_C2_ABLATION_1A_RUN.md](ARM_C2_ABLATION_1A_RUN.md).
+Status: **ablation 1A and its 200-task holdout comparison are complete**.
+The next selected direction is same-state winner/loser preference distillation;
+see the [frozen experiment plan](ARM_PREFERENCE_DISTILLATION_PLAN.md). Rank-32
+and full-fine-tuning variants are secondary until the preference/data recipe is
+tested.
 
 ## What the first C2 curve says
 
