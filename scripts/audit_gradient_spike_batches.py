@@ -88,11 +88,16 @@ def audit(root, rollout, epoch, spike_step, seed):
         label = rollout * (usable // 256) * 2 + epoch * (usable // 256) + batch_id
         logged = re.search(rf'model.py:\d+ - step {label}: (\{{[^\n]*\}})', log)
         recorded = ast.literal_eval(logged[1]) if logged else None
-        reconstructed_mean = statistics.mean(abs(x['normalized_advantage']) for x in rows)
+        # The training reducer contributes zero for a fully masked sample,
+        # while retaining it in the minibatch denominator.
+        reconstructed_mean = statistics.mean(
+            abs(x['normalized_advantage']) if x['active_response_tokens'] > 0 else 0.0
+            for x in rows)
         if recorded and not math.isclose(reconstructed_mean, recorded['train/abs_advantage'], abs_tol=1e-4):
             raise ValueError(f'Batch {batch_id} reconstructed advantages disagree with training; inspect masks/order.')
         batches.append(dict(batch=batch_id, grad_norm=float(grad[1]) if grad else None,
                             reconstructed_advantage_matches_log=bool(recorded),
+                            reconstructed_logged_abs_advantage=reconstructed_mean,
                             sample_count=len(rows), unique_trajectories=len(trajectories),
                             max_turns_from_one_trajectory=max(trajectories.values()),
                             groups=len({x['group_id'] for x in rows}),
