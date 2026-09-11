@@ -39,7 +39,9 @@ Job **287949** was submitted at **11:32 PDT** with explicit approval for
 Its unfinished collection 46 will be collected again. Stealth evaluation
 287879 continues independently.
 
-Use `scripts/resume_baseline_4gpu_32cpu.sbatch` for this profile, obtaining
+The user selected **32 browsers as the four-GPU / 32-CPU default**. Both
+`scripts/resume_baseline_4gpu.sbatch` and the explicit
+`scripts/resume_baseline_4gpu_32cpu.sbatch` now select this profile, obtaining
 explicit approval for each new allocation. It owns and awaits a full GPU
 restore check followed by training in W&B lineage `qcq7i4ug`. Its preserved
 source is runtime `reference-stage1-browsers32-20260911`, prepared with
@@ -80,17 +82,18 @@ reload remains untested. Maximum gradient norm was 2.07854 and maximum PPO KL
 ### Four-GPU continuation
 
 The model/optimizer checkpoint format supports a different tensor-parallel size.
-The prepared four-H200 profile uses TP4/DP1 and 32 browser slots, with conservative
-resource guards of 16 CPUs and 480 GiB RAM on one node. This is a tested CPU
-configuration and workflow. Checkpoint 14 received a successful full TP4 model
+The default four-H200 profile uses TP4/DP1, 32 browser slots, a 32-task gate,
+and 32 CPUs / 480 GiB RAM on one node. The resume wrapper retains a 16-CPU
+minimum for older profiles; that minimum is not the current default request. Checkpoint 14 received a successful full TP4 model
 and optimizer reload in job 284885. Checkpoint 17 also passed full TP4 restore
 in job 285546. The latest checkpoint and prepared source still require their
 own restore verification in each new allocation. Two separate two-GPU
 allocations do not satisfy this single-node profile.
 
-A prepared source snapshot is available at:
-`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-eval-cache-20260909`.
-It preserves all five baseline recipe-file hashes. To recreate such a snapshot
+The default prepared source snapshot is:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-browsers32-20260911`.
+It preserves all five original protected recipe-file hashes and additionally
+hashes the YAML containing the 32-task gate. To recreate such a snapshot
 from a newer preserved baseline (never the experimental working tree):
 
 ```bash
