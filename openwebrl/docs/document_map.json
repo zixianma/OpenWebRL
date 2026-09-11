@@ -1,0 +1,334 @@
+{
+  "version": 1,
+  "description": "Topic consolidation map; SHA256 values preserve the source records before migration.",
+  "targets": {
+    "ARM_INFERENCE.md": {
+      "title": "ARM inference and judge protocol",
+      "sources": [
+        "ARM_INFERENCE_RESULTS.md",
+        "ARM_JUDGE_ALIGNMENT.md",
+        "ARM_INFERENCE_RETRY_RESULTS.md"
+      ]
+    },
+    "ARM_SFT.md": {
+      "title": "ARM filtered SFT: collection, training, and ablations",
+      "sources": [
+        "ARM_FILTERED_SFT_PLAN.md",
+        "ARM_C2_RUN.md",
+        "ARM_C2_RESUME.md",
+        "ARM_C2_ABLATION_1A_RUN.md",
+        "ARM_FILTERED_SFT_ABLATIONS.md",
+        "ARM_C2_SCALING_EVAL.md",
+        "ARM_C2_FULL300_EVAL.md"
+      ]
+    },
+    "ARM_PREFERENCE.md": {
+      "title": "ARM preference learning: experiments and audits",
+      "sources": [
+        "ARM_PREFERENCE_RUN_286384.md",
+        "ARM_PREFERENCE_DISTILLATION_PLAN.md",
+        "ARM_PREFERENCE_V2_CPU_AUDIT.md",
+        "ARM_PREFERENCE_V2_VIABILITY_PLAN.md"
+      ]
+    },
+    "ARM_JOINT_DATA.md": {
+      "title": "ARM joint C2 and Piotr data: recipe and training",
+      "sources": [
+        "ARM_JOINT_DATA_TRAINING_PLAN.md",
+        "ARM_JOINT_DATA_REVIEW.md",
+        "ARM_JOINT_SFT_HISTORY_EXAMPLE.md"
+      ]
+    },
+    "ARM_RESULTS.md": {
+      "title": "ARM results: inference, C2, 1A, joint SFT, and DPO",
+      "sources": [
+        "ARM_RESULTS_DASHBOARD.md",
+        "ARM_C2_VS_1A_FULL300_EVAL.md",
+        "ARM_C2_ABLATION_1A_RESULTS.md",
+        "ARM_C2_SCALING_RESULTS.md",
+        "ARM_JOINT_SFT_VS_DPO_RESULTS.md",
+        "ARM_JOINT_SFT_RESULTS.md",
+        "ARM_JOINT_DPO_RESULTS.md",
+        "ARM_JOINT_TRAINING_MONITOR.md"
+      ]
+    },
+    "RL_RUNTIME.md": {
+      "title": "RL runtime: resume, scaling, and execution history",
+      "sources": [
+        "RESUMING_BASELINE.md",
+        "BASELINE_SCALING.md",
+        "ROLLOUT_ARCHIVE.md",
+        "H200_TESTING.md"
+      ]
+    },
+    "RL_EVALUATION.md": {
+      "title": "RL checkpoint evaluation: baseline, Browser Use, and scheduling",
+      "sources": [
+        "BASELINE_CHECKPOINT_EVALUATION.md",
+        "BROWSER_USE_CHECKPOINT_EVALUATION.md",
+        "REWARD_RANK_EVALUATION_QUEUE.md"
+      ]
+    },
+    "RL_METRICS.md": {
+      "title": "RL metrics: reward, optimization, and diagnostics",
+      "sources": [
+        "METRICS.md",
+        "PAPER_REWARD_COMPARISON.md",
+        "GRADIENT_DIAGNOSTICS.md"
+      ]
+    }
+  },
+  "documents": {
+    "ARM_INFERENCE_RESULTS.md": {
+      "target": "ARM_INFERENCE.md",
+      "anchor": "arm-inference-results",
+      "sha256": "9d3159061b40c34fa9b765ff539d23270afa680a094066bf645f5d845a307d3c",
+      "title": "ARM inference results on Online-Mind2Web"
+    },
+    "ARM_JUDGE_ALIGNMENT.md": {
+      "target": "ARM_INFERENCE.md",
+      "anchor": "arm-judge-alignment",
+      "sha256": "e12916e3d303f15a8bdd45c9854caf8b562cfe75fba5f7a77a7608f9b67a25c0",
+      "title": "ARM judge alignment audit"
+    },
+    "ARM_INFERENCE_RETRY_RESULTS.md": {
+      "target": "ARM_INFERENCE.md",
+      "anchor": "arm-inference-retry-results",
+      "sha256": "c23aa4f3332b4e936a4cf678c3f9242fd1d31b30464b088b7942753fd9b44e22",
+      "title": "ARM matched retry status and results"
+    },
+    "ARM_FILTERED_SFT_PLAN.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-filtered-sft-plan",
+      "sha256": "8b50ac3c1f603aea70103a51250ae9b697178e71621e004bcffeb48a5104e809",
+      "title": "ARM-filtered action-level SFT pilot"
+    },
+    "ARM_C2_RUN.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-c2-run",
+      "sha256": "9954d554086d0989cd3c0941e275023421f6492895eba7a54431fe5bafb05f51",
+      "title": "C2 full-pool collection and SFT run"
+    },
+    "ARM_C2_RESUME.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-c2-resume",
+      "sha256": "f1375ec5f0c8cb7cb16bac7e1ba837e06970f4bbbfe4cd71160f18a77a06ef51",
+      "title": "Resuming C2 student training"
+    },
+    "ARM_C2_ABLATION_1A_RUN.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-c2-ablation-1a-run",
+      "sha256": "afb5ef4e6a69992c6b2549073112cc2d32d4880be99278d0b4f92340051ccce0",
+      "title": "C2 ablation 1A run"
+    },
+    "ARM_FILTERED_SFT_ABLATIONS.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-filtered-sft-ablations",
+      "sha256": "5a53ac5fb6cfde9d87f5d1f8ed928c259cea05f4a17404b0e795a4339207ecc7",
+      "title": "Next action-level filtered-SFT ablations"
+    },
+    "ARM_C2_SCALING_EVAL.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-c2-scaling-eval",
+      "sha256": "192978689f53976ca9c68411932f99aa19bfc6c8684c1c235418673e100ed95c",
+      "title": "C2 checkpoint scaling evaluation"
+    },
+    "ARM_C2_FULL300_EVAL.md": {
+      "target": "ARM_SFT.md",
+      "anchor": "arm-c2-full300-eval",
+      "sha256": "b130dc36befc598c2d326912991c9b027698f69984f067a160c570a06ad5af4c",
+      "title": "C2 update-500/update-700 full evaluation"
+    },
+    "ARM_PREFERENCE_RUN_286384.md": {
+      "target": "ARM_PREFERENCE.md",
+      "anchor": "arm-preference-run-286384",
+      "sha256": "c493d50660fd182d95357c1caed98b082d131219f2cf59475c410b8483fdedf0",
+      "title": "Calibrated ARM preference run 286384"
+    },
+    "ARM_PREFERENCE_DISTILLATION_PLAN.md": {
+      "target": "ARM_PREFERENCE.md",
+      "anchor": "arm-preference-distillation-plan",
+      "sha256": "2707bf4bcd20eaea56900c9f0c9ae2d490724c9721f183b20bd05e63ff419e75",
+      "title": "ARM same-state preference distillation plan"
+    },
+    "ARM_PREFERENCE_V2_CPU_AUDIT.md": {
+      "target": "ARM_PREFERENCE.md",
+      "anchor": "arm-preference-v2-cpu-audit",
+      "sha256": "1c20a317aebc7e5f42ffc3dcbd89f2df8f7b81a52eddab484d9fd0a99d6a4cf5",
+      "title": "ARM preference v2: lightweight CPU audit"
+    },
+    "ARM_PREFERENCE_V2_VIABILITY_PLAN.md": {
+      "target": "ARM_PREFERENCE.md",
+      "anchor": "arm-preference-v2-viability-plan",
+      "sha256": "a7b8a5133d4a3461b29a72b9a9ef4a6ae9cf2d0a989cb7d9ca27dcad0925580d",
+      "title": "ARM preference distillation v2: controlled viability test"
+    },
+    "ARM_JOINT_DATA_TRAINING_PLAN.md": {
+      "target": "ARM_JOINT_DATA.md",
+      "anchor": "arm-joint-data-training-plan",
+      "sha256": "6a076291ac8284c4c65ff82896767d1a8db5870d1f3b599c470634898f18e9e6",
+      "title": "Joint C2 and Piotr teacher-data training proposal"
+    },
+    "ARM_JOINT_DATA_REVIEW.md": {
+      "target": "ARM_JOINT_DATA.md",
+      "anchor": "arm-joint-data-review",
+      "sha256": "36bea6c2731672144e6ccddf5fcc644995133ae2b1864f30288748d9f1099fde",
+      "title": "Combined ARM data: prepared for review"
+    },
+    "ARM_JOINT_SFT_HISTORY_EXAMPLE.md": {
+      "target": "ARM_JOINT_DATA.md",
+      "anchor": "arm-joint-sft-history-example",
+      "sha256": "be1f1938f51d73f50d955f2c8f854ef69e99a8888bca9eb36cb3c5e71f6a6a87",
+      "title": "Retained SFT example: two previous turns"
+    },
+    "ARM_RESULTS_DASHBOARD.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-results-dashboard",
+      "sha256": "f108bcd27b3793a3efecf0361adcece92fa6e28a9468f5d89f55cc8f367a1e84",
+      "title": "ARM results dashboard"
+    },
+    "ARM_C2_VS_1A_FULL300_EVAL.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-c2-vs-1a-full300-eval",
+      "sha256": "ef3754e56c9ca10f33be6bb08147735cbb46e9ec5d8a28b917d3dd44f9a1cc3c",
+      "title": "C2, 1A, and joint-data SFT/DPO: full-300 evaluation"
+    },
+    "ARM_C2_ABLATION_1A_RESULTS.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-c2-ablation-1a-results",
+      "sha256": "b2520cb6fd7219fa3b4baaea0b9893b559aaef2dc2e4a7b5c44d006466db1ed2",
+      "title": "C2 ablation 1A results"
+    },
+    "ARM_C2_SCALING_RESULTS.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-c2-scaling-results",
+      "sha256": "d79b2e295c79aa8498f0f17d477d83e007e69a368ae9a710dceeb5c25f2765ac",
+      "title": "C2 filtered-SFT checkpoint scaling results"
+    },
+    "ARM_JOINT_SFT_VS_DPO_RESULTS.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-joint-sft-vs-dpo-results",
+      "sha256": "a327629285e56a85b9af6842e35912dc303eee5bcdfefe6708f4d7b368eb6038",
+      "title": "Joint C2 + Piotr SFT versus DPO"
+    },
+    "ARM_JOINT_SFT_RESULTS.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-joint-sft-results",
+      "sha256": "1c1918694b2df66343f38b3a7b321784dbf84c6fc795c472a8c34d9dec98cc3b",
+      "title": "Joint-data SFT: endpoint OM2W evaluation"
+    },
+    "ARM_JOINT_DPO_RESULTS.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-joint-dpo-results",
+      "sha256": "ab625028a342c66b971e6bffcd639bcf755ba28520456c404e6c636e1b2c518f",
+      "title": "Joint-data DPO: endpoint OM2W evaluation"
+    },
+    "ARM_JOINT_TRAINING_MONITOR.md": {
+      "target": "ARM_RESULTS.md",
+      "anchor": "arm-joint-training-monitor",
+      "sha256": "779f02d3d78b817d3eda1c23799a9396dedd75ba35707830d46cc4a98df23782",
+      "title": "Joint SFT and DPO training monitoring"
+    },
+    "RESUMING_BASELINE.md": {
+      "target": "RL_RUNTIME.md",
+      "anchor": "resuming-baseline",
+      "sha256": "0719a6ee333dc25221f517de13f2cb439ca534a14b711beaf789ce21c415d93b",
+      "title": "Resuming the reference RL baseline"
+    },
+    "BASELINE_SCALING.md": {
+      "target": "RL_RUNTIME.md",
+      "anchor": "baseline-scaling",
+      "sha256": "a3ad593fdc231c18edc617e85d5362d201b1f2db3ea2427d1e46fbc11952b03a",
+      "title": "Baseline timing and four-GPU continuation"
+    },
+    "ROLLOUT_ARCHIVE.md": {
+      "target": "RL_RUNTIME.md",
+      "anchor": "rollout-archive",
+      "sha256": "0c161369c094b567017b6c876111e70b13bfe1e7fd6cc34d64df1ac6a0095aa2",
+      "title": "Completed rollout archive for future SFT"
+    },
+    "H200_TESTING.md": {
+      "target": "RL_RUNTIME.md",
+      "anchor": "h200-testing",
+      "sha256": "cdbab3801b0380a22e3dceca61ba8375f5390ae66bd012634f40a5b8ad6c5896",
+      "title": "H200 runtime and validation"
+    },
+    "BASELINE_CHECKPOINT_EVALUATION.md": {
+      "target": "RL_EVALUATION.md",
+      "anchor": "baseline-checkpoint-evaluation",
+      "sha256": "a1b8471a90df9cc5476a4e0702e1e4f73f5112c4291f21f91d3004673b402d15",
+      "title": "Intermediate baseline checkpoint evaluation"
+    },
+    "BROWSER_USE_CHECKPOINT_EVALUATION.md": {
+      "target": "RL_EVALUATION.md",
+      "anchor": "browser-use-checkpoint-evaluation",
+      "sha256": "bd07c33acbbfc207b1ab30d6aa48efe8534f3fe4fabc2f07e6d2d30036b058df",
+      "title": "Browser Use checkpoint evaluations"
+    },
+    "REWARD_RANK_EVALUATION_QUEUE.md": {
+      "target": "RL_EVALUATION.md",
+      "anchor": "reward-rank-evaluation-queue",
+      "sha256": "d59c3b53234bced772bbd01ab6edb6332a6ced469be336cfbf2d5b8ebbc5dd57",
+      "title": "Evaluating checkpoints whose training reward enters the top five"
+    },
+    "METRICS.md": {
+      "target": "RL_METRICS.md",
+      "anchor": "metrics",
+      "sha256": "95f9152df227b60ea684439a1e8c55c68766648df01a110403d40d1512bd2a39",
+      "title": "OpenWebRL training and W&B metric reference"
+    },
+    "PAPER_REWARD_COMPARISON.md": {
+      "target": "RL_METRICS.md",
+      "anchor": "paper-reward-comparison",
+      "sha256": "633c36affde4c0bc8f66a3e2af71a93eb2d422d9f8da142e3dfadce564172769",
+      "title": "Comparing the reference run's reward plot"
+    },
+    "GRADIENT_DIAGNOSTICS.md": {
+      "target": "RL_METRICS.md",
+      "anchor": "gradient-diagnostics",
+      "sha256": "81550497dbc1e855c3305727b4ccb6b9a576b6690e496b9e3ecf3066523fb7d8",
+      "title": "Gradient spikes and training diagnostics"
+    }
+  },
+  "retained": [
+    "ARM_INTEGRATION_PLAN.md",
+    "RL_EXPERIMENTS.md"
+  ],
+  "retired_sources": [
+    "ARM_C2_ABLATION_1A_RESULTS.md",
+    "ARM_C2_ABLATION_1A_RUN.md",
+    "ARM_C2_FULL300_EVAL.md",
+    "ARM_C2_RESUME.md",
+    "ARM_C2_RUN.md",
+    "ARM_C2_SCALING_EVAL.md",
+    "ARM_C2_SCALING_RESULTS.md",
+    "ARM_C2_VS_1A_FULL300_EVAL.md",
+    "ARM_FILTERED_SFT_ABLATIONS.md",
+    "ARM_FILTERED_SFT_PLAN.md",
+    "ARM_INFERENCE_RESULTS.md",
+    "ARM_INFERENCE_RETRY_RESULTS.md",
+    "ARM_JOINT_DATA_REVIEW.md",
+    "ARM_JOINT_DATA_TRAINING_PLAN.md",
+    "ARM_JOINT_DPO_RESULTS.md",
+    "ARM_JOINT_SFT_HISTORY_EXAMPLE.md",
+    "ARM_JOINT_SFT_RESULTS.md",
+    "ARM_JOINT_SFT_VS_DPO_RESULTS.md",
+    "ARM_JOINT_TRAINING_MONITOR.md",
+    "ARM_JUDGE_ALIGNMENT.md",
+    "ARM_PREFERENCE_DISTILLATION_PLAN.md",
+    "ARM_PREFERENCE_RUN_286384.md",
+    "ARM_PREFERENCE_V2_CPU_AUDIT.md",
+    "ARM_PREFERENCE_V2_VIABILITY_PLAN.md",
+    "ARM_RESULTS_DASHBOARD.md",
+    "BASELINE_CHECKPOINT_EVALUATION.md",
+    "BASELINE_SCALING.md",
+    "BROWSER_USE_CHECKPOINT_EVALUATION.md",
+    "GRADIENT_DIAGNOSTICS.md",
+    "H200_TESTING.md",
+    "METRICS.md",
+    "PAPER_REWARD_COMPARISON.md",
+    "RESUMING_BASELINE.md",
+    "REWARD_RANK_EVALUATION_QUEUE.md",
+    "ROLLOUT_ARCHIVE.md"
+  ]
+}

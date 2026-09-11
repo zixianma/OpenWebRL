@@ -2,11 +2,13 @@
 import importlib.util
 import json
 import os
+import sys
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
 
+sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
 spec = importlib.util.spec_from_file_location("arm_retry", Path(__file__).parents[1] / "scripts/run_arm_retry.py")
 retry = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(retry)
@@ -139,7 +141,8 @@ class RetryTests(unittest.TestCase):
             self.assertEqual(report["recovery"]["baseline"]["previously_valid_now_unavailable"], 1)
             self.assertEqual(report["paired"]["common_valid_tasks"], 1)
             self.assertEqual(before, {str(p): retry.digest(p) for p in source.rglob("*.json")})
-            self.assertIn("not a replacement", (docs / "ARM_INFERENCE_RETRY_RESULTS.md").read_text())
+            self.assertIn("not a replacement", (docs / "ARM_INFERENCE.md").read_text())
+            self.assertFalse((docs / "ARM_INFERENCE_RETRY_RESULTS.md").exists())
 
     def test_project_quota_does_not_lose_completed_retry_report(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -151,7 +154,7 @@ class RetryTests(unittest.TestCase):
                 for task in q["task_ids"]:
                     (output / mode / "results" / (task + ".json")).write_text(json.dumps(
                         {"task_id": task, "valid": True, "reward": 1}))
-            document = root / "repo/openwebrl/docs/ARM_INFERENCE_RETRY_RESULTS.md"
+            document = root / "repo/openwebrl/docs/ARM_INFERENCE.md"
             document.parent.mkdir(parents=True)
             document.write_text("Original pending document")
             original_write = Path.write_text

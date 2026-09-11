@@ -13,6 +13,10 @@ import time
 
 from train_arm_joint_sft import REPO, RUNTIME, digest, read_rows, write_json
 from resume_arm_c2_training import allocation_deadline, parse_job_record
+try:
+    from project_docs import write_document_section
+except ModuleNotFoundError:  # Imported as scripts.run_arm_joint_pipeline.
+    from scripts.project_docs import write_document_section
 
 PYTHON=RUNTIME/'venv/bin/python'
 CONFIG_DIR=REPO/'openwebrl/docs/arm_results/joint_data_v2'
@@ -66,7 +70,7 @@ def aggregate(root,objective,shards):
     write_json(root/'evaluation/all300-records.json',records)
     rates=report['rates']
     doc=REPO/f'openwebrl/docs/ARM_JOINT_{objective.upper()}_RESULTS.md'
-    doc.write_text(f'# Joint-data {objective.upper()}: endpoint OM2W evaluation\n\n'
+    write_document_section(doc,f'# Joint-data {objective.upper()}: endpoint OM2W evaluation\n\n'
       f"Update 174, 5,540 training states, fresh evaluation of all 300 tasks.\n\n"
       f"- Overall: {rates['successes']}/300 = {percent(rates['overall'])}.\n"
       f"- Valid-only: {rates['successes']}/{rates['valid']} = {percent(rates['valid_only'])}.\n"
