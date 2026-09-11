@@ -266,6 +266,30 @@ and `rollout_recovery/eval_39.pt`. This scheduled evaluation used the training
 allocation and does not consume a reward-triggered evaluation job. After-38
 remains the highest observed result; two approved triggered jobs remain.
 
+<a id="baseline-checkpoint-evaluation--scheduled-after-50-evaluation"></a>
+### Scheduled after-50 evaluation, September 11
+
+Training job **287949** completed the 300-task local-browser evaluation after
+iteration 50 at approximately **16:23 PDT**, using the new **32-task browser
+gate**. It took **28:22**, scoring **105/300 = 35.00%** overall, with **66 invalid
+attempts** and valid-only success **105/234 = 44.87%**. The after-38 local result
+(35.67% overall, 46.93% valid-only) remains the highest observed. Separate live
+runs and different valid subsets do not establish a statistically reliable
+checkpoint ranking. The after-38 stealth result uses a different browser backend
+and is recorded separately below.
+
+All **41 evaluation scalars match W&B history row 805**, `eval/iteration=50`,
+in the main run `qcq7i4ug`. The 82,586,413,765-byte saved evaluation file has a
+complete ZIP central directory and metadata entry. Audit:
+runtime `runs/openwebrl-4b-reference-287949-20260911T183514/iteration_50_scheduled_eval_audit.json`;
+data: `rollout_recovery/eval_49.pt` in that directory. This evaluates the policy
+immediately after training, without a separate checkpoint reload. The saved
+checkpoint `iter_0000049` has 604 Adam updates and passed CPU validation.
+
+The pending-evaluation flag was cleared after verification, and collection 51
+started normally. This scheduled evaluation uses the existing training budget;
+the two remaining approved top-five-triggered evaluation jobs are unchanged.
+
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:end -->
 
 ---

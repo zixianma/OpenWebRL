@@ -103,9 +103,10 @@ GiB**, then dropped to approximately 223 GiB after one iteration handoff.
 A five-second collection sample used 14 of the 32 allocated CPU cores with
 no throttling; it is not a sustained CPU utilization estimate.
 
-The scheduled 300-task after-50 evaluation is running before collection 51.
-The pointer retains pending evaluation 50 and its matching prepared recovery
-source. No new top-five-triggered jobs were eligible from rewards 46–50;
+The scheduled 300-task after-50 evaluation completed at approximately
+**16:23 PDT**, scoring **105/300 (35.00%)**, valid-only **105/234 (44.87%)**.
+All 41 scalars match W&B row 805; the saved evaluation ZIP is complete.
+The pending-evaluation flag is cleared and collection 51 has started. No new top-five-triggered jobs were eligible from rewards 46–50;
 two of the four approved standard-evaluation slots remain available.
 
 <a id="resuming-baseline--four-gpu-continuation"></a>
