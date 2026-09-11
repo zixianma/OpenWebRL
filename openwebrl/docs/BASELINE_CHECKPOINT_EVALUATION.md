@@ -1,11 +1,11 @@
 # Intermediate baseline checkpoint evaluation
 
 Training lineage: W&B `zixianma/openwebrl/qcq7i4ug`. Inventory checked on
-2026-09-10 while allocation 286382 continued training.
+2026-09-11 while allocation 287371 continued training.
 
 ## Saved checkpoints and reward timing
 
-Checkpoints after every completed training iteration **1–34** remain on disk.
+Checkpoints after every completed training iteration **1–39** remain on disk.
 Directory indices are zero-based: after iteration N is `iter_{N-1:07d}`.
 The complete absolute-path inventory and CPU validation evidence are in
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/qcq7i4ug_checkpoint_inventory.json`.
@@ -30,6 +30,7 @@ All directories below are under
 | 19–23 | `285546-20260909T235114` |
 | 24–29 | `286094-20260910T071441` |
 | 30–34 | `286382-20260910T164338` |
+| 35–39 | `287371-20260911T025909` |
 
 `train/reward` at collection N is measured **before** its PPO updates. The policy
 that generated that reward is therefore the checkpoint after N−1 training
@@ -64,9 +65,10 @@ Existing full monitoring evaluations:
 | 21 | 89 / 300 (29.67%) | 67 | 89 / 233 (38.20%) |
 | 22 | 86 / 300 (28.67%) | 64 | 86 / 236 (36.44%) |
 | 30 | 96 / 300 (32.00%) | 52 | 96 / 248 (38.71%) |
+| 38 | 107 / 300 (35.67%) | 72 | 107 / 228 (46.93%) |
 
-Valid-only success is successes divided by `(300 - invalid attempts)`. After-20
-has the highest valid-only rate; after-30 has the highest all-task success rate.
+Valid-only success is successes divided by `(300 - invalid attempts)`. After-38
+has the highest observed valid-only and all-task success rates.
 The valid subset differs between evaluations, so valid-only rates are not scores
 on an identical task cohort.
 
@@ -168,7 +170,34 @@ The after-22 checkpoint scored **86/300 (28.67%)**, with 64 invalid attempts
 (21.33%) and valid-only success 86/236 (36.44%). All 41 scalars matched its separate
 W&B run; receipt: `evaluations/qcq7i4ug-287370-after22/wandb_audit.json`.
 Thus the training-reward jump from collection 22 to 23 did not correspond to a
-higher task-success score in this paired checkpoint evaluation. After-30 remains
-the best evaluated checkpoint at 96/300 (32%), ahead of after-20 at 95/300.
-The user requested a follow-up evaluation of the best checkpoint using Browser
-Use Cloud's stealth browser; preparation and CPU/CDP checks are in progress.
+higher task-success score in this paired checkpoint evaluation. At that time,
+after-30 was the best evaluated checkpoint at 96/300 (32%), ahead of after-20 at
+95/300. Stealth evaluation is now paused by user instruction; job 287521 was
+canceled and its partial attempt is not a valid comparison result.
+
+## First top-five-triggered result: after 38
+
+Collection 39 produced verified `train/reward=0.4877300613`, entering fifth place
+and triggering evaluation of its generating checkpoint **after 38**, directory
+`287371-20260911T025909/iter_0000037`. Job **287588** used the approved two-H200,
+two-hour profile. Its first step failed CPU binding before Python started; an
+explicit `--cpu-bind=none` worker recovered inside the same allocation. The
+submitter and future batch workers now prevent inherited observer CPU masks.
+
+Full TP2 model/optimizer restoration from the selected checkpoint was verified.
+The unchanged deterministic 300-task GPT-4.1 monitor completed in **52:21**,
+with **107 successes, 72 invalid attempts, and 228 valid attempts**. All **41
+scalar metrics** exactly matched W&B history row 0 (tolerance 1e-7). This is
+11 more successes than after-30, alongside 20 more invalid attempts. The
+valid-only comparison uses different subsets; this single live-web evaluation
+does not by itself establish statistical significance.
+
+Results and full recovery data are under runtime
+`evaluations/qcq7i4ug-record-287588-after38/`, including `metrics.json`,
+`evaluation.log`, `wandb_audit.json`, `checkpoint_restore_evidence.json`, and
+`runtime/rollout_recovery/eval_0.pt`. W&B:
+[after-38 evaluation](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after38-287588).
+Worker **287588.1 completed with exit 0**. After verification, the waiting
+original batch controller was canceled to release unused allocation time;
+the resulting Slurm cancellation does not indicate failed evaluation results.
+One of the four approved reward-triggered evaluation jobs has been used.
