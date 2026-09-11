@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import time
 
 from resume_baseline import allocation, clean_environment, source_command, validate_source, write_json
 
@@ -67,10 +68,66 @@ def build_plan(source, checkpoint, output, job_id, attempt=0):
                '--save-debug-rollout-data', str(output / 'runtime/rollout_recovery/{rollout_id}.pt')]
     return {'source': str(source), 'checkpoint': str(checkpoint), 'checkpoint_index': index,
             'completed_training_iterations': index+1, 'output': str(output), 'job_id': job_id,
+            'attempt': attempt,
             'wandb_run_id': run_id, 'parent_training_run': 'qcq7i4ug',
             'protocol': 'existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks',
             'optimizer_updates_requested': 0, 'environment': env, 'command': command,
             'note': 'Native eval/iteration is 1 in eval-only mode; use checkpoint identity in this manifest.'}
+
+
+def restore_pattern(plan):
+    view = Path(plan['output']) / 'checkpoint-view'
+    return r'successfully loaded checkpoint from ' + re.escape(str(view)) + r' .* at iteration ' + str(plan['checkpoint_index']) + r'\b'
+
+
+def record_restore_evidence(plan):
+    """Read this job's actor stdout directly; Ray may omit forwarded stdout lines."""
+    output = Path(plan['output'])
+    target = output / 'checkpoint_restore_evidence.json'
+    if target.exists():
+        return
+    log = output / 'evaluation.log'
+    if not log.exists():
+        return
+    text = log.read_text(errors='replace')
+    for pid in set(re.findall(r'MegatronTrainRayActor pid=(\d+)', text)):
+        try:
+            if f"/job_{plan['job_id']}/" not in Path(f'/proc/{pid}/cgroup').read_text():
+                continue
+            raw = Path(f'/proc/{pid}/fd/1').resolve()
+            if not raw.is_file():
+                continue
+            match = re.search(restore_pattern(plan), raw.read_text(errors='replace'))
+            if match:
+                write_json(target, {'checkpoint': plan['checkpoint'], 'job_id': plan['job_id'],
+                                    'actor_pid': int(pid), 'worker_log': str(raw), 'restore_line': match[0]})
+                return
+        except (OSError, ProcessLookupError):
+            continue
+
+
+def finalize_evaluation(plan, code):
+    output = Path(plan['output'])
+    text = (output / 'evaluation.log').read_text(errors='replace')
+    rows = re.findall(r'rollout.py:\d+ - eval 0: (\{.*\})', text)
+    if code != 0 or len(rows) != 1 or re.search(r'train_one_step start|\[TrainMetrics\]', text):
+        write_json(output / 'status.json', {'complete': False, 'returncode': code, 'eval_rows': len(rows)})
+        raise RuntimeError('Evaluation failed or incomplete; inspect its log before continuing')
+    restored = re.search(restore_pattern(plan), text)
+    receipt = output / 'checkpoint_restore_evidence.json'
+    if not restored and receipt.exists():
+        evidence = json.loads(receipt.read_text())
+        if evidence.get('checkpoint') == plan['checkpoint'] and evidence.get('job_id') == plan['job_id']:
+            restored = re.search(restore_pattern(plan), evidence.get('restore_line', ''))
+    if not restored:
+        raise ValueError('Missing evidence that the selected checkpoint was restored on GPU')
+    metrics = ast.literal_eval(rows[0])
+    if metrics.get('eval/online-mind2web-monitor/task/trajectories') != 300:
+        raise ValueError('Evaluation did not cover all 300 tasks')
+    write_json(output / 'metrics.json', metrics)
+    write_json(output / 'status.json', {'complete': True, 'returncode': code,
+                                      'checkpoint': plan['checkpoint'], 'wandb_run_id': plan['wandb_run_id']})
+    return metrics
 
 
 def run(plan, env_file):
@@ -84,6 +141,22 @@ def run(plan, env_file):
     allowed = {f'{job}.{suffix}' for suffix in ['batch', 'extern', step_id]}
     if any(x.strip() not in allowed for x in steps.splitlines() if x.strip()):
         raise ValueError('Dedicated allocation required: another step is active')
+    # A completed evaluation can be finalized after a bookkeeping failure.
+    # On a supervised retry, reuse that verified result instead of rerunning tasks.
+    if plan.get('attempt', 0):
+        output = Path(plan['output'])
+        previous = output.with_name(output.name.rsplit('-retry', 1)[0])
+        status_path = previous / 'status.json'
+        if status_path.exists() and json.loads(status_path.read_text()).get('complete'):
+            prior = json.loads((previous / 'evaluation_manifest.json').read_text())
+            if any(prior[k] != plan[k] for k in ['checkpoint', 'source', 'protocol', 'job_id']):
+                raise ValueError('Completed evaluation does not match retry identity')
+            metrics = finalize_evaluation(prior, 0)
+            output.mkdir(parents=True, exist_ok=False)
+            write_json(output / 'status.json', {'complete': True, 'reused_complete': str(previous),
+                                              'wandb_run_id': prior['wandb_run_id'], 'checkpoint': prior['checkpoint']})
+            print(json.dumps({'reused_complete': str(previous), 'metrics': metrics}))
+            return
     if resources['maximum_seconds'] < 60 * 60:
         raise ValueError('Reserve at least one hour for a full monitor evaluation')
     from dotenv import dotenv_values
@@ -112,22 +185,13 @@ def run(plan, env_file):
     command = source_command(source, ['timeout', '--signal=INT', '--kill-after=120',
                                       str(resources['maximum_seconds']), *plan['command']])
     with (output / 'evaluation.log').open('w') as log:
-        code = subprocess.call(command, cwd=source, env=env, stdout=log, stderr=subprocess.STDOUT)
-    text = (output / 'evaluation.log').read_text(errors='replace')
-    rows = re.findall(r'rollout.py:\d+ - eval 0: (\{.*\})', text)
-    if code != 0 or len(rows) != 1 or re.search(r'train_one_step start|\[TrainMetrics\]', text):
-        write_json(output / 'status.json', {'complete': False, 'returncode': code, 'eval_rows': len(rows)})
-        raise RuntimeError('Evaluation failed or incomplete; inspect its log before continuing')
-    metrics = ast.literal_eval(rows[0])
-    restored = re.search(r'successfully loaded checkpoint from ' + re.escape(str(view))
-                         + r' .* at iteration ' + str(plan['checkpoint_index']) + r'\b', text)
-    if not restored:
-        raise ValueError('Missing evidence that the selected checkpoint was restored on GPU')
-    if metrics.get('eval/online-mind2web-monitor/task/trajectories') != 300:
-        raise ValueError('Evaluation did not cover all 300 tasks')
-    write_json(output / 'metrics.json', metrics)
-    write_json(output / 'status.json', {'complete': True, 'returncode': code,
-                                      'checkpoint': str(checkpoint), 'wandb_run_id': plan['wandb_run_id']})
+        proc = subprocess.Popen(command, cwd=source, env=env, stdout=log, stderr=subprocess.STDOUT)
+        while proc.poll() is None:
+            record_restore_evidence(plan)
+            time.sleep(5)
+        code = proc.returncode
+    write_json(output / 'launcher_exit.json', {'returncode': code})
+    metrics = finalize_evaluation(plan, code)
     print(json.dumps({'output': str(output), 'wandb_run_id': plan['wandb_run_id'], 'metrics': metrics}))
 
 

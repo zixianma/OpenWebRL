@@ -1,5 +1,6 @@
 """CPU checks for checkpoint identity, output isolation, and eval-only requests."""
 import importlib.util
+import json
 from pathlib import Path
 import sys
 import tempfile
@@ -55,6 +56,53 @@ class EvaluationTest(unittest.TestCase):
         with patch.dict(m.os.environ, {'SLURM_JOB_ID': 'other'}):
             with self.assertRaisesRegex(ValueError, 'authorized Slurm'):
                 m.run(self.plan(), self.root / '.env')
+
+    def completed_log(self, forwarded=True, trajectories=300):
+        plan = self.plan()
+        self.output.mkdir(parents=True)
+        line = f"successfully loaded checkpoint from {self.output}/checkpoint-view [ t 1/4, p 1/1 ] at iteration 21"
+        metrics = {'eval/online-mind2web-monitor/task/trajectories': trajectories}
+        (self.output / 'evaluation.log').write_text(
+            (line + '\n' if forwarded else '') + f'rollout.py:123 - eval 0: {metrics!r}\n')
+        return plan, line
+
+    def test_complete_forwarded_restore(self):
+        plan, _ = self.completed_log()
+        self.assertEqual(m.finalize_evaluation(plan, 0)['eval/online-mind2web-monitor/task/trajectories'], 300)
+        self.assertTrue(json.loads((self.output / 'status.json').read_text())['complete'])
+
+    def test_raw_worker_restore_receipt_without_forwarded_line(self):
+        plan, line = self.completed_log(forwarded=False)
+        receipt = {'checkpoint': plan['checkpoint'], 'job_id': plan['job_id'], 'restore_line': line}
+        path = self.output / 'checkpoint_restore_evidence.json'
+        for key, value in [('checkpoint', 'wrong'), ('job_id', 'another'), ('restore_line', line.replace('iteration 21', 'iteration 22'))]:
+            with self.subTest(key=key):
+                path.write_text(json.dumps(dict(receipt, **{key: value})))
+                with self.assertRaisesRegex(ValueError, 'Missing evidence'):
+                    m.finalize_evaluation(plan, 0)
+                self.assertFalse((self.output / 'metrics.json').exists())
+        path.write_text(json.dumps(receipt))
+        m.finalize_evaluation(plan, 0)
+        self.assertTrue(json.loads((self.output / 'status.json').read_text())['complete'])
+
+    def test_missing_restore_is_rejected(self):
+        plan, _ = self.completed_log(forwarded=False)
+        with self.assertRaisesRegex(ValueError, 'Missing evidence'):
+            m.finalize_evaluation(plan, 0)
+
+    def test_partial_task_count_is_rejected(self):
+        plan, _ = self.completed_log(trajectories=299)
+        with self.assertRaisesRegex(ValueError, 'all 300'):
+            m.finalize_evaluation(plan, 0)
+
+    def test_failed_child_and_training_records_are_rejected(self):
+        plan, _ = self.completed_log()
+        with self.assertRaises(RuntimeError):
+            m.finalize_evaluation(plan, 1)
+        with (self.output / 'evaluation.log').open('a') as log:
+            log.write('[TrainMetrics] unexpected optimizer work\n')
+        with self.assertRaises(RuntimeError):
+            m.finalize_evaluation(plan, 0)
 
 
 if __name__ == '__main__':
