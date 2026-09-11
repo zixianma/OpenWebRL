@@ -1,5 +1,54 @@
 # H200 runtime and validation
 
+## Job 286382 completed five iterations and evaluation 30, 2026-09-10
+
+The approved four-H200 allocation ended at its planned shutdown boundary around
+17:39 PDT after **7:57:24**, with Slurm state COMPLETED. Raw launcher timeout 124
+was normalized to success. Iterations **30–34** completed, adding **54 Adam
+updates**, and the durable checkpoint is **`iter_0000033` / 428 updates** in
+`openwebrl-runtime/runs/openwebrl-4b-reference-286382-20260910T164338`.
+All 54 optimizer records and all five reward observations were checked against
+W&B history. The checkpoint passed metadata, all referenced shard-extent and
+cursor checks plus finite CPU tensor sampling; a full GPU reload of this final
+checkpoint remains a prerequisite for the next continuation.
+
+| Iteration | Train reward | Completed-attempt success | Adam updates |
+| --- | ---: | ---: | ---: |
+| 30 | 0.430012 | 42.46% | 12 |
+| 31 | 0.504698 | 43.84% | 10 |
+| 32 | 0.477212 | 48.15% | 10 |
+| 33 | 0.469777 | 46.48% | 10 |
+| 34 | 0.419214 | 41.60% | 12 |
+
+Evaluation 30 completed all 300 tasks in about 51 minutes: **96 successes
+(32.0%)**, 52 invalid attempts (17.33%), and valid-only success 96/248 (38.71%).
+All 41 evaluation scalars matched W&B history row 525. Evaluation 20 had 95
+successes and 68 invalid attempts; the success difference is only one task.
+The automatic post-evaluation file-cache advice ran without error. Host memory
+peaked at **414.65 GiB**, with zero memory-limit/OOM events. No GPU/backend errors
+were observed, and the maximum gradient norm across these updates was 3.47.
+
+The archive preserved **537 completed groups / 2,685 trajectories**, including
+96 rejected all-success groups and 74 rejected all-failure groups. All completed
+archives' group JSON and image sizes/hashes were checked. Collection 30 exposed
+an audit assumption about masked raw rewards; the auditor was corrected and
+the existing baseline behavior documented in `ROLLOUT_ARCHIVE.md` and `METRICS.md`.
+Training and reward computation were not changed.
+
+Collection 35 was interrupted at **42/48 accepted groups**, with 85 completed
+and 11 pending groups. It has no complete recovery batch or archive and must be
+recollected after restoring checkpoint 33. Evaluation 30 is already complete;
+the next periodic evaluation is 40. The authoritative handoff is
+`current_baseline.json`, with details in this run's `allocation_end_audit.json`.
+Slurm child step 2's exit 124 is the planned cutoff; child step 4 was the initial
+CPU archive-audit failure, not a training failure.
+
+The separately approved intermediate-checkpoint evaluation job 287046 failed
+at scheduler startup before evaluating tasks. Its fix passed CPU restoration
+checks on both selected checkpoint schedulers; a replacement allocation awaits
+explicit approval. See `BASELINE_CHECKPOINT_EVALUATION.md` for the saved checkpoint
+inventory, target selection, failure evidence, and prepared replacement.
+
 ## Approved continuation 286382, 2026-09-10 09:47 PDT
 
 The user explicitly approved another four H200 GPUs for eight hours, 16 CPUs,
