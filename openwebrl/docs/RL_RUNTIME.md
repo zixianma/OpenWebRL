@@ -78,6 +78,36 @@ shard extents, cursor and finite CPU tensor samples passed. Its own full GPU
 reload remains untested. Maximum gradient norm was 2.07854 and maximum PPO KL
 0.00408692. Collection 47 started at approximately 12:30 PDT.
 
+<a id="resuming-baseline--32-browser-results-through-50"></a>
+### 32-browser results through iteration 50
+
+At **15:55 PDT on September 11**, job 287949 has saved iterations **46–50**,
+reaching **604 cumulative Adam updates** at `iter_0000049`. All five rewards
+and **54 optimizer records** match W&B. Complete rollout archives, checkpoint
+metadata, byte extents, cursors and finite CPU tensor samples passed; these
+new checkpoints have not undergone their own full GPU reloads.
+
+| Iteration | Collection minutes | Reward | Task success, all completed | Adam updates added | Cumulative Adam updates |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 46 | 28.5 | 0.431478 | 246/500 = 49.20% | 12 | 562 |
+| 47 | 33.1 | 0.489987 | 273/580 = 47.07% | 12 | 574 |
+| 48 | 27.5 | 0.490605 | 188/460 = 40.87% | 10 | 584 |
+| 49 | 25.9 | 0.431034 | 224/465 = 48.17% | 10 | 594 |
+| 50 | 35.4 | 0.472446 | 275/630 = 43.65% | 10 | 604 |
+
+Collections average **30.1 minutes**. The prior two collections at the
+16-task gate took 40 and 49 minutes; live tasks and filtering differ, so this
+is observational evidence, not a controlled speedup. No GPU/backend errors
+or host OOM events were observed. Host memory peaked around **416 GiB / 480
+GiB**, then dropped to approximately 223 GiB after one iteration handoff.
+A five-second collection sample used 14 of the 32 allocated CPU cores with
+no throttling; it is not a sustained CPU utilization estimate.
+
+The scheduled 300-task after-50 evaluation is running before collection 51.
+The pointer retains pending evaluation 50 and its matching prepared recovery
+source. No new top-five-triggered jobs were eligible from rewards 46–50;
+two of the four approved standard-evaluation slots remain available.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 

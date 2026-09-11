@@ -18,7 +18,7 @@ _Source record: `BASELINE_CHECKPOINT_EVALUATION.md`. Dated entries retain their 
 
 
 Training lineage: W&B `zixianma/openwebrl/qcq7i4ug`. Inventory checked on
-2026-09-11 through saved iteration 46 in allocation 287949.
+2026-09-11 through saved iteration 50 in allocation 287949.
 
 <a id="baseline-checkpoint-evaluation--saved-checkpoints-and-reward-timing"></a>
 ### Saved checkpoints and reward timing
@@ -50,7 +50,7 @@ All directories below are under
 | 30–34 | `286382-20260910T164338` |
 | 35–40 | `287371-20260911T025909` |
 | 41–45 | `287530-20260911T105645` |
-| 46 | `287949-20260911T183514` |
+| 46–50 | `287949-20260911T183514` |
 
 `train/reward` at collection N is measured **before** its PPO updates. The policy
 that generated that reward is therefore the checkpoint after N−1 training
