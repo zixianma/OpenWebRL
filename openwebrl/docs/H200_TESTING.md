@@ -20,6 +20,19 @@ zero browser collections in the verification stage. Receipt:
 `runs/openwebrl-4b-reference-287530-20260911T105645`; its logs and persistent pointer
 retain W&B `qcq7i4ug`.
 
+As of **09:00 PDT**, iterations **41–43** are saved and verified, reaching
+**526 cumulative Adam updates** at `iter_0000042`. Their rewards are 0.480380,
+0.431971 and 0.471503; all three collection rewards and all 36 optimizer records
+match W&B. Complete rollout archives and checkpoint metadata, shard extents,
+cursors and finite CPU tensor samples passed. These new checkpoints have not
+yet undergone a full GPU reload. Collection 44 is running, with no observed
+GPU/backend or host OOM errors.
+
+The pending after-40 evaluation completed all 300 tasks before collection 41:
+**100/300 (33.33%)**, valid-only **100/231 (43.29%)**. All 41 evaluation scalars
+match W&B history row 660. Its audit is `iteration_40_scheduled_eval_audit.json`
+in the current run; the persistent pending-evaluation field is now cleared.
+
 The user also approved up to four separate two-H200 evaluation jobs, each up to
 two hours, triggered by future verified rewards entering the top five. See
 `REWARD_RANK_EVALUATION_QUEUE.md`. Stealth evaluation 287521 was canceled on the
@@ -44,8 +57,9 @@ All checkpoint extents/cursors and finite CPU samples passed validation.
 | 40 | 0.503511 | 10 | 490 |
 
 The scheduled after-40 evaluation stopped at **201/300 tasks** without a final
-metric row; it is not a valid completed score. The pending field remains 40
-for the continuation. Final audit: `allocation_final_audit.json` in that run.
+metric row; it is not a valid completed score. The pending field was carried
+into 287530, which completed the evaluation as recorded above. Final audit:
+`allocation_final_audit.json` in that run.
 Peak host memory was **372.34 GiB**, with no host OOM; sampled average GPU
 utilization over the allocation was **41.94%** (utilization, not MFU).
 Completed-group archives include RL rejections and passed image SHA256 checks.
@@ -53,9 +67,10 @@ Completed-group archives include RL rejections and passed image SHA256 checks.
 Top-five rewards at collections 39 and 40 triggered evaluations of their
 generating checkpoints after 38 and 39. Job **287588** completed after-38 with
 **107/300 (35.67%)**, valid-only **107/228 (46.93%)**, and all 41 W&B scalars
-verified. Job **287596** is evaluating after-39 in a supervised retry after
-clearing an inherited cross-node W&B service socket. Both startup repairs stayed
-within their original allocations; **2/4 approved evaluation jobs** are used.
+verified. Job **287596** completed after-39 with **98/300 (32.67%)**, valid-only
+**98/228 (42.98%)**, and all 41 W&B scalars verified, following a supervised retry
+that cleared an inherited cross-node W&B service socket. Both startup repairs
+stayed within their original allocations; **2/4 approved evaluation jobs** are used.
 
 ## Approved continuation 287371, 2026-09-10 19:57 PDT
 

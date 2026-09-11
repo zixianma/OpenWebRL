@@ -81,9 +81,10 @@ variables, and the worker explicitly uses `--cpu-bind=none`: a CPU mask inherite
 from an observer running on another node caused the first step of job 287588 to
 fail before Python started. That evaluation was restarted inside the same paid
 allocation with an explicit binding override. Its original batch controller
-remains waiting; release the allocation after the supervised worker and W&B
-verification finish, before the controller's deadline. This recovery does not
-consume another job from the approved cap.
+waited while the supervised worker completed; the allocation was then released
+after the full result and W&B verification. This recovery did not consume another
+job from the approved cap. Both 287588 and 287596 have now completed valid
+300-task evaluations, leaving two authorized evaluation submissions available.
 
 Job 287596 exposed another cross-node inheritance issue: the observer's
 `WANDB_SERVICE` points to a node-local service socket. Both submission and the
