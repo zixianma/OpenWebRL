@@ -57,13 +57,18 @@ it is not the paper's official o4-mini evaluation protocol.
 
 Existing full monitoring evaluations:
 
-| Checkpoint after training iteration | Task successes / 300 | Invalid attempts |
-| --- | ---: | ---: |
-| 10 | 70 / 300 (23.33%) | 66 |
-| 20 | 95 / 300 (31.67%) | 68 |
-| 21 | 89 / 300 (29.67%) | 67 |
-| 22 | 86 / 300 (28.67%) | 64 |
-| 30 | 96 / 300 (32.00%) | 52 |
+| Checkpoint after training iteration | Task successes / 300 | Invalid attempts | Valid-only success |
+| --- | ---: | ---: | ---: |
+| 10 | 70 / 300 (23.33%) | 66 | 70 / 234 (29.91%) |
+| 20 | 95 / 300 (31.67%) | 68 | 95 / 232 (40.95%) |
+| 21 | 89 / 300 (29.67%) | 67 | 89 / 233 (38.20%) |
+| 22 | 86 / 300 (28.67%) | 64 | 86 / 236 (36.44%) |
+| 30 | 96 / 300 (32.00%) | 52 | 96 / 248 (38.71%) |
+
+Valid-only success is successes divided by `(300 - invalid attempts)`. After-20
+has the highest valid-only rate; after-30 has the highest all-task success rate.
+The valid subset differs between evaluations, so valid-only rates are not scores
+on an identical task cohort.
 
 Compare task outcomes on the common cohort and report invalidity alongside
 success. Live websites and judge calls can still introduce variation between
