@@ -66,6 +66,7 @@ Existing full monitoring evaluations:
 | 22 | 86 / 300 (28.67%) | 64 | 86 / 236 (36.44%) |
 | 30 | 96 / 300 (32.00%) | 52 | 96 / 248 (38.71%) |
 | 38 | 107 / 300 (35.67%) | 72 | 107 / 228 (46.93%) |
+| 39 | 98 / 300 (32.67%) | 72 | 98 / 228 (42.98%) |
 
 Valid-only success is successes divided by `(300 - invalid attempts)`. After-38
 has the highest observed valid-only and all-task success rates.
@@ -201,3 +202,23 @@ Worker **287588.1 completed with exit 0**. After verification, the waiting
 original batch controller was canceled to release unused allocation time;
 the resulting Slurm cancellation does not indicate failed evaluation results.
 One of the four approved reward-triggered evaluation jobs has been used.
+
+## Second top-five-triggered result: after 39
+
+Collection 40 reward **0.5035112360** entered fourth place and triggered the
+checkpoint after 39 (`287371-20260911T025909/iter_0000038`). Job **287596** used
+two H200s with a two-hour limit. Its first attempt failed before evaluation
+because an inherited `WANDB_SERVICE` referenced another node's socket. The
+submitter and worker now clear that setting; a supervised retry reused the same
+allocation with a separate output/W&B suffix.
+
+The retry restored the selected checkpoint on both GPUs, completed all 300 tasks,
+and scored **98/300 (32.67%)**, with **72 invalid attempts** and valid-only success
+**98/228 (42.98%)**. All 41 scalars matched W&B history row 0. The recovery file's
+ZIP directory is complete. Job and controller both report **COMPLETED / exit 0**,
+elapsed **1:01:53** including startup/recovery; the successful worker took 54:41.
+
+Artifacts: runtime `evaluations/qcq7i4ug-record-287596-after39-retry1/`.
+W&B: [after-39 evaluation](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after39-287596-r1).
+After-38 remains the highest observed all-task and valid-only result. **Two of
+four** approved reward-triggered jobs have now been used. Stealth stays paused.
