@@ -1,6 +1,386 @@
-# H200 runtime and validation
+# RL runtime: resume, scaling, and execution history
 
-## Continuation 287530 started, 2026-09-11 03:54 PDT
+Operational procedures for resuming the reference RL baseline, GPU scaling, rollout archives, and dated runtime validation. Use the resume instructions first; older execution entries explain recovery decisions and do not replace the persistent run pointer or authorize new allocations.
+
+## Contents
+
+- [Resuming the reference RL baseline](#resuming-baseline)
+- [Baseline timing and four-GPU continuation](#baseline-scaling)
+- [Completed rollout archive for future SFT](#rollout-archive)
+- [H200 runtime and validation](#h200-testing)
+
+---
+
+<!-- document:RESUMING_BASELINE.md:start -->
+<a id="resuming-baseline"></a>
+## Resuming the reference RL baseline
+
+_Source record: `RESUMING_BASELINE.md`. Dated entries retain their historical context._
+
+
+Use the existing allocation that the user has explicitly authorized. From the repository:
+
+```bash
+python3 scripts/resume_baseline.py --job-id JOB_ID --dry-run
+python3 scripts/resume_baseline.py --job-id JOB_ID --launch
+```
+
+`--dry-run` is the default. It reads Slurm state, recipe hashes, checkpoint metadata and saved-batch metadata; it does not run models or allocate GPUs. The launch command stays in the foreground. An agent can run it with a persistent exec session; from a terminal, use `nohup` with output redirected to scrubbed storage if it must survive disconnects.
+
+The script **never submits or extends an allocation**. It requires a running, user-owned single-node allocation with at least two H200s, eight CPUs and 240 GiB RAM, and ten usable minutes after the shutdown margin. By default it uses two GPUs through `srun --jobid=... --overlap --exact`; the four-GPU profile is described below. It refuses launch if any non-interactive/non-extern Slurm steps are already present, and uses a per-job lock to prevent concurrent invocations. Inspect existing steps; do not stop unrelated work to bypass this check.
+
+<a id="resuming-baseline--four-gpu-continuation"></a>
+### Four-GPU continuation
+
+The model/optimizer checkpoint format supports a different tensor-parallel size.
+The prepared four-H200 profile uses TP4/DP1 and 32 browser slots, with conservative
+resource guards of 16 CPUs and 480 GiB RAM on one node. This is a tested CPU
+configuration and workflow. Checkpoint 14 received a successful full TP4 model
+and optimizer reload in job 284885. Checkpoint 17 also passed full TP4 restore
+in job 285546. The latest checkpoint and prepared source still require their
+own restore verification in each new allocation. Two separate two-GPU
+allocations do not satisfy this single-node profile.
+
+A prepared source snapshot is available at:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-tp4-eval-cache-20260909`.
+It preserves all five baseline recipe-file hashes. To recreate such a snapshot
+from a newer preserved baseline (never the experimental working tree):
+
+```bash
+python3 scripts/prepare_resume_topology.py --source PRESERVED_SOURCE --output NEW_SOURCE
+```
+
+For an existing four-H200 allocation explicitly authorized by the user:
+
+```bash
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --verify-resume-only --dry-run
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --verify-resume-only --launch
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --dry-run
+python3 scripts/resume_baseline.py --job-id JOB_ID --gpus 4 --source PREPARED_SOURCE --launch
+```
+
+The restore-only pass runs offline, requests zero browser collections and zero
+optimizer updates, and does not replace the current training pointer. Its
+launcher is limited to 15 minutes within the existing allocation. Only an actual
+successful `resume_verification.json` creates a verification receipt. Four-GPU
+training requires a matching receipt for the checkpoint, source launcher and
+allocation. If a newer checkpoint becomes available, repeat the restore check
+for that checkpoint. Inspect the report and released Slurm steps before training.
+
+The old trainer must be stopped at a safe boundary before the new trainer starts;
+the wrapper refuses to fork the same lineage while its recorded old allocation
+still has active steps. Offline verification may run separately while the old
+trainer remains active, inside another explicitly authorized allocation. A
+complete untrained rollout can be replayed after migration, preserving collection
+work. The same W&B ID, dataset cursor, optimizer and scheduler state are retained.
+
+At an evaluation boundary, the checkpoint is saved **before** evaluation. Do not
+treat a saved checkpoint alone as proof that its evaluation has completed. When
+`pending_evaluation_iteration_one_based` is set, the resume wrapper requires the
+checkpoint at that exact boundary and a verified pending-evaluation source. It
+finishes that evaluation before the next collection, using the original W&B run
+and evaluation iteration. No optimizer updates are replayed for this recovery.
+
+The prepared source is runtime `reference-stage1-pending-eval-20260911`, recorded
+as `pending_evaluation_resume_source` in the pointer. It was copied from the
+preserved source with `scripts/prepare_resume_pending_eval.py`; the five recipe
+hashes and launcher hash are unchanged. Only the training driver gains a guarded
+pre-collection evaluation call and the usual post-evaluation cache release.
+The four-GPU restore verification still runs first. Five CPU regression tests
+cover checkpoint identity, evaluation failure, ordinary-resume behavior, source
+integrity, and stale environment controls. The complete recovery path passed on
+GPUs in job **287530**: exact after-40 restoration, 300-task evaluation completed
+in 49:31, all 41 metrics matched main-run W&B history row 660 at evaluation
+iteration 40, then collection 41 started. The audit is
+`runs/openwebrl-4b-reference-287530-20260911T105645/iteration_40_scheduled_eval_audit.json`
+under runtime storage.
+
+After recovery, verify the complete 300-task metrics and W&B synchronization,
+then clear the pending field. `[ResumePendingEvaluation] ... status=completed`
+alone is not proof of remote W&B synchronization. This runs inside the already
+approved training allocation and does not submit another job or consume one of
+the four separately approved reward-ranked evaluation jobs.
+
+Fourteen CPU resume tests cover resource/ownership checks, topology arguments,
+verification receipts, preservation of the training pointer, replay selection,
+and prevention of concurrent trainers. The prepared inner launcher dry run
+selected checkpoint 8 / 130 Adam updates with four GPUs, TP4, 32 browsers,
+48 groups × five attempts, global batch 256 and two PPO epochs. The live two-GPU
+allocation correctly rejects a four-GPU request. No four-GPU allocation was
+requested or consumed by these tests.
+
+<a id="resuming-baseline--batch-driver"></a>
+### Batch driver
+
+`scripts/resume_baseline_4gpu.sbatch` requests one node, four H200s, sixteen CPUs,
+480 GiB RAM, and eight hours in the normal QoS. Its two sequential stages are
+restore-only verification followed by training/replay. The wrapper recognizes
+its own batch driver while continuing to reject other compute steps and live
+trainers in another allocation. Both stages share the one allocation's time
+boundary; verification does not buy or extend time.
+
+The user requested this resource configuration on 2026-09-08. Slurm's
+`--test-only` accepted it and estimated $28.80 for 32 H200 GPU-hours. Automatic
+approval review subsequently rejected submission pending explicit approval of
+the dollar estimate; no batch job was submitted by that rejected action.
+The script does not grant standing approval to submit paid jobs.
+
+The first approved submission, job `283947`, exited after 46 seconds before any
+model restore because its child `srun` mixed a typed H200 allocation with an
+untyped GPU GRES request. Four-GPU child steps now request `gpu:h200:4`; the
+regression suite checks the typed request. No checkpoint or W&B state changed.
+
+<a id="resuming-baseline--state-and-source"></a>
+### State and source
+
+The default persistent pointer is:
+
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/current_baseline.json`
+
+It records the current run directory, checkpoint ancestry, preserved reference source, W&B identity and pending recovery batch. `--state PATH` selects a different recorded lineage. `--source PATH` selects another explicitly prepared reference snapshot; recipe hashes and required resume support are checked. The working repository's experimental recipe files are not copied into the run.
+
+For the current baseline, W&B is [`qcq7i4ug`](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug), and the preserved source for the next resume is `reference-stage1-tp4-eval-cache-20260909` under the runtime root. This snapshot adds post-evaluation file-cache release while preserving the five baseline recipe hashes. The credentials come from the repository `.env` and are never included in the preflight plan. `--wandb-run-id qcq7i4ug` can assert the expected identity; it cannot silently change this lineage's W&B ID.
+
+Job 285546 was canceled at the user's request on 2026-09-10 after 7:24:54.
+Resume from checkpoint 22 at 302 Adam updates. Reward observation 23 and the
+iteration-20 evaluation are complete; collection 24 was unfinished and has no
+saved recovery batch, so it must be collected again. Checkpoint 22 passed CPU
+metadata, shard-extent, cursor, and small finite-payload checks; the batch
+driver must perform its full GPU restore before training. No replacement
+allocation is authorized by this document.
+
+<a id="resuming-baseline--checkpoint-and-batch-selection"></a>
+### Checkpoint and batch selection
+
+The script follows `launch_manifest.json` ancestry, selects the highest completed checkpoint marker, and verifies saved iteration, Adam counters, known scheduler offset, shard extents and matching dataset cursor. A partial checkpoint directory without a completion marker is ignored. If the newest marked checkpoint fails verification, resume stops for investigation; it does not silently roll training back. This CPU validation does not substitute for the actual model/optimizer restore on GPUs.
+
+If a complete saved rollout immediately follows that checkpoint, it is replayed before collecting fresh browser trajectories. Replay requires either matching `.provenance.json` or a unique completed `[GenerateProgress]` line. The restored dataset cursor advances by **completed + pending submitted prompt groups**, not just the 48 accepted groups. Already-trained batches are skipped. An incomplete or ambiguous recovery file stops preflight for inspection. Zip-directory checks detect interrupted saves but do not read every tensor byte; the trainer's load is the full payload check.
+
+Example: checkpoint 5 contains 90 Adam updates; saved batch `6.pt` has 1,946 turns and 144 submitted groups. Replay performs `floor(1946 / 256) × 2 = 14` updates, reaching 104 at checkpoint 6. This remains reward observation 7, not a new collection. W&B's historical `train/step` labels are not reliable cumulative Adam counts when batch lengths change.
+
+<a id="resuming-baseline--monitoring-and-limits"></a>
+### Monitoring and limits
+
+The launcher retains the reference recipe (48 accepted groups × five trajectories, global batch 256, two PPO epochs), the tested runtime fixes, lossless file-backed images during collection and training transfer, allocator trimming, and per-iteration checkpointing. Runtime files stay in scrubbed storage or node-local `/tmp`. It stops before the existing allocation ends, with a three-minute margin and a maximum of eight training hours. GNU `timeout` reports this planned online stop as raw exit code 124; the resume supervisor keeps that raw code in its exit receipt, records the pointer state as `TIME_LIMIT`, and returns success to Slurm. Verification timeouts and other launcher failures remain failures. A collection interrupted by the time boundary may need recollection unless its recovery file finished saving.
+
+The supervisor prints progress and starts a read-only health recorder. Logs:
+
+- `openwebrl-runtime/logs/resume-JOB_ID-TIMESTAMP.log`: launcher output.
+- `openwebrl-runtime/logs/resume-JOB_ID-TIMESTAMP.json`: preflight/resume plan.
+- Run directory `training.log`, `progress.log`, `health.jsonl`: detailed training, phase progress and GPU/cgroup memory samples.
+- Run directory `resume_plan.json` and `resume_checkpoint_validation.json`: startup provenance.
+
+The pointer is updated when the new launch manifest appears. This means **launched**, not verified healthy. After startup, confirm the actual checkpoint-loaded message, optimizer progress and W&B sync. After each save, validate the new checkpoint before reporting durable progress and refresh the pointer's checkpoint/replay fields. A background recorder cannot diagnose or fix failures. While an OpenWebRL run is active, the active agent checks health and updates the user about every 15 minutes, checks more closely around startup and checkpoint saves, and investigates any observed error immediately.
+
+CPU checks: `python3 -m unittest discover -s tests -p test_resume_baseline.py -v`. The real preflight was exercised against job 283214 and correctly selected checkpoint 5, replay batch 6 with 144 submitted groups, and the existing W&B ID. It identified the already-running trainer and monitor; no duplicate training run was launched for this test.
+
+The command also launched the real continuation `openwebrl-4b-reference-283214-20260909T022832` from checkpoint 6, selecting no replay and starting the health recorder automatically. Source validation rejects older snapshots lacking collection-time image mapping and allocator trimming, which are required for this 240-GiB workflow.
+
+
+<a id="resuming-baseline--reward-ranked-evaluation-queue-2026-09-11"></a>
+### Reward-ranked evaluation queue (2026-09-11)
+
+During supervision, apply the user's top-five `train/reward` evaluation trigger
+after each verified collection. Runtime `reward_eval_queue.json` tracks ranking,
+checkpoint identity and submitted jobs. The user explicitly approved at most
+four standard local-browser evaluation jobs, each two H200s for up to two hours;
+use `reward_eval_approval_20260911.json` and do not re-ask within that cap.
+See `REWARD_RANK_EVALUATION_QUEUE.md` for the exact invocation and accounting.
+Stealth evaluations are paused. Keep monitoring training and these evaluations.
+
+<!-- document:RESUMING_BASELINE.md:end -->
+
+---
+
+<!-- document:BASELINE_SCALING.md:start -->
+<a id="baseline-scaling"></a>
+## Baseline timing and four-GPU continuation
+
+_Source record: `BASELINE_SCALING.md`. Dated entries retain their historical context._
+
+
+Snapshot: 2026-09-08 21:30 PDT, W&B `qcq7i4ug`, job `283214` on `g021`.
+Eight collection-and-training iterations are complete (116 durable Adam
+updates); collection nine is in progress. These iterations are the reward
+observations, not individual PPO optimizer updates.
+
+The latest fresh cycle took approximately 87 minutes: 63 minutes of browser
+collection, 22 minutes of training, and the remaining time for transfer,
+checkpointing and weight synchronization. Using that cycle, and accounting
+for collection nine being partly complete, reaching iteration 30 needs roughly
+31–35 additional wall hours on two H200s; iteration 40 needs roughly 46–50.
+These are planning estimates, not measured convergence or a guaranteed runtime.
+Full 300-task Online-Mind2Web evaluations every ten iterations add time; their
+current-runtime duration has not yet been measured. Browser latency, trajectory
+length and dynamic-filter acceptance also change cycle duration.
+
+<a id="baseline-scaling--checkpoint-portability"></a>
+### Checkpoint portability
+
+The current two-GPU topology is tensor parallelism 2, data parallelism 1.
+The checkpoint stores optimizer state in `fully_sharded_model_space` format.
+The installed Megatron implementation lists this as fully reshardable and
+permits loading optimizer state when tensor/pipeline parallel sizes change:
+
+- `openwebrl-runtime/src/Megatron-LM/megatron/core/optimizer/distrib_optimizer.py`,
+  `checkpoint_fully_reshardable_formats` and `sharded_state_dict`.
+- `openwebrl-runtime/src/Megatron-LM/megatron/training/checkpointing.py`,
+  optimizer topology-mismatch checks in `load_checkpoint`.
+
+Thus the checkpoint format does not bind this lineage to two GPUs. Four saved
+shard files likewise do not imply that four GPUs are required. Actual model
+and Adam-state restoration on four GPUs remains untested.
+
+Four-GPU options include TP4/DP1, matching the paper's recorded tensor
+parallel size, or TP2/DP2. Keep 48 accepted prompt groups, five attempts per
+group, global batch 256, two PPO epochs, learning rate and data cursor unchanged.
+Retain W&B ID `qcq7i4ug`, Adam counters and scheduler state. A topology change
+is not a bitwise-equivalent continuation; the loader may discard incompatible
+RNG state when tensor/pipeline parallelism changes.
+
+The quick-resume wrapper now accepts `--gpus 4` with a topology-capable preserved
+source prepared by `scripts/prepare_resume_topology.py`. This profile uses TP4,
+32 browsers, and guards for 16 CPUs / 480 GiB RAM on one node. Thirteen CPU tests
+and the real launcher dry run pass; four-GPU restoration and performance remain
+unverified. See [RESUMING_BASELINE.md](RL_RUNTIME.md#resuming-baseline) for the required
+restore-only pass and migration procedure. Older launchers still force two GPUs;
+setting environment variables alone does not change those launchers.
+
+<a id="baseline-scaling--expected-speedup-and-migration-checks"></a>
+### Expected speedup and migration checks
+
+If four GPUs halve only the 22-minute training portion, an 87-minute cycle
+becomes roughly 76 minutes: about 1.14x faster. That is an illustrative ceiling
+for that assumption, not a measured four-GPU benchmark. More browser concurrency
+and CPU capacity are needed to substantially reduce the dominant collection
+phase. The current job has eight CPUs and sixteen browser slots; a bounded
+probe during collection nine averaged approximately six occupied CPU cores.
+Doubling browser concurrency without additional CPU headroom is unvalidated.
+
+Switch after a completed checkpoint, preserving any complete next rollout for
+replay. First verify four-GPU model/optimizer restoration and counters, then
+measure a complete collection-and-training cycle before buying a long run.
+Keep full recomputation and the other known-working runtime controls for the
+initial migration; assess their performance separately once restoration works.
+
+No new compute is approved by this analysis. A new allocation or batch job
+requires the user's explicit approval of the exact GPU count/type, CPU and RAM
+request, duration, and compute budget. Continue the existing authorized job
+until a checkpoint boundary and an approved replacement allocation are ready.
+
+<!-- document:BASELINE_SCALING.md:end -->
+
+---
+
+<!-- document:ROLLOUT_ARCHIVE.md:start -->
+<a id="rollout-archive"></a>
+## Completed rollout archive for future SFT
+
+_Source record: `ROLLOUT_ARCHIVE.md`. Dated entries retain their historical context._
+
+
+The user requested preservation of discarded all-success and all-failure
+groups on 2026-09-10. Earlier recovery `.pt` files contain accepted training
+turns only. Sparse debug traces (configured probability 0.005) do not provide
+complete rejected-group coverage. Prior discarded groups generally cannot be
+reconstructed from aggregate metrics.
+
+The archive saves **all completed groups**, before their in-memory telemetry
+data is released, while preserving RL filtering and rewards. It excludes
+in-flight attempts canceled at the collection cutoff and unfinished collections
+interrupted before the archive hook runs. It records actual acceptance by sample
+identity; `not_accepted` can also include excess completed groups at cutoff and
+is not an exact dynamic-filter reason.
+
+<a id="rollout-archive--location-and-contents"></a>
+### Location and contents
+
+For each run, inspect `completed_rollout_archive/iteration_NNNN_ID/manifest.json`.
+Only directories with a complete manifest represent complete archives. Each
+`group_NNNN.json.gz` contains group/trajectory IDs, terminal reward and validity,
+acceptance status, turn-level prompts/responses, tokens, loss masks, stored log
+probabilities, conversation metadata, and raw multimodal inputs. Group labels
+are `all_success`, `all_failure` (all valid rewards zero), `all_nonpositive`,
+`mixed`, and `contains_invalid`. These labels do not replace the actual rewards.
+
+Trajectory-level `reward` is null for invalid attempts, even when their turns
+retain numeric raw rewards. Recompute `train/reward` from accepted **turn** rewards,
+not the validity-filtered trajectory reward. The preserved reference filter can
+accept a trajectory marked `remove_sample`; training subsequently zeros its loss
+masks, but its raw reward still enters the collection reward and group reward
+normalization. Collection 30 demonstrated this: four masked turns with raw reward
+zero among 1,686 accepted turns. Its complete archive reproduced W&B reward
+`0.43001186239620404` and task success `259/610`. This is existing baseline behavior,
+not an archive-induced change. Evidence: `iteration_30_archive_audit.json` and
+`iteration_30_reward_wandb_audit.json` in
+`openwebrl-runtime/runs/openwebrl-4b-reference-286382-20260910T164338`.
+
+Screenshots are stored once per SHA-256 in the archive's `images/` directory.
+JSON image references contain a relative path, MIME type, byte count and hash;
+resolve them relative to `image_reference_root` in the manifest. Original data
+URL bytes are retained, and PIL images are encoded losslessly as PNG. Files use
+`.bin` regardless of MIME type. The export avoids processed image tensors;
+recreate those with the intended SFT processor. Preserve the group JSON, shared
+image directory and source run manifest together when moving an archive.
+
+Use valid successful trajectories as candidates for positive SFT. Keep failures
+for analysis, correction, or explicitly designed negative training; copying
+failed actions into a standard positive SFT target would teach those actions.
+Review screenshot availability and success-judge quality when building a dataset.
+
+<a id="rollout-archive--enablement-and-validation"></a>
+### Enablement and validation
+
+`rollout_archive.enabled.json` in the run directory enables the archive, as does
+`OPENWEBRL_ARCHIVE_COMPLETED_GROUPS=1`. The baseline resume wrapper creates the
+control file automatically when its preserved source supports archiving. The
+telemetry hook reads the completed one-based collection number from `progress.log`.
+Archive errors appear in training logs, `rollout_archive_errors.jsonl`, and
+`rollout/archive/errors`; they do not change RL filtering or stop training.
+W&B also receives group/trajectory/image counts and archive duration.
+
+Seven CPU tests covered existing metric denominators, unchanged training
+metrics/sample data, valid/invalid outcome classification, image deduplication
+and byte recovery, opt-in behavior, and visible error reporting. A CPU-only
+export inside allocation 286094 verified a real six-turn trajectory from saved
+collection 23: one trajectory, six unique images, about 95 KB compressed group
+JSON, and about 0.07 seconds exporting. That checks the schema on real data;
+live full-collection archive completion is a separate verification.
+
+The hook was installed before collection 24 completed in job 286094. The
+telemetry module is imported at collection completion; no worker restart was
+needed. `rollout_archive_installation.json` and `archive_source_before/` in the
+run preserve installation provenance. All five baseline recipe hashes remain
+unchanged.
+
+Collection 24's live archive completed at 01:00 PDT: 88 groups, 440 trajectories,
+3,203 turns, and 2,290 unique images. It includes 11 rejected all-success groups,
+12 rejected all-failure groups, 17 rejected groups containing invalid attempts,
+and all 48 accepted groups. Archiving took 31.2 seconds. Every group JSON and
+image reference passed a subsequent audit, including byte sizes and SHA-256 for
+all images. Storage was 831,557,303 image bytes plus 59,114,630 compressed JSON
+bytes. Evidence: `iteration_24_archive_audit.json` in
+`openwebrl-runtime/runs/openwebrl-4b-reference-286094-20260910T071441`.
+
+The archive independently reproduced W&B history row 420:
+`train/reward=0.40914285714285714` across 1,750 accepted turns, and
+`train/task_success_rate=173/440=0.3931818181818182`. See
+`iteration_24_reward_wandb_audit.json`. Earlier rejected collections remain
+unavailable except any sparse debug traces that happened to be saved.
+
+<!-- document:ROLLOUT_ARCHIVE.md:end -->
+
+---
+
+<!-- document:H200_TESTING.md:start -->
+<a id="h200-testing"></a>
+## H200 runtime and validation
+
+_Source record: `H200_TESTING.md`. Dated entries retain their historical context._
+
+
+<a id="h200-testing--continuation-287530-started-2026-09-11-0354-pdt"></a>
+### Continuation 287530 started, 2026-09-11 03:54 PDT
 
 The user requested and explicitly approved another **4 H200 × 8-hour** training
 allocation, 16 CPUs / 480 GiB, **32 GPU-hours / estimated $28.80**, after job
@@ -38,7 +418,8 @@ two hours, triggered by future verified rewards entering the top five. See
 `REWARD_RANK_EVALUATION_QUEUE.md`. Stealth evaluation 287521 was canceled on the
 user's request; its 16 recorded cloud sessions were confirmed stopped.
 
-## Job 287371 completed iterations 35–40
+<a id="h200-testing--job-287371-completed-iterations-3540"></a>
+### Job 287371 completed iterations 35–40
 
 Slurm reports **COMPLETED / 7:57:23 / exit 0**. Its worker reached the planned
 allocation timeout (raw 124), which the controller normalized to success.
@@ -72,7 +453,8 @@ verified. Job **287596** completed after-39 with **98/300 (32.67%)**, valid-only
 that cleared an inherited cross-node W&B service socket. Both startup repairs
 stayed within their original allocations; **2/4 approved evaluation jobs** are used.
 
-## Approved continuation 287371, 2026-09-10 19:57 PDT
+<a id="h200-testing--approved-continuation-287371-2026-09-10-1957-pdt"></a>
+### Approved continuation 287371, 2026-09-10 19:57 PDT
 
 The user approved **4 H200 GPUs for 8 hours** (32 GPU-hours, estimated $28.80),
 16 CPUs and 480 GiB RAM. Job **287371** runs on **g005**, with an allocation
@@ -96,7 +478,8 @@ The separately approved intermediate evaluation job **287370** runs on **g004**,
 4 H200s for three hours, comparing checkpoints after iterations 21 and 22.
 Its details and validation fixes are in `BASELINE_CHECKPOINT_EVALUATION.md`.
 
-## Job 286382 completed five iterations and evaluation 30, 2026-09-10
+<a id="h200-testing--job-286382-completed-five-iterations-and-evaluation-30-2026-09-10"></a>
+### Job 286382 completed five iterations and evaluation 30, 2026-09-10
 
 The approved four-H200 allocation ended at its planned shutdown boundary around
 17:39 PDT after **7:57:24**, with Slurm state COMPLETED. Raw launcher timeout 124
@@ -145,7 +528,8 @@ checks on both selected checkpoint schedulers; a replacement allocation awaits
 explicit approval. See `BASELINE_CHECKPOINT_EVALUATION.md` for the saved checkpoint
 inventory, target selection, failure evidence, and prepared replacement.
 
-## Approved continuation 286382, 2026-09-10 09:47 PDT
+<a id="h200-testing--approved-continuation-286382-2026-09-10-0947-pdt"></a>
+### Approved continuation 286382, 2026-09-10 09:47 PDT
 
 The user explicitly approved another four H200 GPUs for eight hours, 16 CPUs,
 and 480 GiB RAM: 32 GPU-hours, estimated $28.80. Job 286382 is running on g002
@@ -163,7 +547,8 @@ The four-GPU restore receipt is `logs/resume-286382-4gpu-verification.json` unde
 the runtime root. Preserve the baseline recipe and monitor about every
 15 minutes, with closer checks around failures and stage transitions.
 
-## Job 286094 completed six additional iterations, 2026-09-10
+<a id="h200-testing--job-286094-completed-six-additional-iterations-2026-09-10"></a>
+### Job 286094 completed six additional iterations, 2026-09-10
 
 The allocation ended at its planned shutdown boundary around 08:10 PDT after
 7:57:23, with Slurm state COMPLETED. The training launcher's raw timeout code
@@ -202,7 +587,8 @@ Evidence and the next-resume handoff are in `allocation_end_audit.json` under
 passed Slurm preflight at an estimated $28.80; preflight does not submit a job
 or authorize further spending.
 
-## Approved continuation 286094, 2026-09-10 00:17 PDT
+<a id="h200-testing--approved-continuation-286094-2026-09-10-0017-pdt"></a>
+### Approved continuation 286094, 2026-09-10 00:17 PDT
 
 The user explicitly approved four H200 GPUs for eight hours, 16 CPUs and
 480 GiB RAM: 32 GPU-hours, estimated $28.80. Job 286094 is running on g003,
@@ -229,7 +615,8 @@ audit rewards and optimizer records in W&B at iteration boundaries, validate
 each saved checkpoint, and update `current_baseline.json`. No additional
 allocation or budget extension is authorized.
 
-## Evaluation cache retention corrected live, 2026-09-09 19:57 PDT
+<a id="h200-testing--evaluation-cache-retention-corrected-live-2026-09-09-1957-pdt"></a>
+### Evaluation cache retention corrected live, 2026-09-09 19:57 PDT
 
 During fresh collection 21, host memory rose to 358 GiB despite zero cgroup
 memory-limit/OOM events. Cgroup accounting showed about 294 GiB in the `file`
@@ -253,7 +640,8 @@ cannot alter the already imported driver, so the one-time live cleanup handles
 this allocation's evaluation 20. Another evaluation is not expected before
 the allocation ends.
 
-## Iteration 20 trained and evaluated, 2026-09-09 19:40 PDT
+<a id="h200-testing--iteration-20-trained-and-evaluated-2026-09-09-1940-pdt"></a>
+### Iteration 20 trained and evaluated, 2026-09-09 19:40 PDT
 
 Job 285546 completed fresh collection 20 in 3,828.3 seconds: 48 accepted
 groups from 124 completed, 20 pending at cutoff, 144 submitted. The 1,685 turn
@@ -278,7 +666,8 @@ collection 21 started automatically. Reports in the current run directory:
 `iteration_20_eval_wandb_audit.json`. The persistent pointer marks evaluation
 20 complete and has no pending replay or evaluation.
 
-## Replay saved successfully in job 285546, 2026-09-09 17:20 PDT
+<a id="h200-testing--replay-saved-successfully-in-job-285546-2026-09-09-1720-pdt"></a>
+### Replay saved successfully in job 285546, 2026-09-09 17:20 PDT
 
 Saved reward iteration 19 completed all 12 PPO updates. Checkpoint 18 now
 contains 258 durable Adam updates in both parameter groups, with scheduler
@@ -305,7 +694,8 @@ selects checkpoint 18 / 258 updates, with no pending replay. The user updated
 active supervision and progress reporting to every 15 minutes, with closer
 checks at transitions and on errors.
 
-## Approved continuation submitted, 2026-09-09 16:44 PDT
+<a id="h200-testing--approved-continuation-submitted-2026-09-09-1644-pdt"></a>
+### Approved continuation submitted, 2026-09-09 16:44 PDT
 
 The user explicitly requested one further four-GPU, eight-hour continuation.
 Job `285546` is running on `g003` with four H200s, 16 CPUs and 480 GiB RAM;
@@ -329,7 +719,8 @@ replay, and records the successful restoration. The verification source copy
 took about five minutes on the shared filesystem; restore itself passed in
 about one minute. The online process is preparing its own source snapshot.
 
-## Four-GPU continuation stopped at host-memory ceiling, 2026-09-09 14:15 PDT
+<a id="h200-testing--four-gpu-continuation-stopped-at-host-memory-ceiling-2026-09-09-1415-pdt"></a>
+### Four-GPU continuation stopped at host-memory ceiling, 2026-09-09 14:15 PDT
 
 Approved job `284885` ran for 4:49:06 on four H200s and extended the durable
 baseline from checkpoint 14 / 210 Adam updates to checkpoint 17 / **246 Adam
@@ -378,7 +769,8 @@ Evidence is in the run directory as `checkpoint_17_validation.json`,
 `health.jsonl`. The persistent pointer now selects checkpoint 17, the pending
 replay batch, and the cache-release source.
 
-## Second fresh cycle verified, 2026-09-08 22:50 PDT
+<a id="h200-testing--second-fresh-cycle-verified-2026-09-08-2250-pdt"></a>
+### Second fresh cycle verified, 2026-09-08 22:50 PDT
 
 Collection 9 completed in 3730.8 seconds, with 48 accepted groups from 111
 completed groups and 33 surplus groups pending at cutoff (144 submitted).
@@ -399,9 +791,10 @@ Evidence in the current run directory: `checkpoint_verification_8.json`,
 `checkpoint_8_all_shards_cpu_samples.json`, `collection_9_completion_audit.json`,
 `collection_9_complete_wandb_audit.json`, and `rollout_recovery/8.provenance.json`.
 The four-GPU feasibility and timing estimate are documented in
-[BASELINE_SCALING.md](BASELINE_SCALING.md); no additional allocation was requested.
+[BASELINE_SCALING.md](RL_RUNTIME.md#baseline-scaling); no additional allocation was requested.
 
-## Evaluation image retention guarded, 2026-09-08 21:35 PDT
+<a id="h200-testing--evaluation-image-retention-guarded-2026-09-08-2135-pdt"></a>
+### Evaluation image retention guarded, 2026-09-08 21:35 PDT
 
 The next full Online-Mind2Web evaluation retains every completed trajectory
 until metrics and debug data are written. Its custom generator previously
@@ -421,7 +814,8 @@ before that import without interrupting collection or training. The runtime
 patch audit records exact source hashes and confirms the training recipe
 files remain unchanged.
 
-## Complete fresh cycle verified, 2026-09-08 21:00 PDT
+<a id="h200-testing--complete-fresh-cycle-verified-2026-09-08-2100-pdt"></a>
+### Complete fresh cycle verified, 2026-09-08 21:00 PDT
 
 The quick-resume continuation `openwebrl-4b-reference-283214-20260909T022832`
 loaded checkpoint 6 on both GPUs, then completed fresh collection 8 with the
@@ -447,7 +841,8 @@ and `collection_8_complete_wandb_audit.json`. The persistent pointer records
 checkpoint 7 / 116 updates with no pending replay. Collection 9 is running in
 the same allocation, which ends at 02:16:49 PDT; no new compute was requested.
 
-## Collection-time memory fix, 2026-09-08 19:24 PDT
+<a id="h200-testing--collection-time-memory-fix-2026-09-08-1924-pdt"></a>
+### Collection-time memory fix, 2026-09-08 19:24 PDT
 
 Fresh collection 8 revealed that `generate_rollout_async` retains every
 completed group in `all_data`, including groups rejected by the dynamic filter.
@@ -474,7 +869,8 @@ references and calls `malloc_trim(0)` when available. The repeated probe release
 `openwebrl-runtime/collection-mapping-probe-283214.json`. The fix requires a new
 worker process; checkpoint 6 preserves all 104 completed optimizer updates.
 
-## Successful continuation on 240 GiB, 2026-09-08 19:02 PDT
+<a id="h200-testing--successful-continuation-on-240-gib-2026-09-08-1902-pdt"></a>
+### Successful continuation on 240 GiB, 2026-09-08 19:02 PDT
 
 Run `openwebrl-4b-reference-283214-20260909T012629` on g021 loaded checkpoint 5,
 replayed collection 7, completed all fourteen optimizer updates, saved checkpoint
@@ -494,7 +890,7 @@ checkpoint 6 has not been performed; training continues from its in-memory
 state. Runtime reports are `checkpoint_verification_6.json` and
 `replay_6_completion_audit.json` in the run directory.
 
-The [quick resume command](RESUMING_BASELINE.md) is committed as `d1dd5b8`, with
+The [quick resume command](RL_RUNTIME.md#resuming-baseline) is committed as `d1dd5b8`, with
 seven passing CPU tests. Real preflight first selected checkpoint 5 plus replay
 batch 6, then correctly selected checkpoint 6 with no replay after the save.
 The stable run pointer now records 104 durable updates and no pending replay.
@@ -502,7 +898,8 @@ W&B remains `qcq7i4ug`; recovered reward observation 7 is 0.3987667009 and retai
 its original reward-iteration coordinate. New collection 8 will supply the next
 reward observation.
 
-## Resume preparation for allocation 283214, 2026-09-08 18:26 PDT
+<a id="h200-testing--resume-preparation-for-allocation-283214-2026-09-08-1826-pdt"></a>
+### Resume preparation for allocation 283214, 2026-09-08 18:26 PDT
 
 The user explicitly assigned job 283214 on g021 for continuing W&B run
 `qcq7i4ug`. It provides two H200s, eight CPUs, and 240 GiB RAM until
@@ -534,7 +931,8 @@ updates and save checkpoint 6 with 104 Adam updates. This is still the seventh
 collected reward observation. GPU training memory and checkpoint completion
 must be verified in this smaller allocation before declaring the resume healthy.
 
-## Final handoff, 2026-09-08 03:34 PDT
+<a id="h200-testing--final-handoff-2026-09-08-0334-pdt"></a>
+### Final handoff, 2026-09-08 03:34 PDT
 
 The baseline was intentionally paused after collection 7 finished, because its
 14 optimizer updates could not fit before allocation 282346 ended at 03:36 PDT.
@@ -586,7 +984,8 @@ eighth reward point. Fresh collection 8 follows after that checkpoint. Always
 use an explicit `srun --jobid=...` step in the allocated job; plain SSH can attach
 to a different allocation through Slurm PAM adoption.
 
-## Checkpoint 5 validated, 2026-09-08 02:21 PDT
+<a id="h200-testing--checkpoint-5-validated-2026-09-08-0221-pdt"></a>
+### Checkpoint 5 validated, 2026-09-08 02:21 PDT
 
 Collection 6 completed all 14 optimizer updates and saved `iter_0000005` before
 fresh collection 7 began around 02:19 PDT. The checkpoint's Adam counters are
@@ -614,7 +1013,8 @@ collection 7 can also finish both PPO epochs depends on its browser duration;
 any fully collected recovery batch must be preserved separately from durable
 optimizer progress. No new allocation or budget extension is authorized.
 
-## Collection 6 reward and cleanup verified, 2026-09-08 01:52 PDT
+<a id="h200-testing--collection-6-reward-and-cleanup-verified-2026-09-08-0152-pdt"></a>
+### Collection 6 reward and cleanup verified, 2026-09-08 01:52 PDT
 
 Collection 6 finished in 4106.0 seconds (68.4 minutes), with 48 accepted groups,
 124 completed groups, and 20 pending groups at cutoff: 144 submitted in total.
@@ -636,7 +1036,8 @@ validated checkpoint remains checkpoint 4 with 76 updates. If replay is needed,
 explicitly load checkpoint 4 and advance its restored data cursor by the 144
 submitted groups; replay does not create another fresh reward observation.
 
-## Checkpoint 4 validated, 2026-09-08 00:42 PDT
+<a id="h200-testing--checkpoint-4-validated-2026-09-08-0042-pdt"></a>
+### Checkpoint 4 validated, 2026-09-08 00:42 PDT
 
 Collection 5 completed all 14 optimizer updates and saved `iter_0000004` in
 the current recovery run before collection 6 began around 00:40 PDT. Its
@@ -661,7 +1062,8 @@ and backed up in the current run as `collection_5_documentation.patch`.
 Scrubbed checkpoint storage was unaffected, and the checkpoint save completed
 successfully. Project-quota availability should be checked before later commits.
 
-## Recollection 5 and cleanup passed, 2026-09-08 00:16 PDT
+<a id="h200-testing--recollection-5-and-cleanup-passed-2026-09-08-0016-pdt"></a>
+### Recollection 5 and cleanup passed, 2026-09-08 00:16 PDT
 
 The resumed run completed collection 5 in 3261.5 seconds: 48 accepted groups,
 104 completed groups, and 40 pending groups at cutoff (144 submitted). Both
@@ -692,7 +1094,8 @@ cgroup, then stopped. All 12 old browser servers were verified exited. The
 separate ARM allocation and current recovery workers were excluded. Inventories
 and cleanup records are preserved under the failed run's `failure-collection-5/`.
 
-## Recovery running, 2026-09-07 23:18 PDT
+<a id="h200-testing--recovery-running-2026-09-07-2318-pdt"></a>
+### Recovery running, 2026-09-07 23:18 PDT
 
 The same W&B run resumed from checkpoint 3 at 23:14 PDT, using an explicit
 `srun --jobid=282346` step in the existing allocation. The new run directory is
@@ -721,7 +1124,8 @@ alone. Allocation 282346's two free GPUs were verified in its own `srun` step
 before restarting; setting SLURM_JOB_ID in an arbitrary SSH shell would not
 change that shell's actual resource cgroup.
 
-## Collection 5 crash and recovery preparation, 2026-09-07 23:11 PDT
+<a id="h200-testing--collection-5-crash-and-recovery-preparation-2026-09-07-2311-pdt"></a>
+### Collection 5 crash and recovery preparation, 2026-09-07 23:11 PDT
 
 The first g005 continuation exited with code 1 after its rollout actor received
 SIGABRT at 23:02:57 during cancellation of surplus browser tasks. The native
@@ -748,7 +1152,8 @@ Crash diagnostics are preserved under the first continuation's
 `failure-collection-5/` directory. Recovery will use the existing allocation
 and checkpoint 3, with no new paid allocation or budget extension.
 
-## Previous continuation milestone, 2026-09-07 22:24 PDT
+<a id="h200-testing--previous-continuation-milestone-2026-09-07-2224-pdt"></a>
+### Previous continuation milestone, 2026-09-07 22:24 PDT
 
 W&B run `qcq7i4ug` is continuing on `g005`, inside existing allocation 282346
 (two H200s; allocation ends 2026-09-08 03:36:15 PDT, launcher stops three
@@ -821,7 +1226,8 @@ paths. This checks reference lifetime and ordering, not distributed memory
 reclamation. This change is **not in the running g005 snapshot**; monitor its
 next collection's memory before deciding whether a restart is needed.
 
-## Runtime
+<a id="h200-testing--runtime"></a>
+### Runtime
 
 The dedicated environment is `/gpfs/scrubbed/zixianma/openwebrl-runtime/venv`.
 The checkpoint is `/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT`.
@@ -854,7 +1260,8 @@ Python. Install Chromium with `python -m playwright install chromium` after
 sourcing `h200_env.sh`. These scripts contain the fixes discovered during the
 initial build; a complete clean rebuild of the final scripts has not been rerun.
 
-## Completed checks, 2026-09-07 UTC
+<a id="h200-testing--completed-checks-2026-09-07-utc"></a>
+### Completed checks, 2026-09-07 UTC
 
 - All 24 offline tests passed in the dedicated environment.
 - Both H200s passed CUDA backward and NCCL/DDP synchronization checks.
@@ -878,7 +1285,8 @@ The synthetic rewards establish numerical and infrastructure behavior, not
 web-task success. Short text timings and memory are not baseline throughput
 or long-context memory estimates.
 
-## Reproduce tests
+<a id="h200-testing--reproduce-tests"></a>
+### Reproduce tests
 
 ```bash
 python scripts/check_cpu_preflight.py
@@ -933,7 +1341,8 @@ the existing allocation. It never submits a new job. Defaults: 30 rollouts,
 4 groups x 5 trajectories, 15 browser steps, 16K context, global batch 16,
 2 PPO epochs, checkpoint every 5 iterations, and 8 held-out evaluation tasks.
 
-## Real-web baseline launch
+<a id="h200-testing--real-web-baseline-launch"></a>
+### Real-web baseline launch
 
 `scripts/run_h200_browser.sh` defaults to a small two-GPU run: TP=2,
 two rollout iterations, two prompt groups, five trajectories per group,
@@ -960,7 +1369,8 @@ overrides scheduler duration when extending 90 rollouts to 140. This is
 appropriate for the recipe's constant learning rate; changing the LR schedule
 requires reviewing the intended continuation behavior.
 
-## 2026-09-07: reference baseline checkpoint recovery
+<a id="h200-testing--2026-09-07-reference-baseline-checkpoint-recovery"></a>
+### 2026-09-07: reference baseline checkpoint recovery
 
 Allocation 281697 has two H200s and ends at 18:54:27 PDT. The launchers
 initially stopped five minutes earlier. The final guarded recovery uses an
@@ -1051,7 +1461,8 @@ The canonical primary reward series is `train/reward` versus
 history is retained. See `METRICS.md` and `PAPER_REWARD_COMPARISON.md` for axes,
 units, and paper-comparison limitations.
 
-### Final recovery result
+<a id="h200-testing--final-recovery-result"></a>
+#### Final recovery result
 
 At 18:51:32 PDT all 16 replay updates completed. The streaming writer saved
 checkpoint 1 in 20.6 seconds, completing at 18:51:53. No additional host OOM or
@@ -1094,7 +1505,8 @@ backed up under `openwebrl-runtime/checkpoint-streaming-fix/20260907/`; committi
 was initially blocked by the project filesystem quota. Git writes later recovered
 and the verified fixes were committed separately (see below).
 
-## 2026-09-07: continuation on g005
+<a id="h200-testing--2026-09-07-continuation-on-g005"></a>
+### 2026-09-07: continuation on g005
 
 The user explicitly requested continuing W&B run `qcq7i4ug` on `zixianma@g005`.
 Existing allocation 282346 supplies two H200 GPUs, 16 CPUs and 400,000 MiB host
@@ -1125,7 +1537,8 @@ Live files: `training.log` (full output), `progress.log` (compact milestones),
 and budget). `openwebrl-runtime/current_baseline.json` points to this run and
 retains the last validated checkpoint until a newer save is verified.
 
-### Recovery changes preserved in Git
+<a id="h200-testing--recovery-changes-preserved-in-git"></a>
+#### Recovery changes preserved in Git
 
 Git writes succeeded again on the login host at about 19:56 PDT. Commits were
 kept separate and each changes fewer than ten files:
@@ -1140,7 +1553,8 @@ The g005 continuation reached 15/48 accepted groups in collection 3 by about
 20:01 PDT, with no OOM events or runtime errors. This is a progress snapshot,
 not an additional saved checkpoint.
 
-### Explicit tracking shutdown
+<a id="h200-testing--explicit-tracking-shutdown"></a>
+#### Explicit tracking shutdown
 
 The previous run and resume check emitted nonfatal W&B BrokenPipeError messages
 during worker teardown; the online audit nevertheless found all 16 final
@@ -1155,3 +1569,7 @@ zero and no teardown traceback occurred. The reusable check is
 `scripts/check_tracking_shutdown.py --output <new-directory>`; test artifacts
 are preserved and no cloud run or GPU is required. This checks SDK flushing;
 the complete training shutdown path still needs validation on a future run.
+
+<!-- document:H200_TESTING.md:end -->
+
+---

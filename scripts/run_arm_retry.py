@@ -13,6 +13,10 @@ import subprocess
 import sys
 import time
 import urllib.request
+try:
+    from project_docs import rewrite_links, write_document_section
+except ModuleNotFoundError:  # Imported as scripts.run_arm_retry in tests/tools.
+    from scripts.project_docs import rewrite_links, write_document_section
 
 REPO = Path(__file__).resolve().parents[1]
 MODES = ("baseline", "scalar")
@@ -205,14 +209,12 @@ def summarize_retry(queue, original):
               "The browser sessions are fresh. No best-of-retries result selection or full-benchmark replacement was performed.", "",
               f"Artifacts: [{output.name}]({output}).", "",
               "[Original benchmark results](" + str(REPO / "openwebrl/docs/ARM_INFERENCE_RESULTS.md") + ").", ""]
-    markdown = "\n".join(lines)
+    markdown = rewrite_links("\n".join(lines), "ARM_INFERENCE_RETRY_RESULTS.md")
     (output / "RETRY_RESULTS.md").write_text(markdown)
     report["markdown_report"] = str(output / "RETRY_RESULTS.md")
     document = REPO / "openwebrl/docs/ARM_INFERENCE_RETRY_RESULTS.md"
     try:
-        temporary = document.with_suffix(".md.tmp")
-        temporary.write_text(markdown)
-        temporary.replace(document)
+        write_document_section(document, markdown)
     except OSError as exc:
         # Scrubbed outputs remain authoritative if project quota prevents the
         # convenience copy. Do not truncate the existing project document.

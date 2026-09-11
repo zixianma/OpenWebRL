@@ -3,6 +3,10 @@
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+try:
+    from project_docs import write_document_section
+except ModuleNotFoundError:  # Imported as scripts.report_arm_joint_training.
+    from scripts.project_docs import write_document_section
 
 REPO = Path(__file__).resolve().parents[1]
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction')
@@ -62,7 +66,7 @@ def main():
               'endpoint browser evaluations, not either offline loss alone.', '',
               '[Run plan and recovery details](ARM_JOINT_DATA_TRAINING_PLAN.md).', '',
               'Refresh this report with `python3 scripts/report_arm_joint_training.py`.', '']
-    (REPO / 'openwebrl/docs/ARM_JOINT_TRAINING_MONITOR.md').write_text('\n'.join(lines))
+    write_document_section(REPO / 'openwebrl/docs/ARM_JOINT_TRAINING_MONITOR.md', '\n'.join(lines))
     temporary = pointer.with_suffix('.tmp')
     temporary.write_text(json.dumps(data, indent=2) + '\n')
     temporary.replace(pointer)

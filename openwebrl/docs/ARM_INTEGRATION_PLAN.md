@@ -1,16 +1,16 @@
 # Action reward models for OpenWebRL training
 
-[ARM results dashboard](ARM_RESULTS_DASHBOARD.md)
+[ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
 Status: **All three inference evaluations are complete. Overall success: baseline 30.0%, ScalarRM 38.0%, SelectionARM 42.7%; valid-only: 33.7%, 45.4%, 50.0%. C2 collection completed all 2091 tasks with 1151 successful trajectories and produced 8394 eligible action examples; dataset SHA-256 `cb7c75df6a4824e9e653f6d913b0ae83268610966cd13dd13fc7314e9c667fe0`. C2 SFT stopped cleanly at update 923 after train CE plateaued. The fixed 100-task scaling study selected update 500. One-pass rank-16 ablation 1A completed at update 263. On the fresh 200-task holdout it reached 33.5% overall and 37.9% valid-only versus 31.0% and 34.6% for original C2 update 500; the paired result was 23 wins versus 15 losses over 168 common-valid tasks (exact McNemar p=0.2559). Against the starting SFT actor across all 300 tasks, 1A improved overall success from 30.0% to 33.3%, but the paired all-scheduled result is not significant (p=0.2451; bootstrap 95% interval −1.7 to +8.3 points).**
 
-The [judge alignment audit](ARM_JUDGE_ALIGNMENT.md) confirms the author's OpenWebRL results use o4-mini and describes the matching AgentTrek protocol. It also records the author's separate GPT-4.1 comparison and the known decoding differences. See the [C2 scaling results](ARM_C2_SCALING_RESULTS.md), [prepared full-300 comparison](ARM_C2_FULL300_EVAL.md), [next SFT ablations](ARM_FILTERED_SFT_ABLATIONS.md), and [C2 run record](ARM_C2_RUN.md).
+The [judge alignment audit](ARM_INFERENCE.md#arm-judge-alignment) confirms the author's OpenWebRL results use o4-mini and describes the matching AgentTrek protocol. It also records the author's separate GPT-4.1 comparison and the known decoding differences. See the [C2 scaling results](ARM_RESULTS.md#arm-c2-scaling-results), [prepared full-300 comparison](ARM_SFT.md#arm-c2-full300-eval), [next SFT ablations](ARM_SFT.md#arm-filtered-sft-ablations), and [C2 run record](ARM_SFT.md#arm-c2-run).
 
 Created: 2026-09-07. This is the working document for iterating on the plan originally proposed in conversation.
 
-[Inference results, denominators, and retry plan](ARM_INFERENCE_RESULTS.md) · [Action-level filtered SFT pilot](ARM_FILTERED_SFT_PLAN.md).
+[Inference results, denominators, and retry plan](ARM_INFERENCE.md#arm-inference-results) · [Action-level filtered SFT pilot](ARM_SFT.md#arm-filtered-sft-plan).
 
-[Matched retry pass](ARM_INFERENCE_RETRY_RESULTS.md): **held** pending a cohort decision using the three completed runs; C2 currently has execution priority. The earlier 56-task two-arm inventory is provisional, and automatic launch is disabled. **C2 is the selected first SFT experiment**; C1 is an optional later control and C3 is deferred. The user superseded the 128/32/32 draft with **all 2091 deduplicated tasks** and requested C2 after eval. The [SFT plan](ARM_FILTERED_SFT_PLAN.md) records the revised configuration; [C2 run status](ARM_C2_RUN.md) records execution and artifacts.
+[Matched retry pass](ARM_INFERENCE.md#arm-inference-retry-results): **held** pending a cohort decision using the three completed runs; C2 currently has execution priority. The earlier 56-task two-arm inventory is provisional, and automatic launch is disabled. **C2 is the selected first SFT experiment**; C1 is an optional later control and C3 is deferred. The user superseded the 128/32/32 draft with **all 2091 deduplicated tasks** and requested C2 after eval. The [SFT plan](ARM_SFT.md#arm-filtered-sft-plan) records the revised configuration; [C2 run status](ARM_SFT.md#arm-c2-run) records execution and artifacts.
 
 ## 1. Current priority: reproduce Online-Mind2Web inference gains
 

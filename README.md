@@ -21,6 +21,13 @@ The main browser-agent implementation lives in [`openwebrl/`](openwebrl/).
 It supports Playwright-based browser interaction, multi-turn multimodal
 rollouts, tool-call parsing, textual environment feedback, VLM-as-a-judge rewards, and training/evaluation scripts for Qwen3-VL style visual language models.
 
+## Project documentation
+
+[Topic index](openwebrl/docs/README.md) ·
+[ARM results](openwebrl/docs/ARM_RESULTS.md) ·
+[RL runtime and resume](openwebrl/docs/RL_RUNTIME.md) ·
+[RL metrics](openwebrl/docs/RL_METRICS.md)
+
 ## 📋 TODO
 
 - [x] Supported [SFT](sft/README.md) with Qwen3.5 (2026.06.06)

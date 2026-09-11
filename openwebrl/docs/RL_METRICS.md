@@ -1,12 +1,30 @@
-# OpenWebRL training and W&B metric reference
+# RL metrics: reward, optimization, and diagnostics
+
+Definitions and interpretation of training/W&B metrics, comparison with the paper reward curve, and gradient-spike diagnostics. The metric reference comes first; the later sections provide measurement and debugging context.
+
+## Contents
+
+- [OpenWebRL training and W&B metric reference](#metrics)
+- [Comparing the reference run's reward plot](#paper-reward-comparison)
+- [Gradient spikes and training diagnostics](#gradient-diagnostics)
+
+---
+
+<!-- document:METRICS.md:start -->
+<a id="metrics"></a>
+## OpenWebRL training and W&B metric reference
+
+_Source record: `METRICS.md`. Dated entries retain their historical context._
+
 
 Verified on 2026-09-07 against the running 4B reference baseline (`qcq7i4ug`), its isolated source snapshot, and the repository logging code. This document covers the metrics emitted by that baseline, plus clearly marked optional metric families. It does not imply that every metric exists in every run.
 
-### Completed-rollout archive metrics (enabled from collection 24, 2026-09-10)
+<a id="metrics--completed-rollout-archive-metrics-enabled-from-collection-24-2026-09-10"></a>
+#### Completed-rollout archive metrics (enabled from collection 24, 2026-09-10)
 
 These scalars are emitted with collection metrics when the archive is enabled.
 They describe preservation of completed groups, including RL rejections; they
-do not change the reward or training population. See [ROLLOUT_ARCHIVE.md](ROLLOUT_ARCHIVE.md).
+do not change the reward or training population. See [ROLLOUT_ARCHIVE.md](RL_RUNTIME.md#rollout-archive).
 
 | Metric | Calculation |
 | --- | --- |
@@ -20,7 +38,8 @@ The first archive logged 88 groups, 440 trajectories, 2,290 images, 31.23 second
 and zero errors, verified against W&B and local files. A collection interrupted
 before archival has no completed archive and no archival success metric.
 
-## 1. Why one reward measurement can accompany 14 optimizer updates
+<a id="metrics--1-why-one-reward-measurement-can-accompany-14-optimizer-updates"></a>
+### 1. Why one reward measurement can accompany 14 optimizer updates
 
 A **prompt group** is one sampled task with up to five browser attempts. A **trajectory** is one attempt. A **turn sample** is one assistant action within an attempt. A **rollout iteration** collects a training batch, trains on that batch, and then updates the inference model. A **PPO epoch** is one shuffled training pass over the selected turn samples. An **optimizer update** processes a global batch of turn samples, using gradient accumulation where needed.
 
@@ -43,7 +62,8 @@ The judge scores each trajectory at its end, and that reward is copied to its tu
 
 Thus iteration 1 supplies one aggregate training-reward point, summarizing many individual trajectory outcomes. Iteration 2 supplies the next point. Repeating the first mean at every optimizer update would display reuse of the same observation, not 14 measurements of policy quality. The first point uses the SFT policy; the second uses the policy after the first collection's updates. Subsequent points also use different sampled tasks, so changes combine policy changes and task difficulty.
 
-### Collection mean versus minibatch mean
+<a id="metrics--collection-mean-versus-minibatch-mean"></a>
+#### Collection mean versus minibatch mean
 
 There **are seven optimizer minibatches per epoch**, and each has a well-defined mean stored reward:
 
@@ -63,9 +83,10 @@ The current first-epoch summary `rollout/raw_reward` averages the selected 1,792
 
 Source: [`actor.py`](../../slime/backends/megatron_utils/actor.py), epoch selection and `train_actor`; [`data.py`](../../slime/backends/megatron_utils/data.py), `get_data_iterator`.
 
-## 2. Recommended charts, axes, and cadence
+<a id="metrics--2-recommended-charts-axes-and-cadence"></a>
+### 2. Recommended charts, axes, and cadence
 
-For the paper comparison, use `train/reward` versus `train/reward_iteration` as the sole primary reward series: multiply y by 100 and subtract 1 from x when comparing displayed paper coordinates. The duplicate `paper/*` aliases were retired on 2026-09-07; their old observations remain historical. See [PAPER_REWARD_COMPARISON.md](PAPER_REWARD_COMPARISON.md). Exact paper figure aggregation/smoothing is unverified.
+For the paper comparison, use `train/reward` versus `train/reward_iteration` as the sole primary reward series: multiply y by 100 and subtract 1 from x when comparing displayed paper coordinates. The duplicate `paper/*` aliases were retired on 2026-09-07; their old observations remain historical. See [PAPER_REWARD_COMPARISON.md](RL_METRICS.md#paper-reward-comparison). Exact paper figure aggregation/smoothing is unverified.
 
 
 | Chart / family | X-axis | Emission cadence and interpretation |
@@ -80,7 +101,8 @@ For the paper comparison, use `train/reward` versus `train/reward_iteration` as 
 
 Start with `train/reward`, `train/task_success_rate`, `train/task_invalid_rate`, `train/pg_loss`, `train/pg_clipfrac`, `train/ppo_kl`, `train/grad_norm`, and `perf/rollout_time`. For held-out performance use `eval/<dataset>/task/success_rate_all_completed` together with `eval/<dataset>/task/invalid_rate`.
 
-### Axis details and known limitations
+<a id="metrics--axis-details-and-known-limitations"></a>
+#### Axis details and known limitations
 
 - `train/reward_iteration = rollout_id + 1`. Its separate axis prevents optimizer-step metadata from giving reward charts the wrong x-coordinate.
 - `rollout/iteration` and `eval/iteration` are intended to equal `rollout_id + 1`. They identify the associated iteration, not the number of evaluation calls or necessarily the number of completed updates. Pretraining evaluation and iteration-1 collection can both appear at 1.
@@ -92,7 +114,8 @@ Start with `train/reward`, `train/task_success_rate`, `train/task_invalid_rate`,
 
 Source: [`wandb_utils.py`](../../slime/utils/wandb_utils.py), [`training_reward_metrics.py`](../../slime/utils/training_reward_metrics.py), [`model.py`](../../slime/backends/megatron_utils/model.py), `train`; [`metric_utils.py`](../../slime/utils/metric_utils.py), `compute_rollout_step`.
 
-## 3. Reward construction and weighting
+<a id="metrics--3-reward-construction-and-weighting"></a>
+### 3. Reward construction and weighting
 
 For a terminal trajectory reward, the running browser recipe computes:
 
@@ -121,7 +144,8 @@ Negative format-failure rewards make mean reward different from success rate. Lo
 
 Source: [`reward_browser.py`](../reward_browser.py), `reward_func` and `_score_single_sample`; [`trajectory_metrics.py`](../../slime/utils/trajectory_metrics.py).
 
-### Training reward aliases
+<a id="metrics--training-reward-aliases"></a>
+#### Training reward aliases
 
 Every alias is an exact copy of the source scalar; it does not rescore trajectories. Missing source fields are omitted, not replaced with zero. All use `train/reward_iteration`.
 
@@ -144,10 +168,11 @@ preserved reference filter can admit such trajectories when their terminal raw
 reward exists. Their training loss masks are zeroed, while their rewards still
 enter group normalization and the collection reward mean. In collection 30,
 four of 1,686 accepted turns had this flag and raw reward zero; the archive's
-validity-filtered trajectory reward was null. See [ROLLOUT_ARCHIVE.md](ROLLOUT_ARCHIVE.md)
+validity-filtered trajectory reward was null. See [ROLLOUT_ARCHIVE.md](RL_RUNTIME.md#rollout-archive)
 for the audited example and the distinction between raw reward and valid outcome.
 
-## 4. Per-update optimization metrics (`train/*`)
+<a id="metrics--4-per-update-optimization-metrics-train"></a>
+### 4. Per-update optimization metrics (`train/*`)
 
 These are computed over the selected optimizer batch, not fresh browser attempts. In the audited run `calculate_per_token_loss=False`, so the reducer first averages valid response tokens **within each turn sample**, then averages those sample means across the global batch. Prompt, observation, padding, and other masked tokens do not contribute.
 
@@ -192,7 +217,8 @@ Every retained turn of trajectory t receives the same normalized reward. With ze
 
 Source: [`loss.py`](../../slime/backends/megatron_utils/loss.py), `policy_loss_function` and `compute_advantages_and_returns`; [`ppo_utils.py`](../../slime/utils/ppo_utils.py), `compute_policy_loss`; [`cp_utils.py`](../../slime/backends/megatron_utils/cp_utils.py), `get_sum_of_sample_mean`; [`model.py`](../../slime/backends/megatron_utils/model.py), `train_one_step`; [`rollout.py`](../../slime/ray/rollout.py), `_post_process_rewards`.
 
-## 5. Collected-sample diagnostics (`rollout/*`)
+<a id="metrics--5-collected-sample-diagnostics-rollout"></a>
+### 5. Collected-sample diagnostics (`rollout/*`)
 
 Unless stated otherwise, the population is the accepted, flattened turn samples returned by collection, before epoch-specific trimming. A ratio is a fraction from 0 to 1, not a percentage.
 
@@ -218,7 +244,8 @@ Unless stated otherwise, the population is the accepted, flattened turn samples 
 
 Some ratios overlap; they must not be summed as disjoint failure categories. Accepted-only error ratios can be zero even when many attempted tasks failed before filtering. Prefer completed-trajectory invalidity for infrastructure health.
 
-### Trainer-side summaries in the same namespace
+<a id="metrics--trainer-side-summaries-in-the-same-namespace"></a>
+#### Trainer-side summaries in the same namespace
 
 The trainer logs these over its **selected first-epoch subset**. They can differ from the collector's full-batch metrics. The generic logger reduces means across data-parallel ranks and uses a masked mean within samples for token-valued fields.
 
@@ -234,7 +261,8 @@ The trainer logs these over its **selected first-epoch subset**. They can differ
 
 Source: [`rollout.py`](../../slime/ray/rollout.py), `compute_metrics_from_samples`; [`data.py`](../../slime/backends/megatron_utils/data.py), `log_rollout_data`; [`types.py`](../../slime/utils/types.py), `effective_response_length`; [`metric_utils.py`](../../slime/utils/metric_utils.py).
 
-## 6. Trajectory, sampling, and filtering metrics
+<a id="metrics--6-trajectory-sampling-and-filtering-metrics"></a>
+### 6. Trajectory, sampling, and filtering metrics
 
 The following table applies under both `rollout/task/completed/` and `rollout/task/accepted/`.
 
@@ -268,7 +296,8 @@ The reference dynamic filter removes attempts with missing terminal reward, requ
 
 Source: [`trajectory_metrics.py`](../../slime/utils/trajectory_metrics.py); [`sglang_rollout.py`](../../slime/rollout/sglang_rollout.py); [`dynamic_sampling_filters.py`](../../slime/rollout/filter_hub/dynamic_sampling_filters.py).
 
-## 7. Evaluation metrics (`eval/*`)
+<a id="metrics--7-evaluation-metrics-eval"></a>
+### 7. Evaluation metrics (`eval/*`)
 
 Let `D` be the configured dataset name, currently `online-mind2web-monitor`. Evaluation metrics use `eval/iteration`. Evaluation occurs independently of the training reward measurements.
 
@@ -290,9 +319,11 @@ The reused initial evaluation in `qcq7i4ug` came from `v2d9bk11`: 300 tasks, 54 
 
 Source: [`rollout.py`](../../slime/ray/rollout.py), `_log_eval_rollout_data`; [`online_mind2web_monitor.yaml`](../online_mind2web_monitor.yaml); [`trajectory_metrics.py`](../../slime/utils/trajectory_metrics.py).
 
-## 8. Performance and resource metrics
+<a id="metrics--8-performance-and-resource-metrics"></a>
+### 8. Performance and resource metrics
 
-### Collection throughput
+<a id="metrics--collection-throughput"></a>
+#### Collection throughput
 
 Let `T` be the measured collection call duration, `G` the configured number of rollout GPUs, `r_i` response lengths, and `e_i` effective response lengths.
 
@@ -311,7 +342,8 @@ Let `T` be the measured collection call duration, `G` the configured number of r
 
 A recovery can mix fresh replay timing with original collection metrics copied from the saved run. In the first recovered iteration, roughly 81 seconds of replay must not be mistaken for the roughly 2,750 seconds needed to collect the browser batch originally. Exclude replay points when estimating sustainable online throughput.
 
-### Training phase timers and compute estimates
+<a id="metrics--training-phase-timers-and-compute-estimates"></a>
+#### Training phase timers and compute estimates
 
 Timers accumulate wall-clock seconds on the reporting trainer process between timer resets. Nested timers overlap; do not add every `perf/*_time` field together.
 
@@ -335,7 +367,8 @@ Timers accumulate wall-clock seconds on the reporting trainer process between ti
 
 Source: [`train_metric_utils.py`](../../slime/utils/train_metric_utils.py), [`flops_utils.py`](../../slime/utils/flops_utils.py), [`timer.py`](../../slime/utils/timer.py), [`rollout.py`](../../slime/ray/rollout.py), `compute_perf_metrics_from_samples`.
 
-### W&B system tab and local health log
+<a id="metrics--wb-system-tab-and-local-health-log"></a>
+#### W&B system tab and local health log
 
 W&B's SDK samples GPU utilization, GPU memory, GPU power, CPU, RAM, disk, and related process/system counters where supported. Names and available fields depend on SDK version and platform; they are vendor/OS telemetry, not values computed by the RL reward or loss functions. GPU utilization reports recent device activity, not useful FLOPs divided by hardware peak. Hostname/process labels can identify multiple shared-run writers.
 
@@ -369,7 +402,8 @@ Separately, [`monitor_baseline.py`](../../scripts/monitor_baseline.py) writes `h
 
 These local health records are not automatically W&B history metrics. The monitor records state; it does not restart training or request allocations.
 
-## 9. Optional metrics and deliberate absences
+<a id="metrics--9-optional-metrics-and-deliberate-absences"></a>
+### 9. Optional metrics and deliberate absences
 
 - `multi_turn/raw_response_length/response_length_{mean,max,min}` describes lengths of loss-mask arrays; `.../response_length_clip_ratio` is the fraction at least `rollout_max_response_len`. `multi_turn/wo_obs_response_length/response_length_{mean,max,min}` uses mask sums instead. `multi_turn/multi_turn_metric/round_number_{mean,max,min}` describes available round counters. Requires `log_multi_turn=True`, currently false.
 - `passrate/pass@k` and `eval/D-pass@k` require `log_passrate=True`, currently false. The helper averages `1 - C(n-c,k)/C(n,k)` over eligible prompt groups, with c rewards equal to 1 and k in powers of two up to group size. Valid trajectory grouping matters in turn-level mode; do not assume flattened groups of five turns are five independent attempts.
@@ -377,7 +411,8 @@ These local health records are not automatically W&B history metrics. The monito
 - There is no independent post-update browser-reward evaluation after every optimizer batch, no measured MFU, and no full-dataset training success rate in each collection record.
 - A metric exists only when its computation is enabled and its population is available. Missing valid-only reward/success rates should not be filled with zero.
 
-## 10. Live logging, checkpoints, and reproducible audit
+<a id="metrics--10-live-logging-checkpoints-and-reproducible-audit"></a>
+### 10. Live logging, checkpoints, and reproducible audit
 
 Current run: [W&B qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug).
 
@@ -407,7 +442,8 @@ For an audit, compare local `[TrainMetrics]` records with W&B history using `tra
 
 Documentation preference: keep repository documents in `openwebrl/docs/`.
 
-### Recovery audit on 2026-09-07
+<a id="metrics--recovery-audit-on-2026-09-07"></a>
+#### Recovery audit on 2026-09-07
 
 At 18:39 PDT, W&B history contained `train/reward=0.38741396263520156`
 for reward iteration 1 and `0.3325812274368231` for iteration 2. Two recovery
@@ -434,3 +470,229 @@ diagnosed offset in this continuation, use
 and the offset separately. Do not count durable updates from the scheduler
 alone when Adam counters are available. This change does not rewrite existing
 checkpoint files.
+
+<!-- document:METRICS.md:end -->
+
+---
+
+<!-- document:PAPER_REWARD_COMPARISON.md:start -->
+<a id="paper-reward-comparison"></a>
+## Comparing the reference run's reward plot
+
+_Source record: `PAPER_REWARD_COMPARISON.md`. Dated entries retain their historical context._
+
+
+The paper's Figure 2(a) uses **iteration** on the x-axis and **training reward (%)** on the y-axis. Section 5.1 defines an iteration as collection followed by policy updates. Its displayed curve spans the 90-iteration first stage; faint observations and a thicker trend are visible. [Paper](https://arxiv.org/pdf/2606.02031), [official figure](https://openwebrl.github.io/static/images/raw_success_rate_curves_sft_base.png).
+
+<a id="paper-reward-comparison--the-chart-to-use"></a>
+### The chart to use
+
+In [the active W&B run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug), select:
+
+| Setting | Value |
+| --- | --- |
+| Primary y metric | `train/reward` |
+| X metric | `train/reward_iteration` |
+| Source | `rollout/raw_reward_mean` |
+| X conversion | One-based collection number; subtract 1 to compare the paper axis |
+| Frequency | One distinct observation per completed collection |
+| Smoothing | None in logged values; retain raw observations for auditing |
+| Selected-subset diagnostic | Original `rollout/raw_reward` |
+
+Use `train/reward` as the sole primary reward series: 0.3874 corresponds to 38.74%, and collection 1 corresponds to paper iteration 0. The duplicate `paper/*` series is retired; its existing observations remain historical. This avoids changing the units or axes of previously recorded `train/reward` values. The collector mean is the closest documented metric in the release. **The exact field and smoothing parameters used to export the paper figure remain unverified.** Do not describe this chart as an exact reconstruction of the authors' plot.
+
+The pinned official repository revision inspected is `9a120949aca3e58a2628f4b4e6edd0474d984873`. Its [collector](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/slime/ray/rollout.py) computes raw reward mean over accepted flattened samples. Its [trainer](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/slime/backends/megatron_utils/data.py) also logs the selected batch's mean raw reward. Both are iteration-level summaries. No figure-export script or curve CSV was found in that revision's file tree. The separate selected-batch chart preserves the distinction instead of silently assuming the two means are identical.
+
+<a id="paper-reward-comparison--why-optimizer-updates-do-not-add-reward-observations"></a>
+### Why optimizer updates do not add reward observations
+
+The first collection yielded 2,034 turn samples. Seven full 256-turn minibatches fit in each epoch; two epochs made 14 optimizer updates. Those updates reused rewards assigned during that same collection. A per-minibatch mean could be logged, but would describe which stored samples each update consumed. It would not add another collection to the x-axis.
+
+Two completed collections therefore give x=0 and x=1 on the comparison chart. Seven minibatches are not seven online collection iterations. The third collection yielded 2271 turn samples: eight full minibatches per epoch and two epochs produced 16 optimizer updates, but only one new reward observation. Thus the live run had three reward points while collection 3's optimizer updates were running. Collection 4 adds the next point only after fresh browser collection finishes.
+
+Audited observations as of 2026-09-08 03:34 PDT:
+
+| Zero-based iteration | Collected-turn reward (%) |
+| --- | ---: |
+| 0 | 38.7413962635 |
+| 1 | 33.2581227437 |
+| 2 | 38.8815499780 |
+| 3 | 36.2483602973 |
+| 4 | 35.1788339049 |
+| 5 | 34.2671335668 |
+| 6 | 39.8766700925 |
+
+These are raw observations, not smoothed trend values. These first seven points are insufficient to establish convergence, divergence, or successful reproduction. Browser access, task sampling, trajectory lengths, and filtering can change the reward independently of policy quality. Inspect completed-task success and invalidity alongside it, and compare held-out evaluation with matching judge and validity conventions before claiming benchmark reproduction.
+
+<a id="paper-reward-comparison--how-much-variability-is-visible-after-four-collections"></a>
+### How much variability is visible after four collections?
+
+A lightweight check on 2026-09-07 reproduced all four W&B means from the saved rollout batches, then resampled the 48 accepted prompt groups in each collection with replacement. Each resampled group retains all its observed turns and trajectories; the statistic is the sum of rewards divided by the number of turns. This preserves the collector's turn weighting and avoids treating correlated turns from the same prompt as independent observations. With 10,000 draws and NumPy seed 7, the percentile intervals were:
+
+| One-based collection | Reward (%) | Conditional 95% bootstrap interval (%) |
+| --- | ---: | ---: |
+| 1 | 38.74 | 31.45–46.24 |
+| 2 | 33.26 | 26.26–40.05 |
+| 3 | 38.88 | 33.50–44.48 |
+| 4 | 36.25 | 29.27–43.36 |
+
+The intervals overlap substantially. Independently resampling adjacent collections also gives difference intervals that include zero for all three adjacent changes. These four observations therefore provide little evidence for interpreting the oscillations as a learning trend. This calculation is conditional on the observed, filtered prompt groups: it does not measure held-out policy performance or account for every source of task selection, browser, or judge variability. Interval overlap alone is not proof that the policy has remained unchanged.
+
+The complete numeric results and source-batch paths are in `/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-282346-20260908T024410/reward_cluster_bootstrap.json`. This analysis does not add another W&B reward series or change training.
+
+<a id="paper-reward-comparison--live-behavior-and-provenance"></a>
+### Live behavior and provenance
+
+The duplicate paper writer and native `paper/*` emission are disabled. Existing `paper_reward_sync.jsonl` is retained as provenance. `scripts/sync_training_rewards.py` supplied the earlier run's `train/reward` alias; the current g005 continuation emits it directly. These logging changes do not change the training recipe.
+
+See [METRICS.md](RL_METRICS.md#metrics) for reward formulas, subset weighting, task denominators, update counts, and known axis limitations. In particular, the current optimizer `train/step` label can jump when minibatch counts change; the paper comparison uses collection identity and is unaffected by that label issue.
+
+<!-- document:PAPER_REWARD_COMPARISON.md:end -->
+
+---
+
+<!-- document:GRADIENT_DIAGNOSTICS.md:start -->
+<a id="gradient-diagnostics"></a>
+## Gradient spikes and training diagnostics
+
+_Source record: `GRADIENT_DIAGNOSTICS.md`. Dated entries retain their historical context._
+
+
+Audit: 2026-09-09, W&B `qcq7i4ug`; active job 285546.
+
+<a id="gradient-diagnostics--what-the-gradient-norm-measures"></a>
+### What the gradient norm measures
+
+`train/grad_norm` is the global L2 norm of the aggregated minibatch gradient,
+returned by Megatron **before clipping**. The active configuration has
+`clip_grad=1.0`. The optimizer computes the norm, scales gradients by roughly
+`min(1, 1 / (norm + epsilon))`, then performs the Adam update. A logged norm of
+10 therefore implies a roughly 0.1 clipping multiplier; it does not imply a
+tenfold parameter update. Adam's accumulated moments and parameter-wise
+preconditioning further separate gradient norm from parameter displacement.
+
+The installed implementation is in
+`openwebrl-runtime/src/Megatron-LM/megatron/core/optimizer/optimizer.py`,
+`MegatronOptimizer.clip_grad_norm` and `ChainedOptimizer.step`.
+The general operation is documented by
+[PyTorch](https://docs.pytorch.org/docs/2.14/generated/torch.nn.utils.clip_grad_norm_.html).
+
+A high gradient norm is a diagnostic, not reward, generalization, or a universal
+error threshold. Compare against this run's usual range and its neighboring
+updates. Sustained increases, nonfinite values, increasing PPO KL/clipping,
+entropy collapse or held-out regression would be more concerning than an
+isolated clipped spike. Removing an example solely for causing a spike can
+remove useful learning signal and should not be the default response.
+
+<a id="gradient-diagnostics--observed-spikes"></a>
+### Observed spikes
+
+The W&B scan returned 303 distinct optimizer history-row IDs after collapsing
+duplicate API rows. These include historical retries and are not 303 durable
+Adam updates. Median gradient norm was 1.8474, p95 was 3.2182, and the maximum
+was 10.5391. The current allocation's maximum at the initial audit was 2.9194.
+
+| Reward iteration | PPO epoch, minibatch (one-based) | Gradient norm | Approximate clipping multiplier | Sampled PPO KL | PPO clipping fraction |
+|---|---|---:|---:|---:|---:|
+| 4 | 2, 4 | 10.5391 | 0.0949 | 0.001761 | 1.070% |
+| 16 | 1, 2 | 9.4544 | 0.1058 | 0.001774 | 0.707% |
+
+The scalar values are real; both spikes match the local trainer logs. However,
+`train/step` is not a globally monotonic counter in this implementation: it is
+derived from rollout index and the current batch's number of PPO updates.
+For example, the label falls from 239 at iteration 20 to 200 at iteration 21,
+because the latter has fewer minibatches. Inspect W&B history `_step` or wall
+time when assessing temporal spike/recovery relationships. A durable cumulative
+optimizer-update coordinate should be added in a future telemetry change.
+
+<a id="gradient-diagnostics--saved-data-inspection"></a>
+### Saved data inspection
+
+`scripts/audit_gradient_spike_batches.py` memory-maps the trusted recovery
+archive and inspects Python metadata, without accessing image tensor payloads.
+It requires DP1, fixed global batch 256, no sequence-length balancing, and
+GRPO standard-deviation normalization. It reconstructs each epoch's logged
+shuffle seed, trim and 256-turn batches. Reconstructed mean absolute advantages
+are checked against logged trainer statistics to catch an ordering mismatch.
+
+| Batch property | Iteration 4 spike | Iteration 16 spike |
+|---|---:|---:|
+| Turn samples | 256 | 256 |
+| Distinct trajectories | 148 | 132 |
+| Most turns from one trajectory | 5 | 5 |
+| Mean absolute normalized advantage | 0.7870 | 0.7400 |
+| Maximum absolute normalized advantage | 1.7889 | 1.7889 |
+| Mean response tokens | 327.7 | 346.2 |
+| Response token range | 112–866 | 91–832 |
+| Nonfinite stored rollout log probabilities | 0 | 0 |
+| Removed samples | 0 | 0 |
+
+These properties are comparable to neighboring minibatches. The checks do not
+show a short/empty-response pathology, an exploding normalized advantage, or
+an unusual single-trajectory concentration. They do not identify the causal
+sample or rule out model-internal numerical sensitivity: per-sample or
+per-module gradient measurements would be needed for that. No examples were
+deleted, and the training recipe was not changed.
+
+Full reports, including the 256 sample/task/trajectory IDs for each spike,
+are under the current run directory
+`openwebrl-runtime/runs/openwebrl-4b-reference-285546-20260909T235114/`:
+`gradient_spike_wandb_history.json`, `gradient_spike_iteration4.json`, and
+`gradient_spike_iteration16.json`.
+
+<a id="gradient-diagnostics--metrics-to-watch-alongside-reward"></a>
+### Metrics to watch alongside reward
+
+<a id="gradient-diagnostics--additional-spike-investigated-during-job-286094"></a>
+#### Additional spike investigated during job 286094
+
+At iteration 26, second PPO epoch, minibatch 1 (zero-based), the norm reached
+12.3879 (W&B history row 459, legacy `train/step=307`). The next update returned
+to 1.2274. PPO KL was 0.001587 and clipped-objective fraction 0.011807 at the
+spike. The configured norm threshold remained 1.0; clipping scales this gradient
+by approximately 0.0807 before Adam, which does not imply the same factor for
+the eventual parameter update.
+
+CPU metadata reconstruction used logged seed 34440 and independently matched
+the spike batch's mean absolute advantage to the trainer. Its 256 turns came
+from 142 trajectories, at most five turns from one trajectory. Mean absolute
+advantage was 0.8091, maximum 1.7889; response lengths ranged from 147 to 644
+tokens (mean 335.3). There were no removed samples or nonfinite stored log
+probabilities. These checks again found no clear metadata pathology, but do
+not identify the causal sample or measure per-sample gradient contributions.
+
+Training continued, all twelve iteration-26 updates matched W&B, and checkpoint
+25 validated at 338 Adam updates. The sample-ID report is
+`openwebrl-runtime/runs/openwebrl-4b-reference-286094-20260910T071441/gradient_spike_iteration26.json`.
+It was collected while the latter half of the epoch was still running, so later
+batch gradient fields in that report are null; the completed optimizer audit is
+`iteration_26_wandb_audit.json`. No samples or recipe settings were changed.
+
+| Existing metric | What to look for |
+|---|---|
+| `eval/online-mind2web-monitor/task/success_rate_all_completed` | Held-out task performance. Compare with invalid rate, not the turn-weighted evaluation reward. |
+| `train/task_success_rate` and `train/task_invalid_rate` | Completed-attempt success before acceptance filtering; failures/timeouts can alter apparent reward trends. |
+| `train/ppo_kl` and `train/pg_clipfrac` | Policy movement and the fraction where PPO's clipped objective is selected. Abrupt sustained increases merit investigation. |
+| `train/entropy_loss` | Predictive entropy: a rapid fall can indicate shrinking exploration; a rise is not automatically good. |
+| `train/abs_advantage` | Magnitude of the normalized learning signal; use to interpret gradient changes, not as a success metric. |
+| Response/trajectory lengths and truncation rates | Detect looping, budget exhaustion, changed behavior and altered turn weighting. |
+| Accepted/completed prompt groups and collection duration | Dynamic-filter yield and useful data throughput. |
+| GPU utilization, cgroup memory/events, durable checkpoint updates | Efficiency, resource pressure, and actual recoverable progress. |
+
+Metric formulas and exact existing keys are in [METRICS.md](RL_METRICS.md#metrics).
+In this code, `ppo_kl` is a signed sampled old-minus-current log probability,
+not exact distributional KL or KL to the SFT reference. `pg_clipfrac` measures
+clipped-objective selection, not gradient clipping. `train_rollout_logprob_abs_diff`
+is expected to be zero when both operands reuse stored rollout probabilities;
+it is not an independent actor-versus-inference consistency check.
+
+Useful future additions: a monotonic Adam-update coordinate; rollout/epoch/
+minibatch identity on every update; gradient clipping multiplier and fraction
+of updates clipped; per-module gradient norms (vision, connector, language);
+and a compact sample-ID trace plus batch length, advantage-tail and task-mix
+statistics when a norm exceeds a rolling outlier threshold. These are proposed
+telemetry additions, not metrics already installed in the active worker.
+
+<!-- document:GRADIENT_DIAGNOSTICS.md:end -->
+
+---

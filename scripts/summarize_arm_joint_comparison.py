@@ -5,6 +5,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from summarize_arm_c2_full300 import load_records, mcnemar_exact, paired_report, rate_report
+try:
+    from project_docs import write_document_section
+except ModuleNotFoundError:  # Imported as scripts.summarize_arm_joint_comparison.
+    from scripts.project_docs import write_document_section
 
 REPO = Path(__file__).resolve().parents[1]
 DOCS = REPO / 'openwebrl/docs'
@@ -75,7 +79,7 @@ def main():
               '- [DPO results and rollouts](ARM_JOINT_DPO_RESULTS.md)',
               '- [Training diagnostics](ARM_JOINT_TRAINING_MONITOR.md)',
               '- [Machine-readable report](arm_results/joint_data_v2/joint-sft-vs-dpo-om2w.json)', '']
-    (DOCS / 'ARM_JOINT_SFT_VS_DPO_RESULTS.md').write_text('\n'.join(lines))
+    write_document_section(DOCS / 'ARM_JOINT_SFT_VS_DPO_RESULTS.md', '\n'.join(lines))
     print(json.dumps(dict(rates=rates, pairs=pairs), indent=2))
 
 

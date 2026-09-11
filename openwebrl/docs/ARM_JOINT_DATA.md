@@ -1,19 +1,37 @@
-# Joint C2 and Piotr teacher-data training proposal
+# ARM joint C2 and Piotr data: recipe and training
+
+The reviewed C2/Piotr data mixture, filtering rules, full-history examples, training configuration, and recovery record. Both matched runs completed 174 updates and fresh full-300 evaluations; [results and training curves](ARM_RESULTS.md) contain the outcome. Earlier budget options and proposals are retained as dated history.
+
+## Contents
+
+- [Joint C2 and Piotr teacher-data training proposal](#arm-joint-data-training-plan)
+- [Combined ARM data: prepared for review](#arm-joint-data-review)
+- [Retained SFT example: two previous turns](#arm-joint-sft-history-example)
+
+---
+
+<!-- document:ARM_JOINT_DATA_TRAINING_PLAN.md:start -->
+<a id="arm-joint-data-training-plan"></a>
+## Joint C2 and Piotr teacher-data training proposal
+
+_Source record: `ARM_JOINT_DATA_TRAINING_PLAN.md`. Dated entries retain their historical context._
+
 
 2026-09-10. User approved starting the combined-data SFT and full-response
 DPO-only in parallel, retaining the default history format, with automatic
 full-300 OM2W evaluation. **Approved budget: SFT 2 H200s x 3 hours; DPO
 2 H200s x 5 hours, including evaluation (16 H200-hours maximum).** The
 two-GPU launch specification below supersedes the earlier resource options.
-Data preparation is complete: [review report and interactive gallery](ARM_JOINT_DATA_REVIEW.md).
+Data preparation is complete: [review report and interactive gallery](ARM_JOINT_DATA.md#arm-joint-data-review).
 The current review revision has 5,540 train / 658 validation pairs. It uses
 stricter coordinate ambiguity quarantine and excludes conflicting draw IDs
 found in the full Piotr inventory. The user reviewed the retained examples.
 This proposes expanding the data in the
-[controlled preference viability test](ARM_PREFERENCE_V2_VIABILITY_PLAN.md).
+[controlled preference viability test](ARM_PREFERENCE.md#arm-preference-v2-viability-plan).
 The numerical and engineering gates in that plan still apply.
 
-## Approved two-GPU execution
+<a id="arm-joint-data-training-plan--approved-two-gpu-execution"></a>
+### Approved two-GPU execution
 
 **Completed (2026-09-11 08:43 UTC):** both runs finished 174 updates and
 fresh full-300 OM2W evaluations, then released their allocations automatically.
@@ -25,8 +43,8 @@ fresh full-300 OM2W evaluations, then released their allocations automatically.
 
 Both have zero missing task results. DPO versus SFT has 32 wins / 30 losses
 on all 300 tasks (exact paired p=0.899), so this run does not establish an
-advantage for either objective. [Final comparison](ARM_JOINT_SFT_VS_DPO_RESULTS.md).
-[Training diagnostics and checkpoint progression](ARM_JOINT_TRAINING_MONITOR.md).
+advantage for either objective. [Final comparison](ARM_RESULTS.md#arm-joint-sft-vs-dpo-results).
+[Training diagnostics and checkpoint progression](ARM_RESULTS.md#arm-joint-training-monitor).
 The paired report was generated from the explicit r2 roots because the original
 controller's cross-run lookup still names the superseded r1 root; individual
 endpoint aggregation and protocol validation completed automatically.
@@ -150,7 +168,8 @@ evaluation shard directories. The controller writes result markdown in
 `openwebrl/docs/` and overall/valid-only JSON summaries after completion. The
 later-finishing run also produces the paired SFT/DPO comparison.
 
-## Current SFT launch preparation (2026-09-10)
+<a id="arm-joint-data-training-plan--current-sft-launch-preparation-2026-09-10"></a>
+### Current SFT launch preparation (2026-09-10)
 
 - **5,540 training winners, effective batch 32, one pass = 174 updates.**
   The final batch contains four examples, normalized by four, with no padding
@@ -212,7 +231,8 @@ longer DPO allocation avoid holding an idle SFT GPU while DPO finishes. DPO
 implementation/calibration and its exact budget remain pending; the SFT
 launcher does not silently start preference training.
 
-### Expanded option: both training jobs with automatic OM2W evaluation
+<a id="arm-joint-data-training-plan--expanded-option-both-training-jobs-with-automatic-om2w-evaluation"></a>
+#### Expanded option: both training jobs with automatic OM2W evaluation
 
 The user asked about this larger scope after the SFT-only request; no expanded
 budget is approved. Recommendation: two independent one-H200 allocations,
@@ -255,7 +275,8 @@ baseline control. No fresh base-model run is included in this budget.
 The DPO implementation and automatic evaluation handoff still require completion
 and checks before submission. Neither expanded job has been submitted.
 
-## Recommendation
+<a id="arm-joint-data-training-plan--recommendation"></a>
+### Recommendation
 
 Use the full cleaned C2 pool rather than a 2,048-state training cap, reserving
 task-disjoint validation. Add cleaned OpenWebRL teacher-selection examples
@@ -274,7 +295,8 @@ Use one chosen/rejected pair per retained state, after semantic checks and
 validation exclusion. Do not train on held-out tasks or expand every candidate
 alternative into an independently weighted example.
 
-## What was verified in Piotr's release
+<a id="arm-joint-data-training-plan--what-was-verified-in-piotrs-release"></a>
+### What was verified in Piotr's release
 
 Source: [PTeterwak/action-reward-models-data](https://huggingface.co/datasets/PTeterwak/action-reward-models-data).
 The API currently reports revision `13905e69ef10169167eab388533997008694bd6d`.
@@ -302,7 +324,8 @@ may already be familiar to the starting SFT actor. The new supervision is the
 GPT-5.5 comparison among sampled actions. It is neither a measured outcome
 for the rejected action nor a calibrated action-quality score.
 
-## Data conversion and split
+<a id="arm-joint-data-training-plan--data-conversion-and-split"></a>
+### Data conversion and split
 
 1. **Use only `openwebrl_actor/` initially.** The MolmoWeb data use another
    actor/prompt/action format, and the published distillation example references
@@ -353,7 +376,8 @@ Review 64 examples across both sources with screenshots before freezing it.
 Do not interpret a repeated winner as satisfying the 0.7 PRM quality floor
 used in the separate MolmoWeb distillation experiment; that score is absent here.
 
-## Joint training and controls
+<a id="arm-joint-data-training-plan--joint-training-and-controls"></a>
+### Joint training and controls
 
 | Run | Data | Objective | What it establishes |
 | --- | --- | --- | --- |
@@ -400,7 +424,8 @@ SFT supervision. All see the
 same states and candidate pairs where applicable. Extra rejected-response
 compute is reported separately.
 
-## Evidence and next decision
+<a id="arm-joint-data-training-plan--evidence-and-next-decision"></a>
+### Evidence and next decision
 
 Report fixed-panel ranking, winner response CE, chosen/rejected action NLL,
 relative margins, and task-clustered uncertainty separately for C2 and the
@@ -433,7 +458,8 @@ the exact GPU-hour request using retained token lengths and a measured
 throughput estimate; the previous 2,048-state budget should not be reused for
 this larger dataset. No new rollout collection is required for preparation.
 
-## Why action masking is an explicit comparison
+<a id="arm-joint-data-training-plan--why-action-masking-is-an-explicit-comparison"></a>
+### Why action masking is an explicit comparison
 
 Action-level feedback identifies the preferred next turn. It does not require
 the training loss to score only tool-call tokens. Our original motivation was
@@ -455,7 +481,8 @@ semantic credit assignment.
 Source: [DPO paper, objective and preferred-SFT control](https://arxiv.org/html/2305.18290v3).
 Neither actor preference objective is Piotr's scalar value-head RM training.
 
-## Proposed filtering contract for the three-run comparison
+<a id="arm-joint-data-training-plan--proposed-filtering-contract-for-the-three-run-comparison"></a>
+### Proposed filtering contract for the three-run comparison
 
 This section makes the discussion pipeline concrete; it has not yet been
 implemented on the full Piotr candidate release. Preserve immutable raw data
@@ -524,7 +551,8 @@ overlap checks. Record dataset revision, source hashes, pair-selection seed,
 normalization rules and all mask definitions. If filtering removes useful
 coverage, discuss that measured tradeoff before changing the recipe.
 
-## Upstream data explanation and limits
+<a id="arm-joint-data-training-plan--upstream-data-explanation-and-limits"></a>
+### Upstream data explanation and limits
 
 The relevant upstream code is also archived in the pinned
 [Hugging Face code tree](https://huggingface.co/datasets/PTeterwak/action-reward-models-data/tree/13905e69ef10169167eab388533997008694bd6d/code/data_generation/openwebrl_actor).
@@ -559,3 +587,335 @@ setting, using separate GPT-5.5 PRM scores and a 0.7 quality floor. They also
 report a negative online selection-distillation result with looping behavior.
 These support investigating selection quality and actor behavior; they do not
 establish that OpenWebRL action-masked DPO, or this joint dataset, will work.
+
+<!-- document:ARM_JOINT_DATA_TRAINING_PLAN.md:end -->
+
+---
+
+<!-- document:ARM_JOINT_DATA_REVIEW.md:start -->
+<a id="arm-joint-data-review"></a>
+## Combined ARM data: prepared for review
+
+_Source record: `ARM_JOINT_DATA_REVIEW.md`. Dated entries retain their historical context._
+
+
+Prepared 2026-09-10. The user reviewed the retained examples and approved
+starting combined-data SFT and parallel DPO-only. **Compute approved: two
+H200s for three hours (SFT) and two H200s for five hours (DPO), including
+full-300 OM2W endpoint evaluation.** See the [launch plan](ARM_JOINT_DATA.md#arm-joint-data-training-plan).
+
+Open the [interactive HTML review](arm_results/joint_data_v2/review.html).
+It is one self-contained file (57.5 MB), including original screenshots, and
+works offline. Filter by source, decision, pair type or exclusion reason;
+search tasks/actions; compare chosen and rejected tool calls; expand full
+actor responses, pre-action context and GPT-5.5 rationale; zoom screenshots
+and toggle normalized click markers. Review decisions and notes are local to
+the browser. Export the notes as JSON to apply them in a subsequent revision;
+the page does not modify data or authorize a training job.
+
+<a id="arm-joint-data-review--prepared-dataset"></a>
+### Prepared dataset
+
+| Source | Train pairs / SFT winners | Validation pairs / SFT winners | Retained total | Separate SFT-only reserve |
+| --- | ---: | ---: | ---: | ---: |
+| C2 / SelectionARM | 3,464 | 442 | 3,906 | 4,484 |
+| Piotr / GPT-5.5 | 2,076 | 216 | 2,292 | 690 |
+| **Combined** | **5,540** | **658** | **6,198** | **5,174** |
+
+Each retained state contributes exactly one pair. SFT uses precisely those
+chosen responses, in the same order, with no reserve examples added. The two
+preference objectives will use identical pairs. Source proportions in training
+are 62.5% C2 / 37.5% Piotr, with no source oversampling or action balancing.
+
+There are 1,169 retained training task groups and 132 retained validation task
+groups, with zero overlap. Fixed diagnostic panels contain 256 C2 pairs
+(85 task groups) and all 216 Piotr validation pairs (37 task groups).
+The HTML contains 32 retained examples per source plus 65 exclusion/quarantine
+examples: **129 examples, 122 unique screenshots**. Its stratified review mix
+is intentionally different from the natural training distribution.
+
+<a id="arm-joint-data-review--context-and-supervision-format"></a>
+### Context and supervision format
+
+A data point is one browser state and its selected next assistant response,
+not an entire trajectory or an individual tool call. The matched SFT dataset
+has **5,540 training examples and 658 held-out validation examples**; the
+5,174-example SFT-only reserve is separate.
+
+A streaming inspection of all 6,198 retained prompts on 2026-09-10 found:
+
+| Property | C2 (3,906 examples) | Piotr (2,292 examples) |
+| --- | ---: | ---: |
+| Screenshots per example | Exactly 1 | Exactly 1 |
+| Prior assistant turns, minimum / median / 90th percentile / maximum | 0 / 4 / 13 / 29 | 0 / 4 / 13 / 29 |
+| Examples with no prior assistant turn | 640 | 326 |
+| Chosen responses containing reasoning (`</think>` boundary) | 3,906 | 2,292 |
+
+The number of prior assistant turns equals the saved turn index in every row.
+The prompt retains previous assistant reasoning, tool calls and textual browser
+observations; historical screenshots are removed, leaving the current screenshot.
+Every prior assistant turn also retains its reasoning boundary. There is no
+fixed last-four-turn window: four is the observed median. One assistant turn can
+contain multiple tool calls.
+
+For the proposed SFT, the prompt (including historical assistant turns and image
+tokens) is masked from the loss. The target is the **complete chosen current
+response: reasoning, tool calls, and end-of-turn boundary**. This follows the
+existing C2 trainer's response-only supervision. The action-only masks saved in
+the paired data are for the subsequent DPO ablation, not this SFT objective.
+The actor's reasoning is the target; the selection judge's rationale is review
+metadata, not a response to imitate.
+
+This matches the repository's documented released single-screenshot SFT recipe:
+[`PER_TURN=1` with `mask_history: true`](../../sft/README.md), implemented by
+[`render_record` and `iter_prefixes`](../../sft/prepare_openai_for_llamafactory.py).
+That alignment concerns context and supervision format, not identical training
+data, optimizer settings, or full-finetuning versus LoRA. The compute-node
+processor smoke checks listed below remain outstanding.
+
+Paper cross-check (2026-09-10): [Section 4.1](https://arxiv.org/html/2606.02031v2#S4.SS1)
+confirms full textual response/feedback history and current-screenshot context;
+[Section 4.2](https://arxiv.org/html/2606.02031v2#S4.SS2) confirms target-turn-only
+SFT supervision. The observed 29 prior turns reflect our 30-turn collection
+budget, not a universal history-window cap. The paper's default evaluation
+budget is also 30 turns ([Table 8](https://arxiv.org/html/2606.02031v2#A1.T8)).
+
+<a id="arm-joint-data-review--findings-and-filtering-decisions"></a>
+### Findings and filtering decisions
+
+- **120 exact normalized task texts are shared across reconstructed C2 and
+  Piotr states.** They were grouped before the split. There were no exact
+  prompt-plus-image duplicate states across sources. The added data provide
+  additional teacher comparisons and states, not exclusively new tasks.
+- The Piotr candidate file has 49,536 records and 49,360 unique draw IDs.
+  **176 IDs have conflicting records across 11 base states.** An inspected
+  duplicate differs in its actual candidate responses. These identities cannot
+  be safely joined to a single stored selection label. All affected base states
+  are withheld; ten had reconstructed winner records (seven pairs and three
+  reserve examples) and the remaining state had no such usable record.
+- Five additional reconstructed Piotr states have identical context/image
+  identities but conflicting chosen actions. These are also quarantined.
+- Raw candidate draws are 75% temperature 0.7 / 25% temperature 1.0. Repeated
+  draws are not independent states. Draw selection is fixed by a seed/hash;
+  a distinct eligible loser is selected from the same draw without model scores.
+- No exact or screened same-host near matches to OM2W were flagged by this
+  audit. This is a heuristic screen, not proof of semantic or pretraining
+  disjointness. Eleven near-task links within the combined data were grouped
+  conservatively before splitting.
+
+The earlier 5,490 C2 pool is reduced to 3,906 pairs by the stricter ambiguity
+rules. **All coordinate-only differences beyond the five-unit near-click
+threshold are quarantined pending visual review**, because the saved data do
+not contain element identities proving different targets. Nearby differences,
+identical actions, duplicate loser actions, and done-versus-done preferences
+are excluded. Differences only in scroll amount or wait duration are withheld
+for review. This is conservative and loses some potentially useful pairs;
+the gallery exposes those cases rather than treating them as verified mistakes.
+
+Removing a pair does not necessarily remove its state: another eligible loser
+can remain. A valid winner with no eligible loser goes into the separate reserve.
+Done-versus-continue preferences are retained. Terminal-only winners make up
+502/5,540 = 9.1% of training rows (321 C2, 181 Piotr); scroll-only winners are
+1,059/5,540 = 19.1%. These distributions should be watched during training and
+browser evaluation.
+
+There is no imposed 60% modal-winner threshold, no ARM-agreement filter on the
+ARM's own training labels, and no invented PRM quality floor. Unselected actions
+have no observed terminal outcomes. The 64 retained review examples have not
+been certified as correct; they are ready for the user's semantic review.
+
+<a id="arm-joint-data-review--verification-and-remaining-gates"></a>
+### Verification and remaining gates
+
+All **6,198 retained pairs** passed independent verification:
+
+- SFT rows equal the chosen branch of the paired rows exactly.
+- State IDs are unique and task groups do not cross train/validation.
+- Saved response tokens decode exactly to the retained text, including valid
+  noncanonical generation tokenizations; they are not silently re-tokenized.
+- Each decoded action mask is exactly its tool-call spans plus the end-of-turn
+  token, with no reasoning tokens scored directly.
+- Context plus response fits 32,768 tokens.
+- Image bytes were hashed, including all 2,630 Piotr images matched against
+  checksum-verified downloads. Image headers supplied dimensions; no bulk pixel
+  tensor preprocessing was performed on the login node.
+
+The repository's actual regex parser was checked against the strict schema
+parser without importing model dependencies. The actor tokenizer and actual
+image resize function reproduce saved C2 expanded-prefix hashes and grids.
+Full processor pixel-tensor and native SGLang parser smoke checks remain for
+a compute node before training. Twelve focused unit tests passed. Browser
+checks passed for filtering, screenshot loading/zoom, note export, empty search,
+mobile layout, and absence of JavaScript errors.
+
+Piotr's released candidate strings omit finish metadata. The preparation
+requires complete tool-call structure and fewer than 1,024 raw tokens, then
+explicitly appends the training completion boundary. This is recorded per
+candidate; it is not presented as an observed normal stop. A conservative
+structural completion check cannot rule out every hidden truncation.
+
+Median prompt lengths are 5,673 tokens for C2 and 5,310 for Piotr. Median chosen
+response lengths are 320 and 362 tokens; median scored action/boundary lengths
+are 30 tokens in both sources. The planned full-versus-masked comparison must
+account for that large difference in scored-token count.
+
+<a id="arm-joint-data-review--files-and-reproduction"></a>
+### Files and reproduction
+
+Data directory:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/joint-data-v2-20260910/`
+
+- [Training pairs](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/joint-data-v2-20260910/joint_pairs.train.jsonl)
+- [Training SFT view](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/joint-data-v2-20260910/joint_sft.train.jsonl)
+- [Validation pairs](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/joint-data-v2-20260910/joint_pairs.validation.jsonl)
+- [Full audit and artifact hashes](arm_results/joint_data_v2/audit.json)
+- [Independent data verification](arm_results/joint_data_v2/verification.json)
+- [Browser verification](arm_results/joint_data_v2/browser-verification.json)
+
+The same directory holds the SFT validation view, source-specific validation
+panels, reserve, quarantine states, exclusion ledger, split manifest, image
+manifest and gallery sample records. The exclusion ledger counts processed
+draws/candidates, not independent states; higher-hash draws can be skipped once
+a usable lower-hash pair exists. Resume events are deduplicated. Do not sum
+candidate exclusion counts to infer state retention.
+
+Scripts are [fetch_arm_joint_inputs.py](../../scripts/fetch_arm_joint_inputs.py),
+[audit_arm_draw_identity.py](../../scripts/audit_arm_draw_identity.py),
+[prepare_arm_joint_data.py](../../scripts/prepare_arm_joint_data.py),
+[verify_arm_joint_data.py](../../scripts/verify_arm_joint_data.py), and
+[render_arm_joint_review.py](../../scripts/render_arm_joint_review.py).
+Run the candidate identity audit before preparation. Use the pinned input
+directory `arm-reproduction/joint-data-inputs-0d83b48` and its download manifest;
+the dataset revision is `0d83b48c1659cac47a1044ef88fb573d3c16e180`.
+
+Preparation used low-priority, bounded CPU processes, no model weights, and no
+GPU allocation. The download used four network workers (1.63 GB; 40.8 CPU-seconds,
+78.7 MiB peak). The first builder hit its 240 CPU-second safety cap; its output
+is [marked incomplete](arm_results/JOINT_DATA_V1_INTERRUPTED.md). The optimized
+build then exposed duplicate IDs and resumed from saved state. Its final resumed
+phase took 39.2 CPU-seconds / 136.3 wall-seconds, peaking at 390 MiB. These phase
+figures are **not total preparation cost**. Independent final verification took
+3.2 CPU-seconds and 179 MiB. Image decoding for the small browser smoke test was
+separate from data preprocessing. No training job was submitted.
+
+<!-- document:ARM_JOINT_DATA_REVIEW.md:end -->
+
+---
+
+<!-- document:ARM_JOINT_SFT_HISTORY_EXAMPLE.md:start -->
+<a id="arm-joint-sft-history-example"></a>
+## Retained SFT example: two previous turns
+
+_Source record: `ARM_JOINT_SFT_HISTORY_EXAMPLE.md`. Dated entries retain their historical context._
+
+
+Source: `joint-data-v2-20260910/joint_pairs.train.jsonl`, ID `C2:webvoyager/98530:2`.
+
+The prompt below is verbatim after omission of the initial system policy and tool definitions. The image placeholder represents the one current screenshot supplied separately to the model. Historical screenshots are absent. All prompt tokens are masked from SFT loss.
+
+<a id="arm-joint-sft-history-example--input-prompt-system-message-omitted"></a>
+### Input prompt (system message omitted)
+
+```text
+<|im_start|>user
+<user_request>
+Find the main topics discussed in the 'Event Highlights – Winning the Innovation Game' article from November 14, 2024.
+</user_request>
+
+<observation>
+screen size: 1280 x 1000
+Current tab: 0
+Available tabs:
+- Tab 0 (active): https://www.bloomberglive.com/ - Bloomberg Live
+
+</observation><|im_end|>
+<|im_start|>assistant
+<think>
+The current page is the Bloomberg Live homepage featuring the Bloomberg New Economy Forum. The user wants to find the main topics discussed in the 'Event Highlights – Winning the Innovation Game' article from November 14, 2024.
+
+I need to navigate to the specific article. The most direct approach would be to use the search functionality since the article title and date are known. I can see a search icon (magnifying glass) in the top right corner of the page.
+
+Step-by-step plan:
+1. Click on the search icon to open the search functionality
+2. Enter the search query for "Event Highlights – Winning the Innovation Game November 14, 2024"
+3. Submit the search
+4. Find and click on the relevant article result
+5. Read the main topics discussed in the article
+
+The search icon is visible in the top right corner of the page, which is the most logical first step to find the specific article.
+</think>
+
+<tool_call>
+{"name": "click", "arguments": {"point_2d": [949, 77]}}
+</tool_call><|im_end|>
+<|im_start|>user
+<tool_response>
+Succeed: `click` on <li> "Open Search" at (1215, 77) executed. Note: no visible navigation or new tab detected.
+
+<observation>
+screen size: 1280 x 1000
+Current tab: 0
+Available tabs:
+- Tab 0 (active): https://www.bloomberglive.com/ - Bloomberg Live
+
+</observation>
+</tool_response><|im_end|>
+<|im_start|>assistant
+<think>
+The search functionality has been successfully opened, and I can now see a search bar where I can enter my query. The search bar is empty and ready for input.
+
+According to the user request, I need to find the main topics discussed in the 'Event Highlights – Winning the Innovation Game' article from November 14, 2024.
+
+The next logical step is to enter this search query into the search bar. I should type "Event Highlights – Winning the Innovation Game November 14, 2024" to find the specific article the user is looking for.
+
+After entering the search query, I'll need to press Enter to execute the search, which should bring up relevant results including the article we're looking for. Once I find the correct article, I'll need to click on it to read the content and identify the main topics discussed.
+
+The search bar appears to be focused and ready for input, so I can proceed with typing the search query.
+</think>
+
+<tool_call>
+{"name": "write", "arguments": {"message": "Event Highlights – Winning the Innovation Game November 14, 2024"}}
+</tool_call><|im_end|>
+<|im_start|>user
+<tool_response>
+Succeed: `write` typed "Event Highlights – Winning the Innovation Game November 14, 2024" into <input> type=search "Search".
+
+<observation>
+screen size: 1280 x 1000
+Current tab: 0
+Available tabs:
+- Tab 0 (active): https://www.bloomberglive.com/ - Bloomberg Live
+screenshot:
+<|vision_start|><|image_pad|><|vision_end|>
+</observation>
+</tool_response><|im_end|>
+<|im_start|>assistant
+<think>
+```
+
+<a id="arm-joint-sft-history-example--chosen-response-sft-target"></a>
+### Chosen response (SFT target)
+
+The opening `<think>` is already at the end of the prompt. The following continuation is the complete saved target, including reasoning, tool call, and end-of-turn boundary.
+
+```text
+The search query has been successfully entered into the search bar. I can see the text "Event Highlights – Winning the Innovation Game November 14, 2024" is now in the search field. The next logical step is to execute the search by clicking the search button (magnifying glass icon) to get the search results.
+
+According to the user request, I need to find the main topics discussed in the specific article. I've entered the search query correctly, but I need to submit it to see the results. Once the search results load, I'll be able to identify and click on the relevant article.
+
+The search button is visible as a magnifying glass icon on the right side of the search bar. Clicking this button will submit the search query and should bring up the relevant article results, including the one from November 14, 2024 that we're looking for.
+
+After the search results load, I'll need to:
+1. Identify the correct article from the results
+2. Click on it to open the full article
+3. Read through the content to identify the main topics discussed
+</think>
+
+<tool_call>
+{"name": "click", "arguments": {"point_2d": [926, 544]}}
+</tool_call><|im_end|>
+```
+
+<!-- document:ARM_JOINT_SFT_HISTORY_EXAMPLE.md:end -->
+
+---
