@@ -302,6 +302,47 @@ Final evidence in this run: `allocation_end_audit.json`,
 `checkpoint_61_validation.json`. Persistent resume pointer:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/current_baseline.json`.
 
+<a id="resuming-baseline--allocation-290926-16hour"></a>
+### Sixteen-hour continuation: allocation 290926, September 12
+
+The user requested either **8 H200 × eight hours** or **4 H200 × sixteen hours**,
+choosing the more efficient option. **Job 290926** was submitted at **11:47 PDT**
+for **4 H200, 32 CPUs, 480 GiB, sixteen hours**, with **32 concurrent browsers**:
+**64 GPU-hours**, Slurm's estimated maximum GPU cost **$57.60**, plus judge calls.
+The normal QoS permits up to 24 hours. Submission evidence:
+`logs/submission-qcq7i4ug-after62-4gpu16h-20260912.json` under runtime storage.
+
+The choice favors training progress per GPU-hour. The last eight fresh collections
+averaged **30.27 minutes**, with roughly **20–24 further minutes** for training,
+transfer and saving. Doubling GPUs would need a twofold speedup across the entire
+cycle to match four GPUs over twice the wall time. That has not been measured;
+browser work and current 32-task concurrency do not automatically halve. An
+illustrative scenario that halves only optimizer time saves about ten minutes
+per cycle, less than the twofold improvement required. Eight GPUs might reduce
+wall time to a fixed iteration, but are not demonstrated to improve GPU-hour
+cost. Four GPUs use the tested topology. Forecast: about **16–18 additional
+iterations**, ending around **78–80**, including scheduled evaluations. This is
+a throughput estimate, not a convergence guarantee or an eight-GPU benchmark.
+
+The preserved launcher previously capped itself at eight hours even in a longer
+allocation. `scripts/prepare_run_duration.py` created isolated source
+`reference-stage1-browsers32-16hour-20260912`, changing only that launcher cap to
+sixteen hours, plus matching source
+`reference-stage1-browsers32-pending-eval-16hour-20260912`. All protected recipe
+hashes remain identical. The verification cap stays **15 minutes**, and the
+actual allocation deadline minus **180 seconds** still bounds training. The old
+source and default eight-hour template remain available.
+
+Three duration-boundary tests and sixteen resume regressions pass; shell syntax
+and a real preserved-launcher CPU dry run pass, showing **57,600 seconds**, four
+GPUs, 48 prompt groups × five attempts, and the unchanged shutdown margin.
+Template: `scripts/resume_baseline_4gpu_16hour.sbatch`. Its controller owns and
+awaits full GPU restore verification and online continuation. Resume target is
+**after-62 / index 61 / 732 Adam updates**, then fresh collection 63, in W&B
+`qcq7i4ug`. No replay batch or evaluation is pending at launch. All four prior
+standalone evaluation slots remain exhausted; this training request does not
+approve additional standalone evaluation jobs.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 
