@@ -190,15 +190,18 @@ browser tasks in the verification stage. Evidence:
 `runs/openwebrl-4b-reference-288861-20260912T040027`, using preserved source
 `reference-stage1-browsers32-20260911` and the same W&B run `qcq7i4ug`.
 
-The saved collection 54 is being replayed with **144 submitted groups** of cursor
-advance and **ten optimizer updates** to recompute. Its replay reward matches the
+The saved collection 54 was replayed with **144 submitted groups** of cursor
+advance and **ten optimizer updates** recomputed. Its replay reward matches the
 original **0.4744933613**, verified at W&B history row **856** and tagged
 `rollout/replayed_batch=1`. This is a repeated observation of collection 54,
 not a fresh reward point. The replay's throughput counters describe loading a
 saved batch, so exclude them from browser-throughput comparisons. Optimizer
 verification must use the new history rows, excluding the seven unsaved updates
-from the previous allocation. Checkpoint 54 remains pending until its save and
-validation finish; the durable total is currently 636.
+from the previous allocation. At **21:23 PDT**, checkpoint **after-54 / iter_0000053** passed metadata,
+shard extents, cursor and finite sampled-tensor checks, with **646 durable Adam
+updates**. All ten replayed optimizer records match W&B history rows **858–867**;
+maximum gradient norm was **1.896** and maximum PPO KL **0.002512**. Fresh
+collection 55 started. The new checkpoint has not itself been fully GPU-reloaded.
 
 The **0.539293** reward at collection 53 belongs to its generating policy,
 **after-52**, whose completed local-browser evaluation is **92/300 = 30.67%**
