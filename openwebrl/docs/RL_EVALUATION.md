@@ -89,9 +89,13 @@ Existing full monitoring evaluations:
 | 38 | 107 / 300 (35.67%) | 72 | 107 / 228 (46.93%) |
 | 39 | 98 / 300 (32.67%) | 72 | 98 / 228 (42.98%) |
 | 40 | 100 / 300 (33.33%) | 69 | 100 / 231 (43.29%) |
+| 50 | 105 / 300 (35.00%) | 66 | 105 / 234 (44.87%) |
+| 52 | 92 / 300 (30.67%) | 73 | 92 / 227 (40.53%) |
+| 58 | 109 / 300 (36.33%) | 70 | 109 / 230 (47.39%) |
 
-Valid-only success is successes divided by `(300 - invalid attempts)`. After-38
-has the highest observed valid-only and all-task success rates.
+Valid-only success is successes divided by `(300 - invalid attempts)`. After-58
+has the highest observed local-browser valid-only and all-task success rates,
+but exceeds after-38 by only two successes out of 300.
 The valid subset differs between evaluations, so valid-only rates are not scores
 on an identical task cohort.
 
@@ -313,6 +317,34 @@ This held-out result did not improve despite the triggering training reward;
 filtered rewards on changing training prompts do not establish held-out gains.
 After-38 remains the highest observed checkpoint, with uncertainty from single
 live-web runs. **Three of four approved triggered jobs are used; one remains.**
+
+<a id="baseline-checkpoint-evaluation--fourth-top-five-result-after-58"></a>
+### Fourth top-five-triggered result: after 58, September 12
+
+Collection 59's verified reward **0.505842** ranked fourth and triggered
+**after-58 / `iter_0000057` / 690 Adam updates**. Job **290361** used the final
+slot of the four-job approval: two H200s, 16 CPUs, 480 GiB and a two-hour ceiling
+(estimated maximum GPU cost $3.60, plus judge usage). It ran on **g022**, restored
+the TP4 training checkpoint on TP2, and completed successfully at **02:18:43 PDT**
+in **54:24**. The 300 evaluation tasks took **50:33**.
+
+The result is **109/300 = 36.33%** overall, with **70 invalid attempts** and
+**109/230 = 47.39%** valid-only success. This is the highest observed local-browser
+result, but only **two additional successes** over after-38 (107/300). Single
+live-web runs and changing valid subsets do not establish a reliable improvement.
+The GPT-4.1 monitoring evaluator and 16-task local-browser source are unchanged;
+this is not a stealth or official paper-protocol evaluation.
+
+All **41 scalars** match W&B history row 0 in
+[the after-58 evaluation run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after58-290361).
+Artifacts: runtime `evaluations/qcq7i4ug-record-290361-after58/`, including
+`wandb_audit.json`, `checkpoint_restore_evidence.json` and
+`evaluation_artifact_audit.json`. The saved **82,884,798,301-byte** evaluation ZIP
+has a complete central directory and metadata entry; this check does not reload
+all tensor payloads. Slurm and the evaluation launcher both report exit 0.
+**All four authorized triggered evaluation jobs have completed; no slots remain.**
+Scheduled evaluations within the active training allocation use that allocation's
+existing budget.
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:end -->
 
