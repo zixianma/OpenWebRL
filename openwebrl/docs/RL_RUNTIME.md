@@ -109,6 +109,20 @@ All 41 scalars match W&B row 805; the saved evaluation ZIP is complete.
 The pending-evaluation flag is cleared and collection 51 has started. No new top-five-triggered jobs were eligible from rewards 46–50;
 two of the four approved standard-evaluation slots remain available.
 
+<a id="resuming-baseline--health-query-timeout-recovery-20260911"></a>
+### Health recorder timeout recovery, September 11
+
+During collection 53 in job 287949, one `nvidia-smi` query exceeded its 15-second
+timeout around 18:10 PDT. The recorder exited on the uncaught exception;
+training continued normally. The stale health timestamp was detected at the
+next supervised check, and a fresh in-allocation GPU query succeeded.
+`scripts/monitor_baseline.py` now records an empty GPU sample with an explicit
+`gpu_query_error` for timeouts, missing executables or nonzero exits, and
+continues collecting subsequent samples. Three CPU tests cover timeout recovery
+and unavailable/failed queries. The corrected recorder was restarted in the
+same approved allocation, appending to the existing health log. No model or
+optimizer restart was needed. Historical missing samples are not backfilled.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 
