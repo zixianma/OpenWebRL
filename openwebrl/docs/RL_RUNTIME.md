@@ -173,6 +173,40 @@ with all 41 scalars verified. After-52 used the third of four approved top-five
 jobs; one remains for a future eligible reward. There are no active OpenWebRL
 jobs or queued training continuation at this handoff.
 
+<a id="resuming-baseline--allocation-288861"></a>
+### Allocation 288861: continuation from checkpoint 53
+
+The user explicitly requested another **4 H200 × eight hours** on September 11.
+Job **288861** started on **g006 at 20:58:30 PDT**, with **32 CPUs, 480 GiB RAM
+and 32 concurrent local browser tasks**, and ends at **04:58:34 PDT September 12**.
+The authorized ceiling is **32 GPU-hours**, approximately **$28.80** at the
+previously used GPU rate, plus external judge calls. Submission evidence is
+`logs/submission-qcq7i4ug-after53-20260912T035830Z.json` under the runtime root.
+
+Full four-GPU model and optimizer restoration of **after-53 / iter_0000052 /
+636 Adam updates** passed before online continuation, with no optimizer steps or
+browser tasks in the verification stage. Evidence:
+`logs/resume-288861-4gpu-verification.json`. The online run is
+`runs/openwebrl-4b-reference-288861-20260912T040027`, using preserved source
+`reference-stage1-browsers32-20260911` and the same W&B run `qcq7i4ug`.
+
+The saved collection 54 is being replayed with **144 submitted groups** of cursor
+advance and **ten optimizer updates** to recompute. Its replay reward matches the
+original **0.4744933613**, verified at W&B history row **856** and tagged
+`rollout/replayed_batch=1`. This is a repeated observation of collection 54,
+not a fresh reward point. The replay's throughput counters describe loading a
+saved batch, so exclude them from browser-throughput comparisons. Optimizer
+verification must use the new history rows, excluding the seven unsaved updates
+from the previous allocation. Checkpoint 54 remains pending until its save and
+validation finish; the durable total is currently 636.
+
+The **0.539293** reward at collection 53 belongs to its generating policy,
+**after-52**, whose completed local-browser evaluation is **92/300 = 30.67%**
+overall and **92/227 = 40.53%** valid-only. See the checkpoint table in
+[RL_EVALUATION.md](RL_EVALUATION.md). This reward spike did not establish a
+held-out improvement. One of the four authorized future top-five evaluation
+slots remains; no additional training allocation beyond job 288861 is approved.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 
