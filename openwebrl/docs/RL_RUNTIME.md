@@ -123,6 +123,56 @@ and unavailable/failed queries. The corrected recorder was restarted in the
 same approved allocation, appending to the existing health log. No model or
 optimizer restart was needed. Historical missing samples are not backfilled.
 
+<a id="resuming-baseline--allocation-287949-finished"></a>
+### Allocation 287949 finished: resume from 53, replay collection 54
+
+The approved 4-H200 / 32-CPU job ended at its planned boundary on
+**September 11, approximately 19:30 PDT**, elapsed **7:57:38**. Slurm reports
+**COMPLETED / exit 0**; the training worker's raw **124** is the expected
+allocation-boundary timeout, normalized by the controller. Eight new training
+iterations (**46–53**) are saved, adding **86 durable Adam updates** and reaching
+**636 total** at `iter_0000052`. These checkpoints passed metadata, shard extent,
+cursor and finite CPU sample checks; their own full GPU reloads are untested.
+
+| Iteration | Collection minutes | Reward | All-task success | Added Adam updates | Durable total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 51 | 25.7 | 0.482222 | 206/445 = 46.29% | 10 | 614 |
+| 52 | 28.5 | 0.460653 | 217/550 = 39.45% | 12 | 626 |
+| 53 | 24.9 | 0.539293 | 220/460 = 47.83% | 10 | 636 |
+| 54, interrupted optimization | 30.7 | 0.474493 | 258/540 = 47.78% | 7 logged, not saved | 636 |
+
+Collection 54's **44,291,206,929-byte** batch is complete and verified at
+`rollout_recovery/53.pt`; its provenance records **144 submitted prompt groups**.
+Resume from checkpoint 53 and replay **all ten** batch-54 optimizer updates
+before fresh collection, advancing the prompt cursor by 144 groups. The seven
+updates executed before shutdown have no durable checkpoint and must not be
+counted as saved progress. No evaluation is pending. The existing resume helper
+successfully selected this checkpoint, batch and cursor in a CPU-only check.
+The pointer retains the 32-browser source and matching pending-eval recovery
+source. A new paid allocation still requires explicit resource/budget approval.
+
+All **nine collection reward records**, **86 optimizer records from completed
+iterations**, and **seven partial optimizer records** match W&B. The last partial
+record (`train/step=536`) was missing after shutdown; its exact dictionary was
+recovered from the local training log and appended once after all workers exited,
+then verified at W&B row 855. Recovery is explicitly tagged
+`monitor/metric_recovered_from_local_log=1`; it does not represent a new update.
+Evidence: `shutdown_metric_recovery.json` and
+`iteration_54_partial_wandb_audit.json` in this run. The general hard-shutdown
+flush path has not been changed; keep auditing tail records on future resumes.
+
+The nine collections averaged **28.9 minutes**, and archives preserve **4630
+completed trajectories**, including discarded groups. Host memory peaked at
+**415.6 GiB / 480 GiB**. No GPU/backend or host OOM error was observed before
+planned shutdown. The health-recorder timeout and repair are documented above;
+shutdown `KeyboardInterrupt` traces are expected. Final evidence is
+`runs/openwebrl-4b-reference-287949-20260911T183514/allocation_end_audit.json`.
+
+Scheduled after-50 evaluation and separate after-52 evaluation both completed,
+with all 41 scalars verified. After-52 used the third of four approved top-five
+jobs; one remains for a future eligible reward. There are no active OpenWebRL
+jobs or queued training continuation at this handoff.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 
