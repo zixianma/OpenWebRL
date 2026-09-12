@@ -16,6 +16,8 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
+Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
+
 ## Maintaining these documents
 
 - Add experiments and results to the matching topic instead of creating another run-specific Markdown file.

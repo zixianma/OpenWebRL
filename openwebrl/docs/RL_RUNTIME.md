@@ -318,9 +318,13 @@ transfer and saving. Doubling GPUs would need a twofold speedup across the entir
 cycle to match four GPUs over twice the wall time. That has not been measured;
 browser work and current 32-task concurrency do not automatically halve. An
 illustrative scenario that halves only optimizer time saves about ten minutes
-per cycle, less than the twofold improvement required. Eight GPUs might reduce
-wall time to a fixed iteration, but are not demonstrated to improve GPU-hour
-cost. Four GPUs use the tested topology. Forecast: about **16–18 additional
+per cycle, less than the twofold improvement required. The user correctly
+pointed out that **8 GPUs + 64 CPUs + 64 browsers** could accelerate both phases
+and approach twofold throughput. At exactly twofold throughput, 8×8 matches
+4×16's training progress and GPU-hours while halving wall time. Below twofold,
+it trades GPU efficiency for faster results. Neither is a measured Pareto winner:
+**four GPUs are the validated choice**, while the combined eight-GPU configuration
+needs its own topology and browser-concurrency benchmark. Forecast: about **16–18 additional
 iterations**, ending around **78–80**, including scheduled evaluations. This is
 a throughput estimate, not a convergence guarantee or an eight-GPU benchmark.
 
@@ -342,6 +346,68 @@ awaits full GPU restore verification and online continuation. Resume target is
 `qcq7i4ug`. No replay batch or evaluation is pending at launch. All four prior
 standalone evaluation slots remain exhausted; this training request does not
 approve additional standalone evaluation jobs.
+
+<a id="eight-gpu-scaling-benchmark-20260912"></a>
+### Eight-GPU topology and browser benchmark, September 12
+
+**Prepared, CPU-checked, awaiting an additional explicit budget approval.**
+Proposed allocation: **8 H200, 64 CPUs, 960 GiB RAM, four hours on one node**
+(32 GPU-hours; estimated maximum GPU charge **$28.80**, plus judge usage).
+The existing four-GPU training job 290926 continues separately. This benchmark
+does not update its checkpoint pointer or write into W&B run `qcq7i4ug`.
+
+The prepared controller is `scripts/scaling_benchmark.py`; submission template
+is `scripts/benchmark_scaling_8gpu.sbatch`. It owns and awaits each worker and
+respects the allocation deadline with a three-minute shutdown margin. Source
+`benchmark-eightgpu-20260912` under runtime storage was prepared using
+`scripts/prepare_scaling_benchmark.py` from the validated 32-browser reference
+snapshot. Recipe hashes are unchanged; modified launcher scripts and candidate
+browser YAML files have separate hashes checked before execution.
+
+The comparison has two stages:
+
+1. **Optimizer topology:** TP4/DP2, TP2/DP4, TP8/DP1 and TP1/DP8, in that
+   order. Each loads the same after-61 checkpoint (720 Adam updates) and replays
+   the exact saved collection-62 batch, with its 144 submitted-group cursor
+   advance. A candidate must complete all 12 updates, save the resulting
+   checkpoint, and pass model/optimizer restore and checkpoint-counter checks.
+   Compare the slowest rank's training timer per update; the existing four-GPU
+   run took **1,289.5 seconds for these 12 updates**. Sequence parallelism is
+   disabled only for TP1. Inference uses eight separate one-GPU engines for
+   every actor topology, so actor TP and rollout engine count are distinct.
+2. **Browser concurrency:** use the fastest successful actor topology, starting
+   each trial from the same after-62 checkpoint and task cursor. Test gates and
+   pools of **64, 96, 128**, then **192 and 256** if throughput, memory headroom
+   and remaining time permit. Each trial completes a fresh 48-group × five-attempt
+   collection, optimizer work and checkpoint save. Score elapsed time from
+   generation start through durable save, and **8 × seconds / 3,600 GPU-hours**
+   per iteration. Startup and checkpoint-loading time are reported separately
+   through total case wall time, rather than included in the steady-state score.
+
+The largest useful browser count is an empirical result. 256 is this search's
+upper bound, not a validated capacity claim. Stop escalation after a failed
+128-or-higher case, no throughput improvement at 128 or higher, or sampled host
+memory above 85% of the allocation. OOM, incomplete optimizer work, nonfinite
+loss/gradient/KL, missing timing, and invalid checkpoint counters disqualify a
+candidate. Case time limits are 30 minutes for replay and 40 minutes for full
+browser trials; allocation time can prevent later candidates from running.
+
+Artifacts go to `benchmarks/qcq7i4ug-scaling-JOB/` under runtime storage:
+per-case plans, full logs, checkpoint validation, GPU/memory `health.jsonl`,
+CPU usage/pressure `cpu.jsonl`, results and a provisional summary. W&B runs use
+`qcq7i4ug-scale-JOB-CASE`, preserving the baseline's existing training metrics.
+Before promoting a configuration, inspect W&B synchronization, browser timeout
+and invalid-task rates, GPU/CPU use, memory headroom and saved checkpoints.
+These are single live-web trials, so repeat the promising configuration across
+several baseline iterations before claiming a stable optimum. The four-hour
+budget is a bounded first comparison, not a guarantee to exhaust the search.
+
+CPU evidence: six unit tests pass; eight preserved-launcher dry runs and eight
+shell-argument dry runs cover all topologies and browser limits, including TP1's
+sequence-parallel exception. Reports are
+`logs/scaling-eightgpu-cpu-preflight-20260912.json` and
+`logs/scaling-eightgpu-shell-preflight-20260912.json` under runtime storage.
+No eight-GPU restoration, throughput or browser capacity has yet been measured.
 
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
