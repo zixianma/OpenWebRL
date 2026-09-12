@@ -290,6 +290,30 @@ The pending-evaluation flag was cleared after verification, and collection 51
 started normally. This scheduled evaluation uses the existing training budget;
 the two remaining approved top-five-triggered evaluation jobs are unchanged.
 
+<a id="baseline-checkpoint-evaluation--third-top-five-result-after-52"></a>
+### Third top-five-triggered result: after 52
+
+Collection 53's verified reward **0.539293** ranked second and triggered the
+policy that generated it, **checkpoint after 52 / `iter_0000051` / 626 Adam
+updates**. Under the existing four-job approval, job **288791** requested two
+H200s, 16 CPUs, 480 GiB and up to two hours (estimated maximum GPU cost $3.60,
+plus judge usage). It ran on g001 and completed with exit 0 in **52:40**;
+all 300 evaluation tasks took **48:55**. The TP4 checkpoint restored on TP2.
+
+Result: **92/300 = 30.67%** overall; **73 invalid attempts**; valid-only
+**92/227 = 40.53%**. All 41 metrics match W&B history row 0 in
+[the after-52 evaluation run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after52-288791).
+The recovery ZIP central directory and metadata entry are complete. Artifacts
+and audit reports: runtime `evaluations/qcq7i4ug-record-288791-after52/`.
+This uses the established **16-task local-browser evaluation** source, not
+Browser Use stealth. The 32-browser default applies to the four-GPU training
+profile and its scheduled evaluations.
+
+This held-out result did not improve despite the triggering training reward;
+filtered rewards on changing training prompts do not establish held-out gains.
+After-38 remains the highest observed checkpoint, with uncertainty from single
+live-web runs. **Three of four approved triggered jobs are used; one remains.**
+
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:end -->
 
 ---
