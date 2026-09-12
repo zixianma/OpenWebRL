@@ -251,6 +251,57 @@ overall and **92/227 = 40.53%** valid-only. See the checkpoint table in
 held-out improvement. One of the four authorized future top-five evaluation
 slots remains; no additional training allocation beyond job 288861 is approved.
 
+<a id="resuming-baseline--allocation-288861-finished"></a>
+### Allocation 288861 finished: resume from checkpoint 62
+
+Job **288861** finished at **04:56:25 PDT September 12**, elapsed **7:57:55**,
+with Slurm **COMPLETED / exit 0**. Worker exit **124** is the planned timeout,
+normalized by the batch controller. The allocation saved **nine iterations,
+54–62**, adding **96 durable Adam updates** and reaching **732 total** at
+`runs/openwebrl-4b-reference-288861-20260912T040027/iter_0000061`.
+Iteration 54 replayed the preceding allocation's saved on-policy batch; the eight
+fresh collections 55–62 averaged **30.27 minutes** and preserve **4385 completed
+trajectories**, including discarded groups. All fresh rewards and all 96 optimizer
+records match W&B. The last 12 optimizer records remain present through history
+row **978** after shutdown. W&B reports run state **killed** after the planned
+interrupt; this status does not indicate missing optimizer records or a failed
+checkpoint, and the same run ID remains the intended resume identity.
+
+| Iteration | Collection minutes | Reward | All-task success | Added Adam updates | Durable total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 61 | 30.2 | 0.493802 | 272/530 = 51.32% | 10 | 720 |
+| 62 | 30.1 | 0.504920 | 262/530 = 49.43% | 12 | 732 |
+
+The new checkpoints passed metadata, shard extent, cursor and finite sampled
+CPU-tensor checks. Checkpoint 62 has **not** undergone a full GPU reload. The
+source recipe hashes and CPU resume-selection checks pass. Host memory peaked
+at **403.74 GiB / 480 GiB**, with no GPU/backend errors, host OOM events or health
+recorder GPU-query errors. Iteration 61 had an isolated gradient norm **4.628**
+that returned below 1.7 for all subsequent updates in that iteration; iteration
+62 maximum norm was **2.120**, maximum PPO KL **0.003601**.
+
+Collection **63 was interrupted during browser collection**, last reporting
+14/48 accepted, 24 completed and 72 pending groups. It has **no complete batch,
+no complete archive and no optimizer updates**. Do not count it as an additional
+reward or checkpoint. On the next authorized allocation, fully verify and load
+checkpoint **after-62 / index 61**, then **recollect collection 63 from its saved
+dataset cursor**. No batch replay or pending scheduled evaluation is needed.
+The pointer retains the 32-browser source and matching pending-eval recovery
+source. Do not interpret an old replay file for collection 54 as next-batch work.
+
+The separate after-58 evaluation completed (**109/300 overall, 109/230 valid-only**),
+as did scheduled after-60 (**105/300 overall, 105/230 valid-only**). Collection
+62's reward entered the top five at rank 5, making **after-61** an evaluation
+candidate. Its queue entry is **HELD_BUDGET_CAP**: all four authorized triggered
+evaluation jobs are already used, and no fifth job was submitted. No further
+training allocation is queued or authorized. Details are in
+[RL_EVALUATION.md](RL_EVALUATION.md).
+
+Final evidence in this run: `allocation_end_audit.json`,
+`shutdown_wandb_audit.json`, per-iteration archive/reward/optimizer audits, and
+`checkpoint_61_validation.json`. Persistent resume pointer:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/current_baseline.json`.
+
 <a id="resuming-baseline--four-gpu-continuation"></a>
 ### Four-GPU continuation
 
