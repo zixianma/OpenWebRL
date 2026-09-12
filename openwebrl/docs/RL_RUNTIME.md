@@ -221,6 +221,29 @@ then returned near 1; maximum PPO KL for the iteration was **0.002207**.
 Iteration 57 maximum gradient norm was **1.485**, with maximum PPO KL
 **0.003254**. No GPU/backend or host OOM errors were observed.
 
+At **03:03 PDT September 12**, iterations **54–60** are durably saved, adding
+**74 optimizer updates** in this allocation for **710 total**. The latest three
+collections and their rewards, all 32 optimizer records, and the three new
+checkpoints passed the same archive/W&B/CPU checks described above.
+
+| Iteration | Collection minutes | Reward | All-task success | Added Adam updates | Durable total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 58 | 30.6 | 0.440700 | 284/585 = 48.55% | 12 | 690 |
+| 59 | 31.8 | 0.505842 | 288/590 = 48.81% | 10 | 700 |
+| 60 | 29.9 | 0.461760 | 265/570 = 46.49% | 10 | 710 |
+
+Collection 59 triggered the fourth and final approved standalone evaluation,
+job **290361**, for after-58: **109/300 overall,109/230 valid-only**. Scheduled
+after-60 evaluation also completed: **105/300 overall,105/230 valid-only**, all
+41 scalars at W&B row **951**. See [RL_EVALUATION.md](RL_EVALUATION.md) for details.
+The pending-evaluation flag is cleared; fresh collection 61 is running. No
+additional triggered evaluation allocation remains authorized.
+
+The project filesystem briefly rejected a documentation commit with **Disk quota
+exceeded** at 23:57 PDT; scrubbed training storage continued working with no
+storage errors. The user freed space, and the commit succeeded at approximately
+00:18 PDT. Incident evidence is `project_quota_incident.json` in the run.
+
 The **0.539293** reward at collection 53 belongs to its generating policy,
 **after-52**, whose completed local-browser evaluation is **92/300 = 30.67%**
 overall and **92/227 = 40.53%** valid-only. See the checkpoint table in

@@ -92,6 +92,7 @@ Existing full monitoring evaluations:
 | 50 | 105 / 300 (35.00%) | 66 | 105 / 234 (44.87%) |
 | 52 | 92 / 300 (30.67%) | 73 | 92 / 227 (40.53%) |
 | 58 | 109 / 300 (36.33%) | 70 | 109 / 230 (47.39%) |
+| 60 | 105 / 300 (35.00%) | 70 | 105 / 230 (45.65%) |
 
 Valid-only success is successes divided by `(300 - invalid attempts)`. After-58
 has the highest observed local-browser valid-only and all-task success rates,
@@ -345,6 +346,25 @@ all tensor payloads. Slurm and the evaluation launcher both report exit 0.
 **All four authorized triggered evaluation jobs have completed; no slots remain.**
 Scheduled evaluations within the active training allocation use that allocation's
 existing budget.
+
+<a id="baseline-checkpoint-evaluation--scheduled-after-60-evaluation"></a>
+### Scheduled after-60 evaluation, September 12
+
+Training allocation **288861** completed the full 300-task local-browser monitor
+after checkpoint 60 in **29:21**, at approximately **03:01 PDT**. It used the
+training profile's **32 concurrent browser tasks** and scored **105/300 = 35.00%**
+overall, with **70 invalid attempts** and **105/230 = 45.65%** valid-only success.
+After-58 (109/300) remains the highest observed local result; four successes
+between these individual live-web runs do not establish a reliable ranking.
+
+All **41 scalars** match main W&B run `qcq7i4ug`, **history row 951**,
+`eval/iteration=60`. The **82,930,649,761-byte** recovery ZIP is complete.
+Audit: runtime `runs/openwebrl-4b-reference-288861-20260912T040027/iteration_60_scheduled_eval_audit.json`;
+data: `rollout_recovery/eval_59.pt`. This evaluates the policy immediately after
+training rather than performing a separate reload. The checkpoint has **710
+Adam updates** and passed metadata/extents/cursor and finite CPU sample checks.
+The pending-evaluation flag was cleared after audit, and collection 61 began.
+This used the active training allocation and did not create an additional job.
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:end -->
 
