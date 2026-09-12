@@ -350,6 +350,21 @@ approve additional standalone evaluation jobs.
 <a id="eight-gpu-scaling-benchmark-20260912"></a>
 ### Eight-GPU topology and browser benchmark, September 12
 
+**Revised first stage:** the user requested a shorter topology test before the
+browser sweep. Prepared template `scripts/benchmark_topology_8gpu_2hour.sbatch`
+requests **8 H200, 64 CPUs, 960 GiB, two hours**: **16 GPU-hours**, estimated
+maximum GPU charge **$14.40**, awaiting explicit approval. Its
+`--topology-only` controller replays saved batches, makes no new browser/judge
+requests, and exits after the topology candidates. Eight concurrent GPUs are
+necessary to measure an eight-GPU layout; the budget saving is in duration.
+One hour should cover an initial comparison of one or two layouts; two hours
+is the recommended budget to attempt all four, allowing roughly 15–30 minutes
+per layout including startup, restore and saving. These estimates are unverified
+on eight GPUs, and slow restores or failures may leave fewer completed cases.
+This stage can select a provisional optimizer layout; browser concurrency and
+end-to-end scaling still require the separate browser benchmark below. A CPU
+controller test verifies that topology-only mode launches no browser cases.
+
 **Prepared, CPU-checked, awaiting an additional explicit budget approval.**
 Proposed allocation: **8 H200, 64 CPUs, 960 GiB RAM, four hours on one node**
 (32 GPU-hours; estimated maximum GPU charge **$28.80**, plus judge usage).

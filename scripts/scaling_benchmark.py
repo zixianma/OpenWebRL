@@ -184,7 +184,7 @@ def worker(plan):
     return 0
 
 
-def controller(job):
+def controller(job, *, topology_only=False):
     info = subprocess.check_output(['scontrol', 'show', 'job', job, '-o'], text=True)
     budget = resources(info, job)
     root = RUNTIME / 'benchmarks' / f'qcq7i4ug-scaling-{job}'
@@ -217,7 +217,7 @@ def controller(job):
         raise SystemExit('No topology completed the optimizer correctness checks')
     winner = min(topology, key=lambda x: x['seconds_per_update'])['tensor_parallel']
     browser_results = []
-    for count in (64, 96, 128, 192, 256):
+    for count in (() if topology_only else (64, 96, 128, 192, 256)):
         result = execute(f'tp{winner}-b{count}', winner, count, False)
         if result:
             browser_results.append(result)
@@ -229,9 +229,12 @@ def controller(job):
             previous = min(x['iteration_seconds'] for x in browser_results[:-1])
             if result and result['iteration_seconds'] >= previous:
                 break
-    write_json(root / 'summary.json', {'topology_winner_tp': winner, 'results': results,
+    write_json(root / 'summary.json', {'topology_only': topology_only, 'topology_winner_tp': winner, 'results': results,
         'browser_winner': min(browser_results, key=lambda x: x['iteration_seconds'])['browsers'] if browser_results else None,
-        'selection_is_provisional': True, 'notes': 'Single live-web trials; compare failures and resource use before promoting. Startup-inclusive wall time is not steady-state iteration time.'})
+        'selection_is_provisional': True, 'notes': (
+            'Saved-batch optimizer comparison only; browser throughput and full-cycle scaling remain unmeasured.'
+            if topology_only else
+            'Single live-web trials; compare failures and resource use before promoting. Startup-inclusive wall time is not steady-state iteration time.')})
 
 
 if __name__ == '__main__':
@@ -239,7 +242,10 @@ if __name__ == '__main__':
     mode = p.add_mutually_exclusive_group(required=True)
     mode.add_argument('--worker', type=Path)
     mode.add_argument('--controller', metavar='JOB_ID')
+    p.add_argument('--topology-only', action='store_true', help='Replay saved batches only; do not start browser trials.')
     a = p.parse_args()
+    if a.worker and a.topology_only:
+        p.error('--topology-only is a controller option')
     if a.worker:
         raise SystemExit(worker(json.loads(a.worker.read_text())))
-    controller(a.controller)
+    controller(a.controller, topology_only=a.topology_only)

@@ -4,9 +4,12 @@ from pathlib import Path
 import sys
 import unittest
 import tempfile
+from unittest.mock import patch
+from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from scaling_benchmark import ANCESTOR, RUNTIME, case_plan, health_result, parse_result, resources
+import scaling_benchmark
 
 
 class ScalingTest(unittest.TestCase):
@@ -73,6 +76,29 @@ class ScalingTest(unittest.TestCase):
             rows[1].update({'memory.current': '0', 'memory.events': 'oom 1\noom_kill 1'})
             p.write_text('\n'.join(map(json.dumps, rows)))
             self.assertTrue(health_result(p)['new_host_oom'])
+
+    def test_topology_only_never_launches_a_browser_collection(self):
+        plans = []
+        with tempfile.TemporaryDirectory() as tmp:
+            runtime = Path(tmp)
+            def fake_worker(command, **kwargs):
+                path = Path(command[-1].rsplit(' ', 1)[-1])
+                plan = json.loads(path.read_text())
+                plans.append(plan)
+                (path.parent/'result.json').write_text(json.dumps({
+                    **plan, 'complete': True, 'seconds_per_update': plan['tensor_parallel']}))
+                return SimpleNamespace(returncode=0)
+            with patch.object(scaling_benchmark, 'RUNTIME', runtime), \
+                 patch.object(scaling_benchmark, 'resources', return_value={'deadline': 1e12}), \
+                 patch.object(scaling_benchmark.subprocess, 'check_output', return_value=''), \
+                 patch.object(scaling_benchmark.subprocess, 'run', side_effect=fake_worker), \
+                 patch('builtins.print'):
+                scaling_benchmark.controller('42', topology_only=True)
+            self.assertEqual([p['tensor_parallel'] for p in plans], [4, 2, 8, 1])
+            self.assertTrue(all(p['replay_batch'] for p in plans))
+            summary = json.loads((runtime/'benchmarks/qcq7i4ug-scaling-42/summary.json').read_text())
+            self.assertTrue(summary['topology_only'])
+            self.assertIsNone(summary['browser_winner'])
 
 
 if __name__ == '__main__':
