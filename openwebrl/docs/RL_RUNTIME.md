@@ -203,6 +203,24 @@ updates**. All ten replayed optimizer records match W&B history rows **858–867
 maximum gradient norm was **1.896** and maximum PPO KL **0.002512**. Fresh
 collection 55 started. The new checkpoint has not itself been fully GPU-reloaded.
 
+At **23:57 PDT September 11**, iterations **54–57** are saved, adding **42**
+durable optimizer updates in this allocation and reaching **678 total**.
+Collections 55–57 and all their images/trajectory records passed archive checks;
+their rewards and all 32 optimizer metrics records match W&B. The checkpoints
+passed metadata/extents/cursor and finite CPU sample checks; their own full GPU
+reloads remain untested. No new top-five evaluation was triggered.
+
+| Iteration | Collection minutes | Reward | All-task success | Added Adam updates | Durable total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 55 | 30.5 | 0.418288 | 283/575 = 49.22% | 12 | 658 |
+| 56 | 28.7 | 0.453770 | 193/465 = 41.51% | 10 | 668 |
+| 57 | 30.3 | 0.483749 | 262/540 = 48.52% | 10 | 678 |
+
+Iteration 56 briefly reached gradient norm **3.925** at legacy `train/step=553`,
+then returned near 1; maximum PPO KL for the iteration was **0.002207**.
+Iteration 57 maximum gradient norm was **1.485**, with maximum PPO KL
+**0.003254**. No GPU/backend or host OOM errors were observed.
+
 The **0.539293** reward at collection 53 belongs to its generating policy,
 **after-52**, whose completed local-browser evaluation is **92/300 = 30.67%**
 overall and **92/227 = 40.53%** valid-only. See the checkpoint table in
