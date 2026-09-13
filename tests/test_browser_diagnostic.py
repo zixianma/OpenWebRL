@@ -5,7 +5,7 @@ import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'scripts'))
 import diagnose_browser_scaling as diagnostic
@@ -71,14 +71,16 @@ class BrowserDiagnosticTest(unittest.TestCase):
             cfg.write_text(json.dumps({k:1 for k in ('width','height','dpr','max_retries',
                 'wait_timeout','screenshot_timeout','resize_output_coords','resize_scale','image_patch_size')}))
             output = root/'result.json'
-            with patch.object(diagnostic, 'SOURCE', root), patch.dict(sys.modules, modules), patch.object(sys,'path',sys.path.copy()):
-                asyncio.run(diagnostic.browser_worker({'url':'https://example.com'}, output))
+            with patch.object(diagnostic, 'SOURCE', root), patch.dict(sys.modules, modules), patch.object(sys,'path',sys.path.copy()), patch.object(diagnostic.asyncio, 'sleep', new_callable=AsyncMock) as sleep:
+                asyncio.run(diagnostic.browser_worker({'url':'https://example.com', 'hold_seconds':20}, output))
+            sleep.assert_awaited_once_with(20)
             row = json.loads(output.read_text())
             self.assertFalse(row['success'])
             self.assertEqual(row['failure_stage'],'screenshot')
             self.assertEqual(len(row['navigation_calls']),2)
             self.assertEqual(closed,[True])
             self.assertIn('cleanup',row['timings'])
+            self.assertLessEqual(row['setup_complete_time'], row['reset_started_time'])
 
 
 if __name__ == '__main__':

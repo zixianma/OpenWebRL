@@ -350,6 +350,36 @@ approve additional standalone evaluation jobs.
 <a id="eight-gpu-scaling-benchmark-20260912"></a>
 ### Eight-GPU topology and browser benchmark, September 12
 
+<a id="browser48-shared32cpu-20260913"></a>
+**48-browser quick test on the existing 32-CPU allocation.** Job 290926
+remained running; GPU topology, baseline source, checkpoint lineage and W&B
+`qcq7i4ug` were unchanged. CPU-only overlapping steps tested direct preserved
+WebEnv setup/reset during iteration 74's optimizer phase, without model or
+judge calls. No new allocation was requested. The initial short 32/48/32
+comparison never reached its limits (workers finished before 48 overlapped),
+so it is not evidence of 48-browser capacity.
+
+A second 32/48/32 comparison kept every browser open for 20 seconds between
+setup and reset, with 250-ms launch spacing and the same 96-URL sequence per
+case. All three cases captured **96/96** observations. Timestamp overlap
+verified **32/48/32 simultaneously open sessions**, respectively. Durations
+were **87.4 / 64.8 / 86.8 seconds**. The 48-browser case therefore ran this
+specific controlled probe **1.34x** as fast as the mean of its two controls.
+This is **not an RL speedup measurement**: the deliberate hold contributes to
+throughput, the optimizer shares CPU capacity, the sample covers six URLs,
+and challenge pages still count as successful screenshots (32 per case).
+Sampled total job memory peaked at **375.5 GiB / 480 GiB**, with no OOM events.
+48 staggered browsers passed this preflight; full rollout throughput and model
+serving contention remain untested, so the live default stays at 32.
+
+Results and screenshots:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/benchmarks/browser48-hold-290926-20260913/`;
+see `final_audit.json` and `summary.json`. Log:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/browser48-hold-290926-20260913.log`.
+[Separate W&B diagnostic](https://wandb.ai/zixianma/openwebrl/runs/browser48-hold-290926-20260913)
+finished and synced all three cases. Diagnostic code supports an optional
+bounded hold and records setup/reset timestamps; five CPU regression tests pass.
+
 <a id="browser-diagnostic-followup-20260912"></a>
 **Prepared follow-up diagnostic.** `scripts/diagnose_browser_scaling.py` uses
 the preserved reference `WebEnv`, retaining both navigation passes in the

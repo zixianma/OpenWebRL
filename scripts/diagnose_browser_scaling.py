@@ -116,6 +116,14 @@ async def browser_worker(plan, output):
     try:
         await env.setup()
         row['timings']['setup'] = time.monotonic() - launch_started
+        row['setup_complete_time'] = time.time()
+        # Keep real browser sessions open long enough to exercise the requested
+        # concurrency even when these short initial-observation probes are fast.
+        hold_seconds = float(plan.get('hold_seconds', 0))
+        if not 0 <= hold_seconds <= 30:
+            raise ValueError('Browser diagnostic hold must be between 0 and 30 seconds')
+        await asyncio.sleep(hold_seconds)
+        row['reset_started_time'] = time.time()
         start = time.monotonic()
         observation, _ = await env.reset()
         row['timings']['reset'] = time.monotonic() - start
@@ -165,7 +173,7 @@ def telemetry():
     return row | counts
 
 
-async def run_case(root, concurrency, delay, count, deadline):
+async def run_case(root, concurrency, delay, count, deadline, *, hold_seconds=0):
     case = root / f'c{concurrency}-delay{delay:g}'
     case.mkdir()
     semaphore = asyncio.Semaphore(concurrency)
@@ -185,7 +193,7 @@ async def run_case(root, concurrency, delay, count, deadline):
                 return {'url': url, 'skipped': True}
             plan_path = case/f'{index:04d}.plan.json'
             result_path = case/f'{index:04d}.result.json'
-            save(plan_path, {'url': url})
+            save(plan_path, {'url': url, 'hold_seconds': hold_seconds})
             env = os.environ.copy()
             env.update(CUDA_VISIBLE_DEVICES='', PLAYWRIGHT_BROWSERS_PATH=str(RUNTIME/'browsers'))
             active += 1
@@ -236,6 +244,7 @@ async def run_case(root, concurrency, delay, count, deadline):
         except asyncio.CancelledError:
             pass
     result = summarize(records) | {'concurrency_limit': concurrency, 'launch_interval_seconds': delay,
+        'hold_seconds': hold_seconds,
         'peak_active_workers': peak, 'wall_seconds': time.monotonic()-began}
     save(case/'summary.json', result)
     print(json.dumps(result), flush=True)
