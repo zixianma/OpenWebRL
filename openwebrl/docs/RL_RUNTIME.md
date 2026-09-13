@@ -32,8 +32,14 @@ The script **never submits or extends an allocation**. It requires a running, us
 <a id="resuming-baseline--finish90-tp2-20260913"></a>
 ### Prepared minimal-GPU finish to iteration 90, September 13
 
-**Not submitted; explicit new compute approval is required.** The last saved
-checkpoint is `293510-20260913T104752/iter_0000086`: **87 completed iterations,
+**Approved and submitted as job 294421**, running on g020. The budget is
+2 H200s × six hours, 16 CPUs / 480 GiB, at most 12 GPU-hours; Slurm estimates
+$10.80 GPU charges, plus judge API usage. The batch owns and awaits the TP2
+restore check, remaining training and scheduled evaluation.
+Submission receipt: runtime `logs/submission-qcq7i4ug-finish90-294421.json`.
+Controller log: `logs/slurm-qcq7i4ug-294421.out`.
+
+The last saved checkpoint is `293510-20260913T104752/iter_0000086`: **87 completed iterations,
 984 Adam updates**. The interrupted collection 88 has no complete recovery
 batch. The persistent pointer has been corrected from its stale after-78 entry.
 Metadata, all shard byte extents, optimizer/scheduler counters and dataset-cursor
