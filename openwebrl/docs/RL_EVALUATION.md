@@ -17,8 +17,9 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 Moved another 19 inactive runs to `zixianma/openwebrl-evals`: six early pipeline
 tests, five browser benchmarks/diagnostics, three ARM calibration attempts,
 four synthetic GPU diagnostics, and the now-finished checkpoint-80 temperature-0
-evaluation. The training project retains only baseline `qcq7i4ug` and the real
-ARM training pilot `arm-turn-bonus-beta0.5-after70-293194`. New debug, smoke-test,
+evaluation. The training project retains baseline `qcq7i4ug`, the real ARM
+training pilot `arm-turn-bonus-beta0.5-after70-293194`, and the newly started
+from-zero training run `arm-turn-bonus-fresh-294197`. New debug, smoke-test,
 calibration and standalone evaluation launches belong in `openwebrl-evals`.
 
 Verified all moved histories, summaries, configurations, statuses, run/file
