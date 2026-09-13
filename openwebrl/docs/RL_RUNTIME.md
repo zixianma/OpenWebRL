@@ -29,6 +29,44 @@ python3 scripts/resume_baseline.py --job-id JOB_ID --launch
 
 The script **never submits or extends an allocation**. It requires a running, user-owned single-node allocation with at least two H200s, eight CPUs and 240 GiB RAM, and ten usable minutes after the shutdown margin. By default it uses two GPUs through `srun --jobid=... --overlap --exact`; the four-GPU profile is described below. It refuses launch if any non-interactive/non-extern Slurm steps are already present, and uses a per-job lock to prevent concurrent invocations. Inspect existing steps; do not stop unrelated work to bypass this check.
 
+<a id="resuming-baseline--finish90-tp2-20260913"></a>
+### Prepared minimal-GPU finish to iteration 90, September 13
+
+**Not submitted; explicit new compute approval is required.** The last saved
+checkpoint is `293510-20260913T104752/iter_0000086`: **87 completed iterations,
+984 Adam updates**. The interrupted collection 88 has no complete recovery
+batch. The persistent pointer has been corrected from its stale after-78 entry.
+Metadata, all shard byte extents, optimizer/scheduler counters and dataset-cursor
+presence pass. Small CPU tensor samples are finite but cover only two of eight
+shards; this is not a full reload. The new allocation must first verify the
+TP4 checkpoint's model and optimizer restoration on TP2.
+
+The prepared `scripts/resume_baseline_2gpu_finish90.sbatch` requests **2 H200s,
+16 CPUs, 480 GiB RAM, six hours (12 GPU-hours maximum)**. Two GPUs are the smallest
+validated training topology; this does not prove one GPU is physically
+impossible. Extra host RAM gives offload and browser headroom. Expected total
+runtime is roughly **4–5 hours**, using historical TP2 collection/training timing
+and allowing for restore, saving, and final evaluation; live websites can vary.
+The controller exits when all work completes rather than occupying the full cap.
+
+The CPU dry run keeps the frozen reference source, W&B run `qcq7i4ug`,
+48 prompt groups × five attempts, batch 256, two PPO epochs and the iteration-90
+stop. TP2 uses 16 concurrent browser tasks. The scheduled after-90 evaluation
+covers all 300 Online-Mind2Web tasks with local browsers, temperature 0,
+GPT-4.1 judging and a 30-step limit, matching previous scheduled baseline evals.
+It stays in the main training series. No separate stealth/o4-mini eval is in
+this budget. Do not set `OPENWEBRL_STOP_AFTER_SAVED_ROLLOUT` because it would
+stop before the scheduled evaluation.
+
+Both GPU profiles now request typed `gpu:h200:N` Slurm steps; this prevents
+TP2 from mixing untyped steps with a typed H200 allocation. Sixteen resume
+CPU tests and the new batch template's shell syntax check pass. No GPU work
+was used for this preparation.
+
+Prepared plan: runtime `finish90_tp2_plan_20260913.json`; inner-launcher dry run:
+`finish90_tp2_dry_run_20260913.json`; checkpoint audit:
+`runs/openwebrl-4b-reference-293510-20260913T104752/resume_after87_checkpoint_audit.json`.
+
 <a id="resuming-baseline--32-cpu-browser-concurrency-20260911"></a>
 ### 32-CPU continuation, September 11
 

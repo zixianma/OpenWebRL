@@ -206,6 +206,7 @@ class ResumeTest(unittest.TestCase):
     def test_srun_stays_in_exact_existing_job_and_cleans_stale_resume_controls(self):
         command = m.step_command('42', 8)
         self.assertIn('--jobid=42', command)
+        self.assertIn('--gres=gpu:h200:2', command)
         self.assertIn('--exact', command)
         self.assertNotIn('sbatch', command)
         self.assertNotIn('salloc', command)
