@@ -36,13 +36,12 @@
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 58 | 299 / 300 | 175 | 290 | 9 | 1 | 58.53 | 60.34 | 58.33 |
 
-## Planned · stealth browser · o4-mini · temperature 0.6
+## Active / queued · stealth browser · o4-mini
 
-| Checkpoint after iteration | Tasks | GPUs | Hour cap | Status |
-| ---: | ---: | ---: | ---: | --- |
-| 38 | 300 | 2 | 3 | Budget approval pending |
-| 58 | 300 | 2 | 3 | Budget approval pending; fresh run |
-| 80 | 300 | 2 | 3 | Budget approval pending |
+| Checkpoint after iteration | Actor temperature | Tasks | GPUs | Hour cap | Job | Status |
+| ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 80 | 0 | 300 | 2 | 3 | 294093 | Running |
+| 80 | 0.6 | 300 | 2 | 3 | 294094 | Waiting for 294093 |
 
 ## Metric denominators
 

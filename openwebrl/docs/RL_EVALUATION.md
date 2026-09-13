@@ -11,8 +11,47 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:start -->
+<a id="stealth80-temperature-pair-20260913"></a>
+## Checkpoint 80: approved stealth/o4-mini temperature comparison
+
+The user superseded the earlier three-checkpoint plan and explicitly approved
+**checkpoint 80 only**, at actor temperatures **0 and 0.6**. No after-38 or
+after-58 rerun is authorized. Both jobs evaluate all **300 Online-Mind2Web
+tasks**, with Browser Use stealth, the same o4-mini/AgentTrek judge, top-p 0.95,
+top-k 20, 4096 response tokens, 32768 context tokens, 30 turns and eight browser
+sessions. Judge API defaults are unchanged; temperature varies the actor only.
+
+| Actor temperature | Job | Dependency | Resources | Maximum GPU-hours |
+| ---: | ---: | --- | --- | ---: |
+| 0 | 294093 | none; started on g020 | 2 H200, 16 CPUs, 480 GiB, 3 hours | 6 |
+| 0.6 | 294094 | afterok:294093 | 2 H200, 16 CPUs, 480 GiB, 3 hours | 6 |
+
+Slurm confirmed **$5.40 estimated per job**, **$10.80 / 12 GPU-hours total**,
+plus Browser Use and o4-mini usage. The batch controller awaits its evaluation;
+failure of the first job holds the second for inspection. Jobs finish early
+when evaluation completes. Training remains separate and checkpoints 38/58
+are untouched. The 299/300 after-58 partial result remains labeled partial.
+
+Temperature 0 uses isolated source `reference-stealth-o4-temp0-20260913`;
+temperature 0.6 retains `reference-paper-om2w-20260912`. Only the generation
+module's actor temperature and matching YAML setting change. Protected-source
+hash checks and real CPU configuration checks passed for both temperatures;
+13 evaluation regressions and two temperature-identity tests pass. The wrapper
+checks that requested, manifest and executable temperatures agree, and uses
+separate temperature-labeled W&B IDs. Temperature 0 is a controlled ablation,
+not the paper's temperature-0.6 sampling setting.
+
+Checkpoint: `iter_0000079` in runtime run
+`openwebrl-4b-reference-293510-20260913T104752` (after 80).
+Approval, exact plans, submission receipts and checks:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/stealth80_temperature_pair_20260913.json`.
+Logs: `logs/slurm-stealth-o4-294093.out` and `logs/slurm-stealth-o4-294094.out`
+under runtime storage. Results: `evaluations/qcq7i4ug-stealth-o4-JOB-after80-tTEMP/`.
+[Temperature 0 W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-stealth-o4-after80-t0-294093),
+[temperature 0.6 W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
+
 <a id="stealth-o4-checkpoints38-58-80-20260913"></a>
-## Prepared stealth/o4-mini comparison: after 38, 58 and 80
+## Superseded proposal: stealth/o4-mini after 38, 58 and 80
 
 The user requested matching full-300 evaluations of checkpoints **38, 58 and
 80**: Browser Use stealth, o4-mini/AgentTrek judge, **actor temperature 0.6**,
