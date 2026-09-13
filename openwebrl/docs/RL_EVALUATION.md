@@ -629,9 +629,11 @@ Existing verified history and new W&B rows were merged, retaining all 75
 observations. New API rows alone omitted older observations and were not used
 as a replacement history.
 
-**Proposed budget, not yet approved or submitted:** one job with **2 H200,
-16 CPUs, 480 GiB, two hours**, maximum **4 GPU-hours**, estimated **$3.60** plus
-judge usage. Use the existing 300-task Online-Mind2Web local-browser/GPT-4.1
+**Approved and submitted as job 293585**, September 13 at 01:26 PDT:
+**2 H200, 16 CPUs, 480 GiB, two hours**, maximum **4 GPU-hours**. Slurm confirmed
+an estimated **$3.60** plus judge usage. Initial state is `PENDING (Resources)`;
+no start estimate is available. This consumes the single additional job
+explicitly approved for after-69; it does not renew the earlier four-job cap. Use the existing 300-task Online-Mind2Web local-browser/GPT-4.1
 monitoring protocol and report all-task and valid-only success in a separate
 W&B run. No stealth browser or official o4-mini benchmark is implied.
 The earlier four-job evaluation budget is exhausted. Further reward-ranked
@@ -640,9 +642,16 @@ evaluations through iteration 90 require additional bounded approval.
 Prepared state and exact worker plan:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/reward_eval_queue_final90_20260913.json`.
 This file holds only after-69 as the active candidate; after-66 and after-68
-are explicitly deferred. No submission routine was invoked. The legacy
-four-job queue helper has a fixed four-job approval contract, so it must not
-be used to authorize this proposed single-job request.
+are explicitly deferred. Submission used a checkpoint-specific, single-job
+approval receipt rather than the legacy helper's four-job approval contract.
+Receipt: `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/submission-after69-eval-293585.json`.
+Batch log (created on startup):
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/slurm-record-eval-293585.out`.
+Results directory:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-293585-after69/`.
+Expected [W&B evaluation run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after69-293585)
+will appear after worker initialization. Training continuation 293510 remains
+pending on `afterany:290926`; this evaluation has no dependency on training.
 
 <a id="reward-rank-evaluation-queue"></a>
 ## Evaluating checkpoints whose training reward enters the top five
