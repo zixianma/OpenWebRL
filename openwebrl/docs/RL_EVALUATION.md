@@ -11,6 +11,37 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:start -->
+<a id="historical-evaluation-wandb-migration-20260913"></a>
+## Historical evaluation W&B migration, September 13
+
+Moved 11 inactive standalone evaluation runs from `zixianma/openwebrl` to
+[`zixianma/openwebrl-evals`](https://wandb.ai/zixianma/openwebrl-evals): eight
+finished evaluations and three failed or partial attempts. Verified every run's
+ID, history rows, summary, configuration, state, name, group, file checksums and
+artifact references against its pre-move snapshot. W&B's internal storage ID
+changed only in its project component. The two artifacts logged by the after-21
+and after-22 runs remain in their original project with their references intact.
+
+Training runs and their scheduled evaluation history remain in `openwebrl`.
+Active checkpoint-80 temperature-0 run 294093 also remains there to avoid
+interrupting logging; queued temperature-0.6 run 294094 targets `openwebrl-evals`.
+Operational snapshots and the URL mapping are stored in
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/wandb-eval-migration-20260913/`.
+
+| Run | Preserved state |
+| --- | --- |
+| [qcq7i4ug-eval-after21-287046](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after21-287046) | failed |
+| [qcq7i4ug-eval-after21-287370](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after21-287370) | finished |
+| [qcq7i4ug-eval-after22-287370](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after22-287370) | finished |
+| [qcq7i4ug-eval-browseruse-after20-287521](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-browseruse-after20-287521) | crashed |
+| [qcq7i4ug-eval-after38-287588](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after38-287588) | finished |
+| [qcq7i4ug-eval-after39-287596-r1](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after39-287596-r1) | finished |
+| [qcq7i4ug-eval-browseruse-after38-287879](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-browseruse-after38-287879) | finished |
+| [qcq7i4ug-eval-after52-288791](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after52-288791) | finished |
+| [qcq7i4ug-eval-after58-290361](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after58-290361) | finished |
+| [qcq7i4ug-benchmark-after58-291005](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-benchmark-after58-291005) | killed |
+| [qcq7i4ug-eval-after69-293585](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585) | finished |
+
 <a id="separate-evaluation-wandb-project-20260913"></a>
 ## Separate W&B project for new standalone evaluations
 
@@ -19,7 +50,8 @@ continues in `zixianma/openwebrl`. The already-running temperature-0 evaluation
 294093 remains in its original project. Queued temperature-0.6 job **294094**
 will start in the new evaluation project without canceling or resubmitting it.
 Scheduled evaluations emitted by the trainer remain attached to its training
-history. No existing W&B runs are moved or restarted.
+history. The later historical migration below moves inactive standalone
+evaluations; active runs are not restarted.
 
 Both standalone launchers set the CLI project, environment and saved manifest
 consistently; an explicit `--wandb-project` override remains available. The
@@ -320,7 +352,7 @@ Results and full recovery data are under runtime
 `evaluations/qcq7i4ug-record-287588-after38/`, including `metrics.json`,
 `evaluation.log`, `wandb_audit.json`, `checkpoint_restore_evidence.json`, and
 `runtime/rollout_recovery/eval_0.pt`. W&B:
-[after-38 evaluation](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after38-287588).
+[after-38 evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after38-287588).
 Worker **287588.1 completed with exit 0**. After verification, the waiting
 original batch controller was canceled to release unused allocation time;
 the resulting Slurm cancellation does not indicate failed evaluation results.
@@ -343,7 +375,7 @@ ZIP directory is complete. Job and controller both report **COMPLETED / exit 0**
 elapsed **1:01:53** including startup/recovery; the successful worker took 54:41.
 
 Artifacts: runtime `evaluations/qcq7i4ug-record-287596-after39-retry1/`.
-W&B: [after-39 evaluation](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after39-287596-r1).
+W&B: [after-39 evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after39-287596-r1).
 After-38 remains the highest observed all-task and valid-only result. **Two of
 four** approved reward-triggered jobs have now been used. Stealth stays paused.
 
@@ -401,7 +433,7 @@ all 300 evaluation tasks took **48:55**. The TP4 checkpoint restored on TP2.
 
 Result: **92/300 = 30.67%** overall; **73 invalid attempts**; valid-only
 **92/227 = 40.53%**. All 41 metrics match W&B history row 0 in
-[the after-52 evaluation run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after52-288791).
+[the after-52 evaluation run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after52-288791).
 The recovery ZIP central directory and metadata entry are complete. Artifacts
 and audit reports: runtime `evaluations/qcq7i4ug-record-288791-after52/`.
 This uses the established **16-task local-browser evaluation** source, not
@@ -431,7 +463,7 @@ The GPT-4.1 monitoring evaluator and 16-task local-browser source are unchanged;
 this is not a stealth or official paper-protocol evaluation.
 
 All **41 scalars** match W&B history row 0 in
-[the after-58 evaluation run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after58-290361).
+[the after-58 evaluation run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after58-290361).
 Artifacts: runtime `evaluations/qcq7i4ug-record-290361-after58/`, including
 `wandb_audit.json`, `checkpoint_restore_evidence.json` and
 `evaluation_artifact_audit.json`. The saved **82,884,798,301-byte** evaluation ZIP
@@ -500,7 +532,7 @@ steps remain the same. Source hashes record the browser backend, timeout and
 concurrency changes. Fifteen CPU preparation/wrapper tests and the shell syntax
 check passed; the exact checkpoint dry-run plan is saved under
 `evaluations/browser-use-preflight-after38-20260911/evaluation_plan.json`.
-W&B startup confirmed [qcq7i4ug-eval-browseruse-after38-287879](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-browseruse-after38-287879).
+W&B startup confirmed [qcq7i4ug-eval-browseruse-after38-287879](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-browseruse-after38-287879).
 The output is runtime `evaluations/qcq7i4ug-browseruse-287879-after38`; its
 `evaluation.log` contains detailed progress, and the controller log is
 `logs/slurm-stealth-after38-287879.out`. Full TP2 model/optimizer restoration
@@ -739,7 +771,7 @@ attempts; its higher observed training reward did not produce a higher held-out
 score in this evaluation. The valid subsets differ, and one live-web evaluation
 does not establish a statistically reliable checkpoint ranking.
 
-The [W&B run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after69-293585)
+The [W&B run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585)
 is finished. All **41 local metrics match remote history**; the run summary
 contains only runtime metadata, so verification used the actual history row.
 Evidence: `metrics.json`, `status.json`, `checkpoint_restore_evidence.json` and
@@ -787,7 +819,7 @@ Batch log (created on startup):
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/slurm-record-eval-293585.out`.
 Results directory:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-293585-after69/`.
-Expected [W&B evaluation run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after69-293585)
+Expected [W&B evaluation run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585)
 will appear after worker initialization. Training continuation 293510 remains
 pending on `afterany:290926`; this evaluation has no dependency on training.
 

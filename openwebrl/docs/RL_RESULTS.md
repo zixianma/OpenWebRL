@@ -58,8 +58,9 @@
 
 | Results | Record |
 | --- | --- |
+| Standalone evaluations · 11 historical runs | [W&B project](https://wandb.ai/zixianma/openwebrl-evals) · [Migration audit](RL_EVALUATION.md#historical-evaluation-wandb-migration-20260913) |
 | Local 10–60 | [Historical comparison](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
-| Local 69 | [W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after69-293585) |
+| Local 69 | [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585) |
 | Local 70, 80 | [Scheduled evaluations](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Stealth 38, GPT-4.1 | [Browser comparison](RL_EVALUATION.md#browser-use-checkpoint-evaluation) |
 | Stealth 58, o4-mini, partial | [Partial-result audit](arm_results/rl_integration/after58-benchmark-partial.json) |
