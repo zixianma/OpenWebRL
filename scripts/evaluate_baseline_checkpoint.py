@@ -21,6 +21,22 @@ REPO = Path(__file__).resolve().parents[1]
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 
 
+DEFAULT_EVAL_PROJECT = 'openwebrl-evals'
+
+
+def configure_evaluation_tracking(plan, project=DEFAULT_EVAL_PROJECT):
+    """Route standalone evaluations without changing shared training planners."""
+    if not isinstance(project, str) or not project.strip() or '/' in project:
+        raise ValueError('Specify a nonempty W&B project name without slashes')
+    command = plan['command']
+    command[command.index('--wandb-project') + 1] = project
+    plan['environment']['WANDB_PROJECT'] = project
+    plan['wandb_project'] = project
+    entity = command[command.index('--wandb-team') + 1] if '--wandb-team' in command else 'zixianma'
+    plan['wandb_url'] = f'https://wandb.ai/{entity}/{project}/runs/{plan["wandb_run_id"]}'
+    return plan
+
+
 def build_plan(source, checkpoint, output, job_id, attempt=0, browser_env='local_process', gpus=4):
     if gpus not in (2, 4):
         raise ValueError('Supported evaluation profiles use 2 or 4 H200 GPUs')
@@ -147,6 +163,7 @@ def finalize_evaluation(plan, code):
 
 
 def run(plan, env_file):
+    configure_evaluation_tracking(plan, plan.get('wandb_project', DEFAULT_EVAL_PROJECT))
     job = plan['job_id']
     if os.getenv('SLURM_JOB_ID') != job or f'/job_{job}/' not in Path('/proc/self/cgroup').read_text():
         raise ValueError('Execute inside the explicitly authorized Slurm GPU step')
@@ -224,8 +241,10 @@ def main():
     parser.add_argument('--attempt', type=int, default=0)
     parser.add_argument('--browser-env', choices=['local_process', 'browser-use'], default='local_process')
     parser.add_argument('--gpus', choices=[2, 4], type=int, default=4)
+    parser.add_argument('--wandb-project', default=DEFAULT_EVAL_PROJECT)
     args = parser.parse_args()
     plan = build_plan(args.source, args.checkpoint, args.output, args.job_id, args.attempt, args.browser_env, args.gpus)
+    configure_evaluation_tracking(plan, args.wandb_project)
     if args.execute:
         run(plan, args.env_file)
     else:

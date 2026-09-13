@@ -11,6 +11,24 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:start -->
+<a id="separate-evaluation-wandb-project-20260913"></a>
+## Separate W&B project for new standalone evaluations
+
+New standalone evaluation launches use **`zixianma/openwebrl-evals`**; training
+continues in `zixianma/openwebrl`. The already-running temperature-0 evaluation
+294093 remains in its original project. Queued temperature-0.6 job **294094**
+will start in the new evaluation project without canceling or resubmitting it.
+Scheduled evaluations emitted by the trainer remain attached to its training
+history. No existing W&B runs are moved or restarted.
+
+Both standalone launchers set the CLI project, environment and saved manifest
+consistently; an explicit `--wandb-project` override remains available. The
+shared planner used by ARM training pilots retains its training default.
+Fourteen evaluation tests and two temperature-identity tests pass. The queued
+job's real launch plan resolves to
+[its new evaluation W&B location](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
+The project/run will appear when that worker initializes W&B.
+
 <a id="stealth80-temperature-pair-20260913"></a>
 ## Checkpoint 80: approved stealth/o4-mini temperature comparison
 
@@ -48,7 +66,7 @@ Approval, exact plans, submission receipts and checks:
 Logs: `logs/slurm-stealth-o4-294093.out` and `logs/slurm-stealth-o4-294094.out`
 under runtime storage. Results: `evaluations/qcq7i4ug-stealth-o4-JOB-after80-tTEMP/`.
 [Temperature 0 W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-stealth-o4-after80-t0-294093),
-[temperature 0.6 W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
+[temperature 0.6 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
 
 <a id="stealth-o4-checkpoints38-58-80-20260913"></a>
 ## Superseded proposal: stealth/o4-mini after 38, 58 and 80

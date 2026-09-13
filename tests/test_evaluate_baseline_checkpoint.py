@@ -47,6 +47,18 @@ class EvaluationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Missing checkpoint component'):
             self.plan()
 
+    def test_standalone_tracking_overrides_inherited_training_project(self):
+        plan = self.plan()
+        original_run_id = plan['wandb_run_id']
+        plan['environment']['WANDB_PROJECT'] = 'openwebrl'
+        m.configure_evaluation_tracking(plan)
+        self.assertEqual(plan['environment']['WANDB_PROJECT'], 'openwebrl-evals')
+        self.assertEqual(plan['command'][plan['command'].index('--wandb-project')+1], 'openwebrl-evals')
+        self.assertEqual(plan['wandb_run_id'], original_run_id)
+        self.assertIn('/openwebrl-evals/runs/', plan['wandb_url'])
+        # Shared build_plan callers include training pilots; routing is explicit.
+        self.assertEqual(self.plan()['command'][self.plan()['command'].index('--wandb-project')+1], 'openwebrl')
+
     def test_browser_use_has_distinct_identity_and_session_namespace(self):
         source = self.root / 'source'
         source.mkdir()

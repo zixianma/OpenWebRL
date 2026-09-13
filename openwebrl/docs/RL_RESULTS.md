@@ -38,10 +38,10 @@
 
 ## Active / queued · stealth browser · o4-mini
 
-| Checkpoint after iteration | Actor temperature | Tasks | GPUs | Hour cap | Job | Status |
-| ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| 80 | 0 | 300 | 2 | 3 | 294093 | Running |
-| 80 | 0.6 | 300 | 2 | 3 | 294094 | Waiting for 294093 |
+| Checkpoint after iteration | Actor temperature | Tasks | GPUs | Hour cap | Job | W&B project | Status |
+| ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| 80 | 0 | 300 | 2 | 3 | 294093 | openwebrl | Running |
+| 80 | 0.6 | 300 | 2 | 3 | 294094 | openwebrl-evals | Waiting for 294093 |
 
 ## Metric denominators
 

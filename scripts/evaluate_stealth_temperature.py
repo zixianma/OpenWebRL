@@ -7,7 +7,9 @@ from pathlib import Path
 import runpy
 import shutil
 
-from evaluate_baseline_checkpoint import build_plan, run, REPO, RUNTIME
+from evaluate_baseline_checkpoint import (
+    build_plan, run, REPO, RUNTIME, DEFAULT_EVAL_PROJECT, configure_evaluation_tracking,
+)
 from resume_baseline import validate_source, write_json
 
 
@@ -47,7 +49,7 @@ def prepare_greedy(source, output):
     validate_source(output)
 
 
-def temperature_plan(source, checkpoint, output, job_id, temperature):
+def temperature_plan(source, checkpoint, output, job_id, temperature, wandb_project=DEFAULT_EVAL_PROJECT):
     if temperature not in (0.0, 0.6):
         raise ValueError('This comparison only supports temperature 0 or 0.6')
     plan = build_plan(source, checkpoint, output, job_id, gpus=2,
@@ -67,7 +69,7 @@ def temperature_plan(source, checkpoint, output, job_id, temperature):
     plan['environment']['WANDB_RUN_ID'] = run_id
     command = plan['command']
     command[command.index('--wandb-group') + 1] = 'qcq7i4ug-stealth-o4-temperature-comparison'
-    return plan
+    return configure_evaluation_tracking(plan, wandb_project)
 
 
 if __name__ == '__main__':
@@ -80,6 +82,7 @@ if __name__ == '__main__':
     p.add_argument('--temperature', type=float, choices=[0.0, 0.6])
     p.add_argument('--execute', action='store_true')
     p.add_argument('--env-file', type=Path, default=REPO / '.env')
+    p.add_argument('--wandb-project', default=DEFAULT_EVAL_PROJECT)
     a = p.parse_args()
     if a.prepare_greedy:
         if a.execute:
@@ -89,7 +92,7 @@ if __name__ == '__main__':
     else:
         if a.checkpoint is None or a.job_id is None or a.temperature is None:
             p.error('Evaluation needs checkpoint, job ID and temperature')
-        plan = temperature_plan(a.source, a.checkpoint, a.output, a.job_id, a.temperature)
+        plan = temperature_plan(a.source, a.checkpoint, a.output, a.job_id, a.temperature, a.wandb_project)
         if a.execute:
             run(plan, a.env_file)
         else:

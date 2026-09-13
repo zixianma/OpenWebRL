@@ -20,7 +20,7 @@ class TemperatureTest(unittest.TestCase):
             (source / 'openwebrl/eval_benchmark.py').write_text(
                 f'SAMPLING = dict(temperature={actual}, top_p=.95, top_k=20)\n')
             base = {'completed_training_iterations': 80, 'environment': {'JUDGE_MODEL': 'o4-mini'},
-                    'command': ['bash', 'launch', '--wandb-group', 'old']}
+                    'command': ['bash', 'launch', '--wandb-group', 'old', '--wandb-project', 'openwebrl']}
             with patch.object(m, 'build_plan', return_value=base):
                 return m.temperature_plan(source, 'checkpoint', 'output', '42', requested)
 
@@ -31,6 +31,8 @@ class TemperatureTest(unittest.TestCase):
         for plan in (zero, sampled):
             self.assertEqual(plan['environment']['WANDB_RUN_ID'], plan['wandb_run_id'])
             self.assertEqual(plan['environment']['JUDGE_MODEL'], 'o4-mini')
+            self.assertEqual(plan['wandb_project'], 'openwebrl-evals')
+            self.assertIn('/openwebrl-evals/runs/', plan['wandb_url'])
         self.assertIn('actor T=0,', zero['protocol'])
         self.assertIn('actor T=0.6,', sampled['protocol'])
 
