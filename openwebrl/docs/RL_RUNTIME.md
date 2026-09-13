@@ -350,6 +350,55 @@ approve additional standalone evaluation jobs.
 <a id="eight-gpu-scaling-benchmark-20260912"></a>
 ### Eight-GPU topology and browser benchmark, September 12
 
+<a id="browser-diagnostic-followup-20260912"></a>
+**Prepared follow-up diagnostic.** `scripts/diagnose_browser_scaling.py` uses
+the preserved reference `WebEnv`, retaining both navigation passes in the
+original `setup()` + `reset()` path. It measures Python import, browser launch,
+every navigation attempt, screenshot, reset and cleanup time. Each worker has
+its own process group; the controller reaps that group before releasing its
+slot. GPU visibility is disabled for browser workers. Successful screenshots,
+individual JSON results/logs, aggregate per-URL results and process/CPU/memory
+telemetry stay under `benchmarks/browser-diagnostic-JOB/` in runtime storage.
+Separate W&B run `browser-diagnostic-JOB` records browser metrics, including
+suspected challenge pages separately from screenshot availability.
+
+The six URLs are a local HTML control, `example.com`, `velux.com`, `gtmetrix.com`,
+`lens.blogs.nytimes.com` and `discworld.fandom.com`. The serial control visits
+each once. Each concurrent case uses the same 96-entry sequence of these URLs:
+32 and 64 worker limits, each with immediate launches and 250-ms launch spacing.
+96 is attempted only after a complete 64-worker case returns screenshots for
+at least 90% of attempts. This is an initial-observation diagnostic, not a
+task-success evaluation or steady-state browser-agent workload benchmark.
+
+Preliminary single-browser probes on the **login host**, September 12, passed
+the full frozen setup/reset path: local HTML screenshot 0.032 seconds, VELUX
+0.189 seconds, GTmetrix 0.047 seconds. Total worker times were 4.97, 10.72 and
+6.03 seconds. VELUX displayed its homepage/cookie prompt; GTmetrix displayed a
+Cloudflare human-verification challenge. These observations separate screenshot
+availability from website access, and cannot replace paired tests on the same
+compute node. Evidence is in
+`benchmarks/browser-diagnostic-preflight-20260912/` under runtime storage.
+
+Template `scripts/diagnose_browsers_64cpu.sbatch` is prepared but **not submitted**.
+It requests **8 H200 / 64 CPUs / 960 GiB / one hour**, at most **8 GPU-hours,
+estimated $7.20**, plus judge calls only if the optional RL check starts.
+Tillicum has no unbilled CPU-only scheduled allocation: its
+[scheduling rules](https://hyak.uw.edu/docs/systems/tillicum/scheduling-jobs/)
+limit full-H200 requests to eight CPUs per GPU. The GPUs remain unused during
+browser diagnosis. The previous benchmark allocation has ended and cannot be
+reused. This is a new budget and still needs explicit approval.
+
+To use any remaining approved time productively, the template enables
+`--confirm-rl`: only a complete immediate-launch 64/96-worker case with at least
+95% screenshot availability can qualify, and at least 30 minutes must remain.
+The controller then attempts one fresh-SFT TP4/DP2 RL iteration in a separate
+W&B run and output directory, bounded by the same allocation deadline. This
+checks whether browser-only results transfer to the full pipeline; the main
+RL run and its pointer are never changed. If no case qualifies or time is short,
+the controller exits without starting policy training. Five diagnostic unit
+tests and eight benchmark regressions pass; the real local-page probe validates
+the timing instrumentation and cleanup without a GPU or judge.
+
 **Revised first stage:** the user requested a shorter topology test before the
 browser sweep. Prepared template `scripts/benchmark_topology_8gpu_2hour.sbatch`
 requests **8 H200, 64 CPUs, 960 GiB, two hours**: **16 GPU-hours**, estimated
