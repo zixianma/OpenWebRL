@@ -93,6 +93,7 @@ Existing full monitoring evaluations:
 | 52 | 92 / 300 (30.67%) | 73 | 92 / 227 (40.53%) |
 | 58 | 109 / 300 (36.33%) | 70 | 109 / 230 (47.39%) |
 | 60 | 105 / 300 (35.00%) | 70 | 105 / 230 (45.65%) |
+| 69 | 103 / 300 (34.33%) | 79 | 103 / 221 (46.61%) |
 
 Valid-only success is successes divided by `(300 - invalid attempts)`. After-58
 has the highest observed local-browser valid-only and all-task success rates,
@@ -610,6 +611,32 @@ of a validated 16-session evaluation capacity was too strong.
 ---
 
 <!-- document:REWARD_RANK_EVALUATION_QUEUE.md:start -->
+<a id="reward-rank-after69-result-293585"></a>
+### After-69 evaluation result, September 13
+
+Job **293585** completed successfully at **02:22:30 PDT**, after **55m20s**
+(approximately **1.84 GPU-hours**). All **300 tasks** completed: **103 successes,
+221 valid attempts, 79 invalid attempts**. Overall task success is
+**103/300 = 34.33%**; valid-only success is **103/221 = 46.61%**; invalid rate
+is **26.33%**. These are the local-browser/GPT-4.1 monitoring results.
+The turn-weighted raw reward **0.4253456** is a different metric and must not
+be reported as task success.
+
+After-58 scored **109/300 = 36.33% overall** and **109/230 = 47.39% valid-only**.
+After-69 therefore has six fewer successes and nine additional invalid
+attempts; its higher observed training reward did not produce a higher held-out
+score in this evaluation. The valid subsets differ, and one live-web evaluation
+does not establish a statistically reliable checkpoint ranking.
+
+The [W&B run](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-eval-after69-293585)
+is finished. All **41 local metrics match remote history**; the run summary
+contains only runtime metadata, so verification used the actual history row.
+Evidence: `metrics.json`, `status.json`, `checkpoint_restore_evidence.json` and
+`wandb_audit.json` under
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-293585-after69/`.
+The single additional approved evaluation slot is consumed; after-66 and
+after-68 remain deferred and no further evaluation job is authorized.
+
 <a id="reward-rank-final90-20260913"></a>
 ### Prepared best nearby checkpoint evaluation: after-69
 
