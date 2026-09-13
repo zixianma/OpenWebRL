@@ -11,6 +11,40 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:start -->
+<a id="stealth-o4-checkpoints38-58-80-20260913"></a>
+## Prepared stealth/o4-mini comparison: after 38, 58 and 80
+
+The user requested matching full-300 evaluations of checkpoints **38, 58 and
+80**: Browser Use stealth, o4-mini/AgentTrek judge, **actor temperature 0.6**,
+top-p 0.95, top-k 20, 4096 output tokens, 32768 context tokens, 30 turns, and
+eight browser sessions. The judge uses its native API defaults. Use frozen
+source `reference-paper-om2w-20260912`, separate output/W&B identities, and
+zero optimizer updates. All three checkpoint component/source checks pass.
+
+After-58's existing result is **partial**: its two-hour allocation expired
+with **299/300** saved task records (175 successes, 290 valid, nine invalid,
+one missing). **175/300 = 58.33%** is a lower bound, **175/299 = 58.53%** is
+completed-only and **175/290 = 60.34%** is valid-only. Retain that attempt;
+prepare a fresh full-300 after-58 evaluation rather than silently merging it
+with a new attempt. After-38's earlier stealth result used GPT-4.1/greedy;
+after-80's earlier result used local browsers/GPT-4.1. Neither is the requested
+stealth/o4-mini comparison.
+
+**Budget pending; no jobs submitted:** three sequential jobs, each **2 H200,
+16 CPUs, 480 GiB, three hours**; maximum **18 GPU-hours total**, estimated
+**$16.20**, plus Browser Use hosting and o4-mini calls. Use `afterok` dependencies
+so only one eight-session evaluation runs at once and a failed predecessor
+holds later jobs for inspection. Three hours adds headroom over the previous
+two-hour partial attempt; unused time is released upon completion.
+
+Template: `scripts/evaluate_stealth_checkpoint_2gpu_3hour.sbatch`.
+Exact checkpoint paths, worker plans, protocol and template hash:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/stealth_eval_38_58_80_plan_20260913.json`.
+Shell syntax and 13 evaluation regression tests pass. The native worker will
+inspect checkpoint metadata and verify GPU restoration during execution.
+Update [RL_RESULTS.md](RL_RESULTS.md) with both success denominators and invalid
+counts after each evaluation; preserve protocol and partial-result labels.
+
 <a id="baseline-checkpoint-evaluation"></a>
 ## Intermediate baseline checkpoint evaluation
 

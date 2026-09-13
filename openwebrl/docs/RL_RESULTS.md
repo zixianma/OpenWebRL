@@ -36,6 +36,14 @@
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 58 | 299 / 300 | 175 | 290 | 9 | 1 | 58.53 | 60.34 | 58.33 |
 
+## Planned · stealth browser · o4-mini · temperature 0.6
+
+| Checkpoint after iteration | Tasks | GPUs | Hour cap | Status |
+| ---: | ---: | ---: | ---: | --- |
+| 38 | 300 | 2 | 3 | Budget approval pending |
+| 58 | 300 | 2 | 3 | Budget approval pending; fresh run |
+| 80 | 300 | 2 | 3 | Budget approval pending |
+
 ## Metric denominators
 
 | Metric | Calculation |
