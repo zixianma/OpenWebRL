@@ -405,7 +405,7 @@ Results and screenshots:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/benchmarks/browser48-hold-290926-20260913/`;
 see `final_audit.json` and `summary.json`. Log:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/browser48-hold-290926-20260913.log`.
-[Separate W&B diagnostic](https://wandb.ai/zixianma/openwebrl/runs/browser48-hold-290926-20260913)
+[Separate W&B diagnostic](https://wandb.ai/zixianma/openwebrl-evals/runs/browser48-hold-290926-20260913)
 finished and synced all three cases. Diagnostic code supports an optional
 bounded hold and records setup/reset timestamps; five CPU regression tests pass.
 

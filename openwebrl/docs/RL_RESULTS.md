@@ -36,12 +36,12 @@
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 58 | 299 / 300 | 175 | 290 | 9 | 1 | 58.53 | 60.34 | 58.33 |
 
-## Active / queued · stealth browser · o4-mini
+## Jobs · stealth browser · o4-mini
 
 | Checkpoint after iteration | Actor temperature | Tasks | GPUs | Hour cap | Job | W&B project | Status |
 | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| 80 | 0 | 300 | 2 | 3 | 294093 | openwebrl | Running |
-| 80 | 0.6 | 300 | 2 | 3 | 294094 | openwebrl-evals | Waiting for 294093 |
+| 80 | 0 | 300 | 2 | 3 | 294093 | openwebrl-evals | Finished |
+| 80 | 0.6 | 300 | 2 | 3 | 294094 | openwebrl-evals | Running |
 
 ## Metric denominators
 
@@ -58,7 +58,7 @@
 
 | Results | Record |
 | --- | --- |
-| Standalone evaluations · 11 historical runs | [W&B project](https://wandb.ai/zixianma/openwebrl-evals) · [Migration audit](RL_EVALUATION.md#historical-evaluation-wandb-migration-20260913) |
+| Evaluations / debug · 30 migrated runs | [W&B project](https://wandb.ai/zixianma/openwebrl-evals) · [Migration audit](RL_EVALUATION.md#debug-evaluation-wandb-migration-20260913) |
 | Local 10–60 | [Historical comparison](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
 | Local 69 | [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585) |
 | Local 70, 80 | [Scheduled evaluations](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |

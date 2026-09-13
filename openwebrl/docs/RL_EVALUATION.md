@@ -11,6 +11,45 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:start -->
+<a id="debug-evaluation-wandb-migration-20260913"></a>
+## Debug and remaining evaluation W&B migration, September 13
+
+Moved another 19 inactive runs to `zixianma/openwebrl-evals`: six early pipeline
+tests, five browser benchmarks/diagnostics, three ARM calibration attempts,
+four synthetic GPU diagnostics, and the now-finished checkpoint-80 temperature-0
+evaluation. The training project retains only baseline `qcq7i4ug` and the real
+ARM training pilot `arm-turn-bonus-beta0.5-after70-293194`. New debug, smoke-test,
+calibration and standalone evaluation launches belong in `openwebrl-evals`.
+
+Verified all moved histories, summaries, configurations, statuses, run/file
+metadata and artifact references against pre-move snapshots. Five linked
+artifacts remain in their original project; the run references are preserved.
+Audit snapshots and the URL mapping are in
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/wandb-debug-migration-20260913/`.
+Checkpoint-80 temperature-0.6 job 294094 is logging directly to `openwebrl-evals`.
+
+| Run | Preserved state |
+| --- | --- |
+| [l2puwtbj](https://wandb.ai/zixianma/openwebrl-evals/runs/l2puwtbj) | killed |
+| [iamowkmv](https://wandb.ai/zixianma/openwebrl-evals/runs/iamowkmv) | killed |
+| [jf5mo2ze](https://wandb.ai/zixianma/openwebrl-evals/runs/jf5mo2ze) | killed |
+| [92182ncf](https://wandb.ai/zixianma/openwebrl-evals/runs/92182ncf) | failed |
+| [6yineik5](https://wandb.ai/zixianma/openwebrl-evals/runs/6yineik5) | failed |
+| [v2d9bk11](https://wandb.ai/zixianma/openwebrl-evals/runs/v2d9bk11) | crashed |
+| [browser-scale-291224-tp4-b256](https://wandb.ai/zixianma/openwebrl-evals/runs/browser-scale-291224-tp4-b256) | failed |
+| [browser-scale-291224-tp4-b192](https://wandb.ai/zixianma/openwebrl-evals/runs/browser-scale-291224-tp4-b192) | failed |
+| [arm-turn-bonus-calibration-after70-291983](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-turn-bonus-calibration-after70-291983) | finished |
+| [arm-turn-bonus-calibration-after70-291983-r2](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-turn-bonus-calibration-after70-291983-r2) | crashed |
+| [browser-diagnostic-291905](https://wandb.ai/zixianma/openwebrl-evals/runs/browser-diagnostic-291905) | finished |
+| [arm-turn-bonus-calibration-after70-292551](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-turn-bonus-calibration-after70-292551) | failed |
+| [browser48-290926-20260913](https://wandb.ai/zixianma/openwebrl-evals/runs/browser48-290926-20260913) | finished |
+| [browser48-hold-290926-20260913](https://wandb.ai/zixianma/openwebrl-evals/runs/browser48-hold-290926-20260913) | finished |
+| [arm-sol-gpu-diagnostic-294080-training](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-sol-gpu-diagnostic-294080-training) | failed |
+| [qcq7i4ug-stealth-o4-after80-t0-294093](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0-294093) | finished |
+| [arm-sol-gpu-diagnostic-294103-training](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-sol-gpu-diagnostic-294103-training) | finished |
+| [arm-sol-gpu-diagnostic-294103-training-r1](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-sol-gpu-diagnostic-294103-training-r1) | crashed |
+| [arm-sol-gpu-diagnostic-294103-training-r2](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-sol-gpu-diagnostic-294103-training-r2) | finished |
+
 <a id="historical-evaluation-wandb-migration-20260913"></a>
 ## Historical evaluation W&B migration, September 13
 
@@ -23,8 +62,9 @@ changed only in its project component. The two artifacts logged by the after-21
 and after-22 runs remain in their original project with their references intact.
 
 Training runs and their scheduled evaluation history remain in `openwebrl`.
-Active checkpoint-80 temperature-0 run 294093 also remains there to avoid
-interrupting logging; queued temperature-0.6 run 294094 targets `openwebrl-evals`.
+At the first migration, checkpoint-80 temperature-0 run 294093 remained there
+while active; it has now finished and moved in the second migration above.
+Temperature-0.6 run 294094 is running in `openwebrl-evals`.
 Operational snapshots and the URL mapping are stored in
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/wandb-eval-migration-20260913/`.
 
@@ -46,11 +86,11 @@ Operational snapshots and the URL mapping are stored in
 ## Separate W&B project for new standalone evaluations
 
 New standalone evaluation launches use **`zixianma/openwebrl-evals`**; training
-continues in `zixianma/openwebrl`. The already-running temperature-0 evaluation
-294093 remains in its original project. Queued temperature-0.6 job **294094**
-will start in the new evaluation project without canceling or resubmitting it.
+continues in `zixianma/openwebrl`. Temperature-0 evaluation **294093** stayed
+in its original project while active and moved after finishing. Temperature-0.6
+job **294094** started directly in the new project.
 Scheduled evaluations emitted by the trainer remain attached to its training
-history. The later historical migration below moves inactive standalone
+history. The historical migrations above move inactive standalone
 evaluations; active runs are not restarted.
 
 Both standalone launchers set the CLI project, environment and saved manifest
@@ -59,7 +99,7 @@ shared planner used by ARM training pilots retains its training default.
 Fourteen evaluation tests and two temperature-identity tests pass. The queued
 job's real launch plan resolves to
 [its new evaluation W&B location](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
-The project/run will appear when that worker initializes W&B.
+The project and run are now visible in W&B.
 
 <a id="stealth80-temperature-pair-20260913"></a>
 ## Checkpoint 80: approved stealth/o4-mini temperature comparison
@@ -97,7 +137,7 @@ Approval, exact plans, submission receipts and checks:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/stealth80_temperature_pair_20260913.json`.
 Logs: `logs/slurm-stealth-o4-294093.out` and `logs/slurm-stealth-o4-294094.out`
 under runtime storage. Results: `evaluations/qcq7i4ug-stealth-o4-JOB-after80-tTEMP/`.
-[Temperature 0 W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug-stealth-o4-after80-t0-294093),
+[Temperature 0 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0-294093),
 [temperature 0.6 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
 
 <a id="stealth-o4-checkpoints38-58-80-20260913"></a>
