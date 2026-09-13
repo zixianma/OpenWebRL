@@ -12,6 +12,7 @@ collected on different dates. [Results, uncertainty and API audit](ARM_INFERENCE
 ## Contents
 
 - [ARM results dashboard](#arm-results-dashboard)
+- [GPT-5.6 Sol test-time scaling](#arm-results-dashboard--sol-test-time-scaling)
 - [C2, 1A, and joint-data SFT/DPO: full-300 evaluation](#arm-c2-vs-1a-full300-eval)
 - [C2 ablation 1A results](#arm-c2-ablation-1a-results)
 - [C2 filtered-SFT checkpoint scaling results](#arm-c2-scaling-results)
@@ -29,7 +30,7 @@ collected on different dates. [Results, uncertainty and API audit](ARM_INFERENCE
 _Source record: `ARM_RESULTS_DASHBOARD.md`. Dated entries retain their historical context._
 
 
-Last updated: 2026-09-11 PDT.
+Last updated: 2026-09-13 PDT.
 
 This page is the index for Action Reward Model experiments in OpenWebRL. It
 keeps inference-time action selection separate from standalone-policy
@@ -45,6 +46,7 @@ collection and deploys one policy sample per turn.
 | Test-time scaling, all 300 | Frozen OpenWebRL-4B-SFT | 1 | 90/300 = **30.0%** | 90/267 = **33.7%** | control |
 | Test-time scaling, all 300 | ScalarRM best of 5 | 5 | 114/300 = **38.0%** | 114/251 = **45.4%** | **+8.0 pp overall** |
 | Test-time scaling, all 300 | SelectionARM best of 5 | 5 | 128/300 = **42.7%** | 128/256 = **50.0%** | **+12.7 pp overall** |
+| Test-time scaling, all 300, Sep 13 | GPT-5.6 Sol best of 5 | 5 | 132/300 = **44.0%** | 132/256 = **51.6%** | **+14.0 pp overall** vs historical frozen actor |
 | Filtered SFT, fresh holdout 200 | Original C2 update 500 | 1 | 62/200 = **31.0%** | 62/179 = **34.6%** | control |
 | Filtered SFT, fresh holdout 200 | 1A endpoint update 263 | 1 | 67/200 = **33.5%** | 67/177 = **37.9%** | **+2.5 pp overall** |
 | Filtered SFT, combined all 300 | Original C2 update 500 | 1 | 95/300 = **31.7%** | 95/258 = **36.8%** | control |
@@ -53,10 +55,12 @@ collection and deploys one policy sample per turn.
 | Joint C2 + Piotr, fresh all 300 | SFT endpoint update 174 | 1 | 102/300 = **34.0%** | 102/270 = **37.8%** | +4.0 pp vs historical starting actor |
 | Joint C2 + Piotr, fresh all 300 | DPO-only endpoint update 174 | 1 | 104/300 = **34.7%** | 104/254 = **40.9%** | +0.7 pp vs joint SFT; +4.7 pp vs historical starting actor |
 
-The strongest measured effect remains SelectionARM at inference time. On the
-247 tasks valid for both the frozen actor and SelectionARM, SelectionARM gained
-16.6 percentage points, with 57 SelectionARM-only successes and 16
-baseline-only successes (exact McNemar p=1.53e-6).
+On the 247 tasks valid for both the frozen actor and SelectionARM,
+SelectionARM gained 16.6 percentage points, with 57 SelectionARM-only successes
+and 16 baseline-only successes (exact McNemar p=1.53e-6). Sol has the highest
+observed overall score, but its four-success increase over historical
+SelectionARM does not establish an improvement: the common-valid paired
+comparison has p=0.4426, and the runs were collected on different dates.
 
 The 1A filtered-SFT result is directionally favorable versus original C2 but
 uncertain. On the
@@ -102,6 +106,28 @@ ambiguity.
 - [Held unavailable-task retry proposal](ARM_INFERENCE.md#arm-inference-retry-results)
 - [Machine-readable inference summary and paired report](arm_results/inference_comparison.json)
 - Rollouts: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/`
+
+<a id="arm-results-dashboard--sol-test-time-scaling"></a>
+### GPT-5.6 Sol test-time scaling
+
+Same frozen OpenWebRL-4B-SFT actor and released 300-task set as the historical
+ARM inference methods: five candidates per turn, actor temperature 0.7/top-p
+0.9, seed 42, 30 steps, local browsers, and o4-mini/AgentTrek terminal judging.
+Sol selects among the candidates with medium reasoning effort. All 300 tasks
+completed; 44 were unavailable. No retries replace those outcomes.
+
+| Sol vs historical SelectionARM | Common-valid tasks | SelectionARM successes | Sol successes | Difference | Paired bootstrap 95% CI | Exact McNemar p |
+| --- | ---: | ---: | ---: | ---: | --- | ---: |
+| Tasks valid in both runs | 235 | 118/235 = 50.2% | 125/235 = 53.2% | +2.98 pp | −3.40 to +9.79 pp | 0.4426 |
+
+| Job | Elapsed | H200-hours | Sol API cost, judge additional | Valid API requests | Selection fallbacks |
+| ---: | --- | ---: | ---: | ---: | ---: |
+| 294221 | 55m29s | 1.8494 | $84.85 | 4040/4040 | 0/4039 turns |
+
+- [Full Sol results and comparison limits](ARM_INFERENCE.md#sol-selection300-completed-294221)
+- [Machine-readable summary and paired report](arm_results/sol-selection300.json)
+- [W&B evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/sol-selection300-294221)
+- Rollouts and completion audit: `/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sol-selection300-294221/`
 
 <a id="arm-results-dashboard--action-level-filtered-sft"></a>
 ### Action-level filtered SFT
