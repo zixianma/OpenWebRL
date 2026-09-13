@@ -399,6 +399,24 @@ the controller exits without starting policy training. Five diagnostic unit
 tests and eight benchmark regressions pass; the real local-page probe validates
 the timing instrumentation and cleanup without a GPU or judge.
 
+**Approval and submission:** the user approved the above one-hour budget;
+job **291905** was submitted on September 12 at **20:47 PDT** (September 13
+03:47 UTC). Slurm confirmed 8 H200 / 64 CPUs / 960 GiB / one hour and an
+estimated maximum GPU charge of $7.20. Initially queued for resources; elapsed
+allocation time begins only when the job starts. Receipt:
+`logs/submission-browser-diagnostic-8gpu1h-20260912.json` under runtime storage.
+Submitted code is preserved with hashes in
+`benchmarks/browser-diagnostic-291905-prepared-code/`. Results and separate W&B
+identity will use `browser-diagnostic-291905`. Existing RL job 290926 and W&B
+`qcq7i4ug` are outside this diagnostic's write scope.
+
+Scheduler update: g011 was stuck in cleanup for a job that timed out on
+September 11, so it was excluded from this pending job without changing its
+resource request or budget. At 20:56 PDT September 12, Slurm estimated a start
+on **g003 at 03:12 PDT September 13**; this estimate may change. No diagnostic
+allocation time has elapsed. Resume monitoring from
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/current_browser_diagnostic.json`.
+
 **Revised first stage:** the user requested a shorter topology test before the
 browser sweep. Prepared template `scripts/benchmark_topology_8gpu_2hour.sbatch`
 requests **8 H200, 64 CPUs, 960 GiB, two hours**: **16 GPU-hours**, estimated
