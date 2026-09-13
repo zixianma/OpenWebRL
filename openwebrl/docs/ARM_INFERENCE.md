@@ -211,3 +211,43 @@ The project filesystem previously rejected Git object creation with `Disk quota 
 <!-- document:ARM_INFERENCE_RETRY_RESULTS.md:end -->
 
 ---
+
+<a id="sol-selection300-retry-294221"></a>
+
+### 2026-09-13: full Sol inference retry, job 294221
+
+Explicitly approved and submitted **2 H200 × 2 hours**, 16 CPUs / 240 GiB,
+with a **$200 Sol selector cap** and additional o4-mini judge usage. Job 294221
+started on g020. Source-matched readiness verification passed; both actors
+loaded and the live two-task pilot began. The pilot is retained in the full
+300-task total, followed by two disjoint 149-task shards. This is an evaluation
+of the original SFT actor with Sol best-of-five selection, not an intermediate
+RL checkpoint evaluation. The earlier diagnostic completed 2/2 selected tasks
+successfully, with ten five-candidate selections and zero fallbacks; this does
+not establish benchmark accuracy.
+
+[W&B evaluation run](https://wandb.ai/zixianma/openwebrl-evals/runs/sol-selection300-294221).
+Local controller log: `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/slurm-sol-selection-294221.out`.
+Results, actor/pilot/shard logs, API usage and status:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sol-selection300-294221/`.
+The approval receipt is runtime `sol_inference_approval_294221.json`.
+
+A separate `scripts/sync_sol_inference_wandb.py --job-id 294221 --watch` process
+publishes durable task records and API usage every 30 seconds when values change;
+it does not change the GPU worker or diagnose/restart failures. The normal
+monitor remains `scripts/monitor_sol_inference.py --job-id 294221`.
+W&B system sampling is disabled for the logger because it runs on the login
+host. Two CPU tests check the metric denominators and reject duplicate tasks.
+
+| W&B metric | Calculation / meaning |
+| --- | --- |
+| `progress/completed_tasks` | Unique saved task results; evaluation chart x-axis |
+| `eval/successes` | Valid saved tasks with reward 1 |
+| `eval/valid_tasks`, `eval/invalid_tasks` | Completed task validity counts |
+| `eval/success_rate_all_scheduled` | Successes / 300; lower bound while incomplete |
+| `eval/success_rate_completed` | Successes / completed tasks |
+| `eval/success_rate_valid` | Successes / valid completed tasks |
+| `eval/complete`, `eval/failed` | Controller completion / failure flags |
+| `selector/requests`, `selector/accounted_cost_usd` | Selector usage receipts; judge usage excluded |
+| `selector/consecutive_failures` | Selector API failure streak |
+| `progress/stage`, `progress/slurm_state` | Controller stage and allocation status |
