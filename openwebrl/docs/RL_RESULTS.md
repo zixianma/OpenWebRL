@@ -43,13 +43,6 @@
 | 80 | 0 | 166 | 294 | 6 | 55.33 | 56.46 |
 | 80 | 0.6 | 169 | 296 | 4 | 56.33 | 57.09 |
 
-## Jobs · stealth browser · o4-mini
-
-| Checkpoint after iteration | Actor temperature | Tasks | GPUs | Hour cap | Job | W&B project | Status |
-| ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| 80 | 0 | 300 | 2 | 3 | 294093 | openwebrl-evals | Finished |
-| 80 | 0.6 | 300 | 2 | 3 | 294094 | openwebrl-evals | Finished |
-
 ## Metric denominators
 
 | Metric | Calculation |
