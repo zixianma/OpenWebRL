@@ -102,6 +102,36 @@ job's real launch plan resolves to
 [its new evaluation W&B location](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
 The project and run are now visible in W&B.
 
+<a id="stealth80-temperature-completed-20260913"></a>
+## Checkpoint 80: completed stealth/o4-mini temperature comparison
+
+Both approved jobs finished all 300 tasks with exit 0. Each restored checkpoint
+`iter_0000079`, after training iteration 80. The same Browser Use stealth,
+o4-mini/AgentTrek judge, top-p 0.95, top-k 20, 4096 response tokens, 32768 context,
+30-turn limit and eight browser sessions were used; temperature varied the actor.
+
+| Actor temperature | Successes | Valid | Invalid | Overall % | Valid-only % | Job | Elapsed | H200-hours |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| 0 | 166 | 294 | 6 | 55.33 | 56.46 | 294093 | 1:42:32 | 3.4178 |
+| 0.6 | 169 | 296 | 4 | 56.33 | 57.09 | 294094 | 1:37:49 | 3.2606 |
+
+Temperature 0.6 added three successes (+1.00 percentage point overall); this
+single comparison does not establish an advantage. The earlier local-browser,
+GPT-4.1 checkpoint-80 monitor scored 114/300 (38.00%) and 114/229 valid (49.78%);
+browser and judge changes prevent interpreting the difference as training gain.
+Checkpoint-58's stealth/o4-mini temperature-0.6 result remains partial at
+175/299 completed (58.53%) and 175/290 valid (60.34%), with one missing task.
+It is numerically higher but is not a completed, same-date checkpoint ranking.
+
+Verified all 39 logged scalars against each W&B history; both runs are finished.
+Each result directory holds 300 completed task files, `metrics.json`,
+`status.json`, restore evidence and `final_wandb_audit.json`:
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-stealth-o4-294093-after80-t0/`
+and `qcq7i4ug-stealth-o4-294094-after80-t0.6/` under the same parent.
+
+[Temperature 0 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0-294093) ·
+[Temperature 0.6 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after80-t0.6-294094).
+
 <a id="stealth80-temperature-pair-20260913"></a>
 ## Checkpoint 80: approved stealth/o4-mini temperature comparison
 

@@ -36,12 +36,19 @@
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 58 | 299 / 300 | 175 | 290 | 9 | 1 | 58.53 | 60.34 | 58.33 |
 
+## Stealth browser · o4-mini · full 300
+
+| Checkpoint after iteration | Actor temperature | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 80 | 0 | 166 | 294 | 6 | 55.33 | 56.46 |
+| 80 | 0.6 | 169 | 296 | 4 | 56.33 | 57.09 |
+
 ## Jobs · stealth browser · o4-mini
 
 | Checkpoint after iteration | Actor temperature | Tasks | GPUs | Hour cap | Job | W&B project | Status |
 | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
 | 80 | 0 | 300 | 2 | 3 | 294093 | openwebrl-evals | Finished |
-| 80 | 0.6 | 300 | 2 | 3 | 294094 | openwebrl-evals | Running |
+| 80 | 0.6 | 300 | 2 | 3 | 294094 | openwebrl-evals | Finished |
 
 ## Metric denominators
 
@@ -63,6 +70,7 @@
 | Local 69 | [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585) |
 | Local 70, 80 | [Scheduled evaluations](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Stealth 38, GPT-4.1 | [Browser comparison](RL_EVALUATION.md#browser-use-checkpoint-evaluation) |
+| Stealth 80, o4-mini, temperatures 0 / 0.6 | [Completed comparison](RL_EVALUATION.md#stealth80-temperature-completed-20260913) |
 | Stealth 58, o4-mini, partial | [Partial-result audit](arm_results/rl_integration/after58-benchmark-partial.json) |
 
 ## Original SFT actor · local browser · o4-mini
