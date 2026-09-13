@@ -4,6 +4,11 @@ Completed inference and standalone-policy results belong here. The first section
 
 Latest full-300 endpoints: joint SFT **102/300 (34.0% overall; 37.8% valid-only)** and joint DPO **104/300 (34.7%; 40.9%)**. Their paired difference is not significant (p=0.8991).
 
+Latest Sol inference result (2026-09-13): **132/300 (44.0% overall; 51.56%
+valid-only)**, versus historical SelectionARM **128/300 (42.67%; 50.0%)**.
+The common-valid paired difference is not significant (p=0.4426); these were
+collected on different dates. [Results, uncertainty and API audit](ARM_INFERENCE.md#sol-selection300-completed-294221).
+
 ## Contents
 
 - [ARM results dashboard](#arm-results-dashboard)

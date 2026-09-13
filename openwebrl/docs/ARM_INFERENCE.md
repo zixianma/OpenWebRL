@@ -251,3 +251,37 @@ host. Two CPU tests check the metric denominators and reject duplicate tasks.
 | `selector/requests`, `selector/accounted_cost_usd` | Selector usage receipts; judge usage excluded |
 | `selector/consecutive_failures` | Selector API failure streak |
 | `progress/stage`, `progress/slurm_state` | Controller stage and allocation status |
+
+<a id="sol-selection300-completed-294221"></a>
+
+### Sol best-of-five: completed 300-task evaluation, September 13
+
+Job **294221 completed with exit 0 in 55m29s**, using **1.8494 H200-hours**
+of the approved four-GPU-hour cap. All 300 released task IDs are present exactly
+once. Sol achieved **132/300 = 44.00% overall**, or **132/256 = 51.56% valid-only**,
+with 44 unavailable tasks. W&B finished successfully; its final summary and
+history match the durable task results. All 4,040 API requests returned
+`gpt-5.6-sol` and passed validation. The 4,039 action-selection turns each used
+five candidates, with **zero fallbacks**. Selector accounting totals **$84.8546892**;
+o4-mini terminal-judge usage is additional.
+
+| Historical / current condition | Successes / 300 | Valid | Unavailable | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Original SFT, no selector | 90 | 267 | 33 | 30.00 | 33.71 |
+| ScalarARM, best-of-five | 114 | 251 | 49 | 38.00 | 45.42 |
+| SelectionARM, best-of-five | 128 | 256 | 44 | 42.67 | 50.00 |
+| GPT-5.6 Sol, best-of-five | 132 | 256 | 44 | 44.00 | 51.56 |
+
+The historical controls retain the same actor, task set, sampling and judging
+protocol, but were collected on a different date. Sol is only **four successes**
+ahead of SelectionARM across all 300 tasks. On the **235 tasks valid in both**,
+SelectionARM succeeded on 118 and Sol on 125: **+2.98 percentage points**,
+paired bootstrap 95% interval **−3.40 to +9.79 points**, exact McNemar **p=0.4426**.
+This does not establish that Sol is better than SelectionARM. Live-site/date
+variation and differing unavailable subsets remain comparison limitations.
+
+[Machine-readable comparison](arm_results/sol-selection300.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/sol-selection300-294221).
+The full task-set/API/W&B verification is runtime
+`evaluations/sol-selection300-294221/completion-audit.json`; raw per-task results,
+selection traces, API receipts and comparison are preserved in that directory.

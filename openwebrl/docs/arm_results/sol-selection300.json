@@ -1,0 +1,60 @@
+{
+  "summary": {
+    "scheduled": 300,
+    "attempted": 300,
+    "valid": 256,
+    "successes": 132,
+    "unavailable": 44,
+    "success_rate_all_scheduled": 0.44,
+    "success_rate_valid": 0.515625
+  },
+  "complete": true,
+  "paired": {
+    "baseline": {
+      "common_valid_tasks": 247,
+      "baseline_success_rate": 0.3562753036437247,
+      "treatment_success_rate": 0.5263157894736842,
+      "difference_percentage_points": 17.004048582995953,
+      "paired_task_bootstrap_95_percent_interval_pp": [
+        11.336032388663968,
+        22.672064777327936
+      ],
+      "treatment_only_wins": 52,
+      "baseline_only_wins": 10,
+      "mcnemar_exact_two_sided_p": 5.713613733093065e-08,
+      "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+    },
+    "scalar": {
+      "common_valid_tasks": 233,
+      "baseline_success_rate": 0.463519313304721,
+      "treatment_success_rate": 0.5450643776824035,
+      "difference_percentage_points": 8.15450643776824,
+      "paired_task_bootstrap_95_percent_interval_pp": [
+        2.1459227467811157,
+        14.592274678111588
+      ],
+      "treatment_only_wins": 37,
+      "baseline_only_wins": 18,
+      "mcnemar_exact_two_sided_p": 0.014453833533827731,
+      "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+    },
+    "selection": {
+      "common_valid_tasks": 235,
+      "baseline_success_rate": 0.502127659574468,
+      "treatment_success_rate": 0.5319148936170213,
+      "difference_percentage_points": 2.978723404255319,
+      "paired_task_bootstrap_95_percent_interval_pp": [
+        -3.404255319148936,
+        9.787234042553191
+      ],
+      "treatment_only_wins": 34,
+      "baseline_only_wins": 27,
+      "mcnemar_exact_two_sided_p": 0.4426260049464714,
+      "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+    }
+  },
+  "job_id": "294221",
+  "selector": "gpt-5.6-sol",
+  "reasoning_effort": "medium",
+  "limitation": "Historical controls; live-site/date differences remain. All pilots included exactly once."
+}

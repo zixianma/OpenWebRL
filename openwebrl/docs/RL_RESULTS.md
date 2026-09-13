@@ -64,3 +64,20 @@
 | Local 70, 80 | [Scheduled evaluations](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Stealth 38, GPT-4.1 | [Browser comparison](RL_EVALUATION.md#browser-use-checkpoint-evaluation) |
 | Stealth 58, o4-mini, partial | [Partial-result audit](arm_results/rl_integration/after58-benchmark-partial.json) |
+
+## Original SFT actor · local browser · o4-mini · best-of-five
+
+| Selector | Successes / 300 | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| None · historical | 90 | 267 | 33 | 30.00 | 33.71 |
+| ScalarARM · historical | 114 | 251 | 49 | 38.00 | 45.42 |
+| SelectionARM · historical | 128 | 256 | 44 | 42.67 | 50.00 |
+| GPT-5.6 Sol · job 294221 | 132 | 256 | 44 | 44.00 | 51.56 |
+
+| Sol vs SelectionARM · common-valid tasks | N | SelectionARM successes | Sol successes | Difference pp | Paired 95% interval pp | McNemar p |
+| --- | ---: | ---: | ---: | ---: | --- | ---: |
+| Historical control | 235 | 118 | 125 | +2.98 | −3.40 to +9.79 | 0.4426 |
+
+| Runtime | H200-hours | Sol API $ | Selector fallbacks | Detailed record |
+| --- | ---: | ---: | ---: | --- |
+| 55m29s | 1.8494 | 84.8547 | 0 / 4039 | [Sol evaluation](ARM_INFERENCE.md#sol-selection300-completed-294221) |
