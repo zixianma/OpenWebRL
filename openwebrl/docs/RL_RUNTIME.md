@@ -302,6 +302,35 @@ Final evidence in this run: `allocation_end_audit.json`,
 `checkpoint_61_validation.json`. Persistent resume pointer:
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/current_baseline.json`.
 
+<a id="resuming-baseline--final90-293510"></a>
+### Queued continuation toward iteration 90: job 293510, September 13
+
+The user explicitly requested another **4 H200 × eight hours** after job
+290926. Submitted job **293510** at 01:15 PDT with dependency
+`afterany:290926`: **32 CPUs, 480 GiB, 32 GPU-hours maximum**, Slurm estimated
+**$28.80** plus judge calls. The queue confirms `PENDING (Dependency)`.
+The current allocation continues unchanged. The dependent job uses the tested
+`resume_baseline_4gpu_32cpu.sbatch`, preserved source
+`reference-stage1-browsers32-20260911`, TP4, 32 browsers, and W&B `qcq7i4ug`.
+Its controller awaits full GPU restoration verification before continuation,
+selects the latest completed checkpoint in the recorded lineage at startup,
+and replays a complete next batch when present. The native schedule stops at
+90 iterations; the allocation deadline still applies first. No further
+allocation or budget extension is authorized. With 75 iterations saved and
+about 2.5 hours left in 290926 at submission, recent timings suggest a finish
+around 86–88 after this continuation; reaching 90 is not guaranteed.
+
+Scheduled evaluations at 80 and 90 remain in the training recipe. Additional
+reward-ranked evaluations need a new bounded approval because the earlier
+four-job evaluation budget is exhausted. The user selected only after-69
+from the nearby top-five candidates; see
+[the prepared evaluation plan](RL_EVALUATION.md#reward-rank-final90-20260913).
+The existing completed-group archive remains enabled for future SFT use.
+
+Receipt: `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/submission-qcq7i4ug-final-4gpu8h-293510.json`.
+The persistent pointer records this job under `queued_continuation`.
+Shell syntax, source hashes, 16 resume tests and 11 reward-queue tests pass.
+
 <a id="resuming-baseline--allocation-290926-16hour"></a>
 ### Sixteen-hour continuation: allocation 290926, September 12
 
