@@ -94,10 +94,12 @@ Existing full monitoring evaluations:
 | 58 | 109 / 300 (36.33%) | 70 | 109 / 230 (47.39%) |
 | 60 | 105 / 300 (35.00%) | 70 | 105 / 230 (45.65%) |
 | 69 | 103 / 300 (34.33%) | 79 | 103 / 221 (46.61%) |
+| 70 | 103 / 300 (34.33%) | 71 | 103 / 229 (44.98%) |
+| 80 | 114 / 300 (38.00%) | 71 | 114 / 229 (49.78%) |
 
-Valid-only success is successes divided by `(300 - invalid attempts)`. After-58
-has the highest observed local-browser valid-only and all-task success rates,
-but exceeds after-38 by only two successes out of 300.
+Valid-only success is successes divided by `(300 - invalid attempts)`. After-80
+has the highest observed local-browser valid-only and all-task success rates.
+The tables-only overview is [RL_RESULTS.md](RL_RESULTS.md).
 The valid subset differs between evaluations, so valid-only rates are not scores
 on an identical task cohort.
 
@@ -611,6 +613,24 @@ of a validated 16-session evaluation capacity was too strong.
 ---
 
 <!-- document:REWARD_RANK_EVALUATION_QUEUE.md:start -->
+<a id="scheduled-eval70-80-results-20260913"></a>
+### Scheduled evaluations after 70 and 80
+
+The tables-only overview is [RL_RESULTS.md](RL_RESULTS.md). Completed native
+training logs provide two additional full-300 local-browser/GPT-4.1 results:
+after-70 has **103 successes, 229 valid, 71 invalid: 34.33% overall and 44.98%
+valid-only**; after-80 has **114 successes, 229 valid, 71 invalid: 38.00%
+overall and 49.78% valid-only**. After-80 has the highest observed values in
+this completed local-browser series. This is a single-run point estimate;
+valid cohorts and live website conditions differ between evaluations.
+
+Source records were parsed directly from complete native `eval 69` and
+`eval 79` log payloads. They are saved as `iteration_70_scheduled_eval_metrics.json`
+in runtime run `openwebrl-4b-reference-290926-20260912T185301` and
+`iteration_80_scheduled_eval_metrics.json` in
+`openwebrl-4b-reference-293510-20260913T104752`. Both task denominators and
+reported rates were checked. Raw turn-weighted reward is not task success.
+
 <a id="reward-rank-after69-result-293585"></a>
 ### After-69 evaluation result, September 13
 
