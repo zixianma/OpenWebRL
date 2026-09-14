@@ -19,6 +19,8 @@ for the work you are doing, then follow its contents to dated experiment records
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
+Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
+
 ## Maintaining these documents
 
 - Add experiments and results to the matching topic instead of creating another run-specific Markdown file.

@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Stage-2 recipe and prepared launch](#baseline-stage2-20260914)
 - [Resuming the reference RL baseline](#resuming-baseline)
 - [Baseline timing and four-GPU continuation](#baseline-scaling)
 - [Completed rollout archive for future SFT](#rollout-archive)
@@ -28,6 +29,111 @@ python3 scripts/resume_baseline.py --job-id JOB_ID --launch
 `--dry-run` is the default. It reads Slurm state, recipe hashes, checkpoint metadata and saved-batch metadata; it does not run models or allocate GPUs. The launch command stays in the foreground. An agent can run it with a persistent exec session; from a terminal, use `nohup` with output redirected to scrubbed storage if it must survive disconnects.
 
 The script **never submits or extends an allocation**. It requires a running, user-owned single-node allocation with at least two H200s, eight CPUs and 240 GiB RAM, and ten usable minutes after the shutdown margin. By default it uses two GPUs through `srun --jobid=... --overlap --exact`; the four-GPU profile is described below. It refuses launch if any non-interactive/non-extern Slurm steps are already present, and uses a per-job lock to prevent concurrent invocations. Inspect existing steps; do not stop unrelated work to bypass this check.
+
+<a id="baseline-stage2-20260914"></a>
+### Stage 2: recipe audit and prepared continuation, September 14
+
+**Prepared, not submitted. Exact compute-budget approval remains required.**
+Continue W&B `openwebrl/qcq7i4ug` from 90 completed iterations to 140,
+using `reference-stage2-browsers32-20260914`. The stage-1 pointer is unchanged
+until successful GPU restoration inside the approved batch. All paths below
+prefixed `R/` refer to `/gpfs/scrubbed/zixianma/openwebrl-runtime/`.
+
+The paper specifies the two-stage schedule in [§5](https://arxiv.org/html/2606.02031v1#S5),
+and shared hyperparameters in [Table 7](https://arxiv.org/html/2606.02031v1#A1.T7).
+It does not explicitly specify an optimizer reset or data-cursor reset at the
+transition. Our implementation continues both; this is a documented continuation
+choice, not an additional paper claim.
+
+| Setting | Prepared stage 2 |
+| --- | --- |
+| Initial checkpoint | `R/runs/openwebrl-4b-reference-294421-20260913T211532/iter_0000089` |
+| Completed iterations / Adam updates at start | 90 / 1,016 |
+| Additional collections / cumulative target | 50 / 140 |
+| Maximum browser turns | 30, previously 15 |
+| Prompt pool | Released 2,102-task dataset; same shuffled cursor; empty added blacklist |
+| Effective prompt groups / attempted trajectories per group | 48 / 5 |
+| Dynamic group filtering | Enabled: nonempty rewards and nonzero reward variance |
+| Adaptive history-weighted prompt selection | Disabled |
+| Objective / PPO epochs | Preserved MM-GRPO / 2 |
+| Global batch / microbatch | 256 training-turn samples / 1 |
+| PPO clipping lower / upper | 0.2 / 0.28 |
+| KL / entropy coefficients | 0 / 0 |
+| Optimizer / LR / schedule | Adam / `1e-6` / constant |
+| Weight decay / Adam betas | 0.1 / (0.9, 0.98) |
+| Generation temperature / top-p / top-k | 0.8 / 1.0 / -1 |
+| Response / context token limits | 1,024 / 32,768 |
+| Context screenshots / judge screenshots | 1 / 3 |
+| Training judge / prompt | GPT-4.1 / preserved action-history prompt |
+| Inference-step / whole-task timeout | 30 s / 600 s |
+| Browser backend / concurrency | Local process / 32 pool slots and task gate |
+| GPU topology | Four H200s; TP4 actor; four TP1 rollout engines |
+| Checkpoint interval | Every completed iteration |
+| Scheduled monitoring | 300-task Online-Mind2Web at 100, 110, 120, 130, 140 |
+| Monitoring protocol | Local browser, GPT-4.1, T=0, 30 steps, 4,096 response tokens |
+| W&B / reward axis | `openwebrl/qcq7i4ug` / existing `train/reward_iteration`, continuing at 91 |
+| Completed rollout archive | All completed groups, including dynamic-filter rejections |
+
+**Scheduler transition.** The frozen backend derives its scheduler horizon from
+the cumulative rollout target. Its checkpoint loader normally asserts that this
+matches the saved horizon. Moving from 90 to 140 therefore requires
+`--override-opt-param-scheduler`. The prepared launcher sets this explicitly after
+clearing inherited overrides. CPU tests reproduce the original assertion and
+verify that the fix restores the saved scheduler counter and keeps LR `1e-6`
+and weight decay `0.1` over 1,000 additional simulated optimizer steps. Adam
+moments and group step counters still load from the checkpoint. The historical
+one-update scheduler/Adam offset remains preserved and checked. No new warmup
+or SFT restart is introduced. The explicit `--max-steps 30` takes precedence
+over the frozen YAML's default `max_steps: 16`.
+
+**Dynamic sampling evidence from our actual stage-1 run.** The startup argument
+dump has the dynamic-filter path enabled and `enable_adaptive_query_sampling=False`.
+Iteration 90 completed 99 groups, rejected 26 groups with all valid rewards equal
+to one, 24 with all valid rewards zero, and one with no valid reward. It retained
+48 groups with 210 valid trajectories; five are attempted per group, but invalid
+members can be removed. The 99 completed groups / 495 trajectories were archived
+with zero archive errors. This is reward-variance filtering followed by continued
+collection, not adaptive selection of the next prompt from historical scores.
+Source: [iteration-90 training log](/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-294421-20260913T211532/training.log).
+
+**Remaining comparison limits.** Our inherited runtime uses H200s, 32 local
+browsers, GPU Adam, full activation recomputation, SDPA vision attention and
+disabled SGLang CUDA graphs. The paper describes B200 training and 80–100
+Kubernetes sandboxes; its launcher also differs in optimizer offloading. These
+affect throughput and numerical reproducibility. Live sites and the unpinned
+GPT-4.1 endpoint can change outcomes. Scheduled local GPT-4.1 monitoring is
+separate from the paper's stealth-browser official-score protocol. No separate
+stealth allocation is included in this request. Keep the 600-second task timeout
+for recipe fidelity, and inspect timeout rates with the longer horizon. A reward
+change at iteration 91 also reflects the larger action budget, so compare fixed
+30-step evaluations alongside the training curve.
+
+| Launch artifact / check | Location / result |
+| --- | --- |
+| Preparation command | `python3 scripts/prepare_baseline_stage2.py --source R/reference-stage1-browsers32-20260911 --output R/reference-stage2-browsers32-20260914` |
+| First-allocation batch controller | `scripts/resume_baseline_stage2_4gpu.sbatch` |
+| Proposed budget | 4 H200 × 8 h = maximum 32 GPU-hours; 32 CPUs; 480 GiB |
+| Billing | GPU budget above; training-judge and scheduled-monitoring API use additional |
+| Plan | `R/baseline_stage2_plan.json` |
+| Prepared state / preserved stage 1 | `R/baseline_stage2_prepared_state.json` / `R/baseline_stage1_completed90_before_stage2.json` |
+| Source comparison | 199 regular files compared; only launcher and reference manifest changed |
+| Source audit | `R/baseline_stage2_source_audit.json` |
+| GPU-free launch manifest | `R/baseline_stage2_cpu_launch_manifest.json` |
+| CPU regression checks | `tests/test_baseline_stage2.py`; existing `tests/test_resume_baseline.py` |
+| Stage-2 test log | `R/logs/stage2-cpu-tests-20260914.log` |
+| Pending-evaluation recovery | `R/reference-stage2-browsers32-20260914-pending-eval`; source-selection check passed |
+| Remaining GPU gate | Full TP2-to-TP4 model + optimizer restoration before any training |
+
+The controller first verifies restoration with offline W&B, then checks the
+verification receipt and unchanged baseline pointer, activates the prepared
+state, and awaits training in the same allocation. A failed restoration prevents
+activation and training. Subsequent resumes use the ordinary resume script and
+the activated current pointer, retaining stage 2's 30-step / 140-iteration
+defaults. Do not resubmit the first-transition template after activation.
+Every subsequent allocation requires a separate exact budget approval.
+Monitor startup closely, then every 15 minutes; verify reward logging and durable
+checkpoints. Estimate the full 50-iteration runtime from several completed
+stage-2 collections rather than assuming this eight-hour allocation finishes it.
 
 <a id="resuming-baseline--finish90-tp2-20260913"></a>
 ### Prepared minimal-GPU finish to iteration 90, September 13
