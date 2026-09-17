@@ -122,10 +122,13 @@ candidates.
 | Method | Iteration | ARM-labelled rollout groups | Fixed-100 successes / valid / invalid | Fixed-100 overall / valid-only | Full-300 successes / valid / invalid | Full-300 overall / valid-only |
 | --- | ---: | --- | --- | --- | --- | --- |
 | Outcome-only baseline | — | None | 25 / 71 / 29 | 25.0% / 35.2% | 95 / 232 / 68 | 31.67% / 40.95% |
-| All-failure bonus | 30 | Eligible valid all-failure groups | 28 / 70 / 30 | 28.0% / 40.0% | **90 / 222 / 78** | **30.0% / 40.5%** |
+| All-failure bonus | 30 | Eligible valid all-failure groups | 28 / 70 / 30 | 28.0% / 40.0% | 107 / 225 / 75 | 35.67% / 47.56% |
 | Original bonus | 20 | Mixed outcome groups | 26 / 73 / 27 | 26.0% / 35.6% | — | — |
 | Original bonus | 30 | Mixed outcome groups | 27 / 74 / 26 | 27.0% / 36.49% | — | — |
 | Additive bonus | 20 | Mixed groups + up to 8 failure groups | 24 / 77 / 23 | 24.0% / 31.2% | — | — |
+| All-failure bonus | 40 | Eligible valid all-failure groups | 28 / 71 / 29 | 28.0% / 39.44% | 92 / 222 / 78 | 30.67% / 41.44% |
+| Additive bonus | 30 | Mixed groups + up to 8 failure groups | 30 / 68 / 32 | 30.0% / 44.12% | 103 / 219 / 81 | 34.33% / 47.03% |
+| Additive bonus | 40 | Mixed groups + up to 8 failure groups | 30 / 68 / 32 | 30.0% / 44.12% | 102 / 218 / 82 | 34.0% / 46.79% |
 
 - **Outcome-only baseline:** terminal outcome reward only; no ARM-labelled turns.
 - **All-failure bonus:** replace the ordinary mixed collection with eligible groups containing five valid actor failures and at least one usable ARM label.
