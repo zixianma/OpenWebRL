@@ -121,7 +121,7 @@ candidates.
 
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
-| **Outcome-only baseline** | 20 | 25.0% / 35.21% | 31.67% / 40.95% |
+| **Outcome-only baseline** | 20 | 25.0% / 35.21% | **29.00% / 36.86%** |
 |  | 30 | — | 32.00% / 38.71% |
 |  | 40 | — | 33.33% / 43.29% |
 | **Original bonus** | 20 | 26.0% / 35.62% | — |
@@ -188,6 +188,12 @@ ordinary mixed collection instead of replacing it.
 The full-300 baseline is the matched outcome-only OpenWebRL checkpoint under
 the same local-browser/GPT-4.1 RL evaluation protocol. The all-failure full-300
 result is a disjoint merge of its fixed-100 cohort and 200-task complement.
+
+The iteration-20 baseline full-300 value in the table is the fresh same-day
+control (job `299148`, 87/300 successes, 236 valid, 64 invalid). An earlier
+evaluation of the same checkpoint reported 31.67% overall and 40.95% valid-only;
+that historical value is retained in `RL_EVALUATION.md` for provenance, but the
+same-day control is the appropriate comparison for the current ARM evaluations.
 
 The separate inference-time baseline is 90/300 with 267 valid tasks, or 30.0%
 overall and 33.7% valid-only, under the historical o4-mini protocol; it should
