@@ -70,13 +70,28 @@ over joint SFT is small and not statistically significant in the paired audit.
 **Method.** Keep the ordinary terminal outcome reward and add a bounded ARM
 bonus on eligible actor turns:
 
+For trajectory $i$, the judge produces a terminal outcome $R_i\in\{0,1\}$
+(with `-1` reserved for a format failure), and that outcome is propagated to
+every turn before group normalization. For turn $t$:
+
 $$
-r_t = r_{\mathrm{outcome}} + \lambda\,b_{\mathrm{ARM}}(s_t,a_t),
+A'_{i,t}=A_i+\beta\,q_{i,t}\left(\mathbf{1}[j_{i,t}=0]-0.2\right),
+\qquad q_{i,t}\in\{0,1\},
 $$
 
-with the bonus applied only to retained, valid ARM-labelled turns. All variants
+where $A_i$ is the normalized outcome advantage, $q_{i,t}$ indicates that the
+turn received a usable ARM label, and $j_{i,t}=0$ means SelectionARM chose the
+executed actor candidate. Thus `beta=0.5` is the ARM scale and `q=0.20` is the
+target fraction of turns sent for labeling; $q$ is a sampling gate, not a
+multiplicative 0.20 applied to every reward. The bonus is applied only to
+retained, valid ARM-labelled turns. All variants
 use the local browser, GPT-4.1 action-history judge, 48-group collection, and
 PPO2; they differ in which rollout groups contribute labels.
+
+So a successful rollout does receive raw outcome reward `1` on every turn
+because the terminal judge result is propagated across its turn history. The
+training value is then the group-normalized $A_i$, with the ARM term added only
+on labeled turns; it is therefore not literally `1` after normalization.
 
 - **Shared hyperparameters:** `K=5` candidates, SelectionARM with full
   reasoning-plus-action input, turn sampling fraction `q=0.20`, ARM scale
@@ -88,6 +103,21 @@ PPO2; they differ in which rollout groups contribute labels.
   6%, keeping the auxiliary signal bounded; batch 256, PPO2, and `1e-6`
   preserve the tested OpenWebRL optimization scale while limiting off-policy
   reuse.
+
+`q=0.20` is the probability of attempting an ARM label, not a guarantee that
+20% of training turns receive a bonus. The realized applied-label fraction is
+usually 8--10% because the per-trajectory pending-label cap, selector or
+transport failures, timeouts, and later removal of invalid/non-trainable turns
+all reduce the number of usable labels. For example, original ARM iteration 45
+attempted 263 selector requests, had 278 unavailable labels, and applied 139
+usable labels to 1,454 retained turns (9.56%).
+
+Here `K=5` means **one executed actor response plus four counterfactual actor
+responses** sampled from the same state with different deterministic seeds.
+SelectionARM receives the five reasoning-plus-action candidates, chooses one,
+and the permutation is inverted to identify whether it selected the executed
+response or an alternative. SelectionARM itself does not generate these
+candidates.
 
 | Method | Iteration | ARM-labelled rollout groups | Fixed-100 successes / valid / invalid | Fixed-100 overall / valid-only | Full-300 successes / valid / invalid | Full-300 overall / valid-only |
 | --- | ---: | --- | --- | --- | --- | --- |
