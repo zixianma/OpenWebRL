@@ -121,10 +121,12 @@ candidates.
 
 | Method | Iteration | ARM-labelled rollout groups | Fixed-100 successes / valid / invalid | Fixed-100 overall / valid-only | Full-300 successes / valid / invalid | Full-300 overall / valid-only |
 | --- | ---: | --- | --- | --- | --- | --- |
-| **Outcome-only baseline** | **—** | **None** | **25 / 71 / 29** | **25.0% / 35.2%** | **95 / 232 / 68** | **31.67% / 40.95%** |
+| **Outcome-only baseline** | 20 | None | 25 / 71 / 29 | 25.0% / 35.21% | 95 / 232 / 68 | 31.67% / 40.95% |
+|  | 30 | None | — | — | 96 / 248 / 52 | 32.00% / 38.71% |
+|  | 40 | None | — | — | 100 / 231 / 69 | 33.33% / 43.29% |
 | **Original bonus** | 20 | Mixed outcome groups | 26 / 73 / 27 | 26.0% / 35.62% | — | — |
 |  | 30 | Mixed outcome groups | 27 / 74 / 26 | 27.0% / 36.49% | — | — |
-|  | 40 | Mixed outcome groups | — | — | — | — |
+|  | 40 | Mixed outcome groups | **Pending checkpoint** | **Not evaluated** | — | — |
 | **All-failure bonus** | 20 | Eligible valid all-failure groups | 28 / 70 / 30 | 28.0% / 40.00% | 90 / 222 / 78 | 30.00% / 40.54% |
 |  | 30 | Eligible valid all-failure groups | 36 / 73 / 27 | 36.0% / 49.32% | 107 / 225 / 75 | 35.67% / 47.56% |
 |  | 40 | Eligible valid all-failure groups | 28 / 71 / 29 | 28.0% / 39.44% | 92 / 222 / 78 | 30.67% / 41.44% |
