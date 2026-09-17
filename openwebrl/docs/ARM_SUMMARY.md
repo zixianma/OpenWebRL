@@ -134,28 +134,21 @@ candidates.
 |  | 30 | 30.0% / 44.12% | 34.33% / 47.03% |
 |  | 40 | 30.0% / 44.12% | 34.00% / 46.79% |
 
-### Same-iteration significance checks
+The earlier significance calculation was an exploratory unpaired proportion
+test over aggregate counts. It is hidden from this summary because the archived
+evaluations did not preserve aligned task-level verdict IDs, so it cannot support
+a rigorous paired claim. Future comparisons should use paired McNemar or
+bootstrap/permutation tests on shared task IDs, with a predeclared primary
+comparison and multiple-comparison correction.
 
-The archived fixed-100 evaluations retain aggregate counts rather than aligned
-per-task verdict IDs, so these are two-sided unpaired two-proportion tests. The
-reported p-values are exploratory and do not correct for the multiple ARM and
-iteration comparisons; paired McNemar tests would be preferable for future
-evaluations with stable task-level receipts.
-
-| ARM variant and iteration | Cohort | Δ overall vs baseline | p | Δ valid-only vs baseline | p |
-| --- | --- | ---: | ---: | ---: | ---: |
-| Original bonus · 20 | Fixed-100 | +1.00 pp | 0.871 | +0.41 pp | 0.960 |
-| All-failure bonus · 20 | Fixed-100 | +3.00 pp | 0.631 | +4.79 pp | 0.557 |
-| Additive bonus · 20 | Fixed-100 | −1.00 pp | 0.869 | −4.04 pp | 0.602 |
-| All-failure bonus · 20 | Full-300 | −1.67 pp | 0.659 | −0.41 pp | 0.930 |
-| All-failure bonus · 30 | Full-300 | +3.67 pp | 0.343 | +8.85 pp | 0.052 |
-| Additive bonus · 30 | Full-300 | +2.33 pp | 0.544 | +8.32 pp | 0.070 |
-| All-failure bonus · 40 | Full-300 | −2.67 pp | 0.484 | −1.85 pp | 0.691 |
-| Additive bonus · 40 | Full-300 | +0.67 pp | 0.863 | +3.50 pp | 0.456 |
-
-No overall comparison is conventionally significant at 0.05. The iteration-30
-all-failure valid-only result is close to that threshold, but it is not a
-paired test and should not be treated as evidence of a reliable improvement.
+**Per-task records.** The corrected evaluator now saves one addressable file per
+task under each evaluation's `rollouts/` directory. Each file contains the task
+ID and all turns, including final reward, status, and termination reason; a
+completed task with reward `1` or `0` supplies the success verdict, while an
+aborted or unavailable task supplies the invalid outcome. This is sufficient to
+construct aligned paired tests for new evaluations. Older runs only have their
+aggregate metrics or lossless batch archives and may need re-evaluation before a
+paired test.
 
 - **Outcome-only baseline:** terminal outcome reward only; no ARM-labelled turns.
 - **All-failure bonus:** replace the ordinary mixed collection with eligible groups containing five valid actor failures and at least one usable ARM label.
