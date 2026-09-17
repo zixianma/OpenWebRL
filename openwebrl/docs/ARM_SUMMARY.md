@@ -119,20 +119,20 @@ and the permutation is inverted to identify whether it selected the executed
 response or an alternative. SelectionARM itself does not generate these
 candidates.
 
-| Method | Iteration | ARM-labelled rollout groups | Fixed-100 successes / valid / invalid | Fixed-100 overall / valid-only | Full-300 successes / valid / invalid | Full-300 overall / valid-only |
-| --- | ---: | --- | --- | --- | --- | --- |
-| **Outcome-only baseline** | 20 | None | 25 / 71 / 29 | 25.0% / 35.21% | 95 / 232 / 68 | 31.67% / 40.95% |
-|  | 30 | None | — | — | 96 / 248 / 52 | 32.00% / 38.71% |
-|  | 40 | None | — | — | 100 / 231 / 69 | 33.33% / 43.29% |
-| **Original bonus** | 20 | Mixed outcome groups | 26 / 73 / 27 | 26.0% / 35.62% | — | — |
-|  | 30 | Mixed outcome groups | 27 / 74 / 26 | 27.0% / 36.49% | — | — |
-|  | 40 | Mixed outcome groups | **Pending checkpoint** | **Not evaluated** | — | — |
-| **All-failure bonus** | 20 | Eligible valid all-failure groups | 28 / 70 / 30 | 28.0% / 40.00% | 90 / 222 / 78 | 30.00% / 40.54% |
-|  | 30 | Eligible valid all-failure groups | 36 / 73 / 27 | 36.0% / 49.32% | 107 / 225 / 75 | 35.67% / 47.56% |
-|  | 40 | Eligible valid all-failure groups | 28 / 71 / 29 | 28.0% / 39.44% | 92 / 222 / 78 | 30.67% / 41.44% |
-| **Additive bonus** | 20 | Mixed groups + up to 8 failure groups | 24 / 77 / 23 | 24.0% / 31.17% | — | — |
-|  | 30 | Mixed groups + up to 8 failure groups | 30 / 68 / 32 | 30.0% / 44.12% | 103 / 219 / 81 | 34.33% / 47.03% |
-|  | 40 | Mixed groups + up to 8 failure groups | 30 / 68 / 32 | 30.0% / 44.12% | 102 / 218 / 82 | 34.00% / 46.79% |
+| Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
+| --- | ---: | --- | --- |
+| **Outcome-only baseline** | 20 | 25.0% / 35.21% | 31.67% / 40.95% |
+|  | 30 | — | 32.00% / 38.71% |
+|  | 40 | — | 33.33% / 43.29% |
+| **Original bonus** | 20 | 26.0% / 35.62% | — |
+|  | 30 | 27.0% / 36.49% | — |
+|  | 40 | **Pending checkpoint** | — |
+| **All-failure bonus** | 20 | 28.0% / 40.00% | 30.00% / 40.54% |
+|  | 30 | 36.0% / 49.32% | 35.67% / 47.56% |
+|  | 40 | 28.0% / 39.44% | 30.67% / 41.44% |
+| **Additive bonus** | 20 | 24.0% / 31.17% | — |
+|  | 30 | 30.0% / 44.12% | 34.33% / 47.03% |
+|  | 40 | 30.0% / 44.12% | 34.00% / 46.79% |
 
 - **Outcome-only baseline:** terminal outcome reward only; no ARM-labelled turns.
 - **All-failure bonus:** replace the ordinary mixed collection with eligible groups containing five valid actor failures and at least one usable ARM label.
