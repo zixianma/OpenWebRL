@@ -10,6 +10,9 @@ baseline_v=[232,248,231,234,230,229,229,222]
 arm_i=[20,30,40,50,60]
 arm_s=[90,107,92,113,100]
 arm_v=[222,225,222,233,229]
+add_i=[30,40,50,60]
+add_s=[103,102,98,90]
+add_v=[219,218,212,215]
 repo=Path(__file__).resolve().parents[1]
 out=repo/'openwebrl/docs/rl_results/baseline_vs_arm_allfailure_full300.png'
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -18,6 +21,8 @@ ax.plot(baseline_i,[100*x/300 for x in baseline_s],marker='o',lw=2.2,color='#256
 ax.plot(baseline_i,[100*x/y for x,y in zip(baseline_s,baseline_v)],marker='s',lw=2.0,color='#60a5fa',label='Outcome-only baseline · valid-only')
 ax.plot(arm_i,[100*x/300 for x in arm_s],marker='o',lw=2.2,ls='--',color='#dc2626',label='All-failure ARM · overall')
 ax.plot(arm_i,[100*x/y for x,y in zip(arm_s,arm_v)],marker='s',lw=2.0,ls='--',color='#f97316',label='All-failure ARM · valid-only')
+ax.plot(add_i,[100*x/300 for x in add_s],marker='o',lw=2.2,ls=':',color='#16a34a',label='Additive ARM · overall')
+ax.plot(add_i,[100*x/y for x,y in zip(add_s,add_v)],marker='s',lw=2.0,ls=':',color='#84cc16',label='Additive ARM · valid-only')
 ax.set_xlabel('Checkpoint after training iteration'); ax.set_ylabel('Success rate (%)')
 ax.set_title('Outcome-only baseline vs all-failure ARM\nGPT-4.1 · 300 Online-Mind2Web tasks')
 ax.set_xlim(18,92); ax.set_ylim(20,55); ax.set_xticks([20,30,40,50,60,70,80,90])

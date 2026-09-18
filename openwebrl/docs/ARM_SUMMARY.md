@@ -152,7 +152,9 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 ![Outcome-only baseline versus all-failure ARM](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-all-failure ARM full-300 points on their shared iterations.
+all-failure and additive ARM full-300 points. Additive ARM has no full-300
+iteration-20 point in the archived evaluation series, so its curve begins at
+iteration 30.
 
 The earlier significance calculation was an exploratory unpaired proportion
 test over aggregate counts. It is hidden from this summary because the archived
