@@ -128,11 +128,14 @@ candidates.
 | **Original bonus** | 20 | 26.0% / 35.62% | — |
 |  | 30 | 27.0% / 36.49% | — |
 |  | 40 | **31.00% / 44.93%** | — |
+|  | 50 | — | 34.00% / 45.74% |
+|  | 70 | — | 34.33% / 44.59% |
 | **All-failure bonus** | 20 | 28.0% / 40.00% | 30.00% / 40.54% |
 |  | 30 | 36.0% / 49.32% | 35.67% / 47.56% |
 |  | 40 | 28.0% / 39.44% | 30.67% / 41.44% |
 |  | 50 | — | 37.67% / 48.50% |
 |  | 60 | — | 33.33% / 43.67% |
+|  | 70 | — | 35.33% / 45.49% |
 | **Additive bonus** | 20 | 24.0% / 31.17% | — |
 |  | 30 | 30.0% / 44.12% | 34.33% / 47.03% |
 |  | 40 | 30.0% / 44.12% | 34.00% / 46.79% |
@@ -152,9 +155,10 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 ![Outcome-only baseline versus all-failure ARM](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-all-failure and additive ARM full-300 points. Additive ARM has no full-300
-iteration-20 point in the archived evaluation series, so its curve begins at
-iteration 30.
+original, all-failure, and additive ARM full-300 points. Additive ARM has no
+full-300 iteration-20 point in the archived evaluation series, so its curve
+begins at iteration 30. Original ARM begins at iteration 50 because earlier
+full-300 checkpoints were not evaluated.
 
 The earlier significance calculation was an exploratory unpaired proportion
 test over aggregate counts. It is hidden from this summary because the archived
