@@ -82,3 +82,16 @@
 | Runtime | H200-hours | Sol API $ | Selector fallbacks | Detailed record |
 | --- | ---: | ---: | ---: | --- |
 | 55m29s | 1.8494 | 84.8547 | 0 / 4039 | [Sol evaluation](ARM_INFERENCE.md#sol-selection300-completed-294221) |
+
+## ARM audited full-300 results · GPT-4.1 · local browser · temperature 0
+
+| Method | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Source |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Additive bonus | 20 | 85 | 236 | 64 | 28.33 | 36.02 | [307429](RL_EVALUATION.md#arm-additive-iter20-full300-20260920) |
+| Outcome-only · historical | 70 | 103 | 229 | 71 | 34.33 | 44.98 | [Baseline](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
+| Original bonus | 70 | 103 | 231 | 69 | 34.33 | 44.59 | [306478](arm_results/rl_integration/iteration70-audit.json) |
+| All-failure bonus | 70 | 106 | 233 | 67 | 35.33 | 45.49 | [306477](arm_results/rl_integration/iteration70-audit.json) |
+| Additive bonus | 70 | 112 | 222 | 78 | 37.33 | 50.45 | [307120](arm_results/rl_integration/iteration70-audit.json) |
+| Outcome-only · historical | 80 | 114 | 229 | 71 | 38.00 | 49.78 | [Baseline](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
+| Original bonus | 80 | 100 | 222 | 78 | 33.33 | 45.05 | [309685](RL_EVALUATION.md#arm-iter80-launch-20260919) |
+| Additive bonus | 80 | 111 | 212 | 88 | 37.00 | 52.36 | [309686](RL_EVALUATION.md#arm-iter80-launch-20260919) |

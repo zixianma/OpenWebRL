@@ -1,0 +1,72 @@
+{
+  "checked_date": "2026-09-19",
+  "rows": [
+    {
+      "method": "Original bonus",
+      "job": "306478",
+      "iteration": 70,
+      "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-turn-bonus-fresh-303573/runtime/iter_0000069",
+      "protocol": "existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks",
+      "metrics": {
+        "trajectories": 300,
+        "successes": 103,
+        "valid_trajectories": 231,
+        "invalid_trajectories": 69,
+        "success_rate_all_completed": 0.3433333333333333,
+        "success_rate_valid": 0.4458874458874459
+      },
+      "metrics_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-306478-after70/metrics.json",
+      "metrics_sha256": "0ac2d27dfbfc3135f20e5b563e45bd787e878d29fba4d166e48aa01163ebf771",
+      "saved_task_rollouts": 0,
+      "aggregate_archive": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-306478-after70/runtime/rollout_recovery/eval_0.pt",
+      "aggregate_archive_bytes": 87965719989,
+      "metadata_bytes": 1417736324,
+      "archive_contents_verified": false
+    },
+    {
+      "method": "All-failure bonus",
+      "job": "306477",
+      "iteration": 70,
+      "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-turn-bonus-fresh-allfailure-301272/runtime/iter_0000069",
+      "protocol": "existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks",
+      "metrics": {
+        "trajectories": 300,
+        "successes": 106,
+        "valid_trajectories": 233,
+        "invalid_trajectories": 67,
+        "success_rate_all_completed": 0.35333333333333333,
+        "success_rate_valid": 0.45493562231759654
+      },
+      "metrics_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-306477-after70/metrics.json",
+      "metrics_sha256": "43c87d93306747b260bea4f62d08d287f744f37337181e2f3689b94bcc7fbb43",
+      "saved_task_rollouts": 0,
+      "aggregate_archive": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-306477-after70/runtime/rollout_recovery/eval_0.pt",
+      "aggregate_archive_bytes": 85806167969,
+      "metadata_bytes": 1360934803,
+      "archive_contents_verified": false
+    },
+    {
+      "method": "Additive bonus",
+      "job": "307120",
+      "iteration": 70,
+      "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-303574/runtime/iter_0000069",
+      "protocol": "existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks",
+      "metrics": {
+        "trajectories": 300,
+        "successes": 112,
+        "valid_trajectories": 222,
+        "invalid_trajectories": 78,
+        "success_rate_all_completed": 0.37333333333333335,
+        "success_rate_valid": 0.5045045045045045
+      },
+      "metrics_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-307120-after70/metrics.json",
+      "metrics_sha256": "3183da53f127e0ea36ab7d4539d37ae68c8b1738d73b9514e963d2e4608e6b43",
+      "saved_task_rollouts": 0,
+      "aggregate_archive": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-307120-after70/runtime/rollout_recovery/eval_0.pt",
+      "aggregate_archive_bytes": 96482318561,
+      "metadata_bytes": 1492858452,
+      "archive_contents_verified": false
+    }
+  ],
+  "limitation": "Aggregate ZIP metadata headers verified, not tensor payloads or per-task verdict recovery. Metadata exceeds the bounded 128 MiB login-node read limit."
+}

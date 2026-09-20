@@ -998,3 +998,105 @@ Do not copy a W&B service socket between nodes or reuse a failed attempt's score
 <!-- document:REWARD_RANK_EVALUATION_QUEUE.md:end -->
 
 ---
+
+<a id="arm-iter80-launch-20260919"></a>
+
+## ARM iteration-80 full-300 evaluations — approved and submitted 2026-09-19
+
+The user approved the iteration-80 evaluations. Use the established per-evaluation
+profile: **2 H200 × 2 hours, 16 CPUs, 480 GiB RAM** per job, 12 GPU-hours total
+across three jobs. Each allocation exits when its evaluation finishes. Slurm
+estimated $3.60 per job; GPT-4.1 judging is additional.
+
+September 20 update: original-bonus **309685** and additive **309686** completed
+successfully and released their allocations; all-failure
+remains held. Its login-host watcher was verified alive (PID 2079618).
+
+| Method | Evaluation job | Training root under runtime `evaluations/` | Iteration-80 Adam updates | Status |
+| --- | --- | --- | ---: | --- |
+| Original bonus | 309685 | `arm-turn-bonus-fresh-303573` | 950 | complete; all 300 tasks saved |
+| Additive bonus | 309686 | `arm-failure-additive-303574` | 1,042 | complete; all 300 tasks saved |
+| All-failure bonus | 309687 | `arm-turn-bonus-fresh-allfailure-309490` | pending checkpoint | held until checkpoint is verified |
+
+All load **`runtime/iter_0000079`**, meaning 80 completed training iterations.
+The protocol stays actor-only, local browser, GPT-4.1/action-history, temperature
+0, one trajectory per task, all 300 tasks, 30 browser turns, 4,096 response-token
+limit. W&B project is `openwebrl-evals`. The same frozen task-file hash is verified
+across all three sources. Historical outcome-only iteration 80 remains the
+**38.00% overall / 49.78% valid-only** reference; it is not a same-day control.
+
+Original/additive checkpoints already have native completion and counter
+validation. All-failure training job 309490 is now running from completed
+iteration 78. Its evaluation job is submitted with a user hold, so it allocates
+no GPUs while waiting. A persistent, lightweight login-host watcher checks every
+five minutes for the iteration-80 completion/counter receipts and checkpoint
+shard sizes, then releases **only job 309687**. It does not wait for training to
+finish iteration 100 and cannot submit additional jobs. If training stops before
+80, the evaluation stays held for supervision. Watcher:
+`scripts/watch_arm_iteration80_checkpoint.py`.
+
+The three isolated `reference-arm-eval80-{original,additive,allfailure}-20260919-v1`
+sources preserve the corresponding iteration-70 evaluator code except for the
+task persistence hook. Each attempt writes a lossless `rollouts/<task-hash>.pt`
+and a small `.json` sidecar containing the task ID, native validity/success
+metrics, terminal status, and judge verdict metadata. Aborted/empty attempts
+are recorded as well. A judge exception preserves the completed browser turns
+before propagating. Checkpoint-level completion requires all 300 distinct task
+IDs and both artifact types, in addition to GPU checkpoint-restore evidence.
+The aggregate native recovery archive is also retained.
+
+**22 CPU tests passed against the actual frozen source**, including reload of
+saved image tensors after temporary mappings were removed, invalid/empty-task
+persistence, judge-exception recovery, and exact-cohort finalization. Resolved
+launch commands were checked for TP2, zero optimizer rollouts, full-300 monitor
+config, and `openwebrl-evals` tracking. These checks do not claim GPU execution
+before Slurm starts the jobs.
+
+Launcher: `scripts/evaluate_arm_iteration80_2gpu.sbatch`, with controller
+`scripts/run_arm_iteration80_eval.py`. Outputs:
+`evaluations/arm-{original,additive,allfailure}-iter80-JOB/`. Readiness hashes,
+source/cohort audits, submitted commands and receipts, and watcher status are
+under runtime `arm-turn-bonus-preparation/iteration80-evals-20260919/`.
+
+Verified original-bonus result: **100/300 successes, 222 valid, 78 invalid:
+33.33% overall / 45.05% valid-only**. Its historical outcome-only reference is
+38.00% / 49.78%, so this endpoint does not show an improvement. This remains a
+different-date comparison, not a paired significance result. The
+[iteration-80 audit](arm_results/rl_integration/iteration80-audit.json) records
+metric hashes, checkpoint identity and artifact checks. All 300 unique task IDs
+match the planned cohort; per-task verdict sums exactly reproduce the native
+aggregate metrics, with 300 corresponding rollout archives and no persistence
+exceptions. One real trajectory was additionally reloaded on the compute node:
+its image tensors, three judge screenshots, action history and judge metadata
+were intact. This check made no judge API call and used the existing allocation.
+
+Additive iteration 80 also completed: **111/300 successes, 212 valid, 88 invalid:
+37.00% overall / 52.36% valid-only**. Its 300 unique task IDs and per-task verdict
+sums match the native metrics, with all 300 rollout archives present and no
+persistence exceptions; provenance is in the same iteration-80 audit. Relative
+to historical outcome-only iteration 80, overall success is 1.00 percentage
+point lower and valid-only is 2.58 points higher. Because validity sets differ,
+the latter is not evidence of an unconditional performance gain.
+
+<a id="arm-additive-iter20-full300-20260920"></a>
+
+## Additive iteration-20 full-300 result recovered into the docs — 2026-09-20
+
+Job **307429** completed on September 19 in 41m17s with exit code zero, loading
+`arm-failure-additive-295834/runtime/iter_0000019` on GPU. Its result was omitted
+from the summary and plot: **85 successes, 236 valid, 64 invalid; 28.33% overall /
+36.02% valid-only** across all 300 tasks. The older fixed-100 result remains
+24.00% / 31.17%; these are separate evaluations, not a 100+200 merge.
+
+Protocol: local browser, GPT-4.1/action-history, temperature 0, 30 turns,
+4,096 response tokens, one trajectory per task. The frozen cohort has 300 unique
+task IDs. Native final-log metrics exactly match `metrics.json`, and the GPU
+restore receipt names checkpoint index 19. See the
+[source audit](arm_results/rl_integration/additive-iteration20-audit.json) and
+[W&B run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after20-307429).
+
+This older evaluator wrote **zero task-addressable rollout files** but retained
+the 130.63 GB aggregate `runtime/rollout_recovery/eval_0.pt` archive. Its ZIP
+directory is intact; large metadata/tensor payloads were not loaded on the login
+node, so per-task rejudging recovery remains unverified. The iteration-80 saver
+fix does not retroactively establish per-task artifacts for this evaluation.

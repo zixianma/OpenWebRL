@@ -125,23 +125,29 @@ candidates.
 |  | 20 (same-day control) | — | **29.00% / 36.86%** |
 |  | 30 | — | 32.00% / 38.71% |
 |  | 40 | — | 33.33% / 43.29% |
+|  | 50 | — | 35.00% / 44.87% |
+|  | 60 | — | 35.00% / 45.65% |
+|  | 70 | — | 34.33% / 44.98% |
+|  | 80 | — | 38.00% / 49.78% |
 | **Original bonus** | 20 | 26.0% / 35.62% | — |
 |  | 30 | 27.0% / 36.49% | — |
 |  | 40 | **31.00% / 44.93%** | — |
-|  | 50 | — | 34.00% / 45.74% |
+|  | 51 | — | 34.00% / 45.74% |
 |  | 70 | — | 34.33% / 44.59% |
+|  | 80 | — | 33.33% / 45.05% |
 | **All-failure bonus** | 20 | 28.0% / 40.00% | 30.00% / 40.54% |
 |  | 30 | 36.0% / 49.32% | 35.67% / 47.56% |
 |  | 40 | 28.0% / 39.44% | 30.67% / 41.44% |
 |  | 50 | — | 37.67% / 48.50% |
 |  | 60 | — | 33.33% / 43.67% |
 |  | 70 | — | 35.33% / 45.49% |
-| **Additive bonus** | 20 | 24.0% / 31.17% | — |
+| **Additive bonus** | 20 | 24.0% / 31.17% | 28.33% / 36.02% |
 |  | 30 | 30.0% / 44.12% | 34.33% / 47.03% |
 |  | 40 | 30.0% / 44.12% | 34.00% / 46.79% |
 |  | 50 | — | 32.67% / 46.23% |
 |  | 60 | — | 30.00% / 41.86% |
 |  | 70 | — | 37.33% / 50.45% |
+|  | 80 | — | 37.00% / 52.36% |
 
 ### All-failure ARM full-300 curve
 
@@ -156,10 +162,14 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 ![Outcome-only baseline versus all-failure ARM](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-original, all-failure, and additive ARM full-300 points. Additive ARM has no
-full-300 iteration-20 point in the archived evaluation series, so its curve
-begins at iteration 30. Original ARM begins at iteration 50 because earlier
-full-300 checkpoints were not evaluated.
+original, all-failure, and additive ARM full-300 points. Additive's
+[iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
+completed as job 307429 and is now included; it had been omitted from the docs.
+It is a fresh 300-task evaluation, independent of the older fixed-100 result.
+The first plotted original ARM point is iteration 51:
+job 303459 loaded `iter_0000050`, previously mislabeled as iteration 50.
+
+Iteration 80: original bonus **33.33% / 45.05%**, additive **37.00% / 52.36%**, and historical outcome-only **38.00% / 49.78%** (overall / valid-only). These are different-date comparisons with different valid-task sets. Both new ARM evaluations retained all 300 per-task rollout archives and verdicts; see the [audit](RL_EVALUATION.md#arm-iter80-launch-20260919).
 
 The earlier significance calculation was an exploratory unpaired proportion
 test over aggregate counts. It is hidden from this summary because the archived
@@ -178,7 +188,7 @@ aggregate metrics or lossless batch archives and may need re-evaluation before a
 paired test.
 
 - **Outcome-only baseline:** terminal outcome reward only; no ARM-labelled turns.
-- **All-failure bonus:** replace the ordinary mixed collection with eligible groups containing five valid actor failures and at least one usable ARM label.
+- **All-failure bonus:** admit eligible five-failure groups alongside ordinary mixed groups within the same 48-group budget; accepted failure groups displace mixed-group slots.
 - **Original bonus:** apply the ARM term only to eligible turns inside ordinary mixed outcome groups.
 - **Additive bonus:** retain the ordinary mixed batch and add an independently normalized buffer of up to eight eligible all-failure groups.
 
@@ -202,7 +212,7 @@ ARM choices:               A:t3 -> candidate 4 (-0.2)
 
 Original bonus:  ordinary mixed group ──┐
                                         ├─ ARM on eligible turns only
-All-failure:   five-failure group  ────┘ (replaces the ordinary group mix)
+All-failure:   mixed + five-failure groups ──┘ (48 groups total)
 Additive:      ordinary mixed groups + up to eight such failure groups
                └─ separate normalized loss terms for the two sources
 ```

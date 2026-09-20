@@ -1,0 +1,59 @@
+{
+  "checked_date": "2026-09-20",
+  "rows": [
+    {
+      "method": "Original bonus",
+      "job": "309685",
+      "iteration": 80,
+      "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-turn-bonus-fresh-303573/runtime/iter_0000079",
+      "metrics": {
+        "trajectories": 300,
+        "successes": 100,
+        "valid_trajectories": 222,
+        "invalid_trajectories": 78,
+        "success_rate_all_completed": 0.3333333333333333,
+        "success_rate_valid": 0.45045045045045046
+      },
+      "metrics_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-original-iter80-309685/metrics.json",
+      "metrics_sha256": "490a60774750d47c26612333f928184efb1e1b95ef64ce611be1d34b73d2a0bc",
+      "saved_task_rollouts": 300,
+      "saved_task_verdicts": 300,
+      "task_ids_match": true,
+      "per_task_aggregates_match": true,
+      "protocol": "local browser; GPT-4.1/action_history; temperature 0; full 300; 30 turns",
+      "sampled_payload_validation": {
+        "task_id": "0b51b4fa0295ae80ccd176ebdad6fff6",
+        "archive": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-original-iter80-309685/rollouts/8834508332ce7cc1c057464db1679f89d6cc0bb2b76470dad10542318686ea1f.pt",
+        "turns": 3,
+        "metrics_match": true,
+        "judge_screenshots": 3,
+        "image_tensors": 6,
+        "loaded_on_compute_node": true,
+        "api_calls": 0,
+        "new_gpu_hours": 0
+      }
+    },
+    {
+      "method": "Additive bonus",
+      "job": "309686",
+      "iteration": 80,
+      "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-303574/runtime/iter_0000079",
+      "metrics": {
+        "trajectories": 300,
+        "successes": 111,
+        "valid_trajectories": 212,
+        "invalid_trajectories": 88,
+        "success_rate_all_completed": 0.37,
+        "success_rate_valid": 0.5235849056603774
+      },
+      "metrics_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-additive-iter80-309686/metrics.json",
+      "metrics_sha256": "abc2562bd4cc807e23d33b9ad8fd21c77958784fa5a9229e61b0ac2d90a9a2da",
+      "saved_task_rollouts": 300,
+      "saved_task_verdicts": 300,
+      "task_ids_match": true,
+      "per_task_aggregates_match": true,
+      "protocol": "local browser; GPT-4.1/action_history; temperature 0; full 300; 30 turns"
+    }
+  ],
+  "limitation": "One real task payload reloaded on the compute node; all task identities and small verdict records audited, not a full read of every image tensor."
+}

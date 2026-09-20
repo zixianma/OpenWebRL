@@ -1,0 +1,26 @@
+{
+  "checked_date": "2026-09-20",
+  "method": "Additive bonus",
+  "job": "307429",
+  "iteration": 20,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-295834/runtime/iter_0000019",
+  "metrics": {
+    "trajectories": 300,
+    "successes": 85,
+    "valid_trajectories": 236,
+    "invalid_trajectories": 64,
+    "success_rate_all_completed": 0.2833333333333333,
+    "success_rate_valid": 0.3601694915254237
+  },
+  "metrics_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-307429-after20/metrics.json",
+  "metrics_sha256": "945c5e86fc8b7e863538c18e19651845b968172dc5ab9f48bc5df2c94ce9a79d",
+  "metrics_match_native_log": true,
+  "cohort_file": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-failure-additive-20260914-v3/online_mind2web_monitor.jsonl",
+  "cohort_sha256": "d8f81bfc99dfba8b1363d9f50511878dd5db72ff38225c8a196c222aa0c63488",
+  "saved_task_rollouts": 0,
+  "aggregate_archive": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-307429-after20/runtime/rollout_recovery/eval_0.pt",
+  "aggregate_archive_bytes": 130628602721,
+  "archive_metadata_bytes": 1995135266,
+  "archive_contents_verified": false,
+  "limitation": "Old evaluator retained the aggregate archive but no task-addressable artifacts; no tensor payload or paired-verdict recovery attempted on login."
+}
