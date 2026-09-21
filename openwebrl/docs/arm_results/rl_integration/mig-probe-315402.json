@@ -1,0 +1,117 @@
+{
+  "job_id": "315402",
+  "completed": true,
+  "diagnostic_only": true,
+  "checkpoint": "/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT",
+  "source": "reference-arm-mig-probe-20260921-v6",
+  "resources": {
+    "partition": "gpu-h200-mig",
+    "profile": "h200_1g.18gb",
+    "slices": 2,
+    "cpus": 2,
+    "host_memory_gib": 60,
+    "approved_total_seconds": 3600,
+    "attempt_seconds": [
+      153,
+      464,
+      65,
+      403
+    ],
+    "total_seconds": 1085,
+    "released": true
+  },
+  "result": {
+    "passed": true,
+    "diagnostic_only": true,
+    "checkpoint": "SFT architecture proxy, not an RL checkpoint",
+    "offline_states": 2,
+    "browser_trajectories": 2,
+    "actor_tokens": 18212,
+    "selector_calls": 7,
+    "recovered_browser_trajectories": 1,
+    "limitation": "B/C and outcome-only RL checkpoint export/parity are separate required gates."
+  },
+  "devices": {
+    "actor": {
+      "count": 1,
+      "name": "NVIDIA H200 MIG 1g.18gb",
+      "memory_bytes": 17179869184,
+      "uuid": "1b1b0e34-66b2-56b3-b486-1f3f4c9efcf9",
+      "uuid_api": "cuDeviceGetUuid_v2",
+      "torch_uuid": "a2e874ad-eb69-2a72-58f2-014cc6281e5d",
+      "cuda_visible_devices": "MIG-1b1b0e34-66b2-56b3-b486-1f3f4c9efcf9",
+      "slurm_step_id": "0"
+    },
+    "selector": {
+      "count": 1,
+      "name": "NVIDIA H200 MIG 1g.18gb",
+      "memory_bytes": 17179869184,
+      "uuid": "5e6a745c-d980-5847-96c1-bff8f37758b1",
+      "uuid_api": "cuDeviceGetUuid_v2",
+      "torch_uuid": "c9dca3cf-3669-502a-56a0-8eba272678be",
+      "cuda_visible_devices": "MIG-5e6a745c-d980-5847-96c1-bff8f37758b1",
+      "slurm_step_id": "1"
+    }
+  },
+  "context_capacity": {
+    "passed": true,
+    "input_tokens": 32759,
+    "generation": {
+      "id": "80384061b4514e74807a57af8747b1aa",
+      "finish_reason": {
+        "type": "length",
+        "length": 7
+      },
+      "prompt_tokens": 32759,
+      "weight_version": "default",
+      "total_retractions": 0,
+      "completion_tokens": 7,
+      "cached_tokens": 0,
+      "e2e_latency": 7.166467666625977,
+      "response_sent_to_client_ts": 1790018123.3407996
+    },
+    "synthetic": true,
+    "excluded_from_results": true
+  },
+  "browser_checks": [
+    {
+      "mode": "actor0",
+      "valid": true,
+      "reward": 0.0,
+      "steps": 26,
+      "actor_requests": 26,
+      "actor_output_tokens": 6582,
+      "selector_calls": 0,
+      "selector_fallback_turns": 0,
+      "elapsed_seconds": 245.725876663113
+    },
+    {
+      "mode": "arm",
+      "valid": true,
+      "reward": 1.0,
+      "steps": 7,
+      "actor_requests": 35,
+      "actor_output_tokens": 11630,
+      "selector_calls": 7,
+      "selector_fallback_turns": 0,
+      "elapsed_seconds": null
+    }
+  ],
+  "judge": {
+    "model": "gpt-4.1",
+    "prompt_variant": "action_history",
+    "calls": 2,
+    "cost_usd": 0.01844
+  },
+  "cpu_tests_passed": 6,
+  "raw_artifact_roots": [
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mig-probe-315402",
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mig-probe-315402-attempt2"
+  ],
+  "limitations": [
+    "Two different browser tasks; not a paired performance comparison",
+    "SFT architecture proxy; additive checkpoint export/parity and native collector migration remain unvalidated",
+    "Serial candidate generation; no throughput equivalence to four-H200 coverage collector",
+    "ARM trajectory elapsed time was not saved before summary recovery"
+  ]
+}

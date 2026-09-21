@@ -3017,6 +3017,30 @@ was 1m19s; evidence remains under `evaluations/arm-mig-probe-315099*`.
 <a id="mig-corrected-probe-315402"></a>
 ### Corrected MIG probe 315402 — September 21
 
+**Final result: passed; allocation completed and both slices released.** Across
+all four attempts, Slurm recorded **18m05s** on two slices (0.603 slice-hours),
+within the approved two-slice × one-hour budget. Two GPT-4.1 calls cost $0.01844.
+The final source is `reference-arm-mig-probe-20260921-v6`.
+
+| Check | Result |
+| --- | --- |
+| Device isolation | Actor and SelectionARM each see one distinct `1g.18gb` MIG instance; 16 GiB exposed to CUDA |
+| Actor context footprint | 32,759 input + 7 generated tokens; 7.17s; zero retractions |
+| Archived selection | Short and long histories both pass; five candidates generated serially |
+| ARM browser trajectory | 7 turns, 7 selections, zero fallbacks; valid success verdict |
+| Actor-only browser trajectory | 26 turns in 245.73s; valid failure verdict |
+| Persistence | Both lossless `.pt` rollouts and per-task JSON verdicts verified; ARM result recovered without rerun |
+| Tracking | [W&B diagnostic run](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mig-probe-315402), `probe/passed=1` |
+
+These are **two different tasks**, used only to test the inference pipeline;
+their outcomes are not an actor-versus-ARM performance comparison. Both models
+used BF16; actor context was 32,768, TP1, one request at a time, CUDA graphs off.
+This validates SFT-architecture inference on MIG, not additive-checkpoint parity,
+training, or coverage-pilot throughput. Moving the actual coverage pilot still
+requires a verified additive checkpoint export and collector validation. The
+approved native four-H200 pilot remains queued as **315204**.
+Machine-readable [diagnostic result](arm_results/rl_integration/mig-probe-315402.json).
+
 The user approved the corrected **two 18-GB slices × one hour** feasibility test,
 with 2 CPUs, 60 GiB host RAM and at most $1 for terminal judging. Submitted as
 **315402**; it started immediately on **g023**. The first attempt passed the
@@ -3031,9 +3055,32 @@ validates the archived inputs before GPU startup; four CPU tests pass. The same
 job was requeued with 57 minutes remaining after 2m33s used, so the combined maximum
 is 59m33s within the approved one-hour budget. The first attempt is preserved at
 `evaluations/arm-mig-probe-315402-attempt1/`. The retry passed near-32k generation
-and both short/long-history offline ARM selections. Live browser checks are
-running; seven ARM selection steps completed without fallback at the latest
-inspection. The persistent supervisor tracks the retry.
+and both short/long-history offline ARM selections. The ARM browser trajectory
+completed seven turns with seven valid selections and no fallback; its original
+GPT-4.1/action-history verdict is success. Saving the verdict summary exposed a
+second probe-only bug: `reward_key='judge'` indexed a native scalar reward as a
+dictionary. The full atomic `.pt` rollout had already been saved. Its verdict
+and record were recovered without repeating the browser or judge request.
+
+Frozen v5 uses `reward_key=None`, verified through the real rollout/verdict writer.
+The second attempt used 7m44s; the same job was released with **49 minutes** for
+the remaining actor-only check, keeping cumulative runtime below one hour
+(maximum 59m17s). It reuses the recovered ARM record, checks its actor/task/judge
+identity and record hashes, and shares the original judge ledger ($0.009772,
+one request before retry). The original ARM elapsed time was not saved and is
+explicitly unavailable. Attempt two is preserved at
+`evaluations/arm-mig-probe-315402-attempt2/`. The persistent supervisor tracks the
+retry; at this point a full pass still required the actor-only rollout and saved
+verdict, which subsequently completed in the final attempt above.
+
+The 65-second third attempt stopped before inference because PyTorch reported
+the same UUID for the two services on g024. Frozen v6 now obtains the compute
+instance UUID through `cuDeviceGetUuid_v2`, retaining the PyTorch UUID and Slurm
+device assignment for diagnosis, and verifies isolation **before loading either
+model**. This is the [NVIDIA-documented MIG-aware UUID API](https://docs.nvidia.com/cuda/archive/12.2.2/cuda-driver-api/group__CUDA__DEVICE.html).
+The final retry was allotted 48 minutes (maximum cumulative 59m22s); no new
+allocation was submitted. It completed in 6m43s. Six CPU tests cover history conversion, serial
+candidates, scalar-reward persistence, recovery provenance, and isolation checks.
 
 This uses the starting SFT actor as an architecture proxy. It does not validate
 an exported additive checkpoint or replace the native training collector. Keep
