@@ -1,0 +1,92 @@
+{
+  "collections": [
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/iterations/0085/failure_auxiliary.json",
+      "rollout_id": 85,
+      "groups": 0,
+      "turns": 0,
+      "labels": 0,
+      "positive": 0,
+      "coefficient": 0.0
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/iterations/0086/failure_auxiliary.json",
+      "rollout_id": 86,
+      "groups": 0,
+      "turns": 0,
+      "labels": 0,
+      "positive": 0,
+      "coefficient": 0.0
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/iterations/0087/failure_auxiliary.json",
+      "rollout_id": 87,
+      "groups": 4,
+      "turns": 226,
+      "labels": 27,
+      "positive": 5,
+      "coefficient": 0.08333333333333333
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/iterations/0088/failure_auxiliary.json",
+      "rollout_id": 88,
+      "groups": 7,
+      "turns": 307,
+      "labels": 26,
+      "positive": 5,
+      "coefficient": 0.14583333333333331
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/iterations/0089/failure_auxiliary.json",
+      "rollout_id": 89,
+      "groups": 2,
+      "turns": 81,
+      "labels": 13,
+      "positive": 2,
+      "coefficient": 0.041666666666666664
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-313669/iterations/0090/failure_auxiliary.json",
+      "rollout_id": 90,
+      "groups": 5,
+      "turns": 178,
+      "labels": 25,
+      "positive": 3,
+      "coefficient": 0.10416666666666666
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-313669/iterations/0091/failure_auxiliary.json",
+      "rollout_id": 91,
+      "groups": 2,
+      "turns": 58,
+      "labels": 4,
+      "positive": 2,
+      "coefficient": 0.041666666666666664
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-313669/iterations/0092/failure_auxiliary.json",
+      "rollout_id": 92,
+      "groups": 0,
+      "turns": 0,
+      "labels": 0,
+      "positive": 0,
+      "coefficient": 0.0
+    },
+    {
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-313669/iterations/0093/failure_auxiliary.json",
+      "rollout_id": 93,
+      "groups": 1,
+      "turns": 27,
+      "labels": 3,
+      "positive": 1,
+      "coefficient": 0.020833333333333332
+    }
+  ],
+  "count": 9,
+  "mean_groups": 2.3333333333333335,
+  "mean_labels": 10.88888888888889,
+  "mean_positive_labels": 2.0,
+  "zero_group_collections": 3,
+  "note": "Collection manifests, including latest collection not necessarily optimized yet; not gradient norms.",
+  "publication_note": "Aggregate evidence; per-task verdicts and trajectory payloads retained in local/runtime source audits."
+}

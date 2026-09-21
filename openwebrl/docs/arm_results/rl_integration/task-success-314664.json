@@ -1,0 +1,117 @@
+{
+  "complete": true,
+  "stages": {
+    "baseline20": {
+      "complete": true,
+      "tasks": 100,
+      "by_mode": {
+        "arm": {
+          "tasks": 100,
+          "successes": 38,
+          "valid": 80,
+          "invalid": 20,
+          "overall": 0.38,
+          "valid_only": 0.475,
+          "actor_output_tokens": 2217786,
+          "actor_requests": 5935,
+          "selector_calls": 1187,
+          "selector_fallback_turns": 0,
+          "elapsed_seconds": 36546.636304000625
+        }
+      },
+      "limitation": "ARM-only fresh trajectories; historical controls differ in date and decoding. SFT historical judge differs. No selector-only causal or equal-compute claim."
+    },
+    "baseline90": {
+      "complete": true,
+      "tasks": 100,
+      "by_mode": {
+        "arm": {
+          "tasks": 100,
+          "successes": 43,
+          "valid": 81,
+          "invalid": 19,
+          "overall": 0.43,
+          "valid_only": 0.5308641975308642,
+          "actor_output_tokens": 2163267,
+          "actor_requests": 4580,
+          "selector_calls": 916,
+          "selector_fallback_turns": 0,
+          "elapsed_seconds": 32928.577781114494
+        }
+      },
+      "limitation": "ARM-only fresh trajectories; historical controls differ in date and decoding. SFT historical judge differs. No selector-only causal or equal-compute claim."
+    }
+  },
+  "historical_controls": {
+    "sft": {
+      "tasks": 100,
+      "successes": 26,
+      "valid": 85,
+      "overall": 0.26,
+      "valid_only": 0.3058823529411765,
+      "judge": "o4-mini/AgentTrek",
+      "comparable_judge": false,
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/baseline"
+    },
+    "baseline20": {
+      "tasks": 100,
+      "successes": 25,
+      "valid": 71,
+      "overall": 0.25,
+      "valid_only": 0.352112676056338,
+      "judge": "gpt-4.1/action_history",
+      "comparable_judge": true,
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-297011-after19"
+    },
+    "baseline90": {
+      "tasks": 100,
+      "successes": 35,
+      "valid": 68,
+      "overall": 0.35,
+      "valid_only": 0.5147058823529411,
+      "judge": "gpt-4.1/action_history",
+      "comparable_judge": true,
+      "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-success-audit-20260921/historical-baseline90-fixed100.json"
+    }
+  },
+  "historical_sft_selection": {
+    "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/dedicated-282209-20260908T005547Z/full/selection",
+    "judge": "o4-mini/AgentTrek",
+    "historical": true,
+    "new_rollouts": 0,
+    "tasks": 100,
+    "successes": 36,
+    "valid": 83,
+    "invalid": 17,
+    "overall": 0.36,
+    "valid_only": 0.43373493975903615
+  },
+  "terminal_budget": {
+    "calls": 162,
+    "charged_or_reserved_usd": 1.6978499999999979
+  },
+  "limitation": "Historical controls: different date and decoding; SFT judge mismatch. No paired causal ARM-lift estimate.",
+  "job": "314664",
+  "cohort": "arm_c2_scaling_100.json",
+  "judge": "gpt-4.1/action_history",
+  "wall_seconds": 3384,
+  "limitations": [
+    "Historical controls; different dates and availability",
+    "Actor-only T=0 versus K=5 candidates at T=0.8; not selector-only causal effect"
+  ],
+  "historical_comparison_deltas_pp": {
+    "sft": {
+      "overall": 9.999999999999998,
+      "valid_only": 12.785258681785965
+    },
+    "baseline20": {
+      "overall": 13.0,
+      "valid_only": 12.288732394366198
+    },
+    "baseline90": {
+      "overall": 8.000000000000002,
+      "valid_only": 1.61583151779231
+    }
+  },
+  "publication_note": "Aggregate evidence; per-task verdicts and trajectory payloads retained in local/runtime source audits."
+}

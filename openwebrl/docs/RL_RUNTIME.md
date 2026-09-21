@@ -135,23 +135,86 @@ Monitor startup closely, then every 15 minutes; verify reward logging and durabl
 checkpoints. Estimate the full 50-iteration runtime from several completed
 stage-2 collections rather than assuming this eight-hour allocation finishes it.
 
-<a id="resuming-baseline--finish90-tp2-20260913"></a>
-### Prepared minimal-GPU finish to iteration 90, September 13
+<a id="cluster-queue-audit-294983-20260913"></a>
+### Cluster and account audit, September 13 evening
 
-**Approved and submitted as job 294421**, running on g020. The budget is
+Job **294983** waited **4m43s** (19:54:29–19:59:12 PDT), then started on
+**g013 via backfill**. Its requested resources were two H200s, 16 CPUs,
+480 GiB and three hours. The earlier estimated start of 20:22:44 was a
+scheduler forecast, not a guarantee or reservation.
+
+| Visible cluster snapshot near startup | Count |
+| --- | ---: |
+| Full-H200 partition nodes | 22 |
+| Healthy full-H200 nodes / GPUs | 21 / 168 |
+| Allocated healthy full H200s | 158 |
+| Unallocated healthy full H200s | 10 |
+| Healthy nodes fitting 2 GPUs + 16 CPUs + 480 GiB at snapshot | 0 |
+| Down node g018, GPU error / administrator testing | 1 / 8 GPUs |
+| Separate MIG nodes / 18-GiB slices | 2 / 112 |
+| Allocated MIG slices | 6 |
+
+The apparently spare full GPUs were fragmented across nodes. At the snapshot,
+g002 had two free GPUs but only 12 free CPUs; the remaining spare GPUs were
+singletons with four free CPUs each. Thus `MIXED` did not mean this request
+could fit. Scheduler reason was `Priority`; several higher-priority eligible
+jobs also competed for resources. Preemption is disabled. Snapshots of nodes
+and queue are separate reads, so resource totals can change between them.
+
+| Account zixianma | Reported value |
+| --- | --- |
+| Allowed QOS | normal, interactive, debug |
+| Normal QOS per-user maximum | 48 H200s / 384 CPUs |
+| Fair-share factor / job priority at submission | 0.356147 / 1508 |
+| Account enforced total budget / reported used | $14,000.00 / $514.89 |
+| Reported budget remaining | $13,485.11 |
+| Current-cycle ended-job usage | 572.10 GPU-hours / 88 jobs |
+| Active credits | $0.00 |
+
+No account-limit or budget-hold reason was reported. Billing is recorded by job
+end date; the displayed usage excludes unfinished jobs and external judge/browser
+API charges. The other user job, **294976**, remained pending for its larger
+four-GPU/32-CPU request; it is a separate ARM job and was not modified.
+
+For future stealth evaluations, validate an **8–12 CPU / two-GPU** launcher:
+remote Browser Use sessions do not need one local CPU each, and a smaller CPU
+request could fit fragmented nodes such as g002. Every `srun` and the batch
+request must agree; editing only Slurm's requested CPUs would break the current
+16-CPU step. A shorter wall-time cap can improve backfill opportunities but
+risks incomplete evaluation; the prior matching run needed 1h37m49s. Interactive
+QOS has only a modest priority advantage here, and debug is capped at one hour;
+neither makes unavailable resources appear. Urgent QOS is not authorized for
+this account. MIG slices are not a drop-in replacement for the validated TP2
+full-H200 evaluation profile. No queue or resource changes were made.
+
+Evidence: runtime `cluster_queue_audit_294983.json`, from `scontrol`, `squeue`,
+`sprio`, `sshare`, `sacctmgr`, and `hyakusage`.
+
+<a id="resuming-baseline--finish90-tp2-20260913"></a>
+### Completed minimal-GPU finish to iteration 90, September 13
+
+**Job 294421 completed on g020 at 19:22:24 PDT**, exit 0, after 5h10m17s
+(**10.343 H200-hours**). It saved after-90 checkpoint `iter_0000089` with
+**1,016 Adam updates**, then completed all 300 scheduled evaluation tasks:
+**101 successes / 222 valid / 78 invalid**, **33.67% overall / 45.50% valid-only**.
+W&B is finished and all 43 final evaluation metrics match the local log.
+The persistent pointer now records after-90 and no pending evaluation.
+Evidence: [completed evaluation](RL_EVALUATION.md#scheduled-eval90-results-20260913).
+
+The approved budget was
 2 H200s × six hours, 16 CPUs / 480 GiB, at most 12 GPU-hours; Slurm estimates
 $10.80 GPU charges, plus judge API usage. The batch owns and awaits the TP2
 restore check, remaining training and scheduled evaluation.
 Submission receipt: runtime `logs/submission-qcq7i4ug-finish90-294421.json`.
 Controller log: `logs/slurm-qcq7i4ug-294421.out`.
 
-The last saved checkpoint is `293510-20260913T104752/iter_0000086`: **87 completed iterations,
+The starting checkpoint was `293510-20260913T104752/iter_0000086`: **87 completed iterations,
 984 Adam updates**. The interrupted collection 88 has no complete recovery
 batch. The persistent pointer has been corrected from its stale after-78 entry.
 Metadata, all shard byte extents, optimizer/scheduler counters and dataset-cursor
 presence pass. Small CPU tensor samples are finite but cover only two of eight
-shards; this is not a full reload. The new allocation must first verify the
-TP4 checkpoint's model and optimizer restoration on TP2.
+shards; this is not a full reload. The allocation first verified the
+TP4 checkpoint's model and optimizer restoration on TP2 successfully.
 
 The prepared `scripts/resume_baseline_2gpu_finish90.sbatch` requests **2 H200s,
 16 CPUs, 480 GiB RAM, six hours (12 GPU-hours maximum)**. Two GPUs are the smallest
@@ -529,6 +592,86 @@ approve additional standalone evaluation jobs.
 <a id="eight-gpu-scaling-benchmark-20260912"></a>
 ### Eight-GPU topology and browser benchmark, September 12
 
+**Approved and submitted browser comparison: job 291224.** The user revised
+the request to one hour at the largest prepared browser count, then one lower
+level, and explicitly required a brand-new run. Template
+`scripts/benchmark_browsers_8gpu_1hour.sbatch` requests **8 H200 / 64 CPUs /
+960 GiB / one hour**, **8 GPU-hours**, Slurm estimated **$7.20** plus judge calls.
+Receipt: `logs/submission-browser-scale-8gpu1h-20260912.json` under runtime.
+The controller uses `--browser-pair`: **256 then 192** browser slots, fixed
+**TP4/DP2**, up to 25 minutes per case. Both start independently from SFT with
+zero Adam updates; they do not load an RL checkpoint or prior rollout batch.
+There is no separate topology sweep in this one-hour request. This measures
+the two browser limits on one candidate layout, not the optimum across layouts.
+
+Outputs: `benchmarks/browser-scale-291224/tp4-b256/` and `tp4-b192/` under runtime.
+W&B IDs: `browser-scale-291224-tp4-b256` and `browser-scale-291224-tp4-b192`.
+No case writes `current_baseline.json` or the existing `qcq7i4ug` W&B identity;
+job 290926 continues separately. A CPU controller test verifies independent SFT
+starts, unique W&B IDs, and that the lower browser level is attempted even if
+the higher level fails. Eight tests pass. The two-hour topology and four-hour
+combined plans below were prepared alternatives; neither was submitted.
+
+**Result: both high-concurrency settings rejected.** Job 291224 finished after
+**15 minutes 21 seconds (2.047 GPU-hours used)**; the two failed workers were
+stopped early rather than consuming the full hour. Both initialized eight-GPU
+TP4/DP2 model serving from SFT, but neither collected an accepted prompt group,
+performed an optimizer update, or saved a training checkpoint. This does not
+validate optimizer scaling or establish a winning topology.
+
+At the first stop decision, 256 slots had completed 111 groups with zero
+accepted groups and zero judge log events; additional failures continued during
+shutdown. At the lower-count stop decision, 192 slots had completed 176 groups
+with zero accepted groups. Individual environment-log audits found 612 screenshot
+timeout logs and 386 navigation timeout logs among 1,180 files for 256 slots;
+the interim 192-slot audit found 491 and 307 respectively among 932 files.
+These are environment-log counts, not independent task-success denominators.
+Combined Ray logs undercount repeated failures. Raw logs are preserved as
+`environment_logs.zip` in each case directory.
+
+There was no host OOM; sampled host memory peaked around 244.5 GiB and 228.2 GiB.
+A single-browser diagnostic on the same node captured a local HTML page and
+`example.com` successfully in under one second each. High-concurrency browser
+operation was unreliable; the precise bottleneck remains unconfirmed, so these
+results do not establish a universal hardware browser limit. Test substantially
+lower concurrency before promoting an eight-GPU training profile.
+
+Both separate W&B runs have `benchmark/status=stopped_early_browser_failures`
+and failure counters in their summaries; no training-reward points were fabricated.
+Final evidence: `benchmarks/browser-scale-291224/allocation_end_audit.json`,
+per-case failure/health/environment audits, and `wandb_failure_audit.json`.
+The main run remains job 290926 / `qcq7i4ug`, on its preserved source.
+Project quota prevented committing this final browser-pair feature; the tested
+code is preserved with hashes in this benchmark's `prepared_code/` directory.
+
+**Failure diagnosis and next test.** The concrete failing path is
+`env_server.reset_env → WebEnv.reset → get_screenshot → page.screenshot`:
+`Page.screenshot: Timeout 30000ms exceeded`. Example task `webvoyager/139444`
+failed this way at both browser counts. The trace says `fonts loaded` before
+the timeout, so it does not establish font loading as the cause. Navigation
+also failed with `Page.goto: Timeout 20000ms exceeded`, retried up to three
+times while waiting for `load`. These failures become HTTP 500 responses from
+the local `/reset` endpoint before a usable initial observation is available.
+
+Job CPU accounting sampled average usage equivalent to 15.42 CPU cores at 256
+slots and 17.53 at 192, with sample peaks of 31.66 and 24.26 respectively out
+of 64 allocated CPUs. CPU pressure telemetry was unavailable. Thus neither
+CPU exhaustion nor a general maximum supported browser count is proven. The
+single-browser control used easy pages, not the failing task URLs, so it cannot
+exclude site-specific behavior or distinguish browser rendering, process
+startup, network waits, and concurrency effects.
+
+Next use a **browser-only diagnostic**, with no policy model or judge calls:
+replay the same failing URLs at concurrency 1, 32, 64 and then 96 if reliable,
+on the same CPU allocation. Record launch, navigation, screenshot and cleanup
+latencies separately, along with success rates, actual live browser/renderer
+counts, CPU use and network failures. Compare simultaneous versus staggered
+browser launches to separate startup bursts from steady concurrency. Preserve
+the current timeout/navigation semantics for the control; change one setting
+at a time only after reproducing a specific cause. Only a browser limit that
+passes this control should enter a fresh eight-GPU full-iteration test. None
+of these follow-up allocations has been submitted or approved.
+
 <a id="browser48-shared32cpu-20260913"></a>
 **48-browser quick test on the existing 32-CPU allocation.** Job 290926
 remained running; GPU topology, baseline source, checkpoint lineage and W&B
@@ -560,6 +703,22 @@ finished and synced all three cases. Diagnostic code supports an optional
 bounded hold and records setup/reset timestamps; five CPU regression tests pass.
 
 <a id="browser-diagnostic-followup-20260912"></a>
+
+**Completed diagnostic (job 291905).** Ran September 12, 22:01:39–22:07:58
+PDT; Slurm `COMPLETED`, exit 0, 6m19s, approximately 0.84 allocated GPU-hours.
+Initial-observation success for immediate launches was 96/96 at 32 workers,
+90/96 at 64, and 11/96 at 96. With 250-ms launch spacing it was 96/96,
+96/96, and 95/96 respectively. The staggered 96-worker case peaked at only
+77 active workers, so this does not demonstrate reliable 96-browser concurrency.
+All six concurrent cases processed the same 96 requests in roughly 51–59 seconds;
+there was no demonstrated throughput benefit above 32. Challenge pages count as
+successful screenshots and are flagged separately; these are not task rewards.
+The conditional RL confirmation was skipped because neither 64 nor 96 passed
+the 95% success threshold with immediate launches. The allocation ended early;
+main training was unchanged. W&B reported successful final sync to
+[browser-diagnostic-291905](https://wandb.ai/zixianma/openwebrl-evals/runs/browser-diagnostic-291905).
+Full results: `/gpfs/scrubbed/zixianma/openwebrl-runtime/benchmarks/browser-diagnostic-291905/summary.json`.
+
 **Prepared follow-up diagnostic.** `scripts/diagnose_browser_scaling.py` uses
 the preserved reference `WebEnv`, retaining both navigation passes in the
 original `setup()` + `reset()` path. It measures Python import, browser launch,
@@ -2247,3 +2406,610 @@ the complete training shutdown path still needs validation on a future run.
 <!-- document:H200_TESTING.md:end -->
 
 ---
+
+<a id="arm-overnight-supervision-20260920"></a>
+
+## ARM overnight supervision — 2026-09-20
+
+The user requested monitoring of all ARM training/evaluation jobs and repair of
+observed failures. Persistent host supervisor: `scripts/supervise_arm_runs.py`,
+PID **1107462** (restarted from 1080944 to include B/C continuations), launched
+for 36 hours. It tracks training jobs **303573, 303574, 309053, 309054, 309490,
+310981, 311202, 311203, 311962, 311964, 311965** and evaluation jobs **309685, 309686, 309687**. Full
+snapshots are recorded every 15 minutes; cheap file/scheduler checks detect
+failures and stage changes every minute. Unrelated cooking jobs are outside
+this supervisor's scope.
+
+Durable status is under runtime
+`arm-turn-bonus-preparation/overnight-20260920/`: `latest.json`, `alerts.json`,
+`history.jsonl`, and `supervisor.log`. Training snapshots include the latest
+durable iteration and Adam counter, collection/optimization progress, finite
+gradient/clipping checks, and the embedded monitor's GPU/memory/W&B telemetry.
+Evaluation snapshots count per-task archives and verdicts, check GPU restore
+evidence, and sample GPU/memory/W&B state. A lack of measured progress for 30
+minutes raises an inspection alert; it does not automatically discard a slow
+browser collection.
+
+Automatic recovery is deliberately narrow: a terminal evaluation with native
+exit code zero and all 300 archive/verdict pairs can have bookkeeping finalized
+again without browsers or GPUs. Arbitrary source fixes and training restarts
+require active-agent investigation. This supervisor neither submits allocations
+nor changes reward gates/hyperparameters. Replacement allocation budgets still
+require exact approval under root `AGENTS.md`; no new compute was authorized
+merely by starting this CPU monitor.
+
+The separately verified checkpoint watcher (PID **2079618**) releases held
+evaluation **309687** once all-failure job **309490** has durably completed
+iteration 80. It checks every five minutes and allocates no GPUs while waiting.
+All batch controllers own/await their workers and exit when complete or failed.
+
+Initial health check: no nonfinite training gradients or OOMs observed; original
+and additive clipping was below 2%, and B was making collection progress. The
+older additive allocation **303574** completed normally at iteration **82**,
+**1,064 Adam updates**, with insufficient reserved time for another full cycle.
+Its resource release is a budget stop, not a crashed training process.
+
+Subsequent verified boundary: original **303573** completed iteration **85**,
+**1,002 Adam updates**, and stopped normally with insufficient time for another
+cycle. Both older training allocations have released resources. The all-failure
+continuation **309490** has started on g020 and is collecting iteration 79.
+
+B **309053** stopped at calibration before any optimizer update: all checks
+passed except bonus/outcome RMS **10.1672%**, just above the old 10% ceiling.
+Its batch/cursor and full auxiliary population are preserved. See the
+[staged recovery](ARM_INTEGRATION_PLAN.md#arm-bc-calibration-recovery-20260920)
+for the approved guard and replay checks. Replacement **310981** is submitted
+and queued. C **309054** failed before updating because its auxiliary tensor
+exceeded 2 GiB; its corrected fresh restart is approved and queued as **311203**
+(4 H200 × 7h, 32 CPUs, 480 GiB), preserving beta=0.5 and using the approved
+13.67% RMS guard. GPU validation will occur at startup.
+Original/additive iteration-80 evaluations completed and released their GPUs;
+both have 300 per-task rollout archives and verdict records.
+
+<a id="arm-additive-to100-prepared-20260920"></a>
+
+## Additive ARM continuation to iteration 100 — submitted 2026-09-20
+
+Approved and submitted as **311202**, initially queued for priority. Resume
+`evaluations/arm-failure-additive-303574/runtime/iter_0000081`: **82 completed
+collections, 1,064 Adam updates**, with the matching consumed dataset cursor
+and scheduler sample counter **272,384**. Preserve source
+`reference-arm-failure-additive-20260914-v3`, the original five-distinct gate,
+beta=0.5, q=0.20, 48 ordinary groups plus up to eight auxiliary failure groups,
+and W&B `arm-failure-additive-295786` in project `openwebrl`. B/C's experimental
+gate/credit/guard changes are not part of this continuation.
+
+The last ten checkpoint-to-checkpoint intervals averaged **67.32 minutes**,
+with median **54.18**, range **46.15–128.16**. Eighteen remaining collections
+suggest roughly **16–21 hours**, plus startup/save margin. Approved request:
+**one 4-H200 × 24-hour allocation, 32 CPUs, 480 GiB, 32 browsers** (96 GPU-hours;
+Slurm estimate $86.40).
+The controller exits after saving iteration 100 or a time/health gate; the
+24-hour budget is a ceiling, not a guarantee that every collection will fit.
+
+Prepared batch script: `scripts/resume_arm_additive_to100_4gpu.sbatch`.
+Checkpoint metadata/counters/shard extents and exact cursor identity passed
+validation. Native CLI and scheduler checks confirmed target 100, TP4,
+32 browsers, restored LR/weight decay and sample counter; no GPU was started.
+The batch controller verifies actual GPU restoration before collecting,
+preserves the optimizer/W&B lineage, and owns/awaits the training and monitor
+workers. Plans and readiness evidence are under runtime
+`arm-turn-bonus-preparation/additive-to100-20260920/`, including approval,
+submission and exact submitted-plan receipts.
+
+
+### September 20, 16:33 UTC: post-launch status and failure inspection
+
+All-failure 309490 has durably completed **90 iterations / 1,142 Adam updates**
+and is collecting 91. Its iteration-80 evaluation 309687 completed all 300 tasks
+with 300 addressable rollout/verdict pairs; no iteration-90 evaluation is queued.
+Original's earlier allocation stopped normally at 85.
+
+Additive 311202 saved **85 iterations / 1,096 Adam updates**, then failed while
+collecting 86. The fatal stack is `rollout_transport._encode_file_backed` at
+`numpy.tofile`: `OSError: Not enough free space to write 30474240 bytes`.
+Ray reported g008's 446.85 GB local `/tmp` filesystem had only 0.0035 GB free.
+This is node-local storage exhaustion; the saved GPFS checkpoint is preserved.
+No replacement allocation has been submitted or artifacts deleted.
+
+B recovery 310981 failed before updating on the saved-batch provenance check
+`admitted_distinct_action_counts`; inspect report/schema compatibility before
+retrying, without weakening the content check. C restart 311203 completed
+normally after six durable iterations / 92 Adam updates and released its
+allocation under the remaining-budget gate. Persistent supervision recorded
+these failures; it cannot repair source or submit replacement allocations.
+
+
+<a id="arm-additive-to90-storage-recovery-20260920"></a>
+
+### Additive iteration-85 → 90 storage recovery — submitted September 20
+
+The user requested continuation to iteration 90 after job 311202 failed. Its
+fatal write targeted `/tmp/arm-variant-311202-multimodal` on g008: file-backed
+CPU image tensors accumulate because the frozen transport retains them for the
+process lifetime. The checkpoint/recovery archives are on scrubbed GPFS, which
+was not the failing filesystem. Resume from verified `iter_0000084`, **85 completed
+iterations / 1,096 Adam updates**, with its exact saved task cursor. The incomplete
+iteration-86 collection has no complete replay batch and will be recollected.
+
+The prepared launcher `scripts/resume_arm_additive_to90_shared_4gpu.sbatch`
+selects `ARM_VARIANT_MULTIMODAL_STORAGE=shared`. The controller assigns a
+job-specific directory under runtime `multimodal-scratch/arm-variant-JOB`, checks
+at least **2 TiB filesystem free space**, then performs a write/fsync/read probe
+before GPU restoration. It preserves the files; no storage cleanup is authorized
+or performed. The free-space measurement is filesystem capacity, not a certified
+per-user quota. Frozen model/reward/optimizer code remains unchanged; beta=0.5,
+q=0.20, five-distinct candidates, 48 mixed groups plus up to eight auxiliary
+failure groups, TP4/32 browsers, and W&B `arm-failure-additive-295786` are preserved.
+
+Five iterations remain. The latest completed checkpoint intervals were **47.95
+and 45.45 minutes**, suggesting roughly four hours of training, with slower
+shared I/O and startup/save margin. Approved allocation: **4 H200 × 6 hours,
+32 CPUs, 480 GiB**, 24 GPU-hours, stopping at iteration 90. The controller verifies
+GPU optimizer restoration before collection and owns/awaits all training/monitor
+workers. The user approved this exact replacement budget; submitted as **311962**
+at 16:40 UTC, initially pending for priority. Slurm estimates $21.60.
+The persistent supervisor and in-job monitor cover this continuation.
+
+Preparation and CPU validation receipts are under runtime
+`arm-turn-bonus-preparation/additive-to90-storage-20260920/`. GPU execution and
+throughput on the new storage path remain to be checked when allocated.
+
+CPU readiness passed: native argument parsing and checkpoint scheduler load
+preserve the **280,576** sample counter (1,096 × 256), LR 1e-6, weight decay 0.1,
+TP4, 32 browsers, two PPO epochs and target 90. The shared-directory write/read
+probe and frozen transport float32/bfloat16 mmap roundtrip passed. Low-space and
+mismatched-path checks reject before GPU restoration. A generic actor-entry
+preflight hit its uninitialized distributed-group boundary; the final CPU check
+validates native arguments/scheduler only and makes no GPU-restoration claim.
+
+
+### B/C outcome audit after the additive recovery submission
+
+Additive recovery **311962** is submitted for the approved 4 H200 × 6h profile,
+using shared multimodal storage; it was pending for priority at 16:43 UTC.
+Its persistent supervisor is PID **1080944**, with 15-minute full snapshots.
+
+B recovery's provenance-check failure is repaired in a new frozen v3 source;
+29 tests and native CLI checks pass. No replacement B allocation is submitted.
+C's six checkpoint receipts establish 92 completed optimizer updates; its normal
+stop was the 90-minute cycle reserve. See the consolidated
+[B/C audit](ARM_INTEGRATION_PLAN.md#arm-bc-firstupdates-20260920) for training curves,
+coverage, reward-scale checks and the lack of held-out evaluation.
+
+
+### September 20, 16:48 UTC: B/C continuations submitted
+
+B **311964** replays the preserved zero-update first batch using the fixed v3
+source; C **311965** resumes checkpoint `iter_0000005` with 92 optimizer updates.
+Both use the established 4 H200 × 7h / 32 CPU / 480 GiB profile, shared GPFS
+multimodal scratch and an iteration-10 cap. Both were initially pending.
+The continuation routing fix preserves optimizer/cursor restoration rather than
+calling first-launch validation on C's inherited ablation flags. Two routing
+regressions pass; C's native scheduler and actual GPU-restore command dry run
+pass. Actual GPU restoration is checked at allocated startup.
+
+Supervisor PID **1107462** covers both jobs and additive-to-90 **311962**, alongside
+all-failure training. See the [consolidated launch record](ARM_INTEGRATION_PLAN.md#arm-bc-continuations-20260920).
+
+<a id="arm-training-status-20260920-2224"></a>
+### September 20, 22:24 UTC: additive reaches 90; B/C are training
+
+| Run | Job | Durable completed iteration / Adam updates | Current state |
+| --- | ---: | --- | --- |
+| Original bonus | 303573 | 85 / 1,002 | Stopped; no active continuation |
+| Additive | 311962 | 90 / 1,150 | Completed target, exit 0; 4h26m18s of 6h used |
+| All-failure | 309490 | 98 / 1,222 | Collecting 99, target 100 |
+| B: relaxed gate | 311964 | 4 / 62 | Collecting 5; about 2h52m allocation remaining |
+| C: relaxed gate + action-equivalence credit | 311965 | 9 / 134 | Training 10, its target; about 3h14m remaining |
+
+Latest checkpoint validation receipts, optimizer/scheduler agreement and shard
+sizes were verified. B's first-batch auxiliary replay now passes the fixed
+provenance check, followed by three fresh completed collections. C and additive
+passed GPU restoration. Shared temporary storage has allowed additive to finish;
+no new disk failure appears in the active runs.
+
+Recent B collections have 15.95–18.27% ordinary-turn label coverage and
+8.84–10.17% bonus/outcome RMS; C's latest four collections have 17.01–18.58%
+coverage and 9.90–10.88% RMS. All pass the unchanged calibration guard. Latest
+PPO KL/clip fraction: B 0.00263 / 1.29%, C 0.00254 / 1.25%, all-failure
+0.00553 / 2.71%. These are training diagnostics, not held-out success estimates.
+
+Resource samples at about 22:22 UTC showed active GPU use and zero OOM/OOM-kill
+events. C uses about 473.6/480 GiB host RAM during training; B previously touched
+its 480 GiB cgroup cap (499 max events, no OOM) and is now about 365.6 GiB.
+All-failure uses about 304.4 GiB. Memory pressure, especially C's final update/save,
+remains a monitoring concern. W&B histories are advancing for all three active
+runs. The persistent supervisor retains 15-minute full checks.
+
+Recent cycle times suggest all-failure can finish 100 in roughly 1–1.5 hours;
+C is in its final PPO epoch and should finish substantially sooner. B takes
+about 63–67 minutes per iteration, so its current allocation is more likely to
+finish around iteration 6 than its cap of 10. These estimates include no new
+compute allocation. Iteration-90 checkpoints now exist for additive and
+all-failure, but no iteration-90 evaluation has been submitted.
+
+### September 20: B/C W&B display names corrected
+
+With explicit user approval, the two live W&B display names were changed and
+read back through the API: `arm-gate-b-309053` is now
+`ARM-B | relaxed gate | response-index credit`; `arm-gate-c-309054` is now
+`ARM-C | relaxed gate | duplicate-aware credit`. The common old display name
+`arm-min2-independent-credit` came from using the shared group as the run name.
+Run IDs and metric histories remain intact. Receipt:
+`arm-turn-bonus-preparation/wandb-bc-display-names-20260920.json`.
+Future continuation launch plans should explicitly retain these variant names;
+the active frozen training sources were not edited.
+
+### September 20, 22:40 UTC: iteration-90 evaluations submitted; C finished
+
+Approved full-300 evaluations: additive **313187** and all-failure **313188**,
+each 2 H200 × 1h, 16 CPUs / 480 GiB, initially pending for priority. Both use
+checkpoint index 89, the established native GPT-4.1 monitor and per-task
+rollout/verdict persistence. The batch controllers await their workers. See
+[evaluation launch details](RL_EVALUATION.md#arm-iter90-readiness-20260920).
+The existing supervisor was restarted as PID **2486117** to include both jobs;
+ownership and its first snapshot were verified, retaining 15-minute full checks
+and one-minute lightweight failure checks. No extra allocation is authorized.
+
+C **311965** completed its target **10 iterations / 148 Adam updates**, exit 0,
+in 3h54m43s. The final `iter_0000009` validation, save receipt and shard sizes
+pass. Its controller released the allocation with roughly three hours left;
+there is no pending stage assigned to that completed allocation.
+
+### September 20, 22:55 UTC: B/C to 20 and held evaluations submitted
+
+| Stage | Job | Approved resources | Initial state |
+| --- | ---: | --- | --- |
+| B continuation to 20 | 313208 | 4 H200 × 18h, 32 CPUs, 480 GiB | Dependency: afterany 311964 |
+| C continuation to 20 | 313210 | 4 H200 × 12h, 32 CPUs, 480 GiB | Pending priority |
+| B full-300 at 20 | 313209 | 2 H200 × 1h, 16 CPUs, 480 GiB | Held for checkpoint |
+| C full-300 at 20 | 313211 | 2 H200 × 1h, 16 CPUs, 480 GiB | Held for checkpoint |
+
+Approval and submission receipts are in
+`arm-turn-bonus-preparation/bc-iter20-20260920/`. Watchers **2553206/2553214**
+own the B/C evaluation holds, verify checkpoint lineage/counters/shards and then
+release their single recorded evaluation. Supervisor **2553222** includes all
+four jobs. Each batch controller awaits its own workers; monitoring is bounded
+CPU work and cannot submit new allocations. B's final resume checkpoint is
+resolved after its current job finishes. C resumes iteration 10 / Adam 148.
+Distinct B/C W&B display names are preserved in continuation plans.
+
+The separately requested [rescue-yield pilot](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920)
+was CPU prepared at this point; its later approval and submission are below.
+
+### September 20, 23:28 UTC: rescue-yield pilot submitted
+
+Job **313256** requests the separately approved **2 H200 × 2h, 16 CPUs,
+480 GiB RAM** (four GPU-hours), initially pending priority. Slurm estimates
+$3.60. Approval, submission and readiness receipts are in
+`arm-turn-bonus-preparation/rescue-yield-20260920/`.
+The controller `scripts/run_arm_rescue_yield.py` owns and awaits the selector
+and actor/evaluation workers; W&B uses `openwebrl-evals/arm-rescue-yield-313256`.
+Output is `evaluations/arm-rescue-yield-313256/`. The existing supervisor now
+tracks smoke/screen/retry counts, checkpoint restoration, failures and final
+yield without submitting further allocations. GPU/browser smoke validation
+must pass before the full screening stage. Every attempt retains its rollout
+and judge metadata. No training updates or model changes are requested.
+
+**Startup failure and prepared repair:** 313256 exited on g015 after 18 seconds,
+before any trajectories: the selector process could not import `openwebrl`.
+The controller now supplies frozen-source `PYTHONPATH` and Python-header
+`CPATH`; the real selector CLI/dependency checks pass. The replacement source
+is `reference-arm-rescue-yield-20260920-v2`, preserving the failed v1 source and
+artifacts. `proposed-retry-v2.json` requests 2 H200 × 1h59m, 16 CPUs / 480 GiB;
+it is not submitted or newly approved. Combined runtime ceiling with the
+failed attempt is 3.977 GPU-hours. Supervisor **2698912** includes the rescue
+pilot and all previous jobs, with the same 15-minute full snapshots.
+
+Additive iteration-90 evaluation **313187** failed after 1m27s before any tasks:
+two concurrent evaluations on g021 selected the same SGLang distributed ports
+(15004 and 15035). `MASTER_PORT` alone does not control those engine ports.
+New evaluation sources `reference-arm-eval80-{variant}-20260920-v2` now honor
+`OPENWEBRL_ROLLOUT_PORT_BASE`; controllers hold a node-local file lock over a
+free 256-port block until their workers exit. Three tests verify concurrent
+lease exclusion/release, occupied-port rejection and native port-cursor behavior;
+16 evaluator regression tests pass. The pilot uses the same isolation.
+All-failure **313188** continues using its already-running v1 source; active
+workers are unchanged. No replacement additive allocation was submitted.
+
+### September 20, 23:34 UTC: corrected rescue-yield pilot submitted
+
+The user approved **2 H200 × 1h59m, 16 CPUs / 480 GiB**; replacement job
+**313264** is submitted, initially pending priority (Slurm estimate $3.57).
+Approval and submission receipts are `retry-v2-approval.json` and
+`retry-v2-submission.json` under the rescue-yield preparation directory.
+Source v2 preserves the same cohort, policy, judge and zero-update protocol;
+its changes isolate native model-server ports and fix selector import/header
+paths. Output is `evaluations/arm-rescue-yield-313264/`, with W&B identity
+`openwebrl-evals/arm-rescue-yield-313264`. The supervisor includes the replacement;
+checkpoint restore, selector smoke, screening and retries still require live
+verification. Failed job 313256 and all its artifacts remain preserved.
+Supervisor **2726562** owns the updated monitor; its first snapshot includes
+313264. At 23:35 UTC the replacement remained pending priority. In the same
+snapshot, all-failure training **309490** had completed **iteration 100** with
+exit 0, and its iteration-90 evaluation **313188** had saved 191/300 task
+rollouts and verdicts. These are progress counts, not final evaluation results.
+
+### September 21, 00:34 UTC: training and evaluation status
+
+| Track | Durable iteration / Adam updates | Current state |
+| --- | --- | --- |
+| Original bonus | 85 / 1,002 | Previous allocation completed; no continuation queued |
+| All-failure bonus | 100 / 1,242 | 309490 completed successfully; final checkpoint verified |
+| Additive bonus | 90 / 1,150 | 311962 completed successfully |
+| B relaxed gate | 6 / 90 | 311964 completed; 313208 pending priority to continue to 20 |
+| C gate + action credit | 10 / 148 | 313210 training iteration 11 on g013; calibration passed |
+
+B's final saved checkpoint/counters/shard extents and the queued job's resolved
+resume plan now pass CPU checks. Plan:
+`arm-turn-bonus-preparation/bc-iter20-20260920/B-final-checkpoint-plan.json`.
+B/C evaluation jobs 313209/313211 remain held for verified iteration 20.
+
+All-failure iteration-90 evaluation **313188** completed in 33m50s, exit 0,
+with all 300 rollout/verdict pairs saved: **33.67% overall / 46.54% valid-only**.
+[Metric audit and historical comparison](RL_EVALUATION.md#arm-iter90-results-20260921).
+Additive evaluation 313187 failed before collecting tasks; its port-isolation
+fix is prepared but no replacement allocation is submitted.
+
+Rescue pilot **313264** passed real GPU restore, selector preflight and all three
+smoke pairs. All 320 screen attempts are saved; 18 of 64 tasks have five valid
+actor failures, and eight were selected for 48 retry attempts. At this check,
+24 retries were saved and collection continued. The live counts are in
+`evaluations/arm-rescue-yield-313264/status.json` and phase-record directories.
+No final rescue-yield claim yet. Latest resource samples show no OOM events;
+C's W&B identity remains `arm-gate-c-309054`, and rescue uses
+`openwebrl-evals/arm-rescue-yield-313264`.
+
+<a id="arm-live-monitor-20260921"></a>
+
+### September 21: additive retry and automatic live reports
+
+Additive iteration-90 full-300 evaluation retry **313408** was submitted at
+00:53 UTC, following the user's request, with the established **2 H200 × 1h,
+16 CPUs / 480 GiB** profile. It uses the v2 port-isolated source and preserves
+all 300 rollout/verdict pairs; the failed prior attempt collected no tasks.
+Receipts and the actual job plan are `iteration90-evals/additive-retry-v2-*`
+under the runtime preparation directory.
+
+Rescue pilot **313264** completed successfully in **50m24s** with **374 saved
+trajectories**. On the eight selected all-failure tasks, ARM rescued **0/8**,
+one ordinary retry **1/8**, and five ordinary retries **3/8**. See
+[results and limitations](ARM_RESULTS.md#arm-rescue-yield-313264).
+
+The user requested monitoring all running jobs and immediate result reports.
+Supervisor **3094709** runs for 48 hours, with **60-second lightweight checks**
+and **15-minute detailed health checks**. It tracks existing ARM training,
+held/queued evaluations, rescue pilots and the new additive retry. New ARM
+output roots are discovered from the live Slurm queue and retained in
+`discovered-jobs.json`; all other current user Slurm jobs appear with scheduler
+status only. No new allocation, restart or external message is sent automatically.
+
+The [live HTML report](arm_results/rl_integration/live-status.html) refreshes
+every minute, showing verified completion rates and recent transitions;
+[JSON](arm_results/rl_integration/live-status.json) provides the same data.
+`scripts/report_arm_jobs.py` records deduplicated result-ready, failure and
+checkpoint events in runtime `arm-turn-bonus-preparation/overnight-20260920/events.jsonl`.
+Reporting survives supervisor restarts; failed/incomplete jobs do not receive
+final success rates. Five reporting tests and two supervisor tests pass.
+These are automatic **local report updates**, not push notifications to this
+chat; no asynchronous chat-delivery tool is available in this session.
+
+<a id="stage1-baseline-additive-to100-20260921"></a>
+
+## Baseline and additive stage-1 continuation to iteration 100 — submitted September 21
+
+The user requested both outcome-only and additive ARM at iteration 100 followed
+by full-300 Online-Mind2Web evaluation. This preserves each stage-1 recipe;
+it does not start the separately prepared stage-2 experiment.
+
+| Run | Verified resume origin | Target | Approved single allocation, including evaluation |
+| --- | --- | --- | --- |
+| Outcome-only baseline `qcq7i4ug` | Iteration 90 / 1,016 Adam updates | 100 | 4 H200 × 12h; 32 CPUs, 480 GiB, 32 browsers |
+| Additive ARM, existing W&B lineage | Iteration 90 / 1,150 Adam updates | 100 | 4 H200 × 12h; 32 CPUs, 480 GiB, 32 browsers |
+
+**Submitted September 21 after exact budget approval:** outcome-only **313668** and additive **313669**. Both initially queued for priority; each is four H200s × 12 hours including evaluation. Slurm estimates $43.20 per allocation. The independent selection-quality audit was subsequently approved, including its API payload transfer, and submitted as job **313774** (two H200s × two hours).
+The persistent supervisor tracks both job IDs through restore, training and evaluation, retaining 15-minute detailed checks and one-minute local failure checks. Both launchers also retain their existing per-run monitors.
+
+The two jobs cap usage at **96 GPU-hours combined**, releasing allocations on
+completion. Recent ordinary cycles were about 45–59 minutes; ten cycles plus
+restoration and evaluation should fit roughly 10–12 hours, but browser timing
+can vary. A budget stop preserves the latest checkpoint and cannot silently
+substitute an earlier iteration for the iteration-100 evaluation.
+
+`prepare_stage1_to100.py` freezes and hash-validates the original sources.
+Baseline uses `reference-stage1-to100-20260921-v1` plus the matching pending-eval
+recovery source; additive uses `reference-arm-additive-to100-20260921-v1`.
+Changes are limited to target/runtime, shared image scratch, port isolation,
+and lossless baseline evaluation persistence. Rewards, data recipe, Adam state,
+learning rate (1e-6), effective batch (256), five attempts per group and two PPO
+epochs are preserved. Baseline's scheduler offset remains one; additive's is zero.
+The iterations align, while optimizer-update counts and total compute differ.
+
+`run_stage1_to100_4gpu.sbatch` calls `run_stage1_to100.py` with
+`STAGE1_VARIANT=baseline` or `additive`. The batch controller owns and awaits
+GPU restore verification, training, and evaluation. Baseline retains its native
+scheduled evaluation and W&B identity; additive reserves the final hour for its
+standalone evaluation. Training logs to `openwebrl`, standalone evaluation to
+`openwebrl-evals`. Both use local browsers, GPT-4.1/action-history judging,
+temperature zero, 30 turns, and 4,096 response tokens on all 300 tasks.
+Completion requires all 300 unique cohort IDs, per-task verdicts, and nonempty
+rollout archives. Additive's evaluation cannot run until iteration 100 is verified.
+
+CPU preparation inspected checkpoint metadata, not model tensors. Baseline dry
+run confirms 100 iterations / four GPUs / 32 browsers / 12 hours and the inherited
+optimizer recipe. Additive's native CLI preflight also confirms the 100-iteration
+target, four-GPU topology, LR 1e-6, batch 256, 48 groups, five attempts, two PPO
+epochs, and restoration of the checkpoint scheduler. Resume/routing and
+evaluation-persistence tests passed. Native
+GPU restoration remains mandatory at allocation startup. Preparation receipts
+are in runtime `arm-turn-bonus-preparation/stage1-to100-20260921/`.
+
+The independent [64-state selection-quality audit](ARM_INTEGRATION_PLAN.md#arm-selection-quality-audit-20260921)
+requests another 2 H200 × 2h and a $20 / 231-call teacher cap. All three proposed
+allocations together cap GPU use at **100 GPU-hours**; ordinary training/evaluation
+terminal-judge API usage is additional to the audit's teacher cap.
+
+<a id="baseline-to100-scheduler-fix-20260921"></a>
+### September 21, 16:08 UTC: baseline resume failure fixed on CPU
+
+Baseline **313668** failed after **1m47s** during GPU restore verification,
+before any training or browser collection. Increasing the target from 90 to 100
+changed the constructed scheduler horizon to 23,808 while the saved scheduler
+contains 21,504. Megatron correctly rejected that mismatch. The last durable
+baseline remains iteration 90 / 1,016 Adam updates; no checkpoint was altered.
+
+Prepared **`reference-stage1-to100-20260921-v2`** and matching pending-evaluation
+source add `--use-checkpoint-opt-param-scheduler` only when resuming. This keeps
+the saved scheduler and learning rate instead of resetting or overriding them.
+Three CPU scheduler tests pass, including reproducing the old assertion and
+verifying exact scheduler-state/optimizer-LR restoration under an extended
+horizon. Source hashes and Python syntax pass. Allocation-aware dry run cannot
+inspect the expired Slurm job; GPU restore verification remains mandatory in a
+new authorized allocation. No replacement paid job has been submitted.
+[Readiness receipt](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/stage1-to100-20260921/baseline-v2-readiness.json).
+
+Additive **313669** remains on its unchanged v1 source: iteration 92 saved /
+1,174 Adam updates, collecting 93 toward 100 with no current monitor alert.
+B/C completed iteration20; C's full300 result is 36.67% / 44.53%, and B evaluation
+313209 is queued for priority. [C results](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921).
+
+<a id="mig-feasibility-20260921"></a>
+### MIG feasibility for queued jobs — September 21
+
+Read-only audit; no MIG jobs submitted and no existing jobs moved. Tillicum's
+MIG partition exposes `h200_1g.18gb` devices on g023/g024. At inspection, Slurm
+reported 11/112 slices allocated (45 unallocated on g023, 56 on g024); this is
+an inventory snapshot, not a guaranteed start time. CPU counts are not GPU
+availability counts. Partition defaults are one CPU / 30 GiB host RAM per slice.
+
+| Pending work | MIG assessment |
+| --- | --- |
+| ARM fixed100 audit 314664 | Plausible after adaptation: independent actor and selector processes, one slice each; no tensor parallelism; reduced request/browser concurrency, unchanged evaluation protocol |
+| B/C iteration20 evals 313209/313211 | Plausible independent actor-only workers, but held until checkpoints are ready |
+| Baseline/additive to100 313668/313669; ScreenSim RL 313606 | Keep the current full-H200 distributed training launchers; no validated MIG training path |
+| CookSim evaluation array 313573 | Current Vulkan rendering preflight requires graphics unavailable on H200 MIG |
+
+Our installed runtime uses PyTorch 2.9.1+cu129, SGLang 0.5.6.post2 and NCCL
+2.27.5. NVIDIA documents **experimental** multi-MIG support starting in NCCL
+2.31, requiring CUDA driver 13.0 or newer. An environment upgrade alone does not
+validate the training/evaluation stack. H200 MIG also lacks graphics APIs.
+Do not treat multiple slices as pooled VRAM or drop the existing TP2/TP4 jobs
+into this partition unchanged.
+
+Memory feasibility is an estimate, not a GPU test: SFT weights occupy about
+8.99 GiB on disk; SelectionARM's weight index reports 8.27 GiB. BF16 KV for
+36 layers × 8 KV heads × 128 dimensions costs 4.5 GiB per independent 32,768-token
+sequence, before vision activations/workspace/framework overhead. One model per
+slice with a small batch is plausible; the current five parallel candidates and
+16 browsers are not validated. Preserve BF16, context, response length, seeds,
+judge, and fixed100 IDs; control memory by serializing candidate requests or
+sharding tasks across independent workers. RL checkpoints require a validated
+standalone export/load path that reproduces the restored model. A bounded
+memory/throughput pilot should precede moving queued evaluations. Any new MIG
+allocation still requires its exact resource/time budget approval.
+
+Evidence: runtime preparation `task-success-audit-20260921/mig-feasibility.json`.
+[Tillicum scheduling](https://hyak.uw.edu/docs/systems/tillicum/scheduling-jobs/),
+[NCCL MIG support](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/communicators.html#using-mig-instances),
+[NVIDIA graphics restriction](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/deployment-considerations.html#application-considerations).
+
+<a id="mig-probe-ready-20260921"></a>
+### Separate actor/ARM MIG probe — prepared, awaiting exact allocation approval
+
+Prepared `scripts/run_arm_mig_probe.sbatch`: **2 × 18-GB MIG slices × 1 hour**,
+2 CPUs / 60 GiB host RAM, estimated compute **$0.2574**, and native GPT-4.1
+terminal judging capped at **$1 / 6 requests**. No submission has been made.
+This is separate from full-H200 audit **314664**, which is already running.
+The user requested keeping full-H200 execution as fallback if MIG fails.
+The full-H200 jobs and B/C checkpoint watchers remain in place.
+
+The batch controller owns and awaits two one-slice Slurm service steps. It
+checks CUDA identities and memory so actor and SelectionARM occupy distinct
+18-GB slices. The actor uses SGLang TP1, BF16, 32k context, one active request,
+512-token prefill chunks, and no CUDA graphs. All five deterministic candidate
+seeds and the selector permutation are preserved; requests are serialized.
+
+Test sequence: full 32k actor KV-capacity request (synthetic, excluded from
+benchmark results); shortest and longest archived audit prompts with five
+real candidates and ARM selection; one actor+ARM and one actor-only browser
+trajectory on the first two fixed100 IDs. Browser runs retain native GPT-4.1
+judging, 30 turns, 4,096 response tokens, full history, and lossless per-task
+rollout/verdict archives. Report this as a **diagnostic**, never as a success-rate
+comparison. W&B project is `openwebrl-evals`. Stop on model/service errors,
+budget exhaustion, missing archives, wrong device binding, or failed judging.
+
+The first fit test uses the starting SFT weights as an **architecture proxy**.
+It does not establish that the RL checkpoint conversion is correct. B/C follow-up
+requires durable iteration20, correct lineage, a standalone checkpoint export
+with weight/output parity verification, and a one-slice actor-only probe.
+`bc-followup-readiness.json` records these gates; no idle GPU allocation is held
+waiting for checkpoints, and no MIG production evaluation is released by this
+probe. On any failed gate, retain the full-H200 evaluation route.
+
+Frozen source: `reference-arm-mig-probe-20260921-v1`. Preparation manifest:
+runtime `arm-turn-bonus-preparation/mig-probe-20260921/plan.json`. Three CPU tests
+pass for distinct device binding, serialized candidates preserving seeds and
+selection inversion, and requiring real saved rollout/verdict artifacts.
+Python compilation and shell syntax checks pass. GPU fit, latency and live
+browser behavior remain **untested** until the dedicated allocation runs.
+
+<a id="overnight-monitor-20260921"></a>
+### Overnight supervision — September 21
+
+Persistent read-only supervisor PID **654085** is active for 48 hours, with
+15-minute full progress/resource/W&B/checkpoint checks and lightweight 60-second
+failure/status checks. B/C checkpoint watchers poll every five minutes and own
+release of the already-approved iteration20 evaluations. Freshness verified at
+07:26 UTC: B had durable iteration11 / 162 Adam updates; C had durable iteration17
+/ 244 Adam updates. Audit314664 had 20/100 first-checkpoint tasks saved, no caught
+exceptions and no selector fallbacks. Baseline/additive continuations remain
+pending priority. This is a dated snapshot, not a live result claim.
+
+The [live dashboard](arm_results/rl_integration/live-status.html) and runtime
+`arm-turn-bonus-preparation/overnight-20260920/{latest,alerts}.json` record ongoing
+updates. No new compute budgets or automatic paid resubmissions are authorized
+by the monitoring request. The separate prepared MIG pilot still needs exact
+resource/time approval under the root `AGENTS.md`.
+
+
+<a id="baseline-mig-submitted-20260921"></a>
+### Approved baseline replacement and MIG pilot — September 21, 16:11 UTC
+
+Submitted **315098**, outcome-only continuation from iteration90 to100 with
+full300 evaluation, **4 H200 × 12h, 32 CPUs, 480 GiB**. Source v2 preserves
+the saved scheduler; the controller now runs an allocation-aware dry run before
+GPU restore verification, training and evaluation. W&B lineage remains `qcq7i4ug`.
+The job is queued for priority; no competing baseline training is active.
+
+Submitted **315099**, **two h200_1g.18gb MIG slices × 1h, 2 CPUs, 60 GiB**, with
+**$1 / six-call** terminal-judge cap. The initial six-second startup failed on a
+controller-only helper import inside the frozen service launcher. Lazy imports
+fix this without changing inference. Frozen v2 imports successfully in the actual
+worker environment; three MIG CPU tests pass. Preserved the failed attempt at
+`evaluations/arm-mig-probe-315099-startup1/` and requeued the same job with a
+**59-minute** limit: total maximum is 59m06s, inside the approved one hour.
+Actor/selector separation, full-context capacity and live-browser checks remain
+GPU gates, not established results. B/C migration still requires checkpoint export
+and parity verification; the existing full-GPU B evaluation remains running.
+
+Approval and submission receipts are in runtime preparation directories
+`stage1-to100-20260921/` and `mig-probe-20260921/`.
+
+MIG retry is running on **g023**. Both services report exactly one
+`NVIDIA H200 MIG 1g.18gb` device, with distinct UUIDs and 16 GiB exposed CUDA
+memory each. This verifies device separation; model/context/browser tests are
+still in progress. Both jobs are registered with the persistent supervisor.
+
+
+### MIG pilot outcome and prepared context-probe fix — September 21
+
+The second attempt of **315099** failed after 1m13s at the synthetic context
+request, before browser trajectories or paid judge calls. Both actor and selector
+loaded on distinct slices and served health checks. SGLang rejected input32,760
+plus output8 because its API requires a strict total below32,768. This is a
+probe boundary error, not evidence of MIG memory exhaustion. Frozen v3 requests
+32,759+8 tokens; three CPU tests pass, but full-context and browser feasibility
+remain unverified. The expired job is no longer requeueable; no replacement
+allocation has been submitted. Total allocated startup/runtime across attempts
+was 1m19s; evidence remains under `evaluations/arm-mig-probe-315099*`.

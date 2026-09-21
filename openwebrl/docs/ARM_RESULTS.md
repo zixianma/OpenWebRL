@@ -1,18 +1,203 @@
 # ARM results: inference, C2, 1A, joint SFT, and DPO
 
+[Concise collaborator summary](ARM_SUMMARY.md)
+
 Completed inference and standalone-policy results belong here. The first section is the current dashboard; later sections preserve the cohorts, uncertainty, scaling studies, and raw run summaries that support it.
 
 Latest full-300 endpoints: joint SFT **102/300 (34.0% overall; 37.8% valid-only)** and joint DPO **104/300 (34.7%; 40.9%)**. Their paired difference is not significant (p=0.8991).
+
+Initial RL implementation result (2026-09-13): the
+[executed-turn ARM bonus pilot](ARM_INTEGRATION_PLAN.md#arm-turn-bonus-pilot-completed)
+passed calibration and completed ten optimizer updates from the after-70
+baseline actor, with a validated saved checkpoint and no stability warning.
+It used 4 H200 GPUs for 48m38s. This is a one-batch pilot; its updated actor has
+not yet been evaluated on OM2W. The [proposed step-zero comparison](ARM_INTEGRATION_PLAN.md#arm-turn-bonus-from-zero-comparison)
+records the next learning experiment.
+
+Current RL endpoints are in the [collaborator summary](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
+Original bonus iteration 80 (September 20) completed at **33.33% overall /
+45.05% valid-only**, versus historical outcome-only **38.00% / 49.78%**.
+All 300 task rollouts and verdicts are preserved. Additive iteration 80 completed
+at **37.00% / 52.36%**; its previously omitted iteration-20 full-300 result is
+**28.33% / 36.02%**. All-failure iteration 80 completed at **30.67% / 42.20%**.
+Its [iteration-90 evaluation](RL_EVALUATION.md#arm-iter90-results-20260921) is
+**33.67% / 46.54%**, matching the historical baseline's **33.67%** overall
+(baseline valid-only **45.50%**). All 300 rollout archives and verdicts are saved;
+different evaluation dates and valid sets prevent a controlled improvement claim.
+Additive [iteration 90](RL_EVALUATION.md#arm-iter90-results-20260921), job **313408**,
+completed at **39.33% / 54.63%** (118 successes, 216 valid), with all 300 rollouts
+and verdicts saved. This is +5.67 percentage points overall versus historical
+baseline-90; the same different-date comparison limitation applies.
 
 Latest Sol inference result (2026-09-13): **132/300 (44.0% overall; 51.56%
 valid-only)**, versus historical SelectionARM **128/300 (42.67%; 50.0%)**.
 The common-valid paired difference is not significant (p=0.4426); these were
 collected on different dates. [Results, uncertainty and API audit](ARM_INFERENCE.md#sol-selection300-completed-294221).
 
+<a id="arm-task-success-314664"></a>
+## Execution-based SelectionARM audit — September 21, 2026
+
+Job **314664** completed in **56m24s** on two H200s. Both new evaluations use
+exactly the original fixed100 task IDs; the starting-SFT pair and actor-only
+controls reuse historical verdicts. Rate pairs are overall / valid-only.
+
+| Actor | Historical actor-only | Actor + SelectionARM | Δ overall / valid-only (pp) | ARM successes / valid / invalid | Judge |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Starting SFT | 26.00% / 30.59% (26/85) | 36.00% / 43.37% (36/83) (historical) | +10.00 / +12.79 | 36 / 83 / 17 | o4-mini / AgentTrek |
+| Outcome-only iteration 20 | 25.00% / 35.21% (25/71) | 38.00% / 47.50% (38/80) | +13.00 / +12.29 | 38 / 80 / 20 | GPT-4.1 / action history |
+| Outcome-only iteration 90 | 35.00% / 51.47% (35/68) | 43.00% / 53.09% (43/81) | +8.00 / +1.62 | 43 / 81 / 19 | GPT-4.1 / action history |
+
+Parentheses show successes / valid tasks. Overall always uses all 100 tasks;
+valid-only excludes invalid attempts and includes both valid successes and
+valid failures. The valid task sets can differ between the two runs.
+
+All **200 primary and six startup** trajectories have saved archives and JSON
+verdicts; startup tasks are excluded from headline rates. The selector made
+1,187 / 916 calls at iterations 20 / 90, with **zero fallbacks**. Actor generation
+used 2,217,786 / 2,163,267 output tokens and 5,935 / 4,580 requests. Terminal
+judging used 162 requests, costing **$1.69785**. The primary latency fields sum
+concurrent per-task durations; use the 56m24s allocation runtime for wall time.
+
+The overall gains over historical RL controls are +13 / +8 percentage points,
+but valid-only differences are +12.29 / +1.62 points. Different website dates,
+valid subsets and decoding (actor-only T=0; ARM K=5 at T=0.8) prevent a controlled
+selector-effect or significance claim. Cross-actor gain changes do not establish
+drift, especially because the SFT judge differs. No new actor-only rollouts ran.
+
+[Protocol](ARM_INTEGRATION_PLAN.md#arm-task-success-audit-20260921) ·
+[Machine-readable audit](arm_results/rl_integration/task-success-314664.json) ·
+[Saved trajectories and summaries](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-task-success-314664).
+
+Separately, trained variant C at iteration 20 scored **36.67% / 44.53%** on
+full300, with **38.00% / 48.10%** on the fixed100 slice. This is actor-only
+evaluation of the learned policy, distinct from the inference selector audit.
+B also completed: **33.67% / 44.30%** full300, **29.00% / 42.03%** fixed100.
+[B/C evaluation details](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921).
+
+<a id="arm-selection-quality-313774"></a>
+## Fixed-state SelectionARM quality — September 21, 2026 UTC
+
+**Job 313774 completed in 16m25s**, exit 0, using two H200s. All 192 candidate
+sets / 960 responses and 231 valid teacher-label records are saved. Teacher cost
+was **$3.790332**; no optimizer updates or new browser trajectories occurred.
+The native GPU loads of outcome-only iterations 20 and 90 were verified.
+Starting SFT used its HF checkpoint. All three actors received identical prompts
+and screenshots for 64 states from baseline-90 screening trajectories, one state
+per training task. All 192 ARM selections are available and schema-valid.
+
+The table measures **GPT-4.1-assessed next-response acceptability, not task
+success or verified progress**. Random is the exact mean of five binary labels
+per state, not a separately executed rollout. The scorer excludes one state per
+actor because the teacher accepted a malformed candidate; 63 states remain for
+each row, and 62 are shared by the SFT-versus-late paired comparison.
+
+| Candidate-generating actor | At least one acceptable candidate | ARM choice acceptable | First candidate acceptable | Uniform random candidate, expected | ARM minus random |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Starting SFT | 96.8% | 90.5% | 92.1% | 88.9% | +1.6 pp |
+| Outcome-only iteration 20 | 100.0% | 93.7% | 96.8% | 90.5% | +3.2 pp |
+| Outcome-only iteration 90 | 100.0% | 87.3% | 90.5% | 90.5% | −3.2 pp |
+
+ARM missed all acceptable options in 4/63 SFT sets, 4/63 early-RL sets, and
+8/63 late-RL sets. This suggests reviewing selector choices on late-actor
+candidates; it does **not** establish degradation. The prespecified paired
+late-minus-SFT change in ARM lift is **−3.55 pp**, bootstrap 95% interval
+**[−11.29, +3.87] pp**, spanning zero. Three of 39 repeated sets changed at least
+one teacher label under candidate reordering (7.7%); agreement is not correctness.
+
+**Interpretation limits and manual checks.** In 43/63 SFT, 43/63 early and 44/63
+late scored sets, all five candidates were acceptable under this broad label.
+Some acceptable `done` responses merely report blocked website access; this is
+not evidence that a task-solving candidate was available. Sampled late misses
+include choosing Amazon for an explicitly Etsy-only task, choosing English
+Wikipedia for a Faroese-Wikipedia request, and navigating to an unrelated site
+when other responses stayed within the task constraints. These are teacher
+assessments of saved states, not executed counterfactual outcomes. The panel is
+not restricted to the eight failed-rescue tasks and all states come from the
+late actor, so it cannot explain every rescue failure or isolate visitation drift.
+
+An exploratory split finds late ARM-minus-random at −1.1 pp for five distinct
+actions (36 sets), versus −6.2 pp for two-to-four distinct actions (26 sets).
+These small strata do not justify changing B/C gates during training. There
+were six malformed candidates among 960; none was selected by ARM.
+
+[Detailed CPU audit](arm_results/rl_integration/selection-quality-313774-audit.json)
+includes exclusions, diversity strata, selection misses and the original summary.
+[Native summary](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-quality-audit-313774/quality-summary.json) ·
+[Protocol and updated priorities](ARM_INTEGRATION_PLAN.md#arm-selection-quality-audit-20260921).
+
+<a id="arm-rescue-yield-313264"></a>
+## Training-task rescue pilot — September 21, 2026 UTC
+
+Job **313264** completed in **50m24s** using the outcome-only iteration-90
+actor (1,016 Adam updates), frozen SelectionARM and native GPT-4.1/action-history
+judging. Screening five actor attempts on each of 64 training tasks found 18
+tasks with five valid failures. A fixed hash order selected eight; each received
+one ARM-guided retry and five independent ordinary retries, in randomized order.
+
+| Retry method | Tasks rescued | Overall rescue rate | Single-trajectory valid-only | Actor output tokens |
+| --- | ---: | ---: | ---: | ---: |
+| ARM selection, five candidates per turn | 0 / 8 | 0.0% | 0 / 7 = 0.0% | 200,148 |
+| One ordinary actor retry | 1 / 8 | 12.5% | 1 / 7 = 14.29% | 19,137 |
+| Five ordinary actor retries, any success | 3 / 8 | 37.5% | — | 119,630 |
+
+The five-retry row is task pass@5, not a single-trajectory valid-only rate:
+37/40 individual retries were valid, with four successful attempts on three
+distinct tasks. The wrapper counted 84 selection-mode attempts; the subsequent
+[state audit](ARM_INTEGRATION_PLAN.md#arm-selection-quality-audit-20260921)
+verified 83 completed saved decisions and zero selector fallbacks. The attempt
+counter increments before generation/selection finishes.
+Its generated actor tokens were **1.67×** the five-retry control; selector
+compute is additional. All **374** trajectories and judge sidecars are saved
+(6 smoke, 320 screen, 48 retry). No optimizer update occurred.
+
+This small training-task panel supplies no evidence for an ARM rescue gain and
+does not justify scaling this recipe yet. It is not a powered held-out comparison;
+five retries are an approximate generation-budget control, not equal compute.
+Per-task outcomes and denominator checks are in the
+[audit](arm_results/rl_integration/rescue-yield-313264.json).
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-rescue-yield-313264) ·
+[Saved trajectories](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-rescue-yield-313264/trajectories) ·
+[Prespecified protocol](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920).
+
+<a id="arm-three-stage-summary"></a>
+## Three-stage ARM summary
+
+| Stage | Experiment | Headline result |
+| --- | --- | --- |
+| 1. Inference reproduction | ARM selects among five actor candidates at inference | Baseline **30.0%** → ScalarRM **38.0%** → SelectionARM **42.7%** on 300 tasks |
+| 2. Filtered SFT / preference learning | Train the actor on ARM-selected data, then joint SFT/DPO | Filtered 1A **100/300 (33.3%)**; best joint endpoint: DPO **104/300 (34.7%)**; transfer is modest |
+| 3. RL integration | Add ARM turn bonuses during outcome RL: original, all-failure, and additive variants | Iteration 70 additive **37.33%** vs historical outcome-only **34.33%**; iteration 80 original **33.33%** vs **38.00%**. No consistent gain established |
+
+The detailed experiment records remain below; this table is the project-level
+status summary.
+
+<a id="arm-current-three-rl-variants"></a>
+## Current ARM RL variants
+
+These are the three executed-turn ARM variants being continued from the same
+training family. All use the ordinary outcome reward plus a bounded ARM turn
+bonus, GPT-4.1/action-history labels, 48-group collection, PPO2, and the same
+starting SFT actor; each variant has its own checkpoint lineage.
+
+| Variant | ARM data admitted per collection | Purpose | Comparable `iter_0000019` result |
+| --- | --- | --- | --- |
+| Original ARM bonus | Mixed outcome groups only; ARM labels on sampled turns | Conservative baseline for local action credit | 26/100 = 26.0%; 35.62% valid-only |
+| All-failure ARM | Admit eligible valid all-failure groups alongside mixed groups within the same 48-group quota | Test whether ARM can learn from zero-success trajectories | 90/300 = 30.0%; 40.54% valid-only |
+| Additive ARM | Ordinary mixed groups plus up to 8 auxiliary all-failure groups | Preserve outcome learning while adding a bounded failure buffer | 24/100 = 24.0%; 31.17% valid-only |
+| Original ARM, iteration 30 | Mixed outcome groups | Fixed 100 | 27/100 = 27.0%; 36.49% valid-only |
+
+The 100-task comparisons do not show a reliable improvement over the matched
+baseline (25/100, 35.21% valid-only). The all-failure 300-task result is a
+disjoint merge of its 100-task cohort and 200-task complement. This table is
+the early iteration-20/30 record; current later checkpoints and full-300 curves
+are in [ARM_SUMMARY.md](ARM_SUMMARY.md). Detailed counts, W&B links, and continuation records are in
+[RL_RESULTS.md](RL_RESULTS.md) and [RL_EVALUATION.md](RL_EVALUATION.md#arm-iteration-19-evaluations-20260915).
+
 ## Contents
 
 - [ARM results dashboard](#arm-results-dashboard)
 - [GPT-5.6 Sol test-time scaling](#arm-results-dashboard--sol-test-time-scaling)
+- [Serial alternatives SFT: all five versus diverse up to three](#arm-serial-sft-comparison)
 - [C2, 1A, and joint-data SFT/DPO: full-300 evaluation](#arm-c2-vs-1a-full300-eval)
 - [C2 ablation 1A results](#arm-c2-ablation-1a-results)
 - [C2 filtered-SFT checkpoint scaling results](#arm-c2-scaling-results)
@@ -22,6 +207,284 @@ collected on different dates. [Results, uncertainty and API audit](ARM_INFERENCE
 - [Joint SFT and DPO training monitoring](#arm-joint-training-monitor)
 
 ---
+
+<a id="arm-serial-sft-comparison"></a>
+## Serial alternatives SFT: all five versus diverse up to three
+
+**2026-09-11 23:09 PDT: training completed; initial evaluations failed at the
+response protocol. These are not a clean comparison of the recipes.** Both
+models reached update 170 with durable checkpoints. All-five recorded 0/100
+overall and 0/90 valid-only; diverse-three recorded 0/100 and 0/92. Respectively,
+88 and 85 tasks stopped for missing alternatives, two and seven hit generation
+length limits, and ten/eight were unavailable. No saved response contained an
+`<alternative>` tag. All policy failures occurred on turn one.
+
+Audit found a train/evaluation mismatch introduced by the serial integration:
+training appended the new protocol **after** the template's tool instructions;
+evaluation inserted it **before** them. Corrected evaluation now calls the same
+`augment_prompt` function after chat-template rendering. CPU comparison of all
+182 available prompts changes exact system-message matches against the training
+systems from **0/182 to 182/182**. Five regression tests pass. This does not
+establish that prompt correction alone restores generation; the missing
+free-generation startup gate should have caught the protocol failure before
+100-task execution.
+
+Next: verify actual free generation and adapter/merged-model parity with the
+matched prompt, then perform fresh evaluations only after the protocol gate
+passes. Preserve these original results separately. Both allocations have
+ended and released their GPUs (all-five 1:18:40; diverse-three 1:14:20; combined
+5.10 GPU-hours). New GPU work requires explicit allocation approval; the unused
+time is no longer a live allocation. Frozen original configs retain their
+original hashes; corrected attempts require separate configs/output roots.
+[Failure audit](arm_results/serial_sft/failed-evaluation-audit.json).
+
+### Corrected evaluation validation: first GPU check failed generation
+
+The prompt-order fix is now protected by mandatory promotion gates in both
+`openwebrl.arm_eval` and the checkpoint evaluation worker. Serial evaluation
+cannot start without a passed proof tied to the model/checkpoint, adapter and
+merge provenance, processor metadata, runtime hashes, judge/sampling settings,
+task-file hash, and unchanged evidence artifacts. The old result directories
+cannot be reused as corrected evaluations. New runs use separate output roots.
+
+Prepared [validation controller](../../scripts/check_arm_serial_eval.py) and
+[batch template](../../scripts/check_arm_serial_eval.sbatch) perform, per model:
+
+1. On eight fixed held-out states (C2/Piotr; initial/later history), compare
+   original base+adapter versus exported-model HF logits and first-64-token
+   log probabilities using verified image-expanded training prefixes. Require
+   equal first-token argmax, KL <=0.01, and target log-probability MAE <=0.1.
+2. Serve the existing export with SGLang and freely generate on all eight
+   prefixes at temperatures 0 and 0.7. All 16 must stop normally, have the exact
+   expected prompt-token count, pass the serial parser and every action schema,
+   and match the selected/final action. Greedy first tokens must agree with HF.
+   No alternatives are prefilled or supplied as current-turn input.
+3. Only after both checks pass, run five fixed outcome-independent OM2W tasks
+   with the actual actor/browser/judge path. Require at least three available
+   outcomes, no serial protocol or generation-length failures, explicit executed
+   action and projected-history evidence, and at least two multi-turn trajectories.
+   This tests mechanics; task success is reported but is not the promotion threshold.
+4. Only a passed browser-pilot proof can authorize a larger serial cohort.
+   **This validation job never launches the full 100/300 tasks automatically.**
+
+The serial evaluator also records zero-generated-turn failures with valid
+turn-level metadata so the underlying error survives judging instead of being
+replaced by the generic missing-turn-index exception. Policy format failures
+continue to count as failures; they are not reclassified as unavailable.
+
+**CPU verification: 21 tests passed**, including existing ARM contracts,
+prompt-order and execution parsing, missing/failed/stale/wrong-model gates,
+pilot cohort limits, incomplete generation evidence, and execution/history
+requirements. Both frozen recovery configs, panels and runtime hashes reconcile.
+The first GPU check is recorded below; broader evaluation remains blocked.
+
+Proposed new validation-only request: **two H200s × one hour**, 16 CPUs /
+240 GiB RAM (2 GPU-hours; approximately $1.80 at prior scheduler estimates).
+One GPU checks each variant in parallel. Original jobs have ended; the currently
+active RL/screensim allocations are unrelated and are not used. New `sbatch`
+requires explicit user approval under root `AGENTS.md`.
+
+- [All-five recovery config](arm_results/serial_sft/recovery-v2/all5-config.json)
+- [Diverse recovery config](arm_results/serial_sft/recovery-v2/diverse3-config.json)
+- [Frozen five-task cohort](arm_results/serial_sft/recovery-v2/pilot.json)
+- Planned outputs: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/serial-validation-v2/{all5,diverse3}/`
+- Submit only after approval: `sbatch scripts/check_arm_serial_eval.sbatch`.
+
+**Requested smaller first check:** prepare **one H200 × 30 minutes**, 8 CPUs /
+120 GiB RAM (0.5 GPU-hours), for the all-five checkpoint first. This variant has
+the longest required output and exercises the original format failure directly.
+Use the same parity and 16 free-generation checks, then the same five browser
+tasks only if generation passes and allocation time permits. A timeout or an
+incomplete pilot cannot authorize broader evaluation. The diverse variant still
+requires its own successful gates. This replaces the proposed parallel check as
+the immediate next step. **Approved and submitted as job `289684` on `g013`**,
+one H200 for 30 minutes, 8 CPUs / 120 GiB; Slurm estimated $0.45 for the request.
+The job ended after **88 seconds** (0.0244 GPU-hours), releasing the GPU on the
+failed free-generation gate. Slurm correctly reports `FAILED` / exit 1.
+Launch script: `scripts/check_arm_serial_eval_1gpu.sbatch`.
+Log: `/gpfs/scrubbed/zixianma/openwebrl-runtime/logs/arm-serial-quick-check-289684.out`.
+
+**Quick-check outcome (2026-09-11 PDT):**
+
+| Check | all5 update 170 |
+| --- | --- |
+| HF base+adapter versus exported model | Passed on 8/8 states; maximum first-token KL 0.00554, label-log-probability MAE 0.07288 |
+| Exact saved training prompts, matching expanded prompt token counts | 16/16 |
+| Normal generation stop | 16/16; no token-limit failures |
+| Valid serial completion, greedy + temperature 0.7 | **0/16** |
+| Responses containing any `<alternative` tag | **2/16** (both after an early `</think>`) |
+| Browser pilot / broader evaluation | **Not launched** |
+
+Fourteen responses failed the alternative-count check; two failed the thinking
+boundary check. **Correction on 2026-09-12:** the earlier prose incorrectly said
+zero responses contained alternatives; direct inspection and the independent
+response audit show two did. All responses began with ordinary base-style reasoning. The HF
+adapter and merged-model checks also chose `The` or `I` as the first greedy token
+on all eight states, instead of the target's opening `<` token. This is evidence
+that the failure persists with the exact saved training prompts and in HF;
+correcting prompt order alone does not recover the trained protocol.
+
+The generation-gate artifact also records `sglang_first_token_parity=false`, but
+this is **unmeasured**, not evidence of a backend mismatch: first-token capture
+in this checker follows serial parsing, which failed on every response. Keep
+this diagnostic limitation distinct from the independently measured HF
+adapter/export parity pass and the observed free-generation failures.
+
+The training objective remains a plausible contributor, not a proven cause:
+the first output token receives only `0.5 / alternatives_token_count` weight
+(0.00017–0.00046 in these eight examples). Teacher-forced final-action CE can
+be very low because the selected action already appears in the supplied
+alternatives. A low aggregate CE therefore did not demonstrate that the model
+learned to begin or generate the complete protocol. Before another full eval,
+audit boundary-token learning and adapter changes, then validate any repair
+with free generation first. No new training or compute has been launched.
+
+[Machine-readable quick-check evidence](arm_results/serial_sft/recovery-v2/quick-check-289684.json).
+Full generated responses remain in the runtime output directory's
+`free-generation.json`; adapter parity is in `parity.json`.
+
+**Detailed error audit (2026-09-12, CPU only):**
+
+- **14/16** have no alternatives and no selected index. These cannot be evaluated
+  as serial selection, even when their final ordinary action parses.
+- **1/16** (`Piotr:ep267__t0`, greedy) has ordinary reasoning followed by an
+  early `</think>`, then five complete alternatives, selection 1, another
+  `</think>`, and final calls. The selected and final action sequences match
+  exactly. Its suffix starting at the first alternative passes strict parsing,
+  but the full response violates the single-think contract. This suffix check
+  is diagnostic only; no output was rewritten or executed.
+- **1/16** (same state, temperature 0.7) opens five alternatives but closes only
+  the first; alternatives 2–5 omit proposed actions and instead end with
+  `</think>`. It selects 3, whose action is absent, so selected/final equality
+  cannot be checked.
+- Independently of the above categories, final tool-call schemas pass in
+  **11/16**, fail in **5/16**. Malformed outputs include missing `name`, nested
+  `arguments.action`, and malformed JSON. A valid schema does not establish
+  that the action would advance the task.
+- Selected/final comparison: **1 match, 0 measured mismatches, 15 not
+  comparable**. No browser task ran, so this check establishes neither action
+  quality nor terminal task success.
+
+The bounded audit rechecked **12,162 target rows** across both variants and
+train/validation splits: all pass strict serial parsing, final action schemas,
+opening token/segment checks, and serial instruction placement. All **504/504**
+all5 LoRA tensors changed from update 0 to 170, with no nonfinite tensors; the
+initial zero B matrices became nonzero. Thus unchanged saved adapters and
+malformed target construction do not explain the failures. This does not
+prove the entire optimization path is correct. The next diagnostic should
+measure opening/structural-token probabilities separately from aggregate CE
+and test a clearly labelled forced-opening probe before another training run.
+Such a probe would isolate a failure mechanism, not count as a passed free-
+generation gate or authorize full evaluation.
+
+Reproducible CPU audit: `scripts/audit_arm_serial_failures.py`.
+[Response and training-target audit](arm_results/serial_sft/recovery-v2/response-error-audit.json),
+[saved adapter delta audit](arm_results/serial_sft/recovery-v2/adapter-delta-audit.json).
+
+**Undertraining hypothesis (2026-09-12 discussion):** the old response format
+may persist because one pass over 5,437 states (170 updates, rank-16 LoRA,
+peak LR 1e-5) was insufficient to change generation behavior. This remains
+plausible; insufficient dataset diversity has not been established. On the
+same 128 validation states throughout, all5 alternatives CE goes
+0.46266 → 0.42534 → 0.34054 → 0.29521 → 0.27478 at updates
+0/43/85/128/170, while final-call CE is already 0.00683 by update 43.
+The alternatives loss was still improving at the endpoint. These are teacher-
+forced metrics, not evidence of free-generation correctness.
+
+The current loss also gives a final-action token a median **39.2×** the weight
+of an alternative token in all5 (**22.24×** in diverse3), because each segment
+is averaged separately. This is a loss-coefficient ratio, not a measured
+gradient ratio. The first alternative's opening belongs to the long, lower-
+weight segment. Before collecting more data, a bounded small-set overfit test
+with free-generation checks would distinguish failure to learn the protocol
+even on training states from failure to generalize. Compare more exposure
+under the original objective with explicit structural-token weighting while
+holding rank/data fixed; do not bundle rank, LR, and data changes into the
+first diagnostic. No additional compute or training was requested or launched.
+
+<!-- serial-sft-live:start -->
+Monitor snapshot: 2026-09-12T06:14:18.887346+00:00 (10-minute cadence).
+
+| Variant | Job / scheduler | Updates | Latest training loss | Evaluation outcomes |
+| --- | --- | ---: | ---: | --- |
+| all5 | 288893 / COMPLETED | 170/170 | 0.1632 | 0/100 overall (0.0%); 0/90 valid-only (0.0%) |
+| diverse3 | 288894 / COMPLETED | 170/170 | 0.1470 | 0/100 overall (0.0%); 0/92 valid-only (0.0%) |
+
+Local status/alerts: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/serial-monitor.json`.
+<!-- serial-sft-live:end -->
+
+Approved on 2026-09-11 PDT: two independent jobs, **each two H200s × four hours**,
+16 CPUs / 240 GiB RAM, including training and the fixed 100-task OM2W evaluation.
+Scheduler estimates $7.20 per job, $14.40 total. Both were submitted immediately
+after data, parser and launch preparation; both started on g001 with disjoint
+Slurm GPU assignments.
+
+| Variant | Job | Training states | Target tokens, mean / median | Planned updates | Overall / valid-only |
+| --- | ---: | ---: | ---: | ---: | --- |
+| All five reasoning/action alternatives | 288893 | 5,437 | 1,851 / 1,759 | 170 completed | 0/100; 0/90 — failed protocol evaluation |
+| Diverse up to three alternatives | 288894 | 5,437 | 1,091 / 1,042 | 170 completed | 0/100; 0/92 — failed protocol evaluation |
+
+The diverse variant contains 915 two-alternative states and 4,522 three-alternative
+states: exact action deduplication, original winner preserved, typed max-min
+selection capped at three, followed by a fixed permutation. It reduces mean
+target tokens by **41.0%**. Nearby clicks are ranked as lower novelty but are
+not declared equivalent without DOM evidence; the frozen novelty stop threshold
+is zero (exact duplicates). Action coordinates are normalized through the
+browser adapter's 1000-unit resize convention. Subset labels inherit the full
+teacher decision and have not been relabeled by a subset teacher.
+
+Both models start from original OpenWebRL-4B-SFT with language-only LoRA
+16/32/0.05, batch 32, LR 1e-5, 512-state warmup and half-cosine decay to 5e-6.
+Segment loss is 0.50 alternatives / 0.10 selection / 0.40 final action, with
+mean CE within each segment. The last batch uses 29 real states and zero-weight
+padding, not duplicated training exposure. Checkpoints: 0, 43, 85, 128, 170;
+optimizer/RNG/cursor are saved. A fixed 128-state held-out panel is scored at
+intermediate checkpoints and all 644 held-out states at the endpoint. Diagnostics
+include raw segment CE, aggregate token CE, teacher-forced selection accuracy,
+gradient norm, LR, peak GPU memory and update time; W&B project `openwebrl-arm`,
+group `serial-alternatives-v1`.
+
+Each batch controller owns training, endpoint export, two 50-task evaluation
+workers and aggregation. It reserves 75 minutes before its five-minute shutdown
+margin for export/evaluation, and gives a failed training worker a bounded
+10-minute repair window. Both evaluations use the same fixed 100 development
+tasks, one actor sample with no inference ARM, temperature 0.7/top-p 0.9,
+30 turns, o4-mini/AgentTrek, and a 6,144-token response ceiling dynamically
+bounded by the 32K context. Only the selected rationale/action enters future
+history; full generated alternatives remain in saved turn samples. Serial
+protocol violations execute nothing and count as policy failures, not unavailable
+website outcomes. No retries are silently substituted.
+
+CPU preparation verified every retained final action, source draw hashes,
+prompt/target encodings, candidate counts, no task-group split overlap, and
+32K fit after new instructions. Four parser tests cover round trips,
+non-execution of hypothetical tool tags, malformed/truncated/mismatched choices,
+duplicates, single-option and multi-call cases. **Both GPU startup gates passed:**
+longest-example backward produced finite nonzero gradients, and optimized versus
+full-logits loss difference was exactly zero on the smoke example. Both reached
+update 6/170 by 21:54 PDT; initial update times are about 23 seconds for all-five
+and 21 seconds for diverse-three. A spot check across four distinct assigned
+GPU UUIDs showed 94–100% utilization. This is an initial spot check, not an
+allocation-wide utilization average.
+
+W&B: [all five](https://wandb.ai/zixianma/openwebrl-arm/runs/2d4f808c) ·
+[diverse up to three](https://wandb.ai/zixianma/openwebrl-arm/runs/3824c30f).
+A local monitor records training, scheduler, evaluation counts and alerts every
+10 minutes and refreshes the live table above. The batch controllers own the
+training-to-evaluation handoff independently of that monitor.
+
+- [Plan and limitations](ARM_INTEGRATION_PLAN.md#serial-alternatives-sft)
+- [Data audit](arm_results/serial_sft_data.json) · [Exact target review](arm_results/serial_sft_review.html)
+- [All-five configuration](arm_results/serial_sft/all5-config.json) · [Diverse configuration](arm_results/serial_sft/diverse3-config.json)
+- Training logs: `/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/serial-{all5,diverse3}-v1/training.log`
+- Checkpoints and metrics: each run's `student/`; evaluation rollouts: `evaluation/shard-{0,1}/online-mind2web/`.
+- Reports are written to `arm_results/serial_sft/{all5,diverse3}-results.json` and `comparison.json` after both jobs complete.
+
+Resume within an explicitly authorized existing allocation by invoking
+`scripts/run_arm_serial_pipeline.py --config openwebrl/docs/arm_results/serial_sft/VARIANT-config.json`.
+It resumes the durable checkpoint, skips a completed training stage, verifies
+export provenance, and resumes missing evaluation tasks without replacing saved
+unavailable outcomes. New allocations still require exact budget approval.
 
 <!-- document:ARM_RESULTS_DASHBOARD.md:start -->
 <a id="arm-results-dashboard"></a>
@@ -733,3 +1196,22 @@ Refresh this report with `python3 scripts/report_arm_joint_training.py`.
 <!-- document:ARM_JOINT_TRAINING_MONITOR.md:end -->
 
 ---
+
+<!-- document:ARM_JOINT_ACTION_DPO_RESULTS.md:start -->
+<a id="arm-joint-action-dpo-results"></a>
+## Joint-data action-masked DPO: endpoint OM2W evaluation
+
+_Source record: `ARM_JOINT_ACTION_DPO_RESULTS.md`. Dated entries retain their historical context._
+
+
+Update 174, 5,540 training states, fresh evaluation of all 300 tasks.
+
+- Overall: 99/300 = 33.0%.
+- Valid-only: 99/270 = 36.7%.
+- Unavailable: 30; missing: 0.
+
+Protocol: one candidate, no inference ARM, o4-mini/AgentTrek judge. Unavailable results were not silently replaced.
+
+[Full report](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-dpo-action-2gpu-r2/evaluation/all300-summary.json) · [Rollouts](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-dpo-action-2gpu-r2/evaluation)
+
+<!-- document:ARM_JOINT_ACTION_DPO_RESULTS.md:end -->

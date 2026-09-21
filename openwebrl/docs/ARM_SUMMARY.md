@@ -106,11 +106,69 @@ on labeled turns; it is therefore not literally `1` after normalization.
 
 `q=0.20` is the probability of attempting an ARM label, not a guarantee that
 20% of training turns receive a bonus. The realized applied-label fraction is
-usually 8--10% because the per-trajectory pending-label cap, selector or
-transport failures, timeouts, and later removal of invalid/non-trainable turns
-all reduce the number of usable labels. For example, original ARM iteration 45
-attempted 263 selector requests, had 278 unavailable labels, and applied 139
-usable labels to 1,454 retained turns (9.56%).
+usually 8--10%. A [43-collection audit](ARM_INTEGRATION_PLAN.md#arm-label-coverage-confidence-audit-20260919)
+found duplicate-action rejection was the largest cause: 40--50% of sampled
+turns, versus 3--7% truncation/empty outputs and 1--2% candidate parsing errors.
+The current gate requires all five candidate actions to differ. A completed
+90-task confidence replay found that high confidence can reflect a position
+tie-break on identical responses; confidence alone is insufficient to replace
+the gate. A [one-call, at-least-two-action gate test](ARM_INTEGRATION_PLAN.md#arm-min2-gate-test-20260919)
+increased archived gate passes from 47.3% to 88.5% of sampled turns (1.87×).
+The gate and optional duplicate-aware action credit are independently configurable.
+The three original runs retain their original gate; B/C test the changes below.
+
+[Iteration-zero gate ablations](ARM_INTEGRATION_PLAN.md#arm-bc-firstupdates-20260920):
+[B](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-b-309053) relaxes the gate to
+at least two actions; [C](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-c-309054)
+also uses action-equivalence credit. Their W&B display names now identify both
+the variant and credit rule.
+As of September 21, 17:00 UTC, B **313208** and C **313210** both completed
+**iteration 20 / 284 Adam updates**. C's full-300 evaluation **313211** finished
+at **36.67% overall / 44.53% valid-only**; B's **313209** finished at
+**33.67% / 44.30%**. All 300 rollouts and verdicts are saved for each. Calibration passes; recent B/C
+collections label 16–20% of retained ordinary turns, with bonus/outcome RMS
+about 9–11%, beta=0.5 unchanged.
+[C evaluation audit](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921).
+[Initial audit](arm_results/rl_integration/bc-firstupdates-20260920.json);
+[continuation status](RL_RUNTIME.md#arm-training-status-20260920-2224).
+
+Both full-300 evaluations were released after their iteration-20 checkpoints passed validation.
+The separate [rescue-yield pilot](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920)
+**313264** completed: among eight screened all-failure tasks, ARM rescued
+**0/8**, one ordinary retry **1/8**, and five ordinary retries **3/8**.
+All 374 trajectories are saved. This small training-task pilot shows no rescue
+benefit; [protocol and results](ARM_RESULTS.md#arm-rescue-yield-313264).
+The [fixed-state selection audit](ARM_RESULTS.md#arm-selection-quality-313774)
+also finished: ARM minus random next-response acceptability was **+1.6 / +3.2 /
+−3.2 pp** for SFT / outcome-only iteration 20 / iteration 90. This small,
+teacher-labeled panel does not establish drift or task-success gains. The
+[terminal-success audit](ARM_RESULTS.md#arm-task-success-314664) **314664**
+completed actor+ARM on the **same fixed100 tasks** at outcome-only iterations
+20 and 90. All 200 primary rollouts and verdicts are saved; zero selector
+fallbacks. The SFT cells reuse saved results on those exact IDs.
+Rates below are overall / valid-only; Δ is ARM minus actor-only in percentage
+points, calculated from unrounded rates.
+
+| Actor checkpoint | Actor alone · fixed100 | Actor + SelectionARM · fixed100 | Δ overall / valid-only (pp) |
+| --- | ---: | ---: | ---: |
+| Starting SFT | 26.00% / 30.59% (26/85) | 36.00% / 43.37% (36/83) | +10.00 / +12.79 |
+| Outcome-only iteration 20 | 25.00% / 35.21% (25/71) | 38.00% / 47.50% (38/80) | +13.00 / +12.29 |
+| Outcome-only iteration 90 | 35.00% / 51.47% (35/68) | 43.00% / 53.09% (43/81) | +8.00 / +1.62 |
+
+Parentheses show successes / valid tasks. Overall always uses all 100 tasks;
+valid-only excludes invalid attempts and includes both valid successes and
+valid failures. The valid task sets can differ between the two runs.
+
+SFT uses o4-mini; RL uses GPT-4.1. The actor-only controls are historical;
+dates, availability and decoding differ, so these are descriptive inference
+comparisons. Additive **313669** saved iteration 93 and is collecting 94 toward
+100. Baseline replacement **315098** is queued with the scheduler-restore fix,
+using the approved 4 H200 × 12h including full300 evaluation. MIG pilot
+**315099** loaded both models on separate 18-GB slices but stopped at a
+synthetic context-boundary API check; the off-by-one test fix is prepared.
+[Next additive experiments, discussion](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921).
+[Live jobs and completion reports](arm_results/rl_integration/live-status.html)
+refresh every minute; checkpoint/health details are checked every 15 minutes.
 
 Here `K=5` means **one executed actor response plus four counterfactual actor
 responses** sampled from the same state with different deterministic seeds.
@@ -129,6 +187,7 @@ candidates.
 |  | 60 | — | 35.00% / 45.65% |
 |  | 70 | — | 34.33% / 44.98% |
 |  | 80 | — | 38.00% / 49.78% |
+|  | 90 | — | 33.67% / 45.50% |
 | **Original bonus** | 20 | 26.0% / 35.62% | — |
 |  | 30 | 27.0% / 36.49% | — |
 |  | 40 | **31.00% / 44.93%** | — |
@@ -141,6 +200,8 @@ candidates.
 |  | 50 | — | 37.67% / 48.50% |
 |  | 60 | — | 33.33% / 43.67% |
 |  | 70 | — | 35.33% / 45.49% |
+|  | 80 | — | 30.67% / 42.20% |
+|  | 90 | — | **33.67% / 46.54%** |
 | **Additive bonus** | 20 | 24.0% / 31.17% | 28.33% / 36.02% |
 |  | 30 | 30.0% / 44.12% | 34.33% / 47.03% |
 |  | 40 | 30.0% / 44.12% | 34.00% / 46.79% |
@@ -148,13 +209,32 @@ candidates.
 |  | 60 | — | 30.00% / 41.86% |
 |  | 70 | — | 37.33% / 50.45% |
 |  | 80 | — | 37.00% / 52.36% |
+|  | 90 | — | **39.33% / 54.63%** |
+| **B: relaxed gate** | 20 | 29.00% / 42.03% | 33.67% / 44.30% |
+| **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 
 ### All-failure ARM full-300 curve
+
+All three [iteration-80 evaluations](RL_EVALUATION.md#arm-iter80-launch-20260919)
+are complete, each with 300 per-task rollout archives and verdict records.
+Additive is the strongest ARM endpoint by both rates, but none exceeds the
+historical baseline's overall success. These are different-date evaluations
+with different valid-task sets.
+
+All-failure [iteration 90](RL_EVALUATION.md#arm-iter90-results-20260921) completed
+at **33.67% overall / 46.54% valid-only**, matching the historical baseline's
+overall rate. Different evaluation dates and valid-task sets limit comparison.
+All 300 rollouts/verdicts are saved. Training finished at **100 / 1,242 Adam
+updates**. Additive training finished at **90 / 1,150**; corrected full-300
+evaluation **313408** completed at **39.33% overall / 54.63% valid-only**,
+with all 300 rollouts/verdicts saved. This is 5.67 percentage points above the
+historical iteration-90 baseline overall, but is not a controlled same-day or
+paired significance claim. Original remains at **85 / 1,002**.
 
 ![All-failure ARM full-300 evaluation curve](rl_results/arm_allfailure_full300.png)
 
 The curve uses the completed full-300 evaluations at iterations 20, 30, 40,
-50, and 60. Iteration 20 is the disjoint fixed-100 plus 200-task merge; later
+50, 60, 70, 80, and 90. Iteration 20 is the disjoint fixed-100 plus 200-task merge; later
 points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 
 ### Baseline comparison
@@ -168,8 +248,6 @@ completed as job 307429 and is now included; it had been omitted from the docs.
 It is a fresh 300-task evaluation, independent of the older fixed-100 result.
 The first plotted original ARM point is iteration 51:
 job 303459 loaded `iter_0000050`, previously mislabeled as iteration 50.
-
-Iteration 80: original bonus **33.33% / 45.05%**, additive **37.00% / 52.36%**, and historical outcome-only **38.00% / 49.78%** (overall / valid-only). These are different-date comparisons with different valid-task sets. Both new ARM evaluations retained all 300 per-task rollout archives and verdicts; see the [audit](RL_EVALUATION.md#arm-iter80-launch-20260919).
 
 The earlier significance calculation was an exploratory unpaired proportion
 test over aggregate counts. It is hidden from this summary because the archived

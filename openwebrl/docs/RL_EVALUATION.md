@@ -4,11 +4,115 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Paper protocol and best-checkpoint rerun](#paper-om2w-protocol-20260912)
 - [Intermediate baseline checkpoint evaluation](#baseline-checkpoint-evaluation)
 - [Browser Use checkpoint evaluations](#browser-use-checkpoint-evaluation)
 - [Evaluating checkpoints whose training reward enters the top five](#reward-rank-evaluation-queue)
+- [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="paper-om2w-protocol-20260912"></a>
+## Paper protocol and best-checkpoint rerun (2026-09-12)
+
+The user requested OpenWebRL's default judge/config for RL checkpoint evaluation.
+The [paper, Appendix A.6 and B](https://arxiv.org/html/2606.02031v1#A6) explicitly
+distinguishes two protocols:
+
+| Setting | Existing training-curve monitor | Paper Online-Mind2Web benchmark |
+| --- | --- | --- |
+| Judge | GPT-4.1, native action-history prompt | o4-mini, OSU AgentTrek prompt |
+| Actor decoding | temperature 0; top-p 1; top-k 1 | temperature 0.6; top-p 0.95; top-k 20 |
+| Response/context cap | 4,096 / 32,768 tokens | 4,096 / 32,768 tokens |
+| Max turns | 30 | 30 |
+| Actor context | one screenshot, full reasoning history and tool feedback | same |
+| Judge images | up to three recent screenshots | native AgentTrek implementation uses the final screenshot |
+| Browser in our runs | local process; separately labeled Browser Use runs | Browser Use stealth |
+| Reporting | task-level overall and valid-only | task-level overall and valid-only, invalid counts |
+
+Training itself uses GPT-4.1 by default. Consequently, our existing deterministic
+RL monitor was already consistent with the paper's **training-curve** protocol;
+it was not the paper's official OM2W score. The new standalone benchmark uses
+the right-hand column. Keep the old monitor series and live baseline unchanged.
+
+Source check: upstream [run_evaluation.sh](https://github.com/OpenWebRL/OpenWebRL/blob/main/scripts/run_evaluation.sh)
+chooses the canonical OM2W judge when no environment override is supplied.
+However, [run_evaluate.py](https://github.com/OpenWebRL/OpenWebRL/blob/main/openwebrl/run_evaluate.py)
+still has greedy CLI defaults and a hard-coded 2,048-token request. Thus simply
+running the shell script or changing `JUDGE_MODEL` does not reproduce all paper
+settings. The prepared benchmark module pins the paper's actor parameters and
+loads the native AgentTrek reward function explicitly.
+
+Native AgentTrek sends full interleaved reasoning/action history plus the final
+image, seed 42, and no explicit judge temperature or token cap; its per-call
+timeout is 120 seconds with at most four attempts. Actor repetition penalty is
+1.0. Browser concurrency is eight, reflecting the verified account limit; the
+paper's generic table uses 16. Proxy is disabled, matching our validated Browser
+Use source. These operational differences and live-site variability prevent a
+claim of bit-for-bit reproduction of the published score.
+
+**Selected checkpoint:** after **58 training iterations**, index **57**,
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-288861-20260912T040027/iter_0000057`.
+It has the best observed local-browser task scores among the completed same-
+protocol checkpoint evaluations: **109/300 = 36.33% overall; 109/230 = 47.39%
+valid-only; 70 invalid**. Selection is based on these task scores, not the
+turn-weighted legacy metric or peak training reward. Its edge over after-38 is
+only two successes. The after-38 Browser Use result (137/300, 137/291 valid-only)
+is a separate browser condition and was not pooled into this ranking.
+
+Prepared [rerun manifest](arm_results/rl_integration/after58-benchmark-plan.json),
+[benchmark generator](../eval_benchmark.py), and
+[batch launcher](../../scripts/evaluate_paper_after58_2gpu.sbatch).
+Runtime source is `.../openwebrl-runtime/reference-paper-om2w-20260912`.
+It restores the selected distributed checkpoint directly, with zero optimizer
+updates, and writes a separate W&B run/group `qcq7i4ug-paper-benchmark` and metric
+prefix `eval/online-mind2web-benchmark`. Original checkpoints/results are preserved.
+The source manifest records file hashes and the exact configuration.
+
+An integration check prevents a missing AgentTrek verdict from being re-judged
+by slime's generic training reward handler: the missing verdict stays in
+metadata, all affected turns are marked invalid, and a numeric transport sentinel
+prevents automatic second judging. It remains invalid in task statistics.
+
+**Approved and submitted:** job **291005**, **two H200s × two hours**, 16 CPUs,
+480 GiB (four GPU-hours, Slurm estimate **$3.60**), plus o4-mini and Browser Use
+services. Submitted 2026-09-12 20:02 UTC and started on **g008**. The user reduced
+the earlier three-hour proposal to two hours. A previous full-300 Browser
+Use/GPT-4.1 run took 1:52:14 on two GPUs, so this budget is plausible but tight;
+it is not an o4-mini runtime guarantee. Active baseline job 290926 is separate.
+[Submission receipt](arm_results/rl_integration/after58-benchmark-submission.json).
+
+Output: `/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-paper-291005-after58`.
+`evaluation.log` records execution; `completed_tasks/*.json` atomically preserves
+each finished trajectory's task ID, verdict, invalid flag and response history
+before the all-task completion barrier. A timeout therefore retains partial
+task results, which must be labeled partial rather than a completed 300-task
+score. Full completion also produces the existing rollout recovery archive and
+`metrics.json`. W&B run: `qcq7i4ug-benchmark-after58-291005`.
+
+**Startup verified:** TP2 GPU checkpoint restoration at index 57, both inference
+workers generating browser actions, and the first native AgentTrek verdict
+persisted with `judge_model=o4-mini`. This verifies startup, not completion or a
+success-rate estimate. [Startup receipt](arm_results/rl_integration/after58-benchmark-startup.json).
+
+**Allocation ended, partial result:** job 291005 exited after 1:58:44 when its
+evaluation subprocess reached the internal timeout (return code 124, Slurm
+FAILED). It preserved **299/300** task records: **175 successes, 115 valid
+failures, nine unavailable**, and **one task without a saved result**. Seven
+unavailable records have `remove_sample=true`; two additional browser-navigation
+aborts have no judge verdict despite `remove_sample=false` and are excluded
+from the valid denominator. Completed-only success is **175/299 = 58.53%**;
+completed-valid-only success is **175/290 = 60.34%**.
+Across the scheduled 300 tasks, **175/300 = 58.33% is a lower bound**, not a
+completed full-300 score. The all-task finalization barrier did not finish.
+The unresolved task is listed in the
+[partial-result audit](arm_results/rl_integration/after58-benchmark-partial.json).
+The two-hour budget was insufficient for full completion. No additional
+allocation or retry was submitted. These benchmark rates must not be pooled
+with historical GPT-4.1/greedy monitor scores.
+
+The ARM track objectives and separate mechanics-pilot requests are recorded in
+[the integration plan](ARM_INTEGRATION_PLAN.md#arm-rl-exact-losses-20260912).
 
 <!-- document:BASELINE_CHECKPOINT_EVALUATION.md:start -->
 <a id="debug-evaluation-wandb-migration-20260913"></a>
@@ -807,6 +911,145 @@ of a validated 16-session evaluation capacity was too strong.
 ---
 
 <!-- document:REWARD_RANK_EVALUATION_QUEUE.md:start -->
+<a id="after58-invalid-retry-plan-20260914"></a>
+### Completed after-58 invalid/missing retry
+
+Job **295069 completed normally at 22:58:01 PDT, September 13**, exit 0,
+after **13m18s / 0.4433 H200-hours** within the approved two-H200, one-hour
+allocation (16 CPUs / 480 GiB). It restored `iter_0000057` and retried exactly
+nine invalid attempts plus the one missing task, once each, preserving all
+290 originally valid attempts, including their failures.
+
+| Result | Completed / planned | Successes | Valid | Invalid | Missing | Success / completed % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Original job 291005 | 299 / 300 | 175 | 290 | 9 | 1 | 58.53 | 60.34 |
+| Retry subset job 295069 | 10 / 10 | 3 | 7 | 3 | 0 | 30.00 | 42.86 |
+| Original valid + retries | 300 / 300 | 178 | 297 | 3 | 0 | 59.33 | 59.93 |
+
+The retry produced **three successes, four valid failures and three remaining
+invalid attempts**. The formerly missing task completed as a valid failure.
+Remaining invalids are CVS initial navigation timeout, dblp connection closure,
+and task `a48e2f1ee8d87eaeea56fe5e730427e6` timing out at 600 seconds.
+There is no repeat-until-success loop or further authorized allocation.
+
+The isolated `reference-after58-invalid-retry-20260914` source changed only the
+task subset; Browser Use stealth, o4-mini/AgentTrek judging, actor temperature
+0.6 and checkpoint identity are unchanged. The merged result is explicitly
+labeled as including invalid/missing retries in [RL_RESULTS.md](RL_RESULTS.md).
+It is not a fresh single-pass evaluation and has a different retry policy from
+the original after-80/90 rows. The original partial results remain intact.
+
+[W&B retry run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-after58-invalid-retry-295069)
+is finished. All 39 native subset metrics match remote history; the exact ten
+retry identities and retained 290 valid original attempts were checked. Merged
+metrics are recorded separately under `eval/merged/` in the W&B summary, leaving
+the ten-task history unchanged. Evidence under runtime
+`evaluations/qcq7i4ug-after58-invalid-retry-295069/`:
+`metrics.json`, `merged_metrics.json`, `completed_tasks/`,
+`checkpoint_restore_evidence.json`, `final_wandb_audit.json`, and `status.json`.
+Controller log: runtime `logs/slurm-after58-retry-295069.out`.
+
+Launcher: `scripts/retry_stealth_after58_2gpu.sbatch`; worker:
+`scripts/retry_stealth_invalid.py`. Four selection/merge tests and 15 evaluation
+loader tests passed before submission. Runtime provenance remains in
+`after58_invalid_retry_plan.json` and `after58_invalid_retry_submission_plan.json`.
+
+<a id="stealth80-gpt41-rejudge-feasibility-20260913"></a>
+### Completed after-80 temperature-0 GPT-4.1 rejudging
+
+| Saved trajectories | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| After-80, stealth browser, actor temperature 0 | 169 | 294 | 6 | 56.33 | 57.48 |
+
+Rejudged all 300 task records from job 294093 with the frozen baseline
+GPT-4.1 `action_history` reward implementation and its three recent screenshots.
+The original six invalid attempts remain invalid. There were no additional
+judge timeouts or exhausted API retries. The native protocol made 271 API calls;
+23 other valid attempts received deterministic failure scores under its status,
+format or missing-final-answer rules. **No new GPU inference or Browser Use
+sessions** were used. The archive's tensor storage was skipped; screenshot and
+response metadata were preserved. `scripts/rejudge_saved_gpt41.py` provides
+CPU-only auditing by default, explicit execution and per-task resumable output.
+
+The same trajectories originally scored **166/300 (55.33%)** with o4-mini/AgentTrek.
+GPT-4.1 awarded 29 successes where o4-mini did not, and rejected 26 o4-mini
+successes: **55/294 disagreements (18.71%)**, a net gain of three successes.
+This comparison changes the judge model and judging protocol together, and is
+not a second actor rollout or a pure judge-model ablation. The results sheet
+labels it as rejudged saved trajectories.
+
+[W&B rejudging run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-after80-t0-gpt41-rejudge-20260913)
+is finished; all 13 final metrics match remote history and all 300 unique task
+identities match the original evaluation. The served model was
+`gpt-4.1-2025-04-14`; recorded API usage totals **1,298,429 input tokens** and
+**96,847 output tokens**. Evidence under runtime
+`evaluations/qcq7i4ug-after80-t0-gpt41-rejudge-20260913/`:
+`manifest.json`, `metrics.json`, `completed_tasks/`, `api_usage.jsonl`,
+`final_wandb_audit.json` and `status.json`. Local log:
+`logs/rejudge-after80-gpt41-20260913.log`. Three CPU tests cover denominator
+handling, metadata preservation and rejection of unexpected pickle globals.
+
+<a id="stealth90-temperature-plan-20260913"></a>
+### Completed after-90 stealth evaluation, temperature 0.6
+
+**Job 294983 completed normally on g013 at 22:01:55 PDT, September 13**,
+exit 0, after **2h02m43s / 4.091 H200-hours**, within the approved two-H200,
+three-hour allocation (16 CPUs / 480 GiB). It restored checkpoint
+`iter_0000089` from job 294421 and executed zero optimizer updates.
+
+| Checkpoint after iteration | Actor temperature | Completed | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 80 | 0.6 | 300 | 169 | 296 | 4 | 56.33 | 57.09 |
+| 90 | 0.6 | 300 | 171 | 296 | 4 | 57.00 | 57.77 |
+
+The frozen `reference-paper-om2w-20260912` source uses Browser Use stealth
+and o4-mini/AgentTrek judging on all 300 tasks. After-90 has two more successes
+than after-80: **+0.67 percentage points overall / +0.68 valid-only**. This small
+observed difference does not establish a reliable checkpoint advantage; live-web
+conditions and valid task identities can differ.
+
+[W&B run](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-stealth-o4-after90-t0.6-294983)
+is finished. All **39 local metrics** match remote history; all 300 unique
+per-task records match the final counts. Browser navigation exceptions occurred
+within handled task attempts; the overall evaluator and batch both exited 0.
+Raw turn-weighted reward **0.46938186** is not the task success rate.
+
+Evidence under runtime `evaluations/qcq7i4ug-stealth-o4-294983-after90-t0.6/`:
+`metrics.json`, `completed_tasks/`, `checkpoint_restore_evidence.json`,
+`final_wandb_audit.json`, `status.json`, and `launcher_exit.json`.
+Controller log: runtime `logs/slurm-stealth-o4-294983.out`.
+Submission plans remain `stealth90_t06_prepared_plan.json` and
+`stealth90_t06_submission_plan.json`; no further evaluation submission is
+covered by this consumed allocation approval.
+
+<a id="scheduled-eval90-results-20260913"></a>
+### Scheduled evaluation after 90, September 13
+
+Job **294421 completed normally at 19:22:24 PDT** after **5h10m17s**
+(**10.343 H200-hours**, within the approved two-H200/six-hour cap).
+Training reached **90 completed iterations / 1,016 Adam updates** and saved
+`iter_0000089` before the scheduled full-300 evaluation.
+
+| Checkpoint | Browser | Judge | Actor temperature | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 90 | Local | GPT-4.1 | 0 | 101 | 222 | 78 | 33.67 | 45.50 |
+
+After-80 scored 38.00% overall and 49.78% valid-only under the same configuration;
+after-90 is lower by 4.33 and 4.29 percentage points respectively. Valid cohorts
+and live website conditions vary, so this single evaluation does not establish
+a reliable checkpoint ranking. After-80 retains the highest observed overall
+score in the completed local-browser series.
+
+[W&B qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) is **finished**;
+all **43** final evaluation metrics match local progress output within its printed
+precision. The final `train/reward` observation is **0.5241433**; this is distinct
+from evaluation task success. Evidence in runtime run
+`openwebrl-4b-reference-294421-20260913T211532`:
+`iteration_90_scheduled_eval_metrics.json`, `final90_wandb_audit.json`,
+`checkpoint_after90_audit.json`, and `exit_status.json`. Checkpoint metadata,
+optimizer/scheduler counters, dataset cursor presence and all shard byte extents
+passed; small CPU tensor samples were finite. This audit is not a full GPU reload.
+
 <a id="scheduled-eval70-80-results-20260913"></a>
 ### Scheduled evaluations after 70 and 80
 
@@ -999,6 +1242,177 @@ Do not copy a W&B service socket between nodes or reuse a failed attempt's score
 
 ---
 
+
+<a id="arm-early-295690"></a>
+## Early ARM comparison: job 295690 (2026-09-14)
+
+[Numeric results](RL_RESULTS.md) · [Per-task classifications and paired counts](arm_results/rl_integration/threeway-295690.json).
+The fixed 100-task native GPT-4.1/action-history evaluation completed for baseline
+Adam46 and all-failure Adam42. Baseline scored 24/100 overall and 24/65 valid;
+all-failure scored 21/100 overall and 21/70 valid. On 56 common-valid tasks,
+baseline scored 21/56 and all-failure 18/56. Only seven common-valid tasks have
+discordant success outcomes (five baseline-only, two all-failure-only); exact
+two-sided McNemar p=0.4531. The all-task comparison has p=0.5811.
+This does not establish a reliable regression or equivalence. Availability is
+poor (35 and 30 invalid), and the checkpoints differ by four Adam updates.
+All-failure has no demonstrated benefit here, but the evidence is too weak to
+claim it is worse. Hold additional all-failure training pending the missing
+original-ARM control rather than declare a statistically established failure.
+
+**Launcher incident:** the approved three-GPU allocation ran its one-GPU Slurm
+steps sequentially. Baseline ran 16:57:48–18:04:04 PDT; all-failure ran
+18:08:20–18:54:17. Original ARM only obtained a step at 18:54:17 and correctly
+refused to start with less than 30 minutes remaining. It evaluated zero tasks;
+this is missing data, not a zero success rate. Job ended FAILED after 1:57:02,
+although the two completed evaluations passed checkpoint GPU restoration,
+100-task identity verification and zero-training checks. This wasted reserved
+GPU capacity and was not caught during startup monitoring.
+
+The launcher is now changed to one three-task Slurm step with one GPU per task,
+so all three workers acquire resources together. Python/shell syntax checks pass;
+concurrent GPU execution remains unverified. No replacement allocation submitted.
+A missing-control-only retry would preserve both completed evaluations.
+Runtime artifacts: `/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-threeway-295690/`.
+
+
+<a id="arm-early-recovery-295759"></a>
+## Early ARM control and invalid-only recovery — job295759
+
+All planned task sets completed and passed per-case checkpoint-restoration,
+identity and zero-training checks: original ARM46 100/100, baseline retry35/35,
+all-failure retry30/30. Original ARM scored20/100 overall and20/72 valid-only.
+The retries recovered seven baseline successes and five all-failure successes;
+16/35 and15/30 retries respectively produced valid outcomes. Combining the
+single retry only for initially invalid tasks gives baseline31/100 (31/81 valid)
+and all-failure26/100 (26/85 valid). Repeated invalids remain invalid.
+Original ARM has28 invalid tasks and **has not received a retry**; this recovery
+view therefore has unequal retry opportunities and must not be treated as a
+fair three-way ranking. Initial-attempt scores are24/20/21 for baseline/original
+ARM/all-failure. On49 tasks valid for all three initial attempts, successes
+are19/16/16. See [paired counts and per-task classifications](arm_results/rl_integration/threeway-295759-recovery.json).
+Timing differences, local-browser invalids and the46/46/42 update near-match
+limit causal conclusions. These results do not establish all-failure benefit.
+
+Runtime root: `evaluations/arm-threeway-295759/` under the project runtime;
+accepted directories are `arm46`, `baseline46-r3`, and `allfailure42-r3`.
+Earlier baseline startup attempts produced zero task results and are excluded.
+The repair controller returned0 and resumed the waiting batch controller after
+its complete retry queue. Slurm retains FAILED/1:0 (42:52 elapsed) because the
+initial rank failed before repair; per-case complete receipts distinguish the
+successful scientific evaluations from that controller status.
+
+<a id="arm-iteration-19-evaluations-20260915"></a>
+## ARM iteration-19 evaluations — rollout iteration 20 — jobs 296794, 296795, 296816
+
+The three ARM variants were evaluated on the same fixed 100-task cohort with
+the local-process browser and GPT-4.1/action-history judge. The comparable
+checkpoint is `iter_0000019` for each run: the training runtime stores the
+checkpoint after rollout iteration 20 at that zero-based index. The evaluator
+was corrected to accept the ARM scheduler offset of zero and to allocate a
+job-specific distributed rendezvous port. All three evaluations completed all
+100 scheduled tasks with return code zero.
+
+| Run | Overall successes | Valid | Invalid | Overall rate | Valid-only rate | W&B |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Original ARM bonus | 26 | 73 | 27 | 26.00% | 35.62% | [296795](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after20-296795) |
+| All-failure ARM | 28 | 70 | 30 | 28.00% | 40.00% | [296794](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after20-296794) |
+| Additive ARM | 24 | 77 | 23 | 24.00% | 31.17% | [296816](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after20-296816) |
+
+The evaluation artifacts are under
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-{296794,296795,296816}-after19/`.
+These are initial-attempt rates; no invalid-task retries were applied. Browser
+navigation and step failures remain represented in each run's invalid/aborted
+counts, so valid-only rates should be read alongside the invalid counts.
+
+<a id="baseline-iteration-19-fixed-100-20260915"></a>
+## Baseline iteration-19 fixed-100 evaluation (2026-09-15)
+
+The baseline reference checkpoint was regenerated on the same fixed 100-task
+cohort used by the three ARM variants. Job297011 completed all100 tasks with
+return code0, then its idle allocation was canceled. It scored25/100 overall,
+with71 valid and29 invalid tasks, giving35.21% valid-only success. The saved
+evaluation artifacts and W&B run are under
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-297011-after19/`.
+
+### Aggregate comparison
+
+The observed overall differences are small: original ARM is +1 percentage
+point versus baseline, all-failure ARM is +3 points, and additive ARM is −1
+point. Unpaired two-proportion checks are non-significant (approximate
+two-sided p-values 0.87, 0.63, and 0.87 respectively). Valid-only rates are
+35.21% baseline, 35.62% original ARM, 40.00% all-failure ARM, and 31.17%
+additive ARM; these denominators differ because invalid rates differ. Since
+the complete per-task records were not retained, a paired test is unavailable.
+These 100-task results therefore show no significant ARM improvement or
+regression; a larger common cohort is needed to resolve effects of this size.
+
+<a id="arm-original-bonus-iteration-30-fixed-100-20260916"></a>
+## Original ARM bonus iteration-30 evaluation (2026-09-16)
+
+The original ARM-bonus checkpoint `iter_0000029` (the checkpoint after training
+iteration 30) was evaluated on the fixed 100-task cohort with the local browser
+and GPT-4.1/action-history judge. The corrected retry produced **27/100
+successes**, **74 valid**, **26 invalid**, **27.00% overall**, and **36.49%
+valid-only**. A first attempt on the same checkpoint produced 31/100; both
+attempts are retained because live websites and browser availability vary even
+at temperature 0. The corrected retry is the primary reported result.
+
+Artifacts: `/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-297412-after30-retry5/`.
+
+<a id="all-failure-arm-full-300-task-evaluation-20260915"></a>
+## All-failure ARM full-300-task evaluation (2026-09-15)
+
+The all-failure ARM checkpoint `iter_0000019` was evaluated on the 200-task
+complement of the fixed 100-task cohort. The complement produced 62 successes,
+152 valid trajectories, and 48 invalid trajectories: **31.00% overall** and
+**40.79% valid-only**. Combining those disjoint results with the earlier
+all-failure 100-task result (28/100 successes, 70 valid, 30 invalid) gives
+**90/300 = 30.00% overall**, **222 valid**, **78 invalid**, and
+**90/222 = 40.54% valid-only**.
+
+The completed metrics are in
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/qcq7i4ug-record-297227-after19-retry2/runtime/progress.log`;
+the W&B run is [297227-r2](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after20-297227-r2).
+The wrapper exited nonzero only because its legacy finalization guard expected
+300 tasks in this complement-only invocation; the evaluator emitted complete
+200-task metrics before that bookkeeping check. No task was duplicated between
+the complement and fixed-100 cohorts.
+
+<a id="arm-iter70-audit-20260919"></a>
+
+## ARM iteration-70 results and iteration-80 availability — 2026-09-19
+
+All three iteration-70 jobs completed 300 tasks under the deterministic local
+browser / GPT-4.1 Online-Mind2Web monitor. Use the task-level success metrics,
+not the turn-weighted `raw_reward_mean`. Original bonus (306478) has 103 successes,
+231 valid, 69 invalid: **34.33% overall / 44.59% valid-only**. All-failure (306477)
+has 106 successes, 233 valid, 67 invalid: **35.33% / 45.49%**. Additive (307120)
+has 112 successes, 222 valid, 78 invalid: **37.33% / 50.45%**.
+The historical outcome-only iteration-70 reference is **34.33% / 44.98%**
+(103 successes, 229 valid). Additive leads this comparison, but different dates
+and validity sets prevent interpreting these aggregates as a controlled or
+statistically established gain. Numeric records are in [RL_RESULTS.md](RL_RESULTS.md)
+and the [verified metric-source audit](arm_results/rl_integration/iteration70-audit.json).
+
+No completed or queued ARM iteration-80 evaluation was found in the September 19
+check. Original and additive have durable checkpoints past completed iteration
+80. All-failure stopped at completed iteration 78 because the next collection's
+96 labels missed the 100-label guard; [continuation preparation](ARM_INTEGRATION_PLAN.md#arm-allfailure-to100-prepared-20260919)
+records the proposed recovery. The historical baseline iteration-80 full-300
+result is **38.00% overall / 49.78% valid-only**.
+
+Rollout preservation limitation: these three evaluators used older frozen
+sources. Their status files report **zero task-addressable rollout files**, but
+each retained a native aggregate `runtime/rollout_recovery/eval_0.pt` archive:
+85.8 GB for all-failure, 88.0 GB for original, and 96.5 GB for additive. A bounded
+ZIP-header inspection verified the archive members, not their full payloads.
+The pickle metadata alone is 1.36–1.49 GB, above the 128 MiB login-node audit
+limit, so per-task verdict extraction was not attempted there. These aggregate
+archives must be preserved; per-task recovery/rejudging is not yet verified.
+Before the next evaluation, verify that its **actual frozen source** writes
+task-addressable rollouts; setting the destination environment variable alone
+does not establish that the source implements the saver.
+
 <a id="arm-iter80-launch-20260919"></a>
 
 ## ARM iteration-80 full-300 evaluations — approved and submitted 2026-09-19
@@ -1008,15 +1422,15 @@ profile: **2 H200 × 2 hours, 16 CPUs, 480 GiB RAM** per job, 12 GPU-hours total
 across three jobs. Each allocation exits when its evaluation finishes. Slurm
 estimated $3.60 per job; GPT-4.1 judging is additional.
 
-September 20 update: original-bonus **309685** and additive **309686** completed
-successfully and released their allocations; all-failure
-remains held. Its login-host watcher was verified alive (PID 2079618).
+September 20 update: **all three jobs completed successfully and released their
+allocations**. The checkpoint watcher released all-failure 309687 after verifying
+iteration 80; its full-300 evaluation completed in 33m22s.
 
 | Method | Evaluation job | Training root under runtime `evaluations/` | Iteration-80 Adam updates | Status |
 | --- | --- | --- | ---: | --- |
 | Original bonus | 309685 | `arm-turn-bonus-fresh-303573` | 950 | complete; all 300 tasks saved |
 | Additive bonus | 309686 | `arm-failure-additive-303574` | 1,042 | complete; all 300 tasks saved |
-| All-failure bonus | 309687 | `arm-turn-bonus-fresh-allfailure-309490` | pending checkpoint | held until checkpoint is verified |
+| All-failure bonus | 309687 | `arm-turn-bonus-fresh-allfailure-309490` | 1,038 | complete; all 300 tasks saved |
 
 All load **`runtime/iter_0000079`**, meaning 80 completed training iterations.
 The protocol stays actor-only, local browser, GPT-4.1/action-history, temperature
@@ -1078,6 +1492,138 @@ to historical outcome-only iteration 80, overall success is 1.00 percentage
 point lower and valid-only is 2.58 points higher. Because validity sets differ,
 the latter is not evidence of an unconditional performance gain.
 
+All-failure iteration 80 completed with **92/300 successes, 218 valid, 82 invalid:
+30.67% overall / 42.20% valid-only**. All 300 unique task IDs match the cohort,
+all 300 rollout archives and verdict sidecars exist, and their sums reproduce
+the native metrics. This is down from iteration 70's 35.33% / 45.49%, and below
+the historical iteration-80 baseline by 7.33 / 7.58 percentage points. Different
+dates and validity sets limit causal interpretation. The same
+[iteration-80 audit](arm_results/rl_integration/iteration80-audit.json) now includes
+all three variants.
+
+<a id="arm-iter90-readiness-20260920"></a>
+
+### Iteration-90 availability — September 20, 16:33 UTC
+
+No ARM iteration-90 evaluation is completed, running, or queued. All-failure job
+309490 has saved `iter_0000089` with 1,142 Adam updates; checkpoint receipts,
+shard sizes, scheduler agreement, and cursor presence were verified. It is
+collecting iteration 91 toward target 100. Original's latest durable checkpoint
+is 85. Additive job 311202 saved 85, then failed collecting 86 because g008's
+local temporary storage filled. Neither has an iteration-90 checkpoint yet.
+The historical outcome-only iteration-90 reference is **33.67% / 45.50%**.
+
+September 20, 22:35 UTC update: additive **311962** has now completed iteration
+90 with **1,150 Adam updates**. All-failure's iteration-90 checkpoint has
+**1,142 updates**. Both checkpoint identities, saved receipts, shard sizes and
+cursor presence pass the preparation checks. Original bonus remains at 85.
+No iteration-90 evaluation is running or queued.
+
+The user requested these evaluations now. Two full-300 evaluations are prepared
+using the same frozen evaluators as iteration 80; only the selected checkpoint
+and identifying labels change. The launcher now accepts `--completed-iteration`
+and `--training-root`, retaining iteration-80 defaults for its existing watcher.
+Resolved commands verify TP2, zero optimizer rollouts, checkpoint index 89,
+GPT-4.1/action-history and `openwebrl-evals`. The 300-task cohort hashes match,
+and completion requires all task-level rollout archives and verdict sidecars.
+Actual GPU restoration remains a startup check.
+
+Proposed allocation: **two jobs, each 2 H200 × 1 hour, 16 CPUs, 480 GiB RAM**,
+**4 GPU-hours total**, with the existing GPT-4.1 judging protocol. The three
+iteration-80 evaluations took 33–37 minutes each, supporting the shorter
+one-hour budget. Exact allocation approval is still required under the root
+AGENTS.md; no new submission has been made. Ready-to-submit commands, CPU
+checks and file hashes are under runtime
+`arm-turn-bonus-preparation/iteration90-evals/`.
+
+**Approved and submitted September 20, 22:40 UTC:** additive **313187** and
+all-failure **313188**, with the exact profile above (4 GPU-hours maximum in
+total; Slurm estimate $1.80 each, judging additional). Each batch controller
+owns and awaits its evaluation worker and releases the allocation on exit.
+Both are included in persistent supervision. Approval, submission receipts and
+plans with their assigned job IDs are in the preparation directory above.
+Outputs are `evaluations/arm-additive-iter90-313187/` and
+`evaluations/arm-allfailure-iter90-313188/`, including `rollouts/` for the per-task
+archives/verdicts. Initial state is queued; this is not a GPU-restoration claim.
+
+<a id="arm-iter90-results-20260921"></a>
+
+### Iteration-90 results — verified September 21, 00:34 UTC
+
+All-failure **313188** completed in **33m50s**, exit 0, after verified GPU restore
+of `iter_0000089` (1,142 Adam updates). Its 300 distinct saved verdict IDs match
+the frozen cohort; all 300 nonempty rollout archives are present. Per-task
+counts agree with the final metrics: **101 successes, 217 valid, 83 invalid**,
+or **33.67% overall / 46.54% valid-only**. Protocol: local browser,
+GPT-4.1/action-history, temperature 0, 30-turn evaluation horizon. Use these
+task-level rates; the turn-weighted raw reward mean is not the success rate.
+
+Historical outcome-only iteration 90 is **101 successes / 300**, **222 valid**:
+**33.67% / 45.50%**. Overall success therefore matches, while the valid-only
+denominator differs. The runs are from different dates, so this is descriptive,
+not a paired or same-day estimate of an ARM improvement.
+
+[Metric audit](arm_results/rl_integration/iteration90-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after90-313188) ·
+[Metrics](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-allfailure-iter90-313188/metrics.json) ·
+[Rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-allfailure-iter90-313188/rollouts).
+The audit reads small verdicts and archive metadata; it does not load all image
+tensors on the login node.
+
+Additive **313187** failed in 1m27s before collecting any tasks: concurrent
+evaluators on g021 chose the same native model-server ports. Prepared v2 sources
+and controllers now lease separate node-local port blocks; the fix passed CPU
+tests and the rescue pilot's GPU startup. No replacement additive allocation
+has been submitted. Its iteration-90 checkpoint remains available.
+
+**September 21, 00:53 UTC:** the user requested the additive evaluation retry.
+**313408** is submitted with the established **2 H200 × 1h, 16 CPUs / 480 GiB**
+profile (Slurm estimate $1.80), initially pending priority. It loads the same
+iteration-90 checkpoint / 1,150 Adam updates and evaluates all 300 tasks because
+313187 saved none. Frozen source `reference-arm-eval80-additive-20260920-v2`
+adds port isolation without changing the policy, cohort, judge or temperature.
+Output is `evaluations/arm-additive-iter90-313408/`; per-task rollout archives and
+verdicts remain required. Receipts and the resolved plan are under
+`arm-turn-bonus-preparation/iteration90-evals/additive-retry-v2-*`.
+
+**Retry completed; audited September 21, 02:21 UTC:** additive **313408**
+finished in **37m53s**, exit 0, releasing its remaining allocation. It restored
+iteration 90 / 1,150 Adam updates and completed the full cohort: **118 successes,
+216 valid, 84 invalid**, **39.33% overall / 54.63% valid-only**. All 300 unique
+task IDs match the declared cohort; all 300 nonempty trajectory archives and
+verdict sidecars exist. Per-task totals match reported metrics, and all sidecars
+identify GPT-4.1 / action-history. No tensor storage was reloaded on the login
+node. These task-level rates differ from the log's turn-weighted reward mean.
+
+Relative to historical outcome-only iteration 90 (**101/300; 222 valid**),
+additive is +5.67 percentage points overall and +9.13 valid-only. Different
+dates and valid subsets prevent a controlled improvement/significance claim.
+All-failure iteration 90 remains 101/300. The comparison plot now includes the
+additive iteration-90 point with sufficient vertical headroom.
+[Updated audit](arm_results/rl_integration/iteration90-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after90-313408) ·
+[Rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-additive-iter90-313408/rollouts).
+
+### B/C iteration-20 full-300 evaluations — preparation requested September 20
+
+The user requested both evaluations. B is currently before iteration 10 and C
+has completed 10; no iteration-20 checkpoint exists. The
+[training/evaluation handoff plan](ARM_INTEGRATION_PLAN.md#arm-bc-iter20-prepared-20260920)
+prepares two held 2-H200 × 1h evaluations, released only after the corresponding
+iteration-20 checkpoint passes identity, counter and shard checks. No eval job
+has been submitted pending approval of the required continuations and exact
+allocation budgets. Evaluation protocol/cohort and task persistence match the
+original ARM full-300 series. The historical additive/outcome-only iteration-20
+rows remain comparison references; different-date evaluation is not a randomized
+or same-day control.
+
+September 20, 22:55 UTC: exact budgets are now approved and submitted. B
+continuation **313208** follows job 311964; C continuation is **313210**. Held
+full-300 evaluations **313209** (B) and **313211** (C), each 2 H200 × 1h, are
+owned by checkpoint watchers that release them only after a validated
+`iter_0000019` save. They consume no GPU allocation while held. All four jobs
+are included in persistent supervision.
+
 <a id="arm-additive-iter20-full300-20260920"></a>
 
 ## Additive iteration-20 full-300 result recovered into the docs — 2026-09-20
@@ -1100,3 +1646,69 @@ the 130.63 GB aggregate `runtime/rollout_recovery/eval_0.pt` archive. Its ZIP
 directory is intact; large metadata/tensor payloads were not loaded on the login
 node, so per-task rejudging recovery remains unverified. The iteration-80 saver
 fix does not retroactively establish per-task artifacts for this evaluation.
+
+<a id="baseline-iteration90-fixed100-recovery-20260921"></a>
+### Outcome-only iteration 90: recovered fixed100 verdicts, September 21
+
+For the ARM-only execution audit **314664**, extracted the original fixed100
+IDs from the existing iteration90 `rollout_recovery/eval_89.pt` archive. This
+uses saved GPT-4.1/action-history verdicts, not new browser executions or
+rejudging. Overall **35.00%**, valid-only **51.47%**: 35 successes, 68 valid,
+32 invalid. The full archived cohort reproduces the published 101/300 successes,
+222 valid; this validates the task-level grouping and denominator rules.
+Metadata extraction skipped tensor storage and discarded large image strings,
+with a 90 CPU-second / 3 GiB cap. No GPU or API calls.
+
+Source: runtime `runs/openwebrl-4b-reference-294421-20260913T211532/rollout_recovery/eval_89.pt`.
+The exact task verdicts, extraction script, and all historical control references
+are saved under runtime `arm-turn-bonus-preparation/task-success-audit-20260921/`.
+Historical actor decoding was T=0, 4,096 response tokens, 30 turns. The new ARM
+system uses K=5 and T=0.8; different dates/decoding preclude a selector-only causal
+claim. See [audit protocol](ARM_INTEGRATION_PLAN.md#arm-task-success-audit-20260921).
+
+<a id="arm-gate-c-iter20-results-20260921"></a>
+### C iteration 20 completed; B released and queued — September 21
+
+Both B and C saved iteration 20 / 284 Adam updates. C evaluation **313211**
+completed in 34m53s: **110/300 successes, 247 valid, 53 invalid**, giving
+**36.67% overall / 44.53% valid-only**. Its exact fixed100 slice is **38/100**,
+79 valid and 21 invalid: **38.00% / 48.10%**. B evaluation **313209** is queued
+for priority after its checkpoint watcher validated and released it.
+
+C is the additive training recipe with at least two distinct valid candidate
+actions and action-equivalence credit; evaluation uses the learned actor alone.
+Local browser, GPT-4.1/action-history, T=0, 30 turns, 4,096 response tokens.
+All 300 unique task IDs match the full cohort; all have nonempty rollout archives
+and JSON verdicts with the expected judge. Checkpoint index19 restored from
+`arm-failure-additive-313210/runtime/iter_0000019`.
+
+Historical outcome-only iteration20 is 31.67% / 40.95%; historical additive20 is
+28.33% / 36.02%. C's +5.00 pp overall versus baseline is descriptive: dates and
+available task sets differ, so this is not a controlled improvement estimate.
+Do not substitute the turn-weighted log mean (31.68%) for task success (36.67%).
+
+[Result audit](arm_results/rl_integration/gate-c-iteration20-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-c-iter20-313211) ·
+[Saved rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-c-iter20-313211/rollouts).
+
+
+<a id="arm-gate-b-iter20-results-20260921"></a>
+### B iteration20 completed — September 21
+
+Job **313209** finished in 34m26s. Full300: **101 successes, 228 valid,
+72 invalid; 33.67% overall / 44.30% valid-only**. Its fixed100 slice is
+**29 successes, 69 valid, 31 invalid; 29.00% / 42.03%**. All 300 unique
+cohort task IDs, nonempty rollout archives, and GPT-4.1/action-history sidecars
+are verified; evaluation uses T=0 and the actor alone. B relaxed the valid
+candidate gate to at least two distinct actions, retaining response-index credit.
+
+C has 110/300 successes and 247 valid, versus B's 101 and 228. The 199 tasks
+valid in both runs contain **89 B successes and 97 C successes**. This is a
+useful descriptive paired subset, not proof of training-method superiority:
+there is one training seed per variant, differing exposure and rollout noise,
+and common-valid selection excludes 101 tasks. B/C both have 284 Adam updates
+at iteration20; the historical outcome-only control has 270.
+
+[Result audit](arm_results/rl_integration/gate-b-iteration20-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter20-313209) ·
+[Rollouts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter20-313209/rollouts).

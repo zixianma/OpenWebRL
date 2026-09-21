@@ -1,0 +1,24 @@
+{
+  "job": "313209",
+  "completed_iterations": 20,
+  "adam_updates": 284,
+  "full300": {
+    "tasks": 300,
+    "successes": 101,
+    "valid": 228,
+    "invalid": 72,
+    "overall": 0.33666666666666667,
+    "valid_only": 0.44298245614035087
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 29,
+    "valid": 69,
+    "invalid": 31,
+    "overall": 0.29,
+    "valid_only": 0.42028985507246375
+  },
+  "source_metrics": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter20-313209/metrics.json",
+  "saved_rollouts": 300,
+  "publication_note": "Aggregate evidence; per-task verdicts and trajectory payloads retained in local/runtime source audits."
+}

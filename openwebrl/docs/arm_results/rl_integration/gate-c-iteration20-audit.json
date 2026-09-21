@@ -1,0 +1,25 @@
+{
+  "job": "313211",
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-313210/runtime/iter_0000019",
+  "completed_iterations": 20,
+  "adam_updates": 284,
+  "full300": {
+    "tasks": 300,
+    "successes": 110,
+    "valid": 247,
+    "invalid": 53,
+    "overall": 0.36666666666666664,
+    "valid_only": 0.44534412955465585
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 38,
+    "valid": 79,
+    "invalid": 21,
+    "overall": 0.38,
+    "valid_only": 0.4810126582278481
+  },
+  "source_metrics": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-c-iter20-313211/metrics.json",
+  "manifest": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-c-iter20-313211/evaluation_manifest.json",
+  "publication_note": "Aggregate evidence; per-task verdicts and trajectory payloads retained in local/runtime source audits."
+}
