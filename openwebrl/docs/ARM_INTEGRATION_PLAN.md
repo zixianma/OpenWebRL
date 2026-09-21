@@ -3908,12 +3908,13 @@ held behind its training dependency and will require the same zero-based
 checkpoint correction when its iteration-20 checkpoint is available.
 
 <a id="arm-additive-next-experiments-20260921"></a>
-## Next experiments after additive iteration90 — discussion, September 21
+## Next experiments after additive iteration 90 — agreed plan, September 21
 
-**Recommendation:** preserve the 48 ordinary mixed-outcome groups, validate C
-longer, and make the separate failure signal more useful. No new training or
-paid audit is authorized by this discussion. Evaluation/deployment remains one
-actor, with no inference-time selector.
+**Agreed direction:** preserve the 48 ordinary mixed-outcome groups and test
+failure-specific coverage and failure-only reward strength separately. The user
+approved preparation; new GPU resources still need an exact budget approval.
+Continuing C remains a separate recommendation. Evaluation/deployment remains
+one actor, with no inference-time selector.
 
 ### What supports this direction
 
@@ -3940,16 +3941,16 @@ failure group. These are label counts, not measured gradient contributions.
 
 | Priority | Experiment | Concrete change | Rationale / confidence |
 | --- | --- | --- | --- |
-| 1 | Continue C and the unchanged additive comparison | Predeclare iteration40/60 evaluations after the existing C20, then extend only if useful; retain current q=0.20, beta=0.5, 48+up-to8 groups and optimizer | Best existing early signal; moderate confidence of usefulness, limited evidence of sustained gain |
-| 2 | Failure-specific label coverage | Keep mixed-group labeling at0.20. Reservoir up to8 valid five-failure groups before requiring an ARM label; select min(4,T) valid turns uniformly without replacement per trajectory and label with the frozen behavior actor before updating | More supervision on otherwise discarded experience; moderate potential, needs measured cost and usable-label yield |
-| 3 | Failure auxiliary strength, separately | On exactly the same label recipe as its control, multiply only the failure auxiliary loss by2; ordinary loss, q, beta and normalizers stay fixed | Cheapest optimization ablation; uncertain whether extra strength helps or amplifies ranking error |
+| 1 | Continue C and the unchanged additive comparison | Predeclare iteration 40/60 evaluations after the existing C20, then extend only if useful; retain current q=0.20, beta=0.5, 48+up-to8 groups and optimizer | Best existing early signal; moderate confidence of usefulness, limited evidence of sustained gain |
+| 2 | Failure-specific label coverage | Keep mixed-group labeling at 0.20. Reservoir up to 8 valid five-failure groups before requiring an ARM label; select min(4,T) valid turns uniformly without replacement per trajectory and label with the frozen behavior actor before updating | More supervision on otherwise discarded experience; moderate potential, needs measured cost and usable-label yield |
+| 3 | Failure auxiliary strength, separately | Keep the control label recipe and increase only failure beta from 0.5 to 1.0; ordinary beta stays 0.5, q stays 0.20, and normalizers stay fixed | Doubles the failure auxiliary loss; uncertain whether extra strength helps or amplifies ranking error |
 
-Priority2 deliberately changes failure-group eligibility to avoid requiring an
+Priority 2 deliberately changes failure-group eligibility to avoid requiring an
 existing sparse label before selecting the reservoir. It is a coverage recipe,
 not a perfectly isolated q-only test. Keep the reservoir independent of ARM sign,
 retain negative labels, and report raw valid-failure groups versus label-admitted
 groups. A lack of valid failed tasks cannot be fixed by labeling nonexistent
-states. Do not increase the eight-group cap initially. At most160 states are
+states. Do not increase the eight-group cap initially. At most 160 states are
 labeled per collection; this may exceed the current20% rate substantially on
 short trajectories, but is not guaranteed to produce160 usable labels.
 
@@ -3961,17 +3962,75 @@ L=L_{\mathrm{mixed+ARM}}+\lambda_f\,\overline L_{\mathrm{failure}},
 $$
 
 The failure mean retains all valid turns in its denominator, including zero-label
-turns; eligible clipped-PPO terms use the beta-scaled ARM advantage. Priority2
-changes label coverage/eligibility while retaining this normalization. Priority3
-changes lambda to2N_f/48 without changing coverage. Do not simultaneously double
-beta or renormalize over labeled turns: either would conflate separate knobs.
-If coverage and weight both help separately, their combination needs a later test.
-The current implementation caps the coefficient at1/6; a2x treatment requires
-explicitly versioned validation and window-scaling changes, not an environment override.
+turns; eligible clipped-PPO terms use the beta-scaled ARM advantage. Priority 2
+changes label coverage/eligibility while retaining this normalization. Priority 3
+keeps lambda at N_f/48 and doubles only the failure beta inside the advantage.
+For fixed labels, ratios and clipping, this is exactly equivalent to doubling
+the failure loss coefficient. Implement only one of these multipliers; do not
+double both or normalize over labeled turns. If coverage and weight both help
+separately, their combination needs a later test.
 
-For new short continuations, branch control and treatment from the same completed
-additive checkpoint and optimizer state (prefer100), run20 further collections,
-and evaluate both endpoints on the full300 during the same period. This estimates
+| Treatment | Mixed-group beta | Failure beta | Failure turns considered for labeling | Failure-group admission |
+| --- | ---: | ---: | --- | --- |
+| Unchanged additive control | 0.5 | 0.5 | Independent 20% sampling | Five valid actor failures and at least one usable existing ARM label |
+| Failure coverage | 0.5 | 0.5 | Uniform min(4,T) turns without replacement | Five valid actor failures, selected before checking label availability |
+| Failure weight | 0.5 | 1.0 | Independent 20%, unchanged | Same as control |
+
+The response-index advantage is `A_ARM = beta * (1[selected=executed] - 1/5)`.
+Thus the failure-only values change from +0.4/−0.1 to +0.8/−0.2 in the weight
+treatment. Unlabeled/invalid turns stay zero. The full executed response,
+including reasoning, receives the loss as before. K=5, the original five-distinct
+valid-action gate, the eight-group cap, the all-turn denominator and the original
+optimizer windows remain fixed. Neither treatment imports B/C's relaxed gate or
+duplicate-aware credit.
+
+### First live test: one collection, no optimizer updates
+
+Use the completed additive iteration 90 checkpoint for the pipeline audit while
+the unchanged additive continuation finishes 100. Capture up to four exact
+pre-action states per trajectory during native rollout collection. After outcomes
+are known, select at most eight valid five-failure groups and label their retained
+states with the **same frozen behavior actor**, before any actor update. Preserve
+screenshots, prompts, history, candidate responses, ARM decisions, state hashes,
+native group journals and the consumed dataset cursor. Counterfactual candidate
+actions are generated for labeling; they are not executed in the browser.
+
+The ordinary 48-group collection retains its existing 20% labeling. The audit
+reports both the historical label-admitted failure pool and the raw-valid pool
+under 20% labeling, then the latter under the four-turn recipe. Reuse every
+already-attempted selected-state label, including rejected and negative results;
+do not retry only bad labels. At most 160 failure states and 640 new counterfactual
+responses are needed; reuse reduces the actual requests. A missing/stale state or
+interrupted labeling phase stops the run before training serialization.
+
+Compare retained groups, usable labels, positive/negative counts, label fraction,
+new actor/selector requests and tokens, elapsed time and storage. This establishes
+coverage and cost, **not improved policy quality**. Zero valid failure groups is
+a legitimate zero-yield result. The follow-up training comparison is warranted
+only if usable labels increase enough to justify the measured overhead; report
+whether admission, label yield or candidate gating remains the bottleneck.
+
+Prepared entry points are `scripts/prepare_arm_failure_coverage.py --check` and
+`scripts/arm_failure_coverage_pilot.sbatch`. The proposed pilot budget is
+**4 H200 × 3 hours, 32 CPUs, 480 GiB RAM, 32 browsers**, including GPU checkpoint
+restore verification, one full collection and deferred labels; no training or
+OM2W evaluation is included. The controller owns all workers, exits after the
+audit, and logs to `openwebrl-evals`. This resource request has **not been submitted**.
+GPU restoration/browser execution remain unvalidated for the new source.
+
+CPU preparation passed 18 tests against the frozen additive source plus native
+argument parsing. These cover exact-state persistence/provenance, bounded
+sampling, invalid-failure exclusion, unchanged ordinary admission, reuse of
+unavailable labels, interrupted-phase rejection, unchanged all-turn
+normalization, and failure-beta scaling of actual clipped-PPO losses/gradients.
+The prepared source is `reference-arm-failure-coverage-20260921-v1`; runtime
+readiness and logs are under
+`arm-turn-bonus-preparation/failure-coverage-20260921/`. This validates the code
+path on CPU, not GPU memory, browser throughput, or ARM label quality.
+
+For subsequent short training continuations, branch control and treatment from the same completed
+additive checkpoint and optimizer state (prefer 100), run 20 further collections,
+and evaluate both endpoints on the full 300 during the same period. This estimates
 incremental benefit from that checkpoint; it does not replace the from-zero B/C
 comparison. Track successes/all300, valid denominators/common-valid outcomes,
 optimizer updates, completed collections, GPU-hours, browser/selector tokens,

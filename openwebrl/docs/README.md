@@ -30,7 +30,7 @@ Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-res
 [iteration-80 GPT-4.1 rejudging](RL_EVALUATION.md#stealth80-gpt41-rejudge-feasibility-20260913),
 and [cluster/account queue audit](RL_RUNTIME.md#cluster-queue-audit-294983-20260913).
 
-ARM RL: [next experiments after additive90 and B/C20](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921),
+ARM RL: [agreed failure-coverage and failure-weight experiments; CPU preparation](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921),
 [completed turn-bonus pilot](ARM_INTEGRATION_PLAN.md#arm-turn-bonus-pilot-completed),
 [actor-stage selection-quality audit](ARM_INTEGRATION_PLAN.md#arm-selection-quality-audit-20260921),
 [completed fixed-state quality results](ARM_RESULTS.md#arm-selection-quality-313774),
