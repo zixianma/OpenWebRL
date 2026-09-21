@@ -161,11 +161,12 @@ valid failures. The valid task sets can differ between the two runs.
 
 SFT uses o4-mini; RL uses GPT-4.1. The actor-only controls are historical;
 dates, availability and decoding differ, so these are descriptive inference
-comparisons. Additive **313669** saved iteration 94 and is collecting 95 toward
+comparisons. Additive **313669** saved iteration 96 and is collecting 97 toward
 100. Baseline replacement **315098** is queued with the scheduler-restore fix,
 using the approved 4 H200 × 12h including full300 evaluation. MIG pilot
-**315099** loaded both models on separate 18-GB slices but stopped at a
-synthetic context-boundary API check; the off-by-one test fix is prepared.
+**315402** has passed the near-32k actor capacity check and short/long-history
+ARM selection on separate slices; live browser checks are running after fixing
+an archived-history conversion bug. [Probe details](RL_RUNTIME.md#mig-corrected-probe-315402).
 [Agreed next experiments](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921):
 first audit up to four labeled turns per failed trajectory without updating the
 actor; separately test failure-only beta 0.5→1.0 while mixed-group beta stays 0.5.

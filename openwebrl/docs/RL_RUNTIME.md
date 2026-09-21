@@ -3013,3 +3013,31 @@ probe boundary error, not evidence of MIG memory exhaustion. Frozen v3 requests
 remain unverified. The expired job is no longer requeueable; no replacement
 allocation has been submitted. Total allocated startup/runtime across attempts
 was 1m19s; evidence remains under `evaluations/arm-mig-probe-315099*`.
+
+<a id="mig-corrected-probe-315402"></a>
+### Corrected MIG probe 315402 — September 21
+
+The user approved the corrected **two 18-GB slices × one hour** feasibility test,
+with 2 CPUs, 60 GiB host RAM and at most $1 for terminal judging. Submitted as
+**315402**; it started immediately on **g023**. The first attempt passed the
+near-32k actor request (32,759 input / 7 generated tokens in 7.16s), then generated
+five candidates and obtained a valid ARM choice for the short archived state.
+Both services loaded on separate MIG UUIDs. The long archived state exposed a
+probe bug: history was already structured as `{thought, action}`, but the live
+selector expected response strings. No browser trajectories or judge calls ran.
+
+Frozen v4 converts that history without changing the selector payload and
+validates the archived inputs before GPU startup; four CPU tests pass. The same
+job was requeued with 57 minutes remaining after 2m33s used, so the combined maximum
+is 59m33s within the approved one-hour budget. The first attempt is preserved at
+`evaluations/arm-mig-probe-315402-attempt1/`. The retry passed near-32k generation
+and both short/long-history offline ARM selections. Live browser checks are
+running; seven ARM selection steps completed without fallback at the latest
+inspection. The persistent supervisor tracks the retry.
+
+This uses the starting SFT actor as an architecture proxy. It does not validate
+an exported additive checkpoint or replace the native training collector. Keep
+the full-H200 failure-coverage pilot **315204** queued while assessing the MIG
+result. No additional MIG allocation or training is authorized by this test.
+Artifacts: runtime `evaluations/arm-mig-probe-315402/`; submission/approval
+receipts: `arm-turn-bonus-preparation/mig-probe-20260921/`.
