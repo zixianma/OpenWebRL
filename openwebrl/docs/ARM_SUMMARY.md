@@ -169,6 +169,8 @@ synthetic context-boundary API check; the off-by-one test fix is prepared.
 [Agreed next experiments](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921):
 first audit up to four labeled turns per failed trajectory without updating the
 actor; separately test failure-only beta 0.5→1.0 while mixed-group beta stays 0.5.
+Coverage pilot **315204** is submitted: 4 H200 × 3h, 32 browsers, zero optimizer
+updates; initially queued for priority.
 [Live jobs and completion reports](arm_results/rl_integration/live-status.html)
 refresh every minute; checkpoint/health details are checked every 15 minutes.
 

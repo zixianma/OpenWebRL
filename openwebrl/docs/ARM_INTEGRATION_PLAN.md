@@ -3912,7 +3912,8 @@ checkpoint correction when its iteration-20 checkpoint is available.
 
 **Agreed direction:** preserve the 48 ordinary mixed-outcome groups and test
 failure-specific coverage and failure-only reward strength separately. The user
-approved preparation; new GPU resources still need an exact budget approval.
+approved preparation and the exact collection-only pilot budget below. Additional
+training resources still need an exact budget approval.
 Continuing C remains a separate recommendation. Evaluation/deployment remains
 one actor, with no inference-time selector.
 
@@ -4011,11 +4012,17 @@ only if usable labels increase enough to justify the measured overhead; report
 whether admission, label yield or candidate gating remains the bottleneck.
 
 Prepared entry points are `scripts/prepare_arm_failure_coverage.py --check` and
-`scripts/arm_failure_coverage_pilot.sbatch`. The proposed pilot budget is
+`scripts/arm_failure_coverage_pilot.sbatch`. The approved pilot budget is
 **4 H200 × 3 hours, 32 CPUs, 480 GiB RAM, 32 browsers**, including GPU checkpoint
 restore verification, one full collection and deferred labels; no training or
 OM2W evaluation is included. The controller owns all workers, exits after the
-audit, and logs to `openwebrl-evals`. This resource request has **not been submitted**.
+audit, and logs to `openwebrl-evals`. Submitted as **job 315204** on September 21;
+the initial scheduler state is **PENDING (Priority)**. The persistent CPU monitor
+tracks checkpoint restoration, collection progress, deferred label counts and
+verified zero-update completion, with detailed checks every 15 minutes and a cheap
+failure/status check every minute. Approval and preparation receipts are saved
+under the preparation directory below. This pilot does not authorize the later
+training ablations.
 GPU restoration/browser execution remain unvalidated for the new source.
 
 CPU preparation passed 18 tests against the frozen additive source plus native
