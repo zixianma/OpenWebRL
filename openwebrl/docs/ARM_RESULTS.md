@@ -28,6 +28,11 @@ Additive [iteration 90](RL_EVALUATION.md#arm-iter90-results-20260921), job **313
 completed at **39.33% / 54.63%** (118 successes, 216 valid), with all 300 rollouts
 and verdicts saved. This is +5.67 percentage points overall versus historical
 baseline-90; the same different-date comparison limitation applies.
+Additive [iteration 100](RL_EVALUATION.md#arm-additive-iter100-results-20260921),
+job **313669**, then completed at **36.33% / 50.23%** (109 successes, 217 valid),
+with all 300 rollouts and verdicts saved. This is below additive90 by 3.00 / 4.40
+percentage points. Baseline100 remains queued; no matched endpoint conclusion
+is available yet. [Current jobs and missing evaluations](RL_RUNTIME.md#arm-job-inventory-20260921).
 
 Latest Sol inference result (2026-09-13): **132/300 (44.0% overall; 51.56%
 valid-only)**, versus historical SelectionARM **128/300 (42.67%; 50.0%)**.

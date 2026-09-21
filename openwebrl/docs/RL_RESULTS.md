@@ -128,6 +128,7 @@
 | Outcome-only · historical | 90 | 101 | 222 | 78 | 33.67 | 45.50 | [Baseline](RL_EVALUATION.md#arm-iter90-results-20260921) |
 | All-failure bonus | 90 | 101 | 217 | 83 | 33.67 | 46.54 | [313188](RL_EVALUATION.md#arm-iter90-results-20260921) |
 | Additive bonus | 90 | 118 | 216 | 84 | 39.33 | 54.63 | [313408](RL_EVALUATION.md#arm-iter90-results-20260921) |
+| Additive bonus | 100 | 109 | 217 | 83 | 36.33 | 50.23 | [313669](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
 
 ## SelectionARM inference · fixed100 · historical actor-only controls
 
@@ -141,3 +142,4 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | B: relaxed gate | 20 | 29 | 69 | 31 | 29.00 | 42.03 | [313209](RL_EVALUATION.md#arm-gate-b-iter20-results-20260921) |
 | C: relaxed gate + action credit | 20 | 38 | 79 | 21 | 38.00 | 48.10 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
+| Additive bonus | 100 | 31 | 65 | 35 | 31.00 | 47.69 | [313669, slice of full300](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |

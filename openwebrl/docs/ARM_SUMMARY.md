@@ -161,8 +161,9 @@ valid failures. The valid task sets can differ between the two runs.
 
 SFT uses o4-mini; RL uses GPT-4.1. The actor-only controls are historical;
 dates, availability and decoding differ, so these are descriptive inference
-comparisons. Additive **313669** saved iteration 96 and is collecting 97 toward
-100. Baseline replacement **315098** is queued with the scheduler-restore fix,
+comparisons. Additive **313669** completed **100 iterations / 1,262 Adam updates**
+and its full-300 evaluation: **36.33% overall / 50.23% valid-only**; all 300
+rollouts and verdicts are saved. Baseline replacement **315098** is queued with the scheduler-restore fix,
 using the approved 4 H200 × 12h including full300 evaluation. MIG pilot
 **315402 passed**: actor and SelectionARM ran on separate 18-GB slices, including
 near-32k context, short/long-history selection, and two browser trajectories with
@@ -173,8 +174,9 @@ the additive checkpoint or native coverage collector on MIG.
 [Agreed next experiments](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921):
 first audit up to four labeled turns per failed trajectory without updating the
 actor; separately test failure-only beta 0.5→1.0 while mixed-group beta stays 0.5.
-Coverage pilot **315204** is submitted: 4 H200 × 3h, 32 browsers, zero optimizer
-updates; initially queued for priority.
+Coverage pilot **315204** is running on g003: GPU restoration passed and the
+native collection is progressing, with 4 H200 × 3h, 32 browsers and zero
+optimizer updates. [Job inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 [Live jobs and completion reports](arm_results/rl_integration/live-status.html)
 refresh every minute; checkpoint/health details are checked every 15 minutes.
 
@@ -218,6 +220,7 @@ candidates.
 |  | 70 | — | 37.33% / 50.45% |
 |  | 80 | — | 37.00% / 52.36% |
 |  | 90 | — | **39.33% / 54.63%** |
+|  | 100 | 31.00% / 47.69% | **36.33% / 50.23%** |
 | **B: relaxed gate** | 20 | 29.00% / 42.03% | 33.67% / 44.30% |
 | **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 
@@ -233,11 +236,15 @@ All-failure [iteration 90](RL_EVALUATION.md#arm-iter90-results-20260921) complet
 at **33.67% overall / 46.54% valid-only**, matching the historical baseline's
 overall rate. Different evaluation dates and valid-task sets limit comparison.
 All 300 rollouts/verdicts are saved. Training finished at **100 / 1,242 Adam
-updates**. Additive training finished at **90 / 1,150**; corrected full-300
+updates**. Additive's corrected iteration-90 full-300
 evaluation **313408** completed at **39.33% overall / 54.63% valid-only**,
 with all 300 rollouts/verdicts saved. This is 5.67 percentage points above the
 historical iteration-90 baseline overall, but is not a controlled same-day or
-paired significance claim. Original remains at **85 / 1,002**.
+paired significance claim. Additive subsequently completed **100 / 1,262**;
+its [iteration-100 evaluation](RL_EVALUATION.md#arm-additive-iter100-results-20260921)
+is **36.33% / 50.23%**, down 3.00 / 4.40 percentage points from iteration90.
+Baseline100 is still pending, so there is no matched iteration100 comparison yet.
+Original remains at **85 / 1,002**; all-failure100 is trained but not evaluated.
 
 ![All-failure ARM full-300 evaluation curve](rl_results/arm_allfailure_full300.png)
 
@@ -250,7 +257,8 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 ![Outcome-only baseline versus all-failure ARM](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-original, all-failure, and additive ARM full-300 points. Additive's
+original, all-failure, and additive ARM full-300 points, including additive100.
+Additive's
 [iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
 completed as job 307429 and is now included; it had been omitted from the docs.
 It is a fresh 300-task evaluation, independent of the older fixed-100 result.

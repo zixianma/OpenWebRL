@@ -1712,3 +1712,38 @@ at iteration20; the historical outcome-only control has 270.
 [Result audit](arm_results/rl_integration/gate-b-iteration20-audit.json) ·
 [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter20-313209) ·
 [Rollouts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter20-313209/rollouts).
+
+<a id="arm-additive-iter100-results-20260921"></a>
+### Additive iteration 100 completed — September 21
+
+Job **313669** completed additive training through **100 iterations / 1,262
+Adam updates**, then evaluated the verified `iter_0000099` checkpoint on all
+300 Online-Mind2Web tasks in the same allocation. Slurm completed at 15:34 PDT
+with exit code zero after 8h41m17s, releasing the four H200s early.
+
+| Cohort | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 109 | 217 | 83 | 36.33% | 50.23% |
+| Fixed100 IDs, sliced from full300 | 31 | 65 | 35 | 31.00% | 47.69% |
+
+The evaluator used the local browser, GPT-4.1/action-history terminal judge,
+T=0, 30 turns and 4,096 response tokens, with no inference-time ARM selector.
+All 300 expected unique task IDs match the declared cohort; all nonempty `.pt`
+rollouts and per-task JSON verdicts are present, with zero exception records.
+Invalid attempts remain in the overall denominator. The fixed100 row is a
+subset of this evaluation, not an independent rerun.
+
+The generic turn-weighted reward metric is 40.85%; it is **not task success**.
+Task-level rates above are computed from saved verdicts. The GPU restore receipt
+confirms the additive checkpoint even though the inherited evaluation W&B ID
+starts with `qcq7i4ug`.
+
+Compared with additive90 (118 successes, 216 valid), overall drops **3.00 pp**
+and valid-only drops **4.40 pp**. This is checkpoint/evaluation variability,
+not evidence by itself of statistically established deterioration. The pending
+baseline100 job **315098** is needed for the same-iteration control. All-failure
+has trained to100 but has no iteration100 evaluation yet.
+
+[Audited aggregate](arm_results/rl_integration/additive-iteration100-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after100-313669) ·
+[Saved rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-additive-iter100-313669/rollouts).

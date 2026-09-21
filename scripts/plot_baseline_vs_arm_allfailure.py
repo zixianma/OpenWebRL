@@ -10,12 +10,12 @@ baseline_v=[232,248,231,234,230,229,229,222]
 arm_i=[20,30,40,50,60]
 arm_s=[90,107,92,113,100]
 arm_v=[222,225,222,233,229]
-arm_i += [70]
-arm_s += [106]
-arm_v += [233]
-add_i=[20,30,40,50,60,70,80]
-add_s=[85,103,102,98,90,112,111]
-add_v=[236,219,218,212,215,222,212]
+arm_i += [70,80,90]
+arm_s += [106,92,101]
+arm_v += [233,218,217]
+add_i=[20,30,40,50,60,70,80,90,100]
+add_s=[85,103,102,98,90,112,111,118,109]
+add_v=[236,219,218,212,215,222,212,216,217]
 original_i=[51,70,80]
 original_s=[102,103,100]
 original_v=[223,231,222]
@@ -33,6 +33,6 @@ ax.plot(original_i,[100*x/300 for x in original_s],marker='o',lw=2.2,ls='-.',col
 ax.plot(original_i,[100*x/y for x,y in zip(original_s,original_v)],marker='s',lw=2.0,ls='-.',color='#c084fc',label='Original ARM · valid-only')
 ax.set_xlabel('Checkpoint after training iteration'); ax.set_ylabel('Success rate (%)')
 ax.set_title('Outcome-only baseline vs ARM variants\nGPT-4.1 · 300 Online-Mind2Web tasks')
-ax.set_xlim(18,92); ax.set_ylim(20,55); ax.set_xticks([20,30,40,50,60,70,80,90])
-ax.legend(frameon=True,loc='lower right',fontsize=8); ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
+ax.set_xlim(18,102); ax.set_ylim(20,58); ax.set_xticks([20,30,40,50,60,70,80,90,100])
+ax.legend(frameon=True,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=2,fontsize=8); ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
 fig.tight_layout(); out.parent.mkdir(parents=True,exist_ok=True); fig.savefig(out,bbox_inches='tight'); print(out)

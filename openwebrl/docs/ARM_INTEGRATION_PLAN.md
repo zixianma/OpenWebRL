@@ -4017,13 +4017,17 @@ Prepared entry points are `scripts/prepare_arm_failure_coverage.py --check` and
 restore verification, one full collection and deferred labels; no training or
 OM2W evaluation is included. The controller owns all workers, exits after the
 audit, and logs to `openwebrl-evals`. Submitted as **job 315204** on September 21;
-the initial scheduler state is **PENDING (Priority)**. The persistent CPU monitor
+the initial scheduler state was **PENDING (Priority)**. It started on g003 on
+September 21 at 15:34 PDT; GPU model/optimizer restoration passed with zero
+optimizer updates, and native collection is progressing. The deferred-label
+report remains pending. The persistent CPU monitor
 tracks checkpoint restoration, collection progress, deferred label counts and
 verified zero-update completion, with detailed checks every 15 minutes and a cheap
 failure/status check every minute. Approval and preparation receipts are saved
 under the preparation directory below. This pilot does not authorize the later
 training ablations.
-GPU restoration/browser execution remain unvalidated for the new source.
+Full collection completion and deferred-label finalization remain unvalidated
+for the new source; the completed restore gate does not prove those stages.
 
 CPU preparation passed 18 tests against the frozen additive source plus native
 argument parsing. These cover exact-state persistence/provenance, bounded

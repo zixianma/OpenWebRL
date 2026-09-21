@@ -3088,3 +3088,45 @@ the full-H200 failure-coverage pilot **315204** queued while assessing the MIG
 result. No additional MIG allocation or training is authorized by this test.
 Artifacts: runtime `evaluations/arm-mig-probe-315402/`; submission/approval
 receipts: `arm-turn-bonus-preparation/mig-probe-20260921/`.
+
+<a id="arm-job-inventory-20260921"></a>
+### ARM job inventory and remaining work — September 21, 16:00 PDT
+
+| Experiment | Training endpoint / job | Latest full300 evaluation | Current state |
+| --- | --- | --- | --- |
+| Outcome-only | 90 / 1,016 Adam; continuation 315098 | 90: 33.67% / 45.50% | 4 H200 × 12h queued for priority; includes training to100 and full300 |
+| Original bonus | 85 / 1,002 Adam; 303573 | 80: 33.33% / 45.05% | Stopped; no continuation queued |
+| All-failure | 100 / 1,242 Adam; 309490 | 90: 33.67% / 46.54% | Training complete; iteration100 evaluation missing |
+| Additive | 100 / 1,262 Adam; 313669 | 100: 36.33% / 50.23% | Training and all300 rollout/verdict archives complete; allocation released |
+| B, relaxed gate | 20 / 284 Adam; 313208 | 20: 33.67% / 44.30%, 313209 | Training and full300 complete; no continuation queued |
+| C, gate + action credit | 20 / 284 Adam; 313210 | 20: 36.67% / 44.53%, 313211 | Training and full300 complete; no continuation queued |
+
+Rate pairs are overall / valid-only; different rows are at different iterations.
+They are an operational inventory, not a matched comparison. The latest additive
+result is audited in [RL_EVALUATION](RL_EVALUATION.md#arm-additive-iter100-results-20260921).
+
+| Diagnostic / pilot | Job | State |
+| --- | --- | --- |
+| Failure-specific coverage, zero optimizer updates | 315204 | Running on g003, 4 H200 × 3h; restoration from additive90 passed, 26/48 mixed groups collected at 15:59 PDT; deferred labels and coverage/cost report pending |
+| Failed-task rescue yield | 313264 | Complete; ARM 0/8, one ordinary retry 1/8, five retries 3/8; all 374 trajectories saved |
+| Fixed-state selection quality | 313774 | Complete; 192 candidate sets scored |
+| Actor+ARM fixed100 task success | 314664 | Complete; 200 primary evaluations across outcome-only20/90, all saved |
+| Separate-slice MIG inference | 315402 | Passed with SFT actor; released after 18m05s total across attempts |
+
+**Open items.** Baseline100 is already queued. All-failure100 is the clearest
+missing full300 endpoint. Original bonus stopped at85, short of the earlier
+90-iteration target; its full300 curve is also sparse (verified plotted points
+51/70/80). Finishing original90 and any older missing evaluations needs a
+separate resource decision, rather than silently comparing unequal endpoints.
+B/C20 is complete; C40/60 is a proposed follow-up, not a launched continuation.
+The failure-only beta0.5→1.0 training ablation and coverage-treatment training
+are prepared directions but have no approved training allocation; finish the
+coverage/cost pilot before choosing its training budget. MIG checkpoint export,
+parity and native collector migration remain unvalidated; the running full-H200
+pilot is independent of that optional migration.
+
+The additive100 tables and comparison plot are now updated. No new compute was
+submitted during this inventory. Older failed calibration/startup/evaluation
+jobs in monitor history have successful replacement runs and are not additional
+active jobs. Unrelated account jobs at this snapshot: cooking evaluations
+313573_1 and 313573_2 running; ScreenSim training 315088 queued. They were not modified.
