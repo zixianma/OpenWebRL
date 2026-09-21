@@ -3130,3 +3130,40 @@ submitted during this inventory. Older failed calibration/startup/evaluation
 jobs in monitor history have successful replacement runs and are not additional
 active jobs. Unrelated account jobs at this snapshot: cooking evaluations
 313573_1 and 313573_2 running; ScreenSim training 315088 queued. They were not modified.
+
+<a id="arm-bc-to60-prepared-20260921"></a>
+### B/C continuation through iteration 60 — prepared, September 21
+
+The user requested both B and C continue from 20 to 60. Both verified starting
+checkpoints are `iter_0000019`, with 284 completed Adam updates: B from 313208,
+C from 313210. Preserve optimizer, scheduler, dataset cursor and original W&B
+identities. B keeps the at-least-two-action gate with response-index credit;
+C keeps the same gate with action-equivalence credit. Beta stays 0.5 and the
+48-plus-up-to8 group recipe, PPO2, batch 256 and learning rate 1e-6 are unchanged.
+
+| Stage per variant | Training | Evaluation before allocation exits | Proposed allocation |
+| --- | --- | --- | --- |
+| First | 20→40 | Full300 at 40 | 4 H200 × 24h, 32 CPUs, 480 GiB RAM, 32 browsers |
+| Second, after first succeeds | 40→60 | Full300 at 60 | 4 H200 × 24h, 32 CPUs, 480 GiB RAM, 32 browsers |
+
+B and C can run independently. Four allocations total cap compute at **384
+GPU-hours**. Normal QoS limits each allocation to 24h. Measured prior segments
+were B: 14 iterations in 14h00m13s, C: 10 in 9h51m55s; expect roughly 40–44 running
+hours per variant including evaluations, plus queue time. One hour per allocation
+is reserved for evaluation; allocations exit early when finished. A stage that
+cannot reach its exact checkpoint preserves progress and blocks the dependent
+stage rather than evaluating an earlier checkpoint or wasting queued GPUs.
+
+Prepared controller: `scripts/prepare_arm_gate_to60.py`; batch template:
+`scripts/resume_arm_gate_to60_4gpu.sbatch`. Each batch controller owns and waits
+for both training and evaluation workers. Runtime-only source snapshots add
+leased model-server ports, preserving all scientific-source hashes. GPU restore
+verification runs before training in each allocation. CPU preparation verified
+both checkpoint counters and saved schedulers; 10 regression tests cover resume
+routing, port leasing, monitor completion and evaluation handoff. The supervisor
+must be refreshed to the prepared version before launch so it follows 40/60.
+
+Preparation receipts and concrete plans:
+`arm-turn-bonus-preparation/bc-to60-20260921/`. **No job submitted: exact resource
+and total-budget approval remains pending.** This request does not launch the
+separate failure-weight or coverage-treatment training ablations.

@@ -133,6 +133,7 @@ about 9–11%, beta=0.5 unchanged.
 [continuation status](RL_RUNTIME.md#arm-training-status-20260920-2224).
 
 Both full-300 evaluations were released after their iteration-20 checkpoints passed validation.
+B/C continuations to60, with full300 at40/60, are now [prepared](RL_RUNTIME.md#arm-bc-to60-prepared-20260921); exact compute-budget approval is pending.
 The separate [rescue-yield pilot](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920)
 **313264** completed: among eight screened all-failure tasks, ARM rescued
 **0/8**, one ordinary retry **1/8**, and five ordinary retries **3/8**.
