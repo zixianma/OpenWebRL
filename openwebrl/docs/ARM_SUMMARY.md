@@ -133,7 +133,10 @@ about 9–11%, beta=0.5 unchanged.
 [continuation status](RL_RUNTIME.md#arm-training-status-20260920-2224).
 
 Both full-300 evaluations were released after their iteration-20 checkpoints passed validation.
-B/C continuations to60, with full300 at40/60, are now [prepared](RL_RUNTIME.md#arm-bc-to60-prepared-20260921); exact compute-budget approval is pending.
+B/C continuations to60 are [submitted](RL_RUNTIME.md#arm-bc-to60-prepared-20260921):
+**B 316247 / C 316248**, each **8 H200 × 24h**, with 64 training browsers and
+full300 evaluations at40/60 inside the same allocation. Both are queued for
+priority as of September 21, 16:30 PDT; total cap **384 GPU-hours**.
 The separate [rescue-yield pilot](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920)
 **313264** completed: among eight screened all-failure tasks, ARM rescued
 **0/8**, one ordinary retry **1/8**, and five ordinary retries **3/8**.
@@ -175,9 +178,10 @@ the additive checkpoint or native coverage collector on MIG.
 [Agreed next experiments](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921):
 first audit up to four labeled turns per failed trajectory without updating the
 actor; separately test failure-only beta 0.5→1.0 while mixed-group beta stays 0.5.
-Coverage pilot **315204** is running on g003: GPU restoration passed and the
-native collection is progressing, with 4 H200 × 3h, 32 browsers and zero
-optimizer updates. [Job inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
+Coverage pilot **315204** completed in **33m29s**, with 48 ordinary mixed groups
+and zero optimizer updates. All 22 zero-outcome candidate groups failed the
+five-valid-failures gate; no deferred labels were requested. This leaves the
+benefit of four-turn coverage **unmeasured**, not disproved. [Job inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 [Live jobs and completion reports](arm_results/rl_integration/live-status.html)
 refresh every minute; checkpoint/health details are checked every 15 minutes.
 

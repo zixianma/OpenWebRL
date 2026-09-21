@@ -3132,38 +3132,78 @@ active jobs. Unrelated account jobs at this snapshot: cooking evaluations
 313573_1 and 313573_2 running; ScreenSim training 315088 queued. They were not modified.
 
 <a id="arm-bc-to60-prepared-20260921"></a>
-### B/C continuation through iteration 60 — prepared, September 21
+### B/C continuation through iteration 60 — submitted, September 21
 
-The user requested both B and C continue from 20 to 60. Both verified starting
-checkpoints are `iter_0000019`, with 284 completed Adam updates: B from 313208,
-C from 313210. Preserve optimizer, scheduler, dataset cursor and original W&B
-identities. B keeps the at-least-two-action gate with response-index credit;
-C keeps the same gate with action-equivalence credit. Beta stays 0.5 and the
-48-plus-up-to8 group recipe, PPO2, batch 256 and learning rate 1e-6 are unchanged.
+The user approved eight GPUs per training job. Submitted at 16:26 PDT:
+**B 316247** and **C 316248**, each **8 H200 × 24 hours, 64 CPUs, 960 GiB RAM**.
+Both are queued for priority as of 16:30 PDT. This replaces the earlier proposal
+of two four-GPU stages per variant while retaining the **384-GPU-hour total cap**.
+No four-GPU continuation from that proposal was submitted.
 
-| Stage per variant | Training | Evaluation before allocation exits | Proposed allocation |
+Both verified starting checkpoints are `iter_0000019`, with 284 completed Adam
+updates: B from 313208, C from 313210. Preserve optimizer, scheduler, dataset
+cursor and original W&B identities. B keeps the at-least-two-action gate with
+response-index credit; C keeps that gate with action-equivalence credit. Beta
+stays 0.5; the 48-plus-up-to8 group recipe, PPO2, global batch 256 and learning
+rate 1e-6 are unchanged.
+
+| Variant | Job | Owned stages, in order | Training profile |
 | --- | --- | --- | --- |
-| First | 20→40 | Full300 at 40 | 4 H200 × 24h, 32 CPUs, 480 GiB RAM, 32 browsers |
-| Second, after first succeeds | 40→60 | Full300 at 60 | 4 H200 × 24h, 32 CPUs, 480 GiB RAM, 32 browsers |
+| B: relaxed gate | 316247 | Train20→40 → full300 at40 → train40→60 → full300 at60 | TP8, 64 browser pool slots and 64-task gate |
+| C: gate + action credit | 316248 | Train20→40 → full300 at40 → train40→60 → full300 at60 | TP8, 64 browser pool slots and 64-task gate |
 
-B and C can run independently. Four allocations total cap compute at **384
-GPU-hours**. Normal QoS limits each allocation to 24h. Measured prior segments
-were B: 14 iterations in 14h00m13s, C: 10 in 9h51m55s; expect roughly 40–44 running
-hours per variant including evaluations, plus queue time. One hour per allocation
-is reserved for evaluation; allocations exit early when finished. A stage that
-cannot reach its exact checkpoint preserves progress and blocks the dependent
-stage rather than evaluating an earlier checkpoint or wasting queued GPUs.
+The single controller per variant owns and waits for every worker. Evaluations
+use eight GPUs and 32 browsers, temperature0, GPT-4.1/action_history, with all
+300 trajectory archives and per-task verdicts validated before the next stage.
+Training logs to `openwebrl`; these separate evaluation workers log to
+`openwebrl-evals`. Distinct B/C W&B identities and names are preserved.
 
-Prepared controller: `scripts/prepare_arm_gate_to60.py`; batch template:
-`scripts/resume_arm_gate_to60_4gpu.sbatch`. Each batch controller owns and waits
-for both training and evaluation workers. Runtime-only source snapshots add
-leased model-server ports, preserving all scientific-source hashes. GPU restore
-verification runs before training in each allocation. CPU preparation verified
-both checkpoint counters and saved schedulers; 10 regression tests cover resume
-routing, port leasing, monitor completion and evaluation handoff. The supervisor
-must be refreshed to the prepared version before launch so it follows 40/60.
+CPU native argument and saved-scheduler checks pass for both eight-GPU plans,
+and 29 regression tests pass, including ordered stage handoffs and monitor
+routing. The frozen scientific sources are unchanged; runtime snapshots add
+leased model-server ports. Actual eight-GPU model/optimizer restoration is
+verified inside each allocation before training; it has not run while queued.
 
-Preparation receipts and concrete plans:
-`arm-turn-bonus-preparation/bc-to60-20260921/`. **No job submitted: exact resource
-and total-budget approval remains pending.** This request does not launch the
-separate failure-weight or coverage-treatment training ablations.
+The speedup is unmeasured. Previous four-GPU segments took roughly one hour per
+collection, but eight GPUs do not guarantee twice the throughput. The controller
+reserves one hour for each stage's evaluation against the allocation's actual
+remaining time. If the requested checkpoint cannot be reached, it preserves
+progress and stops rather than evaluating an earlier checkpoint or extending
+the budget. Normal QoS limits each allocation to 24h.
+
+Controller: `scripts/prepare_arm_gate_to60.py`; submitted template:
+`scripts/resume_arm_gate_to60_8gpu.sbatch`. The old four-GPU proposal is superseded.
+Plans, approval, preflight reports and submission receipts are under
+`arm-turn-bonus-preparation/bc-to60-20260921/`, especially
+`approval-8gpu.json`, `readiness-8gpu.json`, and `submissions-8gpu.json`.
+The persistent CPU supervisor was refreshed at 16:26 PDT (PID703230), with
+one-minute status checks and 15-minute full checks, and follows the active
+training/evaluation stage. No further allocation is automatically authorized.
+
+<a id="arm-failure-coverage-result-315204"></a>
+### Failure-coverage pilot 315204 — zero eligible groups, September 21
+
+The four-H200 pilot completed successfully after **33m29s**, releasing its
+allocation early. GPU restoration and collection completed; it retained
+**48 ordinary mixed groups**, with **zero optimizer updates**. Its report found
+**zero eligible five-valid-failure groups**: 16 zero-outcome groups were rejected
+first for invalid termination and six first for removed/excluded rows.
+Consequently both the historical admission pool and raw-valid pool were empty;
+the four-turn comparison selected zero states and issued zero new actor or
+selector requests. This does not establish a coverage benefit or failure of the
+idea, and it does not exercise deferred labeling on a nonempty reservoir.
+
+A bounded CPU audit of the 106 JSON group journals found 48 accepted mixed groups,
+31 all-success groups, 22 all-zero groups and five groups with insufficient reward
+information. The all-zero groups contain 110 trajectories: 46 completed, eight
+failed, 38 truncated and 18 aborted. Fourteen groups have removed or untrainable
+rows. These counts can overlap with the first-rejection categories above; a
+completed status alone also does not establish valid native judge provenance.
+The immediate bottleneck in this collection was group validity before ARM
+label coverage. Audit the termination causes before budgeting a larger pilot;
+do not admit technical failures as policy failures just to increase yield.
+
+Evidence: `evaluations/arm-failure-coverage-pilot-315204/iterations/0090/`:
+`failure-coverage.json`, `failure_auxiliary.json`, and `groups/90/*.json`.
+The original coverage and beta-weight training ablations still need concrete
+allocation budgets; this zero-yield pilot does not justify launching them.
