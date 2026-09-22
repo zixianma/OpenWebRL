@@ -3431,10 +3431,33 @@ now describes this corrected design; the earlier after100 design is superseded.
 <a id="failure-ablation-gpu-smoke-proposal-20260922"></a>
 ### Nonempty auxiliary GPU diagnostic — September 22
 
-**Job319102 submitted at10:48 PDT:** 2 H200 ×1h,16 CPUs,480GiB, normal QoS.
-Pending at10:49; Slurm estimated September23 at10:59 PDT. That estimate can
-change. The existing baseline and four eight-GPU reservations are unchanged;
-this smaller job is not guaranteed to run before them.
+**Job319102 passed**, running on g008 from10:59:30 to11:07:11 PDT
+(**7m41s**, about0.256 GPU-hours). It exited after its checks, releasing the
+rest of the approved2 H200 ×1h allocation. The earlier next-day queue estimate
+was inaccurate. The existing training reservations were unchanged.
+
+| GPU check | Observed result |
+| --- | --- |
+| Nonempty auxiliary group | 1 group /10 turns /3 usable ARM labels |
+| Nested q20→q40 labeling | 1 reused label +2 additional live selector labels |
+| Native TP2 optimization | 2 Adam updates; finite gradient norms7.514 and7.729 |
+| β0.5→1 loss-gradient scaling | Exactly2.0× on both ranks |
+| Checkpoint save | Adam counters2; scheduler offset0 |
+| GPU model + optimizer restoration | Passed on both GPUs;0 extra updates |
+| Local browser replay artifacts | Click, screenshots and deterministic assertion preserved |
+
+The five unconstrained actor responses were sent to ARM, but their strict panel
+gate rejected a truncated/empty candidate under the diagnostic128-token limit.
+The admitted auxiliary labels used deliberately constructed valid distinct
+candidates. This therefore validates nonempty multimodal loss/transport and
+restoration, **not natural candidate yield or task-success gains**.
+
+At11:17 PDT, B job318934 was collecting iteration21 on8 H200s at g010
+(15/48 accepted groups;177 usable ARM labels). Its W&B history was advancing,
+host memory was about390GiB/960GiB and no OOM was recorded. Some ARM requests
+were timing out; continue watching label availability and throughput at the
+first collection/optimizer boundary. C318935, beta1318949, q40318950 and
+baseline318933 remained queued.
 
 B previously passed an actual eight-GPU model/optimizer restore (316247,
 iteration20/Adam284), and B/C previously trained on four GPUs. The new beta/q40
@@ -3443,7 +3466,7 @@ TP8 argument checks. However, coverage pilot315204 had zero eligible groups,
 so it did not validate nonempty deferred labeling followed by optimization.
 
 The new isolated diagnostic uses the original SFT actor and a snapshot of the
-frozen ablation source. It runs the following checks within the approved hour:
+frozen ablation source. It completed the following checks within the approved hour:
 
 - **Model calls:** five actual multimodal actor responses and a SelectionARM
   selection, with the natural panel's strict-gate result saved separately.
@@ -3462,10 +3485,10 @@ frozen ablation source. It runs the following checks within the approved hour:
 
 CPU preflight passed, including native launch parsing, the local-browser check,
 multimodal fixture serialization, six usable auxiliary labels and the unchanged
-calibration gate. Model API responses were mocked in that CPU check; GPU/model
-execution is still pending. Diagnostics log to `openwebrl-evals`, with no weights
-or synthetic rows reused by scientific training. A TP2 pass will not establish
-natural failure yield, task-success gain or TP8/64-browser scalability.
+calibration gate. Model API responses were mocked only in that CPU check;
+the completed GPU run used actual actor and ARM inference. Diagnostics log to
+`openwebrl-evals`, with no weights or synthetic rows reused by scientific
+training. TP8/64-browser scalability still requires live production evidence.
 
 Implementation: `scripts/run_arm_failure_gpu_diagnostic.sbatch`,
 `scripts/run_arm_failure_gpu_diagnostic.py`, and
