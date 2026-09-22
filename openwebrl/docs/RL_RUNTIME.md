@@ -3233,19 +3233,36 @@ its GPUs. All300 verdicts and rollout archives passed cohort/completeness checks
 **35.67% overall / 48.20% valid-only**. [Result audit](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921).
 
 <a id="arm-failure-ablations-ready-20260921"></a>
-### Beta and coverage continuations — prepared, not submitted
+### Beta and coverage continuations — submitted September 22 UTC
 
-The [saved truncation/abort audit and concrete proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921)
-are complete. Three proposed branches (unchanged additive control, failure-only
-beta1, failure-only four-turn coverage) start from additive100/Adam1262 and
-target120, including full300 evaluation. Each requests8H200×16h,64CPUs,960GiB,
-64 training browsers; aggregate cap384 GPU-hours. This is additional compute,
-separate from B/C jobs316247/316248. No jobs from this proposal are submitted.
+User-approved jobs **317100 (failure beta1)** and **317101 (failure sampling40%)**
+are queued. Each owns **8 H200 ×16h,64 CPUs,960GiB**,64 training browsers,
+training additive100/Adam1262 →120, then full300 GPT-4.1/T0 evaluation;
+combined cap **256 GPU-hours**. The old third unchanged-control proposal was
+not submitted. B/C jobs316247/316248 remain separate, each8 H200 ×24h to60
+with full300 at40/60; both queued at this check.
 
-Source: `reference-arm-failure-ablations-20260921-v1`; plans/readiness/native
-reports and unexecuted submission commands:
+[Exact recipes, loss scaling and tests](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921).
+Coverage now uses nested Bernoulli q40%, **not a fixed four-turn cap**, and
+preserves historical q20% group admission. Mixed beta0.5/q20% are unchanged.
+Source: `reference-arm-failure-ablations-20260922-v3`;31 working-tree and31
+frozen-source tests plus both native TP8/scheduler checks pass. GPU restoration
+runs before training. Empty eligible pools are valid zero-auxiliary collections;
+nonempty pools must complete deferred labels before the optimizer proceeds.
+
+Plans, fingerprints, native reports, exact user approval and submitted commands:
 `arm-turn-bonus-preparation/failure-ablations-after100-20260921/`.
-The controller awaits train→eval, requires exact checkpoint120, preserves partial
-progress, and reserves one hour for evaluation. Coverage additionally requires
-usable labels on a nonempty first failure pool before any optimizer update.
-The checked batch template is `scripts/run_arm_failure_ablations_8gpu.sbatch`.
+The controller awaits train→eval, requires exact checkpoint120, preserves
+partial progress and reserves one hour for evaluation. Its batch template is
+`scripts/run_arm_failure_ablations_8gpu.sbatch`. Controller roots:
+`evaluations/arm-failure-ablation-weight-317100` and
+`evaluations/arm-failure-ablation-coverage-317101`; training roots use
+`evaluations/arm-failure-additive-JOB_ID`.
+
+The CPU supervisor now tracks both jobs, with60-second status discovery and
+900-second detailed health checks. Each training worker also owns a15-minute
+monitor. W&B training identities are `arm-failure-weight-after100-317100` and
+`arm-failure-coverage-after100-317101`, both in `openwebrl`; endpoint evaluations
+use `openwebrl-evals`. W&B points will appear only after the queued jobs start.
+
+[Failure-turn and sampling plots across training](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922).

@@ -3998,40 +3998,119 @@ Eight turns doubles these maxima. Usable labels can be fewer than selected
 states; this audit measures potential coverage, not label quality or latency.
 [Aggregate audit](arm_results/rl_integration/failure-termination-audit-315204.json).
 
-The concrete proposal is **three independent8-H200×16-hour allocations**
-(control, beta-only, coverage-only), each64 CPUs/960GiB and64 training browsers:
-**384 GPU-hours maximum**, including full300 evaluation at120. Every branch
-starts from the same additive100 checkpoint, optimizer/scheduler and dataset
-cursor (1,262 Adam updates), runs20 further collections, and keeps global batch
-256, PPO2, lr1e-6, K5, distinct5 gate, response-index credit,48 mixed groups plus
-up to8 auxiliary groups. Mixed beta0.5/q0.20 remain fixed. The unchanged control
-separates treatment effects from ordinary continued training under the same
-8-GPU topology. Eight-GPU throughput and coverage overhead are unmeasured;
-16h is a ceiling, not a guarantee of reaching120.
+**September 22 UTC update — approved and submitted.** The earlier three-branch
+proposal was superseded by two **8 H200 × 16-hour** allocations (64 CPUs,
+960GiB,64 training browsers each; **256 GPU-hours total**), from additive100 /
+1,262 Adam updates to iteration120, including full300 evaluation:
 
-- **Control:** failure beta0.5, independent20% labels; new W&B experiment identity.
-- **Weight:** failure beta1.0, unchanged20% labels and all-turn normalization.
-- **Coverage:** failure beta0.5, up to4 uniformly selected turns per valid failed
-  trajectory; select the valid group reservoir before checking label availability.
-  Its first real collection must contain at least one usable deferred failure
-  label before any optimizer update; an empty pool stops and releases the job.
+| Treatment | Job | Failure beta | Failure turn sampling | Mixed beta / sampling |
+| --- | --- | ---: | --- | --- |
+| Weight only | 317100 | 1.0 | 20% | 0.5 / 20% |
+| Coverage only | 317101 | 0.5 | 40% Bernoulli, no four-turn cap | 0.5 / 20% |
 
-CPU preparation passes27 regression tests plus18 against the actual frozen
-source. All three native TP8 argument/saved-scheduler checks pass. The first
-nonempty coverage gate, loss scaling, unchanged control recipe, ordered worker
-ownership, and rejection of an earlier-than120 evaluation are checked. Actual
-GPU restoration/backpropagation and nonempty deferred labeling remain allocation
-startup checks. Training logs to `openwebrl`, endpoint evaluation to
-`openwebrl-evals`, preserving all300 rollout archives and task verdicts. Each
-controller reserves one hour for evaluation, awaits its workers, and releases
-resources on completion or a failed gate. No new paid job is submitted yet.
+Both preserve checkpoint, Adam/scheduler state, dataset cursor, global batch256,
+PPO2, lr1e-6, K5, distinct5 gate, response-index credit,48 ordinary mixed groups,
+and up to8 auxiliary groups. Failure-group admission remains the **historical
+q20% usable-label rule** after strict validity checks in both branches. Coverage
+uses the same hash draw with threshold0.4, retains the exact pre-action states,
+then adds labels only within those already-admitted groups before any update.
+It reuses all already-attempted labels, including negatives and rejected panels.
+It does **not** admit additional groups based on the extra labels or relax
+truncation/browser-error validity. Consequently this tests denser supervision
+on the historical admitted pool; it is not global q40% data acquisition.
 
-Prepared local entry points: `scripts/prepare_arm_failure_ablations.py` and
-`scripts/run_arm_failure_ablations_8gpu.sbatch`. Plans, native reports, readiness
-hashes and exact proposed commands are in runtime
+Auxiliary advantages are beta×(selected-executed-response indicator−1/5):
+weight gives +0.8/−0.2; coverage retains +0.4/−0.1. The auxiliary coefficient
+`N_f/48` and denominator of **all** retained failure turns remain fixed in form;
+there is no inverse-probability correction or renormalization over labeled
+turns. Each branch approximately doubles expected failure supervision through
+a different knob, conditional on the same population; realized training data
+will diverge as the policies update. No new unchanged additive120 control was
+submitted, so these runs alone cannot separate all gains from ordinary further
+training. Neither changes the mixed-outcome recipe.
+
+**Checks:**31 focused tests pass in the working tree and31 against the exact
+frozen source `reference-arm-failure-ablations-20260922-v3`. Both native TP8
+argument and saved-scheduler checks pass (sample counter323072 →323328,
+lr1e-6/weight decay0.1 preserved). GPU restoration is checked inside each job
+before training. Every nonempty coverage pool must complete deferred labeling
+with usable labels before PPO; a legitimately empty pool contributes zero
+auxiliary loss and still permits ordinary mixed-group training. The source
+allows bounded serial accumulation of up to128 auxiliary microbatches per
+optimizer window and8GiB payloads for q40%; this changes transport capacity,
+not optimizer count, batch denominator, or reward normalization.
+
+The controller owns and awaits train→eval, reserves one hour for evaluation,
+requires exact checkpoint120, and preserves partial progress if the allocation
+ends early. Training uses W&B `openwebrl`; standalone full300 GPT-4.1/T0
+evaluation uses `openwebrl-evals`, retaining rollout archives and per-task
+verdicts. TP8 throughput and additional-label overhead remain unmeasured.
+
+Entry points: `scripts/prepare_arm_failure_ablations.py` and
+`scripts/run_arm_failure_ablations_8gpu.sbatch`. Plans, frozen-source checks,
+exact approval/submission receipts and job IDs are in runtime
 `arm-turn-bonus-preparation/failure-ablations-after100-20260921/`.
-Exact new resource/budget approval is still required before submission; the
-existing B/C allocations remain dedicated to their approved experiments.
+B/C jobs316247/316248 retain their separate approved budgets.
+
+<a id="arm-failure-sampling-history-20260922"></a>
+### Failure-turn coverage across completed training iterations — September 22
+
+CPU-only reconstruction reads group journals, calibration summaries, auxiliary
+manifests and checkpoint receipts; **no tensor loading or model requests**.
+All100 Additive and100 All-failure iterations,85 Original bonus iterations,
+and B/C20 iterations are covered. B's first saved-batch replay has no local
+group journal, so its journal-derived series has19 points; its saved calibration
+still contributes the retained-turn count. Historical source hashes for the
+failure filter, additive reservoir and browser generator are identical across
+Additive's continuations through100. Native argument dumps confirm
+`enable_adaptive_query_sampling=False`, shuffled sequential task draws, and
+an empty host blacklist. Thus there is **no adaptive difficulty/length-weighted
+task sampler enabled** in this run. Outcome-variance filtering is still dynamic:
+it keeps collecting candidate groups until48 mixed groups are retained.
+
+Means per iteration (Additive; values rounded only for presentation):
+
+| Training iterations | Completed candidate groups | Admitted failure groups | Admitted failure turns | Sampled failure turns | Usable failure labels |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1–20 | 108.55 | 8.00 | 403.10 | 78.35 | 27.45 |
+| 21–40 | 101.10 | 8.00 | 415.35 | 83.80 | 38.60 |
+| 41–60 | 102.00 | 6.65 | 334.05 | 67.10 | 33.55 |
+| 61–80 | 108.15 | 2.95 | 124.10 | 23.65 | 12.10 |
+| 81–100 | 98.50 | 1.90 | 79.40 | 16.65 | 8.90 |
+
+![Additive failure-turn sampling history](rl_results/arm_additive_failure_sampling.png)
+
+- **Collected zero-reward turns** include invalid/truncated/aborted trajectories;
+  these counts are not interchangeable with judge-confirmed valid failures.
+- **Admitted failure turns** are the strictly validated groups contributing to
+  the failure-only objective. Additive/B/C use a side buffer; All-failure shares
+  its48 slots with mixed groups. Original bonus has no failure-only pool.
+- **Sampled** is the Bernoulli sampling decision, including panels later rejected
+  for invalid/duplicate candidates. **Usable** means a valid ARM label survives.
+  In Additive, all100 auxiliary turn and label totals match their exact manifests.
+- The x-axis is **completed collection/PPO iteration**, not Adam update; both
+  counters and source paths are stored in the aggregate. Journals precede native
+  trimming/shuffling; auxiliary denominators are verified separately. Completed
+  candidate groups omit canceled/in-flight tasks, so they are not a full count
+  of submitted tasks or total browser effort.
+
+Additive's realized sampling rate is **20.02%** on collected zero-reward turns
+and **19.88%** on admitted failure turns. Sampled counts track admitted turn
+counts closely (descriptive Pearson r=0.984). The 48 mixed-group quota remains
+constant while the admitted auxiliary pool shrinks;7/100 iterations contain no
+auxiliary groups. Its mean `N_f/48` coefficient drops from0.1667 to0.0396 across
+the first/last20 iterations. Coverage and loss weighting therefore interact
+with the changing failure population even at constant q and beta. The counts
+do not by themselves distinguish actor improvement, task composition, browser
+validity, trajectory lengths, and label availability as causes. Increasing q
+cannot manufacture eligible groups in an empty pool.
+
+![Failure turns across ARM variants](rl_results/arm_variants_failure_sampling.png)
+
+[Aggregate JSON](arm_results/rl_integration/failure-sampling-history.json);
+reproduce with `scripts/plot_arm_failure_sampling.py` (CPU only). Raw responses,
+screenshots and credentials are not included in these aggregate artifacts.
+
 
 ### What supports this direction
 

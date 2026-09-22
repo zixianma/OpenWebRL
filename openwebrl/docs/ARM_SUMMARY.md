@@ -135,8 +135,7 @@ about 9–11%, beta=0.5 unchanged.
 Both full-300 evaluations were released after their iteration-20 checkpoints passed validation.
 B/C continuations to60 are [submitted](RL_RUNTIME.md#arm-bc-to60-prepared-20260921):
 **B 316247 / C 316248**, each **8 H200 × 24h**, with 64 training browsers and
-full300 evaluations at40/60 inside the same allocation. Both are queued for
-priority as of September 21, 16:30 PDT; total cap **384 GPU-hours**.
+full300 evaluations at40/60 inside the same allocation. Both are queued (B: resources; C: priority) as of September 21, 22:33 PDT; total cap **384 GPU-hours**.
 The separate [rescue-yield pilot](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920)
 **313264** completed: among eight screened all-failure tasks, ARM rescued
 **0/8**, one ordinary retry **1/8**, and five ordinary retries **3/8**.
@@ -186,9 +185,24 @@ benefit of four-turn coverage **unmeasured**, not disproved. The
 found38 response-length truncations and18 browser-step aborts among110
 trajectories in the22 all-zero groups. Four turns would roughly double sampled
 states on their54 individually valid failures, but none of those groups passes
-the five-valid-failures rule. Control/beta1/four-turn branches from additive100
-are CPU-prepared; proposed budget is three8-H200×16h allocations including
-full300 at120, pending exact budget approval. [Job inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
+the five-valid-failures rule. The approved continuation experiments now use
+**failure beta 1.0 (317100)** and **failure sampling 40% (317101)**, replacing
+the fixed-four-turn proposal. Both branch from additive100 and target120 with
+full-300 evaluation, each **8 H200 × 16h**; queued September 21, 22:33 PDT.
+Mixed beta0.5/q20% and the existing failure-group admission rule remain fixed.
+[Exact recipes and launch checks](RL_RUNTIME.md#arm-failure-ablations-ready-20260921).
+
+<a id="arm-failure-sampling-history"></a>
+**Failure supervision shrinks during training.** In Additive, averages from
+iterations 1–20 → 81–100 fall from **403 → 79 admitted failure turns**,
+**78 → 17 sampled turns**, and **27 → 9 usable labels**. Actual sampling stays
+near 20%; admitted groups fall **8 → 1.9**, also lowering their `N_f/48` loss
+coefficient. Adaptive query reweighting is **disabled**; native dynamic filtering
+still collects until 48 mixed groups. [Definitions and windowed measurements](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922);
+[comparison across all five variants](rl_results/arm_variants_failure_sampling.png).
+
+![Additive ARM failure turns and sampling across training](rl_results/arm_additive_failure_sampling.png)
+
 [Live jobs and completion reports](arm_results/rl_integration/live-status.html)
 refresh every minute; checkpoint/health details are checked every 15 minutes.
 

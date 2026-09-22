@@ -122,3 +122,5 @@ hashes remain in `document_map.json`. Retained standalone files are
 | `ROLLOUT_ARCHIVE.md` | [RL_RUNTIME.md](RL_RUNTIME.md#rollout-archive) |
 
 - [Additive storage recovery: iteration 85 → 90](RL_RUNTIME.md#arm-additive-to90-storage-recovery-20260920)
+
+- [ARM failure-turn sampling history and dynamic filtering](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922) · [summary plot](ARM_SUMMARY.md#arm-failure-sampling-history)
