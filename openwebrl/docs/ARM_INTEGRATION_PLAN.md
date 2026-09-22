@@ -5874,3 +5874,16 @@ Comparator: `scripts/audit_arm_task_quality_gpt41.py --execute` (10 tasks,
 responses, pre-model inspection notes and the side-by-side
 `jev-gpt41-pilot-comparison.html` remain in the task-pool runtime directory.
 No training inputs or queued ablation configurations changed.
+
+**Inspect the saved Jev outputs.** [Interactive task-quality dashboard](arm_results/rl_integration/jev-quality-review.html)
+(download the HTML and open it locally) includes the10×7 judgment matrix,
+per-choice probability bars, confidence histogram, adjustable review threshold,
+task/site search and GPT-disagreement filters. Click any cell for its task,
+question, rubric and comparator explanation. The18 low-confidence judgments
+are distinct from the explicit `uncertain` category, selected0 times. Confidence
+is a model-reported distribution summary, not measured correctness probability.
+Rebuild from saved outputs with `python3 scripts/render_arm_task_quality_review.py`;
+this makes no API calls. The public view contains public WebGym task text and
+selected derived results, with no credentials or raw API response envelopes.
+
+![Jev task-quality choices, probabilities and uncertainty](arm_results/rl_integration/jev-quality-overview.png)

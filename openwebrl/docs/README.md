@@ -127,3 +127,5 @@ hashes remain in `document_map.json`. Retained standalone files are
 
 - [OpenWebRL task selection and additional WebGym candidates](ARM_INTEGRATION_PLAN.md#arm-task-pool-expansion-20260922)
 - [Jev task-quality screening pilot](ARM_INTEGRATION_PLAN.md#arm-task-quality-jev-20260922)
+  · [interactive uncertainty dashboard](arm_results/rl_integration/jev-quality-review.html)
+  · [static overview](arm_results/rl_integration/jev-quality-overview.png)
