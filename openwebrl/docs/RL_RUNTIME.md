@@ -3266,3 +3266,76 @@ monitor. W&B training identities are `arm-failure-weight-after100-317100` and
 use `openwebrl-evals`. W&B points will appear only after the queued jobs start.
 
 [Failure-turn and sampling plots across training](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922).
+
+<a id="storage-inventory-20260922"></a>
+### Storage quota, retention correction and cleanup inventory — September 22
+
+The five queued continuations started overnight and failed: baseline315098
+(54s), B316247 (6m17s), C316248 (36s), failure-weight317100 (50s), and
+failure-coverage317101 (69s). Baseline/B logs explicitly report `Disk quota
+exceeded`; the remaining startup logs are truncated. No new optimizer update
+was verified. B passed eight-GPU checkpoint restoration before collection
+failed. At the September22 morning audit no user Slurm jobs were active.
+The personal **scrubbed hard quota was110TiB**, despite substantial filesystem
+free space. The previous filesystem-space/write-probe check did not establish
+personal quota headroom. The supervisor recorded failures but did not recover
+them automatically; monitoring is not evidence that a run is healthy.
+
+The user-authorized non-tenth checkpoint pruning removed375 real checkpoint
+directories and18 symlinks, reclaiming **21.14TiB**. One-based iterations
+10,20,30,…,100 were retained where present (`iter_0000009` means iteration10).
+The operation completed at16:07:48UTC before the correction to also retain each
+lineage's latest checkpoint arrived. **Original-bonus iteration85 was deleted;
+iteration80 remains.** No accessible replacement copy was found in the bounded
+backup search. Historical training metrics were preserved, but they must not be
+treated as the optimizer counters of that older retained checkpoint.
+
+The corrected permanent rule is **every tenth iteration plus the latest durable
+checkpoint of each lineage**, with active resume/evaluation dependencies checked
+before any future deletion. Baseline90, B20, C20, additive100 and all-failure100
+remain available. Saved trajectories and judge verdicts were not deleted.
+The post-cleanup quota query at approximately09:14PDT reports **88.86TiB used**,
+with **11.14TiB below the100TiB soft quota** and **21.14TiB below the110TiB hard
+quota**. These are shared personal limits, not independently available per job.
+
+The following inventory identifies candidates; **no additional deletion has
+been performed or authorized**. Sizes use allocated bytes and TiB (1024^4 bytes).
+The first four categories below are disjoint; aliases/hard links were counted
+once within the OpenWebRL payload scan.
+
+| Data | Size | Location relative to runtime unless stated | Recommendation |
+|---|---:|---|---|
+| Completed-job temporary image-tensor mappings | 7.424TiB;4,946 files | `multimodal-scratch/arm-variant-{311964,311965,311962,313208,313210,313669}/rollout-*.bin` | First deletion candidate. All six jobs completed; native recovery files serialize tensor values independently. Preserve the surrounding directories and all other files. |
+| ARM native recovery batches | 16.256TiB;331 files | ARM training roots under `evaluations/*/runtime/rollout_recovery/*.pt` | Selective pruning only after checking replay dependencies and retained source archives. Total is inventory, not approved/reclaimable space. |
+| Baseline native recovery batches | 5.102TiB;106 files | `runs/openwebrl-4b-reference-*/rollout_recovery/*.pt` | Same dependency review. Preserve pending next-batch recovery and data needed for restart. |
+| ARM per-group training archives | 31.385TiB;32,689 files | ARM training roots under `evaluations/*/iterations/*/groups/**/*.pt` | Preserve by default. Contains accepted and rejected groups, including data not in native optimizer batches; useful for audits, relabeling and future training. |
+| Auxiliary failure tensors | 0.142TiB | `evaluations/*/iterations/*/failure_auxiliary.pt` | Lower priority; inspect dependencies before pruning. |
+| Cooking full-suite processed image tensors | 4.989TiB;71,241 files | Under **checkpoints/web**, `full-suite-eval-20260920/cooking/{update-0,update-3-best,update-12}/episodes/*/visual_tensors/*.pt` | Promising separate-project candidate. Sampled decision logs retain original image data URIs; complete image coverage and preprocessing/replay dependencies still need verification before deletion. |
+
+The entire `checkpoints/web` tree is about19.0TiB, mostly other cooking/ScreenSim
+experiments. Large parents include `full-suite-eval-20260920` (~5.1TiB),
+`cooking-full-295856` (~3.9TiB), `cooking-gemini-novice-rl-306481` (~2.5TiB),
+and `cooking-gemini-novice-rl-308401` (~2.1TiB). These parent totals overlap
+their contents above: **do not sum them as additional deletion candidates**.
+In particular, `cooking-full-295856` is mostly episode data (~3.5TiB), with only
+~401GiB in its `checkpoints/` subdirectory. Directory names alone do not identify
+disposable model checkpoints. OpenWebRL SFT artifacts total only~196GiB and are
+not the main storage pressure.
+
+Transport implementation evidence: `slime/utils/rollout_transport.py` retains
+`rollout-*.bin` for a process lifetime; page-cache eviction does not unlink them.
+`file_back_completed_group` and native `torch.save` preserve independent tensor
+values in durable recovery files. The exact4,946-file proposed cleanup manifest
+records each path, inode, size and modification time. Durable audit files are in
+`arm-turn-bonus-preparation/overnight-20260922/`: `checkpoint-pruning-manifest.json`,
+`checkpoint-pruning-deletions.jsonl`, `temporary-tensors-candidates.json`,
+`storage-payload-inventory.json`, and `other-project-visual-tensors.json`.
+
+Prepared launchers now check **personal quota**, conservatively requiring2TiB
+below the soft limit before GPU restoration, and fail closed if quota cannot be
+read. This is a startup guard, not a reservation or guarantee that several long
+jobs fit concurrently. The approved24h baseline and failure-ablation limits are
+prepared; replacement submissions and their remaining budgets must be recorded
+separately from the failed job IDs. Scientific sources and optimizer settings
+remain unchanged. Quota parsing tests and the refreshed ablation CPU/native
+scheduler checks pass; new GPU execution has not yet been validated.
