@@ -3917,6 +3917,37 @@ training resources still need an exact budget approval.
 Continuing C remains a separate recommendation. Evaluation/deployment remains
 one actor, with no inference-time selector.
 
+### Status after the coverage pilot and iteration100 evaluation
+
+The fixed100 execution audit is complete; it found descriptive actor+ARM gains,
+but historical actor-only controls differ in date/availability and decoding.
+The late actor's valid-only gain is only1.62pp; this does not establish that
+stronger ARM training rewards will help. The coverage pilot315204 completed
+with zero valid five-failure groups, so the four-turn treatment never received
+an eligible pool. Neither coverage-treatment training nor beta1 training has
+launched. B/C continuations are separate gate/credit experiments, keeping
+beta0.5 and nominal sampling0.20.
+
+Keep the two proposed ablations separate. First inspect saved training
+termination reasons to explain the empty pool; 38 truncated and18 aborted
+trajectories appeared among110 trajectories in the22 all-zero groups. Do not
+relax technical-validity checks silently. Test deferred labeling on a nonempty
+valid pool before a long coverage run. The beta-only loss path is CPU-tested;
+a GPU training smoke check and concrete allocation budget remain outstanding.
+
+Four-turn coverage is not a global change from q0.20 to q0.40: it labels
+min(4,T) uniformly selected valid turns per eligible failed trajectory while
+ordinary mixed-group sampling stays0.20. For T=15, expected selected turns
+change3→4; for T=5,1→4. Candidate gates can still reject the selected turns.
+Changing failure-group admission as described below is also part of this
+coverage recipe, so it is not an isolated sampling-probability comparison.
+
+For a later controlled continuation, branch control, beta-only, and (after its
+nonempty pilot passes) coverage-only from additive100 with the same optimizer
+state. Run20 further collections and evaluate each endpoint identically.
+Additive100 is now36.33%/50.23%; all-failure100 is35.67%/48.20%. Baseline100
+is still pending. These endpoints do not yet show a matched outcome-only gain.
+
 ### What supports this direction
 
 Additive90 is **39.33% overall / 54.63% valid-only**, versus the historical

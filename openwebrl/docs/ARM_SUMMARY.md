@@ -217,6 +217,7 @@ candidates.
 |  | 70 | — | 35.33% / 45.49% |
 |  | 80 | — | 30.67% / 42.20% |
 |  | 90 | — | **33.67% / 46.54%** |
+|  | 100 | 26.00% / 39.39% | **35.67% / 48.20%** |
 | **Additive bonus** | 20 | 24.0% / 31.17% | 28.33% / 36.02% |
 |  | 30 | 30.0% / 44.12% | 34.33% / 47.03% |
 |  | 40 | 30.0% / 44.12% | 34.00% / 46.79% |
@@ -249,8 +250,9 @@ paired significance claim. Additive subsequently completed **100 / 1,262**;
 its [iteration-100 evaluation](RL_EVALUATION.md#arm-additive-iter100-results-20260921)
 is **36.33% / 50.23%**, down 3.00 / 4.40 percentage points from iteration90.
 Baseline100 is still pending, so there is no matched iteration100 comparison yet.
-Original remains at **85 / 1,002**. All-failure100 full300 is queued as **316392**
-(2 H200 × 1h); [launch details](RL_RUNTIME.md#arm-allfailure100-eval-316392).
+Original remains at **85 / 1,002**. All-failure100 **316392** completed at
+**35.67% overall / 48.20% valid-only**, with all 300 rollouts/verdicts saved.
+[Result audit](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921).
 
 ![All-failure ARM full-300 evaluation curve](rl_results/arm_allfailure_full300.png)
 

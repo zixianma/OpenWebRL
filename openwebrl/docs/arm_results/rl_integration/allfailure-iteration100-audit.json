@@ -1,0 +1,42 @@
+{
+  "job_id": "316392",
+  "variant": "allfailure",
+  "iteration": 100,
+  "completed_optimizer_updates": 1242,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-turn-bonus-fresh-allfailure-309490/runtime/iter_0000099",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-eval80-allfailure-20260920-v2",
+  "protocol": "existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks",
+  "full300": {
+    "tasks": 300,
+    "successes": 107,
+    "valid": 222,
+    "invalid": 78,
+    "overall": 0.3566666666666667,
+    "valid_only": 0.481981981981982,
+    "saved_rollouts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 26,
+    "valid": 66,
+    "invalid": 34,
+    "overall": 0.26,
+    "valid_only": 0.3939393939393939,
+    "saved_rollouts": 100,
+    "error_records": 0
+  },
+  "evaluation_manifest_sha256": "1102a69f0a93957c5e90aeffceb28aa43aa9b39396828d3bb9da5bebd4044246",
+  "restore_verified": true,
+  "cohort_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-allfailure-iter100-316392/rollouts",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after100-316392",
+  "comparison": {
+    "allfailure90_successes": 101,
+    "allfailure90_valid": 217,
+    "overall_delta_pp": 2.0000000000000018,
+    "valid_only_delta_pp": 1.6544193963548837,
+    "baseline100": "pending training/evaluation"
+  },
+  "scope": "Task-level outcomes; historical comparisons are not controlled same-day paired tests"
+}

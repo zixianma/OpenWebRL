@@ -3227,3 +3227,7 @@ Approval, checkpoint plan and submission receipts:
 The persistent CPU supervisor includes316392, with one-minute status checks
 and 15-minute detailed checks. Original iteration60 remains a separate,
 unsubmitted backfill; this approval covers only all-failure100.
+
+September 21 completion update: **316392 finished in30m58s**, exit0, and released
+its GPUs. All300 verdicts and rollout archives passed cohort/completeness checks;
+**35.67% overall / 48.20% valid-only**. [Result audit](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921).

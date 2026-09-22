@@ -34,6 +34,10 @@ with all 300 rollouts and verdicts saved. This is below additive90 by 3.00 / 4.4
 percentage points. Baseline100 remains queued; no matched endpoint conclusion
 is available yet. [Current jobs and missing evaluations](RL_RUNTIME.md#arm-job-inventory-20260921).
 
+All-failure [iteration100](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921)
+**316392** completed at **35.67% / 48.20%** (107 successes / 222 valid), with all
+300 rollouts and verdicts saved. Baseline100 remains pending.
+
 Latest Sol inference result (2026-09-13): **132/300 (44.0% overall; 51.56%
 valid-only)**, versus historical SelectionARM **128/300 (42.67%; 50.0%)**.
 The common-valid paired difference is not significant (p=0.4426); these were

@@ -1747,3 +1747,25 @@ has trained to100 but has no iteration100 evaluation yet.
 [Audited aggregate](arm_results/rl_integration/additive-iteration100-audit.json) ·
 [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after100-313669) ·
 [Saved rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-additive-iter100-313669/rollouts).
+
+<a id="arm-allfailure-iter100-results-20260921"></a>
+### All-failure iteration100 — completed September 21
+
+Job **316392** completed in **30m58s** on two H200s, releasing the one-hour
+allocation early. The checkpoint is `iter_0000099` from all-failure309490,
+**100 completed collections / 1,242 Adam updates**. Full300: **107 successes,
+222 valid, 78 invalid; 35.67% overall / 48.20% valid-only**. The frozen fixed100
+slice has **26 successes / 66 valid / 34 invalid**, or **26.00% / 39.39%**.
+
+The 300 unique task IDs match the frozen cohort; every task has a nonempty
+rollout archive and verdict sidecar, with no persistence errors. Per-task sums
+match native task metrics; GPU restoration evidence confirms checkpoint99.
+Protocol: local browser, GPT-4.1/action_history, temperature0, same full300
+monitor as other RL endpoints. [Machine-readable audit](arm_results/rl_integration/allfailure-iteration100-audit.json).
+
+Compared with all-failure90, overall increases **2.00 pp** and valid-only
+**1.65 pp**. Additive100 is **36.33% / 50.23%**, higher by **0.67 / 2.03 pp**.
+These are descriptive comparisons across different-date rollouts and valid
+sets, not evidence of significance. Baseline100 is still pending, so no matched
+iteration100 outcome-only comparison is available. All archives are under
+`evaluations/arm-allfailure-iter100-316392/rollouts/`; training was not updated.

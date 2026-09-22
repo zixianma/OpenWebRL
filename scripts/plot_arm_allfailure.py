@@ -2,12 +2,12 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-iterations=[20,30,40,50,60,70]
-successes=[90,107,92,113,100,106]
-valid=[222,225,222,233,229,233]
+iterations=[20,30,40,50,60,70,80,90,100]
+successes=[90,107,92,113,100,106,92,101,107]
+valid=[222,225,222,233,229,233,218,217,222]
 overall=[100*s/300 for s in successes]
 valid_only=[100*s/v for s,v in zip(successes,valid)]
-repo=Path('/gpfs/projects/krishna/zixianma/OpenWebRL')
+repo=Path(__file__).resolve().parents[1]
 out=repo/'openwebrl/docs/rl_results/arm_allfailure_full300.png'
 plt.style.use('seaborn-v0_8-whitegrid')
 fig,ax=plt.subplots(figsize=(8.2,4.8),dpi=180)
@@ -16,6 +16,6 @@ ax.plot(iterations,valid_only,marker='s',linewidth=2.0,markersize=4.5,color='#dc
 ax.set_xlabel('Checkpoint after training iteration')
 ax.set_ylabel('Success rate (%)')
 ax.set_title('All-failure ARM browser evaluation\nGPT-4.1 · 300 Online-Mind2Web tasks')
-ax.set_ylim(20,55); ax.set_xlim(18,72); ax.set_xticks([20,30,40,50,60,70])
+ax.set_ylim(20,55); ax.set_xlim(18,102); ax.set_xticks(iterations)
 ax.legend(frameon=True,loc='lower right'); ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
-fig.tight_layout(); fig.savefig(out,bbox_inches='tight'); print(out)
+fig.tight_layout(); out.parent.mkdir(parents=True,exist_ok=True); fig.savefig(out,bbox_inches='tight'); print(out)
