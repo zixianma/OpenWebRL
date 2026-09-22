@@ -3339,3 +3339,45 @@ prepared; replacement submissions and their remaining budgets must be recorded
 separately from the failed job IDs. Scientific sources and optimizer settings
 remain unchanged. Quota parsing tests and the refreshed ablation CPU/native
 scheduler checks pass; new GPU execution has not yet been validated.
+
+<a id="training-relaunch-20260922"></a>
+### Five approved training continuations resubmitted — September22
+
+Following the explicit request to launch the failed training jobs and the new
+ablations, all five replacements were submitted and verified in Slurm. At the
+morning check they are **pending for priority**, not training yet. They use the
+approved normal QoS on `gpu-h200`; the failed jobs' elapsed runtimes were deducted
+and remaining walltime rounded down to whole minutes, keeping each lineage
+within its approved24h allocation budget including the failed attempt.
+
+| Replacement job | Replaces | Experiment | Resume → target | H200 GPUs | Walltime | Full300 evaluations in the same allocation |
+|---|---|---|---|---:|---|---|
+| 318933 | 315098 | Outcome-only baseline | 90 →100 | 4 | 23h59m | 100 |
+| 318934 | 316247 | B: relaxed candidate gate | 20 →60 | 8 | 23h53m | 40,60 |
+| 318935 | 316248 | C: relaxed gate + duplicate-aware credit | 20 →60 | 8 | 23h59m | 40,60 |
+| 318936 | 317100 | Additive failure weight beta1 | 100 →120 | 8 | 23h59m | 120 |
+| 318937 | 317101 | Additive failure sampling q40% | 100 →120 | 8 | 23h58m | 120 |
+
+Baseline requests32 CPUs/480GiB; the other jobs each request64 CPUs/960GiB.
+All native resume metadata, source hashes, optimizer counters and prepared
+ablation fingerprints passed before submission. GPU restoration is still
+required inside each allocation. Baseline resumes Adam1016; B/C resume284;
+the two new ablations branch from additive100/Adam1262. Existing baseline/B/C
+W&B identities are preserved; the two new ablations use separate training IDs
+`arm-failure-weight-after100-318936` and
+`arm-failure-coverage-after100-318937` in `openwebrl`.
+
+The persistent CPU supervisor was restarted as PID1083186 for72h and verified
+to include all five jobs. It checks status every60s and detailed health plus
+personal quota every900s. Quota alerts fire below4TiB of soft-limit headroom or
+2TiB of hard-limit headroom; these observations do not reserve capacity and do
+not authorize deletion. Newly registered jobs are now loaded without restarting
+the supervisor. Eight supervisor tests pass. The morning quota check passes with
+about21.1TiB below the hard limit; additional temporary-tensor cleanup remains
+unapproved. No saved rollout or judge verdict was removed for these launches.
+
+Exact approval, submitted commands, per-job scheduler/resource verification and
+monitor receipt are under
+`arm-turn-bonus-preparation/overnight-20260922/relaunch/`.
+Each controller owns and awaits its workers and evaluations, preserves partial
+progress if the target does not fit, and does not obtain another allocation.
