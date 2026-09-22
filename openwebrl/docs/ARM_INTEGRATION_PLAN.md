@@ -5743,3 +5743,134 @@ Raw pinned inputs and review artifacts remain under runtime
 No new GPU allocation, browser rollout, training-data switch or API judge call
 was made for this inventory. Embedding and execution stages still need a
 concrete resource proposal and user approval before paid compute is requested.
+
+<a id="arm-task-quality-jev-20260922"></a>
+### Jev quality-screening pilot and GPT-4.1 comparison
+
+Use TypeSafe's Jev for the text-quality stage before browser collection. Pin
+`jev-1.13.0`; the [API](https://docs.typesafe.ai/api) accepts a task state and
+independent typed questions, returning categorical decisions, probabilities
+and confidence. It does not produce free-form explanations. Our adapter saves
+the original instruction/rubric, complete answers, model version, request hash,
+token usage and deterministic reason codes for inspection and resumption.
+
+| Dimension | What is checked | Treatment in the pilot |
+| --- | --- | --- |
+| Self-contained target | Missing entity or unresolved prior context; explicitly allowed arbitrary choices are valid | Flag for review |
+| Single-episode feasibility | Requires repeated future observations, versus looking up an existing schedule or forecast | Flag for review |
+| Completion criterion | Recognizable requested answer/result, versus unbounded research | Flag for review |
+| Contradictions | Explicitly incompatible requirements; redundancy alone is not a contradiction | Flag for review |
+| Missing prerequisite | Explicitly required unavailable personal input, credentials or private files | Flag for review; do not infer current site login behavior |
+| Rubric alignment | Reference adds hidden demands beyond the actor-visible instruction | Separate metadata flag; native outcome judge does not use this rubric |
+| Redundant rubric | Multiple facts repeat/subsume the same demand | Difficulty-inflation flag; not a rejection criterion |
+
+The state includes only the task instruction and start URL. The rubric appears
+only in the two rubric-specific questions, so it cannot supply missing context
+to the other checks. Each answer is `clear`, `problem` or `uncertain`.
+All pilot decisions remain **review**; confidence below0.8 affects review
+priority only. This threshold is an uncalibrated starting heuristic, not an
+estimated probability of correctness. Do not multiply question probabilities
+or interpret their independence in API execution as statistical independence.
+Jev's [documented limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13)
+include numerical/date reasoning and literal interpretation. Keep exact
+arithmetic in code and manually inspect suspected numerical contradictions.
+
+1. Smoke-test10 hand-inspected cases from the existing75, including future
+   observations(ID237800), redundant thresholds(220296), an ordinary recipe
+   task(151472), and rubric overreach(262046). These are sanity checks, not a
+   held-out accuracy estimate.
+2. Audit all75, reusing successful cached responses; manually review flags,
+   uncertainty and provisional passes. Check false rejection of valid tasks
+   and missed blockers before choosing any automatic filtering thresholds.
+3. After semantic deduplication and evaluation-overlap screening, review up to
+   50 diverse candidates per site as a buffer, then retain up to25 passing
+   tasks per site. **337 is only a pre-quality upper bound:**13 sites can
+   contribute25 each, and6 smaller sites contribute12 total. Both caps are
+   proposed review budgets; the final count may be smaller.
+4. Browser execution still establishes availability, valid failure/mixed-group
+   yield and current-actor difficulty. A text-quality pass proves none of these.
+
+Implementation: `scripts/audit_arm_task_quality_jev.py`; CPU/mock tests:
+`tests/test_arm_task_quality_jev.py`. Dry-run is the default. Add
+`TYPESAFE_API_KEY` (or `JEV_API_KEY`) to the repository `.env` or environment; the key is never
+stored in request artifacts. The client caps HTTP attempts, retries transient
+rate-limit/overload errors, stops on authentication/schema errors, and saves
+each response before proceeding. It never changes a training dataset.
+
+```bash
+# First10; then rerun on the75-row input, with successful requests cached.
+python3 scripts/audit_arm_task_quality_jev.py \
+  --input /gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/jev-pilot-10.jsonl \
+  --limit 10 --max-api-calls 12 --execute
+python3 scripts/audit_arm_task_quality_jev.py --limit 75 --max-api-calls 90 --execute
+```
+
+The paired10-task pilot below is complete; the remaining75-task audit has not
+run. This needs no local GPU allocation. Published
+[pricing](https://docs.typesafe.ai/models) is$0.042 per million input tokens,
+with output free (checked2026-09-22 UTC). At an estimated2–5K input tokens per
+task,75 requests would cost about$0.006–0.016 before retries. Record actual
+usage before estimating a larger audit. Accuracy, semantic novelty and browser
+validation are the unresolved constraints, rather than this pilot's API cost.
+
+**Completed paired pilot,2026-09-22 UTC.** The same10 deliberately selected
+examples and seven criterion definitions were sent to both models. Jev batches
+seven independent questions per task; GPT-4.1 receives one isolated question
+per call (70 total, concurrency4, temperature0), preserving the same visibility
+of instruction and rubric. Actual models were `jev-1.13.0` and
+`gpt-4.1-2025-04-14`. All80 requests returned usable categorical judgments.
+
+| Dimension | Agreement (of10) |
+| --- | ---: |
+| Self-contained target | 10 |
+| Single-episode feasibility | 10 |
+| Completion criterion | 8 |
+| Contradictions | 10 |
+| Missing prerequisite | 10 |
+| Rubric alignment | 9 |
+| Redundant rubric | 7 |
+| **All dimensions** | **64/70 (91.4%)** |
+| **Instruction quality only (first5)** | **48/50 (96.0%)** |
+
+| API | Requests | Input tokens | Output tokens | Estimated cost | Median request latency |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Jev | 10 (7 questions each) | 17,875 | Free | $0.000751 | 0.151s |
+| GPT-4.1 | 70 (1 question each) | 25,871 | 5,907 | $0.098998 | 0.940s |
+
+These are observed small-pilot latencies with different request batching, not
+a controlled throughput benchmark. Costs use published token prices; GPT cost
+does not apply cached-input discounts. Agreement is **not accuracy**: the panel
+was selected for edge cases and the pre-model notes are assistant inspection,
+not independent human ground truth. All52 judgments with Jev confidence≥0.8
+agreed with GPT; all6 disagreements were below0.8. This is encouraging for
+review routing, but shared errors remain possible and the threshold is still
+uncalibrated.
+
+- Both detect the seven-day observation blocker(237800) and underspecified
+  sports-league task(211562). Both correctly treat nested course-enrollment
+  thresholds(220296) as compatible but redundant.
+- Jev also flags the generic Einstein lookup's completion condition(262046);
+  GPT accepts a reasonable generic lookup but flags the hidden rubric demands.
+  Do not automatically reject this task based on the rubric or vague scope.
+- The redundancy prompt is too broad: **both** label five distinct requested
+  file names as repeated requirements(202969). Jev additionally flags ordinary
+  recipe/hotel/technical-reference rubrics. Narrow this criterion to logical
+  duplication/subsumption, distinguish different output slots from repeated
+  facts, and keep it advisory before scaling.
+- GPT's requested evidence quote fails exact-source validation in15/70
+  responses (changed case, combined spans, ellipses or generated prose).
+  Retain these as model explanations, not verified quotations. Jev provides
+  categorical reason codes and distributions, not prose evidence.
+
+Recommendation: use Jev for inexpensive first-pass **instruction-quality
+triage**, route uncertainty/disagreement to review or GPT-4.1, and handle
+rubric inflation separately. Refine the two ambiguous criteria before the
+75-task pass; do not automatically discard tasks or add them to training yet.
+Semantic deduplication and browser validation remain separate prerequisites.
+
+[Aggregate comparison](arm_results/rl_integration/task-quality-jev-gpt41-pilot.json).
+Comparator: `scripts/audit_arm_task_quality_gpt41.py --execute` (10 tasks,
+70-call/$1 reservation cap; retries disabled). Full saved requests, per-question
+responses, pre-model inspection notes and the side-by-side
+`jev-gpt41-pilot-comparison.html` remain in the task-pool runtime directory.
+No training inputs or queued ablation configurations changed.

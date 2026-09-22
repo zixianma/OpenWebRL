@@ -126,3 +126,4 @@ hashes remain in `document_map.json`. Retained standalone files are
 - [ARM failure-turn sampling history and dynamic filtering](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922) · [summary plot](ARM_SUMMARY.md#arm-failure-sampling-history)
 
 - [OpenWebRL task selection and additional WebGym candidates](ARM_INTEGRATION_PLAN.md#arm-task-pool-expansion-20260922)
+- [Jev task-quality screening pilot](ARM_INTEGRATION_PLAN.md#arm-task-quality-jev-20260922)

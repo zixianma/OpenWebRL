@@ -1,0 +1,166 @@
+{
+  "tasks": 10,
+  "criteria_per_task": 7,
+  "question_version": "webgym-quality-v1",
+  "selection": "deliberately selected edge cases, not random or independent gold",
+  "agreement": {
+    "overall": [
+      64,
+      70
+    ],
+    "instruction_quality": [
+      48,
+      50
+    ],
+    "by_dimension": {
+      "self_contained": [
+        10,
+        10
+      ],
+      "single_episode": [
+        10,
+        10
+      ],
+      "completion_criterion": [
+        8,
+        10
+      ],
+      "contradiction": [
+        10,
+        10
+      ],
+      "missing_prerequisite": [
+        10,
+        10
+      ],
+      "rubric_alignment": [
+        9,
+        10
+      ],
+      "redundant_rubric": [
+        7,
+        10
+      ]
+    },
+    "jev_confidence_at_least_0_8": {
+      "total": 52,
+      "agree": 52
+    }
+  },
+  "disagreements": [
+    {
+      "task_id": "237800",
+      "dimension": "completion_criterion",
+      "jev": "problem",
+      "jev_confidence": 0.42,
+      "gpt41": "clear"
+    },
+    {
+      "task_id": "211562",
+      "dimension": "rubric_alignment",
+      "jev": "clear",
+      "jev_confidence": 0.52,
+      "gpt41": "problem"
+    },
+    {
+      "task_id": "151472",
+      "dimension": "redundant_rubric",
+      "jev": "problem",
+      "jev_confidence": 0.45,
+      "gpt41": "clear"
+    },
+    {
+      "task_id": "262046",
+      "dimension": "completion_criterion",
+      "jev": "problem",
+      "jev_confidence": 0.78,
+      "gpt41": "clear"
+    },
+    {
+      "task_id": "864",
+      "dimension": "redundant_rubric",
+      "jev": "problem",
+      "jev_confidence": 0.43,
+      "gpt41": "clear"
+    },
+    {
+      "task_id": "260628",
+      "dimension": "redundant_rubric",
+      "jev": "problem",
+      "jev_confidence": 0.39,
+      "gpt41": "clear"
+    }
+  ],
+  "task_flags": {
+    "237800": {
+      "jev_instruction_flags": [
+        "single_episode",
+        "completion_criterion"
+      ],
+      "gpt41_instruction_flags": [
+        "single_episode"
+      ]
+    },
+    "211562": {
+      "jev_instruction_flags": [
+        "self_contained",
+        "completion_criterion"
+      ],
+      "gpt41_instruction_flags": [
+        "self_contained",
+        "completion_criterion"
+      ]
+    },
+    "220296": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    },
+    "151472": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    },
+    "262046": {
+      "jev_instruction_flags": [
+        "completion_criterion"
+      ],
+      "gpt41_instruction_flags": []
+    },
+    "202969": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    },
+    "205605": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    },
+    "205597": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    },
+    "864": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    },
+    "260628": {
+      "jev_instruction_flags": [],
+      "gpt41_instruction_flags": []
+    }
+  },
+  "jev": {
+    "model": "jev-1.13.0",
+    "requests": 10,
+    "input_tokens": 17875,
+    "estimated_cost_usd": 0.00075075,
+    "median_request_seconds": 0.15051815251354128
+  },
+  "gpt41": {
+    "model": "gpt-4.1-2025-04-14",
+    "requests": 70,
+    "input_tokens": 25871,
+    "output_tokens": 5907,
+    "estimated_cost_usd": 0.098998,
+    "median_request_seconds": 0.9402458065887913,
+    "unverified_evidence_quotes": 15
+  },
+  "interpretation": "Agreement is not accuracy. Both confuse repeated output slots with redundant facts; rubric-redundancy question must be narrowed before scaling. All examples remain review-only."
+}
