@@ -1,8 +1,8 @@
-# ARM results: inference, C2, 1A, joint SFT, and DPO
+# ARM results: inference, offline training, and online RL
 
 [Concise collaborator summary](ARM_SUMMARY.md)
 
-Completed inference and standalone-policy results belong here. The first section is the current dashboard; later sections preserve the cohorts, uncertainty, scaling studies, and raw run summaries that support it.
+Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
 Latest full-300 endpoints: joint SFT **102/300 (34.0% overall; 37.8% valid-only)** and joint DPO **104/300 (34.7%; 40.9%)**. Their paired difference is not significant (p=0.8991).
 
@@ -175,7 +175,7 @@ Per-task outcomes and denominator checks are in the
 | --- | --- | --- |
 | 1. Inference reproduction | ARM selects among five actor candidates at inference | Baseline **30.0%** → ScalarRM **38.0%** → SelectionARM **42.7%** on 300 tasks |
 | 2. Filtered SFT / preference learning | Train the actor on ARM-selected data, then joint SFT/DPO | Filtered 1A **100/300 (33.3%)**; best joint endpoint: DPO **104/300 (34.7%)**; transfer is modest |
-| 3. RL integration | Add ARM turn bonuses during outcome RL: original, all-failure, and additive variants | Iteration 70 additive **37.33%** vs historical outcome-only **34.33%**; iteration 80 original **33.33%** vs **38.00%**. No consistent gain established |
+| 3. RL integration | Add ARM turn bonuses during outcome RL: original, all-failure, and additive variants | Additive90 **39.33%** vs historical outcome-only90 **33.67%**; additive100 **36.33%**, baseline100 pending. No consistent gain established |
 
 The detailed experiment records remain below; this table is the project-level
 status summary.
@@ -204,6 +204,7 @@ are in [ARM_SUMMARY.md](ARM_SUMMARY.md). Detailed counts, W&B links, and continu
 
 ## Contents
 
+- [Online RL: detailed analysis and provenance](#arm-online-rl-analysis-20260922)
 - [ARM results dashboard](#arm-results-dashboard)
 - [GPT-5.6 Sol test-time scaling](#arm-results-dashboard--sol-test-time-scaling)
 - [Serial alternatives SFT: all five versus diverse up to three](#arm-serial-sft-comparison)
@@ -216,6 +217,302 @@ are in [ARM_SUMMARY.md](ARM_SUMMARY.md). Detailed counts, W&B links, and continu
 - [Joint SFT and DPO training monitoring](#arm-joint-training-monitor)
 
 ---
+
+<a id="arm-online-rl-analysis-20260922"></a>
+## Online RL: detailed analysis and provenance — September 22, 2026
+
+Moved from section 3 of `ARM_SUMMARY.md` to keep the collaborator page focused
+on methods and results. The coverage audits, examples, separate plots and
+interpretation are preserved below. Superseded launch statements are corrected;
+use [RL_RUNTIME.md](RL_RUNTIME.md#training-relaunch-20260922) and the
+[live monitor](arm_results/rl_integration/live-status.html) for current job status.
+
+### Reward definition and shared configuration
+
+Keep the ordinary terminal outcome reward and add a bounded ARM
+bonus on eligible actor turns:
+
+For trajectory $i$, the judge produces a terminal outcome $R_i\in\{0,1\}$
+(with `-1` reserved for a format failure), and that outcome is propagated to
+every turn before group normalization. For turn $t$:
+
+$$
+A'_{i,t}=A_i+\beta\,q_{i,t}\left(\mathbf{1}[j_{i,t}=0]-0.2\right),
+\qquad q_{i,t}\in\{0,1\},
+$$
+
+where $A_i$ is the normalized outcome advantage, $q_{i,t}$ indicates that the
+turn received a usable ARM label, and $j_{i,t}=0$ means SelectionARM chose the
+executed actor candidate. Thus `beta=0.5` is the ARM scale and `q=0.20` is the
+target fraction of turns sent for labeling; $q$ is a sampling gate, not a
+multiplicative 0.20 applied to every reward. The bonus is applied only to
+retained, valid ARM-labelled turns. All variants
+use the local browser, GPT-4.1 action-history judge, 48-group collection, and
+PPO2; they differ in which rollout groups contribute labels.
+
+So a successful rollout does receive raw outcome reward `1` on every turn
+because the terminal judge result is propagated across its turn history. The
+training value is then the group-normalized $A_i$, with the ARM term added only
+on labeled turns; it is therefore not literally `1` after normalization.
+
+- **Shared hyperparameters:** `K=5` candidates, SelectionARM with full
+  reasoning-plus-action input, turn sampling fraction `q=0.20`, ARM scale
+  `beta=0.5`, 48 accepted groups, global batch 256, two PPO epochs, constant
+  learning rate `1e-6`, weight decay 0.1, 32 browsers in the original4-GPU profile (64 in8-GPU continuations), 15-turn horizon,
+  1,024-token responses, and 32,768-token context.
+- **Why these values:** `K=5` matches the validated inference setup;
+  `beta=0.5` and `q=0.20` passed calibration with an ARM/outcome RMS ratio near
+  6%, keeping the auxiliary signal bounded; batch 256, PPO2, and `1e-6`
+  preserve the tested OpenWebRL optimization scale while limiting off-policy
+  reuse.
+
+### Label coverage, gate ablations and supporting audits
+
+`q=0.20` is the probability of attempting an ARM label, not a guarantee that
+20% of training turns receive a bonus. The realized applied-label fraction is
+usually 8--10%. A [43-collection audit](ARM_INTEGRATION_PLAN.md#arm-label-coverage-confidence-audit-20260919)
+found duplicate-action rejection was the largest cause: 40--50% of sampled
+turns, versus 3--7% truncation/empty outputs and 1--2% candidate parsing errors.
+The current gate requires all five candidate actions to differ. A completed
+90-task confidence replay found that high confidence can reflect a position
+tie-break on identical responses; confidence alone is insufficient to replace
+the gate. A [one-call, at-least-two-action gate test](ARM_INTEGRATION_PLAN.md#arm-min2-gate-test-20260919)
+increased archived gate passes from 47.3% to 88.5% of sampled turns (1.87×).
+The gate and optional duplicate-aware action credit are independently configurable.
+The three original runs retain their original gate; B/C test the changes below.
+
+[Iteration-zero gate ablations](ARM_INTEGRATION_PLAN.md#arm-bc-firstupdates-20260920):
+[B](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-b-309053) relaxes the gate to
+at least two actions; [C](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-c-309054)
+also uses action-equivalence credit. Their W&B display names now identify both
+the variant and credit rule.
+As of September 21, 17:00 UTC, B **313208** and C **313210** both completed
+**iteration 20 / 284 Adam updates**. C's full-300 evaluation **313211** finished
+at **36.67% overall / 44.53% valid-only**; B's **313209** finished at
+**33.67% / 44.30%**. All 300 rollouts and verdicts are saved for each. Calibration passes; recent B/C
+collections label 16–20% of retained ordinary turns, with bonus/outcome RMS
+about 9–11%, beta=0.5 unchanged.
+[C evaluation audit](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921).
+[Initial audit](arm_results/rl_integration/bc-firstupdates-20260920.json);
+[continuation status](RL_RUNTIME.md#arm-training-status-20260920-2224).
+
+Both full-300 evaluations were released after their iteration-20 checkpoints
+passed validation. The initial8-GPU continuations316247/316248 later failed at
+startup because of storage quota. Their replacements are **B318934 / C318935**,
+continuing to60 with64 browsers and full300 evaluations at40/60 inside the same
+allocation. B started September22; current scheduling and remaining approved
+budgets are in the [runtime record](RL_RUNTIME.md#training-relaunch-20260922).
+The separate [rescue-yield pilot](ARM_INTEGRATION_PLAN.md#arm-rescue-yield-pilot-20260920)
+**313264** completed: among eight screened all-failure tasks, ARM rescued
+**0/8**, one ordinary retry **1/8**, and five ordinary retries **3/8**.
+All 374 trajectories are saved. This small training-task pilot shows no rescue
+benefit; [protocol and results](ARM_RESULTS.md#arm-rescue-yield-313264).
+The [fixed-state selection audit](ARM_RESULTS.md#arm-selection-quality-313774)
+also finished: ARM minus random next-response acceptability was **+1.6 / +3.2 /
+−3.2 pp** for SFT / outcome-only iteration 20 / iteration 90. This small,
+teacher-labeled panel does not establish drift or task-success gains. The
+[terminal-success audit](ARM_RESULTS.md#arm-task-success-314664) **314664**
+completed actor+ARM on the **same fixed100 tasks** at outcome-only iterations
+20 and 90. All 200 primary rollouts and verdicts are saved; zero selector
+fallbacks. The SFT cells reuse saved results on those exact IDs.
+Rates below are overall / valid-only; Δ is ARM minus actor-only in percentage
+points, calculated from unrounded rates.
+
+| Actor checkpoint | Actor alone · fixed100 | Actor + SelectionARM · fixed100 | Δ overall / valid-only (pp) |
+| --- | ---: | ---: | ---: |
+| Starting SFT | 26.00% / 30.59% (26/85) | 36.00% / 43.37% (36/83) | +10.00 / +12.79 |
+| Outcome-only iteration 20 | 25.00% / 35.21% (25/71) | 38.00% / 47.50% (38/80) | +13.00 / +12.29 |
+| Outcome-only iteration 90 | 35.00% / 51.47% (35/68) | 43.00% / 53.09% (43/81) | +8.00 / +1.62 |
+
+Parentheses show successes / valid tasks. Overall always uses all 100 tasks;
+valid-only excludes invalid attempts and includes both valid successes and
+valid failures. The valid task sets can differ between the two runs.
+
+SFT uses o4-mini; RL uses GPT-4.1. The actor-only controls are historical;
+dates, availability and decoding differ, so these are descriptive inference
+comparisons. Additive **313669** completed **100 iterations / 1,262 Adam updates**
+and its full-300 evaluation: **36.33% overall / 50.23% valid-only**; all 300
+rollouts and verdicts are saved. Baseline replacement315098 subsequently failed at storage-quota startup;
+replacement **318933** retains the iteration100 target and full300 evaluation.
+See the [runtime record](RL_RUNTIME.md#training-relaunch-20260922). MIG pilot
+**315402 passed**: actor and SelectionARM ran on separate 18-GB slices, including
+near-32k context, short/long-history selection, and two browser trajectories with
+saved GPT-4.1 verdicts. Total allocated runtime across retries was **18m05s**;
+the slices are released. This SFT-actor feasibility test does not yet validate
+the additive checkpoint or native coverage collector on MIG.
+[Results and probe fixes](RL_RUNTIME.md#mig-corrected-probe-315402).
+[Agreed next experiments](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921):
+first audit up to four labeled turns per failed trajectory without updating the
+actor; separately test failure-only beta 0.5→1.0 while mixed-group beta stays 0.5.
+Coverage pilot **315204** completed in **33m29s**, with 48 ordinary mixed groups
+and zero optimizer updates. All 22 zero-outcome candidate groups failed the
+five-valid-failures gate; no deferred labels were requested. This leaves the
+benefit of four-turn coverage **unmeasured**, not disproved. The
+[saved termination audit](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921)
+found38 response-length truncations and18 browser-step aborts among110
+trajectories in the22 all-zero groups. Four turns would roughly double sampled
+states on their54 individually valid failures, but none of those groups passes
+the five-valid-failures rule. The fixed-four-turn proposal was replaced by separate **failure beta1.0**
+and **failure sampling40%** experiments. The initially planned after100 branches
+were superseded: the user requires every new intervention to start from
+**iteration0, original SFT weights, fresh optimizer/scheduler and task cursor**.
+Corrected jobs **318949 /318950** target20 and then full300 evaluation.
+Mixed beta0.5/q20% and the existing failure-group admission rule remain fixed.
+[Corrected recipes and launch checks](RL_RUNTIME.md#failure-ablations-fromzero-20260922).
+
+<a id="arm-failure-sampling-history"></a>
+### Failure-turn sampling and task-pool analysis
+
+**Failure supervision shrinks during training.** In Additive, averages from
+iterations 1–20 → 81–100 fall from **403 → 79 admitted failure turns**,
+**78 → 17 sampled turns**, and **27 → 9 usable labels**. Actual sampling stays
+near 20%; admitted groups fall **8 → 1.9**, also lowering their `N_f/48` loss
+coefficient. Adaptive query reweighting is **disabled**; native dynamic filtering
+still collects until 48 mixed groups. [Definitions and windowed measurements](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922);
+[comparison across all five variants](rl_results/arm_variants_failure_sampling.png).
+
+![Additive ARM failure turns and sampling across training](rl_results/arm_additive_failure_sampling.png)
+
+[Task-pool expansion audit](ARM_INTEGRATION_PLAN.md#arm-task-pool-expansion-20260922):
+our2,102 tasks include143 with WebGym difficulty7+. CPU filtering surfaced
+**511 additional hard-labeled candidates** on existing training hosts and a
+75-task review cohort. Semantic deduplication, task quality and current-actor
+hardness remain unvalidated; the active training pool is unchanged.
+
+[Live jobs and completion reports](arm_results/rl_integration/live-status.html)
+refresh every minute; checkpoint/health details are checked every 15 minutes.
+
+### Candidate provenance
+
+Here `K=5` means **one executed actor response plus four counterfactual actor
+responses** sampled from the same state with different deterministic seeds.
+SelectionARM receives the five reasoning-plus-action candidates, chooses one,
+and the permutation is inverted to identify whether it selected the executed
+response or an alternative. SelectionARM itself does not generate these
+candidates.
+
+The complete fixed100/full300 checkpoint table remains in the
+[concise summary](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
+
+### All-failure ARM full-300 curve
+
+All three [iteration-80 evaluations](RL_EVALUATION.md#arm-iter80-launch-20260919)
+are complete, each with 300 per-task rollout archives and verdict records.
+Additive is the strongest ARM endpoint by both rates, but none exceeds the
+historical baseline's overall success. These are different-date evaluations
+with different valid-task sets.
+
+All-failure [iteration 90](RL_EVALUATION.md#arm-iter90-results-20260921) completed
+at **33.67% overall / 46.54% valid-only**, matching the historical baseline's
+overall rate. Different evaluation dates and valid-task sets limit comparison.
+All 300 rollouts/verdicts are saved. Training finished at **100 / 1,242 Adam
+updates**. Additive's corrected iteration-90 full-300
+evaluation **313408** completed at **39.33% overall / 54.63% valid-only**,
+with all 300 rollouts/verdicts saved. This is 5.67 percentage points above the
+historical iteration-90 baseline overall, but is not a controlled same-day or
+paired significance claim. Additive subsequently completed **100 / 1,262**;
+its [iteration-100 evaluation](RL_EVALUATION.md#arm-additive-iter100-results-20260921)
+is **36.33% / 50.23%**, down 3.00 / 4.40 percentage points from iteration90.
+Baseline100 is still pending, so there is no matched iteration100 comparison yet.
+Original training reached **85 /1,002**; its latest retained checkpoint is80 after the September22 pruning incident. [Retention audit](RL_RUNTIME.md#storage-inventory-20260922). All-failure100 **316392** completed at
+**35.67% overall / 48.20% valid-only**, with all 300 rollouts/verdicts saved.
+[Result audit](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921).
+
+![All-failure ARM full-300 evaluation curve](rl_results/arm_allfailure_full300.png)
+
+The curve uses the completed full-300 evaluations from iteration20 through100. Iteration 20 is the disjoint fixed-100 plus 200-task merge; later
+points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
+
+### Baseline comparison
+
+[Combined outcome-only / original / all-failure / additive curve](rl_results/baseline_vs_arm_allfailure_full300.png)
+
+This comparison overlays the historical outcome-only baseline curve with the
+original, all-failure, and additive ARM full-300 points, including additive100.
+Additive's
+[iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
+completed as job 307429 and is now included; it had been omitted from the docs.
+It is a fresh 300-task evaluation, independent of the older fixed-100 result.
+The first plotted original ARM point is iteration 51:
+job 303459 loaded `iter_0000050`, previously mislabeled as iteration 50.
+
+The earlier significance calculation was an exploratory unpaired proportion
+test over aggregate counts. It is hidden from this summary because the archived
+evaluations did not preserve aligned task-level verdict IDs, so it cannot support
+a rigorous paired claim. Future comparisons should use paired McNemar or
+bootstrap/permutation tests on shared task IDs, with a predeclared primary
+comparison and multiple-comparison correction.
+
+**Per-task records.** The corrected evaluator now saves one addressable file per
+task under each evaluation's `rollouts/` directory. Each file contains the task
+ID and all turns, including final reward, status, and termination reason; a
+completed task with reward `1` or `0` supplies the success verdict, while an
+aborted or unavailable task supplies the invalid outcome. This is sufficient to
+construct aligned paired tests for new evaluations. Older runs only have their
+aggregate metrics or lossless batch archives and may need re-evaluation before a
+paired test.
+
+- **Outcome-only baseline:** terminal outcome reward only; no ARM-labelled turns.
+- **All-failure bonus:** admit eligible five-failure groups alongside ordinary mixed groups within the same 48-group budget; accepted failure groups displace mixed-group slots.
+- **Original bonus:** apply the ARM term only to eligible turns inside ordinary mixed outcome groups.
+- **Additive bonus:** retain the ordinary mixed batch and add an independently normalized buffer of up to eight eligible all-failure groups.
+
+### Failure-group admission and worked example
+
+**What “usable ARM label” means.** An all-failure group has five trajectories for
+the same task, all with valid zero terminal outcome. It is admitted when at least
+one turn in those five trajectories completes candidate generation and selection
+with valid provenance and a parseable selector result. This is label availability,
+not proof that the selector chose the objectively correct action. Candidate 0 is
+the actor's executed action, so that labeled turn receives `+0.8` when ARM picks
+candidate 0 and `-0.2` when ARM prefers one of the four alternatives; unlabeled
+turns receive no ARM term.
+
+**Illustration of the three online runs.** For one task, imagine five actor
+trajectories all ending in a valid failure (`0`):
+
+```text
+five failure trajectories:  A(0)  B(0)  C(0)  D(0)  E(0)
+usable labels:             A:t3, D:t7
+ARM choices:               A:t3 -> candidate 4 (-0.2)
+                           D:t7 -> candidate 0 (+0.8)
+
+Original bonus:  ordinary mixed group ──┐
+                                        ├─ ARM on eligible turns only
+All-failure:   mixed + five-failure groups ──┘ (48 groups total)
+Additive:      ordinary mixed groups + up to eight such failure groups
+               └─ separate normalized loss terms for the two sources
+```
+
+Thus the all-failure run uses the same terminal outcome reward as usual, but
+admits otherwise discarded zero-outcome groups when they contain at least one
+usable turn-level ARM signal. The additive run keeps those groups alongside the
+ordinary mixed collection instead of replacing it.
+
+The full-300 baseline is the matched outcome-only OpenWebRL checkpoint under
+the same local-browser/GPT-4.1 RL evaluation protocol. The all-failure **iteration20** full-300
+result is a disjoint merge of its fixed-100 cohort and200-task complement.
+
+The iteration-20 baseline rows show both controls: the historical run is the
+default comparison, while job `299148` is the fresh same-day control (87/300
+successes, 236 valid, 64 invalid). The same-day rerun is retained to expose
+live-web variance; the historical value remains the canonical comparison used
+by the earlier evaluation tables.
+Unless explicitly marked “same-day control,” the rows above use the historical
+evaluation runs.
+
+The original-bonus iteration-40 fixed-100 result is from job `299156` and has
+31 successes, 69 valid tasks, and 31 invalid tasks; all 100 task-addressable
+rollouts were saved.
+
+The separate inference-time baseline is 90/300 with 267 valid tasks, or 30.0%
+overall and 33.7% valid-only, under the historical o4-mini protocol; it should
+not be used for the RL comparison.
+
+**Interpretation:** Additive90 is the strongest measured ARM endpoint, but
+checkpoint variation, different evaluation dates and missing baseline100 prevent
+a consistent or controlled improvement claim. All-failure20's disjoint cohort
+merge should not be generalized to its later full300 evaluations.
 
 <a id="arm-serial-sft-comparison"></a>
 ## Serial alternatives SFT: all five versus diverse up to three

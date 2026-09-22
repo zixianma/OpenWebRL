@@ -6,7 +6,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | Document | Contents |
 | --- | --- |
 | [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL |
-| [ARM_RESULTS.md](ARM_RESULTS.md) | All ARM benchmark results, C2/1A/joint comparisons, checkpoint scaling, and curves |
+| [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
 | [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, and checkpoint procedures |
@@ -38,7 +38,8 @@ Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-res
 [iteration-80 GPT-4.1 rejudging](RL_EVALUATION.md#stealth80-gpt41-rejudge-feasibility-20260913),
 and [cluster/account queue audit](RL_RUNTIME.md#cluster-queue-audit-294983-20260913).
 
-ARM RL: [saved termination audit and beta/coverage launch proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921),
+ARM RL: [detailed analysis moved from the collaborator summary](ARM_RESULTS.md#arm-online-rl-analysis-20260922),
+[saved termination audit and beta/coverage launch proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921),
 [all-failure100 results and updated curves](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921),
 [B/C20→60 eight-GPU launches and evaluation budget](RL_RUNTIME.md#arm-bc-to60-prepared-20260921),
 [failure-coverage pilot: zero eligible groups](RL_RUNTIME.md#arm-failure-coverage-result-315204),
@@ -69,6 +70,7 @@ Checkpoint benchmarking: [OpenWebRL protocols and prepared after-58 rerun](RL_EV
 ## Maintaining these documents
 
 - Add experiments and results to the matching topic instead of creating another run-specific Markdown file.
+- Keep `ARM_SUMMARY.md` limited to core methods, result tables and the main comparison plot. Put detailed analysis, audits and examples in `ARM_RESULTS.md`, and operational history in `RL_RUNTIME.md`.
 - Keep full-300, held-out, partial, historical, and retry results labeled with their original denominators and judge protocol.
 - Retain JSON manifests, frozen configs, audit data, and HTML galleries under their existing artifact directories. Their recorded hashes and historical paths are provenance and are not rewritten during documentation moves.
 - Report writers use `scripts/project_docs.py` to update one marked section atomically. Preserve the `document:...:start/end` markers and explicit anchors.
@@ -128,7 +130,7 @@ hashes remain in `document_map.json`. Retained standalone files are
 
 - [Additive storage recovery: iteration 85 → 90](RL_RUNTIME.md#arm-additive-to90-storage-recovery-20260920)
 
-- [ARM failure-turn sampling history and dynamic filtering](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922) · [summary plot](ARM_SUMMARY.md#arm-failure-sampling-history)
+- [ARM failure-turn sampling history and dynamic filtering](ARM_INTEGRATION_PLAN.md#arm-failure-sampling-history-20260922) · [analysis and plot](ARM_RESULTS.md#arm-failure-sampling-history)
 
 - [OpenWebRL task selection and additional WebGym candidates](ARM_INTEGRATION_PLAN.md#arm-task-pool-expansion-20260922)
 - [Jev task-quality screening pilot](ARM_INTEGRATION_PLAN.md#arm-task-quality-jev-20260922)
