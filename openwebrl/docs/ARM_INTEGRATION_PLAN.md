@@ -5653,3 +5653,93 @@ The durable `submission.json` there records the approved resources, exact
 submission command, job ID and scheduler response. Output will be
 `evaluations/arm-turn-bonus-fresh-allfailure-309490/`; Slurm log:
 `logs/slurm-arm-allfailure-to100-309490.out`.
+
+<a id="arm-task-pool-expansion-20260922"></a>
+## Task-pool expansion: OpenWebRL selection and additional WebGym candidates
+
+**Paper protocol.** [OpenWebRL §4.2](https://arxiv.org/html/2606.02031v1#S4.SS2)
+removes benchmark overlap, decomposed subtasks, unstable/long-tail sites and
+semantic duplicates. Qwen3-Embedding-8B greedy dedup uses0.99 for15,601 SFT
+seed tasks and0.95 for roughly2.2K RL tasks. This is not explicit hard-task
+mining. [§4.4](https://arxiv.org/html/2606.02031v1#S4.SS4) dynamically rejects
+identical-reward rollout groups. Our native configuration collects48 mixed
+groups of5 attempts; shuffled task selection has adaptive reweighting disabled.
+The exact website-popularity rule and original embedding-curation script were
+not found in the released repository, so reproducing its initial filter exactly
+is not yet established.
+
+The [released OpenWebRL task pool](https://huggingface.co/datasets/OpenWebRL/OpenWebRL-RL-Tasks)
+contains2,198 rows; our active parquet contains2,102. Joining the active IDs to
+WebGym metadata gives1,559 easy,400 medium and143 hard tasks. The active pool
+covers1,397 normalized hosts, reflecting many InSTA tasks with distinct sites.
+
+**Meaning of hard.** [WebGym §3.2/§5.3](https://arxiv.org/html/2601.02439v1)
+defines difficulty by rubric fact count: easy1–3, medium4–6, hard7+. Its
+experiments favor broad task sampling over strong hard-task oversampling, which
+repeated a narrower pool and overfit. This is evidence for preserving breadth;
+it does not establish the optimal mixture for our MM-GRPO/ARM objective.
+
+### Completed CPU inventory
+
+Downloaded the public [WebGym task metadata](https://huggingface.co/datasets/microsoft/webgym_tasks)
+at revision `a61330203480bea9b90b8e954ecf0b084a114cca` (292,092 training rows,
+about199MB), its1,167-row test split, and the released OpenWebRL pool at
+`6234e14bf74ed3f2ac62d89bbfe14646e5d333e5`. Only original `insta-v3` and
+`pae-webvoyager` training tasks are eligible. Exclusions cover decomposed tasks,
+all2,198 released OpenWebRL IDs (including96 omitted from our active parquet),
+WebGym test IDs, and exact normalized instruction overlap with our training and
+OM2W/DeepShop/WebVoyager evaluation tasks. Candidate intents are also exactly
+deduplicated. This leaves228,651 original tasks across all sites, including1,284
+with difficulty7+, before lexical screening.
+
+For the first review, restrict to hosts already present in the active training
+pool. This is a conservative site-selection proxy, **not proof of current
+browser availability**. A CPU lexical screen removes token-set Jaccard≥0.65
+matches against the full released OpenWebRL pool and held-out instructions.
+It does **not** implement the paper's embedding-based0.95 criterion.
+
+| Pool | Medium (4–6) | Hard (7+) | Hosts |
+| --- | ---: | ---: | ---: |
+| Active2,102 RL tasks | 400 | 143 | 1,397 across all difficulties |
+| Additional tasks on existing hosts, before lexical screen | 20,427 | 586 | 19 across medium/hard |
+| After lexical screen against existing/evaluation instructions | 18,749 | **511** | 19 across medium/hard;13 hard-task hosts |
+| Review shortlist, shared cap5 per host | 25 | **50** | 19 |
+
+The nominal review target was50 medium+50 hard; the shared host cap leaves75
+review rows. This is a review cohort, not a training-mixture recommendation.
+Most additional candidates come from PAE-WebVoyager, so blindly appending them
+would concentrate training on a small set of sites. Semantic duplicates remain:
+for example, differently worded repository/documentation requests can pass the
+lexical screen. Manual inspection also found a task requiring observation over
+the next7 days (ID237800), marked as a blocker for a single browser episode.
+High rubric counts can also accompany vague or simple instructions. Thus511
+is a **candidate count**, not a count of validated, novel, actor-hard tasks.
+
+[Aggregate audit](arm_results/rl_integration/task-pool-expansion-audit.json).
+Reproducible CPU selector: `scripts/prepare_arm_task_pool.py`.
+Raw pinned inputs and review artifacts remain under runtime
+`arm-turn-bonus-preparation/task-pool-expansion-20260922/`:
+
+- `same-host-hard-candidates.jsonl`:511 candidates, with rubrics and provenance.
+- `same-host-medium-hard-candidates.jsonl`:19,260 candidates for broader review.
+- `review-shortlist-75.jsonl` and `review.html`:75 review examples; no browser
+  execution or current-actor difficulty measurements have been performed.
+- `sources.json` and `audit.json`:source revisions, checksums and filter counts.
+
+### Next experiment, proposed only
+
+1. Apply the paper's semantic deduplication/benchmark-overlap review, with
+   quality checks for underspecified tasks, impossible requirements and stale
+   references. Rank by novelty within site and task type, not fact count alone.
+2. Screen the surviving diverse medium/hard tasks with a fixed current actor
+   and the existing15-turn horizon. Five attempts distinguish mixed outcomes,
+   valid all-failure groups and invalid episodes; retain per-task outcomes and
+   ARM-label yield. A single failed attempt is not proof of task hardness.
+3. Add validated fresh tasks alongside the existing pool; compare outcome-only
+   and Additive continuations from the same starting checkpoint and compute
+   budget. Keep the already queued beta/q ablations on their unchanged pool.
+   Measure mixed-group yield and admitted failure-label yield per browser-hour.
+
+No new GPU allocation, browser rollout, training-data switch or API judge call
+was made for this inventory. Embedding and execution stages still need a
+concrete resource proposal and user approval before paid compute is requested.

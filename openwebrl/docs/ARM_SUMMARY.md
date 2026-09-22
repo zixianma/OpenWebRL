@@ -203,6 +203,12 @@ still collects until 48 mixed groups. [Definitions and windowed measurements](AR
 
 ![Additive ARM failure turns and sampling across training](rl_results/arm_additive_failure_sampling.png)
 
+[Task-pool expansion audit](ARM_INTEGRATION_PLAN.md#arm-task-pool-expansion-20260922):
+our2,102 tasks include143 with WebGym difficulty7+. CPU filtering surfaced
+**511 additional hard-labeled candidates** on existing training hosts and a
+75-task review cohort. Semantic deduplication, task quality and current-actor
+hardness remain unvalidated; the active training pool is unchanged.
+
 [Live jobs and completion reports](arm_results/rl_integration/live-status.html)
 refresh every minute; checkpoint/health details are checked every 15 minutes.
 

@@ -1,0 +1,265 @@
+{
+  "schema": 1,
+  "sources": {
+    "webgym_revision": "a61330203480bea9b90b8e954ecf0b084a114cca",
+    "openwebrl_revision": "6234e14bf74ed3f2ac62d89bbfe14646e5d333e5",
+    "files": [
+      {
+        "file": "webgym-train.jsonl",
+        "url": "https://huggingface.co/datasets/microsoft/webgym_tasks/resolve/a61330203480bea9b90b8e954ecf0b084a114cca/train.jsonl",
+        "bytes": 198530124,
+        "sha256": "d6c8ff7ffc6a08addcb99144ba4ba5f2364b59eb6df66fe759eaaf8063fa9fb8"
+      },
+      {
+        "file": "webgym-test.jsonl",
+        "url": "https://huggingface.co/datasets/microsoft/webgym_tasks/resolve/a61330203480bea9b90b8e954ecf0b084a114cca/test.jsonl",
+        "bytes": 827714,
+        "sha256": "3553c072659323f328fb8a845273d28ca6f60443ae6d4e981acc5752a069edd1"
+      },
+      {
+        "file": "openwebrl-rl-tasks.jsonl",
+        "url": "https://huggingface.co/datasets/OpenWebRL/OpenWebRL-RL-Tasks/resolve/6234e14bf74ed3f2ac62d89bbfe14646e5d333e5/OpenWebRL_RL_tasks.jsonl",
+        "bytes": 1481759,
+        "sha256": "744ed6574e44e24ca1cfd5c5e8c4c1e0ac9e6ca0ddb8dbee074bb7664257da14"
+      }
+    ]
+  },
+  "raw_counts": {
+    "raw_train": 292092,
+    "allowed_families": 278252,
+    "original_tasks": 254815,
+    "remaining_original_train_tasks": 228651
+  },
+  "rejections": {
+    "in_released_openwebrl_pool": 2198,
+    "decomposed": 23437,
+    "other_benchmark_family": 13840,
+    "exact_existing_or_eval_intent": 1103,
+    "exact_duplicate_intent": 22863
+  },
+  "raw_benchmarks": {
+    "insta-v3": 138646,
+    "pae-webvoyager": 139606,
+    "browsecomp": 7551,
+    "mind2web-live": 630,
+    "online-mind2web": 367,
+    "agentsynth-web": 4218,
+    "gaia-web": 115,
+    "deepshop": 554,
+    "mind2web-2": 352,
+    "travel-planner": 53
+  },
+  "raw_difficulty": {
+    "medium_4to6": 55563,
+    "hard_7plus": 6673,
+    "easy_1to3": 229856
+  },
+  "current_pool": {
+    "tasks": 2102,
+    "hosts": 1397,
+    "difficulty": {
+      "easy_1to3": 1559,
+      "medium_4to6": 400,
+      "hard_7plus": 143
+    },
+    "sources": {
+      "pae-webvoyager": 717,
+      "insta-v3": 1385
+    },
+    "domains": {
+      "Lifestyle & Leisure": 489,
+      "Career & Education": 161,
+      "Misc.": 565,
+      "Science & Research": 586,
+      "Entertainment": 198,
+      "Travel & Transportation": 103
+    }
+  },
+  "released_pool": {
+    "tasks": 2198,
+    "hosts": 1473,
+    "difficulty": {
+      "easy_1to3": 1634,
+      "medium_4to6": 417,
+      "hard_7plus": 147
+    },
+    "sources": {
+      "pae-webvoyager": 734,
+      "insta-v3": 1464
+    },
+    "domains": {
+      "Lifestyle & Leisure": 508,
+      "Career & Education": 162,
+      "Misc.": 591,
+      "Science & Research": 617,
+      "Entertainment": 212,
+      "Travel & Transportation": 108
+    }
+  },
+  "remaining": {
+    "tasks": 228651,
+    "hosts": 125955,
+    "difficulty": {
+      "medium_4to6": 35648,
+      "hard_7plus": 1284,
+      "easy_1to3": 191719
+    },
+    "sources": {
+      "insta-v3": 126026,
+      "pae-webvoyager": 102625
+    },
+    "domains": {
+      "Misc.": 56932,
+      "Travel & Transportation": 14199,
+      "Lifestyle & Leisure": 58771,
+      "Career & Education": 26749,
+      "Entertainment": 14815,
+      "Science & Research": 57185
+    }
+  },
+  "same_hosts": {
+    "tasks": 102613,
+    "hosts": 25,
+    "difficulty": {
+      "easy_1to3": 81600,
+      "medium_4to6": 20427,
+      "hard_7plus": 586
+    },
+    "sources": {
+      "pae-webvoyager": 102518,
+      "insta-v3": 95
+    },
+    "domains": {
+      "Science & Research": 30402,
+      "Misc.": 18497,
+      "Career & Education": 15521,
+      "Lifestyle & Leisure": 32114,
+      "Entertainment": 5395,
+      "Travel & Transportation": 684
+    }
+  },
+  "same_hosts_medium_hard_before_lexical": {
+    "tasks": 21013,
+    "hosts": 19,
+    "difficulty": {
+      "medium_4to6": 20427,
+      "hard_7plus": 586
+    },
+    "sources": {
+      "pae-webvoyager": 20966,
+      "insta-v3": 47
+    },
+    "domains": {
+      "Lifestyle & Leisure": 11430,
+      "Career & Education": 3080,
+      "Misc.": 1706,
+      "Science & Research": 3483,
+      "Entertainment": 1161,
+      "Travel & Transportation": 153
+    }
+  },
+  "same_hosts_medium_hard_after_lexical": {
+    "tasks": 19260,
+    "hosts": 19,
+    "difficulty": {
+      "medium_4to6": 18749,
+      "hard_7plus": 511
+    },
+    "sources": {
+      "pae-webvoyager": 19213,
+      "insta-v3": 47
+    },
+    "domains": {
+      "Career & Education": 2969,
+      "Lifestyle & Leisure": 10094,
+      "Misc.": 1641,
+      "Science & Research": 3272,
+      "Entertainment": 1135,
+      "Travel & Transportation": 149
+    }
+  },
+  "lexical_rejections": {
+    "medium_4to6": 1678,
+    "hard_7plus": 75
+  },
+  "shortlist": {
+    "tasks": 75,
+    "hosts": 19,
+    "difficulty": {
+      "hard_7plus": 50,
+      "medium_4to6": 25
+    },
+    "sources": {
+      "pae-webvoyager": 70,
+      "insta-v3": 5
+    },
+    "domains": {
+      "Science & Research": 26,
+      "Lifestyle & Leisure": 21,
+      "Entertainment": 6,
+      "Misc.": 5,
+      "Career & Education": 9,
+      "Travel & Transportation": 8
+    }
+  },
+  "shortlist_host_counts": {
+    "amazon.com": 5,
+    "apple.com": 5,
+    "github.com": 5,
+    "espn.com": 5,
+    "coursera.org": 5,
+    "allrecipes.com": 5,
+    "bbc.com": 5,
+    "dictionary.cambridge.org": 5,
+    "arxiv.org": 5,
+    "wolframalpha.com": 5,
+    "booking.com": 5,
+    "huggingface.co": 5,
+    "bing.com": 5,
+    "youtube.com": 1,
+    "google.com": 3,
+    "goodreads.com": 1,
+    "wikipedia.org": 2,
+    "imdb.com": 1,
+    "yelp.com": 2
+  },
+  "eval_files": [
+    {
+      "path": "openwebrl/data/eval/online-mind2web.jsonl",
+      "rows": 300
+    },
+    {
+      "path": "openwebrl/data/eval/deepshop.jsonl",
+      "rows": 150
+    },
+    {
+      "path": "openwebrl/data/eval/webvoyager_fara.jsonl",
+      "rows": 595
+    },
+    {
+      "path": "openwebrl/data/online-mind2web.jsonl",
+      "rows": 300
+    }
+  ],
+  "webgym_test_rows": 1167,
+  "limitations": [
+    "Metadata candidates only; current-actor hardness and browser executability unmeasured.",
+    "Difficulty counts rubric facts, not measured steps or actor failure probability.",
+    "Only original insta-v3/pae-webvoyager train tasks; all released2198 OpenWebRL tasks excluded, including96 absent from current2102.",
+    "Exact text/test-ID exclusions plus token-Jaccard0.65 screening; Qwen3-Embedding-8B semantic0.95 dedup and semantic benchmark overlap checks remain.",
+    "Existing training host membership is a proxy for initial site choice, not a live availability guarantee.",
+    "Review contains75 tasks (50 hard,25 medium); a shared5-per-host cap prevented filling the nominal100. Screening only; no training mixture approved or GPU/browser execution."
+  ],
+  "artifacts": {
+    "same-host-medium-hard-candidates.jsonl": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/same-host-medium-hard-candidates.jsonl",
+    "same-host-hard-candidates.jsonl": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/same-host-hard-candidates.jsonl",
+    "review-shortlist-75.jsonl": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/review-shortlist-75.jsonl",
+    "review.html": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/review.html"
+  },
+  "manual_review_findings": {
+    "future_observation_task_ids": [
+      "237800"
+    ],
+    "interpretation": "Rubric fact-count can label vague/simple prompts hard; candidate quantity is not usable-task yield."
+  }
+}
