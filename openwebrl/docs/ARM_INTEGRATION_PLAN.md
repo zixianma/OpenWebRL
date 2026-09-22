@@ -2,10 +2,37 @@
 
 [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
-Latest decision, September 21: [audit frozen ARM quality across actor checkpoints](#arm-selection-quality-audit-20260921)
-before scaling rescue. CPU preparation is complete; new inference compute is not yet authorized.
+<a id="arm-gate-c-priority-20260922"></a>
+## This week's priority: gate C — September 22, 2026
 
-**Current priorities, 2026-09-12:** the user favors **failed-task rescue during
+The user selected **gate C (relaxed candidate gate + action-equivalence credit)**
+as the leading ARM experiment for the week of September 21. Prioritize its
+training health, checkpoint handoffs and evaluation analysis.
+
+- **Completed:** iteration 20 / 284 Adam updates; the retained checkpoint and
+  dataset cursor are verified. Full-300 evaluation: **36.67% overall / 44.53%
+  valid-only**; fixed-100: **38.00% / 48.10%**. All 300 rollout/verdict pairs are saved.
+- **Next:** existing job **318935**, 8 H200s for 23h59m, resumes the same C lineage
+  to 60 with full-300 evaluations at 40 and 60 inside the allocation. At 14:00 PDT,
+  it was pending for priority; Slurm estimated 18:39 today. This is a forecast,
+  not a reserved start. It has the highest scheduler priority among the current
+  pending project jobs.
+- **Decision point:** compare C at 40/60 with outcome-only, unchanged additive and B
+  at matching iterations; retain both overall and valid-only rates and inspect
+  task-level validity before interpreting gains. C at 20 is encouraging, but is
+  not a confirmed improvement. Keep the already approved comparison runs as
+  controls; prioritize C when planning further compute, with exact budget
+  approval required for any new allocation.
+
+[Methods and results](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses) ·
+[Runtime and recovery](RL_RUNTIME.md#training-relaunch-20260922) ·
+[C W&B](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-c-309054).
+
+Earlier September21 decision: audit frozen ARM quality before scaling rescue.
+The [selection-quality](ARM_RESULTS.md#arm-selection-quality-313774) and
+[execution-based](ARM_RESULTS.md#arm-task-success-314664) audits are complete.
+
+**Earlier priorities, 2026-09-12:** the user favors **failed-task rescue during
 outcome RL** and **local ARM preference supervision during outcome RL**, and
 wants independent implementations that can be tried concurrently. See the
 [implementation design](#arm-rl-two-track-implementation) and broader
