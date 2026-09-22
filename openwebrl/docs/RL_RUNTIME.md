@@ -3501,3 +3501,67 @@ Run artifacts: `evaluations/arm-failure-gpu-diagnostic-319102/`;
 final pass requires `diagnostic-result.json`, not merely a completed training
 checkpoint. All relative runtime paths are under
 `/gpfs/scrubbed/zixianma/openwebrl-runtime/`.
+
+<a id="arm-b-eight-gpu-topology-audit-20260922"></a>
+### B eight-GPU throughput audit, September 22
+
+At 16:08 PDT, job **318934** on g010 had completed **two iterations, 20→22**,
+since its 11:01 start. Durable Adam counts increased **284→310**; iteration 23
+was optimizing. The preceding four-GPU B job 313208 provides a historical
+comparison, not a controlled replay of the same batch.
+
+| Measurement | Previous 4 H200s: median over iterations 7–20 | Current 8 H200s: iterations 21 / 22 / 23 |
+|---|---:|---:|
+| Collection, minutes | 28.6 | 32.0 /34.5 /79.5 |
+| Native training phase, minutes | 29.9 | 67.0 /44.9 /in progress |
+| Actor training token rate, tokens/s | 7,351 | 2,902 /3,664 /pending |
+| Invalid fraction of completed trajectories | 7.3% | 70.3% /74.3% /90.2% |
+| Completed groups needed for 48 accepted mixed groups | 103 | 311 /406 /1,055 |
+
+The native training timer includes preparation and actor work but excludes
+checkpoint saving. Its token-rate metric is `sum(seq_lens)/actor_train_time`,
+not a utilization measurement. The accepted mixed trajectories are valid;
+the invalid-rate denominator includes all completed collection attempts.
+
+**Verified layout:** training is **TP8 /DP1 /PP1 /CP1**, microbatch 1 and global
+batch 256, with two PPO epochs. Collection uses **eight independent TP1 actor
+engines** and a **64-browser pool/task gate**; the selector shares the last GPU
+during collection and stops before optimization. The prior run used TP4 /DP1,
+four actor engines and 32 browsers. Adding GPUs expanded tensor parallelism;
+it did not add a second training replica. The auxiliary-loss implementation
+currently requires DP1, so TP4 /DP2 requires transport/loss validation first.
+
+**Physical checks:** all eight GPUs are H200s with NV18 links between every
+pair. Active training workers have 32-CPU affinities each, split across the
+allocation's 64 CPUs; they are not pinned to one core. The one-CPU inspection
+step's `nvidia-smi topo` affinity column must not be confused with worker
+affinities. Sampled SM clocks were 1980 MHz with default 700 W power limits and no
+active throttle flags. These snapshots do not measure sustained NCCL bandwidth.
+
+**Two separate regressions need resolution.** Optimizer throughput fell despite
+similar response lengths and fewer accepted turn rows. TP8 overhead is a
+plausible explanation, but sequence/image mix, storage contention and node
+differences remain confounders. Both runs used shared file-backed multimodal
+storage. All compared actor/browser Python sources match; the sole common-file
+change in `slime` is the rollout port-base override.
+
+Collection also suffers frequent initial screenshot and navigation timeouts.
+For iteration 23, **921/1,055 groups had no usable outcome reward**, accounting
+for most rejected groups. These are unavailable outcomes, not evidence of
+policy failure. The jump from 32 to 64 browsers is a candidate cause; task order
+and live website availability also changed. ARM labeling alone does not explain
+this iteration's collection delay.
+
+Before treating eight GPUs as faster, compare **TP4 versus TP8 on one saved
+batch** and **32 versus 64 browsers on a matched task slice**, recording valid
+groups/minute, invalid causes and GPU-hours per durable iteration. A successful
+eight-GPU checkpoint restore established compatibility but did not establish
+scaling. C's queued job 318935 uses the same layout and inherits this concern.
+This audit made no training, queue or reward changes and requested no allocation.
+
+Evidence under runtime:
+`arm-turn-bonus-preparation/topology-audit-20260922/` contains
+`phase-comparison.json`, its reproducible parser and `node-probe.txt`.
+Preserved inputs are `evaluations/arm-failure-additive-313208/` and
+`evaluations/arm-failure-additive-318934-iter40/`, including launch manifests,
+collection logs, group journals and durable checkpoint validation receipts.

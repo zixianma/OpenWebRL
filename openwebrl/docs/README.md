@@ -32,6 +32,7 @@ baseline100's queued continuation subsequently failed at startup from personal s
 [September 22 quota recovery, checkpoint retention and storage inventory](RL_RUNTIME.md#storage-inventory-20260922).
 [Beta/sampling correction: new interventions start at iteration0](RL_RUNTIME.md#failure-ablations-fromzero-20260922).
 [Passed two-GPU diagnostic and remaining validation gaps](RL_RUNTIME.md#failure-ablation-gpu-smoke-proposal-20260922).
+[B eight-GPU throughput regression and verified topology](RL_RUNTIME.md#arm-b-eight-gpu-topology-audit-20260922).
 [Training/evaluation inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 
 Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-results-20260913),
