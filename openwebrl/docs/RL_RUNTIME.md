@@ -3505,6 +3505,10 @@ checkpoint. All relative runtime paths are under
 <a id="arm-b-eight-gpu-topology-audit-20260922"></a>
 ### B eight-GPU throughput audit, September 22
 
+Follow-up: the [browser-driver diagnosis and live correction below](#arm-browser-egl-fix-20260922)
+resolves the dominant collection failure. Optimizer topology remains a separate
+throughput question.
+
 At 16:08 PDT, job **318934** on g010 had completed **two iterations, 20→22**,
 since its 11:01 start. Durable Adam counts increased **284→310**; iteration 23
 was optimizing. The preceding four-GPU B job 313208 provides a historical
@@ -3565,3 +3569,118 @@ Evidence under runtime:
 Preserved inputs are `evaluations/arm-failure-additive-313208/` and
 `evaluations/arm-failure-additive-318934-iter40/`, including launch manifests,
 collection logs, group journals and durable checkpoint validation receipts.
+
+<a id="arm-browser-egl-fix-20260922"></a>
+### Browser NVIDIA EGL stall: confirmed cause and live correction, September 22
+
+**The dominant invalidity was a browser rendering failure, before actor or ARM
+inference.** A scalar-metadata audit counted one terminal record per trajectory,
+without loading tensor/image storage. In B iteration 23, **4,728/4,758 invalid
+trajectories failed during initial browser reset**:
+
+| Cause | Invalid trajectories |
+|---|---:|
+| Initial screenshot timeout | 3,425 |
+| Initial navigation timeout | 972 |
+| Other reset errors, predominantly interrupted redirects | 301 |
+| Reset DNS / other network errors | 30 |
+| Failures after reset / other causes | 30 |
+
+The previous four-GPU B run's iterations 18–20 had **95/1,470 invalid
+trajectories and zero reset failures**. Current failures span many of the same
+domains, including Apple, Amazon, GitHub and Wikipedia; they are not confined
+to a new group of unavailable websites.
+
+**Mechanism and controlled probes.** During the 64-browser collection, Chromium
+rendering processes loaded NVIDIA EGL libraries and opened the NVIDIA modeset
+device plus all eight GPU devices, despite `--disable-gpu`. A `/proc` sample
+found 47 Chrome processes waiting in `nvkms_unlocked_ioctl`, with further NVIDIA
+lock waits. CPU quotas were not throttling, the job had no OOM events, and file
+descriptor usage was far below its limit.
+
+A diagnostic using the same `WebEnv`, viewport and browser executable reproduced
+the stall even on a tiny local HTML page: JavaScript responded, the page was
+visible, fonts were loaded, but two animation frames and screenshot capture
+timed out. This rules out website/network failures as necessary for this stall.
+Under the same ongoing production load, changing only browser EGL discovery to
+Mesa restored rendering on all three probe pages:
+
+| Probe | Original screenshot | Mesa-only EGL screenshot |
+|---|---:|---:|
+| Local HTML | 30-second timeout | 0.040 seconds |
+| Korean Wikipedia | 30-second timeout | 0.074 seconds |
+| Google | 30-second timeout | 0.042 seconds |
+
+GLVND normally discovers all installed EGL vendors; its documented
+`__EGL_VENDOR_LIBRARY_FILENAMES` override limits discovery to the listed vendor.
+See [NVIDIA's EGL discovery documentation](https://github.com/NVIDIA/libglvnd/blob/master/src/EGL/icd_enumeration.md).
+The probe uses `/usr/share/glvnd/egl_vendor.d/50_mesa.json`. This identifies the
+NVIDIA display-driver path as the proximate stall; it does not isolate a specific
+GPU, driver defect, or the independent effect of 32 versus 64 browsers.
+
+**Applied at 16:26:46 PDT.** The fix supplies a copied environment only to the
+Chromium child process when software rendering is requested and the Mesa
+manifest exists. It respects an explicit vendor override. The actor's process
+environment and CUDA visibility, reward configuration, optimizer, task cursor,
+and browser count are unchanged. New B environment subprocesses picked it up
+during iteration 24; existing subprocesses finished normally. The same fix is in
+the prepared C and beta/q40 sources. No allocation or worker restart was needed.
+
+Live check at 16:32:26, grouped by browser creation time:
+
+| Initial reset outcome | Started in 10 minutes before correction | Started after correction |
+|---|---:|---:|
+| Completed reset verdicts | 684 | 246 |
+| Successful resets | 43 | 241 |
+| Failed resets | 641 (93.71%) | 5 (2.03%) |
+| Screenshot failures | 472 | 0 |
+| Pending resets | 0 | 1 |
+
+All five post-fix errors were DNS failures. All 64 sampled live Chromium rendering
+processes had stopped mapping NVIDIA EGL, and none was in the observed NVIDIA
+driver waits. These are **reset diagnostics, not terminal task-success rates**;
+the full post-fix trajectory-invalid rate and sustained iteration time still
+need measurement. The current collection contains both pre- and post-fix attempts.
+Accepted mixed groups advanced from 2/48 at correction to 22/48 by 16:32:49,
+about six minutes later.
+
+Validation: three child-environment isolation tests, the actual subprocess
+reset/screenshot/cleanup test on g010 under production load, eight B/C/ablation
+controller tests, and prepared-source validation passed. Code is in
+`openwebrl/env/browser_runtime.py` and the `WebEnv.setup` launch call. Original
+frozen files and manifests were backed up; runtime fix hashes and the exact
+cutover are recorded in each affected manifest and `deployment.json`.
+
+Evidence remains under
+`arm-turn-bonus-preparation/topology-audit-20260922/`: `invalid-causes.json`,
+`screenshot-loaded.json`, `screenshot-mesa-egl.json`,
+`production-subprocess-smoke.log`, and the accumulating
+`runtime-after-fix.jsonl`. Per-trajectory cause records remain private.
+
+### How training parallelism and browser concurrency interact
+
+| Setting | Current B configuration | What it controls |
+|---|---|---|
+| Training tensor parallelism (TP) | TP8 | Splits one actor replica's layers across eight GPUs; ranks cooperate on the same microbatch |
+| Training data parallelism (DP) | DP1 | Number of actor replicas processing different examples, with synchronized gradients |
+| Rollout inference parallelism | Eight independent TP1 actor servers | Concurrent action/candidate generation during collection; configured separately from training TP |
+| Browser concurrency | 64 slots and 64-task gate | Concurrent browser trajectories, primarily CPU/network/rendering work; each slot requests inference as needed |
+| Training collection target | 48 accepted mixed-outcome groups, plus up to 8 eligible auxiliary failure groups | How much usable data is collected before optimization; independent of browser slots |
+
+With pipeline/context parallelism both 1, **training GPUs = TP × DP**.
+Eight GPUs can therefore host TP8/DP1 or TP4/DP2. At microbatch 1 and global
+batch 256, the latter would split the main batch across two replicas, reducing
+sequential gradient-accumulation work per replica. Our ARM auxiliary-loss path
+currently rejects DP>1; its sharding and loss normalization need validation
+before that layout can run.
+
+Eight TP1 inference engines can serve 64 browser streams, roughly eight per
+engine on average, although requests arrive unevenly and many browsers are
+waiting on websites. Increasing training TP does not require increasing browser
+slots. More slots help only while the browser system, inference servers and
+selector can sustain the additional work.
+
+The colocated pipeline runs **collection → optimization → weight refresh**;
+iteration time includes both phases plus checkpoint/transfer overhead. Fixing
+browser validity addresses collection. TP4/TP8 saved-batch replay is still
+needed to explain the optimizer throughput regression.
