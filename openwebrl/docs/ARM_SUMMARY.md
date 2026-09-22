@@ -249,7 +249,8 @@ paired significance claim. Additive subsequently completed **100 / 1,262**;
 its [iteration-100 evaluation](RL_EVALUATION.md#arm-additive-iter100-results-20260921)
 is **36.33% / 50.23%**, down 3.00 / 4.40 percentage points from iteration90.
 Baseline100 is still pending, so there is no matched iteration100 comparison yet.
-Original remains at **85 / 1,002**; all-failure100 is trained but not evaluated.
+Original remains at **85 / 1,002**. All-failure100 full300 is queued as **316392**
+(2 H200 × 1h); [launch details](RL_RUNTIME.md#arm-allfailure100-eval-316392).
 
 ![All-failure ARM full-300 evaluation curve](rl_results/arm_allfailure_full300.png)
 

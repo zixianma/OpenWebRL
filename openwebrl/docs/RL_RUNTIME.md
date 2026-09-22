@@ -3207,3 +3207,23 @@ Evidence: `evaluations/arm-failure-coverage-pilot-315204/iterations/0090/`:
 `failure-coverage.json`, `failure_auxiliary.json`, and `groups/90/*.json`.
 The original coverage and beta-weight training ablations still need concrete
 allocation budgets; this zero-yield pilot does not justify launching them.
+
+<a id="arm-allfailure100-eval-316392"></a>
+### All-failure iteration100 full300 — submitted September 21, 17:06 PDT
+
+Job **316392** requests the approved **2 H200 × 1 hour**, 16 CPUs and 480 GiB
+RAM; queued for priority at submission. It evaluates the verified completed
+checkpoint `arm-turn-bonus-fresh-allfailure-309490/runtime/iter_0000099`
+(**100 collections / 1,242 Adam updates**) on all 300 OM2W tasks. Use the same
+local browser, GPT-4.1/action_history judge and temperature0 as the other RL
+evaluations. The established evaluation source and lossless saver passed
+preflight; no training or recipe change is included.
+
+The batch controller owns and awaits the evaluation worker. All task rollouts
+and per-task verdicts are required for successful finalization. Output:
+`evaluations/arm-allfailure-iter100-316392/`; W&B project `openwebrl-evals`.
+Approval, checkpoint plan and submission receipts:
+`arm-turn-bonus-preparation/iteration100-evals/allfailure-{approval,plan,submission}.json`.
+The persistent CPU supervisor includes316392, with one-minute status checks
+and 15-minute detailed checks. Original iteration60 remains a separate,
+unsubmitted backfill; this approval covers only all-failure100.
