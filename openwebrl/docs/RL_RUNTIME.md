@@ -3427,3 +3427,32 @@ submission and scheduler verification receipts:
 `arm-turn-bonus-preparation/failure-ablations-fromzero-20260922/`.
 The [integration plan](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921)
 now describes this corrected design; the earlier after100 design is superseded.
+
+<a id="failure-ablation-gpu-smoke-proposal-20260922"></a>
+### Proposed small GPU diagnostic before long runs — September22
+
+CPU readiness is not end-to-end GPU validation. B has already passed an actual
+eight-GPU model/optimizer restore (316247, iteration20/Adam284), and B/C have
+previously trained on four GPUs. The new beta/q40 interventions have25 CPU tests
+passing in both working and frozen sources and real native TP8 argument checks,
+but the earlier live coverage pilot315204 found zero eligible failure groups.
+It therefore did not exercise nonempty deferred labeling followed by training.
+
+A proposed **2 H200 ×1h,16 CPUs,480GiB** diagnostic would use the frozen ablation
+source and original SFT actor, with15m for actual actor/SelectionARM startup and
+bounded screenshot-state selection,10m for deliberately nonempty diagnostic
+failure groups,30m for native TP2 mixed-plus-auxiliary forward/backward and
+checkpoint/save/reload checks, and5m shutdown reserve. Empty failure pools must
+not count as success. Verify beta1 scaling on matched fixture data, q20 label
+reuse and q40 additional-label transport, finite gradients, durable optimizer
+counters and bounded evaluation-output persistence. Fixtures and their weights
+stay isolated from scientific training; diagnostics use `openwebrl-evals`.
+
+This is a **proposal, not a submitted or GPU-validated test**. The old Sol/text
+smoke fixture needs adaptation to exercise actual multimodal auxiliary paths
+before execution. A TP2 pass cannot establish TP8 collective behavior or
+64-browser production memory/throughput. Read-only scheduler probes currently
+estimate even one-hour1/2GPU requests later than the queued8GPU jobs; the test
+is not guaranteed to happen first, and the existing reservations are unchanged.
+Exact stages, pass conditions and resource request:
+`arm-turn-bonus-preparation/failure-ablations-fromzero-20260922/gpu-smoke-proposal.json`.
