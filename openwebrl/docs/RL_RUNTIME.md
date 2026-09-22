@@ -3343,6 +3343,11 @@ scheduler checks pass; new GPU execution has not yet been validated.
 <a id="training-relaunch-20260922"></a>
 ### Five approved training continuations resubmitted — September22
 
+**Superseded for the two new interventions:**318936/318937 were canceled while
+pending after the user clarified that both experiments must begin at iteration0.
+See [the corrected jobs318949/318950](#failure-ablations-fromzero-20260922).
+Baseline/B/C318933–318935 retain their existing continuation plans.
+
 Following the explicit request to launch the failed training jobs and the new
 ablations, all five replacements were submitted and verified in Slurm. At the
 morning check they are **pending for priority**, not training yet. They use the
@@ -3381,3 +3386,44 @@ monitor receipt are under
 `arm-turn-bonus-preparation/overnight-20260922/relaunch/`.
 Each controller owns and awaits its workers and evaluations, preserves partial
 progress if the target does not fit, and does not obtain another allocation.
+
+<a id="failure-ablations-fromzero-20260922"></a>
+### Beta and sampling experiments corrected to iteration0 — September22
+
+The user clarified that **every new experiment or intervention starts at
+iteration0** for clean comparisons. This is now a permanent root`AGENTS.md`
+instruction. Existing unchanged experiments may continue from their own saved
+state; a new reward/loss/sampling/data intervention may not inherit a later RL
+checkpoint without explicit user direction.
+
+Jobs318936/318937 were canceled while pending, with zero elapsed GPU time.
+Their replacements use the same previously approved resources and remaining
+walltime; there is no compute-budget extension. Both were verified **pending
+for priority** at09:31PDT.
+
+| Job | New experiment | Initial model / state | Target | H200 GPUs | Walltime | Included evaluation |
+|---|---|---|---:|---:|---|---|
+| 318949 | Failure beta1, q20% | Original OpenWebRL-4B-SFT; rollout0; Adam0; fresh scheduler/cursor | 20 | 8 | 23h59m | Full300 at20 |
+| 318950 | Failure q40%, beta0.5 | Original OpenWebRL-4B-SFT; rollout0; Adam0; fresh scheduler/cursor | 20 | 8 | 23h58m | Full300 at20 |
+
+Mixed-outcome beta0.5/q20%,48 ordinary groups, up to8 eligible auxiliary groups,
+distinct5 gate and response-index credit remain unchanged. Each job has64 CPUs,
+960GiB RAM and64 training browsers. Native launch checks confirm both `load` and
+`hf_checkpoint` resolve to the original SFT model, start rollout0, target20 and
+no restored optimizer scheduler. Initialization guards reject resume/replay
+state or a nonzero optimizer offset.25 focused tests pass both locally and
+against the frozen source. GPU initialization remains pending inside allocation.
+
+Training W&B identities are `arm-failure-weight-fromzero-318949` and
+`arm-failure-coverage-fromzero-318950`, in `openwebrl`. Full300 GPT-4.1/T0
+evaluation retains rollout archives and per-task verdicts in `openwebrl-evals`.
+The controllers reserve one hour for evaluation and require exact checkpoint20;
+they preserve partial progress if20 does not fit and do not extend their budgets.
+The persistent supervisor includes both replacements and continues to monitor
+baseline318933 and B/C318934–318935.
+
+Plans, native argument reports,25-test readiness fingerprints, approval,
+submission and scheduler verification receipts:
+`arm-turn-bonus-preparation/failure-ablations-fromzero-20260922/`.
+The [integration plan](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921)
+now describes this corrected design; the earlier after100 design is superseded.

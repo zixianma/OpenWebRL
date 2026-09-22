@@ -3998,17 +3998,27 @@ Eight turns doubles these maxima. Usable labels can be fewer than selected
 states; this audit measures potential coverage, not label quality or latency.
 [Aggregate audit](arm_results/rl_integration/failure-termination-audit-315204.json).
 
-**September 22 UTC update — approved and submitted.** The earlier three-branch
-proposal was superseded by two **8 H200 × 16-hour** allocations (64 CPUs,
-960GiB,64 training browsers each; **256 GPU-hours total**), from additive100 /
-1,262 Adam updates to iteration120, including full300 evaluation:
+**September22 correction — independent experiments from iteration0.** Every new
+experiment/intervention starts from the original agreed SFT checkpoint with
+fresh optimizer/scheduler state and the initial task cursor, unless the user
+explicitly requests otherwise. The earlier additive100 continuation design was
+incorrect for the intended comparison. Its replacement jobs318936/318937 were
+canceled while pending with **zero GPU time**, after the earlier317100/317101
+attempts had failed at startup without verified optimizer updates.
+
+The corrected jobs each use **8 H200,64 CPUs,960GiB,64 training browsers** within
+the existing approved24h budget. Walltimes are23h59m and23h58m, retaining the
+previous deductions for failed startup time. Both begin with
+`OpenWebRL-4B-SFT`, optimizer update0 and rollout0, initially target iteration20,
+and include its full300 evaluation in the same allocation:
 
 | Treatment | Job | Failure beta | Failure turn sampling | Mixed beta / sampling |
 | --- | --- | ---: | --- | --- |
-| Weight only | 317100 | 1.0 | 20% | 0.5 / 20% |
-| Coverage only | 317101 | 0.5 | 40% Bernoulli, no four-turn cap | 0.5 / 20% |
+| Weight only | 318949 | 1.0 | 20% | 0.5 / 20% |
+| Coverage only | 318950 | 0.5 | 40% Bernoulli, no four-turn cap | 0.5 / 20% |
 
-Both preserve checkpoint, Adam/scheduler state, dataset cursor, global batch256,
+Both use fresh Adam/scheduler state and the initial dataset cursor; neither
+loads an RL checkpoint or a saved rollout batch. They preserve global batch256,
 PPO2, lr1e-6, K5, distinct5 gate, response-index credit,48 ordinary mixed groups,
 and up to8 auxiliary groups. Failure-group admission remains the **historical
 q20% usable-label rule** after strict validity checks in both branches. Coverage
@@ -4025,15 +4035,18 @@ weight gives +0.8/−0.2; coverage retains +0.4/−0.1. The auxiliary coefficien
 there is no inverse-probability correction or renormalization over labeled
 turns. Each branch approximately doubles expected failure supervision through
 a different knob, conditional on the same population; realized training data
-will diverge as the policies update. No new unchanged additive120 control was
-submitted, so these runs alone cannot separate all gains from ordinary further
-training. Neither changes the mixed-outcome recipe.
+will diverge as the policies update. Compare at matched iterations against the
+historical additive run initialized from the same SFT model. That control is
+historical and not a simultaneous multi-seed control; fresh initialization alone
+does not eliminate web/environment drift or training variance. Neither changes
+the mixed-outcome recipe.
 
-**Checks:**31 focused tests pass in the working tree and31 against the exact
+**Checks:**25 focused tests pass in the working tree and25 against the exact
 frozen source `reference-arm-failure-ablations-20260922-v3`. Both native TP8
-argument and saved-scheduler checks pass (sample counter323072 →323328,
-lr1e-6/weight decay0.1 preserved). GPU restoration is checked inside each job
-before training. Every nonempty coverage pool must complete deferred labeling
+argument checks resolve the original SFT model, rollout0, target20, and disabled
+checkpoint-scheduler restoration. Launch validation rejects late checkpoints,
+nonzero optimizer offsets and replay/resume payloads. Actual GPU initialization
+still awaits allocation. Every nonempty coverage pool must complete deferred labeling
 with usable labels before PPO; a legitimately empty pool contributes zero
 auxiliary loss and still permits ordinary mixed-group training. The source
 allows bounded serial accumulation of up to128 auxiliary microbatches per
@@ -4041,7 +4054,7 @@ optimizer window and8GiB payloads for q40%; this changes transport capacity,
 not optimizer count, batch denominator, or reward normalization.
 
 The controller owns and awaits train→eval, reserves one hour for evaluation,
-requires exact checkpoint120, and preserves partial progress if the allocation
+requires exact checkpoint20, and preserves partial progress if the allocation
 ends early. Training uses W&B `openwebrl`; standalone full300 GPT-4.1/T0
 evaluation uses `openwebrl-evals`, retaining rollout archives and per-task
 verdicts. TP8 throughput and additional-label overhead remain unmeasured.
@@ -4049,8 +4062,11 @@ verdicts. TP8 throughput and additional-label overhead remain unmeasured.
 Entry points: `scripts/prepare_arm_failure_ablations.py` and
 `scripts/run_arm_failure_ablations_8gpu.sbatch`. Plans, frozen-source checks,
 exact approval/submission receipts and job IDs are in runtime
-`arm-turn-bonus-preparation/failure-ablations-after100-20260921/`.
-B/C jobs316247/316248 retain their separate approved budgets.
+`arm-turn-bonus-preparation/failure-ablations-fromzero-20260922/`.
+The earlier `failure-ablations-after100-20260921/` receipts are superseded history.
+B/C continuations318934/318935 retain their own unchanged experiment identities
+and approved budgets; continuing those existing experiments is distinct from
+starting a new intervention.
 
 <a id="arm-failure-sampling-history-20260922"></a>
 ### Failure-turn coverage across completed training iterations — September 22

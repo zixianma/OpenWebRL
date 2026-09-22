@@ -30,6 +30,7 @@ Additive100 is [complete at 36.33% overall / 50.23% valid-only](RL_EVALUATION.md
 baseline100's queued continuation subsequently failed at startup from personal storage quota;
 [all five approved continuations have been resubmitted](RL_RUNTIME.md#training-relaunch-20260922).
 [September 22 quota recovery, checkpoint retention and storage inventory](RL_RUNTIME.md#storage-inventory-20260922).
+[Beta/sampling correction: new interventions start at iteration0](RL_RUNTIME.md#failure-ablations-fromzero-20260922).
 [Training/evaluation inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 
 Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-results-20260913),
