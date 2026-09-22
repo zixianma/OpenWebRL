@@ -3948,6 +3948,91 @@ state. Run20 further collections and evaluate each endpoint identically.
 Additive100 is now36.33%/50.23%; all-failure100 is35.67%/48.20%. Baseline100
 is still pending. These endpoints do not yet show a matched outcome-only gain.
 
+<a id="arm-failure-termination-audit-20260921"></a>
+### Saved termination audit and concrete ablation preparation — September 21
+
+The CPU audit read only serialized metadata members, never tensor storage
+records, from all106 completed group journals. It processed1.51GB of metadata
+sequentially in about4 seconds without GPUs. Its scalar reconstruction exactly
+matches the pilot's first-rejection counts:16 invalid termination and6
+removed/excluded groups. The22 all-zero groups contain110 trajectories:
+
+| Terminal outcome in all-zero groups | Trajectories | Diagnosis |
+| --- | ---: | --- |
+| Completed, judge-confirmed failure | 46 | Valid individual failure |
+| Exhausted15-step horizon | 8 | Valid native failure |
+| Generation length limit | 38 | Configured1024 output-token cap; last stored response length1026 in every case; no context-limit log events |
+| Browser `env.step` abort | 18 |17 logs contain empty exception text; one reports action execution without a screenshot |
+
+All38 truncated terminal responses lack a complete `</tool_call>` block;27
+also lack `</think>`. This is response truncation, not a missing ARM-label
+artifact. The collector propagates the terminal status to every turn in the
+trajectory. All18 browser aborts are removed from training by the existing
+infrastructure-failure filter. Empty exception strings do not establish the
+exception type; the prepared new source records the type for future runs.
+
+There are54 individually valid failures, but **zero groups with all five
+trajectories valid**. Valid-failure counts per group are0/1/2/3/4 in2/5/2/7/6
+groups respectively. Thus the immediate bottleneck is strict group validity,
+not q or beta. Preserve that rule in these two ablations; accepting valid
+members of partially invalid groups or raising the response-token cap would
+be separate changes. No eligibility repair is supported by this audit.
+
+Four turns was a cost bound, not an optimized setting. Across those54 valid
+individual failures, median length is10 and total length522. The hypothetical
+selected-state budgets below show the effect **if those trajectories were
+admitted**; the current all-five-valid rule admits none of them.
+
+| Failure labeling recipe | Selected states on these54 trajectories | Fraction of522 turns | Maximum states across8×5 trajectories |
+| --- | ---: | ---: | ---: |
+| Independent20% |104.4 expected |20% |600 worst case;120 expected at the15-turn maximum |
+| Uniform up to4 per trajectory |214 |41.0% |160 |
+| Uniform up to8 per trajectory |380 |72.8% |320 |
+| Every turn |522 |100% |600 |
+
+Four turns is already about2.05× the expected20% budget here. Each newly
+selected state requires four counterfactual actor responses and, if candidate
+validation passes, one selector request. The four-turn cap bounds these at640
+new candidate responses and160 selector requests per collection, before reuse.
+Eight turns doubles these maxima. Usable labels can be fewer than selected
+states; this audit measures potential coverage, not label quality or latency.
+[Aggregate audit](arm_results/rl_integration/failure-termination-audit-315204.json).
+
+The concrete proposal is **three independent8-H200×16-hour allocations**
+(control, beta-only, coverage-only), each64 CPUs/960GiB and64 training browsers:
+**384 GPU-hours maximum**, including full300 evaluation at120. Every branch
+starts from the same additive100 checkpoint, optimizer/scheduler and dataset
+cursor (1,262 Adam updates), runs20 further collections, and keeps global batch
+256, PPO2, lr1e-6, K5, distinct5 gate, response-index credit,48 mixed groups plus
+up to8 auxiliary groups. Mixed beta0.5/q0.20 remain fixed. The unchanged control
+separates treatment effects from ordinary continued training under the same
+8-GPU topology. Eight-GPU throughput and coverage overhead are unmeasured;
+16h is a ceiling, not a guarantee of reaching120.
+
+- **Control:** failure beta0.5, independent20% labels; new W&B experiment identity.
+- **Weight:** failure beta1.0, unchanged20% labels and all-turn normalization.
+- **Coverage:** failure beta0.5, up to4 uniformly selected turns per valid failed
+  trajectory; select the valid group reservoir before checking label availability.
+  Its first real collection must contain at least one usable deferred failure
+  label before any optimizer update; an empty pool stops and releases the job.
+
+CPU preparation passes27 regression tests plus18 against the actual frozen
+source. All three native TP8 argument/saved-scheduler checks pass. The first
+nonempty coverage gate, loss scaling, unchanged control recipe, ordered worker
+ownership, and rejection of an earlier-than120 evaluation are checked. Actual
+GPU restoration/backpropagation and nonempty deferred labeling remain allocation
+startup checks. Training logs to `openwebrl`, endpoint evaluation to
+`openwebrl-evals`, preserving all300 rollout archives and task verdicts. Each
+controller reserves one hour for evaluation, awaits its workers, and releases
+resources on completion or a failed gate. No new paid job is submitted yet.
+
+Prepared local entry points: `scripts/prepare_arm_failure_ablations.py` and
+`scripts/run_arm_failure_ablations_8gpu.sbatch`. Plans, native reports, readiness
+hashes and exact proposed commands are in runtime
+`arm-turn-bonus-preparation/failure-ablations-after100-20260921/`.
+Exact new resource/budget approval is still required before submission; the
+existing B/C allocations remain dedicated to their approved experiments.
+
 ### What supports this direction
 
 Additive90 is **39.33% overall / 54.63% valid-only**, versus the historical

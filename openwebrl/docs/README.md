@@ -33,7 +33,8 @@ Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-res
 [iteration-80 GPT-4.1 rejudging](RL_EVALUATION.md#stealth80-gpt41-rejudge-feasibility-20260913),
 and [cluster/account queue audit](RL_RUNTIME.md#cluster-queue-audit-294983-20260913).
 
-ARM RL: [all-failure100 results and updated curves](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921),
+ARM RL: [saved termination audit and beta/coverage launch proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921),
+[all-failure100 results and updated curves](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921),
 [B/C20→60 eight-GPU launches and evaluation budget](RL_RUNTIME.md#arm-bc-to60-prepared-20260921),
 [failure-coverage pilot: zero eligible groups](RL_RUNTIME.md#arm-failure-coverage-result-315204),
 [agreed failure-coverage and failure-weight experiments; CPU preparation](ARM_INTEGRATION_PLAN.md#arm-additive-next-experiments-20260921),

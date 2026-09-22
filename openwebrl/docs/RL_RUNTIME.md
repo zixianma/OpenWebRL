@@ -3231,3 +3231,21 @@ unsubmitted backfill; this approval covers only all-failure100.
 September 21 completion update: **316392 finished in30m58s**, exit0, and released
 its GPUs. All300 verdicts and rollout archives passed cohort/completeness checks;
 **35.67% overall / 48.20% valid-only**. [Result audit](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921).
+
+<a id="arm-failure-ablations-ready-20260921"></a>
+### Beta and coverage continuations — prepared, not submitted
+
+The [saved truncation/abort audit and concrete proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921)
+are complete. Three proposed branches (unchanged additive control, failure-only
+beta1, failure-only four-turn coverage) start from additive100/Adam1262 and
+target120, including full300 evaluation. Each requests8H200×16h,64CPUs,960GiB,
+64 training browsers; aggregate cap384 GPU-hours. This is additional compute,
+separate from B/C jobs316247/316248. No jobs from this proposal are submitted.
+
+Source: `reference-arm-failure-ablations-20260921-v1`; plans/readiness/native
+reports and unexecuted submission commands:
+`arm-turn-bonus-preparation/failure-ablations-after100-20260921/`.
+The controller awaits train→eval, requires exact checkpoint120, preserves partial
+progress, and reserves one hour for evaluation. Coverage additionally requires
+usable labels on a nonempty first failure pool before any optimizer update.
+The checked batch template is `scripts/run_arm_failure_ablations_8gpu.sbatch`.

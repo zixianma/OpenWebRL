@@ -181,7 +181,14 @@ actor; separately test failure-only beta 0.5→1.0 while mixed-group beta stays 
 Coverage pilot **315204** completed in **33m29s**, with 48 ordinary mixed groups
 and zero optimizer updates. All 22 zero-outcome candidate groups failed the
 five-valid-failures gate; no deferred labels were requested. This leaves the
-benefit of four-turn coverage **unmeasured**, not disproved. [Job inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
+benefit of four-turn coverage **unmeasured**, not disproved. The
+[saved termination audit](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921)
+found38 response-length truncations and18 browser-step aborts among110
+trajectories in the22 all-zero groups. Four turns would roughly double sampled
+states on their54 individually valid failures, but none of those groups passes
+the five-valid-failures rule. Control/beta1/four-turn branches from additive100
+are CPU-prepared; proposed budget is three8-H200×16h allocations including
+full300 at120, pending exact budget approval. [Job inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 [Live jobs and completion reports](arm_results/rl_integration/live-status.html)
 refresh every minute; checkpoint/health details are checked every 15 minutes.
 

@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-09-22T03:51:24.762480+00:00",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-coverage-pilot-315204",
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/runtime/iter_0000089",
+  "group_count": 106,
+  "filter_reasons": {
+    "None": 48,
+    "zero_std_1.0": 31,
+    "zero_std_0.0": 22,
+    "all_none_reward_in_group": 3,
+    "insufficient_nonempty_rewards_1": 2
+  },
+  "populations": {
+    "all": {
+      "trajectories": 530,
+      "turns": 3274,
+      "length_histogram": {
+        "1": 35,
+        "2": 38,
+        "3": 74,
+        "4": 65,
+        "5": 68,
+        "6": 54,
+        "7": 34,
+        "8": 17,
+        "9": 36,
+        "10": 31,
+        "11": 21,
+        "12": 13,
+        "13": 15,
+        "14": 8,
+        "15": 21
+      },
+      "median_turns": 5.0,
+      "statuses": {
+        "completed": 377,
+        "aborted": 74,
+        "truncated": 62,
+        "failed": 17
+      },
+      "reasons": {
+        "task_completed": 377,
+        "env_step_error": 49,
+        "generation_length_limit": 62,
+        "reset_other_error": 1,
+        "max_steps_exhausted": 17,
+        "generation_other_error": 2,
+        "reset_navigation_timeout": 10,
+        "reset_connection_closed": 7,
+        "reset_dns_error": 5
+      },
+      "invalid_reasons": {
+        "missing_or_nonzero_reward": 284,
+        "None": 135,
+        "removed_or_excluded": 49,
+        "invalid_termination": 62
+      },
+      "last_response_length_for_truncated": {
+        "1026": 62
+      },
+      "truncated_response_markers": {
+        "closed_reasoning": 16,
+        "complete_tool_call": 2
+      },
+      "expected_twenty_percent_states": 654.8000000000001,
+      "four_turn_states": 1865,
+      "eight_turn_states": 2791,
+      "all_turn_states": 3274,
+      "sampled_turns": 614,
+      "admitted_turns": 341
+    },
+    "ordinary_retained": {
+      "trajectories": 240,
+      "turns": 1577,
+      "length_histogram": {
+        "1": 5,
+        "2": 18,
+        "3": 26,
+        "4": 33,
+        "5": 30,
+        "6": 29,
+        "7": 15,
+        "8": 13,
+        "9": 19,
+        "10": 20,
+        "11": 6,
+        "12": 6,
+        "13": 7,
+        "14": 2,
+        "15": 11
+      },
+      "median_turns": 6.0,
+      "statuses": {
+        "completed": 186,
+        "aborted": 22,
+        "truncated": 23,
+        "failed": 9
+      },
+      "reasons": {
+        "task_completed": 186,
+        "reset_other_error": 1,
+        "generation_length_limit": 23,
+        "env_step_error": 20,
+        "max_steps_exhausted": 9,
+        "generation_other_error": 1
+      },
+      "invalid_reasons": {
+        "missing_or_nonzero_reward": 116,
+        "None": 81,
+        "invalid_termination": 23,
+        "removed_or_excluded": 20
+      },
+      "last_response_length_for_truncated": {
+        "1026": 23
+      },
+      "truncated_response_markers": {
+        "closed_reasoning": 4,
+        "complete_tool_call": 2
+      },
+      "expected_twenty_percent_states": 315.40000000000003,
+      "four_turn_states": 883,
+      "eight_turn_states": 1352,
+      "all_turn_states": 1577,
+      "sampled_turns": 304,
+      "admitted_turns": 168
+    },
+    "individually_valid_failures": {
+      "trajectories": 135,
+      "turns": 1148,
+      "length_histogram": {
+        "2": 3,
+        "3": 10,
+        "4": 16,
+        "5": 10,
+        "6": 12,
+        "7": 13,
+        "8": 2,
+        "9": 17,
+        "10": 9,
+        "11": 9,
+        "12": 5,
+        "13": 7,
+        "14": 4,
+        "15": 18
+      },
+      "median_turns": 9,
+      "statuses": {
+        "completed": 118,
+        "failed": 17
+      },
+      "reasons": {
+        "task_completed": 118,
+        "max_steps_exhausted": 17
+      },
+      "invalid_reasons": {
+        "None": 135
+      },
+      "last_response_length_for_truncated": {},
+      "truncated_response_markers": {
+        "closed_reasoning": 0,
+        "complete_tool_call": 0
+      },
+      "expected_twenty_percent_states": 229.60000000000002,
+      "four_turn_states": 524,
+      "eight_turn_states": 881,
+      "all_turn_states": 1148,
+      "sampled_turns": 224,
+      "admitted_turns": 127
+    },
+    "zero_outcome_groups": {
+      "trajectories": 110,
+      "turns": 951,
+      "length_histogram": {
+        "2": 2,
+        "3": 4,
+        "4": 10,
+        "5": 9,
+        "6": 12,
+        "7": 13,
+        "8": 3,
+        "9": 13,
+        "10": 8,
+        "11": 10,
+        "12": 5,
+        "13": 7,
+        "14": 5,
+        "15": 9
+      },
+      "median_turns": 9.0,
+      "statuses": {
+        "truncated": 38,
+        "completed": 46,
+        "aborted": 18,
+        "failed": 8
+      },
+      "reasons": {
+        "generation_length_limit": 38,
+        "task_completed": 46,
+        "env_step_error": 18,
+        "max_steps_exhausted": 8
+      },
+      "invalid_reasons": {
+        "invalid_termination": 38,
+        "None": 54,
+        "removed_or_excluded": 18
+      },
+      "last_response_length_for_truncated": {
+        "1026": 38
+      },
+      "truncated_response_markers": {
+        "closed_reasoning": 11,
+        "complete_tool_call": 0
+      },
+      "expected_twenty_percent_states": 190.20000000000002,
+      "four_turn_states": 432,
+      "eight_turn_states": 744,
+      "all_turn_states": 951,
+      "sampled_turns": 177,
+      "admitted_turns": 93
+    },
+    "valid_failures_in_zero_groups": {
+      "trajectories": 54,
+      "turns": 522,
+      "length_histogram": {
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 4,
+        "7": 6,
+        "9": 5,
+        "10": 4,
+        "11": 6,
+        "12": 3,
+        "13": 5,
+        "14": 3,
+        "15": 8
+      },
+      "median_turns": 10.0,
+      "statuses": {
+        "completed": 46,
+        "failed": 8
+      },
+      "reasons": {
+        "task_completed": 46,
+        "max_steps_exhausted": 8
+      },
+      "invalid_reasons": {
+        "None": 54
+      },
+      "last_response_length_for_truncated": {},
+      "truncated_response_markers": {
+        "closed_reasoning": 0,
+        "complete_tool_call": 0
+      },
+      "expected_twenty_percent_states": 104.4,
+      "four_turn_states": 214,
+      "eight_turn_states": 380,
+      "all_turn_states": 522,
+      "sampled_turns": 105,
+      "admitted_turns": 62
+    }
+  },
+  "zero_groups": {
+    "count": 22,
+    "first_rejection": {
+      "invalid_termination": 16,
+      "removed_or_excluded": 6
+    },
+    "valid_failure_count_histogram": {
+      "0": 2,
+      "1": 5,
+      "2": 2,
+      "3": 7,
+      "4": 6
+    },
+    "groups_containing_reason": {
+      "generation_length_limit": 17,
+      "task_completed": 19,
+      "env_step_error": 14,
+      "max_steps_exhausted": 6
+    },
+    "all_five_valid": 0
+  },
+  "matched_zero_group_abort_messages": {
+    "(empty exception text)": 17,
+    "Action execution failed without a screenshot.": 1
+  },
+  "context_limit_log_events": 0,
+  "metadata_bytes_read": 1507056853,
+  "tensor_storage_bytes_read": 0,
+  "elapsed_seconds": 3.8521334771066904,
+  "scope": "Scalar metadata audit; four/eight-turn counts are potential selected states, not admitted labels. Individual-valid counts do not relax the five-valid-failure group rule."
+}
