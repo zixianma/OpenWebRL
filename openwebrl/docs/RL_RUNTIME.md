@@ -3429,30 +3429,52 @@ The [integration plan](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-202
 now describes this corrected design; the earlier after100 design is superseded.
 
 <a id="failure-ablation-gpu-smoke-proposal-20260922"></a>
-### Proposed small GPU diagnostic before long runs — September22
+### Nonempty auxiliary GPU diagnostic — September 22
 
-CPU readiness is not end-to-end GPU validation. B has already passed an actual
-eight-GPU model/optimizer restore (316247, iteration20/Adam284), and B/C have
-previously trained on four GPUs. The new beta/q40 interventions have25 CPU tests
-passing in both working and frozen sources and real native TP8 argument checks,
-but the earlier live coverage pilot315204 found zero eligible failure groups.
-It therefore did not exercise nonempty deferred labeling followed by training.
+**Job319102 submitted at10:48 PDT:** 2 H200 ×1h,16 CPUs,480GiB, normal QoS.
+Pending at10:49; Slurm estimated September23 at10:59 PDT. That estimate can
+change. The existing baseline and four eight-GPU reservations are unchanged;
+this smaller job is not guaranteed to run before them.
 
-A proposed **2 H200 ×1h,16 CPUs,480GiB** diagnostic would use the frozen ablation
-source and original SFT actor, with15m for actual actor/SelectionARM startup and
-bounded screenshot-state selection,10m for deliberately nonempty diagnostic
-failure groups,30m for native TP2 mixed-plus-auxiliary forward/backward and
-checkpoint/save/reload checks, and5m shutdown reserve. Empty failure pools must
-not count as success. Verify beta1 scaling on matched fixture data, q20 label
-reuse and q40 additional-label transport, finite gradients, durable optimizer
-counters and bounded evaluation-output persistence. Fixtures and their weights
-stay isolated from scientific training; diagnostics use `openwebrl-evals`.
+B previously passed an actual eight-GPU model/optimizer restore (316247,
+iteration20/Adam284), and B/C previously trained on four GPUs. The new beta/q40
+interventions pass25 CPU tests in both working and frozen sources plus native
+TP8 argument checks. However, coverage pilot315204 had zero eligible groups,
+so it did not validate nonempty deferred labeling followed by optimization.
 
-This is a **proposal, not a submitted or GPU-validated test**. The old Sol/text
-smoke fixture needs adaptation to exercise actual multimodal auxiliary paths
-before execution. A TP2 pass cannot establish TP8 collective behavior or
-64-browser production memory/throughput. Read-only scheduler probes currently
-estimate even one-hour1/2GPU requests later than the queued8GPU jobs; the test
-is not guaranteed to happen first, and the existing reservations are unchanged.
-Exact stages, pass conditions and resource request:
-`arm-turn-bonus-preparation/failure-ablations-fromzero-20260922/gpu-smoke-proposal.json`.
+The new isolated diagnostic uses the original SFT actor and a snapshot of the
+frozen ablation source. It runs the following checks within the approved hour:
+
+- **Model calls:** five actual multimodal actor responses and a SelectionARM
+  selection, with the natural panel's strict-gate result saved separately.
+- **Nonempty coverage:** one deliberately constructed all-failure group;
+  distinct valid candidate actions with real ARM selections. Verify reuse of
+  q20 labels, additional q40 labels, exact-state transport and image tensors.
+- **Native optimization:**48 constructed mixed groups /480 turn rows plus the
+  auxiliary group; global batch256,2 PPO epochs,2 Adam updates on TP2. Keep the
+  native calibration and quota checks. Empty auxiliary pools fail the test.
+- **Weight scaling:** on actual GPU actor log probabilities, verify doubling
+  the auxiliary advantage doubles its loss and gradient. This checks the
+  beta1 loss path; it is not a separate beta1 training experiment.
+- **Durability:** inspect the saved optimizer count, restore the model and
+  optimizer on both GPUs, and preserve a local-browser click, screenshots and
+  deterministic assertion for replay. This is not an OM2W evaluation.
+
+CPU preflight passed, including native launch parsing, the local-browser check,
+multimodal fixture serialization, six usable auxiliary labels and the unchanged
+calibration gate. Model API responses were mocked in that CPU check; GPU/model
+execution is still pending. Diagnostics log to `openwebrl-evals`, with no weights
+or synthetic rows reused by scientific training. A TP2 pass will not establish
+natural failure yield, task-success gain or TP8/64-browser scalability.
+
+Implementation: `scripts/run_arm_failure_gpu_diagnostic.sbatch`,
+`scripts/run_arm_failure_gpu_diagnostic.py`, and
+`scripts/arm_failure_gpu_fixture.py`. The batch controller owns training and
+GPU restoration, then exits early when finished. The persistent supervisor
+tracks the diagnostic alongside existing jobs; full checks are every15 minutes.
+Plans, approval/submission and CPU receipts:
+`arm-turn-bonus-preparation/failure-gpu-diagnostic-20260922/`.
+Run artifacts: `evaluations/arm-failure-gpu-diagnostic-319102/`;
+final pass requires `diagnostic-result.json`, not merely a completed training
+checkpoint. All relative runtime paths are under
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/`.
