@@ -3689,7 +3689,7 @@ needed to explain the optimizer throughput regression.
 
 ## TP2/DP4 replay and B/C monitoring — 2026-09-22
 
-**Prepared and armed; GPU results pending.** The user approved testing TP2/DP4
+**Partial GPU result: TP2/DP4 updates/save passed; reload and matched TP8 control pending.** The user approved testing TP2/DP4
 without interrupting or requeueing current jobs. B318934 owns all eight GPUs on
 g010, so no overlapping GPU benchmark is launched there. The existing C318935
 batch controller will await an isolated replay before starting its normal
@@ -3727,7 +3727,46 @@ pipeline is not benchmarked. Frozen auxiliary log probabilities are recomputed
 redundantly on each DP replica in this initial diagnostic; that overhead is not
 included in the timed optimizer step. Runtime preparation, pinned dependencies,
 and launch receipt are in `arm-turn-bonus-preparation/tpdp-replay-20260922/`;
-case artifacts will be in `benchmarks/arm-tpdp-318935/`.
+case artifacts are in `benchmarks/arm-tpdp-318935/`.
+
+### First GPU attempt — 18:39–18:43 PDT
+
+C318935 started on g016. The isolated TP2/DP4 replay loaded the existing TP8
+checkpoint, completed two updates, and saved Adam324 with consistent scheduler
+counters. Every rank completed both updates; peak allocated memory across ranks
+was67.5GiB. The main production B/C runs remain **TP8/DP1**.
+
+| Check | TP2/DP4 result | Same-batch TP8/DP1 control |
+|---|---:|---:|
+| First optimizer update | 33.56s | Pending |
+| Second optimizer update | 30.91s | Pending |
+| Gradient norms | 1.3843 / 1.3869, finite | Pending |
+| Checkpoint metadata/counters | Passed, Adam322→324 | Pending |
+| Reload newly saved checkpoint on GPUs | Incomplete: tracking initialization failed | Pending |
+
+The reload process retained `--use-wandb`; the frozen tracking adapter forced
+shared mode despite `--wandb-mode disabled`, then rejected `resume=never` for the
+existing diagnostic run ID. This was a **test-harness error after training/save**,
+not evidence of failed DP4 optimization. The fix removes the actual tracking
+enable flag and run/resume identity for verification. A regression test executes
+the preserved adapter's entry and verifies it returns before contacting W&B;
+eight diagnostic CPU tests now pass.
+
+The controller promptly continued C's ordinary iteration20 restore, which passed,
+and actor startup. To avoid interrupting B or C, the corrected TP2 reload and
+missing TP8 control are prepared for **C's iteration40 pre-evaluation handoff**.
+They reuse the saved TP2 weights rather than retraining that case, remain within
+the original45-minute diagnostic budget (five minutes conservatively charged to
+the first attempt), and run only if the one-hour evaluation reserve remains
+intact. No new allocation or automatic production-topology change is scheduled.
+Different node, task subset and auxiliary count prevent interpreting30.91s versus
+B's live~199s/update as a controlled speedup.
+
+At18:44 B had saved iteration25/Adam346 and was collecting iteration26. Its first
+fully post-browser-fix collection took13.11min, followed by45.73min of total
+training time (39.77min in optimizer steps,198.87s/update); invalid trajectories
+fell to3.96%. The batch's turn-level raw reward was0.5242 and valid completed-task
+success was57.89%. These are training measurements, not a new held-out evaluation.
 
 ### Reward and efficiency watch
 
