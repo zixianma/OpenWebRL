@@ -3768,6 +3768,59 @@ training time (39.77min in optimizer steps,198.87s/update); invalid trajectories
 fell to3.96%. The batch's turn-level raw reward was0.5242 and valid completed-task
 success was57.89%. These are training measurements, not a new held-out evaluation.
 
+### Next-launch topology decision and optimization priorities — 2026-09-22
+
+The user authorized switching the **next eight-GPU B/C continuation** to the
+fastest validated layout. The comparison now includes **TP4/DP2**, alongside
+TP2/DP4 and the TP8/DP1 control, on the same saved256-row batch, checkpoint and
+node. At global batch256/microbatch1, the replicas process64,128,256 main rows
+per update respectively, plus correctly scaled auxiliary rows. TP2 is the
+provisional favorite for this4B model; TP4 remains unmeasured, so no winner is
+claimed. TP4 has smaller per-GPU model/activation shards; TP2 has more independent
+replicas and fewer tensor-parallel participants. These are tradeoffs to measure,
+consistent with [NVIDIA's parallelism guide](https://docs.nvidia.com/megatron-core/developer-guide/latest/user-guide/parallelism-guide.html).
+
+The deferred C40 diagnostic now runs: saved TP2 reload → TP4 update/save/reload →
+TP8 update/save/reload. Its Slurm step caps are6+15+18 minutes; adding the five
+minutes charged to the first attempt keeps the scheduled total below the original
+45-minute cap, with one minute for dispatch. No new GPU allocation is submitted.
+All three native argument sets pass CPU parsing; ten diagnostic CPU tests cover
+DP1/2/4 scaling, sparse padding, restore tracking, budget and candidate selection.
+The original TP2 source/results remain preserved; remaining cases use an isolated
+v2 source whose functional addition is DP2 support.
+
+The comparison will write `next-launch-topology-result.json` under runtime
+`arm-turn-bonus-preparation/tpdp-replay-20260922/`. It ranks the second-update
+timings only after matching data fingerprints, finite gradients, saved/reloaded
+checkpoints, and gradient norms within5% of the TP8 control. Norm agreement is a
+sanity check, not full gradient-vector equivalence. The authorization is also
+recorded in the root `AGENTS.md` and `next-launch-topology-policy.json`.
+
+Production migration remains conditional on the benchmark and representative
+full-batch/long-context checks. It must use a production source with validated
+DP auxiliary transport, preserving checkpoint, optimizer/scheduler, task cursor,
+global batch256, PPO epochs and ARM reward/loss settings. Do not use the diagnostic
+source for production: it deliberately trims the batch and bypasses collection.
+The ordinary GPU restore checker now honors a continuation's explicit `TP_SIZE`,
+instead of always verifying TP equal to total GPU count; three regression tests
+cover this distinction. Neither active B nor active C changes topology in place.
+
+| Priority | Candidate optimization | Evidence and validation needed |
+|---|---|---|
+| 1 | Select TP2/DP4 or TP4/DP2 using matched replay | TP2's31s update is promising; compare same-batch control and then full-length memory/updates before migration |
+| 2 | Reduce activation recomputation | Current launch recomputes every layer (`full`, `uniform`, one layer per block). Test selective or disabled recomputation at representative long contexts;67.5GiB on the small replay alone does not prove memory safety |
+| 3 | Balance DP work and remove redundant preprocessing | `balance_data=False`; initial DP auxiliary preparation redundantly scores the same rows on each replica. Profile length imbalance and image/materialization time, then shard frozen auxiliary scoring and cache reusable inputs while preserving exact row weights |
+| 4 | Larger microbatches/sequence packing, then communication overlap | Microbatch1 and DP overlap flags are currently off; the distributed optimizer is already on. Packing requires correct per-turn masks/means and ARM/outcome separation, so it needs implementation and equivalence tests |
+
+Activation recomputation explicitly trades extra compute for memory; selective
+recomputation offers an intermediate option. See [NVIDIA's implementation guide](https://docs.nvidia.com/nemo/megatron-bridge/nightly/training/activation-recomputation.html).
+Flash attention and Transformer Engine are already enabled. Profile actual
+CPU/I/O/NCCL waits before attributing the live g010 versus diagnostic g016 gap
+entirely to topology. Keep the corrected browser environment and64-slot pool for
+this comparison: collection is now~13–15min, versus~46min total training on B25.
+These are systems optimizations; changing batch size, PPO epochs, reward weight
+or task-selection rules would be a separate scientific intervention.
+
 ### Reward and efficiency watch
 
 At 17:03 PDT B was optimizing iteration24, with iteration23/Adam322 durable.
