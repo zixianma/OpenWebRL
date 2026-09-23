@@ -3918,6 +3918,25 @@ are in `benchmarks/arm-gate-{b,c}-tp2-full-JOB/`.
 
 ### Reward and efficiency watch
 
+**September22 supervision refresh:** all five current jobs (B318934, C318935,
+beta1-from-zero318949, sampling40%-from-zero318950, baseline318933) are registered
+with the persistent CPU supervisor. It checks scheduler/status every60 seconds
+and detailed health every15 minutes. The B/C monitor now follows the requeued
+TP2 controller, isolated full-batch validation updates, production training and
+iteration40/60 evaluations. Current `squeue` state overrides old accounting
+records, and pending requeues no longer inherit a previous attempt's failure.
+Thirteen supervisor tests cover these transitions and existing artifact checks.
+
+Runtime `arm-turn-bonus-preparation/overnight-20260920/intervention-needed.json`
+separates actionable alerts for live/recently tracked jobs from historical
+failures; the existing dashboard and event log record state/checkpoint/result
+transitions. Both CPU monitors are refreshed for72 hours. The standing preference
+is now recorded in root `AGENTS.md`: monitor all authorized project jobs,
+investigate and fix failures promptly, then resume within approved resources and
+remaining budget while preserving checkpoints and saved evaluation artifacts.
+These background processes observe and record; they cannot wake a chat agent,
+repair arbitrary source bugs, or automatically obtain replacement allocations.
+
 At 17:03 PDT B was optimizing iteration24, with iteration23/Adam322 durable.
 Its latest collected batch had turn-level raw reward mean **0.4862** and valid
 completed-trajectory success **52.14%**. These are different denominators, and
