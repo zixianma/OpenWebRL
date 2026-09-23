@@ -3810,7 +3810,7 @@ cover this distinction. Neither active B nor active C changes topology in place.
 | 1 | Select TP2/DP4 or TP4/DP2 using matched replay | TP2's31s update is promising; compare same-batch control and then full-length memory/updates before migration |
 | 2 | Reduce activation recomputation | Current launch recomputes every layer (`full`, `uniform`, one layer per block). Test selective or disabled recomputation at representative long contexts;67.5GiB on the small replay alone does not prove memory safety |
 | 3 | Balance DP work and remove redundant preprocessing | `balance_data=False`; initial DP auxiliary preparation redundantly scores the same rows on each replica. Profile length imbalance and image/materialization time, then shard frozen auxiliary scoring and cache reusable inputs while preserving exact row weights |
-| 4 | Larger microbatches/sequence packing, then communication overlap | Microbatch1 and DP overlap flags are currently off; the distributed optimizer is already on. Packing requires correct per-turn masks/means and ARM/outcome separation, so it needs implementation and equivalence tests |
+| 4 | Larger microbatches, then communication overlap | Current microbatch is1; DP communication overlap is off and the distributed optimizer is on. The native `thd` backend already packs sequences, but the ARM iterator/loss assumes one example and reads only the first advantage/scale. Implement per-example ARM weights, masks and source handling before testing microbatch2; preserve global batch256 and verify loss equivalence |
 
 Activation recomputation explicitly trades extra compute for memory; selective
 recomputation offers an intermediate option. See [NVIDIA's implementation guide](https://docs.nvidia.com/nemo/megatron-bridge/nightly/training/activation-recomputation.html).
@@ -3820,6 +3820,41 @@ entirely to topology. Keep the corrected browser environment and64-slot pool for
 this comparison: collection is now~13–15min, versus~46min total training on B25.
 These are systems optimizations; changing batch size, PPO epochs, reward weight
 or task-selection rules would be a separate scientific intervention.
+
+### Live training GPU utilization — 2026-09-22, 19:35–19:36 PDT
+
+Both active jobs remained in actor optimization throughout a roughly60-second
+read-only measurement, with30 `nvidia-smi` samples per GPU at two-second intervals.
+Each job uses eight H200s, training TP8/DP1, microbatch1. This measures training,
+not browser collection or a checkpoint handoff.
+
+| Method / job | Training iteration | Node | Mean GPU utilization across samples and GPUs | Mean power per GPU / limit | GPU memory used, range across GPU means / capacity |
+|---|---:|---|---:|---:|---:|
+| Gate B /318934 | 26 | g010 | 51.9% | 255.1 /700 W | 46.6–55.3 /140.4 GiB |
+| Gate C /318935 | 21 | g016 | 45.5% | 232.5 /700 W | 53.2–61.9 /140.4 GiB |
+
+Every GPU reached100% in at least one sample, but activity was intermittent;
+per-GPU mean utilization ranged46.5–59.0% for B and41.1–52.7% for C.
+SM clocks stayed at1980 MHz and sampled temperatures peaked at45°C and56°C.
+These readings show underutilization and memory headroom in the sampled phase;
+they do not establish the exact fraction of compute wasted, exclude every
+possible throttle, or isolate TP communication from CPU/I/O overhead.
+`nvidia-smi` GPU utilization measures kernel activity, including communication
+kernels, rather than model FLOP utilization. The longest-context memory requirement
+still needs a separate check.
+
+The user's requirement is now recorded in root `AGENTS.md`: do not default the
+4B actor to TP equal to the allocated GPU count; validate lower-TP/higher-DP and
+microbatch choices before long allocations. Preserve the objective/global batch,
+verify restoration and long-context memory, and investigate throughput regressions
+promptly. Existing jobs were not interrupted by these telemetry-only Slurm steps.
+The next-launch comparison and its original compute cap remain as specified above.
+
+Raw telemetry and phase evidence are preserved under runtime
+`arm-turn-bonus-preparation/topology-audit-20260922/` as
+`gpu-usage-318934-20260923T023646Z.json` and
+`gpu-usage-318935-20260923T023646Z.json`; the reusable sampler is
+`sample_gpu_usage.py` in that directory. These runtime payloads are not published.
 
 ### Reward and efficiency watch
 
