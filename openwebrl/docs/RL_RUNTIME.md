@@ -3684,3 +3684,71 @@ The colocated pipeline runs **collection → optimization → weight refresh**;
 iteration time includes both phases plus checkpoint/transfer overhead. Fixing
 browser validity addresses collection. TP4/TP8 saved-batch replay is still
 needed to explain the optimizer throughput regression.
+
+<a id="arm-tpdp-replay-20260922"></a>
+
+## TP2/DP4 replay and B/C monitoring — 2026-09-22
+
+**Prepared and armed; GPU results pending.** The user approved testing TP2/DP4
+without interrupting or requeueing current jobs. B318934 owns all eight GPUs on
+g010, so no overlapping GPU benchmark is launched there. The existing C318935
+batch controller will await an isolated replay before starting its normal
+continuation. This uses at most **45 minutes within C's existing 23:59 allocation**;
+there is no new submission, budget extension, or queue-position change. C remained
+pending at 17:02 PDT; its scheduler estimate was September 23 09:25, subject to change.
+
+| Diagnostic property | Exact setup |
+|---|---|
+| Cases | TP2/DP4 first, then TP8/DP1; eight H200s, same allocation/node |
+| Starting state | B's completed iteration23, Adam322, plus its saved next collection; diagnostic only |
+| Main data | Normalize the original complete task groups, then retain the first256 turn rows; identical global batch in both cases |
+| Auxiliary data | First7 saved nonzero ARM rows; original failure-population denominator365 and coefficient1/6 |
+| Optimization | Global batch256, microbatch1, two PPO epochs: exactly two updates per case; original loss/LR/scheduler |
+| DP4 accumulation | 64 main rows per replica; each real auxiliary row assigned once, with zero-loss padding to align backward-call counts |
+| Outputs | Separate checkpoints, losses/gradient norms, per-update timing, peak GPU memory, assignment records, data fingerprint, save/restore verification |
+| Tracking | Diagnostic W&B project `openwebrl-evals`; B/C training remains in `openwebrl` |
+| Handoff | A failed/stale diagnostic returns control to normal C training; diagnostic weights are never promoted |
+
+Local implementation: `scripts/prepare_arm_tpdp_test.py` (preparation/controller),
+`openwebrl/arm_tpdp_diagnostic.py` (isolated scheduling/instrumentation), and
+`scripts/prepare_arm_gate_to60.py` (owning batch controller).
+The production B/C source and its DP1 restriction are unchanged. A separate frozen
+diagnostic source adds DP4 auxiliary sharding. Five CPU tests pass, including sparse
+padding, exact analytic gradient scaling, unrelated-job exclusion, and failure
+handoff. Both actual native launch argument sets pass CPU validation. These checks
+do **not** establish GPU optimizer resharding or throughput; those remain pending.
+
+This is a systems replay of an existing checkpoint, not a new scientific training
+intervention. One fixed global batch avoids changing which examples contribute to
+each optimizer update across DP layouts. Rank-local accumulation order still
+differs, so floating-point differences are expected. The first update includes
+warmup; the second supplies a preliminary timing comparison. The full collection
+pipeline is not benchmarked. Frozen auxiliary log probabilities are recomputed
+redundantly on each DP replica in this initial diagnostic; that overhead is not
+included in the timed optimizer step. Runtime preparation, pinned dependencies,
+and launch receipt are in `arm-turn-bonus-preparation/tpdp-replay-20260922/`;
+case artifacts will be in `benchmarks/arm-tpdp-318935/`.
+
+### Reward and efficiency watch
+
+At 17:03 PDT B was optimizing iteration24, with iteration23/Adam322 durable.
+Its latest collected batch had turn-level raw reward mean **0.4862** and valid
+completed-trajectory success **52.14%**. These are different denominators, and
+neither is an Online-Mind2Web evaluation. Iteration24 straddled the browser fix;
+its aggregate invalid rate is unsuitable for measuring post-fix reliability.
+By 16:57 the post-fix reset audit counted **486/495 successful browser resets**,
+with nine navigation/DNS failures and zero screenshot timeouts. The first four
+iteration24 optimizer updates took 218,291,292,289 seconds. GPU training speed
+remains a separate unresolved issue.
+
+The read-only B/C efficiency monitor, `scripts/monitor_arm_gate_efficiency.py`,
+runs every15 minutes for48 hours, alongside the existing job/W&B health supervisor.
+It incrementally records reward, valid/all-completed task success, invalid rate,
+collection/training time, seconds per optimizer update, token throughput, durable
+checkpoint, and C's diagnostic status. Alerts flag controller failure/stale
+heartbeat, high post-fix invalidity, a sustained >10pp valid-success decline, or
+training token throughput below75% of the historical TP4 median. Historical
+comparisons use different task batches and are diagnostic, not causal estimates.
+Artifacts: `arm-turn-bonus-preparation/bc-efficiency-20260922/{latest,alerts}.json`
+and `snapshots.jsonl`. The background process records alerts; it does not send
+chat messages, cancel jobs, or submit allocations automatically.
