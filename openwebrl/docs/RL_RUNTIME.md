@@ -3856,6 +3856,66 @@ Raw telemetry and phase evidence are preserved under runtime
 `gpu-usage-318935-20260923T023646Z.json`; the reusable sampler is
 `sample_gpu_usage.py` in that directory. These runtime payloads are not published.
 
+### TP2/DP4 migration of B and C — 2026-09-22
+
+The user authorized requeuing the current eight-GPU B/C jobs with training
+**TP2/DP4, microbatch1**. This supersedes waiting for the former C40 three-way
+diagnostic for these jobs. Global outcome batch256, two PPO epochs,64 browsers,
+reward recipe, original W&B identities, optimizer/scheduler and task cursor remain
+the same. This is a systems continuation, not a new scientific intervention.
+
+Production sources are frozen separately as
+`reference-arm-gate-{b,c}-tp2-20260922-v1`. Their only changed training component is
+ARM auxiliary transport/loss handling: construct each optimizer window's auxiliary
+schedule globally, distribute real rows once across DP ranks, and append zero-loss
+padding to equalize collective counts. Padding contributes no auxiliary metrics.
+Native microbatch and DP scaling preserve the outcome and auxiliary objective
+weights. Native DP sharding/shuffling can change which examples share an optimizer
+window; this does not promise bitwise equivalence to the previous TP8 execution.
+
+Eight CPU tests cover unique row assignment, equal collective counts, global
+gradient scaling, the actual frozen iterator, zero padding gradients,32K response
+preservation, the reduced requeue budget and controller worker ownership. Both
+production launch commands passed native CPU parsing. The existing three restore
+topology tests and three original controller tests also pass.
+
+Before production, each requeued controller owns an isolated replay of the
+complete saved B24 batch from the pinned B23 checkpoint. It includes all saved
+auxiliary rows and an extra **zero-loss32K-context row per DP rank** in the first
+optimizer window of each epoch. The diagnostic must finish the expected12 Adam
+updates with finite losses/gradients, save and reload its checkpoint; it records
+per-update timings and memory peaks in `openwebrl-evals`. Its weights never enter
+the scientific lineage. The actual B/C continuation checkpoint must then restore
+successfully on TP2 before collection/training begins. Validation remains pending
+until the GPU receipts exist.
+
+`scripts/requeue_arm_gate_dp.py` waits for a validated checkpoint, or uses the
+latest durable one while collection is in progress. It holds the same Slurm job,
+preserves the prior Slurm log and payloads, reduces its new time limit to the
+unused original budget (with a two-minute shutdown margin), then releases it.
+Unfinished collection artifacts remain saved; continuation uses the checkpoint's
+task cursor. Both jobs are requeued and pending as of20:03 PDT; no production
+TP2 update or full-batch GPU validation result is claimed yet.
+
+| Method / same Slurm job | Durable iteration | Adam updates | Restart time limit | Configured training layout |
+|---|---:|---:|---:|---|
+| Gate B /318934 | 26 | 360 | 14h57m | TP2/DP4, microbatch1 |
+| Gate C /318935 | 21 | 296 | 22h34m | TP2/DP4, microbatch1 |
+
+B's saved artifacts from the interrupted iteration27 collection are retained,
+but no complete `rollout_recovery/26.pt` exists to replay. Its restart recollects
+iteration27 from the iteration26 cursor. C completed and validated iteration21
+before interruption; its restart begins at iteration22. There is no new budget
+request or reset to a full24-hour limit.
+
+The cached batch script dispatches to `scripts/prepare_arm_gate_dp.py` on restart.
+It awaits validation → train40 → full300 eval40 → train60 → full300 eval60,
+subject to the remaining budget. New training artifacts use
+`evaluations/arm-failure-additive-JOB-tp2-iter{40,60}`; original artifacts remain in
+their existing directories. Migration receipts are in runtime
+`arm-turn-bonus-preparation/bc-tp2-migration-20260922/`; full-batch GPU diagnostics
+are in `benchmarks/arm-gate-{b,c}-tp2-full-JOB/`.
+
 ### Reward and efficiency watch
 
 At 17:03 PDT B was optimizing iteration24, with iteration23/Adam322 durable.
