@@ -35,6 +35,7 @@ baseline100's queued continuation subsequently failed at startup from personal s
 [B eight-GPU throughput regression and verified topology](RL_RUNTIME.md#arm-b-eight-gpu-topology-audit-20260922).
 [Confirmed browser NVIDIA EGL stall and live correction](RL_RUNTIME.md#arm-browser-egl-fix-20260922).
 [Queued TP2/DP4 replay and B/C reward/efficiency monitoring](RL_RUNTIME.md#arm-tpdp-replay-20260922).
+[Beta and sampling-rate migration to TP2/DP4](RL_RUNTIME.md#arm-ablation-tp2-migration-20260922).
 [Training/evaluation inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 
 Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-results-20260913),

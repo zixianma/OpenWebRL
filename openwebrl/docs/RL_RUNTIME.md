@@ -3916,6 +3916,67 @@ their existing directories. Migration receipts are in runtime
 `arm-turn-bonus-preparation/bc-tp2-migration-20260922/`; full-batch GPU diagnostics
 are in `benchmarks/arm-gate-{b,c}-tp2-full-JOB/`.
 
+<a id="arm-ablation-tp2-migration-20260922"></a>
+
+### Beta and sampling-rate TP2 migration — 2026-09-22
+
+The user extended the same TP2/DP4, microbatch1 configuration to the remaining
+eight-GPU ARM ablations. The four-GPU baseline is a separate profile. These
+systems changes preserve global batch256, two PPO epochs,64 browsers and each
+scientific recipe. Beta retains failure beta1.0/q0.2; sampling-rate retains
+failure beta0.5/q0.4. Both retain mixed-group beta0.5/q0.2 and the original
+five-distinct-candidate, response-index credit rule.
+
+| Job | Transition | Training layout | Scientific initialization |
+|---|---|---|---|
+| Beta318949 | Requeued from iteration2 / Adam30;21h41m left | TP8/DP1 → TP2/DP4 | Continue own optimizer/scheduler/cursor and W&B lineage |
+| Sampling40%318950 | Pending launch updated; released from preparation hold | TP2/DP4 from first update | Original SFT, iteration0, fresh optimizer/scheduler/cursor |
+| B318934 / C318935 | Already requeued for TP2 | TP2/DP4 | Continue own verified checkpoints |
+
+The beta requeue retained the same job ID and capped its time limit to21h41m,
+using only the unused approved balance; sampling-rate
+retains its existing23h58m budget. Neither obtains a new allocation. The batch
+controller owns and awaits validation → training to iteration20 → full300 eval,
+with one hour reserved for evaluation and no substitution of an earlier
+checkpoint if training falls short.
+
+Production source `reference-arm-failure-ablations-tp2-20260922-v1` differs from
+its frozen parent only in auxiliary DP transport/loss padding. It preserves the
+ablation-specific credit checks and32-row global auxiliary-window capacity.
+Each allocation first validates the complete saved beta iteration2 batch from
+its iteration1 checkpoint:14 updates, failure beta1.0, all saved auxiliary rows,
+a zero-loss32K row per DP rank, finite gradients/losses, save and GPU reload.
+Diagnostic weights are discarded and logged to `openwebrl-evals`. Beta then
+GPU-restores its actual continuation checkpoint; sampling-rate starts fresh.
+Full-batch GPU validation remains pending until the allocation starts.
+
+The actual native CPU parser passed for beta continuation, fresh sampling-rate,
+and isolated validation;41 CPU tests passed across transport/scaling, recipe
+preservation, scheduler/restore routing, controller ownership and monitoring.
+Preparation/controller: `scripts/prepare_arm_ablation_dp.py`; beta boundary
+watcher: `scripts/requeue_arm_ablation_dp.py`. Runtime receipts, pinned diagnostic
+dependencies and restart plans are in
+`arm-turn-bonus-preparation/ablation-tp2-migration-20260922/`. The persistent
+supervisor and efficiency monitor cover both old and new attempt directories.
+
+Beta's native iteration2 checkpoint (`iter_0000001`) became durable before the
+controller updated its iteration1/Adam16 status, while the next selector was
+starting. The requeue was held until the native checkpoint was independently
+verified: Adam30, scheduler counter7680, dataset cursor1, metadata and all shard
+extents. Controller bookkeeping and the restart record were corrected to that
+checkpoint; the actual continuation command then passed native CPU parsing
+before release. A regression test now rejects stale controller state whenever
+the native checkpoint pointer has advanced. No completed optimizer updates were
+lost. Partial iteration3 artifacts remain saved; no complete iteration3 recovery
+batch exists, so the continuation collects iteration3 from the saved cursor.
+
+Before migration, beta's first iteration took17.0min collection and46.3min
+training, including39.0min actor optimization (146.2s/update). Its second
+collection took14.4min. Invalid trajectories were4.8% and5.1%. A one-minute
+training sample at23:06 PDT averaged55.3% GPU utilization and259W per H200,
+with51–60GiB of140GiB used. This confirms low utilization of the TP8 allocation;
+no production TP2 speedup is claimed before measurement.
+
 ### Reward and efficiency watch
 
 **September22 supervision refresh:** all five current jobs (B318934, C318935,
