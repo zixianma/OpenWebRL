@@ -425,16 +425,16 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 
 ### Baseline comparison
 
-[Combined outcome-only / original / all-failure / additive curve](rl_results/baseline_vs_arm_allfailure_full300.png)
+[Combined outcome-only / all-failure / additive curve](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-original, all-failure, and additive ARM full-300 points, including additive100.
+all-failure and additive ARM full-300 points, including additive100.
 Additive's
 [iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
 completed as job 307429 and is now included; it had been omitted from the docs.
 It is a fresh 300-task evaluation, independent of the older fixed-100 result.
-The first plotted original ARM point is iteration 51:
-job 303459 loaded `iter_0000050`, previously mislabeled as iteration 50.
+Original ARM job 303459 evaluated iteration 51 (`iter_0000050`), previously
+mislabeled as iteration 50 in the results.
 
 The earlier significance calculation was an exploratory unpaired proportion
 test over aggregate counts. It is hidden from this summary because the archived
