@@ -23,6 +23,9 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 
+Default checkpoint evaluation cadence and current queue:
+[full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
+
 Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
 
 Latest requested comparison: [outcome-only and additive stage-1 continuation to iteration 100](RL_RUNTIME.md#stage1-baseline-additive-to100-20260921), with a full-300 evaluation inside each allocation.

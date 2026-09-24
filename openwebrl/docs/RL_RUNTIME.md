@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Automatic tenth-iteration evaluations and temporary-storage cleanup](#milestone-evaluations-20260924)
 - [Stage-2 recipe and prepared launch](#baseline-stage2-20260914)
 - [Resuming the reference RL baseline](#resuming-baseline)
 - [Baseline timing and four-GPU continuation](#baseline-scaling)
@@ -11,6 +12,45 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="milestone-evaluations-20260924"></a>
+## Automatic checkpoint evaluations and storage cleanup — September 24
+
+The default for all future OpenWebRL RL launches is a full-300 Online-Mind2Web
+evaluation every ten completed training iterations. Use the established local
+browser, GPT-4.1 `action_history` judge and temperature 0. Verify the exact
+checkpoint and lineage; preserve each task's rollout and verdict; report both
+overall and valid-only rates. Reuse completed evaluations, and include evaluation
+time in the approved allocation. New allocations or budget extensions still
+require exact resource approval. This preference is also recorded in root
+`AGENTS.md`.
+
+| Existing allocation | Evaluations owned by its controller | Execution order |
+| --- | --- | --- |
+| B318934 | Full-300 at30,40,50,60 | Finish current training to40; evaluate30 then40; continue toward60; evaluate50 then60 if the target fits |
+| C318935 | Full-300 at30,40,50,60 | Same order; iteration30 was not yet durable when queued |
+| Baseline318933 | Full-300 at100 | Already embedded after iteration100; no duplicate standalone job |
+| Beta318949 / sampling318950 | Full-300 at10,20 | Finish training to20, then evaluate10 and20 in each existing allocation |
+
+The intermediate B/C evaluations are queued **inside the existing allocations**,
+not submitted as new Slurm jobs. `scripts/run_arm_milestone_queue.py` is invoked
+and awaited by the existing evaluation worker at its next stage handoff. The
+currently running training stages are not interrupted. Runtime requests and
+per-evaluation audits live in
+`arm-turn-bonus-preparation/milestone-evaluations/`; the supervisor follows the
+active evaluation's task counts. Iteration30 for B was checked against its saved
+checkpoint and a300-task plan. The CPU checks passed39 tests, including wrong
+allocation refusal, exact checkpoint selection, artifact auditing, and avoiding
+duplicate GPU evaluation. GPU evaluation remains pending the handoff. Additional
+evaluations consume the existing budget; reaching iteration60 is not guaranteed.
+
+After explicit approval, all4,946 unchanged temporary `rollout-*.bin` files from
+completed jobs311964,311965,311962,313208,313210,313669 were deleted, reclaiming
+**7.424TiB**. Checkpoints, durable rollout/recovery archives and judge verdicts
+were excluded. The immediate quota recheck showed about93.46TiB used against the
+100TiB soft and110TiB hard limits, restoring about6.54TiB of soft-limit headroom.
+Exact paths, per-file deletion records and completion receipt are under runtime
+`arm-turn-bonus-preparation/overnight-20260920/temporary-tensors-cleanup-*-20260924.*`.
 
 <!-- document:RESUMING_BASELINE.md:start -->
 <a id="resuming-baseline"></a>
