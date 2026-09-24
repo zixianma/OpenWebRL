@@ -28,7 +28,7 @@ require exact resource approval. This preference is also recorded in root
 
 | Existing allocation | Evaluations owned by its controller | Execution order |
 | --- | --- | --- |
-| B318934 | Full-300 at30,40 completed | Continue training within remaining time; iteration50 needs the separately prepared 2-H200 ×1h evaluation allocation, not yet submitted |
+| B318934 | Full-300 at30,40 completed | Continue training within remaining time; iteration50 evaluation is queued as job328790 (2 H200s ×1h), dependent on318934 |
 | C318935 | Full-300 at30,40,50,60 | Finish40; evaluate30/40; next training worker evaluates saved50 before returning, even after a clean partial-budget stop; evaluate60 if durable |
 | Baseline318933 | Full-300 at100 | Already embedded after iteration100; no duplicate standalone job |
 | Beta318949 / sampling318950 | Full-300 at10,20 | Finish training to20, then evaluate10 and20 in each existing allocation |
@@ -49,10 +49,12 @@ reaching iteration60 is not guaranteed.
 The afternoon queue correction passed43 checks. Newly launched train workers
 await durable intermediate evaluations before returning to the parent, so C50
 does not depend on reaching60. This cannot change B's already-loaded worker:
-its separate full-300 iteration50 proposal is
+its separately approved full-300 iteration50 evaluation is job **328790**,
+submitted September24 at16:32PDT. The exact proposal is
 `arm-turn-bonus-preparation/milestone-evaluations/B-iteration50-allocation-proposal.json`
-(2 H200s,16 CPUs,480 GiB,1h, dependent on318934; prepared, awaiting exact budget
-approval). Its batch script accepts an explicit iteration and verifies the
+(2 H200s,16 CPUs,480 GiB,1h, dependent on318934). Scheduler resources and dependency
+were verified, and the job was registered with the persistent supervisor.
+Its batch script accepts an explicit iteration and verifies the
 checkpoint before actor launch. No evaluation substitutes a nearby checkpoint.
 B's inherited90-minute minimum-cycle guard was reduced to45 minutes after the
 last five checkpoint intervals measured29.5–35.1 minutes; its training deadline,
