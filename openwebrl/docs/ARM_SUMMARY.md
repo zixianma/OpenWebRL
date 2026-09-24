@@ -149,7 +149,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 | **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 
 <a id="baseline-comparison"></a>
-![Outcome-only baseline versus all-failure and additive ARM: full-300 results through iteration 100](rl_results/baseline_vs_arm_allfailure_full300.png)
+![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–40](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 Additive iteration 90 reaches **39.33% overall**, versus **33.67%** for the
 historical baseline at iteration 90. At iteration 100, additive is **36.33%**

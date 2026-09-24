@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Plot local-browser GPT-4.1 baseline vs ARM through iteration 100."""
 from pathlib import Path
+import json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -17,6 +18,9 @@ add_i=[20,30,40,50,60,70,80,90,100]
 add_s=[85,103,102,98,90,112,111,118,109]
 add_v=[236,219,218,212,215,222,212,216,217]
 repo=Path(__file__).resolve().parents[1]
+gate_b_i=[20,30,40]
+gate_b_results=[json.loads((repo/f'openwebrl/docs/arm_results/rl_integration/gate-b-iteration{i}-audit.json').read_text())['full300'] for i in gate_b_i]
+assert all(r['tasks']==300 for r in gate_b_results)
 out=repo/'openwebrl/docs/rl_results/baseline_vs_arm_allfailure_full300.png'
 plt.style.use('seaborn-v0_8-whitegrid')
 fig,ax=plt.subplots(figsize=(8.8,8.0),dpi=180)
@@ -26,6 +30,8 @@ ax.plot(arm_i,[100*x/300 for x in arm_s],marker='o',lw=2.2,ls='--',color='#dc262
 ax.plot(arm_i,[100*x/y for x,y in zip(arm_s,arm_v)],marker='s',lw=2.0,ls='--',color='#f97316',label='All-failure ARM · valid-only')
 ax.plot(add_i,[100*x/300 for x in add_s],marker='o',lw=2.2,ls=':',color='#16a34a',label='Additive ARM · overall')
 ax.plot(add_i,[100*x/y for x,y in zip(add_s,add_v)],marker='s',lw=2.0,ls=':',color='#84cc16',label='Additive ARM · valid-only')
+ax.plot(gate_b_i,[100*r['successes']/r['tasks'] for r in gate_b_results],marker='o',lw=2.2,ls='-.',color='#7e22ce',label='Gate B (relaxed gate) · overall')
+ax.plot(gate_b_i,[100*r['successes']/r['valid'] for r in gate_b_results],marker='s',lw=2.0,ls='-.',color='#c026d3',label='Gate B (relaxed gate) · valid-only')
 ax.set_xlabel('Checkpoint after training iteration'); ax.set_ylabel('Success rate (%)')
 ax.set_title('Outcome-only baseline vs ARM variants\nGPT-4.1 · 300 Online-Mind2Web tasks')
 ax.set_xlim(18,102); ax.set_ylim(20,58); ax.set_xticks([20,30,40,50,60,70,80,90,100])

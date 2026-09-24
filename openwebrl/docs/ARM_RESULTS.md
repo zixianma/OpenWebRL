@@ -434,11 +434,14 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 
 ### Baseline comparison
 
-[Combined outcome-only / all-failure / additive curve](rl_results/baseline_vs_arm_allfailure_full300.png)
+[Combined outcome-only / all-failure / additive / Gate B curve](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
 all-failure and additive ARM full-300 points through iteration100. The completed
-baseline100 evaluation supplies the final point for the three-method comparison.
+baseline100 evaluation supplies the final point for those three methods.
+Gate B overlays the completed full-300 evaluations at iterations20,30 and40,
+with overall and valid-only rates taken from the saved result audits; its
+curves stop at40, the latest evaluated checkpoint.
 Additive's
 [iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
 completed as job 307429 and is now included; it had been omitted from the docs.
