@@ -2,7 +2,7 @@
 
 | Dataset | Training run | Updated | Detailed records |
 | --- | --- | --- | --- |
-| Online-Mind2Web, 300 tasks | [qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) | 2026-09-13 | [RL_EVALUATION.md](RL_EVALUATION.md) |
+| Online-Mind2Web, 300 tasks | [qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) | 2026-09-24 | [RL_EVALUATION.md](RL_EVALUATION.md) |
 
 ## Local browser · GPT-4.1 · temperature 0 · full 300
 
@@ -24,6 +24,7 @@
 | 70 | 103 | 229 | 71 | 34.33 | 44.98 |
 | 80 | 114 | 229 | 71 | 38.00 | 49.78 |
 | 90 | 101 | 222 | 78 | 33.67 | 45.50 |
+| 100 | 104 | 227 | 73 | 34.67 | 45.81 |
 
 ## Stealth browser · GPT-4.1 · temperature 0 · full 300
 
@@ -61,6 +62,7 @@
 | Local 69 | [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/qcq7i4ug-eval-after69-293585) |
 | Local 70, 80 | [Scheduled evaluations](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Local 90 | [Completed evaluation](RL_EVALUATION.md#scheduled-eval90-results-20260913) |
+| Local 100 | [Completed evaluation](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | Stealth 38, GPT-4.1 | [Browser comparison](RL_EVALUATION.md#browser-use-checkpoint-evaluation) |
 | Stealth 80, GPT-4.1 | [Rejudging audit](RL_EVALUATION.md#stealth80-gpt41-rejudge-feasibility-20260913) |
 | Stealth 80, o4-mini, temperatures 0 / 0.6 | [Completed comparison](RL_EVALUATION.md#stealth80-temperature-completed-20260913) |
@@ -128,6 +130,7 @@
 | Outcome-only · historical | 90 | 101 | 222 | 78 | 33.67 | 45.50 | [Baseline](RL_EVALUATION.md#arm-iter90-results-20260921) |
 | All-failure bonus | 90 | 101 | 217 | 83 | 33.67 | 46.54 | [313188](RL_EVALUATION.md#arm-iter90-results-20260921) |
 | Additive bonus | 90 | 118 | 216 | 84 | 39.33 | 54.63 | [313408](RL_EVALUATION.md#arm-iter90-results-20260921) |
+| Outcome-only | 100 | 104 | 227 | 73 | 34.67 | 45.81 | [318933](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | All-failure bonus | 100 | 107 | 222 | 78 | 35.67 | 48.20 | [316392](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921) |
 | Additive bonus | 100 | 109 | 217 | 83 | 36.33 | 50.23 | [313669](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
 
@@ -143,5 +146,6 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | B: relaxed gate | 20 | 29 | 69 | 31 | 29.00 | 42.03 | [313209](RL_EVALUATION.md#arm-gate-b-iter20-results-20260921) |
 | C: relaxed gate + action credit | 20 | 38 | 79 | 21 | 38.00 | 48.10 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
+| Outcome-only | 100 | 37 | 68 | 32 | 37.00 | 54.41 | [318933, slice of full300](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | Additive bonus | 100 | 31 | 65 | 35 | 31.00 | 47.69 | [313669, slice of full300](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
 | All-failure bonus | 100 | 26 | 66 | 34 | 26.00 | 39.39 | [316392, slice of full300](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921) |

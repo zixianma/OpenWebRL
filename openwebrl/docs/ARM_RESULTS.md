@@ -31,12 +31,14 @@ baseline-90; the same different-date comparison limitation applies.
 Additive [iteration 100](RL_EVALUATION.md#arm-additive-iter100-results-20260921),
 job **313669**, then completed at **36.33% / 50.23%** (109 successes, 217 valid),
 with all 300 rollouts and verdicts saved. This is below additive90 by 3.00 / 4.40
-percentage points. Baseline100 remains queued; no matched endpoint conclusion
-is available yet. [Current jobs and missing evaluations](RL_RUNTIME.md#arm-job-inventory-20260921).
+percentage points. [Baseline100](RL_EVALUATION.md#baseline-iter100-results-20260924) completed on September24
+at **34.67% / 45.81%** (104 successes, 227 valid), leaving additive100
+**+1.67 / +4.42 pp** descriptively. Evaluation dates and valid-task sets differ. [Current jobs and missing evaluations](RL_RUNTIME.md#arm-job-inventory-20260921).
 
 All-failure [iteration100](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921)
 **316392** completed at **35.67% / 48.20%** (107 successes / 222 valid), with all
-300 rollouts and verdicts saved. Baseline100 remains pending.
+300 rollouts and verdicts saved. Relative to the completed baseline100, this
+is **+1.00 / +2.38 pp** overall / valid-only, descriptively.
 
 Latest Sol inference result (2026-09-13): **132/300 (44.0% overall; 51.56%
 valid-only)**, versus historical SelectionARM **128/300 (42.67%; 50.0%)**.
@@ -175,7 +177,7 @@ Per-task outcomes and denominator checks are in the
 | --- | --- | --- |
 | 1. Inference reproduction | ARM selects among five actor candidates at inference | Baseline **30.0%** → ScalarRM **38.0%** → SelectionARM **42.7%** on 300 tasks |
 | 2. Filtered SFT / preference learning | Train the actor on ARM-selected data, then joint SFT/DPO | Filtered 1A **100/300 (33.3%)**; best joint endpoint: DPO **104/300 (34.7%)**; transfer is modest |
-| 3. RL integration | Add ARM turn bonuses during outcome RL: original, all-failure, and additive variants | Additive90 **39.33%** vs historical outcome-only90 **33.67%**; additive100 **36.33%**, baseline100 pending. No consistent gain established |
+| 3. RL integration | Add ARM turn bonuses during outcome RL: original, all-failure, and additive variants | Additive90 **39.33%** vs historical outcome-only90 **33.67%**; additive100 **36.33%** vs outcome-only100 **34.67%**. No consistent gain established |
 
 The detailed experiment records remain below; this table is the project-level
 status summary.
@@ -413,7 +415,8 @@ historical iteration-90 baseline overall, but is not a controlled same-day or
 paired significance claim. Additive subsequently completed **100 / 1,262**;
 its [iteration-100 evaluation](RL_EVALUATION.md#arm-additive-iter100-results-20260921)
 is **36.33% / 50.23%**, down 3.00 / 4.40 percentage points from iteration90.
-Baseline100 is still pending, so there is no matched iteration100 comparison yet.
+[Baseline100](RL_EVALUATION.md#baseline-iter100-results-20260924) completed at **34.67% / 45.81%**,
+so additive100 is +1.67 / +4.42 pp descriptively; these evaluations used different dates.
 Original training reached **85 /1,002**; its latest retained checkpoint is80 after the September22 pruning incident. [Retention audit](RL_RUNTIME.md#storage-inventory-20260922). All-failure100 **316392** completed at
 **35.67% overall / 48.20% valid-only**, with all 300 rollouts/verdicts saved.
 [Result audit](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921).
@@ -428,8 +431,8 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 [Combined outcome-only / all-failure / additive curve](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-all-failure and additive ARM full-300 points through iteration90, the latest
-iteration with results for all three methods.
+all-failure and additive ARM full-300 points through iteration90, retaining
+the user-requested display limit. Iteration100 results are included in the tables.
 Additive's
 [iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
 completed as job 307429 and is now included; it had been omitted from the docs.
@@ -511,8 +514,9 @@ overall and 33.7% valid-only, under the historical o4-mini protocol; it should
 not be used for the RL comparison.
 
 **Interpretation:** Additive90 is the strongest measured ARM endpoint, but
-checkpoint variation, different evaluation dates and missing baseline100 prevent
-a consistent or controlled improvement claim. All-failure20's disjoint cohort
+checkpoint variation and different evaluation dates prevent a consistent or
+controlled improvement claim. At100, additive is +1.67 pp overall versus the
+completed baseline; on the fixed100 slice it is 31% versus baseline37%. All-failure20's disjoint cohort
 merge should not be generalized to its later full300 evaluations.
 
 <a id="arm-serial-sft-comparison"></a>

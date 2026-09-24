@@ -118,6 +118,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 70 | — | 34.33% / 44.98% |
 |  | 80 | — | 38.00% / 49.78% |
 |  | 90 | — | 33.67% / 45.50% |
+|  | 100 | 37.00% / 54.41% | **34.67% / 45.81%** |
 | **Original bonus** | 20 | 26.0% / 35.62% | — |
 |  | 30 | 27.0% / 36.49% | — |
 |  | 40 | **31.00% / 44.93%** | — |
@@ -149,8 +150,9 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 ![Outcome-only baseline versus all-failure and additive ARM: full-300 results through iteration 90](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 Additive iteration 90 reaches **39.33% overall**, versus **33.67%** for the
-historical baseline at iteration 90; additive falls to **36.33%** at iteration 100, where baseline
-evaluation is still pending.
+historical baseline at iteration 90. At iteration 100, additive is **36.33%**
+versus the [completed baseline](RL_EVALUATION.md#baseline-iter100-results-20260924) at **34.67%**
+overall (+1.67 pp); evaluation dates and valid-task sets differ.
 A consistent gain over outcome-only RL is not yet established.
 
 <a id="arm-failure-sampling-history"></a>

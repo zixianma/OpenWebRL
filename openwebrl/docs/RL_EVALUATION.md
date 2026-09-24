@@ -1766,6 +1766,44 @@ monitor as other RL endpoints. [Machine-readable audit](arm_results/rl_integrati
 Compared with all-failure90, overall increases **2.00 pp** and valid-only
 **1.65 pp**. Additive100 is **36.33% / 50.23%**, higher by **0.67 / 2.03 pp**.
 These are descriptive comparisons across different-date rollouts and valid
-sets, not evidence of significance. Baseline100 is still pending, so no matched
-iteration100 outcome-only comparison is available. All archives are under
+sets, not evidence of significance. Baseline100 was pending at this September21
+record; its [September24 completion](#baseline-iter100-results-20260924) now
+provides the same-iteration outcome-only result. All archives are under
 `evaluations/arm-allfailure-iter100-316392/rollouts/`; training was not updated.
+
+<a id="baseline-iter100-results-20260924"></a>
+### Outcome-only baseline iteration 100 completed — September 24
+
+Job **318933** resumed the outcome-only lineage at iteration90 and completed
+**100 iterations / 1,118 Adam updates**, preserving optimizer, scheduler and
+task cursor. Its scheduled full-300 evaluation used the verified
+`iter_0000099` checkpoint. The four-H200 allocation completed at **10:29 PDT**
+with exit code zero after **9h07m49s**, releasing the remaining allocation.
+
+| Cohort | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 104 | 227 | 73 | 34.67% | 45.81% |
+| Fixed100 IDs, sliced from full300 | 37 | 68 | 32 | 37.00% | 54.41% |
+
+Protocol: local browser, GPT-4.1 `action_history` judge, temperature 0, maximum
+30 turns and 4,096 response tokens; actor-only inference. All 300 unique task
+IDs match the frozen cohort, and all 300 nonempty rollout archives and verdict
+sidecars are saved. There are zero exception records. The fixed100 is the
+original frozen subset sliced from this evaluation, not a separate rerun.
+
+| Iteration100 method | Full300 overall / valid-only | Overall delta vs baseline | Fixed100 overall / valid-only | Adam updates |
+| --- | ---: | ---: | ---: | ---: |
+| Outcome-only baseline | 34.67% / 45.81% | — | 37.00% / 54.41% | 1,118 |
+| All-failure ARM | 35.67% / 48.20% | +1.00 pp | 26.00% / 39.39% | 1,242 |
+| Additive ARM | 36.33% / 50.23% | +1.67 pp | 31.00% / 47.69% | 1,262 |
+
+These checkpoints align by training iteration, not optimizer-update count.
+The ARM evaluations occurred on September21 and the baseline on September24;
+valid-task sets differ. The small full300 gains and opposite fixed100 ordering
+do not establish a consistent or controlled improvement. Per-task records allow
+later paired analysis, subject to those live-web/date limitations. The combined
+summary plot remains capped at iteration90 as requested.
+
+[Machine-readable audit](arm_results/rl_integration/baseline-iteration100-audit.json) ·
+[Training and scheduled-evaluation W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) ·
+[Saved rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-318933-20260924T082345/evaluation/after100/rollouts).

@@ -30,8 +30,8 @@ Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and lau
 
 Latest requested comparison: [outcome-only and additive stage-1 continuation to iteration 100](RL_RUNTIME.md#stage1-baseline-additive-to100-20260921), with a full-300 evaluation inside each allocation.
 Additive100 is [complete at 36.33% overall / 50.23% valid-only](RL_EVALUATION.md#arm-additive-iter100-results-20260921);
-baseline100's queued continuation subsequently failed at startup from personal storage quota;
-[all five approved continuations have been resubmitted](RL_RUNTIME.md#training-relaunch-20260922).
+baseline100 [completed on September24 at34.67% overall /45.81% valid-only](RL_EVALUATION.md#baseline-iter100-results-20260924).
+[Training continuation and quota-recovery history](RL_RUNTIME.md#training-relaunch-20260922).
 [September 22 quota recovery, checkpoint retention and storage inventory](RL_RUNTIME.md#storage-inventory-20260922).
 [Beta/sampling correction: new interventions start at iteration0](RL_RUNTIME.md#failure-ablations-fromzero-20260922).
 [Passed two-GPU diagnostic and remaining validation gaps](RL_RUNTIME.md#failure-ablation-gpu-smoke-proposal-20260922).
@@ -41,7 +41,8 @@ baseline100's queued continuation subsequently failed at startup from personal s
 [Beta and sampling-rate migration to TP2/DP4](RL_RUNTIME.md#arm-ablation-tp2-migration-20260922).
 [Training/evaluation inventory and remaining work](RL_RUNTIME.md#arm-job-inventory-20260921).
 
-Latest baseline: [iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-results-20260913),
+Latest baseline: [iteration-100 completion](RL_EVALUATION.md#baseline-iter100-results-20260924),
+[iteration-90 completion](RL_EVALUATION.md#scheduled-eval90-results-20260913),
 [iteration-80 GPT-4.1 rejudging](RL_EVALUATION.md#stealth80-gpt41-rejudge-feasibility-20260913),
 and [cluster/account queue audit](RL_RUNTIME.md#cluster-queue-audit-294983-20260913).
 

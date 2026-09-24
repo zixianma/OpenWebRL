@@ -1,0 +1,46 @@
+{
+  "job_id": "318933",
+  "variant": "outcome-only baseline",
+  "iteration": 100,
+  "completed_optimizer_updates": 1118,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-318933-20260924T082345/iter_0000099",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-stage1-to100-20260922-24h-v3",
+  "evaluation_date": "2026-09-24",
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "judge_prompt_variant": "action_history",
+    "temperature": 0,
+    "max_turns": 30,
+    "max_response_tokens": 4096
+  },
+  "full300": {
+    "tasks": 300,
+    "successes": 104,
+    "valid": 227,
+    "invalid": 73,
+    "overall": 0.3466666666666667,
+    "valid_only": 0.4581497797356828,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 37,
+    "valid": 68,
+    "invalid": 32,
+    "overall": 0.37,
+    "valid_only": 0.5441176470588235,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100,
+    "error_records": 0
+  },
+  "fixed100_task_ids_sha256": "dfce9b64f84e6d514d516cd9a0c32f1355231845026b767546e8554608d62fb5",
+  "cohort_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-318933-20260924T082345/evaluation/after100/rollouts",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug",
+  "checkpoint_audit": "/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-318933-20260924T082345/checkpoint_after100_audit.json",
+  "scope": "Task-level saved verdicts; fixed100 is a slice of this full300 evaluation, not a rerun.",
+  "fixed100_task_ids_hash_encoding": "UTF-8 sorted IDs joined by newline, without trailing newline"
+}
