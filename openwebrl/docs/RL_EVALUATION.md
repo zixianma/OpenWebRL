@@ -1807,3 +1807,38 @@ summary plot now includes iteration100 for all three methods.
 [Machine-readable audit](arm_results/rl_integration/baseline-iteration100-audit.json) ·
 [Training and scheduled-evaluation W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) ·
 [Saved rollouts and verdicts](/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-318933-20260924T082345/evaluation/after100/rollouts).
+
+<a id="arm-gate-b-iter30-40-results-20260924"></a>
+### Gate B iteration 30 and 40 evaluations completed — September 24
+
+Allocation **318934** completed B training to iteration 40, then evaluated the
+durable iteration-30 and iteration-40 checkpoints in sequence before resuming
+training toward 60. B uses the relaxed minimum-two-distinct-actions gate with
+unchanged response-index credit. Evaluation is actor-only, local browser,
+GPT-4.1 `action_history`, temperature 0, with the same frozen full-300 cohort.
+
+| Iteration | Cohort | Successes | Valid | Invalid | Overall | Valid-only | Adam updates |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 30 | Full300 | 102 | 234 | 66 | 34.00% | 43.59% | 412 |
+| 30 | Fixed100 slice | 29 | 74 | 26 | 29.00% | 39.19% | 412 |
+| 40 | Full300 | 108 | 228 | 72 | 36.00% | 47.37% | 542 |
+| 40 | Fixed100 slice | 38 | 72 | 28 | 38.00% | 52.78% | 542 |
+
+GPU restoration receipts identify native checkpoints `iter_0000029` and
+`iter_0000039`. Each evaluation has all 300 expected unique task IDs, nonempty
+rollout archives and per-task verdicts, with zero exception records. Fixed100
+rows are slices of these evaluations, not additional independent trials.
+
+Historical outcome-only overall rates are 32.00% at30 and 33.33% at40, so B is
+**+2.00 / +2.67 pp** respectively. This is a descriptive comparison across
+different evaluation dates and valid-task sets, not a controlled significance
+claim. Iteration40 is also 2.00 pp above additive40's historical overall rate.
+
+[Iteration30 audit](arm_results/rl_integration/gate-b-iteration30-audit.json) ·
+[Iteration40 audit](arm_results/rl_integration/gate-b-iteration40-audit.json) ·
+[Iteration30 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter30-318934) ·
+[Iteration40 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter40-318934).
+
+Saved trajectories and verdicts are under runtime
+`evaluations/arm-gate-b-iter30-318934/rollouts/` and
+`evaluations/arm-gate-b-iter40-318934/rollouts/`.

@@ -1,0 +1,39 @@
+{
+  "job_id": "318934",
+  "variant": "B: relaxed gate",
+  "iteration": 30,
+  "evaluation_date": "2026-09-24",
+  "completed_optimizer_updates": 412,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-318934-tp2-iter40/runtime/iter_0000029",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-eval80-additive-20260920-v2",
+  "full300": {
+    "tasks": 300,
+    "successes": 102,
+    "valid": 234,
+    "invalid": 66,
+    "overall": 0.34,
+    "valid_only": 0.4358974358974359,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 29,
+    "valid": 74,
+    "invalid": 26,
+    "overall": 0.29,
+    "valid_only": 0.3918918918918919,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100,
+    "error_records": 0
+  },
+  "fixed100_task_ids_sha256": "dfce9b64f84e6d514d516cd9a0c32f1355231845026b767546e8554608d62fb5",
+  "cohort_verified": true,
+  "restore_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter30-318934/rollouts",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter30-318934",
+  "protocol": "existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks",
+  "evaluation_manifest_sha256": "8b8613097fefdcb75d0a9e95ae14406005b6d54a142722e148f9a4d32b36f3ee",
+  "scope": "Task-level saved verdicts; fixed100 is a slice of full300, not a separate rerun."
+}

@@ -144,6 +144,8 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 90 | — | **39.33% / 54.63%** |
 |  | 100 | 31.00% / 47.69% | **36.33% / 50.23%** |
 | **B: relaxed gate** | 20 | 29.00% / 42.03% | 33.67% / 44.30% |
+|  | 30 | 29.00% / 39.19% | 34.00% / 43.59% |
+|  | 40 | 38.00% / 52.78% | **36.00% / 47.37%** |
 | **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 
 <a id="baseline-comparison"></a>

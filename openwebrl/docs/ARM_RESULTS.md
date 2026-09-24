@@ -15,6 +15,12 @@ not yet been evaluated on OM2W. The [proposed step-zero comparison](ARM_INTEGRAT
 records the next learning experiment.
 
 Current RL endpoints are in the [collaborator summary](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
+Gate B's [September24 full-300 evaluations at30 and40](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924)
+completed at **34.00% / 43.59%** and **36.00% / 47.37%** overall / valid-only.
+These are +2.00 and +2.67 pp overall against historical outcome-only checkpoints
+at the same iterations; different dates and valid-task sets limit the comparison.
+All600 task rollouts and verdicts are saved. C's corresponding evaluations remain queued.
+
 Original bonus iteration 80 (September 20) completed at **33.33% overall /
 45.05% valid-only**, versus historical outcome-only **38.00% / 49.78%**.
 All 300 task rollouts and verdicts are preserved. Additive iteration 80 completed

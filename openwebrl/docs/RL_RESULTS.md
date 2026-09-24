@@ -118,6 +118,8 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Additive bonus | 20 | 85 | 236 | 64 | 28.33 | 36.02 | [307429](RL_EVALUATION.md#arm-additive-iter20-full300-20260920) |
 | B: relaxed gate | 20 | 101 | 228 | 72 | 33.67 | 44.30 | [313209](RL_EVALUATION.md#arm-gate-b-iter20-results-20260921) |
+| B: relaxed gate | 30 | 102 | 234 | 66 | 34.00 | 43.59 | [318934](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
+| B: relaxed gate | 40 | 108 | 228 | 72 | 36.00 | 47.37 | [318934](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 20 | 110 | 247 | 53 | 36.67 | 44.53 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
 | Outcome-only · historical | 70 | 103 | 229 | 71 | 34.33 | 44.98 | [Baseline](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Original bonus | 70 | 103 | 231 | 69 | 34.33 | 44.59 | [306478](RL_EVALUATION.md#arm-iter70-audit-20260919) |
@@ -145,6 +147,8 @@
 | Trained actor-only variant | Iteration | Fixed100 successes | Valid | Invalid | Overall % | Valid-only % | Source |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | B: relaxed gate | 20 | 29 | 69 | 31 | 29.00 | 42.03 | [313209](RL_EVALUATION.md#arm-gate-b-iter20-results-20260921) |
+| B: relaxed gate | 30 | 29 | 74 | 26 | 29.00 | 39.19 | [318934, slice of full300](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
+| B: relaxed gate | 40 | 38 | 72 | 28 | 38.00 | 52.78 | [318934, slice of full300](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 20 | 38 | 79 | 21 | 38.00 | 48.10 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
 | Outcome-only | 100 | 37 | 68 | 32 | 37.00 | 54.41 | [318933, slice of full300](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | Additive bonus | 100 | 31 | 65 | 35 | 31.00 | 47.69 | [313669, slice of full300](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
