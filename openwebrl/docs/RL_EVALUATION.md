@@ -1802,7 +1802,7 @@ The ARM evaluations occurred on September21 and the baseline on September24;
 valid-task sets differ. The small full300 gains and opposite fixed100 ordering
 do not establish a consistent or controlled improvement. Per-task records allow
 later paired analysis, subject to those live-web/date limitations. The combined
-summary plot remains capped at iteration90 as requested.
+summary plot now includes iteration100 for all three methods.
 
 [Machine-readable audit](arm_results/rl_integration/baseline-iteration100-audit.json) ·
 [Training and scheduled-evaluation W&B](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) ·

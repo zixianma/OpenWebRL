@@ -431,8 +431,8 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 [Combined outcome-only / all-failure / additive curve](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 This comparison overlays the historical outcome-only baseline curve with the
-all-failure and additive ARM full-300 points through iteration90, retaining
-the user-requested display limit. Iteration100 results are included in the tables.
+all-failure and additive ARM full-300 points through iteration100. The completed
+baseline100 evaluation supplies the final point for the three-method comparison.
 Additive's
 [iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
 completed as job 307429 and is now included; it had been omitted from the docs.
