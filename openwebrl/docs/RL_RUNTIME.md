@@ -28,8 +28,8 @@ require exact resource approval. This preference is also recorded in root
 
 | Existing allocation | Evaluations owned by its controller | Execution order |
 | --- | --- | --- |
-| B318934 | Full-300 at30,40,50,60 | Finish current training to40; evaluate30 then40; continue toward60; evaluate50 then60 if the target fits |
-| C318935 | Full-300 at30,40,50,60 | Same order; iteration30 was not yet durable when queued |
+| B318934 | Full-300 at30,40 completed | Continue training within remaining time; iteration50 needs the separately prepared 2-H200 ×1h evaluation allocation, not yet submitted |
+| C318935 | Full-300 at30,40,50,60 | Finish40; evaluate30/40; next training worker evaluates saved50 before returning, even after a clean partial-budget stop; evaluate60 if durable |
 | Baseline318933 | Full-300 at100 | Already embedded after iteration100; no duplicate standalone job |
 | Beta318949 / sampling318950 | Full-300 at10,20 | Finish training to20, then evaluate10 and20 in each existing allocation |
 
@@ -40,10 +40,24 @@ currently running training stages are not interrupted. Runtime requests and
 per-evaluation audits live in
 `arm-turn-bonus-preparation/milestone-evaluations/`; the supervisor follows the
 active evaluation's task counts. Iteration30 for B was checked against its saved
-checkpoint and a300-task plan. The CPU checks passed39 tests, including wrong
+checkpoint and a300-task plan. The initial CPU checks passed39 tests, including wrong
 allocation refusal, exact checkpoint selection, artifact auditing, and avoiding
-duplicate GPU evaluation. GPU evaluation remains pending the handoff. Additional
-evaluations consume the existing budget; reaching iteration60 is not guaranteed.
+duplicate GPU evaluation. B30/40 subsequently completed; C30/40 remain queued at
+the iteration40 handoff. Additional evaluations consume the existing budget;
+reaching iteration60 is not guaranteed.
+
+The afternoon queue correction passed43 checks. Newly launched train workers
+await durable intermediate evaluations before returning to the parent, so C50
+does not depend on reaching60. This cannot change B's already-loaded worker:
+its separate full-300 iteration50 proposal is
+`arm-turn-bonus-preparation/milestone-evaluations/B-iteration50-allocation-proposal.json`
+(2 H200s,16 CPUs,480 GiB,1h, dependent on318934; prepared, awaiting exact budget
+approval). Its batch script accepts an explicit iteration and verifies the
+checkpoint before actor launch. No evaluation substitutes a nearby checkpoint.
+B's inherited90-minute minimum-cycle guard was reduced to45 minutes after the
+last five checkpoint intervals measured29.5–35.1 minutes; its training deadline,
+allocation budget, optimizer and scientific recipe are unchanged. The adjustment
+is recorded as `318934-cycle-reserve-adjustment.json` in the same runtime folder.
 
 After explicit approval, all4,946 unchanged temporary `rollout-*.bin` files from
 completed jobs311964,311965,311962,313208,313210,313669 were deleted, reclaiming
