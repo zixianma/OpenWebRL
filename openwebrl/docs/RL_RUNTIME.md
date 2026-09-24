@@ -5,6 +5,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ## Contents
 
 - [Automatic tenth-iteration evaluations and temporary-storage cleanup](#milestone-evaluations-20260924)
+- [Verified afternoon storage cleanup](#storage-cleanup-20260924-afternoon)
 - [Stage-2 recipe and prepared launch](#baseline-stage2-20260914)
 - [Resuming the reference RL baseline](#resuming-baseline)
 - [Baseline timing and four-GPU continuation](#baseline-scaling)
@@ -51,6 +52,39 @@ were excluded. The immediate quota recheck showed about93.46TiB used against the
 100TiB soft and110TiB hard limits, restoring about6.54TiB of soft-limit headroom.
 Exact paths, per-file deletion records and completion receipt are under runtime
 `arm-turn-bonus-preparation/overnight-20260920/temporary-tensors-cleanup-*-20260924.*`.
+
+<a id="storage-cleanup-20260924-afternoon"></a>
+### Verified additional cleanup — September 24 afternoon
+
+Both passes below were explicitly approved for exact manifests before deletion.
+
+| Completed (PDT) | Deleted | Allocated space reclaimed |
+| --- | --- | ---: |
+| 15:04 | Completed baseline318933: 1,297 temporary tensor mappings | 1.327 TiB |
+| 16:16 | Gate B's finished iteration40 stage: 2,162 unreferenced temporary mappings | 3.055 TiB |
+| 16:16 | 41 intermediate baseline/B/C checkpoint directories | 2.317 TiB |
+| 16:16 | Completed pilots/evaluations: 647 temporary mappings | 0.253 TiB |
+
+The 16:16 pass removed 3,524 files totaling **5.625 TiB**. Live process mappings
+and open files were checked on g021 and g007; none referenced the approved
+targets. Checkpoint pruning retained every tenth iteration, the latest two
+checkpoint directories per scanned run root, and pinned restore/diagnostic and
+symlink dependencies. Retained checkpoint metadata/shard identities and recorded
+symlink targets passed the post-deletion check. Saved task/group rollouts, native
+recovery batches, judge verdicts and current-stage temporary mappings were preserved.
+
+The immediate quota check reported **95.686 TiB used**, **4.311 TiB below the
+100 TiB soft quota**, and **14.311 TiB below the 110 TiB hard quota**, accounting
+for in-doubt allocations. This passes the 2 TiB startup guard at that instant;
+concurrent writes can consume the headroom. B continued collecting iteration48
+and C continued training iteration39 without interruption.
+
+Exact manifests, identity checks, per-file deletion journals and receipts remain
+under runtime `arm-turn-bonus-preparation/overnight-20260920/`:
+`baseline318933-temporary-tensors-{proposal,receipt}-20260924.json` and
+`storage-cleanup-{proposal,receipt}-20260924b.json`, with matching deletion journals.
+Historical native recovery batches total **21.358 TiB** in the bounded inventory;
+they were excluded and require a separate dependency audit and deletion approval.
 
 <!-- document:RESUMING_BASELINE.md:start -->
 <a id="resuming-baseline"></a>

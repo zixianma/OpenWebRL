@@ -35,6 +35,7 @@ Additive100 is [complete at 36.33% overall / 50.23% valid-only](RL_EVALUATION.md
 baseline100 [completed on September24 at34.67% overall /45.81% valid-only](RL_EVALUATION.md#baseline-iter100-results-20260924).
 [Training continuation and quota-recovery history](RL_RUNTIME.md#training-relaunch-20260922).
 [September 22 quota recovery, checkpoint retention and storage inventory](RL_RUNTIME.md#storage-inventory-20260922).
+[September 24 verified cleanup and restored quota headroom](RL_RUNTIME.md#storage-cleanup-20260924-afternoon).
 [Beta/sampling correction: new interventions start at iteration0](RL_RUNTIME.md#failure-ablations-fromzero-20260922).
 [Passed two-GPU diagnostic and remaining validation gaps](RL_RUNTIME.md#failure-ablation-gpu-smoke-proposal-20260922).
 [B eight-GPU throughput regression and verified topology](RL_RUNTIME.md#arm-b-eight-gpu-topology-audit-20260922).
