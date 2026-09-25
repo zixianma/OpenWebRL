@@ -1,0 +1,124 @@
+{
+  "status": "prepared proposal; exact paid-resource approval pending",
+  "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
+  "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
+  "branch": "openwebrl/arm-forward-transfer",
+  "train_entrypoint": "training/llamafactory/train_refresh.py",
+  "train_config": "training/llamafactory/arm_refresh_baseline40.yaml",
+  "trainer": "LLaMA-Factory standard SFT",
+  "train_states_target": 2000,
+  "dev_states_target": 250,
+  "reserve_states_max": 750,
+  "candidate_sets_max": 3000,
+  "candidates_per_state": 5,
+  "candidate_responses_target": 11250,
+  "candidate_responses_max": 15000,
+  "new_browser_rollouts": 0,
+  "actor_temperature": 0.8,
+  "actor_top_p": 1.0,
+  "actor_top_k": -1,
+  "actor_max_new_tokens": 4096,
+  "forward_panel_states": 377,
+  "forward_panel_tasks": 82,
+  "forward_actor": "outcome-only iteration90",
+  "teacher_requests_target": 2727,
+  "teacher_model": "gpt-5.5",
+  "teacher_completion_cap": 2048,
+  "teacher_pilot_standard_requests": 20,
+  "teacher_api_cap_usd": 225,
+  "teacher_cost_estimate_range_usd": [
+    50,
+    120
+  ],
+  "teacher_cost_estimate_limitations": "Candidate text is not generated yet; build exact byte/token reservations before submitting. Stop within cap, no silent increase.",
+  "original_replay_target": 858,
+  "original_retention_target": 200,
+  "gpu_stages": [
+    {
+      "name": "native baseline40 candidate generation",
+      "gpus": 2,
+      "type": "H200",
+      "hours": 2,
+      "cpus": 16,
+      "memory_gib": 480,
+      "gpu_hours": 4
+    },
+    {
+      "name": "LLaMA-Factory ARM refresh and offline evaluation",
+      "gpus": 1,
+      "type": "H200",
+      "hours": 4,
+      "cpus": 8,
+      "memory_gib": 120,
+      "gpu_hours": 4
+    }
+  ],
+  "gpu_hours_total": 8,
+  "candidate_collection_reference": {
+    "states": 64,
+    "saved_record_span_seconds": 142.91729712486267,
+    "output_tokens": 124307,
+    "end_to_end_three_actor_job_seconds": 985
+  },
+  "reference_scaled_collection_hours": 1.395676729734987,
+  "candidate_tokens_projection": 3829706.375838926,
+  "baseline_quality_audit_tokens_projection": 4370167.96875,
+  "teacher_wait_consumes_gpu_time": false,
+  "submitted": false,
+  "teacher_calls_made": 0,
+  "next_gates": [
+    "Freeze baseline-only task-disjoint state and replay manifests",
+    "Pin isolated LLaMA-Factory dependencies",
+    "Verify exact multimodal training/deployment token prefix and response mask",
+    "Native baseline40 restore and timing on initial candidate panel",
+    "Exact teacher budget reservation and pilot",
+    "Real-image full-context forward/backward/save/reload before fine-tuning"
+  ],
+  "archive_audit": {
+    "late": {
+      "counts": {
+        "saved_selection_records": 909,
+        "fully_joined_eligible": 692,
+        "excluded:maximum": 9,
+        "excluded:Expecting ',' delimiter: line 1 column 104 (char 103)": 1,
+        "excluded:malformed_or_missing_tool_call": 2,
+        "excluded:only_one_action": 15,
+        "excluded:minimum": 1,
+        "excluded:unknown_tool": 5,
+        "excluded:Expecting ',' delimiter: line 1 column 360 (char 359)": 1,
+        "no_unique_archived_state": 170,
+        "excluded:Expecting ',' delimiter: line 1 column 733 (char 732)": 1,
+        "excluded:Unterminated string starting at: line 1 column 44 (char 43)": 1,
+        "excluded:Unterminated string starting at: line 1 column 43 (char 42)": 1,
+        "excluded:Expecting ',' delimiter: line 1 column 251 (char 250)": 1,
+        "excluded:Expecting ',' delimiter: line 1 column 273 (char 272)": 1,
+        "excluded:Expecting ',' delimiter: line 1 column 244 (char 243)": 1,
+        "excluded:Expecting ',' delimiter: line 1 column 277 (char 276)": 1,
+        "excluded:not_integer": 1,
+        "excluded:missing_required": 3,
+        "excluded:Expecting ':' delimiter: line 1 column 42 (char 41)": 1,
+        "excluded:Expecting ',' delimiter: line 1 column 385 (char 384)": 1
+      },
+      "eligible_tasks": 82,
+      "panel_states": 377,
+      "panel_tasks": 82,
+      "logged_selector_calls": 916,
+      "note": "Logged calls can exceed persisted records; only fully joined saved records are eligible."
+    },
+    "early": {
+      "sample_counts": {
+        "groups": 50,
+        "trajectories": 250,
+        "turns_with_verified_current_image": 1341,
+        "without_image": 41
+      },
+      "tasks": 51,
+      "archive_iterations": 10,
+      "response_tokens_mean": 340.41834451901565,
+      "response_tokens_median": 321,
+      "note": "Five groups per iteration; availability/length audit, not the final sampled training set."
+    },
+    "elapsed_seconds": 4.765141402836889,
+    "peak_rss_mib": 100.31640625
+  }
+}
