@@ -25,6 +25,41 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Failure sampling40 /318950 | 0 | 0 | Failed during first collection finalization; CPU fix prepared, not relaunched |
 | B /318934 | 49 | 662 | Stopped; saved iteration50 batch remains untrained |
 
+### B49→60 continuation and C60 evaluation prepared
+
+The September24 request to continue B to60 and evaluate C60 is prepared.
+**C60 uses existing job318935**, after its durable checkpoint is available;
+the same controller owns and awaits the queued full-300 C50 evaluation and
+primary full-300 C60 evaluation. No additional C allocation was submitted.
+
+B's old allocation is no longer available. Proposed new request: **8 H200s ×
+8 hours (64 GPU-hours), 64 CPUs, 960 GiB RAM**, with64 browsers and
+TP2/DP4/microbatch1. This includes training49→60 and full-300 evaluations at50
+and60. Allow roughly5.5–6 hours for restoration/training and reserve2 hours
+for evaluations; reaching60 remains subject to browser speed and storage.
+No new allocation has been submitted; exact resource approval is pending.
+
+Prepared controller: `scripts/prepare_arm_b_to60.py`; batch template:
+`scripts/resume_arm_b_to60_8gpu.sbatch`. The controller restores the native
+iteration49 checkpoint (662 Adam updates), verifies it on GPUs, then replays
+the saved but unoptimized iteration50 batch, its exact consumed task cursor
+and failure auxiliary labels. It preserves B's original optimizer, scheduler,
+W&B identity, gate and reward settings; this is an unchanged continuation.
+Later iterations collect fresh data. The isolated source changes only replay
+bookkeeping and controller validation; active C/beta source snapshots are
+untouched. Both checkpoint50 and60 evaluations use local browsers,
+GPT-4.1 `action_history`, temperature0 and all300 tasks, with saved rollouts
+and per-task verdicts. The controller awaits every worker before exit.
+
+CPU validation passed25 tests covering replay identity, auxiliary labels,
+cursor restoration and distributed auxiliary transport; native launch parsing
+also passed for TP2/DP4, global batch256, microbatch1 and two PPO epochs.
+Actual GPU restoration remains a mandatory first stage in the new allocation.
+Preparation, pinned artifact identities and readiness receipt:
+`arm-turn-bonus-preparation/gate-b-to60-20260924/`.
+The launch retains the2TiB minimum storage-headroom guard; the pending
+1,578-file temporary cleanup below requires separate explicit approval.
+
 C added ten durable iterations since resuming after its30/40 evaluations. Its
 last six checkpoint intervals were roughly25–30 minutes. Latest training
 collection task success is55.2%, with6.8% invalid trajectories; recent optimizer
