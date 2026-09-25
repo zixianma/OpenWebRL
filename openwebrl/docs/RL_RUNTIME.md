@@ -84,6 +84,14 @@ Ten quota tests and nine recovery/reservation tests cover active/expired grace,
 rounding, hard-limit enforcement, in-doubt blocks and avoiding double-counted
 capacity. No new allocation, budget extension or deletion was performed.
 
+**14:15PDT progress:** beta329912 is running on g014. Its44-task iteration10
+recovery finished and the audited full300 aggregate is27.33% overall /33.74%
+valid-only, with all300 rollouts/verdicts saved. Iteration20 has restored the
+correct checkpoint and saved175/300 tasks at this snapshot; there is no final
+iteration20 score yet. Both allocated GPUs are active (56–74% utilization in a
+point-in-time sample), and roughly90 minutes remain. B329908 awaits priority;
+sampling329911 remains storage-held. The watcher is updating once per minute.
+
 <a id="arm-status-20260925-morning"></a>
 ## ARM status and recovery blockers — September25, morning PDT
 

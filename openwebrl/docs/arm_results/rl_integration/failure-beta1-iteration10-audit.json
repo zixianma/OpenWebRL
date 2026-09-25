@@ -1,0 +1,44 @@
+{
+  "job_ids": [
+    "318949",
+    "329912"
+  ],
+  "variant": "Additive: failure beta1",
+  "iteration": 10,
+  "evaluation_date": "2026-09-25",
+  "completed_optimizer_updates": 154,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-318949-tp2-iter20/runtime/iter_0000009",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-eval80-additive-20260920-v2",
+  "full300": {
+    "tasks": 300,
+    "successes": 82,
+    "valid": 243,
+    "invalid": 57,
+    "overall": 0.2733333333333333,
+    "valid_only": 0.3374485596707819,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 27,
+    "valid": 76,
+    "invalid": 24,
+    "overall": 0.27,
+    "valid_only": 0.35526315789473684,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100,
+    "error_records": 0
+  },
+  "fixed100_task_ids_sha256": "dfce9b64f84e6d514d516cd9a0c32f1355231845026b767546e8554608d62fb5",
+  "cohort_verified": true,
+  "archive_headers_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-weight-iter10-329912-merged/rollouts",
+  "original_tasks": 256,
+  "recovered_missing_tasks": 44,
+  "scope": "Original 256 saved tasks plus only 44 missing tasks, same checkpoint/protocol; separate collection windows.",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-failure-weight-iter10-329912",
+  "wandb_scope": "W&B run reports the 44-task recovery; full300 aggregate is in this audit.",
+  "restore_verified": true
+}

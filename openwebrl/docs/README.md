@@ -23,6 +23,9 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [B329908, sampling329911 and beta evaluations329912 queued with automatic storage release](RL_RUNTIME.md#arm-recovery-queue-20260925).
+[Beta1 iteration10 recovered full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
+its iteration20 evaluation is running in329912. B awaits scheduler priority;
+sampling40% remains held for additional storage headroom.
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).

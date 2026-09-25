@@ -102,6 +102,9 @@ reasoning-and-action response.
   $b=\beta m(\mathbf{1}[a_j\equiv a_0]-n(a_0)/5)$, where $n(a_0)$ counts
   candidates equivalent to the executed action. Selecting any equivalent
   candidate earns the same credit.
+- **Failure β = 1:** additive recipe from iteration0; increase only the auxiliary
+  failure-group bonus weight from0.5 to1.0. Mixed-group β stays0.5; both sampling
+  rates stay20%, with the original five-distinct-action gate and response-index credit.
 
 **Evaluation:** local browser, GPT-4.1 action-history judge, temperature 0.
 Rates are **overall / valid-only**; “—” means unavailable. Historical evaluations
@@ -151,6 +154,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 40 | 31.00% / 43.06% | **33.33% / 45.05%** |
 |  | 50 | 31.00% / 41.33% | 33.67% / 43.53% |
 |  | 60 | 30.00% / 41.10% | **32.67% / 43.17%** |
+| **Failure β = 1** | 10 | 27.00% / 35.53% | **27.33% / 33.74%** |
 
 <a id="baseline-comparison"></a>
 ![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–40](rl_results/baseline_vs_arm_allfailure_full300.png)

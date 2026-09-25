@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Failure β1 iteration10 recovered full300](#arm-failure-beta1-iter10-results-20260925)
 - [Gate C iteration50/60 completed evaluations](#arm-gate-c-iter50-60-results-20260925)
 - [Paper protocol and best-checkpoint rerun](#paper-om2w-protocol-20260912)
 - [Intermediate baseline checkpoint evaluation](#baseline-checkpoint-evaluation)
@@ -12,6 +13,35 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-failure-beta1-iter10-results-20260925"></a>
+## Failure β1 iteration10 recovered evaluation — September25, 2026
+
+Job329912 completed only the44 missing tasks from the quota-interrupted
+job318949 evaluation, then merged them with256 preserved results. No completed
+task was rerun. Both attempts restored the same native iteration10 checkpoint
+(154 Adam updates) and used local browsers, GPT-4.1/action_history and T=0.
+
+| Cohort | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Original saved portion | 256 | 76 | 207 | 49 | 29.69 | 36.71 |
+| Missing-task recovery | 44 | 6 | 36 | 8 | 13.64 | 16.67 |
+| **Merged full300** | **300** | **82** | **243** | **57** | **27.33** | **33.74** |
+| Fixed100 slice | 100 | 27 | 76 | 24 | 27.00 | 35.53 |
+
+Verified all300 expected distinct task IDs,300 nonempty ZIP rollout archives
+and300 verdicts, with no exception records. The merged directory links the
+original artifacts; their payloads were not overwritten or duplicated. The two
+collection windows were separated by several hours on September25. Treat this
+as a completed checkpoint evaluation with recovery provenance, not a same-time
+paired comparison or a comparison between the two disjoint task portions.
+
+Sources: [aggregate audit](arm_results/rl_integration/failure-beta1-iteration10-audit.json)
+and [recovery W&B run](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-failure-weight-iter10-329912).
+The W&B run reports the44 recovered tasks; the full300 score is the audited
+aggregate above. Runtime aggregate:
+`evaluations/arm-failure-weight-iter10-329912-merged/`.
+Job329912 then started the iteration20 full300 evaluation in the same allocation.
 
 <a id="arm-gate-c-iter50-60-results-20260925"></a>
 ## Gate C iteration50/60 results — September25, 2026
