@@ -4,7 +4,8 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
-- [Current ARM status, completed evaluations and recovery blockers](#arm-status-20260925-morning)
+- [Queued ARM recoveries and automatic storage release](#arm-recovery-queue-20260925)
+- [Completed evaluations and morning recovery blockers](#arm-status-20260925-morning)
 - [Approved refresh pipeline](#arm-status-20260925-early)
 - [Evening training status and coverage identity fix](#arm-status-20260924-evening)
 - [Automatic tenth-iteration evaluations and temporary-storage cleanup](#milestone-evaluations-20260924)
@@ -16,6 +17,50 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-recovery-queue-20260925"></a>
+## Unfinished ARM jobs queued — September25, 09:25PDT
+
+The user requested queueing the unfinished jobs while cleaning storage. All
+three replacements are submitted, initially held with no GPUs allocated.
+Each request fits within its own predecessor's unused approved GPU budget.
+
+| Job | Work | GPUs / CPU / RAM | Maximum walltime | Recovery behavior |
+| --- | --- | --- | --- | --- |
+| 329908 | B49→60, full300 at50/60 | 8 H200 /64 /960 GiB | 7h59m | Restore49 and replay saved unoptimized50; same optimizer, cursor and W&B lineage |
+| 329911 | Failure sampling40%,0→20, full300 at10/20 | 8 H200 /64 /960 GiB | 23h25m | Original SFT initialization, fresh optimizer/cursor, corrected task-ID provenance; preserve original W&B identity |
+| 329912 | Beta1 evaluations only | 2 H200 /16 /480 GiB | 2h | Iteration10: only44 missing tasks, merge with256 preserved results; iteration20: full300 |
+
+Both training jobs use **TP2/DP4, microbatch1**. C60 and its evaluations are
+complete and were not resubmitted. Beta's training20 checkpoint is preserved;
+its replacement performs no optimizer updates. B's prior30s and sampling's
+prior32m29s are deducted from their respective approvals. Beta's reduced2-GPU
+evaluation request is below its unused8-GPU training/evaluation budget.
+
+Persistent `scripts/watch_arm_storage_release.py` checks quota every minute
+and releases only these registered held jobs. It reserves256GiB for beta and
+2TiB for each training job, using headroom below the scrubbed **soft quota**;
+4.25TiB permits all three to be released together. With less space it releases
+only the jobs that fit, subtracting reservations for already-released jobs.
+Each worker retains its startup storage check. Waiting consumes no GPU time.
+The watcher runs for72h and records queue, controller, training and per-evaluation
+task progress in `logs/arm-unfinished-20260925/watch-status.json`. Existing RL
+supervision also tracks the new IDs; sampling's in-allocation monitor checks
+training metrics, GPU/host memory and W&B every15 minutes. Observation does not
+provide unattended code repair or authorize new allocations.
+
+Recovery preparation verified the original beta task/archive identities,
+checkpoint10/20 availability, fresh sampling initialization, native TP2/DP4
+launch parsing and eight recovery/space-reservation tests. The prior sampling
+attempt passed full-batch32K/save/reload GPU topology validation; the task-ID fix
+has CPU coverage tests and still needs live first-collection validation. Saved
+old attempts remain intact. The batch controllers own and await all workers.
+Private submission, budget, missing-task and readiness receipts are under
+`logs/arm-unfinished-20260925/`; no storage deletion was performed.
+
+The separate ARM-refresh candidate job completed; teacher token-limit repair
+still precedes its authorized fine-tuning stage. No duplicate candidate job or
+GPU job waiting for teacher labels was submitted.
 
 <a id="arm-status-20260925-morning"></a>
 ## ARM status and recovery blockers — September25, morning PDT

@@ -22,7 +22,7 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-Latest checked status: [C60 complete; beta20 trained but evaluation partial; storage and teacher-labeling blockers](RL_RUNTIME.md#arm-status-20260925-morning).
+Latest checked status: [B329908, sampling329911 and beta evaluations329912 queued with automatic storage release](RL_RUNTIME.md#arm-recovery-queue-20260925).
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
@@ -31,7 +31,8 @@ and [Gate C iteration30/40 results](RL_EVALUATION.md#arm-gate-c-iter30-40-result
 are complete, as are [C50/C60 full300 and fixed100 results](RL_EVALUATION.md#arm-gate-c-iter50-60-results-20260925).
 B remains at49; continuation329515 failed its storage preflight. Beta reached20,
 but its iteration10 evaluation stopped at256/300 on disk quota; iteration20 is
-outstanding. No ARM GPU jobs are running or queued at the latest check.
+outstanding. The three recovery jobs are now submitted and held until storage
+headroom permits release; C requires no replacement job.
 
 Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
 
