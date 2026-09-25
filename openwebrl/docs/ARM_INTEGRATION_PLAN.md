@@ -2,6 +2,104 @@
 
 [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
+<a id="arm-offline-forward-transfer-20260924"></a>
+## Offline ARM refresh: forward transfer — September 24, 2026
+
+**Decision:** test whether refreshing the selector on earlier RL actor states
+improves its selection quality on later actor states. The user selected
+**GPT-5.5**, matching Piotr's teacher. CPU data preparation and checks are complete;
+**API labeling and GPU execution have not started**. Proposed budget: **up to
+$225 for labeling, then one H200 × four hours, eight CPUs and 120 GiB RAM**.
+New paid work requires exact budget approval. The actor and live RL jobs are unchanged.
+
+**Teacher verification.** Piotr's
+[OpenWebRL teacher builder](https://github.com/piotr-teterwak/action-reward-models/blob/a37786237a92b669615466313d5d1c448f81ba91/data_generation/openwebrl_actor/build_teacher_batch.py)
+defaults to `gpt-5.5`, `/v1/chat/completions`, five candidate responses and
+`max_completion_tokens=2048`; temperature and reasoning effort are omitted.
+Its explain-then-JSON prompt imports an unpublished `openwebrl.frontier_arbiter`
+helper. We therefore use the pinned **released full-reasoning selection prompt**
+and request the selected index directly. This uses the same teacher model, but
+is **not a byte-identical reproduction of its private teacher prompt**. Preserve
+the returned model snapshot, raw response, usage and candidate permutation.
+
+| Split | States | Distinct tasks | Source and purpose |
+| --- | ---: | ---: | --- |
+| Refresh training | 2,000 | 635 | Saved unchanged-additive actor rollouts, iterations31–40 |
+| Development | 250 | 105 | Same early window; separate tasks |
+| Forward test | 500 | 161 | Iterations51–60; separate tasks, never used for fitting or checkpoint selection |
+| Original replay | 858 | 205 | Previously verified Piotr GPT-5.5 labels; mixed into training |
+| Original retention probe | 200 | 61 | Separate Piotr tasks; checks forgetting, not unseen pretraining generalization |
+
+- **Sampling:** join saved candidate logs to the exact pre-action screenshot,
+  prompt, executed response and policy identity. Require five structurally valid
+  candidates, at least two distinct canonical actions and, for new actor draws,
+  five completed responses. Preserve all candidate reasoning. Group task-ID aliases
+  and identical normalized intents before splitting; exclude Online-Mind2Web task
+  IDs/intents. Current-policy samples are capped at five states per task and one
+  per trajectory. No outcome or old ARM choice determines the teacher winner.
+  This is a **rolling-window forward test**, not an exact checkpoint40→60 test.
+  Historical pretraining overlap cannot be ruled out; the new adaptation splits
+  are disjoint. Results initially apply to this additive actor lineage.
+- **Training:** initialize from `PTeterwak/OpenWebRL-4B-SelectionARM`, with a
+  fresh language-only LoRA and AdamW optimizer. Rank32, alpha64, dropout0.05;
+  freeze vision/projector. One pass over **2,858 examples**, approximately70%
+  refreshed labels and30% original replay; effective batch32, microbatch1,
+  **90 updates** (last batch10). Peak LR`1e-5`, five-update warmup, cosine decay
+  to10% of peak, weight decay0.01, gradient clipping1.0, seed42. Maximum context
+  8,192, image budget262,144 pixels; reject overflow instead of truncating.
+  Rank/vision settings follow Piotr's ARM recipe; the tenfold lower LR and single
+  pass are conservative choices for updating an already trained ARM. Replay aims
+  to limit forgetting. These are pilot choices, not tuned optima.
+- **Loss:** completion-only cross entropy on `{"selection": k}` and the
+  end-of-turn token. For state/candidates `x` and teacher target tokens `y`,
+  `L = -mean_i [mean_j log p_theta(y_ij | x_i, y_i,<j)]` over each training batch.
+  Preserve the deployed selector's assistant prefix exactly, including its open
+  thinking marker. Candidate reasoning is input; actor reasoning/actions receive
+  no training loss. Save adapter and optimizer every five updates.
+- **Comparison:** frozen versus final refreshed ARM on identical states and
+  permutations with the deployed constrained JSON decoding. Primary metric:
+  agreement with the teacher's **canonical action**, so equivalent duplicate
+  actions count as agreement. Also report exact candidate-index agreement,
+  parsing failures, outcome/diversity strata and a paired **task-cluster bootstrap
+  95% interval** for the accuracy difference. On100 fixed future states, repeat
+  the teacher and both ARMs with reversed candidate order; report stability
+  without filtering the primary500-state test. The original200-state probe
+  measures retention. Choose no checkpoint or hyperparameter using future labels.
+- **Interpretation:** a positive future-test difference, with uncertainty and
+  retention reported, supports a subsequent controlled RL experiment. A confidence
+  interval crossing zero is inconclusive. Teacher agreement does not establish
+  correct actions or terminal task success; neither concept drift nor a downstream
+  RL gain is assumed. Any new actor RL intervention still starts at iteration0
+  unless the user explicitly authorizes a later starting point.
+
+**Readiness and execution.** Prepared2,850 teacher requests:2,750 primary labels
+plus100 reversed-order checks. Run20 standard requests as a preflight, then2,830
+through Batch. Do not substitute a teacher, invent labels for failed calls, or
+silently retry requests with unknown outcomes. The conservative request reservation
+is **$209.10**, using UTF-8 byte ceilings for text, image-token bounds and every
+request's full output cap; actual usage should cost less. GPT-5.5 standard pricing
+is $5/$30 per million input/output tokens, with Batch at half price and up to24h
+turnaround. GPU allocation starts only after complete valid labels are saved.
+([Model/pricing](https://developers.openai.com/api/docs/models/gpt-5.5),
+[Batch](https://developers.openai.com/api/docs/guides/batch),
+[image accounting](https://developers.openai.com/api/docs/guides/images-vision).)
+
+CPU checks passed for split/identity joins, malformed teacher responses,
+permutation-to-target mapping and paired reporting. Actual processor/tokenization
+parity passed on the shortest and longest example in all five splits: training
+median3,371, p95 5,595 and maximum7,920 prompt tokens. Dependencies and shell/Python
+syntax passed. GPU loading, full-context backward and causal-loss alignment remain
+startup gates; throughput has not yet been measured. One controller owns frozen
+evaluation, training, adapted evaluation and report generation. ARM training logs
+to `openwebrl`; standalone selector evaluations log to `openwebrl-evals`.
+
+Local reproducible preparation: `scripts/prepare_arm_forward_transfer.py`,
+`scripts/prepare_arm_refresh_teacher.py`, `scripts/label_arm_refresh.py`,
+`scripts/run_arm_forward_transfer.py` and `scripts/run_arm_forward_transfer.sbatch`.
+Private candidate/image/request manifests and the prepared configuration are in
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/arm-refresh-20260924/`.
+No trajectories or API request payloads are published with this plan.
+
 <a id="arm-gate-c-priority-20260922"></a>
 ## This week's priority: gate C — September 22, 2026
 
