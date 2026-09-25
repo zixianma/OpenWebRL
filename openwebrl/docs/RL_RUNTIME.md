@@ -94,15 +94,19 @@ optimizer, replay this exact batch with its cursor and failure auxiliary data,
 then validate checkpoint50 before evaluating. The existing first-batch recovery
 helper only supports rollout0 and cannot safely be reused unchanged here.
 
-**Cleanup proposed, not executed:** quota headroom is about2.7TiB. A new exact
-manifest identifies1,136 temporary mappings from stopped B (1.578TiB) and2,103
-from C's completed through40 stage (2.988TiB), totaling **4.566TiB**. It excludes
-C's new training-stage files, every checkpoint, recovery batch and verdict.
-The g007 process scan found no candidate references; its sole inaccessible
-process was the SSH session itself. Recheck references and file identities
-immediately before any approved deletion. The proposal is
-`arm-turn-bonus-preparation/overnight-20260920/storage-cleanup-proposal-20260924c.json`;
-these newly identified targets require separate explicit approval.
+**Cleanup completed at18:11PDT after exact user approval:** deleted1,136
+temporary mappings from stopped B (1.578TiB) and2,103 from C's completed
+through40 stage (2.988TiB): **3,239 files /4.566TiB** reclaimed. Quota headroom
+rose to **7.18TiB**. The fresh g007 process scan found no candidate references;
+its sole inaccessible process was the SSH session itself. Every target's inode,
+size and modification time matched the approved manifest before deletion.
+C's current-stage files were excluded. Checkpoint49, its saved iteration50
+batch/cursor/auxiliary tensors, C30/40 checkpoints and all600 C evaluation
+archives/verdict records passed before/after identity checks. C remained active
+in iteration41 collection after cleanup.
+
+Exact targets, deletion journal and completion receipt are under runtime
+`arm-turn-bonus-preparation/overnight-20260920/storage-cleanup-{proposal,deletions,receipt}-20260924c.*`.
 
 After explicit approval, all4,946 unchanged temporary `rollout-*.bin` files from
 completed jobs311964,311965,311962,313208,313210,313669 were deleted, reclaiming
@@ -115,7 +119,7 @@ Exact paths, per-file deletion records and completion receipt are under runtime
 <a id="storage-cleanup-20260924-afternoon"></a>
 ### Verified additional cleanup — September 24 afternoon
 
-Both passes below were explicitly approved for exact manifests before deletion.
+Each pass below was explicitly approved for its exact manifest before deletion.
 
 | Completed (PDT) | Deleted | Allocated space reclaimed |
 | --- | --- | ---: |
@@ -123,6 +127,7 @@ Both passes below were explicitly approved for exact manifests before deletion.
 | 16:16 | Gate B's finished iteration40 stage: 2,162 unreferenced temporary mappings | 3.055 TiB |
 | 16:16 | 41 intermediate baseline/B/C checkpoint directories | 2.317 TiB |
 | 16:16 | Completed pilots/evaluations: 647 temporary mappings | 0.253 TiB |
+| 18:11 | Stopped B and C's completed through40 stage: 3,239 temporary mappings | 4.566 TiB |
 
 The 16:16 pass removed 3,524 files totaling **5.625 TiB**. Live process mappings
 and open files were checked on g021 and g007; none referenced the approved
