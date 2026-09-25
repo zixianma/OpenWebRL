@@ -27,17 +27,20 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ### B49→60 continuation and C60 evaluation prepared
 
-The September24 request to continue B to60 and evaluate C60 is prepared.
+The September24 request to continue B to60 and evaluate C60 is approved.
 **C60 uses existing job318935**, after its durable checkpoint is available;
 the same controller owns and awaits the queued full-300 C50 evaluation and
 primary full-300 C60 evaluation. No additional C allocation was submitted.
 
-B's old allocation is no longer available. Proposed new request: **8 H200s ×
-8 hours (64 GPU-hours), 64 CPUs, 960 GiB RAM**, with64 browsers and
+B's old allocation is no longer available. Submitted **job 329515** at 23:21 PDT:
+**8 H200s × 8 hours (64 GPU-hours), 64 CPUs, 960 GiB RAM**, with 64 browsers and
 TP2/DP4/microbatch1. This includes training49→60 and full-300 evaluations at50
 and60. Allow roughly5.5–6 hours for restoration/training and reserve2 hours
 for evaluations; reaching60 remains subject to browser speed and storage.
-No new allocation has been submitted; exact resource approval is pending.
+The job is pending scheduler priority; it has been registered with the persistent
+supervisor. Submission and exact resource/cleanup approval are recorded with
+the preparation artifacts below. C had saved51 and was collecting52 at this
+submission; its60 evaluation remains inside318935.
 
 Prepared controller: `scripts/prepare_arm_b_to60.py`; batch template:
 `scripts/resume_arm_b_to60_8gpu.sbatch`. The controller restores the native
@@ -57,8 +60,13 @@ also passed for TP2/DP4, global batch256, microbatch1 and two PPO epochs.
 Actual GPU restoration remains a mandatory first stage in the new allocation.
 Preparation, pinned artifact identities and readiness receipt:
 `arm-turn-bonus-preparation/gate-b-to60-20260924/`.
-The launch retains the2TiB minimum storage-headroom guard; the pending
-1,578-file temporary cleanup below requires separate explicit approval.
+The launch retains the2TiB minimum storage-headroom guard. The separately
+approved1,578-file cleanup completed at23:21PDT, recovering2.248TiB and leaving
+about3.34TiB below the scrubbed soft quota immediately afterward. Fresh process
+scans on g007/g010 found no target references; protected artifact identities
+were unchanged. No checkpoint, durable batch, saved rollout or verdict was
+deleted. Exact manifest and completion receipt:
+`arm-turn-bonus-preparation/overnight-20260920/storage-cleanup-{proposal,receipt}-20260924d.json`.
 
 C added ten durable iterations since resuming after its30/40 evaluations. Its
 last six checkpoint intervals were roughly25–30 minutes. Latest training
@@ -95,7 +103,7 @@ respect the unused approved budget. The completed attempt consumed32m29s of its
 23h58m cap, leaving23h25m31s before rounding down. Existing controller output
 directories prevent safely requeueing the unchanged launch command.
 
-### Next temporary-file cleanup proposed
+### Temporary-file cleanup approved and completed
 
 The scrubbed quota had about1.91TiB of soft-limit headroom at22:41PDT.
 An exact **1,578-file /2.248TiB** proposal covers obsolete temporary tensor
@@ -103,8 +111,9 @@ mappings: C1.197TiB, beta0.928TiB, and the failed coverage attempt0.122TiB.
 Candidates predate verified durable checkpoints or belong to the failed job;
 live process scans on g007/g010 found no candidate references. All checkpoints,
 durable rollout/recovery archives and verdicts are excluded. No files in this
-new proposal have been deleted; explicit approval and a fresh reference check
-are required. Manifest:
+proposal were deleted before approval. After the user approved the exact targets,
+fresh reference checks passed and all1,578 were deleted at23:21PDT, recovering
+2.248TiB; see the completion details above. Manifest:
 `arm-turn-bonus-preparation/overnight-20260920/storage-cleanup-proposal-20260924d.json`.
 
 <a id="milestone-evaluations-20260924"></a>
@@ -122,6 +131,7 @@ require exact resource approval. This preference is also recorded in root
 | Existing allocation | Evaluations owned by its controller | Execution order |
 | --- | --- | --- |
 | B318934 | Full-300 at30,40 completed | Stopped at durable49; collected50 was not trained. Eval328790 exited in5s because50 was absent; recovery is not launched |
+| B329515 | Full-300 at50,60 | Submitted September24 at23:21PDT, pending priority; restore49, replay saved50, train to60, evaluate50 and60 |
 | C318935 | Full-300 at30,40 completed;50,60 planned | Resumed toward60; its training worker evaluates saved50 before returning, even after a clean partial-budget stop; evaluate60 if durable |
 | Baseline318933 | Full-300 at100 | Already embedded after iteration100; no duplicate standalone job |
 | Beta318949 / sampling318950 | Full-300 at10,20 | Finish training to20, then evaluate10 and20 in each existing allocation |

@@ -30,7 +30,7 @@ Default checkpoint evaluation cadence and current queue:
 and [Gate C iteration30/40 results](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924)
 are complete. C resumed toward60; B stopped at49 and its requested50 evaluation
 could not run. See the [timing-guard diagnosis](RL_RUNTIME.md#gate-b-budget-stop-20260924).
-B49→60 continuation is [CPU-prepared, pending approval of 8 H200s ×8h](RL_RUNTIME.md#b4960-continuation-and-c60-evaluation-prepared);
+B49→60 continuation is [submitted as329515: 8 H200s ×8h, with full-300 at50/60](RL_RUNTIME.md#b4960-continuation-and-c60-evaluation-prepared);
 C60 full-300 is owned by existing job318935, after its checkpoint is durable.
 
 Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
