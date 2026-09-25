@@ -121,6 +121,8 @@
 | B: relaxed gate | 30 | 102 | 234 | 66 | 34.00 | 43.59 | [318934](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
 | B: relaxed gate | 40 | 108 | 228 | 72 | 36.00 | 47.37 | [318934](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 20 | 110 | 247 | 53 | 36.67 | 44.53 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
+| C: relaxed gate + action credit | 30 | 92 | 232 | 68 | 30.67 | 39.66 | [318935](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
+| C: relaxed gate + action credit | 40 | 100 | 222 | 78 | 33.33 | 45.05 | [318935](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
 | Outcome-only · historical | 70 | 103 | 229 | 71 | 34.33 | 44.98 | [Baseline](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Original bonus | 70 | 103 | 231 | 69 | 34.33 | 44.59 | [306478](RL_EVALUATION.md#arm-iter70-audit-20260919) |
 | All-failure bonus | 70 | 106 | 233 | 67 | 35.33 | 45.49 | [306477](RL_EVALUATION.md#arm-iter70-audit-20260919) |
@@ -150,6 +152,8 @@
 | B: relaxed gate | 30 | 29 | 74 | 26 | 29.00 | 39.19 | [318934, slice of full300](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
 | B: relaxed gate | 40 | 38 | 72 | 28 | 38.00 | 52.78 | [318934, slice of full300](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 20 | 38 | 79 | 21 | 38.00 | 48.10 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
+| C: relaxed gate + action credit | 30 | 28 | 72 | 28 | 28.00 | 38.89 | [318935, slice of full300](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
+| C: relaxed gate + action credit | 40 | 31 | 72 | 28 | 31.00 | 43.06 | [318935, slice of full300](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
 | Outcome-only | 100 | 37 | 68 | 32 | 37.00 | 54.41 | [318933, slice of full300](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | Additive bonus | 100 | 31 | 65 | 35 | 31.00 | 47.69 | [313669, slice of full300](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
 | All-failure bonus | 100 | 26 | 66 | 34 | 26.00 | 39.39 | [316392, slice of full300](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921) |

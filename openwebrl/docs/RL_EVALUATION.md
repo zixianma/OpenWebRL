@@ -1842,3 +1842,40 @@ claim. Iteration40 is also 2.00 pp above additive40's historical overall rate.
 Saved trajectories and verdicts are under runtime
 `evaluations/arm-gate-b-iter30-318934/rollouts/` and
 `evaluations/arm-gate-b-iter40-318934/rollouts/`.
+
+<a id="arm-gate-c-iter30-40-results-20260924"></a>
+### Gate C iteration 30 and 40 evaluations completed — September 24
+
+Allocation **318935** evaluated the durable iteration-30 and iteration-40
+checkpoints, then resumed training toward60. C uses B's relaxed gate with
+action-equivalence credit. Evaluation is actor-only, local browser, GPT-4.1
+`action_history`, temperature0, on the same frozen full-300 cohort.
+
+| Iteration | Cohort | Successes | Valid | Invalid | Overall | Valid-only | Adam updates |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 30 | Full300 | 92 | 232 | 68 | 30.67% | 39.66% | 420 |
+| 30 | Fixed100 slice | 28 | 72 | 28 | 28.00% | 38.89% | 420 |
+| 40 | Full300 | 100 | 222 | 78 | 33.33% | 45.05% | 548 |
+| 40 | Fixed100 slice | 31 | 72 | 28 | 31.00% | 43.06% | 548 |
+
+GPU restoration receipts identify native checkpoints `iter_0000029` and
+`iter_0000039`. Both evaluations have exactly the300 expected unique task IDs,
+nonempty trajectory archives and per-task verdict records; there are zero
+exception records. Invalid browser trajectories are included in the overall
+denominator and excluded from valid-only. Fixed100 is a slice of each full300
+evaluation, not a separate trial.
+
+Against the historical outcome-only overall rates of32.00% and33.33%, C is
+−1.33pp at30 and tied at40. Against B's same-day evaluations, C is −3.33pp and
+−2.67pp respectively. Dates, browser availability and valid-task sets limit
+causal interpretation; these are descriptive differences, not significance
+claims. The iteration20 advantage has not persisted through30/40.
+
+[Iteration30 audit](arm_results/rl_integration/gate-c-iteration30-audit.json) ·
+[Iteration40 audit](arm_results/rl_integration/gate-c-iteration40-audit.json) ·
+[Iteration30 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-c-iter30-318935) ·
+[Iteration40 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-c-iter40-318935).
+
+Saved trajectories and verdicts are under runtime
+`evaluations/arm-gate-c-iter30-318935/rollouts/` and
+`evaluations/arm-gate-c-iter40-318935/rollouts/`.

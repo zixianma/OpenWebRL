@@ -28,8 +28,8 @@ require exact resource approval. This preference is also recorded in root
 
 | Existing allocation | Evaluations owned by its controller | Execution order |
 | --- | --- | --- |
-| B318934 | Full-300 at30,40 completed | Continue training within remaining time; iteration50 evaluation is queued as job328790 (2 H200s ×1h), dependent on318934 |
-| C318935 | Full-300 at30,40,50,60 | Finish40; evaluate30/40; next training worker evaluates saved50 before returning, even after a clean partial-budget stop; evaluate60 if durable |
+| B318934 | Full-300 at30,40 completed | Stopped at durable49; collected50 was not trained. Eval328790 exited in5s because50 was absent; recovery is not launched |
+| C318935 | Full-300 at30,40 completed;50,60 planned | Resumed toward60; its training worker evaluates saved50 before returning, even after a clean partial-budget stop; evaluate60 if durable |
 | Baseline318933 | Full-300 at100 | Already embedded after iteration100; no duplicate standalone job |
 | Beta318949 / sampling318950 | Full-300 at10,20 | Finish training to20, then evaluate10 and20 in each existing allocation |
 
@@ -42,8 +42,8 @@ per-evaluation audits live in
 active evaluation's task counts. Iteration30 for B was checked against its saved
 checkpoint and a300-task plan. The initial CPU checks passed39 tests, including wrong
 allocation refusal, exact checkpoint selection, artifact auditing, and avoiding
-duplicate GPU evaluation. B30/40 subsequently completed; C30/40 remain queued at
-the iteration40 handoff. Additional evaluations consume the existing budget;
+duplicate GPU evaluation. B30/40 and C30/40 subsequently completed at
+their iteration40 handoffs. Additional evaluations consume the existing budget;
 reaching iteration60 is not guaranteed.
 
 The afternoon queue correction passed43 checks. Newly launched train workers
@@ -60,6 +60,49 @@ B's inherited90-minute minimum-cycle guard was reduced to45 minutes after the
 last five checkpoint intervals measured29.5–35.1 minutes; its training deadline,
 allocation budget, optimizer and scientific recipe are unchanged. The adjustment
 is recorded as `318934-cycle-reserve-adjustment.json` in the same runtime folder.
+
+<a id="gate-b-budget-stop-20260924"></a>
+### B stopped at49; separate optimizer-time guard missed — September24 evening
+
+B318934 ended at17:21PDT with **iteration49 /662 Adam updates** durable.
+Iteration50's mixed rollout batch, dataset cursor and failure auxiliary tensors
+were saved, and calibration passed, but the optimizer admission check still
+estimated **180s per update**. It requested `14 × 180 + 600 = 3,120s`, with
+only2,336s left before the training deadline; measured TP2 updates were about46s.
+Reducing the earlier minimum-cycle guard alone did not correct this second
+guard. No iteration50 checkpoint was produced. The job released1h41m27s of its
+14h57m allocation unused; that time is no longer allocated.
+
+Dependent evaluation328790 started17:22PDT and exited after5s, before actor
+launch, because its exact checkpoint was unavailable. **Zero tasks ran.** An
+`afterany` training dependency was insufficient: future standalone milestone
+evaluations must remain held until the exact durable checkpoint is verified.
+Do not substitute checkpoint49 or blindly resubmit this evaluation.
+
+C318935 completed both full-300 evaluations and resumed iteration41. Its live
+operational config now uses a45-minute minimum-cycle reserve and **90s per
+optimizer update**, with the original deadline and scientific recipe unchanged.
+The before/after receipt is
+`arm-turn-bonus-preparation/milestone-evaluations/318935-cycle-and-optimizer-timing-correction.json`.
+The correction must also be preserved by future TP2 continuation launch plans.
+
+B recovery is not running. Its saved batch is
+`evaluations/arm-failure-additive-318934-tp2-iter60/runtime/rollout_recovery/49.pt`;
+matching cursor and auxiliary metadata are under the same stage's
+`runtime/rollout/` and `iterations/0049/`. Recovery must restore checkpoint49's
+optimizer, replay this exact batch with its cursor and failure auxiliary data,
+then validate checkpoint50 before evaluating. The existing first-batch recovery
+helper only supports rollout0 and cannot safely be reused unchanged here.
+
+**Cleanup proposed, not executed:** quota headroom is about2.7TiB. A new exact
+manifest identifies1,136 temporary mappings from stopped B (1.578TiB) and2,103
+from C's completed through40 stage (2.988TiB), totaling **4.566TiB**. It excludes
+C's new training-stage files, every checkpoint, recovery batch and verdict.
+The g007 process scan found no candidate references; its sole inaccessible
+process was the SSH session itself. Recheck references and file identities
+immediately before any approved deletion. The proposal is
+`arm-turn-bonus-preparation/overnight-20260920/storage-cleanup-proposal-20260924c.json`;
+these newly identified targets require separate explicit approval.
 
 After explicit approval, all4,946 unchanged temporary `rollout-*.bin` files from
 completed jobs311964,311965,311962,313208,313210,313669 were deleted, reclaiming

@@ -19,7 +19,13 @@ Gate B's [September24 full-300 evaluations at30 and40](RL_EVALUATION.md#arm-gate
 completed at **34.00% / 43.59%** and **36.00% / 47.37%** overall / valid-only.
 These are +2.00 and +2.67 pp overall against historical outcome-only checkpoints
 at the same iterations; different dates and valid-task sets limit the comparison.
-All600 task rollouts and verdicts are saved. C's corresponding evaluations remain queued.
+All 600 task rollouts and verdicts are saved. Gate C's
+[corresponding September 24 evaluations](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924)
+are complete at **30.67% / 39.66%** and **33.33% / 45.05%** overall / valid-only.
+C is −1.33 pp and tied overall against the historical baseline at iterations 30
+and 40, respectively; its stronger iteration-20 result has not persisted.
+All 600 C rollouts and verdicts are also saved. These results do not establish a
+consistent benefit from action-equivalence credit over B's response-index credit.
 
 Original bonus iteration 80 (September 20) completed at **33.33% overall /
 45.05% valid-only**, versus historical outcome-only **38.00% / 49.78%**.

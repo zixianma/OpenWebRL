@@ -26,7 +26,9 @@ Live operations: [job status, completions and failures](arm_results/rl_integrati
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
 [Gate B iteration30/40 full-300 results](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924)
-are complete; training resumed after both evaluations.
+and [Gate C iteration30/40 results](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924)
+are complete. C resumed toward60; B stopped at49 and its requested50 evaluation
+could not run. See the [timing-guard diagnosis](RL_RUNTIME.md#gate-b-budget-stop-20260924).
 
 Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
 
