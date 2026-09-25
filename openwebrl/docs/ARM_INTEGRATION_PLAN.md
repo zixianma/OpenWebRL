@@ -169,6 +169,20 @@ Earlier additive data/request manifests remain preserved but are explicitly
 superseded; launch guards prevent the old teacher requests/custom trainer from running.
 No raw trajectories or API payloads are published with this plan.
 
+<a id="arm-beta-bounded-continuation-20260925"></a>
+## Failure β1: bounded continuation through40 — September25
+
+The user approved continuing the unchanged beta1 experiment from its durable
+iteration20 checkpoint to a **hard cap of40**, with full300 GPT-4.1/action_history,
+T0 evaluations at30 and40. Preserve optimizer, scheduler, task cursor and W&B
+identity. Failureβ remains1; mixedβ stays0.5; both sampling rates stay20%.
+Review20/30/40 task success before any further training; stop at40 and do not
+automatically extend a weak result based on training reward.
+
+Submitted **330278:8 H200 ×14h**,64 CPUs,960GiB,64 browsers,TP2/DP4,microbatch1.
+It awaits sufficient storage headroom under the persistent release watcher.
+[Launch, timing evidence and validation](RL_RUNTIME.md#arm-beta-to40-20260925).
+
 <a id="arm-gate-c-priority-20260922"></a>
 ## This week's priority: gate C — September 22, 2026
 

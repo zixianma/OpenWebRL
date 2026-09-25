@@ -26,6 +26,8 @@ Latest checked status: [B329908, sampling329911 and beta evaluations329912 queue
 [Beta1 iteration10 recovered full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 its iteration20 evaluation is running in329912. B awaits scheduler priority;
 sampling40% remains held for additional storage headroom.
+[Beta1 continuation20→40 is approved and queued as330278](RL_RUNTIME.md#arm-beta-to40-20260925),
+with full300 evaluations30/40 and a hard stop at40; initially storage-held.
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).

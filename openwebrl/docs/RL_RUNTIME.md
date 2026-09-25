@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
 - [Queued ARM recoveries and automatic storage release](#arm-recovery-queue-20260925)
 - [Completed evaluations and morning recovery blockers](#arm-status-20260925-morning)
 - [Approved refresh pipeline](#arm-status-20260925-early)
@@ -17,6 +18,52 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-beta-to40-20260925"></a>
+## Beta1 continuation capped at40 — September25, 2026
+
+The user requested at most iteration40 and stopping there if evaluations do not
+improve, then approved the proposed **8 H200 ×14h** request. Submitted
+**330278**,64 CPUs,960GiB RAM,64 browsers,TP2/DP4,microbatch1. It is initially
+storage-held and registered with the existing persistent quota-release watcher;
+no GPU time is consumed while held. Reserve2TiB of launch headroom separately
+from the other released jobs.
+
+Resume beta1's completed iteration20 /298 Adam updates with the same frozen
+source, model, optimizer, scheduler, task cursor and W&B lineage
+`arm-failure-weight-fromzero-318949`. No reward or sampling hyperparameter
+changes: mixedβ0.5/q20%, auxiliary failureβ1/q20%, original distinct5 gate and
+response-index credit,48 mixed groups plus up to8 failure groups.
+
+The batch controller owns and awaits: GPU restore20 → training21–30 → full300
+evaluation30 → GPU restore30 → training31–40 → full300 evaluation40. Native
+training's rollout target is30 then40; the planner rejects any target beyond40.
+There is no automatic continuation or budget extension after40. Review task
+success at20/30/40 and matched historical controls, with overall and valid-only
+rates, before any further decision; training reward alone is insufficient.
+
+The recent ten beta checkpoint intervals have a31.75-minute median, implying
+about10.58h for20 more iterations. The14h cap includes both restores,
+evaluations and timing margin. Timing guards use45 minutes before beginning a
+new collection and90 seconds per optimizer update, reflecting the measured
+TP2 speed; scientific settings remain unchanged. Partial checkpoints are retained
+if browser delays prevent the endpoint from fitting.
+
+Prepared launcher `scripts/resume_arm_beta_to40_8gpu.sbatch` and controller
+`scripts/prepare_arm_beta_to40.py`. Five CPU continuation tests and the native
+launch-argument check passed: TP2,global batch256,microbatch1,two PPO epochs,
+checkpoint20 and scheduler restoration. Preparation verifies existing native
+checkpoint receipts, shard sizes and metadata/cursor identities without loading
+model tensors on the login node. Full counter/extent checks and actual GPU
+model/optimizer restoration must pass inside the allocation before training.
+Private approval, proposal, prepared controllers and readiness receipts are in
+`logs/arm-beta-to40-20260925/`.
+
+B remains at49 with329908 pending scheduler priority for training through60 and
+full300 evaluations50/60. C completed60 and its50/60 evaluations; no C extension
+was requested or submitted. At matched iteration40, B is36.00% /47.37% and C
+33.33% /45.05% overall /valid-only; the historical baseline is33.33% /43.29%.
+These different-date comparisons are descriptive.
 
 <a id="arm-recovery-queue-20260925"></a>
 ## Unfinished ARM jobs queued — September25, 09:25PDT
