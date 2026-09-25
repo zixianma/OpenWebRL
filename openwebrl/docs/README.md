@@ -54,7 +54,7 @@ Latest baseline: [iteration-100 completion](RL_EVALUATION.md#baseline-iter100-re
 [iteration-80 GPT-4.1 rejudging](RL_EVALUATION.md#stealth80-gpt41-rejudge-feasibility-20260913),
 and [cluster/account queue audit](RL_RUNTIME.md#cluster-queue-audit-294983-20260913).
 
-ARM RL: [baseline40→90 ARM refresh through Piotr’s repo; recalculated budget](ARM_INTEGRATION_PLAN.md#arm-offline-forward-transfer-20260924),
+ARM RL: [baseline40→90 ARM refresh through Piotr’s repo; approved pipeline / job329708](ARM_INTEGRATION_PLAN.md#arm-offline-forward-transfer-20260924),
 [this week's priority: gate C](ARM_INTEGRATION_PLAN.md#arm-gate-c-priority-20260922),
 [detailed analysis moved from the collaborator summary](ARM_RESULTS.md#arm-online-rl-analysis-20260922),
 [saved termination audit and beta/coverage launch proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921),

@@ -9,8 +9,11 @@
 assess selection on its later iteration90 candidates. The user also requested
 fine-tuning through [Piotr's action-reward-models repository](https://github.com/piotr-teterwak/action-reward-models),
 using its **LLaMA-Factory SelectionARM training route**. This supersedes the
-September24 additive-data/custom-trainer draft. No API calls or new GPU jobs
-have started; exact paid-resource approval remains pending.
+September24 additive-data/custom-trainer draft. The user approved the full
+**8 GPU-hour + $225 API cap** on September25. Candidate-generation job
+**329708** is submitted (2 H200 ×2h), currently pending priority. Teacher labeling
+and the separate 1-H200 ×4h training/evaluation allocation follow verified inputs;
+no API calls have been made yet.
 
 ### Data and comparison
 
@@ -19,7 +22,7 @@ have started; exact paid-resource approval remains pending.
 | Refresh training | Target2,000 states | Baseline training states through iteration40; five fresh responses from the retained baseline40 actor |
 | Development | Target250 states | Separate early training tasks; same candidate-generating checkpoint |
 | Sampling reserve | Up to750 states | Replace structurally invalid, duplicate-only or overlength candidate sets; total generation cap3,000 sets |
-| Forward test | **377 joined states /82 tasks** | Saved baseline90 + frozen-ARM fixed100 OM2W evaluation, job314664; cap five states/task |
+| Forward test | **371 states /82 tasks** | Saved baseline90 + frozen-ARM fixed100 OM2W evaluation, job314664; cap five states/task |
 | Teacher order check | 100 of those test states | A second, reversed candidate order; never used to select the training checkpoint |
 | Original replay / retention | Target858 /200 states | Existing Piotr GPT-5.5 labels, re-split to exclude overlap with the new early training/development tasks |
 
@@ -65,12 +68,22 @@ screenshots, executed responses, per-state action schemas and complete histories
 OM2W tasks**. There were170 records without a unique matching archived state and47
 other exclusions. The summary logged916 selector calls; missing/repeated-call
 provenance is not treated as reusable evidence. These counts replace the preliminary
-855/427 claim. Context-length/preprocessing checks remain before model execution.
+855/427 claim. The final context check excludes six states exceeding8,192
+tokens, leaving **371 states over82 tasks**, without truncation or teacher-label
+inspection. Deployed-versus-LLaMA-Factory prefix, completion mask, image grid
+and exact pixel-tensor parity passed on short/long representatives from the
+forward, replay and retention splits; the same check gates the new fit/dev data.
 
 The early availability audit read five groups per iteration31–40:50 groups,
 250 trajectories and1,341 turns with verified current screenshots, spanning51 tasks.
 Mean recorded response length was340 tokens (median321). This establishes
-availability; it is not the final2,250-state sampling manifest.
+availability; it is not the final2,250-state sampling manifest. The complete
+CPU preparation then scanned1,062 archived groups and found5,239 usable
+trajectories. The frozen generation manifest contains **3,000 states**:
+2,600 train candidates across855 tasks and400 development candidates across143
+tasks. A stable task-group hash assigns85%/15%; each trajectory contributes at
+most one state and each task at most five. The generation stage stops each split
+once its2,000/250 eligible target is reached, within the3,000-set hard cap.
 
 ### Training through Piotr's repository
 
@@ -95,19 +108,23 @@ The repository branch is local; the public plan is published on OpenWebRL's `arm
   `L = -mean(log p_theta(teacher target tokens | state, candidates, target prefix))`.
   The small repository entrypoint registers the deployed selector's exact open
   thinking prefix with LLaMA-Factory. Its stock reasoning template can insert an
-  empty closed thinking block, so full multimodal token-prefix and loss-mask parity
-  must pass before training. This is a formatting adapter, not a custom loss/trainer.
+  empty closed thinking block. A small vision plugin also avoids a preliminary
+  PIL resize so training receives the exact deployed pixel tensors. The compatibility
+  model directory links every tensor shard to the released ARM and uses its
+  deployed Transformers4.57-compatible architecture/processor configuration;
+  it does not load actor weights. Full multimodal parity must pass before training.
+  These adapters change formatting/preprocessing, not the standard SFT loss/trainer.
 - Keep checkpoints/optimizer every five updates; evaluate early development at45/90
   and use the final fixed-epoch endpoint for the forward test. Training W&B project
   `openwebrl`; standalone generation/audits/evaluations `openwebrl-evals`.
   Pin an isolated dependency environment; do not modify active RL environments.
 
-### Recalculated resources — proposal, not submitted
+### Approved resources and execution
 
-| Stage | Exact proposed allocation / cap | Basis |
+| Stage | Approved allocation / cap | Basis |
 | --- | --- | --- |
 | Baseline40 restoration and candidate generation | **2 H200 ×2h**,16 CPUs,480 GiB | Target11,250 responses; maximum15,000 with reserve states. Prior64-state offline audit took143s between first/last saved records: linear target projection1.40h, excluding startup and policy/context differences |
-| GPT-5.5 labeling | **Up to$225**; estimated **$50–120** | Target2,727 requests:2,250 early +377 future +100 reverse-order checks.20 standard preflight calls, remaining2,707 Batch requests. Exact reservation rebuilt after candidate generation; halt within the cap |
+| GPT-5.5 labeling | **Up to$225**; estimated **$50–120** | Target2,721 requests:2,250 early +371 future +100 reverse-order checks.20 standard preflight calls, remaining2,701 Batch requests. Exact reservation rebuilt after candidate generation; halt within the cap |
 | ARM fine-tuning, retention and offline forward evaluation | **1 H200 ×4h**,8 CPUs,120 GiB | One2,858-example pass plus paired selector evaluation; includes startup/full-context backward/save-reload checks. Throughput remains an estimate until the GPU smoke |
 | **Total** | **8 GPU-hours + up to$225 API** | Two sequential GPU allocations, separated by API labeling; no GPU allocation held idle for Batch completion |
 
@@ -121,11 +138,23 @@ Batch may take up to24h. These estimates are not vendor quotes or completion gua
 ([Pricing](https://developers.openai.com/api/docs/models/gpt-5.5),
 [Batch](https://developers.openai.com/api/docs/guides/batch).)
 
-The source/configuration and CPU archive audit are staged. Final baseline-only
-manifests, isolated dependency validation, multimodal tokenization parity and
-actual GPU restoration/training tests remain readiness gates. No paid work starts
-until the exact resource/API budget is approved. Each batch controller must own
-and await all its planned workers.
+The isolated LLaMA-Factory environment is installed (Transformers4.57.1,
+PEFT0.18.1, TRL0.24.0, Accelerate1.11.0), preserving active RL environments.
+Native candidate-generation CLI checks and the existing identity/budget tests
+passed. Actual baseline40 GPU restoration and ARM full-context backward plus
+adapter save/reload remain mandatory allocation startup gates. Each batch
+controller owns and awaits its planned workers.
+
+A persistent CPU watcher owns the approved handoffs: wait for verified candidate
+completion, assemble frozen datasets, reserve the exact teacher cost under$225,
+run20 pilot calls, submit/poll Batch labels, validate LLaMA-Factory data, then
+submit the approved1-H200 ×4h training/evaluation job. It holds no GPU while
+waiting for labels and refuses duplicate submissions or unknown-outcome API
+retries. It records failures and stops mutations for agent repair; it does not
+automatically repair arbitrary bugs. Watcher/status files:
+`arm-turn-bonus-preparation/arm-refresh-20260924/baseline40/{watcher,pipeline-status}.json`.
+Controllers: `scripts/run_arm_refresh_candidates.py`,
+`scripts/watch_arm_refresh.py`, `scripts/run_arm_refresh_training.py`.
 
 [Machine-readable budget and CPU audit](arm_results/rl_integration/arm-refresh-baseline40-budget.json).
 

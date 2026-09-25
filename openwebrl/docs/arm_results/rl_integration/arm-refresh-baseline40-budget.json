@@ -1,5 +1,5 @@
 {
-  "status": "prepared proposal; exact paid-resource approval pending",
+  "status": "approved; candidate job329708 submitted, pending priority",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -18,10 +18,10 @@
   "actor_top_p": 1.0,
   "actor_top_k": -1,
   "actor_max_new_tokens": 4096,
-  "forward_panel_states": 377,
+  "forward_panel_states": 371,
   "forward_panel_tasks": 82,
   "forward_actor": "outcome-only iteration90",
-  "teacher_requests_target": 2727,
+  "teacher_requests_target": 2721,
   "teacher_model": "gpt-5.5",
   "teacher_completion_cap": 2048,
   "teacher_pilot_standard_requests": 20,
@@ -64,7 +64,7 @@
   "candidate_tokens_projection": 3829706.375838926,
   "baseline_quality_audit_tokens_projection": 4370167.96875,
   "teacher_wait_consumes_gpu_time": false,
-  "submitted": false,
+  "submitted": true,
   "teacher_calls_made": 0,
   "next_gates": [
     "Freeze baseline-only task-disjoint state and replay manifests",
@@ -120,5 +120,8 @@
     },
     "elapsed_seconds": 4.765141402836889,
     "peak_rss_mib": 100.31640625
-  }
+  },
+  "candidate_job_id": "329708",
+  "final_context_exclusions": 6,
+  "preprocessing_parity_passed": true
 }

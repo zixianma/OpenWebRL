@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Current ARM status and approved refresh pipeline](#arm-status-20260925-early)
 - [Evening training status and coverage identity fix](#arm-status-20260924-evening)
 - [Automatic tenth-iteration evaluations and temporary-storage cleanup](#milestone-evaluations-20260924)
 - [Verified afternoon storage cleanup](#storage-cleanup-20260924-afternoon)
@@ -14,6 +15,40 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-status-20260925-early"></a>
+## ARM status and approved refresh pipeline — September25, 01:25PDT
+
+| Experiment / job | Verified progress | State |
+| --- | --- | --- |
+| Failure beta1 /318949 | Durable10 /154 Adam updates; iteration11 collection completed and optimization beginning | Running on g010,8 H200,TP2/DP4/microbatch1; target20, full300 evaluations10/20 owned by the controller |
+| Failure sampling40 /318950 | No optimizer update | Failed before first update; task-ID provenance correction passes CPU tests; not restarted |
+| C /318935 | Durable55; collecting56 | Running on g007; target60, full300 evaluations50/60 owned by the controller |
+| B /329515 | Resume49, replay saved unoptimized50 batch | Pending priority |
+| Baseline40 ARM-refresh candidates /329708 | Frozen3,000-state input manifest; no generation yet | Pending priority; approved2 H200 ×2h,16 CPUs,480 GiB |
+
+Beta's latest completed collection has252 successes among590 completed
+trajectories (550 valid):42.71% overall,45.82% valid-only,6.78% invalid. The last
+five valid-only training success rates range44.75–49.82%; these are training-pool
+observations, not OM2W evaluation results. Recent collection/checkpoint cycles
+are roughly30–34 minutes. The failed sampling run has a prepared identity fix,
+but no GPU validation or restart has happened; see the correction below.
+
+The [baseline40→90 offline ARM refresh](ARM_INTEGRATION_PLAN.md#arm-offline-forward-transfer-20260924)
+has exact authorization for8 GPU-hours total plus a$225 GPT-5.5 cap. Candidate
+job329708 restores the native outcome-only40 actor and generates five responses
+per saved state, with no browser collection or optimizer updates. Its preserved
+source is `reference-arm-refresh-baseline40-20260925-v1`.
+
+Persistent watcher `scripts/watch_arm_refresh.py` owns the authorized CPU/API
+handoffs and submits the separate1-H200 ×4h LLaMA-Factory training/evaluation job
+only after complete labels and preprocessing checks. Its live state is
+`arm-turn-bonus-preparation/arm-refresh-20260924/baseline40/pipeline-status.json`.
+It preserves partial results, blocks duplicate charges/submissions and stops
+mutations on failures for agent repair; it does not perform unattended code repair.
+The existing RL supervisor remains active separately. No raw examples or API
+payloads are published. Actual GPU restoration/backward validation remains a
+startup gate; seven CPU identity/leakage/budget tests passed.
 
 <a id="arm-status-20260924-evening"></a>
 ## Training status and coverage failure — September24, 22:48PDT
