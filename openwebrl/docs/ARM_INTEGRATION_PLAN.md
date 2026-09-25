@@ -15,9 +15,27 @@ September24 additive-data/custom-trainer draft. The user approved the full
 allocation. Verified native checkpoint40 restoration produced2,382 five-response
 sets, retaining2,000 training and250 development states. The first20 GPT-5.5
 teacher calls produced19 valid labels and one truncated response: its2,048-token
-cap was consumed by reasoning, leaving no visible selection. The watcher stopped
-before bulk Batch submission; no ARM fine-tuning job has been submitted.
-[Current blockers and saved artifacts](RL_RUNTIME.md#arm-status-20260925-morning).
+cap was consumed by reasoning, leaving no visible selection. Bulk Batch labeling
+and ARM fine-tuning have not started; there is no forward-transfer result yet.
+
+**September25 afternoon repair:** bounded recovery is implemented and14 tests
+passed. Preserve all original responses and reuse valid labels; only a recorded
+`finish_reason=length` response may retry at4,096 then8,192 completion tokens.
+Keep the model, messages, candidate order and default reasoning settings fixed.
+Reserve every extra request against the original$225 cap, including unresolved
+request intents; unknown outcomes and other error types are not blindly retried.
+This is a documented token-limit recovery exception to the initial2,048 cap.
+The original2,721-request reservation is$191.04; the20 completed pilot calls
+used about$0.68 at undiscounted input pricing.
+
+**Current blocker:** automatic approval review rejected the attempted retry
+because explicit authorization for the internal example payload and OpenAI
+destination is required in addition to the approved budget. The request did not
+execute. Explicit approval was requested for task instructions, URLs, screenshots,
+action histories and candidate reasoning/actions sent to `api.openai.com`,
+including the pilot recovery and2,701 Batch requests, within$225. A durable
+external-transfer gate keeps labeling paused until approval is recorded.
+[Runtime status and repair](RL_RUNTIME.md#arm-refresh-label-recovery-20260925).
 
 ### Data and comparison
 

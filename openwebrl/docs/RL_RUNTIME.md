@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [ARM-refresh teacher recovery and transfer-approval gate](#arm-refresh-label-recovery-20260925)
 - [Gate B continuation to90](#arm-b-to90-20260925)
 - [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
 - [Queued ARM recoveries and automatic storage release](#arm-recovery-queue-20260925)
@@ -19,6 +20,47 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-refresh-label-recovery-20260925"></a>
+## ARM-refresh labeling recovery — September25 afternoon
+
+Candidate job329708 completed in39m02s:2,382 five-response sets, with2,000 fit
+states and250 development states retained. The prepared dataset also includes
+858 original replay examples,200 retention examples and371 later-actor states
+across82 evaluation tasks. Training will compare the updated SelectionARM with
+the frozen ARM on the same iteration90 candidates; this is offline selection
+agreement, not a new browser task-success measurement.
+
+The pilot saved19 valid GPT-5.5 labels and one known token-limit response with
+2,048 generated tokens and empty visible content. No Batch has been submitted,
+no ARM optimizer updates have run and no forward-transfer result is available.
+
+Repair in `scripts/arm_refresh_label_recovery.py` and
+`scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
+pipeline/forward-transfer tests. Valid originals remain authoritative. Only
+recorded length failures may retry at4,096 and then8,192 tokens, retaining model,
+prompt, candidate order and every original/attempt response. Durable intents
+prevent unknown-outcome retries and count against the full$225 budget. Initial
+requests reserve$191.04; extra requests must fit the remaining reservation.
+Successful standard retries use standard pricing, including for failed Batch
+requests; status records include known failed-response usage.
+
+This exception addresses the completion cap's inclusion of non-visible tokens;
+[official token-counting documentation](https://developers.openai.com/api/docs/guides/token-counting)
+confirms that the limit covers all generated tokens. Original requests remain
+at2,048 tokens, matching the prepared Piotr-style configuration.
+
+Automatic approval review rejected the live pilot-recovery command because it
+requires explicit internal-payload/destination approval. **No retry executed.**
+The user was asked to authorize sending prepared task text, URLs, screenshots,
+action histories and five reasoning/action candidates to OpenAI at
+`api.openai.com` for the one failed pilot and2,701 Batch requests, under$225.
+Private `baseline40/teacher/external-transfer-approval.json` records this pending
+gate; the labeler checks it before any API operation. The persistent watcher
+remains in its stopped-mutations state, holding no GPU allocation. After approval,
+verify the repaired20/20 pilot, resume Batch handoffs, and submit the already
+approved1-H200 ×4h training/evaluation allocation only once labels and training
+readiness pass. No additional GPU/API budget is requested.
 
 <a id="arm-b-to90-20260925"></a>
 ## Gate B continuation through90 — September25, 2026
