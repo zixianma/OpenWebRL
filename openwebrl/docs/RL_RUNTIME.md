@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Evening training status and coverage identity fix](#arm-status-20260924-evening)
 - [Automatic tenth-iteration evaluations and temporary-storage cleanup](#milestone-evaluations-20260924)
 - [Verified afternoon storage cleanup](#storage-cleanup-20260924-afternoon)
 - [Stage-2 recipe and prepared launch](#baseline-stage2-20260914)
@@ -13,6 +14,63 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-status-20260924-evening"></a>
+## Training status and coverage failure — September24, 22:48PDT
+
+| Experiment / job | Durable iteration | Adam updates at checkpoint | Current work |
+| --- | ---: | ---: | --- |
+| C /318935 | 50 | 668 | Collecting51 toward60; full300 evaluations of50/60 owned by this allocation |
+| Failure beta1 /318949 | 5 | 78 | Training6 toward20; resumed its own iteration2 checkpoint |
+| Failure sampling40 /318950 | 0 | 0 | Failed during first collection finalization; CPU fix prepared, not relaunched |
+| B /318934 | 49 | 662 | Stopped; saved iteration50 batch remains untrained |
+
+C added ten durable iterations since resuming after its30/40 evaluations. Its
+last six checkpoint intervals were roughly25–30 minutes. Latest training
+collection task success is55.2%, with6.8% invalid trajectories; recent optimizer
+KL and clipping remain small. These are training-pool statistics, not OM2W
+evaluation results. The beta run's latest collection is48.14% successful and
+4.24% invalid. C50 is now verified and queued for the controller's training-stage
+handoff; no new evaluation result has landed since C30/40. About6h45m remain in
+C's allocation, making60 plus its queued evaluations plausible at current speed,
+subject to browser timing and storage availability.
+
+### Sampling40 identity mismatch and prepared correction
+
+Job318950 ran20:25–20:57PDT and failed before any optimizer update with
+`Missing Bernoulli-sampled pre-action states`. Capture hashed the original
+request task ID (for example `webvoyager/61350`), but deferred validation used
+the browser fallback's resolved ID (`61350`). The changed hash falsely reported
+missing states. The artifact audit found all1,860 expected captures among4,717
+completed turns with response tokens: zero capture-membership discrepancies.
+
+The correction attaches the original sampling identity to each executed turn
+and validates/reuses it for deferred membership and state provenance. Sampling
+rates, task admission, reward weight and loss are unchanged. The local suite
+passed49 CPU tests; the isolated corrected source passed all13 coverage tests,
+including the real selector-to-turn attachment path with a browser task alias.
+No GPU validation or restart of the corrected coverage run has occurred.
+
+The existing beta/C frozen sources remain unchanged. Prepared coverage source:
+`reference-arm-failure-coverage-identity-20260924-v1`; patch, test readiness and
+failure evidence: `arm-turn-bonus-preparation/coverage-identity-fix-20260924/`.
+A restart must preserve iteration0 initialization and fresh optimizer/cursor,
+retain the failed attempt's artifacts, use a new attempt output directory, and
+respect the unused approved budget. The completed attempt consumed32m29s of its
+23h58m cap, leaving23h25m31s before rounding down. Existing controller output
+directories prevent safely requeueing the unchanged launch command.
+
+### Next temporary-file cleanup proposed
+
+The scrubbed quota had about1.91TiB of soft-limit headroom at22:41PDT.
+An exact **1,578-file /2.248TiB** proposal covers obsolete temporary tensor
+mappings: C1.197TiB, beta0.928TiB, and the failed coverage attempt0.122TiB.
+Candidates predate verified durable checkpoints or belong to the failed job;
+live process scans on g007/g010 found no candidate references. All checkpoints,
+durable rollout/recovery archives and verdicts are excluded. No files in this
+new proposal have been deleted; explicit approval and a fresh reference check
+are required. Manifest:
+`arm-turn-bonus-preparation/overnight-20260920/storage-cleanup-proposal-20260924d.json`.
 
 <a id="milestone-evaluations-20260924"></a>
 ## Automatic checkpoint evaluations and storage cleanup — September 24

@@ -22,6 +22,7 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
+Latest checked status: [C saved50; beta training6; sampling40 CPU bug fix prepared](RL_RUNTIME.md#arm-status-20260924-evening).
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
