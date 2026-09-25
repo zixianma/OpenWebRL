@@ -25,7 +25,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Failure sampling40 /318950 | No optimizer update | Failed before first update; task-ID provenance correction passes CPU tests; not restarted |
 | C /318935 | Durable55; collecting56 | Running on g007; target60, full300 evaluations50/60 owned by the controller |
 | B /329515 | Resume49, replay saved unoptimized50 batch | Pending priority |
-| Baseline40 ARM-refresh candidates /329708 | Frozen3,000-state input manifest; no generation yet | Pending priority; approved2 H200 ×2h,16 CPUs,480 GiB |
+| Baseline40 ARM-refresh candidates /329708 | Native checkpoint40 restored; first105 sets /525 responses saved at startup verification | Running on g011; approved2 H200 ×2h,16 CPUs,480 GiB |
 
 Beta's latest completed collection has252 successes among590 completed
 trajectories (550 valid):42.71% overall,45.82% valid-only,6.78% invalid. The last

@@ -11,7 +11,8 @@ fine-tuning through [Piotr's action-reward-models repository](https://github.com
 using its **LLaMA-Factory SelectionARM training route**. This supersedes the
 September24 additive-data/custom-trainer draft. The user approved the full
 **8 GPU-hour + $225 API cap** on September25. Candidate-generation job
-**329708** is submitted (2 H200 ×2h), currently pending priority. Teacher labeling
+**329708** is running on g011 (2 H200 ×2h). Native checkpoint40 restoration
+and the first saved candidate sets are verified. Teacher labeling
 and the separate 1-H200 ×4h training/evaluation allocation follow verified inputs;
 no API calls have been made yet.
 
