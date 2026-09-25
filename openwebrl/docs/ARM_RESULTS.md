@@ -27,6 +27,13 @@ and 40, respectively; its stronger iteration-20 result has not persisted.
 All 600 C rollouts and verdicts are also saved. These results do not establish a
 consistent benefit from action-equivalence credit over B's response-index credit.
 
+Gate C's [September25 full-300 evaluations at50 and60](RL_EVALUATION.md#arm-gate-c-iter50-60-results-20260925)
+completed at **33.67% / 43.53%** and **32.67% / 43.17%** overall / valid-only.
+These are −1.33 and −2.33 pp overall against the historical outcome-only baseline
+at the same iterations. All 600 rollouts and verdicts are saved. C training
+finished at60; [current job status and recovery blockers](RL_RUNTIME.md#arm-status-20260925-morning)
+record beta's partial evaluation and the storage failures separately.
+
 Original bonus iteration 80 (September 20) completed at **33.33% overall /
 45.05% valid-only**, versus historical outcome-only **38.00% / 49.78%**.
 All 300 task rollouts and verdicts are preserved. Additive iteration 80 completed

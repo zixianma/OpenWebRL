@@ -149,6 +149,8 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 | **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 |  | 30 | 28.00% / 38.89% | 30.67% / 39.66% |
 |  | 40 | 31.00% / 43.06% | **33.33% / 45.05%** |
+|  | 50 | 31.00% / 41.33% | 33.67% / 43.53% |
+|  | 60 | 30.00% / 41.10% | **32.67% / 43.17%** |
 
 <a id="baseline-comparison"></a>
 ![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–40](rl_results/baseline_vs_arm_allfailure_full300.png)

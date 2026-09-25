@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Gate C iteration50/60 completed evaluations](#arm-gate-c-iter50-60-results-20260925)
 - [Paper protocol and best-checkpoint rerun](#paper-om2w-protocol-20260912)
 - [Intermediate baseline checkpoint evaluation](#baseline-checkpoint-evaluation)
 - [Browser Use checkpoint evaluations](#browser-use-checkpoint-evaluation)
@@ -11,6 +12,42 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-gate-c-iter50-60-results-20260925"></a>
+## Gate C iteration50/60 results — September25, 2026
+
+Job318935 completed training through iteration60 /782 Adam updates and both
+full-300 evaluations. Protocol: local browser, GPT-4.1 action-history judge,
+temperature0. Fixed100 is extracted from the same saved full300 tasks.
+
+| Checkpoint | Adam updates | Cohort | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
+| C50 | 668 | Full300 | 101 | 232 | 68 | 33.67 | 43.53 |
+| C60 | 782 | Full300 | 98 | 227 | 73 | 32.67 | 43.17 |
+| C50 | 668 | Fixed100 | 31 | 75 | 25 | 31.00 | 41.33 |
+| C60 | 782 | Fixed100 | 30 | 73 | 27 | 30.00 | 41.10 |
+
+Historical baseline50 is35.00% /44.87% and baseline60 is35.00% /45.65%.
+C is below these by1.33 /1.34 pp and2.33 /2.48 pp respectively. These are
+descriptive comparisons across evaluation dates and different valid-task sets,
+not evidence of a statistically established decline or gain.
+
+Verified all300 expected unique task IDs,300 nonempty ZIP rollout archives and
+300 per-task JSON verdicts for each checkpoint. ZIP central-directory checks
+passed; no task exception records or malformed verdict JSON were present.
+Native model restoration receipts and complete status files are saved. Invalid
+browser trajectories are counted separately from missing/exception records.
+
+Sources: [C50 audit](arm_results/rl_integration/gate-c-iteration50-audit.json),
+[C60 audit](arm_results/rl_integration/gate-c-iteration60-audit.json),
+[C50 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-c-iter50-318935),
+[C60 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-c-iter60-318935).
+Runtime artifacts are under `evaluations/arm-gate-c-iter{50,60}-318935/`.
+
+Beta1's separate iteration10 evaluation stopped at256/300 tasks because of disk
+quota; it has no completed full300 score. Its256 rollout archives and verdicts
+are preserved, leaving44 tasks to recover. Its iteration20 evaluation has not
+started. See [the current recovery record](RL_RUNTIME.md#arm-status-20260925-morning).
 
 <a id="paper-om2w-protocol-20260912"></a>
 ## Paper protocol and best-checkpoint rerun (2026-09-12)

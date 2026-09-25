@@ -22,16 +22,16 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-Latest checked status: [C saved50; beta training6; sampling40 CPU bug fix prepared](RL_RUNTIME.md#arm-status-20260924-evening).
+Latest checked status: [C60 complete; beta20 trained but evaluation partial; storage and teacher-labeling blockers](RL_RUNTIME.md#arm-status-20260925-morning).
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
 [Gate B iteration30/40 full-300 results](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924)
 and [Gate C iteration30/40 results](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924)
-are complete. C resumed toward60; B stopped at49 and its requested50 evaluation
-could not run. See the [timing-guard diagnosis](RL_RUNTIME.md#gate-b-budget-stop-20260924).
-B49→60 continuation is [submitted as329515: 8 H200s ×8h, with full-300 at50/60](RL_RUNTIME.md#b4960-continuation-and-c60-evaluation-prepared);
-C60 full-300 is owned by existing job318935, after its checkpoint is durable.
+are complete, as are [C50/C60 full300 and fixed100 results](RL_EVALUATION.md#arm-gate-c-iter50-60-results-20260925).
+B remains at49; continuation329515 failed its storage preflight. Beta reached20,
+but its iteration10 evaluation stopped at256/300 on disk quota; iteration20 is
+outstanding. No ARM GPU jobs are running or queued at the latest check.
 
 Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
 

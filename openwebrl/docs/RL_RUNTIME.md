@@ -4,7 +4,8 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
-- [Current ARM status and approved refresh pipeline](#arm-status-20260925-early)
+- [Current ARM status, completed evaluations and recovery blockers](#arm-status-20260925-morning)
+- [Approved refresh pipeline](#arm-status-20260925-early)
 - [Evening training status and coverage identity fix](#arm-status-20260924-evening)
 - [Automatic tenth-iteration evaluations and temporary-storage cleanup](#milestone-evaluations-20260924)
 - [Verified afternoon storage cleanup](#storage-cleanup-20260924-afternoon)
@@ -15,6 +16,49 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-status-20260925-morning"></a>
+## ARM status and recovery blockers — September25, morning PDT
+
+No ARM training or evaluation GPU jobs are running or queued at this check.
+This supersedes the earlier startup snapshot below.
+
+| Experiment / job | Durable training progress | Evaluation / final state |
+| --- | --- | --- |
+| C /318935 | Iteration60 /782 Adam updates | Completed successfully at04:21PDT; full300 at50 and60 complete |
+| B /329515 | Still49 /662 Adam updates; saved unoptimized50 batch | Failed storage-headroom preflight after30s; no new training;50/60 evaluations outstanding |
+| Failure beta1 /318949 | Iteration20 /298 Adam updates; training complete | Iteration10 evaluation failed on disk quota after256/300 saved task results;20 evaluation not started |
+| Failure sampling40 /318950 | Iteration0 /0 Adam updates | Earlier task-ID provenance failure; CPU-tested source fix prepared, not GPU-validated or restarted |
+| Baseline40 ARM-refresh candidates /329708 | No actor optimizer updates planned | Generation completed in39m02s; teacher pilot halted on one truncated response; ARM fine-tuning not submitted |
+
+[C50/C60 results](RL_EVALUATION.md#arm-gate-c-iter50-60-results-20260925) are
+33.67% /43.53% and32.67% /43.17% overall /valid-only. All600 rollouts and
+verdicts are saved. Beta's partial256 task results include76 successes,207 valid
+and49 invalid;44 tasks have no saved verdict. This incomplete subset must not be
+reported as a full300 score. The misleading directory name
+`evaluations/arm-additive-iter10-318949` is the **beta1** evaluation: its manifest
+and W&B identity point to the failure-weight lineage.
+
+Scrubbed has less than0.1GiB remaining under its hard quota at the morning
+check, and zero safe headroom under its soft quota. B's guard correctly stopped
+before training; beta's eval log ends in `OSError: [Errno 122] Disk quota exceeded`.
+Recovery requires approved storage cleanup first, preserving milestone/latest
+checkpoints and saved rollouts/verdicts. Then recover only beta's44 missing tasks,
+run beta20, and resume B and the corrected sampling experiment within explicitly
+authorized compute budgets. No deletion or replacement allocation was performed
+as part of this status check.
+
+ARM refresh generated2,382 five-response sets (11,910 responses), retaining the
+planned2,000 training and250 development states. Its GPT-5.5 pilot made20 calls:
+19 valid labels and one empty visible response after all2,048 output tokens were
+used for reasoning (`finish_reason=length`). Raw responses and usage are saved;
+pilot cost is about$0.68. No bulk teacher Batch or1-H200 fine-tuning job has been
+submitted. Resolve the token-cap failure with explicit retry accounting within
+the approved$225 cap before releasing the remaining teacher work.
+
+The RL observer and refresh watcher remain active. The refresh watcher is in
+`needs-attention` and has stopped mutations; it will not repair itself or resume
+API spending until its failure is addressed. No ARM GPUs are held idle for it.
 
 <a id="arm-status-20260925-early"></a>
 ## ARM status and approved refresh pipeline — September25, 01:25PDT
