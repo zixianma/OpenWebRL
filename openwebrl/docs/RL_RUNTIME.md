@@ -39,8 +39,9 @@ evaluation request is below its unused8-GPU training/evaluation budget.
 
 Persistent `scripts/watch_arm_storage_release.py` checks quota every minute
 and releases only these registered held jobs. It reserves256GiB for beta and
-2TiB for each training job, using headroom below the scrubbed **soft quota**;
-4.25TiB permits all three to be released together. With less space it releases
+2TiB for each training job;4.25TiB permits all three to be released together.
+Initially the guard used only soft-quota headroom; the grace-aware correction
+below supersedes that unnecessarily restrictive behavior. With less space it releases
 only the jobs that fit, subtracting reservations for already-released jobs.
 Each worker retains its startup storage check. Waiting consumes no GPU time.
 The watcher runs for72h and records queue, controller, training and per-evaluation
@@ -61,6 +62,27 @@ Private submission, budget, missing-task and readiness receipts are under
 The separate ARM-refresh candidate job completed; teacher token-limit repair
 still precedes its authorized fine-tuning stage. No duplicate candidate job or
 GPU job waiting for teacher labels was submitted.
+
+### Active-grace correction and first releases — September25, afternoon
+
+The user's cleanup freed **3.55TiB below the110TiB hard quota** (usage106.45TiB,
+soft quota100TiB); GPFS reports **7 days of block grace**. The original guard
+ignored grace and incorrectly prevented all three jobs from becoming eligible.
+The corrected check uses hard-quota headroom while reported active grace has a
+conservative lower bound of at least48h, covering these at-most24h jobs plus
+margin. Unknown, expired or short grace falls back to the soft limit. In-doubt
+blocks remain reserved; the hard limit and startup checks remain enforced.
+[IBM quota/grace semantics](https://www.ibm.com/docs/en/storage-scale/6.0.0?topic=reference-mmedquota-command).
+
+The restarted persistent watcher released **beta329912 and B329908**; both now
+wait for scheduler priority. Sampling329911 remains held: with2.25TiB reserved
+for beta+B, only1.30TiB remains, versus its2TiB reserve. About0.70TiB of further
+headroom permits simultaneous release, or release can follow sufficient space
+and reservation recovery after another job ends. These reserves are admission
+buffers, not exact predictions or enforced limits on each job's eventual writes.
+Ten quota tests and nine recovery/reservation tests cover active/expired grace,
+rounding, hard-limit enforcement, in-doubt blocks and avoiding double-counted
+capacity. No new allocation, budget extension or deletion was performed.
 
 <a id="arm-status-20260925-morning"></a>
 ## ARM status and recovery blockers — September25, morning PDT
