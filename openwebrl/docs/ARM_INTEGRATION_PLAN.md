@@ -169,6 +169,19 @@ Earlier additive data/request manifests remain preserved but are explicitly
 superseded; launch guards prevent the old teacher requests/custom trainer from running.
 No raw trajectories or API payloads are published with this plan.
 
+<a id="arm-b-continuation-20260925"></a>
+## Gate B: continue the unchanged experiment through90 — September25
+
+Approved and queued **330304:8 H200 ×24h**, following existing B-to-60 job329908.
+Preserve B's relaxed `min2` candidate gate, response-index credit, β0.5/q20%,
+48 mixed groups plus up to8 auxiliary failure groups, and loss coefficient1/6.
+Resume the existing optimizer, scheduler, task cursor and W&B lineage with
+TP2/DP4,microbatch1. This is a continuation, not a new intervention.
+
+The controller owns full300 evaluations at70,80 and90, and stops at90.
+Release requires verified B60, completed B50/B60 evaluations and storage
+headroom. [Resources, timing and validation](RL_RUNTIME.md#arm-b-to90-20260925).
+
 <a id="arm-beta-bounded-continuation-20260925"></a>
 ## Failure β1: bounded continuation through40 — September25
 

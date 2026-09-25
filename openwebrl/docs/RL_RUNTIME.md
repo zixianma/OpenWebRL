@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Gate B continuation to90](#arm-b-to90-20260925)
 - [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
 - [Queued ARM recoveries and automatic storage release](#arm-recovery-queue-20260925)
 - [Completed evaluations and morning recovery blockers](#arm-status-20260925-morning)
@@ -18,6 +19,48 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-b-to90-20260925"></a>
+## Gate B continuation through90 — September25, 2026
+
+Approved and submitted **330304: 8 H200 ×24h** (192 GPU-hours maximum),
+64 CPUs,960GiB RAM,64 browsers. This continues the existing B lineage;
+reward settings, model, optimizer, scheduler and task cursor are preserved.
+Training stays **TP2/DP4, microbatch1, global batch256, two PPO epochs**.
+W&B remains `arm-gate-b-309053` in `openwebrl`.
+
+Job330304 has `afterok:329908` and an initial hold. The persistent quota-release
+watcher additionally requires B60's verified checkpoint, completed full300
+B50/B60 evaluations, and2TiB of unreserved launch headroom. A predecessor
+exiting with a partial checkpoint cannot release this job. Queued/held time
+consumes no GPU allocation. B329908 remains the unchanged49→60 recovery.
+
+The new controller owns and awaits training61–70 → full300 evaluation70 →
+training71–80 → full300 evaluation80 → training81–90 → full300 evaluation90.
+Every segment verifies native model/optimizer restoration first. Evaluations
+use local browsers, GPT-4.1/action_history and T0, and preserve all300 task
+rollouts and verdicts. Standalone evaluation tracking uses `openwebrl-evals`.
+There is no automatic extension beyond90 or the24-hour budget.
+
+B's last eight checkpoint intervals have a31.08-minute median: approximately
+15.54h for30 training iterations, or an estimated18–20h including evaluation
+and restoration. This estimate excludes scheduler waiting and depends on
+browser validity and task lengths; the controller preserves partial progress
+if the endpoint does not fit.
+
+Prepared launcher: `scripts/resume_arm_b_to90_8gpu.sbatch`; controller:
+`scripts/prepare_arm_b_to90.py`. Six continuation tests passed, plus five beta
+regressions and nine recovery/quota tests. The actual launcher arguments
+confirm TP2,microbatch1,global256,two PPO epochs and checkpoint-scheduler
+restoration. B60 is not yet available, so no actual B60 GPU restore is claimed.
+The continuation explicitly removes B49's consumed saved-batch replay settings;
+it retains the scientific candidate gate, credit rule and scale guard.
+
+Private approval/proposal/readiness: `logs/arm-b-to90-20260925/`. The active
+persistent watcher is recorded in `logs/arm-unfinished-20260925/watch-process.json`;
+it observes jobs and releases registered holds when prerequisites pass.
+In-allocation training monitoring runs every15 minutes. These monitors do not
+implement unattended arbitrary bug repair or request additional allocations.
 
 <a id="arm-beta-to40-20260925"></a>
 ## Beta1 continuation capped at40 — September25, 2026

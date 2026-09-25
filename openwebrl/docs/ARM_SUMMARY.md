@@ -154,7 +154,8 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 40 | 31.00% / 43.06% | **33.33% / 45.05%** |
 |  | 50 | 31.00% / 41.33% | 33.67% / 43.53% |
 |  | 60 | 30.00% / 41.10% | **32.67% / 43.17%** |
-| **Failure β = 1** | 10 | 27.00% / 35.53% | **27.33% / 33.74%** |
+| **Failure β = 1** | 10 | 27.00% / 35.53% | 27.33% / 33.74% |
+|  | 20 | 32.00% / 42.11% | **33.00% / 41.77%** |
 
 <a id="baseline-comparison"></a>
 ![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–40](rl_results/baseline_vs_arm_allfailure_full300.png)
