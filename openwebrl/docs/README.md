@@ -18,15 +18,19 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Evolving ARM completed: later-actor offline agreement57.68%→59.57% (+1.89pp); label/order stability remains a concern](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925). This is not browser task success. [Approved browser comparison331770](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926).
+[Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
+[Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
+
+Next ARM feasibility test: [guided prefixes followed by actor-only completion](ARM_INTEGRATION_PLAN.md#arm-prefix-curriculum-pilot-20260926).
+Prepared48 training tasks × three prefix lengths × two attempts; exact two-H200/two-hour allocation and$20 judge cap await approval.
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [Gate B69 recovery331778 held for storage; C60 complete;
 failure sampling40% training/evaluations through20 complete;
-browser forward-transfer comparison331770 running](RL_RUNTIME.md#arm-progress-20260926).
+browser forward-transfer comparison331770 now complete](RL_RUNTIME.md#arm-progress-20260926).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
 Beta continuation330278 failed during21; no replacement is currently running.

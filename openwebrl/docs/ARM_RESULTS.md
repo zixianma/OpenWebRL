@@ -4,6 +4,37 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-refresh-browser-results-20260926"></a>
+## Refreshed ARM browser forward transfer — September26, 2026
+
+Job331770 completed the frozen-versus-refreshed SelectionARM comparison on the
+same outcome-only iteration90 actor. Both300-task stages have saved rollouts and
+judge verdicts, verified against their summaries and native checkpoint restore
+receipts. This comparison does **not** demonstrate a benefit from refreshing ARM.
+
+| Selector | Full300 overall | Full300 valid-only | Valid denominator | Fixed100 overall | Fixed100 valid-only | Valid denominator |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Frozen released ARM |42.00%|56.50%|223|38.00%|56.72%|67|
+| Refreshed ARM,90 adapter updates |41.33%|52.99%|234|42.00%|56.76%|74|
+| Refreshed minus frozen |−0.67pp|−3.51pp|—|+4.00pp|+0.04pp|—|
+
+Full300 success counts are126 and124. There are32 unsuccessful→successful and34
+successful→unsuccessful task changes when invalid outcomes count as unsuccessful;
+200 tasks are valid in both conditions. The valid-only columns use different
+denominators and are not a paired effect estimate. Full300 is the primary cohort;
+the fixed100 subset is descriptive, not a reason to select the refreshed model.
+
+Protocol: full-response K5 selection, actor T0.8/top_p1,response4096,context32768,
+horizon30,local browsers,GPT-4.1/action_history; sequential stages and live browser
+stochasticity remain. This is not the T0 actor-only checkpoint benchmark, nor a
+fresh actor-only control. No selector fallbacks occurred. The shared judge ledger
+records459 calls and$4.86 charged/reserved. Private artifacts:
+runtime `evaluations/arm-refresh-browser-331770/`, especially
+`task-success-summary.json` and each stage's `compare_records/` and `trajectories/`.
+
+The [prefix-curriculum pilot](ARM_INTEGRATION_PLAN.md#arm-prefix-curriculum-pilot-20260926)
+therefore retains the original frozen ARM and starts from the original SFT actor.
+
 <a id="arm-gate-b-mixed-alignment-20260926"></a>
 ## Gate B mixed-group ARM audit — September26, 2026
 

@@ -6463,3 +6463,78 @@ uses progress in future success likelihood for process advantages;
 through return decomposition. They motivate the direction but do not confer
 those guarantees on the weighting heuristic above. The running refreshed-ARM
 browser comparison remains the nearer-term test of better reward quality.
+
+<a id="arm-prefix-curriculum-pilot-20260926"></a>
+## ARM-guided prefixes followed by actor-only completion — September26
+
+**Decision:** prioritize a training-time curriculum that uses ARM to reach useful
+states, then hands control to the ordinary actor. The user requested the first
+feasibility test. CPU implementation and a frozen task cohort are prepared;
+**no pilot allocation has been submitted**. Exact proposed resources are
+**two H200 GPUs × two hours,16 CPUs,480GiB RAM**, plus a **$20 GPT-4.1 judge
+cap /900 requests including retries**. Resource and API-budget approval are the
+remaining launch prerequisite. The earlier deferred failure-only experiment's
+eight-GPU approval is not transferred to this different experiment.
+
+| Pilot component | Fixed specification |
+| --- | --- |
+| Actor | Original `OpenWebRL-4B-SFT`, iteration0; no optimizer updates |
+| Guide | Frozen released `PTeterwak/OpenWebRL-4B-SelectionARM`; five full reasoning+action candidates, shuffled order |
+| Conditions | Actor only; ARM for first2 turns; ARM for first4 turns |
+| Handoff | Same live browser session and accumulated history; one actor response per subsequent turn; no further ARM calls |
+| Tasks |48 tasks sampled by deterministic hash from2,102 existing training tasks; OM2W IDs/intents excluded; seed20260926; no outcome/availability screening |
+| Repeats | Two attempts per condition per task;288 primary trajectories |
+| Startup gate | Two tasks × three conditions × two attempts =12 separate smoke trajectories; require real selection and actor suffix execution before scaling |
+| Decoding | T0.8,top_p1,response1024,context32768; total horizon15 including guided turns;16 concurrent browsers |
+| Judge | Native GPT-4.1/action_history, unchanged terminal success; same protocol for every condition |
+| Tracking | `openwebrl-evals`; controller owns and awaits collection, verification and summary |
+
+A "turn" is one actor response/tool-call turn, not necessarily one individual
+browser tool call. All conditions run freshly. Their order is randomized within
+each task. Repeat seeds and candidate-zero seeds match across prefix lengths;
+later contexts and live web states may differ, so this is not deterministic
+counterfactual replay. Guided completion before handoff is permitted and recorded
+separately. Each trajectory retains its rollout, judge verdict, full guided
+candidate traces, handoff prompt/screenshot hashes and executed suffix. No
+trajectory or temporary tensor cleanup is included.
+
+**Readout:** report overall and valid-only terminal success with denominators,
+paired changes versus actor-only, jointly valid comparisons, and exploratory
+task-cluster bootstrap intervals. Also report the unconditional fraction of
+attempts that succeed **after at least one actor-only turn**, successes completed
+entirely by the guide, number of actor suffix turns, invalid causes, actor output
+tokens/requests, selector calls and elapsed time. The two ordinary actor attempts
+provide an additional retry reference; they are **not exactly equal compute** to
+guided attempts. Concurrent trajectory-seconds are not GPU-hours.
+
+This is a feasibility panel, not held-out evaluation or an RL training result.
+Conditional success among trajectories reaching handoff uses different selected
+populations and cannot establish a causal improvement. Proceed toward a training
+experiment only if the results support useful actor-completed continuations at
+reasonable cost, rather than gains consisting solely of guide-completed tasks or
+availability differences. A null or noisy result motivates discussion, not an
+automatic larger allocation. Any subsequent scientific training experiment starts
+at iteration0; guided prefix tokens would initially be excluded from ordinary
+on-policy PPO, and unassisted rollouts retained alongside assisted suffixes.
+
+The approach builds on [Jump-Start RL](https://arxiv.org/abs/2204.02372), which uses
+a guide policy to generate a curriculum of starting states. The proposed browser
+test asks whether selecting among the learner's own responses can supply those
+states. It does not claim a new general curriculum algorithm or established
+training gains.
+
+Seven CPU tests and the assembled native argument-parser preflight passed.
+Implementation: `openwebrl/arm_prefix_pilot.py`; preparation/controller
+`scripts/run_arm_prefix_pilot.py`; batch template
+`scripts/run_arm_prefix_pilot_2gpu.sbatch`; seven CPU tests in
+`tests/test_arm_prefix_pilot.py`. Private cohort, launch plan and readiness live in
+runtime `arm-turn-bonus-preparation/prefix-pilot-20260926/`. GPU startup is not yet
+validated. The prepared persistent watcher observes queue/startup/progress and
+verifies saved artifacts; it starts upon submission and does not implement
+unattended bug repair.
+
+The separate consequence-informed evaluator idea is deferred. The current ARM
+has not been trained to evaluate before/after screenshots; first compare a
+general-purpose teacher with versus without transition feedback, then consider
+training a new evaluator. Never treat observed feedback from one executed action
+as the outcome of its unexecuted alternatives.
