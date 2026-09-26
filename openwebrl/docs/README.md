@@ -18,7 +18,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Evolving ARM: candidates complete; teacher recovery prepared, explicit OpenAI data-transfer approval pending](RL_RUNTIME.md#arm-refresh-label-recovery-20260925). No fine-tuning or forward-transfer result yet.
+[Evolving ARM: teacher pilot20/20; all2,701 Batch requests submitted under the approved$1,000 cap](RL_RUNTIME.md#arm-refresh-label-recovery-20260925). No fine-tuning or forward-transfer result yet.
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

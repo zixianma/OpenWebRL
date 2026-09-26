@@ -1,5 +1,5 @@
 {
-  "status": "approved; candidate job329708 running on g011; checkpoint restoration and first105 saved sets verified",
+  "status": "candidate generation complete;20/20 pilot valid after one recorded recovery;2701 Batch requests submitted in7 chunks;ARM training/evaluation not started",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -25,12 +25,12 @@
   "teacher_model": "gpt-5.5",
   "teacher_completion_cap": 2048,
   "teacher_pilot_standard_requests": 20,
-  "teacher_api_cap_usd": 225,
+  "teacher_api_cap_usd": 1000,
   "teacher_cost_estimate_range_usd": [
     50,
     120
   ],
-  "teacher_cost_estimate_limitations": "Candidate text is not generated yet; build exact byte/token reservations before submitting. Stop within cap, no silent increase.",
+  "teacher_cost_estimate_limitations": "Initial50-120 range was a pre-generation projection; the frozen request bytes and completion caps now reserve191.22 USD including the pilot retry. The1000 USD cap is a ceiling, not a spending target.",
   "original_replay_target": 858,
   "original_retention_target": 200,
   "gpu_stages": [
@@ -65,14 +65,12 @@
   "baseline_quality_audit_tokens_projection": 4370167.96875,
   "teacher_wait_consumes_gpu_time": false,
   "submitted": true,
-  "teacher_calls_made": 0,
+  "teacher_calls_made": 21,
   "next_gates": [
-    "Freeze baseline-only task-disjoint state and replay manifests",
-    "Pin isolated LLaMA-Factory dependencies",
-    "Verify exact multimodal training/deployment token prefix and response mask",
-    "Native baseline40 restore and timing on initial candidate panel",
-    "Exact teacher budget reservation and pilot",
-    "Real-image full-context forward/backward/save/reload before fine-tuning"
+    "Collect and validate all2721 labels, with bounded known-length retries inside cap",
+    "Verify final fit/development multimodal parity and dataset identities",
+    "Submit already approved1 H200 x4h",
+    "Real-image full-context backward/save/reload,90-update SFT,paired offline forward evaluation"
   ],
   "archive_audit": {
     "late": {
@@ -125,5 +123,22 @@
   "final_context_exclusions": 6,
   "preprocessing_parity_passed": true,
   "candidate_startup_verified": true,
-  "local_arm_implementation_commit": "b1b0e60"
+  "local_arm_implementation_commit": "b1b0e60",
+  "status_updated_at_utc": "2026-09-26T00:08:18.129663+00:00",
+  "previous_teacher_api_cap_usd": 225,
+  "explicit_openai_payload_transfer_approved": true,
+  "teacher_known_length_retry_caps": [
+    4096,
+    8192
+  ],
+  "teacher_reserved_usd": 191.2173475,
+  "teacher_pilot_billed_upper_bound_usd": 0.733315,
+  "teacher_calls_made_scope": "Completed synchronous pilot calls including one retry; Batch submissions are separate",
+  "teacher_batch_requests_submitted": 2701,
+  "teacher_batch_chunks_submitted": 7,
+  "candidate_sets_generated": 2382,
+  "candidate_responses_generated": 11910,
+  "train_states_retained": 2000,
+  "dev_states_retained": 250,
+  "training_submitted": false
 }

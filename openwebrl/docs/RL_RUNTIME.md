@@ -4,7 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
-- [ARM-refresh teacher recovery and transfer-approval gate](#arm-refresh-label-recovery-20260925)
+- [ARM-refresh pilot recovered and labeling resumed](#arm-refresh-label-recovery-20260925)
 - [Gate B continuation to90](#arm-b-to90-20260925)
 - [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
 - [Queued ARM recoveries and automatic storage release](#arm-recovery-queue-20260925)
@@ -31,36 +31,58 @@ across82 evaluation tasks. Training will compare the updated SelectionARM with
 the frozen ARM on the same iteration90 candidates; this is offline selection
 agreement, not a new browser task-success measurement.
 
-The pilot saved19 valid GPT-5.5 labels and one known token-limit response with
-2,048 generated tokens and empty visible content. No Batch has been submitted,
-no ARM optimizer updates have run and no forward-transfer result is available.
+The pilot initially saved19 valid GPT-5.5 labels and one known token-limit
+response with2,048 generated tokens and empty visible content. After explicit
+OpenAI payload-transfer approval, the4,096-token recovery succeeded, giving
+**20/20 valid labels**. It used1,045 generated tokens (1,022 reasoning) with
+model snapshot `gpt-5.5-2026-04-23`; the original failed response is preserved.
+All seven Batch chunks containing2,701 requests are submitted. The first
+verified provider snapshot reports550 completed requests and zero API failures;
+20 validated pilot labels are local, while Batch outputs are pending finalization.
+No ARM optimizer updates have run and no forward-transfer result is available.
 
 Repair in `scripts/arm_refresh_label_recovery.py` and
 `scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
 pipeline/forward-transfer tests. Valid originals remain authoritative. Only
 recorded length failures may retry at4,096 and then8,192 tokens, retaining model,
 prompt, candidate order and every original/attempt response. Durable intents
-prevent unknown-outcome retries and count against the full$225 budget. Initial
-requests reserve$191.04; extra requests must fit the remaining reservation.
+prevent unknown-outcome retries and count against the approved **$1,000 total
+API cap**, raised explicitly by the user on September25. Initial requests
+reserve$191.04; the pilot retry brings the reservation to$191.22. Recorded pilot
+usage including the failed call is approximately$0.73; no additional examples
+or GPU hours were added by the cap increase.
 Successful standard retries use standard pricing, including for failed Batch
 requests; status records include known failed-response usage.
+
+A local GPFS whole-file read failed after chunk2 uploaded, before its Batch was
+created. All input files passed streaming SHA256 verification. The already
+uploaded chunk2 was downloaded as a stream, matched byte-for-byte, and reconciled
+with its provider file ID; provider history confirmed no Batch yet used it.
+Submission resumed from that receipt without a duplicate upload or Batch.
+The uploader now hashes files in bounded chunks and saves upload receipts before
+Batch creation. Three additional tests cover recovered-upload reuse, unknown
+Batch outcomes and streaming hashes. Batch error files are surfaced explicitly.
 
 This exception addresses the completion cap's inclusion of non-visible tokens;
 [official token-counting documentation](https://developers.openai.com/api/docs/guides/token-counting)
 confirms that the limit covers all generated tokens. Original requests remain
 at2,048 tokens, matching the prepared Piotr-style configuration.
 
-Automatic approval review rejected the live pilot-recovery command because it
-requires explicit internal-payload/destination approval. **No retry executed.**
-The user was asked to authorize sending prepared task text, URLs, screenshots,
-action histories and five reasoning/action candidates to OpenAI at
-`api.openai.com` for the one failed pilot and2,701 Batch requests, under$225.
-Private `baseline40/teacher/external-transfer-approval.json` records this pending
-gate; the labeler checks it before any API operation. The persistent watcher
-remains in its stopped-mutations state, holding no GPU allocation. After approval,
-verify the repaired20/20 pilot, resume Batch handoffs, and submit the already
-approved1-H200 ×4h training/evaluation allocation only once labels and training
-readiness pass. No additional GPU/API budget is requested.
+Automatic approval review initially rejected the live pilot-recovery command
+because explicit internal-payload/destination approval was missing. That attempt
+did not execute. The user subsequently explicitly approved sending the prepared
+task text, URLs, screenshots, action histories and five reasoning/action candidates
+to OpenAI at `api.openai.com` for labeling and bounded retries, with a$1,000 cap.
+Private `baseline40/teacher/external-transfer-approval.json` and the main/API
+approval receipts retain the original authorization and the new amendment.
+The repaired pilot then executed successfully; the persistent watcher was
+restarted after verified7/7 submissions and reached `waiting-for-teacher`. It
+will poll every10 minutes and recover known length
+failures within the cap, prepare LLaMA-Factory data, and submit the already
+approved1-H200 ×4h training/evaluation allocation when readiness passes.
+No GPUs are held while waiting for teacher labels. Other errors still stop
+mutations for active-agent investigation; arbitrary unattended repair is not
+implemented.
 
 <a id="arm-b-to90-20260925"></a>
 ## Gate B continuation through90 — September25, 2026
