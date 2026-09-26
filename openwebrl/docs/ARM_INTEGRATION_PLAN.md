@@ -6169,7 +6169,7 @@ selected derived results, with no credentials or raw API response envelopes.
 <a id="arm-refresh-browser-20260926"></a>
 ## Refreshed ARM: executed browser forward transfer — September26, 2026
 
-**Prepared, not submitted.** Default proposed actor is outcome-only iteration90,
+**Approved and submitted as331770.** The actor is outcome-only iteration90,
 matching the later actor in the completed offline transfer test. This uses the
 five-candidate inference mechanism from ARM_SUMMARY section1, with the RL
 actor's GPT-4.1/action_history audit protocol. It does not directly reproduce
@@ -6197,7 +6197,7 @@ the historical SFT/o4-mini result.
 - Proposed cap: **2 H200×4h,16 CPUs,480GiB;606 total trajectories including six
   excluded smoke runs; GPT-4.1 judge≤$30/1818 calls**. Expected around3h from
   the previous200-task audit's56m24s, with4h allowing startup/website variability.
-  Final resource approval is required before submission.
+  The user approved this exact resource request and judge cap on September26.
 
 Prepared launcher: `scripts/run_arm_refresh_browser_2gpu.sbatch`; controller:
 `scripts/run_arm_refresh_browser.py`. CPU plan/cohort/hash/budget/serving-import
@@ -6205,3 +6205,16 @@ checks passed. GPU serving of the adapter is gated inside the proposed job.
 The existing validated frozen and refreshed offline environment uses identical
 SelectionARM base tensors; only the adapter differs. The actor native runtime
 and refreshed selector Python environment remain separate.
+
+
+Browser launch update:331769 loaded the frozen ARM, but the legacy preflight
+model-path guard rejected its declared compatibility directory. It exited
+in45s before any browser trajectory or judge call. The guard now verifies the
+custom path (and adapter hash) explicitly. Recovery331770 uses at most3h59m,
+so cumulative allocated time remains below the approved4h. It started on g014.
+Persistent observer `scripts/watch_arm_refresh_browser.py` follows the current
+submission receipt, records stage/task/smoke/restore progress, and verifies
+all600 primary rollout/verdict pairs on completion. It does not automatically
+repair arbitrary failures. Artifacts:
+`evaluations/arm-refresh-browser-331770/`; watcher status:
+`arm-turn-bonus-preparation/arm-refresh-20260924/browser/watch-status.json`.

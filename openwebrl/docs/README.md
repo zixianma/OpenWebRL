@@ -18,7 +18,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Evolving ARM completed: later-actor offline agreement57.68%→59.57% (+1.89pp); label/order stability remains a concern](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925). This is not browser task success. [Prepared browser comparison](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926).
+[Evolving ARM completed: later-actor offline agreement57.68%→59.57% (+1.89pp); label/order stability remains a concern](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925). This is not browser task success. [Approved browser comparison331770](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

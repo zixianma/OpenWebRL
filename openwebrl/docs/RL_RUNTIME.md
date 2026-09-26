@@ -31,7 +31,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
 | Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete |
 | Failure sampling40% | Iteration19 /288 Adam updates | Job329911 active on20; controller owns evaluations10/20 |
-| Refreshed ARM | Final90 SFT updates | Offline evaluation331120 complete; browser comparison prepared, allocation not approved |
+| Refreshed ARM | Final90 SFT updates | Offline evaluation331120 complete; browser comparison331770 launched on g014 |
 
 B50/B60 full300 evaluations completed in329908:37.67%/48.71% and37.33%/49.12%
 overall/valid-only. Both300-task cohorts, saved archives and verdicts were verified.
@@ -66,8 +66,10 @@ observes jobs and releases registered holds; arbitrary failure repair still
 requires an active agent.
 
 [Refreshed ARM browser comparison](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926)
-uses two fresh selector conditions on actor90; this separate2-H200×4h proposal
-and$30 judge cap still require explicit approval.
+uses two fresh selector conditions on actor90; the user approved2 H200×4h
+and the$30 judge cap. Job331769 failed the model-path preflight in45s before
+browser/judge calls; corrected recovery331770 has3h59m remaining and started
+on g014. A persistent observer tracks both stages and verifies saved artifacts.
 
 <a id="arm-refresh-label-recovery-20260925"></a>
 ## ARM-refresh labeling, training and evaluation recovery — September25
