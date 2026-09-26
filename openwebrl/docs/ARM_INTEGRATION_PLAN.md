@@ -18,7 +18,10 @@ sets, retaining2,000 training and250 development states. The first20 GPT-5.5
 teacher calls produced19 valid labels and one truncated response: its2,048-token
 cap was consumed by reasoning, leaving no visible selection. The known failure
 was recovered with a4,096-token cap: **20/20 pilot labels now pass**. All seven Batch
-chunks containing2,701 remaining requests are submitted; ARM fine-tuning has not started and there is no
+chunks completed and **all2,721 labels are validated**, with zero unresolved
+errors. Seven length failures, including the pilot, recovered at4,096 tokens.
+Final CPU data/preprocessing checks passed. **Job330951 is queued:1 H200 ×4h**
+for the90-update ARM SFT and paired offline evaluation. There is no
 forward-transfer result yet.
 
 **September25 afternoon repair:** bounded recovery is implemented and14 tests
@@ -29,8 +32,9 @@ Reserve every extra request against the approved$1,000 cap, including unresolved
 request intents; unknown outcomes and other error types are not blindly retried.
 This is a documented token-limit recovery exception to the initial2,048 cap.
 The original2,721-request reservation is$191.04; including the pilot retry,
-the reservation is **$191.22**. Recorded pilot usage, including the failed call,
-is approximately **$0.73** at undiscounted input pricing. The higher cap is a
+the initial reservation was **$191.22**. After all seven recoveries the reserved
+ceiling is **$192.56**; recorded usage across all completed calls, including
+failed attempts, is approximately **$42.58** at undiscounted input pricing. The higher cap is a
 ceiling, not a spending target; original requests retain their2,048-token cap.
 
 **Approval resolved:** the user explicitly approved sending task instructions,
@@ -151,7 +155,7 @@ The repository branch is local; the public plan is published on OpenWebRL's `arm
 | Stage | Approved allocation / cap | Basis |
 | --- | --- | --- |
 | Baseline40 restoration and candidate generation | **2 H200 ×2h**,16 CPUs,480 GiB | Target11,250 responses; maximum15,000 with reserve states. Prior64-state offline audit took143s between first/last saved records: linear target projection1.40h, excluding startup and policy/context differences |
-| GPT-5.5 labeling | **Up to$1,000 total**; current reservation **$191.22** | Target2,721 requests:2,250 early +371 future +100 reverse-order checks.20 standard preflight calls, remaining2,701 Batch requests. Exact reservation rebuilt after candidate generation; halt within the cap |
+| GPT-5.5 labeling | **Up to$1,000 total**; completed usage estimate **$42.58** | Target2,721 requests:2,250 early +371 future +100 reverse-order checks.20 standard preflight calls, remaining2,701 Batch requests. Exact reservation rebuilt after candidate generation; halt within the cap |
 | ARM fine-tuning, retention and offline forward evaluation | **1 H200 ×4h**,8 CPUs,120 GiB | One2,858-example pass plus paired selector evaluation; includes startup/full-context backward/save-reload checks. Throughput remains an estimate until the GPU smoke |
 | **Total** | **8 GPU-hours + up to$1,000 API** | Two sequential GPU allocations, separated by API labeling; no GPU allocation held idle for Batch completion |
 

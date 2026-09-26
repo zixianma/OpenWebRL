@@ -36,10 +36,20 @@ response with2,048 generated tokens and empty visible content. After explicit
 OpenAI payload-transfer approval, the4,096-token recovery succeeded, giving
 **20/20 valid labels**. It used1,045 generated tokens (1,022 reasoning) with
 model snapshot `gpt-5.5-2026-04-23`; the original failed response is preserved.
-All seven Batch chunks containing2,701 requests are submitted. The first
-verified provider snapshot reports550 completed requests and zero API failures;
-20 validated pilot labels are local, while Batch outputs are pending finalization.
-No ARM optimizer updates have run and no forward-transfer result is available.
+All seven Batch chunks containing2,701 requests completed with zero provider
+API failures. **All2,721 selections are now valid:**2,000 train,250 development,
+371 future and100 reverse-order checks. Every ID matches the frozen request
+manifest; every label uses the same `gpt-5.5-2026-04-23` snapshot. Seven length
+failures, including the pilot, recovered at4,096 tokens; no8,192-token retry was
+needed. There are zero unresolved errors. Recorded usage including failed
+attempts is approximately$42.58 at undiscounted input pricing; the reservation
+is$192.56 against the$1,000 cap. Final CPU checks passed for2,858 training
+examples and250 development examples, including exact deployment/training
+token-prefix, completion-mask and image-tensor parity on representative cases.
+The watcher submitted **330951:1 H200 ×4h,8 CPUs,120GiB**; initial state is
+pending for priority. The controller owns full-context GPU backward/save-reload
+validation,90-update LLaMA-Factory SFT and the paired offline evaluation. No
+ARM optimizer updates or forward-transfer results exist yet.
 
 Repair in `scripts/arm_refresh_label_recovery.py` and
 `scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
@@ -76,10 +86,17 @@ to OpenAI at `api.openai.com` for labeling and bounded retries, with a$1,000 cap
 Private `baseline40/teacher/external-transfer-approval.json` and the main/API
 approval receipts retain the original authorization and the new amendment.
 The repaired pilot then executed successfully; the persistent watcher was
-restarted after verified7/7 submissions and reached `waiting-for-teacher`. It
-will poll every10 minutes and recover known length
-failures within the cap, prepare LLaMA-Factory data, and submit the already
-approved1-H200 ×4h training/evaluation allocation when readiness passes.
+restarted after verified7/7 submissions, collected and validated all labels,
+completed LLaMA-Factory preparation, and submitted the approved1-H200 ×4h
+training/evaluation job330951. Its current stage is `training-evaluation`; it
+follows the job through queue, worker stages and completion.
+A redundant agent status lookup saw404 because its inherited API key differed
+from the project's key; the persistent watcher used the correct account and
+completed labeling. The teacher client now explicitly selects `OPENAI_API_KEY`
+from the project `.env`, preventing inherited-credential drift. Only equality
+booleans were inspected; no credentials were printed or published. No paid
+requests were repeated because of that lookup.
+
 No GPUs are held while waiting for teacher labels. Other errors still stop
 mutations for active-agent investigation; arbitrary unattended repair is not
 implemented.

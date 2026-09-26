@@ -1,5 +1,5 @@
 {
-  "status": "candidate generation complete;20/20 pilot valid after one recorded recovery;2701 Batch requests submitted in7 chunks;ARM training/evaluation not started",
+  "status": "All2721 teacher labels validated; CPU data/parity checks passed;1-H200 x4h training/evaluation job330951 queued",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -65,12 +65,11 @@
   "baseline_quality_audit_tokens_projection": 4370167.96875,
   "teacher_wait_consumes_gpu_time": false,
   "submitted": true,
-  "teacher_calls_made": 21,
+  "teacher_calls_made": 27,
   "next_gates": [
-    "Collect and validate all2721 labels, with bounded known-length retries inside cap",
-    "Verify final fit/development multimodal parity and dataset identities",
-    "Submit already approved1 H200 x4h",
-    "Real-image full-context backward/save/reload,90-update SFT,paired offline forward evaluation"
+    "Job330951:real-image full-context backward/save/reload",
+    "90-update LLaMA-Factory SFT",
+    "Paired offline forward comparison against frozen ARM on371 future states"
   ],
   "archive_audit": {
     "late": {
@@ -124,21 +123,41 @@
   "preprocessing_parity_passed": true,
   "candidate_startup_verified": true,
   "local_arm_implementation_commit": "b1b0e60",
-  "status_updated_at_utc": "2026-09-26T00:08:18.129663+00:00",
+  "status_updated_at_utc": "2026-09-26T00:27:16.773256+00:00",
   "previous_teacher_api_cap_usd": 225,
   "explicit_openai_payload_transfer_approved": true,
   "teacher_known_length_retry_caps": [
     4096,
     8192
   ],
-  "teacher_reserved_usd": 191.2173475,
+  "teacher_reserved_usd": 192.5585175,
   "teacher_pilot_billed_upper_bound_usd": 0.733315,
-  "teacher_calls_made_scope": "Completed synchronous pilot calls including one retry; Batch submissions are separate",
+  "teacher_calls_made_scope": "Completed synchronous pilot/recovery calls;2701 completed Batch requests tracked separately",
   "teacher_batch_requests_submitted": 2701,
   "teacher_batch_chunks_submitted": 7,
   "candidate_sets_generated": 2382,
   "candidate_responses_generated": 11910,
   "train_states_retained": 2000,
   "dev_states_retained": 250,
-  "training_submitted": false
+  "training_submitted": true,
+  "teacher_batch_requests_completed": 2701,
+  "teacher_labels_valid": 2721,
+  "teacher_unresolved_errors": 0,
+  "teacher_recovered_length_labels": 7,
+  "teacher_recovery_caps_used": [
+    4096
+  ],
+  "teacher_known_billed_upper_bound_usd": 42.582315,
+  "teacher_model_snapshot": "gpt-5.5-2026-04-23",
+  "teacher_labels_by_split": {
+    "train": 2000,
+    "dev": 250,
+    "future": 371,
+    "future_reversed_order": 100
+  },
+  "training_job_id": "330951",
+  "training_examples": 2858,
+  "development_examples": 250,
+  "training_expected_updates": 90,
+  "final_preprocessing_parity_passed": true
 }
