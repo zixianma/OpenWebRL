@@ -1,6 +1,6 @@
 # Action reward models for OpenWebRL training
 
-[Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
+[Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
 <a id="arm-offline-forward-transfer-20260924"></a>
 ## Offline ARM refresh: outcome-only40 → outcome-only90 — September25, 2026
@@ -6218,3 +6218,91 @@ all600 primary rollout/verdict pairs on completion. It does not automatically
 repair arbitrary failures. Artifacts:
 `evaluations/arm-refresh-browser-331770/`; watcher status:
 `arm-turn-bonus-preparation/arm-refresh-20260924/browser/watch-status.json`.
+
+
+<a id="arm-next-experiments-after-bc-20260926"></a>
+## Next experiments after B/C — September26 discussion draft
+
+**Status: proposals only; no new training resources requested or allocated.**
+Wait for the ongoing failure-sampling40% iteration20 evaluation and the frozen
+versus refreshed ARM browser comparison before interpreting their early signals.
+The user mentioned C's strongest results; the measured sustained gains are
+currently stronger for B and late additive. C's early peak is a useful hypothesis
+generator, not an established advantage.
+
+| Full300 overall success | Iteration20 | Iteration50 | Iteration60 |
+| --- | ---: | ---: | ---: |
+| Outcome-only baseline, historical | 31.67% | 35.00% | 35.00% |
+| B: relaxed gate, response-index credit | 33.67% | 37.67% | 37.33% |
+| C: relaxed gate, action-equivalence credit | 36.67% | 33.67% | 32.67% |
+
+[Full results and valid-only rates](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
+Different evaluation dates, validity sets and single training seeds prevent a
+causal claim that either credit rule is better. Additive's iteration90 peak is
+39.33%, falling to36.33% at100; selecting the best checkpoint exaggerates the
+certainty of a method-level gain.
+
+1. **Match credit to what ARM actually endorsed: B credit on reasoning, C credit
+   on action tokens.** Current C gives positive credit to the entire executed
+   response when ARM selects a different response with the same action. That
+   does not establish that the executed reasoning was preferred. Starting from
+   B, change only the ARM bonus on parsed action tokens to C's rule:
+
+   ```text
+   b_index  = beta * m * (1[selected_index == 0] - 1/5)
+   b_action = beta * m * (1[selected_action == executed_action] - multiplicity/5)
+   advantage[token] = outcome_advantage +
+       (b_action if token belongs to the executed action else b_index)
+   ```
+
+   Example: two candidates share the executed action, and ARM selects the other
+   one. With beta0.5, executed reasoning gets -0.1 and action tokens get +0.3.
+   Prompts stay masked and terminal credit still covers the full response.
+   Retain the existing PPO clipping and response-token averaging; do not silently
+   renormalize action tokens or increase beta. This is an online PPO credit
+   ablation, not another offline action-masked SFT/DPO run. First audit exact
+   token boundaries and the share of bonus changes landing on action tokens;
+   short action spans may make the effective intervention small. Its motivation
+   is mechanistic, not evidence that the hypothesis already explains C's curve.
+
+2. **Use ARM only for the extra all-failure groups.** Starting from B, set the
+   ordinary mixed-group ARM beta to0, preserving all48 mixed groups and their
+   unchanged terminal-outcome PPO objective. Keep up to8 extra failure groups,
+   relaxed min2 gate, response-index credit, failure beta0.5 and q0.2. This tests
+   whether ARM is most useful where outcome-normalized advantages are zero,
+   while its preferences interfere with already-informative outcome gradients.
+   Current B/C apply ARM bonuses to mixed groups too, so this has not been
+   isolated by the existing all-failure/additive comparisons. Candidate labeling
+   can initially remain unchanged for diagnostics; no additional selector or
+   browser cost is needed. Success would justify a subsequent compute-saving
+   version that omits mixed-group labels entirely.
+
+3. **Improve reward quality, conditional on the browser forward-transfer test.**
+   If the fixed refreshed ARM improves task success over frozen ARM on paired
+   tasks, compare it with the released ARM inside the unchanged B recipe.
+   Freeze each reward model for the entire new run; start both actors at0.
+   Offline teacher agreement alone (+1.89pp) does not justify this expansion.
+   [PRIME](https://arxiv.org/abs/2502.01456) motivates adapting process rewards
+   using current-policy data and outcome labels, but its math/code evidence
+   does not establish browser gains or validate our teacher-refresh recipe.
+
+**Priority:** the hybrid credit test is the direct C follow-up; failure-only
+auxiliary supervision is the simplest independent objective ablation. Advance
+reward-model refresh only after the already-running execution test. Leave
+beta1 and sampling40% separate until their scheduled endpoints are evaluated;
+those use the original strict gate, so they do not estimate the same changes
+on B/C. Confidence thresholds and expensive rescue scaling have weak support
+from our earlier audits. A progress-based reward is a longer-term direction
+motivated by [Rewarding Progress](https://arxiv.org/abs/2410.08146), but ARM's
+forced-choice win is not a measured improvement in eventual task success.
+
+**Comparison discipline:** all new interventions begin at the original actor,
+iteration0, with fresh optimizer/scheduler/cursor. Hold K5, q0.2, beta0.5 except
+for the stated mixed-group change, task pool, PPO epochs, batch and topology
+fixed. Compare against an unchanged B control; if resources permit, prioritize
+an additional matched seed over a fourth intervention. Predeclare endpoints
+and an aggregate across them, rather than choosing the best checkpoint. Run
+full300 every tenth iteration under the established T0/GPT-4.1 protocol; retain
+rollouts/verdicts, overall and valid-only rates, paired task outcomes, invalid
+causes, optimizer updates, collected groups and GPU-hours. Label these as
+exploratory comparisons because OM2W has already guided many design choices.

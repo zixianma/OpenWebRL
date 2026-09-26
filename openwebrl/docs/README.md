@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 | Document | Contents |
 | --- | --- |
-| [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL; comparison plot includes Gate B at iterations20–40 |
+| [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL; comparison plot includes Gate B at iterations20–60 |
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
@@ -24,13 +24,12 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-Latest checked status: [B329908 and sampling329911 running; beta330278 failed during continuation](RL_RUNTIME.md#arm-recovery-queue-20260925).
-[Beta1 iteration10 recovered full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
-[iteration20 completed:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925). B50/B60 evaluations follow training through60 in329908; sampling40% is running.
-[Beta1 continuation20→40 was launched as330278](RL_RUNTIME.md#arm-beta-to40-20260925),
-with full300 evaluations30/40 and a hard stop at40; it failed during iteration21 training after successful checkpoint20 restoration.
-[Gate B continuation60→90 is approved and queued as330304](RL_RUNTIME.md#arm-b-to90-20260925),
-8 H200 ×24h including evaluations70/80/90; waits for B329908 and verified prerequisites.
+Latest checked status: [Gate B69 recovery331778 held for storage; C60 complete;
+failure sampling40% training20 complete and evaluation20 running;
+browser forward-transfer comparison331770 running](RL_RUNTIME.md#arm-progress-20260926).
+[Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
+[iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
+Beta continuation330278 failed during21; no replacement is currently running.
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
@@ -38,10 +37,7 @@ Default checkpoint evaluation cadence and current queue:
 [Gate B iteration30/40 full-300 results](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924)
 and [Gate C iteration30/40 results](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924)
 are complete, as are [C50/C60 full300 and fixed100 results](RL_EVALUATION.md#arm-gate-c-iter50-60-results-20260925).
-B remains at49; continuation329515 failed its storage preflight. Beta reached20,
-but its iteration10 evaluation stopped at256/300 on disk quota; iteration20 is
-outstanding. The three recovery jobs are now submitted and held until storage
-headroom permits release; C requires no replacement job.
+
 
 Prepared baseline continuation: [stage-2 recipe, dynamic sampling audit, and launch](RL_RUNTIME.md#baseline-stage2-20260914).
 
@@ -165,6 +161,8 @@ hashes remain in `document_map.json`. Retained standalone files are
   · [interactive uncertainty dashboard](arm_results/rl_integration/jev-quality-review.html)
   · [static overview](arm_results/rl_integration/jev-quality-overview.png)
 
-[September26 ARM status: B69 recovery331767, B50/B60 results, C60 complete](RL_RUNTIME.md#arm-progress-20260926).
+[September26 ARM status: B69 recovery331778, B50/B60 results, C60 complete](RL_RUNTIME.md#arm-progress-20260926).
 
 [Failure sampling40% iteration10:29.00% overall /37.34% valid-only](RL_EVALUATION.md#arm-failure-coverage-iter10-results-20260926).
+
+[Next ARM experiments after B/C: hybrid token credit, failure-only auxiliary supervision, and conditional reward-model refresh (discussion draft)](ARM_INTEGRATION_PLAN.md#arm-next-experiments-after-bc-20260926).

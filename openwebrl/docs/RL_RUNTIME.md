@@ -27,10 +27,10 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 | Track | Durable state | Current status |
 | --- | --- | --- |
-| Gate B | Iteration69 /902 Adam updates | Job330304 failed during70; bounded recovery331767 held for storage |
+| Gate B | Iteration69 /902 Adam updates | Job330304 failed during70; bounded recovery331778 held for storage |
 | Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
 | Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete |
-| Failure sampling40% | Iteration19 /288 Adam updates | Job329911 active on20; controller owns evaluations10/20 |
+| Failure sampling40% | Iteration20 /302 Adam updates | Job329911 completed training and evaluation10; evaluation20 active |
 | Refreshed ARM | Final90 SFT updates | Offline evaluation331120 complete; browser comparison331770 launched on g014 |
 
 B50/B60 full300 evaluations completed in329908:37.67%/48.71% and37.33%/49.12%
@@ -55,15 +55,22 @@ of that batch gate subsequent training. The controller owns and awaits full300
 evaluations70,80,90 and ends at90. Same training W&B identity:
 `arm-gate-b-309053`.
 
-**Job331767:**8 H200,64 CPUs,960GiB,19h18m maximum. This is the unused budget of
-330304's approved24h after4h41m49s consumed, rounded down; it is not a reset of
-the allocation budget. Submitted held because personal scrubbed headroom was
-about1.35TiB, below the2TiB continuation reserve while another job is active.
-The existing storage watcher registered331767 and will release it only when
-its quota/reservation checks pass. No GPU time is consumed while held; no
-files were deleted. Watcher heartbeats and ownership lock are active. It
-observes jobs and releases registered holds; arbitrary failure repair still
-requires an active agent.
+**Current recovery331778:**8 H200,64 CPUs,960GiB,19h18m maximum, held for
+storage. Original330304 used4h41m49s; recovery331767 used5s before failing its
+storage check, with no GPU restore or training. The controller now accounts
+for both attempts:16,914s consumed +69,480s requested =86,394s, below the
+approved24h. Four CPU budget/replay/cache tests pass; GPU validation is pending.
+
+During cleanup, personal usage dropped below the100TiB soft quota, resetting
+the active grace period to`none`. The guard consequently switched from hard
+quota headroom during grace to the soft quota ceiling, leaving about1.36TiB
+against a2TiB continuation requirement. This changed between331767's release
+and startup. Its artifacts are preserved. Recovery331778 stays held until the
+storage watcher admits it under current headroom and other-job reservations;
+it consumes no GPU time while held. Hard-limit headroom is about11.36TiB, but
+this controller does not assume a future grace period. No files were deleted.
+The persistent watcher has verified the new job registration and live heartbeat.
+It observes and releases eligible holds; arbitrary bug repair requires an agent.
 
 [Refreshed ARM browser comparison](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926)
 uses two fresh selector conditions on actor90; the user approved2 H200×4h
