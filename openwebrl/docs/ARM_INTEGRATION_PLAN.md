@@ -1,6 +1,6 @@
 # Action reward models for OpenWebRL training
 
-[Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
+[Additive relaxed, failure-only ARM: prepared method](#arm-additive-relaxed-failureonly-20260926) · [Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
 <a id="arm-offline-forward-transfer-20260924"></a>
 ## Offline ARM refresh: outcome-only40 → outcome-only90 — September25, 2026
@@ -6306,3 +6306,71 @@ full300 every tenth iteration under the established T0/GPT-4.1 protocol; retain
 rollouts/verdicts, overall and valid-only rates, paired task outcomes, invalid
 causes, optimizer updates, collected groups and GPU-hours. Label these as
 exploratory comparisons because OM2W has already guided many design choices.
+
+
+<a id="arm-additive-relaxed-failureonly-20260926"></a>
+## Additive relaxed, failure-only ARM — September26, 2026
+
+**Decision:** the user selected proposal2 and clarified that the name should be
+additive, not the older shared-quota all-failure variant. Hybrid token credit
+(proposal1) is deprioritized. Method preparation is complete; **no job submitted**
+because an exact resource request for this new experiment remains unapproved.
+
+| Knob | Existing Gate B | New additive relaxed, failure-only ARM |
+| --- | --- | --- |
+| Ordinary mixed-outcome groups | 48; terminal advantage + ARM bonus | 48; terminal advantage only |
+| Extra all-failure groups | Up to8; separate ARM PPO loss | Same |
+| Mixed-group ARM beta | 0.5 | **0** |
+| Failure-group ARM beta / attempted turn sampling | 0.5 /20% | Same |
+| Candidate gate / credit | Five valid responses, at least two distinct actions / response-index | Same |
+| Failure-loss normalization | Nf/48 times mean over all retained failure turns | Same |
+| Token scope | Full executed reasoning + action | Same |
+
+For mixed groups, A'=A_outcome. For added failure groups,
+`b=0.5*m*(1[selected_index=executed_index]-1/5)`, giving+0.4/-0.1 on usable
+labels and0 otherwise. The separate failure PPO loss keeps its existing Nf/48
+weight and includes unlabeled turns in the denominator. The executed response
+plus four current-actor alternatives are labeled, with K5 and one selector
+call. No action-equivalence credit or new confidence threshold is introduced.
+
+Only the mixed ARM advantage changes. Initially retain mixed-group label
+collection and the same reliability guard for comparable admission/diagnostics.
+Its beta0.5 scale calculation is explicitly **counterfactual**; actual mixed
+bonus is zero. This isolates the objective before a separate compute-saving
+change that would omit those labels. The frozen source inherits Gate B's
+validated TP2/DP4 transport; the sole source edit allows mixed beta0 under an
+explicit failure-only flag. Failure reward serialization remains unchanged.
+
+Fresh initialization: original OpenWebRL-4B-SFT at iteration0; reset optimizer,
+scheduler and task cursor. Proposed first endpoint20, LR1e-6 constant, weight
+decay0.1, global batch256, microbatch1,2 PPO epochs,64 browsers,32K context,
+1024 response tokens and15-turn training horizon. Separate training W&B name:
+`Additive relaxed | failure-only ARM | q20 | JOB_ID` in`openwebrl`.
+
+**Prepared resource request, approval pending:**8 H200 x16h,64 CPUs,960GiB RAM;
+128 GPU-hours maximum. Recent B continuation median is about31min/iteration,
+so20 iterations plus startup and two evaluations should take about11–14h;
+16h gives bounded headroom and is not a guarantee. The controller owns training
+and full300 evaluations of durable10/20 checkpoints, reserves two hours for
+evaluation, and exits early on completion. Evaluation uses the established local
+browser/GPT-4.1/action_history/T0 protocol with every rollout and verdict saved;
+standalone W&B project`openwebrl-evals`. No automatic training/budget extension.
+Launch remains gated by personal storage headroom and other active reservations.
+
+Prepared controller:`scripts/prepare_arm_additive_relaxed_failureonly.py`;
+batch:`scripts/run_arm_additive_relaxed_failureonly_8gpu.sbatch`.
+CPU native argument parsing and three frozen-source semantic checks passed:
+fresh initialization, unchanged reliability checks, and zero mixed bonus with
+positive/negative failure bonuses and the48-group quota preserved. GPU startup
+and first complete optimizer/checkpoint cycle remain allocation-time checks.
+Runtime plans/readiness:`arm-turn-bonus-preparation/additive-relaxed-failureonly-20260926/`.
+
+**Sampling combination:** keep this first run at20%. The existing40% experiment
+changes failure-turn sampling under the original five-distinct-action gate;
+it has trained through20 and its full300 evaluation is still in progress.
+Wait for that completed endpoint before considering longer continuation or a
+combined arm. A strict-gate40% result cannot settle the relaxed-gate interaction.
+The clean next comparison would be this same additive relaxed/failure-only
+recipe at failure q40% versus q20%, with mixed beta0 and all other settings
+fixed. B+40% with mixed beta0.5 is a different comparison; neither combination
+is currently approved or queued. Any new40% combination starts at iteration0.

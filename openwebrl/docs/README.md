@@ -166,3 +166,5 @@ hashes remain in `document_map.json`. Retained standalone files are
 [Failure sampling40% iteration10:29.00% overall /37.34% valid-only](RL_EVALUATION.md#arm-failure-coverage-iter10-results-20260926).
 
 [Next ARM experiments after B/C: hybrid token credit, failure-only auxiliary supervision, and conditional reward-model refresh (discussion draft)](ARM_INTEGRATION_PLAN.md#arm-next-experiments-after-bc-20260926).
+
+[Additive relaxed, failure-only ARM: prepared iteration0→20 experiment; exact compute approval pending](ARM_INTEGRATION_PLAN.md#arm-additive-relaxed-failureonly-20260926).
