@@ -6469,12 +6469,13 @@ browser comparison remains the nearer-term test of better reward quality.
 
 **Decision:** prioritize a training-time curriculum that uses ARM to reach useful
 states, then hands control to the ordinary actor. The user requested the first
-feasibility test. CPU implementation and a frozen task cohort are prepared;
-**no pilot allocation has been submitted**. Exact proposed resources are
-**two H200 GPUs × two hours,16 CPUs,480GiB RAM**, plus a **$20 GPT-4.1 judge
-cap /900 requests including retries**. Resource and API-budget approval are the
-remaining launch prerequisite. The earlier deferred failure-only experiment's
-eight-GPU approval is not transferred to this different experiment.
+feasibility test and then approved **two H200 GPUs × two hours,16 CPUs,480GiB
+RAM**, plus a **$20 GPT-4.1 judge cap /900 requests including retries**.
+**Job331932 is running on g012**, submitted September26 at15:07UTC. Slurm estimates
+$3.60 for the requested GPU allocation. Seven CPU tests and the native launch
+preflight passed; GPU execution is undergoing its separate startup/smoke gate.
+The earlier deferred failure-only experiment's eight-GPU approval was not
+transferred to this experiment.
 
 | Pilot component | Fixed specification |
 | --- | --- |
@@ -6528,10 +6529,12 @@ Implementation: `openwebrl/arm_prefix_pilot.py`; preparation/controller
 `scripts/run_arm_prefix_pilot.py`; batch template
 `scripts/run_arm_prefix_pilot_2gpu.sbatch`; seven CPU tests in
 `tests/test_arm_prefix_pilot.py`. Private cohort, launch plan and readiness live in
-runtime `arm-turn-bonus-preparation/prefix-pilot-20260926/`. GPU startup is not yet
-validated. The prepared persistent watcher observes queue/startup/progress and
-verifies saved artifacts; it starts upon submission and does not implement
-unattended bug repair.
+runtime `arm-turn-bonus-preparation/prefix-pilot-20260926/`. The persistent watcher
+is active and follows the submission receipt through startup/progress, then
+verifies saved artifacts. It does not implement unattended bug repair. Job
+artifacts are in runtime `evaluations/arm-prefix-pilot-331932/`; its Slurm log is
+`logs/slurm-arm-prefix-pilot-331932.out`. The batch controller owns and awaits
+the worker and stops when verification finishes; unused walltime is not held.
 
 The separate consequence-informed evaluator idea is deferred. The current ARM
 has not been trained to evaluate before/after screenshots; first compare a

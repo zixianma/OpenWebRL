@@ -24,7 +24,7 @@ for the work you are doing, then follow its contents to dated experiment records
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
 Next ARM feasibility test: [guided prefixes followed by actor-only completion](ARM_INTEGRATION_PLAN.md#arm-prefix-curriculum-pilot-20260926).
-Prepared48 training tasks × three prefix lengths × two attempts; exact two-H200/two-hour allocation and$20 judge cap await approval.
+Job331932 running:48 training tasks × three prefix lengths × two attempts; approved two H200s × two hours and$20 judge cap, with a separate startup/smoke gate and active watcher.
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
