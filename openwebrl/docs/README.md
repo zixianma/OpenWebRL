@@ -166,3 +166,5 @@ hashes remain in `document_map.json`. Retained standalone files are
   · [static overview](arm_results/rl_integration/jev-quality-overview.png)
 
 [September26 ARM status: B69 recovery331767, B50/B60 results, C60 complete](RL_RUNTIME.md#arm-progress-20260926).
+
+[Failure sampling40% iteration10:29.00% overall /37.34% valid-only](RL_EVALUATION.md#arm-failure-coverage-iter10-results-20260926).

@@ -106,6 +106,10 @@ reasoning-and-action response.
   failure-group bonus weight from0.5 to1.0. Mixed-group β stays0.5; both sampling
   rates stay20%, with the original five-distinct-action gate and response-index credit.
 
+- **Failure sampling40%:** additive recipe from iteration0; attempt ARM labels
+  on40% of failure-group turns and20% of mixed-group turns. Both bonus weights
+  remain0.5, with the original five-distinct-action gate and response-index credit.
+
 **Evaluation:** local browser, GPT-4.1 action-history judge, temperature 0.
 Rates are **overall / valid-only**; “—” means unavailable. Historical evaluations
 are the default; dates and valid-task sets differ, so differences are descriptive.
@@ -158,6 +162,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 60 | 30.00% / 41.10% | **32.67% / 43.17%** |
 | **Failure β = 1** | 10 | 27.00% / 35.53% | 27.33% / 33.74% |
 |  | 20 | 32.00% / 42.11% | **33.00% / 41.77%** |
+| **Failure sampling40%** | 10 | 32.00% / 42.11% | **29.00% / 37.34%** |
 
 **Evolving ARM (offline forward transfer):** refresh SelectionARM on2,000
 GPT-5.5-labeled actor40 states +858 replay examples; test the fixed final90-update

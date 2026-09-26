@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Failure sampling40% iteration10 full300](#arm-failure-coverage-iter10-results-20260926)
 - [Gate B iteration50/60 completed evaluations](#arm-gate-b-iter50-60-results-20260926)
 - [Failure β1 iteration20 full300](#arm-failure-beta1-iter20-results-20260925)
 - [Failure β1 iteration10 recovered full300](#arm-failure-beta1-iter10-results-20260925)
@@ -15,6 +16,29 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-failure-coverage-iter10-results-20260926"></a>
+## Failure sampling40% iteration10 — September26, 2026
+
+Job329911 finished the iteration10 full300 evaluation after completing training
+through20. This checkpoint has156 Adam updates; the native restoration receipt
+loaded zero-based iteration9. Protocol: local browsers, GPT-4.1/action_history,
+temperature0, actor-only inference.
+
+| Cohort | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 300 | 87 | 233 | 67 | 29.00 | 37.34 |
+| Fixed100 slice | 100 | 32 | 76 | 24 | 32.00 | 42.11 |
+
+All300 expected unique task IDs,300 nonempty rollout ZIP archives and300 saved
+verdicts were verified. No exception records were present;67 invalid browser
+trajectories remain in the overall denominator. Fixed100 uses the original
+frozen task IDs sliced from full300. Iteration20 evaluation follows in the
+same allocation; this early result does not establish an improvement.
+
+[Aggregate audit](arm_results/rl_integration/failure-coverage-iteration10-audit.json)
+· [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-failure-coverage-iter10-329911).
+Artifacts: `evaluations/arm-failure-coverage-iter10-329911/rollouts/`.
 
 <a id="arm-gate-b-iter50-60-results-20260926"></a>
 ## Gate B iteration50/60 results — September26, 2026
