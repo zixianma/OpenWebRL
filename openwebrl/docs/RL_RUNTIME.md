@@ -30,7 +30,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate B | Iteration69 /902 Adam updates | Job330304 failed during70; bounded recovery331778 held for storage |
 | Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
 | Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete |
-| Failure sampling40% | Iteration20 /302 Adam updates | Job329911 completed training and evaluation10; evaluation20 active |
+| Failure sampling40% | Iteration20 /302 Adam updates | Job329911 completed training and full300 evaluations10/20; allocation exited |
 | Refreshed ARM | Final90 SFT updates | Offline evaluation331120 complete; browser comparison331770 launched on g014 |
 
 B50/B60 full300 evaluations completed in329908:37.67%/48.71% and37.33%/49.12%

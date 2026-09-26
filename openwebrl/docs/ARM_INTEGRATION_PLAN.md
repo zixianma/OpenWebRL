@@ -6313,8 +6313,9 @@ exploratory comparisons because OM2W has already guided many design choices.
 
 **Decision:** the user selected proposal2 and clarified that the name should be
 additive, not the older shared-quota all-failure variant. Hybrid token credit
-(proposal1) is deprioritized. Method preparation is complete; **no job submitted**
-because an exact resource request for this new experiment remains unapproved.
+(proposal1) is deprioritized. Method preparation is complete. The user approved8 H200 x16h, then deferred
+submission to examine its scientific justification and requested the CPU audit.
+**No job was submitted; do not launch until the next explicit scientific decision.**
 
 | Knob | Existing Gate B | New additive relaxed, failure-only ARM |
 | --- | --- | --- |
@@ -6347,7 +6348,7 @@ decay0.1, global batch256, microbatch1,2 PPO epochs,64 browsers,32K context,
 1024 response tokens and15-turn training horizon. Separate training W&B name:
 `Additive relaxed | failure-only ARM | q20 | JOB_ID` in`openwebrl`.
 
-**Prepared resource request, approval pending:**8 H200 x16h,64 CPUs,960GiB RAM;
+**Approved resources, launch deferred:**8 H200 x16h,64 CPUs,960GiB RAM;
 128 GPU-hours maximum. Recent B continuation median is about31min/iteration,
 so20 iterations plus startup and two evaluations should take about11–14h;
 16h gives bounded headroom and is not a guarantee. The controller owns training
@@ -6374,3 +6375,91 @@ The clean next comparison would be this same additive relaxed/failure-only
 recipe at failure q40% versus q20%, with mixed beta0 and all other settings
 fixed. B+40% with mixed beta0.5 is a different comparison; neither combination
 is currently approved or queued. Any new40% combination starts at iteration0.
+
+
+<a id="arm-outcome-aware-reweighting-20260926"></a>
+## Turn-level outcome-aware reweighting — September26 discussion
+
+**Status:** CPU audit complete; proposal only, no new training launched. The
+[Gate B mixed-group audit](ARM_RESULTS.md#arm-gate-b-mixed-alignment-20260926)
+finds weak positive within-task outcome association rather than broad opposition.
+Removing mixed-group ARM feedback is not currently a well-supported improvement
+bet. The user suggested redistributing the outcome signal across turns instead.
+
+### Verified current objective
+
+For valid trajectories, terminal R is0/1 and is copied to every executed turn.
+The native normalizer groups by task and trajectory, subtracts the mean over
+retained trajectories and divides by sample standard deviation plus1e-6. Each
+turn then receives the same trajectory-level outcome advantage A. The native
+normalizer also handles historical−1 error sentinels; audit them separately.
+B currently adds beta*u after normalization, where
+`u=m*(1[selected_index=executed_index]-1/5)` and beta0.5. The resulting scalar
+is broadcast over the executed response's reasoning and action tokens.
+
+Changing raw per-turn reward fields before normalization will not implement the
+intended weighting: this normalizer takes the first reward of each trajectory
+and broadcasts its normalized value to all turns. Apply the new operation
+**after trajectory outcome normalization and before PPO**, preserving raw outcome
+metrics. Treat the label-derived weights as fixed during actor backpropagation.
+
+### Candidate: redistribute emphasis while preserving mean outcome advantage
+
+For each trajectory i with T trainable turns, define:
+
+```text
+u[i,t] = usable_label[i,t] * (1[selected_index == executed_index] - 1/5)
+v[i,t] = exp(lambda * sign(A[i]) * u[i,t])
+w[i,t] = v[i,t] / mean_over_turns(v[i,:])
+A_new[i,t] = A[i] * w[i,t]
+```
+
+- In a positive-advantage trajectory, preferred turns get stronger positive
+  reinforcement and disfavored turns get less.
+- In a negative-advantage trajectory, preferred turns get a smaller penalty
+  and disfavored turns get a larger penalty. An outcome-independent increasing
+  weight would do the opposite for preferred actions in failed trajectories.
+- Weights are positive, so this preserves every turn's advantage sign and each
+  trajectory's mean advantage. With no labels, all weights are1. An individual
+  unlabeled turn can change weight through its trajectory's mean normalization.
+- With lambda0.5 and two labeled turns (u=+0.8 and−0.2), A=+1 gives advantages
+  +1.245/+0.755; A=−1 gives−0.755/−1.245. These are illustrative normalized
+  advantages, not raw terminal rewards.
+- A=0 remains0. Therefore retain B's separate extra all-failure auxiliary PPO
+  term unchanged if the aim is a single mixed-group objective ablation.
+  Multiplicative weighting alone cannot train a zero-variance all-failure group.
+
+This changes where outcome reinforcement is applied while preserving mean
+scalar advantage. It does **not** establish return-equivalent reward shaping,
+unbiased policy gradients, or unchanged gradient norm: weights depend on sampled
+actions and outcomes, token gradients differ, and PPO clipping/trimming matters.
+ARM still supplies relative forced-choice preferences, not verified causal
+contributions to success. Within-trajectory comparison of these labels is itself
+an assumption to test.
+
+### Comparison and other directions
+
+A clean first comparison is unchanged B versus B with only its mixed-group
+`A+0.5*u` replaced by the weighting above. Keep the extra failure pool, min2 gate,
+response-index credit, q20%, frozen ARM, data, optimizer and topology fixed; start
+a new actor at iteration0. The saved-batch audit gives7.99% perturbation RMS at
+lambda0.5 versus9.46% for current B. Before any allocation, predeclare the desired
+scale and fix lambda from training-only calibration; do not tune it on OM2W.
+Track actual label coverage, weight distributions, effective sample size,
+per-outcome advantage RMS, PPO clipping, KL/entropy, training/evaluation outcomes
+and throughput. This is a plausible alternative, not a demonstrated improvement.
+
+A simpler related control is `A+beta*(u-mean_trajectory(u))`: it removes only the
+trajectory-mean ARM component, without making reward magnitude proportional to
+|A|. Our audit places12.83% of B's bonus squared magnitude in that mean component,
+so centering alone may be a modest intervention. Keep it separate rather than
+combining credit, sampling and normalization changes at once.
+
+A higher-cost direction is learning **progress toward terminal success** from
+state transitions or outcome-conditioned return decomposition, instead of
+reweighting current forced-choice labels. [Rewarding Progress](https://arxiv.org/abs/2410.08146)
+uses progress in future success likelihood for process advantages;
+[RUDDER](https://arxiv.org/abs/1806.07857) develops return-equivalent redistribution
+through return decomposition. They motivate the direction but do not confer
+those guarantees on the weighting heuristic above. The running refreshed-ARM
+browser comparison remains the nearer-term test of better reward quality.

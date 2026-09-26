@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Failure sampling40% iteration20 full300](#arm-failure-coverage-iter20-results-20260926)
 - [Failure sampling40% iteration10 full300](#arm-failure-coverage-iter10-results-20260926)
 - [Gate B iteration50/60 completed evaluations](#arm-gate-b-iter50-60-results-20260926)
 - [Failure β1 iteration20 full300](#arm-failure-beta1-iter20-results-20260925)
@@ -16,6 +17,28 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-failure-coverage-iter20-results-20260926"></a>
+## Failure sampling40% iteration20 — September26, 2026
+
+Job329911 completed training through20/302 Adam updates and both scheduled
+full300 evaluations, then exited. Native restoration loaded zero-based19.
+Protocol remains local browser, GPT-4.1/action_history, temperature0, actor-only.
+
+| Cohort | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 300 | 83 | 222 | 78 | 27.67 | 37.39 |
+| Fixed100 slice | 100 | 26 | 68 | 32 | 26.00 | 38.24 |
+
+All300 unique expected tasks, saved ZIP trajectory archives and judge verdicts
+were verified, with no exception records. The78 invalid browser outcomes remain
+in the overall denominator. This does not show an improvement over historical
+additive iteration20 (28.33%/36.02%) or baseline20 (31.67%/40.95%); evaluation
+dates and valid-task sets differ, so these are descriptive comparisons.
+
+[Aggregate audit](arm_results/rl_integration/failure-coverage-iteration20-audit.json)
+· [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-failure-coverage-iter20-329911).
+Artifacts:`evaluations/arm-failure-coverage-iter20-329911/rollouts/`.
 
 <a id="arm-failure-coverage-iter10-results-20260926"></a>
 ## Failure sampling40% iteration10 — September26, 2026

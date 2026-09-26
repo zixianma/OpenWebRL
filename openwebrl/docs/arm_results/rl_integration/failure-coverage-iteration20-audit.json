@@ -1,0 +1,39 @@
+{
+  "job_id": "329911",
+  "variant": "Failure sampling40%",
+  "iteration": 20,
+  "evaluation_date": "2026-09-26",
+  "completed_optimizer_updates": 302,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-329911-tp2-iter20/runtime/iter_0000019",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-eval80-additive-20260920-v2",
+  "full300": {
+    "tasks": 300,
+    "successes": 83,
+    "valid": 222,
+    "invalid": 78,
+    "overall": 0.27666666666666667,
+    "valid_only": 0.3738738738738739,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 26,
+    "valid": 68,
+    "invalid": 32,
+    "overall": 0.26,
+    "valid_only": 0.38235294117647056,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100,
+    "error_records": 0
+  },
+  "fixed100_task_ids_sha256": "61780df4bbf1977fd2a9bbf38f496684a02aa7a2d47e7aa490445de7f533b1b9",
+  "cohort_verified": true,
+  "restore_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-coverage-iter20-329911/rollouts",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-failure-coverage-iter20-329911",
+  "protocol": "Local browser, GPT-4.1/action_history, temperature0; saved per-task verdicts",
+  "evaluation_manifest_sha256": "4b97731f537265401c76397f3d99bb24d0e55ca34f1264c221dcb5b18707a8f5",
+  "scope": "Fixed100 is sliced from full300; all ZIP central directories checked, no tensor loads."
+}

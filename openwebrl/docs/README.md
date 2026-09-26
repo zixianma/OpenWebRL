@@ -25,7 +25,7 @@ Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#e
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [Gate B69 recovery331778 held for storage; C60 complete;
-failure sampling40% training20 complete and evaluation20 running;
+failure sampling40% training/evaluations through20 complete;
 browser forward-transfer comparison331770 running](RL_RUNTIME.md#arm-progress-20260926).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
@@ -167,4 +167,6 @@ hashes remain in `document_map.json`. Retained standalone files are
 
 [Next ARM experiments after B/C: hybrid token credit, failure-only auxiliary supervision, and conditional reward-model refresh (discussion draft)](ARM_INTEGRATION_PLAN.md#arm-next-experiments-after-bc-20260926).
 
-[Additive relaxed, failure-only ARM: prepared iteration0→20 experiment; exact compute approval pending](ARM_INTEGRATION_PLAN.md#arm-additive-relaxed-failureonly-20260926).
+[Additive relaxed, failure-only ARM: prepared; resources approved but launch deferred for scientific audit](ARM_INTEGRATION_PLAN.md#arm-additive-relaxed-failureonly-20260926).
+
+[Gate B mixed-group audit: all69 iterations; weak positive outcome association](ARM_RESULTS.md#arm-gate-b-mixed-alignment-20260926) · [Outcome-aware turn reweighting proposal](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926) · [Sampling40% iteration20 full300:27.67% /37.39%](RL_EVALUATION.md#arm-failure-coverage-iter20-results-20260926).

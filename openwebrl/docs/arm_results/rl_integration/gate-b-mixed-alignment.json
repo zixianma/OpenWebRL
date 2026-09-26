@@ -1,0 +1,556 @@
+{
+  "created_utc": "2026-09-26T18:52:23.801579+00:00",
+  "run": "arm-gate-b-309053",
+  "iterations": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69
+  ],
+  "aggregate": {
+    "groups": 3312,
+    "binary_only_groups": 3254,
+    "trajectories": 15729,
+    "turns": 124496,
+    "outcomes": {
+      "successful": {
+        "trajectories": 8081,
+        "turns": 54590,
+        "usable_labels": 9921,
+        "coverage": 0.1817365817915369,
+        "selected": 2080,
+        "win_rate": 0.20965628464872493,
+        "bonus_mean_all_turns": 0.00087745008243268,
+        "trajectory_mean_bonus": 0.0007675631577376413
+      },
+      "failed": {
+        "trajectories": 7588,
+        "turns": 69330,
+        "usable_labels": 12243,
+        "coverage": 0.1765902206836867,
+        "selected": 2418,
+        "win_rate": 0.19750061259495222,
+        "bonus_mean_all_turns": -0.0002206836867157075,
+        "trajectory_mean_bonus": -0.00041615291812972354
+      },
+      "native_error_sentinel": {
+        "trajectories": 60,
+        "turns": 576,
+        "usable_labels": 69,
+        "coverage": 0.11979166666666667,
+        "selected": 13,
+        "win_rate": 0.18840579710144928,
+        "bonus_mean_all_turns": -0.0006944444444444445,
+        "trajectory_mean_bonus": -0.0016420107670107671
+      }
+    },
+    "outcome_rms": 0.8984419573398128,
+    "bonus_rms": 0.08497620190450741,
+    "bonus_to_outcome_rms": 0.0945817380970414,
+    "scalar_advantage_bonus_cosine": 0.007758654566137473,
+    "opposing_sign_labeled_fraction": 0.46484954796923494,
+    "sign_flips": 1,
+    "bonus_energy_in_trajectory_means": 0.12828243091460134,
+    "within_group_mean_bonus_difference": {
+      "task_clusters": 1476,
+      "groups": 3254,
+      "mean": 0.0016218830482044994,
+      "lower": 0.0003106595223292929,
+      "upper": 0.0029092492995827354,
+      "bootstrap_replicates": 2000
+    },
+    "within_group_labeled_win_rate_difference": {
+      "task_clusters": 1319,
+      "groups": 2541,
+      "mean": 0.019307406158055516,
+      "lower": 0.004104204900350952,
+      "upper": 0.03417670401493926,
+      "bootstrap_replicates": 2000
+    },
+    "outcome_aware_reweighting": {
+      "0.25": {
+        "delta_to_outcome_rms": 0.0396001891793293,
+        "minimum_weight": 0.8091488966581952,
+        "maximum_weight": 1.2276480400477194,
+        "p05": 0.9575970733508051,
+        "p95": 1.0441332488518515,
+        "sign_flips": 0,
+        "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+      },
+      "0.5": {
+        "delta_to_outcome_rms": 0.07993024356701717,
+        "minimum_weight": 0.652632975691777,
+        "maximum_weight": 1.500306874827036,
+        "p05": 0.91450706846479,
+        "p95": 1.089887653394736,
+        "sign_flips": 0,
+        "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+      },
+      "1.0": {
+        "delta_to_outcome_rms": 0.16604553025154198,
+        "minimum_weight": 0.42126832925691865,
+        "maximum_weight": 2.205263465218758,
+        "p05": 0.8294705749685911,
+        "p95": 1.1863803732450309,
+        "sign_flips": 0,
+        "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+      }
+    }
+  },
+  "windows": {
+    "1-20": {
+      "groups": 960,
+      "binary_only_groups": 931,
+      "trajectories": 4497,
+      "turns": 38943,
+      "outcomes": {
+        "successful": {
+          "trajectories": 2242,
+          "turns": 16017,
+          "usable_labels": 2879,
+          "coverage": 0.17974651932321908,
+          "selected": 633,
+          "win_rate": 0.21986800972559917,
+          "bonus_mean_all_turns": 0.0017856027970281577,
+          "trajectory_mean_bonus": 0.0020480519331991234
+        },
+        "failed": {
+          "trajectories": 2225,
+          "turns": 22627,
+          "usable_labels": 3801,
+          "coverage": 0.16798515048393511,
+          "selected": 762,
+          "win_rate": 0.20047355958958168,
+          "bonus_mean_all_turns": 3.97754894594953e-05,
+          "trajectory_mean_bonus": -0.0010604704908075695
+        },
+        "native_error_sentinel": {
+          "trajectories": 30,
+          "turns": 299,
+          "usable_labels": 37,
+          "coverage": 0.12374581939799331,
+          "selected": 9,
+          "win_rate": 0.24324324324324326,
+          "bonus_mean_all_turns": 0.0026755852842809368,
+          "trajectory_mean_bonus": 0.0008893513893513892
+        }
+      },
+      "outcome_rms": 0.9012105085106231,
+      "bonus_rms": 0.08445550577153722,
+      "bonus_to_outcome_rms": 0.09371340544076855,
+      "scalar_advantage_bonus_cosine": 0.008542956855421573,
+      "opposing_sign_labeled_fraction": 0.45302962632127436,
+      "sign_flips": 0,
+      "bonus_energy_in_trajectory_means": 0.11747611230817735,
+      "within_group_mean_bonus_difference": {
+        "task_clusters": 832,
+        "groups": 931,
+        "mean": 0.0034403703966002573,
+        "lower": 0.0010922092890090702,
+        "upper": 0.005812336600409021,
+        "bootstrap_replicates": 2000
+      },
+      "within_group_labeled_win_rate_difference": {
+        "task_clusters": 686,
+        "groups": 750,
+        "mean": 0.03092724867724869,
+        "lower": 0.0057916482219271094,
+        "upper": 0.05981260144606754,
+        "bootstrap_replicates": 2000
+      },
+      "outcome_aware_reweighting": {
+        "0.25": {
+          "delta_to_outcome_rms": 0.03933921847286714,
+          "minimum_weight": 0.8114073765971503,
+          "maximum_weight": 1.2276480400477194,
+          "p05": 0.957903352755943,
+          "p95": 1.0441332488518515,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "0.5": {
+          "delta_to_outcome_rms": 0.0793030094600472,
+          "minimum_weight": 0.6561956431821859,
+          "maximum_weight": 1.500306874827036,
+          "p05": 0.9157303258093078,
+          "p95": 1.089887653394736,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "1.0": {
+          "delta_to_outcome_rms": 0.16459533865731107,
+          "minimum_weight": 0.4256810006691442,
+          "maximum_weight": 2.203829205054508,
+          "p05": 0.830387656699889,
+          "p95": 1.1863803732450309,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        }
+      }
+    },
+    "21-40": {
+      "groups": 960,
+      "binary_only_groups": 948,
+      "trajectories": 4569,
+      "turns": 35903,
+      "outcomes": {
+        "successful": {
+          "trajectories": 2392,
+          "turns": 16082,
+          "usable_labels": 2923,
+          "coverage": 0.18175600049745055,
+          "selected": 615,
+          "win_rate": 0.21040027369141293,
+          "bonus_mean_all_turns": 0.0009451560751150354,
+          "trajectory_mean_bonus": 0.0010267604237085843
+        },
+        "failed": {
+          "trajectories": 2164,
+          "turns": 19690,
+          "usable_labels": 3520,
+          "coverage": 0.1787709497206704,
+          "selected": 675,
+          "win_rate": 0.19176136363636365,
+          "bonus_mean_all_turns": -0.0007364144235652615,
+          "trajectory_mean_bonus": -0.0005849108275171121
+        },
+        "native_error_sentinel": {
+          "trajectories": 13,
+          "turns": 131,
+          "usable_labels": 17,
+          "coverage": 0.1297709923664122,
+          "selected": 2,
+          "win_rate": 0.11764705882352941,
+          "bonus_mean_all_turns": -0.0053435114503816794,
+          "trajectory_mean_bonus": -0.005635134096672559
+        }
+      },
+      "outcome_rms": 0.8947716021708915,
+      "bonus_rms": 0.08483613706971464,
+      "bonus_to_outcome_rms": 0.09481317563486094,
+      "scalar_advantage_bonus_cosine": 0.011871296218346171,
+      "opposing_sign_labeled_fraction": 0.4630030959752322,
+      "sign_flips": 0,
+      "bonus_energy_in_trajectory_means": 0.12738966604002536,
+      "within_group_mean_bonus_difference": {
+        "task_clusters": 800,
+        "groups": 948,
+        "mean": 0.002159690891230975,
+        "lower": -0.00022846303306829548,
+        "upper": 0.004616543487215049,
+        "bootstrap_replicates": 2000
+      },
+      "within_group_labeled_win_rate_difference": {
+        "task_clusters": 654,
+        "groups": 745,
+        "mean": 0.02652524768296582,
+        "lower": -0.0012685577375604346,
+        "upper": 0.053724505034988906,
+        "bootstrap_replicates": 2000
+      },
+      "outcome_aware_reweighting": {
+        "0.25": {
+          "delta_to_outcome_rms": 0.03970675672664216,
+          "minimum_weight": 0.8118915233299305,
+          "maximum_weight": 1.227229701631705,
+          "p05": 0.9575970733508051,
+          "p95": 1.0445765234254394,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "0.5": {
+          "delta_to_outcome_rms": 0.08034814992250473,
+          "minimum_weight": 0.6571187255871389,
+          "maximum_weight": 1.4997383966480302,
+          "p05": 0.9135308131240186,
+          "p95": 1.089887653394736,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "1.0": {
+          "delta_to_outcome_rms": 0.16772641432539273,
+          "minimum_weight": 0.4271798183188823,
+          "maximum_weight": 2.205263465218758,
+          "p05": 0.827229526304297,
+          "p95": 1.1863803732450309,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        }
+      }
+    },
+    "41-60": {
+      "groups": 960,
+      "binary_only_groups": 950,
+      "trajectories": 4601,
+      "turns": 34844,
+      "outcomes": {
+        "successful": {
+          "trajectories": 2379,
+          "turns": 15668,
+          "usable_labels": 2886,
+          "coverage": 0.18419708960939493,
+          "selected": 587,
+          "win_rate": 0.2033957033957034,
+          "bonus_mean_all_turns": 0.00031273934133265255,
+          "trajectory_mean_bonus": 4.1922488328541384e-05
+        },
+        "failed": {
+          "trajectories": 2212,
+          "turns": 19089,
+          "usable_labels": 3531,
+          "coverage": 0.18497564042118497,
+          "selected": 713,
+          "win_rate": 0.20192580005664118,
+          "bonus_mean_all_turns": 0.00017811304940017813,
+          "trajectory_mean_bonus": 0.0001456635588642823
+        },
+        "native_error_sentinel": {
+          "trajectories": 10,
+          "turns": 87,
+          "usable_labels": 11,
+          "coverage": 0.12643678160919541,
+          "selected": 2,
+          "win_rate": 0.18181818181818182,
+          "bonus_mean_all_turns": -0.0011494252873563218,
+          "trajectory_mean_bonus": -0.0019893162393162397
+        }
+      },
+      "outcome_rms": 0.8985185320394208,
+      "bonus_rms": 0.08631208574181996,
+      "bonus_to_outcome_rms": 0.09606044022922078,
+      "scalar_advantage_bonus_cosine": 0.0029502869683208505,
+      "opposing_sign_labeled_fraction": 0.47137523335407594,
+      "sign_flips": 1,
+      "bonus_energy_in_trajectory_means": 0.13363091726314166,
+      "within_group_mean_bonus_difference": {
+        "task_clusters": 814,
+        "groups": 950,
+        "mean": 0.0001390605009026041,
+        "lower": -0.0024022333884041727,
+        "upper": 0.002710247165090094,
+        "bootstrap_replicates": 2000
+      },
+      "within_group_labeled_win_rate_difference": {
+        "task_clusters": 647,
+        "groups": 730,
+        "mean": 0.003168623613829091,
+        "lower": -0.02472415795586529,
+        "upper": 0.032849426807760124,
+        "bootstrap_replicates": 2000
+      },
+      "outcome_aware_reweighting": {
+        "0.25": {
+          "delta_to_outcome_rms": 0.04048749962762698,
+          "minimum_weight": 0.8091488966581952,
+          "maximum_weight": 1.2239006413833318,
+          "p05": 0.9575970733508051,
+          "p95": 1.0445765234254394,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "0.5": {
+          "delta_to_outcome_rms": 0.08153753739558788,
+          "minimum_weight": 0.652632975691777,
+          "maximum_weight": 1.4899895133379484,
+          "p05": 0.9135308131240186,
+          "p95": 1.089887653394736,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "1.0": {
+          "delta_to_outcome_rms": 0.1685898999313533,
+          "minimum_weight": 0.42126832925691865,
+          "maximum_weight": 2.1722058078849784,
+          "p05": 0.827229526304297,
+          "p95": 1.1863803732450309,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        }
+      }
+    },
+    "61-69": {
+      "groups": 432,
+      "binary_only_groups": 425,
+      "trajectories": 2062,
+      "turns": 14806,
+      "outcomes": {
+        "successful": {
+          "trajectories": 1068,
+          "turns": 6823,
+          "usable_labels": 1233,
+          "coverage": 0.1807122966437051,
+          "selected": 245,
+          "win_rate": 0.19870235198702352,
+          "bonus_mean_all_turns": -0.0001172504763300601,
+          "trajectory_mean_bonus": -0.000884643342508511
+        },
+        "failed": {
+          "trajectories": 987,
+          "turns": 7924,
+          "usable_labels": 1391,
+          "coverage": 0.17554265522463403,
+          "selected": 268,
+          "win_rate": 0.19266714593817397,
+          "bonus_mean_all_turns": -0.0006436143361938416,
+          "trajectory_mean_bonus": 0.0001472317505752158
+        },
+        "native_error_sentinel": {
+          "trajectories": 7,
+          "turns": 59,
+          "usable_labels": 4,
+          "coverage": 0.06779661016949153,
+          "selected": 0,
+          "win_rate": 0.0,
+          "bonus_mean_all_turns": -0.006779661016949153,
+          "trajectory_mean_bonus": -0.004578754578754579
+        }
+      },
+      "outcome_rms": 0.8998495743343139,
+      "bonus_rms": 0.0834995415747823,
+      "bonus_to_outcome_rms": 0.09279277776683192,
+      "scalar_advantage_bonus_cosine": 0.00727815512716652,
+      "opposing_sign_labeled_fraction": 0.4836377473363775,
+      "sign_flips": 0,
+      "bonus_energy_in_trajectory_means": 0.14614546953256466,
+      "within_group_mean_bonus_difference": {
+        "task_clusters": 425,
+        "groups": 425,
+        "mean": -0.00024675727322786157,
+        "lower": -0.0038615861262920057,
+        "upper": 0.003291895033071501,
+        "bootstrap_replicates": 2000
+      },
+      "within_group_labeled_win_rate_difference": {
+        "task_clusters": 316,
+        "groups": 316,
+        "mean": 0.011994549929676503,
+        "lower": -0.03148294655414908,
+        "upper": 0.05670270745428974,
+        "bootstrap_replicates": 2000
+      },
+      "outcome_aware_reweighting": {
+        "0.25": {
+          "delta_to_outcome_rms": 0.03788823017867974,
+          "minimum_weight": 0.8146528056132117,
+          "maximum_weight": 1.219263320375162,
+          "p05": 0.957903352755943,
+          "p95": 1.0436271097865246,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "0.5": {
+          "delta_to_outcome_rms": 0.0766993192793189,
+          "minimum_weight": 0.6603050108317963,
+          "maximum_weight": 1.4808491992100066,
+          "p05": 0.9173079020958825,
+          "p95": 1.0888121504365995,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        },
+        "1.0": {
+          "delta_to_outcome_rms": 0.15966574963911495,
+          "minimum_weight": 0.4255721105619116,
+          "maximum_weight": 2.1536848222656877,
+          "p05": 0.830387656699889,
+          "p95": 1.1779363648091836,
+          "sign_flips": 0,
+          "maximum_trajectory_mean_advantage_error": 2.220446049250313e-16
+        }
+      }
+    }
+  },
+  "resources": {
+    "gpus": 0,
+    "api_calls": 0,
+    "tensors_loaded": 0,
+    "files": 8889,
+    "bytes_read": 153033433,
+    "wall_seconds": 10.31027165800333,
+    "maxrss_kib": 123808
+  },
+  "limitations": [
+    "Accepted trainable turns before native PPO epoch trimming; not exact optimizer gradients.",
+    "Native -1 error sentinels are kept for exact scale reconstruction but excluded from binary-only paired-group outcome associations.",
+    "All counts and RMS reconstructed from trajectory-normalized outcomes and checked against each saved calibration.",
+    "Task-cluster bootstrap describes this single training lineage; it does not quantify training-seed uncertainty.",
+    "Outcome association is not action correctness: good turns occur in failed trajectories and conversely.",
+    "Reweighting is a saved-batch scalar diagnostic, not a trained-model performance estimate.",
+    "Mean turn advantage conservation does not imply unbiased policy gradient or return-equivalent RL."
+  ],
+  "validation": {
+    "completed_iterations": 69,
+    "all_48_group_counts_verified": true,
+    "all_calibration_counts_and_rms_verified": true,
+    "replayed_iterations_recovered": [
+      1,
+      50
+    ],
+    "native_error_sentinel": "Separate category; exclude groups containing these from paired binary-outcome associations",
+    "raw_task_ids_published": false
+  }
+}

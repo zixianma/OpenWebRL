@@ -163,6 +163,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 | **Failure β = 1** | 10 | 27.00% / 35.53% | 27.33% / 33.74% |
 |  | 20 | 32.00% / 42.11% | **33.00% / 41.77%** |
 | **Failure sampling40%** | 10 | 32.00% / 42.11% | **29.00% / 37.34%** |
+|  | 20 | 26.00% / 38.24% | **27.67% / 37.39%** |
 
 **Evolving ARM (offline forward transfer):** refresh SelectionARM on2,000
 GPT-5.5-labeled actor40 states +858 replay examples; test the fixed final90-update

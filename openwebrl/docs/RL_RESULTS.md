@@ -130,6 +130,7 @@
 | Additive: failure β = 1 | 10 | 82 | 243 | 57 | 27.33 | 33.74 | [318949 +329912](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925) |
 | Additive: failure β = 1 | 20 | 99 | 237 | 63 | 33.00 | 41.77 | [329912](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925) |
 | Additive: failure sampling40% | 10 | 87 | 233 | 67 | 29.00 | 37.34 | [329911](RL_EVALUATION.md#arm-failure-coverage-iter10-results-20260926) |
+| Additive: failure sampling40% | 20 | 83 | 222 | 78 | 27.67 | 37.39 | [329911](RL_EVALUATION.md#arm-failure-coverage-iter20-results-20260926) |
 | Outcome-only · historical | 70 | 103 | 229 | 71 | 34.33 | 44.98 | [Baseline](RL_EVALUATION.md#scheduled-eval70-80-results-20260913) |
 | Original bonus | 70 | 103 | 231 | 69 | 34.33 | 44.59 | [306478](RL_EVALUATION.md#arm-iter70-audit-20260919) |
 | All-failure bonus | 70 | 106 | 233 | 67 | 35.33 | 45.49 | [306477](RL_EVALUATION.md#arm-iter70-audit-20260919) |
@@ -168,6 +169,7 @@
 | Additive: failure β = 1 | 10 | 27 | 76 | 24 | 27.00 | 35.53 | [318949 +329912, slice of full300](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925) |
 | Additive: failure β = 1 | 20 | 32 | 76 | 24 | 32.00 | 42.11 | [329912, slice of full300](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925) |
 | Additive: failure sampling40% | 10 | 32 | 76 | 24 | 32.00 | 42.11 | [329911, slice of full300](RL_EVALUATION.md#arm-failure-coverage-iter10-results-20260926) |
+| Additive: failure sampling40% | 20 | 26 | 68 | 32 | 26.00 | 38.24 | [329911, slice of full300](RL_EVALUATION.md#arm-failure-coverage-iter20-results-20260926) |
 | Outcome-only | 100 | 37 | 68 | 32 | 37.00 | 54.41 | [318933, slice of full300](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | Additive bonus | 100 | 31 | 65 | 35 | 31.00 | 47.69 | [313669, slice of full300](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
 | All-failure bonus | 100 | 26 | 66 | 34 | 26.00 | 39.39 | [316392, slice of full300](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921) |

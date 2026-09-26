@@ -4,6 +4,90 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-gate-b-mixed-alignment-20260926"></a>
+## Gate B mixed-group ARM audit — September26, 2026
+
+**No broad evidence that mixed-group ARM preferences oppose terminal outcomes.**
+This weakens the rationale for removing their bonuses; it does not prove that
+those bonuses improve the trained policy. The proposed additive relaxed,
+failure-only run remains unsubmitted while its justification is reconsidered.
+
+A JSON-only CPU audit covers all69 completed B iterations:3,312 ordinary groups,
+15,729 trajectories and124,496 accepted trainable turns. It reconstructs the
+native per-trajectory group normalization and verifies each collection's row
+count, usable-label count, outcome RMS and ARM RMS against saved calibration.
+Original journals for replayed iterations1/50 were recovered through hash-checked
+replay provenance. No checkpoint tensors, screenshots, models or APIs were loaded:
+10.3s wall time, about121MiB peak RSS and146MiB JSON read, on one CPU process.
+
+| Measure | Successful trajectories | Failed trajectories (reward0) |
+| --- | ---: | ---: |
+| Trajectories | 8,081 | 7,588 |
+| Turns | 54,590 | 69,330 |
+| Usable ARM labels | 9,921 | 12,243 |
+| Usable-label coverage | 18.17% | 17.66% |
+| Executed response selected among5 | 20.97% | 19.75% |
+| Mean bonus over all turns | +0.000877 | −0.000221 |
+
+The primary association first averages labeled-turn selection within each
+trajectory, then compares successful and failed trajectories within each query
+group, giving groups equal weight. In2,541 groups with labels on both outcomes,
+the gap is **+1.93 percentage points**, task-cluster bootstrap95% interval
+**[+0.41,+3.42]**, across1,319 distinct tasks (2,000 resamples, seed20260926).
+Averaging bonuses over all turns gives a within-group gap+0.00162
+([+0.00031,+0.00291]) in3,254 binary-only groups.
+
+| Training iterations | Groups contributing labeled comparison | Within-group selection gap (pp) | Task-cluster95% interval (pp) |
+| --- | ---: | ---: | --- |
+| 1–20 | 750 | +3.09 | [+0.58,+5.98] |
+| 21–40 | 745 | +2.65 | [−0.13,+5.37] |
+| 41–60 | 730 | +0.32 | [−2.47,+3.28] |
+| 61–69 | 316 | +1.20 | [−3.15,+5.67] |
+
+Association is weaker later, but differences across windows do not establish
+reward-model drift: task/state distributions and actor quality change too.
+The intervals describe this single collected lineage, not training-seed variance.
+Good actions can occur in failed trajectories; outcome association is not a
+turn-level correctness label or a causal estimate of ARM's training benefit.
+
+Across all accepted turns, bonus RMS is0.08498 versus outcome-advantage RMS0.89844
+(**9.46%**). Scalar advantage/bonus cosine is0.00776; this is **not gradient
+alignment**, since token score-function gradients were not computed.12.83% of
+bonus squared magnitude is the trajectory-mean component, with the rest varying
+within trajectories.46.48% of labeled bonuses oppose the outcome advantage's
+sign, but this is not an error rate; many locally good turns belong to failed
+trajectories. Only one total advantage sign flip occurs.
+
+**Invalidity handling:** native reward−1 error sentinels appear in60 trajectories
+(576 turns) and58 groups. They remain in the exact normalization/scale audit but
+are excluded from the paired binary-outcome comparisons. Do not recast them as
+valid actor failures or mix their count with OM2W evaluation invalidity.
+
+### Saved-batch outcome-aware weighting diagnostic
+
+For the proposed mean-one weighting in the
+[reweighting design](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926),
+recompute scalar advantages on the same saved B batches. No policy is trained.
+
+| Lambda | RMS advantage change / outcome RMS | Observed minimum / maximum turn weight | 5th /95th percentile weight |
+| --- | ---: | --- | --- |
+| 0.25 | 3.96% | 0.809 /1.228 | 0.958 /1.044 |
+| 0.5 | 7.99% | 0.653 /1.500 | 0.915 /1.090 |
+| 1.0 | 16.60% | 0.421 /2.205 | 0.829 /1.186 |
+
+All three preserve each trajectory's mean scalar advantage to numerical
+precision and cause no sign flips. This verifies algebra and scale only, not
+policy-gradient correctness, improved sample efficiency or benchmark gains.
+Lambda0.5 has a comparable but smaller RMS perturbation than B's9.46%; a fair
+objective comparison should account for that scale difference.
+
+[Aggregate audit](arm_results/rl_integration/gate-b-mixed-alignment.json).
+Reproduce with `python3 scripts/audit_arm_mixed_alignment.py`; four bounded CPU
+checks cover native sample-standard-deviation normalization, error sentinels,
+weight/sign conservation and task-cluster resampling. Private per-group task
+identities and provenance remain in runtime
+`arm-turn-bonus-preparation/mixed-alignment-20260926/`.
+
 <a id="arm-offline-forward-transfer-results-20260925"></a>
 ## Evolving ARM: offline forward transfer — September25, 2026
 
