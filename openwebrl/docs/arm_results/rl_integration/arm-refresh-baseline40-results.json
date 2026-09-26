@@ -1,0 +1,203 @@
+{
+  "result": {
+    "complete": true,
+    "job": "331120",
+    "report": {
+      "dev/main": {
+        "states": 250,
+        "tasks": 126,
+        "frozen_action_accuracy": 0.588,
+        "adapted_action_accuracy": 0.596,
+        "frozen_index_accuracy": 0.56,
+        "adapted_index_accuracy": 0.568,
+        "delta": 0.008,
+        "delta_task_bootstrap_95ci": [
+          -0.012096774193548387,
+          0.03162055335968379
+        ],
+        "frozen_parse_failures": 0,
+        "adapted_parse_failures": 0
+      },
+      "future/main": {
+        "states": 371,
+        "tasks": 82,
+        "frozen_action_accuracy": 0.5768194070080862,
+        "adapted_action_accuracy": 0.5956873315363881,
+        "frozen_index_accuracy": 0.5633423180592992,
+        "adapted_index_accuracy": 0.5795148247978437,
+        "delta": 0.018867924528301886,
+        "delta_task_bootstrap_95ci": [
+          0.0,
+          0.03926701570680628
+        ],
+        "frozen_parse_failures": 0,
+        "adapted_parse_failures": 0
+      },
+      "retention/main": {
+        "states": 200,
+        "tasks": 64,
+        "frozen_action_accuracy": 0.71,
+        "adapted_action_accuracy": 0.695,
+        "frozen_index_accuracy": 0.605,
+        "adapted_index_accuracy": 0.59,
+        "delta": -0.015,
+        "delta_task_bootstrap_95ci": [
+          -0.041176470588235294,
+          0.010309278350515464
+        ],
+        "frozen_parse_failures": 0,
+        "adapted_parse_failures": 0
+      },
+      "future/reverse": {
+        "states": 100,
+        "tasks": 57,
+        "frozen_action_accuracy": 0.43,
+        "adapted_action_accuracy": 0.44,
+        "frozen_index_accuracy": 0.38,
+        "adapted_index_accuracy": 0.39,
+        "delta": 0.01,
+        "delta_task_bootstrap_95ci": [
+          -0.031914893617021274,
+          0.054945054945054944
+        ],
+        "frozen_parse_failures": 0,
+        "adapted_parse_failures": 0
+      }
+    },
+    "final_update": 90,
+    "descriptive_future_strata": {
+      "distinct_actions=2": {
+        "states": 13,
+        "frozen": 0.8461538461538461,
+        "adapted": 0.8461538461538461,
+        "delta": 0.0
+      },
+      "distinct_actions=3": {
+        "states": 30,
+        "frozen": 0.5666666666666667,
+        "adapted": 0.6,
+        "delta": 0.033333333333333326
+      },
+      "distinct_actions=4": {
+        "states": 87,
+        "frozen": 0.5747126436781609,
+        "adapted": 0.6206896551724138,
+        "delta": 0.04597701149425293
+      },
+      "distinct_actions=5": {
+        "states": 241,
+        "frozen": 0.5643153526970954,
+        "adapted": 0.5726141078838174,
+        "delta": 0.008298755186721962
+      },
+      "rollout_reward=0": {
+        "states": 174,
+        "frozen": 0.5632183908045977,
+        "adapted": 0.5689655172413793,
+        "delta": 0.005747126436781658
+      },
+      "rollout_reward=1": {
+        "states": 196,
+        "frozen": 0.5918367346938775,
+        "adapted": 0.6224489795918368,
+        "delta": 0.030612244897959218
+      },
+      "rollout_reward=None": {
+        "states": 1,
+        "frozen": 0.0,
+        "adapted": 0.0,
+        "delta": 0.0
+      }
+    },
+    "teacher_order_checks": 100,
+    "teacher_order_action_agreement": 0.58,
+    "limitations": [
+      "Offline teacher agreement, not executed terminal task success.",
+      "Early states visited by baseline actor; future states visited by baseline90+frozenARM.",
+      "Retention is a forgetting probe; original pretraining exposure cannot be excluded."
+    ]
+  },
+  "audit": {
+    "passed": true,
+    "unique_paired_predictions": 921,
+    "saved_prediction_records": 1842,
+    "all_predictions_parse": true,
+    "all_candidate_order_mappings_valid": true,
+    "all_correctness_flags_recomputed": true,
+    "frozen_future_predictions_reused": 371,
+    "paired_counts": {
+      "dev/main": {
+        "states": 250,
+        "tasks": 126,
+        "frozen_correct": 147,
+        "adapted_correct": 149,
+        "improved_states": 5,
+        "regressed_states": 3,
+        "changed_action_states": 9
+      },
+      "future/main": {
+        "states": 371,
+        "tasks": 82,
+        "frozen_correct": 214,
+        "adapted_correct": 221,
+        "improved_states": 10,
+        "regressed_states": 3,
+        "changed_action_states": 17
+      },
+      "retention/main": {
+        "states": 200,
+        "tasks": 64,
+        "frozen_correct": 142,
+        "adapted_correct": 139,
+        "improved_states": 2,
+        "regressed_states": 5,
+        "changed_action_states": 7
+      },
+      "future/reverse": {
+        "states": 100,
+        "tasks": 57,
+        "frozen_correct": 43,
+        "adapted_correct": 44,
+        "improved_states": 3,
+        "regressed_states": 2,
+        "changed_action_states": 8
+      }
+    },
+    "order_checks": {
+      "states": 100,
+      "teacher_same_action": 58,
+      "teacher_same_index": 49,
+      "teacher_same_display_slot": 26,
+      "frozen_same_action": 57,
+      "frozen_reverse_order_teacher_correct": 53,
+      "adapted_same_action": 53,
+      "adapted_reverse_order_teacher_correct": 54
+    },
+    "notes": [
+      "Primary/reversed-order model scores in results.json use original-order teacher labels.",
+      "Reversed-order teacher calls also vary API sampling; order and stochastic variability are confounded."
+    ],
+    "paired_cluster_bootstrap_reproduced": true,
+    "final_checkpoint_hashes_unchanged": true
+  },
+  "metric": "Canonical-action agreement with GPT-5.5 original-order labels; not terminal task success",
+  "training": {
+    "steps": 90,
+    "train_examples": 2858,
+    "development_examples": 250,
+    "final_training_logged_loss": 0.1374,
+    "mean_training_loss": 0.6177956685423851,
+    "development_loss": 0.16095614433288574,
+    "teacher_api_usage_estimate_usd": 42.582315
+  },
+  "provenance": {
+    "candidate_job": "329708",
+    "training_job": "330977",
+    "evaluation_job": "331120",
+    "prediction_file_sha256": {
+      "frozen": "66b4245ba5e2528ee967ac7e410032f39fdfb0448987a5b329d78b410f62622b",
+      "adapted": "d4339c3b3562a83c4e8ab35689703ae1a07dc5a64233195332488e5d72c18ab4"
+    },
+    "raw_predictions_published": false
+  }
+}

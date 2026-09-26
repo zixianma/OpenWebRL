@@ -157,6 +157,13 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 | **Failure β = 1** | 10 | 27.00% / 35.53% | 27.33% / 33.74% |
 |  | 20 | 32.00% / 42.11% | **33.00% / 41.77%** |
 
+**Evolving ARM (offline forward transfer):** refresh SelectionARM on2,000
+GPT-5.5-labeled actor40 states +858 replay examples; test the fixed final90-update
+ARM on actor90 candidates. Teacher action agreement improves **57.68%→59.57%**
+(+1.89pp; paired95% CI0.00–3.93pp), with retention−1.50pp. This is not task
+success; teacher action consistency is58% under reversed-order re-query.
+[Method, table and caveats](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
+
 <a id="baseline-comparison"></a>
 ![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–40](rl_results/baseline_vs_arm_allfailure_full300.png)
 

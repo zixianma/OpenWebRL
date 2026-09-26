@@ -29,10 +29,13 @@ last logged training loss **0.1374**, mean training loss **0.6178**, development
 loss **0.1610**. All18 five-update checkpoints and the final adapter are saved.
 Its offline evaluation failed on the first constrained-decoding call because
 the launcher omitted the Python-header path needed by Triton. The header/compiler
-check now passes; **evaluation-only recovery331120 is queued:1 H200 ×3h24m**,
-within the unused original budget. It verifies the final checkpoint hashes,
-checks the GPU decoder, and resumes the paired comparison without retraining.
-There is no forward-transfer result yet.
+check passed; **evaluation-only recovery331120 completed in8m57s**. The GPU
+and integrity checks passed without retraining. On371 later-actor states,
+teacher action agreement is **57.68% frozen →59.57% refreshed (+1.89pp;
+paired task-bootstrap95% CI[0.00,+3.93])**. Development changes+0.80pp and
+retention−1.50pp. Teacher action consistency across100 reversed-order re-queries
+is58%, with order and API sampling confounded. This is a modest offline signal,
+not a task-success result. [Final table and interpretation](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 
 **September25 afternoon repair:** bounded recovery is implemented and14 tests
 passed. Preserve all original responses and reuse valid labels; only a recorded

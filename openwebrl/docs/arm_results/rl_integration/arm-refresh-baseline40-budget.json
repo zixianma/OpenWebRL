@@ -1,5 +1,5 @@
 {
-  "status": "90-update ARM SFT complete; decoder header fix validated; evaluation-only recovery331120 queued",
+  "status": "All evolving-ARM stages complete; primary offline action agreement57.68%->59.57%,+1.89pp; no browser execution claim",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -66,10 +66,7 @@
   "teacher_wait_consumes_gpu_time": false,
   "submitted": true,
   "teacher_calls_made": 27,
-  "next_gates": [
-    "Job331120:GPU constrained-decoding kernel validation",
-    "Paired offline frozen/refreshed ARM evaluation"
-  ],
+  "next_gates": [],
   "archive_audit": {
     "late": {
       "counts": {
@@ -205,8 +202,16 @@
   "training_runtime_seconds": 1963.104,
   "training_saved_checkpoints": 18,
   "evaluation_job_id": "331120",
-  "evaluation_job_state": "PENDING",
+  "evaluation_job_state": "COMPLETED",
   "evaluation_only": true,
-  "forward_transfer_complete": false,
-  "evaluation_failure": "Missing Python.h during Triton constrained-decoding kernel compilation; CPATH repair validated"
+  "forward_transfer_complete": true,
+  "evaluation_failure": "Missing Python.h during Triton constrained-decoding kernel compilation; CPATH repair validated",
+  "evaluation_elapsed_seconds": 537,
+  "training_evaluation_total_seconds": 2669,
+  "actual_total_gpu_hours": 2.0425,
+  "primary_frozen_action_accuracy": 0.5768194070080862,
+  "primary_adapted_action_accuracy": 0.5956873315363881,
+  "primary_delta_pp": 1.8867924528301887,
+  "teacher_order_action_agreement": 0.58,
+  "results": "arm-refresh-baseline40-results.json"
 }

@@ -4,6 +4,69 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-offline-forward-transfer-results-20260925"></a>
+## Evolving ARM: offline forward transfer — September25, 2026
+
+**A small positive signal, not yet evidence of higher browser task success.**
+Fine-tune the released SelectionARM with Piotr's LLaMA-Factory route on2,000
+GPT-5.5-labeled states with five fresh candidates from the outcome-only actor40,
+plus858 original replay examples. Language-only LoRA32/alpha64, effective batch32,
+LR1e-5 with five-step warmup/cosine decay, one epoch, predefined final update90.
+The actor is unchanged. Final development loss is0.161; no test result selected
+this checkpoint. [Full method and provenance](ARM_INTEGRATION_PLAN.md#arm-offline-forward-transfer-20260924).
+
+The metric below is **canonical-action agreement with the original-order
+GPT-5.5 label**. Alternatives that parse to the same action receive equal credit.
+Both ARMs see the same states, candidates and display orders. Intervals use
+10,000 paired bootstrap resamples of task clusters, seed42; they do not measure
+training-seed or teacher-label uncertainty.
+
+| Panel | States / tasks | Frozen ARM | Refreshed ARM | Delta (pp) | Paired95% CI (pp) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| **Later actor90: primary forward test** | **371 /82** | **57.68%** | **59.57%** | **+1.89** | **[0.00,+3.93]** |
+| Early held-out development | 250 /126 | 58.80% | 59.60% | +0.80 | [−1.21,+3.16] |
+| Original-data retention probe | 200 /64 | 71.00% | 69.50% | −1.50 | [−4.12,+1.03] |
+| Reversed-order test subset, original teacher labels | 100 /57 | 43.00% | 44.00% | +1.00 | [−3.19,+5.49] |
+
+On the primary test,214→221 states match the teacher:10 improve,3 regress,
+and17/371 selections change action. Thus95.42% of actions remain unchanged.
+The gain is modest and its interval includes zero; retention moves slightly
+lower with an interval spanning zero. These results do not justify treating
+online RL gains as established or replacing the frozen ARM in running jobs.
+
+**Label/order stability needs attention.** Across100 reversed-order re-queries,
+GPT-5.5 selects the same canonical action in58 cases (same exact candidate49).
+Frozen/refreshed ARM action stability is57%/53%. Against the *reversed-order*
+teacher's label, reversed-order model agreement is53%/54%; this is a descriptive
+check, distinct from the original-label43%/44% row above. Teacher API sampling
+also varies between queries, so order and stochastic variability are confounded;
+this does not isolate a causal position bias. Candidate-index/permutation mapping
+was independently recomputed and passed. Review label stability before scaling
+training or interpreting small agreement changes as stronger supervision.
+
+The forward states were visited by actor90+frozen ARM, while early states come
+from outcome-only rollouts through40. This remains a conditional offline test
+across visitation distributions. Retention is a forgetting probe; exposure during
+the original ARM's pretraining cannot be excluded. Fresh browser execution is
+required to measure task success; no new execution experiment is launched here.
+
+**Integrity and cost:** all921 expected paired cases are present for each model,
+with1,842 saved records and zero parse failures. Correctness, candidate-order
+mapping, paired report and bootstrap were recomputed; final adapter hashes are
+unchanged from training.371 cached frozen forward choices are reused. Training
+completed90 updates in32m43s; evaluation331120 completed in8m57s and released
+its GPU. Including candidate generation and both recovered attempts, actual
+allocation use is approximately2.04 GPU-hours, within the approved8 GPU-hours.
+Recorded teacher usage is approximately$42.58 against the$1,000 cap.
+
+[Aggregate results and integrity audit](arm_results/rl_integration/arm-refresh-baseline40-results.json)
+· [Training](https://wandb.ai/zixianma/openwebrl/runs/arm-refresh-baseline40-gpt55)
+· [Frozen evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-refresh-330977-frozen)
+· [Refreshed evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-refresh-330977-adapted).
+Private predictions are retained under runtime
+`arm-turn-bonus-preparation/arm-refresh-20260924/baseline40/evaluation/`;
+raw states, trajectories and teacher payloads are not published.
+
 Latest full-300 endpoints: joint SFT **102/300 (34.0% overall; 37.8% valid-only)** and joint DPO **104/300 (34.7%; 40.9%)**. Their paired difference is not significant (p=0.8991).
 
 Initial RL implementation result (2026-09-13): the

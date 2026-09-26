@@ -68,8 +68,8 @@ The follow-on offline evaluation failed before saving any predictions: XGrammar'
 Triton kernel needed `Python.h`, but this launcher omitted the existing runtime
 header paths. The repair exports those paths via `CPATH`; a CPU compilation check
 of the actual Triton driver passes. A new GPU mask-kernel check tests float32 and
-bfloat16 before model evaluation. **Evaluation-only recovery331120 is queued for
-1 H200 ×3h24m**,8 CPUs,120GiB. Prior attempts consumed29+2,103=2,132 seconds;
+bfloat16 before model evaluation. **Evaluation-only recovery331120 completed in8m57s from
+a1 H200 ×3h24m allocation**,8 CPUs,120GiB. Prior attempts consumed29+2,103=2,132 seconds;
 the remaining cap is12,268 seconds, rounded down to12,240 for this job. It does
 not repeat SFT. It verifies final adapter/state hashes and resumes the existing
 `arm-refresh-330977-{frozen,adapted}` W&B identities in `openwebrl-evals`.
@@ -77,11 +77,16 @@ Only evaluation tracking identity handling changed in Piotr's evaluation source;
 prompts, generation, scoring and the trained model remain fixed. Failed-attempt
 logs/source/readiness are archived under `baseline40/attempts/330977/`.
 
-Ten pipeline tests pass, including prevention of retraining during evaluation
+Both float32 and bfloat16 GPU decoder checks passed. The paired evaluation
+finished with921 records/model, zero parse failures and unchanged adapter hashes.
+[Final offline forward-transfer results](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925)
+show57.68%→59.57% action agreement on371 later-actor states (+1.89pp).
+The controller exited successfully, releasing the allocation; the watcher
+verified final completion and exited. Ten pipeline tests pass, including prevention of retraining during evaluation
 recovery, rejection of an incomplete/mismatched endpoint, remaining-budget
-limits and completed-job handling. The persistent watcher follows331120,
-records prediction counts and reports failures; routine bug repair still needs
-an active agent. No forward-transfer result exists yet.
+limits and completed-job handling. The persistent watcher followed331120,
+recorded prediction counts and reported failures; routine bug repair required
+an active agent. All evolving-ARM stages are now complete.
 
 Repair in `scripts/arm_refresh_label_recovery.py` and
 `scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
@@ -238,6 +243,11 @@ Beta330278 is running on g022, collecting21 after durable20 /298 updates;
 its20 evaluation is already complete at33.00% overall /41.77% valid-only.
 Coverage329911 is running on g015 and processing its first iteration.
 B90 remains held until B60 and both evaluations are verified.
+A later check found beta330278 failed after28m49s during iteration21 training.
+Collection and ARM labeling were saved; the native Ray training actor died, and
+logs include a `torch_memory_saver` CUDA allocation failure. Root-cause repair
+and a bounded replay are still pending; this is separate from the completed
+evolving-ARM experiment. Durable beta20 and its completed evaluation are preserved.
 
 The user requested queueing the unfinished jobs while cleaning storage. All
 three replacements are submitted, initially held with no GPUs allocated.
