@@ -54,14 +54,20 @@ torchvision0.23.0, torchaudio2.8.0 and matching CUDA12.8 libraries in a refresh-
 preserving the RL environments. CPU checks passed: LLaMA-Factory trainer and evaluation imports, tiny
 Conv3d backward/NMS, and all ten exact token/mask/image parity cases. All original
 fit-data, label and training-script hashes remain unchanged. The RL environment
-still uses its original torch2.9.1. **Recovery job330977 is queued for1 H200
+still uses its original torch2.9.1. **Recovery job330977 is running on g003 with1 H200
 ×3h59m**,8 CPUs,120GiB; no four-hour budget reset. The controller still owns full-context backward/save-reload,
 90-update LLaMA-Factory SFT and the paired offline evaluation. Failed-attempt
 logs, readiness and submission receipts are archived under `baseline40/attempts/330951/`.
 The watcher now distinguishes a completed job absent from `squeue` from a
 Slurm controller error, checks the worker failure first, and ignores stale
 status from an earlier job ID. Seven pipeline tests pass, including remaining-time
-budget enforcement. No ARM optimizer updates or forward-transfer results exist yet.
+budget enforcement. GPU validation subsequently passed at7,766 tokens with
+finite loss/gradients and exact adapter save/reload; peak allocated memory was
+23.2GiB. **Five of90 optimizer updates completed**, loss3.3415 →3.1289, around
+20s/update. Checkpoint5 includes adapter, optimizer, scheduler, trainer and RNG
+state. A live training sample showed99% GPU utilization.
+[W&B metrics](https://wandb.ai/zixianma/openwebrl/runs/arm-refresh-baseline40-gpt55)
+are verified remotely in `openwebrl`. No forward-transfer result exists yet.
 
 Repair in `scripts/arm_refresh_label_recovery.py` and
 `scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
@@ -103,7 +109,8 @@ completed LLaMA-Factory preparation, and submitted the approved1-H200 ×4h
 training/evaluation job330951. That attempt stopped at the framework-version
 guard described above; the watcher stopped mutations and awaited the repaired
 replacement receipt. It has now restarted against **330977** and follows queue,
-worker stages and completion. `scripts/recover_arm_refresh_training.py` records
+worker stages, latest loss/update metrics, durable checkpoint steps and completion.
+`scripts/recover_arm_refresh_training.py` records
 all prior elapsed time, rejects an unknown job outcome or any existing training
 checkpoint, preserves failed-attempt logs, and submits only unused approved time.
 The isolated dependency pins are saved in `arm-reproduction/refresh-torch28-pins.txt`.

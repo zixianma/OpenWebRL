@@ -1,5 +1,5 @@
 {
-  "status": "All2721 labels valid; isolated torch2.8 CPU/operator/parity checks passed; bounded1-H200 x3h59m recovery330977 queued",
+  "status": "Recovery330977 running on g003; full-context GPU validation passed;5/90 updates and durable checkpoint5 verified",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -160,8 +160,8 @@
   "development_examples": 250,
   "training_expected_updates": 90,
   "final_preprocessing_parity_passed": true,
-  "training_job_state": "PENDING",
-  "training_optimizer_updates": 0,
+  "training_job_state": "RUNNING",
+  "training_optimizer_updates": 5,
   "training_spent_seconds": 29,
   "training_remaining_seconds": 14371,
   "training_recovery_time_limit_seconds": 14340,
@@ -186,5 +186,12 @@
     }
   ],
   "training_recovery_parity_cases_passed": 10,
-  "training_original_data_source_hashes_unchanged": true
+  "training_original_data_source_hashes_unchanged": true,
+  "training_loss_first": 3.3415,
+  "training_loss_latest": 3.1289,
+  "training_durable_checkpoint_step": 5,
+  "training_wandb_url": "https://wandb.ai/zixianma/openwebrl/runs/arm-refresh-baseline40-gpt55",
+  "training_wandb_remote_metrics_verified": true,
+  "training_gpu_smoke_tokens": 7766,
+  "training_gpu_smoke_peak_memory_gib": 23.19425058364868
 }

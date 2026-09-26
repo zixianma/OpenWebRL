@@ -24,10 +24,12 @@ Final CPU data/preprocessing checks passed. **Job330951 failed during GPU smoke
 after29 seconds, before any optimizer update:** LLaMA-Factory rejects PyTorch2.9.x
 with the Qwen3-VL Conv3D layer. The isolated PyTorch2.8/CUDA12.8 stack now passes imports, small operator
 checks and all ten token/mask/image parity cases; original data/source hashes
-are unchanged. **Recovery job330977 is queued:1 H200 ×3h59m**, within the unused
-original four-hour budget. It must pass full-context GPU validation before
-the unchanged90-update SFT and paired offline evaluation. There is no
-forward-transfer result yet.
+are unchanged. **Recovery job330977 is running on g003:1 H200 ×3h59m**, within
+the unused original four-hour budget. GPU forward/backward/save-reload passed
+at7,766 tokens (23.2GiB peak); **5/90 optimizer updates** are verified, with
+training loss3.3415 →3.1289 and a durable checkpoint5 including optimizer,
+scheduler and RNG state. W&B synchronization is verified in `openwebrl`.
+The paired offline evaluation follows training; there is no forward-transfer result yet.
 
 **September25 afternoon repair:** bounded recovery is implemented and14 tests
 passed. Preserve all original responses and reuse valid labels; only a recorded
