@@ -20,8 +20,13 @@ cap was consumed by reasoning, leaving no visible selection. The known failure
 was recovered with a4,096-token cap: **20/20 pilot labels now pass**. All seven Batch
 chunks completed and **all2,721 labels are validated**, with zero unresolved
 errors. Seven length failures, including the pilot, recovered at4,096 tokens.
-Final CPU data/preprocessing checks passed. **Job330951 is queued:1 H200 ×4h**
-for the90-update ARM SFT and paired offline evaluation. There is no
+Final CPU data/preprocessing checks passed. **Job330951 failed during GPU smoke
+after29 seconds, before any optimizer update:** LLaMA-Factory rejects PyTorch2.9.x
+with the Qwen3-VL Conv3D layer. The isolated PyTorch2.8/CUDA12.8 stack now passes imports, small operator
+checks and all ten token/mask/image parity cases; original data/source hashes
+are unchanged. **Recovery job330977 is queued:1 H200 ×3h59m**, within the unused
+original four-hour budget. It must pass full-context GPU validation before
+the unchanged90-update SFT and paired offline evaluation. There is no
 forward-transfer result yet.
 
 **September25 afternoon repair:** bounded recovery is implemented and14 tests

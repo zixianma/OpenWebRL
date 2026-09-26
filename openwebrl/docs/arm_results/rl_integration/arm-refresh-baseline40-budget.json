@@ -1,5 +1,5 @@
 {
-  "status": "All2721 teacher labels validated; CPU data/parity checks passed;1-H200 x4h training/evaluation job330951 queued",
+  "status": "All2721 labels valid; isolated torch2.8 CPU/operator/parity checks passed; bounded1-H200 x3h59m recovery330977 queued",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -67,9 +67,9 @@
   "submitted": true,
   "teacher_calls_made": 27,
   "next_gates": [
-    "Job330951:real-image full-context backward/save/reload",
+    "Job330977:real-image full-context backward/save/reload",
     "90-update LLaMA-Factory SFT",
-    "Paired offline forward comparison against frozen ARM on371 future states"
+    "Paired offline frozen/refreshed ARM evaluation"
   ],
   "archive_audit": {
     "late": {
@@ -155,9 +155,36 @@
     "future": 371,
     "future_reversed_order": 100
   },
-  "training_job_id": "330951",
+  "training_job_id": "330977",
   "training_examples": 2858,
   "development_examples": 250,
   "training_expected_updates": 90,
-  "final_preprocessing_parity_passed": true
+  "final_preprocessing_parity_passed": true,
+  "training_job_state": "PENDING",
+  "training_optimizer_updates": 0,
+  "training_spent_seconds": 29,
+  "training_remaining_seconds": 14371,
+  "training_recovery_time_limit_seconds": 14340,
+  "training_failure": "LLaMA-Factory torch2.9.x Conv3D version guard",
+  "training_environment_cpu_passed": true,
+  "training_environment": {
+    "torch": "2.8.0+cu128",
+    "torchvision": "0.23.0+cu128",
+    "torchaudio": "2.8.0+cu128",
+    "triton": "3.4.0",
+    "transformers": "4.57.1",
+    "peft": "0.18.1",
+    "trl": "0.24.0",
+    "llamafactory": "0.9.6.dev0"
+  },
+  "training_prior_attempts": [
+    {
+      "job_id": "330951",
+      "state": "FAILED",
+      "elapsed_seconds": 29,
+      "optimizer_updates": 0
+    }
+  ],
+  "training_recovery_parity_cases_passed": 10,
+  "training_original_data_source_hashes_unchanged": true
 }

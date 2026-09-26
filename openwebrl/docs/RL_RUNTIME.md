@@ -46,10 +46,22 @@ attempts is approximately$42.58 at undiscounted input pricing; the reservation
 is$192.56 against the$1,000 cap. Final CPU checks passed for2,858 training
 examples and250 development examples, including exact deployment/training
 token-prefix, completion-mask and image-tensor parity on representative cases.
-The watcher submitted **330951:1 H200 ×4h,8 CPUs,120GiB**; initial state is
-pending for priority. The controller owns full-context GPU backward/save-reload
-validation,90-update LLaMA-Factory SFT and the paired offline evaluation. No
-ARM optimizer updates or forward-transfer results exist yet.
+The watcher submitted **330951:1 H200 ×4h,8 CPUs,120GiB**. It failed after
+**29 seconds, before any optimizer update**, at LLaMA-Factory's explicit
+PyTorch2.9.x/Conv3D guard. The upstream [PyTorch issue](https://github.com/pytorch/pytorch/issues/166122)
+documents the AMP performance regression. Recovery pins PyTorch2.8.0,
+torchvision0.23.0, torchaudio2.8.0 and matching CUDA12.8 libraries in a refresh-only directory,
+preserving the RL environments. CPU checks passed: LLaMA-Factory trainer and evaluation imports, tiny
+Conv3d backward/NMS, and all ten exact token/mask/image parity cases. All original
+fit-data, label and training-script hashes remain unchanged. The RL environment
+still uses its original torch2.9.1. **Recovery job330977 is queued for1 H200
+×3h59m**,8 CPUs,120GiB; no four-hour budget reset. The controller still owns full-context backward/save-reload,
+90-update LLaMA-Factory SFT and the paired offline evaluation. Failed-attempt
+logs, readiness and submission receipts are archived under `baseline40/attempts/330951/`.
+The watcher now distinguishes a completed job absent from `squeue` from a
+Slurm controller error, checks the worker failure first, and ignores stale
+status from an earlier job ID. Seven pipeline tests pass, including remaining-time
+budget enforcement. No ARM optimizer updates or forward-transfer results exist yet.
 
 Repair in `scripts/arm_refresh_label_recovery.py` and
 `scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
@@ -88,8 +100,13 @@ approval receipts retain the original authorization and the new amendment.
 The repaired pilot then executed successfully; the persistent watcher was
 restarted after verified7/7 submissions, collected and validated all labels,
 completed LLaMA-Factory preparation, and submitted the approved1-H200 ×4h
-training/evaluation job330951. Its current stage is `training-evaluation`; it
-follows the job through queue, worker stages and completion.
+training/evaluation job330951. That attempt stopped at the framework-version
+guard described above; the watcher stopped mutations and awaited the repaired
+replacement receipt. It has now restarted against **330977** and follows queue,
+worker stages and completion. `scripts/recover_arm_refresh_training.py` records
+all prior elapsed time, rejects an unknown job outcome or any existing training
+checkpoint, preserves failed-attempt logs, and submits only unused approved time.
+The isolated dependency pins are saved in `arm-reproduction/refresh-torch28-pins.txt`.
 A redundant agent status lookup saw404 because its inherited API key differed
 from the project's key; the persistent watcher used the correct account and
 completed labeling. The teacher client now explicitly selects `OPENAI_API_KEY`
