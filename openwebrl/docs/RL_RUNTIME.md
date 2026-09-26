@@ -4,7 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
-- [ARM-refresh pilot recovered and labeling resumed](#arm-refresh-label-recovery-20260925)
+- [ARM-refresh training complete; evaluation recovery](#arm-refresh-label-recovery-20260925)
 - [Gate B continuation to90](#arm-b-to90-20260925)
 - [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
 - [Queued ARM recoveries and automatic storage release](#arm-recovery-queue-20260925)
@@ -22,7 +22,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ---
 
 <a id="arm-refresh-label-recovery-20260925"></a>
-## ARM-refresh labeling recovery — September25 afternoon
+## ARM-refresh labeling, training and evaluation recovery — September25
 
 Candidate job329708 completed in39m02s:2,382 five-response sets, with2,000 fit
 states and250 development states retained. The prepared dataset also includes
@@ -54,20 +54,34 @@ torchvision0.23.0, torchaudio2.8.0 and matching CUDA12.8 libraries in a refresh-
 preserving the RL environments. CPU checks passed: LLaMA-Factory trainer and evaluation imports, tiny
 Conv3d backward/NMS, and all ten exact token/mask/image parity cases. All original
 fit-data, label and training-script hashes remain unchanged. The RL environment
-still uses its original torch2.9.1. **Recovery job330977 is running on g003 with1 H200
-×3h59m**,8 CPUs,120GiB; no four-hour budget reset. The controller still owns full-context backward/save-reload,
-90-update LLaMA-Factory SFT and the paired offline evaluation. Failed-attempt
-logs, readiness and submission receipts are archived under `baseline40/attempts/330951/`.
-The watcher now distinguishes a completed job absent from `squeue` from a
-Slurm controller error, checks the worker failure first, and ignores stale
-status from an earlier job ID. Seven pipeline tests pass, including remaining-time
-budget enforcement. GPU validation subsequently passed at7,766 tokens with
-finite loss/gradients and exact adapter save/reload; peak allocated memory was
-23.2GiB. **Five of90 optimizer updates completed**, loss3.3415 →3.1289, around
-20s/update. Checkpoint5 includes adapter, optimizer, scheduler, trainer and RNG
-state. A live training sample showed99% GPU utilization.
-[W&B metrics](https://wandb.ai/zixianma/openwebrl/runs/arm-refresh-baseline40-gpt55)
-are verified remotely in `openwebrl`. No forward-transfer result exists yet.
+still uses its original torch2.9.1. Recovery330977 ran on g003 and consumed
+35m03s of its3h59m allocation. GPU validation passed at7,766 tokens, finite
+loss/gradients, exact adapter save/reload and23.2GiB peak allocated memory.
+**All90 training updates completed** in32m43s; last logged loss0.1374, mean
+training loss0.6178, and final development loss0.160956 over250 examples.
+All18 checkpoints (5,10,…,90) retain optimizer, scheduler and RNG state.
+The final exported adapter matches checkpoint90 byte-for-byte.
+[W&B training metrics](https://wandb.ai/zixianma/openwebrl/runs/arm-refresh-baseline40-gpt55)
+are preserved in `openwebrl`.
+
+The follow-on offline evaluation failed before saving any predictions: XGrammar's
+Triton kernel needed `Python.h`, but this launcher omitted the existing runtime
+header paths. The repair exports those paths via `CPATH`; a CPU compilation check
+of the actual Triton driver passes. A new GPU mask-kernel check tests float32 and
+bfloat16 before model evaluation. **Evaluation-only recovery331120 is queued for
+1 H200 ×3h24m**,8 CPUs,120GiB. Prior attempts consumed29+2,103=2,132 seconds;
+the remaining cap is12,268 seconds, rounded down to12,240 for this job. It does
+not repeat SFT. It verifies final adapter/state hashes and resumes the existing
+`arm-refresh-330977-{frozen,adapted}` W&B identities in `openwebrl-evals`.
+Only evaluation tracking identity handling changed in Piotr's evaluation source;
+prompts, generation, scoring and the trained model remain fixed. Failed-attempt
+logs/source/readiness are archived under `baseline40/attempts/330977/`.
+
+Ten pipeline tests pass, including prevention of retraining during evaluation
+recovery, rejection of an incomplete/mismatched endpoint, remaining-budget
+limits and completed-job handling. The persistent watcher follows331120,
+records prediction counts and reports failures; routine bug repair still needs
+an active agent. No forward-transfer result exists yet.
 
 Repair in `scripts/arm_refresh_label_recovery.py` and
 `scripts/label_arm_refresh.py` passed seven recovery tests plus seven existing
@@ -108,11 +122,12 @@ restarted after verified7/7 submissions, collected and validated all labels,
 completed LLaMA-Factory preparation, and submitted the approved1-H200 ×4h
 training/evaluation job330951. That attempt stopped at the framework-version
 guard described above; the watcher stopped mutations and awaited the repaired
-replacement receipt. It has now restarted against **330977** and follows queue,
+replacement receipt. It now follows evaluation-only recovery **331120** through queue,
 worker stages, latest loss/update metrics, durable checkpoint steps and completion.
 `scripts/recover_arm_refresh_training.py` records
-all prior elapsed time, rejects an unknown job outcome or any existing training
-checkpoint, preserves failed-attempt logs, and submits only unused approved time.
+all prior elapsed time, rejects unknown job outcomes or retraining over existing
+checkpoints, verifies the final endpoint for `--evaluation-only`, preserves
+failed-attempt logs, and submits only unused approved time.
 The isolated dependency pins are saved in `arm-reproduction/refresh-torch28-pins.txt`.
 A redundant agent status lookup saw404 because its inherited API key differed
 from the project's key; the persistent watcher used the correct account and
@@ -215,6 +230,14 @@ These different-date comparisons are descriptive.
 
 <a id="arm-recovery-queue-20260925"></a>
 ## Unfinished ARM jobs queued — September25, 09:25PDT
+
+**September25 evening live check:** B329908 is running on g016, with durable
+iteration51 /688 Adam updates and iteration52 in progress. Its controller owns
+full300 evaluations50/60 **after training through60**; B50 has not started.
+Beta330278 is running on g022, collecting21 after durable20 /298 updates;
+its20 evaluation is already complete at33.00% overall /41.77% valid-only.
+Coverage329911 is running on g015 and processing its first iteration.
+B90 remains held until B60 and both evaluations are verified.
 
 The user requested queueing the unfinished jobs while cleaning storage. All
 three replacements are submitted, initially held with no GPUs allocated.

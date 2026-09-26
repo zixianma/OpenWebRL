@@ -24,12 +24,15 @@ Final CPU data/preprocessing checks passed. **Job330951 failed during GPU smoke
 after29 seconds, before any optimizer update:** LLaMA-Factory rejects PyTorch2.9.x
 with the Qwen3-VL Conv3D layer. The isolated PyTorch2.8/CUDA12.8 stack now passes imports, small operator
 checks and all ten token/mask/image parity cases; original data/source hashes
-are unchanged. **Recovery job330977 is running on g003:1 H200 ×3h59m**, within
-the unused original four-hour budget. GPU forward/backward/save-reload passed
-at7,766 tokens (23.2GiB peak); **5/90 optimizer updates** are verified, with
-training loss3.3415 →3.1289 and a durable checkpoint5 including optimizer,
-scheduler and RNG state. W&B synchronization is verified in `openwebrl`.
-The paired offline evaluation follows training; there is no forward-transfer result yet.
+are unchanged. **Job330977 completed all90 ARM SFT updates** in32m43s:
+last logged training loss **0.1374**, mean training loss **0.6178**, development
+loss **0.1610**. All18 five-update checkpoints and the final adapter are saved.
+Its offline evaluation failed on the first constrained-decoding call because
+the launcher omitted the Python-header path needed by Triton. The header/compiler
+check now passes; **evaluation-only recovery331120 is queued:1 H200 ×3h24m**,
+within the unused original budget. It verifies the final checkpoint hashes,
+checks the GPU decoder, and resumes the paired comparison without retraining.
+There is no forward-transfer result yet.
 
 **September25 afternoon repair:** bounded recovery is implemented and14 tests
 passed. Preserve all original responses and reuse valid labels; only a recorded

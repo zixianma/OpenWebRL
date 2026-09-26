@@ -1,5 +1,5 @@
 {
-  "status": "Recovery330977 running on g003; full-context GPU validation passed;5/90 updates and durable checkpoint5 verified",
+  "status": "90-update ARM SFT complete; decoder header fix validated; evaluation-only recovery331120 queued",
   "upstream_repo": "https://github.com/piotr-teterwak/action-reward-models",
   "upstream_commit": "4d6dfff869f198f282e4b0e8cf6d429c23dc9fce",
   "branch": "openwebrl/arm-forward-transfer",
@@ -67,8 +67,7 @@
   "submitted": true,
   "teacher_calls_made": 27,
   "next_gates": [
-    "Job330977:real-image full-context backward/save/reload",
-    "90-update LLaMA-Factory SFT",
+    "Job331120:GPU constrained-decoding kernel validation",
     "Paired offline frozen/refreshed ARM evaluation"
   ],
   "archive_audit": {
@@ -160,11 +159,11 @@
   "development_examples": 250,
   "training_expected_updates": 90,
   "final_preprocessing_parity_passed": true,
-  "training_job_state": "RUNNING",
-  "training_optimizer_updates": 5,
-  "training_spent_seconds": 29,
-  "training_remaining_seconds": 14371,
-  "training_recovery_time_limit_seconds": 14340,
+  "training_job_state": "FAILED_AT_FOLLOW_ON_EVALUATION",
+  "training_optimizer_updates": 90,
+  "training_spent_seconds": 2132,
+  "training_remaining_seconds": 12268,
+  "training_recovery_time_limit_seconds": 12240,
   "training_failure": "LLaMA-Factory torch2.9.x Conv3D version guard",
   "training_environment_cpu_passed": true,
   "training_environment": {
@@ -183,15 +182,31 @@
       "state": "FAILED",
       "elapsed_seconds": 29,
       "optimizer_updates": 0
+    },
+    {
+      "job_id": "330977",
+      "state": "FAILED_AT_EVALUATION",
+      "elapsed_seconds": 2103,
+      "optimizer_updates": 90
     }
   ],
   "training_recovery_parity_cases_passed": 10,
   "training_original_data_source_hashes_unchanged": true,
   "training_loss_first": 3.3415,
-  "training_loss_latest": 3.1289,
-  "training_durable_checkpoint_step": 5,
+  "training_loss_latest": 0.1374,
+  "training_durable_checkpoint_step": 90,
   "training_wandb_url": "https://wandb.ai/zixianma/openwebrl/runs/arm-refresh-baseline40-gpt55",
   "training_wandb_remote_metrics_verified": true,
   "training_gpu_smoke_tokens": 7766,
-  "training_gpu_smoke_peak_memory_gib": 23.19425058364868
+  "training_gpu_smoke_peak_memory_gib": 23.19425058364868,
+  "training_complete": true,
+  "training_loss_mean": 0.6177956685423851,
+  "development_loss": 0.16095614433288574,
+  "training_runtime_seconds": 1963.104,
+  "training_saved_checkpoints": 18,
+  "evaluation_job_id": "331120",
+  "evaluation_job_state": "PENDING",
+  "evaluation_only": true,
+  "forward_transfer_complete": false,
+  "evaluation_failure": "Missing Python.h during Triton constrained-decoding kernel compilation; CPATH repair validated"
 }

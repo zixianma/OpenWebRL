@@ -18,7 +18,10 @@ Current RL endpoints are in the [collaborator summary](ARM_SUMMARY.md#3-online-r
 Failure β1's [iteration10 evaluation is complete](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925)
 at **27.33% overall /33.74% valid-only** (82 successes,243 valid). Job329912
 recovered only44 missing tasks and retained the256 existing results. All300
-rollouts and verdicts are preserved; iteration20 evaluation is now in progress.
+rollouts and verdicts are preserved. Its [iteration20 evaluation is also complete](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925)
+at **33.00% overall /41.77% valid-only** (99 successes,237 valid); all300
+rollouts and verdicts are saved. Gate B50 is scheduled after training through60
+in the existing329908 allocation, alongside B60; neither evaluation has started.
 Gate B's [September24 full-300 evaluations at30 and40](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924)
 completed at **34.00% / 43.59%** and **36.00% / 47.37%** overall / valid-only.
 These are +2.00 and +2.67 pp overall against historical outcome-only checkpoints

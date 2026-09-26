@@ -18,7 +18,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Evolving ARM: recovery330977 training; GPU validation and checkpoint5 passed ($42.58 recorded API usage)](RL_RUNTIME.md#arm-refresh-label-recovery-20260925). Fine-tuning is in progress; no forward-transfer result yet.
+[Evolving ARM:90 updates complete; development loss0.161; evaluation-only recovery331120 queued ($42.58 recorded API usage)](RL_RUNTIME.md#arm-refresh-label-recovery-20260925). Fine-tuning is complete; no forward-transfer result yet.
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
