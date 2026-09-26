@@ -522,7 +522,7 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 This comparison overlays the historical outcome-only baseline curve with the
 all-failure and additive ARM full-300 points through iteration100. The completed
 baseline100 evaluation supplies the final point for those three methods.
-Gate B overlays the completed full-300 evaluations at iterations20,30 and40,
+Gate B overlays the completed full-300 evaluations at iterations20 through60,
 with overall and valid-only rates taken from the saved result audits; its
 curves stop at40, the latest evaluated checkpoint.
 Additive's
@@ -1618,3 +1618,22 @@ Protocol: one candidate, no inference ARM, o4-mini/AgentTrek judge. Unavailable 
 [Full report](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-dpo-action-2gpu-r2/evaluation/all300-summary.json) · [Rollouts](/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/runs/joint-v2-dpo-action-2gpu-r2/evaluation)
 
 <!-- document:ARM_JOINT_ACTION_DPO_RESULTS.md:end -->
+
+
+<a id="arm-gate-b-iter50-60-results-20260926"></a>
+## Gate B iteration50/60 update — September26, 2026
+
+| Model | Iteration | Full300 overall | Full300 valid-only | Valid denominator | Fixed100 overall | Fixed100 valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Gate B | 50 | 37.67% | 48.71% | 232 | 33.00% | 45.21% |
+| Gate B | 60 | 37.33% | 49.12% | 228 | 35.00% | 49.30% |
+| Gate C | 50 | 33.67% | 43.53% | 232 | 31.00% | 41.33% |
+| Gate C | 60 | 32.67% | 43.17% | 227 | 30.00% | 41.10% |
+
+B50/B60 job329908 completed with300 saved rollouts and300 verdicts each.
+The existing comparison plot now includes both points. Historical outcome-only
+baseline50 and60 are each35.00% overall; B is descriptively+2.67pp/+2.33pp.
+Different evaluation dates and invalid sets remain a limitation.
+[Audits and provenance](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926).
+B's continuation saved69 before a CUDA allocator OOM during iteration70;
+[bounded recovery331767](RL_RUNTIME.md#arm-progress-20260926) targets90.

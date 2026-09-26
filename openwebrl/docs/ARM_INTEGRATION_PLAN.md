@@ -6164,3 +6164,44 @@ this makes no API calls. The public view contains public WebGym task text and
 selected derived results, with no credentials or raw API response envelopes.
 
 ![Jev task-quality choices, probabilities and uncertainty](arm_results/rl_integration/jev-quality-overview.png)
+
+
+<a id="arm-refresh-browser-20260926"></a>
+## Refreshed ARM: executed browser forward transfer — September26, 2026
+
+**Prepared, not submitted.** Default proposed actor is outcome-only iteration90,
+matching the later actor in the completed offline transfer test. This uses the
+five-candidate inference mechanism from ARM_SUMMARY section1, with the RL
+actor's GPT-4.1/action_history audit protocol. It does not directly reproduce
+the historical SFT/o4-mini result.
+
+- Compare released frozen SelectionARM against its fixed final90-update LoRA
+  refresh, holding the actor90 checkpoint constant. No selection among refresh
+  checkpoints using benchmark performance. Adapter SHA256:
+  `c06bcad3ee6e64f58a121a63f93f61e30117936025edf451904fd474e0cf7d97`.
+- For each condition, run all300 OM2W tasks with K5 full reasoning+action
+  candidates, actor temperature0.8/top-p1,4096 response tokens,32768 context,
+  30 browser turns,16 concurrent browsers, deterministic ARM JSON selection.
+  Same candidate seed derivation and display permutations for both conditions;
+  states naturally diverge after selecting different actions.
+- Both conditions use fresh local-browser trajectories and GPT-4.1/action_history
+  terminal judging. Save each rollout, screenshot archive, candidate set,
+  selection trace and judge verdict. Extract the original fixed100 slice from
+  full300. Report overall, valid-only, denominators, improved/regressed tasks,
+  and jointly valid task count. Historical actor-only results are context, not
+  a fresh control or an equal-compute comparison.
+- Each model must pass health/adapter-identity checks, native actor restoration,
+  real ARM selection and three separate smoke trajectories before its full300
+  stage. No silent selector fallback. One controller owns both stages and stops
+  on model/judge failure; W&B project `openwebrl-evals`.
+- Proposed cap: **2 H200×4h,16 CPUs,480GiB;606 total trajectories including six
+  excluded smoke runs; GPT-4.1 judge≤$30/1818 calls**. Expected around3h from
+  the previous200-task audit's56m24s, with4h allowing startup/website variability.
+  Final resource approval is required before submission.
+
+Prepared launcher: `scripts/run_arm_refresh_browser_2gpu.sbatch`; controller:
+`scripts/run_arm_refresh_browser.py`. CPU plan/cohort/hash/budget/serving-import
+checks passed. GPU serving of the adapter is gated inside the proposed job.
+The existing validated frozen and refreshed offline environment uses identical
+SelectionARM base tensors; only the adapter differs. The actor native runtime
+and refreshed selector Python environment remain separate.

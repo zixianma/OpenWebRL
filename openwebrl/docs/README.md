@@ -18,7 +18,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Evolving ARM completed: later-actor offline agreement57.68%→59.57% (+1.89pp); label/order stability remains a concern](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925). This is not browser task success.
+[Evolving ARM completed: later-actor offline agreement57.68%→59.57% (+1.89pp); label/order stability remains a concern](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925). This is not browser task success. [Prepared browser comparison](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
@@ -34,6 +34,7 @@ with full300 evaluations30/40 and a hard stop at40; it failed during iteration21
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
+[Gate B iteration50/60:37.67% /37.33% overall](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926),
 [Gate B iteration30/40 full-300 results](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924)
 and [Gate C iteration30/40 results](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924)
 are complete, as are [C50/C60 full300 and fixed100 results](RL_EVALUATION.md#arm-gate-c-iter50-60-results-20260925).
@@ -163,3 +164,5 @@ hashes remain in `document_map.json`. Retained standalone files are
 - [Jev task-quality screening pilot](ARM_INTEGRATION_PLAN.md#arm-task-quality-jev-20260922)
   · [interactive uncertainty dashboard](arm_results/rl_integration/jev-quality-review.html)
   · [static overview](arm_results/rl_integration/jev-quality-overview.png)
+
+[September26 ARM status: B69 recovery331767, B50/B60 results, C60 complete](RL_RUNTIME.md#arm-progress-20260926).

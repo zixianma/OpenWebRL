@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Gate B iteration50/60 completed evaluations](#arm-gate-b-iter50-60-results-20260926)
 - [Failure β1 iteration20 full300](#arm-failure-beta1-iter20-results-20260925)
 - [Failure β1 iteration10 recovered full300](#arm-failure-beta1-iter10-results-20260925)
 - [Gate C iteration50/60 completed evaluations](#arm-gate-c-iter50-60-results-20260925)
@@ -14,6 +15,35 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-gate-b-iter50-60-results-20260926"></a>
+## Gate B iteration50/60 results — September26, 2026
+
+Job329908 completed training through iteration60 and both full300 evaluations
+(September25 PDT / September26 UTC). Local browser, GPT-4.1/action_history,
+temperature0; fixed100 is extracted from the same saved full300 verdicts.
+
+| Checkpoint | Adam updates | Cohort | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
+| B50 | 676 | full300 | 113 | 232 | 68 | 37.67 | 48.71 |
+| B60 | 798 | full300 | 112 | 228 | 72 | 37.33 | 49.12 |
+| B50 | 676 | fixed100 | 33 | 73 | 27 | 33.00 | 45.21 |
+| B60 | 798 | fixed100 | 35 | 71 | 29 | 35.00 | 49.30 |
+
+Historical outcome-only baseline50/60 both score35.00% overall; B is higher
+by2.67pp /2.33pp. Different collection dates and valid-task sets prevent a
+causal or statistically established improvement claim.
+
+Verified300 expected unique task IDs,300 nonempty rollout ZIP archives and300
+saved per-task verdicts per checkpoint, no exception records, original fixed100
+membership, checkpoint identity, and native restoration receipts. ZIP central
+directories were checked without loading model or trajectory tensors.
+
+Sources: [B50 audit](arm_results/rl_integration/gate-b-iteration50-audit.json),
+[B60 audit](arm_results/rl_integration/gate-b-iteration60-audit.json),
+[B50 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter50-329908),
+[B60 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter60-329908).
+Artifacts: `evaluations/arm-gate-b-iter{50,60}-329908/rollouts/`.
 
 <a id="arm-failure-beta1-iter20-results-20260925"></a>
 ## Failure β1 iteration20 evaluation — September25, 2026

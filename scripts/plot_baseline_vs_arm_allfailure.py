@@ -18,7 +18,7 @@ add_i=[20,30,40,50,60,70,80,90,100]
 add_s=[85,103,102,98,90,112,111,118,109]
 add_v=[236,219,218,212,215,222,212,216,217]
 repo=Path(__file__).resolve().parents[1]
-gate_b_i=[20,30,40]
+gate_b_i=[20,30,40,50,60]
 gate_b_results=[json.loads((repo/f'openwebrl/docs/arm_results/rl_integration/gate-b-iteration{i}-audit.json').read_text())['full300'] for i in gate_b_i]
 assert all(r['tasks']==300 for r in gate_b_results)
 out=repo/'openwebrl/docs/rl_results/baseline_vs_arm_allfailure_full300.png'

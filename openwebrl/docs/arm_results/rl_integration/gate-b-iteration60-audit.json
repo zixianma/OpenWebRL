@@ -1,0 +1,39 @@
+{
+  "job_id": "329908",
+  "variant": "B: relaxed gate",
+  "iteration": 60,
+  "evaluation_date": "2026-09-25 PDT / 2026-09-26 UTC",
+  "completed_optimizer_updates": 798,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-329908-iter60/runtime/iter_0000059",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-eval80-additive-20260920-v2",
+  "full300": {
+    "tasks": 300,
+    "successes": 112,
+    "valid": 228,
+    "invalid": 72,
+    "overall": 0.37333333333333335,
+    "valid_only": 0.49122807017543857,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 35,
+    "valid": 71,
+    "invalid": 29,
+    "overall": 0.35,
+    "valid_only": 0.49295774647887325,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100,
+    "error_records": 0
+  },
+  "fixed100_task_ids_sha256": "61780df4bbf1977fd2a9bbf38f496684a02aa7a2d47e7aa490445de7f533b1b9",
+  "cohort_verified": true,
+  "restore_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter60-329908/rollouts",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter60-329908",
+  "protocol": "Local browser, GPT-4.1/action_history, temperature0; saved per-task verdicts",
+  "evaluation_manifest_sha256": "29041120908413862fdd5f45c6c4c42bd15c775315e94e008f86dce6e243735f",
+  "scope": "Fixed100 is sliced from full300; all ZIP central directories checked, no tensor loads."
+}

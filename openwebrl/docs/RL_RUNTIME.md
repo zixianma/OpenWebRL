@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Current ARM progress and B69 recovery](#arm-progress-20260926)
 - [ARM-refresh training complete; evaluation recovery](#arm-refresh-label-recovery-20260925)
 - [Gate B continuation to90](#arm-b-to90-20260925)
 - [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
@@ -20,6 +21,53 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-progress-20260926"></a>
+## ARM progress and Gate B69 recovery — September26, 2026
+
+| Track | Durable state | Current status |
+| --- | --- | --- |
+| Gate B | Iteration69 /902 Adam updates | Job330304 failed during70; bounded recovery331767 held for storage |
+| Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
+| Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete |
+| Failure sampling40% | Iteration19 /288 Adam updates | Job329911 active on20; controller owns evaluations10/20 |
+| Refreshed ARM | Final90 SFT updates | Offline evaluation331120 complete; browser comparison prepared, allocation not approved |
+
+B50/B60 full300 evaluations completed in329908:37.67%/48.71% and37.33%/49.12%
+overall/valid-only. Both300-task cohorts, saved archives and verdicts were verified.
+C50/C60 are33.67%/43.53% and32.67%/43.17%. These evaluations use the existing
+T0 GPT-4.1/action_history protocol.
+
+**Failure diagnosis:** both B330304 and beta330278 show the custom
+`torch_memory_saver` allocator's `cu_mem_create` CUDA OOM during PPO training.
+For B, the failure occurred in epoch1/step1 of rollout69 after some unsaved
+optimizer updates, not at checkpoint restoration. Logs show cache releases
+with about21GiB allocated versus113GiB reserved. The existing100GiB cache
+threshold can leave insufficient space for the next variable-size allocation.
+The bounded B recovery lowers this systems-only threshold to48GiB, preserving
+TP2/DP4, microbatch1, global batch256, objective, optimizer, scheduler and task
+cursor. CPU guard/recipe/replay tests passed; GPU validation remains pending.
+
+`recover_arm_b69.py` restores durable checkpoint69, then replays the saved
+iteration70 mixed batch, failure auxiliary examples and consumed task cursor.
+Partial unsaved updates are discarded. Successful completion and durable save
+of that batch gate subsequent training. The controller owns and awaits full300
+evaluations70,80,90 and ends at90. Same training W&B identity:
+`arm-gate-b-309053`.
+
+**Job331767:**8 H200,64 CPUs,960GiB,19h18m maximum. This is the unused budget of
+330304's approved24h after4h41m49s consumed, rounded down; it is not a reset of
+the allocation budget. Submitted held because personal scrubbed headroom was
+about1.35TiB, below the2TiB continuation reserve while another job is active.
+The existing storage watcher registered331767 and will release it only when
+its quota/reservation checks pass. No GPU time is consumed while held; no
+files were deleted. Watcher heartbeats and ownership lock are active. It
+observes jobs and releases registered holds; arbitrary failure repair still
+requires an active agent.
+
+[Refreshed ARM browser comparison](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926)
+uses two fresh selector conditions on actor90; this separate2-H200×4h proposal
+and$30 judge cap still require explicit approval.
 
 <a id="arm-refresh-label-recovery-20260925"></a>
 ## ARM-refresh labeling, training and evaluation recovery — September25
