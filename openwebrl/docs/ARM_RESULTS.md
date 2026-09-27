@@ -4,6 +4,54 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-failure-sampling40-stop-20260927"></a>
+## Failure sampling40% stopped — September27
+
+Stopped at the user's request. Jobs332003 and332005 are canceled; durable
+iteration27/392 Adam updates and all collected artifacts are preserved.
+The latest evaluated checkpoint is20; there is no iteration30 result.
+
+| Iteration20, full300 | Overall | Valid-only | Valid tasks |
+| --- | ---: | ---: | ---: |
+| Historical Additive, failure q20% | 28.33% | 36.02% | 236 |
+| Failure q40% | 27.67% | 37.39% | 222 |
+
+The difference is only two successes out of300, with different collection dates
+and valid-task sets. This supports deprioritizing an unpromising early run, but
+does **not** establish that greater sampling reduces performance. Additive's
+later improvement also means the early checkpoint cannot settle eventual quality.
+
+The saved same-collection audit confirms the coverage intervention executed:
+
+| Iterations1–20, identical retained failure turns | Original q20% labels | After q40% labeling |
+| --- | ---: | ---: |
+| Retained failure groups / turns | 160 / 7,334 | 160 / 7,334 |
+| Usable labels | 572 | 1,059 |
+| Mean usable labels per iteration | 28.6 | 53.0 |
+| Usable fraction of failure turns | 7.80% | 14.44% |
+| Sum of absolute turn bonuses | 89.9 | 172.2 |
+
+Of2,951 attempted labels,1,861 (63.06%) were rejected for duplicate actions;
+1,059 were admitted, with31 other failures. Thus40% is the attempted-label
+rate, not the usable-label rate. The strict five-distinct-action gate remains;
+this run does not use Gate B's relaxed gate. Extra labeling averaged94 seconds
+per collection during1–20.
+
+The failure loss averages over **all retained failure turns**, including zeros,
+with coefficient `N_f/48` and beta0.5. It does not divide by the number of labels
+or by sampling probability. More labels therefore also increase auxiliary reward
+weight: summed absolute bonuses rose1.92×. This is a reward-magnitude diagnostic,
+not a measured gradient-norm ratio or evidence of the cause of weaker task success.
+Extra supervision on failed trajectories remains a local preference signal,
+without a terminal-success guarantee for the selected alternative.
+
+All27 durable iterations pass manifest checks for q40%, beta0.5,48 mixed groups,
+the unchanged gate/credit rule, group coefficient, failure-turn denominator,
+label counts and per-label advantages. These checks confirm recipe execution;
+they do not prove the absence of every possible training bug. The q20% column
+above is a diagnostic on this run's own states, not an independent trained control.
+[Aggregate counts and per-iteration audit](arm_results/rl_integration/failure-sampling40-stop-20260927.json).
+
 <a id="arm-original-backfill-20260927"></a>
 ## Original-bonus iterations20–60 — September27
 

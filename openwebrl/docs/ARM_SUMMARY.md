@@ -109,6 +109,7 @@ reasoning-and-action response.
 - **Failure sampling40%:** additive recipe from iteration0; attempt ARM labels
   on40% of failure-group turns and20% of mixed-group turns. Both bonus weights
   remain0.5, with the original five-distinct-action gate and response-index credit.
+  [Stopped at27; latest evaluation20 and coverage audit](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 
 **Evaluation:** local browser, GPT-4.1 action-history judge, temperature 0.
 Rates are **overall / valid-only**; “—” means unavailable. Historical evaluations

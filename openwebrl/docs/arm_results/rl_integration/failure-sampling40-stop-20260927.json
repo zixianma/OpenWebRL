@@ -1,0 +1,830 @@
+{
+  "experiment": "Failure sampling40%",
+  "decision_date": "2026-09-27",
+  "decision": "Stopped at user request; no automatic continuation",
+  "last_durable_iteration": 27,
+  "optimizer_updates": 392,
+  "last_evaluated_iteration": 20,
+  "canceled_jobs": [
+    "332003",
+    "332005"
+  ],
+  "recipe": {
+    "mixed_q": 0.2,
+    "failure_q": 0.4,
+    "mixed_beta": 0.5,
+    "failure_beta": 0.5,
+    "candidate_gate": "distinct5",
+    "credit": "response_index",
+    "mixed_groups": 48,
+    "failure_group_cap": 8,
+    "failure_loss_coefficient": "N_f / 48",
+    "denominator": "all retained failure turns"
+  },
+  "iteration20_full300": {
+    "sampling40": {
+      "success": 83,
+      "valid": 222,
+      "total": 300,
+      "overall_percent": 27.6666666667,
+      "valid_only_percent": 37.3873873874
+    },
+    "historical_additive": {
+      "success": 85,
+      "valid": 236,
+      "total": 300,
+      "overall_percent": 28.3333333333,
+      "valid_only_percent": 36.0169491525
+    }
+  },
+  "same_collection_first20": {
+    "failure_turns": 7334,
+    "groups": 160,
+    "before_q20": {
+      "labels": 572,
+      "positive": 109,
+      "negative": 463,
+      "sum_absolute_bonus": 89.9
+    },
+    "after_q40": {
+      "labels": 1059,
+      "positive": 221,
+      "negative": 838,
+      "sum_absolute_bonus": 172.2
+    },
+    "attempted_labels": 2951,
+    "label_status_counts": {
+      "duplicate_action": 1861,
+      "admitted": 1059,
+      "ValueError": 16,
+      "JSONDecodeError": 13,
+      "TimeoutError": 2
+    },
+    "mean_deferred_labeling_seconds": 93.6113622785
+  },
+  "manifest_checks_passed": 27,
+  "per_iteration": [
+    {
+      "iteration": 1,
+      "before": {
+        "groups": 8,
+        "turns": 325,
+        "labels": 26,
+        "positive": 1,
+        "negative": 25,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.08
+      },
+      "after": {
+        "groups": 8,
+        "turns": 325,
+        "labels": 48,
+        "positive": 8,
+        "negative": 40,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.1476923076923077
+      },
+      "sampled": 125,
+      "reused": 68,
+      "seconds": 69.37872971897013,
+      "reasons": {
+        "label_unavailable": 77,
+        "admitted": 48
+      }
+    },
+    {
+      "iteration": 2,
+      "before": {
+        "groups": 8,
+        "turns": 341,
+        "labels": 25,
+        "positive": 6,
+        "negative": 19,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.07331378299120235
+      },
+      "after": {
+        "groups": 8,
+        "turns": 341,
+        "labels": 40,
+        "positive": 12,
+        "negative": 28,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.11730205278592376
+      },
+      "sampled": 137,
+      "reused": 72,
+      "seconds": 78.70526799699292,
+      "reasons": {
+        "admitted": 40,
+        "label_unavailable": 97
+      }
+    },
+    {
+      "iteration": 3,
+      "before": {
+        "groups": 8,
+        "turns": 375,
+        "labels": 24,
+        "positive": 5,
+        "negative": 19,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.064
+      },
+      "after": {
+        "groups": 8,
+        "turns": 375,
+        "labels": 42,
+        "positive": 8,
+        "negative": 34,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.112
+      },
+      "sampled": 156,
+      "reused": 73,
+      "seconds": 96.3011504469905,
+      "reasons": {
+        "admitted": 42,
+        "label_unavailable": 114
+      }
+    },
+    {
+      "iteration": 4,
+      "before": {
+        "groups": 8,
+        "turns": 346,
+        "labels": 24,
+        "positive": 5,
+        "negative": 19,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06936416184971098
+      },
+      "after": {
+        "groups": 8,
+        "turns": 346,
+        "labels": 54,
+        "positive": 15,
+        "negative": 39,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.15606936416184972
+      },
+      "sampled": 143,
+      "reused": 58,
+      "seconds": 102.08849178883247,
+      "reasons": {
+        "admitted": 54,
+        "label_unavailable": 89
+      }
+    },
+    {
+      "iteration": 5,
+      "before": {
+        "groups": 8,
+        "turns": 297,
+        "labels": 18,
+        "positive": 3,
+        "negative": 15,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06060606060606061
+      },
+      "after": {
+        "groups": 8,
+        "turns": 297,
+        "labels": 49,
+        "positive": 12,
+        "negative": 37,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.16498316498316498
+      },
+      "sampled": 131,
+      "reused": 61,
+      "seconds": 85.42023477004841,
+      "reasons": {
+        "admitted": 49,
+        "label_unavailable": 82
+      }
+    },
+    {
+      "iteration": 6,
+      "before": {
+        "groups": 8,
+        "turns": 307,
+        "labels": 25,
+        "positive": 4,
+        "negative": 21,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.08143322475570032
+      },
+      "after": {
+        "groups": 8,
+        "turns": 307,
+        "labels": 37,
+        "positive": 8,
+        "negative": 29,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.12052117263843648
+      },
+      "sampled": 107,
+      "reused": 64,
+      "seconds": 53.01967290509492,
+      "reasons": {
+        "label_unavailable": 70,
+        "admitted": 37
+      }
+    },
+    {
+      "iteration": 7,
+      "before": {
+        "groups": 8,
+        "turns": 380,
+        "labels": 27,
+        "positive": 5,
+        "negative": 22,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.07105263157894737
+      },
+      "after": {
+        "groups": 8,
+        "turns": 380,
+        "labels": 55,
+        "positive": 11,
+        "negative": 44,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.14473684210526316
+      },
+      "sampled": 155,
+      "reused": 80,
+      "seconds": 97.83708611200564,
+      "reasons": {
+        "admitted": 55,
+        "label_unavailable": 100
+      }
+    },
+    {
+      "iteration": 8,
+      "before": {
+        "groups": 8,
+        "turns": 318,
+        "labels": 25,
+        "positive": 2,
+        "negative": 23,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.07861635220125786
+      },
+      "after": {
+        "groups": 8,
+        "turns": 318,
+        "labels": 52,
+        "positive": 7,
+        "negative": 45,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.16352201257861634
+      },
+      "sampled": 135,
+      "reused": 67,
+      "seconds": 90.98078605998307,
+      "reasons": {
+        "admitted": 52,
+        "label_unavailable": 83
+      }
+    },
+    {
+      "iteration": 9,
+      "before": {
+        "groups": 8,
+        "turns": 369,
+        "labels": 18,
+        "positive": 3,
+        "negative": 15,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.04878048780487805
+      },
+      "after": {
+        "groups": 8,
+        "turns": 369,
+        "labels": 38,
+        "positive": 7,
+        "negative": 31,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.10298102981029811
+      },
+      "sampled": 149,
+      "reused": 70,
+      "seconds": 107.38719522184692,
+      "reasons": {
+        "admitted": 38,
+        "label_unavailable": 111
+      }
+    },
+    {
+      "iteration": 10,
+      "before": {
+        "groups": 8,
+        "turns": 494,
+        "labels": 32,
+        "positive": 10,
+        "negative": 22,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06477732793522267
+      },
+      "after": {
+        "groups": 8,
+        "turns": 494,
+        "labels": 50,
+        "positive": 14,
+        "negative": 36,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.10121457489878542
+      },
+      "sampled": 200,
+      "reused": 115,
+      "seconds": 113.63747035409324,
+      "reasons": {
+        "label_unavailable": 150,
+        "admitted": 50
+      }
+    },
+    {
+      "iteration": 11,
+      "before": {
+        "groups": 8,
+        "turns": 398,
+        "labels": 24,
+        "positive": 3,
+        "negative": 21,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06030150753768844
+      },
+      "after": {
+        "groups": 8,
+        "turns": 398,
+        "labels": 54,
+        "positive": 6,
+        "negative": 48,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.135678391959799
+      },
+      "sampled": 156,
+      "reused": 82,
+      "seconds": 95.75614792993292,
+      "reasons": {
+        "admitted": 54,
+        "label_unavailable": 102
+      }
+    },
+    {
+      "iteration": 12,
+      "before": {
+        "groups": 8,
+        "turns": 370,
+        "labels": 34,
+        "positive": 6,
+        "negative": 28,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.0918918918918919
+      },
+      "after": {
+        "groups": 8,
+        "turns": 370,
+        "labels": 57,
+        "positive": 13,
+        "negative": 44,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.15405405405405406
+      },
+      "sampled": 154,
+      "reused": 87,
+      "seconds": 93.98081247811206,
+      "reasons": {
+        "label_unavailable": 97,
+        "admitted": 57
+      }
+    },
+    {
+      "iteration": 13,
+      "before": {
+        "groups": 8,
+        "turns": 342,
+        "labels": 26,
+        "positive": 7,
+        "negative": 19,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.07602339181286549
+      },
+      "after": {
+        "groups": 8,
+        "turns": 342,
+        "labels": 55,
+        "positive": 14,
+        "negative": 41,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.1608187134502924
+      },
+      "sampled": 134,
+      "reused": 64,
+      "seconds": 89.90707477391697,
+      "reasons": {
+        "admitted": 55,
+        "label_unavailable": 79
+      }
+    },
+    {
+      "iteration": 14,
+      "before": {
+        "groups": 8,
+        "turns": 305,
+        "labels": 37,
+        "positive": 7,
+        "negative": 30,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.12131147540983607
+      },
+      "after": {
+        "groups": 8,
+        "turns": 305,
+        "labels": 67,
+        "positive": 12,
+        "negative": 55,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.21967213114754097
+      },
+      "sampled": 135,
+      "reused": 62,
+      "seconds": 107.95841298089363,
+      "reasons": {
+        "label_unavailable": 68,
+        "admitted": 67
+      }
+    },
+    {
+      "iteration": 15,
+      "before": {
+        "groups": 8,
+        "turns": 350,
+        "labels": 25,
+        "positive": 3,
+        "negative": 22,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.07142857142857142
+      },
+      "after": {
+        "groups": 8,
+        "turns": 350,
+        "labels": 44,
+        "positive": 9,
+        "negative": 35,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.12571428571428572
+      },
+      "sampled": 146,
+      "reused": 67,
+      "seconds": 101.15348394587636,
+      "reasons": {
+        "admitted": 44,
+        "label_unavailable": 102
+      }
+    },
+    {
+      "iteration": 16,
+      "before": {
+        "groups": 8,
+        "turns": 424,
+        "labels": 27,
+        "positive": 7,
+        "negative": 20,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06367924528301887
+      },
+      "after": {
+        "groups": 8,
+        "turns": 424,
+        "labels": 51,
+        "positive": 9,
+        "negative": 42,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.12028301886792453
+      },
+      "sampled": 159,
+      "reused": 82,
+      "seconds": 100.90406250488013,
+      "reasons": {
+        "label_unavailable": 108,
+        "admitted": 51
+      }
+    },
+    {
+      "iteration": 17,
+      "before": {
+        "groups": 8,
+        "turns": 461,
+        "labels": 44,
+        "positive": 8,
+        "negative": 36,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.09544468546637744
+      },
+      "after": {
+        "groups": 8,
+        "turns": 461,
+        "labels": 75,
+        "positive": 15,
+        "negative": 60,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.16268980477223427
+      },
+      "sampled": 197,
+      "reused": 103,
+      "seconds": 128.40327766817063,
+      "reasons": {
+        "admitted": 75,
+        "label_unavailable": 122
+      }
+    },
+    {
+      "iteration": 18,
+      "before": {
+        "groups": 8,
+        "turns": 435,
+        "labels": 46,
+        "positive": 11,
+        "negative": 35,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.10574712643678161
+      },
+      "after": {
+        "groups": 8,
+        "turns": 435,
+        "labels": 74,
+        "positive": 15,
+        "negative": 59,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.17011494252873563
+      },
+      "sampled": 182,
+      "reused": 114,
+      "seconds": 92.61363805201836,
+      "reasons": {
+        "admitted": 74,
+        "label_unavailable": 108
+      }
+    },
+    {
+      "iteration": 19,
+      "before": {
+        "groups": 8,
+        "turns": 422,
+        "labels": 42,
+        "positive": 9,
+        "negative": 33,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.0995260663507109
+      },
+      "after": {
+        "groups": 8,
+        "turns": 422,
+        "labels": 78,
+        "positive": 20,
+        "negative": 58,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.1848341232227488
+      },
+      "sampled": 155,
+      "reused": 81,
+      "seconds": 102.99063484999351,
+      "reasons": {
+        "label_unavailable": 77,
+        "admitted": 78
+      }
+    },
+    {
+      "iteration": 20,
+      "before": {
+        "groups": 8,
+        "turns": 275,
+        "labels": 23,
+        "positive": 4,
+        "negative": 19,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.08363636363636363
+      },
+      "after": {
+        "groups": 8,
+        "turns": 275,
+        "labels": 39,
+        "positive": 6,
+        "negative": 33,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.14181818181818182
+      },
+      "sampled": 95,
+      "reused": 47,
+      "seconds": 63.803615011041984,
+      "reasons": {
+        "label_unavailable": 56,
+        "admitted": 39
+      }
+    },
+    {
+      "iteration": 21,
+      "before": {
+        "groups": 8,
+        "turns": 371,
+        "labels": 27,
+        "positive": 5,
+        "negative": 22,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.07277628032345014
+      },
+      "after": {
+        "groups": 8,
+        "turns": 371,
+        "labels": 51,
+        "positive": 10,
+        "negative": 41,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.13746630727762804
+      },
+      "sampled": 156,
+      "reused": 86,
+      "seconds": 93.64719177805819,
+      "reasons": {
+        "admitted": 51,
+        "label_unavailable": 105
+      }
+    },
+    {
+      "iteration": 22,
+      "before": {
+        "groups": 8,
+        "turns": 388,
+        "labels": 27,
+        "positive": 7,
+        "negative": 20,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06958762886597938
+      },
+      "after": {
+        "groups": 8,
+        "turns": 388,
+        "labels": 56,
+        "positive": 11,
+        "negative": 45,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.14432989690721648
+      },
+      "sampled": 143,
+      "reused": 67,
+      "seconds": 109.66363417916,
+      "reasons": {
+        "label_unavailable": 87,
+        "admitted": 56
+      }
+    },
+    {
+      "iteration": 23,
+      "before": {
+        "groups": 8,
+        "turns": 363,
+        "labels": 31,
+        "positive": 5,
+        "negative": 26,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.08539944903581267
+      },
+      "after": {
+        "groups": 8,
+        "turns": 363,
+        "labels": 51,
+        "positive": 5,
+        "negative": 46,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.14049586776859505
+      },
+      "sampled": 137,
+      "reused": 75,
+      "seconds": 450.5926952001173,
+      "reasons": {
+        "admitted": 51,
+        "label_unavailable": 86
+      }
+    },
+    {
+      "iteration": 24,
+      "before": {
+        "groups": 8,
+        "turns": 395,
+        "labels": 25,
+        "positive": 0,
+        "negative": 25,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.06329113924050633
+      },
+      "after": {
+        "groups": 8,
+        "turns": 395,
+        "labels": 49,
+        "positive": 5,
+        "negative": 44,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.1240506329113924
+      },
+      "sampled": 165,
+      "reused": 76,
+      "seconds": 353.2547094859183,
+      "reasons": {
+        "label_unavailable": 116,
+        "admitted": 49
+      }
+    },
+    {
+      "iteration": 25,
+      "before": {
+        "groups": 7,
+        "turns": 371,
+        "labels": 32,
+        "positive": 4,
+        "negative": 28,
+        "coefficient": 0.14583333333333334,
+        "label_fraction": 0.0862533692722372
+      },
+      "after": {
+        "groups": 7,
+        "turns": 371,
+        "labels": 58,
+        "positive": 5,
+        "negative": 53,
+        "coefficient": 0.14583333333333334,
+        "label_fraction": 0.15633423180592992
+      },
+      "sampled": 143,
+      "reused": 80,
+      "seconds": 98.85789989982732,
+      "reasons": {
+        "label_unavailable": 85,
+        "admitted": 58
+      }
+    },
+    {
+      "iteration": 26,
+      "before": {
+        "groups": 7,
+        "turns": 392,
+        "labels": 26,
+        "positive": 6,
+        "negative": 20,
+        "coefficient": 0.14583333333333334,
+        "label_fraction": 0.0663265306122449
+      },
+      "after": {
+        "groups": 7,
+        "turns": 392,
+        "labels": 54,
+        "positive": 12,
+        "negative": 42,
+        "coefficient": 0.14583333333333334,
+        "label_fraction": 0.1377551020408163
+      },
+      "sampled": 170,
+      "reused": 83,
+      "seconds": 121.00014458689839,
+      "reasons": {
+        "admitted": 54,
+        "label_unavailable": 116
+      }
+    },
+    {
+      "iteration": 27,
+      "before": {
+        "groups": 8,
+        "turns": 336,
+        "labels": 31,
+        "positive": 6,
+        "negative": 25,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.09226190476190477
+      },
+      "after": {
+        "groups": 8,
+        "turns": 336,
+        "labels": 58,
+        "positive": 9,
+        "negative": 49,
+        "coefficient": 0.16666666666666666,
+        "label_fraction": 0.17261904761904762
+      },
+      "sampled": 147,
+      "reused": 77,
+      "seconds": 95.82492181705311,
+      "reasons": {
+        "label_unavailable": 89,
+        "admitted": 58
+      }
+    }
+  ],
+  "limitations": [
+    "Different-date browser evaluations; no replicated training seed comparison.",
+    "Same-collection q20 is a diagnostic on sampling40-policy trajectories, not a separately trained control.",
+    "Summed absolute bonuses are not measured gradient norms.",
+    "Latest durable27 has not been evaluated; no iteration30 checkpoint exists."
+  ]
+}

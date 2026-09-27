@@ -30,8 +30,9 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 | Track | Durable state at check | Job and status | Next evaluations |
 | --- | --- | --- | --- |
-| Gate B | Iteration75 /970 Adam updates; collecting76 | 331778 running on g014, about5h40 elapsed of19h18 | B70 full300 complete;80/90 remain in controller |
-| Failure sampling40% | Iteration23 /344 Adam updates; collecting24 | 332003 running on g004, about3h13 elapsed of18h | 30/40 in current allocation;332005 waits for successful40 stage, then50/60 |
+| Gate B | Iteration77 /988 Adam updates; recovery startup | 331778 running on g020; same-ID retry capped at4h11m | B70 full300 complete;80/90 are checkpoint-triggered controller stages, subject to remaining time |
+| Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
+| Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
 | Failure β1 | Iteration20 /298 Adam updates | Recovery332452 cancelled at user request before starting;332004 remains administrator-held with a failed dependency | 30/40/50/60 remain outstanding; no runnable continuation |
 
 **Updated inventory after the cancellation, September27:**332004 is the
@@ -47,22 +48,20 @@ this inventory.332004 has also consumed no GPU time.
 
 **Remaining work:**
 
-- B331778 continues75→90 and owns full300 evaluations80/90. B20–70 results are
-  complete; the current collection is76.
-- Sampling40%332003 continues23→40 and owns evaluations30/40. Its approved
-  successor332005 has a normal prerequisite user hold, then targets60 with
-  evaluations50/60. Both10/20 evaluations are complete.
+- B331778 resumes77→80→90 and owns full300 evaluations80/90. B20–70 results are
+  complete. Both future evaluations require durable checkpoints and sufficient
+  remaining allocation time; reaching90 in this retry is not guaranteed.
+- Sampling40% was discontinued at27. Both10/20 evaluations are complete;
+  jobs332003 and332005 are canceled and must not be automatically relaunched.
 - C training and evaluations20–60 are complete. Outcome-only, all-failure and
   additive have their documented full300 endpoints through100. No ARM evaluation
   or test worker is currently running.
 - Refreshed-ARM offline/browser comparisons and the prefix feasibility pilot are
   complete. Beta's tighter-cache GPU validation remains unexecuted after332452's
   cancellation; passing CPU checks does not establish a GPU-memory fix.
-- Historical original-bonus full300 gaps remain at20/30/40/exact50/60; the plotted
-  early full300 point is51, not50. Their checkpoint directories, metadata and
-  eight shard files are present, but this inventory did not perform GPU restores.
-  Original90 was never reached; the latest retained original checkpoint is80.
-  These backfills and further original training have no current allocation.
+- Original-bonus full300 backfills20/30/40/exact50/60 are now complete and audited;
+  exact50 remains separate from the older51 result. Original90 was never reached;
+  the latest retained original checkpoint is80. Further training has no allocation.
 - The prepared additive-relaxed/failure-only experiment remains deliberately
   deferred pending the next scientific decision. Outcome-aware reweighting and
   a trained prefix curriculum remain proposals, not queued work.
@@ -163,7 +162,17 @@ The persistent observer follows these paths after the requeue. Production
 throughput after recovery is still to be verified; the unit/native cleanup
 checks do not alone establish the realized speedup.
 
-Sampling40% remains in332003;332005 waits for its predecessor to complete.
+**Subsequent user decision:** sampling40% jobs332003 and332005 were canceled.
+The active job used12h48m19s; its successor used no allocation time. Checkpoint27,
+392 Adam updates, the partial28 artifacts, and all prior evaluations are preserved.
+The status registry marks this as a user stop, not a failure eligible for repair.
+[Coverage measurements and interpretation](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
+
+B80/90 scheduling is recorded in the recovery controller's `evaluation-queue.json`.
+These are awaited full300 stages inside331778, not separate Slurm allocations:
+train to80 → evaluate80 → train to90 → evaluate90. Each evaluation uses local
+browsers, GPT-4.1/action_history,T0 and saves rollouts plus verdicts. Checkpoint
+and budget gates still apply; no extra allocation or extension was submitted.
 Beta332004 remains administrator-held with the canceled recovery dependency.
 
 <a id="arm-evaluation-backfill-20260927"></a>
@@ -176,8 +185,8 @@ backfill observer verified every result and exited after all jobs finished.
 [Result table and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 
 The user requested all remaining evaluations, including original bonus. B80/90
-are already owned by331778; failure-sampling30/40 by332003 and50/60 by332005.
-Those work queues are retained without duplicate standalone submissions.
+are owned by331778 without duplicate standalone submissions. Failure-sampling
+30/40/50/60 were subsequently withdrawn when the user stopped that experiment.
 Beta30/40/50/60 and original90 lack completed checkpoints and cannot run yet.
 
 | Original-bonus checkpoint | Adam updates | New browser tasks | Reused saved tasks | Approved allocation | Job |
