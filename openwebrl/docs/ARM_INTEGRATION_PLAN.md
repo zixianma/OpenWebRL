@@ -1,5 +1,15 @@
 # Action reward models for OpenWebRL training
 
+<a id="arm-weekly-priority-20260927"></a>
+**This week's priority — September27:** the user prioritized **333454: original
+bonus + relaxed gate B** and **333455: outcome reweighting + relaxed gate B**.
+Both start at iteration0 with only ordinary mixed-outcome groups. Prioritize their
+startup validation, failure repair, training progress and matched full300
+evaluation at iteration10 within the approved **8 H200 ×8h each**. Beta and
+other research directions are secondary. Existing job monitoring continues;
+this changes research priority, without changing scheduler QoS or compute budgets.
+[Exact paired methods and launch records](#arm-outcome-aware-reweighting-20260926).
+
 [Finalized reweighting design](#arm-outcome-aware-reweighting-20260926) · [Outcome-trained reward investigation](#arm-outcome-trained-reward-investigation-20260927) · [Task-pool expansion next steps](#arm-task-pool-next-investigation-20260927) · [Additive relaxed, failure-only ARM: prepared method](#arm-additive-relaxed-failureonly-20260926) · [Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
 <a id="arm-offline-forward-transfer-20260924"></a>
@@ -237,7 +247,10 @@ It awaits sufficient storage headroom under the persistent release watcher.
 [Launch, timing evidence and validation](RL_RUNTIME.md#arm-beta-to40-20260925).
 
 <a id="arm-gate-c-priority-20260922"></a>
-## This week's priority: gate C — September 22, 2026
+## Historical priority: gate C — September 22, 2026
+
+The [September27 mixed-only pair priority](#arm-weekly-priority-20260927)
+supersedes this weekly focus. The dated decision below is retained as history.
 
 The user selected **gate C (relaxed candidate gate + action-equivalence credit)**
 as the leading ARM experiment for the week of September 21. Prioritize its

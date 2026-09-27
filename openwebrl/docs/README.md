@@ -21,7 +21,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
-[Submitted333454/333455: mixed-only relaxed bonus versus reweighting, lambda0.5 and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
+[This week's priority:333454/333455, mixed-only relaxed bonus versus reweighting](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+[Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
 
@@ -34,12 +35,12 @@ Live operations: [job status, completions and failures](arm_results/rl_integrati
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [B331778 failed during78; durable77, evaluations80/90 blocked;
 C completed training/evaluations through60; sampling40% stopped at27;
-beta333402 running on g004,8 H200 ×14h, resuming20 with no hold](RL_RUNTIME.md#arm-progress-20260927).
+beta333431 running on g004, TP4/DP2 recovery from20](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-Beta333402 starts with checkpoint20 restoration and the preserved iteration21 batch.
+Beta333431 passed checkpoint20 restoration and is replaying the preserved iteration21 batch.
 Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).
@@ -76,7 +77,7 @@ Latest baseline: [iteration-100 completion](RL_EVALUATION.md#baseline-iter100-re
 and [cluster/account queue audit](RL_RUNTIME.md#cluster-queue-audit-294983-20260913).
 
 ARM RL: [baseline40→90 ARM refresh through Piotr’s repo; approved pipeline / job329708](ARM_INTEGRATION_PLAN.md#arm-offline-forward-transfer-20260924),
-[this week's priority: gate C](ARM_INTEGRATION_PLAN.md#arm-gate-c-priority-20260922),
+[historical September22 priority: gate C](ARM_INTEGRATION_PLAN.md#arm-gate-c-priority-20260922),
 [detailed analysis moved from the collaborator summary](ARM_RESULTS.md#arm-online-rl-analysis-20260922),
 [saved termination audit and beta/coverage launch proposal](ARM_INTEGRATION_PLAN.md#arm-failure-termination-audit-20260921),
 [all-failure100 results and updated curves](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921),

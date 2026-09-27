@@ -33,7 +33,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
-| Failure β1 | Iteration20 /298 durable Adam updates; iteration21 replay has5 additional unsaved steps | Recovery333431 running on g004; TP4/DP2 restoration passed | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
+| Failure β1 | Iteration20 /298 durable Adam updates; iteration21 replay has11 additional unsaved steps | Recovery333431 running on g004; TP4/DP2 restoration passed | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
 
 **New matched mixed-only jobs:**333454 (original bonus + relaxed B) and333455
 (outcome reweighting + relaxed B) were submitted after explicit approval of
@@ -42,6 +42,20 @@ microbatch1 and64 browsers, and exclude extra all-failure groups. Full300 at10
 is owned by each controller within its allocation. At submission333454 awaits
 resources and333455 priority. Source and28 CPU checks are verified; fresh GPU
 execution is not yet validated. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
+
+**September27 priority update:** the user made these two new runs this week's
+primary experiments. Prioritize startup validation, repairs and matched
+iteration10 evaluation; beta remains secondary and monitored within its existing
+allocation. Both new-job observers are active while the jobs await resources
+and priority. [Recorded research priority](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+
+**Beta timing correction:** the first six replay updates took226–290 seconds
+each. The live budget guard now reserves360 seconds per optimizer update and
+7200 seconds before starting another full collection/train/save cycle, replacing
+90 and3600. The scientific configuration and allocation deadline are unchanged;
+the original iteration config is preserved. Receipt:
+`evaluations/arm-failure-additive-333431-tp4-iter30/runtime-timing-adjustment-20260927.json`
+under the runtime root. No new checkpoint is durable at this check.
 
 **Latest beta recovery, September27:**333402 failed after28m02s. Its saved-batch
 replay reached three optimizer steps without a new durable checkpoint; the
