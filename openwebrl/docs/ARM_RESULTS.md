@@ -4,6 +4,16 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-gate-b-iter70-20260927"></a>
+## Gate B iteration70 — September27
+
+Full300 is **37.33% overall /48.91% valid-only** (229 valid); the fixed100 slice
+is35.00%/50.00% (70 valid). Overall is unchanged from B60 and3.00pp above the
+historical outcome-only baseline70; different collection dates and valid-task
+sets prevent a causal gain claim. All300 rollouts and verdicts are preserved.
+The [summary table and comparison plot](ARM_SUMMARY.md#baseline-comparison)
+now include B70. [Full audit and protocol](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
+
 <a id="arm-prefix-curriculum-results-331932"></a>
 ## ARM prefix curriculum feasibility — September26, job331932
 

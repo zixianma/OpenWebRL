@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Gate B iteration70 full300](#arm-gate-b-iter70-results-20260927)
 - [Failure sampling40% iteration20 full300](#arm-failure-coverage-iter20-results-20260926)
 - [Failure sampling40% iteration10 full300](#arm-failure-coverage-iter10-results-20260926)
 - [Gate B iteration50/60 completed evaluations](#arm-gate-b-iter50-60-results-20260926)
@@ -17,6 +18,32 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-gate-b-iter70-results-20260927"></a>
+## Gate B iteration70 — September27, 2026
+
+Job331778 completed its iteration70 evaluation and continued training toward80.
+The checkpoint contains914 Adam updates; native restoration loaded zero-based69.
+Protocol: local browser, GPT-4.1/action_history, temperature0, actor-only.
+
+| Cohort | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 300 | 112 | 229 | 71 | 37.33 | 48.91 |
+| Fixed100 slice | 100 | 35 | 70 | 30 | 35.00 | 50.00 |
+
+Overall performance is unchanged from B60. Historical outcome-only baseline70
+scores34.33%/44.98%, a descriptive+3.00pp overall difference; collection dates
+and valid-task sets differ, so this is not an established causal improvement.
+
+Verified all300 unique expected task IDs,300 nonempty rollout ZIP archives and
+300 saved per-task verdicts, with zero exception records. The fixed100 cohort
+matches the original manifest; every ZIP central directory was checked without
+loading tensor/image payloads. The71 invalid outcomes remain in the overall
+denominator. Collection completed September26 PDT /September27 UTC.
+
+[Aggregate audit](arm_results/rl_integration/gate-b-iteration70-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter70-331778).
+Artifacts:`evaluations/arm-gate-b-iter70-331778/rollouts/`.
 
 <a id="arm-failure-coverage-iter20-results-20260926"></a>
 ## Failure sampling40% iteration20 — September26, 2026

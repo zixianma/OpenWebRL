@@ -4,7 +4,8 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
-- [Current ARM progress and B69 recovery](#arm-progress-20260926)
+- [Current ARM progress and beta memory recovery](#arm-progress-20260927)
+- [ARM continuation submissions and B69 recovery](#arm-progress-20260926)
 - [ARM-refresh training complete; evaluation recovery](#arm-refresh-label-recovery-20260925)
 - [Gate B continuation to90](#arm-b-to90-20260925)
 - [Beta1 bounded continuation to40](#arm-beta-to40-20260925)
@@ -21,6 +22,65 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-progress-20260927"></a>
+## ARM progress and beta memory recovery — September27, 2026
+
+| Track | Durable state at check | Job and status | Next evaluations |
+| --- | --- | --- | --- |
+| Gate B | Iteration75 /970 Adam updates; collecting76 | 331778 running on g014, about5h40 elapsed of19h18 | B70 full300 complete;80/90 remain in controller |
+| Failure sampling40% | Iteration23 /344 Adam updates; collecting24 | 332003 running on g004, about3h13 elapsed of18h | 30/40 in current allocation;332005 waits for successful40 stage, then50/60 |
+| Failure β1 | Iteration20 /298 Adam updates | 331995 failed; repaired recovery332452 queued for resources,13h10 remaining budget | 30/40 after recovery;332004 remains administrator-held for50/60 |
+
+B70 full300 is37.33% overall/48.91% valid-only; the fixed100 slice is35.00%/50.00%.
+All300 saved rollouts and verdicts were verified. [Result and comparison](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
+Recent B71→75 checkpoint intervals were40,75,46,40min; collection is slower than
+the preceding continuation. Recent raw training rewards were0.451,0.387,0.442,
+0.430. Sampling40%21→22 took47min; rewards21–23 were0.440,0.516,0.426. These
+are training rollout metrics, distinct from Online-Mind2Web task success.
+Both active jobs have zero host cgroup OOM events at inspection. Storage
+headroom is now about80TiB under the soft quota; it is no longer the blocker.
+
+**Beta failure:**331995 passed native model/optimizer restore and exact saved
+iteration21 mixed+auxiliary replay, including unchangedβ1 labels and consumed
+cursor. It then made three unsaved optimizer updates before another
+`torch_memory_saver` `cu_mem_create` CUDA OOM. The48GiB cache guard was executing
+and releasing cache, but was insufficient. No iteration21 checkpoint was saved;
+durable iteration20 remains the resume point. The watcher recorded the failure;
+automatic arbitrary code repair was not implemented.
+
+**Recovery332452:**8 H200,64 CPUs,960GiB,13h10. The isolated controller
+`scripts/recover_arm_beta_memory.py` retains TP2/DP4, micro1, global256, PPO2,
+optimizer/scheduler, cursor, W&B lineage and all reward settings. It lowers
+the reserved-cache threshold from48 to24GiB, close to the observed21GiB live
+tensor footprint, while retaining the existing8GiB minimum unused-cache check.
+This is a further mitigation, not a GPU-validated fix yet. A numeric GPU-memory
+recorder samples every10 seconds during the first checkpoint's processing,
+capped at60min; no image/text payloads are logged by this recorder.
+The same saved iteration21 batch is replayed again; tensors and judge results
+are preserved. GPU restoration and complete first-batch execution gate progress.
+
+Cumulative accounting is1,729s for330278 +1,210s for331995 +47,400s requested
+for332452 =50,339s, below the original50,400s approval. Three CPU tests verify
+both failed attempts are charged, the changed cache setting preserves the
+objective/replay/topology, and the follow-on keeps its separately approved14h.
+The active sampling40% launch plan remains byte-for-byte scientifically unchanged.
+
+**Follow-on332004 requires administrator release.** Its dependency was repaired
+from failed331995 to`afterok:332452`, and its resume target now points to the new
+iteration40 checkpoint. Slurm accepted the dependency update but rejected
+`scontrol release332004` with`Access/permission denied`. It remains
+`JobHeldAdmin`; no budget has been consumed and no replacement was submitted
+to bypass that hold. A tested observer change preserves this administrator
+hold explicitly instead of misclassifying it as a released job. Sampling's
+332005 prerequisite hold is normal and will release after332003 succeeds.
+
+The persistent status/quota observer follows the new attempt through completion,
+with15-minute metrics/resource monitors owned by active training workers. The
+observer reports failures and releases eligible user holds; it does not repair
+arbitrary training bugs. Recovery receipts and logs:
+`logs/arm-beta-memory-20260927/`; the332004 dispatch is recorded under
+`logs/arm-ablation-to60-20260926/dispatch/332004.json`.
 
 <a id="arm-progress-20260926"></a>
 ## ARM progress and Gate B69 recovery — September26, 2026

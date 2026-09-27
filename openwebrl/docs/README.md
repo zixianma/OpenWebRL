@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 | Document | Contents |
 | --- | --- |
-| [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL; comparison plot includes Gate B at iterations20–60 |
+| [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL; comparison plot includes Gate B at iterations20–70 |
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
@@ -28,12 +28,13 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-Latest checked status: [Gate B69→90 recovery331778 queued for resources;
-beta331995→332004 and sampling40%332003→332005 submitted through60, with
-milestone dependencies and storage holds](RL_RUNTIME.md#arm-progress-20260926).
+Latest checked status: [B331778 saved through75, sampling40%332003 through23;
+beta recovery332452 replaces failed331995; follow-on332004 needs administrator
+release](RL_RUNTIME.md#arm-progress-20260927).
+[Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-Beta recovery331995 uses only the unused portion of330278's approved budget.
+Beta recovery332452 counts both failed attempts against the original330278 budget.
 Browser comparison331770 and prefix pilot331932 are complete.
 
 Default checkpoint evaluation cadence and current queue:
