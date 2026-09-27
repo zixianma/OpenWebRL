@@ -6388,7 +6388,8 @@ auxiliary. The user approved the method and requested this matched control.
 The isolated reward hook and both native launch-argument checks passed, with
 28 CPU tests covering the formula, response-index versus action-class credit,
 production PPO shuffle/trim transport, calibration stop behavior and browser
-cleanup. GPU validation and an exact allocation budget remain outstanding.
+cleanup. The user approved the exact budget and both jobs were submitted on
+September27. GPU startup/full-batch validation remains pending while queued.
 
 Existing Gate B is useful motivation, but it also trains on extra all-failure
 groups. Its results do not isolate whether relaxing the gate helps original
@@ -6479,11 +6480,25 @@ later strength-matched control can distinguish objective from magnitude effects.
 | ARM |Frozen released SelectionARM, K5, q20%, five valid responses, at least two distinct canonical actions, response-index credit |
 | Optimization |LR1e-6 constant, global batch256 turns, microbatch1,2 PPO epochs; native clipping0.2/0.28, Adam betas0.9/0.98, weight decay0.1, zero KL/entropy |
 | Rollouts |Temperature0.8, horizon15, response1024, context32768; same2,102-task pool and GPT-4.1/action_history judge |
-| Proposed launch topology |8 H200, TP2/DP4, microbatch1,64 browsers; existing validated layout, new hook still requires live full-batch/save validation |
-| Proposed first allocation |Two separate8-GPU ×8h jobs,64 CPU/960GiB each;128 GPU-hours total; reserve1h per job for full300 at10; exact resource approval pending |
+| Launch topology |8 H200, TP2/DP4, microbatch1,64 browsers; existing validated layout, new hook still requires live full-batch/save validation |
+| Approved first allocation |Two separate8-GPU ×8h jobs,64 CPU/960GiB each;128 GPU-hours total; reserve1h per job for full300 at10 |
 | Endpoints |First allocation targets10; eventual research endpoint60 requires separately approved continuation budgets |
 | Evaluation |Full300 every10 completed iterations, local browser, GPT-4.1/action_history, temperature0; save every task's rollout and verdict |
 | Primary comparison |Mean overall success across40/50/60 against the **new relaxed-bonus control** at the same iterations; show all points, valid-only denominators and compute |
+
+| Submitted job | Variant | Queue status at submission | Training W&B identity |
+| --- | --- | --- | --- |
+|333454 |Original bonus + relaxed B, mixed only |Pending resources |`arm-mixed-bonus-333454` |
+|333455 |Outcome reweighting + relaxed B, mixed only |Pending priority |`arm-mixed-reweight-333455` |
+
+Both use project `openwebrl`, with distinct display names identifying **bonus**
+and **reweight**. The batch controller owns and awaits training and the
+iteration10 full300 evaluation. Each evaluation preserves task-addressable
+rollouts and judge verdicts. Approval/submission receipts and persistent observers
+are under runtime `arm-turn-bonus-preparation/mixed-reweight-20260927/`.
+Observers follow queue/startup/stage changes until terminal state and summarize
+at15-minute intervals. They record failures; controller health guards stop
+unhealthy workers. Arbitrary bug repair still requires an active agent.
 
 The time cap does not guarantee iteration10 or60. The controller owns training
 and evaluation workers and preserves partial progress. Failure trajectories

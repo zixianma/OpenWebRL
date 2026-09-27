@@ -33,7 +33,15 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
-| Failure β1 | Iteration20 /298 Adam updates; no new durable checkpoint | Recovery333431 pending resources;8 H200 ×13h31m, TP4/DP2 | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
+| Failure β1 | Iteration20 /298 durable Adam updates; iteration21 replay has5 additional unsaved steps | Recovery333431 running on g004; TP4/DP2 restoration passed | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
+
+**New matched mixed-only jobs:**333454 (original bonus + relaxed B) and333455
+(outcome reweighting + relaxed B) were submitted after explicit approval of
+**8 H200 ×8h each**,128 GPU-hours total. Both begin at iteration0, use TP2/DP4,
+microbatch1 and64 browsers, and exclude extra all-failure groups. Full300 at10
+is owned by each controller within its allocation. At submission333454 awaits
+resources and333455 priority. Source and28 CPU checks are verified; fresh GPU
+execution is not yet validated. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 
 **Latest beta recovery, September27:**333402 failed after28m02s. Its saved-batch
 replay reached three optimizer steps without a new durable checkpoint; the
@@ -86,8 +94,7 @@ this inventory.332004 has also consumed no GPU time.
   the latest retained original checkpoint is80. Further training has no allocation.
 - The prepared additive-relaxed/failure-only experiment remains deliberately
   deferred pending the next scientific decision. The new mixed-only relaxed
-  bonus/reweighting pair is CPU-ready but not submitted; exact new allocation
-  approval is pending. A trained prefix curriculum remains a proposal.
+  bonus/reweighting pair is submitted as333454/333455 under the approved budget. A trained prefix curriculum remains a proposal.
 
 The active observer's heartbeat continues to refresh; it does not submit jobs
 or relaunch cancellations. Other account jobs332455/332456 (OSWorld) and331086
