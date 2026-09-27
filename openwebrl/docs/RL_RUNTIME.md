@@ -26,15 +26,16 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ## ARM progress and Gate B69 recovery — September26, 2026
 
 Latest scheduler check: **no ARM training or evaluation job is running**.
-The only queued ARM job is storage-held recovery331778. The running OSWorld
-allocation belongs to another project and is not ARM compute.
+B recovery331778 has cleared storage and is pending GPU resources. Beta
+recovery331995 is storage-held and depends on B starting first. The running
+OSWorld allocation belongs to another project and is not ARM compute.
 
 | Track | Durable state | Current status |
 | --- | --- | --- |
-| Gate B | Iteration69 /902 Adam updates | Job330304 failed during70; bounded recovery331778 held for storage |
+| Gate B | Iteration69 /902 Adam updates | Recovery331778 queued for resources; priority continuation through90 |
 | Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
-| Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete; no replacement queued |
-| Failure sampling40% | Iteration20 /302 Adam updates | Job329911 completed training and full300 evaluations10/20; allocation exited |
+| Failure β1 | Iteration20 /298 Adam updates | Repaired recovery331995 submitted through40; extension through60 prepared, additional resource approval pending |
+| Failure sampling40% | Iteration20 /302 Adam updates | Training/evaluations10/20 complete; continuation through60 prepared, resource approval pending |
 | Refreshed ARM | Final90 SFT updates | Offline evaluation331120 and both full300 browser conditions331770 complete |
 | ARM-guided prefix pilot | Zero training updates | Job331932 complete; all288 primary attempts and12 smoke attempts saved and verified |
 
@@ -66,8 +67,8 @@ of that batch gate subsequent training. The controller owns and awaits full300
 evaluations70,80,90 and ends at90. Same training W&B identity:
 `arm-gate-b-309053`.
 
-**Current recovery331778:**8 H200,64 CPUs,960GiB,19h18m maximum, held for
-storage. Original330304 used4h41m49s; recovery331767 used5s before failing its
+**Current recovery331778:**8 H200,64 CPUs,960GiB,19h18m maximum, released by
+the storage guard and queued for resources. Original330304 used4h41m49s; recovery331767 used5s before failing its
 storage check, with no GPU restore or training. The controller now accounts
 for both attempts:16,914s consumed +69,480s requested =86,394s, below the
 approved24h. Four CPU budget/replay/cache tests pass; GPU validation is pending.
@@ -76,14 +77,49 @@ During cleanup, personal usage dropped below the100TiB soft quota, resetting
 the active grace period to`none`. The guard consequently switched from hard
 quota headroom during grace to the soft quota ceiling, leaving about1.36TiB
 at331767's startup against a2TiB continuation requirement. This changed between
-that attempt's release and startup. Its artifacts are preserved. At the latest
-check, launch headroom is about0.87TiB: approximately1.13TiB more is needed for
-B's2TiB reservation, before accounting for further writes. Recovery331778 stays held until the
-storage watcher admits it under current headroom and other-job reservations;
-it consumes no GPU time while held. Hard-limit headroom is about10.87TiB, but
-this controller does not assume a future grace period. No files were deleted.
-The persistent watcher has verified the new job registration and live heartbeat.
+that attempt's release and startup. Its artifacts are preserved. A later check
+had only0.87TiB headroom; subsequent cleanup raised this to about2.57TiB and
+the watcher released B331778. After B's2TiB reservation, approximately0.57TiB
+remains against beta's separate2TiB requirement. The controller does not assume
+a future quota grace period. This agent deleted no files. The persistent
+watcher has verified both job registrations and a live heartbeat.
 It observes and releases eligible holds; arbitrary bug repair requires an agent.
+
+**Updated endpoints approved in principle:** prioritize B through90, and
+continue the unchanged beta1 and failure sampling40% experiments through60.
+This supersedes the earlier scientific stopping target of40 for beta. New
+allocation budgets still need exact approval under the repository agreement.
+
+| Continuation | Allocation cap | Budget/queue state | Full300 evaluations |
+| --- | --- | --- | --- |
+| B69→90 | Existing8 H200×19h18m | 331778 pending resources | 70,80,90 |
+| β1 recovery20→40 | 8 H200×13h30m | 331995 submitted from unused330278 budget; storage-held; `after:331778` | 30,40 |
+| β1 40→60 | 8 H200×14h | Prepared; new resource approval pending | 50,60 |
+| Sampling40%20→40 | 8 H200×18h | Prepared; new resource approval pending | 30,40 |
+| Sampling40%40→60 | 8 H200×18h | Prepared; depends on completed40 stage; new resource approval pending | 50,60 |
+
+The three new allocations total400 GPU-hours maximum. Beta's recovery requests
+48,600s; with330278's1,729s consumed, total50,329s stays below the existing
+50,400s approval. Recent median checkpoint intervals are31.1min for beta and
+42.7min for sampling40%; expected20→60 elapsed time including evaluations is
+roughly23–26h and31–34h, respectively. Normal QoS caps each job at24h.
+
+Prepared controller:`scripts/prepare_arm_ablation_to60.py`; batch template:
+`scripts/resume_arm_ablation_to60_8gpu.sbatch`. Preserve TP2/DP4, microbatch1,
+global256/PPO2, each scientific recipe, optimizer/scheduler, task cursor and
+training W&B identity. The controller owns each training/evaluation worker and
+requires all300 saved rollouts/verdicts at every tenth iteration before the next
+stage. A partial stage exits nonzero so an`afterok`successor cannot start without
+its required milestone. No automatic budget extension or storage deletion.
+
+Beta's allocator cache-release threshold is reduced to48GiB. Its isolated frozen
+source also enables exact replay of the saved iteration21 mixed and auxiliary
+batch: the old helper supported only iteration0 andβ0.5, while this recovery
+checks the saved rollout ID,β1/q0.2, actor, calibration, auxiliary payload and
+consumed cursor. It preserves saved labels and discards only unsaved optimizer
+progress. Six continuation/replay/monitor tests and four B-recovery tests pass;
+native shell arguments confirm TP2, micro1, global256, PPO2 and checkpoint load.
+GPU restoration and actual failed-batch replay remain launch-time gates.
 
 [Refreshed ARM browser comparison](ARM_RESULTS.md#arm-refresh-browser-results-20260926)
 completed in2h18m46s under job331770: frozen42.00%/56.50%, refreshed41.33%/52.99%
@@ -95,8 +131,7 @@ The earlier model-path failure331769 consumed45s before browser/judge calls.
 completed in46m16s and released its remaining allocation. Overall success was
 38.54%,42.71%,40.63% for0,2,4 guided turns. This is an inference feasibility
 test, with no curriculum training yet. The completed pilot observer exited;
-the separate storage watcher remains active for B331778. No new allocations
-or deletions were made during this status check.
+the separate storage watcher remains active for B331778 and beta331995.
 
 <a id="arm-refresh-label-recovery-20260925"></a>
 ## ARM-refresh labeling, training and evaluation recovery — September25
