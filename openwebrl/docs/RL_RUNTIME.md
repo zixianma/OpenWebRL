@@ -30,7 +30,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 | Track | Durable state at check | Job and status | Next evaluations |
 | --- | --- | --- | --- |
-| Gate B | Iteration77 /988 Adam updates; recovery startup | 331778 running on g020; same-ID retry capped at4h11m | B70 full300 complete;80/90 are checkpoint-triggered controller stages, subject to remaining time |
+| Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
 | Failure β1 | Iteration20 /298 Adam updates | Recovery332452 cancelled at user request before starting;332004 remains administrator-held with a failed dependency | 30/40/50/60 remain outstanding; no runnable continuation |
@@ -48,9 +48,9 @@ this inventory.332004 has also consumed no GPU time.
 
 **Remaining work:**
 
-- B331778 resumes77→80→90 and owns full300 evaluations80/90. B20–70 results are
-  complete. Both future evaluations require durable checkpoints and sufficient
-  remaining allocation time; reaching90 in this retry is not guaranteed.
+- B331778 failed while collecting78, before any optimizer update. B20–70 results
+  are complete;80/90 remain requested but have no checkpoints or active allocation.
+  Do not replay the failed launch unchanged; startup diagnosis is required.
 - Sampling40% was discontinued at27. Both10/20 evaluations are complete;
   jobs332003 and332005 are canceled and must not be automatically relaunched.
 - C training and evaluations20–60 are complete. Outcome-only, all-failure and
@@ -158,9 +158,45 @@ before training, owns the80/90 evaluations, and stops at the allocation boundary
 rather than extending its budget. Current recovery controller:
 `evaluations/arm-gate-b-slot-recovery-331778-r1`; training output:
 `evaluations/arm-failure-additive-331778-slots-r1-iter80`.
-The persistent observer follows these paths after the requeue. Production
-throughput after recovery is still to be verified; the unit/native cleanup
-checks do not alone establish the realized speedup.
+The persistent observer followed these paths after the requeue. **Outcome:** the
+retry failed at13:03 PDT after3h08m28s, with no optimizer update. Native checkpoint77
+and its16 shards remain verified at988 updates. Collection78 reached only28/48
+accepted groups after10,108 seconds and recorded897 empty-response sentinels.
+The controller reached its training deadline, with the reserved evaluation hour
+unused because checkpoint80 did not exist. Neither80 nor90 evaluation started.
+
+Parent logs contain1,864 server-start records and1,089 ready records;775 starts
+have no recorded readiness. The pool logged1,816 releases from1,866 acquisitions
+by the final snapshot, so the prior permanent slot-leak diagnosis alone does not
+explain this retry. Successful-start timing includes pool wait and had a4.94s
+median; cleanup elapsed time had a73.25s median and326.59s90th percentile. Severe
+startup/cleanup delays are established; their underlying CPU, event-loop or
+server-import cause is **not established** by these logs. Server stderr was left
+in node-local `/tmp` and is unavailable from the workspace after allocation exit.
+
+**Monitoring gap:** the status observer recorded the failure but did not stop
+degraded collection. The existing health rule stopped repeated empty responses
+only when there were zero completed turns. The separate15-minute diagnostic
+monitor also ended with the prior attempt and was not restarted for the recovery.
+The registry observer followed the new paths, but did not replace that diagnostic
+monitor or provide automatic repair.
+
+Prepared correction: `scripts/arm_browser_startup_guard.py` incrementally checks
+server start/ready records. After a10-minute grace period, it stops when at least
+30% of64–100 mature startups lack readiness for60 seconds; attempts younger than
+120 seconds and older than15 minutes are excluded. Six CPU tests pass. Replay
+of this failed log triggers at10:22:34,15.37 minutes after collection began,
+despite partial rollout success. This is a guard against wasted compute, not a
+validated fix for the underlying startup slowdown. The prepared controller also
+sets a durable `browser-server-logs` directory and writes startup-health snapshots.
+
+No further job was submitted. A bounded live diagnostic must establish startup
+health, resource use and complete collection before another long continuation.
+Cumulative recorded use is82,633 seconds of the original86,400-second budget,
+leaving at most3,767 seconds; no budget extension is authorized. Prepared code,
+tests, log-replay evidence and readiness are under runtime
+`arm-turn-bonus-preparation/browser-slot-recovery-20260927/`. The old attempt's
+controller/source and collected artifacts are preserved.
 
 **Subsequent user decision:** sampling40% jobs332003 and332005 were canceled.
 The active job used12h48m19s; its successor used no allocation time. Checkpoint27,
@@ -168,11 +204,11 @@ The active job used12h48m19s; its successor used no allocation time. Checkpoint2
 The status registry marks this as a user stop, not a failure eligible for repair.
 [Coverage measurements and interpretation](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 
-B80/90 scheduling is recorded in the recovery controller's `evaluation-queue.json`.
-These are awaited full300 stages inside331778, not separate Slurm allocations:
+B80/90 scheduling is recorded in the recovery controller's `evaluation-queue.json`,
+now marked blocked after the controller failed. The intended sequence remains:
 train to80 → evaluate80 → train to90 → evaluate90. Each evaluation uses local
 browsers, GPT-4.1/action_history,T0 and saves rollouts plus verdicts. Checkpoint
-and budget gates still apply; no extra allocation or extension was submitted.
+and budget gates still apply; there is no active worker or replacement allocation.
 Beta332004 remains administrator-held with the canceled recovery dependency.
 
 <a id="arm-evaluation-backfill-20260927"></a>
@@ -185,7 +221,7 @@ backfill observer verified every result and exited after all jobs finished.
 [Result table and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 
 The user requested all remaining evaluations, including original bonus. B80/90
-are owned by331778 without duplicate standalone submissions. Failure-sampling
+were owned by331778 and are now blocked after its failure. Failure-sampling
 30/40/50/60 were subsequently withdrawn when the user stopped that experiment.
 Beta30/40/50/60 and original90 lack completed checkpoints and cannot run yet.
 

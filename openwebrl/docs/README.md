@@ -28,7 +28,7 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-Latest checked status: [B331778 resumes77 with checkpoint-triggered80/90 evaluations;
+Latest checked status: [B331778 failed during78; durable77, evaluations80/90 blocked;
 C completed training/evaluations through60; sampling40% stopped at27;
 beta follow-on332004 remains administrator-held with a failed dependency](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
@@ -40,7 +40,7 @@ Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 
-[Gate B resumes durable77 after a reproduced browser-slot cleanup leak; same job331778,4h11m unused budget](RL_RUNTIME.md#arm-browser-slot-recovery-20260927).
+[Gate B recovery outcome: startup degradation persisted; no new update, early-stop guard CPU-tested, live diagnosis still required](RL_RUNTIME.md#arm-browser-slot-recovery-20260927).
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
