@@ -27,15 +27,15 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 Latest scheduler check: **no ARM training or evaluation job is running**.
 B recovery331778 has cleared storage and is pending GPU resources. Beta
-recovery331995 is storage-held and depends on B starting first. The running
+recovery331995 has also cleared storage and depends on B starting first. The running
 OSWorld allocation belongs to another project and is not ARM compute.
 
 | Track | Durable state | Current status |
 | --- | --- | --- |
 | Gate B | Iteration69 /902 Adam updates | Recovery331778 queued for resources; priority continuation through90 |
 | Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
-| Failure β1 | Iteration20 /298 Adam updates | Repaired recovery331995 submitted through40; extension through60 prepared, additional resource approval pending |
-| Failure sampling40% | Iteration20 /302 Adam updates | Training/evaluations10/20 complete; continuation through60 prepared, resource approval pending |
+| Failure β1 | Iteration20 /298 Adam updates | Recovery331995→40, then approved continuation332004→60; both submitted |
+| Failure sampling40% | Iteration20 /302 Adam updates | Approved continuations332003→40 then332005→60 submitted; first stage storage-held |
 | Refreshed ARM | Final90 SFT updates | Offline evaluation331120 and both full300 browser conditions331770 complete |
 | ARM-guided prefix pilot | Zero training updates | Job331932 complete; all288 primary attempts and12 smoke attempts saved and verified |
 
@@ -79,30 +79,34 @@ quota headroom during grace to the soft quota ceiling, leaving about1.36TiB
 at331767's startup against a2TiB continuation requirement. This changed between
 that attempt's release and startup. Its artifacts are preserved. A later check
 had only0.87TiB headroom; subsequent cleanup raised this to about2.57TiB and
-the watcher released B331778. After B's2TiB reservation, approximately0.57TiB
-remains against beta's separate2TiB requirement. The controller does not assume
+the watcher released B331778. Further headroom of about4.81TiB allowed release
+of beta331995. After their two2TiB reservations, approximately0.81TiB remains
+against sampling40%'s separate2TiB requirement. The controller does not assume
 a future quota grace period. This agent deleted no files. The persistent
-watcher has verified both job registrations and a live heartbeat.
+watcher has verified all five job registrations and a live heartbeat.
 It observes and releases eligible holds; arbitrary bug repair requires an agent.
 
-**Updated endpoints approved in principle:** prioritize B through90, and
+**Updated endpoints and allocation budgets approved:** prioritize B through90, and
 continue the unchanged beta1 and failure sampling40% experiments through60.
-This supersedes the earlier scientific stopping target of40 for beta. New
-allocation budgets still need exact approval under the repository agreement.
+This supersedes the earlier scientific stopping target of40 for beta. The user
+approved the exact three additional allocations below; all were submitted.
 
 | Continuation | Allocation cap | Budget/queue state | Full300 evaluations |
 | --- | --- | --- | --- |
 | B69→90 | Existing8 H200×19h18m | 331778 pending resources | 70,80,90 |
-| β1 recovery20→40 | 8 H200×13h30m | 331995 submitted from unused330278 budget; storage-held; `after:331778` | 30,40 |
-| β1 40→60 | 8 H200×14h | Prepared; new resource approval pending | 50,60 |
-| Sampling40%20→40 | 8 H200×18h | Prepared; new resource approval pending | 30,40 |
-| Sampling40%40→60 | 8 H200×18h | Prepared; depends on completed40 stage; new resource approval pending | 50,60 |
+| β1 recovery20→40 | 8 H200×13h30m | 331995 from unused330278 budget; waiting for B to start: `after:331778` | 30,40 |
+| β1 40→60 | 8 H200×14h | 332004 submitted; prerequisite hold and `afterok:331995` | 50,60 |
+| Sampling40%20→40 | 8 H200×18h | 332003 submitted; storage hold and `after:331778` | 30,40 |
+| Sampling40%40→60 | 8 H200×18h | 332005 submitted; prerequisite hold and `afterok:332003` | 50,60 |
 
 The three new allocations total400 GPU-hours maximum. Beta's recovery requests
 48,600s; with330278's1,729s consumed, total50,329s stays below the existing
 50,400s approval. Recent median checkpoint intervals are31.1min for beta and
 42.7min for sampling40%; expected20→60 elapsed time including evaluations is
 roughly23–26h and31–34h, respectively. Normal QoS caps each job at24h.
+Slurm confirms8 H200,64 CPUs and960GiB for each new job, with14h/18h/18h
+time limits. Submission and approval receipts are in
+`logs/arm-ablation-to60-20260926/`.
 
 Prepared controller:`scripts/prepare_arm_ablation_to60.py`; batch template:
 `scripts/resume_arm_ablation_to60_8gpu.sbatch`. Preserve TP2/DP4, microbatch1,
@@ -111,6 +115,14 @@ training W&B identity. The controller owns each training/evaluation worker and
 requires all300 saved rollouts/verdicts at every tenth iteration before the next
 stage. A partial stage exits nonzero so an`afterok`successor cannot start without
 its required milestone. No automatic budget extension or storage deletion.
+
+The persistent quota/status observer now runs with `--hours 0`, until all
+registered jobs leave the queue. It releases a future`afterok`stage only when
+the predecessor's controller reports complete, Slurm reports COMPLETED, and
+storage permits. This avoids reserving space for future stages ahead of ready
+work. Three prerequisite-release tests pass; all five IDs appear in its live
+status file. Each training worker also owns a15-minute metrics/resource monitor.
+The observer records failures; it does not implement arbitrary unattended repair.
 
 Beta's allocator cache-release threshold is reduced to48GiB. Its isolated frozen
 source also enables exact replay of the saved iteration21 mixed and auxiliary
