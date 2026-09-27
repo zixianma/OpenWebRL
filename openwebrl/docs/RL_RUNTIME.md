@@ -155,8 +155,20 @@ unchanged. All five same IDs were requeued with53 minutes, preserving old
 outputs and writing retries under `-retry1` roots. Slurm accounting charges
 384 seconds to332476 and403 seconds to each other initial attempt; with
 3,180 seconds per retry the aggregate cap is9.942 GPU-hours, below10.
-GPU restoration and first task completion remain pending at this recovery
-snapshot. Both monitors follow the current attempt, not the old output paths.
+Iterations20/30/40/60 subsequently passed GPU restoration;20/30 started saving
+per-task results. Both monitors follow the current attempt, not old output paths.
+
+**Router recovery:**332479 then failed before any task because its router and
+332477 chose the same ports on g012 at the same second. The fatal error was
+`failed to install Prometheus metrics exporter: Address already in use`.
+A separate frozen evaluator source puts the model router inside its existing
+per-job port lease and lets the kernel assign the metrics port. A native CPU
+test ran two routers concurrently and verified both `/workers` endpoints
+returned200. Other active evaluators' source files were untouched.332479 was
+requeued again with50 minutes, retaining its earlier403+186 seconds of charges
+and all logs under separate attempt directories. The revised total cap is
+**9.946 GPU-hours**. Future concurrent evaluators must isolate router and metrics
+ports as well as model-server ports; probing a seeded random port is racy.
 
 Original20/30 have neither reusable per-task archives nor the aggregate
 `eval_0.pt`. Original40 has100 lossless task archives from299156. A bounded
