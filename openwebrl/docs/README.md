@@ -28,12 +28,12 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-Latest checked status: [Gate B69 recovery331778 held for storage; C60 complete;
-failure sampling40% training/evaluations through20 complete;
-browser forward-transfer comparison331770 now complete](RL_RUNTIME.md#arm-progress-20260926).
+Latest checked status: [no ARM jobs running; Gate B69 recovery331778 held for
+storage; C60 and failure sampling40% through20 complete; browser comparison331770
+and prefix pilot331932 complete](RL_RUNTIME.md#arm-progress-20260926).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-Beta continuation330278 failed during21; no replacement is currently running.
+Beta continuation330278 failed during21; no replacement is currently queued.
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).

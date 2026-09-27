@@ -25,18 +25,29 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 <a id="arm-progress-20260926"></a>
 ## ARM progress and Gate B69 recovery — September26, 2026
 
+Latest scheduler check: **no ARM training or evaluation job is running**.
+The only queued ARM job is storage-held recovery331778. The running OSWorld
+allocation belongs to another project and is not ARM compute.
+
 | Track | Durable state | Current status |
 | --- | --- | --- |
 | Gate B | Iteration69 /902 Adam updates | Job330304 failed during70; bounded recovery331778 held for storage |
 | Gate C | Iteration60 /782 Adam updates | Training and full300 evaluations through60 complete |
-| Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete |
+| Failure β1 | Iteration20 /298 Adam updates | Job330278 failed during21; evaluations10/20 complete; no replacement queued |
 | Failure sampling40% | Iteration20 /302 Adam updates | Job329911 completed training and full300 evaluations10/20; allocation exited |
-| Refreshed ARM | Final90 SFT updates | Offline evaluation331120 complete; browser comparison331770 launched on g014 |
+| Refreshed ARM | Final90 SFT updates | Offline evaluation331120 and both full300 browser conditions331770 complete |
+| ARM-guided prefix pilot | Zero training updates | Job331932 complete; all288 primary attempts and12 smoke attempts saved and verified |
 
 B50/B60 full300 evaluations completed in329908:37.67%/48.71% and37.33%/49.12%
 overall/valid-only. Both300-task cohorts, saved archives and verdicts were verified.
 C50/C60 are33.67%/43.53% and32.67%/43.17%. These evaluations use the existing
 T0 GPT-4.1/action_history protocol.
+
+The latest ready milestone evaluations are complete: B60, C60, failureβ1
+iteration20 and failure sampling40% iteration20. The latter two score
+33.00%/41.77% and27.67%/37.39% overall/valid-only, respectively. B70 evaluation
+must wait for a durable iteration70 checkpoint; its saved rollout batch is
+not a completed training checkpoint.
 
 **Failure diagnosis:** both B330304 and beta330278 show the custom
 `torch_memory_saver` allocator's `cu_mem_create` CUDA OOM during PPO training.
@@ -64,19 +75,28 @@ approved24h. Four CPU budget/replay/cache tests pass; GPU validation is pending.
 During cleanup, personal usage dropped below the100TiB soft quota, resetting
 the active grace period to`none`. The guard consequently switched from hard
 quota headroom during grace to the soft quota ceiling, leaving about1.36TiB
-against a2TiB continuation requirement. This changed between331767's release
-and startup. Its artifacts are preserved. Recovery331778 stays held until the
+at331767's startup against a2TiB continuation requirement. This changed between
+that attempt's release and startup. Its artifacts are preserved. At the latest
+check, launch headroom is about0.87TiB: approximately1.13TiB more is needed for
+B's2TiB reservation, before accounting for further writes. Recovery331778 stays held until the
 storage watcher admits it under current headroom and other-job reservations;
-it consumes no GPU time while held. Hard-limit headroom is about11.36TiB, but
+it consumes no GPU time while held. Hard-limit headroom is about10.87TiB, but
 this controller does not assume a future grace period. No files were deleted.
 The persistent watcher has verified the new job registration and live heartbeat.
 It observes and releases eligible holds; arbitrary bug repair requires an agent.
 
-[Refreshed ARM browser comparison](ARM_INTEGRATION_PLAN.md#arm-refresh-browser-20260926)
-uses two fresh selector conditions on actor90; the user approved2 H200×4h
-and the$30 judge cap. Job331769 failed the model-path preflight in45s before
-browser/judge calls; corrected recovery331770 has3h59m remaining and started
-on g014. A persistent observer tracks both stages and verifies saved artifacts.
+[Refreshed ARM browser comparison](ARM_RESULTS.md#arm-refresh-browser-results-20260926)
+completed in2h18m46s under job331770: frozen42.00%/56.50%, refreshed41.33%/52.99%
+overall/valid-only. Both300-task conditions have saved rollouts and verdicts;
+the result does not demonstrate a browser-success gain from refreshing ARM.
+The earlier model-path failure331769 consumed45s before browser/judge calls.
+
+[Prefix pilot331932](ARM_RESULTS.md#arm-prefix-curriculum-results-331932)
+completed in46m16s and released its remaining allocation. Overall success was
+38.54%,42.71%,40.63% for0,2,4 guided turns. This is an inference feasibility
+test, with no curriculum training yet. The completed pilot observer exited;
+the separate storage watcher remains active for B331778. No new allocations
+or deletions were made during this status check.
 
 <a id="arm-refresh-label-recovery-20260925"></a>
 ## ARM-refresh labeling, training and evaluation recovery — September25
