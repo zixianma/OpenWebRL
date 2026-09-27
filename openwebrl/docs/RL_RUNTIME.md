@@ -5,6 +5,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ## Contents
 
 - [Current ARM progress and beta memory recovery](#arm-progress-20260927)
+- [Gate B browser-slot recovery](#arm-browser-slot-recovery-20260927)
 - [Remaining ARM evaluation queue and original-bonus backfills](#arm-evaluation-backfill-20260927)
 - [ARM continuation submissions and B69 recovery](#arm-progress-20260926)
 - [ARM-refresh training complete; evaluation recovery](#arm-refresh-label-recovery-20260925)
@@ -119,6 +120,51 @@ observer reports failures and releases eligible user holds; it does not repair
 arbitrary training bugs. Recovery receipts and logs:
 `logs/arm-beta-memory-20260927/`; the332004 dispatch is recorded under
 `logs/arm-ablation-to60-20260926/dispatch/332004.json`.
+
+<a id="arm-browser-slot-recovery-20260927"></a>
+## Gate B browser-slot recovery — September27
+
+The five original-bonus backfills are complete; [all results and saved-artifact
+audits](RL_EVALUATION.md#arm-original-backfill-results-20260927) are published.
+At the morning check, B had durable77/988 Adam updates and was collecting78;
+failure sampling40% had durable27/392 updates and was completing collection28.
+
+B's iteration78 accepted only16/48 groups after9,835 seconds and produced over
+770 zero-response failure sentinels. Its local process pool reported64 occupied
+slots, while a node-level process audit found only2–3 browser servers, all
+children of the active rollout manager. Pool waits approached600 seconds;
+`startup_ms` includes that pool wait and does not establish a slow server import.
+This is a runtime-capacity problem, not evidence of a policy reward collapse.
+
+The old cleanup implementation leaks ownership when cancellation interrupts
+shutdown/failed creation, or when termination raises. Three targeted tests
+reproduce retained slots on the old code and pass on the correction. Cleanup
+now runs as a retained, shielded task and releases port/slot ownership in a
+`finally` block. A native two-server lifecycle probe also passed: both servers
+exited, both slots were released, and no cleanup tasks remained. The probe used
+an existing allocation's CPU resources, with no actor, judge or new allocation.
+
+Job331778 was requeued under the same ID, with only **4h11m** of its unused
+approved time. Its previous attempt used54,411 seconds; earlier B recovery jobs
+used16,914 seconds. Including15,060 seconds for this retry, the cumulative cap
+is86,385 seconds, below the originally approved24 hours. Durable checkpoint77,
+optimizer/scheduler state, cursor, W&B identity, TP2/DP4/microbatch1,64 browsers
+and the ARM objective are preserved. The interrupted partial78 artifacts remain
+in the old directory; collection restarts from the durable77 task cursor.
+
+The corrected source is `reference-arm-gate-b-browser-cleanup-20260927-v1`;
+only `openwebrl/env/local_process_env.py` differs from B's prior frozen source.
+Controller `scripts/recover_arm_browser_slots.py` requires native GPU restoration
+before training, owns the80/90 evaluations, and stops at the allocation boundary
+rather than extending its budget. Current recovery controller:
+`evaluations/arm-gate-b-slot-recovery-331778-r1`; training output:
+`evaluations/arm-failure-additive-331778-slots-r1-iter80`.
+The persistent observer follows these paths after the requeue. Production
+throughput after recovery is still to be verified; the unit/native cleanup
+checks do not alone establish the realized speedup.
+
+Sampling40% remains in332003;332005 waits for its predecessor to complete.
+Beta332004 remains administrator-held with the canceled recovery dependency.
 
 <a id="arm-evaluation-backfill-20260927"></a>
 ### Original-bonus backfills completed — September27

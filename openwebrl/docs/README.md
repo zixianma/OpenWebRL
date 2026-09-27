@@ -39,6 +39,8 @@ Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 
+[Gate B resumes durable77 after a reproduced browser-slot cleanup leak; same job331778,4h11m unused budget](RL_RUNTIME.md#arm-browser-slot-recovery-20260927).
+
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
 [Gate B iteration50/60:37.67% /37.33% overall](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926),
