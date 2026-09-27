@@ -126,10 +126,12 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 80 | — | 38.00% / 49.78% |
 |  | 90 | — | 33.67% / 45.50% |
 |  | 100 | 37.00% / 54.41% | **34.67% / 45.81%** |
-| **Original bonus** | 20 | 26.0% / 35.62% | — |
-|  | 30 | 27.0% / 36.49% | — |
-|  | 40 | **31.00% / 44.93%** | — |
+| **Original bonus** | 20 | 26.0% / 35.62% | 28.00% / 37.00% |
+|  | 30 | 27.0% / 36.49% | 32.67% / 43.56% |
+|  | 40 | **31.00% / 44.93%** | 32.00% / 42.86% |
+|  | 50 | 32.00% / 44.44% | 34.00% / 43.22% |
 |  | 51 | — | 34.00% / 45.74% |
+|  | 60 | 34.00% / 46.58% | 35.67% / 45.73% |
 |  | 70 | — | 34.33% / 44.59% |
 |  | 80 | — | 33.33% / 45.05% |
 | **All-failure bonus** | 20 | 28.0% / 40.00% | 30.00% / 40.54% |
@@ -165,6 +167,10 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 20 | 32.00% / 42.11% | **33.00% / 41.77%** |
 | **Failure sampling40%** | 10 | 32.00% / 42.11% | **29.00% / 37.34%** |
 |  | 20 | 26.00% / 38.24% | **27.67% / 37.39%** |
+
+Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
+the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30
+remain historical. [Backfill audit](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 
 **Evolving ARM (offline forward transfer):** refresh SelectionARM on2,000
 GPT-5.5-labeled actor40 states +858 replay examples; test the fixed final90-update

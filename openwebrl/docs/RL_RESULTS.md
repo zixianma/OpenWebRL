@@ -116,6 +116,11 @@
 
 | Method | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Source |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Original bonus | 20 | 84 | 227 | 73 | 28.00 | 37.00 | [332476](RL_EVALUATION.md#arm-original-backfill-results-20260927) |
+| Original bonus | 30 | 98 | 225 | 75 | 32.67 | 43.56 | [332477](RL_EVALUATION.md#arm-original-backfill-results-20260927) |
+| Original bonus | 40 | 96 | 224 | 76 | 32.00 | 42.86 | [332478](RL_EVALUATION.md#arm-original-backfill-results-20260927) |
+| Original bonus | 50 | 102 | 236 | 64 | 34.00 | 43.22 | [332479](RL_EVALUATION.md#arm-original-backfill-results-20260927) |
+| Original bonus | 60 | 107 | 234 | 66 | 35.67 | 45.73 | [332480](RL_EVALUATION.md#arm-original-backfill-results-20260927) |
 | Additive bonus | 20 | 85 | 236 | 64 | 28.33 | 36.02 | [307429](RL_EVALUATION.md#arm-additive-iter20-full300-20260920) |
 | B: relaxed gate | 20 | 101 | 228 | 72 | 33.67 | 44.30 | [313209](RL_EVALUATION.md#arm-gate-b-iter20-results-20260921) |
 | B: relaxed gate | 30 | 102 | 234 | 66 | 34.00 | 43.59 | [318934](RL_EVALUATION.md#arm-gate-b-iter30-40-results-20260924) |

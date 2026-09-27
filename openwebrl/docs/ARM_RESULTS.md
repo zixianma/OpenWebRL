@@ -4,6 +4,19 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-original-backfill-20260927"></a>
+## Original-bonus iterations20–60 — September27
+
+All five full300 backfills completed, with every rollout and verdict preserved.
+Overall/valid-only:20 **28.00%/37.00%**,30 **32.67%/43.56%**,40
+**32.00%/42.86%**,50 **34.00%/43.22%**,60 **35.67%/45.73%**.
+Iteration40 reuses its historical100; the other four are fresh300 evaluations.
+Exact50 is separate from the older51 result. Compared with the historical
+outcome-only baseline, overall differences at20/30/40/50/60 are−3.67,+0.67,
+−1.33,−1.00,+0.67pp; these differing-date results show no consistent advantage.
+[Per-checkpoint counts, fixed100 slices and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
+The comparison plot continues to exclude original bonus, as requested.
+
 <a id="arm-gate-b-iter70-20260927"></a>
 ## Gate B iteration70 — September27
 

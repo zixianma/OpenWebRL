@@ -121,7 +121,13 @@ arbitrary training bugs. Recovery receipts and logs:
 `logs/arm-ablation-to60-20260926/dispatch/332004.json`.
 
 <a id="arm-evaluation-backfill-20260927"></a>
-### Remaining evaluations: original-bonus backfills submitted — September27
+### Original-bonus backfills completed — September27
+
+**Completed:**332476–332480 each exited0 with full300 verified. All1,400 new
+rollout/verdict pairs and100 historical pairs are preserved. Total recorded
+usage including retries: **7.466 H200 GPU-hours** against10 approved. The
+backfill observer verified every result and exited after all jobs finished.
+[Result table and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 
 The user requested all remaining evaluations, including original bonus. B80/90
 are already owned by331778; failure-sampling30/40 by332003 and50/60 by332005.

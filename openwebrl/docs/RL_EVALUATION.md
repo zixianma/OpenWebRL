@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration70 full300](#arm-gate-b-iter70-results-20260927)
 - [Failure sampling40% iteration20 full300](#arm-failure-coverage-iter20-results-20260926)
 - [Failure sampling40% iteration10 full300](#arm-failure-coverage-iter10-results-20260926)
@@ -18,6 +19,49 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-original-backfill-results-20260927"></a>
+## Original-bonus full300 backfills — September27
+
+Jobs332476–332480 all completed with exit0. Native GPU restoration, checkpoint
+lineage, exact full300 membership and lossless ZIP archives were independently
+verified against all saved per-task verdicts. Protocol: local browser,
+GPT-4.1/action_history, temperature0,30-step horizon. Actor only at evaluation;
+these checkpoints were trained with the original mixed-group ARM bonus.
+
+| Iteration | Successes | Valid /300 | Overall | Valid-only | Fixed100 successes /valid | Fixed100 overall /valid-only | Job |
+| ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| 20 | 84 | 227 | 28.00% | 37.00% | 25/70 | 25.00% /35.71% | [332476](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter20-backfill-332476-retry1) |
+| 30 | 98 | 225 | 32.67% | 43.56% | 30/67 | 30.00% /44.78% | [332477](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter30-backfill-332477-retry1) |
+| 40 | 96 | 224 | 32.00% | 42.86% | 31/69 | 31.00% /44.93% | [332478](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter40-backfill-332478-retry1) |
+| 50 | 102 | 236 | 34.00% | 43.22% | 32/72 | 32.00% /44.44% | [332479](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter50-backfill-332479-retry3) |
+| 60 | 107 | 234 | 35.67% | 45.73% | 34/73 | 34.00% /46.58% | [332480](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter60-backfill-332480-retry1) |
+
+Iteration40 is the exact union of100 historical tasks from299156 and200 new
+disjoint tasks from332478; it is not a same-day300 rerun. The other four rows
+are fresh300 evaluations. Fixed100 slices above are computed from these full
+cohorts; the summary retains the earlier standalone fixed100 results at20/30.
+Exact50 (`iter_0000049`) remains distinct from historical51. Invalid outcomes
+remain in the overall denominator and are excluded only from valid-only.
+
+Against historical outcome-only results, overall deltas at20/30/40/50/60 are
+−3.67,+0.67,−1.33,−1.00,+0.67 percentage points. This is a descriptive comparison
+across dates and differing valid-task sets, with no consistent gain established.
+
+All1,400 new task archives and verdicts plus100 reused pairs are retained.
+Including every startup retry, recorded usage is7.466 H200 GPU-hours versus10
+approved. Every batch exited after verification; no allocation remained idle.
+The persistent backfill watcher independently verified all five completions.
+[Aggregate audit](arm_results/rl_integration/original-backfill-20260927.json) ·
+[startup recovery and accounting](RL_RUNTIME.md#arm-evaluation-backfill-20260927).
+Private output directories below each have `rollouts/`, `status.json`,
+`full300-audit.json`, and `checkpoint_restore_evidence.json`:
+
+- runtime`evaluations/arm-original-iter20-332476-retry1/`
+- runtime`evaluations/arm-original-iter30-332477-retry1/`
+- runtime`evaluations/arm-original-iter40-332478-retry1/`
+- runtime`evaluations/arm-original-iter50-332479-retry3/`
+- runtime`evaluations/arm-original-iter60-332480-retry1/`
 
 <a id="arm-gate-b-iter70-results-20260927"></a>
 ## Gate B iteration70 — September27, 2026

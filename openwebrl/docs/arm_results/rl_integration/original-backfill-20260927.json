@@ -1,0 +1,137 @@
+{
+  "date": "2026-09-27",
+  "protocol": "local browser; GPT-4.1/action_history; temperature0; full300 frozen cohort",
+  "rows": [
+    {
+      "iteration": 20,
+      "job_id": "332476",
+      "checkpoint_directory": "iter_0000019",
+      "full300": {
+        "tasks": 300,
+        "successes": 84,
+        "valid": 227,
+        "invalid": 73,
+        "overall": 0.28,
+        "valid_only": 0.3700440528634361,
+        "saved_rollouts": 300,
+        "saved_verdicts": 300,
+        "historical100_plus_new200": false
+      },
+      "fixed100": {
+        "tasks": 100,
+        "successes": 25,
+        "valid": 70,
+        "overall": 0.25,
+        "valid_only": 0.35714285714285715
+      },
+      "evaluation_directory": "arm-original-iter20-332476-retry1",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter20-backfill-332476-retry1"
+    },
+    {
+      "iteration": 30,
+      "job_id": "332477",
+      "checkpoint_directory": "iter_0000029",
+      "full300": {
+        "tasks": 300,
+        "successes": 98,
+        "valid": 225,
+        "invalid": 75,
+        "overall": 0.32666666666666666,
+        "valid_only": 0.43555555555555553,
+        "saved_rollouts": 300,
+        "saved_verdicts": 300,
+        "historical100_plus_new200": false
+      },
+      "fixed100": {
+        "tasks": 100,
+        "successes": 30,
+        "valid": 67,
+        "overall": 0.3,
+        "valid_only": 0.44776119402985076
+      },
+      "evaluation_directory": "arm-original-iter30-332477-retry1",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter30-backfill-332477-retry1"
+    },
+    {
+      "iteration": 40,
+      "job_id": "332478",
+      "checkpoint_directory": "iter_0000039",
+      "full300": {
+        "tasks": 300,
+        "successes": 96,
+        "valid": 224,
+        "invalid": 76,
+        "overall": 0.32,
+        "valid_only": 0.42857142857142855,
+        "saved_rollouts": 300,
+        "saved_verdicts": 300,
+        "historical100_plus_new200": true
+      },
+      "fixed100": {
+        "tasks": 100,
+        "successes": 31,
+        "valid": 69,
+        "overall": 0.31,
+        "valid_only": 0.4492753623188406
+      },
+      "evaluation_directory": "arm-original-iter40-332478-retry1",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter40-backfill-332478-retry1"
+    },
+    {
+      "iteration": 50,
+      "job_id": "332479",
+      "checkpoint_directory": "iter_0000049",
+      "full300": {
+        "tasks": 300,
+        "successes": 102,
+        "valid": 236,
+        "invalid": 64,
+        "overall": 0.34,
+        "valid_only": 0.4322033898305085,
+        "saved_rollouts": 300,
+        "saved_verdicts": 300,
+        "historical100_plus_new200": false
+      },
+      "fixed100": {
+        "tasks": 100,
+        "successes": 32,
+        "valid": 72,
+        "overall": 0.32,
+        "valid_only": 0.4444444444444444
+      },
+      "evaluation_directory": "arm-original-iter50-332479-retry3",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter50-backfill-332479-retry3"
+    },
+    {
+      "iteration": 60,
+      "job_id": "332480",
+      "checkpoint_directory": "iter_0000059",
+      "full300": {
+        "tasks": 300,
+        "successes": 107,
+        "valid": 234,
+        "invalid": 66,
+        "overall": 0.3566666666666667,
+        "valid_only": 0.45726495726495725,
+        "saved_rollouts": 300,
+        "saved_verdicts": 300,
+        "historical100_plus_new200": false
+      },
+      "fixed100": {
+        "tasks": 100,
+        "successes": 34,
+        "valid": 73,
+        "overall": 0.34,
+        "valid_only": 0.4657534246575342
+      },
+      "evaluation_directory": "arm-original-iter60-332480-retry1",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter60-backfill-332480-retry1"
+    }
+  ],
+  "all_checkpoint_restores_verified": true,
+  "all_cohorts_recomputed": true,
+  "new_task_archives": 1400,
+  "reused_task_archives": 100,
+  "total_gpu_hours_including_retries": 7.471666666666667,
+  "original_excluded_from_comparison_plot": true
+}
