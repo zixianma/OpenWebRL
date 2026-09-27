@@ -161,14 +161,27 @@ per-task results. Both monitors follow the current attempt, not old output paths
 **Router recovery:**332479 then failed before any task because its router and
 332477 chose the same ports on g012 at the same second. The fatal error was
 `failed to install Prometheus metrics exporter: Address already in use`.
-A separate frozen evaluator source puts the model router inside its existing
-per-job port lease and lets the kernel assign the metrics port. A native CPU
-test ran two routers concurrently and verified both `/workers` endpoints
-returned200. Other active evaluators' source files were untouched.332479 was
-requeued again with50 minutes, retaining its earlier403+186 seconds of charges
-and all logs under separate attempt directories. The revised total cap is
-**9.946 GPU-hours**. Future concurrent evaluators must isolate router and metrics
-ports as well as model-server ports; probing a seeded random port is racy.
+A separate frozen evaluator source now puts the router and metrics listener at
+explicit offsets240/241 inside its existing per-job port lease. The first fix
+incorrectly used metrics port0: its CPU probe omitted `prometheus_host`, so it
+never tested the metrics listener, and the actual worker rejected port0. The
+corrected native test enabled both metrics listeners, verified all four
+`/workers` and `/metrics` endpoints returned200, and checked both processes
+remained alive after8 seconds. The native `find_available_port` helper also adds
+random jitter, so the reserved ports must be assigned directly. Other active
+evaluators' source files were untouched.332479's third retry is capped at45
+minutes, charging its earlier403+186+288 seconds and preserving every attempt's
+logs. The revised aggregate cap is **9.939 GPU-hours**. Future concurrent
+evaluators must isolate router and metrics ports as well as model-server ports,
+and startup tests must enable every listener used in production.
+
+GPFS metadata latency subsequently delayed per-task archive/verdict writes on
+multiple nodes. Live stacks identified `open`, `stat` and `rename` waits;
+bounded create probes took2.9 seconds on g012 and5.5 seconds on g013. No storage
+quota exception was observed. Active evaluations retain completed trajectories
+while writes finish; result counts only include durable verdict sidecars, not
+unpersisted judge completions. This delay is being tracked separately from the
+router failures; unchanged workers are not blindly restarted.
 
 Original20/30 have neither reusable per-task archives nor the aggregate
 `eval_0.pt`. Original40 has100 lossless task archives from299156. A bounded
