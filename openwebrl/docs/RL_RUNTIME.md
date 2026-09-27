@@ -143,8 +143,20 @@ still verified inside each evaluation allocation before accepting its results.
 The five-job request is **10 GPU-hours maximum**,16 CPUs/480GiB per job. The user
 explicitly approved it and all five jobs were submitted immediately. Slurm
 confirmed the exact resources and all five started:20 on g020,30/40 on g012,
-50/60 on g013. Native CPU checkpoint validation passed for each; GPU restoration
-and first task completion are still startup checks at this snapshot.
+50/60 on g013. Native CPU checkpoint validation passed for each.
+
+**Startup recovery:** all five were delayed in Python imports, before any task
+ran. A live stack trace showed `_write_atomic`/`_cache_bytecode`; the blocked
+`openat` targeted a `.pyc` temporary file under the frozen evaluator's GPFS
+`__pycache__`. Imports of the affected modules passed with bytecode writes
+disabled. The controller now disables its own bytecode writes and exports
+`PYTHONDONTWRITEBYTECODE=1` to the evaluator; model weights and protocol are
+unchanged. All five same IDs were requeued with53 minutes, preserving old
+outputs and writing retries under `-retry1` roots. Slurm accounting charges
+384 seconds to332476 and403 seconds to each other initial attempt; with
+3,180 seconds per retry the aggregate cap is9.942 GPU-hours, below10.
+GPU restoration and first task completion remain pending at this recovery
+snapshot. Both monitors follow the current attempt, not the old output paths.
 
 Original20/30 have neither reusable per-task archives nor the aggregate
 `eval_0.pt`. Original40 has100 lossless task archives from299156. A bounded
