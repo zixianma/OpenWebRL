@@ -6471,9 +6471,12 @@ browser comparison remains the nearer-term test of better reward quality.
 states, then hands control to the ordinary actor. The user requested the first
 feasibility test and then approved **two H200 GPUs × two hours,16 CPUs,480GiB
 RAM**, plus a **$20 GPT-4.1 judge cap /900 requests including retries**.
-**Job331932 is running on g012**, submitted September26 at15:07UTC. Slurm estimates
-$3.60 for the requested GPU allocation. Seven CPU tests and the native launch
-preflight passed; GPU execution is undergoing its separate startup/smoke gate.
+**Job331932 completed on g012 in46m16s**, with all288 primary plus12 smoke
+attempts preserved. [Results and analysis](ARM_RESULTS.md#arm-prefix-curriculum-results-331932):
+actor-only38.54%,two-turn42.71%,four-turn40.63% overall; the paired differences
+remain inconclusive. Seven CPU tests, the native launch preflight, real GPU
+handoffs, the smoke gate and final persistence checks passed. Judge usage was$1.86;
+the job released the unused portion of its two-hour allocation.
 The earlier deferred failure-only experiment's eight-GPU approval was not
 transferred to this experiment.
 
@@ -6530,8 +6533,8 @@ Implementation: `openwebrl/arm_prefix_pilot.py`; preparation/controller
 `scripts/run_arm_prefix_pilot_2gpu.sbatch`; seven CPU tests in
 `tests/test_arm_prefix_pilot.py`. Private cohort, launch plan and readiness live in
 runtime `arm-turn-bonus-preparation/prefix-pilot-20260926/`. The persistent watcher
-is active and follows the submission receipt through startup/progress, then
-verifies saved artifacts. It does not implement unattended bug repair. Job
+followed the submission receipt through startup/progress, verified the saved
+artifacts at completion, and exited. It does not implement unattended bug repair. Job
 artifacts are in runtime `evaluations/arm-prefix-pilot-331932/`; its Slurm log is
 `logs/slurm-arm-prefix-pilot-331932.out`. The batch controller owns and awaits
 the worker and stops when verification finishes; unused walltime is not held.

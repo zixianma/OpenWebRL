@@ -1,0 +1,163 @@
+{
+  "job_id": "331932",
+  "complete": true,
+  "actor": "Original OpenWebRL-4B-SFT /iteration0",
+  "selector": "Frozen PTeterwak/OpenWebRL-4B-SelectionARM",
+  "cohort": "48 training tasks, two attempts per condition; excludes OM2W",
+  "protocol": {
+    "prefixes": [
+      0,
+      2,
+      4
+    ],
+    "max_steps": 15,
+    "temperature": 0.8,
+    "response_tokens": 1024,
+    "context_tokens": 32768,
+    "judge": "gpt-4.1/action_history"
+  },
+  "summary": {
+    "complete": true,
+    "tasks": 48,
+    "trajectories": 288,
+    "optimizer_updates": 0,
+    "by_prefix": {
+      "0": {
+        "attempts": 96,
+        "successes": 37,
+        "valid": 96,
+        "invalid": 0,
+        "overall": 0.3854166666666667,
+        "valid_only": 0.3854166666666667,
+        "successes_with_actor_suffix": 37,
+        "suffix_success_per_attempt": 0.3854166666666667,
+        "prefix_only_successes": 0,
+        "reached_actor_suffix": 96,
+        "actor_requests": 870,
+        "actor_output_tokens": 265617,
+        "selector_calls": 0,
+        "elapsed_seconds": 12885.680904361187,
+        "actor_suffix_turns": 870
+      },
+      "2": {
+        "attempts": 96,
+        "successes": 41,
+        "valid": 92,
+        "invalid": 4,
+        "overall": 0.4270833333333333,
+        "valid_only": 0.44565217391304346,
+        "successes_with_actor_suffix": 36,
+        "suffix_success_per_attempt": 0.375,
+        "prefix_only_successes": 5,
+        "reached_actor_suffix": 85,
+        "actor_requests": 1474,
+        "actor_output_tokens": 417698,
+        "selector_calls": 186,
+        "elapsed_seconds": 12793.256293010898,
+        "actor_suffix_turns": 544
+      },
+      "4": {
+        "attempts": 96,
+        "successes": 39,
+        "valid": 95,
+        "invalid": 1,
+        "overall": 0.40625,
+        "valid_only": 0.4105263157894737,
+        "successes_with_actor_suffix": 24,
+        "suffix_success_per_attempt": 0.25,
+        "prefix_only_successes": 15,
+        "reached_actor_suffix": 70,
+        "actor_requests": 2182,
+        "actor_output_tokens": 629956,
+        "selector_calls": 344,
+        "elapsed_seconds": 13531.245587041602,
+        "actor_suffix_turns": 462
+      }
+    },
+    "paired": {
+      "2": {
+        "overall_delta": 0.041666666666666664,
+        "task_cluster_bootstrap_95ci": [
+          -0.0625,
+          0.14583333333333334
+        ],
+        "improved": 12,
+        "regressed": 8,
+        "jointly_valid_attempts": 92,
+        "jointly_valid_delta": 0.05434782608695652
+      },
+      "4": {
+        "overall_delta": 0.020833333333333332,
+        "task_cluster_bootstrap_95ci": [
+          -0.052083333333333336,
+          0.09375
+        ],
+        "improved": 11,
+        "regressed": 9,
+        "jointly_valid_attempts": 95,
+        "jointly_valid_delta": 0.021052631578947368
+      }
+    },
+    "actor_two_attempt_any_success": 0.5,
+    "limitation": "Training-only feasibility, not learning or held-out performance. Guidance changes state distribution. Two actor retries are not exactly matched compute. Common seeds do not make dynamic websites deterministic. Handoff-conditional comparisons are selected populations; report unconditional suffix-success yield. Two prefix comparisons are exploratory."
+  },
+  "additional_analysis": {
+    "0": {
+      "paired_breakdown": {},
+      "invalid_causes": {},
+      "successful_actor_suffix_turns": 271,
+      "actor_output_token_ratio": 1.0
+    },
+    "2": {
+      "paired_breakdown": {
+        "actor_suffix/both_success": 25,
+        "actor_suffix/both_failure": 41,
+        "actor_suffix/regressed": 8,
+        "actor_suffix/improved": 11,
+        "no_suffix/both_failure": 6,
+        "no_suffix/both_success": 4,
+        "no_suffix/improved": 1
+      },
+      "invalid_causes": {
+        "reset_navigation_error": 1,
+        "reset_screenshot_error": 1,
+        "env_step_error": 2
+      },
+      "successful_actor_suffix_turns": 178,
+      "actor_output_token_ratio": 1.5725574793782024
+    },
+    "4": {
+      "paired_breakdown": {
+        "actor_suffix/both_failure": 38,
+        "actor_suffix/improved": 8,
+        "actor_suffix/both_success": 16,
+        "no_suffix/both_failure": 10,
+        "no_suffix/both_success": 12,
+        "actor_suffix/regressed": 8,
+        "no_suffix/improved": 3,
+        "no_suffix/regressed": 1
+      },
+      "invalid_causes": {
+        "reset_screenshot_error": 1
+      },
+      "successful_actor_suffix_turns": 103,
+      "actor_output_token_ratio": 2.3716704879582258
+    }
+  },
+  "verification": {
+    "primary_rollouts_and_verdicts": 288,
+    "smoke_rollouts_and_verdicts": 12,
+    "archive_headers_checked": true,
+    "handoff_trace_boundaries_checked": true,
+    "matched_repeat_seeds_checked": true
+  },
+  "usage": {
+    "elapsed_seconds": 2776,
+    "gpu_hours": 1.5422222222222222,
+    "judge": {
+      "calls": 211,
+      "charged_or_reserved_usd": 1.8621399999999988
+    }
+  },
+  "source_summary_sha256": "89267ec916c5e26036570d01bb22e2cecac1429dac2e32f89cc5b85a23c291a0"
+}

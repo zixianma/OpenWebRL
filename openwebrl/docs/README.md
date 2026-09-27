@@ -23,8 +23,8 @@ for the work you are doing, then follow its contents to dated experiment records
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
-Next ARM feasibility test: [guided prefixes followed by actor-only completion](ARM_INTEGRATION_PLAN.md#arm-prefix-curriculum-pilot-20260926).
-Job331932 running:48 training tasks × three prefix lengths × two attempts; approved two H200s × two hours and$20 judge cap, with a separate startup/smoke gate and active watcher.
+ARM prefix pilot331932 [completed: actor-only38.54%,two-turn42.71%,four-turn40.63% overall on the training panel](ARM_RESULTS.md#arm-prefix-curriculum-results-331932).
+Small, inconclusive positive signal for two-turn guidance; all288 primary attempts saved. [Protocol](ARM_INTEGRATION_PLAN.md#arm-prefix-curriculum-pilot-20260926).
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).

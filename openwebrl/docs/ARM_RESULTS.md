@@ -4,6 +4,64 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-prefix-curriculum-results-331932"></a>
+## ARM prefix curriculum feasibility — September26, job331932
+
+**Small positive signal for two-turn guidance, not a demonstrated curriculum
+learning gain.** The original SFT actor completed48 training tasks with two
+attempts in each of three conditions. The actor and ARM were frozen; no training
+updates occurred. These are training-panel results, not Online-Mind2Web scores.
+
+| Guided prefix | Overall success | Valid-only success | Valid /attempted | Success after actor handoff | Success entirely within guide | Actor output tokens relative to control |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+|0: actor only|38.54%|38.54%|96/96|37|0|1.00×|
+|2 turns|42.71%|44.57%|92/96|36|5|1.57×|
+|4 turns|40.63%|41.05%|95/96|24|15|2.37×|
+
+Two-turn guidance improves overall success by4.17pp, with a task-cluster
+bootstrap95% interval of[−6.25,+14.58]pp. Four turns improves it by2.08pp,
+interval[−5.21,+9.38]pp. Both are exploratory and inconclusive. Among jointly
+valid paired attempts the differences are+5.43pp (92 pairs) and+2.11pp (95 pairs).
+
+The two-turn condition has12 failure→success and8 success→failure paired changes.
+**Eleven of those12 improvements required an actor-only suffix; one finished
+inside the guide.** Therefore the net improvement is not solely explained by
+guide-only completions. However, total actor-completed successful suffixes are36
+versus37 for the control, and successful actor suffix turns are178 versus271.
+These counts measure data yield, not learning value; guided conditions move
+some otherwise successful attempts into the guide-only category. Four-turn
+guidance yields eight actor-suffix improvements and eight actor-suffix regressions,
+with103 successful actor suffix turns. Conditional handoff comparisons are
+selected populations, not causal effects on a common set of states.
+
+The guide uses frozen SelectionARM with five full-response candidates only in
+the prefix, then switches to one actor response in the same browser/history.
+All conditions use T0.8/top_p1,response1024,context32768,horizon15 including
+guided turns, and native GPT-4.1/action_history judging. Condition order is
+randomized within task and repeat seeds match. Live browser states remain
+stochastic. The control's two-attempt any-success rate is50%; that uses a
+different rollout budget and is not an equal-compute comparison. Output-token
+ratios above exclude selector compute and prefill cost.
+
+All288 primary plus12 smoke rollout/verdict pairs were verified, including
+archive headers and handoff trace boundaries. No selector failure/fallback
+occurred. The five invalid attempts comprise one reset navigation failure,
+two reset screenshot failures and two environment-step errors. They remain in
+the primary denominator; none were selectively retried. The job completed in
+46m16s (1.54 H200 GPU-hours), released its unused allocation, and used211 judge
+requests totaling$1.86 charged/reserved. Its persistent watcher verified completion.
+
+**Decision:** discuss the two-turn condition before considering an RL pilot;
+four turns has weaker evidence and higher generation cost. This test alone does
+not justify claiming that assisted suffix training improves the standalone actor.
+No follow-up allocation was submitted.
+
+[Protocol](ARM_INTEGRATION_PLAN.md#arm-prefix-curriculum-pilot-20260926) ·
+[Aggregate results and completion audit](arm_results/rl_integration/prefix-curriculum-pilot-331932.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-prefix-pilot-331932).
+Private complete artifacts: runtime `evaluations/arm-prefix-pilot-331932/sft/`,
+including `compare_records/`, `trajectories/`, and `prefix-summary.json`.
+
 <a id="arm-refresh-browser-results-20260926"></a>
 ## Refreshed ARM browser forward transfer — September26, 2026
 
