@@ -121,28 +121,30 @@ arbitrary training bugs. Recovery receipts and logs:
 `logs/arm-ablation-to60-20260926/dispatch/332004.json`.
 
 <a id="arm-evaluation-backfill-20260927"></a>
-### Remaining evaluations: prepared original-bonus backfills — September27
+### Remaining evaluations: original-bonus backfills submitted — September27
 
 The user requested all remaining evaluations, including original bonus. B80/90
 are already owned by331778; failure-sampling30/40 by332003 and50/60 by332005.
 Those work queues are retained without duplicate standalone submissions.
 Beta30/40/50/60 and original90 lack completed checkpoints and cannot run yet.
 
-| Original-bonus checkpoint | Adam updates | New browser tasks | Reused saved tasks | Proposed allocation |
-| ---: | ---: | ---: | ---: | --- |
-| 20 | 288 | 300 | 0 | 2 H200 ×1h |
-| 30 | 414 | 300 | 0 | 2 H200 ×1h |
-| 40 | 518 | 200 | 100 | 2 H200 ×1h |
-| 50 | 634 | 300 | 0 | 2 H200 ×1h |
-| 60 | 738 | 300 | 0 | 2 H200 ×1h |
+| Original-bonus checkpoint | Adam updates | New browser tasks | Reused saved tasks | Approved allocation | Job |
+| ---: | ---: | ---: | ---: | --- | --- |
+| 20 | 288 | 300 | 0 | 2 H200 ×1h | 332476 |
+| 30 | 414 | 300 | 0 | 2 H200 ×1h | 332477 |
+| 40 | 518 | 200 | 100 | 2 H200 ×1h | 332478 |
+| 50 | 634 | 300 | 0 | 2 H200 ×1h | 332479 |
+| 60 | 738 | 300 | 0 | 2 H200 ×1h | 332480 |
 
 All five saved checkpoint reports agree with the original training lineage,
 zero scheduler offset, dataset cursor and shard sizes. Exact50 uses
 `iter_0000049`; the historical full300 result came from51. GPU restoration is
 still verified inside each evaluation allocation before accepting its results.
-The five-job request is **10 GPU-hours maximum**,16 CPUs/480GiB per job. It is
-prepared, not submitted: exact approval of this additional resource request is
-still required by root`AGENTS.md`.
+The five-job request is **10 GPU-hours maximum**,16 CPUs/480GiB per job. The user
+explicitly approved it and all five jobs were submitted immediately. Slurm
+confirmed the exact resources and all five started:20 on g020,30/40 on g012,
+50/60 on g013. Native CPU checkpoint validation passed for each; GPU restoration
+and first task completion are still startup checks at this snapshot.
 
 Original20/30 have neither reusable per-task archives nor the aggregate
 `eval_0.pt`. Original40 has100 lossless task archives from299156. A bounded
@@ -160,6 +162,11 @@ Each batch owns and awaits its worker, uses the established T0/local-browser/
 GPT-4.1 action-history protocol, logs to`openwebrl-evals`, and requires all task
 archives and verdicts. The merged40 audit checks exact full300 membership and
 rejects overlapping IDs. Existing completed results are preserved separately.
+Six CPU tests and shell syntax checks passed before submission. The persistent
+host observer has all five IDs registered, and the backfill observer tracks
+per-task archives/verdicts and independently verifies final full300 results.
+Neither observer submits replacement allocations or implements arbitrary bug
+repair. Submission/approval receipts and watch status remain beside the plans.
 
 <a id="arm-progress-20260926"></a>
 ## ARM progress and Gate B69 recovery — September26, 2026

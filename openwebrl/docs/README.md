@@ -36,8 +36,8 @@ with a failed dependency; remaining training/evaluation inventory](RL_RUNTIME.md
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
 Beta remains at20 with no runnable continuation after the requested cancellation.
 Browser comparison331770 and prefix pilot331932 are complete.
-[Remaining evaluation queue: original20/30/40/50/60 prepared; exact10-GPU-hour
-approval pending, with40's100 saved trajectories reused](RL_RUNTIME.md#arm-evaluation-backfill-20260927).
+[Remaining evaluation queue: original20/30/40/50/60 submitted as332476–332480;
+approved10 GPU-hours, with40's100 saved trajectories reused](RL_RUNTIME.md#arm-evaluation-backfill-20260927).
 
 Default checkpoint evaluation cadence and current queue:
 [full-300 every ten iterations; September24 temporary-storage cleanup](RL_RUNTIME.md#milestone-evaluations-20260924).
