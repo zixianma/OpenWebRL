@@ -30,7 +30,44 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | --- | --- | --- | --- |
 | Gate B | Iteration75 /970 Adam updates; collecting76 | 331778 running on g014, about5h40 elapsed of19h18 | B70 full300 complete;80/90 remain in controller |
 | Failure sampling40% | Iteration23 /344 Adam updates; collecting24 | 332003 running on g004, about3h13 elapsed of18h | 30/40 in current allocation;332005 waits for successful40 stage, then50/60 |
-| Failure β1 | Iteration20 /298 Adam updates | 331995 failed; repaired recovery332452 queued for resources,13h10 remaining budget | 30/40 after recovery;332004 remains administrator-held for50/60 |
+| Failure β1 | Iteration20 /298 Adam updates | Recovery332452 cancelled at user request before starting;332004 remains administrator-held with a failed dependency | 30/40/50/60 remain outstanding; no runnable continuation |
+
+**Updated inventory after the cancellation, September27:**332004 is the
+previously approved8-H200 ×14h **failure-β1 continuation from40 to60**, with
+full300 evaluations at50/60. It doubles only the extra failure-group ARM weight
+from0.5 to1; mixed-group weight stays0.5 and both sampling rates stay20%.
+The experiment remains at20. Recovery332452 was cancelled at the user's explicit
+request before allocation (elapsed0), so332004 now has
+`afterok:332452(failed)` as well as `JobHeldAdmin`. The administrator/system
+comments are empty; the visible state does not establish who or what applied
+the hold. No automatic replacement of the cancelled recovery is authorized by
+this inventory.332004 has also consumed no GPU time.
+
+**Remaining work:**
+
+- B331778 continues75→90 and owns full300 evaluations80/90. B20–70 results are
+  complete; the current collection is76.
+- Sampling40%332003 continues23→40 and owns evaluations30/40. Its approved
+  successor332005 has a normal prerequisite user hold, then targets60 with
+  evaluations50/60. Both10/20 evaluations are complete.
+- C training and evaluations20–60 are complete. Outcome-only, all-failure and
+  additive have their documented full300 endpoints through100. No ARM evaluation
+  or test worker is currently running.
+- Refreshed-ARM offline/browser comparisons and the prefix feasibility pilot are
+  complete. Beta's tighter-cache GPU validation remains unexecuted after332452's
+  cancellation; passing CPU checks does not establish a GPU-memory fix.
+- Historical original-bonus full300 gaps remain at20/30/40/exact50/60; the plotted
+  early full300 point is51, not50. Their checkpoint directories, metadata and
+  eight shard files are present, but this inventory did not perform GPU restores.
+  Original90 was never reached; the latest retained original checkpoint is80.
+  These backfills and further original training have no current allocation.
+- The prepared additive-relaxed/failure-only experiment remains deliberately
+  deferred pending the next scientific decision. Outcome-aware reweighting and
+  a trained prefix curriculum remain proposals, not queued work.
+
+The active observer's heartbeat continues to refresh; it does not submit jobs
+or relaunch cancellations. Other account jobs332455/332456 (OSWorld) and331086
+(AWS evaluation) are outside this ARM inventory and were not modified.
 
 B70 full300 is37.33% overall/48.91% valid-only; the fixed100 slice is35.00%/50.00%.
 All300 saved rollouts and verdicts were verified. [Result and comparison](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
@@ -49,7 +86,7 @@ and releasing cache, but was insufficient. No iteration21 checkpoint was saved;
 durable iteration20 remains the resume point. The watcher recorded the failure;
 automatic arbitrary code repair was not implemented.
 
-**Recovery332452:**8 H200,64 CPUs,960GiB,13h10. The isolated controller
+**Recovery332452, submitted then cancelled before starting:**8 H200,64 CPUs,960GiB,13h10. The isolated controller
 `scripts/recover_arm_beta_memory.py` retains TP2/DP4, micro1, global256, PPO2,
 optimizer/scheduler, cursor, W&B lineage and all reward settings. It lowers
 the reserved-cache threshold from48 to24GiB, close to the observed21GiB live
@@ -75,7 +112,7 @@ to bypass that hold. A tested observer change preserves this administrator
 hold explicitly instead of misclassifying it as a released job. Sampling's
 332005 prerequisite hold is normal and will release after332003 succeeds.
 
-The persistent status/quota observer follows the new attempt through completion,
+The persistent status/quota observer follows the registered jobs,
 with15-minute metrics/resource monitors owned by active training workers. The
 observer reports failures and releases eligible user holds; it does not repair
 arbitrary training bugs. Recovery receipts and logs:

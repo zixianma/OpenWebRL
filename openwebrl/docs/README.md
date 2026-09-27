@@ -29,12 +29,12 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [B331778 saved through75, sampling40%332003 through23;
-beta recovery332452 replaces failed331995; follow-on332004 needs administrator
-release](RL_RUNTIME.md#arm-progress-20260927).
+beta recovery332452 cancelled before starting; follow-on332004 is administrator-held
+with a failed dependency; remaining training/evaluation inventory](RL_RUNTIME.md#arm-progress-20260927).
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-Beta recovery332452 counts both failed attempts against the original330278 budget.
+Beta remains at20 with no runnable continuation after the requested cancellation.
 Browser comparison331770 and prefix pilot331932 are complete.
 
 Default checkpoint evaluation cadence and current queue:
