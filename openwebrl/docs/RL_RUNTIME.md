@@ -33,7 +33,29 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
-| Failure β1 | Iteration20 /298 Adam updates; native restore starting | Replacement333402 running on g004,8 H200 ×14h; no hold | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
+| Failure β1 | Iteration20 /298 Adam updates; no new durable checkpoint | Recovery333431 pending resources;8 H200 ×13h31m, TP4/DP2 | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
+
+**Latest beta recovery, September27:**333402 failed after28m02s. Its saved-batch
+replay reached three optimizer steps without a new durable checkpoint; the
+preserved worker log reports `torch_memory_saver` `cu_mem_create` CUDA OOM.
+GPU1 peaked at142,196MiB of143,771MiB. The tighter24GiB cache threshold was
+insufficient, so retrying it unchanged is not the recovery plan.
+
+Submitted **333431** changes only the execution topology to **TP4/DP2** on eight
+H200s, with microbatch1/global256/PPO2 unchanged. It restores iteration20,
+optimizer/scheduler/cursor, W&B lineage and the same saved iteration21 batch.
+Failure beta1, mixed beta0.5, q20%, strict five-distinct gate and up to8 extra
+failure groups remain unchanged. TP4 gives smaller tensor shards; actual
+restoration and complete replay must succeed before declaring the memory fix
+validated. Requested13h31m +333402's28m02s =13h59m02s, within that replacement's
+approved14h budget. The controller awaits milestone evaluations30/40/50/60
+as checkpoints and remaining time permit; reaching60 is not guaranteed.
+
+Controller: `scripts/recover_arm_beta_tp4.py`; receipts and live observer output:
+`logs/arm-beta-tp4-recovery-20260927/`. The observer follows333431 from queue
+through termination and records health; it does not implement arbitrary bug
+repair. Two CPU tests verify budget accounting and scientific/state preservation.
+The historical entries below describe earlier attempts and holds.
 
 **Updated inventory after the cancellation, September27:**332004 is the
 previously approved8-H200 ×14h **failure-β1 continuation from40 to60**, with
@@ -57,14 +79,15 @@ this inventory.332004 has also consumed no GPU time.
   additive have their documented full300 endpoints through100. No ARM evaluation
   or test worker is currently running.
 - Refreshed-ARM offline/browser comparisons and the prefix feasibility pilot are
-  complete. Beta's tighter-cache GPU validation remains unexecuted after332452's
-  cancellation; passing CPU checks does not establish a GPU-memory fix.
+  complete. Beta's24GiB-cache attempt333402 also failed;333431 now tests TP4/DP2.
+  Passing CPU checks does not establish a GPU-memory fix.
 - Original-bonus full300 backfills20/30/40/exact50/60 are now complete and audited;
   exact50 remains separate from the older51 result. Original90 was never reached;
   the latest retained original checkpoint is80. Further training has no allocation.
 - The prepared additive-relaxed/failure-only experiment remains deliberately
-  deferred pending the next scientific decision. Outcome-aware reweighting and
-  a trained prefix curriculum remain proposals, not queued work.
+  deferred pending the next scientific decision. The new mixed-only relaxed
+  bonus/reweighting pair is CPU-ready but not submitted; exact new allocation
+  approval is pending. A trained prefix curriculum remains a proposal.
 
 The active observer's heartbeat continues to refresh; it does not submit jobs
 or relaunch cancellations. Other account jobs332455/332456 (OSWorld) and331086

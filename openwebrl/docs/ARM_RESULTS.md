@@ -243,12 +243,17 @@ objective comparison should account for that scale difference.
 
 **September27 finalized design:** lambda is fixed at0.5. Groups containing a
 native -1 sentinel retain B's original objective; all other mixed groups use
-mean-one outcome-aware weighting, with the extra all-failure auxiliary unchanged.
+mean-one outcome-aware weighting. The latest user decision removes extra
+all-failure groups from **both** new runs and adds a fresh relaxed-bonus control.
 The new bounded replay measures **8.04%** perturbation RMS across all rows
 (**8.01%** in binary-only groups), versus B's9.46%. This supersedes using7.99%
 as the exact scale of the finalized recipe; the earlier table remains the
 unconditional diagnostic. Binary-group weights range0.653–1.500, with
-p05/p95=0.915/1.090. No actor has been trained with this objective.
+p05/p95=0.915/1.090. Here RMS means
+`sqrt(sum((A_proposed-A_outcome)^2)/sum(A_outcome^2))`: a scalar-advantage
+perturbation on saved ordinary-group turns, not success improvement or gradient
+strength. This panel comes from B's existing actor lineage; it does not measure
+either new mixed-only run. No actor has been trained with this objective.
 [Final method and controls](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926)
 · [Updated aggregate audit](arm_results/rl_integration/reweighting-design-audit.json).
 

@@ -1,0 +1,98 @@
+{
+  "status": "Complete-trajectory manifest prepared; model/processor parity and image hashes pending",
+  "policy": "outcome-only baseline",
+  "training_iterations": [
+    31,
+    40
+  ],
+  "future_iterations": [
+    81,
+    90
+  ],
+  "judge_model": "gpt-4.1",
+  "split": "Task aliases and normalized intent union; hash70/15/15; cap10 trajectories/task; no label balancing",
+  "benchmark_training_rows": 0,
+  "inventory": {
+    "groups": 2162,
+    "trajectories": 10810
+  },
+  "exclusions": {
+    "invalid_or_nonbinary": 1304
+  },
+  "statistics": {
+    "train": {
+      "trajectories": 2000,
+      "tasks": 700,
+      "tasks_with_both_outcomes": 215,
+      "successes": 1021,
+      "turns": 13030,
+      "supervised_response_tokens": 4651365,
+      "context_tokens": 73552786,
+      "maximum_context_tokens": 21632,
+      "classifications": {
+        "mixed": 555,
+        "contains_invalid": 704,
+        "all_success": 426,
+        "all_failure": 315
+      },
+      "terminal_reasons": {
+        "task_completed": 1767,
+        "generation_length_limit": 48,
+        "max_steps_exhausted": 185
+      }
+    },
+    "dev": {
+      "trajectories": 250,
+      "tasks": 126,
+      "tasks_with_both_outcomes": 25,
+      "successes": 147,
+      "turns": 1490,
+      "supervised_response_tokens": 526655,
+      "context_tokens": 8121118,
+      "maximum_context_tokens": 16891,
+      "classifications": {
+        "contains_invalid": 97,
+        "mixed": 101,
+        "all_failure": 17,
+        "all_success": 35
+      },
+      "terminal_reasons": {
+        "task_completed": 232,
+        "generation_length_limit": 2,
+        "max_steps_exhausted": 16
+      }
+    },
+    "future": {
+      "trajectories": 500,
+      "tasks": 155,
+      "tasks_with_both_outcomes": 49,
+      "successes": 285,
+      "turns": 3064,
+      "supervised_response_tokens": 1187563,
+      "context_tokens": 16489721,
+      "maximum_context_tokens": 13839,
+      "classifications": {
+        "all_success": 129,
+        "all_failure": 66,
+        "mixed": 130,
+        "contains_invalid": 175
+      },
+      "terminal_reasons": {
+        "task_completed": 462,
+        "generation_length_limit": 26,
+        "max_steps_exhausted": 12
+      }
+    }
+  },
+  "resources": {
+    "seconds": 132.03682392602786,
+    "peak_rss_mib": 141.99609375,
+    "gpus": 0,
+    "api_calls": 0
+  },
+  "limitations": [
+    "Image presence and declared hashes checked; bytes must be verified by training loader.",
+    "Saved token/mask shapes checked; processor and token boundary parity still require a model-environment test.",
+    "This is a data artifact, not a fitted reward model or a causal action-quality result."
+  ]
+}

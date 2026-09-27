@@ -6378,12 +6378,23 @@ is currently approved or queued. Any new40% combination starts at iteration0.
 
 
 <a id="arm-outcome-aware-reweighting-20260926"></a>
-## Outcome-aware turn reweighting — finalized design, September27
+## Matched mixed-only relaxed-bonus and reweighting experiments — September27
 
-**Status:** method and first lambda fixed for discussion/implementation; CPU
-journal audit passed. No production hook, GPU validation, new allocation or actor
-training has been launched. The user requested the formula walkthrough and
-investigation of outcome-trained rewards and task-pool expansion.
+**Current decision:** compare two fresh runs from the original SFT checkpoint:
+**original bonus + relaxed gate B** versus **outcome reweighting + the same gate**.
+Both use only48 ordinary mixed-outcome groups; **no extra all-failure groups or
+auxiliary loss**. This supersedes the earlier proposal to retain B's failure
+auxiliary. The user approved the method and requested this matched control.
+The isolated reward hook and both native launch-argument checks passed, with
+28 CPU tests covering the formula, response-index versus action-class credit,
+production PPO shuffle/trim transport, calibration stop behavior and browser
+cleanup. GPU validation and an exact allocation budget remain outstanding.
+
+Existing Gate B is useful motivation, but it also trains on extra all-failure
+groups. Its results do not isolate whether relaxing the gate helps original
+bonus. The new bonus run answers that question; its head-to-head comparison with
+reweighting changes only the mixed-group advantage formula. Historical strict-gate
+original bonus and existing B remain contextual references.
 
 ### Exact objective and interpretation
 
@@ -6394,7 +6405,7 @@ per trajectory, using the sample standard deviation across trajectories:
 A[i] = (R[i] - mean_group(R)) / (sample_std_group(R) + 1e-6)
 u[i,t] = usable_label[i,t] * (1[selected_response == executed_response] - 1/5)
 
-Gate B mixed-group baseline: A_B[i,t] = A[i] + 0.5*u[i,t]
+New relaxed-bonus control: A_bonus[i,t] = A[i] + 0.5*u[i,t]
 Proposed reweighting:
     v[i,t] = exp(0.5 * sign(A[i]) * u[i,t])
     w[i,t] = v[i,t] / mean_trainable_turns(v[i,:])
@@ -6415,7 +6426,7 @@ For positive A, preferred turns receive more positive reinforcement. For negativ
 A, they receive a smaller penalty. The sign factor is essential: using exp(lambda*u)
 for both outcomes would penalize preferred failed-trajectory turns more strongly.
 Weights are fixed during actor backpropagation and broadcast over the executed
-response's **reasoning and action tokens**, preserving B's response-token mean.
+response's **reasoning and action tokens**, preserving the native response-token mean.
 The PPO clipping rule, old-policy log probabilities and optimizer are unchanged.
 
 Within each eligible trajectory, weights average1 and mean A_RW equals A. No
@@ -6459,26 +6470,33 @@ later strength-matched control can distinguish objective from magnitude effects.
 
 ### Fixed experimental recipe
 
-| Component | First experiment |
+| Component | Both new runs unless stated |
 | --- | --- |
-| Name / parent | `ARM-B-outcome-reweight-lambda0.5`; unchanged Gate B scientific recipe except mixed-group advantage construction |
-| Initialization | Original `OpenWebRL-4B-SFT`, iteration0, fresh optimizer/scheduler and initial data cursor; seed42 |
-| Mixed groups |48 per collection,5 trajectories per query, native dynamic filtering |
-| Extra all-failure groups |Up to8; retain B's existing admission, min2 labels, auxiliary PPO term, failure beta0.5, q20%, and N_f/48 coefficient |
-| Mixed ARM settings |Frozen released SelectionARM, K5, q20%, min2 gate, response-index credit |
+| Names | `ARM mixed only / bonus / relaxed B`; `ARM mixed only / reweight / relaxed B` |
+| Only differing knob | `A + 0.5*u` versus `A * mean_one(exp(0.5*sign(A)*u))` |
+| Initialization | Original `OpenWebRL-4B-SFT`, iteration0, fresh optimizer/scheduler and initial data cursor; rollout/ARM seed42 and native model seed1234 |
+| Groups |48 ordinary groups,5 trajectories per query, native dynamic filter; extra all-failure cap0 and auxiliary coefficient0 |
+| ARM |Frozen released SelectionARM, K5, q20%, five valid responses, at least two distinct canonical actions, response-index credit |
 | Optimization |LR1e-6 constant, global batch256 turns, microbatch1,2 PPO epochs; native clipping0.2/0.28, Adam betas0.9/0.98, weight decay0.1, zero KL/entropy |
 | Rollouts |Temperature0.8, horizon15, response1024, context32768; same2,102-task pool and GPT-4.1/action_history judge |
-| GPU topology |Use validated TP2/DP4/microbatch1 for an approved8-GPU allocation; final startup/restore/long-context check required |
-| Research endpoint |Iteration60; full300 OM2W every10 iterations, local browser, GPT-4.1/action_history, temperature0 |
-| Primary comparison |Predeclared mean overall success across iterations40/50/60 against B at those iterations; show each point, valid-only denominators and compute too |
+| Proposed launch topology |8 H200, TP2/DP4, microbatch1,64 browsers; existing validated layout, new hook still requires live full-batch/save validation |
+| Proposed first allocation |Two separate8-GPU ×8h jobs,64 CPU/960GiB each;128 GPU-hours total; reserve1h per job for full300 at10; exact resource approval pending |
+| Endpoints |First allocation targets10; eventual research endpoint60 requires separately approved continuation budgets |
+| Evaluation |Full300 every10 completed iterations, local browser, GPT-4.1/action_history, temperature0; save every task's rollout and verdict |
+| Primary comparison |Mean overall success across40/50/60 against the **new relaxed-bonus control** at the same iterations; show all points, valid-only denominators and compute |
 
-All-failure auxiliary loss must stay: multiplication cannot replace learning on
-zero-variance groups. Lambda0 therefore means outcome-only **mixed** updates plus
-the unchanged failure auxiliary; it is not a fully outcome-only baseline.
+The time cap does not guarantee iteration10 or60. The controller owns training
+and evaluation workers and preserves partial progress. Failure trajectories
+**within mixed groups** still receive their ordinary negative outcome advantage;
+only the additional all-failure population is absent. Lambda0 reduces the
+reweighted arm to outcome-only mixed-group learning. It does not reproduce the
+bonus control, which retains beta0.5. No duplicate-aware/action-class credit is
+introduced: selecting a different response with the same action still gives the
+executed response -0.2 unit credit, exactly as in gate B.
 
 Historical B contains rare native -1 error sentinels. To avoid changing error
 semantics in this ablation, **an entire query group containing any such sentinel
-keeps B's current advantage construction**. Never recast errors as valid failures.
+keeps the relaxed-bonus control's advantage construction**. Never recast errors as valid failures.
 Log this fallback explicitly and exclude these groups from binary-outcome
 interpretations. The audited panel has58/3,312 such groups and2,457/124,496 turns.
 
@@ -6487,15 +6505,14 @@ mixed-group apply_bonus, before DP distribution and PPO. The native normalizer
 otherwise takes the first trajectory reward and broadcasts it, so changing raw
 turn rewards alone would not implement this method. Normalize over all accepted
 trainable turns keyed by policy/group/trajectory; carry immutable scalar weights
-through shuffle, DP and two epochs. Preserve raw outcome telemetry and the
-separate auxiliary manifest. Do not compute a local denominator per microbatch.
+through shuffle, DP and two epochs. Preserve raw outcome telemetry. Explicitly reject an enabled auxiliary manifest. Do not compute a local denominator per microbatch.
 
 Before GPU training, test lambda0/no-label/single-turn behavior, signs/means,
 invalid-group fallback, trajectory isolation, masked turns, DP alignment and
-unchanged auxiliary scales. In an approved allocation, verify full-batch/32K
+absence of auxiliary signals in config and environment. In an approved allocation, verify full-batch/32K
 memory, one update and save/reload. Monitor label coverage, weight quantiles,
 trajectory weight concentration, per-outcome advantage RMS, clipping/KL/entropy,
-invalid rates, auxiliary yield, optimizer time and GPU utilization. Stop on
+invalid rates, optimizer time and GPU utilization. Stop on
 nonfinite values or transport/invariant failures. A noisy single OM2W point
 alone is not a performance stopping rule. Historical comparisons remain
 exploratory: matched contemporaneous controls and independent seeds are needed
@@ -6509,16 +6526,36 @@ and therefore potentially nontrivial weights. Actual weights range0.653–1.500;
 p05/p95 are0.915/1.090. Mean within-trajectory normalized weight ESS is99.41%
 (min94.05%); this describes concentration, not independent observations.
 Maximum trajectory mean-advantage error is2.22e-16. The6.5-second audit used
-about22MiB RAM, no tensors, GPUs, browser calls or APIs. Four existing algebra/
-normalization checks pass. This does not validate the unimplemented GPU hook.
+about22MiB RAM, no tensors, GPUs, browser calls or APIs. The audit validates algebra and scale; it does not validate GPU execution of the new hook.
+
+**What8.04% RMS means:**
+
+```text
+100 * sqrt(sum_turns((A_proposed - A_outcome)^2) / sum_turns(A_outcome^2))
+```
+
+Thus the root-mean-square change in scalar advantages is8.04% of native
+outcome-advantage RMS on this saved panel. It is **not** an8.04% success gain,
+extra reward on every turn, or gradient-norm change. Large changes count more
+because they are squared. These measurements use B's saved **ordinary-group**
+turns only, before epoch trimming; its extra failure auxiliary was never part of
+this denominator. B's actor was trained with that auxiliary, so the8.04% is a
+supporting calibration estimate, not a measurement from either new fresh run.
+
+Local implementation: `openwebrl/arm_outcome_reweight.py`; isolated source and
+launch preparation: `scripts/prepare_arm_mixed_reweight.py`; batch template:
+`scripts/run_arm_mixed_reweight_8gpu.sbatch`. Runtime receipts live under
+`arm-turn-bonus-preparation/mixed-reweight-20260927/`. Both variants keep the
+existing B calibration guard; its bonus RMS is a shared admission diagnostic,
+while the new hook logs the actually applied advantage perturbation separately.
 
 [Aggregate audit](arm_results/rl_integration/reweighting-design-audit.json).
 Local reproducibility: `python3 scripts/audit_arm_reweighting_design.py`.
 
 <a id="arm-outcome-trained-reward-investigation-20260927"></a>
-## Next direction2: outcome-trained evolving reward — September27 investigation
+## Next direction2: outcome-trained evolving reward — September27 offline pilot
 
-**Recommendation:** first test an offline outcome-supervised reward model on
+**User-approved next test:** an offline outcome-supervised reward model on
 saved trajectories; do not scale the previous teacher-choice refresh unchanged.
 That refresh improved offline agreement1.89pp but full300 browser success moved
 42.00%→41.33%. It has not been used in RL.
@@ -6568,13 +6605,59 @@ Null outcomes are excluded, never assigned0. This approximately2-second probe
 loaded JSON only and does not certify all image hashes, masks or judge provenance.
 [Availability probe](arm_results/rl_integration/outcome-reward-data-probe.json).
 
-Concrete preparation sequence:
+**Complete-trajectory preparation is now done (CPU only):** scanned2,162 archived
+groups/10,810 trajectories across baseline31–40 and81–90; excluded1,304 invalid
+or nonbinary trajectories. Frozen selection uses task-ID/alias + normalized-intent
+unions, a deterministic70/15/15 task split, maximum10 trajectories/task and no
+outcome balancing. No OM2W examples enter these files.
 
-1. Build a complete trajectory manifest with outcome/validity, exact actor/policy
-   version, task alias, images, masks and original judge provenance. Exclude
-   OM2W/evaluation overlaps and invalid attempts. Freeze a task-disjoint early
-   train/dev split and later-actor **training-task** test splits; check counts
-   before choosing a token budget. Reuse prior data, not stale teacher labels.
+| Split | Actor training iterations | Complete valid trajectories | Tasks | Tasks with both outcomes | Success /failure | Turns |
+| --- | --- | ---: | ---: | ---: | --- | ---: |
+| Train |31–40 |2,000 |700 |215 |1,021 /979 |13,030 |
+| Dev |31–40 |250 |126 |25 |147 /103 |1,490 |
+| Forward test |81–90 |500 |155 |49 |285 /215 |3,064 |
+
+The forward test is task-disjoint from both train and dev, and uses later
+**training-task** rollouts, not benchmark evaluations. Retained trajectories
+can come from a group with an invalid neighbor; every retained trajectory itself
+has a valid binary terminal outcome. Complete history, terminal marker, response
+mask shapes, context bounds and image-file presence passed. Individual image
+bytes still need hash verification and processor/token-mask parity before fitting.
+Judge-model identity is checked against saved launch manifests (`gpt-4.1`).
+
+This scan took132 seconds and142MiB peak RAM, with no GPUs/APIs. Training totals
+73.55M input/context tokens and4.65M supervised response tokens, so a whole-epoch
+reward/reference pass is materially larger than the earlier2,000 **single-state**
+SelectionARM refresh. Size the first optimizer pilot from this token volume;
+do not assume the old refresh's GPU-time estimate applies. The maximum retained
+context is21,632 tokens. The trainer/processor check and fitted-model test remain
+outstanding; these are data-preparation results only.
+
+[Aggregate manifest](arm_results/rl_integration/outcome-reward-data-manifest.json).
+Private immutable manifests: runtime `arm-turn-bonus-preparation/outcome-reward-20260927/`.
+Preparation: `scripts/prepare_arm_outcome_reward_data.py`. The separate trainer
+will live in the existing Piotr `action-reward-models` checkout.
+
+Useful additional data, in priority order:
+
+- Existing outcome-only archives first; later ARM-lineage rollouts provide a
+  separate robustness test, with lineage and task overlap controlled.
+- [WorkArena](https://github.com/ServiceNow/WorkArena) offers controllable browser
+  tasks with programmatic validation, useful for collecting branch outcomes on
+  new training instances. Reserve benchmark instances/seeds; this needs setup
+  and separate browser-compute approval.
+- [Piotr's candidate data](https://huggingface.co/datasets/PTeterwak/action-reward-models-data)
+  supplies teacher preferences and a possible retention control. It does not
+  establish terminal outcomes for all alternative actions, so do not substitute
+  its chosen-index labels for executed-trajectory success.
+- More WebGym tasks remain direction3, for discussion. Metadata alone is not an
+  outcome-reward training corpus; new tasks need executed and judged rollouts.
+
+Remaining preparation sequence:
+
+1. Finish image-hash and processor/token-mask parity checks on the frozen
+   manifests above; validate exact outcome-loss gradients and choose a bounded
+   training-only pilot token budget before a GPU fit.
 2. Fit one small offline reward model. Measure held-out within-task successful-
    versus-failed ranking, Brier/log loss and generalization to later actors,
    against length/prompt controls. Do not treat good trajectory discrimination
@@ -6595,6 +6678,9 @@ heuristic either method's guarantees.
 
 <a id="arm-task-pool-next-investigation-20260927"></a>
 ## Next direction3: verified task-pool expansion — September27 investigation
+
+**Discussion only:** the user requested more discussion before this direction.
+Do not expand the active task pool or launch its browser audit yet.
 
 **Current state:** active pool2,102;511 extra hard-labeled candidates on13 existing
 hosts after exact/lexical filtering;75 host-capped review tasks (50 hard/25 medium).
