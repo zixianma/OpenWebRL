@@ -33,7 +33,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
-| Failure β1 | Iteration20 /298 Adam updates | 332004 canceled at user request; replacement prepared, scheduler clarification pending | 30/40/50/60 remain outstanding; no active allocation |
+| Failure β1 | Iteration20 /298 Adam updates; native restore starting | Replacement333402 running on g004,8 H200 ×14h; no hold | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
 
 **Updated inventory after the cancellation, September27:**332004 is the
 previously approved8-H200 ×14h **failure-β1 continuation from40 to60**, with
@@ -210,8 +210,9 @@ train to80 → evaluate80 → train to90 → evaluate90. Each evaluation uses lo
 browsers, GPT-4.1/action_history,T0 and saves rollouts plus verdicts. Checkpoint
 and budget gates still apply; there is no active worker or replacement allocation.
 **Later beta decision:** user requested cancellation and replacement of332004.
-It was canceled with zero allocated time. A normal-QOS8-H200 ×14h replacement
-is prepared with64 CPUs/960GiB, TP2/DP4/micro1, original optimizer/scheduler/cursor
+It was canceled with zero allocated time. Replacement **333402** was submitted
+normally and started on **g004 at14:43:57 PDT**, with no hold or dependency.
+It uses8 H200 ×14h,64 CPUs/960GiB, TP2/DP4/micro1, original optimizer/scheduler/cursor
 and W&B identity. It resumes durable20/298 updates, replays the preserved21 batch,
 and targets60 with awaited full300 evaluations30/40/50/60 if time permits. This
 replaces the unused14h budget; it does not add the canceled recovery's budget.
@@ -219,13 +220,23 @@ The24GiB CUDA-cache mitigation still requires native GPU restore and first-batch
 validation. Browser logs will be durable and the new startup guard is included.
 
 `scripts/prepare_arm_beta_replacement.py` and
-`scripts/resume_arm_beta_replacement_8gpu.sbatch` are prepared; three replacement
-tests and shell syntax checks pass. No replacement has been submitted. The old
-job's administrator hold had no explanatory comment; its failed dependency was
-separate. The user was asked whether the hold was cleared or confirmed accidental.
-Execution is gated on that clarification rather than assuming cancellation
-removes an administrative restriction. The submission template contains neither
-a user hold nor an obsolete dependency; ordinary scheduler policy still applies.
+`scripts/resume_arm_beta_replacement_8gpu.sbatch` own the replacement; three
+replacement tests, six startup-guard tests and shell syntax checks pass.
+The old job's administrator hold had no explanatory comment and remains
+unexplained; it did not establish a blanket prohibition on new submissions.
+The assistant-added requirement for blanket administrator clearance was removed.
+No administrator action or clearance is claimed. The replacement uses the normal
+account/QOS, with neither a user hold nor the canceled predecessor dependency;
+Slurm accepted it and allocated resources.
+
+Controller: `evaluations/arm-ablation-weight-recovery-333402`. Native restoration
+of checkpoint20 and first saved-batch GPU validation precede fresh collection.
+The controller owns each training/evaluation worker and15-minute metrics monitors.
+A separate read-only observer follows the job through stage changes, updating
+`logs/arm-beta-replacement-20260927/watch/latest.json` every30 seconds; it does not
+submit jobs or repair arbitrary failures. The controller's startup guard stops
+sustained browser-start failures. No GPU-memory fix is claimed validated until
+the saved iteration21 batch completes and its checkpoint is verified.
 Receipts and prepared plan: `logs/arm-beta-replacement-20260927/`.
 
 <a id="arm-evaluation-backfill-20260927"></a>

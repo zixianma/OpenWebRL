@@ -30,12 +30,12 @@ Live operations: [job status, completions and failures](arm_results/rl_integrati
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [B331778 failed during78; durable77, evaluations80/90 blocked;
 C completed training/evaluations through60; sampling40% stopped at27;
-beta332004 canceled; replacement prepared pending scheduler clarification](RL_RUNTIME.md#arm-progress-20260927).
+beta333402 running on g004,8 H200 ×14h, resuming20 with no hold](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-Beta remains at20 with no runnable continuation after the requested cancellation.
+Beta333402 starts with checkpoint20 restoration and the preserved iteration21 batch.
 Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).
