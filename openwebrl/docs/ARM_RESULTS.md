@@ -241,6 +241,17 @@ policy-gradient correctness, improved sample efficiency or benchmark gains.
 Lambda0.5 has a comparable but smaller RMS perturbation than B's9.46%; a fair
 objective comparison should account for that scale difference.
 
+**September27 finalized design:** lambda is fixed at0.5. Groups containing a
+native -1 sentinel retain B's original objective; all other mixed groups use
+mean-one outcome-aware weighting, with the extra all-failure auxiliary unchanged.
+The new bounded replay measures **8.04%** perturbation RMS across all rows
+(**8.01%** in binary-only groups), versus B's9.46%. This supersedes using7.99%
+as the exact scale of the finalized recipe; the earlier table remains the
+unconditional diagnostic. Binary-group weights range0.653–1.500, with
+p05/p95=0.915/1.090. No actor has been trained with this objective.
+[Final method and controls](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926)
+· [Updated aggregate audit](arm_results/rl_integration/reweighting-design-audit.json).
+
 [Aggregate audit](arm_results/rl_integration/gate-b-mixed-alignment.json).
 Reproduce with `python3 scripts/audit_arm_mixed_alignment.py`; four bounded CPU
 checks cover native sample-standard-deviation normalization, error sentinels,

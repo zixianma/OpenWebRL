@@ -21,6 +21,10 @@ for the work you are doing, then follow its contents to dated experiment records
 [Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
+[Finalized reweighting: lambda0.5, exact objective/controls and bounded CPU verification](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
+[Outcome-trained reward: archive availability and offline-to-execution test](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
+[Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
+
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
 ARM prefix pilot331932 [completed: actor-only38.54%,two-turn42.71%,four-turn40.63% overall on the training panel](ARM_RESULTS.md#arm-prefix-curriculum-results-331932).

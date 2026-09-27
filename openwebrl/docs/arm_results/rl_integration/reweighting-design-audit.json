@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "experiment": "arm-outcome-aware-reweighting-lambda0.5",
+  "status": "CPU diagnostic only; no new training or GPU/API calls",
+  "source_audit_sha256": "cc8fdc96c62375aa5d55d39320ea6b04cc74dc8840c97428564a0e03b45e881c",
+  "source_iterations": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69
+  ],
+  "lambda_value": 0.5,
+  "error_policy": "Groups containing native -1 sentinel keep the original Gate B objective.",
+  "counts": {
+    "groups": 3312,
+    "binary_groups": 3254,
+    "fallback_groups": 58,
+    "trajectories": 15455,
+    "variable_signal_trajectories": 11144,
+    "labeled_trajectories": 11213,
+    "turns": 124496,
+    "fallback_turns": 2457
+  },
+  "all_groups": {
+    "parent_perturbation_rms": 0.0945817380970414,
+    "proposed_perturbation_rms": 0.08039016914016935
+  },
+  "binary_groups": {
+    "parent_perturbation_rms": 0.09463396557722825,
+    "proposed_perturbation_rms": 0.08013956277572772,
+    "minimum_weight": 0.652632975691777,
+    "maximum_weight": 1.500306874827036,
+    "p05_weight": 0.91450706846479,
+    "p95_weight": 1.089887653394736,
+    "mean_trajectory_ess_fraction": 0.9940618475523431,
+    "minimum_trajectory_ess_fraction": 0.940537777329531,
+    "max_mean_advantage_error": 2.220446049250313e-16
+  },
+  "examples": [
+    {
+      "A": 1.0,
+      "turns": 10,
+      "preferred": [
+        1.434907358768285,
+        1.434907358768285
+      ],
+      "rejected": [
+        0.8703153069402403,
+        0.8703153069402403
+      ],
+      "unlabeled": [
+        0.9618471667864344,
+        0.9618471667864344
+      ]
+    },
+    {
+      "A": -1.0,
+      "turns": 10,
+      "preferred": [
+        0.6857149666411457,
+        -0.6857149666411457
+      ],
+      "rejected": [
+        1.1305528511386858,
+        -1.1305528511386858
+      ],
+      "unlabeled": [
+        1.022966522777521,
+        -1.022966522777521
+      ]
+    }
+  ],
+  "limits": [
+    "Before native epoch shuffling/trimming; not a gradient or policy-performance estimate.",
+    "Weight ESS is descriptive concentration, not independent effective observations.",
+    "Only the already audited B1-69 panel is used."
+  ],
+  "resources": {
+    "wall_seconds": 6.5353420849423856,
+    "maxrss_kib": 22744,
+    "gpus": 0,
+    "api_calls": 0,
+    "tensors_loaded": 0
+  }
+}

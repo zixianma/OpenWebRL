@@ -1,0 +1,50 @@
+{
+  "status": "Bounded read-only availability probe; not a training manifest",
+  "selection": "First five source groups per iteration in existing refresh manifest",
+  "source_manifest_sha256": "0553bdd1da646f9f394bcafcb6250fd70c86d7da1b0add7c2f303b1412bc1b49",
+  "source_iterations": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "counts": {
+    "groups": 50,
+    "trajectories": 250,
+    "trajectories_with_existing_archived_images": 248,
+    "valid_binary_trajectories": 227,
+    "valid_with_images_text_and_mask_fields": 227,
+    "turns": 1347,
+    "turns_with_prompt_response": 1345,
+    "turns_with_token_loss_mask": 1345,
+    "turns_with_binary_outcome": 1214
+  },
+  "classifications": {
+    "contains_invalid": 18,
+    "mixed": 11,
+    "all_failure": 6,
+    "all_success": 15
+  },
+  "trajectory_rewards": {
+    "None": 23,
+    "0.0": 81,
+    "1.0": 146
+  },
+  "limitations": [
+    "Convenience sample; not a random estimate of the full corpus.",
+    "Checks file presence and fields, not every image hash, token boundary, mask value or terminal-judge provenance.",
+    "Null outcomes are excluded; never relabel unavailable attempts as failures."
+  ],
+  "resources": {
+    "seconds": 1.9883791550528258,
+    "maxrss_kib": 122476,
+    "gpus": 0,
+    "api_calls": 0
+  }
+}

@@ -1,6 +1,6 @@
 # Action reward models for OpenWebRL training
 
-[Additive relaxed, failure-only ARM: prepared method](#arm-additive-relaxed-failureonly-20260926) · [Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
+[Finalized reweighting design](#arm-outcome-aware-reweighting-20260926) · [Outcome-trained reward investigation](#arm-outcome-trained-reward-investigation-20260927) · [Task-pool expansion next steps](#arm-task-pool-next-investigation-20260927) · [Additive relaxed, failure-only ARM: prepared method](#arm-additive-relaxed-failureonly-20260926) · [Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
 <a id="arm-offline-forward-transfer-20260924"></a>
 ## Offline ARM refresh: outcome-only40 → outcome-only90 — September25, 2026
@@ -6013,8 +6013,8 @@ Raw pinned inputs and review artifacts remain under runtime
    valid all-failure groups and invalid episodes; retain per-task outcomes and
    ARM-label yield. A single failed attempt is not proof of task hardness.
 3. Add validated fresh tasks alongside the existing pool; compare outcome-only
-   and Additive continuations from the same starting checkpoint and compute
-   budget. Keep the already queued beta/q ablations on their unchanged pool.
+   and ARM experiments from the original SFT model at iteration0, with fresh
+   optimizer/cursor and matched compute (September27 clarification). Keep the already queued beta/q ablations on their unchanged pool.
    Measure mixed-group yield and admitted failure-label yield per browser-hour.
 
 No new GPU allocation, browser rollout, training-data switch or API judge call
@@ -6378,91 +6378,270 @@ is currently approved or queued. Any new40% combination starts at iteration0.
 
 
 <a id="arm-outcome-aware-reweighting-20260926"></a>
-## Turn-level outcome-aware reweighting — September26 discussion
+## Outcome-aware turn reweighting — finalized design, September27
 
-**Status:** CPU audit complete; proposal only, no new training launched. The
-[Gate B mixed-group audit](ARM_RESULTS.md#arm-gate-b-mixed-alignment-20260926)
-finds weak positive within-task outcome association rather than broad opposition.
-Removing mixed-group ARM feedback is not currently a well-supported improvement
-bet. The user suggested redistributing the outcome signal across turns instead.
+**Status:** method and first lambda fixed for discussion/implementation; CPU
+journal audit passed. No production hook, GPU validation, new allocation or actor
+training has been launched. The user requested the formula walkthrough and
+investigation of outcome-trained rewards and task-pool expansion.
 
-### Verified current objective
+### Exact objective and interpretation
 
-For valid trajectories, terminal R is0/1 and is copied to every executed turn.
-The native normalizer groups by task and trajectory, subtracts the mean over
-retained trajectories and divides by sample standard deviation plus1e-6. Each
-turn then receives the same trajectory-level outcome advantage A. The native
-normalizer also handles historical−1 error sentinels; audit them separately.
-B currently adds beta*u after normalization, where
-`u=m*(1[selected_index=executed_index]-1/5)` and beta0.5. The resulting scalar
-is broadcast over the executed response's reasoning and action tokens.
-
-Changing raw per-turn reward fields before normalization will not implement the
-intended weighting: this normalizer takes the first reward of each trajectory
-and broadcasts its normalized value to all turns. Apply the new operation
-**after trajectory outcome normalization and before PPO**, preserving raw outcome
-metrics. Treat the label-derived weights as fixed during actor backpropagation.
-
-### Candidate: redistribute emphasis while preserving mean outcome advantage
-
-For each trajectory i with T trainable turns, define:
+In a valid binary-outcome query group, native OpenWebRL computes one advantage
+per trajectory, using the sample standard deviation across trajectories:
 
 ```text
-u[i,t] = usable_label[i,t] * (1[selected_index == executed_index] - 1/5)
-v[i,t] = exp(lambda * sign(A[i]) * u[i,t])
-w[i,t] = v[i,t] / mean_over_turns(v[i,:])
-A_new[i,t] = A[i] * w[i,t]
+A[i] = (R[i] - mean_group(R)) / (sample_std_group(R) + 1e-6)
+u[i,t] = usable_label[i,t] * (1[selected_response == executed_response] - 1/5)
+
+Gate B mixed-group baseline: A_B[i,t] = A[i] + 0.5*u[i,t]
+Proposed reweighting:
+    v[i,t] = exp(0.5 * sign(A[i]) * u[i,t])
+    w[i,t] = v[i,t] / mean_trainable_turns(v[i,:])
+    A_RW[i,t] = A[i] * w[i,t]
 ```
 
-- In a positive-advantage trajectory, preferred turns get stronger positive
-  reinforcement and disfavored turns get less.
-- In a negative-advantage trajectory, preferred turns get a smaller penalty
-  and disfavored turns get a larger penalty. An outcome-independent increasing
-  weight would do the opposite for preferred actions in failed trajectories.
-- Weights are positive, so this preserves every turn's advantage sign and each
-  trajectory's mean advantage. With no labels, all weights are1. An individual
-  unlabeled turn can change weight through its trajectory's mean normalization.
-- With lambda0.5 and two labeled turns (u=+0.8 and−0.2), A=+1 gives advantages
-  +1.245/+0.755; A=−1 gives−0.755/−1.245. These are illustrative normalized
-  advantages, not raw terminal rewards.
-- A=0 remains0. Therefore retain B's separate extra all-failure auxiliary PPO
-  term unchanged if the aim is a single mixed-group objective ablation.
-  Multiplicative weighting alone cannot train a zero-variance all-failure group.
+The five candidates are the executed response plus four fresh responses from
+exactly the same state. Keep full reasoning+action inputs to the frozen selector,
+all five valid candidates, at least two distinct canonical actions, and **B's
+response-index credit**. An alternative with the same action but different
+reasoning does not count as selection of the executed response. The unit signal
+is +0.8 when the executed response wins, -0.2 when another wins, and 0 without
+a usable label. A forced-choice loss is relative preference, not proof the
+executed action is wrong. Turn selection remains the existing deterministic
+seeded 20% sampling rule; no inverse-probability multiplier is introduced.
 
-This changes where outcome reinforcement is applied while preserving mean
-scalar advantage. It does **not** establish return-equivalent reward shaping,
-unbiased policy gradients, or unchanged gradient norm: weights depend on sampled
-actions and outcomes, token gradients differ, and PPO clipping/trimming matters.
-ARM still supplies relative forced-choice preferences, not verified causal
-contributions to success. Within-trajectory comparison of these labels is itself
-an assumption to test.
+For positive A, preferred turns receive more positive reinforcement. For negative
+A, they receive a smaller penalty. The sign factor is essential: using exp(lambda*u)
+for both outcomes would penalize preferred failed-trajectory turns more strongly.
+Weights are fixed during actor backpropagation and broadcast over the executed
+response's **reasoning and action tokens**, preserving B's response-token mean.
+The PPO clipping rule, old-policy log probabilities and optimizer are unchanged.
 
-### Comparison and other directions
+Within each eligible trajectory, weights average1 and mean A_RW equals A. No
+advantage sign changes. With A=0, every new advantage is zero. With no labels,
+one trainable turn, or identical u on every turn, the weights are all1. Unlabeled
+turns can change weight through the denominator. Therefore this is a test of
+within-trajectory credit allocation; it does not create positive reinforcement
+for a good action inside an otherwise negative-advantage trajectory.
 
-A clean first comparison is unchanged B versus B with only its mixed-group
-`A+0.5*u` replaced by the weighting above. Keep the extra failure pool, min2 gate,
-response-index credit, q20%, frozen ARM, data, optimizer and topology fixed; start
-a new actor at iteration0. The saved-batch audit gives7.99% perturbation RMS at
-lambda0.5 versus9.46% for current B. Before any allocation, predeclare the desired
-scale and fix lambda from training-only calibration; do not tune it on OM2W.
-Track actual label coverage, weight distributions, effective sample size,
-per-outcome advantage RMS, PPO clipping, KL/entropy, training/evaluation outcomes
-and throughput. This is a plausible alternative, not a demonstrated improvement.
+For small lambda, `A_RW ≈ A + lambda*abs(A)*(u - mean_turns(u))`: the ARM component
+is centered within a trajectory and scales with its outcome-advantage magnitude.
+This differs from simply increasing/decreasing beta. Mean scalar conservation
+is not a guarantee of unchanged gradient norm, unbiased policy gradients, or
+return-equivalent shaping. Native epoch trimming can also change which turns
+actually enter the optimizer; log both pre-trimming and consumed statistics.
 
-A simpler related control is `A+beta*(u-mean_trajectory(u))`: it removes only the
-trajectory-mean ARM component, without making reward magnitude proportional to
-|A|. Our audit places12.83% of B's bonus squared magnitude in that mean component,
-so centering alone may be a modest intervention. Keep it separate rather than
-combining credit, sampling and normalization changes at once.
+### Why fix lambda at0.5?
 
-A higher-cost direction is learning **progress toward terminal success** from
-state transitions or outcome-conditioned return decomposition, instead of
-reweighting current forced-choice labels. [Rewarding Progress](https://arxiv.org/abs/2410.08146)
-uses progress in future success likelihood for process advantages;
-[RUDDER](https://arxiv.org/abs/1806.07857) develops return-equivalent redistribution
-through return decomposition. They motivate the direction but do not confer
-those guarantees on the weighting heuristic above. The running refreshed-ARM
-browser comparison remains the nearer-term test of better reward quality.
+Lambda is a dimensionless log-weight sensitivity, **not** the ARM bonus beta,
+a 50% sampling probability, or GAE lambda. Because the preferred/rejected u gap
+is1, their weight ratio in a positive-advantage trajectory is `exp(lambda)`.
+At0.5 it is1.649; for negative advantage the preferred/rejected penalty ratio is
+0.607. At1.0 these become2.718 and0.368. All individual weights are bounded by
+`exp(-lambda)` and `exp(lambda)` for this unit signal; no additional clipping or
+weight scheduler is part of the first experiment.
+
+Example: ten trainable turns, one preferred, one rejected and eight unlabeled.
+The numbers below are advantages, using illustrative native A=+1 or -1:
+
+| Native A | Preferred turn | Rejected turn | Each unlabeled turn | Mean over10 turns |
+| --- | ---: | ---: | ---: | ---: |
+| +1 | +1.435 | +0.870 | +0.962 | +1.000 |
+| -1 | -0.686 | -1.131 | -1.023 | -1.000 |
+
+The earlier all-row audit measured perturbation RMS3.96%/7.99%/16.60% at
+lambda0.25/0.5/1.0, versus9.46% for B. The finalized error handling below makes
+lambda0.5 **8.04% across all rows**, or8.01% in binary-only groups. It is a modest,
+bounded intervention comparable in scale but **not exactly matched** to B.
+Fix0.5 now; no online rescaling or OM2W-driven lambda search. If it helps, a
+later strength-matched control can distinguish objective from magnitude effects.
+
+### Fixed experimental recipe
+
+| Component | First experiment |
+| --- | --- |
+| Name / parent | `ARM-B-outcome-reweight-lambda0.5`; unchanged Gate B scientific recipe except mixed-group advantage construction |
+| Initialization | Original `OpenWebRL-4B-SFT`, iteration0, fresh optimizer/scheduler and initial data cursor; seed42 |
+| Mixed groups |48 per collection,5 trajectories per query, native dynamic filtering |
+| Extra all-failure groups |Up to8; retain B's existing admission, min2 labels, auxiliary PPO term, failure beta0.5, q20%, and N_f/48 coefficient |
+| Mixed ARM settings |Frozen released SelectionARM, K5, q20%, min2 gate, response-index credit |
+| Optimization |LR1e-6 constant, global batch256 turns, microbatch1,2 PPO epochs; native clipping0.2/0.28, Adam betas0.9/0.98, weight decay0.1, zero KL/entropy |
+| Rollouts |Temperature0.8, horizon15, response1024, context32768; same2,102-task pool and GPT-4.1/action_history judge |
+| GPU topology |Use validated TP2/DP4/microbatch1 for an approved8-GPU allocation; final startup/restore/long-context check required |
+| Research endpoint |Iteration60; full300 OM2W every10 iterations, local browser, GPT-4.1/action_history, temperature0 |
+| Primary comparison |Predeclared mean overall success across iterations40/50/60 against B at those iterations; show each point, valid-only denominators and compute too |
+
+All-failure auxiliary loss must stay: multiplication cannot replace learning on
+zero-variance groups. Lambda0 therefore means outcome-only **mixed** updates plus
+the unchanged failure auxiliary; it is not a fully outcome-only baseline.
+
+Historical B contains rare native -1 error sentinels. To avoid changing error
+semantics in this ablation, **an entire query group containing any such sentinel
+keeps B's current advantage construction**. Never recast errors as valid failures.
+Log this fallback explicitly and exclude these groups from binary-outcome
+interpretations. The audited panel has58/3,312 such groups and2,457/124,496 turns.
+
+Implementation goes **after native trajectory outcome normalization**, replacing
+mixed-group apply_bonus, before DP distribution and PPO. The native normalizer
+otherwise takes the first trajectory reward and broadcasts it, so changing raw
+turn rewards alone would not implement this method. Normalize over all accepted
+trainable turns keyed by policy/group/trajectory; carry immutable scalar weights
+through shuffle, DP and two epochs. Preserve raw outcome telemetry and the
+separate auxiliary manifest. Do not compute a local denominator per microbatch.
+
+Before GPU training, test lambda0/no-label/single-turn behavior, signs/means,
+invalid-group fallback, trajectory isolation, masked turns, DP alignment and
+unchanged auxiliary scales. In an approved allocation, verify full-batch/32K
+memory, one update and save/reload. Monitor label coverage, weight quantiles,
+trajectory weight concentration, per-outcome advantage RMS, clipping/KL/entropy,
+invalid rates, auxiliary yield, optimizer time and GPU utilization. Stop on
+nonfinite values or transport/invariant failures. A noisy single OM2W point
+alone is not a performance stopping rule. Historical comparisons remain
+exploratory: matched contemporaneous controls and independent seeds are needed
+before making a publishable method-gain claim.
+
+### September27 bounded CPU verification
+
+The new audit reuses hash-checked B1–69 journals:3,312 groups,124,496 turns.
+Among15,455 trajectories in binary-only groups,11,144 (72.11%) have varying u
+and therefore potentially nontrivial weights. Actual weights range0.653–1.500;
+p05/p95 are0.915/1.090. Mean within-trajectory normalized weight ESS is99.41%
+(min94.05%); this describes concentration, not independent observations.
+Maximum trajectory mean-advantage error is2.22e-16. The6.5-second audit used
+about22MiB RAM, no tensors, GPUs, browser calls or APIs. Four existing algebra/
+normalization checks pass. This does not validate the unimplemented GPU hook.
+
+[Aggregate audit](arm_results/rl_integration/reweighting-design-audit.json).
+Local reproducibility: `python3 scripts/audit_arm_reweighting_design.py`.
+
+<a id="arm-outcome-trained-reward-investigation-20260927"></a>
+## Next direction2: outcome-trained evolving reward — September27 investigation
+
+**Recommendation:** first test an offline outcome-supervised reward model on
+saved trajectories; do not scale the previous teacher-choice refresh unchanged.
+That refresh improved offline agreement1.89pp but full300 browser success moved
+42.00%→41.33%. It has not been used in RL.
+
+[PRIME](https://arxiv.org/html/2502.01456v2#S3) trains a causal reward LM from
+trajectory outcome labels using log-likelihood ratios to a frozen reference.
+Its response-token rewards sum to a trajectory score trained with binary cross
+entropy. This is a different objective and input from SelectionARM's SFT on a
+chosen candidate index. PRIME initializes reward/reference from the starting
+actor; its evidence is in math/code, not multimodal browser environments.
+
+A proposed browser adaptation, which needs its own validation, is:
+
+```text
+r_phi(turn) = eta * sum_executed_assistant_tokens(log p_phi - log p_ref)
+z_phi(trajectory) = sum_turns(r_phi(turn))
+L_reward = BCEWithLogits(z_phi(trajectory), terminal_success)
+```
+
+Condition each turn on its exact archived actor prompt, history and screenshots;
+score executed assistant tokens only, excluding prompts, screenshots, tool output
+and padding. Regenerate reference log probabilities under the intended model and
+mask; sampler-temperature old-policy logps are not automatically interchangeable.
+No labels mark every successful-trajectory action correct, although trajectory
+supervision alone still does not identify causal per-turn contributions. Variable
+response/trajectory length can create shortcuts. Check against length-only and
+prompt-only controls and report within-task ranking, calibration and length
+strata. Eta is a separate new coefficient; do not copy either lambda0.5 or
+ARM beta0.5. Its calibration and any intercept/normalization need a declared
+training-only protocol before fitting.
+
+The existing Piotr repo can host a separate trainer/data adapter, but its unchanged
+LLaMA-Factory selection-completion SFT cannot implement this aggregate outcome
+loss. Start a new reward/reference pair from the agreed actor SFT model for a
+PRIME-style test; reusing SelectionARM weights in that role is an extra ablation,
+not an equivalent refresh. No need to switch the OpenWebRL actor backend for an
+offline probe. GPU cost depends on retained token/image volume and reference
+scoring; it is not yet budgeted or authorized.
+
+**Data checked today:** use the baseline31–40 archives already indexed for the
+ARM refresh. The earlier full scan found5,239 trajectories with at least one
+usable state; that is not a count of fully labeled, complete trajectories.
+A fresh bounded probe of50 groups/250 trajectories found146 valid successes,
+81 valid failures and23 null/invalid outcomes. Prompts/responses and token/mask
+fields exist on1,345/1,347 turns;248 trajectories have existing archived images.
+Null outcomes are excluded, never assigned0. This approximately2-second probe
+loaded JSON only and does not certify all image hashes, masks or judge provenance.
+[Availability probe](arm_results/rl_integration/outcome-reward-data-probe.json).
+
+Concrete preparation sequence:
+
+1. Build a complete trajectory manifest with outcome/validity, exact actor/policy
+   version, task alias, images, masks and original judge provenance. Exclude
+   OM2W/evaluation overlaps and invalid attempts. Freeze a task-disjoint early
+   train/dev split and later-actor **training-task** test splits; check counts
+   before choosing a token budget. Reuse prior data, not stale teacher labels.
+2. Fit one small offline reward model. Measure held-out within-task successful-
+   versus-failed ranking, Brier/log loss and generalization to later actors,
+   against length/prompt controls. Do not treat good trajectory discrimination
+   as proof of correct local action ranking.
+3. Only if those checks pass, run a small execution-based action test on
+   reproducible training states. Follow alternative actions with a fixed actor
+   and judge terminal outcomes; retain invalid branches separately. Different
+   rollouts of one task are not alternatives at an identical intermediate state.
+4. A successful reward pilot can motivate a new actor RL experiment from0.
+   Begin with a frozen offline-trained reward to isolate its effect; schedule
+   evolving/online updates only as a subsequent separate experiment.
+
+[Rewarding Progress](https://arxiv.org/abs/2410.08146) offers a different route:
+learn changes in future success probability under a continuation policy. It
+requires explicit continuation outcomes and more browser compute. Do not call
+PRIME's implicit rewards calibrated action values, or give the reweighting
+heuristic either method's guarantees.
+
+<a id="arm-task-pool-next-investigation-20260927"></a>
+## Next direction3: verified task-pool expansion — September27 investigation
+
+**Current state:** active pool2,102;511 extra hard-labeled candidates on13 existing
+hosts after exact/lexical filtering;75 host-capped review tasks (50 hard/25 medium).
+Only the paired10-task Jev/GPT-4.1 quality pilot has run. Agreement was64/70 overall
+and48/50 on instruction-quality judgments; agreement is not accuracy. Semantic
+deduplication, browser availability and actor difficulty remain unvalidated.
+The active pool is unchanged. See the [earlier inventory and filter provenance](#arm-task-pool-expansion-20260922)
+and [quality pilot](#arm-task-quality-jev-20260922).
+
+The mechanism is worth testing: Additive's admitted failure groups drop8→1.9 and
+usable failure labels27→9 from early to late training. This is evidence that
+supervision supply shrinks, **not proof the pool is exhausted**: invalidity,
+candidate gates and actor improvement can all contribute. Evaluate extra tasks
+by usable learning signal per browser-hour, not metadata difficulty alone.
+
+1. Fix the two ambiguous quality prompts before extending the75-task review:
+   recognize finite open-ended answers, and distinguish repeated output slots
+   from genuinely redundant requirements. Keep rubric redundancy advisory.
+   Use Jev for triage, review/GPT-4.1 for disagreements or uncertainty; confidence
+   0.8 remains an uncalibrated routing heuristic, not automatic acceptance.
+2. Apply semantic duplicate/benchmark-overlap screening against the full released
+   OpenWebRL pool, candidate set and held-out benchmarks. Existing token-Jaccard
+   filtering is insufficient. Preserve rejection reasons and manually review
+   borderline matches; task-ID differences do not establish novelty.
+3. Browser-screen the surviving75-or-fewer review tasks with a fixed actor and
+   five15-turn attempts each: at most375 trajectories before retry budgeting.
+   Measure valid/mixed/all-failure/all-success outcomes separately, ARM usable
+   labels, parse/availability failures and cost per usable group. Five failures
+   alone do not prove impossibility; reserve a bounded stronger-policy rescue
+   check before treating such tasks as learnable hard data. A later actor can
+   screen hardness but does not change the fresh training initialization.
+4. Freeze an expanded pool before training. Cap site concentration; start with a
+   proposed ceiling of20% new-task query proposals, then report actual accepted
+   and auxiliary shares after native dynamic filtering. The exact pool and mix
+   remain contingent on yield, not approved training settings.
+5. The clean design crosses original/expanded data with outcome-only/unchanged B:
+   four cells, each from original SFT iteration0 with fresh optimizer/cursor,
+   matched compute and seeds. Historical original-pool runs can guide a first
+   exploratory comparison; they do not replace contemporaneous controls for
+   a causal interaction claim. Keep reweighting separate in the first data test.
+
+[WebRL](https://arxiv.org/abs/2411.02337) provides precedent for failure-driven
+web-task curricula, but its benchmark and recipe differ. This proposal first
+adds validated existing WebGym tasks rather than generating new instructions.
+No additional API calls, embedding model, browser screening, dataset switch or
+GPU job was launched in this investigation. Those stages need a concrete resource
+request once the manifest and retained task count are known.
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26
