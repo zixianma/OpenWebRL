@@ -30,7 +30,7 @@ Live operations: [job status, completions and failures](arm_results/rl_integrati
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 Latest checked status: [B331778 failed during78; durable77, evaluations80/90 blocked;
 C completed training/evaluations through60; sampling40% stopped at27;
-beta follow-on332004 remains administrator-held with a failed dependency](RL_RUNTIME.md#arm-progress-20260927).
+beta332004 canceled; replacement prepared pending scheduler clarification](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
