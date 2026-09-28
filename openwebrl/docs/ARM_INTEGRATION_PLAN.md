@@ -6,8 +6,15 @@ bonus + relaxed gate B** and **outcome reweighting + relaxed gate B**
 (current attempts334493/334494; earlier attempts stopped before training).
 Both start at iteration0 with only ordinary mixed-outcome groups. Prioritize their
 startup validation, failure repair, training progress and matched full300
-evaluation at iteration10 within the approved **8 H200 ×8h each**. Beta and
-other research directions are secondary. Existing job monitoring continues;
+evaluation at iteration10 within the approved **8 H200 ×8h each**. The user
+subsequently added **historical Gate B through90, with full300 evaluations
+at80 and90**, as another priority for this week. Continue its existing
+77/988-update checkpoint and optimizer/scheduler/cursor; preserve its auxiliary
+failure groups, which distinguish it from the new mixed-only pair. The prepared
+request is **one8 H200 ×16h allocation including both evaluations**; exact
+resource approval is pending, with only3,767 seconds left in B's old budget.
+[Gate B recovery and launch plan](RL_RUNTIME.md#arm-b90-priority-20260927).
+Beta and other research directions are secondary. Existing job monitoring continues;
 this changes research priority, without changing scheduler QoS or compute budgets.
 [Exact paired methods and launch records](#arm-outcome-aware-reweighting-20260926).
 

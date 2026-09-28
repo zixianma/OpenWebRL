@@ -5,6 +5,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ## Contents
 
 - [Current ARM progress and beta memory recovery](#arm-progress-20260927)
+- [Priority Gate B77 through90 and full300 evaluations80/90](#arm-b90-priority-20260927)
 - [Gate B browser-slot recovery](#arm-browser-slot-recovery-20260927)
 - [Remaining ARM evaluation queue and original-bonus backfills](#arm-evaluation-backfill-20260927)
 - [ARM continuation submissions and B69 recovery](#arm-progress-20260926)
@@ -30,7 +31,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 | Track | Durable state at check | Job and status | Next evaluations |
 | --- | --- | --- | --- |
-| Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
+| Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 failed; now a weekly priority, continuation prepared pending exact allocation approval | B70 full300 complete; controller prepared for80/90; no new job submitted |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
 | Failure β1 | Iteration21 /312 durable Adam updates; full TP4 replay and checkpoint validation passed |333431 stopped after1h58m37s during collection22:44/100 mature browser startups lacked readiness | No checkpoint30 or new evaluation; browser diagnosis required before another recovery |
@@ -251,6 +252,55 @@ observer reports failures and releases eligible user holds; it does not repair
 arbitrary training bugs. Recovery receipts and logs:
 `logs/arm-beta-memory-20260927/`; the332004 dispatch is recorded under
 `logs/arm-ablation-to60-20260926/dispatch/332004.json`.
+
+<a id="arm-b90-priority-20260927"></a>
+## Priority Gate B77 →80/eval →90/eval — September27, 2026
+
+The user requested continued historical Gate B training and full300 evaluations
+at80/90, adding this lineage to this week's priorities alongside the two fresh
+mixed-only relaxed-B experiments. Latest durable state is77/988 Adam updates;
+there is no active Gate B allocation. **Prepared, not submitted:** one8 H200 ×16h
+allocation,64 CPUs/960GiB,128 GPU-hours including both evaluations. Exact
+resource approval is pending. The original24h budget consumed82,633 seconds
+across all attempts and has at most3,767 seconds remaining; that remainder is
+not silently added to the new request.
+
+The existing recipe remains unchanged: relaxed min2 gate, response-index
+credit, β0.5/q20%,48 mixed groups plus up to8 auxiliary failure groups with
+coefficient1/6; TP2/DP4,microbatch1,global256,PPO2,LR1e−6. Resume the existing
+optimizer, scheduler, task cursor and W&B run `arm-gate-b-309053`. Preserve all
+old partial collections, saved rollouts and verdicts.
+
+Controller `scripts/resume_arm_gate_b90.py` and batch template
+`scripts/resume_arm_gate_b90_8gpu.sbatch` own the sequence:
+native restore77 → train80 → full300 evaluation80 → native restore80 → train90
+→ full300 evaluation90. Each evaluation uses local browsers,GPT-4.1/action_history,
+temperature0 and checks all300 saved task rollouts and judge verdicts before
+completion; report overall and valid-only rates. Reserve two evaluation hours
+before80 and one before90. No new allocation is requested automatically.
+
+The corrected cancellation-safe browser cleanup is preserved. The first resumed
+collection is a guarded live validation: sustained missing server readiness
+stops collection, and per-server logs are saved durably for diagnosis. This is
+not proof that the underlying startup slowdown is fixed. Native argument
+parsing and nine CPU browser cleanup/guard tests pass; checkpoint77 identities,
+Adam/scheduler counters and16 shard sizes are verified. GPFS quota inspection
+showed roughly74.6TiB below the soft limit, exceeding the2TiB launch gate.
+Native GPU restoration and a healthy complete collection remain launch checks.
+
+Before the severe slowdown, recent B cycles took about40–76 minutes, with
+slower95- and337-minute cycles already recorded. Thirteen more healthy cycles
+plus two full300 evaluations motivate a16h cap;90 is not guaranteed if browser
+problems recur. Stop degraded work for diagnosis rather than consume the whole
+cap. Operational admission estimates are conservatively150 seconds per Adam
+update and60 minutes per new cycle; the training objective is unchanged.
+
+Preparation and exact plans:
+`arm-turn-bonus-preparation/gate-b90-20260927/` under the runtime root.
+The active supervisor records Gate B as priority1 pending the exact allocation
+approval. On submission, register the new job, preserve cumulative accounting,
+and follow the controller's active training directory across80/90. Routine
+reports remain hourly, with earlier failure/stall/completion alerts.
 
 <a id="arm-browser-slot-recovery-20260927"></a>
 ## Gate B browser-slot recovery — September27
