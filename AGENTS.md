@@ -1,3 +1,16 @@
+# Priority rule: active supervision and recovery
+
+Requested 2026-09-27 for all projects; also recorded in the global Codex `AGENTS.md`.
+Treat monitoring and recovery of authorized jobs as a top operational priority.
+Keep an active agent or verify a continuation mechanism that brings one back for
+diagnosis and repair; a read-only recorder alone does not satisfy this request.
+Check about every15 minutes, more closely around startup, failure and handoffs.
+Fix and verify observed failures promptly, then relaunch within the remaining
+approved resources and total budget. Preserve state and artifacts, account for
+every attempt's consumed time, and point the supervisor at each replacement ID.
+Do not wait for a user status request to discover stopped jobs. Verify outputs
+before marking completion and report any actual limitation on supervision.
+
 # Repository preferences
 
 - Current ARM priority, requested on 2026-09-27: prioritize the two fresh mixed-only relaxed-gate B experiments, original bonus (current attempt333747) and outcome reweighting (current attempt333748), this week. Give their startup validation, failure diagnosis, training progress and matched milestone evaluations precedence over further beta/legacy experiments. Preserve the approved 8 H200 × 8 hours per run and iteration0 initialization. This research priority does not itself cancel active jobs, change Slurm QoS, or extend compute budgets. See `openwebrl/docs/ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927`.
