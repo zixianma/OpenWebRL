@@ -142,7 +142,8 @@ threshold from24 to48GiB. The setting is
 `slime/utils/memory_utils.py::release_unused_cuda_cache_under_pressure` reads
 it at each training microbatch. This is a cache-release threshold, not a hard
 GPU-memory cap: release also requires at least8GiB of unused reserved memory.
-The launcher now specifies48GiB; Gate B already uses48GiB.
+The mixed launcher now specifies48GiB. Gate B used48GiB at that time;
+its subsequent iteration83 OOM and separate recovery are recorded below.
 
 For the live mixed jobs334493/334494, `scripts/set_arm_cuda_cache_limit.py`
 queues the environment change as a serialized Ray actor method after the
@@ -173,7 +174,8 @@ from almost every microbatch to roughly33–42%. Full iterations now take
 other data/context differences. This before/after comparison uses different
 collected batches and cannot isolate a causal speedup. No matched replay has
 been run. Peak HBM has not been continuously sampled; native training and live
-memory snapshots show no OOM so far.
+memory snapshots show no OOM in these mixed runs so far. This does not establish
+safety for every future batch; historical Gate B later failed at48GiB.
 
 Admission estimates were revised to120 seconds/update plus the existing
 600-second margin, and a50-minute minimum remaining cycle window. Only these
@@ -366,6 +368,32 @@ Native GPU restoration passed, followed by three completed collections and
 verified checkpoints78–80. The saved iteration80 evaluation restore receipt
 confirms loading zero-based79; the controller awaits evaluation artifacts
 before restoring80 for continuation90.
+
+**September28,01:26PDT recovery:** B reached durable iteration82/1046 Adam
+updates, then failed after one unsaved Adam update in iteration83. The native
+training actor reported `torch_memory_saver` / `cu_mem_create` CUDA OOM. This
+allocator bypasses PyTorch's normal OOM/cache-release retry; the48GiB guard was
+active but did not prevent this allocation failure. The exact peak/allocation
+size was not captured, so cache pressure remains a diagnosis to validate with
+the saved batch, not a proven sole cause.
+
+Job334894 was requeued as attempt1 with **11h55m**, after charging all14,664
+seconds from attempt0 against the original57,600-second approval (36 seconds
+remain unallocated). Resume checkpoint82 with optimizer/scheduler/cursor and
+W&B identity intact; replay the saved iteration83 batch, labels, auxiliary
+payload and consumed task cursor. Discard the one unsaved update and recompute
+the whole iteration. Only B's cache-release threshold changes48→24GiB;
+TP2/DP4, batch sizes, context, rewards and loss remain unchanged. The mixed pair
+stays at48GiB. CPU/native-argument, checkpoint-shard and replay archive/identity
+checks passed; GPU restore and full-batch replay are pending in the recovery.
+The controller skips the already verified evaluation80 and owns evaluation90.
+
+Recovery receipts are under
+`arm-turn-bonus-preparation/gate-b90-20260927/334894-recovery*.json`; training
+artifacts use `evaluations/arm-failure-additive-334894-b90-r1-iter90` and the
+controller uses `evaluations/arm-gate-b90-controller-334894-r1`. The active
+supervisor registry follows these paths. No budget extension or new scientific
+experiment was introduced.
 
 Before the severe slowdown, recent B cycles took about40–76 minutes, with
 slower95- and337-minute cycles already recorded. Thirteen more healthy cycles

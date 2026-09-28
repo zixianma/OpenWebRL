@@ -27,6 +27,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
+[Gate B82 saved; iteration83 CUDA OOM recovery requeued within11h55m of remaining approval](RL_RUNTIME.md#arm-b90-priority-20260927).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
