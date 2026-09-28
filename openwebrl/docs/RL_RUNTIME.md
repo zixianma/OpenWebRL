@@ -41,7 +41,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 microbatch1 and64 browsers, and exclude extra all-failure groups. Full300 at10
 is owned by each controller within its allocation. Both are running:334493 on
 g004 and334494 on g007. Actor/ARM serving, collection and calibration passed;
-both entered first-iteration PPO. No durable checkpoint yet at this check. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
+both completed the first finite optimizer update. No durable checkpoint yet at this check. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 
 **September27 priority update:** the user made these two new runs this week's
 primary experiments. Prioritize startup validation, repairs and matched
@@ -72,7 +72,7 @@ observers follow both replacements. Receipts: preparation root
 <a id="arm-mixed-first-batch-20260927"></a>
 **First-batch validation, September27 evening:** both fresh-SFT runs collected
 48 ordinary mixed groups and passed the unchanged calibration guard. These are
-pre-update diagnostics, not evaluation results or evidence of a training gain.
+calibration and first-update diagnostics, not evaluation results or evidence of a training gain.
 
 | First-iteration diagnostic | Relaxed-B bonus334493 | Relaxed-B reweight334494 |
 | --- | ---: | ---: |
@@ -84,13 +84,22 @@ pre-update diagnostics, not evaluation results or evidence of a training gain.
 | Reweight multiplier range |1.00–1.00 |0.656–1.480 |
 | Maximum trajectory-mean advantage error |Not constrained by additive bonus |2.22e-16 |
 | Native-error groups using control behavior |2/48 |0/48 |
+| First optimizer-step loss |0.119257 |0.0534823 |
+| First optimizer-step gradient norm |1.53169 |1.82182 |
+| First optimizer-step PPO KL |0.00165562 |0.00153576 |
+| First optimizer-step clip fraction |0.8117% |0.7768% |
+| Planned optimizer updates in iteration1 |16 |14 |
 
 Both retain q=0.2, beta=0.5, lambda=0.5 and no extra all-failure groups.
 The reweight transform preserves each trajectory's mean advantage to floating
 point precision. Both W&B runs publish collection/calibration metrics. The
 latest100 mature browser startups all reached readiness in each run; individual
 website/navigation and action-format failures still occur and retain native
-handling. No optimizer update or checkpoint was yet verified at this snapshot.
+handling. Both subsequently completed native optimizer step0 with finite metrics,
+verified in local progress logs and W&B. These losses use different sampled
+batches and are not a performance comparison. The first durable checkpoint is
+still pending completion of both PPO epochs; iteration1 has16 updates for bonus
+and14 for reweighting after native256-turn batch trimming.
 
 A live stack sample located the initial GPU-idle period in the recursive CPU
 NaN/Inf scan over rollout tensors. A later sample reached the model forward

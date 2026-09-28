@@ -41,7 +41,7 @@ beta333431 saved21/312 updates, then stopped on browser startup failures](RL_RUN
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated; replacements334493/334494 stay within the original budgets and both entered first-iteration PPO after successful collection/calibration. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927). Beta333431 completed its full TP4 replay and preserved checkpoint21.
+The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated; replacements334493/334494 stay within the original budgets and both completed their first finite optimizer update after successful collection/calibration. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927). Beta333431 completed its full TP4 replay and preserved checkpoint21.
 Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).
