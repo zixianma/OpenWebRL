@@ -21,14 +21,13 @@ for the work you are doing, then follow its contents to dated experiment records
 [Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
-[This week's priorities:334493/334494 mixed-only pair, plus334894 historical Gate B through90 with full300 evaluations80/90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+[This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Gate B82 saved; iteration83 CUDA OOM recovery requeued within11h55m of remaining approval](RL_RUNTIME.md#arm-b90-priority-20260927).
-[Mixed pair checkpoint7 saved; reweight's saved iteration8 queued for bounded1h42m recovery](RL_RUNTIME.md#arm-iteration-throughput-20260927).
+[Current inventory: Gate B335681 restores82 on TP4/DP2 and tests saved83; bonus335682 queues saved9 replay; reweight9 saved, additional budget needed for10/eval](RL_RUNTIME.md#arm-progress-20260928).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
@@ -38,16 +37,14 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 [Active-agent supervision: hourly summaries, urgent failure review and bounded retries](RL_RUNTIME.md#arm-active-agent-supervision-20260927).
-Latest priority status: [B334894 completed evaluation80, restored
-80/1024 updates and started iteration81 toward90](RL_RUNTIME.md#arm-b90-priority-20260927).
-Both mixed-only runs saved iteration4 and activated48GiB on all ranks.
+[Persistent supervisor repaired: systemd user service with fresh heartbeat and current replacement IDs; hourly routine reports and urgent failure review](RL_RUNTIME.md#arm-progress-20260928).
 [Other lineages: C completed through60; sampling40% stopped at27;
 beta333431 stopped after21/312 updates](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 [Gate B80 full300:35.67% overall /47.35% valid-only; fixed10034.00% /47.89%](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated; replacements334493/334494 stay within the original budgets and both completed their first finite optimizer update after successful collection/calibration. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927). Beta333431 completed its full TP4 replay and preserved checkpoint21.
+The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927). Beta333431 completed its full TP4 replay and preserved checkpoint21.
 Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).

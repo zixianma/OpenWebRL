@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Current ARM inventory and bounded recoveries, September28](#arm-progress-20260928)
 - [Current ARM progress and beta memory recovery](#arm-progress-20260927)
 - [Measured iteration throughput and CUDA cache overhead](#arm-iteration-throughput-20260927)
 - [Priority Gate B77 through90 and full300 evaluations80/90](#arm-b90-priority-20260927)
@@ -26,6 +27,69 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="arm-progress-20260928"></a>
+## ARM inventory and recovery — September28, 2026,10:00PDT
+
+This status supersedes the dated snapshots below. Full300 rates are overall /
+valid-only under local browsers,GPT-4.1/action_history,temperature0. Latest
+checkpoints differ across rows; this inventory is not a matched-iteration comparison.
+
+| Track | Training progress | Current work | Latest full300 evaluation |
+| --- | --- | --- | --- |
+| Mixed-only relaxed-B bonus | Durable8 /120 Adam updates; complete saved batch9 |335682 pending resources; restore8 and replay9 within1h03m | Not yet at10 |
+| Mixed-only relaxed-B reweight | Durable9 /140 Adam updates | Partial budget stop; only1,235 seconds left, insufficient for10 plus evaluation | Not yet at10 |
+| Gate B | Durable82 /1,046 Adam updates |335681 running on g014; TP4/DP2 restore passed, saved83 replay entered training; target90/eval90 |80:35.67% /47.35% |
+| Gate C | Durable60 /782 Adam updates | Finished through60; no active continuation |60:32.67% /43.17% |
+| Original bonus | Completed85 /1,002 Adam updates; latest retained checkpoint80 | Stopped;85 was lost in the previously recorded pruning incident |80:33.33% /45.05% |
+| All-failure bonus | Durable100 /1,242 Adam updates | Finished through100 |100:35.67% /48.20% |
+| Additive bonus | Durable100 /1,262 Adam updates | Finished through100 |100:36.33% /50.23% |
+| Failure β1 | Durable21 /312 Adam updates |333431 failed during collection22; browser-startup repair remains secondary to the priority runs |20:33.00% /41.77% |
+| Failure sampling40% | Durable27 /392 Adam updates | Stopped at user request |20:27.67% /37.39% |
+
+No ARM evaluation worker is currently running. Gate B80 has all300 saved
+rollout/verdict pairs verified. Evaluation90 is owned by335681 and waits for
+its checkpoint. The fresh matched pair has no OM2W result yet; neither endpoint
+is marked complete. [All checkpoint scores](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
+
+**Gate B memory recovery:**334894's first attempt used14,664 seconds and failed
+at83 with `cu_mem_create` OOM; its24GiB-cache retry used another1,175 seconds
+and failed at the same iteration after two unsaved Adam updates. Reducing the
+cache threshold alone did not fix the failure. Replacement335681 gets41,760
+seconds (11h36m):15,839 consumed +41,760 scheduled =57,599, within the original
+57,600-second approval. The old job had aged out of Slurm's requeueable records.
+The new attempt changes TP2/DP4 to **TP4/DP2**, retains24GiB cache guard and
+microbatch1/global256/PPO2, and restores82 before replaying the exact saved83
+batch, ARM labels, auxiliary payload and task cursor. CPU argument and DP
+normalization/transport checks passed, as did native GPU model/optimizer
+restoration. **Full-batch memory validation remains pending.** W&B identity,
+Adam/scheduler, reward/loss and all scientific settings are preserved. Recovery
+receipts: runtime `arm-turn-bonus-preparation/gate-b90-20260927/335681-recovery*.json`.
+The exact saved batch contains1,570 ordinary turn examples, with maximum token
+length33,032 and two rows at least30,000 tokens; metadata was inspected inside
+the existing allocation without materializing image tensors. Thus the replay
+includes long-context examples, but restoration alone does not prove it fits.
+
+**Mixed pair recovery:** reweight's bounded continuation passed native GPU
+restoration, reproduced the saved iteration8 calibration/reweighting statistics,
+then saved8 and9. Total consumed time is27,565 /28,800 seconds. Bonus saved8 and
+the complete9 batch; its replacement335682 replays9, with24,990 seconds charged
+and3,780 scheduled (30 seconds remain unallocated). Both keep their original
+W&B identities, TP2/DP4,48GiB cache guard and scientific recipes. The reweight
+entry is marked `requires_user` for additional budget; neither run is marked
+`verified_complete`. Receipts: runtime
+`arm-turn-bonus-preparation/mixed-reweight-20260927/continuations/`.
+
+**Supervisor repair:** at09:51PDT the tool-owned supervisor process was absent
+and its heartbeat was approximately seven hours stale after a session
+interruption. That was a supervision gap. It now runs as the persistent systemd
+user service `openwebrl-arm-supervisor-20260928.service`, with restart-on-failure
+and user lingering enabled. Active service, fresh heartbeat and replacement IDs
+335681/335682 are verified; this survives logout/session interruption, not a host
+reboot. It polls every minute and queues agent review hourly or earlier for
+failure/stall/completion. Registry and findings record the real budget blocker
+for reweight and the still-unverified Gate B memory fix. No test notification
+or new compute approval was created.
 
 <a id="arm-progress-20260927"></a>
 ## ARM progress and beta memory recovery — September27, 2026
@@ -202,10 +266,13 @@ optimizer/scheduler and scientific settings are preserved. Recovery artifacts
 use `arm-mixed-reweight-334494-r1`; receipts are under
 `arm-turn-bonus-preparation/mixed-reweight-20260927/continuations/`.
 
-The unreachable evaluation reservation is now available for useful training:
-bonus334493's training deadline moves to its existing allocation end minus
-three minutes; the bounded reweight continuation reserves no upfront evaluation
-hour. Save/admission guards remain active. Evaluation10 runs only if its durable
+The bounded reweight continuation reserves no upfront evaluation hour.
+An attempted live extension of bonus334493's native training deadline did not
+update the outer controller/timeout deadline captured at launch. It was reverted
+before PPO9, preserving the complete saved9 batch. Replacement335682 uses a
+consistent launch-time deadline with no upfront evaluation reservation; changing
+only a live native configuration is insufficient. Save/admission guards remain
+active. Evaluation10 runs only if its durable
 checkpoint and enough allocation time are available; otherwise it remains
 pending. This does not extend either approval or mark the first milestone
 complete. At the observed speed, iteration10 plus evaluation remains unlikely
