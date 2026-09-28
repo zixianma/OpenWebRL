@@ -1,5 +1,39 @@
 # Action reward models for OpenWebRL training
 
+<a id="arm-mixed-pair-to60-20260928"></a>
+**Mixed-only pair to60 — requested September28:** continue both the
+**mixed-only bonus + relaxed B** and **mixed-only outcome reweighting + relaxed B**
+experiments to iteration60. This extends their requested endpoint, preserving
+their original iteration0 initialization and existing model, optimizer,
+scheduler, task cursor and W&B identities. Bonus currently has durable8 plus
+a complete saved9 batch; its already approved335682 replay remains queued.
+Reweight has durable9. Resolve bonus's latest verified checkpoint after335682
+finishes; never run two writers for the same lineage.
+
+Keep TP2/DP4,microbatch1,global256,PPO2,64 browsers and the48GiB cache guard.
+Scientific settings remain unchanged:48 ordinary mixed groups, no auxiliary
+all-failure groups, min2/response-index ARM credit,K5,q20%,bonus beta0.5 or
+sign-aware mean-one reweighting lambda0.5. Own and await full300 evaluations at
+10/20/30/40/50/60, with the existing local-browser,GPT-4.1/action_history,T0
+protocol and all rollout/verdict pairs saved. Embedded evaluations stay in the
+training W&B project. Evaluate matched iterations rather than comparing the
+different current checkpoint numbers.
+
+**Additional compute proposal, not yet approved:** for each variant,8 H200,
+64 CPUs/960GiB, capped at48 additional hours, split into two at-most24-hour
+normal-QoS allocations. This is384 GPU-hours per variant,768 total, including
+evaluations and all retries. Stop early when60 and its evaluations are verified.
+Measured recent iterations take approximately40–50 minutes;51–52 remaining
+iterations plus six evaluations and restoration suggest roughly40–48 more hours
+per variant, excluding queue time. The cap is not a completion guarantee.
+The previous8h approvals and335682's remaining time are separate and unchanged;
+this endpoint request does not itself approve the proposed additional budget.
+Verified resume identities, lineage and recipe, and the execution contract are
+recorded in runtime
+`arm-turn-bonus-preparation/mixed-reweight-20260927/to60/proposal.json`.
+The existing recovery controller currently targets10; its multi-milestone
+extension must be validated before a new GPU launch.
+
 <a id="arm-weekly-priority-20260927"></a>
 **This week's priority — September27:** the user prioritized **original
 bonus + relaxed gate B** and **outcome reweighting + relaxed gate B**
@@ -6504,7 +6538,7 @@ later strength-matched control can distinguish objective from magnitude effects.
 | Rollouts |Temperature0.8, horizon15, response1024, context32768; same2,102-task pool and GPT-4.1/action_history judge |
 | Launch topology |8 H200, TP2/DP4, microbatch1,64 browsers; existing validated layout, new hook still requires live full-batch/save validation |
 | Approved first allocation |Two separate8-GPU ×8h jobs,64 CPU/960GiB each;128 GPU-hours total; reserve1h per job for full300 at10 |
-| Endpoints |First allocation targets10; eventual research endpoint60 requires separately approved continuation budgets |
+| Endpoints |First allocation targets10; user requested both continuations to60 on September28; [exact additional budget proposal pending](#arm-mixed-pair-to60-20260928) |
 | Evaluation |Full300 every10 completed iterations, local browser, GPT-4.1/action_history, temperature0; save every task's rollout and verdict |
 | Primary comparison |Mean overall success across40/50/60 against the **new relaxed-bonus control** at the same iterations; show all points, valid-only denominators and compute |
 

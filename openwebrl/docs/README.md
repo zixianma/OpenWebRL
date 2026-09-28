@@ -22,6 +22,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
 [This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+[Mixed-only pair: continue both to60 with full300 every10; additional8 H200 ×48h per variant proposed, exact budget approval pending](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
