@@ -6500,10 +6500,10 @@ later strength-matched control can distinguish objective from magnitude effects.
 | Evaluation |Full300 every10 completed iterations, local browser, GPT-4.1/action_history, temperature0; save every task's rollout and verdict |
 | Primary comparison |Mean overall success across40/50/60 against the **new relaxed-bonus control** at the same iterations; show all points, valid-only denominators and compute |
 
-| Submitted job | Variant | Queue status at submission | Training W&B identity |
+| Submitted job | Variant | Current stage, September27 evening | Training W&B identity |
 | --- | --- | --- | --- |
-|334493 |Original bonus + relaxed B, mixed only |Actor startup on g004 |`arm-mixed-bonus-334493` |
-|334494 |Outcome reweighting + relaxed B, mixed only |Pending priority |`arm-mixed-reweight-334494` |
+|334493 |Original bonus + relaxed B, mixed only |First-iteration PPO on g004 |`arm-mixed-bonus-334493` |
+|334494 |Outcome reweighting + relaxed B, mixed only |First-iteration PPO on g007 |`arm-mixed-reweight-334494` |
 
 **Startup repair, September27:** initial333454/333455 stopped after57/58 seconds
 before actor startup or W&B initialization. Their scratch paths did not match
@@ -6522,6 +6522,10 @@ replacements334493/334494 request7h58m each; cumulative prior use is94/96 second
 keeping every attempt inside8h per variant. No optimizer update or checkpoint
 was produced by the failed attempts. The supervisor detected the failures and
 resumed the agent automatically; its registry and observers now follow the new IDs.
+
+Both first collections and calibration gates passed. The measured perturbation
+is9.44% of outcome RMS for bonus and7.65% for reweighting; no checkpoint or
+evaluation result is yet verified. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927).
 
 Both use project `openwebrl`, with distinct display names identifying **bonus**
 and **reweight**. The batch controller owns and awaits training and the

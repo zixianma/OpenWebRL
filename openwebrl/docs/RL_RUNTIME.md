@@ -39,15 +39,15 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 (outcome reweighting + relaxed B) were submitted after explicit approval of
 **8 H200 ×8h each**,128 GPU-hours total. Both begin at iteration0, use TP2/DP4,
 microbatch1 and64 browsers, and exclude extra all-failure groups. Full300 at10
-is owned by each controller within its allocation. At submission334493 awaits
-resources and334494 priority. At19:54PDT,334493 started actor initialization on g004. Source and28 CPU checks are verified; fresh GPU
-execution is not yet validated. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
+is owned by each controller within its allocation. Both are running:334493 on
+g004 and334494 on g007. Actor/ARM serving, collection and calibration passed;
+both entered first-iteration PPO. No durable checkpoint yet at this check. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 
 **September27 priority update:** the user made these two new runs this week's
 primary experiments. Prioritize startup validation, repairs and matched
 iteration10 evaluation; beta remains secondary, with checkpoint21 preserved
-for browser diagnosis. Both new-job observers are active while the jobs await resources
-and priority. [Recorded research priority](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+for browser diagnosis. Both observers and the active-agent supervisor follow
+the running replacement IDs. [Recorded research priority](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 
 **Priority-pair startup repair:**333454/333455 failed before training after57/58
 seconds because their generated scratch paths differed from the canonical path
@@ -68,6 +68,37 @@ prior use; original8h approvals remain intact. Scientific settings are unchanged
 The automatic follow-up caught the failures, and the supervisor registry and
 observers follow both replacements. Receipts: preparation root
 `bonus-ray-recovery-budget.json` and `reweight-ray-recovery-budget.json`.
+
+<a id="arm-mixed-first-batch-20260927"></a>
+**First-batch validation, September27 evening:** both fresh-SFT runs collected
+48 ordinary mixed groups and passed the unchanged calibration guard. These are
+pre-update diagnostics, not evaluation results or evidence of a training gain.
+
+| First-iteration diagnostic | Relaxed-B bonus334493 | Relaxed-B reweight334494 |
+| --- | ---: | ---: |
+| Collection time, minutes |19.9 |16.0 |
+| Retained turns before epoch trimming |2,148 |2,002 |
+| ARM-labeled retained turns |383 |374 |
+| Usable label coverage |17.83% |18.68% |
+| Applied perturbation / outcome RMS |9.44% |7.65% |
+| Reweight multiplier range |1.00–1.00 |0.656–1.480 |
+| Maximum trajectory-mean advantage error |Not constrained by additive bonus |2.22e-16 |
+| Native-error groups using control behavior |2/48 |0/48 |
+
+Both retain q=0.2, beta=0.5, lambda=0.5 and no extra all-failure groups.
+The reweight transform preserves each trajectory's mean advantage to floating
+point precision. Both W&B runs publish collection/calibration metrics. The
+latest100 mature browser startups all reached readiness in each run; individual
+website/navigation and action-format failures still occur and retain native
+handling. No optimizer update or checkpoint was yet verified at this snapshot.
+
+A live stack sample located the initial GPU-idle period in the recursive CPU
+NaN/Inf scan over rollout tensors. A later sample reached the model forward
+pass, confirming the scan advanced; it was not a stalled training process.
+The bonus recovery batch is66.6GB. Keep checking actual update timing before
+changing the validated TP2/DP4 layout or scientific settings. Sources: each
+run's `iterations/0000/{calibration,reweighting,collection_complete}.json`,
+`runtime/progress.log` and the supervisor's review records.
 
 <a id="arm-active-agent-supervision-20260927"></a>
 **Active-agent supervision, September27:** the user reiterated this as a top
