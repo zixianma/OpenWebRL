@@ -6520,7 +6520,10 @@ rollouts and judge verdicts. Approval/submission receipts and persistent observe
 are under runtime `arm-turn-bonus-preparation/mixed-reweight-20260927/`.
 Observers follow queue/startup/stage changes until terminal state and summarize
 at15-minute intervals. They record failures; controller health guards stop
-unhealthy workers. Arbitrary bug repair still requires an active agent.
+unhealthy workers. The [active-agent supervisor](RL_RUNTIME.md#arm-active-agent-supervision-20260927)
+now queues reviews in the owning Codex thread on changes or every15 minutes;
+the agent diagnoses and verifies repairs within the original remaining budget.
+Queue acceptance is tested; agent resumption confirmation is pending.
 
 The time cap does not guarantee iteration10 or60. The controller owns training
 and evaluation workers and preserves partial progress. Failure trajectories

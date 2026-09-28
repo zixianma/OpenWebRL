@@ -58,6 +58,26 @@ native argument checks and28 tests passed. Replacements333747/333748 each reques
 Their new observers follow the replacement IDs until terminal state. Receipts:
 `arm-turn-bonus-preparation/mixed-reweight-20260927/*-scratch-recovery-budget.json`.
 
+<a id="arm-active-agent-supervision-20260927"></a>
+**Active-agent supervision, September27:** the user reiterated this as a top
+priority for every project. The global Codex instructions and root `AGENTS.md`
+now require active diagnosis and recovery, beyond read-only recording.
+`scripts/arm_job_supervisor.py` polls the registered pair every60 seconds and
+queues a follow-up to the owning Codex thread on state/checkpoint changes or
+every15 minutes. Its local `codex queue` delivery test was accepted; confirmation
+that the queued prompt resumes the agent is the next verification step.
+The supervisor itself does not submit, cancel or modify GPU jobs. The resumed
+agent inspects failures, verifies fixes, preserves state and relaunches only
+within the recorded remaining approvals. Pending notifications are deduplicated
+until the agent acknowledges them. Registry, heartbeat, dispatch receipts and
+review acknowledgments are under runtime
+`arm-turn-bonus-preparation/mixed-reweight-20260927/supervisor/`.
+On a replacement, update both this registry and the per-job observer; after
+verified results or a real budget/approval blocker, close the corresponding
+registry entry. The process needs the login host and local Codex server to stay
+available; dispatch errors are recorded explicitly rather than reported as
+successful supervision.
+
 **Beta timing correction:** the first six replay updates took226–290 seconds
 each. The live budget guard now reserves360 seconds per optimizer update and
 7200 seconds before starting another full collection/train/save cycle, replacing
