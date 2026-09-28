@@ -21,7 +21,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
-[This week's priorities:334493/334494 mixed-only pair, plus historical Gate B through90 with full300 evaluations80/90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+[This week's priorities:334493/334494 mixed-only pair, plus334894 historical Gate B through90 with full300 evaluations80/90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).

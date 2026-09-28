@@ -11,8 +11,9 @@ subsequently added **historical Gate B through90, with full300 evaluations
 at80 and90**, as another priority for this week. Continue its existing
 77/988-update checkpoint and optimizer/scheduler/cursor; preserve its auxiliary
 failure groups, which distinguish it from the new mixed-only pair. The prepared
-request is **one8 H200 ×16h allocation including both evaluations**; exact
-resource approval is pending, with only3,767 seconds left in B's old budget.
+allocation is **one8 H200 ×16h including both evaluations**, explicitly
+approved and submitted as **334894**, initially pending resources. Its16h cap
+is separate from the3,767 seconds left in B's old budget; do not add that remainder.
 [Gate B recovery and launch plan](RL_RUNTIME.md#arm-b90-priority-20260927).
 Beta and other research directions are secondary. Existing job monitoring continues;
 this changes research priority, without changing scheduler QoS or compute budgets.

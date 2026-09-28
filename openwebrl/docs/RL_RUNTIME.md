@@ -31,7 +31,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 | Track | Durable state at check | Job and status | Next evaluations |
 | --- | --- | --- | --- |
-| Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 failed; now a weekly priority, continuation prepared pending exact allocation approval | B70 full300 complete; controller prepared for80/90; no new job submitted |
+| Gate B | Iteration77 /988 Adam updates; no new durable update | 334894 submitted, initially pending resources; resumes77 with unchanged state | B70 complete; full300 at80/90 owned and awaited by the new controller |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
 | Failure β1 | Iteration21 /312 durable Adam updates; full TP4 replay and checkpoint validation passed |333431 stopped after1h58m37s during collection22:44/100 mature browser startups lacked readiness | No checkpoint30 or new evaluation; browser diagnosis required before another recovery |
@@ -259,9 +259,9 @@ arbitrary training bugs. Recovery receipts and logs:
 The user requested continued historical Gate B training and full300 evaluations
 at80/90, adding this lineage to this week's priorities alongside the two fresh
 mixed-only relaxed-B experiments. Latest durable state is77/988 Adam updates;
-there is no active Gate B allocation. **Prepared, not submitted:** one8 H200 ×16h
-allocation,64 CPUs/960GiB,128 GPU-hours including both evaluations. Exact
-resource approval is pending. The original24h budget consumed82,633 seconds
+**334894 was submitted after exact resource approval**, initially pending
+resources: one8 H200 ×16h allocation,64 CPUs/960GiB,128 GPU-hours including
+both evaluations. No new optimizer updates have occurred in this continuation. The original24h budget consumed82,633 seconds
 across all attempts and has at most3,767 seconds remaining; that remainder is
 not silently added to the new request.
 
@@ -297,10 +297,15 @@ update and60 minutes per new cycle; the training objective is unchanged.
 
 Preparation and exact plans:
 `arm-turn-bonus-preparation/gate-b90-20260927/` under the runtime root.
-The active supervisor records Gate B as priority1 pending the exact allocation
-approval. On submission, register the new job, preserve cumulative accounting,
-and follow the controller's active training directory across80/90. Routine
-reports remain hourly, with earlier failure/stall/completion alerts.
+The active supervisor registers334894 as priority1 and follows the controller's
+active training directory across80/90. The per-job observer is also running at
+`gate-b90-20260927/watch-334894/`; the active-agent continuation mechanism
+provides diagnosis and repair, while this observer records state. The exact
+approval and submission receipt is `gate-b90-20260927/resource-approval.json`.
+Routine reports remain hourly, with earlier failure/stall/completion alerts.
+The new16h budget is tracked separately, with every failed attempt charged to
+it and no automatic extension. Training W&B keeps
+[`arm-gate-b-309053`](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-b-309053).
 
 <a id="arm-browser-slot-recovery-20260927"></a>
 ## Gate B browser-slot recovery — September27
