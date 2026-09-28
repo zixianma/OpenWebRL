@@ -6773,8 +6773,8 @@ The forward test is task-disjoint from both train and dev, and uses later
 **training-task** rollouts, not benchmark evaluations. Retained trajectories
 can come from a group with an invalid neighbor; every retained trajectory itself
 has a valid binary terminal outcome. Complete history, terminal marker, response
-mask shapes, context bounds and image-file presence passed. Individual image
-bytes still need hash verification and processor/token-mask parity before fitting.
+mask shapes, context bounds and image-file presence passed. The September28
+checks below additionally verify image bytes and nine processor boundary turns.
 Judge-model identity is checked against saved launch manifests (`gpt-4.1`).
 
 This scan took132 seconds and142MiB peak RAM, with no GPUs/APIs. Training totals
@@ -6782,8 +6782,8 @@ This scan took132 seconds and142MiB peak RAM, with no GPUs/APIs. Training totals
 reward/reference pass is materially larger than the earlier2,000 **single-state**
 SelectionARM refresh. Size the first optimizer pilot from this token volume;
 do not assume the old refresh's GPU-time estimate applies. The maximum retained
-context is21,632 tokens. The trainer/processor check and fitted-model test remain
-outstanding; these are data-preparation results only.
+context is21,632 tokens. The fitted-model test remains outstanding; these are
+data-preparation results, with subsequent CPU objective checks below.
 
 [Aggregate manifest](arm_results/rl_integration/outcome-reward-data-manifest.json).
 Private immutable manifests: runtime `arm-turn-bonus-preparation/outcome-reward-20260927/`.
@@ -6807,9 +6807,10 @@ Useful additional data, in priority order:
 
 Remaining preparation sequence:
 
-1. Finish image-hash and processor/token-mask parity checks on the frozen
-   manifests above; validate exact outcome-loss gradients and choose a bounded
-   training-only pilot token budget before a GPU fit.
+1. Integrate the CPU-checked objective and archived-input adapter into a GPU
+   trainer; verify full-loader masks, longest-context memory, native probability
+   parity and save/reload before fitting. Hashes and boundary-case processor
+   checks are complete; a bounded training-only pilot is proposed below.
 2. Fit one small offline reward model. Measure held-out within-task successful-
    versus-failed ranking, Brier/log loss and generalization to later actors,
    against length/prompt controls. Do not treat good trajectory discrimination
@@ -6828,11 +6829,92 @@ requires explicit continuation outcomes and more browser compute. Do not call
 PRIME's implicit rewards calibrated action values, or give the reweighting
 heuristic either method's guarantees.
 
+<a id="arm-outcome-reward-readiness-20260928"></a>
+### September28 preparation and controls
+
+The user requested proceeding with directions2 and3 while continuing discussion.
+No new GPU allocation or API request was made for this preparation.
+
+**Integrity and CPU checks passed:** all13,495 unique screenshots (4.94GB) match
+their archived hashes, as do1,012 group/launch files. The first complete hash
+pass took12.1s and68MiB peak RAM. Actor processor checks passed on nine distinct
+turns from six shortest/longest-context trajectories across train/dev/test,
+including the21,632-token maximum. Prompt token IDs, image grids and response
+mask boundaries match the archive. This is a boundary sample, not a full GPU
+numerical-equivalence claim. [Integrity and controls](arm_results/rl_integration/outcome-reward-readiness.json),
+[processor checks](arm_results/rl_integration/outcome-reward-processor-parity.json).
+
+**Length is already a strong predictor.** A fixed, five-parameter logistic
+control uses log1p(turns), response-token count, total-context count and maximum
+context, plus an intercept. Standardization and L2=.01 fitting use only train;
+there is no hyperparameter search or label balancing. Within-task accuracy
+compares all successful/failed trajectory pairs, credits ties0.5, then averages
+equally over tasks with both outcomes. These are complete trajectories of the
+same task, not alternative actions from the same intermediate state.
+
+| Length-only control | AUROC | Within-task pair accuracy | Tasks with both outcomes | Brier score |
+| --- | ---: | ---: | ---: | ---: |
+| Development |0.648 |60.00% |25 |0.231 |
+| Later-actor, unseen-task test |0.768 |65.48% |49 |0.202 |
+| Same test, excluding token/turn-budget terminations |0.736 |64.86% |46 |0.210 |
+
+The train-prevalence constant has test Brier0.249 and pair accuracy50%. Thus
+good global outcome discrimination alone is insufficient evidence for action
+credit. The control remains strong after excluding budget terminations; no
+trajectories were removed from the frozen fit/test manifests. Add task-only
+and terminal-response sensitivity controls, compare reward-model/length scores
+with paired task bootstrap, and inspect early-turn scores before an execution
+test. Do not tune reward-model settings on the reported future control scores.
+
+**Loss implementation prepared in Piotr's existing checkout:**
+`arm-reproduction/action-reward-models-refresh/training/outcome_reward/` now has
+the trajectory BCE, shifted response-logprob gathering, frozen-reference mask
+handling and a strict model-input whitelist. Six CPU tests passed, including
+the exact gradient of one BCE over a whole trajectory versus a streamed
+two-pass implementation. Sum all turn scores before BCE; applying a separate
+success/failure BCE to each turn would be a different objective. The first pass
+scores a trajectory without gradients; the second replays each turn with the
+fixed derivative of its trajectory loss. Weights cannot change between passes
+and dropout must be disabled or replayed exactly. This saves activation memory
+at the cost of an additional reward-model forward pass. The optimizer loop,
+GPU memory validation and fitted reward model remain outstanding.
+
+Archived metadata contains terminal judge text/outcomes and post-action tool
+responses. Model inputs explicitly whitelist the causal archived prompt, token
+IDs, response mask and images; serializing whole metadata/messages would leak
+labels or future observations. Reference logps will be recomputed at native
+model temperature and cached with model/processor/input/mask hashes.
+
+**Proposed engineering fit, not the final scientific config:** use the first128
+trajectories in the immutable training ordering (120 tasks,61 successes/67
+failures),4.95M context tokens/314,573 response tokens, including the longest
+context. This checks throughput before fitting all2,000 trajectories; it does
+not replace the full training set with128 tasks. Initialize reward/reference
+from the same original OpenWebRL-4B-SFT. Proposed LoRA rank16/alpha32, frozen
+vision/base, dropout0, AdamW LR1e-5, no weight decay, clip1,8 trajectories/update,
+16 updates, constant LR for this bounded smoke. These are engineering defaults
+for an adapter, not copied full-model PRIME training settings. Eta=.05 is a
+starting point from [PRIME's reward scale](https://arxiv.org/html/2502.01456v2#S4.SS1),
+distinct from the actor bonus beta=.5 and reweight lambda=.5. Declare any further
+eta/LR selection on train/dev before the model sees the held-out future test.
+An initial **one-H200, one-hour** GPU smoke is a resource proposal after trainer
+readiness, not a submitted job or a guarantee of completing16 updates. Measure
+its seconds/token before estimating the complete73.55M-token fit and evaluation.
+Private config/cohort: `outcome-reward-20260927/readiness-20260928/pilot-proposal.json`
+and `pilot-train-128.jsonl` under the preparation runtime.
+
+The500-trajectory test changes task IDs as well as actor iterations, so it tests
+joint generalization to unseen tasks and a later actor. It cannot isolate actor
+drift. A later matched-task early/late diagnostic could isolate that question;
+keep the current test immutable. Even a successful offline test must pass a
+small, genuinely reproducible same-state action-execution test before actor RL.
+
 <a id="arm-task-pool-next-investigation-20260927"></a>
 ## Next direction3: verified task-pool expansion — September27 investigation
 
-**Discussion only:** the user requested more discussion before this direction.
-Do not expand the active task pool or launch its browser audit yet.
+**Discussion and CPU preparation:** the user requested proceeding on September28
+while continuing discussion. The active task pool remains unchanged; browser
+screening and training need a finalized design and exact resource approval.
 
 **Current state:** active pool2,102;511 extra hard-labeled candidates on13 existing
 hosts after exact/lexical filtering;75 host-capped review tasks (50 hard/25 medium).
@@ -6880,6 +6962,62 @@ adds validated existing WebGym tasks rather than generating new instructions.
 No additional API calls, embedding model, browser screening, dataset switch or
 GPU job was launched in this investigation. Those stages need a concrete resource
 request once the manifest and retained task count are known.
+
+<a id="arm-task-pool-screening-v2-20260928"></a>
+### September28 controlled screening preparation
+
+Corrected the two ambiguous text-quality questions in a new **v2** request
+format: finite general lookups/overviews can have recognizable completion, and
+different output slots are not logically redundant merely because wording
+repeats. Rubric redundancy stays advisory. The v1 requests/results remain
+preserved. Six existing client/cache/leakage tests pass. All75 revised Jev
+requests are prepared in dry-run form; no v2 API judgments exist yet. Human
+review must validate these prompt changes before treating model outputs as
+quality decisions. GPT-4.1 uses the same revised questions and a separate v2
+output directory.
+
+Prepared a control cohort of **25 tasks from the active pool**, spanning all19
+candidate websites: one task per host, then a second on six represented hosts,
+chosen by a fixed task-ID hash independent of outcomes. These controls match
+websites, not difficulty; record difficulty and site-stratified results. The75
+candidate tasks remain50 metadata-hard/25 medium, maximum5/site. Familiar
+websites remain the provisional scope, pending the user's preference about
+expanding websites/task types at this stage.
+
+Frozen **semantic-screening input** contains4,411 unique reference texts with
+source provenance: all2,198 released OpenWebRL tasks,1,167 WebGym test tasks,
+and the local OM2W/DeepShop/WebVoyager evaluation cohorts. Candidate-to-reference
+and candidate-to-candidate embedding comparisons remain to be run; this input
+preparation does not establish semantic novelty. Review borderline overlap
+instead of treating a cosine threshold as proof of benchmark separation.
+
+Proposed browser comparison after quality/overlap review: surviving candidates
+plus all25 controls, five attempts each,15 turns, at most **500 primary
+trajectories** (375 new-task +125 control before filtering). Interleave cohorts
+using one frozen outcome-only actor and identical temperatures/browser/judge
+settings; GPT-4.1/action_history provides outcomes. Score the executed turns
+with the existing ARM without changing chosen actions. Baseline90 is a useful
+candidate for screening late-stage difficulty, but the exact actor is still to
+be finalized. Any resulting new actor-training experiment starts at0.
+
+Report valid/invalid, mixed/all-success/all-failure groups, usable ARM labels,
+and useful groups per browser-hour against controls. Five valid failures can
+mean a learnable hard task or an impossible task. A bounded stronger-policy
+rescue check is a separate proposed stage, with no budget assigned yet. Keep
+existing and new data yield separate; do not silently replace the training pool
+or assume more failed tasks automatically supplies beneficial supervision.
+
+If yield is promising, first isolate the data change using the unchanged
+relaxed-B recipe on original versus expanded pools. Outcome-only original/
+expanded controls are needed to claim a specific interaction between new data
+and ARM. Keep reward-model replacement and data expansion independent initially;
+combining them first would make gains hard to attribute.
+
+[Prepared cohort and provenance counts](arm_results/rl_integration/task-pool-screening-v2.json).
+CPU preparation: `scripts/prepare_arm_task_screening_v2.py`; private immutable
+cohorts and reference inputs: `task-pool-expansion-20260922/screening-v2/` under
+the preparation runtime. No embeddings, API calls, browser collection or new
+training jobs were launched for this step.
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26

@@ -1,0 +1,168 @@
+{
+  "status": "integrity_passed",
+  "manifest_sha256": "14fd1eca56e45371728ccb1c8f33b19485c0ec74874486216be121c1350bb5da",
+  "integrity": {
+    "source_and_launch_files": 1012,
+    "source_and_launch_bytes": 605750780,
+    "cached_images": 13495,
+    "image_files": 13495,
+    "image_bytes": 4938061091
+  },
+  "integrity_failures": 0,
+  "control": "Fixed L2=.01 logistic regression: log1p turns, response tokens, total context, maximum context. Train-only scaling/fitting; no outcome balancing.",
+  "controls": {
+    "train": {
+      "train_prevalence": {
+        "trajectories": 2000,
+        "tasks": 700,
+        "success_rate": 0.5105,
+        "brier": 0.24988975000000005,
+        "log_loss": 0.6929266643503357,
+        "auroc": 0.5,
+        "within_task_pair_accuracy_macro": 0.5,
+        "mixed_tasks": 215
+      },
+      "length_only": {
+        "trajectories": 2000,
+        "tasks": 700,
+        "success_rate": 0.5105,
+        "brier": 0.2120386860803253,
+        "log_loss": 0.6133634864460407,
+        "auroc": 0.7181066850481063,
+        "within_task_pair_accuracy_macro": 0.6344444444444444,
+        "mixed_tasks": 215
+      },
+      "length_only_excluding_budget_terminations": {
+        "trajectories": 1767,
+        "tasks": 663,
+        "success_rate": 0.577815506508206,
+        "brier": 0.22754616514564457,
+        "log_loss": 0.6479644654381227,
+        "auroc": 0.6505712477647683,
+        "within_task_pair_accuracy_macro": 0.5434697855750488,
+        "mixed_tasks": 171
+      }
+    },
+    "dev": {
+      "train_prevalence": {
+        "trajectories": 250,
+        "tasks": 126,
+        "success_rate": 0.588,
+        "brier": 0.24826225000000002,
+        "log_loss": 0.6896711857386888,
+        "auroc": 0.5,
+        "within_task_pair_accuracy_macro": 0.5,
+        "mixed_tasks": 25
+      },
+      "length_only": {
+        "trajectories": 250,
+        "tasks": 126,
+        "success_rate": 0.588,
+        "brier": 0.23144074444970755,
+        "log_loss": 0.6583946224835674,
+        "auroc": 0.6478436034608018,
+        "within_task_pair_accuracy_macro": 0.6,
+        "mixed_tasks": 25
+      },
+      "length_only_excluding_budget_terminations": {
+        "trajectories": 232,
+        "tasks": 119,
+        "success_rate": 0.6336206896551724,
+        "brier": 0.24343032445508272,
+        "log_loss": 0.6858347688449216,
+        "auroc": 0.5846338535414166,
+        "within_task_pair_accuracy_macro": 0.55,
+        "mixed_tasks": 20
+      }
+    },
+    "future": {
+      "train_prevalence": {
+        "trajectories": 500,
+        "tasks": 155,
+        "success_rate": 0.57,
+        "brier": 0.24864025000000003,
+        "log_loss": 0.6904272969001035,
+        "auroc": 0.5,
+        "within_task_pair_accuracy_macro": 0.5,
+        "mixed_tasks": 49
+      },
+      "length_only": {
+        "trajectories": 500,
+        "tasks": 155,
+        "success_rate": 0.57,
+        "brier": 0.20169101660789704,
+        "log_loss": 0.5912876291780328,
+        "auroc": 0.7683720930232558,
+        "within_task_pair_accuracy_macro": 0.6547619047619047,
+        "mixed_tasks": 49
+      },
+      "length_only_excluding_budget_terminations": {
+        "trajectories": 462,
+        "tasks": 152,
+        "success_rate": 0.6168831168831169,
+        "brier": 0.209672411704305,
+        "log_loss": 0.6092233081835787,
+        "auroc": 0.7357518089007831,
+        "within_task_pair_accuracy_macro": 0.6485507246376812,
+        "mixed_tasks": 46
+      }
+    }
+  },
+  "terminal_reason_strata": {
+    "train": {
+      "generation_length_limit": {
+        "trajectories": 48,
+        "successes": 0
+      },
+      "max_steps_exhausted": {
+        "trajectories": 185,
+        "successes": 0
+      },
+      "task_completed": {
+        "trajectories": 1767,
+        "successes": 1021
+      }
+    },
+    "dev": {
+      "generation_length_limit": {
+        "trajectories": 2,
+        "successes": 0
+      },
+      "max_steps_exhausted": {
+        "trajectories": 16,
+        "successes": 0
+      },
+      "task_completed": {
+        "trajectories": 232,
+        "successes": 147
+      }
+    },
+    "future": {
+      "generation_length_limit": {
+        "trajectories": 26,
+        "successes": 0
+      },
+      "max_steps_exhausted": {
+        "trajectories": 12,
+        "successes": 0
+      },
+      "task_completed": {
+        "trajectories": 462,
+        "successes": 285
+      }
+    }
+  },
+  "resources": {
+    "seconds": 2.817757538985461,
+    "peak_rss_mib": 74.7109375,
+    "gpus": 0,
+    "api_calls": 0
+  },
+  "limitations": [
+    "Image bytes checked against hashes, not image decoder or actor processor parity.",
+    "Task-macro pair accuracy uses only tasks with both outcomes; not same-state action ranking.",
+    "Later-actor test also has new task IDs: cannot isolate temporal drift from task generalization.",
+    "Controls are diagnostics, not estimates of reward-model performance or causal action credit.",
+    "Model inputs must whitelist archived prompt/tokens/images; metadata includes judge text/outcomes and post-action tool responses."
+  ]
+}

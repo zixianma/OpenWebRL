@@ -1,0 +1,110 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "split": "train",
+      "id": "48c19b6745793f8cc2bf194c1c2aef59c21dc662132c1f3941dae9397682183d",
+      "turn": 0,
+      "context_tokens": 3352,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "train",
+      "id": "4426cc3d0c7a28b4369cfee5d4cc609bff15e2c6de941c4489fd17d1d2197371",
+      "turn": 0,
+      "context_tokens": 3562,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "train",
+      "id": "4426cc3d0c7a28b4369cfee5d4cc609bff15e2c6de941c4489fd17d1d2197371",
+      "turn": 14,
+      "context_tokens": 21632,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "dev",
+      "id": "b34fbcaaa31e5d6183b66c4a232a1dbc33c11853fdf8acfaedb561407876c7b6",
+      "turn": 0,
+      "context_tokens": 3364,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "dev",
+      "id": "79cb8518f474b62ad49681df7898ed7be26af95191e864540bb616adbc64f775",
+      "turn": 0,
+      "context_tokens": 3508,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "dev",
+      "id": "79cb8518f474b62ad49681df7898ed7be26af95191e864540bb616adbc64f775",
+      "turn": 9,
+      "context_tokens": 16891,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "future",
+      "id": "e0af43dfe85dc380e6fa34f9687a6a088fb3f9abae159e041cdf92dccbde8c4f",
+      "turn": 0,
+      "context_tokens": 3378,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "future",
+      "id": "61fafc4f94d0bd5318cebae9fd1e2e715da15a97489f2ff3c18aff7f9ffb5ca8",
+      "turn": 0,
+      "context_tokens": 3573,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    },
+    {
+      "split": "future",
+      "id": "61fafc4f94d0bd5318cebae9fd1e2e715da15a97489f2ff3c18aff7f9ffb5ca8",
+      "turn": 14,
+      "context_tokens": 13839,
+      "images": 1,
+      "prefix_equal": true,
+      "grid_equal": true,
+      "mask_valid": true,
+      "response_text_equal": true
+    }
+  ],
+  "seconds": 1.468052381882444,
+  "peak_rss_mib": 931.83984375,
+  "gpus": 0,
+  "api_calls": 0,
+  "scope": "Unique boundary turns from six shortest/longest-context trajectories: CPU actor processor prompt-token/grid parity and response-mask shape. No model weights or GPU kernels.",
+  "response_policy": "Use archived executed token IDs, not re-encoded visible response text; special stop tokens may be absent from text."
+}

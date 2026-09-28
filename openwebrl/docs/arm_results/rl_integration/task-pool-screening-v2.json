@@ -1,0 +1,65 @@
+{
+  "status": "metadata_prepared_not_browser_ready",
+  "candidate_tasks": 75,
+  "candidate_hard": 50,
+  "candidate_medium": 25,
+  "candidate_hosts": 19,
+  "existing_control_tasks": 25,
+  "control_hosts": 19,
+  "control_difficulty_histogram": {
+    "4": 3,
+    "2": 6,
+    "7": 1,
+    "3": 5,
+    "12": 1,
+    "1": 4,
+    "8": 1,
+    "5": 1,
+    "6": 2,
+    "9": 1
+  },
+  "semantic_reference_texts": 4411,
+  "semantic_reference_source_rows": {
+    "released_openwebrl": 2198,
+    "webgym_test": 1167,
+    "online-mind2web.jsonl": 300,
+    "deepshop.jsonl": 150,
+    "webvoyager_fara.jsonl": 595,
+    "webvoyager_val.parquet": 70,
+    "online-mind2web.jsonl_legacy": 300
+  },
+  "manifest_sha256": {
+    "candidate-review-75.jsonl": "52c6928788a021b4b985f5db73d2d3f485f4638dad362e664dd54ef9f370b9aa",
+    "existing-control-25.jsonl": "30ba8837b6c9fbb210101769bfd7630c1509af86fe740a4521c3bf328157195d",
+    "semantic-reference.jsonl": "9d8ad823346b5a8feec71525191f4170a45f3e800457867e14e2b2274fad6760"
+  },
+  "proposed_execution": {
+    "actor": "one frozen outcome-only actor for both cohorts; checkpoint to finalize",
+    "attempts_per_task": 5,
+    "max_turns": 15,
+    "primary_trajectory_cap": 500,
+    "candidate_budget_before_filtering": 375,
+    "control_budget": 125,
+    "interleave_cohorts": true,
+    "judge": "gpt-4.1/action_history",
+    "arm": "released frozen SelectionARM, scoring only; no action selection",
+    "metric": "mixed and valid all-failure group yield, usable ARM labels, and useful groups per browser-hour",
+    "rescue": "bounded separate stronger-policy check only for valid all-failure tasks; exact budget not yet chosen"
+  },
+  "prerequisites": [
+    "Review revised Jev/GPT quality questions and disagreements; no automatic rejection.",
+    "Semantic candidate-to-reference and candidate-to-candidate overlap check; review borderline matches.",
+    "Finalize fixed actor/temperatures and resource/API limits before browser execution."
+  ],
+  "training_pool_changed": false,
+  "resources": {
+    "seconds": 0.5056470220442861,
+    "gpus": 0,
+    "api_calls": 0
+  },
+  "limitations": [
+    "Existing controls match websites, not empirical difficulty; report site-stratified results.",
+    "Five valid failures do not establish learnability; ARM label yield is not verified progress.",
+    "Candidate count is an upper bound before quality and semantic filtering."
+  ]
+}
