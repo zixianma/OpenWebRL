@@ -5,6 +5,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ## Contents
 
 - [Current ARM progress and beta memory recovery](#arm-progress-20260927)
+- [Measured iteration throughput and CUDA cache overhead](#arm-iteration-throughput-20260927)
 - [Priority Gate B77 through90 and full300 evaluations80/90](#arm-b90-priority-20260927)
 - [Gate B browser-slot recovery](#arm-browser-slot-recovery-20260927)
 - [Remaining ARM evaluation queue and original-bonus backfills](#arm-evaluation-backfill-20260927)
@@ -109,6 +110,39 @@ The bonus recovery batch is66.6GB. Keep checking actual update timing before
 changing the validated TP2/DP4 layout or scientific settings. Sources: each
 run's `iterations/0000/{calibration,reweighting,collection_complete}.json`,
 `runtime/progress.log` and the supervisor's review records.
+
+<a id="arm-iteration-throughput-20260927"></a>
+### Iteration throughput: the30-minute result did not carry over — September27
+
+The earlier25–30-minute result was real: Gate C318935 iterations44–50.
+All compared runs still use TP2/DP4,microbatch1,global256 and PPO2. A full
+iteration includes collection, multiple Adam updates and checkpointing.
+
+| Run / measured iterations | Collection/setup | Training/save | Full iteration | Adam updates/iteration | CUDA cache threshold |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Historical C44–50 |13.2–17.8min |11.9–12.9min |25.3–30.3min |12 |Guard unset |
+| Resumed B78–79 |16.2–16.5min |21.3–23.3min |37.5–39.8min |12 |48GiB |
+| Mixed bonus1–3 |15.8–20.5min |34.2–38.9min |49.9–59.0min |14–16 |24GiB |
+| Mixed reweight1–3 |16.5–17.3min |33.6–40.3min |50.1–57.6min |14–16 |24GiB |
+
+The mixed pair has more retained turns, hence more optimizer work per collection.
+There is also a per-update slowdown: including phase overhead, roughly135–151
+seconds/update versus60–65 seconds in historical C. The conservative24GiB
+reserved-memory guard releases CUDA cache2,941 times per rank across2,944
+training microbatches: effectively every microbatch. It synchronizes the GPU
+and empties reusable allocations. This is a strong overhead suspect, not a
+controlled causal measurement. Gate B's48GiB limit and the old C's unset guard
+also differ; neither comparison holds data/context and node constant. Mean
+response length is actually shorter in mixed iteration3 (~332 tokens) than
+B79 (~402) or C50 (~389), so longer generated responses do not explain it.
+
+Next diagnostic: compare24/48GiB on an identical saved batch at a safe handoff,
+including the longest contexts, cache-release time, peak HBM and optimizer
+throughput. Preserve actor/optimizer/scheduler/cursor and the scientific recipe.
+No GPU comparison has run or been scheduled yet; use only remaining approved
+resources and retain OOM protection until memory safety is validated. The
+runtime supervisor records this as a priority efficiency follow-up. CPU audit:
+`arm-turn-bonus-preparation/mixed-reweight-20260927/iteration-throughput-audit-20260927.json`.
 
 <a id="arm-active-agent-supervision-20260927"></a>
 **Active-agent supervision, September27:** the user reiterated this as a top
