@@ -114,8 +114,11 @@ run's `iterations/0000/{calibration,reweighting,collection_complete}.json`,
 priority for every project. The global Codex instructions and root `AGENTS.md`
 now require active diagnosis and recovery, beyond read-only recording.
 `scripts/arm_job_supervisor.py` polls the registered pair every60 seconds and
-queues a follow-up to the owning Codex thread on state/checkpoint changes or
-every15 minutes. Its local `codex queue` delivery test **resumed the same thread**;
+queues routine follow-ups to the owning Codex thread **once per hour**, per
+the user's September27 reporting preference. Ordinary stage changes are quiet.
+Failures, completion, browser-stop signals and stalled progress trigger earlier
+agent review (20 minutes without training progress,30 minutes during collection,
+or15 minutes stuck in actor startup). Polling remains every60 seconds. Its local `codex queue` delivery test **resumed the same thread**;
 the agent acknowledged the continuation and checked both live jobs. The receipt
 is `supervisor/continuation-delivery-verified.json` under the preparation root.
 The supervisor itself does not submit, cancel or modify GPU jobs. The resumed

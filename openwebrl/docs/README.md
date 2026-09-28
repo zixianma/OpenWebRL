@@ -33,7 +33,7 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
-[Active-agent supervision: state-change/15-minute follow-ups, repair and bounded retries](RL_RUNTIME.md#arm-active-agent-supervision-20260927).
+[Active-agent supervision: hourly summaries, urgent failure review and bounded retries](RL_RUNTIME.md#arm-active-agent-supervision-20260927).
 Latest checked status: [B331778 failed during78; durable77, evaluations80/90 blocked;
 C completed training/evaluations through60; sampling40% stopped at27;
 beta333431 saved21/312 updates, then stopped on browser startup failures](RL_RUNTIME.md#arm-progress-20260927).
