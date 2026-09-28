@@ -1,8 +1,9 @@
 # Action reward models for OpenWebRL training
 
 <a id="arm-weekly-priority-20260927"></a>
-**This week's priority — September27:** the user prioritized **333454: original
-bonus + relaxed gate B** and **333455: outcome reweighting + relaxed gate B**.
+**This week's priority — September27:** the user prioritized **original
+bonus + relaxed gate B** and **outcome reweighting + relaxed gate B**
+(current attempts333747/333748; initial333454/333455 stopped before training).
 Both start at iteration0 with only ordinary mixed-outcome groups. Prioritize their
 startup validation, failure repair, training progress and matched full300
 evaluation at iteration10 within the approved **8 H200 ×8h each**. Beta and
@@ -6501,8 +6502,16 @@ later strength-matched control can distinguish objective from magnitude effects.
 
 | Submitted job | Variant | Queue status at submission | Training W&B identity |
 | --- | --- | --- | --- |
-|333454 |Original bonus + relaxed B, mixed only |Pending resources |`arm-mixed-bonus-333454` |
-|333455 |Outcome reweighting + relaxed B, mixed only |Pending priority |`arm-mixed-reweight-333455` |
+|333747 |Original bonus + relaxed B, mixed only |Pending resources |`arm-mixed-bonus-333747` |
+|333748 |Outcome reweighting + relaxed B, mixed only |Pending priority |`arm-mixed-reweight-333748` |
+
+**Startup repair, September27:** initial333454/333455 stopped after57/58 seconds
+before actor startup or W&B initialization. Their scratch paths did not match
+the storage validator's canonical `arm-variant-JOB` path. Both launchers now use
+that path, and preparation runs the real storage/quota/write preflight. Both
+storage checks, both native argument checks and28 tests passed before the
+replacement submissions. Each replacement requests7h59m, so failed time plus
+retry remains within the original8h per variant. No scientific setting changed.
 
 Both use project `openwebrl`, with distinct display names identifying **bonus**
 and **reweight**. The batch controller owns and awaits training and the

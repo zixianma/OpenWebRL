@@ -33,21 +33,30 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate B | Iteration77 /988 Adam updates; no new durable update | 331778 recovery failed at13:03 PDT after3h08m28s | B70 full300 complete;80/90 blocked on missing checkpoints and no active allocation |
 | Failure sampling40% | Iteration27 /392 Adam updates | 332003 and332005 canceled at user request | Latest completed evaluation20; later training/evals withdrawn |
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
-| Failure β1 | Iteration20 /298 durable Adam updates; iteration21 replay has11 additional unsaved steps | Recovery333431 running on g004; TP4/DP2 restoration passed | Full30030/40/50/60 owned by controller as checkpoints and remaining time permit |
+| Failure β1 | Iteration21 /312 durable Adam updates; full TP4 replay and checkpoint validation passed |333431 stopped after1h58m37s during collection22:44/100 mature browser startups lacked readiness | No checkpoint30 or new evaluation; browser diagnosis required before another recovery |
 
-**New matched mixed-only jobs:**333454 (original bonus + relaxed B) and333455
+**New matched mixed-only jobs:**333747 (original bonus + relaxed B) and333748
 (outcome reweighting + relaxed B) were submitted after explicit approval of
 **8 H200 ×8h each**,128 GPU-hours total. Both begin at iteration0, use TP2/DP4,
 microbatch1 and64 browsers, and exclude extra all-failure groups. Full300 at10
-is owned by each controller within its allocation. At submission333454 awaits
-resources and333455 priority. Source and28 CPU checks are verified; fresh GPU
+is owned by each controller within its allocation. At submission333747 awaits
+resources and333748 priority. Source and28 CPU checks are verified; fresh GPU
 execution is not yet validated. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 
 **September27 priority update:** the user made these two new runs this week's
 primary experiments. Prioritize startup validation, repairs and matched
-iteration10 evaluation; beta remains secondary and monitored within its existing
-allocation. Both new-job observers are active while the jobs await resources
+iteration10 evaluation; beta remains secondary, with checkpoint21 preserved
+for browser diagnosis. Both new-job observers are active while the jobs await resources
 and priority. [Recorded research priority](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+
+**Priority-pair startup repair:**333454/333455 failed before training after57/58
+seconds because their generated scratch paths differed from the canonical path
+required by `check_multimodal_storage`. The paths are corrected and the actual
+storage/quota/write preflight now runs during CPU preparation. Both storage and
+native argument checks and28 tests passed. Replacements333747/333748 each request
+7h59m, keeping failed plus replacement time below the original8h per variant.
+Their new observers follow the replacement IDs until terminal state. Receipts:
+`arm-turn-bonus-preparation/mixed-reweight-20260927/*-scratch-recovery-budget.json`.
 
 **Beta timing correction:** the first six replay updates took226–290 seconds
 each. The live budget guard now reserves360 seconds per optimizer update and
@@ -55,7 +64,11 @@ each. The live budget guard now reserves360 seconds per optimizer update and
 90 and3600. The scientific configuration and allocation deadline are unchanged;
 the original iteration config is preserved. Receipt:
 `evaluations/arm-failure-additive-333431-tp4-iter30/runtime-timing-adjustment-20260927.json`
-under the runtime root. No new checkpoint is durable at this check.
+under the runtime root. Subsequently iteration21 saved with312 Adam updates.
+Collection22 then triggered the browser guard at44% missing readiness; the job
+ended without another optimizer update. Saved per-server logs show local health
+poll timeouts, so this is a browser-startup failure, not another CUDA OOM.
+The checkpoint, task cursor and partial collection are preserved.
 
 **Latest beta recovery, September27:**333402 failed after28m02s. Its saved-batch
 replay reached three optimizer steps without a new durable checkpoint; the
@@ -68,14 +81,14 @@ H200s, with microbatch1/global256/PPO2 unchanged. It restores iteration20,
 optimizer/scheduler/cursor, W&B lineage and the same saved iteration21 batch.
 Failure beta1, mixed beta0.5, q20%, strict five-distinct gate and up to8 extra
 failure groups remain unchanged. TP4 gives smaller tensor shards; actual
-restoration and complete replay must succeed before declaring the memory fix
-validated. Requested13h31m +333402's28m02s =13h59m02s, within that replacement's
+restoration and the complete replay have now passed, including checkpoint21;
+later collections remain unvalidated. Requested13h31m +333402's28m02s =13h59m02s, within that replacement's
 approved14h budget. The controller awaits milestone evaluations30/40/50/60
 as checkpoints and remaining time permit; reaching60 is not guaranteed.
 
 Controller: `scripts/recover_arm_beta_tp4.py`; receipts and live observer output:
-`logs/arm-beta-tp4-recovery-20260927/`. The observer follows333431 from queue
-through termination and records health; it does not implement arbitrary bug
+`logs/arm-beta-tp4-recovery-20260927/`. The observer followed333431 through
+termination and recorded its browser failure; it does not implement arbitrary bug
 repair. Two CPU tests verify budget accounting and scientific/state preservation.
 The historical entries below describe earlier attempts and holds.
 
@@ -108,7 +121,7 @@ this inventory.332004 has also consumed no GPU time.
   the latest retained original checkpoint is80. Further training has no allocation.
 - The prepared additive-relaxed/failure-only experiment remains deliberately
   deferred pending the next scientific decision. The new mixed-only relaxed
-  bonus/reweighting pair is submitted as333454/333455 under the approved budget. A trained prefix curriculum remains a proposal.
+  bonus/reweighting pair is resubmitted as333747/333748 within the approved budget. A trained prefix curriculum remains a proposal.
 
 The active observer's heartbeat continues to refresh; it does not submit jobs
 or relaunch cancellations. Other account jobs332455/332456 (OSWorld) and331086
