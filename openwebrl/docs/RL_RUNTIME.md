@@ -313,8 +313,10 @@ arbitrary training bugs. Recovery receipts and logs:
 The user requested continued historical Gate B training and full300 evaluations
 at80/90, adding this lineage to this week's priorities alongside the two fresh
 mixed-only relaxed-B experiments. Job334894 resumed77/988 Adam updates and
-**reached durable iteration80/1024 updates**; full300 evaluation80 is running
-before training resumes toward90. The exact approved allocation is one
+**reached durable iteration80/1024 updates** and completed full300 evaluation80
+at35.67% overall /47.35% valid-only, with all300 rollout/verdict pairs verified.
+The controller passed native GPU restoration of80 (model and optimizer;
+TP2/DP4) and began iteration81 collection in the same allocation. The exact approved allocation is one
 8 H200 ×16h job,64 CPUs/960GiB,128 GPU-hours including both evaluations.
 The original24h budget consumed82,633 seconds
 across all attempts and has at most3,767 seconds remaining; that remainder is

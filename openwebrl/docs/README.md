@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 | Document | Contents |
 | --- | --- |
-| [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL; comparison plot includes Gate B at iterations20–70 |
+| [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results across inference, offline training and RL; comparison plot includes Gate B at iterations20–80 |
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
@@ -36,13 +36,13 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 [Active-agent supervision: hourly summaries, urgent failure review and bounded retries](RL_RUNTIME.md#arm-active-agent-supervision-20260927).
-Latest priority status: [B334894 reached durable80/1024 updates and is evaluating
-full300 before continuing90](RL_RUNTIME.md#arm-b90-priority-20260927).
+Latest priority status: [B334894 completed evaluation80, restored
+80/1024 updates and started iteration81 toward90](RL_RUNTIME.md#arm-b90-priority-20260927).
 Both mixed-only runs saved iteration4 and activated48GiB on all ranks.
 [Other lineages: C completed through60; sampling40% stopped at27;
 beta333431 stopped after21/312 updates](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
-[Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
+[Gate B80 full300:35.67% overall /47.35% valid-only; fixed10034.00% /47.89%](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
 The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated; replacements334493/334494 stay within the original budgets and both completed their first finite optimizer update after successful collection/calibration. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927). Beta333431 completed its full TP4 replay and preserved checkpoint21.

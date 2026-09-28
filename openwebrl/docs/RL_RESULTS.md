@@ -128,6 +128,7 @@
 | B: relaxed gate | 50 | 113 | 232 | 68 | 37.67 | 48.71 | [329908](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926) |
 | B: relaxed gate | 60 | 112 | 228 | 72 | 37.33 | 49.12 | [329908](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926) |
 | B: relaxed gate | 70 | 112 | 229 | 71 | 37.33 | 48.91 | [331778](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927) |
+| B: relaxed gate | 80 | 107 | 226 | 74 | 35.67 | 47.35 | [334894](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927) |
 | C: relaxed gate + action credit | 20 | 110 | 247 | 53 | 36.67 | 44.53 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
 | C: relaxed gate + action credit | 30 | 92 | 232 | 68 | 30.67 | 39.66 | [318935](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 40 | 100 | 222 | 78 | 33.33 | 45.05 | [318935](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
@@ -168,6 +169,7 @@
 | B: relaxed gate | 50 | 33 | 73 | 27 | 33.00 | 45.21 | [329908](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926) |
 | B: relaxed gate | 60 | 35 | 71 | 29 | 35.00 | 49.30 | [329908](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926) |
 | B: relaxed gate | 70 | 35 | 70 | 30 | 35.00 | 50.00 | [331778, slice of full300](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927) |
+| B: relaxed gate | 80 | 34 | 71 | 29 | 34.00 | 47.89 | [334894, slice of full300](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927) |
 | C: relaxed gate + action credit | 20 | 38 | 79 | 21 | 38.00 | 48.10 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
 | C: relaxed gate + action credit | 30 | 28 | 72 | 28 | 28.00 | 38.89 | [318935, slice of full300](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 40 | 31 | 72 | 28 | 31.00 | 43.06 | [318935, slice of full300](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |

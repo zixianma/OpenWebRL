@@ -5,6 +5,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
+- [Gate B iteration80 full300](#arm-gate-b-iter80-results-20260927)
 - [Gate B iteration70 full300](#arm-gate-b-iter70-results-20260927)
 - [Failure sampling40% iteration20 full300](#arm-failure-coverage-iter20-results-20260926)
 - [Failure sampling40% iteration10 full300](#arm-failure-coverage-iter10-results-20260926)
@@ -62,6 +63,36 @@ Private output directories below each have `rollouts/`, `status.json`,
 - runtime`evaluations/arm-original-iter40-332478-retry1/`
 - runtime`evaluations/arm-original-iter50-332479-retry3/`
 - runtime`evaluations/arm-original-iter60-332480-retry1/`
+
+<a id="arm-gate-b-iter80-results-20260927"></a>
+## Gate B iteration80 — September27 PDT / September28 UTC, 2026
+
+Job334894 completed the full300 evaluation with exit0 and handed off to
+checkpoint80 restoration for continuation toward90 in the same allocation.
+The checkpoint contains1024 Adam updates; native GPU restoration loaded
+zero-based79. Protocol: local browser, GPT-4.1/action_history, temperature0,
+actor-only evaluation,30-step horizon.
+
+| Cohort | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 300 | 107 | 226 | 74 | 35.67 | 47.35 |
+| Fixed100 slice | 100 | 34 | 71 | 29 | 34.00 | 47.89 |
+
+Overall is1.67pp below B70 and2.33pp below the historical outcome-only baseline80
+(38.00% overall /49.78% valid-only). These differing-date web evaluations do not
+establish a causal difference. No significance claim is made.
+
+All300 unique expected task IDs, nonempty rollout ZIP archives and saved
+per-task verdicts passed verification; there are zero exception records.
+ZIP central directories were checked without loading tensor/image payloads.
+The fixed100 slice matches the original unchanged sample manifest. All74
+invalid tasks remain in the overall denominator; valid-only uses226 tasks.
+
+[Aggregate audit](arm_results/rl_integration/gate-b-iteration80-audit.json) ·
+[W&B](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-b-iter80-334894).
+Artifacts:`evaluations/arm-gate-b-iter80-334894/rollouts/`.
+This evaluation is embedded in the training allocation and retains the
+`openwebrl` training-project convention.
 
 <a id="arm-gate-b-iter70-results-20260927"></a>
 ## Gate B iteration70 — September27, 2026

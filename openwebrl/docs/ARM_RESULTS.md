@@ -65,6 +65,17 @@ outcome-only baseline, overall differences at20/30/40/50/60 are−3.67,+0.67,
 [Per-checkpoint counts, fixed100 slices and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 The comparison plot continues to exclude original bonus, as requested.
 
+<a id="arm-gate-b-iter80-20260927"></a>
+## Gate B iteration80 — September27
+
+Full300 is **35.67% overall /47.35% valid-only** (226 valid); the original
+fixed100 slice is34.00%/47.89% (71 valid). This is1.67pp below B70 and2.33pp
+below historical outcome-only baseline80; differing dates and valid-task sets
+limit the comparison. All300 rollouts and verdicts are verified and preserved.
+Job334894 passed restoration and began iteration81 collection toward90.
+The [summary and plot](ARM_SUMMARY.md#baseline-comparison) now include B80.
+[Protocol, counts and artifact audit](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927).
+
 <a id="arm-gate-b-iter70-20260927"></a>
 ## Gate B iteration70 — September27
 
@@ -782,7 +793,7 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 This comparison overlays the historical outcome-only baseline curve with the
 all-failure and additive ARM full-300 points through iteration100. The completed
 baseline100 evaluation supplies the final point for those three methods.
-Gate B overlays the completed full-300 evaluations at iterations20 through70,
+Gate B overlays the completed full-300 evaluations at iterations20 through80,
 with overall and valid-only rates taken from the saved result audits; its
 curves stop at70, the latest evaluated checkpoint.
 Additive's
