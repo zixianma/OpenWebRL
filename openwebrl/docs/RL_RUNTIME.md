@@ -146,7 +146,11 @@ The launcher now specifies48GiB; Gate B already uses48GiB.
 
 For the live mixed jobs334493/334494, `scripts/set_arm_cuda_cache_limit.py`
 queues the environment change as a serialized Ray actor method after the
-current training call. Both changes are **queued, not yet verified applied**.
+current training call. Bonus334493 has **all eight ranks verified at48GiB**,
+activated after iteration4 training (60 accumulated Adam updates); its durable
+iteration4 checkpoint passed the16-shard/cursor/counter checks and iteration5
+collection has started. Reweight334494 remains queued behind iteration4
+training; its activation is not yet verified.
 No restart, new allocation, optimizer reset or scientific setting change is
 involved. Per-rank receipts and status are saved beneath each training root's
 `cache-policy-48/`. The active supervisor watches those receipts and requests
