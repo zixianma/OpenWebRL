@@ -4,6 +4,33 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-mixed-pair-iter10-results-20260928"></a>
+## Mixed-only relaxed-B pair: iteration10 — September28
+
+Both fresh-from0 runs completed their first full300 checkpoint evaluation,
+using local browsers, GPT-4.1/action_history and temperature0. Each keeps48
+ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
+auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
+trajectory-mean-one weighting with lambda=.5.
+
+| Method | Iteration | Fixed100 overall / valid-only | Full300 overall / valid-only | Valid /300 |
+| --- | ---: | --- | --- | ---: |
+| Outcome-only baseline, historical |10 | — |23.33% /29.91% |234 |
+| Mixed-only bonus + relaxed B |10 |31.00% /41.33% |30.67% /39.32% |234 |
+| Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
+
+Bonus has92 successes and reweight82; their fixed100 subsets contain31/75 and
+25/72 successes/valid tasks, respectively. All600 rollout/verdict pairs and
+nonempty ZIP archives passed inspection; cohort membership, judge settings,
+checkpoint lineage and temperature were checked. Both controllers resumed
+training toward20 and own later evaluations through60. Historical baseline10
+has70 successes; its different evaluation date prevents a same-day-control claim.
+These early single-run differences do not establish superiority or significance.
+
+[Bonus audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
+[Reweight audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
+[Evaluation provenance](RL_EVALUATION.md#arm-mixed-pair-iter10-results-20260928).
+
 <a id="arm-failure-sampling40-stop-20260927"></a>
 ## Failure sampling40% stopped — September27
 
@@ -264,7 +291,8 @@ p05/p95=0.915/1.090. Here RMS means
 `sqrt(sum((A_proposed-A_outcome)^2)/sum(A_outcome^2))`: a scalar-advantage
 perturbation on saved ordinary-group turns, not success improvement or gradient
 strength. This panel comes from B's existing actor lineage; it does not measure
-either new mixed-only run. No actor has been trained with this objective.
+either new mixed-only run. It predates training; the new runs' first measured
+checkpoint results are [reported above](#arm-mixed-pair-iter10-results-20260928).
 [Final method and controls](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926)
 · [Updated aggregate audit](arm_results/rl_integration/reweighting-design-audit.json).
 

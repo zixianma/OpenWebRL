@@ -1,0 +1,39 @@
+{
+  "method": "mixed-only bonus + relaxed B",
+  "iteration": 10,
+  "job": "335699",
+  "full300": {
+    "tasks": 300,
+    "successes": 92,
+    "valid": 234,
+    "invalid": 66,
+    "overall": 0.30666666666666664,
+    "valid_only": 0.39316239316239315,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter10-335699/rollouts",
+    "iteration": 10,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-335699-iter10/runtime/iter_0000009",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter10-335699"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 31,
+    "valid": 75,
+    "invalid": 25,
+    "overall": 0.31,
+    "valid_only": 0.41333333333333333,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0
+  },
+  "plan_sha256": "0e4079cc6ef4266a9ef352aae050ff96b6d071afc5b08df9a4e3217a0c24dada",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9"
+}

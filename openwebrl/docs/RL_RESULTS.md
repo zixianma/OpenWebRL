@@ -26,6 +26,14 @@
 | 90 | 101 | 222 | 78 | 33.67 | 45.50 |
 | 100 | 104 | 227 | 73 | 34.67 | 45.81 |
 
+## Mixed-only relaxed-B comparison · GPT-4.1 · temperature 0 · full 300
+
+| Method | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Outcome-only baseline, historical |10 |70 |234 |66 |23.33 |29.91 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
+| Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67 |39.32 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) |
+| Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33 |34.17 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) |
+
 ## Stealth browser · GPT-4.1 · temperature 0 · full 300
 
 | Checkpoint after iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Evaluation |

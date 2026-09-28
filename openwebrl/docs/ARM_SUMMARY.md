@@ -102,6 +102,12 @@ reasoning-and-action response.
   $b=\beta m(\mathbf{1}[a_j\equiv a_0]-n(a_0)/5)$, where $n(a_0)$ counts
   candidates equivalent to the executed action. Selecting any equivalent
   candidate earns the same credit.
+- **Mixed-only bonus + relaxed B:** fresh run using48 ordinary mixed groups,
+  B's min2 gate and beta=.5; no extra all-failure groups.
+- **Mixed-only reweight + relaxed B:** same groups/gate, with `A'=w*A`,
+  `w ∝ exp(.5*sign(A)*u)` and mean turn weight1 within each trajectory;
+  `u=m*(1[selected executed response]−1/5)`. Native error-sentinel groups retain
+  the bonus objective. [Exact method](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 - **Failure β = 1:** additive recipe from iteration0; increase only the auxiliary
   failure-group bonus weight from0.5 to1.0. Mixed-group β stays0.5; both sampling
   rates stay20%, with the original five-distinct-action gate and response-index credit.
@@ -117,7 +123,8 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
-| **Outcome-only baseline** | 20 (historical) | 25.0% / 35.21% | **31.67% / 40.95%** |
+| **Outcome-only baseline** | 10 (historical) | — |23.33% /29.91% |
+|  | 20 (historical) | 25.0% / 35.21% | **31.67% / 40.95%** |
 |  | 20 (same-day control) | — | **29.00% / 36.86%** |
 |  | 30 | — | 32.00% / 38.71% |
 |  | 40 | — | 33.33% / 43.29% |
@@ -169,6 +176,11 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 20 | 32.00% / 42.11% | **33.00% / 41.77%** |
 | **Failure sampling40%** | 10 | 32.00% / 42.11% | **29.00% / 37.34%** |
 |  | 20 | 26.00% / 38.24% | **27.67% / 37.39%** |
+| **Mixed-only bonus + relaxed B** |10 |31.00% /41.33% |**30.67% /39.32%** |
+| **Mixed-only reweight + relaxed B** |10 |25.00% /34.72% |**27.33% /34.17%** |
+
+Mixed-only10 evaluations completed September28 with all rollout/verdict pairs
+saved; both runs continue toward60. [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
 the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30

@@ -29,7 +29,25 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 ---
 
 <a id="arm-progress-20260928"></a>
-## ARM inventory and recovery — September28, 2026,10:00PDT
+## ARM inventory and recovery — September28, 2026
+
+**16:15PDT check:** all three priority jobs are running and W&B is updating.
+Bonus335699 has durable13/194 Adam updates and trains14; reweight335697 has
+durable16/244 and starts collection17; Gate B335681 has durable86/1092 and trains87.
+The TP4 recovery has completed four iterations beyond82, including the saved83
+batch that previously failed. Recent checkpoint-to-checkpoint medians are54.7min
+(bonus, two intervals),45.2min (reweight, four) and81.7min (Gate B, three).
+These include collection/training/save, not evaluation or startup. Gate B is
+still slower; do not describe it as a30-minute iteration. All three have finite
+recent optimizer metrics and fresh progress. Iteration10 full300 evaluations
+for both fresh runs are complete and independently audited.
+[Results](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
+
+Queued successors335700 (bonus),335698 (reweight), and335729 (Gate B100) have
+intentional dependencies, with no current ARM user/admin holds. Approved caps
+remain unchanged; the persistent supervisor has a fresh heartbeat.
+
+The following launch/recovery notes preserve the earlier morning history.
 
 **Gate B100 submission update:**335729 is queued after335681 under a separately
 approved8 H200 ×16h cap,64 CPU/960GiB. The controller owns any incomplete
@@ -60,9 +78,9 @@ checkpoints differ across rows; this inventory is not a matched-iteration compar
 
 | Track | Training progress | Current work | Latest full300 evaluation |
 | --- | --- | --- | --- |
-| Mixed-only relaxed-B bonus | Durable8 /120 Adam updates; complete saved batch9 |335682 pending resources; restore8 and replay9 within1h03m | Not yet at10 |
-| Mixed-only relaxed-B reweight | Durable9 /140 Adam updates | Partial budget stop; only1,235 seconds left, insufficient for10 plus evaluation | Not yet at10 |
-| Gate B | Durable82 /1,046 Adam updates |335681 running on g014; TP4/DP2 restore passed, saved83 replay entered training; target90/eval90 |80:35.67% /47.35% |
+| Mixed-only relaxed-B bonus | Durable13 /194 Adam updates |335699 running on g015, training14 toward60;335700 queued |10:30.67% /39.32% |
+| Mixed-only relaxed-B reweight | Durable16 /244 Adam updates |335697 running on g021, collecting17 toward60;335698 queued |10:27.33% /34.17% |
+| Gate B | Durable86 /1,092 Adam updates |335681 running on g014, training87 toward90/eval90;335729 queued through100 |80:35.67% /47.35% |
 | Gate C | Durable60 /782 Adam updates | Finished through60; no active continuation |60:32.67% /43.17% |
 | Original bonus | Completed85 /1,002 Adam updates; latest retained checkpoint80 | Stopped;85 was lost in the previously recorded pruning incident |80:33.33% /45.05% |
 | All-failure bonus | Durable100 /1,242 Adam updates | Finished through100 |100:35.67% /48.20% |
@@ -72,8 +90,8 @@ checkpoints differ across rows; this inventory is not a matched-iteration compar
 
 No ARM evaluation worker is currently running. Gate B80 has all300 saved
 rollout/verdict pairs verified. Evaluation90 is owned by335681 and waits for
-its checkpoint. The fresh matched pair has no OM2W result yet; neither endpoint
-is marked complete. [All checkpoint scores](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
+its checkpoint. The fresh pair has completed its iteration10 evaluations; training endpoints60
+and100 remain incomplete. [All checkpoint scores](ARM_SUMMARY.md#3-online-rl-with-arm-turn-level-bonuses).
 
 **Gate B memory recovery:**334894's first attempt used14,664 seconds and failed
 at83 with `cu_mem_create` OOM; its24GiB-cache retry used another1,175 seconds
