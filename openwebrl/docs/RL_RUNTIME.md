@@ -35,12 +35,12 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 | Gate C | Iteration60 /782 Adam updates | Training complete; no continuation queued | Full300 evaluations20/30/40/50/60 complete |
 | Failure β1 | Iteration21 /312 durable Adam updates; full TP4 replay and checkpoint validation passed |333431 stopped after1h58m37s during collection22:44/100 mature browser startups lacked readiness | No checkpoint30 or new evaluation; browser diagnosis required before another recovery |
 
-**New matched mixed-only jobs:**333747 (original bonus + relaxed B) and333748
+**New matched mixed-only jobs:**334493 (original bonus + relaxed B) and334494
 (outcome reweighting + relaxed B) were submitted after explicit approval of
 **8 H200 ×8h each**,128 GPU-hours total. Both begin at iteration0, use TP2/DP4,
 microbatch1 and64 browsers, and exclude extra all-failure groups. Full300 at10
-is owned by each controller within its allocation. At submission333747 awaits
-resources and333748 priority. Source and28 CPU checks are verified; fresh GPU
+is owned by each controller within its allocation. At submission334493 awaits
+resources and334494 priority. At19:54PDT,334493 started actor initialization on g004. Source and28 CPU checks are verified; fresh GPU
 execution is not yet validated. [Exact paired recipe](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 
 **September27 priority update:** the user made these two new runs this week's
@@ -57,6 +57,17 @@ native argument checks and28 tests passed. Replacements333747/333748 each reques
 7h59m, keeping failed plus replacement time below the original8h per variant.
 Their new observers follow the replacement IDs until terminal state. Receipts:
 `arm-turn-bonus-preparation/mixed-reweight-20260927/*-scratch-recovery-budget.json`.
+
+**Ray startup repair:**333747/333748 reached native argument parsing but failed
+in Ray initialization: their plasma-store UNIX socket path exceeded107 bytes.
+They consumed37/38 seconds and made no optimizer updates. `RAY_TMPDIR` now uses
+`/tmp/am-JOB`; the real Ray path validator is part of each CPU native preflight.
+Both variants passed that check, storage checks and28 tests. Replacements
+**334493/334494** request **8 H200 ×7h58m each**, after94/96 seconds cumulative
+prior use; original8h approvals remain intact. Scientific settings are unchanged.
+The automatic follow-up caught the failures, and the supervisor registry and
+observers follow both replacements. Receipts: preparation root
+`bonus-ray-recovery-budget.json` and `reweight-ray-recovery-budget.json`.
 
 <a id="arm-active-agent-supervision-20260927"></a>
 **Active-agent supervision, September27:** the user reiterated this as a top
@@ -142,7 +153,7 @@ this inventory.332004 has also consumed no GPU time.
   the latest retained original checkpoint is80. Further training has no allocation.
 - The prepared additive-relaxed/failure-only experiment remains deliberately
   deferred pending the next scientific decision. The new mixed-only relaxed
-  bonus/reweighting pair is resubmitted as333747/333748 within the approved budget. A trained prefix curriculum remains a proposal.
+  bonus/reweighting pair is resubmitted as334493/334494 within the approved budget. A trained prefix curriculum remains a proposal.
 
 The active observer's heartbeat continues to refresh; it does not submit jobs
 or relaunch cancellations. Other account jobs332455/332456 (OSWorld) and331086

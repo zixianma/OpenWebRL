@@ -21,7 +21,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
-[This week's priority:333747/333748, mixed-only relaxed bonus versus reweighting](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
+[This week's priority:334493/334494, mixed-only relaxed bonus versus reweighting](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
@@ -41,7 +41,7 @@ beta333431 saved21/312 updates, then stopped on browser startup failures](RL_RUN
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
-The priority pair's scratch-path startup bug is fixed and validated; replacements333747/333748 are queued within the original budgets. Beta333431 completed its full TP4 replay and preserved checkpoint21.
+The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated; replacements334493/334494 stay within the original budgets;334493 is in actor startup and334494 is queued. Beta333431 completed its full TP4 replay and preserved checkpoint21.
 Browser comparison331770 and prefix pilot331932 are complete.
 [Original-bonus20/30/40/50/60 full300 backfills completed:28.00%,32.67%,32.00%,34.00%,35.67% overall;
 all rollout/verdict pairs saved,7.466 GPU-hours used](RL_EVALUATION.md#arm-original-backfill-results-20260927).

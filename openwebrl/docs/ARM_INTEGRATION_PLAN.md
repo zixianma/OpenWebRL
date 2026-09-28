@@ -3,7 +3,7 @@
 <a id="arm-weekly-priority-20260927"></a>
 **This week's priority — September27:** the user prioritized **original
 bonus + relaxed gate B** and **outcome reweighting + relaxed gate B**
-(current attempts333747/333748; initial333454/333455 stopped before training).
+(current attempts334493/334494; earlier attempts stopped before training).
 Both start at iteration0 with only ordinary mixed-outcome groups. Prioritize their
 startup validation, failure repair, training progress and matched full300
 evaluation at iteration10 within the approved **8 H200 ×8h each**. Beta and
@@ -6502,8 +6502,8 @@ later strength-matched control can distinguish objective from magnitude effects.
 
 | Submitted job | Variant | Queue status at submission | Training W&B identity |
 | --- | --- | --- | --- |
-|333747 |Original bonus + relaxed B, mixed only |Pending resources |`arm-mixed-bonus-333747` |
-|333748 |Outcome reweighting + relaxed B, mixed only |Pending priority |`arm-mixed-reweight-333748` |
+|334493 |Original bonus + relaxed B, mixed only |Actor startup on g004 |`arm-mixed-bonus-334493` |
+|334494 |Outcome reweighting + relaxed B, mixed only |Pending priority |`arm-mixed-reweight-334494` |
 
 **Startup repair, September27:** initial333454/333455 stopped after57/58 seconds
 before actor startup or W&B initialization. Their scratch paths did not match
@@ -6512,6 +6512,16 @@ that path, and preparation runs the real storage/quota/write preflight. Both
 storage checks, both native argument checks and28 tests passed before the
 replacement submissions. Each replacement requests7h59m, so failed time plus
 retry remains within the original8h per variant. No scientific setting changed.
+
+**Ray startup repair, September27:**333747/333748 passed storage and argument
+checks, then stopped after37/38 seconds because their Ray UNIX socket paths
+exceeded107 bytes. The Ray root is now `/tmp/am-JOB`; preparation calls Ray's
+production `validate_socket_filepath` with a worst-case session name for both
+variants. Both native/storage preflights and28 tests passed again. Current
+replacements334493/334494 request7h58m each; cumulative prior use is94/96 seconds,
+keeping every attempt inside8h per variant. No optimizer update or checkpoint
+was produced by the failed attempts. The supervisor detected the failures and
+resumed the agent automatically; its registry and observers now follow the new IDs.
 
 Both use project `openwebrl`, with distinct display names identifying **bonus**
 and **reweight**. The batch controller owns and awaits training and the
