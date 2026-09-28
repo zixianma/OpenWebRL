@@ -1,5 +1,29 @@
 # Action reward models for OpenWebRL training
 
+<a id="arm-gate-b-to100-20260928"></a>
+**Historical Gate B to100 — requested September28:** extend the existing
+relaxed-gate B lineage to iteration100, preserving its optimizer/scheduler,
+task cursor,W&B `arm-gate-b-309053`,48 mixed groups plus up to8 auxiliary
+all-failure groups, beta0.5,q20%,min2 gate and response-index credit. This is
+the historical B run, distinct from the new mixed-only pair below.
+
+Current335681 restores82 and tests saved83 on TP4/DP2 with24GiB cache guard;
+its existing controller owns training90 and full300 evaluation90. The first
+five replay updates are finite, but the full batch is not yet verified.
+Propose **one additional8 H200 ×16h allocation**,64 CPUs/960GiB,128 GPU-hours
+including retries and full300 evaluation100. Resume from the latest verified
+checkpoint after335681; if90/evaluation90 is incomplete, finish that milestone
+before100. Keep the existing local-browser,GPT-4.1/action_history,T0 protocol
+and save every rollout/verdict. Do not repeat an already verified evaluation90.
+
+The current recovery needs roughly4.5–5 minutes per optimizer update; full
+iteration throughput has not yet been established. The16h proposal allows
+room for10 further iterations, restoration and evaluation; it is a cap, not
+a completion guarantee. **The additional allocation is not yet approved or
+submitted.** Gate B's existing16h total and both mixed-pair continuation budgets
+remain separate and unchanged. Runtime proposal and verified resume/recipe
+references: `arm-turn-bonus-preparation/gate-b90-20260927/to100/proposal.json`.
+
 <a id="arm-mixed-pair-to60-20260928"></a>
 **Mixed-only pair to60 — requested September28:** continue both the
 **mixed-only bonus + relaxed B** and **mixed-only outcome reweighting + relaxed B**
