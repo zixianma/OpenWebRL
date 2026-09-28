@@ -108,7 +108,7 @@ Beta and other research directions are secondary. Existing job monitoring contin
 this changes research priority, without changing scheduler QoS or compute budgets.
 [Exact paired methods and launch records](#arm-outcome-aware-reweighting-20260926).
 
-[Finalized reweighting design](#arm-outcome-aware-reweighting-20260926) · [Outcome-trained reward investigation](#arm-outcome-trained-reward-investigation-20260927) · [Task-pool expansion next steps](#arm-task-pool-next-investigation-20260927) · [Additive relaxed, failure-only ARM: prepared method](#arm-additive-relaxed-failureonly-20260926) · [Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
+[Finalized reweighting design](#arm-outcome-aware-reweighting-20260926) · [Outcome reward: ORM/PRIME comparison](#arm-outcome-orm-prime-comparison) · [Task-pool expansion next steps](#arm-task-pool-next-investigation-20260927) · [Additive relaxed, failure-only ARM: prepared method](#arm-additive-relaxed-failureonly-20260926) · [Next experiments after B/C: discussion draft](#arm-next-experiments-after-bc-20260926) · [Concise collaborator summary](ARM_SUMMARY.md) · [Three-stage ARM summary](ARM_RESULTS.md#arm-three-stage-summary) · [Current RL variants](ARM_RESULTS.md#arm-current-three-rl-variants) · [ARM results dashboard](ARM_RESULTS.md#arm-results-dashboard)
 
 <a id="arm-offline-forward-transfer-20260924"></a>
 ## Offline ARM refresh: outcome-only40 → outcome-only90 — September25, 2026
@@ -6705,47 +6705,147 @@ while the new hook logs the actually applied advantage perturbation separately.
 Local reproducibility: `python3 scripts/audit_arm_reweighting_design.py`.
 
 <a id="arm-outcome-trained-reward-investigation-20260927"></a>
-## Next direction2: outcome-trained evolving reward — September27 offline pilot
+## Next direction2: outcome-supervised implicit reward — offline browser pilot
 
 **User-approved next test:** an offline outcome-supervised reward model on
 saved trajectories; do not scale the previous teacher-choice refresh unchanged.
 That refresh improved offline agreement1.89pp but full300 browser success moved
 42.00%→41.33%. It has not been used in RL.
 
-[PRIME](https://arxiv.org/html/2502.01456v2#S3) trains a causal reward LM from
-trajectory outcome labels using log-likelihood ratios to a frozen reference.
-Its response-token rewards sum to a trajectory score trained with binary cross
-entropy. This is a different objective and input from SelectionARM's SFT on a
-chosen candidate index. PRIME initializes reward/reference from the starting
-actor; its evidence is in math/code, not multimodal browser environments.
+<a id="arm-outcome-orm-prime-comparison"></a>
+### Review: our proposal versus an outcome reward model, PRIME, and SelectionARM
 
-A proposed browser adaptation, which needs its own validation, is:
+**Our proposal is an offline browser adaptation of PRIME's implicit reward
+construction.** It has outcome-level supervision and a score decomposable into
+causal token/turn scores. It introduces no new credit-assignment objective relative
+to PRIME. Useful local action credit remains unproven; online evolution is a
+possible later experiment.
+
+| Method | Model input | Training label | Output available for use |
+| --- | --- | --- | --- |
+| Conventional scalar-head ORM comparator | Complete trajectory | Final success/failure | One trajectory score; no prescribed local decomposition |
+| Piotr SelectionARM, used in our existing runs | Browser state + five candidate reasoning/action responses | Teacher's preferred candidate index | Selection among the supplied candidates |
+| PRIME implicit reward model | Prompt and response, scored causally | Outcome-verifier label | Token log-ratio rewards and their sum |
+| **Our proposed offline browser model** | Each archived actor context/screenshot and its executed reasoning/action, grouped into a complete trajectory | **One GPT-4.1 success/failure verdict per trajectory** | Token/turn log-ratio scores and their sum; local usefulness unverified |
+
+ORM describes the supervision, not a required architecture or training schedule.
+Our proposal is also outcome-supervised. SelectionARM has direct action-preference
+labels, although teacher preferences are not execution-grounded action values.
+
+**Input, output and loss.** One example is a complete episode. `s_t` contains
+the actor-visible task, tools, history and screenshot; `y_t` is its executed
+reasoning/action response. Trainable reward LM `p_phi` and frozen reference
+`p_ref` start from original OpenWebRL-4B-SFT. Both score archived responses by
+teacher forcing, producing token probabilities rather than generated reward text.
 
 ```text
-r_phi(turn) = eta * sum_executed_assistant_tokens(log p_phi - log p_ref)
-z_phi(trajectory) = sum_turns(r_phi(turn))
-L_reward = BCEWithLogits(z_phi(trajectory), terminal_success)
+For each scored token k of the current executed response:
+  r[t,k] = eta * (log p_phi(y[t,k] | s_t, y[t,<k])
+                 - log p_ref(y[t,k] | s_t, y[t,<k]))
+
+Turn score:         r[t] = sum_k r[t,k]
+Trajectory score:   z    = sum_t r[t]
+Success prediction: p    = sigmoid(z)
+Trajectory loss:    L    = -Y*log(p) - (1-Y)*log(1-p)
+Batch loss:              mean of L over complete trajectories
 ```
 
-Condition each turn on its exact archived actor prompt, history and screenshots;
-score executed assistant tokens only, excluding prompts, screenshots, tool output
-and padding. Regenerate reference log probabilities under the intended model and
-mask; sampler-temperature old-policy logps are not automatically interchangeable.
-No labels mark every successful-trajectory action correct, although trajectory
-supervision alone still does not identify causal per-turn contributions. Variable
-response/trajectory length can create shortcuts. Check against length-only and
-prompt-only controls and report within-task ranking, calibration and length
-strata. Eta is a separate new coefficient; do not copy either lambda0.5 or
-ARM beta0.5. Its calibration and any intercept/normalization need a declared
-training-only protocol before fitting.
+`Y=1` means judged success; `Y=0` means valid judged failure; invalid verdicts
+are excluded. Score only current assistant tokens. Prompt/history, images and
+tool outputs provide context without being scored again. Exclude future
+observations and judge/outcome metadata from inputs. Recompute frozen-reference
+logps; do not substitute temperature-scaled rollout logps. No extra SFT loss.
 
-The existing Piotr repo can host a separate trainer/data adapter, but its unchanged
-LLaMA-Factory selection-completion SFT cannot implement this aggregate outcome
-loss. Start a new reward/reference pair from the agreed actor SFT model for a
-PRIME-style test; reusing SelectionARM weights in that role is an extra ablation,
-not an equivalent refresh. No need to switch the OpenWebRL actor backend for an
-offline probe. GPU cost depends on retained token/image volume and reference
-scoring; it is not yet budgeted or authorized.
+Proposed eta=.05 is separate from actor bonus beta=.5 and reweight lambda=.5.
+Turn scores are signed, not action-correctness probabilities. The trajectory
+success prediction also needs calibration checks.
+
+**Illustration: where the final label enters.** Each proposed turn scorer sees
+only its own causal context; the label supervises the sum after the episode.
+
+```mermaid
+flowchart TD
+    Y["One terminal success/failure label Y"]
+    subgraph O["Conventional scalar-head ORM"]
+        T["Complete recorded trajectory"] --> H["Scalar scoring head"]
+        H --> ZO["Trajectory score z"]
+        ZO --> LO["One trajectory BCE loss"]
+    end
+    subgraph P["Our proposed implicit reward model"]
+        S1["Context + screenshot + response at turn 1"] --> R1["Token log ratios summed to r1"]
+        S2["Context + screenshot + response at turn 2"] --> R2["Token log ratios summed to r2"]
+        S3["Context + screenshot + response at turn 3"] --> R3["Token log ratios summed to r3"]
+        R1 --> ZP["z = r1 + r2 + r3"]
+        R2 --> ZP
+        R3 --> ZP
+        ZP --> LP["One trajectory BCE loss"]
+    end
+    Y --> LO
+    Y --> LP
+```
+
+**Why this still does not identify good actions.** Consider a successful episode:
+the actor opens the wrong page, recovers to the right page, then answers. These
+illustrative reward assignments have identical total score and trajectory loss:
+
+| Possible learned assignment | Wrong page | Recovery | Final answer | Sum |
+| --- | ---: | ---: | ---: | ---: |
+| Credit spread across turns | -0.2 | +0.8 | +0.4 | 1.0 |
+| Credit concentrated on final answer | 0.0 | 0.0 | +1.0 | 1.0 |
+
+Both predict about73.1% success and receive the same loss:
+`dL/dr[t] = sigmoid(z) - Y` for every turn. Useful distinctions must emerge
+across trajectories; length, task difficulty and final-answer wording can also
+explain outcomes without identifying helpful actions.
+
+**What is inherited from PRIME, and what changes.** PRIME trains the same kind
+of causal-LM log-ratio score using an aggregate outcome loss. Its full algorithm
+updates the reward model on current-policy rollouts, combines process and outcome
+returns, and updates the actor. The paper's experiments use math/code tasks and
+rule-based outcome verifiers; its analysis finds online reward updates important.
+These are literature findings, not browser results. [PRIME §§3–5](https://arxiv.org/html/2502.01456v2#S3).
+
+| Dimension | PRIME's published setup | Our current proposal |
+| --- | --- | --- |
+| Reward construction and supervision | Implicit log ratios; aggregate outcome loss | Same construction, aggregated over executed browser turns |
+| Data and observations | Current-policy text reasoning rollouts | Fixed baseline31–40 browser archives with screenshots and tool feedback |
+| Outcome labels | Rule-based verifiers | Saved GPT-4.1 judgments, with possible judge error |
+| Reward update schedule | Online alongside actor learning | Offline reward fitting; actor remains unchanged |
+| Actor training | Process/outcome returns used in RL | No actor RL in this pilot; integration would be separately specified |
+| Main question here | — | Do local scores transfer to later browser actors and improve action choices? |
+
+The offline pilot tests existing-data feasibility, not PRIME's full algorithm
+or long-term reward robustness. The current mixed-only bonus/reweight RL runs
+remain separate and continue using released SelectionARM.
+
+**A more direct action-supervision alternative remains open.** Restore the same
+browser state `s`, execute different candidate actions, and continue each with a
+fixed policy `pi`. Repeated branch outcomes estimate:
+
+```text
+Q_pi(s,a) = expected terminal success after executing a at s,
+            then following the fixed continuation policy pi
+```
+
+These estimates can supervise action values/preferences, subject to continuation
+policy and sampling uncertainty. Different rollouts of one task are not same-state
+comparisons: browser state must be reproducible. This alternative requires new
+browser execution and a separate budget; such branch labels do not yet exist.
+
+**Decision and status.** Test offline ranking/calibration against length/task-only
+controls, then require action-execution evidence before actor RL. Length alone
+already achieves65.48% task-macro pair accuracy on49 later-test tasks with both
+outcomes. Beating that control is necessary evidence, not proof of local credit.
+The test changes task IDs and actor iteration, so it measures joint generalization.
+
+Archive hashes, nine processor boundary cases and six objective CPU tests have
+passed. Loss primitives live in Piotr's existing checkout under
+`training/outcome_reward/`; this needs a separate trainer, not unchanged
+selection-index SFT. No reward-model fit or GPU pilot has run.
+[Data and checks](#arm-outcome-reward-readiness-20260928) ·
+[Task-pool expansion, independent direction3](#arm-task-pool-screening-v2-20260928).
+
+### Data preparation and experiment sequence
 
 **Data checked today:** use the baseline31–40 archives already indexed for the
 ARM refresh. The earlier full scan found5,239 trajectories with at least one

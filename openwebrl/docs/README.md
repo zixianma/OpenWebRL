@@ -25,6 +25,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Historical Gate B:335729 queued after335681, approved additional8 H200 ×16h through100/eval100; preserve and verify90/eval90 first](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
 [Mixed-only pair to60 submitted: reweight335697→335698; bonus335699→335700 after335682; full300 every10, approved additional8 H200 ×48h per variant](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
+[Review: proposed outcome-supervised reward versus ORM, PRIME and SelectionARM—input/label/loss table, diagram, credit-assignment example and open alternative](ARM_INTEGRATION_PLAN.md#arm-outcome-orm-prime-comparison).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Outcome-reward readiness: image hashes/processor/gradient checks pass; length-only later-test pair accuracy65.48%; GPU fit pending](ARM_INTEGRATION_PLAN.md#arm-outcome-reward-readiness-20260928).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
