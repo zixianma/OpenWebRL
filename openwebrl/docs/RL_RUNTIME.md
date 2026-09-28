@@ -136,12 +136,27 @@ also differ; neither comparison holds data/context and node constant. Mean
 response length is actually shorter in mixed iteration3 (~332 tokens) than
 B79 (~402) or C50 (~389), so longer generated responses do not explain it.
 
-Next diagnostic: compare24/48GiB on an identical saved batch at a safe handoff,
-including the longest contexts, cache-release time, peak HBM and optimizer
-throughput. Preserve actor/optimizer/scheduler/cursor and the scientific recipe.
-No GPU comparison has run or been scheduled yet; use only remaining approved
-resources and retain OOM protection until memory safety is validated. The
-runtime supervisor records this as a priority efficiency follow-up. CPU audit:
+**User-authorized change, September27 at23:18PDT:** raise the mixed pair's cache
+threshold from24 to48GiB. The setting is
+`OPENWEBRL_CUDA_CACHE_LIMIT_GIB` in `scripts/prepare_arm_mixed_reweight.py`;
+`slime/utils/memory_utils.py::release_unused_cuda_cache_under_pressure` reads
+it at each training microbatch. This is a cache-release threshold, not a hard
+GPU-memory cap: release also requires at least8GiB of unused reserved memory.
+The launcher now specifies48GiB; Gate B already uses48GiB.
+
+For the live mixed jobs334493/334494, `scripts/set_arm_cuda_cache_limit.py`
+queues the environment change as a serialized Ray actor method after the
+current training call. Both changes are **queued, not yet verified applied**.
+No restart, new allocation, optimizer reset or scientific setting change is
+involved. Per-rank receipts and status are saved beneath each training root's
+`cache-policy-48/`. The active supervisor watches those receipts and requests
+agent verification on completion, errors or a stale control process.
+
+After activation, verify all eight ranks per run, finite optimizer progress,
+peak HBM, cache-release frequency and per-update throughput. A before/after
+comparison uses different collected batches and cannot isolate the causal
+speedup; no matched GPU comparison has been run. Preserve checkpoints,
+optimizer/scheduler/cursor and all remaining budget. CPU audit:
 `arm-turn-bonus-preparation/mixed-reweight-20260927/iteration-throughput-audit-20260927.json`.
 
 <a id="arm-active-agent-supervision-20260927"></a>
