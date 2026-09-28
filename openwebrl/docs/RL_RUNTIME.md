@@ -156,12 +156,31 @@ involved. Per-rank receipts and status are saved beneath each training root's
 `cache-policy-48/`. The active supervisor watches those receipts and requests
 agent verification on completion, errors or a stale control process.
 
-Activation receipts are verified; next measure finite optimizer progress,
-peak HBM, cache-release frequency and per-update throughput in iteration5.
-Training at48GiB and its speedup are not yet verified. A before/after
-comparison uses different collected batches and cannot isolate the causal
-speedup; no matched GPU comparison has been run. Preserve checkpoints,
-optimizer/scheduler/cursor and all remaining budget. CPU audit:
+**Measured after activation, September28:** bonus iterations5–6 and reweight5
+completed without OOM; durable checkpoints and optimizer/scheduler counters
+were verified.
+
+| Run /48GiB iteration | Adam updates | Full cycle, checkpoint to checkpoint | Training/save | Seconds/update including save | Cache releases per rank /microbatches |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Mixed bonus5 |14|41.98min|24.20min|103.72|295–323 /896|
+| Mixed bonus6 |14|40.48min|24.60min|105.42|300–343 /896|
+| Mixed reweight5 |16|46.16min|29.01min|108.77|384–429 /1024|
+
+Training/save time per update fell from roughly144–151 to104–109 seconds
+in the adjacent measured cycles, about27–29% less time. Cache clearing fell
+from almost every microbatch to roughly33–42%. Full iterations now take
+40–46 minutes; the earlier25–30-minute C cycles still have fewer updates and
+other data/context differences. This before/after comparison uses different
+collected batches and cannot isolate a causal speedup. No matched replay has
+been run. Peak HBM has not been continuously sampled; native training and live
+memory snapshots show no OOM so far.
+
+Admission estimates were revised to120 seconds/update plus the existing
+600-second margin, and a50-minute minimum remaining cycle window. Only these
+operational estimates changed; allocation deadlines, the evaluation reserve,
+reward/loss recipe, optimizer and task cursor remain unchanged. Evidence:
+`arm-turn-bonus-preparation/mixed-reweight-20260927/post48-throughput-audit.json`.
+Original CPU audit:
 `arm-turn-bonus-preparation/mixed-reweight-20260927/iteration-throughput-audit-20260927.json`.
 
 <a id="arm-active-agent-supervision-20260927"></a>
