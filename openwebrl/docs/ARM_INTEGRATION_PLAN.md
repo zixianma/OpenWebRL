@@ -6523,7 +6523,8 @@ at15-minute intervals. They record failures; controller health guards stop
 unhealthy workers. The [active-agent supervisor](RL_RUNTIME.md#arm-active-agent-supervision-20260927)
 now queues reviews in the owning Codex thread on changes or every15 minutes;
 the agent diagnoses and verifies repairs within the original remaining budget.
-Queue acceptance is tested; agent resumption confirmation is pending.
+The queued delivery test resumed the same thread and the agent checked both
+jobs; continuation is verified, not just queue acceptance.
 
 The time cap does not guarantee iteration10 or60. The controller owns training
 and evaluation workers and preserves partial progress. Failure trajectories

@@ -64,8 +64,9 @@ priority for every project. The global Codex instructions and root `AGENTS.md`
 now require active diagnosis and recovery, beyond read-only recording.
 `scripts/arm_job_supervisor.py` polls the registered pair every60 seconds and
 queues a follow-up to the owning Codex thread on state/checkpoint changes or
-every15 minutes. Its local `codex queue` delivery test was accepted; confirmation
-that the queued prompt resumes the agent is the next verification step.
+every15 minutes. Its local `codex queue` delivery test **resumed the same thread**;
+the agent acknowledged the continuation and checked both live jobs. The receipt
+is `supervisor/continuation-delivery-verified.json` under the preparation root.
 The supervisor itself does not submit, cancel or modify GPU jobs. The resumed
 agent inspects failures, verifies fixes, preserves state and relaunches only
 within the recorded remaining approvals. Pending notifications are deduplicated
