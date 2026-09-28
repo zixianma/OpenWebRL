@@ -31,6 +31,19 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 <a id="arm-progress-20260928"></a>
 ## ARM inventory and recovery — September28, 2026,10:00PDT
 
+**Gate B100 submission update:**335729 is queued after335681 under a separately
+approved8 H200 ×16h cap,64 CPU/960GiB. The controller owns any incomplete
+90/eval90 milestone, then100/eval100, and preserves the existing B lineage.
+Four controller regression tests, native arguments and storage/quota preflight
+passed; a durable TP4 recovery checkpoint and native GPU restore are required
+before continuation. [Plan and budget](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
+Bonus335682 completed with checkpoint9/134 Adam updates verified; supervisor
+now follows335699. Reweight335697 passed native checkpoint9/140 restoration and
+started iteration10 training. The supervisor now also inspects queued successors
+for failed/held/unsatisfiable states; six queue-state checks passed and its
+persistent service was restarted with a fresh heartbeat. Routine reports remain
+hourly, with urgent failure review sooner.
+
 **10:19PDT continuation update:** the user approved both mixed-only runs through60,
 with a separate additional48h on8 H200 per variant, including evaluations/retries.
 Reweight335697→335698 is queued; bonus335699→335700 follows the running335682

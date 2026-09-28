@@ -10,8 +10,10 @@ the historical B run, distinct from the new mixed-only pair below.
 Current335681 restores82 and tests saved83 on TP4/DP2 with24GiB cache guard;
 its existing controller owns training90 and full300 evaluation90. The first
 five replay updates are finite, but the full batch is not yet verified.
-Propose **one additional8 H200 ×16h allocation**,64 CPUs/960GiB,128 GPU-hours
-including retries and full300 evaluation100. Resume from the latest verified
+Approved and submitted **335729: one additional8 H200 ×16h allocation**,
+64 CPUs/960GiB,128 GPU-hours including retries and full300 evaluation100.
+It waits for335681's successful completion, including a durable budget stop.
+Resume from the latest verified
 checkpoint after335681; if90/evaluation90 is incomplete, finish that milestone
 before100. Keep the existing local-browser,GPT-4.1/action_history,T0 protocol
 and save every rollout/verdict. Do not repeat an already verified evaluation90.
@@ -19,10 +21,19 @@ and save every rollout/verdict. Do not repeat an already verified evaluation90.
 The current recovery needs roughly4.5–5 minutes per optimizer update; full
 iteration throughput has not yet been established. The16h proposal allows
 room for10 further iterations, restoration and evaluation; it is a cap, not
-a completion guarantee. **The additional allocation is not yet approved or
-submitted.** Gate B's existing16h total and both mixed-pair continuation budgets
+a completion guarantee. Gate B's existing16h total and both mixed-pair continuation budgets
 remain separate and unchanged. Runtime proposal and verified resume/recipe
 references: `arm-turn-bonus-preparation/gate-b90-20260927/to100/proposal.json`.
+
+Controller `scripts/resume_arm_gate_b100.py` passed four milestone/budget/resume
+regression tests, native CPU argument parsing, real GPFS quota/storage checks
+and preserved-recipe validation. It requires an inactive, durable TP4 recovery
+checkpoint before starting, then verifies native GPU model/optimizer restoration.
+Full300 at90 is reused only after its saved cohort and archives pass inspection;
+otherwise it is completed before training100. Both evaluation cohorts and the
+final durable checkpoint must pass artifact checks before completion. The
+approved16h cap includes failed attempts; no automatic budget extension.
+The running335681 controller and its scientific settings remain unchanged.
 
 <a id="arm-mixed-pair-to60-20260928"></a>
 **Mixed-only pair to60 — requested September28:** continue both the
@@ -30,9 +41,11 @@ references: `arm-turn-bonus-preparation/gate-b90-20260927/to100/proposal.json`.
 experiments to iteration60. This extends their requested endpoint, preserving
 their original iteration0 initialization and existing model, optimizer,
 scheduler, task cursor and W&B identities. Bonus currently has durable8 plus
-a complete saved9 batch; its already approved335682 replay is running on g005.
-Reweight has durable9. Resolve bonus's latest verified checkpoint after335682
-finishes; never run two writers for the same lineage.
+a complete saved9 batch at preparation. Its already approved335682 replay has
+now finished: **durable9 /134 Adam updates verified**. Reweight has durable9
+/140 updates;335697 restored that state on GPUs and is training10. Resolve
+the latest verified checkpoint at each continuation; never run two writers for
+the same lineage.
 
 Keep TP2/DP4,microbatch1,global256,PPO2,64 browsers and the48GiB cache guard.
 Scientific settings remain unchanged:48 ordinary mixed groups, no auxiliary
@@ -65,8 +78,8 @@ advancing; all six cohorts are checked again before marking60 complete.
 
 | Variant | First24h allocation | Second24h allocation | Initial queue state |
 | --- | ---: | ---: | --- |
-| Reweight + relaxed B, mixed only |335697 |335698, after335697 |First waiting for resources |
-| Bonus + relaxed B, mixed only |335699, after335682 |335700, after335699 |Waiting for existing saved9 replay |
+| Reweight + relaxed B, mixed only |335697 |335698, after335697 |First running on g021; checkpoint9 restored, iteration10 training |
+| Bonus + relaxed B, mixed only |335699, after335682 |335700, after335699 |335682 finished with9 saved;335699 waiting for resources |
 
 Dependencies require successful controller exits, including intentional durable
 budget stops. A failed attempt blocks its successor for diagnosis; repair must
