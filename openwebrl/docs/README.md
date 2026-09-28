@@ -22,13 +22,13 @@ for the work you are doing, then follow its contents to dated experiment records
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
 [This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
-[Mixed-only pair: continue both to60 with full300 every10; additional8 H200 ×48h per variant proposed, exact budget approval pending](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
+[Mixed-only pair to60 submitted: reweight335697→335698; bonus335699→335700 after335682; full300 every10, approved additional8 H200 ×48h per variant](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Current inventory: Gate B335681 restores82 on TP4/DP2 and tests saved83; bonus335682 queues saved9 replay; reweight9 saved, additional budget needed for10/eval](RL_RUNTIME.md#arm-progress-20260928).
+[Current inventory: Gate B335681 tests saved83 on TP4/DP2; bonus335682 runs saved9 replay; both mixed-to60 continuation chains submitted](RL_RUNTIME.md#arm-progress-20260928).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

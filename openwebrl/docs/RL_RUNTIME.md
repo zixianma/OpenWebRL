@@ -31,6 +31,16 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 <a id="arm-progress-20260928"></a>
 ## ARM inventory and recovery — September28, 2026,10:00PDT
 
+**10:19PDT continuation update:** the user approved both mixed-only runs through60,
+with a separate additional48h on8 H200 per variant, including evaluations/retries.
+Reweight335697→335698 is queued; bonus335699→335700 follows the running335682
+saved9 replay. Each new allocation is at most24h,64 CPU/960GiB. Full300 at every
+tenth iteration is owned and awaited by the new controller. Both native CPU
+argument checks, quota/storage preflights and five controller regression tests
+passed; GPU restoration is required on startup. The original8h histories remain
+separate. This approval resolves the earlier reweight budget blocker described
+below. [Exact submission and validation record](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
+
 This status supersedes the dated snapshots below. Full300 rates are overall /
 valid-only under local browsers,GPT-4.1/action_history,temperature0. Latest
 checkpoints differ across rows; this inventory is not a matched-iteration comparison.

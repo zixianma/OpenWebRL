@@ -6,7 +6,7 @@
 experiments to iteration60. This extends their requested endpoint, preserving
 their original iteration0 initialization and existing model, optimizer,
 scheduler, task cursor and W&B identities. Bonus currently has durable8 plus
-a complete saved9 batch; its already approved335682 replay remains queued.
+a complete saved9 batch; its already approved335682 replay is running on g005.
 Reweight has durable9. Resolve bonus's latest verified checkpoint after335682
 finishes; never run two writers for the same lineage.
 
@@ -19,20 +19,38 @@ protocol and all rollout/verdict pairs saved. Embedded evaluations stay in the
 training W&B project. Evaluate matched iterations rather than comparing the
 different current checkpoint numbers.
 
-**Additional compute proposal, not yet approved:** for each variant,8 H200,
+**Additional compute approved and submitted:** for each variant,8 H200,
 64 CPUs/960GiB, capped at48 additional hours, split into two at-most24-hour
 normal-QoS allocations. This is384 GPU-hours per variant,768 total, including
 evaluations and all retries. Stop early when60 and its evaluations are verified.
 Measured recent iterations take approximately40–50 minutes;51–52 remaining
 iterations plus six evaluations and restoration suggest roughly40–48 more hours
 per variant, excluding queue time. The cap is not a completion guarantee.
-The previous8h approvals and335682's remaining time are separate and unchanged;
-this endpoint request does not itself approve the proposed additional budget.
+The previous8h approvals and335682's remaining time are separate and unchanged.
+The user approved the exact additional budget after reviewing measured throughput.
 Verified resume identities, lineage and recipe, and the execution contract are
 recorded in runtime
 `arm-turn-bonus-preparation/mixed-reweight-20260927/to60/proposal.json`.
-The existing recovery controller currently targets10; its multi-milestone
-extension must be validated before a new GPU launch.
+`scripts/resume_arm_mixed_to60.py` owns each training/evaluation stage, preserving
+the separate existing recovery controller for335682. Five CPU regression tests,
+both native argument checks, actual quota/storage preflights and exact resume
+identities passed. Native GPU model/optimizer restoration is mandatory before
+every new training stage. The evaluation controller requires the full declared
+300-task cohort, matching judge settings and nonempty ZIP archives before
+advancing; all six cohorts are checked again before marking60 complete.
+
+| Variant | First24h allocation | Second24h allocation | Initial queue state |
+| --- | ---: | ---: | --- |
+| Reweight + relaxed B, mixed only |335697 |335698, after335697 |First waiting for resources |
+| Bonus + relaxed B, mixed only |335699, after335682 |335700, after335699 |Waiting for existing saved9 replay |
+
+Dependencies require successful controller exits, including intentional durable
+budget stops. A failed attempt blocks its successor for diagnosis; repair must
+update the dependency and charge consumed time. A per-lineage execution lock
+prevents overlapping writers. Each new controller registers itself with the
+persistent supervisor and keeps its current training/evaluation artifact paths
+updated. Approval, per-variant attempt ledgers and submission receipts are in
+the same `to60/` runtime directory. No new scientific intervention is introduced.
 
 <a id="arm-weekly-priority-20260927"></a>
 **This week's priority — September27:** the user prioritized **original
@@ -6538,7 +6556,7 @@ later strength-matched control can distinguish objective from magnitude effects.
 | Rollouts |Temperature0.8, horizon15, response1024, context32768; same2,102-task pool and GPT-4.1/action_history judge |
 | Launch topology |8 H200, TP2/DP4, microbatch1,64 browsers; existing validated layout, new hook still requires live full-batch/save validation |
 | Approved first allocation |Two separate8-GPU ×8h jobs,64 CPU/960GiB each;128 GPU-hours total; reserve1h per job for full300 at10 |
-| Endpoints |First allocation targets10; user requested both continuations to60 on September28; [exact additional budget proposal pending](#arm-mixed-pair-to60-20260928) |
+| Endpoints |First allocation targets10; [both continuations to60 approved and submitted September28](#arm-mixed-pair-to60-20260928) |
 | Evaluation |Full300 every10 completed iterations, local browser, GPT-4.1/action_history, temperature0; save every task's rollout and verdict |
 | Primary comparison |Mean overall success across40/50/60 against the **new relaxed-bonus control** at the same iterations; show all points, valid-only denominators and compute |
 
