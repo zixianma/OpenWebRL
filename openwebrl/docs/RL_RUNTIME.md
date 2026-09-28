@@ -182,6 +182,34 @@ Admission estimates were revised to120 seconds/update plus the existing
 operational estimates changed; allocation deadlines, the evaluation reserve,
 reward/loss recipe, optimizer and task cursor remain unchanged. Evidence:
 `arm-turn-bonus-preparation/mixed-reweight-20260927/post48-throughput-audit.json`.
+
+**September28,02:16PDT budget handoff:** both mixed runs saved iteration7
+(bonus104 Adam updates; reweight108). Reweight334494 collected iteration8 and
+passed calibration, but its time gate rejected training:2,364 seconds remained
+before the reserved evaluation hour versus a2,520-second training estimate.
+The controller exited successfully with a **partial** result, not a completed
+experiment; iteration10/evaluation10 had not been reached.
+
+Reweight334494 is requeued under the same ID for **1h42m**, after charging22,561
+seconds from its training attempt plus96 seconds from the earlier failed
+attempt. The total remains below28,800 seconds, with23 seconds unallocated.
+`scripts/resume_arm_mixed_reweight.py` restores checkpoint7, replays the saved
+iteration8 batch and consumed task cursor, and checks the original calibration
+and reweighting statistics before training. Native argument, reward/gate and
+budget/recipe rejection checks passed; native GPU restoration and replay remain
+pending until scheduled. W&B identity, TP2/DP4,microbatch1,48GiB cache threshold,
+optimizer/scheduler and scientific settings are preserved. Recovery artifacts
+use `arm-mixed-reweight-334494-r1`; receipts are under
+`arm-turn-bonus-preparation/mixed-reweight-20260927/continuations/`.
+
+The unreachable evaluation reservation is now available for useful training:
+bonus334493's training deadline moves to its existing allocation end minus
+three minutes; the bounded reweight continuation reserves no upfront evaluation
+hour. Save/admission guards remain active. Evaluation10 runs only if its durable
+checkpoint and enough allocation time are available; otherwise it remains
+pending. This does not extend either approval or mark the first milestone
+complete. At the observed speed, iteration10 plus evaluation remains unlikely
+within the original budgets.
 Original CPU audit:
 `arm-turn-bonus-preparation/mixed-reweight-20260927/iteration-throughput-audit-20260927.json`.
 
@@ -387,6 +415,11 @@ TP2/DP4, batch sizes, context, rewards and loss remain unchanged. The mixed pair
 stays at48GiB. CPU/native-argument, checkpoint-shard and replay archive/identity
 checks passed; GPU restore and full-batch replay are pending in the recovery.
 The controller skips the already verified evaluation80 and owns evaluation90.
+
+At02:18PDT, the recovery passed native TP2/DP4 model/optimizer restoration of
+checkpoint82/1046 Adam updates. Saved iteration83 reproduced its calibration
+and auxiliary payload and entered training at02:22PDT. This verifies the resume
+and replay handoff; the24GiB OOM fix still requires the full batch to finish.
 
 Recovery receipts are under
 `arm-turn-bonus-preparation/gate-b90-20260927/334894-recovery*.json`; training
