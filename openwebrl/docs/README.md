@@ -26,7 +26,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
 
-[Current ARM timing audit: mixed pair50–59min/iteration; resumed B38–40min; cache-policy investigation](RL_RUNTIME.md#arm-iteration-throughput-20260927).
+[ARM timing audit: both mixed runs now verified at48GiB; iteration5 throughput measurement pending](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
@@ -36,9 +36,11 @@ Small, inconclusive positive signal for two-turn guidance; all288 primary attemp
 Live operations: [job status, completions and failures](arm_results/rl_integration/live-status.html)
 (one-minute refresh; [monitor behavior](RL_RUNTIME.md#arm-live-monitor-20260921)).
 [Active-agent supervision: hourly summaries, urgent failure review and bounded retries](RL_RUNTIME.md#arm-active-agent-supervision-20260927).
-Latest checked status: [B331778 failed during78; durable77, evaluations80/90 blocked;
-C completed training/evaluations through60; sampling40% stopped at27;
-beta333431 saved21/312 updates, then stopped on browser startup failures](RL_RUNTIME.md#arm-progress-20260927).
+Latest priority status: [B334894 reached durable80/1024 updates and is evaluating
+full300 before continuing90](RL_RUNTIME.md#arm-b90-priority-20260927).
+Both mixed-only runs saved iteration4 and activated48GiB on all ranks.
+[Other lineages: C completed through60; sampling40% stopped at27;
+beta333431 stopped after21/312 updates](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
 [Gate B70 full300:37.33% overall /48.91% valid-only](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);

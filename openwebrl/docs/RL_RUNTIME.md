@@ -146,18 +146,19 @@ The launcher now specifies48GiB; Gate B already uses48GiB.
 
 For the live mixed jobs334493/334494, `scripts/set_arm_cuda_cache_limit.py`
 queues the environment change as a serialized Ray actor method after the
-current training call. Bonus334493 has **all eight ranks verified at48GiB**,
-activated after iteration4 training (60 accumulated Adam updates); its durable
-iteration4 checkpoint passed the16-shard/cursor/counter checks and iteration5
-collection has started. Reweight334494 remains queued behind iteration4
-training; its activation is not yet verified.
+current training call. **Both runs now have all eight ranks verified at48GiB**,
+effective for iteration5. Bonus334493 activated at23:34PDT after60 accumulated
+Adam updates; reweight334494 activated at23:45PDT after62. Both durable
+iteration4 checkpoints passed the16-shard/cursor/counter checks, with matching
+scheduler counters15360 and15872 respectively, and both moved into iteration5.
 No restart, new allocation, optimizer reset or scientific setting change is
 involved. Per-rank receipts and status are saved beneath each training root's
 `cache-policy-48/`. The active supervisor watches those receipts and requests
 agent verification on completion, errors or a stale control process.
 
-After activation, verify all eight ranks per run, finite optimizer progress,
-peak HBM, cache-release frequency and per-update throughput. A before/after
+Activation receipts are verified; next measure finite optimizer progress,
+peak HBM, cache-release frequency and per-update throughput in iteration5.
+Training at48GiB and its speedup are not yet verified. A before/after
 comparison uses different collected batches and cannot isolate the causal
 speedup; no matched GPU comparison has been run. Preserve checkpoints,
 optimizer/scheduler/cursor and all remaining budget. CPU audit:
@@ -311,10 +312,11 @@ arbitrary training bugs. Recovery receipts and logs:
 
 The user requested continued historical Gate B training and full300 evaluations
 at80/90, adding this lineage to this week's priorities alongside the two fresh
-mixed-only relaxed-B experiments. Latest durable state is77/988 Adam updates;
-**334894 was submitted after exact resource approval**, initially pending
-resources: one8 H200 ×16h allocation,64 CPUs/960GiB,128 GPU-hours including
-both evaluations. No new optimizer updates have occurred in this continuation. The original24h budget consumed82,633 seconds
+mixed-only relaxed-B experiments. Job334894 resumed77/988 Adam updates and
+**reached durable iteration80/1024 updates**; full300 evaluation80 is running
+before training resumes toward90. The exact approved allocation is one
+8 H200 ×16h job,64 CPUs/960GiB,128 GPU-hours including both evaluations.
+The original24h budget consumed82,633 seconds
 across all attempts and has at most3,767 seconds remaining; that remainder is
 not silently added to the new request.
 
@@ -339,7 +341,10 @@ not proof that the underlying startup slowdown is fixed. Native argument
 parsing and nine CPU browser cleanup/guard tests pass; checkpoint77 identities,
 Adam/scheduler counters and16 shard sizes are verified. GPFS quota inspection
 showed roughly74.6TiB below the soft limit, exceeding the2TiB launch gate.
-Native GPU restoration and a healthy complete collection remain launch checks.
+Native GPU restoration passed, followed by three completed collections and
+verified checkpoints78–80. The saved iteration80 evaluation restore receipt
+confirms loading zero-based79; the controller awaits evaluation artifacts
+before restoring80 for continuation90.
 
 Before the severe slowdown, recent B cycles took about40–76 minutes, with
 slower95- and337-minute cycles already recorded. Thirteen more healthy cycles
