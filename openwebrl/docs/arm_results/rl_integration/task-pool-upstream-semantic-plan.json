@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "model": "Qwen/Qwen3-Embedding-8B",
+  "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+  "references": 4780,
+  "candidates": 205942,
+  "total_texts": 210722,
+  "text_sha256": "5662fb0bdb7427cf823a8d894d15c7ec9c7599b69f47a331a87b2496200c867d",
+  "total_tokens": 5082569,
+  "max_tokens": 214,
+  "threshold": 0.95,
+  "source_audit_sha256": "3abc7e2b3e29df9892f65208694d2baf80e0743629c54235a826ea715e0dc067",
+  "embedding": {
+    "pooling": "last_nonpadding_token",
+    "dimensions": 4096,
+    "normalized": true,
+    "dtype": "bfloat16",
+    "instruction": null,
+    "batch": 8,
+    "truncation": false,
+    "attention": "sdpa"
+  },
+  "dedup": {
+    "cosine_dtype": "float32",
+    "tf32": false,
+    "threshold_rule": "greater_than_or_equal",
+    "order": "source_train_order",
+    "block_size": 256,
+    "references": "all_heldout_and_released_training_first",
+    "candidate_rule": "compare_only_to_previously_retained_candidates",
+    "cross_site_near_duplicates": "quarantine_with_neighbor_ID_and_cosine_for_review"
+  },
+  "exact_original_implementation": false,
+  "website_quality_still_pending": true,
+  "resources": {
+    "gpus": 1,
+    "gpu_type": "h200",
+    "cpus": 8,
+    "memory_gib": 120,
+    "seconds": 10800
+  },
+  "estimate": {
+    "prior_texts": 4486,
+    "prior_tokens": 130128,
+    "prior_measured_seconds": 107.50691795349121,
+    "token_scaled_seconds": 4199,
+    "caveat": "Extrapolation includes old startup; new length/padding/dedup costs may differ."
+  },
+  "approval_required": true,
+  "submitted": false,
+  "api_budget": 0,
+  "browser_budget": 0,
+  "training_data_changed": false
+}

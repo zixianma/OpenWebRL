@@ -7492,6 +7492,81 @@ resource budget. Deduplication review should preserve task meaning in its start-
 URL context. Browser evidence remains necessary before labeling new tasks
 executable or learnable; the36,932/228,651 counts are unvalidated candidates.
 
+<a id="arm-task-pool-upstream-rerun-20260929"></a>
+### Rerun using released OpenWebRL code — September29
+
+**The user authorized rerunning the pipeline with upstream implementations where
+available. The CPU metadata pass is complete; semantic and website-quality
+screening remain pending.** The new version removes our existing-host restriction,
+five-per-host cap, medium/hard-only selection and token-Jaccard0.65 filter. Every
+exclusion has an ID/reason record; earlier75/52-task review artifacts are preserved.
+No active training input was changed, and no API/browser calls were made.
+
+The upstream source is pinned to `9a120949aca3e58a2628f4b4e6edd0474d984873`.
+We directly import its `filter_records_by_excluded_task_ids`,
+`filter_records_by_host_blacklist`, URL normalization and parquet-row converter.
+The converter reproduces **all2,102 active rows exactly**, and our active parquet
+is byte-identical to the published snapshot. The released source's205 files and
+single branch do **not** include the original website-popularity allowlist or
+embedding-curation program; the released SFT data contains412 final tasks, not
+the15,601 seed pool. Thus this rerun must not be described as a complete exact
+reproduction. [Pinned upstream converter](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/openwebrl/data/convert_benchmark_jsonl_to_parquet.py).
+
+| Stage | Retained tasks | Hosts |
+| --- | ---: | ---: |
+| Raw WebGym train |292,092 |127,520 |
+| InSTA/PAE source families |278,252 |127,413 |
+| Original tasks; decompositions removed |254,815 |127,413 |
+| Released training/test IDs excluded |252,617 |125,968 |
+| Exact held-out intents excluded |252,242 |125,966 |
+| Released host blacklist applied |224,287 |125,962 |
+| Exact instruction + start-URL duplicates removed |**205,942** |**125,962** |
+
+These candidates comprise126,032 InSTA and79,910 PAE tasks;172,429 rubric-easy,
+32,297 medium and1,216 hard. Rubric scores describe fact counts, not measured
+actor difficulty. Exact task deduplication preserves different starting URLs;
+183 rows share instruction text with another URL and remain for semantic review.
+Original-task, exact held-out and exact task-duplicate checks are explicitly our
+reconstructions, rather than claimed upstream functions.
+
+**Blacklist caveat:** the current released78-host blacklist removes27,955 candidate
+rows, mostly Cambridge and Coursera. Applying it to the released2,198-task pool
+leaves2,006, not2,102;135 active rows are blacklisted and39 blacklist survivors are
+absent from the active snapshot. This proves the current blacklist alone does not
+reconstruct the historical snapshot. Keep these rows in a separate quarantine;
+do not interpret historical navigation failures as proof the sites are unusable
+today, or replace the running jobs' blacklist. It also does not supply the missing
+popularity filter. [Full stage/provenance audit](arm_results/rl_integration/task-pool-upstream-rerun.json).
+
+Implementation: `scripts/rebuild_arm_task_pool.py`; private outputs under runtime
+`arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/`:
+`candidates.jsonl`, `exclusions.jsonl`, `upstream-blacklist-quarantine.jsonl`,
+`semantic-references.jsonl`, `site-inventory.jsonl`, `examples-30.jsonl` and
+`audit.json`. The deterministic30-task example panel is for inspection only and
+does not restrict the205,942-task candidate pool. The bounded CPU pass took24.5s.
+
+**Next pass prepared, not submitted:** `scripts/dedup_arm_task_pool.py` plus
+`scripts/dedup_arm_task_pool_1gpu.sbatch` use pinned Qwen3-Embedding-8B,
+last-token/unit-normalized embeddings and exact blockwise cosine greedy selection
+at0.95. Released training and held-out instructions are exclusion references;
+new tasks are processed in original source order against previously retained
+candidates. Rejected candidates cannot suppress later candidates. This is our
+paper-based reconstruction; prompt/pooling/order details were not released.
+Every rejection keeps its neighbor ID/cosine for review, including cross-site
+cases. Website quality and live executability remain separate pending checks.
+Five metadata-boundary tests and four greedy-selection tests pass, including
+comparison with a naive greedy reference. GPU execution remains unvalidated.
+Prepared resource request: **1 H200 ×3h,8 CPUs,120GiB, including retries**, no API
+or browser spend. A new allocation requires exact approval; no old GPU budget is
+transferred. Tokenization is complete:210,722 instructions including4,780
+reference entries,5,082,569 tokens, longest214 tokens. Scaling the earlier
+130,128-token/107.5-second embedding pass predicts approximately70 minutes;
+three hours is a cap for embedding, deduplication, I/O and recovery, not an
+expected minimum runtime. Embeddings checkpoint progress for resumption within
+that total cap. Independent ID accounting verifies that all292,092 raw tasks
+appear exactly once in either candidates or exclusions, with no released-training
+IDs retained. See the [frozen semantic-pass request](arm_results/rl_integration/task-pool-upstream-semantic-plan.json).
+
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26
 

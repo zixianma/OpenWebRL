@@ -1,0 +1,283 @@
+{
+  "schema": 3,
+  "date": "2026-09-29",
+  "status": "metadata_complete_semantic_and_site_quality_pending",
+  "sources": {
+    "webgym_revision": "a61330203480bea9b90b8e954ecf0b084a114cca",
+    "openwebrl_revision": "6234e14bf74ed3f2ac62d89bbfe14646e5d333e5",
+    "files": [
+      {
+        "file": "webgym-train.jsonl",
+        "url": "https://huggingface.co/datasets/microsoft/webgym_tasks/resolve/a61330203480bea9b90b8e954ecf0b084a114cca/train.jsonl",
+        "bytes": 198530124,
+        "sha256": "d6c8ff7ffc6a08addcb99144ba4ba5f2364b59eb6df66fe759eaaf8063fa9fb8"
+      },
+      {
+        "file": "webgym-test.jsonl",
+        "url": "https://huggingface.co/datasets/microsoft/webgym_tasks/resolve/a61330203480bea9b90b8e954ecf0b084a114cca/test.jsonl",
+        "bytes": 827714,
+        "sha256": "3553c072659323f328fb8a845273d28ca6f60443ae6d4e981acc5752a069edd1"
+      },
+      {
+        "file": "openwebrl-rl-tasks.jsonl",
+        "url": "https://huggingface.co/datasets/OpenWebRL/OpenWebRL-RL-Tasks/resolve/6234e14bf74ed3f2ac62d89bbfe14646e5d333e5/OpenWebRL_RL_tasks.jsonl",
+        "bytes": 1481759,
+        "sha256": "744ed6574e44e24ca1cfd5c5e8c4c1e0ac9e6ca0ddb8dbee074bb7664257da14"
+      }
+    ]
+  },
+  "upstream": {
+    "repository": "https://github.com/OpenWebRL/OpenWebRL",
+    "commit": "9a120949aca3e58a2628f4b4e6edd0474d984873",
+    "sha256": {
+      "convert_benchmark_jsonl_to_parquet.py": "1d2bfc9598143a96e974ae88578f981ee33ff29b3a00d516ad5db1f1328419f8",
+      "webgym_filtered_popular_blacklist_hosts.txt": "cd32cf7171111a94ff5a464a44223e0e38c84c081a671f4f87f452c78e56fe7f",
+      "webgym_filtered_popular_2102_cleaned.parquet": "6f185a00885d4663fe4b224f5be11d94f034f567b22cf42403281904a347665b"
+    },
+    "search_scope": "All205 files in main at pinned commit; only one upstream branch; curation/embedding/popularity code absent from released source. HF SFT release contains412 final tasks, not15601 seed pool."
+  },
+  "local_reference_sha256": {
+    "openwebrl/data/eval/online-mind2web.jsonl": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+    "openwebrl/data/eval/deepshop.jsonl": "479d35f1d2345b66512b9d398a5472f28bcc5e3e08da487073662ab188f8fefa",
+    "openwebrl/data/eval/webvoyager_fara.jsonl": "ac9253317b76884abbd8d89e9b02570f3f4fbf18e428c335bc8761d778c6fe68",
+    "openwebrl/data/online-mind2web.jsonl": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+    "openwebrl/data/webvoyager_val.parquet": "66b932e5eccef4cf5a1335332ef4e10ecb52ac6e884cd8f0499b30c0e596092a"
+  },
+  "stages": {
+    "raw": {
+      "tasks": 292092,
+      "hosts": 127520,
+      "sources": {
+        "insta-v3": 138646,
+        "pae-webvoyager": 139606,
+        "browsecomp": 7551,
+        "mind2web-live": 630,
+        "online-mind2web": 367,
+        "agentsynth-web": 4218,
+        "gaia-web": 115,
+        "deepshop": 554,
+        "mind2web-2": 352,
+        "travel-planner": 53
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 55563,
+        "hard_7plus": 6673,
+        "easy_1to3": 229856
+      }
+    },
+    "source_scope": {
+      "tasks": 278252,
+      "hosts": 127413,
+      "sources": {
+        "insta-v3": 138646,
+        "pae-webvoyager": 139606
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 48891,
+        "hard_7plus": 1945,
+        "easy_1to3": 227416
+      }
+    },
+    "original_not_decomposed": {
+      "tasks": 254815,
+      "hosts": 127413,
+      "sources": {
+        "insta-v3": 127500,
+        "pae-webvoyager": 127315
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 40641,
+        "hard_7plus": 1571,
+        "easy_1to3": 212603
+      }
+    },
+    "well_formed_instruction_url": {
+      "tasks": 254815,
+      "hosts": 127413,
+      "sources": {
+        "insta-v3": 127500,
+        "pae-webvoyager": 127315
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 40641,
+        "hard_7plus": 1571,
+        "easy_1to3": 212603
+      }
+    },
+    "released_training_or_webgym_test_id": {
+      "tasks": 252617,
+      "hosts": 125968,
+      "sources": {
+        "insta-v3": 126036,
+        "pae-webvoyager": 126581
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 40224,
+        "hard_7plus": 1424,
+        "easy_1to3": 210969
+      }
+    },
+    "exact_heldout_intent": {
+      "tasks": 252242,
+      "hosts": 125966,
+      "sources": {
+        "insta-v3": 126036,
+        "pae-webvoyager": 126206
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 40109,
+        "hard_7plus": 1413,
+        "easy_1to3": 210720
+      }
+    },
+    "upstream_host_blacklist": {
+      "tasks": 224287,
+      "hosts": 125962,
+      "sources": {
+        "insta-v3": 126032,
+        "pae-webvoyager": 98255
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 36118,
+        "hard_7plus": 1321,
+        "easy_1to3": 186848
+      }
+    },
+    "exact_task_dedup": {
+      "tasks": 205942,
+      "hosts": 125962,
+      "sources": {
+        "insta-v3": 126032,
+        "pae-webvoyager": 79910
+      },
+      "rubric_difficulty": {
+        "medium_4to6": 32297,
+        "hard_7plus": 1216,
+        "easy_1to3": 172429
+      }
+    }
+  },
+  "rejection_counts": {
+    "source_scope": 13840,
+    "original_not_decomposed": 23437,
+    "released_training_or_webgym_test_id": 2198,
+    "exact_heldout_intent": 375,
+    "upstream_blacklist_quarantine": 27955,
+    "identical_instruction_and_start_url": 18345
+  },
+  "before_blacklist": {
+    "tasks": 252242,
+    "hosts": 125966,
+    "sources": {
+      "insta-v3": 126036,
+      "pae-webvoyager": 126206
+    },
+    "rubric_difficulty": {
+      "medium_4to6": 40109,
+      "hard_7plus": 1413,
+      "easy_1to3": 210720
+    }
+  },
+  "blacklist_hosts": 78,
+  "blacklist_quarantine": {
+    "tasks": 27955,
+    "hosts": 4,
+    "sources": {
+      "pae-webvoyager": 27951,
+      "insta-v3": 4
+    },
+    "rubric_difficulty": {
+      "easy_1to3": 23872,
+      "medium_4to6": 3991,
+      "hard_7plus": 92
+    }
+  },
+  "upstream_parity": {
+    "active_tasks": 2102,
+    "converted_tasks": 2102,
+    "converted_row_values_match": true,
+    "active_parquet_matches_published_bytes": true,
+    "published_ids_equal_active": true,
+    "released_tasks": 2198,
+    "released_after_current_blacklist": 2006,
+    "blacklist_rows_removed": 192,
+    "active_rows_blacklisted": 135,
+    "blacklist_survivors_absent_from_active": 39
+  },
+  "repeated_instruction_rows_on_distinct_start_urls": 183,
+  "retained_missing_rubric": 0,
+  "removed_old_rules": [
+    "existing_host_membership",
+    "five_tasks_per_host",
+    "medium_hard_only",
+    "token_jaccard_0.65",
+    "risk_ranked_panel_as_pool"
+  ],
+  "executed_upstream_functions": [
+    "filter_records_by_excluded_task_ids",
+    "load_host_blacklist",
+    "filter_records_by_host_blacklist",
+    "normalize_start_url",
+    "record_to_row"
+  ],
+  "reconstructed_rules": [
+    "source_families",
+    "nondecomposed",
+    "well_formed_input",
+    "exact_heldout_intent",
+    "instruction_and_url_exact_dedup"
+  ],
+  "unreleased_original_details": [
+    "website_popularity_allowlist_and_rule",
+    "original_semantic_script",
+    "embedding_prompt_pooling_batching_precision",
+    "greedy_order_and_tie_breaking",
+    "benchmark_overlap_implementation"
+  ],
+  "pending": [
+    "website_quality_popularity_review",
+    "Qwen3-Embedding-8B_greedy_0.95",
+    "semantic_heldout_overlap_review",
+    "live_browser_verification"
+  ],
+  "semantic_plan": {
+    "model": "Qwen/Qwen3-Embedding-8B",
+    "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+    "threshold": 0.95,
+    "ordering": "raw_train_order_after_metadata_filters",
+    "existing_and_heldout_as_exclusion_references": true,
+    "algorithm": "blockwise_exact_cosine_greedy_against_previously_kept_candidates",
+    "exact_upstream_reproduction": false
+  },
+  "training_data_changed": false,
+  "gpu_hours_used": 0,
+  "api_calls": 0,
+  "active_training_parquet_sha256": "6f185a00885d4663fe4b224f5be11d94f034f567b22cf42403281904a347665b",
+  "artifacts": {
+    "candidates.jsonl": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/candidates.jsonl",
+      "sha256": "1271fdc1ce4da808b860cbfe2513cd9bb2900252debfdc9be24f18040095dc7e"
+    },
+    "semantic-references.jsonl": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/semantic-references.jsonl",
+      "sha256": "1d377b3246c74dc2c77f8244df54002da2bdea3a41e98a46681a9b2eca259481"
+    },
+    "upstream-blacklist-quarantine.jsonl": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/upstream-blacklist-quarantine.jsonl",
+      "sha256": "107dcd35ad48ede2727e29cd0b5814997a6f1edaa2a8667904b0423758b7c0ca"
+    },
+    "exclusions.jsonl": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/exclusions.jsonl",
+      "sha256": "516ca2a2407eb5f4f1866ddf617fa84d2ad98d59d8b402514be2eab68eb30591"
+    },
+    "site-inventory.jsonl": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/site-inventory.jsonl",
+      "sha256": "fbf7b3d66dbde641b626d2a3ac13d1065fc3d4fd5192ec764cd81629d118a8ce"
+    },
+    "examples-30.jsonl": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/examples-30.jsonl",
+      "sha256": "a98408b515c6dff822434b9786cb651b995136a868ee45984cef4783713899c6"
+    }
+  },
+  "wall_seconds": 24.533
+}
