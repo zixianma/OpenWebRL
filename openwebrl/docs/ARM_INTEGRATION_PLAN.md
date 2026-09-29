@@ -7496,8 +7496,8 @@ executable or learnable; the36,932/228,651 counts are unvalidated candidates.
 ### Rerun using released OpenWebRL code — September29
 
 **The user authorized rerunning the pipeline with upstream implementations where
-available. The CPU metadata pass is complete; semantic and website-quality
-screening remain pending.** The new version removes our existing-host restriction,
+available. CPU metadata and semantic passes are complete; website/task-quality
+screening remains pending.** The new version removes our existing-host restriction,
 five-per-host cap, medium/hard-only selection and token-Jaccard0.65 filter. Every
 exclusion has an ID/reason record; earlier75/52-task review artifacts are preserved.
 No active training input was changed, and no API/browser calls were made.
@@ -7545,7 +7545,7 @@ Implementation: `scripts/rebuild_arm_task_pool.py`; private outputs under runtim
 `audit.json`. The deterministic30-task example panel is for inspection only and
 does not restrict the205,942-task candidate pool. The bounded CPU pass took24.5s.
 
-**Semantic pass approved and queued as337317:** `scripts/dedup_arm_task_pool.py` plus
+**Semantic pass completed and verified as337317:** `scripts/dedup_arm_task_pool.py` plus
 `scripts/dedup_arm_task_pool_1gpu.sbatch` use pinned Qwen3-Embedding-8B,
 last-token/unit-normalized embeddings and exact blockwise cosine greedy selection
 at0.95. Released training and held-out instructions are exclusion references;
@@ -7555,11 +7555,13 @@ paper-based reconstruction; prompt/pooling/order details were not released.
 Every rejection keeps its neighbor ID/cosine for review, including cross-site
 cases. Website quality and live executability remain separate pending checks.
 Five metadata-boundary tests and four greedy-selection tests pass, including
-comparison with a naive greedy reference. GPU execution remains unvalidated.
+comparison with a naive greedy reference. GPU execution and saved outputs passed
+independent checks described below.
 Approved resource cap: **1 H200 ×3h,8 CPUs,120GiB, including retries**, no API
-or browser spend. Job337317 is registered with the active ARM supervisor and is
-pending resources; its frozen source and approval/attempt ledger are saved with
-the semantic outputs. No old GPU budget is transferred. Tokenization is complete:210,722 instructions including4,780
+or browser spend. Job337317 completed on g016 in **702 seconds (11m42s)**;
+10,098 unused seconds were released. Its frozen source, approval/attempt ledger
+and independent audit are saved with the semantic outputs. No old GPU budget
+was transferred. Tokenization is complete:210,722 instructions including4,780
 reference entries,5,082,569 tokens, longest214 tokens. Scaling the earlier
 130,128-token/107.5-second embedding pass predicts approximately70 minutes;
 three hours is a cap for embedding, deduplication, I/O and recovery, not an
@@ -7567,6 +7569,85 @@ expected minimum runtime. Embeddings checkpoint progress for resumption within
 that total cap. Independent ID accounting verifies that all292,092 raw tasks
 appear exactly once in either candidates or exclusions, with no released-training
 IDs retained. See the [frozen semantic-pass request](arm_results/rl_integration/task-pool-upstream-semantic-plan.json).
+
+| Semantic pass result | Tasks |
+| --- | ---: |
+| Retained candidates, across125,750 hosts |184,546 |
+| Quarantined by cosine≥0.95 |21,396 |
+| Nearest-match reason: released training task |1,849 |
+| Nearest-match reason: earlier retained new task |19,473 |
+| Nearest-match reason: held-out task |74 |
+
+Retained candidates comprise125,820 InSTA and58,726 PAE tasks;155,573 rubric-easy,
+27,887 medium and1,086 hard. Nearest-match reasons are mutually exclusive labels,
+not counts of every possible overlap. The large retained pool still lacks the
+authors' unreleased website-popularity filter and live quality validation.
+Independent checks verified output hashes, every candidate's unique kept/rejected
+partition, every predecessor/reference index,2,174 sampled unit vectors,1,113
+recomputed reported cosines and six exact greedy nearest-neighbor checks across
+early block boundaries. The GPU worker also checked all vectors for finiteness
+and unit norm. This verifies the implementation and artifacts, not semantic
+ground truth or benchmark independence below0.95.
+[Completion audit](arm_results/rl_integration/task-pool-semantic-337317.json).
+
+<a id="arm-task-selection-all-failure-20260929"></a>
+### Next experiment: ARM-based selection of all-failure tasks — September29
+
+**User direction:** prioritize using ARM for data selection, especially among
+all-failure tasks. Generic dataset expansion is preparation for this experiment.
+The design below is proposed for discussion; the semantic-pass allocation does
+not authorize new browser/API screening or RL allocations.
+
+1. Finish semantic screening and review contamination/duplicate matches. Apply
+   basic instruction-quality checks (self-contained, finite, judgeable, no
+   unresolved required input), using cached Jev results where requests match.
+   Rubric count and Jev confidence are descriptive/triage signals. Check live
+   availability on a source/site/task-type-stratified pilot; isolate missing
+   targets, authentication and infrastructure failures. No fixed-five-per-site
+   acceptance limit or existing-host requirement is reintroduced.
+2. Use the **original frozen SFT initialization** for five ordinary actor
+   attempts per pilot task, matching the training harness/horizon and native
+   GPT-4.1/action_history outcome protocol. Preserve all attempt verdicts and
+   failure causes. Define `F0 = {q: five valid attempts, zero successes}`.
+   Invalid attempts require diagnosis/retry and cannot establish membership;
+   `0/5` is an observed sample, not proof of impossibility. A later actor would
+   answer a separate late-stage-headroom question, not replace this screen.
+3. **Recommended first ARM selector: outcome-verified rescuability.** On a small
+   prespecified subset of `F0`, run a fresh actor+SelectionARM attempt (five full
+   reasoning/action candidates, valid/min2 gate) and independent ordinary actor
+   retries in interleaved order. A successful ARM-guided attempt supplies a
+   candidate for `F_ARM`; raw selector confidence, number of labels, or preference
+   for an unexecuted alternative does not establish that a task is learnable.
+   Failed rescue probes remain unresolved rather than permanently excluded.
+   The selection object is the **task ID**, not a demonstration/SFT target.
+4. Validate the selection method before scaling. Compare rescue yield, extra
+   actor-only retry yield, valid rates, usable ARM labels and cost per selected
+   task. One ARM attempt versus five ordinary retries is only a rough generation
+   budget comparison; log actual actor/selector tokens and GPU/browser time.
+   Our earlier iteration90 pilot found ARM0/8 rescues versus3/8 from five ordinary
+   retries. The new actor/pool may behave differently, but no positive yield is
+   assumed. Freeze selection rules on a pilot/dev partition; test useful-task
+   yield on disjoint task IDs with fresh attempts to avoid selecting lucky
+   verdicts and then using those same verdicts as evidence of generalization.
+5. If the audit supports scaling, build equal-size new-task pools and train with
+   the **same relaxed-B recipe**, original initialization at iteration0, matching
+   optimizer, bonus/gate settings, task-proposal share and compute. Minimum
+   comparison: quality-filtered random `F0` versus ARM-selected `F_ARM`.
+   An **actor-retry-selected pool** is the key additional control for an ARM-
+   specific claim, separating ARM's value from extra search/solvability screening.
+   Preserve48 ordinary mixed groups plus up to8 auxiliary failure groups; log
+   actual admissions as selected tasks become mixed rather than treating their
+   initial all-failure label as permanent. Historical original-pool B is context,
+   not a contemporaneous causal control.
+
+Deployment/evaluation still uses the single actor. The proposed change is task
+selection; no new SFT/DPO target, reward model or bonus coefficient is introduced.
+Tasks with useful local ARM contrast but no observed guided success are a
+separate possible selection arm, not proven useless. A score for that cheaper
+alternative should be validated against independent learning/outcome evidence
+before replacing the outcome-verified selection rule. Exact pilot size, retry
+budget, added-task share and training allocation remain to be finalized.
+[Earlier rescue results](ARM_RESULTS.md#arm-rescue-yield-313264).
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26

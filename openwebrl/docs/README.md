@@ -31,7 +31,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
 [Task screening v2 and semantic overlap complete:52 provisional candidates,14 excluded,9 held; job337135 verified in118 GPU-seconds; browser pilot pending](ARM_INTEGRATION_PLAN.md#arm-task-pool-quality-v2-20260929).
 [Task-pool redesign: five-per-host was our review cap; existing-host restriction leaves25 hosts and removes nearly all additional InSTA tasks; broader medium/hard pool spans15,933 hosts](ARM_INTEGRATION_PLAN.md#arm-task-pool-redesign-20260929).
-[Upstream-code rerun:205,942 uncapped metadata candidates;2,102-row converter parity verified; original popularity/semantic code unreleased; GPU dedup prepared](ARM_INTEGRATION_PLAN.md#arm-task-pool-upstream-rerun-20260929).
+[Upstream-code rerun: semantic job337317 verified in11m42s;184,546 candidates retained,21,396 quarantined; website/task quality remains pending](ARM_INTEGRATION_PLAN.md#arm-task-pool-upstream-rerun-20260929).
+[Next experiment: ARM-based task selection among five-valid-failure groups; proposed outcome-verified screening and matched data-selection controls](ARM_INTEGRATION_PLAN.md#arm-task-selection-all-failure-20260929).
 [Interactive75-task quality and uncertainty review](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).

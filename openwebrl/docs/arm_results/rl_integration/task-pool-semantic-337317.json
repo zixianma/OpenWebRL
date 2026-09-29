@@ -1,0 +1,59 @@
+{
+  "verified_complete": true,
+  "job_id": "337317",
+  "job_elapsed_seconds": 702,
+  "approved_seconds": 10800,
+  "unused_seconds_released": 10098,
+  "retained": 184546,
+  "semantic_quarantine": 21396,
+  "retained_hosts": 125750,
+  "retained_sources": {
+    "insta-v3": 125820,
+    "pae-webvoyager": 58726
+  },
+  "retained_difficulty": {
+    "medium_4to6": 27887,
+    "hard_7plus": 1086,
+    "easy_1to3": 155573
+  },
+  "quarantine_nearest_source": {
+    "released_openwebrl": 1849,
+    "retained_candidate": 19473,
+    "webgym_test": 42,
+    "openwebrl/data/eval/webvoyager_fara.jsonl": 25,
+    "openwebrl/data/eval/online-mind2web.jsonl": 5,
+    "webvoyager_validation": 1,
+    "openwebrl/data/eval/deepshop.jsonl": 1
+  },
+  "all_artifact_hashes_verified": true,
+  "all_input_IDs_partitioned_exactly_once": true,
+  "all_decisions_reference_prior_kept_or_reference": true,
+  "embedding_shape": [
+    210722,
+    4096
+  ],
+  "sampled_embedding_vectors_independently_verified": 2174,
+  "embedding_sample_max_norm_error": 1.1920928955078125e-07,
+  "reported_cosines_recomputed": 1113,
+  "max_cosine_error": 2.6226043701171875e-06,
+  "exact_nearest_search_checks": 6,
+  "exact_nearest_search_scope": "Early candidates across block boundaries up to candidate4095; bounded CPU check. All-vector finite/norm validation also performed in GPU worker.",
+  "max_exact_nearest_error": 3.5762786865234375e-07,
+  "training_data_changed": false,
+  "quality_and_browser_screening": "pending",
+  "cpu_audit_wall_seconds": 10.682,
+  "artifacts": {
+    "kept": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/semantic-qwen8b/kept-337317.jsonl",
+      "sha256": "a2a46f77f599c52fa9387ccb131bcbd8c3f78017691b2f34ca3026e3168a44bd"
+    },
+    "quarantine": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/semantic-qwen8b/semantic-quarantine-337317.jsonl",
+      "sha256": "16e799d50defb2778e93df5fb816f8c9d993660a3aa26a539e5e7c2d12f284e1"
+    },
+    "decisions": {
+      "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/semantic-qwen8b/decisions-337317.jsonl",
+      "sha256": "b3c1590313bafb0e841fbfea83bc5bbc1234a7034bf51f983caa8fe1efd0c4ad"
+    }
+  }
+}
