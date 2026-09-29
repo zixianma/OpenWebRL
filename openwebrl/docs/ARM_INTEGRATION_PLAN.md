@@ -7151,6 +7151,57 @@ cohorts and reference inputs: `task-pool-expansion-20260922/screening-v2/` under
 the preparation runtime. No embeddings, API calls, browser collection or new
 training jobs were launched for this step.
 
+<a id="arm-stealth90-three-repeats-o4-20260929"></a>
+### September29: three corrected stealth evaluations per method
+
+The user requested two more evaluations of each ARM method and clarified that
+the outcome-only baseline also needs three total. Retain the corrected first
+cohort for each method and collect **six fresh full300 cohorts**: baseline,
+Additive, and relaxed Gate B, each at iteration90, for repeats2 and3. The older
+GPT-4.1/T0 evaluations are excluded from these means. No additional training is
+part of this comparison.
+
+- Freeze the same checkpoints and300 task IDs. Use Browser Use stealth,
+  actor T0.6/top-p0.95/top-k20,4096 tokens,30 turns, and the unchanged
+  o4-mini/AgentTrek judge. Save every rollout and per-task verdict, including
+  invalids; keep all retry attempts and lineage.
+- Run the three methods contemporaneously in each round. Each job uses three
+  browsers; three jobs use nine total, within the verified ten-session provider
+  limit. Round3 starts after all round2 jobs exit; recovery must update successor
+  dependencies to preserve the concurrency limit. Wait for the first Additive
+  cohort to finish before starting the new round.
+- Use SGLang server RNG seed1235 in round2 and1236 in round3, shared across
+  methods within a round. The first cohort used1234. This changes sampling RNG,
+  not the policy or evaluation recipe; live sites and asynchronous generation
+  remain nondeterministic.
+- Report all three scores plus their **arithmetic mean and sample standard
+  deviation**, separately for overall and valid-only success, with valid
+  denominators and fixed100/full300 results. Also report within-round ARM-minus-
+  baseline differences. These are repeated evaluations of one trained checkpoint
+  per method, not three independent training seeds or pass@3.
+- For any paired analysis, preserve task identities across rounds; do not treat
+  the900 task-repeat records as900 independent tasks. Keep invalid-as-failure
+  overall results primary and common-valid sensitivity separate. Three repeats
+  provide only a limited estimate of evaluation variability.
+
+**Prepared resource request, not yet approved or submitted:** six jobs of
+**1 H200 ×7h,8 CPUs,240GiB each**,42 GPU-hours maximum total, in two waves of
+three. Current first cohorts took about5h including interrupted collection and
+recovery;7h gives headroom, and each job releases its allocation on completion.
+Each new cohort has its own7h cap including failed attempts/retries; unused
+previous-cohort budgets are not transferred. Browser/API usage covers1,800
+fresh primary task attempts and their terminal judgments.
+
+Launcher `scripts/run_arm_stealth90_o4_more.py` and template
+`scripts/evaluate_arm_stealth90_o4_more_1gpu.sbatch` are prepared. A separate
+frozen full300 source includes the tested credit-exhaustion fail-fast fix;
+active/finished first-cohort sources remain unchanged. The15 combined CPU tests
+passed, including distinct artifact/W&B identities, full-cohort/seed checks and
+rejection of the previous study's approval. The supervisor must register queued
+jobs as well as replacements and require independent artifact review before
+completion. Plans and the exact request are in runtime
+`arm-turn-bonus-preparation/stealth90-o4-more-20260929/`.
+
 <a id="arm-task-pool-quality-v2-20260929"></a>
 ### September29: task expansion prioritized; revised text screening completed
 
