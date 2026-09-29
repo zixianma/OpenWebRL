@@ -7258,6 +7258,20 @@ after any recovery to avoid exceeding the browser-session limit. This entails
 1,785 fresh primary trajectories and GPT-4o terminal judgements, with normal
 browser/API service charges. No paid job has been submitted for this request.
 
+**Browser-credit estimate, September29 15:51 PDT:** live balance **$16.30**.
+The API's settled charges for621 owned recent OM2W sessions total$3.6351,
+or$0.005854/session. Scaling to1,785 WebVoyager attempts gives **$10.45**;
+reserve roughly **$10–15** because sites, traffic and trajectory lengths differ.
+The1,682 remaining approved OM2W attempts project another **$9.85**.
+Thus the combined central estimate is **$20.29**, exceeding the current balance;
+a **$20 top-up** provides headroom for both workloads. This is an estimate,
+not a spend cap, and excludes GPU and external judge API charges. Direct traffic
+is metered even with residential proxies disabled. The current rates are
+$0.02/browser-hour plus$0.20/GB direct traffic. [Browser Use pricing](https://browser-use.com/pricing).
+Private `browser-cost-estimate.json` and `browser-cost-session-evidence.json`
+in the preparation runtime preserve the account check and all621 matched session
+charges; no credits were purchased and WebVoyager remains unsubmitted.
+
 Prepared launcher: `scripts/run_arm_webvoyager90.py`; batch template:
 `scripts/evaluate_arm_webvoyager90_1gpu.sbatch`. Eleven new regression tests and
 the fifteen existing OM2W tests pass. Tests exercise the actual released judge
