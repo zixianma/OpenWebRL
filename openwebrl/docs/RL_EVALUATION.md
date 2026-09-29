@@ -50,11 +50,38 @@ is about5–6h. The initial allocations started together on September29 and
 required the startup repair below; record actual task-collection intervals when reporting results. Existing
 training budgets remain separate.
 
-| Method | Job | Node | Initial status |
-| --- | ---: | --- | --- |
-| Outcome-only baseline90 |336864 |g001 |Replacement running; startup validation |
-| Additive90 |336865 |g013 |Replacement running; startup validation |
-| Gate B90 |336866 |g016 |Replacement running; startup validation |
+| Method | Recovery job | Tasks retried | Retained valid tasks | Retained ordinary invalids | Maximum remaining GPU time |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Outcome-only baseline90 |336971 |168 |125 |7 |4h52m |
+| Additive90 |336972 |172 |122 |6 |4h50m |
+| Gate B90 |336973 |162 |131 |7 |4h49m |
+
+**September29 credit-outage recovery:** jobs336864/336865/336866 ended after
+Browser Use exhausted its account balance. The evaluator recorded HTTP402 session
+creation failures as invalid tasks, causing apparent300-record completion despite
+168/172/162 tasks never receiving a browser session. These are **incomplete cohorts**,
+not full300 performance results. Independent archive inspection distinguished them
+from the seven/six/seven ordinary timeout/screenshot failures above. Original
+archives and records are preserved; successful and unsuccessful valid outcomes
+are never replaced.
+
+After the user replenished credits, the account check passed and the three
+recovery jobs above started together on g010. Each retries only its explicitly
+identified HTTP402 task IDs with unchanged actor checkpoint, sampling and judge.
+The recovery sources add a credit preflight and stop on HTTP402 instead of draining
+the remaining task queue; completion audits reject credit-blocked cohorts.
+Twelve CPU tests passed, including artifact preservation and rejecting replacement
+of an originally valid failure. The completed task sources will be merged by ID
+for full300/fixed100 reporting after independent review. Report both collection
+intervals and the outage; do not describe this as an uninterrupted collection.
+
+All attempts count against the original7h-per-method cap. Before these recoveries,
+baseline consumed7,637 seconds, Additive7,760, and Gate B7,852 (including initial
+startup failures). No GPU budget was added. Durable incident manifests and exact
+retry IDs are in runtime `arm-turn-bonus-preparation/stealth90-o4-t06-20260929/*-provider-recovery.json`;
+launch and budget receipts are in `provider-recovery-submission.json` in that
+control directory. The supervisor follows336971/336972/336973 and requires the
+merged300-task artifact audit before final completion.
 
 All three jobs were registered with the active supervisor before release.
 The7h cap per method includes retries; account for every attempt and preserve

@@ -9,7 +9,11 @@ Detailed inference, offline-training and online-RL results belong here. The reco
 
 **Protocol correction:** these GPT-4.1/T0 cohorts did not match the user's
 intended stealth protocol. The default is o4-mini/AgentTrek with actor T0.6;
-[fresh matched baseline/Additive/Gate B runs are active as336864/336865/336866](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+[fresh matched baseline/Additive/Gate B runs are recovering credit-blocked tasks as336971/336972/336973](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+The earlier attempts exhausted Browser Use credits; their apparent300-record
+completion includes tasks with no browser session and is not a full300 result.
+Completed outcomes are preserved, and only independently identified HTTP402
+tasks are retried within the original GPU budgets after the user added credits.
 Preserve the results below as history.
 
 Actor-only evaluation with Browser Use stealth, GPT-4.1/action_history, T0,
