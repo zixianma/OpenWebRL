@@ -183,10 +183,12 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 | **Mixed-only reweight + relaxed B** |10 |25.00% /34.72% |**27.33% /34.17%** |
 |  |20 |31.00% /44.29% |**32.33% /42.73%** |
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
+|  |40 |33.00% /50.00% |**35.33% /47.11%** |
 
 Both mixed-only runs completed10/20 evaluations September28 and30 September29,
-with all rollout/verdict pairs saved. Both continue
-toward60. [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
+with all rollout/verdict pairs saved. Reweight40 also completed September29:
+106 successes,225 valid tasks, all300 archives/verdicts verified. Bonus40 is pending;
+both continue toward60. [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter40-results-20260929).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
 the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30

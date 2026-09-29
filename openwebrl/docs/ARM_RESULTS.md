@@ -49,9 +49,11 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter10-results-20260928"></a>
 <a id="arm-mixed-pair-iter20-results-20260928"></a>
 <a id="arm-mixed-pair-iter30-results-20260929"></a>
-## Mixed-only relaxed-B pair: iterations10–30 — September28–29
+<a id="arm-mixed-pair-iter40-results-20260929"></a>
+## Mixed-only relaxed-B pair: iterations10–40 — September28–29
 
-Both fresh-from0 runs completed full300 evaluations at10,20 and30.
+Both fresh-from0 runs completed full300 evaluations at10,20 and30; reweight40
+is also complete, while bonus40 is pending.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -62,12 +64,23 @@ trajectory-mean-one weighting with lambda=.5.
 | Outcome-only baseline, historical |10 | — |23.33% /29.91% |234 |
 |  |20 | — |31.67% /40.95% |232 |
 |  |30 | — |32.00% /38.71% |248 |
+|  |40 | — |33.33% /43.29% |231 |
 | Mixed-only bonus + relaxed B |10 |31.00% /41.33% |30.67% /39.32% |234 |
 |  |20 |30.00% /43.48% |30.67% /40.89% |225 |
 |  |30 |29.00% /39.19% |32.00% /42.11% |228 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
+|  |40 |33.00% /50.00% |35.33% /47.11% |225 |
+
+Reweight40 has106 successes and225 valid tasks; fixed100 has33 successes and66
+valid tasks. Relative to30, overall improves5.33pp and valid-only6.02pp.
+Historical baseline40 is33.33% /43.29%, giving a descriptive+2.00pp overall
+difference; dates and valid-task sets differ. Bonus40 is not yet available, so
+the matched objective comparison remains pending. The predefined primary
+comparison remains mean overall success across40/50/60, not the best checkpoint.
+All300 archives/verdicts, native checkpoint39 restoration at564 Adam updates and
+final W&B history were verified; the same allocation resumed toward50.
 
 Bonus30 has96 successes and228 valid tasks; fixed100 has29 successes and74
 valid tasks. Relative to20, overall improves1.33pp and valid-only1.22pp. At30,
@@ -92,7 +105,7 @@ slice has30 successes and69 valid tasks. Reweight20 is1.67pp above bonus20 overa
 and valid-task sets limit comparisons; these single-run differences do not
 establish superiority or significance.
 
-All1,800 rollout/verdict pairs and nonempty ZIP archives across the six new
+All2,100 rollout/verdict pairs and nonempty ZIP archives across the seven new
 cohorts passed inspection. Cohort membership, judge settings, checkpoint lineage
 and temperature were checked. Both controllers continue training and own later
 evaluations through60.
@@ -103,6 +116,7 @@ evaluations through60.
 [Reweight10 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
 [Reweight20 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) ·
 [Reweight30 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) ·
+[Reweight40 audit](arm_results/rl_integration/mixed-reweight-iteration40-audit.json) ·
 [Evaluation provenance](RL_EVALUATION.md#arm-mixed-pair-iter10-results-20260928).
 
 <a id="arm-failure-sampling40-stop-20260927"></a>

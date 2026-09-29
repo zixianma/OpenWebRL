@@ -33,12 +33,14 @@
 | Outcome-only baseline, historical |10 |70 |234 |66 |23.33 |29.91 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
 |  |20 |95 |232 |68 |31.67 |40.95 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 |  |30 |96 |248 |52 |32.00 |38.71 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
+|  |40 |100 |231 |69 |33.33 |43.29 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 | Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67 |39.32 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) |
 |  |20 |92 |225 |75 |30.67 |40.89 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) |
 |  |30 |96 |228 |72 |32.00 |42.11 |[September29 audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33 |34.17 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) |
 |  |20 |97 |227 |73 |32.33 |42.73 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) |
 |  |30 |90 |219 |81 |30.00 |41.10 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) |
+|  |40 |106 |225 |75 |35.33 |47.11 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration40-audit.json) |
 
 ## Stealth browser · GPT-4.1 · temperature 0 · full 300
 
