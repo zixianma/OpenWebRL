@@ -184,6 +184,21 @@ outcome-only baseline, overall differences at20/30/40/50/60 are−3.67,+0.67,
 [Per-checkpoint counts, fixed100 slices and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 The comparison plot continues to exclude original bonus, as requested.
 
+<a id="arm-gate-b-iter100-20260929"></a>
+## Gate B iteration100 — September29
+
+Full300 is **36.67% overall /48.89% valid-only** (110 successes,225 valid);
+fixed100 is **30.00% /44.12%** (30 successes,68 valid). This is6.33pp lower
+overall than90, and2.00pp above the historical outcome-only100 result.
+Additive100 is36.33% /50.23%. The different evaluation dates and valid-task
+sets limit these comparisons;90 remains Gate B's best evaluated checkpoint.
+
+Training through100 and the full300 evaluation are verified complete, including
+the native99 checkpoint with1,246 Adam updates, all saved task records/archives,
+and final W&B history. Job336893 exited successfully and released its GPUs.
+The summary, results sheet and comparison plot now include100.
+[Counts, protocol, artifact audit and budget](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
+
 <a id="arm-gate-b-iter90-20260928"></a>
 ## Gate B iteration 90 — September 28
 
@@ -930,7 +945,7 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 This comparison overlays the historical outcome-only baseline curve with the
 all-failure and additive ARM full-300 points through iteration100. The completed
 baseline100 evaluation supplies the final point for those three methods.
-Gate B overlays the completed full-300 evaluations at iterations20 through90,
+Gate B overlays the completed full-300 evaluations at iterations20 through100,
 with overall and valid-only rates taken from the saved result audits; its
 curves stop at90, the latest evaluated checkpoint.
 Additive's

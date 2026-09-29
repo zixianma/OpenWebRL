@@ -9,6 +9,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Mixed-only bonus/reweight iterations10–40 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration90 full300](#arm-gate-b-iter90-results-20260928)
+- [Gate B iteration100 full300 and completed training](#arm-gate-b-iter100-results-20260929)
 - [Gate B iteration80 full300](#arm-gate-b-iter80-results-20260927)
 - [Gate B iteration70 full300](#arm-gate-b-iter70-results-20260927)
 - [Failure sampling40% iteration20 full300](#arm-failure-coverage-iter20-results-20260926)
@@ -336,6 +337,45 @@ Private output directories below each have `rollouts/`, `status.json`,
 - runtime`evaluations/arm-original-iter40-332478-retry1/`
 - runtime`evaluations/arm-original-iter50-332479-retry3/`
 - runtime`evaluations/arm-original-iter60-332480-retry1/`
+
+<a id="arm-gate-b-iter100-results-20260929"></a>
+## Gate B iteration100 — September29
+
+Job336893 completed training through100 and its full300 evaluation, then exited
+successfully at12:57 PDT after1h58m14s, releasing its eight GPUs. The durable
+checkpoint is native `iter_0000099`, with1,246 Adam updates; shard byte sizes,
+metadata, optimizer/scheduler alignment and the task cursor passed inspection.
+The evaluation restored that exact checkpoint on GPU. This completes the
+authorized historical Gate B target100; no continuation beyond100 is scheduled.
+
+| Cohort / method | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Gate B100, full300 |110 |225 |75 |36.67% |48.89% |
+| Gate B100, fixed100 slice |30 |68 |32 |30.00% |44.12% |
+| Historical outcome-only100, full300 |104 |227 |73 |34.67% |45.81% |
+| Historical additive100, full300 |109 |217 |83 |36.33% |50.23% |
+| Gate B90, full300 |129 |234 |66 |43.00% |55.13% |
+
+Gate B falls6.33 percentage points overall and6.24 points valid-only from90.
+At100 it is2.00 points above historical outcome-only overall, and0.33 above
+additive; these are descriptive comparisons across collection dates, not a
+demonstrated treatment effect. Iteration90 remains its best evaluated checkpoint.
+
+All300 task IDs match the frozen cohort, and all300 nonempty rollout archives
+and task records are preserved. The fixed100 slice uses the original unchanged
+manifest without new browser attempts. There are225 valid terminal verdicts and
+75 invalid attempts; invalid attempts remain in the overall denominator. The
+judge identities, YAML, executed command and source retain local browsers,
+GPT-4.1/action_history, actor T0,4096 response tokens and30 turns. This is separate
+from the ongoing o4-mini/T0.6 stealth evaluation at90.
+
+W&B's finished evaluation history matches110/225/300 and uses `openwebrl-evals`;
+the training lineage in `openwebrl` is finished. The earlier80/90 cohorts remain
+preserved. Total time charged to the to100 budget is60,389 of64,095 seconds,
+including both predecessor attempts;3,706 seconds were unused when the endpoint
+completed. Saved runtime results: `evaluations/arm-gate-b-iter100-336893/`.
+[W&B evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter100-336893)
+· [Independent aggregate audit](arm_results/rl_integration/gate-b-iteration100-audit.json).
 
 <a id="arm-gate-b-iter90-results-20260928"></a>
 ## Gate B iteration 90 — September 28

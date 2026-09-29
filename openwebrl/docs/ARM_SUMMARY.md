@@ -168,6 +168,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 70 | 35.00% / 50.00% | **37.33% / 48.91%** |
 |  | 80 | 34.00% / 47.89% | **35.67% / 47.35%** |
 |  | 90 | 39.00% / 54.93% | **43.00% / 55.13%** |
+|  | 100 | 30.00% / 44.12% | **36.67% / 48.89%** |
 | **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 |  | 30 | 28.00% / 38.89% | 30.67% / 39.66% |
 |  | 40 | 31.00% / 43.06% | **33.33% / 45.05%** |
@@ -218,13 +219,13 @@ new stealth results or local curves. No fresh baseline repeats are included.
 
 The requested stealth default is **o4-mini/AgentTrek with actor T0.6**. Fresh,
 matched baseline/Additive/Gate B iteration90 full300 runs are
-[running concurrently as336864/336865/336866](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+[recovering credit-blocked tasks as336971/336972/336973](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
 Gate B's best evaluated local-browser checkpoint so far; dates and valid-task sets differ,
 so a consistent gain over outcome-only RL is not yet established.
-[Counts and audit](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928).
+[Counts and audit](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928). Iteration100 finishes at **36.67% /48.89%**, below90 and2.00pp above historical baseline100 overall. [Iteration100 audit](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
 
 <a id="arm-failure-sampling-history"></a>
 <a id="all-failure-arm-full-300-curve"></a>
