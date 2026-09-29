@@ -7213,6 +7213,62 @@ jobs as well as replacements and require independent artifact review before
 completion. Plans and the exact request are in runtime
 `arm-turn-bonus-preparation/stealth90-o4-more-20260929/`.
 
+<a id="arm-webvoyager90-stealth-20260929"></a>
+### September29: matched WebVoyager evaluation prepared
+
+**Requested:** one WebVoyager evaluation each of the **iteration90 outcome-only
+baseline, Additive and historical Gate B** checkpoints used in the matched OM2W
+comparison. **Prepared and CPU-tested; not submitted.** New compute requires
+the exact resource approval below; existing OM2W/training budgets are unchanged.
+
+The headline OpenWebRL WebVoyager score uses **Browser Use stealth, actor
+temperature0.6/top-p0.95/top-k20,4096 response tokens,30 turns**, with
+**GPT-4o and the WebVoyager judge**, on the **595-task FARA-curated dataset**.
+The reported OpenWebRL-4B headline is74.1%; this is a reference from a different
+checkpoint and collection date. The o4-mini/AgentTrek protocol remains specific
+to our OM2W comparison. [Paper, Appendices A.6–B](https://arxiv.org/html/2606.02031v2#A6).
+
+| Setting | Prepared comparison |
+| --- | --- |
+| Checkpoints | Native89 = completed iteration90; baseline1,016 / Additive1,150 / Gate B1,136 Adam updates |
+| Tasks | Same595 IDs, URLs and instructions for all three models; one sample per task |
+| Actor | Standalone checkpoint, no inference-time ARM selector; T0.6,p0.95,k20,4096 tokens,30 turns,32,768 context,one current screenshot,full reasoning history |
+| Browser | Browser Use stealth; three sessions per model, nine total |
+| Judge | Released GPT-4o/WebVoyager implementation, final answer plus up to30 screenshots; seed42;120s per-call timeout |
+| Reporting | Overall success out of595; valid-only success with explicit denominator; per-task paired comparison |
+| Artifacts | Every task's rollout/screenshots and judge verdict, including invalids; source/data hashes, restored checkpoint evidence, separate `openwebrl-evals` runs |
+
+**Dataset version:** the released OpenWebRL file is byte-identical to our local
+`openwebrl/data/eval/webvoyager_fara.jsonl`, SHA256
+`ac9253317b76884abbd8d89e9b02570f3f4fbf18e428c335bc8761d778c6fe68`.
+It preserves the paper-pinned FARA595 IDs and URLs but changes **53 task
+instructions**, updating dates. Use this released version for all three models;
+do not call it an exact reproduction of the paper's original task text.
+[Pinned released dataset](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/openwebrl/data/eval/webvoyager_fara.jsonl),
+[paper-pinned FARA dataset](https://github.com/microsoft/fara/blob/44908264c810d3806365c6aab63a43c2d52a8057/webeval/data/webvoyager/WebVoyager_data_08312025.jsonl).
+The judge is copied byte-for-byte from the
+[released implementation](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/openwebrl/eval/reward_webvoyager.py).
+
+**Resource request:** **three jobs ×1 H200 ×12h**,8 CPUs/240GiB per job,
+**36 GPU-hours maximum**, including startup and retries. Estimated8–10h per
+model, extrapolated from the observed300-task OM2W cohorts; WebVoyager runtime
+is not yet measured. Release each job immediately after verified completion.
+Start the three together after current OM2W repeats finish; update dependencies
+after any recovery to avoid exceeding the browser-session limit. This entails
+1,785 fresh primary trajectories and GPT-4o terminal judgements, with normal
+browser/API service charges. No paid job has been submitted for this request.
+
+Prepared launcher: `scripts/run_arm_webvoyager90.py`; batch template:
+`scripts/evaluate_arm_webvoyager90_1gpu.sbatch`. Eleven new regression tests and
+the fifteen existing OM2W tests pass. Tests exercise the actual released judge
+with a mocked API, correct screenshots/model, task identity, invalid-artifact
+persistence, credit-exhaustion handling and rejection of OM2W-only approval.
+The worker now honors an explicit allocation cap instead of silently stopping
+a12h WebVoyager job at the generic8h default. Frozen judge import and batch-shell
+syntax pass; GPU restoration and initial real task/verdict checks remain for
+the approved allocation. Runtime plans and snapshot differences are in
+`arm-turn-bonus-preparation/webvoyager90-stealth-20260929/`.
+
 <a id="arm-task-pool-quality-v2-20260929"></a>
 ### September29: task expansion prioritized; revised text screening completed
 
