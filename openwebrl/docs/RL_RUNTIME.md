@@ -47,6 +47,17 @@ Queued successors335700 (bonus),335698 (reweight), and335729 (Gate B100) have
 intentional dependencies, with no current ARM user/admin holds. Approved caps
 remain unchanged; the persistent supervisor has a fresh heartbeat.
 
+**W&B routing correction, September28:** the mixed-pair and Gate B controllers
+had explicitly overridden the evaluation project to `openwebrl`. The shared
+`configure_evaluation_tracking` guard now redirects that legacy request to
+`openwebrl-evals`, including at worker entry for a saved evaluation plan.
+Every separate eval-only run belongs in `openwebrl-evals`, even when its worker
+shares a training allocation; actual training runs stay in `openwebrl`.
+Five routing regression tests and16 existing evaluation tests passed. Real
+checkpoint previews for both mixed variants and Gate B agree in their command,
+environment and manifest; training readiness fingerprints remain unchanged.
+Existing completed evaluation runs have not been moved between W&B projects.
+
 The following launch/recovery notes preserve the earlier morning history.
 
 **Gate B100 submission update:**335729 is queued after335681 under a separately
