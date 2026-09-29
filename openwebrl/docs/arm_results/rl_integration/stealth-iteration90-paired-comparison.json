@@ -1,0 +1,56 @@
+{
+  "comparison": "Gate B minus additive, iteration90 stealth full300",
+  "protocol": {
+    "browser": "Browser Use stealth",
+    "judge": "gpt-4.1",
+    "judge_prompt_variant": "action_history",
+    "temperature": 0,
+    "inference_arm_selection": false
+  },
+  "sources": [
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-additive-r1-336697",
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-gate-b-r1-336698"
+  ],
+  "all_scheduled_invalid_counted_as_failure": {
+    "tasks": 300,
+    "additive_successes": 159,
+    "gate_b_successes": 169,
+    "gate_b_only_successes": 57,
+    "additive_only_successes": 47,
+    "both_success": 112,
+    "neither_success": 84,
+    "difference_pp": 3.3333333333333335,
+    "exact_mcnemar_two_sided_p": 0.37758392329809853,
+    "paired_task_bootstrap_95pct_percentile_ci_pp": [
+      -3.3333333333333335,
+      10.0
+    ]
+  },
+  "common_valid_sensitivity": {
+    "tasks": 277,
+    "additive_successes": 158,
+    "gate_b_successes": 164,
+    "gate_b_only_successes": 52,
+    "additive_only_successes": 46,
+    "both_success": 112,
+    "neither_success": 67,
+    "difference_pp": 2.1660649819494586,
+    "exact_mcnemar_two_sided_p": 0.613734467630139,
+    "paired_task_bootstrap_95pct_percentile_ci_pp": [
+      -4.693140794223827,
+      9.025270758122744
+    ]
+  },
+  "bootstrap": {
+    "seed": 20260929,
+    "samples": 100000,
+    "method": "paired task bootstrap, multinomial count equivalent; percentile interval"
+  },
+  "limitations": [
+    "One evaluation pass per trained checkpoint; no estimate of independent training-seed or repeated-evaluation variation.",
+    "Tasks are resampled independently; website-level correlations are not modeled.",
+    "Historical outcome-only baseline90 uses o4-mini and actor temperature0.6, versus GPT-4.1 and temperature0 for ARM; no matched baseline significance claim.",
+    "Common-valid sensitivity conditions on availability and is not the primary endpoint."
+  ],
+  "exact_p_independently_verified_with": "scipy.stats.binomtest"
+}

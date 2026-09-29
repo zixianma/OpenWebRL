@@ -48,8 +48,14 @@ for Gate B. Both cohorts contain exactly the300 expected unique task IDs; all600
 rollout ZIP archives and saved GPT-4.1/action_history verdicts passed independent
 checks. Native checkpoint89 restores and final W&B metrics match; all owned
 browser sessions stopped. Gate B exceeds Additive by3.33pp overall (ten successes)
-and2.50pp valid-only. These are single evaluations of independently trained
-policies; no significance or repeat-variance claim is made.
+and2.50pp valid-only. The paired all-300 comparison has 57 Gate-B-only successes
+and 47 Additive-only successes: exact two-sided McNemar p=0.378, with a paired
+task-bootstrap 95% interval of −3.33 to +10.00 pp. On 277 common-valid tasks,
+wins/losses are 52/46 (p=0.614). These single evaluations do not establish a
+difference, estimate training-seed/repeat variance, or account for website-level
+task correlations. No matched test against the historical baseline is reported
+because its judge and actor temperature differ.
+[Paired analysis](ARM_RESULTS.md#arm-stealth90-results-20260929) ·
 [Additive audit](arm_results/rl_integration/stealth-additive-iteration90-audit.json) ·
 [Gate B audit](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) ·
 [Additive W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-additive-r1-336697) ·

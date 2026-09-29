@@ -22,6 +22,17 @@ native checkpoint89 restores, cohort membership and final W&B histories passed
 verification; owned browser sessions stopped. Additive used4h03m48s and Gate B
 3h39m44s, together7.73 of the approved14 GPU-hours.
 
+**Paired task test:** Gate B succeeds on 57 tasks where Additive fails; Additive
+succeeds on 47 where Gate B fails. Across all 300 tasks, counting invalid tasks
+as failures, exact two-sided McNemar **p=0.378**. The paired task-bootstrap 95%
+interval for Gate B minus Additive is **−3.33 to +10.00 pp**. On the 277 tasks
+valid in both runs, wins/losses are 52/46 and **p=0.614**. Neither comparison
+establishes a difference. This exploratory task-level analysis does not estimate
+training-seed or repeated-evaluation variance, and does not account for correlation
+among tasks on the same website. The historical outcome-only baseline uses a
+different judge and actor temperature, so no matched baseline significance test
+is reported. [Paired-count and bootstrap audit](arm_results/rl_integration/stealth-iteration90-paired-comparison.json).
+
 Earlier local-browser results were39.33% /54.63% for Additive (216 valid) and
 43.00% /55.13% for Gate B (234 valid). Browser backend and collection date both
 changed. Historical baseline stealth90 uses o4-mini/T0.6; these comparisons do
