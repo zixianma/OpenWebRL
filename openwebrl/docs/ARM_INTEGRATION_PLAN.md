@@ -7218,8 +7218,8 @@ completion. Plans and the exact request are in runtime
 
 **Requested:** one WebVoyager evaluation each of the **iteration90 outcome-only
 baseline, Additive and historical Gate B** checkpoints used in the matched OM2W
-comparison. **Prepared and CPU-tested; not submitted.** New compute requires
-the exact resource approval below; existing OM2W/training budgets are unchanged.
+comparison. **Approved and submitted September29:** baseline337217,
+Additive337218 and Gate B337219. Existing OM2W/training budgets are unchanged.
 
 The headline OpenWebRL WebVoyager score uses **Browser Use stealth, actor
 temperature0.6/top-p0.95/top-k20,4096 response tokens,30 turns**, with
@@ -7249,14 +7249,20 @@ do not call it an exact reproduction of the paper's original task text.
 The judge is copied byte-for-byte from the
 [released implementation](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/openwebrl/eval/reward_webvoyager.py).
 
-**Resource request:** **three jobs ×1 H200 ×12h**,8 CPUs/240GiB per job,
+**Approved resources:** **three jobs ×1 H200 ×12h**,8 CPUs/240GiB per job,
 **36 GPU-hours maximum**, including startup and retries. Estimated8–10h per
 model, extrapolated from the observed300-task OM2W cohorts; WebVoyager runtime
 is not yet measured. Release each job immediately after verified completion.
 Start the three together after current OM2W repeats finish; update dependencies
 after any recovery to avoid exceeding the browser-session limit. This entails
 1,785 fresh primary trajectories and GPT-4o terminal judgements, with normal
-browser/API service charges. No paid job has been submitted for this request.
+browser/API service charges. All three jobs are queued with
+`afterok:337132:337133:337134`, waiting for the last OM2W repeat wave.
+The supervisor tracked all three before release. Each method has its own
+43,200-second budget including retries, requires independent completion review,
+and must save595 task archives/verdicts. Approval, submitted plans and receipts
+are recorded in the preparation runtime. A replacement OM2W parent must update
+all three dependencies before the WebVoyager jobs become eligible.
 
 **Browser-credit estimate, September29 15:51 PDT:** live balance **$16.30**.
 The API's settled charges for621 owned recent OM2W sessions total$3.6351,
@@ -7270,7 +7276,7 @@ is metered even with residential proxies disabled. The current rates are
 $0.02/browser-hour plus$0.20/GB direct traffic. [Browser Use pricing](https://browser-use.com/pricing).
 Private `browser-cost-estimate.json` and `browser-cost-session-evidence.json`
 in the preparation runtime preserve the account check and all621 matched session
-charges; no credits were purchased and WebVoyager remains unsubmitted.
+charges. No credits were purchased; the proposed top-up is the user's action.
 
 Prepared launcher: `scripts/run_arm_webvoyager90.py`; batch template:
 `scripts/evaluate_arm_webvoyager90_1gpu.sbatch`. Eleven new regression tests and
@@ -7385,6 +7391,34 @@ the browser compute/API cap after the retained count is known. Report invalid,
 all-success, mixed and valid all-failure groups and usable labels/browser-hour,
 with site-stratified comparisons on shared hosts. New data is not automatically
 added because it produces failures or ARM labels.
+
+**Selection discussion after WebVoyager submission, September29:** the52
+candidates span **15 hosts**, with **40 metadata-hard and12 medium tasks**;
+47 have source label `pae-webvoyager` and5 `insta-v3`. These are upstream
+difficulty labels, not measured actor success. The original25 controls span19
+hosts; only **21 controls share the15 retained candidate hosts**. Preserve all25
+for context but report the comparison on shared hosts separately, since aggregate
+differences otherwise mix website composition with candidate difficulty.
+
+The proposed decision rule after the385-trajectory pilot is:
+
+| Five-attempt outcome | Selection interpretation / next action |
+| --- | --- |
+| Any invalid attempt | Diagnose access, missing targets, parsing or judge failure; do not count this as five valid failures |
+|1–4 successes with five valid attempts | Direct evidence of a solvable task with variable actor outcomes; prioritize as a useful training candidate |
+|0 successes with five valid attempts | Hard-or-impossible remains unresolved; require a separate stronger-policy success or convincing execution evidence before promoting as learnable hard data |
+|5 successes | Low difficulty for this actor; retain for coverage or test difficulty with the SFT initialization rather than automatically calling it useless |
+
+The screening actor remains the proposed frozen outcome-only iteration90.
+Because new training starts from SFT iteration0, this measures late-stage
+headroom rather than the full fresh-training curriculum. A later SFT difficulty
+check on the retained cohort would address that mismatch; it is not yet budgeted.
+ARM label count is an auxiliary diagnostic, not the task's admission criterion.
+First validate browser/judge reliability and candidate yield on this small panel;
+then scale the frozen quality/overlap pipeline to hundreds from the19,260-task
+pool, cap site concentration, and compare original versus expanded data with the
+reward recipe unchanged. No browser pilot or training-data change was launched
+by the WebVoyager approval.
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26
