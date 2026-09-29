@@ -7,7 +7,25 @@ task cursor,W&B `arm-gate-b-309053`,48 mixed groups plus up to8 auxiliary
 all-failure groups, beta0.5,q20%,min2 gate and response-index credit. This is
 the historical B run, distinct from the new mixed-only pair below.
 
-Current335681 restores82 and tests saved83 on TP4/DP2 with24GiB cache guard;
+**September29 checkpoint and budget audit:** Gate B is now durable at
+**iteration99 /1,234 Adam updates**. Job335729 consumed47,853 seconds and
+retry336829 consumed5,442 seconds, then stopped cleanly at its budget guard.
+All16 checkpoint shards, metadata, optimizer/scheduler counters and the task
+cursor passed artifact checks; calibration passed. The16h approval has
+**4,305 seconds (1h11m45s) remaining**, below the6,000-second training admission
+floor. Iteration100 and its full300 evaluation remain incomplete.
+
+Prepared, **not approved or submitted**: one8 H200 ×3h allocation,
+64 CPUs/960GiB, reusing the remaining4,305 seconds and requesting only
+6,495 additional seconds (14.43 additional GPU-hours). The last training
+attempt took90m42s; evaluation90 took about30m, so3h includes about59m margin
+over those observations. Preserve TP4/DP2,24GiB cache, optimizer/scheduler,
+cursor and W&B identity. Resume plan and exact accounting are in runtime
+`arm-turn-bonus-preparation/gate-b90-20260927/to100/finish100-proposal.json`.
+The supervisor marks this lineage `requires_user` for the budget extension;
+the mixed pair and corrected stealth evaluations remain actively supervised.
+
+At the September28 submission,335681 restored82 and tested saved83 on TP4/DP2 with24GiB cache guard;
 its existing controller owns training90 and full300 evaluation90. The first
 five replay updates are finite, but the full batch is not yet verified.
 Approved and submitted **335729: one additional8 H200 ×16h allocation**,
@@ -52,8 +70,9 @@ Scientific settings remain unchanged:48 ordinary mixed groups, no auxiliary
 all-failure groups, min2/response-index ARM credit,K5,q20%,bonus beta0.5 or
 sign-aware mean-one reweighting lambda0.5. Own and await full300 evaluations at
 10/20/30/40/50/60, with the existing local-browser,GPT-4.1/action_history,T0
-protocol and all rollout/verdict pairs saved. Embedded evaluations stay in the
-training W&B project. Evaluate matched iterations rather than comparing the
+protocol and all rollout/verdict pairs saved. Separate evaluation runs use
+`openwebrl-evals`, including those inside a training allocation; metrics embedded
+in an actual training run may remain in `openwebrl`. Evaluate matched iterations rather than comparing the
 different current checkpoint numbers.
 
 **Additional compute approved and submitted:** for each variant,8 H200,
