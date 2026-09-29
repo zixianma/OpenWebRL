@@ -1,0 +1,91 @@
+{
+  "method": "gate-b",
+  "iteration": 90,
+  "checked_utc": "2026-09-29T21:49:03.041386+00:00",
+  "job_id": "336973",
+  "protocol": "Actor-only iteration90; Browser Use stealth; o4-mini/AgentTrek; T0.6 p0.95 k20; 4096 tokens; 30 turns; full300",
+  "full300": {
+    "tasks": 300,
+    "successes": 166,
+    "valid": 286,
+    "invalid": 14,
+    "overall": 0.5533333333333333,
+    "valid_only": 0.5804195804195804,
+    "saved_rollouts": 300,
+    "saved_task_records": 300,
+    "verified_complete": true
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 62,
+    "valid": 98,
+    "invalid": 2,
+    "overall": 0.62,
+    "valid_only": 0.6326530612244898,
+    "saved_rollouts": 100,
+    "saved_task_records": 100,
+    "verified_complete": true
+  },
+  "original_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r1-336866",
+  "recovery_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r1-recovery-336973",
+  "retained_original_records": 138,
+  "retried_credit_blocked_records": 162,
+  "record_completion_windows": {
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r1-336866": {
+      "first_record_utc": "2026-09-29T16:51:17.251337+00:00",
+      "last_record_utc": "2026-09-29T18:57:02.562662+00:00"
+    },
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r1-recovery-336973": {
+      "first_record_utc": "2026-09-29T19:06:25.719133+00:00",
+      "last_record_utc": "2026-09-29T21:44:13.252740+00:00"
+    }
+  },
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-335729-b100-iter90/runtime/iter_0000089",
+  "adam_updates": 1136,
+  "checkpoint_gpu_restore_verified": true,
+  "checkpoint_artifact_checks_passed": true,
+  "exact_task_id_set_verified": true,
+  "all_merged_records_and_archives_checked": true,
+  "remaining_credit_blocked_records": 0,
+  "valid_judge_verdict_texts_saved": 286,
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "wandb_audit": {
+    "epoch": 1790718435.3904593,
+    "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-gate-b-r1-recovery-336973",
+    "state": "finished",
+    "history": [
+      {
+        "_step": 0,
+        "eval/online-mind2web-benchmark/task/trajectories": 162,
+        "eval/online-mind2web-benchmark/task/valid_trajectories": 155,
+        "eval/online-mind2web-benchmark/task/successes": 85
+      }
+    ],
+    "verified": true
+  },
+  "attempts": [
+    {
+      "job_id": "336863",
+      "state": "FAILED",
+      "elapsed_seconds": 33,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "336866",
+      "state": "COMPLETED",
+      "elapsed_seconds": 7819,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "336973",
+      "state": "COMPLETED",
+      "elapsed_seconds": 9828,
+      "exit_code": "0:0"
+    }
+  ],
+  "approved_gpu_seconds": 25200,
+  "consumed_gpu_seconds": 17680,
+  "unused_gpu_seconds": 7520,
+  "allocation_released": true,
+  "verified_complete": true
+}

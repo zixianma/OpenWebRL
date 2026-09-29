@@ -4,12 +4,42 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-stealth90-o4-results-20260929"></a>
+## Matched iteration90 stealth results: o4-mini/T0.6 — September29
+
+Same300 tasks, Browser Use stealth, actor T0.6/p0.95/k20,4096 tokens and30 turns,
+o4-mini/AgentTrek judge, with no inference-time ARM selection. Original valid
+outcomes and ordinary invalid attempts are retained; only HTTP402 credit-blocked
+tasks were retried after the account was funded. This is a contemporaneous
+comparison interrupted by a shared provider outage, not uninterrupted collection.
+
+| Method | Fixed100 overall / valid-only | Full300 overall / valid-only | Successes / valid / total | State |
+| --- | --- | --- | --- | --- |
+| Outcome-only baseline90 |56.00% /57.14% |**54.33% /56.99%** |163 /286 /300 | Verified complete |
+| Additive90 | — | — | — | Completing |
+| Gate B90 |62.00% /63.27% |**55.33% /58.04%** |166 /286 /300 | Verified complete |
+
+Gate B's merged cohort contains138 retained records and162 retries. All300
+expected task IDs, rollout archives and task records were checked, including
+286 nonempty terminal-judge verdicts; invalid attempts remain recorded. Native89
+GPU restoration, checkpoint counters, final retry W&B history, browser cleanup
+and total consumed compute passed verification. Job336973 released its GPU;
+all attempts consumed17,680 of25,200 approved GPU-seconds. Full300 counts are
+reconstructed from both output roots; the retry W&B run reports its162-task subset.
+Baseline also passed all300 merged-artifact checks and released its GPU;
+all attempts used17,827/25,200 seconds. Gate B is1.00pp higher overall and
+1.05pp higher valid-only. This single evaluation does not establish training-seed
+robustness; Additive is still finishing.
+[Baseline merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json).
+[Gate B merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) ·
+[Protocol and recovery history](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+
 <a id="arm-stealth90-results-20260929"></a>
 ## ARM iteration90 stealth evaluations — September29
 
 **Protocol correction:** these GPT-4.1/T0 cohorts did not match the user's
 intended stealth protocol. The default is o4-mini/AgentTrek with actor T0.6;
-[fresh matched baseline/Additive/Gate B runs are recovering credit-blocked tasks as336971/336972/336973](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+[the corrected matched results and recovery record appear above](#arm-stealth90-o4-results-20260929).
 The earlier attempts exhausted Browser Use credits; their apparent300-record
 completion includes tasks with no browser session and is not a full300 result.
 Completed outcomes are preserved, and only independently identified HTTP402

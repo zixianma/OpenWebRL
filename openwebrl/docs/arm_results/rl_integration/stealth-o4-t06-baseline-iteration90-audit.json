@@ -1,0 +1,91 @@
+{
+  "method": "baseline",
+  "iteration": 90,
+  "checked_utc": "2026-09-29T21:52:36.477097+00:00",
+  "job_id": "336971",
+  "protocol": "Actor-only iteration90; Browser Use stealth; o4-mini/AgentTrek; T0.6 p0.95 k20; 4096 tokens; 30 turns; full300",
+  "full300": {
+    "tasks": 300,
+    "successes": 163,
+    "valid": 286,
+    "invalid": 14,
+    "overall": 0.5433333333333333,
+    "valid_only": 0.5699300699300699,
+    "saved_rollouts": 300,
+    "saved_task_records": 300,
+    "verified_complete": true
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 56,
+    "valid": 98,
+    "invalid": 2,
+    "overall": 0.56,
+    "valid_only": 0.5714285714285714,
+    "saved_rollouts": 100,
+    "saved_task_records": 100,
+    "verified_complete": true
+  },
+  "original_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r1-336864",
+  "recovery_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r1-recovery-336971",
+  "retained_original_records": 132,
+  "retried_credit_blocked_records": 168,
+  "record_completion_windows": {
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r1-336864": {
+      "first_record_utc": "2026-09-29T16:50:56.630525+00:00",
+      "last_record_utc": "2026-09-29T18:53:24.853136+00:00"
+    },
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r1-recovery-336971": {
+      "first_record_utc": "2026-09-29T19:05:22.464268+00:00",
+      "last_record_utc": "2026-09-29T21:49:13.417076+00:00"
+    }
+  },
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/runs/openwebrl-4b-reference-294421-20260913T211532/iter_0000089",
+  "adam_updates": 1016,
+  "checkpoint_gpu_restore_verified": true,
+  "checkpoint_artifact_checks_passed": true,
+  "exact_task_id_set_verified": true,
+  "all_merged_records_and_archives_checked": true,
+  "remaining_credit_blocked_records": 0,
+  "valid_judge_verdict_texts_saved": 286,
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "wandb_audit": {
+    "epoch": 1790718703.350378,
+    "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-baseline-r1-recovery-336971",
+    "state": "finished",
+    "history": [
+      {
+        "_step": 0,
+        "eval/online-mind2web-benchmark/task/trajectories": 168,
+        "eval/online-mind2web-benchmark/task/valid_trajectories": 161,
+        "eval/online-mind2web-benchmark/task/successes": 84
+      }
+    ],
+    "verified": true
+  },
+  "attempts": [
+    {
+      "job_id": "336861",
+      "state": "FAILED",
+      "elapsed_seconds": 33,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "336864",
+      "state": "COMPLETED",
+      "elapsed_seconds": 7604,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "336971",
+      "state": "COMPLETED",
+      "elapsed_seconds": 10190,
+      "exit_code": "0:0"
+    }
+  ],
+  "approved_gpu_seconds": 25200,
+  "consumed_gpu_seconds": 17827,
+  "unused_gpu_seconds": 7373,
+  "allocation_released": true,
+  "verified_complete": true
+}

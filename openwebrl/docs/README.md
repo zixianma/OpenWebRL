@@ -33,7 +33,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Interactive75-task quality and uncertainty review](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Matched iteration90 stealth recovery:336971/336972/336973 retry168/172/162 credit-blocked tasks; completed outcomes preserved, o4-mini/AgentTrek/T0.6 unchanged, no GPU budget extension](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+[Matched stealth90: baseline54.33% /56.99%, Gate B55.33% /58.04% verified; Additive finishing; o4-mini/AgentTrek/T0.6](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 [Gate B training100 complete: full30036.67% /48.89%, fixed10030.00% /44.12%; all artifacts verified and comparison plot updated](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
 [Historical GPT-4.1/T0 stealth evals: Additive53.00% /56.18% (283 valid), Gate B56.33% /58.68% (288 valid); these used the wrong protocol for the intended comparison](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 [Current inventory, September28 evening: Gate B saved90/collects91; mixed bonus saved19/collects20; reweight saved22/collects23; automatic continuation verified](RL_RUNTIME.md#arm-progress-20260928).

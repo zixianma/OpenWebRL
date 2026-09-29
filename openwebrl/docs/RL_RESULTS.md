@@ -51,6 +51,14 @@
 | Additive bonus |90 |159 |283 |17 |53.00 |56.18 |[September29 first pass](arm_results/rl_integration/stealth-additive-iteration90-audit.json) |
 | Gate B: relaxed gate |90 |169 |288 |12 |56.33 |58.68 |[September29 first pass](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) |
 
+## Matched stealth browser · o4-mini · temperature 0.6 · September29
+
+| Method | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Fixed100 overall / valid-only % | Record |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| Outcome-only baseline |90 |163 |286 |14 |54.33 |56.99 |56.00 /57.14 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json) |
+| Additive bonus |90 | — | — | — | — | — | — | Running |
+| Gate B: relaxed gate |90 |166 |286 |14 |55.33 |58.04 |62.00 /63.27 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) |
+
 ## Stealth browser · o4-mini
 
 | Checkpoint after iteration | Actor temperature | Completed / planned | Successes | Valid | Invalid | Overall % | Valid-only % | Evaluation |

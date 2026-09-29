@@ -205,21 +205,21 @@ success; teacher action consistency is58% under reversed-order re-query.
 <a id="baseline-comparison"></a>
 ![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-**Historical stealth runs, GPT-4.1/T0; actor alone, no inference-time selection:**
+**Matched stealth evaluation, September29: o4-mini/AgentTrek, actor T0.6; no inference-time selection.**
 
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
-| Additive bonus |90 |49.00% /51.04% |**53.00% /56.18%** |
-| B: relaxed gate |90 |57.00% /58.16% |**56.33% /58.68%** |
+| Outcome-only baseline |90 |56.00% /57.14% |**54.33% /56.99%** |
+| Additive bonus |90 | Pending | Pending |
+| B: relaxed gate |90 |62.00% /63.27% |**55.33% /58.04%** |
 
-Both first passes are complete. Brown triangles retain historical baseline58/90
-with o4-mini,T0.6 (58 includes retries); these are not matched controls for the
-new stealth results or local curves. No fresh baseline repeats are included.
-[Counts, protocols and saved-artifact audits](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
-
-The requested stealth default is **o4-mini/AgentTrek with actor T0.6**. Fresh,
-matched baseline/Additive/Gate B iteration90 full300 runs are
-[recovering credit-blocked tasks as336971/336972/336973](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+Baseline and Gate B are verified complete, each with286 valid tasks. Gate B
+is1.00pp higher overall in this single matched evaluation. The cohorts merge
+preserved pre-outage results with retries of credit-blocked tasks only;
+Additive is still finishing. Diamonds use this corrected protocol; brown
+triangles retain historical baseline58/90 references. Earlier GPT-4.1/T0 ARM
+results remain in the [history table](ARM_RESULTS.md#arm-stealth90-results-20260929).
+[Matched protocol, counts and artifact audits](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is

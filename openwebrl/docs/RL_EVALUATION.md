@@ -29,6 +29,23 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 <a id="arm-stealth90-o4-matched-20260929"></a>
 ## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29
 
+**Verified result, September29:** Gate B90 is complete at **166/300 =55.33%
+overall**, **166/286 =58.04% valid-only**; fixed100 is **62/100 =62.00%**,
+**62/98 =63.27% valid-only**. Baseline is also verified: **163/300 =54.33%
+overall**, **163/286 =56.99% valid-only**, fixed100 **56.00% /57.14%**.
+Additive remains in progress.
+The independent audit checked the merged300 IDs and archives, every valid
+judge text, native89 model restoration and checkpoint counters, W&B's final
+162-task retry history, and browser cleanup. Job336973 exited0 and released its
+GPU after9,828 seconds; all three attempts used17,680/25,200 seconds, leaving
+7,520 unused. Full300 statistics come from retained plus retried records, not
+from the retry-only W&B counters.
+[Gate B audit with completion-time windows](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json).
+Baseline336971 released its GPU after10,190 seconds,17,827 seconds across all
+attempts and7,373 unused; the same independent artifact/restore/W&B checks passed.
+[Baseline merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json).
+
+
 The user clarified that **all stealth evaluations should use actor T0.6 and
 o4-mini/AgentTrek**. The previous Additive/Gate B GPT-4.1/T0 runs used the wrong
 protocol for the intended comparison; retain them as separately labeled history.
