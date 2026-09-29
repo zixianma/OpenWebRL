@@ -1,0 +1,60 @@
+{
+  "method": "mixed-only reweight + relaxed B",
+  "iteration": 30,
+  "job": "335697",
+  "full300": {
+    "tasks": 300,
+    "successes": 90,
+    "valid": 219,
+    "invalid": 81,
+    "overall": 0.3,
+    "valid_only": 0.410958904109589,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter30-335697/rollouts",
+    "iteration": 30,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-335697-iter30/runtime/iter_0000029",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter30-335697"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 28,
+    "valid": 64,
+    "invalid": 36,
+    "overall": 0.28,
+    "valid_only": 0.4375,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "plan_sha256": "16327933723025f9991609472809a6f99ddb8d61f920f2c621128a70b53adc5d",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 29,
+    "completed_training_iteration": 30,
+    "adam_updates": 436
+  },
+  "invalid_archive_diagnostics": {
+    "source": "Saved rollout data.pkl string fields; no tensor payload loading",
+    "counts": {
+      "browser_reset_error": 27,
+      "browser_step_error_termination": 48,
+      "task_timeout_600s": 5,
+      "empty_generation_error": 1
+    },
+    "invalid_tasks": 81,
+    "one_turn_invalid_tasks": 34,
+    "classification_limit": "Saved generation_error strings and terminate_reason=env_step_error identify failure locations, not policy-versus-website/browser causality."
+  }
+}

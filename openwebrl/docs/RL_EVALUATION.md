@@ -5,7 +5,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
-- [Mixed-only bonus/reweight iterations10–20 full300](#arm-mixed-pair-iter10-results-20260928)
+- [Mixed-only bonus/reweight iterations10–30 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration90 full300](#arm-gate-b-iter90-results-20260928)
 - [Gate B iteration80 full300](#arm-gate-b-iter80-results-20260927)
@@ -103,11 +103,13 @@ Every submitted/replacement job is registered with the active ARM supervisor.
 
 <a id="arm-mixed-pair-iter10-results-20260928"></a>
 <a id="arm-mixed-pair-iter20-results-20260928"></a>
-## Mixed-only bonus/reweight iterations10–20 — September28
+<a id="arm-mixed-pair-iter30-results-20260929"></a>
+## Mixed-only bonus/reweight iterations10–30 — September28–29
 
 Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10
-and20. Their controllers resumed training after evaluation.
-Native checkpoints are `iter_0000009` for10 and `iter_0000019` for20. All use the
+and20; reweight30 completed September29. Their controllers resumed training after
+evaluation. Native checkpoints are `iter_0000009` for10, `iter_0000019` for20 and
+`iter_0000029` for30. All use the
 same frozen full300 cohort and local-browser GPT-4.1/action_history protocol at
 temperature0,4096 response tokens and30 browser turns. Full300 membership,
 per-task judge identity, native checkpoint identity, nonempty rollout ZIPs and
@@ -119,6 +121,22 @@ final metrics were independently checked.
 |  |20 |92 |225 |75 |30.67% |40.89% |30 /69 |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
+|  |30 |90 |219 |81 |30.00% |41.10% |28 /64 |
+
+Reweight30's fixed100 slice is28.00% /43.75%. Versus20, full300 overall falls
+2.33pp and valid-only1.64pp, with227→219 valid tasks. Historical baseline30 is
+32.00% /38.71% with248 valid tasks; differing dates and validity sets prevent
+attributing this difference solely to training. Native29 restoration, all300
+archives/verdicts and final W&B history passed independent checks. The controller
+passed TP2/DP4 model-and-optimizer restoration at436 Adam updates for the next
+training stage; the target remains60 with milestone evaluations.
+
+Saved abort diagnostics at30 contain27 browser-reset errors,48
+`terminate_reason=env_step_error` records, five600-second task timeouts and one
+generation error with an empty message.34 invalid attempts have only one turn.
+These identify failure locations, not whether the policy, website or browser
+caused each failure. No job-wide CUDA OOM or storage failure appeared in the logs;
+the scientific protocol and all invalid attempts remain unchanged in the results.
 
 Fixed100 is extracted from the original frozen task-ID manifest without new
 rollouts. There are300 saved rollout/verdict pairs per cohort, including invalid
@@ -135,15 +153,18 @@ than mean combined reward.
 Runtime roots: `evaluations/arm-mixed-bonus-iter10-335699/`,
 `evaluations/arm-mixed-bonus-iter20-335699/`,
 `evaluations/arm-mixed-reweight-iter10-335697/`, and
-`evaluations/arm-mixed-reweight-iter20-335697/`. Separate W&B evaluations are
+`evaluations/arm-mixed-reweight-iter20-335697/`, and
+`evaluations/arm-mixed-reweight-iter30-335697/`. Separate W&B evaluations are
 in `openwebrl-evals`: [bonus10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter10-335699),
 [bonus20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter20-335699),
 [reweight10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter10-335697),
-[reweight20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter20-335697).
+[reweight20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter20-335697),
+[reweight30](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter30-335697).
 [Bonus10 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
 [Bonus20 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) ·
 [Reweight10 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
-[Reweight20 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json).
+[Reweight20 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) ·
+[Reweight30 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json).
 
 <a id="arm-original-backfill-results-20260927"></a>
 ## Original-bonus full300 backfills — September27
