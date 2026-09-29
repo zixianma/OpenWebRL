@@ -7545,7 +7545,7 @@ Implementation: `scripts/rebuild_arm_task_pool.py`; private outputs under runtim
 `audit.json`. The deterministic30-task example panel is for inspection only and
 does not restrict the205,942-task candidate pool. The bounded CPU pass took24.5s.
 
-**Next pass prepared, not submitted:** `scripts/dedup_arm_task_pool.py` plus
+**Semantic pass approved and queued as337317:** `scripts/dedup_arm_task_pool.py` plus
 `scripts/dedup_arm_task_pool_1gpu.sbatch` use pinned Qwen3-Embedding-8B,
 last-token/unit-normalized embeddings and exact blockwise cosine greedy selection
 at0.95. Released training and held-out instructions are exclusion references;
@@ -7556,9 +7556,10 @@ Every rejection keeps its neighbor ID/cosine for review, including cross-site
 cases. Website quality and live executability remain separate pending checks.
 Five metadata-boundary tests and four greedy-selection tests pass, including
 comparison with a naive greedy reference. GPU execution remains unvalidated.
-Prepared resource request: **1 H200 ×3h,8 CPUs,120GiB, including retries**, no API
-or browser spend. A new allocation requires exact approval; no old GPU budget is
-transferred. Tokenization is complete:210,722 instructions including4,780
+Approved resource cap: **1 H200 ×3h,8 CPUs,120GiB, including retries**, no API
+or browser spend. Job337317 is registered with the active ARM supervisor and is
+pending resources; its frozen source and approval/attempt ledger are saved with
+the semantic outputs. No old GPU budget is transferred. Tokenization is complete:210,722 instructions including4,780
 reference entries,5,082,569 tokens, longest214 tokens. Scaling the earlier
 130,128-token/107.5-second embedding pass predicts approximately70 minutes;
 three hours is a cap for embedding, deduplication, I/O and recovery, not an
