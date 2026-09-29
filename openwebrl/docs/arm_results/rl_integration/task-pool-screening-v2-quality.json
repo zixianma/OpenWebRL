@@ -1,0 +1,776 @@
+{
+  "date": "2026-09-29",
+  "stage": "text_screening_complete_overlap_pending",
+  "candidate_tasks": 75,
+  "judgments": 525,
+  "jev_model": "jev-1.13.0",
+  "jev_calls": 75,
+  "jev_input_tokens": 142980,
+  "gpt41_model": "gpt-4.1-2025-04-14",
+  "gpt41_tasks": 10,
+  "gpt41_calls": 70,
+  "gpt41_estimated_usd": 0.100902,
+  "jev_estimated_usd": 0.006005160000000001,
+  "pricing_basis": "Previously documented API token prices; no cached-input discount for GPT.",
+  "all_dimension_triage": {
+    "uncertain": 31,
+    "flagged": 35,
+    "provisional_pass": 9
+  },
+  "instruction_only_triage": {
+    "uncertain": 22,
+    "flagged": 28,
+    "provisional_pass": 25
+  },
+  "dimension_choices": {
+    "self_contained": {
+      "clear": 47,
+      "problem": 28
+    },
+    "single_episode": {
+      "clear": 74,
+      "problem": 1
+    },
+    "completion_criterion": {
+      "clear": 72,
+      "problem": 2,
+      "uncertain": 1
+    },
+    "contradiction": {
+      "clear": 75
+    },
+    "missing_prerequisite": {
+      "clear": 75
+    },
+    "rubric_alignment": {
+      "clear": 71,
+      "problem": 4
+    },
+    "redundant_rubric": {
+      "clear": 67,
+      "problem": 8
+    }
+  },
+  "paired_agreement": {
+    "all": [
+      67,
+      70
+    ],
+    "instruction_only": [
+      48,
+      50
+    ]
+  },
+  "disagreements": [
+    {
+      "task_id": "211562",
+      "dimension": "rubric_alignment",
+      "jev": "clear",
+      "gpt41": "problem",
+      "jev_confidence": 0.58
+    },
+    {
+      "task_id": "237800",
+      "dimension": "completion_criterion",
+      "jev": "problem",
+      "gpt41": "clear",
+      "jev_confidence": 0.41
+    },
+    {
+      "task_id": "237800",
+      "dimension": "self_contained",
+      "jev": "problem",
+      "gpt41": "clear",
+      "jev_confidence": 0.2
+    }
+  ],
+  "assistant_review_counts": {
+    "provisional_overlap_candidate": 59,
+    "exclude_from_browser_pilot": 12,
+    "hold_for_review": 4
+  },
+  "review_decisions": [
+    {
+      "task_id": "163236",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "164560",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "163239",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "182152",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "165507",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "180966",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Latest Mac Studio and its predecessor identify a finite comparison; record execution date.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "205605",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "161279",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "Unspecified \"certain brand\" of headphones.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "181211",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "205597",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "205642",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "206334",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "215707",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "No equipment model is identified; unrelated purchase, mobile-content and subscription demands lack a shared target.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained",
+        "completion_criterion"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "211562",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "A \"particular\" sports league is required but not identified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "220104",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "154208",
+      "decision": "provisional_overlap_candidate",
+      "reason": "The actor can select two recipes satisfying the lemon/lime constraints.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "209904",
+      "decision": "provisional_overlap_candidate",
+      "reason": "The supplied Lakers head coach example and recent interviews permit a finite result; event availability needs execution.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "252349",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "214520",
+      "decision": "provisional_overlap_candidate",
+      "reason": "A current ESPN college-football ranking supplies a finite list; record ranking/date.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "218174",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "Generic course titles do not identify the three syllabi or the goal for relevance.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "182774",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "245192",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "202969",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "173551",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "224720",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "The specific Data Science course/provider is not identified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "219234",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "236432",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "209821",
+      "decision": "provisional_overlap_candidate",
+      "reason": "A finite cited selection of current sports-media awards/achievements is possible; outcome judging may be subjective.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "148186",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Instruction permits selection of books/recipes, but availability and exact star-rating constraints need execution.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "248456",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Two politicians can be chosen with cited positions; a finite comparison is possible.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "147860",
+      "decision": "provisional_overlap_candidate",
+      "reason": "The actor can select two qualifying dishes/recipes and compare their ratings.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "192203",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Two NLP papers can be selected and a citation source reported; availability is separate.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "237800",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "Requires observing the next seven days; incompatible with one browser episode.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained",
+        "single_episode",
+        "completion_criterion"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "151472",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "220296",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "262046",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "262050",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "252560",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "262062",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "192624",
+      "decision": "hold_for_review",
+      "reason": "Top-three journal ranking and date are unspecified; review before execution.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "156011",
+      "decision": "provisional_overlap_candidate",
+      "reason": "The actor can select one vegetarian and one meat pasta recipe and compare ratings.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "251434",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "864",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "253323",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "239013",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "198648",
+      "decision": "provisional_overlap_candidate",
+      "reason": "A title and author are supplied; paper existence and quality-judgment reliability need browser review.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "237468",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "192784",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "194689",
+      "decision": "hold_for_review",
+      "reason": "Top-five papers lacks a ranking rule; review before execution.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "271684",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "260628",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259352",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259579",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "260984",
+      "decision": "hold_for_review",
+      "reason": "Training/inference-time comparison lacks matched hardware, datasets and measurement conditions.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "263565",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "261379",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "39593",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "260480",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "5892",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "258732",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "49587",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "261382",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "261469",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "A particular model is required but not named.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259324",
+      "decision": "hold_for_review",
+      "reason": "Summer location/hemisphere and artist-popularity ranking are unspecified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "72559",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259318",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "258467",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "\"Different country\" and \"this time\" refer to unavailable context; transport origin/destination also unspecified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "260002",
+      "decision": "provisional_overlap_candidate",
+      "reason": "The website can supply a finite highest-rated-books list; record ranking/source.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259602",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259346",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259609",
+      "decision": "provisional_overlap_candidate",
+      "reason": "Finite browser-visible objective; no clear text blocker on assistant inspection. Availability, overlap and outcome-judge reliability remain unverified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259323",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "\"Your city\" lacks a location in the actor-visible instruction.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "258472",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "The specific landmark, other city, route and detour context are missing.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "259497",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "The specific restaurant is not identified.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    },
+    {
+      "task_id": "258429",
+      "decision": "exclude_from_browser_pilot",
+      "reason": "\"My city\" is not supplied.",
+      "reviewer": "Codex assistant; not independent human ground truth",
+      "instruction_model_flags": [
+        "self_contained"
+      ],
+      "changes_training_pool": false
+    }
+  ],
+  "provisional_candidate_hosts": 17,
+  "control_tasks": 25,
+  "provisional_primary_browser_attempts": 420,
+  "semantic_screening": {
+    "model": "Qwen/Qwen3-Embedding-8B",
+    "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+    "texts": 4486,
+    "computed": false,
+    "gpu_proposal": {
+      "h200": 1,
+      "hours": 0.5,
+      "cpus": 8,
+      "memory_gib": 120,
+      "submitted": false
+    }
+  },
+  "training_pool_changed": false,
+  "limitations": [
+    "Jev/GPT agreement is not accuracy.",
+    "Assistant text review is not independent human validation.",
+    "59 provisional candidates are not a final retained training pool.",
+    "Overlap and browser availability/learnability remain unverified."
+  ]
+}

@@ -22,14 +22,15 @@ for the work you are doing, then follow its contents to dated experiment records
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.
 
 [This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
-[Historical Gate B:335729 queued after335681, approved additional8 H200 ×16h through100/eval100; preserve and verify90/eval90 first](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
+[Historical Gate B training100 and full300 evaluation verified; allocation released](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
 [Mixed-only pair to60 submitted: reweight335697→335698; bonus335699→335700 after335682; full300 every10, approved additional8 H200 ×48h per variant](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Review: proposed outcome-supervised reward versus ORM, PRIME and SelectionARM—input/label/loss table, diagram, credit-assignment example and open alternative](ARM_INTEGRATION_PLAN.md#arm-outcome-orm-prime-comparison).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Outcome-reward readiness: image hashes/processor/gradient checks pass; length-only later-test pair accuracy65.48%; GPU fit pending](ARM_INTEGRATION_PLAN.md#arm-outcome-reward-readiness-20260928).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
-[Task screening v2 prepared:75 candidates +25 existing-site controls,4,411 semantic-reference texts; no new API/browser run](ARM_INTEGRATION_PLAN.md#arm-task-pool-screening-v2-20260928).
+[Task screening v2 complete:75 Jev tasks,10 paired GPT cases;59 provisional candidates,12 excluded,4 held; semantic-overlap GPU stage prepared](ARM_INTEGRATION_PLAN.md#arm-task-pool-quality-v2-20260929).
+[Interactive75-task quality and uncertainty review](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Matched iteration90 stealth recovery:336971/336972/336973 retry168/172/162 credit-blocked tasks; completed outcomes preserved, o4-mini/AgentTrek/T0.6 unchanged, no GPU budget extension](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).

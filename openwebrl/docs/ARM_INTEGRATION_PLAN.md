@@ -7,13 +7,22 @@ task cursor,W&B `arm-gate-b-309053`,48 mixed groups plus up to8 auxiliary
 all-failure groups, beta0.5,q20%,min2 gate and response-index credit. This is
 the historical B run, distinct from the new mixed-only pair below.
 
-**September29 checkpoint and budget audit:** Gate B is now durable at
+**September29 verified completion:** Gate B finished **iteration100 /1,246
+Adam updates**, including full300 evaluation100: **36.67% overall /48.89%
+valid-only (225 valid)**; fixed100 **30.00% /44.12% (68 valid)**. Job336893
+finished successfully and released its GPUs after7,094 seconds. Cumulative
+consumption was60,389 of64,095 approved seconds;3,706 seconds remain unused.
+Checkpoint shards, optimizer/scheduler/cursor, all300 task IDs and saved
+rollout/record pairs, plus W&B history, passed independent checks.
+[Completion audit](arm_results/rl_integration/gate-b-iteration100-audit.json).
+
+**Earlier September29 checkpoint and budget audit:** Gate B was durable at
 **iteration99 /1,234 Adam updates**. Job335729 consumed47,853 seconds and
 retry336829 consumed5,442 seconds, then stopped cleanly at its budget guard.
 All16 checkpoint shards, metadata, optimizer/scheduler counters and the task
-cursor passed artifact checks; calibration passed. The16h approval has
+cursor passed artifact checks; calibration passed. The16h approval had
 **4,305 seconds (1h11m45s) remaining**, below the6,000-second training admission
-floor. Iteration100 and its full300 evaluation remain incomplete.
+floor. Iteration100 and its full300 evaluation were then incomplete.
 
 **Approved and submitted September29: job336893**, one8 H200 ×3h allocation,
 64 CPUs/960GiB, reusing the remaining4,305 seconds and adding only
@@ -7141,6 +7150,83 @@ CPU preparation: `scripts/prepare_arm_task_screening_v2.py`; private immutable
 cohorts and reference inputs: `task-pool-expansion-20260922/screening-v2/` under
 the preparation runtime. No embeddings, API calls, browser collection or new
 training jobs were launched for this step.
+
+<a id="arm-task-pool-quality-v2-20260929"></a>
+### September29: task expansion prioritized; revised text screening completed
+
+The user selected task-pool expansion as the next direction. Another40% failure
+sampling run is deprioritized: its previous strict-gate iteration20 result was
+27.67% overall versus historical additive's28.33%, not evidence for a promising
+gain and not sufficient to establish harm. The mixed-only pair and matched
+stealth comparisons continue unchanged. New actor-training experiments still
+start at iteration0; the active2,102-task training pool has not changed.
+
+Ran Jev's revised v2 questions on all75 candidates and repeated the original
+ten-task GPT-4.1 comparison. All75 Jev requests and70 GPT requests returned
+usable results. Estimated text-screening cost was **$0.107**, using the previously
+documented token prices. Jev used142,980 input tokens; GPT cost was$0.100902.
+API responses and request hashes remain in runtime `jev-quality-v2/` and
+`gpt41-quality-pilot-v2/`; the original v1 results are preserved.
+
+| Review measure | Result |
+| --- | ---: |
+| Jev instruction-only triage: provisional / uncertain / flagged |25 /22 /28 |
+| Jev all-seven-dimension triage, including advisory rubric checks |9 /31 /35 |
+| Jev–GPT agreement on the selected10-task panel |67/70 |
+| Instruction-only agreement on that panel |48/50 |
+| Assistant text review: provisional for overlap / excluded / held |59 /12 /4 |
+| Provisional candidates' hosts |17 |
+| Existing-pool controls, unchanged |25 on19 hosts |
+
+These are **review counts, not retained training data or quality accuracy**.
+The revised prompts corrected the distinct-file redundancy error(202969) and
+allowed the finite Einstein lookup(262046). Remaining model errors include
+flagging reasonable selections of two recipes/papers as unspecified targets.
+The59 provisional cases include12 assistant overrides of instruction flags.
+The12 exclusions cover11 unresolved required targets/context and the seven-day
+observation task237800. Four ranking/comparison cases remain held. Rubric-only
+flags do not reject a task. Every decision and reason is recorded in the
+[aggregate and per-task review](arm_results/rl_integration/task-pool-screening-v2-quality.json).
+Assistant inspection is not independent human ground truth; existence,
+executability, judge reliability and learnability still need browser evidence.
+
+[Updated interactive review:75 tasks,525 judgments](arm_results/rl_integration/jev-quality-review-v2.html)
+shows probabilities, uncertainty, the ten-task comparator and assistant review
+decisions. Unscreened comparator cells are explicitly marked, not counted as
+disagreements. Eight CPU tests passed; the report's search, selection and
+missing-comparator behavior were checked in a local browser.
+
+**Next concrete stage, prepared but not submitted:** semantic-overlap screening
+with [Qwen3-Embedding-8B](https://huggingface.co/Qwen/Qwen3-Embedding-8B), pinned
+revision `1d8ad4ca9b3dd8059ad90a75d4983776a23d44af`. Weights are downloaded;
+the75 candidates plus4,411 reference texts total130,128 tokens, longest214.
+Use normalized4096-dimensional last-token embeddings, symmetric raw task text,
+batch8/BF16, no truncation. Preserve nearest neighbors separately for existing
+training tasks, held-out benchmarks and other candidates. Cosine0.95 flags a
+high-similarity pair for review; it does not prove absence of leakage below the
+threshold or exactly reproduce OpenWebRL's unreleased curation implementation.
+All75 candidates remain in this audit, including held/excluded text cases.
+
+Prepared allocation request: **1 H200 ×30 minutes,8 CPUs,120GiB RAM**, no
+browser sessions or paid API calls. The batch controller exits when embeddings
+and pair reports are saved. It refuses login-node model inference, changed
+input hashes, nonfinite embeddings and silent truncation. Scripts:
+`scripts/screen_arm_task_overlap.py` and
+`scripts/screen_arm_task_overlap_1gpu.sbatch`; frozen plan/readiness live under
+runtime `task-pool-expansion-20260922/screening-v2/overlap-qwen8b/`.
+GPU execution and exact allocation approval remain pending.
+
+After overlap review, freeze the surviving candidate manifest and the25 controls
+for the actor-only browser/ARM-label yield pilot. The provisional59+25 cohort
+would require at most420 primary trajectories at five attempts/task, before
+overlap exclusions; the earlier500 cap remains an upper bound, not a launched
+job. Proposed actor: frozen outcome-only iteration90, using the same actor,
+sampling,15-turn horizon and GPT-4.1/action_history judge for both interleaved
+cohorts. ARM scores sampled executed turns without choosing actions. Finalize
+the browser compute/API cap after the retained count is known. Report invalid,
+all-success, mixed and valid all-failure groups and usable labels/browser-hour,
+with site-stratified comparisons on shared hosts. New data is not automatically
+added because it produces failures or ARM labels.
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26

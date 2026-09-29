@@ -18,47 +18,54 @@ DIMENSIONS = {
 }
 
 
-def build(root):
-    rows = [json.loads(line) for line in (root/'jev-pilot-10.jsonl').read_text().splitlines()]
+def build(root, version='v1'):
+    source = 'jev-pilot-10.jsonl' if version == 'v1' else 'screening-v2/candidate-review-75.jsonl'
+    rows = [json.loads(line) for line in (root/source).read_text().splitlines()]
     jev = {}
-    for path in (root/'jev-quality-v1/responses').glob('*.json'):
+    for path in (root/f'jev-quality-{version}/responses').glob('*.json'):
         record = json.loads(path.read_text())
         if record.get('status') == 'ok': jev[record['task_id']] = record
     gpt = {}
-    for path in (root/'gpt41-quality-pilot-v1/responses').glob('*.json'):
+    for path in (root/f'gpt41-quality-pilot-{version}/responses').glob('*.json'):
         record = json.loads(path.read_text())
         if record.get('valid'): gpt[(record['task_id'],record['dimension'])] = record
     manual = json.loads((root/'pilot-manual-review-before-models.json').read_text())['notes']
+    post_review={}
+    if version=='v2':
+        path=root/'screening-v2/assistant-quality-review.json'
+        if path.exists():post_review={r['task_id']:r for r in json.loads(path.read_text())['decisions']}
     tasks = []
     for row in rows:
         ident = str(row['task_id']); record = jev[ident]
         answers = []
         for dimension, (label, description) in DIMENSIONS.items():
             answer = record['response']['answers'][dimension]
-            other = gpt[(ident,dimension)]
+            other = gpt.get((ident,dimension))
             probabilities = answer['probabilities']
             if abs(sum(probabilities.values())-1) > .001:
                 raise ValueError('Invalid saved probability distribution')
             answers.append({'dimension':dimension, 'label':label, 'description':description,
                 'choice':answer['choice'], 'confidence':answer['confidence'],
-                'probabilities':probabilities, 'gpt_choice':other['label']['choice'],
-                'gpt_explanation':other['label']['explanation'],
+                'probabilities':probabilities, 'gpt_choice':other['label']['choice'] if other else None,
+                'gpt_explanation':other['label']['explanation'] if other else 'Not included in the ten-task comparator.',
                 'question':record['request']['questions'][dimension]})
         # Public WebGym task text and derived outputs only; no credentials or raw API envelopes.
         tasks.append({'id':ident, 'site':row['site_host'], 'instruction':row['task_name'],
-                      'rubric':row['evaluator_reference'], 'manual_note':manual[ident]['note'],
+                      'rubric':row['evaluator_reference'], 'manual_note':manual.get(ident,{}).get('note','No pre-model inspection note for this task.'),
+                      'review':post_review.get(ident),
                       'answers':answers})
     return {'tasks':tasks, 'dimensions':[{'key':k,'label':v[0]} for k,v in DIMENSIONS.items()],
             'model':'jev-1.13.0', 'comparator':'gpt-4.1-2025-04-14',
-            'version':'webgym-quality-v1', 'date':'2026-09-22 UTC'}
+            'version':'webgym-quality-'+version, 'date':'2026-09-22 UTC' if version=='v1' else '2026-09-29 UTC'}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input',type=Path,default=ROOT)
     parser.add_argument('--output',type=Path,default=OUTPUT)
+    parser.add_argument('--version',choices=['v1','v2'],default='v1')
     args = parser.parse_args()
-    data = build(args.input)
+    data = build(args.input,args.version)
     template = (REPO/'scripts/templates/jev_quality_review.html').read_text()
     embedded = json.dumps(data,ensure_ascii=False).replace('<','\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
     rendered = template.replace('__PILOT_DATA__',embedded)
