@@ -35,8 +35,7 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter30-results-20260929"></a>
 ## Mixed-only relaxed-B pair: iterations10–30 — September28–29
 
-Both fresh-from0 runs completed full300 evaluations at10 and20; reweight also
-completed30.
+Both fresh-from0 runs completed full300 evaluations at10,20 and30.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -49,9 +48,17 @@ trajectory-mean-one weighting with lambda=.5.
 |  |30 | — |32.00% /38.71% |248 |
 | Mixed-only bonus + relaxed B |10 |31.00% /41.33% |30.67% /39.32% |234 |
 |  |20 |30.00% /43.48% |30.67% /40.89% |225 |
+|  |30 |29.00% /39.19% |32.00% /42.11% |228 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
+
+Bonus30 has96 successes and228 valid tasks; fixed100 has29 successes and74
+valid tasks. Relative to20, overall improves1.33pp and valid-only1.22pp. At30,
+bonus is2.00pp above reweight overall and1.01pp above valid-only, and matches
+historical baseline30 overall with20 fewer valid tasks. These are descriptive
+single-run comparisons, not established gains. All300 archives/verdicts, native
+checkpoint29 restoration at424 Adam updates and final W&B metrics were verified.
 
 Reweight30 has90 successes and219 valid tasks; fixed100 has28 successes and64
 valid tasks. Relative to20, overall falls2.33pp and valid-only1.64pp, with eight
@@ -69,13 +76,14 @@ slice has30 successes and69 valid tasks. Reweight20 is1.67pp above bonus20 overa
 and valid-task sets limit comparisons; these single-run differences do not
 establish superiority or significance.
 
-All1,500 rollout/verdict pairs and nonempty ZIP archives across the five new
+All1,800 rollout/verdict pairs and nonempty ZIP archives across the six new
 cohorts passed inspection. Cohort membership, judge settings, checkpoint lineage
 and temperature were checked. Both controllers continue training and own later
 evaluations through60.
 
 [Bonus10 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
 [Bonus20 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) ·
+[Bonus30 audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) ·
 [Reweight10 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
 [Reweight20 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) ·
 [Reweight30 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) ·

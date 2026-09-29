@@ -111,9 +111,9 @@ Every submitted/replacement job is registered with the active ARM supervisor.
 <a id="arm-mixed-pair-iter30-results-20260929"></a>
 ## Mixed-only bonus/reweight iterations10–30 — September28–29
 
-Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10
-and20; reweight30 completed September29. Their controllers resumed training after
-evaluation. Native checkpoints are `iter_0000009` for10, `iter_0000019` for20 and
+Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10,
+20 and30; both30 evaluations completed September29. Their controllers own training
+continuation after evaluation. Native checkpoints are `iter_0000009` for10, `iter_0000019` for20 and
 `iter_0000029` for30. All use the
 same frozen full300 cohort and local-browser GPT-4.1/action_history protocol at
 temperature0,4096 response tokens and30 browser turns. Full300 membership,
@@ -124,9 +124,17 @@ final metrics were independently checked.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67% |39.32% |31 /75 |
 |  |20 |92 |225 |75 |30.67% |40.89% |30 /69 |
+|  |30 |96 |228 |72 |32.00% |42.11% |29 /74 |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 |  |30 |90 |219 |81 |30.00% |41.10% |28 /64 |
+
+Bonus30's fixed100 slice is29.00% /39.19%. Versus20, full300 overall increases
+1.33pp and valid-only1.22pp, with225→228 valid tasks. It is2.00pp above reweight30
+overall and1.01pp above valid-only. Historical baseline30 also has96 successes,
+but248 valid tasks versus228 here; differing dates and validity sets limit the
+comparison. All300 archives and verdicts, native29 restoration at424 Adam updates
+and final W&B metrics passed independent checks. The training target remains60.
 
 Reweight30's fixed100 slice is28.00% /43.75%. Versus20, full300 overall falls
 2.33pp and valid-only1.64pp, with227→219 valid tasks. Historical baseline30 is
@@ -136,7 +144,7 @@ archives/verdicts and final W&B history passed independent checks. The controlle
 passed TP2/DP4 model-and-optimizer restoration at436 Adam updates for the next
 training stage; the target remains60 with milestone evaluations.
 
-Saved abort diagnostics at30 contain27 browser-reset errors,48
+Saved reweight30 abort diagnostics contain27 browser-reset errors,48
 `terminate_reason=env_step_error` records, five600-second task timeouts and one
 generation error with an empty message.34 invalid attempts have only one turn.
 These identify failure locations, not whether the policy, website or browser
@@ -157,16 +165,19 @@ than mean combined reward.
 
 Runtime roots: `evaluations/arm-mixed-bonus-iter10-335699/`,
 `evaluations/arm-mixed-bonus-iter20-335699/`,
-`evaluations/arm-mixed-reweight-iter10-335697/`, and
+`evaluations/arm-mixed-bonus-iter30-335699/`,
+`evaluations/arm-mixed-reweight-iter10-335697/`,
 `evaluations/arm-mixed-reweight-iter20-335697/`, and
 `evaluations/arm-mixed-reweight-iter30-335697/`. Separate W&B evaluations are
 in `openwebrl-evals`: [bonus10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter10-335699),
 [bonus20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter20-335699),
+[bonus30](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter30-335699),
 [reweight10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter10-335697),
 [reweight20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter20-335697),
 [reweight30](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter30-335697).
 [Bonus10 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
 [Bonus20 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) ·
+[Bonus30 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) ·
 [Reweight10 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
 [Reweight20 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) ·
 [Reweight30 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json).

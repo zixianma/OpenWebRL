@@ -35,7 +35,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Both iter90 stealth evals complete: Additive53.00% /56.18% (283 valid), Gate B56.33% /58.68% (288 valid); GPT-4.1/T0 differs from historical baseline stealth58/90](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 [Current inventory, September28 evening: Gate B saved90/collects91; mixed bonus saved19/collects20; reweight saved22/collects23; automatic continuation verified](RL_RUNTIME.md#arm-progress-20260928).
 [Mixed-only iteration20 full300: bonus30.67% /40.89%; reweight32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
-[Mixed-only reweight30:30.00% overall /41.10% valid-only (219 valid); all300 archives verified and continuation toward40 restored](ARM_RESULTS.md#arm-mixed-pair-iter30-results-20260929).
+[Mixed-only iteration30 full300: bonus32.00% /42.11% (228 valid); reweight30.00% /41.10% (219 valid); both300-task cohorts and archives verified](ARM_RESULTS.md#arm-mixed-pair-iter30-results-20260929).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

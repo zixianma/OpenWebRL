@@ -179,12 +179,13 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 20 | 26.00% / 38.24% | **27.67% / 37.39%** |
 | **Mixed-only bonus + relaxed B** |10 |31.00% /41.33% |**30.67% /39.32%** |
 |  |20 |30.00% /43.48% |**30.67% /40.89%** |
+|  |30 |29.00% /39.19% |**32.00% /42.11%** |
 | **Mixed-only reweight + relaxed B** |10 |25.00% /34.72% |**27.33% /34.17%** |
 |  |20 |31.00% /44.29% |**32.33% /42.73%** |
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
 
-Both mixed-only runs completed10/20 evaluations September28 with all
-rollout/verdict pairs saved; reweight30 completed September29. Both continue
+Both mixed-only runs completed10/20 evaluations September28 and30 September29,
+with all rollout/verdict pairs saved. Both continue
 toward60. [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
