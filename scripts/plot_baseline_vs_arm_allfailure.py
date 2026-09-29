@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot local-browser GPT-4.1 baseline vs ARM through iteration 100."""
+"""Plot local RL curves and clearly separated historical stealth references."""
 from pathlib import Path
 import json
 import matplotlib
@@ -32,8 +32,17 @@ ax.plot(add_i,[100*x/300 for x in add_s],marker='o',lw=2.2,ls=':',color='#16a34a
 ax.plot(add_i,[100*x/y for x,y in zip(add_s,add_v)],marker='s',lw=2.0,ls=':',color='#84cc16',label='Additive ARM · valid-only')
 ax.plot(gate_b_i,[100*r['successes']/r['tasks'] for r in gate_b_results],marker='o',lw=2.2,ls='-.',color='#7e22ce',label='Gate B (relaxed gate) · overall')
 ax.plot(gate_b_i,[100*r['successes']/r['valid'] for r in gate_b_results],marker='s',lw=2.0,ls='-.',color='#c026d3',label='Gate B (relaxed gate) · valid-only')
+# Historical highlights from RL_RESULTS.md. Do not join these into the local
+# curves: judge, decoding and retry protocol differ for the o4-mini points.
+ax.scatter([80],[100*169/300],marker='D',s=110,color='#0f172a',zorder=6,label='Stealth baseline · GPT-4.1 T0 · overall')
+ax.scatter([80],[100*169/294],marker='D',s=110,facecolors='white',edgecolors='#0f172a',linewidths=1.8,zorder=6,label='Stealth baseline · GPT-4.1 T0 · valid-only')
+ax.scatter([58,90],[100*178/300,100*171/300],marker='^',s=120,color='#a16207',zorder=6,label='Stealth baseline · o4-mini T0.6 · overall')
+ax.scatter([58,90],[100*178/297,100*171/296],marker='^',s=120,facecolors='white',edgecolors='#a16207',linewidths=1.8,zorder=6,label='Stealth baseline · o4-mini T0.6 · valid-only')
+ax.annotate('58: retries merged',xy=(58,100*178/297),xytext=(41,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
+ax.annotate('80: rejudged',xy=(80,100*169/294),xytext=(67,61),fontsize=8,color='#0f172a',arrowprops=dict(arrowstyle='-',color='#0f172a',lw=.8))
+ax.annotate('90: original',xy=(90,100*171/296),xytext=(86,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
 ax.set_xlabel('Checkpoint after training iteration'); ax.set_ylabel('Success rate (%)')
-ax.set_title('Outcome-only baseline vs ARM variants\nGPT-4.1 · 300 Online-Mind2Web tasks')
-ax.set_xlim(18,102); ax.set_ylim(20,58); ax.set_xticks([20,30,40,50,60,70,80,90,100])
+ax.set_title('Outcome-only baseline vs ARM variants · 300 tasks\nLocal curves: GPT-4.1, T0 | Historical stealth: separate markers')
+ax.set_xlim(18,102); ax.set_ylim(20,66); ax.set_xticks([20,30,40,50,60,70,80,90,100])
 ax.legend(frameon=True,loc='upper center',bbox_to_anchor=(.5,-.12),ncol=2,fontsize=8); ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
 fig.tight_layout(); out.parent.mkdir(parents=True,exist_ok=True); fig.savefig(out,bbox_inches='tight'); print(out)
