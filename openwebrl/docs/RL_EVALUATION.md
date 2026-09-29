@@ -4,7 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
-- [Mixed-only bonus/reweight iteration10 full300](#arm-mixed-pair-iter10-results-20260928)
+- [Mixed-only bonus/reweight iterations10–20 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration80 full300](#arm-gate-b-iter80-results-20260927)
 - [Gate B iteration70 full300](#arm-gate-b-iter70-results-20260927)
@@ -23,32 +23,41 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <a id="arm-mixed-pair-iter10-results-20260928"></a>
-## Mixed-only bonus/reweight iteration10 — September28
+<a id="arm-mixed-pair-iter20-results-20260928"></a>
+## Mixed-only bonus/reweight iterations10–20 — September28
 
-Embedded evaluations in335699 (bonus) and335697 (reweight) completed all300
-tasks before their controllers resumed training. Both restored native
-`iter_0000009`, used the same frozen full300 cohort and local-browser
-GPT-4.1/action_history protocol at temperature0,4096 response tokens and
-30 browser turns. Full300 membership, saved per-task judge identity, native
-checkpoint identity, nonempty rollout ZIPs and final metrics were checked.
+Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10;
+reweight also completed20. Their controllers resumed training after evaluation.
+Native checkpoints are `iter_0000009` for10 and `iter_0000019` for20. All use the
+same frozen full300 cohort and local-browser GPT-4.1/action_history protocol at
+temperature0,4096 response tokens and30 browser turns. Full300 membership,
+per-task judge identity, native checkpoint identity, nonempty rollout ZIPs and
+final metrics were independently checked.
 
-| Method | Successes /300 | Valid | Invalid | Overall | Valid-only | Fixed100 successes / valid |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Mixed-only bonus + relaxed B |92 |234 |66 |30.67% |39.32% |31 /75 |
-| Mixed-only reweight + relaxed B |82 |240 |60 |27.33% |34.17% |25 /72 |
+| Method | Iteration | Successes /300 | Valid | Invalid | Overall | Valid-only | Fixed100 successes / valid |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67% |39.32% |31 /75 |
+| Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
+|  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 
 Fixed100 is extracted from the original frozen task-ID manifest without new
-rollouts. There are300 saved rollout/verdict pairs per run, including invalid
-attempts; validity denominators differ. This is an early single-run comparison,
-not a claim of significance. Historical outcome-only10 is23.33% /29.91% on
-70 successes/234 valid tasks and was evaluated on a different date.
+rollouts. There are300 saved rollout/verdict pairs per cohort, including invalid
+attempts; validity denominators differ. Reweight20 is5.00pp above its10 checkpoint
+on overall success. Historical outcome-only20 is31.67% /40.95% (95 successes,
+232 valid), giving a descriptive0.67pp overall difference. Baseline10 is23.33%
+/29.91% (70 successes,234 valid). Historical evaluations have different dates;
+these single-run comparisons do not establish significance. The matched bonus20
+evaluation is still pending.
 
-Runtime roots: `evaluations/arm-mixed-bonus-iter10-335699/` and
-`evaluations/arm-mixed-reweight-iter10-335697/`. Separate W&B evaluations are
+Runtime roots: `evaluations/arm-mixed-bonus-iter10-335699/`,
+`evaluations/arm-mixed-reweight-iter10-335697/`, and
+`evaluations/arm-mixed-reweight-iter20-335697/`. Separate W&B evaluations are
 in `openwebrl-evals`: [bonus10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter10-335699),
-[reweight10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter10-335697).
-[Bonus aggregate audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
-[Reweight aggregate audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json).
+[reweight10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter10-335697),
+[reweight20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter20-335697).
+[Bonus10 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
+[Reweight10 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
+[Reweight20 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json).
 
 <a id="arm-original-backfill-results-20260927"></a>
 ## Original-bonus full300 backfills — September27

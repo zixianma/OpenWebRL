@@ -31,6 +31,39 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 <a id="arm-progress-20260928"></a>
 ## ARM inventory and recovery — September28, 2026
 
+**20:37PDT check:** all three priority jobs are progressing, with fresh finite
+optimizer metrics. Bonus335699 has durable18/266 Adam updates and collects19;
+reweight335697 has durable20/306 and trains21; Gate B335729 restored durable89/1124
+and trains90 using TP4/DP2. All checkpoint shards, metadata, cursor and scheduler
+alignment passed inspection. The paired runs retain TP2/DP4 and the48GiB cache
+guard. Gate B retains its validated TP4 recovery and24GiB guard.
+
+Reweight20 completed full300 at32.33% overall /42.73% valid-only (97 successes,
+227 valid); all300 archives and verdicts, native checkpoint19 and evaluation
+protocol were independently checked. Its fixed100 slice is31.00% /44.29%.
+The separate evaluation was created in `openwebrl-evals`. Bonus20 and Gate B90
+are owned by their active controllers and await their checkpoints.
+[Results and audit](ARM_RESULTS.md#arm-mixed-pair-iter20-results-20260928).
+
+Budget accounting at20:36PDT charges33,170 seconds for bonus and36,801 for
+reweight against their separate172,800-second extensions, leaving38.79h and
+37.78h respectively, including queued24h successors335700/335698. Gate B335729
+has consumed4,601 /57,600 seconds, leaving14.72h. Prior attempts remain in their
+separate historical ledgers; no new allocation or budget extension was made.
+Successor dependencies are valid and prevent simultaneous lineage writers.
+
+**Continuation repair,20:35PDT:** the watcher had a fresh heartbeat but could not
+queue agent reviews: its service omitted the active Codex state directory and
+fell back to a home-directory SQLite database returning disk-I/O errors. The
+local continuation daemon was also absent. The service now preserves the active
+session's Codex home; its restart and the daemon restoration passed health
+checks. Read-only access to the exact existing supervision thread and the daemon
+version probe passed. No test notification was sent; the next scheduled queue
+delivery remains to be observed. Hourly routine reviews and urgent failure
+triggers remain enabled. Private receipts are in the existing supervisor runtime
+directory; this changes no GPU jobs, scientific settings or approvals.
+
+
 **16:15PDT check:** all three priority jobs are running and W&B is updating.
 Bonus335699 has durable13/194 Adam updates and trains14; reweight335697 has
 durable16/244 and starts collection17; Gate B335681 has durable86/1092 and trains87.

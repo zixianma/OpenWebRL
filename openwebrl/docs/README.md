@@ -32,8 +32,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Task screening v2 prepared:75 candidates +25 existing-site controls,4,411 semantic-reference texts; no new API/browser run](ARM_INTEGRATION_PLAN.md#arm-task-pool-screening-v2-20260928).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Current inventory, September28 afternoon: Gate B saved86/trains87; mixed bonus saved13/trains14; reweight saved16/collects17; continuations queued](RL_RUNTIME.md#arm-progress-20260928).
-[Mixed-only iteration10 full300: bonus30.67% /39.32%; reweight27.33% /34.17% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
+[Current inventory, September28 evening: Gate B saved89/trains90; mixed bonus saved18/collects19; reweight saved20/trains21; continuation service repaired](RL_RUNTIME.md#arm-progress-20260928).
+[Mixed-only full300: bonus10 30.67% /39.32%; reweight20 32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 
