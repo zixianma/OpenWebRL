@@ -34,7 +34,7 @@
   "cohort_verified": true,
   "restore_verified": true,
   "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter80-334894/rollouts",
-  "wandb_url": "https://wandb.ai/zixianma/openwebrl/runs/arm-gate-b-iter80-334894",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter80-334894",
   "protocol": "existing deterministic GPT-4.1 Online-Mind2Web monitor, 300 tasks",
   "evaluation_manifest_sha256": "c49056fdbc16c64ad457f8fe95a27f2737958b0c22847de60de547768bd5188a",
   "scope": "Fixed100 is sliced from full300; all ZIP central directories checked, no tensor loads."

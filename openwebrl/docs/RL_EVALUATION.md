@@ -44,9 +44,9 @@ not a claim of significance. Historical outcome-only10 is23.33% /29.91% on
 70 successes/234 valid tasks and was evaluated on a different date.
 
 Runtime roots: `evaluations/arm-mixed-bonus-iter10-335699/` and
-`evaluations/arm-mixed-reweight-iter10-335697/`. Embedded W&B evaluations stay
-in the training project: [bonus10](https://wandb.ai/zixianma/openwebrl/runs/arm-mixed-bonus-iter10-335699),
-[reweight10](https://wandb.ai/zixianma/openwebrl/runs/arm-mixed-reweight-iter10-335697).
+`evaluations/arm-mixed-reweight-iter10-335697/`. Separate W&B evaluations are
+in `openwebrl-evals`: [bonus10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter10-335699),
+[reweight10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter10-335697).
 [Bonus aggregate audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
 [Reweight aggregate audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json).
 
@@ -118,7 +118,7 @@ The fixed100 slice matches the original unchanged sample manifest. All74
 invalid tasks remain in the overall denominator; valid-only uses226 tasks.
 
 [Aggregate audit](arm_results/rl_integration/gate-b-iteration80-audit.json) ·
-[W&B](https://wandb.ai/zixianma/openwebrl/runs/arm-gate-b-iter80-334894).
+[W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter80-334894).
 Artifacts:`evaluations/arm-gate-b-iter80-334894/rollouts/`.
 This evaluation is embedded in the training allocation and retains the
 `openwebrl` training-project convention.

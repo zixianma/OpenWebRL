@@ -56,7 +56,23 @@ shares a training allocation; actual training runs stay in `openwebrl`.
 Five routing regression tests and16 existing evaluation tests passed. Real
 checkpoint previews for both mixed variants and Gate B agree in their command,
 environment and manifest; training readiness fingerprints remain unchanged.
-Existing completed evaluation runs have not been moved between W&B projects.
+Following the user's move approval, Gate B80 (`arm-gate-b-iter80-334894`), mixed
+reweight10 (`arm-mixed-reweight-iter10-335697`) and mixed bonus10
+(`arm-mixed-bonus-iter10-335699`) were moved to `openwebrl-evals`. Run IDs,
+configurations, summaries, metric histories, original file checksums and linked
+artifact IDs were verified after migration. All12 actual training runs remain
+in `openwebrl`; no eval-only run remains there. The private migration receipt is
+`openwebrl-runtime/wandb-eval-migration-20260928/verification.json`.
+
+**RL trainable parameters, verified September28:** the outcome-only baseline,
+historical Gate B and both mixed-only runs use full-parameter actor updates,
+with no LoRA adapters. The dense Qwen3-VL provider has
+`freeze_language_model=False`, `freeze_vision_model=False` and
+`freeze_vision_projection=False`; the live runs also have no parameter-freeze
+or train-only name filters. This trains the language model, vision encoder,
+and vision-to-language mergers (including DeepStack mergers). The separate
+SelectionARM remains frozen during these actor RL runs. This describes the RL
+setup, not the earlier LoRA SFT ablations.
 
 The following launch/recovery notes preserve the earlier morning history.
 
