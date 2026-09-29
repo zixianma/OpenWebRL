@@ -34,7 +34,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Prepared: baseline/Additive/Gate B iteration90, three stealth full300 repeats each; separate2-H200 ×24h approval pending](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 [Current inventory, September28 evening: Gate B saved90/collects91; mixed bonus saved19/collects20; reweight saved22/collects23; automatic continuation verified](RL_RUNTIME.md#arm-progress-20260928).
-[Mixed-only full300: bonus10 30.67% /39.32%; reweight20 32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
+[Mixed-only iteration20 full300: bonus30.67% /40.89%; reweight32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

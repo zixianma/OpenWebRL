@@ -8,7 +8,7 @@ Detailed inference, offline-training and online-RL results belong here. The reco
 <a id="arm-mixed-pair-iter20-results-20260928"></a>
 ## Mixed-only relaxed-B pair: iterations10–20 — September28
 
-Both fresh-from0 runs completed full300 evaluations at10; reweight also completed20.
+Both fresh-from0 runs completed full300 evaluations at10 and20.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -19,21 +19,25 @@ trajectory-mean-one weighting with lambda=.5.
 | Outcome-only baseline, historical |10 | — |23.33% /29.91% |234 |
 |  |20 | — |31.67% /40.95% |232 |
 | Mixed-only bonus + relaxed B |10 |31.00% /41.33% |30.67% /39.32% |234 |
+|  |20 |30.00% /43.48% |30.67% /40.89% |225 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 
 Reweight20 has97 successes and227 valid tasks; its fixed100 slice has31 successes
 and70 valid tasks. Overall improves5.00pp from its10 checkpoint and is0.67pp above
-historical baseline20. The matched bonus20 evaluation is pending. Different dates
+historical baseline20. Bonus20 has92 successes and225 valid tasks; its fixed100
+slice has30 successes and69 valid tasks. Reweight20 is1.67pp above bonus20 overall
+(five additional successes); bonus20 is1.00pp below historical baseline20. Different dates
 and valid-task sets limit comparisons; these single-run differences do not
 establish superiority or significance.
 
-All900 rollout/verdict pairs and nonempty ZIP archives across the three new
+All1,200 rollout/verdict pairs and nonempty ZIP archives across the four new
 cohorts passed inspection. Cohort membership, judge settings, checkpoint lineage
 and temperature were checked. Both controllers continue training and own later
 evaluations through60.
 
 [Bonus10 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
+[Bonus20 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) ·
 [Reweight10 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
 [Reweight20 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) ·
 [Evaluation provenance](RL_EVALUATION.md#arm-mixed-pair-iter10-results-20260928).

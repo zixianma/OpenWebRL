@@ -84,8 +84,8 @@ Never repeat a completed cohort or overwrite a partial attempt during recovery.
 <a id="arm-mixed-pair-iter20-results-20260928"></a>
 ## Mixed-only bonus/reweight iterations10–20 — September28
 
-Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10;
-reweight also completed20. Their controllers resumed training after evaluation.
+Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10
+and20. Their controllers resumed training after evaluation.
 Native checkpoints are `iter_0000009` for10 and `iter_0000019` for20. All use the
 same frozen full300 cohort and local-browser GPT-4.1/action_history protocol at
 temperature0,4096 response tokens and30 browser turns. Full300 membership,
@@ -95,6 +95,7 @@ final metrics were independently checked.
 | Method | Iteration | Successes /300 | Valid | Invalid | Overall | Valid-only | Fixed100 successes / valid |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67% |39.32% |31 /75 |
+|  |20 |92 |225 |75 |30.67% |40.89% |30 /69 |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 
@@ -104,16 +105,22 @@ attempts; validity denominators differ. Reweight20 is5.00pp above its10 checkpoi
 on overall success. Historical outcome-only20 is31.67% /40.95% (95 successes,
 232 valid), giving a descriptive0.67pp overall difference. Baseline10 is23.33%
 /29.91% (70 successes,234 valid). Historical evaluations have different dates;
-these single-run comparisons do not establish significance. The matched bonus20
-evaluation is still pending.
+these single-run comparisons do not establish significance. Bonus20 is30.67%
+overall,1.00pp below historical baseline20 and1.67pp below reweight20. Its overall
+rate is unchanged from10, with nine fewer valid tasks. One valid failed task has
+combined reward−1; task success is computed from saved binary verdicts rather
+than mean combined reward.
 
 Runtime roots: `evaluations/arm-mixed-bonus-iter10-335699/`,
+`evaluations/arm-mixed-bonus-iter20-335699/`,
 `evaluations/arm-mixed-reweight-iter10-335697/`, and
 `evaluations/arm-mixed-reweight-iter20-335697/`. Separate W&B evaluations are
 in `openwebrl-evals`: [bonus10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter10-335699),
+[bonus20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter20-335699),
 [reweight10](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter10-335697),
 [reweight20](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter20-335697).
 [Bonus10 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
+[Bonus20 aggregate audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) ·
 [Reweight10 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
 [Reweight20 aggregate audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json).
 
