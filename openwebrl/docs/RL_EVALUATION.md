@@ -31,31 +31,39 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 accepted the proposed single-GPU/seven-hour profile with only one run per method.
 No fresh baseline or additional repeat jobs are included. This supersedes the
 previous six-cohort plan. Both jobs were submitted and registered with the active
-supervisor before release. Gate B completed September29; Additive remains running.
+supervisor before release. Both completed September29 and exited early.
 
 | Job | Method | Status | GPU cap |
 | --- | --- | --- | --- |
-|336697 |Additive90 |Running |1 H200 ×7h |
+|336697 |Additive90 |Verified complete;4h03m48s used |1 H200 ×7h |
 |336698 |Gate B90 |Verified complete;3h39m44s used |1 H200 ×7h |
 
 | Method | Successes /300 | Valid | Invalid | Overall | Valid-only | Fixed100 successes / valid |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Additive90 |159 |283 |17 |53.00% |56.18% |49 /96 |
 | Gate B90 |169 |288 |12 |56.33% |58.68% |57 /98 |
 
-The original fixed100 slice is57.00% overall /58.16% valid-only. All300 expected
-unique task IDs, rollout ZIP archives and saved GPT-4.1/action_history verdicts
-passed independent checks. Native checkpoint89 restoration and final W&B metrics
-match; all owned browser sessions stopped. The allocation exited successfully
-with3h20m16s unused. [Aggregate audit](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json)
-and [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-gate-b-r1-336698).
+The original fixed100 slices are49.00% /51.04% for Additive and57.00% /58.16%
+for Gate B. Both cohorts contain exactly the300 expected unique task IDs; all600
+rollout ZIP archives and saved GPT-4.1/action_history verdicts passed independent
+checks. Native checkpoint89 restores and final W&B metrics match; all owned
+browser sessions stopped. Gate B exceeds Additive by3.33pp overall (ten successes)
+and2.50pp valid-only. These are single evaluations of independently trained
+policies; no significance or repeat-variance claim is made.
+[Additive audit](arm_results/rl_integration/stealth-additive-iteration90-audit.json) ·
+[Gate B audit](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) ·
+[Additive W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-additive-r1-336697) ·
+[Gate B W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-gate-b-r1-336698).
 
 Compared with Gate B90's earlier local-browser result, overall is13.33pp higher
 and valid-only3.55pp higher; valid tasks increase234→288. Browser backend and
 collection date changed, so this is not a new training improvement or a controlled
 estimate of the browser effect. The historical stealth baseline90 is57.00%
 overall /57.77% valid-only under o4-mini/T0.6, a different judge/decoding protocol.
+Additive's earlier local result was39.33% /54.63% (216 valid), compared with
+53.00% /56.18% (283 valid) here; the same comparison limits apply.
 
-Both actors run alone, without inference-time ARM selection. Keep the prepared
+Both actors ran alone, without inference-time ARM selection, using the prepared
 GPT-4.1/action_history judge, actor T0,4,096 response tokens,30 turns, frozen300
 tasks and screenshot history. Each job uses Browser Use stealth with four
 sessions and12-minute session limits: eight concurrent browsers across two jobs,
@@ -63,11 +71,10 @@ below the previously observed ten-session ceiling. A read-only account check
 reported `rate_limit=10` and zero active sessions before submission.
 
 **Approved reduced budget:** two jobs of **1 H200 ×7h,8 CPUs/240GiB each**,
-**14 GPU-hours maximum** including retries. Expected runtime is roughly4–5h per
-job, concurrently, excluding queue delay; this extrapolates historical browser
-throughput and is not measured TP1 throughput. Release each GPU immediately after
-its result and browser-session cleanup are verified. Existing training budgets
-remain separate. Browser and judge service usage is additional.
+**14 GPU-hours maximum** including retries. Actual combined use was7h43m32s
+(7.73 GPU-hours), releasing6h16m28s of the cap. Each job exited after its result
+and browser-session cleanup were verified. Existing training budgets remain
+separate. Browser and judge service usage is additional.
 
 | Method | Native checkpoint | Adam updates | Scheduler offset | Cohort |
 | --- | --- | ---: | ---: | --- |
@@ -77,11 +84,9 @@ remain separate. Browser and judge service usage is additional.
 Each job owns its worker and has isolated W&B (`openwebrl-evals`), output,
 browser-session and tensor directories. A two-slot lock prevents duplicate
 attempts from exceeding browser capacity. TP1 disables sequence parallelism in
-an isolated source. Checkpoint/argument CPU checks pass; native GPU restoration
-is required before accepting results. Save all task rollouts and judge verdicts,
-and report overall/valid-only rates with denominators. There is no repeat SD
-from this first pass. Diagnose failures, preserve partial artifacts and count
-all attempt time against the original seven-hour cap for that method.
+an isolated source. Checkpoint/argument CPU checks and native GPU restoration
+passed for both models. All task rollouts and judge verdicts are preserved.
+There is no repeat SD from this first pass; no additional repeats are authorized.
 
 **Historical baseline markers retained in the plot at the user's request:**
 

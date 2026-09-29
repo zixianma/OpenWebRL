@@ -45,6 +45,7 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Outcome-only baseline |38 |137 |291 |9 |45.67 |47.08 |Original |
 |  |80 |169 |294 |6 |56.33 |57.48 |Saved trajectories rejudged |
+| Additive bonus |90 |159 |283 |17 |53.00 |56.18 |[September29 first pass](arm_results/rl_integration/stealth-additive-iteration90-audit.json) |
 | Gate B: relaxed gate |90 |169 |288 |12 |56.33 |58.68 |[September29 first pass](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) |
 
 ## Stealth browser · o4-mini

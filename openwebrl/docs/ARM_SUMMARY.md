@@ -205,9 +205,10 @@ success; teacher action consistency is58% under reversed-order re-query.
 
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
+| Additive bonus |90 |49.00% /51.04% |**53.00% /56.18%** |
 | B: relaxed gate |90 |57.00% /58.16% |**56.33% /58.68%** |
 
-Additive90 is still running. Brown triangles retain historical baseline58/90
+Both first passes are complete. Brown triangles retain historical baseline58/90
 with o4-mini,T0.6 (58 includes retries); these are not matched controls for the
 new stealth results or local curves. No fresh baseline repeats are included.
 [Counts, protocols and saved-artifact audits](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).

@@ -12,15 +12,22 @@ Actor-only evaluation with Browser Use stealth, GPT-4.1/action_history, T0,
 
 | Method | Fixed100 overall / valid-only | Full300 overall / valid-only | Successes / valid / total |
 | --- | --- | --- | --- |
+| Additive90 |49.00% /51.04% |**53.00% /56.18%** |159 /283 /300 |
 | Gate B90 |57.00% /58.16% |**56.33% /58.68%** |169 /288 /300 |
 
-Additive90 is still running. Gate B's300 rollout/verdict pairs, native checkpoint89,
-cohort membership and final W&B history passed verification; its job exited after
-3h39m44s, releasing its GPU3h20m early. Gate B90's earlier local-browser
-result was43.00% /55.13% with234 valid tasks. The new result has288 valid tasks,
-but browser backend and collection date both changed. Historical baseline stealth90
-uses o4-mini/T0.6; neither comparison establishes a training gain.
-[Aggregate audit](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) ·
+Both first passes completed. Gate B is3.33pp higher overall (ten successes) and
+2.50pp higher valid-only; this is one evaluation per independently trained policy,
+not a multi-seed or repeated-evaluation estimate. All600 rollout/verdict pairs,
+native checkpoint89 restores, cohort membership and final W&B histories passed
+verification; owned browser sessions stopped. Additive used4h03m48s and Gate B
+3h39m44s, together7.73 of the approved14 GPU-hours.
+
+Earlier local-browser results were39.33% /54.63% for Additive (216 valid) and
+43.00% /55.13% for Gate B (234 valid). Browser backend and collection date both
+changed. Historical baseline stealth90 uses o4-mini/T0.6; these comparisons do
+not establish a training gain over the baseline.
+[Additive audit](arm_results/rl_integration/stealth-additive-iteration90-audit.json) ·
+[Gate B audit](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) ·
 [Protocol and runtime evidence](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 
 <a id="arm-mixed-pair-iter10-results-20260928"></a>
