@@ -199,11 +199,11 @@ success; teacher action consistency is58% under reversed-order re-query.
 <a id="baseline-comparison"></a>
 ![Local-browser baseline and ARM curves, with selected historical stealth baseline references separately labeled](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-Stealth markers restore the historical baseline highlights:58/90 use o4-mini,T0.6
-(58 includes invalid/missing retries);80 uses GPT-4.1,T0 on rejudged trajectories.
+Stealth markers show only historical baseline58/90 with o4-mini,T0.6
+(58 includes invalid/missing retries).
 They are context, not matched controls for the local curves. Fresh baseline
-repeats are omitted from the proposed Additive/Gate B stealth evaluation.
-[Protocols and revised six-run plan](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
+repeats are omitted from the Additive/Gate B stealth evaluation, now one run each.
+[Protocols and two-run plan](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is

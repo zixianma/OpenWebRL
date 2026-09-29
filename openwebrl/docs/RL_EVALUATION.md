@@ -4,7 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
-- [Prepared Additive/Gate B iteration90 stealth repeats](#arm-stealth90-threeway-repeats-20260928)
+- [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
 - [Mixed-only bonus/reweight iterations10–20 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration90 full300](#arm-gate-b-iter90-results-20260928)
@@ -25,71 +25,64 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <a id="arm-stealth90-threeway-repeats-20260928"></a>
-## Prepared: Additive/Gate B iteration90 stealth repeats — September28
+## Additive/Gate B iteration90: first stealth evaluations — September28
 
-**Status: six one-GPU jobs prepared; exact seven-hour-per-job budget pending.
-No evaluation job submitted.** The user removed fresh outcome-only baseline
-runs and requested at most three evaluations concurrently. This supersedes the
-previous nine-cohort sequential proposal.
+**Scope: one full300 evaluation each for Additive90 and Gate B90.** The user
+accepted the proposed single-GPU/seven-hour profile with only one run per method.
+No fresh baseline or additional repeat jobs are included. This supersedes the
+previous six-cohort plan. Both jobs were submitted and registered with the active
+supervisor before release; initial scheduler state is queued.
 
-Evaluate historical Additive and historical Gate B at iteration90, three fresh
-full300 runs each: six cohorts /1,800 task attempts. Both actors run alone;
-there is no inference-time ARM selection. Keep GPT-4.1/action_history, actor
-T0,4,096 response tokens,30 turns, the frozen300 tasks and screenshot history.
-Use Browser Use stealth with three sessions per job and12-minute session limits.
-The read-only account check reports `rate_limit=10`, with zero active sessions;
-combined with the previously observed ten-session ceiling, budget nine concurrent
-browsers across three jobs. No session creation or paid probe was performed.
+| Job | Method | Initial status | GPU cap |
+| --- | --- | --- | --- |
+|336697 |Additive90 |Queued |1 H200 ×7h |
+|336698 |Gate B90 |Queued |1 H200 ×7h |
 
-| Wave | One-GPU job1 | One-GPU job2 | One-GPU job3 |
-| ---: | --- | --- | --- |
-| 1 | Additive repeat1 | Gate B repeat1 | Additive repeat2 |
-| 2 | Gate B repeat2 | Additive repeat3 | Gate B repeat3 |
+Both actors run alone, without inference-time ARM selection. Keep the prepared
+GPT-4.1/action_history judge, actor T0,4,096 response tokens,30 turns, frozen300
+tasks and screenshot history. Each job uses Browser Use stealth with four
+sessions and12-minute session limits: eight concurrent browsers across two jobs,
+below the previously observed ten-session ceiling. A read-only account check
+reported `rate_limit=10` and zero active sessions before submission.
 
-Queue the second wave after all first-wave jobs succeed. On a failed attempt,
-repair it within its remaining cohort budget and update dependencies; preserve
-completed cohorts and partial rollouts. Each job owns its worker, has isolated
-W&B/output/session/tensor directories, and releases its GPU after verification.
-A shared three-slot lock guards against accidental excess browser concurrency.
+**Approved reduced budget:** two jobs of **1 H200 ×7h,8 CPUs/240GiB each**,
+**14 GPU-hours maximum** including retries. Expected runtime is roughly4–5h per
+job, concurrently, excluding queue delay; this extrapolates historical browser
+throughput and is not measured TP1 throughput. Release each GPU immediately after
+its result and browser-session cleanup are verified. Existing training budgets
+remain separate. Browser and judge service usage is additional.
 
-**Proposed resources:** six jobs of **1 H200 ×7h,8 CPUs/240GiB each**,
-maximum three simultaneous jobs; **42 GPU-hours maximum** including retries.
-Historical eight-browser runs took about1.9–2.1h; scaling browser capacity to
-three per job gives an approximate5–6h per cohort,10–12h across two waves,
-excluding queue delays. This is an estimate, not measured TP1 throughput.
-Browser/judge service usage is additional. Existing training budgets are separate.
+| Method | Native checkpoint | Adam updates | Scheduler offset | Cohort |
+| --- | --- | ---: | ---: | --- |
+| Additive | training311962, `iter_0000089` |1,150 |0 |Full300, one pass |
+| Gate B | training335729, `iter_0000089` |1,136 |0 |Full300, one pass |
 
-| Checkpoint, both native `iter_0000089` | Adam updates | Scheduler offset |
-| --- | ---: | ---: |
-| Additive, training job311962 | 1,150 | 0 |
-| Gate B, training job335729 | 1,136 | 0 |
+Each job owns its worker and has isolated W&B (`openwebrl-evals`), output,
+browser-session and tensor directories. A two-slot lock prevents duplicate
+attempts from exceeding browser capacity. TP1 disables sequence parallelism in
+an isolated source. Checkpoint/argument CPU checks pass; native GPU restoration
+is required before accepting results. Save all task rollouts and judge verdicts,
+and report overall/valid-only rates with denominators. There is no repeat SD
+from this first pass. Diagnose failures, preserve partial artifacts and count
+all attempt time against the original seven-hour cap for that method.
 
-TP1 disables sequence parallelism in a separate frozen evaluation source;
-model, judge, task and decoding settings are preserved. Checkpoint artifacts
-passed CPU checks; native GPU restoration is required before accepting results.
-Save every rollout and judge verdict. Report each repeat and mean/sample SD,
-overall and valid-only rates with denominators. These are evaluation repeats,
-not training seeds or pass@3.
-
-**Historical baseline references added to the comparison plot:**
+**Historical baseline markers retained in the plot at the user's request:**
 
 | Iteration | Judge / actor temperature | Overall | Valid-only | Provenance |
 | ---: | --- | ---: | ---: | --- |
 | 58 | o4-mini /0.6 |59.33% |59.93% |[Original valid attempts plus invalid/missing retries](#after58-invalid-retry-plan-20260914) |
-| 80 | GPT-4.1 /0 |56.33% |57.48% |[Saved trajectories rejudged](#stealth80-gpt41-rejudge-feasibility-20260913) |
 | 90 | o4-mini /0.6 |57.00% |57.77% |[Original full300](#stealth90-temperature-plan-20260913) |
 
-These are selected historical highlights, shown as unconnected markers with
-judge/temperature and retry labels. Iteration80 is the strongest saved baseline
-with matching GPT-4.1/T0; the available stealth90 result uses o4-mini/T0.6.
-Skipping fresh baseline repeats saves compute but leaves no contemporaneous,
-identically configured repeated baseline for quantifying ARM improvement.
+The iteration80 stealth marker is removed from the plot; its archived result is
+preserved in the results sheet. The58/90 markers use a different judge/decoding
+protocol from the new GPT-4.1/T0 evaluations, and58 includes retries. They are
+historical references, not matched controls for estimating ARM improvement.
 
 Controller: `scripts/run_arm_stealth90_parallel.py`; template:
-`scripts/evaluate_arm_stealth90_1gpu.sbatch`. Plans, capacity receipt and CPU
-validation are under runtime `arm-turn-bonus-preparation/stealth90-repeats-20260928/parallel/`
-(capacity receipt in its parent). Register every submitted job and any replacement
-with the existing active repair supervisor. No baseline job should be submitted.
+`scripts/evaluate_arm_stealth90_1gpu.sbatch`. Exact plans, approval, per-method
+budget and submission receipts: runtime
+`arm-turn-bonus-preparation/stealth90-repeats-20260928/first-pass/`.
+Every submitted/replacement job is registered with the active ARM supervisor.
 
 <a id="arm-mixed-pair-iter10-results-20260928"></a>
 <a id="arm-mixed-pair-iter20-results-20260928"></a>
