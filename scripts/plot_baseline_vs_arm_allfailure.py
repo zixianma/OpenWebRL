@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Plot local RL curves and clearly separated historical stealth references."""
+"""Plot local RL curves and separately labeled stealth evaluation points."""
 from pathlib import Path
 import json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.transforms import ScaledTranslation
 baseline_i=[20,30,40,50,60,70,80,90,100]
 baseline_s=[95,96,100,105,105,103,114,101,104]
 baseline_v=[232,248,231,234,230,229,229,222,227]
@@ -38,8 +39,20 @@ ax.scatter([58,90],[100*178/300,100*171/300],marker='^',s=120,color='#a16207',zo
 ax.scatter([58,90],[100*178/297,100*171/296],marker='^',s=120,facecolors='white',edgecolors='#a16207',linewidths=1.8,zorder=6,label='Stealth baseline · o4-mini T0.6 · valid-only')
 ax.annotate('58: retries merged',xy=(58,100*178/297),xytext=(41,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
 ax.annotate('90: original',xy=(90,100*171/296),xytext=(86,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
+# Fresh actor-only stealth results use GPT-4.1/T0. Keep them disconnected from
+# the local curves and distinguish them from historical o4-mini/T0.6 markers.
+for method,label,color,offset in [('gate-b','Gate B','#7e22ce',12),('additive','Additive','#16a34a',-12)]:
+    path=repo/f'openwebrl/docs/arm_results/rl_integration/stealth-{method}-iteration90-audit.json'
+    if not path.exists():
+        continue
+    r=json.loads(path.read_text())['full300']
+    assert r['tasks']==300 and r['verified_complete']
+    position=ax.transData+ScaledTranslation(offset/72,0,fig.dpi_scale_trans)
+    ax.scatter([90],[100*r['successes']/300],transform=position,marker='D',s=85,color=color,zorder=7,label=f'Stealth {label} · GPT-4.1 T0 · overall')
+    ax.scatter([90],[100*r['successes']/r['valid']],transform=position,marker='D',s=85,facecolors='white',edgecolors=color,linewidths=1.8,zorder=7,label=f'Stealth {label} · GPT-4.1 T0 · valid-only')
+ax.text(20,21,'Stealth iteration90 symbols offset horizontally for visibility.',fontsize=8,color='#64748b')
 ax.set_xlabel('Checkpoint after training iteration'); ax.set_ylabel('Success rate (%)')
-ax.set_title('Outcome-only baseline vs ARM variants · 300 tasks\nLocal curves: GPT-4.1, T0 | Historical stealth: separate markers')
+ax.set_title('Outcome-only baseline vs ARM variants · 300 tasks\nLocal curves: GPT-4.1, T0 | Stealth points: see legend')
 ax.set_xlim(18,102); ax.set_ylim(20,66); ax.set_xticks([20,30,40,50,60,70,80,90,100])
 ax.legend(frameon=True,loc='upper center',bbox_to_anchor=(.5,-.12),ncol=2,fontsize=8); ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
 fig.tight_layout(); out.parent.mkdir(parents=True,exist_ok=True); fig.savefig(out,bbox_inches='tight'); print(out)

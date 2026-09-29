@@ -1,0 +1,64 @@
+{
+  "method": "Gate B relaxed gate, actor-only stealth evaluation",
+  "iteration": 90,
+  "job": "336698",
+  "full300": {
+    "tasks": 300,
+    "successes": 169,
+    "valid": 288,
+    "invalid": 12,
+    "overall": 0.5633333333333334,
+    "valid_only": 0.5868055555555556,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-gate-b-r1-336698/rollouts",
+    "iteration": 90,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-335729-b100-iter90/runtime/iter_0000089",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-gate-b-r1-336698",
+    "method": "gate-b",
+    "repeat": 1,
+    "cohort_label": "gate-b-r1"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 57,
+    "valid": 98,
+    "invalid": 2,
+    "overall": 0.57,
+    "valid_only": 0.5816326530612245,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "Browser Use stealth",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30,
+    "inference_arm_selection": false,
+    "browser_concurrency": 4,
+    "session_timeout_minutes": 12
+  },
+  "plan_sha256": "d572574885fbee0cc4337135a056462ce0a06adae9ed9b9bb701e3b34402b11a",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-gate-b-r1-336698",
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 89,
+    "completed_training_iteration": 90,
+    "adam_updates": 1136
+  },
+  "verification": {
+    "expected_task_ids_exact": true,
+    "unique_task_ids": 300,
+    "nonempty_zip_archives": 300,
+    "saved_judge_identities_verified": 300,
+    "active_owned_browser_sessions": 0,
+    "wandb_final_history_matches": true
+  },
+  "comparison_limit": "Historical baseline stealth58/90 uses o4-mini and temperature0.6; different protocol, dates and retry policy, not a matched control."
+}

@@ -25,18 +25,35 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <a id="arm-stealth90-threeway-repeats-20260928"></a>
-## Additive/Gate B iteration90: first stealth evaluations — September28
+## Additive/Gate B iteration90: first stealth evaluations — September28–29
 
 **Scope: one full300 evaluation each for Additive90 and Gate B90.** The user
 accepted the proposed single-GPU/seven-hour profile with only one run per method.
 No fresh baseline or additional repeat jobs are included. This supersedes the
 previous six-cohort plan. Both jobs were submitted and registered with the active
-supervisor before release; initial scheduler state is queued.
+supervisor before release. Gate B completed September29; Additive remains running.
 
-| Job | Method | Initial status | GPU cap |
+| Job | Method | Status | GPU cap |
 | --- | --- | --- | --- |
-|336697 |Additive90 |Queued |1 H200 ×7h |
-|336698 |Gate B90 |Queued |1 H200 ×7h |
+|336697 |Additive90 |Running |1 H200 ×7h |
+|336698 |Gate B90 |Verified complete;3h39m44s used |1 H200 ×7h |
+
+| Method | Successes /300 | Valid | Invalid | Overall | Valid-only | Fixed100 successes / valid |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Gate B90 |169 |288 |12 |56.33% |58.68% |57 /98 |
+
+The original fixed100 slice is57.00% overall /58.16% valid-only. All300 expected
+unique task IDs, rollout ZIP archives and saved GPT-4.1/action_history verdicts
+passed independent checks. Native checkpoint89 restoration and final W&B metrics
+match; all owned browser sessions stopped. The allocation exited successfully
+with3h20m16s unused. [Aggregate audit](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json)
+and [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-gate-b-r1-336698).
+
+Compared with Gate B90's earlier local-browser result, overall is13.33pp higher
+and valid-only3.55pp higher; valid tasks increase234→288. Browser backend and
+collection date changed, so this is not a new training improvement or a controlled
+estimate of the browser effect. The historical stealth baseline90 is57.00%
+overall /57.77% valid-only under o4-mini/T0.6, a different judge/decoding protocol.
 
 Both actors run alone, without inference-time ARM selection. Keep the prepared
 GPT-4.1/action_history judge, actor T0,4,096 response tokens,30 turns, frozen300

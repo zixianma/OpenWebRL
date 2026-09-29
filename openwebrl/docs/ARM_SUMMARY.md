@@ -197,17 +197,22 @@ success; teacher action consistency is58% under reversed-order re-query.
 [Method, table and caveats](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 
 <a id="baseline-comparison"></a>
-![Local-browser baseline and ARM curves, with selected historical stealth baseline references separately labeled](rl_results/baseline_vs_arm_allfailure_full300.png)
+![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-Stealth markers show only historical baseline58/90 with o4-mini,T0.6
-(58 includes invalid/missing retries).
-They are context, not matched controls for the local curves. Fresh baseline
-repeats are omitted from the Additive/Gate B stealth evaluation, now one run each.
-[Protocols and two-run plan](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
+**Stealth browser, GPT-4.1/T0; actor alone, no inference-time selection:**
+
+| Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
+| --- | ---: | --- | --- |
+| B: relaxed gate |90 |57.00% /58.16% |**56.33% /58.68%** |
+
+Additive90 is still running. Brown triangles retain historical baseline58/90
+with o4-mini,T0.6 (58 includes retries); these are not matched controls for the
+new stealth results or local curves. No fresh baseline repeats are included.
+[Counts, protocols and saved-artifact audits](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
-Gate B's best evaluated checkpoint so far; dates and valid-task sets differ,
+Gate B's best evaluated local-browser checkpoint so far; dates and valid-task sets differ,
 so a consistent gain over outcome-only RL is not yet established.
 [Counts and audit](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928).
 
