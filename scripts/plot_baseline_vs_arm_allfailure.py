@@ -38,7 +38,7 @@ ax.plot(gate_b_i,[100*r['successes']/r['valid'] for r in gate_b_results],marker=
 ax.scatter([58,90],[100*178/300,100*171/300],marker='^',s=120,color='#a16207',zorder=6,label='Historical stealth baseline · overall')
 ax.scatter([58,90],[100*178/297,100*171/296],marker='^',s=120,facecolors='white',edgecolors='#a16207',linewidths=1.8,zorder=6,label='Historical stealth baseline · valid-only')
 ax.annotate('58: retries merged',xy=(58,100*178/297),xytext=(41,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
-ax.annotate('90: original',xy=(90,100*171/296),xytext=(86,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
+ax.annotate('90: historical baseline',xy=(90,100*171/296),xytext=(72,64),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
 # Corrected matched actor-only stealth cohort: o4-mini/T0.6. The earlier
 # GPT-4.1/T0 runs stay in the history tables rather than this comparison plot.
 for method,label,color,offset in [('baseline','Baseline','#2563eb',-16),('gate-b','Gate B','#7e22ce',16),('additive','Additive','#16a34a',0)]:

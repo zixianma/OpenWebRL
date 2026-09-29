@@ -33,7 +33,9 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 overall**, **166/286 =58.04% valid-only**; fixed100 is **62/100 =62.00%**,
 **62/98 =63.27% valid-only**. Baseline is also verified: **163/300 =54.33%
 overall**, **163/286 =56.99% valid-only**, fixed100 **56.00% /57.14%**.
-Additive remains in progress.
+Additive is now verified at **179/300 =59.67% overall**, **179/286 =62.59%
+valid-only**; fixed100 is **60/100 =60.00%**, **60/97 =61.86% valid-only**.
+The full300 overall differences from baseline are Additive+5.33pp and Gate B+1.00pp.
 The independent audit checked the merged300 IDs and archives, every valid
 judge text, native89 model restoration and checkpoint counters, W&B's final
 162-task retry history, and browser cleanup. Job336973 exited0 and released its
@@ -44,6 +46,13 @@ from the retry-only W&B counters.
 Baseline336971 released its GPU after10,190 seconds,17,827 seconds across all
 attempts and7,373 unused; the same independent artifact/restore/W&B checks passed.
 [Baseline merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json).
+Additive336972 completed and released its GPU after10,942 seconds;
+all attempts used18,702 seconds, leaving6,498 unused. Its128 retained records
+plus172 retries cover exactly300 task IDs. Native89 restoration, checkpoint
+shards/counters, all archives and valid verdict texts, W&B's final172/164/99
+retry counters and zero remaining owned browser sessions passed verification.
+[Additive merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json).
+[Two additional evaluations per method are prepared, pending resource approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
 
 
 The user clarified that **all stealth evaluations should use actor T0.6 and

@@ -210,13 +210,14 @@ success; teacher action consistency is58% under reversed-order re-query.
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
 | Outcome-only baseline |90 |56.00% /57.14% |**54.33% /56.99%** |
-| Additive bonus |90 | Pending | Pending |
+| Additive bonus |90 |60.00% /61.86% |**59.67% /62.59%** |
 | B: relaxed gate |90 |62.00% /63.27% |**55.33% /58.04%** |
 
-Baseline and Gate B are verified complete, each with286 valid tasks. Gate B
-is1.00pp higher overall in this single matched evaluation. The cohorts merge
-preserved pre-outage results with retries of credit-blocked tasks only;
-Additive is still finishing. Diamonds use this corrected protocol; brown
+All three are verified complete, each with286 valid tasks. Additive is5.33pp
+and Gate B1.00pp higher overall than baseline in this single matched evaluation.
+The cohorts merge preserved pre-outage results with retries of credit-blocked
+tasks only. Three evaluations per method are [prepared, pending allocation approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+Diamonds use this corrected protocol; brown
 triangles retain historical baseline58/90 references. Earlier GPT-4.1/T0 ARM
 results remain in the [history table](ARM_RESULTS.md#arm-stealth90-results-20260929).
 [Matched protocol, counts and artifact audits](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).

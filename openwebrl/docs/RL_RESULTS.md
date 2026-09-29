@@ -56,7 +56,7 @@
 | Method | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Fixed100 overall / valid-only % | Record |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
 | Outcome-only baseline |90 |163 |286 |14 |54.33 |56.99 |56.00 /57.14 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json) |
-| Additive bonus |90 | — | — | — | — | — | — | Running |
+| Additive bonus |90 |179 |286 |14 |59.67 |62.59 |60.00 /61.86 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json) |
 | Gate B: relaxed gate |90 |166 |286 |14 |55.33 |58.04 |62.00 /63.27 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) |
 
 ## Stealth browser · o4-mini

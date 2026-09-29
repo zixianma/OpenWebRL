@@ -1,0 +1,96 @@
+{
+  "method": "additive",
+  "iteration": 90,
+  "checked_utc": "2026-09-29T22:05:09.691289+00:00",
+  "job_id": "336972",
+  "protocol": "Actor-only iteration90; Browser Use stealth; o4-mini/AgentTrek; T0.6 p0.95 k20; 4096 tokens; 30 turns; full300",
+  "full300": {
+    "tasks": 300,
+    "successes": 179,
+    "valid": 286,
+    "invalid": 14,
+    "overall": 0.5966666666666667,
+    "valid_only": 0.6258741258741258,
+    "saved_rollouts": 300,
+    "saved_task_records": 300,
+    "verified_complete": true
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 60,
+    "valid": 97,
+    "invalid": 3,
+    "overall": 0.6,
+    "valid_only": 0.6185567010309279,
+    "saved_rollouts": 100,
+    "saved_task_records": 100,
+    "verified_complete": true
+  },
+  "original_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r1-336865",
+  "recovery_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r1-recovery-336972",
+  "retained_original_records": 128,
+  "retried_credit_blocked_records": 172,
+  "record_completion_windows": {
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r1-336865": {
+      "first_record_utc": "2026-09-29T16:51:15.915470+00:00",
+      "last_record_utc": "2026-09-29T18:55:36.028682+00:00"
+    },
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r1-recovery-336972": {
+      "first_record_utc": "2026-09-29T19:05:44.759385+00:00",
+      "last_record_utc": "2026-09-29T22:02:37.139566+00:00"
+    }
+  },
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-311962/runtime/iter_0000089",
+  "adam_updates": 1150,
+  "checkpoint_gpu_restore_verified": true,
+  "checkpoint_artifact_checks_passed": true,
+  "exact_task_id_set_verified": true,
+  "all_merged_records_and_archives_checked": true,
+  "remaining_credit_blocked_records": 0,
+  "valid_judge_verdict_texts_saved": 286,
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "wandb_audit": {
+    "epoch": 1790719455.9244704,
+    "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-additive-r1-recovery-336972",
+    "state": "finished",
+    "history": [
+      {
+        "_step": 0,
+        "eval/online-mind2web-benchmark/task/trajectories": 172,
+        "eval/online-mind2web-benchmark/task/valid_trajectories": 164,
+        "eval/online-mind2web-benchmark/task/successes": 99
+      }
+    ],
+    "expected": {
+      "trajectories": 172,
+      "valid_trajectories": 164,
+      "successes": 99
+    },
+    "verified": true
+  },
+  "attempts": [
+    {
+      "job_id": "336862",
+      "state": "FAILED",
+      "elapsed_seconds": 28,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "336865",
+      "state": "COMPLETED",
+      "elapsed_seconds": 7732,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "336972",
+      "state": "COMPLETED",
+      "elapsed_seconds": 10942,
+      "exit_code": "0:0"
+    }
+  ],
+  "approved_gpu_seconds": 25200,
+  "consumed_gpu_seconds": 18702,
+  "unused_gpu_seconds": 6498,
+  "allocation_released": true,
+  "verified_complete": true
+}

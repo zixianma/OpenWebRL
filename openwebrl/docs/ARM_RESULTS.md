@@ -16,7 +16,7 @@ comparison interrupted by a shared provider outage, not uninterrupted collection
 | Method | Fixed100 overall / valid-only | Full300 overall / valid-only | Successes / valid / total | State |
 | --- | --- | --- | --- | --- |
 | Outcome-only baseline90 |56.00% /57.14% |**54.33% /56.99%** |163 /286 /300 | Verified complete |
-| Additive90 | — | — | — | Completing |
+| Additive90 |60.00% /61.86% |**59.67% /62.59%** |179 /286 /300 | Verified complete |
 | Gate B90 |62.00% /63.27% |**55.33% /58.04%** |166 /286 /300 | Verified complete |
 
 Gate B's merged cohort contains138 retained records and162 retries. All300
@@ -27,9 +27,17 @@ and total consumed compute passed verification. Job336973 released its GPU;
 all attempts consumed17,680 of25,200 approved GPU-seconds. Full300 counts are
 reconstructed from both output roots; the retry W&B run reports its162-task subset.
 Baseline also passed all300 merged-artifact checks and released its GPU;
-all attempts used17,827/25,200 seconds. Gate B is1.00pp higher overall and
-1.05pp higher valid-only. This single evaluation does not establish training-seed
-robustness; Additive is still finishing.
+all attempts used17,827/25,200 seconds. Additive's128 retained records plus172
+retries also passed the same audit, including all300 archives and286 valid
+judge texts; job336972 released its GPU with18,702/25,200 seconds consumed.
+Its retry W&B run reports172 tasks,164 valid and99 successes; the full300
+result includes80 retained successes and is179/286/300.
+
+Additive is5.33pp higher overall and5.59pp higher valid-only than baseline;
+Gate B is1.00pp and1.05pp higher, respectively. These single evaluations do
+not establish training-seed robustness. Two more evaluations per method,
+including baseline, are [prepared pending exact allocation approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+[Additive merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json).
 [Baseline merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json).
 [Gate B merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) ·
 [Protocol and recovery history](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
