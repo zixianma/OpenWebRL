@@ -15,14 +15,18 @@ cursor passed artifact checks; calibration passed. The16h approval has
 **4,305 seconds (1h11m45s) remaining**, below the6,000-second training admission
 floor. Iteration100 and its full300 evaluation remain incomplete.
 
-Prepared, **not approved or submitted**: one8 H200 ×3h allocation,
-64 CPUs/960GiB, reusing the remaining4,305 seconds and requesting only
-6,495 additional seconds (14.43 additional GPU-hours). The last training
+**Approved and submitted September29: job336893**, one8 H200 ×3h allocation,
+64 CPUs/960GiB, reusing the remaining4,305 seconds and adding only
+6,495 seconds (14.43 additional GPU-hours). The cumulative cap is64,095 seconds,
+including the53,295 seconds already consumed. Six regression tests, native
+argument validation and a real GPFS quota check passed before submission.
+The last training
 attempt took90m42s; evaluation90 took about30m, so3h includes about59m margin
 over those observations. Preserve TP4/DP2,24GiB cache, optimizer/scheduler,
 cursor and W&B identity. Resume plan and exact accounting are in runtime
 `arm-turn-bonus-preparation/gate-b90-20260927/to100/finish100-proposal.json`.
-The supervisor marks this lineage `requires_user` for the budget extension;
+Approval and submission receipts are `finish100-approval.json` and
+`finish100-submission.json` in that directory. The supervisor now follows336893;
 the mixed pair and corrected stealth evaluations remain actively supervised.
 
 At the September28 submission,335681 restored82 and tested saved83 on TP4/DP2 with24GiB cache guard;
