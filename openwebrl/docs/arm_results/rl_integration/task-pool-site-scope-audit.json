@@ -1,0 +1,156 @@
+{
+  "checked_epoch": 1790722943.0441244,
+  "cpu_seconds_limit": 45,
+  "elapsed_seconds": 17.408626556396484,
+  "active_training_hosts": 1397,
+  "hostname_definition": "URL hostname, lowercased, leading www. removed; exact hostname matching, not registrable-domain grouping",
+  "stages": {
+    "original_allowed_before_exclusions": {
+      "tasks": 254815,
+      "hosts": 127413,
+      "sources": {
+        "insta-v3": 127500,
+        "pae-webvoyager": 127315
+      }
+    },
+    "eligible_all_hosts": {
+      "tasks": 228651,
+      "hosts": 125955,
+      "sources": {
+        "insta-v3": 126026,
+        "pae-webvoyager": 102625
+      }
+    },
+    "eligible_medium_hard_all_hosts": {
+      "tasks": 36932,
+      "hosts": 15933,
+      "sources": {
+        "insta-v3": 15956,
+        "pae-webvoyager": 20976
+      }
+    },
+    "eligible_new_hosts": {
+      "tasks": 126038,
+      "hosts": 125930,
+      "sources": {
+        "insta-v3": 125931,
+        "pae-webvoyager": 107
+      }
+    },
+    "eligible_medium_hard_new_hosts": {
+      "tasks": 15919,
+      "hosts": 15914,
+      "sources": {
+        "insta-v3": 15909,
+        "pae-webvoyager": 10
+      }
+    },
+    "original_on_existing_hosts_before_exclusions": {
+      "tasks": 128651,
+      "hosts": 1397,
+      "sources": {
+        "pae-webvoyager": 127168,
+        "insta-v3": 1483
+      }
+    },
+    "eligible_existing_hosts": {
+      "tasks": 102613,
+      "hosts": 25,
+      "sources": {
+        "pae-webvoyager": 102518,
+        "insta-v3": 95
+      }
+    },
+    "eligible_medium_hard_existing_hosts": {
+      "tasks": 21013,
+      "hosts": 19,
+      "sources": {
+        "pae-webvoyager": 20966,
+        "insta-v3": 47
+      }
+    }
+  },
+  "top_medium_hard_new_hosts": [
+    [
+      "boardgamegeek.com",
+      3
+    ],
+    [
+      "coindesk.com",
+      2
+    ],
+    [
+      "foodnetwork.com",
+      2
+    ],
+    [
+      "fifa.com",
+      2
+    ],
+    [
+      "childrenontheedge.org",
+      1
+    ],
+    [
+      "wechseljetzt.de",
+      1
+    ],
+    [
+      "funeralguide.co.uk",
+      1
+    ],
+    [
+      "writing.umn.edu",
+      1
+    ],
+    [
+      "airalo.com",
+      1
+    ],
+    [
+      "tradearabia.com",
+      1
+    ],
+    [
+      "sungazette.com",
+      1
+    ],
+    [
+      "archdaily.mx",
+      1
+    ],
+    [
+      "sandalsfoundation.org",
+      1
+    ],
+    [
+      "italyheritage.com",
+      1
+    ],
+    [
+      "greater.jobs",
+      1
+    ],
+    [
+      "spark.apache.org",
+      1
+    ],
+    [
+      "hongkongairlines.com",
+      1
+    ],
+    [
+      "actualidadambiental.pe",
+      1
+    ],
+    [
+      "maxprograms.com",
+      1
+    ],
+    [
+      "regencychess.co.uk",
+      1
+    ]
+  ],
+  "active_hosts_with_no_eligible_new_tasks": 1372
+}

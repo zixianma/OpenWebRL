@@ -7420,6 +7420,78 @@ pool, cap site concentration, and compare original versus expanded data with the
 reward recipe unchanged. No browser pilot or training-data change was launched
 by the WebVoyager approval.
 
+<a id="arm-task-pool-redesign-20260929"></a>
+### September29: task-pool scope and filtering provenance corrected
+
+The user requested a pipeline redesign after questioning the five-task host cap
+and25-host scope. Preserve the75-task review and52-task provisional manifest as
+a **screening-method pilot**, not a proposed final training pool. The previously
+proposed385-trajectory pilot has not launched and its sampling design is under
+revision. Active training and approved benchmark evaluations are unchanged.
+
+**OpenWebRL versus our additions.** The paper's §4.2 describes removing benchmark
+overlap, decomposed subtasks, long-tail/unstable websites and near-duplicate
+intents. It uses Qwen3-Embedding-8B greedy deduplication with cosine thresholds
+0.99 for SFT seeds and0.95 for RL tasks. The released approximately2.2K RL pool
+has already passed the authors' pipeline; new tasks outside that release have
+not thereby passed those checks. Our implementation of additional-task screening
+is not an exact reproduction of the authors' curation.
+[OpenWebRL §4.2](https://arxiv.org/html/2606.02031v2#S4.SS2).
+
+| Our screening step | Provenance / limitation |
+| --- | --- |
+| Remove benchmark matches and decomposed subtasks | Matches the paper's stated filtering principles; our exact-ID/text checks are our implementation |
+| Use original InSTA/PAE-WebVoyager tasks | Our scope choice based on the released pool's source families |
+| Exclude every released2,198 OpenWebRL task | Our additional-data requirement; includes96 tasks not in the active2,102 |
+| Require exact host membership in the active pool | Our shortcut, not the paper's documented website-quality/popularity rule |
+| Keep only rubric-medium/hard tasks | Our heuristic; rubric fact count is not empirical actor difficulty |
+| Token-Jaccard0.65 filter and risk/overlap/hash ranking | Our CPU screening heuristics, not the paper's semantic threshold |
+| Maximum five tasks per host /75-task review | Our small review-budget choice; not a justified training-pool limit |
+| Jev quality questions, GPT-4.1 comparator and assistant review | Our additions; no such Jev procedure is described by OpenWebRL |
+| Qwen embedding nearest-neighbor review on75 tasks | Same embedding model/nominal0.95 flag as the paper, but our reviewed-neighbor procedure is not its full-pool greedy deduplication |
+| Five-attempt difficulty/ARM-yield screening | Our unexecuted proposal; distinct from normal five-rollout groups during RL |
+
+OpenWebRL also mentions a website cap when curating its **SFT demonstration set**
+(412 trajectories,70 websites); that does not establish a five-task cap for RL
+data. Our five-task cap was introduced to keep the initial approximately100-task
+review manageable and prevent a few large sites from filling it. Selecting up to
+50 hard tasks first exhausted shared host slots, leaving only25 medium tasks.
+These arbitrary review choices should not become dataset acceptance rules.
+
+**Fresh CPU audit of site scope:** one17.4-second metadata pass, no GPU or API
+calls, confirms that the25 figure is the intersection of existing hosts with
+remaining eligible new tasks, after basic exclusions. Host means normalized URL
+hostname, with leading `www.` removed; it is not a count of registrable domains
+or all websites in WebGym.
+
+| Pool | Tasks | Hosts |
+| --- | ---: | ---: |
+| Active training pool |2,102 |1,397 |
+| Additional original tasks after basic exclusions, all difficulties |228,651 |125,955 |
+| Additional medium/hard tasks, all hosts |36,932 |15,933 |
+| Additional tasks restricted to existing hosts, all difficulties |102,613 |25 |
+| Additional medium/hard tasks restricted to existing hosts |21,013 |19 |
+| Existing provisional shortlist after quality/overlap review |52 |15 |
+
+The existing-host condition keeps only **95 of126,026** eligible InSTA tasks,
+but **102,518 of102,625** eligible PAE tasks. Many InSTA hosts have one original
+task; after the existing training task is excluded, there is no additional task
+on that host. Consequently the shortcut removes almost all new InSTA coverage
+while retaining densely repeated PAE websites. It excludes15,919 medium/hard
+tasks on15,914 new hosts. The19,260 lexical-screened pool therefore reflects a
+strong source/site selection bias, not the natural scope of WebGym.
+[Recomputed counts and source breakdown](arm_results/rl_integration/task-pool-site-scope-audit.json).
+
+**Redesign direction for discussion:** retain original-task and benchmark-overlap
+checks; replace the exact existing-host requirement with explicit website/task
+quality assessment across a broader pool; use source/site/task-type diversity
+when sampling review batches; remove the fixed-five final-pool limit; use rubric
+difficulty as a descriptive stratum rather than proof of hardness. Scale quality
+and semantic screening beyond75 only after agreeing on the revised scope and
+resource budget. Deduplication review should preserve task meaning in its start-
+URL context. Browser evidence remains necessary before labeling new tasks
+executable or learnable; the36,932/228,651 counts are unvalidated candidates.
+
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26
 
