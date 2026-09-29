@@ -9,8 +9,8 @@ Detailed inference, offline-training and online-RL results belong here. The reco
 
 **Protocol correction:** these GPT-4.1/T0 cohorts did not match the user's
 intended stealth protocol. The default is o4-mini/AgentTrek with actor T0.6;
-[fresh matched baseline/Additive/Gate B runs are prepared](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929)
-and await exact compute approval. Preserve the results below as history.
+[fresh matched baseline/Additive/Gate B runs are active as336864/336865/336866](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+Preserve the results below as history.
 
 Actor-only evaluation with Browser Use stealth, GPT-4.1/action_history, T0,
 4096 response tokens and30 turns. No inference-time ARM selection or task retries.

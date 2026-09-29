@@ -34,7 +34,7 @@ protocol for the intended comparison; retain them as separately labeled history.
 This default is recorded in root `AGENTS.md`. Local-browser monitoring retains
 its existing protocol.
 
-**Prepared, not submitted; exact new compute approval pending:** one fresh
+**Approved and submitted September29:** one fresh
 full300 pass each of outcome-only baseline, Additive and Gate B, all at
 iteration90 (`iter_0000089`). All three use the same frozen task IDs, Browser Use
 stealth, actor temperature0.6/top-p0.95/top-k20, 4096 response tokens, 30 turns,
@@ -42,16 +42,36 @@ and the historical o4-mini/AgentTrek judge implementation. No inference-time
 action selection. Save every task's rollout and verdict, including invalid
 attempts; use distinct outputs and W&B identities in `openwebrl-evals`.
 
-The proposed resources are **three parallel 1-H200 ×7h jobs**, each with
+The approved resources are **three parallel 1-H200 ×7h jobs**, each with
 8 CPUs/240GiB and three browser sessions: **21 GPU-hours maximum**, including
 startup/retries, plus browser/judge service usage. Nine simultaneous sessions
 stay within the previously observed ten-session account limit. Estimated runtime
-is about5–6h plus queue time; record actual collection intervals because queue
-delays may prevent same-day overlap. Existing training budgets remain separate.
+is about5–6h. The initial allocations started together on September29 and
+required the startup repair below; record actual task-collection intervals when reporting results. Existing
+training budgets remain separate.
+
+| Method | Job | Node | Initial status |
+| --- | ---: | --- | --- |
+| Outcome-only baseline90 |336864 |g001 |Replacement running; startup validation |
+| Additive90 |336865 |g013 |Replacement running; startup validation |
+| Gate B90 |336866 |g016 |Replacement running; startup validation |
+
+All three jobs were registered with the active supervisor before release.
+The7h cap per method includes retries; account for every attempt and preserve
+partial archives. Final completion requires all300 task IDs, saved verdicts,
+rollout archives, checkpoint restoration and final W&B metrics to be verified.
+
+The initial336861/336862/336863 attempts failed after33/28/33 seconds because
+Ray's expanded Unix-socket filenames exceeded107 bytes. No tasks or browser
+sessions started. Short job-specific `/tmp/so4-JOBID` roots fix the cause; a
+regression test checks the actual Ray validator. All15 CPU tests passed before
+relaunch. Replacements each have6h59m, keeping prior consumption inside the
+original7h-per-method approval. A fresh read-only account check still reports
+`rate_limit=10`; planned browser concurrency is three per job, nine total.
 
 Preflight verified all three iteration90 checkpoint identities and shard sizes,
 the common cohort, actual sampling function and YAML, unchanged AgentTrek judge
-source, worker routing and W&B project. Fourteen CPU tests passed, including
+source, worker routing and W&B project. Fifteen CPU tests passed, including
 invalid-judge handling without generic rejudging, persistence on aborted/error
 tasks, and rejection of wrong judge/config/environment. GPU restoration and
 live browser/judge validation remain startup checks in the approved allocations.

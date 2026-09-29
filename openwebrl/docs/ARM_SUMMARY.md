@@ -216,7 +216,7 @@ new stealth results or local curves. No fresh baseline repeats are included.
 
 The requested stealth default is **o4-mini/AgentTrek with actor T0.6**. Fresh,
 matched baseline/Additive/Gate B iteration90 full300 runs are
-[prepared pending compute approval](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+[running concurrently as336864/336865/336866](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
