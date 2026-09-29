@@ -4,6 +4,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
 - [Mixed-only bonus/reweight iterations10–30 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
@@ -23,6 +24,46 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="arm-stealth90-o4-matched-20260929"></a>
+## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29
+
+The user clarified that **all stealth evaluations should use actor T0.6 and
+o4-mini/AgentTrek**. The previous Additive/Gate B GPT-4.1/T0 runs used the wrong
+protocol for the intended comparison; retain them as separately labeled history.
+This default is recorded in root `AGENTS.md`. Local-browser monitoring retains
+its existing protocol.
+
+**Prepared, not submitted; exact new compute approval pending:** one fresh
+full300 pass each of outcome-only baseline, Additive and Gate B, all at
+iteration90 (`iter_0000089`). All three use the same frozen task IDs, Browser Use
+stealth, actor temperature0.6/top-p0.95/top-k20, 4096 response tokens, 30 turns,
+and the historical o4-mini/AgentTrek judge implementation. No inference-time
+action selection. Save every task's rollout and verdict, including invalid
+attempts; use distinct outputs and W&B identities in `openwebrl-evals`.
+
+The proposed resources are **three parallel 1-H200 ×7h jobs**, each with
+8 CPUs/240GiB and three browser sessions: **21 GPU-hours maximum**, including
+startup/retries, plus browser/judge service usage. Nine simultaneous sessions
+stay within the previously observed ten-session account limit. Estimated runtime
+is about5–6h plus queue time; record actual collection intervals because queue
+delays may prevent same-day overlap. Existing training budgets remain separate.
+
+Preflight verified all three iteration90 checkpoint identities and shard sizes,
+the common cohort, actual sampling function and YAML, unchanged AgentTrek judge
+source, worker routing and W&B project. Fourteen CPU tests passed, including
+invalid-judge handling without generic rejudging, persistence on aborted/error
+tasks, and rejection of wrong judge/config/environment. GPU restoration and
+live browser/judge validation remain startup checks in the approved allocations.
+Report overall and valid-only on full300/fixed100; use paired all-task tests with
+Holm correction for the three method comparisons, plus common-valid sensitivity.
+One pass per trained model cannot estimate training-seed or repeated-run variance.
+
+Controller `scripts/run_arm_stealth90_o4.py`; template
+`scripts/evaluate_arm_stealth90_o4_1gpu.sbatch`; frozen generator
+`scripts/arm_stealth_o4_generator.py`. Runtime request and three preview plans:
+`arm-turn-bonus-preparation/stealth90-o4-t06-20260929/`. The batch controller owns
+and awaits each worker; startup registers the cohort with active supervision.
 
 <a id="arm-stealth90-threeway-repeats-20260928"></a>
 ## Additive/Gate B iteration90: first stealth evaluations — September28–29

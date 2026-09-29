@@ -202,7 +202,7 @@ success; teacher action consistency is58% under reversed-order re-query.
 <a id="baseline-comparison"></a>
 ![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-**Stealth browser, GPT-4.1/T0; actor alone, no inference-time selection:**
+**Historical stealth runs, GPT-4.1/T0; actor alone, no inference-time selection:**
 
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
@@ -213,6 +213,10 @@ Both first passes are complete. Brown triangles retain historical baseline58/90
 with o4-mini,T0.6 (58 includes retries); these are not matched controls for the
 new stealth results or local curves. No fresh baseline repeats are included.
 [Counts, protocols and saved-artifact audits](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
+
+The requested stealth default is **o4-mini/AgentTrek with actor T0.6**. Fresh,
+matched baseline/Additive/Gate B iteration90 full300 runs are
+[prepared pending compute approval](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
