@@ -32,7 +32,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Task screening v2 prepared:75 candidates +25 existing-site controls,4,411 semantic-reference texts; no new API/browser run](ARM_INTEGRATION_PLAN.md#arm-task-pool-screening-v2-20260928).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Current inventory, September28 evening: Gate B saved89/trains90; mixed bonus saved18/collects19; reweight saved20/trains21; continuation service repaired](RL_RUNTIME.md#arm-progress-20260928).
+[Current inventory, September28 evening: Gate B saved90/collects91; mixed bonus saved19/collects20; reweight saved22/collects23; automatic continuation verified](RL_RUNTIME.md#arm-progress-20260928).
 [Mixed-only full300: bonus10 30.67% /39.32%; reweight20 32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
@@ -47,7 +47,7 @@ Live operations: [job status, completions and failures](arm_results/rl_integrati
 [Other lineages: C completed through60; sampling40% stopped at27;
 beta333431 stopped after21/312 updates](RL_RUNTIME.md#arm-progress-20260927).
 [Sampling40% coverage audit and stop decision:1.85× usable labels, inconclusive early task-success difference](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
-[Gate B80 full300:35.67% overall /47.35% valid-only; fixed10034.00% /47.89%](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927).
+[Gate B90 full300:43.00% overall /55.13% valid-only; fixed10039.00% /54.93%; comparison plot updated](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928).
 [Beta1 iteration10 full300:27.33% overall /33.74% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter10-results-20260925);
 [iteration20:33.00% overall /41.77% valid-only](RL_EVALUATION.md#arm-failure-beta1-iter20-results-20260925).
 The priority pair's scratch-path and Ray socket-length startup bugs are fixed and validated. [First-batch validation](RL_RUNTIME.md#arm-mixed-first-batch-20260927). Beta333431 completed its full TP4 replay and preserved checkpoint21.

@@ -6,6 +6,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 - [Mixed-only bonus/reweight iterations10–20 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
+- [Gate B iteration90 full300](#arm-gate-b-iter90-results-20260928)
 - [Gate B iteration80 full300](#arm-gate-b-iter80-results-20260927)
 - [Gate B iteration70 full300](#arm-gate-b-iter70-results-20260927)
 - [Failure sampling40% iteration20 full300](#arm-failure-coverage-iter20-results-20260926)
@@ -101,6 +102,41 @@ Private output directories below each have `rollouts/`, `status.json`,
 - runtime`evaluations/arm-original-iter40-332478-retry1/`
 - runtime`evaluations/arm-original-iter50-332479-retry3/`
 - runtime`evaluations/arm-original-iter60-332480-retry1/`
+
+<a id="arm-gate-b-iter90-results-20260928"></a>
+## Gate B iteration 90 — September 28
+
+The full300 evaluation inside job335729 completed with exit0, then its controller
+resumed training toward100. Native `iter_0000089` corresponds to training
+iteration90 and1,136 accumulated Adam updates. The checkpoint's shard sizes,
+metadata, cursor and optimizer/scheduler alignment passed inspection, and the
+evaluation log confirms native checkpoint89 restoration.
+
+| Cohort | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Full300 | 129 | 234 | 66 | 43.00% | 55.13% |
+| Fixed100 slice | 39 | 71 | 29 | 39.00% | 54.93% |
+| Historical outcome-only90, full300 | 101 | 222 | 78 | 33.67% | 45.50% |
+
+All300 unique task IDs match the frozen full300 cohort. Each has a nonempty
+ZIP rollout archive and saved judge verdict, including invalid attempts;
+there are no top-level error records. Fixed100 is extracted using the original
+frozen task-ID manifest, with no additional rollouts. Protocol: actor-only
+inference, local browsers, GPT-4.1/action_history, temperature0,4096 response
+tokens,30 browser turns. The frozen evaluation source is identical to Gate B80;
+protocol-related environment settings match apart from the output directory.
+
+Gate B90 exceeds its80 overall result by7.33 percentage points and historical
+baseline90 by9.33 points. Different dates, valid-task sets and a single training
+seed limit interpretation; these are descriptive differences, not evidence of
+statistical significance. Baseline90 remains the historical control.
+
+Runtime root: `evaluations/arm-gate-b-iter90-335729/`, with per-task files under
+`rollouts/`, plus `status.json`, `metrics.json` and
+`checkpoint_restore_evidence.json`. Evaluation command, environment and W&B
+manifest all target `openwebrl-evals`; training remains in `openwebrl`.
+[W&B evaluation](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter90-335729) ·
+[Aggregate audit](arm_results/rl_integration/gate-b-iteration90-audit.json).
 
 <a id="arm-gate-b-iter80-results-20260927"></a>
 ## Gate B iteration80 — September27 PDT / September28 UTC, 2026

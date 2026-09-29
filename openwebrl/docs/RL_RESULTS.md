@@ -139,6 +139,7 @@
 | B: relaxed gate | 60 | 112 | 228 | 72 | 37.33 | 49.12 | [329908](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926) |
 | B: relaxed gate | 70 | 112 | 229 | 71 | 37.33 | 48.91 | [331778](RL_EVALUATION.md#arm-gate-b-iter70-results-20260927) |
 | B: relaxed gate | 80 | 107 | 226 | 74 | 35.67 | 47.35 | [334894](RL_EVALUATION.md#arm-gate-b-iter80-results-20260927) |
+| B: relaxed gate | 90 | 129 | 234 | 66 | 43.00 | 55.13 | [335729](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928) |
 | C: relaxed gate + action credit | 20 | 110 | 247 | 53 | 36.67 | 44.53 | [313211](RL_EVALUATION.md#arm-gate-c-iter20-results-20260921) |
 | C: relaxed gate + action credit | 30 | 92 | 232 | 68 | 30.67 | 39.66 | [318935](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |
 | C: relaxed gate + action credit | 40 | 100 | 222 | 78 | 33.33 | 45.05 | [318935](RL_EVALUATION.md#arm-gate-c-iter30-40-results-20260924) |

@@ -167,6 +167,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  | 60 | 35.00% / 49.30% | **37.33% / 49.12%** |
 |  | 70 | 35.00% / 50.00% | **37.33% / 48.91%** |
 |  | 80 | 34.00% / 47.89% | **35.67% / 47.35%** |
+|  | 90 | 39.00% / 54.93% | **43.00% / 55.13%** |
 | **C: relaxed gate + action credit** | 20 | 38.00% / 48.10% | 36.67% / 44.53% |
 |  | 30 | 28.00% / 38.89% | 30.67% / 39.66% |
 |  | 40 | 31.00% / 43.06% | **33.33% / 45.05%** |
@@ -195,13 +196,13 @@ success; teacher action consistency is58% under reversed-order re-query.
 [Method, table and caveats](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 
 <a id="baseline-comparison"></a>
-![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–80](rl_results/baseline_vs_arm_allfailure_full300.png)
+![Outcome-only baseline versus all-failure, additive and Gate B ARM: full-300 results, with Gate B available at iterations 20–90](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-Additive iteration 90 reaches **39.33% overall**, versus **33.67%** for the
-historical baseline at iteration 90. At iteration 100, additive is **36.33%**
-versus the [completed baseline](RL_EVALUATION.md#baseline-iter100-results-20260924) at **34.67%**
-overall (+1.67 pp); evaluation dates and valid-task sets differ.
-A consistent gain over outcome-only RL is not yet established.
+Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
+historical baseline and **39.33%** for additive at the same iteration. This is
+Gate B's best evaluated checkpoint so far; dates and valid-task sets differ,
+so a consistent gain over outcome-only RL is not yet established.
+[Counts and audit](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928).
 
 <a id="arm-failure-sampling-history"></a>
 <a id="all-failure-arm-full-300-curve"></a>

@@ -1,0 +1,49 @@
+{
+  "job_id": "335729",
+  "variant": "B: relaxed gate",
+  "iteration": 90,
+  "evaluation_date": "2026-09-28 PDT / 2026-09-29 UTC",
+  "completed_optimizer_updates": 1136,
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-failure-additive-335729-b100-iter90/runtime/iter_0000089",
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-eval80-additive-20260920-v2",
+  "full300": {
+    "tasks": 300,
+    "successes": 129,
+    "valid": 234,
+    "invalid": 66,
+    "overall": 0.43,
+    "valid_only": 0.5512820512820513,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "error_records": 0
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 39,
+    "valid": 71,
+    "invalid": 29,
+    "overall": 0.39,
+    "valid_only": 0.5492957746478874,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100,
+    "error_records": 0
+  },
+  "fixed100_task_ids_sha256": "dfce9b64f84e6d514d516cd9a0c32f1355231845026b767546e8554608d62fb5",
+  "fixed100_task_ids_hash_encoding": "UTF-8 sorted IDs joined by newline, without trailing newline",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "cohort_verified": true,
+  "restore_verified": true,
+  "rollout_root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-gate-b-iter90-335729/rollouts",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-gate-b-iter90-335729",
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "evaluation_manifest_sha256": "d4d33e3c1800a8d5d171843e92aade79968dd85d70930b3a63ab0f06420875ae",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "scope": "Fixed100 sliced from full300; all ZIP central directories checked; no tensor loads."
+}

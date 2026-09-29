@@ -31,6 +31,30 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 <a id="arm-progress-20260928"></a>
 ## ARM inventory and recovery — September28, 2026
 
+**21:30PDT check:** Gate B335729 saved90/1,136 Adam updates, completed its full300
+evaluation at **43.00% overall /55.13% valid-only**, and resumed collection91
+through100. Mixed bonus335699 saved19/278 and collects20; reweight335697 saved22/332
+and collects23. New durable checkpoint shards, metadata, task cursors and
+optimizer/scheduler alignment were checked. All three have fresh W&B history and
+browser progress, with no missing browser-ready signals in the latest100 startups.
+Single collection-phase GPU snapshots show active devices across all eight GPUs
+per run; these snapshots do not establish average utilization.
+
+Gate B90 has all300 archives/verdicts preserved, and its W&B evaluation history
+matches the artifact counts. Its summary API is sparse, so verification used
+history rather than treating missing summary fields as lost metrics.
+[Results and updated plot](ARM_SUMMARY.md#baseline-comparison).
+At21:33PDT, remaining approved extensions are approximately37.84h for bonus,
+36.83h for reweight (including their queued24h successors), and13.77h for Gate B.
+No new compute was submitted. Bonus20 and Gate B100 evaluations remain owned by
+the active controllers; no duplicate evaluations were launched.
+
+The repaired supervisor delivered its real hourly continuation at21:29PDT and
+this agent acknowledged it. This verifies actual delivery after the earlier
+configuration repair; no test notification was created. The persistent watcher,
+continuation server and successor tracking remain active.
+
+
 **20:37PDT check:** all three priority jobs are progressing, with fresh finite
 optimizer metrics. Bonus335699 has durable18/266 Adam updates and collects19;
 reweight335697 has durable20/306 and trains21; Gate B335729 restored durable89/1124

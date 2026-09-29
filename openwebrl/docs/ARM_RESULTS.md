@@ -99,6 +99,23 @@ outcome-only baseline, overall differences at20/30/40/50/60 are−3.67,+0.67,
 [Per-checkpoint counts, fixed100 slices and provenance](RL_EVALUATION.md#arm-original-backfill-results-20260927).
 The comparison plot continues to exclude original bonus, as requested.
 
+<a id="arm-gate-b-iter90-20260928"></a>
+## Gate B iteration 90 — September 28
+
+Full300 is **43.00% overall /55.13% valid-only** (129 successes, 234 valid);
+the fixed100 slice is **39.00% /54.93%** (39 successes, 71 valid). This is
+Gate B's best evaluated checkpoint so far: +7.33 percentage points overall
+from iteration80 and +9.33 points versus historical outcome-only baseline90.
+The latter is a comparison across dates and different valid-task sets, not
+an established treatment effect or significance result.
+
+All300 rollout archives and verdicts, cohort membership, native checkpoint89,
+and the unchanged local-browser/GPT-4.1/action_history/temperature0 protocol
+passed inspection. Evaluation logged separately to `openwebrl-evals`.
+Job335729 resumed iteration91 toward100 with the same optimizer, scheduler,
+cursor and training W&B identity. The summary and comparison plot include90.
+[Detailed audit](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928).
+
 <a id="arm-gate-b-iter80-20260927"></a>
 ## Gate B iteration80 — September27
 
@@ -828,9 +845,9 @@ points are full-300 evaluations under the same local-browser/GPT-4.1 protocol.
 This comparison overlays the historical outcome-only baseline curve with the
 all-failure and additive ARM full-300 points through iteration100. The completed
 baseline100 evaluation supplies the final point for those three methods.
-Gate B overlays the completed full-300 evaluations at iterations20 through80,
+Gate B overlays the completed full-300 evaluations at iterations20 through90,
 with overall and valid-only rates taken from the saved result audits; its
-curves stop at70, the latest evaluated checkpoint.
+curves stop at90, the latest evaluated checkpoint.
 Additive's
 [iteration-20 full-300 result](RL_EVALUATION.md#arm-additive-iter20-full300-20260920)
 completed as job 307429 and is now included; it had been omitted from the docs.
