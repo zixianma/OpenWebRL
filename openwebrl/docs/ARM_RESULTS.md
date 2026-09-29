@@ -36,7 +36,7 @@ result includes80 retained successes and is179/286/300.
 Additive is5.33pp higher overall and5.59pp higher valid-only than baseline;
 Gate B is1.00pp and1.05pp higher, respectively. These single evaluations do
 not establish training-seed robustness. Two more evaluations per method,
-including baseline, are [prepared pending exact allocation approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+including baseline, are [approved and scheduled](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
 [Additive merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json).
 [Baseline merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json).
 [Gate B merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) ·

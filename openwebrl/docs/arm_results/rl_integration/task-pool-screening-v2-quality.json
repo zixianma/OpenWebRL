@@ -1,6 +1,6 @@
 {
   "date": "2026-09-29",
-  "stage": "text_screening_complete_overlap_pending",
+  "stage": "overlap_review_complete_browser_pilot_pending",
   "candidate_tasks": 75,
   "judgments": 525,
   "jev_model": "jev-1.13.0",
@@ -752,19 +752,27 @@
   ],
   "provisional_candidate_hosts": 17,
   "control_tasks": 25,
-  "provisional_primary_browser_attempts": 420,
+  "provisional_primary_browser_attempts": 385,
   "semantic_screening": {
     "model": "Qwen/Qwen3-Embedding-8B",
     "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
     "texts": 4486,
-    "computed": false,
+    "computed": true,
     "gpu_proposal": {
       "h200": 1,
       "hours": 0.5,
       "cpus": 8,
       "memory_gib": 120,
-      "submitted": false
-    }
+      "submitted": true,
+      "approved": true
+    },
+    "verified_complete": true,
+    "job_id": "337135",
+    "gpu_seconds": 118,
+    "provisional_after_review": 52,
+    "additional_exclusions": 2,
+    "additional_holds": 5,
+    "heldout_threshold_note": "No>=.95 matches; below-threshold similarity still requires review"
   },
   "training_pool_changed": false,
   "limitations": [
@@ -772,5 +780,12 @@
     "Assistant text review is not independent human validation.",
     "59 provisional candidates are not a final retained training pool.",
     "Overlap and browser availability/learnability remain unverified."
-  ]
+  ],
+  "provisional_primary_browser_attempts_after_overlap": 385,
+  "post_overlap_pipeline_counts": {
+    "provisional": 52,
+    "excluded": 14,
+    "held": 9
+  },
+  "pre_overlap_primary_browser_attempts": 420
 }

@@ -52,7 +52,7 @@ plus172 retries cover exactly300 task IDs. Native89 restoration, checkpoint
 shards/counters, all archives and valid verdict texts, W&B's final172/164/99
 retry counters and zero remaining owned browser sessions passed verification.
 [Additive merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json).
-[Two additional evaluations per method are prepared, pending resource approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+[Two additional evaluations per method are approved and scheduled](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
 
 
 The user clarified that **all stealth evaluations should use actor T0.6 and

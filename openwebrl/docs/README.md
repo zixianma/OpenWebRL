@@ -29,12 +29,12 @@ for the work you are doing, then follow its contents to dated experiment records
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
 [Outcome-reward readiness: image hashes/processor/gradient checks pass; length-only later-test pair accuracy65.48%; GPU fit pending](ARM_INTEGRATION_PLAN.md#arm-outcome-reward-readiness-20260928).
 [Task-pool expansion: quality, deduplication, browser-yield and controlled training plan](ARM_INTEGRATION_PLAN.md#arm-task-pool-next-investigation-20260927).
-[Task screening v2 complete:75 Jev tasks,10 paired GPT cases;59 provisional candidates,12 excluded,4 held; semantic-overlap GPU stage prepared](ARM_INTEGRATION_PLAN.md#arm-task-pool-quality-v2-20260929).
+[Task screening v2 and semantic overlap complete:52 provisional candidates,14 excluded,9 held; job337135 verified in118 GPU-seconds; browser pilot pending](ARM_INTEGRATION_PLAN.md#arm-task-pool-quality-v2-20260929).
 [Interactive75-task quality and uncertainty review](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Matched stealth90 complete: baseline54.33% /56.99%, Additive59.67% /62.59%, Gate B55.33% /58.04%; o4-mini/AgentTrek/T0.6, all three have286 valid tasks](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
-[Prepared: three corrected stealth evaluations each for baseline, Additive and Gate B; six additional single-GPU jobs awaiting exact allocation approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+[Three corrected stealth evaluations per method: round2 jobs337129–337131 running; round3 jobs337132–337134 queued;42 GPU-hour maximum approved](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
 [Gate B training100 complete: full30036.67% /48.89%, fixed10030.00% /44.12%; all artifacts verified and comparison plot updated](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
 [Historical GPT-4.1/T0 stealth evals: Additive53.00% /56.18% (283 valid), Gate B56.33% /58.68% (288 valid); these used the wrong protocol for the intended comparison](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 [Current inventory, September28 evening: Gate B saved90/collects91; mixed bonus saved19/collects20; reweight saved22/collects23; automatic continuation verified](RL_RUNTIME.md#arm-progress-20260928).

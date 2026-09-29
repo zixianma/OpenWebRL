@@ -1,0 +1,2034 @@
+{
+  "job_id": "337135",
+  "checked_epoch": 1790719964.1332653,
+  "verified_complete": true,
+  "model": "Qwen/Qwen3-Embedding-8B",
+  "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+  "embedding_shape": [
+    4486,
+    4096
+  ],
+  "dtype": "float32",
+  "all_finite": true,
+  "max_unit_norm_error": 1.1920928955078125e-07,
+  "all_input_hashes_verified": true,
+  "reported_pair_cosines_verified": 2250,
+  "nearest_rows": 75,
+  "threshold_summary": {
+    "existing_training": {
+      "above_095": 1,
+      "above_090": 3,
+      "maximum": 0.995679497718811
+    },
+    "heldout": {
+      "above_095": 0,
+      "above_090": 0,
+      "maximum": 0.8678264021873474
+    },
+    "candidates": {
+      "above_095": 0,
+      "above_090": 0,
+      "maximum": 0.8711521625518799
+    }
+  },
+  "pair_review": {
+    "checked_epoch": 1790719964.04521,
+    "reviewer": "Codex assistant; not independent human ground truth",
+    "scope": "Computed all75 score summaries; substantive inspection of all returned neighbors with cosine>=.75 for the59 text-provisional cases. No claim that lower scores prove absence of overlap.",
+    "before": 59,
+    "provisional_after_overlap": 52,
+    "excluded_redundant": 2,
+    "held_for_further_review": 5,
+    "all75_pipeline_counts": {
+      "provisional": 52,
+      "excluded": 14,
+      "held": 9
+    },
+    "decisions": [
+      {
+        "task_id": "163236",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6910585761070251,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "165970"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5833617448806763,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "deepshop.jsonl",
+                "task_id": "Amazon--49"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6101985573768616,
+            "match_task_id": "163239",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "164560",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6316903829574585,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "170900"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.534747838973999,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "deepshop.jsonl",
+                "task_id": "Amazon--11"
+              },
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "50"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5535045862197876,
+            "match_task_id": "163239",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "163239",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6844208836555481,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "159827"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5946691036224365,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300325"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6101985573768616,
+            "match_task_id": "163236",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "182152",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.8736624121665955,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "182758"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7219504714012146,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "d02d236836924919f35f2438d9ed2374"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "d02d236836924919f35f2438d9ed2374"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.7718371748924255,
+            "match_task_id": "181211",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "165507",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6128988862037659,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "165970"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.4426473081111908,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "9bb63ad0e38d5691a618932a8b31c05a"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "9bb63ad0e38d5691a618932a8b31c05a"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.49462252855300903,
+            "match_task_id": "163236",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "180966",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7330847978591919,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "184633"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7167248129844666,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.620623767375946,
+            "match_task_id": "173551",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "205605",
+        "decision": "exclude_redundant",
+        "reason": "Same repository README/license/installation lookup as candidate205597, plus contact information. Keep205597 as one representative.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6151487827301025,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "203396"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5534799098968506,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "351"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "40"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.8711521625518799,
+            "match_task_id": "205597",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "181211",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7567374110221863,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "258855"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7053953409194946,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "18"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.7718371748924255,
+            "match_task_id": "182152",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "205597",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.636091947555542,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "203396"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5930059552192688,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "351"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "40"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.8711521625518799,
+            "match_task_id": "205605",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "205642",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6776594519615173,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "260514"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6367273330688477,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "378"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5906587243080139,
+            "match_task_id": "260984",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "206334",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5634976029396057,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "205888"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7249805331230164,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "382"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.42795002460479736,
+            "match_task_id": "205642",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "220104",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.538691520690918,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "220180"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6653848886489868,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "305"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4668537974357605,
+            "match_task_id": "220296",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "154208",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5501607656478882,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "150133"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.48647958040237427,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300393"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5554158687591553,
+            "match_task_id": "147860",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "209904",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6735730171203613,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "217363"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6635811924934387,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "471"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "56"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.569909393787384,
+            "match_task_id": "209821",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "252349",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7385270595550537,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "249528"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7526960372924805,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "f389398d2eeb29e5571e00439c57eb76"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "f389398d2eeb29e5571e00439c57eb76"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5575330257415771,
+            "match_task_id": "252560",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "214520",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6620555520057678,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "212791"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6810641288757324,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "318"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "37"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5485373735427856,
+            "match_task_id": "209821",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "182774",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7904068827629089,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "176819"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5889339447021484,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "bf3b311cc8dce16d3de844f4b5875dfd"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "bf3b311cc8dce16d3de844f4b5875dfd"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5393925309181213,
+            "match_task_id": "181211",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "245192",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6563624739646912,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "241859"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5946406722068787,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "229"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "27"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6270012855529785,
+            "match_task_id": "239013",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "202969",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6047228574752808,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "206831"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6516368985176086,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "351"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "40"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4277564585208893,
+            "match_task_id": "260984",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "173551",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6755365133285522,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "184633"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6451090574264526,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "42"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.620623767375946,
+            "match_task_id": "180966",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "219234",
+        "decision": "hold_novelty_or_heldout_review",
+        "reason": "Potential same Deep Learning course-detail target as released training; named institution may distinguish it, so resolve actual course/site identity before browser pilot.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.8156282901763916,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "228020"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5273013710975647,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "281"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5158233642578125,
+            "match_task_id": "224720",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "236432",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6857741475105286,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "236425"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5418250560760498,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "240"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5681678056716919,
+            "match_task_id": "239013",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "209821",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7788917422294617,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "217363"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7380110621452332,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300782"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6182608604431152,
+            "match_task_id": "211562",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "148186",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5938622355461121,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "154015"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5685421824455261,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300645"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4927075505256653,
+            "match_task_id": "147860",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "248456",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5875357389450073,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "49014"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.4350086748600006,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "301032"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.40171658992767334,
+            "match_task_id": "252349",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "147860",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5747032165527344,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "150133"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5868210196495056,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "23"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5776455998420715,
+            "match_task_id": "156011",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "192203",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7035780549049377,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "196473"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6557786464691162,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "112"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "11"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6138320565223694,
+            "match_task_id": "192784",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "151472",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5496776103973389,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "146791"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5682547688484192,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "22"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.33709433674812317,
+            "match_task_id": "259497",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "220296",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6808953285217285,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "226989"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6662293076515198,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300832"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6270108222961426,
+            "match_task_id": "224720",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "262046",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6016271114349365,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "194750"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5113979578018188,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "159"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6852297782897949,
+            "match_task_id": "262050",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "262050",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6470080614089966,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "258690"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6473048329353333,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "159"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6852297782897949,
+            "match_task_id": "262046",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "252560",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.907674252986908,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "258538"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.8416892290115356,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "f389398d2eeb29e5571e00439c57eb76"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "f389398d2eeb29e5571e00439c57eb76"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6999169588088989,
+            "match_task_id": "259346",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "262062",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5627411007881165,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "258690"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.564437985420227,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "159"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6418029069900513,
+            "match_task_id": "262050",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "156011",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7106912732124329,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "149337"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5953696966171265,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "64b76158720a69e4a5c31a55d54928bf"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "64b76158720a69e4a5c31a55d54928bf"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5776455998420715,
+            "match_task_id": "147860",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "251434",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.684143602848053,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "268501"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.445556640625,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300564"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4656076431274414,
+            "match_task_id": "259579",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "864",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6888888478279114,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "9838"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6430248022079468,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "199"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5317555069923401,
+            "match_task_id": "72559",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "253323",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6916645765304565,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "251355"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.645548403263092,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "169"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4859340786933899,
+            "match_task_id": "252560",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "239013",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7716878056526184,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "241859"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7067399024963379,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "240"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6270012855529785,
+            "match_task_id": "245192",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "198648",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.49703913927078247,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "195721"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5778497457504272,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300557"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4698503315448761,
+            "match_task_id": "192203",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "237468",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6385645866394043,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "234715"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6663946509361267,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "233"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4814423620700836,
+            "match_task_id": "239013",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "192784",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6039589047431946,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "260483"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7356522679328918,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "112"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "11"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6138320565223694,
+            "match_task_id": "192203",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "271684",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.4186376631259918,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "271359"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.501651406288147,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "587"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.34655267000198364,
+            "match_task_id": "263565",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "260628",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6351504325866699,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "260197"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5328015089035034,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "541"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5533844232559204,
+            "match_task_id": "260984",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "259352",
+        "decision": "hold_novelty_or_heldout_review",
+        "reason": "Broad mental-health improvement guide substantially overlaps an existing training goal; novelty unclear without a distinct target or completion criterion.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7650390267372131,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "258699"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7111213803291321,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300795"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6815161108970642,
+            "match_task_id": "258732",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "259579",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.717154324054718,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "51196"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.6335628628730774,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300269"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5810973048210144,
+            "match_task_id": "258472",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "263565",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6532219052314758,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "272646"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7631591558456421,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "578"
+              },
+              {
+                "source": "webvoyager_val.parquet",
+                "task_id": "66"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.47070765495300293,
+            "match_task_id": "260984",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "261379",
+        "decision": "hold_novelty_or_heldout_review",
+        "reason": "Benchmark-adjacent Hugging Face summarization model-card task. Requested fields/selection differ; conservatively hold pending target/workflow separation review, not proven leakage.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6878882646560669,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "261006"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7819716930389404,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "528"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.7446837425231934,
+            "match_task_id": "261382",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "39593",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.43593475222587585,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "92889"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.3951535224914551,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300952"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.3828817307949066,
+            "match_task_id": "259497",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "260480",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6140580773353577,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "170900"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5721511840820312,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "bd1e3770b7181f6fce9c35e18caa9785"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "bd1e3770b7181f6fce9c35e18caa9785"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5426454544067383,
+            "match_task_id": "163236",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "5892",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.4976215064525604,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "94470"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5551496744155884,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "203"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5828261375427246,
+            "match_task_id": "49587",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "258732",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.6864174008369446,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "169977"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.7060677409172058,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300795"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.6815161108970642,
+            "match_task_id": "259352",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "49587",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.47365322709083557,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "85001"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5465253591537476,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "188"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5828261375427246,
+            "match_task_id": "5892",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "261382",
+        "decision": "hold_novelty_or_heldout_review",
+        "reason": "Benchmark-adjacent Hugging Face question-answering model-card task. Requested fields differ; conservatively hold pending target/workflow separation review, not proven leakage.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.7486831545829773,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "261006"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.8239216804504395,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "535"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.7446837425231934,
+            "match_task_id": "261379",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "72559",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5707604885101318,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "25540"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5901385545730591,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "215"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.5543445348739624,
+            "match_task_id": "49587",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "259318",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.618999719619751,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "105636"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.4836626350879669,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webvoyager_fara.jsonl",
+                "task_id": "495"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.44083890318870544,
+            "match_task_id": "260480",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "260002",
+        "decision": "hold_novelty_or_heldout_review",
+        "reason": "All-time best-books list overlaps an existing training list objective; extra author/year fields may add little distinct navigation. Hold for novelty review.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.8212830424308777,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "259860"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.542080283164978,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300131"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.44452422857284546,
+            "match_task_id": "209821",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "259602",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5102844834327698,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "273616"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.5382766127586365,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "2218042362d8fae73756eb309848c2b2"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "2218042362d8fae73756eb309848c2b2"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4667792320251465,
+            "match_task_id": "259609",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "259346",
+        "decision": "exclude_redundant",
+        "reason": "Near-paraphrase of released training259582: latest movie trailers/reviews with cast metadata; omit this redundant objective.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.995679497718811,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "259582"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.8338908553123474,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "online-mind2web.jsonl",
+                "task_id": "95cad96f2e43f3c0d8efad1331c77c8c"
+              },
+              {
+                "source": "online-mind2web.jsonl_legacy",
+                "task_id": "95cad96f2e43f3c0d8efad1331c77c8c"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.714946985244751,
+            "match_task_id": "182152",
+            "provenance": null
+          }
+        }
+      },
+      {
+        "task_id": "259609",
+        "decision": "provisional_browser_pilot",
+        "reason": "No clear duplicate in inspected nearest-neighbor evidence; still provisional for browser availability, task validity and learning-yield checks.",
+        "nearest": {
+          "existing_training": {
+            "cosine": 0.5304176807403564,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "released_openwebrl",
+                "task_id": "259425"
+              }
+            ]
+          },
+          "heldout": {
+            "cosine": 0.43385380506515503,
+            "match_task_id": null,
+            "provenance": [
+              {
+                "source": "webgym_test",
+                "task_id": "300694"
+              }
+            ]
+          },
+          "candidates": {
+            "cosine": 0.4667792320251465,
+            "match_task_id": "259602",
+            "provenance": null
+          }
+        }
+      }
+    ],
+    "training_pool_changed": false,
+    "browser_pilot_started": false,
+    "control_tasks": 25,
+    "provisional_primary_attempts": 385
+  },
+  "approved_gpu_seconds": 1800,
+  "consumed_gpu_seconds": 118,
+  "unused_gpu_seconds": 1682,
+  "allocation_released": true,
+  "training_pool_changed": false,
+  "artifacts_sha256": {
+    "plan.json": "59769dbc0951021faf8b05c558d03c88f2c8eff7146024b73de76a237306d6e5",
+    "embeddings.npy": "0c3b16d398608a06aa90b3a8347ea3e930d30d7c931334624a1915bd2702d5c6",
+    "neighbors.json": "b7ba20db1bf3768b16adda9d403828e4b2e06dbd1d8a14a16e33203e97e9a9ff",
+    "pair-review.json": "1585a17c15e60ece39b51c457606c8c43e56c8115b47b1c294fc2d8381f999b1"
+  },
+  "provisional_manifest_sha256": "07e23f7fdff958f3d1ba0279affb7769221d0a417ce6208df249c27eeeea4ef9"
+}

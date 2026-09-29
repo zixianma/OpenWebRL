@@ -7167,7 +7167,7 @@ part of this comparison.
   invalids; keep all retry attempts and lineage.
 - Run the three methods contemporaneously in each round. Each job uses three
   browsers; three jobs use nine total, within the verified ten-session provider
-  limit. Round3 starts after all round2 jobs exit; recovery must update successor
+  limit. Round3 starts after all round2 jobs succeed; recovery must update successor
   dependencies to preserve the concurrency limit. Wait for the first Additive
   cohort to finish before starting the new round.
 - Use SGLang server RNG seed1235 in round2 and1236 in round3, shared across
@@ -7184,13 +7184,24 @@ part of this comparison.
   overall results primary and common-valid sensitivity separate. Three repeats
   provide only a limited estimate of evaluation variability.
 
-**Prepared resource request, not yet approved or submitted:** six jobs of
+**Approved and submitted September29:** six jobs of
 **1 H200 ×7h,8 CPUs,240GiB each**,42 GPU-hours maximum total, in two waves of
 three. Current first cohorts took about5h including interrupted collection and
 recovery;7h gives headroom, and each job releases its allocation on completion.
 Each new cohort has its own7h cap including failed attempts/retries; unused
 previous-cohort budgets are not transferred. Browser/API usage covers1,800
 fresh primary task attempts and their terminal judgments.
+
+| Round | Outcome-only baseline | Additive | Gate B | Dependency |
+| --- | --- | --- | --- | --- |
+|2 |337129 |337130 |337131 | None; all three started on g001 |
+|3 |337132 |337133 |337134 | `afterok:337129:337130:337131` |
+
+All six jobs were registered with the active-agent supervisor before release.
+Each cohort keeps its own attempt accounting; a failed attempt's successor
+dependencies must follow its replacement. Approval and submission receipts are
+durable alongside the prepared plans. The first corrected evaluation for every
+method is independently verified complete; no old allocation was repurposed.
 
 Launcher `scripts/run_arm_stealth90_o4_more.py` and template
 `scripts/evaluate_arm_stealth90_o4_more_1gpu.sbatch` are prepared. A separate
@@ -7247,7 +7258,7 @@ decisions. Unscreened comparator cells are explicitly marked, not counted as
 disagreements. Eight CPU tests passed; the report's search, selection and
 missing-comparator behavior were checked in a local browser.
 
-**Next concrete stage, prepared but not submitted:** semantic-overlap screening
+**Semantic-overlap stage, now completed:** screening
 with [Qwen3-Embedding-8B](https://huggingface.co/Qwen/Qwen3-Embedding-8B), pinned
 revision `1d8ad4ca9b3dd8059ad90a75d4983776a23d44af`. Weights are downloaded;
 the75 candidates plus4,411 reference texts total130,128 tokens, longest214.
@@ -7258,20 +7269,46 @@ high-similarity pair for review; it does not prove absence of leakage below the
 threshold or exactly reproduce OpenWebRL's unreleased curation implementation.
 All75 candidates remain in this audit, including held/excluded text cases.
 
-Prepared allocation request: **1 H200 ×30 minutes,8 CPUs,120GiB RAM**, no
+Approved and submitted as **337135** on September29: **1 H200 ×30 minutes,
+8 CPUs,120GiB RAM**, no
 browser sessions or paid API calls. The batch controller exits when embeddings
 and pair reports are saved. It refuses login-node model inference, changed
 input hashes, nonfinite embeddings and silent truncation. Scripts:
 `scripts/screen_arm_task_overlap.py` and
 `scripts/screen_arm_task_overlap_1gpu.sbatch`; frozen plan/readiness live under
 runtime `task-pool-expansion-20260922/screening-v2/overlap-qwen8b/`.
-GPU execution and exact allocation approval remain pending.
+Job337135 completed on g006 in **118 GPU-seconds**, releasing1,682 unused
+seconds. Independent checks verified the4,486×4,096 float32 matrix, finite unit
+norms, pinned input/model provenance and all2,250 reported neighbor cosines.
+The matrix and75 nearest-neighbor reports are preserved with the approval,
+submission, accounting and independent-audit receipts.
 
-After overlap review, freeze the surviving candidate manifest and the25 controls
-for the actor-only browser/ARM-label yield pilot. The provisional59+25 cohort
-would require at most420 primary trajectories at five attempts/task, before
-overlap exclusions; the earlier500 cap remains an upper bound, not a launched
-job. Proposed actor: frozen outcome-only iteration90, using the same actor,
+| Nearest-neighbor stratum | Candidates with cosine≥0.95 | Highest cosine |
+| --- | ---: | ---: |
+| Existing training |1 |0.9957 |
+| Held-out benchmarks |0 |0.8678 |
+| Other candidates |0 |0.8712 |
+
+Assistant review of returned neighbors with cosine≥0.75 for the59
+text-provisional candidates removes two redundant cases:259346 repeats an
+existing movie-trailers/reviews objective, and205605 repeats candidate205597's
+repository README/license lookup. The latter has cosine0.8712, demonstrating
+why0.95 alone is insufficient. Five further cases are held:219234,259352 and
+260002 have unresolved novelty relative to existing course/health/book-list
+goals;261379 and261382 resemble held-out Hugging Face model-card tasks. These
+holds are conservative review decisions, not proof of benchmark leakage.
+
+This leaves **52 provisional candidates**; across all75 the current pipeline has
+52 provisional,14 excluded and9 held. Both pre/post-overlap manifests remain
+saved. No training data changed, and below-threshold similarity does not prove
+benchmark independence. [Numeric audit and per-task review decisions](arm_results/rl_integration/task-pool-screening-v2-overlap-audit.json).
+
+The surviving52-candidate manifest is frozen for preparation of the actor-only
+browser/ARM-label yield pilot, alongside25 controls. This77-task cohort would
+require at most385 primary trajectories at five attempts/task. The earlier
+420/500 limits described pre-overlap proposals, not launched jobs. Browser
+execution still requires a separate exact resource approval. Proposed actor:
+frozen outcome-only iteration90, using the same actor,
 sampling,15-turn horizon and GPT-4.1/action_history judge for both interleaved
 cohorts. ARM scores sampled executed turns without choosing actions. Finalize
 the browser compute/API cap after the retained count is known. Report invalid,
