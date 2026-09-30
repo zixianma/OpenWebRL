@@ -7652,7 +7652,11 @@ budget, added-task share and training allocation remain to be finalized.
 <a id="arm-task-quality-human-review-20260929"></a>
 ### Quality screening: exact checks and manual comparison — September29
 
-**Current decision: use model judgments for review triage, not automatic task
+**Superseded later September29:** the user removed mandatory manual review and
+requested live-browser checks first. Follow the [browser-first procedure](#arm-task-pool-live-browser-first-20260929).
+The cached comparison remains available as a diagnostic, not a prerequisite.
+
+**Earlier decision: use model judgments for review triage, not automatic task
 rejection.** The184,546 semantic survivors are candidates; task quality, live
 availability and actor difficulty are distinct checks. The user requested a
 comparison of screening methods and a manual review before trusting the filter.
@@ -7722,6 +7726,57 @@ Rebuild: `scripts/render_arm_task_quality_review.py --version v2 --manual-review
 with`--current-pool`pointing to semantic output`kept-337317.jsonl`and`--output`
 pointing to the existing review HTML. This changes only the review artifact,
 not the running training pool or scientific recipes.
+
+<a id="arm-task-pool-live-browser-first-20260929"></a>
+### Browser-first task filtering; manual review optional — September29
+
+**User direction:** manual review is too slow and unnecessary as a required
+stage. Proceed with live-browser checks before further text-quality screening.
+Jev/GPT comparisons remain optional diagnostics; no human-label prerequisite
+or model-confidence rejection threshold is imposed.
+
+The released [host blacklist](https://github.com/OpenWebRL/OpenWebRL/blob/9a120949aca3e58a2628f4b4e6edd0474d984873/openwebrl/data/webgym_filtered_popular_blacklist_hosts.txt)
+contains78 unique literal host entries in our pinned snapshot. Its header records
+past reset/navigation failures. We already applied its upstream loader/filter,
+quarantining27,955 rows before semantic deduplication. It is a historical negative
+list, not the unreleased popularity allowlist or evidence about today's pages.
+
+The184,546 retained tasks use125,761 normalized start URLs. All58,726 PAE tasks
+share76 URLs. Check **all76 PAE URLs plus124 reproducibly sampled remaining
+InSTA URLs**,200 total; they cover58,982 candidate task IDs (58,726 PAE and256
+InSTA). This is a pilot for availability and cost, not a final website/task cap.
+Do not infer full-pool acceptance or task solvability from shared-page coverage.
+
+1. Reuse the frozen training `WebEnv`, Chromium options and1280×1000 viewport.
+   Visit each actual start URL once per fresh browser attempt. Save final URL,
+   HTTP status, title, visible text, DOM and screenshot; no model calls or actions.
+2. Classify rendered pages as `page_available`; explicit missing/error/parked
+   pages or navigation failures as unavailable observations; challenges, auth
+   forms, timeouts with content, sparse pages and infrastructure errors as
+   `inconclusive`. An ordinary sign-in link does not reject a public page.
+3. Retry non-passes once in a fresh browser. Only two unavailable observations
+   produce `unavailable_after_retry`. Preserve both attempts and uncertain cases;
+   never propagate one URL's failure into a new permanent host blacklist.
+4. Use page availability to decide which tasks receive the later five-actor-
+   attempt screen. Only five valid failures establish observed0/5; ARM-based
+   task selection follows that screen. Page evidence cannot verify instruction
+   quality, target existence, or recoverability by the actor.
+
+**Implemented and tested:** `scripts/check_arm_task_urls.py`, CPU batch template
+`scripts/check_arm_task_urls_cpu.sbatch`, nine unit tests. The bounded sequential
+three-URL live smoke saved all screenshots/text/DOM: Halmstad and SoluCalc rendered;
+Adele showed a browser challenge twice and remains inconclusive. This smoke ran
+on the login host; production observations must come from a compute node.
+
+**Full pilot prepared, not submitted:** request **0 GPUs,8 CPUs,32GiB RAM,2h total**
+(max16 CPU-hours including retries),8 local browser workers and at most400
+attempts. Expected15–40min; release on completion. No API calls or stealth credits.
+The controller persists per-URL artifacts, bounds worker lifetime, resumes saved
+results, accounts all registered attempts against the original2h cap and joins
+all workers before exiting. Exact allocation approval is still required by the
+repository's submission rule; the earlier semantic job's unused time is not reused.
+[Aggregate readiness and smoke evidence](arm_results/rl_integration/task-pool-live-browser-plan.json).
+Runtime manifest, request and smoke artifacts: `task-pool-expansion-20260922/curation-v3-20260929/live-browser-20260929/`.
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26

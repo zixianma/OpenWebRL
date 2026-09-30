@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-29",
+  "status": "prepared_full200_awaiting_exact_cpu_allocation_approval",
+  "manual_review_required": false,
+  "resources": {
+    "gpus": 0,
+    "cpus": 8,
+    "memory_gib": 32,
+    "hours": 2,
+    "browser_workers": 8
+  },
+  "urls": 200,
+  "pae_urls": 76,
+  "insta_sample_urls": 124,
+  "covered_candidate_tasks": 58982,
+  "coverage_by_source": {
+    "insta-v3": 256,
+    "pae-webvoyager": 58726
+  },
+  "total_unique_start_urls": 125761,
+  "source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-mixed-reweight-replay-20260928-v1",
+  "manifest_sha256": "31e67679914c4a4293efa9367b603887fdf3ff801de8a065294170022e02fbee",
+  "checker_sha256": "72e21886f3de038d5cfcd6f7ad0795720df570e9afa2c56310640b37cc104a5e",
+  "cpu_unit_tests": 9,
+  "smoke": {
+    "urls": 3,
+    "attempts": 4,
+    "counts": {
+      "inconclusive": 1,
+      "page_available": 2
+    },
+    "results": [
+      {
+        "url": "https://adele.com",
+        "decision": "inconclusive",
+        "attempts": 2,
+        "reasons": [
+          "browser_challenge",
+          "browser_challenge"
+        ],
+        "evidence_verified": true
+      },
+      {
+        "url": "https://halmstad.se",
+        "decision": "page_available",
+        "attempts": 1,
+        "reasons": [
+          "rendered_content"
+        ],
+        "evidence_verified": true
+      },
+      {
+        "url": "https://solucalc.com",
+        "decision": "page_available",
+        "attempts": 1,
+        "reasons": [
+          "rendered_content"
+        ],
+        "evidence_verified": true
+      }
+    ],
+    "environment": "Sequential local login-host smoke; production checks must run on a compute node."
+  },
+  "interpretation": "Initial-page availability only; shared URL evidence does not verify individual task targets or solvability.",
+  "uses_model_api": false,
+  "uses_stealth_provider": false,
+  "blacklist": {
+    "unique_hosts": 78,
+    "already_quarantined_tasks": 27955,
+    "upstream_commit": "9a120949aca3e58a2628f4b4e6edd0474d984873"
+  },
+  "prepared_epoch": 1790738267.846428
+}
