@@ -66,6 +66,52 @@ final durable checkpoint must pass artifact checks before completion. The
 approved16h cap includes failed attempts; no automatic budget extension.
 The running335681 controller and its scientific settings remain unchanged.
 
+<a id="arm-mixed-pair-to90-20260930"></a>
+### Mixed-only bonus and reweight: prepared continuation through90 — September30
+
+The user requested continuing both existing mixed-only relaxed-B lineages to90.
+This is an unchanged continuation, preserving their original iteration0 start,
+model, optimizer, scheduler, task cursor, training data and W&B identities.
+Reweight60 is independently complete (814 Adam updates); bonus337983 has saved58
+(762 updates) and is collecting59 under its existing approval. Finish its60
+checkpoint/evaluation before advancing. Do not overlap writers or reuse
+released budgets from the previous endpoint.
+
+Full300 OM2W evaluations are due at70,80,90, using local browsers,
+GPT-4.1/action_history,T0,4096 response tokens and30 turns. Save every rollout
+and verdict, report overall/valid-only rates plus the fixed100 extraction, and
+use `openwebrl-evals`. The controller owns and awaits each stage and skips only
+verified existing cohorts. Compare matched checkpoints, including the70/80/90
+mean as a descriptive checkpoint aggregate, not independent training seeds.
+
+| Lineage | Recent iteration mean | Expected additional walltime including evals/startup | Proposed additional cap | Allocation split |
+| --- | ---: | --- | --- | --- |
+| Mixed-only bonus + relaxed B |47.61min |26–29h |8 H200 ×32h |24h, then up to8h |
+| Mixed-only reweight + relaxed B |37.72min |21–23h |8 H200 ×24h |Up to24h |
+
+Each allocation uses64 CPUs/960GiB, normal QoS, TP2/DP4,microbatch1,
+global batch256,PPO2,64 browsers and the48GiB cache guard. Preserve min2 gate,
+response-index credit,K5,q20%,beta0.5,lambda0.5 and zero auxiliary all-failure
+groups. Expected walltimes use the latest ten complete non-evaluation checkpoint
+intervals; recent full300 evaluations take27–32min. Caps include restoration,
+evaluations and every retry; stop and release GPUs when the endpoint is verified.
+The total requested additional cap is448 H200-hours. The bonus estimate begins
+at60; its existing337983 allocation currently covers58→60. If that predecessor
+ends partial, the new controller must finish any missing60 stage first.
+
+**Prepared, exact resource approval pending; no new allocation submitted.**
+The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
+running to60 controller. Nine regression tests cover milestone ordering,
+retry-budget accounting, missing resource approval, inherited cohort lineage,
+state preservation and the shared execution lock that rejects an overlapping
+old/new writer. Both native argument/storage preflights and evaluation project,
+cohort-size and rollout-persistence checks passed. Every paid attempt still
+requires actual GPU model/optimizer restoration before useful training.
+Prepared plans, fingerprints and the unapproved resource proposal are in runtime
+`arm-turn-bonus-preparation/mixed-reweight-20260927/to90-20260930/`.
+After exact approval, launch reweight immediately and queue bonus behind337983;
+register all IDs and count consumed time separately for each new cap.
+
 <a id="arm-mixed-pair-to60-20260928"></a>
 **September30 completion update:** reweight reached durable60/native59 with814
 Adam updates, completed all six full300 evaluations10/20/30/40/50/60, and exited
@@ -7848,6 +7894,29 @@ Runtime manifest, task dispositions, per-attempt screenshots/DOM/text and review
 `task-pool-expansion-20260922/curation-v3-20260929/live-browser-20260929/`.
 
 <a id="arm-task-pool-live-browser-full-20260929"></a>
+
+**Completed and independently verified September30:** all125,761 exact start URLs
+(200 pilot plus125,561 new) and their184,546 task mappings passed artifact,
+source/manifest identity and accounting checks. All four CPU jobs released.
+
+| Initial-page classification | Unique URLs | Associated candidate tasks |
+| --- | ---: | ---: |
+| Available |96,779 |155,512 |
+| Inconclusive |21,328 |21,375 |
+| Unavailable after retry |7,654 |7,659 |
+| Total |125,761 |184,546 |
+
+These are page-availability labels only: instruction quality and five-valid-failure
+actor difficulty remain unassessed. No training-pool changes were made.
+The final auditor now matches the frozen classifier for image-only pages with
+at least three visible interactive elements and preserves literal line endings
+when checking text; positive/negative evidence checks passed. All saved PNG/DOM/
+text evidence, decisions, task IDs and the final mapping hash were checked.
+[Aggregate audit](arm_results/rl_integration/task-pool-live-browser-full-audit-20260930.json).
+Runtime `live-browser-full-20260929/task-dispositions.jsonl` maps every task to
+its exact URL evidence. Raw page artifacts and task mapping remain private.
+
+
 ### Full retained-pool browser coverage — September29
 
 **Approved and running:** extend the same browser checks to all125,761 exact

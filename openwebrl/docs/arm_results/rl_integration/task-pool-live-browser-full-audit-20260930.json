@@ -1,0 +1,132 @@
+{
+  "epoch": 1790785885.2887833,
+  "verified_complete": true,
+  "mode": "complete",
+  "manifest_urls": 125761,
+  "manifest_tasks": 184546,
+  "url_artifacts_audited": 125761,
+  "url_counts": {
+    "inconclusive": 21328,
+    "page_available": 96779,
+    "unavailable_after_retry": 7654
+  },
+  "task_counts": {
+    "inconclusive": 21375,
+    "page_available": 155512,
+    "unavailable_after_retry": 7659
+  },
+  "infrastructure_attempts": 0,
+  "shards": {
+    "pilot": {
+      "urls_audited": 200,
+      "counts": {
+        "inconclusive": 32,
+        "page_available": 160,
+        "unavailable_after_retry": 8
+      },
+      "accounting": [
+        {
+          "job_id": "337474",
+          "state": "COMPLETED",
+          "elapsed_seconds": 266,
+          "exit_code": "0:0",
+          "resources": "billing=8,cpu=8,mem=32G,node=1"
+        }
+      ]
+    },
+    "shard0": {
+      "urls_audited": 31391,
+      "counts": {
+        "page_available": 24133,
+        "inconclusive": 5314,
+        "unavailable_after_retry": 1944
+      },
+      "accounting": {
+        "attempts": [
+          {
+            "job_id": "337489",
+            "state": "COMPLETED",
+            "seconds": 39255,
+            "exit_code": "0:0",
+            "resources": "billing=8,cpu=8,mem=32G,node=1"
+          }
+        ],
+        "consumed_seconds": 39255,
+        "approved_seconds": 46800,
+        "unused_seconds_released": 7545
+      }
+    },
+    "shard1": {
+      "urls_audited": 31390,
+      "counts": {
+        "unavailable_after_retry": 1846,
+        "page_available": 24273,
+        "inconclusive": 5271
+      },
+      "accounting": {
+        "attempts": [
+          {
+            "job_id": "337490",
+            "state": "COMPLETED",
+            "seconds": 39404,
+            "exit_code": "0:0",
+            "resources": "billing=8,cpu=8,mem=32G,node=1"
+          }
+        ],
+        "consumed_seconds": 39404,
+        "approved_seconds": 46800,
+        "unused_seconds_released": 7396
+      }
+    },
+    "shard2": {
+      "urls_audited": 31390,
+      "counts": {
+        "page_available": 24118,
+        "inconclusive": 5320,
+        "unavailable_after_retry": 1952
+      },
+      "accounting": {
+        "attempts": [
+          {
+            "job_id": "337491",
+            "state": "COMPLETED",
+            "seconds": 38697,
+            "exit_code": "0:0",
+            "resources": "billing=8,cpu=8,mem=32G,node=1"
+          }
+        ],
+        "consumed_seconds": 38697,
+        "approved_seconds": 46800,
+        "unused_seconds_released": 8103
+      }
+    },
+    "shard3": {
+      "urls_audited": 31390,
+      "counts": {
+        "page_available": 24095,
+        "inconclusive": 5391,
+        "unavailable_after_retry": 1904
+      },
+      "accounting": {
+        "attempts": [
+          {
+            "job_id": "337492",
+            "state": "COMPLETED",
+            "seconds": 38664,
+            "exit_code": "0:0",
+            "resources": "billing=8,cpu=8,mem=32G,node=1"
+          }
+        ],
+        "consumed_seconds": 38664,
+        "approved_seconds": 46800,
+        "unused_seconds_released": 8136
+      }
+    }
+  },
+  "interpretation": "Initial-page availability only; instruction quality and actor difficulty are not established. No training-pool modification.",
+  "pilot_audit_sha256": "9d126e00baef53ac684ab477e6275707107886959d2dfc6e195d593f3435a054",
+  "task_dispositions_sha256": "8abab209dde57477c9f39c94c15efd66e125b47357a27c602c6c79c6f330acd7",
+  "independent_task_mapping_rechecked": true,
+  "review_epoch": 1790786310.6288834,
+  "auditor_repairs": "Match original classifier: empty body text is permitted with>=3visible interactive elements and saved DOM/PNG. Check saved text without newline normalization. Negative evidence checks passed."
+}

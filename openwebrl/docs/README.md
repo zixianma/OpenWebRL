@@ -23,6 +23,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 [Historical Gate B training100 and full300 evaluation verified; allocation released](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
+[Mixed-only pair to90 prepared: unchanged recipes, full300 at70/80/90; proposed bonus8H200×32h and reweight8H200×24h, exact resource approval pending](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930).
 [Mixed-only pair to60 submitted: reweight335697→335698; bonus335699→335700 after335682; full300 every10, approved additional8 H200 ×48h per variant](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Review: proposed outcome-supervised reward versus ORM, PRIME and SelectionARM—input/label/loss table, diagram, credit-assignment example and open alternative](ARM_INTEGRATION_PLAN.md#arm-outcome-orm-prime-comparison).
@@ -37,7 +38,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Interactive manual review:10 paired cached cases,65 additional Jev cases,12 unlabeled broad-pool examples; model reveal and JSON export](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Full retained-pool browser checks running337489–337492:125,561 new URLs plus200 reused;4 CPU-only jobs,13h cap each](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-full-20260929).
+[Full browser availability audit complete:96,779 available URLs covering155,512 candidate tasks;21,328 inconclusive and7,654 unavailable URLs; instruction quality/actor difficulty still unassessed](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-full-20260929).
 [Browser-first pilot337474 verified:160/200 URLs available,32 inconclusive,8 unavailable;58,892 candidate tasks share available pages;4m26s CPU-only](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-first-20260929).
 [Final three-repeat stealth90 means: baseline55.22 ±2.14%, Additive58.44 ±1.35%, Gate B58.78 ±3.89% overall; all nine cohorts verified, valid-only rates and denominators included](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930).
 [WebVoyager595 iteration90 complete: baseline66.89% /68.27%, Additive64.37% /65.03%, Gate B67.06% /67.86% overall/valid-only; all archives verified; browser charges$7.11](ARM_RESULTS.md#arm-webvoyager90-results-20260930).

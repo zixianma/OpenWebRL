@@ -192,7 +192,9 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 
 Reweight completed training60 and all six full300 evaluations: its40/50/60
 average is36.33% overall /47.05% valid-only. Bonus saved58; continuation337983 targets60;
-the matched aggregate comparison awaits its60 evaluation.
+the matched aggregate comparison awaits its60 evaluation. Both lineages are
+[prepared to continue through90](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930),
+with full300 evaluations at70/80/90; additional resource approval is pending.
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
