@@ -1,0 +1,119 @@
+{
+  "checked_epoch": 1790759221.8082323,
+  "verified_complete": true,
+  "endpoint": "Mixed-only outcome reweight + relaxed Gate B from0 through60, full300 local evaluations10/20/30/40/50/60",
+  "final_checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-335698-iter60/runtime/iter_0000059",
+  "completed_iterations": 60,
+  "adam_updates": 814,
+  "scheduler_offset": 0,
+  "checkpoint_metadata_extents_cursor_and_sampled_tensors_verified": true,
+  "final_eval_gpu_restore_verified": true,
+  "milestones": [
+    {
+      "iteration": 10,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration10-audit.json",
+      "audit_sha256": "7c4118b7f6527f737332b209d308ba1d683063400dfab4020d4a6dce69305583",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter10-335697",
+      "successes": 82,
+      "valid": 240,
+      "overall": 0.2733333333333333,
+      "valid_only": 0.3416666666666667,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 20,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration20-audit.json",
+      "audit_sha256": "a163bdd26375f9d7bf5332fdba4dc3662b1a99efe15b04a14224e76dca88cbf3",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter20-335697",
+      "successes": 97,
+      "valid": 227,
+      "overall": 0.3233333333333333,
+      "valid_only": 0.42731277533039647,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 30,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration30-audit.json",
+      "audit_sha256": "cfd750a410e5f9ad428a9f902cf9d8dfa3a5d70e4c93d04e86c46f17737434a3",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter30-335697",
+      "successes": 90,
+      "valid": 219,
+      "overall": 0.3,
+      "valid_only": 0.410958904109589,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 40,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration40-audit.json",
+      "audit_sha256": "ea40bbb57830c0adcd204313c22e0431c66acb691d43f537e7958abd1fa74137",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter40-335698",
+      "successes": 106,
+      "valid": 225,
+      "overall": 0.35333333333333333,
+      "valid_only": 0.4711111111111111,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 50,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration50-audit.json",
+      "audit_sha256": "37c46971c93db425a369c84f4bf64a0d33d0ea858a3739b588e8c85d50d78670",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter50-335698",
+      "successes": 111,
+      "valid": 237,
+      "overall": 0.37,
+      "valid_only": 0.46835443037974683,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 60,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration60-audit.json",
+      "audit_sha256": "4f1b08c9a64e8e6540076d48213a55a092b32a9455aa0da834d156148c94c90d",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter60-335698",
+      "successes": 110,
+      "valid": 233,
+      "overall": 0.36666666666666664,
+      "valid_only": 0.4721030042918455,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    }
+  ],
+  "saved_task_records": 1800,
+  "saved_archives": 1800,
+  "training_wandb_finished": true,
+  "eval60_wandb_finished": true,
+  "all_attempts": [
+    {
+      "job_id": "335697",
+      "state": "COMPLETED",
+      "elapsed_seconds": 80712,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "335698",
+      "state": "COMPLETED",
+      "elapsed_seconds": 59890,
+      "exit_code": "0:0"
+    }
+  ],
+  "approved_extension_seconds": 172800,
+  "consumed_extension_seconds": 140602,
+  "unused_extension_seconds_released": 32198,
+  "consumed_extension_gpu_hours": 312.4488888888889,
+  "original8h_budget_separate": true,
+  "predefined_late_checkpoint_average": {
+    "iterations": [
+      40,
+      50,
+      60
+    ],
+    "overall": 0.36333333333333334,
+    "valid_only": 0.4705228485942345,
+    "interpretation": "Mean across training checkpoints, not independent replicates; matched bonus40/50/60 comparison awaits bonus60."
+  },
+  "no_further_job_needed_for_this_endpoint": true
+}

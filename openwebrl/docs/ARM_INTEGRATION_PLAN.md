@@ -67,6 +67,15 @@ approved16h cap includes failed attempts; no automatic budget extension.
 The running335681 controller and its scientific settings remain unchanged.
 
 <a id="arm-mixed-pair-to60-20260928"></a>
+**September30 completion update:** reweight reached durable60/native59 with814
+Adam updates, completed all six full300 evaluations10/20/30/40/50/60, and exited
+successfully. Eval60 is36.67% overall /47.21% valid-only (110/233/300); all1,800
+rollout/verdict pairs are retained. Extension attempts335697/335698 consumed
+140,602/172,800 seconds; the allocation was released with32,198 seconds unused.
+The original8h scope is separate. Bonus335700 continues toward60 with its own
+remaining budget; its milestone50 is38.67% /49.57%. The matched40/50/60
+comparison awaits bonus60. [Endpoint audit](arm_results/rl_integration/mixed-reweight-to60-completion.json).
+
 **Mixed-only pair to60 — requested September28:** continue both the
 **mixed-only bonus + relaxed B** and **mixed-only outcome reweighting + relaxed B**
 experiments to iteration60. This extends their requested endpoint, preserving

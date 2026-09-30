@@ -47,7 +47,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Mixed-only iteration20 full300: bonus30.67% /40.89%; reweight32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 [Mixed-only iteration30 full300: bonus32.00% /42.11% (228 valid); reweight30.00% /41.10% (219 valid); both300-task cohorts and archives verified](ARM_RESULTS.md#arm-mixed-pair-iter30-results-20260929).
 [Mixed-only iteration40 full300: bonus33.33% /43.86% (228 valid), reweight35.33% /47.11% (225 valid); all archives/verdicts verified, both continue toward60](ARM_RESULTS.md#arm-mixed-pair-iter40-results-20260929).
-[Mixed-only iteration50 complete: bonus38.67% /49.57% (234 valid), reweight37.00% /46.84% (237 valid); reweight60 saved and evaluating, bonus training toward60](ARM_RESULTS.md#arm-mixed-pair-iter50-results-20260929).
+[Mixed-only reweight60 complete:36.67% /47.21% full300 (233 valid), fixed10034.00% /44.74%; all six milestones and final checkpoint verified, GPU allocation released; bonus continues toward60](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

@@ -45,6 +45,7 @@
 |  |30 |90 |219 |81 |30.00 |41.10 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) |
 |  |40 |106 |225 |75 |35.33 |47.11 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration40-audit.json) |
 |  |50 |111 |237 |63 |37.00 |46.84 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration50-audit.json) |
+|  |60 |110 |233 |67 |36.67 |47.21 |[September30 audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) |
 
 ## Stealth browser · GPT-4.1 · temperature 0 · full 300
 

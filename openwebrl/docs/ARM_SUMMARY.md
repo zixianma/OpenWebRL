@@ -188,11 +188,12 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
 |  |40 |33.00% /50.00% |**35.33% /47.11%** |
 |  |50 |33.00% /45.21% |**37.00% /46.84%** |
+|  |60 |34.00% /44.74% |**36.67% /47.21%** |
 
-Both mixed-only runs have verified full300 evaluations through50. At50, bonus
-is1.67pp higher overall than reweight; the predefined40/50/60 aggregate awaits60.
-Reweight has saved60 and started evaluation; bonus continues toward60.
-[Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter50-results-20260929).
+Reweight completed training60 and all six full300 evaluations: its40/50/60
+average is36.33% overall /47.05% valid-only. Bonus continues from51 toward60;
+the matched aggregate comparison awaits its60 evaluation.
+[Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
 the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30
