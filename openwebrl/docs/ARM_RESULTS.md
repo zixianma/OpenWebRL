@@ -4,6 +4,39 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-webvoyager90-results-20260930"></a>
+## WebVoyager: matched iteration90 results — September30
+
+| Method | Iteration | Overall | Valid-only | Successes / valid / total | Overall Δ vs baseline |
+| --- | ---: | ---: | ---: | --- | ---: |
+| Outcome-only baseline |90 |66.89% |68.27% |398 /583 /595 |+0.00 pp |
+| Additive ARM |90 |64.37% |65.03% |383 /589 /595 |-2.52 pp |
+| Gate B |90 |67.06% |67.86% |399 /588 /595 |+0.17 pp |
+
+Actor-only inference on all595 released OpenWebRL/FARA tasks; Browser Use stealth,
+T0.6/p0.95/k20,4096 response tokens,30 turns, and GPT-4o/WebVoyager terminal judge.
+This is the approved WebVoyager protocol; OM2W stealth uses o4-mini/AgentTrek.
+All1,785 task records and paired rollout archives, embedded screenshot evidence,
+native89 GPU restoration, checkpoint counters, final W&B metrics and browser
+cleanup passed independent checks. Invalid attempts remain in the overall denominator.
+
+Gate B has one more success than baseline (+0.17pp overall) and a slightly
+lower valid-only rate; this pass shows no clear WebVoyager gain. Additive is
+−2.52pp overall. These are single evaluations of fixed checkpoints, not
+independent training seeds. The released dataset has53 date-updated instructions
+relative to the paper-pinned version, so absolute scores are not exact paper reproductions.
+
+Browser/proxy charges were$7.11 total: baseline
+$2.33, Additive$2.47,
+Gate B$2.31; balance after completion
+$4.36, zero active sessions. GPU and judge API costs are separate.
+All three GPU allocations were released. Including initial failed startups,
+consumed GPU-hours were5.926,
+6.282, and5.860,
+within the separate12h caps; unspent budgets are released.
+
+[Outcome-only baseline audit](arm_results/rl_integration/webvoyager-gpt4o-t06-baseline-iteration90-audit.json) · [Additive ARM audit](arm_results/rl_integration/webvoyager-gpt4o-t06-additive-iteration90-audit.json) · [Gate B audit](arm_results/rl_integration/webvoyager-gpt4o-t06-gate-b-iteration90-audit.json).
+
 <a id="arm-stealth90-o4-three-repeat-summary-20260930"></a>
 ## Iteration90 stealth: final three-repeat comparison — September30
 

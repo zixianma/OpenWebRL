@@ -7225,6 +7225,11 @@ completion. Plans and the exact request are in runtime
 <a id="arm-webvoyager90-stealth-20260929"></a>
 ### September29: matched WebVoyager evaluation prepared
 
+**Completed September30:** all three595-task cohorts independently verified;
+baseline66.89% /68.27%, Additive64.37% /65.03%, Gate B67.06% /67.86%
+overall/valid-only. Allocations and browser sessions released; browser cost$7.11.
+[Final methods, results and caveats](ARM_RESULTS.md#arm-webvoyager90-results-20260930).
+
 **September30 handoff:** all nine OM2W cohorts are independently verified;
 [three-repeat results](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930)
 were reported before releasing the user-requested review holds on337217–337219.

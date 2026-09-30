@@ -91,11 +91,23 @@
 | 80 | 0.6 | 300 / 300 | 169 | 296 | 4 | 56.33 | 57.09 | Original |
 | 90 | 0.6 | 300 / 300 | 171 | 296 | 4 | 57.00 | 57.77 | Original |
 
+## WebVoyager · stealth · GPT-4o · temperature0.6 ·595 tasks
+
+| Method | Iteration | Overall | Valid-only | Successes / valid / total | Overall Δ vs baseline |
+| --- | ---: | ---: | ---: | --- | ---: |
+| Outcome-only baseline |90 |66.89% |68.27% |398 /583 /595 |+0.00 pp |
+| Additive ARM |90 |64.37% |65.03% |383 /589 /595 |-2.52 pp |
+| Gate B |90 |67.06% |67.86% |399 /588 /595 |+0.17 pp |
+
+| Sources |
+| --- |
+| [Outcome-only baseline audit](arm_results/rl_integration/webvoyager-gpt4o-t06-baseline-iteration90-audit.json) · [Additive ARM audit](arm_results/rl_integration/webvoyager-gpt4o-t06-additive-iteration90-audit.json) · [Gate B audit](arm_results/rl_integration/webvoyager-gpt4o-t06-gate-b-iteration90-audit.json) |
+
 ## Metric denominators
 
 | Metric | Calculation |
 | --- | --- |
-| Overall % | 100 × successes / 300 |
+| Overall % | 100 × successes / cohort size (OM2W300; WebVoyager595) |
 | Valid-only % | 100 × successes / valid tasks |
 | Completed-only % | 100 × successes / completed tasks |
 | Checkpoint 58 · merged attempts | 290 original valid + 10 retries; 0 missing |

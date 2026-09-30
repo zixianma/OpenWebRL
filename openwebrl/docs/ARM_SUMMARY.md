@@ -191,7 +191,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |60 |34.00% /44.74% |**36.67% /47.21%** |
 
 Reweight completed training60 and all six full300 evaluations: its40/50/60
-average is36.33% overall /47.05% valid-only. Bonus continues from51 toward60;
+average is36.33% overall /47.05% valid-only. Bonus saved58; continuation337983 targets60;
 the matched aggregate comparison awaits its60 evaluation.
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
@@ -237,6 +237,19 @@ so a consistent gain over outcome-only RL is not yet established.
 <a id="all-failure-arm-full-300-curve"></a>
 [Detailed analysis, coverage audits, examples and provenance](ARM_RESULTS.md#arm-online-rl-analysis-20260922)
 · [Evaluation records](RL_EVALUATION.md#arm-iteration-19-evaluations-20260915).
+
+**WebVoyager, iteration90 — September30:** stealth, actor T0.6, GPT-4o/WebVoyager,
+all595 tasks; one evaluation per fixed checkpoint.
+
+| Method | Overall | Valid-only (valid denominator) |
+| --- | ---: | ---: |
+| Outcome-only baseline |66.89% |68.27% (583) |
+| Additive ARM |64.37% |65.03% (589) |
+| Gate B |67.06% |67.86% (588) |
+
+Gate B is effectively tied with baseline on this pass; Additive is lower.
+The53 date-updated instructions limit exact comparison with paper scores.
+[Audited results and protocol](ARM_RESULTS.md#arm-webvoyager90-results-20260930).
 
 ## Overall takeaway
 

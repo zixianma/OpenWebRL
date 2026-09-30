@@ -1,0 +1,74 @@
+{
+  "verified": true,
+  "agent_reviewed": true,
+  "review_epoch": 1790784997.7197943,
+  "method": "baseline",
+  "job_id": "337930",
+  "iteration": 90,
+  "tasks": 595,
+  "successes": 398,
+  "valid": 583,
+  "invalid": 12,
+  "overall": 0.66890756302521,
+  "valid_only": 0.6826758147512865,
+  "saved_rollouts": 595,
+  "saved_task_records": 595,
+  "embedded_image_strings": 4547,
+  "valid_terminal_statuses": {
+    "completed": 560,
+    "truncated": 17,
+    "failed": 6
+  },
+  "protocol_validation": {
+    "tasks": 595,
+    "task_sha256": "ac9253317b76884abbd8d89e9b02570f3f4fbf18e428c335bc8761d778c6fe68",
+    "judge_sha256": "433b946f79f5df2b73fffc3068ac4b8453dcb835210d299cce9b2adcea7368dd",
+    "sampling": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20,
+      "max_new_tokens": 4096,
+      "repetition_penalty": 1.0
+    },
+    "max_steps": 30,
+    "judge_max_images": 30
+  },
+  "protocol": "Actor-only iteration90; Browser Use stealth; GPT-4o/WebVoyager; T0.6 p0.95 k20; 4096 tokens; 30 turns; released FARA595",
+  "checkpoint": "runs/openwebrl-4b-reference-294421-20260913T211532/iter_0000089",
+  "completed_optimizer_updates": 1016,
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/webvoyager90-gpt4o-t06-baseline-r1-337930",
+  "accounting": [
+    {
+      "job_id": "337217",
+      "state": "FAILED",
+      "elapsed_seconds": 257,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "337930",
+      "state": "COMPLETED",
+      "elapsed_seconds": 21078,
+      "exit_code": "0:0"
+    }
+  ],
+  "approved_seconds": 43200,
+  "total_consumed_seconds": 21335,
+  "unused_seconds_released": 21865,
+  "checks": {
+    "exact595_task_ids": true,
+    "all_paired_archives_metadata_readable": true,
+    "completed_valid_tasks_have_images": true,
+    "no_credit_exhaustion_metadata": true,
+    "per_task_judge_identity": true,
+    "metrics_recomputed": true,
+    "checkpoint_metadata_counters_extents_cpu_samples": true,
+    "native89_gpu_restore": true,
+    "all_owned_browser_sessions_closed": true,
+    "wandb_finished_and_matching": true,
+    "final_scheduler_success": true,
+    "all_attempt_time_accounted": true
+  },
+  "dataset_caveat": "Released OpenWebRL/FARA595 tasks;53 date-updated instructions versus paper-pinned version. One evaluation pass per fixed checkpoint, not independent training seeds.",
+  "archive_check_scope": "All ZIP metadata/data.pkl read; sample checkpoint tensors. Not a full-byte CRC scan of every tensor member.",
+  "root": "evaluations/webvoyager90-gpt4o-t06-baseline-r1-337930"
+}
