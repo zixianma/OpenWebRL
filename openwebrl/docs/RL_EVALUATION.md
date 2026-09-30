@@ -235,7 +235,8 @@ Every submitted/replacement job is registered with the active ARM supervisor.
 
 Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10,
 20 and30; both30 evaluations completed September29. Reweight40 completed in335698
-on September29, restoring `iter_0000039` at564 Adam updates. Bonus40 remains pending.
+on September29, restoring `iter_0000039` at564 Adam updates. Bonus40 completed in
+335700 the same day, restoring native39 at548 Adam updates.
 Their controllers own training
 continuation after evaluation. Native checkpoints are `iter_0000009` for10, `iter_0000019` for20 and
 `iter_0000029` for30. All use the
@@ -249,16 +250,25 @@ final metrics were independently checked.
 | Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67% |39.32% |31 /75 |
 |  |20 |92 |225 |75 |30.67% |40.89% |30 /69 |
 |  |30 |96 |228 |72 |32.00% |42.11% |29 /74 |
+|  |40 |100 |228 |72 |33.33% |43.86% |32 /73 |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 |  |30 |90 |219 |81 |30.00% |41.10% |28 /64 |
 |  |40 |106 |225 |75 |35.33% |47.11% |33 /66 |
 
+Bonus40's fixed100 slice is32.00% /43.84%. Full300 overall rises1.33pp from30,
+with228 valid tasks in both cohorts. All300 expected task IDs, archive pairs,
+judge identities, final W&B history and native39 restore were verified. The
+checkpoint's16 shard extents, dataset cursor,548 Adam/scheduler counters and
+sampled small CPU tensor payloads passed checks. This is not a full bytewise
+CRC scan of every rollout archive. The controller owns training toward50 next.
+[Independent bonus40 audit](arm_results/rl_integration/mixed-bonus-iteration40-audit.json).
+
 Reweight40's fixed100 slice is33.00% /50.00%. Full300 overall rises5.33pp from30,
 with219→225 valid tasks; valid-only rises6.02pp. Historical baseline40 has100
 successes and231 valid tasks (33.33% /43.29%). These differing-date results are
-descriptive; the matched bonus40 evaluation and the predefined40/50/60 aggregate
-remain outstanding. Independent inspection verified exactly300 expected unique
+descriptive. Reweight exceeds bonus40 by2.00pp overall; the predefined40/50/60
+aggregate remains outstanding. Independent inspection verified exactly300 expected unique
 task IDs, all nonempty ZIP archives, GPT-4.1/action_history verdict identities,
 temperature0 config, native iteration39 restoration and final W&B history.
 The durable checkpoint's16 shards, metadata and cursor passed checks, and its

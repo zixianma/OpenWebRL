@@ -1,0 +1,52 @@
+{
+  "method": "mixed-only bonus + relaxed B",
+  "iteration": 40,
+  "job": "335700",
+  "full300": {
+    "tasks": 300,
+    "successes": 100,
+    "valid": 228,
+    "invalid": 72,
+    "overall": 0.3333333333333333,
+    "valid_only": 0.43859649122807015,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter40-335700/rollouts",
+    "iteration": 40,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-335700-iter40/runtime/iter_0000039",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter40-335700"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 32,
+    "valid": 73,
+    "invalid": 27,
+    "overall": 0.32,
+    "valid_only": 0.4383561643835616,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "plan_sha256": "020b2ff51dfae3d31df71c3253f7955c8ac46c1afdc8fc0f10bc3d9e5e08781c",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "checkpoint_adam_updates": 548,
+  "checked_epoch": 1790727121.2409637,
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 39,
+    "completed_training_iteration": 40,
+    "adam_updates": 548
+  },
+  "wandb_history_verified": true,
+  "archive_verification": "All300 nonempty ZIP central directories and serialized payload entries; not full bytewise CRC scan."
+}

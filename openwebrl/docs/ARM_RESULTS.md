@@ -94,8 +94,7 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter40-results-20260929"></a>
 ## Mixed-only relaxed-B pair: iterations10–40 — September28–29
 
-Both fresh-from0 runs completed full300 evaluations at10,20 and30; reweight40
-is also complete, while bonus40 is pending.
+Both fresh-from0 runs completed full300 evaluations at10,20,30 and40.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -110,16 +109,24 @@ trajectory-mean-one weighting with lambda=.5.
 | Mixed-only bonus + relaxed B |10 |31.00% /41.33% |30.67% /39.32% |234 |
 |  |20 |30.00% /43.48% |30.67% /40.89% |225 |
 |  |30 |29.00% /39.19% |32.00% /42.11% |228 |
+|  |40 |32.00% /43.84% |33.33% /43.86% |228 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
 |  |40 |33.00% /50.00% |35.33% /47.11% |225 |
 
+Bonus40 has100 successes and228 valid tasks; fixed100 has32 successes and73
+valid tasks. Overall improves1.33pp from30 and matches historical baseline40's
+33.33%, with three fewer valid tasks. All300 archived rollouts/verdicts, native
+checkpoint39 restoration at548 Adam updates and final W&B history were checked.
+The controller resumed training toward50 in the same allocation.
+
 Reweight40 has106 successes and225 valid tasks; fixed100 has33 successes and66
 valid tasks. Relative to30, overall improves5.33pp and valid-only6.02pp.
 Historical baseline40 is33.33% /43.29%, giving a descriptive+2.00pp overall
-difference; dates and valid-task sets differ. Bonus40 is not yet available, so
-the matched objective comparison remains pending. The predefined primary
+difference; dates and valid-task sets differ. Reweight40 is also2.00pp above
+bonus40 overall and3.25pp above valid-only. These are descriptive single-cohort
+differences; valid-task sets differ. The predefined primary
 comparison remains mean overall success across40/50/60, not the best checkpoint.
 All300 archives/verdicts, native checkpoint39 restoration at564 Adam updates and
 final W&B history were verified; the same allocation resumed toward50.
@@ -147,7 +154,7 @@ slice has30 successes and69 valid tasks. Reweight20 is1.67pp above bonus20 overa
 and valid-task sets limit comparisons; these single-run differences do not
 establish superiority or significance.
 
-All2,100 rollout/verdict pairs and nonempty ZIP archives across the seven new
+All2,400 rollout/verdict pairs and nonempty ZIP archives across the eight new
 cohorts passed inspection. Cohort membership, judge settings, checkpoint lineage
 and temperature were checked. Both controllers continue training and own later
 evaluations through60.
@@ -155,6 +162,7 @@ evaluations through60.
 [Bonus10 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) ·
 [Bonus20 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) ·
 [Bonus30 audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) ·
+[Bonus40 audit](arm_results/rl_integration/mixed-bonus-iteration40-audit.json) ·
 [Reweight10 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) ·
 [Reweight20 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) ·
 [Reweight30 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) ·
