@@ -1,0 +1,159 @@
+{
+  "protocol": {
+    "benchmark": "Online-Mind2Web",
+    "tasks": 300,
+    "browser": "local",
+    "judge": "GPT-4.1",
+    "temperature": 0
+  },
+  "metrics": {
+    "overall": "successes / 300",
+    "valid_only": "successes / valid_tasks"
+  },
+  "limitation": "Historical evaluations from different dates with different valid-task sets; no paired significance claim.",
+  "series": {
+    "outcome_only": [
+      {
+        "iteration": 20,
+        "successes": 95,
+        "valid_tasks": 232
+      },
+      {
+        "iteration": 30,
+        "successes": 96,
+        "valid_tasks": 248
+      },
+      {
+        "iteration": 40,
+        "successes": 100,
+        "valid_tasks": 231
+      },
+      {
+        "iteration": 50,
+        "successes": 105,
+        "valid_tasks": 234
+      },
+      {
+        "iteration": 60,
+        "successes": 105,
+        "valid_tasks": 230
+      },
+      {
+        "iteration": 70,
+        "successes": 103,
+        "valid_tasks": 229
+      },
+      {
+        "iteration": 80,
+        "successes": 114,
+        "valid_tasks": 229
+      },
+      {
+        "iteration": 90,
+        "successes": 101,
+        "valid_tasks": 222
+      }
+    ],
+    "all_failure": [
+      {
+        "iteration": 20,
+        "successes": 90,
+        "valid_tasks": 222
+      },
+      {
+        "iteration": 30,
+        "successes": 107,
+        "valid_tasks": 225
+      },
+      {
+        "iteration": 40,
+        "successes": 92,
+        "valid_tasks": 222
+      },
+      {
+        "iteration": 50,
+        "successes": 113,
+        "valid_tasks": 233
+      },
+      {
+        "iteration": 60,
+        "successes": 100,
+        "valid_tasks": 229
+      },
+      {
+        "iteration": 70,
+        "successes": 106,
+        "valid_tasks": 233
+      },
+      {
+        "iteration": 80,
+        "successes": 92,
+        "valid_tasks": 218
+      },
+      {
+        "iteration": 90,
+        "successes": 101,
+        "valid_tasks": 217
+      }
+    ],
+    "additive": [
+      {
+        "iteration": 20,
+        "successes": 85,
+        "valid_tasks": 236
+      },
+      {
+        "iteration": 30,
+        "successes": 103,
+        "valid_tasks": 219
+      },
+      {
+        "iteration": 40,
+        "successes": 102,
+        "valid_tasks": 218
+      },
+      {
+        "iteration": 50,
+        "successes": 98,
+        "valid_tasks": 212
+      },
+      {
+        "iteration": 60,
+        "successes": 90,
+        "valid_tasks": 215
+      },
+      {
+        "iteration": 70,
+        "successes": 112,
+        "valid_tasks": 222
+      },
+      {
+        "iteration": 80,
+        "successes": 111,
+        "valid_tasks": 212
+      },
+      {
+        "iteration": 90,
+        "successes": 118,
+        "valid_tasks": 216
+      }
+    ],
+    "original": [
+      {
+        "iteration": 51,
+        "successes": 102,
+        "valid_tasks": 223
+      },
+      {
+        "iteration": 70,
+        "successes": 103,
+        "valid_tasks": 231
+      },
+      {
+        "iteration": 80,
+        "successes": 100,
+        "valid_tasks": 222
+      }
+    ]
+  }
+}

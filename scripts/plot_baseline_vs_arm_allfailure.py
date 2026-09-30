@@ -59,3 +59,7 @@ order=list(range(0,len(handles),2))+list(range(1,len(handles),2))
 ax.legend([handles[i] for i in order],[labels[i] for i in order],frameon=True,loc='upper center',bbox_to_anchor=(.5,-.12),ncol=2,fontsize=8)
 ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
 fig.tight_layout(); out.parent.mkdir(parents=True,exist_ok=True); fig.savefig(out,bbox_inches='tight'); print(out)
+
+# Keep the downloadable interactive companion current with each plot refresh.
+from plot_arm_interactive import main as write_interactive
+write_interactive()

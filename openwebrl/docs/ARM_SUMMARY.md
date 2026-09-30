@@ -213,6 +213,11 @@ success; teacher action consistency is58% under reversed-order re-query.
 <a id="baseline-comparison"></a>
 ![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
 
+[**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
+Download the HTML and open it in a browser; it works offline. GitHub shows its source
+rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
+original bonus starts hidden. Stealth results remain separate below.
+
 **Matched stealth, three evaluations per iteration90 checkpoint — September29–30.**
 Same300 tasks, actor-only inference; o4-mini/AgentTrek, T0.6/p0.95/k20,
 4096 tokens and30 turns.
@@ -242,6 +247,9 @@ so a consistent gain over outcome-only RL is not yet established.
 [Detailed analysis, coverage audits, examples and provenance](ARM_RESULTS.md#arm-online-rl-analysis-20260922)
 · [Evaluation records](RL_EVALUATION.md#arm-iteration-19-evaluations-20260915).
 
+<details>
+<summary><strong>WebVoyager evaluation · iteration 90 · full 595</strong></summary>
+
 **WebVoyager, iteration90 — September30:** stealth, actor T0.6, GPT-4o/WebVoyager,
 all595 tasks; one evaluation per fixed checkpoint.
 
@@ -254,6 +262,8 @@ all595 tasks; one evaluation per fixed checkpoint.
 Gate B is effectively tied with baseline on this pass; Additive is lower.
 The53 date-updated instructions limit exact comparison with paper scores.
 [Audited results and protocol](ARM_RESULTS.md#arm-webvoyager90-results-20260930).
+
+</details>
 
 ## Overall takeaway
 
