@@ -1,0 +1,67 @@
+{
+  "root": "evaluations/stealth90-o4-t06-baseline-r3-337132",
+  "iteration": 90,
+  "tasks": 300,
+  "successes": 161,
+  "valid": 286,
+  "invalid": 14,
+  "overall": 0.5366666666666666,
+  "valid_only": 0.5629370629370629,
+  "saved_rollouts": 300,
+  "saved_task_records": 300,
+  "checkpoint": "runs/openwebrl-4b-reference-294421-20260913T211532/iter_0000089",
+  "protocol": "Actor-only iteration90; Browser Use stealth; o4-mini/AgentTrek; T0.6 p0.95 k20; 4096 tokens; 30 turns; full300",
+  "fixed100": {
+    "tasks": 100,
+    "successes": 52,
+    "valid": 96,
+    "invalid": 4,
+    "overall": 0.52,
+    "valid_only": 0.5416666666666666
+  },
+  "task_record_completion_window_epoch": [
+    1790738581.4893868,
+    1790755135.7470212
+  ],
+  "verified": true,
+  "agent_reviewed": true,
+  "review_epoch": 1790755570.245073,
+  "method": "baseline",
+  "repeat": 3,
+  "server_rng_seed": 1236,
+  "job_id": "337132",
+  "checkpoint_index": 89,
+  "completed_optimizer_updates": 1016,
+  "protocol_validation": {
+    "sampling": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20,
+      "max_new_tokens": 4096,
+      "repetition_penalty": 1.0
+    },
+    "judge": "o4-mini",
+    "judge_prompt": "agenttrek",
+    "max_steps": 30,
+    "source_sha256": "2e4008711db4be7cd88ebfde88cee6e32474d43d131cce2fd8f741f04df51a98"
+  },
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "checks": {
+    "unique_expected_ids": true,
+    "all_paired_archives_readable": true,
+    "no_credit_exhaustion_metadata": true,
+    "metrics_recomputed_from_verdicts": true,
+    "correct_per_task_judge": true,
+    "every_valid_task_has_nonempty_judge_text": true,
+    "checkpoint_metadata_extents_cpu_samples": true,
+    "gpu_restore_evidence": true,
+    "wandb_finished_and_history_matches": true,
+    "job_completed_successfully": true
+  },
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-baseline-r3-337132",
+  "elapsed_seconds": 17106,
+  "approved_seconds": 25200,
+  "unused_seconds_released": 8094,
+  "sampling_uncertainty": "Evaluation repeat of the same trained checkpoint; not an independent training seed. This receipt verifies one repeat; compute the three-repeat aggregate only once all cohorts are independently verified.",
+  "private_review_receipt": "evaluations/stealth90-o4-t06-baseline-r3-337132/agent-completion-review.json"
+}

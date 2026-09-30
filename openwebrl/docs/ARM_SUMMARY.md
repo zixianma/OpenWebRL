@@ -219,12 +219,10 @@ success; teacher action consistency is58% under reversed-order re-query.
 All three are verified complete, each with286 valid tasks. Additive is5.33pp
 and Gate B1.00pp higher overall than baseline in this single matched evaluation.
 The cohorts merge preserved pre-outage results with retries of credit-blocked
-tasks only. [Fresh repeat2](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929):
-Gate B is verified at **63.00% overall /65.63% valid-only** (288 valid);
-fixed100 **67.00% /68.37%**. Baseline repeat2 is **57.67% /59.66%** (290 valid),
-fixed100 **58.00% /59.18%**. Additive repeat2 is **58.67% /61.54%** (286 valid),
-fixed100 **61.00% /61.62%**. All second passes are verified; third passes are
-running. Report the three-repeat mean and sample SD after completion.
+tasks only. [All second passes are verified](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929).
+[Third-pass results](ARM_RESULTS.md#arm-stealth90-o4-repeat3-results-20260930):
+Outcome-only baseline **53.67% /56.29%** (286 valid). The remaining cohorts are pending; report
+three-repeat means and sample SD after all three methods are verified.
 This plot retains the first matched pass, rather than selecting the best repeat.
 Diamonds use this corrected protocol; brown
 triangles retain historical baseline58/90 references. Earlier GPT-4.1/T0 ARM

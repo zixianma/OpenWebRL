@@ -78,6 +78,27 @@ gain. Wait for all third passes
 before reporting the planned three-repeat mean and sample standard deviation.
 The plot still shows the matched first pass; it does not select the best repeat.
 
+<a id="arm-stealth90-o4-repeat3-results-20260930"></a>
+### Third evaluation of the same iteration90 checkpoints — September30
+
+Fresh full300 rollouts, server RNG seed1236; unchanged stealth/o4-mini/AgentTrek,
+T0.6/p0.95/k20,4096 tokens and30 turns.
+
+| Method | Iteration | Repeat | Fixed100 overall / valid-only | Full300 overall / valid-only | Successes / valid / total | Audit |
+| --- | ---: | ---: | --- | --- | --- | --- |
+| Outcome-only baseline |90 |3 |52.00% /54.17% |**53.67% /56.29%** |161 /286 /300 |[Verified audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json) |
+| Additive bonus |90 |3 | Pending | Pending | Pending | Collecting or finalizing; not yet independently verified |
+| Gate B: relaxed gate |90 |3 | Pending | Pending | Pending | Collecting or finalizing; not yet independently verified |
+
+Completed rows have independently checked task IDs, paired rollout archives,
+nonempty valid-task judge verdicts, checkpoint restoration, matching W&B metrics
+and successful scheduler exits. All attempts count toward the original7h cap.
+The remaining cohorts are pending; report three-repeat means and sample SD only
+after all three methods are verified. These repeat evaluations of fixed models
+measure evaluation variability, not variation across independent training seeds.
+WebVoyager remains intentionally held for the requested post-OM2W results and
+credit review. The comparison plot still shows the first matched pass.
+
 <a id="arm-stealth90-results-20260929"></a>
 ## ARM iteration90 stealth evaluations — September29
 

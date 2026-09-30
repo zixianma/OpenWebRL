@@ -29,6 +29,14 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 <a id="arm-stealth90-o4-matched-20260929"></a>
 ## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29
 
+<!-- arm-stealth-repeat3-progress-start -->
+**Third-pass verification, September30.** Server RNG seed1236; unchanged matched protocol.
+
+**Outcome-only baseline, repeat3:** **161/300 =53.67% overall**, **161/286 =56.29% valid-only**; fixed100 **52.00% /54.17%** (96 valid). All300 task IDs, archives, valid-task judge texts, frozen protocol, native89 restore and final W&B metrics passed independent checks. Job337132 exited0 after17,106 seconds, releasing8,094 unused seconds. [Audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json).
+
+Other third-pass cohorts are pending. Defer the joint three-repeat mean/SD until all three methods are audited; WebVoyager remains held for the requested post-OM2W review.
+<!-- arm-stealth-repeat3-progress-end -->
+
 **Fresh repeat2, September29:** Gate B90 is independently verified at
 **189/300 =63.00% overall**, **189/288 =65.63% valid-only**; fixed100
 **67/100 =67.00%**, **67/98 =68.37% valid-only**. All300 expected task IDs and
