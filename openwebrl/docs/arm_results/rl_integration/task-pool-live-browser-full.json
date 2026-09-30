@@ -1,0 +1,104 @@
+{
+  "status": "all_four_running_startup_verified",
+  "resources_per_job": {
+    "gpus": 0,
+    "cpus": 8,
+    "memory_gib": 32,
+    "hours": 13,
+    "browser_workers": 8
+  },
+  "jobs": 4,
+  "total_cpu_hours_cap": 416,
+  "total_gpu_hours": 0,
+  "maximum_seconds_per_shard": 46800,
+  "expected_hours_per_job": "11\u201313 after scheduling, extrapolated from200-URL pilot; not guaranteed",
+  "total_urls": 125761,
+  "reused_pilot_urls": 200,
+  "new_urls": 125561,
+  "total_tasks": 184546,
+  "estimated_artifact_gib": 106,
+  "model_api_calls": 0,
+  "stealth_sessions": 0,
+  "procedure": "Same frozen Chromium/source/classifier as pilot; max2 non-infrastructure observations per URL; preserve infrastructure errors and retry only within approved cap.",
+  "submitted": true,
+  "job_ids": [
+    "337489",
+    "337490",
+    "337491",
+    "337492"
+  ],
+  "startup_verified_epoch": 1790741790.3029776,
+  "manifests": [
+    {
+      "shard": 0,
+      "urls": 31391,
+      "sha256": "083595b64aaf23a469078897860ef07f560d9e4a280b6ee2c3bd126977348fa3"
+    },
+    {
+      "shard": 1,
+      "urls": 31390,
+      "sha256": "d94fd87d77fef821f5ae2f2a30112d753d51ca73fc73c6c90f564f0eea6a20d9"
+    },
+    {
+      "shard": 2,
+      "urls": 31390,
+      "sha256": "da83769e87c4f2dbe186f7b38d07856ffcdc90209643e8aaf22b96018ddf5e69"
+    },
+    {
+      "shard": 3,
+      "urls": 31390,
+      "sha256": "e7190308f58ca165de7c43cd235bb5c3c36297d63b74ee8e501d3758c88ae070"
+    }
+  ],
+  "startup_checks": [
+    {
+      "epoch": 1790741788.744828,
+      "job_id": "337489",
+      "shard": 0,
+      "node": "g008",
+      "resources": "cpu=8,mem=32G,node=1,billing=8",
+      "saved_decisions": 43,
+      "available_page_evidence_verified": 34,
+      "browser_infrastructure_errors": 0,
+      "source": "Frozen pilot worker/classifier and browser source",
+      "state": "running_not_complete"
+    },
+    {
+      "epoch": 1790741789.1434379,
+      "job_id": "337490",
+      "shard": 1,
+      "node": "g016",
+      "resources": "cpu=8,mem=32G,node=1,billing=8",
+      "saved_decisions": 44,
+      "available_page_evidence_verified": 34,
+      "browser_infrastructure_errors": 0,
+      "source": "Frozen pilot worker/classifier and browser source",
+      "state": "running_not_complete"
+    },
+    {
+      "epoch": 1790741789.6643345,
+      "job_id": "337491",
+      "shard": 2,
+      "node": "g013",
+      "resources": "cpu=8,mem=32G,node=1,billing=8",
+      "saved_decisions": 37,
+      "available_page_evidence_verified": 30,
+      "browser_infrastructure_errors": 0,
+      "source": "Frozen pilot worker/classifier and browser source",
+      "state": "running_not_complete"
+    },
+    {
+      "epoch": 1790741790.2954872,
+      "job_id": "337492",
+      "shard": 3,
+      "node": "g013",
+      "resources": "cpu=8,mem=32G,node=1,billing=8",
+      "saved_decisions": 51,
+      "available_page_evidence_verified": 45,
+      "browser_infrastructure_errors": 0,
+      "source": "Frozen pilot worker/classifier and browser source",
+      "state": "running_not_complete"
+    }
+  ],
+  "tests_passed": 16
+}

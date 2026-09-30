@@ -7806,6 +7806,61 @@ ARM-based task selection; no new GPU allocation is implied by this CPU pilot.
 Runtime manifest, task dispositions, per-attempt screenshots/DOM/text and review:
 `task-pool-expansion-20260922/curation-v3-20260929/live-browser-20260929/`.
 
+<a id="arm-task-pool-live-browser-full-20260929"></a>
+### Full retained-pool browser coverage — September29
+
+**Approved and running:** extend the same browser checks to all125,761 exact
+normalized start URLs in the184,546-task semantic-survivor pool. Reuse the200
+independently audited pilot URLs; collect the remaining125,561. Released
+blacklist/overlap exclusions remain in force. This covers all retained websites,
+not the excluded raw WebGym pool, and it does not alter any active RL data recipe.
+
+| Shard | Job | Node at startup | New URLs | Resource cap, including retries |
+| --- | --- | --- | ---: | --- |
+|0 |337489 |g008 |31,391 |8 CPUs,32GiB,0 GPUs,13h |
+|1 |337490 |g016 |31,390 |8 CPUs,32GiB,0 GPUs,13h |
+|2 |337491 |g013 |31,390 |8 CPUs,32GiB,0 GPUs,13h |
+|3 |337492 |g013 |31,390 |8 CPUs,32GiB,0 GPUs,13h |
+
+The user approved four parallel CPU jobs after the11–13h estimate. Each uses
+the tested8CPU/32GiB profile and is capped at13h, the communicated upper end;
+the total cap is416 CPU-hours. All attempts count toward the same per-shard cap.
+No GPU/model API/stealth-provider spend. Unused pilot time is not transferred.
+
+The pilot used266 seconds for200 URLs; the124 random InSTA URLs averaged8.98
+browser-worker seconds per URL including retries. Extrapolation suggests about
+11–13h once scheduled and roughly106GiB of page artifacts; the small pilot cannot
+guarantee the runtime or availability rate across the full pool. Each job exits
+when its shard finishes or its remaining approved time runs out.
+
+`scripts/check_arm_task_urls_full.py` freezes the controller, original pilot
+worker/classifier and browser source hashes. Deterministic disjoint shards own
+8 local browser workers each. Small64-URL manifests avoid loading the entire
+pool in every browser process. Successful URL decisions are reused on restart;
+all attempt evidence is retained. A browser infrastructure failure cannot become
+a dead-site label: the controller stops for repair if two fresh attempts cannot
+produce sufficient normal page observations. Repair retries remain inside the
+same budget. Ordinary unavailable/uncertain pages receive the same fresh-browser
+retry as the pilot.
+
+All16 pilot/full-controller CPU tests passed, including shard coverage,
+no duplicate visits on resume, preservation of failed evidence, accounting for
+failed attempts and infrastructure failures. Actual8CPU/32GiB/0GPU Slurm
+resources and initial screenshots/DOM/text were independently checked for every
+job. All four are registered with the active repair supervisor. No full-pool
+result is claimed yet.
+
+**Completion requirement:** independently check all four shard identities and
+saved decisions/evidence; combine their125,561 URLs with the200 pilot URLs,
+then map every one of184,546 tasks to its exact-URL evidence. Keep available,
+unavailable and inconclusive outputs separate; initial-page availability does
+not establish instruction quality, target existence, valid0/5 difficulty or
+ARM usefulness. Preserve collection timestamps and pilot provenance. The final
+actor-screen queue and task disposition map remain pending these checks.
+
+Runtime: `task-pool-expansion-20260922/curation-v3-20260929/live-browser-full-20260929/`.
+[Aggregate launch/readiness record](arm_results/rl_integration/task-pool-live-browser-full.json).
+
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26
 
