@@ -51,7 +51,7 @@ Same protocol and all300 task IDs; fresh rollouts with server RNG seed1235.
 | Method | Repeat | Fixed100 overall / valid-only | Full300 overall / valid-only | Successes / valid / total | State |
 | --- | ---: | --- | --- | --- | --- |
 | Outcome-only baseline90 |2 |58.00% /59.18% |**57.67% /59.66%** |173 /290 /300 | Verified complete |
-| Additive90 |2 |— |— |— | Collecting |
+| Additive90 |2 |61.00% /61.62% |**58.67% /61.54%** |176 /286 /300 | Verified complete |
 | Gate B90 |2 |67.00% /68.37% |**63.00% /65.63%** |189 /288 /300 | Verified complete |
 
 Gate B's300 rollout archives, task identities and saved judge verdicts passed
@@ -65,12 +65,16 @@ checkpoint, GPU restoration and W&B checks. It used16,826 seconds and released
 8,374 unused seconds of its7h cap. Its native89 checkpoint retains1016 Adam
 updates and the previously documented scheduler offset of1.
 [Baseline repeat2 audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat2-audit.json).
-Gate B is5.33pp higher overall than baseline in this second matched round;
-Additive remains pending.
+Additive repeat2 passed the same300-task artifact/protocol/W&B checks, including
+286 nonempty valid verdicts, native89 restoration and1150 Adam updates with
+scheduler offset0. Job337130 used18,585 seconds and released6,615 unused seconds.
+[Additive repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json).
+All three second passes are now verified. Relative to baseline in this round,
+Additive is+1.00pp and Gate B+5.33pp overall. Third passes337132–337134 have started.
 
 Gate B's overall rate changed from55.33% to63.00% across two evaluations of the
 same checkpoint. This is evaluation variability, not an additional training
-gain. Wait for the Additive second pass and all third passes
+gain. Wait for all third passes
 before reporting the planned three-repeat mean and sample standard deviation.
 The plot still shows the matched first pass; it does not select the best repeat.
 

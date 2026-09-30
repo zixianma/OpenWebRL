@@ -222,8 +222,9 @@ The cohorts merge preserved pre-outage results with retries of credit-blocked
 tasks only. [Fresh repeat2](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929):
 Gate B is verified at **63.00% overall /65.63% valid-only** (288 valid);
 fixed100 **67.00% /68.37%**. Baseline repeat2 is **57.67% /59.66%** (290 valid),
-fixed100 **58.00% /59.18%**. Additive repeat2 and all third passes are pending;
-report the three-repeat mean and sample SD after completion.
+fixed100 **58.00% /59.18%**. Additive repeat2 is **58.67% /61.54%** (286 valid),
+fixed100 **61.00% /61.62%**. All second passes are verified; third passes are
+running. Report the three-repeat mean and sample SD after completion.
 This plot retains the first matched pass, rather than selecting the best repeat.
 Diamonds use this corrected protocol; brown
 triangles retain historical baseline58/90 references. Earlier GPT-4.1/T0 ARM

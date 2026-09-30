@@ -61,6 +61,7 @@
 | Outcome-only baseline |90 |1 |163 |286 |14 |54.33 |56.99 |56.00 /57.14 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json) |
 | |90 |2 |173 |290 |10 |57.67 |59.66 |58.00 /59.18 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat2-audit.json) |
 | Additive bonus |90 |1 |179 |286 |14 |59.67 |62.59 |60.00 /61.86 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json) |
+| |90 |2 |176 |286 |14 |58.67 |61.54 |61.00 /61.62 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json) |
 | Gate B: relaxed gate |90 |1 |166 |286 |14 |55.33 |58.04 |62.00 /63.27 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) |
 | |90 |2 |189 |288 |12 |63.00 |65.63 |67.00 /68.37 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json) |
 

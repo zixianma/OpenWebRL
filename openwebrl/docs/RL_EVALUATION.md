@@ -45,9 +45,15 @@ The same independent checks passed for300 paired archives and290 nonempty
 valid-task verdicts; native89 retained1016 Adam updates and its known scheduler
 offset1. Job337129 exited0 after16,826 seconds and released8,374 unused seconds.
 [Baseline repeat2 audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat2-audit.json).
-Gate B is5.33pp higher overall in this round; Additive is still collecting.
-All third passes await completion of the second round, preserving the9-browser
-concurrency cap. These are repeated evaluations of the same models; no
+Additive repeat2 is also verified: **176/300 =58.67% overall**,
+**176/286 =61.54% valid-only**; fixed100 **61.00% /61.62%** (61/99 valid).
+All300 archives/verdict records and286 valid judge texts passed independent review;
+native89 restoration,1150 Adam updates, scheduler offset0 and final W&B metrics
+agree. Job337130 exited0 after18,585 seconds, releasing6,615 unused seconds.
+[Additive repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json).
+Relative to baseline in this round, Additive is+1.00pp and Gate B+5.33pp overall.
+All third passes337132–337134 started on g008 after round2 finished, preserving
+the9-browser concurrency cap. These are repeated evaluations of the same models; no
 three-repeat mean or training-seed inference is available yet.
 
 **Verified first-pass result, September29:** Gate B90 is complete at **166/300 =55.33%
