@@ -7237,8 +7237,10 @@ reproducing the original assertion and loading all595 corrected tasks through
 the production Dataset/Qwen vision parser. No model weights or API calls are
 needed for that regression. Failed baseline/Additive/Gate B attempts consumed
 257/203/203 seconds, with no browser sessions; replacement337930/337931/337932
-caps are11:55:43/11:56:37/11:56:37, preserving each12h total. Baseline starts
-first; release the other two after a real saved trajectory passes startup checks.
+scheduler caps are11:55/11:56/11:56, rounded down to preserve each12h total.
+Baseline337930 passed a real five-turn task with five embedded screenshots,
+a GPT-4o/WebVoyager verdict, native89 restore and the correct W&B project;
+Additive337931 and Gate B337932 were then released.
 
 **Requested:** one WebVoyager evaluation each of the **iteration90 outcome-only
 baseline, Additive and historical Gate B** checkpoints used in the matched OM2W
