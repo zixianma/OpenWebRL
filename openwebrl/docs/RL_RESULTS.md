@@ -39,6 +39,7 @@
 |  |20 |92 |225 |75 |30.67 |40.89 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) |
 |  |30 |96 |228 |72 |32.00 |42.11 |[September29 audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) |
 |  |40 |100 |228 |72 |33.33 |43.86 |[September29 audit](arm_results/rl_integration/mixed-bonus-iteration40-audit.json) |
+|  |50 |116 |234 |66 |38.67 |49.57 |[September30 audit](arm_results/rl_integration/mixed-bonus-iteration50-audit.json) |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33 |34.17 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) |
 |  |20 |97 |227 |73 |32.33 |42.73 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) |
 |  |30 |90 |219 |81 |30.00 |41.10 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) |
@@ -54,7 +55,7 @@
 | Additive bonus |90 |159 |283 |17 |53.00 |56.18 |[September29 first pass](arm_results/rl_integration/stealth-additive-iteration90-audit.json) |
 | Gate B: relaxed gate |90 |169 |288 |12 |56.33 |58.68 |[September29 first pass](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) |
 
-## Matched stealth browser · o4-mini · temperature 0.6 · September29
+## Matched stealth browser · o4-mini · temperature 0.6 · September29–30
 
 | Method | Iteration | Repeat | Successes | Valid | Invalid | Overall % | Valid-only % | Fixed100 overall / valid-only % | Record |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -63,9 +64,22 @@
 | |90 |3 |161 |286 |14 |53.67 |56.29 |52.00 /54.17 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json) |
 | Additive bonus |90 |1 |179 |286 |14 |59.67 |62.59 |60.00 /61.86 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json) |
 | |90 |2 |176 |286 |14 |58.67 |61.54 |61.00 /61.62 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json) |
+| |90 |3 |171 |284 |16 |57.00 |60.21 |55.00 /57.29 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat3-audit.json) |
 | Gate B: relaxed gate |90 |1 |166 |286 |14 |55.33 |58.04 |62.00 /63.27 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) |
 | |90 |2 |189 |288 |12 |63.00 |65.63 |67.00 /68.37 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json) |
 | |90 |3 |174 |288 |12 |58.00 |60.42 |61.00 /61.00 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
+
+## Matched stealth iteration90 · three-repeat mean ± sample SD
+
+| Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
+| --- | ---: | --- | --- | ---: | --- |
+| Outcome-only baseline |90 |**55.22 ± 2.14%** |57.65 ± 1.77% |+0.00 pp |286/290/286 |
+| Additive bonus |90 |**58.44 ± 1.35%** |61.45 ± 1.19% |+3.22 pp |286/286/284 |
+| Gate B: relaxed gate |90 |**58.78 ± 3.89%** |61.36 ± 3.88% |+3.56 pp |286/288/288 |
+
+| Source |
+| --- |
+| [Nine-cohort aggregate and audit hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json) |
 
 ## Stealth browser · o4-mini
 

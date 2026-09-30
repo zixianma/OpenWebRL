@@ -4,6 +4,27 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-stealth90-o4-three-repeat-summary-20260930"></a>
+## Iteration90 stealth: final three-repeat comparison — September30
+
+| Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
+| --- | ---: | --- | --- | ---: | --- |
+| Outcome-only baseline |90 |**55.22 ± 2.14%** |57.65 ± 1.77% |+0.00 pp |286/290/286 |
+| Additive bonus |90 |**58.44 ± 1.35%** |61.45 ± 1.19% |+3.22 pp |286/286/284 |
+| Gate B: relaxed gate |90 |**58.78 ± 3.89%** |61.36 ± 3.88% |+3.56 pp |286/288/288 |
+
+All nine full300 cohorts passed independent archive, task-identity, protocol,
+checkpoint-restoration and final-metric checks. Each row averages three
+per-repeat rates; SD uses the sample denominator2. Valid-only rates are averaged
+without pooling their denominators. Additive is+3.22pp and Gate B+3.56pp overall
+versus baseline; Gate B varies more between evaluations. These are fixed-model
+evaluation repeats, not independent training seeds, and no significance claim
+is made. Shared website conditions and the first-pass credit-outage/recovery
+also limit interpretation. First-pass recovery retained valid and ordinary
+invalid outcomes, retrying only identified credit-blocked tasks; repeat2/3 are
+fresh collections with server seeds1235/1236. The existing plot keeps repeat1.
+[Machine-readable aggregate with all nine audit hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json).
+
 <a id="arm-stealth90-o4-results-20260929"></a>
 ## Matched iteration90 stealth results: o4-mini/T0.6 — September29
 
@@ -37,7 +58,7 @@ result includes80 retained successes and is179/286/300.
 Additive is5.33pp higher overall and5.59pp higher valid-only than baseline;
 Gate B is1.00pp and1.05pp higher, respectively. These single evaluations do
 not establish training-seed robustness. Two more evaluations per method,
-including baseline, are [approved and scheduled](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+including baseline, are [now verified complete](#arm-stealth90-o4-three-repeat-summary-20260930); [approval](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
 [Additive merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json).
 [Baseline merged audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-audit.json).
 [Gate B merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) ·
@@ -70,34 +91,30 @@ Additive repeat2 passed the same300-task artifact/protocol/W&B checks, including
 scheduler offset0. Job337130 used18,585 seconds and released6,615 unused seconds.
 [Additive repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json).
 All three second passes are now verified. Relative to baseline in this round,
-Additive is+1.00pp and Gate B+5.33pp overall. Third passes337132–337134 have started.
+Additive is+1.00pp and Gate B+5.33pp overall. Third passes337132–337134 are now independently verified below.
 
 Gate B's overall rate changed from55.33% to63.00% across two evaluations of the
 same checkpoint. This is evaluation variability, not an additional training
-gain. Wait for all third passes
-before reporting the planned three-repeat mean and sample standard deviation.
+gain. The final three-repeat mean and sample standard deviation are reported above.
 The plot still shows the matched first pass; it does not select the best repeat.
 
 <a id="arm-stealth90-o4-repeat3-results-20260930"></a>
 ### Third evaluation of the same iteration90 checkpoints — September30
 
-Fresh full300 rollouts, server RNG seed1236; unchanged stealth/o4-mini/AgentTrek,
+Fresh full300 rollouts, server seed1236; unchanged stealth/o4-mini/AgentTrek,
 T0.6/p0.95/k20,4096 tokens and30 turns.
 
 | Method | Iteration | Repeat | Fixed100 overall / valid-only | Full300 overall / valid-only | Successes / valid / total | Audit |
 | --- | ---: | ---: | --- | --- | --- | --- |
 | Outcome-only baseline |90 |3 |52.00% /54.17% |**53.67% /56.29%** |161 /286 /300 |[Verified audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json) |
-| Additive bonus |90 |3 | Pending | Pending | Pending | Collecting or finalizing; not yet independently verified |
+| Additive bonus |90 |3 |55.00% /57.29% |**57.00% /60.21%** |171 /284 /300 |[Verified audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat3-audit.json) |
 | Gate B: relaxed gate |90 |3 |61.00% /61.00% |**58.00% /60.42%** |174 /288 /300 |[Verified audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
 
-Completed rows have independently checked task IDs, paired rollout archives,
-nonempty valid-task judge verdicts, checkpoint restoration, matching W&B metrics
-and successful scheduler exits. All attempts count toward the original7h cap.
-The remaining cohorts are pending; report three-repeat means and sample SD only
-after all three methods are verified. These repeat evaluations of fixed models
-measure evaluation variability, not variation across independent training seeds.
-WebVoyager remains intentionally held for the requested post-OM2W results and
-credit review. The comparison plot still shows the first matched pass.
+All three passed independent task-ID, paired-archive, saved-verdict, frozen
+protocol, native89 restoration and W&B checks; jobs337132/337133/337134 exited0
+and released their GPUs. Consumed time was17,106/18,470/17,575 seconds,
+respectively, within each original25,200-second cap. WebVoyager was released
+only after the requested final OM2W and settled-credit review.
 
 <a id="arm-stealth90-results-20260929"></a>
 ## ARM iteration90 stealth evaluations — September29
@@ -150,10 +167,9 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter30-results-20260929"></a>
 <a id="arm-mixed-pair-iter40-results-20260929"></a>
 <a id="arm-mixed-pair-iter50-results-20260929"></a>
-## Mixed-only relaxed-B pair: iterations10–50 — September28–29
+## Mixed-only relaxed-B pair: iterations10–50 — September28–30
 
-Both fresh-from0 runs completed full300 evaluations at10,20,30 and40;
-reweight50 is also complete, while bonus50 remains pending.
+Both fresh-from0 runs completed full300 evaluations at10,20,30,40 and50.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -170,18 +186,27 @@ trajectory-mean-one weighting with lambda=.5.
 |  |20 |30.00% /43.48% |30.67% /40.89% |225 |
 |  |30 |29.00% /39.19% |32.00% /42.11% |228 |
 |  |40 |32.00% /43.84% |33.33% /43.86% |228 |
+|  |50 |35.00% /48.61% |38.67% /49.57% |234 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
 |  |40 |33.00% /50.00% |35.33% /47.11% |225 |
 |  |50 |33.00% /45.21% |37.00% /46.84% |237 |
 
+Bonus50 has116 successes and234 valid tasks; fixed100 has35 successes and72
+valid tasks. All300 task IDs, paired archives, stored judge records, native49
+restoration with668 Adam updates and final W&B metrics passed independent checks.
+The baseline protocol assigns failure to some truncated/failed terminal statuses
+without an API judgement;16 valid attempts carry that explicit stored sentinel.
+Bonus exceeds reweight50 by1.67pp overall and2.74pp valid-only. These are single
+evaluations of each checkpoint. [Bonus50 audit](arm_results/rl_integration/mixed-bonus-iteration50-audit.json).
+
 Reweight50 has111 successes and237 valid tasks; fixed100 has33 successes and73
 valid tasks. From40, full300 overall rises1.67pp, while valid-only falls0.28pp
 and valid tasks increase225→237. Historical baseline50 is35.00% /44.87%, so
 the descriptive differences are+2.00pp overall and+1.96pp valid-only. This is not
-a matched-date causal comparison; bonus50 and the predefined40/50/60 aggregate
-are still pending. All300 archive/verdict pairs, native49 restoration at694
+a matched-date causal comparison. Bonus50 is now38.67% /49.57%; the predefined
+40/50/60 aggregate still awaits60. All300 archive/verdict pairs, native49 restoration at694
 Adam updates and W&B history were verified. The same controller passed model/
 optimizer restoration for continuation toward60.
 

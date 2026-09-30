@@ -1,0 +1,214 @@
+{
+  "iteration": 90,
+  "protocol": "Browser Use stealth; o4-mini/AgentTrek; T0.6/p0.95/k20; 4096 response tokens;30 turns; actor-only inference",
+  "repeats": 3,
+  "verified_complete": true,
+  "methods": {
+    "baseline": {
+      "per_repeat": [
+        {
+          "repeat": 1,
+          "successes": 163,
+          "valid": 286,
+          "invalid": 14,
+          "overall": 0.5433333333333333,
+          "valid_only": 0.5699300699300699,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 56,
+            "valid": 98,
+            "invalid": 2,
+            "overall": 0.56,
+            "valid_only": 0.5714285714285714,
+            "saved_rollouts": 100,
+            "saved_task_records": 100,
+            "verified_complete": true
+          },
+          "source": "stealth-o4-t06-baseline-iteration90-audit.json",
+          "sha256": "b9f7c88d367be3b6bef31397e36dbafe2880a138524fa6bf78e1d813e1ec9ac8"
+        },
+        {
+          "repeat": 2,
+          "successes": 173,
+          "valid": 290,
+          "invalid": 10,
+          "overall": 0.5766666666666667,
+          "valid_only": 0.596551724137931,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 58,
+            "valid": 98,
+            "invalid": 2,
+            "overall": 0.58,
+            "valid_only": 0.5918367346938775
+          },
+          "source": "stealth-o4-t06-baseline-iteration90-repeat2-audit.json",
+          "sha256": "7990233e2f06795701a2d582d27e561c210d3591cb3d3b311c2e14283fefe090"
+        },
+        {
+          "repeat": 3,
+          "successes": 161,
+          "valid": 286,
+          "invalid": 14,
+          "overall": 0.5366666666666666,
+          "valid_only": 0.5629370629370629,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 52,
+            "valid": 96,
+            "invalid": 4,
+            "overall": 0.52,
+            "valid_only": 0.5416666666666666
+          },
+          "source": "stealth-o4-t06-baseline-iteration90-repeat3-audit.json",
+          "sha256": "5379c7449bfac74ff10f7627caf1118403aad45670f827c1e6956458861a43f1"
+        }
+      ],
+      "overall_mean": 0.5522222222222222,
+      "overall_sample_sd": 0.0214303350244288,
+      "valid_only_mean": 0.5764729523350213,
+      "valid_only_sample_sd": 0.017736779429649945,
+      "fixed100_overall_mean": 0.5533333333333333,
+      "fixed100_valid_only_mean": 0.5683106575963719,
+      "overall_delta_baseline_pp": 0.0
+    },
+    "additive": {
+      "per_repeat": [
+        {
+          "repeat": 1,
+          "successes": 179,
+          "valid": 286,
+          "invalid": 14,
+          "overall": 0.5966666666666667,
+          "valid_only": 0.6258741258741258,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 60,
+            "valid": 97,
+            "invalid": 3,
+            "overall": 0.6,
+            "valid_only": 0.6185567010309279,
+            "saved_rollouts": 100,
+            "saved_task_records": 100,
+            "verified_complete": true
+          },
+          "source": "stealth-o4-t06-additive-iteration90-audit.json",
+          "sha256": "7f25d578ddd84cda1701f92c107bd24cbe438a0ec125496e3bb73a6fa0e08dc6"
+        },
+        {
+          "repeat": 2,
+          "successes": 176,
+          "valid": 286,
+          "invalid": 14,
+          "overall": 0.5866666666666667,
+          "valid_only": 0.6153846153846154,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 61,
+            "valid": 99,
+            "invalid": 1,
+            "overall": 0.61,
+            "valid_only": 0.6161616161616161
+          },
+          "source": "stealth-o4-t06-additive-iteration90-repeat2-audit.json",
+          "sha256": "3337caf05a6770ff06422a1b941e2c8aed5ea95f4908a0a1bab176c2291bcb36"
+        },
+        {
+          "repeat": 3,
+          "successes": 171,
+          "valid": 284,
+          "invalid": 16,
+          "overall": 0.57,
+          "valid_only": 0.602112676056338,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 55,
+            "valid": 96,
+            "invalid": 4,
+            "overall": 0.55,
+            "valid_only": 0.5729166666666666
+          },
+          "source": "stealth-o4-t06-additive-iteration90-repeat3-audit.json",
+          "sha256": "0e5fc381acdb24c7e278fc8ea354bfd900a75cc7fd06ed9d0d64effb96a36c42"
+        }
+      ],
+      "overall_mean": 0.5844444444444444,
+      "overall_sample_sd": 0.013471506281091299,
+      "valid_only_mean": 0.6144571391050264,
+      "valid_only_sample_sd": 0.011907845462035207,
+      "fixed100_overall_mean": 0.5866666666666667,
+      "fixed100_valid_only_mean": 0.6025449946197369,
+      "overall_delta_baseline_pp": 3.2222222222222263
+    },
+    "gate-b": {
+      "per_repeat": [
+        {
+          "repeat": 1,
+          "successes": 166,
+          "valid": 286,
+          "invalid": 14,
+          "overall": 0.5533333333333333,
+          "valid_only": 0.5804195804195804,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 62,
+            "valid": 98,
+            "invalid": 2,
+            "overall": 0.62,
+            "valid_only": 0.6326530612244898,
+            "saved_rollouts": 100,
+            "saved_task_records": 100,
+            "verified_complete": true
+          },
+          "source": "stealth-o4-t06-gate-b-iteration90-audit.json",
+          "sha256": "09ff09f722116d9f0bb7f0e22639c1992b87455c61e7bbaf731bf42d3518faaf"
+        },
+        {
+          "repeat": 2,
+          "successes": 189,
+          "valid": 288,
+          "invalid": 12,
+          "overall": 0.63,
+          "valid_only": 0.65625,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 67,
+            "valid": 98,
+            "invalid": 2,
+            "overall": 0.67,
+            "valid_only": 0.6836734693877551
+          },
+          "source": "stealth-o4-t06-gate-b-iteration90-repeat2-audit.json",
+          "sha256": "a71fef624a96eecc2abf5fa23a76b71b1d1fdd3c5858e3095187fd4e2e24bb37"
+        },
+        {
+          "repeat": 3,
+          "successes": 174,
+          "valid": 288,
+          "invalid": 12,
+          "overall": 0.58,
+          "valid_only": 0.6041666666666666,
+          "fixed100": {
+            "tasks": 100,
+            "successes": 61,
+            "valid": 100,
+            "invalid": 0,
+            "overall": 0.61,
+            "valid_only": 0.61
+          },
+          "source": "stealth-o4-t06-gate-b-iteration90-repeat3-audit.json",
+          "sha256": "7313cbba472089e24590198a69953468e988ffa251013a64a00bbd268bb4d139"
+        }
+      ],
+      "overall_mean": 0.5877777777777777,
+      "overall_sample_sd": 0.03892062197363777,
+      "valid_only_mean": 0.6136120823620823,
+      "valid_only_sample_sd": 0.03878756297681029,
+      "fixed100_overall_mean": 0.6333333333333333,
+      "fixed100_valid_only_mean": 0.6421088435374149,
+      "overall_delta_baseline_pp": 3.5555555555555562
+    }
+  },
+  "checked_epoch": 1790757215.99526,
+  "interpretation": "Mean and sample SD across evaluations of each fixed trained checkpoint; not across training seeds. Valid-only means average the three ratios, not pooled outcomes. Repeat1 preserves original outcomes and retries only credit-blocked tasks; repeats2/3 use fresh rollouts and seeds1235/1236. No significance claim."
+}

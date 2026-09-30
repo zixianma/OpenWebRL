@@ -30,13 +30,24 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29
 
 <!-- arm-stealth-repeat3-progress-start -->
-**Third-pass verification, September30.** Server RNG seed1236; unchanged matched protocol.
+**All three repeats verified, September30.**
 
-**Outcome-only baseline, repeat3:** **161/300 =53.67% overall**, **161/286 =56.29% valid-only**; fixed100 **52.00% /54.17%** (96 valid). All300 task IDs, archives, valid-task judge texts, frozen protocol, native89 restore and final W&B metrics passed independent checks. Job337132 exited0 after17,106 seconds, releasing8,094 unused seconds. [Audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json).
+| Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
+| --- | ---: | --- | --- | ---: | --- |
+| Outcome-only baseline |90 |**55.22 ± 2.14%** |57.65 ± 1.77% |+0.00 pp |286/290/286 |
+| Additive bonus |90 |**58.44 ± 1.35%** |61.45 ± 1.19% |+3.22 pp |286/286/284 |
+| Gate B: relaxed gate |90 |**58.78 ± 3.89%** |61.36 ± 3.88% |+3.56 pp |286/288/288 |
 
-**Gate B: relaxed gate, repeat3:** **174/300 =58.00% overall**, **174/288 =60.42% valid-only**; fixed100 **61.00% /61.00%** (100 valid). All300 task IDs, archives, valid-task judge texts, frozen protocol, native89 restore and final W&B metrics passed independent checks. Job337134 exited0 after17,575 seconds, releasing7,625 unused seconds. [Audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json).
+Sample SD measures repeat-evaluation variability for fixed checkpoints, not
+training-seed uncertainty. All nine sets of300 task IDs and paired archives,
+saved judge records, frozen protocol, native89 restoration and final W&B metrics
+passed audit. Repeat1 retains pre-outage outcomes plus only credit-blocked
+retries; repeat2/3 are fresh collections with seeds1235/1236. Valid-only means
+average per-repeat ratios. [Aggregate and source hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json).
 
-Other third-pass cohorts are pending. Defer the joint three-repeat mean/SD until all three methods are audited; WebVoyager remains held for the requested post-OM2W review.
+Third-pass jobs337132/337133/337134 completed with161/171/174 successes and
+286/284/288 valid tasks. Each released its GPU after17,106/18,470/17,575 seconds,
+respectively; all attempts remain charged within the original7h caps.
 <!-- arm-stealth-repeat3-progress-end -->
 
 **Fresh repeat2, September29:** Gate B90 is independently verified at
@@ -63,8 +74,7 @@ agree. Job337130 exited0 after18,585 seconds, releasing6,615 unused seconds.
 [Additive repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json).
 Relative to baseline in this round, Additive is+1.00pp and Gate B+5.33pp overall.
 All third passes337132–337134 started on g008 after round2 finished, preserving
-the9-browser concurrency cap. These are repeated evaluations of the same models; no
-three-repeat mean or training-seed inference is available yet.
+the9-browser concurrency cap. These are repeated evaluations of the same models; the final three-repeat means are above; training-seed inference remains unavailable.
 
 **Verified first-pass result, September29:** Gate B90 is complete at **166/300 =55.33%
 overall**, **166/286 =58.04% valid-only**; fixed100 is **62/100 =62.00%**,
@@ -89,7 +99,7 @@ plus172 retries cover exactly300 task IDs. Native89 restoration, checkpoint
 shards/counters, all archives and valid verdict texts, W&B's final172/164/99
 retry counters and zero remaining owned browser sessions passed verification.
 [Additive merged audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-audit.json).
-[Two additional evaluations per method are approved and scheduled](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+[Two additional evaluations per method are complete; approval record](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
 
 
 The user clarified that **all stealth evaluations should use actor T0.6 and
@@ -263,6 +273,19 @@ Controller: `scripts/run_arm_stealth90_parallel.py`; template:
 budget and submission receipts: runtime
 `arm-turn-bonus-preparation/stealth90-repeats-20260928/first-pass/`.
 Every submitted/replacement job is registered with the active ARM supervisor.
+
+<a id="arm-mixed-pair-iter50-bonus-results-20260930"></a>
+### Mixed-only bonus50 verified — September30
+
+Full300 **116/300 =38.67% overall**, **116/234 =49.57% valid-only**;
+fixed100 **35.00% /48.61%**, with72 valid tasks. Native49 restoration retains668
+Adam updates; all300 archives and saved judge records, exact task IDs, executed
+local GPT-4.1/action_history/T0/4096-token/30-turn protocol and final W&B history
+were independently checked. Sixteen valid attempts contain the baseline's
+explicit judge-not-run sentinel for truncated/failed status. Saved data supports
+future rejudging. Bonus is+1.67pp overall versus reweight50; the planned40/50/60
+aggregate awaits60. The controller resumed training in the same allocation.
+[Audit](arm_results/rl_integration/mixed-bonus-iteration50-audit.json).
 
 <a id="arm-mixed-pair-iter10-results-20260928"></a>
 <a id="arm-mixed-pair-iter20-results-20260928"></a>

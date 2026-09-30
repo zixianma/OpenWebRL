@@ -182,16 +182,16 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |20 |30.00% /43.48% |**30.67% /40.89%** |
 |  |30 |29.00% /39.19% |**32.00% /42.11%** |
 |  |40 |32.00% /43.84% |**33.33% /43.86%** |
+|  |50 |35.00% /48.61% |**38.67% /49.57%** |
 | **Mixed-only reweight + relaxed B** |10 |25.00% /34.72% |**27.33% /34.17%** |
 |  |20 |31.00% /44.29% |**32.33% /42.73%** |
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
 |  |40 |33.00% /50.00% |**35.33% /47.11%** |
 |  |50 |33.00% /45.21% |**37.00% /46.84%** |
 
-Both mixed-only runs completed10/20 evaluations September28 and30/40 September29,
-with all rollout/verdict pairs verified. At40, reweight is2.00pp above bonus
-overall. Reweight50 also completed:37.00% /46.84%, with237 valid tasks.
-Bonus50 and the predefined40/50/60 aggregate remain pending; both continue toward60.
+Both mixed-only runs have verified full300 evaluations through50. At50, bonus
+is1.67pp higher overall than reweight; the predefined40/50/60 aggregate awaits60.
+Reweight has saved60 and started evaluation; bonus continues toward60.
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter50-results-20260929).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
@@ -208,26 +208,23 @@ success; teacher action consistency is58% under reversed-order re-query.
 <a id="baseline-comparison"></a>
 ![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-**Matched stealth evaluation, first pass, September29: o4-mini/AgentTrek, actor T0.6; no inference-time selection.**
+**Matched stealth, three evaluations per iteration90 checkpoint — September29–30.**
+Same300 tasks, actor-only inference; o4-mini/AgentTrek, T0.6/p0.95/k20,
+4096 tokens and30 turns.
 
-| Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
-| --- | ---: | --- | --- |
-| Outcome-only baseline |90 |56.00% /57.14% |**54.33% /56.99%** |
-| Additive bonus |90 |60.00% /61.86% |**59.67% /62.59%** |
-| B: relaxed gate |90 |62.00% /63.27% |**55.33% /58.04%** |
+| Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
+| --- | ---: | --- | --- | ---: | --- |
+| Outcome-only baseline |90 |**55.22 ± 2.14%** |57.65 ± 1.77% |+0.00 pp |286/290/286 |
+| Additive bonus |90 |**58.44 ± 1.35%** |61.45 ± 1.19% |+3.22 pp |286/286/284 |
+| Gate B: relaxed gate |90 |**58.78 ± 3.89%** |61.36 ± 3.88% |+3.56 pp |286/288/288 |
 
-All three are verified complete, each with286 valid tasks. Additive is5.33pp
-and Gate B1.00pp higher overall than baseline in this single matched evaluation.
-The cohorts merge preserved pre-outage results with retries of credit-blocked
-tasks only. [All second passes are verified](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929).
-[Third-pass results](ARM_RESULTS.md#arm-stealth90-o4-repeat3-results-20260930):
-Outcome-only baseline **53.67% /56.29%** (286 valid); Gate B: relaxed gate **58.00% /60.42%** (288 valid). The remaining cohorts are pending; report
-three-repeat means and sample SD after all three methods are verified.
-This plot retains the first matched pass, rather than selecting the best repeat.
-Diamonds use this corrected protocol; brown
-triangles retain historical baseline58/90 references. Earlier GPT-4.1/T0 ARM
-results remain in the [history table](ARM_RESULTS.md#arm-stealth90-results-20260929).
-[Matched protocol, counts and artifact audits](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
+Mean ± sample SD describes repeated evaluation of fixed trained checkpoints,
+not training-seed variability. Valid-only means average the three per-repeat
+rates. Repeat1 retains pre-outage outcomes and retries only credit-blocked tasks;
+repeats2/3 use fresh rollouts. [All nine audits and aggregate](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930).
+The plot above retains the first matched pass. Diamonds use this corrected
+protocol; triangles retain historical baseline58/90 references. Earlier
+GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is

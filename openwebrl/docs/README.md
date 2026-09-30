@@ -39,17 +39,15 @@ for the work you are doing, then follow its contents to dated experiment records
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Full retained-pool browser checks running337489–337492:125,561 new URLs plus200 reused;4 CPU-only jobs,13h cap each](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-full-20260929).
 [Browser-first pilot337474 verified:160/200 URLs available,32 inconclusive,8 unavailable;58,892 candidate tasks share available pages;4m26s CPU-only](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-first-20260929).
-[Matched stealth90 complete: baseline54.33% /56.99%, Additive59.67% /62.59%, Gate B55.33% /58.04%; o4-mini/AgentTrek/T0.6, all three have286 valid tasks](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
-[Stealth repeat2 all verified: baseline57.67% /59.66% (290 valid), Additive58.67% /61.54% (286 valid), Gate B63.00% /65.63% (288 valid); third-pass verification in progress](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929).
-[Third stealth pass: Outcome-only baseline 53.67% /56.29% (286 valid); Gate B: relaxed gate 58.00% /60.42% (288 valid) verified; remaining cohorts pending](ARM_RESULTS.md#arm-stealth90-o4-repeat3-results-20260930).
-[WebVoyager595 comparison held for post-OM2W review: iteration90 baseline337217/Additive337218/Gate B337219; stealth/T0.6, GPT-4o;1H200×12h each after OM2W repeats](ARM_INTEGRATION_PLAN.md#arm-webvoyager90-stealth-20260929).
+[Final three-repeat stealth90 means: baseline55.22 ±2.14%, Additive58.44 ±1.35%, Gate B58.78 ±3.89% overall; all nine cohorts verified, valid-only rates and denominators included](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930).
+[WebVoyager595 comparison released after results/credit review: iteration90 baseline337930/Additive337931/Gate B337932; prompt-wrapper fix tested, baseline retry validates first trajectory; original1H200×12h caps include failed attempts](ARM_INTEGRATION_PLAN.md#arm-webvoyager90-stealth-20260929).
 [Gate B training100 complete: full30036.67% /48.89%, fixed10030.00% /44.12%; all artifacts verified and comparison plot updated](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
 [Historical GPT-4.1/T0 stealth evals: Additive53.00% /56.18% (283 valid), Gate B56.33% /58.68% (288 valid); these used the wrong protocol for the intended comparison](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).
 [Current inventory, September28 evening: Gate B saved90/collects91; mixed bonus saved19/collects20; reweight saved22/collects23; automatic continuation verified](RL_RUNTIME.md#arm-progress-20260928).
 [Mixed-only iteration20 full300: bonus30.67% /40.89%; reweight32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 [Mixed-only iteration30 full300: bonus32.00% /42.11% (228 valid); reweight30.00% /41.10% (219 valid); both300-task cohorts and archives verified](ARM_RESULTS.md#arm-mixed-pair-iter30-results-20260929).
 [Mixed-only iteration40 full300: bonus33.33% /43.86% (228 valid), reweight35.33% /47.11% (225 valid); all archives/verdicts verified, both continue toward60](ARM_RESULTS.md#arm-mixed-pair-iter40-results-20260929).
-[Mixed-only reweight50 full300:37.00% /46.84% (237 valid), fixed100:33.00% /45.21%; all artifacts verified, continuation toward60 started; bonus50 pending](ARM_RESULTS.md#arm-mixed-pair-iter50-results-20260929).
+[Mixed-only iteration50 complete: bonus38.67% /49.57% (234 valid), reweight37.00% /46.84% (237 valid); reweight60 saved and evaluating, bonus training toward60](ARM_RESULTS.md#arm-mixed-pair-iter50-results-20260929).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

@@ -7216,6 +7216,30 @@ completion. Plans and the exact request are in runtime
 <a id="arm-webvoyager90-stealth-20260929"></a>
 ### September29: matched WebVoyager evaluation prepared
 
+**September30 handoff:** all nine OM2W cohorts are independently verified;
+[three-repeat results](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930)
+were reported before releasing the user-requested review holds on337217–337219.
+All900 owned third-pass browser sessions are stopped; settled browser charges
+are$5.2798 ($0.005866/session). Live balance is$11.4734; scaling to1,785
+WebVoyager trajectories estimates$10.4715, about$1.00 headroom. Website mix may
+change this cost; GPU and GPT-4o API charges are separate. The three existing
+1-H200 ×12h jobs started September30; no extra allocation or credit purchase.
+The supervisor retains every original43,200-second cap and checks actual spending.
+
+
+**Startup repair, September30:** all three native89 restores succeeded, then
+initial evaluation failed before any task ran: the prepared prompt was a string,
+but the multimodal dataset loader requires a chat-message list. The correction
+wraps the unchanged instruction in one user message, as OM2W does; it preserves
+all595 IDs, URLs, metadata, judge and sampling settings. The old snapshot remains
+intact; retries use `source-v2-chat-prompts`. Twelve regressions pass, including
+reproducing the original assertion and loading all595 corrected tasks through
+the production Dataset/Qwen vision parser. No model weights or API calls are
+needed for that regression. Failed baseline/Additive/Gate B attempts consumed
+257/203/203 seconds, with no browser sessions; replacement337930/337931/337932
+caps are11:55:43/11:56:37/11:56:37, preserving each12h total. Baseline starts
+first; release the other two after a real saved trajectory passes startup checks.
+
 **Requested:** one WebVoyager evaluation each of the **iteration90 outcome-only
 baseline, Additive and historical Gate B** checkpoints used in the matched OM2W
 comparison. **Approved and submitted September29:** baseline337217,
@@ -7256,8 +7280,9 @@ is not yet measured. Release each job immediately after verified completion.
 Start the three together after current OM2W repeats finish; update dependencies
 after any recovery to avoid exceeding the browser-session limit. This entails
 1,785 fresh primary trajectories and GPT-4o terminal judgements, with normal
-browser/API service charges. All three jobs are queued with
-`afterok:337132:337133:337134`, waiting for the last OM2W repeat wave.
+browser/API service charges. All three were submitted with
+`afterok:337132:337133:337134`; after those parents completed and the requested
+review passed, the original jobs were released September30.
 The supervisor tracked all three before release. Each method has its own
 43,200-second budget including retries, requires independent completion review,
 and must save595 task archives/verdicts. Approval, submitted plans and receipts
