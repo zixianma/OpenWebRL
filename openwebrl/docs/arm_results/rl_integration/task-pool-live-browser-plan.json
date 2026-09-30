@@ -1,6 +1,6 @@
 {
   "date": "2026-09-29",
-  "status": "prepared_full200_awaiting_exact_cpu_allocation_approval",
+  "status": "verified_complete",
   "manual_review_required": false,
   "resources": {
     "gpus": 0,
@@ -69,5 +69,14 @@
     "already_quarantined_tasks": 27955,
     "upstream_commit": "9a120949aca3e58a2628f4b4e6edd0474d984873"
   },
-  "prepared_epoch": 1790738267.846428
+  "prepared_epoch": 1790738267.846428,
+  "job_id": "337474",
+  "node": "g008",
+  "approved": true,
+  "full_pilot_complete": true,
+  "uses_gpus": false,
+  "allocation": "8 CPUs,32GiB RAM,2h total including all attempts;0GPUs",
+  "completion_audit": "task-pool-live-browser-200-audit.json",
+  "consumed_seconds": 266,
+  "unused_seconds_released": 6934
 }

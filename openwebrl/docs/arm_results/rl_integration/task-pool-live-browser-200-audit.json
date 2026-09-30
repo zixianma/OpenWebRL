@@ -1,0 +1,209 @@
+{
+  "verified": true,
+  "agent_reviewed": true,
+  "review_epoch": 1790740079.5508075,
+  "job_ids": [
+    "337474"
+  ],
+  "urls": 200,
+  "counts": {
+    "inconclusive": 32,
+    "page_available": 160,
+    "unavailable_after_retry": 8
+  },
+  "covered_candidate_tasks": 58982,
+  "candidate_tasks_by_url_availability": {
+    "inconclusive": 77,
+    "page_available": 58892,
+    "unavailable_after_retry": 13
+  },
+  "url_counts_by_source": {
+    "insta-v3": {
+      "inconclusive": 31,
+      "page_available": 140,
+      "unavailable_after_retry": 8
+    },
+    "pae-webvoyager": {
+      "inconclusive": 14,
+      "page_available": 60,
+      "unavailable_after_retry": 2
+    }
+  },
+  "candidate_tasks_by_source": {
+    "insta-v3": {
+      "inconclusive": 31,
+      "page_available": 217,
+      "unavailable_after_retry": 8
+    },
+    "pae-webvoyager": {
+      "inconclusive": 46,
+      "page_available": 58675,
+      "unavailable_after_retry": 5
+    }
+  },
+  "reason_url_counts": {
+    "browser_challenge": 10,
+    "rendered_content": 160,
+    "http_403_access_or_rate_limit": 16,
+    "navigation_error_with_content": 4,
+    "sparse_or_loading_page": 2,
+    "navigation_error": 8,
+    "incomplete_page_evidence": 1,
+    "http_404": 1,
+    "authentication_form_present": 1
+  },
+  "attempt_reason_counts": {
+    "browser_challenge": 20,
+    "rendered_content": 160,
+    "http_403_access_or_rate_limit": 32,
+    "navigation_error_with_content": 6,
+    "sparse_or_loading_page": 4,
+    "navigation_error": 15,
+    "incomplete_page_evidence": 2,
+    "http_404": 2,
+    "authentication_form_present": 2
+  },
+  "reason_url_counts_by_decision": {
+    "inconclusive": {
+      "browser_challenge": 10,
+      "http_403_access_or_rate_limit": 16,
+      "navigation_error_with_content": 2,
+      "sparse_or_loading_page": 2,
+      "incomplete_page_evidence": 1,
+      "authentication_form_present": 1
+    },
+    "page_available": {
+      "rendered_content": 160,
+      "navigation_error": 1,
+      "navigation_error_with_content": 2
+    },
+    "unavailable_after_retry": {
+      "navigation_error": 7,
+      "http_404": 1
+    }
+  },
+  "attempts": 243,
+  "screenshots": 236,
+  "dom_files": 237,
+  "text_files": 237,
+  "examples": {
+    "inconclusive": [
+      {
+        "url": "https://adele.com",
+        "reasons": [
+          "browser_challenge",
+          "browser_challenge"
+        ]
+      },
+      {
+        "url": "https://bloomberg.com",
+        "reasons": [
+          "http_403_access_or_rate_limit",
+          "http_403_access_or_rate_limit"
+        ]
+      },
+      {
+        "url": "https://boardgamegeek.com",
+        "reasons": [
+          "http_403_access_or_rate_limit",
+          "http_403_access_or_rate_limit"
+        ]
+      },
+      {
+        "url": "https://defense.gov",
+        "reasons": [
+          "http_403_access_or_rate_limit",
+          "http_403_access_or_rate_limit"
+        ]
+      }
+    ],
+    "page_available": [
+      {
+        "url": "https://akc.org",
+        "reasons": [
+          "rendered_content"
+        ]
+      },
+      {
+        "url": "https://allrecipes.com",
+        "reasons": [
+          "rendered_content"
+        ]
+      },
+      {
+        "url": "https://allrecipes.com/",
+        "reasons": [
+          "rendered_content"
+        ]
+      },
+      {
+        "url": "https://alltrails.com",
+        "reasons": [
+          "rendered_content"
+        ]
+      }
+    ],
+    "unavailable_after_retry": [
+      {
+        "url": "https://nasdaq.com",
+        "reasons": [
+          "navigation_error",
+          "navigation_error"
+        ]
+      },
+      {
+        "url": "https://olympics.com",
+        "reasons": [
+          "navigation_error",
+          "navigation_error"
+        ]
+      },
+      {
+        "url": "https://schleswig-holstein.de",
+        "reasons": [
+          "navigation_error",
+          "navigation_error"
+        ]
+      },
+      {
+        "url": "https://filmothek.bundesarchiv.de",
+        "reasons": [
+          "navigation_error",
+          "navigation_error"
+        ]
+      }
+    ]
+  },
+  "manifest_sha256": "31e67679914c4a4293efa9367b603887fdf3ff801de8a065294170022e02fbee",
+  "task_disposition_count": 58982,
+  "task_dispositions_sha256": "8c2de42bce976e587245fba81f418929f4620164c39652c5d212f20e4987611c",
+  "approved_seconds": 7200,
+  "consumed_seconds": 266,
+  "unused_seconds_released": 6934,
+  "cpu_hours_consumed": 0.5911111111111111,
+  "gpu_hours_consumed": 0,
+  "model_api_calls": 0,
+  "stealth_sessions": 0,
+  "accounting": [
+    {
+      "job_id": "337474",
+      "state": "COMPLETED",
+      "elapsed_seconds": 266,
+      "exit_code": "0:0",
+      "resources": "billing=8,cpu=8,mem=32G,node=1"
+    }
+  ],
+  "checks": {
+    "exact_manifest_ids": true,
+    "frozen_sources": true,
+    "decision_logic": true,
+    "per_attempt_provenance": true,
+    "available_page_evidence": true,
+    "source_and_task_counts": true,
+    "correct_resources": true,
+    "budget_preserved": true,
+    "scheduler_completed": true
+  },
+  "interpretation": "Initial-page availability only; shared URL evidence does not verify individual task targets or solvability.",
+  "sampling": "All76 PAE start URLs plus deterministic124 InSTA URLs. URL/source counts overlap for shared sites; task counts do not. Not a population-weighted full-pool availability estimate."
+}

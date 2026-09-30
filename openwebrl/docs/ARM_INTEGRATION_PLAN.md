@@ -7768,15 +7768,43 @@ three-URL live smoke saved all screenshots/text/DOM: Halmstad and SoluCalc rende
 Adele showed a browser challenge twice and remains inconclusive. This smoke ran
 on the login host; production observations must come from a compute node.
 
-**Full pilot prepared, not submitted:** request **0 GPUs,8 CPUs,32GiB RAM,2h total**
-(max16 CPU-hours including retries),8 local browser workers and at most400
-attempts. Expected15–40min; release on completion. No API calls or stealth credits.
-The controller persists per-URL artifacts, bounds worker lifetime, resumes saved
-results, accounts all registered attempts against the original2h cap and joins
-all workers before exiting. Exact allocation approval is still required by the
-repository's submission rule; the earlier semantic job's unused time is not reused.
-[Aggregate readiness and smoke evidence](arm_results/rl_integration/task-pool-live-browser-plan.json).
-Runtime manifest, request and smoke artifacts: `task-pool-expansion-20260922/curation-v3-20260929/live-browser-20260929/`.
+**Completed and independently verified:** job **337474** on g008 used **8 CPUs,
+32GiB RAM and0 GPUs**, finishing in **4m26s** (0.591 CPU-hours). It released
+1h55m34s of the approved2h cap. No model API calls or stealth credits were used.
+
+| Initial-page decision | Exact start URLs | Candidate tasks sharing those URLs |
+| --- | ---: | ---: |
+| Available |160 |58,892 |
+| Inconclusive |32 |77 |
+| Unavailable after fresh-browser retry |8 |13 |
+| Total checked |200 |58,982 |
+
+All200 frozen URL identities and243 attempt records passed independent checks.
+Saved evidence includes236 screenshots and237 DOM/text pairs; failed evidence
+capture retains its diagnostics and cannot count as an available page. There
+were no browser-setup/worker failures. The32 inconclusive URLs include10 browser
+challenges,16 HTTP403 responses,2 navigation timeouts with content,2 sparse pages,
+1 authentication form and1 incomplete-evidence case. Unavailable observations
+are specific to this browser and collection time, not a new permanent blacklist.
+
+The60/76 available PAE URLs cover58,675 PAE tasks. The selected URLs also cover
+217 available InSTA tasks;31 InSTA tasks are inconclusive and8 unavailable.
+URL counts by source overlap at shared sites; task counts do not. The large task
+coverage reflects many PAE instructions sharing a few homepages. This is **not**
+a task-success/quality estimate or a population-weighted full-pool availability
+rate. The125,564 retained tasks outside this pilot remain unprobed.
+
+The private `run/task-dispositions.jsonl` maps all58,982 candidate task IDs to
+page evidence and eligibility for the later actor screen. It nominates58,892
+candidates; it does not add them to training or certify target existence,
+instruction quality, difficulty or ARM usefulness. Next, perform the bounded
+actor screen and distinguish valid0/5 tasks from environment failures before
+ARM-based task selection; no new GPU allocation is implied by this CPU pilot.
+
+[Aggregate audit and counts](arm_results/rl_integration/task-pool-live-browser-200-audit.json) ·
+[Preparation and smoke evidence](arm_results/rl_integration/task-pool-live-browser-plan.json).
+Runtime manifest, task dispositions, per-attempt screenshots/DOM/text and review:
+`task-pool-expansion-20260922/curation-v3-20260929/live-browser-20260929/`.
 
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26

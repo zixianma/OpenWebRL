@@ -37,7 +37,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Interactive manual review:10 paired cached cases,65 additional Jev cases,12 unlabeled broad-pool examples; model reveal and JSON export](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
-[Task filtering now browser-first: manual review optional;200-URL CPU pilot prepared, covering58,982 candidate tasks;3 live smoke checks verified](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-first-20260929).
+[Browser-first pilot337474 verified:160/200 URLs available,32 inconclusive,8 unavailable;58,892 candidate tasks share available pages;4m26s CPU-only](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-first-20260929).
 [Matched stealth90 complete: baseline54.33% /56.99%, Additive59.67% /62.59%, Gate B55.33% /58.04%; o4-mini/AgentTrek/T0.6, all three have286 valid tasks](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 [Stealth repeat2 all verified: baseline57.67% /59.66% (290 valid), Additive58.67% /61.54% (286 valid), Gate B63.00% /65.63% (288 valid); third passes running](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929).
 [WebVoyager595 comparison queued: iteration90 baseline337217/Additive337218/Gate B337219; stealth/T0.6, GPT-4o;1H200×12h each after OM2W repeats](ARM_INTEGRATION_PLAN.md#arm-webvoyager90-stealth-20260929).
