@@ -221,7 +221,7 @@ and Gate B1.00pp higher overall than baseline in this single matched evaluation.
 The cohorts merge preserved pre-outage results with retries of credit-blocked
 tasks only. [All second passes are verified](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929).
 [Third-pass results](ARM_RESULTS.md#arm-stealth90-o4-repeat3-results-20260930):
-Outcome-only baseline **53.67% /56.29%** (286 valid). The remaining cohorts are pending; report
+Outcome-only baseline **53.67% /56.29%** (286 valid); Gate B: relaxed gate **58.00% /60.42%** (288 valid). The remaining cohorts are pending; report
 three-repeat means and sample SD after all three methods are verified.
 This plot retains the first matched pass, rather than selecting the best repeat.
 Diamonds use this corrected protocol; brown

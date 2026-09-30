@@ -41,7 +41,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Browser-first pilot337474 verified:160/200 URLs available,32 inconclusive,8 unavailable;58,892 candidate tasks share available pages;4m26s CPU-only](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-first-20260929).
 [Matched stealth90 complete: baseline54.33% /56.99%, Additive59.67% /62.59%, Gate B55.33% /58.04%; o4-mini/AgentTrek/T0.6, all three have286 valid tasks](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).
 [Stealth repeat2 all verified: baseline57.67% /59.66% (290 valid), Additive58.67% /61.54% (286 valid), Gate B63.00% /65.63% (288 valid); third-pass verification in progress](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929).
-[Third stealth pass: Outcome-only baseline 53.67% /56.29% (286 valid) verified; remaining cohorts pending](ARM_RESULTS.md#arm-stealth90-o4-repeat3-results-20260930).
+[Third stealth pass: Outcome-only baseline 53.67% /56.29% (286 valid); Gate B: relaxed gate 58.00% /60.42% (288 valid) verified; remaining cohorts pending](ARM_RESULTS.md#arm-stealth90-o4-repeat3-results-20260930).
 [WebVoyager595 comparison held for post-OM2W review: iteration90 baseline337217/Additive337218/Gate B337219; stealth/T0.6, GPT-4o;1H200×12h each after OM2W repeats](ARM_INTEGRATION_PLAN.md#arm-webvoyager90-stealth-20260929).
 [Gate B training100 complete: full30036.67% /48.89%, fixed10030.00% /44.12%; all artifacts verified and comparison plot updated](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
 [Historical GPT-4.1/T0 stealth evals: Additive53.00% /56.18% (283 valid), Gate B56.33% /58.68% (288 valid); these used the wrong protocol for the intended comparison](RL_EVALUATION.md#arm-stealth90-threeway-repeats-20260928).

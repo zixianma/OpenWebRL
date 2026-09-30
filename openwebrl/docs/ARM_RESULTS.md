@@ -88,7 +88,7 @@ T0.6/p0.95/k20,4096 tokens and30 turns.
 | --- | ---: | ---: | --- | --- | --- | --- |
 | Outcome-only baseline |90 |3 |52.00% /54.17% |**53.67% /56.29%** |161 /286 /300 |[Verified audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json) |
 | Additive bonus |90 |3 | Pending | Pending | Pending | Collecting or finalizing; not yet independently verified |
-| Gate B: relaxed gate |90 |3 | Pending | Pending | Pending | Collecting or finalizing; not yet independently verified |
+| Gate B: relaxed gate |90 |3 |61.00% /61.00% |**58.00% /60.42%** |174 /288 /300 |[Verified audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
 
 Completed rows have independently checked task IDs, paired rollout archives,
 nonempty valid-task judge verdicts, checkpoint restoration, matching W&B metrics

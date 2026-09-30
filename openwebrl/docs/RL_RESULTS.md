@@ -65,6 +65,7 @@
 | |90 |2 |176 |286 |14 |58.67 |61.54 |61.00 /61.62 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-additive-iteration90-repeat2-audit.json) |
 | Gate B: relaxed gate |90 |1 |166 |286 |14 |55.33 |58.04 |62.00 /63.27 |[Merged audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-audit.json) |
 | |90 |2 |189 |288 |12 |63.00 |65.63 |67.00 /68.37 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json) |
+| |90 |3 |174 |288 |12 |58.00 |60.42 |61.00 /61.00 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
 
 ## Stealth browser · o4-mini
 

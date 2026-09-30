@@ -34,6 +34,8 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 **Outcome-only baseline, repeat3:** **161/300 =53.67% overall**, **161/286 =56.29% valid-only**; fixed100 **52.00% /54.17%** (96 valid). All300 task IDs, archives, valid-task judge texts, frozen protocol, native89 restore and final W&B metrics passed independent checks. Job337132 exited0 after17,106 seconds, releasing8,094 unused seconds. [Audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat3-audit.json).
 
+**Gate B: relaxed gate, repeat3:** **174/300 =58.00% overall**, **174/288 =60.42% valid-only**; fixed100 **61.00% /61.00%** (100 valid). All300 task IDs, archives, valid-task judge texts, frozen protocol, native89 restore and final W&B metrics passed independent checks. Job337134 exited0 after17,575 seconds, releasing7,625 unused seconds. [Audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json).
+
 Other third-pass cohorts are pending. Defer the joint three-repeat mean/SD until all three methods are audited; WebVoyager remains held for the requested post-OM2W review.
 <!-- arm-stealth-repeat3-progress-end -->
 
