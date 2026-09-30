@@ -33,7 +33,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Task-pool redesign: five-per-host was our review cap; existing-host restriction leaves25 hosts and removes nearly all additional InSTA tasks; broader medium/hard pool spans15,933 hosts](ARM_INTEGRATION_PLAN.md#arm-task-pool-redesign-20260929).
 [Upstream-code rerun: semantic job337317 verified in11m42s;184,546 candidates retained,21,396 quarantined; website/task quality remains pending](ARM_INTEGRATION_PLAN.md#arm-task-pool-upstream-rerun-20260929).
 [Next experiment: ARM-based task selection among five-valid-failure groups; proposed outcome-verified screening and matched data-selection controls](ARM_INTEGRATION_PLAN.md#arm-task-selection-all-failure-20260929).
-[Interactive75-task quality and uncertainty review](arm_results/rl_integration/jev-quality-review-v2.html).
+[Quality-screening protocol and trust audit: Jev/GPT/code comparison, blind human review, and separate browser validation](ARM_INTEGRATION_PLAN.md#arm-task-quality-human-review-20260929).
+[Interactive manual review:10 paired cached cases,65 additional Jev cases,12 unlabeled broad-pool examples; model reveal and JSON export](arm_results/rl_integration/jev-quality-review-v2.html).
 
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Matched stealth90 complete: baseline54.33% /56.99%, Additive59.67% /62.59%, Gate B55.33% /58.04%; o4-mini/AgentTrek/T0.6, all three have286 valid tasks](RL_EVALUATION.md#arm-stealth90-o4-matched-20260929).

@@ -7649,6 +7649,80 @@ before replacing the outcome-verified selection rule. Exact pilot size, retry
 budget, added-task share and training allocation remain to be finalized.
 [Earlier rescue results](ARM_RESULTS.md#arm-rescue-yield-313264).
 
+<a id="arm-task-quality-human-review-20260929"></a>
+### Quality screening: exact checks and manual comparison — September29
+
+**Current decision: use model judgments for review triage, not automatic task
+rejection.** The184,546 semantic survivors are candidates; task quality, live
+availability and actor difficulty are distinct checks. The user requested a
+comparison of screening methods and a manual review before trusting the filter.
+The [interactive review page](arm_results/rl_integration/jev-quality-review-v2.html)
+now starts with model outputs hidden, offers per-criterion human labels and a
+task-level pass-to-browser/hold/exclude decision, and exports review JSON.
+Download the HTML and open it locally; GitHub's file view does not execute it.
+No new API calls, browser task probes or GPU allocation were made for this review.
+
+| Check | Concrete operation | Evidence / disposition |
+| --- | --- | --- |
+| Structural validity | Validate task ID, nonempty instruction, HTTP(S) start URL and provenance in code. Use code for exact arithmetic/date comparisons when needed. | Structural validity only; no inference about semantic quality or live availability. |
+| Instruction quality | Ask five isolated questions: specified target, single-episode feasibility, finite completion, explicit contradiction, and missing required private input. Supply only instruction and start URL. | Jev and GPT-4.1 return clear/problem/uncertain. Human review resolves the pilot; difficult or broad-but-finite tasks are allowed. |
+| Rubric metadata | Separately inspect hidden demands and duplicate facts, with access to the reference rubric. | Advisory: the native actor/outcome judge does not receive this rubric. Rubric defects alone do not reject the instruction. |
+| Live availability, proposed | Load the actual start URL in the training browser; save final URL, screenshot, DOM/text and navigation diagnostics. Look for usable content, parked/dead pages, CAPTCHA or authentication. | HTTP200 is insufficient. A homepage pass does not prove the requested target exists. Retry a transient failure once in a fresh session; persist both attempts and quarantine unresolved cases rather than declaring actor failure. Exact session/resource limits await a bounded pilot request. |
+| Measured difficulty, later | Run five ordinary attempts with the frozen initial actor and native outcome judge. | Only five valid complete failures establish observed0/5. Site/infrastructure failures remain separate; neither Jev confidence nor rubric fact count measures actor difficulty. |
+
+**What we know about Jev.** The revised v2 cached comparison has67/70
+criterion agreements with GPT-4.1, including48/50 instruction-quality agreements.
+It contains only10 deliberately selected edge cases from the earlier restricted
+pool. The same cases informed prompt revision, so this is a development sanity
+check, not a held-out accuracy estimate. Seven of these tasks survive the current
+metadata/semantic pipeline. Jev's0.8 confidence heuristic has not been calibrated
+against human labels on this distribution. TypeSafe itself documents literal
+interpretation, numeric/date reasoning and indirection limitations; keep arithmetic
+in code and do not infer a reliable filter from vendor calibration claims.
+[Official limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13).
+
+| Comparison available now | Evidence | Limitation |
+| --- | --- | --- |
+| Transparent structural rules | All75 cached tasks and12 new examples have nonempty instructions, parseable HTTP(S) URLs and reference metadata. | Does not detect semantic blockers or dead websites. |
+| Jev1.13.0, seven atomic questions |525 cached judgments over75 earlier tasks; probabilities and confidence visible per criterion. | No free-form evidence; no validated human accuracy or broad-pool coverage. |
+| GPT-4.1, identical criterion/input visibility |70 cached judgments on10 of those tasks; explanations and requested evidence quotes. |16/70 requested quotes are not exact source matches, clearly flagged in the page. Exact matching itself does not establish a correct conclusion. |
+| Human review | Blank labels, model reveal after initial judgment, optional rubric inspection, browser-local save and JSON export. | No user labels received yet. Prior assistant inspection is labeled as such and is not independent ground truth. |
+
+Concrete review cases: task237800 (tracking future words of the day) is a
+single-episode blocker that both models detect, although they disagree on two
+other criteria;211562 leaves the sports league unspecified;262046's generic
+Einstein lookup is finite but its source rubric demands unstated particulars;
+220296's nested enrollment thresholds are compatible and redundant rather than
+contradictory. Under the old v1 question, both models incorrectly treated distinct
+requested filenames as redundant; revised v2 fixes this example. Model agreement
+therefore cannot replace independent review.
+
+The page also includes12 **unlabeled** examples from the newly retained pool,
+two per source×rubric-count bucket selected by deterministic hash with
+seed label`manual-review-20260929`. This small balanced panel is for inspecting
+criterion transfer, not estimating population accuracy or restricting accepted
+tasks/sites. No model outputs are fabricated for these examples. The export
+records first and subsequent labels, criterion/data fingerprint and whether
+models or the rubric had been revealed before each label. Browser history cannot
+account for exposure outside this page; already familiar examples remain a
+development set even if the page starts hidden.
+
+**Next comparison before scaling:** freeze the criteria after this manual review,
+then label a fresh source/site/task-type sample with Jev and GPT-4.1 and reserve
+separate IDs for an untouched human audit. Compare Jev-only, GPT-only and a
+Jev→GPT escalation policy against human labels, reporting false rejection of
+usable tasks, missed instruction blockers, abstention/review rate and cost.
+Check high-confidence agreements as well as disagreements to detect shared
+errors; do not evaluate only the cases routed for review. Apply sampling weights
+for population estimates if strata are oversampled. Human-unresolved cases stay
+unresolved. The new API/browser budget, audit size and any automatic threshold
+remain unapproved and unchosen; the cached comparison incurs no new spend.
+
+Rebuild: `scripts/render_arm_task_quality_review.py --version v2 --manual-review`
+with`--current-pool`pointing to semantic output`kept-337317.jsonl`and`--output`
+pointing to the existing review HTML. This changes only the review artifact,
+not the running training pool or scientific recipes.
+
 <a id="arm-prefix-curriculum-pilot-20260926"></a>
 ## ARM-guided prefixes followed by actor-only completion — September26
 
