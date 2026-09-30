@@ -29,7 +29,22 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 <a id="arm-stealth90-o4-matched-20260929"></a>
 ## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29
 
-**Verified result, September29:** Gate B90 is complete at **166/300 =55.33%
+**Fresh repeat2, September29:** Gate B90 is independently verified at
+**189/300 =63.00% overall**, **189/288 =65.63% valid-only**; fixed100
+**67/100 =67.00%**, **67/98 =68.37% valid-only**. All300 expected task IDs and
+paired archives were checked; all288 valid tasks contain nonempty o4-mini/
+AgentTrek verdicts, with no credit-exhaustion metadata. Frozen generation code
+confirms T0.6/p0.95/k20/4096 tokens/30 turns; server RNG seed1235. Native89
+model restoration,1136 Adam updates, scheduler offset0, cursor, shard extents
+and sampled finite CPU tensors passed. W&B finished with matching metrics.
+Job337131 exited0 after16,380 seconds and released8,820 unused seconds.
+[Repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json).
+Baseline repeat2 has saved300 tasks and is finalizing; Additive is collecting.
+All third passes await completion of the second round, preserving the9-browser
+concurrency cap. These are repeated evaluations of the same models; no
+three-repeat mean or training-seed inference is available yet.
+
+**Verified first-pass result, September29:** Gate B90 is complete at **166/300 =55.33%
 overall**, **166/286 =58.04% valid-only**; fixed100 is **62/100 =62.00%**,
 **62/98 =63.27% valid-only**. Baseline is also verified: **163/300 =54.33%
 overall**, **163/286 =56.99% valid-only**, fixed100 **56.00% /57.14%**.

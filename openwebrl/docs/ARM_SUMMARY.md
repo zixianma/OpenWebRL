@@ -208,7 +208,7 @@ success; teacher action consistency is58% under reversed-order re-query.
 <a id="baseline-comparison"></a>
 ![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
 
-**Matched stealth evaluation, September29: o4-mini/AgentTrek, actor T0.6; no inference-time selection.**
+**Matched stealth evaluation, first pass, September29: o4-mini/AgentTrek, actor T0.6; no inference-time selection.**
 
 | Method | Iteration | Fixed-100 overall / valid-only | Full-300 overall / valid-only |
 | --- | ---: | --- | --- |
@@ -219,7 +219,11 @@ success; teacher action consistency is58% under reversed-order re-query.
 All three are verified complete, each with286 valid tasks. Additive is5.33pp
 and Gate B1.00pp higher overall than baseline in this single matched evaluation.
 The cohorts merge preserved pre-outage results with retries of credit-blocked
-tasks only. Two additional evaluations per method are [approved and scheduled](ARM_INTEGRATION_PLAN.md#arm-stealth90-three-repeats-o4-20260929).
+tasks only. [Fresh repeat2](ARM_RESULTS.md#arm-stealth90-o4-repeat2-results-20260929):
+Gate B is verified at **63.00% overall /65.63% valid-only** (288 valid);
+fixed100 **67.00% /68.37%**. Baseline/Additive repeat2 and all third passes are
+pending; report the three-repeat mean and sample SD after completion.
+This plot retains the first matched pass, rather than selecting the best repeat.
 Diamonds use this corrected protocol; brown
 triangles retain historical baseline58/90 references. Earlier GPT-4.1/T0 ARM
 results remain in the [history table](ARM_RESULTS.md#arm-stealth90-results-20260929).
