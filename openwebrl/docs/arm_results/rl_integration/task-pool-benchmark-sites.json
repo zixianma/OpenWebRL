@@ -1,0 +1,401 @@
+{
+  "all_page_statuses": {
+    "inconclusive": 21375,
+    "page_available": 155512,
+    "unavailable_after_retry": 7659
+  },
+  "artifacts": {
+    "available-benchmark-tasks.jsonl": "df1e82bb61086860241e81d45cbe38ce673e105182a92ebdda66efcca176c90b",
+    "available-benchmark-websites.csv": "cac4a975a933ddae86970300cdad67d19e70c6370742859bd4bf070827da1474",
+    "available-nonbenchmark-tasks.jsonl": "67931ebe8fc11b3fef1ef3d4c484527c9d9f37e54a9508443ac0dcdd31b12b63",
+    "available-nonbenchmark-websites.csv": "d0d3af68987e97ffcf5be4702a58d5f3eabe2015d96168be6b88c222e7b4ad46",
+    "benchmark-site-evidence.json": "1fdf5907b6bf1fceb982546e3f104c3f6b0d99949389d375243458305d5cbe74",
+    "benchmark-sites.csv": "a081846b9187902847fb2cefd2c49b7c2bbd4d3bd742fc72d45475f53df0e1f7",
+    "host-groups.csv": "7b1360a48d0f2ff0c80682fc505e9e5b96a431c98de9a3454dfdd5376d236a5b",
+    "task-groups.jsonl": "d79c5090d6575aedacb3eebaddbbd7348787656fc2e69cf98321050d21942f3b",
+    "website-groups.csv": "628dfe7e41813a2ad612de728441688d3b88508860a8756c62835c49732eb55b",
+    "webtail-unresolved.json": "432b294c681da86e5c46ba13b84e5e618b52b57972fff7c4afa44c39bb908622"
+  },
+  "available": {
+    "groups": {
+      "benchmark": {
+        "sources": {
+          "insta-v3": 1178,
+          "pae-webvoyager": 57937
+        },
+        "tasks": 59115,
+        "websites": 185
+      },
+      "nonbenchmark_no_known_match": {
+        "sources": {
+          "insta-v3": 95659,
+          "pae-webvoyager": 738
+        },
+        "tasks": 96397,
+        "websites": 82021
+      }
+    },
+    "normalized_hosts": 96768,
+    "tasks": 155512,
+    "websites": 82206
+  },
+  "benchmarks": {
+    "deepshop": {
+      "available_pool_sites": 1,
+      "available_pool_tasks": 8949,
+      "inventory_sites": 1,
+      "tasks_in_benchmark": 150
+    },
+    "om2w": {
+      "available_pool_sites": 85,
+      "available_pool_tasks": 44569,
+      "inventory_sites": 143,
+      "tasks_in_benchmark": 300
+    },
+    "webtailbench": {
+      "available_pool_sites": 111,
+      "available_pool_tasks": 26031,
+      "inventory_sites": 231,
+      "tasks_in_benchmark": 609
+    },
+    "webvoyager": {
+      "available_pool_sites": 13,
+      "available_pool_tasks": 57943,
+      "inventory_sites": 13,
+      "tasks_in_benchmark": 595
+    }
+  },
+  "classification_only": true,
+  "date": "2026-09-30",
+  "input": {
+    "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/live-browser-full-20260929/task-dispositions.jsonl",
+    "sha256": "8abab209dde57477c9f39c94c15efd66e125b47357a27c602c6c79c6f330acd7",
+    "tasks": 184546
+  },
+  "inputs": [
+    {
+      "path": "openwebrl/data/eval/webvoyager_fara.jsonl",
+      "sha256": "ac9253317b76884abbd8d89e9b02570f3f4fbf18e428c335bc8761d778c6fe68"
+    },
+    {
+      "path": "openwebrl/data/eval/online-mind2web.jsonl",
+      "sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed"
+    },
+    {
+      "path": "openwebrl/data/eval/deepshop.jsonl",
+      "sha256": "479d35f1d2345b66512b9d398a5472f28bcc5e3e08da487073662ab188f8fefa"
+    },
+    {
+      "path": "WebTailBench.tsv",
+      "sha256": "a0bc329f830d730d9a578ae287ec1bc7f10474cccdae538339db0618c8fe9e3d",
+      "url": "https://huggingface.co/datasets/microsoft/WebTailBench/resolve/50cc93ed008a4d54271ca3e5779e83d4a39ae647/WebTailBench.tsv"
+    },
+    {
+      "path": "WebTailBench-v2-rubrics.tsv",
+      "sha256": "aab5ec4912284e4768d854e9a4ae777fcc50c0a7fb06f6777ab5c25660e0012a",
+      "url": "https://huggingface.co/datasets/microsoft/WebTailBench/resolve/50cc93ed008a4d54271ca3e5779e83d4a39ae647/WebTailBench-v2-rubrics.tsv"
+    },
+    {
+      "path": "public_suffix_list.dat",
+      "sha256": "257b298daca42f6d8ec964e238c2a55518e14f09d3117917ec8acee6f188503e",
+      "url": "https://publicsuffix.org/list/public_suffix_list.dat"
+    },
+    {
+      "path": "openwebrl/docs/arm_results/rl_integration/task-pool-benchmark-site-aliases.json",
+      "sha256": "b0341a2221056ead778f804bf7137bfa01f4fcf8e493f7023035131229b16680"
+    }
+  ],
+  "largest_sites": {
+    "benchmark": [
+      {
+        "benchmarks": [
+          "om2w",
+          "webvoyager"
+        ],
+        "site": "arxiv.org",
+        "tasks": 9307
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webtailbench",
+          "webvoyager"
+        ],
+        "site": "allrecipes.com",
+        "tasks": 9205
+      },
+      {
+        "benchmarks": [
+          "deepshop",
+          "om2w",
+          "webtailbench",
+          "webvoyager"
+        ],
+        "site": "amazon.com",
+        "tasks": 8949
+      },
+      {
+        "benchmarks": [
+          "webvoyager"
+        ],
+        "site": "bbc.com",
+        "tasks": 8104
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webtailbench",
+          "webvoyager"
+        ],
+        "site": "apple.com",
+        "tasks": 7255
+      },
+      {
+        "benchmarks": [
+          "webvoyager"
+        ],
+        "site": "wolframalpha.com",
+        "tasks": 5570
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webvoyager"
+        ],
+        "site": "github.com",
+        "tasks": 4503
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webvoyager"
+        ],
+        "site": "espn.com",
+        "tasks": 4312
+      },
+      {
+        "benchmarks": [
+          "webvoyager"
+        ],
+        "site": "huggingface.co",
+        "tasks": 591
+      },
+      {
+        "benchmarks": [
+          "om2w"
+        ],
+        "site": "ca.gov",
+        "tasks": 252
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webtailbench"
+        ],
+        "site": "stanford.edu",
+        "tasks": 156
+      },
+      {
+        "benchmarks": [
+          "om2w"
+        ],
+        "site": "berkeley.edu",
+        "tasks": 121
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webtailbench",
+          "webvoyager"
+        ],
+        "site": "booking.com",
+        "tasks": 87
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webtailbench",
+          "webvoyager"
+        ],
+        "site": "google.com",
+        "tasks": 56
+      },
+      {
+        "benchmarks": [
+          "om2w"
+        ],
+        "site": "virginia.gov",
+        "tasks": 49
+      },
+      {
+        "benchmarks": [
+          "om2w"
+        ],
+        "site": "youtube.com",
+        "tasks": 40
+      },
+      {
+        "benchmarks": [
+          "om2w"
+        ],
+        "site": "osu.edu",
+        "tasks": 38
+      },
+      {
+        "benchmarks": [
+          "webtailbench"
+        ],
+        "site": "wikipedia.org",
+        "tasks": 28
+      },
+      {
+        "benchmarks": [
+          "webtailbench"
+        ],
+        "site": "ny.gov",
+        "tasks": 20
+      },
+      {
+        "benchmarks": [
+          "om2w",
+          "webtailbench"
+        ],
+        "site": "marriott.com",
+        "tasks": 18
+      }
+    ],
+    "nonbenchmark_no_known_match": [
+      {
+        "benchmarks": [],
+        "site": "bing.com",
+        "tasks": 694
+      },
+      {
+        "benchmarks": [],
+        "site": "house.gov",
+        "tasks": 229
+      },
+      {
+        "benchmarks": [],
+        "site": "europa.eu",
+        "tasks": 200
+      },
+      {
+        "benchmarks": [],
+        "site": "biomedcentral.com",
+        "tasks": 196
+      },
+      {
+        "benchmarks": [],
+        "site": "nasa.gov",
+        "tasks": 165
+      },
+      {
+        "benchmarks": [],
+        "site": "nsw.gov.au",
+        "tasks": 130
+      },
+      {
+        "benchmarks": [],
+        "site": "nih.gov",
+        "tasks": 113
+      },
+      {
+        "benchmarks": [],
+        "site": "senate.gov",
+        "tasks": 109
+      },
+      {
+        "benchmarks": [],
+        "site": "wisc.edu",
+        "tasks": 107
+      },
+      {
+        "benchmarks": [],
+        "site": "mit.edu",
+        "tasks": 96
+      },
+      {
+        "benchmarks": [],
+        "site": "noaa.gov",
+        "tasks": 94
+      },
+      {
+        "benchmarks": [],
+        "site": "harvard.edu",
+        "tasks": 93
+      },
+      {
+        "benchmarks": [],
+        "site": "cornell.edu",
+        "tasks": 91
+      },
+      {
+        "benchmarks": [],
+        "site": "wiktionary.org",
+        "tasks": 72
+      },
+      {
+        "benchmarks": [],
+        "site": "umn.edu",
+        "tasks": 71
+      },
+      {
+        "benchmarks": [],
+        "site": "wa.gov",
+        "tasks": 66
+      },
+      {
+        "benchmarks": [],
+        "site": "utah.gov",
+        "tasks": 65
+      },
+      {
+        "benchmarks": [],
+        "site": "admin.ch",
+        "tasks": 64
+      },
+      {
+        "benchmarks": [],
+        "site": "dc.gov",
+        "tasks": 64
+      },
+      {
+        "benchmarks": [],
+        "site": "illinois.edu",
+        "tasks": 63
+      }
+    ]
+  },
+  "limitations": [
+    "WebTailBench has no released start URLs; V1/V2 explicit instruction domains and reviewed aliases are used.",
+    "No-known-match is provisional: open-ended tasks can use websites not named in the instruction.",
+    "Task-ID prefixes and rubric-only suggestions are not site evidence. Refusals split is excluded.",
+    "No brand-family expansion, redirect-destination matching, task-semantic exclusion or training-pool changes."
+  ],
+  "matching": "PSL registrable domain including private suffixes; www stripped; country domains distinct; start URL only",
+  "parser_version": "5.3.0",
+  "schema_version": 1,
+  "unknown_suffix_hosts": [],
+  "verification": {
+    "artifact_sha256_verified": true,
+    "available_partitions_disjoint_and_exhaustive": true,
+    "domain_unit_tests_passed": 5,
+    "implementation_sha256": "804f392ccbf4659f02b09bc0ccd37c5ebfdb98f4c4c5dd2b2fe96ada7854f57a",
+    "runtime_output": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/benchmark-sites-20260930/verified",
+    "script": "scripts/group_arm_task_websites.py",
+    "task_ids_match_source": true
+  },
+  "webtail_extraction_coverage": {
+    "WebTailBench-v2-rubrics.tsv": {
+      "no_extracted_site": 241,
+      "tasks_with_at_least_one_site": 368,
+      "total_tasks": 609
+    },
+    "WebTailBench.tsv": {
+      "no_extracted_site": 248,
+      "tasks_with_at_least_one_site": 361,
+      "total_tasks": 609
+    }
+  }
+}

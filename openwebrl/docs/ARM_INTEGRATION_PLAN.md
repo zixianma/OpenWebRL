@@ -7918,6 +7918,73 @@ Runtime `live-browser-full-20260929/task-dispositions.jsonl` maps every task to
 its exact URL evidence. Raw page artifacts and task mapping remain private.
 
 
+<a id="arm-task-pool-benchmark-websites-20260930"></a>
+
+### Benchmark versus non-benchmark websites — September30
+
+**Grouped the155,512 page-available expansion tasks** by their starting website's
+overlap with WebVoyager, Online-Mind2Web, WebTailBench and DeepShop. This is a
+classification for data selection; it does not remove tasks or change training.
+
+| Website group | Available websites | Available tasks | Share of tasks |
+| --- | ---: | ---: | ---: |
+| Known benchmark-associated |185 |59,115 |38.0% |
+| Non-benchmark: no known site match, provisional |82,021 |96,397 |62.0% |
+| Total |82,206 |155,512 |100.0% |
+
+| Benchmark | Matching available websites | Associated available tasks |
+| --- | ---: | ---: |
+| WebVoyager |13 |57,943 |
+| Online-Mind2Web |85 |44,569 |
+| WebTailBench: named-site inventory |111 |26,031 |
+| DeepShop |1 |8,949 |
+
+Benchmark memberships overlap; the second table must not be summed. The first
+table is a disjoint partition. The benchmark group contains57,937 PAE and1,178
+InSTA tasks; the other group contains738 PAE and95,659 InSTA tasks. Examples of
+benchmark-associated sites are `amazon.com`, `arxiv.org`, `allrecipes.com` and
+`bbc.com`; no-known-match examples include `bing.com`, `nasa.gov` and `house.gov`.
+
+- **Website identity:** Public Suffix List registrable domain, including private
+  suffixes. Merge ordinary subdomains (`maps.google.com` → `google.com`), keep
+  separate hosted tenants (`alice.blogspot.com` versus `bob.blogspot.com`), and
+  keep country domains separate (`amazon.com` versus `amazon.co.uk`). Preserve
+  normalized hostname and exact-host benchmark flags separately. These82,206
+  sites contain96,768 normalized hosts. Match the start URL, not redirect targets.
+- **Benchmark sources:** released local evaluation manifests,595 WebVoyager,
+  300 OM2W and150 DeepShop tasks, plus Microsoft's
+  [WebTailBench V1/V2 instructions](https://huggingface.co/datasets/microsoft/WebTailBench/tree/50cc93ed008a4d54271ca3e5779e83d4a39ae647).
+  Freeze input hashes, the suffix-list snapshot and explicit named-site aliases.
+- **WebTailBench limitation:** its609-task release has no starting-URL field.
+  Use literal domains and named-site aliases in the instructions, taking the
+  union of V1/V2. Do not infer sites from stale task-ID prefixes or rubric-only
+  suggestions. At least one site was extracted for361/609 V1 and368/609 V2
+  instructions; the remaining248/241 include open-ended tasks and unresolved
+  entity names. Even a resolved task can visit additional unspecified sites.
+  Thus **no known match is not a guarantee of benchmark-disjoint browsing**.
+  Refusals are not included. Alias-derived evidence is tagged separately from
+  released URLs; the complete evidence and unresolved-ID lists are retained.
+
+[Aggregate counts, hashes and limitations](arm_results/rl_integration/task-pool-benchmark-sites.json) ·
+[354-site benchmark inventory with per-benchmark flags](arm_results/rl_integration/task-pool-benchmark-sites.csv) ·
+[185 benchmark-associated sites present in the available pool](arm_results/rl_integration/task-pool-available-benchmark-websites.csv) ·
+[Reviewed named-site aliases](arm_results/rl_integration/task-pool-benchmark-site-aliases.json).
+
+Reproducer: `scripts/group_arm_task_websites.py` with `tldextract==5.3.0`.
+CPU-only verification checked all184,546 source task identities, the disjoint
+155,512-task available partition, output hashes, website totals and five domain
+boundary tests. No browser/API calls or GPU allocation were used for grouping.
+
+Runtime prefix: `task-pool-expansion-20260922/curation-v3-20260929/benchmark-sites-20260930/`.
+`sources/` holds frozen WebTailBench/PSL inputs; `verified/` contains
+`available-benchmark-websites.csv`, `available-nonbenchmark-websites.csv`,
+`website-groups.csv`, `host-groups.csv`, `benchmark-site-evidence.json`,
+`webtail-unresolved.json`, and per-task `available-benchmark-tasks.jsonl`,
+`available-nonbenchmark-tasks.jsonl`, `task-groups.jsonl`. The latter preserves
+availability labels for the entire184,546-task reservoir. Full per-task mappings
+stay in runtime. Use both groups for subsequent selection comparisons; no
+website group has been selected or excluded from training by this operation.
+
 ### Full retained-pool browser coverage — September29
 
 **Approved and running:** extend the same browser checks to all125,761 exact

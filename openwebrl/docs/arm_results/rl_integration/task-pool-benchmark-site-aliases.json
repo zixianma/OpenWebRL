@@ -1,0 +1,1179 @@
+{
+  "description": "Reviewed named-site mappings for WebTailBench task instructions. Domain inference from a name is labeled separately from literal URL evidence. Only aliases actually present in an instruction contribute. No task-ID-prefix, rubric-only, brand-family or country-domain expansion. Open-ended/other unresolved tasks remain explicitly reported.",
+  "aliases": [
+    {
+      "domain": "amazon.com",
+      "names": [
+        "Amazon"
+      ]
+    },
+    {
+      "domain": "apple.com",
+      "names": [
+        "Apple Books",
+        "Apple Careers"
+      ]
+    },
+    {
+      "domain": "allrecipes.com",
+      "names": [
+        "AllRecipes"
+      ]
+    },
+    {
+      "domain": "reddit.com",
+      "names": [
+        "reddit"
+      ]
+    },
+    {
+      "domain": "steampowered.com",
+      "names": [
+        "Steam"
+      ]
+    },
+    {
+      "domain": "microsoft.com",
+      "names": [
+        "Microsoft support",
+        "Microsoft Store"
+      ]
+    },
+    {
+      "domain": "zara.com",
+      "names": [
+        "zara"
+      ]
+    },
+    {
+      "domain": "stanford.edu",
+      "names": [
+        "stanford"
+      ]
+    },
+    {
+      "domain": "jhu.edu",
+      "names": [
+        "Johns Hopkins"
+      ]
+    },
+    {
+      "domain": "google.com",
+      "names": [
+        "Google Maps",
+        "Google Flights"
+      ]
+    },
+    {
+      "domain": "youtube.com",
+      "names": [
+        "YouTube"
+      ]
+    },
+    {
+      "domain": "aerlingus.com",
+      "names": [
+        "Aer Lingus"
+      ]
+    },
+    {
+      "domain": "airasia.com",
+      "names": [
+        "AirAsia"
+      ]
+    },
+    {
+      "domain": "aircanada.com",
+      "names": [
+        "Air Canada"
+      ]
+    },
+    {
+      "domain": "alaskaair.com",
+      "names": [
+        "Alaska Airlines"
+      ]
+    },
+    {
+      "domain": "ita-airways.com",
+      "names": [
+        "ITA"
+      ]
+    },
+    {
+      "domain": "allegiantair.com",
+      "names": [
+        "Allegiant Air"
+      ]
+    },
+    {
+      "domain": "ana.co.jp",
+      "names": [
+        "ANA"
+      ]
+    },
+    {
+      "domain": "britishairways.com",
+      "names": [
+        "British Airways"
+      ]
+    },
+    {
+      "domain": "cathaypacific.com",
+      "names": [
+        "Cathay Pacific"
+      ]
+    },
+    {
+      "domain": "delta.com",
+      "names": [
+        "Delta"
+      ]
+    },
+    {
+      "domain": "easyjet.com",
+      "names": [
+        "EasyJet"
+      ]
+    },
+    {
+      "domain": "goindigo.in",
+      "names": [
+        "IndiGo"
+      ]
+    },
+    {
+      "domain": "iberia.com",
+      "names": [
+        "Iberia"
+      ]
+    },
+    {
+      "domain": "jal.co.jp",
+      "names": [
+        "Japan Airlines"
+      ]
+    },
+    {
+      "domain": "jetblue.com",
+      "names": [
+        "JetBlue"
+      ]
+    },
+    {
+      "domain": "jetstar.com",
+      "names": [
+        "Jetstar"
+      ]
+    },
+    {
+      "domain": "klm.com",
+      "names": [
+        "KLM"
+      ]
+    },
+    {
+      "domain": "koreanair.com",
+      "names": [
+        "Korean Air"
+      ]
+    },
+    {
+      "domain": "lot.com",
+      "names": [
+        "LOT Polish Airlines"
+      ]
+    },
+    {
+      "domain": "lufthansa.com",
+      "names": [
+        "Lufthansa"
+      ]
+    },
+    {
+      "domain": "malaysiaairlines.com",
+      "names": [
+        "Malaysia Airlines"
+      ]
+    },
+    {
+      "domain": "philippineairlines.com",
+      "names": [
+        "Philippine Airlines"
+      ]
+    },
+    {
+      "domain": "ryanair.com",
+      "names": [
+        "Ryanair"
+      ]
+    },
+    {
+      "domain": "singaporeair.com",
+      "names": [
+        "Singapore Airlines"
+      ]
+    },
+    {
+      "domain": "southwest.com",
+      "names": [
+        "Southwest Airlines"
+      ]
+    },
+    {
+      "domain": "spirit.com",
+      "names": [
+        "Spirit Airlines"
+      ]
+    },
+    {
+      "domain": "suncountry.com",
+      "names": [
+        "Sun Country Airlines"
+      ]
+    },
+    {
+      "domain": "swiss.com",
+      "names": [
+        "Swiss Airlines"
+      ]
+    },
+    {
+      "domain": "thaiairways.com",
+      "names": [
+        "Thai Airways"
+      ]
+    },
+    {
+      "domain": "turkishairlines.com",
+      "names": [
+        "Turkish Airlines"
+      ]
+    },
+    {
+      "domain": "united.com",
+      "names": [
+        "United Airlines"
+      ]
+    },
+    {
+      "domain": "vueling.com",
+      "names": [
+        "Vueling"
+      ]
+    },
+    {
+      "domain": "westjet.com",
+      "names": [
+        "WestJet"
+      ]
+    },
+    {
+      "domain": "wizzair.com",
+      "names": [
+        "Wizz Air"
+      ]
+    },
+    {
+      "domain": "agoda.com",
+      "names": [
+        "Agoda"
+      ]
+    },
+    {
+      "domain": "airbnb.com",
+      "names": [
+        "Airbnb"
+      ]
+    },
+    {
+      "domain": "aubergeresorts.com",
+      "names": [
+        "Auberge Resorts"
+      ]
+    },
+    {
+      "domain": "bestwestern.com",
+      "names": [
+        "Best Western"
+      ]
+    },
+    {
+      "domain": "booking.com",
+      "names": [
+        "Booking.com"
+      ]
+    },
+    {
+      "domain": "costco.com",
+      "names": [
+        "Costco"
+      ]
+    },
+    {
+      "domain": "expedia.com",
+      "names": [
+        "Expedia"
+      ]
+    },
+    {
+      "domain": "hilton.com",
+      "names": [
+        "Hilton"
+      ]
+    },
+    {
+      "domain": "hipcamp.com",
+      "names": [
+        "Hipcamp"
+      ]
+    },
+    {
+      "domain": "hostelworld.com",
+      "names": [
+        "Hostelworld"
+      ]
+    },
+    {
+      "domain": "hyatt.com",
+      "names": [
+        "Hyatt"
+      ]
+    },
+    {
+      "domain": "ihg.com",
+      "names": [
+        "IHG"
+      ]
+    },
+    {
+      "domain": "kayak.com",
+      "names": [
+        "Kayak"
+      ]
+    },
+    {
+      "domain": "kempinski.com",
+      "names": [
+        "Kempinski"
+      ]
+    },
+    {
+      "domain": "marriott.com",
+      "names": [
+        "Marriott"
+      ]
+    },
+    {
+      "domain": "motel6.com",
+      "names": [
+        "Motel 6"
+      ]
+    },
+    {
+      "domain": "orbitz.com",
+      "names": [
+        "Orbitz"
+      ]
+    },
+    {
+      "domain": "premierinn.com",
+      "names": [
+        "Premier Inn"
+      ]
+    },
+    {
+      "domain": "sandals.com",
+      "names": [
+        "Sandals"
+      ]
+    },
+    {
+      "domain": "travelocity.com",
+      "names": [
+        "Travelocity"
+      ]
+    },
+    {
+      "domain": "tripadvisor.com",
+      "names": [
+        "Tripadvisor"
+      ]
+    },
+    {
+      "domain": "vrbo.com",
+      "names": [
+        "Vrbo"
+      ]
+    },
+    {
+      "domain": "aliexpress.com",
+      "names": [
+        "AliExpress"
+      ]
+    },
+    {
+      "domain": "americanstandard-us.com",
+      "names": [
+        "American Standard"
+      ]
+    },
+    {
+      "domain": "agwheelexpress.com",
+      "names": [
+        "AgWheelExpress"
+      ]
+    },
+    {
+      "domain": "beatsbydre.com",
+      "names": [
+        "Beats by Dre"
+      ]
+    },
+    {
+      "domain": "birdbgone.com",
+      "names": [
+        "Bird B Gone"
+      ]
+    },
+    {
+      "domain": "basspro.com",
+      "names": [
+        "Bass Pro Shops",
+        "Bass Pro"
+      ]
+    },
+    {
+      "domain": "bestbuy.com",
+      "names": [
+        "Best Buy",
+        "BestBuy"
+      ]
+    },
+    {
+      "domain": "chewy.com",
+      "names": [
+        "Chewy"
+      ]
+    },
+    {
+      "domain": "colgate.com",
+      "names": [
+        "Colgate's official"
+      ]
+    },
+    {
+      "domain": "craftsman.com",
+      "names": [
+        "Craftsman"
+      ]
+    },
+    {
+      "domain": "dickssportinggoods.com",
+      "names": [
+        "Dick's Sporting Goods",
+        "Dicks Sporting Goods"
+      ]
+    },
+    {
+      "domain": "ebay.com",
+      "names": [
+        "ebay"
+      ]
+    },
+    {
+      "domain": "etsy.com",
+      "names": [
+        "etsy"
+      ]
+    },
+    {
+      "domain": "gap.com",
+      "names": [
+        "Gap"
+      ]
+    },
+    {
+      "domain": "goat.com",
+      "names": [
+        "GOAT"
+      ]
+    },
+    {
+      "domain": "gymshark.com",
+      "names": [
+        "Gymshark"
+      ]
+    },
+    {
+      "domain": "heb.com",
+      "names": [
+        "H-E-B"
+      ]
+    },
+    {
+      "domain": "hobbylobby.com",
+      "names": [
+        "Hobby Lobby"
+      ]
+    },
+    {
+      "domain": "homedepot.com",
+      "names": [
+        "Home Depot",
+        "HomeDepot"
+      ]
+    },
+    {
+      "domain": "ikea.com",
+      "names": [
+        "IKEA"
+      ]
+    },
+    {
+      "domain": "kohls.com",
+      "names": [
+        "Kohl's",
+        "Kohls"
+      ]
+    },
+    {
+      "domain": "landsend.com",
+      "names": [
+        "Lands' End",
+        "Lands End"
+      ]
+    },
+    {
+      "domain": "lowes.com",
+      "names": [
+        "Lowe's",
+        "Lowes"
+      ]
+    },
+    {
+      "domain": "macys.com",
+      "names": [
+        "Macy's",
+        "Macys"
+      ]
+    },
+    {
+      "domain": "newegg.com",
+      "names": [
+        "Newegg"
+      ]
+    },
+    {
+      "domain": "nordstrom.com",
+      "names": [
+        "Nordstrom"
+      ]
+    },
+    {
+      "domain": "overstock.com",
+      "names": [
+        "Overstock"
+      ]
+    },
+    {
+      "domain": "petsmart.com",
+      "names": [
+        "PetSmart"
+      ]
+    },
+    {
+      "domain": "polaroid.com",
+      "names": [
+        "Polaroid's official",
+        "Polaroid's US website"
+      ]
+    },
+    {
+      "domain": "rei.com",
+      "names": [
+        "REI"
+      ]
+    },
+    {
+      "domain": "rockauto.com",
+      "names": [
+        "RockAuto",
+        "Rock Auto"
+      ]
+    },
+    {
+      "domain": "samsclub.com",
+      "names": [
+        "Sam's Club",
+        "Sam\u2019s Club"
+      ]
+    },
+    {
+      "domain": "samsung.com",
+      "names": [
+        "Samsung's official",
+        "Samsung's website",
+        "Samsung website"
+      ]
+    },
+    {
+      "domain": "sephora.com",
+      "names": [
+        "Sephora"
+      ]
+    },
+    {
+      "domain": "target.com",
+      "names": [
+        "Target"
+      ]
+    },
+    {
+      "domain": "ulta.com",
+      "names": [
+        "Ulta"
+      ]
+    },
+    {
+      "domain": "uline.com",
+      "names": [
+        "Uline"
+      ]
+    },
+    {
+      "domain": "underarmour.com",
+      "names": [
+        "Under Armour"
+      ]
+    },
+    {
+      "domain": "uniqlo.com",
+      "names": [
+        "Uniqlo"
+      ]
+    },
+    {
+      "domain": "walgreens.com",
+      "names": [
+        "Walgreens"
+      ]
+    },
+    {
+      "domain": "walmart.com",
+      "names": [
+        "Walmart"
+      ]
+    },
+    {
+      "domain": "wayfair.com",
+      "names": [
+        "Wayfair"
+      ]
+    },
+    {
+      "domain": "westelm.com",
+      "names": [
+        "West Elm"
+      ]
+    },
+    {
+      "domain": "wholefoodsmarket.com",
+      "names": [
+        "Whole Foods"
+      ]
+    },
+    {
+      "domain": "zappos.com",
+      "names": [
+        "Zappos"
+      ]
+    },
+    {
+      "domain": "careerbuilder.com",
+      "names": [
+        "CareerBuilder"
+      ]
+    },
+    {
+      "domain": "linkedin.com",
+      "names": [
+        "LinkedIn"
+      ]
+    },
+    {
+      "domain": "indeed.com",
+      "names": [
+        "Indeed"
+      ]
+    },
+    {
+      "domain": "governmentjobs.com",
+      "names": [
+        "GovernmentJobs"
+      ]
+    },
+    {
+      "domain": "monster.com",
+      "names": [
+        "Monster"
+      ]
+    },
+    {
+      "domain": "usajobs.gov",
+      "names": [
+        "USAJobs"
+      ]
+    },
+    {
+      "domain": "farmers.com",
+      "names": [
+        "Farmers Insurance"
+      ]
+    },
+    {
+      "domain": "ada.org",
+      "names": [
+        "ADA CareerCenter"
+      ]
+    },
+    {
+      "domain": "alltrails.com",
+      "names": [
+        "AllTrails"
+      ]
+    },
+    {
+      "domain": "amtrak.com",
+      "names": [
+        "Amtrak"
+      ]
+    },
+    {
+      "domain": "arlandaexpress.com",
+      "names": [
+        "Arlanda Express"
+      ]
+    },
+    {
+      "domain": "artic.edu",
+      "names": [
+        "Art Institute of Chicago"
+      ]
+    },
+    {
+      "domain": "bahn.de",
+      "names": [
+        "Deutsche Bahn"
+      ]
+    },
+    {
+      "domain": "confirmtkt.com",
+      "names": [
+        "ConfirmTkt"
+      ]
+    },
+    {
+      "domain": "disneyland.disney.go.com",
+      "names": [
+        "Disneyland"
+      ]
+    },
+    {
+      "domain": "disneyworld.disney.go.com",
+      "names": [
+        "Walt Disney World"
+      ]
+    },
+    {
+      "domain": "fandango.com",
+      "names": [
+        "Fandango"
+      ]
+    },
+    {
+      "domain": "metmuseum.org",
+      "names": [
+        "Metropolitan Museum of Art"
+      ]
+    },
+    {
+      "domain": "nhl.com",
+      "names": [
+        "NHL.com"
+      ]
+    },
+    {
+      "domain": "seattlegreatwheel.com",
+      "names": [
+        "Seattle Great Wheel"
+      ]
+    },
+    {
+      "domain": "seaworld.com",
+      "names": [
+        "SeaWorld"
+      ]
+    },
+    {
+      "domain": "sixflags.com",
+      "names": [
+        "Six Flags"
+      ]
+    },
+    {
+      "domain": "stubhub.com",
+      "names": [
+        "StubHub"
+      ]
+    },
+    {
+      "domain": "ticketmaster.com",
+      "names": [
+        "Ticketmaster"
+      ]
+    },
+    {
+      "domain": "universalorlando.com",
+      "names": [
+        "Universal Orlando"
+      ]
+    },
+    {
+      "domain": "vividseats.com",
+      "names": [
+        "VividSeats"
+      ]
+    },
+    {
+      "domain": "eventbrite.com",
+      "names": [
+        "Eventbrite"
+      ]
+    },
+    {
+      "domain": "aaa.com",
+      "names": [
+        "AAA"
+      ]
+    },
+    {
+      "domain": "undercovertourist.com",
+      "names": [
+        "Undercover Tourist"
+      ]
+    },
+    {
+      "domain": "regmovies.com",
+      "names": [
+        "Regal Cinemas"
+      ]
+    },
+    {
+      "domain": "sugarbowl.com",
+      "names": [
+        "Sugar Bowl ski resort"
+      ]
+    },
+    {
+      "domain": "thesphere.com",
+      "names": [
+        "The Sphere website"
+      ]
+    },
+    {
+      "domain": "pacificbonsaimuseum.org",
+      "names": [
+        "Pacific Bonsai Museum"
+      ]
+    },
+    {
+      "domain": "mncourts.gov",
+      "names": [
+        "Minnesota Courts"
+      ]
+    },
+    {
+      "domain": "morgancountyutah.gov",
+      "names": [
+        "Morgan County, Utah District Court"
+      ]
+    },
+    {
+      "domain": "vacourts.gov",
+      "names": [
+        "Virginia Courts"
+      ]
+    },
+    {
+      "domain": "baltimorecity.gov",
+      "names": [
+        "Baltimore City website"
+      ]
+    },
+    {
+      "domain": "stpaul.gov",
+      "names": [
+        "City of St. Paul parking"
+      ]
+    },
+    {
+      "domain": "ny.gov",
+      "names": [
+        "NY DMV"
+      ]
+    },
+    {
+      "domain": "lacourt.org",
+      "names": [
+        "LA Court website"
+      ]
+    },
+    {
+      "domain": "njcourts.gov",
+      "names": [
+        "NJMCDirect"
+      ]
+    },
+    {
+      "domain": "caminitodelrey.info",
+      "names": [
+        "Caminito del Rey website"
+      ]
+    },
+    {
+      "domain": "palaciodemafra.pt",
+      "names": [
+        "Pal\u00e1cio de Mafra website"
+      ]
+    },
+    {
+      "domain": "napaonline.com",
+      "names": [
+        "NAPA"
+      ]
+    },
+    {
+      "domain": "thermofisher.com",
+      "names": [
+        "Thermo Fisher Scientific"
+      ]
+    },
+    {
+      "domain": "spectrum.com",
+      "names": [
+        "Spectrum Jobs"
+      ]
+    },
+    {
+      "domain": "thecignagroup.com",
+      "names": [
+        "Cigna Group"
+      ]
+    },
+    {
+      "domain": "roberthalf.com",
+      "names": [
+        "Robert Half"
+      ]
+    },
+    {
+      "domain": "simplyhired.com",
+      "names": [
+        "SimplyHired"
+      ]
+    },
+    {
+      "domain": "aus.com",
+      "names": [
+        "allied universal"
+      ]
+    },
+    {
+      "domain": "dollargeneral.com",
+      "names": [
+        "Dollar General"
+      ]
+    },
+    {
+      "domain": "wm.com",
+      "names": [
+        "Waste Management"
+      ]
+    },
+    {
+      "domain": "howardbrown.org",
+      "names": [
+        "Howard Brown Health"
+      ]
+    },
+    {
+      "domain": "sfwmd.gov",
+      "names": [
+        "South Florida Water Management District"
+      ]
+    },
+    {
+      "domain": "kroger.com",
+      "names": [
+        "Kroger"
+      ]
+    },
+    {
+      "domain": "fedex.com",
+      "names": [
+        "Fedex Freight"
+      ]
+    },
+    {
+      "domain": "ssense.com",
+      "names": [
+        "SSENSE Careers"
+      ]
+    },
+    {
+      "domain": "icp.org",
+      "names": [
+        "International Center of Photography"
+      ]
+    },
+    {
+      "domain": "nyfa.edu",
+      "names": [
+        "New York Film Academy"
+      ]
+    },
+    {
+      "domain": "gene.com",
+      "names": [
+        "genentech"
+      ]
+    },
+    {
+      "domain": "neurips.cc",
+      "names": [
+        "NeurIPS conference"
+      ]
+    },
+    {
+      "domain": "dmns.org",
+      "names": [
+        "denver museum of nature and science"
+      ]
+    },
+    {
+      "domain": "dol.gov",
+      "names": [
+        "US Dept. of Labor"
+      ]
+    },
+    {
+      "domain": "golfpride.com",
+      "names": [
+        "Golf Pride"
+      ]
+    },
+    {
+      "domain": "extremerate.com",
+      "names": [
+        "ExtremeRate"
+      ]
+    },
+    {
+      "domain": "frandenim.com",
+      "names": [
+        "Fran Denim"
+      ]
+    },
+    {
+      "domain": "kancanusa.com",
+      "names": [
+        "KancanUSA"
+      ]
+    },
+    {
+      "domain": "kelty.com",
+      "names": [
+        "Kelty"
+      ]
+    },
+    {
+      "domain": "medline.com",
+      "names": [
+        "Medline"
+      ]
+    },
+    {
+      "domain": "oceanstatejoblot.com",
+      "names": [
+        "Ocean State Job Lot"
+      ]
+    },
+    {
+      "domain": "recwatches.com",
+      "names": [
+        "REC Watches"
+      ]
+    },
+    {
+      "domain": "easykeys.com",
+      "names": [
+        "EasyKeys"
+      ]
+    },
+    {
+      "domain": "rvusa.com",
+      "names": [
+        "RVUSA"
+      ]
+    },
+    {
+      "domain": "simpletire.com",
+      "names": [
+        "SimpleTire"
+      ]
+    },
+    {
+      "domain": "spreadshirt.com",
+      "names": [
+        "Spreadshirt"
+      ]
+    },
+    {
+      "domain": "vogue-eyewear.com",
+      "names": [
+        "Vogue Eyewear"
+      ]
+    },
+    {
+      "domain": "albemarle.edu",
+      "names": [
+        "College of the Albemarle"
+      ]
+    },
+    {
+      "domain": "quickcourt.biz",
+      "names": [
+        "QuickCourt"
+      ]
+    },
+    {
+      "domain": "rolltide.com",
+      "names": [
+        "Alabama Crimson Tide shop"
+      ]
+    },
+    {
+      "domain": "nothingbundtcakes.com",
+      "names": [
+        "Nothing Bundt Cakes"
+      ]
+    },
+    {
+      "domain": "cityofvancouver.us",
+      "names": [
+        "City of Vancouver, WA parking"
+      ]
+    }
+  ]
+}
