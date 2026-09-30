@@ -216,8 +216,12 @@ success; teacher action consistency is58% under reversed-order re-query.
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
-original bonus starts hidden. Smoothing is off by default and changes lines only;
-points, tooltips and exports retain raw values. Stealth results remain separate below.
+original bonus starts hidden. The y-axis is fixed at0–60%. Smoothing is off by
+default; choose bias-corrected W&B EMA or centered Gaussian (σ in training iterations).
+Faint raw traces, tooltips and exports retain the measured values.
+[Algorithms](https://docs.wandb.ai/models/app/features/panels/line-plot/smoothing);
+the exact smoothing settings of OpenWebRL Figure2(c) are unverified. Stealth results
+remain separate below.
 
 **Matched stealth, three evaluations per iteration90 checkpoint — September29–30.**
 Same300 tasks, actor-only inference; o4-mini/AgentTrek, T0.6/p0.95/k20,
