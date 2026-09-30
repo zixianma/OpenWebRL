@@ -349,12 +349,25 @@ final metrics were independently checked.
 |  |30 |96 |228 |72 |32.00% |42.11% |29 /74 |
 |  |40 |100 |228 |72 |33.33% |43.86% |32 /73 |
 |  |50 |116 |234 |66 |38.67% |49.57% |35 /72 |
+|  |60 |113 |232 |68 |37.67% |48.71% |41 /75 |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 |  |30 |90 |219 |81 |30.00% |41.10% |28 /64 |
 |  |40 |106 |225 |75 |35.33% |47.11% |33 /66 |
 |  |50 |111 |237 |63 |37.00% |46.84% |33 /73 |
 |  |60 |110 |233 |67 |36.67% |47.21% |34 /76 |
+
+**Bonus60 endpoint verified, September30:** full300 **37.67% /48.71%**
+(113 successes,232 valid), fixed100 **41.00% /54.67%** (41/75). All300 exact
+IDs and paired archives/records, GPT-4.1/action_history/T0/4096-token/30-turn
+settings, native59 restoration at786 Adam updates and final W&B history passed.
+Nine valid failures carry the protocol's explicit judge-not-run sentinel
+(6 truncated,3 failed). All six milestone cohorts were independently rechecked
+(1,800 archives/records); final checkpoint counters, cursor,16 shard extents and
+sampled finite tensors passed. Three extension attempts exited0, consuming
+167,384/172,800 seconds. The allocation released5,416 unused seconds.
+[Evaluation audit](arm_results/rl_integration/mixed-bonus-iteration60-audit.json) ·
+[Endpoint audit](arm_results/rl_integration/mixed-bonus-to60-completion.json).
 
 **Reweight60 endpoint verified, September30:** full300 **36.67% /47.21%**
 (110 successes,233 valid), fixed100 **34.00% /44.74%** (34/76). Independent
@@ -367,8 +380,9 @@ passed. All six milestone cohorts10–60 were checked together (1,800 records/
 archives), both extension jobs exited0, and the allocation was released.
 Consumed additional-budget time is140,602/172,800 seconds, including evals;
 original8h attempts remain separate. Reweight's40/50/60 mean is36.33% /47.05%;
-this averages checkpoints, not training seeds. Bonus60 is still required for
-the planned matched comparison.
+this averages checkpoints, not training seeds. Bonus40/50/60 averages
+36.56% /47.38%, only0.22pp higher overall; no clear winner is established.
+[Matched aggregate](arm_results/rl_integration/mixed-pair-iteration40-60-summary.json).
 [Eval60 audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) ·
 [Endpoint audit](arm_results/rl_integration/mixed-reweight-to60-completion.json).
 

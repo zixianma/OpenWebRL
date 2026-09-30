@@ -203,8 +203,9 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter60-results-20260930"></a>
 ## Mixed-only relaxed-B pair: iterations10–60 — September28–30
 
-Both fresh-from0 runs completed full300 evaluations at10,20,30,40 and50.
-Reweight also completed training60/evaluation60; bonus continues toward60.
+Both fresh-from0 runs completed training60 and all six full300 evaluations
+at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
+both GPU allocations are released.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -217,11 +218,13 @@ trajectory-mean-one weighting with lambda=.5.
 |  |30 | — |32.00% /38.71% |248 |
 |  |40 | — |33.33% /43.29% |231 |
 |  |50 | — |35.00% /44.87% |234 |
+|  |60 | — |35.00% /45.65% |230 |
 | Mixed-only bonus + relaxed B |10 |31.00% /41.33% |30.67% /39.32% |234 |
 |  |20 |30.00% /43.48% |30.67% /40.89% |225 |
 |  |30 |29.00% /39.19% |32.00% /42.11% |228 |
 |  |40 |32.00% /43.84% |33.33% /43.86% |228 |
 |  |50 |35.00% /48.61% |38.67% /49.57% |234 |
+|  |60 |41.00% /54.67% |37.67% /48.71% |232 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
@@ -229,23 +232,41 @@ trajectory-mean-one weighting with lambda=.5.
 |  |50 |33.00% /45.21% |37.00% /46.84% |237 |
 |  |60 |34.00% /44.74% |36.67% /47.21% |233 |
 
-Reweight60 finishes at110 successes/233 valid/full300; fixed100 is34/76/100.
-Relative to50, overall is−0.33pp and valid-only+0.37pp. Its predefined40/50/60
-mean is **36.33% overall /47.05% valid-only**, averaging checkpoint rates rather
-than independent replicates. The matched bonus comparison awaits bonus60.
-Historical outcome-only60 is35.00% /45.65%; dates and valid-task sets differ,
-so the+1.67pp overall difference is descriptive.
+Bonus60 finishes at113 successes/232 valid/full300: **37.67% overall /48.71%
+valid-only**. Its fixed100 slice is41/75/100: **41.00% /54.67%**. Compared with50,
+full300 falls1.00pp overall while fixed100 rises6.00pp; the fixed subset alone
+would overstate improvement. Reweight60 is110/233/300: **36.67% /47.21%**,
+with fixed100 **34.00% /44.74%**. Bonus is1.00pp higher overall at60.
 
-All six reweight cohorts cover their exact300 expected tasks with paired
-archives and saved judge records:1,800 task attempts retained. Final native59
-has814 aligned Adam/scheduler updates and a retained task cursor; GPU restore,
-checkpoint extents and sampled finite tensors passed. Training and eval W&B
-finished, and job335698 exited0. The additional48h allocation budget consumed
-140,602 seconds across335697/335698 (312.45 GPU-hours), leaving32,198 seconds
-unused; the original8h approval remains separate. The requested reweight
-endpoint is verified complete, and its GPUs are released.
-[Eval60 audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) ·
-[Six-milestone completion audit](arm_results/rl_integration/mixed-reweight-to60-completion.json).
+| Prespecified40/50/60 checkpoint mean | Overall | Valid-only |
+| --- | ---: | ---: |
+| Mixed-only bonus + relaxed B |36.56% |47.38% |
+| Mixed-only reweight + relaxed B |36.33% |47.05% |
+
+The late-checkpoint mean differs by only0.22pp overall and0.33pp valid-only.
+These correlated checkpoints from one training lineage per method do not
+establish a clear winner or training-seed robustness. Historical outcome-only60
+is35.00% /45.65%; dates and valid-task sets differ, so bonus/reweight's+2.67pp/
++1.67pp overall differences are descriptive.
+[Aggregate and audit hashes](arm_results/rl_integration/mixed-pair-iteration40-60-summary.json).
+
+All six cohorts per method cover their exact300 expected task IDs and paired
+archives/records:3,600 attempts retained across the pair. Final native59 has786
+aligned Adam/scheduler updates for bonus and814 for reweight; task cursors,
+checkpoint extents and sampled finite tensors passed. Actual native59 GPU
+restoration and final W&B histories were verified. Bonus60 includes nine valid
+terminal-status failures with explicit judge-not-run records (6 truncated,
+3 failed), as prescribed by the unchanged baseline evaluation protocol.
+
+Bonus jobs335699/335700/337983 consumed167,384/172,800 extension seconds
+(371.96 GPU-hours), releasing5,416 seconds unused; reweight335697/335698
+consumed140,602/172,800 seconds (312.45 GPU-hours), releasing32,198 seconds.
+Original8h scopes remain separate. All jobs exited successfully; both to60
+endpoints are verified complete. Proposed to90 resources still await approval.
+[Bonus60 evaluation audit](arm_results/rl_integration/mixed-bonus-iteration60-audit.json) ·
+[Bonus six-milestone endpoint](arm_results/rl_integration/mixed-bonus-to60-completion.json) ·
+[Reweight60 evaluation audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) ·
+[Reweight six-milestone endpoint](arm_results/rl_integration/mixed-reweight-to60-completion.json).
 
 Bonus50 has116 successes and234 valid tasks; fixed100 has35 successes and72
 valid tasks. All300 task IDs, paired archives, stored judge records, native49
@@ -260,7 +281,7 @@ valid tasks. From40, full300 overall rises1.67pp, while valid-only falls0.28pp
 and valid tasks increase225→237. Historical baseline50 is35.00% /44.87%, so
 the descriptive differences are+2.00pp overall and+1.96pp valid-only. This is not
 a matched-date causal comparison. Bonus50 is now38.67% /49.57%; the predefined
-40/50/60 comparison still awaits bonus60. All300 archive/verdict pairs, native49 restoration at694
+40/50/60 comparison is now complete above. All300 archive/verdict pairs, native49 restoration at694
 Adam updates and W&B history were verified. The same controller passed model/
 optimizer restoration for continuation toward60.
 

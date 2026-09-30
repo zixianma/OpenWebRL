@@ -1,0 +1,57 @@
+{
+  "method": "mixed-only bonus + relaxed B",
+  "iteration": 60,
+  "job": "337983",
+  "verified_complete": true,
+  "full300": {
+    "tasks": 300,
+    "successes": 113,
+    "valid": 232,
+    "invalid": 68,
+    "overall": 0.37666666666666665,
+    "valid_only": 0.4870689655172414,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter60-337983/rollouts",
+    "iteration": 60,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-337983-iter60/runtime/iter_0000059",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter60-337983"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 41,
+    "valid": 75,
+    "invalid": 25,
+    "overall": 0.41,
+    "valid_only": 0.5466666666666666,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "plan_sha256": "5baf2a555093150910d18e27f5ff46c2a3cf602ee0e5d376839db6f32b733f8e",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "checkpoint_adam_updates": 786,
+  "checked_epoch": 1790791952.230293,
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 59,
+    "completed_training_iteration": 60,
+    "adam_updates": 786
+  },
+  "wandb_history_verified": true,
+  "valid_statuses_with_explicit_judge_not_run": {
+    "truncated": 6,
+    "failed": 3
+  },
+  "archive_verification": "All300 nonempty ZIP central directories and serialized payload entries; not full bytewise CRC scan. Saved judge records include explicit policy sentinel where a terminal status skips the judge."
+}

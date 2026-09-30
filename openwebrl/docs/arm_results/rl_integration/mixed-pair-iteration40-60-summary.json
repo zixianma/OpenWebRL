@@ -1,0 +1,83 @@
+{
+  "verified": true,
+  "checked_epoch": 1790792148.41852,
+  "iterations": [
+    40,
+    50,
+    60
+  ],
+  "protocol": "local browser,GPT-4.1/action_history,T0;full300,mean of per-checkpoint rates",
+  "methods": {
+    "bonus": {
+      "checkpoints": [
+        {
+          "iteration": 40,
+          "overall": 0.3333333333333333,
+          "valid_only": 0.43859649122807015,
+          "successes": 100,
+          "valid": 228,
+          "audit": "arm_results/rl_integration/mixed-bonus-iteration40-audit.json",
+          "sha256": "f052b28b56f3b411fa9c3bbe14194b9f64f711669a2453b5c851ce7c6ac150ea"
+        },
+        {
+          "iteration": 50,
+          "overall": 0.38666666666666666,
+          "valid_only": 0.49572649572649574,
+          "successes": 116,
+          "valid": 234,
+          "audit": "arm_results/rl_integration/mixed-bonus-iteration50-audit.json",
+          "sha256": "a3b5ac3faea0121d8be0317b0cb2952e345c49281b3a1f74a384f4c08ee3a1df"
+        },
+        {
+          "iteration": 60,
+          "overall": 0.37666666666666665,
+          "valid_only": 0.4870689655172414,
+          "successes": 113,
+          "valid": 232,
+          "audit": "arm_results/rl_integration/mixed-bonus-iteration60-audit.json",
+          "sha256": "7cf0d73921a1110d2219d52243c124861b362737dc4d8441e262304cec40768e"
+        }
+      ],
+      "overall_mean": 0.3655555555555555,
+      "valid_only_mean": 0.47379731749060244
+    },
+    "reweight": {
+      "checkpoints": [
+        {
+          "iteration": 40,
+          "overall": 0.35333333333333333,
+          "valid_only": 0.4711111111111111,
+          "successes": 106,
+          "valid": 225,
+          "audit": "arm_results/rl_integration/mixed-reweight-iteration40-audit.json",
+          "sha256": "ea40bbb57830c0adcd204313c22e0431c66acb691d43f537e7958abd1fa74137"
+        },
+        {
+          "iteration": 50,
+          "overall": 0.37,
+          "valid_only": 0.46835443037974683,
+          "successes": 111,
+          "valid": 237,
+          "audit": "arm_results/rl_integration/mixed-reweight-iteration50-audit.json",
+          "sha256": "37c46971c93db425a369c84f4bf64a0d33d0ea858a3739b588e8c85d50d78670"
+        },
+        {
+          "iteration": 60,
+          "overall": 0.36666666666666664,
+          "valid_only": 0.4721030042918455,
+          "successes": 110,
+          "valid": 233,
+          "audit": "arm_results/rl_integration/mixed-reweight-iteration60-audit.json",
+          "sha256": "4f1b08c9a64e8e6540076d48213a55a092b32a9455aa0da834d156148c94c90d"
+        }
+      ],
+      "overall_mean": 0.36333333333333334,
+      "valid_only_mean": 0.4705228485942345
+    }
+  },
+  "interpretation": "Checkpoint averages are descriptive, correlated observations from one training lineage each, not independent training seeds. Evaluation dates and valid-task sets differ; no significance claim.",
+  "bonus_minus_reweight_pp": {
+    "overall_mean": 0.2222222222222181,
+    "valid_only_mean": 0.32744688963679547
+  }
+}

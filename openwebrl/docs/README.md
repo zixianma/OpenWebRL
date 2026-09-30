@@ -24,7 +24,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 [Historical Gate B training100 and full300 evaluation verified; allocation released](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
 [Mixed-only pair to90 prepared: unchanged recipes, full300 at70/80/90; proposed bonus8H200×32h and reweight8H200×24h, exact resource approval pending](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930).
-[Mixed-only pair to60 submitted: reweight335697→335698; bonus335699→335700 after335682; full300 every10, approved additional8 H200 ×48h per variant](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
+[Mixed-only pair to60 completed: twelve full300 milestones, final checkpoints and all3,600 saved attempts verified; original approvals preserved](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Review: proposed outcome-supervised reward versus ORM, PRIME and SelectionARM—input/label/loss table, diagram, credit-assignment example and open alternative](ARM_INTEGRATION_PLAN.md#arm-outcome-orm-prime-comparison).
 [Outcome-reward data prepared:2,000 train /250 dev /500 later-actor test complete trajectories, task-disjoint](ARM_INTEGRATION_PLAN.md#arm-outcome-trained-reward-investigation-20260927).
@@ -48,7 +48,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Mixed-only iteration20 full300: bonus30.67% /40.89%; reweight32.33% /42.73% overall/valid-only; archives verified](ARM_RESULTS.md#arm-mixed-pair-iter10-results-20260928).
 [Mixed-only iteration30 full300: bonus32.00% /42.11% (228 valid); reweight30.00% /41.10% (219 valid); both300-task cohorts and archives verified](ARM_RESULTS.md#arm-mixed-pair-iter30-results-20260929).
 [Mixed-only iteration40 full300: bonus33.33% /43.86% (228 valid), reweight35.33% /47.11% (225 valid); all archives/verdicts verified, both continue toward60](ARM_RESULTS.md#arm-mixed-pair-iter40-results-20260929).
-[Mixed-only reweight60 complete:36.67% /47.21% full300 (233 valid), fixed10034.00% /44.74%; all six milestones and final checkpoint verified, GPU allocation released; bonus continues toward60](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
+[Both mixed-only runs completed60: bonus37.67% /48.71% (fixed10041.00% /54.67%); reweight36.67% /47.21%; all12cohorts verified, GPUs released;40/50/60 overall means36.56% vs36.33%](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

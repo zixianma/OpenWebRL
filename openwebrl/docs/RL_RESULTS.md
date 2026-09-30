@@ -35,17 +35,26 @@
 |  |30 |96 |248 |52 |32.00 |38.71 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 |  |40 |100 |231 |69 |33.33 |43.29 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 |  |50 |105 |234 |66 |35.00 |44.87 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
+|  |60 |105 |230 |70 |35.00 |45.65 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 | Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67 |39.32 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) |
 |  |20 |92 |225 |75 |30.67 |40.89 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) |
 |  |30 |96 |228 |72 |32.00 |42.11 |[September29 audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) |
 |  |40 |100 |228 |72 |33.33 |43.86 |[September29 audit](arm_results/rl_integration/mixed-bonus-iteration40-audit.json) |
 |  |50 |116 |234 |66 |38.67 |49.57 |[September30 audit](arm_results/rl_integration/mixed-bonus-iteration50-audit.json) |
+|  |60 |113 |232 |68 |37.67 |48.71 |[September30 audit](arm_results/rl_integration/mixed-bonus-iteration60-audit.json) |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33 |34.17 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) |
 |  |20 |97 |227 |73 |32.33 |42.73 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) |
 |  |30 |90 |219 |81 |30.00 |41.10 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) |
 |  |40 |106 |225 |75 |35.33 |47.11 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration40-audit.json) |
 |  |50 |111 |237 |63 |37.00 |46.84 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration50-audit.json) |
 |  |60 |110 |233 |67 |36.67 |47.21 |[September30 audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) |
+
+## Mixed-only40/50/60 checkpoint mean · full300
+
+| Method | Overall mean % | Valid-only mean % | Record |
+| --- | ---: | ---: | --- |
+| Bonus + relaxed B |36.56 |47.38 |[Checkpoint aggregate](arm_results/rl_integration/mixed-pair-iteration40-60-summary.json) |
+| Reweight + relaxed B |36.33 |47.05 |[Checkpoint aggregate](arm_results/rl_integration/mixed-pair-iteration40-60-summary.json) |
 
 ## Stealth browser · GPT-4.1 · temperature 0 · full 300
 

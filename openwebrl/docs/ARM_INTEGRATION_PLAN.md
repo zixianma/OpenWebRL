@@ -72,10 +72,10 @@ The running335681 controller and its scientific settings remain unchanged.
 The user requested continuing both existing mixed-only relaxed-B lineages to90.
 This is an unchanged continuation, preserving their original iteration0 start,
 model, optimizer, scheduler, task cursor, training data and W&B identities.
-Reweight60 is independently complete (814 Adam updates); bonus337983 has saved58
-(762 updates) and is collecting59 under its existing approval. Finish its60
-checkpoint/evaluation before advancing. Do not overlap writers or reuse
-released budgets from the previous endpoint.
+Both60 endpoints are independently complete: bonus786 Adam updates and
+reweight814. All twelve full300 cohorts and3,600 saved attempts passed audit;
+both allocations are released. Do not overlap writers or reuse released
+budgets from the previous endpoint.
 
 Full300 OM2W evaluations are due at70,80,90, using local browsers,
 GPT-4.1/action_history,T0,4096 response tokens and30 turns. Save every rollout
@@ -96,8 +96,8 @@ groups. Expected walltimes use the latest ten complete non-evaluation checkpoint
 intervals; recent full300 evaluations take27–32min. Caps include restoration,
 evaluations and every retry; stop and release GPUs when the endpoint is verified.
 The total requested additional cap is448 H200-hours. The bonus estimate begins
-at60; its existing337983 allocation currently covers58→60. If that predecessor
-ends partial, the new controller must finish any missing60 stage first.
+at60; predecessor337983 has now completed60 and its evaluation. The controller
+also handles missing parent milestones before advancing, if a recovery requires it.
 
 **Prepared, exact resource approval pending; no new allocation submitted.**
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
@@ -109,18 +109,19 @@ cohort-size and rollout-persistence checks passed. Every paid attempt still
 requires actual GPU model/optimizer restoration before useful training.
 Prepared plans, fingerprints and the unapproved resource proposal are in runtime
 `arm-turn-bonus-preparation/mixed-reweight-20260927/to90-20260930/`.
-After exact approval, launch reweight immediately and queue bonus behind337983;
+After exact approval, launch both from their verified60 checkpoints;
 register all IDs and count consumed time separately for each new cap.
 
 <a id="arm-mixed-pair-to60-20260928"></a>
-**September30 completion update:** reweight reached durable60/native59 with814
-Adam updates, completed all six full300 evaluations10/20/30/40/50/60, and exited
-successfully. Eval60 is36.67% overall /47.21% valid-only (110/233/300); all1,800
-rollout/verdict pairs are retained. Extension attempts335697/335698 consumed
-140,602/172,800 seconds; the allocation was released with32,198 seconds unused.
-The original8h scope is separate. Bonus335700 continues toward60 with its own
-remaining budget; its milestone50 is38.67% /49.57%. The matched40/50/60
-comparison awaits bonus60. [Endpoint audit](arm_results/rl_integration/mixed-reweight-to60-completion.json).
+**September30 completion update:** both lineages reached durable60/native59,
+with786 Adam updates for bonus and814 for reweight. All six full300 evaluations
+per method and3,600 saved attempts passed independent checks. Bonus60 is37.67%
+overall /48.71% valid-only, fixed10041.00% /54.67%; reweight60 is36.67% /47.21%,
+fixed10034.00% /44.74%. Their40/50/60 overall means are36.56% versus36.33%.
+Bonus used167,384/172,800 extension seconds across335699/335700/337983;
+reweight used140,602/172,800 across335697/335698. All GPUs were released;
+unspent budgets are not reassigned. Original8h scopes remain separate.
+[Both endpoint audits and comparison](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 **Mixed-only pair to60 — requested September28:** continue both the
 **mixed-only bonus + relaxed B** and **mixed-only outcome reweighting + relaxed B**

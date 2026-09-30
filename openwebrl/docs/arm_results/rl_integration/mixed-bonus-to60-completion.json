@@ -1,0 +1,125 @@
+{
+  "checked_epoch": 1790792004.6558874,
+  "verified_complete": true,
+  "endpoint": "Mixed-only executed-turn bonus + relaxed Gate B from0 through60, full300 local evaluations10/20/30/40/50/60",
+  "final_checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-337983-iter60/runtime/iter_0000059",
+  "completed_iterations": 60,
+  "adam_updates": 786,
+  "scheduler_offset": 0,
+  "checkpoint_metadata_extents_cursor_and_sampled_tensors_verified": true,
+  "final_eval_gpu_restore_verified": true,
+  "milestones": [
+    {
+      "iteration": 10,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration10-audit.json",
+      "audit_sha256": "44f79c9d8caa05002428031073650762d40f109571ae5737e6702d111b4b8a17",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter10-335699",
+      "successes": 92,
+      "valid": 234,
+      "overall": 0.30666666666666664,
+      "valid_only": 0.39316239316239315,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 20,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration20-audit.json",
+      "audit_sha256": "e5de5c36080af59e2d18e407381f096a5cd5b12f9a3178eab038baf3a687c519",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter20-335699",
+      "successes": 92,
+      "valid": 225,
+      "overall": 0.30666666666666664,
+      "valid_only": 0.4088888888888889,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 30,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration30-audit.json",
+      "audit_sha256": "b48d614873218e14a48a54ce555f181f7202523fdf52bc48728d28195326f6ec",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter30-335699",
+      "successes": 96,
+      "valid": 228,
+      "overall": 0.32,
+      "valid_only": 0.42105263157894735,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 40,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration40-audit.json",
+      "audit_sha256": "f052b28b56f3b411fa9c3bbe14194b9f64f711669a2453b5c851ce7c6ac150ea",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter40-335700",
+      "successes": 100,
+      "valid": 228,
+      "overall": 0.3333333333333333,
+      "valid_only": 0.43859649122807015,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 50,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration50-audit.json",
+      "audit_sha256": "a3b5ac3faea0121d8be0317b0cb2952e345c49281b3a1f74a384f4c08ee3a1df",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter50-335700",
+      "successes": 116,
+      "valid": 234,
+      "overall": 0.38666666666666666,
+      "valid_only": 0.49572649572649574,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    },
+    {
+      "iteration": 60,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration60-audit.json",
+      "audit_sha256": "7cf0d73921a1110d2219d52243c124861b362737dc4d8441e262304cec40768e",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter60-337983",
+      "successes": 113,
+      "valid": 232,
+      "overall": 0.37666666666666665,
+      "valid_only": 0.4870689655172414,
+      "task_ids_and_archives_rechecked": true,
+      "prior_agent_review_preserved": true
+    }
+  ],
+  "saved_task_records": 1800,
+  "saved_archives": 1800,
+  "training_wandb_finished": true,
+  "eval60_wandb_finished": true,
+  "all_attempts": [
+    {
+      "job_id": "335699",
+      "state": "COMPLETED",
+      "elapsed_seconds": 80880,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "335700",
+      "state": "COMPLETED",
+      "elapsed_seconds": 80034,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "337983",
+      "state": "COMPLETED",
+      "elapsed_seconds": 6470,
+      "exit_code": "0:0"
+    }
+  ],
+  "approved_extension_seconds": 172800,
+  "consumed_extension_seconds": 167384,
+  "unused_extension_seconds_released": 5416,
+  "consumed_extension_gpu_hours": 371.96444444444444,
+  "original8h_budget_separate": true,
+  "predefined_late_checkpoint_average": {
+    "iterations": [
+      40,
+      50,
+      60
+    ],
+    "overall": 0.3655555555555555,
+    "valid_only": 0.47379731749060244,
+    "interpretation": "Mean across training checkpoints, not independent replicates; Compare against the verified matched reweight40/50/60 aggregate; not independent training replicates."
+  },
+  "no_further_job_needed_for_this_endpoint": true
+}

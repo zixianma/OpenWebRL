@@ -183,6 +183,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |30 |29.00% /39.19% |**32.00% /42.11%** |
 |  |40 |32.00% /43.84% |**33.33% /43.86%** |
 |  |50 |35.00% /48.61% |**38.67% /49.57%** |
+|  |60 |41.00% /54.67% |**37.67% /48.71%** |
 | **Mixed-only reweight + relaxed B** |10 |25.00% /34.72% |**27.33% /34.17%** |
 |  |20 |31.00% /44.29% |**32.33% /42.73%** |
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
@@ -190,9 +191,10 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |50 |33.00% /45.21% |**37.00% /46.84%** |
 |  |60 |34.00% /44.74% |**36.67% /47.21%** |
 
-Reweight completed training60 and all six full300 evaluations: its40/50/60
-average is36.33% overall /47.05% valid-only. Bonus saved58; continuation337983 targets60;
-the matched aggregate comparison awaits its60 evaluation. Both lineages are
+Both runs completed60 and all six full300 evaluations. Their40/50/60 averages
+are36.56% /47.38% for bonus and36.33% /47.05% for reweight (overall/valid-only):
+only0.22pp apart overall; these are checkpoint averages, not independent seeds.
+Both lineages are
 [prepared to continue through90](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930),
 with full300 evaluations at70/80/90; additional resource approval is pending.
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
