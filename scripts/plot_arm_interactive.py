@@ -75,7 +75,7 @@ def build_data():
     return dict(series=series, benchmark='Online-Mind2Web · full 300',
                 protocol='Local browser · GPT-4.1 / action_history · actor temperature 0',
                 limitation='Historical evaluations use different collection dates and valid-task sets. '
-                           'Connecting points is a visual guide, not smoothing or a significance claim. '
+                           'Lines are visual guides, not additional evaluations or evidence of significance. '
                            'Training iterations are not matched optimizer-update counts. '
                            'Stealth and WebVoyager results are separate in the summary.')
 

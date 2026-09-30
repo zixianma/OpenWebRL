@@ -33,12 +33,6 @@ ax.plot(add_i,[100*x/300 for x in add_s],marker='o',lw=2.2,ls=':',color='#16a34a
 ax.plot(add_i,[100*x/y for x,y in zip(add_s,add_v)],marker='s',lw=2.0,ls=':',color='#84cc16',label='Additive ARM · valid-only')
 ax.plot(gate_b_i,[100*r['successes']/r['tasks'] for r in gate_b_results],marker='o',lw=2.2,ls='-.',color='#7e22ce',label='Gate B (relaxed gate) · overall')
 ax.plot(gate_b_i,[100*r['successes']/r['valid'] for r in gate_b_results],marker='s',lw=2.0,ls='-.',color='#c026d3',label='Gate B (relaxed gate) · valid-only')
-# Historical highlights from RL_RESULTS.md. Do not join these into the local
-# curves: judge, decoding and retry protocol differ for the o4-mini points.
-ax.scatter([58,90],[100*178/300,100*171/300],marker='^',s=120,color='#a16207',zorder=6,label='Historical stealth baseline · overall')
-ax.scatter([58,90],[100*178/297,100*171/296],marker='^',s=120,facecolors='white',edgecolors='#a16207',linewidths=1.8,zorder=6,label='Historical stealth baseline · valid-only')
-ax.annotate('58: retries merged',xy=(58,100*178/297),xytext=(41,63),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
-ax.annotate('90: historical baseline',xy=(90,100*171/296),xytext=(72,64),fontsize=8,color='#854d0e',arrowprops=dict(arrowstyle='-',color='#854d0e',lw=.8))
 # Corrected matched actor-only stealth cohort: o4-mini/T0.6. The earlier
 # GPT-4.1/T0 runs stay in the history tables rather than this comparison plot.
 for method,label,color,offset in [('baseline','Baseline','#2563eb',-16),('gate-b','Gate B','#7e22ce',16),('additive','Additive','#16a34a',0)]:

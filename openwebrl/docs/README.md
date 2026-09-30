@@ -18,7 +18,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Interactive RL comparison](rl_results/arm_rl_interactive.html): toggle runs, select overall/valid-only, inspect exact counts and export visible data. Download and open the standalone HTML in a browser; no server required.
+[Interactive RL comparison](rl_results/arm_rl_interactive.html): toggle runs, adjust smoothing, select overall/valid-only, inspect exact counts and export raw data. Download and open the standalone HTML in a browser; no server required.
 
 [Evolving ARM: later-actor offline agreement57.68%→59.57% (+1.89pp)](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 [Browser comparison331770 complete: frozen42.00% /56.50% versus refreshed41.33% /52.99% overall/valid-only on full300](ARM_RESULTS.md#arm-refresh-browser-results-20260926); no demonstrated browser gain.

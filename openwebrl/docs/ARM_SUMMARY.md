@@ -211,12 +211,13 @@ success; teacher action consistency is58% under reversed-order re-query.
 [Method, table and caveats](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 
 <a id="baseline-comparison"></a>
-![Local-browser baseline and ARM curves, with separate stealth ARM results and historical baseline references](rl_results/baseline_vs_arm_allfailure_full300.png)
+![Local-browser baseline and ARM curves, with separate matched stealth results](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
-original bonus starts hidden. Stealth results remain separate below.
+original bonus starts hidden. Smoothing is off by default and changes lines only;
+points, tooltips and exports retain raw values. Stealth results remain separate below.
 
 **Matched stealth, three evaluations per iteration90 checkpoint — September29–30.**
 Same300 tasks, actor-only inference; o4-mini/AgentTrek, T0.6/p0.95/k20,
@@ -233,8 +234,7 @@ not training-seed variability. Valid-only means average the three per-repeat
 rates. Repeat1 retains pre-outage outcomes and retries only credit-blocked tasks;
 repeats2/3 use fresh rollouts. [All nine audits and aggregate](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930).
 The plot above retains the first matched pass. Diamonds use this corrected
-protocol; triangles retain historical baseline58/90 references. Earlier
-GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
+protocol. Earlier GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
