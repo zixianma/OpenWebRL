@@ -6,7 +6,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 - [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
-- [Mixed-only bonus/reweight iterations10–40 full300](#arm-mixed-pair-iter10-results-20260928)
+- [Mixed-only bonus/reweight iterations10–50 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration90 full300](#arm-gate-b-iter90-results-20260928)
 - [Gate B iteration100 full300 and completed training](#arm-gate-b-iter100-results-20260929)
@@ -231,12 +231,14 @@ Every submitted/replacement job is registered with the active ARM supervisor.
 <a id="arm-mixed-pair-iter20-results-20260928"></a>
 <a id="arm-mixed-pair-iter30-results-20260929"></a>
 <a id="arm-mixed-pair-iter40-results-20260929"></a>
-## Mixed-only bonus/reweight iterations10–40 — September28–29
+<a id="arm-mixed-pair-iter50-results-20260929"></a>
+## Mixed-only bonus/reweight iterations10–50 — September28–29
 
 Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10,
 20 and30; both30 evaluations completed September29. Reweight40 completed in335698
 on September29, restoring `iter_0000039` at564 Adam updates. Bonus40 completed in
-335700 the same day, restoring native39 at548 Adam updates.
+335700 the same day, restoring native39 at548 Adam updates. Reweight50 also
+completed September29 in335698, restoring native49 at694 Adam updates.
 Their controllers own training
 continuation after evaluation. Native checkpoints are `iter_0000009` for10, `iter_0000019` for20 and
 `iter_0000029` for30. All use the
@@ -255,6 +257,18 @@ final metrics were independently checked.
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 |  |30 |90 |219 |81 |30.00% |41.10% |28 /64 |
 |  |40 |106 |225 |75 |35.33% |47.11% |33 /66 |
+|  |50 |111 |237 |63 |37.00% |46.84% |33 /73 |
+
+Reweight50's fixed100 slice is33.00% /45.21%. Full300 overall rises1.67pp from40,
+with225→237 valid tasks; valid-only changes47.11%→46.84%. Historical baseline50
+is35.00% /44.87%, a descriptive+2.00pp overall difference. Bonus50 is pending.
+All300 expected unique IDs, nonempty archive payloads, GPT-4.1/action_history
+identities, temperature0/30-turn settings and final W&B history were verified.
+Native49 has16 complete shard extents, a matching dataset cursor,694 aligned
+Adam/scheduler updates and finite sampled tensor payloads. The controller
+passed eight-GPU model/optimizer restoration and started the stage targeting60;
+the final60 checkpoint/evaluation remain required.
+[Independent reweight50 audit](arm_results/rl_integration/mixed-reweight-iteration50-audit.json).
 
 Bonus40's fixed100 slice is32.00% /43.84%. Full300 overall rises1.33pp from30,
 with228 valid tasks in both cohorts. All300 expected task IDs, archive pairs,

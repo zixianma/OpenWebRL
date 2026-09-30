@@ -186,11 +186,13 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |20 |31.00% /44.29% |**32.33% /42.73%** |
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
 |  |40 |33.00% /50.00% |**35.33% /47.11%** |
+|  |50 |33.00% /45.21% |**37.00% /46.84%** |
 
 Both mixed-only runs completed10/20 evaluations September28 and30/40 September29,
 with all rollout/verdict pairs verified. At40, reweight is2.00pp above bonus
-overall; the predefined40/50/60 aggregate remains pending. Both continue toward60.
-[Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter40-results-20260929).
+overall. Reweight50 also completed:37.00% /46.84%, with237 valid tasks.
+Bonus50 and the predefined40/50/60 aggregate remain pending; both continue toward60.
+[Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter50-results-20260929).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
 the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30
