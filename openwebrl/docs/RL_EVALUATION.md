@@ -39,7 +39,13 @@ model restoration,1136 Adam updates, scheduler offset0, cursor, shard extents
 and sampled finite CPU tensors passed. W&B finished with matching metrics.
 Job337131 exited0 after16,380 seconds and released8,820 unused seconds.
 [Repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json).
-Baseline repeat2 has saved300 tasks and is finalizing; Additive is collecting.
+Baseline repeat2 is verified at **173/300 =57.67% overall**,
+**173/290 =59.66% valid-only**; fixed100 **58.00% /59.18%** (58/98 valid).
+The same independent checks passed for300 paired archives and290 nonempty
+valid-task verdicts; native89 retained1016 Adam updates and its known scheduler
+offset1. Job337129 exited0 after16,826 seconds and released8,374 unused seconds.
+[Baseline repeat2 audit](arm_results/rl_integration/stealth-o4-t06-baseline-iteration90-repeat2-audit.json).
+Gate B is5.33pp higher overall in this round; Additive is still collecting.
 All third passes await completion of the second round, preserving the9-browser
 concurrency cap. These are repeated evaluations of the same models; no
 three-repeat mean or training-seed inference is available yet.
