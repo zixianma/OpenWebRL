@@ -266,7 +266,7 @@ outcome-only baseline within each difficulty split, for both metrics.
 | Gate B | 67.92% / 69.64% | **62.65% / 65.73%** | 42.62% / 44.92% |
 
 Largest **overall** gains: **Gate B · medium +6.86 pp**;
-**Additive · hard +5.91 pp**; **Additive · easy +4.58 pp**.
+**Additive · hard +5.91 pp**.
 
 Two stale medium labels have reference lengths 11/12 and are classified as hard
 for this analysis; saved labels remain preserved. These are descriptive gains,
