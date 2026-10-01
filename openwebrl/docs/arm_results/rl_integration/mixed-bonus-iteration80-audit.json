@@ -1,0 +1,57 @@
+{
+  "method": "mixed-only bonus + relaxed B",
+  "iteration": 80,
+  "job": "338904",
+  "verified_complete": true,
+  "full300": {
+    "tasks": 300,
+    "successes": 108,
+    "valid": 221,
+    "invalid": 79,
+    "overall": 0.36,
+    "valid_only": 0.48868778280542985,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter80-338904/rollouts",
+    "iteration": 80,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-338904-iter80/runtime/iter_0000079",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter80-338904"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 35,
+    "valid": 69,
+    "invalid": 31,
+    "overall": 0.35,
+    "valid_only": 0.5072463768115942,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "plan_sha256": "eadcf482355913a450e686a6220b1a146ceed2db162d9b923d947108f4e757bf",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "checkpoint_adam_updates": 1004,
+  "checked_epoch": 1790887218.5368145,
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 79,
+    "completed_training_iteration": 80,
+    "adam_updates": 1004
+  },
+  "wandb_history_verified": true,
+  "valid_statuses_with_explicit_judge_not_run": {
+    "failed": 7,
+    "truncated": 8
+  },
+  "archive_verification": "All300 nonempty ZIP central directories and serialized payload entries; not full bytewise CRC scan. Saved judge records include explicit policy sentinel where a terminal status skips the judge."
+}

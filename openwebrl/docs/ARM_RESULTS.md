@@ -329,12 +329,14 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter60-results-20260930"></a>
 <a id="arm-mixed-bonus-iter70-results-20261001"></a>
 <a id="arm-mixed-reweight-iter70-results-20261001"></a>
-## Mixed-only relaxed-B pair: iterations10–70 — September28–October1
+<a id="arm-mixed-bonus-iter80-results-20261001"></a>
+## Mixed-only relaxed-B pair: iterations10–80 — September28–October1
 
 Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
-continuations are running; both70 evaluations are verified.
+continuations reached bonus80 and reweight70 evaluations, all verified.
+Bonus's next stage is waiting for personal-quota recovery; reweight is training.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -355,6 +357,7 @@ trajectory-mean-one weighting with lambda=.5.
 |  |50 |35.00% /48.61% |38.67% /49.57% |234 |
 |  |60 |41.00% /54.67% |37.67% /48.71% |232 |
 |  |70 |44.00% /57.14% |38.33% /48.94% |235 |
+|  |80 |35.00% /50.72% |36.00% /48.87% |221 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
@@ -362,6 +365,19 @@ trajectory-mean-one weighting with lambda=.5.
 |  |50 |33.00% /45.21% |37.00% /46.84% |237 |
 |  |60 |34.00% /44.74% |36.67% /47.21% |233 |
 |  |70 |38.00% /50.00% |38.67% /49.57% |234 |
+
+**Bonus80, October1:**108 successes/221 valid/full300 gives **36.00% overall
+/48.87% valid-only**; fixed100 is35/69/100: **35.00% /50.72%**. Overall is2.33pp
+below70, while valid-only is nearly unchanged (48.94%→48.87%) and valid tasks
+fall235→221. Different valid-task sets prevent attributing this difference
+solely to the policy. All300 task records and nonempty rollout archive payload
+entries, native79 restoration at1,004 Adam updates and final evaluation W&B
+metrics passed independent checks. Fifteen valid failures carry the unchanged
+protocol's judge-not-run sentinel (8 truncated,7 failed). The subsequent training
+preflight stopped on personal quota before any iteration81 optimization;
+checkpoint80 and the completed evaluation are preserved.
+[Bonus80 audit](arm_results/rl_integration/mixed-bonus-iteration80-audit.json) ·
+[Recovery status](ARM_INTEGRATION_PLAN.md#arm-mixed-quota-recovery-20261001).
 
 **Reweight70, October1:**116 successes/234 valid/full300 gives **38.67% overall
 /49.57% valid-only**. Fixed100 is38/76/100: **38.00% /50.00%**. This is+2.00pp

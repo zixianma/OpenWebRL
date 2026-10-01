@@ -9,7 +9,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
 - [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
-- [Mixed-only bonus/reweight iterations10–70 full300](#arm-mixed-pair-iter10-results-20260928)
+- [Mixed-only bonus/reweight iterations10–80 full300](#arm-mixed-pair-iter10-results-20260928)
 - [Original-bonus20/30/40/50/60 full300 backfills](#arm-original-backfill-results-20260927)
 - [Gate B iteration90 full300](#arm-gate-b-iter90-results-20260928)
 - [Gate B iteration100 full300 and completed training](#arm-gate-b-iter100-results-20260929)
@@ -338,7 +338,8 @@ aggregate awaits60. The controller resumed training in the same allocation.
 <a id="arm-mixed-pair-iter60-results-20260930"></a>
 <a id="arm-mixed-bonus-iter70-results-20261001"></a>
 <a id="arm-mixed-reweight-iter70-results-20261001"></a>
-## Mixed-only bonus/reweight iterations10–70 — September28–October1
+<a id="arm-mixed-bonus-iter80-results-20261001"></a>
+## Mixed-only bonus/reweight iterations10–80 — September28–October1
 
 Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10,
 20 and30; both30 evaluations completed September29. Reweight40 completed in335698
@@ -362,6 +363,7 @@ final metrics were independently checked.
 |  |50 |116 |234 |66 |38.67% |49.57% |35 /72 |
 |  |60 |113 |232 |68 |37.67% |48.71% |41 /75 |
 |  |70 |115 |235 |65 |38.33% |48.94% |44 /77 |
+|  |80 |108 |221 |79 |36.00% |48.87% |35 /69 |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33% |34.17% |25 /72 |
 |  |20 |97 |227 |73 |32.33% |42.73% |31 /70 |
 |  |30 |90 |219 |81 |30.00% |41.10% |28 /64 |
@@ -369,6 +371,19 @@ final metrics were independently checked.
 |  |50 |111 |237 |63 |37.00% |46.84% |33 /73 |
 |  |60 |110 |233 |67 |36.67% |47.21% |34 /76 |
 |  |70 |116 |234 |66 |38.67% |49.57% |38 /76 |
+
+**Bonus80 evaluation verified, October1:** full300 **36.00% /48.87%**
+(108 successes,221 valid), fixed100 **35.00% /50.72%** (35/69). Job338904
+evaluated native79 at1,004 Adam updates under the unchanged local-browser
+GPT-4.1/action_history/T0/4096-token/30-turn protocol. Exact300 IDs, paired
+nonempty archive payload entries, saved judge records, checkpoint counters/
+cursor/shard extents/sampled finite tensors, native GPU restoration and final
+evaluation W&B history passed independent checks. Fifteen valid failures have
+explicit judge-not-run sentinels (8 truncated,7 failed). Artifacts remain at
+`evaluations/arm-mixed-bonus-iter80-338904/`. The later training-stage quota
+failure does not invalidate this completed evaluation; recovery will reuse it.
+[Evaluation audit](arm_results/rl_integration/mixed-bonus-iteration80-audit.json) ·
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-bonus-iter80-338904).
 
 **Reweight70 evaluation verified, October1:** full300 **38.67% /49.57%**
 (116 successes,234 valid), fixed100 **38.00% /50.00%** (38/76). Job338905

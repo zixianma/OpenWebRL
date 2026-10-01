@@ -105,6 +105,26 @@ queued for priority; the bonus successor waits for its predecessor. Resources
 were verified as8 H200/64 CPUs/960GiB per allocation, with separate115,200-second
 bonus and86,400-second reweight ledgers. No previous unused budget was added.
 
+<a id="arm-mixed-quota-recovery-20261001"></a>
+**October1 quota interruption:**338904 completed training80 and full300 eval80,
+then failed the next-stage storage preflight: personal scrubbed soft-quota
+headroom was0.263TiB, below the2TiB guard. This is distinct from filesystem-wide
+free space. Native79/1,004 Adam updates and all eight evaluation cohorts are
+verified. Charge the full46,326 seconds consumed;68,874 seconds remain within
+the115,200-second bonus cap. Existing successor338906 still reserves8h and has
+an unsatisfied `afterok` dependency. Its resume plan is CPU-validated; remove
+that dependency only after quota recovery, then require native GPU restoration
+before training. Do not repeat eval80 or reset the budget.
+
+An exact read-only proposal covers87 obsolete checkpoint directories from
+completed to60 stages, reclaiming approximately4.92TiB. It retains every tenth,
+each old stage/attempt's latest, detected resume dependencies, all current
+checkpoints, cursors, rollouts and verdicts. Deletion approval is pending;
+no files have been removed. Proposal, target list, budget and resume receipts:
+runtime `to90-20260930/quota-recovery-20261001/`. Check **personal quota** on
+every supervision review and before recovery; `df` alone does not establish
+usable storage. Reweight338905 remains active and shares the same quota risk.
+
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
 completed to60 controller. Nine regression tests cover milestone ordering,
 retry-budget accounting, missing resource approval, inherited cohort lineage,

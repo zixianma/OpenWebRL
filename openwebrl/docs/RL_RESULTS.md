@@ -43,6 +43,7 @@
 |  |50 |116 |234 |66 |38.67 |49.57 |[September30 audit](arm_results/rl_integration/mixed-bonus-iteration50-audit.json) |
 |  |60 |113 |232 |68 |37.67 |48.71 |[September30 audit](arm_results/rl_integration/mixed-bonus-iteration60-audit.json) |
 |  |70 |115 |235 |65 |38.33 |48.94 |[October1 audit](arm_results/rl_integration/mixed-bonus-iteration70-audit.json) |
+|  |80 |108 |221 |79 |36.00 |48.87 |[October1 audit](arm_results/rl_integration/mixed-bonus-iteration80-audit.json) |
 | Mixed-only reweight + relaxed B |10 |82 |240 |60 |27.33 |34.17 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration10-audit.json) |
 |  |20 |97 |227 |73 |32.33 |42.73 |[September28 audit](arm_results/rl_integration/mixed-reweight-iteration20-audit.json) |
 |  |30 |90 |219 |81 |30.00 |41.10 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration30-audit.json) |
