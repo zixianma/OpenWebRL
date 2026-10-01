@@ -263,9 +263,10 @@ Mean ± sample SD describes repeated evaluation of fixed trained checkpoints,
 not training-seed variability. Valid-only means average the three per-repeat
 rates. Repeat1 retains pre-outage outcomes and retries only credit-blocked tasks;
 repeats2/3 use fresh rollouts. [All nine audits and aggregate](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930).
-**Paired uncertainty:** no pair is significant at5% after correcting the three
-comparisons (Holm p=0.220 for either ARM versus baseline;0.910 for Gate B versus
-Additive). The95% intervals below resample300 tasks, keeping each task’s three
+
+**Paired uncertainty:** no pair is significant at 5% after correcting the three
+comparisons (Holm p=0.220 for either ARM versus baseline; 0.910 for Gate B versus
+Additive). The 95% intervals below resample 300 tasks, keeping each task’s three
 repeats together; they do not measure training-seed variability.
 
 ![Matched iteration90 stealth results: overall means and paired differences with95% task-bootstrap confidence intervals](arm_results/rl_integration/stealth-iteration90-confidence.png)
@@ -273,7 +274,7 @@ repeats together; they do not measure training-seed variability.
 [Exact tests, sensitivity checks and limitations](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 · [Slide-ready SVG](arm_results/rl_integration/stealth-iteration90-confidence.svg).
 
-The plot above retains the first matched pass. Diamonds use this corrected
+The earlier training-curve plot retains the first matched pass. Diamonds use this corrected
 protocol. Earlier GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
