@@ -251,8 +251,9 @@ so a consistent gain over outcome-only RL is not yet established.
 [Detailed analysis, coverage audits, examples and provenance](ARM_RESULTS.md#arm-online-rl-analysis-20260922)
 · [Evaluation records](RL_EVALUATION.md#arm-iteration-19-evaluations-20260915).
 
-<details>
-<summary>OM2W difficulty breakdown: iteration90, three stealth evaluations</summary>
+<a id="om2w-difficulty-breakdown"></a>
+
+**OM2W difficulty breakdown: iteration90, three stealth evaluations.**
 
 Mean **overall / valid-only** success rates, using human reference steps:
 easy 1–5, medium 6–10, hard 11+.
@@ -268,7 +269,6 @@ for this analysis; saved labels remain preserved. Gate B's largest descriptive
 gain is on medium tasks; Additive's is on hard tasks. No significance claim.
 [SD, valid denominators, label audit and per-task verdicts](ARM_RESULTS.md#arm-stealth90-difficulty-20260930).
 
-</details>
 
 <details>
 <summary><strong>WebVoyager evaluation · iteration 90 · full 595</strong></summary>

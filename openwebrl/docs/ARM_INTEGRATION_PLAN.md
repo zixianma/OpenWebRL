@@ -8172,7 +8172,8 @@ Runtime: `task-pool-expansion-20260922/curation-v3-20260929/cohorts-20260930/wei
 The user requested reviewing the frozen 2,000 tasks before proceeding, and
 prioritizing difficulty in addition to diversity. The full cohort can be reviewed
 at [localhost:8765/arm_selected_tasks.html](http://localhost:8765/arm_selected_tasks.html)
-as a self-contained HTML page on the existing local server.
+or by downloading [the published self-contained HTML](arm_results/rl_integration/task-pool-selected-2000.html).
+GitHub shows the HTML source; download it and open it in a browser.
 It includes all original instructions, start URLs and rubrics, plus site/source/
 workflow/difficulty filters, pagination and local review notes with JSON export.
 Notes stay in the user's browser and do not modify the task manifest. No actor
