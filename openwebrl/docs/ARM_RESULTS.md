@@ -328,12 +328,13 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter50-results-20260929"></a>
 <a id="arm-mixed-pair-iter60-results-20260930"></a>
 <a id="arm-mixed-bonus-iter70-results-20261001"></a>
+<a id="arm-mixed-reweight-iter70-results-20261001"></a>
 ## Mixed-only relaxed-B pair: iterations10–70 — September28–October1
 
 Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
-continuations are running; bonus70 is verified and reweight70 is pending.
+continuations are running; both70 evaluations are verified.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -360,6 +361,18 @@ trajectory-mean-one weighting with lambda=.5.
 |  |40 |33.00% /50.00% |35.33% /47.11% |225 |
 |  |50 |33.00% /45.21% |37.00% /46.84% |237 |
 |  |60 |34.00% /44.74% |36.67% /47.21% |233 |
+|  |70 |38.00% /50.00% |38.67% /49.57% |234 |
+
+**Reweight70, October1:**116 successes/234 valid/full300 gives **38.67% overall
+/49.57% valid-only**. Fixed100 is38/76/100: **38.00% /50.00%**. This is+2.00pp
+overall from60 and+0.33pp (one success) above bonus70. The fixed100 slice favors
+bonus while full300 is nearly tied; neither establishes a robust winner. All300
+task IDs, nonempty rollout archive payload entries, judge records, native69
+GPU restoration at934 Adam updates and final evaluation W&B metrics passed
+independent checks. Seventeen valid failures carry the unchanged protocol's
+explicit judge-not-run sentinel (15 truncated,2 failed). The controller then
+passed native69 model-and-optimizer restoration and resumed the stage toward80.
+[Reweight70 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json).
 
 **Bonus70, October1:**115 successes/235 valid/full300 gives **38.33% overall
 /48.94% valid-only**. Fixed100 is44/77/100: **44.00% /57.14%**. Full300 gains

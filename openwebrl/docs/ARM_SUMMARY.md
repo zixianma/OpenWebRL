@@ -217,15 +217,17 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |40 |33.00% /50.00% |**35.33% /47.11%** |
 |  |50 |33.00% /45.21% |**37.00% /46.84%** |
 |  |60 |34.00% /44.74% |**36.67% /47.21%** |
+|  |70 |38.00% /50.00% |**38.67% /49.57%** |
 
 Both runs completed60 and all six full300 evaluations. Their40/50/60 averages
 are36.56% /47.38% for bonus and36.33% /47.05% for reweight (overall/valid-only):
 only0.22pp apart overall; these are checkpoint averages, not independent seeds.
 Both lineages are
 [running toward90](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930),
-with full300 evaluations at70/80/90 and unchanged training settings. Bonus70 is
-[verified](arm_results/rl_integration/mixed-bonus-iteration70-audit.json);
-reweight70 is pending.
+with full300 evaluations at70/80/90 and unchanged training settings. Both70
+evaluations are verified; reweight exceeds bonus by one success out of300.
+[Bonus70 audit](arm_results/rl_integration/mixed-bonus-iteration70-audit.json) ·
+[Reweight70 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json).
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
