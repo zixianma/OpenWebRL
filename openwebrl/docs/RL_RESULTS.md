@@ -91,6 +91,25 @@
 | --- |
 | [Nine-cohort aggregate and audit hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json) |
 
+## OM2W difficulty · iteration90 stealth · o4-mini · T0.6 · three-repeat mean ± sample SD
+
+| Method | Difficulty | Tasks/repeat | Overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid counts, repeats 1/2/3 |
+| --- | --- | ---: | --- | --- | ---: | --- |
+| Outcome-only baseline | Easy | 80 | 70.00 ± 1.25% | 72.11 ± 1.39% | +0.00 pp | 78/78/77 |
+| Outcome-only baseline | Medium | 141 | 55.79 ± 6.96% | 58.49 ± 6.25% | +0.00 pp | 132/137/134 |
+| Outcome-only baseline | Hard | 79 | 39.24 ± 3.35% | 41.14 ± 3.32% | +0.00 pp | 76/75/75 |
+| Additive | Easy | 80 | 74.58 ± 2.60% | 75.86 ± 3.20% | +4.58 pp | 78/79/79 |
+| Additive | Medium | 141 | 56.74 ± 1.88% | 60.92 ± 1.20% | +0.95 pp | 136/130/128 |
+| Additive | Hard | 79 | 45.15 ± 0.73% | 47.37 ± 1.07% | +5.91 pp | 72/77/77 |
+| Gate B | Easy | 80 | 67.92 ± 5.05% | 69.64 ± 4.71% | -2.08 pp | 77/78/79 |
+| Gate B | Medium | 141 | 62.65 ± 4.09% | 65.73 ± 3.58% | +6.86 pp | 133/136/134 |
+| Gate B | Hard | 79 | 42.62 ± 3.19% | 44.92 ± 3.95% | +3.38 pp | 76/74/75 |
+
+| Source / definition |
+| --- |
+| [Difficulty audit: human steps 1–5 / 6–10 / 11+; two stale labels corrected for analysis](ARM_RESULTS.md#arm-stealth90-difficulty-20260930) |
+| [All 2,700 per-task outcomes](http://localhost:8765/arm_om2w_difficulty_verdicts.csv) |
+
 ## Stealth browser · o4-mini
 
 | Checkpoint after iteration | Actor temperature | Completed / planned | Successes | Valid | Invalid | Overall % | Valid-only % | Evaluation |

@@ -1,0 +1,650 @@
+{
+  "iteration": 90,
+  "repeats": 3,
+  "tasks": 300,
+  "protocol": "Browser Use stealth; o4-mini/AgentTrek; T0.6/p0.95/k20; 4096 response tokens;30 turns; actor-only inference",
+  "difficulty_definition": {
+    "easy": "human reference 1\u20135 steps",
+    "medium": "6\u201310 steps",
+    "hard": "11+ steps"
+  },
+  "difficulty_source": "/gpfs/scrubbed/zixianma/openwebrl-runtime/reference-arm-stealth90-o4-t06-20260929/online_mind2web_monitor.jsonl",
+  "difficulty_source_sha256": "d8f81bfc99dfba8b1363d9f50511878dd5db72ff38225c8a196c222aa0c63488",
+  "difficulty_counts": {
+    "medium": 141,
+    "easy": 80,
+    "hard": 79
+  },
+  "label_policy": "Apply published human-reference-length bins to the frozen task metadata; retain original labels separately; no evaluation artifacts modified",
+  "reference_length_label_mismatches": [
+    {
+      "task_id": "11857213ca01510f12813740afd59918_110325",
+      "saved_difficulty": "medium",
+      "reference_length": 12,
+      "length_derived_difficulty": "hard"
+    },
+    {
+      "task_id": "d730f4ff450da1bd60a836163736ef6a_110325",
+      "saved_difficulty": "medium",
+      "reference_length": 11,
+      "length_derived_difficulty": "hard"
+    }
+  ],
+  "saved_difficulty_counts": {
+    "medium": 143,
+    "easy": 80,
+    "hard": 77
+  },
+  "difficulty_definition_url": "https://huggingface.co/spaces/osunlp/Online_Mind2Web_Leaderboard/blob/2dba94f7112bf2e47c701a49c5af971fbf0723d4/content.py",
+  "summary": [
+    {
+      "method": "baseline",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.7,
+      "overall_sample_sd": 0.012500000000000011,
+      "valid_only_mean": 0.721056721056721,
+      "valid_only_sample_sd": 0.013904840845511447,
+      "successes_by_repeat": [
+        57,
+        55,
+        56
+      ],
+      "valid_by_repeat": [
+        78,
+        78,
+        77
+      ],
+      "invalid_by_repeat": [
+        2,
+        2,
+        3
+      ],
+      "overall_delta_baseline_pp": 0.0
+    },
+    {
+      "method": "baseline",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.557919621749409,
+      "overall_sample_sd": 0.06960960692357195,
+      "valid_only_mean": 0.5849135763342104,
+      "valid_only_sample_sd": 0.06250817606153362,
+      "successes_by_repeat": [
+        73,
+        90,
+        73
+      ],
+      "valid_by_repeat": [
+        132,
+        137,
+        134
+      ],
+      "invalid_by_repeat": [
+        9,
+        4,
+        7
+      ],
+      "overall_delta_baseline_pp": 0.0
+    },
+    {
+      "method": "baseline",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.3924050632911392,
+      "overall_sample_sd": 0.03349052292486823,
+      "valid_only_mean": 0.4114035087719298,
+      "valid_only_sample_sd": 0.033184802968309945,
+      "successes_by_repeat": [
+        33,
+        28,
+        32
+      ],
+      "valid_by_repeat": [
+        76,
+        75,
+        75
+      ],
+      "invalid_by_repeat": [
+        3,
+        4,
+        4
+      ],
+      "overall_delta_baseline_pp": 0.0
+    },
+    {
+      "method": "additive",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.7458333333333333,
+      "overall_sample_sd": 0.026020824993326672,
+      "valid_only_mean": 0.7586281510332143,
+      "valid_only_sample_sd": 0.032019665396237636,
+      "successes_by_repeat": [
+        62,
+        59,
+        58
+      ],
+      "valid_by_repeat": [
+        78,
+        79,
+        79
+      ],
+      "invalid_by_repeat": [
+        2,
+        1,
+        1
+      ],
+      "overall_delta_baseline_pp": 4.583333333333339
+    },
+    {
+      "method": "additive",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.5673758865248227,
+      "overall_sample_sd": 0.018764193695493536,
+      "valid_only_mean": 0.6091935331825038,
+      "valid_only_sample_sd": 0.012043113111774164,
+      "successes_by_repeat": [
+        82,
+        81,
+        77
+      ],
+      "valid_by_repeat": [
+        136,
+        130,
+        128
+      ],
+      "invalid_by_repeat": [
+        5,
+        11,
+        13
+      ],
+      "overall_delta_baseline_pp": 0.9456264775413725
+    },
+    {
+      "method": "additive",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.45147679324894513,
+      "overall_sample_sd": 0.0073082312555648905,
+      "valid_only_mean": 0.4737253487253487,
+      "valid_only_sample_sd": 0.010726384871307984,
+      "successes_by_repeat": [
+        35,
+        36,
+        36
+      ],
+      "valid_by_repeat": [
+        72,
+        77,
+        77
+      ],
+      "invalid_by_repeat": [
+        7,
+        2,
+        2
+      ],
+      "overall_delta_baseline_pp": 5.9071729957805905
+    },
+    {
+      "method": "gate-b",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.6791666666666667,
+      "overall_sample_sd": 0.05051814855409224,
+      "valid_only_mean": 0.6963809748619876,
+      "valid_only_sample_sd": 0.04711980053265651,
+      "successes_by_repeat": [
+        50,
+        58,
+        55
+      ],
+      "valid_by_repeat": [
+        77,
+        78,
+        79
+      ],
+      "invalid_by_repeat": [
+        3,
+        2,
+        1
+      ],
+      "overall_delta_baseline_pp": -2.083333333333326
+    },
+    {
+      "method": "gate-b",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.6264775413711584,
+      "overall_sample_sd": 0.04094682760210111,
+      "valid_only_mean": 0.6573185047781878,
+      "valid_only_sample_sd": 0.035769273155254036,
+      "successes_by_repeat": [
+        85,
+        95,
+        85
+      ],
+      "valid_by_repeat": [
+        133,
+        136,
+        134
+      ],
+      "invalid_by_repeat": [
+        8,
+        5,
+        7
+      ],
+      "overall_delta_baseline_pp": 6.85579196217494
+    },
+    {
+      "method": "gate-b",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.42616033755274263,
+      "overall_sample_sd": 0.03185584149903271,
+      "valid_only_mean": 0.44923818555397504,
+      "valid_only_sample_sd": 0.03945558838165213,
+      "successes_by_repeat": [
+        31,
+        36,
+        34
+      ],
+      "valid_by_repeat": [
+        76,
+        74,
+        75
+      ],
+      "invalid_by_repeat": [
+        3,
+        5,
+        4
+      ],
+      "overall_delta_baseline_pp": 3.3755274261603407
+    }
+  ],
+  "per_repeat": [
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 57,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.7125,
+      "valid_only": 0.7307692307692307
+    },
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 73,
+      "valid": 132,
+      "invalid": 9,
+      "overall": 0.5177304964539007,
+      "valid_only": 0.553030303030303
+    },
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 33,
+      "valid": 76,
+      "invalid": 3,
+      "overall": 0.4177215189873418,
+      "valid_only": 0.4342105263157895
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 55,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.6875,
+      "valid_only": 0.7051282051282052
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 90,
+      "valid": 137,
+      "invalid": 4,
+      "overall": 0.6382978723404256,
+      "valid_only": 0.656934306569343
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 28,
+      "valid": 75,
+      "invalid": 4,
+      "overall": 0.35443037974683544,
+      "valid_only": 0.37333333333333335
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 56,
+      "valid": 77,
+      "invalid": 3,
+      "overall": 0.7,
+      "valid_only": 0.7272727272727273
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 73,
+      "valid": 134,
+      "invalid": 7,
+      "overall": 0.5177304964539007,
+      "valid_only": 0.5447761194029851
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 32,
+      "valid": 75,
+      "invalid": 4,
+      "overall": 0.4050632911392405,
+      "valid_only": 0.4266666666666667
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 62,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.775,
+      "valid_only": 0.7948717948717948
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 82,
+      "valid": 136,
+      "invalid": 5,
+      "overall": 0.5815602836879432,
+      "valid_only": 0.6029411764705882
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 35,
+      "valid": 72,
+      "invalid": 7,
+      "overall": 0.4430379746835443,
+      "valid_only": 0.4861111111111111
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 59,
+      "valid": 79,
+      "invalid": 1,
+      "overall": 0.7375,
+      "valid_only": 0.7468354430379747
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 81,
+      "valid": 130,
+      "invalid": 11,
+      "overall": 0.574468085106383,
+      "valid_only": 0.6230769230769231
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 77,
+      "invalid": 2,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.4675324675324675
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 58,
+      "valid": 79,
+      "invalid": 1,
+      "overall": 0.725,
+      "valid_only": 0.7341772151898734
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 77,
+      "valid": 128,
+      "invalid": 13,
+      "overall": 0.5460992907801419,
+      "valid_only": 0.6015625
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 77,
+      "invalid": 2,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.4675324675324675
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 50,
+      "valid": 77,
+      "invalid": 3,
+      "overall": 0.625,
+      "valid_only": 0.6493506493506493
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 85,
+      "valid": 133,
+      "invalid": 8,
+      "overall": 0.6028368794326241,
+      "valid_only": 0.6390977443609023
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 31,
+      "valid": 76,
+      "invalid": 3,
+      "overall": 0.3924050632911392,
+      "valid_only": 0.40789473684210525
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 58,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.725,
+      "valid_only": 0.7435897435897436
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 95,
+      "valid": 136,
+      "invalid": 5,
+      "overall": 0.6737588652482269,
+      "valid_only": 0.6985294117647058
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 74,
+      "invalid": 5,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.4864864864864865
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 55,
+      "valid": 79,
+      "invalid": 1,
+      "overall": 0.6875,
+      "valid_only": 0.6962025316455697
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 85,
+      "valid": 134,
+      "invalid": 7,
+      "overall": 0.6028368794326241,
+      "valid_only": 0.6343283582089553
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 34,
+      "valid": 75,
+      "invalid": 4,
+      "overall": 0.43037974683544306,
+      "valid_only": 0.4533333333333333
+    }
+  ],
+  "sources": [
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "audit_file": "stealth-o4-t06-baseline-iteration90-audit.json",
+      "audit_sha256": "b9f7c88d367be3b6bef31397e36dbafe2880a138524fa6bf78e1d813e1ec9ac8",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r1-recovery-336971"
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "audit_file": "stealth-o4-t06-baseline-iteration90-repeat2-audit.json",
+      "audit_sha256": "7990233e2f06795701a2d582d27e561c210d3591cb3d3b311c2e14283fefe090",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r2-337129"
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "audit_file": "stealth-o4-t06-baseline-iteration90-repeat3-audit.json",
+      "audit_sha256": "5379c7449bfac74ff10f7627caf1118403aad45670f827c1e6956458861a43f1",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-baseline-r3-337132"
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "audit_file": "stealth-o4-t06-additive-iteration90-audit.json",
+      "audit_sha256": "7f25d578ddd84cda1701f92c107bd24cbe438a0ec125496e3bb73a6fa0e08dc6",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r1-recovery-336972"
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "audit_file": "stealth-o4-t06-additive-iteration90-repeat2-audit.json",
+      "audit_sha256": "3337caf05a6770ff06422a1b941e2c8aed5ea95f4908a0a1bab176c2291bcb36",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r2-337130"
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "audit_file": "stealth-o4-t06-additive-iteration90-repeat3-audit.json",
+      "audit_sha256": "0e5fc381acdb24c7e278fc8ea354bfd900a75cc7fd06ed9d0d64effb96a36c42",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-additive-r3-337133"
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "audit_file": "stealth-o4-t06-gate-b-iteration90-audit.json",
+      "audit_sha256": "09ff09f722116d9f0bb7f0e22639c1992b87455c61e7bbaf731bf42d3518faaf",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r1-recovery-336973"
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "audit_file": "stealth-o4-t06-gate-b-iteration90-repeat2-audit.json",
+      "audit_sha256": "a71fef624a96eecc2abf5fa23a76b71b1d1fdd3c5858e3095187fd4e2e24bb37",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r2-337131"
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "audit_file": "stealth-o4-t06-gate-b-iteration90-repeat3-audit.json",
+      "audit_sha256": "7313cbba472089e24590198a69953468e988ffa251013a64a00bbd268bb4d139",
+      "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/stealth90-o4-t06-gate-b-r3-337134"
+    }
+  ],
+  "per_task_verdicts_sha256": "b98710748fdbd8d57f7fec7baeb778d3a0ce00d3db957e33e2c3f8c111ba1951",
+  "implementation_sha256": "e1b0bf7c429afb7bd43674af5391a2ec9f287187420fec544270a1aa6bd3aa62",
+  "verified_complete": true,
+  "new_model_calls": 0,
+  "new_browser_calls": 0,
+  "checks": [
+    "Exact same 300 IDs in each cohort; all difficulty labels present, with reference-length mismatches recorded.",
+    "Only declared credit-blocked records replaced in repeat1; no valid records replaced.",
+    "All 2700 retained records have the expected judge, binary metrics and existing rollout archives.",
+    "All nine flat success/valid totals reproduce the previously verified audits.",
+    "Difficulty-weighted overall means reproduce the published full300 aggregate."
+  ],
+  "caveats": [
+    "Three evaluation repeats of one checkpoint per method, not training-seed replication.",
+    "Valid-only means average per-repeat ratios, not pooled counts.",
+    "Repeat1 contains previously audited credit-outage recovery.",
+    "This is descriptive subgroup analysis; no significance claim.",
+    "Two stale medium labels have reference lengths 11/12; primary tables classify them as hard under the published rule.",
+    "OM2W human-step difficulty differs from WebGym rubric-fact counts."
+  ]
+}

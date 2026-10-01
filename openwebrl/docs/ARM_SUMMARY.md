@@ -252,6 +252,25 @@ so a consistent gain over outcome-only RL is not yet established.
 · [Evaluation records](RL_EVALUATION.md#arm-iteration-19-evaluations-20260915).
 
 <details>
+<summary>OM2W difficulty breakdown: iteration90, three stealth evaluations</summary>
+
+Mean **overall / valid-only** success rates, using human reference steps:
+easy 1–5, medium 6–10, hard 11+.
+
+| Method | Easy (80 tasks) | Medium (141 tasks) | Hard (79 tasks) |
+| --- | ---: | ---: | ---: |
+| Outcome-only baseline | 70.00% / 72.11% | 55.79% / 58.49% | 39.24% / 41.14% |
+| Additive | 74.58% / 75.86% | 56.74% / 60.92% | 45.15% / 47.37% |
+| Gate B | 67.92% / 69.64% | 62.65% / 65.73% | 42.62% / 44.92% |
+
+Two stale medium labels have reference lengths 11/12 and are classified as hard
+for this analysis; saved labels remain preserved. Gate B's largest descriptive
+gain is on medium tasks; Additive's is on hard tasks. No significance claim.
+[SD, valid denominators, label audit and per-task verdicts](ARM_RESULTS.md#arm-stealth90-difficulty-20260930).
+
+</details>
+
+<details>
 <summary><strong>WebVoyager evaluation · iteration 90 · full 595</strong></summary>
 
 **WebVoyager, iteration90 — September30:** stealth, actor T0.6, GPT-4o/WebVoyager,

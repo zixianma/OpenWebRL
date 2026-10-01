@@ -5,6 +5,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
+- [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
 - [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
 - [Mixed-only bonus/reweight iterations10–60 full300](#arm-mixed-pair-iter10-results-20260928)
@@ -83,6 +84,13 @@ Third-pass jobs337132/337133/337134 completed with161/171/174 successes and
 286/284/288 valid tasks. Each released its GPU after17,106/18,470/17,575 seconds,
 respectively; all attempts remain charged within the original7h caps.
 <!-- arm-stealth-repeat3-progress-end -->
+
+The [difficulty breakdown](ARM_RESULTS.md#arm-stealth90-difficulty-20260930) is now reconstructed
+from all 2,700 retained verdicts. Under human-step bins (80 easy / 141 medium /
+79 hard), Gate B gains most on medium (+6.86 pp) and Additive on hard (+5.91 pp).
+Two stale medium labels are corrected for this analysis only; raw records remain
+unchanged. Full denominators, SD, valid-only rates and identity checks are linked.
+
 
 **Fresh repeat2, September29:** Gate B90 is independently verified at
 **189/300 =63.00% overall**, **189/288 =65.63% valid-only**; fixed100

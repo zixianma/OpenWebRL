@@ -8167,6 +8167,59 @@ Runtime: `task-pool-expansion-20260922/curation-v3-20260929/cohorts-20260930/wei
 `weighted-tasks.jsonl`, `selection-manifest.jsonl`, `website-quotas.json`,
 `summary.json`, `verification.json`. Reproducer: `scripts/select_arm_task_cohort.py`.
 
+#### Review and difficulty-aware selection proposal — September30
+
+The user requested reviewing the frozen 2,000 tasks before proceeding, and
+prioritizing difficulty in addition to diversity. The full cohort can be reviewed
+at [localhost:8765/arm_selected_tasks.html](http://localhost:8765/arm_selected_tasks.html)
+as a self-contained HTML page on the existing local server.
+It includes all original instructions, start URLs and rubrics, plus site/source/
+workflow/difficulty filters, pagination and local review notes with JSON export.
+Notes stay in the user's browser and do not modify the task manifest. No actor
+screening has been launched. The random-comparison preparation remains deferred
+while this cohort and the difficulty policy are reviewed.
+
+| WebGym rubric band | Current selected tasks | Share | Available in 59,115-task eligible pool |
+| --- | ---: | ---: | ---: |
+| Easy: 1–3 facts | 1,637 | 81.85% | 45,970 |
+| Medium: 4–6 facts | 345 | 17.25% | 12,751 |
+| Hard: 7+ facts | 18 | 0.90% | 394 |
+
+Every selected task's stored `difficulty` equals its number of rubric facts;
+this equality also holds for all 59,115 eligible tasks. These thresholds are our
+existing WebGym grouping convention, not OM2W human-reference-step difficulty.
+Long/redundant rubrics can inflate the label, and short-rubric tasks can still
+be difficult for the actor. Semantic coverage by itself does not favor hard
+examples, explaining the present concentration in the easy band.
+
+**Proposed next cohort, not applied:** keep 2,000 tasks and target **300 hard,
+1,100 medium and 600 easy** rubric-band tasks (15% / 55% / 30%). Use weighted
+coverage within website × difficulty strata with capacity-aware quotas and
+retain website coverage where feasible. This places 70% of the screen in the
+medium/hard proxy bands while preserving an easier reference, rather than
+assuming that every hard-labeled task is useful. Only 394 hard candidates exist,
+so a much larger hard quota requires broadening the pool or a different measure.
+These are pragmatic starting quotas, not validated optimal proportions; keep
+the current cohort immutable and create a separate manifest after the user's
+review/direction. If comparing weighted vs random sampling, **match both website
+and difficulty quotas** so changing the difficulty mixture does not confound
+the diversity comparison. Draw random controls from the full same eligible strata.
+
+The five-attempt frozen-actor screen supplies the stronger difficulty evidence:
+0/5 valid successes, 1–4/5 successes and 5/5 successes. Preserve invalids and
+instruction-quality issues separately; do not label unavailable or underspecified
+tasks as hard, and do not assume observed 0/5 is proof of impossibility or useful
+ARM supervision. Evaluate ARM utility within valid all-failure groups as already
+planned. Difficulty should guide screening allocation, followed by measured
+learnability/ARM yield rather than automatic preference for the lowest success.
+
+[Review metadata and verification](arm_results/rl_integration/task-pool-selected-2000.json) ·
+[OM2W three-model difficulty results](ARM_RESULTS.md#arm-stealth90-difficulty-20260930).
+Reproducer: `scripts/render_arm_selected_tasks.py`; template:
+`scripts/templates/arm_selected_tasks.html`. All 2,000 tasks, filters, pagination,
+detail views, local persistence, notes export, HTTP identity and mobile layout
+were checked in Chromium; zero JavaScript errors. The cohort hash is unchanged.
+
 ### Full retained-pool browser coverage — September29
 
 **Approved and running:** extend the same browser checks to all125,761 exact

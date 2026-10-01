@@ -1,0 +1,31 @@
+{
+  "tasks": 2000,
+  "sites": 185,
+  "selected_bands": {
+    "easy": 1637,
+    "medium": 345,
+    "hard": 18
+  },
+  "eligible_bands": {
+    "easy": 45970,
+    "medium": 12751,
+    "hard": 394
+  },
+  "cohort_sha256": "c1e740ea6b6264fca4fd7ea5210641cce71e1456df92a324bb01a661d9f74454",
+  "html_sha256": "35b99fae90121656b1e9b58e72c20fe4a282b237b5c1ad80abfe27b40e2029bd",
+  "template_sha256": "a561860d2bea021a962fa81270c84cb387e05e29735242d7445bef44520a4a0e",
+  "implementation_sha256": "f499bbb2b3818b805e86225dde1d2652be76707ff4bb7c90806bc0dcc2dc2435",
+  "facts_equal_source_difficulty_for_all_selected": true,
+  "difficulty_definition": "WebGym rubric facts: easy1\u20133, medium4\u20136, hard7+; not measured actor difficulty",
+  "manifest_changed": false,
+  "api_calls": 0,
+  "browser_calls": 0,
+  "verification": {
+    "all_2000_loaded": true,
+    "filters_pagination_and_details": "passed",
+    "notes_persist_and_export": "passed",
+    "mobile_no_overflow": true,
+    "javascript_errors": [],
+    "http_artifact_sha256": "35b99fae90121656b1e9b58e72c20fe4a282b237b5c1ad80abfe27b40e2029bd"
+  }
+}
