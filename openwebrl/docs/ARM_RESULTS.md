@@ -336,7 +336,8 @@ Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
 continuations reached bonus80 and reweight70 evaluations, all verified.
-Bonus's next stage is waiting for personal-quota recovery; reweight is training.
+Bonus's quota interruption is resolved and its existing successor is queued to
+resume from80; reweight is training.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
