@@ -91,6 +91,17 @@
 | --- |
 | [Nine-cohort aggregate and audit hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json) |
 
+## Matched iteration90 · overall paired95% CIs · three-pair Holm correction
+
+| Benchmark | Comparison | Difference pp | Pointwise95% CI pp | Exact p | Holm p | Record |
+| --- | --- | ---: | --- | ---: | ---: | --- |
+| OM2W300 ×3 | Additive − Outcome-only |+3.22 |[-0.44, +6.78] |0.0959 |0.2198 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
+| OM2W300 ×3 | Gate B − Outcome-only |+3.56 |[-0.22, +7.22] |0.0733 |0.2198 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
+| OM2W300 ×3 | Gate B − Additive |+0.33 |[-3.44, +4.22] |0.9096 |0.9096 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
+| WebVoyager595 ×1 | Additive − Outcome-only |-2.52 |[-6.72, +1.68] |0.2786 |0.8141 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
+| WebVoyager595 ×1 | Gate B − Outcome-only |+0.17 |[-4.20, +4.54] |1.0000 |1.0000 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
+| WebVoyager595 ×1 | Gate B − Additive |+2.69 |[-1.68, +7.23] |0.2714 |0.8141 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
+
 ## OM2W difficulty · iteration90 stealth · o4-mini · T0.6 · three-repeat mean ± sample SD
 
 | Method | Difficulty | Tasks/repeat | Overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid counts, repeats 1/2/3 |

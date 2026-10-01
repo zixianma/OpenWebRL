@@ -51,12 +51,80 @@ checkpoint-restoration and final-metric checks. Each row averages three
 per-repeat rates; SD uses the sample denominator2. Valid-only rates are averaged
 without pooling their denominators. Additive is+3.22pp and Gate B+3.56pp overall
 versus baseline; Gate B varies more between evaluations. These are fixed-model
-evaluation repeats, not independent training seeds, and no significance claim
-is made. Shared website conditions and the first-pass credit-outage/recovery
+evaluation repeats, not independent training seeds. The [paired analysis](#arm-stealth90-paired-inference-20260930)
+finds no significant pairwise difference at5%. Shared website conditions and the first-pass credit-outage/recovery
 also limit interpretation. First-pass recovery retained valid and ordinary
 invalid outcomes, retrying only identified credit-blocked tasks; repeat2/3 are
 fresh collections with server seeds1235/1236. The existing plot keeps repeat1.
 [Machine-readable aggregate with all nine audit hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json).
+
+<a id="arm-stealth90-paired-inference-20260930"></a>
+## Paired iteration90 tests and95% confidence intervals — September30
+
+**No pair establishes a difference at the5% level**, either before or after
+Holm correction. OM2W gains remain promising point estimates, not established
+superiority; failure to reject does not establish equivalence. This reuses the
+saved matched stealth outcomes and makes no new GPU, browser or judge calls.
+
+| Benchmark | Comparison | Overall difference (pp) | Paired95% CI (pp) | Exact p | Holm p (three pairs) |
+| --- | --- | ---: | --- | ---: | ---: |
+| OM2W,300 tasks ×3 repeats | Additive − outcome-only |+3.22 |[−0.44,+6.78] |0.0959 |0.2198 |
+| | Gate B − outcome-only |+3.56 |[−0.22,+7.22] |0.0733 |0.2198 |
+| | Gate B − Additive |+0.33 |[−3.44,+4.22] |0.9096 |0.9096 |
+| WebVoyager,595 tasks ×1 repeat | Additive − outcome-only |−2.52 |[−6.72,+1.68] |0.2786 |0.8141 |
+| | Gate B − outcome-only |+0.17 |[−4.20,+4.54] |1.0000 |1.0000 |
+| | Gate B − Additive |+2.69 |[−1.68,+7.23] |0.2714 |0.8141 |
+
+![OM2W paired uncertainty](arm_results/rl_integration/stealth-iteration90-confidence.png)
+
+**Estimand and pairing.** Let `y[i,m,r]` be the binary overall task success for
+task i, method m and repeat r; invalid attempts count as0. Average each task’s
+three repeats first: `x[i,m] = mean_r y[i,m,r]`. The comparison is
+`Δ(A,B) = mean_i(x[i,A] − x[i,B])`. The300 task vectors are the inference units;
+900 attempts per model are not treated as900 independent tasks. Primary inference
+uses all scheduled tasks; marginal valid-only rates retain their separate
+method-specific denominators and are not substituted into this paired test.
+
+**Intervals and tests.** Use50,000 paired task bootstrap draws with seed20260930
+and BCa pointwise95% intervals. Each draw retains all methods/repeats for each
+selected task. Under within-task method-vector exchangeability, the exact
+two-sided permutation test swaps the complete A/B vectors within each task.
+The statistic uses integer three-repeat success-count differences; convolution
+of the signed-count distribution computes the exact tail without Monte Carlo
+error. With one binary observation per task, this reduces to exact McNemar.
+Holm correction controls the three pairwise comparisons separately within each
+benchmark; WebVoyager is secondary. Pointwise95% CIs are not simultaneous
+familywise intervals. [Paired bootstrap](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html),
+[paired permutation null](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.permutation_test.html),
+[Holm correction](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html),
+[McNemar](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/mcnemar.htm).
+
+**Sensitivity and limits.** Resampling145 start-URL hostname clusters instead
+of individual tasks also gives intervals crossing0 for every OM2W pair:
+Additive−baseline[−0.37,+6.86]pp, Gate B−baseline[−0.11,+7.23]pp and
+Gate B−Additive[−3.32,+4.07]pp. Restricting to tasks valid for both methods in all
+three repeats gives263/269/262 common-valid tasks, respectively; raw paired
+p-values are0.165/0.074/0.763. Three-repeat-level t intervals also all cross0,
+but only three windows make their normality/independence assumptions hard to
+check. These sensitivity results do not change the conclusion.
+
+The primary intervals describe variation across tasks for these fixed checkpoints
+and observed evaluation windows. They do not cover independent training-seed
+variation or arbitrary shared website/time shocks. Iteration90 was examined
+after viewing local learning curves, so this is exploratory fixed-checkpoint
+inference rather than a preregistered test of the training recipes. Repeat1’s
+approved credit-blocked recovery remains exactly preserved. Historical local
+browser checkpoints use different protocols/dates and are excluded from these
+tests; the existing training curves are unchanged.
+
+All2,700 OM2W and1,785 WebVoyager records were rechecked against audit totals,
+judge identities, task pairing and archive presence. Four checks cover exact
+small-sample enumeration, equivalence to exact McNemar, Holm correction, and
+invariance when identical repeats are copied. Per-task provenance stays private
+in runtime `arm-turn-bonus-preparation/paired-inference-20260930/`.
+[Aggregate statistics and source hashes](arm_results/rl_integration/stealth-iteration90-paired-inference.json)
+· [Reproduction script](../../scripts/analyze_arm_paired_evals.py)
+· [SVG figure](arm_results/rl_integration/stealth-iteration90-confidence.svg).
 
 <a id="arm-stealth90-difficulty-20260930"></a>
 ## OM2W difficulty breakdown: iteration90 stealth, three repeats — September30

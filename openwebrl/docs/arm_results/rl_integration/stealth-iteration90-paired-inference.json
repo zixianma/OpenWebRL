@@ -1,0 +1,416 @@
+{
+  "iteration": 90,
+  "primary": "OM2W full300 overall mean over three repeats; invalid=0",
+  "inference_unit": "Task; repeats are never treated as900 independent tasks.",
+  "test": "Exact two-sided task-wise method-vector swap test; sign-flip distribution by convolution of integer differences. With one repeat this equals exact McNemar.",
+  "null_assumption": "Method response vectors exchangeable within each independent task under the null; conditional on the observed evaluation windows.",
+  "confidence_interval": "50,000 paired task bootstrap draws, BCa pointwise95%; fixed checkpoints/windows.",
+  "multiplicity": "Holm correction across the three method pairs separately within each benchmark; WebVoyager secondary.",
+  "resamples": 50000,
+  "seed": 20260930,
+  "om2w": {
+    "tasks": 300,
+    "repeats": 3,
+    "methods": {
+      "baseline": {
+        "overall_mean": 0.5522222222222222,
+        "overall_ci95": [
+          0.5099999999999997,
+          0.5944444444444444
+        ],
+        "per_repeat_overall": [
+          0.5433333333333333,
+          0.5766666666666667,
+          0.5366666666666666
+        ],
+        "per_repeat_successes": [
+          163,
+          173,
+          161
+        ],
+        "per_repeat_valid": [
+          286,
+          290,
+          286
+        ],
+        "valid_only_mean": 0.5764729523350213
+      },
+      "additive": {
+        "overall_mean": 0.5844444444444444,
+        "overall_ci95": [
+          0.5433333333333333,
+          0.6255555555555553
+        ],
+        "per_repeat_overall": [
+          0.5966666666666667,
+          0.5866666666666667,
+          0.57
+        ],
+        "per_repeat_successes": [
+          179,
+          176,
+          171
+        ],
+        "per_repeat_valid": [
+          286,
+          286,
+          284
+        ],
+        "valid_only_mean": 0.6144571391050264
+      },
+      "gate-b": {
+        "overall_mean": 0.5877777777777777,
+        "overall_ci95": [
+          0.5444444444444445,
+          0.6300000000000002
+        ],
+        "per_repeat_overall": [
+          0.5533333333333333,
+          0.63,
+          0.58
+        ],
+        "per_repeat_successes": [
+          166,
+          189,
+          174
+        ],
+        "per_repeat_valid": [
+          286,
+          288,
+          288
+        ],
+        "valid_only_mean": 0.6136120823620823
+      }
+    },
+    "comparisons": [
+      {
+        "comparison": "additive minus baseline",
+        "delta_pp": 3.222222222222222,
+        "delta_ci95_pp": [
+          -0.444444444444445,
+          6.7777777777777795
+        ],
+        "p_exact": 0.09591709193336999,
+        "task_count_difference_histogram": {
+          "-3": 2,
+          "-2": 10,
+          "-1": 53,
+          "0": 154,
+          "1": 59,
+          "2": 17,
+          "3": 5
+        },
+        "common_valid_sensitivity": {
+          "tasks": 263,
+          "delta_pp": 2.915082382762991,
+          "p_exact": 0.1652613707899107
+        },
+        "per_repeat_delta_pp": [
+          5.333333333333334,
+          1.0,
+          3.3333333333333335
+        ],
+        "repeat_level_t_sensitivity": {
+          "n": 3,
+          "df": 2,
+          "ci95_pp": [
+            -2.1653815250280544,
+            8.6098259694725
+          ],
+          "limitation": "Only three evaluation windows; normal/independent repeat-difference assumptions are poorly checkable. Not training seeds."
+        },
+        "p_holm_three_pairs": 0.2197892384661898
+      },
+      {
+        "comparison": "gate-b minus baseline",
+        "delta_pp": 3.555555555555556,
+        "delta_ci95_pp": [
+          -0.2222222222222221,
+          7.222222222222223
+        ],
+        "p_exact": 0.07326307948872994,
+        "task_count_difference_histogram": {
+          "-3": 3,
+          "-2": 15,
+          "-1": 44,
+          "0": 147,
+          "1": 70,
+          "2": 18,
+          "3": 3
+        },
+        "common_valid_sensitivity": {
+          "tasks": 269,
+          "delta_pp": 3.841387856257745,
+          "p_exact": 0.07430030702367973
+        },
+        "per_repeat_delta_pp": [
+          1.0,
+          5.333333333333334,
+          4.333333333333334
+        ],
+        "repeat_level_t_sensitivity": {
+          "n": 3,
+          "df": 2,
+          "ci95_pp": [
+            -2.0808363943853485,
+            9.19194750549646
+          ],
+          "limitation": "Only three evaluation windows; normal/independent repeat-difference assumptions are poorly checkable. Not training seeds."
+        },
+        "p_holm_three_pairs": 0.2197892384661898
+      },
+      {
+        "comparison": "gate-b minus additive",
+        "delta_pp": 0.3333333333333333,
+        "delta_ci95_pp": [
+          -3.4444444444444438,
+          4.2222222222222205
+        ],
+        "p_exact": 0.9096456067057912,
+        "task_count_difference_histogram": {
+          "-3": 5,
+          "-2": 15,
+          "-1": 57,
+          "0": 137,
+          "1": 69,
+          "2": 15,
+          "3": 2
+        },
+        "common_valid_sensitivity": {
+          "tasks": 262,
+          "delta_pp": 0.7633587786259541,
+          "p_exact": 0.7632863277040993
+        },
+        "per_repeat_delta_pp": [
+          -4.333333333333334,
+          4.333333333333334,
+          1.0
+        ],
+        "repeat_level_t_sensitivity": {
+          "n": 3,
+          "df": 2,
+          "ci95_pp": [
+            -10.526386887135358,
+            11.193053553802025
+          ],
+          "limitation": "Only three evaluation windows; normal/independent repeat-difference assumptions are poorly checkable. Not training seeds."
+        },
+        "p_holm_three_pairs": 0.9096456067057912
+      }
+    ],
+    "website_cluster_sensitivity": {
+      "websites": 145,
+      "method": "Percentile bootstrap of start-URL hostname clusters, retaining all tasks/repeats/methods; task-weighted ratio of cluster totals.",
+      "comparison_ci95_pp": [
+        [
+          -0.37316926602940337,
+          6.862745098039216
+        ],
+        [
+          -0.11262215605435982,
+          7.2276159654800445
+        ],
+        [
+          -3.321481128191331,
+          4.065040650406504
+        ]
+      ],
+      "limitation": "Website-level sensitivity; different task mixtures across draws. Hostnames are not necessarily independent organizations."
+    }
+  },
+  "webvoyager": {
+    "tasks": 595,
+    "repeats": 1,
+    "methods": {
+      "baseline": {
+        "overall_mean": 0.66890756302521,
+        "overall_ci95": [
+          0.6302521008403361,
+          0.7058823529411765
+        ],
+        "per_repeat_overall": [
+          0.66890756302521
+        ],
+        "per_repeat_successes": [
+          398
+        ],
+        "per_repeat_valid": [
+          583
+        ],
+        "valid_only_mean": 0.6826758147512865
+      },
+      "additive": {
+        "overall_mean": 0.6436974789915967,
+        "overall_ci95": [
+          0.6033613445378151,
+          0.680672268907563
+        ],
+        "per_repeat_overall": [
+          0.6436974789915967
+        ],
+        "per_repeat_successes": [
+          383
+        ],
+        "per_repeat_valid": [
+          589
+        ],
+        "valid_only_mean": 0.6502546689303905
+      },
+      "gate-b": {
+        "overall_mean": 0.6705882352941176,
+        "overall_ci95": [
+          0.6319327731092437,
+          0.7075630252100841
+        ],
+        "per_repeat_overall": [
+          0.6705882352941176
+        ],
+        "per_repeat_successes": [
+          399
+        ],
+        "per_repeat_valid": [
+          588
+        ],
+        "valid_only_mean": 0.6785714285714286
+      }
+    },
+    "comparisons": [
+      {
+        "comparison": "additive minus baseline",
+        "delta_pp": -2.5210084033613445,
+        "delta_ci95_pp": [
+          -6.722689075630252,
+          1.680672268907563
+        ],
+        "p_exact": 0.27861206921355974,
+        "task_count_difference_histogram": {
+          "-1": 91,
+          "0": 428,
+          "1": 76
+        },
+        "common_valid_sensitivity": {
+          "tasks": 577,
+          "delta_pp": -3.466204506065858,
+          "p_exact": 0.130385703847906
+        },
+        "per_repeat_delta_pp": [
+          -2.5210084033613445
+        ],
+        "p_holm_three_pairs": 0.8140571021192963
+      },
+      {
+        "comparison": "gate-b minus baseline",
+        "delta_pp": 0.16806722689075632,
+        "delta_ci95_pp": [
+          -4.201680672268908,
+          4.53781512605042
+        ],
+        "p_exact": 1.0,
+        "task_count_difference_histogram": {
+          "-1": 87,
+          "0": 420,
+          "1": 88
+        },
+        "common_valid_sensitivity": {
+          "tasks": 576,
+          "delta_pp": -0.3472222222222222,
+          "p_exact": 0.9377905864446687
+        },
+        "per_repeat_delta_pp": [
+          0.16806722689075632
+        ],
+        "p_holm_three_pairs": 1.0
+      },
+      {
+        "comparison": "gate-b minus additive",
+        "delta_pp": 2.689075630252101,
+        "delta_ci95_pp": [
+          -1.680672268907563,
+          7.226890756302522
+        ],
+        "p_exact": 0.27135236737309876,
+        "task_count_difference_histogram": {
+          "-1": 85,
+          "0": 409,
+          "1": 101
+        },
+        "common_valid_sensitivity": {
+          "tasks": 582,
+          "delta_pp": 3.264604810996564,
+          "p_exact": 0.17833858983964604
+        },
+        "per_repeat_delta_pp": [
+          2.689075630252101
+        ],
+        "p_holm_three_pairs": 0.8140571021192963
+      }
+    ]
+  },
+  "caveats": [
+    "No independent training seeds; not a causal significance claim about training recipes.",
+    "Checkpoint90 was considered after inspecting local learning curves; analysis is exploratory, not preregistered.",
+    "Task bootstrap does not capture arbitrary shared website/time shocks; hostname-cluster and three-window t intervals are sensitivity checks.",
+    "Repeat1 includes approved credit-blocked recovery; no valid original outcome replaced.",
+    "Common-valid sensitivity restricts to tasks valid for both methods in every repeat; differs from marginal valid-only rates.",
+    "Non-significance is not proof of equivalence; pointwise95% CIs do not encode Holm familywise decisions."
+  ],
+  "sources": [
+    {
+      "file": "stealth-o4-t06-baseline-iteration90-audit.json",
+      "sha256": "b9f7c88d367be3b6bef31397e36dbafe2880a138524fa6bf78e1d813e1ec9ac8"
+    },
+    {
+      "file": "stealth-o4-t06-baseline-iteration90-repeat2-audit.json",
+      "sha256": "7990233e2f06795701a2d582d27e561c210d3591cb3d3b311c2e14283fefe090"
+    },
+    {
+      "file": "stealth-o4-t06-baseline-iteration90-repeat3-audit.json",
+      "sha256": "5379c7449bfac74ff10f7627caf1118403aad45670f827c1e6956458861a43f1"
+    },
+    {
+      "file": "stealth-o4-t06-additive-iteration90-audit.json",
+      "sha256": "7f25d578ddd84cda1701f92c107bd24cbe438a0ec125496e3bb73a6fa0e08dc6"
+    },
+    {
+      "file": "stealth-o4-t06-additive-iteration90-repeat2-audit.json",
+      "sha256": "3337caf05a6770ff06422a1b941e2c8aed5ea95f4908a0a1bab176c2291bcb36"
+    },
+    {
+      "file": "stealth-o4-t06-additive-iteration90-repeat3-audit.json",
+      "sha256": "0e5fc381acdb24c7e278fc8ea354bfd900a75cc7fd06ed9d0d64effb96a36c42"
+    },
+    {
+      "file": "stealth-o4-t06-gate-b-iteration90-audit.json",
+      "sha256": "09ff09f722116d9f0bb7f0e22639c1992b87455c61e7bbaf731bf42d3518faaf"
+    },
+    {
+      "file": "stealth-o4-t06-gate-b-iteration90-repeat2-audit.json",
+      "sha256": "a71fef624a96eecc2abf5fa23a76b71b1d1fdd3c5858e3095187fd4e2e24bb37"
+    },
+    {
+      "file": "stealth-o4-t06-gate-b-iteration90-repeat3-audit.json",
+      "sha256": "7313cbba472089e24590198a69953468e988ffa251013a64a00bbd268bb4d139"
+    },
+    {
+      "file": "webvoyager-gpt4o-t06-baseline-iteration90-audit.json",
+      "sha256": "2f5f3d87ccb473678f689aa97367e784626ae3e5526814861cfc060240c8adf2"
+    },
+    {
+      "file": "webvoyager-gpt4o-t06-additive-iteration90-audit.json",
+      "sha256": "1aa10b0f340a83e3a633b5d8323a018ee29845ea0fa6b946831c4bb9808a3c2b"
+    },
+    {
+      "file": "webvoyager-gpt4o-t06-gate-b-iteration90-audit.json",
+      "sha256": "3a53b6e366593b58b061d4965a3071f23bcf6b62fce8ebc6d89622305e092254"
+    }
+  ],
+  "implementation_sha256": "48ee3e3daf4715883d16b272e9ee5555814db643f3667b0a31aec4faca69f96b",
+  "references": [
+    "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+    "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.permutation_test.html",
+    "https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html",
+    "https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/mcnemar.htm"
+  ],
+  "new_model_calls": 0,
+  "new_gpu_hours": 0
+}
