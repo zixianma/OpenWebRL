@@ -7985,6 +7985,162 @@ availability labels for the entire184,546-task reservoir. Full per-task mappings
 stay in runtime. Use both groups for subsequent selection comparisons; no
 website group has been selected or excluded from training by this operation.
 
+<a id="arm-task-pool-clustering-20260930"></a>
+
+### Cached-embedding diversity clustering — September30
+
+**Completed:** all59,115 benchmark-associated, page-available tasks were grouped
+within185 websites and317 website × heuristic-interaction strata. All tasks are
+retained; this has not created a training subset or changed any RL sampler.
+
+| Resolution parameter | Clusters | Median cluster size | Largest cluster | Singleton clusters |
+| --- | ---: | ---: | ---: | ---: |
+| Target50 tasks/cluster |1,456 |41 |136 |153 |
+| Target100 tasks/cluster |878 |66 |240 |153 |
+
+Method: reuse the unchanged4096-dimensional, normalized Qwen3-Embedding-8B
+vectors of **task instructions only**. Verify the original ordered text hash,
+candidate/reference offset and selected task identities. Split first by site
+and a deterministic primary interaction tag, preserving other matched tags.
+Tags cover cart/purchase, booking/application, comparison, search/filter/sort,
+calculation and listing/aggregation; unmatched text stays in
+`lookup_or_unclassified`. These regex-derived tags are unvalidated heuristics.
+Within each stratum use sklearn1.6.1 BisectingKMeans, Euclidean distance on the
+normalized vectors, seed20260930, two initializations per split,40 maximum
+iterations, and `k = ceil(stratum_size / target_size)`. The target is a resolution
+parameter, not a cluster-size cap or an empirical count of distinct skills.
+No dimensionality reduction or new model inference was used.
+
+**Caveats measured in this pass:**
+
+- 41,219 tasks (69.73%) are in the broad lookup/unclassified bucket;1,568 match
+  multiple operation tags. Thus the strata are not a validated workflow taxonomy.
+- A second seed in the three largest strata yields adjusted Rand agreement
+  of0.474 (arXiv),0.450 (Allrecipes), and0.459 (BBC), where1 means identical
+  partitions. Semantic neighborhoods are useful, but exact cluster boundaries
+  depend on initialization and resolution.
+- The cache has no screenshots, action sequences or workflow-specific embedding
+  instruction. Topic/product differences may dominate browser-behavior
+  differences. Examples show good local neighborhoods alongside boundary tasks
+  that require different behavior. Cosine cohesion does not certify task quality.
+- Some task instructions remain underspecified or refer to unavailable targets.
+  Clustering does not establish solvability, measured difficulty, benchmark
+  decontamination or ARM usefulness. Small/isolated clusters are retained, not
+  treated as inherently valuable; uniform one-per-cluster sampling would alter
+  the source distribution and can overweight outliers.
+
+Saved each task's cluster at both resolutions, cluster sizes/cohesion,
+representatives, second-nearest and boundary examples, and a searchable HTML
+review with website/type/resolution controls. Review is optional, not a pipeline
+approval gate. The final screening/training cohort remains uncommitted. The diagnostic below
+compares concrete sampling proposals without changing training data.
+
+The complete run used44.4s wall/44.1s CPU, one CPU thread,681MiB peak RSS,
+zero GPU hours and zero API calls. Verification checked every task appears once
+per resolution, site/type boundaries, all representative memberships and output
+hashes, four unit tests and headless-browser review controls. The1200-task
+preflight fit took0.28s and used395MiB peak RSS.
+
+[Aggregate metrics and provenance](arm_results/rl_integration/task-pool-clusters.json) ·
+[Website × interaction counts](arm_results/rl_integration/task-pool-cluster-strata.csv).
+Reproducer: `scripts/cluster_arm_task_pool.py`; [algorithm documentation](https://scikit-learn.org/1.6/modules/generated/sklearn.cluster.BisectingKMeans.html).
+Private runtime: `task-pool-expansion-20260922/curation-v3-20260929/clusters-20260930/run/`
+contains `assignments-r50.jsonl`, `assignments-r100.jsonl`, `clusters.jsonl`,
+`review.html`, `summary.json` and `verification.json`. Full per-task assignments
+remain in runtime; the dashboard below includes public task-instruction examples,
+not browser trajectories or judge payloads.
+
+
+#### Interactive map and proposed diversity sampler
+
+[Open/download the self-contained dashboard](arm_results/rl_integration/task-pool-clusters.html).
+With the existing port forward, open
+[the local interactive map](http://localhost:8765/arm_task_clusters.html).
+Choose a website, interaction tag and cluster resolution; click a bubble to see
+its representative, second-nearest and boundary instructions. Bubble area grows
+with cluster size; gold outlines/counts show diagnostic sampling choices. The
+page also compares website balance and sample budgets of 500, 1,000 and 2,000.
+GitHub displays HTML as source; the local server renders the interactive page.
+
+The map uses two-dimensional PCA of normalized cluster centers, fitted separately
+within each website. Both resolutions share that website's fine-cluster PCA
+basis and equal axis scaling. Website coordinate systems cannot be compared.
+For Amazon, the plot retains only 26.0% of cluster-center variance: visual overlap
+is not evidence that two tasks are interchangeable. Sampling uses the original
+4,096-dimensional vectors, never the 2D coordinates.
+
+**Recommended default: website-balanced, weighted facility-location sampling.**
+This selects tasks that represent many semantic neighborhoods while reducing the
+dominance of repetitive task families. Keep cluster round-robin as the simple
+comparison; there is no evidence yet that the proposed sampler improves RL.
+
+1. Give each of the 185 websites one slot. Allocate remaining slots with
+   deterministic highest-averages apportionment using weight `sqrt(K_site)`,
+   capped by available candidates, where `K_site` is its fine-cluster count.
+   This is a heuristic diversity budget, not an estimate of website importance.
+   It avoids both raw-frequency domination and the earlier arbitrary five-task
+   cap. At 2,000 total tasks, arXiv receives 176 slots, Amazon 172 and GitHub 124.
+2. Within each website, greedily select the task with the greatest increase in
+   weighted coverage of cluster centers:
+
+   `F(S) = sum_c sqrt(n_c) * max_{j in S} max(0, cosine(mu_c, e_j))`.
+
+   Here `n_c` is cluster size, `mu_c` its normalized mean embedding and `e_j` the
+   normalized task embedding. Define empty-set coverage as zero. Square-root
+   weights balance uniform-cluster weighting, which can overvalue outliers,
+   against task-count weighting, which can overvalue repeated templates. The
+   exponent is a proposed setting, not an empirically optimized hyperparameter.
+   Similar neighboring clusters can share a representative; there is no hard
+   requirement to select from every cluster or heuristic workflow tag.
+3. Apply the existing quality/exclusion requirements before committing the
+   cohort. Then measure actor outcomes and ARM utility on the sampled tasks;
+   semantic coverage alone must not label a task learnable or an all-failure
+   group useful. This curation does not change the RL dynamic rollout filter.
+
+The diagnostic uses a shared shortlist of 8,776 tasks: on sites with over 1,000
+members, up to two central, three seeded-random and one boundary candidate per
+fine cluster; smaller sites retain all eligible tasks. Sixty-four audit tasks
+per site with at least 200 members are excluded from the shortlist, giving 640
+audit tasks over 10 sites. For each audit task, measure cosine to its nearest
+selected task from the same website. The table averages equally over those
+sites, because each contributes 64 tasks.
+
+| Method | 500 selected | 1,000 selected | 2,000 selected |
+| --- | ---: | ---: | ---: |
+| Weighted facility location | 0.6993 | 0.7312 | 0.7579 |
+| Cluster round-robin, central candidates first | 0.6874 | 0.7243 | 0.7576 |
+| Farthest-point | 0.6040 | 0.6243 | 0.6684 |
+| Site-balanced random | 0.6343 | 0.6790 | 0.7239 |
+
+These are **mean nearest-neighbor cosine scores, not success rates**. All four
+methods share website quotas and the candidate shortlist. The proposed method
+and round-robin are essentially tied at 2,000 tasks; weighted coverage has a
+modest advantage at smaller budgets in this one diagnostic. Pure farthest-point
+sampling covers the bulk of the pool less well, consistent with emphasizing
+unusual examples. This does not establish which method is best for actor/ARM
+learning, nor validate the website quotas. The audit tasks participated in
+unsupervised clustering, only one selection seed was tested, and the optimized
+objective approximates tasks with cluster centers. Resolution/seed sensitivity
+and actual downstream utility remain open checks.
+
+The visualization/selection comparison took 3.65 seconds wall, 3.97 seconds CPU,
+470 MiB peak RSS on one CPU thread, with no GPU/API calls. Verified unique
+selections, exact quotas, audit exclusion, all six focused clustering/sampling
+tests, HTTP artifact identity, interactive controls, mobile layout and zero
+JavaScript errors. A broader test glob also reached unrelated task-pool tests
+whose dependencies (`pandas`, `tldextract`) are absent from this dedicated small
+venv; those tests were not validated here.
+
+[Sampling metrics and provenance](arm_results/rl_integration/task-pool-cluster-sampling.json).
+Reproducer: `scripts/visualize_arm_task_clusters.py` and
+`scripts/templates/arm_task_clusters.html`; runtime:
+`task-pool-expansion-20260922/curation-v3-20260929/clusters-20260930/visual-v2/`.
+The saved selections are diagnostic only. Facility location is a standard
+representative-subset objective; our site quotas, square-root weights and
+centroid shortlist are project-specific choices, not a recipe validated by the
+literature. See [the objective definition](https://submodlib.readthedocs.io/en/latest/functions/facilityLocation.html)
+and [Wei et al., 2015](https://proceedings.mlr.press/v37/wei15.pdf).
+
 ### Full retained-pool browser coverage — September29
 
 **Approved and running:** extend the same browser checks to all125,761 exact

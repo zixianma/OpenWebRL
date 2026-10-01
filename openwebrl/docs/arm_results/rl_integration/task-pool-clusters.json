@@ -1,0 +1,150 @@
+{
+  "algorithm": "BisectingKMeans on unchanged normalized 4096D embeddings; Euclidean objective",
+  "api_calls": 0,
+  "artifacts": {
+    "assignments-r100.jsonl": "0517bde7be0d74e75a0622bab1ea63bb8f57ce5041e83c82c42b4ccd4f405e14",
+    "assignments-r50.jsonl": "c7a68cf75ee01584bc590ee76655d804a89bdfe70b5826c75558834ef37596ea",
+    "clusters.jsonl": "4ecdb4acb2a9b0e7ec12bd349b4e6984af87b794d1b5d169ce32938bd3159e72",
+    "metadata-audit.json": "c4a37138ed47ada6f86a765536e6da8ba0ab713e94c4d05ca3d4270dc5d92a68",
+    "review.html": "ffd2414b7c5b9dc783ba3b1aa8d5f8b16c445e1a5e8053a261d42402f60ad9f1",
+    "strata.csv": "0690bffbc3d1a275920161c48de5be70b031220f9f0637f224a459fb4032d1b0"
+  },
+  "cache_identity": {
+    "mtime_ns": 1790725010253828251,
+    "note": "All selected rows checked for finiteness/norm; ordered text hash verified; full 3.45GB cache not rehashed",
+    "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/semantic-qwen8b/embeddings.npy",
+    "shape": [
+      210722,
+      4096
+    ],
+    "size": 3452469376
+  },
+  "complete": true,
+  "cpu_seconds": 44.138926025,
+  "elapsed_seconds": 44.42063711793162,
+  "embedding_instruction": null,
+  "embedding_model": "Qwen/Qwen3-Embedding-8B",
+  "embedding_revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+  "gpu_hours": 0,
+  "implementation_sha256": "279f1c71b067f8d8ee2e6878e07d545caf4cefac92e425839859b6beaf10c303",
+  "interpretation": [
+    "Exploratory instruction-semantic clusters, not a validated browser-skill taxonomy.",
+    "69.73% of tasks are lookup_or_unclassified; workflow regex tags are not ground truth.",
+    "Second-seed ARI 0.450\u20130.474 in the three largest strata shows sensitivity; cluster IDs are not natural task classes.",
+    "No removal, actor rollout, ARM labeling, selection quota, API request or training-data change.",
+    "One representative per cluster would distort frequency and oversample rare/outlier groups; sampling policy remains undecided."
+  ],
+  "k_rule": "ceil(stratum_tasks / target_size); target_size 50 or 100; not a maximum cluster size",
+  "max_embedding_norm_error": 1.7881393432617188e-07,
+  "multiple_tag_tasks": 1568,
+  "peak_rss_mib": 680.5625,
+  "resolutions": {
+    "100": {
+      "clusters": 878,
+      "median_cluster_cosine": 0.8134023249149323,
+      "singletons": 153,
+      "size_quantiles": {
+        "0": 1.0,
+        "0.1": 1.0,
+        "0.5": 66.0,
+        "0.9": 142.0,
+        "0.99": 202.0,
+        "1": 240.0
+      }
+    },
+    "50": {
+      "clusters": 1456,
+      "median_cluster_cosine": 0.8293907344341278,
+      "singletons": 153,
+      "size_quantiles": {
+        "0": 1.0,
+        "0.1": 1.0,
+        "0.5": 41.0,
+        "0.9": 76.0,
+        "0.99": 105.0,
+        "1": 136.0
+      }
+    }
+  },
+  "runtime_output": "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/clusters-20260930/run",
+  "seed": 20260930,
+  "seed_checks": [
+    {
+      "clusters_r100": 66,
+      "clusters_r50": 132,
+      "seed_ari_r50": 0.47425535751737224,
+      "site": "arxiv.org",
+      "tasks": 6576,
+      "workflow": "lookup_or_unclassified"
+    },
+    {
+      "clusters_r100": 64,
+      "clusters_r50": 128,
+      "seed_ari_r50": 0.4495392356338619,
+      "site": "allrecipes.com",
+      "tasks": 6373,
+      "workflow": "lookup_or_unclassified"
+    },
+    {
+      "clusters_r100": 64,
+      "clusters_r50": 127,
+      "seed_ari_r50": 0.45864474018596807,
+      "site": "bbc.com",
+      "tasks": 6304,
+      "workflow": "lookup_or_unclassified"
+    }
+  ],
+  "sites": 185,
+  "source_sha256": {
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/benchmark-sites-20260930/verified/available-benchmark-tasks.jsonl": "df1e82bb61086860241e81d45cbe38ce673e105182a92ebdda66efcca176c90b",
+    "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-turn-bonus-preparation/task-pool-expansion-20260922/curation-v3-20260929/semantic-qwen8b/plan.json": "49a1f79816372d774193a6eeb7f584d2bc122c7fa91e74f6a5c29c0d384572c9"
+  },
+  "strata": 317,
+  "tasks": 59115,
+  "training_data_changed": false,
+  "verification": {
+    "all_artifact_hashes_verified": true,
+    "all_cluster_sizes_match_assignments": true,
+    "all_source_task_ids_in_each_resolution_once": true,
+    "browser_review_page_tests_passed": true,
+    "representatives_and_boundary_examples_are_members": true,
+    "unit_tests_passed": 4,
+    "website_and_workflow_boundaries_verified": true
+  },
+  "workflow_counts": {
+    "booking_application": 121,
+    "calculation": 1524,
+    "cart_purchase": 473,
+    "comparison": 3721,
+    "list_aggregate": 3547,
+    "lookup_or_unclassified": 41219,
+    "search_filter_sort": 8510
+  },
+  "workflow_rules": [
+    [
+      "cart_purchase",
+      "\\b(?:add\\b.{0,60}\\b(?:cart|basket)|checkout|check out|purchase|buy|order\\b.{0,40}\\b(?:delivery|pickup))\\b"
+    ],
+    [
+      "booking_application",
+      "\\b(?:book a|book an|reserve|reservation|apply for|submit|register|sign up)\\b"
+    ],
+    [
+      "comparison",
+      "\\b(?:compare|comparison|versus|vs\\.?|difference between|differences between)\\b"
+    ],
+    [
+      "search_filter_sort",
+      "\\b(?:filter|sort|cheapest|highest.rated|lowest.pric\\w*|top.rated|under \\$|between \\$|at least|at most|no more than|no fewer than|rated.{0,12}stars|search for)\\b"
+    ],
+    [
+      "calculation",
+      "\\b(?:calculate|compute|solve|equation|derivative|integral|roots of|convert)\\b"
+    ],
+    [
+      "list_aggregate",
+      "\\b(?:list|summarize|summary|how many|identify (?:three|four|five|all)|find (?:three|four|five|all))\\b"
+    ]
+  ],
+  "workflow_tag_quality": "Heuristic/unvalidated; first matching rule sets stratum; fallback includes uncategorized tasks"
+}

@@ -1,0 +1,288 @@
+{
+  "algorithm": "Site-balanced weighted facility-location on cluster-centroid proxies and a common candidate shortlist",
+  "artifacts": {
+    "audit-task-rows.json": "9e1ffe758b831c2ddee9673a517cf907d844cb32b5aea8b3c909c2e8f1cb907c",
+    "diagnostic-selections.json": "d19b787ae2bf54e01115b4f8c3771b04fef77753fbcd14e88b5625726441356f",
+    "index.html": "04010509763ebb1241b09d653aa9cf501400f72b13a89324f4bb359ed8ae04af",
+    "visual-data.json": "3ffe4dc335277acaa97242714aba2fb0111e76b1fed426284008241409e75d00"
+  },
+  "audit_tasks": 640,
+  "candidate_rule": "All eligible tasks on sites<=1000; otherwise per cluster two central, three seeded random, one boundary; 64 audit tasks withheld on sites>=200",
+  "candidate_tasks": 8776,
+  "caveats": [
+    "No actor/ARM/task-success measurement; scores are embedding coverage proxies.",
+    "Audit tasks are excluded from candidate selection but contributed to the existing unsupervised clustering.",
+    "All methods share website quotas and the same candidate shortlist; this does not measure quality of the quotas.",
+    "Centroid-proxy objective is not exact all-task facility location. Workflow tags do not become additional hard sampling quotas.",
+    "PCA uses fine-cluster centers separately within each website; distances across websites are not comparable; 2D omits most variance."
+  ],
+  "cpu_seconds": 3.96893595,
+  "elapsed_seconds": 3.646590259158984,
+  "fine_clusters": 1456,
+  "implementation_sha256": "570a5282885e441831443e6af87adc7e1b5df82409058271e33d93f98cc5c348",
+  "input_sha256": {
+    "assignments-r100.jsonl": "0517bde7be0d74e75a0622bab1ea63bb8f57ce5041e83c82c42b4ccd4f405e14",
+    "assignments-r50.jsonl": "c7a68cf75ee01584bc590ee76655d804a89bdfe70b5826c75558834ef37596ea",
+    "clusters.jsonl": "4ecdb4acb2a9b0e7ec12bd349b4e6984af87b794d1b5d169ce32938bd3159e72"
+  },
+  "objective": "Within site: sum_c sqrt(n_c) max_j max(0, cosine(normalized_cluster_centroid_c, task_embedding_j))",
+  "peak_rss_mib": 469.5390625,
+  "quota": "One per site; additional slots via highest-averages apportionment weighted by sqrt(fine_cluster_count), capped by candidate capacity",
+  "scores": [
+    {
+      "audit_tasks": 640,
+      "budget": 500,
+      "mean_cosine": 0.6992986214114353,
+      "method": "weighted_coverage",
+      "p10_cosine": 0.487996107339859,
+      "per_site_means": {
+        "allrecipes.com": 0.6837729811668396,
+        "amazon.com": 0.7488086223602295,
+        "apple.com": 0.8008918762207031,
+        "arxiv.org": 0.7270593643188477,
+        "bbc.com": 0.7030181884765625,
+        "ca.gov": 0.4607158899307251,
+        "espn.com": 0.7566341161727905,
+        "github.com": 0.7191171646118164,
+        "huggingface.co": 0.762321412563324,
+        "wolframalpha.com": 0.6306465268135071
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 500,
+      "mean_cosine": 0.6873709765961393,
+      "method": "cluster_round_robin",
+      "p10_cosine": 0.45709321796894076,
+      "per_site_means": {
+        "allrecipes.com": 0.6697193384170532,
+        "amazon.com": 0.7304527759552002,
+        "apple.com": 0.7814286947250366,
+        "arxiv.org": 0.7104160785675049,
+        "bbc.com": 0.6831365823745728,
+        "ca.gov": 0.4587164521217346,
+        "espn.com": 0.74021977186203,
+        "github.com": 0.7027292251586914,
+        "huggingface.co": 0.7735943794250488,
+        "wolframalpha.com": 0.6232964992523193
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 500,
+      "mean_cosine": 0.6040371431270615,
+      "method": "farthest_point",
+      "p10_cosine": 0.40888590812683107,
+      "per_site_means": {
+        "allrecipes.com": 0.586172878742218,
+        "amazon.com": 0.6577038764953613,
+        "apple.com": 0.6978069543838501,
+        "arxiv.org": 0.5889543294906616,
+        "bbc.com": 0.5700143575668335,
+        "ca.gov": 0.4171323776245117,
+        "espn.com": 0.690628170967102,
+        "github.com": 0.653068482875824,
+        "huggingface.co": 0.7145383954048157,
+        "wolframalpha.com": 0.4643516540527344
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 500,
+      "mean_cosine": 0.6343307266011834,
+      "method": "site_balanced_random",
+      "p10_cosine": 0.4298157572746277,
+      "per_site_means": {
+        "allrecipes.com": 0.6287495493888855,
+        "amazon.com": 0.679652988910675,
+        "apple.com": 0.7479419708251953,
+        "arxiv.org": 0.631096363067627,
+        "bbc.com": 0.6419422030448914,
+        "ca.gov": 0.4226270616054535,
+        "espn.com": 0.7077397704124451,
+        "github.com": 0.6690969467163086,
+        "huggingface.co": 0.7121217846870422,
+        "wolframalpha.com": 0.5023385882377625
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 1000,
+      "mean_cosine": 0.73116715780925,
+      "method": "weighted_coverage",
+      "p10_cosine": 0.5216785371303558,
+      "per_site_means": {
+        "allrecipes.com": 0.705904483795166,
+        "amazon.com": 0.7753163576126099,
+        "apple.com": 0.8255701065063477,
+        "arxiv.org": 0.7661037445068359,
+        "bbc.com": 0.7434451580047607,
+        "ca.gov": 0.48065224289894104,
+        "espn.com": 0.7897103428840637,
+        "github.com": 0.7444795370101929,
+        "huggingface.co": 0.7966144680976868,
+        "wolframalpha.com": 0.6838752031326294
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 1000,
+      "mean_cosine": 0.7242952333064749,
+      "method": "cluster_round_robin",
+      "p10_cosine": 0.49930042326450347,
+      "per_site_means": {
+        "allrecipes.com": 0.6993443369865417,
+        "amazon.com": 0.7739422917366028,
+        "apple.com": 0.8165230751037598,
+        "arxiv.org": 0.7430694103240967,
+        "bbc.com": 0.7377505302429199,
+        "ca.gov": 0.4899204671382904,
+        "espn.com": 0.7782691717147827,
+        "github.com": 0.7428889870643616,
+        "huggingface.co": 0.7894723415374756,
+        "wolframalpha.com": 0.6717718839645386
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 1000,
+      "mean_cosine": 0.6243199786404148,
+      "method": "farthest_point",
+      "p10_cosine": 0.43826437294483184,
+      "per_site_means": {
+        "allrecipes.com": 0.5996717214584351,
+        "amazon.com": 0.6747128963470459,
+        "apple.com": 0.722704291343689,
+        "arxiv.org": 0.6062164306640625,
+        "bbc.com": 0.5958466529846191,
+        "ca.gov": 0.42230480909347534,
+        "espn.com": 0.7043452262878418,
+        "github.com": 0.6607911586761475,
+        "huggingface.co": 0.7320141792297363,
+        "wolframalpha.com": 0.5245922207832336
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 1000,
+      "mean_cosine": 0.6790386503562331,
+      "method": "site_balanced_random",
+      "p10_cosine": 0.4792476773262024,
+      "per_site_means": {
+        "allrecipes.com": 0.6659781336784363,
+        "amazon.com": 0.7270663976669312,
+        "apple.com": 0.7820644378662109,
+        "arxiv.org": 0.6889157891273499,
+        "bbc.com": 0.6830328106880188,
+        "ca.gov": 0.4482682943344116,
+        "espn.com": 0.7553914785385132,
+        "github.com": 0.7004560232162476,
+        "huggingface.co": 0.7531901597976685,
+        "wolframalpha.com": 0.5860230326652527
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 2000,
+      "mean_cosine": 0.7579080834286287,
+      "method": "weighted_coverage",
+      "p10_cosine": 0.5544376075267792,
+      "per_site_means": {
+        "allrecipes.com": 0.7445460557937622,
+        "amazon.com": 0.794948399066925,
+        "apple.com": 0.8535610437393188,
+        "arxiv.org": 0.7900720834732056,
+        "bbc.com": 0.7735580205917358,
+        "ca.gov": 0.4986124038696289,
+        "espn.com": 0.8115130662918091,
+        "github.com": 0.7680399417877197,
+        "huggingface.co": 0.8205881118774414,
+        "wolframalpha.com": 0.7236416339874268
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 2000,
+      "mean_cosine": 0.7576490990584717,
+      "method": "cluster_round_robin",
+      "p10_cosine": 0.5484136879444123,
+      "per_site_means": {
+        "allrecipes.com": 0.7461556196212769,
+        "amazon.com": 0.792805552482605,
+        "apple.com": 0.852155327796936,
+        "arxiv.org": 0.7883201837539673,
+        "bbc.com": 0.7759386301040649,
+        "ca.gov": 0.512346625328064,
+        "espn.com": 0.8070530295372009,
+        "github.com": 0.7676202058792114,
+        "huggingface.co": 0.8099544048309326,
+        "wolframalpha.com": 0.7241413593292236
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 2000,
+      "mean_cosine": 0.6683796864934266,
+      "method": "farthest_point",
+      "p10_cosine": 0.49716351032257083,
+      "per_site_means": {
+        "allrecipes.com": 0.6608707904815674,
+        "amazon.com": 0.6946913003921509,
+        "apple.com": 0.7598377466201782,
+        "arxiv.org": 0.6531035900115967,
+        "bbc.com": 0.6654959917068481,
+        "ca.gov": 0.4491347074508667,
+        "espn.com": 0.7433715462684631,
+        "github.com": 0.7096942663192749,
+        "huggingface.co": 0.755489706993103,
+        "wolframalpha.com": 0.5921070575714111
+      },
+      "sites": 10
+    },
+    {
+      "audit_tasks": 640,
+      "budget": 2000,
+      "mean_cosine": 0.7239296293351799,
+      "method": "site_balanced_random",
+      "p10_cosine": 0.5370201468467712,
+      "per_site_means": {
+        "allrecipes.com": 0.7031271457672119,
+        "amazon.com": 0.7728661894798279,
+        "apple.com": 0.8209725618362427,
+        "arxiv.org": 0.7409025430679321,
+        "bbc.com": 0.7450939416885376,
+        "ca.gov": 0.48215144872665405,
+        "espn.com": 0.785252571105957,
+        "github.com": 0.7469867467880249,
+        "huggingface.co": 0.7898676991462708,
+        "wolframalpha.com": 0.6520754098892212
+      },
+      "sites": 10
+    }
+  ],
+  "seed": 20260930,
+  "selection_is_diagnostic_only": true,
+  "sites": 185,
+  "tasks": 59115,
+  "template_sha256": "540f94064e7bc9826e4edce49d727bd062c4101496e5a1143d5de274d86f0c19",
+  "training_data_changed": false,
+  "verification": {
+    "dashboard_sha256": "04010509763ebb1241b09d653aa9cf501400f72b13a89324f4bb359ed8ae04af",
+    "focused_unit_tests_passed": 6,
+    "http_body_matches_artifact": true,
+    "javascript_errors": [],
+    "responsive_no_overflow": true,
+    "runtime_artifact_hashes_verified": true,
+    "ui_controls": "passed"
+  }
+}
