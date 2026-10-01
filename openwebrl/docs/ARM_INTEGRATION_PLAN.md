@@ -8172,8 +8172,8 @@ Runtime: `task-pool-expansion-20260922/curation-v3-20260929/cohorts-20260930/wei
 The user requested reviewing the frozen 2,000 tasks before proceeding, and
 prioritizing difficulty in addition to diversity. The full cohort can be reviewed
 at [localhost:8765/arm_selected_tasks.html](http://localhost:8765/arm_selected_tasks.html)
-or by downloading [the published self-contained HTML](arm_results/rl_integration/task-pool-selected-2000.html).
-GitHub shows the HTML source; download it and open it in a browser.
+as a local-only review page. The user clarified that public HTML publication
+means the interactive results plot, not this task pool.
 It includes all original instructions, start URLs and rubrics, plus site/source/
 workflow/difficulty filters, pagination and local review notes with JSON export.
 Notes stay in the user's browser and do not modify the task manifest. No actor
@@ -8193,18 +8193,31 @@ Long/redundant rubrics can inflate the label, and short-rubric tasks can still
 be difficult for the actor. Semantic coverage by itself does not favor hard
 examples, explaining the present concentration in the easy band.
 
-**Proposed next cohort, not applied:** keep 2,000 tasks and target **300 hard,
-1,100 medium and 600 easy** rubric-band tasks (15% / 55% / 30%). Use weighted
-coverage within website × difficulty strata with capacity-aware quotas and
-retain website coverage where feasible. This places 70% of the screen in the
-medium/hard proxy bands while preserving an easier reference, rather than
-assuming that every hard-labeled task is useful. Only 394 hard candidates exist,
-so a much larger hard quota requires broadening the pool or a different measure.
-These are pragmatic starting quotas, not validated optimal proportions; keep
-the current cohort immutable and create a separate manifest after the user's
-review/direction. If comparing weighted vs random sampling, **match both website
-and difficulty quotas** so changing the difficulty mixture does not confound
-the diversity comparison. Draw random controls from the full same eligible strata.
+**Revised user priority: difficulty first, diversity second.** The previous
+300-hard / 1,100-medium / 600-easy proposal is superseded; it imposed a mixture
+rather than prioritizing difficult tasks. The current 2,000-task manifest stays
+unchanged for review and is not the final difficulty-first cohort.
+
+Difficulty has not yet been measured with the actor. For a CPU-only provisional
+screening queue, rank tasks by their original rubric-fact score first, then use
+weighted coverage to break ties at the cutoff. At a 2,000-task budget, the
+eligible pool has 1,426 tasks with at least six facts (394 rubric-hard with
+seven or more, plus 1,032 with six), leaving 574 slots to select diversely among
+the 2,926 five-fact tasks. This would give 394 rubric-hard / 1,606 rubric-medium
+and no rubric-easy tasks. This is a **proposed proxy-first queue, not a measured
+hard-task set**, and it has not replaced the current manifest. It can narrow
+website coverage; a website quota should not silently admit lower-difficulty
+tasks ahead of higher ones under the user's revised priority.
+
+Use the five-attempt original-actor screen to separate valid observed all-failure
+and low-success tasks from easy tasks, then apply diversity selection within
+the desired difficulty group. Missing targets, ambiguous instructions and
+infrastructure failures remain quality/validity issues, not difficulty signals.
+For a random-control comparison, match the same difficulty cutoff and website
+allocation; randomize the tie selection instead of weighted coverage. Preserve
+natural overlap. Screening 2,000 tasks still means 10,000 primary trajectories;
+the retained measured-hard cohort may be smaller and additional screening would
+need a separately specified resource budget.
 
 The five-attempt frozen-actor screen supplies the stronger difficulty evidence:
 0/5 valid successes, 1–4/5 successes and 5/5 successes. Preserve invalids and

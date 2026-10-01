@@ -105,10 +105,12 @@ was replaced. Every full300 count matches its existing audit, and an independent
 CSV reconstruction reproduces all 27 subgroup counts and rates. Per-task CSV
 contains IDs, reference lengths, labels, validity, success and record hashes;
 raw trajectories and judge text remain in runtime.
-The [task-review HTML](arm_results/rl_integration/task-pool-selected-2000.html)
-is published on `arm` with the user's explicit approval. The per-task verdict
-CSV remains local; its localhost link requires the existing port forward.
-Aggregate metrics and the analysis scripts are also published on `arm`.
+The task-review HTML and per-task verdict CSV are local review artifacts;
+their localhost links require the existing port forward. The user clarified
+that publication was intended for the interactive results plot, not the task
+pool. The task-review HTML was removed from the current `arm` tree; the earlier
+publication commit remains in history pending separately approved cleanup.
+Aggregate metrics and analysis scripts remain published on `arm`.
 
 [Recomputed subgroup metrics and provenance](arm_results/rl_integration/stealth-o4-t06-iteration90-difficulty.json) · [All 2,700 per-task outcomes](http://localhost:8765/arm_om2w_difficulty_verdicts.csv).
 Reproducer: `scripts/report_arm_om2w_difficulty.py`. Runtime:
