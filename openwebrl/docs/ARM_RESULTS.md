@@ -327,11 +327,13 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-pair-iter40-results-20260929"></a>
 <a id="arm-mixed-pair-iter50-results-20260929"></a>
 <a id="arm-mixed-pair-iter60-results-20260930"></a>
-## Mixed-only relaxed-B pair: iterations10–60 — September28–30
+<a id="arm-mixed-bonus-iter70-results-20261001"></a>
+## Mixed-only relaxed-B pair: iterations10–70 — September28–October1
 
 Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
-both GPU allocations are released.
+both original to60 allocations were released. The separately approved to90
+continuations are running; bonus70 is verified and reweight70 is pending.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -351,12 +353,23 @@ trajectory-mean-one weighting with lambda=.5.
 |  |40 |32.00% /43.84% |33.33% /43.86% |228 |
 |  |50 |35.00% /48.61% |38.67% /49.57% |234 |
 |  |60 |41.00% /54.67% |37.67% /48.71% |232 |
+|  |70 |44.00% /57.14% |38.33% /48.94% |235 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
 |  |40 |33.00% /50.00% |35.33% /47.11% |225 |
 |  |50 |33.00% /45.21% |37.00% /46.84% |237 |
 |  |60 |34.00% /44.74% |36.67% /47.21% |233 |
+
+**Bonus70, October1:**115 successes/235 valid/full300 gives **38.33% overall
+/48.94% valid-only**. Fixed100 is44/77/100: **44.00% /57.14%**. Full300 gains
+0.67pp overall from60; one evaluation does not establish a trend. All300 task
+IDs, nonempty rollout archive payload entries and saved judge records were
+verified, together with native69 GPU restoration at894 Adam updates and final
+evaluation W&B metrics. Nineteen valid failures use the unchanged protocol's
+explicit judge-not-run sentinel (14 truncated,5 failed). Training continues
+toward90; this evaluation does not complete the continuation allocation.
+[Bonus70 audit](arm_results/rl_integration/mixed-bonus-iteration70-audit.json).
 
 Bonus60 finishes at113 successes/232 valid/full300: **37.67% overall /48.71%
 valid-only**. Its fixed100 slice is41/75/100: **41.00% /54.67%**. Compared with50,
@@ -388,7 +401,8 @@ Bonus jobs335699/335700/337983 consumed167,384/172,800 extension seconds
 (371.96 GPU-hours), releasing5,416 seconds unused; reweight335697/335698
 consumed140,602/172,800 seconds (312.45 GPU-hours), releasing32,198 seconds.
 Original8h scopes remain separate. All jobs exited successfully; both to60
-endpoints are verified complete. Proposed to90 resources still await approval.
+endpoints are verified complete. The separate to90 resources were subsequently
+[approved and launched](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930).
 [Bonus60 evaluation audit](arm_results/rl_integration/mixed-bonus-iteration60-audit.json) ·
 [Bonus six-milestone endpoint](arm_results/rl_integration/mixed-bonus-to60-completion.json) ·
 [Reweight60 evaluation audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) ·

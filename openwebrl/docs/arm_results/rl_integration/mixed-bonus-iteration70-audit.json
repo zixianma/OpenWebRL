@@ -1,0 +1,57 @@
+{
+  "method": "mixed-only bonus + relaxed B",
+  "iteration": 70,
+  "job": "338904",
+  "verified_complete": true,
+  "full300": {
+    "tasks": 300,
+    "successes": 115,
+    "valid": 235,
+    "invalid": 65,
+    "overall": 0.38333333333333336,
+    "valid_only": 0.48936170212765956,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter70-338904/rollouts",
+    "iteration": 70,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-338904-iter70/runtime/iter_0000069",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-iter70-338904"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 44,
+    "valid": 77,
+    "invalid": 23,
+    "overall": 0.44,
+    "valid_only": 0.5714285714285714,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "plan_sha256": "a421d421c6b948cf435c10422a6c495685e61ea82437e4eb48a613e03b7a8033",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "checkpoint_adam_updates": 894,
+  "checked_epoch": 1790872930.6554167,
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 69,
+    "completed_training_iteration": 70,
+    "adam_updates": 894
+  },
+  "wandb_history_verified": true,
+  "valid_statuses_with_explicit_judge_not_run": {
+    "truncated": 14,
+    "failed": 5
+  },
+  "archive_verification": "All300 nonempty ZIP central directories and serialized payload entries; not full bytewise CRC scan. Saved judge records include explicit policy sentinel where a terminal status skips the judge."
+}
