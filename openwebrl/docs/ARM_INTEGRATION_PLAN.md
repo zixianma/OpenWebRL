@@ -8141,6 +8141,32 @@ centroid shortlist are project-specific choices, not a recipe validated by the
 literature. See [the objective definition](https://submodlib.readthedocs.io/en/latest/functions/facilityLocation.html)
 and [Wei et al., 2015](https://proceedings.mlr.press/v37/wei15.pdf).
 
+#### Weighted screening cohort frozen — September30
+
+The user approved selecting 2,000 weighted-coverage tasks. The cohort is now
+prepared: 2,000 unique tasks across all 185 websites, representing 1,190 fine
+clusters. Selection considered the full 59,115-task eligible pool, rather than
+the visualization's 8,776-task diagnostic shortlist; the earlier diagnostic
+scores therefore do not describe this final cohort. Native instructions, URLs,
+rubrics and task IDs are preserved unchanged. Independent checks verified all
+identities, eligibility, exact website quotas, native payloads and file hashes.
+Preparation took 17.61 seconds wall / 11.68 seconds CPU, with 660 MiB peak RSS,
+zero GPU hours and zero API calls.
+
+**Trajectory accounting:** 2,000 tasks × five actor attempts = **10,000 primary
+trajectories** for this weighted cohort. The earlier 20,000 estimate included an
+additional 2,000-task random-control cohort, also with five attempts. Whether to
+prepare that second cohort now remains pending clarification; natural overlap
+could reduce unique collection. Retries are additional. No rollout collection
+or new allocation was launched by this preparation, and the RL dataset remains
+unchanged. The native screen still requires task-quality/validity accounting;
+initial page availability is not evidence of task solvability.
+
+[Prepared-cohort metadata and verification](arm_results/rl_integration/task-pool-weighted-2000.json).
+Runtime: `task-pool-expansion-20260922/curation-v3-20260929/cohorts-20260930/weighted-2000/`:
+`weighted-tasks.jsonl`, `selection-manifest.jsonl`, `website-quotas.json`,
+`summary.json`, `verification.json`. Reproducer: `scripts/select_arm_task_cohort.py`.
+
 ### Full retained-pool browser coverage — September29
 
 **Approved and running:** extend the same browser checks to all125,761 exact

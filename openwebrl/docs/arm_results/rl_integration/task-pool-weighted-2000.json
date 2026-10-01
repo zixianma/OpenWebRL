@@ -1,0 +1,64 @@
+{
+  "api_calls": 0,
+  "artifacts": {
+    "selection-manifest.jsonl": "dac9c6beb449e2c46954452d2c6ea0dc737301ad0fd06d4b4352aebba8dd91ce",
+    "website-quotas.json": "d97825b139fbe0182e21698e7ab6aff2ff76eb737a6c03c95a2de8c367bf6b80",
+    "weighted-tasks.jsonl": "c1e740ea6b6264fca4fd7ea5210641cce71e1456df92a324bb01a661d9f74454"
+  },
+  "candidate_pool": "All 59,115 eligible tasks, including previous geometric-audit tasks; no diagnostic shortlist",
+  "caveats": [
+    "Initial page availability does not establish task quality or solvability.",
+    "This freezes a screening cohort, not a final RL training dataset.",
+    "The prior diagnostic used a shortlist; its coverage scores do not describe this new full-pool cohort."
+  ],
+  "clusters_represented": 1190,
+  "cpu_seconds": 11.679811655,
+  "dependencies_sha256": {
+    "cluster_arm_task_pool.py": "279f1c71b067f8d8ee2e6878e07d545caf4cefac92e425839859b6beaf10c303",
+    "visualize_arm_task_clusters.py": "570a5282885e441831443e6af87adc7e1b5df82409058271e33d93f98cc5c348"
+  },
+  "elapsed_seconds": 17.607591012027115,
+  "eligible_tasks": 59115,
+  "expected_actor_attempts_per_task": 5,
+  "gpu_hours": 0,
+  "implementation_sha256": "fd6d72a0e595a71c5e00ac1bd9feb6115373fc4546ded335ad002bc20ee397e0",
+  "input_sha256": {
+    "assignments": "c7a68cf75ee01584bc590ee76655d804a89bdfe70b5826c75558834ef37596ea",
+    "clusters": "4ecdb4acb2a9b0e7ec12bd349b4e6984af87b794d1b5d169ce32938bd3159e72",
+    "ordered_embedding_texts": "5662fb0bdb7427cf823a8d894d15c7ec9c7599b69f47a331a87b2496200c867d",
+    "selected_tasks": "df1e82bb61086860241e81d45cbe38ce673e105182a92ebdda66efcca176c90b"
+  },
+  "objective": "sum_c sqrt(n_c) max_j max(0, cosine(normalized_center_c, task_embedding_j)) within website",
+  "peak_rss_mib": 660.05078125,
+  "primary_actor_trajectories": 10000,
+  "quota": "One/site, then highest averages with sqrt(fine_cluster_count), capped by full site capacity",
+  "random_comparison_prepared": false,
+  "rollouts_launched": false,
+  "selection_complete": true,
+  "sources": {
+    "insta-v3": 636,
+    "pae-webvoyager": 1364
+  },
+  "status": "prepared_for_screening_not_training",
+  "tasks": 2000,
+  "tie_breaking": "Ascending embedding row within each site; deterministic lazy greedy",
+  "training_data_changed": false,
+  "verification": {
+    "artifact_hashes_verified": true,
+    "complete": true,
+    "eligible_membership_verified": true,
+    "native_payloads_unchanged": true,
+    "unique_native_tasks": 2000,
+    "website_quotas_verified": true
+  },
+  "websites": 185,
+  "workflows": {
+    "booking_application": 19,
+    "calculation": 48,
+    "cart_purchase": 18,
+    "comparison": 97,
+    "list_aggregate": 140,
+    "lookup_or_unclassified": 1453,
+    "search_filter_sort": 225
+  }
+}
