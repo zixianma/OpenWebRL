@@ -5,10 +5,11 @@
 </style>
 <main>
 <h1>Review the 2,000 selected ARM tasks</h1>
-<p class="sub">Weighted semantic coverage · 185 websites · frozen selection, September 30</p>
+<p class="sub" id="cohort-label">Frozen selection, September 30</p>
+<p class="foot">Local cohort reviews: <a href="http://localhost:8765/arm_selected_tasks.html">original diversity-first</a> · <a href="http://localhost:8765/arm_difficulty_first_tasks.html">strict difficulty-first</a> · <a href="http://localhost:8765/arm_min5_weighted_tasks.html">score ≥5, then weighted coverage</a></p>
 <div class="notice"><b>Difficulty here counts rubric facts.</b> Easy = 1–3, medium = 4–6, hard = 7+. It does not count browser steps or measure actor failure. None of these tasks has been screened with five actor attempts yet. OM2W uses a different, human-step definition.</div>
 <div class="kpis" id="kpis"></div>
-<div class="panel"><h2>Difficulty composition</h2><p id="composition"></p><div id="hist" class="hist"></div><small>The selection favors semantic representation without a difficulty target. Review this snapshot before changing its composition.</small></div>
+<div class="panel"><h2>Difficulty composition</h2><p id="composition"></p><div id="hist" class="hist"></div><small id="selection-note"></small></div>
 <div class="panel controls">
 <label>Search instruction, rubric, ID or cluster<input id="search" placeholder="e.g. compare, flights, missing dates"></label>
 <label>Website<select id="site"><option value="">All websites</option></select></label>
@@ -32,6 +33,7 @@ try{notes=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(e){storageOK=
 let page=0,selected=null,filtered=[],pageSize=30;
 const sorted=xs=>[...new Set(xs)].sort();for(const s of sorted(DATA.tasks.map(t=>t.site)))$('site').add(new Option(s,s));for(const s of sorted(DATA.tasks.map(t=>t.workflow)))$('workflow').add(new Option(s.replaceAll('_',' '),s));
 const counts=DATA.selected_bands;$('kpis').innerHTML=`<div><b>2,000</b><small>selected tasks</small></div><div><b>${DATA.sites}</b><small>websites</small></div><div><b>${counts.hard}</b><small>rubric-hard tasks</small></div><div><b>Not measured</b><small>actor difficulty</small></div>`;
+$('cohort-label').textContent=DATA.label+' · '+DATA.sites+' websites · frozen selection, September 30';$('selection-note').textContent=DATA.selection_note;
 $('composition').innerHTML=['easy','medium','hard'].map(b=>`<span class="tag ${b}">${b}: ${counts[b].toLocaleString()} (${(100*counts[b]/2000).toFixed(1)}%)</span>`).join(' ')+'<br><small>Full eligible pool: '+['easy','medium','hard'].map(b=>DATA.pool_bands[b].toLocaleString()+' '+b).join(' · ')+'</small>';
 $('hist').innerHTML=['easy','medium','hard'].map(b=>`<span class="${b}" style="width:${counts[b]/20}%" title="${b}: ${counts[b]}"></span>`).join('');
 function detail(t){selected=t;if(!t){$('detail').innerHTML='<p>No task matches these filters.</p>';$('review-controls').hidden=true;return}$('review-controls').hidden=false;const safe=/^https?:\/\//i.test(t.url);$('detail').innerHTML=`<p><span class="tag ${t.band}">${t.band} · ${t.difficulty} rubric facts</span> <span class="tag">${esc(t.source)}</span></p><p id="instruction">${esc(t.instruction)}</p><p>${safe?`<a href="${esc(t.url)}" target="_blank" rel="noopener noreferrer">${esc(t.url)}</a>`:esc(t.url)}</p><div class="meta">Task ID: <code>${esc(t.task_id)}</code><br>Cluster: <code>${esc(t.cluster)}</code><br>Website selection rank: ${t.selection_rank}<br>Heuristic tag: ${esc(t.workflow.replaceAll('_',' '))}<br>Domain: ${esc(t.domain)} / ${esc(t.subdomain)}</div><h2 style="margin-top:18px">Original success rubric</h2>${t.rubric.map(r=>`<p><b>${esc(r.id)}. ${esc(r.description)}</b></p><ul>${(r.facts||[]).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`).join('')}<p class="foot">Fact count can grow from redundant criteria. This rubric has not been certified as a reliable difficulty measure.</p>`;const n=notes[t.key]||{};$('mark').value=n.mark||'unreviewed';$('note').value=n.note||'';$('save-status').textContent=storageOK?'Notes stay in this browser.':'Browser storage unavailable; export before closing.';}

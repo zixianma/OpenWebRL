@@ -1,0 +1,71 @@
+{
+  "api_calls": 0,
+  "artifacts": {
+    "cutoff-website-quotas.json": "48353805d355cc0ecafac6b875ac1334b2c57b96a8ae59c8c216139fa8f592e7",
+    "selection-manifest.jsonl": "54480da680e4bd368273d20dbbf7a84e1c67b2dd22f56bca95df5b8613e08b48",
+    "website-quotas.json": "279a2cc19bda4702d7656e0cfb2070e852ceb70a5c3eb0939abd2bc26b6cc663",
+    "weighted-tasks.jsonl": "9b7f86b778bccbf11f4983fa0160b23a4a000fe2cfcd6e83f48ec48271c31240"
+  },
+  "bands": {
+    "hard": 394,
+    "medium": 1606
+  },
+  "caveats": [
+    "Rubric redundancy can inflate difficulty; malformed tasks are not established hard tasks.",
+    "No website floor may override the primary difficulty ranking.",
+    "A matched random tie-break control shares all mandatory higher-score tasks."
+  ],
+  "clusters_represented": 802,
+  "cpu_seconds": 6.914658376,
+  "cutoff_candidates": 2926,
+  "cutoff_coverage": "Existing fine clusters restricted to equal-score candidates; normalized centers and sqrt(tier cluster size); marginal coverage starts with retained higher-score tasks",
+  "cutoff_quota": "One per cutoff website, then sqrt(tier cluster count) highest averages, capped by available cutoff candidates",
+  "cutoff_score": 5,
+  "difficulty_counts": {
+    "5": 574,
+    "6": 1032,
+    "7": 270,
+    "8": 63,
+    "9": 49,
+    "10": 7,
+    "11": 3,
+    "12": 2
+  },
+  "difficulty_definition": "Source rubric fact count; not measured actor success or browser steps",
+  "elapsed_seconds": 6.769402587087825,
+  "eligible_tasks": 59115,
+  "expected_actor_attempts_per_task": 5,
+  "gpu_hours": 0,
+  "helper_sha256": "7287f0d61e5a9871bc849e08e338373e86f16b63fa9d5bca370bb93f1a6923de",
+  "implementation_sha256": "bac0f880e116ca3dee26d9c1cb2c9d2d5d6edd078050031410f3735a41ac676b",
+  "input_sha256": {
+    "assignments": "c7a68cf75ee01584bc590ee76655d804a89bdfe70b5826c75558834ef37596ea",
+    "eligible": "df1e82bb61086860241e81d45cbe38ce673e105182a92ebdda66efcca176c90b",
+    "ordered_texts": "5662fb0bdb7427cf823a8d894d15c7ec9c7599b69f47a331a87b2496200c867d"
+  },
+  "mandatory_above_cutoff": 1426,
+  "overlap_with_original_weighted": 102,
+  "peak_rss_mib": 391.1640625,
+  "previous_cohort_preserved": true,
+  "primary_actor_trajectories": 10000,
+  "random_comparison_prepared": false,
+  "rollouts_launched": false,
+  "selected_at_cutoff": 574,
+  "selection_complete": true,
+  "selection_mode": "difficulty_first",
+  "status": "prepared_for_review_and_screening_not_training",
+  "tasks": 2000,
+  "training_data_changed": false,
+  "websites": 46,
+  "verification": {
+    "verified": true,
+    "unique_tasks": 2000,
+    "native_payloads_unchanged": true,
+    "every_6plus_task_retained": true,
+    "exactly_574_score5": true,
+    "no_lower_scores": true,
+    "website_counts_verified": true,
+    "original_cohort_hashes_unchanged": true,
+    "focused_tests_passed": 5
+  }
+}

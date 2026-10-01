@@ -8195,8 +8195,9 @@ examples, explaining the present concentration in the easy band.
 
 **Revised user priority: difficulty first, diversity second.** The previous
 300-hard / 1,100-medium / 600-easy proposal is superseded; it imposed a mixture
-rather than prioritizing difficult tasks. The current 2,000-task manifest stays
-unchanged for review and is not the final difficulty-first cohort.
+rather than prioritizing difficult tasks. The original diversity-first manifest remains unchanged as a reference.
+The user subsequently approved the strict difficulty-first recipe, now prepared
+and verified below; actor collection has not started.
 
 Difficulty has not yet been measured with the actor. For a CPU-only provisional
 screening queue, rank tasks by their original rubric-fact score first, then use
@@ -8204,8 +8205,8 @@ weighted coverage to break ties at the cutoff. At a 2,000-task budget, the
 eligible pool has 1,426 tasks with at least six facts (394 rubric-hard with
 seven or more, plus 1,032 with six), leaving 574 slots to select diversely among
 the 2,926 five-fact tasks. This would give 394 rubric-hard / 1,606 rubric-medium
-and no rubric-easy tasks. This is a **proposed proxy-first queue, not a measured
-hard-task set**, and it has not replaced the current manifest. It can narrow
+and no rubric-easy tasks. This is an **approved proxy-first screening queue, not a measured
+hard-task set**. It is saved separately from the original manifest. It can narrow
 website coverage; a website quota should not silently admit lower-difficulty
 tasks ahead of higher ones under the user's revised priority.
 
@@ -8233,6 +8234,92 @@ Reproducer: `scripts/render_arm_selected_tasks.py`; template:
 `scripts/templates/arm_selected_tasks.html`. All 2,000 tasks, filters, pagination,
 detail views, local persistence, notes export, HTTP identity and mobile layout
 were checked in Chromium; zero JavaScript errors. The cohort hash is unchanged.
+
+<a id="arm-task-pool-difficulty-comparison-20260930"></a>
+
+#### Difficulty-first cohort and score-5+ weighted alternative — September30
+
+**Approved strict selection is prepared:** retain all 1,426 eligible tasks with
+rubric-fact score ≥6; select 574 from the 2,926 tasks scoring exactly 5. The pool
+is **59,115**, not 58K: only 394 tasks have score ≥7 (our rubric-hard band), and
+1,032 score exactly 6 (rubric-medium). Thus 1,426 is the count at ≥6, not the
+count in the 7+ hard band. All counts are source rubric facts, not actor difficulty.
+
+Within the cutoff tier, website quotas use one per available website followed
+by highest-averages allocation weighted by the square root of the number of
+represented fine clusters. Cluster centers and square-root size weights are
+computed from score-5 members of the existing clusters. Greedy marginal coverage
+starts with the higher-scoring tasks already retained at that website, avoiding
+redundant tie choices. No website quota admits a score below 5 or excludes a
+mandatory score-6+ task. This yields 46 websites and 802 represented fine clusters.
+The original diversity-first cohort and its artifact hashes remain unchanged.
+
+**Requested diagnostic alternative:** filter to **all 4,352 tasks scoring ≥5**,
+then run ordinary website-balanced weighted coverage to select 2,000, with no
+further preference for scores 6–12. Use all filtered candidates; recompute
+centers/weights on filtered members of existing clusters, and assign website
+quotas using square-root filtered cluster counts with capacity limits. This
+alternative is prepared for comparison only and does not replace the approved
+strict cohort. Neither has actor outcomes yet.
+
+| Metric | Strict difficulty-first | Score ≥5, then weighted coverage |
+| --- | ---: | ---: |
+| Selected tasks | 2,000 | 2,000 |
+| Score 5 | 574 | 1,297 |
+| Score 6 | 1,032 | 542 |
+| Score ≥7, rubric-hard | 394 | 161 |
+| Score ≥6, total | 1,426 | 703 |
+| Mean rubric-fact score | 6.012 | 5.472 |
+| Websites | 46 | 46 |
+| Represented fine clusters | 802 | 850 |
+| Amazon tasks | 527 | 330 |
+| Apple tasks | 371 | 253 |
+| PAE-WebVoyager tasks | 1,917 | 1,914 |
+| Insta-v3 tasks | 83 | 86 |
+
+The cohorts share **1,225 tasks (61.25%)**, with 775 unique to each and 2,775 in
+the union. The ≥5 alternative substitutes lower-score tasks for higher-score
+ones, spreads selections more evenly across websites, and represents 48 more
+fine clusters. That cluster count is descriptive, not a measured skill count
+or proof of better training data. Website quotas also differ, so the comparison
+covers the complete selection rules, not only the within-site greedy step.
+Both methods enforce a difficulty floor; strict selection additionally ranks
+higher scores ahead of lower ones. The labels are noisy proxies, so neither
+choice has demonstrated better actor/ARM yield or downstream RL performance.
+
+Both thresholded pools are about 96% PAE-WebVoyager and cover 46 websites,
+compared with 68.2% PAE and 185 websites in the original diversity-first cohort.
+Difficulty-first filtering therefore also changes source/site composition;
+a low score is not evidence that an excluded website's tasks are easy for the
+actor. Instruction quality and infrastructure invalidity remain separate.
+
+**Local-only review:** [strict difficulty-first](http://localhost:8765/arm_difficulty_first_tasks.html) ·
+[score ≥5 weighted alternative](http://localhost:8765/arm_min5_weighted_tasks.html) ·
+[original diversity-first](http://localhost:8765/arm_selected_tasks.html).
+No task-review payload is published. Only aggregate counts, hashes and code are
+pushed. Five focused tests and independent identity/native-payload/count/hash
+checks passed; all 2,000 records and difficulty filters were checked in each
+local review, with no JavaScript errors or mobile overflow.
+
+Strict preparation used 6.77 seconds wall and 391 MiB peak RSS; the alternative
+used 6.92 seconds and 380 MiB. Each was single-core, cached-embedding-only, with
+zero GPU/API calls. Screening either cohort alone requires 10,000 primary actor
+trajectories. Screening both and reusing shared-task outcomes would require
+13,875 primary trajectories, before retries. A different **random tie-break
+control** for strict selection would necessarily share all 1,426 mandatory
+score-6+ tasks and could require at most 12,870 unique primary trajectories in
+union, fewer with cutoff overlap. Those controls answer different questions.
+No new actor allocation was launched or approved by these CPU comparisons.
+
+[Strict cohort aggregate and verification](arm_results/rl_integration/task-pool-difficulty-first-2000.json) ·
+[Comparison aggregate and provenance](arm_results/rl_integration/task-pool-difficulty-vs-min5.json).
+Reproducers: `scripts/select_arm_difficulty_first.py`,
+`scripts/select_arm_task_cohort.py --minimum-difficulty 5 --diagnostic`,
+`scripts/render_arm_selected_tasks.py`. Runtime:
+`task-pool-expansion-20260922/curation-v3-20260929/cohorts-20260930/`, with
+`difficulty-first-2000/`, `comparison-min5-weighted-2000/`, the preserved
+`weighted-2000/`, and `approved-selection.json`. Native tasks, manifests and
+review HTML stay there/local; separate aggregate artifacts contain no task text.
 
 ### Full retained-pool browser coverage — September29
 

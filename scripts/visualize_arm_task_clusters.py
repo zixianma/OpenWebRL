@@ -46,10 +46,15 @@ def quotas(budget, capacities, weights):
     return result
 
 
-def facility_order(sim, weights, budget):
+def facility_order(sim, weights, budget, initial_coverage=None):
     """Exact lazy greedy for this finite, nonnegative proxy similarity matrix."""
-    covered=np.zeros(len(sim),dtype=np.float32)
-    heap=[(-float(g),j) for j,g in enumerate(weights@sim)];heapq.heapify(heap)
+    covered=(np.zeros(len(sim),dtype=np.float32) if initial_coverage is None
+             else np.asarray(initial_coverage,dtype=np.float32).copy())
+    if covered.shape!=(len(sim),) or not np.isfinite(covered).all() or (covered<0).any():
+        raise ValueError('Invalid initial coverage')
+    if budget<0 or budget>sim.shape[1]:raise ValueError('Invalid selection budget')
+    gains=weights@np.maximum(sim-covered[:,None],0)
+    heap=[(-float(g),j) for j,g in enumerate(gains)];heapq.heapify(heap)
     selected=[]
     while len(selected)<budget:
         _,j=heapq.heappop(heap)

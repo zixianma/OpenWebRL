@@ -1,0 +1,150 @@
+{
+  "difficulty-first-2000": {
+    "scores": {
+      "5": 574,
+      "6": 1032,
+      "7": 270,
+      "8": 63,
+      "9": 49,
+      "10": 7,
+      "11": 3,
+      "12": 2
+    },
+    "hard7plus": 394,
+    "sixplus": 1426,
+    "mean_rubric_score": 6.012,
+    "median_rubric_score": 6.0,
+    "sites": 46,
+    "clusters": 802,
+    "top_sites": [
+      [
+        "amazon.com",
+        527
+      ],
+      [
+        "apple.com",
+        371
+      ],
+      [
+        "allrecipes.com",
+        341
+      ],
+      [
+        "espn.com",
+        167
+      ],
+      [
+        "bbc.com",
+        155
+      ],
+      [
+        "arxiv.org",
+        128
+      ],
+      [
+        "wolframalpha.com",
+        115
+      ],
+      [
+        "github.com",
+        101
+      ],
+      [
+        "booking.com",
+        18
+      ],
+      [
+        "trip.com",
+        10
+      ]
+    ],
+    "sources": {
+      "insta-v3": 83,
+      "pae-webvoyager": 1917
+    }
+  },
+  "comparison-min5-weighted-2000": {
+    "scores": {
+      "5": 1297,
+      "6": 542,
+      "7": 111,
+      "8": 26,
+      "9": 20,
+      "10": 3,
+      "12": 1
+    },
+    "hard7plus": 161,
+    "sixplus": 703,
+    "mean_rubric_score": 5.472,
+    "median_rubric_score": 5.0,
+    "sites": 46,
+    "clusters": 850,
+    "top_sites": [
+      [
+        "amazon.com",
+        330
+      ],
+      [
+        "allrecipes.com",
+        325
+      ],
+      [
+        "apple.com",
+        253
+      ],
+      [
+        "bbc.com",
+        247
+      ],
+      [
+        "espn.com",
+        233
+      ],
+      [
+        "arxiv.org",
+        207
+      ],
+      [
+        "github.com",
+        179
+      ],
+      [
+        "wolframalpha.com",
+        128
+      ],
+      [
+        "booking.com",
+        21
+      ],
+      [
+        "trip.com",
+        10
+      ]
+    ],
+    "sources": {
+      "insta-v3": 86,
+      "pae-webvoyager": 1914
+    }
+  },
+  "common_tasks": 1225,
+  "only_in_each": 775,
+  "union_tasks": 2775,
+  "cohorts": {
+    "difficulty-first-2000": {
+      "summary_sha256": "b325ef216bdfeb9d76dd8acba77f4820c2a441fa1fd118e69477ad077da86889",
+      "manifest_sha256": "54480da680e4bd368273d20dbbf7a84e1c67b2dd22f56bca95df5b8613e08b48"
+    },
+    "comparison-min5-weighted-2000": {
+      "summary_sha256": "22c4b3ffd8d69f3776616e73dc934db30baede88f7bd0081a21b220eb150d840",
+      "manifest_sha256": "b8905f0069e1b2b7e98622649f5b278736002b4a8fbcd1215b4dc7f82ad7e8bf"
+    }
+  },
+  "alternative_is_diagnostic_only": true,
+  "new_actor_rollouts": 0,
+  "verification": {
+    "unique_tasks": true,
+    "native_payloads_preserved": true,
+    "difficulty_cutoff_checked": true,
+    "artifact_hashes_checked": true
+  }
+}

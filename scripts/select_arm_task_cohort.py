@@ -19,7 +19,7 @@ from cluster_arm_task_pool import load_metadata, rows, sha, write_json
 from visualize_arm_task_clusters import facility_order, quotas
 
 
-def run(root, output, budget):
+def run(root, output, budget, minimum_difficulty=None, diagnostic=False):
     start = time.monotonic()
     output.mkdir(parents=True, exist_ok=False)
     plan, records, selected_path = load_metadata(root)
@@ -29,6 +29,9 @@ def run(root, output, budget):
         assert sha(cluster_root / name) == expected['artifacts'][name]
     assignment = {r['embedding_row']: r for r in rows(cluster_root / 'assignments-r50.jsonl')}
     assert len(assignment) == len(records)
+    full_eligible_count = len(records)
+    if minimum_difficulty is not None:
+        records = [r for r in records if r['rubric_difficulty'] >= minimum_difficulty]
     by_site = defaultdict(list)
     for r in records:
         a = assignment[r['embedding_row']]
@@ -37,7 +40,8 @@ def run(root, output, budget):
         by_site[r['site']].append(r)
     clusters = {c['cluster_id']: c for c in rows(cluster_root / 'clusters.jsonl')
                 if '-r50-' in c['cluster_id']}
-    site_clusters = Counter(c['site'] for c in clusters.values())
+    site_clusters = {s:len({assignment[r['embedding_row']]['cluster_id'] for r in rs})
+                     for s,rs in by_site.items()}
     allocation = quotas(budget, {s: len(rs) for s, rs in by_site.items()},
                         {s: site_clusters[s] ** .5 for s in by_site})
     cache = root / 'semantic-qwen8b/embeddings.npy'
@@ -57,7 +61,9 @@ def run(root, output, budget):
         ids = sorted(group)
         centers = np.asarray([x[group[c]].mean(axis=0) for c in ids])
         centers /= np.linalg.norm(centers, axis=1, keepdims=True)
-        assert all(len(group[c]) == clusters[c]['size'] for c in ids)
+        assert all(len(group[c]) <= clusters[c]['size'] for c in ids)
+        if minimum_difficulty is None:
+            assert all(len(group[c]) == clusters[c]['size'] for c in ids)
         weights = np.sqrt(np.asarray([len(group[c]) for c in ids], dtype=np.float64))
         weights /= weights.sum()
         sim = np.maximum(centers @ x.T, 0)
@@ -95,16 +101,19 @@ def run(root, output, budget):
     write_json(output / 'website-quotas.json', allocation)
     assert cache.stat().st_size == stat.st_size and cache.stat().st_mtime_ns == stat.st_mtime_ns
     summary = dict(
-        selection_complete=True, status='prepared_for_screening_not_training',
+        selection_complete=True, status='diagnostic_alternative_only' if diagnostic else 'prepared_for_screening_not_training',
         tasks=budget, websites=len(allocation), eligible_tasks=len(records),
+        full_eligible_tasks=full_eligible_count, minimum_rubric_difficulty=minimum_difficulty,
+        diagnostic_alternative=diagnostic,
         expected_actor_attempts_per_task=5, primary_actor_trajectories=5 * budget,
         rollouts_launched=False, random_comparison_prepared=False,
         training_data_changed=False, api_calls=0, gpu_hours=0,
-        candidate_pool='All 59,115 eligible tasks, including previous geometric-audit tasks; no diagnostic shortlist',
+        candidate_pool=f'All {len(records):,} eligible tasks after the declared minimum rubric-fact filter; no diagnostic shortlist',
         objective='sum_c sqrt(n_c) max_j max(0, cosine(normalized_center_c, task_embedding_j)) within website',
         quota='One/site, then highest averages with sqrt(fine_cluster_count), capped by full site capacity',
         tie_breaking='Ascending embedding row within each site; deterministic lazy greedy',
         sources=dict(Counter(r['source'] for r in choices)),
+        difficulty_counts=dict(Counter(r['rubric_difficulty'] for r in choices)),
         workflows=dict(Counter(r['primary_workflow'] for r in choices)),
         clusters_represented=len({r['cluster_id'] for r in choices}),
         implementation_sha256=sha(Path(__file__)),
@@ -131,7 +140,9 @@ if __name__ == '__main__':
     parser.add_argument('--root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--tasks', type=int, default=2000)
+    parser.add_argument('--minimum-difficulty', type=int)
+    parser.add_argument('--diagnostic', action='store_true')
     args = parser.parse_args()
     resource.setrlimit(resource.RLIMIT_CPU, (180, 185))
     with threadpool_limits(limits=1):
-        run(args.root, args.output, args.tasks)
+        run(args.root, args.output, args.tasks, args.minimum_difficulty, args.diagnostic)
