@@ -8321,6 +8321,71 @@ Reproducers: `scripts/select_arm_difficulty_first.py`,
 `weighted-2000/`, and `approved-selection.json`. Native tasks, manifests and
 review HTML stay there/local; separate aggregate artifacts contain no task text.
 
+<a id="arm-task-pool-actor-screen-20260930"></a>
+#### Selected score ≥5 weighted pool: actor screening prepared — September30
+
+**Latest user decision:** choose **score ≥5, then website-balanced weighted
+coverage**, superseding the strict difficulty-first choice above, and run the
+actor on these2,000 tasks. The existing comparison directory is promoted by
+`approved-selection.json`; its native payload/hash and the earlier comparison
+remain unchanged. It contains46 websites,850 fine clusters,1,297 score-5 tasks,
+542 score-6 tasks and161 score-7+ tasks. Its rubric scores remain proxies rather
+than measured actor difficulty. The task review and native data stay local.
+
+**Prepared, not submitted:** no suitable active allocation or previous screening
+compute budget exists. Exact approval is requested for the resources below.
+
+| Component | Prepared specification |
+| --- | --- |
+| Actor | Original `OpenWebRL/OpenWebRL-4B-SFT`, revision `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`; iteration0, no optimizer updates |
+| Data | Frozen2,000-task cohort; upstream converter for instruction/start URL; rubric answers excluded from actor/judge inputs |
+| Attempts | Five independent seeded attempts/task;10,000 primary trajectories; all five run even if an earlier attempt succeeds |
+| Decoding/horizon | T0.8,top_p1,top_k−1,response1024,context32768;15 turns,one current screenshot/full textual reasoning history |
+| Outcome | Native GPT-4.1/action_history,local-process browsers; saved trajectories and terminal verdicts |
+| Proposed allocation | **4 H200 ×16h,32 CPUs,480GiB,normal QoS;64 GPU-hours total including failures/retries** |
+| Topology/concurrency | Native initialization TP2/DP2;four TP1 generation engines;32 local browsers;48GiB CUDA cache guard |
+| Proposed judge cap | **$150 and30,000 requests maximum**, including API retries;five disjoint400-task blocks with persistent$30/6,000-call caps |
+| Storage/tracking | Preserve archives and referenced tensor files;5TiB headroom check;separate `openwebrl-evals` identity |
+
+The first two hash-ordered tasks supply10 startup attempts that count toward the
+primary cohort. Require at least five valid attempts before scaling; stop for
+diagnosis if a later completed batch has more than50% invalid attempts. No
+reward-based early stopping, task replacement, ARM guidance or automatic invalid
+retry is part of this primary screen. API-budget halts stop further collection.
+
+Every task receives one of `all_failure` (exactly five valid zero outcomes),
+`mixed` (five valid attempts,one–four successes), `all_success`,
+`unresolved_invalid`, or `pending`. Report attempt success overall and valid-only
+with denominators, per-task outcomes, and invalid causes. Preserve invalid
+primaries for separately recorded recovery rather than treating them as failures
+or silently replacing them. Only the verified all-failure IDs feed the next ARM
+data-selection experiment; this screen does not launch rescue or change RL data.
+
+**Resource estimate:** the prior SFT actor-only pilot averaged134.2 trajectory
+seconds, suggesting11.65h for10,000 attempts with32 browsers before startup,
+stragglers and new-pool differences. The16h request is a cap, not a completion
+guarantee. Its overall judge usage was$1.86/300 attempts, approximately$62 scaled
+to10,000; the new tasks may cost more. Prior actor-only archives averaged267MiB
+each, approximately2.55TiB for10,000 excluding shared tensor storage. Live GPFS
+quota currently has12.18TiB headroom; reserve5TiB before starting and retain all
+evidence. Release the allocation after verified completion; count time consumed
+by failed attempts against the original16h cap.
+
+The controller awaits its worker and verifies all10,000 archive/verdict pairs
+before completion. Resume validates existing records and skips completed
+attempts, preserves judge ledgers and uses separate attempt directories for
+interrupted writes. Collection returns no accumulated tensor batch to Ray;
+summaries use small records. Native CPU argument parsing and four accounting/
+artifact tests pass; live GPU/browser startup remains untested for this screen.
+On approval, register the submitted ID with active supervision before launch
+handoff; no new monitor or GPU job is running yet.
+
+Launch preparation: `scripts/run_arm_task_screen.py`; batch template:
+`scripts/run_arm_task_screen_4gpu.sbatch`; worker:
+`openwebrl/arm_task_screen.py`. Private runtime control:
+`task-pool-expansion-20260922/curation-v3-20260929/actor-screen-min5-2000/`.
+[Aggregate preparation receipt](arm_results/rl_integration/task-pool-actor-screen-plan.json).
+
 ### Full retained-pool browser coverage — September29
 
 **Approved and running:** extend the same browser checks to all125,761 exact
