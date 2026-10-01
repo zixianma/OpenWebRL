@@ -4,17 +4,25 @@ This is the concise collaborator summary. Detailed configs, provenance, and
 run history are in [ARM_RESULTS.md](ARM_RESULTS.md) and
 [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md).
 
+<a id="arm-methods-at-a-glance"></a>
+![Three ARM stages: choose actions at inference, learn from saved preferences offline, or change turn credit during RL](arm_results/methods/arm_three_stages.svg)
+
+Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png) / [SVG](arm_results/methods/arm_three_stages.svg)) ·
+**RL method differences** ([PNG](arm_results/methods/arm_rl_method_choices.png) / [SVG](arm_results/methods/arm_rl_method_choices.svg)).
+
 ## 1. Inference-time ARM selection
 
-**Method.** For state (s_t), sample five actor responses (a_{t,1:5}). ScalarRM
-scores each response independently; SelectionARM compares the candidates using
-the full reasoning, action, and browser state. Execute
+**Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
+**reasoning + action**. ScalarRM scores independently; SelectionARM compares
+jointly:
 
-$$
-a_t^* = \arg\max_i \mathrm{ARM}(s_t,a_{t,i}),
-$$
+```text
+ScalarRM:     j = argmaxᵢ score(s, xᵢ)
+SelectionARM: j = select(s, [x₀, …, x₄])
+Execute the action in xⱼ.
+```
 
-while the baseline executes one actor sample. Results reproduce the Action
+The baseline executes one actor sample. Results reproduce the Action
 Reward Models setup with the o4-mini/AgentTrek Online-Mind2Web judge.
 
 | Policy | Successes / 300 | Valid | Invalid | Overall | Valid-only |
@@ -40,11 +48,14 @@ $$
 \mathcal L_{\mathrm{SFT}}=-\sum_t\log \pi_\theta(y_t\mid x,y_{<t}).
 $$
 
-C2 is the original filtered recipe; 1A increases the effective batch size. The
-joint-data runs add Piotr's ARM data. DPO uses preferred/rejected responses:
+**Recipe map:** `C2 → 1A` keeps the same8,394 turns but changes **batch16→32 and
+passes2→1**. The joint recipes use a separately filtered set:
+`J = 3,464 C2 states + 2,076 Piotr states`. **SFT imitates the chosen response;
+DPO increases its preference over the rejected response**, relative to the
+frozen starting actor:
 
 $$
-\mathcal L_{\mathrm{DPO}}=-\log\sigma\!\left(\beta\left[\log\frac{\pi_\theta(y^+|x)}{\pi_{\rm ref}(y^+|x)}-\log\frac{\pi_\theta(y^-|x)}{\pi_{\rm ref}(y^-|x)}\right]\right).
+\mathcal L_{\mathrm{DPO}}=-\log\sigma\!\left(\beta_{\mathrm{DPO}}\left[\log\frac{\pi_\theta(y^+|x)}{\pi_{\rm ref}(y^+|x)}-\log\frac{\pi_\theta(y^-|x)}{\pi_{\rm ref}(y^-|x)}\right]\right).
 $$
 
 | Training recipe | Evaluation | Successes / 300 | Valid-only | Relative headline |
@@ -67,8 +78,18 @@ over joint SFT is small and not statistically significant in the paired audit.
 
 ## 3. Online RL with ARM turn-level bonuses
 
+**Notation:** one **group** contains five trajectories for one task.
+`M` = an ordinary group with varying outcomes, e.g. `[1,0,1,0,0]`;
+`F` = five **valid failures**, `[0,0,0,0,0]`. An admitted `F` needs at least one
+usable ARM label, which may prefer the executed response **or** an alternative.
+`A` is the group-normalized terminal-outcome advantage; every turn in a
+trajectory starts with the same `A`. For `F`, `A=0`.
+
 SelectionARM labels the **executed response plus four alternative actor
 responses from the same state**, using full reasoning and action context.
+These five candidates are different from the five trajectories in a group.
+`D` counts distinct candidate actions; all five candidates must be valid.
+`m=1` means the turn was sampled, passed the gate and received a usable label.
 For a usable labeled turn ($m_{i,t}=1$), add a centered bonus to the normalized
 terminal-outcome advantage $A_i$:
 
@@ -81,41 +102,46 @@ Candidate 0 is the executed response. With **β = 0.5**, its bonus is **+0.4** i
 selected and **−0.1** otherwise; unlabeled turns receive zero. Attempt labels
 on **q = 20%** of turns, requiring five valid, distinct actions in the original
 variants. These values retain the validated K = 5 setup and calibrated bonus
-RMS near 6% of the outcome advantage. Shared optimization: **48 groups,
-batch 256, 2 PPO epochs, LR 1e−6**. PPO trains the full executed
+RMS near 6% of the outcome advantage. Shared optimization: **base quota48 groups,
+batch 256, 2 PPO epochs, LR 1e−6**; additive methods append up to8 failure groups.
+PPO trains the full executed
 reasoning-and-action response.
 
-- **Outcome-only baseline:** normalized terminal rewards only; no ARM bonus.
-- **Original bonus:** apply $A'$ within the 48 ordinary mixed-outcome groups.
-- **All-failure bonus:** also admit groups of five valid actor failures with at
-  least one usable ARM label, within the same 48-group quota; these groups
-  replace mixed-group slots. Their outcome advantage is zero, so only $b$
-  supplies a training signal. A usable label may favor either the executed
-  response or an alternative.
-- **Additive bonus:** keep all 48 mixed groups and add up to 8 eligible failure
-  groups. Their separate clipped-PPO loss uses advantage $b$, averages over
-  **all** retained failure turns (including unlabeled ones), and is weighted
-  by $N_f/48$, where $N_f$ is the number of added groups.
-- **B — relaxed gate:** additive recipe, but require at least two distinct
-  actions among five valid candidates; keep response-index credit unchanged.
-- **C — relaxed gate + action credit:** B's gate, with
-  $b=\beta m(\mathbf{1}[a_j\equiv a_0]-n(a_0)/5)$, where $n(a_0)$ counts
-  candidates equivalent to the executed action. Selecting any equivalent
-  candidate earns the same credit.
-- **Mixed-only bonus + relaxed B:** fresh run using48 ordinary mixed groups,
-  B's min2 gate and beta=.5; no extra all-failure groups.
-- **Mixed-only reweight + relaxed B:** same groups/gate, with `A'=w*A`,
-  `w ∝ exp(.5*sign(A)*u)` and mean turn weight1 within each trajectory;
-  `u=m*(1[selected executed response]−1/5)`. Native error-sentinel groups retain
-  the bonus objective. [Exact method](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
-- **Failure β = 1:** additive recipe from iteration0; increase only the auxiliary
-  failure-group bonus weight from0.5 to1.0. Mixed-group β stays0.5; both sampling
-  rates stay20%, with the original five-distinct-action gate and response-index credit.
+<a id="arm-rl-method-guide"></a>
+![ARM RL differences: replacing versus adding failure groups; Gate B versus Gate C on duplicate actions; bonus versus reweighting](arm_results/methods/arm_rl_method_choices.svg)
 
-- **Failure sampling40%:** additive recipe from iteration0; attempt ARM labels
-  on40% of failure-group turns and20% of mixed-group turns. Both bonus weights
-  remain0.5, with the original five-distinct-action gate and response-index credit.
+- **Outcome-only baseline:** `48M; A`. Terminal outcomes supply all credit.
+- **Original bonus:** `48M; D=5; A+b`. Same groups, plus turn-level ARM credit.
+- **All-failure bonus:** `(48−N)M + NF; D=5`. Failure groups **replace** ordinary
+  slots; use `A+b` for `M` and `b` for `F` in the same main PPO batch.
+- **Additive bonus:** `48M + NF, N≤8; D=5`. Failure groups are **extra**;
+  ordinary groups use `A+b`, and a separate failure PPO loss uses `b`.
+  Its coefficient is `N/48`, averaging over **all** retained failure turns,
+  including unlabeled ones.
+- **B — relaxed gate:** `Additive + D≥2`. Allow duplicate actions, but credit
+  only selection of the **exact executed response**; keep the same `b` formula.
+- **C — relaxed gate + action credit:** `B + equivalent-action credit`, with
+  $b=\beta m(\mathbf{1}[a_j\equiv a_0]-n(a_0)/5)$, where $n(a_0)$ counts
+  candidates equivalent to the executed action. Selecting another response
+  with that action earns credit, even if its reasoning differs.
+- **Mixed-only bonus + relaxed B:** `48M; D≥2; A+b`. Fresh original-bonus control
+  with the relaxed gate; zero extra `F` groups.
+- **Mixed-only reweight + relaxed B:** `48M; D≥2; A×w`. Use the same ARM labels
+  to redistribute each trajectory's existing advantage across turns, preserving
+  its mean and sign. Formula and example below; zero extra `F` groups.
+- **Failure β = 1:** `Additive + β_F:0.5→1`. Only the failure bonus is stronger;
+  `β_M=0.5`, both `q=20%`, strict gate and response-index credit stay fixed.
+- **Failure sampling40%:** `Additive + q_F:20%→40%`. Only failure turns are
+  sampled more often; `q_M=20%`, both `β=0.5`, strict gate and response-index
+  credit stay fixed.
   [Stopped at27; latest evaluation20 and coverage audit](ARM_RESULTS.md#arm-failure-sampling40-stop-20260927).
+
+**Reweighting, exactly:** `u=m×(1[j=0]−1/5)`,
+`vₜ=exp(λ×sign(A)×uₜ)`, `wₜ=vₜ/mean_trainable_turns(v)`, **λ=0.5**.
+Preferred turns receive more positive credit when `A>0`, or a smaller penalty
+when `A<0`; `A=0` remains zero. Unlabeled turns can change through the denominator.
+Native error-sentinel groups (outcome `−1`) fall back to `A+b`; the `M/F` examples
+above illustrate binary outcomes. [Exact implementation](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 
 **Evaluation:** local browser, GPT-4.1 action-history judge, temperature 0.
 Rates are **overall / valid-only**; “—” means unavailable. Historical evaluations

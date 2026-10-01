@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930" role="img" aria-labelledby="title desc">
+<title id="title">ARM RL variants: groups, gates and credit</title><desc id="desc">Mixed groups contain varied terminal outcomes; failure groups contain five valid failures. All-failure replaces mixed slots, additive adds up to eight failure groups. Gate B accepts duplicate-containing sets; Gate C also credits action equivalence. Worked examples are synthetic.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif} .mono{font-family:monospace}</style>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>
+<rect x="0" y="0" width="1600" height="930" rx="0" fill="#fff" stroke="none" stroke-width="2"/>
+<text x="40" y="50" font-size="36" fill="#182b44" font-weight="700" text-anchor="start">Online RL: groups, gates and credit</text>
+<text x="40" y="86" font-size="23" fill="#50647a" font-weight="400" text-anchor="start">Two different sets of five: 5 trajectories per task  ≠  5 candidate responses at one state.</text>
+<rect x="40" y="112" width="726" height="420" rx="14" fill="#f8fafc" stroke="#d6dfeb" stroke-width="2"/>
+<text x="62" y="149" font-size="25" fill="#2563b0" font-weight="700" text-anchor="start">1  GROUPS — which trajectories train?</text>
+<text x="62" y="184" font-size="21" fill="#2563b0" font-weight="400" text-anchor="start">M = mixed outcomes [1, 0, 1, 0, 0]</text>
+<text x="62" y="215" font-size="21" fill="#ad5b13" font-weight="400" text-anchor="start">F = five valid failures [0, 0, 0, 0, 0]</text>
+<text x="62" y="249" font-size="20" fill="#182b44" font-weight="700" text-anchor="start">Outcome-only baseline</text>
+<text x="420" y="249" font-size="22" fill="#2563b0" font-weight="700" text-anchor="start">48M</text>
+<text x="420" y="274" font-size="17" fill="#50647a" font-weight="400" text-anchor="start">terminal outcome only</text>
+<text x="62" y="313" font-size="20" fill="#182b44" font-weight="700" text-anchor="start">Original / mixed-only pair</text>
+<text x="420" y="313" font-size="22" fill="#2563b0" font-weight="700" text-anchor="start">48M</text>
+<text x="420" y="338" font-size="17" fill="#50647a" font-weight="400" text-anchor="start">ARM on ordinary groups</text>
+<text x="62" y="377" font-size="20" fill="#182b44" font-weight="700" text-anchor="start">All-failure bonus</text>
+<text x="420" y="377" font-size="22" fill="#2563b0" font-weight="700" text-anchor="start">(48−N)M + NF</text>
+<text x="420" y="402" font-size="17" fill="#50647a" font-weight="400" text-anchor="start">failure groups replace slots</text>
+<text x="62" y="441" font-size="20" fill="#182b44" font-weight="700" text-anchor="start">Additive / Gate B / Gate C</text>
+<text x="420" y="441" font-size="22" fill="#2563b0" font-weight="700" text-anchor="start">48M + NF</text>
+<text x="420" y="466" font-size="17" fill="#50647a" font-weight="400" text-anchor="start">add N ≤ 8 failure groups</text>
+<text x="62" y="516" font-size="18" fill="#50647a" font-weight="400" text-anchor="start">F is eligible only with ≥1 usable ARM label; A = 0 for F.</text>
+<rect x="792" y="112" width="768" height="744" rx="14" fill="#f8fafc" stroke="#d6dfeb" stroke-width="2"/>
+<text x="816" y="149" font-size="25" fill="#14776c" font-weight="700" text-anchor="start">2  GATE — is this candidate set usable?</text>
+<text x="816" y="184" font-size="21" fill="#50647a" font-weight="400" text-anchor="start">All five responses must be valid. Letters denote actions.</text>
+<text x="877" y="223" font-size="18" fill="#2563b0" font-weight="400" text-anchor="middle">response 0</text>
+<rect x="824" y="238" width="106" height="79" rx="14" fill="#eaf2fd" stroke="#2563b0" stroke-width="2"/>
+<text x="877" y="290" font-size="39" fill="#2563b0" font-weight="700" text-anchor="middle">X</text>
+<text x="877" y="346" font-size="18" fill="#2563b0" font-weight="700" text-anchor="middle">executed</text>
+<text x="1018" y="223" font-size="18" fill="#14776c" font-weight="400" text-anchor="middle">response 1</text>
+<rect x="965" y="238" width="106" height="79" rx="14" fill="#e6f5ef" stroke="#14776c" stroke-width="2"/>
+<text x="1018" y="290" font-size="39" fill="#14776c" font-weight="700" text-anchor="middle">X</text>
+<text x="1018" y="346" font-size="18" fill="#14776c" font-weight="700" text-anchor="middle">ARM chose</text>
+<text x="1159" y="223" font-size="18" fill="#50647a" font-weight="400" text-anchor="middle">response 2</text>
+<rect x="1106" y="238" width="106" height="79" rx="14" fill="#fff" stroke="#50647a" stroke-width="2"/>
+<text x="1159" y="290" font-size="39" fill="#50647a" font-weight="700" text-anchor="middle">Y</text>
+<text x="1300" y="223" font-size="18" fill="#50647a" font-weight="400" text-anchor="middle">response 3</text>
+<rect x="1247" y="238" width="106" height="79" rx="14" fill="#fff" stroke="#50647a" stroke-width="2"/>
+<text x="1300" y="290" font-size="39" fill="#50647a" font-weight="700" text-anchor="middle">Z</text>
+<text x="1441" y="223" font-size="18" fill="#50647a" font-weight="400" text-anchor="middle">response 4</text>
+<rect x="1388" y="238" width="106" height="79" rx="14" fill="#fff" stroke="#50647a" stroke-width="2"/>
+<text x="1441" y="290" font-size="39" fill="#50647a" font-weight="700" text-anchor="middle">W</text>
+<text x="816" y="382" font-size="19" fill="#50647a" font-weight="400" text-anchor="start">The two X responses can have different reasoning.</text>
+<text x="816" y="420" font-size="21" fill="#ad5b13" font-weight="400" text-anchor="start">Strict gate: 5 distinct actions required → reject (bonus 0)</text>
+<text x="816" y="456" font-size="21" fill="#14776c" font-weight="700" text-anchor="start">Gate B / C: ≥2 distinct actions required → accept</text>
+<text x="816" y="510" font-size="25" fill="#7350a2" font-weight="700" text-anchor="start">3  CREDIT — what counts as an ARM win?</text>
+<rect x="816" y="532" width="720" height="119" rx="14" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="838" y="567" font-size="23" fill="#182b44" font-weight="700" text-anchor="start">Gate B: exact response index</text>
+<text x="838" y="602" font-size="20" fill="#50647a" font-weight="400" text-anchor="start">ARM chose response 1, not the executed response 0.</text>
+<text x="838" y="631" font-size="23" fill="#ad5b13" font-weight="700" text-anchor="start">b = 0.5 × (0 − 1/5) = −0.10</text>
+<rect x="816" y="668" width="720" height="150" rx="14" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="838" y="703" font-size="23" fill="#182b44" font-weight="700" text-anchor="start">Gate C: equivalent action</text>
+<text x="838" y="738" font-size="20" fill="#50647a" font-weight="400" text-anchor="start">Selected action X matches executed action X.</text>
+<text x="838" y="768" font-size="20" fill="#50647a" font-weight="400" text-anchor="start">Two of five candidates contain action X.</text>
+<text x="838" y="798" font-size="23" fill="#14776c" font-weight="700" text-anchor="start">b = 0.5 × (1 − 2/5) = +0.30</text>
+<rect x="40" y="552" width="726" height="304" rx="14" fill="#f8fafc" stroke="#d6dfeb" stroke-width="2"/>
+<text x="62" y="589" font-size="24" fill="#7350a2" font-weight="700" text-anchor="start">BONUS vs REWEIGHT — same 48M + Gate B</text>
+<text x="62" y="624" font-size="20" fill="#50647a" font-weight="400" text-anchor="start">Example: A = +1; three turns; valid binary outcomes.</text>
+<text x="62" y="657" font-size="19" fill="#50647a" font-weight="400" text-anchor="start">ARM: executed wins / alternative wins / no label</text>
+<text x="62" y="699" font-size="21" fill="#182b44" font-weight="700" text-anchor="start">Outcome only</text>
+<text x="333" y="699" font-size="22" fill="#182b44" font-weight="400" text-anchor="start" class="mono">[1.00, 1.00, 1.00]</text>
+<text x="62" y="733" font-size="21" fill="#182b44" font-weight="700" text-anchor="start">Add bonus (β = 0.5)</text>
+<text x="333" y="733" font-size="22" fill="#182b44" font-weight="400" text-anchor="start" class="mono">[1.40, 0.90, 1.00]</text>
+<text x="62" y="767" font-size="21" fill="#182b44" font-weight="700" text-anchor="start">Reweight (λ = 0.5)</text>
+<text x="333" y="767" font-size="22" fill="#182b44" font-weight="400" text-anchor="start" class="mono">[1.32, 0.80, 0.88]</text>
+<text x="62" y="813" font-size="19" fill="#50647a" font-weight="400" text-anchor="start">Reweight preserves the trajectory’s mean A and its sign.</text>
+<text x="40" y="891" font-size="21" fill="#50647a" font-weight="400" text-anchor="start">Shared: K = 5, q = 20% label attempts, β = 0.5. ARM credit covers executed reasoning + action tokens.</text>
+<text x="40" y="920" font-size="18" fill="#50647a" font-weight="400" text-anchor="start">These are method illustrations, not recorded trajectories. Exact formulas and error handling are in ARM_SUMMARY.md.</text>
+</svg>

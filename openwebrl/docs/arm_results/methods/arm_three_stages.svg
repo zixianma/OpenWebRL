@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="590" viewBox="0 0 1500 590" role="img" aria-labelledby="title desc">
+<title id="title">Three ways to use an action reward model</title><desc id="desc">Inference uses ARM to choose an action now. Offline learning distills saved ARM preferences. Online RL uses ARM to change turn credit during PPO. Only inference-time selection requires ARM at deployment.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif} .mono{font-family:monospace}</style>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>
+<rect x="0" y="0" width="1500" height="590" rx="0" fill="#fff" stroke="none" stroke-width="2"/>
+<text x="42" y="53" font-size="36" fill="#182b44" font-weight="700" text-anchor="start">Three ways to use ARM</text>
+<text x="42" y="88" font-size="22" fill="#50647a" font-weight="400" text-anchor="start">Same signal: which reasoning + action response does ARM prefer at this browser state?</text>
+<rect x="42" y="117" width="436" height="432" rx="14" fill="#f8fafc" stroke="#d6dfeb" stroke-width="2"/>
+<text x="62" y="152" font-size="21" fill="#2563b0" font-weight="700" text-anchor="start">1  INFERENCE</text>
+<text x="62" y="184" font-size="24" fill="#182b44" font-weight="700" text-anchor="start">Choose the action now</text>
+<rect x="60" y="207" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="260" y="236" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">Actor samples 5 responses</text>
+<text x="260" y="260" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">at the current state</text>
+<path d="M260,283 L260,296" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="60" y="301" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="260" y="330" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">ARM selects one response</text>
+<text x="260" y="354" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">ScalarRM scores; SelectionARM compares</text>
+<path d="M260,377 L260,390" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="60" y="395" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="260" y="424" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">Execute the selected action</text>
+<text x="260" y="448" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">repeat at every browser turn</text>
+<text x="260" y="529" font-size="20" fill="#2563b0" font-weight="700" text-anchor="middle">Deployment: actor + ARM</text>
+<rect x="532" y="117" width="436" height="432" rx="14" fill="#f8fafc" stroke="#d6dfeb" stroke-width="2"/>
+<text x="552" y="152" font-size="21" fill="#7350a2" font-weight="700" text-anchor="start">2  OFFLINE LEARNING</text>
+<text x="552" y="184" font-size="24" fill="#182b44" font-weight="700" text-anchor="start">Learn from saved preferences</text>
+<rect x="550" y="207" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="750" y="236" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">Saved states + preferences</text>
+<text x="750" y="260" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">retain eligible training examples</text>
+<path d="M750,283 L750,296" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="550" y="301" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="750" y="330" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">Filtered SFT or DPO</text>
+<text x="750" y="354" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">imitate chosen / prefer chosen to rejected</text>
+<path d="M750,377 L750,390" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="550" y="395" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="750" y="424" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">Train the actor offline</text>
+<text x="750" y="448" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">C2, 1A, joint SFT and joint DPO</text>
+<text x="750" y="529" font-size="20" fill="#7350a2" font-weight="700" text-anchor="middle">Deployment: single trained actor</text>
+<rect x="1022" y="117" width="436" height="432" rx="14" fill="#f8fafc" stroke="#d6dfeb" stroke-width="2"/>
+<text x="1042" y="152" font-size="21" fill="#14776c" font-weight="700" text-anchor="start">3  ONLINE RL</text>
+<text x="1042" y="184" font-size="24" fill="#182b44" font-weight="700" text-anchor="start">Change credit during learning</text>
+<rect x="1040" y="207" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="1240" y="236" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">Actor collects fresh rollouts</text>
+<text x="1240" y="260" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">terminal judge provides task outcome</text>
+<path d="M1240,283 L1240,296" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1040" y="301" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="1240" y="330" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">ARM labels sampled turns</text>
+<text x="1240" y="354" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">executed response + 4 alternatives</text>
+<path d="M1240,377 L1240,390" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1040" y="395" width="400" height="72" rx="9" fill="#fff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="1240" y="424" font-size="21" fill="#182b44" font-weight="700" text-anchor="middle">PPO uses outcome + ARM signal</text>
+<text x="1240" y="448" font-size="16" fill="#50647a" font-weight="400" text-anchor="middle">add a bonus or reweight turn credit</text>
+<text x="1240" y="529" font-size="20" fill="#14776c" font-weight="700" text-anchor="middle">Deployment: single trained actor</text>
+<text x="42" y="578" font-size="19" fill="#50647a" font-weight="400" text-anchor="start">ARM judges local preference; the terminal outcome judge determines task success.</text>
+</svg>
