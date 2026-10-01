@@ -27,7 +27,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [This week's priorities: the mixed-only pair and historical Gate B through90](ARM_INTEGRATION_PLAN.md#arm-weekly-priority-20260927).
 [Historical Gate B training100 and full300 evaluation verified; allocation released](ARM_INTEGRATION_PLAN.md#arm-gate-b-to100-20260928).
-[Mixed-only pair to90 prepared: unchanged recipes, full300 at70/80/90; proposed bonus8H200×32h and reweight8H200×24h, exact resource approval pending](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930).
+[Mixed-only pair to90 approved and queued: bonus338904→338906 and reweight338905; full300 at70/80/90, unchanged recipes and bounded budgets](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930).
 [Mixed-only pair to60 completed: twelve full300 milestones, final checkpoints and all3,600 saved attempts verified; original approvals preserved](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to60-20260928).
 [Exact methods: lambda0.5, matched relaxed gate B and no failure auxiliary](ARM_INTEGRATION_PLAN.md#arm-outcome-aware-reweighting-20260926).
 [Review: proposed outcome-supervised reward versus ORM, PRIME and SelectionARM—input/label/loss table, diagram, credit-assignment example and open alternative](ARM_INTEGRATION_PLAN.md#arm-outcome-orm-prime-comparison).

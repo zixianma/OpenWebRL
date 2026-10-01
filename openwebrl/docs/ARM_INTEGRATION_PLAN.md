@@ -67,7 +67,7 @@ approved16h cap includes failed attempts; no automatic budget extension.
 The running335681 controller and its scientific settings remain unchanged.
 
 <a id="arm-mixed-pair-to90-20260930"></a>
-### Mixed-only bonus and reweight: prepared continuation through90 — September30
+### Mixed-only bonus and reweight: approved continuation through90 — September30
 
 The user requested continuing both existing mixed-only relaxed-B lineages to90.
 This is an unchanged continuation, preserving their original iteration0 start,
@@ -84,7 +84,7 @@ use `openwebrl-evals`. The controller owns and awaits each stage and skips only
 verified existing cohorts. Compare matched checkpoints, including the70/80/90
 mean as a descriptive checkpoint aggregate, not independent training seeds.
 
-| Lineage | Recent iteration mean | Expected additional walltime including evals/startup | Proposed additional cap | Allocation split |
+| Lineage | Recent iteration mean | Expected additional walltime including evals/startup | Approved additional cap | Allocation split |
 | --- | ---: | --- | --- | --- |
 | Mixed-only bonus + relaxed B |47.61min |26–29h |8 H200 ×32h |24h, then up to8h |
 | Mixed-only reweight + relaxed B |37.72min |21–23h |8 H200 ×24h |Up to24h |
@@ -95,22 +95,30 @@ response-index credit,K5,q20%,beta0.5,lambda0.5 and zero auxiliary all-failure
 groups. Expected walltimes use the latest ten complete non-evaluation checkpoint
 intervals; recent full300 evaluations take27–32min. Caps include restoration,
 evaluations and every retry; stop and release GPUs when the endpoint is verified.
-The total requested additional cap is448 H200-hours. The bonus estimate begins
+The approved additional cap is448 H200-hours. The bonus estimate begins
 at60; predecessor337983 has now completed60 and its evaluation. The controller
 also handles missing parent milestones before advancing, if a recovery requires it.
 
-**Prepared, exact resource approval pending; no new allocation submitted.**
+**Approved and submitted September30:** bonus **338904** (24h), followed by
+**338906** (8h, `afterok:338904`); reweight **338905** (24h). Initial jobs are
+queued for priority; the bonus successor waits for its predecessor. Resources
+were verified as8 H200/64 CPUs/960GiB per allocation, with separate115,200-second
+bonus and86,400-second reweight ledgers. No previous unused budget was added.
+
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
-running to60 controller. Nine regression tests cover milestone ordering,
+completed to60 controller. Nine regression tests cover milestone ordering,
 retry-budget accounting, missing resource approval, inherited cohort lineage,
 state preservation and the shared execution lock that rejects an overlapping
 old/new writer. Both native argument/storage preflights and evaluation project,
 cohort-size and rollout-persistence checks passed. Every paid attempt still
 requires actual GPU model/optimizer restoration before useful training.
-Prepared plans, fingerprints and the unapproved resource proposal are in runtime
-`arm-turn-bonus-preparation/mixed-reweight-20260927/to90-20260930/`.
-After exact approval, launch both from their verified60 checkpoints;
-register all IDs and count consumed time separately for each new cap.
+Plans, fingerprints, explicit approval, submission receipts and attempt ledgers
+are in runtime `arm-turn-bonus-preparation/mixed-reweight-20260927/to90-20260930/`.
+The supervisor follows all three IDs, checks health every minute and requests
+active-agent review hourly or sooner for failures/stalls/completion. The persistent
+service is `openwebrl-arm-supervisor-20260930.service`; final completion requires
+an independent checkpoint/evaluation audit. Preserve successor dependencies on
+recovery and count every attempt against its original variant cap.
 
 <a id="arm-mixed-pair-to60-20260928"></a>
 **September30 completion update:** both lineages reached durable60/native59,
