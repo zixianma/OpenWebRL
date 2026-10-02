@@ -14,7 +14,7 @@
   "judge_id": "gpt-4.1/action_history",
   "primary_tasks": 2000,
   "primary_attempts": 10000,
-  "status": "running_startup",
+  "status": "running_validator_recovery",
   "approved": true,
   "prepared_utc": "2026-10-02",
   "native_parse_passed": true,
@@ -28,12 +28,24 @@
     6,
     8
   ],
-  "collection_started": false,
-  "primary_attempts_completed": 0,
+  "collection_started": true,
+  "primary_attempts_completed": 278,
   "selected_native_sha256": "4f8f5b0c8b128934727d49fcdac32ed665ac2c64d562562236d7247f4060c6a6",
   "scientific_protocol_unchanged": true,
   "raw_task_data_public": false,
   "job_ids": [
+    "340180",
+    "340181",
+    "340182",
+    "340183",
+    "340184",
+    "340185",
+    "340186",
+    "340187"
+  ],
+  "submitted_utc": "2026-10-02",
+  "scheduler_running_jobs": 8,
+  "original_job_ids": [
     "340150",
     "340151",
     "340152",
@@ -43,6 +55,15 @@
     "340156",
     "340157"
   ],
-  "submitted_utc": "2026-10-02",
-  "scheduler_running_jobs": 8
+  "preserved_attempts_on_recovery": 278,
+  "validator_regression_tests_passed": 17,
+  "native_reward_values": [
+    -1,
+    0,
+    1
+  ],
+  "binary_success_definition": "native reward == 1",
+  "gpu_seconds_consumed_before_recovery": 5850,
+  "replacement_gpu_seconds": 224340,
+  "budget_extended": false
 }

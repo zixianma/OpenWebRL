@@ -8455,6 +8455,21 @@ primary attempts collected at the launch check. Each has a
 separate8h total budget including retries; completion requires an independent
 artifact review. The existing mixed-only RL continuations remain supervised.
 
+**October2 validator recovery:** shard340152 exposed a screen-only assertion
+which rejected native reward−1. OpenWebRL deliberately emits−1 for an actor
+formatting failure; it is a valid failed attempt, distinct from an unavailable
+browser/judge result. The fix retains raw rewards−1/0/1 and uses `reward == 1`
+for binary success, matching native evaluation. Seventeen regression tests,
+native CPU parsing, and the saved failing archive/verdict passed verification.
+All affected workers were replaced as340180–340187;278 completed primary
+attempts were retained, including the recovered−1 record, and judge ledgers were
+preserved. Old attempts consumed5,850 GPU-seconds; replacements request224,340
+GPU-seconds, together63.94 GPU-hours within the original64. The replacements
+started successfully; no compute or API budget was added. A later all-failure
+selection means five valid attempts with **zero binary successes**, with native
+formatting-failure counts reported separately. No task IDs or raw examples are
+published with this receipt.
+
 The following records the superseded single-allocation proposal for provenance.
 
 **Latest user decision:** choose **score ≥5, then website-balanced weighted
