@@ -8590,6 +8590,54 @@ Implementation: `scripts/run_arm_task_rescue.py`,
 Private preparation and shard manifests:
 `task-pool-expansion-20260922/curation-v3-20260929/actor-arm-allfailure-20261002/`.
 
+<a id="arm-expanded-outcome-baseline-20261002"></a>
+#### Outcome-only baseline with the additional2K tasks — October2 preparation
+
+User requested the data-only baseline first. The frozen private union contains
+**4,102 tasks: original2,102 + all2,000 selected new tasks**, with zero cross-pool
+task-ID or normalized-exact-instruction overlap. The new cohort is retained in
+full, including the78 rescued tasks and the actor-screening outcome categories;
+no static outcome/ARM filtering, teacher answers, or extra reward is introduced.
+The unchanged native shuffled sampler gives new tasks48.76% of pool membership;
+actual accepted shares may differ after dynamic filtering.
+
+Start from **OpenWebRL-4B-SFT at iteration0**, with fresh optimizer, scheduler,
+data cursor and W&B lineage. Preserve48 accepted groups ×5 rollouts, native
+nonempty/nonzero-reward-variance filtering and group normalization, GRPO/PPO2,
+global batch256, microbatch1, constant LR1e−6, Adam(0.9,0.98), weight decay0.1,
+clip0.2/0.28, KL0, entropy0. Training remains T0.8/top_p1/top_k−1,1,024 response
+tokens,32K context,15 turns, full textual history/one current screenshot, local
+browsers and GPT-4.1/action_history. All-failure groups with identical native
+rewards remain filtered; native formatting penalties are preserved unchanged.
+No ARM selection, bonus, reweighting or auxiliary failure groups are enabled.
+
+Proposed first allocation: **8 H200 ×24h,64 CPUs,960GiB**, TP2/DP4,64 browsers,
+48GiB cache, including startup validation, retries and full300 local/T0/GPT-4.1
+evaluations10/20. First checkpoint endpoint20; release unused time after
+verified evaluation20. Expected terminal judging is roughly$100–200; exact
+compute/API authorization and final launcher preflight are still pending.
+Continuation toward90 needs its own remaining-budget review/approval. Compare
+historical outcome-only results at matched iterations, also reporting Adam
+updates and browser cost; this first historical comparison remains exploratory.
+
+**Iteration is not a task-pool epoch.** At90,48 ×90 =4,320 accepted query groups,
+or1.05 pool-size equivalents, which can contain repeated tasks. The preserved
+outcome-only90 data cursor records11,856 fresh task-group draws
+(5 ×2,102 +1,346), including later-rejected/aborted work. At that same draw rate,
+a4,102-task pool would be traversed2.89 times; that is a sizing reference, not a
+prediction that the expanded pool has the same acceptance rate. Track the real
+sampler epoch/offset, distinct proposed/completed/accepted tasks and source
+shares. Two PPO epochs reuse a collected batch; they do not mean two new passes
+through the task dataset.
+
+Data/schema/union checks and parquet round-trip verification passed. Prepared
+files and per-task source membership stay private under
+`task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
+`combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
+Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
+No training allocation has been submitted for this experiment.
+
+
 <details>
 <summary>Launch protocol, validator recovery and superseded allocation proposal</summary>
 
