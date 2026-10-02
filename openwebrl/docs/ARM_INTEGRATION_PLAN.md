@@ -237,6 +237,25 @@ collection with the fixes still require live validation. Source
 receipts are under runtime `to90-20260930/async-label-recovery-20261002/`.
 The36-checkpoint2.03TiB cleanup remains unapproved; no deletion was performed.
 
+**October2,05:30 PDT validation:** reweight340423 restored89 correctly and
+completed90/native89 with1,170 Adam updates. Independent metadata, scheduler,
+cursor, shard-extent and sampled CPU tensor checks pass. Collection90 took13.13min
+and had no recorded label timeouts; all12 optimizer steps were finite. The
+unchanged reweight recipe produced6.76% perturbation/outcome RMS, with no fallback
+groups and trajectory-mean preservation error below3e-16. Its full300 evaluation90
+is running under local browsers/GPT-4.1/action_history/T0; all80 rollout/verdict
+pairs present at the startup audit passed identity and archive checks. This is
+partial collection, not a final success-rate estimate.
+
+Personal quota headroom fell to1.53TiB, below the unchanged2TiB startup guard.
+Bonus340425 was intentionally held **before allocation**, consuming zero time;
+it still resumes88/1,084 Adam. The exact36-directory cleanup proposal was rechecked
+and approval requested. Release the same job when the quota guard passes; do not
+reset its budget or delete the proposed checkpoints without explicit approval.
+Profiling has8,761/10,000 independently checked primary attempts. Shard5 completed
+all1,250, with W&B finished, Slurm exit0 and its GPU released; the other seven
+shards continue. Task payloads remain private.
+
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
 completed to60 controller. Nine regression tests cover milestone ordering,
 retry-budget accounting, missing resource approval, inherited cohort lineage,
