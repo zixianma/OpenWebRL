@@ -338,9 +338,10 @@ at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
 continuations completed both80 evaluations, all verified. Bonus resumed from80,
 then stopped during85 on browser startup failures, preserving durable84.
-Reweight remains active; [bonus recovery339971](ARM_INTEGRATION_PLAN.md#arm-mixed-quota-recovery-20261001)
-is queued from84 within its original budget after quota grace cleared the storage
-check. The browser-health mitigation passes CPU tests; live restoration and
+Reweight subsequently saved87, then collection88 exposed synchronous GPFS log
+creation blocking the rollout event loop. [Recoveries339971/340029](ARM_INTEGRATION_PLAN.md#arm-mixed-quota-recovery-20261001)
+are queued from bonus84/reweight87 within their original budgets. The isolated
+asynchronous log-I/O and browser-health fixes pass CPU tests; live restoration and
 collection validation are pending. Both retain their original optimizer,
 scheduler, data cursor and W&B identities.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48

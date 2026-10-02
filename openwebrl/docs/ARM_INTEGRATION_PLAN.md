@@ -170,6 +170,31 @@ CPU resume plan, patch, diagnosis, tests and submission receipt are in runtime
 `to90-20260930/browser-health-recovery-20261001/`; the exact pending targets are
 `to90-20260930/quota-recovery-20261001/next-checkpoint-prune-paths.txt`.
 
+**October1,22:54 PDT shared-filesystem I/O recovery:** reweight338905 saved87
+(native86,1,138 Adam updates), then collection88 slowed to11/48 accepted groups
+after21 minutes. Two live stack samples placed the common rollout event loop
+inside synchronous browser-log `open()` on GPFS. A direct compute-node probe
+took10.177s on GPFS versus0.000082s in `/tmp`; browser/exit/judge timeouts coincided
+with an idle GPU sample. This identifies a blocking operation in our code; the
+underlying filesystem latency cause remains unconfirmed.
+
+Stopped338905 at the independently verified87 checkpoint, preserving partial88
+with no88 optimizer stage. It consumed66,685/86,400 approved seconds. Replacement
+**340029** reserves **8 H200 ×5h**,64 CPUs/960GiB, leaving1,715 unreserved seconds;
+no budget was added. Bonus339971 was briefly held while still pending and then
+released with the same fix, preserving its8h reservation and84 resume point.
+Both use frozen source `reference-arm-mixed-browser-health-20261001-v2`.
+
+The v2 fix offloads browser-log directory creation and file opening to a thread,
+with protected cleanup of late file descriptors if cancellation occurs. Logs stay
+on shared storage. Eleven browser tests cover responsiveness, repeated
+cancellation, cleanup and HTTP health checks; nine continuation regressions and
+both native argument preflights pass. The previous source remains intact. Both
+jobs are queued; actual GPU restoration and the first collection remain pending,
+and evaluation90 has not started. Supervisor pointers and budget ledgers follow
+339971/340029. Detailed live evidence is in runtime
+`supervisor/reweight338905-gpfs-open-evidence.json` under the mixed-pair preparation.
+
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
 completed to60 controller. Nine regression tests cover milestone ordering,
 retry-budget accounting, missing resource approval, inherited cohort lineage,
