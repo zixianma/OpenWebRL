@@ -8525,8 +8525,8 @@ Private final dispositions and all per-task evidence are preserved under the
 runtime control below, in `sharded-20261002/`.
 
 <a id="arm-task-pool-guided-682-20261002"></a>
-**Actor + ARM follow-up, prepared October2:** the user requested guided rollouts
-on every one of the682 five-valid-failure tasks. The prepared default is **one
+**Actor + ARM follow-up, launched October2:** the user requested guided rollouts
+on every one of the682 five-valid-failure tasks. The approved collection is **one
 fresh guided rollout/task**, retaining the original SFT actor and screening
 decoding/horizon (T0.8,top_p1,top_k−1,1,024 tokens/turn,32K context,15 turns).
 At every turn, sample five full reasoning/action proposals; the released
@@ -8545,21 +8545,31 @@ calls before proceeding. This is a guided rescue-yield measurement on an
 actor0/5-selected pool; without fresh actor-only retries it does not isolate
 ARM's causal advantage over additional search. No policy training is included.
 
-**Prepared resource request; not submitted:** four parallel jobs, each
+**Approved and running: jobs340648–340651**, four parallel jobs, each
 **2 H200 ×3h,16 CPUs,240GiB RAM**; **24 GPU-hours total**, including retries.
 Each job uses one TP1 actor GPU, one ARM GPU and eight local browsers, with
 171/171/170/170 tasks. Judge budgets are$5/750 requests per shard, totaling
 **$20/3,000 calls**. Three hours/job is a cap; release resources when finished.
 The prior eight-task guided pilot averaged174 trajectory-seconds/attempt, but
 it used a different actor/task pool; that estimate is only a sizing reference.
-The new paired serving path must pass actual GPU/browser startup after approval.
+All four released-selector GPU health and real selection preflights passed.
+The first two tasks on each shard are now saved and independently validated:
+eight valid trajectory/verdict archives, full five-candidate traces, and no ARM
+fallbacks. One of these eight was rescued with a real GPT-4.1 success verdict.
+These are startup observations, not the final682-task result. Collection is
+expanding through each shard after its startup gate passes.
 
 Seventeen CPU tests and the assembled native argument preflight passed,
 including original-response execution, full candidate traces, immutable cohort
 and actor/judge identity, denominator preservation and retry-budget limits.
-Exact resource/judge approval and storage clearance are pending. The unchanged
-2TiB launch guard currently fails; the separate36-directory checkpoint cleanup
-proposal remains unapproved. No checkpoint or rollout deletion was performed.
+The user approved these exact compute/judge caps and the separate36-directory
+checkpoint cleanup. Only those listed nonmilestone checkpoint directories were
+deleted (about2.034TiB); protected checkpoints and all rollouts/verdicts remain.
+Personal quota headroom is2.69TiB and the unchanged2TiB launch guard passes.
+The existing mixed-bonus340425 continuation was also released within its
+already approved8h cap. Active-agent supervision follows all five job IDs,
+preserves per-shard retry budgets, and independently verifies saved archives,
+verdicts and full candidate traces before completion.
 Implementation: `scripts/run_arm_task_rescue.py`,
 `scripts/run_arm_task_rescue_2gpu.sbatch`, `openwebrl/arm_task_rescue.py`.
 Private preparation and shard manifests:
