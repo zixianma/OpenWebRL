@@ -47,7 +47,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Full browser availability audit complete:96,779 available URLs covering155,512 candidate tasks;21,328 inconclusive and7,654 unavailable URLs; instruction quality/actor difficulty still unassessed](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-full-20260929).
 [Benchmark-site grouping:59,115 available tasks on185 benchmark-associated sites;96,397 on82,021 sites with no known match; WebVoyager/OM2W/WebTailBench/DeepShop flags and WebTailBench coverage caveat](ARM_INTEGRATION_PLAN.md#arm-task-pool-benchmark-websites-20260930).
 [Difficulty-first 2K vs. weighted coverage over score≥5: exact task mix, 61.25% overlap and local reviews](ARM_INTEGRATION_PLAN.md#arm-task-pool-difficulty-comparison-20260930).
-[Selected ≥5 weighted2K pool: five-attempt SFT actor screen prepared; exact compute/judge budget pending](ARM_INTEGRATION_PLAN.md#arm-task-pool-actor-screen-20260930) · [Local selected-task review](http://localhost:8765/arm_min5_weighted_tasks.html).
+[Selected ≥5 weighted2K pool: eight one-GPU screening shards active;64GPUh/$150 judge cap approved](ARM_INTEGRATION_PLAN.md#arm-task-pool-actor-screen-20260930) · [Local selected-task review](http://localhost:8765/arm_min5_weighted_tasks.html).
 [Review all 2,000 selected tasks and difficulty-aware sampling proposal](ARM_INTEGRATION_PLAN.md#weighted-screening-cohort-frozen--september30) · [Local task-review page](http://localhost:8765/arm_selected_tasks.html).
 [OM2W easy/medium/hard: outcome-only, Additive and Gate B, iteration90/three stealth repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930).
 [Diversity clustering and sampling:59,115 tasks, interactive cluster map, weighted coverage vs. three alternatives](ARM_INTEGRATION_PLAN.md#arm-task-pool-clustering-20260930) · [Dashboard HTML](arm_results/rl_integration/task-pool-clusters.html).
@@ -63,8 +63,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Both mixed-only runs completed60: bonus37.67% /48.71% (fixed10041.00% /54.67%); reweight36.67% /47.21%; all12cohorts verified, GPUs released;40/50/60 overall means36.56% vs36.33%](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 [Mixed-only bonus70 verified:38.33% /48.94% full300 (235 valid),44.00% /57.14% fixed100; all300 saved attempts checked; both continuations remain active](ARM_RESULTS.md#arm-mixed-bonus-iter70-results-20261001).
 [Mixed-only reweight70 verified:38.67% /49.57% full300 (234 valid),38.00% /50.00% fixed100; one success above bonus70; training continues](ARM_RESULTS.md#arm-mixed-reweight-iter70-results-20261001).
-[Mixed-only bonus80 verified:36.00% /48.87% full300 (221 valid),35.00% /50.72% fixed100; durable84 preserved, tested recovery339971 queued within original budget](ARM_RESULTS.md#arm-mixed-bonus-iter80-results-20261001).
-[Mixed-only reweight80 verified:39.33% /51.08% full300 (231 valid),37.00% /49.33% fixed100; durable87 preserved, tested log-I/O recovery340029 queued within original budget](ARM_RESULTS.md#arm-mixed-reweight-iter80-results-20261001).
+[Mixed-only bonus80 verified:36.00% /48.87% full300 (221 valid),35.00% /50.72% fixed100; bonus339971 continues toward90 with checkpoints preserved](ARM_RESULTS.md#arm-mixed-bonus-iter80-results-20261001).
+[Mixed-only reweight80 verified:39.33% /51.08% full300 (231 valid),37.00% /49.33% fixed100; durable89 preserved, tested label-I/O recovery340401 queued within original budget](ARM_RESULTS.md#arm-mixed-reweight-iter80-results-20261001).
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

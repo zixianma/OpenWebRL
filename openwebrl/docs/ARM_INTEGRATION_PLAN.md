@@ -195,6 +195,29 @@ and evaluation90 has not started. Supervisor pointers and budget ledgers follow
 339971/340029. Detailed live evidence is in runtime
 `supervisor/reweight338905-gpfs-open-evidence.json` under the mixed-pair preparation.
 
+<a id="arm-mixed-async-label-recovery-20261002"></a>
+
+**October2,04:10 PDT label-I/O recovery:** reweight340029 saved89/native88
+with1,158 Adam updates, then the startup guard stopped collection90 after31/100
+mature browser starts lacked readiness. Its8,641 seconds are charged, leaving
+11,074 seconds in the original24h approval. No iteration90 update occurred.
+A live stack sample from the matching bonus runtime caught synchronous ARM label
+`write_json()` blocking the rollout event loop in GPFS `open()`; this remained
+after the browser-log fix. The replacement source moves label and telemetry
+writes to threads, serializes telemetry writers, and awaits durable writes even
+under repeated cancellation. Health deadlines, rewards, topology and training
+state are unchanged. Twenty-nine frozen-source tests and native argument parsing
+pass; a compute-node probe persisted four files over11.37s while its20ms heartbeat
+never paused longer than22ms. Sustained browser health still requires live validation.
+
+Replacement **340401** was submitted and released for **8 H200 ×3h04m**,
+64 CPUs/960GiB, resuming89 and owning full300 evaluation90. Prior attempts consume
+75,326 seconds; the11,040-second reservation leaves34 unreserved seconds, with
+no new budget. Bonus339971 continues independently. Source
+`reference-arm-mixed-async-label-20261002-v3`, diagnosis, tests, resume plan and
+receipts are under runtime `to90-20260930/async-label-recovery-20261002/`.
+The36-checkpoint2.03TiB cleanup remains unapproved; no deletion was performed.
+
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
 completed to60 controller. Nine regression tests cover milestone ordering,
 retry-budget accounting, missing resource approval, inherited cohort lineage,
