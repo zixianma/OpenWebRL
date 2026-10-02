@@ -1,0 +1,138 @@
+{
+  "checked_epoch": 1790945592.1584945,
+  "verified_complete": true,
+  "endpoint": "Mixed-only reweight + relaxed Gate B through90 and full300 evaluations10..90",
+  "completed_iterations": 90,
+  "adam_updates": 1170,
+  "final_checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-340423-iter90/runtime/iter_0000089",
+  "scheduler_offset": 0,
+  "checkpoint_metadata_extents_cursor_and_sampled_tensors_verified": true,
+  "final_eval_gpu_restore_verified": true,
+  "milestones": [
+    {
+      "iteration": 10,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration10-audit.json",
+      "audit_sha256": "7c4118b7f6527f737332b209d308ba1d683063400dfab4020d4a6dce69305583",
+      "successes": 82,
+      "valid": 240,
+      "overall": 0.2733333333333333,
+      "valid_only": 0.3416666666666667,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 20,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration20-audit.json",
+      "audit_sha256": "a163bdd26375f9d7bf5332fdba4dc3662b1a99efe15b04a14224e76dca88cbf3",
+      "successes": 97,
+      "valid": 227,
+      "overall": 0.3233333333333333,
+      "valid_only": 0.42731277533039647,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 30,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration30-audit.json",
+      "audit_sha256": "cfd750a410e5f9ad428a9f902cf9d8dfa3a5d70e4c93d04e86c46f17737434a3",
+      "successes": 90,
+      "valid": 219,
+      "overall": 0.3,
+      "valid_only": 0.410958904109589,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 40,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration40-audit.json",
+      "audit_sha256": "ea40bbb57830c0adcd204313c22e0431c66acb691d43f537e7958abd1fa74137",
+      "successes": 106,
+      "valid": 225,
+      "overall": 0.35333333333333333,
+      "valid_only": 0.4711111111111111,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 50,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration50-audit.json",
+      "audit_sha256": "37c46971c93db425a369c84f4bf64a0d33d0ea858a3739b588e8c85d50d78670",
+      "successes": 111,
+      "valid": 237,
+      "overall": 0.37,
+      "valid_only": 0.46835443037974683,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 60,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration60-audit.json",
+      "audit_sha256": "4f1b08c9a64e8e6540076d48213a55a092b32a9455aa0da834d156148c94c90d",
+      "successes": 110,
+      "valid": 233,
+      "overall": 0.36666666666666664,
+      "valid_only": 0.4721030042918455,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 70,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration70-audit.json",
+      "audit_sha256": "e3e5ac4226962046d13ff3d121773f4ad469a049b75aa747b78fd48fd3bec855",
+      "successes": 116,
+      "valid": 234,
+      "overall": 0.38666666666666666,
+      "valid_only": 0.49572649572649574,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 80,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration80-audit.json",
+      "audit_sha256": "5a26accb05e5b472ff0d801a3d2061df3f724885986e4fb8a4589e1f0d6fe58c",
+      "successes": 118,
+      "valid": 231,
+      "overall": 0.3933333333333333,
+      "valid_only": 0.5108225108225108,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 90,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-reweight-iteration90-audit.json",
+      "audit_sha256": "0d089f316974091cc399c5fbb9932db8603c000ff50be69b89ef8d5b90c884c8",
+      "successes": 113,
+      "valid": 227,
+      "overall": 0.37666666666666665,
+      "valid_only": 0.4977973568281938,
+      "task_ids_and_archives_rechecked": true
+    }
+  ],
+  "saved_task_records": 2700,
+  "saved_archives": 2700,
+  "wandb_final_states": {
+    "openwebrl/arm-mixed-reweight-334494": "finished",
+    "openwebrl-evals/arm-mixed-reweight-iter90-340423": "finished"
+  },
+  "all_attempts": [
+    {
+      "job_id": "338905",
+      "scheduler_state": "CANCELLED by 1385309",
+      "charged_seconds": 66685
+    },
+    {
+      "job_id": "340029",
+      "scheduler_state": "FAILED",
+      "charged_seconds": 8641
+    },
+    {
+      "job_id": "340401",
+      "scheduler_state": "CANCELLED by 1385309",
+      "charged_seconds": 184
+    },
+    {
+      "job_id": "340423",
+      "scheduler_state": "COMPLETED",
+      "charged_seconds": 4764
+    }
+  ],
+  "approved_extension_seconds": 86400,
+  "consumed_extension_seconds": 80274,
+  "unused_extension_seconds_released": 6126,
+  "consumed_extension_gpu_hours": 178.38666666666666,
+  "prior_to60_and_initial_budgets_separate": true,
+  "allocation_released": true,
+  "no_further_job_needed_for_this_endpoint": true
+}

@@ -256,6 +256,17 @@ Profiling has8,761/10,000 independently checked primary attempts. Shard5 complet
 all1,250, with W&B finished, Slurm exit0 and its GPU released; the other seven
 shards continue. Task payloads remain private.
 
+**October2,05:53 PDT endpoint verification:** reweight340423 completed and released
+its allocation. Evaluation90 is **37.67% overall /49.78% valid-only** on full300
+(113 successes,227 valid), and **39.00% /51.32%** on fixed100 (39 successes,76 valid).
+The independent endpoint audit rechecked all nine10–90 cohorts:2,700 saved
+archives/verdicts, exact task sets, final checkpoint counters and final W&B states.
+All four to90 attempts consumed80,274 of86,400 approved seconds;6,126 seconds were
+released unused and are not reassigned to bonus. [Results and verification](ARM_RESULTS.md#arm-mixed-reweight-iter90-results-20261002).
+Bonus remains held for storage with its checkpoint and remaining budget preserved;
+the36-directory cleanup is still unapproved. Profiling has9,499/10,000 verified
+attempts; shards2,5,6,7 are independently complete with their GPUs released.
+
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
 completed to60 controller. Nine regression tests cover milestone ordering,
 retry-budget accounting, missing resource approval, inherited cohort lineage,

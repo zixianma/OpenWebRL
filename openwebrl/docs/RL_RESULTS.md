@@ -36,6 +36,9 @@
 |  |40 |100 |231 |69 |33.33 |43.29 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 |  |50 |105 |234 |66 |35.00 |44.87 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 |  |60 |105 |230 |70 |35.00 |45.65 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
+|  |70 |103 |229 |71 |34.33 |44.98 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
+|  |80 |114 |229 |71 |38.00 |49.78 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
+|  |90 |101 |222 |78 |33.67 |45.50 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation) |
 | Mixed-only bonus + relaxed B |10 |92 |234 |66 |30.67 |39.32 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration10-audit.json) |
 |  |20 |92 |225 |75 |30.67 |40.89 |[September28 audit](arm_results/rl_integration/mixed-bonus-iteration20-audit.json) |
 |  |30 |96 |228 |72 |32.00 |42.11 |[September29 audit](arm_results/rl_integration/mixed-bonus-iteration30-audit.json) |
@@ -52,6 +55,7 @@
 |  |60 |110 |233 |67 |36.67 |47.21 |[September30 audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) |
 |  |70 |116 |234 |66 |38.67 |49.57 |[October1 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json) |
 |  |80 |118 |231 |69 |39.33 |51.08 |[October1 audit](arm_results/rl_integration/mixed-reweight-iteration80-audit.json) |
+|  |90 |113 |227 |73 |37.67 |49.78 |[October2 audit](arm_results/rl_integration/mixed-reweight-iteration90-audit.json) |
 
 ## Mixed-only40/50/60 checkpoint mean · full300
 
