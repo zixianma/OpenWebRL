@@ -141,15 +141,32 @@ health checks timed out; the underlying event-loop/server/node cause is not
 established. A CPU regression reproduces the checker rejecting a healthy endpoint
 whose response takes1.2s. The prepared fix allows up to5s per health request,
 clipped to the unchanged30s overall startup deadline, and records exception type
-and attempt count. Five health, three cleanup and six guard tests pass. The live
-frozen source is unchanged; recovery still requires an isolated source, actual84
-GPU restoration and bounded64-browser validation before production continuation.
+and attempt count. Five health, three cleanup and six guard tests pass.
 
-Restart is blocked by personal quota below the2TiB guard. A separate exact list
-of36 obsolete checkpoints (61–69 and71–79 from both completed stages;2.03TiB)
-awaits explicit deletion approval. The earlier87-directory approval does not
-cover these targets. No new deletion or replacement job has occurred. The
-validated CPU resume plan, patch, diagnosis and test receipt are in runtime
+**October1,22:06 PDT recovery submission:** the filesystem activated its7-day
+soft-quota grace period. The unchanged startup policy now passes using9.78TiB
+of hard-limit headroom and at least48h remaining grace. No additional checkpoints
+were deleted. Replacement **339971** is queued for **8 H200 ×8h**,64 CPUs/960GiB,
+from the remaining original bonus approval:58,431 seconds consumed +28,800
+reserved leaves27,969 unreserved seconds. It resumes durable84/1,048 Adam updates
+and owns training90 followed by full300 evaluation90; completed70/80 cohorts stay
+intact.
+
+The recovery uses a separately frozen source and isolated controllers; active
+reweight source and controllers are unchanged. The frozen-source HTTP tests,
+nine continuation regressions, five first-collection gate cases and native
+argument parsing pass. Actual GPU model/optimizer restoration and the first
+64-browser collection remain unverified while queued. Before its first optimizer
+stage, the controller requires at least64 recorded browser starts and under30%
+missing readiness, matching the existing degradation threshold; the ongoing
+startup guard remains active. This tests the mitigation without claiming the
+underlying cause is established. TP2/DP4, microbatch1, batch256, PPO2,64 browsers,
+48GiB cache, rewards, optimizer/scheduler/cursor and W&B identity remain unchanged.
+
+The separate36-directory cleanup proposal (61–69 and71–79;2.03TiB) remains
+unapproved and was not executed; it no longer blocks this retry because quota
+grace satisfies the existing storage policy. The isolated source, controller,
+CPU resume plan, patch, diagnosis, tests and submission receipt are in runtime
 `to90-20260930/browser-health-recovery-20261001/`; the exact pending targets are
 `to90-20260930/quota-recovery-20261001/next-checkpoint-prune-paths.txt`.
 
@@ -162,7 +179,7 @@ cohort-size and rollout-persistence checks passed. Every paid attempt still
 requires actual GPU model/optimizer restoration before useful training.
 Plans, fingerprints, explicit approval, submission receipts and attempt ledgers
 are in runtime `arm-turn-bonus-preparation/mixed-reweight-20260927/to90-20260930/`.
-The supervisor follows all three IDs, checks health every minute and requests
+The supervisor follows each current replacement ID, checks health every minute and requests
 active-agent review hourly or sooner for failures/stalls/completion. The persistent
 service is `openwebrl-arm-supervisor-20260930.service`; final completion requires
 an independent checkpoint/evaluation audit. Preserve successor dependencies on

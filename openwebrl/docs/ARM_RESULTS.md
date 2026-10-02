@@ -338,8 +338,10 @@ at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
 continuations completed both80 evaluations, all verified. Bonus resumed from80,
 then stopped during85 on browser startup failures, preserving durable84.
-Reweight remains active; [bonus recovery](ARM_INTEGRATION_PLAN.md#arm-mixed-quota-recovery-20261001)
-awaits storage recovery and live validation. Both retain their original optimizer,
+Reweight remains active; [bonus recovery339971](ARM_INTEGRATION_PLAN.md#arm-mixed-quota-recovery-20261001)
+is queued from84 within its original budget after quota grace cleared the storage
+check. The browser-health mitigation passes CPU tests; live restoration and
+collection validation are pending. Both retain their original optimizer,
 scheduler, data cursor and W&B identities.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
