@@ -8447,9 +8447,13 @@ Launcher: `scripts/run_arm_task_screen_shards.py`; batch:
 accounting/browser-recovery tests passed; actual GPU/browser startup is still
 pending. The frozen source includes cancellation-safe browser cleanup, the
 health-request timeout correction and asynchronous browser-log opening. The
-prepared protocol remains GPT-4.1/action_history; the user’s earlier suggestion
-of GPT-6 Sol awaits clarification. **No screen job or judge call has launched;
-the exact new allocation and judge-spend cap await approval.**
+user approved GPT-4.1/action_history and the exact compute/judge caps on
+October2. **Submitted eight jobs340150–340157**, shards0–7 respectively; all
+are registered with the active agent supervisor and released to scheduling.
+All eight received resources immediately and entered model startup, with0
+primary attempts collected at the launch check. Each has a
+separate8h total budget including retries; completion requires an independent
+artifact review. The existing mixed-only RL continuations remain supervised.
 
 The following records the superseded single-allocation proposal for provenance.
 
