@@ -331,6 +331,7 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-reweight-iter70-results-20261001"></a>
 <a id="arm-mixed-bonus-iter80-results-20261001"></a>
 <a id="arm-mixed-reweight-iter80-results-20261001"></a>
+<a id="arm-mixed-bonus-iter90-results-20261002"></a>
 <a id="arm-mixed-reweight-iter90-results-20261002"></a>
 ## Mixed-only relaxed-B pair: iterations10–90 — September28–October2
 
@@ -339,12 +340,12 @@ at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
 continuations completed both80 evaluations, all verified. Reweight340423 has now
 completed90 with1,170 Adam updates; its checkpoint and full300 evaluation90 passed
-independent integrity checks. The allocation has been released. Bonus340425 retains durable88 and is
-held before allocation because personal storage is below its startup guard.
+independent integrity checks. Bonus340425 has also completed90 with1,106 Adam updates
+and its full300 evaluation. Both allocations have been released.
 [Recovery and storage status](ARM_INTEGRATION_PLAN.md#arm-mixed-async-label-recovery-20261002)
 record the tested label-I/O/checkpoint-discovery fixes and all consumed time.
 Both retain their original optimizer, scheduler, data cursor and W&B identities;
-bonus90 remains pending.
+both final90 checkpoints and all nine full300 milestones per lineage are verified.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -369,6 +370,7 @@ trajectory-mean-one weighting with lambda=.5.
 |  |60 |41.00% /54.67% |37.67% /48.71% |232 |
 |  |70 |44.00% /57.14% |38.33% /48.94% |235 |
 |  |80 |35.00% /50.72% |36.00% /48.87% |221 |
+|  |90 |38.00% /51.35% |40.67% /52.36% |233 |
 | Mixed-only reweight + relaxed B |10 |25.00% /34.72% |27.33% /34.17% |240 |
 |  |20 |31.00% /44.29% |32.33% /42.73% |227 |
 |  |30 |28.00% /43.75% |30.00% /41.10% |219 |
@@ -378,6 +380,14 @@ trajectory-mean-one weighting with lambda=.5.
 |  |70 |38.00% /50.00% |38.67% /49.57% |234 |
 |  |80 |37.00% /49.33% |39.33% /51.08% |231 |
 |  |90 |39.00% /51.32% |37.67% /49.78% |227 |
+
+**Bonus90, October2:**122 successes/233 valid/full300 gives **40.67% overall
+/52.36% valid-only**; fixed100 is38/74/100: **38.00% /51.35%**. This is3.00pp
+above reweight90 overall and7.00pp above the historical outcome-only90 result;
+different collection dates and valid-task sets limit interpretation. All300
+archives/verdicts, checkpoint restoration and final W&B metrics were verified.
+Fourteen valid failures carry native judge-not-run sentinels (9 truncated,5 failed).
+[Bonus90 audit](arm_results/rl_integration/mixed-bonus-iteration90-audit.json).
 
 **Reweight90, October2:**113 successes/227 valid/full300 gives **37.67% overall
 /49.78% valid-only**; fixed100 is39/76/100: **39.00% /51.32%**. Full300 is1.67pp

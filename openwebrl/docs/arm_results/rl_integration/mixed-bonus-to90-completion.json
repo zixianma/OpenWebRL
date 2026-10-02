@@ -1,0 +1,138 @@
+{
+  "checked_epoch": 1790971880.0754695,
+  "verified_complete": true,
+  "endpoint": "Mixed-only bonus + relaxed Gate B through90 and full300 evaluations10..90",
+  "completed_iterations": 90,
+  "adam_updates": 1106,
+  "final_checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-bonus-340425-iter90/runtime/iter_0000089",
+  "scheduler_offset": 0,
+  "checkpoint_metadata_extents_cursor_and_sampled_tensors_verified": true,
+  "final_eval_gpu_restore_verified": true,
+  "milestones": [
+    {
+      "iteration": 10,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration10-audit.json",
+      "audit_sha256": "44f79c9d8caa05002428031073650762d40f109571ae5737e6702d111b4b8a17",
+      "successes": 92,
+      "valid": 234,
+      "overall": 0.30666666666666664,
+      "valid_only": 0.39316239316239315,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 20,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration20-audit.json",
+      "audit_sha256": "e5de5c36080af59e2d18e407381f096a5cd5b12f9a3178eab038baf3a687c519",
+      "successes": 92,
+      "valid": 225,
+      "overall": 0.30666666666666664,
+      "valid_only": 0.4088888888888889,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 30,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration30-audit.json",
+      "audit_sha256": "b48d614873218e14a48a54ce555f181f7202523fdf52bc48728d28195326f6ec",
+      "successes": 96,
+      "valid": 228,
+      "overall": 0.32,
+      "valid_only": 0.42105263157894735,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 40,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration40-audit.json",
+      "audit_sha256": "f052b28b56f3b411fa9c3bbe14194b9f64f711669a2453b5c851ce7c6ac150ea",
+      "successes": 100,
+      "valid": 228,
+      "overall": 0.3333333333333333,
+      "valid_only": 0.43859649122807015,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 50,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration50-audit.json",
+      "audit_sha256": "a3b5ac3faea0121d8be0317b0cb2952e345c49281b3a1f74a384f4c08ee3a1df",
+      "successes": 116,
+      "valid": 234,
+      "overall": 0.38666666666666666,
+      "valid_only": 0.49572649572649574,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 60,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration60-audit.json",
+      "audit_sha256": "7cf0d73921a1110d2219d52243c124861b362737dc4d8441e262304cec40768e",
+      "successes": 113,
+      "valid": 232,
+      "overall": 0.37666666666666665,
+      "valid_only": 0.4870689655172414,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 70,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration70-audit.json",
+      "audit_sha256": "63ba524bbfc44869da97e25f3d2abeb30fce1650012d21156d264f803d96abbf",
+      "successes": 115,
+      "valid": 235,
+      "overall": 0.38333333333333336,
+      "valid_only": 0.48936170212765956,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 80,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration80-audit.json",
+      "audit_sha256": "2e954165eaeb8795834d5869afbf710e1e6f71c72abd4a45159188bd19ccfc59",
+      "successes": 108,
+      "valid": 221,
+      "overall": 0.36,
+      "valid_only": 0.48868778280542985,
+      "task_ids_and_archives_rechecked": true
+    },
+    {
+      "iteration": 90,
+      "audit": "openwebrl/docs/arm_results/rl_integration/mixed-bonus-iteration90-audit.json",
+      "audit_sha256": "f14aed30b86b0bf2b607fa90f1215ac37861763efb0dcca188468b6c38b52ff9",
+      "successes": 122,
+      "valid": 233,
+      "overall": 0.4066666666666667,
+      "valid_only": 0.5236051502145923,
+      "task_ids_and_archives_rechecked": true
+    }
+  ],
+  "saved_task_records": 2700,
+  "saved_archives": 2700,
+  "wandb_final_states": {
+    "openwebrl/arm-mixed-bonus-334493": "finished",
+    "openwebrl-evals/arm-mixed-bonus-iter90-340425": "finished"
+  },
+  "all_attempts": [
+    {
+      "job_id": "338904",
+      "scheduler_state": "FAILED",
+      "charged_seconds": 46326
+    },
+    {
+      "job_id": "338906",
+      "scheduler_state": "FAILED",
+      "charged_seconds": 12105
+    },
+    {
+      "job_id": "339971",
+      "scheduler_state": "FAILED",
+      "charged_seconds": 13474
+    },
+    {
+      "job_id": "340425",
+      "scheduler_state": "COMPLETED",
+      "charged_seconds": 6510
+    }
+  ],
+  "approved_extension_seconds": 115200,
+  "consumed_extension_seconds": 78415,
+  "unused_extension_seconds_released": 36785,
+  "consumed_extension_gpu_hours": 174.25555555555556,
+  "prior_to60_and_initial_budgets_separate": true,
+  "allocation_released": true,
+  "no_further_job_needed_for_this_endpoint": true
+}

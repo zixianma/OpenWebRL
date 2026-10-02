@@ -105,6 +105,14 @@ queued for priority; the bonus successor waits for its predecessor. Resources
 were verified as8 H200/64 CPUs/960GiB per allocation, with separate115,200-second
 bonus and86,400-second reweight ledgers. No previous unused budget was added.
 
+**October2 endpoint verified:** bonus340425 finished90/1,106 Adam updates and
+full300 evaluation90 at122/300 (40.67%) overall,122/233 (52.36%) valid-only.
+Both mixed-only lineages now retain all nine audited full300 cohorts10–90,
+saved rollouts/verdicts, final checkpoints and unchanged optimizer/scheduler/cursor.
+Bonus consumed78,415 of115,200 extension seconds including all retries;36,785
+seconds were released unused. No new allocation is required for this endpoint.
+[Completion audit](arm_results/rl_integration/mixed-bonus-to90-completion.json).
+
 <a id="arm-mixed-quota-recovery-20261001"></a>
 **October1 quota interruption:**338904 completed training80 and full300 eval80,
 then failed the next-stage storage preflight: personal scrubbed soft-quota
@@ -8659,7 +8667,11 @@ files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
 `combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
 Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
-No training allocation has been submitted for this experiment.
+No training allocation has been submitted for this experiment. As of the October2 status check, the
+native launcher/evaluation/budget preflight remains unfinished and no optimizer
+updates have run. Fresh personal quota headroom is1.17TiB, below the current2TiB
+startup guard; size the proposed checkpoint/log footprint before launch. This is
+a local guard threshold, not a new scheduler permission requirement.
 
 
 <details>

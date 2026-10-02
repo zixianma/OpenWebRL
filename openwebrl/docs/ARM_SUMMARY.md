@@ -212,6 +212,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |60 |41.00% /54.67% |**37.67% /48.71%** |
 |  |70 |44.00% /57.14% |**38.33% /48.94%** |
 |  |80 |35.00% /50.72% |**36.00% /48.87%** |
+|  |90 |38.00% /51.35% |**40.67% /52.36%** |
 | **Mixed-only reweight + relaxed B** |10 |25.00% /34.72% |**27.33% /34.17%** |
 |  |20 |31.00% /44.29% |**32.33% /42.73%** |
 |  |30 |28.00% /43.75% |**30.00% /41.10%** |
@@ -228,12 +229,13 @@ only0.22pp apart overall; these are checkpoint averages, not independent seeds.
 Both lineages are
 [approved through90](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930),
 with full300 evaluations at70/80/90 and unchanged training settings. Both70
-and80 evaluations are verified. Reweight90 is complete; bonus retains88 and awaits
-storage recovery before continuing to90.
+and80 evaluations are verified. Both90 evaluations are now independently verified: bonus
+40.67% /52.36% and reweight37.67% /49.78% overall/valid-only.
 [Bonus70 audit](arm_results/rl_integration/mixed-bonus-iteration70-audit.json) ·
 [Reweight70 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json).
 [Bonus80 audit](arm_results/rl_integration/mixed-bonus-iteration80-audit.json) ·
 [Reweight80 audit](arm_results/rl_integration/mixed-reweight-iteration80-audit.json).
+[Bonus90 audit](arm_results/rl_integration/mixed-bonus-iteration90-audit.json) ·
 [Reweight90 audit](arm_results/rl_integration/mixed-reweight-iteration90-audit.json).
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 

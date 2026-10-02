@@ -1,5 +1,21 @@
 # RL checkpoint evaluation: baseline, Browser Use, and scheduling
 
+<a id="arm-mixed-bonus-iter90-results-20261002"></a>
+## Mixed-only bonus iteration90 — October2
+
+Job340425 completed training90 and full300 local-browser, GPT-4.1/action_history,
+T0 evaluation. Overall success is122/300 (40.67%); valid-only is122/233 (52.36%).
+Fixed100:38/100 (38.00%) overall and38/74 (51.35%) valid-only. The native89
+checkpoint has1,106 Adam updates with matching scheduler and saved task cursor.
+All300 task identities, nonempty rollout archives and verdicts, actual GPU
+checkpoint restoration, and W&B final history passed independent checks.
+Fourteen valid failures have native judge-not-run sentinels:9 truncated,5 failed.
+The archive audit checked ZIP metadata and serialized entries, not every tensor byte.
+This historical local-browser result is3.00pp above reweight90; collection dates
+and valid-task sets differ, so this is not a controlled significance claim.
+[Audit](arm_results/rl_integration/mixed-bonus-iteration90-audit.json).
+
+
 Reference-policy checkpoint evaluations, the separate Browser Use protocol, and reward-ranked evaluation scheduling. Preserve each protocol and cohort when comparing results. Allocation and cancellation entries remain dated experiment history.
 
 ## Contents
