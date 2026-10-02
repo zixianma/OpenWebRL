@@ -8492,7 +8492,40 @@ Reproducers: `scripts/select_arm_difficulty_first.py`,
 review HTML stay there/local; separate aggregate artifacts contain no task text.
 
 <a id="arm-task-pool-actor-screen-20260930"></a>
-#### Selected score ≥5 weighted pool: actor screening prepared — September30
+#### Selected score ≥5 weighted pool: actor screening complete — October2
+
+**Verified complete:** all2,000 selected tasks have five saved primary actor
+attempts. The independent audit checked all10,000 trajectory archives and
+terminal verdicts, task/attempt identities, finished W&B runs, released Slurm
+allocations and every attempt's compute/API accounting. Task payloads and the
+review HTML remain private.
+
+| Task disposition | Tasks | Share |
+| --- | ---: | ---: |
+| Five valid failures; eligible for the next ARM selection test |682|34.10%|
+| Five valid attempts with one–four successes |1,061|53.05%|
+| Five valid successes |213|10.65%|
+| At least one invalid attempt; unresolved separately |44|2.20%|
+
+Actor attempt success is **35.97% overall** (3,597/10,000) and **36.20%
+valid-only** (3,597/9,936);64 attempts were invalid. There were79 valid native
+formatting failures, counted as failed attempts rather than unavailable pages.
+The cohort used the original SFT actor at iteration0, T0.8,1,024 response tokens,
+15 turns, local browsers and GPT-4.1/action_history; no ARM guidance or policy
+updates. These are selected-pool profiling results, not held-out benchmark
+performance or evidence that the682 tasks are impossible.
+
+Total usage, including failed attempts, was **43.86 of64 approved GPU-hours**
+and **$52.62 of the$150 judge cap**. Every shard stayed within its own8h/$18.75
+cap, and unused allocation time was released. The682 five-valid-failure tasks
+form the eligible pool for the proposed ARM data-selection comparison; this
+screen does not launch ARM rescue, retry invalid attempts, or change RL data.
+[Aggregate completion receipt](arm_results/rl_integration/task-pool-actor-screen-result.json).
+Private final dispositions and all per-task evidence are preserved under the
+runtime control below, in `sharded-20261002/`.
+
+<details>
+<summary>Launch protocol, validator recovery and superseded allocation proposal</summary>
 
 **October2 parallel preparation:** the user requested splitting this collection
 across smaller GPU jobs. The current prepared proposal is **eight independent
@@ -8605,6 +8638,8 @@ Launch preparation: `scripts/run_arm_task_screen.py`; batch template:
 `openwebrl/arm_task_screen.py`. Private runtime control:
 `task-pool-expansion-20260922/curation-v3-20260929/actor-screen-min5-2000/`.
 [Aggregate preparation receipt](arm_results/rl_integration/task-pool-actor-screen-plan.json).
+
+</details>
 
 ### Full retained-pool browser coverage — September29
 
