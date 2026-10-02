@@ -1,0 +1,57 @@
+{
+  "method": "mixed-only reweight + relaxed B",
+  "iteration": 80,
+  "job": "338905",
+  "verified_complete": true,
+  "full300": {
+    "tasks": 300,
+    "successes": 118,
+    "valid": 231,
+    "invalid": 69,
+    "overall": 0.3933333333333333,
+    "valid_only": 0.5108225108225108,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300,
+    "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter80-338905/rollouts",
+    "iteration": 80,
+    "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-338905-iter80/runtime/iter_0000079",
+    "verified_complete": true,
+    "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-reweight-iter80-338905"
+  },
+  "fixed100": {
+    "tasks": 100,
+    "successes": 37,
+    "valid": 75,
+    "invalid": 25,
+    "overall": 0.37,
+    "valid_only": 0.49333333333333335,
+    "saved_rollouts": 100,
+    "saved_verdicts": 100
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "plan_sha256": "27e33a502638d1fe86013c248c2c488c8d9c7ea3b665dcb5c1e05cfb1e8b809d",
+  "fixed100_manifest_sha256": "2b55f26b0a02296d4488b801bffc0806ce4830cf47350ef7917de887f424390d",
+  "eval_config_sha256": "89c8407a1cdb9df58eab6f524832622827d1c97fa4372e301e29a001cba47ed9",
+  "wandb_project": "openwebrl-evals",
+  "checkpoint_adam_updates": 1060,
+  "checked_epoch": 1790903551.336962,
+  "native_restore": {
+    "verified": true,
+    "loaded_iteration": 79,
+    "completed_training_iteration": 80,
+    "adam_updates": 1060
+  },
+  "wandb_history_verified": true,
+  "valid_statuses_with_explicit_judge_not_run": {
+    "failed": 5,
+    "truncated": 13
+  },
+  "archive_verification": "All300 nonempty ZIP central directories and serialized payload entries; not full bytewise CRC scan. Saved judge records include explicit policy sentinel where a terminal status skips the judge."
+}

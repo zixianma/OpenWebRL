@@ -330,14 +330,15 @@ not establish a training gain over the baseline.
 <a id="arm-mixed-bonus-iter70-results-20261001"></a>
 <a id="arm-mixed-reweight-iter70-results-20261001"></a>
 <a id="arm-mixed-bonus-iter80-results-20261001"></a>
+<a id="arm-mixed-reweight-iter80-results-20261001"></a>
 ## Mixed-only relaxed-B pair: iterations10–80 — September28–October1
 
 Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
-continuations reached bonus80 and reweight70 evaluations, all verified.
-Bonus's quota interruption is resolved and its existing successor is queued to
-resume from80; reweight is training.
+continuations completed both80 evaluations, all verified. Bonus's quota
+interruption is resolved; its successor resumed from80. Both runs are training
+toward90 with their original optimizer, scheduler, data cursor and W&B identities.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
@@ -366,6 +367,18 @@ trajectory-mean-one weighting with lambda=.5.
 |  |50 |33.00% /45.21% |37.00% /46.84% |237 |
 |  |60 |34.00% /44.74% |36.67% /47.21% |233 |
 |  |70 |38.00% /50.00% |38.67% /49.57% |234 |
+|  |80 |37.00% /49.33% |39.33% /51.08% |231 |
+
+**Reweight80, October1:**118 successes/231 valid/full300 gives **39.33% overall
+/51.08% valid-only**; fixed100 is37/75/100: **37.00% /49.33%**. Full300 gains
+0.67pp overall from70 and exceeds bonus80 by3.33pp overall and2.21pp valid-only.
+This is one evaluation per checkpoint with different valid-task sets, not an
+established winner. All300 task IDs, nonempty rollout archive payload entries,
+saved judge records, native79 restoration at1,060 Adam updates and final W&B
+metrics passed independent checks. Eighteen valid failures carry the unchanged
+protocol's judge-not-run sentinel (13 truncated,5 failed). Training restoration
+from80 passed and the controller started the stage toward90.
+[Reweight80 audit](arm_results/rl_integration/mixed-reweight-iteration80-audit.json).
 
 **Bonus80, October1:**108 successes/221 valid/full300 gives **36.00% overall
 /48.87% valid-only**; fixed100 is35/69/100: **35.00% /50.72%**. Overall is2.33pp

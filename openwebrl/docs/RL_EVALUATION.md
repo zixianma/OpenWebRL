@@ -339,6 +339,7 @@ aggregate awaits60. The controller resumed training in the same allocation.
 <a id="arm-mixed-bonus-iter70-results-20261001"></a>
 <a id="arm-mixed-reweight-iter70-results-20261001"></a>
 <a id="arm-mixed-bonus-iter80-results-20261001"></a>
+<a id="arm-mixed-reweight-iter80-results-20261001"></a>
 ## Mixed-only bonus/reweight iterations10–80 — September28–October1
 
 Evaluations inside335699 (bonus) and335697 (reweight) completed all300 tasks at10,
@@ -371,6 +372,21 @@ final metrics were independently checked.
 |  |50 |111 |237 |63 |37.00% |46.84% |33 /73 |
 |  |60 |110 |233 |67 |36.67% |47.21% |34 /76 |
 |  |70 |116 |234 |66 |38.67% |49.57% |38 /76 |
+|  |80 |118 |231 |69 |39.33% |51.08% |37 /75 |
+
+**Reweight80 evaluation verified, October1:** full300 **39.33% /51.08%**
+(118 successes,231 valid), fixed100 **37.00% /49.33%** (37/75). Job338905
+evaluated native79 at1,060 Adam updates under the unchanged local-browser
+GPT-4.1/action_history/T0/4096-token/30-turn protocol. Exact300 task IDs,
+nonempty archive payload entries, saved judge records, checkpoint counters/
+cursor/shard extents/sampled finite tensors, actual GPU restoration and final
+evaluation W&B history passed independent checks. Eighteen valid failures have
+explicit judge-not-run sentinels (13 truncated,5 failed). Artifacts remain at
+`evaluations/arm-mixed-reweight-iter80-338905/`; per-task records stay local.
+Native79 model-and-optimizer restoration subsequently passed for training
+toward90. This evaluation does not complete the to90 allocation.
+[Evaluation audit](arm_results/rl_integration/mixed-reweight-iteration80-audit.json) ·
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-reweight-iter80-338905).
 
 **Bonus80 evaluation verified, October1:** full300 **36.00% /48.87%**
 (108 successes,221 valid), fixed100 **35.00% /50.72%** (35/69). Job338904

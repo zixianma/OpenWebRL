@@ -51,6 +51,7 @@
 |  |50 |111 |237 |63 |37.00 |46.84 |[September29 audit](arm_results/rl_integration/mixed-reweight-iteration50-audit.json) |
 |  |60 |110 |233 |67 |36.67 |47.21 |[September30 audit](arm_results/rl_integration/mixed-reweight-iteration60-audit.json) |
 |  |70 |116 |234 |66 |38.67 |49.57 |[October1 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json) |
+|  |80 |118 |231 |69 |39.33 |51.08 |[October1 audit](arm_results/rl_integration/mixed-reweight-iteration80-audit.json) |
 
 ## Mixed-only40/50/60 checkpoint mean · full300
 
