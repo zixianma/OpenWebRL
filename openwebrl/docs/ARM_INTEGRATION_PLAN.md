@@ -8630,6 +8630,30 @@ sampler epoch/offset, distinct proposed/completed/accepted tasks and source
 shares. Two PPO epochs reuse a collected batch; they do not mean two new passes
 through the task dataset.
 
+**Acceptance denominator audit:** the cumulative4,320/11,856 =36.44% is
+accepted groups per fresh task draw, not the acceptance rate among completed
+groups. The saved baseline iteration90 gives this concrete decomposition:
+
+| Task groups at iteration90 | Count |
+| --- | ---: |
+| Accepted for RL |48|
+| Completed, rejected, all failure |8|
+| Completed, rejected, all success |15|
+| Completed, rejected, containing invalid rollouts |28|
+| Still pending and canceled at batch cutoff |45|
+| Total task groups drawn |144|
+
+Thus acceptance was48/99 =48.48% among completed groups, versus48/144 =33.33%
+among draws in this particular iteration. Identical native rewards give no
+within-group advantage, so the dynamic filter discards those groups.
+`contains_invalid` is an archive classification; some rejected groups may also
+have equal rewards among their valid rollouts. A group containing an invalid
+rollout is not automatically rejected:27 of this iteration's48 accepted groups
+also contained invalid trajectories. Pending work is canceled once48 accepted
+groups are available. Preserve the baseline reward/filter, carry runtime fixes,
+and measure rejection causes and canceled work separately in the new data run.
+
+
 Data/schema/union checks and parquet round-trip verification passed. Prepared
 files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
