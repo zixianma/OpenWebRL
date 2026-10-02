@@ -8524,6 +8524,47 @@ screen does not launch ARM rescue, retry invalid attempts, or change RL data.
 Private final dispositions and all per-task evidence are preserved under the
 runtime control below, in `sharded-20261002/`.
 
+<a id="arm-task-pool-guided-682-20261002"></a>
+**Actor + ARM follow-up, prepared October2:** the user requested guided rollouts
+on every one of the682 five-valid-failure tasks. The prepared default is **one
+fresh guided rollout/task**, retaining the original SFT actor and screening
+decoding/horizon (T0.8,top_p1,top_k−1,1,024 tokens/turn,32K context,15 turns).
+At every turn, sample five full reasoning/action proposals; the released
+`PTeterwak/OpenWebRL-4B-SelectionARM` (revision
+`81b452d800d9f859687074f82680dd5257e02d89`) chooses the original response to
+execute. The deployed compatibility view links the released weights and has no
+learned refresh adapter. Use local browsers and the same native
+GPT-4.1/action_history terminal judge.
+
+Each attempt saves the executed trajectory/screenshots, terminal verdict, all
+five candidates per turn, candidate seeds, ARM raw choice, selected index,
+fallbacks and actor token/request counts. Resume validates these artifacts and
+skips completed attempts; invalid outcomes remain separate. A startup gate on
+the first two primary tasks requires a valid guided rollout and real selector
+calls before proceeding. This is a guided rescue-yield measurement on an
+actor0/5-selected pool; without fresh actor-only retries it does not isolate
+ARM's causal advantage over additional search. No policy training is included.
+
+**Prepared resource request; not submitted:** four parallel jobs, each
+**2 H200 ×3h,16 CPUs,240GiB RAM**; **24 GPU-hours total**, including retries.
+Each job uses one TP1 actor GPU, one ARM GPU and eight local browsers, with
+171/171/170/170 tasks. Judge budgets are$5/750 requests per shard, totaling
+**$20/3,000 calls**. Three hours/job is a cap; release resources when finished.
+The prior eight-task guided pilot averaged174 trajectory-seconds/attempt, but
+it used a different actor/task pool; that estimate is only a sizing reference.
+The new paired serving path must pass actual GPU/browser startup after approval.
+
+Seventeen CPU tests and the assembled native argument preflight passed,
+including original-response execution, full candidate traces, immutable cohort
+and actor/judge identity, denominator preservation and retry-budget limits.
+Exact resource/judge approval and storage clearance are pending. The unchanged
+2TiB launch guard currently fails; the separate36-directory checkpoint cleanup
+proposal remains unapproved. No checkpoint or rollout deletion was performed.
+Implementation: `scripts/run_arm_task_rescue.py`,
+`scripts/run_arm_task_rescue_2gpu.sbatch`, `openwebrl/arm_task_rescue.py`.
+Private preparation and shard manifests:
+`task-pool-expansion-20260922/curation-v3-20260929/actor-arm-allfailure-20261002/`.
+
 <details>
 <summary>Launch protocol, validator recovery and superseded allocation proposal</summary>
 
