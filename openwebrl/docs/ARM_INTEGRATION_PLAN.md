@@ -8525,7 +8525,7 @@ Private final dispositions and all per-task evidence are preserved under the
 runtime control below, in `sharded-20261002/`.
 
 <a id="arm-task-pool-guided-682-20261002"></a>
-**Actor + ARM follow-up, launched October2:** the user requested guided rollouts
+**Actor + ARM follow-up, verified complete October2:** the user requested guided rollouts
 on every one of the682 five-valid-failure tasks. The approved collection is **one
 fresh guided rollout/task**, retaining the original SFT actor and screening
 decoding/horizon (T0.8,top_p1,top_k−1,1,024 tokens/turn,32K context,15 turns).
@@ -8545,19 +8545,33 @@ calls before proceeding. This is a guided rescue-yield measurement on an
 actor0/5-selected pool; without fresh actor-only retries it does not isolate
 ARM's causal advantage over additional search. No policy training is included.
 
-**Approved and running: jobs340648–340651**, four parallel jobs, each
+**Completed jobs340648–340651**, four parallel jobs, each
 **2 H200 ×3h,16 CPUs,240GiB RAM**; **24 GPU-hours total**, including retries.
 Each job uses one TP1 actor GPU, one ARM GPU and eight local browsers, with
 171/171/170/170 tasks. Judge budgets are$5/750 requests per shard, totaling
 **$20/3,000 calls**. Three hours/job is a cap; release resources when finished.
 The prior eight-task guided pilot averaged174 trajectory-seconds/attempt, but
 it used a different actor/task pool; that estimate is only a sizing reference.
-All four released-selector GPU health and real selection preflights passed.
-The first two tasks on each shard are now saved and independently validated:
-eight valid trajectory/verdict archives, full five-candidate traces, and no ARM
-fallbacks. One of these eight was rescued with a real GPT-4.1 success verdict.
-These are startup observations, not the final682-task result. Collection is
-expanding through each shard after its startup gate passes.
+All four GPU/browser startup gates passed. The independent final audit verified
+all682 saved trajectory/verdict archives and full candidate traces, exact task
+coverage, finished W&B runs, released Slurm allocations and per-shard budgets.
+
+| Final guided-collection result | Value |
+| --- | ---: |
+| Tasks rescued after five valid actor-only failures |78/682|
+| Success rate, overall |11.44%|
+| Success rate, valid-only |11.49% (78/679)|
+| Valid unsuccessful attempts / invalid attempts |601 /3|
+| Saved selection turns / selector fallbacks |9,437 /0|
+| GPU-hours used / approved |9.33 /24|
+| Terminal-judge cost / cap |$1.68 /$20|
+
+Each shard finished in68–73 minutes and released its remaining time. The78
+rescued tasks provide a concrete candidate set for ARM-assisted data selection;
+they do not establish a gain over compute-matched actor-only additional search.
+[Aggregate final result](arm_results/rl_integration/task-pool-actor-arm-rescue-result.json).
+Private task IDs and complete per-task evidence remain under the runtime path
+below; no task payloads were published.
 
 Seventeen CPU tests and the assembled native argument preflight passed,
 including original-response execution, full candidate traces, immutable cohort
@@ -8565,11 +8579,12 @@ and actor/judge identity, denominator preservation and retry-budget limits.
 The user approved these exact compute/judge caps and the separate36-directory
 checkpoint cleanup. Only those listed nonmilestone checkpoint directories were
 deleted (about2.034TiB); protected checkpoints and all rollouts/verdicts remain.
-Personal quota headroom is2.69TiB and the unchanged2TiB launch guard passes.
+After cleanup, launch-time quota headroom was2.69TiB and the unchanged2TiB
+launch guard passed.
 The existing mixed-bonus340425 continuation was also released within its
-already approved8h cap. Active-agent supervision follows all five job IDs,
-preserves per-shard retry budgets, and independently verifies saved archives,
-verdicts and full candidate traces before completion.
+already approved8h cap and is now training iteration89 from the restored88
+checkpoint. Its supervision continues through90 and the full300 evaluation;
+the four completed collection jobs have been closed after artifact verification.
 Implementation: `scripts/run_arm_task_rescue.py`,
 `scripts/run_arm_task_rescue_2gpu.sbatch`, `openwebrl/arm_task_rescue.py`.
 Private preparation and shard manifests:

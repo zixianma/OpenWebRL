@@ -1,0 +1,53 @@
+{
+  "verified_complete": true,
+  "collection": "One actor plus released SelectionARM guided rollout on each task with five valid failed actor-only attempts",
+  "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+  "selector": "PTeterwak/OpenWebRL-4B-SelectionARM",
+  "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+  "protocol": {
+    "temperature": 0.8,
+    "top_p": 1.0,
+    "top_k": -1,
+    "response_tokens": 1024,
+    "context_tokens": 32768,
+    "max_turns": 15,
+    "candidates_per_turn": 5,
+    "candidate_representation": "full reasoning and action",
+    "browser": "local",
+    "judge": "gpt-4.1/action_history",
+    "optimizer_updates": 0
+  },
+  "results": {
+    "tasks": 682,
+    "guided_attempts": 682,
+    "successes": 78,
+    "valid_attempts": 679,
+    "invalid_attempts": 3,
+    "valid_failures": 601,
+    "overall_success_rate": 0.11436950146627566,
+    "valid_only_success_rate": 0.11487481590574374,
+    "selector_calls": 9437,
+    "selector_fallback_turns": 0,
+    "actor_requests": 47185,
+    "actor_output_tokens": 15636144
+  },
+  "usage": {
+    "gpu_hours": 9.325555555555555,
+    "approved_gpu_hours": 24,
+    "judge_usd": 1.6809379999999996,
+    "judge_cap_usd": 20,
+    "wall_minutes_per_shard": [
+      70.06666666666666,
+      73.06666666666666,
+      69.06666666666666,
+      67.56666666666666
+    ]
+  },
+  "verification": {
+    "all_allocations_released": true,
+    "finished_wandb_runs": 4,
+    "every_archive_verdict_and_candidate_trace_checked": true,
+    "private_task_payloads_published": false
+  },
+  "interpretation": "Descriptive rescue yield on actor0/5-selected tasks; no compute-matched actor-only extra-search control."
+}
