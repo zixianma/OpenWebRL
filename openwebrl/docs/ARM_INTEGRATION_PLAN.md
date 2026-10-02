@@ -8422,6 +8422,37 @@ review HTML stay there/local; separate aggregate artifacts contain no task text.
 <a id="arm-task-pool-actor-screen-20260930"></a>
 #### Selected score ≥5 weighted pool: actor screening prepared — September30
 
+**October2 parallel preparation:** the user requested splitting this collection
+across smaller GPU jobs. The current prepared proposal is **eight independent
+1-H200 ×8h jobs**, each with8 CPUs,120GiB RAM and8 local browsers. Each shard owns
+250 distinct tasks/five attempts each, giving10,000 primary trajectories and64
+concurrent local browsers if all jobs run together. This replaces the single
+4-H200 ×16h proposal below; the total cap remains64 GPU-hours, including retries.
+The original hash-ordered cohort, task/attempt seeds, SFT actor and scientific
+settings are preserved. Jobs can start independently as resources become free;
+queue time and concurrent scheduling are not guaranteed.
+
+At the prior134.2s/trajectory rate, the ideal collection time is5.82h with64
+browsers; allow roughly6–8h after startup, subject to new-task runtime and
+stragglers. Each shard independently saves and verifies archives/verdicts, skips
+verified attempts on resume, and retains its consumed GPU time and judge ledger.
+The proposed **$150/30,000-call total** is partitioned into eight persistent
+**$18.75/3,750-call caps**. The first two tasks of each shard are startup checks
+and count toward the primary collection. Aggregate completion requires exactly
+2,000 unique tasks and10,000 archive/verdict pairs. Invalid attempts remain
+separate from five-valid-failure tasks.
+
+Launcher: `scripts/run_arm_task_screen_shards.py`; batch:
+`scripts/run_arm_task_screen_1gpu.sbatch`. Native TP1 argument validation and24
+accounting/browser-recovery tests passed; actual GPU/browser startup is still
+pending. The frozen source includes cancellation-safe browser cleanup, the
+health-request timeout correction and asynchronous browser-log opening. The
+prepared protocol remains GPT-4.1/action_history; the user’s earlier suggestion
+of GPT-6 Sol awaits clarification. **No screen job or judge call has launched;
+the exact new allocation and judge-spend cap await approval.**
+
+The following records the superseded single-allocation proposal for provenance.
+
 **Latest user decision:** choose **score ≥5, then website-balanced weighted
 coverage**, superseding the strict difficulty-first choice above, and run the
 actor on these2,000 tasks. The existing comparison directory is promoted by

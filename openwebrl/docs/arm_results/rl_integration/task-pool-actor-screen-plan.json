@@ -1,40 +1,36 @@
 {
   "resources": {
-    "gpus": 4,
+    "jobs": 8,
+    "gpus_per_job": 1,
     "gpu_type": "H200",
-    "hours": 16,
-    "gpu_hours": 64,
-    "cpus": 32,
-    "memory_gib": 480
+    "hours_per_job": 8,
+    "cpus_per_job": 8,
+    "memory_gib_per_job": 120,
+    "total_gpu_hours": 64,
+    "max_concurrent_jobs": 8
   },
-  "actor_manifest": {
-    "repo_id": "OpenWebRL/OpenWebRL-4B-SFT",
-    "revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
-    "verified_files": 17,
-    "model_sha256": "2b92e7fbb83fd8255877648a73237fdb472dfc7ce72dd92fbd466151150d9800",
-    "size_bytes": 9665181809
-  },
-  "selected_native_sha256": "4f8f5b0c8b128934727d49fcdac32ed665ac2c64d562562236d7247f4060c6a6",
   "judge_max_usd": 150.0,
   "judge_max_calls": 30000,
-  "judge_budget_partitions": {
-    "count": 5,
-    "tasks_each": 400,
-    "usd_each": 30.0
-  },
+  "judge_id": "gpt-4.1/action_history",
   "primary_tasks": 2000,
   "primary_attempts": 10000,
-  "browser_concurrency": 32,
-  "storage_reserve_bytes": 5497558138880,
-  "optimizer_updates": 0,
-  "status": "prepared_pending_exact_allocation_and_judge_budget_approval",
+  "status": "prepared_pending_exact_budget_and_judge_confirmation",
+  "approved": false,
+  "prepared_utc": "2026-10-02",
   "native_parse_passed": true,
-  "accounting_tests_passed": 4,
-  "existing_native_archive_sidecars_verified": 96,
-  "actor_and_judge_exclude_rubric": true,
-  "gpu_execution_validated": false,
-  "gpu_job_submitted": false,
-  "api_calls": 0,
-  "task_contents_published": false,
-  "source_manifest_sha256": "56e22f746731a17f2f777f7fe47262490e3b26b2a62b459cfb61a95541e9499f"
+  "gpu_validation_pending": true,
+  "unit_tests_passed": 24,
+  "shards": 8,
+  "tasks_per_shard": 250,
+  "attempts_per_task": 5,
+  "browsers_per_shard": 8,
+  "estimated_collection_hours_without_queue": [
+    6,
+    8
+  ],
+  "collection_started": false,
+  "primary_attempts_completed": 0,
+  "selected_native_sha256": "4f8f5b0c8b128934727d49fcdac32ed665ac2c64d562562236d7247f4060c6a6",
+  "scientific_protocol_unchanged": true,
+  "raw_task_data_public": false
 }
