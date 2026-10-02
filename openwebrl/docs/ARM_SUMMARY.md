@@ -227,7 +227,7 @@ only0.22pp apart overall; these are checkpoint averages, not independent seeds.
 Both lineages are
 [approved through90](ARM_INTEGRATION_PLAN.md#arm-mixed-pair-to90-20260930),
 with full300 evaluations at70/80/90 and unchanged training settings. Both70
-and80 evaluations are verified; training continues toward90.
+and80 evaluations are verified; continuations target90.
 [Bonus70 audit](arm_results/rl_integration/mixed-bonus-iteration70-audit.json) ·
 [Reweight70 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json).
 [Bonus80 audit](arm_results/rl_integration/mixed-bonus-iteration80-audit.json) ·

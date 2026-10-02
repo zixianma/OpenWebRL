@@ -112,9 +112,8 @@ headroom was0.263TiB, below the2TiB guard. This is distinct from filesystem-wide
 free space. Native79/1,004 Adam updates and all eight evaluation cohorts are
 verified. Charge the full46,326 seconds consumed;68,874 seconds remain within
 the115,200-second bonus cap. Existing successor338906 retains its approved8h.
-After quota recovery, its failed-predecessor dependency was cleared; it is
-queued for resources with the same8 H200/64 CPUs/960GiB request. Its resume
-plan is CPU-validated and requires native GPU restoration before training.
+After quota recovery, its failed-predecessor dependency was cleared and it
+resumed with the same8 H200/64 CPUs/960GiB request, passing native GPU restoration.
 Do not repeat eval80 or reset the budget.
 
 The user explicitly approved deletion of the exact87 obsolete checkpoint
@@ -129,6 +128,30 @@ and successor-release receipts are in runtime
 `to90-20260930/quota-recovery-20261001/`. Check **personal quota** on every
 supervision review and before recovery; `df` alone does not establish usable
 storage. Reweight338905 remains active under the same shared-quota checks.
+
+**October1 browser-startup recovery:**338906 subsequently stopped during
+collection85 when59/100 mature server starts lacked readiness. Durable84/native83
+and1,048 Adam updates passed independent checks; partial85 artifacts remain saved
+and no85 optimizer update occurred. The job released its GPUs after12,105 seconds.
+Together with338904,58,431/115,200 seconds are consumed, leaving56,769 seconds
+(15h46m09s); retries must fit this remaining cap. Reweight338905 remains active.
+
+Recent failed server logs include application-startup messages, but parent
+health checks timed out; the underlying event-loop/server/node cause is not
+established. A CPU regression reproduces the checker rejecting a healthy endpoint
+whose response takes1.2s. The prepared fix allows up to5s per health request,
+clipped to the unchanged30s overall startup deadline, and records exception type
+and attempt count. Five health, three cleanup and six guard tests pass. The live
+frozen source is unchanged; recovery still requires an isolated source, actual84
+GPU restoration and bounded64-browser validation before production continuation.
+
+Restart is blocked by personal quota below the2TiB guard. A separate exact list
+of36 obsolete checkpoints (61–69 and71–79 from both completed stages;2.03TiB)
+awaits explicit deletion approval. The earlier87-directory approval does not
+cover these targets. No new deletion or replacement job has occurred. The
+validated CPU resume plan, patch, diagnosis and test receipt are in runtime
+`to90-20260930/browser-health-recovery-20261001/`; the exact pending targets are
+`to90-20260930/quota-recovery-20261001/next-checkpoint-prune-paths.txt`.
 
 The isolated `scripts/resume_arm_mixed_to90.py` and batch template preserve the
 completed to60 controller. Nine regression tests cover milestone ordering,

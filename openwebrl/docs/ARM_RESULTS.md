@@ -336,9 +336,11 @@ not establish a training gain over the baseline.
 Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
-continuations completed both80 evaluations, all verified. Bonus's quota
-interruption is resolved; its successor resumed from80. Both runs are training
-toward90 with their original optimizer, scheduler, data cursor and W&B identities.
+continuations completed both80 evaluations, all verified. Bonus resumed from80,
+then stopped during85 on browser startup failures, preserving durable84.
+Reweight remains active; [bonus recovery](ARM_INTEGRATION_PLAN.md#arm-mixed-quota-recovery-20261001)
+awaits storage recovery and live validation. Both retain their original optimizer,
+scheduler, data cursor and W&B identities.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no
 auxiliary all-failure groups. Bonus uses beta=.5; reweight uses sign-aware,
