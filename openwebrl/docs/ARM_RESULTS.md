@@ -336,12 +336,13 @@ not establish a training gain over the baseline.
 Both fresh-from0 runs completed training60 and all six full300 evaluations
 at10,20,30,40,50,60. All checkpoints, archives and task records are verified;
 both original to60 allocations were released. The separately approved to90
-continuations completed both80 evaluations, all verified. Bonus339971 continues
-after saving88. Reweight saved89 before collection90 stopped on browser startup
-timeouts; [recovery340401](ARM_INTEGRATION_PLAN.md#arm-mixed-async-label-recovery-20261002)
-is queued from89 within its remaining original budget. The asynchronous label-I/O
-fix passes29 tests and a live filesystem probe; GPU restoration and sustained
-collection validation remain pending. Both retain their original optimizer,
+continuations completed both80 evaluations, all verified. Bonus saved88 and
+reweight89 before browser-startup failures. [Replacements340425/340423](ARM_INTEGRATION_PLAN.md#arm-mixed-async-label-recovery-20261002)
+are queued from those checkpoints within their original budgets. The asynchronous
+label-I/O fix passes29 tests and a live filesystem probe; a checkpoint-discovery
+fix passes12 regression tests and both native configuration checks. A restart
+that selected an older checkpoint was stopped before training. GPU restoration
+and sustained collection validation remain pending. Both retain their original optimizer,
 scheduler, data cursor and W&B identities; evaluation90 is not yet complete.
 Protocol: local browsers, GPT-4.1/action_history and temperature0. Each keeps48
 ordinary mixed groups, the relaxed min2 gate and response-index credit, with no

@@ -210,10 +210,29 @@ state are unchanged. Twenty-nine frozen-source tests and native argument parsing
 pass; a compute-node probe persisted four files over11.37s while its20ms heartbeat
 never paused longer than22ms. Sustained browser health still requires live validation.
 
-Replacement **340401** was submitted and released for **8 H200 ×3h04m**,
-64 CPUs/960GiB, resuming89 and owning full300 evaluation90. Prior attempts consume
-75,326 seconds; the11,040-second reservation leaves34 unreserved seconds, with
-no new budget. Bonus339971 continues independently. Source
+Replacement **340401** was submitted for **8 H200 ×3h04m** with a prepared
+iteration89 resume plan, but startup inspection caught the controller selecting
+iteration87. It was canceled during restoration after184 seconds, with zero
+optimizer updates or browser collections. The controller had omitted partially
+successful, subsequently failed stages from its checkpoint search. It now
+includes supervised attempt history and records each training output before
+starting its worker. Twelve regression tests pass, including discovery of the
+newest durable checkpoint after a failure and rejection of incomplete or
+wrong-lineage checkpoints; native configuration checks pass for both variants.
+
+Bonus339971 also stopped on browser readiness before iteration89, preserving88
+and1,084 Adam updates; its13,474 seconds are charged. Both replacements use the
+tested asynchronous label writes and repaired checkpoint discovery:
+
+| Variant | Replacement | Resume | Allocation | Previously consumed | Unreserved original time |
+|---|---|---|---|---|---|
+| Mixed bonus |340425|88 /1,084 Adam|8 H200 ×8h|71,905s|14,495s|
+| Mixed reweight |340423|89 /1,158 Adam|8 H200 ×3h01m|75,510s|30s|
+
+Both jobs are released to the queue and own training through90 followed by
+full300 evaluation90. Their original32h/24h totals include every failed or
+canceled attempt; no new budget was added. GPU restoration and sustained
+collection with the fixes still require live validation. Source
 `reference-arm-mixed-async-label-20261002-v3`, diagnosis, tests, resume plan and
 receipts are under runtime `to90-20260930/async-label-recovery-20261002/`.
 The36-checkpoint2.03TiB cleanup remains unapproved; no deletion was performed.
