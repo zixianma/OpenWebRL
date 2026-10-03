@@ -8619,14 +8619,17 @@ browsers and GPT-4.1/action_history. All-failure groups with identical native
 rewards remain filtered; native formatting penalties are preserved unchanged.
 No ARM selection, bonus, reweighting or auxiliary failure groups are enabled.
 
-Proposed first allocation: **8 H200 ×24h,64 CPUs,960GiB**, TP2/DP4,64 browsers,
-48GiB cache, including startup validation, retries and full300 local/T0/GPT-4.1
-evaluations10/20. First checkpoint endpoint20; release unused time after
-verified evaluation20. Proposed terminal-judge spend cap is$200 shared across
-training, evaluations and retries; exact compute/API authorization is pending.
-CPU launcher preflight passed October3; GPU startup validation remains part of
-the proposed allocation.
-Continuation toward90 needs its own remaining-budget review/approval. Compare
+**October3 approved target: iteration60**, with full300 local/T0/GPT-4.1
+evaluations at10/20/30/40/50/60, preserving every rollout and judge verdict.
+The first approved allocation is **8 H200 ×24h,64 CPUs,960GiB**, TP2/DP4,
+64 browsers and48GiB cache, including startup validation and all retries.
+The shared training/evaluation judge cap is **$200**. Submitted as **342093**;
+Slurm estimates$172.80 for the GPU block. The user extended the endpoint from20
+to60; this does not extend the first block's24h/$200 limits. Continue past20
+while approved time remains, then preserve the latest durable checkpoint.
+Measure useful training throughput and request exact additional resources if
+needed to finish60 and its evaluations; no extra block is currently approved.
+Compare
 historical outcome-only results at matched iterations, also reporting Adam
 updates and browser cost; this first historical comparison remains exploratory.
 
@@ -8669,29 +8672,33 @@ files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
 `combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
 Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
-**October3 readiness:** no training allocation submitted and zero optimizer updates.
-The prior storage blocker is resolved:43.18TiB soft-quota headroom passes the2TiB
+**October3 launch:** job342093 is running on g011;
+GPU startup validation and the first optimizer update are pending.
+The prior storage blocker is resolved:43.07TiB soft-quota headroom passes the2TiB
 startup guard. The isolated native baseline source is frozen; reward prompts,
 parser, dynamic filter, sampler, normalization and loss are preserved. Runtime
 changes carry validated browser startup/log-I/O fixes and a shared judge budget.
 Native assembled arguments pass CPU validation (H200 architecture metadata is
 stubbed for the CPU-only validator; this is not GPU restoration validation).
-Six CPU tests pass, covering inherited ARM/resume settings, distinct evaluation
+Six experiment CPU tests and16 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
 paths/checkpoints, unchanged judge requests, failed-request reservations, retry
 budget accounting and rejection of incomplete saved artifacts.
 
 Prepared controller: `scripts/run_expanded_baseline.py`; batch template:
 `scripts/run_expanded_baseline_8gpu.sbatch`; source preparer:
 `scripts/prepare_expanded_baseline.py`. It owns first-iteration startup validation,
-then training through10/eval10 and20/eval20; the continuation after iteration1
+then training/evaluation at every10 iterations through60; the continuation after iteration1
 reloads the full native model/optimizer checkpoint. Every iteration saves a
 checkpoint and dataset cursor; completed next batches can be replayed with the
 correct task-cursor advance. Separate evaluation runs use`openwebrl-evals` and
 retain every rollout/verdict. One persistent GPU/API ledger includes all failed
 attempts; retries do not reset24h or$200. No GPU allocation, API judge call, or
-training step was performed during preparation. Exact resource approval is the
-remaining launch decision. The completed mixed-pair supervisor is inactive;
-register the new job and reactivate agent supervision when it is submitted.
+training step was performed during preparation. The active-agent supervisor
+`openwebrl-expanded-supervisor-20261003.service` is active and follows342093,
+its budget ledger and all six milestone cohorts. Routine reports remain hourly,
+with earlier failure/stall/completion review. The earlier frozen20-iteration
+proposal is retained as history; `approval-request.json`, launcher preparation
+and launch receipt record the approved60-iteration target and first-block cap.
 
 
 <details>
