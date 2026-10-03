@@ -365,3 +365,43 @@ The53 date-updated instructions limit exact comparison with paper scores.
 ARM's strongest validated use is **inference-time candidate selection**. Offline
 distillation and the first online turn-bonus integrations have not yet matched
 that gain.
+
+<a id="arm-next-experiment-20261003"></a>
+## Current decision and next experiment — October3
+
+**Prioritize ARM-assisted task selection, while the expanded outcome-only
+baseline establishes the data-only comparison.** The mixed-only bonus and
+reweight runs both finished90: their70/80/90 mean overall success is38.33%
+and38.56%, respectively. Bonus wins at90 alone, but this window provides no
+clear reason to expand the reweighting sweep. These checkpoint averages are
+descriptive, not independent seeds. Matched stealth and WebVoyager also leave
+the broader ARM RL advantage uncertain.
+
+The selected2,000 new tasks contain682 tasks with five valid actor failures.
+One subsequent ARM-guided attempt rescued78 (11.44% overall). **Fresh actor
+retries are still missing**, so that yield does not establish an ARM-specific
+effect. The existing4,102-task outcome-only run already includes all78; adding
+them again would test duplication/reweighting rather than new-task discovery.
+
+The CPU audit found that78 rescues span11 of42 eligible start-URL hosts;
+73 rescues come from seven hosts. A seeded random78-task control now matches
+the selected pool's exact host counts. Its sampling frame includes all eligible
+tasks, including ARM successes, to avoid constructing a known-negative control.
+
+**Prepared next design:** on all682 eligible tasks, collect one fresh ARM-guided
+attempt and five independent actor retries, with seeded within-task order.
+Use the original SFT actor and the same local-browser/GPT-4.1 training-horizon
+protocol. Compare ARM with actor1 and actor-any-of-five, report unique rescues,
+invalids and actual cost, and independently retest the historical78-task
+subgroup. The previous guided pass used15.64M actor output tokens versus14.95M
+for the five failed actor attempts: a useful sizing reference, not exact total
+compute matching. The scientific specification, private schedule and aggregate
+audit are prepared; a new launch controller, native/GPU validation and exact
+compute/API approval remain pending. No new job was submitted.
+
+Only then compare equal-size, host-matched **ARM-selected / random /
+actor-retry-selected** training pools, starting every actor at iteration0 with
+the same outcome-only recipe and task-proposal share. This separates the value
+of selecting tasks from changing the reward objective. A later Gate B factorial
+can test interaction with failure-group supervision.
+[Detailed design, resource sizing and decision criteria](ARM_INTEGRATION_PLAN.md#arm-selection-control-20261003).

@@ -1,5 +1,113 @@
 # Action reward models for OpenWebRL training
 
+<a id="arm-selection-control-20261003"></a>
+## Next experiment: independent ARM task-selection control — October3
+
+**Research priority proposed after reviewing the completed runs:** validate
+ARM-assisted task selection while the approved expanded outcome-only baseline
+continues. The baseline's target60 and existing24h/$200 first-block cap are
+unchanged. Its first held-out evaluation10 is still pending at this review.
+The completed mixed-only pair gives38.33% versus38.56% mean overall success
+over70/80/90 for bonus versus reweight; further bonus/reweight tuning has weaker
+support than resolving the task-selection mechanism. These are correlated
+checkpoint averages from one lineage per method.
+
+The completed actor screen and guided follow-up provide682 eligible tasks and
+78 guided rescues. Their previous five failures selected the cohort, so they
+cannot be the control for an additional attempt. A fresh retry control is
+required. The October3 CPU audit reconciled all10,000 screen records and682
+guided records with the independent completion receipts, and rechecked guided
+archive presence, verdict sidecars and candidate traces. It did not repeat the
+earlier full-archive CRC inspection.
+
+| Prepared audit | Value |
+| --- | ---: |
+| Five-valid-failure tasks / guided rescues |682 /78|
+| Eligible start-URL hosts / hosts with a rescue |42 /11|
+| Rescues on the seven largest rescue hosts |73 /78|
+| Eligible tasks with at least one valid native formatting failure |36|
+| Actor output tokens: guided pass / original five failures |15,636,144 /14,953,843|
+| Actor requests: guided pass / original five failures |47,185 /47,003|
+| Frozen random control, matched to rescue host counts |78 tasks|
+| Random-control overlap with ARM-selected set |11 tasks|
+| Historical78 as a share of the current4,102-task union |1.90%|
+
+Host means normalized start-URL hostname with a leading`www.` removed; it is
+not a manual website-family grouping. Host concentration motivates matching.
+The random sample includes all eligible tasks rather than excluding known ARM
+successes; the11-task overlap is expected and is retained in paired analyses.
+Native reward−1 is a valid actor-format failure, not an unavailable task.
+
+**Paired collection specification, not launched:**
+
+1. Freeze all682 task IDs from the original SFT actor0/5 screen. For each task,
+   collect one fresh released-SelectionARM attempt and five fresh actor-only
+   attempts, all six regardless of earlier success. Task/shard assignment and
+   within-task execution order are seeded and independent of rescue outcome.
+   Historical guided outcomes define a subgroup for independent retesting;
+   they do not count as new validation outcomes.
+2. Preserve actor iteration0, ARM revision
+   `81b452d800d9f859687074f82680dd5257e02d89`, full reasoning/action candidates,
+   K5, local browsers, GPT-4.1/action_history, T0.8/p1/k−1,1,024 response tokens,
+   32K context and15 turns. No optimizer updates. This reproduces the actual
+   successful guided collector; it does not add the training min2 gate or
+   substitute the separate stealth benchmark protocol.
+3. Primary endpoint: paired overall rescue difference, ARM versus the fixed
+   first actor retry. Secondary endpoints: ARM versus any success among five
+   actor retries, both discordant counts, unique rescued tasks, and fresh actor
+   success on historical ARM-selected versus host-matched random tasks. Report
+   validity and both-valid sensitivity separately. Missing attempts mean an
+   incomplete cohort; invalid attempts remain in overall denominators.
+4. Keep all six attempts together in task-bootstrap intervals, with a
+   host-cluster sensitivity analysis because failures can correlate by site.
+   Measure actual actor requests/tokens, selector time, browser time, GPU-hours
+   and judge charges. Five retries are a generation-cost reference, not an
+   exact compute match. Historical timings imply5.13–5.49 ideal hours per shard
+   at eight browser slots, excluding startup/stragglers; this is sizing, not a
+   throughput guarantee.
+
+**Resource proposal only:** four jobs, each **2 H200 ×8h,16 CPUs,240GiB**;
+64 GPU-hours total including failures/retries. One actor GPU and one selector
+GPU per shard; eight browser slots. Judge cap **$50 /12,000 calls total**, to
+be partitioned across the four persistent ledgers. Primary collection is4,092
+attempts. Release resources at verified completion. Previous screen/rescue
+allocations are finished; their unused balances do not authorize this work.
+Exact approval is needed before submission. No allocation or API call occurred
+during this preparation.
+
+**Training decision after the control:** if ARM adds independent rescue yield,
+useful unique coverage or better selected-task yield per cost than actor retries,
+prepare equal-size, host-matched ARM-selected, random-F0 and actor-retry-selected
+pools. Freeze the matching before training; if the actor-selected pool cannot
+fill a host quota, reduce that quota identically in all arms. Start at0 with
+fresh optimizer/scheduler/cursor, an identical outcome-only recipe and the same
+explicit new-task proposal share. Record actual admissions, since initial0/5
+does not mean a task remains all-failure as the actor learns. The current4,102
+union already includes the78 tasks: construct alternative pools, not a duplicate
+append. Fix the endpoint and compare complete curves/full300 every10, followed
+by matched stealth confirmation; do not select the best checkpoint as the
+primary result. An additional seed is more informative than another bonus
+coefficient once a matched effect is observed. Training resources and sampling
+share are separate decisions, not approved by this collection proposal.
+
+If ordinary retries match ARM's yield and coverage at lower total cost, prefer
+the cheaper selector for expansion and reconsider the ARM-specific selection
+claim. A noisy/inconclusive contrast does not establish equivalence. Successful
+rescue alone does not prove RL learnability: the matched training comparison is
+the downstream test. Reward-model refresh and further reward-weight sweeps
+remain lower priority given the current evidence.
+
+CPU preparer:`scripts/prepare_arm_selection_control.py`; four focused tests
+passed for fixed schedules, balanced shards, duplicate rejection, host matching,
+invalid/native-format separation and unchanged protocol. Private output:
+runtime`task-pool-expansion-20260922/curation-v3-20260929/selection-control-20261003/`.
+It contains the audit/provenance, scientific specification, paired schedule and
+candidate pool IDs. **Preparation status:** CPU specification complete; launch
+controller, native/GPU startup validation and resource approval pending. A new
+controller must own/await workers, preserve retry/API ledgers and saved evidence,
+route tracking to`openwebrl-evals`, and register active repair supervision.
+The existing expanded-baseline supervisor remains responsible for job342095.
+
 <a id="arm-gate-b-to100-20260928"></a>
 **Historical Gate B to100 — requested September28:** extend the existing
 relaxed-gate B lineage to iteration100, preserving its optimizer/scheduler,
