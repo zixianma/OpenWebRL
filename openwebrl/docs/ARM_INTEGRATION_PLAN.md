@@ -8623,8 +8623,9 @@ No ARM selection, bonus, reweighting or auxiliary failure groups are enabled.
 evaluations at10/20/30/40/50/60, preserving every rollout and judge verdict.
 The first approved allocation is **8 H200 ×24h,64 CPUs,960GiB**, TP2/DP4,
 64 browsers and48GiB cache, including startup validation and all retries.
-The shared training/evaluation judge cap is **$200**. Submitted as **342093**;
-Slurm estimates$172.80 for the GPU block. The user extended the endpoint from20
+The shared training/evaluation judge cap is **$200**. Initial job342093 failed
+during scheduler initialization; replacement **342095** retains23h56m after
+charging the failed attempt's3m21s. The user extended the endpoint from20
 to60; this does not extend the first block's24h/$200 limits. Continue past20
 while approved time remains, then preserve the latest durable checkpoint.
 Measure useful training throughput and request exact additional resources if
@@ -8672,15 +8673,15 @@ files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
 `combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
 Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
-**October3 launch:** job342093 is running on g011;
-GPU startup validation and the first optimizer update are pending.
+**October3 recovery:** replacement342095 submitted and released for scheduling;
+GPU startup validation and the first optimizer update remain pending.
 The prior storage blocker is resolved:43.07TiB soft-quota headroom passes the2TiB
 startup guard. The isolated native baseline source is frozen; reward prompts,
 parser, dynamic filter, sampler, normalization and loss are preserved. Runtime
 changes carry validated browser startup/log-I/O fixes and a shared judge budget.
 Native assembled arguments pass CPU validation (H200 architecture metadata is
 stubbed for the CPU-only validator; this is not GPU restoration validation).
-Six experiment CPU tests and16 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
+Seven experiment CPU tests and16 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
 paths/checkpoints, unchanged judge requests, failed-request reservations, retry
 budget accounting and rejection of incomplete saved artifacts.
 
@@ -8694,11 +8695,25 @@ correct task-cursor advance. Separate evaluation runs use`openwebrl-evals` and
 retain every rollout/verdict. One persistent GPU/API ledger includes all failed
 attempts; retries do not reset24h or$200. No GPU allocation, API judge call, or
 training step was performed during preparation. The active-agent supervisor
-`openwebrl-expanded-supervisor-20261003.service` is active and follows342093,
+`openwebrl-expanded-supervisor-20261003.service` is active and follows342095,
 its budget ledger and all six milestone cohorts. Routine reports remain hourly,
 with earlier failure/stall/completion review. The earlier frozen20-iteration
 proposal is retained as history; `approval-request.json`, launcher preparation
 and launch receipt record the approved60-iteration target and first-block cap.
+
+**Startup failure and correction:** the initial one-iteration validation stage
+set`num_rollout=1`. The native scheduler computed
+`floor(1 ×48 ×5 /256)=0` planned optimizer steps and asserted that its schedule
+length must be positive. This happened before any rollout, judge call or Adam
+update. The launcher now keeps`num_rollout=60` for every stage and uses the
+existing stop-after-saved-checkpoint hook at1/10/20/30/40/50/60. Constant LR,
+weight decay, data, rewards and loss stay unchanged. A CPU regression test runs
+the actual native scheduler constructor/factory, reproduces the old assertion,
+and verifies corrected initialization plus scheduler-state reload across every
+stage. Native argument validation also passes. Preserve the failed logs and
+receipt under`recovery-342093/`; all201 consumed seconds count against the
+original24h approval. The real urgent supervisor notification delivered this
+repair; no extra budget or test notification was added.
 
 
 <details>
