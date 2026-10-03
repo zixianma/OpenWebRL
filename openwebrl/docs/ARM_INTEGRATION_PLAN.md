@@ -8673,16 +8673,23 @@ files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
 `combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
 Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
-**October3 recovery:** replacement342095 is running on g011, has passed
-scheduler initialization and is collecting real browser rollouts. The first
-optimizer update, durable checkpoint and GPU restoration remain pending.
+**October3 startup verified:** replacement342095 saved iteration1 and resumed
+iteration2 on g011. The checkpoint contains16 Adam updates; both optimizer
+parameter-group counters and the scheduler agree, and the dataset cursor is
+preserved. All16 shard sizes and sampled finite tensors passed inspection.
+The next worker successfully restored the native checkpoint with optimizer
+loading enabled, loaded the saved cursor, transferred the restored actor
+weights to the rollout engines and began collection with an observed64/64
+active browser pool. All16 first-iteration training points remain in the same
+W&B history. This verifies startup and continuation, not the iteration60
+endpoint; the first full300 evaluation is still due at iteration10.
 The prior storage blocker is resolved:43.07TiB soft-quota headroom passes the2TiB
 startup guard. The isolated native baseline source is frozen; reward prompts,
 parser, dynamic filter, sampler, normalization and loss are preserved. Runtime
 changes carry validated browser startup/log-I/O fixes and a shared judge budget.
 Native assembled arguments pass CPU validation (H200 architecture metadata is
 stubbed for the CPU-only validator; this is not GPU restoration validation).
-Eight experiment CPU tests and17 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
+Eight experiment CPU tests and20 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
 paths/checkpoints, unchanged judge requests, failed-request reservations, retry
 budget accounting and rejection of incomplete saved artifacts.
 
@@ -8717,17 +8724,29 @@ original24h approval. The real urgent supervisor notification delivered this
 repair; no extra budget or test notification was added.
 
 The startup throughput audit also found the inherited YAML submission gate
-was32 despite a64-slot browser pool. Iteration1 retains its already-loaded
-32-browser gate; the next worker after checkpoint1 will read the corrected64
-gate. Only this YAML runtime key changes; rewards, sampler, loss and decoding
+was32 despite a64-slot browser pool. Iteration1 retained its already-loaded
+32-browser gate; the resumed worker after checkpoint1 now uses the corrected64
+gate, verified in its assembled arguments and live active-browser count.
+Only this YAML runtime key changes; rewards, sampler, loss and decoding
 stay fixed. CPU checks execute the real gate-precedence function and parse the
 preserved source's config explicitly. This also corrects the earlier CPU
 validator's relative-path ambiguity. The supervisor now recognizes native
-`phase=generate` as collection and reviews startup every15min until the first
-checkpoint/reload and actual64-browser gate are verified; routine user reports
-remain hourly. Initial collection produced successful judge calls with no
-browser-readiness failures or judge API exceptions observed. This is startup
-evidence, not a completed training update or evaluation result.
+`phase=generate` as collection. First collection accepted48 of113 completed
+groups (42.48%), with53 invalid trajectories out of565 (9.38%), in35.2min at
+the old32-browser gate. PPO completed16 finite optimizer updates, at roughly
+138sec/update after the cold first step. These are training/runtime diagnostics,
+not held-out success results or a steady-state64-browser throughput estimate.
+
+The checkpoint handoff exposed a monitoring-only bug: startup age was measured
+from the original job manifest, incorrectly flagging the new worker as stale.
+The supervisor now times the current stage from its explicit start timestamp
+or the legacy stage-entry status file. Three regression tests verify that a
+normal milestone restart is quiet while a genuinely stalled startup still
+alerts. Only the supervisor service was restarted; training was uninterrupted.
+With checkpoint/reload and64-browser operation verified, agent reviews return
+to hourly; health checks remain every60sec with immediate failure/stall review.
+All consumed time, including the initial201sec failure, remains charged to the
+same24h approval. No additional compute was submitted.
 
 
 <details>
