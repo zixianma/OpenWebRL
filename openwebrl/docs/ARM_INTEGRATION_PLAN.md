@@ -8773,9 +8773,16 @@ the original screenshot failure; restoring child-only Mesa EGL isolation
 captured the same page in0.17sec. The exact previously validated browser fix
 is now applied, with source/manifest backups and13 passing regression tests.
 The actual subprocess reset/screenshot/cleanup also passed. Actor settings,
-optimizer, cursor and current PPO batch were uninterrupted; collection4 is
-the first full post-fix collection and its invalid-rate reduction remains
-unverified. Detailed causes and evidence are in
+optimizer, cursor and current PPO batch were uninterrupted. The first full
+post-fix collection4 is now independently verified: initial screenshot failures
+fell from183/760 to0/525; total invalid trajectories fell from36.84% to10.10%.
+It accepted48/105 groups in19.04min, versus48/152 in25.52min before the fix.
+These are different task batches, not a controlled performance comparison.
+The remaining53 invalids comprise three navigation timeouts and50 browser-step
+errors whose detailed exception types are not fully preserved. No timeout or
+scientific setting was changed. Checkpoint3 is durable with48 Adam updates and
+matching scheduler/cursor; iteration4 PPO is active. Full300 evaluation10 and
+the requested iteration60 endpoint remain pending. Detailed causes and evidence are in
 [RL_RUNTIME](RL_RUNTIME.md#expanded4102-egl-regression-20261003).
 
 

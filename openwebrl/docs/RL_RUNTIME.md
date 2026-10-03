@@ -5266,14 +5266,47 @@ preparer now copies all three necessary browser modules. Thirteen tests cover
 the actual parent and deployed `WebEnv.setup` calls, child-only environment
 isolation, native scheduler/resume behavior, scientific settings and budgets.
 The real env_server reset/screenshot/cleanup smoke also passed after deployment.
-The GPU job and optimizer were not restarted. Full production improvement is
-pending collection4; do not label the run recovered solely from the smoke test.
+The GPU job and optimizer were not restarted. The first full post-fix collection4
+has now been independently audited against every saved group and the training
+metrics. The dominant initial-screenshot failure disappeared in this cohort:
+
+| Collection diagnostic | Before: iteration3 | After: iteration4 |
+|---|---:|---:|
+| Completed trajectories | 760 | 525 |
+| Valid trajectories | 480 | 472 |
+| Invalid trajectories | 280 (36.84%) | 53 (10.10%) |
+| Initial screenshot timeout / capture error | 178 / 5 | 0 / 0 |
+| Initial navigation redirect / timeout | 18 / 0 | 0 / 3 |
+| Browser health timeout | 10 | 0 |
+| Browser-step error | 55 | 50 |
+| Actor request / whole-trajectory timeout | 13 / 1 | 0 / 0 |
+| Accepted / completed groups | 48 / 152 | 48 / 105 |
+| Collection time, excluding archive and handoff | 25.52 min | 19.04 min |
+
+These are consecutive, different task batches, not a matched throughput or
+policy-quality experiment. The repair is validated for the observed screenshot
+failure; it does not eliminate all invalid trajectories. Collection4's residual
+errors are three initial navigation timeouts and50 browser-step errors. Worker
+logs in that time window contain49 empty exception messages and two missing-
+screenshot errors, but include in-flight attempts; those51 records cannot be
+assigned one-to-one to the50 archived step errors. An empty message alone does
+not establish the exception type, so timeout settings remain unchanged.
+
+Checkpoint3 is durable with48 matching Adam/scheduler updates, its dataset
+cursor and16 complete shard extents; sampled tensors are finite. W&B contains
+all48 optimizer points, and iteration4 PPO has started. This is training/runtime
+validation, not a held-out evaluation; full300 evaluation10 remains pending.
 
 The archive added57sec for152 groups and its metadata audit took4.7sec.
 Both accepted and rejected trajectories remain private. Evidence is under the
 expanded-run control directory: `iteration3-invalid-cause-audit.json`,
 `iteration3-detailed-errors.json`, `browser-egl-probe.json`,
-`browser-egl-deployment.json` and `browser-egl-recovery/`.
+`browser-egl-deployment.json` and `browser-egl-recovery/`. Post-fix evidence adds
+`iteration4-invalid-cause-audit.json`, `iteration4-browser-recovery-audit.json`,
+`fourth-collection-metrics.json` and `agent-checkpoint-review-iteration3.json`.
+The new archive has105 groups,525 trajectories and3,512 unique images; its
+53.9sec write completed without errors. Raw trajectories and diagnostic logs
+remain private.
 
 ### How training parallelism and browser concurrency interact
 
