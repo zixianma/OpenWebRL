@@ -8748,6 +8748,23 @@ to hourly; health checks remain every60sec with immediate failure/stall review.
 All consumed time, including the initial201sec failure, remains charged to the
 same24h approval. No additional compute was submitted.
 
+**October3 follow-up:** iteration2 is durable with32 Adam updates and matching
+scheduler/cursor; all32 finite optimizer points are present in W&B. Iteration3
+is collecting. The64-browser collection took16.8min (48 accepted groups out
+of121 completed), versus35.2min for the first32-browser collection; these are
+different task batches, so this is not a controlled throughput benchmark.
+PPO still took42.9min, and the checkpoint interval including worker reload was
+64.6min. Invalid trajectories increased from53/565 (9.38%) to169/605 (27.93%);
+only five DNS failures are directly explained by the worker exceptions, so the
+remaining causes are unresolved. The existing completed-group archive hook is
+now enabled from collection3 to retain rejected as well as accepted trajectories
+for diagnosis, without changing rewards/filtering or restarting training.
+Its three non-mutation/failure-isolation tests pass. Temporary agent reviews
+return to15min for that audit; routine user reports remain hourly. Storage has
+42.20TiB soft-quota headroom; no new GPU/API/browser-startup fault was observed.
+Full300 evaluation10 is pending; this is still training progress, not a held-out
+result or completion of the requested60-iteration run.
+
 
 <details>
 <summary>Launch protocol, validator recovery and superseded allocation proposal</summary>
