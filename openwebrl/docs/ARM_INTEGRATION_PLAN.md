@@ -8765,6 +8765,19 @@ return to15min for that audit; routine user reports remain hourly. Storage has
 Full300 evaluation10 is pending; this is still training progress, not a held-out
 result or completion of the requested60-iteration run.
 
+**October3 browser repair:** the collection3 archive reconciled all760
+trajectories and280 invalids. Initial screenshot failures account for183;
+the source had copied the validated browser-driver helper but omitted its
+`WebEnv.setup` launch call. A local HTML probe during ongoing PPO reproduced
+the original screenshot failure; restoring child-only Mesa EGL isolation
+captured the same page in0.17sec. The exact previously validated browser fix
+is now applied, with source/manifest backups and13 passing regression tests.
+The actual subprocess reset/screenshot/cleanup also passed. Actor settings,
+optimizer, cursor and current PPO batch were uninterrupted; collection4 is
+the first full post-fix collection and its invalid-rate reduction remains
+unverified. Detailed causes and evidence are in
+[RL_RUNTIME](RL_RUNTIME.md#expanded4102-egl-regression-20261003).
+
 
 <details>
 <summary>Launch protocol, validator recovery and superseded allocation proposal</summary>

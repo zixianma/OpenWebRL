@@ -5231,6 +5231,50 @@ Evidence remains under
 `production-subprocess-smoke.log`, and the accumulating
 `runtime-after-fix.jsonl`. Per-trajectory cause records remain private.
 
+<a id="expanded4102-egl-regression-20261003"></a>
+### Expanded4102 source omitted the browser launch fix, October3
+
+The expanded outcome-only run342095 retained the `browser_runtime.py` helper
+but its preparer copied only that module and `local_process_env.py`; it omitted
+the `WebEnv.setup` call that passes the isolated environment to Chromium.
+The helper therefore had no effect. This was a source-assembly regression,
+not evidence of worse actor behavior or an established effect of64 browsers.
+
+The independently checked collection3 archive contains152 completed groups,
+760 trajectories,480 valid trajectories and191 successful trajectories.
+The280 invalid trajectories break down as follows:
+
+| Failure | Trajectories |
+|---|---:|
+| Initial screenshot timeout | 178 |
+| Initial screenshot capture error | 5 |
+| Initial navigation interrupted by redirect | 18 |
+| Browser health timeout | 10 |
+| Browser-step error; detailed subtype not yet reconciled | 55 |
+| Actor inference request timeout | 13 |
+| Whole-trajectory timeout | 1 |
+
+During ongoing PPO on g011, a matched local-HTML probe failed screenshot
+capture with the original child environment; adding only the existing Mesa
+EGL override succeeded in0.166sec. No external website, judge or actor call
+was needed. The actor environment and CUDA visibility were unchanged.
+
+At12:59:31 PDT, the exact three-line import/launch correction from the validated
+browser parent was applied atomically to the preserved source. Original files
+and manifests were backed up, and recipe/preflight hashes refreshed. The
+preparer now copies all three necessary browser modules. Thirteen tests cover
+the actual parent and deployed `WebEnv.setup` calls, child-only environment
+isolation, native scheduler/resume behavior, scientific settings and budgets.
+The real env_server reset/screenshot/cleanup smoke also passed after deployment.
+The GPU job and optimizer were not restarted. Full production improvement is
+pending collection4; do not label the run recovered solely from the smoke test.
+
+The archive added57sec for152 groups and its metadata audit took4.7sec.
+Both accepted and rejected trajectories remain private. Evidence is under the
+expanded-run control directory: `iteration3-invalid-cause-audit.json`,
+`iteration3-detailed-errors.json`, `browser-egl-probe.json`,
+`browser-egl-deployment.json` and `browser-egl-recovery/`.
+
 ### How training parallelism and browser concurrency interact
 
 | Setting | Current B configuration | What it controls |
