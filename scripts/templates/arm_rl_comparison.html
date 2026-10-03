@@ -23,6 +23,7 @@
 </div>
 <details class="card table-card"><summary>Visible data and sources</summary><div class="table-wrap"><table><thead><tr><th>Run</th><th>Iteration</th><th>Overall</th><th>Valid-only</th><th>Successes</th><th>Valid / total</th><th>Source</th></tr></thead><tbody id="rows"></tbody></table></div></details>
 <details class="card table-card"><summary>About smoothing</summary><p class="note">W&amp;B EMA uses the documented bias correction: previous observations decay by the selected weight, then the weighted sum is divided by the accumulated weights. This is W&amp;B’s EMA option, not its default time-weighted EMA. Gaussian uses a normalized Gaussian kernel over training-iteration distance, including earlier and later checkpoints; σ is measured in iterations. Try σ = 10 for roughly one checkpoint interval. Both methods average only observed values and leave raw results unchanged. <a href="https://docs.wandb.ai/models/app/features/panels/line-plot/smoothing">W&amp;B smoothing reference ↗</a></p><p class="note">The raw faint trace plus stronger trend follows the presentation in <a href="https://arxiv.org/html/2606.02031v2#S5.F2">OpenWebRL Figure 2(c) ↗</a>; the authors’ exact smoothing algorithm and parameter are unverified.</p></details>
+__ARM_REWARD_CHART__
 <footer>Standalone HTML · works offline · hover, tap or keyboard-focus a point for exact counts. Original bonus is available but hidden by default. Source links require a network connection.</footer>
 </main>
 <div class="tooltip" id="tip" role="status" hidden></div>
@@ -78,6 +79,7 @@ function render(){
 }
 byId('csv').onclick=()=>{const rows=[['run','iteration','successes','valid','total','overall_percent','valid_only_percent','source']];for(const s of data.series.filter(s=>selected.has(s.id)))for(const p of s.points)rows.push([s.label,p.iteration,p.successes,p.valid,p.tasks,rate(p,'overall'),rate(p,'valid_only'),p.source]);const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='arm-rl-visible-results.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip();});window.addEventListener('scroll',hideTip,{passive:true});render();
+function openLinkedSection(){if(location.hash==='#reward-hacking'){const d=byId('reward-hacking');if(d){d.open=true;d.scrollIntoView();}}}window.addEventListener('hashchange',openLinkedSection);openLinkedSection();
 </script>
 </body>
 </html>

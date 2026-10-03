@@ -20,6 +20,8 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Interactive RL comparison](rl_results/arm_rl_interactive.html): includes both mixed-only runs through90; toggle runs, select bias-corrected EMA or centered Gaussian smoothing, switch overall/valid-only and export raw data; fixed0–60% y-axis. Download and open the standalone HTML in a browser; no server required.
 
+[Reward-hacking diagnostic](ARM_RESULTS.md#arm-reward-hacking-curves-20261003):673 saved training collections across nine ARM variants; independent full300 task success versus ARM bonus/proxy, with separate failure buffers, label coverage and credited selection. [Interactive view](rl_results/arm_rl_interactive.html#reward-hacking) · [Figure](rl_results/arm_reward_hacking.png) · [PDF](rl_results/arm_reward_hacking.pdf).
+
 [Matched iteration90 uncertainty: paired95% CIs and Holm-corrected tests; no significant pair among outcome-only, Additive and Gate B](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930).
 
 [ARM method presentation guide](ARM_SUMMARY.md#arm-methods-at-a-glance): three stages, group composition, Gate B/C credit and bonus versus reweighting, with downloadable PNG/SVG figures.

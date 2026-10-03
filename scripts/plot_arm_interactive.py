@@ -6,6 +6,7 @@ embedded. Historical counts come from the published comparison data;
 newer audited counts override them. Local and stealth protocols stay separate.
 """
 import json
+import html as html_module
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
@@ -85,6 +86,16 @@ def main():
     template = (REPO / 'scripts/templates/arm_rl_comparison.html').read_text()
     assert template.count('__ARM_DATA__') == 1
     html = template.replace('__ARM_DATA__', json.dumps(data, ensure_ascii=False).replace('<', '\\u003c'))
+    reward_path = DOCS / 'rl_results/arm_reward_hacking.html'
+    reward = ''
+    if reward_path.exists():
+        reward = ('<details class="card table-card" id="reward-hacking">'
+                  '<summary>Reward-hacking diagnostic: ARM reward versus task success</summary>'
+                  '<iframe title="ARM reward and task success throughout training" '
+                  'style="width:100%;height:1450px;border:0;margin-top:15px" loading="lazy" '
+                  'srcdoc="' + html_module.escape(reward_path.read_text(), quote=True) + '"></iframe></details>')
+    assert template.count('__ARM_REWARD_CHART__') == 1
+    html = html.replace('__ARM_REWARD_CHART__', reward)
     target = DOCS / 'rl_results/arm_rl_interactive.html'
     target.write_text(html)
     print(f'{target}: {len(data["series"])} runs, '

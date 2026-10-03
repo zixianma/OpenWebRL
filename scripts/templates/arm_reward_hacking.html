@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARM reward versus task success</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#18263b;font:15px/1.5 system-ui,sans-serif}main{max-width:1140px;margin:0 auto;padding:22px}h1{font-size:25px;margin:0 0 8px}h2{font-size:17px;margin:0 0 5px}.muted{color:#53647b}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:15px;background:white;border:1px solid #dce4ef;border-radius:10px;margin:18px 0}.controls label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}select,button{font:inherit;padding:6px;border:1px solid #bac7d7;border-radius:5px;background:white}button{cursor:pointer}section{background:white;padding:15px;border:1px solid #dce4ef;border-radius:10px;margin:12px 0}svg{width:100%;height:auto;display:block;overflow:visible}svg text{font-family:system-ui,sans-serif;font-size:12px;fill:#53647b}.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px}.blue{color:#2563eb}.orange{color:#c65b08}.gray{color:#64748b}details{padding:12px 0}summary{cursor:pointer;font-weight:600}.scroll{max-height:330px;overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:5px 9px;border-bottom:1px solid #e3eaf2;text-align:right}th{position:sticky;top:0;background:white}#notice{border-left:3px solid #c65b08;padding-left:12px}p{margin:8px 0}.dot:focus{outline:2px solid #172a46}#tip{position:fixed;display:none;background:#172a46;color:white;border-radius:6px;padding:10px;max-width:360px;pointer-events:none;z-index:10;white-space:pre-line;font-size:13px}a{color:#2459a6}input[type=range]{width:130px}
+</style></head><body><main>
+<h1>ARM reward versus held-out task success</h1>
+<p class="muted">Reward-hacking diagnostic · Online-Mind2Web full 300 · local browser · GPT-4.1/action_history · actor temperature 0</p>
+<p>Task success uses an independent terminal judge, not an oracle. ARM signal comes from retained training turns. Rising ARM reward with falling success would warrant investigation; these changing task/state distributions cannot prove reward hacking.</p>
+<div class="controls">
+<label>Run <select id="method" aria-label="Training run"></select></label>
+<label>ARM population <select id="scope" aria-label="ARM population"></select></label>
+<label>Task metric <select id="metric"><option value="overall">Overall success</option><option value="valid">Valid-only success</option></select></label>
+<label>ARM trailing window <input id="window" type="range" min="1" max="20" value="5"><output id="windowLabel">5 iterations</output></label>
+<label><input id="raw" type="checkbox" checked> Raw ARM</label>
+<label><input id="baseline" type="checkbox"> Outcome-only baseline</label>
+<button id="csv">Export raw rows</button>
+</div>
+<p id="notice"></p><p id="status" class="muted" aria-live="polite"></p>
+<section><h2>Task performance and ARM signal</h2><div class="legend"><span class="blue">● Task success · left axis</span><span class="orange">— Mean ARM signal · right axis</span><span class="gray" id="baselineLegend" hidden>– – Outcome-only baseline</span></div>
+<svg id="reward" role="img" aria-label="Task success and mean ARM signal" viewBox="0 0 1060 360"></svg></section>
+<section><h2>Credited selection rate among usable labels</h2><p class="muted">Separates ARM preference from how many turns receive labels. Dotted line: chance baseline (20% for response-index credit; multiplicity/5 for Gate C).</p>
+<svg id="selection" role="img" aria-label="Credited selection rate and chance baseline" viewBox="0 0 1060 235"></svg></section>
+<section><h2>Usable label coverage</h2><p class="muted">Usable ARM labels / all retained trainable turns. Gated-out and unsampled turns receive zero ARM bonus.</p>
+<svg id="coverage" role="img" aria-label="Fraction of turns with usable ARM labels" viewBox="0 0 1060 220"></svg></section>
+<details><summary>Exact raw observations and denominators</summary><p>Hover or focus chart points for details. Table and CSV contain unsmoothed values.</p><div class="scroll"><table><thead><tr><th>Actor iteration</th><th>Mean signal</th><th>RMS</th><th>Labels / turns</th><th>Selection</th><th>Chance</th><th>Failure-loss coefficient</th></tr></thead><tbody id="rows"></tbody></table></div><h2>Held-out evaluations</h2><div class="scroll"><table><thead><tr><th>Checkpoint</th><th>Success / total</th><th>Valid</th><th>Overall</th><th>Valid-only</th><th>Audit</th></tr></thead><tbody id="evalrows"></tbody></table></div></details>
+<details><summary>Definitions, alignment, and limits</summary><div id="definitions"></div></details>
+<p class="muted">Smoothing pools turns or labels over a trailing iteration window; evaluation points remain unsmoothed. No new evaluations, APIs, GPUs, or task payloads are used in this figure.</p>
+</main><div id="tip" role="status"></div><script>
+'use strict';
+const data=__REWARD_DATA__;
+const $=id=>document.getElementById(id),blue='#2563eb',orange='#c65b08',gray='#64748b';
+const fmt=(v,n=2)=>v===null||v===undefined?'—':Number(v).toFixed(n),pct=v=>v===null||v===undefined?'—':fmt(v*100)+'%';
+function el(tag,attrs={},text=null,parent){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==null)e.textContent=text;parent.append(e);return e;}
+function smooth(rows,key,weight,window){return rows.map(r=>{if(r[key]===null||r[key]===undefined)return null;const w=rows.filter(p=>p.iteration>r.iteration-window&&p.iteration<=r.iteration&&p[key]!==null&&p[key]!==undefined&&p[weight]>0);const n=w.reduce((a,p)=>a+p[weight],0);return n?w.reduce((a,p)=>a+p[key]*p[weight],0)/n:null;});}
+function tip(event,text){const box=$('tip');box.textContent=text;box.style.display='block';const rect=event.target.getBoundingClientRect();const x=event.clientX||rect.x,y=event.clientY||rect.y;box.style.left=Math.min(x+12,window.innerWidth-375)+'px';box.style.top=Math.min(y+12,window.innerHeight-box.offsetHeight-12)+'px';}
+function hide(){ $('tip').style.display='none'; }
+function chart(id,maxX,low,high,label,right=false){const svg=$(id);svg.replaceChildren();const H=Number(svg.viewBox.baseVal.height),L=70,R=right?95:40,T=22,B=48,W=1060;const x=i=>L+i/maxX*(W-L-R),y=v=>H-B-(v-low)/(high-low)*(H-T-B);
+ for(let j=0;j<=4;j++){const v=low+(high-low)*j/4;el('line',{x1:L,y1:y(v),x2:W-R,y2:y(v),stroke:'#e5ebf3'},null,svg);el('text',{x:L-12,y:y(v)+4,'text-anchor':'end'},fmt(v,0)+'%',svg);}
+ for(let i=0;i<=maxX;i+=10)el('text',{x:x(i),y:H-B+23,'text-anchor':'middle'},i,svg);
+ el('text',{x:20,y:(T+H-B)/2,transform:`rotate(-90 20 ${(T+H-B)/2})`,'text-anchor':'middle'},label,svg);
+ el('text',{x:(L+W-R)/2,y:H-5,'text-anchor':'middle'},'Actor checkpoint (completed training iterations)',svg);
+ return{svg,x,y,H,L,R,T,B,W};}
+function line(c,rows,values,color,{width=2,opacity=1,dash='',y=c.y}={}){let segment=[];const flush=()=>{if(segment.length)el('polyline',{points:segment.join(' '),fill:'none',stroke:color,'stroke-width':width,'stroke-opacity':opacity,'stroke-dasharray':dash,'stroke-linejoin':'round'},null,c.svg);segment=[];};for(let i=0;i<rows.length;i++){if(values[i]===null||values[i]===undefined||(i&&rows[i].iteration>rows[i-1].iteration+1&&rows[i].turns!==undefined)){flush();}if(values[i]!==null&&values[i]!==undefined)segment.push(`${c.x(rows[i].iteration)},${y(values[i])}`);}flush();}
+function dot(c,r,v,color,text,{y=c.y,radius=3,opacity=1}={}){if(v===null||v===undefined)return;const d=el('circle',{cx:c.x(r.iteration),cy:y(v),r:radius,fill:color,opacity,class:'dot',tabindex:0,'aria-label':text},null,c.svg);el('title',{},text,d);for(const e of ['pointerenter','pointermove','focus'])d.addEventListener(e,event=>tip(event,text));for(const e of ['pointerleave','blur'])d.addEventListener(e,hide);}
+for(const s of data.series){const opt=document.createElement('option');opt.value=s.id;opt.textContent=s.label;$('method').append(opt);}$('method').value='gate_b';
+for(const [key,value]of Object.entries(data.definitions)){const p=document.createElement('p'),b=document.createElement('b');b.textContent=key+': ';p.append(b,document.createTextNode(value));$('definitions').append(p);}
+function scopes(){const s=data.series.find(s=>s.id===$('method').value),old=$('scope').value;$('scope').replaceChildren();for(const [key,label]of [['main','Main training batch'],['failure',s.failure_scope],['mixed','Mixed groups inside main batch']])if(s.rows.some(r=>r[key])){const opt=document.createElement('option');opt.value=key;opt.textContent=label;$('scope').append(opt);}if([...$('scope').options].some(o=>o.value===old))$('scope').value=old;render();}
+function render(){hide();const s=data.series.find(s=>s.id===$('method').value),scope=$('scope').value,rows=s.rows.filter(r=>r[scope]).map(r=>r[scope]),win=Number($('window').value),raw=$('raw').checked,valid=$('metric').value==='valid';
+ $('windowLabel').textContent=win===1?'1 (off)':win+' iterations';$('window').setAttribute('aria-valuetext',win===1?'Smoothing off':win+' iteration trailing pooled mean');
+ $('notice').textContent=s.reweight?'Reweighting: orange shows the shared β=0.5 ARM proxy. The training objective multiplies outcome advantages by normalized weights (λ=0.5); it does not add this bonus.':scope==='failure'&&s.id!=='all_failure'?'Extra failure buffer: signal is shown before its Nf/48 auxiliary loss coefficient. Empty buffers are missing observations, not zero reward.':s.id==='all_failure'&&scope==='main'?'This historical method uses failure and mixed-outcome groups within the same 48-slot batch. Use the population menu to inspect them separately.':'ARM signal is the mean centered bonus over retained trainable turns, before native epoch trimming. Unlabeled turns contribute zero.';
+ $('status').textContent=`${s.label} · ${rows.length} saved collections · actor ${rows[0].iteration}–${rows.at(-1).iteration} · ${s.evaluations.length} full-300 evaluations${s.missing_iterations.length?' · gaps: '+s.missing_iterations.join(', '):''}`;
+ const maxX=Math.max(10,Math.ceil(Math.max(...s.evaluations.map(e=>e.iteration),...rows.map(r=>r.iteration))/10)*10),c=chart('reward',maxX,0,60,'Held-out task success',true);
+ const limit=scope==='main'?.016:Math.max(.02,Math.ceil(Math.max(...rows.map(r=>Math.abs(r.mean||0)))*100)/100),ry=v=>c.H-c.B-(v+limit)/(2*limit)*(c.H-c.T-c.B);
+ for(let j=0;j<=4;j++){const v=-limit+j*limit/2;el('text',{x:c.W-c.R+12,y:ry(v)+4,fill:orange},fmt(v,3),c.svg);}
+ el('text',{x:1040,y:(c.T+c.H-c.B)/2,transform:`rotate(-90 1040 ${(c.T+c.H-c.B)/2})`,'text-anchor':'middle'},s.reweight?'Mean ARM proxy':'Mean ARM bonus',c.svg);
+ el('line',{x1:c.L,y1:ry(0),x2:c.W-c.R,y2:ry(0),stroke:orange,'stroke-dasharray':'3 5','stroke-opacity':.35},null,c.svg);
+ const rate=e=>100*e.successes/(valid?e.valid:e.tasks);
+ if($('baseline').checked){const b=data.baseline.filter(e=>e.iteration<=maxX);line(c,b,b.map(rate),gray,{dash:'6 4',opacity:.65});}$('baselineLegend').hidden=!$('baseline').checked;
+ line(c,s.evaluations,s.evaluations.map(rate),blue);for(const e of s.evaluations)dot(c,e,rate(e),blue,`Checkpoint ${e.iteration}: ${s.label}\n${e.successes}/${e.tasks} overall; ${e.valid} valid\nOverall ${pct(e.successes/e.tasks)}; valid-only ${pct(e.successes/e.valid)}`,{radius:4});
+ if(raw)line(c,rows,rows.map(r=>r.mean),orange,{opacity:.22,width:1,y:ry});line(c,rows,smooth(rows,'mean','turns',win),orange,{y:ry});
+ for(const r of rows)dot(c,r,r.mean,orange,`Actor ${r.iteration} (pre-update)\nMean ARM signal ${fmt(r.mean,6)}; RMS ${fmt(r.rms,5)}\nLabels ${r.labels}/${r.turns} (${pct(r.coverage)})\nCredited ${pct(r.credited_rate)}; chance ${pct(r.chance)}\nβ ${r.beta}${r.loss_coefficient!==undefined?'\nAuxiliary coefficient '+fmt(r.loss_coefficient,4):''}`,{y:ry,opacity:raw?.4:0,radius:2.5});
+ const sc=chart('selection',maxX,0,100,'Credited selection (%)');if(raw)line(sc,rows,rows.map(r=>r.credited_rate===null?null:100*r.credited_rate),orange,{opacity:.22,width:1});line(sc,rows,smooth(rows,'credited_rate','labels',win).map(v=>v===null?null:100*v),orange);line(sc,rows,smooth(rows,'chance','labels',win).map(v=>v===null?null:100*v),gray,{dash:'3 5'});
+ const cc=chart('coverage',maxX,0,40,'Usable labels (%)');if(raw)line(cc,rows,rows.map(r=>r.coverage===null?null:100*r.coverage),orange,{opacity:.22,width:1});line(cc,rows,smooth(rows,'coverage','turns',win).map(v=>v===null?null:100*v),orange);
+ $('rows').replaceChildren();for(const r of rows){const tr=document.createElement('tr');for(const v of [r.iteration,fmt(r.mean,6),fmt(r.rms,5),`${r.labels} / ${r.turns}`,pct(r.credited_rate),pct(r.chance),fmt(r.loss_coefficient,4)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}$('rows').append(tr);}
+ $('evalrows').replaceChildren();for(const e of s.evaluations){const tr=document.createElement('tr');for(const v of [e.iteration,`${e.successes}/${e.tasks}`,e.valid,pct(e.successes/e.tasks),pct(e.successes/e.valid)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}const td=document.createElement('td'),a=document.createElement('a');a.href=e.source;a.target='_blank';a.rel='noopener';a.textContent='Source';td.append(a);tr.append(td);$('evalrows').append(tr);}
+}
+$('method').addEventListener('change',scopes);for(const id of ['scope','metric','window','raw','baseline'])$(id).addEventListener('input',render);
+$('csv').onclick=()=>{const s=data.series.find(s=>s.id===$('method').value),scope=$('scope').value,fields=['iteration','turns','labels','mean','rms','coverage','credited_rate','chance','beta','loss_coefficient'],rows=[['method','scope',...fields],...s.rows.filter(r=>r[scope]).map(r=>[s.id,scope,...fields.map(k=>r[scope][k]??'')])];const text=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=`arm-reward-${s.id}-${scope}-raw.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hide();});window.addEventListener('scroll',hide,{passive:true});scopes();
+</script></body></html>
