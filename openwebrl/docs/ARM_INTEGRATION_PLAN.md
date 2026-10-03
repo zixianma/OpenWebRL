@@ -8673,15 +8673,16 @@ files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
 `combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
 Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
-**October3 recovery:** replacement342095 submitted and released for scheduling;
-GPU startup validation and the first optimizer update remain pending.
+**October3 recovery:** replacement342095 is running on g011, has passed
+scheduler initialization and is collecting real browser rollouts. The first
+optimizer update, durable checkpoint and GPU restoration remain pending.
 The prior storage blocker is resolved:43.07TiB soft-quota headroom passes the2TiB
 startup guard. The isolated native baseline source is frozen; reward prompts,
 parser, dynamic filter, sampler, normalization and loss are preserved. Runtime
 changes carry validated browser startup/log-I/O fixes and a shared judge budget.
 Native assembled arguments pass CPU validation (H200 architecture metadata is
 stubbed for the CPU-only validator; this is not GPU restoration validation).
-Seven experiment CPU tests and16 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
+Eight experiment CPU tests and17 supervisor tests pass, covering inherited ARM/resume settings, all six distinct evaluation
 paths/checkpoints, unchanged judge requests, failed-request reservations, retry
 budget accounting and rejection of incomplete saved artifacts.
 
@@ -8714,6 +8715,19 @@ stage. Native argument validation also passes. Preserve the failed logs and
 receipt under`recovery-342093/`; all201 consumed seconds count against the
 original24h approval. The real urgent supervisor notification delivered this
 repair; no extra budget or test notification was added.
+
+The startup throughput audit also found the inherited YAML submission gate
+was32 despite a64-slot browser pool. Iteration1 retains its already-loaded
+32-browser gate; the next worker after checkpoint1 will read the corrected64
+gate. Only this YAML runtime key changes; rewards, sampler, loss and decoding
+stay fixed. CPU checks execute the real gate-precedence function and parse the
+preserved source's config explicitly. This also corrects the earlier CPU
+validator's relative-path ambiguity. The supervisor now recognizes native
+`phase=generate` as collection and reviews startup every15min until the first
+checkpoint/reload and actual64-browser gate are verified; routine user reports
+remain hourly. Initial collection produced successful judge calls with no
+browser-readiness failures or judge API exceptions observed. This is startup
+evidence, not a completed training update or evaluation result.
 
 
 <details>
