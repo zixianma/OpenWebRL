@@ -8622,8 +8622,10 @@ No ARM selection, bonus, reweighting or auxiliary failure groups are enabled.
 Proposed first allocation: **8 H200 ×24h,64 CPUs,960GiB**, TP2/DP4,64 browsers,
 48GiB cache, including startup validation, retries and full300 local/T0/GPT-4.1
 evaluations10/20. First checkpoint endpoint20; release unused time after
-verified evaluation20. Expected terminal judging is roughly$100–200; exact
-compute/API authorization and final launcher preflight are still pending.
+verified evaluation20. Proposed terminal-judge spend cap is$200 shared across
+training, evaluations and retries; exact compute/API authorization is pending.
+CPU launcher preflight passed October3; GPU startup validation remains part of
+the proposed allocation.
 Continuation toward90 needs its own remaining-budget review/approval. Compare
 historical outcome-only results at matched iterations, also reporting Adam
 updates and browser cost; this first historical comparison remains exploratory.
@@ -8667,11 +8669,29 @@ files and per-task source membership stay private under
 `task-pool-expansion-20260922/curation-v3-20260929/outcome-only-expanded-20261002/`:
 `combined-tasks.parquet`, `training-plan.json`, and `exposure-audit.json`.
 Reproducible CPU preparer: `scripts/prepare_task_pool_baseline.py`.
-No training allocation has been submitted for this experiment. As of the October2 status check, the
-native launcher/evaluation/budget preflight remains unfinished and no optimizer
-updates have run. Fresh personal quota headroom is1.17TiB, below the current2TiB
-startup guard; size the proposed checkpoint/log footprint before launch. This is
-a local guard threshold, not a new scheduler permission requirement.
+**October3 readiness:** no training allocation submitted and zero optimizer updates.
+The prior storage blocker is resolved:43.18TiB soft-quota headroom passes the2TiB
+startup guard. The isolated native baseline source is frozen; reward prompts,
+parser, dynamic filter, sampler, normalization and loss are preserved. Runtime
+changes carry validated browser startup/log-I/O fixes and a shared judge budget.
+Native assembled arguments pass CPU validation (H200 architecture metadata is
+stubbed for the CPU-only validator; this is not GPU restoration validation).
+Six CPU tests pass, covering inherited ARM/resume settings, distinct evaluation
+paths/checkpoints, unchanged judge requests, failed-request reservations, retry
+budget accounting and rejection of incomplete saved artifacts.
+
+Prepared controller: `scripts/run_expanded_baseline.py`; batch template:
+`scripts/run_expanded_baseline_8gpu.sbatch`; source preparer:
+`scripts/prepare_expanded_baseline.py`. It owns first-iteration startup validation,
+then training through10/eval10 and20/eval20; the continuation after iteration1
+reloads the full native model/optimizer checkpoint. Every iteration saves a
+checkpoint and dataset cursor; completed next batches can be replayed with the
+correct task-cursor advance. Separate evaluation runs use`openwebrl-evals` and
+retain every rollout/verdict. One persistent GPU/API ledger includes all failed
+attempts; retries do not reset24h or$200. No GPU allocation, API judge call, or
+training step was performed during preparation. Exact resource approval is the
+remaining launch decision. The completed mixed-pair supervisor is inactive;
+register the new job and reactivate agent supervision when it is submitted.
 
 
 <details>
