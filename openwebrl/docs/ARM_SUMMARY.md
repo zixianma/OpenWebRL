@@ -251,9 +251,10 @@ success; teacher action consistency is58% under reversed-order re-query.
 [Method, table and caveats](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 
 <a id="baseline-comparison"></a>
-![Local-browser baseline and ARM curves, with separate matched stealth results](rl_results/baseline_vs_arm_allfailure_full300.png)
+![Local-browser baseline and ARM curves, including both mixed-only runs through iteration90, with separate matched stealth results](rl_results/baseline_vs_arm_allfailure_full300.png)
 
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
+Both mixed-only curves include iterations10–90 and are visible by default; use **Mixed-only pair** to compare them with the outcome-only baseline.
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
 original bonus starts hidden. The y-axis is fixed at0–60%. Smoothing is off by
