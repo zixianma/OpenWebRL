@@ -134,6 +134,99 @@ index. Public artifacts contain aggregates only. The model-shape, image-resize,
 FLOP arithmetic, subset averaging and cache-sharing checks passed; the existing
 20 inference/critic regression tests plus six FLOP tests pass.
 
+<a id="arm-historical-reconciliation-20261004"></a>
+### Why the fresh result differs from the historical30% →43%
+
+**The fresh collection did not reproduce the historical12.67pp ARM gain.**
+These are separate live-web collections, with changed random streams and
+execution scheduling; the October4 cohort is controlled within its six modes,
+but is not an exact replay of September7–8. Reporting the fresh result without
+this comparison obscured a material discrepancy.
+
+| Measurement | September7–8 | October4 | Change |
+| --- | ---: | ---: | ---: |
+| Ordinary one-episode success |90/300 =30.00% |528/1,500 =35.20% |+5.20pp |
+| ARM, five candidates/turn |128/300 =42.67% |118/300 =39.33% |−3.33pp |
+| ARM gain over ordinary one episode |+12.67pp |+4.13pp |−8.53pp |
+| Ordinary unavailable episodes |33/300 |135/1,500 (27 per300) |fewer |
+| ARM unavailable episodes |44/300 |31/300 |fewer |
+
+October4 pass@1 averages the five ordinary episodes; it does not select their
+best result. Their separate success rates are35.33%,35.00%,34.67%,37.67%,33.33%.
+Using only the first ordinary episode gives35.33% and a4.00pp ARM gain, so the
+change in baseline aggregation does not explain the discrepancy.
+
+**Availability does not explain it either.** On the229 tasks valid in both
+historical episodes and all six October4 episodes, historical baseline/ARM
+successes are82/119:35.81%/51.97%, a16.16pp gain. On exactly those tasks,
+October4 ordinary pass@1 is465/1,145 =40.61%, while ARM is101/229 =44.10%:
+a3.49pp gain. This post-hoc intersection is a sensitivity analysis, not a
+replacement for the all300 denominator. Across all300 tasks, the change in
+the ARM gain is−8.53pp, paired task-bootstrap95% interval[−15.07,−1.93]pp.
+This10,000-draw interval conditions on the saved cohorts; it does not measure
+repeat-seed/date uncertainty or identify a causal explanation.
+
+**Verified matching ingredients:** the task file is byte-identical; both use
+the original frozen actor, the same released SelectionARM tensors with no new
+adapter, five full reasoning/action candidates, temperature0.7/top-p0.9,
+1,024 response tokens,30 turns,32K context, full history/current screenshot,
+local-process browsers, and o4-mini/AgentTrek judging. The selector prompt
+builder and greedy constrained JSON rule are unchanged. The older request
+omitted top-k; the new request explicitly specifies−1. Both selector loading
+paths honor the262,144-pixel cap in CPU processor checks, despite different
+serialized processor-size fields; three tested image sizes produce identical
+image grids and pixel tensors. There is no evidence here of a refreshed ARM,
+a switch to action-only candidates, or a change to a GPT-4.1 judge.
+
+**Changes that were not isolated:** historical generation used seed42 and ran
+policy cohorts sequentially (baseline concurrency8, ARM16), with actor and
+selector sharing one H200. October4 uses independent task/mode seeds derived
+from20261004, shuffled mode order within tasks, eight concurrent task blocks
+per shard, and separate actor/selector H200s. Collection dates are almost a
+month apart on live websites. Selector Python/PyTorch environments also
+changed; bitwise inference equivalence has not been established. The historical
+judge metadata identifies the rubric and requested model but lacks the full
+response-usage receipts now recorded. Seed variation, website state, judge
+variability and runtime differences therefore remain competing explanations;
+this audit does not attribute the change to any one of them.
+
+<a id="arm-historical-judge-audit-20261004"></a>
+**Judge-specific audit.** Both collections request o4-mini, use seed42, and
+provide the goal, executed thoughts/actions and final screenshot at high
+detail. Neither call explicitly specifies temperature or reasoning effort.
+The judge implementation is byte-identical in the pre-existing July git
+version, the preserved September9 source, and the October4 deployed source
+(SHA256`b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583`).
+The old API call did not specify a completion cap; the new budget wrapper sets
+`max_completion_tokens=4096` and disables SDK automatic retries. All1,124
+new returned responses identify`o4-mini-2025-04-16` and finish with`stop`;
+completion usage, including reasoning, ranges96–2,512 tokens. None is blank,
+missing a status, or truncated at the cap. All saved historical/current verdicts
+agree with a strict extraction of the stated success/failure label, including
+two new statuses with curly quotes. No parser discrepancy was found.
+
+The old artifacts do not record the returned model snapshot, usage or finish
+reason, so the requested alias and matching prompt do not prove identical API
+realization or repeatable labels. Most importantly, AgentTrek is a **lenient
+trajectory-progress rubric**: it can accept substantial partial completion,
+many correct actions, or an omitted final save. These scores measure success
+under that rubric, not independently verified strict task completion. This
+applies to both dates and does not itself explain the changed ARM gain; it also
+makes false-positive amplification in oracle pass@k a concern. A shared blinded
+re-judging of both saved cohorts with one pinned snapshot would isolate grading
+variation from changes in collected trajectories. A stricter terminal-success
+rubric would be a separately labeled sensitivity applied to every policy.
+No re-judging or additional judge API spending occurred in this audit.
+
+The supported conclusion is that ARM improved the historical single episode
+and has a smaller, uncertain single-episode gain in the fresh cohort. The new
+within-cohort cost/pass@k comparison remains useful, but the historical gain
+should not be described as reproduced or stable. The next diagnostic is a
+matched old/current harness replay on saved identical states and a blinded,
+shared re-judging of saved trajectories; another live comparison should isolate
+seeds and runtime settings. None of those additional paid experiments ran here.
+[Aggregate reconciliation audit](arm_results/rl_integration/controlled-inference-historical-reconciliation-20261004.json).
+
 ### Frozen collection protocol and cost-analysis amendment
 
 | Setting | Prespecified value |

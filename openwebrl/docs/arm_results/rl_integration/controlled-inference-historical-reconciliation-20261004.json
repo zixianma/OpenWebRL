@@ -1,0 +1,238 @@
+{
+  "overall": {
+    "tasks": 300,
+    "old_base_successes": 90,
+    "old_arm_successes": 128,
+    "new_arm_successes": 118,
+    "new_actor0_successes": 106,
+    "new_base_pooled_successes": 528,
+    "old_gain": {
+      "mean_pp": 12.666666666666668,
+      "paired_task_bootstrap_95_pp": [
+        7.000000000000001,
+        18.333333333333332
+      ]
+    },
+    "new_gain": {
+      "mean_pp": 4.133333333333333,
+      "paired_task_bootstrap_95_pp": [
+        -5.921189464667502e-16,
+        8.333333333333332
+      ]
+    },
+    "gap_change": {
+      "mean_pp": -8.533333333333333,
+      "paired_task_bootstrap_95_pp": [
+        -15.066666666666665,
+        -1.9333333333333338
+      ]
+    }
+  },
+  "all_eight_valid": {
+    "tasks": 229,
+    "old_base_successes": 82,
+    "old_arm_successes": 119,
+    "new_arm_successes": 101,
+    "new_actor0_successes": 93,
+    "new_base_pooled_successes": 465,
+    "old_gain": {
+      "mean_pp": 16.157205240174672,
+      "paired_task_bootstrap_95_pp": [
+        9.606986899563319,
+        23.144104803493452
+      ]
+    },
+    "new_gain": {
+      "mean_pp": 3.4934497816593884,
+      "paired_task_bootstrap_95_pp": [
+        -1.4847161572052403,
+        8.384279475982535
+      ]
+    },
+    "gap_change": {
+      "mean_pp": -12.663755458515283,
+      "paired_task_bootstrap_95_pp": [
+        -20.262008733624455,
+        -5.240174672489083
+      ]
+    }
+  },
+  "old_and_new_actor0_all_four_valid": {
+    "tasks": 237,
+    "old_base_successes": 83,
+    "old_arm_successes": 122,
+    "new_arm_successes": 105,
+    "new_actor0_successes": 96,
+    "new_base_pooled_successes": 476,
+    "old_gain": {
+      "mean_pp": 16.455696202531644,
+      "paired_task_bootstrap_95_pp": [
+        9.70464135021097,
+        22.78481012658228
+      ]
+    },
+    "new_gain": {
+      "mean_pp": 4.135021097046413,
+      "paired_task_bootstrap_95_pp": [
+        -0.843881856540085,
+        9.113924050632912
+      ]
+    },
+    "gap_change": {
+      "mean_pp": -12.320675105485233,
+      "paired_task_bootstrap_95_pp": [
+        -19.999999999999996,
+        -4.641350210970466
+      ]
+    }
+  },
+  "new_actor_successes": [
+    106,
+    105,
+    104,
+    113,
+    100
+  ],
+  "new_actor_valid": [
+    272,
+    272,
+    275,
+    270,
+    276
+  ],
+  "changes": {
+    "base_average": {
+      "mean_pp": 5.2,
+      "paired_task_bootstrap_95_pp": [
+        0.8666666666666674,
+        9.6
+      ]
+    },
+    "base_actor0": {
+      "mean_pp": 5.333333333333334,
+      "paired_task_bootstrap_95_pp": [
+        0.0,
+        10.666666666666668
+      ]
+    },
+    "arm": {
+      "mean_pp": -3.3333333333333335,
+      "paired_task_bootstrap_95_pp": [
+        -9.0,
+        2.3333333333333335
+      ]
+    }
+  },
+  "base_cross_date": {
+    "common_valid": 257,
+    "old_successes_common": 88,
+    "new_successes_common": 100,
+    "old_only_successes": 26,
+    "new_only_successes": 42,
+    "old_invalid_new_successes": 6,
+    "old_success_new_invalid": 2
+  },
+  "arm_cross_date": {
+    "common_valid": 245,
+    "old_successes_common": 123,
+    "new_successes_common": 106,
+    "old_only_successes": 44,
+    "new_only_successes": 34,
+    "old_invalid_new_successes": 12,
+    "old_success_new_invalid": 5
+  },
+  "method": {
+    "bootstrap_unit": "task, preserving all eight historical/current outcomes together",
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 20261004,
+    "interval_type": "percentile 95%; conditional on these saved cohorts, not repeat-date/seed uncertainty",
+    "overall_invalid_handling": "unavailable is failure",
+    "new_baseline": "mean of five independent one-episode outcomes; no best-of-five selection",
+    "common_valid": "both historical episodes and all six current episodes valid"
+  },
+  "protocol_audit": {
+    "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+    "same_task_file": true,
+    "same_frozen_actor": true,
+    "same_released_selector_weights": true,
+    "selector_adapter": null,
+    "same_temperature": 0.7,
+    "same_top_p": 0.9,
+    "same_max_response_tokens": 1024,
+    "same_max_steps": 30,
+    "same_context_limit": 32768,
+    "same_history": "full; current screenshot",
+    "same_judge_model_and_rubric": "o4-mini; Online-Mind2Web/AgentTrek",
+    "old_generation_seed": 42,
+    "new_generation_seed_scheme": "independent per-task/mode seeds derived from 20261004",
+    "old_execution": "sequential policy cohorts; baseline concurrency8; ARM16; actor and selector shared H200",
+    "new_execution": "randomized mode order within task; 8 concurrent task blocks per shard; separate actor/selector H200s",
+    "dates": "historical September7\u20138; new October4",
+    "selector_processor_check": "Old and new configurations both honor max_pixels262144; CPU checks produced identical grids and pixel tensors for three image sizes. Historical package versions not immutably preserved; bitwise model equivalence not established.",
+    "causal_attribution": "Unresolved: seed, live website/date, judge stochasticity, and execution/runtime changes were not isolated."
+  },
+  "analysis_script_sha256": "4214e3819b4b73e9b78b3a62a33e5a1f014f4670ac07fb505183a95389e56ece",
+  "judge_audit": {
+    "models": {
+      "o4-mini-2025-04-16": 1124
+    },
+    "finish_reasons": {
+      "stop": 1124
+    },
+    "blank_responses": 0,
+    "missing_status": 0,
+    "by_mode_finish_reason": {
+      "actor0": {
+        "stop": 187
+      },
+      "actor1": {
+        "stop": 190
+      },
+      "actor2": {
+        "stop": 190
+      },
+      "actor3": {
+        "stop": 191
+      },
+      "actor4": {
+        "stop": 189
+      },
+      "arm": {
+        "stop": 177
+      }
+    },
+    "completion_tokens": {
+      "min": 96,
+      "max": 2512,
+      "mean": 397.98932384341634,
+      "at_cap": 0
+    },
+    "judge_source_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+    "source_comparison": "Byte-identical July git source, September9 preserved source, and October4 deployed source",
+    "judge_seed": 42,
+    "temperature": "not explicitly specified in either run",
+    "historical_completion_cap": "not explicitly specified",
+    "current_completion_cap": 4096,
+    "actual_historical_response_model": "not recorded",
+    "current_response_model": "o4-mini-2025-04-16",
+    "interpretation": "No observed truncation or verdict parsing failure; cap differs but causal effect on grading not established. Same rubric does not prove identical historical API realization or grading stability.",
+    "saved_verdict_parser_audit": {
+      "historical_baseline": {
+        "judge_verdict": 168,
+        "canonical_parser_agreement": 168,
+        "no_judge_verdict": 132
+      },
+      "historical_selection": {
+        "judge_verdict": 176,
+        "canonical_parser_agreement": 176,
+        "no_judge_verdict": 124
+      },
+      "current": {
+        "judge_verdict": 1124,
+        "canonical_parser_agreement_including_curly_quotes": 1124,
+        "substring_parser_disagreement": 0
+      },
+      "note": "Two current statuses use curly quotes; both parse to the same label as the native parser. Historical no_judge_verdict includes trajectories with no judge call, not only errors."
+    }
+  }
+}

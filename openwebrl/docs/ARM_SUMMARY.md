@@ -54,6 +54,11 @@ bound; a deployed episode chooser has additional errors and cost. The complete
 research collection used20.269 H200 GPU-hours within the approved32.
 [Results, cost assumptions and protocol](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 
+**Historical gain was not reproduced:** the old30.00%→42.67% gain was12.67pp;
+the fresh35.20%→39.33% gain is4.13pp. This discrepancy survives a shared valid-task
+restriction. Seeds, collection dates and execution/runtime changed; their
+contributions remain unresolved. [Historical reconciliation](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).
+
 **Next critic comparison:** our outcome corpus supports14,825 verified executed
 nonterminal transitions (11,023 train /1,239 dev /2,563 later-policy test).
 Compare goal-conditioned state value, pre-action outcome prediction, and
