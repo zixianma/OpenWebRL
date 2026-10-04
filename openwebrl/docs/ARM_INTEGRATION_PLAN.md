@@ -8832,9 +8832,11 @@ Private preparation and shard manifests:
 **October4 iteration20 result verified:** full300 **33.33% overall (100/300)**,
 **42.19% valid-only (100/237)**;63 invalid tasks. Iteration10 was27.00% /34.32%.
 Checkpoint20 contains312 Adam updates with matching scheduler and saved cursor.
-Job342742 subsequently hit an early controller cutoff; recovery343513 is queued
-to replay the preserved iteration21 batch using only43min of the original
-approval. Target60 and evaluations30/40/50/60 remain unfinished; continuation
+Job342742 subsequently hit an early controller cutoff. Its first replay attempt
+343513 failed before optimizer updates when the debug saver overwrote its
+memory-mapped input. Recovery343716 is queued for38min within the original
+approval: reconstruct the retained metadata/screenshots with validated identical
+processing, then replay21 using the fixed archive-preservation guard. Target60 and evaluations30/40/50/60 remain unfinished; continuation
 beyond the remaining first-block budget requires additional compute approval.
 [Results and artifact audit](RL_EVALUATION.md#expanded4102-iter10-results-20261003) ·
 [Budget recovery](RL_RUNTIME.md#expanded4102-budget-cutoff-recovery-20261004).
