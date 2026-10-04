@@ -342,6 +342,22 @@ def adapt_agent(session, transport, config):
                 self.page.close()
                 self.target = None
 
+        def act(self, action, page, text=None):
+            try:
+                return super().act(action, page, text=text)
+            except (browser_module.StalePage, RuntimeError) as exc:
+                # Upstream tick swallows StalePage. Preserve its exact code-owned
+                # cause, without recording arbitrary CDP exception bodies/secrets.
+                message = str(exc)
+                known = ("Page changed since this decision. Observe again.",
+                         "Target changed or is covered. Observe again.",
+                         "Dropdown execution was not confirmed; inspect before retrying.",
+                         "Dropdown execution was interrupted; inspect before retrying.")
+                append_json(transport.root / "execution-rejections.jsonl", dict(
+                    action=action, fingerprint=page["fingerprint"], error_type=type(exc).__name__,
+                    reason=message if message in known else "CDP execution failed", updated_unix=time.time()))
+                raise
+
     def cdp(method, session_id=None, **params):
         if session_id is None:
             raise ValueError("CDP operation requires the owned task session")
@@ -352,7 +368,9 @@ def adapt_agent(session, transport, config):
     browser_module.cdp = cdp
     model_module.post_json = transport.post
     try:
-        yield agent_module.Agent
+        from openwebrl.jev_harness import revision
+        with revision(browser_module, config.get("harness_revision", "upstream-v1")):
+            yield agent_module.Agent
     finally:
         agent_module.Browser, agent_module.MAX_STEPS, browser_module.cdp, model_module.post_json = originals
 

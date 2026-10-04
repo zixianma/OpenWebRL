@@ -117,6 +117,16 @@ def stop_process(process, seconds):
             process.wait()
 
 
+def check_port_available(endpoint):
+    import socket
+    from urllib.parse import urlsplit
+    with socket.socket() as probe:
+        # Match the server's bind policy: a closed prior listener may leave
+        # TIME_WAIT connections. A live listener must still fail this check.
+        probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        probe.bind(("127.0.0.1", urlsplit(endpoint).port))
+
+
 def run(args, plan):
     import httpx
     if not os.environ.get("SLURM_JOB_ID"):
@@ -163,10 +173,8 @@ def run(args, plan):
                 heartbeat("starting_" + variant)
                 # Refuse an occupied endpoint rather than connecting to somebody
                 # else's model, even if it advertises the same checkpoint.
-                import socket
                 from urllib.parse import urlsplit
-                with socket.socket() as probe:
-                    probe.bind(("127.0.0.1", urlsplit(args.endpoint).port))
+                check_port_available(args.endpoint)
                 spec = kev.model_spec(variant)
                 command = [str(RUNTIME / "kev-eval-venv/bin/python"), "-m", "kev.serve", "--run", spec["server_run"],
                            "--host", "127.0.0.1", "--port", str(urlsplit(args.endpoint).port)]

@@ -4,7 +4,8 @@ Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
 [October4 Jev Ultrafast: completed10-task pilot,1/10 successes, independently verified browser and judge artifacts](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
-[Kev0.8B/27B: paired alternative decision models, shared browser/helper/judge protocol; GPU allocation approval pending](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
+[Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
+[SFT proposes five actions; Jev/Kev select: implemented pilot and fresh SFT control, new allocation pending](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
 
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

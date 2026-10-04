@@ -17,6 +17,7 @@ set -euo pipefail
 cd /gpfs/projects/krishna/zixianma/OpenWebRL
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
 export WANDB_PROJECT=openwebrl-evals
+export CPATH="/gpfs/scrubbed/zixianma/openwebrl-runtime/src/python-headers/Include:/gpfs/scrubbed/zixianma/openwebrl-runtime/src/python-headers${CPATH:+:$CPATH}"
 export PLAYWRIGHT_BROWSERS_PATH=/gpfs/scrubbed/zixianma/openwebrl-runtime/browsers
 exec /gpfs/scrubbed/zixianma/openwebrl-runtime/jev-eval-venv/bin/python \
   scripts/evaluate_kev_pair.py --execute "$@"

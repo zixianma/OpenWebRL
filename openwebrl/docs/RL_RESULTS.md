@@ -9,6 +9,8 @@
 | Decision model | Text helper | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Jev 1.13.0 | GPT-4.1-mini |10 |1 |10 |0 |10.00 |10.00 |[October4 pilot](rl_results/jev-ultrafast-pilot-20261004.json), [Protocol](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004) |
+| Kev 0.8B | GPT-4.1-mini |10 |0 |10 |0 |0.00 |0.00 |[Paired pilot](rl_results/kev-pair-pilot-20261004.json), [Protocol](RL_EVALUATION.md#kev-paired-online-mind2web-20261004) |
+| Kev 27B | GPT-4.1-mini |10 |3 |10 |0 |30.00 |30.00 |[Paired pilot](rl_results/kev-pair-pilot-20261004.json), [Protocol](RL_EVALUATION.md#kev-paired-online-mind2web-20261004) |
 
 ## Local browser · GPT-4.1 · temperature 0 · full 300
 

@@ -121,3 +121,25 @@ def test_pair_restart_does_not_restore_consumed_budget(tmp_path, monkeypatch):
     jev.write_json(tmp_path / "pair-time-ledger.json", dict(attempts=[dict(finished=True, elapsed_seconds=6600)]))
     with pytest.raises(ValueError, match="exhausted"):
         pair.run(SimpleNamespace(output=tmp_path), dict(controller_budget_seconds=6900))
+
+
+def test_port_probe_allows_closed_server_connections_but_rejects_live_listener():
+    import socket
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from evaluate_kev_pair import check_port_available
+    with socket.socket() as listener, socket.socket() as client:
+        listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        listener.bind(("127.0.0.1", 0))
+        address = listener.getsockname()
+        endpoint = f"http://127.0.0.1:{address[1]}/v1/systemone"
+        listener.listen()
+        with pytest.raises(OSError):
+            check_port_available(endpoint)
+        client.connect(address)
+        connection, _ = listener.accept()
+        connection.shutdown(socket.SHUT_WR)
+        assert client.recv(1) == b""
+        client.shutdown(socket.SHUT_WR)
+        assert connection.recv(1) == b""
+        connection.close()
+    check_port_available(endpoint)

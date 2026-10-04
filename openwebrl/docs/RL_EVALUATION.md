@@ -22,7 +22,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 - [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
-- [Kev0.8B/27B paired pilot preparation](#kev-paired-online-mind2web-20261004)
+- [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
 
 - [Expanded 4,102-task outcome-only baseline: iterations10/20](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
@@ -147,13 +147,38 @@ Mean Jev HTTP latency was 95.4 ms (median 90.2 ms). The pilot measures the whole
 DOM-agent stack, including executor limitations and the lack of a final-answer
 channel, rather than isolated decision accuracy.
 
+### What the public results establish
+
+Checked October4. The1/10 above is an Online-Mind2Web startup pilot using
+our adapter, fresh remote browser sessions and the unchanged Jev Ultrafast
+executor. It is not a reproduced full300 score for Jev, and the public speed
+demonstrations do not establish one.
+
+| Public source | Reported result | Scope and comparison limit |
+| --- | --- | --- |
+| [Official Jev Ultrafast performance report](https://github.com/browser-use/jev-ultrafast/blob/main/docs/performance.md) | 3/3 for each runtime; optimized median7.092s | Three repeats of one Google Flights goal on an existing Chrome profile; explicitly not a broad reliability benchmark |
+| [Independent jev-ra public benchmarks](https://github.com/brnyxx/jev-ra/blob/main/docs/BENCHMARKS.md#the-public-benchmarks) | Online-Mind2Web3/10 initially, then3/10 and2/10 | Different Jev-based implementation, difficulty-stratified sample, browser profile and official WebJudge; contextual evidence, not a matched reproduction |
+| [Kev model evaluations](https://github.com/jaredpalmer/kev#models) | Kev27B0.851 development /0.889 test on new-source accuracy | Classification and decision datasets, not browser-task success |
+| [Browser Use Cloud Online-Mind2Web](https://github.com/browser-use/online-mind2web) | bu-max291/300 (97%) | Different cloud agent; its published procedure uses Claude to judge final responses rather than our AgentTrek screenshot/history protocol |
+
+The low pilot score warrants diagnosis. Three runs used all60 decision cycles
+while executing0,2 and5 actions; two other tasks displayed Cloudflare security
+pages. One task reached the requested comparison page but failed the judge
+because this demo has no generated final-answer channel. Two zero-action
+BLOCKED decisions occurred on ordinary initial pages, not blank navigation
+results. These are distinct failure modes, not evidence that every failure
+comes from the classifier or from site availability. Ten ordered tasks also do
+not provide a representative ranking of the decision models. The adapter and
+browser execution need further validation before interpreting a larger score
+as general Jev/Kev capability.
+
 <a id="kev-paired-online-mind2web-20261004"></a>
 ## Kev alternatives: smallest and largest — October 4
 
-**Prepared; GPU execution awaits an exact allocation approval.** The current
+**Completed and independently audited: Kev 0.8B 0/10; Kev 27B 3/10.** All20 attempts have valid saved evidence and judge verdicts. The current
 [Kev 1.0 family](https://github.com/jaredpalmer/kev) ranges from 0.8B to 27B.
-Evaluate both on the exact same 10 tasks as the completed Jev pilot, sequentially
-in one allocation. The unchanged Jev Ultrafast policy, DOM extraction, guarded
+Both used the exact same10 tasks as the completed Jev pilot, sequentially
+within one shared approved budget. The unchanged Jev Ultrafast policy, DOM extraction, guarded
 executor, GPT-4.1-mini field-text helper, Browser Use sessions and o4-mini judge
 are shared. The experimental change is the System One decision endpoint and
 model. Kev does not generate field text. Browser content is collected afresh for each model,
@@ -180,8 +205,8 @@ graphs and the checkpoint's shipped calibration; date preprocessing and state
 truncation are disabled. Both weight caches passed SHA-256 verification against Hub metadata, including
 all eleven 27B shards and the 0.8B adapter/base weights. Both tokenizers strictly
 admitted all 199 saved requests; the prepared paired manifests passed dry-run
-source, credential-presence and task-identity checks. GPU loading and inference
-remain unvalidated until the approved allocation starts.
+source, credential-presence and task-identity checks. Both models then passed actual
+GPU loading, identity checks, warmup requests and live browser inference.
 
 [`evaluate_kev_pair.py`](../../scripts/evaluate_kev_pair.py) verifies model-file
 hash receipts, source/dependency identities and exact paired task identities.
@@ -195,7 +220,7 @@ accepted as evidence of which checkpoint was loaded. The controller owns and
 awaits both model servers and all browser workers, preserves separate variant
 artifacts and charges a shared time ledger without resetting it on retry.
 
-| Proposed pilot budget | Limit |
+| Approved pilot budget | Limit |
 | --- | ---: |
 | Allocation, both models and all retries combined | 1 H200, 8 CPUs, 120 GiB, 2 hours |
 | Model-task attempts | 20 (10 per model) |
@@ -207,7 +232,7 @@ artifacts and charges a shared time ledger without resetting it on retry.
 Prepared batch entry:
 [`evaluate_kev_pair_1gpu.sbatch`](../../scripts/evaluate_kev_pair_1gpu.sbatch).
 Private artifacts use runtime `evaluations/kev-pair-om2w-pilot-20261004/`.
-The 28 offline adapter tests passed, including actual Chromium fill/click/DONE,
+The original29 adapter tests passed, including actual Chromium fill/click/DONE,
 checkpoint/calibration mismatch rejection, secret-safe local routing and
 inherited-setting isolation. All 199 saved Jev requests passed Kev's API schema and strict tokenizer
 admission (up to 3,953 state tokens; 9,256 packed tokens across questions).
@@ -216,7 +241,101 @@ actor episode limit is unchanged. The new runner also enforces the project's
 4,096-token judge response cap. The completed Jev pilot omitted that explicit
 cap; its longest judge response used 681 completion tokens. Keep this recorded
 configuration difference when interpreting the historical pilot comparison.
-This preparation creates no browser sessions and performs no model inference.
+
+| Result | Jev 1.13.0 | Kev 0.8B | Kev 27B |
+| --- | ---: | ---: | ---: |
+| Successes / tasks |1/10 |0/10 |3/10 |
+| Valid / invalid |10/0 |10/0 |10/0 |
+| Executed actions |15 |75 |62 |
+| Decision requests |199 |232 |231 |
+| Mean decision HTTP latency, ms |95.4 |43.9 |224.7 |
+| Median decision HTTP latency, ms |90.2 |21.5 |203.5 |
+| Mean actor episode, seconds |17.73 |21.29 |22.57 |
+| Text-helper requests |4 |0 |3 |
+| Judge requests |10 |10 |10 |
+
+[Kev aggregate audit](rl_results/kev-pair-pilot-20261004.json). Both Kev variants
+finished within **600 seconds total allocated GPU time**, including every failed
+attempt:34391424s,343916267s,343922309s. The first failure was a missing Python
+header during Triton compilation; exporting the existing compatible headers
+fixed it. The second was a server-port probe rejecting a closed listener's
+TIME_WAIT connection; matching the server's SO_REUSEADDR bind policy fixed the
+handoff. No completed task or billed browser session was repeated. The final
+job exited0. All20 task identities, state archives, terminal screenshots, judge
+requests/verdicts, provider responses and session-stop receipts passed independent
+audits. Kev0.8B chose only CLICK/BLOCKED and never used the typing helper. Kev27B
+had one valid failed trajectory ending in a dropdown-execution RuntimeError;
+valid evidence does not imply that the actor ran without errors.
+
+### Harness diagnosis and private review
+
+All reported scores above use the unchanged pinned upstream DOM reader and
+execution policy, labeled `upstream-v1`. The supplied Jev code offers controls
+based on visibility and viewport geometry, but checks `elementFromPoint` only
+at execution. A covered control can therefore be repeatedly offered and rejected.
+A local Chromium fixture reproduces this mismatch for buttons and selects.
+The opt-in `actionable-v2` snapshot filters offered targets with the same existing
+center-point hit test. It keeps the execution guard and restores upstream globals
+on exit. After dismissing the fixture overlay, the underlying controls reappear.
+No live evaluation of this revised harness has run. Keep its results separate.
+
+The original traces did not record each caught StalePage reason. Future attempts
+now save code-owned rejection reasons in a private `execution-rejections.jsonl`.
+The historical Speedo screenshots show an overlay while all three policies exhaust
+60 decisions without executing an action. This supports investigating the mismatch,
+but does not establish the exact rejection cause of every historical attempt.
+The dropdown RuntimeError also needs a live replay with the improved telemetry;
+blindly retrying a possibly partially executed dropdown is intentionally avoided.
+
+[`render_jev_kev_review.py`](../../scripts/render_jev_kev_review.py) builds the
+self-contained private review `runtime/visualizations/jev-kev-review-20261004.html`.
+It contains10 matched tasks,30 trajectories and215 distinct original screenshots,
+with provider probabilities, per-step execution status, typing outputs and judge
+explanations. It is approximately30MiB and requires no server or external assets.
+Chromium checks passed for all three columns, task filtering, timeline controls,
+image enlargement and mobile layout with no JavaScript errors. Task payloads and
+screenshots remain local; only the renderer and template are versioned publicly.
+
+Before scaling, rerun the same small cohort under an explicitly recorded revised
+harness, compare rejected-decision counts and terminal outcomes, then expand the
+cohort if useful progress is verified. Distinguish website blocks, execution
+limitations and model selection failures.
+
+<a id="sft-jev-kev-selection-pilot-20261004"></a>
+### Prepared: original SFT proposes five actions; Jev/Kev select
+
+The requested SelectionARM-style replacement is implemented separately from the
+Jev Ultrafast direct agent. At each state, the original OpenWebRL-4B-SFT samples
+five independently seeded full reasoning/action candidates. Jev, Kev0.8B or
+Kev27B chooses one via a five-way probability distribution; the original actor
+output tuple, tool arguments and text values are executed unchanged. There is
+no GPT typing helper, action repair, training update or first-candidate fallback.
+A malformed provider response stops the cohort and preserves the proposals.
+A fresh SFT-only control executes candidate0 from the same seed schedule.
+
+The proposer uses the standing stealth protocol: T0.6,p0.95,k20,4096 response
+tokens,30 turns,32K context, full actor history and the current screenshot.
+The text-only selectors receive task, URL, page text (explicit16000-character
+limit), interactive-element geometry, last-five executed reasoning/actions and
+all five full proposals. This modality differs from the visual SelectionARM;
+frames/canvas content may be absent. No hidden benchmark rubric is supplied.
+The shared judge is o4-mini/AgentTrek with fresh final screenshots and a4096-token
+completion cap. All cohorts use Browser Use without proxies and a1280×1000
+viewport. This is a separate protocol from the direct1120×780 Jev agent.
+
+Prepared entry: [`evaluate_sft_decision_selection.py`](../../scripts/evaluate_sft_decision_selection.py),
+[`batch template`](../../scripts/evaluate_sft_decision_selection_2gpu.sbatch).
+The four conditions each use the same first10 tasks (40 fresh episodes total),
+with2 concurrent browsers. Proposed allocation: **2H200,16CPUs,240GiB,1hour total
+including startup and retries**; one GPU for SFT and one for the sequential Kev
+servers. It releases on completion and stops at its cap if incomplete. API caps:
+300Jev calls,602local Kev calls including warmups,160judge attempts,4096judge
+completion tokens per attempt;40browser sessions with12-minute expiry and no
+additional helper calls. This is prepared only; the new allocation and API/browser
+budget have not been approved or submitted. The completed direct-pilot budget is
+not reused. Combined offline tests passed38 cases, including literal candidate
+preservation, probability failures, secret-safe routing and local overlay behavior.
+
 
 <a id="evaluation-harness-guide"></a>
 ## Evaluation harness: code map and entry points

@@ -1,0 +1,145 @@
+{
+  "verified_complete": true,
+  "cohort": "Same first 10 Online-Mind2Web tasks as Jev pilot; fresh live sessions per model",
+  "browser": "Browser Use remote; proxy disabled",
+  "judge": "o4-mini / AgentTrek / fresh final screenshot / 4096 completion tokens",
+  "allocation": {
+    "gpus": 1,
+    "gpu_type": "H200",
+    "cpus": 8,
+    "memory_gib": 120,
+    "approved_seconds": 7200,
+    "actual_seconds_including_retries": 600
+  },
+  "variants": {
+    "0.8b": {
+      "verified_complete": true,
+      "variant": "0.8b",
+      "decision_checkpoint": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+      "tasks": 10,
+      "valid": 10,
+      "successes": 0,
+      "overall_success_rate": 0.0,
+      "valid_only_success_rate": 0.0,
+      "api_attempts": {
+        "kev": 232,
+        "text": 0,
+        "judge": 10
+      },
+      "warmup_requests": 2,
+      "actual_models": {
+        "kev": [
+          "kev-latest"
+        ],
+        "judge": [
+          "o4-mini-2025-04-16"
+        ]
+      },
+      "api_latency_seconds": {
+        "kev": {
+          "mean": 0.04391279648879045,
+          "median": 0.021483155520400032,
+          "maximum": 0.7878985549905337
+        },
+        "judge": {
+          "mean": 2.8422914820024743,
+          "median": 3.0263383385026827,
+          "maximum": 3.20597802096745
+        }
+      },
+      "actor_mean_seconds": 21.28539944490767,
+      "actor_median_seconds": 9.991435507021379,
+      "total_actions": 75,
+      "total_decisions": 232,
+      "terminations": {
+        "blocked": 6,
+        "max_steps": 2,
+        "max_decisions": 2
+      },
+      "usage": {
+        "kev": {
+          "input_tokens": 581148,
+          "output_tokens": 103137
+        },
+        "text": {},
+        "judge": {
+          "prompt_tokens": 34357,
+          "completion_tokens": 2491,
+          "total_tokens": 36848
+        }
+      },
+      "verified_snapshot_archives": 252
+    },
+    "27b": {
+      "verified_complete": true,
+      "variant": "27b",
+      "decision_checkpoint": "jaredpalmer/kev-27b@af0e6d551bdc2cc724f3e9d7a8bee1cd4fb8f7bf",
+      "tasks": 10,
+      "valid": 10,
+      "successes": 3,
+      "overall_success_rate": 0.3,
+      "valid_only_success_rate": 0.3,
+      "api_attempts": {
+        "kev": 231,
+        "text": 3,
+        "judge": 10
+      },
+      "warmup_requests": 2,
+      "actual_models": {
+        "kev": [
+          "kev-latest"
+        ],
+        "judge": [
+          "o4-mini-2025-04-16"
+        ],
+        "text": [
+          "gpt-4.1-mini-2025-04-14"
+        ]
+      },
+      "api_latency_seconds": {
+        "kev": {
+          "mean": 0.2246553669018405,
+          "median": 0.20345663093030453,
+          "maximum": 1.3797544660046697
+        },
+        "judge": {
+          "mean": 3.195212364802137,
+          "median": 2.907485216157511,
+          "maximum": 4.787429366726428
+        },
+        "text": {
+          "mean": 0.5515645174309611,
+          "median": 0.5236740130931139,
+          "maximum": 0.6617603781633079
+        }
+      },
+      "actor_mean_seconds": 22.57477526348084,
+      "actor_median_seconds": 16.523454933892936,
+      "total_actions": 62,
+      "total_decisions": 231,
+      "terminations": {
+        "blocked": 3,
+        "done": 4,
+        "max_decisions": 2,
+        "error": 1
+      },
+      "usage": {
+        "kev": {
+          "input_tokens": 505511,
+          "output_tokens": 84577
+        },
+        "text": {
+          "prompt_tokens": 824,
+          "completion_tokens": 33,
+          "total_tokens": 857
+        },
+        "judge": {
+          "prompt_tokens": 31586,
+          "completion_tokens": 3180,
+          "total_tokens": 34766
+        }
+      },
+      "verified_snapshot_archives": 250
+    }
+  }
+}

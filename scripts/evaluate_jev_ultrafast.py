@@ -22,8 +22,10 @@ RUNTIME = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime")
 
 
 def configuration(args):
+    from openwebrl import jev_harness
     mercury = args.text_provider == "openrouter"
     config = dict(version=1, browser=args.browser, jev_model="jev-1.13.0",
+                harness_revision=getattr(args, "harness_revision", "upstream-v1"),
                 text_provider=args.text_provider,
                 text_model="inception/mercury-2.5" if mercury else "gpt-4.1-mini-2025-04-14",
                 text_base_url="https://openrouter.ai/api/v1" if mercury else "https://api.openai.com/v1",
@@ -37,7 +39,7 @@ def configuration(args):
                 wandb_project="openwebrl-evals", upstream=evaluation.source_identity(args.upstream),
                 judge_prompt_sha256=evaluation.digest(evaluation.judge_protocol()),
                 code_sha256={str(p.relative_to(REPO)): hashlib.sha256(p.read_bytes()).hexdigest()
-                             for p in (Path(__file__), Path(evaluation.__file__))})
+                             for p in (Path(__file__), Path(evaluation.__file__), Path(jev_harness.__file__))})
     if getattr(args, "decision_provider", "jev") == "kev":
         from openwebrl import kev_eval
         config.update(decision_provider="kev", jev_model="kev-latest",
@@ -223,6 +225,7 @@ def main():
     parser.add_argument("--browser", choices=("browser-use", "local"), default="browser-use")
     parser.add_argument("--text-provider", choices=("openai", "openrouter"), default="openai")
     parser.add_argument("--decision-provider", choices=("jev", "kev"), default="jev")
+    parser.add_argument("--harness-revision", choices=("upstream-v1", "actionable-v2"), default="upstream-v1")
     parser.add_argument("--kev-variant", choices=("0.8b", "27b"))
     parser.add_argument("--kev-endpoint", default="http://127.0.0.1:18761/v1/systemone")
     parser.add_argument("--execute", action="store_true")
