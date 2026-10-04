@@ -1,0 +1,90 @@
+{
+  "status": "CPU data audit complete; neural critic fits not launched",
+  "source_manifest_sha256": "14fd1eca56e45371728ccb1c8f33b19485c0ec74874486216be121c1350bb5da",
+  "index_sha256": {
+    "train": "005e91c92223454f036bd0a8fc894670d48d1b465bd4f523aeea436d130be446",
+    "dev": "718683b842d1e2272f801682bdfab123825c331b94c0c1a27ae105be12743f74",
+    "future": "28efc2b8d9594e0689e8bfdc8c2688fcfe60c6448d6858d99b56b8656bf3b3de"
+  },
+  "statistics": {
+    "train": {
+      "tasks": 700,
+      "trajectories": 2000,
+      "prefixes": 13030,
+      "matched_transitions": 11023,
+      "trajectories_with_matched_transitions": 1854,
+      "successful_return_pairs": 4230,
+      "exclusions": {
+        "terminal_after_observation_unavailable": 2000,
+        "missing_execution_receipt": 7
+      }
+    },
+    "dev": {
+      "tasks": 126,
+      "trajectories": 250,
+      "prefixes": 1490,
+      "matched_transitions": 1239,
+      "trajectories_with_matched_transitions": 226,
+      "successful_return_pairs": 615,
+      "exclusions": {
+        "terminal_after_observation_unavailable": 250,
+        "missing_execution_receipt": 1
+      }
+    },
+    "future": {
+      "tasks": 155,
+      "trajectories": 500,
+      "prefixes": 3064,
+      "matched_transitions": 2563,
+      "trajectories_with_matched_transitions": 486,
+      "successful_return_pairs": 1183,
+      "exclusions": {
+        "terminal_after_observation_unavailable": 500,
+        "missing_execution_receipt": 1
+      }
+    }
+  },
+  "source_archives_verified": 1008,
+  "unique_images_verified": 13495,
+  "image_bytes_verified": 4938061091,
+  "horizon_values": [
+    15
+  ],
+  "task_disjoint": true,
+  "benchmark_training_rows": 0,
+  "target": "Observed undiscounted terminal return under archived behavior; not action correctness",
+  "causal_fields": [
+    "goal",
+    "before_prompt",
+    "before_images",
+    "elapsed_turns",
+    "remaining_turns",
+    "candidate_response (Q/post only)",
+    "after_prompt (post only)",
+    "after_images (post only)",
+    "after_remaining_turns (post only)",
+    "tool_responses (post only)"
+  ],
+  "forbidden_inputs": [
+    "trajectory reward/success",
+    "eval",
+    "terminate_reason",
+    "total_steps",
+    "num_turns_in_trajectory",
+    "is_last_turn",
+    "next actor response",
+    "remaining actual trajectory length"
+  ],
+  "limitations": [
+    "Post-state missing for terminal turns; matched comparison excludes them.",
+    "Observed behavior is a policy mixture (train iterations31-40, future81-90), not a fixed-policy Q oracle.",
+    "Task and policy shift both change in future; they cannot be separated in this split.",
+    "No counterfactual branch outcomes or direct progress/advantage labels.",
+    "Input renderer must budget context/images identically and keep these index labels out of prompts."
+  ],
+  "resources": {
+    "gpus": 0,
+    "api_calls": 0,
+    "wall_seconds": 98.9
+  }
+}

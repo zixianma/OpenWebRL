@@ -1,5 +1,120 @@
 # Action reward models for OpenWebRL training
 
+<a id="arm-critic-comparison-20261004"></a>
+## Critic comparison: available supervision and prepared transitions — October4
+
+The user requested a comparison of pre-action, post-action, and advantage
+formulations. **CPU preparation is complete; neural critics have not been fit.**
+This study is separate from the unchanged, previously approved actor-training
+lineages. No GPU allocation or API budget was consumed or requested here.
+
+The existing ARM is a goal-conditioned teacher-preference model. Its selection
+index is not an outcome value. The canonical training and serving prompts
+include the original task; both inference selection and RL shadow selection
+forward it. The canonical selector normally sees the last five history steps
+and the current screenshot, rather than the actor's complete history. Private
+source/hash audit: runtime `arm-turn-bonus-preparation/arm-goal-audit-20261004/`.
+
+### Data that actually supports each target
+
+| Source | Verified available data | Appropriate supervision | Missing evidence |
+| --- | --- | --- | --- |
+| Piotr OpenWebRL subset, pinned `0d83b48` |3,085 states in412 demonstration episodes;49,536 five-candidate records,49,360 unique draw IDs; teacher choices |Pre-action preference SFT/BT; source demonstration transitions can support observation-based relabeling |No executed outcome for each sampled candidate;176 conflicting duplicate draw records require the existing identity audit |
+| Same source demonstrations |2,673 adjacent episode/turn pairs and original `demo_action` |Potential before/demo-action/after examples after lineage validation |The next screenshot belongs to the demonstration action, not the later teacher-selected candidate; no terminal-return field in these state records |
+| Prepared outcome-only RL corpus |2,750 valid binary-outcome trajectories;17,584 causal prefixes;14,825 executed nonterminal transitions |Observed-return state value, pre-action outcome prediction, post-action outcome prediction |No same-state alternative-action returns or direct advantage/progress labels |
+| Our inference and screening rollouts |Executed path, goal, action history, screenshots and terminal verdict; selector traces also retain unexecuted candidates |Additional behavior-specific outcome examples after equivalent archive checks |Candidate alternatives still lack realized transitions; OM2W benchmark trajectories stay out of critic training |
+
+The [upstream dataset card](https://huggingface.co/datasets/PTeterwak/action-reward-models-data)
+describes teacher selection and scalar preference training. Its older MolmoWeb
+PRM variants use teacher scores; the inspected `build_reward_data.py` constructs
+single-action prompts with GPT-5.5 scores, not measured browser branch returns.
+These statements about missing returns apply to the inspected schemas and
+pinned OpenWebRL subset, not an exhaustive claim about every upstream artifact.
+
+The new [aggregate audit](arm_results/rl_integration/critic-data-audit-20261004.json)
+verifies1,008 source archive hashes and13,495 screenshot hashes (4.938GB).
+Private train/dev/future transition indices are under runtime
+`arm-turn-bonus-preparation/outcome-reward-20260927/critic-comparison-20261004/`.
+They preserve the earlier task-disjoint, benchmark-excluded outcome corpus:
+
+| Split | Actor iterations | Tasks | Trajectories | All prefixes | Matched nonterminal transitions |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Train |31–40|700|2,000|13,030|11,023|
+| Dev |31–40|126|250|1,490|1,239|
+| Later-policy test |81–90|155|500|3,064|2,563|
+
+The14,834 possible adjacent pairs lose nine examples without an execution
+receipt. Tool execution failures with a receipt remain legitimate observed
+transitions. The final2,750 turns lack a next-turn observation and are excluded
+from the matched pre/post test; a terminal action is not assigned its own
+pre-action screenshot as an after-state. This also excludes single-turn
+episodes from the matched comparison, so report its coverage separately.
+
+**Leakage guard:** final reward, verdict metadata, termination reason,
+`total_steps`, and `num_turns_in_trajectory` are broadcast onto earlier archived
+turns. Never pass the entire metadata object to a critic. The resolver permits
+only original causal prompts/images, goal, elapsed turn count, the configured
+15-turn budget, the proposed response when appropriate, and the observed
+tool response/next prompt/images for the post-action variant. It never includes
+the next actor response or actual future trajectory length. Keep labels and
+weights outside model prompts. Three regression tests cover this boundary,
+missing execution receipts, and pass@k invalid/missing-attempt handling.
+
+### Matched experiment and interpretation
+
+Start with a small engineering fit, then the full prepared split if the loader,
+memory, save/reload and calibration checks pass. Use a common starting critic
+backbone and fresh optimizer for every intervention; freeze the vision encoder
+and match adaptation capacity, training exposure, seed and context policy.
+Specify the exact checkpoint and resource cap in the launch proposal before
+allocating compute. No later actor checkpoint is a substitute for an agreed
+iteration0 initialization.
+
+| Variant | Input at turn t | Training target / role |
+| --- | --- | --- |
+| State value V |Goal, causal history, before screenshot, remaining budget |Observed terminal return Y; supplies the state baseline |
+| Pre-action Q |Same state plus the executed reasoning/action response |Same Y; tests outcome prediction before execution |
+| Post-action transition critic |Same state/action plus tool feedback and next screenshot/observation |Same Y; tests the added information from execution |
+| Derived advantage |Cross-fitted V and successor links, or Q minus V |`Y − V(s)` as a Monte Carlo estimate, or `r + γV(s′) − V(s)` as a TD estimate; no fabricated direct labels |
+| Frozen existing SelectionARM |Its canonical goal/state/five-candidate prompt |Preference reference; teacher agreement is a separate endpoint from value calibration |
+
+Compare V, Q and post-action outcome prediction on the **same nonterminal
+rows**, with per-trajectory weights so long failures do not dominate. Also
+report state-value/pre-action coverage on all prefixes separately. Render the
+post input as the same causal prefix plus one new observation; do not duplicate
+the entire history or silently truncate one variant more aggressively. The
+current artifact is an audited source index/resolver, not yet a finalized
+processor-specific training renderer or GPU trainer.
+
+Use dev Brier score/log loss and calibration as primary offline endpoints;
+include task-clustered uncertainty, AUROC, remaining-budget slices, and
+prefix-only length/time controls. Test the held-out future split only after
+model selection. Its task and actor both change, so it measures joint shift,
+not isolated policy drift. The archives mix behavior snapshots within each
+iteration band: their return predictor is not automatically Q for the original
+SFT actor or a future RL policy. Do not identify every action on a successful
+trajectory as good, or every action on a failed trajectory as bad.
+
+Cross-fit value estimates by task before constructing training advantage
+targets. With terminal reward paid on the final transition, use terminal
+V=0; handle actual timeouts/truncations explicitly. Under the appropriate fixed
+continuation policy, an accurate V makes expected TD residual an advantage;
+estimated V can introduce bias. Outcome supervision alone may produce a
+trajectory predictor with weak local credit, which is why we need a separate
+action-ranking validation. [GAE](https://arxiv.org/abs/1506.02438).
+
+For inference, Q and Q−V have identical within-state action rankings. A
+post-action model can provide RL feedback after a real step, but cannot select
+among five unexecuted actions without executing/replaying branches or using a
+learned transition model. Next, collect a bounded held-out same-state branch
+panel with a frozen continuation actor and repeated returns; verify browser
+state restoration rather than assuming a URL reload restores the state. That
+panel can measure action ranking and advantage sign. Distill validated
+post-action signals into a pre-action scorer for deployment if useful.
+
+The inference-cost audit and required episode-level control are described in
+[ARM_INFERENCE.md](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
+
 <a id="arm-selection-control-20261003"></a>
 ## Next experiment: independent ARM task-selection control — October3
 

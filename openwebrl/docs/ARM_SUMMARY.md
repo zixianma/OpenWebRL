@@ -35,9 +35,20 @@ Reward Models setup with the o4-mini/AgentTrek Online-Mind2Web judge.
 - **ScalarRM:** score each of five candidates independently and execute the candidate with the highest scalar score.
 - **SelectionARM:** compare the five candidates jointly using full state, reasoning, and action context, then execute the selected candidate.
 
-**Conclusion:** ARM provides a large inference-time gain, with SelectionARM
-stronger than ScalarRM. This requires five-way sampling and selection at every
-turn, so it increases inference cost.
+**Conclusion:** ARM improves the historical one-episode baseline, with
+SelectionARM stronger than ScalarRM. The October4 saved-trace audit measures
+**5.05× baseline actor-text tokens** for SelectionARM, before selector compute.
+The original300-task study has no matched episode pass@5 control, so it does
+not establish that action selection is the best use of the extra budget.
+[Cost/pass@k analysis](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
+
+**Next critic comparison:** our outcome corpus supports14,825 verified executed
+nonterminal transitions (11,023 train /1,239 dev /2,563 later-policy test).
+Compare goal-conditioned state value, pre-action outcome prediction, and
+post-action outcome prediction on matched rows, then derive cross-fitted
+advantages. Piotr's preference labels do not supply counterfactual returns for
+the five candidates. CPU indices and leakage checks are complete; neural fits
+remain pending. [Data and experiment](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
 
 ## 2. Offline filtered SFT and preference learning
 

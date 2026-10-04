@@ -4,11 +4,150 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
+- [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
 - [ARM inference results on Online-Mind2Web](#arm-inference-results)
 - [ARM judge alignment audit](#arm-judge-alignment)
 - [ARM matched retry status and results](#arm-inference-retry-results)
 
 ---
+
+<a id="arm-inference-cost-passk-20261004"></a>
+## Inference cost versus episode pass@k — October4
+
+**The historical benchmark establishes a gain over one ordinary episode. It
+does not establish a gain over five complete episodes at comparable compute.**
+We reconstructed saved candidate-text costs and separately audited the existing
+five-episode screening data. [Aggregate audit](arm_results/rl_integration/inference-cost-passk-20261004.json).
+This analysis made no new model calls and launched no GPU work.
+
+![Historical ARM output-cost proxy and separate empirical episode pass@k curve](arm_results/rl_integration/inference-cost-passk-20261004.png)
+
+Standalone figure: [PNG](arm_results/rl_integration/inference-cost-passk-20261004.png)
+or [SVG](arm_results/rl_integration/inference-cost-passk-20261004.svg).
+
+### Historical matched task list:300 Online-Mind2Web tasks
+
+Original SFT actor, temperature0.7/top-p0.9,30-turn horizon, local browser,
+o4-mini/AgentTrek judge. Each method has one final result per task.
+
+| Method | Successes /300 | Overall | Valid-only | Saved decisions | Actor responses | Saved actor-text token proxy | Ratio to baseline |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| One actor sample per turn |90|30.00%|90/267 =33.71%|4,698|4,698|1,521,052|1.00×|
+| ScalarRM, five candidates |114|38.00%|114/251 =45.42%|4,638|23,190|7,869,942|5.17×|
+| SelectionARM, five candidates |128|42.67%|128/256 =50.00%|4,662|23,310|7,687,807|5.05×|
+
+The proxy retokenizes every saved candidate's reasoning plus action, including
+unselected candidates, with the original actor tokenizer. It excludes stripped
+delimiters and requests with no saved trace. It is **not** exact generated-token
+usage, FLOPs, GPU-hours, dollars, or latency. Baseline traces contain19 repeated
+task/turn keys from resumed work; their logged costs are retained. None occur
+for scalar or selection. Initial and resumed execution had different parallel
+settings, and actor/ARM shared the GPU, preventing a clean per-method wall-time
+or GPU-hour reconstruction from these artifacts.
+
+Selection adds4,662 saved selector decisions; scalar scores five candidates
+per decision. Selector prefill, vision processing, actor prefill/cache behavior,
+and unsaved failed requests are additional costs. Saved decision counts are
+almost unchanged across methods, so these logs show no substantial reduction
+in path length offsetting five-way candidate generation. The12.67-point ARM
+gain therefore comes with roughly five times the recorded actor-text output
+and additional selector work.
+
+### Empirical episode scaling on the separate2,000-task training pool
+
+This is a **different protocol and population**: original SFT actor,
+temperature0.8/top-p1,15-turn horizon, GPT-4.1/action-history judge. All10,000
+attempts are present;9,936 are valid. Treat an invalid attempt as no success in
+the primary all-scheduled metric. For each task with c successes among n=5
+episodes, average `1 − C(n−c,k)/C(n,k)` over tasks. This is the standard
+finite-sample [pass@k estimator](https://arxiv.org/abs/2107.03374); k<5 means
+uniformly sampling a subset of the observed five attempts.
+
+| Complete-episode budget | Overall pass@k | Expected actor output tokens/task | Expected browser steps/task |
+| --- | ---: | ---: | ---: |
+|1|35.970%|3,660|11.39|
+|2|49.285%|7,321|22.78|
+|3|56.540%|10,981|34.17|
+|4|61.280%|14,642|45.55|
+|5|64.650%|18,302|56.94|
+
+These are metered output-token costs, averaged over random k-subsets and paying
+for all k episodes, without early stopping. Exactly1,293/2,000 tasks have at
+least one success. Among the1,956 tasks with five valid attempts, pass@5 is
+65.13%; this is a task-filtered diagnostic, not a per-trajectory valid-only rate.
+Success-count histogram for c=0,1,2,3,4,5 is707,337,274,229,240,213 tasks.
+
+Do not compare64.65% directly with historical ARM42.67%: task pool, temperature,
+horizon, judge, and collection time differ. Likewise `1 − (1 − 0.30)^5 =83.19%`
+is not an estimate of historical OM2W pass@5. It assumes a common independent
+success probability and discards task difficulty. On the actual screening
+data, the same shortcut using mean35.97% predicts89.24%, far above observed
+64.65%. Repeated tasks, not an aggregate pass@1 number, are needed.
+
+### What we already know about ARM versus retries
+
+The [eight-task randomized retry pilot](ARM_RESULTS.md#arm-rescue-yield-313264)
+used an outcome-only iteration90 actor and failure-selected training tasks.
+It directly compares fresh attempts after the screen:
+
+| Retry strategy | Tasks rescued | Metered actor output tokens |
+| --- | ---: | ---: |
+| One ordinary retry |1/8|19,137|
+| Five ordinary retries, any success |3/8|119,630|
+| One ARM-guided episode |0/8|200,148|
+
+ARM cost1.67× the five retries in output tokens, plus selection. This is small,
+conditional evidence against a rescue advantage in that panel; it is not a
+powered original-SFT OM2W test or an exact compute match.
+
+The newer682-task guided collection is larger:78 rescues (11.44%),679 valid,
+15,636,144 actor output tokens,47,185 actor requests, and9,437 browser
+steps/selector calls. Its *earlier* five failures used14,953,843 tokens and
+47,003 browser steps. Thus guided collection had approximately the same actor
+generation count and one fifth the browser steps, with extra selector compute.
+But the earlier failures **selected the cohort**: zero-versus78 is not a valid
+estimate of ARM's gain over a fresh actor retry budget. That control is missing.
+
+As an observed adaptive collection policy, five actor episodes on all2,000
+tasks followed by one guided episode on682 eligible failures covers1,371/2,000
+tasks (68.55%), versus64.65% before the follow-up. It adds42.72% actor output
+tokens (36.604M →52.240M total), plus selectors. Extra ordinary retries might
+also add coverage; this does not identify the value of ARM selection itself.
+
+### Fair next comparison and cost interpretation
+
+| Quantity | Five candidates per action, one guided episode | Five independent complete episodes |
+| --- | --- | --- |
+| Actor decode |Approximately5L responses, with guided path length L |Sum of the five ordinary path lengths |
+| Browser execution |Approximately L real steps |Approximately5L steps if lengths match |
+| Critic cost |Selection at each real step |No action critic; final episode selection/verification may cost extra |
+| Exploration |One committed prefix; local alternatives are not executed |Five distinct full trajectories |
+| Headline outcome |Success of the single executed episode |Any successful episode: an oracle coverage metric |
+
+Candidate batches may share actor prefixes; independent episodes may run in
+parallel. GPU sharing, browser latency, selected path length and selector
+prefill determine the actual crossover. Five unexecuted choices per turn are
+not an evaluated search over5^T complete trajectories. Post-action candidate
+ranking would require actual candidate branches and change this cost model.
+
+Freeze one SFT actor and one task cohort, then interleave/randomize one guided
+episode and five fresh ordinary episodes per task under the same browser,
+sampling, horizon and judge protocol. Recover the ordinary pass@1…5 curve and
+compare guided success on a joint cost/performance plot. Meter actor and
+selector input/output tokens, GPU service time, browser steps/time, API costs,
+failed attempts, and end-to-end median/p95 latency; report all-scheduled and
+common-valid paired outcomes with task-clustered intervals. Log actual seeds,
+candidate responses, selected indices and verdict artifacts. After a measured
+pilot, prespecify resource-matched budgets; five retries alone do not guarantee
+equal compute.
+
+Also distinguish **oracle pass@k** from a deployable episode best-of-k policy:
+if only one final artifact can be returned, a verifier/selector must pick it,
+and its accuracy and cost count. On live tasks that change browser/account
+state, retries also require an appropriate reset protocol. The prepared
+[independent task-selection control](ARM_INTEGRATION_PLAN.md#arm-selection-control-20261003)
+addresses the conditional rescue question; a fresh common-cohort OM2W control
+addresses inference scaling. Neither new allocation is approved by this audit.
 
 <!-- document:ARM_INFERENCE_RESULTS.md:start -->
 <a id="arm-inference-results"></a>

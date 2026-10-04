@@ -1,0 +1,215 @@
+{
+  "historical_om2w": {
+    "modes": {
+      "baseline": {
+        "tasks": 300,
+        "successes": 90,
+        "valid": 267,
+        "overall": 0.3,
+        "tasks_with_saved_decisions": 278,
+        "saved_decisions": 4698,
+        "duplicate_task_turns": 19,
+        "candidate_responses": 4698,
+        "actor_text_token_proxy": 1521052,
+        "selected_text_token_proxy": 1521052,
+        "selector_decisions": 0,
+        "selector_scored_candidates": null,
+        "fallback_decisions": 0,
+        "finish_types": {
+          "stop": 4697,
+          "length": 1
+        },
+        "trace_content_sha256": "210bf121fcdaa2301f846564f75e9c943d2ac007b61ee6afc22636a1db813887",
+        "protocol": {
+          "sampling": {
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "max_new_tokens": 1024
+          },
+          "max_steps": 30,
+          "judge": "o4-mini",
+          "judge_protocol": "online_mind2web/AgentTrek",
+          "candidate_count": 1
+        },
+        "actor_text_token_ratio_to_baseline": 1.0,
+        "saved_decision_ratio_to_baseline": 1.0
+      },
+      "scalar": {
+        "tasks": 300,
+        "successes": 114,
+        "valid": 251,
+        "overall": 0.38,
+        "tasks_with_saved_decisions": 274,
+        "saved_decisions": 4638,
+        "duplicate_task_turns": 0,
+        "candidate_responses": 23190,
+        "actor_text_token_proxy": 7869942,
+        "selected_text_token_proxy": 1574171,
+        "selector_decisions": 4638,
+        "selector_scored_candidates": 23190,
+        "fallback_decisions": 0,
+        "finish_types": {
+          "stop": 23167,
+          "length": 23
+        },
+        "trace_content_sha256": "e98e0c820d08496a9c26e6a7a100859ffbbde1f8a6fb385d31a332aa7275b385",
+        "protocol": {
+          "sampling": {
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "max_new_tokens": 1024
+          },
+          "max_steps": 30,
+          "judge": "o4-mini",
+          "judge_protocol": "online_mind2web/AgentTrek",
+          "candidate_count": 5
+        },
+        "actor_text_token_ratio_to_baseline": 5.174012459797561,
+        "saved_decision_ratio_to_baseline": 0.9872286079182631
+      },
+      "selection": {
+        "tasks": 300,
+        "successes": 128,
+        "valid": 256,
+        "overall": 0.4266666666666667,
+        "tasks_with_saved_decisions": 275,
+        "saved_decisions": 4662,
+        "duplicate_task_turns": 0,
+        "candidate_responses": 23310,
+        "actor_text_token_proxy": 7687807,
+        "selected_text_token_proxy": 1525945,
+        "selector_decisions": 4662,
+        "selector_scored_candidates": null,
+        "fallback_decisions": 0,
+        "finish_types": {
+          "stop": 23304,
+          "length": 6
+        },
+        "trace_content_sha256": "227bd843bc53be51e2566263ff7fc868735596c12aa7924eddfed0cdda8bff7c",
+        "protocol": {
+          "sampling": {
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "max_new_tokens": 1024
+          },
+          "max_steps": 30,
+          "judge": "o4-mini",
+          "judge_protocol": "online_mind2web/AgentTrek",
+          "candidate_count": 5
+        },
+        "actor_text_token_ratio_to_baseline": 5.054269676513361,
+        "saved_decision_ratio_to_baseline": 0.9923371647509579
+      }
+    },
+    "cost_definition": "Retokenized saved thought + action text, excluding stripped delimiters and missing requests; selected and unselected candidates included.",
+    "limitation": "Not exact generated tokens or GPU cost: no prefill, cache, image encoder, selector tokens, failed unsaved requests, browser/API timing. Resumes and concurrency differ; no per-mode GPU-hour causal comparison.",
+    "pass_at_k_control": "Absent: only one ordinary episode per OM2W task in this historical comparison."
+  },
+  "screening_2000": {
+    "tasks": 2000,
+    "attempts": 10000,
+    "valid_attempts": 9936,
+    "successful_attempts": 3597,
+    "success_count_histogram": {
+      "0": 707,
+      "1": 337,
+      "2": 274,
+      "3": 229,
+      "4": 240,
+      "5": 213
+    },
+    "five_valid_tasks": 1956,
+    "cost_totals": {
+      "actor_requests": 114002,
+      "actor_output_tokens": 36603797,
+      "steps": 113884
+    },
+    "pass_at_k": [
+      {
+        "k": 1,
+        "overall_pass_at_k": 0.35969999999999996,
+        "five_valid_tasks_pass_at_k": 0.3637014314928425,
+        "expected_random_subset_cost_per_task": {
+          "actor_requests": 11.4002,
+          "actor_output_tokens": 3660.3797000000004,
+          "steps": 11.388399999999999
+        }
+      },
+      {
+        "k": 2,
+        "overall_pass_at_k": 0.49285,
+        "five_valid_tasks_pass_at_k": 0.4975971370143149,
+        "expected_random_subset_cost_per_task": {
+          "actor_requests": 22.8004,
+          "actor_output_tokens": 7320.759400000001,
+          "steps": 22.776799999999998
+        }
+      },
+      {
+        "k": 3,
+        "overall_pass_at_k": 0.5654,
+        "five_valid_tasks_pass_at_k": 0.570398773006135,
+        "expected_random_subset_cost_per_task": {
+          "actor_requests": 34.2006,
+          "actor_output_tokens": 10981.1391,
+          "steps": 34.1652
+        }
+      },
+      {
+        "k": 4,
+        "overall_pass_at_k": 0.6127999999999999,
+        "five_valid_tasks_pass_at_k": 0.6177914110429449,
+        "expected_random_subset_cost_per_task": {
+          "actor_requests": 45.6008,
+          "actor_output_tokens": 14641.518800000002,
+          "steps": 45.553599999999996
+        }
+      },
+      {
+        "k": 5,
+        "overall_pass_at_k": 0.6465,
+        "five_valid_tasks_pass_at_k": 0.6513292433537833,
+        "expected_random_subset_cost_per_task": {
+          "actor_requests": 57.001,
+          "actor_output_tokens": 18301.8985,
+          "steps": 56.942
+        }
+      }
+    ],
+    "definition": "Equal-task mean of 1-comb(5-c,k)/comb(5,k). Invalid attempts count as no success; no replacement.",
+    "cost_definition": "Expected cost of a uniformly sampled k-subset of the five saved attempts; run all k, no early stopping.",
+    "limitation": "Selected training-task pool; not OM2W. Empirical finite-sample coverage, not a fresh-run guarantee."
+  },
+  "guided_682": {
+    "tasks": 682,
+    "successes": 78,
+    "valid": 679,
+    "guided_cost": {
+      "actor_requests": 47185,
+      "actor_output_tokens": 15636144,
+      "steps": 9437,
+      "selector_calls": 9437
+    },
+    "conditioning_five_failures_cost": {
+      "actor_requests": 47003,
+      "actor_output_tokens": 14953843,
+      "steps": 47003
+    },
+    "fresh_actor_control_available": false,
+    "limitation": "The five earlier failures selected this cohort; comparing their zero yield to the fresh guided retry is selection bias."
+  },
+  "piotr_openwebrl": {
+    "states": 3085,
+    "episodes": 412,
+    "adjacent_demonstration_pairs": 2673,
+    "rows": 49536,
+    "unique_draw_ids": 49360,
+    "conflicting_duplicate_records": 176,
+    "limitation": "Adjacency belongs to the source demo_action, not the subsequently sampled candidates. No per-candidate rollout return in these files."
+  },
+  "resources": {
+    "gpus": 0,
+    "api_calls": 0,
+    "wall_seconds": 77.31
+  }
+}

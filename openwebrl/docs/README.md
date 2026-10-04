@@ -3,6 +3,9 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
+[October4 critic comparison:14,825 verified transitions, task-disjoint splits, causal-input leakage guards, and pre/post/value/advantage test design](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+[October4 inference scaling: historical ARM costs5.05× actor-text output; empirical training-pool pass@1…5, direct retry pilot, and missing matched benchmark control](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
+
 | Document | Contents |
 | --- | --- |
 | [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results; presentation figures for the three stages and RL variants; static/interactive plots; collapsed WebVoyager results |
