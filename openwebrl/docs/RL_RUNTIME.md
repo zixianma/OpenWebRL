@@ -5272,6 +5272,39 @@ Private evidence: expanded outcome-only controller
 logs agree. Iteration10 evaluation/recovery time is excluded from these
 checkpoint-to-checkpoint training intervals.
 
+<a id="expanded4102-budget-cutoff-recovery-20261004"></a>
+### Expanded4102 non-milestone budget recovery, October4
+
+Job342742 completed checkpoint20 (312 Adam and312 scheduler updates) and its
+full300 evaluation, then collected iteration21. The controller passed its
+allocation deadline minus40min to every training stage, even when the next
+checkpoint was not an evaluation milestone. It therefore stopped during21
+with unused approved time. Slurm charged41,471s; together with the earlier201s
+and42,112s attempts, total consumed time is83,784s of the original86,400s.
+
+Recovery343513 requests only **8 H200 ×43min,64 CPUs,960GiB**, leaving36s
+unallocated. It replays the intact iteration21 batch from checkpoint20, advancing
+the saved task cursor by96 submitted groups. The full60-iteration scheduler
+horizon, optimizer, W&B identity and scientific settings are unchanged. This
+short recovery stops after checkpoint21 and reserves180s for shutdown; no
+milestone evaluation is due there. It cannot complete the iteration60 endpoint.
+The earlier iteration10/20 evaluations are verified and will not be repeated.
+
+Eight CPU tests passed, including a real launcher-plan parity check: only the
+stop-after-save boundary changes. That check caught and fixed an initial
+recovery helper that rejected non-milestone21. Checkpoint metadata and bounded
+finite payload samples, replay ZIP structure/cursor, frozen-source hashes and
+both completed evaluation artifact sets passed before submission. Actual GPU
+restoration and checkpoint21 remain pending while343513 queues for resources.
+
+The user requested keeping342742 on g011, so it ran until its natural controller
+cutoff. The replacement excludes g011 because of the confirmed thermal issue.
+The active-agent supervisor now follows343513. Every retry remains charged to
+the same24h approval; further training toward60 needs additional exact compute
+approval. Private receipts: expanded outcome-only controller
+`early-cutoff-recovery-review.json`, `pending-batch-recovery-submission.json`,
+`pending-replay21-review.json` and `attempts.json`. Rollouts remain private.
+
 <a id="expanded4102-egl-regression-20261003"></a>
 ### Expanded4102 source omitted the browser launch fix, October3
 

@@ -8709,13 +8709,15 @@ Private preparation and shard manifests:
 <a id="arm-expanded-outcome-baseline-20261002"></a>
 #### Outcome-only baseline with the additional2K tasks — October2 preparation
 
-**October3 iteration10 result verified:** full300 **27.00% overall (81/300)**,
-**34.32% valid-only (81/236)**;64 invalid tasks. The historical original-pool
-iteration10 result is23.33% /29.91%; this is an exploratory historical comparison.
-Checkpoint10 contains162 Adam updates with matching scheduler and saved cursor.
-Replacement342742 completed the evaluation and restored training from that
-checkpoint toward20. Target60/full300 every10 remains pending, inside the
-remaining first-block approval. [Results and artifact audit](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
+**October4 iteration20 result verified:** full300 **33.33% overall (100/300)**,
+**42.19% valid-only (100/237)**;63 invalid tasks. Iteration10 was27.00% /34.32%.
+Checkpoint20 contains312 Adam updates with matching scheduler and saved cursor.
+Job342742 subsequently hit an early controller cutoff; recovery343513 is queued
+to replay the preserved iteration21 batch using only43min of the original
+approval. Target60 and evaluations30/40/50/60 remain unfinished; continuation
+beyond the remaining first-block budget requires additional compute approval.
+[Results and artifact audit](RL_EVALUATION.md#expanded4102-iter10-results-20261003) ·
+[Budget recovery](RL_RUNTIME.md#expanded4102-budget-cutoff-recovery-20261004).
 
 User requested the data-only baseline first. The frozen private union contains
 **4,102 tasks: original2,102 + all2,000 selected new tasks**, with zero cross-pool
@@ -8744,7 +8746,7 @@ before failing during scheduler initialization. Replacement342095 trained10
 iterations, then failed at evaluation startup after42,112s when its exclusive
 Slurm-step guard encountered a short overlapping observer audit. The evaluator
 now waits up to120s for that transient step to finish, retaining its isolation
-guard;35 tests plus9 subtests passed. Current replacement **342742** is capped
+guard;35 tests plus9 subtests passed. Replacement **342742** was capped
 at44,040s (12h14m), within the44,087s left after both prior attempts. It completed
 evaluation10 and restored native9 for training, with no science changes.
 The user extended the endpoint from20
