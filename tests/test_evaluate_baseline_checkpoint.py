@@ -15,6 +15,29 @@ SPEC.loader.exec_module(m)
 
 
 class EvaluationTest(unittest.TestCase):
+    def test_exclusive_step_wait_allows_short_observer_to_finish(self):
+        with patch.object(m.subprocess, 'check_output', side_effect=[
+                '42.batch\n42.extern\n42.80\n42.79\n', '42.batch\n42.extern\n42.80\n']), \
+                patch.object(m.time, 'monotonic', side_effect=[0, 0]), \
+                patch.object(m.time, 'sleep') as sleep:
+            m.wait_for_exclusive_step('42', '80', 120)
+        sleep.assert_called_once_with(5)
+
+    def test_exclusive_step_wait_rejects_persistent_workload(self):
+        with patch.object(m.subprocess, 'check_output', return_value='42.batch\n42.80\n42.79\n'), \
+                patch.object(m.time, 'monotonic', side_effect=[0, 0, 120]), \
+                patch.object(m.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(ValueError, r'active steps 42\.79'):
+                m.wait_for_exclusive_step('42', '80', 120)
+        sleep.assert_called_once_with(5)
+
+    def test_exclusive_step_default_still_rejects_other_step_immediately(self):
+        with patch.object(m.subprocess, 'check_output', return_value='42.80\n42.79\n'), \
+                patch.object(m.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(ValueError, 'Dedicated allocation required'):
+                m.wait_for_exclusive_step('42', '80')
+        sleep.assert_not_called()
+
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(prefix='openwebrl-eval-plan-test-'))
         self.ckpt = self.root / 'run/iter_0000021'
@@ -96,6 +119,33 @@ class EvaluationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'new output'):
             self.plan()
 
+    def test_single_gpu_requires_prepared_tp1_source(self):
+        source = self.root/'source'
+        source.mkdir()
+        manifest = source/'reference_manifest.json'
+        manifest.write_text('{}')
+        with patch.object(m, 'RUNTIME', self.root), patch.object(m, 'validate_source'):
+            with self.assertRaisesRegex(ValueError, 'TP1 requires'):
+                m.build_plan(source, self.ckpt, self.output, '42', gpus=1)
+            manifest.write_text(json.dumps({'single_gpu_evaluation': {'sequence_parallel': False}}))
+            plan = m.build_plan(source, self.ckpt, self.output, '42', gpus=1)
+        self.assertEqual(plan['environment']['TP_SIZE'], '1')
+        self.assertEqual(plan['environment']['NUM_ROLLOUT'], '0')
+
+    def test_paper_benchmark_requires_its_own_prepared_source_and_identity(self):
+        source=self.root/'source';source.mkdir()
+        (source/'reference_manifest.json').write_text(json.dumps({'browser_use_evaluation':True,
+            'paper_om2w_benchmark':True}))
+        with patch.object(m,'RUNTIME',self.root),patch.object(m,'validate_source'):
+            p=m.build_plan(source,self.ckpt,self.output,'42',gpus=2,browser_env='browser-use',protocol='benchmark')
+        self.assertEqual(p['environment']['JUDGE_MODEL'],'o4-mini')
+        self.assertEqual(p['metric_prefix'],'eval/online-mind2web-benchmark')
+        self.assertEqual(p['wandb_run_id'],'qcq7i4ug-benchmark-after22-42')
+        self.assertTrue(p['command'][p['command'].index('--eval-config')+1].endswith('online_mind2web_benchmark.yaml'))
+        with patch.object(m,'RUNTIME',self.root),patch.object(m,'validate_source'):
+            with self.assertRaisesRegex(ValueError,'stealth-browser source'):
+                m.build_plan(source,self.ckpt,self.output,'42',protocol='benchmark')
+
     def test_execution_outside_allocation_rejected(self):
         with patch.dict(m.os.environ, {'SLURM_JOB_ID': 'other'}):
             with self.assertRaisesRegex(ValueError, 'authorized Slurm'):
@@ -139,6 +189,19 @@ class EvaluationTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'all 300'):
             m.finalize_evaluation(plan, 0)
 
+    def test_explicit_subset_requires_exact_saved_task_identities(self):
+        plan, _ = self.completed_log(trajectories=2)
+        plan.update(expected_task_count=2, expected_task_ids=['a', 'b'])
+        directory = self.output / 'completed_tasks'
+        directory.mkdir()
+        (directory / 'a.json').write_text(json.dumps({'task_id': 'a'}))
+        (directory / 'b.json').write_text(json.dumps({'task_id': 'wrong'}))
+        with self.assertRaisesRegex(ValueError, 'identities'):
+            m.finalize_evaluation(plan, 0)
+        (directory / 'b.json').write_text(json.dumps({'task_id': 'b'}))
+        m.finalize_evaluation(plan, 0)
+        self.assertTrue(json.loads((self.output / 'status.json').read_text())['complete'])
+
     def test_failed_child_and_training_records_are_rejected(self):
         plan, _ = self.completed_log()
         with self.assertRaises(RuntimeError):
@@ -146,6 +209,22 @@ class EvaluationTest(unittest.TestCase):
         with (self.output / 'evaluation.log').open('a') as log:
             log.write('[TrainMetrics] unexpected optimizer work\n')
         with self.assertRaises(RuntimeError):
+            m.finalize_evaluation(plan, 0)
+
+    def test_required_rollout_and_verdict_files_cover_exact_cohort(self):
+        plan, _ = self.completed_log(trajectories=2)
+        plan.update(expected_task_count=2, require_task_rollouts=True,
+                    expected_rollout_task_ids=['a', 'b'])
+        directory = self.output/'rollouts'
+        directory.mkdir()
+        with self.assertRaisesRegex(ValueError, 'persistence is incomplete'):
+            m.finalize_evaluation(plan, 0)
+        for task in ['a', 'b']:
+            (directory/f'{task}.pt').write_bytes(b'fixture archive')
+            (directory/f'{task}.json').write_text(json.dumps(dict(task_id=task, rollout_file=f'{task}.pt')))
+        m.finalize_evaluation(plan, 0)
+        (directory/'b.json').write_text(json.dumps(dict(task_id='a', rollout_file='b.pt')))
+        with self.assertRaisesRegex(ValueError, 'persistence is incomplete'):
             m.finalize_evaluation(plan, 0)
 
 

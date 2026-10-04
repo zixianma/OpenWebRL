@@ -70,6 +70,13 @@ class ResumeTest(unittest.TestCase):
         self.assertIn('--gres=gpu:h200:4', command)
         self.assertEqual(job['maximum_seconds'], 3420)
 
+    def test_single_gpu_allocation_preserves_capacity_checks(self):
+        now = m.datetime(2030, 1, 1, 7).timestamp()
+        info = self.info(AllocTRES='cpu=8,mem=240G,node=1,gres/gpu=1,gres/gpu:h200=1')
+        self.assertEqual(m.allocation(info, '42', now, requested_gpus=1)['gpus'], 1)
+        with self.assertRaises(ValueError):
+            m.allocation(info, '42', now, requested_gpus=2)
+
     def lineage(self):
         old, new = self.root / 'old', self.root / 'new'
         old.mkdir(); new.mkdir()

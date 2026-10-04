@@ -12,6 +12,14 @@ from resume_baseline import allocation,clean_environment,source_command,validate
 from inspect_training_checkpoint import inspect_checkpoint
 
 
+def restore_tensor_parallel(gpus,environment,*,continuation):
+    """Verify the topology selected for the actual continuation launch."""
+    tp=int(environment.get('TP_SIZE',gpus)) if continuation else gpus
+    if tp not in (2,4,8) or gpus%tp:
+        raise ValueError('Restore tensor parallelism must divide the allocated GPUs')
+    return tp
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--training-root',type=Path,required=True)
@@ -42,6 +50,31 @@ def main():
         from resume_arm_turn_bonus import validate_resume_plan,continuation_identity
         continuation=json.loads(a.continuation_plan.read_text())
         validate_resume_plan(continuation)
+        if continuation.get('failure_ablation_training'):
+            from prepare_arm_failure_ablations import validate_plan
+            validate_plan(continuation)
+            source=Path(continuation['source'])
+            validate_source(source)
+        elif continuation.get('failure_coverage_pilot'):
+            from prepare_arm_failure_coverage import validate_plan
+            validate_plan(continuation)
+            source=Path(continuation['source'])
+            validate_source(source)
+        elif continuation.get('variant_continuation'):
+            from resume_arm_failure_variants import validate_plan
+            validate_plan(continuation)
+            source=Path(continuation['source'])
+            validate_source(source)
+        elif continuation.get('gate_ablation'):
+            from run_arm_gate_ablation import validate_plan
+            validate_plan(continuation)
+            source=Path(continuation['source'])
+            validate_source(source)
+        elif continuation.get('continuation_label_guard'):
+            from resume_arm_failure_variants import validate_plan
+            validate_plan(continuation)
+            source=Path(continuation['source'])
+            validate_source(source)
         if (Path(continuation['resume_from']).resolve()!=root or continuation['job_id']!=a.job_id
                 or continuation['source']!=str(source) or continuation['requested_resources']['gpus']!=a.gpus):
             raise ValueError('Continuation plan does not match the requested restore')
@@ -56,13 +89,14 @@ def main():
         raise ValueError('Restore output must be a new run artifact outside checkpoint storage')
     command=list(manifest['command'])
     env=dict(clean_environment(),**manifest.get('environment',{}))
+    tp=restore_tensor_parallel(a.gpus,manifest.get('environment',{}),continuation=bool(a.continuation_plan))
     if command[0]=='bash':
         dry_env=dict(env,DRY_RUN='1',JUDGE_API_MODE='served',JUDGE_API_BASE='https://api.openai.com/v1')
         command=shlex.split(subprocess.check_output(command,env=dry_env,text=True))
     command.remove('--colocate'); command.remove('--use-wandb')
     for key,value in [('--load',str(root/'runtime')),('--save',str(output)),('--wandb-mode','disabled'),
             ('--num-gpus-per-node',str(a.gpus)),('--actor-num-gpus-per-node',str(a.gpus)),
-            ('--tensor-model-parallel-size',str(a.gpus))]:
+            ('--tensor-model-parallel-size',str(tp))]:
         command[command.index(key)+1]=value
     command+=['--debug-train-only']
     if a.continuation_plan:
@@ -70,7 +104,8 @@ def main():
         # Stage the identical browser settings inside this verification output.
         command[command.index('--custom-config-path')+1]=str(output/'browser-training-config.json')
     plan=dict(job_id=a.job_id,source=str(source),command=command,checkpoint=before,
-        output=str(output),gpus=a.gpus,optimizer_updates_requested=0,browser_collections_requested=0)
+        output=str(output),gpus=a.gpus,tensor_parallel=tp,data_parallel=a.gpus//tp,
+        optimizer_updates_requested=0,browser_collections_requested=0)
     if not a.execute:
         print(json.dumps(plan,indent=2)); return
     if os.environ.get('SLURM_JOB_ID')!=a.job_id or f'/job_{a.job_id}/' not in Path('/proc/self/cgroup').read_text():
@@ -96,6 +131,7 @@ def main():
             or result['optimizer_updates_executed'] or result['browser_collections_executed']):
         raise ValueError('Unexpected native GPU restore receipt')
     result.update(passed=True,job_id=a.job_id,source=str(source),checkpoint_completed_optimizer_updates=state['completed_optimizer_updates'],
+        tensor_parallel=tp,data_parallel=a.gpus//tp,
         limitation='GPU model and optimizer restoration only; no additional training or browser collection')
     if continuation_hash: result['continuation_identity_sha256']=continuation_hash
     write_json(output/'result.json',result)

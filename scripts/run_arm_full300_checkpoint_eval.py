@@ -43,6 +43,9 @@ def main():
     parser.add_argument("--browser-port-end", required=True, type=int)
     parser.add_argument("--parallel", type=int, default=6)
     parser.add_argument("--mem-fraction-static", type=float, default=0.3)
+    parser.add_argument("--serial-variant", choices=["all5", "diverse3"])
+    parser.add_argument("--serial-gate",type=Path)
+    parser.add_argument("--serial-gate-pilot",action="store_true")
     args = parser.parse_args()
     if bool(args.task_cohort) != bool(args.cohort_name):
         parser.error("--task-cohort and --cohort-name must be provided together")
@@ -96,6 +99,11 @@ def main():
     audit = json.loads(audit_path.read_text())
     if merge.get("dataset_sha256") != audit.get("dataset_sha256"):
         raise ValueError("Merged-model and C2 dataset provenance differ")
+    serial_gate_sha=None
+    if args.serial_variant:
+        from openwebrl.serial_eval_gate import identity,load_gate
+        serial_gate_sha=load_gate(args.serial_gate,identity(model,args.serial_variant,TASK_FILE,REPO),
+            pilot=args.serial_gate_pilot,task_ids=task_ids or [])
     group = (args.output_group or (root / "evaluation/checkpoint-full-300")).resolve()
     work = group / args.label
     output = work / "online-mind2web"
@@ -112,6 +120,9 @@ def main():
             raise ValueError("Existing evaluation used another task cohort")
         if os.path.realpath(manifest.get("actor", "")) != os.path.realpath(model):
             raise ValueError("Existing full300 evaluation used another model")
+        if args.serial_variant and (manifest.get('serial_protocol_revision')!=2 or
+                manifest.get('serial_gate_sha256')!=serial_gate_sha or manifest.get('serial_variant')!=args.serial_variant):
+            raise ValueError('Existing serial results predate or differ from the validation gate; use a new output root')
         write_json(status, {"phase": "complete", "updated_utc": datetime.now(timezone.utc).isoformat(),
                             "allocation": args.job_id, "completed": expected_count, "scheduled": expected_count,
                             "summary": summary, "reused_complete": True})
@@ -163,11 +174,14 @@ def main():
                    "-m", "openwebrl.arm_eval", "--mode", "baseline", "--actor", str(model),
                    "--actor-port", str(args.actor_port), "--output", str(output), "--parallel", str(args.parallel),
                    "--task-file", str(TASK_FILE), "--seed", "42", "--temperature", "0.7", "--top-p", "0.9",
-                   "--max-new-tokens", "1024", "--max-steps", "30", "--task-timeout", "1800",
+                   "--max-new-tokens", "6144" if args.serial_variant else "1024", "--max-steps", "30", "--task-timeout", "1800",
                    "--judge-model", "o4-mini", "--env-file", ".env",
                    "--browser-port-start", str(args.browser_port_start), "--browser-port-end", str(args.browser_port_end)]
         if task_indices:
             command.extend(["--task-indices", ",".join(map(str, task_indices))])
+        if args.serial_variant:
+            command.extend(["--serial-variant", args.serial_variant,"--serial-gate",str(args.serial_gate)])
+            if args.serial_gate_pilot:command.append('--serial-gate-pilot')
         with (work / "eval.log").open("a") as log:
             code = subprocess.call(command, cwd=REPO, stdout=log, stderr=subprocess.STDOUT)
         count = len(list((output / "results").glob("*.json"))) if (output / "results").exists() else 0

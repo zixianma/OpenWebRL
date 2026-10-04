@@ -104,6 +104,9 @@ class EvalArgs:
     turn_history_reasoning_mode: str = "full"
     browser_response_format_mode: str = "slime"
     browser_include_tool_response: int = 1
+    browser_observation_memory: bool = False
+    browser_memory_max_entries: int = 8
+    browser_memory_max_chars: int = 4000
 
 
 def _serialize_exception(exc: BaseException) -> dict[str, str]:
@@ -430,6 +433,9 @@ def main():
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--output", type=str, default=os.environ.get("OUTPUT_ROOT", "eval_outputs/browser_eval"),
                         help="Output JSONL path (default: auto-generated with timestamp)")
+    parser.add_argument("--browser-observation-memory", action="store_true")
+    parser.add_argument("--browser-memory-max-entries", type=int, default=8)
+    parser.add_argument("--browser-memory-max-chars", type=int, default=4000)
     parser.add_argument("--context-num-screenshots", type=int, default=3,
                         help="Number of latest screenshots kept in turn-level context.")
     parser.add_argument("--judge-max-attached-imgs", type=int, default=None,
@@ -526,6 +532,9 @@ def main():
         turn_history_reasoning_mode=args.turn_history_reasoning_mode,
         browser_response_format_mode=args.browser_response_format_mode,
         browser_include_tool_response=args.browser_include_tool_response,
+        browser_observation_memory=args.browser_observation_memory,
+        browser_memory_max_entries=args.browser_memory_max_entries,
+        browser_memory_max_chars=args.browser_memory_max_chars,
         judge_timeout_secs=args.judge_timeout_secs,
         path_to_save_generated_samples=os.path.join(args.output, 'eval_samples'),
         inference_step_timeout_secs=args.inference_step_timeout_secs,

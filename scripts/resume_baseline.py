@@ -75,10 +75,10 @@ def capture(argv):
     return subprocess.check_output(argv, text=True, stderr=subprocess.PIPE).strip()
 
 
-def allocation(info, job_id, now=None, uid=None, requested_gpus=2):
+def allocation(info, job_id, now=None, uid=None, requested_gpus=2, maximum_hours=8):
     """Validate ownership, capacity, state and the existing paid time boundary."""
-    if requested_gpus not in (2, 4):
-        raise ValueError('Supported profiles use 2 or 4 H200 GPUs.')
+    if requested_gpus not in (1, 2, 4, 8):
+        raise ValueError('Supported profiles use 1, 2, 4 or 8 H200 GPUs.')
     fields = dict(re.findall(r'(\w+)=(\S+)', info))
     uid = os.getuid() if uid is None else uid
     now = time.time() if now is None else now
@@ -97,7 +97,7 @@ def allocation(info, job_id, now=None, uid=None, requested_gpus=2):
     if int(tres.get('gres/gpu:h200', '0')) < requested_gpus:
         raise ValueError(f'This profile requires {requested_gpus} allocated H200 GPUs.')
     end = datetime.strptime(fields['EndTime'], '%Y-%m-%dT%H:%M:%S').timestamp()
-    seconds = min(8 * 3600, int(end - now) - 180)
+    seconds = min(maximum_hours * 3600, int(end - now) - 180)
     if seconds < 600:
         raise ValueError('Less than 10 minutes remain after the three-minute shutdown margin.')
     return {'job_id': job_id, 'host': fields['NodeList'], 'cpus': cpus,
@@ -247,7 +247,8 @@ def prepare(args):
     state = read_json(args.state)
     gpus = getattr(args, 'gpus', 2)
     verification = getattr(args, 'verify_resume_only', False)
-    job = allocation(capture(['scontrol', 'show', 'job', args.job_id, '-o']), args.job_id, requested_gpus=gpus)
+    job = allocation(capture(['scontrol', 'show', 'job', args.job_id, '-o']), args.job_id,
+                     requested_gpus=gpus, maximum_hours=getattr(args, 'maximum_hours', 8))
     batch_driver = (os.environ.get('OPENWEBRL_BATCH_DRIVER_JOB') == args.job_id
                     and os.environ.get('SLURM_JOB_ID') == args.job_id)
     busy = active_steps(capture(['squeue', '--steps', f'--jobs={args.job_id}', '--noheader', '--format=%i|%j']), allow_batch=batch_driver)
@@ -463,6 +464,8 @@ def main():
     parser.add_argument('--wandb-run-id', help='Optional assertion against the recorded W&B ID')
     parser.add_argument('--env-file', type=Path, default=REPO / '.env')
     parser.add_argument('--gpus', type=int, choices=[2, 4], default=2, help='Use TP2 or TP4 in the existing allocation')
+    parser.add_argument('--maximum-hours', type=int, choices=range(1,25), default=8,
+                        help='Upper supervision bound inside an already-approved allocation; does not extend it')
     parser.add_argument('--verify-resume-only', action='store_true', help='Restore on GPUs without training, browsers, online W&B, or changing the run pointer')
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--launch', action='store_true')
