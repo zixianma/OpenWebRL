@@ -5231,6 +5231,47 @@ Evidence remains under
 `production-subprocess-smoke.log`, and the accumulating
 `runtime-after-fix.jsonl`. Per-trajectory cause records remain private.
 
+<a id="expanded4102-thermal-throughput-20261003"></a>
+### Expanded4102 throughput and thermal throttling on g011, October3
+
+Completed iterations4–10 average68.45min (range60.70–72.40min);
+iteration10 takes68.83min between durable checkpoints. Its measured breakdown:
+
+| Component | Minutes |
+| --- | ---: |
+| Active rollout collection |18.97 |
+|16 PPO optimizer updates |44.07 |
+| Other training, including log-probability computation |2.92 |
+| Checkpoint save |0.26 |
+| Remaining archive/collection teardown/handoffs |2.61 |
+
+The mean optimizer update is165.25s, median170.5s. The worker is already using
+TP2/DP4, microbatch1, global256, PPO2,64 browsers and the48GiB cache guard.
+The earlier mixed-only bonus iterations5/6 used about89–92s per update under
+the same topology/cache setting, with similar mean input lengths (5,760–5,845
+tokens versus5,859 here). Different batches remain a comparison limitation;
+doubling the pool itself does not double a fixed48-group iteration's work.
+
+Two live GPU snapshots during job342742 collection11 identify a hardware issue:
+
+| GPUs on g011 | Temperature | SM clock, confirmation sample | Software thermal slowdown |
+| --- | --- | --- | --- |
+|2 |86°C |1,395MHz |Active |
+|6 |87°C |345MHz |Active |
+|Other six |37–40°C |1,980MHz |Not active |
+
+Thermal throttling is confirmed now and can hold up synchronous TP/DP training.
+These samples were taken during collection, so its exact contribution to
+earlier PPO timings is not yet measured. The next systems step is migration
+from g011 at a durable checkpoint or preserved replayable batch, using only
+remaining approved time and preserving optimizer/scheduler/cursor and science.
+Validate destination thermal flags and matched update timing; no clock/power
+override, new allocation budget, or scientific change was made by this audit.
+Private evidence: expanded outcome-only controller
+`thermal-throughput-review-20261003.json`; W&B phase metrics and native timing
+logs agree. Iteration10 evaluation/recovery time is excluded from these
+checkpoint-to-checkpoint training intervals.
+
 <a id="expanded4102-egl-regression-20261003"></a>
 ### Expanded4102 source omitted the browser launch fix, October3
 
