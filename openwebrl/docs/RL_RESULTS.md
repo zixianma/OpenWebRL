@@ -4,6 +4,12 @@
 | --- | --- | --- | --- |
 | Online-Mind2Web, 300 tasks | [qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) | 2026-09-24 | [RL_EVALUATION.md](RL_EVALUATION.md) |
 
+## DOM decision models · first 10-task pilot · Browser Use · o4-mini
+
+| Decision model | Text helper | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Jev 1.13.0 | GPT-4.1-mini |10 |1 |10 |0 |10.00 |10.00 |[October4 pilot](rl_results/jev-ultrafast-pilot-20261004.json), [Protocol](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004) |
+
 ## Local browser · GPT-4.1 · temperature 0 · full 300
 
 | Checkpoint after iteration | Successes | Valid | Invalid | Overall % | Valid-only % |

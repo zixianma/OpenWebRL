@@ -143,7 +143,8 @@ def load_credentials(env_file, config):
     from dotenv import dotenv_values
     values = {**dotenv_values(env_file), **os.environ}
     keys = {
-        "TYPESAFE_API_KEY": values.get("TYPESAFE_API_KEY") or values.get("JEV_API_KEY"),
+        "TYPESAFE_API_KEY": ("local-kev" if config.get("decision_provider") == "kev"
+                             else values.get("TYPESAFE_API_KEY") or values.get("JEV_API_KEY")),
         "TEXT_MODEL_API_KEY": values.get("TEXT_MODEL_API_KEY") or (
             values.get("OPENAI_API_KEY") if config["text_provider"] == "openai" else values.get("OPENROUTER_API_KEY")),
         "JUDGE_API_KEY": values.get("JUDGE_API_KEY") or values.get("OPENAI_API_KEY"),
@@ -186,20 +187,26 @@ class ModelTransport:
         import httpx
         self.root, self.config = Path(root), config
         self.client = client or httpx.Client(http2=True, follow_redirects=False)
-        self.counts = {"jev": 0, "text": 0, "judge": 0}
+        self.decision_provider = config.get("decision_provider", "jev")
+        self.counts = {self.decision_provider: 0, "text": 0, "judge": 0}
 
     def post(self, url, key, body):
-        provider = "jev" if url == "https://api.typesafe.ai/v1/systemone" else "text"
+        provider = self.decision_provider if url == "https://api.typesafe.ai/v1/systemone" else "text"
+        if provider == "kev":
+            # Only the decision endpoint changes; never send TypeSafe credentials
+            # to a locally served alternative model.
+            url, key = self.config["decision_endpoint"], "local-kev"
         body = dict(body)
         if provider == "text" and self.config["text_provider"] == "openai":
             body.pop("reasoning", None)
             body.pop("thinking", None)
             body.update(temperature=0.6, top_p=0.95)
-        return self.request(provider, url, key, body, attempts=3, timeout=25)
+        timeout = self.config.get("decision_timeout_seconds", 25) if provider == "kev" else 25
+        return self.request(provider, url, key, body, attempts=3, timeout=timeout)
 
     def request(self, provider, url, key, body, *, attempts, timeout):
         import httpx
-        caps = {"jev": self.config["max_decisions"] * 3,
+        caps = {self.decision_provider: self.config["max_decisions"] * 3,
                 "text": self.config["max_decisions"] * 3, "judge": 4}
         for attempt in range(attempts):
             if self.counts[provider] >= caps[provider]:
@@ -225,8 +232,10 @@ class ModelTransport:
                 result = response.json()
                 record["response"] = result
                 append_json(self.root / "api-responses.jsonl", record)
-                if provider == "jev" and result.get("model") != self.config["jev_model"]:
+                if provider == self.decision_provider and result.get("model") != self.config["jev_model"]:
                     raise ProviderError(provider, "model_identity_mismatch")
+                if provider == "kev" and result.get("truncated"):
+                    raise ProviderError(provider, "unexpected_state_truncation")
                 return result
             append_json(self.root / "api-responses.jsonl", record)
             if response.status_code not in {429, 500, 502, 503, 504, 529} or attempt == attempts - 1:
@@ -443,10 +452,12 @@ def run_task(task, root, config):
     if actor_valid:
         write_json(root / "heartbeat.json", dict(stage="judge", updated_unix=time.time()))
         messages = judge_messages(task, history, screenshot, terminal)
-        write_json(root / "judge-request.json", dict(model="o4-mini", seed=42, messages=messages))
+        judge_request = dict(model="o4-mini", seed=42, messages=messages,
+                             max_completion_tokens=config.get("judge_max_completion_tokens", 4096))
+        write_json(root / "judge-request.json", judge_request)
         try:
             response = transport.request("judge", config["judge_base_url"] + "/chat/completions",
-                os.environ["JUDGE_API_KEY"], dict(model="o4-mini", seed=42, messages=messages),
+                os.environ["JUDGE_API_KEY"], judge_request,
                 attempts=4, timeout=120)
             write_json(root / "judge-response.json", response)
             judge_text = response["choices"][0]["message"]["content"] or ""
@@ -464,6 +475,8 @@ def run_task(task, root, config):
         judge_error=judge_error, provider_blocked=provider_blocked, cleanup_errors=cleanup_errors,
         actor_seconds=actor_seconds, total_seconds=time.monotonic() - started,
         actions=len(history), decisions=len(snapshot.get("decisions", [])) if snapshot else 0,
+        decision_provider=config.get("decision_provider", "jev"),
+        decision_checkpoint=config.get("kev", {}).get("run"),
         api_attempts=transport.counts, requested_jev_model=config["jev_model"],
         resolved_jev_models=sorted({d["model"] for d in snapshot.get("decisions", [])}) if snapshot else [])
     write_json(root / "result.json", record)
@@ -472,8 +485,9 @@ def run_task(task, root, config):
     return record
 
 
-def summarize(tasks, output):
-    rows, missing, usage = [], [], {p: {} for p in ("jev", "text", "judge")}
+def summarize(tasks, output, decision_provider="jev"):
+    providers = (decision_provider, "text", "judge")
+    rows, missing, usage = [], [], {p: {} for p in providers}
     for task in tasks:
         root = Path(output) / "tasks" / digest(task["task_id"])
         path = root / "result.json"
@@ -505,5 +519,5 @@ def summarize(tasks, output):
                 usage=usage,
                 mean_actor_seconds=statistics.mean(r["actor_seconds"] for r in rows) if rows else None,
                 median_actor_seconds=statistics.median(r["actor_seconds"] for r in rows) if rows else None,
-                api_attempts={p: sum(r["api_attempts"].get(p, 0) for r in rows) for p in ("jev", "text", "judge")},
+                api_attempts={p: sum(r["api_attempts"].get(p, 0) for r in rows) for p in providers},
                 updated_unix=time.time())

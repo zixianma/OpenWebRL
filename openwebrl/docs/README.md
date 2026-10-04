@@ -3,7 +3,8 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[October4 Jev Ultrafast: prepared DOM-policy Online-Mind2Web pilot, CPU-only runner, independent o4-mini judging and verified local browser adapter; allocation approval pending](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
+[October4 Jev Ultrafast: completed10-task pilot,1/10 successes, independently verified browser and judge artifacts](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
+[Kev0.8B/27B: paired alternative decision models, shared browser/helper/judge protocol; GPU allocation approval pending](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference: fresh full300 ARM versus five ordinary episodes per task, paired performance and metered costs](ARM_INFERENCE.md#arm-controlled-inference-20261004).

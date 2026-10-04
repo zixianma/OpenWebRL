@@ -1,0 +1,72 @@
+{
+  "verified_complete": true,
+  "tasks": 10,
+  "valid": 10,
+  "successes": 1,
+  "overall_success_rate": 0.1,
+  "valid_only_success_rate": 0.1,
+  "actor_mean_seconds": 17.733286168565975,
+  "actor_median_seconds": 10.117430093698204,
+  "total_actions": 15,
+  "total_decisions": 199,
+  "terminations": {
+    "blocked": 5,
+    "done": 2,
+    "max_decisions": 3
+  },
+  "api_attempts": {
+    "jev": 199,
+    "judge": 10,
+    "text": 4
+  },
+  "actual_models": {
+    "jev": [
+      "jev-1.13.0"
+    ],
+    "judge": [
+      "o4-mini-2025-04-16"
+    ],
+    "text": [
+      "gpt-4.1-mini-2025-04-14"
+    ]
+  },
+  "api_latency_seconds": {
+    "jev": {
+      "mean": 0.09540240299752235,
+      "median": 0.09024173906072974
+    },
+    "judge": {
+      "mean": 3.5231151301413774,
+      "median": 3.080546127166599
+    },
+    "text": {
+      "mean": 0.5376571606611833,
+      "median": 0.5301591889001429
+    }
+  },
+  "verified_snapshot_archives": 219,
+  "allocation_elapsed_seconds": 148,
+  "usage": {
+    "jev": {
+      "input_tokens": 547331,
+      "output_tokens": 40242
+    },
+    "text": {
+      "prompt_tokens": 1182,
+      "completion_tokens": 50,
+      "total_tokens": 1232
+    },
+    "judge": {
+      "prompt_tokens": 30826,
+      "completion_tokens": 2941,
+      "total_tokens": 33767
+    }
+  },
+  "cohort": "first 10 Online-Mind2Web tasks in dataset order; startup pilot",
+  "judge": "o4-mini / AgentTrek / fresh final screenshot",
+  "browser": "Browser Use remote; proxy disabled",
+  "decision_model": "jev-1.13.0",
+  "text_model": "gpt-4.1-mini-2025-04-14",
+  "archived_source_commit": "7dc79cf488f95c33f29f57ccd23bd0a28ac63a6a",
+  "rejected_decisions": 177
+}

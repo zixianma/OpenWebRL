@@ -21,7 +21,8 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
-- [Jev Ultrafast: prepared Online-Mind2Web pilot](#jev-ultrafast-online-mind2web-20261004)
+- [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
+- [Kev0.8B/27B paired pilot preparation](#kev-paired-online-mind2web-20261004)
 
 - [Expanded 4,102-task outcome-only baseline: iterations10/20](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
@@ -50,12 +51,14 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ---
 
 <a id="jev-ultrafast-online-mind2web-20261004"></a>
-## Jev Ultrafast browser evaluation — October4
+## Jev Ultrafast browser evaluation — October 4
 
-**Prepared; no benchmark score or paid run yet.** The first cohort is the first
-10 tasks in the unchanged 300-task Online-Mind2Web file, in dataset order. This
-is a startup pilot, not a representative performance estimate. A full300 cohort
-uses the same runner with `--limit 300` and a separately approved allocation.
+**Completed and independently audited: 1/10 successes (10%), 10 valid, 0 invalid.**
+The cohort is the first 10 tasks in the unchanged 300-task Online-Mind2Web file,
+in dataset order. This startup pilot is not a representative performance
+estimate. Job 343691 completed in 148 seconds (2m28s), exit 0, within the approved
+0-GPU/4-CPU/8 GiB/two-hour allocation. A full 300 cohort needs a separate approval.
+[Aggregate audit and usage](rl_results/jev-ultrafast-pilot-20261004.json).
 
 The adapter pins [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast/tree/1231850a0bf1a0c0341fe408ef1668dbbfdfac46)
 at `1231850a0bf1a0c0341fe408ef1668dbbfdfac46`. Its DOM reader, operation/target
@@ -68,16 +71,16 @@ version and reject a different returned model identity.
 | Setting | Prepared pilot |
 | --- | --- |
 | Policy | Jev 1.13.0; argmax operation and matching target, no actor screenshots |
-| Text helper | GPT-4.1-mini-2025-04-14; T0.6, top-p0.95, 1,024 output tokens |
-| Helper difference | Upstream demo uses Mercury2.5; `--text-provider openrouter` prepares that alternative in a new cohort |
+| Text helper | GPT-4.1-mini-2025-04-14; T 0.6, top-p 0.95, 1,024 output tokens |
+| Helper difference | Upstream demo uses Mercury 2.5; `--text-provider openrouter` prepares that alternative in a new cohort |
 | Browser | Isolated Browser Use session per task; proxy disabled; 1120×780 upstream viewport |
-| Episode | 30 executed actions, at most60 decision cycles, 600-second actor timeout |
-| Judge | o4-mini, canonical AgentTrek prompt and verdict parser, seed42, actual final screenshot |
+| Episode | 30 executed actions, at most 60 decision cycles, 600-second actor timeout |
+| Judge | o4-mini, canonical AgentTrek prompt and verdict parser, seed 42, actual final screenshot |
 | Outcome | Independent verdict; `DONE` is only the actor's stopping signal |
-| Proposed allocation | 0 GPUs, 4 CPUs, 8GiB RAM, 2 hours total including retries |
-| Browser limit | 10 sessions, at most2 concurrent, 12-minute expiry each |
+| Approved allocation | 0 GPUs, 4 CPUs, 8 GiB RAM, 2 hours total including retries |
+| Browser limit | 10 sessions, at most 2 concurrent, 12-minute expiry each |
 | API attempt ceilings | 1,800 Jev, 1,800 helper, 40 judge HTTP attempts, including service retries |
-| Execution status | Not submitted; exact allocation approval pending |
+| Execution status | Completed; 10/10 attempts and all 10 remote-session closures verified |
 
 The helper is explicitly labeled because the configured credentials support
 OpenAI, whereas no OpenRouter helper key was found. Jev's classification has no
@@ -95,7 +98,8 @@ The runner imports no GPU training stack. Dry-run preparation:
 
 ```bash
 /gpfs/scrubbed/zixianma/openwebrl-runtime/jev-eval-venv/bin/python \
-  scripts/evaluate_jev_ultrafast.py
+  scripts/evaluate_jev_ultrafast.py \
+  --output /gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/jev-ultrafast-next-plan
 ```
 
 The installed upstream package and dependency versions are checked and recorded
@@ -124,8 +128,95 @@ the independently checked final page and judge evidence. Tests also cover
 reference stripping, unchanged canonical judge semantics, retry accounting,
 provider/model failures, cleanup ownership and incomplete-cohort denominators.
 Jev, both OpenAI models and Browser Use passed read-only credential checks.
-These checks made no paid inference calls or remote browser sessions; a live
-pilot remains necessary.
+The subsequent live pilot made 199 Jev, 4 helper and 10 judge calls, all HTTP 200.
+Returned identities were `jev-1.13.0`, `gpt-4.1-mini-2025-04-14` and
+`o4-mini-2025-04-16`. All 219 compressed snapshots, 10 fresh final screenshots,
+judge messages/responses and exact task identities passed an independent audit.
+The completed code is archived with the private run; its published source is
+commit `7dc79cf488f95c33f29f57ccd23bd0a28ac63a6a`.
+
+The actor executed 15 actions across 199 decisions. Five episodes stopped as
+BLOCKED, two as DONE and three reached 60 decision cycles. The three capped
+episodes executed 0, 2 and 5 actions: upstream freshness/target guards repeatedly
+rejected selections. These failures and encountered anti-bot pages remain in
+the overall denominator. Here **valid** means usable browser evidence and a
+parseable judge verdict; it does not certify that the site was available.
+DONE produced one success and one failure. Instrumented actor latency averaged
+17.73 s (median 10.12 s); this includes browser setup and evidence collection.
+Mean Jev HTTP latency was 95.4 ms (median 90.2 ms). The pilot measures the whole
+DOM-agent stack, including executor limitations and the lack of a final-answer
+channel, rather than isolated decision accuracy.
+
+<a id="kev-paired-online-mind2web-20261004"></a>
+## Kev alternatives: smallest and largest — October 4
+
+**Prepared; GPU execution awaits an exact allocation approval.** The current
+[Kev 1.0 family](https://github.com/jaredpalmer/kev) ranges from 0.8B to 27B.
+Evaluate both on the exact same 10 tasks as the completed Jev pilot, sequentially
+in one allocation. The unchanged Jev Ultrafast policy, DOM extraction, guarded
+executor, GPT-4.1-mini field-text helper, Browser Use sessions and o4-mini judge
+are shared. The experimental change is the System One decision endpoint and
+model. Kev does not generate field text. Browser content is collected afresh for each model,
+so this is a same-task comparison with live-site variability.
+
+| Setting | Kev 0.8B | Kev 27B |
+| --- | --- | --- |
+| Hub repository | `jaredpalmer/kev-0.8b` | `jaredpalmer/kev-27b` |
+| Pinned v1.0 revision | `bf75a6a8848ea6960ff2ed108d9ed44c2941174f` | `af0e6d551bdc2cc724f3e9d7a8bee1cd4fb8f7bf` |
+| Base | Qwen3.5-0.8B-Base | Qwen3.8-27B |
+| Weights | LoRA adapter plus pinned base | Full BF16 weights, approximately 51.3 GB |
+| Shipped probability calibration | T 2.3510958125672174 | T 1.319507910772894 |
+| Selection | Argmax; no generative sampling | Argmax; no generative sampling |
+| Server context limit | 65,536 tokens; no truncation | 65,536 tokens; no truncation |
+| Upstream accuracy-validated context | 8,192 tokens | 65,536 tokens |
+
+Kev serving source is pinned to
+`fe64b1274ea7f80d4095866df90666abb03e9cf6`. An isolated environment uses
+upstream's locked dependencies and its CUDA serving additions: torch 2.8.0,
+transformers 5.17.0, flash-linear-attention 0.5.2, Triton 3.7.1 and
+causal-conv1d 1.7.0. Triton intentionally overrides torch's older dependency pin,
+as in upstream's serving image. Both models use BF16, fused kernels, CUDA
+graphs and the checkpoint's shipped calibration; date preprocessing and state
+truncation are disabled. Both weight caches passed SHA-256 verification against Hub metadata, including
+all eleven 27B shards and the 0.8B adapter/base weights. Both tokenizers strictly
+admitted all 199 saved requests; the prepared paired manifests passed dry-run
+source, credential-presence and task-identity checks. GPU loading and inference
+remain unvalidated until the approved allocation starts.
+
+[`evaluate_kev_pair.py`](../../scripts/evaluate_kev_pair.py) verifies model-file
+hash receipts, source/dependency identities and exact paired task identities.
+Servers open the verified revision-specific cache directories directly; all
+Hub/tokenizer loading is offline. This avoids an upstream Hub-ID resolution
+path that still attempts a metadata request with the offline flag set.
+At startup it checks the actual server checkpoint, base, CUDA device, dtype,
+calibration and truncation policy, then validates short/long saved Jev requests
+before opening paid browser sessions. The alias `kev-latest` alone is not
+accepted as evidence of which checkpoint was loaded. The controller owns and
+awaits both model servers and all browser workers, preserves separate variant
+artifacts and charges a shared time ledger without resetting it on retry.
+
+| Proposed pilot budget | Limit |
+| --- | ---: |
+| Allocation, both models and all retries combined | 1 H200, 8 CPUs, 120 GiB, 2 hours |
+| Model-task attempts | 20 (10 per model) |
+| Remote browser sessions / concurrency / expiry | 20 / 2 / 12 min |
+| Local Kev HTTP attempts, including four warmups | 3,604 |
+| GPT-4.1-mini HTTP attempts, including retries | 3,600 |
+| o4-mini HTTP attempts, including retries | 80 |
+
+Prepared batch entry:
+[`evaluate_kev_pair_1gpu.sbatch`](../../scripts/evaluate_kev_pair_1gpu.sbatch).
+Private artifacts use runtime `evaluations/kev-pair-om2w-pilot-20261004/`.
+The 28 offline adapter tests passed, including actual Chromium fill/click/DONE,
+checkpoint/calibration mismatch rejection, secret-safe local routing and
+inherited-setting isolation. All 199 saved Jev requests passed Kev's API schema and strict tokenizer
+admission (up to 3,953 state tokens; 9,256 packed tokens across questions).
+Local Kev requests allow 120 seconds for a new CUDA compilation; the 600-second
+actor episode limit is unchanged. The new runner also enforces the project's
+4,096-token judge response cap. The completed Jev pilot omitted that explicit
+cap; its longest judge response used 681 completion tokens. Keep this recorded
+configuration difference when interpreting the historical pilot comparison.
+This preparation creates no browser sessions and performs no model inference.
 
 <a id="evaluation-harness-guide"></a>
 ## Evaluation harness: code map and entry points

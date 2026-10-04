@@ -23,12 +23,13 @@ RUNTIME = Path("/gpfs/scrubbed/zixianma/openwebrl-runtime")
 
 def configuration(args):
     mercury = args.text_provider == "openrouter"
-    return dict(version=1, browser=args.browser, jev_model="jev-1.13.0",
+    config = dict(version=1, browser=args.browser, jev_model="jev-1.13.0",
                 text_provider=args.text_provider,
                 text_model="inception/mercury-2.5" if mercury else "gpt-4.1-mini-2025-04-14",
                 text_base_url="https://openrouter.ai/api/v1" if mercury else "https://api.openai.com/v1",
                 text_sampling="upstream provider defaults; reasoning disabled" if mercury else dict(temperature=0.6, top_p=0.95),
                 text_max_tokens=1024, judge_model="o4-mini", judge_prompt_variant="agenttrek",
+                judge_max_completion_tokens=4096,
                 judge_base_url="https://api.openai.com/v1", judge_seed=42,
                 max_steps=30, max_decisions=60, task_timeout_seconds=600,
                 viewport=dict(width=1120, height=780), actor_input="DOM text; no screenshots",
@@ -37,6 +38,15 @@ def configuration(args):
                 judge_prompt_sha256=evaluation.digest(evaluation.judge_protocol()),
                 code_sha256={str(p.relative_to(REPO)): hashlib.sha256(p.read_bytes()).hexdigest()
                              for p in (Path(__file__), Path(evaluation.__file__))})
+    if getattr(args, "decision_provider", "jev") == "kev":
+        from openwebrl import kev_eval
+        config.update(decision_provider="kev", jev_model="kev-latest",
+                      decision_timeout_seconds=120,
+                      decision_endpoint=kev_eval.local_endpoint(args.kev_endpoint),
+                      kev=kev_eval.model_spec(args.kev_variant))
+        path = Path(kev_eval.__file__)
+        config["code_sha256"][str(path.relative_to(REPO))] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return config
 
 
 def prepare(args):
@@ -54,6 +64,9 @@ def prepare(args):
                             jev_http_attempts=180 * len(tasks), text_http_attempts=180 * len(tasks),
                             judge_http_attempts=4 * len(tasks)),
                 approval_status="not_submitted", training_updates=0)
+    if config.get("decision_provider") == "kev":
+        plan["limits"]["kev_http_attempts"] = plan["limits"].pop("jev_http_attempts")
+        plan["proposed_resources"] = dict(shared_pair_allocation=True, gpus=1, cpus=8, memory_gib=120, hours=2)
     output.mkdir(parents=True, exist_ok=True)
     manifest = output / "plan.json"
     if manifest.exists() and json.loads(manifest.read_text()) != plan:
@@ -80,6 +93,9 @@ def worker(args):
     config = plan["config"]
     check_worker_source(config)
     evaluation.load_credentials(args.env_file, config)
+    if config.get("decision_provider") == "kev":
+        from openwebrl.kev_eval import check_server
+        check_server(config["decision_endpoint"], config["kev"])
     task = next(t for t in plan["tasks"] if evaluation.digest(t["task_id"]) == args.worker)
     root = args.output / "tasks" / args.worker
     # Completed attempts are immutable. Interrupted attempts require a separate retry cohort.
@@ -173,7 +189,7 @@ def execute(args, plan):
                         if code != 0:
                             failures.append(dict(task_directory=root.name, exit_code=code))
                             stop = True
-                summary = evaluation.summarize(plan["tasks"], args.output)
+                summary = evaluation.summarize(plan["tasks"], args.output, plan["config"].get("decision_provider", "jev"))
                 summary.update(active_workers=len(active), pending_tasks=len(pending), failures=failures,
                                state="running" if active or (pending and not stop) else "complete" if summary["verified_complete"] else "partial")
                 evaluation.write_json(args.output / "summary.json", summary)
@@ -206,11 +222,16 @@ def main():
     parser.add_argument("--wall-budget-seconds", type=int, default=6900)
     parser.add_argument("--browser", choices=("browser-use", "local"), default="browser-use")
     parser.add_argument("--text-provider", choices=("openai", "openrouter"), default="openai")
+    parser.add_argument("--decision-provider", choices=("jev", "kev"), default="jev")
+    parser.add_argument("--kev-variant", choices=("0.8b", "27b"))
+    parser.add_argument("--kev-endpoint", default="http://127.0.0.1:18761/v1/systemone")
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--worker", help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.worker:
         return worker(args)
+    if args.decision_provider == "kev" and not args.kev_variant:
+        parser.error("--kev-variant is required for the Kev decision provider")
     if args.workers < 1 or args.wall_budget_seconds < 1200:
         parser.error("Positive worker count and at least 1200 seconds are required")
     plan = prepare(args)
@@ -219,7 +240,7 @@ def main():
         print(f"Prepared {len(plan['tasks'])} tasks; no browser/model calls or allocation submission.")
         return 0
     if not os.environ.get("SLURM_JOB_ID"):
-        parser.error("Run the evaluation inside an explicitly approved CPU allocation")
+        parser.error("Run the evaluation inside an explicitly approved allocation")
     return execute(args, plan)
 
 

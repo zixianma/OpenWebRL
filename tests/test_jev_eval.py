@@ -204,6 +204,7 @@ def test_real_browser_fill_click_done_and_durable_judge_evidence(tmp_path, monke
     assert "Results for algebra" in state["page"]["text"]
     assert len((root / "final.jpg").read_bytes()) > 100
     assert (root / "judge-response.json").exists()
+    assert json.loads((root / "judge-request.json").read_text())["max_completion_tokens"] == 4096
     for body in calls:
         if body["model"] == "jev-1.13.0":
             assert "screenshot" not in json.dumps(body)
