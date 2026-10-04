@@ -4,12 +4,67 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
+- [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
 - [ARM inference results on Online-Mind2Web](#arm-inference-results)
 - [ARM judge alignment audit](#arm-judge-alignment)
 - [ARM matched retry status and results](#arm-inference-retry-results)
 
 ---
+
+<a id="arm-controlled-inference-20261004"></a>
+## Controlled full300 ARM versus episode pass@5 — October4
+
+**User approved the exact GPU/API caps. CPU preparation and20 regression tests
+pass.** Initial four-hour submissions343534/343535 stopped after33 seconds each
+because the actor launcher omitted the established CUDA environment. The
+launcher now uses the preserved `h200_env.sh`; replacement jobs343537/343538
+were submitted with four-hour limits. Those33 seconds remain charged to each
+shard's original eight-hour ceiling. No episodes were collected by the failed
+startups; scientific settings and frozen schedule are unchanged.
+
+| Setting | Prespecified value |
+| --- | --- |
+| Cohort |All300 Online-Mind2Web tasks; no failure/success filtering |
+| Actor |Original OpenWebRL-4B-SFT, frozen; zero optimizer updates |
+| ARM |Released SelectionARM `81b452d800d9f859687074f82680dd5257e02d89`; full reasoning/action candidates; no refreshed adapter |
+| Comparison |One ARM-guided episode plus five independent actor episodes per task;1,800 committed attempts |
+| Execution order |Seed20261004; frozen task order, two150-task shards, independently shuffled six-mode order within each task |
+| Sampling |Temperature0.7, top-p0.9, top-k−1,1,024 actor response tokens;30 turns;32K context; full actor history, one current screenshot |
+| Browser |Local process, eight concurrent task blocks/shard; fresh episode per attempt; existing EGL child-environment fix included |
+| Judge |o4-mini / Online-Mind2Web AgentTrek;4,096 completion tokens; unchanged prompt/parser; SDK automatic retries disabled |
+| Startup gate |First two frozen tasks/shard, all six attempts each, count toward the final cohort; verify functioning actor/ARM/browser paths before scaling |
+| Primary |Paired all-scheduled ARM success minus taskwise actor pass@5 |
+| Secondary |Pass@1…5; ARM versus fixed actor0; discordant counts; all-six-valid sensitivity; task-bootstrap intervals |
+| Measurements |Backend actor input/output tokens; selector input/output tokens and service time; actual browser-step count/time; request/episode elapsed time; GPU utilization/power samples and whole-allocation GPU-hours |
+| Persistence |Original responses, screenshots, candidate traces, judge text, API usage and artifact hashes; resume only independently verified committed slots |
+| Approved ceiling |Two shards, each2 H200 ×8h total,16 CPUs,240GiB;32 total GPU-hours including every startup, continuation and retry |
+| Initial/replacement request |Four-hour allocation per shard; release immediately after collection; observed startup failures count against the eight-hour total |
+| Approved API cap |$50 total and7,200 calls; separate persistent $25/3,600-call shard ledgers, including unsuccessful/interrupted requests |
+
+Run every episode regardless of previous success. Environment/judge-invalid
+attempts stay in primary denominators; do not replace them with fresh episodes.
+A process interrupted before a slot is durably committed can retry that slot;
+its previous artifacts and costs remain recorded. Both shards have independent
+eight-hour total budgets; failures cannot reset them. The controller owns and
+awaits model servers and collection and releases them on completion/failure.
+
+The selector has its own GPU; the actor uses the other. Concurrent actor
+requests can share batches, so client-request seconds are not per-policy GPU
+kernel time. Report whole-allocation GPU cost and the separate metered workload
+components without mislabeling one as the other. Oracle pass@5 also does not
+include a deployable final-episode selector.
+
+Private frozen schedule, manifest, launch plans and readiness:
+runtime `arm-turn-bonus-preparation/controlled-inference-20261004/`.
+Source: `reference-arm-controlled-inference-20261004-v1`.
+Launcher: `scripts/run_arm_controlled_inference.py`; batch template:
+`scripts/run_arm_controlled_inference_2gpu.sbatch`.
+The preparation cannot submit allocations. Execution checks the exact recorded
+approval, actual Slurm resources, immutable-source hashes, and prior-attempt
+elapsed time. API accounting uses the checked
+[o4-mini rates](https://developers.openai.com/api/docs/models/o4-mini)
+($1.10/M input and$4.40/M output, conservatively ignoring cache discounts).
 
 <a id="arm-inference-cost-passk-20261004"></a>
 ## Inference cost versus episode pass@k — October4

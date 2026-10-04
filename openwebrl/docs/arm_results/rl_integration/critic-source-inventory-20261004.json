@@ -1,0 +1,373 @@
+{
+  "snapshot_utc": "2026-10-04T17:20:24.829531+00:00",
+  "raw_baseline": {
+    "groups": 8034,
+    "trajectories": 40170,
+    "manifests": 77
+  },
+  "expanded": {
+    "groups": 1869,
+    "trajectories": 9345,
+    "manifests": 19
+  },
+  "arm_filesystem_inventory": {
+    "additive_gate_ablation": {
+      "collection_markers": 318,
+      "label_files": 205561,
+      "group_files": 4993,
+      "group_bytes": 4443700462599
+    },
+    "diagnostics_exclude": {
+      "collection_markers": 5,
+      "label_files": 40,
+      "group_files": 7,
+      "group_bytes": 1882235163
+    },
+    "mixed_bonus": {
+      "collection_markers": 91,
+      "label_files": 57600,
+      "group_files": 9216,
+      "group_bytes": 9471724942208
+    },
+    "mixed_reweight": {
+      "collection_markers": 91,
+      "label_files": 53280,
+      "group_files": 8908,
+      "group_bytes": 9564208848284
+    },
+    "original_bonus": {
+      "collection_markers": 86,
+      "label_files": 54850,
+      "group_files": 228,
+      "group_bytes": 148031115330
+    },
+    "allfailure": {
+      "collection_markers": 101,
+      "label_files": 50729,
+      "group_files": 101,
+      "group_bytes": 86379981089
+    }
+  },
+  "refresh_future_benchmark_overlap": {
+    "rows": 371,
+    "tasks": 82,
+    "benchmark_tasks": 82
+  },
+  "inventory_scope": "Known ARM source families in the HF release and project artifacts; derived views and overlapping collections are explicitly identified. Counts have the verification levels shown.",
+  "default_split_rule": "Group task aliases/normalized goals across ALL sources before splitting; preserve existing dev/test/retention sets and exclude reported benchmark tasks.",
+  "no_direct_advantage_labels": true,
+  "sources": [
+    {
+      "id": "P1",
+      "name": "Piotr OpenWebRL raw states/candidates/labels",
+      "count": "3,085 states;412 episodes;49,536 candidate draws /49,360 IDs",
+      "label": "Teacher winner among five unexecuted proposals",
+      "preference": "Yes",
+      "value_q": "No measured returns",
+      "post_action": "No for sampled alternatives",
+      "advantage": "No",
+      "readiness": "Local; identity and schema audited",
+      "caveat": "176 conflicting duplicate draw records; repeated draws are not new states; split by task/state, not draw.",
+      "derived_from": null
+    },
+    {
+      "id": "P2",
+      "name": "Piotr source demonstration adjacency",
+      "count": "2,673 adjacent pairs across412 episodes",
+      "label": "Executed source demonstration, without saved binary terminal verdict",
+      "preference": "Requires relabeling",
+      "value_q": "No current return labels",
+      "post_action": "Potential after demo lineage audit",
+      "advantage": "No",
+      "readiness": "Local states; not converted to critic transitions",
+      "caveat": "After-image belongs to demo_action, not the later preferred proposal; demonstration quality is not a progress label.",
+      "derived_from": "P1"
+    },
+    {
+      "id": "P3",
+      "name": "Piotr packaged selection SFT / scalar BT",
+      "count": "Remote prepared train/validation files; row counts not re-audited",
+      "label": "Same teacher choices as P1, reformatted",
+      "preference": "Yes",
+      "value_q": "No calibrated success values",
+      "post_action": "No",
+      "advantage": "No",
+      "readiness": "Remote derivative; not new evidence",
+      "caveat": "Original draw-level validation can share states across splits; rebuild task-disjoint splits for new claims.",
+      "derived_from": "P1"
+    },
+    {
+      "id": "M1",
+      "name": "MolmoWeb PRM / preference data",
+      "count": "reward_pairs_15k.jsonl,101.6MB; filename count not independently verified",
+      "label": "GPT-5.5 per-candidate PRM scores",
+      "preference": "Yes",
+      "value_q": "Teacher score only, not return",
+      "post_action": "No observed branches established",
+      "advantage": "No measured advantage",
+      "readiness": "Remote schema sampled",
+      "caveat": "Different actor/action syntax; screenshot restoration is a prerequisite; teacher counterfactual scoring does not prove executed counterfactual returns.",
+      "derived_from": null
+    },
+    {
+      "id": "M2",
+      "name": "MolmoWeb actor-distillation rounds",
+      "count": "Four published state/candidate/selection/SFT files",
+      "label": "PRM-selected candidate; original demonstration action",
+      "preference": "Yes",
+      "value_q": "No binary outcomes verified",
+      "post_action": "No observed candidate branches verified",
+      "advantage": "No",
+      "readiness": "Remote schemas sampled; screenshots referenced in external archive",
+      "caveat": "Actor-distribution shift and missing archived screenshots; selection/SFT views are derivatives of the same rounds.",
+      "derived_from": null
+    },
+    {
+      "id": "C1",
+      "name": "C2 complete guided collection",
+      "count": "2,091 episodes;1,956 valid;1,151 successes /805 valid failures",
+      "label": "Frozen SelectionARM choices plus terminal o4-mini/AgentTrek verdict",
+      "preference": "Yes, model preferences",
+      "value_q": "Yes, after conversion",
+      "post_action": "Executed path only; adjacency audit needed",
+      "advantage": "Derived, not directly observed",
+      "readiness": "Complete collection and outcome audit already available",
+      "caveat": "Continuation policy includes ARM at every step; success prediction is for that composite policy, not ordinary SFT. Keep failures.",
+      "derived_from": null
+    },
+    {
+      "id": "C2",
+      "name": "C2 successful-turn SFT view",
+      "count": "8,394 usable turns from1,151 successes",
+      "label": "Executed ARM winner from successful episode",
+      "preference": "Can rejoin candidate traces",
+      "value_q": "Positive-only: inadequate alone",
+      "post_action": "Can rejoin underlying episode",
+      "advantage": "No direct labels",
+      "readiness": "Local audited derivative",
+      "caveat": "Success filtering removes negative outcomes; chosen/rejected candidate is a preference contrast, not successful/failed counterfactual.",
+      "derived_from": "C1"
+    },
+    {
+      "id": "J1",
+      "name": "Cleaned joint C2 + Piotr preference pairs",
+      "count": "5,540 train /658 validation: C2 3,464/442; Piotr2,076/216",
+      "label": "Frozen ARM winner for C2; teacher winner for Piotr",
+      "preference": "Yes",
+      "value_q": "C2 positive-only; Piotr unobserved",
+      "post_action": "Underlying source joins required",
+      "advantage": "No direct labels",
+      "readiness": "Local, task-group split and ambiguity/dedup audited",
+      "caveat": "Not an additional raw collection. 120 normalized task texts shared across sources; preserve the common split.",
+      "derived_from": "P1+C2"
+    },
+    {
+      "id": "R0",
+      "name": "Outcome-only baseline raw completed archives",
+      "count": "40,170 archived trajectories in77 collection manifests (iterations24\u2013100)",
+      "label": "Native GPT-4.1/action_history terminal outcome",
+      "preference": "No alternative preference unless joined",
+      "value_q": "Yes, after validity/split audit",
+      "post_action": "Yes where successor observation retained",
+      "advantage": "Cross-fitted MC/TD targets",
+      "readiness": "Manifest inventory; full eligible count beyond R1 pending",
+      "caveat": "Includes invalid attempts and all outcome-group types; behavior changes with checkpoint. Manifest count is not usable-example count.",
+      "derived_from": null
+    },
+    {
+      "id": "R1",
+      "name": "Prepared outcome-critic corpus",
+      "count": "2,000 train /250 dev /500 later test;17,584 prefixes;14,825 matched transitions",
+      "label": "Valid binary terminal return; no local correctness labels",
+      "preference": "Not direct preference",
+      "value_q": "Yes, ready indices",
+      "post_action": "Yes:11,023/1,239/2,563 matched transitions",
+      "advantage": "Derived; cross-fit V first",
+      "readiness": "Source and screenshot hashes verified; causal resolver tested",
+      "caveat": "Derived from R0. Preserve task splits. Final-turn after-images absent; future changes both tasks and actor. Never expose broadcast terminal metadata.",
+      "derived_from": "R0"
+    },
+    {
+      "id": "R2",
+      "name": "Expanded4,102-task outcome-only archives",
+      "count": "9,345 archived trajectories in19 manifests (collection iterations3\u201321)",
+      "label": "Native terminal outcomes",
+      "preference": "No direct preference",
+      "value_q": "Potential after audit",
+      "post_action": "Potential after conversion",
+      "advantage": "Derived only",
+      "readiness": "Manifest snapshot; training still incomplete",
+      "caveat": "These are collection indices, not verified optimizer progress. Early browser-failure cohort must stay distinguishable; filter invalids and freeze splits before fitting.",
+      "derived_from": null
+    },
+    {
+      "id": "A-original_bonus",
+      "name": "Original mixed-outcome ARM bonus",
+      "count": "86 collection markers;54,850 label files;228 saved group payload files",
+      "label": "Frozen ARM shadow preference + original native outcome in joined payload",
+      "preference": "Yes where label admitted",
+      "value_q": "After extracting native outcome",
+      "post_action": "After recovering retained tensors/images/successor links",
+      "advantage": "Derived only; current bonus is not advantage",
+      "readiness": "Filesystem/schema inventory only; usable deduplicated counts pending",
+      "caveat": "Retries/resume snapshots may overlap. Files are not trajectories. Exclude diagnostics, identify actor checkpoint/gate and separate native return from shaped training reward.",
+      "derived_from": null
+    },
+    {
+      "id": "A-allfailure",
+      "name": "Historical failure-only ARM",
+      "count": "101 collection markers;50,729 label files;101 saved group payload files",
+      "label": "Frozen ARM shadow preference + original native outcome in joined payload",
+      "preference": "Yes where label admitted",
+      "value_q": "After extracting native outcome",
+      "post_action": "After recovering retained tensors/images/successor links",
+      "advantage": "Derived only; current bonus is not advantage",
+      "readiness": "Filesystem/schema inventory only; usable deduplicated counts pending",
+      "caveat": "Retries/resume snapshots may overlap. Files are not trajectories. Exclude diagnostics, identify actor checkpoint/gate and separate native return from shaped training reward.",
+      "derived_from": null
+    },
+    {
+      "id": "A-additive_gate_ablation",
+      "name": "Additive / Gate B/C / beta / sampling ablations",
+      "count": "318 collection markers;205,561 label files;4,993 saved group payload files",
+      "label": "Frozen ARM shadow preference + original native outcome in joined payload",
+      "preference": "Yes where label admitted",
+      "value_q": "After extracting native outcome",
+      "post_action": "After recovering retained tensors/images/successor links",
+      "advantage": "Derived only; current bonus is not advantage",
+      "readiness": "Filesystem/schema inventory only; usable deduplicated counts pending",
+      "caveat": "Retries/resume snapshots may overlap. Files are not trajectories. Exclude diagnostics, identify actor checkpoint/gate and separate native return from shaped training reward.",
+      "derived_from": null
+    },
+    {
+      "id": "A-mixed_bonus",
+      "name": "Fresh mixed-only bonus",
+      "count": "91 collection markers;57,600 label files;9,216 saved group payload files",
+      "label": "Frozen ARM shadow preference + original native outcome in joined payload",
+      "preference": "Yes where label admitted",
+      "value_q": "After extracting native outcome",
+      "post_action": "After recovering retained tensors/images/successor links",
+      "advantage": "Derived only; current bonus is not advantage",
+      "readiness": "Filesystem/schema inventory only; usable deduplicated counts pending",
+      "caveat": "Retries/resume snapshots may overlap. Files are not trajectories. Exclude diagnostics, identify actor checkpoint/gate and separate native return from shaped training reward.",
+      "derived_from": null
+    },
+    {
+      "id": "A-mixed_reweight",
+      "name": "Fresh mixed-only outcome reweighting",
+      "count": "91 collection markers;53,280 label files;8,908 saved group payload files",
+      "label": "Frozen ARM shadow preference + original native outcome in joined payload",
+      "preference": "Yes where label admitted",
+      "value_q": "After extracting native outcome",
+      "post_action": "After recovering retained tensors/images/successor links",
+      "advantage": "Derived only; current bonus is not advantage",
+      "readiness": "Filesystem/schema inventory only; usable deduplicated counts pending",
+      "caveat": "Retries/resume snapshots may overlap. Files are not trajectories. Exclude diagnostics, identify actor checkpoint/gate and separate native return from shaped training reward.",
+      "derived_from": null
+    },
+    {
+      "id": "S1",
+      "name": "New2,000-task ordinary actor screen",
+      "count": "10,000 episodes;9,936 valid;3,597 successes;five attempts/task",
+      "label": "Original SFT + GPT-4.1/action_history outcomes",
+      "preference": "No candidate preference",
+      "value_q": "Strong clean behavior-policy source",
+      "post_action": "Requires lightweight archive conversion",
+      "advantage": "MC/TD derivation; only root task repeats, not same intermediate state",
+      "readiness": "Completed archive/verdict audit; transition conversion pending",
+      "caveat": "Five attempts share task identity: keep them in the same split. Attempts with native reward\u22121 are actor-format failures, not successes.",
+      "derived_from": null
+    },
+    {
+      "id": "S2",
+      "name": "Guided rescue after five valid failures",
+      "count": "682 episodes;679 valid;78 successes",
+      "label": "SelectionARM choices and native outcome",
+      "preference": "Yes, model preferences",
+      "value_q": "Yes for guided failure-selected behavior",
+      "post_action": "Executed path only, after conversion",
+      "advantage": "Derived only",
+      "readiness": "Completed rollout/verdict/candidate audit; conversion pending",
+      "caveat": "Subset of S1 tasks selected by five failures; do not compare its yield to those conditioning failures as a fresh control.",
+      "derived_from": "S1 task subset; new episodes"
+    },
+    {
+      "id": "S3",
+      "name": "Small late-actor rescue pilot",
+      "count": "320 screen +48 fresh retry episodes;6 separate smoke episodes",
+      "label": "Iteration90 ordinary/guided actor + native outcome",
+      "preference": "Guided traces only",
+      "value_q": "Yes, small conditional panel",
+      "post_action": "After conversion",
+      "advantage": "Derived; no same-state branches",
+      "readiness": "Completed audit;64 training tasks, eight retry tasks",
+      "caveat": "Exclude smoke from scientific fit/evaluation; actor differs from SFT, and retry tasks were failure-selected.",
+      "derived_from": null
+    },
+    {
+      "id": "S4",
+      "name": "SFT actor /2-turn /4-turn ARM-prefix pilot",
+      "count": "288 episodes;48 tasks \u00d73 conditions \u00d72 repeats;283 valid",
+      "label": "Native outcomes and intervention-prefix labels",
+      "preference": "Only during guided prefix",
+      "value_q": "Yes with behavior condition retained",
+      "post_action": "After conversion",
+      "advantage": "Derived; continuation changes at prefix boundary",
+      "readiness": "Complete; training tasks exclude OM2W",
+      "caveat": "Useful controlled policy-mixture data, not same-state branching. Keep all conditions for a task in one split.",
+      "derived_from": null
+    },
+    {
+      "id": "F1",
+      "name": "Baseline40 ARM refresh: new preference states",
+      "count": "2,000 train /250 dev states;plus858 Piotr replay;2,858 formatted train rows",
+      "label": "GPT-5.5 teacher selections on current actor candidates",
+      "preference": "Yes",
+      "value_q": "Can join R0 outcomes for executed action only",
+      "post_action": "Can join R0 demo transition; sampled alternatives unexecuted",
+      "advantage": "No direct labels",
+      "readiness": "Local trained selection corpus; teacher labels complete",
+      "caveat": "New sampled candidates are not the archived executed action. Piotr858 is reused P1 data, not new outcome supervision;200 Piotr retention rows are held out.",
+      "derived_from": "R0 states + P1 replay"
+    },
+    {
+      "id": "E1",
+      "name": "ARM refresh future preference panel",
+      "count": "371 states on82 OM2W benchmark tasks;all82 IDs match benchmark",
+      "label": "Teacher choices; frozen-ARM choice; benchmark rollout outcome",
+      "preference": "Evaluation only",
+      "value_q": "Evaluation only",
+      "post_action": "Evaluation only if recoverable",
+      "advantage": "No training",
+      "readiness": "Benchmark contamination check verified this audit",
+      "caveat": "This future.jsonl is NOT R1 future.jsonl. It must not be folded into critic training.",
+      "derived_from": null
+    },
+    {
+      "id": "E2",
+      "name": "Held-out inference / checkpoint evaluations",
+      "count": "Original900 OM2W episodes;many additional full300, stealth, WebVoyager595 cohorts;controlled1,800 planned",
+      "label": "Benchmark success verdicts; candidates in guided arms",
+      "preference": "Evaluation only",
+      "value_q": "Evaluation only",
+      "post_action": "Evaluation only",
+      "advantage": "No training",
+      "readiness": "Per-cohort audits; do not pool different judges/protocols",
+      "caveat": "Keep benchmark tasks and trajectories out of all critic training; repeated evaluations are not independent training examples.",
+      "derived_from": null
+    },
+    {
+      "id": "T0",
+      "name": "Task pool / URL availability / instruction screening",
+      "count": "Task instructions and screening metadata, not executed transitions",
+      "label": "Availability, quality, task-level difficulty",
+      "preference": "No action label",
+      "value_q": "No trajectory return without S1/S2 joins",
+      "post_action": "No",
+      "advantage": "No",
+      "readiness": "Useful for task sampling and joins",
+      "caveat": "Do not treat site availability or instruction-quality scores as action rewards.",
+      "derived_from": null
+    }
+  ]
+}

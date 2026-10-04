@@ -4,11 +4,123 @@ The reviewed C2/Piotr data mixture, filtering rules, full-history examples, trai
 
 ## Contents
 
+- [Critic training source inventory: 24 sources and derived views](#arm-critic-source-inventory-20261004)
 - [Joint C2 and Piotr teacher-data training proposal](#arm-joint-data-training-plan)
 - [Combined ARM data: prepared for review](#arm-joint-data-review)
 - [Retained SFT example: two previous turns](#arm-joint-sft-history-example)
 
 ---
+
+<a id="arm-critic-source-inventory-20261004"></a>
+## Critic training source inventory — October4
+
+**We have outcome data for a matched pre/post-action comparison, but no
+verified dataset of directly measured same-state advantages for all candidate
+actions.** The table inventories 24 source families or derived views. Its rows
+are not disjoint collections and must not be summed. Counts distinguish
+verified trajectories/states from filesystem payload counts and remote files.
+[Machine-readable aggregate catalog](arm_results/rl_integration/critic-source-inventory-20261004.json).
+[Matched critic experiment and causal-input rules](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+
+The private review bundle is under runtime
+`arm-turn-bonus-preparation/outcome-reward-20260927/critic-comparison-20261004/source-review/`:
+`critic-source-review.html` is searchable and expands each source's actual
+fields and artifact paths; `catalog.csv` and `catalog.json` retain the same
+inspection detail. `raw-archive-provenance.json` records the completed archive
+manifest paths and hashes. These task-level references stay local.
+
+Here **preference** means selecting/ranking proposed actions, **V/Q** means
+predicting an observed terminal outcome from a causal state/state-action input,
+and **post** means using the observed transition as additional evidence.
+A post-action outcome predictor is not automatically a local-progress critic.
+“Derived” advantage requires a fitted, task-cross-fitted value baseline;
+it does not mean a direct advantage label exists.
+
+| ID | Source and available amount | Preference | Outcome V/Q | Post-action | Advantage | Qualification before use |
+| --- | --- | --- | --- | --- | --- | --- |
+| P1 |Piotr OpenWebRL: 3,085 states / 412 source episodes; 49,536 candidate draws, 49,360 IDs |Teacher winner |No observed candidate return |No sampled-candidate after-state |No |Local schema audited; 176 conflicting duplicate draw records; split by task/state, not draw |
+| P2 |Piotr demonstration adjacency: 2,673 pairs |Needs relabeling |No saved terminal label |Potential |No |Derived from P1; next image follows `demo_action`, not the later teacher-selected proposal |
+| P3 |Piotr packaged selection-SFT / scalar-BT train/validation files |Yes |Preference score only |No |No |Remote derivatives of P1; row counts not re-audited; original draw splits can share states |
+| M1 |MolmoWeb `reward_pairs_15k.jsonl`, 101.6 MB |Teacher PRM scores |Teacher scores, not returns |No observed branches verified |No |Remote schema inspected; filename is not an audited row count; restore screenshots and reconcile action syntax |
+| M2 |MolmoWeb actor-distillation state/candidate/selection/SFT files |Yes |No binary outcomes verified |No candidate branches verified |No |Four related remote files; external screenshot archive required; derivatives are not additional episodes |
+| C1 |Complete C2 guided collection: 2,091 episodes, 1,956 valid, 1,151 successes / 805 valid failures |Frozen ARM choices |After conversion |Executed path, after adjacency audit |Derived |Original SFT plus ARM continuation policy; retain valid failures and separate 135 invalid episodes |
+| C2 |C2 success-only SFT view: 8,394 turns from 1,151 successes |Rejoin candidates |Positive-only |Rejoin C1 |Not alone |Derivative of C1; cannot calibrate success probability using only retained successes |
+| J1 |Cleaned joint C2/Piotr: 5,540 train / 658 validation pairs |Ready |Not a complete outcome corpus |Underlying joins |No direct labels |Derivative of P1/C2; 120 shared normalized tasks grouped before splitting; preserve that split |
+| R0 |Original outcome-only archives: 40,170 trajectory records in 77 complete collections, iterations 24–100 |No alternative labels |After validity/split audit |Where successor retained |Derived |Raw archived records include invalids; changing actor checkpoints; not 40,170 verified usable examples |
+| R1 |Prepared outcome corpus: 2,000 train / 250 dev / 500 later test; 17,584 prefixes / 14,825 matched transitions |No direct preference |Ready indices |Ready matched indices |Cross-fit V first |Audited R0 subset; 11,023 / 1,239 / 2,563 matched transitions; final-turn after-images absent |
+| R2 |Expanded 4,102-task baseline: 9,345 trajectory records in 19 collections, indices 3–21 |No direct labels |After audit |After conversion |Derived |Collection indices are not optimizer progress; preserve early browser-failure cohort identity |
+| A-original_bonus |Original ARM bonus: 86 collection markers / 54,850 label files / 228 group payload files |Where eligible |Join native outcome |Recover transitions |Derived |Filesystem counts, not unique trajectories; shaped bonus is not the terminal target |
+| A-allfailure |Historical failure-only ARM: 101 markers / 50,729 label files / 101 group payload files |Where eligible |Join native outcome |Recover transitions |Derived |Failure-group selection changes distribution; preserve group/gate/actor identity |
+| A-additive_gate_ablation |Additive / Gate B/C / beta / sampling: 318 markers / 205,561 label files / 4,993 group payload files |Where eligible |Join native outcome |Recover transitions |Derived |Several recipes; exclude diagnostics; deduplicate resume/replay snapshots |
+| A-mixed_bonus |Fresh mixed-only bonus: 91 markers / 57,600 label files / 9,216 group payload files |Where eligible |Join native outcome |Recover transitions |Derived |Mixed-group conditioning; payload files are not individual episodes |
+| A-mixed_reweight |Fresh mixed-only reweight: 91 markers / 53,280 label files / 8,908 group payload files |Where eligible |Join native outcome |Recover transitions |Derived |Keep original outcome separate from reweighted training reward; usable unique count pending |
+| S1 |New 2,000-task ordinary screen: 10,000 episodes, 9,936 valid, 3,597 successes |No direct labels |Strong next corpus |Conversion needed |Derived |Five original-SFT episodes/task; all repeats share a split; native −1 format failures are not successes |
+| S2 |Guided rescue: 682 episodes, 679 valid, 78 successes |Frozen ARM choices |Guided-policy return |Executed path |Derived |New episodes on an S1 subset selected by five failures; alternatives remain unexecuted |
+| S3 |Late-actor rescue pilot: 320 screen + 48 fresh retries; 6 additional smokes |Guided arms |Small conditional panel |Conversion needed |Derived |Iteration90 actor; 64 screen tasks / 8 retry tasks; exclude six smoke episodes |
+| S4 |SFT / 2-turn / 4-turn ARM-prefix pilot: 288 episodes, 283 valid, 48 tasks |Guided prefix |Condition on policy |Conversion needed |Derived |Two repeats per condition; continuation switches at prefix boundary; group all task conditions together |
+| F1 |ARM refresh: 2,000 train / 250 dev new preference states + 858 Piotr replay; 2,858 formatted train rows |Teacher winner |Join R0 executed action only |Join R0 executed action only |No direct labels |New actor40 candidates were not executed in the source archive; do not broadcast its outcome onto them; 200 Piotr retention rows stay held out |
+| E1 |Refresh `future.jsonl`: 371 states / 82 OM2W tasks |Evaluation only |Evaluation only |Evaluation only |No training |All 82 IDs match the benchmark; this is different from R1's 500-trajectory later test |
+| E2 |OM2W / checkpoint / stealth / WebVoyager evaluations; new controlled 1,800-episode collection |Evaluation only |Evaluation only |Evaluation only |No training |Benchmark trajectories stay excluded; keep judges, sampling and cohorts distinct |
+| T0 |Task pool, URL availability and instruction screening |No action labels |No trajectory labels alone |No |No |Useful sampling/join metadata; availability and task quality are not action reward |
+
+The remote source is [Piotr's released dataset](https://huggingface.co/datasets/PTeterwak/action-reward-models-data).
+The OpenWebRL subset is pinned locally at `0d83b48`. Inspect the separate
+[OpenWebRL files](https://huggingface.co/datasets/PTeterwak/action-reward-models-data/tree/main/openwebrl_actor)
+and [MolmoWeb files](https://huggingface.co/datasets/PTeterwak/action-reward-models-data/tree/main/molmoweb_actor)
+without treating their prepared views as independent supervision.
+
+### What each artifact actually gives us
+
+Piotr's state record carries the task/goal, source episode/turn, current image,
+causal prompt and demonstration action. Candidate and teacher-label records add
+unexecuted proposals and a preferred index. The source demonstration's next
+image can give an observed transition after the demonstration action. It
+cannot supply the next state or realized return for a newly sampled candidate.
+The cleaned joint preference corpus already resolves source overlap and
+conflicting/ambiguous pairs, making it the appropriate existing preference
+training view.
+
+Our completed rollout archives retain executed responses and observations plus
+native terminal verdicts. R1 already has source/image hash checks and a tested
+causal resolver. Its final outcome is a legitimate label for an observed-return
+predictor, but does not prove every individual action was locally good or bad.
+The baseline's behavior varies with checkpoint, so record the behavior policy
+and task distribution. C2 and S2 instead predict return under an ARM-guided
+continuation. S1 is especially useful next because its behavior actor is the
+unchanged original SFT model and both successful and failed episodes are saved.
+
+The ARM RL `labels/*.json` records contain candidate texts, permutations,
+chosen indices, goal-bearing prompts, eligibility/gating information, policy
+identity and group/parent-sample links. **The label alone does not contain the
+native terminal outcome.** Recover that from the corresponding saved rollout
+payload before building outcome examples, then verify causal successor links.
+Some group files are gigabytes, so the current count is a filesystem/schema
+inventory; it is not a completed payload-level deduplication or conversion.
+Outcome-only and mixed-group filtering also select different difficulty bands.
+
+### Training order and split rules
+
+Use R1 first for the matched V, pre-action Q and post-action outcome test. Fit
+fresh models on identical nonterminal rows, preserving its 700 training tasks,
+126 dev tasks and 155 later-test tasks. Cross-fit V by task before deriving
+Monte Carlo or TD advantage targets. Report all-prefix V/Q coverage separately
+from the matched transition panel. A derived Q−V ranks actions exactly as Q
+within one state; ranking gains cannot come merely from subtracting V.
+
+Next convert S1, followed by the full C2 and guided S2 collections. Keep their
+policy identities separate in evaluation; pooling them estimates the observed
+mixture's return, not automatically the ordinary actor's return. ARM RL payload
+conversion is a larger third stage because eligibility, group conditioning,
+resume duplicates and native-versus-shaped rewards all need explicit joins.
+Same-state action-ranking validation still needs actual branch executions with
+a fixed continuation policy, or additional human/teacher progress supervision.
+
+Across sources, group task aliases and normalized goals before splitting.
+Preserve existing dev/test/retention sets and exclude OM2W/WebVoyager benchmark
+tasks, including E1. Do not leak terminal verdicts, final trajectory length or
+future actor responses into causal inputs. Distinguish successful execution of
+a browser command, teacher preference, local task progress and eventual task
+success: they are different targets.
 
 <!-- document:ARM_JOINT_DATA_TRAINING_PLAN.md:start -->
 <a id="arm-joint-data-training-plan"></a>

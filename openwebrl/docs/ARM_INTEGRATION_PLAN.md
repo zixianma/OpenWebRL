@@ -17,6 +17,11 @@ source/hash audit: runtime `arm-turn-bonus-preparation/arm-goal-audit-20261004/`
 
 ### Data that actually supports each target
 
+The [full source inventory](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004)
+now covers 24 source families and derived views, with private field/path
+inspection, readiness and exclusions. The compact table below describes the
+initial matched comparison.
+
 | Source | Verified available data | Appropriate supervision | Missing evidence |
 | --- | --- | --- | --- |
 | Piotr OpenWebRL subset, pinned `0d83b48` |3,085 states in412 demonstration episodes;49,536 five-candidate records,49,360 unique draw IDs; teacher choices |Pre-action preference SFT/BT; source demonstration transitions can support observation-based relabeling |No executed outcome for each sampled candidate;176 conflicting duplicate draw records require the existing identity audit |
