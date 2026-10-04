@@ -35,7 +35,20 @@ def origin(root):
     allowed_sources={training.SOURCE.resolve(),
         RUNTIME/'reference-arm-turn-bonus-cycles-20260913-v3',
         RUNTIME/'reference-arm-failure-bonus-20260913-v2',
-        RUNTIME/'reference-arm-failure-additive-20260914-v3'}
+        RUNTIME/'reference-arm-failure-bonus-20260919-countguard-v1',
+        RUNTIME/'reference-arm-gate-c-restart-20260920-v1',
+        RUNTIME/'reference-arm-gate-recovery-20260920-v3',
+        RUNTIME/'reference-arm-gate-b-to60-20260921-v1',
+        RUNTIME/'reference-arm-gate-c-to60-20260921-v1',
+        RUNTIME/'reference-arm-gate-b-tp2-20260922-v1',
+        RUNTIME/'reference-arm-gate-b-resume49-20260924-v1',
+        RUNTIME/'reference-arm-gate-c-tp2-20260922-v1',
+        RUNTIME/'reference-arm-failure-ablations-20260922-v3',
+        RUNTIME/'reference-arm-failure-ablations-tp2-20260922-v1',
+        RUNTIME/'reference-arm-failure-weight-replay20-20260926-v1',
+        RUNTIME/'reference-arm-failure-coverage-identity-20260924-v1',
+        RUNTIME/'reference-arm-failure-additive-20260914-v3',
+        RUNTIME/'reference-arm-additive-to100-20260921-v1'}
     if Path(manifest['source']).resolve() not in allowed_sources:
         raise ValueError('Resume must preserve the checkpoint source')
     from resume_baseline import validate_source

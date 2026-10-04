@@ -85,18 +85,31 @@ def verify_live_shadow(p,root,no_optimizer_updates):
     """Separate live-hook diagnostics from statistical calibration/training success."""
     if not p.get('diagnostic_only') or not p['arm_config'].get('shadow_only') or not no_optimizer_updates:
         raise ValueError('Live shadow diagnostic must execute zero optimizer updates')
-    current=Path(root)/'iterations/0000'
+    current=Path(root)/'iterations'/f"{p.get('start_rollout_id',0):04d}"
     report=json.loads((current/'calibration.json').read_text())
     complete=json.loads((current/'collection_complete.json').read_text())
     if (report.get('applied_beta')!=0 or report.get('collection_records',0)<1
             or report.get('admitted',0)<1 or complete.get('optimizer_updates')!=0):
         raise ValueError('Live shadow diagnostic lacks real admitted turn labels or changed actor rewards')
+    if p.get('failure_coverage_pilot'):
+        coverage=json.loads((current/'failure-coverage.json').read_text())
+        if not coverage.get('complete') or coverage['rollout_id'] != p['start_rollout_id']:
+            raise ValueError('Deferred failure labeling did not finish')
     return report
 
 
 def execute(p):
-    if p.get('variant_continuation'):
+    if p.get('failure_ablation_training'):
+        from prepare_arm_failure_ablations import validate_plan
+        readiness=validate_plan(p)
+    elif p.get('failure_coverage_pilot'):
+        from prepare_arm_failure_coverage import validate_plan
+        readiness=validate_plan(p)
+    elif p.get('variant_continuation'):
         from resume_arm_failure_variants import validate_plan
+        readiness=validate_plan(p)
+    elif p.get('gate_ablation'):
+        from run_arm_gate_ablation import validate_plan
         readiness=validate_plan(p)
     elif p.get('experiment') == 'additive-all-failure':
         from run_arm_failure_additive import require_receipt
@@ -119,7 +132,10 @@ def execute(p):
     steps=subprocess.check_output(['squeue','--steps',f'--jobs={job}','--noheader','--format=%i'],text=True).split()
     if set(steps)-{f'{job}.{x}' for x in ('batch','extern','interactive',os.getenv('SLURM_STEP_ID'))}:
         raise ValueError('Another worker is active in this allocation')
-    deadline=time.time()+min(resources['maximum_seconds'],p['requested_resources']['hours']*3600-180)
+    reserve=p.get('evaluation_reserve_seconds',0)
+    if reserve not in (0,3600):raise ValueError('Unsupported reserved evaluation time')
+    deadline=time.time()+min(resources['maximum_seconds'],p['requested_resources']['hours']*3600-180)-reserve
+    if deadline-time.time()<600:raise ValueError('Insufficient training time after evaluation reserve')
     p['arm_config']['deadline_epoch_seconds']=deadline
     from dotenv import dotenv_values
     env={k:v for k,v in clean_environment().items() if not k.startswith('OPENWEBRL_ARM_')}
@@ -159,7 +175,17 @@ def execute(p):
                 try: os.killpg(child.pid,signal.SIGKILL)
                 except ProcessLookupError: pass
                 child.wait()
+    port_lease=None
     try:
+        if json.loads((SOURCE/'reference_manifest.json').read_text()).get('runtime_port_leases'):
+            from runtime_ports import PORT_ENV, lease_ports
+            port_lease,port_base=lease_ports(job)
+            env[PORT_ENV]=str(port_base)
+            p['selector_port']=port_base+250
+            p['arm_config']['selector_endpoint']=f"http://127.0.0.1:{p['selector_port']}"
+            write_json(root/'arm-config.json',p['arm_config'])
+            write_json(root/'launch_manifest.json',p)
+            write_json(root/'port-lease.json',dict(base=port_base,size=256,job_id=job))
         status()
         handles.append((root/'collection.log').open('w'))
         worker=subprocess.Popen(source_command(SOURCE,['timeout','--signal=INT','--kill-after=60',str(int(deadline-time.time())),*p['command']]),
@@ -253,6 +279,7 @@ def execute(p):
     finally:
         for child in reversed(children): stop_child(child)
         for handle in handles: handle.close()
+        if port_lease is not None:port_lease.close()
         for sig,handler in zip((signal.SIGTERM,signal.SIGINT),old): signal.signal(sig,handler)
 
 
