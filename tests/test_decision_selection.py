@@ -73,3 +73,21 @@ def test_failed_http_is_durable_and_halts_without_retry(tmp_path):
         assert json.loads((tmp_path/'request-00001.json').read_text())['status']=='failed'
         assert (tmp_path/'halt.json').exists()
     asyncio.run(run())
+
+
+def test_terminal_screenshot_crosses_nested_task_boundary_without_episode_leakage():
+    from openwebrl.decision_selection_eval import FINAL_SCREENSHOT, remember_screenshot
+    async def episode(image):
+        token = FINAL_SCREENSHOT.set({'image': None})
+        try:
+            async def generation_child():
+                await asyncio.sleep(0)
+                remember_screenshot(image)
+            await asyncio.wait_for(generation_child(), timeout=1)
+            return FINAL_SCREENSHOT.get()['image']
+        finally:
+            FINAL_SCREENSHOT.reset(token)
+    async def run():
+        assert await asyncio.gather(episode(b'A'), episode(b'B')) == [b'A', b'B']
+        assert FINAL_SCREENSHOT.get() is None
+    asyncio.run(run())

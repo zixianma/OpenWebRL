@@ -26,6 +26,16 @@ CURRENT_TASK = ContextVar('decision_selection_task')
 FINAL_SCREENSHOT = ContextVar('decision_selection_final_screenshot', default=None)
 
 
+def remember_screenshot(image):
+    # generate_turn_sample uses wait_for, which creates a child asyncio Task.
+    # Mutate the per-episode holder inherited by that task; ContextVar.set in
+    # the child would not propagate back to the terminal judge's parent task.
+    holder = FINAL_SCREENSHOT.get()
+    if holder is None:
+        raise RuntimeError('Missing per-episode final screenshot holder')
+    holder['image'] = image
+
+
 class PilotJudge:
     """Four attempts per task, no SDK retries; persist the exact judge evidence."""
     def __init__(self, root, client):
@@ -56,12 +66,12 @@ def install_final_screenshot():
 
     async def wrapped_reset(self, *args, **kwargs):
         result = await reset(self, *args, **kwargs)
-        FINAL_SCREENSHOT.set(result[0].get('screenshot'))
+        remember_screenshot(result[0].get('screenshot'))
         return result
 
     async def wrapped_step(self, *args, **kwargs):
         result = await step(self, *args, **kwargs)
-        FINAL_SCREENSHOT.set(result[0].get('screenshot'))
+        remember_screenshot(result[0].get('screenshot'))
         return result
 
     WebEnv.reset, WebEnv.step = wrapped_reset, wrapped_step
@@ -91,7 +101,7 @@ async def run(config):
 
     async def terminal_reward(args, samples):
         sample = samples[-1] if isinstance(samples, list) else samples
-        final = FINAL_SCREENSHOT.get()
+        final = (FINAL_SCREENSHOT.get() or {}).get('image')
         if final:
             sample.metadata['full_image_list'] = [base64.b64encode(final).decode()]
             directory = root / 'final'; directory.mkdir(exist_ok=True)
@@ -145,7 +155,7 @@ async def run(config):
                 if started_path.exists():
                     raise RuntimeError('Interrupted task requires diagnosis; no automatic extra browser session')
                 write_json(started_path, dict(task_id=task['task_id'], started_unix=time.time()))
-                token = CURRENT_TASK.set(key); image_token = FINAL_SCREENSHOT.set(None)
+                token = CURRENT_TASK.set(key); image_token = FINAL_SCREENSHOT.set({'image': None})
                 local = copy(args); local.browser_action_selector = selector
                 local.path_to_save_generated_samples = str(root / 'samples' / key)
                 start = time.monotonic()

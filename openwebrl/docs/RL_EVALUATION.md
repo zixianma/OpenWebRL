@@ -302,7 +302,7 @@ cohort if useful progress is verified. Distinguish website blocks, execution
 limitations and model selection failures.
 
 <a id="sft-jev-kev-selection-pilot-20261004"></a>
-### Prepared: original SFT proposes five actions; Jev/Kev select
+### Submitted: original SFT proposes five actions; Jev/Kev select
 
 The requested SelectionARM-style replacement is implemented separately from the
 Jev Ultrafast direct agent. At each state, the original OpenWebRL-4B-SFT samples
@@ -326,15 +326,35 @@ viewport. This is a separate protocol from the direct1120×780 Jev agent.
 Prepared entry: [`evaluate_sft_decision_selection.py`](../../scripts/evaluate_sft_decision_selection.py),
 [`batch template`](../../scripts/evaluate_sft_decision_selection_2gpu.sbatch).
 The four conditions each use the same first10 tasks (40 fresh episodes total),
-with2 concurrent browsers. Proposed allocation: **2H200,16CPUs,240GiB,1hour total
+with2 concurrent browsers. Approved allocation: **2H200,16CPUs,240GiB,1hour total
 including startup and retries**; one GPU for SFT and one for the sequential Kev
 servers. It releases on completion and stops at its cap if incomplete. API caps:
 300Jev calls,602local Kev calls including warmups,160judge attempts,4096judge
 completion tokens per attempt;40browser sessions with12-minute expiry and no
-additional helper calls. This is prepared only; the new allocation and API/browser
-budget have not been approved or submitted. The completed direct-pilot budget is
-not reused. Combined offline tests passed38 cases, including literal candidate
+additional helper calls. The user approved this exact allocation and API/browser budget; job344043 was
+submitted and is queued. The completed direct-pilot budget is not reused. Combined offline tests passed39 cases, including literal candidate
 preservation, probability failures, secret-safe routing and local overlay behavior.
+
+A pre-start check found that `asyncio.wait_for` creates a child task: assigning a
+ContextVar there did not return the final screenshot to the judge's task. Source
+revision2 uses a shared per-episode image holder. A concurrent two-episode test
+verifies correct propagation and isolation. The same queued job was briefly held
+for this repair and released; no GPU or browser budget was consumed. Both source
+revisions, prior approval/plan and repair lineage remain in private runtime storage.
+
+Persistent service `openwebrl-sft-selection-supervisor-20261004.service` polls the
+current run pointer every60seconds and queues the owning agent thread on state
+changes or every15minutes. The initial same-thread continuation was accepted and
+the service heartbeat verified. The agent owns diagnosis, bounded recovery and
+independent completion review; the watcher itself does not modify GPU work.
+The requested endpoint is all40 task results with candidate traces, final images,
+judge verdicts, closed browser sessions and actual scheduler-time accounting.
+
+The [Jev model reference](https://docs.typesafe.ai/models) explicitly specifies
+text-only input with no image/audio/video modality. Kev's pinned serving path
+also tokenizes text. SFT and the terminal judge see screenshots; the Jev/Kev
+selectors see textual observations and candidate reasoning. This is a material
+modality difference from visual SelectionARM, not an equal-input model swap.
 
 
 <a id="evaluation-harness-guide"></a>
