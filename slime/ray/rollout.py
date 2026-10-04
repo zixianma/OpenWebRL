@@ -731,6 +731,13 @@ class RolloutManager:
         return dynamic_gbs
 
     def _save_debug_rollout_data(self, data, rollout_id, evaluation: bool):
+        # A replay already has a durable archive. Re-saving can truncate the
+        # file backing mmap-loaded tensors and cause SIGBUS/data loss.
+        replay = os.environ.get("OPENWEBRL_REPLAY_FIRST_BATCH")
+        replay_id = int(os.environ.get("OPENWEBRL_REPLAY_ROLLOUT_ID", "0"))
+        if not evaluation and replay and rollout_id == replay_id:
+            logger.info("Preserving existing replay archive without re-saving: %s", replay)
+            return
         # TODO to be refactored (originally Buffer._set_data)
         if (path_template := self.args.save_debug_rollout_data) is not None:
             path = Path(path_template.format(rollout_id=("eval_" if evaluation else "") + str(rollout_id)))
