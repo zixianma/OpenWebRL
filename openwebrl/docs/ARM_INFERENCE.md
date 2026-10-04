@@ -44,6 +44,9 @@ All invalid attempts remain failures in these overall denominators.
 **Mean dominant forward FLOPs per task, in10¹⁵ operations.** These include
 actor and selector vision, prefill and decode. Cache bounds are distinct from
 statistical confidence intervals; the detailed counting assumptions follow.
+Uniform sharing credits exact full-state/image reuse and omits partial-history
+prefix hits. Its absolute costs can therefore exceed the current-serving
+estimates; the columns describe different cache policies.
 
 | Policy | Observed KV hits, vision-cache bounds | Uniform identical-state sharing | Uniform fresh prefill/vision per request |
 | --- | ---: | ---: | ---: |
