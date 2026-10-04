@@ -14,7 +14,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |
 | [RL_RESULTS.md](RL_RESULTS.md) | Tables-only RL checkpoint scores; overall, valid-only, invalid counts, and separate protocols |
 | [RL_RUNTIME.md](RL_RUNTIME.md) | Reference baseline resume, GPU scaling, archives, and runtime history |
-| [RL_EVALUATION.md](RL_EVALUATION.md) | Baseline and Browser Use evaluations and reward-ranked scheduling |
+| [RL_EVALUATION.md](RL_EVALUATION.md) | Evaluation harness code map, protocols, commands/tests, checkpoint results and scheduling |
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
@@ -72,6 +72,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Mixed-only reweight70 verified:38.67% /49.57% full300 (234 valid),38.00% /50.00% fixed100; one success above bonus70; training continues](ARM_RESULTS.md#arm-mixed-reweight-iter70-results-20261001).
 [Mixed-only bonus80 verified:36.00% /48.87% full300 (221 valid),35.00% /50.72% fixed100; recovery340425 held for storage before allocation, durable88 preserved](ARM_RESULTS.md#arm-mixed-bonus-iter80-results-20261001).
 [Mixed-only pair90 complete: bonus40.67% /52.36%, reweight37.67% /49.78% full300; all nine milestones each verified and GPUs released](ARM_RESULTS.md#arm-mixed-bonus-iter90-results-20261002).
+
+[Evaluation harness on `arm`: topic index, entry points, protocol table, dry-run commands and regression tests](RL_EVALUATION.md#evaluation-harness-guide). Runtime task data, trajectories, credentials and checkpoints remain private.
 
 Current scaling plan: [eight-GPU topology and browser benchmark](RL_RUNTIME.md#eight-gpu-scaling-benchmark-20260912).
 

@@ -20,6 +20,8 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
+
 - [Expanded 4,102-task outcome-only baseline: iteration10](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
@@ -45,6 +47,135 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="evaluation-harness-guide"></a>
+## Evaluation harness: code map and entry points
+
+The `arm` branch contains the evaluation code, its shared runtime dependencies,
+and regression tests. Use the entry points below; dated runners preserve the
+settings and recovery rules of earlier experiments. Paths remain stable so that
+frozen jobs and old commands continue to resolve. Task-pool payloads, raw
+trajectories, credentials, native checkpoints and live approval/budget ledgers
+are private runtime artifacts, not part of this publication.
+
+| Topic | Entry points | Purpose |
+| --- | --- | --- |
+| Native RL checkpoints | [`evaluate_baseline_checkpoint.py`](../../scripts/evaluate_baseline_checkpoint.py), [`eval_monitor.py`](../eval_monitor.py) | Evaluate a saved checkpoint with zero optimizer updates; validate restoration, cohort coverage and separate W&B routing |
+| HF/student checkpoints | [`run_arm_full300_checkpoint_eval.py`](../../scripts/run_arm_full300_checkpoint_eval.py) | Actor-server evaluation of merged checkpoints; optional compact/serial-action variants |
+| ARM inference | [`arm_eval.py`](../arm_eval.py), [`arm_inference.py`](../arm_inference.py), [`serve_arm.py`](../../scripts/serve_arm.py) | Actor-only, SelectionARM and ScalarRM; full versus action-only candidates; see [inference protocol](ARM_INFERENCE.md) |
+| Stealth OM2W | [`eval_benchmark.py`](../eval_benchmark.py), [`prepare_paper_benchmark.py`](../../scripts/prepare_paper_benchmark.py) | Reusable o4-mini/AgentTrek template and isolated source preparation |
+| Historical matched stealth runs | [`run_arm_stealth90_o4.py`](../../scripts/run_arm_stealth90_o4.py), [`run_arm_stealth90_o4_more.py`](../../scripts/run_arm_stealth90_o4_more.py) | Fixed baseline/Additive/Gate B checkpoints, independent repeat cohorts and provider-credit recovery |
+| WebVoyager | [`arm_webvoyager_generator.py`](../../scripts/arm_webvoyager_generator.py), [`run_arm_webvoyager90.py`](../../scripts/run_arm_webvoyager90.py) | WebVoyager terminal judge, saved task records and the matched 595-task comparison |
+| Judge-only replay and retries | [`rejudge_saved_gpt41.py`](../../scripts/rejudge_saved_gpt41.py), [`retry_stealth_invalid.py`](../../scripts/retry_stealth_invalid.py) | Rejudge existing evidence without actor/browser collection; separately record invalid-task retries |
+| Milestones and supervision | [`run_arm_milestone_queue.py`](../../scripts/run_arm_milestone_queue.py), [`arm_job_supervisor.py`](../../scripts/arm_job_supervisor.py), [`run_expanded_baseline.py`](../../scripts/run_expanded_baseline.py) | Checkpoint handoffs, bounded recovery, artifact audits and active-agent review |
+| Results and plots | [`analyze_arm_paired_evals.py`](../../scripts/analyze_arm_paired_evals.py), [`plot_arm_interactive.py`](../../scripts/plot_arm_interactive.py), [`plot_arm_reward_hacking.py`](../../scripts/plot_arm_reward_hacking.py) | Paired task comparisons, interactive learning curves and ARM/task-success diagnostics |
+
+### Keep the protocols separate
+
+| Protocol | Browser | Terminal judge | Actor T / top-p / top-k | Response / turns |
+| --- | --- | --- | --- | --- |
+| RL milestone monitor | Local | GPT-4.1 / `action_history` | 0 / 1 / 1 | 4,096 tokens / 30 |
+| Matched stealth OM2W | Browser Use stealth | o4-mini / AgentTrek | 0.6 / 0.95 / 20 | 4,096 tokens / 30 |
+| Matched WebVoyager | Browser Use stealth | GPT-4o / WebVoyager | 0.6 / 0.95 / 20 | 4,096 tokens / 30 |
+
+ARM inference reproduction has its own candidate-sampling configuration; do not
+substitute the RL monitor settings. The saved worker command, generation
+function and judge identity define a cohort, not its filename. Separate eval
+workers are routed to `openwebrl-evals` even when a legacy controller passes the
+training project. Browser concurrency is an account-wide budget; parallel jobs
+must share that limit.
+
+### Running and checking an evaluation
+
+Use the project's installed SGLang/Megatron/PyTorch environment and browser
+setup from the [repository README](../../README.md). Packaging checks use
+Python 3.12 and CPU execution. Launch scripts retain this cluster's GPFS paths,
+Slurm resource profiles and reference manifests; a fresh clone supplies the
+code but still needs models, benchmark data, environment configuration and a
+validated frozen source. Historical `*90*` runners additionally require their
+private run manifests. They are reproducibility profiles, not arbitrary-model
+CLIs.
+
+For a native checkpoint in an **existing authorized allocation**, first inspect
+a dry-run plan (the command below does not submit a job):
+
+```bash
+python scripts/evaluate_baseline_checkpoint.py \
+  --source "$EVAL_SOURCE" --checkpoint "$CHECKPOINT" \
+  --output "$EVAL_OUTPUT" --job-id "$SLURM_JOB_ID" \
+  --gpus 2 --browser-env local_process --protocol monitor
+```
+
+`EVAL_SOURCE` must pass `reference_manifest.json` validation. `CHECKPOINT` is a
+native directory such as `iter_0000019` for completed iteration20, with its
+saved data cursor; `EVAL_OUTPUT` is a new directory under runtime `evaluations/`.
+After checking the plan, add `--execute`. Stealth requires an isolated Browser
+Use source followed by `prepare_paper_benchmark.py`; select `--browser-env
+browser-use --protocol benchmark`. One-GPU evaluation also requires the
+validated single-GPU source profile. Frozen source hashes are checked before
+execution; changing public code does not change an already frozen training run.
+
+Every task attempt writes `rollouts/<sha256(task_id)>.pt` and a paired `.json`
+verdict/metrics record, including aborted or judge-error attempts. The `.pt`
+contains the trajectory and screenshot tensors so temporary tensor mappings
+can expire without losing judge evidence. Legacy stealth subset tools also
+retain `completed_tasks/*.json`. Do not treat a completed Slurm job as a
+completed cohort: verify exact task IDs, rollout/verdict pairs, the actual GPU
+checkpoint-restore receipt and aggregate metrics. Missing attempts stay partial.
+
+Report **overall = successes / planned tasks** and **valid-only = successes /
+valid attempts**, including the valid denominator. Do not use the per-turn
+`eval/online-mind2web-monitor` scalar as task success. Preserve original and
+retry cohorts independently; do not replace valid failures with new attempts.
+Judge-only replay uses the saved artifacts:
+
+```bash
+python scripts/rejudge_saved_gpt41.py \
+  --input "$EVAL_OUTPUT" --rollout-dir "$EVAL_OUTPUT/rollouts" \
+  --source "$EVAL_SOURCE" --output "$REJUDGE_OUTPUT" \
+  --wandb-id "$REJUDGE_ID"
+```
+
+This previews GPT-4.1/action-history rejudging; `--execute` makes judge API calls
+but does not collect new browser trajectories. Keep its verdicts separate from
+an o4-mini or WebVoyager cohort.
+
+### Tests and publication checks
+
+With the project dependencies and `pytest` installed, this focused suite uses
+synthetic fixtures/mocked services, without a GPU allocation, live browser or
+paid judge call:
+
+```bash
+python -m pytest -q \
+  tests/test_eval_monitor.py tests/test_eval_task_persistence.py \
+  tests/test_rejudge_saved_gpt41.py tests/test_runtime_ports.py \
+  tests/test_evaluation_project_routing.py tests/test_retry_stealth_invalid.py \
+  tests/test_arm_stealth_o4.py::GeneratorTests \
+  tests/test_arm_stealth_o4.py::PublicTemplateTests \
+  tests/test_arm_stealth_o4.py::PublicPreparationTests \
+  tests/test_arm_webvoyager90.py::GeneratorTests
+```
+
+The remaining prepared-plan, scheduler, continuation and milestone tests include
+cluster integration checks against frozen sources and saved manifests. These
+require the corresponding private runtime artifacts and Megatron checkout.
+October3 publication validation: **310 regression tests passed**, including
+the **41-test portable suite** above; Python syntax, 30 shell launchers and
+repository file references were checked. The larger suite uses private cluster
+fixtures. These checks did not launch a new GPU evaluation.
+
+CPU checks establish protocol, persistence, bookkeeping and regression behavior;
+they do not establish fresh GPU restoration or live website availability.
+
+The reusable stealth template now explicitly selects AgentTrek, saves invalid
+attempts, and stops new session requests after provider-credit exhaustion. Its
+source preparer includes the persistence dependencies when upgrading an older
+frozen source. Historical Sol inference planning now reads one saved result at a time, keeping
+only task ID, validity and reward instead of retaining screenshot payloads.
+The topic commits also include shared ARM reward, resume and
+transport modules imported by the evaluation controllers; they are necessary
+code dependencies, not new experiment launches.
 
 <a id="expanded4102-iter10-results-20261003"></a>
 ## Expanded task-pool baseline: iteration10 — October3

@@ -25,6 +25,7 @@ rollouts, tool-call parsing, textual environment feedback, VLM-as-a-judge reward
 
 [Topic index](openwebrl/docs/README.md) ·
 [ARM results](openwebrl/docs/ARM_RESULTS.md) ·
+[Evaluation harness: protocols, code map and commands](openwebrl/docs/RL_EVALUATION.md#evaluation-harness-guide) ·
 [RL runtime and resume](openwebrl/docs/RL_RUNTIME.md) ·
 [RL metrics](openwebrl/docs/RL_METRICS.md)
 
