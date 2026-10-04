@@ -8709,6 +8709,14 @@ Private preparation and shard manifests:
 <a id="arm-expanded-outcome-baseline-20261002"></a>
 #### Outcome-only baseline with the additional2K tasks — October2 preparation
 
+**October3 iteration10 result verified:** full300 **27.00% overall (81/300)**,
+**34.32% valid-only (81/236)**;64 invalid tasks. The historical original-pool
+iteration10 result is23.33% /29.91%; this is an exploratory historical comparison.
+Checkpoint10 contains162 Adam updates with matching scheduler and saved cursor.
+Replacement342742 completed the evaluation and restored training from that
+checkpoint toward20. Target60/full300 every10 remains pending, inside the
+remaining first-block approval. [Results and artifact audit](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
+
 User requested the data-only baseline first. The frozen private union contains
 **4,102 tasks: original2,102 + all2,000 selected new tasks**, with zero cross-pool
 task-ID or normalized-exact-instruction overlap. The new cohort is retained in
@@ -8731,9 +8739,15 @@ No ARM selection, bonus, reweighting or auxiliary failure groups are enabled.
 evaluations at10/20/30/40/50/60, preserving every rollout and judge verdict.
 The first approved allocation is **8 H200 ×24h,64 CPUs,960GiB**, TP2/DP4,
 64 browsers and48GiB cache, including startup validation and all retries.
-The shared training/evaluation judge cap is **$200**. Initial job342093 failed
-during scheduler initialization; replacement **342095** retains23h56m after
-charging the failed attempt's3m21s. The user extended the endpoint from20
+The shared training/evaluation judge cap is **$200**. Initial job342093 used201s
+before failing during scheduler initialization. Replacement342095 trained10
+iterations, then failed at evaluation startup after42,112s when its exclusive
+Slurm-step guard encountered a short overlapping observer audit. The evaluator
+now waits up to120s for that transient step to finish, retaining its isolation
+guard;35 tests plus9 subtests passed. Current replacement **342742** is capped
+at44,040s (12h14m), within the44,087s left after both prior attempts. It completed
+evaluation10 and restored native9 for training, with no science changes.
+The user extended the endpoint from20
 to60; this does not extend the first block's24h/$200 limits. Continue past20
 while approved time remains, then preserve the latest durable checkpoint.
 Measure useful training throughput and request exact additional resources if
@@ -8790,7 +8804,8 @@ loading enabled, loaded the saved cursor, transferred the restored actor
 weights to the rollout engines and began collection with an observed64/64
 active browser pool. All16 first-iteration training points remain in the same
 W&B history. This verifies startup and continuation, not the iteration60
-endpoint; the first full300 evaluation is still due at iteration10.
+endpoint; at that startup review, the first full300 evaluation was still due.
+The October3 result above supersedes that evaluation status.
 The prior storage blocker is resolved:43.07TiB soft-quota headroom passes the2TiB
 startup guard. The isolated native baseline source is frozen; reward prompts,
 parser, dynamic filter, sampler, normalization and loss are preserved. Runtime
@@ -8811,7 +8826,7 @@ correct task-cursor advance. Separate evaluation runs use`openwebrl-evals` and
 retain every rollout/verdict. One persistent GPU/API ledger includes all failed
 attempts; retries do not reset24h or$200. No GPU allocation, API judge call, or
 training step was performed during preparation. The active-agent supervisor
-`openwebrl-expanded-supervisor-20261003.service` is active and follows342095,
+`openwebrl-expanded-supervisor-20261003.service` is active and follows342742,
 its budget ledger and all six milestone cohorts. Routine reports remain hourly,
 with earlier failure/stall/completion review. The earlier frozen20-iteration
 proposal is retained as history; `approval-request.json`, launcher preparation

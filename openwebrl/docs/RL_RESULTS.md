@@ -26,6 +26,17 @@
 | 90 | 101 | 222 | 78 | 33.67 | 45.50 |
 | 100 | 104 | 227 | 73 | 34.67 | 45.81 |
 
+## Expanded task pool · outcome-only · local browser · GPT-4.1 · temperature 0 · full 300
+
+| Training pool | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Original 2,102 tasks, historical |10 |70 |234 |66 |23.33 |29.91 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
+| Expanded 4,102 tasks |10 |81 |236 |64 |27.00 |34.32 |[October3 audit](arm_results/rl_integration/expanded4102-iteration10-audit.json) |
+
+| Comparison | Overall Δ | Valid-only Δ | Interpretation |
+| --- | ---: | ---: | --- |
+| Expanded − historical original, iteration10 |+3.67 pp |+4.41 pp |[Exploratory historical comparison](RL_EVALUATION.md#expanded4102-iter10-results-20261003) |
+
 ## Mixed-only relaxed-B comparison · GPT-4.1 · temperature 0 · full 300
 
 | Method | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Record |

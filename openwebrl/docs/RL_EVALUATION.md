@@ -20,6 +20,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Expanded 4,102-task outcome-only baseline: iteration10](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
@@ -44,6 +45,37 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="expanded4102-iter10-results-20261003"></a>
+## Expanded task-pool baseline: iteration10 — October3
+
+The first full300 evaluation of the outcome-only baseline trained on4,102 tasks
+(original2,102 + selected2,000) is complete: **81/300 =27.00% overall** and
+**81/236 =34.32% valid-only**, with64 invalid tasks retained in the overall
+denominator. The model started from the original SFT checkpoint at iteration0;
+no ARM reward or selection is enabled in this data-only experiment.
+
+Evaluation uses local browsers, GPT-4.1/action_history, T0/p1/k1,4,096 response
+tokens and30 turns. The evaluation generation function overrides the launcher's
+15-turn training default to30, as in the original baseline. Checkpoint10 is
+native9, with162 Adam updates and matching scheduler state. All300 exact task
+identities, paired nonempty rollout archives and saved verdict records, actual
+GPU actor restoration, and final W&B history were independently checked.
+Native judge-not-run sentinels remain for53 failed and1 truncated valid
+trajectories; these count as failures. Archive validation covers ZIP metadata
+and serialized entries, with bounded screenshot/payload samples, rather than a
+full scan of every tensor byte. Raw trajectories and task identities stay private.
+
+The historical original-pool iteration10 result is70/300 (23.33%) overall and
+70/234 (29.91%) valid-only: differences of **+3.67pp** and **+4.41pp** respectively.
+Collection dates, valid-task sets and training randomness differ. This is an
+early exploratory comparison, not evidence of a statistically established data
+benefit. Training has resumed toward20 with the same optimizer, scheduler,
+cursor and W&B lineage; target60 and its remaining evaluations are unfinished.
+
+[Aggregate audit](arm_results/rl_integration/expanded4102-iteration10-audit.json) ·
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter10) ·
+[Method and approved budget](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-baseline-20261002).
 
 <a id="arm-webvoyager90-results-20260930"></a>
 ## WebVoyager: matched iteration90 results — September30
