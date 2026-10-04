@@ -86,6 +86,21 @@ async def run(args):
         "selector_endpoint": args.selector_endpoint if args.mode != "baseline" else None,
         "task_timeout": args.task_timeout,
     }
+    serial_variant = getattr(args, "serial_variant", None)
+    if serial_variant:
+        if args.mode != "baseline":
+            raise ValueError("Serial actor evaluation must not use an external selector")
+        from openwebrl.serial_eval_gate import identity, load_gate
+        current=identity(args.actor,serial_variant,args.task_file,Path(__file__).resolve().parents[1])
+        if current['sampling'] != dict(temperature=args.temperature,top_p=args.top_p,
+                max_new_tokens=args.max_new_tokens,seed=args.seed,max_steps=args.max_steps) or args.judge_model!='o4-mini':
+            raise ValueError('Serial evaluation settings differ from validation gate')
+        gate_sha=load_gate(getattr(args,'serial_gate',None),current,
+            pilot=getattr(args,'serial_gate_pilot',False),task_ids=[t['task_id'] for t in tasks])
+        manifest.update(serial_variant=serial_variant, history="selected alternative reasoning/action",
+                        internal_candidates="5" if serial_variant == "all5" else "1-3",
+                        serial_protocol_revision=2,serial_runtime=current['runtime_hashes'],
+                        serial_gate_sha256=gate_sha,serial_gate_pilot=getattr(args,'serial_gate_pilot',False))
     async with httpx.AsyncClient(timeout=30, trust_env=False) as client:
         if args.mode != "baseline":
             resp = await client.get(args.selector_endpoint.rstrip("/") + "/health")
@@ -101,6 +116,8 @@ async def run(args):
             raise ValueError("Actor server does not match pinned frozen actor path")
 
     manifest_path = output / "manifest.json"
+    if args.candidate_representation != "full" or args.shadow_modulus:
+        manifest.update(candidate_representation=args.candidate_representation, shadow_modulus=args.shadow_modulus)
     if manifest_path.exists():
         if json.loads(manifest_path.read_text()) != manifest:
             raise ValueError("Output manifest differs; use a new directory")
@@ -118,8 +135,12 @@ async def run(args):
     )
     eval_args.rollout_temperature = args.temperature
     eval_args.rollout_max_response_len = args.max_new_tokens
+    if serial_variant:
+        eval_args.serial_action_variant = serial_variant
+        eval_args.inference_step_timeout_secs = 300
     eval_args.browser_action_selector = ActionSelector(
-        args.mode, args.selector_endpoint, output / "selections", seed=args.seed)
+        args.mode, args.selector_endpoint, output / "selections", seed=args.seed,
+        candidate_representation=args.candidate_representation, shadow_modulus=args.shadow_modulus)
     init_http_client(eval_args)
     sem = asyncio.Semaphore(args.parallel)
 
@@ -170,6 +191,12 @@ def main():
     ap.add_argument("--browser-port-end", type=int, default=19399)
     ap.add_argument("--judge-model", default="o4-mini")
     ap.add_argument("--env-file", default=".env")
+    ap.add_argument("--candidate-representation", choices=["full", "actions_only"], default="full")
+    ap.add_argument("--shadow-modulus", type=int, default=0,
+                    help="Score full candidates too on a deterministic 1/N subset; never execute shadow choice")
+    ap.add_argument("--serial-variant", choices=["all5", "diverse3"])
+    ap.add_argument("--serial-gate", help="Passed model/runtime-specific generation or browser gate JSON")
+    ap.add_argument("--serial-gate-pilot", action="store_true", help="Run only the frozen <=5-task pilot after a generation gate")
     args = ap.parse_args()
     args.requested_parallel = args.parallel
     args.parallel, args.execution_settings = execution_parallel(args.mode, args.output, args.parallel)

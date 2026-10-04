@@ -98,8 +98,48 @@ class Contracts(unittest.TestCase):
         self.assertIn(action, msgs[1]["content"][2]["text"])
         self.assertNotIn("Action History", msgs[1]["content"][0]["text"])
 
+    def test_action_only_prompt_removes_candidate_thoughts_and_preserves_context(self):
+        source = "/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/source"
+        if not Path(source, "inference/selection_prompt.py").exists():
+            self.skipTest("Requires pinned reference builder")
+        builder = load_selection_builder(source)
+        candidates = [{"action": '<tool_call>{"name":"click","arguments":{"point_2d":[500,250]}}</tool_call>',
+                       "thought": "candidate-only-secret"},
+                      {"action": "scroll down", "thought": "alternative-only-secret"}]
+        history = [{"action": "previous action", "thought": "history-to-preserve"}]
+        full = selection_messages(builder, "task", "https://example.com", history, candidates, b"image")
+        compact = selection_messages(builder, "task", "https://example.com", history, candidates, b"image", "actions_only")
+        self.assertEqual(full[0], compact[0])
+        self.assertEqual(full[1]["content"][:2], compact[1]["content"][:2])
+        expected = full[1]["content"][2]["text"]
+        for candidate in candidates:
+            expected = expected.replace("     Thought: " + candidate["thought"] + "\n", "")
+            self.assertIn(candidate["action"], compact[1]["content"][2]["text"])
+        self.assertEqual(expected, compact[1]["content"][2]["text"])
+        self.assertEqual(candidates[0]["thought"], "candidate-only-secret")
+
 
 class AsyncContracts(unittest.IsolatedAsyncioTestCase):
+    async def test_compact_selection_and_shadow_execute_only_compact_winner(self):
+        requests = []
+        async def select(endpoint, payload, *args):
+            requests.append(payload)
+            return {"candidate_representation": payload["candidate_representation"],
+                    "raw": '{"selection":2}' if payload['candidate_representation']=='actions_only' else '{"selection":1}'}
+        async def infer(*args, **kwargs):
+            return ('<think>candidate thought</think>action', [1], [-.2], 'stop')
+        with tempfile.TemporaryDirectory() as directory:
+            selector = ActionSelector('selection', 'http://arm', directory,
+                                      candidate_representation='actions_only', shadow_modulus=1)
+            with patch('openwebrl.arm_inference.request_selection_result', side_effect=select):
+                _, meta = await selector(infer=infer, url='actor', input_text='prompt', sampling_params={},
+                    images=[], observation={'screenshot':b'image'}, history=[], task='task', task_id='task', turn=0, timeout=2)
+            record = json.loads(next(Path(directory).glob('*.jsonl')).read_text())
+            self.assertEqual(meta['selected_index'], 1)
+            self.assertEqual(record['shadow_full']['selected_index'], 0)
+            self.assertEqual([p['candidate_representation'] for p in requests], ['actions_only','full'])
+            self.assertEqual(requests[0]['candidates'], requests[1]['candidates'])
+
     async def test_selection_executes_original_response_with_original_tokens(self):
         import httpx
         original_client = httpx.AsyncClient

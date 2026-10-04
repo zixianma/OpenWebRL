@@ -3,12 +3,15 @@
 import argparse
 import base64
 import io
+import hashlib
 import json
 import threading
+import time
 from pathlib import Path
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from typing import Literal
 
 from openwebrl.arm_inference import load_selection_builder, scalar_messages, selection_messages, selection_schema
 
@@ -20,6 +23,7 @@ class SelectionRequest(BaseModel):
     history: list[dict]
     candidates: list[dict]
     screenshot: str
+    candidate_representation: Literal["full", "actions_only"] = "full"
 
 
 def make_app(args):
@@ -51,6 +55,17 @@ def make_app(args):
         config=base_config, torch_dtype=torch.bfloat16, device_map=args.device,
         attn_implementation="sdpa", local_files_only=True)
     value_head = None
+    adapter = getattr(args, "adapter", None)
+    adapter_sha256 = None
+    if adapter:
+        if args.mode != "selection":
+            raise ValueError("An additional adapter is supported only for SelectionARM")
+        from peft import PeftModel
+        config = json.loads((Path(adapter) / "adapter_config.json").read_text())
+        if Path(config["base_model_name_or_path"]).resolve() != Path(args.model).resolve():
+            raise ValueError("Adapter base does not match the requested SelectionARM")
+        adapter_sha256 = hashlib.sha256((Path(adapter) / "adapter_model.safetensors").read_bytes()).hexdigest()
+        model = PeftModel.from_pretrained(model, adapter, local_files_only=True, is_trainable=False)
     if args.mode == "scalar":
         from peft import PeftModel
         model = PeftModel.from_pretrained(model, args.model, local_files_only=True)
@@ -71,6 +86,7 @@ def make_app(args):
     @app.get("/health")
     def health():
         return {"mode": args.mode, "model": args.model, "base": args.base,
+                "adapter": adapter, "adapter_sha256": adapter_sha256,
                 "max_pixels": args.max_pixels, "config_source": args.base,
                 "source_root": args.source_root,
                 **({"selection_decoding": "canonical_no_cot_json_schema/xgrammar"}
@@ -85,8 +101,10 @@ def make_app(args):
         img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         with lock, torch.inference_mode():
             if args.mode == "selection":
+                started = time.monotonic()
                 messages = selection_messages(builder, request.task, request.url,
-                                              request.history, request.candidates, image_bytes)
+                                              request.history, request.candidates, image_bytes,
+                                              request.candidate_representation)
                 # Processor chat templates use type=image. Preserve the exact text
                 # blocks and screenshot position produced by the canonical builder.
                 messages[1]["content"][1] = {"type": "image"}
@@ -104,7 +122,10 @@ def make_app(args):
                     logits_processor=[LogitsProcessor(grammar)])
                 raw = processor.tokenizer.decode(output[0, inputs.input_ids.shape[-1]:],
                                                   skip_special_tokens=True)
-                return {"raw": raw}
+                return {"raw": raw, "candidate_representation": request.candidate_representation,
+                        "input_tokens": inputs.input_ids.shape[-1],
+                        "output_tokens": output.shape[-1] - inputs.input_ids.shape[-1],
+                        "seconds": time.monotonic() - started}
             scores = []
             weight = value_head["v_head.summary.weight"]
             bias = value_head.get("v_head.summary.bias")
@@ -130,6 +151,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--mode", required=True, choices=["selection", "scalar"])
     ap.add_argument("--model", required=True)
+    ap.add_argument("--adapter", help="Optional trained SelectionARM LoRA, loaded on its exact base")
     ap.add_argument("--base", default="/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT")
     ap.add_argument("--source-root", default="/gpfs/scrubbed/zixianma/openwebrl-runtime/arm-reproduction/source")
     ap.add_argument("--device", default="cuda:0")

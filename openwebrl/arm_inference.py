@@ -80,10 +80,13 @@ def load_selection_builder(source_root):
     return module.build_catts_vision_prompt_v2
 
 
-def selection_messages(builder, task, url, history, candidates, screenshot):
+def selection_messages(builder, task, url, history, candidates, screenshot, candidate_representation="full"):
+    if candidate_representation not in ("full", "actions_only"):
+        raise ValueError("Unknown candidate representation")
     # Keep JSON point_2d actions untouched. The reference builder rescales textual
     # click(x,y) syntax as raw 1280x720 pixels; our actor emits normalized JSON.
-    clusters = [{"rep": SimpleNamespace(molmo_action=c["action"], thought=c["thought"]),
+    clusters = [{"rep": SimpleNamespace(molmo_action=c["action"],
+                 thought=c["thought"] if candidate_representation == "full" else ""),
                  "vote_count": 1, "cluster_key": str(i)} for i, c in enumerate(candidates)]
     return builder(task, history, url, clusters, screenshot)
 
@@ -118,10 +121,16 @@ async def request_selection_result(endpoint, payload, timeout, connect_timeout=N
 
 class ActionSelector:
     """Sample five iid proposals at one live state, score, execute one unchanged."""
-    def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180, exporter=None, connect_timeout=None):
+    def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180, exporter=None, connect_timeout=None,
+                 candidate_representation="full", shadow_modulus=0):
         if mode not in ("baseline", "selection", "scalar"):
             raise ValueError(mode)
         self.mode, self.endpoint = mode, endpoint.rstrip("/")
+        if candidate_representation not in ("full", "actions_only") or shadow_modulus < 0:
+            raise ValueError("Invalid compact-selection configuration")
+        if (candidate_representation != "full" or shadow_modulus) and mode != "selection":
+            raise ValueError("Candidate ablation is SelectionARM-only")
+        self.candidate_representation, self.shadow_modulus = candidate_representation, shadow_modulus
         self.output, self.seed = Path(output), seed
         self.candidates = 1 if mode == "baseline" else candidates
         self.timeout = timeout
@@ -147,7 +156,11 @@ class ActionSelector:
                 "candidates": candidates,
                 "screenshot": base64.b64encode(observation["screenshot"]).decode(),
             }
+            if self.candidate_representation != "full":
+                payload["candidate_representation"] = self.candidate_representation
             result = await request_selection_result(self.endpoint, payload, self.timeout, self.connect_timeout)
+            if self.candidate_representation != "full" and result.get("candidate_representation") != self.candidate_representation:
+                raise ValueError("Selector did not acknowledge candidate ablation")
             scores, raw = result.get("scores"), result.get("raw")
             if self.mode == "scalar":
                 if len(scores or []) != len(candidates) or not all(math.isfinite(s) for s in scores):
@@ -159,6 +172,8 @@ class ActionSelector:
                 try:
                     index = parse_selection(raw or "", len(candidates))
                 except ValueError as exc:
+                    if self.candidate_representation != "full":
+                        raise  # Ablation failures must not silently execute candidate 1.
                     fallback = str(exc)
                     index = 0
         record = {"mode": self.mode, "task_id": task_id, "turn": turn,
@@ -170,6 +185,20 @@ class ActionSelector:
                   "url": observation.get("active_tab_url", ""),
                   "prompt_sha256": hashlib.sha256(input_text.encode()).hexdigest(),
                   "screenshot_sha256": hashlib.sha256(observation["screenshot"]).hexdigest()}
+        if self.candidate_representation != "full":
+            record["candidate_representation"] = self.candidate_representation
+            record["selector_telemetry"] = {k: result.get(k) for k in ("input_tokens", "output_tokens", "seconds")}
+        if self.shadow_modulus and candidate_seed(self.seed, task_id, turn, 999) % self.shadow_modulus == 0:
+            # Shadow scoring cannot change the executed branch or invalidate it.
+            try:
+                shadow = await request_selection_result(self.endpoint, dict(payload, candidate_representation="full"),
+                                                        self.timeout, self.connect_timeout)
+                other_index = parse_selection(shadow.get("raw", ""), len(candidates))
+                record["shadow_full"] = dict(shadow, selected_index=other_index,
+                    same_index=other_index == index,
+                    same_action=candidates[other_index]["action"] == candidates[index]["action"])
+            except Exception as exc:
+                record["shadow_full"] = {"error": str(exc)}
         path = self.output / (hashlib.sha256(str(task_id).encode()).hexdigest()[:20] + ".jsonl")
         if self.exporter is not None:
             from openwebrl.artifact_io import run_artifact_io
