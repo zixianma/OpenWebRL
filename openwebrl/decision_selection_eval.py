@@ -26,6 +26,18 @@ CURRENT_TASK = ContextVar('decision_selection_task')
 FINAL_SCREENSHOT = ContextVar('decision_selection_final_screenshot', default=None)
 
 
+def preflight_browser():
+    """Validate lazy SDK imports and the exact client API without a paid session."""
+    from browser_use_sdk import AsyncBrowserUse
+    from playwright.async_api import async_playwright  # noqa: F401
+    from openwebrl.env.browser_use_env import create_browser_use_env  # noqa: F401
+    import inspect
+    client = AsyncBrowserUse(api_key='preflight-no-network', timeout=30, max_retries=0)
+    inspect.signature(client.browsers.create).bind(timeout=12, proxy_country_code=None,
+        browser_screen_width=1280, browser_screen_height=1000)
+    asyncio.run(client.close())
+
+
 def remember_screenshot(image):
     # generate_turn_sample uses wait_for, which creates a child asyncio Task.
     # Mutate the per-episode holder inherited by that task; ContextVar.set in
@@ -200,4 +212,5 @@ if __name__ == '__main__':
     a = parser.parse_args()
     # Match the established runner's import-before-loop requirement.
     from openwebrl import run_evaluate  # noqa: F401
+    preflight_browser()
     asyncio.run(run(json.loads(Path(a.config).read_text())))

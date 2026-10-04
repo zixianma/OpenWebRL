@@ -296,6 +296,17 @@ Chromium checks passed for all three columns, task filtering, timeline controls,
 image enlargement and mobile layout with no JavaScript errors. Task payloads and
 screenshots remain local; only the renderer and template are versioned publicly.
 
+The review now resolves each selected target number from that decision's exact
+request to its label and harness action ID. Click execution resolves the cached
+DOM node, checks freshness/visibility/occlusion, then dispatches CDP mouse events
+at the current bounding-box center. Model target numbers and harness IDs are
+internal references, not HTML `id` attributes or model-generated coordinates.
+Of568 element-target decisions,527 have saved geometry with an exact matching
+page fingerprint;41 retain their request label without an invented location.
+Highlights use a separate saved decision-state screenshot. They show observed
+bounds, not recorded execution coordinates or proof that the click executed.
+Three mapping regression tests and Chromium overlay/lightbox/mobile checks pass.
+
 Before scaling, rerun the same small cohort under an explicitly recorded revised
 harness, compare rejected-decision counts and terminal outcomes, then expand the
 cohort if useful progress is verified. Distinguish website blocks, execution
@@ -331,8 +342,9 @@ including startup and retries**; one GPU for SFT and one for the sequential Kev
 servers. It releases on completion and stops at its cap if incomplete. API caps:
 300Jev calls,602local Kev calls including warmups,160judge attempts,4096judge
 completion tokens per attempt;40browser sessions with12-minute expiry and no
-additional helper calls. The user approved this exact allocation and API/browser budget; job344043 was
-submitted and is queued. The completed direct-pilot budget is not reused. Combined offline tests passed39 cases, including literal candidate
+additional helper calls. The user approved this exact allocation and API/browser budget.
+Original job344043 was replaced by344049 after the startup failure below. The
+completed direct-pilot budget is not reused. Combined offline tests passed39 cases, including literal candidate
 preservation, probability failures, secret-safe routing and local overlay behavior.
 
 A pre-start check found that `asyncio.wait_for` creates a child task: assigning a
@@ -341,6 +353,19 @@ revision2 uses a shared per-episode image holder. A concurrent two-episode test
 verifies correct propagation and isolation. The same queued job was briefly held
 for this repair and released; no GPU or browser budget was consumed. Both source
 revisions, prior approval/plan and repair lineage remain in private runtime storage.
+
+Job344043 exposed a missing lazy `browser_use_sdk` import after loading SFT.
+The first two cohorts aborted before browser creation; these are infrastructure
+failures, not task scores. The attempt was canceled after74 scheduler seconds.
+All failed rows, logs, manifests and source revisions remain preserved. No
+browser sessions, Jev calls, judge calls or task proposals were consumed; one
+successful Kev0.8B warmup is retained and reused. Source revision3 adds a browser
+SDK preflight before GPU loading and before workers start, using an isolated
+dependency directory with pinned package hashes. The training environment and
+scientific settings are unchanged. Deployed-source CPU imports and nine selection
+regressions pass. Replacement344049 requests3480seconds, so both attempts can
+consume at most3554 of the approved3600seconds. The supervisor pointer follows
+the replacement; results remain unverified until independent artifact audit.
 
 Persistent service `openwebrl-sft-selection-supervisor-20261004.service` polls the
 current run pointer every60seconds and queues the owning agent thread on state

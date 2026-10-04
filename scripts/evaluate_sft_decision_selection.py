@@ -25,7 +25,8 @@ from runtime_ports import lease_ports
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 CONTROL = RUNTIME / 'evaluations/sft-decision-selection-pilot-20261004'
 PARENT = RUNTIME / 'reference-arm-task-rescue-20261002-v1'
-SOURCE = RUNTIME / 'reference-sft-decision-selection-20261004-v2'
+SOURCE = RUNTIME / 'reference-sft-decision-selection-20261004-v3'
+WORKER_DEPS = RUNTIME / 'sft-selection-deps-20261004'
 ACTOR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT')
 MODES = ('sft', 'jev', 'kev-0.8b', 'kev-27b')
 RESOURCES = dict(gpus=2, gpu_type='H200', cpus=16, memory_gib=240, total_seconds=3600)
@@ -118,6 +119,8 @@ def prepare():
         modes=MODES, resources=RESOURCES, limits=LIMITS, actor=str(ACTOR), actor_weights=weights,
         actor_config_sha256=file_hash(ACTOR / 'config.json'), source=str(SOURCE),
         source_manifest_sha256=file_hash(SOURCE / 'reference_manifest.json'),
+        worker_dependencies=str(WORKER_DEPS),
+        worker_dependencies_sha256=file_hash(WORKER_DEPS / 'verified.json'),
         tasks=str(tasks), task_ids=ids, tasks_sha256=file_hash(tasks),
         kev_source=source_identity(), kev_specs={v: model_spec(v) for v in ('0.8b', '27b')},
         code_sha256={p: file_hash(REPO / p) for p in ('scripts/evaluate_sft_decision_selection.py',
@@ -167,6 +170,14 @@ def run(plan):
     env.update(PYTHONPATH=str(SOURCE), WANDB_PROJECT='openwebrl-evals', OMP_NUM_THREADS='1',
         OPENBLAS_NUM_THREADS='1', PYTHONDONTWRITEBYTECODE='1',
         CPATH=str(RUNTIME / 'src/python-headers/Include') + ':' + str(RUNTIME / 'src/python-headers'))
+    worker_path = str(SOURCE) + ':' + str(WORKER_DEPS)
+    for name, expected in read(WORKER_DEPS / 'verified.json')['files'].items():
+        if file_hash(WORKER_DEPS / name) != expected:
+            raise ValueError('Evaluation worker dependency changed')
+    # Exercise lazy browser imports before loading either GPU model.
+    subprocess.run(source_command(SOURCE, [str(RUNTIME / 'venv/bin/python'), '-c',
+        'from openwebrl.decision_selection_eval import preflight_browser; preflight_browser()']),
+        cwd=SOURCE, env=dict(env, PYTHONPATH=worker_path), check=True)
     devices = env.get('CUDA_VISIBLE_DEVICES', '').split(',')
     if len(devices) != 2 or not all(devices):
         raise ValueError('Exactly two allocated GPUs required')
@@ -244,6 +255,7 @@ def run(plan):
                 actor=str(ACTOR), actor_port=port, mode=mode, endpoint=endpoint)
             write_json(output / 'config.json', cfg)
             worker_env = dict(env, CUDA_VISIBLE_DEVICES=devices[0],
+                PYTHONPATH=worker_path,
                 OPENWEBRL_BROWSER_USE_SESSION_DIR=str(output / 'browser_sessions'),
                 OPENWEBRL_MULTIMODAL_STORAGE_DIR=str(output / 'multimodal'))
             worker = spawn([str(RUNTIME / 'venv/bin/python'), '-m', 'openwebrl.decision_selection_eval',
