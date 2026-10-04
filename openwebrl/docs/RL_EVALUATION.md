@@ -21,6 +21,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
+- [Jev Ultrafast: prepared Online-Mind2Web pilot](#jev-ultrafast-online-mind2web-20261004)
 
 - [Expanded 4,102-task outcome-only baseline: iterations10/20](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
@@ -47,6 +48,84 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Canonical ARM comparison at rollout iteration 20](#arm-iteration-19-evaluations-20260915)
 
 ---
+
+<a id="jev-ultrafast-online-mind2web-20261004"></a>
+## Jev Ultrafast browser evaluation — October4
+
+**Prepared; no benchmark score or paid run yet.** The first cohort is the first
+10 tasks in the unchanged 300-task Online-Mind2Web file, in dataset order. This
+is a startup pilot, not a representative performance estimate. A full300 cohort
+uses the same runner with `--limit 300` and a separately approved allocation.
+
+The adapter pins [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast/tree/1231850a0bf1a0c0341fe408ef1668dbbfdfac46)
+at `1231850a0bf1a0c0341fe408ef1668dbbfdfac46`. Its DOM reader, operation/target
+questions, choice validation, stale-page guards and executor are unchanged.
+A Playwright CDP connection replaces the desktop Browser Harness connection.
+[TypeSafe's model reference](https://docs.typesafe.ai/models) identifies
+`jev-1.13.0` as the current version behind `jev-latest`; requests pin that
+version and reject a different returned model identity.
+
+| Setting | Prepared pilot |
+| --- | --- |
+| Policy | Jev 1.13.0; argmax operation and matching target, no actor screenshots |
+| Text helper | GPT-4.1-mini-2025-04-14; T0.6, top-p0.95, 1,024 output tokens |
+| Helper difference | Upstream demo uses Mercury2.5; `--text-provider openrouter` prepares that alternative in a new cohort |
+| Browser | Isolated Browser Use session per task; proxy disabled; 1120×780 upstream viewport |
+| Episode | 30 executed actions, at most60 decision cycles, 600-second actor timeout |
+| Judge | o4-mini, canonical AgentTrek prompt and verdict parser, seed42, actual final screenshot |
+| Outcome | Independent verdict; `DONE` is only the actor's stopping signal |
+| Proposed allocation | 0 GPUs, 4 CPUs, 8GiB RAM, 2 hours total including retries |
+| Browser limit | 10 sessions, at most2 concurrent, 12-minute expiry each |
+| API attempt ceilings | 1,800 Jev, 1,800 helper, 40 judge HTTP attempts, including service retries |
+| Execution status | Not submitted; exact allocation approval pending |
+
+The helper is explicitly labeled because the configured credentials support
+OpenAI, whereas no OpenRouter helper key was found. Jev's classification has no
+temperature/top-p/top-k sampling controls. The helper's sampling is recorded
+separately. This DOM agent also has no generated final-answer channel, unlike
+the project's Qwen actor. These differences, the viewport, and instrumented
+screenshot collection prevent treating its timing or success rate as an
+otherwise identical Qwen experiment.
+
+Entry points:
+[`jev_eval.py`](../jev_eval.py),
+[`evaluate_jev_ultrafast.py`](../../scripts/evaluate_jev_ultrafast.py),
+[`evaluate_jev_ultrafast_cpu.sbatch`](../../scripts/evaluate_jev_ultrafast_cpu.sbatch).
+The runner imports no GPU training stack. Dry-run preparation:
+
+```bash
+/gpfs/scrubbed/zixianma/openwebrl-runtime/jev-eval-venv/bin/python \
+  scripts/evaluate_jev_ultrafast.py
+```
+
+The installed upstream package and dependency versions are checked and recorded
+in the private plan. After exact approval, the prepared batch script runs the
+same command with `--execute` and owns/awaits every worker. A new output
+directory is required for a changed protocol. The controller preserves
+completed attempts, stops dispatch after provider failure, charges its elapsed
+time ledger on restart, and never silently reruns an interrupted browser task.
+Remote session IDs have durable ownership markers and cleanup; capability URLs
+and credentials are excluded from logs.
+
+Private artifacts live under runtime
+`evaluations/jev-ultrafast-om2w-pilot-20261004/`: plan, heartbeats, time ledger,
+per-task compressed DOM/screenshot states, executed actions, API attempt/response
+records with usage, final screenshot, judge request/response, verdict and
+summary. Only task ID, instruction and start URL enter the actor; hidden
+reference answers and rubrics are stripped. Summary denominators are
+successes/planned tasks and successes/valid attempts, with missing, invalid and
+provider-blocked states separate. Token usage and instrumented actor latency
+are summarized. W&B project identity is fixed to `openwebrl-evals`; this runner
+currently persists local metrics and does not create a W&B run.
+
+Validation: **12 tests passed**, including a real local Chromium fixture with
+mocked model calls that filled a field, clicked search, selected DONE, and saved
+the independently checked final page and judge evidence. Tests also cover
+reference stripping, unchanged canonical judge semantics, retry accounting,
+provider/model failures, cleanup ownership and incomplete-cohort denominators.
+Jev, both OpenAI models and Browser Use passed read-only credential checks.
+These checks made no paid inference calls or remote browser sessions; a live
+pilot remains necessary.
 
 <a id="evaluation-harness-guide"></a>
 ## Evaluation harness: code map and entry points
