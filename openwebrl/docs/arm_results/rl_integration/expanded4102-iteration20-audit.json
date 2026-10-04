@@ -1,0 +1,61 @@
+{
+  "method": "Outcome-only baseline, expanded 4102-task pool",
+  "iteration": 20,
+  "job": "342742",
+  "evaluation_verified_complete": true,
+  "training_target_complete": false,
+  "full300": {
+    "tasks": 300,
+    "successes": 100,
+    "valid": 237,
+    "invalid": 63,
+    "overall": 0.3333333333333333,
+    "valid_only": 0.4219409282700422,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "top_p": 1,
+    "top_k": 1,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "checkpoint_native_index": 19,
+  "checkpoint_adam_updates": 312,
+  "checkpoint_scheduler_updates": 312,
+  "actual_gpu_actor_restore_verified": true,
+  "wandb_history_verified": true,
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter20",
+  "exact_expected_300_task_ids_verified": true,
+  "archive_verification": "All300 archive headers and nonempty serialized entries checked; not every tensor byte. No new screenshot payload sampling. Invalid tasks retain saved records; failed/truncated trajectories can have native judge-not-run sentinels.",
+  "terminal_status_counts": {
+    "aborted": 63,
+    "completed": 198,
+    "failed": 33,
+    "truncated": 6
+  },
+  "artifact_sha256": {
+    "status.json": "13ed538e094f40e91245504b60fb2d5a27f3bae17acea642bbd4f34cbeac6352",
+    "metrics.json": "c302c2d7611ea2b360e5bc85ba8cd6c4a22ab6eb0669b3c2bf1e0ece9be9affd",
+    "evaluation_manifest.json": "e94f1514935b41b043315f6d1b061fdc5a216f4d03dd2d4453866321b5e4f8f7",
+    "checkpoint_restore_evidence.json": "0c2e21748bdad1a61cd1d79fb47dc63aaf357a378486bcd029ae8e7c446bbdae",
+    "controller-artifact-audit.json": "cce32d45026bcc5c809353e9bcb2e65302b16d15afd7ec2a8fdd738b5cafe2ea"
+  },
+  "checked_epoch": 1791130694.1378996,
+  "private_task_payloads_published": false,
+  "historical_iteration20_reference": {
+    "training_tasks": 2102,
+    "successes": 95,
+    "valid": 232,
+    "invalid": 68,
+    "overall": 0.31666666666666665,
+    "valid_only": 0.40948275862068967,
+    "overall_delta_pp": 1.6666666666666663,
+    "valid_only_delta_pp": 1.2458169649352535,
+    "caveat": "Different collection dates, valid-task sets and training randomness; exploratory historical comparison."
+  }
+}
