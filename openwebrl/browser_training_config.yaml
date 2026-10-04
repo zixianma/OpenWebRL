@@ -57,3 +57,14 @@ log_judge_output_prob: 0.1
 # - --turn-history-reasoning-mode
 # judge_max_tokens: 2048
 # judge_temperature: 0.0
+
+# Optional CPU-preparable experiments. Full reasoning history remains intact.
+browser_observation_memory: false
+browser_memory_max_entries: 8
+browser_memory_max_chars: 4000
+browser_state_advantage_mix: 0.0
+# Set browser_value_provider_path to a frozen prefix-only probability provider
+# and custom_reward_post_process_path to openwebrl.rl_recipe.state_advantages.
+# To collect all finished groups (including dynamic-filter rejects), set:
+# rollout_all_samples_process_path: openwebrl.recipe_data.export_rollouts
+# browser_recipe_export_dir: /absolute/path/to/recipe_data

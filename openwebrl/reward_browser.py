@@ -33,6 +33,7 @@ from openwebrl.feedback_utils import (
 )
 from openwebrl.response_format import get_browser_response_format_mode
 from slime.utils.types import Sample
+from openwebrl.rl_recipe import parse_judge_verdict
 
 logger = logging.getLogger(__name__)
 
@@ -204,7 +205,7 @@ JUDGE_SYSTEM_PROMPT = (
     "response is not mentioned on the screenshot, choose to believe the content.\n\n"
     "You should elaborate on how you arrived at your final evaluation and then "
     "provide a definitive verdict on whether the task has been successfully "
-    "accomplished, either as 'SUCCESS' or 'NOT SUCCESS'."
+    "accomplished. End with a standalone final line: SUCCESS or NOT SUCCESS."
 )
 
 JUDGE_SYSTEM_PROMPT_ACTION_HISTORY = (
@@ -236,7 +237,7 @@ JUDGE_SYSTEM_PROMPT_ACTION_HISTORY = (
     "consistent with the screenshots and action history.\n\n"
     "You should first explain your reasoning with explicit reference to the "
     "instruction, action history, screenshots, and final response. Then provide "
-    "a definitive verdict as either 'SUCCESS' or 'NOT SUCCESS'."
+    "a definitive verdict on its own final line: SUCCESS or NOT SUCCESS."
 )
 
 JUDGE_USER_PROMPT = (
@@ -995,14 +996,9 @@ async def compute_judge_reward(
             if _should_sample_judge_output(args):
                 logger.info("Judge response: %s", judge_text)
 
-            judge_score = 0.0
-            if "NOT SUCCESS" in judge_text:
-                judge_score = 0.0
-            elif "SUCCESS" in judge_text:
-                judge_score = 1.0
-            else:
-                logger.warning(f"Judge response does not contain SUCCESS/NOT SUCCESS: {judge_text}")
-                judge_score = 0.0
+            judge_score = parse_judge_verdict(judge_text)
+            if judge_score is None:
+                raise ValueError("Missing or ambiguous terminal judge verdict")
 
             _save_judge_trace(
                 args,
@@ -1043,6 +1039,7 @@ async def compute_judge_reward(
                 await asyncio.sleep(3 ** (attempt + 1))
             else:
                 logger.error("All judge API retry attempts exhausted.")
+                sample.metadata["judge_invalid"] = True
                 return 0.0, "All judge API retry attempts exhausted.", saw_timeout
 
     return 0.0, "Unexpected error occurred.", saw_timeout  # Should not reach here
@@ -1122,14 +1119,9 @@ async def compute_judge_reward_actionhistory(
             if _should_sample_judge_output(args):
                 logger.info("Judge response: %s", judge_text)
 
-            judge_score = 0.0
-            if "NOT SUCCESS" in judge_text:
-                judge_score = 0.0
-            elif "SUCCESS" in judge_text:
-                judge_score = 1.0
-            else:
-                logger.warning(f"Judge response does not contain SUCCESS/NOT SUCCESS: {judge_text}")
-                judge_score = 0.0
+            judge_score = parse_judge_verdict(judge_text)
+            if judge_score is None:
+                raise ValueError("Missing or ambiguous terminal judge verdict")
 
             _save_judge_trace(
                 args,
@@ -1171,6 +1163,7 @@ async def compute_judge_reward_actionhistory(
                 await asyncio.sleep(3 ** (attempt + 1))
             else:
                 logger.error("All judge API retry attempts exhausted.")
+                sample.metadata["judge_invalid"] = True
                 return 0.0, "All judge API retry attempts exhausted.", saw_timeout
 
     return 0.0, "Unexpected error occurred.", saw_timeout
@@ -1304,9 +1297,9 @@ async def _score_single_sample(args: Any, sample: Sample) -> float:
                 )
             else:
                 judge_score, judge_text, judge_timeout = await compute_judge_reward(args, sample)
-            if judge_timeout:
+            if judge_timeout or sample.metadata.get("judge_invalid", False):
                 sample.remove_sample = True
-                sample.metadata["judge_timeout"] = True
+                sample.metadata["judge_timeout"] = judge_timeout
 
         # --- Combine ---
         if terminate_reason == "format_error_failed":
@@ -1327,6 +1320,7 @@ async def _score_single_sample(args: Any, sample: Sample) -> float:
             "combined": combined,
             "judge_text": judge_text,
             "judge_timeout": judge_timeout,
+            "valid": not sample.remove_sample,
             "judge_prompt_variant": getattr(args, "judge_prompt_variant", "default"),
         }
         return combined

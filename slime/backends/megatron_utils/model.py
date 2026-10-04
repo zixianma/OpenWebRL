@@ -373,6 +373,10 @@ def train_one_step(
                 "rollout_log_probs",
                 "max_seq_lens",
                 "teacher_log_probs",
+                "arm_source",
+                "arm_scale",
+                "arm_advantage",
+                "arm_old_log_probs",
             ],
             args.data_pad_size_multiplier,
             args.qkv_format,
@@ -482,6 +486,15 @@ def train_one_step(
             loss_reduced["raw_loss_samples"] = num_samples_or_tokens
         for key, value in zip(keys, values[1:], strict=False):
             loss_reduced[key] = value * mpu.get_context_parallel_world_size() / num_samples_or_tokens
+        if "arm_outcome_loss" in loss_reduced:
+            # ARM rows have separate denominators encoded in their scales.
+            # Undo the generic mixed-row logging mean to report actual components.
+            outcome_gbs = data_iterator[0].rollout_data["effective_global_batch_size"]
+            for key in ("arm_outcome_loss", "arm_demo_loss", "arm_local_loss"):
+                loss_reduced[key] *= num_samples_or_tokens / outcome_gbs
+            loss_reduced["arm_aux_rows"] = num_samples_or_tokens - outcome_gbs
+            loss_reduced["loss"] = sum(loss_reduced[key] for key in
+                ("arm_outcome_loss", "arm_demo_loss", "arm_local_loss"))
         return loss_reduced, grad_norm
     return {}, grad_norm
 

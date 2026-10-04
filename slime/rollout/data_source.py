@@ -124,7 +124,7 @@ class RolloutDataSource(DataSource):
             path = Path(configured_path)
         else:
             repo_root = Path(__file__).resolve().parents[2]
-            path = repo_root / "examples" / "browser" / "data" / "webgym_filtered_popular_blacklist_hosts.txt"
+            path = repo_root / "openwebrl" / "data" / "webgym_filtered_popular_blacklist_hosts.txt"
 
         if not path.exists():
             return set()
@@ -396,9 +396,13 @@ class RolloutDataSource(DataSource):
 
             for trajectory in trajectories:
                 terminal_sample = extract_terminal_sample(trajectory)
+                if any(s.remove_sample for s in trajectory):
+                    stats.invalid_traj_count += 1
+                    continue
                 reward_value = terminal_sample.get_reward_value(self.args) if terminal_sample.reward is not None else None
                 outcome = self._reward_to_binary_outcome(reward_value)
                 if outcome is None:
+                    stats.invalid_traj_count += 1
                     continue
                 if outcome == 1:
                     stats.success_count += 1
@@ -406,9 +410,7 @@ class RolloutDataSource(DataSource):
                     stats.fail_count += 1
 
                 terminal_outcome = outcome
-                if terminal_outcome is None:
-                    stats.invalid_traj_count += 1
-                elif terminal_outcome == 1:
+                if terminal_outcome == 1:
                     stats.success_traj_count += 1
                 else:
                     stats.fail_traj_count += 1

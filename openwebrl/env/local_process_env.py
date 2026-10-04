@@ -22,6 +22,47 @@ import aiohttp
 
 logger = logging.getLogger(__name__)
 
+# Retain detached cleanup tasks until process/port/slot ownership is released.
+# A caller timing out or being cancelled must not strand a browser slot.
+_PENDING_CLEANUPS: set[asyncio.Task] = set()
+
+
+async def _protected_cleanup(coroutine):
+    task = asyncio.create_task(coroutine)
+    _PENDING_CLEANUPS.add(task)
+
+    def finished(done):
+        _PENDING_CLEANUPS.discard(done)
+        if not done.cancelled() and (error := done.exception()) is not None:
+            logger.error("Local browser cleanup failed: %r", error)
+
+    task.add_done_callback(finished)
+    return await asyncio.shield(task)
+
+
+async def _open_browser_log(log_dir: str, log_path: str):
+    # Shared-filesystem metadata calls can take seconds. Blocking this event
+    # loop also delays every browser, actor and judge request in the process.
+    def open_file():
+        os.makedirs(log_dir, exist_ok=True)
+        return open(log_path, "ab", buffering=0)
+
+    opening = asyncio.create_task(asyncio.to_thread(open_file))
+    try:
+        return await asyncio.shield(opening)
+    except BaseException:
+        async def close_late_file():
+            try:
+                handle = await opening
+            except Exception:
+                return
+            await asyncio.to_thread(handle.close)
+
+        # Cancellation cannot stop a filesystem call already running in a
+        # thread. Retain cleanup until its eventual descriptor is closed.
+        await _protected_cleanup(close_late_file())
+        raise
+
 _DEFAULT_HOST = "127.0.0.1"
 _DEFAULT_PORT_START = 18000
 _DEFAULT_PORT_END = 18999
@@ -389,6 +430,9 @@ class LocalProcessWebEnv:
         if self._closed:
             return
         self._closed = True
+        await _protected_cleanup(self._exit_owned_resources())
+
+    async def _exit_owned_resources(self) -> None:
         t0 = time.monotonic()
         try:
             if not self._broken and self.proc.returncode is None:
@@ -408,14 +452,16 @@ class LocalProcessWebEnv:
                         exc,
                     )
         finally:
-            await self._terminate_process_group()
-            self.port_lease.release()
-            if self.slot_pool is not None:
-                await self.slot_pool.release()
             try:
-                self.log_file.close()
-            except Exception:
-                pass
+                await self._terminate_process_group()
+            finally:
+                self.port_lease.release()
+                if self.slot_pool is not None:
+                    await self.slot_pool.release()
+                try:
+                    self.log_file.close()
+                except Exception:
+                    pass
             logger.info(
                 "[LocalProcessExit] task_id=%s pid=%s port=%s healthy=%s elapsed_ms=%.1f",
                 self._current_task_id or "unknown",
@@ -498,22 +544,39 @@ async def _wait_until_healthy(
 ) -> None:
     deadline = time.monotonic() + startup_timeout_secs
     last_error: Exception | None = None
-    timeout = aiohttp.ClientTimeout(total=max(1.0, startup_poll_secs))
+    attempts = 0
     while time.monotonic() < deadline:
         if proc.returncode is not None:
             raise RuntimeError(f"local_process env_server exited early with code {proc.returncode}")
+        # Poll frequency is not a response deadline: a healthy, busy server can
+        # need longer than one second to answer. Keep each request within the
+        # original overall startup budget, including the final attempt.
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
+        timeout = aiohttp.ClientTimeout(total=min(5.0, remaining))
+        attempts += 1
         try:
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.get(f"{base_url}/health") as resp:
                     if resp.status == 200:
                         await resp.read()
-                        return
+                        if time.monotonic() <= deadline:
+                            return
+                        last_error = TimeoutError("Health response arrived after startup deadline")
+                    else:
+                        last_error = RuntimeError(f"Health endpoint returned HTTP {resp.status}")
         except Exception as exc:
             last_error = exc
-        await asyncio.sleep(startup_poll_secs)
+        remaining = deadline - time.monotonic()
+        if remaining > 0:
+            await asyncio.sleep(min(startup_poll_secs, remaining))
+    error_detail = (
+        f"{type(last_error).__name__}: {last_error!r}" if last_error is not None else "none"
+    )
     raise TimeoutError(
         f"local_process env_server at {base_url} was not healthy within "
-        f"{startup_timeout_secs}s; last_error={last_error}"
+        f"{startup_timeout_secs}s; attempts={attempts}; last_error={error_detail}"
     )
 
 
@@ -583,9 +646,8 @@ async def create_local_process_env(local_cfg: Dict[str, Any]) -> LocalProcessWeb
         await slot_pool.acquire(timeout=acquire_timeout_secs)
         slot_acquired = True
         port_lease = _acquire_port(host, port_start, port_end, port_lock_dir)
-        os.makedirs(log_dir, exist_ok=True)
         log_path = os.path.join(log_dir, f"env_server_{port_lease.port}_{int(time.time() * 1000)}.log")
-        log_file = open(log_path, "ab", buffering=0)
+        log_file = await _open_browser_log(log_dir, log_path)
 
         proc = await asyncio.create_subprocess_exec(
             python_bin,
@@ -627,16 +689,20 @@ async def create_local_process_env(local_cfg: Dict[str, Any]) -> LocalProcessWeb
             startup_ms=startup_ms,
         )
     except BaseException:
-        if proc is not None and proc.returncode is None:
-            with contextlib.suppress(ProcessLookupError):
-                os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
-            with contextlib.suppress(Exception):
-                await proc.wait()
-        if port_lease is not None:
-            port_lease.release()
-        if log_file is not None:
-            with contextlib.suppress(Exception):
-                log_file.close()
-        if slot_acquired:
-            await slot_pool.release()
+        async def release_failed_creation():
+            try:
+                if proc is not None and proc.returncode is None:
+                    with contextlib.suppress(ProcessLookupError):
+                        os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+                    with contextlib.suppress(Exception):
+                        await asyncio.wait_for(proc.wait(), timeout=max(1.0, kill_timeout_secs))
+            finally:
+                if port_lease is not None:
+                    port_lease.release()
+                if log_file is not None:
+                    with contextlib.suppress(Exception):
+                        log_file.close()
+                if slot_acquired:
+                    await slot_pool.release()
+        await _protected_cleanup(release_failed_creation())
         raise

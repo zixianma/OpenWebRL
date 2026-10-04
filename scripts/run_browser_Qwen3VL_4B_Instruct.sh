@@ -216,6 +216,7 @@ if [ -n "${SLIME_CKPT_STEP}" ]; then
   fi
 fi
 
+
 [ -f "${TRAIN_DATA}" ] || { echo "ERROR: ${TRAIN_DATA} not found"; exit 1; }
 [ -f "${EVAL_DATA}" ] || { echo "ERROR: ${EVAL_DATA} not found"; exit 1; }
 
@@ -345,7 +346,7 @@ ROLLOUT_ARGS=(
     # Custom browser generate / reward / config
     --custom-generate-function-path ${GENERATE_FN}
     --custom-rm-path openwebrl.reward_browser.reward_func
-    --custom-config-path openwebrl/browser_training_config.yaml
+    --custom-config-path "${BROWSER_TRAIN_CONFIG:-openwebrl/browser_training_config.yaml}"
     --max-steps "${BROWSER_MAX_STEPS}"
     --context-num-screenshots "${CONTEXT_NUM_SCREENSHOTS}"
     --judge-max-attached-imgs "${JUDGE_MAX_ATTACHED_IMGS}"
@@ -361,7 +362,7 @@ ROLLOUT_ARGS=(
     --rollout-health-check-timeout "${ROLLOUT_HEALTH_CHECK_TIMEOUT}"
     --rollout-health-check-first-wait "${ROLLOUT_HEALTH_CHECK_FIRST_WAIT}"
     # Hyper-params
-    --num-rollout 100                       # 100 × batch_size32 = 3200 prompts 
+    --num-rollout "${NUM_ROLLOUT:-100}"
     --rollout-batch-size 48
     --n-samples-per-prompt 5
     --rollout-max-response-len 1024
@@ -487,6 +488,10 @@ if [ -n "${SLIME_CKPT_STEP}" ]; then
     BACKEND_ARGS+=(
         --ckpt-step "${SLIME_CKPT_STEP}"
     )
+fi
+
+if [ "${OVERRIDE_OPT_PARAM_SCHEDULER:-0}" = "1" ]; then
+    BACKEND_ARGS+=(--override-opt-param-scheduler)
 fi
 
 # ── Wandb (optional) ────────────────────────────────────────────────────────

@@ -48,6 +48,19 @@ class FileBackedTransportTest(unittest.TestCase):
         self.assertEqual(advise.call_count, 2)
         self.assertTrue(first.is_file() and second.is_file() and unrelated.is_file())
 
+    def test_consumed_storage_removes_only_rollout_mappings(self):
+        directory = Path(tempfile.mkdtemp(prefix="openwebrl-transport-delete-"))
+        first = directory / "rollout-first.bin"
+        second = directory / "rollout-second.bin"
+        unrelated = directory / "keep.bin"
+        first.write_bytes(b"a" * 4096)
+        second.write_bytes(b"b" * 8192)
+        unrelated.write_bytes(b"c" * 1024)
+        result = evict_file_backed_cache(directory, delete=True)
+        self.assertEqual(result, {"files": 2, "bytes": 12288})
+        self.assertFalse(first.exists() or second.exists())
+        self.assertEqual(unrelated.read_bytes(), b"c" * 1024)
+
     def test_single_file_cache_eviction_is_best_effort(self):
         directory = Path(tempfile.mkdtemp(prefix="openwebrl-transport-cache-one-"))
         path = directory / "recovery.pt"

@@ -1028,6 +1028,10 @@ def loss_function(
         case _:
             raise ValueError(f"Unknown loss type: {args.loss_type}")
 
+    if batch.get("arm_source") is not None:
+        from openwebrl.arm_rl_megatron import loss as arm_loss
+        func = arm_loss
+
     if args.recompute_loss_function:
         loss, log = checkpoint(func, args, batch, logits, sum_of_sample_mean)
     else:

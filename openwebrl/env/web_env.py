@@ -8,6 +8,7 @@ import time
 from playwright.async_api import async_playwright
 
 from openwebrl.env.base_env import BaseEnv
+from openwebrl.env.browser_runtime import browser_process_environment
 from openwebrl.feedback_utils import (
     DEFAULT_BROWSER_ACTUAL_VALUE_MAX_CHARS,
     truncate_feedback_text,
@@ -139,7 +140,8 @@ class WebEnv(BaseEnv):
         self.playwright = await async_playwright().start()
         self.browser_type = self.playwright.chromium
         self.browser = await self.browser_type.launch(
-            headless=True, args=self.browser_args, proxy=self.proxy_settings
+            headless=True, args=self.browser_args, proxy=self.proxy_settings,
+            env=browser_process_environment(self.browser_args),
         )
 
         await self._initialize_context(

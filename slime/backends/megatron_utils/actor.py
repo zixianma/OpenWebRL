@@ -706,6 +706,8 @@ class MegatronTrainRayActor(TrainRayActor):
         )
 
     def train_actor(self, rollout_id: int, rollout_data: RolloutBatch) -> None:
+        from openwebrl.arm_rl_megatron import prepare_auxiliary, attach_auxiliary
+        arm_auxiliary = prepare_auxiliary(self, rollout_id)
         if self.args.ppo_epochs > 1:
             # Multi-epoch PPO path:
             # keep each rank's local rollout shard, then for each PPO epoch do
@@ -831,13 +833,15 @@ class MegatronTrainRayActor(TrainRayActor):
                         )
 
                     with timer("actor_train"):
+                        train_iterators, train_counts = attach_auxiliary(
+                            self.args, data_iterator, num_microbatches, arm_auxiliary)
                         train(
                             rollout_id,
                             self.model,
                             self.optimizer,
                             self.opt_param_scheduler,
-                            data_iterator,
-                            num_microbatches,
+                            train_iterators,
+                            train_counts,
                             ppo_epoch_id=ppo_epoch_id,
                         )
 
@@ -994,13 +998,15 @@ class MegatronTrainRayActor(TrainRayActor):
                 logging_utils.append_progress_log(self.args, line)
 
             with timer("actor_train"):
+                train_iterators, train_counts = attach_auxiliary(
+                    self.args, data_iterator, num_microbatches, arm_auxiliary)
                 train(
                     rollout_id,
                     self.model,
                     self.optimizer,
                     self.opt_param_scheduler,
-                    data_iterator,
-                    num_microbatches,
+                    train_iterators,
+                    train_counts,
                     ppo_epoch_id=0,
                 )
 

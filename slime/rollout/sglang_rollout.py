@@ -479,6 +479,9 @@ async def generate_rollout_async(
     state = GenerateState(args)
 
     # instantiate data filters
+    if os.environ.get("OPENWEBRL_ARM_CONFIG"):
+        from openwebrl.arm_rl_runtime import begin_round
+        begin_round(args, rollout_id)
     dynamic_filter = (
         load_function(args.dynamic_sampling_filter_path) if args.dynamic_sampling_filter_path is not None else None
     )
@@ -605,6 +608,10 @@ async def generate_rollout_async(
     if args.rollout_sample_filter_path is not None:
         filter_func = load_function(args.rollout_sample_filter_path)
         filter_func(args, data)
+
+    if os.environ.get("OPENWEBRL_ARM_CONFIG"):
+        from openwebrl.arm_rl_runtime import finish_round
+        await finish_round(args, rollout_id, all_samples, data, state.sampling_params.copy())
 
     # There can be circumstances where users want to process all samples including filtered ones.
     if args.rollout_all_samples_process_path is not None:

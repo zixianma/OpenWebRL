@@ -155,7 +155,7 @@ class ServerGroup:
         else:
             # Compute base_port from the maximum cursor across all nodes that
             # this group's engines may land on (conservative: just use global max).
-            base_port = max(port_cursors.values()) if port_cursors else 15000
+            base_port = max(port_cursors.values()) if port_cursors else int(os.environ.get("OPENWEBRL_ROLLOUT_PORT_BASE", "15000"))
             addr_and_ports, port_cursors = _allocate_rollout_engine_addr_and_ports_normal(
                 args=self.args,
                 rollout_engines=rollout_engines,
@@ -766,8 +766,14 @@ class RolloutManager:
             self.args.advantage_estimator in ["grpo", "gspo", "reinforce_plus_plus_baseline"]
             and self.args.rewards_normalization
         ):
-            grouped_samples = group_by(samples, lambda s: s.group_index)
-            normalized_rewards_by_index: dict[int, float] = {}
+            # Exclude an entire trajectory if any turn is invalid, before statistics.
+            invalid_ids = {(s.group_index, _trajectory_id(s)) for s in samples if s.remove_sample}
+            valid_samples = [s for s in samples if (s.group_index, _trajectory_id(s)) not in invalid_ids]
+            for sample in samples:
+                if (sample.group_index, _trajectory_id(sample)) in invalid_ids:
+                    sample.remove_sample = True
+            grouped_samples = group_by(valid_samples, lambda s: s.group_index)
+            normalized_rewards_by_index: dict[int, float] = {id(s): 0.0 for s in samples}
             group_sizes = [len(group) for group in grouped_samples.values()]
             if group_sizes:
                 logger.info(

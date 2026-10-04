@@ -43,14 +43,32 @@ def evict_file_cache(path, *, sync=False):
         return 0
 
 
-def evict_file_backed_cache(directory=None):
-    """Release cache pages for consumed node-local multimodal mappings."""
+def evict_file_backed_cache(directory=None, *, delete=None):
+    """Release consumed multimodal mappings, optionally unlinking their files.
+
+    Deletion is safe only after every training consumer has returned. Durable
+    recovery archives serialize the tensor values rather than these paths.
+    """
+    configured_directory = directory is None
     directory = directory or os.environ.get("OPENWEBRL_MULTIMODAL_STORAGE_DIR")
     if not directory:
         return {"files": 0, "bytes": 0}
+    if delete is None:
+        # No-argument calls are the production consumption boundaries. An
+        # explicit directory remains a cache-only maintenance operation.
+        delete = configured_directory
     files = 0
     advised_bytes = 0
     for path in Path(directory).glob("rollout-*.bin"):
+        if delete:
+            try:
+                size = path.stat().st_size
+                path.unlink()
+            except OSError:
+                continue
+            files += 1
+            advised_bytes += size
+            continue
         size = evict_file_cache(path, sync=True)
         if size:
             files += 1

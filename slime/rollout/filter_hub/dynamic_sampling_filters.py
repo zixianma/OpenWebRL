@@ -11,7 +11,7 @@ def _terminal_sample(sample: Sample | list[Sample]) -> Sample:
 
 
 def _reward_value(args, sample: Sample):
-    if sample.reward is None:
+    if sample.remove_sample or sample.reward is None:
         return None
     return sample.get_reward_value(args)
 
@@ -31,7 +31,7 @@ def check_reward_nonempty_nonzero_std(args, samples: list[Sample], **kwargs):
     num_none_rewards = 0
     for sample in samples:
         reward_sample = _terminal_sample(sample)
-        reward = _reward_value(args, reward_sample)
+        reward = None if isinstance(sample, list) and any(s.remove_sample for s in sample) else _reward_value(args, reward_sample)
         if reward is None:
             num_none_rewards += 1
             continue
@@ -65,7 +65,7 @@ def check_reward_nonempty(args, samples: list[Sample], **kwargs):
     kept_samples = []
     for sample in samples:
         reward_sample = _terminal_sample(sample)
-        if _reward_value(args, reward_sample) is None:
+        if (isinstance(sample, list) and any(s.remove_sample for s in sample)) or _reward_value(args, reward_sample) is None:
             continue
         kept_samples.append(sample)
 
