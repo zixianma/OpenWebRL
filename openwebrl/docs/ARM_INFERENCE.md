@@ -15,13 +15,123 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
 
-**User approved the exact GPU/API caps. CPU preparation and20 regression tests
-pass.** Initial four-hour submissions343534/343535 stopped after33 seconds each
-because the actor launcher omitted the established CUDA environment. The
-launcher now uses the preserved `h200_env.sh`; replacement jobs343537/343538
-were submitted with four-hour limits. Those33 seconds remain charged to each
-shard's original eight-hour ceiling. No episodes were collected by the failed
-startups; scientific settings and frozen schedule are unchanged.
+**Completed and independently verified: all1,800 episodes, all300 paired task
+blocks, original result/decision-trace hashes, final Slurm accounting and both
+finished W&B runs.** “Six episodes” means one ARM-guided episode and five
+ordinary episodes per task; it is not a claim that their costs are equal.
+
+<a id="arm-controlled-inference-results-20261004"></a>
+### Completed performance–cost comparison
+
+| Policy | Overall success | ARM minus policy, pp [paired 95% interval] | Mean browser-step calls/task |
+| --- | ---: | --- | ---: |
+| ARM, five candidates/turn |39.33% (118/300) |— |15.89 |
+| Ordinary pass@1 |35.20% |+4.13 [-0.13, +8.40] |14.39 |
+| Ordinary pass@2 |46.17% |-6.83 [-11.40, -2.20] |28.77 |
+| Ordinary pass@3 |52.30% |-12.97 [-17.43, -8.23] |43.16 |
+| Ordinary pass@4 |56.40% |-17.07 [-22.13, -12.27] |57.55 |
+| Ordinary pass@5 |59.33% |-20.00 [-26.00, -14.33] |71.94 |
+
+Ordinary pass@k averages all k-subsets of each task's five ordinary outcomes.
+Pass@1 is528/1,500 pooled episode successes, not a selected seed. Fixed actor0
+is106/300 (35.33%). ARM's gain over ordinary pass@1 is+4.13pp, with a paired
+interval spanning zero. Against pass@5 it is−20.00pp;10 tasks succeed only with
+ARM and70 only with ordinary resampling (exact discordance p=3.16×10⁻¹²).
+All invalid attempts remain failures in these overall denominators.
+
+![Paired success versus actor-plus-selector FLOPs under three cache assumptions](arm_results/rl_integration/controlled-inference-flops-20261004.png)
+
+**Mean dominant forward FLOPs per task, in10¹⁵ operations.** These include
+actor and selector vision, prefill and decode. Cache bounds are distinct from
+statistical confidence intervals; the detailed counting assumptions follow.
+
+| Policy | Observed KV hits, vision-cache bounds | Uniform identical-state sharing | Uniform fresh prefill/vision per request |
+| --- | ---: | ---: | ---: |
+| ARM |1.815–2.269 |2.544 |9.249 |
+| Ordinary pass@1 |0.352–0.434 |1.369 |1.391 |
+| Ordinary pass@2 |0.703–0.868 |2.723 |2.781 |
+| Ordinary pass@3 |1.055–1.302 |4.073 |4.172 |
+| Ordinary pass@4 |1.407–1.736 |5.421 |5.562 |
+| Ordinary pass@5 |1.758–2.170 |6.767 |6.953 |
+
+For these recorded episodes, **ordinary pass@4 has higher oracle success and
+lower estimated model work than ARM even across opposite vision-cache bounds**:
+56.40% at1.407–1.736×10¹⁵ FLOPs versus39.33% at1.815–2.269×10¹⁵. This statement
+concerns model work, not browser use, latency or total deployment dollars.
+The current-serving equal-bound estimates put ARM just beyond the measured
+pass@5 cost curve, and the fresh-prefill view puts it further beyond; do not
+extrapolate a matched-budget score beyond five episodes.
+
+Under the hypothetical uniform identical-state cache, ARM costs
+2.544×10¹⁵ FLOPs. An outcome-independent mixture of13.17% one-episode and
+86.83% two-episode trials matches that mean cost and achieves
+**44.72%** oracle success. ARM minus this comparator is
+**-5.39pp**, paired task-bootstrap95% interval
+**[-10.63, -0.12]pp**. The upper endpoint is close to zero. This cache policy is
+an implementation model, not demonstrated serving performance; the bootstrap
+re-estimates both costs and the mixture weight on each task resample.
+
+**Browser cost changes the trade-off.** ARM uses15.89 browser-step calls/task,
+compared with57.55 for four ordinary episodes. At equal expected browser-step
+count, an ordinary one/two-episode mixture scores
+36.34%; ARM's difference is
++2.99pp [-1.49, +7.47]pp.
+This comparison does not equalize model compute. Mean recorded episode time
+is184.3s for ARM and135.3s for one ordinary episode, but these times include
+shared queues, browser initialization and judging; they do not establish
+matched-resource deployment latency. Browser-step calls include terminal done.
+
+**Oracle limitation.** Pass@k asks whether any sampled episode succeeded. A
+deployed system still needs a selector/verifier and must pay for its errors
+and cost. All success labels come from the same o4-mini/AgentTrek judge;
+no independent human adjudication was performed. Label errors, especially
+false positives across multiple trials, can affect the oracle comparison.
+These results therefore favor episode resampling as an oracle
+compute–performance reference, and do not prove that a deployable best-of-k
+agent achieves these rates. The experiment tests this frozen SelectionARM
+with five proposals, not the complete ARM candidate-count frontier.
+
+**Failure and robustness audit.** There are166 invalid episodes:126 failures
+before the first actor request,28 browser-step failures and12 context-limit
+exhaustions. The40 rejected actor requests associated with those context
+failures never reached the model scheduler. No selector fallback or backend
+retraction was observed. Treating context exhaustion as an observed policy
+failure gives264 tasks with all six operationally valid episodes: ARM112/264
+(42.42%) versus ordinary pass@5 171/264 (64.77%). The raw all-six-valid panel
+has253 tasks; neither sensitivity replaces the all300 primary denominator.
+
+**Actual research cost and recovery.** The complete collection consumed
+**20.269 H200 GPU-hours**, including every attempt, versus the32 GPU-hour
+ceiling. Per-shard allocated time was4.871h and5.263h, each below its own8h
+cap. Terminal-judge accounting is**$8.86** across1,125 calls,
+including one unsettled reservation;1,124 returned responses identify
+`o4-mini-2025-04-16`. GPU work and evaluator API cost are separate.
+
+The initial CUDA-environment failures343534/343535 consumed33s each and no
+episodes. Replacements343537/343538 preserved1,453 committed slots before
+their planned allocation guards stopped them; continuations343856/343857
+finished the remaining347 within the original ceilings. All allocations are
+released. There are1,816 physical attempt directories for1,800 committed
+slots, preserving16 interrupted attempts. The policy FLOP curves cover the
+committed episodes;210 extra returned actor requests from interrupted attempts,
+any unreturned in-flight work and startup/idle overhead remain charged in the
+whole-allocation GPU-hour total. Do not confuse research-collection cost with
+the cost of deploying either policy.
+
+[Aggregate report](arm_results/rl_integration/controlled-inference-20261004.json) ·
+[FLOP CSV](arm_results/rl_integration/controlled-inference-flops-20261004.csv) ·
+[Workload CSV](arm_results/rl_integration/controlled-inference-20261004.csv) ·
+[FLOP SVG](arm_results/rl_integration/controlled-inference-flops-20261004.svg) ·
+[Token/browser plot](arm_results/rl_integration/controlled-inference-20261004.png) ·
+[Shard0 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-controlled-20261004-shard0) ·
+[Shard1 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-controlled-20261004-shard1).
+Reproduce with `scripts/report_arm_controlled_inference.py --final`;
+`scripts/estimate_arm_inference_flops.py` retains the private per-task cost
+index. Public artifacts contain aggregates only. The model-shape, image-resize,
+FLOP arithmetic, subset averaging and cache-sharing checks passed; the existing
+20 inference/critic regression tests plus six FLOP tests pass.
+
+### Frozen collection protocol and cost-analysis amendment
 
 | Setting | Prespecified value |
 | --- | --- |
@@ -33,8 +143,10 @@ startups; scientific settings and frozen schedule are unchanged.
 | Sampling |Temperature0.7, top-p0.9, top-k−1,1,024 actor response tokens;30 turns;32K context; full actor history, one current screenshot |
 | Browser |Local process, eight concurrent task blocks/shard; fresh episode per attempt; existing EGL child-environment fix included |
 | Judge |o4-mini / Online-Mind2Web AgentTrek;4,096 completion tokens; unchanged prompt/parser; SDK automatic retries disabled |
+| Timeouts |1,800 seconds per episode including judging;180 seconds per actor request, selector request and judge API attempt; up to four explicit judge attempts |
 | Startup gate |First two frozen tasks/shard, all six attempts each, count toward the final cohort; verify functioning actor/ARM/browser paths before scaling |
-| Primary |Paired all-scheduled ARM success minus taskwise actor pass@5 |
+| Prespecified performance comparison |Paired all-scheduled ARM success minus taskwise actor pass@5 |
+| Main cost comparison, clarified during collection |Success versus estimated actor-plus-selector FLOPs under all reported cache views; match expected cost where the measured pass@1…5 curve covers the budget |
 | Secondary |Pass@1…5; ARM versus fixed actor0; discordant counts; all-six-valid sensitivity; task-bootstrap intervals |
 | Measurements |Backend actor input/output tokens; selector input/output tokens and service time; actual browser-step count/time; request/episode elapsed time; GPU utilization/power samples and whole-allocation GPU-hours |
 | Persistence |Original responses, screenshots, candidate traces, judge text, API usage and artifact hashes; resume only independently verified committed slots |
@@ -54,6 +166,68 @@ requests can share batches, so client-request seconds are not per-policy GPU
 kernel time. Report whole-allocation GPU cost and the separate metered workload
 components without mislabeling one as the other. Oracle pass@5 also does not
 include a deployable final-episode selector.
+
+The actor receipts also retain backend cache-hit token counts and end-to-end
+latency when supplied by SGLang. Report total and uncached input separately;
+shared-cache benefits depend on request order. Backend latency includes queues,
+while the selector's reported service time starts after its lock is acquired.
+Episode elapsed time also includes browser initialization and judging. Token
+measurements cover returned responses; interrupted calls can have unreported
+work, which remains included in allocation GPU-hours. Thus this is a controlled
+policy/protocol comparison with metered costs, not an equal-GPU-budget trial.
+One guided episode per task does not establish full-cohort repeatability.
+
+### Performance versus cost: clarification during collection
+
+“All six episodes” means **one guided episode and five ordinary episodes for
+each task**. It is the data-collection design, not an assertion of equal cost.
+The five ordinary outcomes estimate pass@1…5 by averaging all subsets of each
+size. Every episode is collected even after success, so the later samples are
+not selected by earlier outcomes. The entire research collection costs more
+than either policy would cost when deployed.
+
+Following the user's cost-comparison clarification, report success against
+**actor plus selector model FLOPs**, alongside browser work and latency. Keep
+the prespecified paired pass@5 comparison, but do not interpret it as a
+compute-matched result. The analytic counter includes actor and selector
+vision encoders, prompt prefill, autoregressive decoding, attention, vocabulary
+projection and all Qwen3-VL DeepStack mergers. It uses saved request token/cache
+counts and screenshot dimensions; one multiply-add is two FLOPs. Matrix shapes
+were independently checked against the actual model modules without loading
+weights or allocating GPUs. These are dominant forward-operation estimates,
+not hardware-counter measurements; elementwise operations, kernel padding and
+CPU/browser work are excluded. See the [Qwen3-VL report](https://arxiv.org/abs/2511.21631)
+for the architecture; even [PyTorch's profiler FLOP option](https://docs.pytorch.org/docs/stable/profiler)
+only estimates selected operator types.
+
+| Cost view | Interpretation |
+| --- | --- |
+| Current implementation | Use observed actor KV-cache hits; bound the unlogged vision-cache work from zero actor encoder misses to recomputation in every uncached prefill chunk. Include every selector forward. |
+| Uniform identical-state sharing | Reuse an identical full prompt/screenshot prefill and identical image embeddings within each task/policy. Apply the same rule to ARM candidate draws, the selector and ordinary episode subsets; cache entries never cross models with different weights. This is an idealized implementation comparison; it is not achieved serving cost. |
+| Uniform recomputation | Recompute input/vision for every request while retaining normal autoregressive KV reuse within each response. Apply this equally to both policies. |
+| Other real costs | Report browser steps/time, episode latency, judge API usage, GPU power/utilization and total allocation GPU-hours separately. Shared batches and queues prevent exact per-policy GPU-hour attribution. |
+
+Show all cache views together; do not choose a favorable assumption from the
+outcomes. At a guided policy's mean FLOP budget, interpolate ordinary pass@k
+only as an outcome-independent randomized mixture of adjacent k values.
+Bootstrap tasks jointly for performance, cost and mixture weight. Report when
+k≤5 does not cover the budget; never extrapolate. This matches expected cost
+over tasks, not a hard budget for every task. Also show cross-method extreme
+vision-cache bounds rather than assuming both methods have identical unknown
+cache-hit rates.
+
+Pass@k is the probability that at least one of k episodes succeeds. It is an
+oracle success bound: a deployed system needs a way to identify that episode,
+whose errors and cost are additional. It therefore cannot, by itself,
+establish the performance of a deployable best-of-k selector. All curves pay
+for their full sampled episodes; oracle early stopping is not silently credited.
+
+Context-limit HTTP400 failures discovered in the running cohort occur before
+GPU scheduler submission. Preserve their raw records and count them as failures
+in every overall score. In the additional common-valid sensitivity, count
+identified context exhaustion as an observed policy failure, so excluding these
+episodes cannot favor a longer-running policy. The frozen serving protocol and
+already committed episode slots remain unchanged.
 
 Private frozen schedule, manifest, launch plans and readiness:
 runtime `arm-turn-bonus-preparation/controlled-inference-20261004/`.

@@ -42,6 +42,18 @@ The original300-task study has no matched episode pass@5 control, so it does
 not establish that action selection is the best use of the extra budget.
 [Cost/pass@k analysis](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
 
+**Fresh controlled comparison complete:** all300 tasks, one guided episode
+and five ordinary episodes per task. ARM scores**39.33%**, ordinary pass@1
+**35.20%**, pass@2 **46.17%**, and pass@5 **59.33%**. In the current-serving
+FLOP estimates, pass@4 achieves56.40% with lower model work than ARM even across
+opposite vision-cache bounds. With uniform identical-state caching, the
+ordinary equal-mean-compute mixture scores44.72% versus ARM39.33%
+(ARM difference−5.39pp, paired95% interval−10.63 to−0.12pp). ARM uses far fewer
+browser steps than four episodes:15.89 versus57.55. Pass@k remains an oracle
+bound; a deployed episode chooser has additional errors and cost. The complete
+research collection used20.269 H200 GPU-hours within the approved32.
+[Results, cost assumptions and protocol](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
+
 **Next critic comparison:** our outcome corpus supports14,825 verified executed
 nonterminal transitions (11,023 train /1,239 dev /2,563 later-policy test).
 Compare goal-conditioned state value, pre-action outcome prediction, and
@@ -49,6 +61,11 @@ post-action outcome prediction on matched rows, then derive cross-fitted
 advantages. Piotr's preference labels do not supply counterfactual returns for
 the five candidates. CPU indices and leakage checks are complete; neural fits
 remain pending. [Data and experiment](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+The [24-source inventory](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004)
+separates raw collections, derived views, conversion work and benchmark-only
+data. In particular, the ARM refresh future panel contains82 OM2W tasks and
+must remain evaluation-only; it is not the prepared outcome critic's500-trajectory
+later-policy test.
 
 ## 2. Offline filtered SFT and preference learning
 

@@ -7,9 +7,9 @@ for the work you are doing, then follow its contents to dated experiment records
 [Kev0.8B/27B: paired alternative decision models, shared browser/helper/judge protocol; GPU allocation approval pending](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
-[October4 controlled inference: fresh full300 ARM versus five ordinary episodes per task, paired performance and metered costs](ARM_INFERENCE.md#arm-controlled-inference-20261004).
+[October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 critic comparison:14,825 verified transitions, task-disjoint splits, causal-input leakage guards, and pre/post/value/advantage test design](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
-[October4 inference scaling: historical ARM costs5.05× actor-text output; empirical training-pool pass@1…5, direct retry pilot, and missing matched benchmark control](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
+[October4 historical inference audit: ARM actor-text cost, training-pool pass@k and the limitation addressed by the fresh controlled cohort](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
 
 | Document | Contents |
 | --- | --- |

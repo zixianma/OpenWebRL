@@ -4,6 +4,34 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-controlled-cost-results-20261004"></a>
+## Controlled ARM versus episode resampling — October4
+
+All300 tasks and1,800 episodes independently verified; frozen original SFT
+actor, SelectionARM with five full-response candidates, local browser,
+T0.7/p0.9/k−1,30 turns, and o4-mini/AgentTrek judge.
+
+| Policy | Overall success | ARM minus policy, pp [paired 95% interval] | Mean browser-step calls/task |
+| --- | ---: | --- | ---: |
+| ARM, five candidates/turn |39.33% (118/300) |— |15.89 |
+| Ordinary pass@1 |35.20% |+4.13 [-0.13, +8.40] |14.39 |
+| Ordinary pass@2 |46.17% |-6.83 [-11.40, -2.20] |28.77 |
+| Ordinary pass@3 |52.30% |-12.97 [-17.43, -8.23] |43.16 |
+| Ordinary pass@4 |56.40% |-17.07 [-22.13, -12.27] |57.55 |
+| Ordinary pass@5 |59.33% |-20.00 [-26.00, -14.33] |71.94 |
+
+Observed-KV/vision-cache FLOP bounds per task are1.815–2.269×10¹⁵ for ARM and
+1.407–1.736×10¹⁵ for ordinary pass@4. Uniform identical-state caching gives
+ARM2.544×10¹⁵ versus an equal-mean-cost ordinary mixture scoring44.72%; ARM's
+difference is−5.39pp [−10.63,−0.12]. This is an idealized cache model.
+ARM's browser-step count is much lower than multiple ordinary episodes;
+pass@k is an oracle bound and excludes a deployable episode chooser.
+Total research cost:20.269 H200 GPU-hours; judge accounting$8.86 including
+one unsettled reservation. All allocations released.
+
+[Full paired results, cost assumptions and robustness](ARM_INFERENCE.md#arm-controlled-inference-results-20261004) ·
+[Aggregate JSON](arm_results/rl_integration/controlled-inference-20261004.json).
+
 <a id="arm-reward-hacking-curves-20261003"></a>
 ## ARM reward versus task success throughout training — October3
 

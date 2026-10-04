@@ -1,0 +1,1324 @@
+{
+  "generated_utc": "2026-10-04T22:46:42.429094+00:00",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": -1,
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0
+  },
+  "effective_settings_audit": {
+    "audited_utc": "2026-10-04T18:53:08.833171+00:00",
+    "worker_sha256": "ee3d789b22414d2dc263118d0b05a05de9378150c8aa11f977f492ba524c220b",
+    "eval_args_literal_settings": {
+      "sglang_router_ip": "127.0.0.1",
+      "max_steps": 30,
+      "context_num_screenshots": 1,
+      "judge_api_model": "o4-mini",
+      "judge_api_mode": "served",
+      "judge_timeout_secs": 180,
+      "browser_response_format_mode": "browser_env",
+      "turn_history_reasoning_mode": "full",
+      "browser_include_tool_response": 1,
+      "inference_step_timeout_secs": 180,
+      "task_timeout_secs": 1800
+    },
+    "judge_prompt_sha256": {
+      "SYSTEM_PROMPT": "6906e021cb15a3398225fe82232ea5ee61b1cb7489c0bbbd9be4ad82f2000ca9",
+      "USER_PROMPT": "557b3e52d90d324bd085a0e631a11ecacb5ab7946a1b41568ce10d2d7a431740"
+    },
+    "judge_explicit_max_attempts": 4,
+    "judge_sdk_retries": 0,
+    "judge_input": "Task goal, interleaved executed thoughts/actions, final screenshot",
+    "judge_note": "AgentTrek rubric; outcomes are according to this judge, not independent human ground truth",
+    "selector_decoding": "Greedy, canonical JSON schema; maximum128 output tokens",
+    "selector_max_pixels": 262144,
+    "selector_prompt_sha256": "043ab7e98127f07ccd76b0eb736837f8a089c1328fa211c4ca4c20d771a7751c",
+    "audit_only_no_worker_changes": true
+  },
+  "performance": {
+    "complete": true,
+    "scheduled_tasks": 300,
+    "scheduled_attempts": 1800,
+    "completed_attempts": 1800,
+    "completed_task_blocks": 300,
+    "by_mode": {
+      "arm": {
+        "successes": 118,
+        "valid": 269,
+        "overall": 0.3933333333333333,
+        "valid_only": 0.43866171003717475,
+        "actor_requests": 23900,
+        "actor_output_tokens": 8039583,
+        "actor_input_tokens": 218431500,
+        "actor_client_request_seconds": 129783.3803501539,
+        "browser_steps": 4766,
+        "browser_step_seconds": 20383.08843533229,
+        "selector_calls": 4773,
+        "selector_input_tokens": 17981000,
+        "selector_output_tokens": 40783,
+        "selector_service_seconds": 1221.5214589419775,
+        "elapsed_seconds": 55282.93570971768
+      },
+      "actor0": {
+        "successes": 106,
+        "valid": 272,
+        "overall": 0.35333333333333333,
+        "valid_only": 0.3897058823529412,
+        "actor_requests": 4452,
+        "actor_output_tokens": 1429864,
+        "actor_input_tokens": 37048002,
+        "actor_client_request_seconds": 21552.10408407217,
+        "browser_steps": 4438,
+        "browser_step_seconds": 17648.308134123683,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 43566.600317305885
+      },
+      "actor1": {
+        "successes": 105,
+        "valid": 272,
+        "overall": 0.35,
+        "valid_only": 0.3860294117647059,
+        "actor_requests": 4289,
+        "actor_output_tokens": 1363043,
+        "actor_input_tokens": 35364030,
+        "actor_client_request_seconds": 20603.54710223712,
+        "browser_steps": 4281,
+        "browser_step_seconds": 15272.257962283678,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 40458.652679437306
+      },
+      "actor2": {
+        "successes": 104,
+        "valid": 275,
+        "overall": 0.3466666666666667,
+        "valid_only": 0.3781818181818182,
+        "actor_requests": 4262,
+        "actor_output_tokens": 1372961,
+        "actor_input_tokens": 35473045,
+        "actor_client_request_seconds": 20685.71684094472,
+        "browser_steps": 4246,
+        "browser_step_seconds": 13459.925375280436,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 38576.59129925072
+      },
+      "actor3": {
+        "successes": 113,
+        "valid": 270,
+        "overall": 0.37666666666666665,
+        "valid_only": 0.4185185185185185,
+        "actor_requests": 4212,
+        "actor_output_tokens": 1328194,
+        "actor_input_tokens": 34963454,
+        "actor_client_request_seconds": 20132.679727732204,
+        "browser_steps": 4195,
+        "browser_step_seconds": 15141.366689373739,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 39758.946752962656
+      },
+      "actor4": {
+        "successes": 100,
+        "valid": 276,
+        "overall": 0.3333333333333333,
+        "valid_only": 0.36231884057971014,
+        "actor_requests": 4433,
+        "actor_output_tokens": 1429144,
+        "actor_input_tokens": 36814824,
+        "actor_client_request_seconds": 21388.10792351095,
+        "browser_steps": 4421,
+        "browser_step_seconds": 14662.47073678067,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 40620.897229067516
+      }
+    },
+    "pass_at_k": [
+      {
+        "k": 1,
+        "pass_at_k": 0.352,
+        "arm_minus_pass_at_k": 0.04133333333333333,
+        "paired_task_bootstrap_95": [
+          -0.0013333333333333316,
+          0.08399999999999999
+        ],
+        "expected_actor_output_tokens": 1384641.2
+      },
+      {
+        "k": 2,
+        "pass_at_k": 0.46166666666666667,
+        "arm_minus_pass_at_k": -0.06833333333333333,
+        "paired_task_bootstrap_95": [
+          -0.114,
+          -0.022000000000000002
+        ],
+        "expected_actor_output_tokens": 2769282.4
+      },
+      {
+        "k": 3,
+        "pass_at_k": 0.523,
+        "arm_minus_pass_at_k": -0.12966666666666665,
+        "paired_task_bootstrap_95": [
+          -0.1743333333333333,
+          -0.08233333333333333
+        ],
+        "expected_actor_output_tokens": 4153923.6
+      },
+      {
+        "k": 4,
+        "pass_at_k": 0.564,
+        "arm_minus_pass_at_k": -0.1706666666666667,
+        "paired_task_bootstrap_95": [
+          -0.22133333333333335,
+          -0.12266666666666669
+        ],
+        "expected_actor_output_tokens": 5538564.8
+      },
+      {
+        "k": 5,
+        "pass_at_k": 0.5933333333333334,
+        "arm_minus_pass_at_k": -0.2,
+        "paired_task_bootstrap_95": [
+          -0.26,
+          -0.14333333333333334
+        ],
+        "expected_actor_output_tokens": 6923206.0
+      }
+    ],
+    "paired_arm_actor5": {
+      "arm_only": 10,
+      "actor5_only": 70,
+      "all_six_valid_tasks": 253,
+      "common_valid_arm_successes": 112,
+      "common_valid_actor5_successes": 168,
+      "exact_two_sided_discordance_p": 3.161290522649495e-12
+    },
+    "cost_limitations": "Client request seconds overlap; allocation GPU-hours/device samples are whole-job costs, not per-policy kernel time. Missing server timing stays missing.",
+    "arm_vs_fixed_actor0": {
+      "mean_difference": 0.04,
+      "arm_only": 35,
+      "actor0_only": 23
+    },
+    "context_exhaustion_counted_valid_failure_sensitivity": {
+      "by_mode": {
+        "arm": {
+          "successes": 118,
+          "valid": 276,
+          "overall": 0.3933333333333333,
+          "valid_only": 0.427536231884058
+        },
+        "actor0": {
+          "successes": 106,
+          "valid": 273,
+          "overall": 0.35333333333333333,
+          "valid_only": 0.3882783882783883
+        },
+        "actor1": {
+          "successes": 105,
+          "valid": 273,
+          "overall": 0.35,
+          "valid_only": 0.38461538461538464
+        },
+        "actor2": {
+          "successes": 104,
+          "valid": 276,
+          "overall": 0.3466666666666667,
+          "valid_only": 0.37681159420289856
+        },
+        "actor3": {
+          "successes": 113,
+          "valid": 272,
+          "overall": 0.37666666666666665,
+          "valid_only": 0.41544117647058826
+        },
+        "actor4": {
+          "successes": 100,
+          "valid": 276,
+          "overall": 0.3333333333333333,
+          "valid_only": 0.36231884057971014
+        }
+      },
+      "paired_arm_actor5": {
+        "arm_only": 10,
+        "actor5_only": 70,
+        "all_six_valid_tasks": 264,
+        "common_valid_arm_successes": 112,
+        "common_valid_actor5_successes": 171
+      }
+    }
+  },
+  "costs": {
+    "arm_per_task": {
+      "actor_requests": 79.66666666666667,
+      "actor_input_tokens": 728105.0,
+      "actor_output_tokens": 26798.61,
+      "selector_calls": 15.91,
+      "selector_input_tokens": 59936.666666666664,
+      "selector_output_tokens": 135.94333333333333,
+      "browser_steps": 15.886666666666667,
+      "browser_step_seconds": 67.94362811777431,
+      "actor_client_request_seconds": 432.6112678338463,
+      "selector_service_seconds": 4.071738196473258,
+      "elapsed_seconds": 184.27645236572562
+    },
+    "actor_expected_random_subset_per_task": [
+      {
+        "method": "actor-pass@1",
+        "actor_requests": 14.432,
+        "actor_input_tokens": 119775.57,
+        "actor_output_tokens": 4615.470666666666,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "browser_steps": 14.387333333333332,
+        "browser_step_seconds": 50.78955259856147,
+        "actor_client_request_seconds": 69.57477045233145,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 135.32112551868272
+      },
+      {
+        "method": "actor-pass@2",
+        "actor_requests": 28.864,
+        "actor_input_tokens": 239551.14,
+        "actor_output_tokens": 9230.941333333332,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "browser_steps": 28.774666666666665,
+        "browser_step_seconds": 101.57910519712294,
+        "actor_client_request_seconds": 139.1495409046629,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 270.64225103736544
+      },
+      {
+        "method": "actor-pass@3",
+        "actor_requests": 43.296,
+        "actor_input_tokens": 359326.71,
+        "actor_output_tokens": 13846.412,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "browser_steps": 43.162,
+        "browser_step_seconds": 152.3686577956844,
+        "actor_client_request_seconds": 208.72431135699432,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 405.96337655604816
+      },
+      {
+        "method": "actor-pass@4",
+        "actor_requests": 57.728,
+        "actor_input_tokens": 479102.28,
+        "actor_output_tokens": 18461.882666666665,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "browser_steps": 57.54933333333333,
+        "browser_step_seconds": 203.15821039424588,
+        "actor_client_request_seconds": 278.2990818093258,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 541.2845020747309
+      },
+      {
+        "method": "actor-pass@5",
+        "actor_requests": 72.16,
+        "actor_input_tokens": 598877.85,
+        "actor_output_tokens": 23077.353333333333,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "browser_steps": 71.93666666666667,
+        "browser_step_seconds": 253.94776299280736,
+        "actor_client_request_seconds": 347.8738522616572,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 676.6056275934136
+      }
+    ],
+    "observed_episode_seconds_by_mode": {
+      "arm": {
+        "mean": 184.27645236572562,
+        "p50": 139.98141401819885,
+        "p90": 357.43269776925445,
+        "p95": 415.2805891870521
+      },
+      "actor0": {
+        "mean": 145.22200105768627,
+        "p50": 103.34221660299227,
+        "p90": 324.6715057347901,
+        "p95": 353.77420172840357
+      },
+      "actor1": {
+        "mean": 134.86217559812437,
+        "p50": 103.9496214510873,
+        "p90": 299.2626992287114,
+        "p95": 342.2696861997247
+      },
+      "actor2": {
+        "mean": 128.58863766416908,
+        "p50": 94.97230941802263,
+        "p90": 283.2267367229797,
+        "p95": 342.0352395619266
+      },
+      "actor3": {
+        "mean": 132.52982250987552,
+        "p50": 93.87274301797152,
+        "p90": 317.3410696447827,
+        "p95": 356.21901860879734
+      },
+      "actor4": {
+        "mean": 135.4029907635584,
+        "p50": 113.03362738480791,
+        "p90": 293.35764805506915,
+        "p95": 348.0269182692282
+      }
+    },
+    "arm_to_one_actor": {
+      "actor_requests": 5.520140428677014,
+      "actor_input_tokens": 6.078910749495911,
+      "actor_output_tokens": 5.8062572455593555,
+      "selector_calls": null,
+      "selector_input_tokens": null,
+      "selector_output_tokens": null,
+      "browser_steps": 1.1042120383670821,
+      "browser_step_seconds": 1.3377481123883477,
+      "actor_client_request_seconds": 6.217933095880584,
+      "selector_service_seconds": null,
+      "elapsed_seconds": 1.3617715021168961
+    },
+    "interpretation": "Input tokens include cached tokens. All k episodes are paid; no early stop or deployable episode selector is assumed. Seconds sum overlapping client work, not GPU kernel time. Episode latency includes shared queues, browser startup and judging; it is not a matched-resource deployment latency benchmark."
+  },
+  "physical_costs": {
+    "actor": {
+      "client_seconds": 236505.2258231612,
+      "received_requests": 45718.0,
+      "prompt_tokens": 399478653.0,
+      "completion_tokens": 15024755.0,
+      "cached_tokens": 339620081.0
+    },
+    "actor_request_errors": {
+      "HTTPStatusError": 40
+    },
+    "all_physical_requests": 45758,
+    "committed_actor_backend_by_mode": {
+      "actor1": {
+        "received_requests": 4288.0,
+        "prompt_tokens": 35364030.0,
+        "completion_tokens": 1363043.0,
+        "cached_tokens": 28123462.0,
+        "e2e_latency": 20458.049437999725,
+        "uncached_prompt_tokens": 7240568.0
+      },
+      "arm": {
+        "received_requests": 23865.0,
+        "prompt_tokens": 218431500.0,
+        "completion_tokens": 8039583.0,
+        "cached_tokens": 195560313.0,
+        "e2e_latency": 125230.54199361801,
+        "uncached_prompt_tokens": 22871187.0
+      },
+      "actor2": {
+        "received_requests": 4261.0,
+        "prompt_tokens": 35473045.0,
+        "completion_tokens": 1372961.0,
+        "cached_tokens": 28271586.0,
+        "e2e_latency": 20543.24726653099,
+        "uncached_prompt_tokens": 7201459.0
+      },
+      "actor0": {
+        "received_requests": 4451.0,
+        "prompt_tokens": 37048002.0,
+        "completion_tokens": 1429864.0,
+        "cached_tokens": 29497286.0,
+        "e2e_latency": 21406.092455863953,
+        "uncached_prompt_tokens": 7550716.0
+      },
+      "actor4": {
+        "received_requests": 4433.0,
+        "prompt_tokens": 36814824.0,
+        "completion_tokens": 1429144.0,
+        "cached_tokens": 29284059.0,
+        "e2e_latency": 21314.288990974426,
+        "uncached_prompt_tokens": 7530765.0
+      },
+      "actor3": {
+        "received_requests": 4210.0,
+        "prompt_tokens": 34963454.0,
+        "completion_tokens": 1328194.0,
+        "cached_tokens": 27821598.0,
+        "e2e_latency": 19925.141021966934,
+        "uncached_prompt_tokens": 7141856.0
+      }
+    },
+    "committed_physical_requests": 45548,
+    "physical_attempt_directories": 1816,
+    "slots_with_multiple_physical_attempts": 16,
+    "judge": {
+      "calls": 1125.0,
+      "charged_or_reserved_usd": 8.860089700000003
+    },
+    "judge_by_mode": {
+      "actor1": {
+        "calls": 190.0,
+        "usd": 1.451778900000001,
+        "input_tokens": 1016739.0,
+        "output_tokens": 75765.0
+      },
+      "actor2": {
+        "calls": 190.0,
+        "usd": 1.4579235000000008,
+        "input_tokens": 1024025.0,
+        "output_tokens": 75340.0
+      },
+      "arm": {
+        "calls": 177.0,
+        "usd": 1.4471842000000001,
+        "input_tokens": 1026222.0,
+        "output_tokens": 72350.0
+      },
+      "actor4": {
+        "calls": 189.0,
+        "usd": 1.4776222999999997,
+        "input_tokens": 1050345.0,
+        "output_tokens": 73237.0
+      },
+      "actor3": {
+        "calls": 191.0,
+        "usd": 1.4714446999999995,
+        "input_tokens": 1035973.0,
+        "output_tokens": 75426.0
+      },
+      "actor0": {
+        "calls": 187.0,
+        "usd": 1.4827428000000007,
+        "input_tokens": 1047060.0,
+        "output_tokens": 75222.0
+      }
+    },
+    "judge_response_models": {
+      "o4-mini-2025-04-16": 1124
+    }
+  },
+  "failure_audit": {
+    "by_mode": {
+      "actor0": {
+        "startup_failure_before_first_actor_request": 21,
+        "browser_step_error": 6,
+        "context_limit_rejected_before_model_forward": 1
+      },
+      "actor3": {
+        "startup_failure_before_first_actor_request": 22,
+        "context_limit_rejected_before_model_forward": 2,
+        "browser_step_error": 6
+      },
+      "actor1": {
+        "startup_failure_before_first_actor_request": 20,
+        "browser_step_error": 7,
+        "context_limit_rejected_before_model_forward": 1
+      },
+      "actor2": {
+        "startup_failure_before_first_actor_request": 21,
+        "context_limit_rejected_before_model_forward": 1,
+        "browser_step_error": 3
+      },
+      "arm": {
+        "startup_failure_before_first_actor_request": 21,
+        "context_limit_rejected_before_model_forward": 7,
+        "browser_step_error": 3
+      },
+      "actor4": {
+        "startup_failure_before_first_actor_request": 21,
+        "browser_step_error": 3
+      }
+    },
+    "server_errors": {
+      "0": {
+        "context_limit": 420
+      },
+      "1": {
+        "context_limit": 1980
+      }
+    },
+    "context_attribution": "HTTP400 episode artifacts plus server-wide audit that every HTTP error was a context rejection. Tokenizer validation occurs before scheduler submission.",
+    "handling": "Raw records and overall outcomes unchanged. Context exhaustion remains a policy failure; it is counted as an observed failure in the additional common-valid sensitivity."
+  },
+  "model_flops": {
+    "counter_version": "3dc08679bba53120c3845237a6ca95a8e5a4353d6c4b439dee91da2266cdb404",
+    "records": 1800,
+    "missing_records": 0,
+    "counts": {
+      "received_actor_requests": 45508,
+      "unmetered_actor_requests": 40,
+      "retractions": 0,
+      "selector_calls": 4773,
+      "images_verified": 19782,
+      "context_rejected_requests_no_model_forward": 40,
+      "unclassified_failed_actor_requests": 0
+    },
+    "failure_audit": {
+      "by_mode": {
+        "actor0": {
+          "startup_failure_before_first_actor_request": 21,
+          "browser_step_error": 6,
+          "context_limit_rejected_before_model_forward": 1
+        },
+        "actor3": {
+          "startup_failure_before_first_actor_request": 22,
+          "context_limit_rejected_before_model_forward": 2,
+          "browser_step_error": 6
+        },
+        "actor1": {
+          "startup_failure_before_first_actor_request": 20,
+          "browser_step_error": 7,
+          "context_limit_rejected_before_model_forward": 1
+        },
+        "actor2": {
+          "startup_failure_before_first_actor_request": 21,
+          "context_limit_rejected_before_model_forward": 1,
+          "browser_step_error": 3
+        },
+        "arm": {
+          "startup_failure_before_first_actor_request": 21,
+          "context_limit_rejected_before_model_forward": 7,
+          "browser_step_error": 3
+        },
+        "actor4": {
+          "startup_failure_before_first_actor_request": 21,
+          "browser_step_error": 3
+        }
+      },
+      "server_errors": {
+        "0": {
+          "context_limit": 420
+        },
+        "1": {
+          "context_limit": 1980
+        }
+      },
+      "context_attribution": "HTTP400 episode artifacts plus server-wide audit that every HTTP error was a context rejection. Tokenizer validation occurs before scheduler submission.",
+      "handling": "Raw records and overall outcomes unchanged. Context exhaustion remains a policy failure; it is counted as an observed failure in the additional common-valid sensitivity."
+    },
+    "convention": "Multiply-add=2 FLOPs; dominant matrix/conv and QK/AV work; causal attention counts only allowed query/key pairs.",
+    "uniform_cache_model": "shared_state_flops: identical full-state prefill and image encodings shared within a task/policy, including ordinary episode subsets; no partial-prefix reuse. Idealized uniform cache policy, not measured hardware FLOPs.",
+    "reporting_policy": "Present implementation-specific observed-KV vision bounds and uniform cache models together; do not select a favorable cache model after seeing outcomes.",
+    "sensitivity_models": {
+      "cold_request_flops": "Recompute input/vision for every actor request; within-response autoregressive KV reuse retained.",
+      "observed_kv_lower_flops": "Observed actor LM prefix hits; zero actor image-encoder misses; actual selector forward work.",
+      "observed_kv_upper_flops": "Observed actor LM prefix hits; actor encoder recomputed in every uncached prefill chunk; actual selector forward work."
+    },
+    "limits": [
+      "Elementwise/norm/softmax operations, kernel padding and CPU work excluded.",
+      "Image-embedding cache hit/miss events were not logged; observed-KV totals have explicit vision bounds.",
+      "Unclassified failed requests and retractions can add unaccounted work; context rejections precede GPU scheduler submission.",
+      "Per-policy curves cover committed episodes; interrupted physical attempts and server startup are charged in whole-allocation GPU-hours.",
+      "Serving efficiency, memory traffic, browser time and API judge cost are separate metrics."
+    ],
+    "architecture": {
+      "text_config": {
+        "attention_bias": false,
+        "attention_dropout": 0.0,
+        "bos_token_id": 151643,
+        "dtype": "bfloat16",
+        "eos_token_id": 151645,
+        "head_dim": 128,
+        "hidden_act": "silu",
+        "hidden_size": 2560,
+        "initializer_range": 0.02,
+        "intermediate_size": 9728,
+        "max_position_embeddings": 262144,
+        "model_type": "qwen3_vl_text",
+        "num_attention_heads": 32,
+        "num_hidden_layers": 36,
+        "num_key_value_heads": 8,
+        "rms_norm_eps": 1e-06,
+        "rope_scaling": {
+          "mrope_interleaved": true,
+          "mrope_section": [
+            24,
+            20,
+            20
+          ],
+          "rope_type": "default"
+        },
+        "rope_theta": 5000000,
+        "tie_word_embeddings": true,
+        "use_cache": true,
+        "vocab_size": 151936
+      },
+      "vision_config": {
+        "deepstack_visual_indexes": [
+          5,
+          11,
+          17
+        ],
+        "depth": 24,
+        "hidden_act": "gelu_pytorch_tanh",
+        "hidden_size": 1024,
+        "in_channels": 3,
+        "initializer_range": 0.02,
+        "intermediate_size": 4096,
+        "model_type": "qwen3_vl",
+        "num_heads": 16,
+        "num_position_embeddings": 2304,
+        "out_hidden_size": 2560,
+        "patch_size": 16,
+        "spatial_merge_size": 2,
+        "temporal_patch_size": 2
+      }
+    },
+    "actor_selector_dimensions_identical": true,
+    "selector_image_max_pixels": 262144,
+    "actor_image_max_pixels": 16777216,
+    "sources": [
+      "https://arxiv.org/abs/2511.21631",
+      "https://docs.pytorch.org/docs/stable/profiler"
+    ],
+    "curve": {
+      "arm": {
+        "success": 0.3933333333333333,
+        "cold_request_flops": 9249074338728290.0,
+        "observed_kv_lower_flops": 1815416711384050.2,
+        "observed_kv_upper_flops": 2268907763440899.5,
+        "shared_state_flops": 2544410791376104.0
+      },
+      "actor": [
+        {
+          "k": 1,
+          "success": 0.35200000000000004,
+          "cold_request_flops": 1390541769137455.2,
+          "observed_kv_lower_flops": 351654215357650.25,
+          "observed_kv_upper_flops": 433916089944943.25,
+          "shared_state_flops": 1368945509458073.0
+        },
+        {
+          "k": 2,
+          "success": 0.46166666666666667,
+          "cold_request_flops": 2781083538274910.5,
+          "observed_kv_lower_flops": 703308430715300.5,
+          "observed_kv_upper_flops": 867832179889886.5,
+          "shared_state_flops": 2722638028133062.0
+        },
+        {
+          "k": 3,
+          "success": 0.523,
+          "cold_request_flops": 4171625307412365.5,
+          "observed_kv_lower_flops": 1054962646072950.9,
+          "observed_kv_upper_flops": 1301748269834829.8,
+          "shared_state_flops": 4072826063141688.5
+        },
+        {
+          "k": 4,
+          "success": 0.564,
+          "cold_request_flops": 5562167076549821.0,
+          "observed_kv_lower_flops": 1406616861430601.0,
+          "observed_kv_upper_flops": 1735664359779773.0,
+          "shared_state_flops": 5420751058744771.0
+        },
+        {
+          "k": 5,
+          "success": 0.5933333333333334,
+          "cold_request_flops": 6952708845687276.0,
+          "observed_kv_lower_flops": 1758271076788251.2,
+          "observed_kv_upper_flops": 2169580449724716.2,
+          "shared_state_flops": 6766967335125866.0
+        }
+      ],
+      "matched_expected_budget": {
+        "cold_request_flops": {
+          "covered": false,
+          "arm_cost": 9249074338728290.0,
+          "actor5_cost": 6952708845687276.0,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "observed_kv_lower_flops": {
+          "covered": false,
+          "arm_cost": 1815416711384050.2,
+          "actor5_cost": 1758271076788251.2,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "observed_kv_upper_flops": {
+          "covered": false,
+          "arm_cost": 2268907763440899.5,
+          "actor5_cost": 2169580449724716.2,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "shared_state_flops": {
+          "covered": true,
+          "arm_cost": 2544410791376104.0,
+          "lower_k": 1,
+          "upper_k": 2,
+          "upper_k_probability": 0.8683399410883876,
+          "actor_success_at_equal_expected_cost": 0.4472279468726932,
+          "arm_minus_actor": -0.05389461353935987
+        }
+      },
+      "vision_cache_sensitivity": {
+        "arm_to_actor5_cost_ratio": [
+          0.8367593428556183,
+          1.290419772806252
+        ],
+        "less_budget_more_expensive_baseline": {
+          "covered": true,
+          "arm_cost": 1815416711384050.2,
+          "lower_k": 4,
+          "upper_k": 5,
+          "upper_k_probability": 0.1837967142780912,
+          "actor_success_at_equal_expected_cost": 0.5693913702854907,
+          "arm_minus_actor": -0.17605803695215738
+        },
+        "more_budget_cheaper_baseline": {
+          "covered": false,
+          "arm_cost": 2268907763440899.5,
+          "actor5_cost": 1758271076788251.2,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "interpretation": "Cross-method extreme vision-cache assumptions; not a statistical confidence interval. No extrapolation beyond k=5."
+      },
+      "bootstrap": {
+        "by_cost_model": {
+          "cold_request_flops": {
+            "draws": 5000,
+            "covered_draws": 0,
+            "matched_difference_95": null,
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                8246099138395771.0,
+                1269902476689568.8,
+                2539804953379137.5,
+                3809707430068710.5,
+                5079609906758275.0,
+                6349512383447849.0
+              ],
+              [
+                1.0268544070752798e+16,
+                1513823913488070.8,
+                3027647826976141.5,
+                4541471740464217.0,
+                6055295653952283.0,
+                7569119567440356.0
+              ]
+            ]
+          },
+          "observed_kv_lower_flops": {
+            "draws": 5000,
+            "covered_draws": 1027,
+            "matched_difference_95": [
+              -0.23734601713555553,
+              -0.13571015880683068
+            ],
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                1655367407119078.0,
+                324172961087482.3,
+                648345922174964.6,
+                972518883262447.5,
+                1296691844349929.2,
+                1620864805437412.5
+              ],
+              [
+                1975052372780575.8,
+                379838388171114.44,
+                759676776342228.9,
+                1139515164513344.2,
+                1519353552684457.8,
+                1899191940855573.2
+              ]
+            ]
+          },
+          "observed_kv_upper_flops": {
+            "draws": 5000,
+            "covered_draws": 551,
+            "matched_difference_95": [
+              -0.23341619631037985,
+              -0.12960391577274064
+            ],
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                2073592838647300.0,
+                400771948407294.0,
+                801543896814588.0,
+                1202315845221882.0,
+                1603087793629176.0,
+                2003859742036471.8
+              ],
+              [
+                2462854493616631.5,
+                467846105430923.7,
+                935692210861847.4,
+                1403538316292771.2,
+                1871384421723694.8,
+                2339230527154620.0
+              ]
+            ]
+          },
+          "shared_state_flops": {
+            "draws": 5000,
+            "covered_draws": 5000,
+            "matched_difference_95": [
+              -0.10625628521201355,
+              -0.0012311529167040485
+            ],
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                2281656552405151.0,
+                1249933736603468.8,
+                2485054784100752.5,
+                3717473075024193.0,
+                4947308184733010.0,
+                6175125053134906.0
+              ],
+              [
+                2806823810564019.0,
+                1490830401711370.0,
+                2966305567057607.0,
+                4437986798501665.5,
+                5907362314620463.0,
+                7374551549474953.0
+              ]
+            ]
+          }
+        },
+        "success_95": [
+          [
+            0.33999999999999997,
+            0.31133333333333335,
+            0.41499166666666687,
+            0.47300000000000025,
+            0.5113333333333335,
+            0.54
+          ],
+          [
+            0.4499999999999999,
+            0.3953500000000001,
+            0.5110000000000002,
+            0.5743333333333334,
+            0.6166666666666665,
+            0.6467499999999992
+          ]
+        ],
+        "column_order": [
+          "arm",
+          "actor-pass@1",
+          "actor-pass@2",
+          "actor-pass@3",
+          "actor-pass@4",
+          "actor-pass@5"
+        ]
+      },
+      "interpretation": "Equal expected model work using an outcome-independent randomized mixture of adjacent k; no per-task hard-cap claim. Pass@k is an oracle success bound."
+    },
+    "common_valid_sensitivity_tasks": 264,
+    "common_valid_sensitivity_curve": {
+      "arm": {
+        "success": 0.42424242424242425,
+        "cold_request_flops": 1.0008233188512364e+16,
+        "observed_kv_lower_flops": 1959945450593559.2,
+        "observed_kv_upper_flops": 2446990974712366.5,
+        "shared_state_flops": 2750085584447922.5
+      },
+      "actor": [
+        {
+          "k": 1,
+          "success": 0.3878787878787879,
+          "cold_request_flops": 1481928724099345.0,
+          "observed_kv_lower_flops": 374849538966050.1,
+          "observed_kv_upper_flops": 462719400426080.2,
+          "shared_state_flops": 1458920535488226.5
+        },
+        {
+          "k": 2,
+          "success": 0.5064393939393939,
+          "cold_request_flops": 2963857448198690.0,
+          "observed_kv_lower_flops": 749699077932100.2,
+          "observed_kv_upper_flops": 925438800852160.4,
+          "shared_state_flops": 2901431121067957.5
+        },
+        {
+          "k": 3,
+          "success": 0.5727272727272726,
+          "cold_request_flops": 4445786172298035.5,
+          "observed_kv_lower_flops": 1124548616898150.2,
+          "observed_kv_upper_flops": 1388158201278240.5,
+          "shared_state_flops": 4340176805928761.0
+        },
+        {
+          "k": 4,
+          "success": 0.6166666666666667,
+          "cold_request_flops": 5927714896397380.0,
+          "observed_kv_lower_flops": 1499398155864200.5,
+          "observed_kv_upper_flops": 1850877601704320.8,
+          "shared_state_flops": 5776484050952787.0
+        },
+        {
+          "k": 5,
+          "success": 0.6477272727272727,
+          "cold_request_flops": 7409643620496725.0,
+          "observed_kv_lower_flops": 1874247694830250.8,
+          "observed_kv_upper_flops": 2313597002130401.0,
+          "shared_state_flops": 7210944573369996.0
+        }
+      ],
+      "matched_expected_budget": {
+        "cold_request_flops": {
+          "covered": false,
+          "arm_cost": 1.0008233188512364e+16,
+          "actor5_cost": 7409643620496725.0,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "observed_kv_lower_flops": {
+          "covered": false,
+          "arm_cost": 1959945450593559.2,
+          "actor5_cost": 1874247694830250.8,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "observed_kv_upper_flops": {
+          "covered": false,
+          "arm_cost": 2446990974712366.5,
+          "actor5_cost": 2313597002130401.0,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "shared_state_flops": {
+          "covered": true,
+          "arm_cost": 2750085584447922.5,
+          "lower_k": 1,
+          "upper_k": 2,
+          "upper_k_probability": 0.8950818537257315,
+          "actor_success_at_equal_expected_cost": 0.49400023493036127,
+          "arm_minus_actor": -0.06975781068793702
+        }
+      },
+      "vision_cache_sensitivity": {
+        "arm_to_actor5_cost_ratio": [
+          0.8471421119532947,
+          1.3055856925751688
+        ],
+        "less_budget_more_expensive_baseline": {
+          "covered": true,
+          "arm_cost": 1959945450593559.2,
+          "lower_k": 4,
+          "upper_k": 5,
+          "upper_k_probability": 0.2357105597664738,
+          "actor_success_at_equal_expected_cost": 0.6239879795078981,
+          "arm_minus_actor": -0.19974555526547383
+        },
+        "more_budget_cheaper_baseline": {
+          "covered": false,
+          "arm_cost": 2446990974712366.5,
+          "actor5_cost": 1874247694830250.8,
+          "reason": "Guided cost exceeds measured curve; no extrapolation"
+        },
+        "interpretation": "Cross-method extreme vision-cache assumptions; not a statistical confidence interval. No extrapolation beyond k=5."
+      },
+      "bootstrap": {
+        "by_cost_model": {
+          "cold_request_flops": {
+            "draws": 5000,
+            "covered_draws": 0,
+            "matched_difference_95": null,
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                8938710542177112.0,
+                1355930447988747.8,
+                2711860895977495.5,
+                4067791343966241.5,
+                5423721791954991.0,
+                6779652239943735.0
+              ],
+              [
+                1.1067156928680826e+16,
+                1604516974229610.5,
+                3209033948459221.0,
+                4813550922688829.0,
+                6418067896918442.0,
+                8022584871148052.0
+              ]
+            ]
+          },
+          "observed_kv_lower_flops": {
+            "draws": 5000,
+            "covered_draws": 665,
+            "matched_difference_95": [
+              -0.2611549080043629,
+              -0.15243136020880568
+            ],
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                1788647569393564.2,
+                346940793099679.9,
+                693881586199359.8,
+                1040822379299039.8,
+                1387763172398719.5,
+                1734703965498399.0
+              ],
+              [
+                2127934162753908.0,
+                402012563102161.44,
+                804025126204322.9,
+                1206037689306484.0,
+                1608050252408645.8,
+                2010062815510807.2
+              ]
+            ]
+          },
+          "observed_kv_upper_flops": {
+            "draws": 5000,
+            "covered_draws": 357,
+            "matched_difference_95": [
+              -0.252818381523459,
+              -0.15110911445757733
+            ],
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                2240298257405301.2,
+                429328314424385.75,
+                858656628848771.5,
+                1287984943273157.0,
+                1717313257697543.0,
+                2146641572121929.2
+              ],
+              [
+                2646040606591297.5,
+                495408346826688.9,
+                990816693653377.8,
+                1486225040480066.5,
+                1981633387306755.5,
+                2477041734133444.5
+              ]
+            ]
+          },
+          "shared_state_flops": {
+            "draws": 5000,
+            "covered_draws": 5000,
+            "matched_difference_95": [
+              -0.12671364369584465,
+              -0.010225390271876168
+            ],
+            "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+            "mean_cost_95": [
+              [
+                2468111964711588.0,
+                1335827895980273.2,
+                2656166341918477.5,
+                3972039199548788.5,
+                5285559872413139.0,
+                6597392452203982.0
+              ],
+              [
+                3025322870589551.5,
+                1579698826880359.2,
+                3142574911503493.5,
+                4702477763347238.0,
+                6259662233917665.0,
+                7814512641952273.0
+              ]
+            ]
+          }
+        },
+        "success_95": [
+          [
+            0.36742424242424215,
+            0.3409090909090909,
+            0.45416666666666655,
+            0.5174242424242422,
+            0.5590909090909089,
+            0.5871212121212117
+          ],
+          [
+            0.4848484848484845,
+            0.43333333333333324,
+            0.5564393939393938,
+            0.6257575757575754,
+            0.6712121212121209,
+            0.704545454545454
+          ]
+        ],
+        "column_order": [
+          "arm",
+          "actor-pass@1",
+          "actor-pass@2",
+          "actor-pass@3",
+          "actor-pass@4",
+          "actor-pass@5"
+        ]
+      },
+      "interpretation": "Equal expected model work using an outcome-independent randomized mixture of adjacent k; no per-task hard-cap claim. Pass@k is an oracle success bound."
+    }
+  },
+  "matched_browser_budgets": {
+    "comparisons": {
+      "browser_steps": {
+        "covered": true,
+        "arm_cost": 15.886666666666667,
+        "lower_k": 1,
+        "upper_k": 2,
+        "upper_k_probability": 0.10421203836708223,
+        "actor_success_at_equal_expected_cost": 0.3634285868742567,
+        "arm_minus_actor": 0.029904746459076592,
+        "bootstrap": {
+          "draws": 5000,
+          "covered_draws": 5000,
+          "matched_difference_95": [
+            -0.014944199154999109,
+            0.07467231430881072
+          ],
+          "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+          "mean_cost_95": [
+            [
+              14.643333333333324,
+              13.372000000000002,
+              26.744000000000003,
+              40.11600000000001,
+              53.48800000000001,
+              66.85999999999999
+            ],
+            [
+              17.163333333333316,
+              15.409999999999997,
+              30.819999999999993,
+              46.22999999999998,
+              61.639999999999986,
+              77.04999999999998
+            ]
+          ]
+        }
+      },
+      "browser_step_seconds": {
+        "covered": true,
+        "arm_cost": 67.94362811777431,
+        "lower_k": 1,
+        "upper_k": 2,
+        "upper_k_probability": 0.33774811238834773,
+        "actor_success_at_equal_expected_cost": 0.38903970965858886,
+        "arm_minus_actor": 0.004293623674744451,
+        "bootstrap": {
+          "draws": 5000,
+          "covered_draws": 5000,
+          "matched_difference_95": [
+            -0.04804052987649762,
+            0.05493147392346286
+          ],
+          "interval_interpretation": "Paired task bootstrap, re-estimating costs and mixture weights; interval conditional on observed k<=5 covering the budget.",
+          "mean_cost_95": [
+            [
+              57.1851050693242,
+              45.00918773370517,
+              90.01837546741034,
+              135.02756320111538,
+              180.03675093482067,
+              225.0459386685258
+            ],
+            [
+              79.57027763592288,
+              56.61517491775231,
+              113.23034983550463,
+              169.84552475325688,
+              226.46069967100925,
+              283.07587458876156
+            ]
+          ]
+        }
+      }
+    },
+    "interpretation": "Separate resource axis; equal expected browser-step calls or measured step-seconds, not equal model compute. Steps include terminal done calls. Browser initialization, queues and judging are outside step-seconds."
+  },
+  "allocations": [
+    {
+      "job_id": "343534",
+      "shard": 0,
+      "state": "FAILED",
+      "elapsed_seconds": 33,
+      "gpu_hours": 0.018333333333333333,
+      "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+    },
+    {
+      "job_id": "343535",
+      "shard": 1,
+      "state": "FAILED",
+      "elapsed_seconds": 33,
+      "gpu_hours": 0.018333333333333333,
+      "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+    },
+    {
+      "job_id": "343537",
+      "shard": 0,
+      "state": "FAILED",
+      "elapsed_seconds": 14105,
+      "gpu_hours": 7.836111111111111,
+      "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+    },
+    {
+      "job_id": "343538",
+      "shard": 1,
+      "state": "FAILED",
+      "elapsed_seconds": 14105,
+      "gpu_hours": 7.836111111111111,
+      "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+    },
+    {
+      "job_id": "343856",
+      "shard": 0,
+      "state": "COMPLETED",
+      "elapsed_seconds": 3399,
+      "gpu_hours": 1.8883333333333334,
+      "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+    },
+    {
+      "job_id": "343857",
+      "shard": 1,
+      "state": "COMPLETED",
+      "elapsed_seconds": 4810,
+      "gpu_hours": 2.672222222222222,
+      "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+    }
+  ],
+  "total_gpu_hours": 20.269444444444446,
+  "artifact_audit": {
+    "committed_records": 1800,
+    "result_hashes_verified": 1800,
+    "trace_hashes_verified": 1674,
+    "selector_fallbacks": 0,
+    "analysis_code_sha256": {
+      "scripts/report_arm_controlled_inference.py": "57f9e18200dbdf2adc71deb4e0c5dea1f988e14eb1d0066df88cb3c95500d89f",
+      "scripts/estimate_arm_inference_flops.py": "45d825195a061b158be256a45ae3a1cd5c8b919618697712a8b48774acc09b5f",
+      "openwebrl/arm_inference_flops.py": "57d7a038bf4b0aaf443ebcc13da841b37edd30f210ec730e8f11ab05526957ac"
+    }
+  },
+  "limits": [
+    "One guided episode per task; paired seeds/tasks do not remove live website drift.",
+    "Shared actor batches and a dedicated selector GPU prevent exact per-method GPU-hour attribution.",
+    "Backend end-to-end latency includes queuing; selector service time excludes its queue. Neither is GPU kernel time.",
+    "Token totals cover received responses; interrupted/failed requests may have unreported work, included only in whole-allocation GPU-hours.",
+    "Benchmark trajectories are evaluation-only and excluded from critic training.",
+    "AgentTrek judge and local browser sampling are the frozen historical protocol, not the separate stealth protocol."
+  ]
+}

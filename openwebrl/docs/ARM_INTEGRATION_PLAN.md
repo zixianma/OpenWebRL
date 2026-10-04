@@ -117,8 +117,15 @@ state restoration rather than assuming a URL reload restores the state. That
 panel can measure action ranking and advantage sign. Distill validated
 post-action signals into a pre-action scorer for deployment if useful.
 
-The inference-cost audit and required episode-level control are described in
-[ARM_INFERENCE.md](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
+The [controlled inference experiment is complete](ARM_INFERENCE.md#arm-controlled-inference-results-20261004):
+ARM39.33%, ordinary pass@1 35.20%, pass@5 59.33%. Ordinary pass@4 has higher
+oracle success and lower estimated current-serving model FLOPs; ARM uses fewer
+browser steps. Even the hypothetical uniform-cache equal-compute comparison
+favors ordinary resampling (44.72% versus39.33%, paired ARM difference−5.39pp,
+95% interval−10.63 to−0.12pp). A deployable episode verifier is still missing.
+Keep critic quality/ranking and cache efficiency separate in the next study;
+the completed benchmark episodes remain evaluation-only. The historical
+[cost audit](ARM_INFERENCE.md#arm-inference-cost-passk-20261004) is separate.
 
 <a id="arm-selection-control-20261003"></a>
 ## Next experiment: independent ARM task-selection control — October3
