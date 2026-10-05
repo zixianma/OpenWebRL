@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791182812.853396,
+  "snapshot_epoch": 1791183440.5489445,
   "rows": [
     {
       "id": "AS01",
@@ -9,9 +9,11 @@
       "mode": "qwen",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "prepared_awaiting_exact_budget_approval",
+      "status": "queued",
       "protocol_group": "luna_full300",
-      "job_id": null
+      "job_id": "344754",
+      "successes": 0,
+      "valid": 0
     },
     {
       "id": "AS02",
@@ -21,9 +23,11 @@
       "mode": "qwen_luna5",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "prepared_awaiting_exact_budget_approval",
+      "status": "queued",
       "protocol_group": "luna_full300",
-      "job_id": null
+      "job_id": "344754",
+      "successes": 0,
+      "valid": 0
     },
     {
       "id": "AS04",
@@ -48,9 +52,11 @@
       "mode": "sft_luna5",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "prepared_awaiting_exact_budget_approval",
+      "status": "queued",
       "protocol_group": "luna_full300",
-      "job_id": null
+      "job_id": "344754",
+      "successes": 0,
+      "valid": 0
     },
     {
       "id": "AS06",
@@ -60,9 +66,11 @@
       "mode": "sft_luna10",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "prepared_awaiting_exact_budget_approval",
+      "status": "queued",
       "protocol_group": "luna_full300",
-      "job_id": null
+      "job_id": "344754",
+      "successes": 0,
+      "valid": 0
     },
     {
       "id": "AS07",
@@ -71,10 +79,12 @@
       "n": 1,
       "mode": "luna",
       "target_tasks": 300,
-      "recorded_episodes": 0,
-      "status": "prepared_awaiting_exact_budget_approval",
+      "recorded_episodes": 4,
+      "status": "running",
       "protocol_group": "luna_full300",
-      "job_id": null
+      "job_id": "344755",
+      "successes": 2,
+      "valid": 4
     },
     {
       "id": "AS08",
@@ -83,10 +93,13 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 24,
+      "recorded_episodes": 33,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
-      "job_id": "344708"
+      "job_id": "344708",
+      "successes": 25,
+      "valid": 32,
+      "verified_complete": false
     },
     {
       "id": "AS09",
@@ -95,10 +108,13 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 25,
+      "recorded_episodes": 32,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
-      "job_id": "344661"
+      "job_id": "344661",
+      "successes": 23,
+      "valid": 32,
+      "verified_complete": false
     }
   ],
   "excluded": [
@@ -125,31 +141,38 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T06:46:52Z",
+  "snapshot_utc": "2026-10-05T06:57:20Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
-  "proposed_luna_budgets": {
-    "approved": false,
+  "approved_luna_budgets": {
+    "approved": true,
     "gpu_pool": {
       "gpu_type": "H200",
       "gpus": 8,
       "cpus": 64,
       "memory_gib": 960,
       "total_hours": 16,
-      "total_gpu_hours": 128
+      "total_gpu_hours": 128,
+      "job_id": "344754",
+      "scheduler_state": "PENDING",
+      "scheduler_reason": "Priority"
     },
     "cpu_pool": {
       "gpus": 0,
       "cpus": 16,
       "memory_gib": 32,
-      "total_hours": 4
+      "total_hours": 4,
+      "job_id": "344755",
+      "scheduler_state": "RUNNING"
     },
     "shared_api": {
       "luna_usd": 100,
       "luna_requests": 39600,
       "judge_usd": 25,
       "judge_requests": 6600
-    }
+    },
+    "ceiling_not_target": true,
+    "exit_early_when_complete": true
   }
 }

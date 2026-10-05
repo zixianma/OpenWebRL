@@ -10,7 +10,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Full300 SFT+Jev344708 and SFT+Kev27B344661: T1.0/p0.95/4K; partial audits and private reviews updated; Jev timeout preserved; baseline remains a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
 
 [Unified actor/selector experiment tracker: all eight full-set rows, existing SFT baseline, Luna preparations and live Jev/Kev runs; protocol and telemetry differences explicit](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
-[October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; exact new budget approval pending](ARM_INFERENCE.md#luna-actor-full300-20261004).
+[October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; approved GPU344754 queued and CPU344755 running independently](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [October4 Qwen Thinking / official OpenWebRL SFT / Luna comparison: official SFT N=5 and Qwen recovery queued concurrently, two GPUs each with adaptive reuse;50 episodes and cost/latency/token plots within the original total budget](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

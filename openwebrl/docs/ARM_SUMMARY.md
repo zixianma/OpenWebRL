@@ -18,7 +18,9 @@ alone, Luna alone, Qwen + Luna N=5, and official OpenWebRL-SFT + Luna N=5/10:
 SFT-only full300 as a protocol-different reference (T0.7/p0.9/1024 output),
 without a new SFT-only or Luna+Luna run. Track performance, cost, latency,
 input/output tokens, browser steps and local compute; plot success against
-cost/latency/tokens. New compute/API ceilings await exact approval.
+cost/latency/tokens. Budgets are approved: GPU344754 is queued for up to
+8 H200 ×16h; CPU344755 has started independently with a4h ceiling. Shared
+API caps are$100 Luna/$25 judge. Jobs release resources when their work finishes.
 [Full-set matrix, baseline caveat and budget](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [Unified eight-run tracker, including SFT + Jev/Kev](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 
