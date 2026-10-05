@@ -708,7 +708,7 @@ two concurrent episodes, top-p0.95/top-k20,4096 response tokens,
 with the proposed allocations and caps. A new frozen source revision preserves
 the earlier pilot/preparation settings. Each run collects300 fresh
 episodes, including the pilot's first10 tasks; the pilot remains separate.
-Jobs **344793 (Kev27B)** and **344794 (Jev)** are running under the following
+Jobs **344793 (Kev27B)** and **345021 (Jev)** are running under the following
 separate approvals. Both replacements have produced fresh selections and resumed
 their original W&B identities; neither has a full300 result yet.
 The first two recovered Kev episodes have saved final images and canonical
@@ -726,8 +726,36 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 345021 | 10-05 04:43 PDT | 190/300 | 179 | 11 | 123 | 18181 |
-| SFT + Kev27B | 344793 | 10-05 01:11 PDT | 58/300 | 56 | 2 | 38 | 6636 |
+| SFT + Kev27B | 344793 | 10-05 04:53 PDT | 212/300 | 207 | 5 | 144 | 19956 |
 <!-- sft-full300-live-audit:end -->
+
+<a id="sft-kev-progress-audit-20261005"></a>
+**Kev evidence follow-up — October 5.** Job 344793 continues with the original
+frozen replacement worker and W&B identity. The 212-record audit verifies 207
+scored episodes, 144 canonical positives and five diagnosed invalids; no
+unexplained evidence mismatches remain. All 58 previously audited results and
+all 42 pre-typing-fix outcomes are byte-identical. This partial aggregate still
+mixes the explicitly labeled earlier and corrected typing harnesses.
+
+The three newly diagnosed invalids comprise two navigation races in the selector
+text-capture wrapper and one lost browser page. The navigation failures retain
+pre-action images, not verified terminal screenshots. All three have preserved
+rollouts and confirmed browser shutdown, with no judge request or selective
+rerun. A future navigation repair must recapture a coherent image/text state
+without repeating actions; it is not deployed into this healthy frozen cohort.
+Two stale browser markers were reconciled against provider metadata confirming
+that the sessions had already stopped; the SDK had rejected billing values in
+scientific notation. This was a receipt-parsing failure, not evidence of excess
+live browsers.
+
+The private review includes six newly inspected final images and an additional
+judge caveat: a positive accepted a weaker review-playtime filter than requested,
+contradicted by the visible reviews. Canonical verdicts remain unchanged. The
+last 60 checked selector requests all returned HTTP 200 in 0.23–1.59 seconds, and
+remote W&B remained running with the approved sampling configuration. At this
+audit 19,956 scheduler seconds were charged across both attempts, leaving 16,044
+of the original 36,000 seconds. Full300 remains incomplete and active-agent
+continuation is verified.
 
 <a id="sft-jev-context-recovery-20261005"></a>
 **Jev input-limit recovery — October 5.** Job344794 stopped after189 saved
