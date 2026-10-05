@@ -725,7 +725,7 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 345021 | 10-05 05:35 PDT | 222/300 | 210 | 12 | 140 | 21270 |
+| SFT + Jev | 345021 | 10-05 05:55 PDT | 237/300 | 225 | 12 | 150 | 22457 |
 | SFT + Kev27B | 344793 | 10-05 05:49 PDT | 248/300 | 241 | 7 | 162 | 23302 |
 <!-- sft-full300-live-audit:end -->
 
@@ -861,6 +861,21 @@ purchase price substituted for ownership cost, a playlist repost treated as a
 song repost, and a most-viewed ranking inferred after an unsuccessful sort
 click. The private review retains the exact images, selected actions and judge
 verdicts with evidence notes; all canonical scores remain unchanged.
+
+The 237-record Jev audit retains 12 diagnosed invalids and verifies 225 scored
+episodes with 150 canonical positives. Its paired pricing and Steam Deck tasks
+satisfy the conditions previously missed by Kev: the saved pricing text supports
+the multiline total, and the actual device-use filter is selected. All 222
+previously audited result files remain byte-identical.
+
+New evidence notes flag a women's/men's size mix-up in the cart and an
+unestablished newest-report claim based on a single forecast statistic in mixed
+search results. A possible false negative is also retained: the official
+provisional 2027 SuperBike calendar supports the reported Italian venues/dates,
+which are upcoming relative to this October 2026 evaluation; the judge instead
+assumes the task requires this year's events, although no year was specified.
+The private review preserves the exact supporting evidence and uncertainty;
+canonical positive and negative scores are unchanged.
 
 <a id="sft-selector-platform-clearing-20261005"></a>
 **Confirmed typing-harness defect and recovery — October5.** The cloud provider
