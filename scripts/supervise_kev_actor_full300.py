@@ -18,6 +18,20 @@ def write(path, value):
     temporary.write_text(json.dumps(value,indent=2)+'\n');temporary.replace(path)
 
 
+def continuation_prompt(root, pointer, job):
+    prompt=(f'[Authorized Kev27B actor full300 supervision] Check {pointer} first. '
+        'If verified_complete, silently ack this stale callback and stop; no user-facing repeat. '
+        f'Read {root}/plan.json, approval.json and supervisor-latest.json; '
+        f'ack: python3 scripts/supervise_kev_actor_full300.py --root {root} --ack. '
+        f'Follow job {job}: logs, GPU use, rollouts, final screenshots, judges, W&B. '
+        'Diagnose/test/fix/relaunch within approved total resource/API/browser caps; charge every attempt, '
+        'preserve evidence and update replacement pointer. Audit all300 before verified_complete; '
+        'update docs/private review. Report only meaningful changes, routine at most hourly; '
+        'alert failures and first verified completion promptly. No added budget.')
+    if len(prompt.encode())>1000:raise ValueError('Continuation prompt exceeds queue limit')
+    return prompt
+
+
 def poll(root, pointer, thread):
     current=read(pointer);plan=read(root/'plan.json');approval=read(root/'approval.json')
     if not approval.get('approved'):
@@ -50,18 +64,23 @@ def poll(root, pointer, thread):
     old=read(root/'supervisor-state.json');ack=read(root/'supervisor-ack.json').get('epoch',0)
     signature=[job,record[1],heart.get('stage'),stale,halted,invalid,bool(snapshot['summary'].get('collection_complete'))]
     pending=old.get('queued_epoch',0)>ack
-    if not pending and (signature!=old.get('signature') or now-max(ack,old.get('queued_epoch',0))>=900):
-        prompt=(f'[Authorized Kev27B actor full300 supervision] Read {root}/plan.json, approval.json and supervisor-latest.json; '
-            'ack with scripts/supervise_kev_actor_full300.py --root '+str(root)+' --ack. '
-            f'Follow current {mode} job{job}; inspect logs,GPU use,rollouts,final screenshots,judge verdicts and W&B. '
-            'Diagnose/test/fix/relaunch only within the exact approved total resources and API/browser caps, charging every attempt. '
-            'Preserve evidence and update the run pointer for replacements. Audit all300 before verified_complete; update docs/private review. '
-            'Hourly routine reports; alert failures/completion promptly. This continuation adds no budget.')
-        if len(prompt.encode())>1000:raise ValueError('Continuation prompt exceeds queue limit')
+    previous_signature=old.get('signature',[])
+    previous_invalid=previous_signature[5] if len(previous_signature)>5 else 0
+    urgent=(record[1].split()[0] in ('FAILED','TIMEOUT','CANCELLED','OUT_OF_MEMORY',
+        'NODE_FAIL','BOOT_FAIL','PREEMPTED','DEADLINE','COMPLETED') or stale or halted or
+        invalid>previous_invalid or bool(snapshot['summary'].get('collection_complete')))
+    changed=signature!=previous_signature
+    # A queued routine review must not hide a later failure or completion.
+    # Saving its signature keeps each urgent change deduplicated until ack.
+    if (changed and urgent) or (not pending and
+            (changed or now-max(ack,old.get('queued_epoch',0))>=900)):
+        prompt=continuation_prompt(root,pointer,job)
         result=subprocess.run(['codex','queue','--thread',thread,'--message',prompt],capture_output=True,text=True,timeout=45)
         if result.returncode:
             raise RuntimeError('Continuation queue failed: '+result.stderr[:500])
-        old.update(queued_epoch=now,signature=signature,queue_receipt=result.stdout.strip())
+        old.update(queued_epoch=now,signature=signature,queue_receipt=result.stdout.strip(),
+            notification_kind='urgent' if urgent else 'routine',
+            pending_callback_bypassed=bool(pending and changed and urgent))
         with (root/'supervisor-notifications.jsonl').open('a') as log:log.write(json.dumps(old)+'\n')
     write(root/'supervisor-state.json',old)
     return True

@@ -173,13 +173,17 @@ browser execution need further validation before interpreting a larger score
 as general Jev/Kev capability.
 
 <a id="kev27b-actor-full300-20261004"></a>
-## Kev27B as the direct browser policy: full300 preparation — October 4
+## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Prepared and locally validated; not submitted or approved.** This scales the
-standalone Kev27B pilot (3/10) to all300 Online-Mind2Web tasks, freshly collected
-including the pilot10. It is separate from the ongoing SFT+Kev27B experiment,
-where an image-conditioned SFT model proposes five actions for Kev to select.
-Both selector runs and this prepared direct-policy run contain the same300 task IDs.
+**Approved and launched October 5 as job 345177.** The user confirmed approval
+of the prepared resource/API proposal, and the controller submitted the exact
+1 H200 / 8 CPU / 120 GiB request with a 14,400-second total across all attempts.
+The model loaded, identity checks and both warmups passed, W&B is online, and
+the two-worker browser collection has started. Final results remain pending.
+This scales the standalone Kev27B pilot (3/10) to all300 Online-Mind2Web tasks,
+freshly collected including the pilot10. It is separate from the completed
+SFT+Kev27B experiment, where an image-conditioned SFT model proposes five actions
+for Kev to select. Both selector runs and this direct-policy run contain the same300 task IDs.
 
 The direct policy retains the pinned `upstream-v1` Jev Ultrafast operation/target
 questions, DOM reader and guarded executor. Kev27B receives DOM text, chooses
@@ -193,7 +197,7 @@ Browser Use,1120×780 viewport,30 actions,60 decisions and600 seconds per task
 match the direct pilot. The experimental change is cohort size; operational changes
 add an isolated localhost port, frozen runtime and shared durable budget reservations.
 
-| Proposed limit | Value |
+| Approved limit | Value |
 | --- | ---: |
 | Compute, including every failed/replacement attempt |1 H200,8 CPUs,120 GiB;14,400 scheduler seconds total |
 | Fresh browser sessions, including recovery reserve |330 |
@@ -207,7 +211,7 @@ The pilot averaged25.786 seconds per task including judging. Linear extrapolatio
 at two concurrent tasks is3,868 seconds (about64 minutes), before model startup
 and variation across the remaining sites. The four-hour ceiling is a budget,
 not an expected duration or a guarantee that every harder task will finish.
-No unused pilot or selector allocation time transfers into this proposed budget.
+No unused pilot or selector allocation time transfers into this budget.
 
 [`evaluate_kev_actor_full300.py`](../../scripts/evaluate_kev_actor_full300.py)
 prepares the source/model/dependency checks, exact approval gate, Slurm request,
@@ -217,8 +221,14 @@ replacement; browser and HTTP attempts are reserved durably before dispatch.
 Valid failed tasks are never rerolled, and invalid/interrupted attempts require
 preserved evidence and diagnosis before recovery. Collection completion remains
 separate from `verified_complete`; all300 artifacts, verdicts, closed sessions,
-W&B and scheduler accounting require independent audit. The prepared supervisor
-queues the owning agent for repair; it becomes active only after approval/submission.
+W&B and scheduler accounting require independent audit. The active supervisor
+has verified delivery back to the owning agent for diagnosis and repair. Urgent
+failures bypass pending routine callbacks; completed-run callbacks are silently
+acknowledged instead of repeating progress. The controller/supervisor regression
+suites pass47 tests. These supervision changes do not modify the frozen worker,
+scientific settings or approved caps.
+
+[Live evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/kev27b-actor-full300-20261004).
 
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 frozen runtime: `runtime/reference-kev27b-actor-full300-20261004-v1`.
