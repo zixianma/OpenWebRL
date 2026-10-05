@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791219346.2499735,
+  "snapshot_epoch": 1791220991.3522646,
   "rows": [
     {
       "id": "AS01",
@@ -9,11 +9,12 @@
       "mode": "qwen",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "queued",
+      "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344754",
       "successes": 0,
-      "valid": 0
+      "valid": 0,
+      "verified_complete": false
     },
     {
       "id": "AS02",
@@ -23,11 +24,12 @@
       "mode": "qwen_luna5",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "queued",
+      "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344754",
       "successes": 0,
-      "valid": 0
+      "valid": 0,
+      "verified_complete": false
     },
     {
       "id": "AS04",
@@ -52,11 +54,12 @@
       "mode": "sft_luna5",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "queued",
+      "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344754",
       "successes": 0,
-      "valid": 0
+      "valid": 0,
+      "verified_complete": false
     },
     {
       "id": "AS06",
@@ -66,11 +69,12 @@
       "mode": "sft_luna10",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "queued",
+      "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344754",
       "successes": 0,
-      "valid": 0
+      "valid": 0,
+      "verified_complete": false
     },
     {
       "id": "AS07",
@@ -80,7 +84,7 @@
       "mode": "luna",
       "target_tasks": 300,
       "recorded_episodes": 300,
-      "status": "verified_complete_cpu_family",
+      "status": "verified_complete",
       "protocol_group": "luna_full300",
       "job_id": "344875",
       "successes": 110,
@@ -100,7 +104,7 @@
       "mode": "jev",
       "target_tasks": 300,
       "recorded_episodes": 300,
-      "status": "verified_complete_with_diagnosed_invalids",
+      "status": "verified_complete",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "345021",
       "successes": 176,
@@ -121,7 +125,7 @@
       "mode": "kev-27b",
       "target_tasks": 300,
       "recorded_episodes": 300,
-      "status": "verified_complete_with_diagnosed_invalids",
+      "status": "verified_complete",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
       "successes": 184,
@@ -140,14 +144,14 @@
       "mode": "luna_high",
       "reasoning_effort": "high",
       "target_tasks": 300,
-      "recorded_episodes": 1,
+      "recorded_episodes": 53,
       "status": "running",
       "protocol_group": "api_actor_high_full300",
       "job_id": "345178",
       "approved": true,
       "proposal": "reasoning-high-proposal.json",
-      "valid": 1,
-      "successes": 0,
+      "valid": 45,
+      "successes": 13,
       "verified_complete": false
     },
     {
@@ -158,15 +162,32 @@
       "mode": "sol61_high",
       "reasoning_effort": "high",
       "target_tasks": 300,
-      "recorded_episodes": 2,
+      "recorded_episodes": 64,
       "status": "running",
       "protocol_group": "api_actor_high_full300",
       "job_id": "345179",
       "approved": true,
       "proposal": "reasoning-high-proposal.json",
-      "valid": 2,
-      "successes": 1,
+      "valid": 54,
+      "successes": 14,
       "verified_complete": false
+    },
+    {
+      "id": "AS12",
+      "actor": "Kev27B direct actor",
+      "selector": null,
+      "n": 1,
+      "mode": "kev27b_actor",
+      "target_tasks": 300,
+      "recorded_episodes": 45,
+      "valid": 45,
+      "successes": 5,
+      "status": "running",
+      "job_id": "345177",
+      "approved": true,
+      "verified_complete": false,
+      "protocol_group": "kev27b_direct_actor",
+      "matched_protocol": false
     }
   ],
   "excluded": [
@@ -190,12 +211,12 @@
     }
   ],
   "new_luna_episodes": 1500,
-  "other_session_episodes": 600,
+  "other_session_episodes": 900,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T16:55:46Z",
-  "new_episodes_all_sessions": 2100,
-  "comparison_rows": 8,
+  "snapshot_utc": "2026-10-05T17:23:11Z",
+  "new_episodes_all_sessions": 3000,
+  "comparison_rows": 11,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
   "approved_luna_budgets": {
     "approved": true,
@@ -207,8 +228,7 @@
       "total_hours": 16,
       "total_gpu_hours": 128,
       "job_id": "344754",
-      "scheduler_state": "PENDING",
-      "scheduler_reason": "Priority"
+      "scheduler_state": "RUNNING"
     },
     "cpu_pool": {
       "gpus": 0,
@@ -487,5 +507,33 @@
     "new_episodes": 600,
     "proposal": "reasoning-high-proposal.json",
     "started": true
+  },
+  "new_reasoning_high_episodes": 600,
+  "kev27b_direct_actor": {
+    "approved": true,
+    "job_id": "345177",
+    "tasks": 300,
+    "resources": {
+      "gpus": 1,
+      "gpu_type": "H200",
+      "cpus": 8,
+      "memory_gib": 120,
+      "total_seconds": 14400
+    },
+    "protocol": "Own upstream DOM policy with GPT-4.1-mini text assistance; separate protocol and budget; peer-owned",
+    "details": "../../RL_EVALUATION.md#kev27b-actor-full300-20261004"
+  },
+  "high_reasoning_health": {
+    "snapshot_epoch": 1791220947.6789274,
+    "model_and_effort_verified": true,
+    "actor_errors": {
+      "luna_high": {},
+      "sol61_high": {
+        "520": 1,
+        "503": 1
+      }
+    },
+    "cost_policy": "Unresolved usage keeps conservative reservations; token totals are lower bounds where receipts are missing",
+    "complete": false
   }
 }
