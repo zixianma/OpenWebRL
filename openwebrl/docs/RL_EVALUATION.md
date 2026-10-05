@@ -175,8 +175,8 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Recovery job 345273 is running; final results remain pending.** All 154 saved
-records are preserved: 152 valid results and two diagnosed, unscored invalids.
+**Recovery job 345281 is running; final results remain pending.** All 183 saved
+records are preserved: 180 valid results and three diagnosed, unscored invalids.
 The approved 1 H200 / 8 CPU / 120 GiB request retains the
 14,400-second total across all attempts; the replacement uses only its remainder.
 The same W&B run and two-worker browser collection continue.
@@ -346,6 +346,26 @@ checks, with one optional browser test skipped. Recovery job 345273 covers the
 remaining 146 tasks with 8,220 seconds allocated from the 8,265 seconds left
 after charging every attempt (6,135 / 14,400 seconds). All scientific settings,
 resource and API caps remain unchanged.
+
+**State-limit recovery — October 5, 11:58 PDT.** Job 345273 stopped after
+490 seconds on another HTTP 422. The newly captured error body establishes a
+78,772-token page state, above the fixed 65,536-token state limit. Independent
+checks confirm one prior action, a fresh terminal image, a closed browser and
+zero judge calls. This third invalid remains unscored, with its request and
+response preserved. The interrupted peer is preserved separately for one retry.
+All 183 completed records pass the artifact audit: 180 valid and three diagnosed
+invalids; all 188 browsers from the four finished attempts are stopped.
+Replacement 345281 uses the same frozen v4 source and scientific protocol for
+117 remaining tasks, with 7,740 seconds allocated against 7,775 seconds left
+from the original cap (6,625 / 14,400 seconds charged). No rejected input is
+truncated or replayed unchanged.
+
+Further semantic review identifies a positive that searched a scam-report ID
+when the task required a phone-number search; zero matches in that different
+field do not support the requested conclusion. A separate quote task verifies
+the requested rating but leaves distance and quote completion unestablished.
+These are private evidence annotations, not changed canonical verdicts or
+infrastructure-invalid labels.
 
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;
