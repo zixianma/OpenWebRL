@@ -21,7 +21,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 Online-Mind2Web tasks. The scientific question is how an action selector changes
 success and efficiency for different actors, and whether ten proposals improve
 on five enough to justify their extra cost. The existing ten-task pilot at
-top-p0.9 stays separate and continues within its original approval.
+top-p0.9 stays separate; it stopped at49/50 episodes and awaits the resource-profile approval described below.
 
 | Actor | Alone | Luna selector, N=5 | Luna selector, N=10 |
 | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ top-p0.9 stays separate and continues within its original approval.
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 07:26:35 UTC**. “Saved” is terminal
+Snapshot: **2026-10-05 08:08:44 UTC**. “Saved” is terminal
 record coverage; it does not imply every record is valid or the run has passed
 its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
@@ -43,30 +43,31 @@ its final audit. The table includes runs owned by the other evaluation session. 
 | AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
-| AS07 | GPT-6 Luna | None |1 |300 |64 |Running344755; collecting |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |44 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |42 |Queued344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+| AS07 | GPT-6 Luna | None |1 |300 |174 |Running344755; collecting |Luna study; API sampling |Approved shared CPU/API pools below |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |76 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |56 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
 
 **Coverage checklist:** eight full-set comparison rows; one completed reusable
-baseline, two running rows and five queued rows. The five fresh Luna-study
+baseline, three running rows and four queued rows. The five fresh Luna-study
 rows share two approved pools. This totals2,100 new
 full-set episodes across both sessions plus300 reused baseline records. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
 updated request; only official SFT + Luna has an N=10 arm. Other IDs remain
 unchanged. **Kev0.8B has only a completed10-task pilot**; no
 full300 plan or approval exists, so it is explicitly outside the committed
-full-set checklist. The separate Qwen/Luna calibration pilot has36/50 retained
-records, including4 official SFT records;344655 is running both actor families
-concurrently within its own unchanged approval.
+full-set checklist. The separate Qwen/Luna pilot has49/50 retained
+records, including all10 official SFT records. Job344655 stopped at its internal
+deadline; [partial plots and recovery approval](#luna-qwen-pilot-partial-20261005)
+are tracked separately.
 
 **October5 peer recovery:** Jev344708 and Kev344661 were intentionally stopped
 for a confirmed hosted-browser input-clearing bug: Mac sessions need the Mac
 select-all shortcut. Their existing repair owner submitted replacements
-Jev344794 (starting) and Kev344793 (queued). The44 Jev and42 Kev records
-are preserved pending the recovery audit. These
-partial results are not final comparison results. Remaining allocation time is
+Jev344794 and Kev344793, both now running. The44 Jev and42 Kev records
+from before the repair are preserved pending the recovery audit. These
+partial results are not final comparison results. At replacement submission, remaining allocation time was
 31,184 seconds for Jev and31,135 seconds for Kev under their separate10-hour
-limits. No budget extension is implied. Local Luna/pilot collection continues.
+limits. No budget extension is implied. The local Luna CPU pool continues independently.
 
 | Protocol group | Actor decoding | Browser / timeout | Judge evidence and horizon scoring | Efficiency coverage |
 | --- | --- | --- | --- | --- |
@@ -180,7 +181,65 @@ retain their own repair owners and approvals.
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking, official SFT and Luna: performance versus cost — October4
 
-**Job344655 is running concurrent official SFT + Luna N=5 and Qwen recovery, with a49-minute ceiling inside the original90-minute total.**
+**Partial pilot:49/50 episodes saved. Job344655 stopped at its internal shutdown deadline; one Qwen + Luna N=10 episode remains unfinished.**
+
+<a id="luna-qwen-pilot-partial-20261005"></a>
+### October5 partial results and remaining recovery
+
+All49 saved episodes have verified artifact hashes and complete model-usage
+receipts. The official SFT arm finished all10 episodes and both workers exited
+cleanly. This is the separate **T1/p0.9 ten-task pilot**, not the full300 study.
+
+| Arm | Saved / planned | Valid | Observed successes |
+| --- | ---: | ---: | ---: |
+| Qwen alone |10/10 |9 |0 |
+| Qwen + Luna N=5 |10/10 |8 |1 |
+| Qwen + Luna N=10 |9/10 |8 |0 |
+| Luna alone |10/10 |9 |0 |
+| Official OpenWebRL SFT + Luna N=5 |10/10 |8 |2 |
+
+The three plots use exactly the **same nine completed tasks for all five arms**
+(45 records), retain invalid attempts in their denominators and do not impute
+the missing result. This completion-selected subset is provisional; it does not
+support a reliable model ranking. Empirical bootstrap intervals degenerate for
+zero-success arms in this small pilot and do not establish zero population
+success probability. [Aggregate metrics and common-valid sensitivity](arm_results/luna_qwen_pilot_20261004/common-cohort-summary.json)
+and [all-arm coverage](arm_results/luna_qwen_pilot_20261004/arm-coverage.csv).
+
+![Partial pilot success versus cost](arm_results/luna_qwen_pilot_20261004/cost.png)
+[Cost SVG](arm_results/luna_qwen_pilot_20261004/cost.svg).
+
+![Partial pilot success versus latency](arm_results/luna_qwen_pilot_20261004/latency.png)
+[Latency SVG](arm_results/luna_qwen_pilot_20261004/latency.svg).
+
+![Partial pilot success versus tokens](arm_results/luna_qwen_pilot_20261004/tokens.png)
+[Tokens SVG](arm_results/luna_qwen_pilot_20261004/tokens.svg).
+
+Final scheduler accounting through344655 totals **5,076 seconds across five
+four-H200 attempts:5.64 GPU-hours**, estimated at$5.076 using$0.90/H200-hour.
+The last allocation ended after2,646 seconds: the allocation helper reserved
+180 seconds and the dispatcher another120 seconds before the Slurm limit.
+The last N=10 episode was interrupted, with its requests preserved. This was a
+controller deadline, not a new API or GPU crash. There are324 seconds left in
+the original fixed four-GPU allowance, equivalent to1,296 GPU-seconds.
+
+The reconciled ledgers contain **717 Luna calls /$1.036909 charged or reserved**
+and **23 judge calls /$0.093251**. Two interrupted Luna reservations remain at
+conservative bounds; they are not reported as zero cost. The59 physical attempt
+identities include six interrupted attempts, five missing final timers and28
+unknown model-usage requests, separate from the49 fully metered saved episodes.
+Allocation accounting includes startup, idle time and every failed attempt.
+[Aggregate final accounting through this attempt](arm_results/luna_qwen_pilot_20261004/accounting.json).
+
+A proposed **1H200/8CPU/120GiB ×20-minute** recovery would use1,200 of the1,296
+remaining GPU-seconds and keep cumulative use at most5.9734 GPU-hours, below
+the original six. It changes the approved fixed resource/time profile, so it
+is prepared but **not approved or submitted**. The original$15 Luna/$5 judge
+caps and717/23 call accounting remain shared. The full300 pools continue
+under their separate approvals; their budget is not transferred to this pilot.
+
+### Pilot protocol and execution history
+
 The user approved the four-H200/90-minute pilot and $15 Luna/$5 judge caps.
 Two live API preflight calls passed (vision + structured selection, and a native
 browser `done` tool call), returning `gpt-6-luna` and complete usage receipts;
@@ -219,7 +278,7 @@ Luna uses `gpt-6-luna`, **medium reasoning**, 4096 output tokens, and the standa
 service tier in both roles. With reasoning enabled its API does not accept
 temperature/top-p, so those requested sampling controls apply to Qwen.
 Account access and live vision, tool-call and structured-selection requests
-have passed their compatibility checks; live benchmark behavior remains unverified. Save the actual model
+have passed their compatibility checks; actual benchmark identities and usage are saved. Save the actual model
 identity returned on every request. See the [model reference](https://developers.openai.com/api/docs/models/gpt-6-luna)
 and [reasoning parameter compatibility](https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters).
 
@@ -243,9 +302,9 @@ episodes. Freed slots are assigned to unfinished SFT work first, then Qwen work,
 so neither family waits for the other to finish. The batch controller owns and
 awaits every worker before exiting. All workers share the original API ledgers,
 and every failed attempt counts against the original90-minute total.
-No new allocation, time extension or API-cap increase was approved or requested.
-The aggregate comparison and its three plots require all50 verified episodes;
-a partial cohort remains incomplete. SFT was requested after the original
+No resource/time conversion has been approved; the pending one-GPU proposal above preserves the GPU-hour and API ceilings.
+The final aggregate comparison requires all50 verified episodes. The explicitly
+partial plots above cover only the nine common completed tasks. SFT was requested after the original
 collection began: its timing overlaps recovery, but it is outside the original
 randomized four-arm order. Live-site changes between collection windows remain
 a comparison limitation.

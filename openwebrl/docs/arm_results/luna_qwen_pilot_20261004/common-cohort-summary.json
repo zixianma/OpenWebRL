@@ -1,0 +1,624 @@
+{
+  "complete": false,
+  "scheduled_tasks": 9,
+  "recorded_episodes": 45,
+  "pricing": {
+    "luna_input": 0.1,
+    "luna_cached": 0.01,
+    "luna_cache_write": 0.125,
+    "luna_output": 0.5,
+    "judge_input": 1.1,
+    "judge_cached": 0.275,
+    "judge_output": 4.4,
+    "h200_hour": 0.9
+  },
+  "by_mode": {
+    "qwen": {
+      "episodes": 9,
+      "successes": 0,
+      "valid": 8,
+      "overall": 0.0,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 179.58423549573249,
+          "p50": 138.9474905342795,
+          "p95": 440.9110909730196,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 14.88888888888889,
+          "p50": 12.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 50.405024515775345,
+          "p50": 12.640870478469878,
+          "p95": 184.9071017886512,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 224597.77777777778,
+          "p50": 97229.0,
+          "p95": 509611.8,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 10142.333333333334,
+          "p50": 9954.0,
+          "p95": 21086.0,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 179.58423549573249,
+          "p50": 138.9474905342795,
+          "p95": 440.9110909730196,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 595125801626282.6,
+          "p50": 380305187536896.0,
+          "p95": 1213690557680844.8,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 649119617617464.9,
+          "p50": 422869655617536.0,
+          "p95": 1320101727882444.8,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.04489605887393312,
+      "cost_upper_mean_usd": 0.04489605887393312,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "qwen_actor": {
+          "input": 2021380.0,
+          "output": 91281.0,
+          "cached_input": 1765296.0,
+          "reasoning_output": 0.0,
+          "requests": 135.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 135.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 135.0,
+          "image_input": 0.0,
+          "image_missing": 135.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "api_judge": {
+          "input": 9323.0,
+          "output": 1156.0,
+          "cached_input": 0.0,
+          "reasoning_output": 768.0,
+          "requests": 4.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 4.0,
+          "image_input": 0.0,
+          "image_missing": 4.0,
+          "cost_lower_usd": 0.015341700000000002,
+          "cost_upper_usd": 0.015341700000000002
+        }
+      },
+      "success_95": [
+        0.0,
+        0.0
+      ],
+      "valid_only": 0.0
+    },
+    "qwen_luna5": {
+      "episodes": 9,
+      "successes": 1,
+      "valid": 7,
+      "overall": 0.1111111111111111,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 273.88615892899946,
+          "p50": 223.31071717711166,
+          "p95": 667.9012142607942,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 12.11111111111111,
+          "p50": 12.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 46.71569291817852,
+          "p50": 33.424064913764596,
+          "p95": 144.04824298312883,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 879182.2222222222,
+          "p50": 584481.0,
+          "p95": 2605926.4,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 44934.444444444445,
+          "p50": 28731.0,
+          "p95": 108089.59999999999,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 273.88615892899946,
+          "p50": 223.31071717711166,
+          "p95": 667.9012142607942,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 1285927180064085.2,
+          "p50": 885666603073536.0,
+          "p95": 3255945296714137.5,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 1501114213138432.0,
+          "p50": 1098488943476736.0,
+          "p95": 3788001147722137.5,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.08896939528780543,
+      "cost_upper_mean_usd": 0.08896939528780543,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "qwen_actor": {
+          "input": 6625325.0,
+          "output": 357261.0,
+          "cached_input": 6142316.0,
+          "reasoning_output": 0.0,
+          "requests": 545.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 545.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 545.0,
+          "image_input": 0.0,
+          "image_missing": 545.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "luna_selector": {
+          "input": 1287315.0,
+          "output": 47149.0,
+          "cached_input": 0.0,
+          "reasoning_output": 45514.0,
+          "requests": 109.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 1286988.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 109.0,
+          "cost_lower_usd": 0.1844807,
+          "cost_upper_usd": 0.1844807
+        },
+        "api_judge": {
+          "input": 11945.0,
+          "output": 1443.0,
+          "cached_input": 0.0,
+          "reasoning_output": 896.0,
+          "requests": 5.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 5.0,
+          "image_input": 0.0,
+          "image_missing": 5.0,
+          "cost_lower_usd": 0.019488700000000005,
+          "cost_upper_usd": 0.019488700000000005
+        }
+      },
+      "success_95": [
+        0.0,
+        0.3333333333333333
+      ],
+      "valid_only": 0.14285714285714285
+    },
+    "qwen_luna10": {
+      "episodes": 9,
+      "successes": 0,
+      "valid": 8,
+      "overall": 0.0,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 387.6734889815044,
+          "p50": 464.54127050191164,
+          "p95": 874.5516671957448,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 15.555555555555555,
+          "p50": 20.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 54.7890860497848,
+          "p50": 23.446431471500546,
+          "p95": 193.68142798105254,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 2419374.888888889,
+          "p50": 3202384.0,
+          "p95": 5154728.199999999,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 106434.88888888889,
+          "p50": 145553.0,
+          "p95": 207131.19999999998,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 387.6734889815044,
+          "p50": 464.54127050191164,
+          "p95": 874.5516671957448,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 2455614017539641.0,
+          "p50": 3738229902082048.0,
+          "p95": 4431618829883801.5,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 3008557987142770.0,
+          "p50": 4451184742432768.0,
+          "p95": 5497149347502489.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.13163478891204278,
+      "cost_upper_mean_usd": 0.13163478891204278,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "qwen_actor": {
+          "input": 19562580.0,
+          "output": 885946.0,
+          "cached_input": 18958715.0,
+          "reasoning_output": 0.0,
+          "requests": 1400.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 1400.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 1400.0,
+          "image_input": 0.0,
+          "image_missing": 1400.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "luna_selector": {
+          "input": 2211794.0,
+          "output": 71968.0,
+          "cached_input": 0.0,
+          "reasoning_output": 69868.0,
+          "requests": 140.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 2211374.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 140.0,
+          "cost_lower_usd": 0.3124477500000001,
+          "cost_upper_usd": 0.3124477500000001
+        },
+        "api_judge": {
+          "input": 12343.0,
+          "output": 1155.0,
+          "cached_input": 0.0,
+          "reasoning_output": 640.0,
+          "requests": 5.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 5.0,
+          "image_input": 0.0,
+          "image_missing": 5.0,
+          "cost_lower_usd": 0.0186593,
+          "cost_upper_usd": 0.0186593
+        }
+      },
+      "success_95": [
+        0.0,
+        0.0
+      ],
+      "valid_only": 0.0
+    },
+    "luna": {
+      "episodes": 9,
+      "successes": 0,
+      "valid": 8,
+      "overall": 0.0,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 98.82214869864077,
+          "p50": 102.43040954507887,
+          "p95": 215.90608443366358,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 20.0,
+          "p50": 30.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 44.402278188150376,
+          "p50": 33.39430502662435,
+          "p95": 138.32321567302566,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 106283.11111111111,
+          "p50": 139046.0,
+          "p95": 190389.8,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 1625.888888888889,
+          "p50": 1384.0,
+          "p95": 4334.399999999999,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.014035333333333332,
+      "cost_upper_mean_usd": 0.014035333333333332,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "luna_actor": {
+          "input": 956548.0,
+          "output": 14633.0,
+          "cached_input": 0.0,
+          "reasoning_output": 9630.0,
+          "requests": 180.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 933868.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 180.0,
+          "cost_lower_usd": 0.12631799999999999,
+          "cost_upper_usd": 0.12631799999999999
+        },
+        "api_judge": {
+          "input": 7317.0,
+          "output": 1076.0,
+          "cached_input": 0.0,
+          "reasoning_output": 768.0,
+          "requests": 3.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 3.0,
+          "image_input": 0.0,
+          "image_missing": 3.0,
+          "cost_lower_usd": 0.012783099999999999,
+          "cost_upper_usd": 0.012783099999999999
+        }
+      },
+      "success_95": [
+        0.0,
+        0.0
+      ],
+      "valid_only": 0.0
+    },
+    "sft_luna5": {
+      "episodes": 9,
+      "successes": 2,
+      "valid": 7,
+      "overall": 0.2222222222222222,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 161.53103205463333,
+          "p50": 112.35121456207708,
+          "p95": 401.6021640720777,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 11.777777777777779,
+          "p50": 9.0,
+          "p95": 26.4,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 51.62863777986624,
+          "p50": 22.16162358922884,
+          "p95": 149.19164190106093,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 599645.6666666666,
+          "p50": 242158.0,
+          "p95": 1710084.2,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 21372.666666666668,
+          "p50": 15359.0,
+          "p95": 48258.799999999996,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 161.53103205463333,
+          "p50": 112.35121456207708,
+          "p95": 401.6021640720777,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 900408589491313.8,
+          "p50": 528248974344192.0,
+          "p95": 2388816343033446.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 1109289775442602.6,
+          "p50": 687865729646592.0,
+          "p95": 2825102140860006.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.050447458013658325,
+      "cost_upper_mean_usd": 0.050447458013658325,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "luna_selector": {
+          "input": 613346.0,
+          "output": 27844.0,
+          "cached_input": 0.0,
+          "reasoning_output": 26254.0,
+          "requests": 106.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 613028.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 106.0,
+          "cost_lower_usd": 0.09058229999999998,
+          "cost_upper_usd": 0.09058229999999998
+        },
+        "qwen_actor": {
+          "input": 4783465.0,
+          "output": 164510.0,
+          "cached_input": 4302763.0,
+          "reasoning_output": 0.0,
+          "requests": 530.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 530.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 530.0,
+          "image_input": 0.0,
+          "image_missing": 530.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "api_judge": {
+          "input": 12323.0,
+          "output": 1831.0,
+          "cached_input": 0.0,
+          "reasoning_output": 1344.0,
+          "requests": 5.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 5.0,
+          "image_input": 0.0,
+          "image_missing": 5.0,
+          "cost_lower_usd": 0.0216117,
+          "cost_upper_usd": 0.0216117
+        }
+      },
+      "success_95": [
+        0.0,
+        0.5555555555555556
+      ],
+      "valid_only": 0.2857142857142857
+    }
+  },
+  "paired_differences": {
+    "qwen_luna5_minus_qwen": {
+      "mean": 0.1111111111111111,
+      "task_bootstrap_95": [
+        0.0,
+        0.3333333333333333
+      ]
+    },
+    "qwen_luna10_minus_qwen": {
+      "mean": 0.0,
+      "task_bootstrap_95": [
+        0.0,
+        0.0
+      ]
+    },
+    "luna_minus_qwen": {
+      "mean": 0.0,
+      "task_bootstrap_95": [
+        0.0,
+        0.0
+      ]
+    },
+    "sft_luna5_minus_qwen": {
+      "mean": 0.2222222222222222,
+      "task_bootstrap_95": [
+        0.0,
+        0.5555555555555556
+      ]
+    }
+  },
+  "cost_scope": "Estimated exclusive model-serving cost; browser CPU not separately priced. Judge and research startup/idle costs are separate.",
+  "token_scope": "Provider token totals include image tokens and reasoning where supported; model tokenizers differ. Subsets are never added twice.",
+  "full_pilot_complete": false,
+  "partial_pilot": true,
+  "full_pilot_recorded_episodes": 49,
+  "full_pilot_target_episodes": 50,
+  "full_pilot_scheduled_tasks": 10,
+  "common_completed_cohort_complete": true,
+  "analysis_cohort": "9 tasks with committed records for every arm (45 records); invalid attempts retained",
+  "missing_results_imputed": false,
+  "completion_selection_caveat": "The last task is excluded for every arm solely because one arm has no committed result; this partial subset can be completion-biased.",
+  "label": "PARTIAL PILOT: 49/50 episodes; 9 common completed tasks",
+  "snapshot_unix": 1791187144.9831233,
+  "common_valid_sensitivity": {
+    "tasks": 7,
+    "by_mode": {
+      "qwen": {
+        "successes": 0,
+        "denominator": 7
+      },
+      "qwen_luna5": {
+        "successes": 1,
+        "denominator": 7
+      },
+      "qwen_luna10": {
+        "successes": 0,
+        "denominator": 7
+      },
+      "luna": {
+        "successes": 0,
+        "denominator": 7
+      },
+      "sft_luna5": {
+        "successes": 2,
+        "denominator": 7
+      }
+    }
+  },
+  "interval_caveat": "Empirical bootstrap intervals are descriptive and degenerate for zero-success arms in this small pilot; they do not establish zero population success probability."
+}

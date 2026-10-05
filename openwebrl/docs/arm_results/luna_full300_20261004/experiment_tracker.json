@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791185195.016912,
+  "snapshot_epoch": 1791187724.7015145,
   "rows": [
     {
       "id": "AS01",
@@ -79,12 +79,12 @@
       "n": 1,
       "mode": "luna",
       "target_tasks": 300,
-      "recorded_episodes": 64,
+      "recorded_episodes": 174,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344755",
-      "successes": 7,
-      "valid": 56
+      "successes": 20,
+      "valid": 161
     },
     {
       "id": "AS08",
@@ -93,12 +93,12 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 44,
+      "recorded_episodes": 76,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344794",
-      "successes": 28,
-      "valid": 42,
+      "successes": 48,
+      "valid": 73,
       "verified_complete": false
     },
     {
@@ -108,12 +108,12 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 42,
-      "status": "pending",
+      "recorded_episodes": 56,
+      "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
-      "successes": 26,
-      "valid": 41,
+      "successes": 37,
+      "valid": 54,
       "verified_complete": false
     }
   ],
@@ -141,7 +141,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T07:26:35Z",
+  "snapshot_utc": "2026-10-05T08:08:44Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -191,10 +191,22 @@
   },
   "separate_pilot": {
     "job_id": "344655",
-    "state": "RUNNING",
-    "recorded_episodes": 36,
+    "state": "FAILED",
+    "stage": "awaiting_resource_profile_approval",
+    "recorded_episodes": 49,
     "target": 50,
-    "sft_records": 4,
-    "top_p": 0.9
+    "sft_records": 10,
+    "top_p": 0.9,
+    "complete": false,
+    "gpu_hours_used": 5.64,
+    "remaining_original_seconds": 324,
+    "proposed_conversion": {
+      "approved": false,
+      "gpus": 1,
+      "cpus": 8,
+      "memory_gib": 120,
+      "total_seconds": 1200,
+      "cumulative_gpu_hours_ceiling": 5.973333333333334
+    }
   }
 }

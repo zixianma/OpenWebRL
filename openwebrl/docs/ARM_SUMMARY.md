@@ -24,10 +24,13 @@ API caps are$100 Luna/$25 judge. Jobs release resources when their work finishes
 [Full-set matrix, baseline caveat and budget](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [Unified eight-run tracker, including SFT + Jev/Kev](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 
-The separate T1/p0.9 pilot is running as344655 with official SFT and Qwen
-recovery in parallel, two GPUs each, within its existing total caps. Its
-36 retained records include4 official SFT episodes; they remain incomplete
-and will not be pooled with full-set results. [Pilot protocol](ARM_INFERENCE.md#luna-qwen-inference-20261004).
+The separate T1/p0.9 pilot stopped at49/50 episodes; official SFT + Luna N=5
+finished10/10 with two successes and eight valid episodes. The last Qwen N=10
+episode was interrupted by the controller deadline. [Three clearly labeled
+partial plots](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005) compare the same
+nine completed tasks. Actual use is5.64 GPU-hours; a one-GPU/20-minute recovery
+profile is prepared for approval and would stay below the original6GPU-hours.
+These records remain separate from full300 results.
 
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
 **reasoning + action**. ScalarRM scores independently; SelectionARM compares

@@ -1,0 +1,6 @@
+mode,label,planned,committed,missing,valid,successes_observed,common_completed_tasks
+qwen,Qwen alone,10,10,0,9,0,9
+qwen_luna5,Qwen + Luna (N=5),10,10,0,8,1,9
+qwen_luna10,Qwen + Luna (N=10),10,9,1,8,0,9
+luna,Luna alone,10,10,0,9,0,9
+sft_luna5,Official OpenWebRL SFT + Luna (N=5),10,10,0,8,2,9

@@ -1,0 +1,86 @@
+{
+  "checked_unix": 1791187332.7041557,
+  "all_allocations_terminal": true,
+  "final_scheduler_accounting_verified": true,
+  "attempts": [
+    {
+      "job_id": "344476",
+      "state": "CANCELLED by 1385309",
+      "elapsed_seconds": 150,
+      "gpus": 4,
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "344534",
+      "state": "FAILED",
+      "elapsed_seconds": 25,
+      "gpus": 4,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "344536",
+      "state": "FAILED",
+      "elapsed_seconds": 27,
+      "gpus": 4,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "344537",
+      "state": "FAILED",
+      "elapsed_seconds": 2228,
+      "gpus": 4,
+      "exit_code": "1:0"
+    },
+    {
+      "job_id": "344655",
+      "state": "FAILED",
+      "elapsed_seconds": 2646,
+      "gpus": 4,
+      "exit_code": "1:0"
+    }
+  ],
+  "elapsed_seconds": 5076,
+  "approved_seconds": 5400,
+  "remaining_original_seconds": 324,
+  "gpu_hours": 5.64,
+  "approved_gpu_hours": 6,
+  "remaining_gpu_seconds": 1296,
+  "allocated_gpu_cost_usd": 5.076,
+  "api": {
+    "luna": {
+      "files": 717,
+      "received": 715,
+      "usage_unknown": 0,
+      "reserved": 2,
+      "charged_or_reserved_usd": 1.0369091749999995,
+      "ledger": {
+        "calls": 717,
+        "charged_or_reserved_usd": 1.0369091750000001
+      }
+    },
+    "judge": {
+      "files": 23,
+      "received": 23,
+      "usage_unknown": 0,
+      "reserved": 0,
+      "charged_or_reserved_usd": 0.09325140000000001,
+      "ledger": {
+        "calls": 23,
+        "charged_or_reserved_usd": 0.09325140000000001
+      }
+    }
+  },
+  "records": 49,
+  "target_records": 50,
+  "complete": false,
+  "all_committed_usage_known": true,
+  "physical": {
+    "attempts": 59,
+    "interrupted": 6,
+    "missing_final_timing": 5,
+    "unknown_model_usage_requests": 28
+  },
+  "stop_reason": "Internal dispatcher deadline: shared allocation helper180s plus dispatcher120s shutdown margins; last N10 episode incomplete",
+  "api_usage_note": "Two Luna reservations have no final usage receipt and remain charged at their conservative bounds.",
+  "local_token_note": "All49 committed episodes have known usage; interrupted/superseded attempts retain28 unknown model requests and5 missing final timers."
+}
