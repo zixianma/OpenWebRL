@@ -36,6 +36,83 @@ def task_key(task_id):
     return sha(json.dumps(task_id, sort_keys=True).encode())
 
 
+def live_status_snapshot(root, now=None):
+    """Saved live liveness only; never reinterpret the immutable result audit."""
+    root = Path(root).resolve()
+    now = time.time() if now is None else now
+    paths = dict(pointer=root.parent.parent / 'current_kev27b_actor_full300.json',
+                 heartbeat=root / 'heartbeat.json', supervisor=root / 'supervisor-latest.json',
+                 approval=root / 'approval.json')
+    values, sources = {}, {}
+    for name, path in paths.items():
+        try:
+            raw = path.read_bytes()
+            value = json.loads(raw)
+            if not isinstance(value, dict):
+                raise ValueError('Expected an object')
+            values[name] = value
+            sources[name] = dict(path=str(path), sha256=sha(raw))
+        except (OSError, ValueError, TypeError) as exc:
+            values[name] = {}
+            sources[name] = dict(path=str(path), unavailable=type(exc).__name__)
+    pointer, heartbeat, supervisor = (values[n] for n in ('pointer', 'heartbeat', 'supervisor'))
+    job = str(pointer.get('job_id', ''))
+
+    def fresh(value):
+        return (isinstance(value, (int, float)) and not isinstance(value, bool)
+                and 0 <= now - value <= 120)
+
+    submitted = next((a.get('submitted_unix') for a in values['approval'].get('attempts', [])
+                      if isinstance(a, dict) and str(a.get('job_id', '')) == job), None)
+    if not isinstance(submitted, (int, float)) or not 0 < submitted <= now:
+        submitted = None
+    snapshot = dict(observed_unix=now, source='saved_live_controller_snapshot',
+        separate_from_result_audit=True, sources=sources, job_id=job or None,
+        verified_complete=pointer.get('verified_complete') is True,
+        heartbeat_unix=heartbeat.get('updated_unix'), supervisor_checked_unix=supervisor.get('checked_unix'),
+        scheduler_state=supervisor.get('state'), active_workers=heartbeat.get('active_workers', 0),
+        attempt_submitted_unix=submitted, freshness_seconds=120, running=False)
+    if pointer.get('verified_complete'):
+        snapshot['reason'] = 'verified_complete'
+    elif (not job.isdecimal() or pointer.get('run_directory') != str(root)
+          or pointer.get('status') not in ('running', 'submitted')):
+        snapshot['reason'] = 'missing_or_mismatched_current_pointer'
+    elif str(heartbeat.get('job_id', '')) != job or not fresh(heartbeat.get('updated_unix')):
+        snapshot['reason'] = 'missing_stale_or_mismatched_controller_heartbeat'
+    elif (paths['supervisor'].exists() and
+          (str(supervisor.get('job_id', '')) != job or not fresh(supervisor.get('checked_unix'))
+           or str(supervisor.get('state', '')).split()[:1] != ['RUNNING']
+           or supervisor.get('stale_heartbeat') or supervisor.get('selector_halted')
+           or supervisor.get('verified_complete'))):
+        snapshot['reason'] = 'stale_mismatched_or_nonrunning_supervisor'
+    elif not isinstance(heartbeat.get('active_workers'), int) or heartbeat['active_workers'] <= 0:
+        snapshot['reason'] = 'no_active_workers'
+    else:
+        snapshot.update(running=True, reason='current_controller_has_active_workers')
+    return snapshot
+
+
+def unfinished_status(directory, live):
+    """Classify unaudited tasks using current-attempt evidence, not old audits."""
+    directory = Path(directory)
+    if (directory / 'result.json').exists():
+        return 'unaudited'
+    if not directory.exists():
+        return 'pending'
+    if live.get('running') and not live.get('verified_complete'):
+        # Per-task heartbeats can legitimately remain unchanged for a 600-second
+        # browser call. The durable task creation must belong to this attempt;
+        # an old unfinished directory cannot inherit a replacement job's status.
+        try:
+            created = (directory / 'task.json').stat().st_mtime
+            boundary = live.get('attempt_submitted_unix')
+            if boundary is not None and boundary <= created <= live['observed_unix']:
+                return 'running'
+        except OSError:
+            pass
+    return 'interrupted'
+
+
 class AuditedFiles:
     def __init__(self, root, directory, record):
         self.root, self.directory = root.resolve(), directory.resolve()
@@ -195,17 +272,14 @@ def build(root, audit_path, image_dir):
     # Notes are separate human interpretations, frozen into the private review;
     # their presence never upgrades audit status or changes a canonical score.
     notes_source = dict(path=str(note_path), sha256=sha(note_path.read_bytes())) if notes else None
+    live = live_status_snapshot(root)
     images, tasks = Images(image_dir), []
     for task in planned:
         tid = task['task_id']
         directory = root / 'actor/tasks' / task_key(tid)
         row = rows.get(tid)
-        item = dict(**task, status='pending', frames=[], result=None, audit_issues=issues[tid],
+        item = dict(**task, status=unfinished_status(directory, live), frames=[], result=None, audit_issues=issues[tid],
                     review_notes=notes_by_task[tid])
-        if (directory / 'result.json').exists():
-            item['status'] = 'unaudited'
-        elif directory.exists():
-            item['status'] = 'running' if not audit['scheduler_closed'] else 'interrupted'
         if row and not issues[tid]:
             try:
                 files = AuditedFiles(root, directory, row)
@@ -230,12 +304,21 @@ def build(root, audit_path, image_dir):
                 item['status'] = 'unaudited'
                 item['audit_issues'].append(dict(task_id=tid, error_type=type(exc).__name__, error=str(exc)))
         tasks.append(item)
+    # Frame decoding can take minutes. Refresh only unaudited live states after
+    # that work so a newly started task is not compared with an old timestamp.
+    # A failed audit check remains unaudited even if its source is later moved.
+    live = live_status_snapshot(root)
+    for item in tasks:
+        if (item['status'] in ('pending', 'running', 'interrupted') or
+                (item['status'] == 'unaudited' and item['task_id'] not in rows
+                 and not item['audit_issues'])):
+            item['status'] = unfinished_status(root / 'actor/tasks' / task_key(item['task_id']), live)
     statuses = Counter(t['status'] for t in tasks)
     return dict(rendered_unix=time.time(), title='Kev 27B as the browser actor', tasks=tasks,
         protocol=plan['protocol'], resources=plan['resources'], limits=plan['limits'],
         audit={k: v for k, v in audit.items() if k != 'per_task'},
         audit_path=str(audit_path), audit_sha256=sha(audit_path.read_bytes()),
-        review_notes_source=notes_source,
+        review_notes_source=notes_source, live_status_snapshot=live,
         statuses=dict(statuses), canonical_scores_unchanged=True, images=images.urls,
         image_assets=True, privacy='Private local review; do not publish task payloads.')
 
@@ -261,6 +344,7 @@ def render(root, audit_path, output):
         audit_sha256=payload['audit_sha256'], image_assets=str(asset_dir),
         unique_screenshots=len(payload['images']), public=False, canonical_scores_unchanged=True)
     receipt['review_notes'] = sum(len(t['review_notes']) for t in payload['tasks'])
+    receipt['live_status_snapshot'] = payload['live_status_snapshot']
     output.with_suffix('.receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     return receipt
 

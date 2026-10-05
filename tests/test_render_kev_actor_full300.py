@@ -4,6 +4,7 @@ from copy import deepcopy
 import gzip
 import io
 import json
+import os
 
 from PIL import Image
 import pytest
@@ -26,7 +27,7 @@ def sign(root, directory, row):
 
 @pytest.fixture
 def saved(tmp_path):
-    root = tmp_path / 'runtime'
+    root = tmp_path / 'runtime/evaluations/actor-run'
     tasks = [dict(task_id=f'task-{i}', intent='Open result', start_url='https://example.org/') for i in range(300)]
     plan = dict(tasks=tasks, protocol={'max_decisions': 60}, resources={}, limits={})
     write(root / 'plan.json', plan)
@@ -79,7 +80,7 @@ def build(saved):
 def test_full_plan_separates_audited_pending_and_unaudited(saved):
     data = build(saved)
     assert len(data['tasks']) == 300
-    assert data['statuses'] == {'failure': 1, 'unaudited': 1, 'running': 1, 'pending': 297}
+    assert data['statuses'] == {'failure': 1, 'unaudited': 1, 'interrupted': 1, 'pending': 297}
     assert data['tasks'][1]['result'] is None  # An unaudited positive cannot inflate the score.
 
 
@@ -176,3 +177,108 @@ def test_private_render_uses_external_assets_and_refuses_repository_output(saved
     assert '__REVIEW_DATA__' not in html and 'data:image/' not in html
     data = json.loads(html.split('<script id="data" type="application/json">')[1].split('</script>')[0])
     assert all((output.parent / url).exists() for url in data['images'].values())
+
+
+def live_files(saved):
+    root = saved[0]
+    pointer = root.parent.parent / 'current_kev27b_actor_full300.json'
+    write(pointer, dict(job_id='345298', status='running', run_directory=str(root), verified_complete=False))
+    write(root / 'heartbeat.json', dict(job_id='345298', updated_unix=1000, active_workers=2))
+    write(root / 'supervisor-latest.json', dict(job_id='345298', checked_unix=1000, state='RUNNING',
+        stale_heartbeat=False, selector_halted=False, verified_complete=False))
+    write(root / 'approval.json', dict(attempts=[dict(job_id='345298', submitted_unix=800)]))
+    directory = root / 'actor/tasks' / review.task_key('task-2')
+    write(directory / 'task.json', dict(task_id='task-2'))
+    os.utime(directory / 'task.json', (900, 900))
+    return root, pointer, directory
+
+
+def test_current_replacement_liveness_overrides_only_unfinished_status_not_closed_audit(saved, monkeypatch):
+    root, _, directory = live_files(saved)
+    saved[4]['scheduler_closed'] = True  # Immutable audit covers an earlier stopped attempt.
+    write(saved[1], saved[4])
+    monkeypatch.setattr(review.time, 'time', lambda: 1000)
+    data = build(saved)
+    assert data['tasks'][2]['status'] == 'running'
+    assert data['tasks'][0]['status'] == 'failure' and data['tasks'][1]['status'] == 'unaudited'
+    assert data['audit']['scheduler_closed'] is True
+    live = data['live_status_snapshot']
+    assert live['running'] and live['job_id'] == '345298'
+    assert live['separate_from_result_audit'] and live['observed_unix'] == 1000
+    assert review.unfinished_status(directory, live) == 'running'
+
+
+@pytest.mark.parametrize('source,change', [
+    ('heartbeat', {'updated_unix': 879}),
+    ('heartbeat', {'updated_unix': 1001}),
+    ('heartbeat', {'job_id': '345281'}),
+    ('heartbeat', {'active_workers': 0}),
+    ('supervisor-latest', {'checked_unix': 879}),
+    ('supervisor-latest', {'job_id': '345281'}),
+    ('supervisor-latest', {'state': 'COMPLETED'}),
+    ('supervisor-latest', {'selector_halted': True}),
+    ('supervisor-latest', {'stale_heartbeat': True}),
+    ('pointer', {'run_directory': '/different/run'}),
+    ('pointer', {'verified_complete': True}),
+    ('pointer', {'status': 'failed'}),
+])
+def test_stale_mismatched_terminal_or_verified_metadata_cannot_label_running(saved, source, change):
+    root, pointer, directory = live_files(saved)
+    path = pointer if source == 'pointer' else root / (source + '.json')
+    value = review.read(path)
+    value.update(change)
+    write(path, value)
+    live = review.live_status_snapshot(root, now=1000)
+    assert not live['running']
+    assert review.unfinished_status(directory, live) == 'interrupted'
+
+
+def test_old_task_cannot_inherit_new_attempt_and_slow_current_task_can_remain_running(saved):
+    root, _, directory = live_files(saved)
+    write(directory / 'heartbeat.json', dict(stage='actor', updated_unix=400))
+    live = review.live_status_snapshot(root, now=1000)
+    assert review.unfinished_status(directory, live) == 'running'  # Legitimate long CDP call.
+    os.utime(directory / 'task.json', (799, 799))
+    assert review.unfinished_status(directory, live) == 'interrupted'
+
+
+def test_missing_attempt_boundary_does_not_guess_task_ownership(saved):
+    root, _, directory = live_files(saved)
+    write(root / 'approval.json', dict(attempts=[dict(job_id='345281', submitted_unix=500)]))
+    live = review.live_status_snapshot(root, now=1000)
+    assert live['running'] and live['attempt_submitted_unix'] is None
+    assert review.unfinished_status(directory, live) == 'interrupted'
+
+
+def test_result_existence_and_missing_directory_are_independent_of_live_status(saved):
+    root, _, directory = live_files(saved)
+    live = review.live_status_snapshot(root, now=1000)
+    assert review.unfinished_status(root / 'actor/tasks/not-started', live) == 'pending'
+    write(directory / 'result.json', dict(score=1, valid=True))
+    assert review.unfinished_status(directory, live) == 'unaudited'
+    live.update(verified_complete=True)
+    assert review.unfinished_status(directory, live) == 'unaudited'
+
+
+def test_live_status_refreshes_after_expensive_audited_frame_work(saved, monkeypatch):
+    root, _, _ = live_files(saved)
+    clock = [1000]
+    monkeypatch.setattr(review.time, 'time', lambda: clock[0])
+    original = review.build_frames
+
+    def parse_and_advance(*args):
+        frames = original(*args)
+        clock[0] = 1300
+        write(root / 'heartbeat.json', dict(job_id='345298', updated_unix=1300, active_workers=2))
+        write(root / 'supervisor-latest.json', dict(job_id='345298', checked_unix=1300, state='RUNNING'))
+        created = root / 'actor/tasks' / review.task_key('task-3') / 'task.json'
+        write(created, dict(task_id='task-3'))
+        os.utime(created, (1200, 1200))
+        return frames
+
+    monkeypatch.setattr(review, 'build_frames', parse_and_advance)
+    data = build(saved)
+    assert data['live_status_snapshot']['observed_unix'] == 1300
+    assert data['tasks'][3]['status'] == 'running'
+    assert data['tasks'][0]['status'] == 'failure'
+    assert data['audit_sha256'] == review.sha(saved[1].read_bytes())

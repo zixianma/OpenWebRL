@@ -379,6 +379,8 @@ peer is archived separately for retry. Recovery job 345298 continues the
 remaining 82 tasks with the same frozen v4 source and protocol: 6,960 seconds
 allocated against 6,963 seconds remaining after charging 7,437 / 14,400 seconds.
 The existing W&B identity, resource/API caps and active repair supervisor persist.
+The private review keeps the immutable result audit separate from current worker
+status; fresh matching job heartbeats determine running labels after a recovery.
 
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;
