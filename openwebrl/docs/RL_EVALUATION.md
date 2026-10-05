@@ -725,7 +725,7 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 344794 | 10-05 00:38 PDT | 53/300 | 50 | 3 | 33 | 5581 |
+| SFT + Jev | 344794 | 10-05 00:54 PDT | 64/300 | 61 | 3 | 39 | 6546 |
 | SFT + Kev27B | 344793 | 10-05 00:48 PDT | 45/300 | 44 | 1 | 29 | 5275 |
 <!-- sft-full300-live-audit:end -->
 
@@ -758,7 +758,7 @@ The corrected Jev replacement subsequently lost the screenshot on a Fandom
 episode without any diagnostic connection to that browser. The observation
 guard stopped inference, no judge was called, and the episode remains unscored
 with its last available image retained. Subsequent tasks continued normally;
-the latest53-record audit has three diagnosed invalids and no unexplained
+the latest64-record audit has three diagnosed invalids and no unexplained
 evidence errors. W&B has resumed the original evaluation identity.
 
 A subsequent canonical success used a25-mile job-search filter for a requested
@@ -768,6 +768,14 @@ also reported nonzero `proxy_cost`; its byte/cost ratio matches the provider's
 [$0.20/GB direct-egress rate](https://browser-use.com/pricing), and the frozen
 caller/SDK test preserves explicit `proxyCountryCode:null`. This is consistent
 with network egress billing, not evidence that the proxy setting changed.
+
+The64-record Jev audit retains three diagnosed invalids and39 canonical positives.
+Additional judge caveats include substituting a human-boxing search for an
+adoption task, treating an experience threshold as proof of the maximum, and
+crediting a lookup attempt that returned no matching order. These are flagged
+in the private review without selectively relabeling scores. One malformed SFT
+action was selected by Jev; the existing parser reported the format failure and
+the episode continued. Preserve that model behavior under the fixed protocol.
 
 
 <a id="sft-kev-full300-timeout-20261005"></a>
