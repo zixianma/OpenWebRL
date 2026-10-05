@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791239688.7604663,
+  "snapshot_epoch": 1791239990.4538841,
   "rows": [
     {
       "id": "AS01",
@@ -8,15 +8,20 @@
       "n": 1,
       "mode": "qwen",
       "target_tasks": 300,
-      "recorded_episodes": 133,
+      "recorded_episodes": 134,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
       "successes": 27,
-      "valid": 119,
+      "valid": 120,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 14
+      "invalid": 14,
+      "success_rate_pct": 20.149253731343283,
+      "success_rate_denominator": 134,
+      "valid_only_success_rate_pct": 22.5,
+      "valid_only_success_rate_denominator": 120,
+      "rates_provisional": true
     },
     {
       "id": "AS02",
@@ -25,15 +30,20 @@
       "n": 5,
       "mode": "qwen_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 132,
+      "recorded_episodes": 134,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 39,
-      "valid": 119,
+      "successes": 40,
+      "valid": 121,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 13
+      "invalid": 13,
+      "success_rate_pct": 29.850746268656717,
+      "success_rate_denominator": 134,
+      "valid_only_success_rate_pct": 33.05785123966942,
+      "valid_only_success_rate_denominator": 121,
+      "rates_provisional": true
     },
     {
       "id": "AS04",
@@ -49,7 +59,12 @@
       "successes": 106,
       "valid": 272,
       "matched_protocol": false,
-      "invalid": 28
+      "invalid": 28,
+      "success_rate_pct": 35.333333333333336,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 38.970588235294116,
+      "valid_only_success_rate_denominator": 272,
+      "rates_provisional": false
     },
     {
       "id": "AS05",
@@ -58,15 +73,20 @@
       "n": 5,
       "mode": "sft_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 146,
+      "recorded_episodes": 149,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 57,
-      "valid": 133,
+      "successes": 59,
+      "valid": 136,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 13
+      "invalid": 13,
+      "success_rate_pct": 39.59731543624161,
+      "success_rate_denominator": 149,
+      "valid_only_success_rate_pct": 43.38235294117647,
+      "valid_only_success_rate_denominator": 136,
+      "rates_provisional": true
     },
     {
       "id": "AS06",
@@ -75,15 +95,20 @@
       "n": 10,
       "mode": "sft_luna10",
       "target_tasks": 300,
-      "recorded_episodes": 145,
+      "recorded_episodes": 149,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 55,
-      "valid": 132,
+      "successes": 57,
+      "valid": 135,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 13
+      "invalid": 14,
+      "success_rate_pct": 38.25503355704698,
+      "success_rate_denominator": 149,
+      "valid_only_success_rate_pct": 42.22222222222222,
+      "valid_only_success_rate_denominator": 135,
+      "rates_provisional": true
     },
     {
       "id": "AS07",
@@ -104,7 +129,12 @@
       "overall_success": 0.36666666666666664,
       "valid_only_success": 0.3942652329749104,
       "aggregate_report": "cpu-family-aggregate.json",
-      "invalid": 21
+      "invalid": 21,
+      "success_rate_pct": 36.666666666666664,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 39.42652329749104,
+      "valid_only_success_rate_denominator": 279,
+      "rates_provisional": false
     },
     {
       "id": "AS08",
@@ -126,7 +156,12 @@
       "failure_audit_pending": false,
       "coverage_note": "All300 records audited; invalids preserved with diagnoses. Final scheduler/API accounting, W&B and browser cleanup verified by owning session; pre/post input-clearing repair strata remain distinct.",
       "overall_success": 0.5866666666666667,
-      "invalid": 16
+      "invalid": 16,
+      "success_rate_pct": 58.666666666666664,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 61.971830985915496,
+      "valid_only_success_rate_denominator": 284,
+      "rates_provisional": false
     },
     {
       "id": "AS09",
@@ -146,7 +181,12 @@
       "counts_provisional": false,
       "coverage_note": "All300 records audited; invalids preserved with diagnoses. Final scheduler/API accounting, W&B and browser cleanup verified by owning session; pre/post input-clearing repair strata remain distinct.",
       "overall_success": 0.6133333333333333,
-      "invalid": 9
+      "invalid": 9,
+      "success_rate_pct": 61.333333333333336,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 63.23024054982818,
+      "valid_only_success_rate_denominator": 291,
+      "rates_provisional": false
     },
     {
       "id": "AS10",
@@ -172,7 +212,12 @@
       "api_accounting_verified": true,
       "wandb_verified": true,
       "shared_judge_accounting_final": true,
-      "invalid": 23
+      "invalid": 23,
+      "success_rate_pct": 32.333333333333336,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 35.018050541516246,
+      "valid_only_success_rate_denominator": 277,
+      "rates_provisional": false
     },
     {
       "id": "AS11",
@@ -198,7 +243,12 @@
       "api_accounting_verified": true,
       "wandb_verified": true,
       "shared_judge_accounting_final": true,
-      "invalid": 27
+      "invalid": 27,
+      "success_rate_pct": 20.333333333333332,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 22.344322344322343,
+      "valid_only_success_rate_denominator": 273,
+      "rates_provisional": false
     },
     {
       "id": "AS12",
@@ -219,7 +269,12 @@
       "counts_provisional": false,
       "overall_success": 0.08666666666666667,
       "valid_only_success": 0.08843537414965986,
-      "invalid": 6
+      "invalid": 6,
+      "success_rate_pct": 8.666666666666666,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 8.843537414965986,
+      "valid_only_success_rate_denominator": 294,
+      "rates_provisional": false
     }
   ],
   "excluded": [
@@ -246,7 +301,7 @@
   "other_session_episodes": 900,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T22:34:48Z",
+  "snapshot_utc": "2026-10-05T22:39:50Z",
   "new_episodes_all_sessions": 3000,
   "comparison_rows": 11,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -427,7 +482,7 @@
     "verified_utc": "2026-10-05T10:26:44.224499+00:00"
   },
   "progress_health_snapshot": {
-    "snapshot_utc": "2026-10-05T22:34:48Z",
+    "snapshot_utc": "2026-10-05T22:39:50Z",
     "cpu_job_id": "344875",
     "cpu_state": "COMPLETED",
     "cpu_active_workers": 0,
@@ -437,7 +492,7 @@
     "remaining_luna_tasks": 0,
     "gpu_job_id": "345214",
     "gpu_state": "RUNNING",
-    "remaining_GPU_arm_episodes": 644,
+    "remaining_GPU_arm_episodes": 634,
     "budget_caps_changed": false,
     "cpu_total_seconds_cap": 14400,
     "cpu_total_actual_seconds": 12257,
@@ -453,24 +508,24 @@
     "full_experiment_complete": false,
     "gpu_pending_reason": null,
     "verification_scope": "CPU family only; full actor-selector study incomplete",
-    "GPU_primary_records_saved": 556,
+    "GPU_primary_records_saved": 566,
     "GPU_workers_active": 8,
     "API_ledgers": {
       "luna": {
-        "calls": 14332,
-        "charged_or_reserved_usd": 10.389142755000016
+        "calls": 14449,
+        "charged_or_reserved_usd": 10.511121930000028
       },
       "judge": {
-        "calls": 635,
-        "charged_or_reserved_usd": 2.8894294
+        "calls": 643,
+        "charged_or_reserved_usd": 2.9254071
       }
     },
     "gpu_active_workers": 8,
-    "recorded_GPU_arm_episodes": 556,
+    "recorded_GPU_arm_episodes": 566,
     "stalled_workers": 0,
     "record_errors": 0,
     "api_halts": false,
-    "API_ledgers_snapshot_utc": "2026-10-05T22:34:48Z",
+    "API_ledgers_snapshot_utc": "2026-10-05T22:39:50Z",
     "API_ledgers_are_historical": false,
     "API_ledgers_are_final": false
   },
@@ -511,7 +566,7 @@
     }
   },
   "full_experiment_complete": false,
-  "new_Luna_study_primary_records": 856,
+  "new_Luna_study_primary_records": 866,
   "new_Luna_study_target_records": 1500,
   "full_comparison_plots_generated": false,
   "peer_accounting_snapshot": {
@@ -802,11 +857,19 @@
     "verified_complete_rows_including_reused_baseline": 7,
     "audited_API_rows_pending_report_closeout": 0,
     "running_rows": 4,
-    "fresh_records_saved": 2356,
+    "fresh_records_saved": 2366,
     "fresh_records_target": 3000,
     "reused_baseline_records": 300,
-    "all_saved_records": 2656,
+    "all_saved_records": 2666,
     "all_record_target": 3300,
     "partial_counts_are_provisional": true
+  },
+  "success_rate_definitions": {
+    "unit": "percent",
+    "success_rate": "100 * saved judge successes / saved primary terminal records; invalid records remain in this denominator",
+    "valid_only_success_rate": "100 * saved judge successes / valid saved primary records",
+    "completed_denominator": 300,
+    "unfinished_runs": "Rates use only records saved at the snapshot and are provisional; missing episodes are not counted as failures. Completed task subsets can differ across arms.",
+    "judge_scope": "Protocol-specific judge success; see stopping/judge audit for permissive completion criteria. Protocol groups are not all matched."
   }
 }
