@@ -726,7 +726,7 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 345021 | 10-05 05:17 PDT | 211/300 | 200 | 11 | 134 | 20195 |
-| SFT + Kev27B | 344793 | 10-05 05:22 PDT | 235/300 | 228 | 7 | 156 | 21707 |
+| SFT + Kev27B | 344793 | 10-05 05:29 PDT | 240/300 | 233 | 7 | 159 | 22143 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-kev-progress-audit-20261005"></a>
