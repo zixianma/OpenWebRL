@@ -88,9 +88,13 @@ def build(root=ROOT):
                     tool_result='\n'.join(c['text'] for c in following if c['type'] == 'text'),
                     latency_seconds=decision.get('seconds'),
                     raw_response=decision.get('response'), status=decision.get('status', 'selected')))
+                if receipt.get('final_action_execution_verified') is False and i == len(decisions) - 1:
+                    frames[-1]['execution_unverified'] = True
             final = directory / 'final' / (key + '.png')
             task['models'][mode] = dict(status='completed', valid=result.get('valid'), reward=result.get('reward'),
-                steps=receipt.get('decisions', max(result.get('total_steps', 0), len(frames))), termination=result.get('terminate_reason'),
+                steps=receipt.get('decisions', max(result.get('total_steps', 0), len(frames))),
+                termination=result.get('terminate_reason') or result.get('error_type'),
+                partial_rollout=receipt.get('partial_rollout_verified', False),
                 elapsed_seconds=result.get('elapsed_seconds'), frames=frames,
                 final=image(final.read_bytes()) if final.exists() else None,
                 judge=result.get('metadata', {}).get('reward', {}).get('judge_text'),

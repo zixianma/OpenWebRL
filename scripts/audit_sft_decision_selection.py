@@ -112,14 +112,33 @@ def audit(root=ROOT):
                 termination=result.get('terminate_reason'), result_sha256=digest(path.read_bytes()),
                 terminal_correction_staged=staged, issues=[])
             try:
-                assert result['task_id'] == task_id and result['start_url'] == tasks[task_id]['metadata']['start_url']
+                assert result['task_id'] == task_id
                 assert result['mode'] == mode
+                diagnosis = diagnosed.get((mode, task_id))
+                partial = result.get('error_type') == 'TimeoutError' and 'metadata' not in result
                 if result['valid']:
                     assert result['reward'] in (0, 1)
-                messages = result['metadata']['messages']
-                assistants = [m['content'] for m in messages if m['role'] == 'assistant']
-                screenshots = [decode_image(c['image_url']) for m in messages if m['role'] == 'user'
-                               for c in m['content'] if c['type'] == 'image_url']
+                if partial:
+                    assert not result['valid'] and diagnosis and diagnosis['error_type'] == 'TimeoutError'
+                    archive = Path(diagnosis['partial_rollout'])
+                    assert archive in list((folder / 'samples' / key).rglob('*.json'))
+                    assert digest(archive.read_bytes()) == diagnosis['partial_rollout_sha256']
+                    sample = read(archive)
+                    assert sample['sample_id'] == task_id and sample['status'] == 'pending'
+                    prompt = sample['llm_input_texts']
+                    assert tasks[task_id]['metadata']['start_url'] in prompt
+                    assistants = re.findall(r'<\|im_start\|>assistant\n(.*?)<\|im_end\|>', prompt, re.S)
+                    assistants.append(sample['llm_response'])
+                    assert all(len(images) == 1 for images in sample['images'])
+                    screenshots = [decode_image(images[0]) for images in sample['images']]
+                    row.update(partial_rollout=str(archive), termination='TimeoutError',
+                        final_action_execution_verified=False)
+                else:
+                    assert result['start_url'] == tasks[task_id]['metadata']['start_url']
+                    messages = result['metadata']['messages']
+                    assistants = [m['content'] for m in messages if m['role'] == 'assistant']
+                    screenshots = [decode_image(c['image_url']) for m in messages if m['role'] == 'user'
+                                   for c in m['content'] if c['type'] == 'image_url']
                 all_decisions = sorted(traces[task_id], key=lambda r: r['turn'])
                 failed_decisions = [r for r in all_decisions if mode != 'sft' and r['status'] != 'selected']
                 decisions = [r for r in all_decisions if r not in failed_decisions]
@@ -165,10 +184,10 @@ def audit(root=ROOT):
                     assert actual_split['thought'] == chosen['thought'], 'Selected reasoning changed'
                     assert normalized(actual_split['action']) == normalized(chosen['action']), 'Selected action changed'
                 if not result['valid']:
-                    diagnosis = diagnosed.get((mode, task_id))
                     assert diagnosis, 'Invalid result requires diagnosis'
                     assert diagnosis['original_result_sha256'] == row['result_sha256']
-                    assert result['reward'] == diagnosis['saved_reward'] and 'ABORTED' in result['status']
+                    assert result['reward'] == diagnosis['saved_reward']
+                    assert partial or 'ABORTED' in result['status']
                     final_path = folder / 'final' / (key + '.png')
                     assert final_path.exists() == diagnosis['saved_final_image']
                     if final_path.exists():
@@ -185,7 +204,8 @@ def audit(root=ROOT):
                         assert digest(trace_path.with_suffix('.png').read_bytes()) == failed['screenshot_sha256']
                         assert len(failed['actor_outputs']) == 5 and 'selected_index' not in failed
                     assert not list((folder / 'judge' / key).glob('request-*.json'))
-                    row.update(diagnosed_invalid=True, trajectory_verified=True,
+                    row.update(diagnosed_invalid=True, trajectory_verified=not partial,
+                        partial_rollout_verified=partial,
                         decisions=len(decisions), unexecuted_reservations=len(failed_decisions), diagnosis=diagnosis['diagnosis'])
                     row['issues'].append('Diagnosed invalid: ' + diagnosis['classification'])
                     issues.append(dict(mode=mode, task_id=task_id, error=row['issues'][-1], diagnosed=True))

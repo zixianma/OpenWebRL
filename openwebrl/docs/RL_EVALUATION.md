@@ -411,6 +411,27 @@ closed page, context, CDP transport or remote browser. This fourth invalid episo
 has no terminal image or verdict and is preserved without replay. Other tasks
 continue under the same allocation; thirteen finished records have been audited.
 
+At the17:49 Pacific handoff, both the SFT and Jev cohorts have all10 records.
+The independent audit verifies9 SFT episodes (4 successes) and6 Jev episodes
+(3 successes), with5 diagnosed invalid records across the two cohorts. The two
+Jev step-limit terminal verdicts were recovered from their preserved final images
+using the unchanged canonical judge and are both failures. W&B agrees with the
+corrected summary; every SFT and Jev browser session is stopped.
+
+The last Jev episode reached its600-second timeout after selecting `go_back`
+as proposal30. Browser-level CDP commands still responded, but a read-only
+`Runtime.evaluate` on the page timed out. The underlying cause is unresolved.
+Its archived prompt, all30 input images and selected actor proposals are preserved
+and cross-checked against the selection records. Completion of the last browser
+action and the terminal state are unverified; there is no fresh final image or
+judge verdict. The private review labels that distinction explicitly.
+
+Kev0.8B started on the same allocation at17:47, with its pinned model card,
+fresh successful selector requests and activity on both GPUs verified. Kev27B
+remains pending. Roughly11minutes of controller time remained at this handoff,
+so completing both Kev cohorts within the original budget is uncertain. These
+partial results are not a completed four-way comparison or `verified_complete`.
+
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
 the explicit null proxy request. Inspection of the pinned SDK's serialized body
