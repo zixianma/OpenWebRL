@@ -99,18 +99,19 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 191,
-      "status": "running_after_context_failure_isolation",
+      "recorded_episodes": 300,
+      "status": "collection_complete_final_audit_pending",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "345021",
-      "successes": 124,
-      "valid": 180,
+      "successes": 176,
+      "valid": 284,
       "verified_complete": false,
       "counts_provisional": true,
-      "counts_provisional_reason": "Partial collection; mixed pre/post browser-repair strata remain explicit; final cohort audit pending.",
+      "counts_provisional_reason": "All300 records saved and scheduler completed; final owner evidence, verdict, receipt and browser-cleanup reconciliation pending. Historical browser-harness strata remain explicit.",
       "selector_halted": false,
-      "scheduler_state": "RUNNING",
-      "failure_audit_pending": false
+      "scheduler_state": "COMPLETED",
+      "failure_audit_pending": false,
+      "overall_success_provisional": 0.5866666666666667
     },
     {
       "id": "AS09",
@@ -119,16 +120,17 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 207,
-      "status": "running",
+      "recorded_episodes": 300,
+      "status": "collection_complete_final_audit_pending",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
-      "successes": 143,
-      "valid": 202,
+      "successes": 184,
+      "valid": 291,
       "verified_complete": false,
-      "scheduler_state": "RUNNING",
+      "scheduler_state": "COMPLETED",
       "counts_provisional": true,
-      "counts_provisional_reason": "Partial collection; mixed pre/post browser-repair strata remain explicit; final cohort audit pending."
+      "counts_provisional_reason": "All300 records saved and scheduler completed; final owner evidence, verdict, receipt and browser-cleanup reconciliation pending. Historical browser-harness strata remain explicit.",
+      "overall_success_provisional": 0.6133333333333333
     }
   ],
   "excluded": [
@@ -155,7 +157,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T11:44:00Z",
+  "snapshot_utc": "2026-10-05T16:28:03Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -335,7 +337,7 @@
     "verified_utc": "2026-10-05T10:26:44.224499+00:00"
   },
   "progress_health_snapshot": {
-    "snapshot_utc": "2026-10-05T11:44:00Z",
+    "snapshot_utc": "2026-10-05T16:28:03Z",
     "cpu_job_id": "344875",
     "cpu_state": "COMPLETED",
     "cpu_active_workers": 0,
@@ -401,18 +403,47 @@
   "new_Luna_study_target_records": 1500,
   "full_comparison_plots_generated": false,
   "peer_accounting_snapshot": {
-    "snapshot_utc": "2026-10-05T11:44:00Z",
-    "source": "Scheduler exact allocation rows across all registered attempts",
+    "snapshot_utc": "2026-10-05T16:28:03Z",
+    "source": "Final scheduler exact allocation rows across all registered attempts",
     "jev": {
-      "used_seconds": 18189,
-      "remaining_seconds": 17811,
+      "used_seconds": 30164,
+      "remaining_seconds": 5836,
       "approved_seconds": 36000
     },
     "kev27b": {
-      "used_seconds": 19393,
-      "remaining_seconds": 16607,
+      "used_seconds": 29158,
+      "remaining_seconds": 6842,
       "approved_seconds": 36000
     },
     "budgets_separate": true
+  },
+  "peer_collection_endpoint": {
+    "snapshot_utc": "2026-10-05T16:28:03Z",
+    "jev": {
+      "job_id": "345021",
+      "recorded_episodes": 300,
+      "provisional_successes": 176,
+      "provisional_valid": 284,
+      "total_actual_seconds": 30164,
+      "remaining_original_seconds": 5836,
+      "approved_total_seconds": 36000,
+      "verified_complete": false
+    },
+    "kev27b": {
+      "job_id": "344793",
+      "recorded_episodes": 300,
+      "provisional_successes": 184,
+      "provisional_valid": 291,
+      "total_actual_seconds": 29158,
+      "remaining_original_seconds": 6842,
+      "approved_total_seconds": 36000,
+      "verified_complete": false
+    },
+    "final_owner_audits_pending": true,
+    "new_fresh_records_all_studies": 900,
+    "target_fresh_records_all_studies": 2100,
+    "new_Qwen_Luna_verified_records": 300,
+    "new_Qwen_Luna_target": 1500,
+    "protocols_not_equated": true
   }
 }

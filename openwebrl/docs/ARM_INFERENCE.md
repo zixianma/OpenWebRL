@@ -32,7 +32,7 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 11:44:00 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-05 16:28:03 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
 run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
@@ -45,8 +45,8 @@ run has passed its final audit. The table includes runs owned by the other evalu
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS07 | GPT-6 Luna | None |1 |300 |300 |Verified complete344875;110 successes |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |191 provisional |Running345021; context-failure isolation recovery |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |207 provisional |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |300 provisional |Collection complete345021; final owner audit pending |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |300 provisional |Collection complete344793; final owner audit pending |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
 
 **October5 CPU-family endpoint:** all300 primary records are independently
 verified, comprising90 retained no-coordinate originals and210 corrected
@@ -55,12 +55,14 @@ finished. Scheduler use totals **12,257/14,400 approved CPU-pool seconds**
 across both attempts. The [verified CPU-family results](#luna-cpu-family-results-20261005)
 are separate from the full actor/selector comparison: **300/1,500 new study
 episodes are complete**, with GPU344754 still queued for four arms totaling
-1,200 episodes. Jev recovery and Kev collection retain their separate budgets.
-The table coverage snapshot is11:44:00 UTC; final CPU verification completed
+1,200 episodes. Jev and Kev have each saved300 records and exited successfully;
+their final owner audits remain pending under separate budgets.
+The table coverage snapshot is16:28:03 UTC; final CPU verification completed
 at10:26:44 UTC.
 
 **Coverage checklist:** eight full-set comparison rows; one completed reusable
-baseline, one verified CPU family, two running peers and four queued rows. The five fresh Luna-study
+baseline, one verified CPU family, two fully collected peers awaiting final
+audits, and four queued rows. The five fresh Luna-study
 rows share two approved pools. This totals2,100 new
 full-set episodes across both sessions plus300 reused baseline records. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
@@ -108,6 +110,23 @@ The Jev retry is capped at **17,940 seconds**, giving a maximum cumulative
 scheduler accounting shows 18,189 seconds used and 17,811 remaining for Jev;
 Kev has 19,393 used and 16,607 remaining under its separate 36,000-second
 cap. No approval or budget transfer was added.
+
+**October5,16:28:03 UTC collection endpoints:** Jev345021 and Kev344793 both
+exited successfully with **300/300 records**. Saved judge outcomes are
+provisionally **176/300 (58.67%)** for Jev and
+**184/300 (61.33%)** for Kev27B; 284 and 291 records are marked
+valid, respectively. Final evidence, verdict, receipt and browser-cleanup
+audits by their existing repair owner are still pending. These scores retain
+the pre/post browser-repair strata and differ in protocol from the Luna study;
+they are not a matched ranking against Luna or the historical SFT baseline.
+
+Final scheduler accounting, including every attempt, is **30,164/36,000 seconds**
+for Jev's one-GPU pool and **29,158/36,000 seconds** for Kev's two-GPU pool.
+The unified table therefore has **900/2,100 fresh records collected**, plus
+the300-record historical SFT reference. The new Qwen/Luna study itself is
+still **300/1,500 verified**. Its four GPU arms remain queued under job344754
+and have consumed zero GPU time. The full cost/latency/token comparison
+awaits those1,200 episodes and final accounting; approvals are unchanged.
 
 <a id="luna-cpu-family-results-20261005"></a>
 ### Verified Luna CPU-family results — October5
