@@ -11,7 +11,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Unified actor/selector tracker: Luna verified110/300; Jev/Kev300 records each with provisional176/184 successes; four GPU arms queued; snapshot16:28:03 UTC](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 [October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; GPU344754 queued; Luna CPU verified36.67% overall/39.43% valid-only using12,257/14,400 CPU seconds; full study300/1,500 complete](ARM_INFERENCE.md#luna-actor-full300-20261004).
-[October5 reasoning audit: Luna used medium, zero output-cap hits; matched Luna-high and GPT-6.1 Sol-high full300 baselines prepared, exact CPU/API approval pending](ARM_INFERENCE.md#api-actor-reasoning-20261005).
+[October5 reasoning audit: Luna used medium, zero output-cap hits; approved Luna-high345178 and GPT-6.1 Sol-high345179 full300 baselines running in parallel, with verified high-effort receipts and separate CPU/API caps](ARM_INFERENCE.md#api-actor-reasoning-20261005).
 [Corrected Qwen/SFT pilot:49 collected, seven Luna actor episodes compromised and Luna-alone comparison withdrawn; four-arm/nine-task plots, unchanged accounting; unapproved Qwen-only tail proposal](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

@@ -5,7 +5,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 ## Contents
 
 - [Full300 actor × Luna-selector study](#luna-actor-full300-20261004)
-- [Luna reasoning audit and proposed Luna-high / Sol6.1-high baselines](#api-actor-reasoning-20261005)
+- [Luna reasoning audit and running Luna-high / Sol6.1-high baselines](#api-actor-reasoning-20261005)
 - [Qwen/SFT pilot: corrected four-arm comparison; Luna actor withdrawn](#luna-qwen-inference-20261004)
 - [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
@@ -33,10 +33,10 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 16:40:53 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-05 16:55:46 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
-run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same ten rows: eight committed comparisons and two proposed high-reasoning baselines. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
+run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same ten committed comparison rows, including both approved high-reasoning baselines. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
 | ID | Actor | Selector | N | Target | Saved | Status / current job | Protocol | Budget |
 | --- | --- | --- | ---: | ---: | ---: | --- | --- | --- |
@@ -48,8 +48,8 @@ run has passed its final audit. The table includes runs owned by the other evalu
 | AS07 | GPT-6 Luna | None |1 |300 |300 |Verified complete344875;110 successes |Luna study; API sampling |Approved shared CPU/API pools below |
 | AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |300 |Audited complete345021;176 successes,16 diagnosed invalids |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
 | AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |300 |Audited complete344793;184 successes,9 diagnosed invalids |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
-| AS10 | GPT-6 Luna, high reasoning |None |1 |300 |0 |Protocol/budget prepared; exact approval pending |Matched API actor protocol |Proposed separate CPU/API caps below |
-| AS11 | GPT-6.1 Sol, high reasoning |None |1 |300 |0 |Protocol/budget prepared; exact approval pending |Matched API actor protocol |Proposed separate CPU/API caps below |
+| AS10 | GPT-6 Luna, high reasoning |None |1 |300 |1 |Running345178; startup verified |Matched API actor protocol |Approved separate CPU/API caps below |
+| AS11 | GPT-6.1 Sol, high reasoning |None |1 |300 |2 |Running345179; startup verified |Matched API actor protocol |Approved separate CPU/API caps below |
 
 **October5 CPU-family endpoint:** all300 primary records are independently
 verified, comprising90 retained no-coordinate originals and210 corrected
@@ -61,10 +61,11 @@ episodes are complete**, with GPU344754 still queued for four arms totaling
 1,200 episodes. Jev and Kev have each saved300 records and exited successfully;
 their owner has now completed the final audits, retaining16 and9 diagnosed invalids respectively. Their separate protocol and budgets remain explicit. Final Luna CPU verification completed at10:26:44 UTC.
 
-**Coverage checklist:** eight committed full-set comparison rows; one completed reusable
-baseline, one verified CPU family, two audited peers, and four queued rows. Two additional300-task high-reasoning rows are proposed and unapproved. The five fresh Luna-study
-rows share two approved pools. This totals2,100 new
-full-set episodes across both sessions plus300 reused baseline records. No
+**Coverage checklist:** ten committed full-set comparison rows: one completed reusable
+baseline, one verified CPU family, two audited peers, four queued rows and two
+running300-task high-reasoning actors. The five fresh Luna-study
+rows share two approved pools. This totals2,700 new
+full-set episodes across the three separately budgeted studies plus300 reused baseline records. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
 updated request; only official SFT + Luna has an N=10 arm. Other IDs remain
 unchanged. **Kev0.8B has only a completed10-task pilot**; no
@@ -174,7 +175,7 @@ All original CPU/GPU/API caps remain unchanged; completion of this CPU family
 does not authorize a transfer of its unused budget to another pool or the pilot.
 
 <a id="api-actor-reasoning-20261005"></a>
-### Luna reasoning audit and proposed high-reasoning baselines — October5
+### Luna reasoning audit and high-reasoning baselines — October5
 
 **The verified Luna result used medium reasoning. No primary actor response hit
 its4,096-token cap.** All3,839 primary calls returned the requested
@@ -192,7 +193,7 @@ of every failed action. More reasoning could improve planning, grounding or
 stopping decisions; it is an untested intervention here.
 
 The user requested GPT-6.1 Sol at high reasoning. Two actor-only comparisons are
-prepared: **AS10 Luna-high** isolates effort against the existing medium result;
+approved and running in parallel: **AS10 Luna-high** isolates effort against the existing medium result;
 **AS11 GPT-6.1 Sol-high** compares model choice at the same high setting. Each
 uses all300 tasks, the corrected pixel-coordinate harness, identical task goals
 and browser tools, local1280×720 browsers,30 turns,4,096 total output tokens,
@@ -208,12 +209,12 @@ reasoning as well as visible output. [Sol model and pricing](https://developers.
 [Luna model](https://developers.openai.com/api/docs/models/gpt-6-luna), and
 [reasoning/output-budget semantics](https://developers.openai.com/api/docs/guides/reasoning).
 
-| Proposed arm | Tasks | CPU allocation ceiling, including retries | Actor API ceiling | Counterfactual actor cost at observed Luna-medium usage |
+| Approved arm | Tasks | CPU allocation ceiling, including retries | Actor API ceiling | Counterfactual actor cost at observed Luna-medium usage |
 | --- | ---: | --- | --- | ---: |
 | AS10 Luna-high |300 |0 GPU,16 CPU,32GiB ×6h;4 browser workers |$15 and9,900 calls |$2.21 |
 | AS11 GPT-6.1 Sol-high |300 |0 GPU,16 CPU,32GiB ×6h;4 browser workers |$100 and9,900 calls |$44.28 |
 
-Run these independent CPU jobs in parallel and release each when finished.
+These independent CPU jobs run in parallel and release each allocation when finished.
 The two resource totals remain separate across retries. Shared terminal-judge
 cap: **$5 /2,640 calls**, giving **$120 maximum API spending** across the pair.
 The6h values are ceilings, not runtime predictions. The counterfactual costs
@@ -221,12 +222,20 @@ apply current Standard token prices to the observed medium cohort; high effort
 and model choice can change tokens, trajectories, caching and latency. No
 budget transfers from the existing study or pilot are authorized.
 
-Status: **protocol and budget prepared; exact new resource/API approval pending;
-no submission or paid model call made.** The new model/effort/pricing worker
-configuration must be frozen and validated before launch. Track success,
-paired differences, costs, latency, total/reasoning/cache tokens, browser steps
-and CPU allocation use; plot success versus cost, latency and input/output
-tokens. [Reviewable protocol and exact budget proposal](arm_results/luna_full300_20261004/reasoning-high-proposal.json).
+Status: **explicitly approved; Luna-high345178 and Sol6.1-high345179 are running**
+with four browser workers each. The frozen implementation passed21 targeted
+accounting and coordinate tests. Live startup checks at **2026-10-05 16:55:46 UTC** verified
+all eight W&B runs in `openwebrl-evals`, exact returned model identities,
+high reasoning,4,096-token output caps, and no actor/judge budget halts.
+Initial saved coverage is1/300 Luna-high and2/300 Sol-high; this is startup
+coverage, not a performance result. Both jobs have0 allocated GPUs.
+
+A verified persistent supervisor checks both jobs and returns the owning agent
+for diagnosis/recovery every15 minutes or on state changes. Each retry charges
+its original arm's six-hour total. Track success, paired differences, costs,
+latency, total/reasoning/cache tokens, browser steps and CPU allocation use;
+plot success versus cost, latency and input/output tokens after complete
+collection and final accounting. [Approved protocol and exact budget](arm_results/luna_full300_20261004/reasoning-high-proposal.json).
 
 <a id="luna-pixel-coordinate-repair-20261005"></a>
 ### October5 Luna actor coordinate repair

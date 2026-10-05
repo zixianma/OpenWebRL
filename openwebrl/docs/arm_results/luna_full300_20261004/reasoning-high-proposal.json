@@ -1,7 +1,7 @@
 {
   "experiment_id": "reasoning-actors-full300-20261005",
-  "status": "protocol_and_budget_prepared_awaiting_exact_approval",
-  "approved": false,
+  "status": "running",
+  "approved": true,
   "target_new_episodes": 600,
   "reused_baseline": {
     "id": "AS07",
@@ -206,5 +206,18 @@
     "https://developers.openai.com/api/docs/models/gpt-6-luna"
   ],
   "pricing_retrieved_utc": "2026-10-05T16:39:51Z",
-  "publication": "Aggregate results and three plots only; raw task payloads, screenshots, trajectories and receipts remain local"
+  "publication": "Aggregate results and three plots only; raw task payloads, screenshots, trajectories and receipts remain local",
+  "approved_jobs": {
+    "luna_high": "345178",
+    "sol61_high": "345179"
+  },
+  "startup_utc": "2026-10-05 16:55:46 UTC",
+  "validation": {
+    "tests_passed": 21,
+    "active_browser_workers": 8,
+    "wandb_project": "openwebrl-evals",
+    "exact_model_and_high_reasoning_receipts_verified": true,
+    "output_token_cap": 4096,
+    "local_GPU_use": 0
+  }
 }
