@@ -195,13 +195,13 @@ The same API ledgers and scientific settings are retained. Run data and source h
 under runtime `luna-qwen-inference-20261004/`. GPU startup is verified on four distinct H200 UUIDs. Actual request receipts
 confirm Qwen temperature1/top-p0.9/top-k disabled, Luna medium reasoning and the
 pinned o4-mini judge; the first browser episode and verdict are durable. All
-four evaluation-only W&B runs are live in `openwebrl-evals`. This is startup
+four evaluation-only W&B identities are preserved in `openwebrl-evals`. This is startup
 validation, not a completed comparison.
 A persistent host supervisor watches the current attempt and queues this owning
 agent on state changes and at15-minute review intervals. Its own-thread
 continuation dispatch was verified; it does not independently mutate GPU jobs.
 The active agent handles diagnosis, fixes and recovery within the remaining
-approval. Final completion requires all40 episode records, final Slurm accounting
+approval. Final completion requires all50 episode records, final Slurm accounting
 and the three reviewed figures.
 
 
@@ -212,19 +212,20 @@ and the three reviewed figures.
 |344476 |4 |150 |Stopped: inherited batch-level GPU count serialized the worker steps |
 |344534 |4 |25 |Failed: Slurm requires the same GPU type in both GPU request flags |
 |344536 |4 |27 |Failed: host GPU indexes differ from the indexes inside a worker's device namespace |
-|344537 |4 |Failed after2228 seconds |First finished worker hit W&B summary API error;33 records preserved |
-|344655 |4 |Queued |Corrected W&B/context handling;49-minute maximum, same four TP1 workers |
+|344537 |4 |2228 |Failed: first finished worker hit W&B summary API error;33 records preserved |
+|344655 |4 |— |Queued: corrected W&B/context handling;49-minute maximum, same four TP1 workers |
 
 The worker command now explicitly uses `--gpus=h200:1` and
 `--gres=gpu:h200:1`. GPU identity is read from the single visible NVML device;
 the controller verifies four distinct UUIDs. Both corrections were checked
-with live Slurm steps, followed by successful four-worker startup. **202 seconds
-were consumed by prior attempts.** The replacement's maximum5160 seconds keeps
-the combined maximum5362 seconds below the original5400-second cap. API ledgers
+with live Slurm steps, followed by successful four-worker startup. The first
+three attempts consumed202 seconds;344537 then consumed2228 seconds.
+**2430 seconds have been consumed.** Replacement344655 has a2940-second
+maximum, keeping the combined maximum5370 seconds below the original5400 cap. API ledgers
 were not reset, and model weights, sampling, task order, judge and metric
 protocols were preserved. Interrupted receipts and partial artifacts remain
 private and are included in research spending; missing final episode timers
-are explicitly marked rather than fabricated. Local regression checks:16 passed.
+are explicitly marked rather than fabricated. Local regression checks:20 passed, plus the actual offline W&B SDK check.
 
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
