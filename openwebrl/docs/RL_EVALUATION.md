@@ -711,6 +711,18 @@ episodes, including the pilot's first10 tasks; the pilot remains separate.
 Jobs **344661 (Kev27B)** and **344708 (Jev, replacing344662)** are submitted under the following
 separate approvals; neither has a full300 result yet.
 
+<!-- sft-full300-live-audit:start -->
+Latest independent audit snapshots; both runs remain active. Counts below describe
+completed records only, with all pending tasks retained in the300-task target.
+Judge successes are canonical verdicts, including the separately noted evidence
+limitations; these are not final full300 results.
+
+| Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
+| SFT + Jev | 344708 | 10-04 23:57 PDT | 33/300 | 32 | 1 | 25 | 3262 |
+| SFT + Kev27B | 344661 | 10-04 23:54 PDT | 32/300 | 32 | 0 | 23 | 3109 |
+<!-- sft-full300-live-audit:end -->
+
 | Run | H200 | CPU | RAM GiB | Total hours including retries | Browser-session cap | Selector-call cap | Judge-call cap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT + Kev27B ·344661 |2 |16 |240 |10 |330 |9910 local, including warmups |1320 |
