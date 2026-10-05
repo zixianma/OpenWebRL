@@ -261,6 +261,16 @@ observation has the matching fingerprint; they are not recorded click
 coordinates. Manual caveats leave canonical scores unchanged. The review and
 its image assets remain private.
 
+**Judge caveat — October 5, 10:38 PDT.** The 66-record artifact audit passes,
+but visual review found one canonical positive whose saved destination belongs
+to a different Fandom community from the one required by the task. The judge
+accepted a matching image filename and action count without establishing the
+community constraint. A hash-bound private note links the original history,
+fresh final image and verdict. Artifact validity and the canonical score
+remain unchanged; the caveat concerns whether the task requirement was met.
+The other five positives reviewed so far are supported by their saved evidence.
+Collection is still running, and this partial check is not a final success rate.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 frozen runtime: `runtime/reference-kev27b-actor-full300-20261004-v1`.
 Validation passed37 offline checks plus the opt-in local Chromium fill/click/done
