@@ -653,13 +653,13 @@ two concurrent episodes, top-p0.95/top-k20,4096 response tokens,
 with the proposed allocations and caps. A new frozen source revision preserves
 the earlier pilot/preparation settings. Each run collects300 fresh
 episodes, including the pilot's first10 tasks; the pilot remains separate.
-Jobs **344661 (Kev27B)** and **344662 (Jev)** are submitted under the following
+Jobs **344661 (Kev27B)** and **344708 (Jev, replacing344662)** are submitted under the following
 separate approvals; neither has a full300 result yet.
 
 | Run | H200 | CPU | RAM GiB | Total hours including retries | Browser-session cap | Selector-call cap | Judge-call cap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT + Kev27B ·344661 |2 |16 |240 |10 |330 |9910 local, including warmups |1320 |
-| SFT + Jev ·344662 |1 |8 |120 |10 |330 |9900 Jev |1320 |
+| SFT + Jev ·344662→344708 |1 |8 |120 |10 |330 |9900 Jev |1320 |
 
 These are separate caps totaling30 H200-hours,660 browser reservations and2640
 judge calls. Each run reserves at most50000 actor proposals, including failed
@@ -697,6 +697,22 @@ retain the original per-mode budget through recovery.
 Independent completion still requires all300 records, preserved rollouts and
 terminal evidence or explicit invalid diagnoses, browser shutdown, final budget
 accounting, W&B verification, documentation and a private review.
+
+Jev recovery on October4: job344662 stopped after1,003 scheduler seconds when
+one HTTP200 reply named choice1 but assigned0.35 to it and0.36 to choice5.
+The strict validator correctly rejected the contradiction; its global halt
+interrupted a second browser episode. All eight valid completed results remain
+unchanged; the two interrupted attempts and41 superseded decision traces are
+preserved. The exact failed request returned a valid response in a charged replay.
+Revision v3 adds up to two explicitly recorded retries of that identical request,
+with no new actor samples and no replacement action. Every request consumes the
+original shared9900-call cap. Existing model, probability, choice and argmax
+validation remains strict. All147 earlier successful selections replay unchanged;
+27 targeted tests pass, including exhaustion of retry and request budgets.
+Replacement344708 requests1H200/8CPU/120GiB for34,980 seconds (9h43m), within
+the34,997 seconds remaining. Kev344661 keeps its existing v2 worker. A private
+full300 review now supports300-task navigation, external JPEG previews and saved
+retry responses; its snapshots remain explicitly provisional until the final audit.
 
 <a id="evaluation-harness-guide"></a>
 ## Evaluation harness: code map and entry points

@@ -75,6 +75,7 @@ def audit(root=ROOT):
     system_prompt = next(ast.literal_eval(n.value) for n in prompt_ast.body
         if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'SYSTEM_PROMPT' for t in n.targets))
     issues, rows, counts, summaries, unfinished = [], [], Counter(), {}, []
+    counts['jev_requests'] += len(list((root / 'recovery-probes').glob('request-*.json')))
     diagnosed = {(r['mode'], r['task_id']): r for r in
         (read(root / 'diagnosed-invalid.json') if (root / 'diagnosed-invalid.json').exists() else [])}
     for mode in modes:
@@ -91,7 +92,7 @@ def audit(root=ROOT):
         else:
             for path in sorted((folder / 'selections').glob('request-*.json')):
                 record = read(path); record['_path'] = path
-                counts['jev_requests' if mode == 'jev' else 'local_kev_requests'] += 1
+                counts['jev_requests' if mode == 'jev' else 'local_kev_requests'] += len(record.get('http_attempts', [None]))
                 counts['actor_proposals_saved'] += len(record['actor_outputs'])
                 if path.name in superseded:
                     prior = superseded[path.name]
@@ -182,6 +183,15 @@ def audit(root=ROOT):
                             top_p=plan['protocol']['top_p'], top_k=plan['protocol']['top_k'],
                             max_new_tokens=4096, repetition_penalty=1.)
                         request, response = record['request'], record['response']
+                        http_attempts = record.get('http_attempts')
+                        if http_attempts is not None:
+                            assert 1 <= len(http_attempts) <= 1 + plan.get('worker_options', {}).get('selector_validation_retries', 0)
+                            assert http_attempts[-1]['response'] == response
+                            for rejected in http_attempts[:-1]:
+                                assert mode == 'jev' and rejected['http_status'] == 200
+                                assert rejected['validation_error'] == 'Decision choice disagrees with probability argmax'
+                                rejected_answer = rejected['response']['answers']['selection']
+                                assert rejected_answer['probabilities'][rejected_answer['choice']] < max(rejected_answer['probabilities'].values())
                         assert response['model'] == request['model'] == ('jev-1.13.0' if mode == 'jev' else 'kev-latest')
                         assert not response.get('truncated')
                         assert record['identity'] == ({'model': 'jev-1.13.0'} if mode == 'jev'

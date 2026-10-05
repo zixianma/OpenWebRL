@@ -6,7 +6,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [October4 Jev Ultrafast: completed10-task pilot,1/10 successes, independently verified browser and judge artifacts](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
-[Full300 SFT+Jev and SFT+Kev27B submitted as344662/344661: actor T1.0/p0.95/4K; recent SFT baseline reused only as a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
+[Full300 SFT+Jev recovery344708 and SFT+Kev27B344661: actor T1.0/p0.95/4K; recent SFT baseline reused only as a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
 
 [October4 Qwen Thinking / official OpenWebRL SFT / Luna comparison: fifth SFT N=5 arm queued on the same ten tasks; cost/latency/token plots and browser/local-compute accounting; recovery344655 retains the original total budget](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).

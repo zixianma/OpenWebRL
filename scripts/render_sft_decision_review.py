@@ -21,11 +21,12 @@ def read(path):
     return json.loads(Path(path).read_text())
 
 
-def build(root=ROOT):
+def build(root=ROOT, image_dir=None):
     plan, audit = read(root / 'plan.json'), read(root / 'independent-audit.json')
+    modes = [(key, label) for key, label in MODES if key in plan.get('modes', dict(MODES))]
     evidence = {(r['mode'], r['task_id']): r for r in audit['rows']}
     notes_path = root / 'judge-review-notes.json'
-    review_notes = {(r['mode'], r['task_id']): r['note']
+    review_notes = {(r['mode'], r['task_id']): r.get('note', r.get('observation', ''))
                     for r in (read(notes_path) if notes_path.exists() else [])}
     tasks = []
     for line in Path(plan['tasks']).read_text().splitlines():
@@ -41,10 +42,16 @@ def build(root=ROOT):
                 preview = original.convert('RGB')
                 preview.thumbnail((1600, 1600))
                 buffer = io.BytesIO(); preview.save(buffer, format='JPEG', quality=85)
-            images[key] = base64.b64encode(buffer.getvalue()).decode()
+            if image_dir is None:
+                images[key] = base64.b64encode(buffer.getvalue()).decode()
+            else:
+                target = image_dir / (key + '.jpg')
+                if not target.exists():
+                    target.write_bytes(buffer.getvalue())
+                images[key] = image_dir.name + '/' + target.name
         return key
 
-    for mode, label in MODES:
+    for mode, label in modes:
         directory = root / mode
         superseded_path = directory / 'superseded-selections.json'
         superseded = read(superseded_path) if superseded_path.exists() else {}
@@ -110,7 +117,8 @@ def build(root=ROOT):
                     seeds=decision['candidate_seeds'], page=page,
                     tool_result='\n'.join(c['text'] for c in following if c['type'] == 'text'),
                     latency_seconds=decision.get('seconds'),
-                    raw_response=decision.get('response'), status=decision.get('status', 'selected')))
+                    raw_response=decision.get('response'), http_attempts=decision.get('http_attempts'),
+                    status=decision.get('status', 'selected')))
                 if receipt.get('final_action_execution_verified') is False and i == len(decisions) - 1:
                     frames[-1]['execution_unverified'] = True
             final = directory / 'final' / (key + '.png')
@@ -123,15 +131,19 @@ def build(root=ROOT):
                 judge=result.get('metadata', {}).get('reward', {}).get('judge_text'),
                 judge_review=review_notes.get((mode, task['task_id'])),
                 evidence_verified=receipt.get('evidence_verified', False), issues=receipt['issues'])
-    return dict(tasks=tasks, models=[dict(key=k, label=v) for k,v in MODES], images=images,
+    return dict(tasks=tasks, models=[dict(key=k, label=v) for k,v in modes], images=images,
+        image_assets=image_dir is not None, recovery=plan.get('recovery'),
         audit={k:v for k,v in audit.items() if k != 'rows'}, protocol=plan['protocol'], rendered_unix=time.time())
 
 
-def render(output):
+def render(output, root=ROOT):
     output = Path(output).resolve()
     if output.is_relative_to(REPO):
         raise ValueError('Raw task data must remain private')
-    payload = build()
+    image_dir = output.with_suffix('.assets') if len(read(root / 'plan.json')['task_ids']) > 10 else None
+    if image_dir is not None:
+        image_dir.mkdir(parents=True, exist_ok=True)
+    payload = build(root, image_dir)
     template = (REPO / 'scripts/templates/sft_decision_review.html').read_text()
     assert template.count('__REVIEW_DATA__') == 1
     prefix, suffix = template.split('__REVIEW_DATA__')
@@ -159,7 +171,9 @@ def render(output):
     partial.replace(output)
     receipt = dict(html=str(output), sha256=digest.hexdigest(),
         bytes=byte_count, completed_results=payload['audit']['completed_results'],
-        all40_evidence_verified=payload['audit']['all40_evidence_verified'], public=False)
+        all40_evidence_verified=payload['audit']['all40_evidence_verified'],
+        expected_results=payload['audit'].get('expected_results'), image_assets=str(image_dir) if image_dir else None,
+        public=False)
     output.with_suffix('.receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     return receipt
 
@@ -167,4 +181,6 @@ def render(output):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=RUNTIME / 'visualizations/sft-decision-selection-review-20261004.html')
-    print(json.dumps(render(parser.parse_args().output), indent=2))
+    parser.add_argument('--root', type=Path, default=ROOT)
+    args = parser.parse_args()
+    print(json.dumps(render(args.output, args.root), indent=2))

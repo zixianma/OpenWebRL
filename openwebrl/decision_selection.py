@@ -51,6 +51,10 @@ def selection_payload(model, task, observation, history, candidates):
             criteria={str(i + 1): f'Candidate {i + 1} is the best next action.' for i in range(5)})})
 
 
+class DecisionChoiceMismatch(ValueError):
+    """A well-formed probability vector contradicts the provider's choice."""
+
+
 def selected_index(request, response):
     if response.get('model') != request['model'] or response.get('truncated'):
         raise ValueError('Wrong decision model or truncated request')
@@ -74,8 +78,10 @@ def selected_index(request, response):
         raise ValueError('Invalid selection probability vector')
     winner = max(keys, key=lambda k: probs[k])
     choice = answer.get('choice')
-    if choice not in keys or not math.isclose(probs[choice], probs[winner], abs_tol=1e-7):
-        raise ValueError('Decision choice disagrees with probability argmax')
+    if choice not in keys:
+        raise ValueError('Decision choice is outside the supplied alternatives')
+    if not math.isclose(probs[choice], probs[winner], abs_tol=1e-7):
+        raise DecisionChoiceMismatch('Decision choice disagrees with probability argmax')
     return int(choice) - 1
 
 
@@ -101,7 +107,7 @@ class ObservationGuard:
 
 class DecisionSelector:
     def __init__(self, provider, output, *, client, endpoint=None, api_key=None,
-                 seed=42, max_requests=300, identity=None, budget=None):
+                 seed=42, max_requests=300, identity=None, budget=None, validation_retries=0):
         if provider not in ('jev', 'kev'):
             raise ValueError('Expected Jev or Kev')
         self.provider, self.client, self.seed = provider, client, seed
@@ -113,6 +119,11 @@ class DecisionSelector:
         self.root = Path(output); self.root.mkdir(parents=True, exist_ok=True)
         self.max_requests, self.identity = max_requests, identity
         self.budget = budget
+        if type(validation_retries) is not int or not 0 <= validation_retries <= 2:
+            raise ValueError('At most two validation retries are supported')
+        if validation_retries and (provider != 'jev' or budget is None):
+            raise ValueError('Validation retries require Jev and a shared request budget')
+        self.validation_retries = validation_retries
         self.counter = len(list(self.root.glob('request-*.json')))
         self.halted = (self.root / 'halt.json').exists()
 
@@ -127,7 +138,7 @@ class DecisionSelector:
             dict(sampling_params, sampling_seed=s), images, timeout_secs=timeout) for s in seeds))
         candidates = [split_response(o[0]) for o in outputs]
         request = selection_payload(self.model, task, observation, history, candidates)
-        # Reserve durably before sending. No hidden retries or fallback to action 1.
+        # Reserve durably before sending; all retries retain the same candidates.
         if self.halted or self.counter >= self.max_requests:
             raise RuntimeError('Selector halted or request cap reached')
         self.counter += 1
@@ -143,14 +154,29 @@ class DecisionSelector:
         write_json(path, record)
         start = time.monotonic()
         try:
-            if self.budget:
-                self.budget.reserve('jev_requests' if self.provider == 'jev' else 'local_kev_requests',
-                                    task_id=task_id, turn=turn)
-            reply = await self.client.post(self.endpoint, json=request, headers=self.headers, timeout=120)
-            record['http_status'] = reply.status_code
-            reply.raise_for_status()
-            record['response'] = reply.json()
-            index = selected_index(request, record['response'])
+            record['http_attempts'] = []
+            for attempt in range(self.validation_retries + 1):
+                if self.budget:
+                    self.budget.reserve('jev_requests' if self.provider == 'jev' else 'local_kev_requests',
+                                        task_id=task_id, turn=turn, validation_attempt=attempt)
+                receipt = dict(attempt=attempt, started_unix=time.time())
+                record['http_attempts'].append(receipt)
+                write_json(path, record)
+                reply = await self.client.post(self.endpoint, json=request, headers=self.headers, timeout=120)
+                record['http_status'] = receipt['http_status'] = reply.status_code
+                reply.raise_for_status()
+                record['response'] = receipt['response'] = reply.json()
+                try:
+                    index = selected_index(request, record['response'])
+                except DecisionChoiceMismatch as exc:
+                    receipt.update(validation_error=str(exc), finished_unix=time.time())
+                    write_json(path, record)
+                    if attempt >= self.validation_retries:
+                        raise
+                    await asyncio.sleep(.5 * (attempt + 1))
+                    continue
+                receipt['finished_unix'] = time.time()
+                break
             record.update(status='selected', selected_index=index)
             return outputs[index], dict(selected_index=index, mode=self.provider,
                                         fallback=None, trace_path=str(path))

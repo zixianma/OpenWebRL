@@ -78,6 +78,45 @@ def test_actor_reservations_survive_failed_generation(tmp_path):
     asyncio.run(run())
 
 
+@pytest.mark.parametrize('succeeds,cap,expected_calls', [(True, 3, 2), (False, 3, 3), (True, 1, 1)])
+def test_jev_contradictory_response_retry_preserves_candidates_and_charges_calls(tmp_path, succeeds, cap, expected_calls):
+    async def run():
+        actor_calls, requests = [], []
+        outputs = [(f'<think>reason {i}</think>action {i}', [], [], 'stop') for i in range(5)]
+        async def infer(*args, **kwargs):
+            output = outputs[len(actor_calls)]; actor_calls.append(output); return output
+        bad = {'model':'jev-1.13.0','answers':{'selection':{'type':'choice','choice':'1',
+            'probabilities':{'3':.14,'4':.07,'1':.35,'2':.08,'5':.36}}}}
+        good = json.loads(json.dumps(bad)); good['answers']['selection']['choice'] = '5'
+        def handle(request):
+            requests.append(request.content)
+            return httpx.Response(200, json=good if succeeds and len(requests)>1 else bad)
+        budget = SelectionBudget(tmp_path/'budget', {'actor_proposals':5,'jev_requests':cap})
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handle)) as client:
+            selector = DecisionSelector('jev', tmp_path/'traces', client=client, api_key='fixture',
+                                        validation_retries=2, budget=budget)
+            kwargs = dict(infer=infer,url='actor',input_text='prompt',sampling_params={},images=[],
+                observation={'screenshot':b'fixture','active_tab_url':'https://example.com',
+                             'selection_page':{'url':'https://example.com'}},
+                history=[],task='task',task_id='id',turn=0,timeout=30)
+            if succeeds and cap>1:
+                result, meta = await selector(**kwargs)
+                assert result is outputs[4] and meta['fallback'] is None and not selector.halted
+            else:
+                with pytest.raises((ValueError, RuntimeError)):
+                    await selector(**kwargs)
+                assert selector.halted
+        assert len(actor_calls)==5 and len(requests)==expected_calls and len(set(requests))==1
+        usage=json.loads((tmp_path/'budget/usage.json').read_text())['reserved']
+        assert usage=={'actor_proposals':5,'jev_requests':expected_calls}
+        saved=json.loads((tmp_path/'traces/request-00001.json').read_text())
+        assert saved['http_attempts'][0]['response']==bad
+        assert saved['http_attempts'][0]['validation_error']=='Decision choice disagrees with probability argmax'
+        assert len(saved['http_attempts'])==expected_calls
+        assert saved['actor_outputs']==[o[0] for o in outputs]
+    asyncio.run(run())
+
+
 def test_step_limit_uses_same_judge_and_preserves_termination():
     failed = SimpleNamespace(name='FAILED')
     sample = SimpleNamespace(status=failed, metadata={'terminate_reason': 'max_steps_exhausted',

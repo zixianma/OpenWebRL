@@ -193,7 +193,8 @@ async def run(config):
                 write_json(root / 'server-identity.json', check_server(config['endpoint'], identity))
             selector = DecisionSelector(provider, root / 'selections', client=client,
                 endpoint=config.get('endpoint'), api_key=os.getenv('TYPESAFE_API_KEY') or os.getenv('JEV_API_KEY'),
-                max_requests=config.get('selector_request_cap', 300), identity=identity, budget=budget)
+                max_requests=config.get('selector_request_cap', 300), identity=identity, budget=budget,
+                validation_retries=config.get('selector_validation_retries', 0))
         write_json(root / 'manifest.json', config)
         guarded_selector = ObservationGuard(selector, root / 'observation-failures')
         import wandb
