@@ -38,8 +38,9 @@ SFT/SelectionARM/pass@k experiments below.
 Use the released `Qwen/Qwen3-VL-4B-Thinking` at revision
 `1de27d8c51f12e819435303b9e84c4e25ba8401e`, with **temperature1, top-p0.9**, top-k
 disabled, repetition penalty1, 4096 response tokens and a 32K context. Near the
-context boundary, shorten the response allowance by the same rule in all Qwen
-arms. This is not the historical project SFT checkpoint. The checkpoint shards
+context boundary, shorten the response allowance by the same rule in all local
+actor arms: `min(4096, 32768 - input_tokens - 1)`. SGLang reserves one token
+and rejects a requested input-plus-output total equal to32768. This is not the historical project SFT checkpoint. The checkpoint shards
 have been downloaded and independently checked against their SHA256 digests.
 
 The added arm uses **`OpenWebRL/OpenWebRL-4B-SFT`**, revision
@@ -174,7 +175,16 @@ Implementation: `openwebrl/luna_qwen_{policy,eval,metrics}.py`,
 `scripts/report_luna_qwen_inference.py`, with the added stage in
 `scripts/run_luna_qwen_sft_extension.py`. The fifth-arm preparation passed19
 CPU tests, official-checkpoint/processor verification and shared-budget checks;
-its GPU startup remains pending. Run data and source hashes are preserved
+its GPU startup remains pending. A subsequent context-boundary regression
+test brought the suite to20 passing tests. The live run exposed aborted local
+requests whose input plus requested output equaled32768; the engine requires
+a strictly smaller total. The correction reserves one token, retaining the
+4096 response cap and the rest of the protocol. Only episodes affected by this
+diagnosed transport failure are queued for fresh-browser recovery before the
+SFT stage. Their original records and all request receipts remain archived,
+and every attempt remains charged to the same compute/API budgets. Successful
+and ordinary unsuccessful episodes are retained without outcome-based retries.
+GPU validation of the repaired episodes is pending. Run data and source hashes are preserved
 under runtime `luna-qwen-inference-20261004/`. GPU startup is verified on four distinct H200 UUIDs. Actual request receipts
 confirm Qwen temperature1/top-p0.9/top-k disabled, Luna medium reasoning and the
 pinned o4-mini judge; the first browser episode and verdict are durable. All
