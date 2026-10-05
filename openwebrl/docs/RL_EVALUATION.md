@@ -175,8 +175,8 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Recovery job 345298 is running; final results remain pending.** All 218 saved
-records are preserved and audited: 214 valid results and four diagnosed, unscored invalids.
+**Recovery job 345324 is running; final results remain pending.** All 236 saved
+records are preserved and audited: 231 valid results and five diagnosed, unscored invalids.
 The approved 1 H200 / 8 CPU / 120 GiB request retains the
 14,400-second total across all attempts; the replacement uses only its remainder.
 The same W&B run and two-worker browser collection continue.
@@ -381,6 +381,25 @@ allocated against 6,963 seconds remaining after charging 7,437 / 14,400 seconds.
 The existing W&B identity, resource/API caps and active repair supervisor persist.
 The private review keeps the immutable result audit separate from current worker
 status; fresh matching job heartbeats determine running labels after a recovery.
+
+**Browser-timeout and saved-judge recovery — October 5, 12:35 PDT.** Job
+345298 stopped after 640 seconds when a browser task reached its unchanged
+600-second deadline. Bounded cleanup closed the session; the final snapshot
+correctly recorded that a fresh image was unavailable. This fifth invalid
+remains unscored and preserved without another rollout.
+
+The interrupted peer had already completed its actor rollout and saved a fresh
+terminal image and canonical judge request. A tested recovery helper preserved
+the original unanswered, charged judge call and issued exactly one additional
+call with identical image, action history, model, seed and token cap. The new
+verdict is a valid negative; no browser was restarted. Hash-bound provenance
+allows the auditor to distinguish this documented interruption from missing or
+fabricated responses. Original actor duration is retained; the reported measured
+actor-plus-recovery-judge duration excludes the unknown interrupted-call latency.
+Recovery/audit/controller checks passed 57 tests. All 242 prior browsers are
+closed and all 236 canonical records are audited. Replacement 345324 continues
+64 tasks with unchanged frozen v4 worker settings and 6,300 seconds allocated
+from the remaining 6,323 (8,077 / 14,400 scheduler seconds charged).
 
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;

@@ -122,9 +122,28 @@ def invalid_diagnosis(root, directory, result, diagnosis):
             'Invalid diagnosis lacks recorded failure')
 
 
-def audit_task(root, task, config, judge_source, diagnosis=None, cohort_name='actor'):
+def saved_actor_metadata(task, trajectory, config, attempts):
+    """Result-shaped actor facts only; no invented response or verdict."""
+    counts = Counter(a['provider'] for a in attempts)
+    return dict(task_id=task['task_id'], completed=True, valid=True, decision_provider='kev',
+                decision_checkpoint=config['kev']['run'], requested_jev_model=config['jev_model'],
+                actions=len(trajectory['history']), decisions=len(trajectory['decisions']),
+                terminal=trajectory['terminal'], actor_error=trajectory['error'], cleanup_errors=trajectory['cleanup_errors'],
+                provider_blocked=False, api_attempts={p: counts[p] for p in KINDS},
+                resolved_jev_models=sorted({d['model'] for d in trajectory['decisions']}))
+
+
+def audit_task(root, task, config, judge_source, diagnosis=None, cohort_name='actor', *, _pending_judge=False):
     directory = root/cohort_name/'tasks'/digest(task['task_id'])
-    result, trajectory = read(directory/'result.json'), read(directory/'trajectory.json')
+    trajectory = read(directory/'trajectory.json')
+    if _pending_judge:
+        require(not (directory/'result.json').exists() and not (directory/'judge-response.json').exists(),
+                'Saved judge recovery cannot replace a result or verdict')
+        require(trajectory['terminal'] in {'done', 'blocked'} and trajectory['error'] is None
+                and not trajectory['cleanup_errors'], 'Saved judge recovery requires a clean terminal actor')
+        result = saved_actor_metadata(task, trajectory, config, lines(directory/'api-attempts.jsonl'))
+    else:
+        result = read(directory/'result.json')
     require(read(directory/'task.json') == trajectory['task'] == task, 'Task identity mismatch')
     require(result['task_id'] == task['task_id'] and result['completed'], 'Result identity/completion mismatch')
     require(result['decision_provider'] == 'kev' and result['decision_checkpoint'] == config['kev']['run']
@@ -224,6 +243,13 @@ def audit_task(root, task, config, judge_source, diagnosis=None, cohort_name='ac
         require(expected is not None, 'Judge was given missing or stale final evidence')
         require(read(directory/'judge-request.json') == expected, 'Canonical judge request mismatch')
         require(all(a['request'] == expected for a in attempts if a['provider'] == 'judge'), 'Judge retry changed canonical request')
+    if _pending_judge:
+        require(expected is not None and (directory/'judge-request.json').exists(), 'Missing saved canonical judge input')
+        missing = [a for a in attempts if a['call_id'] not in indexed]
+        require(len(missing) == 1 and missing[0]['provider'] == 'judge' and counts['judge'] == 1,
+                'Recovery requires exactly one unanswered original judge and no other unresolved calls')
+        return dict(task_id=task['task_id'], status='saved_judge_pending_verified', api_attempts=result['api_attempts'],
+                    missing_call_id=missing[0]['call_id'])
     if (directory/'judge-response.json').exists():
         response = read(directory/'judge-response.json')
         require(any(request == expected and body == response for request, body in successful['judge']), 'Judge evidence/API mismatch')
@@ -235,7 +261,9 @@ def audit_task(root, task, config, judge_source, diagnosis=None, cohort_name='ac
         require(response is not None and score is not None, 'Unparseable or missing judge verdict marked valid')
         require(result['judge_text'] == text and result['score'] == score and result['judge_model'] == config['judge_model']
                 and result['judge_prompt_variant'] == 'agenttrek' and result['judge_error'] is None, 'Canonical verdict/result mismatch')
-        require(len(responses) == len(attempts), 'Valid task has unresolved API attempts')
+        if (result.get('saved_judge_recovery') or (directory/'saved-judge-recovery').exists()
+                or len(responses) != len(attempts)):
+            validate_saved_judge_recovery(root, directory, result, attempts, responses, expected)
     else:
         error = result['judge_error']
         if error == 'unparseable_verdict':
@@ -256,7 +284,42 @@ def audit_task(root, task, config, judge_source, diagnosis=None, cohort_name='ac
                 valid=result['valid'], score=result['score'], terminal=result['terminal'], actions=len(history),
                 decisions=len(decisions), screenshots=len(states), api_attempts=dict(counts),
                 diagnosis=diagnosis if not result['valid'] else None,
-                artifact_sha256={str(p.relative_to(root)): sha(p) for p in directory.iterdir() if p.is_file() and p.suffix != '.tmp'})
+                artifact_sha256={str(p.relative_to(root)): sha(p) for p in directory.rglob('*') if p.is_file() and p.suffix != '.tmp'})
+
+
+def validate_saved_judge_recovery(root, directory, result, attempts, responses, expected):
+    """Exempt only the proven original interrupted judge call, never actor calls."""
+    try:
+        from scripts.recover_kev_actor_saved_judge import validate_intent
+    except ModuleNotFoundError as exc:
+        if exc.name != 'scripts':
+            raise
+        from recover_kev_actor_saved_judge import validate_intent
+    folder = directory/'saved-judge-recovery'
+    require((folder/'intent.json').exists() and (folder/'completion.json').exists(),
+            'Valid task has unresolved API attempts without completed saved-judge recovery')
+    intent = read(folder/'intent.json')
+    original = validate_intent(root, directory, intent)
+    completion = read(folder/'completion.json')
+    require(completion['intent_sha256'] == sha(folder/'intent.json')
+            and completion['result_digest'] == digest(result)
+            and completion['judge_response_sha256'] == sha(directory/'judge-response.json'),
+            'Saved judge recovery completion hash mismatch')
+    require(result.get('saved_judge_recovery') == dict(intent_sha256=sha(folder/'intent.json'),
+            original_unanswered_call_id=intent['missing_call_id'], original_judge_latency_unknown=True),
+            'Missing saved judge recovery result provenance')
+    indexed = {r['call_id']: r for r in responses}
+    require({a['call_id'] for a in attempts} - set(indexed) == {intent['missing_call_id']},
+            'Recovery cannot waive additional unanswered calls')
+    added = attempts[len(original['attempts']):]
+    require(0 < len(added) <= intent['max_additional_calls'] and all(
+        a['provider'] == 'judge' and a['request'] == expected and a['started_unix'] >= intent['prepared_unix']
+        for a in added), 'Recovery changed actor calls, judge input, or call allowance')
+    judges = [a for a in attempts if a['provider'] == 'judge']
+    require(len(judges) <= 4 and [a['call_id'] for a in judges] == [f'judge-{i:04d}' for i in range(1, len(judges)+1)],
+            'Recovery judge counter/cap mismatch')
+    require(result.get('actor_seconds') == read(directory/'trajectory.json')['actor_seconds'],
+            'Recovery changed original actor duration')
 
 
 def audit(root):
