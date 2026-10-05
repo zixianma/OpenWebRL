@@ -175,7 +175,7 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Recovery job 345243 is running; final results remain pending.** The original
+**Recovery job 345255 is running; final results remain pending.** The original
 job 345177 stopped after a confirmed browser-finalization hang. Its 109 completed
 results are preserved. The approved 1 H200 / 8 CPU / 120 GiB request retains the
 14,400-second total across all attempts; the replacement uses only its remainder.
@@ -300,9 +300,28 @@ interrupted retries, with a 9,600-second allocation against the remaining 9,647
 seconds. All prior requests and browser reservations remain charged; no budget
 was added. Model identity, both warmups and resumed W&B startup are verified.
 
+**Diagnosed timeout and resume — October 5, 11:29 PDT.** The AKC retry
+confirmed the cleanup fix: it finalized at 600.251 seconds with two executed
+actions, no fresh terminal image and no judge call, and its remote browser
+closed successfully. The saved result is an explicitly diagnosed invalid,
+with no numeric score. The underlying site/CDP stall remains unresolved.
+Job 345243 then halted for owner review after 674 scheduler seconds. Its one
+interrupted peer is preserved separately; all 122 saved results pass independent
+artifact checks (121 valid, one diagnosed invalid), and all 125 browser sessions
+from both attempts are confirmed stopped.
+
+Frozen runtime v3 adds strict resume handling for owner-diagnosed invalids:
+the result, trajectory and log hashes, task identity, exact error fields and
+closed browser must match the diagnosis. It retains the AKC invalid and skips
+all completed records, including scored negatives. The change passed 34 offline
+checks and an independent check against the actual timeout evidence. Recovery
+345255 runs the remaining 178 tasks with 8,940 seconds allocated from the 8,973
+seconds left after charging both attempts (5,427 / 14,400 seconds). Scientific
+settings and all resource, browser and API caps are unchanged.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
-current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v2`;
-the original v1 runtime remains preserved.
+current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v3`;
+both earlier frozen runtimes remain preserved.
 Validation passed37 offline checks plus the opt-in local Chromium fill/click/done
 and durable-judge-evidence test. Model calls were mocked in that browser test;
 preparation made no paid requests and submitted no allocation. Task payloads,

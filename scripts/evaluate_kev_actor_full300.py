@@ -204,12 +204,51 @@ def submit(root):
 
 def pending_tasks(root, cp):
     pending=[]
+    diagnoses=None
     for task in cp['tasks']:
         directory=root/'actor/tasks'/io.digest(task['task_id'])
         if (directory/'result.json').exists():
             result=read(directory/'result.json')
-            if result.get('task_id')!=task['task_id'] or not result.get('valid') or result.get('provider_blocked'):
+            if result.get('task_id')!=task['task_id']:
                 raise ValueError('Invalid result requires diagnosis and preservation before retry')
+            if result.get('valid'):
+                if result.get('provider_blocked'):
+                    raise ValueError('Invalid result requires diagnosis and preservation before retry')
+                # A scored negative is completed work, never a retry candidate.
+                continue
+            # This is acceptance of an explicit owner's diagnosis, not an
+            # automatic diagnosis or a substitute for the final evidence audit.
+            if diagnoses is None:
+                path=root/'diagnosed-invalids.json'
+                diagnoses=read(path) if path.exists() else {}
+            diagnosis=diagnoses.get(task['task_id']) if isinstance(diagnoses,dict) else None
+            required_fields={'task_id','reason','result_sha256','expected_actor_error',
+                             'expected_judge_error','evidence_sha256'}
+            if (not isinstance(diagnosis,dict) or not required_fields<=set(diagnosis)
+                    or diagnosis['task_id']!=task['task_id'] or result.get('valid') is not False
+                    or result.get('completed') is not True or 'score' not in result or result['score'] is not None
+                    or not isinstance(diagnosis['reason'],str) or not diagnosis['reason'].strip()
+                    or diagnosis['result_sha256']!=kev.file_hash(directory/'result.json')
+                    or diagnosis['expected_actor_error']!=result.get('actor_error')
+                    or diagnosis['expected_judge_error']!=result.get('judge_error')
+                    or not (result.get('actor_error') or result.get('judge_error') or result.get('cleanup_errors'))):
+                raise ValueError('Invalid result requires exact hash-bound owner diagnosis before it can be skipped')
+            evidence=diagnosis['evidence_sha256']
+            required={str((directory/name).relative_to(root)) for name in ('result.json','trajectory.json','worker.log')}
+            if not isinstance(evidence,dict) or not required<=set(evidence):
+                raise ValueError('Invalid diagnosis lacks immutable result/trajectory/log evidence')
+            for name,expected in evidence.items():
+                if not isinstance(name,str):
+                    raise ValueError('Invalid diagnosis evidence path')
+                path=(root/name).resolve()
+                if (not path.is_relative_to(directory.resolve()) or not path.is_file()
+                        or kev.file_hash(path)!=expected):
+                    raise ValueError('Invalid diagnosis evidence changed or escapes its task directory')
+            marker=directory/'browser-session.json'
+            if not marker.exists() or read(marker).get('stopped') is not True:
+                raise ValueError('Invalid diagnosis requires a stopped owned browser')
+            if read(directory/'task.json')!=task or read(directory/'trajectory.json').get('task')!=task:
+                raise ValueError('Invalid diagnosis task/trajectory identity mismatch')
         elif (directory/'task.json').exists():
             raise ValueError('Interrupted attempt requires diagnosis and preservation before retry')
         else:pending.append(task)
