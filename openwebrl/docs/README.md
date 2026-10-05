@@ -7,6 +7,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 [SFT proposes five actions; Jev/Kev select: stopped at original budget guard;27 terminal records audited, SFT4/10, Jev3/10, Kev0.8B3/7, Kev27B unrun;3386/3600seconds charged](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
 
+[October4 Qwen Thinking / Luna comparison: four arms, cost/latency/token plots, browser and local-compute accounting; pilot prepared, allocation approval pending](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 historical reconciliation: why30.0%→42.7% became35.2%→39.3%; matched-valid sensitivity and unresolved causes](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).

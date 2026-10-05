@@ -12,6 +12,12 @@ Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png)
 
 ## 1. Inference-time ARM selection
 
+**Next comparison, prepared:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
+selection at N=5/10, and Luna alone. Track cost, latency, tokens, browser steps
+and local compute; plot success against the first three. The bounded ten-task
+pilot awaits exact allocation/API-budget approval; no new results yet.
+[Protocol and metric definitions](ARM_INFERENCE.md#luna-qwen-inference-20261004).
+
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
 **reasoning + action**. ScalarRM scores independently; SelectionARM compares
 jointly:

@@ -4,6 +4,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
+- [Qwen3-VL-4B-Thinking with Luna: four-arm comparison and efficiency metrics](#luna-qwen-inference-20261004)
 - [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
 - [ARM inference results on Online-Mind2Web](#arm-inference-results)
@@ -11,6 +12,122 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 - [ARM matched retry status and results](#arm-inference-retry-results)
 
 ---
+
+<a id="luna-qwen-inference-20261004"></a>
+## Qwen Thinking and Luna: performance versus cost — October4
+
+**Prepared; no GPU allocation submitted and no paid inference collected.** The
+user selected cost, latency, tokens, browser steps and local compute, with plots
+for the first three. This is a new four-arm comparison, separate from the older
+SFT/SelectionARM/pass@k experiments below.
+
+| Arm | Actor samples per browser decision | Action selection |
+| --- | ---: | --- |
+| Qwen alone | 1 | Execute Qwen's action |
+| Qwen + Luna, N=5 | 5 | Luna chooses one unchanged candidate |
+| Qwen + Luna, N=10 | 10 | Luna chooses one unchanged candidate |
+| Luna alone | 1 Luna response | Execute Luna's native browser tool call |
+
+Use the released `Qwen/Qwen3-VL-4B-Thinking` at revision
+`1de27d8c51f12e819435303b9e84c4e25ba8401e`, with **temperature1, top-p0.9**, top-k
+disabled, repetition penalty1, 4096 response tokens and a 32K context. Near the
+context boundary, shorten the response allowance by the same rule in all Qwen
+arms. This is not the historical project SFT checkpoint. The checkpoint shards
+have been downloaded and independently checked against their SHA256 digests.
+
+Luna uses `gpt-6-luna`, **medium reasoning**, 4096 output tokens, and the standard
+service tier in both roles. With reasoning enabled its API does not accept
+temperature/top-p, so those requested sampling controls apply to Qwen.
+Read-only account access succeeded; paid vision, tool-call and selection
+requests still need validation inside the approved pilot. Save the actual model
+identity returned on every request. See the [model reference](https://developers.openai.com/api/docs/models/gpt-6-luna)
+and [reasoning parameter compatibility](https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters).
+
+Every task receives all four arms in deterministic shuffled order, using fresh
+local browser sessions, one exclusive episode at a time, a 1280×720 viewport,
+the initial task goal, the current screenshot, and full retained history.
+Proposals within each decision run concurrently; their seeds are fixed by
+task/turn/candidate index across Qwen arms. Flush Qwen's server cache before each
+episode and retain within-episode reuse, preventing the preceding arm from
+warming the next arm's initial prompt. Provider-side Luna caching is recorded
+from receipts rather than assumed controllable. The selector sees every candidate's
+reasoning and action in shuffled order and must return a valid index. It cannot
+rewrite actions or silently fall back to candidate1. All requested proposals,
+including discarded proposals, are charged to their arm.
+
+All arms have a 30-turn horizon and the same browser tools. Native Luna tool
+calls are converted to the framework's action representation; the Qwen token
+IDs used for that conversion are never reported as Luna usage. The shared
+framework currently also enforces its Qwen-tokenized context gate on Luna;
+context-limit terminations must be reported. These are controlled harness
+conditions, not a claim to maximize each model's native context capacity.
+
+**Judge evidence is actions-only for this new cohort:** task goal, action log
+and final observed screenshot, with actor thoughts removed in every arm.
+Luna's private reasoning is unavailable, so including Qwen thoughts would give
+the judge different evidence. Use the existing Online-Mind2Web/AgentTrek rubric,
+pinned `o4-mini-2025-04-16`, seed42 and 4096 completion tokens. Preserve raw model
+outputs and judge requests/verdicts separately. This evidence change means the
+new scores must not be merged with historical thought-inclusive scores. The
+existing rubric's lenient success criteria remain a limitation.
+
+| Selected metric | Recorded definition | Comparison / display |
+| --- | --- | --- |
+| **Cost** | API dollars from every returned usage receipt, plus exclusive local GPU reservation during Qwen episodes × declared hourly rate | Mean estimated serving USD per attempted task; success versus cost |
+| **Latency** | Wall time from episode start through generation/browser cleanup, stopping before the terminal judge | Median and p95 across all attempted tasks; success versus median latency, with a span to p95 |
+| **Tokens** | Provider input/output totals by actor/selector/judge; cached input, cache writes and reasoning output retained where supplied | Success versus mean input and output tokens in two panels; actor and selector combined, judge separate |
+| **Browser steps** | Browser `step` calls, including failed calls, plus time awaiting those calls | Mean/p50/p95; distinguish step calls from generation turns |
+| **Local compute** | Local GPU reservation seconds, proposal-batch wall time, overlapping request seconds, Qwen analytic FLOP estimates and 5-second GPU utilization/memory/power samples | Report separately; local model demand for Luna alone is zero, while the research allocation still incurs overhead |
+
+Primary success uses the full scheduled denominator; invalid episodes remain
+in it and also get separate counts. Every arm must finish the same task cohort
+before comparison plots are produced. Use paired task-bootstrap95% intervals
+for success differences. These intervals describe task variation at the fixed
+sampling protocol, not additional date/seed uncertainty. Latency includes
+failed episodes; no success-only filtering.
+
+The three figures are **success versus cost**, **success versus latency**, and
+**success versus input/output tokens**. Browser steps and compute remain in the
+CSV/JSON tables. No synthetic performance figures are published. Raw task
+payloads, screenshots, requests and trajectories remain private.
+
+Cost accounting assumptions:
+
+- Use **$0.90/H200-hour as an adjustable reference rate**, derived from the
+  [prior cluster allocation estimate](RL_RUNTIME.md#h200-testing--approved-continuation-287371-2026-09-10-1957-pdt).
+  This is a serving-cost estimate, not a cluster invoice. Qwen's exclusive GPU
+  reservation includes browser/selector waiting; it is not kernel busy time.
+- Luna reference rates are $0.10/M input, $0.01/M cached input, $0.125/M cache
+  writes and $0.50/M output at the frozen short-context tier. Cache-price bounds
+  are shown when the provider omits write telemetry. Cached and reasoning
+  tokens are subsets of input/output totals and are never added twice.
+- Tokenizers differ across models. Token plots expose usage; they do not
+  establish equal compute. Qwen FLOPs are analytic bounds with measured KV
+  reuse and uncertain vision caching. Luna's internal FLOPs are unavailable.
+- Unknown usage stays unknown; omit the affected cost/token point instead of
+  imputing zero. Interrupted API calls retain conservative budget reservations.
+  Budget ledgers survive restarts. Browser CPU is not separately priced.
+- Terminal judging, startup/idle allocation time, and interrupted recovery
+  attempts are separate research expenses. Preserve every attempt's usage and
+  final Slurm accounting so the total experiment bill remains auditable.
+
+**Proposed bounded pilot, awaiting exact resource approval:**10 fixed,
+hash-selected tasks ×4 arms =40 episodes; **one H200,8 CPUs,120GiB, at most4 hours
+total across all attempts**, plus **$15 Luna /902 calls** and **$5 judge /160
+calls**. The four-hour value is a ceiling, not an eight-hour runtime prediction;
+release the allocation when complete. API dollar and call caps both apply.
+The reference GPU ceiling is $3.60; the API ceiling is $20. No new GPU/API budget
+has been approved for this experiment. The full300-task schedule is prepared,
+but its allocation request will use measured pilot throughput/cost. The pilot
+is for protocol and efficiency validation; ten tasks cannot establish a small
+performance difference.
+
+Implementation: `openwebrl/luna_qwen_{policy,eval,metrics}.py`,
+`scripts/prepare_luna_qwen_inference.py`, and
+`scripts/report_luna_qwen_inference.py`. Run data and source hashes are preserved
+under runtime `luna-qwen-inference-20261004/`. GPU startup, live browser behavior
+and paid API compatibility remain unverified until launch. Evaluation-only W&B
+records use `openwebrl-evals`.
 
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
