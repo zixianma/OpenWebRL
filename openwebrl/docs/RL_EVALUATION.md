@@ -175,8 +175,8 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Recovery job 345281 is running; final results remain pending.** All 183 saved
-records are preserved: 180 valid results and three diagnosed, unscored invalids.
+**Recovery job 345298 is running; final results remain pending.** All 218 saved
+records are preserved and audited: 214 valid results and four diagnosed, unscored invalids.
 The approved 1 H200 / 8 CPU / 120 GiB request retains the
 14,400-second total across all attempts; the replacement uses only its remainder.
 The same W&B run and two-worker browser collection continue.
@@ -366,6 +366,19 @@ field do not support the requested conclusion. A separate quote task verifies
 the requested rating but leaves distance and quote completion unestablished.
 These are private evidence annotations, not changed canonical verdicts or
 infrastructure-invalid labels.
+
+**Browser-start recovery — October 5, 12:17 PDT.** Job 345281 stopped after
+812 seconds on a browser startup error, before any actor request. The attempt
+has no observation, terminal screenshot or judge call and remains unscored.
+The underlying exception message was not retained, so its exact network cause
+is unconfirmed. Independent checks validate the missing-evidence diagnosis and
+closed browser; this attempt is preserved without an unchanged replay.
+All 218 saved records pass the artifact audit (214 valid, four invalid), and
+all 224 browsers from the five finished attempts are stopped. The interrupted
+peer is archived separately for retry. Recovery job 345298 continues the
+remaining 82 tasks with the same frozen v4 source and protocol: 6,960 seconds
+allocated against 6,963 seconds remaining after charging 7,437 / 14,400 seconds.
+The existing W&B identity, resource/API caps and active repair supervisor persist.
 
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;

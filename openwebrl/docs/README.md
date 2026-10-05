@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [October4 Jev Ultrafast: completed10-task pilot,1/10 successes, independently verified browser and judge artifacts](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
-[Kev27B direct browser policy: recovery job 345281, 183 audited records preserved including three diagnosed invalids, original four-hour total cap and active repair supervision](RL_EVALUATION.md#kev27b-actor-full300-20261004).
+[Kev27B direct browser policy: recovery job 345298, 218 audited records preserved including four diagnosed invalids, original four-hour total cap and active repair supervision](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
 [Full300 SFT+Jev and SFT+Kev27B: 600 records audited; 176/300 and 184/300 canonical successes; common-valid paired totals 175 versus 176; invalids and judge/harness caveats retained](RL_EVALUATION.md#sft-selection-full300-final-20261005).
 
