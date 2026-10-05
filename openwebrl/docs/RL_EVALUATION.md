@@ -472,7 +472,8 @@ will finish within an hour.
 
 The user subsequently approved that continuation: **one additional hour total on
 2 H200 /16 CPUs /240 GiB**, including retries, and **two additional browser
-sessions (42 total)**. Job**344458** was submitted for3600seconds and is queued.
+sessions (42 total)**. Job**344458** was submitted for3600seconds and started
+on g012 at21:36 Pacific on October4.
 The enforced cumulative cap is6986seconds:3386 already charged plus3600 newly
 approved; the original unused214seconds are excluded. All other API caps and the
 scientific protocol remain unchanged. The active-agent supervisor now follows
@@ -488,6 +489,18 @@ The selector resumes after request135, preventing request-ID reuse. Frozen sourc
 revision4 passes deployed CPU/browser imports, the19 existing regression tests
 pass, and the prelaunch evidence audit retains27 records with no unexplained
 issues. The earlier incomplete comparison remains provisional while this job runs.
+
+Startup verification confirms fresh small-Kev selections after request135,
+the pinned BF16 model, actor GPU activity and the resumed `openwebrl-evals` run.
+The first new completed episode reaches the requested IGN Breath of the Wild
+walkthrough; both its final screenshot and canonical success verdict were checked.
+The current independent audit contains28 terminal records: small Kev has4
+successes in8 valid completed episodes, while its last two tasks are running and
+Kev27B awaits the handoff. The five earlier diagnosed invalid records remain
+unchanged, with no new unexplained audit issues. This is still a partial comparison.
+A regression-tested correction to the terminal-judge recovery helper permits
+updating a finished cohort when a later cohort has no summary yet; it changes no
+actor, selector, judge or sampling settings.
 
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite

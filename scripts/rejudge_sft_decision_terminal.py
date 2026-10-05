@@ -32,6 +32,17 @@ def eligible(result):
         result.get('metadata', {}).get('reward', {}).get('judge_text', '').startswith('Judge not run for status='))
 
 
+def mode_summaries(root, overall):
+    """A finished cohort can be corrected before later cohorts have started."""
+    summaries = {}
+    for mode in MODES:
+        path = root / mode / 'summary.json'
+        summaries[mode] = read(path) if path.exists() else overall.get('modes', {}).get(mode, {
+            'scheduled': 10, 'attempted': 0, 'valid': 0, 'successes': 0,
+            'complete': False, 'status': 'not_started'})
+    return summaries
+
+
 async def run(root, modes, execute):
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
     assert approval['approved'] and approval['limits']['judge_http_attempts'] == 160
@@ -130,7 +141,8 @@ async def run(root, modes, execute):
             if overall.exists() and any(r['status'] == 'applied' for r in receipts):
                 original_overall = root / 'judge-recovery/original-overall-summary.json'
                 if not original_overall.exists(): write_json(original_overall, read(overall))
-                write_json(overall, dict(read(overall), modes={m: read(root/m/'summary.json') for m in MODES},
+                prior = read(overall)
+                write_json(overall, dict(prior, modes=mode_summaries(root, prior),
                     terminal_judge_recovered=True))
             write_json(root / 'judge-recovery/latest.json', dict(updated_unix=time.time(), receipts=receipts))
     finally:
