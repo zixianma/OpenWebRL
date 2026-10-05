@@ -725,7 +725,7 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 345021 | 10-05 05:17 PDT | 211/300 | 200 | 11 | 134 | 20195 |
+| SFT + Jev | 345021 | 10-05 05:35 PDT | 222/300 | 210 | 12 | 140 | 21270 |
 | SFT + Kev27B | 344793 | 10-05 05:29 PDT | 240/300 | 233 | 7 | 159 | 22143 |
 <!-- sft-full300-live-audit:end -->
 
@@ -837,6 +837,20 @@ explicitly credits it as the closest available option. Both full judge inputs
 and verdicts are preserved, and the private reviews flag this paired discrepancy.
 Using the same judge model and prompt therefore does not establish consistent
 constraint enforcement across different trajectories. Neither score is relabeled.
+
+The 222-record Jev audit verifies 210 scored episodes, 140 canonical positives
+and 12 diagnosed invalids. DBLP adds one initialization failure: three closed
+connections before any observation or inference, with one browser reservation
+and confirmed cleanup. The existing strict auditor verifies its original result,
+start receipt and exception log; no worker change or task replay is needed.
+All 189 records saved before the input-limit recovery remain byte-identical.
+
+Review of the ten new scored episodes found four positive-verdict caveats:
+a current MacBook generation substituted for the requested dated model,
+purchase price substituted for ownership cost, a playlist repost treated as a
+song repost, and a most-viewed ranking inferred after an unsuccessful sort
+click. The private review retains the exact images, selected actions and judge
+verdicts with evidence notes; all canonical scores remain unchanged.
 
 <a id="sft-selector-platform-clearing-20261005"></a>
 **Confirmed typing-harness defect and recovery — October5.** The cloud provider
