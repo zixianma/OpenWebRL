@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import time
 from types import SimpleNamespace
@@ -35,6 +36,13 @@ async def run(root, modes, execute):
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
     assert approval['approved'] and approval['limits']['judge_http_attempts'] == 160
     assert hashlib.sha256((root / 'plan.json').read_bytes()).hexdigest() == approval['plan_sha256']
+    jobs = {attempt['job_id'] for attempt in approval['attempts']}
+    accounting = subprocess.check_output(['sacct', '-X', '-n', '-P', '-j', ','.join(sorted(jobs)),
+        '--format=JobIDRaw,State'], text=True)
+    states = {parts[0]: parts[1].split()[0] for line in accounting.splitlines()
+              if (parts := line.split('|'))[0] in jobs}
+    stopped = states.keys() == jobs and all(state in ('COMPLETED', 'FAILED', 'CANCELLED', 'TIMEOUT')
+                                           for state in states.values())
     sys.path.insert(0, plan['source'])
     from openwebrl.decision_selection import write_json
     from openwebrl.decision_selection_eval import PilotJudge, CURRENT_TASK
@@ -53,6 +61,7 @@ async def run(root, modes, execute):
         for mode in modes:
             folder = root / mode
             cohort_done = (folder / 'summary.json').exists() and read(folder / 'summary.json')['complete']
+            cohort_quiescent = cohort_done or stopped
             for path in sorted((folder / 'results').glob('*.json')):
                 result = read(path)
                 if not eligible(result): continue
@@ -62,6 +71,7 @@ async def run(root, modes, execute):
                 final = (folder / 'final' / (key + '.png')).read_bytes()
                 assert base64.b64decode(result['metadata']['full_image_list'][-1].split(',')[-1], validate=True) == final
                 record = dict(mode=mode, task_id=result['task_id'], cohort_done=cohort_done,
+                    scheduler_terminal=stopped,
                     final_sha256=hashlib.sha256(final).hexdigest(), status='eligible')
                 if not execute:
                     receipts.append(record); continue
@@ -97,17 +107,20 @@ async def run(root, modes, execute):
                         actor_browser_and_rollout_unchanged=True)
                     write_json(corrected, new)
                 record['status'] = 'staged'
-                if cohort_done:
+                if cohort_quiescent:
                     write_json(path, read(corrected)); record['status'] = 'applied'
                 receipts.append(record)
-            if execute and cohort_done and any(r['mode'] == mode and r['status'] == 'applied' for r in receipts):
+            if execute and cohort_quiescent and any(r['mode'] == mode and r['status'] == 'applied' for r in receipts):
                 recovery = root / 'judge-recovery' / mode
                 old_summary = recovery / 'original-summary.json'
-                if not old_summary.exists(): write_json(old_summary, read(folder / 'summary.json'))
+                prior_summary = read(folder / 'summary.json') if (folder / 'summary.json').exists() else {}
+                if prior_summary and not old_summary.exists(): write_json(old_summary, prior_summary)
                 rows = [read(f) for f in (folder / 'results').glob('*.json')]
                 valid = sum(bool(r['valid']) for r in rows)
                 wins = sum(r['valid'] and r['reward'] == 1 for r in rows)
-                summary = dict(read(folder / 'summary.json'), valid=valid, successes=wins,
+                summary = dict(prior_summary, scheduled=10, attempted=len(rows),
+                    complete=len(rows) == 10, provider_halted=(folder / 'selections/halt.json').exists(),
+                    valid=valid, successes=wins,
                     unavailable=len(rows)-valid, success_rate_all_scheduled=wins/10,
                     success_rate_valid=wins/valid if valid else None, terminal_judge_recovered=True)
                 write_json(folder / 'summary.json', summary)

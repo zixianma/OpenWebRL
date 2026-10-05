@@ -52,18 +52,32 @@ def build(root=ROOT):
         for task in tasks:
             key = hashlib.sha256(task['task_id'].encode()).hexdigest()
             result_path = directory / 'results' / (key + '.json')
-            if not result_path.exists():
-                task['models'][mode] = dict(status='running' if (directory / 'started' / (key + '.json')).exists() else 'pending')
-                continue
-            result = read(result_path)
+            unfinished = not result_path.exists()
+            status = 'completed'
+            if unfinished:
+                started = (directory / 'started' / (key + '.json')).exists()
+                status = ('interrupted' if started else 'not run') if audit['scheduler_terminal'] else ('running' if started else 'pending')
+                if not traces[task['task_id']]:
+                    task['models'][mode] = dict(status=status)
+                    continue
+                start = read(directory / 'started' / (key + '.json'))['started_unix']
+                end = audit['audited_unix']
+                if audit['scheduler_terminal'] and (root / 'heartbeat.json').exists():
+                    end = min(end, read(root / 'heartbeat.json')['updated_unix'])
+                result = dict(valid=False, reward=None, elapsed_seconds=max(0, end - start),
+                    error_type='No terminal result; partial trace only')
+            else:
+                result = read(result_path)
             corrected = root / 'judge-recovery' / mode / 'corrected-results' / result_path.name
             original = root / 'judge-recovery' / mode / 'original-results' / result_path.name
             if corrected.exists() and original.exists() and read(original) == result:
                 result = read(corrected)
-            if (mode, task['task_id']) not in evidence:
+            if not unfinished and (mode, task['task_id']) not in evidence:
                 task['models'][mode] = dict(status='awaiting audit')
                 continue
-            receipt = evidence[(mode, task['task_id'])]
+            receipt = evidence.get((mode, task['task_id']), dict(issues=[
+                'No terminal result. These saved proposals are not an audited completed trajectory.'],
+                partial_rollout_verified=False, final_action_execution_verified=False))
             messages = result.get('metadata', {}).get('messages', [])
             observations = [m['content'] for m in messages if m['role'] == 'user']
             decisions = sorted(traces[task['task_id']], key=lambda r: r['turn'])
@@ -91,10 +105,10 @@ def build(root=ROOT):
                 if receipt.get('final_action_execution_verified') is False and i == len(decisions) - 1:
                     frames[-1]['execution_unverified'] = True
             final = directory / 'final' / (key + '.png')
-            task['models'][mode] = dict(status='completed', valid=result.get('valid'), reward=result.get('reward'),
+            task['models'][mode] = dict(status=status, valid=result.get('valid'), reward=result.get('reward'),
                 steps=receipt.get('decisions', max(result.get('total_steps', 0), len(frames))),
                 termination=result.get('terminate_reason') or result.get('error_type'),
-                partial_rollout=receipt.get('partial_rollout_verified', False),
+                partial_rollout=unfinished or receipt.get('partial_rollout_verified', False),
                 elapsed_seconds=result.get('elapsed_seconds'), frames=frames,
                 final=image(final.read_bytes()) if final.exists() else None,
                 judge=result.get('metadata', {}).get('reward', {}).get('judge_text'),

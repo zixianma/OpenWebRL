@@ -71,7 +71,7 @@ def audit(root=ROOT):
     prompt_ast = ast.parse((source / 'openwebrl/eval/reward_online_mind2web.py').read_text())
     system_prompt = next(ast.literal_eval(n.value) for n in prompt_ast.body
         if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'SYSTEM_PROMPT' for t in n.targets))
-    issues, rows, counts, summaries = [], [], Counter(), {}
+    issues, rows, counts, summaries, unfinished = [], [], Counter(), {}, []
     diagnosed = {(r['mode'], r['task_id']): r for r in
         (read(root / 'diagnosed-invalid.json') if (root / 'diagnosed-invalid.json').exists() else [])}
     for mode in MODES:
@@ -100,6 +100,14 @@ def audit(root=ROOT):
         for task_id in plan['task_ids']:
             key = digest(task_id.encode()); path = folder / 'results' / (key + '.json')
             if not path.exists():
+                started = folder / 'started' / (key + '.json')
+                decisions = sorted(traces[task_id], key=lambda r: r['turn'])
+                unfinished.append(dict(mode=mode, task_id=task_id, started=started.exists(),
+                    start_receipt=read(started) if started.exists() else None,
+                    saved_selection_records=len(decisions),
+                    last_saved_turn=decisions[-1]['turn'] if decisions else None,
+                    final_action_execution_verified=False,
+                    saved_rollouts=[str(p) for p in (folder / 'samples' / key).rglob('*.json')]))
                 continue
             result = read(path); summary['completed'] += 1
             corrected = root / 'judge-recovery' / mode / 'corrected-results' / path.name
@@ -262,6 +270,7 @@ def audit(root=ROOT):
         staged_terminal_corrections=sum(r['terminal_correction_staged'] for r in rows),
         all40_results_audited=len(rows) == 40 and all(r.get('evidence_verified') or r.get('diagnosed_invalid') for r in rows),
         scheduler_terminal=terminal, all_browsers_closed=not any(s['active_browser_sessions'] for s in summaries.values()),
+        unfinished_tasks=unfinished,
         scheduler_seconds=seconds, attempts=attempts, accounting=dict(counts), summaries=summaries, issues=issues, rows=rows,
         limitations=['Canonical AgentTrek verdicts are not independently relabeled ground truth.',
                     'Saved proposal counts exclude SGLang startup warmup and any generation interrupted before trace persistence.'])

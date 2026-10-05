@@ -313,7 +313,7 @@ cohort if useful progress is verified. Distinguish website blocks, execution
 limitations and model selection failures.
 
 <a id="sft-jev-kev-selection-pilot-20261004"></a>
-### Submitted: original SFT proposes five actions; Jev/Kev select
+### Partial pilot: original SFT proposes five actions; Jev/Kev select
 
 The requested SelectionARM-style replacement is implemented separately from the
 Jev Ultrafast direct agent. At each state, the original OpenWebRL-4B-SFT samples
@@ -431,6 +431,44 @@ fresh successful selector requests and activity on both GPUs verified. Kev27B
 remains pending. Roughly11minutes of controller time remained at this handoff,
 so completing both Kev cohorts within the original budget is uncertain. These
 partial results are not a completed four-way comparison or `verified_complete`.
+
+The allocation subsequently stopped at its configured time guard at18:00 Pacific.
+Final Slurm accounting charges344043=74s,344049=1207s and344086=2105s:
+**3386/3600 approved scheduler seconds**, leaving214s. That balance cannot fit
+another model startup, the configured180-second shutdown reserve and the remaining
+episodes, so no replacement was submitted. All29 created browser sessions are
+closed; two surviving remote sessions were explicitly stopped after the worker
+exited. All attempts, original verdicts and corrections remain preserved.
+
+The stopping-point audit contains **27 terminal records**: SFT4 successes/10
+records (9 valid), SFT+Jev3/10 (6 valid), and SFT+Kev0.8B3/7 (7 valid). Small Kev
+has two interrupted episodes with9 and1 saved selections respectively, plus one
+unstarted episode; Kev27B has not started. Three small-Kev step-limit verdicts were
+recovered from their original final images and are all failures. The completed
+small-Kev successes are the AeroAPI comparison, CarMax search and MTA FEIS report.
+These partial counts must not be used as a completed four-condition comparison.
+
+The independent audit verifies all27 available terminal records or their diagnosed
+invalid provenance, and separately inventories the13 missing results. There are
+no remaining staged verdict corrections or unexplained audit errors. Saved totals
+are29 browser sessions,137 Jev calls,136 local Kev calls including one warmup,
+22 judge HTTP requests and1545 actor proposals (excluding startup warmup and
+any interrupted generation before trace persistence). The seven small-Kev terminal
+images were also visually reviewed. The private HTML now exposes the unfinished
+proposal traces with explicit execution uncertainty, and distinguishes interrupted
+episodes from tasks that never ran. `verified_complete` remains false.
+
+W&B now records the corrected small-Kev3/7 summary with `complete=false`; its
+stale running status was changed to failed after verifying Slurm termination.
+
+The run pointer records `partial_budget_limited` and the supervisor stops at the
+explicit approval blocker; no further automatic execution is authorized. A private,
+unsubmitted continuation proposal requests one additional2-H200/16-CPU/240-GiB
+hour and two additional browser sessions (42 total) to replay the two interrupted
+episodes and run the11 untouched episodes. It preserves all27 terminal results,
+including the five diagnosed invalid records, and does not increase the other API
+caps. This proposal is not an approval or a guarantee that every remaining task
+will finish within an hour.
 
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
