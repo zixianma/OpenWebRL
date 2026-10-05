@@ -708,8 +708,14 @@ two concurrent episodes, top-p0.95/top-k20,4096 response tokens,
 with the proposed allocations and caps. A new frozen source revision preserves
 the earlier pilot/preparation settings. Each run collects300 fresh
 episodes, including the pilot's first10 tasks; the pilot remains separate.
-Jobs **344793 (Kev27B)** and **344794 (Jev)** are submitted under the following
-separate approvals; neither has a full300 result yet.
+Jobs **344793 (Kev27B)** and **344794 (Jev)** are running under the following
+separate approvals. Both replacements have produced fresh selections and resumed
+their original W&B identities; neither has a full300 result yet.
+The first two recovered Kev episodes have saved final images and canonical
+success verdicts. One final image contradicts the requested location: the actor
+selected an address suggestion instead of the intended ZIP code, and the judge
+accepted its incorrect completion claim. The private review flags this evidence
+contradiction; the canonical score remains unchanged.
 
 <!-- sft-full300-live-audit:start -->
 Latest independent audit snapshots; both runs remain active. Counts below describe
@@ -720,7 +726,7 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 344794 | 10-05 00:38 PDT | 53/300 | 50 | 3 | 33 | 5581 |
-| SFT + Kev27B | 344793 | 10-05 00:27 PDT | 42/300 | 41 | 1 | 26 | 4865 |
+| SFT + Kev27B | 344793 | 10-05 00:46 PDT | 44/300 | 43 | 1 | 28 | 5128 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-selector-platform-clearing-20261005"></a>
