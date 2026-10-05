@@ -4,6 +4,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
+- [Big experiment table: all eleven actor/selector runs](#actor-selector-experiment-tracker-20261004)
 - [Full300 actor × Luna-selector study](#luna-actor-full300-20261004)
 - [Completed Luna-high / Sol6.1-high results and cost/latency/token plots](#api-actor-high-results-20261005)
 - [Luna reasoning audit and high-effort protocol](#api-actor-reasoning-20261005)
@@ -34,18 +35,18 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 21:49:37 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-05 22:34:48 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised and transport-diagnostic records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
 run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eleven committed comparison rows, including both approved high-reasoning baselines and the other session’s direct Kev27B actor. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
 | ID | Actor | Selector | N | Saved /300 | Successes | Valid | Status / current job | Protocol | Budget |
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
-| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 111 | 21 | 98 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
-| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 113 | 32 | 101 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 133 | 27 | 119 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 132 | 39 | 119 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
 | AS04 | Official OpenWebRL-SFT4B | None | 1 | 300 | 106 | 272 | Complete; reused actor0 reference | Historical SFT | Already completed |
-| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna | 5 | 117 | 48 | 105 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
-| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 118 | 47 | 106 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna | 5 | 146 | 57 | 133 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 145 | 55 | 132 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
 | AS07 | GPT-6 Luna | None | 1 | 300 | 110 | 279 | Verified complete 344875 | Luna study; API sampling | Approved shared CPU/API pools below |
 | AS08 | Official OpenWebRL-SFT4B | Jev | 5 | 300 | 176 | 284 | Verified complete 345021 | Jev/Kev study | Approved1 H200/8 CPU/120GiB ×10h total |
 | AS09 | Official OpenWebRL-SFT4B | Kev27B | 5 | 300 | 184 | 291 | Verified complete 344793 | Jev/Kev study | Approved2 H200/16 CPU/240GiB ×10h total |
@@ -54,7 +55,7 @@ run has passed its final audit. The table includes runs owned by the other evalu
 | AS12 | Kev27B direct actor | None | 1 | 300 | 26 | 294 | Verified complete 345391 | Upstream DOM + text assistance | Approved1 H200/8 CPU/120GiB ×4h total |
 
 **Current coverage:** seven rows are verified complete, including the reused SFT reference and both high-reasoning API rows with final plots and accounting.
-The four GPU rows have saved 459/1,200 records and remain active. Their
+The four GPU rows have saved 556/1,200 records and remain active. Their
 partial success counts are provisional; protocol differences remain explicit.
 Direct Kev27B is now verified at 26/300 (8.67%; 26/294 valid-only, 8.84%), with
 six diagnosed invalids and 9,907/14,400 scheduler seconds charged.

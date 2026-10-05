@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791236977.7627366,
+  "snapshot_epoch": 1791239688.7604663,
   "rows": [
     {
       "id": "AS01",
@@ -8,15 +8,15 @@
       "n": 1,
       "mode": "qwen",
       "target_tasks": 300,
-      "recorded_episodes": 111,
+      "recorded_episodes": 133,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 21,
-      "valid": 98,
+      "successes": 27,
+      "valid": 119,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 13
+      "invalid": 14
     },
     {
       "id": "AS02",
@@ -25,15 +25,15 @@
       "n": 5,
       "mode": "qwen_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 113,
+      "recorded_episodes": 132,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 32,
-      "valid": 101,
+      "successes": 39,
+      "valid": 119,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 12
+      "invalid": 13
     },
     {
       "id": "AS04",
@@ -58,15 +58,15 @@
       "n": 5,
       "mode": "sft_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 117,
+      "recorded_episodes": 146,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 48,
-      "valid": 105,
+      "successes": 57,
+      "valid": 133,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 12
+      "invalid": 13
     },
     {
       "id": "AS06",
@@ -75,15 +75,15 @@
       "n": 10,
       "mode": "sft_luna10",
       "target_tasks": 300,
-      "recorded_episodes": 118,
+      "recorded_episodes": 145,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 47,
-      "valid": 106,
+      "successes": 55,
+      "valid": 132,
       "verified_complete": false,
       "counts_provisional": true,
-      "invalid": 12
+      "invalid": 13
     },
     {
       "id": "AS07",
@@ -246,7 +246,7 @@
   "other_session_episodes": 900,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T21:49:37Z",
+  "snapshot_utc": "2026-10-05T22:34:48Z",
   "new_episodes_all_sessions": 3000,
   "comparison_rows": 11,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -427,7 +427,7 @@
     "verified_utc": "2026-10-05T10:26:44.224499+00:00"
   },
   "progress_health_snapshot": {
-    "snapshot_utc": "2026-10-05T21:47:28Z",
+    "snapshot_utc": "2026-10-05T22:34:48Z",
     "cpu_job_id": "344875",
     "cpu_state": "COMPLETED",
     "cpu_active_workers": 0,
@@ -437,7 +437,7 @@
     "remaining_luna_tasks": 0,
     "gpu_job_id": "345214",
     "gpu_state": "RUNNING",
-    "remaining_GPU_arm_episodes": 741,
+    "remaining_GPU_arm_episodes": 644,
     "budget_caps_changed": false,
     "cpu_total_seconds_cap": 14400,
     "cpu_total_actual_seconds": 12257,
@@ -453,25 +453,26 @@
     "full_experiment_complete": false,
     "gpu_pending_reason": null,
     "verification_scope": "CPU family only; full actor-selector study incomplete",
-    "GPU_primary_records_saved": 459,
+    "GPU_primary_records_saved": 556,
     "GPU_workers_active": 8,
     "API_ledgers": {
       "luna": {
-        "calls": 13202,
-        "charged_or_reserved_usd": 9.371417704999992
+        "calls": 14332,
+        "charged_or_reserved_usd": 10.389142755000016
       },
       "judge": {
-        "calls": 570,
-        "charged_or_reserved_usd": 2.6008828999999998
+        "calls": 635,
+        "charged_or_reserved_usd": 2.8894294
       }
     },
     "gpu_active_workers": 8,
-    "recorded_GPU_arm_episodes": 452,
+    "recorded_GPU_arm_episodes": 556,
     "stalled_workers": 0,
     "record_errors": 0,
     "api_halts": false,
-    "API_ledgers_snapshot_utc": "2026-10-05T18:53:28Z",
-    "API_ledgers_are_historical": true
+    "API_ledgers_snapshot_utc": "2026-10-05T22:34:48Z",
+    "API_ledgers_are_historical": false,
+    "API_ledgers_are_final": false
   },
   "cpu_family_result": {
     "verified_complete": true,
@@ -510,7 +511,7 @@
     }
   },
   "full_experiment_complete": false,
-  "new_Luna_study_primary_records": 759,
+  "new_Luna_study_primary_records": 856,
   "new_Luna_study_target_records": 1500,
   "full_comparison_plots_generated": false,
   "peer_accounting_snapshot": {
@@ -801,10 +802,10 @@
     "verified_complete_rows_including_reused_baseline": 7,
     "audited_API_rows_pending_report_closeout": 0,
     "running_rows": 4,
-    "fresh_records_saved": 2259,
+    "fresh_records_saved": 2356,
     "fresh_records_target": 3000,
     "reused_baseline_records": 300,
-    "all_saved_records": 2559,
+    "all_saved_records": 2656,
     "all_record_target": 3300,
     "partial_counts_are_provisional": true
   }
