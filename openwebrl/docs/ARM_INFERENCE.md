@@ -16,8 +16,13 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking and Luna: performance versus cost — October4
 
-**Prepared; no GPU allocation submitted and no paid inference collected.** The
-user selected cost, latency, tokens, browser steps and local compute, with plots
+**Approved and submitted as job344476; queued, benchmark collection not started.**
+The user approved the four-H200/90-minute pilot and $15 Luna/$5 judge caps.
+Two live API preflight calls passed (vision + structured selection, and a native
+browser `done` tool call), returning `gpt-6-luna` and complete usage receipts;
+their combined usage estimate is **$0.000482275**, charged to the shared Luna
+ledger. These are compatibility checks, not benchmark episodes.
+The user selected cost, latency, tokens, browser steps and local compute, with plots
 for the first three. This is a new four-arm comparison, separate from the older
 SFT/SelectionARM/pass@k experiments below.
 
@@ -38,8 +43,8 @@ have been downloaded and independently checked against their SHA256 digests.
 Luna uses `gpt-6-luna`, **medium reasoning**, 4096 output tokens, and the standard
 service tier in both roles. With reasoning enabled its API does not accept
 temperature/top-p, so those requested sampling controls apply to Qwen.
-Read-only account access succeeded; paid vision, tool-call and selection
-requests still need validation inside the approved pilot. Save the actual model
+Account access and live vision, tool-call and structured-selection requests
+have passed their compatibility checks; live benchmark behavior remains unverified. Save the actual model
 identity returned on every request. See the [model reference](https://developers.openai.com/api/docs/models/gpt-6-luna)
 and [reasoning parameter compatibility](https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters).
 
@@ -114,8 +119,8 @@ Cost accounting assumptions:
 **Faster pilot proposal, updated after the user's GPU-scaling request:**10 fixed,
 hash-selected tasks ×4 arms =40 episodes; **four H200s,32 CPUs,480GiB, at most90
 minutes total across all attempts**, plus the unchanged **$15 Luna /902 calls**
-and **$5 judge /160 calls**, shared across all four workers. No allocation has
-been submitted. This replaces the unsubmitted one-H200/four-hour proposal.
+and **$5 judge /160 calls**, shared across all four workers. The user approved this exact request
+and it was submitted as **344476**. This replaces the unsubmitted one-H200/four-hour proposal.
 
 Each GPU serves an independent TP1 Qwen replica with8 CPUs/120GiB and one active
 browser episode. Workers claim the next unfinished task under a file lock and
@@ -138,7 +143,7 @@ four-GPU speedup is claimed. API and browser performance remain to be validated.
 The90-minute value is a ceiling, not a completion-time promise; release early
 when complete. The new ceiling is **6 H200-hours**, versus4 in the first
 proposal, or **$5.40 reference GPU cost**, plus at most$20 for APIs. Both dollar
-and call caps apply. No new GPU/API budget has been approved for this experiment. The full300-task schedule is prepared,
+and call caps apply. Approval and all attempt ledgers are preserved locally. The full300-task schedule is prepared,
 but its allocation request will use measured pilot throughput/cost. The pilot
 is for protocol and efficiency validation; ten tasks cannot establish a small
 performance difference.
@@ -146,9 +151,14 @@ performance difference.
 Implementation: `openwebrl/luna_qwen_{policy,eval,metrics}.py`,
 `scripts/prepare_luna_qwen_inference.py`, and
 `scripts/report_luna_qwen_inference.py`. Run data and source hashes are preserved
-under runtime `luna-qwen-inference-20261004/`. GPU startup, live browser behavior
-and paid API compatibility remain unverified until launch. Evaluation-only W&B
-records use `openwebrl-evals`.
+under runtime `luna-qwen-inference-20261004/`. GPU startup and live benchmark/browser behavior remain unverified until the
+allocation starts. Evaluation-only W&B records use `openwebrl-evals`.
+A persistent host supervisor watches the current attempt and queues this owning
+agent on state changes and at15-minute review intervals. Its own-thread
+continuation dispatch was verified; it does not independently mutate GPU jobs.
+The active agent handles diagnosis, fixes and recovery within the remaining
+approval. Final completion requires all40 episode records, final Slurm accounting
+and the three reviewed figures.
 
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
