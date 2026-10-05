@@ -142,3 +142,103 @@ def test_initial_navigation_failure_requires_immutable_setup_and_shutdown_eviden
         diagnosis[name] = 'wrong'
     with pytest.raises(AssertionError):
         audit.verify_initial_navigation_failure(*setup_failure)
+
+
+@pytest.fixture
+def observation_failure(setup_failure):
+    folder, key, path, diagnosis, task_id, url, decisions = setup_failure
+    result = json.loads(path.read_text())
+    error = ('Page.evaluate: Error: eval is disabled\n'
+        '    at monkeypatchedEval (https://example.test/app.js:2:1)\n'
+        '    at UtilityScript.evaluate (<anonymous>:290:30)')
+    result['terminate_reason'] = result['metadata']['terminate_reason'] = 'generation_error: ' + error
+    path.write_text(json.dumps(result))
+    diagnosis.update(initial_observation_failure=True, terminate_reason=result['terminate_reason'],
+        original_result_sha256=audit.digest(path.read_bytes()))
+    excerpt = Path(diagnosis['log_excerpt'])
+    excerpt.write_text(f'Task {task_id}: generate_turn_sample failed: {error}\n'
+        'in wrapped_reset\nawait enrich(self, observation)\nin enrich\n'
+        'data = await env.page.evaluate\n'
+        f'playwright._impl._errors.Error: {error}\n'
+        f"[Stopped Browser-Use session {diagnosis['browser_session_id']}]\n")
+    diagnosis['log_excerpt_sha256'] = audit.digest(excerpt.read_bytes())
+    ledger = folder.parent / 'budget/reservations.jsonl'
+    ledger.parent.mkdir()
+    ledger.write_text(json.dumps(dict(task_id=task_id, kind='browser_sessions', count=1)) + '\n')
+    return setup_failure
+
+
+def test_initial_observation_failure_verified_without_fabricated_image(observation_failure):
+    audit.verify_initial_observation_failure(*observation_failure)
+
+
+@pytest.mark.parametrize('change', ['inference', 'trace', 'archive', 'final', 'judge', 'active',
+    'messages', 'image', 'reward', 'error', 'log', 'stop', 'result_hash', 'start_hash'])
+def test_initial_observation_failure_is_not_a_generic_missing_evidence_bypass(observation_failure, change):
+    folder, key, path, diagnosis, task_id, _, decisions = observation_failure
+    if change == 'inference':
+        with (folder.parent / 'budget/reservations.jsonl').open('a') as out:
+            out.write(json.dumps(dict(task_id=task_id, kind='actor_proposals', count=5)) + '\n')
+    elif change == 'trace':
+        decisions.append({})
+    elif change in ('archive', 'final', 'judge', 'active'):
+        artifact = {'archive': folder / 'samples' / key / 'rollout.json',
+            'final': folder / 'final' / (key + '.png'),
+            'judge': folder / 'judge' / key / 'request-1.json',
+            'active': folder / 'browser_sessions' / diagnosis['browser_session_id']}[change]
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        artifact.write_text('evidence')
+    elif change in ('messages', 'image', 'reward', 'error'):
+        result = json.loads(path.read_text())
+        if change in ('messages', 'image'):
+            result['metadata']['messages' if change == 'messages' else 'full_image_list'] = ['evidence']
+        else:
+            result['reward' if change == 'reward' else 'terminate_reason'] = 0 if change == 'reward' else 'other'
+        path.write_text(json.dumps(result))
+        diagnosis['original_result_sha256'] = audit.digest(path.read_bytes())
+    elif change in ('log', 'stop'):
+        excerpt = Path(diagnosis['log_excerpt'])
+        value = excerpt.read_text().replace('in enrich', 'elsewhere') if change == 'log' else excerpt.read_text().split('[Stopped')[0]
+        excerpt.write_text(value)
+        diagnosis['log_excerpt_sha256'] = audit.digest(excerpt.read_bytes())
+    else:
+        diagnosis['original_result_sha256' if change == 'result_hash' else 'start_receipt_sha256'] = 'wrong'
+    with pytest.raises(AssertionError):
+        audit.verify_initial_observation_failure(*observation_failure)
+
+
+@pytest.fixture
+def format_failure():
+    result = dict(valid=True, status='Status.FAILED', reward=0, terminate_reason='format_error_failed',
+        metadata=dict(terminate_reason='format_error_failed', reward=dict(judge=0., combined=0.,
+            judge_text='Judge not run for status=Status.FAILED', judge_timeout=False, protocol='online_mind2web')))
+    assistants = ['<think>reason</think><tool_call>{"name":"click","arguments":{"point_200, 787]}}</tool_call>'] * 3
+    sample = dict(status='failed', terminate_reason='format_error_failed')
+    return result, assistants, sample, []
+
+
+def test_deterministic_format_failure_preserves_zero_without_judge(format_failure):
+    audit.verify_deterministic_format_failure(*format_failure)
+
+
+@pytest.mark.parametrize('change', ['valid_json', 'missing_call', 'two_errors', 'success', 'status', 'judge', 'sample', 'metadata'])
+def test_deterministic_format_failure_requires_three_malformed_outputs(format_failure, change):
+    result, assistants, sample, requests = format_failure
+    if change == 'valid_json':
+        assistants[-1] = '<tool_call>{"name":"click","arguments":{"point_2d":[200,787]}}</tool_call>'
+    elif change == 'missing_call':
+        assistants[-1] = 'text'
+    elif change == 'two_errors':
+        assistants.pop()
+    elif change == 'success':
+        result['reward'] = 1
+    elif change == 'status':
+        result['status'] = 'Status.COMPLETED'
+    elif change == 'judge':
+        requests.append('request.json')
+    elif change == 'sample':
+        sample['status'] = 'completed'
+    else:
+        result['metadata']['reward']['judge_text'] = 'success'
+    with pytest.raises(AssertionError):
+        audit.verify_deterministic_format_failure(*format_failure)

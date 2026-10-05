@@ -126,6 +126,72 @@ def verify_initial_navigation_failure(folder, key, result_path, diagnosis, task_
     assert f'[Stopped Browser-Use session {session} after failure]' in log
 
 
+def verify_initial_observation_failure(folder, key, result_path, diagnosis, task_id, start_url, decisions):
+    """Accept only a proved, unscored eval-disabled setup failure."""
+    result = read(result_path)
+    assert diagnosis.get('initial_observation_failure') is True
+    assert digest(result_path.read_bytes()) == diagnosis['original_result_sha256']
+    assert result['task_id'] == result['metadata']['task_id'] == task_id
+    assert result['start_url'] == result['metadata']['start_url'] == start_url
+    assert result['status'] == 'Status.ABORTED' and result['valid'] is False
+    assert result['reward'] is diagnosis['saved_reward'] is None
+    assert result['total_steps'] == 0 and result['response'] == ''
+    reason = result['terminate_reason']
+    assert reason == diagnosis['terminate_reason'] == result['metadata']['terminate_reason']
+    assert reason.startswith('generation_error: Page.evaluate: Error: eval is disabled\n')
+    assert '\n    at monkeypatchedEval (' in reason and 'UtilityScript.evaluate' in reason
+    assert not result['metadata'].get('messages') and not result['metadata'].get('full_image_list')
+    assert not decisions and not list((folder / 'samples' / key).rglob('*.json'))
+    reservations = [json.loads(line) for line in
+        (folder.parent / 'budget/reservations.jsonl').read_text().splitlines()]
+    task_reservations = [r for r in reservations if r.get('task_id') == task_id]
+    assert len(task_reservations) == 1
+    assert task_reservations[0]['kind'] == 'browser_sessions' and task_reservations[0]['count'] == 1
+    assert not (folder / 'final' / (key + '.png')).exists()
+    assert diagnosis['saved_final_image'] is False
+    assert not list((folder / 'judge' / key).glob('*.json'))
+    started = folder / 'started' / (key + '.json')
+    assert str(started) == diagnosis['start_receipt']
+    assert digest(started.read_bytes()) == diagnosis['start_receipt_sha256']
+    assert read(started)['task_id'] == task_id
+    session = diagnosis['browser_session_id']
+    assert re.fullmatch(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', session)
+    stopped = folder / 'browser_sessions' / 'stopped' / session
+    assert str(stopped) == diagnosis['browser_stop_receipt'] and stopped.is_file()
+    assert not (folder / 'browser_sessions' / session).exists()
+    excerpt = Path(diagnosis['log_excerpt']).read_bytes()
+    assert digest(excerpt) == diagnosis['log_excerpt_sha256']
+    log = excerpt.decode()
+    assert f'Task {task_id}: generate_turn_sample failed: ' + reason.removeprefix('generation_error: ') in log
+    assert 'playwright._impl._errors.Error: Page.evaluate: Error: eval is disabled' in log
+    assert 'in wrapped_reset' in log and 'await enrich(self, observation)' in log
+    assert 'in enrich' in log and 'data = await env.page.evaluate' in log
+    assert f'[Stopped Browser-Use session {session}]' in log
+
+
+def verify_deterministic_format_failure(result, assistants, sample, judge_requests):
+    """Verify the existing three-invalid-JSON rule without fabricating a judge."""
+    assert result['valid'] is True and result['status'] == 'Status.FAILED'
+    assert result['reward'] == 0 and result['terminate_reason'] == 'format_error_failed'
+    assert result['metadata']['terminate_reason'] == 'format_error_failed'
+    assert result['metadata']['reward'] == dict(judge=0., combined=0.,
+        judge_text='Judge not run for status=Status.FAILED', judge_timeout=False,
+        protocol='online_mind2web')
+    assert not judge_requests and sample['status'] == 'failed'
+    assert sample['terminate_reason'] == 'format_error_failed'
+    assert len(assistants) >= 3
+    for output in assistants[-3:]:
+        action = split_output(output)['action']
+        calls = re.findall(r'<tool_call>(.*?)</tool_call>', action, re.S)
+        assert len(calls) == 1, 'Expected one malformed JSON tool call'
+        try:
+            json.loads(calls[0])
+        except json.JSONDecodeError:
+            pass
+        else:
+            raise AssertionError('Claimed format failure has parseable JSON')
+
+
 def audit(root=ROOT):
     root = Path(root)
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
@@ -209,6 +275,16 @@ def audit(root=ROOT):
                 assert result['task_id'] == task_id
                 assert result['mode'] == mode
                 diagnosis = diagnosed.get((mode, task_id))
+                if diagnosis and diagnosis.get('initial_observation_failure'):
+                    verify_initial_observation_failure(folder, key, path, diagnosis, task_id,
+                        tasks[task_id]['metadata']['start_url'], traces[task_id])
+                    row.update(diagnosed_invalid=True, initial_observation_failure_verified=True,
+                        decisions=0, final_action_execution_verified=False,
+                        fresh_final_image=False, diagnosis=diagnosis['diagnosis'])
+                    row['issues'].append('Diagnosed invalid: ' + diagnosis['classification'])
+                    issues.append(dict(mode=mode, task_id=task_id, error=row['issues'][-1], diagnosed=True))
+                    rows.append(row)
+                    continue
                 if diagnosis and diagnosis.get('initial_navigation_failure'):
                     verify_initial_navigation_failure(folder, key, path, diagnosis, task_id,
                         tasks[task_id]['metadata']['start_url'], traces[task_id])
@@ -353,7 +429,20 @@ def audit(root=ROOT):
                 row['final_sha256'] = digest(final)
                 assert decode_image(result['metadata']['full_image_list'][-1]) == final
                 judge_folder = folder / 'judge' / key
-                requests = sorted(judge_folder.glob('request-*.json')); assert 1 <= len(requests) <= 4
+                requests = sorted(judge_folder.glob('request-*.json'))
+                samples = list((folder / 'samples' / key).rglob('*.json'))
+                assert len(samples) == 1, 'Expected one final rollout archive'
+                sample = read(samples[0]); assert sample['total_steps'] == result['total_steps']
+                assert normalized(sample['llm_response']).removeprefix('<think>').strip() == normalized(assistants[-1]).removeprefix('<think>').strip()
+                if result['terminate_reason'] == 'format_error_failed':
+                    verify_deterministic_format_failure(result, assistants, sample, requests)
+                    row.update(evidence_verified=True, deterministic_format_failure_verified=True,
+                        judge_model=None, judge_text=result['metadata']['reward']['judge_text'],
+                        rollout=str(samples[0]), decisions=len(decisions))
+                    summary['valid'] += 1
+                    rows.append(row)
+                    continue
+                assert 1 <= len(requests) <= 4
                 for req in requests:
                     request = read(req)
                     assert request['model'] == 'o4-mini' and request['max_completion_tokens'] == 4096 and request['seed'] == 42
@@ -368,10 +457,6 @@ def audit(root=ROOT):
                 assert text == result['metadata']['reward']['judge_text']
                 assert 'status:' in text.lower()
                 assert float('success' in text.lower().split('status:', 1)[1]) == result['reward']
-                samples = list((folder / 'samples' / key).rglob('*.json'))
-                assert len(samples) == 1, 'Expected one final rollout archive'
-                sample = read(samples[0]); assert sample['total_steps'] == result['total_steps']
-                assert normalized(sample['llm_response']).removeprefix('<think>').strip() == normalized(assistants[-1]).removeprefix('<think>').strip()
                 row.update(evidence_verified=True, judge_model=response['model'], judge_text=text,
                     rollout=str(samples[0]), decisions=len(decisions))
                 summary['valid'] += 1; summary['successes'] += int(result['reward'])

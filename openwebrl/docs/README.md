@@ -7,7 +7,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 [Kev27B direct browser policy: full300 prepared, awaiting exact approval; separate from SFT proposal selection](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
-[Full300 SFT+Jev and SFT+Kev27B:300/300 records each, scheduler completed; final owner audits pending; separate budgets and protocol caveats retained](RL_EVALUATION.md#sft-selection-full300-20261004).
+[Full300 SFT+Jev and SFT+Kev27B: 600 records audited; 176/300 and 184/300 canonical successes; common-valid paired totals 175 versus 176; invalids and judge/harness caveats retained](RL_EVALUATION.md#sft-selection-full300-final-20261005).
 
 [Unified actor/selector tracker: Luna verified110/300; Jev/Kev300 records each with provisional176/184 successes; four GPU arms queued; snapshot16:28:03 UTC](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 [October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; GPU344754 queued; Luna CPU verified36.67% overall/39.43% valid-only using12,257/14,400 CPU seconds; full study300/1,500 complete](ARM_INFERENCE.md#luna-actor-full300-20261004).

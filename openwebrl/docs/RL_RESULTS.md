@@ -23,6 +23,18 @@
 | SFT + Kev0.8B |10 |10 |4 |10 |0 |40.00 |40.00 |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 | SFT + Kev27B |10 |10 |9 |10 |0 |90.00 |90.00 |[Final audit and judge caveats](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 
+## SFT decision selection · full300 · T1/p0.95/k20/4096 · mixed typing harness
+
+| Condition | Scheduled | Audited | Canonical successes | Valid | Invalid | Overall % | Valid-only % | Source |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| SFT + Jev | 300 | 300 | 176 | 284 | 16 | 58.67 | 61.97 | [Final audit and caveats](RL_EVALUATION.md#sft-selection-full300-final-20261005) |
+| SFT + Kev27B | 300 | 300 | 184 | 291 | 9 | 61.33 | 63.23 | [Aggregate](rl_results/sft-selector-full300-20261005.json) |
+
+| Paired subset | Tasks | Both succeed | Jev only | Kev only | Neither | Jev successes | Kev successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Common-valid | 279 | 136 | 39 | 40 | 64 | 175 | 176 |
+| Both post-typing-fix, common-valid | 238 | 116 | 31 | 33 | 58 | 147 | 149 |
+
 ## Local browser · GPT-4.1 · temperature 0 · full 300
 
 | Checkpoint after iteration | Successes | Valid | Invalid | Overall % | Valid-only % |

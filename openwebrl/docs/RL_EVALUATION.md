@@ -699,34 +699,84 @@ modality difference from visual SelectionARM, not an equal-input model swap.
 <a id="sft-selection-full300-20261004"></a>
 ### Full300 SFT + Jev and Kev27B comparison
 
-The user requested all300 Online-Mind2Web tasks with the original SFT proposer
-and each of Jev and Kev27B. Both runs preserve the pilot's five full
-reasoning/action candidates, deterministic seed schedule, hosted browser,
-two concurrent episodes, top-p0.95/top-k20,4096 response tokens,
-30 turns and canonical o4-mini/AgentTrek judge. The user subsequently requested
-**actor temperature1.0**, replacing the pilot's0.6, and authorized proceeding
-with the proposed allocations and caps. A new frozen source revision preserves
-the earlier pilot/preparation settings. Each run collects300 fresh
-episodes, including the pilot's first10 tasks; the pilot remains separate.
-Jobs **344793 (Kev27B)** and **345021 (Jev)** are running under the following
-separate approvals. Both replacements have produced fresh selections and resumed
-their original W&B identities; neither has a full300 result yet.
-The first two recovered Kev episodes have saved final images and canonical
-success verdicts. One final image contradicts the requested location: the actor
-selected an address suggestion instead of the intended ZIP code, and the judge
-accepted its incorrect completion claim. The private review flags this evidence
-contradiction; the canonical score remains unchanged.
+The two approved evaluations finished all 300 Online-Mind2Web tasks each.
+Independent audits cover every saved result, selected proposal, available rollout,
+final screenshot and judge artifact; all invalid records have explicit diagnoses.
+Both W&B runs are finished and all 606 reserved browser sessions have stopped.
+Every failed and completed scheduler attempt remains charged to its original cap.
+
+Both conditions use the original OpenWebRL-4B-SFT actor with **temperature 1.0,
+top-p 0.95, top-k 20 and 4096 response tokens**, five full reasoning/action
+candidates, the deterministic seed schedule, full history, a screenshot,
+30 turns and two concurrent hosted-browser episodes. Jev and Kev receive page
+text, element geometry, the candidates and the last five actions; neither
+selector receives images. The selected actor output executes unchanged,
+including typing. Terminal scoring uses the canonical o4-mini/AgentTrek protocol.
+The earlier 10-task pilot remains a separate cohort.
 
 <!-- sft-full300-live-audit:start -->
-Latest independent audit snapshots; both runs remain active. Counts below describe
-completed records only, with all pending tasks retained in the300-task target.
-Judge successes are canonical verdicts, including the separately noted evidence
-limitations; these are not final full300 results.
+<a id="sft-selection-full300-final-20261005"></a>
+**Final audit — October 5.** Canonical scores are unchanged. Overall rates use all
+300 scheduled tasks; invalid episodes remain unscored and are shown separately.
+Valid-only rates exclude them.
 
-| Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
-| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 345021 | 10-05 05:55 PDT | 237/300 | 225 | 12 | 150 | 22457 |
-| SFT + Kev27B | 344793 | 10-05 05:49 PDT | 248/300 | 241 | 7 | 162 | 23302 |
+| Run | Records audited | Canonical successes | Valid | Invalid | Overall % | Valid-only % | Scheduler seconds charged / approved |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT + Jev | 300/300 | 176 | 284 | 16 | 58.67 | 61.97 | 30164 / 36000 |
+| SFT + Kev27B | 300/300 | 184 | 291 | 9 | 61.33 | 63.23 | 29158 / 36000 |
+
+The paired comparison is closer than the all-scheduled totals: on the **279
+common-valid tasks**, Jev succeeds on 175 and Kev on 176. Both succeed on 136;
+39 favor Jev, 40 favor Kev and 64 fail in both. On the 238 common-valid tasks
+collected after the typing fix in both arms, the totals are Jev 147 and Kev 149
+(both 116, Jev-only 31, Kev-only 33, neither 58). These subsets exclude invalids;
+they do not establish a selector advantage.
+
+Both full aggregates mix the preserved earlier typing harness with the corrected
+platform-aware clearing harness. Every boundary result is byte-identical, and
+Jev's 189 records preserved before context recovery remain unchanged. The strata
+below have different task membership and are not a causal typing comparison.
+
+| Run / typing stratum | Records | Valid | Invalid | Successes |
+| --- | ---: | ---: | ---: | ---: |
+| Jev before fix | 44 | 42 | 2 | 28 |
+| Jev after fix | 256 | 242 | 14 | 148 |
+| Kev27B before fix | 42 | 41 | 1 | 26 |
+| Kev27B after fix | 258 | 250 | 8 | 158 |
+
+The 25 invalid records retain their original evidence and diagnoses for browser
+setup/navigation/observation failures, timeouts, context overflows and the
+preserved Jev provider-halt cases. They are not converted into model failures or
+selectively rerun. One **valid Jev negative** follows the existing deterministic
+rule for three consecutive malformed actions; its selected outputs and final
+archive verify the failure, and no terminal judge was called. Thus Jev has 284
+valid results but 283 judge requests. The audit explicitly verifies the AmEx
+zero-action observation failures without inventing missing screenshots or
+rollouts. The two focused audit/controller suites pass 68 tests.
+
+The private reviews contain **29 Jev and 20 Kev notes**, including direct evidence
+contradictions, unsupported claims and qualified uncertainties. These are not
+exhaustive human labels or a count of false positives. Newly reviewed examples
+include accepted wrong product/model comparisons, a hotel/car package credited
+as a flight package, total taxes called federal taxes, and a slower shipping
+option called fastest. All canonical rewards remain unchanged. Using the same
+judge preserves the scoring protocol, but does not eliminate judge errors.
+The earlier SFT-only baseline is an **unmatched historical reference** because
+browser, sampling, response limits, timeout and step-limit judge behavior differ.
+
+Jev used 30,164 scheduler seconds across four attempts at 1 H200 / 8 CPU / 120 GiB;
+Kev used 29,158 seconds across two attempts at 2 H200 / 16 CPU / 240 GiB. Their
+separate unused balances are 5,836 and 6,842 seconds. Browser reservations were
+304/330 and 302/330, selector requests 4,617/9,900 and 4,348/9,910, actor proposal
+reservations 23,080/50,000 and 21,770/50,000, and judge calls 283/1,320 and
+291/1,320. Failed calls, warmups and interrupted proposals remain in the ledgers;
+no budget was added or transferred.
+
+[Aggregate result and paired counts](rl_results/sft-selector-full300-20261005.json),
+[finished Jev W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/sft-selection-full300-20261004-jev),
+[finished Kev W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/sft-selection-full300-20261004-kev-27b).
+Task payloads, raw trajectories and interactive reviews stay private. Earlier
+progress entries below are historical snapshots.
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-kev-progress-audit-20261005"></a>

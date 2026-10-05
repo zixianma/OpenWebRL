@@ -1,0 +1,208 @@
+{
+  "date": "2026-10-05",
+  "dataset": "Online-Mind2Web",
+  "scheduled_per_arm": 300,
+  "actor": "OpenWebRL-4B-SFT, original iteration-0 model",
+  "protocol": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 20,
+    "max_new_tokens": 4096,
+    "candidates": 5,
+    "max_turns": 30,
+    "context_tokens": 32768,
+    "actor_observation": "screenshot and full history",
+    "selector_observation": "page text, element geometry, five full reasoning/action candidates and last five selected actions; no images",
+    "judge": "o4-mini, Online-Mind2Web/AgentTrek terminal protocol",
+    "judge_seed": 42,
+    "judge_max_completion_tokens": 4096
+  },
+  "canonical_scores_unchanged": true,
+  "baseline_matched": false,
+  "runs": {
+    "jev": {
+      "aggregate": {
+        "scheduled": 300,
+        "valid": 284,
+        "invalid": 16,
+        "successes": 176,
+        "valid_failures": 108,
+        "success_rate_all_scheduled": 0.5866666666666667,
+        "success_rate_valid": 0.6197183098591549
+      },
+      "typing_strata": {
+        "pre_typing_fix": {
+          "scheduled": 44,
+          "valid": 42,
+          "invalid": 2,
+          "successes": 28,
+          "valid_failures": 14,
+          "success_rate_all_scheduled": 0.6363636363636364,
+          "success_rate_valid": 0.6666666666666666
+        },
+        "post_typing_fix": {
+          "scheduled": 256,
+          "valid": 242,
+          "invalid": 14,
+          "successes": 148,
+          "valid_failures": 94,
+          "success_rate_all_scheduled": 0.578125,
+          "success_rate_valid": 0.6115702479338843
+        }
+      },
+      "limits": {
+        "browser_sessions": 330,
+        "jev_requests": 9900,
+        "local_kev_requests": 0,
+        "judge_http_attempts": 1320,
+        "actor_proposals": 50000
+      },
+      "reserved": {
+        "actor_proposals": 23080,
+        "browser_sessions": 304,
+        "jev_requests": 4617,
+        "judge_http_attempts": 283
+      },
+      "resources": {
+        "gpus": 1,
+        "gpu_type": "H200",
+        "cpus": 8,
+        "memory_gib": 120,
+        "total_seconds": 36000
+      },
+      "charged_scheduler_seconds": 30164,
+      "remaining_scheduler_seconds": 5836,
+      "charged_gpu_hours": 8.37888888888889,
+      "audited_results": 300,
+      "all_results_audited": true,
+      "diagnosed_invalids": 16,
+      "all_valid_result_evidence_verified": true,
+      "all_browsers_closed": true,
+      "wandb_state": "finished",
+      "review_note_count": 29,
+      "historical_boundary_hashes_preserved": true,
+      "independent_audit_sha256": "f0b3b9a9deeb83f9c85439e9f6535614418d924a48a4978f05abab9ab6528da6",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/sft-selection-full300-20261004-jev",
+      "context_recovery_strata": {
+        "preserved_before_recovery": {
+          "scheduled": 189,
+          "valid": 178,
+          "invalid": 11,
+          "successes": 122,
+          "valid_failures": 56,
+          "success_rate_all_scheduled": 0.6455026455026455,
+          "success_rate_valid": 0.6853932584269663
+        },
+        "new_after_recovery": {
+          "scheduled": 111,
+          "valid": 106,
+          "invalid": 5,
+          "successes": 54,
+          "valid_failures": 52,
+          "success_rate_all_scheduled": 0.4864864864864865,
+          "success_rate_valid": 0.5094339622641509
+        }
+      },
+      "context_boundary_all189_hashes_preserved": true,
+      "valid_deterministic_format_failures_without_judge": 1
+    },
+    "kev27b": {
+      "aggregate": {
+        "scheduled": 300,
+        "valid": 291,
+        "invalid": 9,
+        "successes": 184,
+        "valid_failures": 107,
+        "success_rate_all_scheduled": 0.6133333333333333,
+        "success_rate_valid": 0.6323024054982818
+      },
+      "typing_strata": {
+        "pre_typing_fix": {
+          "scheduled": 42,
+          "valid": 41,
+          "invalid": 1,
+          "successes": 26,
+          "valid_failures": 15,
+          "success_rate_all_scheduled": 0.6190476190476191,
+          "success_rate_valid": 0.6341463414634146
+        },
+        "post_typing_fix": {
+          "scheduled": 258,
+          "valid": 250,
+          "invalid": 8,
+          "successes": 158,
+          "valid_failures": 92,
+          "success_rate_all_scheduled": 0.6124031007751938,
+          "success_rate_valid": 0.632
+        }
+      },
+      "limits": {
+        "browser_sessions": 330,
+        "jev_requests": 0,
+        "local_kev_requests": 9910,
+        "judge_http_attempts": 1320,
+        "actor_proposals": 50000
+      },
+      "reserved": {
+        "actor_proposals": 21770,
+        "local_kev_requests": 4348,
+        "browser_sessions": 302,
+        "judge_http_attempts": 291
+      },
+      "resources": {
+        "gpus": 2,
+        "gpu_type": "H200",
+        "cpus": 16,
+        "memory_gib": 240,
+        "total_seconds": 36000
+      },
+      "charged_scheduler_seconds": 29158,
+      "remaining_scheduler_seconds": 6842,
+      "charged_gpu_hours": 16.198888888888888,
+      "audited_results": 300,
+      "all_results_audited": true,
+      "diagnosed_invalids": 9,
+      "all_valid_result_evidence_verified": true,
+      "all_browsers_closed": true,
+      "wandb_state": "finished",
+      "review_note_count": 20,
+      "historical_boundary_hashes_preserved": true,
+      "independent_audit_sha256": "b364397fee2e7b88bec06c926176479e2c0257215f3572cf89f57ea875393527",
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/sft-selection-full300-20261004-kev-27b"
+    }
+  },
+  "common_valid_paired": {
+    "common_valid_tasks": 279,
+    "both_success": 136,
+    "jev_success_only": 39,
+    "kev_success_only": 40,
+    "both_failure": 64,
+    "jev_successes": 175,
+    "kev_successes": 176,
+    "kev_minus_jev_percentage_points": 0.35842293906810035
+  },
+  "both_post_typing_common_valid_paired": {
+    "common_valid_tasks": 238,
+    "both_success": 116,
+    "jev_success_only": 31,
+    "kev_success_only": 33,
+    "both_failure": 58,
+    "jev_successes": 147,
+    "kev_successes": 149,
+    "kev_minus_jev_percentage_points": 0.8403361344537815
+  },
+  "paired_validity": {
+    "both_valid": 279,
+    "jev_valid_only": 5,
+    "kev_valid_only": 12,
+    "both_invalid": 4
+  },
+  "limitations": [
+    "Canonical lenient judge scores; manual review notes are neither exhaustive human labels nor score corrections.",
+    "Both aggregates mix labeled pre/post platform-aware typing harness strata. Stratum task sets differ and do not identify a causal typing effect.",
+    "Invalid episodes remain unscored; overall denominator includes all300 scheduled tasks; valid-only excludes invalids.",
+    "One valid Jev failure follows the pre-existing three-consecutive-malformed-actions rule and has no terminal judge call.",
+    "Common-valid paired comparison excludes tasks invalid in either arm and does not establish a selector advantage.",
+    "Historical SFT baseline differs in browser/sampling/response limits/timeouts and judge dispatch; it is an unmatched reference."
+  ]
+}
