@@ -59,6 +59,9 @@ def verify_image(raw):
 def audit(root=ROOT):
     root = Path(root)
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
+    modes = plan.get('modes', MODES)
+    task_count = len(plan['task_ids'])
+    expected_results = len(modes) * task_count
     assert digest((root / 'plan.json').read_bytes()) == approval['plan_sha256']
     source = Path(plan['source'])
     assert digest((source / 'reference_manifest.json').read_bytes()) == plan['source_manifest_sha256']
@@ -67,14 +70,14 @@ def audit(root=ROOT):
     assert digest(Path(plan['tasks']).read_bytes()) == plan['tasks_sha256']
     tasks = {r['metadata']['task_id']: r for r in
              map(json.loads, Path(plan['tasks']).read_text().splitlines())}
-    assert set(tasks) == set(plan['task_ids']) and len(tasks) == 10
+    assert set(tasks) == set(plan['task_ids']) and len(tasks) == task_count and task_count > 0
     prompt_ast = ast.parse((source / 'openwebrl/eval/reward_online_mind2web.py').read_text())
     system_prompt = next(ast.literal_eval(n.value) for n in prompt_ast.body
         if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'SYSTEM_PROMPT' for t in n.targets))
     issues, rows, counts, summaries, unfinished = [], [], Counter(), {}, []
     diagnosed = {(r['mode'], r['task_id']): r for r in
         (read(root / 'diagnosed-invalid.json') if (root / 'diagnosed-invalid.json').exists() else [])}
-    for mode in MODES:
+    for mode in modes:
         folder = root / mode
         superseded_path = folder / 'superseded-selections.json'
         superseded = read(superseded_path) if superseded_path.exists() else {}
@@ -260,7 +263,7 @@ def audit(root=ROOT):
                 issues.append(dict(mode=mode, task_id=task_id, error=row['issues'][-1],
                     audit_line=traceback.extract_tb(exc.__traceback__)[-1].lineno))
             rows.append(row)
-        summary['success_rate_all_scheduled'] = summary['successes'] / 10
+        summary['success_rate_all_scheduled'] = summary['successes'] / task_count
         summary['success_rate_valid'] = summary['successes'] / summary['valid'] if summary['valid'] else None
         summaries[mode] = summary
     for key in ('browser_sessions', 'jev_requests', 'local_kev_requests', 'judge_http_attempts'):
@@ -275,9 +278,12 @@ def audit(root=ROOT):
     seconds = sum(a['seconds'] for a in attempts); assert seconds <= approval['resources']['total_seconds']
     terminal = all(a['state'].split()[0] in ('COMPLETED', 'FAILED', 'TIMEOUT', 'CANCELLED') for a in attempts)
     return dict(audited_unix=time.time(), source=str(source), plan_sha256=approval['plan_sha256'],
-        completed_results=len(rows), all40_evidence_verified=len(rows) == 40 and not issues and not any(r['terminal_correction_staged'] for r in rows),
+        expected_results=expected_results,
+        all_results_audited=len(rows) == expected_results and all(r.get('evidence_verified') or r.get('diagnosed_invalid') for r in rows),
+        all_evidence_verified=len(rows) == expected_results and not issues and not any(r['terminal_correction_staged'] for r in rows),
+        completed_results=len(rows), all40_evidence_verified=expected_results == 40 and len(rows) == 40 and not issues and not any(r['terminal_correction_staged'] for r in rows),
         staged_terminal_corrections=sum(r['terminal_correction_staged'] for r in rows),
-        all40_results_audited=len(rows) == 40 and all(r.get('evidence_verified') or r.get('diagnosed_invalid') for r in rows),
+        all40_results_audited=expected_results == 40 and len(rows) == 40 and all(r.get('evidence_verified') or r.get('diagnosed_invalid') for r in rows),
         scheduler_terminal=terminal, all_browsers_closed=not any(s['active_browser_sessions'] for s in summaries.values()),
         unfinished_tasks=unfinished,
         scheduler_seconds=seconds, attempts=attempts, accounting=dict(counts), summaries=summaries, issues=issues, rows=rows,

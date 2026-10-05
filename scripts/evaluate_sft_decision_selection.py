@@ -138,17 +138,24 @@ def prepare():
     return plan
 
 
-def run(plan):
+def run(plan, control=CONTROL):
     import httpx
     from dotenv import dotenv_values
+    CONTROL, SOURCE = Path(control), Path(plan['source'])
+    RESOURCES, LIMITS, MODES = plan['resources'], plan['limits'], plan['modes']
+    if plan['protocol'] != PROTOCOL:
+        raise ValueError('Scientific protocol changed')
+    validate_source(SOURCE)
+    if file_hash(SOURCE / 'reference_manifest.json') != plan['source_manifest_sha256']:
+        raise ValueError('Frozen source manifest changed')
     job = os.environ.get('SLURM_JOB_ID')
     approval = read(CONTROL / 'approval.json')
     if (not job or not approval.get('approved') or approval['resources'] != RESOURCES or
             approval['limits'] != LIMITS or approval['plan_sha256'] != file_hash(CONTROL / 'plan.json')):
         raise ValueError('Exact new allocation and API/browser approval required')
     resources = allocation(subprocess.check_output(['scontrol', 'show', 'job', job, '-o'], text=True),
-                           job, requested_gpus=2, maximum_hours=1)
-    if resources['cpus'] != 16 or resources['allocated_memory_gib'] != 240:
+                           job, requested_gpus=RESOURCES['gpus'], maximum_hours=RESOURCES['total_seconds']/3600)
+    if resources['cpus'] != RESOURCES['cpus'] or resources['allocated_memory_gib'] != RESOURCES['memory_gib']:
         raise ValueError('Allocation differs from the approved CPU/memory request')
     attempts = approval['attempts']
     current = [a for a in attempts if a['job_id'] == job]
@@ -164,6 +171,10 @@ def run(plan):
         used += int(row[2])
     if used + current[0]['time_limit_seconds'] > RESOURCES['total_seconds']:
         raise ValueError('Recovery exceeds the original allocation budget')
+    budget = None
+    if plan.get('budget'):
+        from openwebrl.selection_budget import SelectionBudget
+        budget = SelectionBudget(plan['budget']['root'], plan['budget']['limits'])
     deadline = time.monotonic() + min(resources['maximum_seconds'], current[0]['time_limit_seconds'] - 90)
     env = environment()
     for key, value in dotenv_values(REPO / '.env').items():
@@ -181,8 +192,10 @@ def run(plan):
         'from openwebrl.decision_selection_eval import preflight_browser; preflight_browser()']),
         cwd=SOURCE, env=dict(env, PYTHONPATH=worker_path), check=True)
     devices = env.get('CUDA_VISIBLE_DEVICES', '').split(',')
-    if len(devices) != 2 or not all(devices):
-        raise ValueError('Exactly two allocated GPUs required')
+    if len(devices) != RESOURCES['gpus'] or not all(devices):
+        raise ValueError('Visible GPUs differ from exact approval')
+    if any(m.startswith('kev-') for m in MODES) and len(devices) != 2:
+        raise ValueError('Kev selection requires a separate second GPU')
     lease, port = lease_ports(job); children = []; handles = []
     actor = None
 
@@ -205,6 +218,8 @@ def run(plan):
         raise TimeoutError('Allocation termination signal')
     old_signals = {s: signal.signal(s, terminated) for s in (signal.SIGTERM, signal.SIGINT)}
     try:
+        if budget:
+            budget.reserve('actor_proposals', 10, purpose='conservative actor startup allowance', job_id=job)
         actor = spawn([str(RUNTIME / 'venv/bin/python'), '-m', 'sglang.launch_server',
             '--model-path', str(ACTOR), '--host', '127.0.0.1', '--port', str(port), '--dtype', 'bfloat16',
             '--tp', '1', '--mem-fraction-static', '.45', '--context-length', '32768',
@@ -248,6 +263,8 @@ def run(plan):
                 warmup = output / 'warmup-request.json'
                 if not warmup.exists():
                     request = warmup_request(); write_json(warmup, request)
+                    if budget:
+                        budget.reserve('local_kev_requests', purpose='selector warmup', job_id=job)
                     response = httpx.post(endpoint, json=request, timeout=180, trust_env=False)
                     response.raise_for_status(); selected_index(request, response.json())
                     write_json(output / 'warmup-response.json', response.json())
@@ -255,6 +272,8 @@ def run(plan):
                     raise ValueError('Interrupted warmup needs diagnosis; do not reset request budget')
             cfg = dict(protocol=PROTOCOL, output=str(output), tasks=plan['tasks'], task_ids=plan['task_ids'],
                 actor=str(ACTOR), actor_port=port, mode=mode, endpoint=endpoint)
+            if plan.get('worker_options'):
+                cfg.update(plan['worker_options'])
             write_json(output / 'config.json', cfg)
             worker_env = dict(env, CUDA_VISIBLE_DEVICES=devices[0],
                 PYTHONPATH=worker_path,

@@ -50,8 +50,9 @@ def remember_screenshot(image):
 
 class PilotJudge:
     """Four attempts per task, no SDK retries; persist the exact judge evidence."""
-    def __init__(self, root, client):
+    def __init__(self, root, client, budget=None):
         self.root, self.client = Path(root), client
+        self.budget = budget
         self.chat = SimpleNamespace(completions=SimpleNamespace(create=self.create))
 
     async def create(self, **kwargs):
@@ -64,6 +65,8 @@ class PilotJudge:
             raise ValueError('Task judge attempt budget exhausted')
         ident = f'{count + 1:02d}'
         request = dict(kwargs, max_completion_tokens=4096, store=False)
+        if self.budget:
+            self.budget.reserve('judge_http_attempts', task_key=CURRENT_TASK.get())
         write_json(directory / f'request-{ident}.json', request)
         result = await self.client.chat.completions.create(**request)
         write_json(directory / f'response-{ident}.json', result.model_dump())
@@ -89,6 +92,30 @@ def install_final_screenshot():
     WebEnv.reset, WebEnv.step = wrapped_reset, wrapped_step
 
 
+async def score_step_limit(args, samples, reward):
+    """Use the same canonical judge on the terminal state of a step-limit episode.
+
+    This automates the pilot's saved-evidence recovery without changing its
+    prompt, model, image, action history, or the recorded termination status.
+    """
+    sample = samples[-1] if isinstance(samples, list) else samples
+    if (getattr(sample.status, 'name', '') != 'FAILED' or
+            sample.metadata.get('terminate_reason') != 'max_steps_exhausted'):
+        return await reward.reward_func(args, samples)
+    parser = reward.ToolParser(reward._TOOLS_INFO,
+        parser_type=reward.resolve_parser_type(args.hf_checkpoint))
+    score, text, timeout = await reward._judge(args, sample, parser)
+    for item in samples if isinstance(samples, list) else [sample]:
+        item.metadata['reward'] = dict(judge=score, combined=score, judge_text=text,
+            judge_timeout=timeout, protocol='online_mind2web')
+        item.metadata['terminal_judge_at_step_limit'] = True
+        if score is None or timeout:
+            item.remove_sample = True
+            item.metadata['judge_invalid'] = True
+        item.reward = score
+    return [score] * len(samples) if isinstance(samples, list) else score
+
+
 async def run(config):
     import httpx
     from openai import AsyncOpenAI
@@ -103,12 +130,18 @@ async def run(config):
     os.environ.update(SLIME_BROWSER_ENV_MODE='browser-use', SLIME_BROWSER_ROLLOUT_CONCURRENCY='2')
     generation._BROWSER_HOST_BLACKLIST_PATH = str(root / 'navigation-failures.txt')
     tasks = evaluation.load_tasks_from_jsonl(config['tasks'])
-    if [t['task_id'] for t in tasks] != config['task_ids'] or len(tasks) != 10:
+    expected_count = config.get('expected_task_count', 10)
+    if ([t['task_id'] for t in tasks] != config['task_ids'] or len(tasks) != expected_count or
+            len(set(config['task_ids'])) != expected_count):
         raise ValueError('Task cohort changed')
+    budget = None
+    if config.get('budget'):
+        from openwebrl.selection_budget import SelectionBudget
+        budget = SelectionBudget(config['budget']['root'], config['budget']['limits'])
     install_page_observation(); install_final_screenshot()
     judge_client = AsyncOpenAI(api_key=os.getenv('JUDGE_API_KEY') or os.environ['OPENAI_API_KEY'],
         base_url='https://api.openai.com/v1', max_retries=0, timeout=120)
-    judge = PilotJudge(root / 'judge', judge_client)
+    judge = PilotJudge(root / 'judge', judge_client, budget=budget)
     reward._get_openai_client = lambda **unused: judge
 
     async def terminal_reward(args, samples):
@@ -121,6 +154,8 @@ async def run(config):
         else:
             sample.metadata['judge_invalid'] = True
             return [None] * len(samples) if isinstance(samples, list) else None
+        if config.get('judge_step_limit'):
+            return await score_step_limit(args, samples, reward)
         return await reward.reward_func(args, samples)
 
     evaluation.reward_func = terminal_reward
@@ -149,12 +184,14 @@ async def run(config):
                 write_json(root / 'server-identity.json', check_server(config['endpoint'], identity))
             selector = DecisionSelector(provider, root / 'selections', client=client,
                 endpoint=config.get('endpoint'), api_key=os.getenv('TYPESAFE_API_KEY') or os.getenv('JEV_API_KEY'),
-                max_requests=300, identity=identity)
+                max_requests=config.get('selector_request_cap', 300), identity=identity, budget=budget)
         write_json(root / 'manifest.json', config)
         guarded_selector = ObservationGuard(selector, root / 'observation-failures')
         import wandb
-        tracking = wandb.init(project='openwebrl-evals', group='SFT-decision-selection-20261004',
-            id='sft-selection-20261004-' + mode, resume='allow', dir=str(root), config=config['protocol'])
+        tracking = wandb.init(project='openwebrl-evals',
+            group=config.get('wandb_group', 'SFT-decision-selection-20261004'),
+            id=config.get('wandb_id', 'sft-selection-20261004-' + mode),
+            resume='allow', dir=str(root), config=config['protocol'])
 
         async def one(task):
             key = hashlib.sha256(task['task_id'].encode()).hexdigest()
@@ -167,6 +204,8 @@ async def run(config):
                 started_path = root / 'started' / (key + '.json')
                 if started_path.exists():
                     raise RuntimeError('Interrupted task requires diagnosis; no automatic extra browser session')
+                if budget:
+                    budget.reserve('browser_sessions', task_id=task['task_id'])
                 write_json(started_path, dict(task_id=task['task_id'], started_unix=time.time()))
                 token = CURRENT_TASK.set(key); image_token = FINAL_SCREENSHOT.set({'image': None})
                 local = copy(args); local.browser_action_selector = guarded_selector
@@ -193,8 +232,8 @@ async def run(config):
             if any(isinstance(r, BaseException) for r in rows):
                 raise RuntimeError('One or more tasks could not start; preserve the partial cohort')
             from openwebrl.arm_eval import summarize
-            summary = summarize(rows, 10)
-            summary['complete'] = len(rows) == 10
+            summary = summarize(rows, expected_count)
+            summary['complete'] = len(rows) == expected_count
             summary['provider_halted'] = getattr(selector, 'halted', False)
             if summary['provider_halted']:
                 raise RuntimeError('Decision provider halted; inspect saved responses')

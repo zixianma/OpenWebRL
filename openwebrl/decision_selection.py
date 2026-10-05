@@ -101,7 +101,7 @@ class ObservationGuard:
 
 class DecisionSelector:
     def __init__(self, provider, output, *, client, endpoint=None, api_key=None,
-                 seed=42, max_requests=300, identity=None):
+                 seed=42, max_requests=300, identity=None, budget=None):
         if provider not in ('jev', 'kev'):
             raise ValueError('Expected Jev or Kev')
         self.provider, self.client, self.seed = provider, client, seed
@@ -112,6 +112,7 @@ class DecisionSelector:
         self.headers = {'Authorization': 'Bearer ' + api_key} if provider == 'jev' else {}
         self.root = Path(output); self.root.mkdir(parents=True, exist_ok=True)
         self.max_requests, self.identity = max_requests, identity
+        self.budget = budget
         self.counter = len(list(self.root.glob('request-*.json')))
         self.halted = (self.root / 'halt.json').exists()
 
@@ -120,6 +121,8 @@ class DecisionSelector:
         if self.halted or self.counter >= self.max_requests:
             raise RuntimeError('Selector halted or request cap reached')
         seeds = [candidate_seed(self.seed, task_id, turn, j) for j in range(5)]
+        if self.budget:
+            self.budget.reserve('actor_proposals', 5, task_id=task_id, turn=turn)
         outputs = await asyncio.gather(*(infer(url, input_text,
             dict(sampling_params, sampling_seed=s), images, timeout_secs=timeout) for s in seeds))
         candidates = [split_response(o[0]) for o in outputs]
@@ -140,6 +143,9 @@ class DecisionSelector:
         write_json(path, record)
         start = time.monotonic()
         try:
+            if self.budget:
+                self.budget.reserve('jev_requests' if self.provider == 'jev' else 'local_kev_requests',
+                                    task_id=task_id, turn=turn)
             reply = await self.client.post(self.endpoint, json=request, headers=self.headers, timeout=120)
             record['http_status'] = reply.status_code
             reply.raise_for_status()
