@@ -271,6 +271,16 @@ remain unchanged; the caveat concerns whether the task requirement was met.
 The other five positives reviewed so far are supported by their saved evidence.
 Collection is still running, and this partial check is not a final success rate.
 
+**Constraint caveat — October 5, 10:54 PDT.** All 94 saved records pass the
+artifact audit. Review of five subsequent positive verdicts supports four and
+flags one shopping outcome: the cart addition is real, but no saved ranking
+establishes the requested best-selling item, and the selected size is large tall.
+The graphic could suit the requested event, but an explicit event-style category
+was not established. The original positive is preserved with a private evidence
+note. Across the first 11 reviewed positives, one has a confirmed community
+mismatch and one has unverified product constraints; these annotations do not
+change canonical scores or artifact-validity counts.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 frozen runtime: `runtime/reference-kev27b-actor-full300-20261004-v1`.
 Validation passed37 offline checks plus the opt-in local Chromium fill/click/done
