@@ -708,7 +708,7 @@ two concurrent episodes, top-p0.95/top-k20,4096 response tokens,
 with the proposed allocations and caps. A new frozen source revision preserves
 the earlier pilot/preparation settings. Each run collects300 fresh
 episodes, including the pilot's first10 tasks; the pilot remains separate.
-Jobs **344661 (Kev27B)** and **344708 (Jev, replacing344662)** are submitted under the following
+Jobs **344793 (Kev27B)** and **344794 (Jev)** are submitted under the following
 separate approvals; neither has a full300 result yet.
 
 <!-- sft-full300-live-audit:start -->
@@ -719,9 +719,35 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 344708 | 10-05 00:17 PDT | 40/300 | 39 | 1 | 26 | 4469 |
-| SFT + Kev27B | 344661 | 10-05 00:15 PDT | 38/300 | 37 | 1 | 25 | 4398 |
+| SFT + Jev | 344794 | 10-05 00:27 PDT | 44/300 | 42 | 2 | 28 | 4937 |
+| SFT + Kev27B | 344793 | 10-05 00:27 PDT | 42/300 | 41 | 1 | 26 | 4865 |
 <!-- sft-full300-live-audit:end -->
+
+<a id="sft-selector-platform-clearing-20261005"></a>
+**Confirmed typing-harness defect and recovery — October5.** The cloud provider
+supplies both Mac and Windows browser profiles. An isolated input test in those
+actual browsers showed `Control+A` producing `newold` on Mac, while `Meta+A`
+produced `new`; Windows required `Control+A`. The shared write executor now
+selects the shortcut using the browser's platform. The production method passed
+in the Mac cloud browser;19 focused tests cover both branches and audit guards.
+The separate full-method Windows probe lost its stopped session and is not
+claimed as a pass; its unchanged shortcut had passed the earlier cloud test.
+
+Jev344708 and Kev344661 were stopped, evidence retained, and replacements344794
+and344793 submitted with only the remaining approved time. Prior charges are
+4816seconds for Jev (including344662) and4865seconds for Kev; replacement limits
+are31140 and31080seconds. API/browser caps and actor/selector/judge settings are
+unchanged. Two interrupted tasks per mode restart; completed outcomes are not
+selectively rerolled. The44 Jev and42 Kev completed records before this fix remain
+explicitly labeled as using the earlier harness. Combined totals therefore mix
+harness versions and must not be presented as a uniform corrected full300 result.
+
+One Jev episode also lost its browser target during an overlapping diagnostic;
+diagnostic interference cannot be excluded. It remains an unscored, diagnosed
+invalid record. Further probes must not share browsers carrying active tasks.
+All receipts, original attempts, partial trajectories, charges, and the exact
+pre/post boundary remain in private runtime storage and the private reviews.
+
 
 <a id="sft-kev-full300-timeout-20261005"></a>
 **Kev27B episode timeout — October5,00:14Pacific.** One episode reached

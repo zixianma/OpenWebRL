@@ -1016,8 +1016,10 @@ class WebEnv(BaseEnv):
             elem_desc = await self._get_focused_element_description()
             pre_url = self.page.url
 
-            # Clear existing content first
-            await self.page.keyboard.press("Control+A")
+            # Cloud browsers can use Mac editing shortcuts even when this
+            # Python client runs on Linux. Resolve the browser's platform.
+            is_mac = await self.page.evaluate("() => navigator.platform.startsWith('Mac')")
+            await self.page.keyboard.press("Meta+A" if is_mac else "Control+A")
             await self.page.keyboard.press("Backspace")
 
             await self.page.keyboard.type(message)

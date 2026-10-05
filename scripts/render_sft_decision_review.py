@@ -135,6 +135,7 @@ def build(root=ROOT, image_dir=None):
                 evidence_verified=receipt.get('evidence_verified', False), issues=receipt['issues'])
     return dict(tasks=tasks, models=[dict(key=k, label=v) for k,v in modes], images=images,
         image_assets=image_dir is not None, recovery=plan.get('recovery'),
+        platform_clearing_recovery=plan.get('platform_clearing_recovery'),
         audit={k:v for k,v in audit.items() if k != 'rows'}, protocol=plan['protocol'], rendered_unix=time.time())
 
 
