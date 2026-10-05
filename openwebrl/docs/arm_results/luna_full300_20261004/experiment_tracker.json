@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791198449.1207871,
+  "snapshot_epoch": 1791218453.6572297,
   "rows": [
     {
       "id": "AS01",
@@ -100,18 +100,18 @@
       "mode": "jev",
       "target_tasks": 300,
       "recorded_episodes": 300,
-      "status": "collection_complete_final_audit_pending",
+      "status": "verified_complete_with_diagnosed_invalids",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "345021",
       "successes": 176,
       "valid": 284,
-      "verified_complete": false,
-      "counts_provisional": true,
-      "counts_provisional_reason": "All300 records saved and scheduler completed; final owner evidence, verdict, receipt and browser-cleanup reconciliation pending. Historical browser-harness strata remain explicit.",
+      "verified_complete": true,
+      "counts_provisional": false,
       "selector_halted": false,
       "scheduler_state": "COMPLETED",
       "failure_audit_pending": false,
-      "overall_success_provisional": 0.5866666666666667
+      "coverage_note": "All300 records audited; invalids preserved with diagnoses. Final scheduler/API accounting, W&B and browser cleanup verified by owning session; pre/post input-clearing repair strata remain distinct.",
+      "overall_success": 0.5866666666666667
     },
     {
       "id": "AS09",
@@ -121,16 +121,46 @@
       "mode": "kev-27b",
       "target_tasks": 300,
       "recorded_episodes": 300,
-      "status": "collection_complete_final_audit_pending",
+      "status": "verified_complete_with_diagnosed_invalids",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
       "successes": 184,
       "valid": 291,
-      "verified_complete": false,
+      "verified_complete": true,
       "scheduler_state": "COMPLETED",
-      "counts_provisional": true,
-      "counts_provisional_reason": "All300 records saved and scheduler completed; final owner evidence, verdict, receipt and browser-cleanup reconciliation pending. Historical browser-harness strata remain explicit.",
-      "overall_success_provisional": 0.6133333333333333
+      "counts_provisional": false,
+      "coverage_note": "All300 records audited; invalids preserved with diagnoses. Final scheduler/API accounting, W&B and browser cleanup verified by owning session; pre/post input-clearing repair strata remain distinct.",
+      "overall_success": 0.6133333333333333
+    },
+    {
+      "id": "AS10",
+      "actor": "gpt-6-luna",
+      "selector": null,
+      "n": 1,
+      "mode": "luna_high",
+      "reasoning_effort": "high",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "protocol_and_budget_prepared_awaiting_exact_approval",
+      "protocol_group": "api_actor_high_full300",
+      "job_id": null,
+      "approved": false,
+      "proposal": "reasoning-high-proposal.json"
+    },
+    {
+      "id": "AS11",
+      "actor": "gpt-6.1-sol",
+      "selector": null,
+      "n": 1,
+      "mode": "sol61_high",
+      "reasoning_effort": "high",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "protocol_and_budget_prepared_awaiting_exact_approval",
+      "protocol_group": "api_actor_high_full300",
+      "job_id": null,
+      "approved": false,
+      "proposal": "reasoning-high-proposal.json"
     }
   ],
   "excluded": [
@@ -157,7 +187,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T16:28:03Z",
+  "snapshot_utc": "2026-10-05T16:40:53Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -445,5 +475,10 @@
     "new_Qwen_Luna_verified_records": 300,
     "new_Qwen_Luna_target": 1500,
     "protocols_not_equated": true
+  },
+  "proposed_reasoning_high": {
+    "approved": false,
+    "new_episodes": 600,
+    "proposal": "reasoning-high-proposal.json"
   }
 }

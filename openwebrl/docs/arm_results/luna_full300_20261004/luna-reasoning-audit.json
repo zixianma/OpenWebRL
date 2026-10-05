@@ -1,0 +1,96 @@
+{
+  "epoch": 1791218260.8069034,
+  "scope": "300 verified primary Luna episodes; excludes quarantined/nonprimary attempts",
+  "requests": 3839,
+  "statuses": {
+    "completed": 3839
+  },
+  "requested_efforts": {
+    "medium": 3839
+  },
+  "requested_caps": {
+    "4096": 3839
+  },
+  "returned_models": {
+    "gpt-6-luna": 3839
+  },
+  "output_tokens": {
+    "count": 3839,
+    "total": 382378,
+    "mean": 99.60354258921595,
+    "p50": 76,
+    "p95": 254,
+    "max": 2189
+  },
+  "reasoning_tokens": {
+    "count": 3839,
+    "total": 257283,
+    "mean": 67.01823391508205,
+    "p50": 44,
+    "p95": 215,
+    "max": 2150
+  },
+  "cap_hits": 0,
+  "incomplete_reasons": {
+    "null": 3839
+  },
+  "error_types": {
+    "null": 3839
+  },
+  "episode_counts": {
+    "success": 110,
+    "valid_failure": 169,
+    "invalid": 21
+  },
+  "valid_failure_browser_steps": {
+    "8": 6,
+    "6": 9,
+    "13": 2,
+    "3": 12,
+    "30": 59,
+    "2": 27,
+    "7": 4,
+    "5": 4,
+    "19": 1,
+    "15": 2,
+    "4": 7,
+    "21": 1,
+    "28": 3,
+    "1": 7,
+    "14": 3,
+    "10": 3,
+    "23": 2,
+    "9": 7,
+    "11": 2,
+    "20": 3,
+    "26": 1,
+    "12": 3,
+    "22": 1
+  },
+  "termination_status_counts": [
+    {
+      "group": "success",
+      "status": "Status.COMPLETED",
+      "count": 110
+    },
+    {
+      "group": "valid_failure",
+      "status": "Status.COMPLETED",
+      "count": 110
+    },
+    {
+      "group": "valid_failure",
+      "status": "Status.FAILED",
+      "count": 59
+    },
+    {
+      "group": "invalid",
+      "status": "Status.ABORTED",
+      "count": 21
+    }
+  ],
+  "valid_failure_termination_reasons": {
+    "task_completed": 110,
+    "max_steps_exhausted": 59
+  }
+}
