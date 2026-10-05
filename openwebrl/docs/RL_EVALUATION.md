@@ -769,6 +769,28 @@ the34,997 seconds remaining. Kev344661 keeps its existing v2 worker. A private
 full300 review now supports300-task navigation, external JPEG previews and saved
 retry responses; its snapshots remain explicitly provisional until the final audit.
 
+### Jev episode-timeout audit — October 4, 23:49 Pacific
+
+Replacement344708 remains active. The partial audit verifies26 completed episodes
+and preserves one diagnosed invalid timeout (27 records total);20 of the26 valid
+episodes have canonical success verdicts. These early counts are not a full300
+result. GPU decoding and W&B synchronization are healthy, and all26 valid records
+have matching selection traces, rollouts, terminal images and judge evidence.
+The cumulative scheduler charge at this audit is2,775 seconds, including the
+failed attempt's1,003 seconds, within the approved36,000-second total.
+
+The timed-out episode repeatedly failed to replace an airport-origin input and
+reached the existing600-second limit after18 selected proposals. The shared
+`write` executor attempted Control+A/Backspace, but observed field values retained
+old text. Several selected proposals also pressed Control and A separately, which
+does not form a chord. A local Chromium check confirms that the frozen write
+executor clears an ordinary input and that separate key presses append text;
+it does not establish why clearing failed on the remote site. No semantic patch
+or unchanged replay was applied. The final selected multi-action proposal has no
+following observation, fresh terminal screenshot or judge verdict. Its partial
+rollout and input images remain preserved, and remote-browser shutdown is confirmed.
+The private HTML labels this execution uncertainty and the invalid record explicitly.
+
 <a id="evaluation-harness-guide"></a>
 ## Evaluation harness: code map and entry points
 

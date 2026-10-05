@@ -7,7 +7,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 [Kev27B direct browser policy: full300 prepared, awaiting exact approval; separate from SFT proposal selection](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
-[Full300 SFT+Jev recovery344708 and SFT+Kev27B344661: actor T1.0/p0.95/4K; recent SFT baseline reused only as a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
+[Full300 SFT+Jev344708 and SFT+Kev27B344661: T1.0/p0.95/4K; Jev timeout diagnosed and preserved; baseline remains a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
 
 [Unified actor/selector experiment tracker: all eight full-set rows, existing SFT baseline, Luna preparations and live Jev/Kev runs; protocol and telemetry differences explicit](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 [October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; exact new budget approval pending](ARM_INFERENCE.md#luna-actor-full300-20261004).
