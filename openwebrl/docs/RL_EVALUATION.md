@@ -791,6 +791,23 @@ following observation, fresh terminal screenshot or judge verdict. Its partial
 rollout and input images remain preserved, and remote-browser shutdown is confirmed.
 The private HTML labels this execution uncertainty and the invalid record explicitly.
 
+### Kev27B partial audit — October 4, 23:54 Pacific
+
+Job344661 remains active with32 independently audited valid records and23 canonical
+success verdicts; no invalid records or unexplained artifact-audit issues were
+found in this snapshot. All32 selected-action histories, frozen candidate tuples,
+terminal screenshots and saved o4-mini verdicts agree. These are provisional
+counts from an unfinished300-task cohort. Both GPUs show measured inference
+activity, W&B retains T1.0/p0.95/4K and the original SFT identity, and the
+3,109-second scheduler charge is within the36,000-second total approval.
+
+The private review now includes the32 audited outcomes and preserves the original
+judge verdicts. One added evidence note records that a product-comparison success
+contains general comparison claims not independently established by the saved
+terminal page; this follows the same review standard used for both selector
+cohorts. Site-blocked episodes with intact terminal evidence remain valid judged
+failures. No scientific settings, completed outcomes or allocation were changed.
+
 <a id="evaluation-harness-guide"></a>
 ## Evaluation harness: code map and entry points
 
