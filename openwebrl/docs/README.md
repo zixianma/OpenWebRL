@@ -9,7 +9,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
 [Full300 SFT+Jev344794 and SFT+Kev27B344793: browser-repair replacements running under separate10h budgets; T1.0/p0.95/4K and baseline protocol caveats retained](RL_EVALUATION.md#sft-selection-full300-20261004).
 
-[Unified actor/selector tracker: eight full-set rows; Luna coordinate-repair CPU344875 running with90 eligible records at snapshot, GPU queued, Jev/Kev replacements running](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
+[Unified actor/selector tracker: eight full-set rows; Luna coordinate-repair CPU344875 running with270/300 eligible records at the10:11 UTC snapshot, GPU queued, Jev/Kev replacements running](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 [October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; GPU344754 queued; CPU344875 replays coordinate-affected tasks within the original4h cap](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [Corrected Qwen/SFT pilot:49 collected, seven Luna actor episodes compromised and Luna-alone comparison withdrawn; four-arm/nine-task plots, unchanged accounting; unapproved Qwen-only tail proposal](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).

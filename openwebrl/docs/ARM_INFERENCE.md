@@ -32,7 +32,7 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 08:53:56 UTC**. “Saved” is eligible terminal
+Snapshot: **2026-10-05 10:11:16 UTC**. “Saved” is eligible terminal
 record coverage; archived coordinate-compromised records are excluded. It does
 not imply every record is valid or the run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
@@ -43,9 +43,21 @@ not imply every record is valid or the run has passed its final audit. The table
 | AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
-| AS07 | GPT-6 Luna | None |1 |300 |90 |Running344875; coordinate-repair replay |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |106 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |90 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+| AS07 | GPT-6 Luna | None |1 |300 |270 |Running344875; coordinate-repair replay |Luna study; API sampling |Approved shared CPU/API pools below |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |150 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |144 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+
+**October5,10:11 UTC progress:** Luna CPU344875 has270/300 eligible records:
+90 retained no-coordinate originals plus180 corrected collection records, with
+30 tasks remaining. All four CPU workers are active; the supervisor reports
+no stalled workers, record-integrity errors, approval mismatch or API halt.
+GPU344754 remains queued. Jev and Kev retain their separate running jobs and
+budgets. The shared Luna-study ledgers show7,971 Luna calls /$4.723312 charged
+or reserved and250 judge calls /$1.104818; these are live totals, including
+prior attempts and reservations, not final reconciled spend. Caps remain
+$100 Luna/$25 judge, and the CPU prior-use plus retry ceiling remains
+14,381/14,400 seconds. Partial coverage does not establish a performance
+ranking; exact cohort and final scheduler audits are still pending.
 
 **Coverage checklist:** eight full-set comparison rows; one completed reusable
 baseline, three running rows and four queued rows. The five fresh Luna-study
@@ -88,8 +100,8 @@ CPU344755 was deliberately stopped after **6,761 seconds**. Its267 committed
 records were classified by coordinate presence in native API calls and saved
 action history, independently of rewards: **177 compromised records were
 archived;90 no-coordinate records were retained**. Four interrupted attempts
-and every receipt remain preserved. Corrected or fresh collection is required
-for the other210 tasks. The retained subset is coverage, not a standalone
+and every receipt remain preserved. At relaunch, corrected or fresh collection
+was required for the other210 tasks. The retained subset is coverage, not a standalone
 Luna success estimate.
 
 Replacement **344875** is running four CPU workers with a **7,620-second
@@ -104,8 +116,8 @@ executed actions, future actor history and judge history all remain viewport
 pixels. Qwen/SFT proposals retain their normalized0–1000 coordinates; the
 pinned Luna selector prompt already states that convention and returns only a
 candidate index. Validation passed **51 tests**:46 targeted coordinate and
-existing tests plus five repair-controller tests. After the tracker snapshot,
-live checks confirmed matching requested/executed pixel coordinates for all
+existing tests plus five repair-controller tests. During replacement startup
+on October5, live checks confirmed matching requested/executed pixel coordinates for all
 four replacement workers, five verified new records and four running W&B
 identities. Final results remain separately supervised.
 

@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791190436.102464,
+  "snapshot_epoch": 1791195076.049363,
   "rows": [
     {
       "id": "AS01",
@@ -79,15 +79,15 @@
       "n": 1,
       "mode": "luna",
       "target_tasks": 300,
-      "recorded_episodes": 90,
+      "recorded_episodes": 270,
       "status": "running_coordinate_repair",
       "protocol_group": "luna_full300",
       "job_id": "344875",
-      "successes": 17,
-      "valid": 71,
-      "eligible_saved_episodes": 90,
+      "successes": 99,
+      "valid": 251,
+      "eligible_saved_episodes": 270,
       "verified_complete": false,
-      "coverage_note": "90 retained no-coordinate episodes; 177 compromised committed episodes archived and 4 partial attempts preserved. Partial subset outcomes are not a Luna baseline performance estimate."
+      "coverage_note": "270 eligible records:90 retained no-coordinate originals and180 corrected collection records.177 compromised original records are archived and4 original partial attempts preserved.30 tasks remain; partial outcomes are not final comparison results."
     },
     {
       "id": "AS08",
@@ -96,12 +96,12 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 106,
+      "recorded_episodes": 150,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344794",
-      "successes": 67,
-      "valid": 102,
+      "successes": 95,
+      "valid": 144,
       "verified_complete": false
     },
     {
@@ -111,12 +111,12 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 90,
+      "recorded_episodes": 144,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
-      "successes": 59,
-      "valid": 86,
+      "successes": 100,
+      "valid": 139,
       "verified_complete": false
     }
   ],
@@ -144,7 +144,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T08:53:56Z",
+  "snapshot_utc": "2026-10-05T10:11:16Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -256,7 +256,54 @@
       "workers_with_matching_requested_executed_pixel_coordinates": 4,
       "new_records_verified": 5,
       "running_wandb_identities": 4,
-      "does_not_change_timestamped_coverage_snapshot": true
+      "does_not_change_timestamped_coverage_snapshot": true,
+      "reference_snapshot_utc": "2026-10-05T08:53:56Z"
     }
+  },
+  "progress_health_snapshot": {
+    "snapshot_utc": "2026-10-05T10:11:16Z",
+    "cpu_job_id": "344875",
+    "cpu_state": "RUNNING",
+    "cpu_active_workers": 4,
+    "eligible_luna_records": 270,
+    "retained_no_coordinate_originals": 90,
+    "corrected_collection_records": 180,
+    "remaining_luna_tasks": 30,
+    "gpu_job_id": "344754",
+    "gpu_state": "PENDING",
+    "record_integrity_errors_reported": 0,
+    "stalled_workers_reported": 0,
+    "approval_mismatch": false,
+    "API_halt_reported": false,
+    "shared_API_ledger_snapshot": {
+      "luna": {
+        "calls": 7971,
+        "charged_or_reserved_usd": 4.7233120750000275
+      },
+      "judge": {
+        "calls": 250,
+        "charged_or_reserved_usd": 1.104818
+      }
+    },
+    "API_accounting_scope": "Live shared-ledger snapshot including reservations and every attempt; not final spend reconciliation.",
+    "budget_caps_changed": false,
+    "cpu_total_seconds_cap": 14400,
+    "cpu_prior_plus_retry_ceiling_seconds": 14381,
+    "peer_health": {
+      "jev": {
+        "state": "RUNNING",
+        "verified_failure": false,
+        "selector_halted": false,
+        "continuation_active": true
+      },
+      "kev-27b": {
+        "state": "RUNNING",
+        "verified_failure": false,
+        "selector_halted": false,
+        "continuation_active": true
+      }
+    },
+    "scientific_completion_verified": false,
+    "final_scheduler_and_cohort_audits_pending": true
   }
 }
