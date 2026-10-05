@@ -33,24 +33,32 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 18:53:28 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-05 21:46:25 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised and transport-diagnostic records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
 run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eleven committed comparison rows, including both approved high-reasoning baselines and the other session’s direct Kev27B actor. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
-| ID | Actor | Selector | N | Target | Saved | Status / current job | Protocol | Budget |
-| --- | --- | --- | ---: | ---: | ---: | --- | --- | --- |
-| AS01 | Qwen3-VL-4B-Thinking | None |1 |300 |14 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
-| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna |5 |300 |14 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
-| AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
-| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |19 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
-| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |17 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
-| AS07 | GPT-6 Luna | None |1 |300 |300 |Verified complete344875;110 successes |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |300 |Audited complete345021;176 successes,16 diagnosed invalids |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |300 |Audited complete344793;184 successes,9 diagnosed invalids |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
-| AS10 | GPT-6 Luna, high reasoning |None |1 |300 |255 |Running345178; receipts verified; provisional coverage |Matched API actor protocol |Approved separate CPU/API caps below |
-| AS11 | GPT-6.1 Sol, high reasoning |None |1 |300 |300 |Arm audit passed345179;61 successes/273 valid; shared judge audit pending |Matched API actor protocol |Approved separate CPU/API caps below |
-| AS12 | Kev27B direct actor |None |1 |300 |174 |Running recovery345273; prior6,135s charged; peer-owned |Upstream DOM + text assistance |Approved1 H200/8 CPU/120GiB ×4h total |
+| ID | Actor | Selector | N | Saved /300 | Successes | Valid | Status / current job | Protocol | Budget |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
+| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 110 | 21 | 97 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 110 | 30 | 98 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS04 | Official OpenWebRL-SFT4B | None | 1 | 300 | 106 | 272 | Complete; reused actor0 reference | Historical SFT | Already completed |
+| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna | 5 | 117 | 48 | 105 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 115 | 44 | 103 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS07 | GPT-6 Luna | None | 1 | 300 | 110 | 279 | Verified complete 344875 | Luna study; API sampling | Approved shared CPU/API pools below |
+| AS08 | Official OpenWebRL-SFT4B | Jev | 5 | 300 | 176 | 284 | Verified complete 345021 | Jev/Kev study | Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B | 5 | 300 | 184 | 291 | Verified complete 344793 | Jev/Kev study | Approved2 H200/16 CPU/240GiB ×10h total |
+| AS10 | GPT-6 Luna, high reasoning | None | 1 | 300 | 97 | 277 | Audited 345178; plots/report closeout pending | Matched API actor protocol | Approved separate CPU/API caps below |
+| AS11 | GPT-6.1 Sol, high reasoning | None | 1 | 300 | 61 | 273 | Audited 345179; plots/report closeout pending | Matched API actor protocol | Approved separate CPU/API caps below |
+| AS12 | Kev27B direct actor | None | 1 | 300 | 26 | 294 | Verified complete 345391 | Upstream DOM + text assistance | Approved1 H200/8 CPU/120GiB ×4h total |
+
+**Current coverage:** seven rows have all 300 records: five are verified complete
+(including the reused SFT reference), and both high-reasoning API rows have passed
+collection, scheduler, API and W&B audits with plots/report publication still pending.
+The four GPU rows have saved 452/1,200 records and remain active. Their
+partial success counts are provisional; protocol differences remain explicit.
+Direct Kev27B is now verified at 26/300 (8.67%; 26/294 valid-only, 8.84%), with
+six diagnosed invalids and 9,907/14,400 scheduler seconds charged.
 
 **October5 CPU-family endpoint:** all300 primary records are independently
 verified, comprising90 retained no-coordinate originals and210 corrected
@@ -72,9 +80,9 @@ their owner has now completed the final audits, retaining16 and9 diagnosed inval
 
 **October 5 direct-Kev recovery update:** the peer owner resumed collection as **345273** after diagnosing the local-server rejection, preserving completed records and diagnosed invalids. Its replacement ceiling is **8,220s**; prior use plus this ceiling is **14,355/14,400 approved seconds**. Worker progress and the owner’s active repair continuation are verified. Protocol and diagnostic details remain with the [peer report](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 
-**Coverage checklist:** eleven committed full-set comparison rows: one completed reusable
-baseline, one verified CPU family, two audited selectors, four GPU rows running after recovery, one independently audited high-reasoning actor, one
-running300-task high-reasoning actor and the independently supervised direct Kev27B actor. The five fresh Luna-study
+**Coverage checklist:** eleven committed full-set comparison rows: five verified
+complete rows including the reused baseline, two audited high-reasoning API rows
+awaiting report closeout, and four GPU rows running after recovery. The five fresh Luna-study
 rows share two approved pools. This totals3,000 new
 full-set episodes across separately budgeted studies plus300 reused baseline records. AS12 uses its own upstream DOM policy and GPT-4.1-mini text assistance; see the [direct Kev27B protocol](RL_EVALUATION.md#kev27b-actor-full300-20261004). Its results are not a matched comparison with the pixel-based API actors. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
