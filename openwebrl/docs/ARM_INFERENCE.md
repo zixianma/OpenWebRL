@@ -44,7 +44,7 @@ identity returned on every request. See the [model reference](https://developers
 and [reasoning parameter compatibility](https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters).
 
 Every task receives all four arms in deterministic shuffled order, using fresh
-local browser sessions, one exclusive episode at a time, a 1280×720 viewport,
+local browser sessions, one exclusive episode per GPU, a 1280×720 viewport,
 the initial task goal, the current screenshot, and full retained history.
 Proposals within each decision run concurrently; their seeds are fixed by
 task/turn/candidate index across Qwen arms. Flush Qwen's server cache before each
@@ -111,13 +111,34 @@ Cost accounting assumptions:
   attempts are separate research expenses. Preserve every attempt's usage and
   final Slurm accounting so the total experiment bill remains auditable.
 
-**Proposed bounded pilot, awaiting exact resource approval:**10 fixed,
-hash-selected tasks ×4 arms =40 episodes; **one H200,8 CPUs,120GiB, at most4 hours
-total across all attempts**, plus **$15 Luna /902 calls** and **$5 judge /160
-calls**. The four-hour value is a ceiling, not an eight-hour runtime prediction;
-release the allocation when complete. API dollar and call caps both apply.
-The reference GPU ceiling is $3.60; the API ceiling is $20. No new GPU/API budget
-has been approved for this experiment. The full300-task schedule is prepared,
+**Faster pilot proposal, updated after the user's GPU-scaling request:**10 fixed,
+hash-selected tasks ×4 arms =40 episodes; **four H200s,32 CPUs,480GiB, at most90
+minutes total across all attempts**, plus the unchanged **$15 Luna /902 calls**
+and **$5 judge /160 calls**, shared across all four workers. No allocation has
+been submitted. This replaces the unsubmitted one-H200/four-hour proposal.
+
+Each GPU serves an independent TP1 Qwen replica with8 CPUs/120GiB and one active
+browser episode. Workers claim the next unfinished task under a file lock and
+run all four of its arms in the preassigned order. Separate ports, browser
+processes, logs and W&B identities prevent workers from sharing those resources;
+shared locked API ledgers enforce the global caps. Saved complete episodes are
+never rerun after recovery. GPU UUIDs must be distinct and per-GPU telemetry is
+recorded. The controller owns and waits for all four workers before checking
+all40 records and building the plots. This follows the independent-replica
+approach described in [SGLang's parallel-serving guide](https://github.com/sgl-project/sglang/blob/main/docs/docs/advanced_features/dp_dpa_smg_guide.mdx).
+
+The purpose is to finish independent episodes concurrently while preserving
+one-GPU actor latency. It does not establish a speedup for a single episode.
+Up to four task blocks can advance at once; actual completion time still depends
+on model loading, API/browser delays, workload imbalance and the scheduler
+queue. API requests can now overlap across four workers, so record that global
+concurrency when interpreting latency or rate-limit failures. No measured
+four-GPU speedup is claimed. API and browser performance remain to be validated.
+
+The90-minute value is a ceiling, not a completion-time promise; release early
+when complete. The new ceiling is **6 H200-hours**, versus4 in the first
+proposal, or **$5.40 reference GPU cost**, plus at most$20 for APIs. Both dollar
+and call caps apply. No new GPU/API budget has been approved for this experiment. The full300-task schedule is prepared,
 but its allocation request will use measured pilot throughput/cost. The pilot
 is for protocol and efficiency validation; ten tasks cannot establish a small
 performance difference.
