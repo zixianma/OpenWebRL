@@ -331,8 +331,8 @@ limit), interactive-element geometry, last-five executed reasoning/actions and
 all five full proposals. This modality differs from the visual SelectionARM;
 frames/canvas content may be absent. No hidden benchmark rubric is supplied.
 The shared judge is o4-mini/AgentTrek with fresh final screenshots and a4096-token
-completion cap. All cohorts use Browser Use without proxies and a1280×1000
-viewport. This is a separate protocol from the direct1120×780 Jev agent.
+completion cap. All cohorts request Browser Use with `proxyCountryCode: null`
+and a1280×1000 viewport; provider proxy accounting is discussed below. This is a separate protocol from the direct1120×780 Jev agent.
 
 Prepared entry: [`evaluate_sft_decision_selection.py`](../../scripts/evaluate_sft_decision_selection.py),
 [`batch template`](../../scripts/evaluate_sft_decision_selection_2gpu.sbatch).
@@ -343,7 +343,7 @@ servers. It releases on completion and stops at its cap if incomplete. API caps:
 300Jev calls,602local Kev calls including warmups,160judge attempts,4096judge
 completion tokens per attempt;40browser sessions with12-minute expiry and no
 additional helper calls. The user approved this exact allocation and API/browser budget.
-Original job344043 was replaced by344049 after the startup failure below. The
+Attempt lineage is344043 →344049 →344086; the recoveries are described below. The
 completed direct-pilot budget is not reused. Combined offline tests passed39 cases, including literal candidate
 preservation, probability failures, secret-safe routing and local overlay behavior.
 
@@ -374,10 +374,39 @@ receipt are preserved; no fresh final image or judge verdict exists. The task
 remains invalid. The remote closure's underlying cause is not established.
 An `ObservationGuard` now has a regression test proving that a missing image
 stops before either actor or selector inference and that valid outputs pass
-through unchanged. This diagnostic fix is prepared for a future source revision;
-the active revision3 remains immutable. It cannot restore the closed session.
+through unchanged. This diagnostic fix is deployed in source revision4 for
+replacement344086. It cannot restore the closed session.
 Repeating this task would require an additional browser session beyond the40
 reserved for the four matched cohorts; none has been opened for a retry.
+
+Job344049 then halted during the first two Jev episodes: one HTTP200 response
+returned probabilities `[0.56, 0.15, 0.10, 0.04, 0.14]`, summing to0.99 after
+hundredth rounding. Its selected candidate was the clear argmax. The harness's
+0.001 sum tolerance incorrectly rejected it and stopped both concurrent episodes.
+Source revision4 accepts only the rounding error implied by five hundredth-rounded
+Jev values (at most0.025); other responses retain the original tolerance. Finite
+values, range, keys, model identity and choice/argmax agreement remain required.
+No probabilities are changed and there is no fallback. The saved failing response
+passes offline replay, and19 selection/review regression tests pass. Both aborted
+episodes, including their terminal images and the unexecuted request, remain
+invalid and preserved; no judge was called for their aborted status.
+
+Attempt344049 consumed1207seconds, bringing the charged total to1281seconds.
+Replacement344086 requests2280seconds (38minutes), for a maximum combined3561
+of the approved3600seconds. It reuses10 SFT results and2 interrupted Jev results,
+then runs only the remaining28 unstarted episodes. The plan differs only in source,
+manifest and controller hashes; actor, seeds, tasks, scientific settings and API
+caps are unchanged. Source4 passes deployed CPU imports and browser preflight.
+The persistent pointer and supervisor follow344086. Retrying the3 invalid episodes
+would need browser-cap approval beyond40; no such retries are included.
+
+A read-only provider audit confirms the first10 SFT sessions are stopped. The
+provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
+the explicit null proxy request. Inspection of the pinned SDK's serialized body
+confirms that it preserves `proxyCountryCode: null`. This is an unresolved provider
+accounting discrepancy, not evidence that the requested setting was omitted or a
+verified zero-proxy-charge run. The Discogs session stopped after roughly149seconds,
+well before its12-minute expiry, so session expiry does not explain that failure.
 
 [`audit_sft_decision_selection.py`](../../scripts/audit_sft_decision_selection.py)
 independently checks source/task pins, deterministic seeds, selected actor text,
@@ -399,10 +428,11 @@ corrected to incomplete and the original infrastructure counts retained under
 job344043. Final metrics must be checked against the independent artifact audit.
 
 The audit also found that the shared training reward returns zero without
-calling the judge when status is not `COMPLETED`. Two initial SFT episodes
+calling the judge when status is not `COMPLETED`. Three SFT episodes
 reached30steps and exposed this behavior. Their preserved terminal PNGs and
 histories were sent to the same canonical o4-mini/AgentTrek judge, which returned
-failure for both. This recovery uses the existing per-task four-call allowance
+failure for all three. Corrections are applied after the SFT worker exited;
+the audited control has4 successes,9 valid episodes and1 invalid episode out of10. This recovery uses the existing per-task four-call allowance
 and160-call pilot cap, with no new browser or actor calls.
 [`rejudge_sft_decision_terminal.py`](../../scripts/rejudge_sft_decision_terminal.py)
 preserves original results, stages actual verdicts and applies corrections after

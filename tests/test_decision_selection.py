@@ -112,3 +112,24 @@ def test_missing_observation_stops_before_actor_or_selector_and_valid_tuple_is_u
     record = json.loads(next(tmp_path.glob('*.json')).read_text())
     assert record['actor_called'] is record['selector_called'] is False
     assert record['turn'] == 15
+
+
+@pytest.mark.parametrize('model,values,choice,valid', [
+    ('jev-1.13.0', [.56, .15, .10, .04, .14], '1', True),
+    ('jev-1.13.0', [.56, .15, .10, .06, .14], '1', True),
+    ('jev-1.13.0', [.56, .15, .10, .15, .14], '1', False),
+    ('kev-latest', [.56, .15, .10, .04, .14], '1', False),
+    ('jev-1.13.0', [.561, .15, .10, .04, .14], '1', False),
+    ('jev-1.13.0', [.56, .15, .10, .04, .14], '2', False),
+])
+def test_jev_rounded_probabilities_preserve_argmax_and_reject_other_errors(model, values, choice, valid):
+    payload = selection_payload(model, 'find', observation(), [], [dict(action='a')]*5)
+    reply = response(model, choice)
+    reply['answers']['selection']['probabilities'] = dict(zip('12345', values))
+    original = json.dumps(reply)
+    if valid:
+        assert selected_index(payload, reply) == 0
+    else:
+        with pytest.raises(ValueError):
+            selected_index(payload, reply)
+    assert json.dumps(reply) == original

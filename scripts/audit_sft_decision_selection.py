@@ -120,7 +120,10 @@ def audit(root=ROOT):
                 assistants = [m['content'] for m in messages if m['role'] == 'assistant']
                 screenshots = [decode_image(c['image_url']) for m in messages if m['role'] == 'user'
                                for c in m['content'] if c['type'] == 'image_url']
-                decisions = sorted(traces[task_id], key=lambda r: r['turn'])
+                all_decisions = sorted(traces[task_id], key=lambda r: r['turn'])
+                failed_decisions = [r for r in all_decisions if mode != 'sft' and r['status'] != 'selected']
+                decisions = [r for r in all_decisions if r not in failed_decisions]
+                assert not failed_decisions or not result['valid'], 'Unexecuted reservation in valid episode'
                 assert len(assistants) == len(decisions) <= 30
                 if result['valid']:
                     assert len(decisions) == result['total_steps']
@@ -145,7 +148,9 @@ def audit(root=ROOT):
                             else plan['kev_specs'][mode.removeprefix('kev-')])
                         answer = response['answers']['selection']; probs = answer['probabilities']
                         assert set(probs) == set('12345') and all(math.isfinite(p) and 0 <= p <= 1 for p in probs.values())
-                        assert abs(sum(probs.values()) - 1) <= .001
+                        rounding = (mode == 'jev' and all(abs(p * 100 - round(p * 100)) < 1e-10
+                            for p in probs.values()))
+                        assert abs(sum(probs.values()) - 1) <= (.025 + 1e-12 if rounding else .001)
                         index = record['selected_index']; assert str(index + 1) == answer['choice']
                         assert probs[str(index + 1)] >= max(probs.values()) - 1e-7
                         candidates = request['state']['candidates']
@@ -163,12 +168,26 @@ def audit(root=ROOT):
                     diagnosis = diagnosed.get((mode, task_id))
                     assert diagnosis, 'Invalid result requires diagnosis'
                     assert diagnosis['original_result_sha256'] == row['result_sha256']
-                    assert result['reward'] is None and 'ABORTED' in result['status']
-                    assert not (folder / 'final' / (key + '.png')).exists()
+                    assert result['reward'] == diagnosis['saved_reward'] and 'ABORTED' in result['status']
+                    final_path = folder / 'final' / (key + '.png')
+                    assert final_path.exists() == diagnosis['saved_final_image']
+                    if final_path.exists():
+                        final = final_path.read_bytes()
+                        row['final_image_dimensions'] = verify_image(final)
+                        row['final_sha256'] = digest(final)
+                        assert decode_image(result['metadata']['full_image_list'][-1]) == final
+                    assert len(failed_decisions) == len(diagnosis.get('unexecuted_requests', {}))
+                    for failed in failed_decisions:
+                        trace_path = failed['_path']
+                        assert digest(trace_path.read_bytes()) == diagnosis['unexecuted_requests'][trace_path.name]
+                        assert failed['status'] == 'failed' and failed['turn'] == len(decisions)
+                        assert failed['candidate_seeds'] == [expected_seed(task_id, failed['turn'], j) for j in range(5)]
+                        assert digest(trace_path.with_suffix('.png').read_bytes()) == failed['screenshot_sha256']
+                        assert len(failed['actor_outputs']) == 5 and 'selected_index' not in failed
                     assert not list((folder / 'judge' / key).glob('request-*.json'))
                     row.update(diagnosed_invalid=True, trajectory_verified=True,
-                        decisions=len(decisions), diagnosis=diagnosis['diagnosis'])
-                    row['issues'].append('Diagnosed invalid: no fresh final image or terminal verdict')
+                        decisions=len(decisions), unexecuted_reservations=len(failed_decisions), diagnosis=diagnosis['diagnosis'])
+                    row['issues'].append('Diagnosed invalid: ' + diagnosis['classification'])
                     issues.append(dict(mode=mode, task_id=task_id, error=row['issues'][-1], diagnosed=True))
                     rows.append(row)
                     continue

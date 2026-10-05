@@ -25,7 +25,7 @@ from runtime_ports import lease_ports
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 CONTROL = RUNTIME / 'evaluations/sft-decision-selection-pilot-20261004'
 PARENT = RUNTIME / 'reference-arm-task-rescue-20261002-v1'
-SOURCE = RUNTIME / 'reference-sft-decision-selection-20261004-v3'
+SOURCE = RUNTIME / 'reference-sft-decision-selection-20261004-v4'
 WORKER_DEPS = RUNTIME / 'sft-selection-deps-20261004'
 ACTOR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT')
 MODES = ('sft', 'jev', 'kev-0.8b', 'kev-27b')

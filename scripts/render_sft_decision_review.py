@@ -48,7 +48,7 @@ def build(root=ROOT):
                     row = json.loads(line); traces[row['task_id']].append(row)
         else:
             for path in (directory / 'selections').glob('request-*.json'):
-                row = read(path); traces[row['task_id']].append(row)
+                row = read(path); row['_path'] = path; traces[row['task_id']].append(row)
         for task in tasks:
             key = hashlib.sha256(task['task_id'].encode()).hexdigest()
             result_path = directory / 'results' / (key + '.json')
@@ -69,10 +69,12 @@ def build(root=ROOT):
             decisions = sorted(traces[task['task_id']], key=lambda r: r['turn'])
             frames = []
             for i, decision in enumerate(decisions):
-                if i >= len(observations): break
-                picture = next((c['image_url'] for c in observations[i] if c['type'] == 'image_url'), None)
+                observation = observations[i] if i < len(observations) else []
+                picture = next((c['image_url'] for c in observation if c['type'] == 'image_url'), None)
                 if isinstance(picture, dict): picture = picture['url']
                 picture = image(base64.b64decode(picture.split(',', 1)[-1], validate=True)) if picture else None
+                if picture is None and decision.get('_path'):
+                    picture = image(decision['_path'].with_suffix('.png').read_bytes())
                 if mode == 'sft':
                     candidates = decision['candidates']; probabilities = {'1': 1.0}; page = None
                 else:
@@ -88,7 +90,7 @@ def build(root=ROOT):
                     raw_response=decision.get('response'), status=decision.get('status', 'selected')))
             final = directory / 'final' / (key + '.png')
             task['models'][mode] = dict(status='completed', valid=result.get('valid'), reward=result.get('reward'),
-                steps=max(result.get('total_steps', 0), len(frames)), termination=result.get('terminate_reason'),
+                steps=receipt.get('decisions', max(result.get('total_steps', 0), len(frames))), termination=result.get('terminate_reason'),
                 elapsed_seconds=result.get('elapsed_seconds'), frames=frames,
                 final=image(final.read_bytes()) if final.exists() else None,
                 judge=result.get('metadata', {}).get('reward', {}).get('judge_text'),

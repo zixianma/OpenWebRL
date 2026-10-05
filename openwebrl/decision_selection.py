@@ -62,8 +62,15 @@ def selected_index(request, response):
     keys = list(request['questions']['selection']['criteria'])
     if (answer.get('type') != 'choice' or set(probs) != set(keys) or
             any(type(p) not in (int, float) or not math.isfinite(p) or not 0 <= p <= 1
-                for p in probs.values()) or
-            not math.isclose(sum(probs.values()), 1, abs_tol=1e-3)):
+                for p in probs.values())):
+        raise ValueError('Invalid selection probability vector')
+    # Jev returns probabilities rounded to hundredths. Five independent
+    # rounding errors can total .025; retain the raw values and exact argmax.
+    tolerance = 1e-3
+    if request['model'] == JEV_MODEL and all(
+            math.isclose(p, round(p, 2), rel_tol=0, abs_tol=1e-12) for p in probs.values()):
+        tolerance = len(probs) * .005 + 1e-12
+    if not math.isclose(sum(probs.values()), 1, rel_tol=0, abs_tol=tolerance):
         raise ValueError('Invalid selection probability vector')
     winner = max(keys, key=lambda k: probs[k])
     choice = answer.get('choice')
