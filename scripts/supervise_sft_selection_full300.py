@@ -50,7 +50,17 @@ def poll(root, pointer, thread):
     old=read(root/'supervisor-state.json');ack=read(root/'supervisor-ack.json').get('epoch',0)
     signature=[job,record[1],heart.get('stage'),stale,halted,invalid,bool(snapshot['summary'].get('complete'))]
     pending=old.get('queued_epoch',0)>ack
-    if not pending and (signature!=old.get('signature') or now-max(ack,old.get('queued_epoch',0))>=900):
+    previous_signature=old.get('signature',[])
+    previous_invalid=previous_signature[5] if len(previous_signature)>5 else 0
+    urgent=(record[1].split()[0] in ('FAILED','TIMEOUT','CANCELLED','OUT_OF_MEMORY',
+        'NODE_FAIL','BOOT_FAIL','PREEMPTED','DEADLINE','COMPLETED') or stale or halted or
+        invalid>previous_invalid or bool(snapshot['summary'].get('complete')))
+    changed=signature!=previous_signature
+    # An unacknowledged routine callback must not hide a later failure or
+    # completion. Record the new signature after dispatch so unchanged urgent
+    # states still produce only one callback while acknowledgement is pending.
+    if (changed and urgent) or (not pending and
+            (changed or now-max(ack,old.get('queued_epoch',0))>=900)):
         prompt=(f'[Authorized SFT selector full300 supervision] Read {root}/plan.json, approval.json and supervisor-latest.json; '
             'ack with scripts/supervise_sft_selection_full300.py --root '+str(root)+' --ack. '
             f'Follow current {mode} job{job}; inspect logs,GPU use,rollouts,final screenshots,judge verdicts and W&B. '
@@ -61,7 +71,9 @@ def poll(root, pointer, thread):
         result=subprocess.run(['codex','queue','--thread',thread,'--message',prompt],capture_output=True,text=True,timeout=45)
         if result.returncode:
             raise RuntimeError('Continuation queue failed: '+result.stderr[:500])
-        old.update(queued_epoch=now,signature=signature,queue_receipt=result.stdout.strip())
+        old.update(queued_epoch=now,signature=signature,queue_receipt=result.stdout.strip(),
+            notification_kind='urgent' if urgent else 'routine',
+            pending_callback_bypassed=bool(pending and changed and urgent))
         with (root/'supervisor-notifications.jsonl').open('a') as log:log.write(json.dumps(old)+'\n')
     write(root/'supervisor-state.json',old)
     return True

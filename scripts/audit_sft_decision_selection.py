@@ -83,6 +83,49 @@ def verify_pre_action_abort(sample, decisions, task_id, initial_image):
     return verify_image(initial_image)
 
 
+def verify_initial_navigation_failure(folder, key, result_path, diagnosis, task_id, start_url, decisions):
+    """Verify a failed setup without inventing a rollout or terminal state."""
+    result = read(result_path)
+    assert diagnosis.get('initial_navigation_failure') is True
+    assert diagnosis['classification'] == 'initial browser navigation failed before any observation or inference'
+    assert diagnosis['error_type'] == 'OSError'
+    assert digest(result_path.read_bytes()) == diagnosis['original_result_sha256']
+    assert result['task_id'] == task_id and result['start_url'] == start_url
+    assert result['metadata']['task_id'] == task_id
+    assert result['metadata']['start_url'] == start_url
+    assert result['status'] == 'Status.ABORTED' and not result['valid']
+    assert result['reward'] is None and diagnosis['saved_reward'] is None
+    assert result['total_steps'] == 0 and result['response'] == ''
+    expected_error = (
+        f'Failed to navigate to {start_url} after 3 attempts: '
+        f'Page.goto: net::ERR_CONNECTION_CLOSED at {start_url}\nCall log:\n'
+        f'  - navigating to "{start_url}", waiting until "domcontentloaded"\n')
+    assert result['terminate_reason'] == 'generation_error: ' + expected_error
+    assert diagnosis['terminate_reason'] == result['terminate_reason']
+    assert result['metadata']['terminate_reason'] == result['terminate_reason']
+    assert not result['metadata'].get('messages') and not result['metadata'].get('full_image_list')
+    assert not decisions, 'Initial navigation failure contains selector requests'
+    assert not list((folder / 'samples' / key).rglob('*.json'))
+    assert not (folder / 'final' / (key + '.png')).exists()
+    assert diagnosis['saved_final_image'] is False
+    assert not list((folder / 'judge' / key).glob('request-*.json'))
+    started = folder / 'started' / (key + '.json')
+    assert str(started) == diagnosis['start_receipt']
+    assert digest(started.read_bytes()) == diagnosis['start_receipt_sha256']
+    assert read(started)['task_id'] == task_id
+    session = diagnosis['browser_session_id']
+    assert re.fullmatch(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', session)
+    stopped = folder / 'browser_sessions' / 'stopped' / session
+    assert str(stopped) == diagnosis['browser_stop_receipt'] and stopped.is_file()
+    assert not (folder / 'browser_sessions' / session).exists()
+    excerpt = Path(diagnosis['log_excerpt']).read_bytes()
+    assert digest(excerpt) == diagnosis['log_excerpt_sha256']
+    log = excerpt.decode()
+    assert f'Task {task_id}: generate_turn_sample failed: ' + expected_error in log
+    assert f'OSError: {expected_error}' in log
+    assert f'[Stopped Browser-Use session {session} after failure]' in log
+
+
 def audit(root=ROOT):
     root = Path(root)
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
@@ -166,6 +209,16 @@ def audit(root=ROOT):
                 assert result['task_id'] == task_id
                 assert result['mode'] == mode
                 diagnosis = diagnosed.get((mode, task_id))
+                if diagnosis and diagnosis.get('initial_navigation_failure'):
+                    verify_initial_navigation_failure(folder, key, path, diagnosis, task_id,
+                        tasks[task_id]['metadata']['start_url'], traces[task_id])
+                    row.update(diagnosed_invalid=True, initial_navigation_failure_verified=True,
+                        decisions=0, final_action_execution_verified=False,
+                        fresh_final_image=False, diagnosis=diagnosis['diagnosis'])
+                    row['issues'].append('Diagnosed invalid: ' + diagnosis['classification'])
+                    issues.append(dict(mode=mode, task_id=task_id, error=row['issues'][-1], diagnosed=True))
+                    rows.append(row)
+                    continue
                 if diagnosis and diagnosis.get('pre_action_abort'):
                     assert not result['valid'] and result['reward'] is None
                     assert result['error_type'] == diagnosis['error_type'] == 'ValueError'

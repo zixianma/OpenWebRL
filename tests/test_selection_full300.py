@@ -168,3 +168,69 @@ def test_supervisor_queues_once_until_ack_and_exits_on_verified_completion(tmp_p
     assert supervisor.poll(root,pointer,'thread') is False
     assert len(calls)==1
     assert supervisor.read(root/'supervisor-finished.json')['reason']=='verified completion'
+
+
+@pytest.mark.parametrize('event', ['failed', 'timeout', 'oom', 'halted', 'stale',
+                                  'invalid', 'completed', 'summary_complete'])
+def test_supervisor_dispatches_new_urgent_event_while_routine_callback_pending(tmp_path,monkeypatch,event):
+    spec=importlib.util.spec_from_file_location('selection_supervisor_urgent',
+        Path(__file__).resolve().parents[1]/'scripts/supervise_sft_selection_full300.py')
+    supervisor=importlib.util.module_from_spec(spec);spec.loader.exec_module(supervisor)
+    root=tmp_path/'run';root.mkdir();pointer=tmp_path/'pointer.json'
+    supervisor.write(root/'approval.json',{'approved':True})
+    supervisor.write(root/'plan.json',{'modes':['jev']})
+    supervisor.write(pointer,{'job_id':'12345','verified_complete':False})
+    supervisor.write(root/'heartbeat.json',{'stage':'jev','updated_unix':1000})
+    now=[1000.];state=['RUNNING'];calls=[]
+    monkeypatch.setattr(supervisor.time,'time',lambda:now[0])
+    monkeypatch.setattr(supervisor.subprocess,'check_output',
+                        lambda *a,**k:f'12345|{state[0]}|100|0:0\n')
+    def queue(command,**kwargs):
+        calls.append(command)
+        return SimpleNamespace(stdout=f'queued-{len(calls)}',returncode=0)
+    monkeypatch.setattr(supervisor.subprocess,'run',queue)
+    assert supervisor.poll(root,pointer,'thread') and len(calls)==1
+    assert supervisor.read(root/'supervisor-state.json')['notification_kind']=='routine'
+    now[0]=1001.
+    if event in ('failed','timeout','oom','completed'):
+        state[0]={'failed':'FAILED','timeout':'TIMEOUT','oom':'OUT_OF_MEMORY','completed':'COMPLETED'}[event]
+    elif event=='halted':
+        (root/'jev/selections').mkdir(parents=True)
+        supervisor.write(root/'jev/selections/halt.json',{'reason':'HTTPStatusError'})
+    elif event=='stale':
+        now[0]=1300.
+    elif event=='invalid':
+        (root/'jev/results').mkdir(parents=True)
+        supervisor.write(root/'jev/results/invalid.json',{'valid':False})
+    else:
+        (root/'jev').mkdir()
+        supervisor.write(root/'jev/summary.json',{'complete':True})
+    assert supervisor.poll(root,pointer,'thread') and len(calls)==2
+    receipt=supervisor.read(root/'supervisor-state.json')
+    assert receipt['notification_kind']=='urgent' and receipt['pending_callback_bypassed']
+    assert supervisor.poll(root,pointer,'thread') and len(calls)==2
+    assert not supervisor.read(root/'supervisor-latest.json')['verified_complete']
+
+
+def test_supervisor_keeps_ordinary_stage_changes_deduplicated_until_ack(tmp_path,monkeypatch):
+    spec=importlib.util.spec_from_file_location('selection_supervisor_routine',
+        Path(__file__).resolve().parents[1]/'scripts/supervise_sft_selection_full300.py')
+    supervisor=importlib.util.module_from_spec(spec);spec.loader.exec_module(supervisor)
+    root=tmp_path/'run';root.mkdir();pointer=tmp_path/'pointer.json';calls=[]
+    supervisor.write(root/'approval.json',{'approved':True})
+    supervisor.write(root/'plan.json',{'modes':['jev']})
+    supervisor.write(pointer,{'job_id':'12345','verified_complete':False})
+    supervisor.write(root/'heartbeat.json',{'stage':'startup','updated_unix':1000})
+    monkeypatch.setattr(supervisor.time,'time',lambda:1000.)
+    monkeypatch.setattr(supervisor.subprocess,'check_output',lambda *a,**k:'12345|RUNNING|100|0:0\n')
+    def queue(command,**kwargs):
+        calls.append(command)
+        return SimpleNamespace(stdout='queued',returncode=0)
+    monkeypatch.setattr(supervisor.subprocess,'run',queue)
+    supervisor.poll(root,pointer,'thread')
+    supervisor.write(root/'heartbeat.json',{'stage':'jev','updated_unix':1000})
+    supervisor.poll(root,pointer,'thread')
+    assert len(calls)==1
+    supervisor.write(root/'supervisor-ack.json',{'epoch':1000})
+    supervisor.poll(root,pointer,'thread')
+    assert len(calls)==2

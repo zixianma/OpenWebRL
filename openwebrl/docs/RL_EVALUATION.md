@@ -725,8 +725,8 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 345021 | 10-05 04:43 PDT | 190/300 | 179 | 11 | 123 | 18181 |
-| SFT + Kev27B | 344793 | 10-05 04:53 PDT | 212/300 | 207 | 5 | 144 | 19956 |
+| SFT + Jev | 345021 | 10-05 04:58 PDT | 204/300 | 193 | 11 | 134 | 19037 |
+| SFT + Kev27B | 344793 | 10-05 05:02 PDT | 221/300 | 215 | 6 | 149 | 20499 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-kev-progress-audit-20261005"></a>
@@ -785,6 +785,29 @@ an empty response and matching initial image, and freezes its completed-result
 set before reading traces to avoid races with live workers. A reviewed senior-dog
 positive visibly includes puppies; its canonical score remains unchanged and the
 private review flags the age-filter contradiction. Full300 remains incomplete.
+
+The subsequent 204-record audit verifies 193 scored episodes and 134 canonical
+positives, with the same 11 diagnosed invalids and all 189 pre-recovery results
+unchanged. Provider-halt episodes remain unscored invalids, distinct from judged
+task failures. Two additional private-review notes flag a generic subscription
+accepted as requested topic subscriptions and a degree-requirements list
+accepted as a class schedule; canonical scores remain unchanged.
+
+A late peer alert also exposed a supervision defect: an older pending callback
+could suppress a newly observed failure. The shared supervisor now dispatches
+new failure, stall, invalid-result and completion events despite pending
+callbacks, while deduplicating unchanged urgent states and ordinary updates.
+Twenty focused tests pass, including each urgent transition behind an
+unacknowledged routine message. Both supervisor services were restarted and
+fresh heartbeats verified; evaluation workers and their budgets were unchanged.
+
+A subsequent Kev start-page connection failure is separately diagnosed before
+any actor proposal or selector request. The independent auditor now verifies
+this case against immutable result/start/log evidence and a confirmed browser
+shutdown, requiring zero model actions, rollout archives, screenshots and judge
+requests. It does not manufacture missing evidence or treat initialization
+failure as a judged task failure. The combined supervisor and partial-evidence
+test suites pass 44 tests; frozen evaluation workers remain unchanged.
 
 <a id="sft-selector-platform-clearing-20261005"></a>
 **Confirmed typing-harness defect and recovery — October5.** The cloud provider
