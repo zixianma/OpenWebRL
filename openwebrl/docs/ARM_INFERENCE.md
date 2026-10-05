@@ -33,24 +33,24 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 18:23:45 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-05 18:44:12 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised and transport-diagnostic records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
 run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eleven committed comparison rows, including both approved high-reasoning baselines and the other session’s direct Kev27B actor. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
 | ID | Actor | Selector | N | Target | Saved | Status / current job | Protocol | Budget |
 | --- | --- | --- | ---: | ---: | ---: | --- | --- | --- |
-| AS01 | Qwen3-VL-4B-Thinking | None |1 |300 |1 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
-| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna |5 |300 |1 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
+| AS01 | Qwen3-VL-4B-Thinking | None |1 |300 |11 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
+| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna |5 |300 |8 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
 | AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
-| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |2 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
-| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
+| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |11 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
+| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |12 |Running recovery345214; parallel dispatch verified; prior386s charged |Luna study |Approved shared GPU/API pools below |
 | AS07 | GPT-6 Luna | None |1 |300 |300 |Verified complete344875;110 successes |Luna study; API sampling |Approved shared CPU/API pools below |
 | AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |300 |Audited complete345021;176 successes,16 diagnosed invalids |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
 | AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |300 |Audited complete344793;184 successes,9 diagnosed invalids |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
-| AS10 | GPT-6 Luna, high reasoning |None |1 |300 |186 |Running345178; receipts verified; provisional coverage |Matched API actor protocol |Approved separate CPU/API caps below |
-| AS11 | GPT-6.1 Sol, high reasoning |None |1 |300 |243 |Running345179; receipts verified; provisional coverage |Matched API actor protocol |Approved separate CPU/API caps below |
-| AS12 | Kev27B direct actor |None |1 |300 |116 |Running recovery345243; prior109 records retained; peer-owned |Upstream DOM + text assistance |Approved1 H200/8 CPU/120GiB ×4h total |
+| AS10 | GPT-6 Luna, high reasoning |None |1 |300 |234 |Running345178; receipts verified; provisional coverage |Matched API actor protocol |Approved separate CPU/API caps below |
+| AS11 | GPT-6.1 Sol, high reasoning |None |1 |300 |288 |Running345179; receipts verified; provisional coverage |Matched API actor protocol |Approved separate CPU/API caps below |
+| AS12 | Kev27B direct actor |None |1 |300 |154 |Failed345255; HTTP422 under peer-owner diagnosis;6,135/14,400s used |Upstream DOM + text assistance |Approved1 H200/8 CPU/120GiB ×4h total |
 
 **October5 CPU-family endpoint:** all300 primary records are independently
 verified, comprising90 retained no-coordinate originals and210 corrected
@@ -64,7 +64,9 @@ their owner has now completed the final audits, retaining16 and9 diagnosed inval
 
 **October5 GPU transport recovery:** attempt344754 started at17:21 UTC, then exposed a client connection limit of one: candidate proposals were serialized despite being gathered concurrently. A180s timeout left a server request active during the next cache flush, which returned HTTP400. The affected attempt stopped after386s. All four early GPU records and every partial attempt are preserved as diagnostic history; all four GPU arms will be recollected under the corrected dispatch, independent of their outcomes. The repair allows ten candidate connections per dedicated GPU and waits up to60s for cancellation to drain before flushing. Real ten-way HTTP overlap and bounded flush/error tests passed. **Replacement345214 is running with a15h53m ceiling**, keeping prior use plus the new ceiling at57,566/57,600 seconds. Models, decoding, browser concurrency, task/judge settings and shared API ledgers are unchanged. The CPU actor studies continue independently. Startup verification confirmed eight exclusive GPUs, five concurrent Qwen proposals and ten concurrent SFT proposals, successful cache flushes between episodes, and all eight W&B runs in `openwebrl-evals`. Saved request sampling matches T1/p0.95/k−1 with the 4096-token cap; new records carry the repair identity.
 
-**October 5 direct-Kev recovery:** job 345177 stopped after browser cleanup hung following its 600s actor timeout. The existing owner reproduced the dead Playwright dispatcher, tested bounded capture and cleanup (24 tests passed, 1 skipped), and started **replacement 345243**. Two browser workers are active and new records are arriving. All 109 completed records and both interrupted attempts are preserved. The prior 4,753s plus the replacement’s 9,600s ceiling total **14,353/14,400 approved seconds**, with the same 1 H200/8 CPU/120 GiB profile and API/browser caps. Its actor deadline, DOM policy, model and judge settings are unchanged. This is a separate, incomplete protocol cohort.
+**October 5 direct-Kev recovery:** job 345177 stopped after browser cleanup hung following its 600s actor timeout. The existing owner reproduced the dead Playwright dispatcher, tested bounded capture and cleanup (24 tests passed, 1 skipped), and started **replacement 345243**. At that startup, two browser workers resumed collection. All 109 completed records and both interrupted attempts are preserved. The prior 4,753s plus the replacement’s 9,600s ceiling total **14,353/14,400 approved seconds**, with the same 1 H200/8 CPU/120 GiB profile and API/browser caps. Its actor deadline, DOM policy, model and judge settings are unchanged. This is a separate, incomplete protocol cohort.
+
+**October 5 direct-Kev follow-up:** the initial recovery 345243 used another 674s; its successor 345255 used 708s before stopping on a local-model HTTP 422. The peer owner acknowledged the new failure and is diagnosing it. All 154 completed records (152 valid) and interrupted attempts remain preserved. Total use is **6,135/14,400 seconds**, leaving **8,265 seconds** under its original separate approval. The Qwen/Luna and high-reasoning jobs continue independently.
 
 **Coverage checklist:** eleven committed full-set comparison rows: one completed reusable
 baseline, one verified CPU family, two audited selectors, four GPU rows running after recovery, two
