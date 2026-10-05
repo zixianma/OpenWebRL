@@ -58,7 +58,9 @@ def poll(root, pointer, thread):
             'Preserve evidence and update the run pointer for replacements. Audit all300 before verified_complete; update docs/private review. '
             'Hourly routine reports; alert failures/completion promptly. This continuation adds no budget.')
         if len(prompt.encode())>1000:raise ValueError('Continuation prompt exceeds queue limit')
-        result=subprocess.run(['codex','queue','--thread',thread,'--message',prompt],capture_output=True,text=True,timeout=45,check=True)
+        result=subprocess.run(['codex','queue','--thread',thread,'--message',prompt],capture_output=True,text=True,timeout=45)
+        if result.returncode:
+            raise RuntimeError('Continuation queue failed: '+result.stderr[:500])
         old.update(queued_epoch=now,signature=signature,queue_receipt=result.stdout.strip())
         with (root/'supervisor-notifications.jsonl').open('a') as log:log.write(json.dumps(old)+'\n')
     write(root/'supervisor-state.json',old)

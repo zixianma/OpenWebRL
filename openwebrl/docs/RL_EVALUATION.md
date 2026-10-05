@@ -642,27 +642,32 @@ modality difference from visual SelectionARM, not an equal-input model swap.
 
 
 <a id="sft-selection-full300-20261004"></a>
-### Prepared full300 SFT + Jev and Kev27B comparison
+### Full300 SFT + Jev and Kev27B comparison
 
 The user requested all300 Online-Mind2Web tasks with the original SFT proposer
-and each of Jev and Kev27B. Both prepared runs preserve the pilot's five full
+and each of Jev and Kev27B. Both runs preserve the pilot's five full
 reasoning/action candidates, deterministic seed schedule, hosted browser,
-two concurrent episodes, temperature0.6/top-p0.95/top-k20,4096 response tokens,
-30 turns and canonical o4-mini/AgentTrek judge. Each run collects300 fresh
+two concurrent episodes, top-p0.95/top-k20,4096 response tokens,
+30 turns and canonical o4-mini/AgentTrek judge. The user subsequently requested
+**actor temperature1.0**, replacing the pilot's0.6, and authorized proceeding
+with the proposed allocations and caps. A new frozen source revision preserves
+the earlier pilot/preparation settings. Each run collects300 fresh
 episodes, including the pilot's first10 tasks; the pilot remains separate.
-No new allocation or API use has been authorized or launched at preparation.
+Jobs **344661 (Kev27B)** and **344662 (Jev)** are submitted under the following
+separate approvals; neither has a full300 result yet.
 
-| Prepared run | H200 | CPU | RAM GiB | Total hours including retries | Browser-session cap | Selector-call cap | Judge-call cap |
+| Run | H200 | CPU | RAM GiB | Total hours including retries | Browser-session cap | Selector-call cap | Judge-call cap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT + Kev27B |2 |16 |240 |10 |330 |9910 local, including warmups |1320 |
-| SFT + Jev |1 |8 |120 |10 |330 |9900 Jev |1320 |
+| SFT + Kev27B ·344661 |2 |16 |240 |10 |330 |9910 local, including warmups |1320 |
+| SFT + Jev ·344662 |1 |8 |120 |10 |330 |9900 Jev |1320 |
 
 These are separate caps totaling30 H200-hours,660 browser reservations and2640
 judge calls. Each run reserves at most50000 actor proposals, including failed
 generation reservations and a conservative startup allowance. Unused pilot
 time is not transferred. The Kev27B pilot's1629.55 summed episode-seconds for10
 tasks project to about6.8 hours for300 tasks at concurrency2, before startup and
-load imbalance. The10-hour ceiling adds headroom but cannot guarantee completion
+load imbalance. This extrapolation used the earlier temperature0.6 pilot.
+The10-hour ceiling adds headroom but cannot guarantee completion
 on different live tasks. Valid failures are not automatically rerolled.
 
 The recent [controlled SFT baseline](ARM_INFERENCE.md#arm-controlled-inference-results-20261004)
@@ -673,10 +678,10 @@ tokens, different seeds and1800-second episode timeouts, versus the selector
 pilot's hosted browsers and600-second timeout. Its judge uses the same
 o4-mini/AgentTrek rubric, but the baseline automatically assigns failure at
 the30-step limit without invoking it. The selector pilot recovered canonical
-verdicts for those terminal states, and both prepared selector runs automate
+verdicts for those terminal states, and both full300 selector runs automate
 that operation. Therefore the reused baseline does not isolate the
 selector's causal gain under the pilot protocol. No new SFT-only run is included
-in this prepared request; any strict re-judging would need a shared protocol
+in this request; any strict re-judging would need a shared protocol
 applied to all compared methods.
 
 [`evaluate_sft_selection_full300.py`](../../scripts/evaluate_sft_selection_full300.py)
@@ -685,8 +690,10 @@ matching approval, and charges every prior scheduler attempt before replacement.
 The frozen worker adds durable shared request reservations, separate W&B identities
 under `openwebrl-evals`, and automatic canonical judging at the step limit—the
 same evidence-recovery operation applied during the pilot, with unchanged judge
-prompt and termination status. CPU/browser import preflight and21 targeted tests
-pass. The continuation supervisor is prepared but remains inactive until launch.
+prompt and termination status. CPU/browser import preflight and24 targeted tests
+pass, including five-candidate requests at the exact actor sampling settings.
+Dedicated continuation supervisors follow each run's current job pointer and
+retain the original per-mode budget through recovery.
 Independent completion still requires all300 records, preserved rollouts and
 terminal evidence or explicit invalid diagnoses, browser shutdown, final budget
 accounting, W&B verification, documentation and a private review.

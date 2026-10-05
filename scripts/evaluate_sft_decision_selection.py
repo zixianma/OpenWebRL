@@ -15,7 +15,7 @@ import time
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 from openwebrl.decision_selection import selection_payload, selected_index, write_json
-from openwebrl.decision_selection_eval import PROTOCOL
+from openwebrl.decision_selection_eval import PROTOCOL, actor_sampling
 from openwebrl.kev_eval import model_spec, file_hash, check_server
 from evaluate_kev_pair import server_environment, source_identity, check_port_available
 from prepare_arm_turn_bonus import copy_plain
@@ -143,8 +143,7 @@ def run(plan, control=CONTROL):
     from dotenv import dotenv_values
     CONTROL, SOURCE = Path(control), Path(plan['source'])
     RESOURCES, LIMITS, MODES = plan['resources'], plan['limits'], plan['modes']
-    if plan['protocol'] != PROTOCOL:
-        raise ValueError('Scientific protocol changed')
+    actor_sampling(plan['protocol'])
     validate_source(SOURCE)
     if file_hash(SOURCE / 'reference_manifest.json') != plan['source_manifest_sha256']:
         raise ValueError('Frozen source manifest changed')
@@ -270,7 +269,7 @@ def run(plan, control=CONTROL):
                     write_json(output / 'warmup-response.json', response.json())
                 elif not (output / 'warmup-response.json').exists():
                     raise ValueError('Interrupted warmup needs diagnosis; do not reset request budget')
-            cfg = dict(protocol=PROTOCOL, output=str(output), tasks=plan['tasks'], task_ids=plan['task_ids'],
+            cfg = dict(protocol=plan['protocol'], output=str(output), tasks=plan['tasks'], task_ids=plan['task_ids'],
                 actor=str(ACTOR), actor_port=port, mode=mode, endpoint=endpoint)
             if plan.get('worker_options'):
                 cfg.update(plan['worker_options'])

@@ -14,7 +14,8 @@ import time
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
-from evaluate_sft_decision_selection import run, PROTOCOL, ACTOR, WORKER_DEPS
+from evaluate_sft_decision_selection import run, ACTOR, WORKER_DEPS
+from openwebrl.decision_selection_eval import FULL300_PROTOCOL as PROTOCOL
 from openwebrl.decision_selection import write_json
 from openwebrl.kev_eval import file_hash, model_spec
 from prepare_arm_turn_bonus import copy_plain
@@ -22,7 +23,7 @@ from resume_baseline import validate_source, source_command
 
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 PILOT = RUNTIME / 'evaluations/sft-decision-selection-pilot-20261004'
-SOURCE = RUNTIME / 'reference-sft-selection-full300-20261004-v1'
+SOURCE = RUNTIME / 'reference-sft-selection-full300-20261004-v2'
 CHANGED = ('openwebrl/decision_selection.py', 'openwebrl/decision_selection_eval.py',
            'openwebrl/selection_budget.py')
 CODE = ('scripts/evaluate_sft_selection_full300.py',

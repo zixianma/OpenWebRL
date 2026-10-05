@@ -10,7 +10,35 @@ import pytest
 
 from openwebrl.selection_budget import SelectionBudget
 from openwebrl.decision_selection import DecisionSelector
-from openwebrl.decision_selection_eval import score_step_limit
+from openwebrl.decision_selection_eval import score_step_limit, actor_sampling, PROTOCOL, FULL300_PROTOCOL
+
+
+@pytest.mark.parametrize('protocol,temperature',[(PROTOCOL,.6),(FULL300_PROTOCOL,1.0)])
+def test_five_actor_requests_use_frozen_sampling(tmp_path,protocol,temperature):
+    async def run():
+        seen=[]
+        async def infer(url,text,params,images,timeout_secs):
+            seen.append(params)
+            return ('<think>reason</think>{"name":"wait","arguments":{}}',[],[],'stop')
+        reply={'model':'kev-latest','answers':{'selection':{'type':'choice','choice':'1',
+            'probabilities':{'1':1.,'2':0.,'3':0.,'4':0.,'5':0.}}}}
+        async with httpx.AsyncClient(transport=httpx.MockTransport(lambda _:httpx.Response(200,json=reply))) as client:
+            selector=DecisionSelector('kev',tmp_path,client=client,endpoint='http://127.0.0.1:1234/v1/systemone')
+            await selector(infer=infer,url='actor',input_text='prompt',sampling_params=actor_sampling(protocol),
+                images=[],observation={'screenshot':b'fixture','active_tab_url':'https://example.com',
+                'selection_page':{'url':'https://example.com'}},history=[],task='task',task_id='id',turn=0,timeout=30)
+        assert len(seen)==5
+        for params in seen:
+            assert params['temperature']==temperature and params['top_p']==.95
+            assert params['max_new_tokens']==4096 and params['top_k']==20
+        saved=json.loads((tmp_path/'request-00001.json').read_text())
+        assert saved['sampling']['temperature']==temperature
+    asyncio.run(run())
+
+
+def test_sampling_rejects_unrecorded_protocol_changes():
+    with pytest.raises(ValueError,match='protocol changed'):
+        actor_sampling(dict(FULL300_PROTOCOL,max_steps=60))
 
 
 def test_shared_budget_cannot_reset_or_overbook(tmp_path):
@@ -91,7 +119,7 @@ def test_supervisor_queues_once_until_ack_and_exits_on_verified_completion(tmp_p
     monkeypatch.setattr(supervisor.subprocess,'check_output',lambda *a,**k:'12345|PENDING|0|0:0\n')
     def queue(command,**kwargs):
         calls.append(command)
-        return SimpleNamespace(stdout='queued')
+        return SimpleNamespace(stdout='queued',returncode=0)
     monkeypatch.setattr(supervisor.subprocess,'run',queue)
     assert supervisor.poll(root,pointer,'thread')
     assert supervisor.poll(root,pointer,'thread')

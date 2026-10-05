@@ -178,7 +178,8 @@ def audit(root=ROOT):
                         chosen = record['candidates'][0]
                     else:
                         assert record['status'] == 'selected' and record['http_status'] == 200
-                        assert record['sampling'] == dict(temperature=.6, top_p=.95, top_k=20,
+                        assert record['sampling'] == dict(temperature=plan['protocol']['temperature'],
+                            top_p=plan['protocol']['top_p'], top_k=plan['protocol']['top_k'],
                             max_new_tokens=4096, repetition_penalty=1.)
                         request, response = record['request'], record['response']
                         assert response['model'] == request['model'] == ('jev-1.13.0' if mode == 'jev' else 'kev-latest')

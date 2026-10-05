@@ -22,8 +22,16 @@ PROTOCOL = dict(actor='OpenWebRL-4B-SFT:iteration0', optimizer_updates=0,
     concurrency=2, task_timeout_seconds=600, judge='o4-mini',
     judge_protocol='online_mind2web/AgentTrek', judge_completion_tokens=4096,
     page_text_characters=16000, selector_modality='text and interactive element geometry')
+FULL300_PROTOCOL = dict(PROTOCOL, temperature=1.0)
 CURRENT_TASK = ContextVar('decision_selection_task')
 FINAL_SCREENSHOT = ContextVar('decision_selection_final_screenshot', default=None)
+
+
+def actor_sampling(protocol):
+    if protocol not in (PROTOCOL, FULL300_PROTOCOL):
+        raise ValueError('Evaluation protocol changed outside the frozen pilot/full300 settings')
+    return dict(temperature=protocol['temperature'], top_p=protocol['top_p'],
+        top_k=protocol['top_k'], max_new_tokens=protocol['max_new_tokens'], repetition_penalty=1.)
 
 
 def preflight_browser():
@@ -125,7 +133,8 @@ async def run(config):
     from slime.utils.http_utils import init_http_client
 
     root = Path(config['output']); root.mkdir(parents=True, exist_ok=True)
-    if config['protocol'] != PROTOCOL or os.environ.get('WANDB_PROJECT') != 'openwebrl-evals':
+    sampling = actor_sampling(config['protocol'])
+    if os.environ.get('WANDB_PROJECT') != 'openwebrl-evals':
         raise ValueError('Evaluation protocol or tracking project changed')
     os.environ.update(SLIME_BROWSER_ENV_MODE='browser-use', SLIME_BROWSER_ROLLOUT_CONCURRENCY='2')
     generation._BROWSER_HOST_BLACKLIST_PATH = str(root / 'navigation-failures.txt')
@@ -165,9 +174,9 @@ async def run(config):
         judge_timeout_secs=120, browser_response_format_mode='browser_env',
         turn_history_reasoning_mode='full', browser_include_tool_response=1,
         inference_step_timeout_secs=180, task_timeout_secs=600,
-        rollout_temperature=.6, rollout_top_p=.95, rollout_top_k=20, rollout_max_response_len=4096)
+        rollout_temperature=sampling['temperature'], rollout_top_p=sampling['top_p'],
+        rollout_top_k=sampling['top_k'], rollout_max_response_len=sampling['max_new_tokens'])
     init_http_client(args)
-    sampling = dict(temperature=.6, top_p=.95, top_k=20, max_new_tokens=4096, repetition_penalty=1.)
     sem = asyncio.Semaphore(2)
     async with httpx.AsyncClient(trust_env=False) as client:
         response = await client.get(f'http://127.0.0.1:{config["actor_port"]}/get_model_info', timeout=30)
