@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791220991.3522646,
+  "snapshot_epoch": 1791221535.990837,
   "rows": [
     {
       "id": "AS01",
@@ -9,9 +9,9 @@
       "mode": "qwen",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "running",
+      "status": "queued_repair",
       "protocol_group": "luna_full300",
-      "job_id": "344754",
+      "job_id": "345214",
       "successes": 0,
       "valid": 0,
       "verified_complete": false
@@ -24,9 +24,9 @@
       "mode": "qwen_luna5",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "running",
+      "status": "queued_repair",
       "protocol_group": "luna_full300",
-      "job_id": "344754",
+      "job_id": "345214",
       "successes": 0,
       "valid": 0,
       "verified_complete": false
@@ -54,9 +54,9 @@
       "mode": "sft_luna5",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "running",
+      "status": "queued_repair",
       "protocol_group": "luna_full300",
-      "job_id": "344754",
+      "job_id": "345214",
       "successes": 0,
       "valid": 0,
       "verified_complete": false
@@ -69,9 +69,9 @@
       "mode": "sft_luna10",
       "target_tasks": 300,
       "recorded_episodes": 0,
-      "status": "running",
+      "status": "queued_repair",
       "protocol_group": "luna_full300",
-      "job_id": "344754",
+      "job_id": "345214",
       "successes": 0,
       "valid": 0,
       "verified_complete": false
@@ -144,14 +144,14 @@
       "mode": "luna_high",
       "reasoning_effort": "high",
       "target_tasks": 300,
-      "recorded_episodes": 53,
+      "recorded_episodes": 77,
       "status": "running",
       "protocol_group": "api_actor_high_full300",
       "job_id": "345178",
       "approved": true,
       "proposal": "reasoning-high-proposal.json",
-      "valid": 45,
-      "successes": 13,
+      "valid": 68,
+      "successes": 20,
       "verified_complete": false
     },
     {
@@ -162,14 +162,14 @@
       "mode": "sol61_high",
       "reasoning_effort": "high",
       "target_tasks": 300,
-      "recorded_episodes": 64,
+      "recorded_episodes": 103,
       "status": "running",
       "protocol_group": "api_actor_high_full300",
       "job_id": "345179",
       "approved": true,
       "proposal": "reasoning-high-proposal.json",
-      "valid": 54,
-      "successes": 14,
+      "valid": 91,
+      "successes": 23,
       "verified_complete": false
     },
     {
@@ -214,7 +214,7 @@
   "other_session_episodes": 900,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T17:23:11Z",
+  "snapshot_utc": "2026-10-05T17:32:15Z",
   "new_episodes_all_sessions": 3000,
   "comparison_rows": 11,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -227,8 +227,9 @@
       "memory_gib": 960,
       "total_hours": 16,
       "total_gpu_hours": 128,
-      "job_id": "344754",
-      "scheduler_state": "RUNNING"
+      "job_id": "345214",
+      "scheduler_state": "PENDING",
+      "scheduler_reason": "Priority"
     },
     "cpu_pool": {
       "gpus": 0,
@@ -524,7 +525,7 @@
     "details": "../../RL_EVALUATION.md#kev27b-actor-full300-20261004"
   },
   "high_reasoning_health": {
-    "snapshot_epoch": 1791220947.6789274,
+    "snapshot_epoch": 1791221492.4873464,
     "model_and_effort_verified": true,
     "actor_errors": {
       "luna_high": {},
@@ -535,5 +536,21 @@
     },
     "cost_policy": "Unresolved usage keeps conservative reservations; token totals are lower bounds where receipts are missing",
     "complete": false
+  },
+  "gpu_transport_recovery": {
+    "prior_job_id": "344754",
+    "prior_state": "FAILED",
+    "prior_actual_seconds": 386,
+    "replacement_job_id": "345214",
+    "replacement_limit_seconds": 57180,
+    "approved_total_seconds": 57600,
+    "archived_diagnostic_records": 4,
+    "primary_gpu_records_reused": 0,
+    "scientific_protocol_changed": false,
+    "reason": "Single-connection client serialized candidate batches; after request timeout cache flush raced server cancellation.",
+    "fix": "Ten HTTP connections per dedicated model worker and bounded cache drain; same browser concurrency and decoding.",
+    "regression_tests_passed": 2,
+    "shared_API_ledgers_preserved": true,
+    "verified_running": false
   }
 }
