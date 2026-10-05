@@ -12,6 +12,12 @@
 | Kev 0.8B | GPT-4.1-mini |10 |0 |10 |0 |0.00 |0.00 |[Paired pilot](rl_results/kev-pair-pilot-20261004.json), [Protocol](RL_EVALUATION.md#kev-paired-online-mind2web-20261004) |
 | Kev 27B | GPT-4.1-mini |10 |3 |10 |0 |30.00 |30.00 |[Paired pilot](rl_results/kev-pair-pilot-20261004.json), [Protocol](RL_EVALUATION.md#kev-paired-online-mind2web-20261004) |
 
+## DOM decision model · full300 · Browser Use · o4-mini · October5
+
+| Decision model | Text helper | Tasks | Audited | Canonical successes | Valid | Invalid | Overall % | Valid-only % | Source |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Kev27B | GPT-4.1-mini | 300 | 300 | 26 | 294 | 6 | 8.67 | 8.84 | [Aggregate](rl_results/kev27b-actor-full300-20261005.json), [Audit and caveats](RL_EVALUATION.md#kev27b-actor-full300-20261004) |
+
 ## SFT decision selection · Online-Mind2Web · October4 completed pilot
 
 <a id="sft-decision-selection-20261004"></a>

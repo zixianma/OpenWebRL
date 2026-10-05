@@ -175,11 +175,13 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Recovery job 345324 is running; final results remain pending.** All 236 saved
-records are preserved and audited: 231 valid results and five diagnosed, unscored invalids.
-The approved 1 H200 / 8 CPU / 120 GiB request retains the
-14,400-second total across all attempts; the replacement uses only its remainder.
-The same W&B run and two-worker browser collection continue.
+**Completed and independently audited: 26/300 canonical successes (8.67%),
+with 294 valid results and six diagnosed, unscored invalids.** Valid-only success
+is 26/294 (8.84%). All 300 records pass the artifact audit; every browser is
+closed and W&B is finished. All eight scheduler attempts total 9,907 seconds
+(2.75 H200-hours) against the approved 14,400-second cap. No budget was added.
+[Aggregate results](rl_results/kev27b-actor-full300-20261005.json).
+
 This scales the standalone Kev27B pilot (3/10) to all300 Online-Mind2Web tasks,
 freshly collected including the pilot10. It is separate from the completed
 SFT+Kev27B experiment, where an image-conditioned SFT model proposes five actions
@@ -228,7 +230,7 @@ acknowledged instead of repeating progress. The controller/supervisor regression
 suites pass47 tests. These supervision changes do not modify the frozen worker,
 scientific settings or approved caps.
 
-[Live evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/kev27b-actor-full300-20261004).
+[Completed evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/kev27b-actor-full300-20261004).
 
 **Initial evidence check — October 5, 10:06 PDT.** All 19 completed records
 pass the independent artifact audit with no unexplained mismatches; collection
@@ -407,6 +409,41 @@ the second filter. A separate listing task supports the requested review-sort
 interaction, with caveats that the business is closed and ordered review rows
 are outside the final viewport. These private annotations leave canonical
 verdicts and validity labels unchanged.
+
+**Final recovery and audit — October 5.** Job 345324 stopped after 1,693
+seconds when another browser reached the unchanged 600-second actor deadline
+without fresh terminal evidence. Its result remains the sixth unscored invalid.
+The interrupted peer had no terminal trajectory or judge request: all 24 prior
+HTTP attempts, including its unanswered final Kev call, were archived and charged
+before that peer was resumed. Replacement 345391 completed the three outstanding
+tasks in 137 seconds using the unchanged frozen v4 worker. The complete ledger is
+4,753 + 674 + 708 + 490 + 812 + 640 + 1,693 + 137 = 9,907 seconds;
+4,493 seconds of the original cap remain unused.
+
+The final audit verifies all 300 task identities, saved decisions and executed
+actions, fresh terminal images and canonical verdicts for all 294 valid results,
+and exact hash-bound diagnoses for the six invalids. Those comprise three
+missing-terminal-evidence timeouts, two Kev input-limit rejections, and one
+browser-start failure whose exact cause was not retained. All 307 browser
+sessions, including interrupted attempts, are closed. All eight scheduler
+attempts are terminal and remote W&B reports finished with the same totals.
+Independent recovery review checked 2,785 historical hash references covering
+742 unique artifacts, with no unexplained changes. The single saved-judge
+recovery retains both the original unanswered call and its one additional
+canonical request in accounting.
+
+All 26 canonical positives received semantic review. Existing unsupported and
+questionable positives remain annotated rather than rescored. The final review
+adds a cart task where the merchant, $100 amount and cart addition are visible,
+but birthday-specific suitability is ambiguous because the chosen design is
+Level Up. A separate fee-page task is supported; its displayed $300 is labeled
+an additional fee, not the full filing amount. These task-level notes and images
+remain in the private review.
+
+The direct policy's 26/300 and the SFT+Kev selector's 184/300 describe distinct
+end-to-end methods on the same task IDs. The proposer, observations, action
+interface and field-text generation differ, so this comparison does not isolate
+Kev's model quality or establish a matched SFT-only baseline.
 
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;

@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-05",
+  "dataset": "Online-Mind2Web",
+  "method": "Direct Kev27B DOM operation/target policy",
+  "scheduled": 300,
+  "audited": 300,
+  "successes": 26,
+  "valid": 294,
+  "invalid": 6,
+  "valid_failures": 268,
+  "overall_success_rate": 0.08666666666666667,
+  "valid_only_success_rate": 0.08843537414965986,
+  "canonical_scores_unchanged": true,
+  "model": {
+    "repo": "jaredpalmer/kev-27b",
+    "revision": "af0e6d551bdc2cc724f3e9d7a8bee1cd4fb8f7bf",
+    "base": "Qwen/Qwen3.8-27B",
+    "base_revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "temperature": 1.319507910772894,
+    "weights": "full",
+    "upstream_commit": "fe64b1274ea7f80d4095866df90666abb03e9cf6"
+  },
+  "protocol": {
+    "actor_observation": "DOM text; no images",
+    "operation_target": "calibrated argmax",
+    "sft_proposer": false,
+    "text_model": "gpt-4.1-mini-2025-04-14",
+    "text_sampling": {
+      "temperature": 0.6,
+      "top_p": 0.95
+    },
+    "text_max_tokens": 1024,
+    "judge": "o4-mini",
+    "judge_prompt": "AgentTrek",
+    "judge_seed": 42,
+    "judge_max_completion_tokens": 4096,
+    "max_steps": 30,
+    "max_decisions": 60,
+    "actor_timeout_seconds": 600,
+    "viewport": {
+      "width": 1120,
+      "height": 780
+    }
+  },
+  "invalid_diagnoses": {
+    "missing_fresh_terminal_evidence_after_actor_deadline": 3,
+    "kev_context_or_packed_row_limit": 2,
+    "browser_start_failure_cause_unconfirmed": 1
+  },
+  "resources": {
+    "gpus": 1,
+    "gpu_type": "H200",
+    "cpus": 8,
+    "memory_gib": 120,
+    "total_seconds": 14400
+  },
+  "limits": {
+    "browser_sessions": 330,
+    "concurrent_browsers": 2,
+    "browser_expiry_minutes": 12,
+    "browser_minutes": 3960,
+    "local_kev_requests": 59410,
+    "text_http_attempts": 10000,
+    "text_completion_tokens": 1024,
+    "judge_http_attempts": 1320,
+    "judge_completion_tokens": 4096
+  },
+  "charged_scheduler_seconds": 9907,
+  "remaining_scheduler_seconds": 4493,
+  "charged_gpu_hours": 2.7519444444444443,
+  "scheduler_attempts": [
+    {
+      "job_id": "345177",
+      "state": "FAILED",
+      "scheduler_seconds": 4753
+    },
+    {
+      "job_id": "345243",
+      "state": "FAILED",
+      "scheduler_seconds": 674
+    },
+    {
+      "job_id": "345255",
+      "state": "FAILED",
+      "scheduler_seconds": 708
+    },
+    {
+      "job_id": "345273",
+      "state": "FAILED",
+      "scheduler_seconds": 490
+    },
+    {
+      "job_id": "345281",
+      "state": "FAILED",
+      "scheduler_seconds": 812
+    },
+    {
+      "job_id": "345298",
+      "state": "FAILED",
+      "scheduler_seconds": 640
+    },
+    {
+      "job_id": "345324",
+      "state": "FAILED",
+      "scheduler_seconds": 1693
+    },
+    {
+      "job_id": "345391",
+      "state": "COMPLETED",
+      "scheduler_seconds": 137
+    }
+  ],
+  "browser_sessions": 307,
+  "all_browsers_closed": true,
+  "reserved": {
+    "local_kev_requests": 8567,
+    "browser_sessions": 307,
+    "judge_http_attempts": 295,
+    "text_http_attempts": 325
+  },
+  "recorded_http_attempts": {
+    "local_kev_requests": 8567,
+    "text_http_attempts": 325,
+    "judge_http_attempts": 295
+  },
+  "warmup_attempts": 16,
+  "all_results_audited": true,
+  "independent_audit_sha256": "e4e3eedfab35eb34964bd3e8c2dd55e2a7c67ca2e120db823b7cc57017755b7c",
+  "historical_preservation_audit_sha256": "5d083e3145ac03bfb8cf438174ebcfba6107a51339cda32f687d6ed9720ed3dd",
+  "wandb_state": "finished",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/kev27b-actor-full300-20261004",
+  "semantic_positive_reviews": 26,
+  "semantic_annotations_do_not_rescore": true,
+  "saved_judge_recovery": {
+    "tasks": 1,
+    "original_unanswered_calls_preserved": 1,
+    "additional_canonical_judge_calls": 1,
+    "actor_reruns": 0
+  },
+  "interpretation": "Same 300 task IDs as the SFT-selector cohorts; proposer, observation, action interface and text generation differ. Canonical judge successes include documented unsupported and questionable positives; no post-hoc adjusted success rate is substituted."
+}
