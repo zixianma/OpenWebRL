@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791183440.5489445,
+  "snapshot_epoch": 1791185134.832949,
   "rows": [
     {
       "id": "AS01",
@@ -79,12 +79,12 @@
       "n": 1,
       "mode": "luna",
       "target_tasks": 300,
-      "recorded_episodes": 4,
+      "recorded_episodes": 62,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344755",
-      "successes": 2,
-      "valid": 4
+      "successes": 7,
+      "valid": 54
     },
     {
       "id": "AS08",
@@ -93,12 +93,12 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 33,
-      "status": "running",
+      "recorded_episodes": 44,
+      "status": "stopped_recovery_preparing",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344708",
-      "successes": 25,
-      "valid": 32,
+      "successes": 28,
+      "valid": 42,
       "verified_complete": false
     },
     {
@@ -108,12 +108,12 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 32,
-      "status": "running",
+      "recorded_episodes": 42,
+      "status": "stopped_recovery_preparing",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344661",
-      "successes": 23,
-      "valid": 32,
+      "successes": 26,
+      "valid": 41,
       "verified_complete": false
     }
   ],
@@ -141,7 +141,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T06:57:20Z",
+  "snapshot_utc": "2026-10-05T07:25:34Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -174,5 +174,23 @@
     },
     "ceiling_not_target": true,
     "exit_early_when_complete": true
+  },
+  "peer_recovery": {
+    "reason": "Hosted Mac input clearing requires the platform-correct select-all shortcut; existing owners are preparing repairs.",
+    "prior_results_preserved": true,
+    "prior_results_pending_recovery_audit": true,
+    "budgets_unchanged": true,
+    "remaining_scheduler_seconds": {
+      "jev": 31184,
+      "kev27b": 31135
+    }
+  },
+  "separate_pilot": {
+    "job_id": "344655",
+    "state": "RUNNING",
+    "recorded_episodes": 36,
+    "target": 50,
+    "sft_records": 4,
+    "top_p": 0.9
   }
 }
