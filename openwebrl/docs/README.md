@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [October4 Jev Ultrafast: completed10-task pilot,1/10 successes, independently verified browser and judge artifacts](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
-[SFT proposes five actions; Jev/Kev select: job344458 running,28 terminal records audited; small Kev4 successes/8 valid so far, same protocol,42 browser-session cap](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
+[SFT proposes five actions; Jev/Kev select:30 terminal records audited; small Kev complete at4/10, Kev27B running in job344458 under the approved continuation](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
 
 [October4 Qwen Thinking / Luna comparison: four arms, cost/latency/token plots, browser and local-compute accounting; approved four-GPU pilot344476 queued, API preflight passed](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).

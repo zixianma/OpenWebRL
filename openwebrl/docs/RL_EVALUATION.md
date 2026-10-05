@@ -502,6 +502,25 @@ A regression-tested correction to the terminal-judge recovery helper permits
 updating a finished cohort when a later cohort has no summary yet; it changes no
 actor, selector, judge or sampling settings.
 
+At21:45 Pacific, the small-Kev cohort is complete with **4 successes/10 valid
+episodes**. Carvana and the IGN boardgame task both reached30 actions; their
+preserved final screenshots received canonical failure verdicts, and the staged
+corrections have been applied. All ten small-Kev rollouts, final images and
+verdicts pass the independent audit. The three new terminal screenshots were
+visually reviewed, and provider reads confirm all three new browser sessions
+stopped. The two interrupted historical attempts remain preserved and charged.
+W&B records the completed cohort; stale interrupted/not-started fields from the
+previous attempt have been cleared while retaining historical attempt counts.
+
+The controller has handed the same allocation to Kev27B. Its pinned model card,
+BF16 CUDA backend, successful warmup and fresh selection requests are verified;
+the actor and selector occupy roughly68GB and74GB of GPU memory respectively.
+The fourth cohort uses the intended `openwebrl-evals` project and unchanged
+five-candidate protocol. The audit now contains30 terminal records with the same
+five diagnosed invalid records and no unexplained issues. No small-Kev judge
+corrections remain pending; the ten large-Kev outcomes still need completion and
+audit before the overall pilot can be marked verified.
+
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
 the explicit null proxy request. Inspection of the pinned SDK's serialized body

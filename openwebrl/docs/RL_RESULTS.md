@@ -18,8 +18,8 @@
 |---|---:|---:|---:|---:|---:|---:|---:|---|
 | SFT alone |10 |10 |4 |9 |1 |40.00 |44.44 |[Protocol and audit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 | SFT + Jev |10 |10 |3 |6 |4 |30.00 |50.00 |[Protocol and audit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
-| SFT + Kev0.8B · running |10 |8 |4 |8 |0 |40.00 |50.00 |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
-| SFT + Kev27B · awaiting small Kev |10 |0 |— |— |— |— |— |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
+| SFT + Kev0.8B |10 |10 |4 |10 |0 |40.00 |40.00 |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
+| SFT + Kev27B · running |10 |0 |— |— |— |— |— |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 
 ## Local browser · GPT-4.1 · temperature 0 · full 300
 
