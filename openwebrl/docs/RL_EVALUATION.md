@@ -521,6 +521,15 @@ five diagnosed invalid records and no unexplained issues. No small-Kev judge
 corrections remain pending; the ten large-Kev outcomes still need completion and
 audit before the overall pilot can be marked verified.
 
+At21:52 Pacific,33 terminal records have been audited. Kev27B has two successes
+in three finished episodes: AeroAPI plan comparison and the Discogs submission
+overview both finish in six actions with matching final screenshots and canonical
+success verdicts. Trader Joe's reaches30 actions; the recovered judge verdict is
+failure because the requested home-store setting was never completed. Its
+correction is preserved and staged until the cohort exits. Seven large-Kev
+results remain, with no new diagnosed invalid records or unexplained audit errors.
+These are provisional counts, not a completed four-condition comparison.
+
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
 the explicit null proxy request. Inspection of the pinned SDK's serialized body
