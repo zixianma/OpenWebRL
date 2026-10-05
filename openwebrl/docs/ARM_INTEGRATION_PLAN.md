@@ -8833,7 +8833,46 @@ Implementation: `scripts/run_arm_task_rescue.py`,
 Private preparation and shard manifests:
 `task-pool-expansion-20260922/curation-v3-20260929/actor-arm-allfailure-20261002/`.
 
+<a id="arm-expanded-outcome-to90-20261005"></a>
+### Expanded outcome-only continuation to90: requested October4
+
+The user requested extending the same4,102-task outcome-only lineage to
+iteration90 to assess whether the early data benefit persists. This changes
+the requested endpoint, not the original24h compute or$200 judge approval.
+Recovery344274 remains queued within its remaining38min original budget.
+
+Preserve the existing actor, optimizer, constant1e-6 LR scheduler and counters,
+task cursor, original data union and W&B identity. Keep TP2/DP4, microbatch1,
+global256, PPO2,48 groups ×5 rollouts,64 browsers and48GiB cache. Extend the
+training loop bound to90 while loading the saved scheduler; no fresh optimizer
+or reward/filter change. Full300 local-browser GPT-4.1/action_history/T0
+evaluations remain due at30/40/50/60/70/80/90, each with saved rollout/verdict
+pairs. Independently verified10/20 cohorts are reused.
+
+**Additional budget proposal, not yet approved or submitted:**8 H200 ×96h
+total (768GPUh),64 CPUs/960GiB per allocation, in four sequential blocks of at
+most24h under normal QoS; plus$400 additional judge allowance, bringing the
+lifetime cap to$600. Count all retries and evaluation time; release unused
+resources after verified90 and its evaluation. Keep separate old/new GPU
+ledgers and a cumulative judge ledger. Current judge spending/reservations
+are$78.86 of the original$200.
+
+Iterations11–20 averaged61.87min on thermally throttled g011:70 more iterations
+project to72.18h plus about7h for evaluations and handoffs. A healthy node may
+reduce total runtime to50–65h, but that improvement remains unverified for this
+lineage. Exclude g011 and measure destination throughput before revising the
+estimate. The96h cap includes recovery margin; it is not a runtime target.
+
+All seven proposed native launcher commands pass CPU checks for unchanged
+science and optimizer restoration. Private preparation is in
+`outcome-only-expanded-20261002/to90-20261005/`. Allocation-controller and
+cumulative judge-cap extensions still need implementation/validation before
+submission. No active launcher, frozen source, original approval or queued
+recovery was changed. Independent work can proceed concurrently; writers to
+this same training lineage must remain serialized.
+
 <a id="arm-expanded-outcome-baseline-20261002"></a>
+
 #### Outcome-only baseline with the additional2K tasks — October2 preparation
 
 **October4 iteration20 result verified:** full300 **33.33% overall (100/300)**,
