@@ -726,7 +726,7 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 345021 | 10-05 05:17 PDT | 211/300 | 200 | 11 | 134 | 20195 |
-| SFT + Kev27B | 344793 | 10-05 05:13 PDT | 228/300 | 221 | 7 | 152 | 21159 |
+| SFT + Kev27B | 344793 | 10-05 05:22 PDT | 235/300 | 228 | 7 | 156 | 21707 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-kev-progress-audit-20261005"></a>
@@ -765,6 +765,15 @@ and ten selected action/image pairs are retained; browser shutdown is confirmed.
 The worker continued with unchanged settings. Four additional terminal images
 and verdicts were reviewed, including the selected beige-filter coordinates and
 applied rug results; no new judge caveat or score change was warranted.
+
+The 235-record Kev audit verifies 228 scored episodes, 156 canonical positives
+and the same seven diagnosed invalids. Review of all seven new terminal images,
+verdicts and final selections found two additional positive-verdict mismatches:
+one answer ignores an applicable multiline discount explicitly stated in the
+saved page text, and another substitutes purchase source for the requested
+device-use filter despite a separate device option in the saved page. Both
+canonical positives remain unchanged, with hashed evidence in the private
+review. The worker, sampling settings and original budget are unchanged.
 
 <a id="sft-jev-context-recovery-20261005"></a>
 **Jev input-limit recovery — October 5.** Job344794 stopped after189 saved
