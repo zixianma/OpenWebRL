@@ -719,7 +719,7 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 344794 | 10-05 00:27 PDT | 44/300 | 42 | 2 | 28 | 4937 |
+| SFT + Jev | 344794 | 10-05 00:35 PDT | 50/300 | 47 | 3 | 32 | 5374 |
 | SFT + Kev27B | 344793 | 10-05 00:27 PDT | 42/300 | 41 | 1 | 26 | 4865 |
 <!-- sft-full300-live-audit:end -->
 
@@ -747,6 +747,13 @@ diagnostic interference cannot be excluded. It remains an unscored, diagnosed
 invalid record. Further probes must not share browsers carrying active tasks.
 All receipts, original attempts, partial trajectories, charges, and the exact
 pre/post boundary remain in private runtime storage and the private reviews.
+
+The corrected Jev replacement subsequently lost the screenshot on a Fandom
+episode without any diagnostic connection to that browser. The observation
+guard stopped inference, no judge was called, and the episode remains unscored
+with its last available image retained. Subsequent tasks continued normally;
+the latest50-record audit has three diagnosed invalids and no unexplained
+evidence errors. W&B has resumed the original evaluation identity.
 
 
 <a id="sft-kev-full300-timeout-20261005"></a>
