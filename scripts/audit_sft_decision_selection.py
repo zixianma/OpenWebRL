@@ -56,6 +56,22 @@ def verify_image(raw):
     return list(dimensions)
 
 
+def align_partial_screenshots(screenshots, decision_count, diagnosis):
+    """Keep an explicitly diagnosed, unselected next observation separate.
+
+    Cancellation during the next proposal leaves mm_messages one image ahead of
+    the last completed turn sample. It is evidence, but not a selected action or
+    a terminal screenshot. Never silently discard an unexplained extra image.
+    """
+    extras = screenshots[decision_count:]
+    expected = diagnosis.get('unselected_observation_sha256', [])
+    assert len(screenshots) >= decision_count and len(extras) <= 1
+    assert [digest(raw) for raw in extras] == expected, 'Unexplained unselected observation'
+    for raw in extras:
+        verify_image(raw)
+    return screenshots[:decision_count], expected
+
+
 def audit(root=ROOT):
     root = Path(root)
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
@@ -163,6 +179,9 @@ def audit(root=ROOT):
                 all_decisions = sorted(traces[task_id], key=lambda r: r['turn'])
                 failed_decisions = [r for r in all_decisions if mode != 'sft' and r['status'] != 'selected']
                 decisions = [r for r in all_decisions if r not in failed_decisions]
+                if partial:
+                    screenshots, extra_hashes = align_partial_screenshots(screenshots, len(decisions), diagnosis)
+                    row['unselected_observation_sha256'] = extra_hashes
                 assert not failed_decisions or not result['valid'], 'Unexecuted reservation in valid episode'
                 assert len(assistants) == len(decisions) <= 30
                 if result['valid']:

@@ -720,8 +720,21 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 344708 | 10-04 23:57 PDT | 33/300 | 32 | 1 | 25 | 3262 |
-| SFT + Kev27B | 344661 | 10-05 00:12 PDT | 37/300 | 37 | 0 | 25 | 4190 |
+| SFT + Kev27B | 344661 | 10-05 00:15 PDT | 38/300 | 37 | 1 | 25 | 4398 |
 <!-- sft-full300-live-audit:end -->
+
+<a id="sft-kev-full300-timeout-20261005"></a>
+**Kev27B episode timeout — October5,00:14Pacific.** One episode reached
+its600-second cap after27 selections while repeatedly typing into a focused
+Clear button. The five proposed actions converged on the same ineffective write;
+Kev requests continued to return HTTP200 in0.36–1.06seconds. The browser stopped
+cleanly and the next task started. Preserve this as a diagnosed invalid result,
+with no terminal image or judge verdict, and retain all charged time/proposals.
+The partial archive contains one next-observation image beyond its selected turns;
+the audit now verifies its explicit hash separately instead of treating it as a
+selected or terminal state (seven focused tests pass). The frozen worker and
+scientific settings are unchanged; no difficulty-driven replay is scheduled.
+
 
 | Run | H200 | CPU | RAM GiB | Total hours including retries | Browser-session cap | Selector-call cap | Judge-call cap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
