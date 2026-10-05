@@ -319,6 +319,14 @@ checks and an independent check against the actual timeout evidence. Recovery
 seconds left after charging both attempts (5,427 / 14,400 seconds). Scientific
 settings and all resource, browser and API caps are unchanged.
 
+**Further verdict review — October 5, 11:35 PDT.** A fresh positive on
+Google Finance displays an AI-generated research summary, without establishing
+that its first bullet is the requested first stock-news item. The original
+positive remains intact with a private evidence caveat. Another store-selection
+positive verifies the requested location and Apple-authorized filter, while
+coverage for the specific device is not independently established. These are
+semantic review notes, not infrastructure invalids or revised judge scores.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v3`;
 both earlier frozen runtimes remain preserved.
