@@ -5278,7 +5278,7 @@ checkpoint-to-checkpoint training intervals.
 Checkpoint20 is durable with312 Adam/scheduler updates and a verified full300
 evaluation. Job342742 then collected iteration21, but its controller subtracted
 an unnecessary40min evaluation reserve from the training deadline. It stopped
-during21 with unused approved time. A38min recovery is now queued as343716;
+during21 with unused approved time. A38min recovery is now queued as344274;
 it must reconstruct the saved image tensors before replaying21. Target60 remains
 unfinished and is not covered by an additional compute approval.
 
@@ -5288,8 +5288,9 @@ unfinished and is not covered by an additional compute approval.
 |342095 |42,112 |Checkpoint10; evaluation step isolation race; fixed |
 |342742 |41,471 |Checkpoint20 and evaluations10/20; early reserve cutoff |
 |343513 |296 |Restored20; replay archive self-overwrite; no optimizer update |
-|**Consumed** |**84,080** |**Original approval86,400s** |
-|343716 |2,280 maximum |Queued;40s left unallocated |
+|343716 |39 |Incorrect batch-shape guard; no reconstruction or optimizer update |
+|**Consumed** |**84,119** |**Original approval86,400s** |
+|344274 |2,280 maximum |Queued;1s left unallocated |
 
 **Replay failure:**343513 loaded `20.pt` using `torch.load(..., mmap=True)`.
 The existing debug saver then called `torch.save` on the same pathname,
@@ -5301,8 +5302,8 @@ record: saved prompts, token IDs, actions, rewards and screenshots are retained.
 
 **Repair and validation:** the native debug saver now skips re-saving an already
 loaded replay batch. Three regression tests exercise real mmap tensor retention,
-subsequent fresh-rollout saves and evaluation saves. Eleven additional recovery
-and reconstruction tests pass. The reconstruction uses the original frozen
+subsequent fresh-rollout saves and evaluation saves. Fourteen recovery
+and reconstruction tests now pass. The reconstruction uses the original frozen
 encoder/model processor, requires exact saved prompt tokens and image grids,
 and validates tensor shapes, strides and dtypes. A bounded real-sample CPU
 check reproduced its entire30,474,240-byte pixel tensor byte-for-byte against a
@@ -5310,20 +5311,31 @@ retained original cache buffer. Full reconstruction and per-sample checks run
 on the replacement allocation's CPUs before training; they are not yet complete.
 The damaged metadata is retained, and rebuilt output goes to a separate path.
 
-343716 preserves checkpoint20, the96-submitted-group replay cursor, full60-step
+**PPO2 recovery check correction:**343716 stopped after39s because the reconstruction
+helper incorrectly required a sample count divisible by256. The native collection
+log and an independent bounded pickle scan both verify **1,850 saved turns across48
+groups**. Native PPO2 keeps all1,850 turns, then shuffles/repartitions and selects
+1,792 for each epoch: seven optimizer updates per epoch,14 total. The corrected
+check requires the exact1,850/48 shape without trimming or reordering. Tests reject
+a pre-trimmed batch and changed group counts. Reconstruction failures now also
+write an explicit failed controller status before training starts. Full tensor
+reconstruction and GPU replay remain pending.
+
+344274 preserves checkpoint20, the96-submitted-group replay cursor, full60-step
 scheduler horizon, optimizer, W&B identity and scientific recipe. It uses only
 **8 H200 ×38min,64 CPUs,960GiB**, including reconstruction, startup and replay,
-with180s reserved for shutdown. The first43min retry was charged296s before this
-38min replacement was computed; failed time was not reset. Existing evaluations
+with180s reserved for shutdown. The failed replay attempts consumed296s and39s
+before this38min replacement was computed; all failed time remains charged. Existing evaluations
 10/20 are independently verified and will not be repeated.
 
 The earlier job stayed on g011 until its natural cutoff, as requested. Retries
 exclude that node because of confirmed thermal throttling. The active-agent
-supervisor follows343716. Further training toward60 requires additional exact
+supervisor follows344274. Further training toward60 requires additional exact
 compute approval. Implementation: [replay save guard](../../slime/ray/rollout.py)
 and [regression tests](../../tests/test_replay_archive_preservation.py).
 Private receipts remain under the expanded outcome-only controller:
-`recovery-343513/diagnosis.json`, `replay21-first-sample-parity.json`,
+`recovery-343513/diagnosis.json`, `recovery-343716/diagnosis.json`,
+`replay21-batch-shape-audit.json`, `replay21-first-sample-parity.json`,
 `pending-batch-recovery-submission.json` and `attempts.json`.
 
 <a id="expanded4102-egl-regression-20261003"></a>
