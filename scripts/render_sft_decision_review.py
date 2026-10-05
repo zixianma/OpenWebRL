@@ -130,6 +130,8 @@ def build(root=ROOT, image_dir=None):
                 final=image(final.read_bytes()) if final.exists() else None,
                 judge=result.get('metadata', {}).get('reward', {}).get('judge_text'),
                 judge_review=review_notes.get((mode, task['task_id'])),
+                diagnosed_invalid=receipt.get('diagnosed_invalid', False),
+                diagnosis=receipt.get('diagnosis'),
                 evidence_verified=receipt.get('evidence_verified', False), issues=receipt['issues'])
     return dict(tasks=tasks, models=[dict(key=k, label=v) for k,v in modes], images=images,
         image_assets=image_dir is not None, recovery=plan.get('recovery'),

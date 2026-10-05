@@ -15,7 +15,8 @@ spec.loader.exec_module(review)
 def test_streamed_review_preserves_unicode_and_escapes_script_end(tmp_path, monkeypatch):
     payload = {'audit': {'completed_results': 40, 'all40_evidence_verified': False},
                'text': '日本語 café </script><script>alert(1)</script>'}
-    monkeypatch.setattr(review, 'build', lambda: payload)
+    monkeypatch.setattr(review, 'read', lambda path: {'task_ids': ['fixture']})
+    monkeypatch.setattr(review, 'build', lambda *args: payload)
     output = tmp_path / 'review.html'
     receipt = review.render(output)
     raw = output.read_bytes()
@@ -33,7 +34,8 @@ def test_failed_serialization_preserves_previous_review_and_receipt(tmp_path, mo
     output.write_text('previous complete review')
     receipt = output.with_suffix('.receipt.json')
     receipt.write_text('previous receipt')
-    monkeypatch.setattr(review, 'build', lambda: {'first': 'written', 'bad': object()})
+    monkeypatch.setattr(review, 'read', lambda path: {'task_ids': ['fixture']})
+    monkeypatch.setattr(review, 'build', lambda *args: {'first': 'written', 'bad': object()})
     with pytest.raises(TypeError):
         review.render(output)
     assert output.read_text() == 'previous complete review'
