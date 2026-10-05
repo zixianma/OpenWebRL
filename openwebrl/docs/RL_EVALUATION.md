@@ -172,6 +172,61 @@ not provide a representative ranking of the decision models. The adapter and
 browser execution need further validation before interpreting a larger score
 as general Jev/Kev capability.
 
+<a id="kev27b-actor-full300-20261004"></a>
+## Kev27B as the direct browser policy: full300 preparation — October 4
+
+**Prepared and locally validated; not submitted or approved.** This scales the
+standalone Kev27B pilot (3/10) to all300 Online-Mind2Web tasks, freshly collected
+including the pilot10. It is separate from the ongoing SFT+Kev27B experiment,
+where an image-conditioned SFT model proposes five actions for Kev to select.
+Both selector runs and this prepared direct-policy run contain the same300 task IDs.
+
+The direct policy retains the pinned `upstream-v1` Jev Ultrafast operation/target
+questions, DOM reader and guarded executor. Kev27B receives DOM text, chooses
+operation and target with calibrated argmax (checkpoint temperature1.319507910772894),
+and delegates field text to GPT-4.1-mini-2025-04-14 at T0.6/p0.95/1,024 response
+tokens. There is no SFT proposer or generative Kev sampling. The user's
+T1.0/p0.95/4K SFT-proposal settings do not change this classifier's calibration.
+The actor receives no screenshots. The o4-mini/AgentTrek judge receives the saved
+fresh terminal screenshot and action history, with seed42 and4,096 response tokens.
+Browser Use,1120×780 viewport,30 actions,60 decisions and600 seconds per task
+match the direct pilot. The experimental change is cohort size; operational changes
+add an isolated localhost port, frozen runtime and shared durable budget reservations.
+
+| Proposed limit | Value |
+| --- | ---: |
+| Compute, including every failed/replacement attempt |1 H200,8 CPUs,120 GiB;14,400 scheduler seconds total |
+| Fresh browser sessions, including recovery reserve |330 |
+| Concurrent browsers / expiry |2 /12 minutes |
+| Browser lifetime upper bound |3,960 browser-minutes |
+| Local Kev requests, including warmups and retries |59,410 |
+| GPT-4.1-mini HTTP attempts / output cap each |10,000 /1,024 tokens |
+| o4-mini judge HTTP attempts / output cap each |1,320 /4,096 tokens |
+
+The pilot averaged25.786 seconds per task including judging. Linear extrapolation
+at two concurrent tasks is3,868 seconds (about64 minutes), before model startup
+and variation across the remaining sites. The four-hour ceiling is a budget,
+not an expected duration or a guarantee that every harder task will finish.
+No unused pilot or selector allocation time transfers into this proposed budget.
+
+[`evaluate_kev_actor_full300.py`](../../scripts/evaluate_kev_actor_full300.py)
+prepares the source/model/dependency checks, exact approval gate, Slurm request,
+aggregate W&B tracking in `openwebrl-evals`, GPU telemetry and owned worker
+lifecycle. It charges scheduler elapsed for every previous attempt before a
+replacement; browser and HTTP attempts are reserved durably before dispatch.
+Valid failed tasks are never rerolled, and invalid/interrupted attempts require
+preserved evidence and diagnosis before recovery. Collection completion remains
+separate from `verified_complete`; all300 artifacts, verdicts, closed sessions,
+W&B and scheduler accounting require independent audit. The prepared supervisor
+queues the owning agent for repair; it becomes active only after approval/submission.
+
+Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
+frozen runtime: `runtime/reference-kev27b-actor-full300-20261004-v1`.
+Validation passed37 offline checks plus the opt-in local Chromium fill/click/done
+and durable-judge-evidence test. Model calls were mocked in that browser test;
+preparation made no paid requests and submitted no allocation. Task payloads,
+screenshots and subsequent review HTML stay private.
+
 <a id="kev-paired-online-mind2web-20261004"></a>
 ## Kev alternatives: smallest and largest — October 4
 

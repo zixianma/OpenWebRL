@@ -126,6 +126,16 @@ class EpisodeTimeout(TimeoutError):
     pass
 
 
+def reserve_budget(config, kind, **context):
+    """Optional cohort-wide cap, shared across processes and preserved retries."""
+    if config.get("budget"):
+        from openwebrl.selection_budget import SelectionBudget
+        try:
+            return SelectionBudget(**config["budget"]).reserve(kind, **context)
+        except RuntimeError as exc:
+            raise ProviderError("budget", kind + "_exhausted") from exc
+
+
 @contextmanager
 def deadline(seconds):
     def expired(*_):
@@ -211,6 +221,9 @@ class ModelTransport:
         for attempt in range(attempts):
             if self.counts[provider] >= caps[provider]:
                 raise RuntimeError(f"{provider} HTTP attempt budget exhausted")
+            reserve_budget(self.config, {"kev": "local_kev_requests", "jev": "jev_requests",
+                "text": "text_http_attempts", "judge": "judge_http_attempts"}[provider],
+                task_directory=self.root.name, provider_attempt=self.counts[provider] + 1)
             self.counts[provider] += 1
             call_id = f"{provider}-{self.counts[provider]:04d}"
             record = dict(call_id=call_id, provider=provider, model=body["model"],
@@ -257,6 +270,7 @@ class BrowserSession:
         self.client = httpx.Client(timeout=30, follow_redirects=False)
         self.playwright = sync_playwright().start()
         if self.config["browser"] == "browser-use":
+            reserve_budget(self.config, "browser_sessions", task_directory=self.root.name)
             response = self.client.post(BROWSER_API, headers=self.headers, json=dict(
                 timeout=12, proxyCountryCode=None, browserScreenWidth=1120, browserScreenHeight=780))
             if not response.is_success:
