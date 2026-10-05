@@ -175,11 +175,11 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Approved and launched October 5 as job 345177.** The user confirmed approval
-of the prepared resource/API proposal, and the controller submitted the exact
-1 H200 / 8 CPU / 120 GiB request with a 14,400-second total across all attempts.
-The model loaded, identity checks and both warmups passed, W&B is online, and
-the two-worker browser collection has started. Final results remain pending.
+**Recovery job 345243 is running; final results remain pending.** The original
+job 345177 stopped after a confirmed browser-finalization hang. Its 109 completed
+results are preserved. The approved 1 H200 / 8 CPU / 120 GiB request retains the
+14,400-second total across all attempts; the replacement uses only its remainder.
+The same W&B run and two-worker browser collection continue.
 This scales the standalone Kev27B pilot (3/10) to all300 Online-Mind2Web tasks,
 freshly collected including the pilot10. It is separate from the completed
 SFT+Kev27B experiment, where an image-conditioned SFT model proposes five actions
@@ -281,8 +281,28 @@ note. Across the first 11 reviewed positives, one has a confirmed community
 mismatch and one has unverified product constraints; these annotations do not
 change canonical scores or artifact-validity counts.
 
+**Timeout recovery — October 5, 11:16 PDT.** Job 345177 failed after 4,753
+scheduler seconds when a task exceeded the controller's outer guard. Live
+Python stacks and a network-free regression reproduced the cause: the actor's
+SIGALRM can stop Playwright's dispatcher, after which final screenshot capture
+spins indefinitely. Both interrupted task directories and all prior metadata
+are preserved; all 111 owned browser sessions were confirmed stopped. All 109
+completed records pass the independent audit and are excluded from replay.
+
+Frozen runtime v2 guards unavailable dispatchers, bounds final screenshot and
+cleanup operations, and stops the owned remote browser before local cleanup.
+It preserves the 600-second actor limit, model, prompts, sampling, viewport,
+action limits and judge. Missing fresh terminal evidence is recorded explicitly
+as invalid; no old screenshot is presented as a terminal observation. The fix
+passed 24 offline regression checks plus the local Chromium fill/click/done
+smoke test. Replacement 345243 covers 191 pending tasks, including the two
+interrupted retries, with a 9,600-second allocation against the remaining 9,647
+seconds. All prior requests and browser reservations remain charged; no budget
+was added. Model identity, both warmups and resumed W&B startup are verified.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
-frozen runtime: `runtime/reference-kev27b-actor-full300-20261004-v1`.
+current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v2`;
+the original v1 runtime remains preserved.
 Validation passed37 offline checks plus the opt-in local Chromium fill/click/done
 and durable-judge-evidence test. Model calls were mocked in that browser test;
 preparation made no paid requests and submitted no allocation. Task payloads,

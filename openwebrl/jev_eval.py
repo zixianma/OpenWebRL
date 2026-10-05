@@ -149,6 +149,36 @@ def deadline(seconds):
         signal.signal(signal.SIGALRM, previous)
 
 
+def playwright_dispatcher_dead(obj):
+    """A SIGALRM can unwind Playwright's dispatcher greenlet permanently.
+
+    Sync API timeouts need that dispatcher to pump the event loop. Calling any
+    sync method after it dies can spin forever, even for a zero-duration task.
+    """
+    dispatcher = getattr(obj, "_dispatcher_fiber", None)
+    return dispatcher is not None and dispatcher.dead
+
+
+def terminal_snapshot(agent):
+    """Preserve history, but label missing terminal evidence without guessing."""
+    snapshot = agent.snapshot()
+    try:
+        if playwright_dispatcher_dead(agent.browser.page):
+            raise RuntimeError("playwright_dispatcher_unavailable")
+        # Independent of the exhausted actor timer. A live but stalled event
+        # loop cannot strand finalization indefinitely either.
+        with deadline(15):
+            image = agent.browser.page.screenshot(type="jpeg", quality=72, timeout=10000)
+        snapshot["page"]["screenshot"] = base64.b64encode(image).decode()
+        snapshot["final_screenshot_fresh"] = True
+    except Exception as exc:
+        snapshot["page"].pop("screenshot", None)
+        snapshot["final_screenshot_fresh"] = False
+        snapshot["final_screenshot_error"] = ("playwright_dispatcher_unavailable"
+            if playwright_dispatcher_dead(agent.browser.page) else type(exc).__name__)
+    return snapshot
+
+
 def load_credentials(env_file, config):
     from dotenv import dotenv_values
     values = {**dotenv_values(env_file), **os.environ}
@@ -303,16 +333,13 @@ class BrowserSession:
 
     def close(self):
         errors = []
-        for obj in (self.browser, self.playwright):
-            if obj:
-                try:
-                    obj.close() if obj is self.browser else obj.stop()
-                except Exception as exc:
-                    errors.append(type(exc).__name__)
+        # Stop the owned remote resource before touching a potentially dead
+        # local dispatcher. Never let local cleanup prevent the provider stop.
         if self.remote_id:
             try:
-                response = self.client.patch(BROWSER_API + "/" + self.remote_id, headers=self.headers,
-                                             json={"action": "stop"})
+                with deadline(35):
+                    response = self.client.patch(BROWSER_API + "/" + self.remote_id, headers=self.headers,
+                                                 json={"action": "stop"})
                 stopped = response.is_success
                 write_json(self.root / "browser-session.json", dict(id=self.remote_id, stopped=stopped,
                                                                     stop_http_status=response.status_code))
@@ -320,8 +347,23 @@ class BrowserSession:
                     errors.append("RemoteStopFailed")
             except Exception as exc:
                 errors.append(type(exc).__name__)
+        for obj in (self.browser, self.playwright):
+            if obj:
+                if playwright_dispatcher_dead(obj):
+                    if "PlaywrightDispatcherUnavailable" not in errors:
+                        errors.append("PlaywrightDispatcherUnavailable")
+                    continue
+                try:
+                    with deadline(10):
+                        obj.close() if obj is self.browser else obj.stop()
+                except Exception as exc:
+                    errors.append(type(exc).__name__)
         if self.client:
-            self.client.close()
+            try:
+                with deadline(5):
+                    self.client.close()
+            except Exception as exc:
+                errors.append(type(exc).__name__)
         return errors
 
 
@@ -457,17 +499,11 @@ def run_task(task, root, config):
         try:
             if agent:
                 # Preserve executed actions even when the post-action observation failed.
-                snapshot = agent.snapshot()
-                try:
-                    final_image = agent.browser.page.screenshot(type="jpeg", quality=72, timeout=10000)
-                    snapshot["page"]["screenshot"] = base64.b64encode(final_image).decode()
-                    snapshot["final_screenshot_fresh"] = True
-                except Exception:
-                    # Never judge a pre-action screenshot as the final outcome.
-                    snapshot["page"].pop("screenshot", None)
-                    snapshot["final_screenshot_fresh"] = False
+                write_json(root / "heartbeat.json", dict(stage="final_screenshot", updated_unix=time.time()))
+                snapshot = terminal_snapshot(agent)
                 save_snapshot(root, config["max_decisions"] + 1, snapshot)
         finally:
+            write_json(root / "heartbeat.json", dict(stage="browser_cleanup", updated_unix=time.time()))
             cleanup_errors = session.close()
         if cleanup_errors:
             provider_blocked = True
