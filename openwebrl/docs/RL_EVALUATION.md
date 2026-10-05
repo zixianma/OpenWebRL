@@ -725,7 +725,7 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 345021 | 10-05 05:08 PDT | 207/300 | 196 | 11 | 134 | 19632 |
+| SFT + Jev | 345021 | 10-05 05:17 PDT | 211/300 | 200 | 11 | 134 | 20195 |
 | SFT + Kev27B | 344793 | 10-05 05:13 PDT | 228/300 | 221 | 7 | 152 | 21159 |
 <!-- sft-full300-live-audit:end -->
 
@@ -817,6 +817,17 @@ shutdown, requiring zero model actions, rollout archives, screenshots and judge
 requests. It does not manufacture missing evidence or treat initialization
 failure as a judged task failure. The combined supervisor and partial-evidence
 test suites pass 44 tests; frozen evaluation workers remain unchanged.
+
+**Paired judge consistency check — October 5.** The next Jev audit covers
+211 records: 200 scored, 134 canonical positives and the same 11 diagnosed
+invalids. Four additional final screenshots support their failure verdicts.
+One matched review-filter task demonstrates inconsistent application of the
+shared terminal-judge criteria: both trajectories substitute a weaker playtime
+threshold, but Jev's verdict explicitly rejects that substitution while Kev's
+explicitly credits it as the closest available option. Both full judge inputs
+and verdicts are preserved, and the private reviews flag this paired discrepancy.
+Using the same judge model and prompt therefore does not establish consistent
+constraint enforcement across different trajectories. Neither score is relabeled.
 
 <a id="sft-selector-platform-clearing-20261005"></a>
 **Confirmed typing-harness defect and recovery — October5.** The cloud provider
