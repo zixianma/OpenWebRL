@@ -4,7 +4,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
-- [Qwen3-VL-4B-Thinking with Luna: four-arm comparison and efficiency metrics](#luna-qwen-inference-20261004)
+- [Qwen Thinking, official OpenWebRL SFT and Luna: five-arm comparison](#luna-qwen-inference-20261004)
 - [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
 - [ARM inference results on Online-Mind2Web](#arm-inference-results)
@@ -14,16 +14,17 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 ---
 
 <a id="luna-qwen-inference-20261004"></a>
-## Qwen Thinking and Luna: performance versus cost — October4
+## Qwen Thinking, official SFT and Luna: performance versus cost — October4
 
-**Running as job344537 after startup repairs; all four GPU workers are collecting.**
+**Running as job344537; four original arms are collecting, with official SFT + Luna N=5 queued afterward.**
 The user approved the four-H200/90-minute pilot and $15 Luna/$5 judge caps.
 Two live API preflight calls passed (vision + structured selection, and a native
 browser `done` tool call), returning `gpt-6-luna` and complete usage receipts;
 their combined usage estimate is **$0.000482275**, charged to the shared Luna
 ledger. These are compatibility checks, not benchmark episodes.
 The user selected cost, latency, tokens, browser steps and local compute, with plots
-for the first three. This is a new four-arm comparison, separate from the older
+for the first three. The user subsequently requested a fifth arm using the official
+OpenWebRL SFT checkpoint. This is a new comparison, separate from the older
 SFT/SelectionARM/pass@k experiments below.
 
 | Arm | Actor samples per browser decision | Action selection |
@@ -32,6 +33,7 @@ SFT/SelectionARM/pass@k experiments below.
 | Qwen + Luna, N=5 | 5 | Luna chooses one unchanged candidate |
 | Qwen + Luna, N=10 | 10 | Luna chooses one unchanged candidate |
 | Luna alone | 1 Luna response | Execute Luna's native browser tool call |
+| Official OpenWebRL SFT + Luna, N=5 | 5 | Luna chooses one unchanged candidate |
 
 Use the released `Qwen/Qwen3-VL-4B-Thinking` at revision
 `1de27d8c51f12e819435303b9e84c4e25ba8401e`, with **temperature1, top-p0.9**, top-k
@@ -39,6 +41,14 @@ disabled, repetition penalty1, 4096 response tokens and a 32K context. Near the
 context boundary, shorten the response allowance by the same rule in all Qwen
 arms. This is not the historical project SFT checkpoint. The checkpoint shards
 have been downloaded and independently checked against their SHA256 digests.
+
+The added arm uses **`OpenWebRL/OpenWebRL-4B-SFT`**, revision
+`15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`; its local weights match the
+verified release SHA256. It uses **N=5, temperature1, top-p0.9**, top-k disabled,
+repetition penalty1, the same4096-token response allowance and32K context.
+The ten tasks, Luna selector, browser settings, action-only terminal judge and
+all five metric definitions remain matched. The checkpoint and tokenizer change
+with the actor; all five proposals contribute to cost, tokens and compute.
 
 Luna uses `gpt-6-luna`, **medium reasoning**, 4096 output tokens, and the standard
 service tier in both roles. With reasoning enabled its API does not accept
@@ -48,7 +58,7 @@ have passed their compatibility checks; live benchmark behavior remains unverifi
 identity returned on every request. See the [model reference](https://developers.openai.com/api/docs/models/gpt-6-luna)
 and [reasoning parameter compatibility](https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters).
 
-Every task receives all four arms in deterministic shuffled order, using fresh
+Every task receives the original four arms in deterministic shuffled order, using fresh
 local browser sessions, one exclusive episode per GPU, a 1280×720 viewport,
 the initial task goal, the current screenshot, and full retained history.
 Proposals within each decision run concurrently; their seeds are fixed by
@@ -59,6 +69,17 @@ from receipts rather than assumed controllable. The selector sees every candidat
 reasoning and action in shuffled order and must return a valid index. It cannot
 rewrite actions or silently fall back to candidate1. All requested proposals,
 including discarded proposals, are charged to their arm.
+
+The requested SFT arm is scheduled after the original40 episodes, producing
+**50 episodes across the same ten tasks** if the remaining approved budget
+permits. The batch controller owns and awaits this additional collection stage
+before exiting. Its four TP1 SFT workers reuse the same global API ledgers,
+and every failed attempt still counts against the original90-minute total.
+No new allocation, time extension or API-cap increase was approved or requested.
+The aggregate comparison and its three plots require all50 verified episodes;
+a partial SFT cohort will be labeled incomplete. This additional arm was
+requested after collection began, so its later collection time is an explicit
+limitation rather than part of the original randomized arm order.
 
 All arms have a 30-turn horizon and the same browser tools. Native Luna tool
 calls are converted to the framework's action representation; the Qwen token
@@ -142,7 +163,7 @@ four-GPU speedup is claimed. API and browser performance remain to be validated.
 
 The90-minute value is a ceiling, not a completion-time promise; release early
 when complete. The new ceiling is **6 H200-hours**, versus4 in the first
-proposal, or **$5.40 reference GPU cost**, plus at most$20 for APIs. Both dollar
+proposal, or **$5.40 reference GPU cost**, plus at most$20 for APIs. The requested fifth arm shares this same ceiling. Both dollar
 and call caps apply. Approval and all attempt ledgers are preserved locally. The full300-task schedule is prepared,
 but its allocation request will use measured pilot throughput/cost. The pilot
 is for protocol and efficiency validation; ten tasks cannot establish a small
@@ -150,7 +171,10 @@ performance difference.
 
 Implementation: `openwebrl/luna_qwen_{policy,eval,metrics}.py`,
 `scripts/prepare_luna_qwen_inference.py`, and
-`scripts/report_luna_qwen_inference.py`. Run data and source hashes are preserved
+`scripts/report_luna_qwen_inference.py`, with the added stage in
+`scripts/run_luna_qwen_sft_extension.py`. The fifth-arm preparation passed19
+CPU tests, official-checkpoint/processor verification and shared-budget checks;
+its GPU startup remains pending. Run data and source hashes are preserved
 under runtime `luna-qwen-inference-20261004/`. GPU startup is verified on four distinct H200 UUIDs. Actual request receipts
 confirm Qwen temperature1/top-p0.9/top-k disabled, Luna medium reasoning and the
 pinned o4-mini judge; the first browser episode and verdict are durable. All
