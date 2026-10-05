@@ -8,7 +8,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
 [Prepared full300 SFT+Jev and SFT+Kev27B runs: exact new resource/API approval pending; recent SFT baseline reused only as a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
 
-[October4 Qwen Thinking / official OpenWebRL SFT / Luna comparison: fifth SFT N=5 arm queued on the same ten tasks; cost/latency/token plots and browser/local-compute accounting; pilot344537 retains its original budget](ARM_INFERENCE.md#luna-qwen-inference-20261004).
+[October4 Qwen Thinking / official OpenWebRL SFT / Luna comparison: fifth SFT N=5 arm queued on the same ten tasks; cost/latency/token plots and browser/local-compute accounting; recovery344655 retains the original total budget](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 historical reconciliation: why30.0%→42.7% became35.2%→39.3%; matched-valid sensitivity and unresolved causes](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).

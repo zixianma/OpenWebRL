@@ -16,7 +16,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking, official SFT and Luna: performance versus cost — October4
 
-**Running as job344537; four original arms are collecting, with official SFT + Luna N=5 queued afterward.**
+**Recovery queued as job344655, with a49-minute ceiling inside the original90-minute total; official SFT + Luna N=5 follows the repaired original cohort.**
 The user approved the four-H200/90-minute pilot and $15 Luna/$5 judge caps.
 Two live API preflight calls passed (vision + structured selection, and a native
 browser `done` tool call), returning `gpt-6-luna` and complete usage receipts;
@@ -184,7 +184,14 @@ diagnosed transport failure are queued for fresh-browser recovery before the
 SFT stage. Their original records and all request receipts remain archived,
 and every attempt remains charged to the same compute/API budgets. Successful
 and ordinary unsuccessful episodes are retained without outcome-based retries.
-GPU validation of the repaired episodes is pending. Run data and source hashes are preserved
+GPU validation of the repaired episodes is pending. Job344537 later stopped
+when a finished worker called W&B summary update with keyword arguments; the
+SDK requires a mapping. The corrected call passed an actual offline SDK check.
+All33 saved records survived; four context-failure records were archived for
+replacement, leaving29 retained cohort records and11 original-arm episodes to
+collect or repair. Replacement344655 has a49-minute ceiling: all earlier
+attempts consumed2430 seconds, so2430+2940=5370 seconds remains below5400.
+The same API ledgers and scientific settings are retained. Run data and source hashes are preserved
 under runtime `luna-qwen-inference-20261004/`. GPU startup is verified on four distinct H200 UUIDs. Actual request receipts
 confirm Qwen temperature1/top-p0.9/top-k disabled, Luna medium reasoning and the
 pinned o4-mini judge; the first browser episode and verdict are durable. All
@@ -205,7 +212,8 @@ and the three reviewed figures.
 |344476 |4 |150 |Stopped: inherited batch-level GPU count serialized the worker steps |
 |344534 |4 |25 |Failed: Slurm requires the same GPU type in both GPU request flags |
 |344536 |4 |27 |Failed: host GPU indexes differ from the indexes inside a worker's device namespace |
-|344537 |4 |Running |Four simultaneous TP1 workers,8 CPUs/120GiB each;86-minute maximum |
+|344537 |4 |Failed after2228 seconds |First finished worker hit W&B summary API error;33 records preserved |
+|344655 |4 |Queued |Corrected W&B/context handling;49-minute maximum, same four TP1 workers |
 
 The worker command now explicitly uses `--gpus=h200:1` and
 `--gres=gpu:h200:1`. GPU identity is read from the single visible NVML device;

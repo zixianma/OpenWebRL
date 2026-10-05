@@ -12,14 +12,15 @@ Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png)
 
 ## 1. Inference-time ARM selection
 
-**Next comparison, running as344537:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
+**Next comparison, recovery queued as344655:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
 selection at N=5/10, and Luna alone, plus the requested **official
 OpenWebRL/OpenWebRL-4B-SFT + Luna N=5** arm at temperature1/top-p0.9.
 The SFT arm is queued after the original40 episodes, targeting50 on the same
 ten tasks within the existing caps; it has not started. Track cost, latency, tokens, browser steps
 and local compute; plot success against the first three. The bounded ten-task
 pilot has a four-H200/90-minute total and $20 API cap; API preflight passed,
-with four workers collecting after startup repairs; full results pending.
+with saved episodes preserved after a W&B finalization error; the replacement
+has49 minutes inside the original total. Full results pending.
 [Protocol and metric definitions](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
