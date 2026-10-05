@@ -12,18 +12,20 @@ Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png)
 
 ## 1. Inference-time ARM selection
 
-**Next comparison, recovery queued as344655:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
-selection at N=5/10, and Luna alone, plus the requested **official
-OpenWebRL/OpenWebRL-4B-SFT + Luna N=5** arm at temperature1/top-p0.9.
-The queued job starts two SFT workers alongside two Qwen recovery workers,
-then reuses freed GPU slots for unfinished work. SFT no longer waits for the
-original arms to finish; its GPU startup is still pending. The target is50
-episodes on the same ten tasks within the existing caps. Track cost, latency, tokens, browser steps
-and local compute; plot success against the first three. The bounded ten-task
-pilot has a four-H200/90-minute total and $20 API cap; API preflight passed,
-with saved episodes preserved after a W&B finalization error; the replacement
-has49 minutes inside the original total. Full results pending.
-[Protocol and metric definitions](ARM_INFERENCE.md#luna-qwen-inference-20261004).
+**Next comparison: full300 actor × Luna-selector study.** Fresh Qwen Thinking
+alone, Luna alone, Qwen + Luna N=5, and official OpenWebRL-SFT + Luna N=5/10:
+1,500 new episodes. Only official SFT + Luna has an N=10 arm. Local actors use temperature1.0/top-p0.95. Reuse the existing
+SFT-only full300 as a protocol-different reference (T0.7/p0.9/1024 output),
+without a new SFT-only or Luna+Luna run. Track performance, cost, latency,
+input/output tokens, browser steps and local compute; plot success against
+cost/latency/tokens. New compute/API ceilings await exact approval.
+[Full-set matrix, baseline caveat and budget](ARM_INFERENCE.md#luna-actor-full300-20261004).
+[Unified eight-run tracker, including SFT + Jev/Kev](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
+
+The separate T1/p0.9 pilot remains queued as344655 for concurrent official SFT
+and Qwen recovery, initially two GPUs each, within its existing total caps.
+Its29 retained records are incomplete and will not be pooled with full-set
+results. [Pilot protocol](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
 **reasoning + action**. ScalarRM scores independently; SelectionARM compares

@@ -4,6 +4,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
+- [Full300 actor × Luna-selector study](#luna-actor-full300-20261004)
 - [Qwen Thinking, official OpenWebRL SFT and Luna: five-arm comparison](#luna-qwen-inference-20261004)
 - [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
@@ -12,6 +13,146 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 - [ARM matched retry status and results](#arm-inference-retry-results)
 
 ---
+
+<a id="luna-actor-full300-20261004"></a>
+## Full300 actor × Luna-selector study — October4
+
+**Full-set scope requested; new resource and API ceilings await exact approval.** The target is all300 unique
+Online-Mind2Web tasks. The scientific question is how an action selector changes
+success and efficiency for different actors, and whether ten proposals improve
+on five enough to justify their extra cost. The existing ten-task pilot at
+top-p0.9 stays separate and continues within its original approval.
+
+| Actor | Alone | Luna selector, N=5 | Luna selector, N=10 |
+| --- | --- | --- | --- |
+| Released Qwen3-VL-4B-Thinking | Fresh300 | Fresh300 | Excluded by the updated scope |
+| Official OpenWebRL/OpenWebRL-4B-SFT | Reuse existing full300 reference | Fresh300 | Fresh300 |
+| GPT-6 Luna | Fresh300 | Excluded | Excluded |
+
+<a id="actor-selector-experiment-tracker-20261004"></a>
+### Unified experiment tracker
+
+Snapshot: **2026-10-05 06:46:52 UTC**. “Saved” is terminal
+record coverage; it does not imply every record is valid or the run has passed
+its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
+
+| ID | Actor | Selector | N | Target | Saved | Status / current job | Protocol | Budget |
+| --- | --- | --- | ---: | ---: | ---: | --- | --- | --- |
+| AS01 | Qwen3-VL-4B-Thinking | None |1 |300 |0 |Prepared; awaiting exact budget approval |Luna study |New shared GPU/API pools below |
+| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna |5 |300 |0 |Prepared; awaiting exact budget approval |Luna study |New shared GPU/API pools below |
+| AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
+| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Prepared; awaiting exact budget approval |Luna study |New shared GPU/API pools below |
+| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Prepared; awaiting exact budget approval |Luna study |New shared GPU/API pools below |
+| AS07 | GPT-6 Luna | None |1 |300 |0 |Prepared; awaiting exact budget approval |Luna study; API sampling |New shared CPU/API pools below |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |24 |Running344708; replaces344662 |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |25 |Running344661 |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+
+**Coverage checklist:** eight full-set comparison rows; one completed reusable
+baseline, two active runs, and five prepared fresh runs. This totals2,100 new
+full-set episodes across both sessions plus300 reused baseline records. No
+Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
+updated request; only official SFT + Luna has an N=10 arm. Other IDs remain
+unchanged. **Kev0.8B has only a completed10-task pilot**; no
+full300 plan or approval exists, so it is explicitly outside the committed
+full-set checklist. The separate Qwen/Luna calibration pilot has29/50 retained
+records, recovery344655 queued, and its own unchanged approval.
+
+| Protocol group | Actor decoding | Browser / timeout | Judge evidence and horizon scoring | Efficiency coverage |
+| --- | --- | --- | --- | --- |
+| Luna study |Local T1/p0.95/k−1,4096 tokens; Luna medium/API-controlled |Local1280×720;1800s |Actions + final screenshot; step-limit failure0 |All candidate/request tokens, judge-excluded episode latency, browser calls/time and exclusive local GPU accounting |
+| Jev/Kev study |SFT T1/p0.95/k20,4096 tokens |Hosted1280×1000;600s |Thoughts + actions + final screenshot; terminal step limits also judged |Selector/judge token receipts, elapsed episode time including judge/cleanup, step totals and job/device accounting; exact actor token receipts and comparable exclusive GPU cost absent |
+| Historical SFT |T0.7/p0.9/k−1,1024 tokens |Local;1800s |Thoughts + actions; step-limit failure0 |Actor tokens/steps and shared-server timing/FLOP estimates; exclusive serving cost/latency unavailable |
+
+Thus this is a **coverage tracker, not a claim that all rows isolate the same
+intervention**. Cross-protocol performance and efficiency comparisons carry
+these labels. Do not fill missing measurements with zeros or silently combine
+the other session's measurements with the Luna metric definitions.
+
+Jev/Kev completion and review artifacts are maintained in the
+[full300 SFT selector report](RL_EVALUATION.md#sft-selection-full300-20261004).
+The reused baseline's audited results are in the
+[controlled inference report](#arm-controlled-inference-results-20261004).
+Each active full300 Jev/Kev run additionally caps330 hosted-browser sessions,
+1,320 judge calls and50,000 actor proposals; Jev caps9,900 selector requests,
+Kev caps9,910 local selector requests. Those approved budgets remain separate
+from the new Luna request and from every pilot.
+
+The Luna-study matrix requires **1,500 fresh episodes** and reuses the existing SFT
+actor-only result. No completed full300 Qwen Thinking or Luna baseline was
+found in the project artifacts. The released actor revisions match the pilot:
+Qwen `1de27d8c51f12e819435303b9e84c4e25ba8401e` and official SFT
+`15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`.
+
+Both local actors use **temperature1.0, top-p0.95, top-k disabled**, repetition
+penalty1,4096 response tokens,32K context and30 turns. Response allowances near
+the context boundary retain the validated one-token reserve. All requested
+proposals are charged, including discarded candidates. The seed schedule,
+shuffled candidate presentation, unchanged chosen action, goal/history/current
+screenshot,1280×720 local browser and action-only o4-mini/AgentTrek terminal
+judge remain common. Each task receives every fresh arm; within-family arm
+order is deterministically shuffled. The horizon rule remains explicit:
+completed trajectories invoke the judge, step-limit failures score zero, and
+aborted trajectories are invalid. No valid failure is automatically rerolled.
+
+Luna keeps medium reasoning and4096 output tokens in both roles. Its sampling
+is API controlled: temperature/top-p are unsupported with nonzero reasoning,
+so T1/p0.95 applies to the local actors. Actual returned model identities and
+usage are retained. [Official parameter compatibility](https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters).
+
+**Baseline reuse is a limitation.** The October4 official-SFT actor0 baseline
+has106/300 successes (35.33%,272 valid); pooled ordinary pass@1 is528/1500
+(35.20%). It used T0.7/p0.9,1024 output tokens, thoughts-inclusive judge evidence
+and shared actor serving. It supplies a historical performance reference,
+not an isolated estimate of Luna's causal gain at T1/p0.95. Its shared-server
+latency and GPU dollars are not interchangeable with the new exclusive-worker
+measurements. Reuse recorded tokens/browser steps with their protocol labels;
+do not invent matched cost or latency points. Fresh Qwen alone versus Qwen +
+Luna N=5 and fresh SFT N=5 versus N=10 support matched within-actor comparisons.
+
+| Metric | Primary report |
+| --- | --- |
+| Performance | Success/all300, valid-only success, invalid count, task-paired differences and95% bootstrap intervals; common-valid sensitivity |
+| Cost | Mean actor+selector serving dollars per task and per success; all proposal tokens, cache pricing bounds and reserved GPU time included; judge and total research spending separate |
+| Latency | Median/p95 episode time excluding terminal judging; actor/selector/browser components retained; campaign throughput separate |
+| Tokens | Mean and total input/output, split by actor/selector/judge; cached, image and reasoning subsets recorded without double counting |
+| Browser steps | Actual browser calls and elapsed browser time, including failed calls |
+| Local compute | Reserved GPU-seconds, proposal-batch time,5-second utilization/power/memory samples, analytic local FLOP ranges and all-attempt Slurm GPU-hours; hosted Luna FLOPs unknown |
+
+Plot success against **cost, latency and input/output tokens**. Show official
+SFT N=5 and N=10 distinctly; Qwen has only the N=5 selector arm. Plot only metrics with defensible
+measurements; label the reused SFT reference separately. All fresh-arm plots
+require the exact complete cohort, and missing API usage is unknown rather
+than zero. Aggregate CSV/JSON and figures may be public; raw task payloads,
+trajectories, screenshots and request logs remain private.
+
+The prepared scheduling request runs local actors and Luna concurrently:
+
+| Pool | Resource ceiling | Time ceiling including every retry | Purpose |
+| --- | --- | --- | --- |
+| Local actors |8 H200,64 CPUs,960GiB |16 hours total (128 GPU-hours) | Initially4 SFT +4 Qwen workers; one episode/GPU, freed slots reused |
+| Luna actor |0 GPUs,16 CPUs,32GiB |4 hours total | Four independent CPU browser workers; no idle local actor server |
+| Shared APIs |Luna $100 /39,600 requests; judge $25 /6,600 requests |Across both pools and every attempt | Reservations persist through interruption/recovery |
+
+These are **new, unapproved ceilings**, independent of the pilot's remaining
+balance. The partial pilot's valid-episode means project to101.45 GPU-hours
+(12.7 hours at8 GPUs),2.3 hours for four Luna browsers, and about$27.1 Luna
+usage. These are rough projections: SFT uses Qwen throughput as a temporary
+proxy, top-p changes, and300 tasks can have different runtimes. The ceilings
+provide headroom and stop execution if exhausted; they do not guarantee
+completion. GPU and CPU workers have no dependency on each other or on pilot
+completion. Frozen plans and both batch files are prepared locally; no new
+allocation has been submitted.
+
+Implementation: `scripts/prepare_luna_qwen_full300.py`,
+`scripts/run_luna_qwen_full300.py`, `openwebrl/luna_qwen_full_eval.py` and
+`scripts/report_luna_qwen_full300.py`. New source, result directories and
+W&B identities isolate the full-set study from the pilot. All evaluation runs
+use `openwebrl-evals`. Controllers preserve completed records and failed-attempt
+receipts, account for prior allocation time, own all workers, and require a
+separate final scheduler audit before verified completion. Preparation passes
+25 worker/controller tests, frozen-source and full-cohort checks, a CPU-only
+Luna tokenizer/processor check, and a private plot-rendering check. No paid
+request was used in these checks; live full-set worker startup is still pending.
 
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking, official SFT and Luna: performance versus cost — October4

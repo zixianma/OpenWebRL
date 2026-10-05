@@ -1,0 +1,155 @@
+{
+  "snapshot_epoch": 1791182812.853396,
+  "rows": [
+    {
+      "id": "AS01",
+      "actor": "Qwen3-VL-4B-Thinking",
+      "selector": null,
+      "n": 1,
+      "mode": "qwen",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "prepared_awaiting_exact_budget_approval",
+      "protocol_group": "luna_full300",
+      "job_id": null
+    },
+    {
+      "id": "AS02",
+      "actor": "Qwen3-VL-4B-Thinking",
+      "selector": "GPT-6 Luna",
+      "n": 5,
+      "mode": "qwen_luna5",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "prepared_awaiting_exact_budget_approval",
+      "protocol_group": "luna_full300",
+      "job_id": null
+    },
+    {
+      "id": "AS04",
+      "actor": "Official OpenWebRL-SFT4B",
+      "selector": null,
+      "n": 1,
+      "mode": "sft_reference",
+      "target_tasks": 300,
+      "recorded_episodes": 300,
+      "status": "verified_complete_reuse",
+      "protocol_group": "historical_sft",
+      "job_id": null,
+      "successes": 106,
+      "valid": 272,
+      "matched_protocol": false
+    },
+    {
+      "id": "AS05",
+      "actor": "Official OpenWebRL-SFT4B",
+      "selector": "GPT-6 Luna",
+      "n": 5,
+      "mode": "sft_luna5",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "prepared_awaiting_exact_budget_approval",
+      "protocol_group": "luna_full300",
+      "job_id": null
+    },
+    {
+      "id": "AS06",
+      "actor": "Official OpenWebRL-SFT4B",
+      "selector": "GPT-6 Luna",
+      "n": 10,
+      "mode": "sft_luna10",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "prepared_awaiting_exact_budget_approval",
+      "protocol_group": "luna_full300",
+      "job_id": null
+    },
+    {
+      "id": "AS07",
+      "actor": "GPT-6 Luna",
+      "selector": null,
+      "n": 1,
+      "mode": "luna",
+      "target_tasks": 300,
+      "recorded_episodes": 0,
+      "status": "prepared_awaiting_exact_budget_approval",
+      "protocol_group": "luna_full300",
+      "job_id": null
+    },
+    {
+      "id": "AS08",
+      "actor": "Official OpenWebRL-SFT4B",
+      "selector": "Jev",
+      "n": 5,
+      "mode": "jev",
+      "target_tasks": 300,
+      "recorded_episodes": 24,
+      "status": "running",
+      "protocol_group": "sft_jev_kev_full300",
+      "job_id": "344708"
+    },
+    {
+      "id": "AS09",
+      "actor": "Official OpenWebRL-SFT4B",
+      "selector": "Kev27B",
+      "n": 5,
+      "mode": "kev-27b",
+      "target_tasks": 300,
+      "recorded_episodes": 25,
+      "status": "running",
+      "protocol_group": "sft_jev_kev_full300",
+      "job_id": "344661"
+    }
+  ],
+  "excluded": [
+    {
+      "actor": "GPT-6 Luna",
+      "selector": "GPT-6 Luna",
+      "reason": "User excluded"
+    },
+    {
+      "actor": "Official OpenWebRL-SFT4B",
+      "selector": "Kev0.8B",
+      "reason": "10-task pilot only; no full300 request or approval found"
+    },
+    {
+      "id": "AS03",
+      "actor": "Qwen3-VL-4B-Thinking",
+      "selector": "GPT-6 Luna",
+      "n": 10,
+      "mode": "qwen_luna10",
+      "reason": "User scope correction: only official SFT + Luna has an N=10 arm"
+    }
+  ],
+  "new_luna_episodes": 1500,
+  "other_session_episodes": 600,
+  "reused_baseline_episodes": 300,
+  "missing_configuration": [],
+  "snapshot_utc": "2026-10-05T06:46:52Z",
+  "new_episodes_all_sessions": 2100,
+  "comparison_rows": 8,
+  "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
+  "proposed_luna_budgets": {
+    "approved": false,
+    "gpu_pool": {
+      "gpu_type": "H200",
+      "gpus": 8,
+      "cpus": 64,
+      "memory_gib": 960,
+      "total_hours": 16,
+      "total_gpu_hours": 128
+    },
+    "cpu_pool": {
+      "gpus": 0,
+      "cpus": 16,
+      "memory_gib": 32,
+      "total_hours": 4
+    },
+    "shared_api": {
+      "luna_usd": 100,
+      "luna_requests": 39600,
+      "judge_usd": 25,
+      "judge_requests": 6600
+    }
+  }
+}
