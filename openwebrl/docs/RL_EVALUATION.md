@@ -400,6 +400,17 @@ caps are unchanged. Source4 passes deployed CPU imports and browser preflight.
 The persistent pointer and supervisor follow344086. Retrying the3 invalid episodes
 would need browser-cap approval beyond40; no such retries are included.
 
+Replacement344086 started on g023 and resumed Jev at request8, preserving the
+seven earlier requests and all completed/invalid results. The actor GPU is
+producing five-candidate batches, Jev responds in roughly0.1seconds, and W&B
+resumed the existing evaluation identity. Discogs again lost its page/context
+after `go_back` from its login page, this time after7 selected actions. The new
+observation guard correctly stopped before another inference and saved a receipt.
+The last saved state contained one tab; available evidence cannot distinguish a
+closed page, context, CDP transport or remote browser. This fourth invalid episode
+has no terminal image or verdict and is preserved without replay. Other tasks
+continue under the same allocation; thirteen finished records have been audited.
+
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
 the explicit null proxy request. Inspection of the pinned SDK's serialized body
