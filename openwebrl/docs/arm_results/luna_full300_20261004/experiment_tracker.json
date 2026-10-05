@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791195979.8032749,
+  "snapshot_epoch": 1791198449.1207871,
   "rows": [
     {
       "id": "AS01",
@@ -99,13 +99,18 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 165,
-      "status": "running",
+      "recorded_episodes": 189,
+      "status": "failed_awaiting_owner_recovery",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344794",
-      "successes": 106,
-      "valid": 157,
-      "verified_complete": false
+      "successes": 122,
+      "valid": 178,
+      "verified_complete": false,
+      "counts_provisional": true,
+      "counts_provisional_reason": "Provider selector HTTP400 halt; existing owner failure audit pending. Two invalid records may reflect the halt.",
+      "selector_halted": true,
+      "scheduler_state": "FAILED",
+      "failure_audit_pending": true
     },
     {
       "id": "AS09",
@@ -114,12 +119,12 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 154,
+      "recorded_episodes": 182,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
-      "successes": 110,
-      "valid": 149,
+      "successes": 129,
+      "valid": 177,
       "verified_complete": false
     }
   ],
@@ -147,7 +152,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T10:26:19Z",
+  "snapshot_utc": "2026-10-05T11:07:29Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -203,6 +208,37 @@
     "replacement_jobs": {
       "jev": "344794",
       "kev27b": "344793"
+    },
+    "remaining_scheduler_seconds_basis": "At browser-repair replacement submission; not the current remaining budget",
+    "jev_selector_failure": {
+      "snapshot_utc": "2026-10-05T11:07:29Z",
+      "job_id": "344794",
+      "scheduler_state": "FAILED",
+      "selector_halted": true,
+      "error_class": "HTTP400",
+      "owner_notified": true,
+      "owner_recovery_pending": true,
+      "failure_audit_pending": true,
+      "recorded_episodes_provisional": 189,
+      "valid_provisional": 178,
+      "successes_provisional": 122,
+      "possibly_provider_halt_invalid_records": 2,
+      "verified_complete": false,
+      "all_attempt_elapsed_seconds": [
+        1003,
+        3813,
+        13189
+      ],
+      "total_actual_seconds": 18005,
+      "approved_total_seconds": 36000,
+      "remaining_original_seconds": 17995,
+      "approved_gpus": 1,
+      "approved_cpus": 8,
+      "approved_memory_gib": 120,
+      "budget_unchanged": true,
+      "budget_transfer_authorized": false,
+      "underlying_cause_diagnosed": false,
+      "provider_error_body_saved": false
     }
   },
   "separate_pilot": {
@@ -273,7 +309,7 @@
     "verified_utc": "2026-10-05T10:26:44.224499+00:00"
   },
   "progress_health_snapshot": {
-    "snapshot_utc": "2026-10-05T10:26:19Z",
+    "snapshot_utc": "2026-10-05T11:07:29Z",
     "cpu_job_id": "344875",
     "cpu_state": "COMPLETED",
     "cpu_active_workers": 0,

@@ -32,9 +32,10 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 10:26:19 UTC**. “Saved” is eligible terminal
-record coverage; archived coordinate-compromised records are excluded. It does
-not imply every record is valid or the run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
+Snapshot: **2026-10-05 11:07:29 UTC**. “Saved” is terminal record coverage;
+archived coordinate-compromised records are excluded, and provisional counts
+are flagged explicitly. Coverage does not imply every record is valid or the
+run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
 | ID | Actor | Selector | N | Target | Saved | Status / current job | Protocol | Budget |
 | --- | --- | --- | ---: | ---: | ---: | --- | --- | --- |
@@ -44,8 +45,8 @@ not imply every record is valid or the run has passed its final audit. The table
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS07 | GPT-6 Luna | None |1 |300 |300 |Verified complete344875;110 successes |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |165 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |154 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |189 provisional |Failed344794; selector HTTP400, awaiting owner recovery |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |182 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
 
 **October5 CPU-family endpoint:** all300 primary records are independently
 verified, comprising90 retained no-coordinate originals and210 corrected
@@ -54,11 +55,13 @@ finished. Scheduler use totals **12,257/14,400 approved CPU-pool seconds**
 across both attempts. The [verified CPU-family results](#luna-cpu-family-results-20261005)
 are separate from the full actor/selector comparison: **300/1,500 new study
 episodes are complete**, with GPU344754 still queued for four arms totaling
-1,200 episodes. Jev and Kev continue under their separate budgets. The table
-coverage snapshot is10:26:19 UTC; final CPU verification completed at10:26:44 UTC.
+1,200 episodes. Jev recovery and Kev collection retain their separate budgets.
+The table coverage snapshot is11:07:29 UTC; final CPU verification completed
+at10:26:44 UTC.
 
 **Coverage checklist:** eight full-set comparison rows; one completed reusable
-baseline, one verified CPU family, two running peer rows and four queued rows. The five fresh Luna-study
+baseline, one verified CPU family, one failed peer awaiting recovery, one
+running peer and four queued rows. The five fresh Luna-study
 rows share two approved pools. This totals2,100 new
 full-set episodes across both sessions plus300 reused baseline records. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
@@ -74,12 +77,23 @@ are tracked separately.
 **October5 peer recovery:** Jev344708 and Kev344661 were intentionally stopped
 for a confirmed hosted-browser input-clearing bug: Mac sessions need the Mac
 select-all shortcut. Their existing repair owner submitted replacements
-Jev344794 and Kev344793, both now running. The44 Jev and42 Kev records
+Jev344794 and Kev344793. The44 Jev and42 Kev records
 from before the repair are preserved pending the recovery audit. These
 partial results are not final comparison results. At replacement submission, remaining allocation time was
 31,184 seconds for Jev and31,135 seconds for Kev under their separate10-hour
 limits. No budget extension is implied. The separate local Luna CPU collection
 has finished.
+
+**October5,11:07 UTC peer failure:** Jev344794 failed after an HTTP400
+selector halt; its existing owner has been notified and recovery is pending.
+The provider error body was not saved, so the underlying cause remains
+undiagnosed. The189 saved records (178 marked valid,122 successes) are **provisional**
+pending the owner’s failure audit; two invalid records may reflect the
+provider halt. This is not a completed comparison result. Its three attempts
+used1,003 +3,813 +13,189 = **18,005 of36,000 approved allocation seconds**,
+leaving **17,995 seconds** within its unchanged1 H200/8 CPU/120GiB budget.
+Kev344793 remains running with182 saved records at this snapshot. Recovery
+does not transfer budgets between peers, the Luna study or the pilot.
 
 <a id="luna-cpu-family-results-20261005"></a>
 ### Verified Luna CPU-family results — October5
