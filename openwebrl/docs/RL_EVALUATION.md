@@ -719,7 +719,7 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 344794 | 10-05 00:35 PDT | 50/300 | 47 | 3 | 32 | 5374 |
+| SFT + Jev | 344794 | 10-05 00:38 PDT | 53/300 | 50 | 3 | 33 | 5581 |
 | SFT + Kev27B | 344793 | 10-05 00:27 PDT | 42/300 | 41 | 1 | 26 | 4865 |
 <!-- sft-full300-live-audit:end -->
 
@@ -752,8 +752,16 @@ The corrected Jev replacement subsequently lost the screenshot on a Fandom
 episode without any diagnostic connection to that browser. The observation
 guard stopped inference, no judge was called, and the episode remains unscored
 with its last available image retained. Subsequent tasks continued normally;
-the latest50-record audit has three diagnosed invalids and no unexplained
+the latest53-record audit has three diagnosed invalids and no unexplained
 evidence errors. W&B has resumed the original evaluation identity.
+
+A subsequent canonical success used a25-mile job-search filter for a requested
+20-mile radius and inferred permanence from Full-time. The private review flags
+those evidence gaps while retaining the shared judge verdict. A stopped browser
+also reported nonzero `proxy_cost`; its byte/cost ratio matches the provider's
+[$0.20/GB direct-egress rate](https://browser-use.com/pricing), and the frozen
+caller/SDK test preserves explicit `proxyCountryCode:null`. This is consistent
+with network egress billing, not evidence that the proxy setting changed.
 
 
 <a id="sft-kev-full300-timeout-20261005"></a>
