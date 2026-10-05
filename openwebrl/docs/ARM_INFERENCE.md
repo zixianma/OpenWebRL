@@ -17,7 +17,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 <a id="luna-actor-full300-20261004"></a>
 ## Full300 actor × Luna-selector study — October4
 
-**GPU344754 remains queued; repaired Luna CPU344875 is running with four browser workers.** The target is all300 unique
+**Luna alone is verified complete:110/300 successes (36.67% overall;39.43% of279 valid episodes). GPU344754 remains queued for the other1,200 episodes.** The target is all300 unique
 Online-Mind2Web tasks. The scientific question is how an action selector changes
 success and efficiency for different actors, and whether ten proposals improve
 on five enough to justify their extra cost. The existing ten-task pilot at
@@ -32,7 +32,7 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 10:11:16 UTC**. “Saved” is eligible terminal
+Snapshot: **2026-10-05 10:26:19 UTC**. “Saved” is eligible terminal
 record coverage; archived coordinate-compromised records are excluded. It does
 not imply every record is valid or the run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
@@ -43,24 +43,22 @@ not imply every record is valid or the run has passed its final audit. The table
 | AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
-| AS07 | GPT-6 Luna | None |1 |300 |270 |Running344875; coordinate-repair replay |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |150 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |144 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+| AS07 | GPT-6 Luna | None |1 |300 |300 |Verified complete344875;110 successes |Luna study; API sampling |Approved shared CPU/API pools below |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |165 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |154 |Running344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
 
-**October5,10:11 UTC progress:** Luna CPU344875 has270/300 eligible records:
-90 retained no-coordinate originals plus180 corrected collection records, with
-30 tasks remaining. All four CPU workers are active; the supervisor reports
-no stalled workers, record-integrity errors, approval mismatch or API halt.
-GPU344754 remains queued. Jev and Kev retain their separate running jobs and
-budgets. The shared Luna-study ledgers show7,971 Luna calls /$4.723312 charged
-or reserved and250 judge calls /$1.104818; these are live totals, including
-prior attempts and reservations, not final reconciled spend. Caps remain
-$100 Luna/$25 judge, and the CPU prior-use plus retry ceiling remains
-14,381/14,400 seconds. Partial coverage does not establish a performance
-ranking; exact cohort and final scheduler audits are still pending.
+**October5 CPU-family endpoint:** all300 primary records are independently
+verified, comprising90 retained no-coordinate originals and210 corrected
+records. CPU344875 completed and all four repair workers and their W&B runs
+finished. Scheduler use totals **12,257/14,400 approved CPU-pool seconds**
+across both attempts. The [verified CPU-family results](#luna-cpu-family-results-20261005)
+are separate from the full actor/selector comparison: **300/1,500 new study
+episodes are complete**, with GPU344754 still queued for four arms totaling
+1,200 episodes. Jev and Kev continue under their separate budgets. The table
+coverage snapshot is10:26:19 UTC; final CPU verification completed at10:26:44 UTC.
 
 **Coverage checklist:** eight full-set comparison rows; one completed reusable
-baseline, three running rows and four queued rows. The five fresh Luna-study
+baseline, one verified CPU family, two running peer rows and four queued rows. The five fresh Luna-study
 rows share two approved pools. This totals2,100 new
 full-set episodes across both sessions plus300 reused baseline records. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
@@ -80,7 +78,53 @@ Jev344794 and Kev344793, both now running. The44 Jev and42 Kev records
 from before the repair are preserved pending the recovery audit. These
 partial results are not final comparison results. At replacement submission, remaining allocation time was
 31,184 seconds for Jev and31,135 seconds for Kev under their separate10-hour
-limits. No budget extension is implied. The local Luna CPU pool continues independently.
+limits. No budget extension is implied. The separate local Luna CPU collection
+has finished.
+
+<a id="luna-cpu-family-results-20261005"></a>
+### Verified Luna CPU-family results — October5
+
+The corrected Luna-alone cohort is complete. These are single-arm results;
+no matched actor/selector comparison or full-study plots are available yet.
+The judge remains action-only o4-mini/AgentTrek, with a30-turn horizon and
+step-limit failures scored zero. [Sanitized aggregate metrics and all-attempt accounting](arm_results/luna_full300_20261004/cpu-family-aggregate.json).
+
+| Tasks | Successes | Valid | Invalid | Overall | Valid-only | Task-bootstrap95% interval |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|300 |110 |279 |21 |36.67% |39.43% |31–42% overall |
+
+| Metric | Verified aggregate |
+| --- | --- |
+| Actor API cost estimate |$2.214169 total;$0.007381 per task |
+| Terminal judge cost estimate, separate |$0.960615 total |
+| Episode latency, excluding terminal judge |78.09s mean;55.98s median;254.41s p95 |
+| Actor tokens |16,280,584 input;382,378 output; means54,268.61 /1,274.59 per task |
+| Browser steps |3,839 total;12.80 mean per task |
+| Local model compute |0 GPU-seconds and0 local model FLOPs; hosted API compute unknown |
+| All-attempt CPU allocation |12,257 seconds at16 CPUs/32GiB, or54.48 CPU-core-hours; includes original failure and repair |
+
+The provider reported total input/output usage for every primary request, but
+did not report separate image-token counts. Image-token subcounts are
+unavailable; the aggregate records missing-subcount coverage rather than
+treating omitted image usage as measured zero.
+
+All21 invalid episodes were unavailable task starts:11 navigation timeouts,
+five download responses and five network failures. Invalids remain in the
+300-task overall denominator. Artifact hashes, receipt-derived metrics,
+primary-cohort coverage, repair provenance, worker exits, final scheduler
+accounting and all four repair W&B runs passed the independent audit.
+
+The primary cohort combines90 explicitly audited no-coordinate originals with
+210 corrected episodes. The177 compromised original records and four
+interrupted attempts remain preserved outside the primary cohort: **481
+physical attempts in total**. Across every attempt, actor API costs are
+**$4.920691 known or conservatively reserved**, with **$1.190080 judge costs**
+separate. Two interrupted original actor requests still lack returned usage;
+their reservations remain charged, never treated as zero. API dollars are
+frozen-price token estimates; browser CPU dollars are unpriced. These research
+totals include discarded work and differ from the primary per-task cost above.
+All original CPU/GPU/API caps remain unchanged; completion of this CPU family
+does not authorize a transfer of its unused budget to another pool or the pilot.
 
 <a id="luna-pixel-coordinate-repair-20261005"></a>
 ### October5 Luna actor coordinate repair
@@ -104,9 +148,9 @@ and every receipt remain preserved. At relaunch, corrected or fresh collection
 was required for the other210 tasks. The retained subset is coverage, not a standalone
 Luna success estimate.
 
-Replacement **344875** is running four CPU workers with a **7,620-second
-retry limit**. Prior use plus the retry ceiling is **14,381 of
-14,400 approved seconds**, with the same0 GPU/16 CPU/32GiB profile and shared
+Replacement **344875** finished after **5,496 seconds**, below its7,620-second
+retry limit; all four repair workers exited0. Actual use across both CPU
+attempts is **12,257 of14,400 approved seconds**, with the same0 GPU/16 CPU/32GiB profile and shared
 $100 Luna/$25 judge caps. GPU344754 remains queued independently; its code,
 scientific settings and budget are unchanged.
 
@@ -119,7 +163,8 @@ candidate index. Validation passed **51 tests**:46 targeted coordinate and
 existing tests plus five repair-controller tests. During replacement startup
 on October5, live checks confirmed matching requested/executed pixel coordinates for all
 four replacement workers, five verified new records and four running W&B
-identities. Final results remain separately supervised.
+identities. Final independent verification now confirms all300 primary records
+and successful exits for all four repair workers.
 
 | Protocol group | Actor decoding | Browser / timeout | Judge evidence and horizon scoring | Efficiency coverage |
 | --- | --- | --- | --- | --- |
@@ -142,8 +187,8 @@ Kev caps9,910 local selector requests. Those approved budgets remain separate
 from the approved Luna budgets and from every pilot.
 
 The Luna-study matrix requires **1,500 fresh episodes** and reuses the existing SFT
-actor-only result. No completed full300 Qwen Thinking or Luna baseline was
-found in the project artifacts. The released actor revisions match the pilot:
+actor-only result. At planning, no completed full300 Qwen Thinking or Luna
+baseline was found in the project artifacts. The released actor revisions match the pilot:
 Qwen `1de27d8c51f12e819435303b9e84c4e25ba8401e` and official SFT
 `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`.
 
@@ -208,8 +253,9 @@ runtimes. Earlier Luna actor runtime and API-cost projections are withdrawn
 because the coordinate mismatch changed its trajectories. The ceilings
 provide headroom and stop execution if exhausted; they do not guarantee
 completion. GPU and CPU workers have no dependency on each other or on pilot
-completion. GPU344754 is pending cluster priority; CPU344875 is running the
-coordinate-repair collection. Final cohort and scheduler audits are still required.
+completion. GPU344754 is pending cluster priority; CPU344875 has finished
+coordinate-repair collection, released its allocation and passed final
+independent verification. Four GPU arms remain pending.
 
 Implementation: `scripts/prepare_luna_qwen_full300.py`,
 `scripts/run_luna_qwen_full300.py`, `openwebrl/luna_qwen_full_eval.py` and
@@ -222,7 +268,8 @@ separate final scheduler audit before verified completion. Preparation passes
 Luna tokenizer/processor check, and a private plot-rendering check. No paid
 request was used in these checks. CPU344755's original records passed usage
 and hash checks but failed the coordinate-semantics audit described above.
-Replacement344875 has four browser workers and keeps zero local GPU use.
+Replacement344875 finished its four browser workers with zero local GPU use
+and passed the independent completion audit.
 Live GPU startup is still pending.
 A persistent supervisor now tracks both full-set pools, the Jev/Kev runs and
 the separate pilot. Its dispatch back to the owning repair agent is verified.

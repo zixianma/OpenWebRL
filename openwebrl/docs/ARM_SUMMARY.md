@@ -18,16 +18,17 @@ alone, Luna alone, Qwen + Luna N=5, and official OpenWebRL-SFT + Luna N=5/10:
 SFT-only full300 as a protocol-different reference (T0.7/p0.9/1024 output),
 without a new SFT-only or Luna+Luna run. Track performance, cost, latency,
 input/output tokens, browser steps and local compute; plot success against
-cost/latency/tokens. Budgets are approved: GPU344754 is queued for up to
-8 H200 ×16h; repaired CPU344875 runs independently within the original4h
-ceiling. Original CPU344755 used6,761 seconds; the7,620-second retry keeps
-the cumulative ceiling at14,381/14,400 seconds. Shared
-API caps are$100 Luna/$25 judge. The Luna actor's pixel coordinates were
-incorrectly interpreted as normalized0–1000 coordinates:177 compromised
-full300 records were archived,
-90 no-coordinate records retained, and four partial attempts preserved.
-Corrected collection covers the other210 tasks. Qwen/SFT selector arms are
-unchanged. Jobs release resources when their work finishes.
+cost/latency/tokens. **Luna alone is independently verified complete:110/300
+successes (36.67% overall),110/279 valid episodes (39.43%) and21 invalid starts.**
+Its primary actor API estimate is$0.007381 per task; median/p95 episode latency
+is55.98/254.41 seconds, excluding judging. API dollars exclude browser CPU and
+terminal judging. The300 records combine90 audited no-coordinate originals
+and210 corrected episodes;177 compromised records and four interrupted attempts
+remain preserved. CPU use was12,257/14,400 approved seconds across both attempts.
+GPU344754 remains queued for the other four arms (1,200 episodes), under the
+unchanged8 H200 ×16h ceiling. Shared API caps remain$100 Luna/$25 judge.
+**The new study is300/1,500 complete; matched comparison plots are not ready.**
+[Verified CPU-family outcome and efficiency metrics](ARM_INFERENCE.md#luna-cpu-family-results-20261005).
 [Full-set matrix, baseline caveat and budget](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [Unified eight-run tracker, including SFT + Jev/Kev](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 

@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "scope": "Luna actor-alone CPU-family result",
+  "actor": "gpt-6-luna",
+  "selector": null,
+  "candidate_count": 1,
+  "cpu_family_complete": true,
+  "full_experiment_complete": false,
+  "full_comparison_available": false,
+  "full_comparison_plots_generated": false,
+  "verified_utc": "2026-10-05T10:26:44.224499+00:00",
+  "performance": {
+    "tasks": 300,
+    "successes": 110,
+    "valid": 279,
+    "invalid": 21,
+    "overall_success": 0.36666666666666664,
+    "valid_only_success": 0.3942652329749104,
+    "success_task_bootstrap_95": [
+      0.31,
+      0.42
+    ]
+  },
+  "primary_model_cost": {
+    "total_lower_usd": 2.21416915,
+    "total_upper_usd": 2.21416915,
+    "mean_lower_usd": 0.0073805638333333335,
+    "mean_upper_usd": 0.0073805638333333335,
+    "upper_usd_per_success": 0.020128810454545454,
+    "judge_total_upper_usd_separate": 0.9606146000000001,
+    "basis": "Provider-token estimate using frozen prices; local browser CPU is unpriced; judge separate"
+  },
+  "frozen_api_usd_per_million_tokens": {
+    "luna_input": 0.1,
+    "luna_cached": 0.01,
+    "luna_cache_write": 0.125,
+    "luna_output": 0.5,
+    "judge_input": 1.1,
+    "judge_cached": 0.275,
+    "judge_output": 4.4
+  },
+  "latency_seconds": {
+    "episode": {
+      "total": 23428.00227850955,
+      "mean": 78.09334092836517,
+      "p50": 55.97931478335522,
+      "p95": 254.40995958540594
+    },
+    "terminal_judge_total_separate": 782.1646207207814,
+    "scope": "All primary episodes, including failures and invalids; terminal judge excluded from episode latency"
+  },
+  "tokens": {
+    "model_input": {
+      "total": 16280584,
+      "mean": 54268.613333333335,
+      "p50": 27642.5,
+      "p95": 152389.25
+    },
+    "model_output": {
+      "total": 382378,
+      "mean": 1274.5933333333332,
+      "p50": 867.5,
+      "p95": 3741.9500000000016
+    },
+    "by_role": {
+      "luna_actor": {
+        "input": 16280584.0,
+        "output": 382378.0,
+        "cached_input": 0.0,
+        "reasoning_output": 257283.0,
+        "requests": 3839.0,
+        "usage_missing": 0.0,
+        "cache_write_input": 15796870.0,
+        "image_input": 0.0,
+        "cached_missing": 0.0,
+        "reasoning_missing": 0.0,
+        "cache_write_missing": 0.0,
+        "image_missing": 3839.0
+      },
+      "api_judge": {
+        "input": 546070.0,
+        "output": 81804.0,
+        "cached_input": 0.0,
+        "reasoning_output": 59392.0,
+        "requests": 220.0,
+        "usage_missing": 0.0,
+        "cache_write_input": 0.0,
+        "image_input": 0.0,
+        "cached_missing": 0.0,
+        "reasoning_missing": 0.0,
+        "cache_write_missing": 220.0,
+        "image_missing": 220.0
+      }
+    },
+    "subsets_are_not_added_to_input_output_totals": true,
+    "image_input_subcounts_available": false,
+    "missing_subcounts_note": "Image input subcounts are absent for all primary actor and judge requests. A zero image_input accumulator is an empty reported sum, not measured zero image tokens; image_missing records the absent coverage."
+  },
+  "browser": {
+    "steps": {
+      "total": 3839,
+      "mean": 12.796666666666667,
+      "p50": 9.0,
+      "p95": 30.0
+    },
+    "step_seconds": {
+      "total": 9943.416428991128,
+      "mean": 33.144721429970424,
+      "p50": 17.438856539316475,
+      "p95": 171.96029785298745
+    }
+  },
+  "local_compute": {
+    "gpu_reserved_seconds": 0,
+    "local_model_flops": 0,
+    "cpu_allocation_cpus": 16,
+    "cpu_allocation_memory_gib": 32,
+    "all_attempt_allocation_seconds": 12257,
+    "all_attempt_core_seconds": 196112,
+    "all_attempt_memory_gib_seconds": 392224,
+    "approved_total_seconds": 14400,
+    "charged_cpu_usd": null,
+    "scope": "Scheduler reservation includes startup, idle, failed original run and repair; API server compute unknown"
+  },
+  "repair": {
+    "retained_unaffected_primary": 90,
+    "corrected_primary": 210,
+    "quarantined_excluded_records": 177,
+    "correction": "Native Luna actions use viewport pixels; task goals, API settings and terminal judge unchanged",
+    "selection_for_replay": "Coordinate exposure and receipt completeness; independent of outcomes"
+  },
+  "research_collection": {
+    "physical_attempts": 481,
+    "primary_attempts": 300,
+    "nonprimary_attempts": 181,
+    "attempts_missing_final_timing": 4,
+    "replayed_task_additional_attempts": 181,
+    "duplicate_physical_attempt_identities": 0,
+    "all_attempt_api": {
+      "actor": {
+        "requests": 8319,
+        "received_with_usage": 8317,
+        "unknown_usage_requests": 2,
+        "known_cost_lower_usd": 4.904051700000005,
+        "known_cost_upper_usd": 4.904051700000005,
+        "unresolved_reserved_usd": 0.016639750000000002,
+        "input_tokens": 36639398,
+        "output_tokens": 700651,
+        "known_upper_plus_unresolved_reservations_usd": 4.920691450000005
+      },
+      "judge": {
+        "requests": 270,
+        "received_with_usage": 270,
+        "unknown_usage_requests": 0,
+        "known_cost_lower_usd": 1.190080100000001,
+        "known_cost_upper_usd": 1.190080100000001,
+        "unresolved_reserved_usd": 0.0,
+        "input_tokens": 676723,
+        "output_tokens": 101292,
+        "known_upper_plus_unresolved_reservations_usd": 1.190080100000001
+      }
+    },
+    "nonprimary_actor_input_tokens": 20358814,
+    "nonprimary_actor_output_tokens": 318273,
+    "nonprimary_actor_known_upper_usd": 2.6898825500000045,
+    "nonprimary_judge_known_upper_usd": 0.22946550000000088,
+    "unresolved_usage_note": "Unknown interrupted calls retain conservative reservations; unknown usage is never zero or refunded"
+  },
+  "protocol": {
+    "task_count": 300,
+    "max_browser_turns": 30,
+    "response_token_cap": 4096,
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "actor_temperature": null,
+    "actor_top_p": null,
+    "native_pixel_coordinates": true,
+    "terminal_judge": "o4-mini-2025-04-16",
+    "judge_seed": 42,
+    "judge_response_token_cap": 4096,
+    "judge_evidence": "Actions-only history and final post-action screenshot"
+  },
+  "limitations": [
+    "CPU-family aggregate only; other arms remain under collection or verification.",
+    "No matched actor-selector comparison or full-study plots are available from this export.",
+    "API costs are token-price estimates; local CPU dollar cost and API-side compute are unavailable."
+  ]
+}
