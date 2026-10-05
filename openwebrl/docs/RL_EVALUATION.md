@@ -725,9 +725,38 @@ limitations; these are not final full300 results.
 
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| SFT + Jev | 344794 | 10-05 00:54 PDT | 64/300 | 61 | 3 | 39 | 6546 |
+| SFT + Jev | 345021 | 10-05 04:43 PDT | 190/300 | 179 | 11 | 123 | 18181 |
 | SFT + Kev27B | 344793 | 10-05 01:11 PDT | 58/300 | 56 | 2 | 38 | 6636 |
 <!-- sft-full300-live-audit:end -->
+
+<a id="sft-jev-context-recovery-20261005"></a>
+**Jev input-limit recovery — October 5.** Job344794 stopped after189 saved
+records when one full-state selector request returned HTTP400. A separately
+charged replay of the identical request returned `max_tokens_exceeded`. The
+harness had treated this episode-specific rejection as a global provider halt,
+which also aborted one newly started episode before its first selection.
+The replacement isolates this exact error to its episode and preserves the
+unmodified request and raw error body. It does not truncate candidate reasoning,
+page state or history, substitute actions, or reroll any saved outcome.
+
+Replacement345021 uses1H200,8CPU,120GiB for17940seconds, with18005seconds already
+charged to all prior attempts. It resumed the111 remaining tasks and the same
+W&B identity. The first recovered episode has a saved rollout, terminal image
+and judge verdict. The190-record independent audit verifies179 scored episodes
+and11 diagnosed invalids, with123 canonical positives. The diagnoses include two
+actor full-history overflows of the32768-token context limit, browser failures,
+timeouts, the oversized Jev request and its collateral zero-action abort.
+All189 previous result files remain byte-identical. Two leftover browser markers
+were reconciled against provider metadata confirming shutdown; the SDK had
+rejected an earlier scientific-notation billing value.
+
+Validation:37 focused tests cover failure isolation, exact action/input retention,
+charged requests, unchanged global handling of other errors, full300 controls and
+partial-evidence auditing. The auditor now verifies zero-action aborts against
+an empty response and matching initial image, and freezes its completed-result
+set before reading traces to avoid races with live workers. A reviewed senior-dog
+positive visibly includes puppies; its canonical score remains unchanged and the
+private review flags the age-filter contradiction. Full300 remains incomplete.
 
 <a id="sft-selector-platform-clearing-20261005"></a>
 **Confirmed typing-harness defect and recovery — October5.** The cloud provider

@@ -1,5 +1,6 @@
 """A timeout may save the next observation before any corresponding selection."""
 import importlib.util
+import base64
 import io
 from pathlib import Path
 
@@ -35,3 +36,19 @@ def test_diagnosed_next_observation_is_separate_from_selected_states():
 def test_unexplained_extra_or_missing_states_fail(count, extra, diagnosis):
     with pytest.raises(AssertionError):
         audit.align_partial_screenshots([png()] * (1 + extra), count, diagnosis)
+
+
+def test_pre_action_abort_requires_empty_response_and_matching_initial_image():
+    raw = png()
+    sample = dict(sample_id='task', status='aborted', total_steps=0, llm_response='',
+        terminate_reason='generation_error: Selector halted or request cap reached',
+        images=[[base64.b64encode(raw).decode()]])
+    assert audit.verify_pre_action_abort(sample, [], 'task', raw) == [2, 2]
+    for changed, decisions, image in [
+        (dict(sample, llm_response='action'), [], raw),
+        (dict(sample, total_steps=1), [], raw),
+        (sample, [{}], raw),
+        (sample, [], b'different'),
+    ]:
+        with pytest.raises(AssertionError):
+            audit.verify_pre_action_abort(changed, decisions, 'task', image)

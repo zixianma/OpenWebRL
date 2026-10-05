@@ -55,6 +55,10 @@ class DecisionChoiceMismatch(ValueError):
     """A well-formed probability vector contradicts the provider's choice."""
 
 
+class DecisionInputTooLong(ValueError):
+    """This episode exceeds Jev's input limit; unrelated episodes may proceed."""
+
+
 def selected_index(request, response):
     if response.get('model') != request['model'] or response.get('truncated'):
         raise ValueError('Wrong decision model or truncated request')
@@ -164,6 +168,17 @@ class DecisionSelector:
                 write_json(path, record)
                 reply = await self.client.post(self.endpoint, json=request, headers=self.headers, timeout=120)
                 record['http_status'] = receipt['http_status'] = reply.status_code
+                if reply.status_code >= 400:
+                    record['response_text'] = receipt['response_text'] = reply.text
+                    try:
+                        error_body = reply.json()
+                    except ValueError:
+                        error_body = None
+                    if (self.provider == 'jev' and reply.status_code == 400 and
+                            isinstance(error_body, dict) and
+                            error_body.get('detail') == {'error_type': 'max_tokens_exceeded'}):
+                        receipt['finished_unix'] = time.time()
+                        raise DecisionInputTooLong('Jev rejected the unchanged episode input: max_tokens_exceeded')
                 reply.raise_for_status()
                 record['response'] = receipt['response'] = reply.json()
                 try:
@@ -180,6 +195,10 @@ class DecisionSelector:
             record.update(status='selected', selected_index=index)
             return outputs[index], dict(selected_index=index, mode=self.provider,
                                         fallback=None, trace_path=str(path))
+        except DecisionInputTooLong as exc:
+            record.update(status='failed', error_type=type(exc).__name__,
+                          failure_scope='episode', request_unchanged=True)
+            raise
         except BaseException as exc:
             self.halted = True
             record.update(status='failed', error_type=type(exc).__name__)

@@ -75,6 +75,56 @@ def test_failed_http_is_durable_and_halts_without_retry(tmp_path):
     asyncio.run(run())
 
 
+def test_jev_oversized_episode_preserves_input_and_budget_then_next_task_runs(tmp_path):
+    from openwebrl.decision_selection import DecisionInputTooLong
+    from openwebrl.selection_budget import SelectionBudget
+    async def run():
+        calls = []
+        async def infer(*args, **kwargs):
+            return ('unchanged reasoning</think>literal action', [], [], 'stop')
+        def reply(request):
+            calls.append(json.loads(request.content))
+            return (httpx.Response(400, json={'detail': {'error_type': 'max_tokens_exceeded'}})
+                    if len(calls) == 1 else httpx.Response(200, json=response('jev-1.13.0')))
+        budget = SelectionBudget(tmp_path/'budget', {'actor_proposals': 10, 'jev_requests': 2})
+        async with httpx.AsyncClient(transport=httpx.MockTransport(reply)) as client:
+            selector = DecisionSelector('jev', tmp_path/'traces', client=client,
+                api_key='fixture', budget=budget, validation_retries=2)
+            kwargs = dict(infer=infer,url='actor',input_text='prompt',sampling_params={},images=[],
+                observation=observation(),history=[],task='find',turn=0,timeout=30)
+            with pytest.raises(DecisionInputTooLong):
+                await selector(task_id='oversized', **kwargs)
+            assert not selector.halted and not (tmp_path/'traces/halt.json').exists()
+            output, meta = await selector(task_id='next', **kwargs)
+            assert output[0] == 'unchanged reasoning</think>literal action'
+            assert meta['selected_index'] == 3 and meta['fallback'] is None
+        rejected = json.loads((tmp_path/'traces/request-00001.json').read_text())
+        assert rejected['request'] == calls[0] and len(rejected['http_attempts']) == 1
+        assert rejected['failure_scope'] == 'episode' and 'selected_index' not in rejected
+        assert json.loads(rejected['response_text'])['detail']['error_type'] == 'max_tokens_exceeded'
+        assert json.loads((tmp_path/'budget/usage.json').read_text())['reserved'] == {
+            'actor_proposals': 10, 'jev_requests': 2}
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize('code,body', [
+    (400, {'detail': {'error_type': 'unknown_model'}}),
+    (401, {'detail': {'error_type': 'max_tokens_exceeded'}}),
+    (400, {'detail': 'max_tokens_exceeded'}),
+])
+def test_other_provider_errors_still_halt(tmp_path, code, body):
+    async def run():
+        async def infer(*args, **kwargs):return ('</think>action', [], [], 'stop')
+        async with httpx.AsyncClient(transport=httpx.MockTransport(
+                lambda _: httpx.Response(code, json=body))) as client:
+            selector = DecisionSelector('jev', tmp_path, client=client, api_key='fixture')
+            with pytest.raises(httpx.HTTPStatusError):
+                await selector(infer=infer,url='actor',input_text='prompt',sampling_params={},images=[],
+                    observation=observation(),history=[],task='find',task_id='x',turn=0,timeout=30)
+            assert selector.halted and (tmp_path/'halt.json').exists()
+    asyncio.run(run())
+
+
 def test_terminal_screenshot_crosses_nested_task_boundary_without_episode_leakage():
     from openwebrl.decision_selection_eval import FINAL_SCREENSHOT, remember_screenshot
     async def episode(image):

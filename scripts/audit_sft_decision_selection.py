@@ -72,6 +72,17 @@ def align_partial_screenshots(screenshots, decision_count, diagnosis):
     return screenshots[:decision_count], expected
 
 
+def verify_pre_action_abort(sample, decisions, task_id, initial_image):
+    """Verify a preserved initial observation with no executed model action."""
+    assert sample['sample_id'] == task_id and sample['status'] == 'aborted'
+    assert sample['total_steps'] == 0 and sample['llm_response'] == ''
+    assert not decisions, 'Pre-action abort contains selector requests'
+    assert sample['terminate_reason'] == 'generation_error: Selector halted or request cap reached'
+    assert len(sample['images']) == 1 and len(sample['images'][0]) == 1
+    assert decode_image(sample['images'][0][0]) == initial_image
+    return verify_image(initial_image)
+
+
 def audit(root=ROOT):
     root = Path(root)
     plan, approval = read(root / 'plan.json'), read(root / 'approval.json')
@@ -96,6 +107,9 @@ def audit(root=ROOT):
         (read(root / 'diagnosed-invalid.json') if (root / 'diagnosed-invalid.json').exists() else [])}
     for mode in modes:
         folder = root / mode
+        # Freeze the completed set before reading traces; live workers may
+        # finish another episode while this audit scans earlier evidence.
+        result_paths = set((folder / 'results').glob('*.json'))
         superseded_path = folder / 'superseded-selections.json'
         superseded = read(superseded_path) if superseded_path.exists() else {}
         traces = defaultdict(list)
@@ -128,7 +142,7 @@ def audit(root=ROOT):
             stopped_browser_sessions=len(stopped), selection_turns=sum(map(len, traces.values())))
         for task_id in plan['task_ids']:
             key = digest(task_id.encode()); path = folder / 'results' / (key + '.json')
-            if not path.exists():
+            if path not in result_paths:
                 started = folder / 'started' / (key + '.json')
                 decisions = sorted(traces[task_id], key=lambda r: r['turn'])
                 unfinished.append(dict(mode=mode, task_id=task_id, started=started.exists(),
@@ -152,6 +166,26 @@ def audit(root=ROOT):
                 assert result['task_id'] == task_id
                 assert result['mode'] == mode
                 diagnosis = diagnosed.get((mode, task_id))
+                if diagnosis and diagnosis.get('pre_action_abort'):
+                    assert not result['valid'] and result['reward'] is None
+                    assert result['error_type'] == diagnosis['error_type'] == 'ValueError'
+                    assert digest(path.read_bytes()) == diagnosis['original_result_sha256']
+                    archive = Path(diagnosis['partial_rollout'])
+                    assert list((folder / 'samples' / key).rglob('*.json')) == [archive]
+                    assert digest(archive.read_bytes()) == diagnosis['partial_rollout_sha256']
+                    initial = (folder / 'final' / (key + '.png')).read_bytes()
+                    assert digest(initial) == diagnosis['initial_image_sha256']
+                    dimensions = verify_pre_action_abort(read(archive), traces[task_id], task_id, initial)
+                    assert read(folder / 'started' / (key + '.json'))['task_id'] == task_id
+                    assert not list((folder / 'judge' / key).glob('request-*.json'))
+                    row.update(diagnosed_invalid=True, partial_rollout_verified=True,
+                        partial_rollout=str(archive), decisions=0, final_action_execution_verified=False,
+                        image_role='initial observation only', final_image_dimensions=dimensions,
+                        final_sha256=digest(initial), diagnosis=diagnosis['diagnosis'])
+                    row['issues'].append('Diagnosed invalid: ' + diagnosis['classification'])
+                    issues.append(dict(mode=mode, task_id=task_id, error=row['issues'][-1], diagnosed=True))
+                    rows.append(row)
+                    continue
                 partial = result.get('error_type') == 'TimeoutError' and 'metadata' not in result
                 if result['valid']:
                     assert result['reward'] in (0, 1)
