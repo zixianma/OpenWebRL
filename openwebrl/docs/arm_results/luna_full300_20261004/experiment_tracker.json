@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791225852.636198,
+  "snapshot_epoch": 1791226408.7704487,
   "rows": [
     {
       "id": "AS01",
@@ -8,12 +8,12 @@
       "n": 1,
       "mode": "qwen",
       "target_tasks": 300,
-      "recorded_episodes": 11,
+      "recorded_episodes": 14,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
       "successes": 5,
-      "valid": 9,
+      "valid": 11,
       "verified_complete": false,
       "counts_provisional": true
     },
@@ -24,12 +24,12 @@
       "n": 5,
       "mode": "qwen_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 8,
+      "recorded_episodes": 14,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
       "successes": 2,
-      "valid": 7,
+      "valid": 12,
       "verified_complete": false,
       "counts_provisional": true
     },
@@ -55,12 +55,12 @@
       "n": 5,
       "mode": "sft_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 11,
+      "recorded_episodes": 19,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 5,
-      "valid": 9,
+      "successes": 7,
+      "valid": 15,
       "verified_complete": false,
       "counts_provisional": true
     },
@@ -71,12 +71,12 @@
       "n": 10,
       "mode": "sft_luna10",
       "target_tasks": 300,
-      "recorded_episodes": 12,
+      "recorded_episodes": 17,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 4,
-      "valid": 10,
+      "successes": 5,
+      "valid": 14,
       "verified_complete": false,
       "counts_provisional": true
     },
@@ -148,14 +148,14 @@
       "mode": "luna_high",
       "reasoning_effort": "high",
       "target_tasks": 300,
-      "recorded_episodes": 234,
+      "recorded_episodes": 255,
       "status": "running",
       "protocol_group": "api_actor_high_full300",
       "job_id": "345178",
       "approved": true,
       "proposal": "reasoning-high-proposal.json",
-      "valid": 215,
-      "successes": 75,
+      "valid": 236,
+      "successes": 84,
       "verified_complete": false,
       "counts_provisional": true
     },
@@ -167,16 +167,17 @@
       "mode": "sol61_high",
       "reasoning_effort": "high",
       "target_tasks": 300,
-      "recorded_episodes": 288,
-      "status": "running",
+      "recorded_episodes": 300,
+      "status": "arm_audited_shared_judge_pending",
       "protocol_group": "api_actor_high_full300",
       "job_id": "345179",
       "approved": true,
       "proposal": "reasoning-high-proposal.json",
-      "valid": 262,
-      "successes": 57,
+      "valid": 273,
+      "successes": 61,
       "verified_complete": false,
-      "counts_provisional": true
+      "counts_provisional": false,
+      "independent_arm_audit_verified": true
     },
     {
       "id": "AS12",
@@ -185,11 +186,11 @@
       "n": 1,
       "mode": "kev27b_actor",
       "target_tasks": 300,
-      "recorded_episodes": 154,
-      "valid": 152,
-      "successes": 16,
-      "status": "failed",
-      "job_id": "345255",
+      "recorded_episodes": 174,
+      "valid": 172,
+      "successes": 22,
+      "status": "running",
+      "job_id": "345273",
       "approved": true,
       "verified_complete": false,
       "protocol_group": "kev27b_direct_actor",
@@ -221,7 +222,7 @@
   "other_session_episodes": 900,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T18:44:12Z",
+  "snapshot_utc": "2026-10-05T18:53:28Z",
   "new_episodes_all_sessions": 3000,
   "comparison_rows": 11,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -401,7 +402,7 @@
     "verified_utc": "2026-10-05T10:26:44.224499+00:00"
   },
   "progress_health_snapshot": {
-    "snapshot_utc": "2026-10-05T18:44:12Z",
+    "snapshot_utc": "2026-10-05T18:53:28Z",
     "cpu_job_id": "344875",
     "cpu_state": "COMPLETED",
     "cpu_active_workers": 0,
@@ -411,7 +412,7 @@
     "remaining_luna_tasks": 0,
     "gpu_job_id": "345214",
     "gpu_state": "RUNNING",
-    "remaining_GPU_arm_episodes": 1158,
+    "remaining_GPU_arm_episodes": 1136,
     "budget_caps_changed": false,
     "cpu_total_seconds_cap": 14400,
     "cpu_total_actual_seconds": 12257,
@@ -427,16 +428,16 @@
     "full_experiment_complete": false,
     "gpu_pending_reason": null,
     "verification_scope": "CPU family only; full actor-selector study incomplete",
-    "GPU_primary_records_saved": 42,
+    "GPU_primary_records_saved": 64,
     "GPU_workers_active": 8,
     "API_ledgers": {
       "luna": {
-        "calls": 8884,
-        "charged_or_reserved_usd": 5.474877725000019
+        "calls": 9114,
+        "charged_or_reserved_usd": 5.680460350000021
       },
       "judge": {
-        "calls": 295,
-        "charged_or_reserved_usd": 1.3185138999999997
+        "calls": 307,
+        "charged_or_reserved_usd": 1.3763859999999997
       }
     }
   },
@@ -529,13 +530,41 @@
     "new_episodes": 600,
     "proposal": "reasoning-high-proposal.json",
     "started": true,
-    "saved_episodes": 522,
-    "verified_complete": false
+    "saved_episodes": 555,
+    "verified_complete": false,
+    "independently_verified_arms": [
+      "sol61_high"
+    ],
+    "sol61_high_result": {
+      "episodes": 300,
+      "valid": 273,
+      "successes": 61,
+      "total_scheduler_seconds": 7056,
+      "approved_scheduler_seconds": 21600,
+      "actor_API": {
+        "calls": 3978,
+        "received": 3974,
+        "unknown_usage": 4,
+        "known_upper_usd": 45.7640955000001,
+        "unresolved_reserved_usd": 0.66115,
+        "charged_or_reserved_usd": 46.4252455000001,
+        "input_tokens": 17763227,
+        "output_tokens": 160639,
+        "max_calls": 9900,
+        "max_usd": 100.0
+      },
+      "collection_verified": true,
+      "scheduler_accounting_verified": true,
+      "actor_API_accounting_verified": true,
+      "wandb_verified": true,
+      "full600_verified": false,
+      "shared_judge_accounting_final": false
+    }
   },
   "new_reasoning_high_episodes": 600,
   "kev27b_direct_actor": {
     "approved": true,
-    "job_id": "345255",
+    "job_id": "345273",
     "tasks": 300,
     "resources": {
       "gpus": 1,
@@ -562,7 +591,7 @@
       "verified_complete": false,
       "two_browser_workers_verified_at_initial_startup": true
     },
-    "current_state": "FAILED",
+    "current_state": "RUNNING",
     "latest_failure": {
       "job_id": "345255",
       "reason": "Local Kev model server returned HTTP 422; owner acknowledged and is diagnosing before recovery.",
@@ -590,10 +619,23 @@
       "valid_records": 152,
       "repair_owned_by_existing_peer": true,
       "verified_complete": false
+    },
+    "latest_recovery": {
+      "job_id": "345273",
+      "prior_actual_seconds": 6135,
+      "new_limit_seconds": 8220,
+      "total_ceiling_seconds": 14355,
+      "approved_total_seconds": 14400,
+      "records": 174,
+      "consumed_scheduler_seconds": 6550,
+      "remaining_approved_seconds": 7850,
+      "repair_owned_by_existing_peer": true,
+      "continuation_verified": true,
+      "verified_complete": false
     }
   },
   "high_reasoning_health": {
-    "snapshot_epoch": 1791225840.8461816,
+    "snapshot_epoch": 1791226398.4722688,
     "model_and_effort_verified": true,
     "actor_errors": {
       "luna_high": {},
@@ -607,17 +649,17 @@
     "complete": false,
     "actor_ledgers": {
       "luna_high": {
-        "calls": 4191,
-        "charged_or_reserved_usd": 2.7492177750000018
+        "calls": 4528,
+        "charged_or_reserved_usd": 2.9668780749999972
       },
       "sol61_high": {
-        "calls": 3804,
-        "charged_or_reserved_usd": 44.63771649999995
+        "calls": 3978,
+        "charged_or_reserved_usd": 46.42524549999989
       }
     },
     "shared_judge_ledger": {
-      "calls": 299,
-      "charged_or_reserved_usd": 1.2367663000000004
+      "calls": 319,
+      "charged_or_reserved_usd": 1.3252271999999996
     }
   },
   "gpu_transport_recovery": {
