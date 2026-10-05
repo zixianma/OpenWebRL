@@ -99,18 +99,18 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 189,
-      "status": "failed_awaiting_owner_recovery",
+      "recorded_episodes": 191,
+      "status": "running_after_context_failure_isolation",
       "protocol_group": "sft_jev_kev_full300",
-      "job_id": "344794",
-      "successes": 122,
-      "valid": 178,
+      "job_id": "345021",
+      "successes": 124,
+      "valid": 180,
       "verified_complete": false,
       "counts_provisional": true,
-      "counts_provisional_reason": "Provider selector HTTP400 halt; existing owner failure audit pending. Two invalid records may reflect the halt.",
-      "selector_halted": true,
-      "scheduler_state": "FAILED",
-      "failure_audit_pending": true
+      "counts_provisional_reason": "Partial collection; mixed pre/post browser-repair strata remain explicit; final cohort audit pending.",
+      "selector_halted": false,
+      "scheduler_state": "RUNNING",
+      "failure_audit_pending": false
     },
     {
       "id": "AS09",
@@ -119,13 +119,16 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 182,
+      "recorded_episodes": 207,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
-      "successes": 129,
-      "valid": 177,
-      "verified_complete": false
+      "successes": 143,
+      "valid": 202,
+      "verified_complete": false,
+      "scheduler_state": "RUNNING",
+      "counts_provisional": true,
+      "counts_provisional_reason": "Partial collection; mixed pre/post browser-repair strata remain explicit; final cohort audit pending."
     }
   ],
   "excluded": [
@@ -152,7 +155,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T11:07:29Z",
+  "snapshot_utc": "2026-10-05T11:44:00Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -238,7 +241,30 @@
       "budget_unchanged": true,
       "budget_transfer_authorized": false,
       "underlying_cause_diagnosed": false,
-      "provider_error_body_saved": false
+      "provider_error_body_saved": false,
+      "historical_snapshot": true
+    },
+    "jev_context_recovery": {
+      "snapshot_utc": "2026-10-05T11:44:00Z",
+      "failed_job_id": "344794",
+      "replacement_job_id": "345021",
+      "scheduler_state": "RUNNING",
+      "confirmed_error_code": "max_tokens_exceeded",
+      "diagnosis_basis": "Separately charged identical-request diagnostic returned the provider error code; original failure response body was not saved.",
+      "fix": "Save error bodies and isolate confirmed context-limit failure to the affected episode, allowing other tasks to continue.",
+      "requests_and_actions_unchanged": true,
+      "no_history_compaction_or_action_fallback": true,
+      "historical_results_preserved": true,
+      "recovery_time_limit_seconds": 17940,
+      "prior_actual_seconds": 18005,
+      "cumulative_seconds_ceiling": 35945,
+      "approved_total_seconds": 36000,
+      "current_actual_seconds": 18189,
+      "current_remaining_seconds": 17811,
+      "new_budget": false,
+      "full_cohort_complete": false,
+      "failure_affected_records_retained": 2,
+      "same_owner_repair_verified": true
     }
   },
   "separate_pilot": {
@@ -309,7 +335,7 @@
     "verified_utc": "2026-10-05T10:26:44.224499+00:00"
   },
   "progress_health_snapshot": {
-    "snapshot_utc": "2026-10-05T11:07:29Z",
+    "snapshot_utc": "2026-10-05T11:44:00Z",
     "cpu_job_id": "344875",
     "cpu_state": "COMPLETED",
     "cpu_active_workers": 0,
@@ -373,5 +399,20 @@
   "full_experiment_complete": false,
   "new_Luna_study_primary_records": 300,
   "new_Luna_study_target_records": 1500,
-  "full_comparison_plots_generated": false
+  "full_comparison_plots_generated": false,
+  "peer_accounting_snapshot": {
+    "snapshot_utc": "2026-10-05T11:44:00Z",
+    "source": "Scheduler exact allocation rows across all registered attempts",
+    "jev": {
+      "used_seconds": 18189,
+      "remaining_seconds": 17811,
+      "approved_seconds": 36000
+    },
+    "kev27b": {
+      "used_seconds": 19393,
+      "remaining_seconds": 16607,
+      "approved_seconds": 36000
+    },
+    "budgets_separate": true
+  }
 }

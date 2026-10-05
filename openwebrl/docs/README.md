@@ -7,9 +7,9 @@ for the work you are doing, then follow its contents to dated experiment records
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 [Kev27B direct browser policy: full300 prepared, awaiting exact approval; separate from SFT proposal selection](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
-[Full300 SFT+Jev344794 failed after a selector HTTP400; owner recovery pending; SFT+Kev27B344793 remains running under separate10h budgets; protocol caveats retained](RL_EVALUATION.md#sft-selection-full300-20261004).
+[Full300 SFT+Jev345021 resumed after confirmed context-limit failure isolation; SFT+Kev27B344793 continues under its separate10h budget; protocol caveats retained](RL_EVALUATION.md#sft-selection-full300-20261004).
 
-[Unified actor/selector tracker: eight full-set rows; Luna CPU300/300 independently verified,110 successes; GPU queued; Jev failed awaiting recovery with189 provisional records, Kev running with182 at11:07 UTC](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
+[Unified actor/selector tracker: eight full-set rows; Luna CPU300/300 verified,110 successes; GPU queued; Jev recovery345021 and Kev344793 running with191/207 provisional records at11:44:00 UTC](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 [October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; GPU344754 queued; Luna CPU verified36.67% overall/39.43% valid-only using12,257/14,400 CPU seconds; full study300/1,500 complete](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [Corrected Qwen/SFT pilot:49 collected, seven Luna actor episodes compromised and Luna-alone comparison withdrawn; four-arm/nine-task plots, unchanged accounting; unapproved Qwen-only tail proposal](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
