@@ -16,7 +16,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking and Luna: performance versus cost — October4
 
-**Approved and submitted as job344476; queued, benchmark collection not started.**
+**Running as job344537 after startup repairs; all four GPU workers are collecting.**
 The user approved the four-H200/90-minute pilot and $15 Luna/$5 judge caps.
 Two live API preflight calls passed (vision + structured selection, and a native
 browser `done` tool call), returning `gpt-6-luna` and complete usage receipts;
@@ -151,14 +151,38 @@ performance difference.
 Implementation: `openwebrl/luna_qwen_{policy,eval,metrics}.py`,
 `scripts/prepare_luna_qwen_inference.py`, and
 `scripts/report_luna_qwen_inference.py`. Run data and source hashes are preserved
-under runtime `luna-qwen-inference-20261004/`. GPU startup and live benchmark/browser behavior remain unverified until the
-allocation starts. Evaluation-only W&B records use `openwebrl-evals`.
+under runtime `luna-qwen-inference-20261004/`. GPU startup is verified on four distinct H200 UUIDs. Actual request receipts
+confirm Qwen temperature1/top-p0.9/top-k disabled, Luna medium reasoning and the
+pinned o4-mini judge; the first browser episode and verdict are durable. All
+four evaluation-only W&B runs are live in `openwebrl-evals`. This is startup
+validation, not a completed comparison.
 A persistent host supervisor watches the current attempt and queues this owning
 agent on state changes and at15-minute review intervals. Its own-thread
 continuation dispatch was verified; it does not independently mutate GPU jobs.
 The active agent handles diagnosis, fixes and recovery within the remaining
 approval. Final completion requires all40 episode records, final Slurm accounting
 and the three reviewed figures.
+
+
+### Startup recovery within the original approval
+
+| Attempt | Allocated GPUs | Final elapsed seconds | State / finding |
+| --- | ---: | ---: | --- |
+|344476 |4 |150 |Stopped: inherited batch-level GPU count serialized the worker steps |
+|344534 |4 |25 |Failed: Slurm requires the same GPU type in both GPU request flags |
+|344536 |4 |27 |Failed: host GPU indexes differ from the indexes inside a worker's device namespace |
+|344537 |4 |Running |Four simultaneous TP1 workers,8 CPUs/120GiB each;86-minute maximum |
+
+The worker command now explicitly uses `--gpus=h200:1` and
+`--gres=gpu:h200:1`. GPU identity is read from the single visible NVML device;
+the controller verifies four distinct UUIDs. Both corrections were checked
+with live Slurm steps, followed by successful four-worker startup. **202 seconds
+were consumed by prior attempts.** The replacement's maximum5160 seconds keeps
+the combined maximum5362 seconds below the original5400-second cap. API ledgers
+were not reset, and model weights, sampling, task order, judge and metric
+protocols were preserved. Interrupted receipts and partial artifacts remain
+private and are included in research spending; missing final episode timers
+are explicitly marked rather than fabricated. Local regression checks:16 passed.
 
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4

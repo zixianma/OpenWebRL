@@ -12,11 +12,11 @@ Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png)
 
 ## 1. Inference-time ARM selection
 
-**Next comparison, approved and queued as344476:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
+**Next comparison, running as344537:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
 selection at N=5/10, and Luna alone. Track cost, latency, tokens, browser steps
 and local compute; plot success against the first three. The bounded ten-task
 pilot has a four-H200/90-minute total and $20 API cap; API preflight passed,
-with no benchmark results yet.
+with four workers collecting after startup repairs; full results pending.
 [Protocol and metric definitions](ARM_INFERENCE.md#luna-qwen-inference-20261004).
 
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
