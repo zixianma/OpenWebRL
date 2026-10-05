@@ -280,6 +280,13 @@ class ModelTransport:
                 if provider == "kev" and result.get("truncated"):
                     raise ProviderError(provider, "unexpected_state_truncation")
                 return result
+            # Keep bounded private failure evidence without retaining a supplied
+            # credential, including when it straddles the truncation boundary.
+            error_body = response.text
+            if key:
+                error_body = error_body.replace(key, "[REDACTED]")
+            record["error_body"] = error_body[:4096]
+            record["error_body_truncated"] = len(error_body) > 4096
             append_json(self.root / "api-responses.jsonl", record)
             if response.status_code not in {429, 500, 502, 503, 504, 529} or attempt == attempts - 1:
                 raise ProviderError(provider, response.status_code)

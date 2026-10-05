@@ -175,9 +175,9 @@ as general Jev/Kev capability.
 <a id="kev27b-actor-full300-20261004"></a>
 ## Kev27B as the direct browser policy: full300 — October 4–5
 
-**Recovery job 345255 is running; final results remain pending.** The original
-job 345177 stopped after a confirmed browser-finalization hang. Its 109 completed
-results are preserved. The approved 1 H200 / 8 CPU / 120 GiB request retains the
+**Recovery job 345273 is running; final results remain pending.** All 154 saved
+records are preserved: 152 valid results and two diagnosed, unscored invalids.
+The approved 1 H200 / 8 CPU / 120 GiB request retains the
 14,400-second total across all attempts; the replacement uses only its remainder.
 The same W&B run and two-worker browser collection continue.
 This scales the standalone Kev27B pilot (3/10) to all300 Online-Mind2Web tasks,
@@ -327,9 +327,29 @@ positive verifies the requested location and Apple-authorized filter, while
 coverage for the specific device is not independently established. These are
 semantic review notes, not infrastructure invalids or revised judge scores.
 
+**Input-limit recovery — October 5, 11:45 PDT.** Job 345255 stopped after
+708 seconds when Kev returned HTTP 422. Offline reproduction with the saved
+request and pinned tokenizer accepts the schema but confirms a 120,190-token
+selection row: 60,356 state tokens plus a 59,834-token question branch, exceeding
+the 73,728-token row limit. The state itself fits its separate 65,536-token cap.
+The original HTTP error body was not retained; this diagnosis comes from the
+exact request and pinned admission code, without inference or paid calls.
+The attempt remains an explicitly diagnosed, unscored invalid; its input is not
+truncated or replayed unchanged.
+
+All 154 saved records passed independent artifact checks: 152 valid and two
+diagnosed invalids. All 158 owned browsers were stopped, and the interrupted
+peer task is preserved separately. Frozen runtime v4 records at most 4,096
+characters of future HTTP error bodies, redacting supplied credentials before
+truncation. It changes neither requests nor retry behavior and passed 23 offline
+checks, with one optional browser test skipped. Recovery job 345273 covers the
+remaining 146 tasks with 8,220 seconds allocated from the 8,265 seconds left
+after charging every attempt (6,135 / 14,400 seconds). All scientific settings,
+resource and API caps remain unchanged.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
-current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v3`;
-both earlier frozen runtimes remain preserved.
+current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;
+all earlier frozen runtimes remain preserved.
 Validation passed37 offline checks plus the opt-in local Chromium fill/click/done
 and durable-judge-evidence test. Model calls were mocked in that browser test;
 preparation made no paid requests and submitted no allocation. Task payloads,
