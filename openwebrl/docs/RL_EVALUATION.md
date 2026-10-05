@@ -401,6 +401,13 @@ closed and all 236 canonical records are audited. Replacement 345324 continues
 64 tasks with unchanged frozen v4 worker settings and 6,300 seconds allocated
 from the remaining 6,323 (8,077 / 14,400 scheduler seconds charged).
 
+Further visual review flags a search positive where only one of two requested
+subject filters remained active; a cross-listed first result does not establish
+the second filter. A separate listing task supports the requested review-sort
+interaction, with caveats that the business is closed and ordered review rows
+are outside the final viewport. These private annotations leave canonical
+verdicts and validity labels unchanged.
+
 Private manifests: `runtime/evaluations/kev27b-actor-full300-20261004/`;
 current frozen runtime: `runtime/reference-kev27b-actor-full300-20261005-v4`;
 all earlier frozen runtimes remain preserved.
