@@ -72,6 +72,26 @@ def selected_index(request, response):
     return int(choice) - 1
 
 
+class ObservationGuard:
+    """Stop before inference if the browser failed to return a usable image.
+
+    This cannot repair a disconnected browser or substitute older evidence.
+    Keep the last failed observation explicit and preserve the original trace.
+    """
+    def __init__(self, selector, output):
+        self.selector, self.output = selector, Path(output)
+
+    async def __call__(self, **kwargs):
+        observation = kwargs.get('observation') or {}
+        if not isinstance(observation.get('screenshot'), (bytes, bytearray)) or not observation['screenshot']:
+            key = hashlib.sha256(str(kwargs['task_id']).encode()).hexdigest()
+            write_json(self.output / (key + '.json'), dict(task_id=kwargs['task_id'],
+                turn=kwargs['turn'], reason='missing_browser_screenshot',
+                observation_keys=sorted(observation), actor_called=False, selector_called=False))
+            raise RuntimeError('Browser observation has no screenshot; no further inference was submitted')
+        return await self.selector(**kwargs)
+
+
 class DecisionSelector:
     def __init__(self, provider, output, *, client, endpoint=None, api_key=None,
                  seed=42, max_requests=300, identity=None):

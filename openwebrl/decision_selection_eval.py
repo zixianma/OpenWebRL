@@ -11,7 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 import time
 
-from openwebrl.decision_selection import DecisionSelector, install_page_observation, write_json
+from openwebrl.decision_selection import DecisionSelector, ObservationGuard, install_page_observation, write_json
 from openwebrl.kev_eval import check_server, model_spec
 
 PROTOCOL = dict(actor='OpenWebRL-4B-SFT:iteration0', optimizer_updates=0,
@@ -151,6 +151,7 @@ async def run(config):
                 endpoint=config.get('endpoint'), api_key=os.getenv('TYPESAFE_API_KEY') or os.getenv('JEV_API_KEY'),
                 max_requests=300, identity=identity)
         write_json(root / 'manifest.json', config)
+        guarded_selector = ObservationGuard(selector, root / 'observation-failures')
         import wandb
         tracking = wandb.init(project='openwebrl-evals', group='SFT-decision-selection-20261004',
             id='sft-selection-20261004-' + mode, resume='allow', dir=str(root), config=config['protocol'])
@@ -168,7 +169,7 @@ async def run(config):
                     raise RuntimeError('Interrupted task requires diagnosis; no automatic extra browser session')
                 write_json(started_path, dict(task_id=task['task_id'], started_unix=time.time()))
                 token = CURRENT_TASK.set(key); image_token = FINAL_SCREENSHOT.set({'image': None})
-                local = copy(args); local.browser_action_selector = selector
+                local = copy(args); local.browser_action_selector = guarded_selector
                 local.path_to_save_generated_samples = str(root / 'samples' / key)
                 start = time.monotonic()
                 try:

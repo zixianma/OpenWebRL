@@ -91,3 +91,24 @@ def test_terminal_screenshot_crosses_nested_task_boundary_without_episode_leakag
         assert await asyncio.gather(episode(b'A'), episode(b'B')) == [b'A', b'B']
         assert FINAL_SCREENSHOT.get() is None
     asyncio.run(run())
+
+
+def test_missing_observation_stops_before_actor_or_selector_and_valid_tuple_is_unchanged(tmp_path):
+    from openwebrl.decision_selection import ObservationGuard
+    calls = []
+    original = ('actor result', [], [], 'stop')
+    async def select(**kwargs):
+        calls.append(kwargs)
+        return original
+    async def run():
+        guard = ObservationGuard(select, tmp_path)
+        for observation in ({}, {'screenshot': None}, {'screenshot': b''}):
+            with pytest.raises(RuntimeError, match='no screenshot'):
+                await guard(observation=observation, task_id='closed-browser', turn=15)
+        assert not calls
+        assert await guard(observation={'screenshot': b'valid-image'}, task_id='ok', turn=0) is original
+        assert len(calls) == 1
+    asyncio.run(run())
+    record = json.loads(next(tmp_path.glob('*.json')).read_text())
+    assert record['actor_called'] is record['selector_called'] is False
+    assert record['turn'] == 15

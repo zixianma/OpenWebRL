@@ -367,6 +367,50 @@ regressions pass. Replacement344049 requests3480seconds, so both attempts can
 consume at most3554 of the approved3600seconds. The supervisor pointer follows
 the replacement; results remain unverified until independent artifact audit.
 
+During the SFT control, Discogs lost its active page/context after a `go_back`.
+The environment returned an empty observation, and the next inference path
+failed on the absent screenshot. Its15 recorded actions and stopped-session
+receipt are preserved; no fresh final image or judge verdict exists. The task
+remains invalid. The remote closure's underlying cause is not established.
+An `ObservationGuard` now has a regression test proving that a missing image
+stops before either actor or selector inference and that valid outputs pass
+through unchanged. This diagnostic fix is prepared for a future source revision;
+the active revision3 remains immutable. It cannot restore the closed session.
+Repeating this task would require an additional browser session beyond the40
+reserved for the four matched cohorts; none has been opened for a retry.
+
+[`audit_sft_decision_selection.py`](../../scripts/audit_sft_decision_selection.py)
+independently checks source/task pins, deterministic seeds, selected actor text,
+probability argmax, screenshot identity, canonical judge prompt/verdict, session
+receipts and all scheduler attempts. It separates diagnosed invalid results
+from complete evidence and never marks the run complete itself.
+[`render_sft_decision_review.py`](../../scripts/render_sft_decision_review.py)
+builds the private `sft-decision-selection-review-20261004.html`, linked from the
+direct-agent review. It shows per-condition timelines, all proposed actions,
+selected probabilities and terminal evidence. JPEG previews are capped at1600
+pixels; original PNGs remain private. The partial review labels unfinished and
+invalid episodes explicitly. Requested browser dimensions are1280×1000; the
+provider returned differing actual viewport/DPR values, which the existing
+environment reads for coordinate transforms and the saved images preserve.
+
+W&B uses the same four evaluation run identities across recovery. Resuming a
+run initially retained the failed bootstrap's `complete=true` summary; this was
+corrected to incomplete and the original infrastructure counts retained under
+job344043. Final metrics must be checked against the independent artifact audit.
+
+The audit also found that the shared training reward returns zero without
+calling the judge when status is not `COMPLETED`. Two initial SFT episodes
+reached30steps and exposed this behavior. Their preserved terminal PNGs and
+histories were sent to the same canonical o4-mini/AgentTrek judge, which returned
+failure for both. This recovery uses the existing per-task four-call allowance
+and160-call pilot cap, with no new browser or actor calls.
+[`rejudge_sft_decision_terminal.py`](../../scripts/rejudge_sft_decision_terminal.py)
+preserves original results, stages actual verdicts and applies corrections after
+the cohort worker exits. Later step-limit episodes require this same check before
+the final comparison. A browser abort without terminal evidence cannot use this
+recovery. The supervisor now also wakes the agent for invalid results, skipped
+terminal judges, halted selectors and stale heartbeats.
+
 Persistent service `openwebrl-sft-selection-supervisor-20261004.service` polls the
 current run pointer every60seconds and queues the owning agent thread on state
 changes or every15minutes. The initial same-thread continuation was accepted and
