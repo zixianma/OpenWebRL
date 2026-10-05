@@ -76,6 +76,8 @@ def audit(root=ROOT):
         (read(root / 'diagnosed-invalid.json') if (root / 'diagnosed-invalid.json').exists() else [])}
     for mode in MODES:
         folder = root / mode
+        superseded_path = folder / 'superseded-selections.json'
+        superseded = read(superseded_path) if superseded_path.exists() else {}
         traces = defaultdict(list)
         if mode == 'sft':
             for path in (folder / 'selections').glob('*.jsonl'):
@@ -86,9 +88,16 @@ def audit(root=ROOT):
         else:
             for path in sorted((folder / 'selections').glob('request-*.json')):
                 record = read(path); record['_path'] = path
-                traces[record['task_id']].append(record)
                 counts['jev_requests' if mode == 'jev' else 'local_kev_requests'] += 1
                 counts['actor_proposals_saved'] += len(record['actor_outputs'])
+                if path.name in superseded:
+                    prior = superseded[path.name]
+                    assert digest(path.read_bytes()) == prior['sha256']
+                    assert digest(path.with_suffix('.png').read_bytes()) == prior['image_sha256']
+                    assert record['task_id'] == prior['task_id']
+                    counts['superseded_selection_requests'] += 1
+                    continue
+                traces[record['task_id']].append(record)
         counts['local_kev_requests'] += len(list(folder.glob('warmup-request.json')))
         counts['judge_http_attempts'] += len(list((folder / 'judge').rglob('request-*.json')))
         markers = folder / 'browser_sessions'
@@ -263,7 +272,7 @@ def audit(root=ROOT):
     attempts = [dict(job_id=r[0], state=r[1], seconds=int(r[2])) for line in accounting.splitlines()
                 if (r := line.split('|'))[0] in jobs.split(',')]
     assert len(attempts) == len(approval['attempts'])
-    seconds = sum(a['seconds'] for a in attempts); assert seconds <= 3600
+    seconds = sum(a['seconds'] for a in attempts); assert seconds <= approval['resources']['total_seconds']
     terminal = all(a['state'].split()[0] in ('COMPLETED', 'FAILED', 'TIMEOUT', 'CANCELLED') for a in attempts)
     return dict(audited_unix=time.time(), source=str(source), plan_sha256=approval['plan_sha256'],
         completed_results=len(rows), all40_evidence_verified=len(rows) == 40 and not issues and not any(r['terminal_correction_staged'] for r in rows),

@@ -470,6 +470,25 @@ including the five diagnosed invalid records, and does not increase the other AP
 caps. This proposal is not an approval or a guarantee that every remaining task
 will finish within an hour.
 
+The user subsequently approved that continuation: **one additional hour total on
+2 H200 /16 CPUs /240 GiB**, including retries, and **two additional browser
+sessions (42 total)**. Job**344458** was submitted for3600seconds and is queued.
+The enforced cumulative cap is6986seconds:3386 already charged plus3600 newly
+approved; the original unused214seconds are excluded. All other API caps and the
+scientific protocol remain unchanged. The active-agent supervisor now follows
+344458, with a verified accepted continuation message.
+
+The continuation preserves the27 terminal records and runs only the13 missing
+results: three small-Kev tasks followed by ten27B tasks. Small-Kev continuation
+state is isolated from its complete prior directory. The ten selection requests
+from the two interrupted episodes remain intact and charged, with their hashes
+checked independently; a lineage receipt excludes those old choices from the
+new retry trajectories. All seven completed small-Kev results are unchanged.
+The selector resumes after request135, preventing request-ID reuse. Frozen source
+revision4 passes deployed CPU/browser imports, the19 existing regression tests
+pass, and the prelaunch evidence audit retains27 records with no unexplained
+issues. The earlier incomplete comparison remains provisional while this job runs.
+
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite
 the explicit null proxy request. Inspection of the pinned SDK's serialized body

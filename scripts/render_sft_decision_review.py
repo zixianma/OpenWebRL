@@ -41,6 +41,8 @@ def build(root=ROOT):
 
     for mode, label in MODES:
         directory = root / mode
+        superseded_path = directory / 'superseded-selections.json'
+        superseded = read(superseded_path) if superseded_path.exists() else {}
         traces = defaultdict(list)
         if mode == 'sft':
             for path in (directory / 'selections').glob('*.jsonl'):
@@ -48,6 +50,8 @@ def build(root=ROOT):
                     row = json.loads(line); traces[row['task_id']].append(row)
         else:
             for path in (directory / 'selections').glob('request-*.json'):
+                if path.name in superseded:
+                    continue
                 row = read(path); row['_path'] = path; traces[row['task_id']].append(row)
         for task in tasks:
             key = hashlib.sha256(task['task_id'].encode()).hexdigest()

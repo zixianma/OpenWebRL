@@ -29,8 +29,10 @@ SOURCE = RUNTIME / 'reference-sft-decision-selection-20261004-v4'
 WORKER_DEPS = RUNTIME / 'sft-selection-deps-20261004'
 ACTOR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT')
 MODES = ('sft', 'jev', 'kev-0.8b', 'kev-27b')
-RESOURCES = dict(gpus=2, gpu_type='H200', cpus=16, memory_gib=240, total_seconds=3600)
-LIMITS = dict(browser_sessions=40, concurrent_browsers=2, browser_expiry_minutes=12,
+# Original attempts consumed3386s. The separately approved extension adds3600s;
+# the original unused214s are not added to this continuation's allowance.
+RESOURCES = dict(gpus=2, gpu_type='H200', cpus=16, memory_gib=240, total_seconds=6986)
+LIMITS = dict(browser_sessions=42, concurrent_browsers=2, browser_expiry_minutes=12,
     jev_requests=300, local_kev_requests=602, judge_http_attempts=160,
     judge_completion_tokens=4096, actor_proposals=4800, text_helper_calls=0)
 CHANGED = ['openwebrl/decision_selection.py', 'openwebrl/decision_selection_eval.py',
@@ -125,7 +127,7 @@ def prepare():
         kev_source=source_identity(), kev_specs={v: model_spec(v) for v in ('0.8b', '27b')},
         code_sha256={p: file_hash(REPO / p) for p in ('scripts/evaluate_sft_decision_selection.py',
             'scripts/evaluate_sft_decision_selection_2gpu.sbatch')}, wandb_project='openwebrl-evals',
-        budget_policy='One hour total including startup/recovery; no automatic extension or extra browser attempts',
+        budget_policy='3386 seconds charged to original hour, plus3600-second approved extension including all retries; original214-second balance excluded;42 browser sessions total',
         comparison='Ten fresh episodes per condition; same seed schedule, live states diverge after different actions')
     # JSON-normalize tuples before comparing a saved plan.
     plan = json.loads(json.dumps(plan))

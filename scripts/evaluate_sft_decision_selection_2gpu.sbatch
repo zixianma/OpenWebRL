@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Requires exact approval: 2 H200, 16 CPU, 240 GiB, 1h total including retries;
-# 40 Browser Use sessions, 300 Jev calls, <=160 o4-mini calls, no text helper.
+# Approved extension: 2 H200, 16 CPU, 240 GiB, 1 additional hour including retries;
+# 42 Browser Use sessions TOTAL, 300 Jev calls, <=160 o4-mini calls, no text helper.
 #SBATCH --job-name=sft-decision-select
 #SBATCH --account=zixianma
 #SBATCH --partition=gpu-h200
