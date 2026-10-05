@@ -32,7 +32,7 @@ top-p0.9 stays separate and continues within its original approval.
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 07:25:34 UTC**. “Saved” is terminal
+Snapshot: **2026-10-05 07:26:35 UTC**. “Saved” is terminal
 record coverage; it does not imply every record is valid or the run has passed
 its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eight rows. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
@@ -43,12 +43,12 @@ its final audit. The table includes runs owned by the other evaluation session. 
 | AS04 | Official OpenWebRL-SFT4B | None |1 |300 |300 |Complete; reuse actor0,106 successes |Historical SFT |Already completed |
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna |5 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
 | AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna |10 |300 |0 |Queued344754 (Priority) |Luna study |Approved shared GPU/API pools below |
-| AS07 | GPT-6 Luna | None |1 |300 |62 |Running344755; collecting |Luna study; API sampling |Approved shared CPU/API pools below |
-| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |44 |Stopped344708; owner preparing browser repair |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
-| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |42 |Stopped344661; owner preparing browser repair |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
+| AS07 | GPT-6 Luna | None |1 |300 |64 |Running344755; collecting |Luna study; API sampling |Approved shared CPU/API pools below |
+| AS08 | Official OpenWebRL-SFT4B | Jev |5 |300 |44 |Running344794; browser-repair replacement |Jev/Kev study |Approved1 H200/8 CPU/120GiB ×10h total |
+| AS09 | Official OpenWebRL-SFT4B | Kev27B |5 |300 |42 |Queued344793; browser-repair replacement |Jev/Kev study |Approved2 H200/16 CPU/240GiB ×10h total |
 
 **Coverage checklist:** eight full-set comparison rows; one completed reusable
-baseline, one running row, two rows awaiting repair, and four queued rows. The five fresh Luna-study
+baseline, two running rows and five queued rows. The five fresh Luna-study
 rows share two approved pools. This totals2,100 new
 full-set episodes across both sessions plus300 reused baseline records. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
@@ -61,8 +61,9 @@ concurrently within its own unchanged approval.
 
 **October5 peer recovery:** Jev344708 and Kev344661 were intentionally stopped
 for a confirmed hosted-browser input-clearing bug: Mac sessions need the Mac
-select-all shortcut. Their existing repair owner is preparing replacements;
-44 Jev and42 Kev records are preserved pending the recovery audit. These
+select-all shortcut. Their existing repair owner submitted replacements
+Jev344794 (starting) and Kev344793 (queued). The44 Jev and42 Kev records
+are preserved pending the recovery audit. These
 partial results are not final comparison results. Remaining allocation time is
 31,184 seconds for Jev and31,135 seconds for Kev under their separate10-hour
 limits. No budget extension is implied. Local Luna/pilot collection continues.

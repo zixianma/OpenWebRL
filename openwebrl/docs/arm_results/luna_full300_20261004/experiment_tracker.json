@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791185134.832949,
+  "snapshot_epoch": 1791185195.016912,
   "rows": [
     {
       "id": "AS01",
@@ -79,12 +79,12 @@
       "n": 1,
       "mode": "luna",
       "target_tasks": 300,
-      "recorded_episodes": 62,
+      "recorded_episodes": 64,
       "status": "running",
       "protocol_group": "luna_full300",
       "job_id": "344755",
       "successes": 7,
-      "valid": 54
+      "valid": 56
     },
     {
       "id": "AS08",
@@ -94,9 +94,9 @@
       "mode": "jev",
       "target_tasks": 300,
       "recorded_episodes": 44,
-      "status": "stopped_recovery_preparing",
+      "status": "running",
       "protocol_group": "sft_jev_kev_full300",
-      "job_id": "344708",
+      "job_id": "344794",
       "successes": 28,
       "valid": 42,
       "verified_complete": false
@@ -109,9 +109,9 @@
       "mode": "kev-27b",
       "target_tasks": 300,
       "recorded_episodes": 42,
-      "status": "stopped_recovery_preparing",
+      "status": "pending",
       "protocol_group": "sft_jev_kev_full300",
-      "job_id": "344661",
+      "job_id": "344793",
       "successes": 26,
       "valid": 41,
       "verified_complete": false
@@ -141,7 +141,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T07:25:34Z",
+  "snapshot_utc": "2026-10-05T07:26:35Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -176,13 +176,17 @@
     "exit_early_when_complete": true
   },
   "peer_recovery": {
-    "reason": "Hosted Mac input clearing requires the platform-correct select-all shortcut; existing owners are preparing repairs.",
+    "reason": "Hosted Mac input clearing requires the platform-correct select-all shortcut; existing owners submitted repaired replacements.",
     "prior_results_preserved": true,
     "prior_results_pending_recovery_audit": true,
     "budgets_unchanged": true,
     "remaining_scheduler_seconds": {
       "jev": 31184,
       "kev27b": 31135
+    },
+    "replacement_jobs": {
+      "jev": "344794",
+      "kev27b": "344793"
     }
   },
   "separate_pilot": {
