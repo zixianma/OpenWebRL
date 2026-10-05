@@ -8834,42 +8834,64 @@ Private preparation and shard manifests:
 `task-pool-expansion-20260922/curation-v3-20260929/actor-arm-allfailure-20261002/`.
 
 <a id="arm-expanded-outcome-to90-20261005"></a>
-### Expanded outcome-only continuation to90: requested October4
+### Expanded outcome-only continuation to90: approved October5
 
-The user requested extending the same4,102-task outcome-only lineage to
-iteration90 to assess whether the early data benefit persists. This changes
-the requested endpoint, not the original24h compute or$200 judge approval.
-Recovery344274 remains queued within its remaining38min original budget.
+The user approved continuing the same4,102-task outcome-only lineage through
+iteration90, including full300 evaluations at30/40/50/60/70/80/90. The verified
+10/20 evaluations are reused. The additional approval is **8 H200 ×96h total
+(768GPUh),64 CPUs/960GiB per allocation**, including all retries and evaluations,
+plus **$400 additional judge allowance ($600 lifetime cap)**. Original24h
+accounting remains separate; no unused old budget is added to the extension.
 
-Preserve the existing actor, optimizer, constant1e-6 LR scheduler and counters,
-task cursor, original data union and W&B identity. Keep TP2/DP4, microbatch1,
-global256, PPO2,48 groups ×5 rollouts,64 browsers and48GiB cache. Extend the
-training loop bound to90 while loading the saved scheduler; no fresh optimizer
-or reward/filter change. Full300 local-browser GPT-4.1/action_history/T0
-evaluations remain due at30/40/50/60/70/80/90, each with saved rollout/verdict
-pairs. Independently verified10/20 cohorts are reused.
+| Allocation | Maximum | Dependency | Work |
+| --- | ---: | --- | --- |
+|344759 |24h |afterany344274 |Restore latest checkpoint; train/evaluate toward90 |
+|344760 |24h |afterok344759 |Continue unchanged lineage |
+|344761 |24h |afterok344760 |Continue unchanged lineage |
+|344762 |24h |afterok344761 |Finish90 and its full300 evaluation |
 
-**Additional budget proposal, not yet approved or submitted:**8 H200 ×96h
-total (768GPUh),64 CPUs/960GiB per allocation, in four sequential blocks of at
-most24h under normal QoS; plus$400 additional judge allowance, bringing the
-lifetime cap to$600. Count all retries and evaluation time; release unused
-resources after verified90 and its evaluation. Keep separate old/new GPU
-ledgers and a cumulative judge ledger. Current judge spending/reservations
-are$78.86 of the original$200.
+All four jobs are submitted and released, queued on dependencies. Failed
+predecessors require agent diagnosis and budget-accounted recovery before
+successors are unblocked. Release unused queued allocations once90 and its
+artifacts are complete. Earlier recovery344274 retains its original38min cap.
+
+Preserve actor/optimizer state, constant1e-6 LR scheduler and counters, task
+cursor, data union and W&B identity. Keep TP2/DP4, microbatch1, global256, PPO2,
+48 groups ×5 rollouts,64 browsers and48GiB cache. Extending the loop bound to90
+loads the saved scheduler without resetting it. Local-browser evaluations use
+GPT-4.1/action_history/T0 and save every task's rollout and verdict. Separate
+W&B evaluation runs stay in`openwebrl-evals`.
 
 Iterations11–20 averaged61.87min on thermally throttled g011:70 more iterations
 project to72.18h plus about7h for evaluations and handoffs. A healthy node may
 reduce total runtime to50–65h, but that improvement remains unverified for this
-lineage. Exclude g011 and measure destination throughput before revising the
-estimate. The96h cap includes recovery margin; it is not a runtime target.
+lineage. g011 is excluded. The96h cap includes recovery margin, not a runtime
+target. Judge spending/reservations at approval were$78.86; this balance is
+preserved in the cumulative ledger. Storage startup checks passed with30.46TiB
+soft-quota headroom.
 
-All seven proposed native launcher commands pass CPU checks for unchanged
-science and optimizer restoration. Private preparation is in
-`outcome-only-expanded-20261002/to90-20261005/`. Allocation-controller and
-cumulative judge-cap extensions still need implementation/validation before
-submission. No active launcher, frozen source, original approval or queued
-recovery was changed. Independent work can proceed concurrently; writers to
-this same training lineage must remain serialized.
+Controller`resume_expanded_baseline_to90.py` owns and awaits training/evaluation
+workers and holds the original lineage lock. An isolated copy of the frozen
+source changes only the cumulative judge-budget adapter and a pre-collection
+allocation-boundary guard. It stops at a durable checkpoint when another full
+iteration cannot fit, rather than collecting a new batch near the deadline.
+No scientific reward/filter/sampling change is introduced. If needed, the
+original audited iteration21 reconstruction runs under the extension's own
+registered allocation, preserving all1,850 turns and cursor advance96.
+
+**Validation:**38 CPU tests pass across continuation, original-baseline and
+supervisor suites; all seven native continuation commands pass dry runs.
+Tests cover native60→90 scheduler restoration, unchanged judge requests and
+cumulative charges, retry/queued-budget accounting, safe iteration boundaries,
+and exact70/80/90 checkpoint/evaluation identities. Actual GPU restoration and
+first useful optimizer progress remain startup checks. Original344274 launcher
+fingerprints and frozen source remain unchanged. The active-agent supervisor
+follows all five jobs and now requests iteration90 supervision, with15min
+checks/hourly routine reports and earlier failure/completion alerts.
+
+Approval, ledger, readiness and submission receipts remain private under
+`outcome-only-expanded-20261002/to90-20261005/`. Independent work proceeds
+concurrently; writers to this same training lineage remain serialized.
 
 <a id="arm-expanded-outcome-baseline-20261002"></a>
 
