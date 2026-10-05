@@ -12,14 +12,16 @@
 | Kev 0.8B | GPT-4.1-mini |10 |0 |10 |0 |0.00 |0.00 |[Paired pilot](rl_results/kev-pair-pilot-20261004.json), [Protocol](RL_EVALUATION.md#kev-paired-online-mind2web-20261004) |
 | Kev 27B | GPT-4.1-mini |10 |3 |10 |0 |30.00 |30.00 |[Paired pilot](rl_results/kev-pair-pilot-20261004.json), [Protocol](RL_EVALUATION.md#kev-paired-online-mind2web-20261004) |
 
-## SFT decision selection · Online-Mind2Web · October4 partial pilot
+## SFT decision selection · Online-Mind2Web · October4 completed pilot
 
-| Condition | Scheduled | Finished records | Successes | Valid | Invalid | All scheduled % | Valid-only % | Source |
+<a id="sft-decision-selection-20261004"></a>
+
+| Condition | Scheduled | Finished records | Judge successes | Valid | Invalid | All scheduled % | Valid-only % | Source |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
 | SFT alone |10 |10 |4 |9 |1 |40.00 |44.44 |[Protocol and audit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 | SFT + Jev |10 |10 |3 |6 |4 |30.00 |50.00 |[Protocol and audit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 | SFT + Kev0.8B |10 |10 |4 |10 |0 |40.00 |40.00 |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
-| SFT + Kev27B · running,1 verdict staged |10 |3 |2 |3 |0 |20.00 |66.67 |[Pilot status](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
+| SFT + Kev27B |10 |10 |9 |10 |0 |90.00 |90.00 |[Final audit and judge caveats](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004) |
 
 ## Local browser · GPT-4.1 · temperature 0 · full 300
 

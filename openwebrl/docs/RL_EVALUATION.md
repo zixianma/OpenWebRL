@@ -313,7 +313,30 @@ cohort if useful progress is verified. Distinguish website blocks, execution
 limitations and model selection failures.
 
 <a id="sft-jev-kev-selection-pilot-20261004"></a>
-### Partial pilot: original SFT proposes five actions; Jev/Kev select
+### Completed pilot: original SFT proposes five actions; Jev/Kev select
+
+All40 terminal records are audited:35 valid episodes and five diagnosed invalid
+records preserved from earlier attempts. The canonical o4-mini/AgentTrek scores
+are **SFT4/10, SFT+Jev3/10, SFT+Kev0.8B4/10 and SFT+Kev27B9/10**. Valid-only
+rates use9,6,10 and10 episodes respectively; see the
+[results table](RL_RESULTS.md#sft-decision-selection-20261004).
+The large-Kev tally includes three questionable positives: Speedo sizing/discount,
+Carvana without a specific car/price, and an empty IGN boardgame search. The forum
+maximum-replies claim also has a review limitation. These are preserved canonical
+scores under a permissive judge, not independently relabeled strict task success.
+
+Job344458 completed at21:59:57 Pacific on October4 after1419seconds. Together
+with the three preserved earlier attempts, **4805seconds (80m05s)** were charged
+against the effective6986-second approval, leaving2181seconds unused. All42
+created browser sessions are stopped. Final usage is137 Jev requests,353 local
+Kev requests including two warmups,35 judge requests and2625 saved actor proposals.
+The ten superseded choices from interrupted small-Kev episodes remain charged.
+All40 records have verified evidence or a documented invalid diagnosis, and no
+terminal corrections remain staged. Five invalid records mean
+`all40_evidence_verified=false`; completed supervision means
+`all40_results_audited=true`, with limitations retained explicitly.
+
+The following history preserves the preparation, repairs and intermediate audits.
 
 The requested SelectionARM-style replacement is implemented separately from the
 Jev Ultrafast direct agent. At each state, the original OpenWebRL-4B-SFT samples
@@ -529,6 +552,38 @@ failure because the requested home-store setting was never completed. Its
 correction is preserved and staged until the cohort exits. Seven large-Kev
 results remain, with no new diagnosed invalid records or unexplained audit errors.
 These are provisional counts, not a completed four-condition comparison.
+
+The next audit contains36 terminal records, including six valid Kev27B episodes
+with five canonical successes. Visual review flags the Speedo success for further
+checking: the saved cart contains a black kneeskin in size`26 L`; both actor and
+judge call that Large without a verified mapping, and the saved product page
+states a regular$280 price without establishing the highest discount. The
+[official product page](https://speedo.com/en-us/products/womens-lzr-racer-pro-recordbreaker-kneeskin-black-87190920001)
+also lists numeric R/L variants. This leaves the size and discount requirements
+unverified. The FlightAware forum screenshot confirms an opened64-post thread;
+the maximum-replies comparison relies on the canonical judge's interpretation.
+The private HTML displays these review notes alongside the preserved verdicts.
+Canonical scores remain unchanged, and an evidence/provenance audit must not be
+read as independent ground-truth relabeling.
+
+The subsequent Carvana success also needs that distinction. Its judge explicitly
+acknowledges that no individual listing or specific price was found, then accepts
+a Bing/Copilot recommendation of model years and trims as an effective workaround.
+That does not establish the cheapest available car meeting every constraint.
+The frozen AgentTrek prompt permits partial-goal credit, including more than eight
+correct actions or completing one of two subtasks. The saved canonical verdict is
+retained and flagged in the private review. These pilot scores therefore measure
+this permissive judge protocol, rather than independently verified strict goal
+completion.
+
+The final IGN boardgame verdict illustrates the same concern: the saved screen is
+an empty search for `boardgame`, with no requested review opened. The judge awards
+success for the conclusion that the review is unavailable and asserts that IGN
+reviews only video games; the trajectory does not establish that premise. The
+strict requested outcome is unsupported, and the review flags it alongside the
+Speedo and Carvana concerns. All ten Kev27B final screenshots were visually
+reviewed. The completed cohort retains nine canonical successes and one canonical
+failure; the earlier staged Trader Joe's verdict has been applied.
 
 A read-only provider audit confirms the first10 SFT sessions are stopped. The
 provider reports approximately$0.01167 browser cost and$0.05273 proxy cost despite

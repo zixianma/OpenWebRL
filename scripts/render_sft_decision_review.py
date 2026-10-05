@@ -6,7 +6,9 @@ from collections import defaultdict
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
+import tempfile
 import time
 
 REPO = Path(__file__).resolve().parents[1]
@@ -22,6 +24,9 @@ def read(path):
 def build(root=ROOT):
     plan, audit = read(root / 'plan.json'), read(root / 'independent-audit.json')
     evidence = {(r['mode'], r['task_id']): r for r in audit['rows']}
+    notes_path = root / 'judge-review-notes.json'
+    review_notes = {(r['mode'], r['task_id']): r['note']
+                    for r in (read(notes_path) if notes_path.exists() else [])}
     tasks = []
     for line in Path(plan['tasks']).read_text().splitlines():
         row = json.loads(line)['metadata']
@@ -116,6 +121,7 @@ def build(root=ROOT):
                 elapsed_seconds=result.get('elapsed_seconds'), frames=frames,
                 final=image(final.read_bytes()) if final.exists() else None,
                 judge=result.get('metadata', {}).get('reward', {}).get('judge_text'),
+                judge_review=review_notes.get((mode, task['task_id'])),
                 evidence_verified=receipt.get('evidence_verified', False), issues=receipt['issues'])
     return dict(tasks=tasks, models=[dict(key=k, label=v) for k,v in MODES], images=images,
         audit={k:v for k,v in audit.items() if k != 'rows'}, protocol=plan['protocol'], rendered_unix=time.time())
@@ -128,10 +134,31 @@ def render(output):
     payload = build()
     template = (REPO / 'scripts/templates/sft_decision_review.html').read_text()
     assert template.count('__REVIEW_DATA__') == 1
-    encoded = json.dumps(payload, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
-    output.write_text(template.replace('__REVIEW_DATA__', encoded))
-    receipt = dict(html=str(output), sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
-        bytes=output.stat().st_size, completed_results=payload['audit']['completed_results'],
+    prefix, suffix = template.split('__REVIEW_DATA__')
+    digest = hashlib.sha256()
+    byte_count = 0
+    # Preserve the previous review if rendering fails, and avoid several full
+    # copies of the large image/trajectory payload during serialization.
+    with tempfile.NamedTemporaryFile(dir=output.parent, prefix=output.name + '.',
+                                     suffix='.partial', delete=False) as stream:
+        partial = Path(stream.name)
+
+        def write(chunk):
+            nonlocal byte_count
+            raw = chunk.encode('utf-8')
+            stream.write(raw)
+            digest.update(raw)
+            byte_count += len(raw)
+
+        write(prefix)
+        for chunk in json.JSONEncoder(ensure_ascii=False, separators=(',', ':')).iterencode(payload):
+            write(chunk.replace('<', '\\u003c'))
+        write(suffix)
+        stream.flush()
+        os.fsync(stream.fileno())
+    partial.replace(output)
+    receipt = dict(html=str(output), sha256=digest.hexdigest(),
+        bytes=byte_count, completed_results=payload['audit']['completed_results'],
         all40_evidence_verified=payload['audit']['all40_evidence_verified'], public=False)
     output.with_suffix('.receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     return receipt
