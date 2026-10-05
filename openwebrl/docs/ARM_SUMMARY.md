@@ -15,8 +15,10 @@ Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png)
 **Next comparison, recovery queued as344655:** Qwen3-VL-4B-Thinking alone, Qwen with Luna
 selection at N=5/10, and Luna alone, plus the requested **official
 OpenWebRL/OpenWebRL-4B-SFT + Luna N=5** arm at temperature1/top-p0.9.
-The SFT arm is queued after the original40 episodes, targeting50 on the same
-ten tasks within the existing caps; it has not started. Track cost, latency, tokens, browser steps
+The queued job starts two SFT workers alongside two Qwen recovery workers,
+then reuses freed GPU slots for unfinished work. SFT no longer waits for the
+original arms to finish; its GPU startup is still pending. The target is50
+episodes on the same ten tasks within the existing caps. Track cost, latency, tokens, browser steps
 and local compute; plot success against the first three. The bounded ten-task
 pilot has a four-H200/90-minute total and $20 API cap; API preflight passed,
 with saved episodes preserved after a W&B finalization error; the replacement

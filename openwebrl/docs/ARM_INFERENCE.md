@@ -16,7 +16,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking, official SFT and Luna: performance versus cost — October4
 
-**Recovery queued as job344655, with a49-minute ceiling inside the original90-minute total; official SFT + Luna N=5 follows the repaired original cohort.**
+**Job344655 is queued for concurrent official SFT + Luna N=5 and Qwen recovery, with a49-minute ceiling inside the original90-minute total.**
 The user approved the four-H200/90-minute pilot and $15 Luna/$5 judge caps.
 Two live API preflight calls passed (vision + structured selection, and a native
 browser `done` tool call), returning `gpt-6-luna` and complete usage receipts;
@@ -71,16 +71,20 @@ reasoning and action in shuffled order and must return a valid index. It cannot
 rewrite actions or silently fall back to candidate1. All requested proposals,
 including discarded proposals, are charged to their arm.
 
-The requested SFT arm is scheduled after the original40 episodes, producing
-**50 episodes across the same ten tasks** if the remaining approved budget
-permits. The batch controller owns and awaits this additional collection stage
-before exiting. Its four TP1 SFT workers reuse the same global API ledgers,
-and every failed attempt still counts against the original90-minute total.
+The requested SFT arm runs **concurrently with recovery of the original four
+arms**, targeting **50 episodes across the same ten tasks** within the remaining
+approved budget. Job344655 starts two official-SFT workers and two Qwen workers;
+each owns one H200, eight CPUs and120GiB, with at most four concurrent browser
+episodes. Freed slots are assigned to unfinished SFT work first, then Qwen work,
+so neither family waits for the other to finish. The batch controller owns and
+awaits every worker before exiting. All workers share the original API ledgers,
+and every failed attempt counts against the original90-minute total.
 No new allocation, time extension or API-cap increase was approved or requested.
 The aggregate comparison and its three plots require all50 verified episodes;
-a partial SFT cohort will be labeled incomplete. This additional arm was
-requested after collection began, so its later collection time is an explicit
-limitation rather than part of the original randomized arm order.
+a partial cohort remains incomplete. SFT was requested after the original
+collection began: its timing overlaps recovery, but it is outside the original
+randomized four-arm order. Live-site changes between collection windows remain
+a comparison limitation.
 
 All arms have a 30-turn horizon and the same browser tools. Native Luna tool
 calls are converted to the framework's action representation; the Qwen token
@@ -172,16 +176,17 @@ performance difference.
 
 Implementation: `openwebrl/luna_qwen_{policy,eval,metrics}.py`,
 `scripts/prepare_luna_qwen_inference.py`, and
-`scripts/report_luna_qwen_inference.py`, with the added stage in
-`scripts/run_luna_qwen_sft_extension.py`. The fifth-arm preparation passed19
+`scripts/report_luna_qwen_inference.py`, with fifth-arm reporting in
+`scripts/run_luna_qwen_sft_extension.py` and concurrent scheduling in
+`scripts/run_luna_qwen_parallel.py`. The fifth-arm preparation passed19
 CPU tests, official-checkpoint/processor verification and shared-budget checks;
 its GPU startup remains pending. A subsequent context-boundary regression
 test brought the suite to20 passing tests. The live run exposed aborted local
 requests whose input plus requested output equaled32768; the engine requires
 a strictly smaller total. The correction reserves one token, retaining the
 4096 response cap and the rest of the protocol. Only episodes affected by this
-diagnosed transport failure are queued for fresh-browser recovery before the
-SFT stage. Their original records and all request receipts remain archived,
+diagnosed transport failure are queued for fresh-browser recovery alongside
+SFT collection. Their original records and all request receipts remain archived,
 and every attempt remains charged to the same compute/API budgets. Successful
 and ordinary unsuccessful episodes are retained without outcome-based retries.
 GPU validation of the repaired episodes is pending. Job344537 later stopped
@@ -192,7 +197,9 @@ replacement, leaving29 retained cohort records and11 original-arm episodes to
 collect or repair. Replacement344655 has a49-minute ceiling: all earlier
 attempts consumed2430 seconds, so2430+2940=5370 seconds remains below5400.
 The same API ledgers and scientific settings are retained. Run data and source hashes are preserved
-under runtime `luna-qwen-inference-20261004/`. GPU startup is verified on four distinct H200 UUIDs. Actual request receipts
+under runtime `luna-qwen-inference-20261004/`. The original Qwen worker startup
+was verified on four distinct H200 UUIDs; the new mixed-model startup remains
+pending. Actual request receipts
 confirm Qwen temperature1/top-p0.9/top-k disabled, Luna medium reasoning and the
 pinned o4-mini judge; the first browser episode and verdict are durable. All
 four evaluation-only W&B identities are preserved in `openwebrl-evals`. This is startup
@@ -213,7 +220,7 @@ and the three reviewed figures.
 |344534 |4 |25 |Failed: Slurm requires the same GPU type in both GPU request flags |
 |344536 |4 |27 |Failed: host GPU indexes differ from the indexes inside a worker's device namespace |
 |344537 |4 |2228 |Failed: first finished worker hit W&B summary API error;33 records preserved |
-|344655 |4 |— |Queued: corrected W&B/context handling;49-minute maximum, same four TP1 workers |
+|344655 |4 |— |Queued: two SFT + two Qwen TP1 workers, adaptive slot reuse; corrected W&B/context handling;49-minute maximum |
 
 The worker command now explicitly uses `--gpus=h200:1` and
 `--gres=gpu:h200:1`. GPU identity is read from the single visible NVML device;
@@ -225,7 +232,11 @@ maximum, keeping the combined maximum5370 seconds below the original5400 cap. AP
 were not reset, and model weights, sampling, task order, judge and metric
 protocols were preserved. Interrupted receipts and partial artifacts remain
 private and are included in research spending; missing final episode timers
-are explicitly marked rather than fabricated. Local regression checks:20 passed, plus the actual offline W&B SDK check.
+are explicitly marked rather than fabricated. Local regression checks:22 passed,
+including concurrent initial assignment, adaptive reuse and retained-record
+preservation, plus the actual offline W&B SDK check. Frozen source manifests,
+controller hash and shared approval checks passed before the job was released.
+The temporary preparation hold is removed; the remaining wait is Slurm priority.
 
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
