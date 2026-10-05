@@ -19,18 +19,28 @@ SFT-only full300 as a protocol-different reference (T0.7/p0.9/1024 output),
 without a new SFT-only or Luna+Luna run. Track performance, cost, latency,
 input/output tokens, browser steps and local compute; plot success against
 cost/latency/tokens. Budgets are approved: GPU344754 is queued for up to
-8 H200 ×16h; CPU344755 has started independently with a4h ceiling. Shared
-API caps are$100 Luna/$25 judge. Jobs release resources when their work finishes.
+8 H200 ×16h; repaired CPU344875 runs independently within the original4h
+ceiling. Original CPU344755 used6,761 seconds; the7,620-second retry keeps
+the cumulative ceiling at14,381/14,400 seconds. Shared
+API caps are$100 Luna/$25 judge. The Luna actor's pixel coordinates were
+incorrectly interpreted as normalized0–1000 coordinates:177 compromised
+full300 records were archived,
+90 no-coordinate records retained, and four partial attempts preserved.
+Corrected collection covers the other210 tasks. Qwen/SFT selector arms are
+unchanged. Jobs release resources when their work finishes.
 [Full-set matrix, baseline caveat and budget](ARM_INFERENCE.md#luna-actor-full300-20261004).
 [Unified eight-run tracker, including SFT + Jev/Kev](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
 
-The separate T1/p0.9 pilot stopped at49/50 episodes; official SFT + Luna N=5
-finished10/10 with two successes and eight valid episodes. The last Qwen N=10
-episode was interrupted by the controller deadline. [Three clearly labeled
-partial plots](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005) compare the same
-nine completed tasks. Actual use is5.64 GPU-hours; a one-GPU/20-minute recovery
-profile is prepared for approval and would stay below the original6GPU-hours.
-These records remain separate from full300 results.
+The separate T1/p0.9 pilot collected49/50 episodes, but **seven Luna actor
+episodes are coordinate-compromised and the entire Luna-alone performance
+comparison is withdrawn**. Official SFT + Luna N=5 finished10/10 with two
+successes and eight valid episodes. [Three corrected partial plots](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005)
+show **four unaffected arms on the same nine tasks (36 records)**; their
+metrics are unchanged. The final Qwen N=10 episode remains missing. Actual
+use stays5.64 GPU-hours, including every compromised attempt. The unapproved
+one-GPU/20-minute proposal covers only that missing Qwen episode, does not
+repair the seven Luna episodes, and would not complete the five-arm comparison.
+No new pilot budget or launch is approved. Pilot and full300 records stay separate.
 
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
 **reasoning + action**. ScalarRM scores independently; SelectionARM compares

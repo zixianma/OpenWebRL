@@ -7,11 +7,11 @@ for the work you are doing, then follow its contents to dated experiment records
 [Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
 [Kev27B direct browser policy: full300 prepared, awaiting exact approval; separate from SFT proposal selection](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 [Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
-[Full300 SFT+Jev344708 and SFT+Kev27B344661: T1.0/p0.95/4K; partial audits and private reviews updated; Jev timeout preserved; baseline remains a protocol-different reference](RL_EVALUATION.md#sft-selection-full300-20261004).
+[Full300 SFT+Jev344794 and SFT+Kev27B344793: browser-repair replacements running under separate10h budgets; T1.0/p0.95/4K and baseline protocol caveats retained](RL_EVALUATION.md#sft-selection-full300-20261004).
 
-[Unified actor/selector tracker: eight full-set rows; Luna collecting, GPU pool queued, Jev/Kev recovery replacements running; separate pilot49/50 with partial plots](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
-[October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; approved GPU344754 queued and CPU344755 running independently](ARM_INFERENCE.md#luna-actor-full300-20261004).
-[Qwen/SFT/Luna pilot:49/50 episodes, official SFT10/10; three partial plots on nine common tasks, reconciled accounting and unapproved one-GPU recovery proposal](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005).
+[Unified actor/selector tracker: eight full-set rows; Luna coordinate-repair CPU344875 running with90 eligible records at snapshot, GPU queued, Jev/Kev replacements running](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
+[October4 full300 actor × Luna-selector study: five fresh arms, reused SFT baseline, T1/p0.95, performance/efficiency metrics; GPU344754 queued; CPU344875 replays coordinate-affected tasks within the original4h cap](ARM_INFERENCE.md#luna-actor-full300-20261004).
+[Corrected Qwen/SFT pilot:49 collected, seven Luna actor episodes compromised and Luna-alone comparison withdrawn; four-arm/nine-task plots, unchanged accounting; unapproved Qwen-only tail proposal](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 historical reconciliation: why30.0%→42.7% became35.2%→39.3%; matched-valid sensitivity and unresolved causes](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).

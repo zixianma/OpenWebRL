@@ -1,7 +1,7 @@
 {
   "complete": false,
   "scheduled_tasks": 9,
-  "recorded_episodes": 45,
+  "recorded_episodes": 36,
   "pricing": {
     "luna_input": 0.1,
     "luna_cached": 0.01,
@@ -339,104 +339,6 @@
       ],
       "valid_only": 0.0
     },
-    "luna": {
-      "episodes": 9,
-      "successes": 0,
-      "valid": 8,
-      "overall": 0.0,
-      "metrics": {
-        "episode_seconds": {
-          "mean": 98.82214869864077,
-          "p50": 102.43040954507887,
-          "p95": 215.90608443366358,
-          "missing": 0
-        },
-        "browser_steps": {
-          "mean": 20.0,
-          "p50": 30.0,
-          "p95": 30.0,
-          "missing": 0
-        },
-        "browser_step_seconds": {
-          "mean": 44.402278188150376,
-          "p50": 33.39430502662435,
-          "p95": 138.32321567302566,
-          "missing": 0
-        },
-        "model_input_tokens": {
-          "mean": 106283.11111111111,
-          "p50": 139046.0,
-          "p95": 190389.8,
-          "missing": 0
-        },
-        "model_output_tokens": {
-          "mean": 1625.888888888889,
-          "p50": 1384.0,
-          "p95": 4334.399999999999,
-          "missing": 0
-        },
-        "local_gpu_reserved_seconds": {
-          "mean": 0.0,
-          "p50": 0.0,
-          "p95": 0.0,
-          "missing": 0
-        },
-        "qwen_flops_lower": {
-          "mean": 0.0,
-          "p50": 0.0,
-          "p95": 0.0,
-          "missing": 0
-        },
-        "qwen_flops_upper": {
-          "mean": 0.0,
-          "p50": 0.0,
-          "p95": 0.0,
-          "missing": 0
-        }
-      },
-      "cost_lower_mean_usd": 0.014035333333333332,
-      "cost_upper_mean_usd": 0.014035333333333332,
-      "unknown_usage_requests": 0,
-      "role_totals": {
-        "luna_actor": {
-          "input": 956548.0,
-          "output": 14633.0,
-          "cached_input": 0.0,
-          "reasoning_output": 9630.0,
-          "requests": 180.0,
-          "usage_missing": 0.0,
-          "cached_missing": 0.0,
-          "reasoning_missing": 0.0,
-          "cache_write_input": 933868.0,
-          "cache_write_missing": 0.0,
-          "image_input": 0.0,
-          "image_missing": 180.0,
-          "cost_lower_usd": 0.12631799999999999,
-          "cost_upper_usd": 0.12631799999999999
-        },
-        "api_judge": {
-          "input": 7317.0,
-          "output": 1076.0,
-          "cached_input": 0.0,
-          "reasoning_output": 768.0,
-          "requests": 3.0,
-          "usage_missing": 0.0,
-          "cached_missing": 0.0,
-          "reasoning_missing": 0.0,
-          "cache_write_input": 0.0,
-          "cache_write_missing": 3.0,
-          "image_input": 0.0,
-          "image_missing": 3.0,
-          "cost_lower_usd": 0.012783099999999999,
-          "cost_upper_usd": 0.012783099999999999
-        }
-      },
-      "success_95": [
-        0.0,
-        0.0
-      ],
-      "valid_only": 0.0
-    },
     "sft_luna5": {
       "episodes": 9,
       "successes": 2,
@@ -567,13 +469,6 @@
         0.0
       ]
     },
-    "luna_minus_qwen": {
-      "mean": 0.0,
-      "task_bootstrap_95": [
-        0.0,
-        0.0
-      ]
-    },
     "sft_luna5_minus_qwen": {
       "mean": 0.2222222222222222,
       "task_bootstrap_95": [
@@ -588,13 +483,28 @@
   "partial_pilot": true,
   "full_pilot_recorded_episodes": 49,
   "full_pilot_target_episodes": 50,
-  "full_pilot_scheduled_tasks": 10,
+  "included_modes": [
+    "qwen",
+    "qwen_luna5",
+    "qwen_luna10",
+    "sft_luna5"
+  ],
+  "included_committed_episodes": 39,
+  "included_planned_episodes": 40,
+  "matched_tasks": 9,
+  "matched_episodes": 36,
   "common_completed_cohort_complete": true,
-  "analysis_cohort": "9 tasks with committed records for every arm (45 records); invalid attempts retained",
+  "analysis_cohort": "Same nine common tasks as the earlier pilot plots; four unaffected arms; all committed invalid episodes remain in the denominator.",
+  "excluded_modes": {
+    "luna": "Native Luna pixel-coordinate actions were rescaled as normalized coordinates. Exclude the entire actor-only arm from performance/cost/latency/token comparisons."
+  },
+  "coordinate_exposed_luna_episodes": 7,
   "missing_results_imputed": false,
-  "completion_selection_caveat": "The last task is excluded for every arm solely because one arm has no committed result; this partial subset can be completion-biased.",
-  "label": "PARTIAL PILOT: 49/50 episodes; 9 common completed tasks",
-  "snapshot_unix": 1791187144.9831233,
+  "completion_selection_caveat": "One task is excluded from every retained arm because Qwen N=10 lacks a committed result. This partial subset can be completion-biased.",
+  "label": "CORRECTED PARTIAL PILOT: 4 arms, 9 matched tasks",
+  "protocol_note": "Local actors temperature 1, top-p 0.9; this pilot is separate from the full300 top-p 0.95 experiment.",
+  "all_attempt_accounting": "Unchanged: 49 historical records and every failed/interrupted attempt remain preserved; excluded Luna attempts still count toward all research costs and budgets.",
+  "snapshot_unix": 1791190211.3536,
   "common_valid_sensitivity": {
     "tasks": 7,
     "by_mode": {
@@ -610,15 +520,21 @@
         "successes": 0,
         "denominator": 7
       },
-      "luna": {
-        "successes": 0,
-        "denominator": 7
-      },
       "sft_luna5": {
         "successes": 2,
         "denominator": 7
       }
     }
   },
-  "interval_caveat": "Empirical bootstrap intervals are descriptive and degenerate for zero-success arms in this small pilot; they do not establish zero population success probability."
+  "interval_caveat": "Empirical bootstrap intervals are descriptive and degenerate for zero-success arms in this small pilot; they do not establish zero population success probability.",
+  "correction": {
+    "date": "2026-10-05",
+    "withdrawn_mode": "luna",
+    "coordinate_exposed_records": 7,
+    "collected_luna_records": 10,
+    "coordinate_exposed_in_prior_plotted_cohort": 6,
+    "entire_luna_arm_excluded": true,
+    "other_four_arm_aggregates_unchanged": true,
+    "prior_five_arm_assets_preserved_in_git_history": true
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791187724.7015145,
+  "snapshot_epoch": 1791190436.102464,
   "rows": [
     {
       "id": "AS01",
@@ -79,12 +79,15 @@
       "n": 1,
       "mode": "luna",
       "target_tasks": 300,
-      "recorded_episodes": 174,
-      "status": "running",
+      "recorded_episodes": 90,
+      "status": "running_coordinate_repair",
       "protocol_group": "luna_full300",
-      "job_id": "344755",
-      "successes": 20,
-      "valid": 161
+      "job_id": "344875",
+      "successes": 17,
+      "valid": 71,
+      "eligible_saved_episodes": 90,
+      "verified_complete": false,
+      "coverage_note": "90 retained no-coordinate episodes; 177 compromised committed episodes archived and 4 partial attempts preserved. Partial subset outcomes are not a Luna baseline performance estimate."
     },
     {
       "id": "AS08",
@@ -93,12 +96,12 @@
       "n": 5,
       "mode": "jev",
       "target_tasks": 300,
-      "recorded_episodes": 76,
+      "recorded_episodes": 106,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344794",
-      "successes": 48,
-      "valid": 73,
+      "successes": 67,
+      "valid": 102,
       "verified_complete": false
     },
     {
@@ -108,12 +111,12 @@
       "n": 5,
       "mode": "kev-27b",
       "target_tasks": 300,
-      "recorded_episodes": 56,
+      "recorded_episodes": 90,
       "status": "running",
       "protocol_group": "sft_jev_kev_full300",
       "job_id": "344793",
-      "successes": 37,
-      "valid": 54,
+      "successes": 59,
+      "valid": 86,
       "verified_complete": false
     }
   ],
@@ -141,7 +144,7 @@
   "other_session_episodes": 600,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-05T08:08:44Z",
+  "snapshot_utc": "2026-10-05T08:53:56Z",
   "new_episodes_all_sessions": 2100,
   "comparison_rows": 8,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -163,8 +166,14 @@
       "cpus": 16,
       "memory_gib": 32,
       "total_hours": 4,
-      "job_id": "344755",
-      "scheduler_state": "RUNNING"
+      "job_id": "344875",
+      "scheduler_state": "RUNNING",
+      "prior_job_id": "344755",
+      "prior_elapsed_seconds": 6761,
+      "retry_time_limit_seconds": 7620,
+      "cumulative_seconds_ceiling": 14381,
+      "total_seconds": 14400,
+      "workers": 4
     },
     "shared_api": {
       "luna_usd": 100,
@@ -192,7 +201,7 @@
   "separate_pilot": {
     "job_id": "344655",
     "state": "FAILED",
-    "stage": "awaiting_resource_profile_approval",
+    "stage": "partial_with_Luna_actor_comparison_withdrawn",
     "recorded_episodes": 49,
     "target": 50,
     "sft_records": 10,
@@ -206,7 +215,48 @@
       "cpus": 8,
       "memory_gib": 120,
       "total_seconds": 1200,
-      "cumulative_gpu_hours_ceiling": 5.973333333333334
+      "cumulative_gpu_hours_ceiling": 5.973333333333334,
+      "scope": "Only the last missing Qwen + Luna N=10 episode; does not repair the seven compromised Luna actor episodes",
+      "repairs_luna_actor": false
+    },
+    "coordinate_exposed_luna_records": 7,
+    "luna_records": 10,
+    "luna_arm_performance_withdrawn": true,
+    "corrected_plot_arms": 4,
+    "corrected_plot_tasks": 9,
+    "corrected_plot_records": 36,
+    "other_four_arm_aggregates_unchanged": true
+  },
+  "cpu_coordinate_repair": {
+    "repair_id": "luna-pixel-coordinates-20261005",
+    "prior_job_id": "344755",
+    "prior_final_state": "FAILED",
+    "prior_elapsed_seconds": 6761,
+    "replacement_job_id": "344875",
+    "replacement_state": "RUNNING",
+    "replacement_workers": 4,
+    "replacement_time_limit_seconds": 7620,
+    "cumulative_seconds_ceiling": 14381,
+    "approved_CPU_seconds": 14400,
+    "all_budgets_unchanged": true,
+    "original_committed": 267,
+    "coordinate_exposed_committed_archived": 177,
+    "safe_no_coordinate_records_retained": 90,
+    "partial_attempts_preserved": 4,
+    "corrected_or_fresh_tasks_remaining_at_relaunch": 210,
+    "classification_independent_of_outcomes": true,
+    "cause": "Luna native pixel coordinates were interpreted as normalized0..1000. Synthetic example at1280x720: viewport center[640,360] would become[819.2,259.2].",
+    "fix": "Per-episode resize_output_coords=False only for the Luna actor. Native API actions, execution and actor/judge history stay in viewport pixels; Qwen/SFT and Luna index selection unchanged.",
+    "targeted_tests_passed": 46,
+    "repair_controller_tests_passed": 5,
+    "scientific_completion_verified": false,
+    "example_is_synthetic": true,
+    "tests_passed_total": 51,
+    "post_snapshot_startup_validation": {
+      "workers_with_matching_requested_executed_pixel_coordinates": 4,
+      "new_records_verified": 5,
+      "running_wandb_identities": 4,
+      "does_not_change_timestamped_coverage_snapshot": true
     }
   }
 }
