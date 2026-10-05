@@ -726,7 +726,7 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 344794 | 10-05 00:54 PDT | 64/300 | 61 | 3 | 39 | 6546 |
-| SFT + Kev27B | 344793 | 10-05 00:48 PDT | 45/300 | 44 | 1 | 29 | 5275 |
+| SFT + Kev27B | 344793 | 10-05 01:08 PDT | 56/300 | 54 | 2 | 37 | 6476 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-selector-platform-clearing-20261005"></a>
@@ -777,6 +777,16 @@ in the private review without selectively relabeling scores. One malformed SFT
 action was selected by Jev; the existing parser reported the format failure and
 the episode continued. Preserve that model behavior under the fixed protocol.
 
+
+The56-record Kev audit contains54 valid episodes,37 canonical positives and two
+diagnosed invalids. Its later Healthline episode reached the600-second cap while
+awaiting a browser step after the29th selection; no tool response followed the
+last click. The precise browser await is not identifiable from the retained
+archive. All selector calls succeeded, the browser closed, and the worker
+continued. Preserve the partial rollout without a terminal image or judge score.
+The adoption task also received credit for a human-boxing search in Kev, matching
+the Jev goal substitution; both private reviews flag it with canonical scores
+unchanged.
 
 <a id="sft-kev-full300-timeout-20261005"></a>
 **Kev27B episode timeout — October5,00:14Pacific.** One episode reached
