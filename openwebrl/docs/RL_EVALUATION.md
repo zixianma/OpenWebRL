@@ -726,7 +726,7 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 345021 | 10-05 05:08 PDT | 207/300 | 196 | 11 | 134 | 19632 |
-| SFT + Kev27B | 344793 | 10-05 05:02 PDT | 221/300 | 215 | 6 | 149 | 20499 |
+| SFT + Kev27B | 344793 | 10-05 05:13 PDT | 228/300 | 221 | 7 | 152 | 21159 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-kev-progress-audit-20261005"></a>
@@ -756,6 +756,15 @@ remote W&B remained running with the approved sampling configuration. At this
 audit 19,956 scheduler seconds were charged across both attempts, leaving 16,044
 of the original 36,000 seconds. Full300 remains incomplete and active-agent
 continuation is verified.
+
+The next Kev audit covers 228 records: 221 scored, 152 canonical positives and
+seven diagnosed invalids. The additional invalid stopped at the text-observation
+consistency guard after ten selections. Its five next-turn actor proposals remain
+charged, although no further Kev or judge request was sent. The extra observation
+and ten selected action/image pairs are retained; browser shutdown is confirmed.
+The worker continued with unchanged settings. Four additional terminal images
+and verdicts were reviewed, including the selected beige-filter coordinates and
+applied rug results; no new judge caveat or score change was warranted.
 
 <a id="sft-jev-context-recovery-20261005"></a>
 **Jev input-limit recovery — October 5.** Job344794 stopped after189 saved
