@@ -1,0 +1,656 @@
+{
+  "complete": true,
+  "scheduled_tasks": 300,
+  "recorded_episodes": 900,
+  "by_mode": {
+    "luna": {
+      "episodes": 300,
+      "successes": 110,
+      "valid": 279,
+      "overall": 0.36666666666666664,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 78.09334092836517,
+          "p50": 55.97931478335522,
+          "p95": 254.40995958540594,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 12.796666666666667,
+          "p50": 9.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 33.144721429970424,
+          "p50": 17.438856539316475,
+          "p95": 171.96029785298745,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 54268.613333333335,
+          "p50": 27642.5,
+          "p95": 152389.25,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 1274.5933333333332,
+          "p50": 867.5,
+          "p95": 3741.9500000000016,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.0073805638333333335,
+      "cost_upper_mean_usd": 0.0073805638333333335,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "luna_actor": {
+          "input": 16280584.0,
+          "output": 382378.0,
+          "cached_input": 0.0,
+          "reasoning_output": 257283.0,
+          "requests": 3839.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 15796870.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 3839.0,
+          "cost_lower_usd": 2.214169150000002,
+          "cost_upper_usd": 2.214169150000002
+        },
+        "api_judge": {
+          "input": 546070.0,
+          "output": 81804.0,
+          "cached_input": 0.0,
+          "reasoning_output": 59392.0,
+          "requests": 220.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 220.0,
+          "image_input": 0.0,
+          "image_missing": 220.0,
+          "cost_lower_usd": 0.9606146000000002,
+          "cost_upper_usd": 0.9606146000000002
+        }
+      },
+      "success_95": [
+        0.31,
+        0.42
+      ],
+      "invalid": 21,
+      "valid_only": 0.3942652329749104,
+      "primary_cost_bounds": {
+        "lower_mean_usd": 0.007380563833333321,
+        "conservative_upper_mean_usd": 0.007380563833333321,
+        "unknown_calls": 0,
+        "unresolved_reserved_usd": 0.0,
+        "interpretation": "Known-cost lower bound to known-cost upper plus unresolved request reservations; not a final provider bill."
+      }
+    },
+    "luna_high": {
+      "episodes": 300,
+      "successes": 97,
+      "valid": 277,
+      "overall": 0.3233333333333333,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 114.6327228345008,
+          "p50": 116.8678910152521,
+          "p95": 271.3372604150325,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 17.976666666666667,
+          "p50": 19.5,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 45.04120685843441,
+          "p50": 33.09371882211417,
+          "p95": 183.49093997888266,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 83716.22333333333,
+          "p50": 79839.5,
+          "p95": 174173.65,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 2811.786666666667,
+          "p50": 2273.0,
+          "p95": 7002.900000000004,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.01181379475,
+      "cost_upper_mean_usd": 0.01181379475,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "gpt-6-luna_actor": {
+          "input": 25114867.0,
+          "output": 843536.0,
+          "cached_input": 0.0,
+          "reasoning_output": 664084.0,
+          "requests": 5393.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 24435349.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 5393.0,
+          "cost_lower_usd": 3.544138425000004,
+          "cost_upper_usd": 3.544138425000004
+        },
+        "api_judge": {
+          "input": 412203.0,
+          "output": 60923.0,
+          "cached_input": 0.0,
+          "reasoning_output": 44096.0,
+          "requests": 162.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 162.0,
+          "image_input": 0.0,
+          "image_missing": 162.0,
+          "cost_lower_usd": 0.7214845000000001,
+          "cost_upper_usd": 0.7214845000000001
+        }
+      },
+      "success_95": [
+        0.27,
+        0.37666666666666665
+      ],
+      "invalid": 23,
+      "valid_only": 0.35018050541516244,
+      "primary_cost_bounds": {
+        "lower_mean_usd": 0.01181379474999999,
+        "conservative_upper_mean_usd": 0.01181379474999999,
+        "unknown_calls": 0,
+        "unresolved_reserved_usd": 0.0,
+        "interpretation": "Known-cost lower bound to known-cost upper plus unresolved request reservations; not a final provider bill."
+      }
+    },
+    "sol61_high": {
+      "episodes": 300,
+      "successes": 61,
+      "valid": 273,
+      "overall": 0.20333333333333334,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 90.2739527850179,
+          "p50": 59.436545997159556,
+          "p95": 285.9134997053538,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 13.246666666666666,
+          "p50": 7.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 35.68450988625021,
+          "p50": 13.787374219391495,
+          "p95": 182.1121276282007,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 59210.75666666667,
+          "p50": 20817.5,
+          "p95": 159112.65,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 535.4633333333334,
+          "p50": 333.5,
+          "p95": 1463.9,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.15254698500000002,
+      "cost_upper_mean_usd": null,
+      "unknown_usage_requests": 4,
+      "role_totals": {
+        "gpt-6.1-sol_actor": {
+          "input": 17763227.0,
+          "output": 160639.0,
+          "cached_input": 0.0,
+          "reasoning_output": 53241.0,
+          "requests": 3978.0,
+          "usage_missing": 4.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 17262503.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 3974.0,
+          "cost_lower_usd": 45.76409549999998,
+          "cost_upper_usd": 45.76409549999998
+        },
+        "api_judge": {
+          "input": 420727.0,
+          "output": 51866.0,
+          "cached_input": 0.0,
+          "reasoning_output": 34688.0,
+          "requests": 178.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 178.0,
+          "image_input": 0.0,
+          "image_missing": 178.0,
+          "cost_lower_usd": 0.6910101000000003,
+          "cost_upper_usd": 0.6910101000000003
+        }
+      },
+      "success_95": [
+        0.15666666666666668,
+        0.25
+      ],
+      "invalid": 27,
+      "valid_only": 0.22344322344322345,
+      "primary_cost_bounds": {
+        "lower_mean_usd": 0.15254698499999972,
+        "conservative_upper_mean_usd": 0.154750818333333,
+        "unknown_calls": 4,
+        "unresolved_reserved_usd": 0.6611499999999999,
+        "interpretation": "Known-cost lower bound to known-cost upper plus unresolved request reservations; not a final provider bill."
+      }
+    }
+  },
+  "paired_differences": {
+    "luna_high_minus_luna": {
+      "mean": -0.043333333333333335,
+      "task_bootstrap_95": [
+        -0.09333333333333334,
+        0.006666666666666667
+      ],
+      "common_valid_tasks": 277,
+      "common_valid_difference": -0.04693140794223827
+    },
+    "sol61_high_minus_luna": {
+      "mean": -0.16333333333333333,
+      "task_bootstrap_95": [
+        -0.22,
+        -0.10333333333333333
+      ],
+      "common_valid_tasks": 273,
+      "common_valid_difference": -0.17216117216117216
+    },
+    "sol61_high_minus_luna_high": {
+      "mean": -0.12,
+      "task_bootstrap_95": [
+        -0.17333333333333334,
+        -0.06666666666666667
+      ],
+      "common_valid_tasks": 272,
+      "common_valid_difference": -0.12867647058823528
+    }
+  },
+  "cost_scope": "Estimated exclusive model-serving cost; browser CPU not separately priced. Judge and research startup/idle costs are separate.",
+  "token_scope": "Provider token totals include image tokens and reasoning where supported; model tokenizers differ. Subsets are never added twice.",
+  "protocols": {
+    "luna_high": {
+      "temperature": null,
+      "top_p": null,
+      "top_k": null,
+      "repetition_penalty": null,
+      "candidates": [
+        1
+      ],
+      "actor_max_output_tokens": 4096,
+      "context_length": 32768,
+      "max_steps": 30,
+      "selector": null,
+      "actor_history": "full",
+      "screenshots": 1,
+      "browser": "local_process",
+      "concurrency_per_gpu": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "qwen_cache": "no local model serving",
+      "task_timeout_seconds": 1800,
+      "request_timeout_seconds": 180,
+      "judge": "o4-mini-2025-04-16",
+      "judge_protocol": "Online-Mind2Web/AgentTrek",
+      "judge_evidence": "executed actions and final screenshot; actor thoughts excluded for every arm",
+      "judge_seed": 42,
+      "judge_max_output_tokens": 4096,
+      "judge_max_attempts": 4,
+      "optimizer_updates": 0,
+      "image_detail": "high",
+      "seed": 20261004,
+      "benchmark": "Online-Mind2Web",
+      "benchmark_tasks": 300,
+      "terminal_status_rule": "COMPLETED: judge; FAILED including step limit: zero; ABORTED: invalid",
+      "framework_tokenizer": "Qwen/Qwen3-VL-4B-Thinking",
+      "framework_tokenizer_revision": "1de27d8c51f12e819435303b9e84c4e25ba8401e",
+      "reasoning_effort": "high",
+      "service_tier": "default",
+      "api": "responses",
+      "browser_coordinate_space": "viewport_pixels",
+      "resize_output_coords": false,
+      "tool_choice": "required",
+      "parallel_tool_calls": false,
+      "api_snapshot": "Record requested and returned identity for every response; reject substitution",
+      "sampling": "API-controlled; no temperature/top_p sent",
+      "incomplete_response_policy": "Save usage/status/incomplete_details; never execute partial actions or silently raise token cap",
+      "actor": "gpt-6-luna"
+    },
+    "sol61_high": {
+      "temperature": null,
+      "top_p": null,
+      "top_k": null,
+      "repetition_penalty": null,
+      "candidates": [
+        1
+      ],
+      "actor_max_output_tokens": 4096,
+      "context_length": 32768,
+      "max_steps": 30,
+      "selector": null,
+      "actor_history": "full",
+      "screenshots": 1,
+      "browser": "local_process",
+      "concurrency_per_gpu": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "qwen_cache": "no local model serving",
+      "task_timeout_seconds": 1800,
+      "request_timeout_seconds": 180,
+      "judge": "o4-mini-2025-04-16",
+      "judge_protocol": "Online-Mind2Web/AgentTrek",
+      "judge_evidence": "executed actions and final screenshot; actor thoughts excluded for every arm",
+      "judge_seed": 42,
+      "judge_max_output_tokens": 4096,
+      "judge_max_attempts": 4,
+      "optimizer_updates": 0,
+      "image_detail": "high",
+      "seed": 20261004,
+      "benchmark": "Online-Mind2Web",
+      "benchmark_tasks": 300,
+      "terminal_status_rule": "COMPLETED: judge; FAILED including step limit: zero; ABORTED: invalid",
+      "framework_tokenizer": "Qwen/Qwen3-VL-4B-Thinking",
+      "framework_tokenizer_revision": "1de27d8c51f12e819435303b9e84c4e25ba8401e",
+      "reasoning_effort": "high",
+      "service_tier": "default",
+      "api": "responses",
+      "browser_coordinate_space": "viewport_pixels",
+      "resize_output_coords": false,
+      "tool_choice": "required",
+      "parallel_tool_calls": false,
+      "api_snapshot": "Record requested and returned identity for every response; reject substitution",
+      "sampling": "API-controlled; no temperature/top_p sent",
+      "incomplete_response_policy": "Save usage/status/incomplete_details; never execute partial actions or silently raise token cap",
+      "actor": "gpt-6.1-sol"
+    },
+    "luna": {
+      "actor": "gpt-6-luna",
+      "actor_revision": null,
+      "temperature": null,
+      "top_p": null,
+      "top_k": null,
+      "repetition_penalty": null,
+      "candidates": [
+        1
+      ],
+      "actor_max_output_tokens": 4096,
+      "context_length": 32768,
+      "max_steps": 30,
+      "selector": null,
+      "luna_reasoning": "medium",
+      "luna_max_output_tokens": 4096,
+      "luna_service_tier": "default",
+      "actor_history": "full",
+      "selector_history": "full",
+      "screenshots": 1,
+      "browser": "local_process",
+      "concurrency_per_gpu": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "qwen_cache": "no local model serving",
+      "task_timeout_seconds": 1800,
+      "request_timeout_seconds": 180,
+      "judge": "o4-mini-2025-04-16",
+      "judge_protocol": "Online-Mind2Web/AgentTrek",
+      "judge_evidence": "executed actions and final screenshot; actor thoughts excluded for every arm",
+      "judge_seed": 42,
+      "judge_max_output_tokens": 4096,
+      "judge_max_attempts": 4,
+      "optimizer_updates": 0,
+      "image_detail": "high",
+      "seed": 20261004,
+      "benchmark": "Online-Mind2Web",
+      "benchmark_tasks": 300,
+      "terminal_status_rule": "COMPLETED: judge; FAILED including step limit: zero; ABORTED: invalid",
+      "candidate_selection": "shuffled candidates; index only; execute chosen candidate unchanged",
+      "local_actor_sampling": "not applicable; Luna API controls sampling",
+      "framework_tokenizer": "Qwen/Qwen3-VL-4B-Thinking",
+      "framework_tokenizer_revision": "1de27d8c51f12e819435303b9e84c4e25ba8401e",
+      "luna_snapshot": "provider-resolved snapshot saved in every receipt"
+    }
+  },
+  "new_episodes": 600,
+  "reused_medium_episodes": 300,
+  "collection_verified": true,
+  "limitations": [
+    "The medium cohort was collected earlier; live website state can differ.",
+    "API server compute is unavailable; local CPU monetary charges are unpriced.",
+    "Missing usage uses preserved conservative reservations for the cost upper bound; token triangles denote lower bounds, not exact totals."
+  ],
+  "all_attempt_accounting": {
+    "scheduler": {
+      "luna_high": {
+        "attempts": [
+          {
+            "job_id": "345178",
+            "state": "COMPLETED",
+            "elapsed_seconds": 8907
+          }
+        ],
+        "total_seconds": 8907,
+        "approved_seconds": 21600,
+        "CPU_core_seconds": 142512,
+        "memory_GiB_seconds": 285024,
+        "GPU_seconds": 0
+      },
+      "sol61_high": {
+        "attempts": [
+          {
+            "job_id": "345179",
+            "state": "COMPLETED",
+            "elapsed_seconds": 7056
+          }
+        ],
+        "total_seconds": 7056,
+        "approved_seconds": 21600,
+        "CPU_core_seconds": 112896,
+        "memory_GiB_seconds": 225792,
+        "GPU_seconds": 0
+      }
+    },
+    "api": {
+      "luna_high": {
+        "calls": 5393,
+        "received": 5393,
+        "unknown_usage": 0,
+        "known_upper_usd": 3.5441384250000048,
+        "unresolved_reserved_usd": 0.0,
+        "charged_or_reserved_usd": 3.5441384250000048,
+        "input_tokens": 25114867,
+        "output_tokens": 843536,
+        "max_calls": 9900,
+        "max_usd": 15.0
+      },
+      "sol61_high": {
+        "calls": 3978,
+        "received": 3974,
+        "unknown_usage": 4,
+        "known_upper_usd": 45.7640955000001,
+        "unresolved_reserved_usd": 0.66115,
+        "charged_or_reserved_usd": 46.4252455000001,
+        "input_tokens": 17763227,
+        "output_tokens": 160639,
+        "max_calls": 9900,
+        "max_usd": 100.0
+      },
+      "judge": {
+        "calls": 340,
+        "received": 340,
+        "unknown_usage": 0,
+        "known_upper_usd": 1.4124946000000003,
+        "unresolved_reserved_usd": 0.0,
+        "charged_or_reserved_usd": 1.4124946000000003,
+        "input_tokens": 832930,
+        "output_tokens": 112789,
+        "max_calls": 2640,
+        "max_usd": 5.0
+      }
+    }
+  },
+  "api_prices_by_model": {
+    "gpt-6-luna": {
+      "input": 0.1,
+      "cached_input": 0.01,
+      "cache_write": 0.125,
+      "output": 0.5
+    },
+    "gpt-6.1-sol": {
+      "input": 2.0,
+      "cached_input": 0.1,
+      "cache_write": 2.5,
+      "output": 10.0
+    }
+  },
+  "actor_response_verification": {
+    "epoch": 1791228133.7454474,
+    "scope": "All actor attempts in each high-reasoning arm",
+    "arms": {
+      "luna_high": {
+        "model": "gpt-6-luna",
+        "requested_effort": "high",
+        "counts": {
+          "calls": 5393,
+          "exact_model_and_high_effort": 5393,
+          "output_at_cap": 0,
+          "incomplete_max_output_tokens": 0
+        },
+        "response_status": {
+          "completed": 5393
+        },
+        "missing_response_status": {},
+        "input_tokens": 25114867,
+        "output_tokens": 843536,
+        "reasoning_tokens": 664084,
+        "max_returned_output_tokens": 2598
+      },
+      "sol61_high": {
+        "model": "gpt-6.1-sol",
+        "requested_effort": "high",
+        "counts": {
+          "calls": 3978,
+          "exact_model_and_high_effort": 3974,
+          "output_at_cap": 0,
+          "incomplete_max_output_tokens": 0,
+          "no_returned_response": 4
+        },
+        "response_status": {
+          "completed": 3974
+        },
+        "missing_response_status": {
+          "usage_unknown": 4
+        },
+        "input_tokens": 17763227,
+        "output_tokens": 160639,
+        "reasoning_tokens": 53241,
+        "max_returned_output_tokens": 800
+      }
+    }
+  },
+  "invalid_categories": {
+    "luna_high": {
+      "preaction_navigation_timeout": 11,
+      "preaction_ERR_HTTP2_PROTOCOL_ERROR": 5,
+      "browser_step_goto_missing_screenshot": 1,
+      "preaction_navigation_download": 5,
+      "browser_step_missing_screenshot_with_new_page_load_timeout": 1
+    },
+    "sol61_high": {
+      "provider_5xx": 4,
+      "preaction_navigation_timeout": 11,
+      "preaction_navigation_download": 5,
+      "preaction_ERR_HTTP2_PROTOCOL_ERROR": 5,
+      "browser_step_missing_screenshot_with_new_page_load_timeout": 2
+    }
+  }
+}

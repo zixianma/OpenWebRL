@@ -5,7 +5,8 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 ## Contents
 
 - [Full300 actor × Luna-selector study](#luna-actor-full300-20261004)
-- [Luna reasoning audit and Luna-high / Sol6.1-high baselines](#api-actor-reasoning-20261005)
+- [Completed Luna-high / Sol6.1-high results and cost/latency/token plots](#api-actor-high-results-20261005)
+- [Luna reasoning audit and high-effort protocol](#api-actor-reasoning-20261005)
 - [Qwen/SFT pilot: corrected four-arm comparison; Luna actor withdrawn](#luna-qwen-inference-20261004)
 - [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)
@@ -33,29 +34,27 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-05 21:46:25 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-05 21:49:37 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised and transport-diagnostic records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
 run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eleven committed comparison rows, including both approved high-reasoning baselines and the other session’s direct Kev27B actor. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
 | ID | Actor | Selector | N | Saved /300 | Successes | Valid | Status / current job | Protocol | Budget |
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
-| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 110 | 21 | 97 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
-| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 110 | 30 | 98 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 111 | 21 | 98 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 113 | 32 | 101 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
 | AS04 | Official OpenWebRL-SFT4B | None | 1 | 300 | 106 | 272 | Complete; reused actor0 reference | Historical SFT | Already completed |
 | AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna | 5 | 117 | 48 | 105 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
-| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 115 | 44 | 103 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 118 | 47 | 106 | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
 | AS07 | GPT-6 Luna | None | 1 | 300 | 110 | 279 | Verified complete 344875 | Luna study; API sampling | Approved shared CPU/API pools below |
 | AS08 | Official OpenWebRL-SFT4B | Jev | 5 | 300 | 176 | 284 | Verified complete 345021 | Jev/Kev study | Approved1 H200/8 CPU/120GiB ×10h total |
 | AS09 | Official OpenWebRL-SFT4B | Kev27B | 5 | 300 | 184 | 291 | Verified complete 344793 | Jev/Kev study | Approved2 H200/16 CPU/240GiB ×10h total |
-| AS10 | GPT-6 Luna, high reasoning | None | 1 | 300 | 97 | 277 | Audited 345178; plots/report closeout pending | Matched API actor protocol | Approved separate CPU/API caps below |
-| AS11 | GPT-6.1 Sol, high reasoning | None | 1 | 300 | 61 | 273 | Audited 345179; plots/report closeout pending | Matched API actor protocol | Approved separate CPU/API caps below |
+| AS10 | GPT-6 Luna, high reasoning | None | 1 | 300 | 97 | 277 | Verified complete 345178; plots published | Matched API actor protocol | Approved separate CPU/API caps below |
+| AS11 | GPT-6.1 Sol, high reasoning | None | 1 | 300 | 61 | 273 | Verified complete 345179; plots published | Matched API actor protocol | Approved separate CPU/API caps below |
 | AS12 | Kev27B direct actor | None | 1 | 300 | 26 | 294 | Verified complete 345391 | Upstream DOM + text assistance | Approved1 H200/8 CPU/120GiB ×4h total |
 
-**Current coverage:** seven rows have all 300 records: five are verified complete
-(including the reused SFT reference), and both high-reasoning API rows have passed
-collection, scheduler, API and W&B audits with plots/report publication still pending.
-The four GPU rows have saved 452/1,200 records and remain active. Their
+**Current coverage:** seven rows are verified complete, including the reused SFT reference and both high-reasoning API rows with final plots and accounting.
+The four GPU rows have saved 459/1,200 records and remain active. Their
 partial success counts are provisional; protocol differences remain explicit.
 Direct Kev27B is now verified at 26/300 (8.67%; 26/294 valid-only, 8.84%), with
 six diagnosed invalids and 9,907/14,400 scheduler seconds charged.
@@ -76,13 +75,12 @@ their owner has now completed the final audits, retaining16 and9 diagnosed inval
 
 **October 5 direct-Kev follow-up:** the initial recovery 345243 used another 674s; its successor 345255 used 708s before stopping on a local-model HTTP 422. The peer owner acknowledged and diagnosed that failure before the replacement described below. All 154 completed records (152 valid) and interrupted attempts remain preserved. Total use is **6,135/14,400 seconds**, leaving **8,265 seconds** under its original separate approval. The Qwen/Luna and high-reasoning jobs continue independently.
 
-**October 5 Sol-high endpoint:** all 300 records are independently verified: **61 successes (20.33% overall; 22.34% of 273 valid)** and 27 diagnosed invalids. Job 345179 completed in **7,056/21,600 approved seconds**; all four workers exited successfully and all four W&B runs finished. Every returned actor receipt confirms `gpt-6.1-sol`, high effort, and completed output. The actor ledger reconciles across **3,978 calls: $45.7640955 recorded upper-bound cost plus $0.66115 reserved for four HTTP 5xx errors**, totaling **$46.4252455/$100**. The raw failures and reservations remain preserved. Luna-high continues independently; the shared judge accounting and combined three-arm cost/latency/token figures wait for the full 600-episode audit. These actor dollars exclude judging and local CPU charges.
+**October 5 Sol-high endpoint:** all 300 records are independently verified: **61 successes (20.33% overall; 22.34% of 273 valid)** and 27 diagnosed invalids. Job 345179 completed in **7,056/21,600 approved seconds**; all four workers exited successfully and all four W&B runs finished. Every returned actor receipt confirms `gpt-6.1-sol`, high effort, and completed output. The actor ledger reconciles across **3,978 calls: $45.7640955 recorded upper-bound cost plus $0.66115 reserved for four HTTP 5xx errors**, totaling **$46.4252455/$100**. The raw failures and reservations remain preserved. At this single-arm endpoint Luna-high was still running; the completed two-arm audit and three plots are reported below. These actor dollars exclude judging and local CPU charges.
 
 **October 5 direct-Kev recovery update:** the peer owner resumed collection as **345273** after diagnosing the local-server rejection, preserving completed records and diagnosed invalids. Its replacement ceiling is **8,220s**; prior use plus this ceiling is **14,355/14,400 approved seconds**. Worker progress and the owner’s active repair continuation are verified. Protocol and diagnostic details remain with the [peer report](RL_EVALUATION.md#kev27b-actor-full300-20261004).
 
-**Coverage checklist:** eleven committed full-set comparison rows: five verified
-complete rows including the reused baseline, two audited high-reasoning API rows
-awaiting report closeout, and four GPU rows running after recovery. The five fresh Luna-study
+**Coverage checklist:** eleven committed full-set comparison rows: one completed reusable
+baseline, one verified CPU family, two audited selectors, four GPU rows running after recovery, two verified high-reasoning actors and the peer-audited direct Kev27B actor. The five fresh Luna-study
 rows share two approved pools. This totals3,000 new
 full-set episodes across separately budgeted studies plus300 reused baseline records. AS12 uses its own upstream DOM policy and GPT-4.1-mini text assistance; see the [direct Kev27B protocol](RL_EVALUATION.md#kev27b-actor-full300-20261004). Its results are not a matched comparison with the pixel-based API actors. No
 Luna+Luna row is planned. Qwen + Luna N=10 (former AS03) is excluded by the
@@ -209,11 +207,10 @@ not establish what higher reasoning effort would achieve.
 Of169 valid failures,59 exhausted the30-step horizon and110 terminated with a
 completion claim rejected by the terminal judge. The21 invalid tasks were
 unavailable starts. These are termination categories, not a semantic diagnosis
-of every failed action. More reasoning could improve planning, grounding or
-stopping decisions; it is an untested intervention here.
+of every failed action. The completed high-effort comparison below tests the observed effect on this harness.
 
 The user requested GPT-6.1 Sol at high reasoning. Two actor-only comparisons are
-approved and running in parallel: **AS10 Luna-high** isolates effort against the existing medium result;
+complete after running in parallel: **AS10 Luna-high** isolates effort against the existing medium result;
 **AS11 GPT-6.1 Sol-high** compares model choice at the same high setting. Each
 uses all300 tasks, the corrected pixel-coordinate harness, identical task goals
 and browser tools, local1280×720 browsers,30 turns,4,096 total output tokens,
@@ -234,7 +231,7 @@ reasoning as well as visible output. [Sol model and pricing](https://developers.
 | AS10 Luna-high |300 |0 GPU,16 CPU,32GiB ×6h;4 browser workers |$15 and9,900 calls |$2.21 |
 | AS11 GPT-6.1 Sol-high |300 |0 GPU,16 CPU,32GiB ×6h;4 browser workers |$100 and9,900 calls |$44.28 |
 
-These independent CPU jobs run in parallel and release each allocation when finished.
+These independent CPU jobs ran in parallel and released both allocations when finished.
 The two resource totals remain separate across retries. Shared terminal-judge
 cap: **$5 /2,640 calls**, giving **$120 maximum API spending** across the pair.
 The6h values are ceilings, not runtime predictions. The counterfactual costs
@@ -242,7 +239,7 @@ apply current Standard token prices to the observed medium cohort; high effort
 and model choice can change tokens, trajectories, caching and latency. No
 budget transfers from the existing study or pilot are authorized.
 
-Status: **Sol6.1-high345179 completed with61/300 successes and passed its independent arm audit; Luna-high345178 remains running**.
+Status: **Both high-reasoning jobs are complete; all 600 records, final accounting and eight finished W&B runs passed the independent audit**.
 Both arms launched with four browser workers each. The frozen implementation passed21 targeted
 accounting and coordinate tests. Live startup checks at **2026-10-05 16:55:46 UTC** verified
 all eight W&B runs in `openwebrl-evals`, exact returned model identities,
@@ -250,10 +247,10 @@ high reasoning,4,096-token output caps, and no actor/judge budget halts.
 Initial saved coverage was1/300 Luna-high and2/300 Sol-high; this records startup
 validation, not the current performance result. Both jobs have0 allocated GPUs.
 
-The final Sol audit retained four transient provider errors (HTTP502, HTTP503, and two HTTP520 responses); later requests succeeded. All four failed episodes and their unresolved cost reservations are preserved. Cost plots will show conservative reservation bounds, and token plots will mark missing-usage totals as lower bounds. The shared two-arm study remains in progress.
+The final Sol audit retained four transient provider errors (HTTP502, HTTP503, and two HTTP520 responses); later requests succeeded. All four failed episodes and their unresolved cost reservations are preserved. The completed cost plots include those conservative reservations, and the token plots mark missing-usage totals as lower bounds.
 
-A verified persistent supervisor checks both jobs and returns the owning agent
-for diagnosis/recovery every15 minutes or on state changes, new API errors, or receipt protocol violations. Each retry charges
+A verified persistent supervisor checked both jobs and returned the owning agent
+for diagnosis/recovery every15 minutes or on state changes, new API errors, or receipt protocol violations. It is retired after verified publication. Each retry charges
 its original arm's six-hour total. Track success, paired differences, costs,
 latency, total/reasoning/cache tokens, browser steps and CPU allocation use;
 plot success versus cost, latency and input/output tokens after complete
@@ -409,6 +406,57 @@ the separate pilot. Its dispatch back to the owning repair agent is verified.
 It checks health each minute and requests agent review on failures/stalls or
 at15-minute intervals; user-facing routine summaries remain hourly. Peer runs
 retain their own repair owners and approvals.
+
+<a id="api-actor-high-results-20261005"></a>
+### Completed Luna-high / Sol6.1-high comparison — October5
+
+**All 600 new episodes are verified.** Neither high-reasoning arm improved on the earlier Luna-medium cohort in this experiment. The medium run was collected earlier, so its comparisons include possible live-site differences. Sol-high is a reference under this browser/tool/judge protocol; the result does not establish a model-wide capability ranking.
+
+| Actor | Successes / tasks | Valid | Overall | Valid-only | Overall 95% task-bootstrap interval |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Luna medium (earlier cohort) |110/300 |279 |36.67% |39.43% |31.00–42.00% |
+| Luna high |97/300 |277 |32.33% |35.02% |27.00–37.67% |
+| GPT-6.1 Sol high |61/300 |273 |20.33% |22.34% |15.67–25.00% |
+
+| Actor | Actor API USD / task | Mean episode seconds | Mean input tokens | Mean output tokens | Mean browser steps |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Luna medium (earlier cohort) |$0.00738 |78.09 |54,268.61 |1,274.59 |12.80 |
+| Luna high |$0.01181 |114.63 |83,716.22 |2,811.79 |17.98 |
+| GPT-6.1 Sol high |$0.15255–$0.15475 |90.27 |≥59,210.76 |≥535.46 |13.25 |
+
+Actor costs are frozen-price token estimates, excluding judging and local CPU charges. Ranges include cache-price uncertainty and, for Sol, four unresolved request reservations. Sol token means are lower bounds for that reason. Episode latency excludes the terminal judge. All 300 tasks remain in each overall denominator; invalid episodes are not silently dropped.
+
+| Paired comparison | Overall difference |95% task-bootstrap interval | Common-valid tasks | Difference on common-valid tasks |
+| --- | ---: | ---: | ---: | ---: |
+| Luna high − medium |-4.33pp |-9.33 to +0.67pp |277 |-4.69pp |
+| Sol high − Luna high |-12.00pp |-17.33 to -6.67pp |272 |-12.87pp |
+| Sol high − Luna medium |-16.33pp |-22.00 to -10.33pp |273 |-17.22pp |
+
+The Luna high-versus-medium interval includes zero; this cohort does not establish a change caused by reasoning effort.
+
+Every returned response has the exact requested model and high reasoning effort: **5,393 Luna responses and 3,974 Sol responses**. All returned responses were completed; there were **zero output-cap hits**. Maximum returned output was 2,598 tokens for Luna and 800 for Sol. Reasoning tokens are subsets of total output: 664,084 for Luna and 53,241 for Sol. The four Sol HTTP 5xx calls retain unknown usage and conservative reservations. These observations rule out output-cap truncation in the returned responses; they do not identify the semantic cause of each failure.
+
+Luna retained 23 invalid episodes: 21 unavailable starts and two missing-screenshot browser failures. Sol retained 27: 21 unavailable starts, two browser failures and four provider 5xx errors. The saved verdict, final screenshot, artifact hashes and receipt-derived metrics passed verification; no failed outcomes were selectively rerun.
+
+| Final resource ledger | Used | Approved cap |
+| --- | ---: | ---: |
+| Luna high,0GPU/16CPU/32GiB |8,907s (2h28m27s) |21,600s |
+| Sol high,0GPU/16CPU/32GiB |7,056s (1h57m36s) |21,600s |
+| Luna actor |$3.544138;5,393 calls |$15;9,900 calls |
+| Sol actor |$46.425246;3,978 calls |$100;9,900 calls |
+| Shared terminal judge |$1.412495;340 calls |$5;2,640 calls |
+
+Both pools used zero local GPUs; hosted API compute is unavailable. Scheduler use totals 70.95 CPU-core-hours. All eight workers exited successfully and all eight evaluation W&B runs finished. Budgets remain separate; no unused balance was transferred. The primary cohorts and all physical attempts are preserved.
+
+[Aggregate metrics, paired comparisons and accounting](arm_results/reasoning_actors_full300_20261005/summary.json).
+
+![Success versus actor cost](arm_results/reasoning_actors_full300_20261005/cost.png)
+
+![Success versus episode latency](arm_results/reasoning_actors_full300_20261005/latency.png)
+
+![Success versus input and output tokens](arm_results/reasoning_actors_full300_20261005/tokens.png)
+
+Vector plots: [cost](arm_results/reasoning_actors_full300_20261005/cost.svg), [latency](arm_results/reasoning_actors_full300_20261005/latency.svg), [tokens](arm_results/reasoning_actors_full300_20261005/tokens.svg).
 
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking, official SFT and Luna: performance versus cost — October4
