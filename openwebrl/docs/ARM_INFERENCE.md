@@ -410,7 +410,7 @@ retain their own repair owners and approvals.
 <a id="api-actor-high-results-20261005"></a>
 ### Completed Luna-high / Sol6.1-high comparison — October5
 
-**All 600 new episodes are verified.** Neither high-reasoning arm improved on the earlier Luna-medium cohort in this experiment. The medium run was collected earlier, so its comparisons include possible live-site differences. Sol-high is a reference under this browser/tool/judge protocol; the result does not establish a model-wide capability ranking.
+**All 600 new episodes are verified.** Neither high-reasoning arm improved on the earlier Luna-medium cohort in this experiment. The medium run was collected earlier, so its comparisons include possible live-site differences. Sol-high is a reference under this browser/tool/judge protocol; the result does not establish a model-wide capability ranking. **These are scores under the saved permissive judge rubric, which can credit partial progress; they are not independently verified strict task-completion rates.** See the [stopping and judge audit](#api-actor-stopping-audit-20261005).
 
 | Actor | Successes / tasks | Valid | Overall | Valid-only | Overall 95% task-bootstrap interval |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -457,6 +457,30 @@ Both pools used zero local GPUs; hosted API compute is unavailable. Scheduler us
 ![Success versus input and output tokens](arm_results/reasoning_actors_full300_20261005/tokens.png)
 
 Vector plots: [cost](arm_results/reasoning_actors_full300_20261005/cost.svg), [latency](arm_results/reasoning_actors_full300_20261005/latency.svg), [tokens](arm_results/reasoning_actors_full300_20261005/tokens.svg).
+
+<a id="api-actor-stopping-audit-20261005"></a>
+### Why the Sol-high result needs a harness audit — October5
+
+An offline review found a large difference in when the actors end an episode. Calling `done` can report a blocker or ask a question; it does not necessarily claim task success. The counts below include all 300 tasks per arm and retain the original verdicts.
+
+| Saved behavior | Luna high | Sol6.1 high |
+| --- | ---: | ---: |
+| `done` on the first action |7 |58 |
+| Successes among those first-action endings |0 |2 |
+| First-action terminal text reports a site or verification block |7 |53 |
+| First-action terminal text asks for a location |0 |3 |
+| `done` within the first three actions |29 |100 |
+| Any terminal `done` |162 |178 |
+
+**The harness supplies an empty system message and requires a tool call.** The task goal and screenshot are supplied in user messages; the empty system message means there is no system instruction defining autonomous behavior. This was verified from the first saved API request for all 279 episodes per arm that reached the actor; the other 21 stopped before an actor request. The `done` description explicitly permits ending when a CAPTCHA or anti-bot verification page blocks progress. With no interactive clarification channel, a location question sent through `done` ends the episode. Two inspected tasks omitted the location: Sol asked for it and failed, while Luna chose a location and passed. This exposes a mismatch between interactive-assistant behavior and autonomous benchmark scoring, rather than showing that the question itself was unreasonable.
+
+Among Sol's 58 first-action endings, Luna passed ten tasks that Sol failed: eight reported blocks and two location questions. Visual review of all eight block-related pairs found a visible site or verification block in **both** initial screenshots. These eight differences therefore cannot simply be attributed to Sol alone receiving an initially blocked page. This is a selected case review, not a measurement of block prevalence across all tasks or proof that later browser states were identical. The remaining Sol first-action endings include one shopping refusal and one direct answer; report categories describe the terminal text, not independently verified causes for all 58 episodes.
+
+**This explains only part of the observed gap.** Across 272 common-valid tasks, Luna alone passed 53 and Sol alone passed 18. The first-action-ending subset contributes ten Luna-only passes and one Sol-only pass; most of the net difference remains outside that subset. Neither empty system instructions nor early stopping has been tested as a causal intervention. Model identity, requested high effort and returned-response completeness were verified, but the result should not be called a general capability ranking or a reliable upper bound.
+
+**The saved judge rubric also rewards partial progress.** All 340 judge calls (162 Luna, 178 Sol) used the same system prompt. Its rules allow success for more than eight correct actions, completing one of two subtasks, or omitting the final save. In one of the eight inspected block-related Luna passes, the final screenshot still showed an access error and the actor acknowledged that the requested content could not be displayed. The judge nonetheless credited navigation to the requested URL and cited the number of effective steps. This demonstrates that a saved success can fall short of visible completion; one selected example does not estimate the false-positive rate. The shared rubric may interact differently with actors that keep navigating and actors that stop, but its contribution to the score gap has not been quantified. Original verdicts remain unchanged.
+
+The next useful control is a separately specified, matched autonomous-agent prompt with explicit handling of underspecified goals and clear success/failure terminal actions, alongside an independent audit of site availability and discordant judge verdicts. Preserve all current results and report any new protocol separately; do not selectively rerun failed tasks or instruct actors to bypass verification. No new model calls or allocations were used for this review. [Aggregate stopping audit](arm_results/reasoning_actors_full300_20261005/stopping-behavior.json).
 
 <a id="luna-qwen-inference-20261004"></a>
 ## Qwen Thinking, official SFT and Luna: performance versus cost — October4

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "reviewed_epoch": 1791237793.112218,
+  "analysis": "descriptive_offline_stopping_audit",
+  "review_sha256": "5085b302d908a6252d4c8ad32eb6fa35b88a9dfddddcadd15414986eeb67d925",
+  "outcomes_changed": false,
+  "new_model_calls": 0,
+  "arms": {
+    "luna_high": {
+      "episodes": 300,
+      "initial_instruction_messages": {
+        "empty_system_only": 279,
+        "no_actor_request": 21
+      },
+      "terminal_done": 162,
+      "terminal_done_successes": 97,
+      "first_action_done": 7,
+      "first_action_done_successes": 0,
+      "done_within_three_actions": 29,
+      "first_action_terminal_categories": {
+        "reports_site_or_verification_block": 7
+      },
+      "paired_first_action_outcomes": {
+        "self_0_other_0": 7
+      }
+    },
+    "sol61_high": {
+      "episodes": 300,
+      "initial_instruction_messages": {
+        "empty_system_only": 279,
+        "no_actor_request": 21
+      },
+      "terminal_done": 178,
+      "terminal_done_successes": 61,
+      "first_action_done": 58,
+      "first_action_done_successes": 2,
+      "done_within_three_actions": 100,
+      "first_action_terminal_categories": {
+        "reports_site_or_verification_block": 53,
+        "shopping_refusal": 1,
+        "asks_for_location": 3,
+        "direct_answer": 1
+      },
+      "paired_first_action_outcomes": {
+        "self_0_other_0": 46,
+        "self_0_other_1": 10,
+        "self_1_other_1": 1,
+        "self_1_other_0": 1
+      }
+    }
+  },
+  "limitations": [
+    "Terminal text categories describe model reports, not verified causes for all episodes.",
+    "First-action stopping is associated with outcomes; this is not a causal ablation.",
+    "The eight screenshot pairs were selected for Sol first-action block reports and Luna success.",
+    "A done call can contain a blocker report or clarification question, not only a success claim."
+  ],
+  "common_valid_paired_outcomes": {
+    "luna_1_sol_0": 53,
+    "luna_1_sol_1": 43,
+    "luna_0_sol_0": 158,
+    "luna_0_sol_1": 18
+  },
+  "manual_initial_screenshot_review": {
+    "selected_pairs": 8,
+    "both_initial_screens_show_site_or_verification_block": 8,
+    "scope": "All pairs where Sol stopped on its first action reporting a block and Luna passed.",
+    "annotation": "Visually inspected both saved initial screenshots; block types match within each pair."
+  },
+  "harness": {
+    "actor_reached_episodes_per_arm": 279,
+    "empty_system_message_per_arm": 279,
+    "tool_choice": "required",
+    "parallel_tool_calls": false,
+    "done_ends_episode": true,
+    "done_description_explicitly_allows_stopping_at_captcha_or_antibot": true
+  },
+  "judge_rubric_audit": {
+    "all_340_judge_system_prompts_identical": true,
+    "per_arm_judged_episodes": {
+      "luna_high": 162,
+      "sol61_high": 178
+    },
+    "judge_system_prompt_sha256": "6906e021cb15a3398225fe82232ea5ee61b1cb7489c0bbbd9be4ad82f2000ca9",
+    "rubric_allows_over_eight_correct_actions_without_strict_completion": true,
+    "rubric_allows_one_of_two_subtasks": true,
+    "rubric_allows_omitting_final_save": true,
+    "selected_verified_success_with_final_access_error": 1,
+    "selected_example_not_a_false_positive_rate": true,
+    "verdicts_changed": false
+  }
+}
