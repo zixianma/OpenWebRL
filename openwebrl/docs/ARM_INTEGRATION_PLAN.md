@@ -8850,10 +8850,17 @@ accounting remains separate; no unused old budget is added to the extension.
 |344761 |24h |afterok344760 |Continue unchanged lineage |
 |344762 |24h |afterok344761 |Finish90 and its full300 evaluation |
 
-All four jobs are submitted and released, queued on dependencies. Failed
+All four jobs are submitted and released. As of October5 10:20 Pacific,
+344759 awaits resources; the other three retain their dependencies. Failed
 predecessors require agent diagnosis and budget-accounted recovery before
 successors are unblocked. Release unused queued allocations once90 and its
-artifacts are complete. Earlier recovery344274 retains its original38min cap.
+artifacts are complete. Recovery344274 was stopped after841s: reconstruction
+and two finite optimizer updates passed, but g015 GPU0 thermally throttled.
+The measured128/129s updates projected another26min before checkpointing with
+only21min left before the controller cutoff. Checkpoint20 remains authoritative;
+the two transient updates were not saved. Its validated57.4GB replay archive is
+retained for344759. Original24h accounting closes at84,960s used/1,440s released;
+the separate96h extension remains unspent.
 
 Preserve actor/optimizer state, constant1e-6 LR scheduler and counters, task
 cursor, data union and W&B identity. Keep TP2/DP4, microbatch1, global256, PPO2,
@@ -8865,7 +8872,8 @@ W&B evaluation runs stay in`openwebrl-evals`.
 Iterations11–20 averaged61.87min on thermally throttled g011:70 more iterations
 project to72.18h plus about7h for evaluations and handoffs. A healthy node may
 reduce total runtime to50–65h, but that improvement remains unverified for this
-lineage. g011 is excluded. The96h cap includes recovery margin, not a runtime
+lineage. g011 and g015 are excluded from all four queued allocations following
+observed thermal throttling. The96h cap includes recovery margin, not a runtime
 target. Judge spending/reservations at approval were$78.86; this balance is
 preserved in the cumulative ledger. Storage startup checks passed with30.46TiB
 soft-quota headroom.
@@ -8883,10 +8891,12 @@ registered allocation, preserving all1,850 turns and cursor advance96.
 supervisor suites; all seven native continuation commands pass dry runs.
 Tests cover native60→90 scheduler restoration, unchanged judge requests and
 cumulative charges, retry/queued-budget accounting, safe iteration boundaries,
-and exact70/80/90 checkpoint/evaluation identities. Actual GPU restoration and
-first useful optimizer progress remain startup checks. Original344274 launcher
-fingerprints and frozen source remain unchanged. The active-agent supervisor
-follows all five jobs and now requests iteration90 supervision, with15min
+and exact70/80/90 checkpoint/evaluation identities. Recovery344274 completed
+reconstruction, GPU checkpoint restoration, archive-preserving replay and two
+finite optimizer updates; a durable21 has not been produced. The new continuation
+still needs its own startup verification. Original344274 launcher fingerprints
+and frozen source remain unchanged. The active-agent supervisor follows344759
+and its three successors, with15min
 checks/hourly routine reports and earlier failure/completion alerts.
 
 Approval, ledger, readiness and submission receipts remain private under
@@ -8904,12 +8914,12 @@ Job342742 subsequently hit an early controller cutoff. Its first replay attempt
 343513 failed before optimizer updates when the debug saver overwrote its
 memory-mapped input. A second attempt343716 consumed39s on an incorrect
 batch-divisibility check. Native PPO2 keeps1,850 turns and selects1,792 per epoch;
-the corrected recovery preserves all1,850. Recovery344274 is queued for38min
-within the original approval after charging every failed attempt. It will
-reconstruct the retained metadata/screenshots with validated identical processing,
-then replay21 using the fixed archive-preservation guard. Target60 and
-evaluations30/40/50/60 remain unfinished; continuation
-beyond the remaining first-block budget requires additional compute approval.
+the corrected recovery preserves all1,850. On October5, recovery344274 rebuilt
+the batch and verified two finite updates, then was stopped early because g015
+GPU0 thermal throttling made the full checkpoint unlikely to fit its38min cap.
+The replay archive is retained and checkpoint20 remains the resume point.
+Continuation to90 and full300 evaluations every10 are now explicitly approved
+under the separate96h budget [above](#arm-expanded-outcome-to90-20261005).
 [Results and artifact audit](RL_EVALUATION.md#expanded4102-iter10-results-20261003) ·
 [Budget recovery](RL_RUNTIME.md#expanded4102-budget-cutoff-recovery-20261004).
 

@@ -5278,9 +5278,11 @@ checkpoint-to-checkpoint training intervals.
 Checkpoint20 is durable with312 Adam/scheduler updates and a verified full300
 evaluation. Job342742 then collected iteration21, but its controller subtracted
 an unnecessary40min evaluation reserve from the training deadline. It stopped
-during21 with unused approved time. A38min recovery is now queued as344274;
-it must reconstruct the saved image tensors before replaying21. Target60 remains
-unfinished and is not covered by an additional compute approval.
+during21 with unused approved time. Recovery344274 ran on October5, rebuilt the
+saved tensors and verified two optimizer updates. It was stopped early after
+observed thermal throttling made checkpoint21 unlikely to fit its38min cap.
+The unchanged lineage now has a separately approved96h continuation to90;
+[approval and queue](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).
 
 | Attempt | Final charged seconds | Result |
 | --- | ---: | --- |
@@ -5289,8 +5291,8 @@ unfinished and is not covered by an additional compute approval.
 |342742 |41,471 |Checkpoint20 and evaluations10/20; early reserve cutoff |
 |343513 |296 |Restored20; replay archive self-overwrite; no optimizer update |
 |343716 |39 |Incorrect batch-shape guard; no reconstruction or optimizer update |
-|**Consumed** |**84,119** |**Original approval86,400s** |
-|344274 |2,280 maximum |Queued;1s left unallocated |
+|344274 |841 |Rebuilt replay; two finite updates; stopped for thermal/runtime limit |
+|**Consumed** |**84,960** |**Original approval86,400s;1,440s released** |
 
 **Replay failure:**343513 loaded `20.pt` using `torch.load(..., mmap=True)`.
 The existing debug saver then called `torch.save` on the same pathname,
@@ -5308,7 +5310,9 @@ encoder/model processor, requires exact saved prompt tokens and image grids,
 and validates tensor shapes, strides and dtypes. A bounded real-sample CPU
 check reproduced its entire30,474,240-byte pixel tensor byte-for-byte against a
 retained original cache buffer. Full reconstruction and per-sample checks run
-on the replacement allocation's CPUs before training; they are not yet complete.
+on the replacement allocation's CPUs before training;344274 completed all1,850
+samples in146.36s and wrote a separate57,395,302,151-byte archive. Its ZIP directory,
+provenance and96-group cursor advance were independently checked.
 The damaged metadata is retained, and rebuilt output goes to a separate path.
 
 **PPO2 recovery check correction:**343716 stopped after39s because the reconstruction
@@ -5319,7 +5323,7 @@ groups**. Native PPO2 keeps all1,850 turns, then shuffles/repartitions and selec
 check requires the exact1,850/48 shape without trimming or reordering. Tests reject
 a pre-trimmed batch and changed group counts. Reconstruction failures now also
 write an explicit failed controller status before training starts. Full tensor
-reconstruction and GPU replay remain pending.
+reconstruction, GPU restore and the replay archive-preservation guard now pass.
 
 344274 preserves checkpoint20, the96-submitted-group replay cursor, full60-step
 scheduler horizon, optimizer, W&B identity and scientific recipe. It uses only
@@ -5328,15 +5332,26 @@ with180s reserved for shutdown. The failed replay attempts consumed296s and39s
 before this38min replacement was computed; all failed time remains charged. Existing evaluations
 10/20 are independently verified and will not be repeated.
 
-The earlier job stayed on g011 until its natural cutoff, as requested. Retries
-exclude that node because of confirmed thermal throttling. The active-agent
-supervisor follows344274. Further training toward60 requires additional exact
-compute approval. Implementation: [replay save guard](../../slime/ray/rollout.py)
+**October5 thermal/runtime handoff:**344274 restored checkpoint20 and completed
+two updates with gradient norms2.7321/1.8177 in128/129s. g015 GPU0 reached90C,
+fell to1110MHz under load and reported active software thermal slowdown; other
+GPUs were45–52C at1965–1980MHz. Twelve remaining updates projected25.7min, before
+the next epoch's validation/save, against21.5min until the controller cutoff.
+The agent stopped the allocation after14min01s to avoid predictable unsaved
+work. The two updates are transient W&B/log observations, not a new checkpoint;
+resume from20/312 Adam updates and replay the saved21 batch with cursor96.
+
+The active-agent supervisor now follows344759→344760→344761→344762. All four
+queued allocations exclude g011 and g015; resources, dependencies and the
+separate96h cap are unchanged. Original24h unused time is released, not added.
+Implementation: [replay save guard](../../slime/ray/rollout.py)
 and [regression tests](../../tests/test_replay_archive_preservation.py).
 Private receipts remain under the expanded outcome-only controller:
 `recovery-343513/diagnosis.json`, `recovery-343716/diagnosis.json`,
 `replay21-batch-shape-audit.json`, `replay21-first-sample-parity.json`,
-`pending-batch-recovery-submission.json` and `attempts.json`.
+`pending-batch-recovery-submission.json`, `attempts.json`,
+`recovery344274-final-agent-review.json`, `recovery344274-early-stop.json`,
+and `to90-20261005/g015-thermal-exclusion.json`.
 
 <a id="expanded4102-egl-regression-20261003"></a>
 ### Expanded4102 source omitted the browser launch fix, October3
