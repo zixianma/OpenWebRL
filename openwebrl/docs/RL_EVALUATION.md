@@ -726,7 +726,7 @@ limitations; these are not final full300 results.
 | Run | Current job | Audit time | Records | Valid | Invalid | Judge successes | Scheduler seconds charged |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT + Jev | 345021 | 10-05 05:35 PDT | 222/300 | 210 | 12 | 140 | 21270 |
-| SFT + Kev27B | 344793 | 10-05 05:29 PDT | 240/300 | 233 | 7 | 159 | 22143 |
+| SFT + Kev27B | 344793 | 10-05 05:49 PDT | 248/300 | 241 | 7 | 162 | 23302 |
 <!-- sft-full300-live-audit:end -->
 
 <a id="sft-kev-progress-audit-20261005"></a>
@@ -774,6 +774,16 @@ saved page text, and another substitutes purchase source for the requested
 device-use filter despite a separate device option in the saved page. Both
 canonical positives remain unchanged, with hashed evidence in the private
 review. The worker, sampling settings and original budget are unchanged.
+
+The 248-record Kev audit retains seven diagnosed invalids and verifies 241
+scored episodes with 162 canonical positives. One new private-review note flags a
+positive that accepts an exactly 4.0-rated station for an above-4.0 requirement
+and credits an attempted review sort despite its not completing. Another flags
+an unsupported highest-view ranking: the saved page text lists a higher-view
+robotics talk within the required duration that the actor did not inspect.
+The competitor's own topic-tag page was not visited, so this is an evidence gap,
+not a conclusive relabeling. Canonical scores remain unchanged, and all 240
+earlier result files remain byte-identical.
 
 <a id="sft-jev-context-recovery-20261005"></a>
 **Jev input-limit recovery — October 5.** Job344794 stopped after189 saved
