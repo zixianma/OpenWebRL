@@ -3,7 +3,7 @@
 <a id="arm-rltasks-three-arm-20261006"></a>
 ## Fresh comparison of original and RL-task SelectionARM — October 6
 
-**Both replacement jobs are collecting: 187/900 episode records verified as of October 6, 14:49 PDT (118 on shard 0; 69 on shard 1).** Jobs 347256 and 347257 replace 347180 and 347181 within their original caps. Both passed the prespecified startup gate and now use their eight-browser queues. The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. No historical outcome is substituted for a fresh result; these incomplete counts do not establish a success-rate comparison.
+**Both replacement jobs are collecting: 298/900 episode records verified as of October 6, 15:10 PDT.** Jobs 347256 and 347257 replace 347180 and 347181 within their original caps. Both passed the prespecified startup gate and now use their eight-browser queues. The user requested the earlier protocol behind the first table in ARM_SUMMARY (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. No historical outcome is substituted for a fresh result. The matched preview below is incomplete and may overrepresent tasks that finish quickly.
 
 | Arm | Actor | Selector | Proposals per decision | Fresh OM2W episodes | Status |
 | --- | --- | --- | ---: | ---: | --- |
@@ -35,10 +35,42 @@ Each shard keeps its original 2 H200 / 16 CPU / 240 GiB allocation shape and $10
 **Context-limit diagnosis:** three shard-0 episodes reached the fixed 32,768-token limit when the full prompt was combined with the 1,024-token completion allowance. These outcomes remain invalid in the primary sample and count as zero overall; neither history nor the context/output limits were changed. The HTTP client made 60 HTTP attempts per rejected candidate request, producing 660 rejected HTTP requests across those three episodes. A narrowly scoped fail-fast patch passes five offline cases, including unchanged successful and transient-error behavior. It is prepared for the next otherwise-required recovery, but is **not deployed**: interrupting eight active task groups to remove this bounded retry delay would discard useful work. Browser page-load failures and these input-limit failures remain separately diagnosed. Allocation time includes the retries; logical actor-request counts do not count each transport retry separately.
 
 
+<a id="arm-rltasks-three-arm-preview-20261006"></a>
+### Matched preview — 93 of 300 tasks
+
+Only the **93 tasks with all three committed outcomes** enter this preview (279 episodes). Invalid outcomes count as zero; the other 19 committed episodes remain saved and accounted for. This is a duration-selected partial cohort, not the full300 result.
+
+| Arm | Success | Valid-only success | Invalid episodes | Mean episode latency | Mean actor + selector tokens |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| SFT alone | 34/93 = 36.6% | 41.0% | 10 | 161.2 s | 112.9k |
+| SFT + Piotr ARM | 36/93 = 38.7% | 43.4% | 10 | 218.3 s | 717.4k |
+| SFT + RL-task ARM | 37/93 = 39.8% | 46.2% | 13 | 221.7 s | 654.2k |
+
+| Paired contrast | Success difference | 95% task-bootstrap interval |
+| --- | ---: | ---: |
+| RL-task ARM − SFT | +3.2 pp | [-6.5, +12.9] pp |
+| Piotr ARM − SFT | +2.2 pp | [-6.5, +10.8] pp |
+| RL-task ARM − Piotr ARM | +1.1 pp | [-9.7, +11.8] pp |
+
+All three difference intervals include zero. The aggregate preserves common-valid comparisons and the receipt-I/O phase sensitivity; no winner is established.
+
+**Cost interpretation:** both compute panels estimate decoder work from actual actor/selector token receipts. One charges full prefill for every request; the other uses observed actor KV-cache hits. Both exclude vision encoders, failed/unmetered requests and hardware overhead, so neither is total measured FLOPs or a dollar price. Tokens include cached input. Episode latency is wall time, while request durations overlap. Whole-allocation GPU-hours and evaluation-judge dollars include every attempt and remain separately reported; shared GPUs do not support exact per-arm dollar attribution.
+
+![Partial performance versus estimated decoder compute](arm_results/selectionarm_rltasks_historical_20261006/cost.png)
+
+![Partial performance versus episode latency](arm_results/selectionarm_rltasks_historical_20261006/latency.png)
+
+![Partial performance versus actor and selector tokens](arm_results/selectionarm_rltasks_historical_20261006/tokens.png)
+
+[Aggregate preview, paired uncertainty and accounting](arm_results/selectionarm_rltasks_historical_20261006/aggregate.json). The offline reporting checks pass 18 tests covering matched cohorts, invalid outcomes, separate retry budgets, final-accounting gates, token receipts and both selector variants. Final reporting still requires all 900 episodes and terminal scheduler/API accounting.
+
+
 Inference-time ARM selection, terminal-success judge alignment, and unavailable-task retry policy. Initial benchmark results and retries retain separate denominators. See [all experiment results](ARM_RESULTS.md) for comparison with standalone training.
 
 ## Contents
 
+- [Fresh baseline, Piotr ARM and RL-task ARM comparison](#arm-rltasks-three-arm-20261006)
+- [Partial matched performance and efficiency plots](#arm-rltasks-three-arm-preview-20261006)
 - [Consolidated Qwen/SFT/GPT-6/Jev/Kev results and scaling comparisons](ARM_INFERENCE_SCALING.md)
 - [Controlled full300 ARM versus episode pass@5 experiment](#arm-controlled-inference-20261004)
 - [Inference cost versus episode pass@k](#arm-inference-cost-passk-20261004)

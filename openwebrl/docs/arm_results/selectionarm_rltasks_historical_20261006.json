@@ -63,7 +63,7 @@
   "status": "both_shards_collecting_startup_verified",
   "cpu_imports_passed": true,
   "checkpoint_sha256_verified": true,
-  "paid_api_calls": 114,
+  "paid_api_calls": 192,
   "arms": [
     {
       "actor": "OpenWebRL/OpenWebRL-4B-SFT",
@@ -91,7 +91,7 @@
   ],
   "supervisor_tests_passed": 6,
   "active_agent_queue_verified": true,
-  "completed_episodes": 187,
+  "completed_episodes": 298,
   "verified_complete": false,
   "repair": {
     "name": "awaited_receipt_io",
@@ -123,42 +123,67 @@
     "347257"
   ],
   "initial_tests_passed": 22,
-  "judge_charged_or_reserved_usd": 0.8786799999999999,
+  "judge_charged_or_reserved_usd": 1.5518876999999995,
   "scheduler_attempts_submitted": 4,
-  "as_of_epoch": 1791323397.651063,
+  "as_of_epoch": 1791324658.9445307,
   "final_accounting_verified": false,
   "success_rate_comparison_ready": false,
   "live_accounting": [
     {
       "shard": 0,
-      "job_id": "347256",
-      "completed_episodes": 118,
-      "records_hashes_verified": 118,
-      "all_attempt_allocation_seconds": 6225,
-      "remaining_total_seconds": 8175,
+      "attempts": [
+        {
+          "job_id": "347180",
+          "state": "FAILED",
+          "elapsed_seconds": 1584,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347256",
+          "state": "RUNNING",
+          "elapsed_seconds": 5899,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        }
+      ],
+      "allocation_seconds": 7483,
+      "allocation_seconds_cap": 14400,
+      "allocated_gpu_hours": 4.157222222222222,
       "judge": {
-        "calls": 67,
-        "charged_or_reserved_usd": 0.5568024
-      }
+        "calls": 110,
+        "charged_or_reserved_usd": 0.9278917999999999
+      },
+      "settled_judge_usd": 0.9278918,
+      "unsettled_judge_receipts": 0,
+      "final_accounting_verified": false
     },
     {
       "shard": 1,
-      "job_id": "347257",
-      "completed_episodes": 69,
-      "records_hashes_verified": 69,
-      "all_attempt_allocation_seconds": 4445,
-      "remaining_total_seconds": 9955,
+      "attempts": [
+        {
+          "job_id": "347181",
+          "state": "FAILED",
+          "elapsed_seconds": 42,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347257",
+          "state": "RUNNING",
+          "elapsed_seconds": 5660,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        }
+      ],
+      "allocation_seconds": 5702,
+      "allocation_seconds_cap": 14400,
+      "allocated_gpu_hours": 3.167777777777778,
       "judge": {
-        "calls": 47,
-        "charged_or_reserved_usd": 0.32187759999999993
-      }
+        "calls": 82,
+        "charged_or_reserved_usd": 0.6239958999999997
+      },
+      "settled_judge_usd": 0.6239959,
+      "unsettled_judge_receipts": 0,
+      "final_accounting_verified": false
     }
   ],
-  "completed_by_arm": {
-    "actor0": 61,
-    "piotr": 63,
-    "arm": 63
-  },
   "context_limit_audit": {
     "affected_committed_episodes": 3,
     "physical_rejected_http_requests": 660,
@@ -170,5 +195,8 @@
     "fail_fast_patch_deployed": false,
     "repair_timing": "Next otherwise-required recovery; no interruption solely to remove bounded retry delay.",
     "request_count_caveat": "Actor requests are logical candidate calls; transport retries are separate."
-  }
+  },
+  "matched_tasks": 93,
+  "matched_preview": "selectionarm_rltasks_historical_20261006/aggregate.json",
+  "report_tests_passed": 18
 }

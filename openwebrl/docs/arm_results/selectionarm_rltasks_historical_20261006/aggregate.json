@@ -1,0 +1,536 @@
+{
+  "epoch": 1791324658.9445307,
+  "status": "partial_matched_preview",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "a1f8d265855ddf1074eae91516c6e86f6f836177",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "davidan03/openwebrl-4b-selectionarm-rltasks",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "one fresh baseline, Piotr-ARM and new-ARM episode per task",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "comparability": "Matched fresh pair; historical collection dates/runtime differ. Judge metering adds4096 output cap."
+  },
+  "recorded_episodes": 298,
+  "expected_episodes": 900,
+  "matched_tasks": 93,
+  "matched_episodes": 279,
+  "unmatched_episodes": 19,
+  "cohort": {
+    "complete": true,
+    "scheduled_tasks": 93,
+    "scheduled_attempts": 279,
+    "completed_attempts": 279,
+    "by_mode": {
+      "arm": {
+        "completed": 93,
+        "successes": 37,
+        "valid": 80,
+        "invalid": 13,
+        "overall": 0.3978494623655914,
+        "valid_only": 0.4625,
+        "actor_requests": 6285,
+        "actor_output_tokens": 2095285,
+        "actor_input_tokens": 54097600,
+        "actor_client_request_seconds": 39603.285442066845,
+        "browser_steps": 1254,
+        "browser_step_seconds": 5515.89173895726,
+        "selector_calls": 1256,
+        "selector_input_tokens": 4635802,
+        "selector_output_tokens": 12560,
+        "selector_service_seconds": 784.5246513858438,
+        "elapsed_seconds": 20616.694793402217,
+        "mean": {
+          "actor_input_tokens": 581694.623655914,
+          "actor_output_tokens": 22529.94623655914,
+          "selector_input_tokens": 49847.333333333336,
+          "selector_output_tokens": 135.05376344086022,
+          "elapsed_seconds": 221.68489025163674,
+          "actor_client_request_seconds": 425.84177894695534,
+          "selector_service_seconds": 8.43574893963273,
+          "browser_steps": 13.483870967741936,
+          "browser_step_seconds": 59.31066385975548,
+          "decoder_cold_flops": 6914013940659629.0,
+          "decoder_observed_kv_flops": 1519040692750402.0,
+          "unmetered_failed_actor_requests": 0.053763440860215055
+        },
+        "bootstrap95": {
+          "success": [
+            0.30107526881720426,
+            0.4946236559139784
+          ],
+          "decoder_cold_flops": [
+            5351876155290682.0,
+            8506836880957176.0
+          ],
+          "decoder_observed_kv_flops": [
+            1248640594702767.2,
+            1787643785251375.2
+          ],
+          "elapsed_seconds": [
+            184.5148391067048,
+            261.22791508711913
+          ],
+          "total_tokens": [
+            515983.74327956984,
+            791648.6986559142
+          ]
+        }
+      },
+      "piotr": {
+        "completed": 93,
+        "successes": 36,
+        "valid": 83,
+        "invalid": 10,
+        "overall": 0.3870967741935484,
+        "valid_only": 0.43373493975903615,
+        "actor_requests": 6680,
+        "actor_output_tokens": 2256195,
+        "actor_input_tokens": 59430360,
+        "actor_client_request_seconds": 42577.139623161405,
+        "browser_steps": 1334,
+        "browser_step_seconds": 5228.4681798708625,
+        "selector_calls": 1335,
+        "selector_input_tokens": 5021775,
+        "selector_output_tokens": 11354,
+        "selector_service_seconds": 724.5308713805862,
+        "elapsed_seconds": 20298.161218335852,
+        "mean": {
+          "actor_input_tokens": 639036.1290322581,
+          "actor_output_tokens": 24260.16129032258,
+          "selector_input_tokens": 53997.58064516129,
+          "selector_output_tokens": 122.08602150537635,
+          "elapsed_seconds": 218.25979804662205,
+          "actor_client_request_seconds": 457.81870562539143,
+          "selector_service_seconds": 7.790654530974045,
+          "browser_steps": 14.344086021505376,
+          "browser_step_seconds": 56.220087955600675,
+          "decoder_cold_flops": 7653133508276797.0,
+          "decoder_observed_kv_flops": 1662857962783424.8,
+          "unmetered_failed_actor_requests": 0.053763440860215055
+        },
+        "bootstrap95": {
+          "success": [
+            0.29032258064516125,
+            0.4838709677419354
+          ],
+          "decoder_cold_flops": [
+            6049501799549276.0,
+            9298139716210976.0
+          ],
+          "decoder_observed_kv_flops": [
+            1382370464065091.2,
+            1944556316331706.8
+          ],
+          "elapsed_seconds": [
+            179.20822861007449,
+            261.5950755555436
+          ],
+          "total_tokens": [
+            578573.2561827957,
+            858576.7123655915
+          ]
+        }
+      },
+      "actor0": {
+        "completed": 93,
+        "successes": 34,
+        "valid": 83,
+        "invalid": 10,
+        "overall": 0.3655913978494624,
+        "valid_only": 0.40963855421686746,
+        "actor_requests": 1202,
+        "actor_output_tokens": 384510,
+        "actor_input_tokens": 10116427,
+        "actor_client_request_seconds": 6920.661392708775,
+        "browser_steps": 1195,
+        "browser_step_seconds": 4984.9954450828955,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 14992.536321637686,
+        "mean": {
+          "actor_input_tokens": 108778.78494623656,
+          "actor_output_tokens": 4134.5161290322585,
+          "selector_input_tokens": 0.0,
+          "selector_output_tokens": 0.0,
+          "elapsed_seconds": 161.2100679745988,
+          "actor_client_request_seconds": 74.41571390009435,
+          "selector_service_seconds": 0.0,
+          "browser_steps": 12.849462365591398,
+          "browser_step_seconds": 53.60210156003114,
+          "decoder_cold_flops": 1204021573726604.5,
+          "decoder_observed_kv_flops": 321857039636678.2,
+          "unmetered_failed_actor_requests": 0.010752688172043012
+        },
+        "bootstrap95": {
+          "success": [
+            0.26881720430107525,
+            0.4623655913978494
+          ],
+          "decoder_cold_flops": [
+            908608271223114.2,
+            1512894416352403.8
+          ],
+          "decoder_observed_kv_flops": [
+            255405666454556.7,
+            390653798816646.9
+          ],
+          "elapsed_seconds": [
+            130.09394198591363,
+            193.8989713891467
+          ],
+          "total_tokens": [
+            86986.72688172042,
+            139707.18494623655
+          ]
+        }
+      }
+    },
+    "paired": {
+      "arm_minus_actor0": {
+        "difference": 0.03225806451612903,
+        "bootstrap95": [
+          -0.06451612903225806,
+          0.12903225806451613
+        ],
+        "first_only": 11,
+        "second_only": 8,
+        "common_valid_tasks": 80,
+        "common_valid_first_successes": 37,
+        "common_valid_second_successes": 34
+      },
+      "piotr_minus_actor0": {
+        "difference": 0.021505376344086023,
+        "bootstrap95": [
+          -0.06451612903225806,
+          0.10752688172043011
+        ],
+        "first_only": 10,
+        "second_only": 8,
+        "common_valid_tasks": 81,
+        "common_valid_first_successes": 35,
+        "common_valid_second_successes": 34
+      },
+      "arm_minus_piotr": {
+        "difference": 0.010752688172043012,
+        "bootstrap95": [
+          -0.0967741935483871,
+          0.11827956989247312
+        ],
+        "first_only": 13,
+        "second_only": 12,
+        "common_valid_tasks": 79,
+        "common_valid_first_successes": 37,
+        "common_valid_second_successes": 35
+      }
+    },
+    "cost_limitations": "Request latencies overlap; allocation GPU-hours and device logs are campaign totals, not per-arm GPU kernel measurements.",
+    "execution_phases": {
+      "awaited_thread_v1": {
+        "by_mode": {
+          "arm": {
+            "episodes": 92,
+            "successes": 37,
+            "invalid": 12,
+            "mean": {
+              "elapsed_seconds": 217.7269319418929,
+              "actor_client_request_seconds": 420.36691393756877,
+              "actor_input_tokens": 584783.5869565217,
+              "actor_output_tokens": 22620.641304347828,
+              "selector_input_tokens": 50042.47826086957,
+              "selector_output_tokens": 135.43478260869566
+            }
+          },
+          "piotr": {
+            "episodes": 92,
+            "successes": 35,
+            "invalid": 10,
+            "mean": {
+              "elapsed_seconds": 217.7829598150945,
+              "actor_client_request_seconds": 461.2258968119024,
+              "actor_input_tokens": 645617.5,
+              "actor_output_tokens": 24501.771739130436,
+              "selector_input_tokens": 54546.358695652176,
+              "selector_output_tokens": 123.19565217391305
+            }
+          },
+          "actor0": {
+            "episodes": 91,
+            "successes": 33,
+            "invalid": 9,
+            "mean": {
+              "elapsed_seconds": 154.42805718109113,
+              "actor_client_request_seconds": 74.54534149390983,
+              "actor_input_tokens": 109942.82417582418,
+              "actor_output_tokens": 4171.3626373626375,
+              "selector_input_tokens": 0.0,
+              "selector_output_tokens": 0.0
+            }
+          }
+        },
+        "common_phase_tasks": 91,
+        "common_phase_by_mode": {
+          "arm": {
+            "episodes": 91,
+            "successes": 36,
+            "invalid": 12,
+            "mean": {
+              "elapsed_seconds": 214.09940770610265,
+              "actor_client_request_seconds": 417.36448712236563,
+              "actor_input_tokens": 575553.7362637363,
+              "actor_output_tokens": 22330.75824175824,
+              "selector_input_tokens": 49382.87912087912,
+              "selector_output_tokens": 133.84615384615384
+            }
+          },
+          "piotr": {
+            "episodes": 91,
+            "successes": 35,
+            "invalid": 10,
+            "mean": {
+              "elapsed_seconds": 216.062248824502,
+              "actor_client_request_seconds": 461.94555007637695,
+              "actor_input_tokens": 646552.7472527473,
+              "actor_output_tokens": 24464.978021978022,
+              "selector_input_tokens": 54479.395604395606,
+              "selector_output_tokens": 123.07692307692308
+            }
+          },
+          "actor0": {
+            "episodes": 91,
+            "successes": 33,
+            "invalid": 9,
+            "mean": {
+              "elapsed_seconds": 154.42805718109113,
+              "actor_client_request_seconds": 74.54534149390983,
+              "actor_input_tokens": 109942.82417582418,
+              "actor_output_tokens": 4171.3626373626375,
+              "selector_input_tokens": 0.0,
+              "selector_output_tokens": 0.0
+            }
+          }
+        }
+      },
+      "synchronous_receipts_v0": {
+        "by_mode": {
+          "arm": {
+            "episodes": 1,
+            "successes": 0,
+            "invalid": 1,
+            "mean": {
+              "elapsed_seconds": 585.8170547480695,
+              "actor_client_request_seconds": 929.52935981052,
+              "actor_input_tokens": 297510.0,
+              "actor_output_tokens": 14186.0,
+              "selector_input_tokens": 31894.0,
+              "selector_output_tokens": 100.0
+            }
+          },
+          "piotr": {
+            "episodes": 1,
+            "successes": 1,
+            "invalid": 0,
+            "mean": {
+              "elapsed_seconds": 262.1289153471589,
+              "actor_client_request_seconds": 144.3571164663881,
+              "actor_input_tokens": 33550.0,
+              "actor_output_tokens": 2032.0,
+              "selector_input_tokens": 3510.0,
+              "selector_output_tokens": 20.0
+            }
+          },
+          "actor0": {
+            "episodes": 2,
+            "successes": 1,
+            "invalid": 1,
+            "mean": {
+              "elapsed_seconds": 469.7915590791963,
+              "actor_client_request_seconds": 68.51765838149004,
+              "actor_input_tokens": 55815.0,
+              "actor_output_tokens": 2458.0,
+              "selector_input_tokens": 0.0,
+              "selector_output_tokens": 0.0
+            }
+          }
+        },
+        "common_phase_tasks": 1,
+        "common_phase_by_mode": {
+          "arm": {
+            "episodes": 1,
+            "successes": 0,
+            "invalid": 1,
+            "mean": {
+              "elapsed_seconds": 585.8170547480695,
+              "actor_client_request_seconds": 929.52935981052,
+              "actor_input_tokens": 297510.0,
+              "actor_output_tokens": 14186.0,
+              "selector_input_tokens": 31894.0,
+              "selector_output_tokens": 100.0
+            }
+          },
+          "piotr": {
+            "episodes": 1,
+            "successes": 1,
+            "invalid": 0,
+            "mean": {
+              "elapsed_seconds": 262.1289153471589,
+              "actor_client_request_seconds": 144.3571164663881,
+              "actor_input_tokens": 33550.0,
+              "actor_output_tokens": 2032.0,
+              "selector_input_tokens": 3510.0,
+              "selector_output_tokens": 20.0
+            }
+          },
+          "actor0": {
+            "episodes": 1,
+            "successes": 0,
+            "invalid": 1,
+            "mean": {
+              "elapsed_seconds": 204.5803221357055,
+              "actor_client_request_seconds": 28.138218940235674,
+              "actor_input_tokens": 6827.0,
+              "actor_output_tokens": 496.0,
+              "selector_input_tokens": 0.0,
+              "selector_output_tokens": 0.0
+            }
+          }
+        }
+      }
+    }
+  },
+  "accounting": [
+    {
+      "shard": 0,
+      "attempts": [
+        {
+          "job_id": "347180",
+          "state": "FAILED",
+          "elapsed_seconds": 1584,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347256",
+          "state": "RUNNING",
+          "elapsed_seconds": 5899,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        }
+      ],
+      "allocation_seconds": 7483,
+      "allocation_seconds_cap": 14400,
+      "allocated_gpu_hours": 4.157222222222222,
+      "judge": {
+        "calls": 110,
+        "charged_or_reserved_usd": 0.9278917999999999
+      },
+      "settled_judge_usd": 0.9278918,
+      "unsettled_judge_receipts": 0,
+      "final_accounting_verified": false
+    },
+    {
+      "shard": 1,
+      "attempts": [
+        {
+          "job_id": "347181",
+          "state": "FAILED",
+          "elapsed_seconds": 42,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347257",
+          "state": "RUNNING",
+          "elapsed_seconds": 5660,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        }
+      ],
+      "allocation_seconds": 5702,
+      "allocation_seconds_cap": 14400,
+      "allocated_gpu_hours": 3.167777777777778,
+      "judge": {
+        "calls": 82,
+        "charged_or_reserved_usd": 0.6239958999999997
+      },
+      "settled_judge_usd": 0.6239959,
+      "unsettled_judge_receipts": 0,
+      "final_accounting_verified": false
+    }
+  ],
+  "invalid_causes_all_recorded": {
+    "arm": {
+      "actor_http400_rejection": 1,
+      "browser_step_error": 4,
+      "before_first_actor_request_or_browser_step": 8
+    },
+    "piotr": {
+      "before_first_actor_request_or_browser_step": 8,
+      "actor_http400_rejection": 1,
+      "browser_step_error": 1
+    },
+    "actor0": {
+      "browser_step_error": 1,
+      "before_first_actor_request_or_browser_step": 8,
+      "actor_http400_rejection": 1
+    }
+  },
+  "collection_target_verified": false,
+  "final_accounting_verified": false,
+  "verified_complete": false,
+  "caveats": [
+    "Preview comparisons use only complete three-arm task blocks; all invalid outcomes count as zero. This subset can be selected by task duration and is not full300.",
+    "Decoder FLOPs are analytical workload estimates, excluding vision encoders, elementwise operations, recomputation, failed/unmetered requests and hardware overhead. They are not total compute or a dollar price.",
+    "Cold prefill charges each request equally. Observed actor KV reuse is reported separately; selector decoder work is included in both views.",
+    "Tokens count actual received actor and selector input/output, including cached input. They are not billing-equivalent across services.",
+    "Latency is complete episode wall time. Concurrent request seconds must not be summed as wall time. Shared GPU time is reported at campaign/shard level only.",
+    "All-attempt GPU hours and judge spend include failed and interrupted attempts. Evaluation judge spend is not actor/selector deployment cost.",
+    "Artifacts must be reviewed and remote publication verified before marking this experiment complete."
+  ],
+  "plots": [
+    {
+      "name": "cost.png",
+      "sha256": "8e60bdcd49a5793b8b82194c5302fe2d21bfd3dc938ff3f587b140c02d4c90cd"
+    },
+    {
+      "name": "cost.svg",
+      "sha256": "48b33978c29ad8105bd57867592a66df01490da670428e4f65545a3b9e835247"
+    },
+    {
+      "name": "latency.png",
+      "sha256": "846ded29acb03e44f69e71e69c85e99c60cd75b0bef4807b5c7fbd4536f097df"
+    },
+    {
+      "name": "latency.svg",
+      "sha256": "088d70171b460706db85bda15444137127b05d5738b42f1e78bad4b09b7d7aae"
+    },
+    {
+      "name": "tokens.png",
+      "sha256": "644ad14ceb02aaf6deb3f42f2451c5d707ffb75a0040eacc8f595a3dc7abd43a"
+    },
+    {
+      "name": "tokens.svg",
+      "sha256": "c4036c6a94a5874f63556726840159a6c336b79ea6e7c6dc6aab3835e51cfd9f"
+    }
+  ]
+}
