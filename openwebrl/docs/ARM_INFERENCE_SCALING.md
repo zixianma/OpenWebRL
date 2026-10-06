@@ -6,9 +6,8 @@ The clearest matched result is **Qwen + Luna N=5: 28.33% versus Qwen alone 17.67
 
 ## Contents
 
-- [Full300 results](#actor-selector-experiment-tracker-20261004)
+- [Five takeaways from the full300 results](#actor-selector-experiment-tracker-20261004)
 - [What each experiment measures](#luna-actor-full300-20261004)
-- [Selection and reasoning scaling](#scaling-comparisons)
 - [Cost, latency, tokens, and plots](#luna-full300-results-20261006)
 - [GPT-6 actor and judge audit](#api-actor-stopping-audit-20261005)
 - [Learned ARM versus episode retries](#learned-arm-and-retries)
@@ -16,27 +15,91 @@ The clearest matched result is **Qwen + Luna N=5: 28.33% versus Qwen alone 17.67
 - [Evidence and accounting](#evidence-and-accounting)
 
 <a id="actor-selector-experiment-tracker-20261004"></a>
-## Full300 results
+<a id="scaling-comparisons"></a>
+## Results by takeaway
 
-All rows below are complete. **Overall = successes / 300; valid-only = successes / valid records.** Invalid records remain in the overall denominator. These are saved judge verdicts, not independently certified strict task completions. Valid-only does not remove every blocked page: a blocked trajectory can be a valid judged failure.
+All results below are complete. **Overall includes all 300 tasks; valid-only excludes records marked invalid.** Fractions show both denominators. A blocked page can still be a valid judged failure. Scores retain the saved judge verdicts, including its documented partial-progress allowances. Serving costs exclude judging and separately priced browser CPU; [full accounting definitions](#luna-full300-results-20261006) follow.
+
+### 1. Selection improves Qwen, at higher cost
 
 <!-- actor-selector-results:start -->
-| ID | Actor | Selector | N | Successes | Valid | Overall | Valid-only |
-| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 53 | 277 | 17.67% | 19.13% |
-| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna medium | 5 | 85 | 276 | 28.33% | 30.80% |
-| AS04 | Official OpenWebRL-4B-SFT, reused reference | None | 1 | 106 | 272 | 35.33% | 38.97% |
-| AS05 | Official OpenWebRL-4B-SFT | GPT-6 Luna medium | 5 | 113 | 274 | 37.67% | 41.24% |
-| AS06 | Official OpenWebRL-4B-SFT | GPT-6 Luna medium | 10 | 112 | 274 | 37.33% | 40.88% |
-| AS07 | GPT-6 Luna medium | None | 1 | 110 | 279 | 36.67% | 39.43% |
-| AS08 | Official OpenWebRL-4B-SFT | Jev | 5 | 176 | 284 | 58.67% | 61.97% |
-| AS09 | Official OpenWebRL-4B-SFT | Kev27B | 5 | 184 | 291 | 61.33% | 63.23% |
-| AS10 | GPT-6 Luna high | None | 1 | 97 | 277 | 32.33% | 35.02% |
-| AS11 | GPT-6.1 Sol high | None | 1 | 61 | 273 | 20.33% | 22.34% |
-| AS12 | Kev27B direct DOM actor | None | 1 | 26 | 294 | 8.67% | 8.84% |
+<!-- cohorts: AS01, AS02 -->
+
+| Qwen3-VL-4B-Thinking policy | Overall success | Valid-only success | Serving $/task |
+| --- | ---: | ---: | ---: |
+| One proposal, no selector | 53/300 (17.67%) | 53/277 (19.13%) | $0.03991 |
+| Five proposals, Luna medium selects | **85/300 (28.33%)** | 85/276 (30.80%) | $0.08885 |
+
+**Selection adds 10.67 percentage points** (paired 95% interval **+5.67 to +16.00**), for **2.23× serving cost** and 1.86× median latency. This supports selection over one actor episode under the shared protocol; cost-matched episode retries were not tested in this pair.
+
+### 2. Ten SFT proposals did not improve on five
+
+<!-- cohorts: AS05, AS06 -->
+
+| Official SFT + Luna medium | Overall success | Valid-only success | Serving $/task |
+| --- | ---: | ---: | ---: |
+| Five proposals | **113/300 (37.67%)** | 113/274 (41.24%) | $0.06023 |
+| Ten proposals | 112/300 (37.33%) | 112/274 (40.88%) | $0.07219 |
+
+**Doubling proposals adds 19.9% cost without an observed success gain.** N=10 minus N=5 is −0.33 points (95% interval −5.33 to +4.67); the arms tie on 271 common-valid tasks. The interval permits modest gains or losses.
+
+The historical SFT-alone reference is shown separately because it uses different sampling, output limits, judge evidence and serving. It cannot establish the selector's causal gain:
+
+<!-- cohort: AS04; unmatched historical reference -->
+
+| Historical reference | Overall success | Valid-only success |
+| --- | ---: | ---: |
+| Official SFT alone, T=0.7 / p=0.9 / 1,024 tokens | 106/300 (35.33%) | 106/272 (38.97%) |
+
+### 3. Jev and Kev selection are nearly tied on shared valid tasks
+
+Both systems use the same official SFT actor to propose five actions. This hosted-browser study has a different protocol from the Luna study above.
+
+<!-- cohorts: AS08, AS09 -->
+
+| Evaluation set | SFT + Jev | SFT + Kev27B |
+| --- | ---: | ---: |
+| All 300 tasks | 176/300 (58.67%) | 184/300 (61.33%) |
+| Each arm's valid tasks, different subsets | 176/284 (61.97%) | 184/291 (63.23%) |
+| **Same 279 common-valid tasks** | **175/279 (62.72%)** | **176/279 (63.08%)** |
+| Same 238 common-valid tasks, both after typing repair | 147/238 (61.76%) | 149/238 (62.61%) |
+
+**The eight-success overall gap becomes one success on the common-valid set.** These results do not establish Kev as the better selector. Pre/post typing-repair strata and original outcomes remain intact. The higher headline scores versus Luna selection are confounded by browser, candidate and judge differences.
+
+<a id="luna-cpu-family-results-20261005"></a>
+<a id="api-actor-high-results-20261005"></a>
+### 4. Higher reasoning effort did not improve API-actor success here
+
+These are **saved-harness results**: the missing browser-policy prompt and discarded native API history are confirmed defects, with unmeasured effects on success. See the [actor/judge audit](#api-actor-stopping-audit-20261005) before interpreting model differences.
+
+<!-- cohorts: AS07, AS10, AS11 -->
+
+| Direct actor | Overall success | Valid-only success | Actor API $/task |
+| --- | ---: | ---: | ---: |
+| GPT-6 Luna, medium | **110/300 (36.67%)** | 110/279 (39.43%) | **$0.00738** |
+| GPT-6 Luna, high | 97/300 (32.33%) | 97/277 (35.02%) | $0.01181 |
+| GPT-6.1 Sol, high | 61/300 (20.33%) | 61/273 (22.34%) | $0.15255–$0.15475 |
+
+Luna high minus medium is **−4.33 points [−9.33, +0.67]**, with about 1.60× API cost; medium was collected earlier. Sol high minus Luna high is **−12.00 points [−17.33, −6.67]**. This does not rank underlying model capabilities. Sol's cost range includes cache-price uncertainty and four unknown-usage reservations.
+
+**Luna medium is also the cheaper alternative to the SFT + Luna system:** SFT + Luna N=5 scores only +1.00 point higher [−4.67, +6.67], at 8.16× serving cost. Collection dates differ; there is no established success advantage for the more expensive system.
+
+### 5. Kev's strong selector result does not carry over to the direct-DOM system
+
+This compares two assembled systems with different action generation and observation interfaces; it does not isolate the causal effect of using Kev as a selector.
+
+<!-- cohorts: AS09 (repeated control), AS12 -->
+
+| System | How the next action is produced | Overall success | Valid-only success |
+| --- | --- | ---: | ---: |
+| SFT + Kev27B | SFT proposes five actions from screenshots; Kev selects | **184/300 (61.33%)** | 184/291 (63.23%) |
+| Kev27B direct actor | Kev selects DOM operations/targets; GPT-4.1-mini supplies typing text | 26/300 (8.67%) | 26/294 (8.84%) |
+
 <!-- actor-selector-results:end -->
 
-The stable IDs match the [aggregate tracker](arm_results/luna_full300_20261004/experiment_tracker.json), finalized at **2026-10-06 03:52:48 UTC**. AS03 (Qwen + Luna N=10) was excluded from the full300 scope. Kev0.8B and direct Jev have pilot results only. No full300 result is inferred for an unrun arm.
+**The promising result belongs to SFT proposal generation plus Kev selection.** It does not imply that this direct Kev browser policy is strong. The repeated SFT + Kev row is the same cohort as table 3, not another 300 episodes.
+
+Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experiment_tracker.json), finalized **2026-10-06 03:52:48 UTC**. Stable IDs are retained there and in table comments. Qwen + Luna N=10 was excluded from full300 scope; Kev0.8B and direct Jev have pilots only. Paired intervals quantify task sampling, not website drift, harness bias or judge error.
 
 <a id="luna-actor-full300-20261004"></a>
 ## What each experiment measures
@@ -55,24 +118,13 @@ The SFT actor is the released **`OpenWebRL/OpenWebRL-4B-SFT`**, not Qwen Thinkin
 
 Model revisions and complete settings are preserved in the [Qwen/Luna summary](arm_results/luna_full300_20261004/summary.json), [API actor summary](arm_results/reasoning_actors_full300_20261005/summary.json), [Jev/Kev selector summary](rl_results/sft-selector-full300-20261005.json), and [direct Kev summary](rl_results/kev27b-actor-full300-20261005.json).
 
-<a id="scaling-comparisons"></a>
-## Selection and reasoning scaling
-
-| Comparison | Observed change | Interpretation |
-| --- | --- | --- |
-| Qwen + Luna N=5 vs Qwen alone | **+10.67pp**, paired 95% interval **[+5.67, +16.00]**; 2.23× serving cost | A measured selection benefit over one actor episode; not a cost-matched retry comparison |
-| SFT + Luna N=10 vs N=5 | **−0.33pp [−5.33, +4.67]**; +19.9% serving cost; tie on 271 common-valid tasks | No observed benefit from doubling proposals; interval permits modest gains or losses |
-| SFT + Luna N=5 vs Luna medium actor | +1.00pp [−4.67, +6.67]; 8.16× serving cost | No established success advantage; CPU/GPU cohorts also differ in collection time |
-| SFT + Kev27B vs SFT + Jev | +2.67pp overall; **176 vs 175 successes on 279 common-valid tasks** | The eight-success overall gap is largely due to different invalid sets; no clear selector ranking |
-| Luna high vs Luna medium | −4.33pp [−9.33, +0.67] | High reasoning did not improve observed success; medium was collected earlier |
-| Sol high vs Luna high | −12.00pp [−17.33, −6.67] | A result under this harness and judge, with unresolved causal attribution |
-
-Jev/Kev also include a mid-collection typing repair. On the 238 tasks collected after the repair and valid in both arms, Jev/Kev scores are **147/238 versus 149/238**. The original results and pre/post strata remain intact. Reused SFT is a historical reference, so subtracting 35.33% from any fresh selector score does not give a controlled selector effect. Task-paired intervals exclude website drift, judge error and harness bias.
-
 <a id="luna-full300-results-20261006"></a>
 ## Cost, latency, tokens, and plots
 
 The five-arm Qwen/Luna study has complete primary token receipts. Serving cost includes all proposals, selector calls and one reserved H200 throughout each local-model episode, including waits, at the frozen **$0.90/H200-hour** rate. It excludes judging, separately priced browser CPU, and research startup/idle overhead. API prices are frozen receipt-based estimates, not provider invoices. Tokens include cached/repeated prefixes and use different tokenizers.
+
+<details>
+<summary>Detailed efficiency tables and plots</summary>
 
 | Policy | Overall | Mean serving $/task | Episode p50 / p95, s | Mean input / output tokens per task |
 | --- | ---: | ---: | ---: | ---: |
@@ -88,8 +140,6 @@ Luna medium is the cheapest measured policy in this table under the frozen price
 
 [Latency plot](arm_results/luna_full300_20261004/latency.png) · [Token plot](arm_results/luna_full300_20261004/tokens.png) · [Metrics CSV](arm_results/luna_full300_20261004/metrics.csv) · SVG: [cost](arm_results/luna_full300_20261004/cost.svg), [latency](arm_results/luna_full300_20261004/latency.svg), [tokens](arm_results/luna_full300_20261004/tokens.svg).
 
-<a id="luna-cpu-family-results-20261005"></a>
-<a id="api-actor-high-results-20261005"></a>
 ### API actor efficiency
 
 | Actor | Overall | Actor API $/task | Mean episode seconds | Mean input / output tokens | Mean actions |
@@ -101,6 +151,8 @@ Luna medium is the cheapest measured policy in this table under the frozen price
 Sol's range includes cache-price uncertainty and four HTTP 5xx reservations with unknown returned usage; its token means are lower bounds. Episode latency excludes the terminal judge. High versus medium changes reasoning effort, with possible collection-date effects. [API metrics and accounting](arm_results/reasoning_actors_full300_20261005/summary.json); plots: [cost](arm_results/reasoning_actors_full300_20261005/cost.png), [latency](arm_results/reasoning_actors_full300_20261005/latency.png), [tokens](arm_results/reasoning_actors_full300_20261005/tokens.png).
 
 No harmonized serving-cost/latency point is asserted for Jev/Kev or the reused SFT baseline. Their total resource ledgers remain available, but campaign allocation cost and per-policy serving cost measure different quantities.
+
+</details>
 
 <a id="api-actor-reasoning-20261005"></a>
 <a id="api-actor-stopping-audit-20261005"></a>
@@ -127,7 +179,7 @@ Sol often stops when blocked or asks for missing information through `done`, whi
 
 **A shared judge does not guarantee equally strict outcomes.** The saved AgentTrek rubric permits credit for partial progress, including more than eight correct actions, one of two subtasks, or omitting a final save. One reviewed Luna pass still showed a final access error; the judge credited effective navigation. Such a rubric can favor continuing over stopping even when neither actor finishes the requested task. Its contribution to the score difference is unmeasured. Original scores are retained; no adjusted rate is substituted. [Aggregate stopping/judge audit](arm_results/reasoning_actors_full300_20261005/stopping-behavior.json).
 
-Across families, hosted versus local browsers, DOM versus screenshot inputs, candidate presentation, typing behavior, episode limits and judge evidence all differ. The table is a record of implemented systems, not a clean ranking of underlying model capabilities.
+Across families, hosted versus local browsers, DOM versus screenshot inputs, candidate presentation, typing behavior, episode limits and judge evidence all differ. The tables record implemented systems, not a clean ranking of underlying model capabilities.
 
 <a id="learned-arm-and-retries"></a>
 ## Learned ARM versus episode retries
