@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "prepared_awaiting_exact_resource_approval",
+  "status": "prepared_parallel_shards_awaiting_exact_resource_approval",
   "launch_authorized": false,
   "new_experiments_launched": 0,
   "protocol_name": "local-openwebrl-om2w-v2",
@@ -300,7 +300,7 @@
       "--no-sandbox"
     ],
     "fresh_profile_each_episode": true,
-    "assignment": "One common browser-worker pool; randomized/interleaved task blocks, never nodes dedicated by condition. Record host and egress for every episode.",
+    "assignment": "Two disjoint task shards; all four conditions for a task run on the same shard shared browser pool with seeded interleaved ordering. Record host and egress for every episode; no condition-dedicated browser nodes.",
     "binary_hash_verified": true,
     "installed_binaries": [
       {
@@ -417,12 +417,19 @@
   "budget": {
     "approved": false,
     "requested_compute": {
-      "gpus": 8,
-      "gpu_type": "H200",
-      "cpus": 64,
-      "memory_gib": 960,
-      "total_scheduler_seconds_all_attempts": 57600,
-      "maximum_gpu_hours": 128
+      "jobs": 2,
+      "per_job": {
+        "gpus": 2,
+        "gpu_type": "H200",
+        "cpus": 16,
+        "memory_gib": 240,
+        "total_scheduler_seconds_all_attempts": 28800,
+        "maximum_gpu_hours": 16
+      },
+      "max_concurrent_gpus": 4,
+      "max_concurrent_cpus": 32,
+      "max_concurrent_memory_gib": 480,
+      "maximum_gpu_hours": 32
     },
     "api_caps": {
       "actor_proposals": 316800,
@@ -436,22 +443,58 @@
     "browser_session_caps": {
       "total": 1320,
       "per_arm": 330,
-      "concurrent": 7,
+      "concurrent": 16,
       "primary": 1200,
-      "smoke": 12,
-      "infrastructure_recovery": 108
+      "smoke": 24,
+      "infrastructure_recovery": 96
     },
-    "note": "User accepted local-browser scientific scope and the unchanged OpenWebRL OM2W judge. Exact new resource/API/browser caps have not yet been approved. No suite jobs or paid suite requests have launched, and no historical budget is transferred. The mistaken separate strict audit is stopped and separately accounted.",
+    "note": "Scientific scope and splitting into small parallel jobs are accepted. Exact two2H200/16CPU/240GiB\u00d78h resource/API/browser caps remain proposed and unapproved; no jobs or paid suite requests have launched and no historical budget is transferred. Separate shard ledgers preserve retries and enforce caps without automatic budget transfers.",
     "topology_proposed": {
-      "sft_tp1_replicas": 7,
-      "kev27b_tp1_replicas": 1,
-      "max_active_browser_sessions": 7,
-      "shared_randomized_arm_queue": true
+      "per_job": {
+        "sft_tp1_replicas": 1,
+        "kev27b_tp1_replicas": 1,
+        "max_active_browser_sessions": 8,
+        "shared_randomized_arm_queue": true
+      },
+      "task_ids_per_shard": 150,
+      "all_four_conditions_in_each_shard": true,
+      "disjoint_tasks": true,
+      "max_concurrent_browser_sessions": 16
+    },
+    "superseded_compute_proposals": [
+      {
+        "proposal": "single8GPU",
+        "requested_compute": {
+          "gpus": 8,
+          "gpu_type": "H200",
+          "cpus": 64,
+          "memory_gib": 960,
+          "total_scheduler_seconds_all_attempts": 57600,
+          "maximum_gpu_hours": 128
+        },
+        "approved": false,
+        "launched": false,
+        "reason": "User requested smaller parallel jobs; dedicated SFT replica per browser was not justified."
+      }
+    ],
+    "per_shard_caps": {
+      "primary_browser_episodes": 600,
+      "browser_episodes_total": 660,
+      "browser_episodes_per_arm": 165,
+      "smoke_episodes_total": 12,
+      "infrastructure_recovery_episodes_maximum": 48,
+      "actor_proposals": 158400,
+      "luna_requests": 9905,
+      "jev_requests": 9905,
+      "local_kev_requests": 9905,
+      "luna_usd": 25.0,
+      "canonical_judge_http_attempts": 2640,
+      "canonical_judge_usd": 12.5
     }
   },
   "not_yet_validated": [
-    "Real GPU serving startup, resource use, inference concurrency and request acceptance for all providers.",
-    "Bounded live diagnostics and12 smoke episodes must pass before primary collection.",
+    "Real GPU serving startup, shared SFT server concurrency/long-context request latency and resource use; no measured guarantee of completing each shard within8h.",
+    "Live provider acceptance and12smokeepisodes per shard (24total) must pass before that shard primary collection.",
     "No benchmark browser episodes or paid model/API requests have run for this new suite."
   ],
   "scope_accepted": true,
@@ -501,7 +544,7 @@
       "model_api_calls": 0,
       "browser_calls": 0
     },
-    "tests_passed": 142,
+    "tests_passed": 164,
     "frozen_controller_dry_run_passed": true,
     "real_local_browser_cpu_fixture": {
       "status": "passed",
@@ -514,13 +557,35 @@
       "benchmark_sites": 0,
       "model_calls": 0,
       "gpu_allocations": 0
-    }
+    },
+    "parallel_controller": "Two2-H200 shards, disjoint complete150-task halves, allfourconditions pertask, eightcollectors sharing oneSFTendpoint, separate retry/API/browser ledgers; testedoffline."
   },
+  "previous_frozen_preparations": [
+    {
+      "version": "prepared-v2",
+      "plan_sha256": "ed56cf51a1de76409ebca6cfcac5da8f284b8260f3efefe9fc7c72107850488b",
+      "source_manifest_sha256": "e7e3eef315b2207d48b8224c3537dc0b16e5f0a45b1cfa7bf40ea693d12437f1",
+      "scientific_config_at_freeze_sha256": "dcadd77dc6964c86209732420042289458b2bd5dc272fbe6871dbb6a55cc104b",
+      "note": "This public document updates readiness metadata after the immutable runtime configuration was frozen. Scientific settings and caps are unchanged; exact allocation approval binds the frozen runtime plan.",
+      "status": "superseded_unapproved_no_jobs"
+    }
+  ],
   "frozen_preparation": {
-    "version": "prepared-v2",
-    "plan_sha256": "ed56cf51a1de76409ebca6cfcac5da8f284b8260f3efefe9fc7c72107850488b",
-    "source_manifest_sha256": "e7e3eef315b2207d48b8224c3537dc0b16e5f0a45b1cfa7bf40ea693d12437f1",
-    "scientific_config_at_freeze_sha256": "dcadd77dc6964c86209732420042289458b2bd5dc272fbe6871dbb6a55cc104b",
-    "note": "This public document updates readiness metadata after the immutable runtime configuration was frozen. Scientific settings and caps are unchanged; exact allocation approval binds the frozen runtime plan."
+    "version": "prepared-parallel-v3",
+    "campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
+    "partition_sha256": "6cd9db242665d4c7e367bd9e837874dc24125f45aac75cfc6b822a0715517f0a",
+    "shards": [
+      {
+        "shard": 0,
+        "plan_sha256": "7ffefbfc3cedc15c0adc55c35543372d5c77b2db19ff0585567a5c53af5c58a2",
+        "source_manifest_sha256": "e7683907770e5fa1e6e09a5f86f094fe577953b3ccf1adaed5f8b71c9f1bc212"
+      },
+      {
+        "shard": 1,
+        "plan_sha256": "3ea14770db8c3bd8bc1df60c7a85010eeb7d9caac484df6db730b5ffa242bb02",
+        "source_manifest_sha256": "e7683907770e5fa1e6e09a5f86f094fe577953b3ccf1adaed5f8b71c9f1bc212"
+      }
+    ],
+    "note": "Public readiness metadata updated after both immutable per-shard scientific configurations were frozen. No scientific setting or resource/API/browser cap changed after freeze; approvals bind these exact private shard plans."
   }
 }

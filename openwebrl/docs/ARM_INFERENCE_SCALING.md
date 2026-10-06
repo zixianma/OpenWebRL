@@ -66,7 +66,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 <a id="local-browser-rerun-20261006"></a>
 ## Next experiments: controlled local-browser suite
 
-**First wave: four conditions × the same 300 Online-Mind2Web tasks = 1,200 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. This replaces the twelve-condition first-wave draft. The old SFT baseline will not fill the new control row. The frozen package is prepared and CPU-validated; exact resource approval and GPU/provider startup checks remain. No new benchmark run has started. Each row inherits the shared settings below; model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
+**First wave: four conditions × the same 300 Online-Mind2Web tasks = 1,200 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. This replaces the twelve-condition first-wave draft. The old SFT baseline will not fill the new control row. The shared worker is CPU-validated; preparation now uses two independent 2-GPU task shards. Exact resource approval and GPU/provider startup checks remain. No new benchmark run has started. Each row inherits the shared settings below; model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
 
 | ID | Actor | Selector | Proposals per step | Actor decoding | Selector decision |
 | --- | --- | --- | ---: | --- | --- |
@@ -83,7 +83,7 @@ Jev actor-only remains the missing full300 experiment, separately proposed for l
 | --- | --- |
 | Browser | **Local** headless Chromium 145.0.7632.6, revision 1208 / Playwright 1.58.0; viewport 1280×720, DPR 1, en-US, UTC; default Chromium user agent; no proxy/stealth; fresh profile per episode; extra flags `--disable-dev-shm-usage --no-sandbox` |
 | SFT generation | BF16, no quantization, repetition penalty 1.0, context 32,768; reserve the full 4,096 output budget (maximum 28,671 prompt tokens including image tokens); full text history and latest screenshot only; no adaptive history/output truncation |
-| Seeds and schedule | Base 20261006; deterministic seeds per task/turn/candidate and candidate shuffle; N=1 generates only candidate 0. Randomized, interleaved task blocks on a common browser pool; save actual schedule/host/egress. Identical seeds do not make diverged trajectories share candidate contents |
+| Seeds and schedule | Base 20261006; deterministic seeds per task/turn/candidate and candidate shuffle; N=1 generates only candidate 0. Two seeded, disjoint 150-task shards, each running all four conditions through its common browser pool; interleave task/arm blocks and save actual schedule/host/egress. Identical seeds do not make diverged trajectories share candidate contents |
 | Actor prompt | Restored, hash-pinned SFT browser-policy prompt; missing/empty/mismatched prompt halts before a model/browser request |
 | All selectors | **Same text/DOM view, no images**: task, URL/title/tabs, ordered observed elements/geometry, first 16,000 Unicode codepoints of visible page text, last 5 executed actions and full candidate reasoning/actions. Same policy and seeded candidate order; execute the chosen candidate unchanged |
 | Selector input limit | Canonical shared JSON ≤262,144 UTF-8 bytes; page-text truncation is recorded. Overflow or provider context rejection is preserved as an explicit invalid; no per-selector compaction, fallback or replacement candidates |
@@ -98,17 +98,29 @@ Jev actor-only remains the missing full300 experiment, separately proposed for l
 
 The comparison is L01 versus L08/L10/L11. The shared selector input deliberately differs from earlier Luna selection, which also saw screenshots and full history. Local browsers still call hosted Jev/GPT selector APIs; all four arms use the same screenshot-based SFT proposer.
 
-**Prepared, awaiting exact resource approval:** 142 offline tests and the frozen controller dry-run pass. Real CPU checks on the frozen source verify SFT prompt/image processing, local Chromium settings, normalized-coordinate clicks, Linux text replacement, stopping, fresh final screenshots and complete browser-process teardown. GPU inference and live provider acceptance remain startup gates: 12 smoke episodes must validate every actor/selector path and the canonical judge before the 1,200 primary episodes. Jev's exact confirmed context-limit error is preserved as an input-budget invalid without truncation or fallback; unknown provider errors stop dispatch.
+**Prepared parallel jobs, awaiting exact resource approval:** 164 combined offline tests and both frozen-controller dry-runs pass. The unchanged common worker retains its real CPU checks for prompt/image processing, local Chromium settings, normalized-coordinate clicks, Linux text replacement, stopping, fresh final screenshots and complete browser-process teardown. The revised controller decouples browser workers from SFT replicas: eight collectors share one SFT endpoint per job, with one separate Kev GPU. Live GPU throughput and provider acceptance remain unverified. Each job must pass 12 smoke episodes before its primary collection, preserving actor request latency/context and GPU evidence. Jev's exact confirmed context-limit error remains an input-budget invalid without truncation or fallback; unknown provider errors stop dispatch.
 
-| Proposed total cap, including all attempts | Limit |
-| --- | --- |
-| One allocation / replacements | **8 H200, 64 CPUs, 960 GiB; 16 hours total scheduler time** (128 H200-hours maximum) |
-| Serving layout | 7 independent SFT replicas + 1 Kev replica; at most 7 local browsers; one Kev forward at a time |
-| Browser episodes | 1,320 total, at most 330 per arm: 1,200 primary + 12 smoke + up to 108 infrastructure-recovery attempts |
-| Proposals / selector requests | 316,800 SFT proposals; at most 19,810 requests each for Luna, Jev and local Kev, including diagnostics |
-| OpenAI API spend | Luna **$50**; canonical judge **$25**, at most 5,280 judge HTTP attempts. Jev has the separate request-count cap above |
+| Parallel job | Task assignment | GPU layout | CPU / RAM | Cumulative wall-clock cap, all attempts |
+| --- | --- | --- | --- | --- |
+| Shard 0 | 150 tasks × all four conditions = 600 primary episodes | 1 H200 SFT + 1 H200 Kev | 16 CPUs / 240 GiB | 8 hours |
+| Shard 1 | Other150 tasks × all four conditions = 600 primary episodes | 1 H200 SFT + 1 H200 Kev | 16 CPUs / 240 GiB | 8 hours |
+| **Combined** | **All300 tasks × four conditions = 1,200 primary episodes** | **4 H200 concurrently** | **32 CPUs / 480 GiB concurrently** | **32 H200-hours maximum** |
 
-These are spending/resource ceilings, not runtime or completion guarantees. Every failed attempt is charged; no historical budget carries forward. The source, plan and durable ledger are frozen together before submission.
+Both jobs can proceed independently in parallel. Each has its own scheduler accounting, browser/API ledger, W&B identity and replacement lineage. Task subsets are disjoint and cover all 300; every task retains all four conditions on one browser host. No selector is assigned a separate browser host. Aggregate results require both independent audits.
+
+| Proposed cap, including all attempts | Per job | Whole campaign |
+| --- | ---: | ---: |
+| Concurrent local browsers | 8 | 16 |
+| Browser episodes | 660; 165 per arm | 1,320; 330 per arm |
+| Primary / smoke / possible infrastructure recovery episodes | 600 / 12 / 48 | 1,200 / 24 / 96 |
+| SFT proposals | 158,400 | 316,800 |
+| Requests each for Luna, Jev and local Kev, including diagnostics | 9,905 | 19,810 |
+| Luna selector spend | $25 | $50 |
+| Canonical judge spend / HTTP attempts | $12.50 / 2,640 | $25 / 5,280 |
+
+The two 2-GPU proposal replaces the unapproved 8-GPU × 16-hour proposal. It reduces the maximum compute reservation from 128 to 32 H200-hours, while retaining total browser/API ceilings; the extra 12 smokes come from the recovery reserve. One-GPU jobs would require unvalidated SFT/Kev colocation or model swapping. Two GPUs keep both models resident independently.
+
+**Eight hours per job is a cap, not a measured completion forecast.** Eight browser collectors can create up to 40 simultaneous candidate requests; the SFT server initially runs five at once. Queue delay counts toward the unchanged 180s model and 1,800s episode deadlines. Startup must assess shared-server latency, observed context lengths and GPU use; ordinary short smoke episodes alone do not validate long-context throughput. No scientific timeout or decoding limit is relaxed to conceal overload. Every failed attempt is charged to its original shard, with no automatic transfer between shards or from historical budgets. Freeze both plans and their partition/cap manifest before submission.
 
 ### Judge compatibility and version boundary
 
