@@ -58,17 +58,8 @@ ablation and new browser data remain later-stage planning.
 <a id="arm-continuation-branches-20261006"></a>
 ### Overnight continuation branches — prepared October 6 UTC
 
-**Startup gate stopped: 0 accepted states /12 considered; no continuation or teacher results yet.** The user approved the revised 5 × 3
-experiment. The scheduler rejected the original 48-CPU request before allocating
-resources; its limit is eight CPUs per GPU. The accepted request uses **4 H200,
-32 CPUs, 480 GiB, eight hours total across retries**, with two state groups
-(30 browsers) in parallel. The $15 Luna / $25 judge ceilings are unchanged.
-An active-agent supervisor has a verified queue receipt and held ownership lock;
-All four actor identities and the resumed evaluation W&B run are verified;
-live prefix collection completed its initial gate. Job 346655 exited after
-350 seconds; together with the first attempt, 445 of28,800 approved allocation
-seconds are consumed. All browser reservations are closed. No model API
-spending occurred. The experiment is partial, not verified complete.
+**Recovery running as job 346951; continuation results not yet available.** The user reaffirmed that earlier approval covers continued repairs and resubmission. The replacement uses **4 H200, 32 CPUs, 480 GiB, 7h52m**; the two earlier attempts consumed 445 seconds, keeping the combined maximum below the original eight-hour ceiling. The $15 Luna / $25 judge caps and every prior attempt/counter are preserved. Two state groups (30 browsers) run in parallel. The supervisor follows the replacement job and queues this session for repair.
+
 The user requested enough continuations overnight to assess the benefit of
 execution-informed selection. This supersedes the small 30-state pilot as the
 proposed launch. The user revised the design to **five actions × three continuations**;
@@ -83,8 +74,8 @@ part of this experiment.
 | Cohort | 100 accepted states, one state per training task; up to 200 candidate tasks in fixed order |
 | Actor | Official OpenWebRL-4B-SFT for fresh prefixes, candidates and all continuations |
 | Decoding | Temperature 1.0, top-p 0.95, top-k disabled; 4,096 response-token cap |
-| Branch point | After 2, 4 or 6 actor decisions in a fresh SFT prefix; one prespecified depth per task, independent of judgments/outcomes |
-| Candidates | First five distinct parseable tool bundles from fifteen proposals; preserve full response/reasoning |
+| Branch point | After 0, 1 or 2 actor decisions in a fresh SFT prefix; one prespecified depth per task, independent of judgments/outcomes |
+| Candidates | Exactly five samples, including duplicate actions; preserve full response/reasoning; reject malformed panels without replacement |
 | Continuations | Three repetitions for every candidate: **1,500 target rollouts** |
 | Teacher | GPT-6 Luna, high reasoning; selected-index output only |
 | Before condition | Task, last-five response history, five candidates, original observation/screenshot |
@@ -102,8 +93,8 @@ replays saved responses in fresh contexts, checks every prefix observation and
 branch point, and releases a state only when all fifteen reconstructions pass.
 It checks again immediately before candidate dispatch, preserves failures after
 release as invalid attempts, and never replaces them based on outcomes. The
-observable checks cover page text, forms, focus, tabs, scroll and storage, plus a
-fixed screenshot tolerance. They **do not prove equality of hidden JavaScript or
+observable checks cover page text, forms, focus, tabs, scroll and history, plus a
+fixed screenshot tolerance. Raw cookie/localStorage/IndexedDB/session evidence is retained but is not an equality gate. These checks **do not prove equality of hidden JavaScript or
 remote server state**; independently isolated browser contexts can still affect
 the same remote application. The strict checks may restrict the accepted cohort.
 Stop if the first twelve candidate states yield no accepted reconstruction.
@@ -118,7 +109,7 @@ post-action browser.
 
 ```mermaid
 flowchart LR
-    T["Cleaned training task"] --> P["Fresh frozen-SFT prefix: 2, 4 or 6 decisions"]
+    T["Cleaned training task"] --> P["Fresh frozen-SFT prefix: 0, 1 or 2 decisions"]
     P --> S["One decision state; five fixed candidates"]
     S --> A["Action A: 3 independent rollouts"]
     S --> B["Action B: 3 independent rollouts"]
@@ -177,8 +168,7 @@ uses the transactional all-attempt ledger, preserves immutable receipts, and
 requires an exact registered approval before work. Separate evaluation logging
 uses `openwebrl-evals`. The supervisor queues the owning agent for diagnosis/recovery;
 its initial continuation receipt and persistent ownership lock are verified. GPU throughput and live reconstruction yield remain
-startup checks. CPU validation: 92 targeted tests pass; the real child-browser
-RPC fixture captures consistent branch observations and closes both browsers.
+startup checks. CPU validation: 102 targeted tests pass. A real two-process browser fixture verifies equal visible observations despite independently randomized cookie/session/localStorage values, and closes both browsers.
 
 **Startup recovery:** attempt 346645 used 95 seconds and failed before any
 actor/API calls. The complete-state check had spanned the shared capture retry
@@ -193,23 +183,14 @@ hours. No API or compute budget was added. Two initial browser reservations
 remain charged; interrupted discovery attempts are explicitly authorized for
 retry with preserved lineage.
 
-**Gate diagnosis and proposed amendment (not yet approved):** seven of the
+**Original strict-stage gate diagnosis:** seven of the
 12 actors terminated before their assigned depth, three failed stable capture,
 one lacked five distinct candidate commands, and one produced a panel whose
 15 replays all differed from the reference. Those replay mismatches included
 page content, forms and independent-session storage, so simply ignoring cookie
 values would not have accepted that panel.
 
-The proposed recovery samples earlier prespecified depths 0/1/2, keeps exactly
-five actor draws including duplicates (reporting action diversity), and requires
-matching task-visible page/forms/grounded controls and the same tight screenshot
-tolerance while preserving raw session/storage evidence as diagnostics. This is
-an explicit change to the state cohort and equivalence definition; it is not a
-bug fix or a claim of complete browser-state restoration. It awaits the user's
-choice. The actor, decoding, five-actions × three-continuations design, paired
-teacher conditions and all budget ceilings would remain unchanged. Remaining
-allocation time is 28,355 seconds; no replacement has been submitted after the
-gate failure.
+**Authorized recovery, visible-replay-v2:** the user directed continued fixes and submission under the existing approval. The recovery samples earlier prespecified depths 0/1/2, keeps exactly five actor draws including duplicates (reporting action diversity), and requires matching page/forms/grounded controls plus the same tight screenshot tolerance while retaining raw session/storage differences. This revises the state cohort and observable-equivalence definition; it does not establish a complete browser-state clone. The original strict stage remains separately preserved and contributes only to all-attempt accounting, not to the new scientific cohort. The actor, decoding, five-actions × three-continuations design, paired teacher conditions and all budget ceilings remain unchanged. Job 346951 was submitted after the 102-test suite, frozen-controller dry run and real-browser fixture passed.
 
 [Aggregate protocol and resource request](arm_results/rl_integration/continuation-branches-protocol-20261006.json).
 

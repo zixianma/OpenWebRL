@@ -1,23 +1,23 @@
 {
-  "status": "startup_gate_failed_protocol_decision_pending",
+  "status": "authorized_recovery_running",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
     "anchor_depths": [
-      2,
-      4,
-      6
+      0,
+      1,
+      2
     ],
-    "candidate_draws": 15,
+    "candidate_draws": 5,
     "candidates": 5,
     "comparison": "Teacher-selected terminal success vs paired before-only and uniform candidate choice; task-cluster intervals; no best-of-repetitions success oracle.",
     "continuations_per_candidate": 3,
-    "equivalence": "Exact observed storage/page/forms/tabs/scroll plus frozen pixel tolerance; hidden remote/JS state is not proven cloned.",
+    "equivalence": "Exact observed page/forms/tabs/scroll/focus/history/grounded controls plus unchanged raster tolerance; storage/session differences retained as diagnostics. No hidden or remote state clone claim.",
     "gate": "Stop if first twelve candidate states yield zero accepted states; release all fifteen branches only after reconstruction.",
     "intervention": "Whole candidate response (reasoning and grounded action bundle) enters actor history.",
     "maximum_candidate_states": 200,
     "outcome": "Canonical OM2W o4-mini-2025-04-16,4096 response cap; original terminal status retained.",
-    "protocol": "fixed-sft-continuation-branches-v1",
+    "protocol": "fixed-sft-continuation-branches-v2",
     "remaining_horizon": "30 total browser operations and60 total policy decisions minus common prefix; 1800s after release.",
     "replay": "Fresh independent browser contexts; identical prefix responses; compare every prefix observation and anchor.",
     "sampling": {
@@ -44,7 +44,8 @@
       "permutation_check": "One extra before and one after(rep0) call per form/state",
       "planned_calls": 1400,
       "repeat_calls": 3
-    }
+    },
+    "retain_duplicate_candidates": true
   },
   "resources": {
     "collectors": 32,
@@ -72,11 +73,11 @@
     "selection": "one-based integer 1..5"
   },
   "factored_output_included": false,
-  "offline_tests_passed": 92,
+  "offline_tests_passed": 102,
   "new_model_calls": 0,
-  "new_gpu_allocations": 2,
+  "new_gpu_allocations": 3,
   "revision": "User requested five actions and three continuations; previous unlaunched 3x5 proposal superseded.",
-  "job_id": "346655",
+  "job_id": "346951",
   "active_agent_queue_verified": true,
   "prior_attempts": [
     {
@@ -91,9 +92,9 @@
       "experiment_complete": false
     }
   ],
-  "current_attempt_limit_seconds": 28680,
+  "current_attempt_limit_seconds": 28320,
   "accepted_states": 0,
-  "considered_states": 12,
+  "considered_states": 0,
   "verified_complete": false,
   "actual_allocation_seconds": 445,
   "remaining_allocation_seconds": 28355,
@@ -104,7 +105,7 @@
     "fewer_than_five_distinct_candidates": 1
   },
   "proposed_amendment": {
-    "approved": false,
+    "approved": true,
     "reason": "Strict live replay startup gate accepted zero of twelve states.",
     "changes": {
       "anchor_depths": [
@@ -133,6 +134,18 @@
       "anchor_captured_but_all_15_replays_failed": 1,
       "fewer_than_five_distinct_candidates": 1
     },
-    "note": "No implementation or collection under this amendment has started; explicit user scientific-protocol decision pending."
+    "note": "User directed continued repairs and submission within existing approval; implementation tested and replacement submitted."
+  },
+  "prior_actual_allocation_seconds": 445,
+  "original_strict_stage": {
+    "considered_states": 12,
+    "accepted_states": 0,
+    "reason_counts": {
+      "capture_failure_before_anchor": 3,
+      "actor_terminated_before_fixed_depth": 7,
+      "anchor_captured_but_all_15_replays_failed": 1,
+      "fewer_than_five_distinct_candidates": 1
+    },
+    "included_in_scientific_cohort": false
   }
 }

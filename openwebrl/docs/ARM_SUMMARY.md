@@ -4,7 +4,7 @@ This is the concise collaborator summary. Detailed configs, provenance, and
 run history are in [ARM_RESULTS.md](ARM_RESULTS.md) and
 [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md).
 
-**Next critic diagnostic, startup gate stopped (0/12 states):** 100 fresh fixed-SFT states × five candidate actions × three continuations (1,500 rollouts), comparing Luna-high before-only versus execution-informed selection. Both return only `{"selection": N}`. Approved: 4 H200 / 32 CPU / 480 GiB × 8 hours across retries, $15 Luna / $25 judge; verified agent continuation active. No continuation/teacher results; a revised collection protocol awaits the user’s choice. [Protocol, validation and resource request](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+**Next critic diagnostic, recovery running (346951):** 100 fresh fixed-SFT states × five samples × three continuations (1,500 rollouts), comparing Luna-high before-only versus execution-informed selection; both return only `{"selection": N}`. Earlier branch points and visible replay checks passed 102 tests and a real-browser fixture. Original failed attempts retained; replacement capped at 7h52m within the original 4 H200 × 8h, $15 Luna / $25 judge totals. No continuation results yet. [Protocol and recovery](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 
 <a id="arm-methods-at-a-glance"></a>
 ![Three ARM stages: choose actions at inference, learn from saved preferences offline, or change turn credit during RL](arm_results/methods/arm_three_stages.svg)
