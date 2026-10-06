@@ -259,11 +259,11 @@ FLOP arithmetic, subset averaging and cache-sharing checks passed; the existing
 <a id="arm-historical-reconciliation-20261004"></a>
 ### Why the fresh result differs from the historical30% →43%
 
-**The fresh collection did not reproduce the historical12.67pp ARM gain.**
-These are separate live-web collections, with changed random streams and
-execution scheduling; the October4 cohort is controlled within its six modes,
-but is not an exact replay of September7–8. Reporting the fresh result without
-this comparison obscured a material discrepancy.
+**October6 correction: the October4 runs had the same missing-system-policy bug as the initial October6 runs.** Their frozen source omitted the actor's browser policy file and silently substituted an empty system message. September trajectories include the 4,180-character policy. Task goals and tool definitions were still supplied. Every saved policy inspected in October4 actor0 and ARM was empty (279/279 in each; the other episodes failed before saving message history). The same frozen loader served all five ordinary modes.
+
+The smaller observed gain, **4.13pp versus 12.67pp**, is therefore **not a comparison under matching actor prompts**. We have confirmed the bug's presence, not how much of the gain difference it caused. Recorded request seeds also failed to guarantee reproducible draws in both historical and recent serving; live websites, scheduling and runtime differ as well. [Saved-artifact evidence and corrected recovery](#arm-historical-harness-audit-20261006).
+
+The rates below remain valid descriptions of the saved cohorts. October4's within-cohort ARM/pass@k comparison is specifically a comparison under the blank-policy harness; it cannot establish that the historical ARM gain failed to reproduce with the historical actor policy.
 
 | Measurement | September7–8 | October4 | Change |
 | --- | ---: | ---: | ---: |
@@ -287,8 +287,6 @@ replacement for the all300 denominator. Across all300 tasks, the change in
 the ARM gain is−8.53pp, paired task-bootstrap95% interval[−15.07,−1.93]pp.
 This10,000-draw interval conditions on the saved cohorts; it does not measure
 repeat-seed/date uncertainty or identify a causal explanation.
-
-**October6 correction:** the actor system policy did **not** match: historical trajectories contain the policy, while the October4 frozen source silently supplied an empty system message. The counts below describe the saved experiments; they cannot establish failure to reproduce the historical gain under the same actor prompt. [Evidence and recovery](#arm-historical-harness-audit-20261006).
 
 **Other verified matching ingredients:** the task file is byte-identical; both use
 the original frozen actor, the same released SelectionARM tensors with no new
