@@ -35,18 +35,18 @@ top-p0.9 stays separate:49/50 episodes were collected, but its Luna-alone compar
 <a id="actor-selector-experiment-tracker-20261004"></a>
 ### Unified experiment tracker
 
-Snapshot: **2026-10-06 01:41:06 UTC**. “Saved” is terminal record coverage;
+Snapshot: **2026-10-06 02:42:25 UTC**. “Saved” is terminal record coverage;
 archived coordinate-compromised and transport-diagnostic records are excluded, and provisional counts
 are flagged explicitly. Coverage does not imply every record is valid or the
 run has passed its final audit. The table includes runs owned by the other evaluation session. The [aggregate tracker JSON](arm_results/luna_full300_20261004/experiment_tracker.json) records the same eleven committed comparison rows, including both approved high-reasoning baselines and the other session’s direct Kev27B actor. Supervisors must maintain this table and JSON snapshot on submission, recovery, routine progress review and verified completion, including the other session’s runs. Preserve stable IDs and report omitted or unconfigured arms explicitly.
 
 | ID | Actor | Selector | N | Saved /300 | Successes | Success rate | Valid | Valid-only rate | Status / current job | Protocol | Budget |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- |
-| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 235 | 45 | 19.15%† | 215 | 20.93%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
-| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 236 | 65 | 27.54%† | 216 | 30.09%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS01 | Qwen3-VL-4B-Thinking | None | 1 | 262 | 46 | 17.56%† | 242 | 19.01%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS02 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | 262 | 71 | 27.10%† | 242 | 29.34%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
 | AS04 | Official OpenWebRL-SFT4B | None | 1 | 300 | 106 | 35.33% | 272 | 38.97% | Complete; reused actor0 reference | Historical SFT | Already completed |
-| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna | 5 | 248 | 94 | 37.90%† | 227 | 41.41%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
-| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 251 | 97 | 38.65%† | 230 | 42.17%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS05 | Official OpenWebRL-SFT4B | GPT-6 Luna | 5 | 280 | 103 | 36.79%† | 255 | 40.39%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
+| AS06 | Official OpenWebRL-SFT4B | GPT-6 Luna | 10 | 279 | 104 | 37.28%† | 255 | 40.78%† | Running 345214; provisional | Luna study | Approved shared GPU/API pools below |
 | AS07 | GPT-6 Luna | None | 1 | 300 | 110 | 36.67% | 279 | 39.43% | Verified complete 344875 | Luna study; API sampling | Approved shared CPU/API pools below |
 | AS08 | Official OpenWebRL-SFT4B | Jev | 5 | 300 | 176 | 58.67% | 284 | 61.97% | Verified complete 345021 | Jev/Kev study | Approved1 H200/8 CPU/120GiB ×10h total |
 | AS09 | Official OpenWebRL-SFT4B | Kev27B | 5 | 300 | 184 | 61.33% | 291 | 63.23% | Verified complete 344793 | Jev/Kev study | Approved2 H200/16 CPU/240GiB ×10h total |
@@ -56,8 +56,10 @@ run has passed its final audit. The table includes runs owned by the other evalu
 
 **Success rate = successes / saved episodes**, including invalid episodes in the denominator. **Valid-only rate = successes / valid episodes.** Completed runs use all 300 tasks. **† Running rows are provisional rates over the currently saved subset**, which may differ across arms; unfinished tasks are not imputed as failures. Scores use each row’s judge protocol and are not uniformly strict-completion rates; see the [GPT-6 actor and judge audit](#api-actor-stopping-audit-20261005).
 
+In the Qwen/Luna study, the validity flag also excludes post-action browser errors, including a recorded timeout after a selected 300-second wait. Valid-only rates therefore mix site availability with exclusions caused by agent behavior; overall success remains the primary metric.
+
 **Current coverage:** seven rows are verified complete, including the reused SFT reference and both high-reasoning API rows with final plots and accounting.
-The four GPU rows have saved 970/1,200 records and remain active. Their
+The four GPU rows have saved 1083/1,200 records and remain active. Their
 partial success counts are provisional; protocol differences remain explicit.
 Direct Kev27B is now verified at 26/300 (8.67%; 26/294 valid-only, 8.84%), with
 six diagnosed invalids and 9,907/14,400 scheduler seconds charged.
