@@ -2,6 +2,10 @@
   "version": 1,
   "description": "Topic consolidation map; SHA256 values preserve the source records before migration.",
   "targets": {
+    "ARM_INFERENCE_SCALING.md": {
+      "title": "ARM inference-time scaling: actors and selectors",
+      "sources": []
+    },
     "ARM_INFERENCE.md": {
       "title": "ARM inference and judge protocol",
       "sources": [

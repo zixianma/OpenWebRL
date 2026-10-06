@@ -1750,7 +1750,7 @@ Actions-only SelectionARM completed all 300 OM2W tasks at **35.0% overall /
 This suggests that the existing selector uses candidate reasoning, but the
 historical endpoint comparison does not isolate its causal contribution or
 prove that verbose reasoning is necessary for a newly trained selector.
-See [compact validation](ARM_INFERENCE.md#compact-candidate-selection).
+See [compact validation](ARM_INFERENCE_SCALING.md#compact-candidate-selection).
 
 A bounded CPU audit recovered the original five-candidate draws for every
 state in the reviewed joint-pair pool, verifying C2 source hashes, Piotr draw

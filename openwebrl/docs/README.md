@@ -3,17 +3,8 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[October4 Jev Ultrafast: completed10-task pilot,1/10 successes, independently verified browser and judge artifacts](RL_EVALUATION.md#jev-ultrafast-online-mind2web-20261004).
-[Kev0.8B/27B: completed paired pilot,0/10 and3/10; private HTML review and harness diagnosis](RL_EVALUATION.md#kev-paired-online-mind2web-20261004).
-[Kev27B direct browser policy: full300 audited, 26/300 canonical successes (8.67%), 26/294 valid-only (8.84%), six diagnosed invalids; all attempts charged within the original cap](RL_EVALUATION.md#kev27b-actor-full300-20261004).
-[Completed SFT decision-selection pilot:40 records audited; canonical scores4/10 SFT,3/10 Jev,4/10 Kev0.8B,9/10 Kev27B; five invalid records and three questionable large-Kev positives remain explicit](RL_EVALUATION.md#sft-jev-kev-selection-pilot-20261004).
-[Full300 SFT+Jev and SFT+Kev27B: 600 records audited; 176/300 and 184/300 canonical successes; common-valid paired totals 175 versus 176; invalids and judge/harness caveats retained](RL_EVALUATION.md#sft-selection-full300-final-20261005).
+[Inference-time scaling: Qwen, official SFT, GPT-6, Jev and Kev—eleven completed full300 comparisons, success rates, costs, protocols and audit caveats](ARM_INFERENCE_SCALING.md).
 
-[Unified eleven-row actor/selector tracker: all full-set rows complete, with overall and valid-only success rates; protocol differences retained](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
-[Completed Qwen/SFT × Luna study:1,500 verified episodes; Qwen17.67%→28.33%, SFT N5/N10 37.67%/37.33%, Luna36.67%; final cost/latency/token plots and all-attempt accounting](ARM_INFERENCE.md#luna-full300-results-20261006).
-[Completed Luna-high/Sol6.1-high comparison:600 verified episodes;32.33% and20.33% overall versus earlier Luna-medium36.67%; final cost, latency and token plots](ARM_INFERENCE.md#api-actor-high-results-20261005).
-[Offline stopping and judge audit: Sol ended58 tasks on its first action versus Luna7; shared judge rubric permits partial progress, with one reviewed pass still showing a final access error](ARM_INFERENCE.md#api-actor-stopping-audit-20261005).
-[Corrected Qwen/SFT pilot:49 collected, seven Luna actor episodes compromised and Luna-alone comparison withdrawn; four-arm/nine-task plots, unchanged accounting; unapproved Qwen-only tail proposal](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 historical reconciliation: why30.0%→42.7% became35.2%→39.3%; matched-valid sensitivity and unresolved causes](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).
@@ -26,6 +17,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
+| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Qwen/SFT/GPT-6/Jev/Kev actor and selector results, inference cost, pilots and comparison limits |
 | [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, and checkpoint procedures |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |

@@ -1,0 +1,40 @@
+{
+  "scope": "Offline verification of working-tree fixes; completed and active frozen evaluations preserved",
+  "new_api_calls": 0,
+  "new_browser_sessions": 0,
+  "new_gpu_allocations": 0,
+  "test_counts": {
+    "tests": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "fixes": {
+    "prompt_assets": "Required generic and native API prompt assets copied and SHA256-pinned for future preparations; missing, empty, unpinned or changed assets fail preflight. Working-tree framework loader and native API prompt loader reject empty/missing policy.",
+    "native_history": "Medium/high API actors preserve all native Responses output items, including opaque reasoning; current browser feedback is attached as function_call_output to original call_id. Previous input images are removed while output items remain unchanged. Framework/action mismatch, multiple calls and repeated IDs fail closed.",
+    "future_packaging_followup": "Pilot FILES now includes responses_actor_history.py. Full300 CODE now includes corrected luna_qwen_policy.py plus history helper. Pilot/full300 startup validates required prompt manifest. Future manifests identify native_responses_v1."
+  },
+  "validation_coverage": [
+    "three-turn SDK-shaped native output replay",
+    "both medium and high policy integrations",
+    "call-ID and exact argument matching",
+    "error feedback preserved",
+    "one current image with unchanged native output",
+    "task reset and no caller mutation",
+    "empty/missing prompt rejected",
+    "prompt source freeze/hash preflight",
+    "conservative size guard counts opaque state and excludes image base64 text",
+    "viewport coordinate executor roundtrip",
+    "Qwen/SFT selector behavior unchanged",
+    "controller resource/cap and family protocol regressions"
+  ],
+  "limits": [
+    "No new live API request; provider acceptance of corrected replay must be confirmed in an authorized future diagnostic.",
+    "No browser rerun or success-rate uplift measured. Canonical completed scores are unchanged.",
+    "No historical approved source or plan was rewritten; new source preparation was not invoked against protected historical paths.",
+    "Pipeline and environment differences still prevent attributing model quality from unmatched rates."
+  ],
+  "date": "2026-10-06",
+  "missing_prompt_scope": "API actors and local Qwen/SFT actors in the Luna full300 study lacked browser-policy text; local actors still received tokenizer tool-schema wrappers. Luna selector prompt was constructed separately.",
+  "canonical_scores_changed": false
+}

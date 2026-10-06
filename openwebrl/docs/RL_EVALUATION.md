@@ -1,5 +1,9 @@
 # RL checkpoint evaluation: baseline, Browser Use, and scheduling
 
+[Consolidated inference-time scaling results](ARM_INFERENCE_SCALING.md) compare
+Qwen, official SFT, GPT-6, Jev and Kev in one report. Detailed Jev/Kev operational
+records remain below.
+
 <a id="arm-mixed-bonus-iter90-results-20261002"></a>
 ## Mixed-only bonus iteration90 — October2
 

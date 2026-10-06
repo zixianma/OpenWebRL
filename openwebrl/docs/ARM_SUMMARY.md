@@ -12,36 +12,21 @@ Slide figures: **three stages** ([PNG](arm_results/methods/arm_three_stages.png)
 
 ## 1. Inference-time ARM selection
 
-**Next comparison: full300 actor × Luna-selector study.** Fresh Qwen Thinking
-alone, Luna alone, Qwen + Luna N=5, and official OpenWebRL-SFT + Luna N=5/10:
-1,500 new episodes. Only official SFT + Luna has an N=10 arm. Local actors use temperature1.0/top-p0.95. Reuse the existing
-SFT-only full300 as a protocol-different reference (T0.7/p0.9/1024 output),
-without a new SFT-only or Luna+Luna run. Track performance, cost, latency,
-input/output tokens, browser steps and local compute; plot success against
-cost/latency/tokens. **Luna alone is independently verified complete:110/300
-successes (36.67% overall),110/279 valid episodes (39.43%) and21 invalid starts.**
-Its primary actor API estimate is$0.007381 per task; median/p95 episode latency
-is55.98/254.41 seconds, excluding judging. API dollars exclude browser CPU and
-terminal judging. The300 records combine90 audited no-coordinate originals
-and210 corrected episodes;177 compromised records and four interrupted attempts
-remain preserved. CPU use was12,257/14,400 approved seconds across both attempts.
-GPU344754 remains queued for the other four arms (1,200 episodes), under the
-unchanged8 H200 ×16h ceiling. Shared API caps remain$100 Luna/$25 judge.
-**The new study is300/1,500 complete; matched comparison plots are not ready.**
-[Verified CPU-family outcome and efficiency metrics](ARM_INFERENCE.md#luna-cpu-family-results-20261005).
-[Full-set matrix, baseline caveat and budget](ARM_INFERENCE.md#luna-actor-full300-20261004).
-[Unified eight-run tracker, including SFT + Jev/Kev](ARM_INFERENCE.md#actor-selector-experiment-tracker-20261004).
+**The actor/selector comparison is complete:** eleven full300 rows cover
+Qwen, official SFT, GPT-6 Luna/Sol, Jev and Kev. Qwen improves from 17.67%
+alone to 28.33% with Luna selecting among five actions. SFT + Luna scores
+37.67% with five proposals and 37.33% with ten; ten costs more without an
+observed success gain. Direct Luna-medium, Luna-high and Sol-high score
+36.67%, 32.33% and 20.33%. SFT + Jev/Kev27B scores 58.67%/61.33%, while
+Kev27B as the direct actor scores 8.67%. These are protocol-specific judged
+successes; browser platforms, actor settings and judge inputs differ across
+studies. The reused SFT-alone reference (35.33%) is not a matched control.
+[Consolidated results, costs and comparison limits](ARM_INFERENCE_SCALING.md).
 
-The separate T1/p0.9 pilot collected49/50 episodes, but **seven Luna actor
-episodes are coordinate-compromised and the entire Luna-alone performance
-comparison is withdrawn**. Official SFT + Luna N=5 finished10/10 with two
-successes and eight valid episodes. [Three corrected partial plots](ARM_INFERENCE.md#luna-qwen-pilot-partial-20261005)
-show **four unaffected arms on the same nine tasks (36 records)**; their
-metrics are unchanged. The final Qwen N=10 episode remains missing. Actual
-use stays5.64 GPU-hours, including every compromised attempt. The unapproved
-one-GPU/20-minute proposal covers only that missing Qwen episode, does not
-repair the seven Luna episodes, and would not complete the five-arm comparison.
-No new pilot budget or launch is approved. Pilot and full300 records stay separate.
+The separate Qwen/Luna pilot remains 49/50 collected, with its Luna-alone
+comparison withdrawn because seven episodes used compromised coordinates.
+[Pilot limitations](ARM_INFERENCE_SCALING.md#luna-qwen-pilot-partial-20261005)
+remain separate from the verified full300 results.
 
 **Method.** At browser state `s`, sample five responses `x₀,…,x₄`, each containing
 **reasoning + action**. ScalarRM scores independently; SelectionARM compares

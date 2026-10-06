@@ -70,7 +70,7 @@ def inspect():
 
 def main():
     issues = inspect()
-    print(json.dumps({'canonical_documents': 11,
+    print(json.dumps({'canonical_documents': len(document_map()['targets']) + len(document_map()['retained']),
                       'retired_source_records': len(document_map()['documents']),
                       'issues': issues}, indent=2))
     if issues:

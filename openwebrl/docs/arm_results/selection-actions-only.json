@@ -1,0 +1,61 @@
+{
+  "summary": {
+    "scheduled": 300,
+    "attempted": 300,
+    "valid": 253,
+    "successes": 105,
+    "unavailable": 47,
+    "success_rate_all_scheduled": 0.35,
+    "success_rate_valid": 0.4150197628458498
+  },
+  "paired": {
+    "baseline": {
+      "all300_wins": 38,
+      "all300_losses": 23,
+      "all300_exact_p": 0.07217743850092258,
+      "common_valid": {
+        "common_valid_tasks": 242,
+        "baseline_success_rate": 0.34710743801652894,
+        "treatment_success_rate": 0.4214876033057851,
+        "difference_percentage_points": 7.43801652892562,
+        "paired_task_bootstrap_95_percent_interval_pp": [
+          1.6528925619834711,
+          13.636363636363635
+        ],
+        "treatment_only_wins": 35,
+        "baseline_only_wins": 17,
+        "mcnemar_exact_two_sided_p": 0.017533235299084904,
+        "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+      }
+    },
+    "selection": {
+      "all300_wins": 32,
+      "all300_losses": 55,
+      "all300_exact_p": 0.017827552929735955,
+      "common_valid": {
+        "common_valid_tasks": 233,
+        "baseline_success_rate": 0.48497854077253216,
+        "treatment_success_rate": 0.4206008583690987,
+        "difference_percentage_points": -6.437768240343348,
+        "paired_task_bootstrap_95_percent_interval_pp": [
+          -13.304721030042918,
+          0.0
+        ],
+        "treatment_only_wins": 25,
+        "baseline_only_wins": 40,
+        "mcnemar_exact_two_sided_p": 0.08168153394154005,
+        "limitations": "Conditional on common valid tasks; one run does not measure seed or date variability."
+      }
+    }
+  },
+  "limitation": "Historical endpoint controls: live sites and implementation dates differ. Shadow agreement is not correctness.",
+  "shadow": {
+    "attempted": 549,
+    "valid": 549,
+    "same_index": 421,
+    "same_action": 431,
+    "note": "Deterministic 10% of states on compact-selector trajectories; full selector is a reference, not ground truth.",
+    "mean_compact_input_tokens": 2317.0127504553734,
+    "mean_full_input_tokens": 3837.8597449908925
+  }
+}
