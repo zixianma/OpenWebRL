@@ -15,6 +15,7 @@ AUDITS = DOCS / 'arm_results/rl_integration'
 REMOTE = 'https://github.com/zixianma/OpenWebRL/blob/arm/openwebrl/docs/'
 SPECS = [
     ('outcome_only', 'Outcome-only baseline', '#2563eb', True, 'baseline'),
+    ('expanded4102', 'Outcome-only · expanded 4,102 tasks', '#ea580c', True, 'expanded4102'),
     ('all_failure', 'All-failure ARM', '#dc2626', True, 'allfailure'),
     ('additive', 'Additive ARM', '#16803c', True, 'additive'),
     ('gate_b', 'Gate B · relaxed gate', '#7e22ce', True, 'gate-b'),
@@ -61,6 +62,8 @@ def build_data():
                 iteration = int(path.name.split('-iteration')[1].split('-')[0])
                 data = json.loads(path.read_text())
                 assert data.get('iteration', data.get('completed_iterations', iteration)) == iteration
+                if key == 'expanded4102':
+                    assert data.get('evaluation_verified_complete') is True, path
                 counts = data.get('full300')
                 if counts is None:
                     m = data['metrics']
@@ -78,6 +81,7 @@ def build_data():
                 limitation='Historical evaluations use different collection dates and valid-task sets. '
                            'Lines are visual guides, not additional evaluations or evidence of significance. '
                            'Training iterations are not matched optimizer-update counts. '
+                           'The expanded outcome-only run uses 4,102 training tasks; other runs use the original pool. '
                            'Stealth and WebVoyager results are separate in the summary.')
 
 

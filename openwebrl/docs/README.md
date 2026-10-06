@@ -30,7 +30,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Interactive RL comparison](rl_results/arm_rl_interactive.html): includes both mixed-only runs through90; toggle runs, select bias-corrected EMA or centered Gaussian smoothing, switch overall/valid-only and export raw data; fixed0–60% y-axis. Download and open the standalone HTML in a browser; no server required.
+[Interactive RL comparison](rl_results/arm_rl_interactive.html): includes both mixed-only runs through90 and the expanded4,102-task outcome-only run through50; toggle runs, select bias-corrected EMA or centered Gaussian smoothing, switch overall/valid-only and export raw data; fixed0–60% y-axis. Download and open the standalone HTML in a browser; no server required.
 
 [Reward-hacking diagnostic](ARM_RESULTS.md#arm-reward-hacking-curves-20261003):673 saved training collections across nine ARM variants; independent full300 task success versus ARM bonus/proxy, with separate failure buffers, label coverage and credited selection. [Interactive view](rl_results/arm_rl_interactive.html#reward-hacking) · [Figure](rl_results/arm_reward_hacking.png) · [PDF](rl_results/arm_reward_hacking.pdf).
 

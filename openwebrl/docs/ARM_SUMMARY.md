@@ -333,6 +333,7 @@ success; teacher action consistency is58% under reversed-order re-query.
 
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
 Both mixed-only curves include iterations10–90 and are visible by default; use **Mixed-only pair** to compare them with the outcome-only baseline.
+**Outcome-only · expanded 4,102 tasks** is also visible by default, with verified full300 results at10/20/30/40/50. Its curve stops at50 until evaluation60 is complete; this data-pool ablation uses2,000 additional training tasks.
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
 original bonus starts hidden. The y-axis is fixed at0–60%. Smoothing is off by
