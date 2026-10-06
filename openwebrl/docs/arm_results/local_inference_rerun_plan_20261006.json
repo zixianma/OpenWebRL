@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "prepared_parallel_shards_awaiting_exact_resource_approval",
-  "launch_authorized": false,
-  "new_experiments_launched": 0,
+  "status": "authorized_five_conditions_sft_queued_jev_running",
+  "launch_authorized": true,
+  "new_experiments_launched": 5,
   "protocol_name": "local-openwebrl-om2w-v2",
   "scope": {
     "conditions": 4,
@@ -25,58 +25,61 @@
         "actor_profile": "qwen3",
         "selector_profile": null,
         "candidates_per_step": 1,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       },
       {
         "id": "L03",
         "actor_profile": "luna_medium",
         "selector_profile": null,
         "candidates_per_step": 1,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       },
       {
         "id": "L04",
         "actor_profile": "luna_high",
         "selector_profile": null,
         "candidates_per_step": 1,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       },
       {
         "id": "L05",
         "actor_profile": "sol_high",
         "selector_profile": null,
         "candidates_per_step": 1,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
-      },
-      {
-        "id": "L06",
-        "actor_profile": "jev",
-        "selector_profile": null,
-        "candidates_per_step": 1,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       },
       {
         "id": "L07",
         "actor_profile": "kev27b",
         "selector_profile": null,
         "candidates_per_step": 1,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       },
       {
         "id": "L09",
         "actor_profile": "sft",
         "selector_profile": "luna_medium_selector",
         "candidates_per_step": 10,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       },
       {
         "id": "L12",
         "actor_profile": "qwen3",
         "selector_profile": "luna_medium_selector",
         "candidates_per_step": 5,
-        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+        "reason": "No active v2 allocation; requires separate exact resource approval. Preparation can proceed independently of the five approved conditions."
       }
-    ]
+    ],
+    "sft_core_condition_ids": [
+      "L01",
+      "L08",
+      "L10",
+      "L11"
+    ],
+    "separately_approved_condition_ids": [
+      "L06"
+    ],
+    "description": "Machine-readable SFT core. The separate approved L06 experiment is described in additional_approved_experiments; the complete study has five conditions."
   },
   "dataset": {
     "name": "Online-Mind2Web",
@@ -243,7 +246,8 @@
       "group": "actor_alone",
       "actor_view": "screenshot_and_history",
       "selector_view": null,
-      "typing_helper": null
+      "typing_helper": null,
+      "budget_group": "sft_core"
     },
     {
       "id": "L08",
@@ -254,7 +258,8 @@
       "group": "sft_selector",
       "actor_view": "screenshot_and_history",
       "selector_view": "shared_text_dom_candidates_v1",
-      "typing_helper": null
+      "typing_helper": null,
+      "budget_group": "sft_core"
     },
     {
       "id": "L10",
@@ -265,7 +270,8 @@
       "group": "sft_selector",
       "actor_view": "screenshot_and_history",
       "selector_view": "shared_text_dom_candidates_v1",
-      "typing_helper": null
+      "typing_helper": null,
+      "budget_group": "sft_core"
     },
     {
       "id": "L11",
@@ -276,7 +282,8 @@
       "group": "sft_selector",
       "actor_view": "screenshot_and_history",
       "selector_view": "shared_text_dom_candidates_v1",
-      "typing_helper": null
+      "typing_helper": null,
+      "budget_group": "sft_core"
     }
   ],
   "shared_browser": {
@@ -396,7 +403,7 @@
     "temperature": 0.6,
     "top_p": 0.95,
     "max_completion_tokens": 1024,
-    "scope": "Jev/Kev direct actors only; SFT and API actors generate their own text."
+    "scope": "Approved only for direct Jev L06. All four SFT conditions generate their own text; deferred actor profiles are not running."
   },
   "judge": {
     "model": "o4-mini-2025-04-16",
@@ -415,7 +422,7 @@
     "training_monitor_is_separate": "GPT-4.1/action_history in reward_browser.py is not the Online-Mind2Web/AgentTrek judge and is not selected by using a local browser."
   },
   "budget": {
-    "approved": false,
+    "approved": true,
     "requested_compute": {
       "jobs": 2,
       "per_job": {
@@ -448,7 +455,7 @@
       "smoke": 24,
       "infrastructure_recovery": 96
     },
-    "note": "Scientific scope and splitting into small parallel jobs are accepted. Exact two2H200/16CPU/240GiB\u00d78h resource/API/browser caps remain proposed and unapproved; no jobs or paid suite requests have launched and no historical budget is transferred. Separate shard ledgers preserve retries and enforce caps without automatic budget transfers.",
+    "note": "Approved SFT-core budget only. Every failed scheduler/API/browser attempt remains charged to its own shard; no transfers or extensions. L06 has the separate approved allowance below.",
     "topology_proposed": {
       "per_job": {
         "sft_tp1_replicas": 1,
@@ -490,12 +497,18 @@
       "luna_usd": 25.0,
       "canonical_judge_http_attempts": 2640,
       "canonical_judge_usd": 12.5
-    }
+    },
+    "scope_condition_ids": [
+      "L01",
+      "L08",
+      "L10",
+      "L11"
+    ]
   },
   "not_yet_validated": [
-    "Real GPU serving startup, shared SFT server concurrency/long-context request latency and resource use; no measured guarantee of completing each shard within8h.",
-    "Live provider acceptance and12smokeepisodes per shard (24total) must pass before that shard primary collection.",
-    "No benchmark browser episodes or paid model/API requests have run for this new suite."
+    "Complete SFT smoke acceptance and shared-server concurrency/long-context throughput after targeted capture hydration and reset-cleanup recovery; no measured guarantee of finishing a shard within8h.",
+    "All1500 primary records and27 smoke records require independent final evidence, judge, resource and W&B audits; partial collection is not verified completion.",
+    "Remaining historical conditions require separate approved allocations and fresh v2 collection before they enter the comparison."
   ],
   "scope_accepted": true,
   "historical_judge_audit": {
@@ -572,9 +585,9 @@
   ],
   "frozen_preparation": {
     "version": "prepared-parallel-v3",
-    "campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
     "partition_sha256": "6cd9db242665d4c7e367bd9e837874dc24125f45aac75cfc6b822a0715517f0a",
-    "shards": [
+    "note": "The public five-condition overview is updated independently of the preserved private SFT-core shard plans and separate L06 plan. Targeted operational fixes retain scientific settings, saved attempts and all-attempt budget accounting.",
+    "initial_shards": [
       {
         "shard": 0,
         "plan_sha256": "7ffefbfc3cedc15c0adc55c35543372d5c77b2db19ff0585567a5c53af5c58a2",
@@ -586,6 +599,209 @@
         "source_manifest_sha256": "e7683907770e5fa1e6e09a5f86f094fe577953b3ccf1adaed5f8b71c9f1bc212"
       }
     ],
-    "note": "Public readiness metadata updated after both immutable per-shard scientific configurations were frozen. No scientific setting or resource/API/browser cap changed after freeze; approvals bind these exact private shard plans."
-  }
+    "initial_campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
+    "current_campaign_manifest_sha256": "7b5ef0db55be2bcbb01d30f2ca6924449d99732021400cf3ab2949e72b391eb9",
+    "current_shards": [
+      {
+        "shard": 0,
+        "plan_sha256": "b75f3f8ee5d8c5e6fb7623e324c4570a626bdd0eecd79b95f0995503d106bdff",
+        "source_manifest_sha256": "879d6dd870e00cb767d1ea26a95f1ec28a81ac937d2cb9c5e526d677d11f794b",
+        "job_id": "346624"
+      },
+      {
+        "shard": 1,
+        "plan_sha256": "c007826d8aaf09b23a6938da0b5d4d47609ef59665f20d58855a96bfeb7d0de5",
+        "source_manifest_sha256": "0c769b7fde438a8d933526b6a11388c795a152f545eb2bbca9ccde4e2422e7c7",
+        "job_id": "346625"
+      }
+    ]
+  },
+  "launch_status": {
+    "status": "queued_recovery",
+    "current_jobs": [
+      "346624",
+      "346625"
+    ],
+    "total_approved_wall_seconds_per_shard": 28800,
+    "prior_charged_seconds_by_shard": [
+      366,
+      333
+    ],
+    "replacement_wall_seconds_by_shard": [
+      28380,
+      28440
+    ],
+    "prior_attempts": [
+      {
+        "shard": 0,
+        "job_id": "346534",
+        "state": "FAILED",
+        "elapsed_seconds": 23
+      },
+      {
+        "shard": 0,
+        "job_id": "346538",
+        "state": "FAILED",
+        "elapsed_seconds": 144
+      },
+      {
+        "shard": 0,
+        "job_id": "346557",
+        "state": "FAILED",
+        "elapsed_seconds": 199
+      },
+      {
+        "shard": 1,
+        "job_id": "346535",
+        "state": "FAILED",
+        "elapsed_seconds": 23
+      },
+      {
+        "shard": 1,
+        "job_id": "346539",
+        "state": "FAILED",
+        "elapsed_seconds": 142
+      },
+      {
+        "shard": 1,
+        "job_id": "346558",
+        "state": "FAILED",
+        "elapsed_seconds": 168
+      }
+    ],
+    "recovery": "Pinned inherited HF cache paths and controller W&B credentials; repaired screenshot hydration and reset cleanup. Preserved every attempt and all counters; scientific settings and total caps unchanged.",
+    "benchmark_results_available": false,
+    "preserved_attempt_evidence_available": true,
+    "final_success_rates_available": false,
+    "note": "SFT replacements must repeat their smoke gate before primary collection; no audited final rates."
+  },
+  "additional_approved_experiments": [
+    {
+      "id": "L06",
+      "actor_profile": "jev",
+      "selector_profile": null,
+      "tasks": 300,
+      "browser": "local",
+      "judge": "same canonical OpenWebRL OM2W judge and metering as v2",
+      "status": "running_primary",
+      "scope_requested": true,
+      "exact_additional_budget_approved": true,
+      "budget_inheritance": "none; separate from the approved SFT-selector shard budgets",
+      "scope_accepted": true,
+      "approved_resources": {
+        "gpus": 0,
+        "cpus": 8,
+        "memory_gib": 32,
+        "total_seconds_all_attempts": 14400
+      },
+      "approved_caps": {
+        "concurrent_browsers": 4,
+        "browser_sessions": 330,
+        "primary": 300,
+        "smoke": 3,
+        "infrastructure_recovery": 27,
+        "jev_http_attempts": 19800,
+        "typing_http_attempts": 19800,
+        "typing_usd": 15,
+        "judge_http_attempts": 1320,
+        "judge_usd": 8
+      },
+      "approved_utc": "2026-10-06T06:59:37.951527+00:00",
+      "native_judge_evidence": "Actual executed operations mapped to canonical turns with empty thought fields, because native Jev emits no generative thoughts; fresh final screenshot.",
+      "terminal_rule": "Only native DONE becomes COMPLETED; other terminals get canonical0 without API; infrastructure validity separate",
+      "actor_upstream_commit": "1231850a0bf1a0c0341fe408ef1668dbbfdfac46",
+      "typing_sampling": {
+        "max_tokens": 1024,
+        "temperature": 0.6,
+        "top_p": 0.95
+      },
+      "initial_frozen_preparation": "prepared-v2",
+      "scientific_settings_unchanged_by_recovery": true,
+      "condition": {
+        "id": "L06",
+        "actor_profile": "jev",
+        "selector_profile": null,
+        "candidates_per_step": null,
+        "tasks": 300,
+        "group": "actor_alone",
+        "actor_view": "native_dom_text",
+        "selector_view": null,
+        "typing_helper": "gpt-4.1-mini-2025-04-14",
+        "budget_group": "separate_jev_actor",
+        "decision_policy": "Native operation/target probability argmax; preserve contract violations without fallback."
+      },
+      "launch_status": {
+        "job_id": "346623",
+        "state": "RUNNING",
+        "prior_charged_seconds": 84,
+        "replacement_wall_seconds": 14280,
+        "total_approved_seconds": 14400,
+        "prior_attempts": [
+          {
+            "job_id": "346563",
+            "state": "FAILED",
+            "elapsed_seconds": 34
+          },
+          {
+            "job_id": "346567",
+            "state": "FAILED",
+            "elapsed_seconds": 50
+          }
+        ],
+        "plan_sha256": "9473bb408b4e54ca0eb284f284d78fc746bfecd565262bb7e5e947a85c269ef8",
+        "source_manifest_sha256": "51b8c110d9d2cee7c55ab7f44592b0c56813e868b9ed6870c0b3325a80237d7e",
+        "first_completed_episode_canonical_judge_verified": true,
+        "fresh_terminal_screenshot_verified": true,
+        "wandb_synchronization_verified": true,
+        "final_success_rates_available": false,
+        "recovery": "Preserved original native-argmax contract-violation evidence and classified it without rerunning that task; retained all previous scheduler, browser and API counters."
+      }
+    }
+  ],
+  "supervision": {
+    "sft_core_service": "openwebrl-controlled-sft-supervisor-20261006.service",
+    "jev_actor_service": "openwebrl-local-jev-actor-supervisor-20261006.service",
+    "poll_seconds": 60,
+    "agent_callback_seconds": 900,
+    "urgent_callbacks": "New current-job failures, halts, stalled progress and collection completion bypass pending routine callbacks; replacement pointers are reread.",
+    "routine_user_reports": "Meaningful changes only, at most hourly; suppress repeat verified-completion callbacks.",
+    "services_active_verified": true,
+    "current_jobs_followed": {
+      "sft_core": [
+        "346624",
+        "346625"
+      ],
+      "jev_actor": [
+        "346623"
+      ]
+    },
+    "verified_utc": "2026-10-06T07:09:35.081924+00:00"
+  },
+  "approved_study_scope": {
+    "conditions": 5,
+    "condition_ids": [
+      "L01",
+      "L06",
+      "L08",
+      "L10",
+      "L11"
+    ],
+    "tasks_per_condition": 300,
+    "primary_episodes": 1500,
+    "smoke_episodes": 27,
+    "budget_groups": {
+      "sft_core": [
+        "L01",
+        "L08",
+        "L10",
+        "L11"
+      ],
+      "separate_jev_actor": [
+        "L06"
+      ]
+    },
+    "budget_transfer_allowed": false,
+    "reuse_historical_results": false
+  },
+  "updated_utc": "2026-10-06T07:09:35.081924+00:00"
 }
