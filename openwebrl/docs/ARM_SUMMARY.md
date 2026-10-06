@@ -389,6 +389,21 @@ repeats together; they do not measure training-seed variability.
 The earlier training-curve plot retains the first matched pass. Diamonds use this corrected
 protocol. Earlier GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
 
+**Mixed-only iteration90 checkpoints — October6; repeat set in progress.**
+The same full300 stealth protocol is used: actor-only inference,
+T0.6/p0.95/k20,4096 tokens,30 turns and o4-mini/AgentTrek.
+
+| Method | Verified repeats | Repeat1 full300 overall | Repeat1 valid-only | Repeat1 valid / invalid |
+| --- | ---: | ---: | ---: | ---: |
+| Mixed-only bonus + relaxed B |0/3 |— |— |Collecting |
+| Mixed-only reweight + relaxed B |1/3 |**56.67%** (170/300) |57.05% (170/298) |298 /2 |
+
+Reweight's first cohort is verified; its three-repeat evaluation is unfinished.
+No repeat mean or SD is reported yet. Comparison with the September29–30 results
+above is descriptive because collection dates differ.
+[Protocol and progress](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006)
+· [Verified aggregate evidence](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json).
+
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
 Gate B's best evaluated local-browser checkpoint so far; dates and valid-task sets differ,

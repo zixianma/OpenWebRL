@@ -1,0 +1,73 @@
+{
+  "updated_utc": "2026-10-06T21:22:49.525134+00:00",
+  "status": "partial_repeat_set",
+  "expected_cohorts": 6,
+  "verified_cohorts": 1,
+  "expected_repeats_per_method": 3,
+  "verified_repeats": {
+    "mixed-bonus": 0,
+    "mixed-reweight": 1
+  },
+  "protocol": {
+    "benchmark": "Online-Mind2Web",
+    "tasks_per_cohort": 300,
+    "checkpoint_iteration": 90,
+    "actor_only": true,
+    "browser": "Browser Use stealth",
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 20,
+    "max_response_tokens": 4096,
+    "max_turns": 30,
+    "judge": "o4-mini",
+    "judge_protocol": "AgentTrek terminal success",
+    "repeat_seeds": [
+      1234,
+      1235,
+      1236
+    ],
+    "shared_with_september29": true
+  },
+  "cohorts": [
+    {
+      "method": "mixed-reweight",
+      "repeat": 1,
+      "job_id": "346993",
+      "iteration": 90,
+      "server_rng_seed": 1234,
+      "tasks": 300,
+      "successes": 170,
+      "valid": 298,
+      "invalid": 2,
+      "overall": 0.5666666666666667,
+      "valid_only": 0.5704697986577181,
+      "fixed100": {
+        "tasks": 100,
+        "successes": 56,
+        "valid": 100,
+        "invalid": 0,
+        "overall": 0.56,
+        "valid_only": 0.56
+      },
+      "verified_complete": true,
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r1-346993",
+      "full_runtime_audit_sha256": "54ccb6d24a2042fa30b3a82c5538b70f533f04e34a5554136f4fa51ac8be72de",
+      "archive_count": 300,
+      "archive_bytes": 183293006776,
+      "full_archive_crc_verified": true,
+      "unique_task_ids_and_pairs_verified": true,
+      "all_judge_identities_match": true,
+      "actual_gpu_restore_verified": true,
+      "all_owned_browser_sessions_stopped": true,
+      "gpu_seconds_consumed": 15754,
+      "approved_gpu_seconds": 25200,
+      "browser_and_proxy_usd": 1.2078129765838386,
+      "invalid_outcomes": [
+        "Initial navigation failure",
+        "Native judge response lacked Status field"
+      ]
+    }
+  ],
+  "mean_and_sample_sd": null,
+  "comparison_limit": "Repeated evaluations of fixed trained checkpoints, not independent training seeds. Earlier outcome-only/Additive/Gate B cohorts were collected September29-30; comparisons are descriptive across collection dates."
+}

@@ -32,6 +32,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
+- [Mixed-only iteration90 stealth: three-repeat evaluation in progress, October6](#arm-mixed-stealth90-three-repeats-20261006)
 - [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
 - [Mixed-only bonus/reweight iterations10–80 full300](#arm-mixed-pair-iter10-results-20260928)
@@ -1591,6 +1592,45 @@ consumed GPU-hours were5.926,
 within the separate12h caps; unspent budgets are released.
 
 [Outcome-only baseline audit](arm_results/rl_integration/webvoyager-gpt4o-t06-baseline-iteration90-audit.json) · [Additive ARM audit](arm_results/rl_integration/webvoyager-gpt4o-t06-additive-iteration90-audit.json) · [Gate B audit](arm_results/rl_integration/webvoyager-gpt4o-t06-gate-b-iteration90-audit.json).
+
+<a id="arm-mixed-stealth90-three-repeats-20261006"></a>
+## Mixed-only iteration90 stealth evaluations — October6
+
+**Partial repeat set: reweight1/3 verified; bonus0/3 verified.** Each completed
+cohort contains all300 tasks. Bonus's first cohort is still collecting; later
+repeats remain queued. The requested three-repeat evaluation is not complete.
+
+| Method | Iteration | Repeat | Successes / tasks | Valid / invalid | Overall | Valid-only | Status |
+| --- | ---: | ---: | --- | --- | ---: | ---: | --- |
+| Mixed-only bonus + relaxed B |90 |1 |— |— |— |— |Collecting |
+| Mixed-only reweight + relaxed B |90 |1 |170 /300 |298 /2 |56.67% |57.05% |Verified;1/3 repeats |
+
+Both fixed iteration90 checkpoints (`iter_0000089`) use the unchanged
+September29 repeat source and the same300 Online-Mind2Web task IDs, with one
+actor rollout per task and no inference-time ARM selection. Actual generation
+uses temperature0.6, top-p0.95, top-k20,4096 response tokens and30 turns. Browser
+Use stealth and the native o4-mini/AgentTrek terminal-success prompt and parser
+match the earlier runs. Repeat seeds1234/1235/1236 are paired across the two
+methods. Each round runs both methods; the next round waits for both workers.
+
+Reweight repeat1 passed independent checks of exact task identity, saved
+rollout/verdict pairs, all300 archive CRCs, frozen protocol, native89 GPU
+restoration and checkpoint counters, finished W&B metrics, successful worker
+and controller termination, and owned-browser cleanup. Its two invalid outcomes
+are retained: one initial navigation failure and one judge response without the
+native `Status:` field. Neither was selectively retried. All300 tasks remain in
+the overall denominator; valid-only uses298.
+
+No repeat mean, SD or new confidence interval is reported while the repeat set
+is incomplete. These are repeated evaluations of fixed trained checkpoints,
+not independent training seeds. Comparisons with the September29–30
+outcome-only/Additive/Gate B cohorts are descriptive because collection dates
+differ despite the shared protocol.
+
+[Verified aggregate evidence](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json)
+· [Approved six-cohort plan](ARM_INTEGRATION_PLAN.md#arm-mixed-stealth90-three-repeats-20261006)
+· [Reweight repeat1 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r1-346993).
+Raw task records, rollout archives and detailed runtime receipts remain private.
 
 <a id="arm-stealth90-o4-matched-20260929"></a>
 ## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29

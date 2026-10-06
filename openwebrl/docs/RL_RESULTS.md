@@ -151,6 +151,21 @@
 | |90 |2 |189 |288 |12 |63.00 |65.63 |67.00 /68.37 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json) |
 | |90 |3 |174 |288 |12 |58.00 |60.42 |61.00 /61.00 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
 
+## Mixed-only relaxed B · stealth · o4-mini · T0.6 · October6 · partial repeat set
+
+| Method | Iteration | Repeat | Verified repeats | Successes | Valid | Invalid | Overall % | Valid-only % | Status / record |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Mixed-only bonus + relaxed B |90 |1 |0/3 |— |— |— |— |— |Collecting |
+| Mixed-only reweight + relaxed B |90 |1 |1/3 |170 |298 |2 |56.67 |57.05 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+
+| Protocol / comparison scope | Value |
+| --- | --- |
+| Actor / judge |T0.6 /p0.95 /k20 /4096 tokens /30 turns; o4-mini /AgentTrek |
+| Task cohort / inference |Same300 OM2W task IDs; actor-only |
+| Three-repeat mean / SD |Pending |
+| September29–30 comparison |Different collection dates; descriptive only |
+| Details |[Protocol and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006) |
+
 ## Matched stealth iteration90 · three-repeat mean ± sample SD
 
 | Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
