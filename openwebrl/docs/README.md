@@ -5,10 +5,11 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Inference-time scaling: Qwen, official SFT, GPT-6, Jev and Kev—eleven completed full300 comparisons, success rates, costs, protocols and audit caveats](ARM_INFERENCE_SCALING.md).
 
+[Next critic study: fixed-policy data only; clean SFT transition conversion and research formulation pending](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 historical reconciliation: why30.0%→42.7% became35.2%→39.3%; matched-valid sensitivity and unresolved causes](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).
-[October4 critic comparison:14,825 verified transitions, task-disjoint splits, causal-input leakage guards, and pre/post/value/advantage test design](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+[Historical October4 critic preparation:14,825 mixed-checkpoint transitions and leakage guards; superseded as first-fit data by the fixed-policy decision](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
 [October4 historical inference audit: ARM actor-text cost, training-pool pass@k and the limitation addressed by the fresh controlled cohort](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
 
 | Document | Contents |

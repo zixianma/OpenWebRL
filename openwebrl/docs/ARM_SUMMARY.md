@@ -75,13 +75,15 @@ the fresh35.20%→39.33% gain is4.13pp. This discrepancy survives a shared valid
 restriction. Seeds, collection dates and execution/runtime changed; their
 contributions remain unresolved. [Historical reconciliation](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).
 
-**Next critic comparison:** our outcome corpus supports14,825 verified executed
-nonterminal transitions (11,023 train /1,239 dev /2,563 later-policy test).
-Compare goal-conditioned state value, pre-action outcome prediction, and
-post-action outcome prediction on matched rows, then derive cross-fitted
-advantages. Piotr's preference labels do not supply counterfactual returns for
-the five candidates. CPU indices and leakage checks are complete; neural fits
-remain pending. [Data and experiment](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+**Next critic study: one fixed policy per cohort.** The user requested avoiding
+mixed-policy training data. The audited 14,825-transition R1 corpus mixes actor
+checkpoints and stays outside the first clean fit; its indices and historical
+splits remain preserved. The proposed starting source is the 10,000-episode
+ordinary original-SFT screen, after checkpoint/protocol and transition audits.
+Neural fits remain pending. V/Q/post-action/advantage formulations are standard
+baselines; the research question is useful action credit and the decision
+objective, not renaming those functions. Piotr's teacher preferences do not
+supply executed counterfactual returns. [Decision and prior preparation](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
 The [24-source inventory](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004)
 separates raw collections, derived views, conversion work and benchmark-only
 data. In particular, the ARM refresh future panel contains82 OM2W tasks and

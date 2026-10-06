@@ -100,20 +100,26 @@ Outcome-only and mixed-group filtering also select different difficulty bands.
 
 ### Training order and split rules
 
-Use R1 first for the matched V, pre-action Q and post-action outcome test. Fit
-fresh models on identical nonterminal rows, preserving its 700 training tasks,
-126 dev tasks and 155 later-test tasks. Cross-fit V by task before deriving
-Monte Carlo or TD advantage targets. Report all-prefix V/Q coverage separately
-from the matched transition panel. A derived Q−V ranks actions exactly as Q
-within one state; ranking gains cannot come merely from subtracting V.
+**October 6 UTC user decision: do not mix behavior policies in the first critic
+experiment.** This supersedes the earlier R1-first proposal. R1 remains a
+verified mixed-checkpoint archive; its ready indices do not make it eligible
+for the new clean training fit. Propose converting S1 first, verifying one
+frozen original SFT checkpoint, decoding/horizon/browser/judge protocol, causal
+transitions and benchmark exclusions before fixing task-disjoint splits. The
+clean transition count remains unknown until that conversion is audited.
 
-Next convert S1, followed by the full C2 and guided S2 collections. Keep their
-policy identities separate in evaluation; pooling them estimates the observed
-mixture's return, not automatically the ordinary actor's return. ARM RL payload
-conversion is a larger third stage because eligibility, group conditioning,
-resume duplicates and native-versus-shaped rewards all need explicit joins.
-Same-state action-ranking validation still needs actual branch executions with
-a fixed continuation policy, or additional human/teacher progress supervision.
+Treat ordinary, guided and different-checkpoint cohorts separately. Alternative
+first actions are legitimate interventions if all continuations use the same
+frozen actor and protocol. Preserve existing held-out tasks across sources;
+never promote benchmark rollouts into training. C2/S2 and ARM RL conversion may
+support later separately labeled studies, not an unlabeled policy mixture.
+
+Compare established V/Q/post-action baselines on matched rows, with all-prefix
+coverage reported separately. Cross-fit by task before deriving advantage
+labels. Q−V has the same within-state ranking as Q; this is not a new selector
+objective. Actual same-state branch executions remain necessary to validate
+local action ranking against measured returns. The research formulation is
+still under discussion; no new compute or data-collection budget is implied.
 
 Across sources, group task aliases and normalized goals before splitting.
 Preserve existing dev/test/retention sets and exclude OM2W/WebVoyager benchmark

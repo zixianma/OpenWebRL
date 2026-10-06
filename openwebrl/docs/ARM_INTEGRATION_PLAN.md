@@ -4,7 +4,8 @@
 ## Critic comparison: available supervision and prepared transitions — October4
 
 The user requested a comparison of pre-action, post-action, and advantage
-formulations. **CPU preparation is complete; neural critics have not been fit.**
+formulations. **Historical mixed-checkpoint CPU preparation is complete; the
+new fixed-policy conversion is pending and neural critics have not been fit.**
 This study is separate from the unchanged, previously approved actor-training
 lineages. No GPU allocation or API budget was consumed or requested here.
 
@@ -14,6 +15,29 @@ include the original task; both inference selection and RL shadow selection
 forward it. The canonical selector normally sees the last five history steps
 and the current screenshot, rather than the actor's complete history. Private
 source/hash audit: runtime `arm-turn-bonus-preparation/arm-goal-audit-20261004/`.
+
+### Fixed-policy decision — October 6 UTC
+
+The user requested keeping the next critic experiment free of mixed-policy
+training data. Use one frozen actor checkpoint and fixed decoding, browser,
+horizon and outcome-judge protocol for each cohort. Alternative actions may be
+forced for an intervention study, but every branch must then follow the same
+frozen continuation actor; do not combine ordinary and ARM-guided continuation
+returns as interchangeable labels.
+
+This supersedes the earlier proposal to start neural fitting on R1, whose
+prepared 14,825 transitions mix actor checkpoints. Preserve R1 and its existing
+splits as an audited historical corpus, outside the first clean training fit.
+S1 (10,000 ordinary episodes from the original SFT actor) is the proposed first
+source to convert, subject to checking exact checkpoint and protocol identity,
+validity, causal successor observations and benchmark exclusion. Its eligible
+transition count and clean task split are not yet prepared. C2/S2 and mixed
+ARM RL lineages remain separate sources, not a pooled training set.
+
+V, Q, post-action outcome prediction and derived advantage are established
+baselines, not conceptual novelty claims. The next discussion concerns the
+supervision, identification of useful action credit, and the decision objective;
+no new neural fit, branch collection or allocation is launched by this decision.
 
 ### Data that actually supports each target
 
@@ -40,7 +64,9 @@ The new [aggregate audit](arm_results/rl_integration/critic-data-audit-20261004.
 verifies1,008 source archive hashes and13,495 screenshot hashes (4.938GB).
 Private train/dev/future transition indices are under runtime
 `arm-turn-bonus-preparation/outcome-reward-20260927/critic-comparison-20261004/`.
-They preserve the earlier task-disjoint, benchmark-excluded outcome corpus:
+They preserve the earlier task-disjoint, benchmark-excluded outcome corpus;
+this mixed-checkpoint split is historical and is not the newly requested clean
+training cohort:
 
 | Split | Actor iterations | Tasks | Trajectories | All prefixes | Matched nonterminal transitions |
 | --- | --- | ---: | ---: | ---: | ---: |
@@ -67,7 +93,9 @@ missing execution receipts, and pass@k invalid/missing-attempt handling.
 
 ### Matched experiment and interpretation
 
-Start with a small engineering fit, then the full prepared split if the loader,
+For the newly requested fixed-policy cohort, first finish conversion and
+freeze a clean split. Then start with a small engineering fit and scale to that
+cohort if the loader,
 memory, save/reload and calibration checks pass. Use a common starting critic
 backbone and fresh optimizer for every intervention; freeze the vision encoder
 and match adaptation capacity, training exposure, seed and context policy.
