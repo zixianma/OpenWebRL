@@ -4,6 +4,8 @@ This is the concise collaborator summary. Detailed configs, provenance, and
 run history are in [ARM_RESULTS.md](ARM_RESULTS.md) and
 [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md).
 
+**High priority — confirmed recent harness bug:** October4 controlled inference and the initial October6 three-arm run silently omitted the actor's 4,180-character browser system policy. Historical trajectories include it. The smaller recent ARM gain therefore is not a matched historical replication; how much the omission explains remains unmeasured. The 402 affected October6 episodes are preserved separately. Corrected jobs **347424/347425** restore the exact policy under the remaining original caps. [Evidence, sampling-control limitation and repair](ARM_INFERENCE.md#arm-historical-harness-audit-20261006).
+
 **Next critic diagnostic, wait-timeout repair queued (347100):** target 100 fixed-SFT states × five samples × three continuations (1,500 rollouts), comparing index-only Luna-high before versus after immediate execution evidence. Audited: 11 states / 165 continuations, 158 valid outcomes and 154 teacher judgments. A valid 30-second wait previously collided with the wrapper timeout; the tested repair preserves all earlier results. The 800-task deterministic reserve and strict replay criteria remain unchanged. All attempts remain inside 4 H200 × 8h and $15 Luna / $25 judge. [Protocol and recovery](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 
 <a id="arm-methods-at-a-glance"></a>
@@ -49,7 +51,7 @@ Reward Models setup with the o4-mini/AgentTrek Online-Mind2Web judge.
 | ScalarRM, five candidates | 114 | 251 | 49 | 38.0% | 45.4% |
 | SelectionARM, five candidates | 128 | 256 | 44 | **42.7%** | **50.0%** |
 
-**Fresh three-arm repetition underway; receipt-I/O recovery 347256/347257:** official SFT alone, SFT + Piotr's original SelectionARM, and SFT + `davidan03/openwebrl-4b-selectionarm-rltasks`; 300 fresh episodes each, matching this table's T=0.7 / p=0.9 / 1,024-token / seed42 settings. The two shards each retain 2 H200 / 16 CPUs / 240 GiB × 4 hours total and $10 / 1,980 judge calls, including retries. [Protocol, checks and resource request](ARM_INFERENCE.md#arm-rltasks-three-arm-20261006).
+**Corrected three-arm repetition submitted, 347424/347425:** official SFT alone, SFT + Piotr ARM and SFT + RL-task ARM; target 300 corrected episodes each. The 402 earlier blank-policy episodes stay separate. Policy restoration, all prior compute time and shared judge spending are explicitly tracked; remaining caps are 1h33m and 2h03m at 2 H200 / 16 CPUs / 240 GiB per shard. Completion of all 900 under those remaining caps is not yet established. [Audit and recovery](ARM_INFERENCE.md#arm-historical-harness-audit-20261006).
 
 - **Baseline:** execute one actor sample without an ARM call.
 - **ScalarRM:** score each of five candidates independently and execute the candidate with the highest scalar score.
@@ -62,7 +64,7 @@ The original300-task study has no matched episode pass@5 control, so it does
 not establish that action selection is the best use of the extra budget.
 [Cost/pass@k analysis](ARM_INFERENCE.md#arm-inference-cost-passk-20261004).
 
-**Fresh controlled comparison complete:** all300 tasks, one guided episode
+**October4 blank-policy controlled comparison complete:** all300 tasks, one guided episode
 and five ordinary episodes per task. ARM scores**39.33%**, ordinary pass@1
 **35.20%**, pass@2 **46.17%**, and pass@5 **59.33%**. In the current-serving
 FLOP estimates, pass@4 achieves56.40% with lower model work than ARM even across
@@ -74,10 +76,7 @@ bound; a deployed episode chooser has additional errors and cost. The complete
 research collection used20.269 H200 GPU-hours within the approved32.
 [Results, cost assumptions and protocol](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 
-**Historical gain was not reproduced:** the old30.00%→42.67% gain was12.67pp;
-the fresh35.20%→39.33% gain is4.13pp. This discrepancy survives a shared valid-task
-restriction. Seeds, collection dates and execution/runtime changed; their
-contributions remain unresolved. [Historical reconciliation](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).
+**Historical comparison corrected:** September's 30.00%→42.67% and October4's 35.20%→39.33% remain the observed rates. The October6 audit establishes a missing actor policy in the newer harness, so these do not isolate reproducibility under identical prompts. The separate causal contributions of policy, sampling realization, live-site state and runtime remain unresolved. [High-priority audit](ARM_INFERENCE.md#arm-historical-harness-audit-20261006).
 
 **Next critic study: one fixed policy per cohort.** The user requested avoiding
 mixed-policy training data. The audited 14,825-transition R1 corpus mixes actor

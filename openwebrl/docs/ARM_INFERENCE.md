@@ -1,9 +1,43 @@
 # ARM inference and judge protocol
 
+<a id="arm-historical-harness-audit-20261006"></a>
+## High-priority historical-gain audit — October 6
+
+**A recent harness bug is confirmed: the actor's browser system policy was missing.** The frozen October4 controlled-inference source and October6 three-arm source omitted `system_prompt_browser_env.md`; their loader silently substituted an empty string. Saved historical trajectories contain the 4,180-character policy, byte-identical to the repository asset (SHA256 `7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9`). Recent saved trajectories have an empty system message. Task goals and tool schemas were still supplied. This corrects our earlier claim of historical actor-prompt equivalence.
+
+| Cohort | Episodes audited | Saved policies available | Empty policies | Overall success |
+| --- | ---: | ---: | ---: | ---: |
+| September SFT baseline | 300 | 278 | 0 | 90/300 = 30.00% |
+| September Piotr SelectionARM | 300 | 275 | 0 | 128/300 = 42.67% |
+| October4 ordinary actor0 | 300 | 279 | 279 | 106/300 = 35.33% |
+| October4 Piotr SelectionARM | 300 | 279 | 279 | 118/300 = 39.33% |
+| October6 SFT baseline, stopped | 134 | 124 | 124 | 52/134 = 38.81% |
+| October6 Piotr ARM, stopped | 132 | 121 | 121 | 56/132 = 42.42% |
+| October6 RL-task ARM, stopped | 136 | 125 | 125 | 56/136 = 41.18% |
+
+Episodes that failed before creating message history have no saved policy to inspect. The unequal October6 rows above are an artifact audit, not a paired performance comparison. October4 ordinary pass@1 remains the mean over five episodes, 35.20%; actor0 is shown here to make its trace coverage explicit. The completed October4 cost/pass@k comparison remains evidence for its **blank-policy harness**, not a controlled replication of September.
+
+**The causal contribution to the smaller ARM gain is still unmeasured.** Removing the policy changes the actor's proposal distribution and potentially the selector's benefit; the direction and magnitude cannot be read off these cross-date results. Neither historical inflation nor complete explanation of the 12.67pp → 4.13pp change has been established.
+
+**A second control problem concerns sampling seeds.** Historical and recent server logs show FlashInfer sampling with deterministic inference disabled and varying global server seeds. The currently installed sampler only materializes per-request seeds when deterministic inference is enabled; its FlashInfer top-p call does not pass the request seed. Among historical first decisions with identical saved prompt/image/request-seed inputs, all 67 pairs produced different candidate0 outputs; October6 baseline/Piotr gives 44/44. Thus recorded request seeds did not establish repeatable or shared draws. These checks are evidence of a reproducibility limitation; the complete historical dependency environment was not immutably archived. The policy repair keeps the sampler unchanged to avoid combining two interventions.
+
+**What the saved-data audit did not find:** candidate-seed bookkeeping, one-based selector-index conversion and chosen-response/assistant-history mapping all pass across 24,386 audited decisions. No selector fallback occurred. Historical versus October4 Piotr ARM chose candidate0 on 56.5% versus 56.5% of decisions; all five executable actions were identical on 30.4% versus 30.4%. There is no evidence here of an index bug or a collapse in proposal diversity. Assistant-history matching establishes that the chosen response reached execution parsing, not that the website applied it successfully. Nineteen historical interrupted-prefix decisions were preserved separately before matching the final committed attempts.
+
+The existing judge checks still find no outcome-parser mismatch or observed truncation at the new 4,096-token cap. Both harnesses judge only `Status.COMPLETED` episodes and use the last captured pre-action screenshot. Those are shared protocol limitations, not a newly isolated explanation of the changed gain. Live-site state, concurrency, runtime and judge realization remain additional uncontrolled differences.
+
+**Repair and recovery:** stopped both affected jobs after 402 committed episodes and verified owned-process cleanup. Preserved every record, interrupted attempt, original source and API reservation. Restored the exact historical policy, pinned all browser prompt assets, made missing/blank policies fail before browser startup, and added an actual actor-input guard before every model call. Thirty-seven targeted tests, two frozen-controller dry runs and a real frozen-runtime loader check pass. Corrected episodes use a separate directory, namespace and W&B lineage; the old 402 do not count toward the corrected 900 target. Each shard continues charging its original judge ledger.
+
+| Shard | Corrected job | Prior allocation time charged | Maximum corrected allocation | Combined reserved time | Judge cap including all attempts |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 347424 | 2h26m42s | 1h33m | 3h59m42s | $10 / 1,980 calls |
+| 1 | 347425 | 1h57m | 2h03m | 4h | $10 / 1,980 calls |
+
+Both jobs retain 2 H200 / 16 CPU / 240 GiB and were submitted in parallel. This adds no budget. Remaining time may not cover all 900 corrected episodes; final completeness will be reported separately. The continuation-branch experiment already has its prompt assets pinned and is unaffected by this omission. [Aggregate audit and coverage](arm_results/rl_integration/historical-harness-audit-20261006.json).
+
 <a id="arm-rltasks-three-arm-20261006"></a>
 ## Fresh comparison of original and RL-task SelectionARM — October 6
 
-**Both replacement jobs are collecting: 298/900 episode records verified as of October 6, 15:10 PDT.** Jobs 347256 and 347257 replace 347180 and 347181 within their original caps. Both passed the prespecified startup gate and now use their eight-browser queues. The user requested the earlier protocol behind the first table in ARM_SUMMARY (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. No historical outcome is substituted for a fresh result. The matched preview below is incomplete and may overrepresent tasks that finish quickly.
+**Correction: the blank-policy collection stopped at 402 episodes. Corrected jobs 347424/347425 were submitted within the remaining original budgets.** See the [high-priority harness audit](#arm-historical-harness-audit-20261006); the historical-prompt equivalence claim below is superseded. The following startup/receipt-repair narrative is retained as history. **Earlier snapshot: 298/900 records at 15:10 PDT.** Jobs 347256 and 347257 replace 347180 and 347181 within their original caps. Both passed the prespecified startup gate and now use their eight-browser queues. The user requested the earlier protocol behind the first table in ARM_SUMMARY (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. No historical outcome is substituted for a fresh result. The matched preview below is incomplete and may overrepresent tasks that finish quickly.
 
 | Arm | Actor | Selector | Proposals per decision | Fresh OM2W episodes | Status |
 | --- | --- | --- | ---: | ---: | --- |
@@ -36,7 +70,9 @@ Each shard keeps its original 2 H200 / 16 CPU / 240 GiB allocation shape and $10
 
 
 <a id="arm-rltasks-three-arm-preview-20261006"></a>
-### Matched preview — 93 of 300 tasks
+### Archived blank-policy preview — 93 of 300 tasks
+
+**This saved preview predates the missing-policy diagnosis. It is not a historical-protocol replication and is excluded from the corrected cohort.** The plots below retain their original 15:10 snapshot.
 
 Only the **93 tasks with all three committed outcomes** enter this preview (279 episodes). Invalid outcomes count as zero; the other 19 committed episodes remain saved and accounted for. This is a duration-selected partial cohort, not the full300 result.
 
@@ -69,6 +105,7 @@ Inference-time ARM selection, terminal-success judge alignment, and unavailable-
 
 ## Contents
 
+- [High-priority historical-gain audit: missing actor policy and sampling control](#arm-historical-harness-audit-20261006)
 - [Fresh baseline, Piotr ARM and RL-task ARM comparison](#arm-rltasks-three-arm-20261006)
 - [Partial matched performance and efficiency plots](#arm-rltasks-three-arm-preview-20261006)
 - [Consolidated Qwen/SFT/GPT-6/Jev/Kev results and scaling comparisons](ARM_INFERENCE_SCALING.md)
@@ -97,6 +134,8 @@ The eleven completed Qwen/SFT/GPT-6/Jev/Kev comparisons, costs, pilots and harne
 
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
+
+**October6 correction:** this completed comparison used an empty actor system policy because its frozen source omitted the prompt asset. Its within-harness results remain recorded, but historical prompt equivalence is withdrawn. See the [harness audit and repair](#arm-historical-harness-audit-20261006).
 
 **Completed and independently verified: all1,800 episodes, all300 paired task
 blocks, original result/decision-trace hashes, final Slurm accounting and both
@@ -249,7 +288,9 @@ the ARM gain is−8.53pp, paired task-bootstrap95% interval[−15.07,−1.93]pp.
 This10,000-draw interval conditions on the saved cohorts; it does not measure
 repeat-seed/date uncertainty or identify a causal explanation.
 
-**Verified matching ingredients:** the task file is byte-identical; both use
+**October6 correction:** the actor system policy did **not** match: historical trajectories contain the policy, while the October4 frozen source silently supplied an empty system message. The counts below describe the saved experiments; they cannot establish failure to reproduce the historical gain under the same actor prompt. [Evidence and recovery](#arm-historical-harness-audit-20261006).
+
+**Other verified matching ingredients:** the task file is byte-identical; both use
 the original frozen actor, the same released SelectionARM tensors with no new
 adapter, five full reasoning/action candidates, temperature0.7/top-p0.9,
 1,024 response tokens,30 turns,32K context, full history/current screenshot,
@@ -269,9 +310,7 @@ per shard, and separate actor/selector H200s. Collection dates are almost a
 month apart on live websites. Selector Python/PyTorch environments also
 changed; bitwise inference equivalence has not been established. The historical
 judge metadata identifies the rubric and requested model but lacks the full
-response-usage receipts now recorded. Seed variation, website state, judge
-variability and runtime differences therefore remain competing explanations;
-this audit does not attribute the change to any one of them.
+response-usage receipts now recorded. The confirmed policy omission is now an additional material difference. Website state, judge realization and runtime differences remain unresolved; their separate causal contributions have not been measured.
 
 <a id="arm-historical-judge-audit-20261004"></a>
 **Judge-specific audit.** Both collections request o4-mini, use seed42, and

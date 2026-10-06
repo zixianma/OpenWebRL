@@ -510,27 +510,34 @@
   "plots": [
     {
       "name": "cost.png",
-      "sha256": "8e60bdcd49a5793b8b82194c5302fe2d21bfd3dc938ff3f587b140c02d4c90cd"
+      "sha256": "0af5b4aeae595ada4132021e5206e8b21dffbe9f186f70377ab72875bcdcbd93"
     },
     {
       "name": "cost.svg",
-      "sha256": "48b33978c29ad8105bd57867592a66df01490da670428e4f65545a3b9e835247"
+      "sha256": "c058cc6b08b5e6339a589d02290d57409aa14c10441d33077b6dab43531b9f2c"
     },
     {
       "name": "latency.png",
-      "sha256": "846ded29acb03e44f69e71e69c85e99c60cd75b0bef4807b5c7fbd4536f097df"
+      "sha256": "06ee706ac7b9353008e3b19ebd7f171ef4d9cb6196bcec591e650ae4c797b2b7"
     },
     {
       "name": "latency.svg",
-      "sha256": "088d70171b460706db85bda15444137127b05d5738b42f1e78bad4b09b7d7aae"
+      "sha256": "2ce1b42b3215334766302fbedbb093a70328ac1360ab1a197afe3e5f5c5d198c"
     },
     {
       "name": "tokens.png",
-      "sha256": "644ad14ceb02aaf6deb3f42f2451c5d707ffb75a0040eacc8f595a3dc7abd43a"
+      "sha256": "0e900cafb966ae54f34ddbe1c2e155d0dc1400c63ecc32ab5de053ab826dd73e"
     },
     {
       "name": "tokens.svg",
-      "sha256": "c4036c6a94a5874f63556726840159a6c336b79ea6e7c6dc6aab3835e51cfd9f"
+      "sha256": "cbc3d8084cb60bb7cb22202141ca16303890a5fa5d54c061aa9da6c801b7b4a4"
     }
-  ]
+  ],
+  "harness_correction": {
+    "actor_system_policy_missing": true,
+    "discovered": "2026-10-06",
+    "historical_replication_claim_withdrawn": true,
+    "excluded_from_corrected_cohort": true,
+    "original_metrics_unchanged": true
+  }
 }
