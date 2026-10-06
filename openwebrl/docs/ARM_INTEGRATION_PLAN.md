@@ -8132,6 +8132,49 @@ jobs as well as replacements and require independent artifact review before
 completion. Plans and the exact request are in runtime
 `arm-turn-bonus-preparation/stealth90-o4-more-20260929/`.
 
+<a id="arm-mixed-stealth90-three-repeats-20261006"></a>
+### October6: three stealth evaluations for each mixed-only checkpoint90
+
+The user approved six fresh full300 Online-Mind2Web evaluations: mixed-only
+bonus and mixed-only outcome reweighting, each at iteration90, with three
+repeats. The six jobs were submitted after confirming the browser top-up:
+$15.6859 available, versus $10.6489 in observed browser/proxy charges for the
+previous six300-task cohorts. Actual usage may differ; judge API charges are
+separate. No automatic credit purchase is authorized.
+
+The80 frozen recipe files are byte-identical to the September29 repeat source.
+Actual generation is **T0.6, top-p0.95, top-k20,4096 response tokens,30 turns**,
+with the same **o4-mini/AgentTrek terminal-success judge**,32K context and300 task
+IDs. Server RNG seeds1234/1235/1236 match the earlier repeat schedule. Both
+checkpoints are native89; bonus retains1106 Adam updates and reweight1170.
+Fresh TP1 GPU restoration must be verified at startup. These are actor-only
+evaluations of ARM-trained policies; no action selector or extra training.
+
+| Round | Mixed-only bonus | Mixed-only reweight | Dependency |
+| --- | --- | --- | --- |
+|1 |346992 |346993 | Scheduler priority queue |
+|2 |346994 |346995 | Both round1 jobs succeed |
+|3 |346996 |346997 | Both round2 jobs succeed |
+
+Each job is **1 H200,8 CPUs,240GiB, up to7h**, totaling42 GPU-hours including
+all retries. Two methods run together per round, three browser sessions each,
+six total against the verified ten-session limit. Prior cohorts took4.55–5.16h;
+three paired rounds should take roughly15h plus queueing. Failed attempts keep
+their consumed time, preserved outputs and lineage, and successor dependencies
+must follow replacement IDs. No earlier budget is transferred.
+
+All six queued jobs are registered with the active-agent supervisor. Completion
+requires the actual checkpoint/protocol, all300 task identities and paired
+archives/verdicts, archive integrity, W&B final metrics and browser cleanup to
+be independently checked. Report each repeat and the mean/sample standard
+deviation, separately for overall and valid-only success. These measure
+evaluation variability, not independent training seeds or pass@3. Comparisons
+against the September29 methods remain historical because collection dates
+differ. Preparation passed eight CPU tests and batch syntax validation.
+
+Approval, frozen source, launch plans, protocol audit and attempt accounting are
+in runtime `arm-turn-bonus-preparation/mixed-stealth90-three-20261006/`.
+
 <a id="arm-webvoyager90-stealth-20260929"></a>
 ### September29: matched WebVoyager evaluation prepared
 

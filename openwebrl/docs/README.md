@@ -36,6 +36,8 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [October3 next experiment: independently test ARM-assisted task selection](ARM_INTEGRATION_PLAN.md#arm-selection-control-20261003). CPU audit and private paired schedule prepared for682 tasks;78 historical rescues span11 hosts. Fresh ARM versus actor retries and host-matched selection controls; no new allocation approved or submitted. [Concise current decision](ARM_SUMMARY.md#arm-next-experiment-20261003).
 
+[Mixed-only bonus and reweight: three fresh iteration90 stealth evaluations each, submitted October6; unchanged T0.6/o4-mini/AgentTrek protocol and42 GPU-hour total cap](ARM_INTEGRATION_PLAN.md#arm-mixed-stealth90-three-repeats-20261006).
+
 [Matched iteration90 uncertainty: paired95% CIs and Holm-corrected tests; no significant pair among outcome-only, Additive and Gate B](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930).
 
 [ARM method presentation guide](ARM_SUMMARY.md#arm-methods-at-a-glance): three stages, group composition, Gate B/C credit and bonus versus reweighting, with downloadable PNG/SVG figures.
