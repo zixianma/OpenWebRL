@@ -8156,12 +8156,14 @@ completion. Plans and the exact request are in runtime
 <a id="arm-mixed-stealth90-three-repeats-20261006"></a>
 ### October6: three stealth evaluations for each mixed-only checkpoint90
 
-**First verified cohort, October6:** reweight repeat1 is170/300 =56.67% overall
-and170/298 =57.05% valid-only, with two invalids retained; **1/3 reweight
-repeats are verified**, and bonus repeat1 is still collecting. Native89 TP1
-GPU restoration passed for both methods. Reweight job346993 completed0:0 after
-15,754 seconds within its25,200-second cap; no resources or budget were added.
-Later paired rounds remain queued, and no repeat mean or SD is reported yet.
+**First verified cohorts, October6:** bonus repeat1 is182/300 =60.67% overall
+and182/299 =60.87% valid-only; reweight is170/300 =56.67% overall and170/298
+=57.05% valid-only. One/two invalids remain, respectively; **1/3 repeats per
+method are verified**. Native89 TP1 GPU restoration passed for both methods.
+Jobs346992/346993 completed0:0 after17,587/15,754 seconds, respectively, within
+their separate25,200-second caps; no resources or budget were added.
+The second repeats have started; third repeats remain queued. No repeat mean
+or SD is reported yet.
 [Results, protocol and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006).
 
 The user approved six fresh full300 Online-Mind2Web evaluations: mixed-only

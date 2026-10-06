@@ -395,10 +395,10 @@ T0.6/p0.95/k20,4096 tokens,30 turns and o4-mini/AgentTrek.
 
 | Method | Verified repeats | Repeat1 full300 overall | Repeat1 valid-only | Repeat1 valid / invalid |
 | --- | ---: | ---: | ---: | ---: |
-| Mixed-only bonus + relaxed B |0/3 |— |— |Collecting |
+| Mixed-only bonus + relaxed B |1/3 |**60.67%** (182/300) |60.87% (182/299) |299 /1 |
 | Mixed-only reweight + relaxed B |1/3 |**56.67%** (170/300) |57.05% (170/298) |298 /2 |
 
-Reweight's first cohort is verified; its three-repeat evaluation is unfinished.
+Both first cohorts are verified; each three-repeat evaluation is unfinished.
 No repeat mean or SD is reported yet. Comparison with the September29–30 results
 above is descriptive because collection dates differ.
 [Protocol and progress](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006)

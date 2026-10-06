@@ -1596,13 +1596,13 @@ within the separate12h caps; unspent budgets are released.
 <a id="arm-mixed-stealth90-three-repeats-20261006"></a>
 ## Mixed-only iteration90 stealth evaluations — October6
 
-**Partial repeat set: reweight1/3 verified; bonus0/3 verified.** Each completed
-cohort contains all300 tasks. Bonus's first cohort is still collecting; later
-repeats remain queued. The requested three-repeat evaluation is not complete.
+**Partial repeat set: bonus1/3 and reweight1/3 verified.** Both first cohorts
+contain all300 tasks. The second repeats have started; third repeats remain
+queued. The requested three-repeat evaluation is not complete.
 
 | Method | Iteration | Repeat | Successes / tasks | Valid / invalid | Overall | Valid-only | Status |
 | --- | ---: | ---: | --- | --- | ---: | ---: | --- |
-| Mixed-only bonus + relaxed B |90 |1 |— |— |— |— |Collecting |
+| Mixed-only bonus + relaxed B |90 |1 |182 /300 |299 /1 |60.67% |60.87% |Verified;1/3 repeats |
 | Mixed-only reweight + relaxed B |90 |1 |170 /300 |298 /2 |56.67% |57.05% |Verified;1/3 repeats |
 
 Both fixed iteration90 checkpoints (`iter_0000089`) use the unchanged
@@ -1613,13 +1613,14 @@ Use stealth and the native o4-mini/AgentTrek terminal-success prompt and parser
 match the earlier runs. Repeat seeds1234/1235/1236 are paired across the two
 methods. Each round runs both methods; the next round waits for both workers.
 
-Reweight repeat1 passed independent checks of exact task identity, saved
-rollout/verdict pairs, all300 archive CRCs, frozen protocol, native89 GPU
+Both first repeats passed independent checks of exact task identity, saved
+rollout/verdict pairs, all300 archive CRCs per method, frozen protocol, native89 GPU
 restoration and checkpoint counters, finished W&B metrics, successful worker
-and controller termination, and owned-browser cleanup. Its two invalid outcomes
-are retained: one initial navigation failure and one judge response without the
-native `Status:` field. Neither was selectively retried. All300 tasks remain in
-the overall denominator; valid-only uses298.
+and controller termination, and owned-browser cleanup. Bonus retains one invalid
+initial navigation failure. Reweight retains two invalid outcomes: one initial
+navigation failure and one judge response without the native `Status:` field.
+None was selectively retried. All300 tasks per method remain in the overall
+denominator; valid-only uses299 for bonus and298 for reweight.
 
 No repeat mean, SD or new confidence interval is reported while the repeat set
 is incomplete. These are repeated evaluations of fixed trained checkpoints,
@@ -1629,6 +1630,7 @@ differ despite the shared protocol.
 
 [Verified aggregate evidence](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json)
 · [Approved six-cohort plan](ARM_INTEGRATION_PLAN.md#arm-mixed-stealth90-three-repeats-20261006)
+· [Bonus repeat1 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r1-346992)
 · [Reweight repeat1 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r1-346993).
 Raw task records, rollout archives and detailed runtime receipts remain private.
 

@@ -1,11 +1,11 @@
 {
-  "updated_utc": "2026-10-06T21:22:49.525134+00:00",
+  "updated_utc": "2026-10-06T21:42:21.151070+00:00",
   "status": "partial_repeat_set",
   "expected_cohorts": 6,
-  "verified_cohorts": 1,
+  "verified_cohorts": 2,
   "expected_repeats_per_method": 3,
   "verified_repeats": {
-    "mixed-bonus": 0,
+    "mixed-bonus": 1,
     "mixed-reweight": 1
   },
   "protocol": {
@@ -29,6 +29,43 @@
     "shared_with_september29": true
   },
   "cohorts": [
+    {
+      "method": "mixed-bonus",
+      "repeat": 1,
+      "job_id": "346992",
+      "iteration": 90,
+      "server_rng_seed": 1234,
+      "tasks": 300,
+      "successes": 182,
+      "valid": 299,
+      "invalid": 1,
+      "overall": 0.6066666666666667,
+      "valid_only": 0.6086956521739131,
+      "fixed100": {
+        "tasks": 100,
+        "successes": 56,
+        "valid": 100,
+        "invalid": 0,
+        "overall": 0.56,
+        "valid_only": 0.56
+      },
+      "verified_complete": true,
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r1-346992",
+      "full_runtime_audit_sha256": "ece67362c170920ecdc553599b4898c276c17e2df4aee2ca64cace36286d22c8",
+      "archive_count": 300,
+      "archive_bytes": 209638025380,
+      "full_archive_crc_verified": true,
+      "unique_task_ids_and_pairs_verified": true,
+      "all_judge_identities_match": true,
+      "actual_gpu_restore_verified": true,
+      "all_owned_browser_sessions_stopped": true,
+      "gpu_seconds_consumed": 17587,
+      "approved_gpu_seconds": 25200,
+      "browser_and_proxy_usd": 1.3024275884156427,
+      "invalid_outcomes": [
+        "Initial navigation failure"
+      ]
+    },
     {
       "method": "mixed-reweight",
       "repeat": 1,

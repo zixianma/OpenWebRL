@@ -155,7 +155,7 @@
 
 | Method | Iteration | Repeat | Verified repeats | Successes | Valid | Invalid | Overall % | Valid-only % | Status / record |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Mixed-only bonus + relaxed B |90 |1 |0/3 |— |— |— |— |— |Collecting |
+| Mixed-only bonus + relaxed B |90 |1 |1/3 |182 |299 |1 |60.67 |60.87 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
 | Mixed-only reweight + relaxed B |90 |1 |1/3 |170 |298 |2 |56.67 |57.05 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
 
 | Protocol / comparison scope | Value |
