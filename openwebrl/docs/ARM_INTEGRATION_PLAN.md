@@ -55,8 +55,95 @@ pre-versus-full-post diagnostic first. The 40-case calibration and subsequently
 approved 200-task panel are now complete below. Critic training, the image-only
 ablation and new browser data remain later-stage planning.
 
+<a id="arm-continuation-branches-20261006"></a>
+### Overnight continuation branches — prepared October 6 UTC
+
+**Status: implementation and CPU validation prepared; exact new allocation/API
+caps await approval. No live research rollout or paid teacher request has started.**
+The user requested enough continuations overnight to assess the benefit of
+execution-informed selection. This supersedes the small 30-state pilot as the
+proposed launch. The output remains **`{"selection": N}` only**, with a one-based
+index in both conditions. The previously suggested factored output was not
+agreed and is excluded. No neural critic fit or mixed-policy return corpus is
+part of this experiment.
+
+| Component | Frozen overnight proposal |
+| --- | --- |
+| Cohort | 100 accepted states, one state per training task; up to 200 candidate tasks in fixed order |
+| Actor | Official OpenWebRL-4B-SFT for fresh prefixes, candidates and all continuations |
+| Decoding | Temperature 1.0, top-p 0.95, top-k disabled; 4,096 response-token cap |
+| Branch point | Prespecified depth 2, 4 or 6; no selection using teacher judgments or outcomes |
+| Candidates | First three distinct parseable tool bundles from nine proposals; preserve full response/reasoning |
+| Continuations | Five repetitions for every candidate: **1,500 target rollouts** |
+| Teacher | GPT-6 Luna, high reasoning; selected-index output only |
+| Before condition | Task, last-five response history, three candidates, original observation/screenshot |
+| Execution-informed condition | Same inputs plus immediate results and screenshots for all three candidates; no continuation/verdict |
+| Teacher controls | Three judgments per input; one extra before permutation and one after permutation per state |
+| Planned teacher calls | **2,000**; before judgments reused across the five execution repetitions |
+| Terminal outcome | Existing canonical OM2W o4-mini-2025-04-16 judge, 4,096 response-token cap |
+| Parallelism | Four TP1 actor replicas; three state groups / 45 isolated browser sessions concurrently |
+
+A localhost browser test demonstrated why storage restoration is insufficient:
+three restored contexts had identical pixels and preserved cookies/local
+storage/IndexedDB, but the same action differed because live JavaScript state
+was absent. Prefix replay restored that fixture's behavior. The runner therefore
+replays saved responses in fresh contexts, checks every prefix observation and
+branch point, and releases a state only when all fifteen reconstructions pass.
+It checks again immediately before candidate dispatch, preserves failures after
+release as invalid attempts, and never replaces them based on outcomes. The
+observable checks cover page text, forms, focus, tabs, scroll and storage, plus a
+fixed screenshot tolerance. They **do not prove equality of hidden JavaScript or
+remote server state**; independently isolated browser contexts can still affect
+the same remote application. The strict checks may restrict the accepted cohort.
+Stop if the first twelve candidate states yield no accepted reconstruction.
+
+All branches have the same remaining horizon: 30 total browser operations and
+60 decisions minus the common prefix, and 1,800 seconds after release. The
+intervention includes the candidate's whole response in subsequent history.
+The index output reproduces the SelectionARM formulation, adapted to three
+candidates; this is not an exact replication of its five-candidate prompt.
+The task source excludes exact normalized instructions and task IDs from the
+OM2W300/WebVoyager validation files; semantic near-duplicate exclusion is not
+claimed. Availability/reconstruction exclusions remain separate from outcomes.
+
+**Analysis fixed before collection:** compare execution-informed versus
+before-only selected-branch terminal success and uniform candidate choice.
+Average teacher repeats and execution repetitions within each task, then use
+paired task-cluster bootstrap intervals; do not treat the 1,500 branches or
+teacher repeats as 1,500 independent tasks. Report selection flips alongside
+before-repeat and after-repeat disagreement, permutation sensitivity, branch
+validity, and both failure-inclusive and common-valid comparisons. Never take
+best-of-five success as an action's success probability. Report a 95% interval
+for the paired success difference: evidence of improvement if its lower bound
+exceeds zero; if its upper bound is below five percentage points, rule out that
+size of gain for this cohort; otherwise report the uncertainty. Morning results
+may still be inconclusive if the effect is small or reconstruction yields few
+states. Execution-informed selection uses extra browser work and is a
+privileged-evidence teacher diagnostic, not yet a deployable pre-action ARM gain.
+
+| Proposed all-attempt ceiling | Limit |
+| --- | ---: |
+| Allocation | 4 H200, 48 CPUs, 480 GiB, **8 hours total across retries** |
+| GPU allocation time | 32 GPU-hours maximum; release early on completion/gate failure |
+| Luna teacher | **$15 / 2,200 calls** |
+| Canonical outcome judge | **$25 / 6,600 HTTP attempts** |
+| Local actor generations | 110,000 |
+| Browser sessions, including reconstruction and retries | 3,400 total / 45 concurrent |
+
+These are ceilings, not predicted usage or additional funds from an earlier
+study. No budget transfers are allowed. The controller owns/awaits all workers,
+uses the transactional all-attempt ledger, preserves immutable receipts, and
+requires an exact registered approval before work. Separate evaluation logging
+uses `openwebrl-evals`. An active-agent continuation must be verified at launch
+for overnight diagnosis/recovery; the prepared controller alone is not that
+supervision mechanism. GPU throughput and live reconstruction yield remain
+startup checks. CPU validation: 84 targeted tests pass; the real child-browser
+RPC fixture captures consistent branch observations and closes both browsers.
+
+[Aggregate protocol and resource request](arm_results/rl_integration/continuation-branches-protocol-20261006.json).
+
 <a id="arm-selection-execution-evidence-20261006"></a>
-### Selection teacher and execution attribution — proposed October 6 UTC
+### Selection teacher and execution attribution — earlier proposal, superseded October 6 UTC
 
 The user asked whether feedback separates a poor action from a useful action
 whose execution failed, and whether the earlier SelectionARM formulation can
@@ -95,7 +182,8 @@ identity is still unverified, so this is not a fixed-policy return dataset.
 | Original selected-index output | Choose one of five candidates | Reconsider the original choice using the audited branch |
 | Separated evidence fields + selected index | Intended effect, goal usefulness, grounding | Add actual effect, fulfillment, observed progress and failure attribution |
 
-The proposed first diagnostic uses 40 states, four conditions, three independent
+This earlier, unlaunched proposal was not authorized; the factored output is
+excluded by the user's correction above. It described 40 states, four conditions, three independent
 same-order judgments per condition and one additional permuted-order judgment:
 **640 proposed Luna-high calls, none sent**. All conditions share full candidate
 reasoning/actions, the original task, last-five causal history, before

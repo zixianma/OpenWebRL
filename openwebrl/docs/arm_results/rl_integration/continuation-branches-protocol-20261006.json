@@ -1,0 +1,78 @@
+{
+  "status": "prepared_exact_budget_not_approved",
+  "protocol": {
+    "actor_checkpoint": "official OpenWebRL-4B-SFT",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "anchor_depths": [
+      2,
+      4,
+      6
+    ],
+    "candidate_draws": 9,
+    "candidates": 3,
+    "comparison": "Teacher-selected terminal success vs paired before-only and uniform candidate choice; task-cluster intervals; no best-of-five success oracle.",
+    "continuations_per_candidate": 5,
+    "equivalence": "Exact observed storage/page/forms/tabs/scroll plus frozen pixel tolerance; hidden remote/JS state is not proven cloned.",
+    "gate": "Stop if first twelve candidate states yield zero accepted states; release all fifteen branches only after reconstruction.",
+    "intervention": "Whole candidate response (reasoning and grounded action bundle) enters actor history.",
+    "maximum_candidate_states": 200,
+    "outcome": "Canonical OM2W o4-mini-2025-04-16,4096 response cap; original terminal status retained.",
+    "protocol": "fixed-sft-continuation-branches-v1",
+    "remaining_horizon": "30 total browser operations and60 total policy decisions minus common prefix; 1800s after release.",
+    "replay": "Fresh independent browser contexts; identical prefix responses; compare every prefix observation and anchor.",
+    "sampling": {
+      "max_new_tokens": 4096,
+      "temperature": 1.0,
+      "top_k": -1,
+      "top_p": 0.95
+    },
+    "scope": "No mixed-policy training data and no critic fitting; branch collection and teacher diagnostic only.",
+    "states_target": 100,
+    "teachers": {
+      "conditions": [
+        "before",
+        "all_three_immediate_results"
+      ],
+      "effort": "high",
+      "forms": [
+        "index"
+      ],
+      "leakage": "Allowlisted pre-action and immediate observations only; suffix/terminal evidence unavailable.",
+      "legacy": "Original selection-index output formulation adapted to three candidates; not an exact prompt replication.",
+      "model": "gpt-6-luna",
+      "output_cap": 4096,
+      "permutation_check": "One extra before and one after(rep0) call per form/state",
+      "planned_calls": 2000,
+      "repeat_calls": 3
+    }
+  },
+  "resources": {
+    "collectors": 48,
+    "cpus": 48,
+    "gpu_type": "H200",
+    "gpus": 4,
+    "memory_gib": 480,
+    "sft_replicas": 4,
+    "total_seconds": 28800
+  },
+  "limits": {
+    "browser_sessions": 3400,
+    "browser_sessions_per_condition": 3400,
+    "canonical_judge_http_attempts": 6600,
+    "canonical_judge_usd": 25.0,
+    "concurrent_browsers": 45,
+    "jev_selector_requests": 0,
+    "local_kev_requests": 0,
+    "local_sft_generations": 110000,
+    "luna_selector_requests": 2200,
+    "luna_usd": 15.0
+  },
+  "primary_continuations": 1500,
+  "teacher_output": {
+    "selection": "one-based integer 1..3"
+  },
+  "factored_output_included": false,
+  "offline_tests_passed": 84,
+  "new_model_calls": 0,
+  "new_gpu_allocations": 0
+}
