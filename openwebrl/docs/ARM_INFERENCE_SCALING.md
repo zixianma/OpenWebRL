@@ -66,7 +66,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 <a id="local-browser-rerun-20261006"></a>
 ## Next experiments: controlled local-browser suite
 
-**First wave: four conditions × the same 300 Online-Mind2Web tasks = 1,200 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. This replaces the twelve-condition first-wave draft. The old SFT baseline will not fill the new control row. Exact resource/API caps and live validation are still pending; no new run has started. Each row inherits the shared settings below; model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
+**First wave: four conditions × the same 300 Online-Mind2Web tasks = 1,200 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. This replaces the twelve-condition first-wave draft. The old SFT baseline will not fill the new control row. The frozen package is prepared and CPU-validated; exact resource approval and GPU/provider startup checks remain. No new benchmark run has started. Each row inherits the shared settings below; model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
 
 | ID | Actor | Selector | Proposals per step | Actor decoding | Selector decision |
 | --- | --- | --- | ---: | --- | --- |
@@ -91,14 +91,24 @@ Jev actor-only remains the missing full300 experiment, separately proposed for l
 | Selector API contract | Luna selectors are stateless text-only calls with no tools/native conversation history/images and strict JSON `selected_index` in 1..N |
 | Jev/Kev decisions | Jev model `jev-1.13.0`; Kev `jaredpalmer/kev-27b`, full BF16 weights, calibrated argmax (calibration temperature 1.319507910772894), maximum 65,536 state tokens, `truncate_states=false`. Generative temperature/top-p/output cap do not apply to either choice head |
 | Typing | SFT generates its own text in all four arms; no GPT-4.1-mini helper |
-| Episode/action limits | **30 action attempts, 60 decision attempts, 1,800s per episode for every arm**; count failed dispatched operations and individual operations inside compound actions; terminal `done` consumes one step. No-action decisions consume the decision limit |
+| Episode/action limits | **30 action attempts, 60 decision attempts, 1,800s per episode for every arm**; count failed dispatched operations and individual operations inside compound actions; terminal `done` consumes one step. No-action decisions consume the decision limit; 3 consecutive parse failures end the episode |
 | Timeouts/retries | Model request 180s, navigation 60s, browser operation 30s, final screenshot 15s; one HTTP attempt per actor/selector/typing request; judge at most 4 HTTP attempts. Preserve all failures; no automatic episode replay |
 | Judge | **Unchanged OpenWebRL Online-Mind2Web/AgentTrek `reward_func`**, `o4-mini-2025-04-16`, seed 42: full actor thoughts/actions + final screenshot. Only `COMPLETED` episodes are judged; non-completed episodes score zero. No actions-only transformation or step-limit bypass. Common 4,096-token metering cap, explicitly additional to the native uncapped request |
 | Reporting | Save every attempt/request/choice/executed action and terminal evidence. Overall, valid-only, common-valid paired effects/intervals, cost, latency, invalid causes and page-access failures; separate campaign overhead from per-episode serving cost |
 
 The comparison is L01 versus L08/L10/L11. The shared selector input deliberately differs from earlier Luna selection, which also saw screenshots and full history. Local browsers still call hosted Jev/GPT selector APIs; all four arms use the same screenshot-based SFT proposer.
 
-**Readiness remains unverified:** verify the worker uses the installed, hash-checked Chromium binary; package prompts on every path; port the hosted selector runner to the common local browser; validate coordinate execution/platform-aware typing, shared selector bounds, action counters and terminal judging. Jev/Kev already have a local-browser transport, but their current adapter fixes the viewport at 1120×780 and the selector runner assumes BrowserUse. These proposed settings do not claim a working or launch-ready implementation.
+**Prepared, awaiting exact resource approval:** 142 offline tests and the frozen controller dry-run pass. Real CPU checks on the frozen source verify SFT prompt/image processing, local Chromium settings, normalized-coordinate clicks, Linux text replacement, stopping, fresh final screenshots and complete browser-process teardown. GPU inference and live provider acceptance remain startup gates: 12 smoke episodes must validate every actor/selector path and the canonical judge before the 1,200 primary episodes. Jev's exact confirmed context-limit error is preserved as an input-budget invalid without truncation or fallback; unknown provider errors stop dispatch.
+
+| Proposed total cap, including all attempts | Limit |
+| --- | --- |
+| One allocation / replacements | **8 H200, 64 CPUs, 960 GiB; 16 hours total scheduler time** (128 H200-hours maximum) |
+| Serving layout | 7 independent SFT replicas + 1 Kev replica; at most 7 local browsers; one Kev forward at a time |
+| Browser episodes | 1,320 total, at most 330 per arm: 1,200 primary + 12 smoke + up to 108 infrastructure-recovery attempts |
+| Proposals / selector requests | 316,800 SFT proposals; at most 19,810 requests each for Luna, Jev and local Kev, including diagnostics |
+| OpenAI API spend | Luna **$50**; canonical judge **$25**, at most 5,280 judge HTTP attempts. Jev has the separate request-count cap above |
+
+These are spending/resource ceilings, not runtime or completion guarantees. Every failed attempt is charged; no historical budget carries forward. The source, plan and durable ledger are frozen together before submission.
 
 ### Judge compatibility and version boundary
 
@@ -114,7 +124,7 @@ V2 freezes the browser binary, prompts, model revisions, decoding, selector obse
 
 Luna selection with images, Kev 0.8B actor/selector, learned ScalarARM/SelectionARM and oracle episode pass@k remain outside the four-condition core. No selectively repeated valid failures or changed canonical historical verdicts are planned.
 
-**Nothing in this plan has been launched.** The user accepted the narrowed scientific scope; new allocations and paid calls still need the exact resource/API budget required by the repository working agreement. All diagnostics and retries count toward those caps; no historical budget transfers.
+**No benchmark, GPU or paid API work for this suite has launched.** CPU fixtures used only a synthetic image and a local test page. The user accepted the narrowed scientific scope; new allocations and paid calls still need the exact resource/API budget required by the repository working agreement. All diagnostics and retries count toward those caps; no historical budget transfers.
 
 <a id="luna-actor-full300-20261004"></a>
 ## What each experiment measures

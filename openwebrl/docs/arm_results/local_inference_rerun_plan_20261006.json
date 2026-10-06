@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "scope_accepted_preparing_exact_budget_pending",
+  "status": "prepared_awaiting_exact_resource_approval",
   "launch_authorized": false,
   "new_experiments_launched": 0,
   "protocol_name": "local-openwebrl-om2w-v2",
@@ -450,13 +450,9 @@
     }
   },
   "not_yet_validated": [
-    "Uniform launch configuration and actual worker Chromium identity; installed binary files/version/hash checked offline.",
-    "Hosted-selector path port to shared local browser",
-    "Shared selector state/schema construction and bound enforcement",
-    "Equivalent prompt preflight on Jev/Kev SFT path",
-    "Common action counters and terminal judge dispatch",
-    "Per-profile serving layout, concurrency, total API/browser/compute budget",
-    "No paid preflight or live model acceptance test has run for this proposed suite"
+    "Real GPU serving startup, resource use, inference concurrency and request acceptance for all providers.",
+    "Bounded live diagnostics and12 smoke episodes must pass before primary collection.",
+    "No benchmark browser episodes or paid model/API requests have run for this new suite."
   ],
   "scope_accepted": true,
   "historical_judge_audit": {
@@ -486,5 +482,45 @@
     ],
     "deferred_arms": "Any deferred actor/selector arm must be recollected under this same pinned protocol before joining its comparison table.",
     "after_scientific_change": "Freeze a new protocol version and rerun every arm included in its comparison; never combine pre-change and post-change cohorts."
+  },
+  "offline_validation": {
+    "canonical_judge_binding": "Unchanged source/rubric/parser, full actor thoughts/actions, fresh screenshot, COMPLETED-only dispatch; no strict secondary hook.",
+    "worker_contracts": "Shared selector state, original candidate execution, prompt/context/image alignment, controlled action boundaries, invalid classification and compact private-artifact receipts tested offline.",
+    "real_processor_cpu_fixture": {
+      "status": "passed",
+      "processor": "Qwen3VLProcessor",
+      "tokenizer": "Qwen2TokenizerFast",
+      "synthetic_image_size": [
+        1280,
+        720
+      ],
+      "expanded_prompt_tokens": 3759,
+      "raw_policy_preserved": true,
+      "visible_think_prefill": true,
+      "gpu_calls": 0,
+      "model_api_calls": 0,
+      "browser_calls": 0
+    },
+    "tests_passed": 142,
+    "frozen_controller_dry_run_passed": true,
+    "real_local_browser_cpu_fixture": {
+      "status": "passed",
+      "fixed_viewport_locale_timezone_dpr": true,
+      "normalized_coordinate_clicks": true,
+      "linux_control_a_text_replacement": true,
+      "done_stops_compound_actions": true,
+      "fresh_terminal_capture": true,
+      "all_browser_processes_closed": true,
+      "benchmark_sites": 0,
+      "model_calls": 0,
+      "gpu_allocations": 0
+    }
+  },
+  "frozen_preparation": {
+    "version": "prepared-v2",
+    "plan_sha256": "ed56cf51a1de76409ebca6cfcac5da8f284b8260f3efefe9fc7c72107850488b",
+    "source_manifest_sha256": "e7e3eef315b2207d48b8224c3537dc0b16e5f0a45b1cfa7bf40ea693d12437f1",
+    "scientific_config_at_freeze_sha256": "dcadd77dc6964c86209732420042289458b2bd5dc272fbe6871dbb6a55cc104b",
+    "note": "This public document updates readiness metadata after the immutable runtime configuration was frozen. Scientific settings and caps are unchanged; exact allocation approval binds the frozen runtime plan."
   }
 }

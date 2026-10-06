@@ -66,7 +66,7 @@
     "maximum_completion_tokens": 4096,
     "proposed_usd_cap": 35,
     "conservative_reservation_usd": 32.77,
-    "paid_calls_made": 0,
+    "paid_calls_made": 18,
     "browser_sessions": 0,
     "gpus": 0,
     "strict_scores_available": false,
@@ -75,6 +75,14 @@
       "Evidence-only input without actor thoughts or old verdicts"
     ],
     "interpretation": "A changed rate is not an isolated causal estimate of rubric leniency: evidence also changes, and no matched SFT baseline has yet been rejudged.",
-    "relative_date_policy": "Never resolve relative dates against rejudge date; require a supplied original reference date or preserve relevant uncertainty."
+    "relative_date_policy": "Never resolve relative dates against rejudge date; require a supplied original reference date or preserve relevant uncertainty.",
+    "status": "stopped_after_user_clarification",
+    "validated_secondary_outputs": 16,
+    "invalid_secondary_outputs": 2,
+    "known_usage_uncached_upper_usd": 0.2136937,
+    "additional_calls_authorized": false,
+    "use_in_comparison": false,
+    "original_verdicts_changed": false,
+    "stop_reason": "Approval referred to local browsers and the existing OpenWebRL judge, not a strict rejudge. Earlier proposed caps are retained as history only."
   }
 }
