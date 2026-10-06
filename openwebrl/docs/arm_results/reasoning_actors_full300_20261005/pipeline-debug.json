@@ -36,7 +36,20 @@
     "Pipeline and environment differences still prevent attributing model quality from unmatched rates."
   ],
   "date": "2026-10-06",
-  "missing_prompt_scope": "API actors and local Qwen/SFT actors in the Luna full300 study lacked browser-policy text; local actors still received tokenizer tool-schema wrappers. Luna selector prompt was constructed separately.",
+  "missing_prompt_scope": "The Luna study local Qwen/SFT actors, API actors, and hosted Jev/Kev-study SFT proposers lacked browser-policy text. Local Qwen/SFT tokenizer tool-schema wrappers remained present. This does not establish an omission in separately constructed selector prompts.",
   "canonical_scores_changed": false,
-  "protocol_version": "browser-prompts-native-responses-v1"
+  "protocol_version": "browser-prompts-native-responses-v1",
+  "hosted_prompt_audit": {
+    "read_only": true,
+    "frozen_sources_audited": 2,
+    "saved_history_samples_per_mode": {
+      "jev": 1,
+      "kev27b": 1
+    },
+    "both_sampled_system_messages_empty": true,
+    "required_browser_policy_files_absent": true,
+    "private_proof_sha256": "05e18f915f20eb0fc9ff8b177158ba413692f4e2fa4ec7316a5e054b805b2b5b",
+    "coverage_limit": "Frozen-source/loader audit plus one saved actor-history sample per mode; not a scan of all saved prompts."
+  },
+  "implemented_fix_scope": "The 112 offline tests validate working-tree Luna/API pipeline fixes. The newly audited hosted SFT path still requires equivalent prompt packaging and preflight validation before a fresh launch."
 }
