@@ -1,5 +1,5 @@
 {
-  "status": "running_staged_preflight",
+  "status": "reserve800_prefetch_queued",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -15,7 +15,7 @@
     "equivalence": "Exact observed page/forms/tabs/scroll/focus/history/grounded controls plus unchanged raster tolerance; storage/session differences retained as diagnostics. No hidden or remote state clone claim.",
     "gate": "Stop if first twelve candidate states yield zero accepted states; release all fifteen branches only after reconstruction.",
     "intervention": "Whole candidate response (reasoning and grounded action bundle) enters actor history.",
-    "maximum_candidate_states": 200,
+    "maximum_candidate_states": 800,
     "outcome": "Canonical OM2W o4-mini-2025-04-16,4096 response cap; original terminal status retained.",
     "protocol": "fixed-sft-continuation-branches-v2",
     "remaining_horizon": "30 total browser operations and60 total policy decisions minus common prefix; 1800s after release.",
@@ -45,7 +45,16 @@
       "planned_calls": 1400,
       "repeat_calls": 3
     },
-    "retain_duplicate_candidates": true
+    "retain_duplicate_candidates": true,
+    "discovery_prefetch_states": 8,
+    "candidate_pool_extension": {
+      "original_candidate_states": 200,
+      "added_reserve_states": 600,
+      "eligible_tasks": 2090,
+      "original_prefix_preserved": true,
+      "selection_uses_outcomes": false,
+      "resource_caps_unchanged": true
+    }
   },
   "resources": {
     "collectors": 32,
@@ -73,10 +82,10 @@
     "selection": "one-based integer 1..5"
   },
   "factored_output_included": false,
-  "offline_tests_passed": 109,
-  "new_gpu_allocations": 4,
+  "offline_tests_passed": 113,
+  "new_gpu_allocations": 5,
   "revision": "User requested five actions and three continuations; previous unlaunched 3x5 proposal superseded.",
-  "job_id": "346956",
+  "job_id": "347009",
   "active_agent_queue_verified": true,
   "prior_attempts": [
     {
@@ -95,14 +104,20 @@
       "state": "FAILED",
       "elapsed_seconds": 1250,
       "reason": "Deliberate SIGTERM after scientific workers/teachers drained; verified owned-process teardown. Released work preserved."
+    },
+    {
+      "job_id": "346956",
+      "state": "COMPLETED",
+      "elapsed_seconds": 1309,
+      "reason": "Graceful batch/teacher handoff for deterministic reserve extension and discovery prefetch; experiment not complete."
     }
   ],
-  "current_attempt_limit_seconds": 27060,
-  "accepted_states": 3,
-  "considered_states": 12,
+  "current_attempt_limit_seconds": 25740,
+  "accepted_states": 6,
+  "considered_states": 34,
   "verified_complete": false,
-  "actual_allocation_seconds": 1695,
-  "remaining_allocation_seconds": 27105,
+  "actual_allocation_seconds": 3004,
+  "remaining_allocation_seconds": 25796,
   "gate_reason_counts": {
     "capture_failure_before_anchor": 3,
     "actor_terminated_before_fixed_depth": 7,
@@ -127,7 +142,7 @@
       "actor decoding",
       "Luna high and index-only output",
       "5 candidates x3 continuations",
-      "100 target states /200 candidate tasks",
+      "100 target states (original200 candidate tasks preserved in subsequent reserve extension)",
       "paired before/after inputs and common outcomes",
       "teacher repeats and permutation checks",
       "allocation/API all-attempt ceilings"
@@ -141,7 +156,7 @@
     },
     "note": "User directed continued repairs and submission within existing approval; implementation tested and replacement submitted."
   },
-  "prior_actual_allocation_seconds": 1695,
+  "prior_actual_allocation_seconds": 3004,
   "original_strict_stage": {
     "considered_states": 12,
     "accepted_states": 0,
@@ -153,22 +168,26 @@
     },
     "included_in_scientific_cohort": false
   },
-  "completed_continuations": 45,
-  "valid_continuations": 41,
+  "completed_continuations": 90,
+  "valid_continuations": 86,
   "invalid_continuation_reasons": {
     "missing_fresh_terminal_evidence": 4
   },
-  "verified_teacher_judgments": 42,
-  "accounting_scope": "Snapshot at replacement submission; current attempt elapsed time accumulates separately. Consumed plus newly reserved seconds=28755/28800.",
+  "verified_teacher_judgments": 84,
+  "accounting_scope": "Snapshot at replacement submission. Consumed plus reserved seconds=28744/28800; live job elapsed time accumulates separately.",
   "execution_strategy": "Ordinary c0/r0 replay first; fan out other14 only after ready. Require all15 crossed proofs before candidate execution. Independent probes, fixed task-order release.",
   "staged_recovery_preserved_all_released_work": true,
   "analysis": "Equal-weight state averages; all3 continuations and all3 teacher calls, state bootstrap, before/after repeat disagreement, separate permutation controls, failure-inclusive and paired common-valid estimates. No scientific conclusion from startup cohort.",
   "all_attempt_api_snapshot": {
-    "luna_requests": 42,
-    "luna_usd": 0.14267775,
-    "judge_requests": 21,
-    "judge_usd": 0.1422751
+    "luna_requests": 84,
+    "luna_usd": 0.341471,
+    "judge_requests": 57,
+    "judge_usd": 0.3409989
   },
-  "model_api_calls_at_handoff": 63,
-  "local_sft_generations_at_handoff": 782
+  "model_api_calls_at_handoff": 141,
+  "local_sft_generations_at_handoff": 1169,
+  "candidate_state_limit": 800,
+  "discovery_prefetch_states": 8,
+  "original200_task_prefix_preserved": true,
+  "maximum_concurrent_browsers": 30
 }

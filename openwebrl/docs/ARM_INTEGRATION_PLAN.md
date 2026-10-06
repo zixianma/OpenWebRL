@@ -58,7 +58,7 @@ ablation and new browser data remain later-stage planning.
 <a id="arm-continuation-branches-20261006"></a>
 ### Overnight continuation branches — prepared October 6 UTC
 
-**Recovery running as job 346956; 3/100 states and 45/1,500 continuations audited so far.** The first three accepted states have all 42 planned Luna-high judgments; 41 continuations have valid terminal evidence and four lack fresh terminal evidence after browser capture failures. These are startup counts, not an effect-size conclusion. The replacement uses **4 H200, 32 CPUs, 480 GiB, 7h31m**; prior attempts consumed 1,695 seconds, so consumed plus reserved allocation time is 28,755 seconds within the original 28,800-second ceiling. The $15 Luna / $25 judge caps and all attempt counters carry forward. The supervisor follows the replacement and queues this session for repair.
+**Replacement job 347009 queued; 6/100 states and 90/1,500 continuations audited at handoff.** All 84 planned Luna-high judgments are preserved; 86 continuations have valid terminal evidence and four lack fresh terminal evidence after browser capture failures. Replay accepted only six of the first 34 candidate tasks, so the same deterministic task ordering now has an 800-task reserve, preserving the original 200 exactly. The target remains 100 accepted states, and replay criteria remain unchanged. The replacement retains **4 H200, 32 CPUs, 480 GiB**, with **7h09m** available; prior attempts consumed 3,004 seconds. Consumed plus reserved time is 28,744/28,800 seconds. The $15 Luna / $25 judge caps and all counters carry forward. This is an interim collection status, with no effect-size conclusion yet.
 
 The user requested enough continuations overnight to assess the benefit of
 execution-informed selection. This supersedes the small 30-state pilot as the
@@ -71,7 +71,7 @@ part of this experiment.
 
 | Component | Approved overnight design |
 | --- | --- |
-| Cohort | 100 accepted states, one state per training task; up to 200 candidate tasks in fixed order |
+| Cohort | 100 accepted states, one state per training task; up to 800 candidate tasks in fixed order, preserving the original 200-task prefix |
 | Actor | Official OpenWebRL-4B-SFT for fresh prefixes, candidates and all continuations |
 | Decoding | Temperature 1.0, top-p 0.95, top-k disabled; 4,096 response-token cap |
 | Branch point | After 0, 1 or 2 actor decisions in a fresh SFT prefix; one prespecified depth per task, independent of judgments/outcomes |
@@ -83,7 +83,7 @@ part of this experiment.
 | Teacher controls | Three judgments per input; one extra before permutation and one after permutation per state |
 | Planned teacher calls | **1,400** (4 before + 10 after per state); before judgments reused across the three execution repetitions |
 | Terminal outcome | Existing canonical OM2W o4-mini-2025-04-16 judge, 4,096 response-token cap |
-| Parallelism | Four TP1 actor replicas; two state groups / 30 isolated browser sessions concurrently |
+| Parallelism | Four TP1 actor replicas; eight prefixes prefetched per wave, then two continuation groups; at most 30 browser sessions and 32 collectors |
 
 A localhost browser test demonstrated why storage restoration is insufficient:
 three restored contexts had identical pixels and preserved cookies/local
@@ -127,9 +127,9 @@ States will be collected live from the cleaned WebGym training-task pool
 (`webgym_filtered_popular_2102_cleaned.parquet`), using the same frozen official
 SFT for prefixes, candidates and suffixes. They are not reconstructed from
 Piotr's saved screenshots or drawn from historical mixed-policy rollouts.
-The filter retains 2,090 unique eligible tasks from 2,102 input rows; 200 are
-ordered deterministically for collection, aiming for the first 100 eligible
-states. The task source excludes exact normalized instructions and task IDs from the
+The filter retains 2,090 unique eligible tasks from 2,102 input rows. The
+original 200 tasks are preserved as an exact prefix of an 800-task deterministic
+reserve, aiming for the first 100 eligible states within the same hard resource caps. The task source excludes exact normalized instructions and task IDs from the
 OM2W300/WebVoyager validation files; semantic near-duplicate exclusion is not
 claimed. Availability/reconstruction exclusions remain separate from outcomes.
 
@@ -168,7 +168,7 @@ uses the transactional all-attempt ledger, preserves immutable receipts, and
 requires an exact registered approval before work. Separate evaluation logging
 uses `openwebrl-evals`. The supervisor queues the owning agent for diagnosis/recovery;
 its initial continuation receipt and persistent ownership lock are verified. GPU throughput and live reconstruction yield remain
-startup checks. CPU validation: 104 targeted controller/worker tests and five paired-analysis tests pass. A real two-process browser fixture verifies equal visible observations despite independently randomized cookie/session/localStorage values, and closes both browsers.
+startup checks. CPU validation: 113 targeted controller, worker, accounting, paired-analysis and supervisor tests pass. A real two-process browser fixture verifies equal visible observations despite independently randomized cookie/session/localStorage values, and closes both browsers.
 
 **Startup recovery:** attempt 346645 used 95 seconds and failed before any
 actor/API calls. The complete-state check had spanned the shared capture retry
@@ -195,6 +195,11 @@ values would not have accepted that panel.
 **Replay precheck recovery, job 346956:** initial mismatch rejection launched all 15 browsers even when the first replay already proved the state unsuitable. The controller now starts the ordinary candidate-0/repetition-0 replay first for each of the two independent state groups, then starts the other 14 only if that replay reaches its ready barrier. It still requires all 15 independent replay proofs before any candidate executes, and releases states in the original task order. This saves sessions on rejected states without changing candidates, seeds, actor, teacher inputs or replay thresholds. Job 346951 was drained after its released continuations and teacher calls finished, preserving all 45 outcomes and 42 judgments; its 1,250 seconds are charged to the original total. Slurm reports the deliberate SIGTERM handoff as `FAILED`/143; all owned processes were independently verified closed.
 
 The analysis averages all three continuation repetitions and three teacher calls per state; it does not take the best repetition. Confidence intervals resample whole states. Before/after choice changes are compared with both before-repeat and after-repeat disagreement, and permutation calls remain separate controls. Invalid continuations count as zero in the failure-inclusive estimate, with a paired common-valid estimate alongside it. Missing teacher panels are explicitly reported. The small startup cohort does not support a scientific conclusion yet.
+
+
+**Candidate reserve and discovery throughput recovery, job 347009:** six states passed among the first 34 candidates. A private mismatch audit found page-content/form/layout differences and screenshot differences; the matching criteria were kept intact. The reserve now continues the same deterministic ordering from the same 2,090 eligible training tasks through 800 candidates, with the original 200 task objects, state IDs and schedule entries verified unchanged. There is no outcome-based reordering or filtering, and no change to the 100-state target or resource/API ceilings. Eight independent prefixes are prefetched per wave on the four actor replicas; the two-group continuation release and 30-browser/32-collector bounds remain. Every prior result, attempt and charge is preserved. Job 346956 ended cleanly after the current scientific batch and teachers drained; its 1,309 seconds are included in the 3,004-second prior total. Reaching 100 states remains conditional on replay yield and the existing budgets.
+
+The supervisor polls health every minute and queues routine agent checks every 15 minutes. Ordinary discovery/continuation stage changes are coalesced; job failures, stalls, budget halts and closeout still trigger prompt agent review. This avoids repeated routine callbacks without disabling active repair.
 
 [Aggregate protocol and resource request](arm_results/rl_integration/continuation-branches-protocol-20261006.json).
 
