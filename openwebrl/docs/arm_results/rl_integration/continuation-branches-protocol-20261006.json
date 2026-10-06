@@ -1,5 +1,5 @@
 {
-  "status": "reserve800_prefetch_queued",
+  "status": "reserve800_prefetch_running",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -113,7 +113,7 @@
     }
   ],
   "current_attempt_limit_seconds": 25740,
-  "accepted_states": 6,
+  "accepted_states": 7,
   "considered_states": 34,
   "verified_complete": false,
   "actual_allocation_seconds": 3004,
@@ -168,12 +168,12 @@
     },
     "included_in_scientific_cohort": false
   },
-  "completed_continuations": 90,
-  "valid_continuations": 86,
+  "completed_continuations": 105,
+  "valid_continuations": 101,
   "invalid_continuation_reasons": {
     "missing_fresh_terminal_evidence": 4
   },
-  "verified_teacher_judgments": 84,
+  "verified_teacher_judgments": 98,
   "accounting_scope": "Snapshot at replacement submission. Consumed plus reserved seconds=28744/28800; live job elapsed time accumulates separately.",
   "execution_strategy": "Ordinary c0/r0 replay first; fan out other14 only after ready. Require all15 crossed proofs before candidate execution. Independent probes, fixed task-order release.",
   "staged_recovery_preserved_all_released_work": true,

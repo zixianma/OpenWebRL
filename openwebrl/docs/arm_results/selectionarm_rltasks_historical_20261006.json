@@ -1,0 +1,89 @@
+{
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "a1f8d265855ddf1074eae91516c6e86f6f836177",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "davidan03/openwebrl-4b-selectionarm-rltasks",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "one fresh baseline, Piotr-ARM and new-ARM episode per task",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and 42.7% SelectionARM",
+    "comparability": "Matched fresh three-arm comparison; historical collection dates/runtime differ. Judge metering adds a 4096-token output cap."
+  },
+  "primary_episodes": 900,
+  "resources_per_shard": {
+    "gpus": 2,
+    "gpu_type": "H200",
+    "cpus": 16,
+    "memory_gib": 240,
+    "total_seconds": 14400
+  },
+  "shards": 2,
+  "maximum_gpu_hours": 16,
+  "judge_caps_per_shard": {
+    "judge_usd": 10.0,
+    "judge_calls": 1980
+  },
+  "judge_caps_total": {
+    "usd": 20,
+    "calls": 3960
+  },
+  "actor_concurrency": 8,
+  "selector_services": "Piotr and new ARM on the second H200; actor on first, per shard",
+  "telemetry": [
+    "success overall/valid-only/common-valid",
+    "paired task-bootstrap contrasts",
+    "actor/selector input/output tokens",
+    "episode/request latency",
+    "browser steps/time",
+    "judge costs and all-attempt allocation GPU-hours",
+    "GPU utilization/power"
+  ],
+  "status": "prepared_exact_compute_approval_pending",
+  "tests_passed": 22,
+  "cpu_imports_passed": true,
+  "checkpoint_sha256_verified": true,
+  "new_allocations": 0,
+  "paid_api_calls": 0,
+  "arms": [
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": null,
+      "n": 1,
+      "episodes": 300
+    },
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "PTeterwak/OpenWebRL-4B-SelectionARM",
+      "n": 5,
+      "episodes": 300
+    },
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "davidan03/openwebrl-4b-selectionarm-rltasks",
+      "n": 5,
+      "episodes": 300
+    }
+  ]
+}

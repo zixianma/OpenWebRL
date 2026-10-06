@@ -4,7 +4,7 @@ This is the concise collaborator summary. Detailed configs, provenance, and
 run history are in [ARM_RESULTS.md](ARM_RESULTS.md) and
 [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md).
 
-**Next critic diagnostic, replacement queued (347009):** target 100 fixed-SFT states × five samples × three continuations (1,500 rollouts), comparing index-only Luna-high before versus after immediate execution evidence. At handoff: 6 states / 90 continuations and 84 teacher judgments audited; 86 continuations valid, four capture failures retained. The deterministic candidate reserve expands from 200 to 800 with the original prefix preserved; eight prefixes are prepared in parallel, with strict replay criteria unchanged. All attempts remain inside 4 H200 × 8h and $15 Luna / $25 judge. [Protocol and recovery](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+**Next critic diagnostic, replacement running (347009):** target 100 fixed-SFT states × five samples × three continuations (1,500 rollouts), comparing index-only Luna-high before versus after immediate execution evidence. Now: 7 states / 105 continuations and 98 teacher judgments audited; 101 continuations valid, four capture failures retained. The deterministic candidate reserve expands from 200 to 800 with the original prefix preserved; eight prefixes are prepared in parallel, with strict replay criteria unchanged. All attempts remain inside 4 H200 × 8h and $15 Luna / $25 judge. [Protocol and recovery](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 
 <a id="arm-methods-at-a-glance"></a>
 ![Three ARM stages: choose actions at inference, learn from saved preferences offline, or change turn credit during RL](arm_results/methods/arm_three_stages.svg)
@@ -48,6 +48,8 @@ Reward Models setup with the o4-mini/AgentTrek Online-Mind2Web judge.
 | Baseline, one sample | 90 | 267 | 33 | 30.0% | 33.7% |
 | ScalarRM, five candidates | 114 | 251 | 49 | 38.0% | 45.4% |
 | SelectionARM, five candidates | 128 | 256 | 44 | **42.7%** | **50.0%** |
+
+**Fresh three-arm repetition prepared:** official SFT alone, SFT + Piotr's original SelectionARM, and SFT + `davidan03/openwebrl-4b-selectionarm-rltasks`; 300 fresh episodes each, matching this table's T=0.7 / p=0.9 / 1,024-token / seed42 settings. Exact new compute/API caps await approval. [Protocol, checks and resource request](ARM_INFERENCE.md#arm-rltasks-three-arm-20261006).
 
 - **Baseline:** execute one actor sample without an ARM call.
 - **ScalarRM:** score each of five candidates independently and execute the candidate with the highest scalar score.
