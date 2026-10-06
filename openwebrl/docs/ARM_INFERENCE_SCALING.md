@@ -1,94 +1,113 @@
 # ARM inference-time scaling: actor alone versus actor + selector
 
-**Main actor: official `OpenWebRL/OpenWebRL-4B-SFT`.** We compare its standalone performance with selecting among its proposed actions. Released Qwen3-VL-4B-Thinking is an actor ablation; direct GPT-6 and Kev policies are secondary references.
+**Main actor: official `OpenWebRL/OpenWebRL-4B-SFT`; Qwen3-VL-4B-Thinking is the actor ablation.** Actor-only performance comes first, followed by the gain from selecting among proposed actions.
 
-All eleven recent full300 rows are complete: **3,000 fresh episodes plus 300 reused SFT reference episodes**, finalized October 6, 2026. **Overall includes all 300 tasks; valid-only excludes records marked invalid.** These are saved judge successes, including documented partial-progress allowances. The protocol labels matter: the existing SFT-alone reference is not matched to the fresh selector runs.
+The tables below retain the **historical** results: eleven completed full300 conditions, comprising 3,000 fresh episodes and 300 reused SFT records. They mix browser and harness protocols. The next study will recollect every condition with a shared local-browser protocol and add the missing full300 Jev actor. No results from that new study are available yet.
 
 ## Contents
 
-- [OpenWebRL-SFT: alone versus +selector](#actor-selector-experiment-tracker-20261004)
-- [Qwen3 actor ablation](#qwen-actor-ablation)
-- [Other standalone actors](#api-actor-high-results-20261005)
-- [Recommended matched SFT control](#matched-sft-control)
-- [Protocol differences](#luna-actor-full300-20261004)
+- [Actor alone: existing results](#actor-selector-experiment-tracker-20261004)
+- [Actor + selector: existing results](#scaling-comparisons)
+- [Next experiments: controlled local-browser suite](#local-browser-rerun-20261006)
+- [Historical protocol differences](#luna-actor-full300-20261004)
 - [Efficiency details](#luna-full300-results-20261006)
 - [Actor/judge audit](#api-actor-stopping-audit-20261005)
 - [Learned ARM and episode retries](#learned-arm-and-retries)
 - [Pilots and provenance](#luna-qwen-inference-20261004)
 
 <a id="actor-selector-experiment-tracker-20261004"></a>
-<a id="scaling-comparisons"></a>
-## OpenWebRL-SFT: alone versus +selector
-
-The actor checkpoint is the same in every row. **N** is the number of proposed next actions; one is executed per step.
-
-<!-- actor-selector-results:start -->
-<!-- cohorts: AS04, AS05, AS06, AS08, AS09 -->
-
-| Selector | N | Overall success | Valid-only success | Protocol |
-| --- | ---: | ---: | ---: | --- |
-| None — historical reference | 1 | 35.33% (106/300) | 38.97% (106/272) | Historical; unmatched |
-| GPT-6 Luna medium | 5 | 37.67% (113/300) | 41.24% (113/274) | Local browser |
-| GPT-6 Luna medium | 10 | 37.33% (112/300) | 40.88% (112/274) | Local browser |
-| Jev | 5 | 58.67% (176/300) | 61.97% (176/284) | Hosted browser |
-| Kev27B | 5 | 61.33% (184/300) | 63.23% (184/291) | Hosted browser |
-
-**What we can conclude:** Luna N=10 did not improve on N=5 (−0.33pp, paired 95% interval −5.33 to +4.67) and cost 19.9% more. Jev/Kev are nearly tied on the same 279 valid tasks: **175 versus 176 successes**; after the typing repair in both arms, **147 versus 149 on 238 tasks**.
-
-**What is missing:** a matched SFT-only control. The 35.33% reference used T=0.7, p=0.9 and 1,024 output tokens; the selector runs use T=1.0, p=0.95 and 4,096. Browser, prompt, top-k and judging also differ across families. Neither the gain over the historical baseline nor the gap between Luna and Jev/Kev isolates selector quality.
-
-<a id="qwen-actor-ablation"></a>
-## Qwen3: actor ablation
-
-Both rows use released `Qwen/Qwen3-VL-4B-Thinking` under the same local-browser protocol.
-
-<!-- cohorts: AS01, AS02 -->
-
-| Selector | N | Overall success | Valid-only success |
-| --- | ---: | ---: | ---: |
-| None | 1 | 17.67% (53/300) | 19.13% (53/277) |
-| GPT-6 Luna medium | 5 | **28.33% (85/300)** | 30.80% (85/276) |
-
-Selection adds **10.67pp** (paired 95% interval **+5.67 to +16.00**) at **2.23× serving cost**. This is the completed actor-alone versus actor+selector comparison; it supports a benefit for this Qwen actor, not a quantified gain for official SFT. Cost-matched episode retries were not tested in this pair.
-
 <a id="luna-cpu-family-results-20261005"></a>
 <a id="api-actor-high-results-20261005"></a>
-## Other standalone actors: reference results
+## Actor alone: existing results
 
-<details>
-<summary>GPT-6 and Kev direct actors</summary>
+**Overall = successes / all 300 tasks; valid-only = successes / valid records.** These are saved judge verdicts, including the rubric's documented partial-progress allowances. Missing prompt/history and browser differences limit cross-row comparisons.
 
-<!-- cohorts: AS07, AS10, AS11, AS12 -->
+<!-- actor-selector-results:start -->
+<!-- cohorts: AS04, AS01, AS07, AS10, AS11, AS12 -->
 
-| Actor, no selector | Overall success | Valid-only success | Interface |
+| Actor, no selector | Overall success | Valid-only success | Collection |
 | --- | ---: | ---: | --- |
-| GPT-6 Luna medium | 36.67% (110/300) | 39.43% (110/279) | Screenshot / local browser |
-| GPT-6 Luna high | 32.33% (97/300) | 35.02% (97/277) | Screenshot / local browser |
-| GPT-6.1 Sol high | 20.33% (61/300) | 22.34% (61/273) | Screenshot / local browser |
-| Kev27B | 8.67% (26/300) | 8.84% (26/294) | DOM / hosted browser; GPT-4.1-mini typing |
+| **Official OpenWebRL-SFT** | **35.33% (106/300)** | 38.97% (106/272) | Historical decoding; unmatched control |
+| Qwen3-VL-4B-Thinking — ablation | 17.67% (53/300) | 19.13% (53/277) | Local browser |
+| GPT-6 Luna medium | 36.67% (110/300) | 39.43% (110/279) | Local browser |
+| GPT-6 Luna high | 32.33% (97/300) | 35.02% (97/277) | Local browser |
+| GPT-6.1 Sol high | 20.33% (61/300) | 22.34% (61/273) | Local browser |
+| Jev | **Not run on full300** | — | Hosted pilot only: 1/10 |
+| Kev27B | 8.67% (26/300) | 8.84% (26/294) | Hosted browser |
+
+**Jev actor-only is a missing full300 experiment.** Its [10-task pilot](rl_results/jev-ultrafast-pilot-20261004.json) is not a comparable full-set score. Direct Jev/Kev use DOM decisions plus GPT-4.1-mini for typing; the other actors use screenshots. API-actor defects are documented in the [audit](#api-actor-stopping-audit-20261005).
+
+<a id="scaling-comparisons"></a>
+## Actor + selector: existing results
+
+**N** is the number of proposed next actions; only the selected action is executed.
+
+<!-- cohorts: AS05, AS06, AS08, AS09, AS02 -->
+
+| Actor | Selector | N | Overall success | Valid-only success | Browser |
+| --- | --- | ---: | ---: | ---: | --- |
+| Official SFT | GPT-6 Luna medium | 5 | 37.67% (113/300) | 41.24% (113/274) | Local |
+| Official SFT | GPT-6 Luna medium | 10 | 37.33% (112/300) | 40.88% (112/274) | Local |
+| Official SFT | Jev | 5 | 58.67% (176/300) | 61.97% (176/284) | Hosted |
+| Official SFT | Kev27B | 5 | 61.33% (184/300) | 63.23% (184/291) | Hosted |
+| Qwen3 — ablation | GPT-6 Luna medium | 5 | 28.33% (85/300) | 30.80% (85/276) | Local |
 
 <!-- actor-selector-results:end -->
 
-API actor results have confirmed missing-policy and native-history defects; see the [audit](#api-actor-stopping-audit-20261005). Luna high minus medium is −4.33pp [−9.33, +0.67]; Sol high minus Luna high is −12.00pp [−17.33, −6.67]. These are harness-specific results, not a model-capability ranking.
+For SFT, Luna N=10 did not improve on N=5 (−0.33pp, paired 95% interval −5.33 to +4.67) and cost 19.9% more. Jev/Kev are nearly tied on the same 279 valid tasks: **175 versus 176 successes**; after the typing repair in both arms, **147 versus 149 on 238 tasks**. Their gains over the old SFT baseline and the gap versus Luna do not isolate selector quality.
 
-Luna medium costs $0.00738 per task versus $0.06023 for SFT + Luna N=5, whose success difference is only +1.00pp [−4.67, +6.67]; collection dates differ. Kev's 8.67% direct-policy result and 61.33% SFT-selector result describe different assembled systems and action interfaces.
+<a id="qwen-actor-ablation"></a>
+The Qwen ablation supplies the completed within-protocol actor-alone comparison: **17.67% → 28.33%**, or +10.67pp [5.67, 16.00], at 2.23× serving cost. The SFT-alone reference instead used T=0.7/p=0.9/1,024 tokens, versus T=1.0/p=0.95/4,096 in the selector studies. A fresh matched SFT control is essential.
 
-</details>
-
-Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experiment_tracker.json). All eleven cohorts appear once above; IDs remain in table comments. Qwen + Luna N=10 was excluded from full300 scope; Kev0.8B and direct Jev have pilots only. Paired intervals quantify task sampling, not website drift, harness bias or judge error.
+Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experiment_tracker.json). All eleven completed cohorts appear once above; Jev's missing full300 row adds no completed episodes. Paired intervals quantify task sampling, not website drift, harness bias or judge error.
 
 <a id="matched-sft-control"></a>
-## Recommended next control: official SFT alone
+<a id="local-browser-rerun-20261006"></a>
+## Next experiments: controlled local-browser suite
 
-**Yes: a fresh N=1 SFT-only control is the missing comparison.** Use the identical released SFT checkpoint/revision, **T=1.0, top-p=0.95, 4,096 output tokens**, and the same 300 tasks. Match the browser, viewport, prompt, history, context/horizon limits, typing behavior, judge inputs and terminal rules as well as decoding. Generate one action and execute it without a selector.
+**Draft for review; do not run.** Twelve conditions × the same 300 Online-Mind2Web tasks = **3,600 fresh primary episodes**. This covers the eleven recent full300 conditions plus the missing Jev actor. The old SFT baseline will not fill the new control row. Every row inherits the shared settings below; exact model revisions, prompt hashes, seed formula and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
 
-**Recommended first comparison: SFT alone (N=1) and SFT + Kev27B (N=5), collected together in the hosted harness.** Use top-k=20, 1280×1000, 30 turns/600s, the repaired typing path, and the same thoughts/actions + final-screenshot o4-mini/AgentTrek judging, including step-limit dispatch. Jev can be an additional selector arm under that same protocol.
+| ID | Actor | Selector | Proposals per step | Actor decoding / decision rule | Selector decoding / decision rule |
+| --- | --- | --- | ---: | --- | --- |
+| **L01** | **Official OpenWebRL-4B-SFT** | None | 1 | T=1.0, p=0.95, k=off, 4,096 tokens | — |
+| L02 | Qwen3-VL-4B-Thinking | None | 1 | T=1.0, p=0.95, k=off, 4,096 tokens | — |
+| L03 | GPT-6 Luna | None | 1 | Medium reasoning, 4,096 tokens | — |
+| L04 | GPT-6 Luna | None | 1 | High reasoning, 4,096 tokens | — |
+| L05 | GPT-6.1 Sol | None | 1 | High reasoning, 4,096 tokens | — |
+| L06 | Jev 1.13.0 + typing helper | None | Native policy | Argmax operation/target | — |
+| L07 | Kev27B + typing helper | None | Native policy | Calibrated argmax operation/target | — |
+| **L08** | **Official SFT** | **GPT-6 Luna** | **5** | T=1.0, p=0.95, k=off, 4,096 tokens | Medium reasoning, 4,096 tokens |
+| **L09** | **Official SFT** | **GPT-6 Luna** | **10** | T=1.0, p=0.95, k=off, 4,096 tokens | Medium reasoning, 4,096 tokens |
+| **L10** | **Official SFT** | **Jev 1.13.0** | **5** | T=1.0, p=0.95, k=off, 4,096 tokens | Argmax choice |
+| **L11** | **Official SFT** | **Kev27B** | **5** | T=1.0, p=0.95, k=off, 4,096 tokens | Calibrated argmax choice |
+| L12 | Qwen3-VL-4B-Thinking | GPT-6 Luna | 5 | T=1.0, p=0.95, k=off, 4,096 tokens | Medium reasoning, 4,096 tokens |
 
-The hosted Jev/Kev sources also omitted the SFT browser-policy prompt. Restore and pin that prompt for **both** new arms. A corrected SFT-only run alone would still be unmatched to the old selector results; a fresh pair avoids changing the prompt only for the control and reduces collection-date drift. Preserve the earlier cohorts, including their pre/post typing strata, as historical results.
+### Shared proposed configuration
 
-The Luna family needs a **separate local control**: top-k disabled, 1280×720, 30 actions/1,800s, actions-only judge evidence and step-limit zero. Its saved actors lacked the browser-policy prompt. A control using the corrected prompt alone would also change the harness; for a clean corrected comparison, collect SFT alone and SFT + Luna together under the same corrected protocol. One new baseline cannot match both families.
+| Component | Exact proposed setting |
+| --- | --- |
+| Browser | **Local** headless Chromium 145.0.7632.6, revision 1208 / Playwright 1.58.0; viewport 1280×720, DPR 1, en-US, UTC; default Chromium user agent; no proxy/stealth; fresh profile per episode; extra flags `--disable-dev-shm-usage --no-sandbox` |
+| SFT/Qwen generation | BF16, no quantization, repetition penalty 1.0, context 32,768; reserve the full 4,096 output budget (maximum 28,671 prompt tokens including image tokens); full text history and latest screenshot only; no adaptive history/output truncation |
+| Seeds and schedule | Base 20261006; deterministic seeds per task/turn/candidate and candidate shuffle; N=1 generates only candidate 0. Randomized, interleaved task blocks on a common browser pool; save actual schedule/host/egress. Identical seeds do not make diverged trajectories share candidate contents |
+| Actor prompts | Restored, hash-pinned browser-policy prompts for SFT/Qwen and native API actors; missing/empty/mismatched prompts halt before a model/browser request. Jev/Kev retain their pinned native DOM instructions |
+| All selectors | **Same text/DOM view, no images**: task, URL/title/tabs, ordered observed elements/geometry, first 16,000 Unicode codepoints of visible page text, last 5 executed actions and full candidate reasoning/actions. Same policy and seeded candidate order; execute the chosen candidate unchanged |
+| Selector input limit | Canonical shared JSON ≤262,144 UTF-8 bytes; page-text truncation is recorded. Overflow or provider context rejection is preserved as an explicit invalid; no per-selector compaction, fallback or replacement candidates |
+| Luna/Sol API settings | Exact aliases `gpt-6-luna` / `gpt-6.1-sol`; effort as listed, max output 4,096, default service tier, `store=false`; temperature/top-p/seed omitted. Record returned model identity; aliases are not immutable snapshots |
+| API role contracts | Actors preserve native reasoning/tool-call IDs, require one native function call and see the current image at high detail. Luna selectors are stateless text-only calls with no tools/history/images and strict JSON `selected_index` in 1..N |
+| Jev/Kev decisions | Jev model `jev-1.13.0`; Kev `jaredpalmer/kev-27b`, full BF16 weights, calibrated argmax (calibration temperature 1.319507910772894), maximum 65,536 state tokens, `truncate_states=false`. Generative temperature/top-p/output cap do not apply to either choice head |
+| Direct Jev/Kev typing | `gpt-4.1-mini-2025-04-14`, T=0.6, p=0.95, maximum 1,024 completion tokens; no helper in SFT-selector arms |
+| Episode/action limits | **30 action attempts, 60 decision attempts, 1,800s per episode for every arm**; count failed dispatched operations and individual operations inside compound actions; terminal `done` consumes one step. No-action decisions consume the decision limit |
+| Timeouts/retries | Model request 180s, navigation 60s, browser operation 30s, final screenshot 15s; one HTTP attempt per actor/selector/typing request; judge at most 4 HTTP attempts. Preserve all failures; no automatic episode replay |
+| Primary judge | **`o4-mini-2025-04-16`, Online-Mind2Web/AgentTrek, seed 42, 4,096 completion tokens**; task + executed actions + fresh final screenshot, no actor reasoning or selector identity. Judge every usable terminal state, including action/deadline limits; missing evidence or infrastructure failures remain explicit invalids |
+| Reporting | Save every attempt/request/choice/executed action and terminal evidence. Overall, valid-only, common-valid paired effects/intervals, cost, latency, invalid causes and page-access failures; separate campaign overhead from per-episode serving cost |
 
-This is a recommended design, not a submitted run. Exact compute/API/browser budgets must be approved before a new allocation. Report paired task differences and both denominators; keep original scores and invalids intact.
+The primary comparison is L01 versus L08–L11; L02/L12 supply the Qwen actor ablation. The shared selector input is a deliberate change from earlier Luna selection, which also saw screenshots and full history. Native screenshot versus DOM policies and typing assistance remain explicit system differences. Local browsers still call hosted Jev/GPT model APIs.
+
+**Readiness remains unverified:** confirm the actual Chromium binary/hash; package prompts on every path; port the hosted selector runner to the common local browser; validate coordinate execution/platform-aware typing, shared selector bounds, action counters and terminal judging. Jev/Kev already have a local-browser transport, but their current adapter fixes the viewport at 1120×780 and the selector runner assumes BrowserUse. These proposed settings do not claim a working or launch-ready implementation.
+
+The primary judge retains its known lenient rubric for every arm. Strict-completion review, Luna selection with images, pilot-only Kev 0.8B actor/selector, learned ScalarARM/SelectionARM and oracle episode pass@k are **outside the twelve-condition core**. No selectively repeated valid failures or changed primary verdicts are planned.
+
+**Nothing in this plan has been launched.** Serving topology/concurrency and total compute/API/browser caps are still unspecified and unapproved; no historical budget transfers. The user requested config review before any run. Future diagnostics and retries must be included in the eventual exact allocation/API budget.
 
 <a id="luna-actor-full300-20261004"></a>
 ## What each experiment measures

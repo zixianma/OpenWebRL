@@ -3,7 +3,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Inference-time scaling: official SFT alone versus SFT + selectors, with Qwen3 as an actor ablation and GPT/Kev direct actors as references](ARM_INFERENCE_SCALING.md).
+[Inference-time scaling: actor-alone results first, SFT + selectors, and the proposed controlled local-browser matrix](ARM_INFERENCE_SCALING.md).
 
 [Next critic study: selected experiments1/3, post-evidence diagnostic and matched pre-action distillation protocol; fixed-SFT data only for fitting](ARM_INTEGRATION_PLAN.md#arm-post-evidence-protocol-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
@@ -19,7 +19,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
-| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Official SFT alone versus +selectors; Qwen3 ablation, matched-control design, efficiency and audit limits |
+| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Actor-alone and SFT + selector results; exact proposed local-browser configs, efficiency and audit limits |
 | [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, and checkpoint procedures |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |
