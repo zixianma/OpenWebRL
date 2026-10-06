@@ -1,0 +1,72 @@
+{
+  "stage": "prepared_awaiting_exact_api_cap_approval",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "pairs": 40,
+  "unique_task_groups": 40,
+  "independent_repeated_pairs": 20,
+  "planned_calls": 120,
+  "max_calls": 140,
+  "max_usd": 30,
+  "max_output_tokens": 4096,
+  "api_concurrency": 4,
+  "gpus": 0,
+  "new_slurm_allocations": 0,
+  "pricing_per_million": {
+    "input": 2,
+    "cached_input": 0.1,
+    "cache_write": 2.5,
+    "output": 10
+  },
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+  "prepared_request_worst_case_usd": 22.073762500000004,
+  "all_calls_plus_retry_reserve_worst_case_usd": 26.741812500000005,
+  "eligible_transition_count": 1964,
+  "eligible_task_groups": 282,
+  "excluded": {
+    "protected_task_group": 627,
+    "no_audited_task_group": 81,
+    "malformed_action": 1
+  },
+  "selection": "One random transition per task group; deterministic seed42; no outcome conditioning.",
+  "isolation": "Calibration task groups are reserved from the later primary teacher panel. No critic fitting.",
+  "requested_outputs": [
+    "paired label transition matrix and flip fraction",
+    "mean absolute score change",
+    "progress probability and entropy shifts",
+    "same-condition repeat disagreement",
+    "paired examples with largest changes",
+    "cost, latency, input/output/reasoning tokens"
+  ],
+  "limitations": [
+    "Disagreement is not evidence of higher accuracy.",
+    "No alternative actions executed or episode-return labels fabricated.",
+    "Pixel changes and execution success do not imply goal progress.",
+    "Automated references and full200 primary panel are deferred to a later stage.",
+    "Prior studies budgets are not transferred."
+  ],
+  "approval_pending": true,
+  "actual_api_calls": 0,
+  "readiness": {
+    "all_checks_passed": true,
+    "matched_pre_post_inputs": true,
+    "repeat_requests_identical": true,
+    "image_hashes_verified": true,
+    "unique_task_groups": 40,
+    "pairs": 40,
+    "planned_calls": 120,
+    "repeat_pairs": 20,
+    "receipt_categories": {
+      "success_prefixed": 40
+    },
+    "tool_bundle_sizes": {
+      "3": 9,
+      "1": 30,
+      "2": 1
+    },
+    "identical_images": 2,
+    "no_api_requests_sent": true,
+    "paid_execution_approved": false
+  },
+  "runner_offline_tests_passed": true
+}
