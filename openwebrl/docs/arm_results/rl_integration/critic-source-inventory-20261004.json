@@ -73,15 +73,16 @@
     {
       "id": "P2",
       "name": "Piotr source demonstration adjacency",
-      "count": "2,673 adjacent pairs across412 episodes",
+      "count": "2,673 verified adjacent transitions across 412 episodes; 2,672 parseable tool sequences",
       "label": "Executed source demonstration, without saved binary terminal verdict",
       "preference": "Requires relabeling",
       "value_q": "No current return labels",
-      "post_action": "Potential after demo lineage audit",
+      "post_action": "Verified action/feedback/after-state; full causal history and image hashes checked",
       "advantage": "No",
-      "readiness": "Local states; not converted to critic transitions",
-      "caveat": "After-image belongs to demo_action, not the later preferred proposal; demonstration quality is not a progress label.",
-      "derived_from": "P1"
+      "readiness": "Extracted private transition index; outcome/progress labels and behavior-policy verification still needed",
+      "caveat": "Full executed calls come from successor history, not truncated demo_action; sampled alternatives remain unexecuted except exact tool-identical matches. No final success labels.",
+      "derived_from": "P1",
+      "audit": "piotr-post-execution-audit-20261006.json"
     },
     {
       "id": "P3",
@@ -369,5 +370,6 @@
       "caveat": "Do not treat site availability or instruction-quality scores as action rewards.",
       "derived_from": null
     }
-  ]
+  ],
+  "post_execution_audit_updated_utc": "2026-10-06"
 }

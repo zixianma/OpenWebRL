@@ -7,6 +7,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Next critic study: fixed-policy data only; clean SFT transition conversion and research formulation pending](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
+[Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
 [October4 historical reconciliation: why30.0%→42.7% became35.2%→39.3%; matched-valid sensitivity and unresolved causes](ARM_INFERENCE.md#arm-historical-reconciliation-20261004).
 [Historical October4 critic preparation:14,825 mixed-checkpoint transitions and leakage guards; superseded as first-fit data by the fixed-policy decision](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).

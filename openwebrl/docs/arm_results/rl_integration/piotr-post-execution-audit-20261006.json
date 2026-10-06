@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "source_revision": "0d83b48c1659cac47a1044ef88fb573d3c16e180",
+  "source_dataset": "PTeterwak/action-reward-models-data",
+  "source_hashes": {
+    "states_full.jsonl": "2d2a841e4a84c46e9403290d22e779ad4236d02ae56ca9e81dddae52b41a1e98",
+    "candidates_merged.jsonl": "218d6048bc768b7663172e834eba6b85fc0720c8ebb1cb216976cb6583779ad9",
+    "labels_drawlevel.jsonl": "e8c3dfab56f7ac2a7052530059bf85df0c1501774e42a5cffeacb9ae77cbc765"
+  },
+  "counts": {
+    "states": 3085,
+    "episodes": 412,
+    "demo_field_at_2000_chars": 115,
+    "image_lfs_hash_verified": 2630,
+    "unique_images_verified": 2630,
+    "verified_transitions": 2673,
+    "demo_field_contains_tool_tag": 1,
+    "transition_demo_field_at_2000_chars": 60,
+    "screenshots_byte_identical": 84,
+    "screenshots_changed": 2589,
+    "receipt_contains_any_failed_marker": 9,
+    "transitions_all_tool_json_valid": 2672,
+    "last_states_without_successor": 412,
+    "transitions_tool_json_invalid": 1,
+    "candidate_rows": 49536,
+    "unique_candidate_draw_ids": 49360,
+    "conflicting_candidate_draw_ids_excluded": 176,
+    "eligible_draws_on_parseable_demo_transitions": 42640,
+    "draws_with_exact_demonstration_tool_sequence": 15543,
+    "candidate_slots_matching_demonstration": 46005,
+    "eligible_transition_states_with_candidate_draws": 2665,
+    "transition_states_with_exact_candidate_match": 1480
+  },
+  "feedback_categories": {
+    "success_prefixed": 2665,
+    "parse_failure": 1,
+    "failure_prefixed": 7
+  },
+  "tool_count_per_transition": {
+    "1": 2390,
+    "3": 216,
+    "2": 63,
+    "5": 1,
+    "4": 3
+  },
+  "tool_names": {
+    "click": 1524,
+    "scroll": 566,
+    "write": 357,
+    "press_keys": 253,
+    "wait": 89,
+    "new_tab": 81,
+    "switch_tab": 71,
+    "goto_url": 128,
+    "go_back": 93,
+    "close_tab": 17,
+    "drag": 1
+  },
+  "audit_checks": [
+    "unique episode-turn keys and contiguous turns starting at zero",
+    "entire causal history prefix equal except pruned image placeholders",
+    "successor adds exactly one assistant and one user message",
+    "demonstration text matches executed history after template think prefix",
+    "after response has tool response and observation",
+    "all images exist and match content-addressed SHA1 names"
+  ],
+  "caveats": [
+    "Feedback describes tool execution, not goal progress or terminal success.",
+    "No saved terminal outcomes or same-state counterfactual returns in these three raw files.",
+    "Final 412 states have no successor in states_full; not claimed unavailable elsewhere.",
+    "Multi-tool transitions are action bundles; final screenshot does not isolate each tool.",
+    "Exact candidate tool equality excludes reasoning and does not verify identical continuation policy.",
+    "Demonstration generator identity unverified; not eligible for fixed-SFT return fit.",
+    "All counts precede task split, overlap exclusion, and training eligibility filtering.",
+    "Molmo user_post is text after image within the same prompt, not a successor state."
+  ]
+}

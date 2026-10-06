@@ -5,6 +5,7 @@ The reviewed C2/Piotr data mixture, filtering rules, full-history examples, trai
 ## Contents
 
 - [Critic training source inventory: 24 sources and derived views](#arm-critic-source-inventory-20261004)
+- [Piotr post-execution audit and next experiments](#piotr-post-execution-audit-20261006)
 - [Joint C2 and Piotr teacher-data training proposal](#arm-joint-data-training-plan)
 - [Combined ARM data: prepared for review](#arm-joint-data-review)
 - [Retained SFT example: two previous turns](#arm-joint-sft-history-example)
@@ -39,7 +40,7 @@ it does not mean a direct advantage label exists.
 | ID | Source and available amount | Preference | Outcome V/Q | Post-action | Advantage | Qualification before use |
 | --- | --- | --- | --- | --- | --- | --- |
 | P1 |Piotr OpenWebRL: 3,085 states / 412 source episodes; 49,536 candidate draws, 49,360 IDs |Teacher winner |No observed candidate return |No sampled-candidate after-state |No |Local schema audited; 176 conflicting duplicate draw records; split by task/state, not draw |
-| P2 |Piotr demonstration adjacency: 2,673 pairs |Needs relabeling |No saved terminal label |Potential |No |Derived from P1; next image follows `demo_action`, not the later teacher-selected proposal |
+| P2 |Piotr demonstration adjacency: 2,673 verified transitions; 2,672 parseable action bundles |Needs progress labels |No saved terminal label |Verified before/action/feedback/after |No |Full action recovered from successor history; demo text alone omits calls; behavior policy unverified; [audit](#piotr-post-execution-audit-20261006) |
 | P3 |Piotr packaged selection-SFT / scalar-BT train/validation files |Yes |Preference score only |No |No |Remote derivatives of P1; row counts not re-audited; original draw splits can share states |
 | M1 |MolmoWeb `reward_pairs_15k.jsonl`, 101.6 MB |Teacher PRM scores |Teacher scores, not returns |No observed branches verified |No |Remote schema inspected; filename is not an audited row count; restore screenshots and reconcile action syntax |
 | M2 |MolmoWeb actor-distillation state/candidate/selection/SFT files |Yes |No binary outcomes verified |No candidate branches verified |No |Four related remote files; external screenshot archive required; derivatives are not additional episodes |
@@ -73,9 +74,10 @@ without treating their prepared views as independent supervision.
 
 Piotr's state record carries the task/goal, source episode/turn, current image,
 causal prompt and demonstration action. Candidate and teacher-label records add
-unexecuted proposals and a preferred index. The source demonstration's next
-image can give an observed transition after the demonstration action. It
-cannot supply the next state or realized return for a newly sampled candidate.
+unexecuted proposals and a preferred index. The October6 audit recovers the source demonstration's actual tool call,
+browser feedback and next image from successor history. This supplies evidence
+for that executed action, including exact tool-identical sampled proposals; it
+does not supply outcomes for other candidates or verify the continuation policy.
 The cleaned joint preference corpus already resolves source overlap and
 conflicting/ambiguous pairs, making it the appropriate existing preference
 training view.
@@ -127,6 +129,101 @@ tasks, including E1. Do not leak terminal verdicts, final trajectory length or
 future actor responses into causal inputs. Distinguish successful execution of
 a browser command, teacher preference, local task progress and eventual task
 success: they are different targets.
+
+<a id="piotr-post-execution-audit-20261006"></a>
+## Piotr post-execution evidence and experiment priorities — October6 UTC
+
+**Real post-execution evidence is extractable from Piotr's OpenWebRL raw
+states. It is not a dataset of executed candidate branches or measured
+advantages.** This audit uses the immutable `0d83b48c1659cac47a1044ef88fb573d3c16e180`
+release, checks all state histories and image hashes, and preserves the source
+files. [Aggregate audit](arm_results/rl_integration/piotr-post-execution-audit-20261006.json).
+
+| Evidence or limitation | Verified amount | Interpretation |
+| --- | ---: | --- |
+| States / source episodes | 3,085 / 412 | Every episode has contiguous turns starting at zero |
+| Before/action/feedback/after transitions | 2,673 | All successor histories match the complete earlier history except pruned image placeholders |
+| Transitions with fully parseable tool JSON | 2,672 | One demonstrated response failed tool parsing; retain as a separate observed failure |
+| Single-tool / multi-tool transitions | 2,390 / 283 | A multi-tool turn has one final observation; do not assign it separately to every component call |
+| Unique screenshots verified | 2,630 | Local bytes match both content-addressed SHA1 filenames and upstream LFS SHA256 hashes |
+| Changed / identical before-after images | 2,589 / 84 | Pixel change is not task progress; unchanged images are not automatically failures |
+| Receipts beginning `Succeed` / `Failed` / parse failure | 2,665 / 7 / 1 | Nine receipts contain any failure marker, including one mixed-result bundle; execution success is not goal success |
+| Last recorded states with no successor | 412 | Their final action's after-state cannot be recovered from this state file |
+| States with an exact sampled-candidate tool-sequence match | 1,480 | At least one proposal shares the demonstrated tool sequence; reasoning and continuation policy need not match |
+| Eligible candidate draws / draws with such a match | 42,640 / 15,543 | Excludes all 176 conflicting draw IDs; repeated matches do not create independent observed transitions |
+
+The private transition index records before/after state IDs, full executed
+assistant text, ordered tool calls, tool receipts, next observation and image
+hashes. It is saved under runtime
+`arm-turn-bonus-preparation/outcome-reward-20260927/critic-comparison-20261004/piotr-post-execution-audit-20261006/`.
+The audit script and candidate-match index are there too. Raw tasks and images
+remain private. These are availability counts before task deduplication,
+benchmark exclusion and train/dev/test filtering, not final training counts.
+
+**Extraction trap:** `demo_action` is only assistant content, truncated at
+2,000 characters; structured tool calls were stored separately upstream. Only
+one of the 2,673 transition records has a tool tag in this field, and 60 hit
+the character cap. The successor's rendered conversation preserves the full
+assistant message and actual tool feedback. Recover the action there, while
+keeping the earlier prompt as the causal pre-action input. The post-action
+input ends at the observed feedback; never append the next actor response.
+
+The goal is available in the causal prompt. Useful targets could describe the
+observed effect (navigation, input, error, state change) or goal-conditioned
+progress after relabeling. The release does **not** provide verified binary
+terminal outcomes for these episodes or returns for alternative actions.
+`Succeed` is a browser-command receipt. A terminal demonstration's reasoning
+that the task is complete is not an independent success verdict. Nor does an
+SFT training demonstration establish that the deployed SFT actor generated it:
+the demonstration behavior-policy identity remains unverified. Consequently,
+these transitions stay a separate data source and are not pooled into the
+fixed-SFT return experiment.
+
+For MolmoWeb, the inspected `build_reward_data.py` splits text before and after
+an image into `user_pre`/`user_post`; these are parts of one pre-action prompt.
+A separate inspected simulator `distillation_data` episode has chosen actions
+and successive accessibility trees, but no screenshots or success verdict in
+that record. It is a different environment/policy source, not an audited
+addition to the counts above; `terminated` alone is not success.
+
+### Recommended order
+
+1. **Establish that after-state evidence improves criticism.** Use a small,
+   task-disjoint Piotr transition panel to compare judgments with and without
+   the actual after-state, separating observable action effects, command
+   errors and goal progress. This is a data/label-quality diagnostic, not a
+   fixed-SFT outcome fit. Evaluate against independent assessment or measured
+   outcomes where available; changed judgments alone do not prove improved
+   accuracy. Its few explicit errors make a command-success
+   classifier alone a weak research target. No paid relabeling is launched.
+2. **Make the clean fixed-SFT cohort usable, then collect a small same-state
+   branch panel.** Convert S1's saved 10,000 episodes (9,936 valid; 3,597
+   successful), verifying exact actor/protocol and exclusions. Separately
+   execute candidate alternatives from reproducibly restored browser states,
+   with one fixed continuation policy. The five existing episodes per task
+   are not five counterfactual actions at the same intermediate state.
+   Prepare this conversion in parallel with the independent Piotr diagnostic.
+   Branch repeats must quantify return noise; the panel should measure candidate
+   headroom and selector regret before a large model-training sweep.
+3. **Test an execution-grounded pre-action selector against strong controls.**
+   On matched clean data, compare current preference supervision, an ordinary
+   return-based pre-action critic, a post-action critic, and pre-action
+   prediction trained using post-action supervision. Pre-action deployment
+   must not see the actual successor. Post-action criticism deployed online
+   requires real branch execution or an explicitly evaluated world model;
+   include that cost. The research hypothesis is better action ranking from
+   verified effects and return differences, not the novelty of V, Q, A or
+   distillation themselves. Validate calibration and branch-ranking regret,
+   then paired success versus cost/latency/tokens at inference.
+4. **Defer direct advantage regression and RL reward shaping.** For a fixed
+   state, Q−V ranks actions exactly as Q. Direct advantage labels still need
+   a defensible baseline and branch evidence; noisy final outcomes alone do
+   not identify local credit. Test RL only after held-out ranking and online
+   selection benefits are established.
+
+All proposals preserve the no-mixed-policy decision. Piotr-only diagnostics
+and fixed-SFT outcome training are separate studies; no new allocations,
+model training, teacher calls or browser collection were launched by this audit.
 
 <!-- document:ARM_JOINT_DATA_TRAINING_PLAN.md:start -->
 <a id="arm-joint-data-training-plan"></a>
