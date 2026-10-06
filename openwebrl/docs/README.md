@@ -2,6 +2,8 @@
 
 [High-priority historical-gain audit: recent actor-policy omission confirmed; corrected three-arm jobs submitted within remaining caps](ARM_INFERENCE.md#arm-historical-harness-audit-20261006).
 
+[Inference scaling rerun audit: five corrected local v2 conditions complete; remaining GPT-actor, N=10, Qwen and episode-pass@k comparisons](ARM_INFERENCE_SCALING.md#rerun-triage-20261006).
+
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 

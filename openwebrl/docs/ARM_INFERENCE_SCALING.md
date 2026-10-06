@@ -6,6 +6,7 @@
 
 ## Contents
 
+- [Which results need a corrected rerun?](#rerun-triage-20261006)
 - [Actor alone: current local-browser results](#local-jev-actor-results-20261006)
 - [Actor + selector: matched local-browser results](#local-sft-selector-results-20261006)
 - [Actor alone: historical results](#actor-selector-experiment-tracker-20261004)
@@ -17,6 +18,24 @@
 - [Actor/judge audit](#api-actor-stopping-audit-20261005)
 - [Learned ARM and episode retries](#learned-arm-and-retries)
 - [Pilots and provenance](#luna-qwen-inference-20261004)
+
+<a id="rerun-triage-20261006"></a>
+## Which results need a corrected rerun? — October 6
+
+**The five completed local v2 conditions already use the corrected harness.** The four SFT conditions restore the required, hash-pinned 4,180-character actor policy; direct Jev uses its own native DOM instructions. The final SFT artifact audit verifies the policy in saved actor requests. No repeat is needed for the missing-policy defect: SFT N=1 **31.33%**, SFT + Luna N=5 **40.33%**, SFT + Jev N=5 **33.33%**, SFT + Kev27B N=5 **40.67%**, and Jev actor **4.67%** remain the current local v2 results. [Protocol manifest](arm_results/local_inference_rerun_plan_20261006.json) · [Final SFT audit](arm_results/local_sft_selector_controlled_20261006.json).
+
+| Experiment family | Rerun assessment | What is still needed |
+| --- | --- | --- |
+| October 4 learned ARM versus episode pass@k | **Yes, before relying on the corrected-protocol cost/performance conclusion** | Both actor-only and ARM proposal generation omitted the browser policy. The queued historical-protocol SFT/Piotr/new-ARM study retests one episode per task and arm; it does **not** replace five actor-only episodes per task for pass@k. Repeat that controlled design under a pinned corrected harness if retaining the pass@k claim. |
+| Luna medium, Luna high, Sol6.1 high as direct actors | **High priority** | Missing actor policy **and** lost native conversation state/call IDs. Verify the repaired live provider loop first, then collect fresh matched full300 cohorts; old scores are not clean capability comparisons. |
+| SFT + Luna N=10 | **High priority for action-count scaling** | The old N=5/N=10 pair both omitted the actor policy. N=5 already has a local v2 replacement; N=10 does not. Compare a fresh N=10 with v2 N=5, retaining collection-date caveats; a contemporaneous N=5 control would remove that remaining timing mismatch. |
+| Qwen3-VL-4B-Thinking alone and + Luna N=5 | **Next actor ablation** | Both older rows omitted the actor policy. Repeat the pair under the same corrected protocol to test whether its observed selector gain persists. |
+| Historical hosted SFT + Jev / Kev27B | **Already replaced for the main local comparison** | The SFT proposers omitted the policy, but the new local v2 selector rows above supersede them for the matched comparison. Browser, selector evidence and judge-adapter differences also changed; the score changes cannot be attributed solely to the policy repair. |
+| Kev27B direct actor, hosted | **Optional matched-protocol extension** | No evidence establishes the same VLM-policy-file defect in this native DOM actor. A local v2 cohort is needed to join the local actor-versus-selector comparison, not because this particular bug was demonstrated. |
+| September learned-ARM / action-only / Sol-selector results | **No automatic repeat solely for this defect** | The audited September baseline and SelectionARM requests contain the actor policy. The queued three-arm replication tests the historical baseline/Piotr comparison; other September ablations retain their collection-date and protocol limitations. |
+| Small pilots | **No priority to repeat** | Preserve them as diagnostics and use the full300 corrected cohorts for conclusions. The coordinate-corrupted Luna pilot stays withdrawn. |
+
+The five v2 results do not validate the older incomplete harness, and the historical-protocol three-arm correction uses different decoding from local v2. Keep those protocols separate. The additional reruns above are recommendations, without a new allocation or transfer from existing budgets. All rates remain outcomes under the documented canonical judge, including its partial-progress allowances. [Actor-policy/history audit](#api-actor-stopping-audit-20261005) · [Historical learned-ARM audit](ARM_INFERENCE.md#arm-historical-harness-audit-20261006).
 
 <a id="local-jev-actor-results-20261006"></a>
 ## Actor alone: current local-browser results
@@ -110,10 +129,10 @@ Jev's historical [10-task pilot](rl_results/jev-ultrafast-pilot-20261004.json) i
 
 <!-- actor-selector-results:end -->
 
-For SFT, Luna N=10 did not improve on N=5 (−0.33pp, paired 95% interval −5.33 to +4.67) and cost 19.9% more. Jev/Kev are nearly tied on the same 279 valid tasks: **175 versus 176 successes**; after the typing repair in both arms, **147 versus 149 on 238 tasks**. Their gains over the old SFT baseline and the gap versus Luna do not isolate selector quality. Both cohorts contain confirmed incomplete-task positives under the lenient rubric; see the [saved-evidence audit](#sft-selector-judge-leniency-20261006).
+Within the historical missing-policy SFT cohort, Luna N=10 did not improve on N=5 (−0.33pp, paired 95% interval −5.33 to +4.67) and cost 19.9% more. Jev/Kev are nearly tied on the same 279 valid tasks: **175 versus 176 successes**; after the typing repair in both arms, **147 versus 149 on 238 tasks**. Their gains over the old SFT baseline and the gap versus Luna do not isolate selector quality. Both cohorts contain confirmed incomplete-task positives under the lenient rubric; see the [saved-evidence audit](#sft-selector-judge-leniency-20261006).
 
 <a id="qwen-actor-ablation"></a>
-The Qwen ablation supplies the completed within-protocol actor-alone comparison: **17.67% → 28.33%**, or +10.67pp [5.67, 16.00], at 2.23× serving cost. The SFT-alone reference instead used T=0.7/p=0.9/1,024 tokens, versus T=1.0/p=0.95/4,096 in the selector studies. The fresh local v2 control above now provides that matched comparison; it does not retroactively match the historical cohorts.
+The historical Qwen ablation compares two arms sharing the missing-policy defect: **17.67% → 28.33%**, or +10.67pp [5.67, 16.00], at 2.23× serving cost. The SFT-alone reference instead used T=0.7/p=0.9/1,024 tokens, versus T=1.0/p=0.95/4,096 in the selector studies. The fresh local v2 control above now provides that matched comparison; it does not retroactively match the historical cohorts.
 
 Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experiment_tracker.json). All eleven completed historical cohorts appear once in these two historical tables; the Jev pilot is not a full300 cohort. Paired intervals quantify task sampling, not website drift, harness bias or judge error.
 
@@ -312,6 +331,8 @@ Across families, hosted versus local browsers, DOM versus screenshot inputs, can
 
 <a id="learned-arm-and-retries"></a>
 ## Learned ARM versus episode retries
+
+**Historical missing-policy cohort:** actor-only and ARM proposal generation omitted the browser policy. These saved outcomes describe that harness, and its cost/performance ordering needs a corrected repeat; the queued three-arm replication does not include episode pass@k.
 
 The separate October 4 controlled study collected **1,800 episodes**: one learned-ARM N=5 trajectory and five ordinary SFT trajectories on each of 300 tasks. Ordinary pass@k averages all k-subsets of the five recorded outcomes. It assumes an oracle success verifier; it is not a deployed selector that can identify the successful trajectory.
 
