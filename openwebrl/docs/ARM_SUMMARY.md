@@ -226,6 +226,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 | **Outcome-only · expanded 4,102-task pool** |10 |— |27.00% /34.32% |
 |  |20 |— |33.33% /42.19% |
 |  |30 |— |33.00% /40.74% |
+|  |40 |— |**39.00% /45.35%** |
 | **Original bonus** | 20 | 26.0% / 35.62% | 28.00% / 37.00% |
 |  | 30 | 27.0% / 36.49% | 32.67% / 43.56% |
 |  | 40 | **31.00% / 44.93%** | 32.00% / 42.86% |
@@ -306,9 +307,12 @@ and80 evaluations are verified. Both90 evaluations are now independently verifie
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 The **expanded 4,102-task baseline** adds2,000 tasks to the original pool and
-uses outcome reward only, starting from iteration0. Its iteration30 result is
-flat versus20 (99 versus100 successes); training continues to90. This separate
-data ablation does not change the task pool used by the ARM runs above.
+uses outcome reward only, starting from iteration0. Iteration40 reaches
+**39.00% overall /45.35% valid-only** (117/300 successes;258 valid), up6.00pp
+overall from iteration30. It exceeds the historical original-pool iteration40
+score by5.67pp overall, with different collection dates and valid-task sets.
+Training continues to the user-requested stop at60. This separate data ablation
+does not change the task pool used by the ARM runs above.
 [Expanded-pool results and comparison caveats](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines

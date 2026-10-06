@@ -9350,6 +9350,18 @@ including replay and evaluation, leaving about88.8h; live ledgers remain
 authoritative. Successors344760/61/62 retain their dependencies.
 [Results and audits](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
+**October6 01:19 Pacific:** full300 evaluation40 completed with
+**117/300 =39.00% overall** and **117/258 =45.35% valid-only** (42 invalid).
+The independent audit verified all300 task identities, saved rollout/verdict
+pairs, complete archive ZIP member CRCs, GPU actor restoration and final W&B
+history. Checkpoint40 is native39,576 Adam updates,scheduler147456,cursor698
+in epoch1. Job344759 restored this checkpoint and resumed collection41 toward50
+with the same optimizer/scheduler/cursor/W&B lineage. The stop remains60, with
+full300 evaluations50/60 pending and unused allocations released after final
+artifact verification. The96h extension includes all elapsed training, replay,
+evaluation and recovery time; about14.5h has elapsed at this check.
+[Iteration40 results and comparison limits](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
+
 Preserve actor/optimizer state, constant1e-6 LR scheduler and counters, task
 cursor, data union and W&B identity. Keep TP2/DP4, microbatch1, global256, PPO2,
 48 groups ×5 rollouts,64 browsers and48GiB cache. Extending the loop bound to90
