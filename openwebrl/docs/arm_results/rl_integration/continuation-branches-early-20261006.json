@@ -1,55 +1,55 @@
 {
-  "states_with_continuation_records": 14,
-  "analyzed_states": 14,
+  "states_with_continuation_records": 19,
+  "analyzed_states": 19,
   "estimates": {
-    "before": 0.4365079365079365,
-    "after": 0.40476190476190477,
-    "difference": -0.03174603174603175,
-    "uniform": 0.3761904761904762,
-    "before_repeat_disagreement": 0.2857142857142857,
-    "after_repeat_disagreement": 0.16666666666666666,
-    "before_after_disagreement": 0.35185185185185186,
-    "excess_disagreement": 0.12566137566137564
+    "before": 0.3742690058479532,
+    "after": 0.3508771929824561,
+    "difference": -0.02339181286549708,
+    "uniform": 0.3192982456140351,
+    "before_repeat_disagreement": 0.21052631578947367,
+    "after_repeat_disagreement": 0.14619883040935672,
+    "before_after_disagreement": 0.37037037037037035,
+    "excess_disagreement": 0.19200779727095516
   },
   "state_bootstrap_95_intervals": {
     "before": [
-      0.1984126984126984,
-      0.6825396825396826
+      0.17543859649122806,
+      0.5789473684210527
     ],
     "after": [
-      0.18253968253968253,
-      0.6349206349206349
+      0.15789473684210525,
+      0.543859649122807
     ],
     "difference": [
-      -0.07142857142857144,
+      -0.052631578947368425,
       0
     ],
     "uniform": [
-      0.16666666666666666,
-      0.5952380952380952
+      0.1473684210526316,
+      0.4982456140350877
     ],
     "before_repeat_disagreement": [
-      0.09523809523809523,
-      0.47619047619047616
+      0.07017543859649122,
+      0.3508771929824561
     ],
     "after_repeat_disagreement": [
-      0.031746031746031744,
-      0.3333333333333333
+      0.04678362573099415,
+      0.27485380116959063
     ],
     "before_after_disagreement": [
-      0.17724867724867724,
-      0.5317460317460317
+      0.20857699805068225,
+      0.5458089668615984
     ],
     "excess_disagreement": [
-      0.02248677248677249,
-      0.2579365079365079
+      0.059454191033138405,
+      0.34795321637426896
     ]
   },
   "common_valid_selected_pairs": {
-    "before": 0.453781512605042,
-    "after": 0.42857142857142855,
-    "pairs": 119,
-    "difference": -0.025210084033613467
+    "before": 0.3987341772151899,
+    "after": 0.379746835443038,
+    "pairs": 158,
+    "difference": -0.01898734177215189
   },
   "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
   "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
@@ -173,6 +173,65 @@
       "invalid_continuations": 0,
       "exclusion_counts": {}
     },
+    "terminal-capture-transport-v1": {
+      "states_with_continuation_records": 5,
+      "analyzed_states": 5,
+      "estimates": {
+        "before": 0.2,
+        "after": 0.2,
+        "difference": 0,
+        "uniform": 0.15999999999999998,
+        "before_repeat_disagreement": 0,
+        "after_repeat_disagreement": 0.08888888888888888,
+        "before_after_disagreement": 0.4222222222222222,
+        "excess_disagreement": 0.37777777777777777
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0,
+          0.6
+        ],
+        "after": [
+          0,
+          0.6
+        ],
+        "difference": [
+          0,
+          0
+        ],
+        "uniform": [
+          0,
+          0.4533333333333333
+        ],
+        "before_repeat_disagreement": [
+          0,
+          0
+        ],
+        "after_repeat_disagreement": [
+          0,
+          0.17777777777777776
+        ],
+        "before_after_disagreement": [
+          0.02222222222222222,
+          0.8222222222222222
+        ],
+        "excess_disagreement": [
+          0.0,
+          0.7777777777777778
+        ]
+      },
+      "common_valid_selected_pairs": {
+        "before": 0.23076923076923078,
+        "after": 0.23076923076923078,
+        "pairs": 39,
+        "difference": 0.0
+      },
+      "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+      "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+      "continuations": 75,
+      "invalid_continuations": 6,
+      "exclusion_counts": {}
+    },
     "visible-replay-v2": {
       "states_with_continuation_records": 3,
       "analyzed_states": 3,
@@ -293,48 +352,48 @@
     }
   },
   "execution_phase_note": "All completed primary outcomes are retained. Repair-phase cohorts differ; phase comparisons are descriptive, not randomized effects.",
-  "epoch": 1791320120.5517428,
+  "epoch": 1791323909.8915136,
   "protocol_stage": "visible-replay-v2",
   "target_states": 100,
   "target_continuations": 1500,
-  "completed_states": 14,
-  "completed_continuations": 210,
-  "valid_continuations": 196,
+  "completed_states": 19,
+  "completed_continuations": 285,
+  "valid_continuations": 265,
   "released_states_pending": 0,
   "replay_exclusions": {
-    "At least one reconstruction failed before release": 85,
-    "anchor_not_captured": 15
+    "At least one reconstruction failed before release": 119,
+    "anchor_not_captured": 20
   },
   "candidate_diversity_counts": {
-    "5": 5,
+    "5": 7,
     "1": 1,
-    "4": 4,
-    "3": 2,
+    "4": 6,
+    "3": 3,
     "2": 2
   },
-  "verified_teacher_requests": 196,
-  "valid_teacher_judgments": 196,
+  "verified_teacher_requests": 266,
+  "valid_teacher_judgments": 266,
   "teacher_response_models": {
-    "gpt-6-luna": 196
+    "gpt-6-luna": 266
   },
   "judge_response_models": {
-    "o4-mini-2025-04-16": 127
+    "o4-mini-2025-04-16": 176
   },
   "regular_teacher_tokens": {
-    "before_input_tokens": 346911,
-    "before_output_tokens": 26282,
-    "after_input_tokens": 4994868,
-    "after_output_tokens": 40420
+    "before_input_tokens": 444258,
+    "before_output_tokens": 36370,
+    "after_input_tokens": 6201900,
+    "after_output_tokens": 65679
   },
   "all_attempt_counters": {
-    "active_browsers": 0.0,
-    "browsers:L01": 682.0,
-    "browser_sessions": 682.0,
-    "local_sft_generations": 3206.0,
-    "om2w_judge_http_attempts": 127.0,
-    "canonical_judge_usd": 0.8656681000000004,
-    "luna_selector_requests": 196.0,
-    "luna_usd": 0.7916350000000002
+    "active_browsers": 2.0,
+    "browsers:L01": 959.0,
+    "browser_sessions": 959.0,
+    "local_sft_generations": 4360.0,
+    "om2w_judge_http_attempts": 176.0,
+    "canonical_judge_usd": 1.2792659000000006,
+    "luna_selector_requests": 266.0,
+    "luna_usd": 0.9967920000000005
   },
   "scheduler": [
     {
@@ -364,27 +423,31 @@
     },
     {
       "job_id": "347100",
+      "state": "COMPLETED",
+      "elapsed_seconds": 2933
+    },
+    {
+      "job_id": "347282",
       "state": "RUNNING",
-      "elapsed_seconds": 2924
+      "elapsed_seconds": 3705
     }
   ],
-  "all_attempt_allocation_seconds": 8454,
+  "all_attempt_allocation_seconds": 12168,
   "allocation_seconds_cap": 28800,
-  "unsettled_reservations": 0,
+  "unsettled_reservations": 2,
   "final_accounting_verified": false,
   "collection_target_verified": false,
   "verified_complete": false,
-  "status": "partial_recovery_running",
+  "status": "partial",
   "scope": "Continuation and teacher diagnostic on replayable training states; not a full OM2W evaluation. All-attempt counters include earlier failed protocol stages. No effect claim before adequate paired sample.",
   "current_job_id": "347282",
   "prior_attempts_final_accounting_verified": true,
   "prior_allocation_seconds": 8463,
   "replacement_limit_seconds": 20280,
   "state_direction_counts": {
-    "ties": 11,
+    "ties": 16,
     "before_better": 3,
-    "after_better": 0,
-    "all_outcomes_equal": 7
+    "after_better": 0
   },
   "repair": {
     "name": "terminal_capture_transport_v1",
@@ -394,5 +457,13 @@
     "tests_passed": 57,
     "loopback_fixture_seconds": 16.04606726579368,
     "completed_outcomes_preserved": true
+  },
+  "new_invalid_diagnosis": {
+    "count": 6,
+    "states": 1,
+    "primary_cause": "strict observation consistency rejection after page content changed",
+    "secondary_cause": "terminal connection failure after broken browser cleanup",
+    "completed_outcomes_preserved": true,
+    "transport_deadline_regression": false
   }
 }
