@@ -1,0 +1,67 @@
+{
+  "method": "Outcome-only baseline, expanded 4102-task pool",
+  "iteration": 30,
+  "job": "344759",
+  "evaluation_verified_complete": true,
+  "training_target_complete": false,
+  "full300": {
+    "tasks": 300,
+    "successes": 99,
+    "valid": 243,
+    "invalid": 57,
+    "overall": 0.33,
+    "valid_only": 0.4074074074074074,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "top_p": 1,
+    "top_k": 1,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "checkpoint_native_index": 29,
+  "checkpoint_adam_updates": 454,
+  "checkpoint_scheduler_updates": 454,
+  "actual_gpu_actor_restore_verified": true,
+  "wandb_history_verified": true,
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter30",
+  "exact_expected_300_task_ids_verified": true,
+  "archive_verification": "All300 saved rollout archives have nonempty payloads and passing ZIP member CRCs. Task identities and verdict totals reconcile with the expected cohort, metrics and final W&B history. This does not replay browser environments. Failed/truncated valid trajectories may retain native judge-not-run sentinels.",
+  "terminal_status_counts": {
+    "completed": 207,
+    "aborted": 57,
+    "truncated": 2,
+    "failed": 34
+  },
+  "artifact_sha256": {
+    "status.json": "3d2c81b5305b69f1e32329bdde06b2063a8b3af574c78bcfe5f01c247632a44d",
+    "metrics.json": "bd6c4369fc5d59eb91c567a12010d7c70da77ac41e59e16e0028e77b4def651e",
+    "evaluation_manifest.json": "70413361beb3af068cb0df55dc3d5f2783d0ffc70f8b0e4e69bac6e44c93de94",
+    "checkpoint_restore_evidence.json": "b87f5146e37abc25b79feef5d373d3f14cd370267198d1a80343b0913b3faa72",
+    "controller-artifact-audit.json": "833815b0fce8a27b0fa7392bbba6e75050776b6f26bc9d9ae059e39bf82f0053"
+  },
+  "checked_epoch": 1791248988.4740703,
+  "private_task_payloads_published": false,
+  "historical_iteration30_reference": {
+    "training_tasks": 2102,
+    "successes": 96,
+    "valid": 248,
+    "invalid": 52,
+    "overall": 0.32,
+    "valid_only": 0.3870967741935484,
+    "overall_delta_pp": 1.0000000000000009,
+    "valid_only_delta_pp": 2.0310633213859006,
+    "caveat": "Different collection dates, valid-task sets and training randomness; exploratory historical comparison."
+  },
+  "expanded_iteration20_comparison": {
+    "successes": 100,
+    "valid": 237,
+    "overall_delta_pp": -0.33333333333332993,
+    "valid_only_delta_pp": -1.453352086263482
+  }
+}

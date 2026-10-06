@@ -8850,17 +8850,28 @@ accounting remains separate; no unused old budget is added to the extension.
 |344761 |24h |afterok344760 |Continue unchanged lineage |
 |344762 |24h |afterok344761 |Finish90 and its full300 evaluation |
 
-All four jobs are submitted and released. As of October5 10:20 Pacific,
-344759 awaits resources; the other three retain their dependencies. Failed
+All four jobs were submitted and released. At October5 10:20 Pacific,
+344759 awaited resources; the other three retained their dependencies. Failed
 predecessors require agent diagnosis and budget-accounted recovery before
 successors are unblocked. Release unused queued allocations once90 and its
 artifacts are complete. Recovery344274 was stopped after841s: reconstruction
 and two finite optimizer updates passed, but g015 GPU0 thermally throttled.
 The measured128/129s updates projected another26min before checkpointing with
-only21min left before the controller cutoff. Checkpoint20 remains authoritative;
-the two transient updates were not saved. Its validated57.4GB replay archive is
-retained for344759. Original24h accounting closes at84,960s used/1,440s released;
-the separate96h extension remains unspent.
+only21min left before the controller cutoff. At that stop, checkpoint20 remained
+authoritative; the two transient updates were not saved. The validated57.4GB
+replay archive was retained for344759. Original24h accounting closed at84,960s
+used/1,440s released; none of that released time transfers into the96h extension.
+
+**October5 18:06 Pacific:**344759 on g009 reached verified checkpoint30
+(native29,454 Adam updates,scheduler116224,cursor3600) and completed its
+full300 evaluation:99/300 **33.00% overall**,99/243 **40.74% valid-only**.
+All300 rollout/verdict pairs and W&B history were independently checked. The
+controller then started the next training stage through40. Fresh iterations22–29
+on g009 averaged43.0min, with no observed GPU thermal throttling; iteration30's
+14 optimizer updates averaged98.1s. The extension has consumed about7.2h,
+including replay and evaluation, leaving about88.8h; live ledgers remain
+authoritative. Successors344760/61/62 retain their dependencies.
+[Results and audits](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
 Preserve actor/optimizer state, constant1e-6 LR scheduler and counters, task
 cursor, data union and W&B identity. Keep TP2/DP4, microbatch1, global256, PPO2,
@@ -8871,8 +8882,9 @@ W&B evaluation runs stay in`openwebrl-evals`.
 
 Iterations11–20 averaged61.87min on thermally throttled g011:70 more iterations
 project to72.18h plus about7h for evaluations and handoffs. A healthy node may
-reduce total runtime to50–65h, but that improvement remains unverified for this
-lineage. g011 and g015 are excluded from all four queued allocations following
+reduce total runtime to50–65h; the subsequent43.0min average on g009 is
+consistent with faster progress, although remaining wall time depends on future
+collections and evaluations. g011 and g015 are excluded from all four queued allocations following
 observed thermal throttling. The96h cap includes recovery margin, not a runtime
 target. Judge spending/reservations at approval were$78.86; this balance is
 preserved in the cumulative ledger. Storage startup checks passed with30.46TiB

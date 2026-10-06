@@ -71,11 +71,15 @@
 | Expanded 4,102 tasks |10 |81 |236 |64 |27.00 |34.32 |[October3 audit](arm_results/rl_integration/expanded4102-iteration10-audit.json) |
 | Original 2,102 tasks, historical |20 |95 |232 |68 |31.67 |40.95 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
 | Expanded 4,102 tasks |20 |100 |237 |63 |33.33 |42.19 |[October4 audit](arm_results/rl_integration/expanded4102-iteration20-audit.json) |
+| Original 2,102 tasks, historical |30 |96 |248 |52 |32.00 |38.71 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
+| Expanded 4,102 tasks |30 |99 |243 |57 |33.00 |40.74 |[October5 audit](arm_results/rl_integration/expanded4102-iteration30-audit.json) |
 
 | Comparison | Overall Δ | Valid-only Δ | Interpretation |
 | --- | ---: | ---: | --- |
 | Expanded − historical original, iteration10 |+3.67 pp |+4.41 pp |[Exploratory historical comparison](RL_EVALUATION.md#expanded4102-iter10-results-20261003) |
 | Expanded − historical original, iteration20 |+1.67 pp |+1.25 pp |[Exploratory historical comparison](RL_EVALUATION.md#expanded4102-iter10-results-20261003) |
+| Expanded − historical original, iteration30 |+1.00 pp |+2.03 pp |[Exploratory historical comparison](RL_EVALUATION.md#expanded4102-iter10-results-20261003) |
+| Expanded iteration30 −20 |−0.33 pp |−1.45 pp |[Checkpoint comparison](RL_EVALUATION.md#expanded4102-iter10-results-20261003) |
 
 ## Mixed-only relaxed-B comparison · GPT-4.1 · temperature 0 · full 300
 
