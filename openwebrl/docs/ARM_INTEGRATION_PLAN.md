@@ -60,6 +60,17 @@ ablation and new browser data remain later-stage planning.
 
 **Replacement job 347100 queued; 11/100 states and 165/1,500 continuations audited.** All 154 planned Luna-high judgments are preserved; 158 continuations have valid terminal evidence. Four invalid continuations lack fresh terminal evidence after capture failures; three hit the confirmed wait/watchdog collision described below. Job 347009 drained its active batch and teachers cleanly. Its 2,526 seconds bring all-attempt consumption to 5,530/28,800 seconds. The replacement retains **4 H200, 32 CPUs, 480 GiB**, with **6h27m** reserved; consumed plus reserved time is 28,750/28,800 seconds. The $15 Luna / $25 judge caps and all counters carry forward. Collection remains incomplete, with no effect-size conclusion yet.
 
+<a id="arm-continuation-early-signal-20261006"></a>
+**Early paired readout: 11 states, not 165 independent observations.** Execution-informed choices are more repeatable, but do not improve continuation success in this small partial sample. Both teachers are index-only Luna-high; after sees immediate execution evidence and no later continuation or terminal verdict.
+
+| Metric | Before teacher | Execution-informed teacher |
+| --- | ---: | ---: |
+| Selected-continuation success, invalid counted as zero | 37.4% | 34.3% |
+| Success on 93 pairs where both selected continuations are valid | 39.8% | 36.6% |
+| Choice disagreement across repeated calls with the same evidence | 36.4% | 17.2% |
+
+The after-minus-before success estimate is **−3.0 percentage points** (state-bootstrap 95% interval −8.1 to 0.0 pp). Nine states tie, two favor before, and none favor after. These 11 states are too few for a stable direction estimate; six have identical outcomes across all 15 continuations, so action selection cannot change observed success there. Before/after choice disagreement is 35.7%, versus mean within-condition disagreement of 26.8%: the 8.9 pp excess is descriptive evidence of changed choices, not improved choices. Candidate-index comparisons retain duplicate sampled actions and do not establish semantic action disagreement. The common-valid sensitivity has the same negative direction; the seven invalid continuations do not explain it. All previous failed attempts and their costs remain included. More replayable states are still needed; the repaired continuation job remains queued. [Aggregate early readout](arm_results/rl_integration/continuation-branches-early-20261006.json).
+
 The user requested enough continuations overnight to assess the benefit of
 execution-informed selection. This supersedes the small 30-state pilot as the
 proposed launch. The user revised the design to **five actions × three continuations**;

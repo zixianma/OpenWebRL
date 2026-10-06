@@ -3,13 +3,13 @@
 <a id="arm-rltasks-three-arm-20261006"></a>
 ## Fresh comparison of original and RL-task SelectionARM — October 6
 
-**Prepared; exact new compute/API approval pending.** The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. This is a 900-episode experiment; no historical outcome is substituted for a fresh result.
+**Approved and submitted: jobs 347180 and 347181 are queued.** The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. This is a 900-episode experiment; no historical outcome is substituted for a fresh result.
 
 | Arm | Actor | Selector | Proposals per decision | Fresh OM2W episodes | Status |
 | --- | --- | --- | ---: | ---: | --- |
-| Baseline | Official OpenWebRL-4B-SFT | None | 1 | 300 | Prepared |
-| Original ARM | Same SFT | PTeterwak/OpenWebRL-4B-SelectionARM | 5 | 300 | Prepared |
-| RL-task ARM | Same SFT | davidan03/openwebrl-4b-selectionarm-rltasks | 5 | 300 | Prepared |
+| Baseline | Official OpenWebRL-4B-SFT | None | 1 | 300 | Queued |
+| Original ARM | Same SFT | PTeterwak/OpenWebRL-4B-SelectionARM | 5 | 300 | Queued |
+| RL-task ARM | Same SFT | davidan03/openwebrl-4b-selectionarm-rltasks | 5 | 300 | Queued |
 
 **Matched settings:** actor temperature **0.7**, top-p **0.9**, **1,024** output tokens, seed **42**, **30** browser steps, **32,768** context, full text history and one current screenshot, local browsers, 1,800-second episode timeout. The actor request preserves the original omission of top-k; the native `/generate` implementation uses `SamplingParams` defaults, rather than the chat endpoint's model-generation defaults. Both ARMs receive the original canonical task/URL/recent-history/current-screenshot prompt and five full reasoning/action candidates, with greedy constrained `{"selection": N}` output and the same 128-token selector cap. Execute the chosen candidate unchanged.
 
@@ -17,11 +17,11 @@ Pinned revisions: actor `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`; Piotr ARM `8
 
 The canonical o4-mini/AgentTrek judge sees executed thoughts/actions and terminal screenshots and judges only completed episodes. A common 4,096-token judge cap meters this new collection; the original September request was uncapped. Browser/runtime and collection date also differ from September, so the three fresh arms form the matched comparison and the old table remains historical.
 
-**Prepared resources:** two independent jobs in parallel, each **2 H200 / 16 CPUs / 240 GiB for up to 4 hours across all attempts**; **16 GPU-hours maximum combined**. Each receives 150 disjoint tasks and runs all three conditions with randomized within-task arm order, an eight-browser pool, SFT on one GPU and both 4B ARM services on the other. Judge ceilings are **$10 / 1,980 calls per shard**, totaling **$20 / 3,960 calls**. These are ceilings; allocations exit once their queues finish. No budget transfer from the continuation experiment or earlier studies is allowed.
+**Approved resources:** two independent jobs in parallel, each **2 H200 / 16 CPUs / 240 GiB for up to 4 hours across all attempts**; **16 GPU-hours maximum combined**. Each receives 150 disjoint tasks and runs all three conditions with randomized within-task arm order, an eight-browser pool, SFT on one GPU and both 4B ARM services on the other. Judge ceilings are **$10 / 1,980 calls per shard**, totaling **$20 / 3,960 calls**. These are ceilings; allocations exit once their queues finish. No budget transfer from the continuation experiment or earlier studies is allowed.
 
 Report success overall and valid-only, all three paired task-bootstrap contrasts, common-valid sensitivity, invalid causes, actor/selector input and output tokens, episode/request latency, browser steps/time, judge spend, allocated GPU-hours and device utilization/power. Request seconds overlap, and shared-device totals are not per-arm kernel time. Preserve every attempt and separately account for retries; resume only missing committed slots.
 
-Both frozen-controller dry runs, worker/selector CPU imports and **22 tests** passed. GPU startup and real-browser checks remain launch-time checks. [Aggregate protocol and resource request](arm_results/selectionarm_rltasks_historical_20261006.json).
+Both frozen-controller dry runs, worker/selector CPU imports and **22 tests** passed. Six supervisor tests also pass, and an actual active-agent queue receipt is verified; the persistent supervisor follows both registered job IDs and their independent retry budgets. GPU startup and real-browser checks remain launch-time checks. [Aggregate protocol and resource request](arm_results/selectionarm_rltasks_historical_20261006.json).
 
 
 Inference-time ARM selection, terminal-success judge alignment, and unavailable-task retry policy. Initial benchmark results and retries retain separate denominators. See [all experiment results](ARM_RESULTS.md) for comparison with standalone training.

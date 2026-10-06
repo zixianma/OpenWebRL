@@ -60,11 +60,11 @@
     "judge costs and all-attempt allocation GPU-hours",
     "GPU utilization/power"
   ],
-  "status": "prepared_exact_compute_approval_pending",
+  "status": "approved_queued",
   "tests_passed": 22,
   "cpu_imports_passed": true,
   "checkpoint_sha256_verified": true,
-  "new_allocations": 0,
+  "new_allocations": 2,
   "paid_api_calls": 0,
   "arms": [
     {
@@ -85,5 +85,12 @@
       "n": 5,
       "episodes": 300
     }
-  ]
+  ],
+  "approved": true,
+  "job_ids": [
+    "347180",
+    "347181"
+  ],
+  "supervisor_tests_passed": 6,
+  "active_agent_queue_verified": true
 }

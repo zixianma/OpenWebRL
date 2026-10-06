@@ -1,0 +1,72 @@
+{
+  "analyzed_states": 11,
+  "estimates": {
+    "before": 0.37373737373737376,
+    "after": 0.3434343434343434,
+    "difference": -0.030303030303030307,
+    "uniform": 0.37575757575757573,
+    "before_repeat_disagreement": 0.3636363636363636,
+    "after_repeat_disagreement": 0.1717171717171717,
+    "before_after_disagreement": 0.3569023569023569,
+    "excess_disagreement": 0.08922558922558922
+  },
+  "state_bootstrap_95_intervals": {
+    "before": [
+      0.12121212121212122,
+      0.6464646464646464
+    ],
+    "after": [
+      0.1212121212121212,
+      0.5959595959595959
+    ],
+    "difference": [
+      -0.0808080808080808,
+      0.0
+    ],
+    "uniform": [
+      0.12727272727272726,
+      0.6363636363636364
+    ],
+    "before_repeat_disagreement": [
+      0.1818181818181818,
+      0.5454545454545454
+    ],
+    "after_repeat_disagreement": [
+      0,
+      0.3838383838383838
+    ],
+    "before_after_disagreement": [
+      0.1818181818181818,
+      0.5454545454545454
+    ],
+    "excess_disagreement": [
+      0.0101010101010101,
+      0.17676767676767677
+    ]
+  },
+  "common_valid_selected_pairs": {
+    "before": 0.3978494623655914,
+    "after": 0.3655913978494624,
+    "pairs": 93,
+    "difference": -0.032258064516129004
+  },
+  "completed_continuations": 165,
+  "valid_continuations": 158,
+  "verified_teacher_requests": 154,
+  "candidate_diversity_counts": {
+    "5": 5,
+    "1": 1,
+    "4": 2,
+    "3": 1,
+    "2": 2
+  },
+  "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+  "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+  "status": "early_partial_not_a_conclusion",
+  "states_after_better": 0,
+  "states_after_worse": 2,
+  "states_tied": 9,
+  "states_all_15_outcomes_equal": 6,
+  "target_states": 100,
+  "verified_complete": false
+}
