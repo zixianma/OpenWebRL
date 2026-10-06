@@ -60,12 +60,10 @@
     "judge costs and all-attempt allocation GPU-hours",
     "GPU utilization/power"
   ],
-  "status": "approved_queued",
-  "tests_passed": 22,
+  "status": "shard0_repaired_collection_started_shard1_pending",
   "cpu_imports_passed": true,
   "checkpoint_sha256_verified": true,
-  "new_allocations": 2,
-  "paid_api_calls": 0,
+  "paid_api_calls": 2,
   "arms": [
     {
       "actor": "OpenWebRL/OpenWebRL-4B-SFT",
@@ -88,9 +86,43 @@
   ],
   "approved": true,
   "job_ids": [
-    "347180",
-    "347181"
+    "347256",
+    "347257"
   ],
   "supervisor_tests_passed": 6,
-  "active_agent_queue_verified": true
+  "active_agent_queue_verified": true,
+  "completed_episodes": 4,
+  "verified_complete": false,
+  "repair": {
+    "name": "awaited_receipt_io",
+    "protocol_changed": false,
+    "tests_passed": 26,
+    "old_attempts_preserved": true,
+    "phase_sensitivity_required": true,
+    "shards": [
+      {
+        "shard": 0,
+        "prior_job": "347180",
+        "prior_actual_seconds": 1584,
+        "replacement_job": "347256",
+        "replacement_limit_seconds": 12780
+      },
+      {
+        "shard": 1,
+        "prior_job": "347181",
+        "prior_actual_seconds": 42,
+        "replacement_job": "347257",
+        "replacement_limit_seconds": 14340
+      }
+    ]
+  },
+  "all_attempt_job_ids": [
+    "347180",
+    "347181",
+    "347256",
+    "347257"
+  ],
+  "initial_tests_passed": 22,
+  "judge_charged_or_reserved_usd": 0.0144914,
+  "scheduler_attempts_submitted": 4
 }

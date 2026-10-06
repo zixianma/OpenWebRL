@@ -49,7 +49,7 @@ Reward Models setup with the o4-mini/AgentTrek Online-Mind2Web judge.
 | ScalarRM, five candidates | 114 | 251 | 49 | 38.0% | 45.4% |
 | SelectionARM, five candidates | 128 | 256 | 44 | **42.7%** | **50.0%** |
 
-**Fresh three-arm repetition approved and queued (347180/347181):** official SFT alone, SFT + Piotr's original SelectionARM, and SFT + `davidan03/openwebrl-4b-selectionarm-rltasks`; 300 fresh episodes each, matching this table's T=0.7 / p=0.9 / 1,024-token / seed42 settings. The two shards each retain 2 H200 / 16 CPUs / 240 GiB × 4 hours total and $10 / 1,980 judge calls, including retries. [Protocol, checks and resource request](ARM_INFERENCE.md#arm-rltasks-three-arm-20261006).
+**Fresh three-arm repetition underway; receipt-I/O recovery 347256/347257:** official SFT alone, SFT + Piotr's original SelectionARM, and SFT + `davidan03/openwebrl-4b-selectionarm-rltasks`; 300 fresh episodes each, matching this table's T=0.7 / p=0.9 / 1,024-token / seed42 settings. The two shards each retain 2 H200 / 16 CPUs / 240 GiB × 4 hours total and $10 / 1,980 judge calls, including retries. [Protocol, checks and resource request](ARM_INFERENCE.md#arm-rltasks-three-arm-20261006).
 
 - **Baseline:** execute one actor sample without an ARM call.
 - **ScalarRM:** score each of five candidates independently and execute the candidate with the highest scalar score.

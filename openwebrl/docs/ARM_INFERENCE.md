@@ -3,13 +3,13 @@
 <a id="arm-rltasks-three-arm-20261006"></a>
 ## Fresh comparison of original and RL-task SelectionARM — October 6
 
-**Approved and submitted: jobs 347180 and 347181 are queued.** The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. This is a 900-episode experiment; no historical outcome is substituted for a fresh result.
+**Recovery submitted: jobs 347256 and 347257 replace 347180 and 347181 within their original caps.** The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. This is a 900-episode experiment; no historical outcome is substituted for a fresh result.
 
 | Arm | Actor | Selector | Proposals per decision | Fresh OM2W episodes | Status |
 | --- | --- | --- | ---: | ---: | --- |
-| Baseline | Official OpenWebRL-4B-SFT | None | 1 | 300 | Queued |
-| Original ARM | Same SFT | PTeterwak/OpenWebRL-4B-SelectionARM | 5 | 300 | Queued |
-| RL-task ARM | Same SFT | davidan03/openwebrl-4b-selectionarm-rltasks | 5 | 300 | Queued |
+| Baseline | Official OpenWebRL-4B-SFT | None | 1 | 300 | Collection started; repair deployed |
+| Original ARM | Same SFT | PTeterwak/OpenWebRL-4B-SelectionARM | 5 | 300 | Collection started; repair deployed |
+| RL-task ARM | Same SFT | davidan03/openwebrl-4b-selectionarm-rltasks | 5 | 300 | Collection started; repair deployed |
 
 **Matched settings:** actor temperature **0.7**, top-p **0.9**, **1,024** output tokens, seed **42**, **30** browser steps, **32,768** context, full text history and one current screenshot, local browsers, 1,800-second episode timeout. The actor request preserves the original omission of top-k; the native `/generate` implementation uses `SamplingParams` defaults, rather than the chat endpoint's model-generation defaults. Both ARMs receive the original canonical task/URL/recent-history/current-screenshot prompt and five full reasoning/action candidates, with greedy constrained `{"selection": N}` output and the same 128-token selector cap. Execute the chosen candidate unchanged.
 
@@ -21,7 +21,16 @@ The canonical o4-mini/AgentTrek judge sees executed thoughts/actions and termina
 
 Report success overall and valid-only, all three paired task-bootstrap contrasts, common-valid sensitivity, invalid causes, actor/selector input and output tokens, episode/request latency, browser steps/time, judge spend, allocated GPU-hours and device utilization/power. Request seconds overlap, and shared-device totals are not per-arm kernel time. Preserve every attempt and separately account for retries; resume only missing committed slots.
 
-Both frozen-controller dry runs, worker/selector CPU imports and **22 tests** passed. Six supervisor tests also pass, and an actual active-agent queue receipt is verified; the persistent supervisor follows both registered job IDs and their independent retry budgets. GPU startup and real-browser checks remain launch-time checks. [Aggregate protocol and resource request](arm_results/selectionarm_rltasks_historical_20261006.json).
+Initial model identities, local-browser progress, W&B routing and canonical o4-mini usage receipts were verified. Four episodes committed before the repair; these remain in the primary sample, including two browser-aborted outcomes. No success-rate conclusion is available from this startup sample.
+
+**October 6 receipt-I/O repair:** synchronous durable writes to shared storage blocked the browser event loop, serializing otherwise concurrent candidate responses. Receipt persistence and judge-ledger transactions now run in awaited threads; cancellation still waits for active writes, and ledger locking/caps are unchanged. The repair passed **26 targeted tests**, including cancellation, token counting, concurrent judge reservations and attempt identity. Six supervisor tests and both repaired-controller dry runs also pass. The actual source, scheduler attempt and logging phase are saved in new episode records. Final reporting retains all primary outcomes/costs and adds a common-phase latency sensitivity view; the separate analysis regression passes.
+
+| Shard | Prior attempt | Accounted prior time | Replacement | Maximum replacement time | Total reserved across attempts |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 347180 | 26m24s | 347256 | 3h33m | 3h59m24s |
+| 1 | 347181 | 42s | 347257 | 3h59m | 3h59m42s |
+
+Each shard keeps its original 2 H200 / 16 CPU / 240 GiB allocation shape and $10 / 1,980 judge-call ceiling. The four committed outcomes, interrupted attempts, old frozen source and API receipts are preserved. Only missing committed slots resume. The persistent supervisor follows the replacement IDs and has a verified active-agent queue receipt; replacement startup and throughput remain under live verification. [Aggregate protocol and resource request](arm_results/selectionarm_rltasks_historical_20261006.json).
 
 
 Inference-time ARM selection, terminal-success judge alignment, and unavailable-task retry policy. Initial benchmark results and retries retain separate denominators. See [all experiment results](ARM_RESULTS.md) for comparison with standalone training.
