@@ -84,6 +84,11 @@ Neural fits remain pending. V/Q/post-action/advantage formulations are standard
 baselines; the research question is useful action credit and the decision
 objective, not renaming those functions. Piotr's teacher preferences do not
 supply executed counterfactual returns. [Decision and prior preparation](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+The first [Luna-high execution-evidence diagnostic](ARM_RESULTS.md#arm-teacher-evidence-results-20261006)
+is complete:8/40 labels changed after seeing execution. On20 repeated tasks,
+pre/post disagreement was25% versus5% within either repeated condition. All120
+calls succeeded for$0.0541 estimated API cost. This measures judgment changes,
+not improved accuracy or learned selector performance; training remains pending.
 The [24-source inventory](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004)
 separates raw collections, derived views, conversion work and benchmark-only
 data. In particular, the ARM refresh future panel contains82 OM2W tasks and

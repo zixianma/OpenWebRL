@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Inference-time scaling: actor-alone results first, SFT + selectors, and the proposed controlled local-browser matrix](ARM_INFERENCE_SCALING.md).
 
-[Next critic study: first40 pre/post teacher comparisons prepared, with repeat-noise controls; exact new API cap pending](ARM_INTEGRATION_PLAN.md#arm-teacher-evidence-pilot-20261006).
+[Luna-high teacher diagnostic completed:8/40 labels change with execution evidence; matched repeat controls, plot and$0.0541 estimated cost](ARM_RESULTS.md#arm-teacher-evidence-results-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

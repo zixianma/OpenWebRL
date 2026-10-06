@@ -1,26 +1,26 @@
 {
-  "stage": "prepared_awaiting_exact_api_cap_approval",
-  "model": "gpt-6.1-sol",
+  "stage": "verified_complete",
+  "model": "gpt-6-luna",
   "reasoning_effort": "high",
   "pairs": 40,
   "unique_task_groups": 40,
   "independent_repeated_pairs": 20,
   "planned_calls": 120,
   "max_calls": 140,
-  "max_usd": 30,
+  "max_usd": 1.5,
   "max_output_tokens": 4096,
   "api_concurrency": 4,
   "gpus": 0,
   "new_slurm_allocations": 0,
   "pricing_per_million": {
-    "input": 2,
-    "cached_input": 0.1,
-    "cache_write": 2.5,
-    "output": 10
+    "input": 0.1,
+    "cached_input": 0.01,
+    "cache_write": 0.125,
+    "output": 0.5
   },
-  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
-  "prepared_request_worst_case_usd": 22.073762500000004,
-  "all_calls_plus_retry_reserve_worst_case_usd": 26.741812500000005,
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+  "prepared_request_worst_case_usd": 1.1036881249999997,
+  "all_calls_plus_retry_reserve_worst_case_usd": 1.3370906249999996,
   "eligible_transition_count": 1964,
   "eligible_task_groups": 282,
   "excluded": {
@@ -45,8 +45,8 @@
     "Automated references and full200 primary panel are deferred to a later stage.",
     "Prior studies budgets are not transferred."
   ],
-  "approval_pending": true,
-  "actual_api_calls": 0,
+  "approval_pending": false,
+  "actual_api_calls": 120,
   "readiness": {
     "all_checks_passed": true,
     "matched_pre_post_inputs": true,
@@ -65,8 +65,14 @@
       "2": 1
     },
     "identical_images": 2,
-    "no_api_requests_sent": true,
-    "paid_execution_approved": false
+    "no_api_requests_sent": false,
+    "paid_execution_approved": true,
+    "model": "gpt-6-luna",
+    "reasoning_effort": "high"
   },
-  "runner_offline_tests_passed": true
+  "runner_offline_tests_passed": true,
+  "receipt_based_estimated_cost_usd": 0.054055395,
+  "conservative_ledger_usd": 0.068899625,
+  "results": "teacher-evidence-pilot-results-20261006.json",
+  "user_model_revision": "User selected GPT-6 Luna high in place of Sol due to cost; preserved all120 request payloads except model/rate metadata."
 }

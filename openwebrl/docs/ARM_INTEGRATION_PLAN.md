@@ -56,7 +56,11 @@ primary panel, image-only ablation and new browser data until this first result
 is reviewed. The following larger protocol is retained as later-stage planning.
 
 <a id="arm-teacher-evidence-pilot-20261006"></a>
-The first-stage request set is now prepared from40 distinct task groups. After
+**Completed with GPT-6 Luna high:** all120 calls succeeded;8/40 labels changed,
+with5% within-condition repeat disagreement on20 tasks. Receipt-based cost was
+$0.0541 under a separate$1.50 cap. [Results and plot](ARM_RESULTS.md#arm-teacher-evidence-results-20261006).
+
+The first-stage request set uses40 distinct task groups. After
 protecting existing validation/retention task groups and normalized benchmark
 goals,1,964 parseable transitions in282 groups are eligible. Selection uses
 one seeded random transition per group with no filtering by teacher score or
@@ -65,14 +69,14 @@ have identical screenshot bytes. This reflects the demonstration-heavy source
 and does not establish positive goal progress. Keep this descriptive pilot
 separate from a later failure-rich fixed-SFT cohort.
 
-Each pair gets two independent judgments from `gpt-6.1-sol` with high reasoning:
+Each pair received two independent judgments from `gpt-6-luna` with high reasoning:
 (A) goal/history/before screenshot/tool action and (C) the identical information
 plus actual after screenshot and execution feedback. Repeat both conditions
 independently on20 preselected pairs. The resulting120 planned requests permit
 comparison of pre/post changes with ordinary same-condition judgment variation.
 Requests are shuffled, have independent contexts, and use the same prompt,
 4,096-output-token cap and default service tier. The model's supported effort,
-image input and current pricing were checked against [OpenAI Docs](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
+image input and current pricing were checked against [OpenAI Docs](https://developers.openai.com/api/docs/models/gpt-6-luna).
 
 First outputs: a label-transition matrix, flip rate including unresolved cases,
 mean absolute/signed progress-score change, uncertainty/entropy changes,
@@ -85,13 +89,14 @@ is part of this first40-example stage.
 The private runtime `critic-comparison-20261004/teacher-evidence-pilot-20261006/`
 contains the selected pairs,120 frozen request payloads, proposal, readiness
 checks and tested approval-gated runner. Images and task payloads remain local.
-The CPU tests used a mock API, including a complete120-request mock and restart;
-**no real API request or model training has run**. The proposed separate cap is
-**$30 and140 calls including at most20 retries, zero GPUs and no new Slurm
-allocation**. This is a conservative ceiling: reserving the prepared requests
-at their input bounds and full output caps plus20 maximum-size retries totals
-$26.74; it is not an estimate of expected actual spend. Exact new-budget approval
-is pending. [Aggregate readiness](arm_results/rl_integration/teacher-evidence-pilot-plan-20261006.json).
+CPU tests first used a mock API, including a complete120-request mock and
+restart. The user then selected Luna-high in place of Sol because of cost;
+the paired inputs and120-request scope were unchanged. The enforced separate
+cap was **$1.50 and140 calls including at most20 retries, zero GPUs and no new
+Slurm allocation**. Conservative request bounds plus20 maximum-size retries
+totaled$1.3371; actual receipt-based estimated cost was$0.0541 for120 successful
+calls. The superseded Sol proposal and all original preparation were preserved.
+The verified-complete result is the first40-example calibration only. [Aggregate readiness](arm_results/rl_integration/teacher-evidence-pilot-plan-20261006.json).
 
 Real post-execution evidence currently applies to executed demonstrations and
 exact tool-identical proposals only. Other proposals can receive pre-execution

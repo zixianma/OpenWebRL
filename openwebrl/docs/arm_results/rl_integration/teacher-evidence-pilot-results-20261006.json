@@ -1,0 +1,140 @@
+{
+  "stage": "verified_complete",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "high",
+  "unique_tasks": 40,
+  "primary_pairs": 40,
+  "repeat_pairs": 20,
+  "completed_requests": 120,
+  "total_api_attempts": 120,
+  "incomplete_or_failed_api_attempts": 0,
+  "changed_primary_labels": 8,
+  "primary_metrics": {
+    "changed": {
+      "mean": 0.2,
+      "ci95": [
+        0.075,
+        0.325
+      ]
+    },
+    "absolute_shift": {
+      "mean": 0.147,
+      "ci95": [
+        0.08499999999999999,
+        0.219
+      ]
+    },
+    "delta": {
+      "mean": -0.016499999999999997,
+      "ci95": [
+        -0.10124999999999999,
+        0.06
+      ]
+    }
+  },
+  "transition_matrix": {
+    "progress -> progress": 31,
+    "unresolved -> progress": 2,
+    "progress -> no_progress": 4,
+    "no_progress -> no_progress": 1,
+    "no_progress -> progress": 1,
+    "unresolved -> no_progress": 1
+  },
+  "pre_label_counts": {
+    "progress": 35,
+    "unresolved": 3,
+    "no_progress": 2
+  },
+  "post_label_counts": {
+    "progress": 34,
+    "no_progress": 6
+  },
+  "repeated_subset": {
+    "pre_flip": {
+      "mean": 0.05,
+      "ci95": [
+        0.0,
+        0.15
+      ]
+    },
+    "post_flip": {
+      "mean": 0.05,
+      "ci95": [
+        0.0,
+        0.15
+      ]
+    },
+    "cross_flip": {
+      "mean": 0.25,
+      "ci95": [
+        0.05,
+        0.45
+      ]
+    },
+    "pre_shift": {
+      "mean": 0.05025,
+      "ci95": [
+        0.03000000000000001,
+        0.07550000000000001
+      ]
+    },
+    "post_shift": {
+      "mean": 0.03649999999999999,
+      "ci95": [
+        0.013500000000000007,
+        0.06699999999999998
+      ]
+    },
+    "cross_shift": {
+      "mean": 0.1495,
+      "ci95": [
+        0.0615,
+        0.25949999999999995
+      ]
+    }
+  },
+  "matched_excess_absolute_shift_over_mean_repeat_noise": {
+    "mean": 0.10612499999999998,
+    "ci95": [
+      0.026625000000000017,
+      0.20925
+    ]
+  },
+  "mean_entropy_bits": {
+    "pre": 0.4766241647930222,
+    "post": 0.2816180094799377
+  },
+  "probability_ties_reported_as_unresolved": 0,
+  "cost": {
+    "receipt_based_estimate_usd": 0.054055395,
+    "all_cache_telemetry_known": true,
+    "conservative_ledger_usd": 0.068899625,
+    "cap_usd": 1.5
+  },
+  "tokens": {
+    "input": 384217,
+    "output": 41745,
+    "reasoning_output": 27299
+  },
+  "latency_seconds": {
+    "pre": {
+      "mean": 6.339952813733059,
+      "median": 5.878392369952053
+    },
+    "post": {
+      "mean": 5.296836926058556,
+      "median": 4.753202369902283
+    }
+  },
+  "actual_request_window_seconds": 176.1734848022461,
+  "dataset": "Piotr executed demonstrations; task-group-disjoint from protected validation/retention and normalized benchmarks",
+  "all_primary_receipts_success_prefixed": true,
+  "limitations": [
+    "Calibration sample, not an independent primary experiment.",
+    "Changes and reduced entropy do not establish greater accuracy.",
+    "One executed action bundle per state; no counterfactual ranking result.",
+    "Demonstration-heavy cohort; all40 primary receipts start with Succeed.",
+    "Confidence intervals bootstrap task groups (one primary pair per distinct group).",
+    "All tasks, images, actions and rationales stay in private review artifacts."
+  ]
+}

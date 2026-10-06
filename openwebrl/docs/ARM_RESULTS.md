@@ -4,6 +4,82 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-teacher-evidence-results-20261006"></a>
+## Execution-informed teacher judgments — October6 UTC
+
+**Luna-high changed8/40 labels after seeing execution evidence.** On the
+20 tasks with repeat controls, pre/post disagreement was5/20 (25%), versus
+1/20 (5%) for repeated pre-only judgments and1/20 (5%) for repeated post-informed
+judgments. This is a descriptive calibration study; disagreement is not proof
+of improved accuracy, critic-learning benefit or better candidate selection.
+
+The same `gpt-6-luna`, high effort,4,096-output-token cap and default service tier
+judged each executed action independently before and after execution evidence.
+Both inputs retain the goal, same five-step causal history, before screenshot
+and ordered tool action. The post condition adds the real next screenshot and
+execution feedback. Proposed actor reasoning and future actor responses are
+excluded. Forty task groups were sampled from the eligible Piotr demonstration
+transitions;20 have an independent repeat of both conditions. Every request was
+shuffled and had its own context. All120 provider model/high-effort identities
+and usage receipts were verified, with no failed calls or retries.
+
+| Metric | Before → after evidence | Before → before repeat | After → after repeat |
+| --- | ---: | ---: | ---: |
+| Label changes, all primary tasks |8/40 =20.0% [7.5%,32.5%] |— |— |
+| Label changes, matched20 repeat tasks |5/20 =25.0% |1/20 =5.0% |1/20 =5.0% |
+| Mean absolute score change, matched20 |0.1495 [0.0615,0.2595] |0.0503 [0.0300,0.0755] |0.0365 [0.0135,0.0670] |
+| Mean absolute score change, all40 |0.1470 [0.0850,0.2190] |— |— |
+
+Score is P(progress)−P(regression), in[-1,1]. Intervals are10,000 task-bootstrap
+95% intervals with seed42. On the matched20 tasks, the excess absolute shift
+over the mean of the two repeat shifts is0.1061 [0.0266,0.2093]. These estimates
+are exploratory; the larger primary panel has not been run.
+
+| Primary label transition | Tasks |
+| --- | ---: |
+| Progress → progress |31 |
+| Progress → no progress |4 |
+| No progress → progress |1 |
+| No progress → no progress |1 |
+| Unresolved → progress |2 |
+| Unresolved → no progress |1 |
+
+There were no regression labels or tied maxima. Mean label entropy fell from
+0.477 to0.282 bits; mean signed score change was−0.0165 [−0.1013,0.0600]. Thus,
+changes included both downgrades and upgrades, without a clear net score shift.
+All40 source receipts begin with successful command execution; goal progress
+is a separate judgment. This demonstration-heavy sample does not cover the
+full range of failed trajectories. Some observed effects may be unpredictable
+from the before-state, which matters before treating revised judgments as
+pre-action training targets.
+
+![Luna-high judgment changes and repeat controls](arm_results/rl_integration/teacher-evidence-pilot-20261006.png)
+
+| Efficiency/accounting | Verified amount |
+| --- | ---: |
+| API calls, including failures/retries |120 /140 cap;0 failed |
+| Receipt-based estimated API cost |$0.054055 |
+| Conservative settled ledger |$0.068900 /$1.50 cap |
+| Input / output tokens |384,217 /41,745 |
+| Reasoning tokens, included in output |27,299 |
+| Mean request latency, before / after |6.34s /5.30s |
+| Request window, concurrency4 |176.17s |
+| GPU allocations / new browser executions / critic fits |0 /0 /0 |
+
+Cost uses complete cache-read/write telemetry and the [verified Luna rates](https://developers.openai.com/api/docs/models/gpt-6-luna);
+it is a usage-based estimate, not a provider invoice. The higher conservative
+ledger charges every input token at the maximum cache-write rate. This is a
+separate labeling budget, with no transfer from the earlier inference studies.
+
+[Aggregate results](arm_results/rl_integration/teacher-evidence-pilot-results-20261006.json) ·
+[Vector plot](arm_results/rl_integration/teacher-evidence-pilot-20261006.svg) ·
+[Protocol and aggregate readiness](ARM_INTEGRATION_PLAN.md#arm-teacher-evidence-pilot-20261006).
+The interactive paired review, source screenshots, prompts, responses and
+rationales remain private under runtime
+`critic-comparison-20261004/teacher-evidence-pilot-20261006/analysis/paired-review.private.html`.
+Review these examples before the next stage; no200-row primary panel, new
+branch collection or critic training has started.
+
 <a id="arm-controlled-cost-results-20261004"></a>
 ## Controlled ARM versus episode resampling — October4
 
