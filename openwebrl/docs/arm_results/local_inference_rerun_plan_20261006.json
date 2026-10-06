@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "jev_verified_complete_sft_smoke_running",
+  "status": "jev_verified_complete_sft_recovery_running",
   "launch_authorized": true,
   "new_experiments_launched": 5,
   "protocol_name": "local-openwebrl-om2w-v2",
@@ -600,36 +600,55 @@
       }
     ],
     "initial_campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
-    "current_campaign_manifest_sha256": "7b5ef0db55be2bcbb01d30f2ca6924449d99732021400cf3ab2949e72b391eb9",
+    "current_campaign_manifest_sha256": "eaefceeeae34adf8ccbe6617b16f68451de10cf1624707beb658ccff5cd26aba",
     "current_shards": [
       {
         "shard": 0,
-        "plan_sha256": "b75f3f8ee5d8c5e6fb7623e324c4570a626bdd0eecd79b95f0995503d106bdff",
-        "source_manifest_sha256": "879d6dd870e00cb767d1ea26a95f1ec28a81ac937d2cb9c5e526d677d11f794b",
-        "job_id": "346624"
+        "plan_sha256": "b7a795249ac94be2589c9d942b87d83dcaf5bd24b69df7e35f6b3c0173ccefcd",
+        "source_manifest_sha256": "b28811b533d8b48ef9549bb1881e1a7ce86821d6230389640a6ece15f20e0ef7",
+        "job_id": "346656"
       },
       {
         "shard": 1,
-        "plan_sha256": "c007826d8aaf09b23a6938da0b5d4d47609ef59665f20d58855a96bfeb7d0de5",
-        "source_manifest_sha256": "0c769b7fde438a8d933526b6a11388c795a152f545eb2bbca9ccde4e2422e7c7",
-        "job_id": "346625"
+        "plan_sha256": "8416aee6cca58f8657b8b26d192ab25e59263dfbc22c1d3fb89ce17af6a6c78c",
+        "source_manifest_sha256": "06660bf5d444861e467e5d5dd34451cd6cd0a38be870e9f2a072e29e96e07a24",
+        "job_id": "346657"
+      }
+    ],
+    "previous_recovery_shards": [
+      {
+        "campaign_manifest_sha256": "7b5ef0db55be2bcbb01d30f2ca6924449d99732021400cf3ab2949e72b391eb9",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "b75f3f8ee5d8c5e6fb7623e324c4570a626bdd0eecd79b95f0995503d106bdff",
+            "source_manifest_sha256": "879d6dd870e00cb767d1ea26a95f1ec28a81ac937d2cb9c5e526d677d11f794b",
+            "job_id": "346624"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "c007826d8aaf09b23a6938da0b5d4d47609ef59665f20d58855a96bfeb7d0de5",
+            "source_manifest_sha256": "0c769b7fde438a8d933526b6a11388c795a152f545eb2bbca9ccde4e2422e7c7",
+            "job_id": "346625"
+          }
+        ]
       }
     ]
   },
   "launch_status": {
-    "status": "running_smoke_validation",
+    "status": "running_recovery",
     "current_jobs": [
-      "346624",
-      "346625"
+      "346656",
+      "346657"
     ],
     "total_approved_wall_seconds_per_shard": 28800,
     "prior_charged_seconds_by_shard": [
-      366,
-      333
+      1225,
+      1147
     ],
     "replacement_wall_seconds_by_shard": [
-      28380,
-      28440
+      27540,
+      27600
     ],
     "prior_attempts": [
       {
@@ -667,13 +686,48 @@
         "job_id": "346558",
         "state": "FAILED",
         "elapsed_seconds": 168
+      },
+      {
+        "shard": 0,
+        "job_id": "346624",
+        "state": "FAILED",
+        "elapsed_seconds": 859
+      },
+      {
+        "shard": 1,
+        "job_id": "346625",
+        "state": "FAILED",
+        "elapsed_seconds": 814
       }
     ],
-    "recovery": "Pinned inherited HF cache paths and controller W&B credentials; repaired screenshot hydration and reset cleanup. Preserved every attempt and all counters; scientific settings and total caps unchanged.",
+    "recovery": "Bound transient capture retry to3attempts within the existing15s deadline; preserve and score well-formed native argmax guard rejection as valid non-completed canonical0, with no action/fallback/judge/replay. Other provider/schema/identity errors still halt. Preserve all previous evidence and charges.",
     "benchmark_results_available": false,
     "preserved_attempt_evidence_available": true,
     "final_success_rates_available": false,
-    "note": "SFT jobs346624/346625 running smoke validation; transient screenshot invalid under diagnosis. No final SFT rates."
+    "note": "Resume smoke gate using17preserved valid records and7explicitly reopened infrastructure/interrupted attempts; no final SFT rates.",
+    "preserved_valid_smokes_by_shard": [
+      7,
+      10
+    ],
+    "reopened_capture_invalids": 5,
+    "reopened_collateral_interrupted": 2,
+    "saved_selector_rejection_amendment": {
+      "original_retained": true,
+      "immutable_amendment": true,
+      "valid": true,
+      "status": "ABORTED",
+      "score": 0,
+      "judge_http_attempts": 0,
+      "action_executed": false,
+      "fallback": false,
+      "episode_replayed": false
+    },
+    "recovery_validation": {
+      "offline_tests_passed": 172,
+      "independent_readonly_review_passed": true,
+      "scientific_sampling_unchanged": true,
+      "resource_api_browser_caps_unchanged": true
+    }
   },
   "additional_approved_experiments": [
     {
@@ -874,8 +928,8 @@
     "services_active_verified": true,
     "current_jobs_followed": {
       "sft_core": [
-        "346624",
-        "346625"
+        "346656",
+        "346657"
       ],
       "jev_actor": [
         "346638"
@@ -910,5 +964,12 @@
     "budget_transfer_allowed": false,
     "reuse_historical_results": false
   },
-  "updated_utc": "2026-10-06T07:22:53.477604+00:00"
+  "updated_utc": "2026-10-06T07:35:18.854203+00:00",
+  "operational_recovery_rules": {
+    "transient_capture_max_attempts": 3,
+    "transient_capture_shared_deadline_seconds": 15,
+    "well_formed_native_argmax_rejection": "Retain guard; no candidate executes, no fallback/replay; fresh terminal evidence required for valid non-completed canonical0 with zerojudgecalls.",
+    "other_identity_schema_transport_errors": "Shared cohort halt with preserved receipts.",
+    "selector_rejection_changes_probability_or_sampling": false
+  }
 }
