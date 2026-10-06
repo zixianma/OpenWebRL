@@ -3,7 +3,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Inference-time scaling: actor-alone results first, SFT + selectors, and the proposed controlled local-browser matrix](ARM_INFERENCE_SCALING.md).
+[Inference-time scaling: audited local actor-alone and matched SFT + selector results](ARM_INFERENCE_SCALING.md).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
 [Approved overnight continuation experiment: 100 states × 5 actions × 3 repetitions, index-only Luna-high before/after comparison; startup gate 0/12; revised collection protocol awaiting decision](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
@@ -20,7 +20,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
-| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Actor-alone and SFT + selector results; exact proposed local-browser configs, efficiency and audit limits |
+| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Audited local actor-alone and matched SFT + selector results; historical comparisons, configs, efficiency and audit limits |
 | [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, and checkpoint procedures |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |

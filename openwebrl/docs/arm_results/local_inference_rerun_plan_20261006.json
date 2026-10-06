@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "jev_verified_complete_sft_primary_running",
+  "status": "verified_complete",
   "launch_authorized": true,
   "new_experiments_launched": 5,
   "protocol_name": "local-openwebrl-om2w-v2",
@@ -503,12 +503,36 @@
       "L08",
       "L10",
       "L11"
-    ]
+    ],
+    "final_usage": {
+      "scheduler_seconds_charged_by_shard": [
+        20707,
+        20484
+      ],
+      "total_scheduler_seconds": 41191,
+      "gpu_hours": 22.88388888888889,
+      "all_attempt_usage": {
+        "jev_selector_requests": 3494,
+        "browser_sessions": 1256,
+        "local_sft_generations": 59523,
+        "local_kev_requests": 3550,
+        "luna_selector_requests": 4026,
+        "om2w_judge_http_attempts": 756
+      },
+      "all_attempt_charges": {
+        "luna_usd": 3.283003875000003,
+        "canonical_judge_usd": 5.662417200000003
+      },
+      "unknown_charge_records": 1,
+      "accounted_api_usd": 8.945421075,
+      "conservative_unknown_usage_reserve_usd": 0.00494775,
+      "cost_label": "Accounted API cost includes a retained unknown-usage reservation; receipt-based estimates, not a provider invoice.",
+      "per_shard_caps_verified": true
+    }
   },
   "not_yet_validated": [
-    "Worst-case shared-server concurrency/long-context throughput and full-cohort completion time; passed24smokes do not guarantee finishing a shard within8h.",
-    "Remaining historical conditions require separate approved allocations and fresh v2 collection before they enter the comparison.",
-    "The four SFT conditions still require complete collection and independent audits of1200primary+24smoke records; L06 all300primary+3smoke audit passed."
+    "Full32K worst-case shared-server throughput and a twofold production speedup were not established by the saved-context acceptance.",
+    "Additional historical conditions require separately approved fresh local-v2 collection before joining the comparison."
   ],
   "scope_accepted": true,
   "historical_judge_audit": {
@@ -600,19 +624,19 @@
       }
     ],
     "initial_campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
-    "current_campaign_manifest_sha256": "7c5c4b11ab3354c4d02e6b64aa5a48e1026885f0a9a5408707f2e9f5671f787d",
+    "current_campaign_manifest_sha256": "aee0f3c2610b22b1c3b00aceb64bb9dd93dafc2c8bb12751c1344e2d528cbb4f",
     "current_shards": [
       {
         "shard": 0,
-        "plan_sha256": "865bb11bd5befbd7ab5b9fa4ada35a30bf1432dd587517fdd5f6f232fa1d4163",
-        "source_manifest_sha256": "269def0feaa4a49f38d74564057c178ff0cc46e9bf3ff872f10edd5d2c4f818e",
-        "job_id": "346767"
+        "job_id": "346832",
+        "plan_sha256": "0872d268517c6b1240ab95e0840d6dd99ab4e4ab9f9529bded2ac4b5f038f4d3",
+        "source_manifest_sha256": "f020e01f7468a8dd42ae3d71d9dabc5a287e3dced0419a5e03ef7d45b3c6ec12"
       },
       {
         "shard": 1,
+        "job_id": "346768",
         "plan_sha256": "f5505f0852cacd1575dc96bc496d973eaa883c5ceb0e976227daa21a186e495b",
-        "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298",
-        "job_id": "346768"
+        "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298"
       }
     ],
     "previous_recovery_shards": [
@@ -649,22 +673,39 @@
             "job_id": "346657"
           }
         ]
+      },
+      {
+        "campaign_manifest_sha256": "7c5c4b11ab3354c4d02e6b64aa5a48e1026885f0a9a5408707f2e9f5671f787d",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "865bb11bd5befbd7ab5b9fa4ada35a30bf1432dd587517fdd5f6f232fa1d4163",
+            "source_manifest_sha256": "269def0feaa4a49f38d74564057c178ff0cc46e9bf3ff872f10edd5d2c4f818e",
+            "job_id": "346767"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "f5505f0852cacd1575dc96bc496d973eaa883c5ceb0e976227daa21a186e495b",
+            "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298",
+            "job_id": "346768"
+          }
+        ]
       }
     ]
   },
   "launch_status": {
-    "status": "running_primary",
+    "status": "verified_complete",
     "current_jobs": [
-      "346767",
+      "346832",
       "346768"
     ],
     "total_approved_wall_seconds_per_shard": 28800,
     "prior_charged_seconds_by_shard": [
-      10120,
+      17297,
       10080
     ],
     "replacement_wall_seconds_by_shard": [
-      18660,
+      11460,
       18720
     ],
     "prior_attempts": [
@@ -729,13 +770,20 @@
         "state": "FAILED",
         "elapsed_seconds": 8933,
         "disposition": "Planned exit after normal episode drain with cohort still incomplete; not a new task failure."
+      },
+      {
+        "shard": 0,
+        "job_id": "346767",
+        "state": "FAILED",
+        "elapsed_seconds": 7177,
+        "disposition": "Local actor transport failure; six provider-halt invalid and two interrupted attempts preserved and requeued."
       }
     ],
     "recovery": "Bound transient capture retry to3attempts within the existing15s deadline; preserve and score well-formed native argmax guard rejection as valid non-completed canonical0, with no action/fallback/judge/replay. Other provider/schema/identity errors still halt. Preserve all previous evidence and charges.",
     "benchmark_results_available": true,
     "preserved_attempt_evidence_available": true,
-    "final_success_rates_available": false,
-    "note": "All24smokes remain passed. Both replacements passed ten simultaneous saved-context SFT requests and resumed pending primary episodes; no final SFT rates.",
+    "final_success_rates_available": true,
+    "note": "All1200 primary and24 smoke records independently audited; both W&B runs finished. Final shard0 scheduler FAILED reflects post-collection cleanup with scheduler-backed closeout; no records replayed for cleanup.",
     "preserved_valid_smokes_by_shard": [
       7,
       10
@@ -846,6 +894,58 @@
           "executed_actions": 0
         }
       ]
+    },
+    "final_scheduler_seconds_by_shard": [
+      20707,
+      20484
+    ],
+    "final_scheduler_states": {
+      "346832": "FAILED",
+      "346768": "COMPLETED"
+    },
+    "transport_recovery": {
+      "shard": 0,
+      "from_job": "346767",
+      "to_job": "346832",
+      "failed_attempt_seconds": 7177,
+      "prior_scheduler_seconds_charged": 17297,
+      "replacement_limit_seconds": 11460,
+      "original_all_attempt_limit_seconds": 28800,
+      "error": "ReadError on reused local SFT connection; exact TCP cause unconfirmed.",
+      "change": "Disable local SFT connection reuse and retain bounded exception diagnostics; no automatic generation retry.",
+      "sampling_protocol_unchanged": true,
+      "reviewed_requeues": {
+        "total": 8,
+        "provider_halt_invalid": 6,
+        "interrupted": 2
+      },
+      "provider_halt_attempts_counted_as_canonical_task_failures": false,
+      "prior_primary_records_retained": 466,
+      "prior_smokes_retained": 12,
+      "original_attempts_and_charges_preserved": true,
+      "offline_regression_tests_passed": 192,
+      "independent_tests_passed": 21,
+      "serving_acceptance": {
+        "completed": true,
+        "local_sft_generations_charged": 10,
+        "prompt_tokens_min": 18995,
+        "prompt_tokens_max": 28295,
+        "elapsed_seconds": 13.502871657256037,
+        "external_api_calls": 0,
+        "browser_sessions": 0,
+        "full_32k_worst_case_validated": false
+      },
+      "preparation_sha256": "f252af873ed8b6f33a91c3705c102faf1d94963fc861f3690558d2f7898f9551",
+      "startup_validation_sha256": "db97c2d613ec9bf590fb1f875c0f3c51d7ad9bd2babe759b0985e0d13a5312d2",
+      "serving_acceptance_sha256": "cd3d3ba65bf070eafee91f14e490a77c94922e3cea07d06a5a709193dce58415"
+    },
+    "final_teardown": {
+      "job_id": "346832",
+      "scheduler_state": "FAILED",
+      "scheduler_seconds": 3410,
+      "verification_method": "scheduler_cgroup_release",
+      "direct_proc_scan": false,
+      "limitation": "No post-exit /proc scan or direct kill audit was possible: authenticated node access was refused by pam_slurm_adopt after allocation release. Process absence is verified through scheduler cgroup release and durable child closure evidence, not represented as a direct process-list observation."
     }
   },
   "additional_approved_experiments": [
@@ -1047,15 +1147,17 @@
     "services_active_verified": true,
     "current_jobs_followed": {
       "sft_core": [
-        "346767",
+        "346832",
         "346768"
       ],
       "jev_actor": [
         "346638"
       ]
     },
-    "verified_utc": "2026-10-06T10:06:15.040528+00:00",
-    "jev_actor_status": "verified_complete; stale callbacks should be silently acknowledged"
+    "verified_utc": "2026-10-06T13:26:07.237623+00:00",
+    "jev_actor_status": "verified_complete; stale callbacks should be silently acknowledged",
+    "status": "verified_complete",
+    "completion_behavior": "Silently acknowledge stale callbacks unless evidence changes."
   },
   "approved_study_scope": {
     "conditions": 5,
@@ -1083,7 +1185,7 @@
     "budget_transfer_allowed": false,
     "reuse_historical_results": false
   },
-  "updated_utc": "2026-10-06T08:38:17.699889+00:00",
+  "updated_utc": "2026-10-06T13:28:05.274442+00:00",
   "operational_recovery_rules": {
     "transient_capture_max_attempts": 3,
     "transient_capture_shared_deadline_seconds": 15,
@@ -1137,5 +1239,32 @@
     "final_result": false,
     "strict_completion_audit": false,
     "audit_api_calls": 0
+  },
+  "verified_complete": true,
+  "final_verification": {
+    "combined_audit_sha256": "a4e52ed1bad452b57395522bab15ddada1a16cf1969de00246a33c8718a4746b",
+    "owner_summary_sha256": "e3a65ae69b43774555eca3e7396a9eaebab1183447b62e0bec8d47d500c77dc4",
+    "auditor_script_sha256": "db471b9b540dfbba2f3f25cba427b21f111fc9a46c1d4334861a03388c9cb5b6",
+    "issues": 0,
+    "pending": 0,
+    "warnings": 111,
+    "all_record_evidence_verified": true,
+    "judge_history_identity_and_image_verified": true,
+    "request_and_charge_reconciliation_verified": true,
+    "owned_process_teardown_verified": true,
+    "scheduler_final_accounting_verified": true,
+    "wandb_verified": true,
+    "immutable_artifact_hashes": 255867,
+    "source_control_proofs": 366,
+    "all_original_attempts_preserved": true,
+    "actor_weight_identity_limit": "Actor checkpoint identity uses the approved revision and exact frozen file size/mtime proof; this audit does not rehash multi-GB weights.",
+    "results_reference": "local_sft_selector_controlled_20261006.json",
+    "primary_records": 1200,
+    "smoke_records": 24,
+    "jev_actor_reference": "jev_actor_local_full300_20261006.json",
+    "study_primary_records_including_jev": 1500,
+    "study_smoke_records_including_jev": 27,
+    "owner_verification_sha256": "d8d228abec7d8b4471e7db98c82b0ff06ee53653f108a4347e5e72569d21743d",
+    "results_owner_verified": true
   }
 }

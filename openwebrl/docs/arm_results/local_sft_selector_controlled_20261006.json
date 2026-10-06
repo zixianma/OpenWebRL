@@ -1,0 +1,758 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-06",
+  "experiment": "Matched local-browser SFT N=1 versus N=5 selectors",
+  "protocol_name": "local-openwebrl-om2w-v2",
+  "status": "verified_complete",
+  "verified_complete": true,
+  "audit_passed": true,
+  "publication_gate": {
+    "final_audits_verified": true,
+    "all_1200_primary_records_verified": true,
+    "wandb_verified": true,
+    "note": "Independent artifact/accounting audit and owner verification passed; all1200 primary and24 smoke records preserved.",
+    "results_owner_verified": true
+  },
+  "scope": {
+    "condition_ids": [
+      "L01",
+      "L08",
+      "L10",
+      "L11"
+    ],
+    "target_tasks_per_condition": 300,
+    "target_primary": 1200,
+    "separate_smoke": 24,
+    "historical_result_reuse": false,
+    "separate_jev_actor_result": "jev_actor_local_full300_20261006.json"
+  },
+  "metric_definitions": {
+    "overall_success_rate": "successes / all300 primary tasks; invalids count as zero",
+    "valid_only_success_rate": "successes / valid primary records",
+    "delta_overall_vs_L01_percentage_points": "100*(selector overall rate - fresh L01 overall rate) on the same300 tasks",
+    "common_valid_comparison": "Restrict each comparison to task IDs valid in both arms; publish counts and paired effects without task IDs.",
+    "smokes_excluded": true,
+    "all_attempt_costs_preserved": true
+  },
+  "conditions": [
+    {
+      "condition_id": "L01",
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": null,
+      "candidates_per_step": 1,
+      "status": "verified_complete",
+      "counts": {
+        "primary": 300,
+        "valid_primary": 254,
+        "invalid_primary": 46,
+        "successes": 94,
+        "smoke": 6,
+        "smoke_successes": 2
+      },
+      "denominators": {
+        "overall": 300,
+        "valid_only": 254
+      },
+      "overall_success_rate": 0.31333333333333335,
+      "valid_only_success_rate": 0.3700787401574803,
+      "delta_overall_vs_L01_percentage_points": 0.0,
+      "terminal_screenshots": {
+        "primary": 257,
+        "valid_primary": 254
+      },
+      "invalid_causes": {
+        "infrastructure_or_input_budget_invalid": 3,
+        "missing_fresh_terminal_evidence": 43
+      },
+      "terminal_status_counts": {
+        "Status.ABORTED": 120,
+        "Status.COMPLETED": 180
+      }
+    },
+    {
+      "condition_id": "L08",
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "gpt-6-luna",
+      "candidates_per_step": 5,
+      "status": "verified_complete",
+      "counts": {
+        "primary": 300,
+        "valid_primary": 255,
+        "invalid_primary": 45,
+        "successes": 121,
+        "smoke": 6,
+        "smoke_successes": 3
+      },
+      "denominators": {
+        "overall": 300,
+        "valid_only": 255
+      },
+      "overall_success_rate": 0.4033333333333333,
+      "valid_only_success_rate": 0.4745098039215686,
+      "delta_overall_vs_L01_percentage_points": 9.0,
+      "terminal_screenshots": {
+        "primary": 258,
+        "valid_primary": 255
+      },
+      "invalid_causes": {
+        "missing_fresh_terminal_evidence": 42,
+        "infrastructure_or_input_budget_invalid": 3
+      },
+      "terminal_status_counts": {
+        "Status.ABORTED": 121,
+        "Status.COMPLETED": 178,
+        "Status.FAILED": 1
+      }
+    },
+    {
+      "condition_id": "L10",
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "jev-1.13.0",
+      "candidates_per_step": 5,
+      "status": "verified_complete",
+      "counts": {
+        "primary": 300,
+        "valid_primary": 250,
+        "invalid_primary": 50,
+        "successes": 100,
+        "smoke": 6,
+        "smoke_successes": 1
+      },
+      "denominators": {
+        "overall": 300,
+        "valid_only": 250
+      },
+      "overall_success_rate": 0.3333333333333333,
+      "valid_only_success_rate": 0.4,
+      "delta_overall_vs_L01_percentage_points": 2.0,
+      "terminal_screenshots": {
+        "primary": 250,
+        "valid_primary": 250
+      },
+      "invalid_causes": {
+        "missing_fresh_terminal_evidence": 50
+      },
+      "terminal_status_counts": {
+        "Status.ABORTED": 109,
+        "Status.COMPLETED": 190,
+        "Status.FAILED": 1
+      }
+    },
+    {
+      "condition_id": "L11",
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "jaredpalmer/kev-27b",
+      "candidates_per_step": 5,
+      "status": "verified_complete",
+      "counts": {
+        "primary": 300,
+        "valid_primary": 247,
+        "invalid_primary": 53,
+        "successes": 122,
+        "smoke": 6,
+        "smoke_successes": 4
+      },
+      "denominators": {
+        "overall": 300,
+        "valid_only": 247
+      },
+      "overall_success_rate": 0.4066666666666667,
+      "valid_only_success_rate": 0.4939271255060729,
+      "delta_overall_vs_L01_percentage_points": 9.333333333333334,
+      "terminal_screenshots": {
+        "primary": 249,
+        "valid_primary": 247
+      },
+      "invalid_causes": {
+        "missing_fresh_terminal_evidence": 51,
+        "infrastructure_or_input_budget_invalid": 2
+      },
+      "terminal_status_counts": {
+        "Status.ABORTED": 105,
+        "Status.COMPLETED": 194,
+        "Status.FAILED": 1
+      }
+    }
+  ],
+  "paired_comparisons": [
+    {
+      "baseline": "L01",
+      "selector_condition": "L08",
+      "all_tasks": {
+        "tasks": 300,
+        "both_success": 67,
+        "selector_only_success": 54,
+        "baseline_only_success": 27,
+        "neither_success": 152,
+        "baseline_successes": 94,
+        "selector_successes": 121,
+        "baseline_success_rate": 0.31333333333333335,
+        "selector_success_rate": 0.4033333333333333,
+        "delta_percentage_points": 9.0,
+        "delta_percentage_points_95_interval": [
+          3.3333333333333335,
+          14.666666666666666
+        ],
+        "bootstrap_seed": 20261006
+      },
+      "common_valid": {
+        "tasks": 231,
+        "both_success": 67,
+        "selector_only_success": 44,
+        "baseline_only_success": 19,
+        "neither_success": 101,
+        "baseline_successes": 86,
+        "selector_successes": 111,
+        "baseline_success_rate": 0.3722943722943723,
+        "selector_success_rate": 0.4805194805194805,
+        "delta_percentage_points": 10.822510822510823,
+        "delta_percentage_points_95_interval": [
+          4.329004329004329,
+          17.316017316017316
+        ],
+        "bootstrap_seed": 20261007
+      }
+    },
+    {
+      "baseline": "L01",
+      "selector_condition": "L10",
+      "all_tasks": {
+        "tasks": 300,
+        "both_success": 57,
+        "selector_only_success": 43,
+        "baseline_only_success": 37,
+        "neither_success": 163,
+        "baseline_successes": 94,
+        "selector_successes": 100,
+        "baseline_success_rate": 0.31333333333333335,
+        "selector_success_rate": 0.3333333333333333,
+        "delta_percentage_points": 2.0,
+        "delta_percentage_points_95_interval": [
+          -3.6666666666666665,
+          7.666666666666667
+        ],
+        "bootstrap_seed": 20261008
+      },
+      "common_valid": {
+        "tasks": 228,
+        "both_success": 57,
+        "selector_only_success": 35,
+        "baseline_only_success": 26,
+        "neither_success": 110,
+        "baseline_successes": 83,
+        "selector_successes": 92,
+        "baseline_success_rate": 0.36403508771929827,
+        "selector_success_rate": 0.40350877192982454,
+        "delta_percentage_points": 3.9473684210526314,
+        "delta_percentage_points_95_interval": [
+          -2.6315789473684212,
+          10.526315789473685
+        ],
+        "bootstrap_seed": 20261009
+      }
+    },
+    {
+      "baseline": "L01",
+      "selector_condition": "L11",
+      "all_tasks": {
+        "tasks": 300,
+        "both_success": 68,
+        "selector_only_success": 54,
+        "baseline_only_success": 26,
+        "neither_success": 152,
+        "baseline_successes": 94,
+        "selector_successes": 122,
+        "baseline_success_rate": 0.31333333333333335,
+        "selector_success_rate": 0.4066666666666667,
+        "delta_percentage_points": 9.333333333333334,
+        "delta_percentage_points_95_interval": [
+          3.6666666666666665,
+          15.0
+        ],
+        "bootstrap_seed": 20261010
+      },
+      "common_valid": {
+        "tasks": 228,
+        "both_success": 68,
+        "selector_only_success": 46,
+        "baseline_only_success": 20,
+        "neither_success": 94,
+        "baseline_successes": 88,
+        "selector_successes": 114,
+        "baseline_success_rate": 0.38596491228070173,
+        "selector_success_rate": 0.5,
+        "delta_percentage_points": 11.403508771929825,
+        "delta_percentage_points_95_interval": [
+          4.824561403508772,
+          18.42105263157895
+        ],
+        "bootstrap_seed": 20261011
+      }
+    }
+  ],
+  "configuration": {
+    "actor": {
+      "kind": "local_generative",
+      "model": "OpenWebRL/OpenWebRL-4B-SFT",
+      "revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+      "decoding": {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "top_k": -1,
+        "max_new_tokens": 4096,
+        "repetition_penalty": 1.0,
+        "context_tokens": 32768,
+        "dtype": "bfloat16",
+        "quantization": null
+      }
+    },
+    "selectors": {
+      "luna_medium_selector": "gpt-6-luna",
+      "jev": "jev-1.13.0",
+      "kev27b": "jaredpalmer/kev-27b"
+    },
+    "selector_images": false,
+    "shared_selector_observation": "text/DOM, task, five candidates and five recent actions",
+    "browser": {
+      "backend": "local_process",
+      "viewport": [
+        1280,
+        720
+      ],
+      "locale": "en-US",
+      "timezone": "UTC",
+      "device_scale_factor": 1
+    },
+    "judge": {
+      "model": "o4-mini-2025-04-16",
+      "seed": 42,
+      "max_completion_tokens": 4096,
+      "source_file_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+      "system_prompt_sha256": "6906e021cb15a3398225fe82232ea5ee61b1cb7489c0bbbd9be4ad82f2000ca9",
+      "terminal_rule": "Use canonical reward_func dispatch: only Sample.Status.COMPLETED is judged; non-completed episodes receive zero without a judge call. A done action signals COMPLETED, not success; action/decision/deadline limits remain non-completed. Preserve infrastructure-invalid classification separately."
+    },
+    "full_configuration_reference": "local_inference_rerun_plan_20261006.json"
+  },
+  "budget": {
+    "approved_compute": {
+      "jobs": 2,
+      "per_job": {
+        "gpus": 2,
+        "gpu_type": "H200",
+        "cpus": 16,
+        "memory_gib": 240,
+        "total_scheduler_seconds_all_attempts": 28800,
+        "maximum_gpu_hours": 16
+      },
+      "max_concurrent_gpus": 4,
+      "max_concurrent_cpus": 32,
+      "max_concurrent_memory_gib": 480,
+      "maximum_gpu_hours": 32
+    },
+    "api_caps": {
+      "actor_proposals": 316800,
+      "luna_requests": 19810,
+      "jev_requests": 19810,
+      "local_kev_requests": 19810,
+      "luna_usd": 50,
+      "canonical_judge_http_attempts": 5280,
+      "canonical_judge_usd": 25
+    },
+    "browser_session_caps": {
+      "total": 1320,
+      "per_arm": 330,
+      "concurrent": 16,
+      "primary": 1200,
+      "smoke": 24,
+      "infrastructure_recovery": 96
+    },
+    "scheduler_seconds_charged_by_shard": [
+      20707,
+      20484
+    ],
+    "scheduler_attempts": [
+      {
+        "shard": 0,
+        "job_id": "346534",
+        "state": "FAILED",
+        "elapsed_seconds": 23,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28800,
+        "replacement_for": null
+      },
+      {
+        "shard": 0,
+        "job_id": "346538",
+        "state": "FAILED",
+        "elapsed_seconds": 144,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28740,
+        "replacement_for": "346534"
+      },
+      {
+        "shard": 0,
+        "job_id": "346557",
+        "state": "FAILED",
+        "elapsed_seconds": 199,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28620,
+        "replacement_for": "346538"
+      },
+      {
+        "shard": 0,
+        "job_id": "346624",
+        "state": "FAILED",
+        "elapsed_seconds": 859,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28380,
+        "replacement_for": "346557"
+      },
+      {
+        "shard": 0,
+        "job_id": "346656",
+        "state": "FAILED",
+        "elapsed_seconds": 8895,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 27540,
+        "replacement_for": "346624",
+        "disposition": "Planned normal episode drain; incomplete-cohort controller exit is not a new task failure."
+      },
+      {
+        "shard": 0,
+        "job_id": "346767",
+        "state": "FAILED",
+        "elapsed_seconds": 7177,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 18660,
+        "replacement_for": "346656",
+        "disposition": "Local SFT transport ReadError; affected provider-halt and interrupted attempts preserved, excluded from canonical task-failure counts, and requeued within the original budget."
+      },
+      {
+        "shard": 0,
+        "job_id": "346832",
+        "state": "FAILED",
+        "elapsed_seconds": 3410,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 11460,
+        "replacement_for": "346767",
+        "disposition": "All612 shard records were saved before a process-identity cleanup guard caused FAILED. Final release verified through scheduler cgroup release and durable child-closure evidence, not a post-exit /proc scan; no task replay."
+      },
+      {
+        "shard": 1,
+        "job_id": "346535",
+        "state": "FAILED",
+        "elapsed_seconds": 23,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28800,
+        "replacement_for": null
+      },
+      {
+        "shard": 1,
+        "job_id": "346539",
+        "state": "FAILED",
+        "elapsed_seconds": 142,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28740,
+        "replacement_for": "346535"
+      },
+      {
+        "shard": 1,
+        "job_id": "346558",
+        "state": "FAILED",
+        "elapsed_seconds": 168,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28620,
+        "replacement_for": "346539"
+      },
+      {
+        "shard": 1,
+        "job_id": "346625",
+        "state": "FAILED",
+        "elapsed_seconds": 814,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 28440,
+        "replacement_for": "346558"
+      },
+      {
+        "shard": 1,
+        "job_id": "346657",
+        "state": "FAILED",
+        "elapsed_seconds": 8933,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 27600,
+        "replacement_for": "346625",
+        "disposition": "Planned normal episode drain; incomplete-cohort controller exit is not a new task failure."
+      },
+      {
+        "shard": 1,
+        "job_id": "346768",
+        "state": "COMPLETED",
+        "elapsed_seconds": 10404,
+        "alloc_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1",
+        "time_limit_seconds": 18720,
+        "replacement_for": "346657"
+      }
+    ],
+    "all_attempt_usage": {
+      "jev_selector_requests": 3494,
+      "browser_sessions": 1256,
+      "local_sft_generations": 59523,
+      "local_kev_requests": 3550,
+      "luna_selector_requests": 4026,
+      "om2w_judge_http_attempts": 756
+    },
+    "per_shard_caps_verified": true,
+    "historical_budget_transfer": false,
+    "terminal_attempt_scheduler_seconds_by_shard": [
+      20707,
+      20484
+    ],
+    "scheduler_accounting_as_of_utc": "2026-10-06T13:26:07.237623+00:00",
+    "scheduler_charge_note": "All13 scheduler attempts are terminal and fully charged; both shards remain within their separate28800-second caps. The final shard0 cleanup limitation is preserved in provenance.",
+    "total_scheduler_seconds": 41191,
+    "gpu_hours": 22.88388888888889,
+    "scheduler_final_accounting_verified": true,
+    "all_attempt_charges": {
+      "luna_usd": 3.283003875000003,
+      "canonical_judge_usd": 5.662417200000003
+    },
+    "unknown_charge_records": 1,
+    "accounted_api_usd": 8.945421075,
+    "usage_priced_api_estimate_usd": 8.940473325,
+    "conservative_unknown_usage_reserve_usd": 0.00494775,
+    "cost_label": "Accounted API cost includes a retained unknown-usage reservation; receipt-based estimates, not a provider invoice.",
+    "unknown_charge_detail": {
+      "records": 1,
+      "condition_id": "L08",
+      "job_id": "346557",
+      "kind": "luna_selector_requests",
+      "cause": "CancelledError with missing usage",
+      "conservative_reserved_usd": 0.00494775,
+      "reservation_retained": true,
+      "budget_caps_verified": true
+    },
+    "usage_priced_estimates": {
+      "luna_usd": 3.278056125,
+      "canonical_judge_usd": 5.6624172
+    }
+  },
+  "verification": {
+    "combined_audit_sha256": "a4e52ed1bad452b57395522bab15ddada1a16cf1969de00246a33c8718a4746b",
+    "owner_summary_sha256": "e3a65ae69b43774555eca3e7396a9eaebab1183447b62e0bec8d47d500c77dc4",
+    "auditor_script_sha256": "db471b9b540dfbba2f3f25cba427b21f111fc9a46c1d4334861a03388c9cb5b6",
+    "issues": 0,
+    "pending": 0,
+    "warnings": 111,
+    "all_record_evidence_verified": true,
+    "judge_history_identity_and_image_verified": true,
+    "request_and_charge_reconciliation_verified": true,
+    "owned_process_teardown_verified": true,
+    "scheduler_final_accounting_verified": true,
+    "wandb_verified": true,
+    "immutable_artifact_hashes": 255867,
+    "source_control_proofs": 366,
+    "all_original_attempts_preserved": true,
+    "actor_weight_identity_limit": "Actor checkpoint identity uses the approved revision and exact frozen file size/mtime proof; this audit does not rehash multi-GB weights.",
+    "owner_verification_sha256": "d8d228abec7d8b4471e7db98c82b0ff06ee53653f108a4347e5e72569d21743d",
+    "results_owner_verified": true
+  },
+  "provenance": {
+    "partition_sha256": "6cd9db242665d4c7e367bd9e837874dc24125f45aac75cfc6b822a0715517f0a",
+    "campaign_manifest_sha256": "aee0f3c2610b22b1c3b00aceb64bb9dd93dafc2c8bb12751c1344e2d528cbb4f",
+    "shards": [
+      {
+        "shard": 0,
+        "job_id": "346832",
+        "plan_sha256": "0872d268517c6b1240ab95e0840d6dd99ab4e4ab9f9529bded2ac4b5f038f4d3",
+        "source_manifest_sha256": "f020e01f7468a8dd42ae3d71d9dabc5a287e3dced0419a5e03ef7d45b3c6ec12"
+      },
+      {
+        "shard": 1,
+        "job_id": "346768",
+        "plan_sha256": "f5505f0852cacd1575dc96bc496d973eaa883c5ceb0e976227daa21a186e495b",
+        "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298"
+      }
+    ],
+    "wandb_project": "openwebrl-evals",
+    "wandb_run_urls": [
+      "https://wandb.ai/zixianma/openwebrl-evals/runs/local-sft-selector-controlled-20261006-parallel-v3-shard-0",
+      "https://wandb.ai/zixianma/openwebrl-evals/runs/local-sft-selector-controlled-20261006-parallel-v3-shard-1"
+    ],
+    "previous_frozen_preparations": [
+      {
+        "campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "7ffefbfc3cedc15c0adc55c35543372d5c77b2db19ff0585567a5c53af5c58a2",
+            "source_manifest_sha256": "e7683907770e5fa1e6e09a5f86f094fe577953b3ccf1adaed5f8b71c9f1bc212"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "3ea14770db8c3bd8bc1df60c7a85010eeb7d9caac484df6db730b5ffa242bb02",
+            "source_manifest_sha256": "e7683907770e5fa1e6e09a5f86f094fe577953b3ccf1adaed5f8b71c9f1bc212"
+          }
+        ]
+      },
+      {
+        "campaign_manifest_sha256": "7b5ef0db55be2bcbb01d30f2ca6924449d99732021400cf3ab2949e72b391eb9",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "b75f3f8ee5d8c5e6fb7623e324c4570a626bdd0eecd79b95f0995503d106bdff",
+            "source_manifest_sha256": "879d6dd870e00cb767d1ea26a95f1ec28a81ac937d2cb9c5e526d677d11f794b",
+            "job_id": "346624"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "c007826d8aaf09b23a6938da0b5d4d47609ef59665f20d58855a96bfeb7d0de5",
+            "source_manifest_sha256": "0c769b7fde438a8d933526b6a11388c795a152f545eb2bbca9ccde4e2422e7c7",
+            "job_id": "346625"
+          }
+        ]
+      },
+      {
+        "campaign_manifest_sha256": "eaefceeeae34adf8ccbe6617b16f68451de10cf1624707beb658ccff5cd26aba",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "b7a795249ac94be2589c9d942b87d83dcaf5bd24b69df7e35f6b3c0173ccefcd",
+            "source_manifest_sha256": "b28811b533d8b48ef9549bb1881e1a7ce86821d6230389640a6ece15f20e0ef7",
+            "job_id": "346656"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "8416aee6cca58f8657b8b26d192ab25e59263dfbc22c1d3fb89ce17af6a6c78c",
+            "source_manifest_sha256": "06660bf5d444861e467e5d5dd34451cd6cd0a38be870e9f2a072e29e96e07a24",
+            "job_id": "346657"
+          }
+        ]
+      },
+      {
+        "campaign_manifest_sha256": "7c5c4b11ab3354c4d02e6b64aa5a48e1026885f0a9a5408707f2e9f5671f787d",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "865bb11bd5befbd7ab5b9fa4ada35a30bf1432dd587517fdd5f6f232fa1d4163",
+            "source_manifest_sha256": "269def0feaa4a49f38d74564057c178ff0cc46e9bf3ff872f10edd5d2c4f818e",
+            "job_id": "346767"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "f5505f0852cacd1575dc96bc496d973eaa883c5ceb0e976227daa21a186e495b",
+            "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298",
+            "job_id": "346768"
+          }
+        ]
+      }
+    ],
+    "transport_recovery": {
+      "shard": 0,
+      "from_job": "346767",
+      "to_job": "346832",
+      "failed_attempt_seconds": 7177,
+      "prior_scheduler_seconds_charged": 17297,
+      "replacement_limit_seconds": 11460,
+      "original_all_attempt_limit_seconds": 28800,
+      "error": "ReadError on reused local SFT connection; exact TCP cause unconfirmed.",
+      "change": "Disable local SFT connection reuse and retain bounded exception diagnostics; no automatic generation retry.",
+      "sampling_protocol_unchanged": true,
+      "reviewed_requeues": {
+        "total": 8,
+        "provider_halt_invalid": 6,
+        "interrupted": 2
+      },
+      "provider_halt_attempts_counted_as_canonical_task_failures": false,
+      "prior_primary_records_retained": 466,
+      "prior_smokes_retained": 12,
+      "original_attempts_and_charges_preserved": true,
+      "offline_regression_tests_passed": 192,
+      "independent_tests_passed": 21,
+      "serving_acceptance": {
+        "completed": true,
+        "local_sft_generations_charged": 10,
+        "prompt_tokens_min": 18995,
+        "prompt_tokens_max": 28295,
+        "elapsed_seconds": 13.502871657256037,
+        "external_api_calls": 0,
+        "browser_sessions": 0,
+        "full_32k_worst_case_validated": false
+      },
+      "preparation_sha256": "f252af873ed8b6f33a91c3705c102faf1d94963fc861f3690558d2f7898f9551",
+      "startup_validation_sha256": "db97c2d613ec9bf590fb1f875c0f3c51d7ad9bd2babe759b0985e0d13a5312d2",
+      "serving_acceptance_sha256": "cd3d3ba65bf070eafee91f14e490a77c94922e3cea07d06a5a709193dce58415"
+    },
+    "source_and_wandb_proofs": [
+      {
+        "shard": 0,
+        "judge_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+        "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+        "prompt_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+        "tool_list_sha256": "e8d4051ee4e0ba743f90ebd9e5e40a60b82a48afe7b6a7079e39255916a9cdaa",
+        "scientific_config_sha256": "cfec2bc444d8c9adee0e95ba2177fb2d9cedcd11ad054e466c03536a21a98d13",
+        "wandb": {
+          "id": "local-sft-selector-controlled-20261006-parallel-v3-shard-0",
+          "project": "openwebrl-evals",
+          "state": "finished",
+          "url": "https://wandb.ai/zixianma/openwebrl-evals/runs/local-sft-selector-controlled-20261006-parallel-v3-shard-0",
+          "checked_unix": 1791292240.9825077,
+          "final_counts_verified": true
+        },
+        "plan_sha256": "aa203c5583264d159d3941f3d5c739655864b027756aac5c1b65d797f9383448",
+        "approval_sha256": "34c6b1cf1271eacb85303efe4ff96e48a0ece33c0c9a14fc12d58234b1c4b0a9",
+        "source_manifest_sha256": "f020e01f7468a8dd42ae3d71d9dabc5a287e3dced0419a5e03ef7d45b3c6ec12",
+        "collection_complete_sha256": "0f5e74b9875cf81d4d75122977cda6e05f74bcb8edb97a41af88a12e23d898a5",
+        "wandb_receipt_sha256": "8caa6c174e720aa84028e4b76feee5f03d46a2f7d71dfd48a70b88cb4ff9366b"
+      },
+      {
+        "shard": 1,
+        "judge_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+        "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+        "prompt_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+        "tool_list_sha256": "e8d4051ee4e0ba743f90ebd9e5e40a60b82a48afe7b6a7079e39255916a9cdaa",
+        "scientific_config_sha256": "cfec2bc444d8c9adee0e95ba2177fb2d9cedcd11ad054e466c03536a21a98d13",
+        "wandb": {
+          "id": "local-sft-selector-controlled-20261006-parallel-v3-shard-1",
+          "project": "openwebrl-evals",
+          "state": "finished",
+          "url": "https://wandb.ai/zixianma/openwebrl-evals/runs/local-sft-selector-controlled-20261006-parallel-v3-shard-1",
+          "checked_unix": 1791291501.0575402,
+          "final_counts_verified": true
+        },
+        "plan_sha256": "8b648af6bec58b0b8450b8983823c26fcdf54c04c74e008eb44db802456b8a5e",
+        "approval_sha256": "f2084acce176e52c5f76717fc14542c60598b5470ec457e580eaab05215a4043",
+        "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298",
+        "collection_complete_sha256": "3d511351b45f5b6551af8746b36f868437bd490e5ee78f339f1522cfdc9430c0",
+        "wandb_receipt_sha256": "cacd46c9b9289702c20ca3159c72caaf70a63e63ec901b6ea73b51fec1e9b2cc"
+      }
+    ],
+    "final_teardown": {
+      "job_id": "346832",
+      "scheduler_state": "FAILED",
+      "scheduler_seconds": 3410,
+      "verification_method": "scheduler_cgroup_release",
+      "direct_proc_scan": false,
+      "limitation": "No post-exit /proc scan or direct kill audit was possible: authenticated node access was refused by pam_slurm_adopt after allocation release. Process absence is verified through scheduler cgroup release and durable child closure evidence, not represented as a direct process-list observation."
+    },
+    "historical_and_closeout_verification_sha256": "c8e610c17c40808c0d2a012cc98781ae1f39b32d97bc753ddff0b3b51fb55079"
+  },
+  "comparison_limits": [
+    "Fresh local v2 results remain separate from historical hosted or differently wrapped judge cohorts.",
+    "Canonical rubric partial-progress allowances are unchanged; this is not a strict-completion score.",
+    "Paired task intervals do not eliminate website drift or judge error.",
+    "Historical hosted-versus-local score differences combine browser, prompt, generation, stopping and judge-wrapper changes; they cannot be attributed to judge leniency alone."
+  ],
+  "public_payload": "Aggregate metrics and provenance only; no task IDs, raw trajectories, screenshots, or private filesystem paths.",
+  "audit_created_utc": "2026-10-06T13:21:05.373287+00:00",
+  "verified_utc": "2026-10-06T13:26:07.237623+00:00",
+  "paired_interval_method": {
+    "name": "paired nonparametric task bootstrap",
+    "draws": 200000,
+    "base_seed": 20261006,
+    "confidence_level": 0.95,
+    "interval": "2.5th and97.5th percentiles of selector-minus-baseline percentage-point differences",
+    "implementation": "Multinomial resampling of the audited paired2x2 outcome counts; equivalent to drawing matched tasks with replacement.",
+    "common_valid_conditioning": "Common-valid intervals condition on the observed common-valid task set.",
+    "limitations": "Intervals quantify task sampling, not website drift, protocol differences, judge errors, or model stochasticity across fresh repetitions."
+  }
+}

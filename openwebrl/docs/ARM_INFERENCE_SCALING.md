@@ -2,13 +2,14 @@
 
 **Main actor: official `OpenWebRL/OpenWebRL-4B-SFT`; Qwen3-VL-4B-Thinking is the actor ablation.** Actor-only performance comes first, followed by the gain from selecting among proposed actions.
 
-**Current local-browser result: Jev actor-only achieves 4.67% (14/300); the four matched SFT conditions are still running.** The historical tables retain eleven completed full300 conditions, comprising 3,000 fresh episodes and 300 reused SFT records, across different browser and harness protocols. Keep those results separate from the five-condition fresh local-browser study.
+**Fresh local-browser result: SFT N=1 scores 31.33%; selecting among five SFT actions reaches 40.33% with Luna and 40.67% with Kev27B.** Jev selection reaches 33.33%; Jev actor-only scores 4.67%. All five conditions are independently audited. The historical tables retain eleven completed full300 conditions, comprising 3,000 fresh episodes and 300 reused SFT records, across different browser and harness protocols. Keep those results separate from the five-condition fresh local-browser study.
 
 ## Contents
 
-- [Actor alone: current local-browser result](#local-jev-actor-results-20261006)
+- [Actor alone: current local-browser results](#local-jev-actor-results-20261006)
+- [Actor + selector: matched local-browser results](#local-sft-selector-results-20261006)
 - [Actor alone: historical results](#actor-selector-experiment-tracker-20261004)
-- [Actor + selector: existing results](#scaling-comparisons)
+- [Actor + selector: historical results](#scaling-comparisons)
 - [Controlled local-browser suite](#local-browser-rerun-20261006)
 - [Historical protocol differences](#luna-actor-full300-20261004)
 - [Efficiency details](#luna-full300-results-20261006)
@@ -18,17 +19,57 @@
 - [Pilots and provenance](#luna-qwen-inference-20261004)
 
 <a id="local-jev-actor-results-20261006"></a>
-## Actor alone: current local-browser result
+## Actor alone: current local-browser results
 
-| Actor | Protocol | Overall success | Valid-only success | Invalid tasks |
+<!-- local-v2-actor-results:start -->
+| Actor | Proposals per step | Overall success | Valid-only success | Invalid tasks |
 | --- | --- | ---: | ---: | ---: |
-| **Jev Ultrafast + GPT-4.1-mini typing** | **Local v2** | **4.67% (14/300)** | **5.38% (14/260)** | **40/300** |
+| **Official OpenWebRL-SFT** | **1** | **31.33% (94/300)** | **37.01% (94/254)** | **46/300** |
+| Jev Ultrafast + GPT-4.1-mini typing | Native DOM choices | **4.67% (14/300)** | **5.38% (14/260)** | **40/300** |
+<!-- local-v2-actor-results:end -->
+
+Both rows use **local v2**. The fresh SFT N=1 row is the matched control for the selectors below; the historical SFT score is not reused. Jev is a separate complete actor system with its typing helper.
+
+<a id="local-sft-selector-results-20261006"></a>
+## Actor + selector: matched local-browser results
+
+<!-- local-v2-selector-results:start -->
+| Same SFT actor + selector | N | Overall success | Valid-only success | Invalid tasks | Δ overall vs SFT N=1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| GPT-6 Luna medium | 5 | **40.33% (121/300)** | 47.45% (121/255) | 45/300 | +9.00pp |
+| Jev 1.13.0 | 5 | **33.33% (100/300)** | 40.00% (100/250) | 50/300 | +2.00pp |
+| Kev27B | 5 | **40.67% (122/300)** | 49.39% (122/247) | 53/300 | +9.33pp |
+<!-- local-v2-selector-results:end -->
+
+**Luna and Kev each add about nine percentage points over matched SFT N=1; they differ by only one success.** Jev adds six successes (+2pp); its paired 95% interval includes zero. These are scores under the unchanged canonical rubric, including its partial-progress allowances, not strict-completion scores.
+
+**Overall = successes / all 300 primary tasks; valid-only = successes / valid primary records.** Invalids count as zero overall. Smokes and recovery attempts are excluded from these denominators, but every attempt remains charged. Of 194 invalid primary records, 186 lack fresh terminal evidence and eight are infrastructure/input-budget invalids. All 1,006 valid records have a verified terminal screenshot.
+
+<details>
+<summary>Matched-task checks and paired 95% intervals</summary>
+
+| Selector | Overall Δ vs SFT N=1, pp [95% interval] | Common-valid successes: selector / SFT | Common-valid tasks | Common-valid Δ, pp [95% interval] |
+| --- | ---: | ---: | ---: | ---: |
+| Luna | +9.00 [3.33, 14.67] | 111 / 86 | 231 | +10.82 [4.33, 17.32] |
+| Jev | +2.00 [-3.67, 7.67] | 92 / 83 | 228 | +3.95 [-2.63, 10.53] |
+| Kev27B | +9.33 [3.67, 15.00] | 114 / 88 | 228 | +11.40 [4.82, 18.42] |
+
+Intervals use 200,000 paired task-bootstrap draws; common-valid comparisons condition on tasks valid in both arms. They quantify task sampling, not website drift or judge error. [Audited aggregate counts and bootstrap method](arm_results/local_sft_selector_controlled_20261006.json).
+
+</details>
+
+All four SFT conditions share T=1.0, p=0.95, top-k off, 4,096 output tokens, local Chromium 1280×720 and the unchanged canonical OM2W judge; only completed episodes are judged. Selectors receive the same text/DOM view and five full candidates, without images. The SFT budget was **two independent 2-H200 jobs, each capped at 8 hours across all attempts**. All 1,200 primary records and 24 separate smokes passed the artifact/accounting audit; both W&B runs finished with reconciled counts. [Audited aggregate results](arm_results/local_sft_selector_controlled_20261006.json) · [Full configuration and caps](arm_results/local_inference_rerun_plan_20261006.json).
+
+<details>
+<summary>Completed Jev actor: audit, saved-only judge repair and budget</summary>
 
 All 300 primary records and 3 separate smokes passed the independent artifact/accounting audit. There were 224 native `BLOCKED` endings and 40 observation/infrastructure invalids; invalids count as zero in the overall denominator. Every valid primary record has a terminal screenshot. [Aggregate results and provenance](arm_results/jev_actor_local_full300_20261006.json).
 
 The initial Jev-to-judge adapter omitted required tool-call newlines and native tool names, yielding unparseable actions. After repairing that adapter, **all 23 valid `DONE` records were rejudged from the same saved operations and PNG bytes**, regardless of their earlier verdict. The canonical rubric, reward source, model, seed and token cap stayed unchanged; native actions remain faithful and thoughts empty. Earlier verdicts are preserved and superseded; no actor or browser episode was replayed for this repair. This remains the canonical rubric's score, not a strict-completion score.
 
-The complete lineage used **760/14,400 CPU-allocation seconds**, **306/330 browser sessions**, 1,523 Jev requests, 192 typing calls ($0.0298748), and 46 judge calls ($0.2052523), including failures and the saved-only repair. This result does not measure a selector gain: the matched SFT control and three selector conditions are still running, while earlier Jev/Kev scores used different harnesses.
+The complete lineage used **760/14,400 CPU-allocation seconds**, **306/330 browser sessions**, 1,523 Jev requests, 192 typing calls ($0.0298748), and 46 judge calls ($0.2052523), including failures and the saved-only repair. Jev actor-only does not isolate selector quality. Its separate CPU budget cannot be transferred to the SFT shards; historical hosted Jev/Kev results use a different harness.
+
+</details>
 
 <a id="actor-selector-experiment-tracker-20261004"></a>
 <a id="luna-cpu-family-results-20261005"></a>
@@ -53,7 +94,7 @@ The complete lineage used **760/14,400 CPU-allocation seconds**, **306/330 brows
 Jev's historical [10-task pilot](rl_results/jev-ultrafast-pilot-20261004.json) is separate from its completed local v2 full300 result above. Direct Jev/Kev use DOM decisions plus GPT-4.1-mini for typing; the other actors use screenshots. API-actor defects are documented in the [audit](#api-actor-stopping-audit-20261005).
 
 <a id="scaling-comparisons"></a>
-## Actor + selector: existing results
+## Actor + selector: historical results
 
 **N** is the number of proposed next actions; only the selected action is executed.
 
@@ -72,7 +113,7 @@ Jev's historical [10-task pilot](rl_results/jev-ultrafast-pilot-20261004.json) i
 For SFT, Luna N=10 did not improve on N=5 (−0.33pp, paired 95% interval −5.33 to +4.67) and cost 19.9% more. Jev/Kev are nearly tied on the same 279 valid tasks: **175 versus 176 successes**; after the typing repair in both arms, **147 versus 149 on 238 tasks**. Their gains over the old SFT baseline and the gap versus Luna do not isolate selector quality. Both cohorts contain confirmed incomplete-task positives under the lenient rubric; see the [saved-evidence audit](#sft-selector-judge-leniency-20261006).
 
 <a id="qwen-actor-ablation"></a>
-The Qwen ablation supplies the completed within-protocol actor-alone comparison: **17.67% → 28.33%**, or +10.67pp [5.67, 16.00], at 2.23× serving cost. The SFT-alone reference instead used T=0.7/p=0.9/1,024 tokens, versus T=1.0/p=0.95/4,096 in the selector studies. A fresh matched SFT control is essential.
+The Qwen ablation supplies the completed within-protocol actor-alone comparison: **17.67% → 28.33%**, or +10.67pp [5.67, 16.00], at 2.23× serving cost. The SFT-alone reference instead used T=0.7/p=0.9/1,024 tokens, versus T=1.0/p=0.95/4,096 in the selector studies. The fresh local v2 control above now provides that matched comparison; it does not retroactively match the historical cohorts.
 
 Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experiment_tracker.json). All eleven completed historical cohorts appear once in these two historical tables; the Jev pilot is not a full300 cohort. Paired intervals quantify task sampling, not website drift, harness bias or judge error.
 
@@ -80,7 +121,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 <a id="local-browser-rerun-20261006"></a>
 ## Controlled local-browser suite
 
-**Five approved conditions × the same 300 Online-Mind2Web tasks = 1,500 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. The SFT core contributes 1,200 episodes across two independent 2-GPU shards; Jev actor-only contributes 300 in its separately approved CPU job. The old SFT baseline will not fill the new control row. Jev actor-only is verified complete; all 24 smoke episodes passed across the two SFT shards, which have entered primary collection with no final SFT rates. Model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
+**Five approved conditions × the same 300 Online-Mind2Web tasks = 1,500 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. The SFT core contributes 1,200 episodes across two independent 2-GPU shards; Jev actor-only contributes 300 in its separately approved CPU job. The historical SFT baseline was not reused. All five conditions are verified complete: 1,500 primary records, plus 24 SFT smokes and three separate Jev actor smokes. Model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
 
 | ID | Actor | Selector | Proposals per step | Actor decoding | Selector decision |
 | --- | --- | --- | ---: | --- | --- |
@@ -90,7 +131,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 | **L10** | **Official SFT** | **Jev 1.13.0** | **5** | Same as L01 | Argmax choice |
 | **L11** | **Official SFT** | **Kev27B** | **5** | Same as L01 | Calibrated argmax choice |
 
-**All five conditions are approved and have launched.** L06 uses native Jev DOM decisions without actor images, plus `gpt-4.1-mini-2025-04-14` for typing at T=0.6, p=0.95 and 1,024 tokens. It shares the pinned browser and canonical judge with the SFT core, but has its own worker pool, ledger and CPU budget. Qwen ablations, Luna N=10, Kev actor-only and the three GPT actor reruns have no active v2 allocation. They can be prepared independently when their separate budgets are approved; they need not wait for these runs to finish. **Every additional arm needs fresh v2 results** before joining this comparison.
+**All five approved conditions are complete.** L06 uses native Jev DOM decisions without actor images, plus `gpt-4.1-mini-2025-04-14` for typing at T=0.6, p=0.95 and 1,024 tokens. It shares the pinned browser and canonical judge with the SFT core, but has its own worker pool, ledger and CPU budget. Qwen ablations, Luna N=10, Kev actor-only and the three GPT actor reruns have no active v2 allocation. They can be prepared independently when their separate budgets are approved. **Every additional arm needs fresh v2 results** before joining this comparison.
 
 ### Shared configuration
 
@@ -113,7 +154,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 
 The matched selector comparison is L01 versus L08/L10/L11. L06 measures the complete Jev direct-actor system, including its typing helper; it does not isolate selection quality. The shared selector input deliberately differs from earlier Luna selection, which also saw screenshots and full history. Local browsers still call hosted Jev/GPT selector APIs; all four arms use the same screenshot-based SFT proposer.
 
-**Approved and submitted as two parallel jobs:** 172 combined offline tests and independent review pass; frozen-controller dry-runs pass. The common worker retains its real CPU checks for prompt/image processing, local Chromium settings, normalized-coordinate clicks, Linux text replacement, stopping, fresh final screenshots and complete browser-process teardown. The revised controller decouples browser workers from SFT replicas: eight collectors share one SFT endpoint per job, with one separate Kev GPU. Both jobs passed their 12-episode smoke gates and entered primary collection. Smoke actor-request P95 latency was 23.3 / 24.9s (max 28.5 / 30.2s), with maximum observed prompts of 22,308 / 18,393 tokens; this does not validate worst-case long-context throughput. Jev's exact confirmed context-limit error remains an input-budget invalid without truncation or fallback; unknown provider errors stop dispatch.
+**Completed within the approved two-job budget:** 172 combined offline tests and independent review pass; frozen-controller dry-runs pass. The common worker retains its real CPU checks for prompt/image processing, local Chromium settings, normalized-coordinate clicks, Linux text replacement, stopping, fresh final screenshots and complete browser-process teardown. The revised controller decouples browser workers from SFT replicas: eight collectors share one SFT endpoint per job, with one separate Kev GPU. Both shards passed their 12-episode smoke gates and completed all 600 primary records each. Smoke actor-request P95 latency was 23.3 / 24.9s (max 28.5 / 30.2s), with maximum observed prompts of 22,308 / 18,393 tokens; this does not validate worst-case long-context throughput. Jev's exact confirmed context-limit error remains an input-budget invalid without truncation or fallback; unknown provider errors stop dispatch.
 
 | Parallel job | Task assignment | GPU layout | CPU / RAM | Cumulative wall-clock cap, all attempts |
 | --- | --- | --- | --- | --- |
@@ -121,7 +162,7 @@ The matched selector comparison is L01 versus L08/L10/L11. L06 measures the comp
 | Shard 1 | Other150 tasks × all four conditions = 600 primary episodes | 1 H200 SFT + 1 H200 Kev | 16 CPUs / 240 GiB | 8 hours |
 | **Combined** | **All300 tasks × four conditions = 1,200 primary episodes** | **4 H200 concurrently** | **32 CPUs / 480 GiB concurrently** | **32 H200-hours maximum** |
 
-Both jobs can proceed independently in parallel. Each has its own scheduler accounting, browser/API ledger, W&B identity and replacement lineage. Task subsets are disjoint and cover all 300; every task retains all four conditions on one browser host. No selector is assigned a separate browser host. Aggregate results require both independent audits.
+The shards ran independently in parallel, with separate scheduler accounting, browser/API ledgers, W&B identities and replacement lineages. Their disjoint task subsets cover all 300; every task retains all four conditions in its shared shard browser pool. Both final audits passed.
 
 | Approved SFT cap, including all attempts | Per shard | SFT core total |
 | --- | ---: | ---: |
@@ -135,7 +176,7 @@ Both jobs can proceed independently in parallel. Each has its own scheduler acco
 
 The approved two-job layout replaces the unapproved 8-GPU × 16-hour proposal. It reduces the maximum compute reservation from 128 to 32 H200-hours, while retaining total browser/API ceilings; the extra 12 smokes come from the recovery reserve. One-GPU jobs would require unvalidated SFT/Kev colocation or model swapping. Two GPUs keep both models resident independently.
 
-**Eight hours per job is a cap, not a measured completion forecast.** Eight browser collectors can create up to 40 simultaneous candidate requests; the replacement SFT server permits ten in flight, increased from five after a normal drain of active episodes. Queue delay counts toward the unchanged 180s model and 1,800s episode deadlines. Continue tracking shared-server latency, observed context lengths and GPU use; the passed smoke episodes do not validate worst-case long-context throughput. No scientific timeout or decoding limit is relaxed to conceal overload. Every failed attempt is charged to its original shard, with no automatic transfer between shards or from historical budgets. Both plans and their partition/cap manifest were frozen before submission; targeted recovery changes retain their lineage and accounting.
+The SFT serving cap increased from five to ten in-flight requests after active episodes drained normally; saved-context acceptance passed before resuming. Queue delays remained inside the unchanged 180s model and 1,800s episode deadlines. This does not establish full-32K worst-case capacity or a twofold speedup. All failed attempts remained charged to their original shard, with no budget transfers; frozen source and recovery lineage are preserved.
 
 ### Separately approved Jev actor budget
 
@@ -165,15 +206,11 @@ V2 freezes the browser binary, prompts, model revisions, decoding, selector obse
 Luna selection with images, Kev 0.8B actor/selector, learned ScalarARM/SelectionARM and oracle episode pass@k remain outside the five approved conditions. No selectively repeated valid failures or changed canonical historical verdicts are planned.
 
 <!-- local-suite-live-status:start -->
-**October 6 serving recovery:** SFT replacements **346767 / 346768 resumed primary collection**, retaining all 24 passed smokes and saved primary episodes. All 16 active episodes finished normally before the change; none was replayed. Only SFT maximum in-flight requests increases from five to ten; sampling, context/output limits, eager execution, 0.60 memory fraction, browsers, judge and budget caps stay unchanged. Prior scheduler use is **10,120 / 10,080 seconds**; replacement limits are **18,660 / 18,720 seconds**, within the unchanged **28,800-second total per shard**. The previous jobs' scheduler `FAILED` states reflect the planned controller exit with collection incomplete, not new task failures. No SFT final rates are available.
+**Verified closeout:** the SFT core saved and audited all **1,200 primary + 24 smoke records**, with zero unresolved audit issues. All attempts used **20,707 / 20,484 scheduler seconds** against separate 28,800-second caps: **22.88 of 32 approved H200-hours**. Usage was **1,256/1,320 browsers**, 59,523 SFT proposals, 4,026 Luna, 3,494 Jev, 3,550 Kev and 756 judge requests. Accounted API cost was **$8.9454**, including a retained **$0.00494775** unknown-usage reservation; these are receipt-based estimates, not a provider invoice. [Complete counts, caps and provenance](arm_results/local_sft_selector_controlled_20261006.json).
 
-The serving change passed 62 offline tests and independent review. Both replacements passed ten simultaneous saved-input requests: **18,995–28,295 / 18,238–20,272 prompt tokens**, completing in **14.7 / 13.5s** with the stored sampling, images and seeds. All 20 calls were charged to the SFT-generation ledgers, with no browser or external API calls. This acceptance test does not establish full-32K worst-case capacity or a twofold production speedup.
+Recoveries preserved every attempt and charge. Eight provider-halt/interrupted episodes were replayed after the local SFT transport repair; original invalid attempts were excluded from canonical task-failure counts. Final shard-0 job **346832 remains `FAILED`** because a process-identity cleanup guard tripped after all 612 records were saved. Closeout used **scheduler cgroup release and durable child-closure evidence**; a post-exit `/proc` scan was unavailable after allocation access ended. The independent audit accepted that explicit limitation. Shard-1 job **346768 completed**.
 
-Earlier recovery preserved seven / ten valid smokes and reopened five capture-invalid episodes plus two interrupted by the sibling halt. Its targeted fixes retry transient screenshot capture at most three times within the existing 15s deadline and treat a well-formed, pinned-model non-argmax choice as a **valid model-decision failure**: reject it, execute no action or fallback, preserve fresh terminal evidence, and apply canonical non-completed zero without a judge call. Identity, schema and transport failures still halt. The saved Jev-selector rejection was amended from its existing evidence without replay; 172 offline tests and independent review passed. Sampling and budgets are unchanged.
-
-A saved primary judge-history audit found all **461 executed actions and 384 thoughts present across 29 judged episodes**, with exact canonical prompt and terminal-image matches. This is a sampling snapshot under the unchanged rubric, not a final result or strict-completion audit. [Aggregate milestone evidence](arm_results/local_inference_rerun_plan_20261006.json).
-
-**Jev actor L06 remains verified complete:** 14/300 overall and 14/260 valid-only, with all 23 `DONE` judge inputs repaired from saved evidence. Its full lineage used **760/14,400 seconds**. The SFT supervisor follows both replacements; no budget was added.
+Jev actor L06 remains **14/300 overall, 14/260 valid-only**, with its separate complete lineage charged **760/14,400 CPU-allocation seconds**. All five results use the unchanged canonical rubric. Differences from the historical hosted Jev/Kev scores combine browser, prompt, decoding, stopping and judge-wrapper changes; the gap cannot be attributed to judge leniency alone.
 <!-- local-suite-live-status:end -->
 
 <a id="luna-actor-full300-20261004"></a>
@@ -255,7 +292,7 @@ The prompt defect affects SFT/Qwen proposal actors as well as API actors; the na
 1. **Missing system prompt:** frozen source packaging omitted Markdown prompt assets, and the loader silently supplied an empty system message. Actors still received the task, screenshot and tool schemas, but no system-level browser-agent instruction. The same missing browser-policy text affected local Qwen/SFT actors in the Luna study and hosted SFT proposers in the Jev/Kev study; local actors still received their tokenizer tool-schema wrapper. The hosted frozen sources also omit the required Markdown file, and their loader falls back to an empty policy. This finding concerns the actor policy, not the separately constructed selector prompts.
 2. **Lost native conversation state:** the adapter rebuilt later turns as Qwen-style XML text, discarding native Responses reasoning items and tool-call IDs. Stateless native tool loops should preserve returned output items and pair execution feedback with the original call ID. See the [Responses reasoning guide](https://developers.openai.com/api/docs/guides/reasoning).
 
-These are confirmed implementation problems, not measured explanations for a particular percentage-point loss. Working-tree fixes to the Luna/API pipeline passed **112 offline tests** and three-turn replays of saved Luna-high and Sol-high responses: prompt assets are pinned and required, native state/call IDs persist, and only the current screenshot is replayed. The corrected protocol has a separate version and prompt hashes, and workers reject mismatched identities. Completed frozen sources and canonical verdicts stay unchanged. Live provider acceptance and any success-rate improvement remain unmeasured; a new, matched cohort is needed. The newly identified hosted SFT path still needs equivalent prompt-packaging/preflight validation before a fresh launch. First-action failures cannot be caused by loss of earlier-turn state. [Offline verification summary](arm_results/reasoning_actors_full300_20261005/pipeline-debug.json).
+These are confirmed implementation problems, not measured explanations for a particular percentage-point loss. Working-tree fixes to the Luna/API pipeline passed **112 offline tests** and three-turn replays of saved Luna-high and Sol-high responses: prompt assets are pinned and required, native state/call IDs persist, and only the current screenshot is replayed. The corrected protocol has a separate version and prompt hashes, and workers reject mismatched identities. Completed frozen sources and canonical verdicts stay unchanged. Live provider acceptance and any success-rate improvement remain unmeasured; a new, matched cohort is needed. The fresh local v2 SFT study above used a restored pinned prompt and passed prompt/image preflight; it does not repair or rerun the historical hosted cohorts. First-action failures cannot be caused by loss of earlier-turn state. [Offline verification summary](arm_results/reasoning_actors_full300_20261005/pipeline-debug.json).
 
 The saved-response audit found the expected model and high reasoning effort on all **5,393 Luna-high and 3,974 Sol-high returned responses**, with no incomplete output or output-cap hits. The corrected full300 cohorts do not show the old coordinate-remapping bug described below.
 
