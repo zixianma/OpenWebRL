@@ -1,5 +1,5 @@
 {
-  "status": "reserve800_prefetch_running",
+  "status": "wait_watchdog_repair_queued",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -83,9 +83,9 @@
   },
   "factored_output_included": false,
   "offline_tests_passed": 113,
-  "new_gpu_allocations": 5,
+  "new_gpu_allocations": 6,
   "revision": "User requested five actions and three continuations; previous unlaunched 3x5 proposal superseded.",
-  "job_id": "347009",
+  "job_id": "347100",
   "active_agent_queue_verified": true,
   "prior_attempts": [
     {
@@ -110,14 +110,20 @@
       "state": "COMPLETED",
       "elapsed_seconds": 1309,
       "reason": "Graceful batch/teacher handoff for deterministic reserve extension and discovery prefetch; experiment not complete."
+    },
+    {
+      "job_id": "347009",
+      "state": "COMPLETED",
+      "elapsed_seconds": 2526,
+      "reason": "Graceful batch and teacher handoff for wait-watchdog fix; study incomplete."
     }
   ],
-  "current_attempt_limit_seconds": 25740,
-  "accepted_states": 7,
-  "considered_states": 34,
+  "current_attempt_limit_seconds": 23220,
+  "accepted_states": 11,
+  "considered_states": 84,
   "verified_complete": false,
-  "actual_allocation_seconds": 3004,
-  "remaining_allocation_seconds": 25796,
+  "actual_allocation_seconds": 5530,
+  "remaining_allocation_seconds": 23270,
   "gate_reason_counts": {
     "capture_failure_before_anchor": 3,
     "actor_terminated_before_fixed_depth": 7,
@@ -156,7 +162,7 @@
     },
     "note": "User directed continued repairs and submission within existing approval; implementation tested and replacement submitted."
   },
-  "prior_actual_allocation_seconds": 3004,
+  "prior_actual_allocation_seconds": 5530,
   "original_strict_stage": {
     "considered_states": 12,
     "accepted_states": 0,
@@ -168,13 +174,13 @@
     },
     "included_in_scientific_cohort": false
   },
-  "completed_continuations": 105,
-  "valid_continuations": 101,
+  "completed_continuations": 165,
+  "valid_continuations": 158,
   "invalid_continuation_reasons": {
     "missing_fresh_terminal_evidence": 4
   },
-  "verified_teacher_judgments": 98,
-  "accounting_scope": "Snapshot at replacement submission. Consumed plus reserved seconds=28744/28800; live job elapsed time accumulates separately.",
+  "verified_teacher_judgments": 154,
+  "accounting_scope": "Snapshot at replacement submission. Consumed plus reserved seconds=28750/28800; live job elapsed time accumulates separately.",
   "execution_strategy": "Ordinary c0/r0 replay first; fan out other14 only after ready. Require all15 crossed proofs before candidate execution. Independent probes, fixed task-order release.",
   "staged_recovery_preserved_all_released_work": true,
   "analysis": "Equal-weight state averages; all3 continuations and all3 teacher calls, state bootstrap, before/after repeat disagreement, separate permutation controls, failure-inclusive and paired common-valid estimates. No scientific conclusion from startup cohort.",
@@ -184,10 +190,24 @@
     "judge_requests": 57,
     "judge_usd": 0.3409989
   },
-  "model_api_calls_at_handoff": 141,
-  "local_sft_generations_at_handoff": 1169,
+  "model_api_calls_at_handoff": 247,
+  "local_sft_generations_at_handoff": 2712,
   "candidate_state_limit": 800,
   "discovery_prefetch_states": 8,
   "original200_task_prefix_preserved": true,
-  "maximum_concurrent_browsers": 30
+  "maximum_concurrent_browsers": 30,
+  "valid_teacher_judgments": 154,
+  "wait_watchdog_repair": {
+    "version": "wait-watchdog-v1",
+    "tests_passed": 49,
+    "full_duration_handler_test_seconds": 30.03613051911816,
+    "simulated_playwright_timer": true,
+    "no_browser_or_paid_calls_for_timing_fixture": true,
+    "confirmed_affected_completed_continuations": 3,
+    "old_results_preserved": true,
+    "completed_failures_selectively_rerun": false,
+    "outer_deadlines_unchanged": true,
+    "scientific_settings_unchanged": true,
+    "resource_caps_unchanged": true
+  }
 }
