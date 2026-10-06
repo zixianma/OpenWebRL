@@ -4,7 +4,7 @@
   "new_browser_sessions": 0,
   "new_gpu_allocations": 0,
   "test_counts": {
-    "tests": 97,
+    "tests": 112,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -12,7 +12,8 @@
   "fixes": {
     "prompt_assets": "Required generic and native API prompt assets copied and SHA256-pinned for future preparations; missing, empty, unpinned or changed assets fail preflight. Working-tree framework loader and native API prompt loader reject empty/missing policy.",
     "native_history": "Medium/high API actors preserve all native Responses output items, including opaque reasoning; current browser feedback is attached as function_call_output to original call_id. Previous input images are removed while output items remain unchanged. Framework/action mismatch, multiple calls and repeated IDs fail closed.",
-    "future_packaging_followup": "Pilot FILES now includes responses_actor_history.py. Full300 CODE now includes corrected luna_qwen_policy.py plus history helper. Pilot/full300 startup validates required prompt manifest. Future manifests identify native_responses_v1."
+    "future_packaging_followup": "Pilot FILES now includes responses_actor_history.py. Full300 CODE now includes corrected luna_qwen_policy.py plus history helper. Pilot/full300 startup validates required prompt manifest. Future manifests identify native_responses_v1.",
+    "protocol_identity": "Corrected prompt hashes, restored local-policy version and native API history version are now included in PROTOCOL and full-family scientific protocol, so record protocol_sha256 changes. Preparations verify copied hashes; pilot/full300/high workers reject old or mismatched identity and changed prompt bytes."
   },
   "validation_coverage": [
     "three-turn SDK-shaped native output replay",
@@ -36,5 +37,6 @@
   ],
   "date": "2026-10-06",
   "missing_prompt_scope": "API actors and local Qwen/SFT actors in the Luna full300 study lacked browser-policy text; local actors still received tokenizer tool-schema wrappers. Luna selector prompt was constructed separately.",
-  "canonical_scores_changed": false
+  "canonical_scores_changed": false,
+  "protocol_version": "browser-prompts-native-responses-v1"
 }
