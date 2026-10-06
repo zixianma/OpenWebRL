@@ -58,15 +58,17 @@ ablation and new browser data remain later-stage planning.
 <a id="arm-continuation-branches-20261006"></a>
 ### Overnight continuation branches — prepared October 6 UTC
 
-**Running as replacement job 346655; initial replay gate in progress.** The user approved the revised 5 × 3
+**Startup gate stopped: 0 accepted states /12 considered; no continuation or teacher results yet.** The user approved the revised 5 × 3
 experiment. The scheduler rejected the original 48-CPU request before allocating
 resources; its limit is eight CPUs per GPU. The accepted request uses **4 H200,
 32 CPUs, 480 GiB, eight hours total across retries**, with two state groups
 (30 browsers) in parallel. The $15 Luna / $25 judge ceilings are unchanged.
 An active-agent supervisor has a verified queue receipt and held ownership lock;
 All four actor identities and the resumed evaluation W&B run are verified;
-live prefix collection has begun. Full reconstruction/continuation/teacher
-validation remains pending.
+live prefix collection completed its initial gate. Job 346655 exited after
+350 seconds; together with the first attempt, 445 of28,800 approved allocation
+seconds are consumed. All browser reservations are closed. No model API
+spending occurred. The experiment is partial, not verified complete.
 The user requested enough continuations overnight to assess the benefit of
 execution-informed selection. This supersedes the small 30-state pilot as the
 proposed launch. The user revised the design to **five actions × three continuations**;
@@ -190,6 +192,24 @@ logs, attempt records and counters are retained. Replacement 346655 has a
 hours. No API or compute budget was added. Two initial browser reservations
 remain charged; interrupted discovery attempts are explicitly authorized for
 retry with preserved lineage.
+
+**Gate diagnosis and proposed amendment (not yet approved):** seven of the
+12 actors terminated before their assigned depth, three failed stable capture,
+one lacked five distinct candidate commands, and one produced a panel whose
+15 replays all differed from the reference. Those replay mismatches included
+page content, forms and independent-session storage, so simply ignoring cookie
+values would not have accepted that panel.
+
+The proposed recovery samples earlier prespecified depths 0/1/2, keeps exactly
+five actor draws including duplicates (reporting action diversity), and requires
+matching task-visible page/forms/grounded controls and the same tight screenshot
+tolerance while preserving raw session/storage evidence as diagnostics. This is
+an explicit change to the state cohort and equivalence definition; it is not a
+bug fix or a claim of complete browser-state restoration. It awaits the user's
+choice. The actor, decoding, five-actions × three-continuations design, paired
+teacher conditions and all budget ceilings would remain unchanged. Remaining
+allocation time is 28,355 seconds; no replacement has been submitted after the
+gate failure.
 
 [Aggregate protocol and resource request](arm_results/rl_integration/continuation-branches-protocol-20261006.json).
 

@@ -1,5 +1,5 @@
 {
-  "status": "running_initial_reconstruction_gate",
+  "status": "startup_gate_failed_protocol_decision_pending",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -83,7 +83,56 @@
       "job_id": "346645",
       "state": "FAILED",
       "elapsed_seconds": 95
+    },
+    {
+      "job_id": "346655",
+      "state": "COMPLETED",
+      "elapsed_seconds": 350,
+      "experiment_complete": false
     }
   ],
-  "current_attempt_limit_seconds": 28680
+  "current_attempt_limit_seconds": 28680,
+  "accepted_states": 0,
+  "considered_states": 12,
+  "verified_complete": false,
+  "actual_allocation_seconds": 445,
+  "remaining_allocation_seconds": 28355,
+  "gate_reason_counts": {
+    "capture_failure_before_anchor": 3,
+    "actor_terminated_before_fixed_depth": 7,
+    "anchor_captured_but_all_15_replays_failed": 1,
+    "fewer_than_five_distinct_candidates": 1
+  },
+  "proposed_amendment": {
+    "approved": false,
+    "reason": "Strict live replay startup gate accepted zero of twelve states.",
+    "changes": {
+      "anchor_depths": [
+        0,
+        1,
+        2
+      ],
+      "candidate_draws": 5,
+      "retain_duplicate_candidates": true,
+      "replay_equivalence": "Exact task-visible page, tabs, forms, scroll, focus and grounded controls plus unchanged pixel tolerance; preserve raw storage/session evidence but do not require equality of anonymous session storage."
+    },
+    "unchanged": [
+      "official SFT checkpoint",
+      "actor decoding",
+      "Luna high and index-only output",
+      "5 candidates x3 continuations",
+      "100 target states /200 candidate tasks",
+      "paired before/after inputs and common outcomes",
+      "teacher repeats and permutation checks",
+      "allocation/API all-attempt ceilings"
+    ],
+    "remaining_allocation_seconds": 28355,
+    "initial_failure_counts": {
+      "capture_failure_before_anchor": 3,
+      "actor_terminated_before_fixed_depth": 7,
+      "anchor_captured_but_all_15_replays_failed": 1,
+      "fewer_than_five_distinct_candidates": 1
+    },
+    "note": "No implementation or collection under this amendment has started; explicit user scientific-protocol decision pending."
+  }
 }
