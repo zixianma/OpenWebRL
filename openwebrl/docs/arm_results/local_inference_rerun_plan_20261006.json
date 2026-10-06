@@ -4,7 +4,7 @@
   "status": "scope_accepted_preparing_exact_budget_pending",
   "launch_authorized": false,
   "new_experiments_launched": 0,
-  "protocol_name": "local-controlled-actor-selector-v1-proposed",
+  "protocol_name": "local-openwebrl-om2w-v2",
   "scope": {
     "conditions": 4,
     "tasks_per_condition": 300,
@@ -401,14 +401,18 @@
   "judge": {
     "model": "o4-mini-2025-04-16",
     "protocol": "Online-Mind2Web/AgentTrek",
+    "implementation": "openwebrl/eval/reward_online_mind2web.py:reward_func",
     "source_file_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+    "system_prompt_sha256": "6906e021cb15a3398225fe82232ea5ee61b1cb7489c0bbbd9be4ad82f2000ca9",
     "prompt_literals_sha256": "1e2d4fb5139222149a24dcc62c02feada2a38f193d5c4437b7089d1d958f3e09",
     "seed": 42,
     "max_completion_tokens": 4096,
-    "evidence": "Task goal + executed action history + fresh final screenshot; no actor reasoning or selector identity.",
-    "terminal_rule": "Judge every usable terminal state, including action-limit and deadline endings, with the same evidence builder. Missing fresh final evidence/provider or browser failures remain explicit invalids.",
+    "evidence": "Canonical task goal + interleaved full actor thoughts/actions from the executed trajectory + fresh final screenshot. No actions-only transformation or selector identity.",
+    "terminal_rule": "Use canonical reward_func dispatch: only Sample.Status.COMPLETED is judged; non-completed episodes receive zero without a judge call. A done action signals COMPLETED, not success; action/decision/deadline limits remain non-completed. Preserve infrastructure-invalid classification separately.",
+    "metering_wrapper": "Common 4096-completion-token cap, request/dollar metering and receipts in every arm. Native upstream _judge has no output-token cap; this explicit common wrapper is the sole request-level difference.",
     "primary_scores_preserved": true,
-    "strict_secondary_review": "Prepare a separately versioned evidence-only strict-completion verdict alongside the unchanged AgentTrek compatibility score for every evidence-eligible episode. All explicit constraints/subtasks must be satisfied; no partial-action-count, partial-subtask, or missing-commit shortcuts. Preserve evidence-insufficient separately. Not yet run; separate request/dollar caps required."
+    "strict_secondary_review": false,
+    "training_monitor_is_separate": "GPT-4.1/action_history in reward_browser.py is not the Online-Mind2Web/AgentTrek judge and is not selected by using a local browser."
   },
   "budget": {
     "approved": false,
@@ -425,13 +429,9 @@
       "luna_requests": 19810,
       "jev_requests": 19810,
       "local_kev_requests": 19810,
-      "legacy_judge_http_attempts": 5280,
-      "strict_judge_http_attempts": 5280,
-      "historical_strict_judge_http_attempts": 575,
       "luna_usd": 50,
-      "legacy_judge_usd": 25,
-      "strict_judge_usd": 75,
-      "historical_strict_judge_usd": 35
+      "canonical_judge_http_attempts": 5280,
+      "canonical_judge_usd": 25
     },
     "browser_session_caps": {
       "total": 1320,
@@ -441,7 +441,7 @@
       "smoke": 12,
       "infrastructure_recovery": 108
     },
-    "note": "User accepted the narrowed scientific scope. Exact new resource/API/browser caps have not yet been approved; prior no-run instruction no longer blocks preparation, but no jobs or paid requests have been launched and no historical budget is transferred.",
+    "note": "User accepted local-browser scientific scope and the unchanged OpenWebRL OM2W judge. Exact new resource/API/browser caps have not yet been approved. No suite jobs or paid suite requests have launched, and no historical budget is transferred. The mistaken separate strict audit is stopped and separately accounted.",
     "topology_proposed": {
       "sft_tp1_replicas": 7,
       "kev27b_tp1_replicas": 1,
@@ -460,27 +460,31 @@
   ],
   "scope_accepted": true,
   "historical_judge_audit": {
-    "scope": "All600 saved Jev/Kev task records; all valid positive and negative records with verified terminal evidence are eligible, not just flagged positives.",
+    "status": "stopped_after_user_clarification",
+    "scope": "Historical strict-rubric secondary rejudge, separate from the saved-evidence offline audit.",
+    "http_attempts": 18,
+    "validated_secondary_outputs": 16,
+    "invalid_secondary_outputs": 2,
+    "known_usage_uncached_upper_cost_usd": 0.2136937,
+    "outstanding_requests": 0,
     "new_browser_sessions": 0,
     "new_actor_generations": 0,
     "canonical_verdicts_changed": false,
-    "status": "offline_preparation",
-    "model": "o4-mini-2025-04-16",
-    "max_completion_tokens": 4096,
-    "seed": 42,
-    "maximum_http_attempts": 575,
-    "automatic_retries": false,
-    "api_dollar_cap_usd_proposed": 35,
-    "approved": false,
-    "pricing_verification": {
-      "date": "2026-10-06",
-      "input_usd_per_million": 1.1,
-      "output_usd_per_million": 4.4,
-      "source": "https://developers.openai.com/api/docs/models/o4-mini",
-      "image_token_reserve": "8 tokens per unresized32px patch plus padding, conservative versus published o4-mini multiplier1.72",
-      "vision_source": "https://developers.openai.com/api/docs/guides/images-vision",
-      "snapshot_shutdown_date": "2026-10-23",
-      "deprecation_source": "https://developers.openai.com/api/docs/deprecations"
-    }
+    "use_in_comparison": false,
+    "additional_calls_authorized": false,
+    "reason": "The user clarified that approval referred to local browsers and the existing OpenWebRL judge, not a new strict judge."
+  },
+  "protocol_version_policy": {
+    "reason": "Local browsers, restored actor prompts, unified decoding and selector observations, and canonical OM2W evidence/status handling materially change the measured system.",
+    "all_compared_arms_fresh": true,
+    "historical_scores_eligible_for_new_table": false,
+    "first_wave": [
+      "L01",
+      "L08",
+      "L10",
+      "L11"
+    ],
+    "deferred_arms": "Any deferred actor/selector arm must be recollected under this same pinned protocol before joining its comparison table.",
+    "after_scientific_change": "Freeze a new protocol version and rerun every arm included in its comparison; never combine pre-change and post-change cohorts."
   }
 }

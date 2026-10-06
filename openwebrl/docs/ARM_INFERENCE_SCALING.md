@@ -66,7 +66,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 <a id="local-browser-rerun-20261006"></a>
 ## Next experiments: controlled local-browser suite
 
-**Accepted scope: four conditions × the same 300 Online-Mind2Web tasks = 1,200 fresh primary episodes.** This replaces the twelve-condition draft. The old SFT baseline will not fill the new control row. Exact resource/API caps and live validation are still pending; no new run has started. Each row inherits the shared settings below; model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
+**First wave: four conditions × the same 300 Online-Mind2Web tasks = 1,200 fresh primary episodes**, under protocol **`local-openwebrl-om2w-v2`**. This replaces the twelve-condition first-wave draft. The old SFT baseline will not fill the new control row. Exact resource/API caps and live validation are still pending; no new run has started. Each row inherits the shared settings below; model revisions, prompt hashes and failure rules are in the [config manifest](arm_results/local_inference_rerun_plan_20261006.json).
 
 | ID | Actor | Selector | Proposals per step | Actor decoding | Selector decision |
 | --- | --- | --- | ---: | --- | --- |
@@ -75,7 +75,7 @@ Source: [eleven-row aggregate tracker](arm_results/luna_full300_20261004/experim
 | **L10** | **Official SFT** | **Jev 1.13.0** | **5** | Same as L01 | Argmax choice |
 | **L11** | **Official SFT** | **Kev27B** | **5** | Same as L01 | Calibrated argmax choice |
 
-Jev actor-only remains the missing full300 experiment, separately proposed for later. Qwen ablations, Luna N=10, Kev actor-only and the three GPT actor reruns are deferred. Keep their existing results as historical evidence rather than recollecting every ablation now.
+Jev actor-only remains the missing full300 experiment, separately proposed for later. Qwen ablations, Luna N=10, Kev actor-only and the three GPT actor reruns are deferred. **Any deferred arm added to the new comparison must also be rerun under v2.** Its historical result cannot substitute for a v2 result.
 
 ### Shared proposed configuration
 
@@ -93,14 +93,24 @@ Jev actor-only remains the missing full300 experiment, separately proposed for l
 | Typing | SFT generates its own text in all four arms; no GPT-4.1-mini helper |
 | Episode/action limits | **30 action attempts, 60 decision attempts, 1,800s per episode for every arm**; count failed dispatched operations and individual operations inside compound actions; terminal `done` consumes one step. No-action decisions consume the decision limit |
 | Timeouts/retries | Model request 180s, navigation 60s, browser operation 30s, final screenshot 15s; one HTTP attempt per actor/selector/typing request; judge at most 4 HTTP attempts. Preserve all failures; no automatic episode replay |
-| Primary judge | **`o4-mini-2025-04-16`, Online-Mind2Web/AgentTrek, seed 42, 4,096 completion tokens**; task + executed actions + fresh final screenshot, no actor reasoning or selector identity. Judge every usable terminal state, including action/deadline limits; missing evidence or infrastructure failures remain explicit invalids |
+| Judge | **Unchanged OpenWebRL Online-Mind2Web/AgentTrek `reward_func`**, `o4-mini-2025-04-16`, seed 42: full actor thoughts/actions + final screenshot. Only `COMPLETED` episodes are judged; non-completed episodes score zero. No actions-only transformation or step-limit bypass. Common 4,096-token metering cap, explicitly additional to the native uncapped request |
 | Reporting | Save every attempt/request/choice/executed action and terminal evidence. Overall, valid-only, common-valid paired effects/intervals, cost, latency, invalid causes and page-access failures; separate campaign overhead from per-episode serving cost |
 
 The comparison is L01 versus L08/L10/L11. The shared selector input deliberately differs from earlier Luna selection, which also saw screenshots and full history. Local browsers still call hosted Jev/GPT selector APIs; all four arms use the same screenshot-based SFT proposer.
 
 **Readiness remains unverified:** verify the worker uses the installed, hash-checked Chromium binary; package prompts on every path; port the hosted selector runner to the common local browser; validate coordinate execution/platform-aware typing, shared selector bounds, action counters and terminal judging. Jev/Kev already have a local-browser transport, but their current adapter fixes the viewport at 1120×780 and the selector runner assumes BrowserUse. These proposed settings do not claim a working or launch-ready implementation.
 
-Report strict completion alongside the unchanged AgentTrek compatibility score for all evidence-eligible episodes, using separately versioned verdicts. The strict rubric requires all requested constraints/subtasks and evidence of completion; action counts, partial progress and an unverified `done` claim do not suffice. Evidence-insufficient cases remain distinct. First prepare the same blinded audit of all 600 saved Jev/Kev records, including positives and negatives, without rerunning browsers or actors; original invalids remain excluded. The new judge calls need their own exact caps.
+### Judge compatibility and version boundary
+
+The OM2W judge source is byte-identical across the historical runs; **its surrounding wrappers differed**. Using a local browser does not select a judge automatically. The separate GPT-4.1/action-history training monitor is not the judge for this comparison.
+
+| Pipeline | Evidence supplied to the same OM2W rubric | Step-limit ending |
+| --- | --- | --- |
+| Official OpenWebRL OM2W / new v2 suite | Full actor thoughts/actions + final screenshot | Non-completed → zero, no judge call |
+| Historical SFT + Jev/Kev | Full actor thoughts/actions + final screenshot | Custom bypass sent it to the judge |
+| Historical Luna/Qwen/SFT + Luna | Actions only + final screenshot | Non-completed → zero, no judge call |
+
+V2 freezes the browser binary, prompts, model revisions, decoding, selector observation, action limits and canonical judge evidence/status handling. Every arm in its results table is collected fresh. A later material change creates another version and requires fresh results for **all arms compared under that version**; previous scores remain labeled historical. The unchanged rubric retains its partial-progress allowances. There is **no new strict judge** in this suite.
 
 Luna selection with images, Kev 0.8B actor/selector, learned ScalarARM/SelectionARM and oracle episode pass@k remain outside the four-condition core. No selectively repeated valid failures or changed canonical historical verdicts are planned.
 
@@ -174,7 +184,7 @@ No harmonized serving-cost/latency point is asserted for Jev/Kev or the reused S
 
 **Threshold mentions and review flags are not false-positive counts.** `done` is an actor stop signal, not proof of task completion. Reviewed saved examples include an item not added to the cart, a required home-store setting omitted, and data located without the requested chart being created; the judge nevertheless credited effective actions or partial subtasks. Consequently, changing only the handling of step-limit endings would miss other incomplete positives. The step-limit difference alone concerns six Jev and one Kev positives and cannot explain the large headline gap.
 
-The prepared strict audit covers all 600 records, including original positive and negative verdicts; original invalids stay excluded. It uses preserved executed actions/tool feedback, final screenshot and terminal answer, with actor thoughts, previous verdict and model/selector identities hidden from the judge. Every explicit task requirement must be supported; missing evidence is reported separately. All 575 originally valid episodes have verified blinded inputs; the 25 original invalids remain excluded. The proposed audit uses at most 575 judge calls and a $35 API cap, with zero GPUs or browser sessions; no paid calls have run. Comparison with canonical verdicts changes both the rubric and the removal of actor thoughts, so it does not isolate the causal effect of either change. No canonical score changes. [Offline aggregate audit](arm_results/sft_selector_judge_audit_20261006.json).
+A separate strict rejudge was started after misinterpreting approval, then **stopped when the user clarified local browsers and the existing OpenWebRL judge**. It made 18 requests (16 validated outputs, 2 invalid outputs), with known-usage uncached upper cost **$0.213694**, zero browser sessions and zero actor generations. Those outputs are excluded from every comparison; no original verdict changed and no further strict calls are authorized. The saved-evidence audit above remains an offline diagnostic, not a replacement success rate. [Offline aggregate audit](arm_results/sft_selector_judge_audit_20261006.json).
 
 <a id="api-actor-reasoning-20261005"></a>
 <a id="api-actor-stopping-audit-20261005"></a>
