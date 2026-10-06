@@ -5,7 +5,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Inference-time scaling: official SFT alone versus SFT + selectors, with Qwen3 as an actor ablation and GPT/Kev direct actors as references](ARM_INFERENCE_SCALING.md).
 
-[Next critic study: fixed-policy data only; clean SFT transition conversion and research formulation pending](ARM_INTEGRATION_PLAN.md#arm-critic-comparison-20261004).
+[Next critic study: selected experiments1/3, post-evidence diagnostic and matched pre-action distillation protocol; fixed-SFT data only for fitting](ARM_INTEGRATION_PLAN.md#arm-post-evidence-protocol-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

@@ -39,6 +39,133 @@ baselines, not conceptual novelty claims. The next discussion concerns the
 supervision, identification of useful action credit, and the decision objective;
 no new neural fit, branch collection or allocation is launched by this decision.
 
+<a id="arm-post-evidence-protocol-20261006"></a>
+### Selected experiments 1 and 3: proposed execution protocol — October6 UTC
+
+The user selected the post-execution evidence diagnostic and training a
+pre-action selector from post-execution supervision, and requested the exact
+plan. New same-state branch collection is outside this first pass. Converting
+already-saved fixed-SFT rollouts is a necessary preparation step for experiment
+3; it does not authorize collecting the branches from experiment2. The
+following sample sizes and training settings are a proposal, not completed
+manifests or an approved resource request.
+
+**Experiment1: information diagnostic.** Freeze40 calibration transitions and
+200 primary transitions from Piotr after the existing task-group, held-out and
+benchmark exclusions. Task groups cannot cross calibration/primary sets.
+Sample primary rows reproducibly with task-balanced weighting; report tool,
+trajectory-depth and single/multi-call strata. Keep all nine receipts with a
+failure marker and84 identical-image transitions as a separate descriptive
+stress slice where eligible, deduplicating overlap; do not oversample them into
+the primary accuracy estimate. Counts may shrink after exclusions and must be
+reported rather than filled with leaking examples.
+
+For each transition, run the same fixed teacher under three independently
+queried conditions: (A) goal, causal history, before screenshot and canonical
+ordered tool actions; (B) A plus after screenshot; (C) B plus actual execution
+feedback/next observation. Remove proposed actor reasoning in every condition
+and keep the same history/context policy. Randomize request order; share no
+answers between conditions. Output observed/predicted effect categories,
+a distribution over local goal progress {-1,0,+1}, uncertainty, and a short
+evidence justification. Progress is movement toward the stated task, not
+terminal success or a successful browser call. Ambiguous evidence receives an
+unresolved annotation, never a fabricated zero.
+
+Construct a reference using two independently configured reviewers with full
+transition evidence, blind to A/B/C judgments and Piotr's teacher preference.
+Use deterministic receipt facts only for execution-effect checks. Disagreement
+that cannot be resolved remains unscored for progress and counts against
+coverage. These are automated reference judgments, not human ground truth;
+optional human spot checks are supplementary. Freeze labeler/reviewer model
+IDs, prompts, generation settings, versions and call caps after calibration
+and before the200-row primary panel. Do not tune on primary results.
+
+Report paired macro-F1/balanced accuracy and Brier score against the reference,
+reference agreement, unresolved/abstention coverage, and the paired difference
+B−A and C−B with task-cluster bootstrap confidence intervals. Report execution
+facts separately from semantic progress and cost/latency/tokens per condition.
+The semantic result establishes agreement with independently adjudicated
+reference labels; it does not measure true causal return improvement.
+
+**Experiment3: matched learning pilot.** Use S1 only after verifying all shard
+checkpoint/config hashes and converting causal transitions. Its recorded
+protocol is original official OpenWebRL-4B-SFT at iteration0, temperature0.8,
+top-p1.0, top-k−1,1,024 response tokens,15 turns, local browsers and the
+GPT-4.1/action_history outcome judge. Preserve native validity and actor-error
+semantics. This is separate from the earlier T1/top-p0.95 inference study.
+Piotr, ARM-guided continuations and changing-checkpoint RL records are excluded
+from this training cohort.
+
+Preserve existing held-out task groups, normalize aliases and exclude benchmark
+tasks. Split remaining eligible task groups80/10/10 with seed42; all five
+attempts of a task stay together. Target up to2,000/250/500 matched train/dev/test
+transitions, at most two per trajectory and ten per task, sampled with a fixed
+seed independently of outcome. Preserve natural class prevalence. Freeze the
+same rows for every arm; report any shortage and missing terminal after-state
+coverage. The test set is held out from new fitting, prompt development and
+checkpoint selection. Teacher-label the executed actions using A and C above;
+never copy a trajectory outcome onto an unexecuted candidate. Use independent
+reference review on test progress labels. Unresolved progress targets use a
+shared mask across progress arms and are reported explicitly; outcome labels
+remain available for their separate endpoint.
+
+| Arm | Model input | Target | Purpose |
+| --- | --- | --- | --- |
+| PRE | Before state + executed tool action | Teacher's pre-execution progress distribution | Matched pre-action judgment-supervision control |
+| POST→PRE | Identical to PRE | Teacher's post-execution progress distribution | Main test: execution-informed supervision at pre-action deployment |
+| POST | Before state/action + after observation | Same post-execution progress distribution | Measure the additional information available after execution |
+| Q | Before state + executed tool action | Native binary episode outcome | Ordinary outcome-prediction baseline, not novelty |
+| Existing SelectionARM | Its frozen canonical candidate-set interface | No new fit | Historical preference reference, not a matched-training control |
+
+For PRE/POST→PRE/POST minimize soft-target cross-entropy; for Q use binary
+cross-entropy. Rank deployable progress critics by p(progress)−p(regression).
+Maintain a separate uncertainty/coverage report rather than turning unresolved
+labels into neutral progress. No direct advantage target or local reward is
+claimed from the terminal verdict. The direct comparison is PRE versus
+POST→PRE: exactly the same student input, rows, backbone and training exposure,
+with the source of supervision changed. An outcome-only Q cannot be compared
+to a progress predictor using Brier scores on different targets.
+
+Propose the original official OpenWebRL-4B-SFT as a shared fresh critic
+initialization, language LoRA rank16/alpha32/dropout0.05, frozen vision encoder,
+AdamW learning rate1e-4, global batch32 and a maximum of two epochs. Use a
+shared8,192-text-token causal-context limit; truncate the same oldest history
+for all arms and retain the current goal/action. POST adds its after image and
+receipt; report the extra visual tokens and compute. Fit seed11 first; if
+load/save/reload and loss/label checks pass, repeat with seeds22/33, keeping
+the same data split and equal search/exposure budgets. Select checkpoints on
+each arm's declared dev endpoint only. Exact model revision, processor settings,
+physical batch/accumulation and resource caps must be frozen before launch.
+
+Primary offline comparison: PRE versus POST→PRE on independent held-out
+progress references, including calibration and coverage. POST is an
+information diagnostic, not a deployable selector with free after-states.
+Q's terminal prediction metrics are separate. Saved unexecuted candidate sets
+can support a secondary teacher-preference agreement check; they cannot yield
+measured action regret without branch returns. Post evidence may reveal
+irreducible execution randomness that a pre-action student cannot predict;
+a better POST result does not guarantee distillation gains.
+
+After offline qualification, propose a fresh paired end-to-end evaluation with
+one frozen SFT actor and N=5 for PRE, POST→PRE and the existing selector, plus
+an actor-alone control. Keep the collection protocol fixed and charge every
+candidate, selector call and retry. Track success/validity, cost, latency,
+input/output tokens, browser steps and local compute, with cost/latency/token
+plots. Do not substitute the earlier differing-protocol baseline. This later
+browser evaluation has no allocation yet; a small dev smoke precedes a sealed
+full300 test. It does not require candidate branch execution.
+
+**Budget and execution boundary.** Prepare manifests, exclusions, prompt
+payloads, token estimates, losses and tests on CPU first, in parallel where
+independent. The40-row calibration is the first paid stage; freeze exact
+labeler/reviewer choices and a dollar/call cap before requesting launch.
+Likewise propose an exact GPU/CPU/RAM/time cap and an independently budgeted
+online-evaluation stage before scheduling them. Prior pilot/full300 balances
+are not reusable approvals. No training, teacher call or new browser run has
+been launched by this plan. The research hypothesis is improved selection from
+verified post-execution supervision; V/Q, privileged-information training and
+distillation themselves are not novelty claims.
+
 ### Data that actually supports each target
 
 The [full source inventory](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004)
@@ -49,7 +176,7 @@ initial matched comparison.
 | Source | Verified available data | Appropriate supervision | Missing evidence |
 | --- | --- | --- | --- |
 | Piotr OpenWebRL subset, pinned `0d83b48` |3,085 states in412 demonstration episodes;49,536 five-candidate records,49,360 unique draw IDs; teacher choices |Pre-action preference SFT/BT; source demonstration transitions can support observation-based relabeling |No executed outcome for each sampled candidate;176 conflicting duplicate draw records require the existing identity audit |
-| Same source demonstrations |2,673 adjacent episode/turn pairs and original `demo_action` |Potential before/demo-action/after examples after lineage validation |The next screenshot belongs to the demonstration action, not the later teacher-selected candidate; no terminal-return field in these state records |
+| Same source demonstrations |2,673 verified before/action/feedback/after transitions; 2,672 parseable tool sequences |Observed effects; progress labels still required |Executed calls recovered from successor history, not truncated `demo_action`; demonstration policy unverified; no terminal-return field; [audit](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006) |
 | Prepared outcome-only RL corpus |2,750 valid binary-outcome trajectories;17,584 causal prefixes;14,825 executed nonterminal transitions |Observed-return state value, pre-action outcome prediction, post-action outcome prediction |No same-state alternative-action returns or direct advantage/progress labels |
 | Our inference and screening rollouts |Executed path, goal, action history, screenshots and terminal verdict; selector traces also retain unexecuted candidates |Additional behavior-specific outcome examples after equivalent archive checks |Candidate alternatives still lack realized transitions; OM2W benchmark trajectories stay out of critic training |
 
