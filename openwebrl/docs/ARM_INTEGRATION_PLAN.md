@@ -58,13 +58,15 @@ ablation and new browser data remain later-stage planning.
 <a id="arm-continuation-branches-20261006"></a>
 ### Overnight continuation branches — prepared October 6 UTC
 
-**Approved and queued as job 346645.** The user approved the revised 5 × 3
+**Running as replacement job 346655; initial replay gate in progress.** The user approved the revised 5 × 3
 experiment. The scheduler rejected the original 48-CPU request before allocating
 resources; its limit is eight CPUs per GPU. The accepted request uses **4 H200,
 32 CPUs, 480 GiB, eight hours total across retries**, with two state groups
 (30 browsers) in parallel. The $15 Luna / $25 judge ceilings are unchanged.
 An active-agent supervisor has a verified queue receipt and held ownership lock;
-GPU startup and useful collection are still pending.
+All four actor identities and the resumed evaluation W&B run are verified;
+live prefix collection has begun. Full reconstruction/continuation/teacher
+validation remains pending.
 The user requested enough continuations overnight to assess the benefit of
 execution-informed selection. This supersedes the small 30-state pilot as the
 proposed launch. The user revised the design to **five actions × three continuations**;
@@ -173,8 +175,21 @@ uses the transactional all-attempt ledger, preserves immutable receipts, and
 requires an exact registered approval before work. Separate evaluation logging
 uses `openwebrl-evals`. The supervisor queues the owning agent for diagnosis/recovery;
 its initial continuation receipt and persistent ownership lock are verified. GPU throughput and live reconstruction yield remain
-startup checks. CPU validation: 89 targeted tests pass; the real child-browser
+startup checks. CPU validation: 92 targeted tests pass; the real child-browser
 RPC fixture captures consistent branch observations and closes both browsers.
+
+**Startup recovery:** attempt 346645 used 95 seconds and failed before any
+actor/API calls. The complete-state check had spanned the shared capture retry
+loop and could reject a stable retried observation. It now runs inside each
+individual capture attempt, retaining the same equality criteria, three-attempt
+limit and 15-second deadline. Child ownership is registered before initialization
+so a failed reset closes and settles its browser reservation. Both fixes have
+regression tests and a fresh real child-browser replay check. Original source,
+logs, attempt records and counters are retained. Replacement 346655 has a
+7h58m limit; together with the consumed 95 seconds this remains below eight
+hours. No API or compute budget was added. Two initial browser reservations
+remain charged; interrupted discovery attempts are explicitly authorized for
+retry with preserved lineage.
 
 [Aggregate protocol and resource request](arm_results/rl_integration/continuation-branches-protocol-20261006.json).
 

@@ -6,7 +6,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Inference-time scaling: actor-alone results first, SFT + selectors, and the proposed controlled local-browser matrix](ARM_INFERENCE_SCALING.md).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
-[Approved overnight continuation experiment: 100 states × 5 actions × 3 repetitions, index-only Luna-high before/after comparison; job 346645 queued](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+[Approved overnight continuation experiment: 100 states × 5 actions × 3 repetitions, index-only Luna-high before/after comparison; job 346655 running after tested startup repair](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

@@ -1,5 +1,5 @@
 {
-  "status": "approved_queued",
+  "status": "running_initial_reconstruction_gate",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -72,10 +72,18 @@
     "selection": "one-based integer 1..5"
   },
   "factored_output_included": false,
-  "offline_tests_passed": 89,
+  "offline_tests_passed": 92,
   "new_model_calls": 0,
-  "new_gpu_allocations": 1,
+  "new_gpu_allocations": 2,
   "revision": "User requested five actions and three continuations; previous unlaunched 3x5 proposal superseded.",
-  "job_id": "346645",
-  "active_agent_queue_verified": true
+  "job_id": "346655",
+  "active_agent_queue_verified": true,
+  "prior_attempts": [
+    {
+      "job_id": "346645",
+      "state": "FAILED",
+      "elapsed_seconds": 95
+    }
+  ],
+  "current_attempt_limit_seconds": 28680
 }
