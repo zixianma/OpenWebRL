@@ -60,10 +60,10 @@
     "judge costs and all-attempt allocation GPU-hours",
     "GPU utilization/power"
   ],
-  "status": "shard0_repaired_collection_started_shard1_pending",
+  "status": "both_shards_collecting_startup_verified",
   "cpu_imports_passed": true,
   "checkpoint_sha256_verified": true,
-  "paid_api_calls": 2,
+  "paid_api_calls": 114,
   "arms": [
     {
       "actor": "OpenWebRL/OpenWebRL-4B-SFT",
@@ -91,7 +91,7 @@
   ],
   "supervisor_tests_passed": 6,
   "active_agent_queue_verified": true,
-  "completed_episodes": 4,
+  "completed_episodes": 187,
   "verified_complete": false,
   "repair": {
     "name": "awaited_receipt_io",
@@ -123,6 +123,52 @@
     "347257"
   ],
   "initial_tests_passed": 22,
-  "judge_charged_or_reserved_usd": 0.0144914,
-  "scheduler_attempts_submitted": 4
+  "judge_charged_or_reserved_usd": 0.8786799999999999,
+  "scheduler_attempts_submitted": 4,
+  "as_of_epoch": 1791323397.651063,
+  "final_accounting_verified": false,
+  "success_rate_comparison_ready": false,
+  "live_accounting": [
+    {
+      "shard": 0,
+      "job_id": "347256",
+      "completed_episodes": 118,
+      "records_hashes_verified": 118,
+      "all_attempt_allocation_seconds": 6225,
+      "remaining_total_seconds": 8175,
+      "judge": {
+        "calls": 67,
+        "charged_or_reserved_usd": 0.5568024
+      }
+    },
+    {
+      "shard": 1,
+      "job_id": "347257",
+      "completed_episodes": 69,
+      "records_hashes_verified": 69,
+      "all_attempt_allocation_seconds": 4445,
+      "remaining_total_seconds": 9955,
+      "judge": {
+        "calls": 47,
+        "charged_or_reserved_usd": 0.32187759999999993
+      }
+    }
+  ],
+  "completed_by_arm": {
+    "actor0": 61,
+    "piotr": 63,
+    "arm": 63
+  },
+  "context_limit_audit": {
+    "affected_committed_episodes": 3,
+    "physical_rejected_http_requests": 660,
+    "actor_context_tokens": 32768,
+    "completion_allowance_tokens": 1024,
+    "outcomes_retained": true,
+    "protocol_changed": false,
+    "fail_fast_patch_tests_passed": 5,
+    "fail_fast_patch_deployed": false,
+    "repair_timing": "Next otherwise-required recovery; no interruption solely to remove bounded retry delay.",
+    "request_count_caveat": "Actor requests are logical candidate calls; transport retries are separate."
+  }
 }

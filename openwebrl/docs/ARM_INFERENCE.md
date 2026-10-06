@@ -3,7 +3,7 @@
 <a id="arm-rltasks-three-arm-20261006"></a>
 ## Fresh comparison of original and RL-task SelectionARM — October 6
 
-**Recovery submitted: jobs 347256 and 347257 replace 347180 and 347181 within their original caps.** The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. This is a 900-episode experiment; no historical outcome is substituted for a fresh result.
+**Both replacement jobs are collecting: 187/900 episode records verified as of October 6, 14:49 PDT (118 on shard 0; 69 on shard 1).** Jobs 347256 and 347257 replace 347180 and 347181 within their original caps. Both passed the prespecified startup gate and now use their eight-browser queues. The user requested the earlier protocol behind the first table in `ARM_SUMMARY` (30.0% baseline / 42.7% original SelectionARM), then explicitly added Piotr's ARM as a fresh third arm. No historical outcome is substituted for a fresh result; these incomplete counts do not establish a success-rate comparison.
 
 | Arm | Actor | Selector | Proposals per decision | Fresh OM2W episodes | Status |
 | --- | --- | --- | ---: | ---: | --- |
@@ -30,7 +30,9 @@ Initial model identities, local-browser progress, W&B routing and canonical o4-m
 | 0 | 347180 | 26m24s | 347256 | 3h33m | 3h59m24s |
 | 1 | 347181 | 42s | 347257 | 3h59m | 3h59m42s |
 
-Each shard keeps its original 2 H200 / 16 CPU / 240 GiB allocation shape and $10 / 1,980 judge-call ceiling. The four committed outcomes, interrupted attempts, old frozen source and API receipts are preserved. Only missing committed slots resume. The persistent supervisor follows the replacement IDs and has a verified active-agent queue receipt; replacement startup and throughput remain under live verification. [Aggregate protocol and resource request](arm_results/selectionarm_rltasks_historical_20261006.json).
+Each shard keeps its original 2 H200 / 16 CPU / 240 GiB allocation shape and $10 / 1,980 judge-call ceiling. The four committed outcomes, interrupted attempts, old frozen source and API receipts are preserved. Only missing committed slots resume. Actual served models, sampling receipts, canonical judge receipts and both running W&B identities have been verified. The persistent supervisor follows the replacement IDs and has a verified active-agent queue receipt. [Aggregate protocol, progress and resource accounting](arm_results/selectionarm_rltasks_historical_20261006.json).
+
+**Context-limit diagnosis:** three shard-0 episodes reached the fixed 32,768-token limit when the full prompt was combined with the 1,024-token completion allowance. These outcomes remain invalid in the primary sample and count as zero overall; neither history nor the context/output limits were changed. The HTTP client made 60 HTTP attempts per rejected candidate request, producing 660 rejected HTTP requests across those three episodes. A narrowly scoped fail-fast patch passes five offline cases, including unchanged successful and transient-error behavior. It is prepared for the next otherwise-required recovery, but is **not deployed**: interrupting eight active task groups to remove this bounded retry delay would discard useful work. Browser page-load failures and these input-limit failures remain separately diagnosed. Allocation time includes the retries; logical actor-request counts do not count each transport retry separately.
 
 
 Inference-time ARM selection, terminal-success judge alignment, and unavailable-task retry policy. Initial benchmark results and retries retain separate denominators. See [all experiment results](ARM_RESULTS.md) for comparison with standalone training.
