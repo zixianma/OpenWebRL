@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "draft_for_user_review_do_not_run",
+  "status": "scope_accepted_preparing_exact_budget_pending",
   "launch_authorized": false,
   "new_experiments_launched": 0,
   "protocol_name": "local-controlled-actor-selector-v1-proposed",
   "scope": {
-    "conditions": 12,
+    "conditions": 4,
     "tasks_per_condition": 300,
-    "primary_episodes": 3600,
+    "primary_episodes": 1200,
     "reuse_historical_results": false,
     "excludes_diagnostics_and_retries": true,
     "excluded_optional_extensions": [
@@ -18,6 +18,64 @@
       "SFT + learned SelectionARM N=5",
       "Luna selector with images",
       "Oracle episode pass@k"
+    ],
+    "deferred_conditions": [
+      {
+        "id": "L02",
+        "actor_profile": "qwen3",
+        "selector_profile": null,
+        "candidates_per_step": 1,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L03",
+        "actor_profile": "luna_medium",
+        "selector_profile": null,
+        "candidates_per_step": 1,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L04",
+        "actor_profile": "luna_high",
+        "selector_profile": null,
+        "candidates_per_step": 1,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L05",
+        "actor_profile": "sol_high",
+        "selector_profile": null,
+        "candidates_per_step": 1,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L06",
+        "actor_profile": "jev",
+        "selector_profile": null,
+        "candidates_per_step": 1,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L07",
+        "actor_profile": "kev27b",
+        "selector_profile": null,
+        "candidates_per_step": 1,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L09",
+        "actor_profile": "sft",
+        "selector_profile": "luna_medium_selector",
+        "candidates_per_step": 10,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      },
+      {
+        "id": "L12",
+        "actor_profile": "qwen3",
+        "selector_profile": "luna_medium_selector",
+        "candidates_per_step": 5,
+        "reason": "Deferred to avoid repeating ablations; Jev actor-only remains a separately proposed missing experiment."
+      }
     ]
   },
   "dataset": {
@@ -188,87 +246,10 @@
       "typing_helper": null
     },
     {
-      "id": "L02",
-      "actor_profile": "qwen3",
-      "selector_profile": null,
-      "candidates_per_step": 1,
-      "tasks": 300,
-      "group": "actor_alone",
-      "actor_view": "screenshot_and_history",
-      "selector_view": null,
-      "typing_helper": null
-    },
-    {
-      "id": "L03",
-      "actor_profile": "luna_medium",
-      "selector_profile": null,
-      "candidates_per_step": 1,
-      "tasks": 300,
-      "group": "actor_alone",
-      "actor_view": "screenshot_and_history",
-      "selector_view": null,
-      "typing_helper": null
-    },
-    {
-      "id": "L04",
-      "actor_profile": "luna_high",
-      "selector_profile": null,
-      "candidates_per_step": 1,
-      "tasks": 300,
-      "group": "actor_alone",
-      "actor_view": "screenshot_and_history",
-      "selector_view": null,
-      "typing_helper": null
-    },
-    {
-      "id": "L05",
-      "actor_profile": "sol_high",
-      "selector_profile": null,
-      "candidates_per_step": 1,
-      "tasks": 300,
-      "group": "actor_alone",
-      "actor_view": "screenshot_and_history",
-      "selector_view": null,
-      "typing_helper": null
-    },
-    {
-      "id": "L06",
-      "actor_profile": "jev",
-      "selector_profile": null,
-      "candidates_per_step": 1,
-      "tasks": 300,
-      "group": "actor_alone",
-      "actor_view": "native_DOM",
-      "selector_view": null,
-      "typing_helper": "gpt-4.1-mini-2025-04-14"
-    },
-    {
-      "id": "L07",
-      "actor_profile": "kev27b",
-      "selector_profile": null,
-      "candidates_per_step": 1,
-      "tasks": 300,
-      "group": "actor_alone",
-      "actor_view": "native_DOM",
-      "selector_view": null,
-      "typing_helper": "gpt-4.1-mini-2025-04-14"
-    },
-    {
       "id": "L08",
       "actor_profile": "sft",
       "selector_profile": "luna_medium_selector",
       "candidates_per_step": 5,
-      "tasks": 300,
-      "group": "sft_selector",
-      "actor_view": "screenshot_and_history",
-      "selector_view": "shared_text_dom_candidates_v1",
-      "typing_helper": null
-    },
-    {
-      "id": "L09",
-      "actor_profile": "sft",
-      "selector_profile": "luna_medium_selector",
-      "candidates_per_step": 10,
       "tasks": 300,
       "group": "sft_selector",
       "actor_view": "screenshot_and_history",
@@ -296,17 +277,6 @@
       "actor_view": "screenshot_and_history",
       "selector_view": "shared_text_dom_candidates_v1",
       "typing_helper": null
-    },
-    {
-      "id": "L12",
-      "actor_profile": "qwen3",
-      "selector_profile": "luna_medium_selector",
-      "candidates_per_step": 5,
-      "tasks": 300,
-      "group": "qwen_ablation",
-      "actor_view": "screenshot_and_history",
-      "selector_view": "shared_text_dom_candidates_v1",
-      "typing_helper": null
     }
   ],
   "shared_browser": {
@@ -331,7 +301,24 @@
     ],
     "fresh_profile_each_episode": true,
     "assignment": "One common browser-worker pool; randomized/interleaved task blocks, never nodes dedicated by condition. Record host and egress for every episode.",
-    "binary_hash_verified": false
+    "binary_hash_verified": true,
+    "installed_binaries": [
+      {
+        "relative_path": "chromium-1208/chrome-linux64/chrome",
+        "sha256": "481fea1516a1f2b76454664272f12cd9dd1f20117b21e1f1498e08bc7f872c00",
+        "version": "Google Chrome for Testing 145.0.7632.6",
+        "version_returncode": 0,
+        "browser_session_started": false
+      },
+      {
+        "relative_path": "chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell",
+        "sha256": "27e55cc30e487493b89b663085d6deeb0707be201a568657c922fac9076c317c",
+        "version": "Google Chrome for Testing 145.0.7632.6",
+        "version_returncode": 0,
+        "browser_session_started": false
+      }
+    ],
+    "uniform_runtime_launch_verified": false
   },
   "proposer": {
     "history": "Full prior text history and latest screenshot only; no history truncation or summarization.",
@@ -421,22 +408,79 @@
     "evidence": "Task goal + executed action history + fresh final screenshot; no actor reasoning or selector identity.",
     "terminal_rule": "Judge every usable terminal state, including action-limit and deadline endings, with the same evidence builder. Missing fresh final evidence/provider or browser failures remain explicit invalids.",
     "primary_scores_preserved": true,
-    "strict_secondary_review": "Not in core; scope/model/rubric/API budget must be specified separately before launch."
+    "strict_secondary_review": "Prepare a separately versioned evidence-only strict-completion verdict alongside the unchanged AgentTrek compatibility score for every evidence-eligible episode. All explicit constraints/subtasks must be satisfied; no partial-action-count, partial-subtask, or missing-commit shortcuts. Preserve evidence-insufficient separately. Not yet run; separate request/dollar caps required."
   },
   "budget": {
     "approved": false,
-    "requested_compute": null,
-    "api_caps": null,
-    "browser_session_caps": null,
-    "note": "User explicitly requested no runs yet. These must be prepared and approved before submission; no unspent historical budget is transferred."
+    "requested_compute": {
+      "gpus": 8,
+      "gpu_type": "H200",
+      "cpus": 64,
+      "memory_gib": 960,
+      "total_scheduler_seconds_all_attempts": 57600,
+      "maximum_gpu_hours": 128
+    },
+    "api_caps": {
+      "actor_proposals": 316800,
+      "luna_requests": 19810,
+      "jev_requests": 19810,
+      "local_kev_requests": 19810,
+      "legacy_judge_http_attempts": 5280,
+      "strict_judge_http_attempts": 5280,
+      "historical_strict_judge_http_attempts": 575,
+      "luna_usd": 50,
+      "legacy_judge_usd": 25,
+      "strict_judge_usd": 75,
+      "historical_strict_judge_usd": 35
+    },
+    "browser_session_caps": {
+      "total": 1320,
+      "per_arm": 330,
+      "concurrent": 7,
+      "primary": 1200,
+      "smoke": 12,
+      "infrastructure_recovery": 108
+    },
+    "note": "User accepted the narrowed scientific scope. Exact new resource/API/browser caps have not yet been approved; prior no-run instruction no longer blocks preparation, but no jobs or paid requests have been launched and no historical budget is transferred.",
+    "topology_proposed": {
+      "sft_tp1_replicas": 7,
+      "kev27b_tp1_replicas": 1,
+      "max_active_browser_sessions": 7,
+      "shared_randomized_arm_queue": true
+    }
   },
   "not_yet_validated": [
-    "Pinned Chromium binary presence/hash and uniform launch configuration",
+    "Uniform launch configuration and actual worker Chromium identity; installed binary files/version/hash checked offline.",
     "Hosted-selector path port to shared local browser",
     "Shared selector state/schema construction and bound enforcement",
     "Equivalent prompt preflight on Jev/Kev SFT path",
     "Common action counters and terminal judge dispatch",
     "Per-profile serving layout, concurrency, total API/browser/compute budget",
     "No paid preflight or live model acceptance test has run for this proposed suite"
-  ]
+  ],
+  "scope_accepted": true,
+  "historical_judge_audit": {
+    "scope": "All600 saved Jev/Kev task records; all valid positive and negative records with verified terminal evidence are eligible, not just flagged positives.",
+    "new_browser_sessions": 0,
+    "new_actor_generations": 0,
+    "canonical_verdicts_changed": false,
+    "status": "offline_preparation",
+    "model": "o4-mini-2025-04-16",
+    "max_completion_tokens": 4096,
+    "seed": 42,
+    "maximum_http_attempts": 575,
+    "automatic_retries": false,
+    "api_dollar_cap_usd_proposed": 35,
+    "approved": false,
+    "pricing_verification": {
+      "date": "2026-10-06",
+      "input_usd_per_million": 1.1,
+      "output_usd_per_million": 4.4,
+      "source": "https://developers.openai.com/api/docs/models/o4-mini",
+      "image_token_reserve": "8 tokens per unresized32px patch plus padding, conservative versus published o4-mini multiplier1.72",
+      "vision_source": "https://developers.openai.com/api/docs/guides/images-vision",
+      "snapshot_shutdown_date": "2026-10-23",
+      "deprecation_source": "https://developers.openai.com/api/docs/deprecations"
+    }
+  }
 }

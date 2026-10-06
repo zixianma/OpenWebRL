@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-06T05:28:55.774012+00:00",
+  "scope": "Read-only offline verification of 600 canonical results and their saved judge responses. No new model calls, browsers, jobs or rescoring.",
+  "interpretation": [
+    "DONE is an agent stop action, not independently proven task completion.",
+    "Mentions of eight effective/correct actions are textual observations, not false-positive counts.",
+    "Prior review notes are targeted evidence flags, not a representative estimate of judge error.",
+    "Leniency is demonstrated in saved examples, but its causal contribution to the cross-harness success gap is unmeasured.",
+    "The difference in judging step-limit trajectories alone affects six Jev and one Kev positive records; it cannot alone explain the headline gap.",
+    "No adjusted success rate is calculated, and canonical verdicts remain unchanged."
+  ],
+  "threshold_language_regex": "(?:over|more than|at least|exceed\\w*)\\s+(?:8|eight)\\s+(?:\\w+[\\s,/-]+){0,6}(?:actions?|steps?)|(?:8|eight)\\+\\s+(?:\\w+[\\s,/-]+){0,6}(?:actions?|steps?)",
+  "modes": {
+    "jev": {
+      "canonical_records": 300,
+      "canonical_valid": 284,
+      "canonical_successes": 176,
+      "canonical_overall_success_percent": 58.6667,
+      "canonical_valid_only_success_percent": 61.9718,
+      "positive_done_termination": 170,
+      "positive_step_limit_termination": 6,
+      "positive_done_at_step_30": 0,
+      "positive_judge_text_threshold_mentions": 30,
+      "threshold_mentions_in_done_positives": 28,
+      "threshold_mentions_in_step_limit_positives": 2,
+      "existing_flagged_positive_tasks": 27,
+      "existing_flagged_negative_tasks": 2,
+      "all_positive_verdicts_match_saved_api_responses": true,
+      "all_positive_judge_requests_contain_partial_progress_rules": true,
+      "positive_judge_system_prompt_sha256_counts": {
+        "6906e021cb15a3398225fe82232ea5ee61b1cb7489c0bbbd9be4ad82f2000ca9": 176
+      }
+    },
+    "kev-27b": {
+      "canonical_records": 300,
+      "canonical_valid": 291,
+      "canonical_successes": 184,
+      "canonical_overall_success_percent": 61.3333,
+      "canonical_valid_only_success_percent": 63.2302,
+      "positive_done_termination": 183,
+      "positive_step_limit_termination": 1,
+      "positive_done_at_step_30": 4,
+      "positive_judge_text_threshold_mentions": 37,
+      "threshold_mentions_in_done_positives": 37,
+      "threshold_mentions_in_step_limit_positives": 0,
+      "existing_flagged_positive_tasks": 20,
+      "existing_flagged_negative_tasks": 0,
+      "all_positive_verdicts_match_saved_api_responses": true,
+      "all_positive_judge_requests_contain_partial_progress_rules": true,
+      "positive_judge_system_prompt_sha256_counts": {
+        "6906e021cb15a3398225fe82232ea5ee61b1cb7489c0bbbd9be4ad82f2000ca9": 184
+      }
+    }
+  },
+  "private_proof_sha256": "1070d28a67cab178425ef1213a9cea87149f4844a656be7eccb6628a011bbd94",
+  "examples_retained_privately": 7,
+  "strict_secondary_preparation": {
+    "prepared_version": "v3",
+    "records": 600,
+    "eligible": 575,
+    "preserved_original_invalid": 25,
+    "input_manifest_sha256": "35d80650d945c46373d6bbf7d1fa78de518cb82cb29fca57daeaac8adb387337",
+    "readiness_sha256": "96739a8b3e0175a7a45a1a374d510314f4c105548acf459e92b73cf3e82bf1b2",
+    "maximum_calls": 575,
+    "maximum_completion_tokens": 4096,
+    "proposed_usd_cap": 35,
+    "conservative_reservation_usd": 32.77,
+    "paid_calls_made": 0,
+    "browser_sessions": 0,
+    "gpus": 0,
+    "strict_scores_available": false,
+    "changes_from_canonical": [
+      "Strict rather than partial-progress rubric",
+      "Evidence-only input without actor thoughts or old verdicts"
+    ],
+    "interpretation": "A changed rate is not an isolated causal estimate of rubric leniency: evidence also changes, and no matched SFT baseline has yet been rejudged.",
+    "relative_date_policy": "Never resolve relative dates against rejudge date; require a supplied original reference date or preserve relevant uncertainty."
+  }
+}
