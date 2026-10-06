@@ -28,7 +28,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
 - [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
 
-- [Expanded 4,102-task outcome-only baseline: iterations10/20/30/40](#expanded4102-iter10-results-20261003)
+- [Expanded 4,102-task outcome-only baseline: iterations10/20/30/40/50](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
@@ -1458,7 +1458,7 @@ transport modules imported by the evaluation controllers; they are necessary
 code dependencies, not new experiment launches.
 
 <a id="expanded4102-iter10-results-20261003"></a>
-## Expanded task-pool baseline: iterations10/20/30/40 — October3–6
+## Expanded task-pool baseline: iterations10/20/30/40/50 — October3–6
 
 The first full300 evaluation of the outcome-only baseline trained on4,102 tasks
 (original2,102 + selected2,000) is complete: **81/300 =27.00% overall** and
@@ -1521,11 +1521,30 @@ actual evaluation configuration and final W&B history were independently
 verified. There are224 completed,42 aborted,11 truncated and23 failed terminal
 trajectories; failed/truncated valid attempts remain in the denominators.
 
-Job344759 restored checkpoint40 and resumed collection41 toward50 with the same
+Iteration50 completed on October6: **105/300 =35.00% overall** and
+**105/240 =43.75% valid-only**, with60 invalid tasks. Compared with40, this is
+12 fewer successes (−4.00pp overall, −1.60pp valid-only) and18 more invalid
+attempts. The iteration40 gain has not persisted at50. The historical original
+pool also scored105/300 (35.00%) at50, with105/234 (44.87%) valid-only:
+0.00pp overall and−1.12pp valid-only. These are descriptive comparisons across
+different collection dates and valid-task sets, not a matched test of data benefit.
+
+Native checkpoint49 has702 Adam updates, matching scheduler counter179712,
+and dataset cursor1802 in epoch1. All300 exact expected task IDs, paired saved
+rollout/verdict records, every archive ZIP member CRC, GPU actor restoration,
+evaluation protocol and final W&B history were independently checked. Terminal
+statuses are221 completed,60 aborted,13 failed and6 truncated; valid failed/
+truncated attempts remain in the denominators. The raw turn-weighted reward
+(33.52%) is distinct from the task success rate (35.00%).
+
+Job344759 restored checkpoint50 and resumed collection51 toward60 with the same
 optimizer, scheduler, cursor and W&B lineage. The user-requested stop remains60.
-Full300 evaluations50/60 remain pending;10/20/30/40 are verified. The
+Full300 evaluation60 remains pending;10/20/30/40/50 are verified. The
 existing96h extension and$600 lifetime judge cap remain maximum budgets, with
 all consumed time retained and unused allocations released after the endpoint. [Extension and accounting](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).
+
+[Iteration50 aggregate audit](arm_results/rl_integration/expanded4102-iteration50-audit.json) ·
+[Iteration50 evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter50).
 
 [Iteration40 aggregate audit](arm_results/rl_integration/expanded4102-iteration40-audit.json) ·
 [Iteration40 evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter40).

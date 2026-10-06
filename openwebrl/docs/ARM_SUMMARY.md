@@ -227,6 +227,7 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |20 |— |33.33% /42.19% |
 |  |30 |— |33.00% /40.74% |
 |  |40 |— |**39.00% /45.35%** |
+|  |50 |— |35.00% /43.75% |
 | **Original bonus** | 20 | 26.0% / 35.62% | 28.00% / 37.00% |
 |  | 30 | 27.0% / 36.49% | 32.67% / 43.56% |
 |  | 40 | **31.00% / 44.93%** | 32.00% / 42.86% |
@@ -307,11 +308,12 @@ and80 evaluations are verified. Both90 evaluations are now independently verifie
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
 The **expanded 4,102-task baseline** adds2,000 tasks to the original pool and
-uses outcome reward only, starting from iteration0. Iteration40 reaches
-**39.00% overall /45.35% valid-only** (117/300 successes;258 valid), up6.00pp
-overall from iteration30. It exceeds the historical original-pool iteration40
-score by5.67pp overall, with different collection dates and valid-task sets.
-Training continues to the user-requested stop at60. This separate data ablation
+uses outcome reward only, starting from iteration0. Iteration50 scores
+**35.00% overall /43.75% valid-only** (105/300 successes;240 valid), down4.00pp
+overall and1.60pp valid-only from iteration40 (39.00% /45.35%). It matches the
+historical original-pool iteration50 overall score; collection dates and valid-task
+sets differ. The iteration40 gain has not persisted at50. Training has resumed
+from checkpoint50 toward the user-requested stop at60. This separate data ablation
 does not change the task pool used by the ARM runs above.
 [Expanded-pool results and comparison caveats](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
