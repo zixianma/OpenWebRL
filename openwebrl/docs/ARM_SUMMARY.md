@@ -4,7 +4,7 @@ This is the concise collaborator summary. Detailed configs, provenance, and
 run history are in [ARM_RESULTS.md](ARM_RESULTS.md) and
 [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md).
 
-**Next critic diagnostic, prepared:** 100 fresh fixed-SFT states × three candidate actions × five continuations (1,500 rollouts), comparing Luna-high before-only versus execution-informed selection. Both return only `{"selection": N}`. Exact overnight compute/API approval is pending; no paid calls or live research collection have started. [Protocol, validation and resource request](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+**Next critic diagnostic, approved/queued (346645):** 100 fresh fixed-SFT states × five candidate actions × three continuations (1,500 rollouts), comparing Luna-high before-only versus execution-informed selection. Both return only `{"selection": N}`. Approved: 4 H200 / 32 CPU / 480 GiB × 8 hours across retries, $15 Luna / $25 judge; verified agent continuation active. Collection/startup pending. [Protocol, validation and resource request](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 
 <a id="arm-methods-at-a-glance"></a>
 ![Three ARM stages: choose actions at inference, learn from saved preferences offline, or change turn credit during RL](arm_results/methods/arm_three_stages.svg)

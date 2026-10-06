@@ -1,5 +1,5 @@
 {
-  "status": "prepared_exact_budget_not_approved",
+  "status": "approved_queued",
   "protocol": {
     "actor_checkpoint": "official OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -8,10 +8,10 @@
       4,
       6
     ],
-    "candidate_draws": 9,
-    "candidates": 3,
-    "comparison": "Teacher-selected terminal success vs paired before-only and uniform candidate choice; task-cluster intervals; no best-of-five success oracle.",
-    "continuations_per_candidate": 5,
+    "candidate_draws": 15,
+    "candidates": 5,
+    "comparison": "Teacher-selected terminal success vs paired before-only and uniform candidate choice; task-cluster intervals; no best-of-repetitions success oracle.",
+    "continuations_per_candidate": 3,
     "equivalence": "Exact observed storage/page/forms/tabs/scroll plus frozen pixel tolerance; hidden remote/JS state is not proven cloned.",
     "gate": "Stop if first twelve candidate states yield zero accepted states; release all fifteen branches only after reconstruction.",
     "intervention": "Whole candidate response (reasoning and grounded action bundle) enters actor history.",
@@ -31,24 +31,24 @@
     "teachers": {
       "conditions": [
         "before",
-        "all_three_immediate_results"
+        "all_five_immediate_results"
       ],
       "effort": "high",
       "forms": [
         "index"
       ],
       "leakage": "Allowlisted pre-action and immediate observations only; suffix/terminal evidence unavailable.",
-      "legacy": "Original selection-index output formulation adapted to three candidates; not an exact prompt replication.",
+      "legacy": "Original five-candidate selection-index output formulation; evidence prompt differs from the earlier study.",
       "model": "gpt-6-luna",
       "output_cap": 4096,
       "permutation_check": "One extra before and one after(rep0) call per form/state",
-      "planned_calls": 2000,
+      "planned_calls": 1400,
       "repeat_calls": 3
     }
   },
   "resources": {
-    "collectors": 48,
-    "cpus": 48,
+    "collectors": 32,
+    "cpus": 32,
     "gpu_type": "H200",
     "gpus": 4,
     "memory_gib": 480,
@@ -60,7 +60,7 @@
     "browser_sessions_per_condition": 3400,
     "canonical_judge_http_attempts": 6600,
     "canonical_judge_usd": 25.0,
-    "concurrent_browsers": 45,
+    "concurrent_browsers": 30,
     "jev_selector_requests": 0,
     "local_kev_requests": 0,
     "local_sft_generations": 110000,
@@ -69,10 +69,13 @@
   },
   "primary_continuations": 1500,
   "teacher_output": {
-    "selection": "one-based integer 1..3"
+    "selection": "one-based integer 1..5"
   },
   "factored_output_included": false,
-  "offline_tests_passed": 84,
+  "offline_tests_passed": 89,
   "new_model_calls": 0,
-  "new_gpu_allocations": 0
+  "new_gpu_allocations": 1,
+  "revision": "User requested five actions and three continuations; previous unlaunched 3x5 proposal superseded.",
+  "job_id": "346645",
+  "active_agent_queue_verified": true
 }
