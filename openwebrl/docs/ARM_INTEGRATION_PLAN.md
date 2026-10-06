@@ -55,6 +55,70 @@ pre-versus-full-post diagnostic first. The 40-case calibration and subsequently
 approved 200-task panel are now complete below. Critic training, the image-only
 ablation and new browser data remain later-stage planning.
 
+<a id="arm-selection-execution-evidence-20261006"></a>
+### Selection teacher and execution attribution — proposed October 6 UTC
+
+The user asked whether feedback separates a poor action from a useful action
+whose execution failed, and whether the earlier SelectionARM formulation can
+receive the same before/after diagnostic. CPU preparation is complete; no new
+teacher calls, browser collection or GPU allocations have started.
+
+Separate three questions: whether a concrete intended effect would help the
+goal; whether the actual grounded command achieved that effect; and what goal
+progress the observed state supports. Preserve an unknown attribution when
+receipts and screenshots cannot distinguish wrong actor arguments, executor
+errors, transient site failures or incomplete observation. `Succeed` certifies
+neither correct grounding nor useful progress. Repeated environment failure can
+also make an otherwise sensible action a poor operational choice. One failed
+execution does not identify a counterfactual success rate or excuse the action.
+The existing 200-case panel is demonstration-heavy, with all receipts
+success-prefixed; it is insufficient for a robust failure-attribution benchmark.
+
+The original deployed SelectionARM jointly sees five reasoning/action proposals
+and emits only `{"selection": N}`, with a one-based index. Its prompt asks for
+the candidate most likely to advance the task, includes the goal and recent
+history, and explicitly values information gathering. It is a relative choice,
+not the absolute progress/regression output in the latest Luna diagnostic.
+The pinned deployed template is auditable locally; reconstructing every original
+upstream teacher request would additionally need its archived prompt dependency.
+
+A candidate join found 92 of the 200 primary states with a valid five-candidate
+set including the exact observed tool sequence. Restricting candidate temperature
+to 0.7 leaves 87 states. Each set has at least two distinct ordered tool bundles;
+27/8/26/26 sets have 2/3/4/5 distinct bundles respectively. The deterministic
+40-state proposed subset is chosen without teacher outcomes. Raw candidates,
+source identifiers and screenshots remain private. The demonstration generator
+identity is still unverified, so this is not a fixed-policy return dataset.
+
+| Proposed teacher formulation | Before only | Before + observed branch |
+| --- | --- | --- |
+| Original selected-index output | Choose one of five candidates | Reconsider the original choice using the audited branch |
+| Separated evidence fields + selected index | Intended effect, goal usefulness, grounding | Add actual effect, fulfillment, observed progress and failure attribution |
+
+The proposed first diagnostic uses 40 states, four conditions, three independent
+same-order judgments per condition and one additional permuted-order judgment:
+**640 proposed Luna-high calls, none sent**. All conditions share full candidate
+reasoning/actions, the original task, last-five causal history, before
+observation/screenshot and an identically identified audited candidate class.
+Only the post condition receives the branch evidence. This common candidate
+identification adapts the historical prompt; the original selection output and
+objective remain the baseline. All choices concern the original before-state,
+not the next action from the after-state. Other candidates' executions remain
+unknown; matched tool calls do not validate their reasoning or continuation.
+
+Report task-paired selection changes against same-order repeat disagreement,
+permutation sensitivity separately, and equivalence-class choices so identical
+actions at different indices do not create artificial flips. A separate blind
+case audit should distinguish supported revisions, new mistakes and unresolved
+cases; neither execution nor the old teacher winner is a gold label. Costs,
+tokens, latency and all attempts remain tracked. This diagnostic reuses earlier
+cases and is exploratory; it cannot prove that the post-informed winner would
+outperform all unexecuted alternatives. A later controlled branch study would
+be needed for that claim. No new paid API budget is approved by this proposal.
+
+[Aggregate preparation](arm_results/rl_integration/selection-evidence-readiness-20261006.json) ·
+[Proposed protocol](arm_results/rl_integration/selection-evidence-protocol-20261006.json).
+
 <a id="arm-teacher-evidence-primary200-20261006"></a>
 ### Independent 200-task teacher panel — completed October 6 UTC
 

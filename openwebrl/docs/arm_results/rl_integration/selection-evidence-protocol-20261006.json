@@ -1,0 +1,72 @@
+{
+  "stage": "proposed_not_launched",
+  "question": "Does observed execution evidence improve stable candidate selection, and does separating action usefulness from execution reduce teacher errors?",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "high",
+  "source_release": "0d83b48c1659cac47a1044ef88fb573d3c16e180",
+  "eligible_states": 87,
+  "proposed_states": 40,
+  "sampling": "One existing temperature-0.7 five-candidate draw per state, hashed independently of labels; one primary task group per state.",
+  "conditions": [
+    {
+      "formulation": "original_selection_index",
+      "evidence": "before_only"
+    },
+    {
+      "formulation": "original_selection_index",
+      "evidence": "before_plus_executed_branch"
+    },
+    {
+      "formulation": "factored_evidence_plus_selection",
+      "evidence": "before_only"
+    },
+    {
+      "formulation": "factored_evidence_plus_selection",
+      "evidence": "before_plus_executed_branch"
+    }
+  ],
+  "repeats_per_condition_same_order": 3,
+  "additional_permuted_calls_per_condition": 1,
+  "proposed_calls": 640,
+  "controls": [
+    "Same candidates, candidate reasoning, task, last-five causal history, before observation and screenshot across conditions.",
+    "Designate the audited candidate equivalence class in both evidence conditions; only post gets its after screenshot/feedback. This common bookkeeping adapts the historical prompt and must be labeled as such.",
+    "Choose which original action should have been taken at the BEFORE state, not the next action after execution.",
+    "No previous teacher label, rationale, repeat response, next actor response or episode outcome is shown.",
+    "Three independent same-order contexts estimate repeat variability; one separate permutation estimates order sensitivity.",
+    "Compare equivalence classes of exact ordered tool bundles in primary metrics; preserve raw slot identity separately.",
+    "Matched tool sequences do not certify candidate reasoning or unexecuted alternatives.",
+    "Failure attribution may remain unknown; a failure receipt is not automatically an environmental fault.",
+    "Do not treat the executed candidate as the correct winner or count disagreement with the historical teacher as an error."
+  ],
+  "factored_fields": {
+    "candidates": "For each candidate: id, concrete intended_effect, goal_usefulness_if_effect_occurs (useful_preparation/direct_progress/irrelevant/harmful/unknown), visible_grounding (supported/contradicted/unknown), concise evidence.",
+    "observed_execution": "Only audited action class: evidence_available, actual_effect, intended_effect_achieved (yes/partial/no/unknown), observed_goal_effect (preparatory/direct/none/regression/unknown), failure_source (action_specification/executor/site_or_environment/unknown), concise cited evidence. Null observed fields before-only.",
+    "selection": "One-based original candidate slot selected for the original before-state; retain exact original baseline output {\"selection\": N} in index-only arms."
+  },
+  "primary_analysis": [
+    "Task-paired selection changes versus within-condition repeat variability, using action equivalence.",
+    "Human/evidence-reference supported preference revisions, new errors and abstentions, with reviewers blinded to teacher labels.",
+    "Reference review of all revisions plus randomly selected stable controls; qualitative selected-case audit, not full-panel gold accuracy."
+  ],
+  "secondary_analysis": [
+    "Within-condition modal-choice agreement and empirical action-choice entropy from repeats; small repeat counts explicitly qualified.",
+    "Permutation disagreement separately from same-order disagreement.",
+    "Executed action selected versus rejected; descriptive only.",
+    "Attribution error and unresolved rates on evidence-audited failures; insufficient failure coverage is a limitation.",
+    "Calls, all-attempt input/output/reasoning tokens, latency and estimated cost."
+  ],
+  "interpretation": [
+    "This tests Luna-high teachers under two formulations; it is not an evaluation of the trained 4B SelectionARM checkpoint.",
+    "One observed branch permits a partially informed judgment diagnostic, not a verified ranking of all five realized outcomes.",
+    "The 40 cases reuse the earlier diagnostic cohort and are exploratory; prompt design is informed by prior review.",
+    "No external advantage or terminal return labels are fabricated.",
+    "A later clean intervention study needs controlled candidate execution and, for returns, the same frozen continuation actor."
+  ],
+  "resources": {
+    "new_gpu_allocations": 0,
+    "new_browser_rollouts": 0,
+    "paid_calls_sent": 0,
+    "new_paid_api_budget_approved": false
+  }
+}

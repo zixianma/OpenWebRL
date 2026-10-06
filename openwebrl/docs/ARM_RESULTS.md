@@ -35,6 +35,13 @@ the excess label-change fraction is
 These paired comparisons preserve the same 100 task groups in all three terms.
 Calibration and primary observations are reported separately.
 
+A subsequent comparison against the before-repeat control alone gives only
++5 percentage points in label changes, paired 95% bootstrap interval [−3, +14]
+points. Thus the categorical evidence does not clearly exceed before-only
+variability on these 100 tasks. The continuous absolute-score contrast is
+0.0734 [0.0348, 0.1150]. This sensitivity was requested after reviewing the
+primary result; probability movement still does not establish greater accuracy.
+
 A post-hoc exact-goal sensitivity check that collapses only the leading
 find/search-for/look-for/locate verb identifies 198 phrasing clusters within
 the 200 primary groups, with no such alias overlap to calibration. Resampling

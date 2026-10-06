@@ -1,0 +1,23 @@
+{
+  "stage": "prepared_no_model_calls",
+  "source_primary_pairs": 200,
+  "eligible_states": 87,
+  "candidate_temperature": 0.7,
+  "single_source_release": "0d83b48c1659cac47a1044ef88fb573d3c16e180",
+  "distinct_tool_bundles": {
+    "4": 26,
+    "5": 26,
+    "2": 27,
+    "3": 8
+  },
+  "exact_executed_tool_match": true,
+  "same_primary_task_groups": true,
+  "original_92_state_inventory_preserved": true,
+  "requests_sent": 0,
+  "paid_api_spending": 0,
+  "limitations": [
+    "Saved demonstration policy identity remains unverified; not an on-policy return dataset.",
+    "Only executed tool bundle has after evidence.",
+    "Source candidate temperature is audited; exact sampler checkpoint and other parameters rely on pinned source provenance, not a new runtime receipt."
+  ]
+}
