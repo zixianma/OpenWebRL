@@ -1,0 +1,251 @@
+{
+  "stage": "verified_complete",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "high",
+  "unique_tasks": 200,
+  "primary_pairs": 200,
+  "repeat_pairs": 100,
+  "completed_requests": 600,
+  "total_api_attempts": 600,
+  "incomplete_or_failed_api_attempts": 0,
+  "changed_primary_labels": 32,
+  "primary_metrics": {
+    "changed": {
+      "mean": 0.16,
+      "ci95": [
+        0.11,
+        0.215
+      ],
+      "wilson_ci95": [
+        0.1156741203158702,
+        0.21714070162067106
+      ]
+    },
+    "absolute_shift": {
+      "mean": 0.14604999999999999,
+      "ci95": [
+        0.119224375,
+        0.17555124999999996
+      ]
+    },
+    "delta": {
+      "mean": -0.01615,
+      "ci95": [
+        -0.051625,
+        0.01802687499999997
+      ]
+    }
+  },
+  "transition_matrix": {
+    "progress -> progress": 156,
+    "no_progress -> progress": 4,
+    "unresolved -> regression": 1,
+    "progress -> no_progress": 8,
+    "unresolved -> no_progress": 8,
+    "regression -> unresolved": 1,
+    "no_progress -> no_progress": 11,
+    "unresolved -> progress": 9,
+    "regression -> regression": 1,
+    "no_progress -> regression": 1
+  },
+  "pre_label_counts": {
+    "progress": 164,
+    "no_progress": 16,
+    "unresolved": 18,
+    "regression": 2
+  },
+  "post_label_counts": {
+    "progress": 169,
+    "regression": 3,
+    "no_progress": 27,
+    "unresolved": 1
+  },
+  "repeated_subset": {
+    "pre_flip": {
+      "mean": 0.13,
+      "ci95": [
+        0.07,
+        0.2
+      ]
+    },
+    "post_flip": {
+      "mean": 0.07,
+      "ci95": [
+        0.03,
+        0.12
+      ]
+    },
+    "cross_flip": {
+      "mean": 0.18,
+      "ci95": [
+        0.11,
+        0.26
+      ]
+    },
+    "pre_shift": {
+      "mean": 0.07485,
+      "ci95": [
+        0.052349999999999994,
+        0.10275124999999999
+      ]
+    },
+    "post_shift": {
+      "mean": 0.06629999999999998,
+      "ci95": [
+        0.0469,
+        0.08869999999999999
+      ]
+    },
+    "cross_shift": {
+      "mean": 0.14825,
+      "ci95": [
+        0.11190000000000001,
+        0.1888
+      ]
+    }
+  },
+  "matched_excess_absolute_shift_over_mean_repeat_noise": {
+    "mean": 0.077675,
+    "ci95": [
+      0.04289875,
+      0.11685000000000001
+    ]
+  },
+  "mean_entropy_bits": {
+    "pre": 0.5150686764538378,
+    "post": 0.3750296532261369
+  },
+  "probability_ties_reported_as_unresolved": 0,
+  "cost": {
+    "receipt_based_estimate_usd": 0.28315689,
+    "all_cache_telemetry_known": true,
+    "conservative_ledger_usd": 0.3581835,
+    "cap_usd": 0.5
+  },
+  "tokens": {
+    "input": 1957188,
+    "output": 227070,
+    "reasoning_output": 153937
+  },
+  "latency_seconds": {
+    "pre": {
+      "mean": 5.666346184383147,
+      "median": 5.000479694455862
+    },
+    "post": {
+      "mean": 4.745805082614534,
+      "median": 4.338226754451171
+    }
+  },
+  "actual_request_window_seconds": 784.5551629066467,
+  "dataset": "Piotr executed demonstrations; task-group-disjoint from protected validation/retention and normalized benchmarks",
+  "all_primary_receipts_success_prefixed": true,
+  "source_tool_count_histogram": {
+    "1": 155,
+    "3": 35,
+    "2": 8,
+    "4": 1,
+    "5": 1
+  },
+  "identical_before_after_images": 4,
+  "limitations": [
+    "Independent200 primary task groups; all40 calibration groups excluded. No pooled calibration-primary estimate.",
+    "Changes and reduced entropy do not establish greater accuracy.",
+    "One executed action bundle per state; no counterfactual ranking result.",
+    "Demonstration-heavy cohort; all200 primary receipts start with Succeed. This does not establish goal progress.",
+    "Confidence intervals bootstrap task groups (one primary pair per distinct group).",
+    "All tasks, images, actions and rationales stay in private review artifacts."
+  ],
+  "matched_excess_label_flip_over_mean_repeat_noise": {
+    "mean": 0.08,
+    "ci95": [
+      0.005,
+      0.155
+    ]
+  },
+  "unresolved_counts": {
+    "pre": 18,
+    "post": 1
+  },
+  "both_resolved_pairs": 181,
+  "changed_among_both_resolved": 13,
+  "strata": {
+    "tool_count": {
+      "multiple": {
+        "n": 45,
+        "changed": 4,
+        "mean_absolute_score_change": 0.11422222222222221
+      },
+      "single": {
+        "n": 155,
+        "changed": 28,
+        "mean_absolute_score_change": 0.15529032258064515
+      }
+    },
+    "turn": {
+      "0": {
+        "n": 66,
+        "changed": 9,
+        "mean_absolute_score_change": 0.13893939393939395
+      },
+      "1-3": {
+        "n": 68,
+        "changed": 12,
+        "mean_absolute_score_change": 0.13426470588235292
+      },
+      "4+": {
+        "n": 66,
+        "changed": 11,
+        "mean_absolute_score_change": 0.1653030303030303
+      }
+    }
+  },
+  "evidence_review": {
+    "reviewed_changed_cases": 32,
+    "reviewed_unchanged_controls": 20,
+    "extra_blind_reference_cases_saved": 3,
+    "changed_case_outcomes": {
+      "supported_resolution": 13,
+      "unsupported_resolution": 2,
+      "reviewer_unresolved": 6,
+      "supported_label_correction": 10,
+      "new_mismatch_to_reference": 1
+    },
+    "unchanged_control_outcomes": {
+      "both_match_reference": 17,
+      "reviewer_unresolved": 3
+    },
+    "reviewer": "One local assistant; teacher labels/rationales hidden until reference recorded; screenshots, tool calls and observed receipts available; saved history consulted when needed.",
+    "selection": "All changed primary pairs plus first20 unchanged pairs in a frozen outcome-independent SHA256 random order.",
+    "interpretation": "Reference agreement under full observed evidence, not human ground truth or full-panel accuracy. Changed cases deliberately overrepresented. A reasonable pre-action probabilistic forecast can disagree with a realized stochastic outcome.",
+    "additional_paid_judge_calls": 0
+  },
+  "goal_alias_sensitivity": {
+    "method": "Exact goal normalization with only leading find/search for/look for/locate collapsed; exploratory sensitivity, not a semantic-equivalence oracle. Primary protocol unchanged.",
+    "primary_normalized_verb_clusters": 198,
+    "primary_pairs_in_multirow_verb_clusters": 4,
+    "primary_pairs_with_verb_alias_overlap_to_calibration": 0,
+    "label_change": {
+      "resampling_clusters": 198,
+      "ci95": [
+        0.11,
+        0.21393034825870647
+      ]
+    },
+    "absolute_score_shift": {
+      "resampling_clusters": 198,
+      "ci95": [
+        0.11907937073426832,
+        0.17512564384422105
+      ]
+    },
+    "matched_excess_score_shift": {
+      "resampling_clusters": 100,
+      "ci95": [
+        0.04270000000000002,
+        0.11647499999999997
+      ]
+    },
+    "qualification": "Post-hoc sensitivity only. No source rows, prompts, primary endpoints or request counts changed."
+  }
+}

@@ -89,6 +89,11 @@ is complete:8/40 labels changed after seeing execution. On20 repeated tasks,
 pre/post disagreement was25% versus5% within either repeated condition. All120
 calls succeeded for$0.0541 estimated API cost. This measures judgment changes,
 not improved accuracy or learned selector performance; training remains pending.
+The independent [200-task follow-up](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006) is complete:
+32/200 labels changed (16.0%); on 100 matched tasks pre/post changes were
+18.0%, versus 13.0%/7.0% on before/after repeats.
+All 600 calls succeeded for $0.2832 estimated API cost. Separate blind case review
+and unresolved coverage are reported; this does not establish downstream benefit.
 The [24-source inventory](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004)
 separates raw collections, derived views, conversion work and benchmark-only
 data. In particular, the ARM refresh future panel contains82 OM2W tasks and

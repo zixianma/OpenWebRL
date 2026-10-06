@@ -4,8 +4,128 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-teacher-evidence-primary200-20261006"></a>
+## Execution-informed teacher: independent 200-task panel — October 6 UTC
+
+**32/200 primary labels changed (16.0%) after execution evidence.**
+This panel contains 200 new Piotr task groups and excludes all 40 calibration
+sample groups and normalized goals. Both judgments use `gpt-6-luna`, high
+reasoning, the same frozen prompt and 4,096-output-token cap. Before-only inputs
+contain the goal, up to five causal history steps, before screenshot and exact
+ordered action bundle; post-informed inputs add the actual after screenshot
+and browser feedback. All 600 requests use independent contexts and randomized
+order; 100 tasks repeat both conditions. Source revision, protected validation,
+retention and benchmark exclusions match the calibration. No critic is trained.
+
+| Metric | Before → after | Before repeat | After repeat |
+| --- | ---: | ---: | ---: |
+| Primary label-change fraction, 200 tasks |16.0% [11.0%, 21.5%] |— |— |
+| Label-change fraction, matched 100 tasks |18.0% [11.0%, 26.0%] |13.0% [7.0%, 20.0%] |7.0% [3.0%, 12.0%] |
+| Mean absolute score shift, matched 100 |0.1482 [0.1119, 0.1888] |0.0748 [0.0523, 0.1028] |0.0663 [0.0469, 0.0887] |
+| Mean absolute score shift, all 200 |0.1460 [0.1192, 0.1756] |— |— |
+
+Score is P(progress)−P(regression), in [−1, 1]. Intervals are 95% task-bootstrap
+intervals from 10,000 resamples, seed 42. The supplementary Wilson interval for
+the primary change fraction is [11.6%,
+21.7%]. The matched excess
+absolute score shift over mean repeat variability is
+**0.0777 [0.0429, 0.1169]**;
+the excess label-change fraction is
+8.0% [0.5%, 15.5%].
+These paired comparisons preserve the same 100 task groups in all three terms.
+Calibration and primary observations are reported separately.
+
+A post-hoc exact-goal sensitivity check that collapses only the leading
+find/search-for/look-for/locate verb identifies 198 phrasing clusters within
+the 200 primary groups, with no such alias overlap to calibration. Resampling
+these clusters gives a label-change interval of
+[11.0%, 21.4%].
+This simple check is not a comprehensive semantic deduplication guarantee;
+no primary rows or requests were changed after the protocol freeze.
+
+| Coverage / direction | Primary result |
+| --- | ---: |
+| Unresolved before / after |18 / 1 |
+| Both resolved |181 / 200 |
+| Changed among both resolved |13 / 181 |
+| Mean signed score shift |-0.0162 [-0.0516, 0.0180] |
+| Mean entropy, before / after |0.515 / 0.375 bits |
+
+| Primary label transition | Tasks |
+| --- | ---: |
+|no progress -> no progress |11 |
+|no progress -> progress |4 |
+|no progress -> regression |1 |
+|progress -> no progress |8 |
+|progress -> progress |156 |
+|regression -> regression |1 |
+|regression -> unresolved |1 |
+|unresolved -> no progress |8 |
+|unresolved -> progress |9 |
+|unresolved -> regression |1 |
+
+The primary cohort remains demonstration-heavy: all 200 browser receipts begin
+with `Succeed`, which only describes command execution. Four transitions have
+identical before/after image hashes. The cohort has 155 single-tool and 45
+multi-tool bundles. It does not establish coverage of failed actor trajectories
+or selection among unexecuted alternatives.
+
+The evidence audit used one local assistant reviewer with teacher labels and
+rationales hidden until the reference judgment was saved. The reviewer inspected
+the task, tool action, before/after screenshots and receipts, consulting saved
+history when needed. All changed cases plus 20 randomly ordered unchanged controls
+were included; uncertain references remain unresolved. No additional paid
+reference-judge calls were made.
+
+| Evidence audit of changed cases | Count |
+| --- | ---: |
+|Revised label agrees with observed-evidence reference; original resolved label differs |10 |
+|Previously unresolved; revised label agrees with reference |13 |
+|Original label agrees with reference; revised resolved label differs |1 |
+|Independent reviewer abstains |6 |
+|Previously unresolved; revised resolved label differs from reference |2 |
+
+Unchanged controls: `{"both_match_reference": 17, "reviewer_unresolved": 3}`.
+This is qualitative agreement with one AI review, not human ground truth or a
+representative accuracy estimate. Reviewing all changed cases overrepresents
+those cases. Retrospective reference mismatch does not show that a probabilistic
+before-action forecast was unreasonable: actual executions can reveal randomness
+or information unavailable before acting. Image-only versus receipt-only effects
+are also not isolated by this two-condition study. Independent gold/reference
+labels and downstream selection or learning gains remain unmeasured.
+
+![Luna-high primary200 judgments and repeat controls](arm_results/rl_integration/teacher-evidence-primary200-20261006.png)
+
+| Efficiency/accounting | Verified amount |
+| --- | ---: |
+| Completed requests / API attempts |600 / 600 |
+| Failed/incomplete API attempts |0 |
+| Receipt-based estimated API cost |$0.283157 |
+| Conservative ledger / voluntary cap |$0.358183 /$0.50 |
+| Input / output tokens |1,957,188 / 227,070 |
+| Reasoning tokens, included in output |153,937 |
+| Mean request latency, before / after |5.67s / 4.75s |
+| Request window, concurrency 4 |784.56s |
+| GPU allocations / new browser rollouts / critic fits |0 / 0 / 0 |
+
+Costs are provider-usage estimates using the same verified Luna rates as the
+calibration, with all cache telemetry accounted for; they are not invoices.
+The user authorized 200 fresh pairs and 100 repeated pairs (600 planned calls),
+with an observed-cost estimate around $0.27. Execution imposed a separate $0.50
+ceiling and 620-attempt limit including diagnosed retries, preserving every receipt;
+no earlier study budget was transferred. Conservative per-call reservations are
+settled before subsequent requests, and the ceiling could stop the panel early.
+
+[Aggregate results](arm_results/rl_integration/teacher-evidence-primary200-results-20261006.json) ·
+[Vector plot](arm_results/rl_integration/teacher-evidence-primary200-20261006.svg) ·
+[Protocol](ARM_INTEGRATION_PLAN.md#arm-teacher-evidence-primary200-20261006).
+The full private interactive review supports changed/unresolved filters, hidden
+teacher judgments, repeat inspection and local annotation export. It stays in
+runtime `critic-comparison-20261004/teacher-evidence-primary200-20261006/analysis/paired-review.private.html`;
+raw screenshots, task text and rationales are not published.
+
 <a id="arm-teacher-evidence-results-20261006"></a>
-## Execution-informed teacher judgments — October6 UTC
+## Execution-informed teacher judgments — October 6 UTC
 
 **Luna-high changed8/40 labels after seeing execution evidence.** On the
 20 tasks with repeat controls, pre/post disagreement was5/20 (25%), versus
@@ -33,7 +153,7 @@ and usage receipts were verified, with no failed calls or retries.
 Score is P(progress)−P(regression), in[-1,1]. Intervals are10,000 task-bootstrap
 95% intervals with seed42. On the matched20 tasks, the excess absolute shift
 over the mean of the two repeat shifts is0.1061 [0.0266,0.2093]. These estimates
-are exploratory; the larger primary panel has not been run.
+are exploratory; the independent 200-task primary panel is reported above.
 
 | Primary label transition | Tasks |
 | --- | ---: |
@@ -77,8 +197,8 @@ separate labeling budget, with no transfer from the earlier inference studies.
 The interactive paired review, source screenshots, prompts, responses and
 rationales remain private under runtime
 `critic-comparison-20261004/teacher-evidence-pilot-20261006/analysis/paired-review.private.html`.
-Review these examples before the next stage; no200-row primary panel, new
-branch collection or critic training has started.
+The independent 200-row primary panel is now reported above; new branch
+collection and critic training remain unstarted.
 
 <a id="arm-controlled-cost-results-20261004"></a>
 ## Controlled ARM versus episode resampling — October4

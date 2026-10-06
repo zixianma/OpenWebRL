@@ -1,0 +1,94 @@
+{
+  "stage": "verified_complete",
+  "version": 1,
+  "experiment": "Piotr independent pre/post teacher information diagnostic, primary200",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "high",
+  "pairs": 200,
+  "unique_task_groups": 200,
+  "independent_repeated_pairs": 100,
+  "planned_calls": 600,
+  "max_calls": 620,
+  "max_usd": 0.5,
+  "max_output_tokens": 4096,
+  "api_concurrency": 4,
+  "gpus": 0,
+  "new_slurm_allocations": 0,
+  "pricing_per_million": {
+    "input": 0.1,
+    "cached_input": 0.01,
+    "cache_write": 0.125,
+    "output": 0.5
+  },
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+  "prepared_request_worst_case_usd": 5.524607125000002,
+  "all_calls_plus_retry_reserve_worst_case_usd": 5.772422125000002,
+  "charge_scope": "All600 primary/repeat calls plus up to20 diagnosed failed-request retries; unused cap is not a target.",
+  "source_revision": "0d83b48c1659cac47a1044ef88fb573d3c16e180",
+  "eligible_transition_count": 1964,
+  "eligible_task_groups": 282,
+  "available_groups_after_calibration_exclusion": 242,
+  "excluded_calibration_groups": 40,
+  "excluded": {
+    "protected_task_group": 627,
+    "no_audited_task_group": 81,
+    "malformed_action": 1
+  },
+  "selection": "One random transition per task group; deterministic seed42; no outcome conditioning.",
+  "isolation": "All200 primary task groups and normalized goals exclude all40 calibration groups plus protected validation/retention and benchmarks. No critic fitting.",
+  "requested_outputs": [
+    "paired label transition matrix and flip fraction",
+    "mean absolute score change",
+    "progress probability and entropy shifts",
+    "same-condition repeat disagreement",
+    "paired examples with largest changes",
+    "cost, latency, input/output/reasoning tokens"
+  ],
+  "limitations": [
+    "Disagreement is not evidence of higher accuracy.",
+    "No alternative actions executed or episode-return labels fabricated.",
+    "Pixel changes and execution success do not imply goal progress.",
+    "No paid reference judge is included; evidence-support audit is separate and cannot be treated as full-panel ground truth.",
+    "Prior studies budgets are not transferred.",
+    "Self-imposed dollar ceiling can halt the panel if input lengths exceed observed cost estimates."
+  ],
+  "completed_requests": 600,
+  "receipt_based_estimated_cost_usd": 0.28315689,
+  "protocol": {
+    "sample": "200 new task groups, one transition per group; disjoint40 calibration; seed42",
+    "conditions": [
+      "pre",
+      "post"
+    ],
+    "repeated_pairs": 100,
+    "primary_metrics": [
+      "label change fraction",
+      "mean absolute and signed P(progress)-P(regression) change",
+      "task-paired excess absolute change over mean pre/post repeat variability",
+      "unresolved coverage"
+    ],
+    "intervals": "10000 task bootstrap resamples, seed42; Wilson for binomial fractions as supplementary",
+    "secondary_metrics": [
+      "transition matrix",
+      "entropy",
+      "repeat label flips",
+      "tool-count and turn strata",
+      "receipt-based estimated cost",
+      "conservative ledger",
+      "input/output/reasoning tokens",
+      "latency"
+    ],
+    "evidence_review": {
+      "method": "Qualitative local independent review of all changed primary cases plus20 randomly selected unchanged controls; no additional paid judge calls. Reviewer sees full observed evidence without teacher labels/rationales, records an evidence-based reference with abstention, then compares to both judgments.",
+      "outcomes": [
+        "supports post and contradicts pre",
+        "supports pre and contradicts post",
+        "both compatible or neither established",
+        "insufficient evidence"
+      ],
+      "cautions": "Selected review set is not representative accuracy. Single reviewer is not ground truth; preserve unresolved and distinguish direct execution effects from semantic progress."
+    },
+    "freeze_before_first_call": true
+  },
+  "private_payloads_published": false
+}

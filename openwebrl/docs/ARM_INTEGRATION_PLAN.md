@@ -40,7 +40,7 @@ supervision, identification of useful action credit, and the decision objective;
 no new neural fit, branch collection or allocation is launched by this decision.
 
 <a id="arm-post-evidence-protocol-20261006"></a>
-### Selected experiments 1 and 3: proposed execution protocol — October6 UTC
+### Selected experiments 1 and 3: proposed execution protocol — October 6 UTC
 
 The user selected the post-execution evidence diagnostic and training a
 pre-action selector from post-execution supervision, and requested the exact
@@ -51,9 +51,37 @@ following sample sizes and training settings are a proposal, not completed
 manifests or an approved resource request.
 
 **Latest steering: run one step at a time.** Prepare a40-transition
-pre-versus-full-post diagnostic first; defer critic training, the200-example
-primary panel, image-only ablation and new browser data until this first result
-is reviewed. The following larger protocol is retained as later-stage planning.
+pre-versus-full-post diagnostic first. The 40-case calibration and subsequently
+approved 200-task panel are now complete below. Critic training, the image-only
+ablation and new browser data remain later-stage planning.
+
+<a id="arm-teacher-evidence-primary200-20261006"></a>
+### Independent 200-task teacher panel — completed October 6 UTC
+
+The user approved the 200 new task-disjoint examples, repeats on 100 and their
+analysis after reviewing the calibration result. The completed panel contains
+600 independent Luna-high requests under the unchanged before-only/post-informed
+prompt, 4,096 output-token cap, default service tier and concurrency 4. Both inputs
+retain the task goal and causal history; post adds real screenshot/feedback.
+There are 200 distinct primary groups among 242 eligible groups left after
+excluding the 40 calibration groups, with all historical held-out, retention and
+normalized benchmark-goal protections preserved. No outcome stratification or
+mixing with other actor cohorts was introduced. Requests, sampling and analysis
+protocol were frozen before calls; no gold-accuracy claim or critic fit was added.
+
+The self-imposed $0.50 cap covers all paid attempts (620 maximum, 600 planned);
+settled conservative usage was $0.358183, with
+receipt-based estimated cost $0.283157. All 600 calls completed under exact
+`gpt-6-luna`/high identities. The analysis includes paired task-bootstrap
+intervals, score/label repeat controls, unresolved coverage, transition counts,
+tool/depth strata, tokens and latency. A separately saved blind local evidence
+review covers all 32 changed cases and 20 random unchanged controls, retaining
+abstentions. It is a single AI review rather than human ground truth.
+
+[Results and plot](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006) ·
+[Aggregate protocol](arm_results/rl_integration/teacher-evidence-primary200-plan-20261006.json).
+The broader three-condition image/receipt ablation and matched critic-learning
+pilot below remain later proposals. No new browser data or neural fits were run.
 
 <a id="arm-teacher-evidence-pilot-20261006"></a>
 **Completed with GPT-6 Luna high:** all120 calls succeeded;8/40 labels changed,
@@ -96,7 +124,7 @@ cap was **$1.50 and140 calls including at most20 retries, zero GPUs and no new
 Slurm allocation**. Conservative request bounds plus20 maximum-size retries
 totaled$1.3371; actual receipt-based estimated cost was$0.0541 for120 successful
 calls. The superseded Sol proposal and all original preparation were preserved.
-The verified-complete result is the first40-example calibration only. [Aggregate readiness](arm_results/rl_integration/teacher-evidence-pilot-plan-20261006.json).
+The 40-example result remains a separate calibration; the independent 200-task panel is reported above. [Aggregate readiness](arm_results/rl_integration/teacher-evidence-pilot-plan-20261006.json).
 
 Real post-execution evidence currently applies to executed demonstrations and
 exact tool-identical proposals only. Other proposals can receive pre-execution
