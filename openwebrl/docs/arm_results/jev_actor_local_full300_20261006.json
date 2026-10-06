@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-06",
+  "condition_id": "L06",
+  "experiment": "Jev Ultrafast direct actor, local browser",
+  "protocol_name": "local-openwebrl-om2w-v2",
+  "status": "verified_complete",
+  "verified_complete": true,
+  "audit_passed": true,
+  "audit_created_utc": "2026-10-06T07:21:06.729698+00:00",
+  "audit_sha256": "069cba1025e01f7129ca19484ea5e0644a6e2731d51329479baa48fa0d0649a1",
+  "counts": {
+    "primary": 300,
+    "smoke": 3,
+    "valid_primary": 260,
+    "invalid_primary": 40,
+    "completed_done": 23,
+    "repaired_done": 23,
+    "repaired_or_canonical_successes": 14,
+    "final_screenshots": 275,
+    "overall_success_rate": 0.04666666666666667,
+    "valid_only_success_rate": 0.05384615384615385,
+    "terminals": {
+      "blocked": 224,
+      "error": 40,
+      "native_choice_invalid": 5,
+      "action_limit": 7,
+      "done": 23,
+      "typing_value_unavailable": 1
+    }
+  },
+  "denominators": {
+    "overall": "14 successes / all300 primary tasks",
+    "valid_only": "14 successes /260 valid primary tasks",
+    "smokes_excluded": 3,
+    "invalid_primary_counted_as_zero_overall": 40
+  },
+  "terminal_screenshots": {
+    "primary": 275,
+    "valid_primary": 260,
+    "invalid_primary": 15
+  },
+  "models": {
+    "actor": "jev-1.13.0",
+    "actor_input": "native DOM text, no images",
+    "typing_helper": "gpt-4.1-mini-2025-04-14",
+    "helper_temperature": 0.6,
+    "helper_top_p": 0.95,
+    "helper_max_tokens": 1024,
+    "judge": "o4-mini-2025-04-16",
+    "judge_seed": 42,
+    "judge_max_completion_tokens": 4096,
+    "canonical_reward_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583"
+  },
+  "browser": {
+    "engine": "Chromium",
+    "version": "145.0.7632.6",
+    "revision": 1208,
+    "playwright": "1.58.0",
+    "viewport": [
+      1280,
+      720
+    ],
+    "device_scale_factor": 1,
+    "locale": "en-US",
+    "timezone": "UTC",
+    "headless": true,
+    "proxy": false,
+    "stealth": false
+  },
+  "limits": {
+    "browser_operations": 30,
+    "decisions": 60,
+    "episode_seconds": 1800
+  },
+  "judge_input_repair": {
+    "scope": "All23 originally valid native DONE records, regardless of the previous verdict",
+    "saved_only_rejudges": 23,
+    "canonical_source_rubric_model_unchanged": true,
+    "change": "Newline-correct qwen25 serialization and a private faithful native DOM tool registry; no invented action mapping or synthetic thoughts.",
+    "old_verdicts_preserved_and_superseded": true,
+    "actor_replays": 0,
+    "browser_replays": 0,
+    "same_saved_terminal_png_bytes": true,
+    "input_manifest_sha256": "3d2bbb393f46a98bda1c339f5484ee7a7cb25472274cf8ef9f874b4eeaf81439",
+    "adapter_sha256": "ca77b05898baa7f497c9f0480ba5286de70bca567c994794332a8a4deb749058",
+    "controller_sha256": "731b3048521f36c183758b1f9727b1d6f7958c3efc35de34c26c882f6430ba31"
+  },
+  "budget": {
+    "resources": {
+      "gpus": 0,
+      "cpus": 8,
+      "memory_gib": 32,
+      "scheduler_seconds_cap": 14400
+    },
+    "scheduler_seconds_charged": 760,
+    "scheduler_attempts": [
+      {
+        "job_id": "346563",
+        "state": "FAILED",
+        "elapsed_seconds": 34,
+        "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+      },
+      {
+        "job_id": "346567",
+        "state": "FAILED",
+        "elapsed_seconds": 50,
+        "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+      },
+      {
+        "job_id": "346623",
+        "state": "COMPLETED",
+        "elapsed_seconds": 615,
+        "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+      },
+      {
+        "job_id": "346638",
+        "state": "COMPLETED",
+        "elapsed_seconds": 61,
+        "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+      }
+    ],
+    "browser_sessions": 306,
+    "browser_session_cap": 330,
+    "jev_requests": 1523,
+    "jev_request_cap": 19800,
+    "typing_requests": 192,
+    "typing_request_cap": 19800,
+    "typing_usd": 0.0298748,
+    "typing_usd_cap": 15,
+    "judge_http_attempts": 46,
+    "judge_http_attempt_cap": 1320,
+    "judge_usd": 0.2052523,
+    "judge_usd_cap": 8,
+    "active_browsers_at_close": 0,
+    "request_counts_and_charges_reconciled": true,
+    "all_attempt_usage": {
+      "jev": {
+        "input_tokens": 5273245,
+        "output_tokens": 358993
+      },
+      "text": {
+        "input_tokens": 65559,
+        "output_tokens": 2282
+      },
+      "judge": {
+        "input_tokens": 116673,
+        "output_tokens": 17480
+      }
+    },
+    "historical_budget_transfer": false
+  },
+  "attempt_dispositions": {
+    "finished": 303,
+    "interrupted": 2,
+    "halt_invalid_preserved": 1,
+    "superseded_judge_input": 23
+  },
+  "provenance": {
+    "upstream_commit": "1231850a0bf1a0c0341fe408ef1668dbbfdfac46",
+    "rejudge_plan_sha256": "5ed7e28543f822dbaa409e8e530c19aac933b3333489039aee7f1547f05acc4e",
+    "frozen_source_manifest_sha256": "8a9156c0dc0f8f429146ad372c5988f8a142befb59ad70fa3cfe9c3b8e5bede9",
+    "final_job_id": "346638",
+    "wandb_project": "openwebrl-evals",
+    "wandb_run_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/jev-actor-local-full300-20261006"
+  },
+  "comparison_limits": [
+    "This current local-browser result is separate from the historical hosted Jev/Kev and selector cohorts.",
+    "The four matched SFT conditions remain in progress; no contemporaneous actor-versus-selector gain is available.",
+    "The unchanged canonical rubric retains its partial-progress allowances; this is not a strict-completion score."
+  ],
+  "public_payload": "Aggregate metrics and provenance only; no task IDs, raw trajectories, screenshots, or private filesystem paths."
+}

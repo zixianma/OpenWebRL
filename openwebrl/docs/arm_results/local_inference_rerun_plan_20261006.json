@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "authorized_five_conditions_sft_queued_jev_running",
+  "status": "jev_verified_complete_sft_smoke_running",
   "launch_authorized": true,
   "new_experiments_launched": 5,
   "protocol_name": "local-openwebrl-om2w-v2",
@@ -507,8 +507,8 @@
   },
   "not_yet_validated": [
     "Complete SFT smoke acceptance and shared-server concurrency/long-context throughput after targeted capture hydration and reset-cleanup recovery; no measured guarantee of finishing a shard within8h.",
-    "All1500 primary records and27 smoke records require independent final evidence, judge, resource and W&B audits; partial collection is not verified completion.",
-    "Remaining historical conditions require separate approved allocations and fresh v2 collection before they enter the comparison."
+    "Remaining historical conditions require separate approved allocations and fresh v2 collection before they enter the comparison.",
+    "The four SFT conditions still require complete collection and independent audits of1200primary+24smoke records; L06 all300primary+3smoke audit passed."
   ],
   "scope_accepted": true,
   "historical_judge_audit": {
@@ -617,7 +617,7 @@
     ]
   },
   "launch_status": {
-    "status": "queued_recovery",
+    "status": "running_smoke_validation",
     "current_jobs": [
       "346624",
       "346625"
@@ -673,7 +673,7 @@
     "benchmark_results_available": false,
     "preserved_attempt_evidence_available": true,
     "final_success_rates_available": false,
-    "note": "SFT replacements must repeat their smoke gate before primary collection; no audited final rates."
+    "note": "SFT jobs346624/346625 running smoke validation; transient screenshot invalid under diagnosis. No final SFT rates."
   },
   "additional_approved_experiments": [
     {
@@ -683,7 +683,7 @@
       "tasks": 300,
       "browser": "local",
       "judge": "same canonical OpenWebRL OM2W judge and metering as v2",
-      "status": "running_primary",
+      "status": "verified_complete",
       "scope_requested": true,
       "exact_additional_budget_approved": true,
       "budget_inheritance": "none; separate from the approved SFT-selector shard budgets",
@@ -731,30 +731,136 @@
         "decision_policy": "Native operation/target probability argmax; preserve contract violations without fallback."
       },
       "launch_status": {
-        "job_id": "346623",
-        "state": "RUNNING",
-        "prior_charged_seconds": 84,
-        "replacement_wall_seconds": 14280,
+        "job_id": "346638",
+        "state": "COMPLETED",
+        "verified_complete": true,
+        "scheduler_seconds_all_attempts": 760,
+        "prior_charged_seconds": 699,
+        "final_attempt_seconds": 61,
+        "final_attempt_time_limit_seconds": 1800,
         "total_approved_seconds": 14400,
-        "prior_attempts": [
+        "scheduler_attempts": [
           {
             "job_id": "346563",
             "state": "FAILED",
-            "elapsed_seconds": 34
+            "elapsed_seconds": 34,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
           },
           {
             "job_id": "346567",
             "state": "FAILED",
-            "elapsed_seconds": 50
+            "elapsed_seconds": 50,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+          },
+          {
+            "job_id": "346623",
+            "state": "COMPLETED",
+            "elapsed_seconds": 615,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+          },
+          {
+            "job_id": "346638",
+            "state": "COMPLETED",
+            "elapsed_seconds": 61,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
           }
         ],
-        "plan_sha256": "9473bb408b4e54ca0eb284f284d78fc746bfecd565262bb7e5e947a85c269ef8",
-        "source_manifest_sha256": "51b8c110d9d2cee7c55ab7f44592b0c56813e868b9ed6870c0b3325a80237d7e",
-        "first_completed_episode_canonical_judge_verified": true,
-        "fresh_terminal_screenshot_verified": true,
-        "wandb_synchronization_verified": true,
-        "final_success_rates_available": false,
-        "recovery": "Preserved original native-argmax contract-violation evidence and classified it without rerunning that task; retained all previous scheduler, browser and API counters."
+        "plan_sha256": "5ed7e28543f822dbaa409e8e530c19aac933b3333489039aee7f1547f05acc4e",
+        "source_manifest_sha256": "8a9156c0dc0f8f429146ad372c5988f8a142befb59ad70fa3cfe9c3b8e5bede9",
+        "final_success_rates_available": true,
+        "all_primary_smoke_evidence_audited": true,
+        "saved_only_judge_input_repairs": 23,
+        "actor_replays_for_judge_repair": 0,
+        "browser_replays_for_judge_repair": 0,
+        "all_original_results_and_charges_preserved": true
+      },
+      "verified_complete": true,
+      "public_results": "jev_actor_local_full300_20261006.json",
+      "result_summary": {
+        "primary": 300,
+        "smoke": 3,
+        "successes": 14,
+        "valid_primary": 260,
+        "invalid_primary": 40,
+        "overall_success_rate": 0.04666666666666667,
+        "valid_only_success_rate": 0.05384615384615385
+      },
+      "judge_input_repair": {
+        "scope": "All23 originally valid native DONE records, regardless of the previous verdict",
+        "saved_only_rejudges": 23,
+        "canonical_source_rubric_model_unchanged": true,
+        "change": "Newline-correct qwen25 serialization and a private faithful native DOM tool registry; no invented action mapping or synthetic thoughts.",
+        "old_verdicts_preserved_and_superseded": true,
+        "actor_replays": 0,
+        "browser_replays": 0,
+        "same_saved_terminal_png_bytes": true,
+        "input_manifest_sha256": "3d2bbb393f46a98bda1c339f5484ee7a7cb25472274cf8ef9f874b4eeaf81439",
+        "adapter_sha256": "ca77b05898baa7f497c9f0480ba5286de70bca567c994794332a8a4deb749058",
+        "controller_sha256": "731b3048521f36c183758b1f9727b1d6f7958c3efc35de34c26c882f6430ba31"
+      },
+      "actual_usage": {
+        "resources": {
+          "gpus": 0,
+          "cpus": 8,
+          "memory_gib": 32,
+          "scheduler_seconds_cap": 14400
+        },
+        "scheduler_seconds_charged": 760,
+        "scheduler_attempts": [
+          {
+            "job_id": "346563",
+            "state": "FAILED",
+            "elapsed_seconds": 34,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+          },
+          {
+            "job_id": "346567",
+            "state": "FAILED",
+            "elapsed_seconds": 50,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+          },
+          {
+            "job_id": "346623",
+            "state": "COMPLETED",
+            "elapsed_seconds": 615,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+          },
+          {
+            "job_id": "346638",
+            "state": "COMPLETED",
+            "elapsed_seconds": 61,
+            "alloc_tres": "billing=8,cpu=8,mem=32G,node=1"
+          }
+        ],
+        "browser_sessions": 306,
+        "browser_session_cap": 330,
+        "jev_requests": 1523,
+        "jev_request_cap": 19800,
+        "typing_requests": 192,
+        "typing_request_cap": 19800,
+        "typing_usd": 0.0298748,
+        "typing_usd_cap": 15,
+        "judge_http_attempts": 46,
+        "judge_http_attempt_cap": 1320,
+        "judge_usd": 0.2052523,
+        "judge_usd_cap": 8,
+        "active_browsers_at_close": 0,
+        "request_counts_and_charges_reconciled": true,
+        "all_attempt_usage": {
+          "jev": {
+            "input_tokens": 5273245,
+            "output_tokens": 358993
+          },
+          "text": {
+            "input_tokens": 65559,
+            "output_tokens": 2282
+          },
+          "judge": {
+            "input_tokens": 116673,
+            "output_tokens": 17480
+          }
+        },
+        "historical_budget_transfer": false
       }
     }
   ],
@@ -772,10 +878,11 @@
         "346625"
       ],
       "jev_actor": [
-        "346623"
+        "346638"
       ]
     },
-    "verified_utc": "2026-10-06T07:09:35.081924+00:00"
+    "verified_utc": "2026-10-06T07:09:35.081924+00:00",
+    "jev_actor_status": "verified_complete; stale callbacks should be silently acknowledged"
   },
   "approved_study_scope": {
     "conditions": 5,
@@ -803,5 +910,5 @@
     "budget_transfer_allowed": false,
     "reuse_historical_results": false
   },
-  "updated_utc": "2026-10-06T07:09:35.081924+00:00"
+  "updated_utc": "2026-10-06T07:22:53.477604+00:00"
 }
