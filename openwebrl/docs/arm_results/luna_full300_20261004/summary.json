@@ -1,0 +1,1018 @@
+{
+  "complete": true,
+  "scheduled_tasks": 300,
+  "recorded_episodes": 1500,
+  "pricing": {
+    "luna_input": 0.1,
+    "luna_cached": 0.01,
+    "luna_cache_write": 0.125,
+    "luna_output": 0.5,
+    "judge_input": 1.1,
+    "judge_cached": 0.275,
+    "judge_output": 4.4,
+    "h200_hour": 0.9
+  },
+  "by_mode": {
+    "qwen": {
+      "episodes": 300,
+      "successes": 53,
+      "valid": 277,
+      "overall": 0.17666666666666667,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 159.63916571648326,
+          "p50": 120.73704254766926,
+          "p95": 389.0357319930337,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 13.21,
+          "p50": 8.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 43.70653237496503,
+          "p50": 22.79543920024298,
+          "p95": 183.66657039958517,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 167009.45666666667,
+          "p50": 53612.0,
+          "p95": 500685.25000000006,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 8960.253333333334,
+          "p50": 7107.5,
+          "p95": 21147.600000000006,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 159.63916571648326,
+          "p50": 120.73704254766926,
+          "p95": 389.0357319930337,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 462349098325551.8,
+          "p50": 239380276969472.0,
+          "p95": 1225087109395251.2,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 509903067942311.25,
+          "p50": 269243844755456.0,
+          "p95": 1324089383233126.8,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.039909791429120815,
+      "cost_upper_mean_usd": 0.039909791429120815,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "qwen_actor": {
+          "input": 50102837.0,
+          "output": 2688076.0,
+          "cached_input": 42905244.0,
+          "reasoning_output": 0.0,
+          "requests": 3994.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 3994.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 3994.0,
+          "image_input": 0.0,
+          "image_missing": 3994.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "api_judge": {
+          "input": 438600.0,
+          "output": 71830.0,
+          "cached_input": 0.0,
+          "reasoning_output": 53760.0,
+          "requests": 181.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 181.0,
+          "image_input": 0.0,
+          "image_missing": 181.0,
+          "cost_lower_usd": 0.7985120000000001,
+          "cost_upper_usd": 0.7985120000000001
+        }
+      },
+      "success_95": [
+        0.13333333333333333,
+        0.22
+      ],
+      "valid_only": 0.19133574007220217,
+      "invalid": 23,
+      "serving_usd_per_success": 0.22590447978747633
+    },
+    "qwen_luna5": {
+      "episodes": 300,
+      "successes": 85,
+      "valid": 276,
+      "overall": 0.2833333333333333,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 295.4520444210867,
+          "p50": 224.1464296586346,
+          "p95": 677.4378371699248,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 13.5,
+          "p50": 10.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 46.1398170801159,
+          "p50": 27.1761262123473,
+          "p95": 179.67776980157942,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 941157.98,
+          "p50": 380402.0,
+          "p95": 2741386.0500000003,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 50214.67,
+          "p50": 39999.0,
+          "p95": 119387.15,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 295.4520444210867,
+          "p50": 224.1464296586346,
+          "p95": 677.4378371699248,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 1421513995826189.8,
+          "p50": 935723372085248.0,
+          "p95": 3529602193951949.5,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 1662464355552679.2,
+          "p50": 1119333397889024.0,
+          "p95": 4054460381767271.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.08885368252193834,
+      "cost_upper_mean_usd": 0.08885368252193834,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "luna_selector": {
+          "input": 30482379.0,
+          "output": 1374418.0,
+          "cached_input": 0.0,
+          "reasoning_output": 1313428.0,
+          "requests": 4066.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 30470181.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 4066.0,
+          "cost_lower_usd": 4.497201424999999,
+          "cost_upper_usd": 4.497201424999999
+        },
+        "qwen_actor": {
+          "input": 251865015.0,
+          "output": 13689983.0,
+          "cached_input": 234637188.0,
+          "reasoning_output": 0.0,
+          "requests": 20330.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 20330.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 20330.0,
+          "image_input": 0.0,
+          "image_missing": 20330.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "api_judge": {
+          "input": 472554.0,
+          "output": 76661.0,
+          "cached_input": 0.0,
+          "reasoning_output": 56896.0,
+          "requests": 194.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 194.0,
+          "image_input": 0.0,
+          "image_missing": 194.0,
+          "cost_lower_usd": 0.8571178,
+          "cost_upper_usd": 0.8571178
+        }
+      },
+      "success_95": [
+        0.23333333333333334,
+        0.33666666666666667
+      ],
+      "valid_only": 0.3079710144927536,
+      "invalid": 24,
+      "serving_usd_per_success": 0.31360123243037064
+    },
+    "sft_luna5": {
+      "episodes": 300,
+      "successes": 113,
+      "valid": 274,
+      "overall": 0.37666666666666665,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 200.03537492246366,
+          "p50": 151.17712916247547,
+          "p95": 489.8616625058233,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 14.693333333333333,
+          "p50": 12.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 54.08440262401632,
+          "p50": 32.852420159382746,
+          "p95": 189.29087352762,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 684272.7666666667,
+          "p50": 406182.0,
+          "p95": 1776296.1000000003,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 28652.163333333334,
+          "p50": 22668.0,
+          "p95": 65874.1,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 200.03537492246366,
+          "p50": 151.17712916247547,
+          "p95": 489.8616625058233,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 984782055270864.2,
+          "p50": 761657425002496.0,
+          "p95": 2314222693099111.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 1245785008848677.5,
+          "p50": 976321984331776.0,
+          "p95": 2813526866844058.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.06022842861394925,
+      "cost_upper_mean_usd": 0.06022842861394925,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "qwen_actor": {
+          "input": 185149105.0,
+          "output": 7476152.0,
+          "cached_input": 168071263.0,
+          "reasoning_output": 0.0,
+          "requests": 22075.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 22075.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 22075.0,
+          "image_input": 0.0,
+          "image_missing": 22075.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "luna_selector": {
+          "input": 20132725.0,
+          "output": 1119497.0,
+          "cached_input": 88109.0,
+          "reasoning_output": 1053272.0,
+          "requests": 4415.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 20031371.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 4415.0,
+          "cost_lower_usd": 3.065875465000001,
+          "cost_upper_usd": 3.065875465000001
+        },
+        "api_judge": {
+          "input": 519359.0,
+          "output": 90220.0,
+          "cached_input": 0.0,
+          "reasoning_output": 68224.0,
+          "requests": 206.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 206.0,
+          "image_input": 0.0,
+          "image_missing": 206.0,
+          "cost_lower_usd": 0.9682628999999999,
+          "cost_upper_usd": 0.9682628999999999
+        }
+      },
+      "success_95": [
+        0.3233333333333333,
+        0.43333333333333335
+      ],
+      "valid_only": 0.4124087591240876,
+      "invalid": 26,
+      "serving_usd_per_success": 0.15989848304588297
+    },
+    "sft_luna10": {
+      "episodes": 300,
+      "successes": 112,
+      "valid": 274,
+      "overall": 0.37333333333333335,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 230.85523242213452,
+          "p50": 178.3128540192265,
+          "p95": 525.3826668846889,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 15.426666666666666,
+          "p50": 13.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 55.72071978020947,
+          "p50": 35.532992609310895,
+          "p95": 189.50078774685971,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 1419131.3133333332,
+          "p50": 848654.5,
+          "p95": 3585134.000000001,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 57484.75666666667,
+          "p50": 47170.5,
+          "p95": 125001.1,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 230.85523242213452,
+          "p50": 178.3128540192265,
+          "p95": 525.3826668846889,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 1396372605158905.2,
+          "p50": 1068806988464128.0,
+          "p95": 3231727036750234.5,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 1943798958529358.5,
+          "p50": 1513832697266176.0,
+          "p95": 4295838738766234.5,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.07219003640553363,
+      "cost_upper_mean_usd": 0.07219003640553363,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "qwen_actor": {
+          "input": 396352850.0,
+          "output": 15896633.0,
+          "cached_input": 378628314.0,
+          "reasoning_output": 0.0,
+          "requests": 46300.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 46300.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 46300.0,
+          "image_input": 0.0,
+          "image_missing": 46300.0,
+          "cost_lower_usd": 0.0,
+          "cost_upper_usd": 0.0
+        },
+        "luna_selector": {
+          "input": 29386544.0,
+          "output": 1348794.0,
+          "cached_input": 39124.0,
+          "reasoning_output": 1279344.0,
+          "requests": 4630.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 29333530.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 4630.0,
+          "cost_lower_usd": 4.342868489999999,
+          "cost_upper_usd": 4.342868489999999
+        },
+        "api_judge": {
+          "input": 508865.0,
+          "output": 89888.0,
+          "cached_input": 0.0,
+          "reasoning_output": 67840.0,
+          "requests": 201.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 201.0,
+          "image_input": 0.0,
+          "image_missing": 201.0,
+          "cost_lower_usd": 0.9552587000000005,
+          "cost_upper_usd": 0.9552587000000005
+        }
+      },
+      "success_95": [
+        0.32,
+        0.4266666666666667
+      ],
+      "valid_only": 0.40875912408759124,
+      "invalid": 26,
+      "serving_usd_per_success": 0.19336616894339365
+    },
+    "luna": {
+      "episodes": 300,
+      "successes": 110,
+      "valid": 279,
+      "overall": 0.36666666666666664,
+      "metrics": {
+        "episode_seconds": {
+          "mean": 78.09334092836517,
+          "p50": 55.97931478335522,
+          "p95": 254.40995958540594,
+          "missing": 0
+        },
+        "browser_steps": {
+          "mean": 12.796666666666667,
+          "p50": 9.0,
+          "p95": 30.0,
+          "missing": 0
+        },
+        "browser_step_seconds": {
+          "mean": 33.144721429970424,
+          "p50": 17.438856539316475,
+          "p95": 171.96029785298745,
+          "missing": 0
+        },
+        "model_input_tokens": {
+          "mean": 54268.613333333335,
+          "p50": 27642.5,
+          "p95": 152389.25,
+          "missing": 0
+        },
+        "model_output_tokens": {
+          "mean": 1274.5933333333332,
+          "p50": 867.5,
+          "p95": 3741.9500000000016,
+          "missing": 0
+        },
+        "local_gpu_reserved_seconds": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_lower": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        },
+        "qwen_flops_upper": {
+          "mean": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "missing": 0
+        }
+      },
+      "cost_lower_mean_usd": 0.0073805638333333335,
+      "cost_upper_mean_usd": 0.0073805638333333335,
+      "unknown_usage_requests": 0,
+      "role_totals": {
+        "luna_actor": {
+          "input": 16280584.0,
+          "output": 382378.0,
+          "cached_input": 0.0,
+          "reasoning_output": 257283.0,
+          "requests": 3839.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 15796870.0,
+          "cache_write_missing": 0.0,
+          "image_input": 0.0,
+          "image_missing": 3839.0,
+          "cost_lower_usd": 2.214169150000001,
+          "cost_upper_usd": 2.214169150000001
+        },
+        "api_judge": {
+          "input": 546070.0,
+          "output": 81804.0,
+          "cached_input": 0.0,
+          "reasoning_output": 59392.0,
+          "requests": 220.0,
+          "usage_missing": 0.0,
+          "cached_missing": 0.0,
+          "reasoning_missing": 0.0,
+          "cache_write_input": 0.0,
+          "cache_write_missing": 220.0,
+          "image_input": 0.0,
+          "image_missing": 220.0,
+          "cost_lower_usd": 0.9606146000000004,
+          "cost_upper_usd": 0.9606146000000004
+        }
+      },
+      "success_95": [
+        0.31,
+        0.42
+      ],
+      "valid_only": 0.3942652329749104,
+      "invalid": 21,
+      "serving_usd_per_success": 0.020128810454545454
+    }
+  },
+  "paired_differences": {
+    "qwen_luna5_minus_qwen": {
+      "mean": 0.10666666666666667,
+      "task_bootstrap_95": [
+        0.056666666666666664,
+        0.16
+      ],
+      "common_valid_tasks": 274,
+      "common_valid_difference": 0.11678832116788321
+    },
+    "sft_luna5_minus_qwen": {
+      "mean": 0.19999999999999998,
+      "task_bootstrap_95": [
+        0.14666666666666664,
+        0.25666666666666665
+      ]
+    },
+    "sft_luna10_minus_qwen": {
+      "mean": 0.19666666666666668,
+      "task_bootstrap_95": [
+        0.1433333333333333,
+        0.2533333333333333
+      ]
+    },
+    "luna_minus_qwen": {
+      "mean": 0.18999999999999997,
+      "task_bootstrap_95": [
+        0.13333333333333333,
+        0.2466666666666667
+      ]
+    },
+    "sft_luna10_minus_sft_luna5": {
+      "mean": -0.0033333333333333335,
+      "task_bootstrap_95": [
+        -0.05333333333333334,
+        0.04666666666666667
+      ],
+      "common_valid_tasks": 271,
+      "common_valid_difference": 0.0
+    },
+    "sft_luna5_minus_luna": {
+      "mean": 0.01,
+      "task_bootstrap_95": [
+        -0.04666666666666667,
+        0.06666666666666667
+      ],
+      "common_valid_tasks": 274,
+      "common_valid_difference": 0.014598540145985401
+    },
+    "sft_luna10_minus_luna": {
+      "mean": 0.006666666666666667,
+      "task_bootstrap_95": [
+        -0.05333333333333334,
+        0.06674999999999878
+      ],
+      "common_valid_tasks": 274,
+      "common_valid_difference": 0.014598540145985401
+    }
+  },
+  "cost_scope": "Estimated exclusive model-serving cost; browser CPU not separately priced. Judge and research startup/idle costs are separate.",
+  "token_scope": "Provider token totals include image tokens and reasoning where supported; model tokenizers differ. Subsets are never added twice.",
+  "protocols": {
+    "qwen": {
+      "actor": "Qwen/Qwen3-VL-4B-Thinking",
+      "actor_revision": "1de27d8c51f12e819435303b9e84c4e25ba8401e",
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": -1,
+      "repetition_penalty": 1.0,
+      "candidates": [
+        1,
+        5
+      ],
+      "actor_max_output_tokens": 4096,
+      "context_length": 32768,
+      "max_steps": 30,
+      "selector": "gpt-6-luna",
+      "luna_reasoning": "medium",
+      "luna_max_output_tokens": 4096,
+      "luna_service_tier": "default",
+      "actor_history": "full",
+      "selector_history": "full",
+      "screenshots": 1,
+      "browser": "local_process",
+      "concurrency_per_gpu": 1,
+      "viewport": [
+        1280,
+        720
+      ],
+      "qwen_cache": "flush before each episode; retain within-episode reuse",
+      "task_timeout_seconds": 1800,
+      "request_timeout_seconds": 180,
+      "judge": "o4-mini-2025-04-16",
+      "judge_protocol": "Online-Mind2Web/AgentTrek",
+      "judge_evidence": "executed actions and final screenshot; actor thoughts excluded for every arm",
+      "judge_seed": 42,
+      "judge_max_output_tokens": 4096,
+      "judge_max_attempts": 4,
+      "optimizer_updates": 0,
+      "image_detail": "high",
+      "seed": 20261004,
+      "benchmark": "Online-Mind2Web",
+      "benchmark_tasks": 300,
+      "terminal_status_rule": "COMPLETED: judge; FAILED including step limit: zero; ABORTED: invalid",
+      "candidate_selection": "shuffled candidates; index only; execute chosen candidate unchanged",
+      "local_actor_sampling": "temperature 1.0; top_p 0.95; top_k -1; repetition_penalty 1.0",
+      "framework_tokenizer": "Qwen/Qwen3-VL-4B-Thinking",
+      "framework_tokenizer_revision": "1de27d8c51f12e819435303b9e84c4e25ba8401e"
+    },
+    "sft": {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": -1,
+      "repetition_penalty": 1.0,
+      "candidates": [
+        5,
+        10
+      ],
+      "actor_max_output_tokens": 4096,
+      "context_length": 32768,
+      "max_steps": 30,
+      "selector": "gpt-6-luna",
+      "luna_reasoning": "medium",
+      "luna_max_output_tokens": 4096,
+      "luna_service_tier": "default",
+      "actor_history": "full",
+      "selector_history": "full",
+      "screenshots": 1,
+      "browser": "local_process",
+      "concurrency_per_gpu": 1,
+      "viewport": [
+        1280,
+        720
+      ],
+      "qwen_cache": "flush before each episode; retain within-episode reuse",
+      "task_timeout_seconds": 1800,
+      "request_timeout_seconds": 180,
+      "judge": "o4-mini-2025-04-16",
+      "judge_protocol": "Online-Mind2Web/AgentTrek",
+      "judge_evidence": "executed actions and final screenshot; actor thoughts excluded for every arm",
+      "judge_seed": 42,
+      "judge_max_output_tokens": 4096,
+      "judge_max_attempts": 4,
+      "optimizer_updates": 0,
+      "image_detail": "high",
+      "seed": 20261004,
+      "benchmark": "Online-Mind2Web",
+      "benchmark_tasks": 300,
+      "terminal_status_rule": "COMPLETED: judge; FAILED including step limit: zero; ABORTED: invalid",
+      "candidate_selection": "shuffled candidates; index only; execute chosen candidate unchanged",
+      "local_actor_sampling": "temperature 1.0; top_p 0.95; top_k -1; repetition_penalty 1.0",
+      "framework_tokenizer": "OpenWebRL/OpenWebRL-4B-SFT",
+      "framework_tokenizer_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a"
+    },
+    "luna": {
+      "actor": "gpt-6-luna",
+      "actor_revision": null,
+      "temperature": null,
+      "top_p": null,
+      "top_k": null,
+      "repetition_penalty": null,
+      "candidates": [
+        1
+      ],
+      "actor_max_output_tokens": 4096,
+      "context_length": 32768,
+      "max_steps": 30,
+      "selector": null,
+      "luna_reasoning": "medium",
+      "luna_max_output_tokens": 4096,
+      "luna_service_tier": "default",
+      "actor_history": "full",
+      "selector_history": "full",
+      "screenshots": 1,
+      "browser": "local_process",
+      "concurrency_per_gpu": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "qwen_cache": "no local model serving",
+      "task_timeout_seconds": 1800,
+      "request_timeout_seconds": 180,
+      "judge": "o4-mini-2025-04-16",
+      "judge_protocol": "Online-Mind2Web/AgentTrek",
+      "judge_evidence": "executed actions and final screenshot; actor thoughts excluded for every arm",
+      "judge_seed": 42,
+      "judge_max_output_tokens": 4096,
+      "judge_max_attempts": 4,
+      "optimizer_updates": 0,
+      "image_detail": "high",
+      "seed": 20261004,
+      "benchmark": "Online-Mind2Web",
+      "benchmark_tasks": 300,
+      "terminal_status_rule": "COMPLETED: judge; FAILED including step limit: zero; ABORTED: invalid",
+      "candidate_selection": "shuffled candidates; index only; execute chosen candidate unchanged",
+      "local_actor_sampling": "not applicable; Luna API controls sampling",
+      "framework_tokenizer": "Qwen/Qwen3-VL-4B-Thinking",
+      "framework_tokenizer_revision": "1de27d8c51f12e819435303b9e84c4e25ba8401e",
+      "luna_snapshot": "provider-resolved snapshot saved in every receipt"
+    }
+  },
+  "historical_sft_reference": {
+    "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+    "fixed_actor0": {
+      "successes": 106,
+      "tasks": 300,
+      "valid": 272
+    },
+    "pooled_pass1": {
+      "successes": 528,
+      "episodes": 1500
+    },
+    "protocol": {
+      "actor": "OpenWebRL-4B-SFT:iteration0",
+      "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+      "browser": "local_process",
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": -1,
+      "max_new_tokens": 1024,
+      "max_steps": 30,
+      "context_length": 32768,
+      "context_num_screenshots": 1,
+      "history": "full",
+      "judge": "o4-mini",
+      "judge_protocol": "online_mind2web/AgentTrek",
+      "judge_response_tokens": 4096,
+      "candidates": 5,
+      "candidate_representation": "full",
+      "optimizer_updates": 0
+    },
+    "matched_protocol": false,
+    "comparable_exclusive_gpu_cost": false,
+    "comparable_episode_latency": false,
+    "interpretation": "Historical SFT reference only; T0.7/p0.9/1024 output, thoughts-inclusive judge and shared serving differ. No new SFT-alone episodes."
+  },
+  "pilot_not_full300": false,
+  "final_scheduler_audit_required": false,
+  "physical_collection": {
+    "attempts": 1693,
+    "committed": 1500,
+    "interrupted": 12,
+    "attempts_missing_final_timing": 12,
+    "model_input_tokens": 1002141914,
+    "model_output_tokens": 44462938,
+    "unknown_usage_requests": 27,
+    "token_totals_are_lower_bounds": true,
+    "archived_coordinate_compromised_CPU_records": 177,
+    "archived_GPU_diagnostic_records": 4,
+    "unresolved_local_requests": 24,
+    "unresolved_API_requests": 3
+  },
+  "api_ledgers": {
+    "luna": {
+      "calls": 21480,
+      "charged_or_reserved_usd": 16.871675155000176
+    },
+    "judge": {
+      "calls": 1055,
+      "charged_or_reserved_usd": 4.784383999999995
+    }
+  },
+  "verified_complete": true,
+  "verified_utc": "2026-10-06T03:52:48Z",
+  "primary_episode_usage_complete": true,
+  "api_accounting": {
+    "luna": {
+      "receipts": 21480,
+      "received": 21477,
+      "unresolved": 3,
+      "input_tokens": 116877357,
+      "output_tokens": 4556471,
+      "known_cost_lower_usd": 16.846087780000072,
+      "known_cost_upper_usd": 16.846087780000072,
+      "charged_or_reserved_from_receipts_usd": 16.87167515500007,
+      "cap_usd": 100.0,
+      "cap_calls": 39600,
+      "unresolved_reserved_usd": 0.02558737499999708,
+      "final_global_accounting": true,
+      "receipt_ledger_exact": true,
+      "token_totals_complete": false
+    },
+    "judge": {
+      "receipts": 1055,
+      "received": 1055,
+      "unresolved": 0,
+      "input_tokens": 2623160,
+      "output_tokens": 431570,
+      "known_cost_lower_usd": 4.78438399999999,
+      "known_cost_upper_usd": 4.78438399999999,
+      "charged_or_reserved_from_receipts_usd": 4.78438399999999,
+      "cap_usd": 25.0,
+      "cap_calls": 6600,
+      "unresolved_reserved_usd": 0.0,
+      "final_global_accounting": true,
+      "receipt_ledger_exact": true,
+      "token_totals_complete": true
+    }
+  },
+  "scheduler_accounting": {
+    "gpu_pool": {
+      "gpus": 8,
+      "gpu_type": "H200",
+      "cpus": 64,
+      "memory_gib": 960,
+      "consumed_seconds": 34476,
+      "approved_seconds": 57600,
+      "GPU_hours": 76.61333333333333,
+      "CPU_core_hours": 612.9066666666666,
+      "memory_GiB_hours": 9193.6,
+      "attempts": [
+        {
+          "job_id": "344754",
+          "state": "FAILED",
+          "elapsed_seconds": 386,
+          "timelimit_seconds": 57600,
+          "alloc_tres": {
+            "billing": "64",
+            "cpu": "64",
+            "gres/gpu:h200": "8",
+            "gres/gpu": "8",
+            "mem": "960G",
+            "node": "1"
+          },
+          "exit_code": "143:0",
+          "end": "2026-10-05T10:27:24",
+          "terminal": true
+        },
+        {
+          "job_id": "345214",
+          "state": "COMPLETED",
+          "elapsed_seconds": 34090,
+          "timelimit_seconds": 57180,
+          "alloc_tres": {
+            "billing": "64",
+            "cpu": "64",
+            "gres/gpu:h200": "8",
+            "gres/gpu": "8",
+            "mem": "960G",
+            "node": "1"
+          },
+          "exit_code": "0:0",
+          "end": "2026-10-05T20:47:27",
+          "terminal": true
+        }
+      ]
+    },
+    "cpu_pool": {
+      "gpus": 0,
+      "cpus": 16,
+      "memory_gib": 32,
+      "consumed_seconds": 12257,
+      "approved_seconds": 14400,
+      "CPU_core_hours": 54.47555555555556,
+      "memory_GiB_hours": 108.95111111111112,
+      "attempts": [
+        {
+          "job_id": "344755",
+          "state": "FAILED",
+          "elapsed_seconds": 6761,
+          "timelimit_seconds": 14400,
+          "alloc_tres": {
+            "billing": "16",
+            "cpu": "16",
+            "mem": "32G",
+            "node": "1"
+          },
+          "exit_code": "143:0",
+          "end": "2026-10-05T01:45:32",
+          "terminal": true
+        },
+        {
+          "job_id": "344875",
+          "state": "COMPLETED",
+          "elapsed_seconds": 5496,
+          "timelimit_seconds": 7620,
+          "alloc_tres": {
+            "billing": "16",
+            "cpu": "16",
+            "mem": "32G",
+            "node": "1"
+          },
+          "exit_code": "0:0",
+          "end": "2026-10-05T03:24:29",
+          "terminal": true
+        }
+      ]
+    },
+    "separate_caps_preserved": true,
+    "all_attempts_included": true,
+    "final_GPU_workers_finished": 12,
+    "final_CPU_workers_finished": 4,
+    "all_final_worker_WandB_runs_finished": true,
+    "authoritative_counts": "Unique task/mode committed records; original worker and W&B progress counters can include repeated visits to already committed records and are not summed."
+  },
+  "invalid_episode_audit": {
+    "by_mode": {
+      "qwen": {
+        "before_action_navigation_timeout": 12,
+        "before_action_http2_protocol_error": 5,
+        "post_action_browser_step_error": 1,
+        "before_action_navigation_started_download": 5
+      },
+      "qwen_luna5": {
+        "before_action_http2_protocol_error": 5,
+        "before_action_navigation_started_download": 5,
+        "before_action_navigation_timeout": 12,
+        "post_action_browser_step_error": 2
+      },
+      "sft_luna10": {
+        "before_action_navigation_started_download": 5,
+        "before_action_navigation_timeout": 11,
+        "post_action_browser_step_error": 5,
+        "before_action_http2_protocol_error": 5
+      },
+      "sft_luna5": {
+        "before_action_http2_protocol_error": 5,
+        "before_action_navigation_timeout": 11,
+        "post_action_browser_step_error": 5,
+        "before_action_navigation_started_download": 5
+      },
+      "luna": {
+        "before_action_navigation_timeout": 11,
+        "before_action_navigation_started_download": 5,
+        "before_action_http2_protocol_error": 5
+      }
+    },
+    "before_action": 107,
+    "after_actions": 13,
+    "original_validity_flags_preserved": true,
+    "selected_300_second_wait_caused_one_browser_timeout": true,
+    "all_root_causes_resolved": false,
+    "overall_denominator_includes_all_invalids": true
+  },
+  "metric_limits": {
+    "cost": "Frozen experiment rates, including $0.90 per reserved H200-hour. API costs are receipt-derived estimates, not provider invoices. Serving excludes judge, browser CPU and research startup/idle costs.",
+    "tokens": "All actor candidates and selectors included; input includes repeated and cached prefixes. Tokenizers differ; no cross-model compute equivalence is claimed.",
+    "local_compute": "Analytic decoder FLOPs with measured KV reuse and uncertain vision caching. Hosted API FLOPs unavailable; zero local compute for Luna does not mean zero remote compute.",
+    "latency": "Per-episode wall time through browser actions, excluding offline terminal judging. Same task cohort; CPU and GPU collections occurred at different times.",
+    "judge": "Protocol-specific terminal success, including permissive partial-progress criteria; not strict task completion.",
+    "SFT_baseline": "Historical T0.7/top-p0.9/1024-output/thought-inclusive judge is unmatched; no clean causal estimate of adding a selector to SFT."
+  },
+  "audit_hashes": {
+    "gpu-completion-readiness.json": "015938ee731d4a879b0026277930feb3b0c09f60bead6277936a92f484bc12d7",
+    "cpu-completion-readiness.json": "3eaefad12d4c7c38faf9b3379c13882f7b26ef31e939a836cccc74026fc5acc6",
+    "cpu-and-shared-api-final-recheck.json": "ea75d88b32277e544bbbd8176b2e47ea011c8e21c34b223df8398987a0f2e168",
+    "final-api-reservation-resolution.json": "1a40a0a96668ae7bc8757ac70c8df5f7bc47f4b4f9c38d2c03355a986b536aba",
+    "final-invalid-inventory.json": "4cbe35dc200d7d94a955dc2654d31f054790dd2a3b069877ea80d98e829ac957",
+    "summary.json": "9e8e2c928229abab01b8a740de74e1bc8795182f1f18899c238d6f382d6b1332"
+  }
+}

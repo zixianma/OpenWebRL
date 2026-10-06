@@ -1,5 +1,5 @@
 {
-  "snapshot_epoch": 1791254545.054576,
+  "snapshot_epoch": 1791258768.9285588,
   "rows": [
     {
       "id": "AS01",
@@ -8,20 +8,20 @@
       "n": 1,
       "mode": "qwen",
       "target_tasks": 300,
-      "recorded_episodes": 262,
-      "status": "running",
+      "recorded_episodes": 300,
+      "status": "verified_complete",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 46,
-      "valid": 242,
-      "verified_complete": false,
-      "counts_provisional": true,
-      "invalid": 20,
-      "success_rate_pct": 17.557251908396946,
-      "success_rate_denominator": 262,
-      "valid_only_success_rate_pct": 19.00826446280992,
-      "valid_only_success_rate_denominator": 242,
-      "rates_provisional": true
+      "successes": 53,
+      "valid": 277,
+      "verified_complete": true,
+      "counts_provisional": false,
+      "invalid": 23,
+      "success_rate_pct": 17.666666666666668,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 19.133574007220215,
+      "valid_only_success_rate_denominator": 277,
+      "rates_provisional": false
     },
     {
       "id": "AS02",
@@ -30,20 +30,20 @@
       "n": 5,
       "mode": "qwen_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 262,
-      "status": "running",
+      "recorded_episodes": 300,
+      "status": "verified_complete",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 71,
-      "valid": 242,
-      "verified_complete": false,
-      "counts_provisional": true,
-      "invalid": 20,
-      "success_rate_pct": 27.099236641221374,
-      "success_rate_denominator": 262,
-      "valid_only_success_rate_pct": 29.33884297520661,
-      "valid_only_success_rate_denominator": 242,
-      "rates_provisional": true
+      "successes": 85,
+      "valid": 276,
+      "verified_complete": true,
+      "counts_provisional": false,
+      "invalid": 24,
+      "success_rate_pct": 28.333333333333332,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 30.79710144927536,
+      "valid_only_success_rate_denominator": 276,
+      "rates_provisional": false
     },
     {
       "id": "AS04",
@@ -73,20 +73,20 @@
       "n": 5,
       "mode": "sft_luna5",
       "target_tasks": 300,
-      "recorded_episodes": 280,
-      "status": "running",
+      "recorded_episodes": 300,
+      "status": "verified_complete",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 103,
-      "valid": 255,
-      "verified_complete": false,
-      "counts_provisional": true,
-      "invalid": 25,
-      "success_rate_pct": 36.785714285714285,
-      "success_rate_denominator": 280,
-      "valid_only_success_rate_pct": 40.3921568627451,
-      "valid_only_success_rate_denominator": 255,
-      "rates_provisional": true
+      "successes": 113,
+      "valid": 274,
+      "verified_complete": true,
+      "counts_provisional": false,
+      "invalid": 26,
+      "success_rate_pct": 37.666666666666664,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 41.24087591240876,
+      "valid_only_success_rate_denominator": 274,
+      "rates_provisional": false
     },
     {
       "id": "AS06",
@@ -95,20 +95,20 @@
       "n": 10,
       "mode": "sft_luna10",
       "target_tasks": 300,
-      "recorded_episodes": 279,
-      "status": "running",
+      "recorded_episodes": 300,
+      "status": "verified_complete",
       "protocol_group": "luna_full300",
       "job_id": "345214",
-      "successes": 104,
-      "valid": 255,
-      "verified_complete": false,
-      "counts_provisional": true,
-      "invalid": 24,
-      "success_rate_pct": 37.27598566308244,
-      "success_rate_denominator": 279,
-      "valid_only_success_rate_pct": 40.78431372549019,
-      "valid_only_success_rate_denominator": 255,
-      "rates_provisional": true
+      "successes": 112,
+      "valid": 274,
+      "verified_complete": true,
+      "counts_provisional": false,
+      "invalid": 26,
+      "success_rate_pct": 37.333333333333336,
+      "success_rate_denominator": 300,
+      "valid_only_success_rate_pct": 40.87591240875913,
+      "valid_only_success_rate_denominator": 274,
+      "rates_provisional": false
     },
     {
       "id": "AS07",
@@ -134,7 +134,8 @@
       "success_rate_denominator": 300,
       "valid_only_success_rate_pct": 39.42652329749104,
       "valid_only_success_rate_denominator": 279,
-      "rates_provisional": false
+      "rates_provisional": false,
+      "counts_provisional": false
     },
     {
       "id": "AS08",
@@ -301,7 +302,7 @@
   "other_session_episodes": 900,
   "reused_baseline_episodes": 300,
   "missing_configuration": [],
-  "snapshot_utc": "2026-10-06T02:42:25Z",
+  "snapshot_utc": "2026-10-06T03:52:48Z",
   "new_episodes_all_sessions": 3000,
   "comparison_rows": 11,
   "maintenance": "Supervisors update this snapshot and its Markdown table on submission, recovery, routine progress review and verified completion; preserve stable IDs and report omissions.",
@@ -315,8 +316,12 @@
       "total_hours": 16,
       "total_gpu_hours": 128,
       "job_id": "345214",
-      "scheduler_state": "RUNNING",
-      "scheduler_reason": null
+      "scheduler_state": "COMPLETED",
+      "scheduler_reason": null,
+      "total_actual_seconds": 34476,
+      "remaining_original_seconds": 23124,
+      "final_retry_elapsed_seconds": 34090,
+      "active_workers": 0
     },
     "cpu_pool": {
       "gpus": 0,
@@ -527,7 +532,8 @@
     "api_halts": false,
     "API_ledgers_snapshot_utc": "2026-10-06T02:42:25Z",
     "API_ledgers_are_historical": false,
-    "API_ledgers_are_final": false
+    "API_ledgers_are_final": false,
+    "historical_snapshot": true
   },
   "cpu_family_result": {
     "verified_complete": true,
@@ -565,10 +571,10 @@
       "network": 5
     }
   },
-  "full_experiment_complete": false,
-  "new_Luna_study_primary_records": 1383,
+  "full_experiment_complete": true,
+  "new_Luna_study_primary_records": 1500,
   "new_Luna_study_target_records": 1500,
-  "full_comparison_plots_generated": false,
+  "full_comparison_plots_generated": true,
   "peer_accounting_snapshot": {
     "snapshot_utc": "2026-10-05T16:28:03Z",
     "source": "Final scheduler exact allocation rows across all registered attempts",
@@ -841,28 +847,29 @@
     "fix": "Ten HTTP connections per dedicated model worker and bounded cache drain; same browser concurrency and decoding.",
     "regression_tests_passed": 2,
     "shared_API_ledgers_preserved": true,
-    "verified_running": true,
-    "replacement_state": "RUNNING",
+    "verified_running": false,
+    "replacement_state": "COMPLETED",
     "eight_exclusive_gpus_verified": true,
     "actual_qwen_parallel_candidates": 5,
     "actual_sft_parallel_candidates": 10,
     "cache_flushes_successful": true,
-    "wandb_running_workers": 8,
-    "scientific_settings_unchanged": true
+    "wandb_running_workers": 0,
+    "scientific_settings_unchanged": true,
+    "historical_snapshot": true
   },
-  "new_Luna_study_audited_records": 300,
+  "new_Luna_study_audited_records": 1500,
   "coverage_progress": {
     "rows": 11,
-    "rows_with_all300_records": 7,
-    "verified_complete_rows_including_reused_baseline": 7,
+    "rows_with_all300_records": 11,
+    "verified_complete_rows_including_reused_baseline": 11,
     "audited_API_rows_pending_report_closeout": 0,
-    "running_rows": 4,
-    "fresh_records_saved": 2883,
+    "running_rows": 0,
+    "fresh_records_saved": 3000,
     "fresh_records_target": 3000,
     "reused_baseline_records": 300,
-    "all_saved_records": 3183,
+    "all_saved_records": 3300,
     "all_record_target": 3300,
-    "partial_counts_are_provisional": true
+    "partial_counts_are_provisional": false
   },
   "success_rate_definitions": {
     "unit": "percent",
@@ -879,6 +886,149 @@
     "policy_induced_timeout_observed": true,
     "example_selected_wait_seconds": 300,
     "original_validity_flags_preserved": true,
-    "full_failure_type_audit_pending": true
+    "full_failure_type_audit_pending": false,
+    "preaction_invalids": 107,
+    "postaction_invalids": 13
+  },
+  "final_result": {
+    "verified_complete": true,
+    "episodes": 1500,
+    "summary": "summary.json",
+    "metrics": "metrics.csv",
+    "plots": [
+      "cost.png",
+      "latency.png",
+      "tokens.png"
+    ],
+    "scheduler_accounting": {
+      "gpu_pool": {
+        "gpus": 8,
+        "gpu_type": "H200",
+        "cpus": 64,
+        "memory_gib": 960,
+        "consumed_seconds": 34476,
+        "approved_seconds": 57600,
+        "GPU_hours": 76.61333333333333,
+        "CPU_core_hours": 612.9066666666666,
+        "memory_GiB_hours": 9193.6,
+        "attempts": [
+          {
+            "job_id": "344754",
+            "state": "FAILED",
+            "elapsed_seconds": 386,
+            "timelimit_seconds": 57600,
+            "alloc_tres": {
+              "billing": "64",
+              "cpu": "64",
+              "gres/gpu:h200": "8",
+              "gres/gpu": "8",
+              "mem": "960G",
+              "node": "1"
+            },
+            "exit_code": "143:0",
+            "end": "2026-10-05T10:27:24",
+            "terminal": true
+          },
+          {
+            "job_id": "345214",
+            "state": "COMPLETED",
+            "elapsed_seconds": 34090,
+            "timelimit_seconds": 57180,
+            "alloc_tres": {
+              "billing": "64",
+              "cpu": "64",
+              "gres/gpu:h200": "8",
+              "gres/gpu": "8",
+              "mem": "960G",
+              "node": "1"
+            },
+            "exit_code": "0:0",
+            "end": "2026-10-05T20:47:27",
+            "terminal": true
+          }
+        ]
+      },
+      "cpu_pool": {
+        "gpus": 0,
+        "cpus": 16,
+        "memory_gib": 32,
+        "consumed_seconds": 12257,
+        "approved_seconds": 14400,
+        "CPU_core_hours": 54.47555555555556,
+        "memory_GiB_hours": 108.95111111111112,
+        "attempts": [
+          {
+            "job_id": "344755",
+            "state": "FAILED",
+            "elapsed_seconds": 6761,
+            "timelimit_seconds": 14400,
+            "alloc_tres": {
+              "billing": "16",
+              "cpu": "16",
+              "mem": "32G",
+              "node": "1"
+            },
+            "exit_code": "143:0",
+            "end": "2026-10-05T01:45:32",
+            "terminal": true
+          },
+          {
+            "job_id": "344875",
+            "state": "COMPLETED",
+            "elapsed_seconds": 5496,
+            "timelimit_seconds": 7620,
+            "alloc_tres": {
+              "billing": "16",
+              "cpu": "16",
+              "mem": "32G",
+              "node": "1"
+            },
+            "exit_code": "0:0",
+            "end": "2026-10-05T03:24:29",
+            "terminal": true
+          }
+        ]
+      },
+      "separate_caps_preserved": true,
+      "all_attempts_included": true,
+      "final_GPU_workers_finished": 12,
+      "final_CPU_workers_finished": 4,
+      "all_final_worker_WandB_runs_finished": true,
+      "authoritative_counts": "Unique task/mode committed records; original worker and W&B progress counters can include repeated visits to already committed records and are not summed."
+    },
+    "api_accounting": {
+      "luna": {
+        "receipts": 21480,
+        "received": 21477,
+        "unresolved": 3,
+        "input_tokens": 116877357,
+        "output_tokens": 4556471,
+        "known_cost_lower_usd": 16.846087780000072,
+        "known_cost_upper_usd": 16.846087780000072,
+        "charged_or_reserved_from_receipts_usd": 16.87167515500007,
+        "cap_usd": 100.0,
+        "cap_calls": 39600,
+        "unresolved_reserved_usd": 0.02558737499999708,
+        "final_global_accounting": true,
+        "receipt_ledger_exact": true,
+        "token_totals_complete": false
+      },
+      "judge": {
+        "receipts": 1055,
+        "received": 1055,
+        "unresolved": 0,
+        "input_tokens": 2623160,
+        "output_tokens": 431570,
+        "known_cost_lower_usd": 4.78438399999999,
+        "known_cost_upper_usd": 4.78438399999999,
+        "charged_or_reserved_from_receipts_usd": 4.78438399999999,
+        "cap_usd": 25.0,
+        "cap_calls": 6600,
+        "unresolved_reserved_usd": 0.0,
+        "final_global_accounting": true,
+        "receipt_ledger_exact": true,
+        "token_totals_complete": true
+      }
+    }
   }
 }
