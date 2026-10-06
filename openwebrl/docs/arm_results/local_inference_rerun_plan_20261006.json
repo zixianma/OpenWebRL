@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-06",
-  "status": "jev_verified_complete_sft_recovery_running",
+  "status": "jev_verified_complete_sft_primary_running",
   "launch_authorized": true,
   "new_experiments_launched": 5,
   "protocol_name": "local-openwebrl-om2w-v2",
@@ -506,7 +506,7 @@
     ]
   },
   "not_yet_validated": [
-    "Complete SFT smoke acceptance and shared-server concurrency/long-context throughput after targeted capture hydration and reset-cleanup recovery; no measured guarantee of finishing a shard within8h.",
+    "Worst-case shared-server concurrency/long-context throughput and full-cohort completion time; passed24smokes do not guarantee finishing a shard within8h.",
     "Remaining historical conditions require separate approved allocations and fresh v2 collection before they enter the comparison.",
     "The four SFT conditions still require complete collection and independent audits of1200primary+24smoke records; L06 all300primary+3smoke audit passed."
   ],
@@ -636,7 +636,7 @@
     ]
   },
   "launch_status": {
-    "status": "running_recovery",
+    "status": "running_primary",
     "current_jobs": [
       "346656",
       "346657"
@@ -701,10 +701,10 @@
       }
     ],
     "recovery": "Bound transient capture retry to3attempts within the existing15s deadline; preserve and score well-formed native argmax guard rejection as valid non-completed canonical0, with no action/fallback/judge/replay. Other provider/schema/identity errors still halt. Preserve all previous evidence and charges.",
-    "benchmark_results_available": false,
+    "benchmark_results_available": true,
     "preserved_attempt_evidence_available": true,
     "final_success_rates_available": false,
-    "note": "Resume smoke gate using17preserved valid records and7explicitly reopened infrastructure/interrupted attempts; no final SFT rates.",
+    "note": "Both shards passed all12smokes each and entered primary collection; no final SFT rates.",
     "preserved_valid_smokes_by_shard": [
       7,
       10
@@ -727,7 +727,10 @@
       "independent_readonly_review_passed": true,
       "scientific_sampling_unchanged": true,
       "resource_api_browser_caps_unchanged": true
-    }
+    },
+    "smoke_gate_passed": true,
+    "valid_smoke_records_total": 24,
+    "primary_started_on_both_shards": true
   },
   "additional_approved_experiments": [
     {
@@ -964,12 +967,59 @@
     "budget_transfer_allowed": false,
     "reuse_historical_results": false
   },
-  "updated_utc": "2026-10-06T07:35:18.854203+00:00",
+  "updated_utc": "2026-10-06T08:38:17.699889+00:00",
   "operational_recovery_rules": {
     "transient_capture_max_attempts": 3,
     "transient_capture_shared_deadline_seconds": 15,
     "well_formed_native_argmax_rejection": "Retain guard; no candidate executes, no fallback/replay; fresh terminal evidence required for valid non-completed canonical0 with zerojudgecalls.",
     "other_identity_schema_transport_errors": "Shared cohort halt with preserved receipts.",
     "selector_rejection_changes_probability_or_sampling": false
+  },
+  "smoke_milestone": {
+    "passed": true,
+    "valid_smokes": 24,
+    "per_shard": [
+      {
+        "shard": 0,
+        "job_id": "346656",
+        "valid_smokes": 12,
+        "receipt_sha256": "1d474f087e8cba58baa22261d9fc94fe46e54e3dc75015084382cb38a5425936",
+        "actor_http_responses": 919,
+        "p95_actor_http_seconds": 23.25813960004598,
+        "max_actor_http_seconds": 28.46644644672051,
+        "max_observed_prompt_tokens": 22308,
+        "maximum_concurrent_long_context_acceptance_verified": false
+      },
+      {
+        "shard": 1,
+        "job_id": "346657",
+        "valid_smokes": 12,
+        "receipt_sha256": "357c4894f8090d8b1e0524f10f7916c76f49747c2c8ae80a519d6706d2419a90",
+        "actor_http_responses": 723,
+        "p95_actor_http_seconds": 24.93840489909053,
+        "max_actor_http_seconds": 30.219737174920738,
+        "max_observed_prompt_tokens": 18393,
+        "maximum_concurrent_long_context_acceptance_verified": false
+      }
+    ],
+    "worst_case_long_context_throughput_validated": false,
+    "scientific_timeouts_unchanged": true
+  },
+  "primary_judge_history_snapshot": {
+    "checked_unix": 1791274064.8593957,
+    "audit_sha256": "c6cf2cd2942172d82528aed9334851a774320944b2b8a318659966204a8b21cc",
+    "judged_episodes": 29,
+    "executed_actions_present": 461,
+    "actor_thoughts_present": 384,
+    "unparseable_action_rows": 0,
+    "canonical_trajectory_text_exact": true,
+    "operation_histories_exact": true,
+    "terminal_images_exact": true,
+    "canonical_reward_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+    "canonical_rubric_unchanged": true,
+    "sampling_snapshot_only": true,
+    "final_result": false,
+    "strict_completion_audit": false,
+    "audit_api_calls": 0
   }
 }
