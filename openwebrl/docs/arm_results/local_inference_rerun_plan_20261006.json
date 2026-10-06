@@ -600,19 +600,19 @@
       }
     ],
     "initial_campaign_manifest_sha256": "779e974b63e7c62f1b23483ffa5002963eac9e9dd20c2fe6931bdf63b2667a42",
-    "current_campaign_manifest_sha256": "eaefceeeae34adf8ccbe6617b16f68451de10cf1624707beb658ccff5cd26aba",
+    "current_campaign_manifest_sha256": "7c5c4b11ab3354c4d02e6b64aa5a48e1026885f0a9a5408707f2e9f5671f787d",
     "current_shards": [
       {
         "shard": 0,
-        "plan_sha256": "b7a795249ac94be2589c9d942b87d83dcaf5bd24b69df7e35f6b3c0173ccefcd",
-        "source_manifest_sha256": "b28811b533d8b48ef9549bb1881e1a7ce86821d6230389640a6ece15f20e0ef7",
-        "job_id": "346656"
+        "plan_sha256": "865bb11bd5befbd7ab5b9fa4ada35a30bf1432dd587517fdd5f6f232fa1d4163",
+        "source_manifest_sha256": "269def0feaa4a49f38d74564057c178ff0cc46e9bf3ff872f10edd5d2c4f818e",
+        "job_id": "346767"
       },
       {
         "shard": 1,
-        "plan_sha256": "8416aee6cca58f8657b8b26d192ab25e59263dfbc22c1d3fb89ce17af6a6c78c",
-        "source_manifest_sha256": "06660bf5d444861e467e5d5dd34451cd6cd0a38be870e9f2a072e29e96e07a24",
-        "job_id": "346657"
+        "plan_sha256": "f5505f0852cacd1575dc96bc496d973eaa883c5ceb0e976227daa21a186e495b",
+        "source_manifest_sha256": "19472131f73fc0bc5afb35087f10118a4a537b42d71b716c8014923e5a525298",
+        "job_id": "346768"
       }
     ],
     "previous_recovery_shards": [
@@ -632,23 +632,40 @@
             "job_id": "346625"
           }
         ]
+      },
+      {
+        "campaign_manifest_sha256": "eaefceeeae34adf8ccbe6617b16f68451de10cf1624707beb658ccff5cd26aba",
+        "shards": [
+          {
+            "shard": 0,
+            "plan_sha256": "b7a795249ac94be2589c9d942b87d83dcaf5bd24b69df7e35f6b3c0173ccefcd",
+            "source_manifest_sha256": "b28811b533d8b48ef9549bb1881e1a7ce86821d6230389640a6ece15f20e0ef7",
+            "job_id": "346656"
+          },
+          {
+            "shard": 1,
+            "plan_sha256": "8416aee6cca58f8657b8b26d192ab25e59263dfbc22c1d3fb89ce17af6a6c78c",
+            "source_manifest_sha256": "06660bf5d444861e467e5d5dd34451cd6cd0a38be870e9f2a072e29e96e07a24",
+            "job_id": "346657"
+          }
+        ]
       }
     ]
   },
   "launch_status": {
     "status": "running_primary",
     "current_jobs": [
-      "346656",
-      "346657"
+      "346767",
+      "346768"
     ],
     "total_approved_wall_seconds_per_shard": 28800,
     "prior_charged_seconds_by_shard": [
-      1225,
-      1147
+      10120,
+      10080
     ],
     "replacement_wall_seconds_by_shard": [
-      27540,
-      27600
+      18660,
+      18720
     ],
     "prior_attempts": [
       {
@@ -698,13 +715,27 @@
         "job_id": "346625",
         "state": "FAILED",
         "elapsed_seconds": 814
+      },
+      {
+        "shard": 0,
+        "job_id": "346656",
+        "state": "FAILED",
+        "elapsed_seconds": 8895,
+        "disposition": "Planned exit after normal episode drain with cohort still incomplete; not a new task failure."
+      },
+      {
+        "shard": 1,
+        "job_id": "346657",
+        "state": "FAILED",
+        "elapsed_seconds": 8933,
+        "disposition": "Planned exit after normal episode drain with cohort still incomplete; not a new task failure."
       }
     ],
     "recovery": "Bound transient capture retry to3attempts within the existing15s deadline; preserve and score well-formed native argmax guard rejection as valid non-completed canonical0, with no action/fallback/judge/replay. Other provider/schema/identity errors still halt. Preserve all previous evidence and charges.",
     "benchmark_results_available": true,
     "preserved_attempt_evidence_available": true,
     "final_success_rates_available": false,
-    "note": "Both shards passed all12smokes each and entered primary collection; no final SFT rates.",
+    "note": "All24smokes remain passed. Both replacements passed ten simultaneous saved-context SFT requests and resumed pending primary episodes; no final SFT rates.",
     "preserved_valid_smokes_by_shard": [
       7,
       10
@@ -730,7 +761,92 @@
     },
     "smoke_gate_passed": true,
     "valid_smoke_records_total": 24,
-    "primary_started_on_both_shards": true
+    "primary_started_on_both_shards": true,
+    "serving_recovery": {
+      "only_serving_parameter_change": {
+        "max_running_requests_before": 5,
+        "max_running_requests_after": 10
+      },
+      "prior_jobs": [
+        "346656",
+        "346657"
+      ],
+      "replacement_jobs": [
+        "346767",
+        "346768"
+      ],
+      "normal_drain": {
+        "active_episodes_finished_normally": 16,
+        "episode_replays": 0,
+        "preserved_primary_records": 335,
+        "preserved_smoke_records": 24,
+        "pending_primary_by_shard_at_drain": [
+          442,
+          423
+        ]
+      },
+      "unchanged": [
+        "checkpoint",
+        "temperature",
+        "top_p",
+        "top_k",
+        "max_new_tokens",
+        "context_length",
+        "eager_execution",
+        "memory_fraction_0.60",
+        "browser_concurrency",
+        "canonical_judge",
+        "resource_api_browser_caps"
+      ],
+      "offline_tests_passed": 62,
+      "independent_readonly_review_passed": true,
+      "acceptance_status": "passed",
+      "acceptance_requests_per_shard": 10,
+      "acceptance_charged_to": "local_sft_generations",
+      "acceptance_extra_browser_episodes": 0,
+      "acceptance_extra_jev_requests": 0,
+      "full_32k_worst_case_validated": false,
+      "twofold_speedup_established": false,
+      "preparation_receipt_sha256_by_shard": [
+        "dbf62d70d1e6eec995ed03cbc08c7edd2c7568c15053e7c16682500fec70aa69",
+        "a956c6f2a1053355ca67158936404b179ec3dc416c358baf5698e8fbf107a6d3"
+      ],
+      "all_attempt_accounting_preserved": true,
+      "source_history_preserved": true,
+      "no_budget_added": true,
+      "acceptance_per_shard": [
+        {
+          "shard": 0,
+          "job_id": "346767",
+          "receipt_sha256": "924689d838e636a8d33284a4adeddc339421c4e62424122ad4e60028826868ee",
+          "completed": true,
+          "simultaneous_requests": 10,
+          "observed_running_requests": 10,
+          "minimum_prompt_tokens": 18995,
+          "maximum_prompt_tokens": 28295,
+          "elapsed_seconds": 14.681527305394411,
+          "charged_local_sft_generations": 10,
+          "browser_sessions": 0,
+          "external_api_calls": 0,
+          "executed_actions": 0
+        },
+        {
+          "shard": 1,
+          "job_id": "346768",
+          "receipt_sha256": "830e694815592898152b467f196db3836503dca0819725db32dba905372f032f",
+          "completed": true,
+          "simultaneous_requests": 10,
+          "observed_running_requests": 10,
+          "minimum_prompt_tokens": 18238,
+          "maximum_prompt_tokens": 20272,
+          "elapsed_seconds": 13.454515016637743,
+          "charged_local_sft_generations": 10,
+          "browser_sessions": 0,
+          "external_api_calls": 0,
+          "executed_actions": 0
+        }
+      ]
+    }
   },
   "additional_approved_experiments": [
     {
@@ -931,14 +1047,14 @@
     "services_active_verified": true,
     "current_jobs_followed": {
       "sft_core": [
-        "346656",
-        "346657"
+        "346767",
+        "346768"
       ],
       "jev_actor": [
         "346638"
       ]
     },
-    "verified_utc": "2026-10-06T07:09:35.081924+00:00",
+    "verified_utc": "2026-10-06T10:06:15.040528+00:00",
     "jev_actor_status": "verified_complete; stale callbacks should be silently acknowledged"
   },
   "approved_study_scope": {
