@@ -1503,9 +1503,10 @@ member CRCs, GPU actor restore evidence and the final W&B history were checked.
 The turn-weighted reward metric (29.86%) is distinct from task success (33.00%).
 
 Job344759 has moved on to training toward40 with the same optimizer, scheduler,
-cursor and W&B lineage. The approved endpoint is90, with full300 evaluations
-every10, under the separate96h extension; evaluations10/20/30 are verified and
-40–90 remain pending. [Extension and accounting](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).
+cursor and W&B lineage. On October5 the user reduced the stopping endpoint
+to60. Full300 evaluations40/50/60 remain pending;10/20/30 are verified. The
+existing96h extension and$600 lifetime judge cap remain maximum budgets, with
+all consumed time retained and unused allocations released after the endpoint. [Extension and accounting](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).
 
 [Iteration30 aggregate audit](arm_results/rl_integration/expanded4102-iteration30-audit.json) ·
 [Iteration30 evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter30).

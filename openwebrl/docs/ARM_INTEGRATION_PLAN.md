@@ -8834,7 +8834,19 @@ Private preparation and shard manifests:
 `task-pool-expansion-20260922/curation-v3-20260929/actor-arm-allfailure-20261002/`.
 
 <a id="arm-expanded-outcome-to90-20261005"></a>
-### Expanded outcome-only continuation to90: approved October5
+### Expanded outcome-only continuation: capped at60 on October5
+
+**October5 stopping-target update:** the user requested **stop at iteration60**,
+superseding the earlier90 endpoint. Finish the unchanged training recipe and
+full300 evaluations at40/50/60, then release unused queued allocations. Retain
+all prior spend in the existing96h/$600 ledgers; this change adds no budget.
+The controller reads the reduced endpoint on each stage and replacement. The
+already-running controller is stopped by its final evaluation worker after the
+checkpoint and all six evaluation cohorts pass controller checks; independent
+agent artifact review still gates verified completion. The active supervisor
+and future reminders now use60. The endpoint and release behavior passed44 CPU
+tests; training was not interrupted. The original approval below is retained
+as budget history.
 
 The user approved continuing the same4,102-task outcome-only lineage through
 iteration90, including full300 evaluations at30/40/50/60/70/80/90. The verified
@@ -8845,15 +8857,15 @@ accounting remains separate; no unused old budget is added to the extension.
 
 | Allocation | Maximum | Dependency | Work |
 | --- | ---: | --- | --- |
-|344759 |24h |afterany344274 |Restore latest checkpoint; train/evaluate toward90 |
+|344759 |24h |afterany344274 |Restore latest checkpoint; train/evaluate toward60 |
 |344760 |24h |afterok344759 |Continue unchanged lineage |
 |344761 |24h |afterok344760 |Continue unchanged lineage |
-|344762 |24h |afterok344761 |Finish90 and its full300 evaluation |
+|344762 |24h |afterok344761 |Use only if still needed through60; otherwise release |
 
 All four jobs were submitted and released. At October5 10:20 Pacific,
 344759 awaited resources; the other three retained their dependencies. Failed
 predecessors require agent diagnosis and budget-accounted recovery before
-successors are unblocked. Release unused queued allocations once90 and its
+successors are unblocked. Release unused queued allocations once60 and its
 artifacts are complete. Recovery344274 was stopped after841s: reconstruction
 and two finite optimizer updates passed, but g015 GPU0 thermally throttled.
 The measured128/129s updates projected another26min before checkpointing with
