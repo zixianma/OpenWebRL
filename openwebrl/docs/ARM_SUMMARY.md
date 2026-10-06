@@ -4,7 +4,7 @@ This is the concise collaborator summary. Detailed configs, provenance, and
 run history are in [ARM_RESULTS.md](ARM_RESULTS.md) and
 [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md).
 
-**Next critic diagnostic, recovery running (346951):** 100 fresh fixed-SFT states × five samples × three continuations (1,500 rollouts), comparing Luna-high before-only versus execution-informed selection; both return only `{"selection": N}`. Earlier branch points and visible replay checks passed 102 tests and a real-browser fixture. Original failed attempts retained; replacement capped at 7h52m within the original 4 H200 × 8h, $15 Luna / $25 judge totals. No continuation results yet. [Protocol and recovery](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+**Next critic diagnostic, recovery running (346956):** target 100 fresh fixed-SFT states × five samples × three continuations (1,500 rollouts), comparing index-only Luna-high before versus after immediate execution evidence. First 3 states / 45 continuations and 42 teacher judgments audited; 41 continuations valid, four capture failures retained. A tested one-replay precheck saves browser sessions while keeping the full 15-way release barrier. Remaining allocation is capped at 7h31m; all attempts stay within 4 H200 × 8h and $15 Luna / $25 judge. No effect-size conclusion from this small cohort. [Protocol and recovery](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 
 <a id="arm-methods-at-a-glance"></a>
 ![Three ARM stages: choose actions at inference, learn from saved preferences offline, or change turn credit during RL](arm_results/methods/arm_three_stages.svg)

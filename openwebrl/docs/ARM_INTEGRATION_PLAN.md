@@ -58,7 +58,7 @@ ablation and new browser data remain later-stage planning.
 <a id="arm-continuation-branches-20261006"></a>
 ### Overnight continuation branches — prepared October 6 UTC
 
-**Recovery running as job 346951; continuation results not yet available.** The user reaffirmed that earlier approval covers continued repairs and resubmission. The replacement uses **4 H200, 32 CPUs, 480 GiB, 7h52m**; the two earlier attempts consumed 445 seconds, keeping the combined maximum below the original eight-hour ceiling. The $15 Luna / $25 judge caps and every prior attempt/counter are preserved. Two state groups (30 browsers) run in parallel. The supervisor follows the replacement job and queues this session for repair.
+**Recovery running as job 346956; 3/100 states and 45/1,500 continuations audited so far.** The first three accepted states have all 42 planned Luna-high judgments; 41 continuations have valid terminal evidence and four lack fresh terminal evidence after browser capture failures. These are startup counts, not an effect-size conclusion. The replacement uses **4 H200, 32 CPUs, 480 GiB, 7h31m**; prior attempts consumed 1,695 seconds, so consumed plus reserved allocation time is 28,755 seconds within the original 28,800-second ceiling. The $15 Luna / $25 judge caps and all attempt counters carry forward. The supervisor follows the replacement and queues this session for repair.
 
 The user requested enough continuations overnight to assess the benefit of
 execution-informed selection. This supersedes the small 30-state pilot as the
@@ -168,7 +168,7 @@ uses the transactional all-attempt ledger, preserves immutable receipts, and
 requires an exact registered approval before work. Separate evaluation logging
 uses `openwebrl-evals`. The supervisor queues the owning agent for diagnosis/recovery;
 its initial continuation receipt and persistent ownership lock are verified. GPU throughput and live reconstruction yield remain
-startup checks. CPU validation: 102 targeted tests pass. A real two-process browser fixture verifies equal visible observations despite independently randomized cookie/session/localStorage values, and closes both browsers.
+startup checks. CPU validation: 104 targeted controller/worker tests and five paired-analysis tests pass. A real two-process browser fixture verifies equal visible observations despite independently randomized cookie/session/localStorage values, and closes both browsers.
 
 **Startup recovery:** attempt 346645 used 95 seconds and failed before any
 actor/API calls. The complete-state check had spanned the shared capture retry
@@ -191,6 +191,10 @@ page content, forms and independent-session storage, so simply ignoring cookie
 values would not have accepted that panel.
 
 **Authorized recovery, visible-replay-v2:** the user directed continued fixes and submission under the existing approval. The recovery samples earlier prespecified depths 0/1/2, keeps exactly five actor draws including duplicates (reporting action diversity), and requires matching page/forms/grounded controls plus the same tight screenshot tolerance while retaining raw session/storage differences. This revises the state cohort and observable-equivalence definition; it does not establish a complete browser-state clone. The original strict stage remains separately preserved and contributes only to all-attempt accounting, not to the new scientific cohort. The actor, decoding, five-actions × three-continuations design, paired teacher conditions and all budget ceilings remain unchanged. Job 346951 was submitted after the 102-test suite, frozen-controller dry run and real-browser fixture passed.
+
+**Replay precheck recovery, job 346956:** initial mismatch rejection launched all 15 browsers even when the first replay already proved the state unsuitable. The controller now starts the ordinary candidate-0/repetition-0 replay first for each of the two independent state groups, then starts the other 14 only if that replay reaches its ready barrier. It still requires all 15 independent replay proofs before any candidate executes, and releases states in the original task order. This saves sessions on rejected states without changing candidates, seeds, actor, teacher inputs or replay thresholds. Job 346951 was drained after its released continuations and teacher calls finished, preserving all 45 outcomes and 42 judgments; its 1,250 seconds are charged to the original total. Slurm reports the deliberate SIGTERM handoff as `FAILED`/143; all owned processes were independently verified closed.
+
+The analysis averages all three continuation repetitions and three teacher calls per state; it does not take the best repetition. Confidence intervals resample whole states. Before/after choice changes are compared with both before-repeat and after-repeat disagreement, and permutation calls remain separate controls. Invalid continuations count as zero in the failure-inclusive estimate, with a paired common-valid estimate alongside it. Missing teacher panels are explicitly reported. The small startup cohort does not support a scientific conclusion yet.
 
 [Aggregate protocol and resource request](arm_results/rl_integration/continuation-branches-protocol-20261006.json).
 
