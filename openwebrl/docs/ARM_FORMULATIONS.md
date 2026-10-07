@@ -47,6 +47,25 @@ flowchart LR
 
 **More consistent choices; no demonstrated success improvement.** Rates average repeated selections, not integer success counts. Invalid continuations count as zero; intervals resample whole states.
 
+### Which states were tested?
+
+| Candidate decision | Completed states | Share | Completed / discovery attempts |
+| --- | ---: | ---: | ---: |
+| 1 | 33 | 44.6% | 21.2% |
+| 2 | 23 | 31.1% | 13.7% |
+| 3 | 18 | 24.3% | 12.2% |
+
+**Early states only:** 30 site families, 57 distinct screenshots, and 37 states with five distinct actions. Eighteen states show blank/access/error pages; their outcomes remain included. Completion rates include discovery and replay attrition.
+
+**Approved extension: decisions 5, 10, and 15.** Cycle these targets through unused tasks; keep strict prefix replay and report the new cohort separately. The 30-action budget includes the prefix, so record actions remaining as well as depth. One decision can contain several browser actions. [Extension](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007) · [Coverage data](arm_results/rl_integration/continuation-state-diversity-20261007/aggregate.json).
+
+<details>
+<summary>State diversity plot</summary>
+
+![State depth, site families, and distinct candidates; bar labels are counts](arm_results/rl_integration/continuation-state-diversity-20261007/state-diversity.png)
+
+</details>
+
 ### What does “random candidate” mean?
 
 Choose one of the **five sampled action entries** with equal probability, ignoring teacher scores. Duplicate actions retain their separate entries.
@@ -76,7 +95,7 @@ Actor: official SFT, T=1, p=.95, top-k off, 4,096 tokens. Three before judgments
 
 Saved-action labels use three progress probabilities, `evidence_sufficient`, `effect`, and `rationale`; score = P(progress) − P(regression). Branching uses only the selected index.
 
-All attempts accounted for: 31.94 H200-hours; $3.32 teacher; $5.82 judge. Dataset partial, accounting final.
+Original allocation: 31.94 H200-hours; $3.32 teacher; $5.82 judge. Its accounting is closed; the approved later-state extension has separate compute accounting.
 
 </details>
 

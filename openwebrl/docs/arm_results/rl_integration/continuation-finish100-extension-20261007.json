@@ -1,0 +1,58 @@
+{
+  "status": "queued",
+  "job_id": "349137",
+  "approval_date": "2026-10-07",
+  "additional_resources": {
+    "gpus": 4,
+    "gpu_type": "H200",
+    "cpus": 32,
+    "memory_gib": 480,
+    "additional_seconds": 14400
+  },
+  "cumulative_limits": {
+    "browser_sessions": 5000,
+    "browser_sessions_per_condition": 5000,
+    "canonical_judge_http_attempts": 6600,
+    "canonical_judge_usd": 25.0,
+    "concurrent_browsers": 30,
+    "jev_selector_requests": 0,
+    "local_kev_requests": 0,
+    "local_sft_generations": 110000,
+    "luna_selector_requests": 2200,
+    "luna_usd": 15.0
+  },
+  "additional_api_usd": 0,
+  "previous_attempt_seconds": 28747,
+  "original_unspent_seconds_not_added": 53,
+  "retained_complete_states": 74,
+  "retained_complete_continuations": 1110,
+  "additional_complete_states_target": 26,
+  "additional_complete_continuations_target": 390,
+  "total_complete_states_target": 100,
+  "total_complete_continuations_target": 1500,
+  "censored_state_count": 1,
+  "censored_state_finished_records": 4,
+  "censored_state_interrupted_records": 11,
+  "incomplete_teacher_panels_retained": 4,
+  "method": "Same task reserve, actor, decoding, strict replay and index-only Luna-high teacher. Future unused states cycle candidate decisions5/10/15; old early states are retained separately.",
+  "tests_passed": 65,
+  "active_agent_supervision_verified": true,
+  "queued_epoch": 1791417375,
+  "candidate_decisions": [
+    5,
+    10,
+    15
+  ],
+  "prefix_depths": [
+    4,
+    9,
+    14
+  ],
+  "new_state_reserve": 328,
+  "deferred_prefetched_early_states": 6,
+  "replaced_job": "349105",
+  "replaced_job_seconds": 0,
+  "targeted_tests_passed": 65,
+  "depths_reported_separately": true,
+  "total_browser_operation_limit_includes_prefix": 30
+}

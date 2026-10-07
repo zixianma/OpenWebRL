@@ -1,0 +1,964 @@
+{
+  "schema": "arm_branch_state_diversity_v1",
+  "cohort": "74 complete states before the approved finish100 extension",
+  "created_unix": 1791416901.1314743,
+  "source_proofs": {
+    "snapshot_sha256": "08d9e66026c0843dcef89c11dc5a8b8347b87e61cce3db597573529d196e2d1b",
+    "plan_sha256": "83210c9f7ab62aa72bfc0de47ca903e610382b23d8a45ae902ddae5d36832291",
+    "accepted_states_sha256": "474cc9ebbf01a3d24677cae2318798b3a875721ab213fa431a37e949cf5a1e73"
+  },
+  "definitions": {
+    "decision_number": "anchor depth + 1: the forced candidate is executed on actor decision1,2,or3. A decision may bundle multiple browser tools.",
+    "domain": "Registrable domain using the installed libpsl public suffix list; hostnames preserve subdomains.",
+    "page_flags": "Descriptive audit flags only; do not filter or replace outcomes. Error flags use fixed visible-text/title rules; blank means every screenshot RGB channel is255.",
+    "phash": "63-bit perceptual hash from32x32 grayscale image, top8x8 type-II DCT excluding DC, thresholded atmedian. Similar hashes do not prove identical state.",
+    "repeat_noise": "Discordance between each pair of the three execution repeats for the same fixed state and candidate. Failure-inclusive outcomes assign invalid continuationszero."
+  },
+  "stages": {
+    "reserve": {
+      "states": 800,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 277,
+          "percent": 34.625
+        },
+        {
+          "value": 2,
+          "count": 270,
+          "percent": 33.75
+        },
+        {
+          "value": 3,
+          "count": 253,
+          "percent": 31.625
+        }
+      ],
+      "start_hostnames": 546,
+      "start_domains": 308
+    },
+    "discovery_finished": {
+      "states": 472,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 156,
+          "percent": 33.05084745762712
+        },
+        {
+          "value": 2,
+          "count": 168,
+          "percent": 35.59322033898305
+        },
+        {
+          "value": 3,
+          "count": 148,
+          "percent": 31.35593220338983
+        }
+      ],
+      "start_hostnames": 331,
+      "start_domains": 208
+    },
+    "anchor_captured": {
+      "states": 412,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 149,
+          "percent": 36.16504854368932
+        },
+        {
+          "value": 2,
+          "count": 142,
+          "percent": 34.46601941747573
+        },
+        {
+          "value": 3,
+          "count": 121,
+          "percent": 29.368932038834952
+        }
+      ],
+      "start_hostnames": 288,
+      "start_domains": 186
+    },
+    "rejected_before_release": {
+      "states": 391,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 121,
+          "percent": 30.946291560102303
+        },
+        {
+          "value": 2,
+          "count": 143,
+          "percent": 36.57289002557545
+        },
+        {
+          "value": 3,
+          "count": 127,
+          "percent": 32.48081841432225
+        }
+      ],
+      "start_hostnames": 282,
+      "start_domains": 189
+    },
+    "complete": {
+      "states": 74,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 33,
+          "percent": 44.5945945945946
+        },
+        {
+          "value": 2,
+          "count": 23,
+          "percent": 31.08108108108108
+        },
+        {
+          "value": 3,
+          "count": 18,
+          "percent": 24.324324324324323
+        }
+      ],
+      "start_hostnames": 53,
+      "start_domains": 30
+    },
+    "cutoff_censored": {
+      "states": 1,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 1,
+          "percent": 100.0
+        }
+      ],
+      "start_hostnames": 1,
+      "start_domains": 1
+    },
+    "prefetched_unreleased": {
+      "states": 6,
+      "decision_number": [
+        {
+          "value": 1,
+          "count": 1,
+          "percent": 16.666666666666668
+        },
+        {
+          "value": 2,
+          "count": 2,
+          "percent": 33.333333333333336
+        },
+        {
+          "value": 3,
+          "count": 3,
+          "percent": 50.0
+        }
+      ],
+      "start_hostnames": 5,
+      "start_domains": 5
+    }
+  },
+  "diversity": {
+    "start_domains": [
+      {
+        "value": "allrecipes.com",
+        "count": 9,
+        "percent": 12.162162162162161
+      },
+      {
+        "value": "apple.com",
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": "arxiv.org",
+        "count": 5,
+        "percent": 6.756756756756757
+      },
+      {
+        "value": "baidu.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "bluefrogplumbing.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "cambridge.org",
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": "cnn.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "communitytax.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "directionsonmicrosoft.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "goodreads.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "huggingface.co",
+        "count": 2,
+        "percent": 2.7027027027027026
+      },
+      {
+        "value": "imdb.com",
+        "count": 2,
+        "percent": 2.7027027027027026
+      },
+      {
+        "value": "maxbotix.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "mechelen.be",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "naver.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "netflix.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "pecanplantationtx.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "samsung.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "samsungknox.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "squawkfox.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "steakwaytx.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "stockx.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "tjx.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "topografix.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "triblive.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "unifrax.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "usps.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "wikipedia.org",
+        "count": 23,
+        "percent": 31.08108108108108
+      },
+      {
+        "value": "wolframalpha.com",
+        "count": 3,
+        "percent": 4.054054054054054
+      },
+      {
+        "value": "youtube.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      }
+    ],
+    "anchor_domains": [
+      {
+        "value": "alkegen.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "allrecipes.com",
+        "count": 8,
+        "percent": 10.81081081081081
+      },
+      {
+        "value": "apple.com",
+        "count": 3,
+        "percent": 4.054054054054054
+      },
+      {
+        "value": "arxiv.org",
+        "count": 5,
+        "percent": 6.756756756756757
+      },
+      {
+        "value": "baidu.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "bluefrogplumbing.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "cambridge.org",
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": "cashandkerry.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "cdc.gov",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "cnn.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "communitytax.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "directionsonmicrosoft.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "github.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "goodreads.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "huggingface.co",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "imdb.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "maxbotix.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "missing",
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": "naver.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "netflix.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "samsung.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "samsungknox.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "stockx.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "tjx.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "topografix.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "triblive.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "usps.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "visitmechelen.be",
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": "wikipedia.org",
+        "count": 23,
+        "percent": 31.08108108108108
+      },
+      {
+        "value": "wolframalpha.com",
+        "count": 3,
+        "percent": 4.054054054054054
+      },
+      {
+        "value": "youtube.com",
+        "count": 1,
+        "percent": 1.3513513513513513
+      }
+    ],
+    "unique_start_hostnames": 53,
+    "unique_start_domains": 30,
+    "unique_anchor_hostnames": 54,
+    "unique_anchor_domains": 31,
+    "changed_domain_since_task_start": 9,
+    "prior_browser_operations": [
+      {
+        "value": 0,
+        "count": 33,
+        "percent": 44.5945945945946
+      },
+      {
+        "value": 1,
+        "count": 16,
+        "percent": 21.62162162162162
+      },
+      {
+        "value": 2,
+        "count": 10,
+        "percent": 13.513513513513514
+      },
+      {
+        "value": 3,
+        "count": 9,
+        "percent": 12.162162162162161
+      },
+      {
+        "value": 4,
+        "count": 6,
+        "percent": 8.108108108108109
+      }
+    ],
+    "candidate_distinct": [
+      {
+        "value": 1,
+        "count": 5,
+        "percent": 6.756756756756757
+      },
+      {
+        "value": 2,
+        "count": 5,
+        "percent": 6.756756756756757
+      },
+      {
+        "value": 3,
+        "count": 9,
+        "percent": 12.162162162162161
+      },
+      {
+        "value": 4,
+        "count": 18,
+        "percent": 24.324324324324323
+      },
+      {
+        "value": 5,
+        "count": 37,
+        "percent": 50.0
+      }
+    ],
+    "candidate_tool_calls": [
+      {
+        "value": 1,
+        "count": 266,
+        "percent": 71.89189189189189
+      },
+      {
+        "value": 2,
+        "count": 8,
+        "percent": 2.1621621621621623
+      },
+      {
+        "value": 3,
+        "count": 92,
+        "percent": 24.864864864864863
+      },
+      {
+        "value": 4,
+        "count": 1,
+        "percent": 0.2702702702702703
+      },
+      {
+        "value": 5,
+        "count": 1,
+        "percent": 0.2702702702702703
+      },
+      {
+        "value": 6,
+        "count": 2,
+        "percent": 0.5405405405405406
+      }
+    ],
+    "tool_calls": {
+      "click": 206,
+      "write": 98,
+      "press_keys": 83,
+      "goto_url": 53,
+      "scroll": 47,
+      "go_back": 25,
+      "new_tab": 21,
+      "done": 19,
+      "wait": 13,
+      "switch_tab": 12,
+      "close_tab": 2
+    },
+    "candidate_bundles_containing_tool": {
+      "click": 195,
+      "write": 97,
+      "press_keys": 83,
+      "goto_url": 53,
+      "scroll": 47,
+      "go_back": 25,
+      "new_tab": 21,
+      "done": 19,
+      "wait": 13,
+      "switch_tab": 12,
+      "close_tab": 2
+    },
+    "states_containing_tool": {
+      "click": 46,
+      "press_keys": 29,
+      "write": 28,
+      "goto_url": 19,
+      "scroll": 18,
+      "go_back": 12,
+      "new_tab": 9,
+      "done": 9,
+      "switch_tab": 7,
+      "wait": 7,
+      "close_tab": 2
+    },
+    "page_text_characters": {
+      "min": 0.0,
+      "q25": 316.0,
+      "median": 2398.0,
+      "q75": 5410.5,
+      "max": 16000.0
+    },
+    "task_characters": {
+      "min": 45.0,
+      "q25": 84.0,
+      "median": 99.5,
+      "q75": 129.25,
+      "max": 215.0
+    },
+    "unique_exact_screenshots": 57,
+    "exact_screenshot_cluster_sizes": [
+      8,
+      6,
+      4,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "states_sharing_exact_screenshot": 22,
+    "unique_exact_page_records": 61,
+    "unique_visible_page_texts": 54,
+    "nearest_phash_hamming": {
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 18.0,
+      "q75": 22.0,
+      "max": 24.0
+    },
+    "states_with_phash_neighbor_within4": 24,
+    "page_flags": {
+      "all_white_screenshot": 6,
+      "people_inc_access_notice": 8,
+      "other_explicit_error_or_unavailable": 4
+    },
+    "states_with_any_flag": 18
+  },
+  "outcomes": {
+    "overall": {
+      "states": 74,
+      "continuations": 1110,
+      "successes": 443,
+      "success_percent": 39.909909909909906,
+      "valid_continuations": 1000
+    },
+    "page_flagged": {
+      "states": 18,
+      "continuations": 270,
+      "successes": 31,
+      "success_percent": 11.481481481481481,
+      "valid_continuations": 215
+    },
+    "not_page_flagged": {
+      "states": 56,
+      "continuations": 840,
+      "successes": 412,
+      "success_percent": 49.04761904761905,
+      "valid_continuations": 785
+    },
+    "state_success_count_distribution": [
+      {
+        "value": 0,
+        "count": 20,
+        "percent": 27.027027027027028
+      },
+      {
+        "value": 1,
+        "count": 8,
+        "percent": 10.81081081081081
+      },
+      {
+        "value": 10,
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": 11,
+        "count": 3,
+        "percent": 4.054054054054054
+      },
+      {
+        "value": 12,
+        "count": 3,
+        "percent": 4.054054054054054
+      },
+      {
+        "value": 13,
+        "count": 2,
+        "percent": 2.7027027027027026
+      },
+      {
+        "value": 14,
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": 15,
+        "count": 10,
+        "percent": 13.513513513513514
+      },
+      {
+        "value": 2,
+        "count": 5,
+        "percent": 6.756756756756757
+      },
+      {
+        "value": 3,
+        "count": 4,
+        "percent": 5.405405405405405
+      },
+      {
+        "value": 4,
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": 5,
+        "count": 2,
+        "percent": 2.7027027027027026
+      },
+      {
+        "value": 6,
+        "count": 3,
+        "percent": 4.054054054054054
+      },
+      {
+        "value": 7,
+        "count": 2,
+        "percent": 2.7027027027027026
+      },
+      {
+        "value": 8,
+        "count": 1,
+        "percent": 1.3513513513513513
+      },
+      {
+        "value": 9,
+        "count": 2,
+        "percent": 2.7027027027027026
+      }
+    ],
+    "all_fifteen_failure_states": 20,
+    "all_fifteen_success_states": 10,
+    "mixed_success_states": 44,
+    "states_with_candidate_mean_differences": 43,
+    "candidate_panels_with_repeat_variation": 101,
+    "candidate_panels": 370,
+    "repeat_pair_disagreements": 202,
+    "repeat_pairs": 1110,
+    "repeat_pair_disagreement_percent": 18.1981981981982,
+    "valid_only_repeat_pair_disagreements": 172,
+    "valid_only_repeat_pairs": 951,
+    "valid_only_repeat_pair_disagreement_percent": 18.08622502628812,
+    "all_valid_candidate_panels": 305,
+    "all_valid_candidate_panels_with_repeat_variation": 82
+  },
+  "paired_teacher_sensitivity": {
+    "all_complete": {
+      "analyzed_states": 70,
+      "estimates": {
+        "before": 0.44285714285714284,
+        "after": 0.44761904761904764,
+        "difference": 0.00476190476190476,
+        "uniform": 0.4142857142857143,
+        "before_repeat_disagreement": 0.30476190476190473,
+        "after_repeat_disagreement": 0.18253968253968253,
+        "before_after_disagreement": 0.44814814814814813,
+        "excess_disagreement": 0.20449735449735448
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0.34285714285714286,
+          0.5492063492063493
+        ],
+        "after": [
+          0.34444444444444444,
+          0.5523809523809524
+        ],
+        "difference": [
+          -0.02380952380952382,
+          0.0365079365079365
+        ],
+        "uniform": [
+          0.32571428571428573,
+          0.5057142857142857
+        ],
+        "before_repeat_disagreement": [
+          0.2238095238095238,
+          0.3857142857142857
+        ],
+        "after_repeat_disagreement": [
+          0.12698412698412698,
+          0.2396825396825397
+        ],
+        "before_after_disagreement": [
+          0.35978835978835977,
+          0.5365079365079365
+        ],
+        "excess_disagreement": [
+          0.13386243386243385,
+          0.2796296296296296
+        ]
+      }
+    },
+    "page_flagged": {
+      "analyzed_states": 16,
+      "estimates": {
+        "before": 0.1736111111111111,
+        "after": 0.15277777777777776,
+        "difference": -0.020833333333333336,
+        "uniform": 0.12916666666666665,
+        "before_repeat_disagreement": 0.16666666666666666,
+        "after_repeat_disagreement": 0.1111111111111111,
+        "before_after_disagreement": 0.35185185185185186,
+        "excess_disagreement": 0.21296296296296297
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0.041666666666666664,
+          0.3333333333333333
+        ],
+        "after": [
+          0.027777777777777776,
+          0.3125
+        ],
+        "difference": [
+          -0.05555555555555556,
+          0.0
+        ],
+        "uniform": [
+          0.05,
+          0.22916666666666666
+        ],
+        "before_repeat_disagreement": [
+          0.041666666666666664,
+          0.29166666666666663
+        ],
+        "after_repeat_disagreement": [
+          0.027777777777777776,
+          0.20833333333333331
+        ],
+        "before_after_disagreement": [
+          0.1574074074074074,
+          0.5740740740740741
+        ],
+        "excess_disagreement": [
+          0.05092592592592593,
+          0.41203703703703703
+        ]
+      }
+    },
+    "not_page_flagged": {
+      "analyzed_states": 54,
+      "estimates": {
+        "before": 0.522633744855967,
+        "after": 0.5349794238683128,
+        "difference": 0.012345679012345677,
+        "uniform": 0.49876543209876545,
+        "before_repeat_disagreement": 0.345679012345679,
+        "after_repeat_disagreement": 0.2037037037037037,
+        "before_after_disagreement": 0.4766803840877915,
+        "excess_disagreement": 0.20198902606310012
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0.40329218106995884,
+          0.6399176954732511
+        ],
+        "after": [
+          0.4176954732510288,
+          0.6522633744855967
+        ],
+        "difference": [
+          -0.02469135802469136,
+          0.05144032921810699
+        ],
+        "uniform": [
+          0.39382716049382716,
+          0.6024691358024692
+        ],
+        "before_repeat_disagreement": [
+          0.25308641975308643,
+          0.4382716049382716
+        ],
+        "after_repeat_disagreement": [
+          0.13991769547325103,
+          0.2716049382716049
+        ],
+        "before_after_disagreement": [
+          0.37997256515775035,
+          0.5713305898491083
+        ],
+        "excess_disagreement": [
+          0.12825788751714676,
+          0.28189300411522633
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "Replayable early states are a selected subset, not a representative sample of all task states.",
+    "Site families and repeated blank/access-error pages reduce effective diversity below the nominal number oftasks.",
+    "Page-status flags are descriptive and incomplete; an unflagged page is not certified usable.",
+    "Three continuations per candidate make candidate mean differences noisy; these are not causal estimates of candidatequality.",
+    "Old74complete states are retained unchanged; new extension data must be separately labeled and reaudited."
+  ]
+}
