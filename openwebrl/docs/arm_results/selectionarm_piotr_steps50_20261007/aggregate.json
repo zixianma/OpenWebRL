@@ -1,0 +1,289 @@
+{
+  "epoch": 1791402359.0285633,
+  "complete": true,
+  "verified_complete": true,
+  "status": "verified_complete",
+  "episodes": 600,
+  "tasks": 300,
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 50,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 45,
+    "server_seed_base": 4500,
+    "repetition": 1,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "Fresh full300 SFT and Piotr SelectionARM pair; max_steps50 is the only scientific setting changed from30",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "selectionarm-piotr-steps50-20261007",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Same actor/browser/prompt/judge/decoding; task-paired. Earlier30 and new50 have distinct runs/dates, so horizon interaction remains a cross-run comparison.",
+    "actor_control_source": "same campaign; randomized interleaved paired arms"
+  },
+  "by_mode": {
+    "actor0": {
+      "episodes": 300,
+      "successes": 92,
+      "valid": 252,
+      "invalid": 48,
+      "success_rate": 0.30666666666666664,
+      "valid_only": 0.36507936507936506,
+      "totals": {
+        "actor_requests": 6121,
+        "actor_input_tokens": 80880881,
+        "actor_output_tokens": 2052053,
+        "actor_client_request_seconds": 36761.935807260685,
+        "browser_steps": 6094,
+        "browser_step_seconds": 20415.377381654922,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 61967.73196312273
+      },
+      "means": {
+        "actor_requests": 20.403333333333332,
+        "actor_input_tokens": 269602.93666666665,
+        "actor_output_tokens": 6840.176666666666,
+        "actor_client_request_seconds": 122.53978602420229,
+        "browser_steps": 20.313333333333333,
+        "browser_step_seconds": 68.05125793884974,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 206.55910654374244
+      },
+      "missing_metric_episodes": {}
+    },
+    "arm": {
+      "episodes": 300,
+      "successes": 120,
+      "valid": 234,
+      "invalid": 66,
+      "success_rate": 0.4,
+      "valid_only": 0.5128205128205128,
+      "totals": {
+        "actor_requests": 30620,
+        "actor_input_tokens": 404833980,
+        "actor_output_tokens": 10673973,
+        "actor_client_request_seconds": 208376.40017334837,
+        "browser_steps": 6082,
+        "browser_step_seconds": 25916.57055165153,
+        "selector_calls": 6082,
+        "selector_input_tokens": 24190265,
+        "selector_output_tokens": 51918,
+        "selector_service_seconds": 3045.4466550359502,
+        "elapsed_seconds": 81506.09477545833
+      },
+      "means": {
+        "actor_requests": 102.06666666666666,
+        "actor_input_tokens": 1349446.6,
+        "actor_output_tokens": 35579.91,
+        "actor_client_request_seconds": 694.5880005778279,
+        "browser_steps": 20.273333333333333,
+        "browser_step_seconds": 86.3885685055051,
+        "selector_calls": 20.273333333333333,
+        "selector_input_tokens": 80634.21666666666,
+        "selector_output_tokens": 173.06,
+        "selector_service_seconds": 10.151488850119835,
+        "elapsed_seconds": 271.6869825848611
+      },
+      "missing_metric_episodes": {}
+    }
+  },
+  "paired_arm_minus_sft": {
+    "tasks": 300,
+    "difference": 0.09333333333333334,
+    "bootstrap95": [
+      0.04,
+      0.14666666666666667
+    ],
+    "first_only": 49,
+    "second_only": 21,
+    "common_valid_tasks": 215,
+    "common_valid_arm_successes": 115,
+    "common_valid_actor_successes": 87
+  },
+  "old30_mean_paired": {
+    "difference": 0.05,
+    "bootstrap95": [
+      0.013333333333333334,
+      0.085
+    ]
+  },
+  "horizon_interaction_50_minus_30": {
+    "difference": 0.043333333333333335,
+    "bootstrap95": [
+      -0.02,
+      0.105
+    ]
+  },
+  "method_change_50_minus_30": {
+    "actor0": {
+      "difference": -0.023333333333333334,
+      "bootstrap95": [
+        -0.06666666666666667,
+        0.02
+      ]
+    },
+    "arm": {
+      "difference": 0.02,
+      "bootstrap95": [
+        -0.021666666666666667,
+        0.06166666666666667
+      ]
+    }
+  },
+  "termination_reasons": {
+    "actor0": {
+      "task_completed": 181,
+      "zero_step_reset_or_navigation": 23,
+      "generation_length_limit": 2,
+      "max_steps_exhausted": 68,
+      "generation_error": 22,
+      "format_error_failed": 1,
+      "env_step_error": 3
+    },
+    "arm": {
+      "task_completed": 185,
+      "generation_error": 42,
+      "max_steps_exhausted": 44,
+      "zero_step_reset_or_navigation": 22,
+      "generation_length_limit": 5,
+      "env_step_error": 2
+    }
+  },
+  "invalid_reasons": {
+    "actor0": {
+      "zero_step_reset_or_navigation": 23,
+      "generation_error": 22,
+      "env_step_error": 3
+    },
+    "arm": {
+      "generation_error": 42,
+      "zero_step_reset_or_navigation": 22,
+      "env_step_error": 2
+    }
+  },
+  "episodes_reaching_step50": {
+    "actor0": 67,
+    "arm": 46
+  },
+  "all_attempt_actor_tokens": {
+    "actor0": {
+      "requests": 6121,
+      "received_requests": 6099,
+      "input_tokens": 80880881,
+      "output_tokens": 2052053,
+      "failed_or_unmetered_requests": 22
+    },
+    "arm": {
+      "requests": 30620,
+      "received_requests": 30410,
+      "input_tokens": 404833980,
+      "output_tokens": 10673973,
+      "failed_or_unmetered_requests": 210
+    }
+  },
+  "accounting_by_shard": [
+    {
+      "shard": 0,
+      "attempts": [
+        {
+          "job_id": "348680",
+          "state": "FAILED",
+          "seconds": 7
+        },
+        {
+          "job_id": "348683",
+          "state": "COMPLETED",
+          "seconds": 10443
+        }
+      ],
+      "all_attempt_seconds": 10450,
+      "cap_seconds": 14400,
+      "remaining_seconds": 3950,
+      "allocated_h200_hours": 5.805555555555555,
+      "judge": {
+        "calls": 187,
+        "usd": 1.5762461000000008,
+        "unsettled": 0
+      },
+      "judge_cap": {
+        "calls": 1320,
+        "usd": 5
+      }
+    },
+    {
+      "shard": 1,
+      "attempts": [
+        {
+          "job_id": "348681",
+          "state": "FAILED",
+          "seconds": 7
+        },
+        {
+          "job_id": "348684",
+          "state": "COMPLETED",
+          "seconds": 9823
+        }
+      ],
+      "all_attempt_seconds": 9830,
+      "cap_seconds": 14400,
+      "remaining_seconds": 4570,
+      "allocated_h200_hours": 5.461111111111111,
+      "judge": {
+        "calls": 179,
+        "usd": 1.4774826000000003,
+        "unsettled": 0
+      },
+      "judge_cap": {
+        "calls": 1320,
+        "usd": 5
+      }
+    }
+  ],
+  "final_accounting_verified": true,
+  "wandb_states": [
+    "finished",
+    "finished"
+  ],
+  "no_transfers": true,
+  "new_budget": 0,
+  "limitations": [
+    "One new 50-step paired run versus two completed 30-step runs; no run-level SD for the new run.",
+    "Task-cluster bootstrap keeps both old repetitions together; it does not measure run/website drift or judge error.",
+    "Context remains 32K, output cap 1024 and task timeout 1800 seconds; a higher step cap does not guarantee 50 executable steps.",
+    "Invalid and unjudged outcomes remain zero; canonical AgentTrek success allows partial progress.",
+    "FlashInfer ignores request seeds; distinct server seeds were verified, not deterministic trajectory matching.",
+    "Compute proxy excludes prefill, attention, vision and caching; it is neither measured FLOPs nor dollars.",
+    "Token totals include all metered actor attempts; unmetered failures are reported separately.",
+    "Terminal screenshots decoded and matched to saved receipts; no independent human adjudication."
+  ],
+  "plots_visually_reviewed": true
+}

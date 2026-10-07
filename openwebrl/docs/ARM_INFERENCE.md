@@ -1052,7 +1052,7 @@ All metered actor/selector attempts contribute to token and cost totals, includi
 | SFT + RL-task SelectionARM | 30 | 300 | Completed fresh full300 SFT30 in the API-selector study | One job: 2 H200 / 16 CPU / 240 GiB × 3h | $5 / 1,320 calls |
 | SFT vs SFT + Piotr SelectionARM | 50 | 600 | Fresh full300 SFT50 in the same new study | Two parallel jobs, each 2 H200 / 16 CPU / 240 GiB × 4h | Each $5 / 1,320 calls |
 
-**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. Approved and submitted October 7: **RL-task ARM job 348682; 50-step pair jobs 348683/348684**. The RL-task repeat is now independently complete (see below); the 50-step pair continues under its separate approval and active-agent supervisors. Eight preparation checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. The 50-step pair still awaits collection and final full-cohort verification.
+**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. Approved and submitted October 7: **RL-task ARM job 348682; 50-step pair jobs 348683/348684**. The RL-task repeat and 50-step pair are independently complete; final results and accounting follow below. Eight preparation checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. Both full-cohort audits passed.
 
 An initial approval-hash serialization mismatch stopped jobs 348679/348680/348681 before model/API work, using 4/7/7 seconds. The plan and scientific source were unchanged; canonical hashes were repaired and checked against both approval gates. Every failed second is charged, and replacement wall times were rounded down to the remaining cap.
 
@@ -1089,3 +1089,36 @@ The failed four-second startup is included; 2644 approved seconds remain unused.
 Invalid ARM outcomes: zero_step_reset_or_navigation: 22, generation_error: 10, env_step_error: 1. Their artifacts are preserved. All 22515 actor requests were checked; 50 failed/unmetered requests have no token usage. Terminal screenshots were decoded and matched to saved verdict receipts, without independent human adjudication.
 
 Plots: [compute proxy](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) · [latency](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) · [tokens](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png). Compute is a generated-token estimate, not measured FLOPs or dollars. Latency is descriptive because deployments/concurrency differ. [Aggregate](arm_results/selectionarm_rltasks_repeat_20261007/aggregate.json) · [Independent audit](arm_results/selectionarm_rltasks_repeat_20261007/independent-audit.json) · [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/selectionarm-rltasks-repeat-20261007-shard0).
+
+
+<a id="selectionarm-piotr-steps50-results-20261007"></a>
+### Piotr SelectionARM: 50-step full300 pair — October 7
+
+**ARM gain: +9.33 pp, paired 95% interval [+4.00, +14.67].** Compared with the two complete 30-step repeats, the change in gain is **+4.33 pp [-2.00, +10.50]**. The estimated change in ARM gain remains uncertain.
+
+| Method | Tasks | Successes | Success | Valid | Invalid | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT | 300 | 92 | 30.67% | 252 | 48 | 36.51% |
+| SFT + Piotr SelectionARM | 300 | 120 | 40.00% | 234 | 66 | 51.28% |
+
+ARM-only success: **49**; SFT-only: **21**. On 215 common-valid tasks, ARM has 115 successes and SFT 87. All invalid and unjudged outcomes remain zero; canonical AgentTrek success allows partial progress.
+
+**Comparison:** same 300-task file, official SFT, Piotr SelectionARM revision `81b452d800d9f859687074f82680dd5257e02d89`, local browser, historical policy/full history/current image, T=0.7, p=0.9, top-k omitted, 1,024 output tokens, N=5 greedy selection, o4-mini/AgentTrek. The step cap changes from 30 to 50; 32K context, 1,800-second task timeout and 4,096-token judge cap stay fixed. Server seeds 4500/4501 verified; request seeds are ignored by FlashInfer. Runs/dates differ, so this is not a deterministic same-trajectory horizon intervention.
+
+Uncertainty uses 10,000 task-cluster bootstrap samples, seed 42. Both old repetitions stay together in each sampled task; the new run has no run-level SD. Task uncertainty does not capture run variance, website drift or judge error.
+
+| Method | Episodes reaching 50 steps | Reset/navigation failures | Generation errors | Execution errors |
+| --- | ---: | ---: | ---: | ---: |
+| SFT | 67 | 23 | 22 | 3 |
+| SFT + Piotr SelectionARM | 46 | 22 | 42 | 2 |
+
+These limits can stop an episode before step 50. Full termination counts and measured latency/token/browser work are in the [aggregate](arm_results/selectionarm_piotr_steps50_20261007/aggregate.json).
+
+| Shard | All-attempt allocation seconds | Cap | Unused seconds | Judge calls | Judge USD |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 10450 | 14,400 | 3950 | 187 | 1.5762461 |
+| 1 | 9830 | 14,400 | 4570 | 179 | 1.4774826 |
+
+Each shard stayed within its independent 2 H200 / 16 CPU / 240 GiB × 4h and $5 / 1,320-call caps. Every failed startup second is included. All receipts settled, W&B finished, owned processes exited and artifacts preserved. No budget transfer or extension.
+
+[Compute proxy](arm_results/selectionarm_piotr_steps50_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_steps50_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_steps50_20261007/tokens.png) · [Independent audit](arm_results/selectionarm_piotr_steps50_20261007/independent-audit.json). Compute is a generated-token estimate, excluding prefill/attention/vision/cache, rather than measured FLOPs or dollars. All metered actor attempts count toward token work; unmetered failed requests are listed separately. Terminal screenshots were decoded and matched to saved verdicts, without independent human adjudication.

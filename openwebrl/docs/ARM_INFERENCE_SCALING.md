@@ -65,11 +65,13 @@ Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens**; step cap
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Piotr, two-repeat mean | 30 | 2 | 198 | 228 | 33.00 ± 0.47% | 38.00 ± 0.47% | +5.00 ± 0.00 pp | Complete; counts pooled over 600 episodes per arm |
 | RL-task SelectionARM repeat | 30 | 1 | 95 | 123 | 31.67% | 41.00% | +9.33 pp | Complete; earlier SFT control reused |
-| Piotr, longer horizon | 50 | 0 | — | — | — | — | — | Collecting; jobs 348683/348684 |
+| Piotr, longer horizon | 50 | 1 | 92 | 120 | 30.67% | 40.00% | +9.33 pp | Complete; fresh paired SFT control |
 
-New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collects its own SFT control. Each new comparison is one run, so no run-level SD will be inferred from it. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
+New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collected its own SFT control. Each new comparison is one run; no run-level SD. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
 
 RL-task ARM: **+9.33 pp**, paired 95% interval **[+4.00, +14.67]**. One run with the earlier SFT control; no run-level SD or controlled cross-checkpoint ranking. [Audit and accounting](ARM_INFERENCE.md#selectionarm-rltasks-repeat-results-20261007) · [compute proxy](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) · [latency](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) · [tokens](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png).
+
+Piotr at 50 steps: **+9.33 pp [+4.00, +14.67]**, versus **+5.00 pp** at 30 steps. Change in gain: **+4.33 pp [-2.00, +10.50]**. The estimated change in ARM gain remains uncertain. The 32K context and task-time limits remain unchanged. [Audit](ARM_INFERENCE.md#selectionarm-piotr-steps50-results-20261007) · [compute proxy](arm_results/selectionarm_piotr_steps50_20261007/cost.png) · [latency](arm_results/selectionarm_piotr_steps50_20261007/latency.png) · [tokens](arm_results/selectionarm_piotr_steps50_20261007/tokens.png).
 
 ### Piotr: the two completed repeats
 

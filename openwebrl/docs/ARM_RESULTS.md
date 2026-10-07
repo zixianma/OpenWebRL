@@ -6,6 +6,8 @@ Detailed inference, offline-training and online-RL results belong here. The reco
 
 **RL-task SelectionARM full300 repeat:** 41.00% versus 31.67% for the reused SFT control; **+9.33 pp [+4.00, +14.67]**. [Controlled-results table](ARM_INFERENCE_SCALING.md#sft-piotr-repeat-tracker-20261006) · [Final audit](ARM_INFERENCE.md#selectionarm-rltasks-repeat-results-20261007).
 
+**Piotr SelectionARM at 50 steps:** 40.00% versus 30.67% SFT; **+9.33 pp**. Change in gain versus the two 30-step repeats: **+4.33 pp [-2.00, +10.50]**. [Full300 table](ARM_INFERENCE_SCALING.md#sft-piotr-repeat-tracker-20261006) · [Final audit](ARM_INFERENCE.md#selectionarm-piotr-steps50-results-20261007).
+
 <a id="arm-continuation-branches-results-20261007"></a>
 ## Before versus execution-informed selection
 

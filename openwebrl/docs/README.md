@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Piotr SelectionARM at 50 steps: full300 paired results, comparison with 30 steps and three plots](ARM_INFERENCE.md#selectionarm-piotr-steps50-results-20261007).
+
 [RL-task SelectionARM repeat complete: 41.00% versus 31.67% reused SFT control; full300 paired results and three plots](ARM_INFERENCE.md#selectionarm-rltasks-repeat-results-20261007).
 
 [API-selector reproduction complete: SFT 31.67%, Sol 43.33%, GPT-5.5 42.00%; 900 episodes, paired results and three plots](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
