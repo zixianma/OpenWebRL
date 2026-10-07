@@ -1857,9 +1857,12 @@ respectively; all attempts remain charged within the original7h caps.
 
 </details>
 
-The [difficulty breakdown](ARM_RESULTS.md#arm-stealth90-difficulty-20260930) is now reconstructed
-from all 2,700 retained verdicts. Under human-step bins (80 easy / 141 medium /
-79 hard), Gate B gains most on medium (+6.86 pp) and Additive on hard (+5.91 pp).
+The [five-method difficulty breakdown](ARM_RESULTS.md#arm-stealth90-five-method-difficulty-20261007) now covers
+all 4,500 retained outcomes, including the October 6 mixed-only bonus and
+reweight cohorts. Human-step bins remain 80 easy / 141 medium / 79 hard.
+Within the September 29–30 collection, Gate B's largest descriptive gain is
+on medium (+6.86 pp), and Additive's is on hard (+5.91 pp). Comparisons with
+the October collection are descriptive because the dates differ.
 Two stale medium labels are corrected for this analysis only; raw records remain
 unchanged. Full denominators, SD, valid-only rates and identity checks are linked.
 

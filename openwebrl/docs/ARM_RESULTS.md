@@ -403,32 +403,52 @@ in runtime `arm-turn-bonus-preparation/paired-inference-20260930/`.
 · [SVG figure](arm_results/rl_integration/stealth-iteration90-confidence.svg).
 
 <a id="arm-stealth90-difficulty-20260930"></a>
-## OM2W difficulty breakdown: iteration90 stealth, three repeats — September30
+<a id="arm-stealth90-five-method-difficulty-20261007"></a>
+## OM2W difficulty breakdown: five methods, iteration 90 and three repeats — October 7
 
-Same nine completed cohorts as the matched comparison: actor-only inference,
-Browser Use stealth, o4-mini/AgentTrek, T0.6/p0.95/k20, 4,096 tokens, 30 turns.
-No new rollouts, GPU allocation or judge calls. Difficulty follows the published
-human reference-length rule: easy 1–5 steps, medium 6–10, hard 11+.
+The five-method summary combines the nine September 29–30 cohorts with the six
+October 6 mixed-only cohorts (2026, PDT). All use actor-only inference,
+Browser Use stealth, o4-mini/AgentTrek, T0.6/p0.95/k20, 4,096 response tokens
+and 30 turns. Difficulty follows the published human reference-length rule:
+easy 1–5 steps, medium 6–10, hard 11+.
 [Benchmark definition](https://huggingface.co/spaces/osunlp/Online_Mind2Web_Leaderboard/blob/2dba94f7112bf2e47c701a49c5af971fbf0723d4/content.py).
 
-| Method | Difficulty | Tasks/repeat | Overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid counts, repeats 1/2/3 |
-| --- | --- | ---: | --- | --- | ---: | --- |
-| Outcome-only baseline | Easy | 80 | 70.00 ± 1.25% | 72.11 ± 1.39% | +0.00 pp | 78/78/77 |
-| Outcome-only baseline | Medium | 141 | 55.79 ± 6.96% | 58.49 ± 6.25% | +0.00 pp | 132/137/134 |
-| Outcome-only baseline | Hard | 79 | 39.24 ± 3.35% | 41.14 ± 3.32% | +0.00 pp | 76/75/75 |
-| Additive | Easy | 80 | 74.58 ± 2.60% | 75.86 ± 3.20% | +4.58 pp | 78/79/79 |
-| Additive | Medium | 141 | 56.74 ± 1.88% | 60.92 ± 1.20% | +0.95 pp | 136/130/128 |
-| Additive | Hard | 79 | 45.15 ± 0.73% | 47.37 ± 1.07% | +5.91 pp | 72/77/77 |
-| Gate B | Easy | 80 | 67.92 ± 5.05% | 69.64 ± 4.71% | -2.08 pp | 77/78/79 |
-| Gate B | Medium | 141 | 62.65 ± 4.09% | 65.73 ± 3.58% | +6.86 pp | 133/136/134 |
-| Gate B | Hard | 79 | 42.62 ± 3.19% | 44.92 ± 3.95% | +3.38 pp | 76/74/75 |
+| Method | Collection dates (PDT) | Difficulty | Tasks/repeat | Overall mean ± sample SD | Valid-only mean ± sample SD | Overall Δ vs Sep baseline | Valid counts, repeats 1/2/3 |
+| --- | --- | --- | ---: | --- | --- | ---: | --- |
+| Outcome-only baseline | Sep 29–30 | Easy | 80 | 70.00 ± 1.25% | 72.11 ± 1.39% | +0.00 pp | 78/78/77 |
+| Outcome-only baseline | Sep 29–30 | Medium | 141 | 55.79 ± 6.96% | 58.49 ± 6.25% | +0.00 pp | 132/137/134 |
+| Outcome-only baseline | Sep 29–30 | Hard | 79 | 39.24 ± 3.35% | 41.14 ± 3.32% | +0.00 pp | 76/75/75 |
+| Additive | Sep 29–30 | Easy | 80 | 74.58 ± 2.60% | 75.86 ± 3.20% | +4.58 pp | 78/79/79 |
+| Additive | Sep 29–30 | Medium | 141 | 56.74 ± 1.88% | 60.92 ± 1.20% | +0.95 pp | 136/130/128 |
+| Additive | Sep 29–30 | Hard | 79 | 45.15 ± 0.73% | 47.37 ± 1.07% | +5.91 pp | 72/77/77 |
+| Gate B | Sep 29–30 | Easy | 80 | 67.92 ± 5.05% | 69.64 ± 4.71% | -2.08 pp | 77/78/79 |
+| Gate B | Sep 29–30 | Medium | 141 | 62.65 ± 4.09% | 65.73 ± 3.58% | +6.86 pp | 133/136/134 |
+| Gate B | Sep 29–30 | Hard | 79 | 42.62 ± 3.19% | 44.92 ± 3.95% | +3.38 pp | 76/74/75 |
+| Mixed-only bonus + relaxed B | Oct 6 | Easy | 80 | 75.83 ± 7.11% | 76.43 ± 6.41% | +5.83 pp | 80/78/80 |
+| Mixed-only bonus + relaxed B | Oct 6 | Medium | 141 | 57.45 ± 3.25% | 58.15 ± 3.76% | +1.65 pp | 140/138/140 |
+| Mixed-only bonus + relaxed B | Oct 6 | Hard | 79 | 44.73 ± 4.45% | 45.29 ± 4.31% | +5.49 pp | 79/78/77 |
+| Mixed-only reweight + relaxed B | Oct 6 | Easy | 80 | 71.25 ± 1.25% | 71.25 ± 1.25% | +1.25 pp | 80/80/80 |
+| Mixed-only reweight + relaxed B | Oct 6 | Medium | 141 | 56.26 ± 1.78% | 57.49 ± 1.87% | +0.47 pp | 139/136/139 |
+| Mixed-only reweight + relaxed B | Oct 6 | Hard | 79 | 40.93 ± 4.45% | 40.93 ± 4.45% | +1.69 pp | 79/79/79 |
 
-Gate B's largest descriptive gain is on medium tasks (+6.86 pp); its easy-task
-rate is −2.08 pp and hard-task rate +3.38 pp. Additive gains +4.58 pp on easy,
-+0.95 pp on medium and +5.91 pp on hard. This is compatible with benefit on
-harder tasks but does not show that oversampling difficult training tasks causes
-improvement. These are evaluation repeats of fixed checkpoints, not independent
-training seeds; subgroup comparisons are descriptive, with no significance claim.
+The baseline deltas are descriptive percentage-point differences. In the
+September collection, Gate B's overall deltas are +6.86 pp on medium, −2.08 pp
+on easy and +3.38 pp on hard; Additive gains +4.58 pp on easy, +0.95 pp on medium and
++5.91 pp on hard. The October mixed-only rows share the protocol and task bins
+but were collected later, so their differences from the September baseline are
+not contemporaneously matched effects. These are evaluations of fixed trained
+checkpoints, not independent training seeds. No subgroup CIs or significance
+tests are introduced, and these results do not show that oversampling difficult
+training tasks causes improvement.
+
+Overall rates retain every task in its bin, including invalid attempts.
+Valid-only means average three per-repeat success/valid ratios; they are not
+pooled ratios. SD is sample SD across the three evaluations (`ddof=1`).
+The combined analysis reconciles all 4,500 saved outcomes across 15 cohorts:
+45 per-repeat bin rows sum to their full-300 audit totals, and all nine historical
+summary rows remain unchanged. It reuses the verified cohort evidence without
+new actor, browser or judge calls, archive rescans, or selective retries.
+[Five-method subgroup metrics and source hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-five-method-difficulty.json).
 
 **Label audit:** the frozen metadata contains two updated task IDs with a stale
 `medium` label but human reference lengths 12 and 11:
@@ -440,24 +460,23 @@ in the per-task CSV; evaluation artifacts were not changed. Full300 results
 are identical under either grouping. These OM2W labels are not the WebGym
 rubric-fact-count bands used to review the expansion tasks.
 
-Overall includes invalid attempts in the denominator; valid-only averages the
-three per-repeat ratios, not pooled successes/valids. SD is sample SD across
-three evaluations. All 2,700 task identities, binary verdict metrics, judge
+**Historical September verification:** all 2,700 task identities, binary verdict metrics, judge
 identities and associated archive presence were checked. Repeat1 uses exactly
 the previously approved credit-blocked recovery IDs; no valid original record
 was replaced. Every full300 count matches its existing audit, and an independent
 CSV reconstruction reproduces all 27 subgroup counts and rates. Per-task CSV
 contains IDs, reference lengths, labels, validity, success and record hashes;
 raw trajectories and judge text remain in runtime.
-The task-review HTML and per-task verdict CSV are local review artifacts;
-their localhost links require the existing port forward. The user clarified
+The historical task-review HTML and 2,700-row per-task verdict CSV remain local;
+their links require the existing port forward. They do not contain the October
+cohorts, and no new per-task CSV is published for the five-method summary. The user clarified
 that publication was intended for the interactive results plot, not the task
 pool. The task-review HTML was removed from the current `arm` tree; the earlier
 publication commit remains in history pending separately approved cleanup.
 Aggregate metrics and analysis scripts remain published on `arm`.
 
-[Recomputed subgroup metrics and provenance](arm_results/rl_integration/stealth-o4-t06-iteration90-difficulty.json) · [All 2,700 per-task outcomes](http://localhost:8765/arm_om2w_difficulty_verdicts.csv).
-Reproducer: `scripts/report_arm_om2w_difficulty.py`. Runtime:
+[Historical three-method subgroup metrics and provenance](arm_results/rl_integration/stealth-o4-t06-iteration90-difficulty.json) · [Historical September 2,700 per-task outcomes (local)](http://localhost:8765/arm_om2w_difficulty_verdicts.csv).
+Historical reproducer: `scripts/report_arm_om2w_difficulty.py`. Runtime:
 `arm-turn-bonus-preparation/stealth90-o4-t06-20260929/difficulty-breakdown-20260930-v2/`.
 
 <a id="arm-stealth90-o4-results-20260929"></a>

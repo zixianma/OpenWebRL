@@ -1,0 +1,1091 @@
+{
+  "schema": "openwebrl.stealth-five-method-difficulty.v1",
+  "iteration": 90,
+  "repeats": 3,
+  "tasks": 300,
+  "cohorts": 15,
+  "saved_outcomes": 4500,
+  "protocol": "Browser Use stealth; o4-mini/AgentTrek; T0.6/p0.95/k20; 4096 response tokens;30 turns; actor-only inference",
+  "difficulty_definition": {
+    "easy": "human reference 1\u20135 steps",
+    "medium": "6\u201310 steps",
+    "hard": "11+ steps"
+  },
+  "difficulty_counts": {
+    "easy": 80,
+    "medium": 141,
+    "hard": 79
+  },
+  "difficulty_source_sha256": "d8f81bfc99dfba8b1363d9f50511878dd5db72ff38225c8a196c222aa0c63488",
+  "difficulty_definition_url": "https://huggingface.co/spaces/osunlp/Online_Mind2Web_Leaderboard/blob/2dba94f7112bf2e47c701a49c5af971fbf0723d4/content.py",
+  "label_policy": "Apply the existing human-reference-length bins to the same frozen metadata; no evaluation artifacts or saved labels modified.",
+  "reference_length_label_mismatch_count": 2,
+  "reference_length_label_correction_summary": "Two saved medium labels with human reference lengths11 and12 remain classified as hard, matching the previous table.",
+  "saved_difficulty_counts": {
+    "medium": 143,
+    "easy": 80,
+    "hard": 77
+  },
+  "summary": [
+    {
+      "method": "baseline",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.7,
+      "overall_sample_sd": 0.012500000000000011,
+      "valid_only_mean": 0.721056721056721,
+      "valid_only_sample_sd": 0.013904840845511445,
+      "successes_by_repeat": [
+        57,
+        55,
+        56
+      ],
+      "valid_by_repeat": [
+        78,
+        78,
+        77
+      ],
+      "invalid_by_repeat": [
+        2,
+        2,
+        3
+      ],
+      "overall_delta_baseline_pp": 0.0
+    },
+    {
+      "method": "baseline",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.557919621749409,
+      "overall_sample_sd": 0.06960960692357193,
+      "valid_only_mean": 0.5849135763342104,
+      "valid_only_sample_sd": 0.06250817606153362,
+      "successes_by_repeat": [
+        73,
+        90,
+        73
+      ],
+      "valid_by_repeat": [
+        132,
+        137,
+        134
+      ],
+      "invalid_by_repeat": [
+        9,
+        4,
+        7
+      ],
+      "overall_delta_baseline_pp": 0.0
+    },
+    {
+      "method": "baseline",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.3924050632911392,
+      "overall_sample_sd": 0.03349052292486823,
+      "valid_only_mean": 0.4114035087719298,
+      "valid_only_sample_sd": 0.033184802968309945,
+      "successes_by_repeat": [
+        33,
+        28,
+        32
+      ],
+      "valid_by_repeat": [
+        76,
+        75,
+        75
+      ],
+      "invalid_by_repeat": [
+        3,
+        4,
+        4
+      ],
+      "overall_delta_baseline_pp": 0.0
+    },
+    {
+      "method": "additive",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.7458333333333333,
+      "overall_sample_sd": 0.026020824993326672,
+      "valid_only_mean": 0.7586281510332143,
+      "valid_only_sample_sd": 0.032019665396237636,
+      "successes_by_repeat": [
+        62,
+        59,
+        58
+      ],
+      "valid_by_repeat": [
+        78,
+        79,
+        79
+      ],
+      "invalid_by_repeat": [
+        2,
+        1,
+        1
+      ],
+      "overall_delta_baseline_pp": 4.583333333333339
+    },
+    {
+      "method": "additive",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.5673758865248227,
+      "overall_sample_sd": 0.018764193695493536,
+      "valid_only_mean": 0.6091935331825038,
+      "valid_only_sample_sd": 0.012043113111774164,
+      "successes_by_repeat": [
+        82,
+        81,
+        77
+      ],
+      "valid_by_repeat": [
+        136,
+        130,
+        128
+      ],
+      "invalid_by_repeat": [
+        5,
+        11,
+        13
+      ],
+      "overall_delta_baseline_pp": 0.9456264775413725
+    },
+    {
+      "method": "additive",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.45147679324894513,
+      "overall_sample_sd": 0.00730823125556489,
+      "valid_only_mean": 0.4737253487253487,
+      "valid_only_sample_sd": 0.010726384871307984,
+      "successes_by_repeat": [
+        35,
+        36,
+        36
+      ],
+      "valid_by_repeat": [
+        72,
+        77,
+        77
+      ],
+      "invalid_by_repeat": [
+        7,
+        2,
+        2
+      ],
+      "overall_delta_baseline_pp": 5.9071729957805905
+    },
+    {
+      "method": "gate-b",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.6791666666666667,
+      "overall_sample_sd": 0.05051814855409224,
+      "valid_only_mean": 0.6963809748619876,
+      "valid_only_sample_sd": 0.04711980053265651,
+      "successes_by_repeat": [
+        50,
+        58,
+        55
+      ],
+      "valid_by_repeat": [
+        77,
+        78,
+        79
+      ],
+      "invalid_by_repeat": [
+        3,
+        2,
+        1
+      ],
+      "overall_delta_baseline_pp": -2.083333333333326
+    },
+    {
+      "method": "gate-b",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.6264775413711584,
+      "overall_sample_sd": 0.04094682760210111,
+      "valid_only_mean": 0.6573185047781878,
+      "valid_only_sample_sd": 0.035769273155254036,
+      "successes_by_repeat": [
+        85,
+        95,
+        85
+      ],
+      "valid_by_repeat": [
+        133,
+        136,
+        134
+      ],
+      "invalid_by_repeat": [
+        8,
+        5,
+        7
+      ],
+      "overall_delta_baseline_pp": 6.85579196217494
+    },
+    {
+      "method": "gate-b",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.42616033755274263,
+      "overall_sample_sd": 0.03185584149903271,
+      "valid_only_mean": 0.44923818555397504,
+      "valid_only_sample_sd": 0.03945558838165213,
+      "successes_by_repeat": [
+        31,
+        36,
+        34
+      ],
+      "valid_by_repeat": [
+        76,
+        74,
+        75
+      ],
+      "invalid_by_repeat": [
+        3,
+        5,
+        4
+      ],
+      "overall_delta_baseline_pp": 3.3755274261603407
+    },
+    {
+      "method": "mixed-bonus",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.7583333333333333,
+      "overall_sample_sd": 0.07107800878846661,
+      "valid_only_mean": 0.7643162393162394,
+      "valid_only_sample_sd": 0.06412846698873803,
+      "successes_by_repeat": [
+        67,
+        56,
+        59
+      ],
+      "valid_by_repeat": [
+        80,
+        78,
+        80
+      ],
+      "invalid_by_repeat": [
+        0,
+        2,
+        0
+      ],
+      "overall_delta_baseline_pp": 5.833333333333335
+    },
+    {
+      "method": "mixed-bonus",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.574468085106383,
+      "overall_sample_sd": 0.032500536843658424,
+      "valid_only_mean": 0.5815389924085577,
+      "valid_only_sample_sd": 0.03762713309667248,
+      "successes_by_repeat": [
+        80,
+        86,
+        77
+      ],
+      "valid_by_repeat": [
+        140,
+        138,
+        140
+      ],
+      "invalid_by_repeat": [
+        1,
+        3,
+        1
+      ],
+      "overall_delta_baseline_pp": 1.654846335697402
+    },
+    {
+      "method": "mixed-bonus",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.4472573839662447,
+      "overall_sample_sd": 0.0444542352441044,
+      "valid_only_mean": 0.45287413008932,
+      "valid_only_sample_sd": 0.04305879919286058,
+      "successes_by_repeat": [
+        35,
+        39,
+        32
+      ],
+      "valid_by_repeat": [
+        79,
+        78,
+        77
+      ],
+      "invalid_by_repeat": [
+        0,
+        1,
+        2
+      ],
+      "overall_delta_baseline_pp": 5.485232067510548
+    },
+    {
+      "method": "mixed-reweight",
+      "difficulty": "easy",
+      "tasks_per_repeat": 80,
+      "overall_mean": 0.7125,
+      "overall_sample_sd": 0.012500000000000011,
+      "valid_only_mean": 0.7125,
+      "valid_only_sample_sd": 0.012500000000000011,
+      "successes_by_repeat": [
+        57,
+        58,
+        56
+      ],
+      "valid_by_repeat": [
+        80,
+        80,
+        80
+      ],
+      "invalid_by_repeat": [
+        0,
+        0,
+        0
+      ],
+      "overall_delta_baseline_pp": 1.2500000000000067
+    },
+    {
+      "method": "mixed-reweight",
+      "difficulty": "medium",
+      "tasks_per_repeat": 141,
+      "overall_mean": 0.5626477541371159,
+      "overall_sample_sd": 0.017848308357614032,
+      "valid_only_mean": 0.5749224150091692,
+      "valid_only_sample_sd": 0.018711570391929857,
+      "successes_by_repeat": [
+        77,
+        79,
+        82
+      ],
+      "valid_by_repeat": [
+        139,
+        136,
+        139
+      ],
+      "invalid_by_repeat": [
+        2,
+        5,
+        2
+      ],
+      "overall_delta_baseline_pp": 0.47281323877068626
+    },
+    {
+      "method": "mixed-reweight",
+      "difficulty": "hard",
+      "tasks_per_repeat": 79,
+      "overall_mean": 0.4092827004219409,
+      "overall_sample_sd": 0.04445423524410437,
+      "valid_only_mean": 0.4092827004219409,
+      "valid_only_sample_sd": 0.04445423524410437,
+      "successes_by_repeat": [
+        36,
+        29,
+        32
+      ],
+      "valid_by_repeat": [
+        79,
+        79,
+        79
+      ],
+      "invalid_by_repeat": [
+        0,
+        0,
+        0
+      ],
+      "overall_delta_baseline_pp": 1.6877637130801704
+    }
+  ],
+  "per_repeat": [
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 57,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.7125,
+      "valid_only": 0.7307692307692307
+    },
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 73,
+      "valid": 132,
+      "invalid": 9,
+      "overall": 0.5177304964539007,
+      "valid_only": 0.553030303030303
+    },
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 33,
+      "valid": 76,
+      "invalid": 3,
+      "overall": 0.4177215189873418,
+      "valid_only": 0.4342105263157895
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 55,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.6875,
+      "valid_only": 0.7051282051282052
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 90,
+      "valid": 137,
+      "invalid": 4,
+      "overall": 0.6382978723404256,
+      "valid_only": 0.656934306569343
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 28,
+      "valid": 75,
+      "invalid": 4,
+      "overall": 0.35443037974683544,
+      "valid_only": 0.37333333333333335
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 56,
+      "valid": 77,
+      "invalid": 3,
+      "overall": 0.7,
+      "valid_only": 0.7272727272727273
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 73,
+      "valid": 134,
+      "invalid": 7,
+      "overall": 0.5177304964539007,
+      "valid_only": 0.5447761194029851
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 32,
+      "valid": 75,
+      "invalid": 4,
+      "overall": 0.4050632911392405,
+      "valid_only": 0.4266666666666667
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 62,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.775,
+      "valid_only": 0.7948717948717948
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 82,
+      "valid": 136,
+      "invalid": 5,
+      "overall": 0.5815602836879432,
+      "valid_only": 0.6029411764705882
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 35,
+      "valid": 72,
+      "invalid": 7,
+      "overall": 0.4430379746835443,
+      "valid_only": 0.4861111111111111
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 59,
+      "valid": 79,
+      "invalid": 1,
+      "overall": 0.7375,
+      "valid_only": 0.7468354430379747
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 81,
+      "valid": 130,
+      "invalid": 11,
+      "overall": 0.574468085106383,
+      "valid_only": 0.6230769230769231
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 77,
+      "invalid": 2,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.4675324675324675
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 58,
+      "valid": 79,
+      "invalid": 1,
+      "overall": 0.725,
+      "valid_only": 0.7341772151898734
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 77,
+      "valid": 128,
+      "invalid": 13,
+      "overall": 0.5460992907801419,
+      "valid_only": 0.6015625
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 77,
+      "invalid": 2,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.4675324675324675
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 50,
+      "valid": 77,
+      "invalid": 3,
+      "overall": 0.625,
+      "valid_only": 0.6493506493506493
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 85,
+      "valid": 133,
+      "invalid": 8,
+      "overall": 0.6028368794326241,
+      "valid_only": 0.6390977443609023
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 31,
+      "valid": 76,
+      "invalid": 3,
+      "overall": 0.3924050632911392,
+      "valid_only": 0.40789473684210525
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 58,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.725,
+      "valid_only": 0.7435897435897436
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 95,
+      "valid": 136,
+      "invalid": 5,
+      "overall": 0.6737588652482269,
+      "valid_only": 0.6985294117647058
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 74,
+      "invalid": 5,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.4864864864864865
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 55,
+      "valid": 79,
+      "invalid": 1,
+      "overall": 0.6875,
+      "valid_only": 0.6962025316455697
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 85,
+      "valid": 134,
+      "invalid": 7,
+      "overall": 0.6028368794326241,
+      "valid_only": 0.6343283582089553
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 34,
+      "valid": 75,
+      "invalid": 4,
+      "overall": 0.43037974683544306,
+      "valid_only": 0.4533333333333333
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 67,
+      "valid": 80,
+      "invalid": 0,
+      "overall": 0.8375,
+      "valid_only": 0.8375
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 80,
+      "valid": 140,
+      "invalid": 1,
+      "overall": 0.5673758865248227,
+      "valid_only": 0.5714285714285714
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 35,
+      "valid": 79,
+      "invalid": 0,
+      "overall": 0.4430379746835443,
+      "valid_only": 0.4430379746835443
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 56,
+      "valid": 78,
+      "invalid": 2,
+      "overall": 0.7,
+      "valid_only": 0.717948717948718
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 86,
+      "valid": 138,
+      "invalid": 3,
+      "overall": 0.6099290780141844,
+      "valid_only": 0.6231884057971014
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 39,
+      "valid": 78,
+      "invalid": 1,
+      "overall": 0.4936708860759494,
+      "valid_only": 0.5
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 59,
+      "valid": 80,
+      "invalid": 0,
+      "overall": 0.7375,
+      "valid_only": 0.7375
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 77,
+      "valid": 140,
+      "invalid": 1,
+      "overall": 0.5460992907801419,
+      "valid_only": 0.55
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 32,
+      "valid": 77,
+      "invalid": 2,
+      "overall": 0.4050632911392405,
+      "valid_only": 0.4155844155844156
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 1,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 57,
+      "valid": 80,
+      "invalid": 0,
+      "overall": 0.7125,
+      "valid_only": 0.7125
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 1,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 77,
+      "valid": 139,
+      "invalid": 2,
+      "overall": 0.5460992907801419,
+      "valid_only": 0.5539568345323741
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 1,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 36,
+      "valid": 79,
+      "invalid": 0,
+      "overall": 0.45569620253164556,
+      "valid_only": 0.45569620253164556
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 2,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 58,
+      "valid": 80,
+      "invalid": 0,
+      "overall": 0.725,
+      "valid_only": 0.725
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 2,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 79,
+      "valid": 136,
+      "invalid": 5,
+      "overall": 0.5602836879432624,
+      "valid_only": 0.5808823529411765
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 2,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 29,
+      "valid": 79,
+      "invalid": 0,
+      "overall": 0.3670886075949367,
+      "valid_only": 0.3670886075949367
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 3,
+      "difficulty": "easy",
+      "tasks": 80,
+      "successes": 56,
+      "valid": 80,
+      "invalid": 0,
+      "overall": 0.7,
+      "valid_only": 0.7
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 3,
+      "difficulty": "medium",
+      "tasks": 141,
+      "successes": 82,
+      "valid": 139,
+      "invalid": 2,
+      "overall": 0.5815602836879432,
+      "valid_only": 0.5899280575539568
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 3,
+      "difficulty": "hard",
+      "tasks": 79,
+      "successes": 32,
+      "valid": 79,
+      "invalid": 0,
+      "overall": 0.4050632911392405,
+      "valid_only": 0.4050632911392405
+    }
+  ],
+  "collection_dates_pacific": {
+    "baseline": "2026-09-29 to 2026-09-30",
+    "additive": "2026-09-29 to 2026-09-30",
+    "gate-b": "2026-09-29 to 2026-09-30",
+    "mixed-bonus": "2026-10-06",
+    "mixed-reweight": "2026-10-06"
+  },
+  "sources": [
+    {
+      "file": "stealth-iteration90-paired-inference.json",
+      "sha256": "8042a551d300f5fa52e5708f5f299e22b4392c2c96ec56264b3febb9603837ca"
+    },
+    {
+      "file": "stealth-o4-t06-iteration90-three-repeat-summary.json",
+      "sha256": "b41ba8e03524aab6dc1ec40d7e4b31ad0bea5963d1b246d9f8744b55ada1e8ea"
+    },
+    {
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72"
+    },
+    {
+      "file": "stealth-o4-t06-iteration90-difficulty.json",
+      "sha256": "c3ac5c2ff92ad70cb8ebf3a0fdddef8dec5f5a093d7ef92bee41b3515a69b3bf"
+    }
+  ],
+  "cohort_sources": [
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "file": "stealth-o4-t06-baseline-iteration90-audit.json",
+      "sha256": "b9f7c88d367be3b6bef31397e36dbafe2880a138524fa6bf78e1d813e1ec9ac8",
+      "successes": 163,
+      "valid": 286
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "file": "stealth-o4-t06-baseline-iteration90-repeat2-audit.json",
+      "sha256": "7990233e2f06795701a2d582d27e561c210d3591cb3d3b311c2e14283fefe090",
+      "successes": 173,
+      "valid": 290
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "file": "stealth-o4-t06-baseline-iteration90-repeat3-audit.json",
+      "sha256": "5379c7449bfac74ff10f7627caf1118403aad45670f827c1e6956458861a43f1",
+      "successes": 161,
+      "valid": 286
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "file": "stealth-o4-t06-additive-iteration90-audit.json",
+      "sha256": "7f25d578ddd84cda1701f92c107bd24cbe438a0ec125496e3bb73a6fa0e08dc6",
+      "successes": 179,
+      "valid": 286
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "file": "stealth-o4-t06-additive-iteration90-repeat2-audit.json",
+      "sha256": "3337caf05a6770ff06422a1b941e2c8aed5ea95f4908a0a1bab176c2291bcb36",
+      "successes": 176,
+      "valid": 286
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "file": "stealth-o4-t06-additive-iteration90-repeat3-audit.json",
+      "sha256": "0e5fc381acdb24c7e278fc8ea354bfd900a75cc7fd06ed9d0d64effb96a36c42",
+      "successes": 171,
+      "valid": 284
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "file": "stealth-o4-t06-gate-b-iteration90-audit.json",
+      "sha256": "09ff09f722116d9f0bb7f0e22639c1992b87455c61e7bbaf731bf42d3518faaf",
+      "successes": 166,
+      "valid": 286
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "file": "stealth-o4-t06-gate-b-iteration90-repeat2-audit.json",
+      "sha256": "a71fef624a96eecc2abf5fa23a76b71b1d1fdd3c5858e3095187fd4e2e24bb37",
+      "successes": 189,
+      "valid": 288
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "file": "stealth-o4-t06-gate-b-iteration90-repeat3-audit.json",
+      "sha256": "7313cbba472089e24590198a69953468e988ffa251013a64a00bbd268bb4d139",
+      "successes": 174,
+      "valid": 288
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 1,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "ece67362c170920ecdc553599b4898c276c17e2df4aee2ca64cace36286d22c8",
+      "independent_review_sha256": "d642e2507e7073f93ce1b4a3de71be447317ee62125360e516f9bc38d3f90ec3",
+      "checked_task_records_sha256": "bb4098b28d1a2c1a61f49fd41fb1ed48a785317bd1faf5005cb111d455e6b4a1",
+      "successes": 182,
+      "valid": 299
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 1,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "54ccb6d24a2042fa30b3a82c5538b70f533f04e34a5554136f4fa51ac8be72de",
+      "independent_review_sha256": "bbb74589658761340e7326dfe9de6780213303e46d2f21d9a13ae8062e7f5073",
+      "checked_task_records_sha256": "133265d9932c2138b56640bd3989ed75d3746472b5088b1655776291f7e5830b",
+      "successes": 170,
+      "valid": 298
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 2,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "1c738eaa3c62c218923d68cf3e9d596275e7bfe21a1e4d588bf5105178884b66",
+      "independent_review_sha256": "86b5b23870917c5aa5f0cb51f77f9c23abd60b3df297dfafb6030afc59c83630",
+      "checked_task_records_sha256": "3b6c127b4b2465d02c80fc3d84d233432564210d2f0754332c1062a4019c4117",
+      "successes": 181,
+      "valid": 294
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 2,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "940c5efa707effdc07082af50a27b7f0e5fbda3d18d7698bc251e644137fb83c",
+      "independent_review_sha256": "b3b58a467ec4207db3fd9175fe22764c9c0d9e3b29a6ea8b10918104950fdd1f",
+      "checked_task_records_sha256": "0a8b2a24d045cf7e62af103ba015fe58d198a52453b801234bfb5bbf31818b8c",
+      "successes": 166,
+      "valid": 295
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 3,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "a4a760c1f8c82a1019b7b0a0d785b6718bde211c2a2ffa0d96d505b4098e4183",
+      "independent_review_sha256": "9e3ff7570e6be6fd8a70998f71fe7a62521caa00b8f59c66cc87aa9129220cf3",
+      "checked_task_records_sha256": "f7a468836bed346e35aaabd21e050c72e721a534ea97bfdab47c8a0917fa1130",
+      "successes": 168,
+      "valid": 297
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 3,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "86dc2a7fe17a03d0b7a7cfcd05cb7c63d64f8ccb70a114246c38bfdff38bf4e3",
+      "independent_review_sha256": "bc103812c3646fc5a3893df5acf740380c1e612a2135c9b4d1ca0ee853b6b27a",
+      "checked_task_records_sha256": "7f85820aa0b5042aaea91d2fe3d65c1d102af542693d6ebe8de477e984e3c5ab",
+      "successes": 170,
+      "valid": 298
+    }
+  ],
+  "implementation_sha256": "8e6130c3e9609970309e8e537823c9d064d082163d54afa8349f82923ba45b6b",
+  "outcome_loader_sha256": "300e70a36e664f6ca47029d3d114bbce76c3d856ae49eb4a85879a58eac1cd80",
+  "original_difficulty_implementation_sha256": "e1b0bf7c429afb7bd43674af5391a2ec9f287187420fec544270a1aa6bd3aa62",
+  "verification_receipt_sha256": "c74ed8f43aeba90090c4a50ba5455e14b57f309833454f9c4fd4920ac68a563d",
+  "checks": [
+    "All4500 retained outcomes match the expected300 tasks, reviewed cohort counts and native judge identities.",
+    "All9 original summary rows and27 original per-repeat bin rows reproduce the existing difficulty aggregate.",
+    "Every cohort bin sum recovers its audited300-task success, valid and invalid totals.",
+    "Difficulty-weighted overall means and reconstructed full300 per-repeat valid-only ratios reproduce all five published summaries."
+  ],
+  "caveats": [
+    "Mean and sample SD (ddof1) over three evaluations of one fixed checkpoint per method, not independent training seeds.",
+    "Valid-only means average the three per-repeat ratios rather than pooling their denominators.",
+    "Invalid outcomes remain failures in each fixed difficulty-bin overall denominator.",
+    "Historical September29\u201330 versus mixed October6 collection windows differ; cross-date baseline deltas are descriptive, not matched causal comparisons.",
+    "Subgroup summaries only: no new confidence intervals or significance tests.",
+    "Original repeat1 retains the previously audited credit-outage recovery; no additional task retries or relabeling.",
+    "Human-reference-step difficulty is distinct from WebGym rubric-fact difficulty."
+  ],
+  "new_model_calls": 0,
+  "new_browser_calls": 0,
+  "new_gpu_hours": 0,
+  "archive_crc_rescans": 0
+}
