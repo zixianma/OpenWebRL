@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "updated_utc": "2026-10-07T02:40:55.572730+00:00",
+  "scope": "Historical phase profiling and isolated CPU candidate checks; no production performance change or measured end-to-end speedup",
+  "production_optimization_deployed": false,
+  "training_window": {
+    "lineage": "Outcome-only expanded4102",
+    "job_id": "344759",
+    "node": "g009",
+    "iterations_inclusive": [
+      40,
+      53
+    ],
+    "complete_cycles": 14,
+    "accepted_groups_per_iteration": 48,
+    "rollouts_per_task": 5,
+    "gpus": 8,
+    "gpu_type": "H200",
+    "tp": 2,
+    "dp": 4,
+    "microbatch": 1,
+    "global_batch": 256,
+    "ppo_epochs": 2,
+    "browser_concurrency": 64,
+    "cuda_cache_threshold_gib": 48,
+    "mean_cycle_minutes": 37.86904761904762,
+    "cycle_minutes_range": [
+      31.966666666666665,
+      42.03333333333333
+    ],
+    "phase_components": {
+      "active_collection": {
+        "mean_seconds": 838.0214285714286,
+        "mean_minutes": 13.96702380952381,
+        "percent": 36.8824269097768
+      },
+      "actor_optimizer": {
+        "mean_seconds": 1147.6140781300408,
+        "mean_minutes": 19.126901302167347,
+        "percent": 50.50800721100462
+      },
+      "other_training": {
+        "mean_seconds": 139.61288360186987,
+        "mean_minutes": 2.3268813933644976,
+        "percent": 6.14454690482923
+      },
+      "checkpoint_model_save": {
+        "mean_seconds": 17.37857142857143,
+        "mean_minutes": 0.28964285714285715,
+        "percent": 0.7648538195535994
+      },
+      "other_archive_teardown_handoff": {
+        "mean_seconds": 129.51589541094646,
+        "mean_minutes": 2.1585982568491078,
+        "percent": 5.700165154835744
+      }
+    },
+    "archive_seconds_mean": 33.004330000108375,
+    "archive_is_included_in_remaining_phase": true,
+    "optimizer_updates_per_iteration": {
+      "n": 14,
+      "mean": 12.571428571428571,
+      "min": 12,
+      "max": 14,
+      "sum": 176
+    },
+    "mean_per_iteration_actor_seconds_per_update": 91.32611943588776,
+    "definition": "Collection start to next training handoff or terminal checkpoint boundary; separate milestone evaluation and worker startup excluded",
+    "current_iteration_save_timer_used": true,
+    "lagged_perf_save_model_time_not_used": true
+  },
+  "collection": {
+    "accepted_groups": 672,
+    "completed_groups": 1280,
+    "submitted_groups": 1536,
+    "pending_groups_at_collection_stop": 256,
+    "accepted_per_completed": 0.525,
+    "accepted_per_submitted": 0.4375,
+    "completed_trajectories": 6400,
+    "accepted_turn_samples": 23818,
+    "mean_accepted_turns_per_iteration": 1701.2857142857142
+  },
+  "milestone_evaluations": {
+    "tasks_per_cohort": 300,
+    "cohorts": [
+      {
+        "iteration": 30,
+        "elapsed_seconds": 1234.001699924469
+      },
+      {
+        "iteration": 40,
+        "elapsed_seconds": 1209.0261561870575
+      },
+      {
+        "iteration": 50,
+        "elapsed_seconds": 1264.1432325839996
+      }
+    ],
+    "mean_seconds": 1235.723696231842,
+    "amortized_seconds_per_training_iteration": 123.5723696231842,
+    "interval": 10,
+    "measurement": "Completed evaluation manifest/status timestamps; includes startup/tasks/finalization, excludes independent later archive rescan"
+  },
+  "worker_startup": {
+    "observed_lower_bounds_seconds": [
+      132.0,
+      130.0,
+      128.0
+    ],
+    "definition": "First timestamped worker log to collection; preceding untimestamped imports and controller work excluded"
+  },
+  "older_comparisons": {
+    "expanded4102_iterations4_10": {
+      "mean_cycle_minutes": 68.45,
+      "node": "g011",
+      "iteration10_adam_updates": 16,
+      "iteration10_seconds_per_update": 165.25,
+      "thermal_throttling_confirmed": true,
+      "thermal_snapshots_during_collection": true,
+      "source_document": "RL_RUNTIME.md#expanded4102-thermal-throughput-20261003"
+    },
+    "original2102_iterations91_100": {
+      "gpus": 4,
+      "tp": 4,
+      "dp": 1,
+      "browser_concurrency": 32,
+      "completed_cycle_samples": 9,
+      "mean_cycle_minutes": 51.653703703703705,
+      "optimizer_phase_samples": 10,
+      "mean_seconds_per_update": 105.68999107281367
+    },
+    "limit": "Different node/resources, dates, tasks, model state, optimizer update counts and timing boundaries; descriptive, not a causal speedup comparison"
+  },
+  "cpu_encode_candidate": {
+    "status": "Isolated unapplied candidate passed CPU and independent code review; production integration remains unvalidated",
+    "saved_turns": 3,
+    "calls_per_arm": 36,
+    "alternating_rounds": 4,
+    "synchronous_max_loop_delay_seconds_range": [
+      1.1520662857219577,
+      1.6982025322504342
+    ],
+    "candidate_max_loop_delay_seconds_range": [
+      0.07835204293951392,
+      0.10317378118634224
+    ],
+    "synchronous_total_round_seconds_range": [
+      1.1519188727252185,
+      1.6980560799129307
+    ],
+    "candidate_total_round_seconds_range": [
+      1.1032414622604847,
+      1.7720839139074087
+    ],
+    "timing_includes_verification_hashing": true,
+    "all_outputs_equal": true,
+    "equivalence_fields": [
+      "token_ids",
+      "image_grid",
+      "tensor_keys",
+      "tensor_dtype",
+      "tensor_shape",
+      "tensor_stride",
+      "tensor_bytes",
+      "PIL_mode",
+      "PIL_size",
+      "PIL_pixels"
+    ],
+    "scheduling_tests_passed": 6,
+    "independent_stress": {
+      "original_scheduling_tests_passed": 6,
+      "surge_callers": 128,
+      "canceled_waiters": 64,
+      "peak_worker_concurrency": 1,
+      "executor_queued_while_first_call_canceled": 0,
+      "fifo_remaining_calls": true,
+      "unhandled_loop_errors": 0,
+      "cross_loop_rejected": true,
+      "one_thread_reused": true,
+      "test_shutdown_joined_thread": true
+    },
+    "interpretation": "Improved event-loop responsiveness on sampled inputs; total encoding durations overlap and end-to-end training speedup is unmeasured",
+    "required_before_production": [
+      "Concurrent full browser workflow replay/integration including main-loop tokenizer/chat-template access and cancellation/teardown.",
+      "Matched representative full-batch training/collection validation, preserving accepted-batch and scientific settings.",
+      "Check scheduling and completion-order effects; same-input tensor equality alone does not establish identical online rollout ordering."
+    ],
+    "shared_tokenizer_and_process_lifetime_integration_unvalidated": true
+  },
+  "native_packing_cpu_check": {
+    "saved_iteration": 51,
+    "accepted_turn_samples": 1645,
+    "dp": 4,
+    "global_batch": 256,
+    "ppo_epochs": 2,
+    "rollout_seed": 42,
+    "token_scheduling_budget": 16384,
+    "fixed_microbatch1_microbatches_per_update": 64,
+    "dynamic_microbatches_per_update_range": [
+      23,
+      26
+    ],
+    "dynamic_microbatches_per_update_mean": 24.833333333333332,
+    "same_update_membership_verified": true,
+    "max_observed_packed_tokens": 16312,
+    "gpu_speed_gradient_equivalence_and_memory_safety_verified": false,
+    "limit": "CPU partition arithmetic only; token scheduling budget is not a hard cap or vision-memory bound"
+  },
+  "balance_data_warning": {
+    "changes_initial_dp_ownership": true,
+    "local_ppo_shuffle_and_truncation_then_change_selected_samples_and_update_membership": true,
+    "excluded_from_recipe_preserving_comparison": true
+  },
+  "training_protocol": {
+    "actor_temperature": 0.8,
+    "top_p": 1.0,
+    "top_k": -1,
+    "max_turns": 15,
+    "response_tokens": 1024,
+    "context_tokens": 32768,
+    "judge": "gpt-4.1",
+    "judge_protocol": "action_history",
+    "arm_enabled": false
+  },
+  "current_56group_control": {
+    "job_id": "347895",
+    "state_at_review": "PENDING",
+    "reason_at_review": "Priority",
+    "checked_utc": "2026-10-07T02:35:51.066433+00:00",
+    "allocated_seconds_at_review": 0,
+    "training_tasks": 2102,
+    "accepted_groups_per_iteration": 56,
+    "fresh_original_sft_iteration0": true,
+    "target_iteration": 20,
+    "full300_evaluation_iterations": [
+      10,
+      20
+    ],
+    "approved_resources": {
+      "gpus": 8,
+      "gpu_type": "H200",
+      "hours": 24,
+      "cpus": 64,
+      "memory_gib": 960,
+      "judge_cap_usd": 200,
+      "all_retries_included": true
+    },
+    "performance_optimization_deployed": false,
+    "new_run_performance_measured": false
+  },
+  "priority_candidates": [
+    "Same saved batch: microbatch1 versus2 and native16384-token packing, then4 only after longest-context/vision memory validation",
+    "Selective recomputation as a separate matched experiment after batching memory validation",
+    "Bounded single-worker encoding after concurrent browser/tokenizer/process-lifetime integration checks"
+  ],
+  "safeguards": [
+    "Preserve optimizer-step membership, masks, per-sample weights, old-policy logprobs, rewards, global256, PPO2 and scheduler counters",
+    "Require matched loss/gradient/parameter-delta checks,32K plus vision-memory stress and complete save/optimizer reload before production",
+    "Keep all saved rollouts, verdicts and due full300 evaluations",
+    "Use approved remaining resources; new allocations and budget extensions require exact approval"
+  ],
+  "limitations": [
+    "Phase shares are elapsed-time shares, not measured GPU utilization",
+    "Aggregate logs do not separately measure per-browser-action or judge latency",
+    "No matched production before/after comparison or production deployment",
+    "CPU encoding samples cover only three turns from one trajectory"
+  ],
+  "review_resources": {
+    "new_gpu_allocations": 0,
+    "new_gpu_benchmarks": 0,
+    "new_judge_api_calls": 0
+  },
+  "source_receipts": [
+    {
+      "filename": "pipeline-performance-measurements-20261006.json",
+      "sha256": "ec00ee79ef010b4f38cf50cddf735171dcdac77e9649a4c829e311f150bf9289"
+    },
+    {
+      "filename": "pipeline-performance-review-20261006.json",
+      "sha256": "4cf2f59e58f7489aa4689ed14c46c9e73e92c84ae0062480cd71e3ded655d6cb"
+    },
+    {
+      "filename": "pipeline-code-review.json",
+      "sha256": "039d5654781f3dd21c5116f642d5e4137d56b0d242248f76abf169c3839ec645"
+    },
+    {
+      "filename": "bounded-encode-candidate-cpu-checks.json",
+      "sha256": "46906ee8470cbcdd29d2b30147068255220671bf95df651089890dc2bba27640"
+    },
+    {
+      "filename": "native-packing-cpu-checks.json",
+      "sha256": "54c323aa82531b6badc513944601e0fa92a3860ce7aec5f013cf53d3b8e6b1b4"
+    },
+    {
+      "filename": "independent-bounded-encode-review.json",
+      "sha256": "2bd856325adb43522c29b299ded84d389512e8002b3e4d4a7ef5ff2c3b3a29bf"
+    },
+    {
+      "filename": "independent-encode-scheduling-check.json",
+      "sha256": "01f9a570833e3541b71a2bbaff8eaaefd467d9e762ae9dd9d349d47bf8e4b146"
+    }
+  ]
+}

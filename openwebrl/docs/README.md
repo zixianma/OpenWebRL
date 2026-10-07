@@ -66,6 +66,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Quality-screening protocol and trust audit: Jev/GPT/code comparison, blind human review, and separate browser validation](ARM_INTEGRATION_PLAN.md#arm-task-quality-human-review-20260929).
 [Interactive manual review:10 paired cached cases,65 additional Jev cases,12 unlabeled broad-pool examples; model reveal and JSON export](arm_results/rl_integration/jev-quality-review-v2.html).
 
+[Training pipeline profile, October6: recent37.87min cycles; PPO50.5%, collection36.9%, checkpoint save0.8%. Prioritized systems checks; no deployed performance change or demonstrated end-to-end speedup](RL_RUNTIME.md#training-pipeline-profile-20261006).
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Full browser availability audit complete:96,779 available URLs covering155,512 candidate tasks;21,328 inconclusive and7,654 unavailable URLs; instruction quality/actor difficulty still unassessed](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-full-20260929).
 [Benchmark-site grouping:59,115 available tasks on185 benchmark-associated sites;96,397 on82,021 sites with no known match; WebVoyager/OM2W/WebTailBench/DeepShop flags and WebTailBench coverage caveat](ARM_INTEGRATION_PLAN.md#arm-task-pool-benchmark-websites-20260930).

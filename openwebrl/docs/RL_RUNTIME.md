@@ -4,6 +4,7 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 
 ## Contents
 
+- [Training pipeline profile and targeted systems checks, October6](#training-pipeline-profile-20261006)
 - [Current ARM inventory and bounded recoveries, September28](#arm-progress-20260928)
 - [Current ARM progress and beta memory recovery](#arm-progress-20260927)
 - [Measured iteration throughput and CUDA cache overhead](#arm-iteration-throughput-20260927)
@@ -27,6 +28,71 @@ Operational procedures for resuming the reference RL baseline, GPU scaling, roll
 - [H200 runtime and validation](#h200-testing)
 
 ---
+
+<a id="training-pipeline-profile-20261006"></a>
+## Training pipeline profile — October6
+
+**PPO training is the largest measured phase.** Expanded4,102-task outcome-only
+iterations40–53 on g009 average **37.87min per training cycle**, with12–14 Adam
+updates and91.33s per update on average. The unchanged configuration is
+48 accepted groups/iteration, TP2/DP4, microbatch1, global256, PPO2,64 browsers
+and a48GiB cache guard. These14 collection-to-handoff cycles exclude milestone
+evaluations and worker restarts.
+
+| Phase | Mean minutes/cycle | Share |
+| --- | ---: | ---: |
+| Active browser collection |13.97 |36.9% |
+| PPO optimizer work |19.13 |50.5% |
+| Other training, including log-probability computation |2.33 |6.1% |
+| Model checkpoint save |0.29 |0.8% |
+| Remaining archive, teardown and handoff |2.16 |5.7% |
+| Total |37.87 |100.0% |
+
+The rollout archive averages33.00s and is already included in the remaining
+archive/teardown/handoff row. The current-iteration save timer averages17.38s;
+the lagged `perf/save_model_time` field is not used for this breakdown.
+Checkpoint I/O therefore has lower priority than optimizer and collection work.
+Full300 evaluations30/40/50 took20.57/20.15/21.07min, including startup and
+finalization: about2.06min per training iteration at the every10 cadence.
+Timestamped worker startup takes at least128–132s per stage; earlier imports
+and controller work fall outside that lower bound.
+
+[Earlier expanded-pool iterations4–10](#expanded4102-thermal-throughput-20261003)
+averaged68.45min on g011; iteration10 used16 Adam updates at165.25s/update.
+Thermal throttling was confirmed on that node. Different nodes, task batches,
+update counts and measurement boundaries prevent a causal speedup claim.
+
+Across the recent14 collections, **672/1,280 completed groups were accepted
+(52.5%)**. There were1,536 submitted groups, including256 still pending when
+collection stopped:43.75% accepted per submitted group. The mixed-group filter
+remains part of the scientific recipe. The48 groups expand into about1,701
+accepted training turns per iteration, so global256 with PPO2 requires12–14
+updates. Browser, judge and queue latencies need separate instrumentation.
+
+| Priority | Next systems check | Required comparison |
+| --- | --- | --- |
+| PPO throughput |Replay the same batch with microbatch1/2 and native16,384-token packing; test4 after memory validation |Seconds/update, token throughput,32K context, vision memory, loss/gradient equivalence and full optimizer reload; retain global256/PPO2 |
+| Collection responsiveness |Move synchronous vision-language encoding off the shared event loop using one bounded worker |Identical token/grid/tensor payloads and encoder call order; then full-collection timing and browser/judge latency |
+| Memory/recomputation |Consider selective activation recomputation only after the microbatch memory results |Same batch, finite equivalent loss/gradients,32K stress and full optimizer reload; prior TP2 stress peaked127.2GiB, so headroom needs measurement |
+
+A CPU replay used three turns from one saved trajectory,36 calls per arm over
+four alternating rounds. Maximum event-loop delay was1.15–1.70s synchronously
+versus78–103ms with one worker. Total times overlapped:1.15–1.70s versus1.10–1.77s,
+including verification hashing. Encoded payloads and image pixels matched;
+six scheduling tests and independent128-caller/64-cancellation stress passed.
+Concurrent browser/shared-tokenizer use, process-lifetime teardown, live completion
+order and end-to-end gains remain unverified. The patch remains unapplied, with
+no deployed performance configuration change.
+A separate CPU packing check preserved update membership while reducing64
+microbatches/update to23–26 at the16,384-token setting. This scheduling budget
+is not a hard token or vision-memory bound. Plain `--balance-data` instead
+changes initial DP ownership before local PPO shuffling/truncation, changing
+selected samples and update membership; it is excluded. GPU speed, loss/gradient
+equivalence and memory safety still require validation within approved resources.
+New allocations or budget extensions require exact approval.
+
+[Aggregate measurements, validation scope and source receipt hashes](arm_results/rl_integration/training-pipeline-profile-20261006.json).
+Raw logs, task payloads and the unapplied candidate patch remain local.
 
 <a id="arm-progress-20260928"></a>
 ## ARM inventory and recovery — September28, 2026
