@@ -8167,12 +8167,22 @@ restoration passed for both methods.
 Jobs346992/346993 completed0:0 after17,587/15,754 seconds, respectively, within
 their separate25,200-second caps; no resources or budget were added.
 
-**Second cohorts verified;2/3 repeats per method:** bonus repeat2 is181/300 =60.33% overall
+**Second cohorts verified:** bonus repeat2 is181/300 =60.33% overall
 and181/294 =61.56% valid-only; reweight is166/300 =55.33% overall and166/295
 =56.27% valid-only. Six/five invalids remain, respectively. Jobs346994/346995
 completed0:0 after15,707/15,110 seconds, respectively, within their separate
-25,200-second caps. Both third repeats have started.
-No repeat mean or SD is reported yet.
+25,200-second caps.
+
+**Complete; all six cohorts independently verified:** bonus repeat3 is168/300
+=56.00% overall and168/297 =56.57% valid-only; reweight is170/300 =56.67% overall
+and170/298 =57.05% valid-only. Three/two invalids remain. Jobs346996/346997
+completed0:0 after15,981/13,905seconds, respectively, with all owned sessions
+stopped. Across three repeats, bonus is**59.00 ±2.60% overall /59.67 ±2.71%
+valid-only** and reweight is**56.22 ±0.77% /56.79 ±0.45%**, mean±sample SD.
+The paired difference is+2.78pp and is not significant at5%; the collapsed
+analysis and caveats are linked below. Total use is94,044seconds (26.12 GPU-hours)
+of151,200seconds (42 GPU-hours); browser/proxy charges are$7.4882, excluding
+separate judge API charges. No resources or budget were added.
 [Results, protocol and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006).
 
 The user approved six fresh full300 Online-Mind2Web evaluations: mixed-only
@@ -8187,7 +8197,7 @@ Actual generation is **T0.6, top-p0.95, top-k20,4096 response tokens,30 turns**,
 with the same **o4-mini/AgentTrek terminal-success judge**,32K context and300 task
 IDs. Server RNG seeds1234/1235/1236 match the earlier repeat schedule. Both
 checkpoints are native89; bonus retains1106 Adam updates and reweight1170.
-Fresh TP1 GPU restoration must be verified at startup. These are actor-only
+Fresh TP1 GPU restoration was verified at startup for all six cohorts. These are actor-only
 evaluations of ARM-trained policies; no action selector or extra training.
 
 | Round | Mixed-only bonus | Mixed-only reweight | Dependency |
@@ -8203,12 +8213,12 @@ three paired rounds should take roughly15h plus queueing. Failed attempts keep
 their consumed time, preserved outputs and lineage, and successor dependencies
 must follow replacement IDs. No earlier budget is transferred.
 
-All six queued jobs are registered with the active-agent supervisor. Completion
-requires the actual checkpoint/protocol, all300 task identities and paired
-archives/verdicts, archive integrity, W&B final metrics and browser cleanup to
-be independently checked. Report each repeat and the mean/sample standard
-deviation, separately for overall and valid-only success. These measure
-evaluation variability, not independent training seeds or pass@3. Comparisons
+All six jobs are registered as independently verified complete. Final checks
+covered the actual checkpoint/protocol, all300 task identities and paired
+archives/verdicts per cohort, archive integrity, W&B final metrics and browser
+cleanup. Each repeat and the mean/sample standard deviation are reported
+separately for overall and valid-only success. These measure evaluation
+variability, not independent training seeds or pass@3. Comparisons
 against the September29 methods remain historical because collection dates
 differ. Preparation passed eight CPU tests and batch syntax validation.
 

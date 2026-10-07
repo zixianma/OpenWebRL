@@ -32,7 +32,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
-- [Mixed-only iteration90 stealth: three-repeat evaluation in progress, October6](#arm-mixed-stealth90-three-repeats-20261006)
+- [Mixed-only iteration90 stealth: all six cohorts verified, October6](#arm-mixed-stealth90-three-repeats-20261006)
 - [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
 - [Mixed-only bonus/reweight iterations10–80 full300](#arm-mixed-pair-iter10-results-20260928)
@@ -1596,16 +1596,23 @@ within the separate12h caps; unspent budgets are released.
 <a id="arm-mixed-stealth90-three-repeats-20261006"></a>
 ## Mixed-only iteration90 stealth evaluations — October6
 
-**Partial repeat set: bonus2/3 and reweight2/3 verified.** All four verified
-cohorts contain all300 tasks. Both third repeats have started. The requested
-three-repeat evaluation is not complete.
+**Complete: all six cohorts independently verified, three repeats per method.**
+Every cohort retains all300 tasks. These are repeated evaluations of two fixed
+iteration90 checkpoints, not independent training seeds or pass@3.
 
-| Method | Iteration | Repeat | Successes / tasks | Valid / invalid | Overall | Valid-only | Status |
-| --- | ---: | ---: | --- | --- | ---: | ---: | --- |
-| Mixed-only bonus + relaxed B |90 |1 |182 /300 |299 /1 |60.67% |60.87% |Verified;2/3 repeats |
-| |90 |2 |181 /300 |294 /6 |60.33% |61.56% |Verified;2/3 repeats |
-| Mixed-only reweight + relaxed B |90 |1 |170 /300 |298 /2 |56.67% |57.05% |Verified;2/3 repeats |
-| |90 |2 |166 /300 |295 /5 |55.33% |56.27% |Verified;2/3 repeats |
+| Method | Verified repeats | Full300 overall mean ± sample SD | Valid-only mean ± sample SD |
+| --- | ---: | ---: | ---: |
+| Mixed-only bonus + relaxed B |3/3 |**59.00 ± 2.60%** |59.67 ± 2.71% |
+| Mixed-only reweight + relaxed B |3/3 |**56.22 ± 0.77%** |56.79 ± 0.45% |
+
+| Method | Repeat | Full300 overall | Valid-only | Valid / invalid | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Mixed-only bonus + relaxed B |1 |60.67% (182/300) |60.87% (182/299) |299 /1 |Verified |
+|  |2 |60.33% (181/300) |61.56% (181/294) |294 /6 |Verified |
+|  |3 |56.00% (168/300) |56.57% (168/297) |297 /3 |Verified |
+| Mixed-only reweight + relaxed B |1 |56.67% (170/300) |57.05% (170/298) |298 /2 |Verified |
+|  |2 |55.33% (166/300) |56.27% (166/295) |295 /5 |Verified |
+|  |3 |56.67% (170/300) |57.05% (170/298) |298 /2 |Verified |
 
 Both fixed iteration90 checkpoints (`iter_0000089`) use the unchanged
 September29 repeat source and the same300 Online-Mind2Web task IDs, with one
@@ -1613,35 +1620,73 @@ actor rollout per task and no inference-time ARM selection. Actual generation
 uses temperature0.6, top-p0.95, top-k20,4096 response tokens and30 turns. Browser
 Use stealth and the native o4-mini/AgentTrek terminal-success prompt and parser
 match the earlier runs. Repeat seeds1234/1235/1236 are paired across the two
-methods. Each round runs both methods; the next round waits for both workers.
+methods. Each round ran both methods; the next round waited for both workers.
+Saved task completions span October6,16:45 through October7,06:22 UTC
+(October6 in Pacific time).
 
-All four completed cohorts passed independent checks of exact task identity,
-saved rollout/verdict pairs, all300 archive CRCs per cohort, frozen protocol,
-native89 GPU restoration and checkpoint counters, finished W&B metrics,
-successful worker and controller termination, and owned-browser cleanup.
+All six cohorts passed independent checks of exact task identity, saved
+rollout/verdict pairs, all300 archive CRCs per cohort, frozen protocol, native89
+GPU restoration and checkpoint counters, finished W&B metrics, successful
+worker and controller termination, and all300 owned browser sessions stopped
+per cohort. Bonus retains1106 Adam updates and reweight1170. Final analysis
+reuses the reviewed archive audits and verifies unchanged task-JSON digests;
+it does not rescan archives or issue model calls.
+
 Bonus repeat1 retains one invalid initial navigation failure. Reweight repeat1
-retains two invalid outcomes: one initial navigation failure and one judge
-response without the native `Status:` field.
+retains two: one initial navigation failure and one judge response without the
+native `Status:` field. Repeat2 retains six invalids for bonus: three600-second
+task timeouts, two HTTP response failures and one closed connection. Reweight
+retains five: four600-second task timeouts and one closed connection. Repeat2's
+invalid sets overlap on one task;290 tasks are valid for both methods.
 
-Repeat2 retains six invalids for bonus: three600-second task timeouts, two HTTP
-response failures and one closed connection. Reweight retains five: four600-second
-task timeouts and one closed connection. The invalid sets overlap on one task;
-290 tasks are valid for both methods. No failed task was selectively rerun.
-All300 tasks per cohort remain in the overall denominator; valid-only uses
-299/298 for bonus/reweight repeat1 and294/295 for repeat2.
+Repeat3 retains three bonus invalids: one600-second task timeout and two initial
+navigation timeouts (10seconds, three attempts). Reweight retains two: one
+initial-navigation closed connection and one600-second task timeout. A saved
+one-turn aborted placeholder does not establish the actual failure turn. No
+cohort or failed task was selectively rerun. All300 tasks remain in each overall
+denominator; valid-only denominators are299/294/297 for bonus and298/295/298 for
+reweight. Means and sample SDs use the three per-repeat rates (`ddof=1`), including
+the three separate valid-only ratios rather than a pooled ratio.
 
-No repeat mean, SD or new confidence interval is reported while the repeat set
-is incomplete. These are repeated evaluations of fixed trained checkpoints,
-not independent training seeds. Comparisons with the September29–30
-outcome-only/Additive/Gate B cohorts are descriptive because collection dates
-differ despite the shared protocol.
+<details>
+<summary><strong>October mixed-only paired comparison and 95% confidence interval</strong></summary>
 
-[Verified aggregate evidence](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json)
+| Comparison | Overall mean difference | Paired 95% CI | Exact paired p |
+| --- | ---: | --- | ---: |
+| Bonus − reweight |+2.78 pp |[−1.00, +6.56] pp |0.1724 |
+
+The difference is not significant at5%. The50,000 BCa bootstrap draws resample
+300 task clusters, keeping both methods and all three repeats together. The
+exact two-sided test swaps each task's complete three-repeat method vectors;
+there is one October pair. This is exploratory uncertainty across tasks for
+fixed checkpoints and observed evaluation windows, not training-seed variability.
+
+</details>
+
+The per-repeat bonus−reweight differences are+4.00,+5.00 and−0.67pp. Among the286
+tasks valid for both methods in all three repeats, the mean difference is+2.91pp
+(exact p=0.1668); this common-valid subset differs from marginal valid-only
+rates. Resampling145 start-hostname clusters gives a sensitivity95% interval
+of[−0.94,+6.47]pp. Task resampling does not capture arbitrary shared website/time
+shocks, and hostnames need not be independent organizations. The exploratory
+analysis provides no causal significance claim about the training recipes;
+comparisons with the September29–30 outcome-only/Additive/Gate B cohorts remain
+descriptive because collection dates differ despite the shared protocol.
+
+All1,800 rollout/verdict pairs are verified, totaling1,184,147,941,996 archive
+bytes. The six allocations consumed94,044seconds (26.12 GPU-hours) of the approved
+151,200seconds (42 GPU-hours), with every job inside its separate7h cap.
+Browser/proxy charges total$7.4882; **judge API charges are separate and are not
+included in that amount**. No new compute or retries were added for this analysis.
+
+[Verified aggregate, audit/review hashes and paired statistics](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json)
 · [Approved six-cohort plan](ARM_INTEGRATION_PLAN.md#arm-mixed-stealth90-three-repeats-20261006)
 · [Bonus repeat1 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r1-346992)
 · [Reweight repeat1 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r1-346993)
 · [Bonus repeat2 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r2-346994)
-· [Reweight repeat2 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r2-346995).
+· [Reweight repeat2 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r2-346995)
+· [Bonus repeat3 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r3-346996)
+· [Reweight repeat3 W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r3-346997).
 Raw task records, rollout archives and detailed runtime receipts remain private.
 
 <a id="arm-stealth90-o4-matched-20260929"></a>

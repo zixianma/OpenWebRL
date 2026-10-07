@@ -151,20 +151,36 @@
 | |90 |2 |189 |288 |12 |63.00 |65.63 |67.00 /68.37 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json) |
 | |90 |3 |174 |288 |12 |58.00 |60.42 |61.00 /61.00 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
 
-## Mixed-only relaxed B · stealth · o4-mini · T0.6 · October6 · partial repeat set
+## Mixed-only relaxed B · stealth · o4-mini · T0.6 · October6 · six cohorts verified
+
+| Method | Verified repeats | Full300 overall mean ± sample SD | Valid-only mean ± sample SD |
+| --- | ---: | ---: | ---: |
+| Mixed-only bonus + relaxed B |3/3 |**59.00 ± 2.60%** |59.67 ± 2.71% |
+| Mixed-only reweight + relaxed B |3/3 |**56.22 ± 0.77%** |56.79 ± 0.45% |
 
 | Method | Iteration | Repeat | Verified repeats | Successes | Valid | Invalid | Overall % | Valid-only % | Status / record |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Mixed-only bonus + relaxed B |90 |1 |2/3 |182 |299 |1 |60.67 |60.87 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
-| |90 |2 |2/3 |181 |294 |6 |60.33 |61.56 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
-| Mixed-only reweight + relaxed B |90 |1 |2/3 |170 |298 |2 |56.67 |57.05 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
-| |90 |2 |2/3 |166 |295 |5 |55.33 |56.27 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+| Mixed-only bonus + relaxed B |90 |1 |3/3 |182 |299 |1 |60.67 |60.87 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+|  |90 |2 |3/3 |181 |294 |6 |60.33 |61.56 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+|  |90 |3 |3/3 |168 |297 |3 |56.00 |56.57 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+| Mixed-only reweight + relaxed B |90 |1 |3/3 |170 |298 |2 |56.67 |57.05 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+|  |90 |2 |3/3 |166 |295 |5 |55.33 |56.27 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+|  |90 |3 |3/3 |170 |298 |2 |56.67 |57.05 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
+
+<details>
+<summary>October mixed-only paired comparison</summary>
+
+| Comparison | Mean Δ, pp | Paired95% BCa CI, pp | Exact paired p | Task clusters | Repeats/method |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Bonus − reweight |+2.78 |[−1.00, +6.56] |0.1724 |300 |3 |
+
+</details>
 
 | Protocol / comparison scope | Value |
 | --- | --- |
 | Actor / judge |T0.6 /p0.95 /k20 /4096 tokens /30 turns; o4-mini /AgentTrek |
 | Task cohort / inference |Same300 OM2W task IDs; actor-only |
-| Three-repeat mean / SD |Pending |
+| Summary convention |Three fixed-checkpoint repeats; sample SD, ddof1; valid-only mean of per-repeat ratios |
 | September29–30 comparison |Different collection dates; descriptive only |
 | Details |[Protocol and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006) |
 

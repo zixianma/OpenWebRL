@@ -388,21 +388,45 @@ repeats together; they do not measure training-seed variability.
 The earlier training-curve plot retains the first matched pass. Diamonds use this corrected
 protocol. Earlier GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
 
-**Mixed-only iteration90 checkpoints — October6; repeat set in progress.**
+**Mixed-only iteration90 checkpoints — October6; all six cohorts verified.**
 The same full300 stealth protocol is used: actor-only inference,
 T0.6/p0.95/k20,4096 tokens,30 turns and o4-mini/AgentTrek.
 
+| Method | Verified repeats | Full300 overall mean ± sample SD | Valid-only mean ± sample SD |
+| --- | ---: | ---: | ---: |
+| Mixed-only bonus + relaxed B |3/3 |**59.00 ± 2.60%** |59.67 ± 2.71% |
+| Mixed-only reweight + relaxed B |3/3 |**56.22 ± 0.77%** |56.79 ± 0.45% |
+
 | Method | Repeat | Full300 overall | Valid-only | Valid / invalid | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Mixed-only bonus + relaxed B |1 |**60.67%** (182/300) |60.87% (182/299) |299 /1 |Verified |
-| |2 |**60.33%** (181/300) |61.56% (181/294) |294 /6 |Verified |
-| Mixed-only reweight + relaxed B |1 |**56.67%** (170/300) |57.05% (170/298) |298 /2 |Verified |
-| |2 |**55.33%** (166/300) |56.27% (166/295) |295 /5 |Verified |
+| Mixed-only bonus + relaxed B |1 |60.67% (182/300) |60.87% (182/299) |299 /1 |Verified |
+|  |2 |60.33% (181/300) |61.56% (181/294) |294 /6 |Verified |
+|  |3 |56.00% (168/300) |56.57% (168/297) |297 /3 |Verified |
+| Mixed-only reweight + relaxed B |1 |56.67% (170/300) |57.05% (170/298) |298 /2 |Verified |
+|  |2 |55.33% (166/300) |56.27% (166/295) |295 /5 |Verified |
+|  |3 |56.67% (170/300) |57.05% (170/298) |298 /2 |Verified |
 
-Both methods have **2/3 repeats verified**; the third repeats have started.
-No repeat mean or SD is reported yet. Comparison with the September29–30 results
+Mean ± sample SD describes three evaluations of each fixed trained checkpoint;
+valid-only means average the three per-repeat ratios. Invalid attempts remain
+failures in the full300 denominator. Comparison with the September29–30 results
 above is descriptive because collection dates differ.
-[Protocol and progress](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006)
+
+<details>
+<summary><strong>October mixed-only paired comparison and 95% confidence interval</strong></summary>
+
+| Comparison | Overall mean difference | Paired 95% CI | Exact paired p |
+| --- | ---: | --- | ---: |
+| Bonus − reweight |+2.78 pp |[−1.00, +6.56] pp |0.1724 |
+
+The difference is not significant at5%. The50,000 BCa bootstrap draws resample
+300 task clusters, keeping both methods and all three repeats together. The
+exact two-sided test swaps each task's complete three-repeat method vectors;
+there is one October pair. This is exploratory uncertainty across tasks for
+fixed checkpoints and observed evaluation windows, not training-seed variability.
+
+</details>
+
+[Protocol, paired analysis and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006)
 · [Verified aggregate evidence](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json).
 
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the

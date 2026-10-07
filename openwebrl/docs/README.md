@@ -49,7 +49,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [October3 next experiment: independently test ARM-assisted task selection](ARM_INTEGRATION_PLAN.md#arm-selection-control-20261003). CPU audit and private paired schedule prepared for682 tasks;78 historical rescues span11 hosts. Fresh ARM versus actor retries and host-matched selection controls; no new allocation approved or submitted. [Concise current decision](ARM_SUMMARY.md#arm-next-experiment-20261003).
 
-[Mixed-only iteration90 stealth, October6: second repeats verified, bonus60.33% overall /61.56% valid-only (181/300,294 valid), reweight55.33% /56.27% (166/300,295 valid);2/3 repeats per method. Three-repeat mean/SD pending; unchanged T0.6/o4-mini/AgentTrek protocol](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006) · [Approved six-cohort plan](ARM_INTEGRATION_PLAN.md#arm-mixed-stealth90-three-repeats-20261006).
+[Mixed-only iteration90 stealth, October6: all six cohorts verified; bonus59.00 ±2.60% and reweight56.22 ±0.77% overall, valid-only59.67 ±2.71% /56.79 ±0.45%. Three-repeat mean ± sample SD; paired difference not significant; unchanged T0.6/o4-mini/AgentTrek protocol](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006) · [Approved six-cohort plan](ARM_INTEGRATION_PLAN.md#arm-mixed-stealth90-three-repeats-20261006).
 
 [Matched iteration90 uncertainty: paired95% CIs and Holm-corrected tests; no significant pair among outcome-only, Additive and Gate B](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930).
 

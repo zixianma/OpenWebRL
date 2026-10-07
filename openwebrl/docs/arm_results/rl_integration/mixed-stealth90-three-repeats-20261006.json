@@ -1,12 +1,12 @@
 {
-  "updated_utc": "2026-10-07T02:30:11.249779+00:00",
-  "status": "partial_repeat_set",
+  "updated_utc": "2026-10-07T06:50:47.484779+00:00",
+  "status": "verified_complete",
   "expected_cohorts": 6,
-  "verified_cohorts": 4,
+  "verified_cohorts": 6,
   "expected_repeats_per_method": 3,
   "verified_repeats": {
-    "mixed-bonus": 2,
-    "mixed-reweight": 2
+    "mixed-bonus": 3,
+    "mixed-reweight": 3
   },
   "protocol": {
     "benchmark": "Online-Mind2Web",
@@ -64,6 +64,12 @@
       "browser_and_proxy_usd": 1.3024275884156427,
       "invalid_outcomes": [
         "Initial navigation failure"
+      ],
+      "independent_review_sha256": "d642e2507e7073f93ce1b4a3de71be447317ee62125360e516f9bc38d3f90ec3",
+      "checked_task_records_sha256": "bb4098b28d1a2c1a61f49fd41fb1ed48a785317bd1faf5005cb111d455e6b4a1",
+      "record_completion_window_utc": [
+        "2026-10-06T16:45:08.446021+00:00",
+        "2026-10-06T21:27:02.387543+00:00"
       ]
     },
     {
@@ -102,6 +108,12 @@
       "invalid_outcomes": [
         "Initial navigation failure",
         "Native judge response lacked Status field"
+      ],
+      "independent_review_sha256": "bbb74589658761340e7326dfe9de6780213303e46d2f21d9a13ae8062e7f5073",
+      "checked_task_records_sha256": "133265d9932c2138b56640bd3989ed75d3746472b5088b1655776291f7e5830b",
+      "record_completion_window_utc": [
+        "2026-10-06T16:56:07.068567+00:00",
+        "2026-10-06T21:05:58.539640+00:00"
       ]
     },
     {
@@ -146,7 +158,13 @@
         "Task timeout (600s)": 3,
         "HTTP response failure": 2,
         "Connection closed": 1
-      }
+      },
+      "independent_review_sha256": "86b5b23870917c5aa5f0cb51f77f9c23abd60b3df297dfafb6030afc59c83630",
+      "checked_task_records_sha256": "3b6c127b4b2465d02c80fc3d84d233432564210d2f0754332c1062a4019c4117",
+      "record_completion_window_utc": [
+        "2026-10-06T21:44:26.741203+00:00",
+        "2026-10-07T01:55:46.956542+00:00"
+      ]
     },
     {
       "method": "mixed-reweight",
@@ -188,9 +206,250 @@
       "invalid_outcome_counts": {
         "Task timeout (600s)": 4,
         "Connection closed": 1
-      }
+      },
+      "independent_review_sha256": "b3b58a467ec4207db3fd9175fe22764c9c0d9e3b29a6ea8b10918104950fdd1f",
+      "checked_task_records_sha256": "0a8b2a24d045cf7e62af103ba015fe58d198a52453b801234bfb5bbf31818b8c",
+      "record_completion_window_utc": [
+        "2026-10-06T21:44:46.930277+00:00",
+        "2026-10-07T01:46:11.719558+00:00"
+      ]
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 3,
+      "job_id": "346996",
+      "iteration": 90,
+      "server_rng_seed": 1236,
+      "tasks": 300,
+      "successes": 168,
+      "valid": 297,
+      "invalid": 3,
+      "overall": 0.56,
+      "valid_only": 0.5656565656565656,
+      "fixed100": {
+        "tasks": 100,
+        "successes": 59,
+        "valid": 99,
+        "invalid": 1,
+        "overall": 0.59,
+        "valid_only": 0.5959595959595959
+      },
+      "verified_complete": true,
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r3-346996",
+      "full_runtime_audit_sha256": "a4a760c1f8c82a1019b7b0a0d785b6718bde211c2a2ffa0d96d505b4098e4183",
+      "independent_review_sha256": "9e3ff7570e6be6fd8a70998f71fe7a62521caa00b8f59c66cc87aa9129220cf3",
+      "checked_task_records_sha256": "f7a468836bed346e35aaabd21e050c72e721a534ea97bfdab47c8a0917fa1130",
+      "archive_count": 300,
+      "archive_bytes": 199241482992,
+      "full_archive_crc_verified": true,
+      "unique_task_ids_and_pairs_verified": true,
+      "all_judge_identities_match": true,
+      "actual_gpu_restore_verified": true,
+      "all_owned_browser_sessions_stopped": true,
+      "gpu_seconds_consumed": 15981,
+      "approved_gpu_seconds": 25200,
+      "browser_and_proxy_usd": 1.262064109273255,
+      "record_completion_window_utc": [
+        "2026-10-07T02:06:50.716372+00:00",
+        "2026-10-07T06:22:34.192587+00:00"
+      ],
+      "invalid_outcome_counts": {
+        "Task timeout (600s)": 1,
+        "Initial navigation timeout (10s, three attempts)": 2
+      },
+      "invalid_outcomes": [
+        "Task timeout (600s)",
+        "Initial navigation timeout (10s, three attempts)"
+      ],
+      "invalid_diagnosis_sha256": "d5aad7a12ef53eefb64d099be324f01c5f5f0f0277c17e0f7685abe3de47240e"
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 3,
+      "job_id": "346997",
+      "iteration": 90,
+      "server_rng_seed": 1236,
+      "tasks": 300,
+      "successes": 170,
+      "valid": 298,
+      "invalid": 2,
+      "overall": 0.5666666666666667,
+      "valid_only": 0.5704697986577181,
+      "fixed100": {
+        "tasks": 100,
+        "successes": 59,
+        "valid": 100,
+        "invalid": 0,
+        "overall": 0.59,
+        "valid_only": 0.59
+      },
+      "verified_complete": true,
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r3-346997",
+      "full_runtime_audit_sha256": "86dc2a7fe17a03d0b7a7cfcd05cb7c63d64f8ccb70a114246c38bfdff38bf4e3",
+      "independent_review_sha256": "bc103812c3646fc5a3893df5acf740380c1e612a2135c9b4d1ca0ee853b6b27a",
+      "checked_task_records_sha256": "7f85820aa0b5042aaea91d2fe3d65c1d102af542693d6ebe8de477e984e3c5ab",
+      "archive_count": 300,
+      "archive_bytes": 186389875356,
+      "full_archive_crc_verified": true,
+      "unique_task_ids_and_pairs_verified": true,
+      "all_judge_identities_match": true,
+      "actual_gpu_restore_verified": true,
+      "all_owned_browser_sessions_stopped": true,
+      "gpu_seconds_consumed": 13905,
+      "approved_gpu_seconds": 25200,
+      "browser_and_proxy_usd": 1.2214186250567436,
+      "record_completion_window_utc": [
+        "2026-10-07T02:10:31.588830+00:00",
+        "2026-10-07T05:52:35.020401+00:00"
+      ],
+      "invalid_outcome_counts": {
+        "Initial navigation connection closed": 1,
+        "Task timeout (600s)": 1
+      },
+      "invalid_outcomes": [
+        "Initial navigation connection closed",
+        "Task timeout (600s)"
+      ],
+      "invalid_diagnosis_sha256": "3b6ac9201f07b2a2a0e6e4b8de68ee4f65cfd4aadb98e45e88228f0641f1c4ed"
     }
   ],
-  "mean_and_sample_sd": null,
-  "comparison_limit": "Repeated evaluations of fixed trained checkpoints, not independent training seeds. Earlier outcome-only/Additive/Gate B cohorts were collected September29-30; comparisons are descriptive across collection dates."
+  "mean_and_sample_sd": {
+    "mixed-bonus": {
+      "repeats": 3,
+      "overall_mean": 0.5900000000000001,
+      "overall_sample_sd": 0.026034165586355504,
+      "valid_only_mean": 0.59666615877796,
+      "valid_only_sample_sd": 0.02707903028641727,
+      "per_repeat_successes": [
+        182,
+        181,
+        168
+      ],
+      "per_repeat_valid": [
+        299,
+        294,
+        297
+      ],
+      "per_repeat_invalid": [
+        1,
+        6,
+        3
+      ]
+    },
+    "mixed-reweight": {
+      "repeats": 3,
+      "overall_mean": 0.5622222222222222,
+      "overall_sample_sd": 0.007698003589194996,
+      "valid_only_mean": 0.5678838205740719,
+      "valid_only_sample_sd": 0.004479045428134705,
+      "per_repeat_successes": [
+        170,
+        166,
+        170
+      ],
+      "per_repeat_valid": [
+        298,
+        295,
+        298
+      ],
+      "per_repeat_invalid": [
+        2,
+        5,
+        2
+      ]
+    }
+  },
+  "comparison_limit": "Repeated evaluations of fixed trained checkpoints, not independent training seeds. Earlier outcome-only/Additive/Gate B cohorts were collected September29-30; comparisons are descriptive across collection dates.",
+  "paired_comparison": {
+    "tasks": 300,
+    "methods": [
+      "mixed-bonus",
+      "mixed-reweight"
+    ],
+    "repeats": 3,
+    "inference_unit": "Task cluster retaining all three repeats and both methods; not 900 independent tasks.",
+    "confidence_interval": "Pointwise 95% paired task-cluster BCa bootstrap",
+    "bootstrap_numerical_convention": "Bootstrap integer per-task three-repeat success sums; divide confidence limits by three afterward to preserve exact bias-correction ties.",
+    "bootstrap_resamples": 50000,
+    "bootstrap_seed": 20260930,
+    "method_overall_ci95": {
+      "mixed-bonus": [
+        0.548888888888889,
+        0.63
+      ],
+      "mixed-reweight": [
+        0.5211111111111111,
+        0.6022222222222222
+      ]
+    },
+    "comparison": "mixed-bonus minus mixed-reweight",
+    "delta_pp": 2.7777777777777772,
+    "delta_ci95_pp": [
+      -1.0,
+      6.5555555555555545
+    ],
+    "per_repeat_delta_pp": [
+      4.0,
+      5.0,
+      -0.6666666666666667
+    ],
+    "p_exact": 0.1723805417677225,
+    "test": "Exact two-sided within-task swap of whole three-repeat method vectors.",
+    "null_assumption": "Method response vectors exchangeable within independent tasks under the null, conditional on observed evaluation windows.",
+    "multiplicity": "One October mixed-method pair; no correction across earlier September comparisons.",
+    "task_count_difference_histogram": {
+      "-3": 2,
+      "-2": 14,
+      "-1": 57,
+      "0": 140,
+      "1": 60,
+      "2": 25,
+      "3": 2
+    },
+    "common_valid_sensitivity": {
+      "tasks": 286,
+      "delta_pp": 2.913752913752914,
+      "p_exact": 0.16677873009340666,
+      "definition": "Tasks valid for both methods in all three repeats; distinct from marginal valid-only ratios."
+    },
+    "website_cluster_sensitivity": {
+      "websites": 145,
+      "resamples": 50000,
+      "seed": 20260931,
+      "delta_ci95_pp": [
+        -0.9375366784037553,
+        6.474820143884892
+      ],
+      "method": "Percentile bootstrap of start-URL hostname clusters retaining all tasks/repeats/methods; task-weighted cluster totals.",
+      "limitation": "Task mixtures vary across draws; hostnames need not be independent organizations."
+    },
+    "caveats": [
+      "Fixed trained checkpoints and observed evaluation windows; not independent training seeds.",
+      "Exploratory, not preregistered; no causal significance claim about training recipes.",
+      "Invalid attempts count as failures in the primary fixed-300 denominator.",
+      "No contemporaneous outcome-only/Additive/Gate B cohort; September comparisons remain descriptive.",
+      "Task resampling does not capture arbitrary common website/time shocks."
+    ]
+  },
+  "resource_totals": {
+    "cohorts": 6,
+    "saved_task_pairs": 1800,
+    "archive_bytes": 1184147941996,
+    "gpu_seconds_consumed": 94044,
+    "approved_gpu_seconds": 151200,
+    "browser_and_proxy_usd": 7.488244642255207,
+    "browser_and_proxy_cost_excludes_judge_api": true
+  },
+  "calculation": {
+    "implementation_sha256": "a5e64fb0d92eaa992b8b5d484036ca375aee6f85a68c04a5dba7e8d5735f0373",
+    "numpy_version": "1.26.4",
+    "task_source_sha256": "d8f81bfc99dfba8b1363d9f50511878dd5db72ff38225c8a196c222aa0c63488",
+    "scipy_version": "1.17.1",
+    "new_model_calls": 0,
+    "new_gpu_hours": 0,
+    "archive_crc_rescans": 0,
+    "all_task_jsons_match_reviewed_audit_digests": true,
+    "valid_only_aggregation": "Unweighted mean and sample SD of the three per-repeat valid-only ratios.",
+    "sample_sd_ddof": 1
+  }
 }
