@@ -1,7 +1,7 @@
 {
   "name": "selectionarm-random5-sameday30-20261007",
-  "status": "prepared_awaiting_exact_resource_approval",
-  "approved": false,
+  "status": "running",
+  "approved": true,
   "scientific_scope_approved": true,
   "tasks": 300,
   "new_episodes": 300,
@@ -71,6 +71,7 @@
     "same-day independent browser collection; no identical-state or deterministic-prefix claim",
     "same actor requests and eight-browser concurrency; one GPU and8CPUs per random shard versus actor+selector GPUs/16CPUs per paired shard; latency is operational rather than hardware-matched"
   ],
-  "new_paid_jobs": 0,
-  "offline_tests_passed": 8
+  "new_paid_jobs": 2,
+  "offline_tests_passed": 8,
+  "active_agent_supervision_verified": true
 }
