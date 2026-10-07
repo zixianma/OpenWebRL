@@ -1,0 +1,80 @@
+{
+  "name": "selectionarm-piotr-sameday30-20261007",
+  "status": "prepared_awaiting_exact_resource_approval",
+  "approved": false,
+  "tasks": 300,
+  "episodes": 600,
+  "shards": 2,
+  "resources_per_shard": {
+    "gpus": 2,
+    "gpu_type": "H200",
+    "cpus": 16,
+    "memory_gib": 240,
+    "total_seconds": 10800
+  },
+  "judge_caps_per_shard": {
+    "judge_usd": 5.0,
+    "judge_calls": 1320
+  },
+  "total_gpu_hours": 12,
+  "total_judge_usd": 10,
+  "total_judge_calls": 2640,
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 45,
+    "server_seed_base": 4500,
+    "repetition": 1,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "Fresh full300 SFT and Piotr SelectionARM pair, same-day30 control for the completed50-step pair",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "selectionarm-piotr-sameday30-20261007",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Same task list, models, prompts, decoding, seed45 and runtime as the completed50-step pair; step cap50 to30. Fresh browsers and outcomes. Same-day later collection does not remove within-day website drift; FlashInfer does not promise identical prefixes.",
+    "actor_control_source": "same campaign; randomized interleaved paired arms"
+  },
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "reference_50_step_run": "selectionarm-piotr-steps50-20261007",
+  "fresh_episodes": true,
+  "shared_control": false,
+  "science_changes": [
+    "max_steps50_to30"
+  ],
+  "analysis": [
+    "paired ARM30 minus SFT30 on all300 tasks",
+    "task-paired change in ARM gain: (ARM50-SFT50)-(ARM30-SFT30)",
+    "same-day RL-task ARM versus Piotr ARM, with separate collection times disclosed",
+    "three complete30-step Piotr runs: per-run rates and mean/sample SD, with dates retained"
+  ],
+  "outputs": [
+    "overall and valid-only success",
+    "paired task-bootstrap intervals",
+    "cost, latency, token plots",
+    "all-attempt scheduler and API accounting"
+  ],
+  "offline_tests_passed": 4
+}
