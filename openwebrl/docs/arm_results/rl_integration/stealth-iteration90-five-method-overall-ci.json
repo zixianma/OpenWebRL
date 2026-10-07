@@ -1,0 +1,343 @@
+{
+  "schema": "openwebrl.stealth-five-method-overall-ci.v1",
+  "checked_utc": "2026-10-07T22:26:33.023391+00:00",
+  "iteration": 90,
+  "inference_unit": "300 task clusters; retain all three observed repeats within every resampled task.",
+  "estimand": "Mean full300 overall success of each fixed checkpoint across its three observed evaluation repeats; invalid attempts remain failures.",
+  "interval_method": "Pointwise 95% task-cluster BCa bootstrap",
+  "bootstrap_seed": 20260930,
+  "bootstrap_resamples": 50000,
+  "bootstrap_batch": 256,
+  "numerical_convention": "Bootstrap integer per-task three-repeat success sums and divide confidence limits by three; equal counts retain exact BCa bias-correction ties.",
+  "existing_paired_tests_unchanged": true,
+  "valid_only_aggregation": "Unweighted mean/sample SD of three per-repeat valid-only ratios; no valid-only CI calculated.",
+  "sources": [
+    {
+      "file": "stealth-iteration90-paired-inference.json",
+      "sha256": "8042a551d300f5fa52e5708f5f299e22b4392c2c96ec56264b3febb9603837ca"
+    },
+    {
+      "file": "stealth-o4-t06-iteration90-three-repeat-summary.json",
+      "sha256": "b41ba8e03524aab6dc1ec40d7e4b31ad0bea5963d1b246d9f8744b55ada1e8ea"
+    },
+    {
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72"
+    }
+  ],
+  "cohort_sources": [
+    {
+      "method": "baseline",
+      "repeat": 1,
+      "file": "stealth-o4-t06-baseline-iteration90-audit.json",
+      "sha256": "b9f7c88d367be3b6bef31397e36dbafe2880a138524fa6bf78e1d813e1ec9ac8",
+      "successes": 163,
+      "valid": 286
+    },
+    {
+      "method": "baseline",
+      "repeat": 2,
+      "file": "stealth-o4-t06-baseline-iteration90-repeat2-audit.json",
+      "sha256": "7990233e2f06795701a2d582d27e561c210d3591cb3d3b311c2e14283fefe090",
+      "successes": 173,
+      "valid": 290
+    },
+    {
+      "method": "baseline",
+      "repeat": 3,
+      "file": "stealth-o4-t06-baseline-iteration90-repeat3-audit.json",
+      "sha256": "5379c7449bfac74ff10f7627caf1118403aad45670f827c1e6956458861a43f1",
+      "successes": 161,
+      "valid": 286
+    },
+    {
+      "method": "additive",
+      "repeat": 1,
+      "file": "stealth-o4-t06-additive-iteration90-audit.json",
+      "sha256": "7f25d578ddd84cda1701f92c107bd24cbe438a0ec125496e3bb73a6fa0e08dc6",
+      "successes": 179,
+      "valid": 286
+    },
+    {
+      "method": "additive",
+      "repeat": 2,
+      "file": "stealth-o4-t06-additive-iteration90-repeat2-audit.json",
+      "sha256": "3337caf05a6770ff06422a1b941e2c8aed5ea95f4908a0a1bab176c2291bcb36",
+      "successes": 176,
+      "valid": 286
+    },
+    {
+      "method": "additive",
+      "repeat": 3,
+      "file": "stealth-o4-t06-additive-iteration90-repeat3-audit.json",
+      "sha256": "0e5fc381acdb24c7e278fc8ea354bfd900a75cc7fd06ed9d0d64effb96a36c42",
+      "successes": 171,
+      "valid": 284
+    },
+    {
+      "method": "gate-b",
+      "repeat": 1,
+      "file": "stealth-o4-t06-gate-b-iteration90-audit.json",
+      "sha256": "09ff09f722116d9f0bb7f0e22639c1992b87455c61e7bbaf731bf42d3518faaf",
+      "successes": 166,
+      "valid": 286
+    },
+    {
+      "method": "gate-b",
+      "repeat": 2,
+      "file": "stealth-o4-t06-gate-b-iteration90-repeat2-audit.json",
+      "sha256": "a71fef624a96eecc2abf5fa23a76b71b1d1fdd3c5858e3095187fd4e2e24bb37",
+      "successes": 189,
+      "valid": 288
+    },
+    {
+      "method": "gate-b",
+      "repeat": 3,
+      "file": "stealth-o4-t06-gate-b-iteration90-repeat3-audit.json",
+      "sha256": "7313cbba472089e24590198a69953468e988ffa251013a64a00bbd268bb4d139",
+      "successes": 174,
+      "valid": 288
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 1,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "ece67362c170920ecdc553599b4898c276c17e2df4aee2ca64cace36286d22c8",
+      "independent_review_sha256": "d642e2507e7073f93ce1b4a3de71be447317ee62125360e516f9bc38d3f90ec3",
+      "checked_task_records_sha256": "bb4098b28d1a2c1a61f49fd41fb1ed48a785317bd1faf5005cb111d455e6b4a1",
+      "successes": 182,
+      "valid": 299
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 1,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "54ccb6d24a2042fa30b3a82c5538b70f533f04e34a5554136f4fa51ac8be72de",
+      "independent_review_sha256": "bbb74589658761340e7326dfe9de6780213303e46d2f21d9a13ae8062e7f5073",
+      "checked_task_records_sha256": "133265d9932c2138b56640bd3989ed75d3746472b5088b1655776291f7e5830b",
+      "successes": 170,
+      "valid": 298
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 2,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "1c738eaa3c62c218923d68cf3e9d596275e7bfe21a1e4d588bf5105178884b66",
+      "independent_review_sha256": "86b5b23870917c5aa5f0cb51f77f9c23abd60b3df297dfafb6030afc59c83630",
+      "checked_task_records_sha256": "3b6c127b4b2465d02c80fc3d84d233432564210d2f0754332c1062a4019c4117",
+      "successes": 181,
+      "valid": 294
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 2,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "940c5efa707effdc07082af50a27b7f0e5fbda3d18d7698bc251e644137fb83c",
+      "independent_review_sha256": "b3b58a467ec4207db3fd9175fe22764c9c0d9e3b29a6ea8b10918104950fdd1f",
+      "checked_task_records_sha256": "0a8b2a24d045cf7e62af103ba015fe58d198a52453b801234bfb5bbf31818b8c",
+      "successes": 166,
+      "valid": 295
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 3,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "a4a760c1f8c82a1019b7b0a0d785b6718bde211c2a2ffa0d96d505b4098e4183",
+      "independent_review_sha256": "9e3ff7570e6be6fd8a70998f71fe7a62521caa00b8f59c66cc87aa9129220cf3",
+      "checked_task_records_sha256": "f7a468836bed346e35aaabd21e050c72e721a534ea97bfdab47c8a0917fa1130",
+      "successes": 168,
+      "valid": 297
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 3,
+      "file": "mixed-stealth90-three-repeats-20261006.json",
+      "aggregate_sha256": "cc10940b56942c7b6ee29b708da8b91b7bd3f1a20f8288fdb59aff881240cf72",
+      "full_runtime_audit_sha256": "86dc2a7fe17a03d0b7a7cfcd05cb7c63d64f8ccb70a114246c38bfdff38bf4e3",
+      "independent_review_sha256": "bc103812c3646fc5a3893df5acf740380c1e612a2135c9b4d1ca0ee853b6b27a",
+      "checked_task_records_sha256": "7f85820aa0b5042aaea91d2fe3d65c1d102af542693d6ebe8de477e984e3c5ab",
+      "successes": 170,
+      "valid": 298
+    }
+  ],
+  "implementation_sha256": "300e70a36e664f6ca47029d3d114bbce76c3d856ae49eb4a85879a58eac1cd80",
+  "verified_loader_sha256": {
+    "historical": "48ee3e3daf4715883d16b272e9ee5555814db643f3667b0a31aec4faca69f96b",
+    "mixed": "a5e64fb0d92eaa992b8b5d484036ca375aee6f85a68c04a5dba7e8d5735f0373"
+  },
+  "numpy_version": "1.26.4",
+  "scipy_version": "1.17.1",
+  "caveats": [
+    "Conditional uncertainty across tasks for fixed trained checkpoints and observed evaluation windows; not training-seed variability.",
+    "September and October collections are not contemporaneous; cross-window comparisons remain descriptive.",
+    "Intervals are pointwise, not simultaneous five-method coverage, and CI overlap is not a paired significance test.",
+    "Task resampling does not capture arbitrary shared website/time shocks or systematic judge error.",
+    "Exploratory checkpoint analysis; no new comparisons, paired tests, judge requests, task retries or archive CRC scans."
+  ],
+  "new_gpu_hours": 0,
+  "new_model_calls": 0,
+  "archive_crc_rescans": 0,
+  "methods": {
+    "baseline": {
+      "repeats": 3,
+      "tasks_per_repeat": 300,
+      "overall_mean": 0.5522222222222223,
+      "overall_sample_sd": 0.0214303350244288,
+      "valid_only_mean": 0.5764729523350213,
+      "valid_only_sample_sd": 0.017736779429649945,
+      "per_repeat_successes": [
+        163,
+        173,
+        161
+      ],
+      "per_repeat_valid": [
+        286,
+        290,
+        286
+      ],
+      "per_repeat_invalid": [
+        14,
+        10,
+        14
+      ],
+      "collection_dates_pacific": "2026-09-29 to 2026-09-30",
+      "overall_ci95": [
+        0.5088888888888888,
+        0.5944444444444444
+      ]
+    },
+    "additive": {
+      "repeats": 3,
+      "tasks_per_repeat": 300,
+      "overall_mean": 0.5844444444444444,
+      "overall_sample_sd": 0.013471506281091299,
+      "valid_only_mean": 0.6144571391050264,
+      "valid_only_sample_sd": 0.011907845462035207,
+      "per_repeat_successes": [
+        179,
+        176,
+        171
+      ],
+      "per_repeat_valid": [
+        286,
+        286,
+        284
+      ],
+      "per_repeat_invalid": [
+        14,
+        14,
+        16
+      ],
+      "collection_dates_pacific": "2026-09-29 to 2026-09-30",
+      "overall_ci95": [
+        0.5433333333333333,
+        0.6255555555555556
+      ]
+    },
+    "gate-b": {
+      "repeats": 3,
+      "tasks_per_repeat": 300,
+      "overall_mean": 0.5877777777777777,
+      "overall_sample_sd": 0.03892062197363777,
+      "valid_only_mean": 0.6136120823620823,
+      "valid_only_sample_sd": 0.0387875629768103,
+      "per_repeat_successes": [
+        166,
+        189,
+        174
+      ],
+      "per_repeat_valid": [
+        286,
+        288,
+        288
+      ],
+      "per_repeat_invalid": [
+        14,
+        12,
+        12
+      ],
+      "collection_dates_pacific": "2026-09-29 to 2026-09-30",
+      "overall_ci95": [
+        0.5444444444444444,
+        0.63
+      ]
+    },
+    "mixed-bonus": {
+      "repeats": 3,
+      "tasks_per_repeat": 300,
+      "overall_mean": 0.59,
+      "overall_sample_sd": 0.026034165586355504,
+      "valid_only_mean": 0.59666615877796,
+      "valid_only_sample_sd": 0.02707903028641727,
+      "per_repeat_successes": [
+        182,
+        181,
+        168
+      ],
+      "per_repeat_valid": [
+        299,
+        294,
+        297
+      ],
+      "per_repeat_invalid": [
+        1,
+        6,
+        3
+      ],
+      "collection_dates_pacific": "2026-10-06",
+      "overall_ci95": [
+        0.548888888888889,
+        0.63
+      ]
+    },
+    "mixed-reweight": {
+      "repeats": 3,
+      "tasks_per_repeat": 300,
+      "overall_mean": 0.5622222222222223,
+      "overall_sample_sd": 0.007698003589194996,
+      "valid_only_mean": 0.5678838205740719,
+      "valid_only_sample_sd": 0.004479045428134705,
+      "per_repeat_successes": [
+        170,
+        166,
+        170
+      ],
+      "per_repeat_valid": [
+        298,
+        295,
+        298
+      ],
+      "per_repeat_invalid": [
+        2,
+        5,
+        2
+      ],
+      "collection_dates_pacific": "2026-10-06",
+      "overall_ci95": [
+        0.5211111111111111,
+        0.6022222222222222
+      ]
+    }
+  },
+  "interval_selection": "Uniform integer-count BCa across all five methods; parent-selected after numerical consistency check.",
+  "numerical_consistency": {
+    "previous_baseline_lower_percent": 51.0,
+    "integer_count_baseline_lower_percent": 50.888888888888886,
+    "baseline_lower_change_percentage_points": -0.11111111111108407,
+    "other_displayed_endpoints_unchanged": true,
+    "explanation": "Integer task sums preserve mathematical ties in BCa bias correction. Earlier floating one-third task means split some equal-count draws by rounding, changing the baseline lower endpoint by0.11percentage points. The estimand is unchanged.",
+    "archived_paired_tests_and_plots_unchanged": true
+  },
+  "verification": {
+    "all_15_cohort_counts_and_reported_means_reconciled": true,
+    "all_mixed_task_jsons_match_full_audit_digests": true,
+    "consistency_receipt_sha256": "12fc8a3e6132e77386db7a5e18b9235586c90eebc3953224fb32ac70ae0ace16",
+    "private_task_provenance_sha256": "3045ff5db3e531c60e1f09edcefb709163ad5e3fb997cd035f33f1603ed682a6",
+    "private_numeric_tie_evidence_sha256": "c51fc9aac8d2cb6cc1fedd95207247453496d4cb708ab9f872f52e708b4439b2"
+  }
+}

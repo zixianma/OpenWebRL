@@ -366,25 +366,35 @@ Blue is independent GPT-4.1-judged full300 task success; orange is the mean cent
 
 </details>
 
-**Matched stealth, three evaluations per iteration90 checkpoint — September29–30.**
-Same300 tasks, actor-only inference; o4-mini/AgentTrek, T0.6/p0.95/k20,
-4096 tokens and30 turns.
+<a id="arm-stealth90-five-method-summary-20261007"></a>
+**Iteration 90 stealth: full 300 tasks, three evaluations per checkpoint.**
+Same task set and actor-only protocol: o4-mini/AgentTrek, T0.6/p0.95/k20,
+4,096 response tokens and 30 turns. All 15 cohorts are verified.
 
-| Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
-| --- | ---: | --- | --- | ---: | --- |
-| Outcome-only baseline |90 |**55.22 ± 2.14%** |57.65 ± 1.77% |+0.00 pp |286/290/286 |
-| Additive bonus |90 |**58.44 ± 1.35%** |61.45 ± 1.19% |+3.22 pp |286/286/284 |
-| Gate B: relaxed gate |90 |**58.78 ± 3.89%** |61.36 ± 3.88% |+3.56 pp |286/288/288 |
+| Method | Collection dates (PDT) | Overall mean ± sample SD | Overall 95% task-cluster BCa CI | Valid-only mean ± sample SD |
+| --- | --- | ---: | --- | ---: |
+| Outcome-only baseline | Sep 29–30 | **55.22 ± 2.14%** | [50.89, 59.44]% | 57.65 ± 1.77% |
+| Additive bonus | Sep 29–30 | **58.44 ± 1.35%** | [54.33, 62.56]% | 61.45 ± 1.19% |
+| Gate B: relaxed gate | Sep 29–30 | **58.78 ± 3.89%** | [54.44, 63.00]% | 61.36 ± 3.88% |
+| Mixed-only bonus + relaxed B | Oct 6 | **59.00 ± 2.60%** | [54.89, 63.00]% | 59.67 ± 2.71% |
+| Mixed-only reweight + relaxed B | Oct 6 | **56.22 ± 0.77%** | [52.11, 60.22]% | 56.79 ± 0.45% |
 
-Mean ± sample SD describes repeated evaluation of fixed trained checkpoints,
-not training-seed variability. Valid-only means average the three per-repeat
-rates. Repeat1 retains pre-outage outcomes and retries only credit-blocked tasks;
-repeats2/3 use fresh rollouts. [All nine audits and aggregate](ARM_RESULTS.md#arm-stealth90-o4-three-repeat-summary-20260930).
+Sample SD describes variation among the three evaluation rates. The separate
+95% confidence interval describes uncertainty across tasks in the mean overall
+rate: 50,000 BCa bootstrap draws resample 300 task clusters, retaining all three
+repeats together. These intervals are conditional on the fixed checkpoints and
+observed evaluation windows; they do not measure training-seed variability.
+Valid-only means average the three per-repeat ratios; invalid attempts remain
+failures in the full-300 denominator. The September and October collections
+share the protocol but differ in dates, so comparisons across those periods are
+descriptive. Marginal interval overlap is not a paired significance test.
+[CI method and limits](RL_EVALUATION.md#arm-stealth90-five-method-summary-20261007)
+· [Five-method aggregate and source hashes](arm_results/rl_integration/stealth-iteration90-five-method-overall-ci.json).
 
 <details>
-<summary><strong>Significance tests and 95% confidence intervals</strong></summary>
+<summary><strong>September 29–30 paired tests and 95% confidence intervals</strong></summary>
 
-**Paired uncertainty:** no pair is significant at 5% after correcting the three
+**September 29–30 paired uncertainty:** no pair is significant at 5% after correcting the three
 comparisons (Holm p=0.220 for either ARM versus baseline; 0.910 for Gate B versus
 Additive). The 95% intervals below resample 300 tasks, keeping each task’s three
 repeats together; they do not measure training-seed variability.
@@ -399,14 +409,8 @@ repeats together; they do not measure training-seed variability.
 The earlier training-curve plot retains the first matched pass. Diamonds use this corrected
 protocol. Earlier GPT-4.1/T0 ARM cohorts remain [separate history](ARM_RESULTS.md#arm-stealth90-results-20260929).
 
-**Mixed-only iteration90 checkpoints — October6; all six cohorts verified.**
-The same full300 stealth protocol is used: actor-only inference,
-T0.6/p0.95/k20,4096 tokens,30 turns and o4-mini/AgentTrek.
-
-| Method | Verified repeats | Full300 overall mean ± sample SD | Valid-only mean ± sample SD |
-| --- | ---: | ---: | ---: |
-| Mixed-only bonus + relaxed B |3/3 |**59.00 ± 2.60%** |59.67 ± 2.71% |
-| Mixed-only reweight + relaxed B |3/3 |**56.22 ± 0.77%** |56.79 ± 0.45% |
+<details>
+<summary><strong>October 6 mixed-only per-repeat results</strong></summary>
 
 | Method | Repeat | Full300 overall | Valid-only | Valid / invalid | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -417,10 +421,7 @@ T0.6/p0.95/k20,4096 tokens,30 turns and o4-mini/AgentTrek.
 |  |2 |55.33% (166/300) |56.27% (166/295) |295 /5 |Verified |
 |  |3 |56.67% (170/300) |57.05% (170/298) |298 /2 |Verified |
 
-Mean ± sample SD describes three evaluations of each fixed trained checkpoint;
-valid-only means average the three per-repeat ratios. Invalid attempts remain
-failures in the full300 denominator. Comparison with the September29–30 results
-above is descriptive because collection dates differ.
+</details>
 
 <details>
 <summary><strong>October mixed-only paired comparison and 95% confidence interval</strong></summary>

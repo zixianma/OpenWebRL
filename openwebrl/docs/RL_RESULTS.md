@@ -154,7 +154,27 @@
 | Additive bonus |90 |159 |283 |17 |53.00 |56.18 |[September29 first pass](arm_results/rl_integration/stealth-additive-iteration90-audit.json) |
 | Gate B: relaxed gate |90 |169 |288 |12 |56.33 |58.68 |[September29 first pass](arm_results/rl_integration/stealth-gate-b-iteration90-audit.json) |
 
-## Matched stealth browser · o4-mini · temperature 0.6 · September29–30
+<a id="arm-stealth90-five-method-summary-20261007"></a>
+## Iteration 90 stealth · full 300 · three repeats · mean ± sample SD and 95% CI
+
+| Method | Collection dates (PDT) | Overall mean ± sample SD | Overall 95% task-cluster BCa CI | Valid-only mean ± sample SD |
+| --- | --- | ---: | --- | ---: |
+| Outcome-only baseline | Sep 29–30 | **55.22 ± 2.14%** | [50.89, 59.44]% | 57.65 ± 1.77% |
+| Additive bonus | Sep 29–30 | **58.44 ± 1.35%** | [54.33, 62.56]% | 61.45 ± 1.19% |
+| Gate B: relaxed gate | Sep 29–30 | **58.78 ± 3.89%** | [54.44, 63.00]% | 61.36 ± 3.88% |
+| Mixed-only bonus + relaxed B | Oct 6 | **59.00 ± 2.60%** | [54.89, 63.00]% | 59.67 ± 2.71% |
+| Mixed-only reweight + relaxed B | Oct 6 | **56.22 ± 0.77%** | [52.11, 60.22]% | 56.79 ± 0.45% |
+
+| Protocol / uncertainty | Value |
+| --- | --- |
+| Actor / judge | T0.6 / p0.95 / k20 / 4,096 tokens / 30 turns; o4-mini / AgentTrek |
+| Overall 95% CI | Task-cluster BCa; 300 clusters × 3 repeats; 50,000 draws; fixed checkpoints and observed evaluation windows |
+| SD / valid-only convention | Sample SD, ddof 1; valid-only mean of three per-repeat ratios |
+| Collection dates | September 29–30 vs October 6, 2026 (PDT); cross-period comparisons descriptive |
+| Source / interpretation | [Five-method aggregate](arm_results/rl_integration/stealth-iteration90-five-method-overall-ci.json) · [CI method and limits](RL_EVALUATION.md#arm-stealth90-five-method-summary-20261007) |
+
+<details>
+<summary>September 29–30: per-repeat counts and denominators</summary>
 
 | Method | Iteration | Repeat | Successes | Valid | Invalid | Overall % | Valid-only % | Fixed100 overall / valid-only % | Record |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -168,12 +188,10 @@
 | |90 |2 |189 |288 |12 |63.00 |65.63 |67.00 /68.37 |[Fresh repeat2 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat2-audit.json) |
 | |90 |3 |174 |288 |12 |58.00 |60.42 |61.00 /61.00 |[Fresh repeat3 audit](arm_results/rl_integration/stealth-o4-t06-gate-b-iteration90-repeat3-audit.json) |
 
-## Mixed-only relaxed B · stealth · o4-mini · T0.6 · October6 · six cohorts verified
+</details>
 
-| Method | Verified repeats | Full300 overall mean ± sample SD | Valid-only mean ± sample SD |
-| --- | ---: | ---: | ---: |
-| Mixed-only bonus + relaxed B |3/3 |**59.00 ± 2.60%** |59.67 ± 2.71% |
-| Mixed-only reweight + relaxed B |3/3 |**56.22 ± 0.77%** |56.79 ± 0.45% |
+<details>
+<summary>October 6: mixed-only per-repeat counts and denominators</summary>
 
 | Method | Iteration | Repeat | Verified repeats | Successes | Valid | Invalid | Overall % | Valid-only % | Status / record |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
@@ -184,6 +202,8 @@
 |  |90 |2 |3/3 |166 |295 |5 |55.33 |56.27 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
 |  |90 |3 |3/3 |170 |298 |2 |56.67 |57.05 |[Verified cohort](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json) |
 
+</details>
+
 <details>
 <summary>October mixed-only paired comparison</summary>
 
@@ -192,26 +212,6 @@
 | Bonus − reweight |+2.78 |[−1.00, +6.56] |0.1724 |300 |3 |
 
 </details>
-
-| Protocol / comparison scope | Value |
-| --- | --- |
-| Actor / judge |T0.6 /p0.95 /k20 /4096 tokens /30 turns; o4-mini /AgentTrek |
-| Task cohort / inference |Same300 OM2W task IDs; actor-only |
-| Summary convention |Three fixed-checkpoint repeats; sample SD, ddof1; valid-only mean of per-repeat ratios |
-| September29–30 comparison |Different collection dates; descriptive only |
-| Details |[Protocol and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006) |
-
-## Matched stealth iteration90 · three-repeat mean ± sample SD
-
-| Method | Iteration | Full300 overall mean ± SD | Valid-only mean ± SD | Overall Δ vs baseline | Valid denominators, repeats1/2/3 |
-| --- | ---: | --- | --- | ---: | --- |
-| Outcome-only baseline |90 |**55.22 ± 2.14%** |57.65 ± 1.77% |+0.00 pp |286/290/286 |
-| Additive bonus |90 |**58.44 ± 1.35%** |61.45 ± 1.19% |+3.22 pp |286/286/284 |
-| Gate B: relaxed gate |90 |**58.78 ± 3.89%** |61.36 ± 3.88% |+3.56 pp |286/288/288 |
-
-| Source |
-| --- |
-| [Nine-cohort aggregate and audit hashes](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json) |
 
 ## Matched iteration90 · overall paired95% CIs · three-pair Holm correction
 

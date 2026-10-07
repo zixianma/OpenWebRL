@@ -33,6 +33,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
+- [Five-method iteration 90 stealth summary: means, sample SDs and overall 95% CIs](#arm-stealth90-five-method-summary-20261007)
 - [Mixed-only iteration90 stealth: all six cohorts verified, October6](#arm-mixed-stealth90-three-repeats-20261006)
 - [Matched iteration90 stealth rerun: o4-mini/T0.6](#arm-stealth90-o4-matched-20260929)
 - [Additive/Gate B iteration90 first stealth evaluations](#arm-stealth90-threeway-repeats-20260928)
@@ -1681,6 +1682,59 @@ within the separate12h caps; unspent budgets are released.
 
 [Outcome-only baseline audit](arm_results/rl_integration/webvoyager-gpt4o-t06-baseline-iteration90-audit.json) · [Additive ARM audit](arm_results/rl_integration/webvoyager-gpt4o-t06-additive-iteration90-audit.json) · [Gate B audit](arm_results/rl_integration/webvoyager-gpt4o-t06-gate-b-iteration90-audit.json).
 
+<a id="arm-stealth90-five-method-summary-20261007"></a>
+## Iteration 90 stealth: five methods, three repeats and overall 95% CIs — October 7
+
+| Method | Collection dates (PDT) | Overall mean ± sample SD | Overall 95% task-cluster BCa CI | Valid-only mean ± sample SD |
+| --- | --- | ---: | --- | ---: |
+| Outcome-only baseline | Sep 29–30 | **55.22 ± 2.14%** | [50.89, 59.44]% | 57.65 ± 1.77% |
+| Additive bonus | Sep 29–30 | **58.44 ± 1.35%** | [54.33, 62.56]% | 61.45 ± 1.19% |
+| Gate B: relaxed gate | Sep 29–30 | **58.78 ± 3.89%** | [54.44, 63.00]% | 61.36 ± 3.88% |
+| Mixed-only bonus + relaxed B | Oct 6 | **59.00 ± 2.60%** | [54.89, 63.00]% | 59.67 ± 2.71% |
+| Mixed-only reweight + relaxed B | Oct 6 | **56.22 ± 0.77%** | [52.11, 60.22]% | 56.79 ± 0.45% |
+
+All 15 verified cohorts cover the same 300 Online-Mind2Web tasks with actor-only
+Browser Use stealth, o4-mini/AgentTrek, temperature 0.6, top-p 0.95, top-k 20,
+4,096 response tokens and 30 turns. Each method uses three evaluations of one
+fixed iteration 90 checkpoint. These are neither independent training seeds
+nor pass@3 results. Baseline, Additive and Gate B were collected September 29–30;
+the two mixed-only methods were collected October 6, 2026 (PDT). Combining
+the rows does not make the five methods a contemporaneously matched experiment.
+Cross-period comparisons remain descriptive, and local-browser GPT-4.1/T0
+monitoring results remain separate.
+
+The overall point estimate averages the three full-300 success rates, retaining
+invalid attempts as failures. Sample SD (`ddof=1`) describes the spread of those
+three rates. The **overall 95% CI** uses 50,000 bias-corrected and accelerated
+(BCa) bootstrap draws with seed 20260930, resampling 300 task clusters and keeping
+each task's three outcomes together. Integer three-repeat success counts are
+bootstrapped before dividing the interval limits by three, avoiding floating
+point tie ambiguity while preserving the mean-rate estimand. The interval
+measures task-sampling uncertainty conditional on these trained checkpoints and
+observed evaluation windows. It does not cover training-seed variation or
+arbitrary shared website and time effects. It is not a confidence interval
+computed from the three repeat rates or from 900 independent attempts.
+
+For the baseline, uniform integer-count tie handling changes the archived
+lower marginal bound from 51.00% to 50.89%; its upper bound remains 59.44%.
+All other displayed marginal endpoints are unchanged. The archived
+three-method confidence figure and its paired tests retain their original values.
+
+The CI column covers the primary full-300 overall metric. Valid-only results
+retain the mean and sample SD of the three separate per-repeat ratios. The five
+intervals are
+pointwise marginal intervals, without a simultaneous-coverage adjustment;
+interval overlap does not replace a paired test. The existing
+[September three-method paired tests](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
+and [October mixed-only paired test](#arm-mixed-stealth90-three-repeats-20261006)
+are unchanged. No cross-period significance test is introduced.
+
+[Five-method aggregate, CI settings and input hashes](arm_results/rl_integration/stealth-iteration90-five-method-overall-ci.json)
+· [September nine-cohort aggregate](arm_results/rl_integration/stealth-o4-t06-iteration90-three-repeat-summary.json)
+· [October six-cohort aggregate](arm_results/rl_integration/mixed-stealth90-three-repeats-20261006.json).
+The computation reuses saved verdicts and verified audit receipts; no actor,
+judge or browser calls, archive rescans, or selective retries were performed.
+
 <a id="arm-mixed-stealth90-three-repeats-20261006"></a>
 ## Mixed-only iteration90 stealth evaluations — October6
 
@@ -1688,10 +1742,7 @@ within the separate12h caps; unspent budgets are released.
 Every cohort retains all300 tasks. These are repeated evaluations of two fixed
 iteration90 checkpoints, not independent training seeds or pass@3.
 
-| Method | Verified repeats | Full300 overall mean ± sample SD | Valid-only mean ± sample SD |
-| --- | ---: | ---: | ---: |
-| Mixed-only bonus + relaxed B |3/3 |**59.00 ± 2.60%** |59.67 ± 2.71% |
-| Mixed-only reweight + relaxed B |3/3 |**56.22 ± 0.77%** |56.79 ± 0.45% |
+[Combined five-method means and overall 95% CIs](#arm-stealth90-five-method-summary-20261007).
 
 | Method | Repeat | Full300 overall | Valid-only | Valid / invalid | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -1780,6 +1831,9 @@ Raw task records, rollout archives and detailed runtime receipts remain private.
 <a id="arm-stealth90-o4-matched-20260929"></a>
 ## Matched iteration90 stealth rerun: o4-mini/T0.6 — September29
 
+<details>
+<summary>September 29–30 summary, baseline deltas and verification history</summary>
+
 <!-- arm-stealth-repeat3-progress-start -->
 **All three repeats verified, September30.**
 
@@ -1800,6 +1854,8 @@ Third-pass jobs337132/337133/337134 completed with161/171/174 successes and
 286/284/288 valid tasks. Each released its GPU after17,106/18,470/17,575 seconds,
 respectively; all attempts remain charged within the original7h caps.
 <!-- arm-stealth-repeat3-progress-end -->
+
+</details>
 
 The [difficulty breakdown](ARM_RESULTS.md#arm-stealth90-difficulty-20260930) is now reconstructed
 from all 2,700 retained verdicts. Under human-step bins (80 easy / 141 medium /
