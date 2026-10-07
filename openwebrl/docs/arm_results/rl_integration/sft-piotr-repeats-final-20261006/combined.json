@@ -1,0 +1,158 @@
+{
+  "independent_task_clusters": 300,
+  "repeats": 2,
+  "episodes": 1200,
+  "overall_success": {
+    "actor0": 0.33,
+    "arm": 0.38
+  },
+  "success_bootstrap95": {
+    "actor0": [
+      0.28499999999999986,
+      0.37666666666666665
+    ],
+    "arm": [
+      0.33,
+      0.43000000000000005
+    ]
+  },
+  "arm_minus_actor0": 0.04999999999999999,
+  "paired_task_cluster_bootstrap95": [
+    0.015000000000000013,
+    0.08500000000000019
+  ],
+  "bootstrap_draws": 50000,
+  "bootstrap_seed": 20261006,
+  "resampling_unit": "Task ID, retaining both repeats and both arms",
+  "estimand": "Mean paired success gain across these two fixed fresh stochastic repeats",
+  "limitation": "Task-bootstrap intervals condition on these two repeats; they do not estimate uncertainty over an unlimited population of random seeds.",
+  "epoch": 1791353010.2253475,
+  "status": "verified_complete",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "one fresh baseline and Piotr-ARM episode per task",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Matched fresh pair; historical collection dates/runtime differ. Judge metering adds4096 output cap."
+  },
+  "target_episodes": 1200,
+  "verified_complete": true,
+  "source_reports_sha256": [
+    "67b7bdbd7077c8c33a6d60490d281ba4c3524c2e45b5ce89bcfc0090bfda1f96",
+    "37dbbebf15e599e505f5811010edaa33a87a8ded02cb505682da1ffd81d73499"
+  ],
+  "successes": {
+    "actor0": 198,
+    "arm": 228
+  },
+  "valid": {
+    "actor0": 547,
+    "arm": 523
+  },
+  "per_repeat": [
+    {
+      "repeat": 1,
+      "successes": {
+        "actor0": 100,
+        "arm": 115
+      },
+      "paired": {
+        "arm_minus_actor0": {
+          "difference": 0.05,
+          "bootstrap95": [
+            -0.0033333333333333335,
+            0.10333333333333333
+          ],
+          "first_only": 40,
+          "second_only": 25,
+          "common_valid_tasks": 252,
+          "common_valid_first_successes": 112,
+          "common_valid_second_successes": 98
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "successes": {
+        "actor0": 98,
+        "arm": 113
+      },
+      "paired": {
+        "arm_minus_actor0": {
+          "difference": 0.05,
+          "bootstrap95": [
+            0.0,
+            0.1
+          ],
+          "first_only": 38,
+          "second_only": 23,
+          "common_valid_tasks": 263,
+          "common_valid_first_successes": 111,
+          "common_valid_second_successes": 97
+        }
+      }
+    }
+  ],
+  "mean_efficiency": {
+    "actor0": {
+      "actor_input_tokens": 141351.86166666666,
+      "actor_output_tokens": 4771.733333333334,
+      "selector_input_tokens": 0.0,
+      "selector_output_tokens": 0.0,
+      "elapsed_seconds": 144.75134603652288,
+      "actor_client_request_seconds": 78.5319006217149,
+      "selector_service_seconds": 0.0,
+      "browser_steps": 14.761666666666667,
+      "browser_step_seconds": 51.851737896035004,
+      "decoder_cold_flops": 1590174605756443.2,
+      "decoder_observed_kv_flops": 392613409753443.0,
+      "unmetered_failed_actor_requests": 0.006666666666666667
+    },
+    "arm": {
+      "actor_input_tokens": 838018.5916666667,
+      "actor_output_tokens": 27391.64166666667,
+      "selector_input_tokens": 61396.19,
+      "selector_output_tokens": 138.59833333333333,
+      "elapsed_seconds": 214.56626473098567,
+      "actor_client_request_seconds": 493.4104787948427,
+      "selector_service_seconds": 8.45515081022866,
+      "browser_steps": 16.195,
+      "browser_step_seconds": 79.5687743151704,
+      "decoder_cold_flops": 1.0270684550940592e+16,
+      "decoder_observed_kv_flops": 1948843342068121.5,
+      "unmetered_failed_actor_requests": 0.18333333333333335
+    }
+  },
+  "final_accounting_verified": true,
+  "allocated_gpu_hours": 16.65,
+  "judge_cost_usd": 6.071727200000001,
+  "judge_calls": 724,
+  "zero_policy": "Invalid and unjudged outcomes count as zero; no tasks discarded.",
+  "efficiency_caveat": "Equal-weight mean of full300 per-repeat metrics. Decoder work excludes vision, failed/unmetered requests and hardware overhead. Judge spend is evaluation overhead. Allocation GPU-hours cannot be apportioned exactly to concurrent arms."
+}

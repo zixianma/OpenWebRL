@@ -1,9 +1,9 @@
 {
-  "epoch": 1791351395.5412834,
-  "status": "repeat2_complete_repeat1_running",
+  "epoch": 1791352983.0268145,
+  "status": "verified_complete",
   "repetitions": 2,
   "target_episodes": 1200,
-  "completed_episodes": 1149,
+  "completed_episodes": 1200,
   "target_tasks_per_repeat": 300,
   "arms": [
     {
@@ -65,36 +65,36 @@
   "active_agent_queue_verified": true,
   "prior_results_reused": false,
   "prior_budget_transferred": false,
-  "verified_complete": false,
+  "verified_complete": true,
   "all_startup_gates_passed": true,
-  "final_accounting_verified": false,
+  "final_accounting_verified": true,
   "results": [
     {
       "repeat": 1,
-      "recorded_episodes": 549,
-      "matched_tasks": 272,
-      "unmatched_episodes": 5,
+      "recorded_episodes": 600,
+      "matched_tasks": 300,
+      "unmatched_episodes": 0,
       "successes": {
-        "actor0": 89,
-        "arm": 107
+        "actor0": 100,
+        "arm": 115
       },
       "paired": {
         "arm_minus_actor0": {
-          "difference": 0.0661764705882353,
+          "difference": 0.05,
           "bootstrap95": [
-            0.011029411764705883,
-            0.1213235294117647
+            -0.0033333333333333335,
+            0.10333333333333333
           ],
-          "first_only": 39,
-          "second_only": 21,
-          "common_valid_tasks": 224,
-          "common_valid_first_successes": 104,
-          "common_valid_second_successes": 87
+          "first_only": 40,
+          "second_only": 25,
+          "common_valid_tasks": 252,
+          "common_valid_first_successes": 112,
+          "common_valid_second_successes": 98
         }
       },
-      "artifact_directory": "sft-piotr-repeats-partial-20261006-2235/repeat-1",
-      "verified_complete": false,
-      "final_accounting_verified": false
+      "artifact_directory": "sft-piotr-repeats-final-20261006/repeat-1",
+      "verified_complete": true,
+      "final_accounting_verified": true
     },
     {
       "repeat": 2,
@@ -124,5 +124,18 @@
       "final_accounting_verified": true
     }
   ],
-  "caveat": "Repeat2 is full300; repeat1 remains a duration-selected partial subset. No pooled estimate until both repeats complete. Interim confidence intervals are not adjusted for repeated looks."
+  "caveat": "Both repeats cover the identical full300 cohort. Paired uncertainty resamples task clusters with both arms and repeats retained. The initial corrected three-arm run remains incomplete and is not included in this full300 average.",
+  "combined": {
+    "overall_success": {
+      "actor0": 0.33,
+      "arm": 0.38
+    },
+    "arm_minus_actor0": 0.04999999999999999,
+    "paired_task_cluster_bootstrap95": [
+      0.015000000000000013,
+      0.08500000000000019
+    ],
+    "independent_task_clusters": 300,
+    "episodes": 1200
+  }
 }

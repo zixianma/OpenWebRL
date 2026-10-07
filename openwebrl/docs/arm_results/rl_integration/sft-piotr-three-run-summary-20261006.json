@@ -1,5 +1,5 @@
 {
-  "epoch": 1791352334.4506974,
+  "epoch": 1791352998.8404818,
   "study": "Three October corrected runs; September excluded from average",
   "matched_tasks": 160,
   "runs": [
@@ -62,10 +62,10 @@
     {
       "label": "Repeat 1",
       "request_seed_label": 43,
-      "recorded_episodes": 588,
-      "sft_tasks": 295,
-      "piotr_tasks": 293,
-      "paired_tasks": 293
+      "recorded_episodes": 600,
+      "sft_tasks": 300,
+      "piotr_tasks": 300,
+      "paired_tasks": 300
     },
     {
       "label": "Repeat 2",
@@ -87,7 +87,7 @@
   },
   "record_set_sha256": [
     "5e8dd8069e7786df1e9069a08ba2982449a951bbccabeed270e1ad672acf6e77",
-    "8104c482b56e2da30d0ab37a0117168c72dec5bd2429b953270edba09707c323",
+    "3419e0ce81a487d07ed1bad9df16f5f813a89c19ec3ec23ede35fab29c526b47",
     "2402ec366d41518487f0f0d2bcc25eb476137fc9e667bc9fe6197525435d06c7"
   ],
   "matched_scientific_settings": {

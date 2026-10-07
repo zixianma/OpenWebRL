@@ -7,7 +7,7 @@
 ## Contents
 
 - [SFT versus Piotr ARM: three-run mean ± SD on the same 160 tasks](#sft-piotr-three-run-summary-20261006)
-- [SFT versus Piotr ARM: repeat 2 complete; repeat 1 running](#sft-piotr-repeat-tracker-20261006)
+- [SFT versus Piotr ARM: both full300 repeats complete](#sft-piotr-repeat-tracker-20261006)
 - [Learned ARM: corrected historical-protocol partial](#historical-corrected-partial-tracker-20261006)
 - [Which results need a corrected rerun?](#rerun-triage-20261006)
 - [Actor alone: current local-browser results](#local-jev-actor-results-20261006)
@@ -33,23 +33,22 @@
 | SFT + Piotr ARM success | 62/160 = 38.75% | 64/160 = 40.00% | 64/160 = 40.00% | **39.58 ± 0.72%** |
 | ARM gain | +5.63 pp | +4.38 pp | +4.38 pp | **4.79 ± 0.72 pp** |
 
-SD is the sample standard deviation of the three run-level rates (`ddof=1`), not a confidence interval. Recorded invalid/unjudged outcomes remain zero. All six task/arm observations are present for every included task; the active repeat's remaining collection cannot change this fixed subset. [Method, task-identity proof and coverage explanation](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006) · [Aggregate](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
+SD is the sample standard deviation of the three run-level rates (`ddof=1`), not a confidence interval. Recorded invalid/unjudged outcomes remain zero. All six task/arm observations are present for every included task. Both fresh repeats are now full300 complete; the initial corrected run still limits this three-run table to 160 paired tasks. [Method, task-identity proof and coverage explanation](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006) · [Aggregate](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
-## SFT versus Piotr ARM: full300 repeats
+## SFT versus Piotr ARM: both full300 repeats complete
 
-| Repeat | Actor / selector | N | Matched tasks / target | Success on matched tasks | Status |
-| --- | --- | ---: | ---: | --- | --- |
-| 1 | Official SFT alone | 1 | 272/300 | 89/272 = **32.72%** | Running; partial |
-| 1 | Official SFT + Piotr ARM | 5 | 272/300 | 107/272 = **39.34%** | Running; partial |
-| 2 | Official SFT alone | 1 | 300/300 | 98/300 = **32.67%** | Complete; final accounting |
-| 2 | Official SFT + Piotr ARM | 5 | 300/300 | 113/300 = **37.67%** | Complete; final accounting |
+**Both repeats are complete: 1,200/1,200 episodes, with both arms on all 300 tasks in each repeat.** All four jobs completed; model/seed/decoding receipts, browser teardown, W&B terminal states and independent final scheduler/API accounting are verified. Invalid and unjudged recorded outcomes remain zero.
 
-**Repeat 2 is complete: 600/600 episodes on all 300 tasks, with final scheduler/API accounting and cleanup verified.** Repeat 1 remains active at 549/600 episodes in the October 6, 22:36 PDT snapshot, with 272 complete task pairs and 5 unmatched records preserved. Overall scores retain invalid and unjudged outcomes as zero. Repeat 1's duration-selected subset is not a full300 result.
+| Metric, full300 | Repeat 1 | Repeat 2 | Two-run mean ± sample SD |
+| --- | ---: | ---: | ---: |
+| SFT success | 100/300 = 33.33% | 98/300 = 32.67% | **33.00 ± 0.47%** |
+| SFT + Piotr ARM success | 115/300 = 38.33% | 113/300 = 37.67% | **38.00 ± 0.47%** |
+| ARM gain | +5.00 pp | +5.00 pp | **+5.00 ± 0.00 pp** |
 
-The full300 repeat 2 gain is **+5.00 percentage points** (paired 95% task-bootstrap interval +0.00 to +10.00 pp): ARM wins 38 tasks that SFT misses and loses 23 that SFT solves. Repeat 1's interim gain is +6.62 pp (+1.10 to +12.13); that interval is not adjusted for repeated interim looks. The pooled repeated-task comparison remains pending until repeat 1 finishes.
+The mean paired gain is **+5.00 percentage points**, with a **95% task-cluster bootstrap interval of +1.50 to +8.50 pp** (50,000 draws). Each resampled task retains both arms and both repeats. These are 300 task clusters, not 600 independent tasks. The interval conditions on these two repeats; it does not estimate uncertainty over arbitrary future seeds. The zero gain SD means the two observed gains happen to match, not that the gain has zero uncertainty.
 
-**Historical decoding remains T=0.7 / p=0.9 / 1,024 actor tokens / 30 turns**, with the corrected pinned browser policy. The RL-task ARM and the earlier partial cohort remain separate. [Protocol, seeds, accounting and compute/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
+**Historical decoding: T=0.7 / p=0.9 / 1,024 actor tokens / 30 turns**, with the corrected pinned browser policy. [Final accounting, paired analysis and cost/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
 
 <a id="historical-corrected-partial-tracker-20261006"></a>
 ## Learned ARM: corrected historical protocol, partial
