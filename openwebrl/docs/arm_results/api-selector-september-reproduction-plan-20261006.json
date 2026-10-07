@@ -125,24 +125,26 @@
   ],
   "approved": true,
   "allocated_jobs": [
-    "348363",
-    "348362"
+    "348445",
+    "348446"
   ],
   "offline_validation": {
-    "tests_passed": 8,
+    "tests_passed": 9,
     "tests_failed": 0,
     "actual_http_request_route_tested": true,
     "shared_concurrent_budget_tested": true,
     "ambiguous_usage_preserved": true,
     "historical_sol_wrapper_sha256": "d1132587f43af9eedafffd45571d590e5f5470ed270c800fc372590c3b2605f5",
     "historical_prompt_wrapper_byte_identical": true,
-    "gpu_startup_not_yet_run": true
+    "gpu_startup_not_yet_run": false
   },
   "all_attempt_jobs": [
     "348336",
     "348337",
     "348363",
-    "348362"
+    "348362",
+    "348445",
+    "348446"
   ],
   "resources_actual_per_shard": {
     "gpus": 1,
@@ -151,6 +153,25 @@
     "total_seconds": 14400
   },
   "offline_tests_passed": 9,
-  "repair": "Known model output-token cap aborts original episode without retry/fallback; other episodes proceed. Scientific settings unchanged.",
-  "snapshot_scope": "Protocol and approval record; live usage is in private append-only ledgers, not this static plan."
+  "repair": "Episode-scoped output-cap handling plus cross-node safe shared-ledger updates; all outcomes and spend preserved, scientific settings unchanged.",
+  "snapshot_scope": "Protocol and approval record; live usage is in private append-only ledgers, not this static plan.",
+  "recovery_remaining_seconds_per_shard": [
+    13260,
+    13200
+  ],
+  "prior_used_seconds_per_shard": [
+    1140,
+    1144
+  ],
+  "cross_node_validation": {
+    "passed": true,
+    "nodes": 2,
+    "threads_per_node": 8,
+    "selector_settlements": 200,
+    "judge_settlements": 200,
+    "paid_calls": 0
+  },
+  "startup_verified": true,
+  "active_agent_supervision_verified": true,
+  "updated_epoch": 1791359315.5811157
 }
