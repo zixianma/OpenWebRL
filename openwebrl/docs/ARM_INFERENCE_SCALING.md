@@ -6,7 +6,7 @@
 
 ## Contents
 
-- [SFT versus Piotr ARM: two running full300 repeats](#sft-piotr-repeat-tracker-20261006)
+- [SFT versus Piotr ARM: repeat 2 complete; repeat 1 running](#sft-piotr-repeat-tracker-20261006)
 - [Learned ARM: corrected historical-protocol partial](#historical-corrected-partial-tracker-20261006)
 - [Which results need a corrected rerun?](#rerun-triage-20261006)
 - [Actor alone: current local-browser results](#local-jev-actor-results-20261006)
@@ -22,20 +22,20 @@
 - [Pilots and provenance](#luna-qwen-inference-20261004)
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
-## SFT versus Piotr ARM: two fresh full300 repeats
+## SFT versus Piotr ARM: full300 repeats
 
 | Repeat | Actor / selector | N | Matched tasks / target | Success on matched tasks | Status |
 | --- | --- | ---: | ---: | --- | --- |
-| 1 | Official SFT alone | 1 | 121/300 | 47/121 = **38.84%** | Running; partial |
-| 1 | Official SFT + Piotr ARM | 5 | 121/300 | 49/121 = **40.50%** | Running; partial |
-| 2 | Official SFT alone | 1 | 159/300 | 53/159 = **33.33%** | Running; partial |
-| 2 | Official SFT + Piotr ARM | 5 | 159/300 | 65/159 = **40.88%** | Running; partial |
+| 1 | Official SFT alone | 1 | 272/300 | 89/272 = **32.72%** | Running; partial |
+| 1 | Official SFT + Piotr ARM | 5 | 272/300 | 107/272 = **39.34%** | Running; partial |
+| 2 | Official SFT alone | 1 | 300/300 | 98/300 = **32.67%** | Complete; final accounting |
+| 2 | Official SFT + Piotr ARM | 5 | 300/300 | 113/300 = **37.67%** | Complete; final accounting |
 
-**All four shards are running; 579/1,200 episodes are saved in the October 6, 21:27 PDT snapshot.** Repeat 1 has 251/600 episodes and 121 complete task pairs; repeat 2 has 328/600 episodes and 159 complete pairs. The table compares arms on the same completed tasks within each repeat. The 19 remaining records are preserved but unmatched. These duration-selected previews are not full300 results and the repeats currently cover different task subsets. Invalid outcomes count as zero overall.
+**Repeat 2 is complete: 600/600 episodes on all 300 tasks, with final scheduler/API accounting and cleanup verified.** Repeat 1 remains active at 549/600 episodes in the October 6, 22:36 PDT snapshot, with 272 complete task pairs and 5 unmatched records preserved. Overall scores retain invalid and unjudged outcomes as zero. Repeat 1's duration-selected subset is not a full300 result.
 
-Interim paired ARM gains are **+1.65 pp** in repeat 1 (95% task-bootstrap interval −5.79 to +9.09 pp) and **+7.55 pp** in repeat 2 (+0.63 to +14.47 pp). These intervals describe the current subsets, without adjustment for repeated interim looks; they are not stopping criteria or final evidence. Full300 collection continues under the original caps.
+The full300 repeat 2 gain is **+5.00 percentage points** (paired 95% task-bootstrap interval +0.00 to +10.00 pp): ARM wins 38 tasks that SFT misses and loses 23 that SFT solves. Repeat 1's interim gain is +6.62 pp (+1.10 to +12.13); that interval is not adjusted for repeated interim looks. The pooled repeated-task comparison remains pending until repeat 1 finishes.
 
-**Historical decoding is unchanged: T=0.7/p=0.9/1,024 actor tokens and30 turns**, with the corrected pinned actor policy. All four startup gates passed and active-agent supervision is verified. The RL-task ARM is excluded; the earlier partial cohort remains separate. [Protocol, seeds, budgets and interim cost/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
+**Historical decoding remains T=0.7 / p=0.9 / 1,024 actor tokens / 30 turns**, with the corrected pinned browser policy. The RL-task ARM and the earlier partial cohort remain separate. [Protocol, seeds, accounting and compute/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
 
 <a id="historical-corrected-partial-tracker-20261006"></a>
 ## Learned ARM: corrected historical protocol, partial

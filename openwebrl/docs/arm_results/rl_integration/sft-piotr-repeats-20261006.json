@@ -1,9 +1,9 @@
 {
-  "epoch": 1791347272.1530817,
-  "status": "running_partial_matched_preview",
+  "epoch": 1791351395.5412834,
+  "status": "repeat2_complete_repeat1_running",
   "repetitions": 2,
   "target_episodes": 1200,
-  "completed_episodes": 579,
+  "completed_episodes": 1149,
   "target_tasks_per_repeat": 300,
   "arms": [
     {
@@ -71,54 +71,58 @@
   "results": [
     {
       "repeat": 1,
-      "recorded_episodes": 251,
-      "matched_tasks": 121,
-      "unmatched_episodes": 9,
+      "recorded_episodes": 549,
+      "matched_tasks": 272,
+      "unmatched_episodes": 5,
       "successes": {
-        "actor0": 47,
-        "arm": 49
+        "actor0": 89,
+        "arm": 107
       },
       "paired": {
         "arm_minus_actor0": {
-          "difference": 0.01652892561983471,
+          "difference": 0.0661764705882353,
           "bootstrap95": [
-            -0.05785123966942149,
-            0.09090909090909091
+            0.011029411764705883,
+            0.1213235294117647
           ],
-          "first_only": 12,
-          "second_only": 10,
-          "common_valid_tasks": 100,
-          "common_valid_first_successes": 48,
-          "common_valid_second_successes": 46
+          "first_only": 39,
+          "second_only": 21,
+          "common_valid_tasks": 224,
+          "common_valid_first_successes": 104,
+          "common_valid_second_successes": 87
         }
       },
-      "artifact_directory": "sft-piotr-repeats-partial-20261006-2128/repeat-1"
+      "artifact_directory": "sft-piotr-repeats-partial-20261006-2235/repeat-1",
+      "verified_complete": false,
+      "final_accounting_verified": false
     },
     {
       "repeat": 2,
-      "recorded_episodes": 328,
-      "matched_tasks": 159,
-      "unmatched_episodes": 10,
+      "recorded_episodes": 600,
+      "matched_tasks": 300,
+      "unmatched_episodes": 0,
       "successes": {
-        "actor0": 53,
-        "arm": 65
+        "actor0": 98,
+        "arm": 113
       },
       "paired": {
         "arm_minus_actor0": {
-          "difference": 0.07547169811320754,
+          "difference": 0.05,
           "bootstrap95": [
-            0.006289308176100629,
-            0.14465408805031446
+            0.0,
+            0.1
           ],
-          "first_only": 23,
-          "second_only": 11,
-          "common_valid_tasks": 137,
-          "common_valid_first_successes": 63,
-          "common_valid_second_successes": 52
+          "first_only": 38,
+          "second_only": 23,
+          "common_valid_tasks": 263,
+          "common_valid_first_successes": 111,
+          "common_valid_second_successes": 97
         }
       },
-      "artifact_directory": "sft-piotr-repeats-partial-20261006-2128/repeat-2"
+      "artifact_directory": "sft-piotr-repeats-final-20261006/repeat-2",
+      "verified_complete": true,
+      "final_accounting_verified": true
     }
   ],
-  "caveat": "Duration-selected partial task pairs; subsets differ between repeats. No pooled estimate or full300 claim. Interim confidence intervals are not adjusted for repeated looks."
+  "caveat": "Repeat2 is full300; repeat1 remains a duration-selected partial subset. No pooled estimate until both repeats complete. Interim confidence intervals are not adjusted for repeated looks."
 }

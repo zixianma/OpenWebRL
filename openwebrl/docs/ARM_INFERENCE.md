@@ -1,35 +1,40 @@
 # ARM inference and judge protocol
 
 <a id="sft-piotr-repeats-20261006"></a>
-## SFT versus Piotr ARM: two fresh repeats — running October 6
+## SFT versus Piotr ARM: repeat 2 complete; repeat 1 running — October 6
 
-**All four shards are running; 579/1,200 episodes are saved in the October 6, 21:27 PDT snapshot.** Repeat 1 has 251/600 episodes and 121 complete task pairs; repeat 2 has 328/600 episodes and 159 complete pairs. The table compares arms on the same completed tasks within each repeat. The 19 remaining records are preserved but unmatched. These duration-selected previews are not full300 results and the repeats currently cover different task subsets. Invalid outcomes count as zero overall.
+**Repeat 2 is complete: 600/600 episodes on all 300 tasks, with final scheduler/API accounting and cleanup verified.** Repeat 1 remains active at 549/600 episodes in the October 6, 22:36 PDT snapshot, with 272 complete task pairs and 5 unmatched records preserved. Overall scores retain invalid and unjudged outcomes as zero. Repeat 1's duration-selected subset is not a full300 result.
 
 | Repeat | Actor / selector | N | Matched tasks / target | Success on matched tasks | Status |
 | --- | --- | ---: | ---: | --- | --- |
-| 1 | Official SFT alone | 1 | 121/300 | 47/121 = **38.84%** | Running; partial |
-| 1 | Official SFT + Piotr ARM | 5 | 121/300 | 49/121 = **40.50%** | Running; partial |
-| 2 | Official SFT alone | 1 | 159/300 | 53/159 = **33.33%** | Running; partial |
-| 2 | Official SFT + Piotr ARM | 5 | 159/300 | 65/159 = **40.88%** | Running; partial |
+| 1 | Official SFT alone | 1 | 272/300 | 89/272 = **32.72%** | Running; partial |
+| 1 | Official SFT + Piotr ARM | 5 | 272/300 | 107/272 = **39.34%** | Running; partial |
+| 2 | Official SFT alone | 1 | 300/300 | 98/300 = **32.67%** | Complete; final accounting |
+| 2 | Official SFT + Piotr ARM | 5 | 300/300 | 113/300 = **37.67%** | Complete; final accounting |
 
-Interim paired ARM gains are **+1.65 pp** in repeat 1 (95% task-bootstrap interval −5.79 to +9.09 pp) and **+7.55 pp** in repeat 2 (+0.63 to +14.47 pp). These intervals describe the current subsets, without adjustment for repeated interim looks; they are not stopping criteria or final evidence. Full300 collection continues under the original caps.
+The full300 repeat 2 gain is **+5.00 percentage points** (paired 95% task-bootstrap interval +0.00 to +10.00 pp): ARM wins 38 tasks that SFT misses and loses 23 that SFT solves. Repeat 1's interim gain is +6.62 pp (+1.10 to +12.13); that interval is not adjusted for repeated interim looks. The pooled repeated-task comparison remains pending until repeat 1 finishes.
 
-The repeats retain the corrected historical actor/browser/judge code, pinned browser policy and model revisions: **actor temperature0.7, top-p0.9, top-k omitted, 1,024 output tokens per candidate per turn,30 turns,32K context, full history/current screenshot; greedy Piotr selection and o4-mini/AgentTrek judging.** The current judge cap is4,096 tokens. Historical September baseline/ARM manifests and archived evaluator code also specify1,024 actor tokens; that historical judge call had no explicit completion cap. This differs from the separate4,096-actor-token local v2 study.
+| Repeat 2, full300 | Valid-only success | Mean episode latency | Mean actor + selector tokens | Mean browser steps |
+| --- | ---: | ---: | ---: | ---: |
+| SFT alone | 98/273 = 35.90% | 145.0 s | 148,954 | 14.96 |
+| SFT + Piotr ARM | 113/267 = 42.32% | 208.7 s | 904,516 | 15.88 |
 
-Each repeat has two disjoint150-task shards, with both arms run for each task. Explicit actor-server RNG seeds are4300/4301 and4400/4401; request seed labels are43 and44. The FlashInfer sampler remains unchanged with deterministic inference disabled, so logged request seeds do not guarantee batch-independent replayability. Startup checks require the actual server seed/backend, served model identities and historical policy hash before collection. All four GPU/startup gates passed. Saved actor and selector identities, server seeds, full actor policy, decoding and candidate/selection/token receipts pass validation; eight concurrent browser episodes per shard and live W&B reporting are verified.
+Repeat 2 used **8.34 allocated H200-hours**, and **$3.0187 across 364 judge requests**, all settled. Shard wall times were 7,765 and 7,248 seconds against 10,800 seconds each. Judge costs are evaluation overhead, not actor/selector deployment cost.
 
-The approved cap is **four parallel2H200/16CPU/240GiB allocations ×3h each, including all retries**, with **$5/1,320 judge calls per shard**:24GPUh and$20/5,280 calls combined. Budgets are independent, with no transfers or old-study balances. Allocations end early when complete. Both persistent supervisors have verified active-agent queue receipts.
+The repeats retain the corrected historical actor/browser/judge code and pinned policy/model revisions: **actor T=0.7, top-p=0.9, top-k omitted, 1,024 output tokens per candidate per turn, 30 turns, 32K context, full history/current screenshot; greedy Piotr selection and o4-mini/AgentTrek judging with a 4,096-token judge cap.** Historical September manifests and archived evaluator code also specify 1,024 actor tokens; that historical judge call had no explicit completion cap. This is separate from the 4,096-actor-token local v2 study.
 
-Analysis will report each full300 repeat separately and an equally weighted paired gain across repeats, resampling task IDs together across arms/repeats for uncertainty. Overall zeros, valid-only scores, completion coverage, latency, tokens, browser steps, decoder-compute estimates and all-attempt scheduler/API costs remain explicit. Repeated episodes are not treated as600 independent tasks. No raw trajectories or task payloads are published.
+Each repeat contains two disjoint 150-task shards with both arms on every task. Actor-server RNG seeds are 4300/4301 and 4400/4401; request seed labels are 43 and 44. FlashInfer and nondeterministic inference are unchanged, so request labels do not guarantee batch-independent replay. Actual models, server RNG, browser policy, decoding, candidate/selection traces and token receipts have been audited. Startup-gate episodes remain in the full cohort; no outcome-based reruns were added.
+
+Each shard retains its own **2 H200 / 16 CPU / 240 GiB × 3 hours**, including all attempts, and **$5 / 1,320 judge calls**. No transfers or prior-study balances are used. The seed43 active-agent supervisor remains enabled. An equally weighted cross-repeat paired gain will resample task IDs together across arms and repeats; repeated episodes will not be treated as 600 independent tasks.
 
 [Aggregate progress snapshot](arm_results/rl_integration/sft-piotr-repeats-20261006.json).
 
-| Interim artifacts | Compute cost | Episode latency | Input/output tokens | Aggregate |
+| Artifacts | Decoder compute | Episode latency | Input/output tokens | Aggregate |
 | --- | --- | --- | --- | --- |
-| Repeat 1, 121 matched tasks | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-1/cost.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-1/latency.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-1/tokens.png) | [JSON](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-1/aggregate.json) |
-| Repeat 2, 159 matched tasks | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-2/cost.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-2/latency.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-2/tokens.png) | [JSON](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2128/repeat-2/aggregate.json) |
+| Repeat 1, 272 matched tasks; interim | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2235/repeat-1/cost.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2235/repeat-1/latency.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2235/repeat-1/tokens.png) | [JSON](arm_results/rl_integration/sft-piotr-repeats-partial-20261006-2235/repeat-1/aggregate.json) |
+| Repeat 2, full300 final | [Plot](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/cost.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/latency.png) | [Plot](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/tokens.png) | [JSON](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/aggregate.json) |
 
-Compute plots use analytical decoder PFLOPs, separately showing cold prefill and observed actor KV reuse; these exclude vision encoders, failed/unmetered requests and hardware overhead. They are not dollar costs or measured total FLOPs. Episode latency is wall time, and token counts include actor plus selector input/output. Shared GPU time and evaluation judge spend are accounted per shard, without arbitrary per-arm allocation. No service failure has been observed; start-page failures, fixed-context limits, screenshot failures and one episode dominated by five 300-second actor-proposed waits remain in the results. Final scheduler/API accounting is still pending.
+Compute plots use analytical decoder PFLOPs, with cold-prefill and observed actor KV-reuse views. They exclude vision encoders, failed/unmetered requests and hardware overhead, so they are neither dollar costs nor measured total FLOPs. Token totals count received actor and selector input/output, including cached input. Latency is episode wall time; overlapping request seconds are not added as latency. Browser/reset failures, fixed-context rejections, screenshot failures and selected-wait timeouts remain in the overall scores. Raw trajectories and task payloads remain private.
 
 <a id="arm-same-task-verdict-audit-20261006"></a>
 ## Same-task historical gain and saved-verdict audit — October 6
