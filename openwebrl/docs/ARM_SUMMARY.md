@@ -457,20 +457,21 @@ so a consistent gain over outcome-only RL is not yet established.
 **OM2W difficulty breakdown: iteration 90, three stealth evaluations per method.**
 
 Mean **overall / valid-only** success rates use human reference steps:
-easy 1–5, medium 6–10, hard 11+. **Bold** marks the highest observed mean
-for each split and metric separately; collection dates differ, so these
-cross-period comparisons are descriptive.
+easy 1–5, medium 6–10, hard 11+. **Bold** highlights the largest observed
+gain over the outcome-only baseline in each split and metric, with the
+percentage-point delta in parentheses. Deltas use unrounded means;
+comparisons across collection dates are descriptive.
 
 | Method | Collection dates (PDT) | Easy (80 tasks) | Medium (141 tasks) | Hard (79 tasks) |
 | --- | --- | ---: | ---: | ---: |
 | Outcome-only baseline | Sep 29–30 | 70.00% / 72.11% | 55.79% / 58.49% | 39.24% / 41.14% |
-| Additive | Sep 29–30 | 74.58% / 75.86% | 56.74% / 60.92% | **45.15%** / **47.37%** |
-| Gate B | Sep 29–30 | 67.92% / 69.64% | **62.65%** / **65.73%** | 42.62% / 44.92% |
-| Mixed-only bonus + relaxed B | Oct 6 | **75.83%** / **76.43%** | 57.45% / 58.15% | 44.73% / 45.29% |
+| Additive | Sep 29–30 | 74.58% / 75.86% | 56.74% / 60.92% | **45.15% (+5.91 pp)** / **47.37% (+6.23 pp)** |
+| Gate B | Sep 29–30 | 67.92% / 69.64% | **62.65% (+6.86 pp)** / **65.73% (+7.24 pp)** | 42.62% / 44.92% |
+| Mixed-only bonus + relaxed B | Oct 6 | **75.83% (+5.83 pp)** / **76.43% (+4.33 pp)** | 57.45% / 58.15% | 44.73% / 45.29% |
 | Mixed-only reweight + relaxed B | Oct 6 | 71.25% / 71.25% | 56.26% / 57.49% | 40.93% / 40.93% |
 
-Within the September 29–30 collection, Gate B's largest overall gain over
-baseline is on medium tasks (+6.86 pp), and Additive's is on hard tasks (+5.91 pp).
+Largest observed gains over baseline: **Gate B on medium tasks,
++6.86 pp overall / +7.24 pp valid-only**.
 The October mixed-only results use the same protocol and task bins but are not
 contemporaneous controls. These are repeated evaluations of fixed checkpoints,
 not independent training seeds; no subgroup significance claim is made.
