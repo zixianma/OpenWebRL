@@ -1,0 +1,449 @@
+{
+  "complete": true,
+  "scheduled_tasks": 300,
+  "scheduled_attempts": 900,
+  "completed_attempts": 900,
+  "by_mode": {
+    "arm": {
+      "completed": 300,
+      "successes": 130,
+      "valid": 268,
+      "invalid": 32,
+      "overall": 0.43333333333333335,
+      "valid_only": 0.48507462686567165,
+      "actor_requests": 21140,
+      "actor_output_tokens": 7047036,
+      "actor_input_tokens": 206361355,
+      "actor_client_request_seconds": 123424.28663202329,
+      "browser_steps": 4217,
+      "browser_step_seconds": 16078.79422852816,
+      "selector_calls": 4221,
+      "selector_input_tokens": 20919354,
+      "selector_output_tokens": 399604,
+      "selector_service_seconds": 11769.603572661523,
+      "elapsed_seconds": 60315.25625390513
+    },
+    "gpt55": {
+      "completed": 300,
+      "successes": 126,
+      "valid": 255,
+      "invalid": 45,
+      "overall": 0.42,
+      "valid_only": 0.49411764705882355,
+      "actor_requests": 22050,
+      "actor_output_tokens": 7413017,
+      "actor_input_tokens": 219418070,
+      "actor_client_request_seconds": 129115.85370872729,
+      "browser_steps": null,
+      "browser_step_seconds": null,
+      "selector_calls": 4401,
+      "selector_input_tokens": 21958833,
+      "selector_output_tokens": 1118443,
+      "selector_service_seconds": 20438.79478890542,
+      "elapsed_seconds": 71532.09189723618
+    },
+    "actor0": {
+      "completed": 300,
+      "successes": 95,
+      "valid": 273,
+      "invalid": 27,
+      "overall": 0.31666666666666665,
+      "valid_only": 0.34798534798534797,
+      "actor_requests": 4564,
+      "actor_output_tokens": 1483711,
+      "actor_input_tokens": 43066539,
+      "actor_client_request_seconds": 23802.106167891994,
+      "browser_steps": 4550,
+      "browser_step_seconds": null,
+      "selector_calls": 0,
+      "selector_input_tokens": 0,
+      "selector_output_tokens": 0,
+      "selector_service_seconds": 0.0,
+      "elapsed_seconds": 44921.61136151245
+    }
+  },
+  "paired": {
+    "arm_minus_actor0": {
+      "difference": 0.11666666666666667,
+      "bootstrap95": [
+        0.06333333333333334,
+        0.17
+      ],
+      "first_only": 51,
+      "second_only": 16,
+      "common_valid_tasks": 264,
+      "common_valid_first_successes": 129,
+      "common_valid_second_successes": 94
+    },
+    "gpt55_minus_actor0": {
+      "difference": 0.10333333333333333,
+      "bootstrap95": [
+        0.05,
+        0.15666666666666668
+      ],
+      "first_only": 51,
+      "second_only": 20,
+      "common_valid_tasks": 250,
+      "common_valid_first_successes": 124,
+      "common_valid_second_successes": 91
+    },
+    "arm_minus_gpt55": {
+      "difference": 0.013333333333333334,
+      "bootstrap95": [
+        -0.03666666666666667,
+        0.06333333333333334
+      ],
+      "first_only": 32,
+      "second_only": 28,
+      "common_valid_tasks": 248,
+      "common_valid_first_successes": 123,
+      "common_valid_second_successes": 124
+    }
+  },
+  "cost_limitations": "Request latencies overlap; allocation GPU-hours and device logs are campaign totals, not per-arm GPU kernel measurements.",
+  "execution_phases": {
+    "awaited_thread_v1": {
+      "by_mode": {
+        "arm": {
+          "episodes": 300,
+          "successes": 130,
+          "invalid": 32,
+          "mean": {
+            "elapsed_seconds": 201.05085417968377,
+            "actor_client_request_seconds": 411.41428877341093,
+            "actor_input_tokens": 687871.1833333333,
+            "actor_output_tokens": 23490.12,
+            "selector_input_tokens": 69731.18,
+            "selector_output_tokens": 1332.0133333333333
+          }
+        },
+        "gpt55": {
+          "episodes": 300,
+          "successes": 126,
+          "invalid": 45,
+          "mean": {
+            "elapsed_seconds": 238.4403063241206,
+            "actor_client_request_seconds": 430.38617902909095,
+            "actor_input_tokens": 731393.5666666667,
+            "actor_output_tokens": 24710.056666666667,
+            "selector_input_tokens": 73196.11,
+            "selector_output_tokens": 3728.1433333333334
+          }
+        },
+        "actor0": {
+          "episodes": 300,
+          "successes": 95,
+          "invalid": 27,
+          "mean": {
+            "elapsed_seconds": 149.73870453837483,
+            "actor_client_request_seconds": 79.34035389297331,
+            "actor_input_tokens": 143555.13,
+            "actor_output_tokens": 4945.703333333333,
+            "selector_input_tokens": 0.0,
+            "selector_output_tokens": 0.0
+          }
+        }
+      },
+      "common_phase_tasks": 300,
+      "common_phase_by_mode": {
+        "arm": {
+          "episodes": 300,
+          "successes": 130,
+          "invalid": 32,
+          "mean": {
+            "elapsed_seconds": 201.05085417968377,
+            "actor_client_request_seconds": 411.41428877341093,
+            "actor_input_tokens": 687871.1833333333,
+            "actor_output_tokens": 23490.12,
+            "selector_input_tokens": 69731.18,
+            "selector_output_tokens": 1332.0133333333333
+          }
+        },
+        "gpt55": {
+          "episodes": 300,
+          "successes": 126,
+          "invalid": 45,
+          "mean": {
+            "elapsed_seconds": 238.4403063241206,
+            "actor_client_request_seconds": 430.38617902909095,
+            "actor_input_tokens": 731393.5666666667,
+            "actor_output_tokens": 24710.056666666667,
+            "selector_input_tokens": 73196.11,
+            "selector_output_tokens": 3728.1433333333334
+          }
+        },
+        "actor0": {
+          "episodes": 300,
+          "successes": 95,
+          "invalid": 27,
+          "mean": {
+            "elapsed_seconds": 149.73870453837483,
+            "actor_client_request_seconds": 79.34035389297331,
+            "actor_input_tokens": 143555.13,
+            "actor_output_tokens": 4945.703333333333,
+            "selector_input_tokens": 0.0,
+            "selector_output_tokens": 0.0
+          }
+        }
+      }
+    }
+  },
+  "epoch": 1791371057.0432434,
+  "approved": true,
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": null,
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "gpt-5.6-sol",
+    "additional_selector_model": "gpt-5.5-2026-04-23",
+    "selector_reasoning_effort": "medium",
+    "selector_max_output_tokens": 2048,
+    "selector_format": "strict_json_schema_index_only",
+    "selector_images": "high-detail current screenshot, historical selection_messages builder",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "server_seed_base": 4200,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "same300 tasks, fresh SFT alone and SFT plus each API selector; interleaved random arm order",
+    "historical_reference": "September Sol294221:132/300; GPT5.5 online historical reference not located",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "api-selector-september-reproduction-v1",
+    "seed_realization": "Explicit server seeds4200/4201; FlashInfer request seeds ignored; no deterministic replication claim.",
+    "comparability": "Contemporaneous controlled comparison. Historical websites, server versions and API aliases may drift."
+  },
+  "accounting": {
+    "sol": {
+      "calls": 4303,
+      "received": 4303,
+      "unsettled": 0,
+      "receipt_priced_usd": 91.40005839999974,
+      "charged_or_reserved_upper_usd": 112.14457639999974,
+      "tokens": {
+        "input": 21347834,
+        "output": 409033,
+        "cached": 603316,
+        "reasoning": 345132
+      },
+      "response_or_receipt_processing_failures": 1,
+      "provider_completed_responses": 4303,
+      "provider_incomplete_responses": 0
+    },
+    "gpt55": {
+      "calls": 4436,
+      "received": 4436,
+      "unsettled": 0,
+      "receipt_priced_usd": 139.35546699999975,
+      "charged_or_reserved_upper_usd": 165.61344824999992,
+      "tokens": {
+        "input": 22113329,
+        "output": 1125669,
+        "cached": 1106944,
+        "reasoning": 1059313
+      },
+      "response_or_receipt_processing_failures": 13,
+      "provider_completed_responses": 4423,
+      "provider_incomplete_responses": 13
+    },
+    "judge": {
+      "calls": 574,
+      "unsettled": 0,
+      "charged_or_reserved_usd": 4.740435700000004
+    }
+  },
+  "scheduler": [
+    {
+      "shard": 0,
+      "attempts": [
+        {
+          "job_id": "348336",
+          "state": "FAILED",
+          "seconds": 241
+        },
+        {
+          "job_id": "348363",
+          "state": "FAILED",
+          "seconds": 899
+        },
+        {
+          "job_id": "348445",
+          "state": "COMPLETED",
+          "seconds": 11758
+        }
+      ]
+    },
+    {
+      "shard": 1,
+      "attempts": [
+        {
+          "job_id": "348337",
+          "state": "FAILED",
+          "seconds": 240
+        },
+        {
+          "job_id": "348362",
+          "state": "FAILED",
+          "seconds": 904
+        },
+        {
+          "job_id": "348446",
+          "state": "COMPLETED",
+          "seconds": 10585
+        }
+      ]
+    }
+  ],
+  "allocated_gpu_hours": 6.840833333333333,
+  "final_accounting_verified": true,
+  "verified_complete": true,
+  "status": "verified_complete",
+  "independent_completion_requirements": [],
+  "cost_note": "API receipt-priced cost and conservative cache-write upper bound reported separately; GPU dollar price unavailable. No vendor-FLOP estimates. Judge billed separately. All failed attempts included.",
+  "all_attempt_actor_tokens": {
+    "arm": {
+      "requests": 21560,
+      "input": 210535195,
+      "output": 7195699,
+      "received_requests": 21515,
+      "unmetered_or_failed_requests": 45
+    },
+    "gpt55": {
+      "requests": 22240,
+      "input": 220671120,
+      "output": 7463914,
+      "received_requests": 22180,
+      "unmetered_or_failed_requests": 60
+    },
+    "actor0": {
+      "requests": 4567,
+      "input": 43080180,
+      "output": 1484529,
+      "received_requests": 4565,
+      "unmetered_or_failed_requests": 2
+    }
+  },
+  "efficiency_notes": [
+    "Token plot counts all metered actor/selector attempts, including interrupted and failed attempts; unknown actor requests are counted separately.",
+    "Latency plot is mean wall time of committed episodes; total allocated time and retry overhead are separate. Two recovered outcomes use saved-result wall timestamps and have missing browser timing.",
+    "API costs include failed attempts; local GPU dollar cost is not inferred."
+  ],
+  "plot_rows": [
+    {
+      "mode": "actor0",
+      "label": "SFT alone",
+      "completed": 300,
+      "successes": 95,
+      "success_rate": 31.666666666666668,
+      "selector_api_upper_usd_per_completed": 0.0,
+      "mean_elapsed_seconds": 149.73870453837483,
+      "mean_tokens": 148549.03,
+      "mean_committed_episode_tokens": 148500.83333333334
+    },
+    {
+      "mode": "arm",
+      "label": "SFT + GPT-5.6 Sol",
+      "completed": 300,
+      "successes": 130,
+      "success_rate": 43.333333333333336,
+      "selector_api_upper_usd_per_completed": 0.37381525466666576,
+      "mean_elapsed_seconds": 201.05085417968377,
+      "mean_tokens": 798292.5366666666,
+      "mean_committed_episode_tokens": 782424.4966666667
+    },
+    {
+      "mode": "gpt55",
+      "label": "SFT + GPT-5.5",
+      "completed": 300,
+      "successes": 126,
+      "success_rate": 42.0,
+      "selector_api_upper_usd_per_completed": 0.5520448274999997,
+      "mean_elapsed_seconds": 238.4403063241206,
+      "mean_tokens": 837913.44,
+      "mean_committed_episode_tokens": 833027.8766666667
+    }
+  ],
+  "independent_audit": {
+    "epoch": 1791371148.8260782,
+    "passed": true,
+    "episodes": 900,
+    "tasks_per_arm": 300,
+    "by_mode": {
+      "actor0": {
+        "episodes": 300,
+        "successes": 95,
+        "valid": 273
+      },
+      "arm": {
+        "episodes": 300,
+        "successes": 130,
+        "valid": 268
+      },
+      "gpt55": {
+        "episodes": 300,
+        "successes": 126,
+        "valid": 255
+      }
+    },
+    "evidence_checks": {
+      "Status.COMPLETED": 574,
+      "judge_receipt_matched": 574,
+      "terminal_image_decoded": 574,
+      "verified_action_traces": 13171,
+      "Status.FAILED": 215,
+      "Status.TRUNCATED": 7,
+      "Status.ABORTED": 42,
+      "exception": 62
+    },
+    "all_actor_request_decoding_checks": {
+      "count": 48367,
+      "statuses": {
+        "received": 48260,
+        "failed": 107
+      }
+    },
+    "wandb_finished_shards": 2,
+    "accounting_crosscheck": true,
+    "limitations": [
+      "Saved terminal screenshots were decoded and matched to verdict-bearing artifacts; no claim of independent human adjudication.",
+      "Canonical judge success allows partial progress. Invalid and unjudged non-completed episodes count as zero.",
+      "Per-request seeds are ignored by FlashInfer; server seeds are pinned, but exact deterministic replay is not claimed."
+    ]
+  },
+  "plots_visually_reviewed": true,
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "final_wandb_states": [
+    "finished",
+    "finished"
+  ],
+  "all_attempt_resource_seconds_by_shard": [
+    12898,
+    11729
+  ],
+  "unused_approved_seconds_by_shard": [
+    1502,
+    2671
+  ],
+  "new_budget": 0,
+  "accounting_notes": [
+    "Receipt-priced USD is computed from saved provider usage. Cache-write uncertainty is covered by the separately reported conservative upper bound. No invoice reconciliation is claimed.",
+    "Sol has one local receipt-settlement failure with a completed provider response; its charge was recovered and retained. GPT-5.5 has 13 incomplete output-cap responses, retained without selection fallback.",
+    "All 104 invalid outcomes, 215 non-completed failures and 7 truncated outcomes remain zero in the 300-task denominators."
+  ]
+}

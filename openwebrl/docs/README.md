@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[September API-selector reproduction: fresh SFT control plus GPT-5.6 Sol/GPT-5.5; prepared protocol and exact budget proposal](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
+[API-selector reproduction complete: SFT 31.67%, Sol 43.33%, GPT-5.5 42.00%; 900 episodes, paired results and three plots](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
 
 [SFT versus Piotr ARM: supplementary three-run average on the 160-task overlap; first run incomplete, both later runs full300](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006).
 

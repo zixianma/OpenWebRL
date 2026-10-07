@@ -1,10 +1,11 @@
 # ARM inference scaling: controlled results
 
+- **API selectors:** Sol **43.33%**, close to September’s **44.00%**; fresh gains are **+11.67 pp** for Sol and **+10.33 pp** for GPT-5.5. Their difference is inconclusive.
 - **Piotr SelectionARM:** **+5.00 percentage points** across two full300 repeats, at **6.3× tokens** and **1.48× episode latency**.
 - **Local v2 selectors:** Luna and Kev27B each add about **9 points**; they differ by one success. Jev's **+2-point** interval includes zero.
-- **Compare within each table.** Decoding and selector inputs differ between studies; these results do not rank Piotr against Luna/Kev.
+- **Compare within each table.** Decoding, selector inputs and collection dates differ between studies; cross-table model rankings are not controlled.
 
-Both headline comparisons cover all 300 Online-Mind2Web tasks. Recorded invalid and unjudged outcomes count as zero. Success is the canonical o4-mini/AgentTrek verdict, which allows partial progress—not strict task completion. **N** is the number of proposed actions; one is executed.
+All headline comparisons cover the same 300 Online-Mind2Web tasks. Recorded invalid and unjudged outcomes count as zero. Success is the canonical o4-mini/AgentTrek verdict, which allows partial progress—not strict task completion. **N** is the number of proposed actions; one is executed.
 
 ## Actors alone
 
@@ -30,6 +31,30 @@ Other actor-only experiments remain recorded below. Known-bug scores are kept in
 | Kev27B direct actor | 300 | Hosted browser and its own DOM policy; separate from local v2 |
 
 [Preserved actor-only counts and scores](https://github.com/zixianma/OpenWebRL/blob/a0a6db4e677c7f1959a53f0498ffc9a18d9c9ca0/openwebrl/docs/ARM_INFERENCE_SCALING.md#actor-selector-experiment-tracker-20261004) · [API actor bug audit](arm_results/reasoning_actors_full300_20261005/pipeline-debug.json).
+
+<a id="api-selector-results-20261007"></a>
+## API selectors: September reproduction
+
+Official SFT; **T=0.7, p=0.9, 1,024 actor output tokens, 30 turns**. N=5 selectors use **medium reasoning**, 2,048 output tokens and the historical full-candidate prompt with a screenshot. One complete run per condition.
+
+| Selector | N | Tasks | Successes | Success | Gain, pp | Paired 95% interval, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| None | 1 | 300 | 95 | **31.67%** | — | — |
+| GPT-5.6 Sol | 5 | 300 | 130 | **43.33%** | +11.67 | [+6.33, +17.00] |
+| GPT-5.5 | 5 | 300 | 126 | **42.00%** | +10.33 | [+5.00, +15.67] |
+
+- Sol is close to September’s 44.00%; the fresh gain is +11.67 pp versus September’s +14.00 pp.
+- Sol versus GPT-5.5: **+1.33 pp**, interval **[−3.67, +6.33]**. No clear winner. No September GPT-5.5 online selector result was found.
+
+| Method | Mean latency, s | Mean metered input + output tokens | Selector API upper USD/task |
+| --- | ---: | ---: | ---: |
+| SFT alone | 149.7 | 148,549 | 0.000 |
+| SFT + Sol | 201.1 | 798,293 | 0.374 |
+| SFT + GPT-5.5 | 238.4 | 837,913 | 0.552 |
+
+Tokens and API cost include all attempts; 107 failed actor requests have no token usage. Latency averages committed episodes. GPU and judge costs are separate. All caps passed; **6.84 allocated H200-hours** including retries. GPT-5.5’s 13 output-cap failures remain zero.
+
+Plots: [API cost](arm_results/api_selector_september_reproduction_20261006/cost.png) · [latency](arm_results/api_selector_september_reproduction_20261006/latency.png) · [tokens](arm_results/api_selector_september_reproduction_20261006/tokens.png). [Final aggregate](arm_results/api_selector_september_reproduction_20261006/aggregate.json) · [Protocol, validity and accounting](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
 ## SelectionARM: full300 comparisons
@@ -141,7 +166,7 @@ Local v2 judges only completed episodes using full actor thoughts/actions and a 
 
 </details>
 
-[Next: matched SFT / GPT-5.6 Sol / GPT-5.5 comparison](ARM_INFERENCE.md#api-selector-september-reproduction-20261006) — approved and running; usage and failed attempts retained within the original caps.
+[API-selector comparison completed: 900/900 episodes, final accounting and three plots](#api-selector-results-20261007).
 
 <details>
 <summary>Historical September results — separate reference, excluded from current averages</summary>

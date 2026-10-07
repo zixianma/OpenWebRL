@@ -993,28 +993,53 @@ selection traces, API receipts and comparison are preserved in that directory.
 
 <a id="api-selector-september-reproduction-20261006"></a>
 
-### September API-selector reproduction: approved and running
+### September API-selector reproduction: complete, October 7
 
-| Fresh condition | Tasks | Candidate actions | Selector reasoning |
-| --- | ---: | ---: | --- |
-| Official OpenWebRL-4B-SFT alone | 300 | 1 | — |
-| SFT + GPT-5.6 Sol | 300 | 5 | Medium |
-| SFT + GPT-5.5 (2026-04-23) | 300 | 5 | Medium |
+**All 900 episodes verified: 300 identical tasks × three conditions.** Sol’s **43.33%** is close to September’s **44.00%**. Fresh selector gains are **+11.67 pp** for Sol and **+10.33 pp** for GPT-5.5; the difference between selectors is inconclusive.
 
-Same 300-task file, full historical browser policy, actor T=0.7 / top-p=0.9 / 1,024 output tokens / 30 turns. Both selectors receive the historical full-candidate prompt, task, history and current screenshot; strict index-only JSON and 2,048 output tokens. o4-mini/AgentTrek judging, 4,096-token cap. Fresh episodes interleave all three conditions on each task; matched overall and common-valid analyses retain invalid outcomes. Save verdicts, every physical attempt, tokens including reasoning/cache usage, API cost, request/episode latency, browser steps, allocation time and GPU telemetry.
+| Condition | Tasks | Successes | Success | Valid | Invalid | Valid-only success | Gain vs SFT, pp | Paired 95% interval, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| SFT alone | 300 | 95 | 31.67% | 273 | 27 | 34.80% | — | — |
+| SFT + GPT-5.6 Sol | 300 | 130 | 43.33% | 268 | 32 | 48.51% | +11.67 | [+6.33, +17.00] |
+| SFT + GPT-5.5 | 300 | 126 | 42.00% | 255 | 45 | 49.41% | +10.33 | [+5.00, +15.67] |
 
-September Sol completed 132 successes on 300 tasks (44.00%), using 4,040 API requests and $84.85. Its original prompt-wrapper source hash still matches exactly. **No September GPT-5.5 online selector benchmark has been located**; current evidence identifies GPT-5.5 as a training-data teacher. The proposed GPT-5.5 arm is therefore a fresh comparison. Both exact API model IDs passed read-only availability checks.
+Sol minus GPT-5.5: **+1.33 pp**, paired 95% interval **[−3.67, +6.33]**. Intervals use 10,000 paired task-bootstrap draws; one run per condition, with no run-level SD claim. Invalid and unjudged non-completed outcomes count as zero. The canonical o4-mini/AgentTrek judge permits partial progress; this metric is not strict completion.
 
-Approved ceiling: **two parallel shards, each 1 H200 / 16 CPUs / 120 GiB × 4 hours**; **8 H200-hours total** across all attempts. Actual requests use **8 CPUs per shard** to satisfy the scheduler's CPU/GPU ratio. Shared API ceilings remain **Sol $125 / 9,900 calls; GPT-5.5 $175 / 9,900 calls; judge $10 / 3,960 calls**.
+| Common-valid pair | Tasks | First successes | Second successes | First success | Second success |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Sol / SFT | 264 | 129 | 94 | 48.86% | 35.61% |
+| GPT-5.5 / SFT | 250 | 124 | 91 | 49.60% | 36.40% |
+| Sol / GPT-5.5 | 248 | 123 | 124 | 49.60% | 50.00% |
 
-Recovery jobs **348445/348446** are collecting with 13,260/13,200 seconds remaining. Earlier attempts consumed 1,140/1,144 seconds per shard; budgets and scientific settings are unchanged.
+**Frozen protocol:** official OpenWebRL-4B-SFT revision `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`; local browsers; full historical browser policy/history; actor **T=0.7, top-p=0.9, 1,024 output tokens, 30 turns, 32K context**, top-k omitted. Selectors `gpt-5.6-sol` and `gpt-5.5-2026-04-23`: N=5, medium reasoning, strict index-only JSON, 2,048 output tokens, historical full-candidate prompt/history and current screenshot. Judge: o4-mini/AgentTrek, 4,096-token cap. Conditions interleave per task. Server seeds are 4200/4201; FlashInfer ignores request seeds, so exact deterministic reproduction is not claimed.
 
-- A GPT-5.5 output-cap failure is retained as invalid/zero, without retry or fallback.
-- Concurrent shared-ledger updates lost one Sol reservation. Its saved provider receipt restored the charge. Process-wide thread serialization plus POSIX file locks passed a two-node test with 200 selector and 200 judge settlements before paid collection resumed.
-- All attempts remain saved, including a finished SFT failure recovered before restart. Cost and token accounting includes interrupted work; missing browser timings stay explicitly missing. Actual models, decoding, browser progress and W&B are verified; active-agent continuation follows both jobs.
+September Sol was **132/300 (44.00%)**, versus SFT **90/300 (30.00%)**; the fresh pair is **130/300 (43.33%)** versus **95/300 (31.67%)**. This reproduces a substantial Sol gain and a similar absolute score. It does not isolate website/date/provider changes or establish equality of the historical and fresh effects. The original selector prompt-wrapper hash matches; the same Sol API ID exposes no immutable September backend snapshot. **No September GPT-5.5 online selector benchmark was found**; this arm is a fresh comparison.
 
+| API ledger, all attempts | Calls | Call cap | Receipt-priced USD | Conservative upper USD | USD cap |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Sol | 4,303 | 9,900 | 91.4001 | 112.1446 | 125 |
+| GPT-5.5 | 4,436 | 9,900 | 139.3555 | 165.6134 | 175 |
+| Judge | 574 | 3,960 | 4.7404 | 4.7404 | 10 |
 
-A changed result is a reason to investigate, not proof of a code bug. Compare the fresh selector-minus-SFT effects first; preserved prompts, candidates, screenshots and verdicts support separating harness changes from website/provider drift and sampling. Sol uses the same API model ID as September; no immutable September backend snapshot is exposed. Prices checked against [GPT-5.6 Sol](https://developers.openai.com/api/docs/models/gpt-5.6-sol) and [GPT-5.5](https://developers.openai.com/api/docs/models/gpt-5.5). [Prepared protocol, caps and validation](arm_results/api-selector-september-reproduction-plan-20261006.json).
+| Shard | Earlier attempt seconds | Final attempt seconds | Total seconds | Approved seconds | Unused seconds |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 1,140 | 11,758 | 12,898 | 14,400 | 1,502 |
+| 1 | 1,144 | 10,585 | 11,729 | 14,400 | 2,671 |
+
+Actual allocations: **1 H200 / 8 CPUs / 120 GiB per shard**, **6.8408 H200-hours** total, including every failed attempt. No added or transferred budget. Receipt-priced costs use saved usage; upper bounds cover cache-write uncertainty, not invoice reconciliation. Local GPU dollar cost is unavailable.
+
+Final checks matched **574 judge responses** to saved verdicts and decodable screenshots, verified **13,171 action traces** with no selection fallback, and checked decoding on **48,367 actor requests**. Both final jobs completed, teardown verified, and both W&B runs finished. The remaining **215 failed, 7 truncated and 104 invalid** episodes remain zero; no results were replaced based on outcome. All model/cost ledgers are settled.
+
+<details>
+<summary>Recovery and accounting details</summary>
+
+The initial GPT-5.5 output-cap failure and 12 later output-cap failures remain invalid/zero without retry or fallback. A separate concurrent-ledger failure lost one Sol reservation; its saved completed provider response restored the charge. Process-wide serialization and POSIX locks passed a two-node 200-selector/200-judge-settlement test before recovery. All earlier attempts remain preserved. Final jobs were 348445/348446; scientific settings were unchanged.
+
+All metered actor/selector attempts contribute to token and cost totals, including infrastructure retries; **107 failed actor requests have no usage** and are separately counted. Episode latency covers committed episodes; allocation time includes all overhead. Two salvaged outcomes use saved-result timestamps and lack some browser timings. Existing context-cap retries were retained with the frozen historical harness. Final analysis streams receipts to avoid retaining image payloads in memory.
+
+</details>
+
+[Cost plot](arm_results/api_selector_september_reproduction_20261006/cost.png) · [Latency plot](arm_results/api_selector_september_reproduction_20261006/latency.png) · [Token plot](arm_results/api_selector_september_reproduction_20261006/tokens.png) · [Final aggregate](arm_results/api_selector_september_reproduction_20261006/aggregate.json) · [Independent evidence audit](arm_results/api_selector_september_reproduction_20261006/independent-audit.json) · [Prepared protocol and validation](arm_results/api-selector-september-reproduction-plan-20261006.json) · W&B [shard 0](https://wandb.ai/zixianma/openwebrl-evals/runs/api-selector-sep-repro-20261006-shard0), [shard 1](https://wandb.ai/zixianma/openwebrl-evals/runs/api-selector-sep-repro-20261006-shard1).
 
 
 <a id="selectionarm-followups-20261007"></a>
@@ -1024,12 +1049,12 @@ A changed result is a reason to investigate, not proof of a code bug. Compare th
 
 | New comparison | Step cap | New episodes | SFT control | New allocation request | Judge cap |
 | --- | ---: | ---: | --- | --- | --- |
-| SFT + RL-task SelectionARM | 30 | 300 | Fresh full300 SFT30 in the ongoing API-selector study | One job: 2 H200 / 16 CPU / 240 GiB × 3h | $5 / 1,320 calls |
+| SFT + RL-task SelectionARM | 30 | 300 | Completed fresh full300 SFT30 in the API-selector study | One job: 2 H200 / 16 CPU / 240 GiB × 3h | $5 / 1,320 calls |
 | SFT vs SFT + Piotr SelectionARM | 50 | 600 | Fresh full300 SFT50 in the same new study | Two parallel jobs, each 2 H200 / 16 CPU / 240 GiB × 4h | Each $5 / 1,320 calls |
 
 **Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. These are prepared requests, not approved allocations. Eight offline checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. GPU/browser validation remains an in-allocation startup gate.
 
-RL-task checkpoint: `davidan03/openwebrl-4b-selectionarm-rltasks`, revision `a1f8d265855ddf1074eae91516c6e86f6f836177`. Piotr: `PTeterwak/OpenWebRL-4B-SelectionARM`, revision `81b452d800d9f859687074f82680dd5257e02d89`. The first reuses the ongoing fresh SFT30 control to avoid another baseline collection; its deployment/concurrency context differs, so cross-study latency comparisons need that qualification.
+RL-task checkpoint: `davidan03/openwebrl-4b-selectionarm-rltasks`, revision `a1f8d265855ddf1074eae91516c6e86f6f836177`. Piotr: `PTeterwak/OpenWebRL-4B-SelectionARM`, revision `81b452d800d9f859687074f82680dd5257e02d89`. The first reuses the completed fresh SFT30 control to avoid another baseline collection; its deployment/concurrency context differs, so cross-study latency comparisons need that qualification.
 
 For the 50-step study, report the paired effect **ARM50 − SFT50**, then its difference from the two complete 30-step effects. Bootstrap by task while retaining both old repetitions together. Website dates and stochastic runs differ, so this interaction is suggestive rather than a deterministic same-trajectory horizon ablation. Report overall and valid-only success; input/output tokens, API cost and allocated GPU-hours; episode/request/browser latency; browser steps; and step-cap, context-cap and wall-timeout frequencies. The original task timeout may bind before 50 steps, so measure that explicitly.
 

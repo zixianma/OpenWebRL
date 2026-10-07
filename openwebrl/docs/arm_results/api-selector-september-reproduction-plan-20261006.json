@@ -1,5 +1,5 @@
 {
-  "status": "running_recovery",
+  "status": "verified_complete",
   "created_epoch": 1791355553.6827958,
   "tasks": 300,
   "primary_episodes": 900,
@@ -173,5 +173,8 @@
   },
   "startup_verified": true,
   "active_agent_supervision_verified": true,
-  "updated_epoch": 1791359315.5811157
+  "updated_epoch": 1791359315.5811157,
+  "final_aggregate": "api_selector_september_reproduction_20261006/aggregate.json",
+  "final_episodes": 900,
+  "final_accounting_verified": true
 }

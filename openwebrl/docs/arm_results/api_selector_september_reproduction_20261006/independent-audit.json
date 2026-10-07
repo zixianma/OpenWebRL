@@ -1,0 +1,47 @@
+{
+  "epoch": 1791371148.8260782,
+  "passed": true,
+  "episodes": 900,
+  "tasks_per_arm": 300,
+  "by_mode": {
+    "actor0": {
+      "episodes": 300,
+      "successes": 95,
+      "valid": 273
+    },
+    "arm": {
+      "episodes": 300,
+      "successes": 130,
+      "valid": 268
+    },
+    "gpt55": {
+      "episodes": 300,
+      "successes": 126,
+      "valid": 255
+    }
+  },
+  "evidence_checks": {
+    "Status.COMPLETED": 574,
+    "judge_receipt_matched": 574,
+    "terminal_image_decoded": 574,
+    "verified_action_traces": 13171,
+    "Status.FAILED": 215,
+    "Status.TRUNCATED": 7,
+    "Status.ABORTED": 42,
+    "exception": 62
+  },
+  "all_actor_request_decoding_checks": {
+    "count": 48367,
+    "statuses": {
+      "received": 48260,
+      "failed": 107
+    }
+  },
+  "wandb_finished_shards": 2,
+  "accounting_crosscheck": true,
+  "limitations": [
+    "Saved terminal screenshots were decoded and matched to verdict-bearing artifacts; no claim of independent human adjudication.",
+    "Canonical judge success allows partial progress. Invalid and unjudged non-completed episodes count as zero.",
+    "Per-request seeds are ignored by FlashInfer; server seeds are pinned, but exact deterministic replay is not claimed."
+  ]
+}
