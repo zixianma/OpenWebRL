@@ -1,0 +1,76 @@
+{
+  "name": "selectionarm-random5-sameday30-20261007",
+  "status": "prepared_awaiting_exact_resource_approval",
+  "approved": false,
+  "scientific_scope_approved": true,
+  "tasks": 300,
+  "new_episodes": 300,
+  "reused_controls": 600,
+  "controls": "selectionarm-piotr-sameday30-20261007",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": null,
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "uniform_random_candidate",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 45,
+    "server_seed_base": 4500,
+    "repetition": 1,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "Full-episode random-of-five: resample five actor candidates and independently pick a uniform candidate index at every step",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "selectionarm-random5-sameday30-20261007",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Same300 tasks and actor/browser/decoding/judge as the concurrently collecting SFT/Piotr pair; later same-day collection, independent actor deployment. Random selection is uniform over sampled indices including duplicates and malformed candidates.",
+    "actor_control_source": "selectionarm-piotr-sameday30-20261007",
+    "selection_rule": "uniform_candidate_index_v1",
+    "selector_reasoning": "none"
+  },
+  "resources_per_shard": {
+    "gpus": 1,
+    "gpu_type": "H200",
+    "cpus": 8,
+    "memory_gib": 120,
+    "total_seconds": 10800
+  },
+  "judge_caps_per_shard": {
+    "judge_usd": 2.5,
+    "judge_calls": 660
+  },
+  "shards": 2,
+  "total_gpu_hours": 6,
+  "total_judge_usd": 5,
+  "total_judge_calls": 1320,
+  "selection_api_calls": 0,
+  "selection_algorithm": "Independent task/turn PRNG stream; randrange(5), all indices retained including duplicate/malformed candidates. Pick after all five generated; never score with selector or execution outcome.",
+  "analysis": [
+    "random5 versus fresh SFT, paired task bootstrap",
+    "Piotr SelectionARM versus random5, paired task bootstrap",
+    "invalid/candidate failure rates, tokens, latency, GPU and judge accounting"
+  ],
+  "scientific_limitations": [
+    "same-day independent browser collection; no identical-state or deterministic-prefix claim",
+    "same actor requests and eight-browser concurrency; one GPU and8CPUs per random shard versus actor+selector GPUs/16CPUs per paired shard; latency is operational rather than hardware-matched"
+  ],
+  "new_paid_jobs": 0,
+  "offline_tests_passed": 8
+}

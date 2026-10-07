@@ -61,7 +61,9 @@ For a full-episode control, repeat this at **every step**:
 
 Compare it with SFT alone and SFT + the pre-action SelectionARM, using the same tasks, actor, decoding, browser, step cap and judge. No execution evidence goes to the selector.
 
-If candidates are independent, identically distributed actor samples, a random pick has the same action distribution as one actor sample. A full300, 30-step random-of-five run would mainly check the pipeline and cost. **The one-state random control already exists; extra random branches are unnecessary.** A full-episode control is proposed, not launched.
+If candidates are independent, identically distributed actor samples, a random pick has the same action distribution as one actor sample. The full-episode run tests that expectation in the actual five-candidate pipeline.
+
+**Prepared:** 300 tasks, 30 steps, random choice among five candidates at every step; compare with today's fresh SFT/Piotr pair. Eight offline tests passed. Scientific scope approved; exact additional compute/judge caps awaiting approval. [Run plan](ARM_INFERENCE.md#selectionarm-random5-sameday30-20261007).
 
 <details>
 <summary>Protocol and limitations</summary>

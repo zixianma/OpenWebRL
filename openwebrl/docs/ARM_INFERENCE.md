@@ -1137,3 +1137,20 @@ Reuse the completed 50-step run's frozen runtime, checkpoints, prompts, local br
 | Episodes | 150 tasks × 2 methods | 600 |
 
 Compare the new paired ARM gain with today's 50-step pair and the RL-task ARM result; report task-paired confidence intervals. Same-day collection reduces the date gap but does not remove within-day website drift. Keep the two earlier 30-step runs separate and add a third complete run only after all600 outcomes pass verification. Publish aggregate success, cost, latency and token results only. No prior budget or results transferred. **Four preparation tests passed**; model, source and task identities validated. [Frozen plan](arm_results/selectionarm-piotr-sameday30-plan-20261007.json).
+
+<a id="selectionarm-random5-sameday30-20261007"></a>
+## Random-of-five at every step — prepared 2026-10-07
+
+**Generate five actor candidates → choose one uniformly → execute → repeat**, up to 30 steps on all 300 tasks. Every candidate entry keeps a 20% chance, including duplicates and malformed outputs; no scoring, filtering or selector model. Save all candidates and the selected index.
+
+Compare against the [same-day SFT/Piotr pair](#selectionarm-piotr-sameday30-20261007): same tasks, official SFT, prompts, local browser, T=0.7, p=0.9, 1,024 tokens, 32K context and o4-mini/AgentTrek judge. These are **300 new full episodes**, distinct from the branching study's one-action random control.
+
+| Additional request, including retries | Per shard | Total, two parallel shards |
+| --- | --- | --- |
+| Compute | 1 H200, 8 CPUs, 120 GiB, 3 hours | 6 H200-hours |
+| Judge cap | $2.50 / 660 calls | $5 / 1,320 calls |
+| New episodes | 150 | 300 |
+
+**Scientific scope approved; exact additional resource caps awaiting approval. Not submitted.** Eight offline tests passed, including uniform content-independent selection, five calls per step, no selector calls, unchanged decoding and budget guards. No existing budget transferred.
+
+Report task-paired success differences for random versus SFT and Piotr versus random, plus cost, latency and tokens. Collection starts later the same day in independent browsers. Browser concurrency stays eight; the random arm uses fewer host resources, so latency is descriptive, not a hardware-matched comparison. [Frozen plan](arm_results/selectionarm-random5-sameday30-plan-20261007.json).
