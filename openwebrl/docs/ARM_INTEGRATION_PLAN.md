@@ -8162,12 +8162,17 @@ completion. Plans and the exact request are in runtime
 
 **First verified cohorts, October6:** bonus repeat1 is182/300 =60.67% overall
 and182/299 =60.87% valid-only; reweight is170/300 =56.67% overall and170/298
-=57.05% valid-only. One/two invalids remain, respectively; **1/3 repeats per
-method are verified**. Native89 TP1 GPU restoration passed for both methods.
+=57.05% valid-only. One/two invalids remain, respectively. Native89 TP1 GPU
+restoration passed for both methods.
 Jobs346992/346993 completed0:0 after17,587/15,754 seconds, respectively, within
 their separate25,200-second caps; no resources or budget were added.
-The second repeats have started; third repeats remain queued. No repeat mean
-or SD is reported yet.
+
+**Second cohorts verified;2/3 repeats per method:** bonus repeat2 is181/300 =60.33% overall
+and181/294 =61.56% valid-only; reweight is166/300 =55.33% overall and166/295
+=56.27% valid-only. Six/five invalids remain, respectively. Jobs346994/346995
+completed0:0 after15,707/15,110 seconds, respectively, within their separate
+25,200-second caps. Both third repeats have started.
+No repeat mean or SD is reported yet.
 [Results, protocol and verification](RL_EVALUATION.md#arm-mixed-stealth90-three-repeats-20261006).
 
 The user approved six fresh full300 Online-Mind2Web evaluations: mixed-only

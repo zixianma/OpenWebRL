@@ -1,12 +1,12 @@
 {
-  "updated_utc": "2026-10-06T21:42:21.151070+00:00",
+  "updated_utc": "2026-10-07T02:30:11.249779+00:00",
   "status": "partial_repeat_set",
   "expected_cohorts": 6,
-  "verified_cohorts": 2,
+  "verified_cohorts": 4,
   "expected_repeats_per_method": 3,
   "verified_repeats": {
-    "mixed-bonus": 1,
-    "mixed-reweight": 1
+    "mixed-bonus": 2,
+    "mixed-reweight": 2
   },
   "protocol": {
     "benchmark": "Online-Mind2Web",
@@ -103,6 +103,92 @@
         "Initial navigation failure",
         "Native judge response lacked Status field"
       ]
+    },
+    {
+      "method": "mixed-bonus",
+      "repeat": 2,
+      "job_id": "346994",
+      "iteration": 90,
+      "server_rng_seed": 1235,
+      "tasks": 300,
+      "successes": 181,
+      "valid": 294,
+      "invalid": 6,
+      "overall": 0.6033333333333334,
+      "valid_only": 0.6156462585034014,
+      "fixed100": {
+        "tasks": 100,
+        "successes": 58,
+        "valid": 99,
+        "invalid": 1,
+        "overall": 0.58,
+        "valid_only": 0.5858585858585859
+      },
+      "verified_complete": true,
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-bonus-r2-346994",
+      "full_runtime_audit_sha256": "1c738eaa3c62c218923d68cf3e9d596275e7bfe21a1e4d588bf5105178884b66",
+      "archive_count": 300,
+      "archive_bytes": 200148751978,
+      "full_archive_crc_verified": true,
+      "unique_task_ids_and_pairs_verified": true,
+      "all_judge_identities_match": true,
+      "actual_gpu_restore_verified": true,
+      "all_owned_browser_sessions_stopped": true,
+      "gpu_seconds_consumed": 15707,
+      "approved_gpu_seconds": 25200,
+      "browser_and_proxy_usd": 1.2658509468386572,
+      "invalid_outcomes": [
+        "Task timeout (600s)",
+        "HTTP response failure",
+        "Connection closed"
+      ],
+      "invalid_outcome_counts": {
+        "Task timeout (600s)": 3,
+        "HTTP response failure": 2,
+        "Connection closed": 1
+      }
+    },
+    {
+      "method": "mixed-reweight",
+      "repeat": 2,
+      "job_id": "346995",
+      "iteration": 90,
+      "server_rng_seed": 1235,
+      "tasks": 300,
+      "successes": 166,
+      "valid": 295,
+      "invalid": 5,
+      "overall": 0.5533333333333333,
+      "valid_only": 0.5627118644067797,
+      "fixed100": {
+        "tasks": 100,
+        "successes": 53,
+        "valid": 98,
+        "invalid": 2,
+        "overall": 0.53,
+        "valid_only": 0.5408163265306123
+      },
+      "verified_complete": true,
+      "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/stealth90-o4-t06-mixed-reweight-r2-346995",
+      "full_runtime_audit_sha256": "940c5efa707effdc07082af50a27b7f0e5fbda3d18d7698bc251e644137fb83c",
+      "archive_count": 300,
+      "archive_bytes": 205436799514,
+      "full_archive_crc_verified": true,
+      "unique_task_ids_and_pairs_verified": true,
+      "all_judge_identities_match": true,
+      "actual_gpu_restore_verified": true,
+      "all_owned_browser_sessions_stopped": true,
+      "gpu_seconds_consumed": 15110,
+      "approved_gpu_seconds": 25200,
+      "browser_and_proxy_usd": 1.2286703960870704,
+      "invalid_outcomes": [
+        "Task timeout (600s)",
+        "Connection closed"
+      ],
+      "invalid_outcome_counts": {
+        "Task timeout (600s)": 4,
+        "Connection closed": 1
+      }
     }
   ],
   "mean_and_sample_sd": null,
