@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Same-day SFT/Piotr 30-step control: 600 fresh episodes prepared; exact resource approval pending](ARM_INFERENCE.md#selectionarm-piotr-sameday30-20261007).
+[Same-day SFT/Piotr 30-step control: 600 fresh episodes running with approved independent shard caps](ARM_INFERENCE.md#selectionarm-piotr-sameday30-20261007).
 
 [Piotr SelectionARM at 50 steps: full300 paired results, comparison with 30 steps and three plots](ARM_INFERENCE.md#selectionarm-piotr-steps50-results-20261007).
 

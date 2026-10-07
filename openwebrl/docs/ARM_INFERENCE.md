@@ -1124,9 +1124,9 @@ Each shard stayed within its independent 2 H200 / 16 CPU / 240 GiB × 4h and $5 
 [Compute proxy](arm_results/selectionarm_piotr_steps50_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_steps50_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_steps50_20261007/tokens.png) · [Independent audit](arm_results/selectionarm_piotr_steps50_20261007/independent-audit.json). Compute is a generated-token estimate, excluding prefill/attention/vision/cache, rather than measured FLOPs or dollars. All metered actor attempts count toward token work; unmetered failed requests are listed separately. Terminal screenshots were decoded and matched to saved verdicts, without independent human adjudication.
 
 <a id="selectionarm-piotr-sameday30-20261007"></a>
-## Same-day Piotr 30-step control — prepared 2026-10-07
+## Same-day Piotr 30-step control — running 2026-10-07
 
-**Prepared and tested; exact new resource approval pending.** Fresh SFT and SFT + Piotr SelectionARM on the same 300 tasks: **600 new episodes**, with randomized method order within each task.
+**Approved and running.** Both shards started October7; active-agent repair callbacks are enabled. Fresh SFT and SFT + Piotr SelectionARM on the same 300 tasks: **600 new episodes**, with randomized method order within each task.
 
 Reuse the completed 50-step run's frozen runtime, checkpoints, prompts, local browser and o4-mini/AgentTrek judge. Actor **T=0.7, top-p=0.9, 1,024 output tokens**, 32K context; **N=5**, greedy SelectionARM. Set **max_steps=30**; retain seed45 and the same shard seeds. Fresh browser sessions; the sampler does not guarantee identical trajectory prefixes.
 

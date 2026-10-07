@@ -1,7 +1,7 @@
 {
   "name": "selectionarm-piotr-sameday30-20261007",
-  "status": "prepared_awaiting_exact_resource_approval",
-  "approved": false,
+  "status": "running",
+  "approved": true,
   "tasks": 300,
   "episodes": 600,
   "shards": 2,
@@ -76,5 +76,6 @@
     "cost, latency, token plots",
     "all-attempt scheduler and API accounting"
   ],
-  "offline_tests_passed": 4
+  "offline_tests_passed": 4,
+  "active_agent_supervision": true
 }
