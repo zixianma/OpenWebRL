@@ -4,6 +4,53 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+<a id="arm-continuation-branches-results-20261007"></a>
+## Before versus execution-informed selection: continuation outcomes
+
+**Execution evidence changed the teacher's choices and reduced repeat disagreement, but did not demonstrate better continuation success.** This is a selection study with measured future outcomes, separate from the progress-label diagnostic below. No critic was trained.
+
+| Selection rule | Paired states | Selected-continuation success | State-bootstrap 95% interval |
+| --- | ---: | ---: | --- |
+| Uniform random among the five candidates | 70 | 41.43% | [32.57%, 50.57%] |
+| Before-only Luna-high teacher | 70 | 44.29% | [34.29%, 54.92%] |
+| Execution-informed Luna-high teacher | 70 | 44.76% | [34.44%, 55.24%] |
+| **Execution-informed − before-only** | **70** | **+0.48 pp** | **[−2.38, +3.65] pp** |
+
+These rates average the continuation outcomes selected by repeated teacher calls, with equal weight per state. They are not integer success counts or full-episode OM2W benchmark scores. Invalid continuations count as zero; nothing is selected by its eventual outcome. A paired interval is more informative here than the two marginal intervals.
+
+| Choice-index diagnostic | Rate | State-bootstrap 95% interval |
+| --- | ---: | --- |
+| Before-only: disagreement between repeated judgments | 30.48% | [22.38%, 38.57%] |
+| Execution-informed: disagreement between repeated judgments | 18.25% | [12.70%, 23.97%] |
+| Before versus execution-informed disagreement | 44.81% | [35.98%, 53.65%] |
+| Cross-condition disagreement minus mean within-condition disagreement | +20.45 pp | [+13.39, +27.96] pp |
+
+- **Evidence matters to the decisions.** Cross-condition changes exceed the repeat-control disagreement, and the observed after-only repeat disagreement is lower by 12.22 points.
+- **More consistent choices did not yield a demonstrated success gain.** The +0.48-point estimate is uncertain; this is neither evidence of equivalence nor proof that post-action critics cannot help.
+- **Do not treat agreement or label changes as reward quality.** The next useful diagnostic is whether changed choices prefer candidates with better held-out continuations, especially in panels with distinct actions. This result alone does not justify scaling teacher-label production.
+
+![Continuation success and teacher repeat disagreement](arm_results/rl_integration/continuation-teacher-findings-20261007.png)
+
+### Controlled setup
+
+| Component | Fixed design |
+| --- | --- |
+| States | Fresh official SFT prefixes, depth 0–2, one state per training task; not restoration of Piotr screenshots |
+| Actor | Official OpenWebRL-4B-SFT for prefixes, five candidates and all continuations; T=1.0, p=0.95, top-k off, 4,096 tokens |
+| Branches | Five candidates × three independently executed continuations per state |
+| Teacher | GPT-6 Luna, high reasoning; only `{"selection": N}` in both conditions |
+| Before inputs | Task goal, last five history steps, current screenshot and the exact five candidate responses |
+| After inputs | Identical before inputs plus immediate execution feedback/screenshots for all five candidates; no continuation or verdict |
+| Repeats | Three before judgments reused across the three execution repetitions; three after judgments for each execution repetition; separate order-permutation controls |
+| Outcome | Frozen canonical o4-mini/AgentTrek terminal judge (allows partial progress); invalid outcomes retained as zero |
+| Replay control | All 15 reconstructions must pass observable-state checks before release; failures after release are retained |
+
+**Scope and limits.** The allocation closed with 74 complete states and 1,110 continuation records, including 1,000 valid and 110 invalid records. Four states lack a complete valid teacher panel, leaving 70 for paired analysis. Another state has four finished and 11 interrupted continuations and is excluded. The planned 100 states / 1,500 continuations were not reached within the approved allocation.
+
+Observable replay checks do not prove identical hidden JavaScript or remote server state. Accepted early states are a selected subset: 333 candidate states failed reconstruction before release. Only 37 of the 74 complete panels contained five distinct actions; changing an index can select a duplicate action. Three continuations per candidate also give coarse estimates of candidate quality. The common-valid sensitivity yields +0.84 points, and the final repair phase yields +1.39 points with interval [−2.18, +5.16]; neither changes the conclusion. Repair phases were not randomized.
+
+All seven attempts are accounted for: **31.94 H200-hours**, **$3.32 teacher API**, **$5.82 judge API**, no unsettled reservations. The dataset is partial; accounting is final. [Aggregate results and intervals](arm_results/rl_integration/continuation-branches-final-20261006.json) · [Replay checks, complete protocol and repair history](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+
 <a id="arm-teacher-evidence-primary200-20261006"></a>
 ## Execution-informed teacher: independent 200-task panel — October 6 UTC
 

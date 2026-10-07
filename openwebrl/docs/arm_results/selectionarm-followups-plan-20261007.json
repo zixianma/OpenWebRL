@@ -1,0 +1,159 @@
+{
+  "status": "prepared_awaiting_exact_resource_approval",
+  "experiments": [
+    {
+      "name": "selectionarm-rltasks-repeat-20261007",
+      "status": "prepared_awaiting_exact_resource_approval",
+      "approved": false,
+      "tasks": 300,
+      "episodes": 300,
+      "shards": 1,
+      "resources_per_shard": {
+        "gpus": 2,
+        "gpu_type": "H200",
+        "cpus": 16,
+        "memory_gib": 240,
+        "total_seconds": 10800
+      },
+      "judge_caps_per_shard": {
+        "judge_usd": 5.0,
+        "judge_calls": 1320
+      },
+      "total_gpu_hours": 6,
+      "total_judge_usd": 5,
+      "total_judge_calls": 1320,
+      "protocol": {
+        "actor": "OpenWebRL-4B-SFT:iteration0",
+        "selector_revision": "a1f8d265855ddf1074eae91516c6e86f6f836177",
+        "browser": "local_process",
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": "omitted, original native generate endpoint default",
+        "max_new_tokens": 1024,
+        "max_steps": 30,
+        "context_length": 32768,
+        "context_num_screenshots": 1,
+        "history": "full",
+        "judge": "o4-mini",
+        "judge_protocol": "online_mind2web/AgentTrek",
+        "judge_response_tokens": 4096,
+        "candidates": 5,
+        "candidate_representation": "full",
+        "optimizer_updates": 0,
+        "selector_model": "davidan03/openwebrl-4b-selectionarm-rltasks",
+        "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+        "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+        "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+        "seed": 42,
+        "server_seed_base": 4200,
+        "repetition": 1,
+        "sampling_request": {
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "max_new_tokens": 1024
+        },
+        "design": "RL-task SelectionARM full300; paired with separately running fresh API-study SFT30 control",
+        "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+        "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+        "cohort_revision": "selectionarm-rltasks-repeat-20261007",
+        "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+        "comparability": "Same actor/browser/prompt/judge/decoding; task-paired. Earlier30 and new50 have distinct runs/dates, so horizon interaction remains a cross-run comparison.",
+        "actor_control_source": "api-selector-september-reproduction-20261006"
+      },
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+      "shared_control": "api-selector-september-reproduction-20261006",
+      "science_changes": [
+        "selector model and fresh run"
+      ],
+      "outputs": [
+        "overall and valid-only task success",
+        "paired task-bootstrap ARM gain",
+        "API cost plus measured allocation GPU-hours",
+        "latency and token plots",
+        "browser steps and cap/timeout/context-limit frequencies"
+      ],
+      "analysis": "Pair with fresh SFT30 in API comparison by all300 task IDs; no duplicate baseline generation. Different deployment/concurrency contexts constrain latency comparison.",
+      "offline_tests_passed": 4,
+      "prepared_epoch": 1791357685.1329393
+    },
+    {
+      "name": "selectionarm-piotr-steps50-20261007",
+      "status": "prepared_awaiting_exact_resource_approval",
+      "approved": false,
+      "tasks": 300,
+      "episodes": 600,
+      "shards": 2,
+      "resources_per_shard": {
+        "gpus": 2,
+        "gpu_type": "H200",
+        "cpus": 16,
+        "memory_gib": 240,
+        "total_seconds": 14400
+      },
+      "judge_caps_per_shard": {
+        "judge_usd": 5.0,
+        "judge_calls": 1320
+      },
+      "total_gpu_hours": 16,
+      "total_judge_usd": 10,
+      "total_judge_calls": 2640,
+      "protocol": {
+        "actor": "OpenWebRL-4B-SFT:iteration0",
+        "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+        "browser": "local_process",
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": "omitted, original native generate endpoint default",
+        "max_new_tokens": 1024,
+        "max_steps": 50,
+        "context_length": 32768,
+        "context_num_screenshots": 1,
+        "history": "full",
+        "judge": "o4-mini",
+        "judge_protocol": "online_mind2web/AgentTrek",
+        "judge_response_tokens": 4096,
+        "candidates": 5,
+        "candidate_representation": "full",
+        "optimizer_updates": 0,
+        "selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+        "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+        "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+        "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+        "seed": 45,
+        "server_seed_base": 4500,
+        "repetition": 1,
+        "sampling_request": {
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "max_new_tokens": 1024
+        },
+        "design": "Fresh full300 SFT and Piotr SelectionARM pair; max_steps50 is the only scientific setting changed from30",
+        "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+        "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+        "cohort_revision": "selectionarm-piotr-steps50-20261007",
+        "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+        "comparability": "Same actor/browser/prompt/judge/decoding; task-paired. Earlier30 and new50 have distinct runs/dates, so horizon interaction remains a cross-run comparison.",
+        "actor_control_source": "same campaign; randomized interleaved paired arms"
+      },
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+      "shared_control": "same campaign; randomized interleaved paired arms",
+      "science_changes": [
+        "max_steps30_to50 and fresh run"
+      ],
+      "outputs": [
+        "overall and valid-only task success",
+        "paired task-bootstrap ARM gain",
+        "API cost plus measured allocation GPU-hours",
+        "latency and token plots",
+        "browser steps and cap/timeout/context-limit frequencies"
+      ],
+      "analysis": "Compare ARM50-minus-SFT50 with the two full300 ARM30-minus-SFT30 repeats, preserving tasks as bootstrap clusters. One50 run only; no run SD or deterministic prefix claim.",
+      "offline_tests_passed": 4,
+      "prepared_epoch": 1791357685.1334536
+    }
+  ],
+  "total_gpu_hours_cap": 22,
+  "total_judge_usd_cap": 15,
+  "total_judge_calls_cap": 3960,
+  "shared_or_transferred_budget": false
+}

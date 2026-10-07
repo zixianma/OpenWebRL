@@ -1,5 +1,5 @@
 {
-  "status": "prepared_not_approved",
+  "status": "running_recovery",
   "created_epoch": 1791355553.6827958,
   "tasks": 300,
   "primary_episodes": 900,
@@ -123,9 +123,11 @@
     "Same saved screenshot/candidates can be replayed offline through prompt construction; paid rescoring not included",
     "Non-reproduction can reflect harness defect, website drift, model/provider changes or stochastic trajectories"
   ],
-  "approved": false,
-  "allocated_jobs": [],
-  "paid_generation_calls": 0,
+  "approved": true,
+  "allocated_jobs": [
+    "348363",
+    "348362"
+  ],
   "offline_validation": {
     "tests_passed": 8,
     "tests_failed": 0,
@@ -135,5 +137,20 @@
     "historical_sol_wrapper_sha256": "d1132587f43af9eedafffd45571d590e5f5470ed270c800fc372590c3b2605f5",
     "historical_prompt_wrapper_byte_identical": true,
     "gpu_startup_not_yet_run": true
-  }
+  },
+  "all_attempt_jobs": [
+    "348336",
+    "348337",
+    "348363",
+    "348362"
+  ],
+  "resources_actual_per_shard": {
+    "gpus": 1,
+    "cpus": 8,
+    "memory_gib": 120,
+    "total_seconds": 14400
+  },
+  "offline_tests_passed": 9,
+  "repair": "Known model output-token cap aborts original episode without retry/fallback; other episodes proceed. Scientific settings unchanged.",
+  "snapshot_scope": "Protocol and approval record; live usage is in private append-only ledgers, not this static plan."
 }

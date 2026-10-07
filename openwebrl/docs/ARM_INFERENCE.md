@@ -993,7 +993,7 @@ selection traces, API receipts and comparison are preserved in that directory.
 
 <a id="api-selector-september-reproduction-20261006"></a>
 
-### September API-selector reproduction: prepared, awaiting exact budget approval
+### September API-selector reproduction: approved and running
 
 | Fresh condition | Tasks | Candidate actions | Selector reasoning |
 | --- | ---: | ---: | --- |
@@ -1005,6 +1005,28 @@ Same 300-task file, full historical browser policy, actor T=0.7 / top-p=0.9 / 1,
 
 September Sol completed 132 successes on 300 tasks (44.00%), using 4,040 API requests and $84.85. Its original prompt-wrapper source hash still matches exactly. **No September GPT-5.5 online selector benchmark has been located**; current evidence identifies GPT-5.5 as a training-data teacher. The proposed GPT-5.5 arm is therefore a fresh comparison. Both exact API model IDs passed read-only availability checks.
 
-Proposed ceiling: **two parallel shards, each 1 H200 / 16 CPUs / 120 GiB × 4 hours**; **8 H200-hours total** across all attempts. Shared, nontransferable API ceilings: **Sol $125 / 9,900 calls; GPT-5.5 $175 / 9,900 calls; judge $10 / 3,960 calls**. All pilots and retries consume these caps. No allocations or paid generation calls submitted. Eight offline tests passed, including historical prompt parity, the actual HTTP route, concurrent shared reservations, restart accounting, and fail-closed API errors; GPU/browser startup remains an in-allocation gate.
+Approved ceiling: **two parallel shards, each 1 H200 / 16 CPUs / 120 GiB × 4 hours**; **8 H200-hours total** across all attempts. Actual requests use **8 CPUs per shard** to satisfy the scheduler's CPU/GPU ratio. Shared API ceilings remain **Sol $125 / 9,900 calls; GPT-5.5 $175 / 9,900 calls; judge $10 / 3,960 calls**.
+
+Initial attempts 348336/348337 stopped after 241/240 seconds when GPT-5.5 used all 2,048 output tokens on reasoning with no selection. That original failed episode is committed as invalid/zero; it is not retried or replaced by candidate 1. The repair makes this known model-cap failure terminate only its episode; transport/identity/unknown failures still halt for investigation. Both models retain medium reasoning and the 2,048-token cap. Nine offline checks passed. Replacement jobs **348363/348362** use only the remaining 14,100/14,160 seconds; every earlier call and allocation second remains charged. Missing browser timing for the recovered failed episode is explicitly marked missing. Startup checks verify the actual actor policy, model and decoding receipts; active-agent continuation follows both replacement IDs.
+
 
 A changed result is a reason to investigate, not proof of a code bug. Compare the fresh selector-minus-SFT effects first; preserved prompts, candidates, screenshots and verdicts support separating harness changes from website/provider drift and sampling. Sol uses the same API model ID as September; no immutable September backend snapshot is exposed. Prices checked against [GPT-5.6 Sol](https://developers.openai.com/api/docs/models/gpt-5.6-sol) and [GPT-5.5](https://developers.openai.com/api/docs/models/gpt-5.5). [Prepared protocol, caps and validation](arm_results/api-selector-september-reproduction-plan-20261006.json).
+
+
+<a id="selectionarm-followups-20261007"></a>
+### Prepared follow-ups: RL-task ARM repeat and a 50-step Piotr pair
+
+**All runs use the identical 300 OM2W tasks**, official OpenWebRL-4B-SFT, local browsers, the full historical actor policy, T=0.7 / p=0.9 / 1,024 actor output tokens, top-k omitted, 32K context, five full-response candidates, greedy learned selection, and the same canonical o4-mini/AgentTrek judge. The 1,800-second task timeout is unchanged. Runs initialize fresh browser episodes; no outcome-based replacement or policy mixing.
+
+| New comparison | Step cap | New episodes | SFT control | New allocation request | Judge cap |
+| --- | ---: | ---: | --- | --- | --- |
+| SFT + RL-task SelectionARM | 30 | 300 | Fresh full300 SFT30 in the ongoing API-selector study | One job: 2 H200 / 16 CPU / 240 GiB × 3h | $5 / 1,320 calls |
+| SFT vs SFT + Piotr SelectionARM | 50 | 600 | Fresh full300 SFT50 in the same new study | Two parallel jobs, each 2 H200 / 16 CPU / 240 GiB × 4h | Each $5 / 1,320 calls |
+
+**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. These are prepared requests, not approved allocations. Eight offline checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. GPU/browser validation remains an in-allocation startup gate.
+
+RL-task checkpoint: `davidan03/openwebrl-4b-selectionarm-rltasks`, revision `a1f8d265855ddf1074eae91516c6e86f6f836177`. Piotr: `PTeterwak/OpenWebRL-4B-SelectionARM`, revision `81b452d800d9f859687074f82680dd5257e02d89`. The first reuses the ongoing fresh SFT30 control to avoid another baseline collection; its deployment/concurrency context differs, so cross-study latency comparisons need that qualification.
+
+For the 50-step study, report the paired effect **ARM50 − SFT50**, then its difference from the two complete 30-step effects. Bootstrap by task while retaining both old repetitions together. Website dates and stochastic runs differ, so this interaction is suggestive rather than a deterministic same-trajectory horizon ablation. Report overall and valid-only success; input/output tokens, API cost and allocated GPU-hours; episode/request/browser latency; browser steps; and step-cap, context-cap and wall-timeout frequencies. The original task timeout may bind before 50 steps, so measure that explicitly.
+
+The new rows will join the [full300 scaling table](ARM_INFERENCE_SCALING.md#sft-piotr-repeat-tracker-20261006), with single-run estimates labeled separately from the two-repeat mean ± sample SD. [Frozen plans, caps and validation](arm_results/selectionarm-followups-plan-20261007.json).

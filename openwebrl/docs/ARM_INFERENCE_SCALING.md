@@ -32,13 +32,19 @@ Other actor-only experiments remain recorded below. Known-bug scores are kept in
 [Preserved actor-only counts and scores](https://github.com/zixianma/OpenWebRL/blob/a0a6db4e677c7f1959a53f0498ffc9a18d9c9ca0/openwebrl/docs/ARM_INFERENCE_SCALING.md#actor-selector-experiment-tracker-20261004) · [API actor bug audit](arm_results/reasoning_actors_full300_20261005/pipeline-debug.json).
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
-## Piotr SelectionARM: two full300 repeats + one partial run
+## SelectionARM: full300 comparisons
 
-Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens, 30 turns**. Piotr **SelectionARM**, N=5, greedy selection; this is not ScalarARM.
+Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens, 30 turns**. Learned **SelectionARM**, N=5, greedy selection; the completed repeats use Piotr’s checkpoint.
 
-**Three runs were launched; only two completed full300.** The first corrected run stopped after collecting both SFT/Piotr outcomes for 160 tasks, with too little approved allocation time left to restart. Every run used the same 300-task list; the remaining tasks were not filtered out.
+| SelectionARM comparison | Step cap | Complete full300 runs | SFT successes | ARM successes | SFT success | ARM success | ARM gain | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Piotr, two-repeat mean | 30 | 2 | 198 | 228 | 33.00 ± 0.47% | 38.00 ± 0.47% | +5.00 ± 0.00 pp | Complete; counts pooled over 600 episodes per arm |
+| RL-task SelectionARM repeat | 30 | 0 | — | — | — | — | — | Prepared; new allocation approval pending |
+| Piotr, longer horizon | 50 | 0 | — | — | — | — | — | Prepared; new allocation approval pending |
 
-### Full300: the two completed repeats
+New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collects its own SFT control. Each new comparison is one run, so no run-level SD will be inferred from it. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
+
+### Piotr: the two completed repeats
 
 | Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -55,6 +61,11 @@ Mean gain: **+5.00 pp; paired 95% interval [+1.50, +8.50]**. Bootstrap resamples
 
 Plots: repeat 1 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/tokens.png); repeat 2 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/tokens.png). Compute is estimated decoder work, not dollars or total measured FLOPs. [Final audit and accounting](ARM_INFERENCE.md#sft-piotr-repeats-20261006) · [Combined aggregate](arm_results/rl_integration/sft-piotr-repeats-final-20261006/combined.json).
 
+<details>
+<summary>Supplementary: incomplete first run and the 160-task overlap</summary>
+
+**Three runs were launched; only two completed full300.** The first corrected run stopped after collecting both SFT/Piotr outcomes for 160 tasks, with too little approved allocation time left to restart. Every run used the same 300-task list; the remaining tasks were not filtered out.
+
 <a id="sft-piotr-three-run-summary-20261006"></a>
 ### Supplementary three-run average: 160 tasks with all six outcomes
 
@@ -68,6 +79,8 @@ Each included task has SFT-alone and SFT+Piotr outcomes in all three runs: **160
 | **Mean ± sample SD** | 160 | — | **34.79 ± 1.44%** | — | **39.58 ± 0.72%** | **+4.79 ± 0.72 pp** |
 
 [Three-run aggregate and unchanged task-file verification](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
+
+</details>
 
 <a id="local-sft-selector-results-20261006"></a>
 <a id="matched-sft-control"></a>
@@ -128,7 +141,7 @@ Local v2 judges only completed episodes using full actor thoughts/actions and a 
 
 </details>
 
-[Next: matched SFT / GPT-5.6 Sol / GPT-5.5 comparison](ARM_INFERENCE.md#api-selector-september-reproduction-20261006) — prepared; exact new resource/API caps await approval.
+[Next: matched SFT / GPT-5.6 Sol / GPT-5.5 comparison](ARM_INFERENCE.md#api-selector-september-reproduction-20261006) — approved and running; usage and failed attempts retained within the original caps.
 
 <details>
 <summary>Historical September results — separate reference, excluded from current averages</summary>

@@ -17,6 +17,8 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Inference-time scaling: visible actor-alone results and inventory, Piotr repeat averages and matched Luna/Jev/Kev selectors](ARM_INFERENCE_SCALING.md).
 
+[Before/after continuation selection: choices change and become more repeatable, but success gain is +0.48 pp with 95% interval [−2.38, +3.65]; 70 paired states](ARM_RESULTS.md#arm-continuation-branches-results-20261007).
+
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
 [Continuation allocation closed: 74 complete states / 1,110 records; partial target and final accounting verified](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
 [Continuation readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
