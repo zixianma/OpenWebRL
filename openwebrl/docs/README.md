@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Historical-vs-corrected verdict audit: same 158 tasks, all 23 both-judged changes reviewed, unjudged-zero contribution quantified](ARM_INFERENCE.md#arm-same-task-verdict-audit-20261006).
+
 [Corrected ARM comparison: 493/900 records, 158 paired tasks; final accounting and cost/latency/token plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
 
 [Inference scaling rerun audit: five corrected local v2 conditions complete; remaining GPT-actor, N=10, Qwen and episode-pass@k comparisons](ARM_INFERENCE_SCALING.md#rerun-triage-20261006).
@@ -10,8 +12,8 @@ for the work you are doing, then follow its contents to dated experiment records
 [Inference-time scaling: audited local actor-alone and matched SFT + selector results](ARM_INFERENCE_SCALING.md).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
-[Approved continuation experiment: 72/100 states and 1,080/1,500 records audited; original caps and all attempts preserved](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
-[Continuation readout: 68 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
+[Continuation allocation closed: 74 complete states / 1,110 records; partial target and final accounting verified](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
+[Continuation readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).

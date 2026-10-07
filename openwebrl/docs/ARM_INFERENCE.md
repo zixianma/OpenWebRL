@@ -1,5 +1,35 @@
 # ARM inference and judge protocol
 
+<a id="arm-same-task-verdict-audit-20261006"></a>
+## Same-task historical gain and saved-verdict audit — October 6
+
+**On the same 158 tasks, the historical Piotr ARM gain was +10.13 pp; the corrected gain is +4.43 pp.** Restricting September's full300 cohort removes 2.54 pp of its +12.67 pp gain. The remaining cross-date gain change is −5.70 pp (50,000 paired task-bootstrap draws, 95% interval −15.19 to +3.16 pp). This is not a randomized test of harness changes, website drift or judge variability.
+
+| Same 158 tasks | September successes | Corrected October 6 successes | Change |
+| --- | ---: | ---: | ---: |
+| SFT alone | 48/158 = 30.38% | 53/158 = 33.54% | +5 successes |
+| SFT + Piotr SelectionARM | 64/158 = 40.51% | 60/158 = 37.97% | −4 successes |
+| ARM minus SFT | +16 = +10.13 pp | +7 = +4.43 pp | −9 = −5.70 pp |
+
+Across the available baseline/Piotr records there are 82 changed binary outcomes on 64 unique tasks; 75 changes are in this matched subset. **Only 23 of the 82 pairs have actual judge verdicts on both runs** (22 in the matched subset). The other 59 involve at least one zero assigned without invoking the judge. Both dates exhibit this behavior; an unjudged zero is not a negative model judgment.
+
+The following is an exact decomposition of matched outcome flips, **not causal attribution**. Positive counts mean more October successes. Unchanged outcomes contribute zero.
+
+| Type of changed outcome | SFT net successes | Piotr net successes | Contribution to change in ARM advantage |
+| --- | ---: | ---: | ---: |
+| Both runs actually judged | −2 | −8 | −3.80 pp |
+| Unjudged zero from step/output limit | +6 | 0 | −3.80 pp |
+| Unjudged zero from invalid execution | +1 | +4 | +1.90 pp |
+| **Total** | **+5** | **−4** | **−5.70 pp** |
+
+Thus all unjudged-zero transitions together account for **−1.90 pp**, one-third of the observed matched reduction. The baseline gained seven net successes in those transitions versus four for Piotr; invalid-execution changes alone actually narrowed the reduction. In the 120 tasks with valid records in all four old/new baseline/Piotr runs, historical successes are 43 versus 60 and corrected successes 46 versus 54, so invalid runs alone do not explain the difference.
+
+**Manual review covers all 23 both-judged pairs plus four unjudged-zero examples.** Saved screenshots, verdicts and final responses reveal a mixture of actual navigation/access differences, unsupported factual or constraint claims on both dates, and unequal partial-progress credit. The original AgentTrek rubric explicitly permits some partial completion and more than eight effective actions. Therefore a strict-completion failure is not automatically a rubric violation. The judge also sees actor-written reasoning and a last saved pre-action image, so its explanatory prose is not independent ground truth.
+
+The remaining unjudged pairs retain explicit unreviewed labels in the private task table; all raw screenshots and task-level assessments stay local. No original verdicts or headline metrics were overwritten. Reviewing only outcome flips cannot estimate an unbiased judge-error rate or justify a rescored leaderboard; a balanced, blinded audit would also need unchanged outcomes and a prespecified grading standard.
+
+[Matched-cohort aggregate](arm_results/rl_integration/historical-verdict-audit-20261006/same-task.json) · [Verdict coverage and decomposition](arm_results/rl_integration/historical-verdict-audit-20261006/verdict-audit.json)
+
 <a id="arm-rltasks-corrected-partial-20261006"></a>
 ## Corrected historical-protocol comparison — partial, October 6
 

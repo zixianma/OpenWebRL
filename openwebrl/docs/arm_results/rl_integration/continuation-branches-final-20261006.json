@@ -1,0 +1,458 @@
+{
+  "states_with_continuation_records": 74,
+  "analyzed_states": 70,
+  "estimates": {
+    "before": 0.44285714285714284,
+    "after": 0.44761904761904764,
+    "difference": 0.00476190476190476,
+    "uniform": 0.4142857142857143,
+    "before_repeat_disagreement": 0.30476190476190473,
+    "after_repeat_disagreement": 0.18253968253968253,
+    "before_after_disagreement": 0.44814814814814813,
+    "excess_disagreement": 0.20449735449735448
+  },
+  "state_bootstrap_95_intervals": {
+    "before": [
+      0.34285714285714286,
+      0.5492063492063493
+    ],
+    "after": [
+      0.34444444444444444,
+      0.5523809523809524
+    ],
+    "difference": [
+      -0.02380952380952382,
+      0.0365079365079365
+    ],
+    "uniform": [
+      0.32571428571428573,
+      0.5057142857142857
+    ],
+    "before_repeat_disagreement": [
+      0.2238095238095238,
+      0.3857142857142857
+    ],
+    "after_repeat_disagreement": [
+      0.12698412698412698,
+      0.2396825396825397
+    ],
+    "before_after_disagreement": [
+      0.35978835978835977,
+      0.5365079365079365
+    ],
+    "excess_disagreement": [
+      0.13386243386243385,
+      0.2796296296296296
+    ]
+  },
+  "common_valid_selected_pairs": {
+    "before": 0.46308724832214765,
+    "after": 0.4714765100671141,
+    "pairs": 596,
+    "difference": 0.008389261744966459
+  },
+  "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+  "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+  "committed_activation_failure_count": 1,
+  "post_release_continuation_attempts": 1109,
+  "activation_failure_note": "Committed release-read failures stay invalid and count zero; no execution is invented and no attempt is replaced.",
+  "exclusion_counts": {
+    "incomplete_valid_teacher_repeats": 4
+  },
+  "execution_phase_sensitivity": {
+    "reserve800-prefetch-v1": {
+      "states_with_continuation_records": 5,
+      "analyzed_states": 5,
+      "estimates": {
+        "before": 0.26666666666666666,
+        "after": 0.2222222222222222,
+        "difference": -0.04444444444444444,
+        "uniform": 0.21333333333333335,
+        "before_repeat_disagreement": 0.26666666666666666,
+        "after_repeat_disagreement": 0.2,
+        "before_after_disagreement": 0.34074074074074073,
+        "excess_disagreement": 0.1074074074074074
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0,
+          0.6666666666666666
+        ],
+        "after": [
+          0,
+          0.5333333333333333
+        ],
+        "difference": [
+          -0.13333333333333333,
+          0.0
+        ],
+        "uniform": [
+          0.013333333333333332,
+          0.5466666666666666
+        ],
+        "before_repeat_disagreement": [
+          0,
+          0.5333333333333333
+        ],
+        "after_repeat_disagreement": [
+          0,
+          0.5111111111111111
+        ],
+        "before_after_disagreement": [
+          0.07407407407407407,
+          0.6074074074074074
+        ],
+        "excess_disagreement": [
+          -0.029629629629629627,
+          0.25555555555555554
+        ]
+      },
+      "common_valid_selected_pairs": {
+        "before": 0.2857142857142857,
+        "after": 0.23809523809523808,
+        "pairs": 42,
+        "difference": -0.047619047619047616
+      },
+      "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+      "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+      "continuations": 75,
+      "invalid_continuations": 3,
+      "exclusion_counts": {}
+    },
+    "staged-preflight-v1": {
+      "states_with_continuation_records": 3,
+      "analyzed_states": 3,
+      "estimates": {
+        "before": 0.6666666666666666,
+        "after": 0.6666666666666666,
+        "difference": 0,
+        "uniform": 0.6666666666666666,
+        "before_repeat_disagreement": 0.6666666666666666,
+        "after_repeat_disagreement": 0.2962962962962963,
+        "before_after_disagreement": 0.6296296296296295,
+        "excess_disagreement": 0.14814814814814817
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0,
+          1
+        ],
+        "after": [
+          0,
+          1
+        ],
+        "difference": [
+          0,
+          0
+        ],
+        "uniform": [
+          0,
+          1
+        ],
+        "before_repeat_disagreement": [
+          0.6666666666666666,
+          0.6666666666666666
+        ],
+        "after_repeat_disagreement": [
+          0,
+          0.8888888888888888
+        ],
+        "before_after_disagreement": [
+          0.3333333333333333,
+          0.8888888888888888
+        ],
+        "excess_disagreement": [
+          0.0,
+          0.3333333333333333
+        ]
+      },
+      "common_valid_selected_pairs": {
+        "before": 0.6666666666666666,
+        "after": 0.6666666666666666,
+        "pairs": 27,
+        "difference": 0.0
+      },
+      "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+      "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+      "continuations": 45,
+      "invalid_continuations": 0,
+      "exclusion_counts": {}
+    },
+    "terminal-capture-transport-v1": {
+      "states_with_continuation_records": 60,
+      "analyzed_states": 56,
+      "estimates": {
+        "before": 0.4444444444444444,
+        "after": 0.4583333333333333,
+        "difference": 0.013888888888888888,
+        "uniform": 0.4238095238095238,
+        "before_repeat_disagreement": 0.30952380952380953,
+        "after_repeat_disagreement": 0.1865079365079365,
+        "before_after_disagreement": 0.4722222222222222,
+        "excess_disagreement": 0.22420634920634921
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0.3333333333333333,
+          0.5595238095238095
+        ],
+        "after": [
+          0.34523809523809523,
+          0.5753968253968254
+        ],
+        "difference": [
+          -0.021825396825396824,
+          0.051587301587301584
+        ],
+        "uniform": [
+          0.325,
+          0.5238095238095238
+        ],
+        "before_repeat_disagreement": [
+          0.22023809523809523,
+          0.3988095238095238
+        ],
+        "after_repeat_disagreement": [
+          0.12896825396825395,
+          0.24801587301587302
+        ],
+        "before_after_disagreement": [
+          0.37103174603174605,
+          0.5720899470899471
+        ],
+        "excess_disagreement": [
+          0.14219576719576718,
+          0.31316137566137564
+        ]
+      },
+      "common_valid_selected_pairs": {
+        "before": 0.46540880503144655,
+        "after": 0.48218029350104824,
+        "pairs": 477,
+        "difference": 0.016771488469601692
+      },
+      "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+      "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+      "continuations": 900,
+      "invalid_continuations": 96,
+      "exclusion_counts": {
+        "incomplete_valid_teacher_repeats": 4
+      }
+    },
+    "visible-replay-v2": {
+      "states_with_continuation_records": 3,
+      "analyzed_states": 3,
+      "estimates": {
+        "before": 0.25925925925925924,
+        "after": 0.2222222222222222,
+        "difference": -0.037037037037037056,
+        "uniform": 0.35555555555555557,
+        "before_repeat_disagreement": 0.2222222222222222,
+        "after_repeat_disagreement": 0,
+        "before_after_disagreement": 0.1111111111111111,
+        "excess_disagreement": 0.0
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0,
+          0.7777777777777778
+        ],
+        "after": [
+          0,
+          0.6666666666666666
+        ],
+        "difference": [
+          -0.11111111111111116,
+          0
+        ],
+        "uniform": [
+          0,
+          0.9333333333333333
+        ],
+        "before_repeat_disagreement": [
+          0,
+          0.6666666666666666
+        ],
+        "after_repeat_disagreement": [
+          0,
+          0
+        ],
+        "before_after_disagreement": [
+          0,
+          0.3333333333333333
+        ],
+        "excess_disagreement": [
+          0.0,
+          0.0
+        ]
+      },
+      "common_valid_selected_pairs": {
+        "before": 0.2916666666666667,
+        "after": 0.25,
+        "pairs": 24,
+        "difference": -0.041666666666666685
+      },
+      "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+      "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+      "continuations": 45,
+      "invalid_continuations": 4,
+      "exclusion_counts": {}
+    },
+    "wait-watchdog-v1": {
+      "states_with_continuation_records": 3,
+      "analyzed_states": 3,
+      "estimates": {
+        "before": 0.6666666666666666,
+        "after": 0.6296296296296297,
+        "difference": -0.037037037037037056,
+        "uniform": 0.37777777777777777,
+        "before_repeat_disagreement": 0,
+        "after_repeat_disagreement": 0.14814814814814814,
+        "before_after_disagreement": 0.3333333333333333,
+        "excess_disagreement": 0.25925925925925924
+      },
+      "state_bootstrap_95_intervals": {
+        "before": [
+          0,
+          1
+        ],
+        "after": [
+          0,
+          1
+        ],
+        "difference": [
+          -0.11111111111111116,
+          0
+        ],
+        "uniform": [
+          0,
+          0.7333333333333333
+        ],
+        "before_repeat_disagreement": [
+          0,
+          0
+        ],
+        "after_repeat_disagreement": [
+          0,
+          0.2222222222222222
+        ],
+        "before_after_disagreement": [
+          0,
+          0.8888888888888888
+        ],
+        "excess_disagreement": [
+          0.0,
+          0.7777777777777777
+        ]
+      },
+      "common_valid_selected_pairs": {
+        "before": 0.6538461538461539,
+        "after": 0.6538461538461539,
+        "pairs": 26,
+        "difference": 0.0
+      },
+      "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+      "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
+      "continuations": 45,
+      "invalid_continuations": 7,
+      "exclusion_counts": {}
+    }
+  },
+  "execution_phase_note": "All completed primary outcomes are retained. Repair-phase cohorts differ; phase comparisons are descriptive, not randomized effects.",
+  "epoch": 1791340778.4498155,
+  "plan_sha256": "4dcec4024c7947d3f1b98e3da3c1f187b78ec90f3871c79a999ee1e2502f3586",
+  "protocol_stage": "visible-replay-v2",
+  "target_states": 100,
+  "target_continuations": 1500,
+  "completed_states": 74,
+  "completed_continuations": 1110,
+  "valid_continuations": 1000,
+  "released_states_pending": 1,
+  "replay_exclusions": {
+    "At least one reconstruction failed before release": 333,
+    "anchor_not_captured": 57,
+    "Malformed fixed candidate panel": 1
+  },
+  "candidate_diversity_counts": {
+    "5": 37,
+    "1": 5,
+    "4": 18,
+    "3": 9,
+    "2": 5
+  },
+  "verified_teacher_requests": 1008,
+  "valid_teacher_judgments": 1008,
+  "teacher_response_models": {
+    "gpt-6-luna": 1008
+  },
+  "judge_response_models": {
+    "o4-mini-2025-04-16": 793
+  },
+  "regular_teacher_tokens": {
+    "before_input_tokens": 1565280,
+    "before_output_tokens": 114593,
+    "after_input_tokens": 20573007,
+    "after_output_tokens": 235476
+  },
+  "all_attempt_counters": {
+    "active_browsers": 0.0,
+    "browsers:L01": 2701.0,
+    "browser_sessions": 2701.0,
+    "local_sft_generations": 13674.0,
+    "om2w_judge_http_attempts": 797.0,
+    "canonical_judge_usd": 5.818292700000002,
+    "luna_selector_requests": 1008.0,
+    "luna_usd": 3.324324999999999
+  },
+  "scheduler": [
+    {
+      "job_id": "346645",
+      "state": "FAILED",
+      "elapsed_seconds": 95
+    },
+    {
+      "job_id": "346655",
+      "state": "COMPLETED",
+      "elapsed_seconds": 350
+    },
+    {
+      "job_id": "346951",
+      "state": "FAILED",
+      "elapsed_seconds": 1250
+    },
+    {
+      "job_id": "346956",
+      "state": "COMPLETED",
+      "elapsed_seconds": 1309
+    },
+    {
+      "job_id": "347009",
+      "state": "COMPLETED",
+      "elapsed_seconds": 2526
+    },
+    {
+      "job_id": "347100",
+      "state": "COMPLETED",
+      "elapsed_seconds": 2933
+    },
+    {
+      "job_id": "347282",
+      "state": "TIMEOUT",
+      "elapsed_seconds": 20284
+    }
+  ],
+  "all_attempt_allocation_seconds": 28747,
+  "allocation_seconds_cap": 28800,
+  "unsettled_reservations": 0,
+  "final_accounting_verified": true,
+  "collection_target_verified": false,
+  "verified_complete": false,
+  "status": "partial",
+  "scope": "Continuation and teacher diagnostic on replayable training states; not a full OM2W evaluation. All-attempt counters include earlier failed protocol stages. No effect claim before adequate paired sample.",
+  "additional_finished_continuations_in_incomplete_state": 4,
+  "interrupted_continuations_in_incomplete_state": 11,
+  "partial_state_note": "Four additional finished branch records are preserved with 11 interrupted peers. The incomplete state and absent teacher panel are excluded from the 74-state/1110-record complete-state analysis.",
+  "scheduler_teardown_basis": "All job steps terminal under Slurm cgroup containment; final extern step completed. No direct node process probe available after allocation ended.",
+  "wandb_final_state": "finished",
+  "allocated_gpu_hours": 31.941111111111113
+}

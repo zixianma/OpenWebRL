@@ -1,0 +1,66 @@
+{
+  "epoch": 1791340859.262537,
+  "changed_outcomes": 82,
+  "unique_tasks": 64,
+  "matched_changed_outcomes": 75,
+  "both_judged": 23,
+  "at_least_one_unjudged": 59,
+  "manually_reviewed_cases": 27,
+  "manually_reviewed_both_judged": 23,
+  "original_scores_unchanged": true,
+  "limitations": [
+    "Selected outcome flips are not a representative judge-error sample.",
+    "Manual saved-image review, no fresh teacher/model calls.",
+    "Not all intermediate screenshots inspected; scope and uncertainty preserved privately.",
+    "Historical rubric allows partial progress and is not strict goal completion."
+  ],
+  "matched_tasks": 158,
+  "matched_outcome_change_decomposition": [
+    {
+      "category": "both_judged",
+      "baseline": {
+        "wins": 5,
+        "losses": 7,
+        "net": -2
+      },
+      "piotr": {
+        "wins": 1,
+        "losses": 9,
+        "net": -8
+      },
+      "gain_change_successes": -6,
+      "gain_change_pp": -3.7974683544303796
+    },
+    {
+      "category": "unjudged_valid",
+      "baseline": {
+        "wins": 13,
+        "losses": 7,
+        "net": 6
+      },
+      "piotr": {
+        "wins": 9,
+        "losses": 9,
+        "net": 0
+      },
+      "gain_change_successes": -6,
+      "gain_change_pp": -3.7974683544303796
+    },
+    {
+      "category": "unjudged_invalid",
+      "baseline": {
+        "wins": 4,
+        "losses": 3,
+        "net": 1
+      },
+      "piotr": {
+        "wins": 6,
+        "losses": 2,
+        "net": 4
+      },
+      "gain_change_successes": 3,
+      "gain_change_pp": 1.8987341772151898
+    }
+  ],
+  "decomposition_note": "Exact accounting of outcome flips, not causal attribution; both-judged pairs include different trajectories as well as grading variability. Both old and current cohorts contain unjudged zeros."
+}

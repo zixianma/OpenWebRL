@@ -1,0 +1,122 @@
+{
+  "epoch": 1791339905.6366858,
+  "offline_only": true,
+  "matched_tasks": 158,
+  "full_historical_tasks": 300,
+  "full_historical_baseline": 0.3,
+  "full_historical_piotr": 0.4266666666666667,
+  "matched": {
+    "historical_baseline": {
+      "valid": 137,
+      "successes": 48,
+      "episodes": 158,
+      "overall": 0.3037974683544304,
+      "valid_only": 0.35036496350364965
+    },
+    "historical_piotr": {
+      "valid": 133,
+      "successes": 64,
+      "episodes": 158,
+      "overall": 0.4050632911392405,
+      "valid_only": 0.48120300751879697
+    },
+    "corrected_baseline": {
+      "valid": 141,
+      "successes": 53,
+      "episodes": 158,
+      "overall": 0.33544303797468356,
+      "valid_only": 0.375886524822695
+    },
+    "corrected_piotr": {
+      "valid": 139,
+      "successes": 60,
+      "episodes": 158,
+      "overall": 0.379746835443038,
+      "valid_only": 0.4316546762589928
+    },
+    "corrected_new_arm": {
+      "valid": 137,
+      "successes": 61,
+      "episodes": 158,
+      "overall": 0.3860759493670886,
+      "valid_only": 0.44525547445255476
+    }
+  },
+  "paired_statistics": {
+    "historical_gain": {
+      "estimate": 0.10126582278481013,
+      "bootstrap95": [
+        0.03164556962025311,
+        0.170886075949367
+      ]
+    },
+    "corrected_gain": {
+      "estimate": 0.04430379746835443,
+      "bootstrap95": [
+        -0.01898734177215189,
+        0.10759493670886067
+      ]
+    },
+    "gain_change": {
+      "estimate": -0.056962025316455694,
+      "bootstrap95": [
+        -0.15189873417721494,
+        0.03164556962025317
+      ]
+    },
+    "baseline_change": {
+      "estimate": 0.03164556962025317,
+      "bootstrap95": [
+        -0.044303797468354444,
+        0.10759493670886078
+      ]
+    },
+    "piotr_change": {
+      "estimate": -0.02531645569620253,
+      "bootstrap95": [
+        -0.10126582278481,
+        0.050632911392405
+      ]
+    }
+  },
+  "success_transitions": {
+    "baseline": {
+      "0to0": 88,
+      "1to1": 31,
+      "0to1": 22,
+      "1to0": 17
+    },
+    "piotr": {
+      "0to0": 78,
+      "1to0": 20,
+      "0to1": 16,
+      "1to1": 44
+    }
+  },
+  "bootstrap_draws": 50000,
+  "bootstrap_seed": 42,
+  "limitations": [
+    "Same-task comparison across dates, not identical browser states or randomized harness intervention.",
+    "Current matched subset depends on completion before allocation cutoff.",
+    "Bootstrap resamples complete task blocks across all cohorts; it does not measure website drift or judge variability."
+  ],
+  "four_way_common_valid": {
+    "tasks": 120,
+    "historical_baseline": 43,
+    "historical_piotr": 60,
+    "corrected_baseline": 46,
+    "corrected_piotr": 54
+  },
+  "task_intent_checks": {
+    "baseline": {
+      "identical_intent": 143,
+      "historical_intent_unavailable": 15
+    },
+    "selection": {
+      "identical_intent": 144,
+      "historical_intent_unavailable": 14
+    }
+  },
+  "cohort_size_gap_contribution_pp": 2.540084388185658,
+  "same_task_gain_change_pp": -5.69620253164557
+}
