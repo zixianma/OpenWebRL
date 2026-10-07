@@ -1052,7 +1052,7 @@ All metered actor/selector attempts contribute to token and cost totals, includi
 | SFT + RL-task SelectionARM | 30 | 300 | Completed fresh full300 SFT30 in the API-selector study | One job: 2 H200 / 16 CPU / 240 GiB × 3h | $5 / 1,320 calls |
 | SFT vs SFT + Piotr SelectionARM | 50 | 600 | Fresh full300 SFT50 in the same new study | Two parallel jobs, each 2 H200 / 16 CPU / 240 GiB × 4h | Each $5 / 1,320 calls |
 
-**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. Approved and submitted October 7: **RL-task ARM job 348682; 50-step pair jobs 348683/348684**. All three passed model startup and began collection; active-agent supervisors follow the current attempts. Eight preparation checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. The first saved episodes have passed the model/browser path; final full-cohort verification remains pending.
+**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. Approved and submitted October 7: **RL-task ARM job 348682; 50-step pair jobs 348683/348684**. The RL-task repeat is now independently complete (see below); the 50-step pair continues under its separate approval and active-agent supervisors. Eight preparation checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. The 50-step pair still awaits collection and final full-cohort verification.
 
 An initial approval-hash serialization mismatch stopped jobs 348679/348680/348681 before model/API work, using 4/7/7 seconds. The plan and scientific source were unchanged; canonical hashes were repaired and checked against both approval gates. Every failed second is charged, and replacement wall times were rounded down to the remaining cap.
 
@@ -1061,3 +1061,31 @@ RL-task checkpoint: `davidan03/openwebrl-4b-selectionarm-rltasks`, revision `a1f
 For the 50-step study, report the paired effect **ARM50 − SFT50**, then its difference from the two complete 30-step effects. Bootstrap by task while retaining both old repetitions together. Website dates and stochastic runs differ, so this interaction is suggestive rather than a deterministic same-trajectory horizon ablation. Report overall and valid-only success; input/output tokens, API cost and allocated GPU-hours; episode/request/browser latency; browser steps; and step-cap, context-cap and wall-timeout frequencies. The original task timeout may bind before 50 steps, so measure that explicitly.
 
 The new rows will join the [full300 scaling table](ARM_INFERENCE_SCALING.md#sft-piotr-repeat-tracker-20261006), with single-run estimates labeled separately from the two-repeat mean ± sample SD. [Frozen plans, caps and validation](arm_results/selectionarm-followups-plan-20261007.json).
+
+
+<a id="selectionarm-rltasks-repeat-results-20261007"></a>
+### RL-task SelectionARM: full300 repeat complete — October 7
+
+**123 / 300 successes (41.00%) versus the saved SFT control’s 95 / 300 (31.67%): +9.33 pp, paired 95% interval [+4.00, +14.67].** One new ARM run; the control is the completed API-selector study, with the identical 300-task file. This is not a contemporaneous checkpoint comparison.
+
+| Method | Tasks | Successes | Success | Valid | Invalid | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT control, reused | 300 | 95 | 31.67% | 273 | 27 | 34.80% |
+| SFT + RL-task SelectionARM | 300 | 123 | 41.00% | 267 | 33 | 46.07% |
+
+Matched discordances: ARM-only success **48**, SFT-only **20**. On 263 common-valid tasks, ARM has 122 successes and SFT 94. The interval uses 10,000 task-bootstrap samples, seed 42; no run-level SD. Invalid and unjudged outcomes remain zero. Canonical AgentTrek success allows partial progress.
+
+**Protocol:** frozen official SFT revision `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a`; RL-task SelectionARM revision `a1f8d265855ddf1074eae91516c6e86f6f836177`; N=5 full-response candidates, greedy selection; local browsers; historical policy/full history/current image; T=0.7, p=0.9, top-k omitted, 1,024 output tokens, 32K context, 30 steps, 1,800-second task timeout; o4-mini/AgentTrek with 4,096-token judge cap. Server seed 4200 verified; FlashInfer ignores request seeds. No deterministic trajectory claim.
+
+| New ARM run accounting | Used | Approved cap |
+| --- | ---: | ---: |
+| Two-H200 allocation seconds, all attempts | 8156 | 10,800 |
+| Allocated H200-hours | 4.5311 | 6.0000 |
+| Judge calls | 184 | 1,320 |
+| Judge receipt-priced USD | 1.5188668 | 5.0000000 |
+
+The failed four-second startup is included; 2644 approved seconds remain unused. All judge receipts settled, model/seed/decoding identities verified, W&B finished and owned-process teardown verified. The reused control’s accounting remains in its original study; no transfers or added budget.
+
+Invalid ARM outcomes: zero_step_reset_or_navigation: 22, generation_error: 10, env_step_error: 1. Their artifacts are preserved. All 22515 actor requests were checked; 50 failed/unmetered requests have no token usage. Terminal screenshots were decoded and matched to saved verdict receipts, without independent human adjudication.
+
+Plots: [compute proxy](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) · [latency](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) · [tokens](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png). Compute is a generated-token estimate, not measured FLOPs or dollars. Latency is descriptive because deployments/concurrency differ. [Aggregate](arm_results/selectionarm_rltasks_repeat_20261007/aggregate.json) · [Independent audit](arm_results/selectionarm_rltasks_repeat_20261007/independent-audit.json) · [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/selectionarm-rltasks-repeat-20261007-shard0).

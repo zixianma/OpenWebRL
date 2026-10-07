@@ -4,6 +4,8 @@
 
 Detailed inference, offline-training and online-RL results belong here. The records preserve cohorts, uncertainty, scaling studies, audits and provenance; the linked summary contains the core methods and results.
 
+**RL-task SelectionARM full300 repeat:** 41.00% versus 31.67% for the reused SFT control; **+9.33 pp [+4.00, +14.67]**. [Controlled-results table](ARM_INFERENCE_SCALING.md#sft-piotr-repeat-tracker-20261006) · [Final audit](ARM_INFERENCE.md#selectionarm-rltasks-repeat-results-20261007).
+
 <a id="arm-continuation-branches-results-20261007"></a>
 ## Before versus execution-informed selection
 

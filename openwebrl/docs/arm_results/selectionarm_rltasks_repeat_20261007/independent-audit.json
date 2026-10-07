@@ -1,0 +1,39 @@
+{
+  "epoch": 1791400001.7863085,
+  "passed": true,
+  "new_episodes_verified": 300,
+  "reused_control_episodes": 300,
+  "identical_task_file": true,
+  "evidence_checks": {
+    "status:Status.COMPLETED": 184,
+    "terminal_images_verified": 184,
+    "saved_verdicts_receipt_matched": 184,
+    "verified_action_traces": 4493,
+    "status:Status.FAILED": 76,
+    "status:exception": 22,
+    "status:Status.TRUNCATED": 7,
+    "status:Status.ABORTED": 11
+  },
+  "native_request_checks": {
+    "requests": 22515,
+    "received_requests": 22465,
+    "input_tokens": 227267325,
+    "output_tokens": 7620021,
+    "failed_or_unmetered_requests": 50
+  },
+  "model_seed_decoding_verified": true,
+  "all_caps_verified": true,
+  "teardown_verified": true,
+  "wandb_finished": true,
+  "limitations": [
+    "One newly collected ARM run; paired control reused from the earlier completed API-selector study. No run-level SD.",
+    "Task-bootstrap intervals measure task sampling, not website drift, judge error or differences in deployment/concurrency.",
+    "Invalid and unjudged outcomes count as zero. The canonical AgentTrek judge allows partial progress.",
+    "Latency comparison is descriptive across deployments. Allocation GPU-hours belong to the new ARM campaign only.",
+    "One recovered control record lacks browser-step timing; this missing value is excluded from that metric only and its outcome remains included.",
+    "Compute proxy is 2 \u00d7 4B parameters \u00d7 generated actor/selector tokens; excludes prefill, attention, vision and caching. It is neither measured FLOPs nor dollars.",
+    "Token totals include every metered actor attempt; unmetered failures reported separately. Selector totals cover committed decision receipts.",
+    "FlashInfer ignores per-request seeds; server seed was verified, but deterministic paired trajectories are not claimed.",
+    "Saved terminal screenshots decoded and matched to verdict receipts; no independent human adjudication is claimed."
+  ]
+}

@@ -59,15 +59,17 @@ Plots: [API cost](arm_results/api_selector_september_reproduction_20261006/cost.
 <a id="sft-piotr-repeat-tracker-20261006"></a>
 ## SelectionARM: full300 comparisons
 
-Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens, 30 turns**. Learned **SelectionARM**, N=5, greedy selection; the completed repeats use Piotr’s checkpoint.
+Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens**; step caps below. Learned **SelectionARM**, N=5, greedy selection; checkpoint and horizon are listed separately below.
 
 | SelectionARM comparison | Step cap | Complete full300 runs | SFT successes | ARM successes | SFT success | ARM success | ARM gain | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Piotr, two-repeat mean | 30 | 2 | 198 | 228 | 33.00 ± 0.47% | 38.00 ± 0.47% | +5.00 ± 0.00 pp | Complete; counts pooled over 600 episodes per arm |
-| RL-task SelectionARM repeat | 30 | 0 | — | — | — | — | — | Collecting; job 348682 |
+| RL-task SelectionARM repeat | 30 | 1 | 95 | 123 | 31.67% | 41.00% | +9.33 pp | Complete; earlier SFT control reused |
 | Piotr, longer horizon | 50 | 0 | — | — | — | — | — | Collecting; jobs 348683/348684 |
 
 New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collects its own SFT control. Each new comparison is one run, so no run-level SD will be inferred from it. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
+
+RL-task ARM: **+9.33 pp**, paired 95% interval **[+4.00, +14.67]**. One run with the earlier SFT control; no run-level SD or controlled cross-checkpoint ranking. [Audit and accounting](ARM_INFERENCE.md#selectionarm-rltasks-repeat-results-20261007) · [compute proxy](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) · [latency](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) · [tokens](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png).
 
 ### Piotr: the two completed repeats
 

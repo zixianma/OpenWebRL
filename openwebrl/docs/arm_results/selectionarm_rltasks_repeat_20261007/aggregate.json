@@ -1,0 +1,217 @@
+{
+  "epoch": 1791400000.90789,
+  "complete": true,
+  "verified_complete": true,
+  "status": "verified_complete",
+  "newly_collected_episodes": 300,
+  "reused_control_episodes": 300,
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "a1f8d265855ddf1074eae91516c6e86f6f836177",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "davidan03/openwebrl-4b-selectionarm-rltasks",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "server_seed_base": 4200,
+    "repetition": 1,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "RL-task SelectionARM full300; paired with separately running fresh API-study SFT30 control",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "selectionarm-rltasks-repeat-20261007",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Same actor/browser/prompt/judge/decoding; task-paired. Earlier30 and new50 have distinct runs/dates, so horizon interaction remains a cross-run comparison.",
+    "actor_control_source": "api-selector-september-reproduction-20261006"
+  },
+  "by_mode": {
+    "actor0": {
+      "episodes": 300,
+      "successes": 95,
+      "valid": 273,
+      "invalid": 27,
+      "success_rate": 0.31666666666666665,
+      "valid_only": 0.34798534798534797,
+      "missing_metric_episodes": {
+        "browser_step_seconds": 1
+      },
+      "totals": {
+        "actor_requests": 4564,
+        "actor_output_tokens": 1483711,
+        "actor_input_tokens": 43066539,
+        "actor_client_request_seconds": 23802.106167891994,
+        "browser_steps": 4550,
+        "browser_step_seconds": 16480.096589909866,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 44921.61136151245
+      },
+      "means": {
+        "actor_requests": 15.213333333333333,
+        "actor_output_tokens": 4945.703333333333,
+        "actor_input_tokens": 143555.13,
+        "actor_client_request_seconds": 79.34035389297331,
+        "browser_steps": 15.166666666666666,
+        "browser_step_seconds": 55.1173798993641,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 149.73870453837483
+      }
+    },
+    "arm": {
+      "episodes": 300,
+      "successes": 123,
+      "valid": 267,
+      "invalid": 33,
+      "success_rate": 0.41,
+      "valid_only": 0.4606741573033708,
+      "missing_metric_episodes": {},
+      "totals": {
+        "actor_requests": 22515,
+        "actor_output_tokens": 7620021,
+        "actor_input_tokens": 227267325,
+        "actor_client_request_seconds": 153068.11678146338,
+        "browser_steps": 4487,
+        "browser_step_seconds": 18861.38018892519,
+        "selector_calls": 4493,
+        "selector_input_tokens": 17021519,
+        "selector_output_tokens": 44930,
+        "selector_service_seconds": 2642.492348528933,
+        "elapsed_seconds": 61645.19595708419
+      },
+      "means": {
+        "actor_requests": 75.05,
+        "actor_output_tokens": 25400.07,
+        "actor_input_tokens": 757557.75,
+        "actor_client_request_seconds": 510.22705593821127,
+        "browser_steps": 14.956666666666667,
+        "browser_step_seconds": 62.87126729641731,
+        "selector_calls": 14.976666666666667,
+        "selector_input_tokens": 56738.39666666667,
+        "selector_output_tokens": 149.76666666666668,
+        "selector_service_seconds": 8.808307828429776,
+        "elapsed_seconds": 205.48398652361396
+      }
+    }
+  },
+  "paired_arm_minus_sft": {
+    "tasks": 300,
+    "difference": 0.09333333333333334,
+    "bootstrap95": [
+      0.04,
+      0.14666666666666667
+    ],
+    "first_only": 48,
+    "second_only": 20,
+    "common_valid_tasks": 263,
+    "common_valid_first_successes": 122,
+    "common_valid_second_successes": 94
+  },
+  "termination_reasons": {
+    "task_completed": 184,
+    "max_steps_exhausted": 75,
+    "zero_step_reset_or_navigation": 22,
+    "generation_length_limit": 7,
+    "generation_error": 10,
+    "env_step_error": 1,
+    "format_error_failed": 1
+  },
+  "invalid_reasons": {
+    "zero_step_reset_or_navigation": 22,
+    "generation_error": 10,
+    "env_step_error": 1
+  },
+  "all_attempt_actor_tokens": {
+    "requests": 22515,
+    "received_requests": 22465,
+    "input_tokens": 227267325,
+    "output_tokens": 7620021,
+    "failed_or_unmetered_requests": 50
+  },
+  "scheduler_attempts": [
+    {
+      "job_id": "348679",
+      "state": "FAILED",
+      "seconds": 4
+    },
+    {
+      "job_id": "348682",
+      "state": "COMPLETED",
+      "seconds": 8152
+    }
+  ],
+  "resources": {
+    "gpus": 2,
+    "gpu_type": "H200",
+    "cpus": 16,
+    "memory_gib": 240,
+    "total_seconds": 10800
+  },
+  "all_attempt_seconds": 8156,
+  "allocated_h200_hours": 4.5311111111111115,
+  "remaining_approved_seconds": 2644,
+  "judge": {
+    "calls": 184,
+    "usd": 1.5188667999999992,
+    "unsettled": 0
+  },
+  "final_accounting_verified": true,
+  "new_budget": 0,
+  "no_transfers": true,
+  "wandb_state": "finished",
+  "control_source": "api-selector-september-reproduction-20261006",
+  "plot_rows": [
+    {
+      "mode": "actor0",
+      "label": "SFT control (earlier)",
+      "success_percent": 31.666666666666664,
+      "mean_latency_seconds": 149.73870453837483,
+      "metered_tokens_per_episode": 148549.03,
+      "generated_token_compute_proxy_tflop": 39.58744
+    },
+    {
+      "mode": "arm",
+      "label": "SFT + RL-task SelectionARM",
+      "success_percent": 41.0,
+      "mean_latency_seconds": 205.48398652361396,
+      "metered_tokens_per_episode": 839845.9833333333,
+      "generated_token_compute_proxy_tflop": 204.39869333333334
+    }
+  ],
+  "limitations": [
+    "One newly collected ARM run; paired control reused from the earlier completed API-selector study. No run-level SD.",
+    "Task-bootstrap intervals measure task sampling, not website drift, judge error or differences in deployment/concurrency.",
+    "Invalid and unjudged outcomes count as zero. The canonical AgentTrek judge allows partial progress.",
+    "Latency comparison is descriptive across deployments. Allocation GPU-hours belong to the new ARM campaign only.",
+    "One recovered control record lacks browser-step timing; this missing value is excluded from that metric only and its outcome remains included.",
+    "Compute proxy is 2 \u00d7 4B parameters \u00d7 generated actor/selector tokens; excludes prefill, attention, vision and caching. It is neither measured FLOPs nor dollars.",
+    "Token totals include every metered actor attempt; unmetered failures reported separately. Selector totals cover committed decision receipts.",
+    "FlashInfer ignores per-request seeds; server seed was verified, but deterministic paired trajectories are not claimed.",
+    "Saved terminal screenshots decoded and matched to verdict receipts; no independent human adjudication is claimed."
+  ],
+  "plots_visually_reviewed": true
+}
