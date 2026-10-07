@@ -1043,7 +1043,7 @@ All metered actor/selector attempts contribute to token and cost totals, includi
 
 
 <a id="selectionarm-followups-20261007"></a>
-### Prepared follow-ups: RL-task ARM repeat and a 50-step Piotr pair
+### Approved follow-ups: RL-task ARM repeat and a 50-step Piotr pair
 
 **All runs use the identical 300 OM2W tasks**, official OpenWebRL-4B-SFT, local browsers, the full historical actor policy, T=0.7 / p=0.9 / 1,024 actor output tokens, top-k omitted, 32K context, five full-response candidates, greedy learned selection, and the same canonical o4-mini/AgentTrek judge. The 1,800-second task timeout is unchanged. Runs initialize fresh browser episodes; no outcome-based replacement or policy mixing.
 
@@ -1052,7 +1052,9 @@ All metered actor/selector attempts contribute to token and cost totals, includi
 | SFT + RL-task SelectionARM | 30 | 300 | Completed fresh full300 SFT30 in the API-selector study | One job: 2 H200 / 16 CPU / 240 GiB × 3h | $5 / 1,320 calls |
 | SFT vs SFT + Piotr SelectionARM | 50 | 600 | Fresh full300 SFT50 in the same new study | Two parallel jobs, each 2 H200 / 16 CPU / 240 GiB × 4h | Each $5 / 1,320 calls |
 
-**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. These are prepared requests, not approved allocations. Eight offline checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. GPU/browser validation remains an in-allocation startup gate.
+**Total new ceiling: 22 H200-hours and $15 / 3,960 judge calls**, including startup and every retry. Each job's budget is independent; unused time is not transferable. Approved and submitted October 7: **RL-task ARM job 348682; 50-step pair jobs 348683/348684**. All three passed model startup and began collection; active-agent supervisors follow the current attempts. Eight preparation checks passed: full task identity/coverage, pinned source/models, actual evaluation argument construction at 30/50 steps, complete mode summaries and refusal of unapproved execution. The first saved episodes have passed the model/browser path; final full-cohort verification remains pending.
+
+An initial approval-hash serialization mismatch stopped jobs 348679/348680/348681 before model/API work, using 4/7/7 seconds. The plan and scientific source were unchanged; canonical hashes were repaired and checked against both approval gates. Every failed second is charged, and replacement wall times were rounded down to the remaining cap.
 
 RL-task checkpoint: `davidan03/openwebrl-4b-selectionarm-rltasks`, revision `a1f8d265855ddf1074eae91516c6e86f6f836177`. Piotr: `PTeterwak/OpenWebRL-4B-SelectionARM`, revision `81b452d800d9f859687074f82680dd5257e02d89`. The first reuses the completed fresh SFT30 control to avoid another baseline collection; its deployment/concurrency context differs, so cross-study latency comparisons need that qualification.
 

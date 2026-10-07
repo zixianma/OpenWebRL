@@ -1,10 +1,10 @@
 {
-  "status": "prepared_awaiting_exact_resource_approval",
+  "status": "approved_running",
   "experiments": [
     {
       "name": "selectionarm-rltasks-repeat-20261007",
-      "status": "prepared_awaiting_exact_resource_approval",
-      "approved": false,
+      "status": "collecting",
+      "approved": true,
       "tasks": 300,
       "episodes": 300,
       "shards": 1,
@@ -74,12 +74,36 @@
       ],
       "analysis": "Pair with fresh SFT30 in API comparison by all300 task IDs; no duplicate baseline generation. Different deployment/concurrency contexts constrain latency comparison.",
       "offline_tests_passed": 4,
-      "prepared_epoch": 1791357685.1329393
+      "prepared_epoch": 1791357685.1329393,
+      "current_job_ids": [
+        "348682"
+      ],
+      "all_attempts_by_shard": {
+        "shard-0": {
+          "plan_sha256": "2adc0c9393b2d7252c37789fb44905050faaba75e3be2b1bc8a2f060d8327994",
+          "attempts": [
+            {
+              "job_id": "348679",
+              "time_limit_seconds": 10800,
+              "prior_actual_seconds": 0,
+              "submitted_unix": 1791391647.3208168,
+              "initially_held_for_registration": true
+            },
+            {
+              "job_id": "348682",
+              "time_limit_seconds": 10740,
+              "prior_actual_seconds": 4,
+              "submitted_unix": 1791391722.9187472,
+              "initially_held_for_registration": true
+            }
+          ]
+        }
+      }
     },
     {
       "name": "selectionarm-piotr-steps50-20261007",
-      "status": "prepared_awaiting_exact_resource_approval",
-      "approved": false,
+      "status": "collecting",
+      "approved": true,
       "tasks": 300,
       "episodes": 600,
       "shards": 2,
@@ -149,11 +173,56 @@
       ],
       "analysis": "Compare ARM50-minus-SFT50 with the two full300 ARM30-minus-SFT30 repeats, preserving tasks as bootstrap clusters. One50 run only; no run SD or deterministic prefix claim.",
       "offline_tests_passed": 4,
-      "prepared_epoch": 1791357685.1334536
+      "prepared_epoch": 1791357685.1334536,
+      "current_job_ids": [
+        "348683",
+        "348684"
+      ],
+      "all_attempts_by_shard": {
+        "shard-0": {
+          "plan_sha256": "df38f601864afbdc393af503034ddb4f8c0615932e7a27831b9d6e0427653905",
+          "attempts": [
+            {
+              "job_id": "348680",
+              "time_limit_seconds": 14400,
+              "prior_actual_seconds": 0,
+              "submitted_unix": 1791391647.3802028,
+              "initially_held_for_registration": true
+            },
+            {
+              "job_id": "348683",
+              "time_limit_seconds": 14340,
+              "prior_actual_seconds": 7,
+              "submitted_unix": 1791391723.1578553,
+              "initially_held_for_registration": true
+            }
+          ]
+        },
+        "shard-1": {
+          "plan_sha256": "58eaa28da918725755f968103ff35097deca9dd8755637dc1f6a64145cc82b46",
+          "attempts": [
+            {
+              "job_id": "348681",
+              "time_limit_seconds": 14400,
+              "prior_actual_seconds": 0,
+              "submitted_unix": 1791391647.4348667,
+              "initially_held_for_registration": true
+            },
+            {
+              "job_id": "348684",
+              "time_limit_seconds": 14340,
+              "prior_actual_seconds": 7,
+              "submitted_unix": 1791391723.2494037,
+              "initially_held_for_registration": true
+            }
+          ]
+        }
+      }
     }
   ],
   "total_gpu_hours_cap": 22,
   "total_judge_usd_cap": 15,
   "total_judge_calls_cap": 3960,
-  "shared_or_transferred_budget": false
+  "shared_or_transferred_budget": false,
+  "startup_repair": "Canonical approval hash formatting repaired; plans, scientific settings and source unchanged. Failed attempts consumed 4/7/7 seconds and remain charged."
 }

@@ -64,8 +64,8 @@ Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens, 30 turns**
 | SelectionARM comparison | Step cap | Complete full300 runs | SFT successes | ARM successes | SFT success | ARM success | ARM gain | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Piotr, two-repeat mean | 30 | 2 | 198 | 228 | 33.00 ± 0.47% | 38.00 ± 0.47% | +5.00 ± 0.00 pp | Complete; counts pooled over 600 episodes per arm |
-| RL-task SelectionARM repeat | 30 | 0 | — | — | — | — | — | Prepared; new allocation approval pending |
-| Piotr, longer horizon | 50 | 0 | — | — | — | — | — | Prepared; new allocation approval pending |
+| RL-task SelectionARM repeat | 30 | 0 | — | — | — | — | — | Collecting; job 348682 |
+| Piotr, longer horizon | 50 | 0 | — | — | — | — | — | Collecting; jobs 348683/348684 |
 
 New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collects its own SFT control. Each new comparison is one run, so no run-level SD will be inferred from it. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
 
