@@ -1,9 +1,9 @@
 {
-  "epoch": 1791342000.969835,
-  "status": "submitted_pending_scheduler",
+  "epoch": 1791347272.1530817,
+  "status": "running_partial_matched_preview",
   "repetitions": 2,
   "target_episodes": 1200,
-  "completed_episodes": 0,
+  "completed_episodes": 579,
   "target_tasks_per_repeat": 300,
   "arms": [
     {
@@ -61,9 +61,64 @@
     "judge_calls": 5280
   },
   "cpu_validation_passed": true,
-  "gpu_validation_pending": true,
+  "gpu_validation_pending": false,
   "active_agent_queue_verified": true,
   "prior_results_reused": false,
   "prior_budget_transferred": false,
-  "verified_complete": false
+  "verified_complete": false,
+  "all_startup_gates_passed": true,
+  "final_accounting_verified": false,
+  "results": [
+    {
+      "repeat": 1,
+      "recorded_episodes": 251,
+      "matched_tasks": 121,
+      "unmatched_episodes": 9,
+      "successes": {
+        "actor0": 47,
+        "arm": 49
+      },
+      "paired": {
+        "arm_minus_actor0": {
+          "difference": 0.01652892561983471,
+          "bootstrap95": [
+            -0.05785123966942149,
+            0.09090909090909091
+          ],
+          "first_only": 12,
+          "second_only": 10,
+          "common_valid_tasks": 100,
+          "common_valid_first_successes": 48,
+          "common_valid_second_successes": 46
+        }
+      },
+      "artifact_directory": "sft-piotr-repeats-partial-20261006-2128/repeat-1"
+    },
+    {
+      "repeat": 2,
+      "recorded_episodes": 328,
+      "matched_tasks": 159,
+      "unmatched_episodes": 10,
+      "successes": {
+        "actor0": 53,
+        "arm": 65
+      },
+      "paired": {
+        "arm_minus_actor0": {
+          "difference": 0.07547169811320754,
+          "bootstrap95": [
+            0.006289308176100629,
+            0.14465408805031446
+          ],
+          "first_only": 23,
+          "second_only": 11,
+          "common_valid_tasks": 137,
+          "common_valid_first_successes": 63,
+          "common_valid_second_successes": 52
+        }
+      },
+      "artifact_directory": "sft-piotr-repeats-partial-20261006-2128/repeat-2"
+    }
+  ],
+  "caveat": "Duration-selected partial task pairs; subsets differ between repeats. No pooled estimate or full300 claim. Interim confidence intervals are not adjusted for repeated looks."
 }
