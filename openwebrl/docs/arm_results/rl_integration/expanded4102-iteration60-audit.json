@@ -1,0 +1,126 @@
+{
+  "method": "Outcome-only baseline, expanded 4102-task pool",
+  "iteration": 60,
+  "job": "344760",
+  "evaluation_verified_complete": true,
+  "training_target_complete": true,
+  "full300": {
+    "tasks": 300,
+    "successes": 97,
+    "valid": 246,
+    "invalid": 54,
+    "overall": 0.3233333333333333,
+    "valid_only": 0.3943089430894309,
+    "saved_rollouts": 300,
+    "saved_verdicts": 300
+  },
+  "protocol": {
+    "browser": "local",
+    "judge": "gpt-4.1",
+    "prompt": "action_history",
+    "temperature": 0,
+    "top_p": 1,
+    "top_k": 1,
+    "max_response_tokens": 4096,
+    "max_browser_turns": 30
+  },
+  "checkpoint_native_index": 59,
+  "checkpoint_adam_updates": 826,
+  "checkpoint_scheduler_updates": 826,
+  "checkpoint_scheduler_counter": 211456,
+  "checkpoint_dataset_cursor": {
+    "sample_offset": 2858,
+    "epoch_id": 1,
+    "sample_group_index": 6960,
+    "sample_index": 34800
+  },
+  "actual_gpu_actor_restore_verified": true,
+  "wandb_history_verified": true,
+  "wandb_final_metric_source": "Finished evaluation run history; summary is empty. All ten task metrics reconciled.",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter60",
+  "exact_expected_300_task_ids_verified": true,
+  "archive_verification": "All300 saved rollout archives have nonempty payloads and passing ZIP member CRCs. Exact task identities and verdict totals reconcile with the expected cohort, metrics and finished W&B history. Twelve native judge-not-run failed/truncated trajectories remain valid failures under the unchanged scoring convention. This does not replay browser environments.",
+  "terminal_status_counts": {
+    "completed": 234,
+    "aborted": 54,
+    "truncated": 5,
+    "failed": 7
+  },
+  "artifact_sha256": {
+    "status.json": "b32b6cc1f651646322c5aa9af85efdaa728c75367d9549c56bcf0cf0dc3546ca",
+    "metrics.json": "914755bf55a28c8ed21282bbfc4f39f1a86051db6b23ce0a0f8ddf3faebe35bd",
+    "evaluation_manifest.json": "792f786b99dd3b9d64ef5f0da034074bc1a2fb2eed2766219c448ec7f2cc10ce",
+    "checkpoint_restore_evidence.json": "5c78fc14ab43a05017cc9dffafa2655c633484daf94cde38fac5c52f3a1721f1",
+    "launcher_exit.json": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "checked_task_records_sha256": "e0f156e9e4eb88dc814d67dda27d3bcae946093ae7599c9460bd0853951372ed"
+  },
+  "checked_epoch": 1791385923.1470854,
+  "private_task_payloads_published": false,
+  "historical_iteration60_reference": {
+    "training_tasks": 2102,
+    "successes": 105,
+    "valid": 230,
+    "invalid": 70,
+    "overall": 0.35,
+    "valid_only": 0.45652173913043476,
+    "overall_delta_pp": -2.666666666666667,
+    "valid_only_delta_pp": -6.221279604100388,
+    "caveat": "Different collection dates, valid-task sets and training randomness; exploratory historical comparison, not a causal or significance claim."
+  },
+  "expanded_iteration50_comparison": {
+    "successes": 105,
+    "valid": 240,
+    "overall_delta_pp": -2.666666666666667,
+    "valid_only_delta_pp": -4.3191056910569126
+  },
+  "expanded_iteration40_comparison": {
+    "successes": 117,
+    "valid": 258,
+    "overall_delta_pp": -6.6666666666666705,
+    "valid_only_delta_pp": -5.917942900359235
+  },
+  "endpoint_accounting": {
+    "gpus_per_allocation": 8,
+    "original_approved_seconds": 86400,
+    "original_consumed_seconds": 84960,
+    "original_unused_seconds_closed": 1440,
+    "extension_approved_seconds": 345600,
+    "extension_consumed_seconds": 100285,
+    "extension_unused_seconds_released": 245315,
+    "total_allocation_seconds_consumed": 185245,
+    "total_h200_hours_consumed": 411.65555555555557,
+    "unused_successor_job_ids": [
+      "344761",
+      "344762"
+    ],
+    "unused_successor_elapsed_seconds": 0,
+    "lifetime_judge_calls": 24401,
+    "lifetime_judge_charged_or_reserved_usd": 263.351816,
+    "lifetime_judge_cap_usd": 600,
+    "judge_ledger_is_final_settled_bill": false
+  },
+  "controller_cleanup": {
+    "evaluation_worker_returncode": 0,
+    "scheduler_state": "FAILED",
+    "scheduler_exit_code": "1:0",
+    "cause": "Post-evaluation cleanup queried an aged-out completed predecessor with squeue.",
+    "unused_successors_released": true,
+    "training_or_evaluation_rerun": false,
+    "new_gpu_allocation": false,
+    "recovery_receipt_sha256": "b1c35d1f08ca3ed27ddd6f501cd499722169a73c3889612e50446508287a0aef",
+    "cpu_tests_passed": 15
+  },
+  "readiness_receipt_sha256": {
+    "evaluation_protocol_review": "62ac15d5d998c7b711e2e93675cdff47225bd9eb2c446a9ce78ef114fb54b7c0",
+    "wandb_final_history_review": "03dc7decd62663fd8d4251e4438b6021877eb853c3052ddc5edcb4aa6c9c5359",
+    "extension_attempt_accounting": "4da78d8d3e6773d30edc7636c22a97e35e598921e2e2884f26884bfbb14fa9fe",
+    "controller_cleanup_recovery": "b1c35d1f08ca3ed27ddd6f501cd499722169a73c3889612e50446508287a0aef"
+  },
+  "full_runtime_audit_sha256": "aac30e7c0c17bf131d3cdbabb52d34b8e306f0bb3b4a8761270c75319e42beff",
+  "independent_completion_review_sha256": "c183ce5c84426f1be71dbdb747f139fe1b862724a15cb230291372535045d650",
+  "archive_bytes": 83106534646,
+  "archive_members": 7168,
+  "full_archive_crc_verified": true,
+  "archive_count": 300,
+  "native_nonjudged_terminal_failure_records": 12
+}

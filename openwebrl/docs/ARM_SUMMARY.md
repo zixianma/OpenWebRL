@@ -308,14 +308,16 @@ and80 evaluations are verified. Both90 evaluations are now independently verifie
 [Reweight90 audit](arm_results/rl_integration/mixed-reweight-iteration90-audit.json).
 [Audits and comparison limits](ARM_RESULTS.md#arm-mixed-pair-iter60-results-20260930).
 
-The **expanded 4,102-task baseline** adds2,000 tasks to the original pool and
-uses outcome reward only, starting from iteration0. Iteration50 scores
-**35.00% overall /43.75% valid-only** (105/300 successes;240 valid), down4.00pp
-overall and1.60pp valid-only from iteration40 (39.00% /45.35%). It matches the
-historical original-pool iteration50 overall score; collection dates and valid-task
-sets differ. The iteration40 gain has not persisted at50. Training has resumed
-from checkpoint50 toward the user-requested stop at60. This separate data ablation
-does not change the task pool used by the ARM runs above.
+The **expanded 4,102-task baseline** adds 2,000 tasks to the original pool and
+uses outcome reward only, starting from iteration0. The requested stop at60 and
+all six full300 evaluations are verified. Iteration60 scores **32.33% overall /
+39.43% valid-only** (97/300 successes;246 valid), down 2.67pp overall from50 and
+6.67pp from the best observed checkpoint40 (39.00%). The expanded run finishes
+below the historical original-pool60 score (35.00% overall /45.65% valid-only).
+These single-cohort checkpoint results use different collection dates and valid
+task sets; they do not establish a causal data benefit or a significant ranking.
+The interactive curve now includes all six checkpoints10–60. This separate data
+ablation does not change the task pool used by the ARM runs above.
 [Expanded-pool results and comparison caveats](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines

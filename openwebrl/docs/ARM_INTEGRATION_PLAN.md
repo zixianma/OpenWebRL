@@ -9379,6 +9379,28 @@ Private preparation and shard manifests:
 <a id="arm-expanded-outcome-to90-20261005"></a>
 ### Expanded outcome-only continuation: capped at60 on October5
 
+**October7 completion:** the user-requested checkpoint60 (native59,826 Adam
+updates, scheduler211456, cursor2858 in epoch1) and all six full300 evaluations
+at10/20/30/40/50/60 are independently verified. The final cohort is97/300
+**32.33% overall**,97/246 **39.43% valid-only**, with54 invalid attempts retained.
+The best observed expanded-pool checkpoint remains40 (39.00% overall);60 is
+6.67pp lower. These are single-cohort historical checkpoint comparisons.
+
+Job344760's evaluation worker exited0; its controller subsequently failed during
+cleanup because `squeue` could not find the already-completed predecessor344759.
+The cleanup path was fixed and checked on CPU, with the successful artifacts
+preserved and unused successors released. No training/evaluation rerun or new
+GPU allocation was required. All failed-attempt time remains charged to the
+same approved extension, and the original24h budget remains separate.
+Final charged allocation time is84,960 seconds from the original24h and100,285
+seconds from the96h extension:185,245 seconds total, or411.66 H200-hours at eight
+GPUs. Successors344761/344762 were canceled with zero elapsed time. The unused
+245,315 extension seconds are released; the original1,440 unused seconds remain
+closed separately. The lifetime judge ledger has24,401 calls and$263.351816
+charged or reserved against the$600 cap, rather than a final settled API bill.
+[Final results and audit](RL_EVALUATION.md#expanded4102-iter10-results-20261003) ·
+[Complete interactive curve](rl_results/arm_rl_interactive.html).
+
 **October5 stopping-target update:** the user requested **stop at iteration60**,
 superseding the earlier90 endpoint. Finish the unchanged training recipe and
 full300 evaluations at40/50/60, then release unused queued allocations. Retain

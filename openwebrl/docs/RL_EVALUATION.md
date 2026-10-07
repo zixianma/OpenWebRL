@@ -28,7 +28,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
 - [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
 
-- [Expanded 4,102-task outcome-only baseline: iterations10/20/30/40/50](#expanded4102-iter10-results-20261003)
+- [Expanded 4,102-task outcome-only baseline: complete through60](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
 - [OM2W difficulty breakdown, three repeats](ARM_RESULTS.md#arm-stealth90-difficulty-20260930)
@@ -1459,7 +1459,7 @@ transport modules imported by the evaluation controllers; they are necessary
 code dependencies, not new experiment launches.
 
 <a id="expanded4102-iter10-results-20261003"></a>
-## Expanded task-pool baseline: iterations10/20/30/40/50 — October3–6
+## Expanded task-pool baseline: complete through60 — October3–7
 
 The first full300 evaluation of the outcome-only baseline trained on4,102 tasks
 (original2,102 + selected2,000) is complete: **81/300 =27.00% overall** and
@@ -1538,11 +1538,43 @@ statuses are221 completed,60 aborted,13 failed and6 truncated; valid failed/
 truncated attempts remain in the denominators. The raw turn-weighted reward
 (33.52%) is distinct from the task success rate (35.00%).
 
-Job344759 restored checkpoint50 and resumed collection51 toward60 with the same
-optimizer, scheduler, cursor and W&B lineage. The user-requested stop remains60.
-Full300 evaluation60 remains pending;10/20/30/40/50 are verified. The
-existing96h extension and$600 lifetime judge cap remain maximum budgets, with
-all consumed time retained and unused allocations released after the endpoint. [Extension and accounting](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).
+Iteration60 completed on October7: **97/300 =32.33% overall** and
+**97/246 =39.43% valid-only**, with54 invalid attempts retained in the overall
+denominator. Compared with50, this is eight fewer successes (−2.67pp overall,
+−4.32pp valid-only); compared with40, it is20 fewer (−6.67pp /−5.92pp).
+Checkpoint40 remains the best observed expanded-pool checkpoint at39.00%
+overall. The historical original-pool60 result is105/300 (35.00%) and105/230
+(45.65%) valid-only, giving expanded-pool differences of−2.67pp /−6.22pp.
+The curve does not show a sustained late-checkpoint improvement. Each point is
+a single local-browser cohort, with changing collection dates and valid-task
+sets; neither a causal data benefit nor a significant method ranking is established.
+
+Native checkpoint59 retains826 Adam updates and matching scheduler counter
+211456, with dataset cursor2858 in epoch1. All300 expected task identities,
+saved rollout/verdict pairs, archive ZIP member CRCs, actual native59 GPU actor
+restoration, executed T0/p1/k1/4096-token/30-turn GPT-4.1/action_history protocol,
+and final evaluation W&B metrics were independently verified. Terminal statuses
+are 234 completed, 54 aborted, 7 failed, 5 truncated; native valid failed/truncated outcomes remain failures in
+the denominators. Raw task identities and trajectories stay private.
+
+The requested endpoint60 and all six full300 evaluations10/20/30/40/50/60 are
+verified, and the interactive plot includes the complete expanded-pool curve.
+Evaluation itself exited successfully. The batch controller then failed during
+cleanup when querying an already-completed predecessor that had aged out of
+`squeue`; this did not damage the checkpoint or evaluation artifacts. Cleanup
+was repaired on CPU, preserving consumed time and releasing unused successors;
+no GPU or evaluation rerun was needed. The existing96h extension and$600 lifetime
+judge cap remain maximum budgets, with no added allocation or spend allowance.
+Final accounting retains84,960 seconds in the original budget and100,285 seconds
+in the extension:185,245 allocation seconds in total (51.46 hours on eight H200s,
+411.66 H200-hours). Unused successors344761/344762 were canceled with zero elapsed
+time. The lifetime judge ledger records$263.351816 charged or reserved across
+24,401 calls; that ledger amount is not a final settled API bill.
+[Extension and final accounting](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).
+
+[Iteration60 aggregate audit](arm_results/rl_integration/expanded4102-iteration60-audit.json) ·
+[Iteration60 evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter60) ·
+[Interactive full300 curves](rl_results/arm_rl_interactive.html).
 
 [Iteration50 aggregate audit](arm_results/rl_integration/expanded4102-iteration50-audit.json) ·
 [Iteration50 evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-expanded-4102-20261003-iter50).
