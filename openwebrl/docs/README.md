@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[SFT versus Piotr ARM: clean three-run table, mean ± sample SD on the same 160 tasks; unchanged 300-task manifest verified](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006).
+
 [SFT versus Piotr ARM: repeat 2 full300 complete; repeat 1 still running. Paired success rates and compute/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
 
 [Historical-vs-corrected verdict audit: same 158 tasks, all 23 both-judged changes reviewed, unjudged-zero contribution quantified](ARM_INFERENCE.md#arm-same-task-verdict-audit-20261006).

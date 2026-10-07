@@ -1,0 +1,118 @@
+{
+  "epoch": 1791352334.4506974,
+  "study": "Three October corrected runs; September excluded from average",
+  "matched_tasks": 160,
+  "runs": [
+    {
+      "label": "Corrected initial",
+      "request_seed_label": 42,
+      "matched_tasks": 160,
+      "sft_successes": 53,
+      "piotr_successes": 62,
+      "sft_success_percent": 33.125,
+      "piotr_success_percent": 38.75,
+      "gain_percentage_points": 5.625
+    },
+    {
+      "label": "Repeat 1",
+      "request_seed_label": 43,
+      "matched_tasks": 160,
+      "sft_successes": 57,
+      "piotr_successes": 64,
+      "sft_success_percent": 35.625,
+      "piotr_success_percent": 40.0,
+      "gain_percentage_points": 4.375
+    },
+    {
+      "label": "Repeat 2",
+      "request_seed_label": 44,
+      "matched_tasks": 160,
+      "sft_successes": 57,
+      "piotr_successes": 64,
+      "sft_success_percent": 35.625,
+      "piotr_success_percent": 40.0,
+      "gain_percentage_points": 4.375
+    }
+  ],
+  "mean_and_sample_sd": {
+    "sft_success_percent": {
+      "mean": 34.791666666666664,
+      "sample_standard_deviation": 1.4433756729740643
+    },
+    "piotr_success_percent": {
+      "mean": 39.583333333333336,
+      "sample_standard_deviation": 0.7216878364870323
+    },
+    "gain_percentage_points": {
+      "mean": 4.791666666666667,
+      "sample_standard_deviation": 0.7216878364870323
+    }
+  },
+  "sd_ddof": 1,
+  "full300_three_run_result": false,
+  "coverage_at_snapshot": [
+    {
+      "label": "Corrected initial",
+      "request_seed_label": 42,
+      "recorded_episodes": 493,
+      "sft_tasks": 165,
+      "piotr_tasks": 163,
+      "paired_tasks": 160
+    },
+    {
+      "label": "Repeat 1",
+      "request_seed_label": 43,
+      "recorded_episodes": 588,
+      "sft_tasks": 295,
+      "piotr_tasks": 293,
+      "paired_tasks": 293
+    },
+    {
+      "label": "Repeat 2",
+      "request_seed_label": 44,
+      "recorded_episodes": 600,
+      "sft_tasks": 300,
+      "piotr_tasks": 300,
+      "paired_tasks": 300
+    }
+  ],
+  "task_identity": {
+    "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+    "unique_tasks": 300,
+    "historical_manifests_checked": 2,
+    "recent_task_files_checked": 3,
+    "task_ids_and_order_equal": true,
+    "byte_identical_task_files": true,
+    "unexpected_record_task_ids": 0
+  },
+  "record_set_sha256": [
+    "5e8dd8069e7786df1e9069a08ba2982449a951bbccabeed270e1ad672acf6e77",
+    "8104c482b56e2da30d0ab37a0117168c72dec5bd2429b953270edba09707c323",
+    "2402ec366d41518487f0f0d2bcc25eb476137fc9e667bc9fe6197525435d06c7"
+  ],
+  "matched_scientific_settings": {
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full"
+  },
+  "limitations": [
+    "Initial run is incomplete: the shared 160-task cohort is duration-selected.",
+    "Sample SD describes three run-level rates; it is neither a confidence interval nor a standard error.",
+    "Shared scientific settings do not imply identical scheduling: initial collection also included the RL-task selector.",
+    "Request seed labels are not honored by the unchanged FlashInfer sampler; repeats use distinct server RNG seeds.",
+    "Missing episodes are excluded symmetrically; recorded invalid/unjudged episodes count as zero."
+  ]
+}

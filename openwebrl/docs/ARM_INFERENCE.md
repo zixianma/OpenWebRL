@@ -1,5 +1,22 @@
 # ARM inference and judge protocol
 
+<a id="sft-piotr-three-run-summary-20261006"></a>
+## SFT versus Piotr ARM: three-run mean and standard deviation
+
+**Same 160 tasks in every column; 960 recorded episodes.** The three runs are the October 6 corrected initial collection and its two stochastic repeats. September is a separate historical reference. Because the initial corrected collection stopped early, a three-run **full300** average is unavailable. This common subset is selected by collection duration and should not be read as a full-benchmark result.
+
+| Metric | Initial corrected run | Repeat 1 | Repeat 2 | Three-run mean ± SD |
+| --- | ---: | ---: | ---: | ---: |
+| SFT success | 53/160 = 33.13% | 57/160 = 35.63% | 57/160 = 35.63% | **34.79 ± 1.44%** |
+| SFT + Piotr ARM success | 62/160 = 38.75% | 64/160 = 40.00% | 64/160 = 40.00% | **39.58 ± 0.72%** |
+| ARM gain | +5.63 pp | +4.38 pp | +4.38 pp | **4.79 ± 0.72 pp** |
+
+SD is the **sample standard deviation across the three run-level rates** (`ddof=1`), not a confidence interval or standard error. The gain row computes ARM minus SFT within each run before taking mean and SD. Recorded invalid and unjudged outcomes stay zero; missing episodes are excluded equally from all columns. Repeat 1 is still collecting its remaining tasks, but all 160 tasks in this table already have both arms in all three runs. The matched task set is therefore fixed unless an underlying saved result is corrected.
+
+Actor/model/policy/decoding and judge settings match across these three October runs. Scheduling differs: the initial collection also ran the RL-task selector. Request seed labels are 42/43/44; FlashInfer does not honor those per-request labels, while the fresh repeats use explicit distinct server RNG seeds. Interpret the SD as observed run-to-run variability, not a pure seed-only variance estimate.
+
+[Aggregate counts, mean/SD and task-identity verification](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json) · [Full300 repeat progress and efficiency plots](#sft-piotr-repeats-20261006).
+
 <a id="sft-piotr-repeats-20261006"></a>
 ## SFT versus Piotr ARM: repeat 2 complete; repeat 1 running — October 6
 
@@ -38,6 +55,10 @@ Compute plots use analytical decoder PFLOPs, with cold-prefill and observed acto
 
 <a id="arm-same-task-verdict-audit-20261006"></a>
 ## Same-task historical gain and saved-verdict audit — October 6
+
+**The task set was not switched.** Both September manifests specify the same 300 task IDs in the same order as the corrected October collection and both repeats. Their recorded task-file SHA256 matches all three recent files byte for byte: `8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed`. This checks the task definitions as well as their IDs.
+
+**Why 158?** The corrected October collection saved only 493 of 900 planned episodes before its allocation caps: SFT has 165 task records, Piotr 163, and the RL-task ARM 165. Only 158 tasks have all three arms. The historical verdict audit reused that three-arm intersection for consistency with the original corrected table; it is a coverage restriction, not a different task sample or a requirement that every episode receive a judge verdict. For **SFT versus Piotr alone**, 160 paired tasks are available. The [three-run summary above](#sft-piotr-three-run-summary-20261006) uses all 160, including the two tasks missing only the RL-task ARM.
 
 **On the same 158 tasks, the historical Piotr ARM gain was +10.13 pp; the corrected gain is +4.43 pp.** Restricting September's full300 cohort removes 2.54 pp of its +12.67 pp gain. The remaining cross-date gain change is −5.70 pp (50,000 paired task-bootstrap draws, 95% interval −15.19 to +3.16 pp). This is not a randomized test of harness changes, website drift or judge variability.
 

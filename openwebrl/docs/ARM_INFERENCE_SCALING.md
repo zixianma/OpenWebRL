@@ -6,6 +6,7 @@
 
 ## Contents
 
+- [SFT versus Piotr ARM: three-run mean ± SD on the same 160 tasks](#sft-piotr-three-run-summary-20261006)
 - [SFT versus Piotr ARM: repeat 2 complete; repeat 1 running](#sft-piotr-repeat-tracker-20261006)
 - [Learned ARM: corrected historical-protocol partial](#historical-corrected-partial-tracker-20261006)
 - [Which results need a corrected rerun?](#rerun-triage-20261006)
@@ -20,6 +21,19 @@
 - [Actor/judge audit](#api-actor-stopping-audit-20261005)
 - [Learned ARM and episode retries](#learned-arm-and-retries)
 - [Pilots and provenance](#luna-qwen-inference-20261004)
+
+<a id="sft-piotr-three-run-summary-20261006"></a>
+## SFT versus Piotr ARM: three-run mean ± SD
+
+**Same 160 tasks across the corrected initial run and both repeats.** This is a common partial cohort, not three full300 runs: the initial collection stopped early. September is excluded from this average.
+
+| Metric | Initial corrected run | Repeat 1 | Repeat 2 | Three-run mean ± SD |
+| --- | ---: | ---: | ---: | ---: |
+| SFT success | 53/160 = 33.13% | 57/160 = 35.63% | 57/160 = 35.63% | **34.79 ± 1.44%** |
+| SFT + Piotr ARM success | 62/160 = 38.75% | 64/160 = 40.00% | 64/160 = 40.00% | **39.58 ± 0.72%** |
+| ARM gain | +5.63 pp | +4.38 pp | +4.38 pp | **4.79 ± 0.72 pp** |
+
+SD is the sample standard deviation of the three run-level rates (`ddof=1`), not a confidence interval. Recorded invalid/unjudged outcomes remain zero. All six task/arm observations are present for every included task; the active repeat's remaining collection cannot change this fixed subset. [Method, task-identity proof and coverage explanation](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006) · [Aggregate](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
 ## SFT versus Piotr ARM: full300 repeats
