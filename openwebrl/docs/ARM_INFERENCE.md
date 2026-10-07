@@ -1,5 +1,27 @@
 # ARM inference and judge protocol
 
+<a id="sft-piotr-repeats-20261006"></a>
+## SFT versus Piotr ARM: two fresh repeats — submitted October 6
+
+**Two fresh full300 comparisons are submitted: 1,200 episodes across SFT alone and SFT + Piotr SelectionARM.** All four independent shards are queued for scheduler priority at this snapshot; no new success rates are available. The RL-task ARM is outside this repeat study. The earlier 493/900 corrected cohort remains a separately labeled partial result.
+
+| Repeat | Actor | Selector | N | Planned tasks | Completed | Success rate | Status |
+| --- | --- | --- | ---: | ---: | ---: | --- | --- |
+| 1 | Official OpenWebRL-SFT | None | 1 | 300 | 0 | Pending | Queued |
+| 1 | Official OpenWebRL-SFT | Piotr SelectionARM | 5 | 300 | 0 | Pending | Queued |
+| 2 | Official OpenWebRL-SFT | None | 1 | 300 | 0 | Pending | Queued |
+| 2 | Official OpenWebRL-SFT | Piotr SelectionARM | 5 | 300 | 0 | Pending | Queued |
+
+The repeats retain the corrected historical actor/browser/judge code, pinned browser policy and model revisions: **actor temperature0.7, top-p0.9, top-k omitted, 1,024 output tokens per candidate per turn,30 turns,32K context, full history/current screenshot; greedy Piotr selection and o4-mini/AgentTrek judging.** The current judge cap is4,096 tokens. Historical September baseline/ARM manifests and archived evaluator code also specify1,024 actor tokens; that historical judge call had no explicit completion cap. This differs from the separate4,096-actor-token local v2 study.
+
+Each repeat has two disjoint150-task shards, with both arms run for each task. Explicit actor-server RNG seeds are4300/4301 and4400/4401; request seed labels are43 and44. The FlashInfer sampler remains unchanged with deterministic inference disabled, so logged request seeds do not guarantee batch-independent replayability. Startup checks require the actual server seed/backend, served model identities and historical policy hash before collection. CPU launch, schedule, source-identity and negative budget checks passed; GPU/startup validation remains pending.
+
+The approved cap is **four parallel2H200/16CPU/240GiB allocations ×3h each, including all retries**, with **$5/1,320 judge calls per shard**:24GPUh and$20/5,280 calls combined. Budgets are independent, with no transfers or old-study balances. Allocations end early when complete. Both persistent supervisors have verified active-agent queue receipts.
+
+Analysis will report each full300 repeat separately and an equally weighted paired gain across repeats, resampling task IDs together across arms/repeats for uncertainty. Overall zeros, valid-only scores, completion coverage, latency, tokens, browser steps, decoder-compute estimates and all-attempt scheduler/API costs remain explicit. Repeated episodes are not treated as600 independent tasks. No raw trajectories or task payloads are published.
+
+[Aggregate submission snapshot](arm_results/rl_integration/sft-piotr-repeats-20261006.json).
+
 <a id="arm-same-task-verdict-audit-20261006"></a>
 ## Same-task historical gain and saved-verdict audit — October 6
 

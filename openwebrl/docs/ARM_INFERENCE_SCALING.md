@@ -6,6 +6,7 @@
 
 ## Contents
 
+- [SFT versus Piotr ARM: two submitted full300 repeats](#sft-piotr-repeat-tracker-20261006)
 - [Learned ARM: corrected historical-protocol partial](#historical-corrected-partial-tracker-20261006)
 - [Which results need a corrected rerun?](#rerun-triage-20261006)
 - [Actor alone: current local-browser results](#local-jev-actor-results-20261006)
@@ -19,6 +20,18 @@
 - [Actor/judge audit](#api-actor-stopping-audit-20261005)
 - [Learned ARM and episode retries](#learned-arm-and-retries)
 - [Pilots and provenance](#luna-qwen-inference-20261004)
+
+<a id="sft-piotr-repeat-tracker-20261006"></a>
+## SFT versus Piotr ARM: two fresh full300 repeats
+
+| Repeat | Actor / selector | N | Planned / completed episodes | Success rate | Status |
+| --- | --- | ---: | --- | --- | --- |
+| 1 | Official SFT alone | 1 | 300 / 0 | Pending | Queued |
+| 1 | Official SFT + Piotr ARM | 5 | 300 / 0 | Pending | Queued |
+| 2 | Official SFT alone | 1 | 300 / 0 | Pending | Queued |
+| 2 | Official SFT + Piotr ARM | 5 | 300 / 0 | Pending | Queued |
+
+**Submitted:1,200 fresh episodes under historical T=0.7/p=0.9/1,024 actor tokens and30 turns**, with the corrected pinned actor policy. Four independently capped shards are waiting on scheduler priority; active-agent supervision is verified. RL-task ARM is excluded. The earlier partial cohort is not reused as a complete repetition. [Protocol, seeds and exact budgets](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
 
 <a id="historical-corrected-partial-tracker-20261006"></a>
 ## Learned ARM: corrected historical protocol, partial

@@ -1,0 +1,69 @@
+{
+  "epoch": 1791342000.969835,
+  "status": "submitted_pending_scheduler",
+  "repetitions": 2,
+  "target_episodes": 1200,
+  "completed_episodes": 0,
+  "target_tasks_per_repeat": 300,
+  "arms": [
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": null,
+      "n": 1
+    },
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "PTeterwak/OpenWebRL-4B-SelectionARM",
+      "n": 5
+    }
+  ],
+  "protocol": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted",
+    "actor_output_tokens": 1024,
+    "judge_output_tokens": 4096,
+    "max_turns": 30,
+    "context_tokens": 32768,
+    "judge": "o4-mini/AgentTrek",
+    "selector_decoding": "greedy constrained JSON",
+    "browser": "local_process"
+  },
+  "server_seeds": [
+    [
+      4300,
+      4301
+    ],
+    [
+      4400,
+      4401
+    ]
+  ],
+  "request_seed_labels": [
+    43,
+    44
+  ],
+  "deterministic_inference": false,
+  "resources_per_shard": {
+    "h200": 2,
+    "cpus": 16,
+    "memory_gib": 240,
+    "total_seconds_across_retries": 10800
+  },
+  "shards": 4,
+  "judge_caps_per_shard": {
+    "usd": 5,
+    "calls": 1320
+  },
+  "total_caps": {
+    "gpu_hours": 24,
+    "judge_usd": 20,
+    "judge_calls": 5280
+  },
+  "cpu_validation_passed": true,
+  "gpu_validation_pending": true,
+  "active_agent_queue_verified": true,
+  "prior_results_reused": false,
+  "prior_budget_transferred": false,
+  "verified_complete": false
+}

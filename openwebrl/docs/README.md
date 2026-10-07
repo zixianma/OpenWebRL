@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[SFT versus Piotr ARM: two fresh full300 repeats submitted;1,200 episodes, historical1,024-token decoding](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
+
 [Historical-vs-corrected verdict audit: same 158 tasks, all 23 both-judged changes reviewed, unjudged-zero contribution quantified](ARM_INFERENCE.md#arm-same-task-verdict-audit-20261006).
 
 [Corrected ARM comparison: 493/900 records, 158 paired tasks; final accounting and cost/latency/token plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
