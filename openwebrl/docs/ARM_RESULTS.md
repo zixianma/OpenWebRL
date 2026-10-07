@@ -9,7 +9,7 @@ Detailed inference, offline-training and online-RL results belong here. The reco
 
 **After-selection success is 44.76% versus 44.29% before: +0.48 pp, paired 95% interval [−2.38, +3.65], across 70 states.** Execution evidence changes choices and reduces repeat disagreement, but a success gain remains unproven. Collection stopped within budget at 74 complete states / 1,110 records; the planned 100 / 1,500 was not reached.
 
-[ARM formulations: definitions, branching graph, complete results and before/after example directories](ARM_FORMULATIONS.md) · [Aggregate results](arm_results/rl_integration/continuation-branches-final-20261006.json).
+[ARM formulations: concise results, branching diagram, random control and before/after examples](ARM_FORMULATIONS.md) · [Aggregate results](arm_results/rl_integration/continuation-branches-final-20261006.json).
 
 <a id="arm-teacher-evidence-primary200-20261006"></a>
 ## Execution-informed teacher: independent 200-task panel — October 6 UTC
