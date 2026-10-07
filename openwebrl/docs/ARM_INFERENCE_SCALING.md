@@ -7,14 +7,18 @@
 Both headline comparisons cover all 300 Online-Mind2Web tasks. Recorded invalid and unjudged outcomes count as zero. Success is the canonical o4-mini/AgentTrek verdict, which allows partial progress—not strict task completion. **N** is the number of proposed actions; one is executed.
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
-## Piotr SelectionARM: two full300 repeats
+## Piotr SelectionARM: initial run + two repeats
 
 Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens, 30 turns**. Piotr **SelectionARM**, N=5, greedy selection; this is not ScalarARM.
 
+**Three runs total:** the initial corrected run stopped early; both additional repeats completed all 300 tasks. The two tables below use different, explicitly matched cohorts.
+
+### Full300: the two completed repeats
+
 | Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Repeat 1 | 300 | 100 | 33.33% | 115 | 38.33% | +5.00 pp |
-| Repeat 2 | 300 | 98 | 32.67% | 113 | 37.67% | +5.00 pp |
+| Run 2: repeat 1 | 300 | 100 | 33.33% | 115 | 38.33% | +5.00 pp |
+| Run 3: repeat 2 | 300 | 98 | 32.67% | 113 | 37.67% | +5.00 pp |
 | **Mean ± sample SD** | 300 | — | **33.00 ± 0.47%** | — | **38.00 ± 0.47%** | **+5.00 ± 0.00 pp** |
 
 Mean gain: **+5.00 pp; paired 95% interval [+1.50, +8.50]**. Bootstrap resamples 300 task clusters with both repeats retained. SD describes the two observed run rates; identical gains do not imply zero uncertainty.
@@ -25,6 +29,20 @@ Mean gain: **+5.00 pp; paired 95% interval [+1.50, +8.50]**. Bootstrap resamples
 | SFT + Piotr SelectionARM | 214.6 | 926,945 | 16.20 |
 
 Plots: repeat 1 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/tokens.png); repeat 2 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/tokens.png). Compute is estimated decoder work, not dollars or total measured FLOPs. [Final audit and accounting](ARM_INFERENCE.md#sft-piotr-repeats-20261006) · [Combined aggregate](arm_results/rl_integration/sft-piotr-repeats-final-20261006/combined.json).
+
+<a id="sft-piotr-three-run-summary-20261006"></a>
+### All three runs: same 160 tasks
+
+**Same 160 tasks in all three runs.** The initial corrected run stopped early, so this is a duration-selected subset, not a three-run full300 estimate. September is excluded.
+
+| Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Run 1: initial corrected | 160 | 53 | 33.13% | 62 | 38.75% | +5.63 pp |
+| Run 2: repeat 1 | 160 | 57 | 35.63% | 64 | 40.00% | +4.38 pp |
+| Run 3: repeat 2 | 160 | 57 | 35.63% | 64 | 40.00% | +4.38 pp |
+| **Mean ± sample SD** | 160 | — | **34.79 ± 1.44%** | — | **39.58 ± 0.72%** | **+4.79 ± 0.72 pp** |
+
+[Three-run aggregate and unchanged task-file verification](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
 
 <a id="local-sft-selector-results-20261006"></a>
 <a id="matched-sft-control"></a>
@@ -44,20 +62,7 @@ Same official SFT actor; **T=1.0, p=0.95, top-k off, 4,096 output tokens, 30 act
 [Audited counts and paired comparisons](arm_results/local_sft_selector_controlled_20261006.json) · [Pinned protocol](arm_results/local_inference_rerun_plan_20261006.json). Paired intervals quantify task sampling, not judge error or website drift.
 
 <details>
-<summary>Supplementary: three-run common-task summary and partial RL-task ARM</summary>
-
-<a id="sft-piotr-three-run-summary-20261006"></a>
-
-**Same 160 tasks in all three runs.** The initial corrected run stopped early, so this is a duration-selected subset, not a three-run full300 estimate. September is excluded.
-
-| Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Corrected initial | 160 | 53 | 33.13% | 62 | 38.75% | +5.63 pp |
-| Repeat 1 | 160 | 57 | 35.63% | 64 | 40.00% | +4.38 pp |
-| Repeat 2 | 160 | 57 | 35.63% | 64 | 40.00% | +4.38 pp |
-| **Mean ± sample SD** | 160 | — | **34.79 ± 1.44%** | — | **39.58 ± 0.72%** | **+4.79 ± 0.72 pp** |
-
-[Three-run aggregate and unchanged task-file verification](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
+<summary>Supplementary: partial three-arm RL-task comparison</summary>
 
 <a id="historical-corrected-partial-tracker-20261006"></a>
 
