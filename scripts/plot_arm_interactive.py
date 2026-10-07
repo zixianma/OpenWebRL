@@ -15,6 +15,7 @@ AUDITS = DOCS / 'arm_results/rl_integration'
 REMOTE = 'https://github.com/zixianma/OpenWebRL/blob/arm/openwebrl/docs/'
 SPECS = [
     ('outcome_only', 'Outcome-only baseline', '#2563eb', True, 'baseline'),
+    ('outcome56', 'Outcome-only · 56 groups (2,102 tasks)', '#111827', True, 'outcome56'),
     ('expanded4102', 'Outcome-only · expanded 4,102 tasks', '#ea580c', True, 'expanded4102'),
     ('all_failure', 'All-failure ARM', '#dc2626', True, 'allfailure'),
     ('additive', 'Additive ARM', '#16803c', True, 'additive'),
@@ -62,7 +63,7 @@ def build_data():
                 iteration = int(path.name.split('-iteration')[1].split('-')[0])
                 data = json.loads(path.read_text())
                 assert data.get('iteration', data.get('completed_iterations', iteration)) == iteration
-                if key == 'expanded4102':
+                if key in {'expanded4102', 'outcome56'}:
                     assert data.get('evaluation_verified_complete') is True, path
                 counts = data.get('full300')
                 if counts is None:
@@ -73,6 +74,10 @@ def build_data():
                                   valid_only=m['success_rate_valid'])
                 points[iteration] = point(iteration, counts,
                                           'arm_results/rl_integration/' + path.name)
+                if key == 'outcome56':
+                    updates = data['checkpoint_adam_updates']
+                    assert isinstance(updates, int) and updates >= 0, path
+                    points[iteration]['adam_updates'] = updates
         assert points, key
         series.append(dict(id=key, label=label, color=color, visible=visible,
                            points=[points[i] for i in sorted(points)]))

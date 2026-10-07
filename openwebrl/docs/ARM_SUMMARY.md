@@ -320,6 +320,15 @@ The interactive curve now includes all six checkpoints10–60. This separate dat
 ablation does not change the task pool used by the ARM runs above.
 [Expanded-pool results and comparison caveats](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
+The separate **outcome-only56-group control on the original2,102 tasks** has its
+first verified iteration10 result: **29.33% overall /35.06% valid-only**
+(88/300 successes;251 valid), with178 Adam updates. It changes accepted mixed
+groups from48 to56 while keeping global256/PPO2; this matches ARM's maximum
+group count, not48M+≤8F composition or auxiliary loss. The historical48-group
+iteration10 score is23.33% overall, but different dates and optimizer work make
+the+6.00pp difference exploratory. Target20 is still pending within the existing
+24h/$200 caps. [Method and first audit](RL_EVALUATION.md#outcome56-iter10-results-20261007).
+
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
 the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30
 remain historical. [Backfill audit](RL_EVALUATION.md#arm-original-backfill-results-20260927).

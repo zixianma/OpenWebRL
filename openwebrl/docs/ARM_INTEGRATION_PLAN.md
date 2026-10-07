@@ -9376,6 +9376,32 @@ Implementation: `scripts/run_arm_task_rescue.py`,
 Private preparation and shard manifests:
 `task-pool-expansion-20260922/curation-v3-20260929/actor-arm-allfailure-20261002/`.
 
+<a id="outcome56-control-20261006"></a>
+### October6: original-pool outcome-only56-group control
+
+The user approved one fresh outcome-only control on the original2,102 tasks,
+starting from the original SFT model at iteration0 with fresh optimizer,
+scheduler, task cursor and W&B lineage. The changed knob is48→56 accepted
+mixed groups, with five rollouts per task; no ARM reward, action selection or
+auxiliary loss is enabled. Global256/PPO2/LR1e−6 and TP2/DP4/microbatch1 remain.
+The56-group count matches the maximum48M+≤8F of additive/Gate B, while its56M
+composition differs; mixed-only ARM already uses48M. Compare matched iterations
+alongside Adam updates, submitted/accepted groups and rollout cost.
+
+Job347895 has **8 H200 ×24h,64 CPUs,960GiB and$200 judge allowance**, including
+startup, training, full300 local T0/GPT-4.1 evaluations10/20 and all retries.
+The initial target is20, subject to these shared caps; reaching20 is not
+guaranteed within24h and no new allocation is authorized by this plan.
+
+**October7 first milestone:** checkpoint10 (native9) has178 Adam updates and
+scheduler45568. Its full300 evaluation is independently verified at88/300
+**29.33% overall** and88/251 **35.06% valid-only**, with49 invalid attempts.
+Training restored native9 and resumed collection11; target20 remains pending.
+The original-pool historical
+iteration10 comparison is descriptive; dates and optimizer work differ.
+[Results, protocol and audit](RL_EVALUATION.md#outcome56-iter10-results-20261007) ·
+[Interactive curve](rl_results/arm_rl_interactive.html).
+
 <a id="arm-expanded-outcome-to90-20261005"></a>
 ### Expanded outcome-only continuation: capped at60 on October5
 

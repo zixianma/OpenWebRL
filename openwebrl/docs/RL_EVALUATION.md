@@ -28,6 +28,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
 - [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
 
+- [Original2,102-task outcome-only56-group control: iteration10](#outcome56-iter10-results-20261007)
 - [Expanded 4,102-task outcome-only baseline: complete through60](#expanded4102-iter10-results-20261003)
 - [WebVoyager iteration90: completed comparison](#arm-webvoyager90-results-20260930)
 - [Matched iteration90 paired tests and95% CIs](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930)
@@ -1457,6 +1458,61 @@ only task ID, validity and reward instead of retaining screenshot payloads.
 The topic commits also include shared ARM reward, resume and
 transport modules imported by the evaluation controllers; they are necessary
 code dependencies, not new experiment launches.
+
+<a id="outcome56-iter10-results-20261007"></a>
+## Outcome-only56-group control: iteration10 — October7
+
+The first full300 evaluation is independently verified: **88/300 =29.33%
+overall** and **88/251 =35.06% valid-only**, with49 invalid attempts retained
+in the overall denominator. This control uses the **original2,102-task pool**,
+separate from the expanded4,102-task data ablation. It starts at iteration0 from
+the original OpenWebRL-4B-SFT model with fresh optimizer, scheduler and task cursor.
+
+The changed collection setting is **56 accepted mixed groups per iteration**,
+with five sampled rollouts per task, outcome rewards only and no ARM bonus,
+selection or auxiliary loss. Global optimizer batch256, PPO2, constant1e−6 LR,
+TP2/DP4, microbatch1,64 local browsers and48GiB cache guard remain unchanged.
+Training uses T0.8/p1/k−1,1,024 response tokens and15 turns; evaluation uses the
+separate established local-browser GPT-4.1/action_history protocol,
+**T0/p1/k1,4,096 response tokens and30 turns**, one rollout per held-out task.
+The evaluation W&B run is in `openwebrl-evals`.
+
+The group count56 matches the maximum48 mixed plus up to8 all-failure groups
+used by additive/Gate B, **not their group composition or auxiliary ARM loss**.
+Mixed-only ARM already uses48 mixed groups. With native outcome-only filtering,
+all-failure groups have zero outcome advantage and are excluded, so56 mixed
+groups provide more useful outcome-only data. Training iterations alone do not
+match Adam updates, collected groups or rollout cost.
+
+Native checkpoint9 records178 Adam updates and scheduler counter45568, with
+task cursor1568 from the fresh starting cursor. Iteration10 accepted56 of138
+completed groups;168 groups were submitted, including30 pending at collection
+stop, and PPO used18 updates. These collection counts differ from the full300
+held-out evaluation denominator. Further comparisons must retain optimizer
+updates, proposed/accepted groups and rollout/browser cost alongside iteration.
+
+The historical original-pool48-group iteration10 score was70/300 (23.33%)
+overall and70/234 (29.91%) valid-only: descriptive differences of**+6.00pp** and
+**+5.15pp**. Collection dates, valid-task sets, sampled training data and optimizer
+work differ. One early cohort does not establish a causal batch-group benefit
+or statistical significance.
+
+All300 expected task identities, paired rollout/verdict records, archive ZIP
+member CRCs, actual native9 actor GPU restoration, executed protocol and final
+W&B task metrics were independently checked. Terminal statuses are 181 completed, 49 aborted, 62 failed, 8 truncated.
+The70 native judge-not-run terminal failures (62 failed,8 truncated) retain the
+established valid-failure scoring convention; these are not judge errors.
+Raw task IDs and trajectories remain private.
+
+Only evaluation10 is verified. Training restored native9 optimizer, scheduler
+and cursor and resumed collection11. Training through20 and its full300 evaluation remain pending
+under the existing **8 H200 ×24h,64 CPU/960GiB and$200 judge cap**, including all
+startup work and retries. The cap can stop work before20; no extension is implied.
+
+[Aggregate audit](arm_results/rl_integration/outcome56-iteration10-audit.json) ·
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-56groups-20261006-iter10) ·
+[Control method and authorization](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006) ·
+[Interactive full300 curves](rl_results/arm_rl_interactive.html).
 
 <a id="expanded4102-iter10-results-20261003"></a>
 ## Expanded task-pool baseline: complete through60 — October3–7

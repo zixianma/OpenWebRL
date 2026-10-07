@@ -63,6 +63,18 @@
 | 90 | 101 | 222 | 78 | 33.67 | 45.50 |
 | 100 | 104 | 227 | 73 | 34.67 | 45.81 |
 
+## Outcome-only56-group control · original2,102 tasks · local browser · GPT-4.1 · T0
+
+| Method | Iteration | Accepted groups/iteration | Adam updates | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Historical outcome-only |10 |48 |— |70 |234 |66 |23.33 |29.91 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
+| Outcome-only56-group control |10 |56 |178 |88 |251 |49 |29.33 |35.06 |[October7 audit](arm_results/rl_integration/outcome56-iteration10-audit.json) |
+
+| Comparison / status | Value | Source |
+| --- | --- | --- |
+|56-group − historical48-group, iteration10 |+6.00pp overall /+5.15pp valid-only |[Historical comparison and caveats](RL_EVALUATION.md#outcome56-iter10-results-20261007) |
+| Initial target / verified evaluations |20 /10 only;20 pending |[Approved control](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006) |
+
 ## Expanded task pool · outcome-only · local browser · GPT-4.1 · temperature 0 · full 300
 
 | Training pool | Iteration | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
