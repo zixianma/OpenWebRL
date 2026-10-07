@@ -8,12 +8,12 @@
 
 [Corrected ARM comparison: 493/900 records, 158 paired tasks; final accounting and cost/latency/token plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
 
-[Inference scaling rerun audit: five corrected local v2 conditions complete; remaining GPT-actor, N=10, Qwen and episode-pass@k comparisons](ARM_INFERENCE_SCALING.md#rerun-triage-20261006).
+[Inference scaling: controlled full300 results, separate count/rate columns, concise takeaways; buggy history collapsed](ARM_INFERENCE_SCALING.md).
 
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Inference-time scaling: audited local actor-alone and matched SFT + selector results](ARM_INFERENCE_SCALING.md).
+[Inference-time scaling: Piotr repeat averages and matched Luna/Jev/Kev selector comparison](ARM_INFERENCE_SCALING.md).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
 [Continuation allocation closed: 74 complete states / 1,110 records; partial target and final accounting verified](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).
