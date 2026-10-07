@@ -1,0 +1,466 @@
+{
+  "epoch": 1791339587.3358037,
+  "status": "partial_matched_preview",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "a1f8d265855ddf1074eae91516c6e86f6f836177",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "davidan03/openwebrl-4b-selectionarm-rltasks",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "one fresh baseline, Piotr-ARM and new-ARM episode per task",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "historical-system-policy-restored-v1",
+    "seed_realization": "Request seeds recorded; FlashInfer deterministic inference remains disabled, as in historical collection.",
+    "comparability": "Matched fresh pair; historical collection dates/runtime differ. Judge metering adds4096 output cap."
+  },
+  "recorded_episodes": 493,
+  "expected_episodes": 900,
+  "matched_tasks": 158,
+  "matched_episodes": 474,
+  "unmatched_episodes": 19,
+  "cohort": {
+    "complete": true,
+    "scheduled_tasks": 158,
+    "scheduled_attempts": 474,
+    "completed_attempts": 474,
+    "by_mode": {
+      "arm": {
+        "completed": 158,
+        "successes": 61,
+        "valid": 137,
+        "invalid": 21,
+        "overall": 0.3860759493670886,
+        "valid_only": 0.44525547445255476,
+        "actor_requests": 11325,
+        "actor_output_tokens": 3818691,
+        "actor_input_tokens": 117696305,
+        "actor_client_request_seconds": 71402.27876286162,
+        "browser_steps": 2256,
+        "browser_step_seconds": 9569.801198747475,
+        "selector_calls": 2260,
+        "selector_input_tokens": 8527972,
+        "selector_output_tokens": 22600,
+        "selector_service_seconds": 1345.7197088352405,
+        "elapsed_seconds": 29304.188121001236,
+        "mean": {
+          "actor_input_tokens": 744913.3227848101,
+          "actor_output_tokens": 24168.930379746835,
+          "selector_input_tokens": 53974.50632911392,
+          "selector_output_tokens": 143.0379746835443,
+          "elapsed_seconds": 185.46954506962808,
+          "actor_client_request_seconds": 451.91315672697226,
+          "selector_service_seconds": 8.517213347058483,
+          "browser_steps": 14.278481012658228,
+          "browser_step_seconds": 60.56836201738908,
+          "decoder_cold_flops": 9223522651506300.0,
+          "decoder_observed_kv_flops": 1709039194987196.0,
+          "unmetered_failed_actor_requests": 0.15822784810126583
+        },
+        "bootstrap95": {
+          "success": [
+            0.31012658227848106,
+            0.46202531645569617
+          ],
+          "decoder_cold_flops": [
+            7748927842400113.0,
+            1.067352941590194e+16
+          ],
+          "decoder_observed_kv_flops": [
+            1486626189992734.5,
+            1924985548548142.8
+          ],
+          "elapsed_seconds": [
+            162.41289851892344,
+            208.33879853325172
+          ],
+          "total_tokens": [
+            701081.1378164563,
+            942196.9237341769
+          ]
+        }
+      },
+      "piotr": {
+        "completed": 158,
+        "successes": 60,
+        "valid": 139,
+        "invalid": 19,
+        "overall": 0.379746835443038,
+        "valid_only": 0.4316546762589928,
+        "actor_requests": 11900,
+        "actor_output_tokens": 4024378,
+        "actor_input_tokens": 121224540,
+        "actor_client_request_seconds": 74709.79277156433,
+        "browser_steps": 2375,
+        "browser_step_seconds": 10775.406167320907,
+        "selector_calls": 2376,
+        "selector_input_tokens": 8982944,
+        "selector_output_tokens": 20438,
+        "selector_service_seconds": 1254.168779707048,
+        "elapsed_seconds": 31310.915869998746,
+        "mean": {
+          "actor_input_tokens": 767243.9240506329,
+          "actor_output_tokens": 25470.74683544304,
+          "selector_input_tokens": 56854.07594936709,
+          "selector_output_tokens": 129.35443037974684,
+          "elapsed_seconds": 198.170353607587,
+          "actor_client_request_seconds": 472.84678969344515,
+          "selector_service_seconds": 7.937777086753469,
+          "browser_steps": 15.031645569620252,
+          "browser_step_seconds": 68.19877321089182,
+          "decoder_cold_flops": 9388004050744282.0,
+          "decoder_observed_kv_flops": 1794365738161424.2,
+          "unmetered_failed_actor_requests": 0.12658227848101267
+        },
+        "bootstrap95": {
+          "success": [
+            0.30379746835443044,
+            0.4556962025316455
+          ],
+          "decoder_cold_flops": [
+            7987317184413625.0,
+            1.0865645685064578e+16
+          ],
+          "decoder_observed_kv_flops": [
+            1572932019436344.0,
+            2020520109200262.0
+          ],
+          "elapsed_seconds": [
+            173.82790424096342,
+            224.9740623484786
+          ],
+          "total_tokens": [
+            731230.2552215189,
+            973284.2226265828
+          ]
+        }
+      },
+      "actor0": {
+        "completed": 158,
+        "successes": 53,
+        "valid": 141,
+        "invalid": 17,
+        "overall": 0.33544303797468356,
+        "valid_only": 0.375886524822695,
+        "actor_requests": 2338,
+        "actor_output_tokens": 755028,
+        "actor_input_tokens": 22096722,
+        "actor_client_request_seconds": 12976.598199778702,
+        "browser_steps": 2331,
+        "browser_step_seconds": 8630.057856596075,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 23890.24335940508,
+        "mean": {
+          "actor_input_tokens": 139852.67088607594,
+          "actor_output_tokens": 4778.658227848101,
+          "selector_input_tokens": 0.0,
+          "selector_output_tokens": 0.0,
+          "elapsed_seconds": 151.20407189496888,
+          "actor_client_request_seconds": 82.13036835302977,
+          "selector_service_seconds": 0.0,
+          "browser_steps": 14.753164556962025,
+          "browser_step_seconds": 54.62061934554478,
+          "decoder_cold_flops": 1569436205990925.0,
+          "decoder_observed_kv_flops": 392541490278348.1,
+          "unmetered_failed_actor_requests": 0.0189873417721519
+        },
+        "bootstrap95": {
+          "success": [
+            0.2594936708860761,
+            0.41139240506329094
+          ],
+          "decoder_cold_flops": [
+            1334333065188862.8,
+            1822258757207436.2
+          ],
+          "decoder_observed_kv_flops": [
+            342299428529517.44,
+            445855515428796.56
+          ],
+          "elapsed_seconds": [
+            132.92989646546084,
+            170.20536514817454
+          ],
+          "total_tokens": [
+            124243.14525316456,
+            166149.7772151899
+          ]
+        }
+      }
+    },
+    "paired": {
+      "arm_minus_actor0": {
+        "difference": 0.05063291139240506,
+        "bootstrap95": [
+          -0.0189873417721519,
+          0.12025316455696203
+        ],
+        "first_only": 21,
+        "second_only": 13,
+        "common_valid_tasks": 135,
+        "common_valid_first_successes": 60,
+        "common_valid_second_successes": 52
+      },
+      "piotr_minus_actor0": {
+        "difference": 0.04430379746835443,
+        "bootstrap95": [
+          -0.012658227848101266,
+          0.10759493670886076
+        ],
+        "first_only": 16,
+        "second_only": 9,
+        "common_valid_tasks": 136,
+        "common_valid_first_successes": 60,
+        "common_valid_second_successes": 53
+      },
+      "arm_minus_piotr": {
+        "difference": 0.006329113924050633,
+        "bootstrap95": [
+          -0.056962025316455694,
+          0.06962025316455696
+        ],
+        "first_only": 15,
+        "second_only": 14,
+        "common_valid_tasks": 133,
+        "common_valid_first_successes": 61,
+        "common_valid_second_successes": 59
+      }
+    },
+    "cost_limitations": "Request latencies overlap; allocation GPU-hours and device logs are campaign totals, not per-arm GPU kernel measurements.",
+    "execution_phases": {
+      "awaited_thread_v1": {
+        "by_mode": {
+          "arm": {
+            "episodes": 158,
+            "successes": 61,
+            "invalid": 21,
+            "mean": {
+              "elapsed_seconds": 185.46954506962808,
+              "actor_client_request_seconds": 451.91315672697226,
+              "actor_input_tokens": 744913.3227848101,
+              "actor_output_tokens": 24168.930379746835,
+              "selector_input_tokens": 53974.50632911392,
+              "selector_output_tokens": 143.0379746835443
+            }
+          },
+          "piotr": {
+            "episodes": 158,
+            "successes": 60,
+            "invalid": 19,
+            "mean": {
+              "elapsed_seconds": 198.170353607587,
+              "actor_client_request_seconds": 472.84678969344515,
+              "actor_input_tokens": 767243.9240506329,
+              "actor_output_tokens": 25470.74683544304,
+              "selector_input_tokens": 56854.07594936709,
+              "selector_output_tokens": 129.35443037974684
+            }
+          },
+          "actor0": {
+            "episodes": 158,
+            "successes": 53,
+            "invalid": 17,
+            "mean": {
+              "elapsed_seconds": 151.20407189496888,
+              "actor_client_request_seconds": 82.13036835302977,
+              "actor_input_tokens": 139852.67088607594,
+              "actor_output_tokens": 4778.658227848101,
+              "selector_input_tokens": 0.0,
+              "selector_output_tokens": 0.0
+            }
+          }
+        },
+        "common_phase_tasks": 158,
+        "common_phase_by_mode": {
+          "arm": {
+            "episodes": 158,
+            "successes": 61,
+            "invalid": 21,
+            "mean": {
+              "elapsed_seconds": 185.46954506962808,
+              "actor_client_request_seconds": 451.91315672697226,
+              "actor_input_tokens": 744913.3227848101,
+              "actor_output_tokens": 24168.930379746835,
+              "selector_input_tokens": 53974.50632911392,
+              "selector_output_tokens": 143.0379746835443
+            }
+          },
+          "piotr": {
+            "episodes": 158,
+            "successes": 60,
+            "invalid": 19,
+            "mean": {
+              "elapsed_seconds": 198.170353607587,
+              "actor_client_request_seconds": 472.84678969344515,
+              "actor_input_tokens": 767243.9240506329,
+              "actor_output_tokens": 25470.74683544304,
+              "selector_input_tokens": 56854.07594936709,
+              "selector_output_tokens": 129.35443037974684
+            }
+          },
+          "actor0": {
+            "episodes": 158,
+            "successes": 53,
+            "invalid": 17,
+            "mean": {
+              "elapsed_seconds": 151.20407189496888,
+              "actor_client_request_seconds": 82.13036835302977,
+              "actor_input_tokens": 139852.67088607594,
+              "actor_output_tokens": 4778.658227848101,
+              "selector_input_tokens": 0.0,
+              "selector_output_tokens": 0.0
+            }
+          }
+        }
+      }
+    }
+  },
+  "accounting": [
+    {
+      "shard": 0,
+      "attempts": [
+        {
+          "job_id": "347180",
+          "state": "FAILED",
+          "elapsed_seconds": 1584,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347256",
+          "state": "FAILED",
+          "elapsed_seconds": 7218,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347424",
+          "state": "FAILED",
+          "elapsed_seconds": 5456,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        }
+      ],
+      "allocation_seconds": 14258,
+      "allocation_seconds_cap": 14400,
+      "allocated_gpu_hours": 7.921111111111111,
+      "judge": {
+        "calls": 246,
+        "charged_or_reserved_usd": 2.0357007
+      },
+      "settled_judge_usd": 2.0357007,
+      "unsettled_judge_receipts": 0,
+      "final_accounting_verified": true
+    },
+    {
+      "shard": 1,
+      "attempts": [
+        {
+          "job_id": "347181",
+          "state": "FAILED",
+          "elapsed_seconds": 42,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347257",
+          "state": "FAILED",
+          "elapsed_seconds": 6978,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        },
+        {
+          "job_id": "347425",
+          "state": "FAILED",
+          "elapsed_seconds": 7257,
+          "allocated_tres": "billing=16,cpu=16,gres/gpu:h200=2,gres/gpu=2,mem=240G,node=1"
+        }
+      ],
+      "allocation_seconds": 14277,
+      "allocation_seconds_cap": 14400,
+      "allocated_gpu_hours": 7.931666666666667,
+      "judge": {
+        "calls": 308,
+        "charged_or_reserved_usd": 2.439917700000001
+      },
+      "settled_judge_usd": 2.4399177,
+      "unsettled_judge_receipts": 0,
+      "final_accounting_verified": true
+    }
+  ],
+  "invalid_causes_all_recorded": {
+    "arm": {
+      "before_first_actor_request_or_browser_step": 13,
+      "browser_step_error": 3,
+      "actor_http400_rejection": 6
+    },
+    "piotr": {
+      "actor_http400_rejection": 4,
+      "browser_step_error": 2,
+      "before_first_actor_request_or_browser_step": 13
+    },
+    "actor0": {
+      "browser_step_error": 1,
+      "before_first_actor_request_or_browser_step": 13,
+      "actor_http400_rejection": 4
+    }
+  },
+  "collection_target_verified": false,
+  "final_accounting_verified": true,
+  "verified_complete": false,
+  "caveats": [
+    "Preview comparisons use only complete three-arm task blocks; all invalid outcomes count as zero. This subset can be selected by task duration and is not full300.",
+    "Decoder FLOPs are analytical workload estimates, excluding vision encoders, elementwise operations, recomputation, failed/unmetered requests and hardware overhead. They are not total compute or a dollar price.",
+    "Cold prefill charges each request equally. Observed actor KV reuse is reported separately; selector decoder work is included in both views.",
+    "Tokens count actual received actor and selector input/output, including cached input. They are not billing-equivalent across services.",
+    "Latency is complete episode wall time. Concurrent request seconds must not be summed as wall time. Shared GPU time is reported at campaign/shard level only.",
+    "All-attempt GPU hours and judge spend include failed and interrupted attempts. Evaluation judge spend is not actor/selector deployment cost.",
+    "Artifacts must be reviewed and remote publication verified before marking this experiment complete."
+  ],
+  "plots": [
+    {
+      "name": "cost.png",
+      "sha256": "986d138e85cc694048f9d4b94d222557eac4b1c98fecf4db9443f78f0f670129"
+    },
+    {
+      "name": "cost.svg",
+      "sha256": "a3e9cda4359252a6fad76561367d280f18aa44753a1ade92c994050b862fda69"
+    },
+    {
+      "name": "latency.png",
+      "sha256": "ebc2702e58c012918ba436ed1c5229d9bc7ab68fafa97b5229408a00b20508e2"
+    },
+    {
+      "name": "latency.svg",
+      "sha256": "2d60eef9530015e7968e1e81268bf4e39bcd36296cf78e71459e1808c8e72273"
+    },
+    {
+      "name": "tokens.png",
+      "sha256": "81fd7d6e3bd1f52666ede1a00265197eb0d2fb49f1bdbde268c84c1281712d3c"
+    },
+    {
+      "name": "tokens.svg",
+      "sha256": "1399aa9f9d690560264df5f05620e1a10f3f34a04e424f8ee4f4d7d9c1902d88"
+    }
+  ]
+}

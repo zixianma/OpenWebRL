@@ -1,5 +1,35 @@
 # ARM inference and judge protocol
 
+<a id="arm-rltasks-corrected-partial-20261006"></a>
+## Corrected historical-protocol comparison — partial, October 6
+
+**493/900 corrected episodes are saved; both allocations have ended.** This paired comparison uses the **158 tasks with all three arms complete** (474 episodes). The remaining 19 committed episodes are preserved but unmatched, and 407 of the planned 900 are missing. This duration-selected subset is not a full300 result. Invalid outcomes count as zero overall. The earlier 402 blank-policy records remain separate and are excluded here.
+
+| Actor / selector | N | Success on matched tasks | Valid-only success | Mean episode latency | Mean actor + selector tokens |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Official OpenWebRL-SFT alone | 1 | **53/158 = 33.54%** | 53/141 = 37.59% | 151.2 s | 144,631 |
+| SFT + Piotr SelectionARM | 5 | **60/158 = 37.97%** | 60/139 = 43.17% | 198.2 s | 849,698 |
+| SFT + RL-task SelectionARM | 5 | **61/158 = 38.61%** | 61/137 = 44.53% | 185.5 s | 823,200 |
+
+Piotr minus SFT is **+4.43 pp** (paired 95% interval −1.27 to +10.76 pp); RL-task ARM minus SFT is **+5.06 pp** (−1.90 to +12.03 pp). RL-task ARM minus Piotr is +0.63 pp (−5.70 to +6.96 pp). These intervals include zero; the partial corrected results do not establish the cause or size of the difference from September's +12.67 pp gain.
+
+The actor policy is restored, with T=0.7, top-p=0.9, top-k omitted, 1,024 output tokens and the historical 30-turn/o4-mini protocol. All 493 result artifacts and decision traces were verified. The 454 saved actor histories contain the exact 4,180-character policy; the other 39 records failed before any actor request. Exact served model and judge identities were checked, along with decoding and actor/selector token receipts for all 474 matched episodes. No selector fallback occurred. This protocol differs from the T=1.0/p=0.95/4,096-token local v2 Luna/Jev/Kev comparison. The historical seed and terminal-screenshot limitations remain as documented below.
+
+| Independent shard | Corrected records | All-attempt allocation time / 4h cap | GPU-hours | Judge calls | Settled judge cost | Original time remaining |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 187/450 | 14,258 / 14,400 s | 7.9211 | 246 / 1,980 | $2.0357007 / $10 | 142 s |
+| 1 | 306/450 | 14,277 / 14,400 s | 7.9317 | 308 / 1,980 | $2.4399177 / $10 | 123 s |
+
+**Final scheduler/API accounting and owned-process teardown are verified; the requested cohort is incomplete.** All failed and interrupted attempts remain charged. Jobs 347424/347425 ended at their planned allocation-shutdown boundaries; their scheduler status is `FAILED`, not completed. The remaining seconds cannot restart three model servers. No budget was extended or transferred. W&B status and receipts are retained under the separate corrected lineages.
+
+The three plots use the same 158 tasks and task-bootstrap intervals. Cost is shown as **decoder-work estimates**, with cold-prefill and observed-KV views; these exclude vision, failed/unmetered requests and hardware overhead, and are not measured total FLOPs or dollar prices. All-attempt GPU time and evaluation-judge spend are reported separately above. Tokens include received input/output for actor and selector, including cached input.
+
+[Audited aggregate](arm_results/rl_integration/historical-corrected-partial-20261006/aggregate.json) · [Compute-cost plot](arm_results/rl_integration/historical-corrected-partial-20261006/cost.png) · [Latency plot](arm_results/rl_integration/historical-corrected-partial-20261006/latency.png) · [Token plot](arm_results/rl_integration/historical-corrected-partial-20261006/tokens.png)
+
+![Corrected partial ARM cost comparison](arm_results/rl_integration/historical-corrected-partial-20261006/cost.png)
+![Corrected partial ARM latency comparison](arm_results/rl_integration/historical-corrected-partial-20261006/latency.png)
+![Corrected partial ARM token comparison](arm_results/rl_integration/historical-corrected-partial-20261006/tokens.png)
+
 <a id="arm-historical-harness-audit-20261006"></a>
 ## High-priority historical-gain audit — October 6
 
@@ -32,7 +62,7 @@ The existing judge checks still find no outcome-parser mismatch or observed trun
 | 0 | 347424 | 2h26m42s | 1h33m | 3h59m42s | $10 / 1,980 calls |
 | 1 | 347425 | 1h57m | 2h03m | 4h | $10 / 1,980 calls |
 
-Both jobs retain 2 H200 / 16 CPU / 240 GiB and were submitted in parallel. This adds no budget. Remaining time may not cover all 900 corrected episodes; final completeness will be reported separately. The continuation-branch experiment already has its prompt assets pinned and is unaffected by this omission. [Aggregate audit and coverage](arm_results/rl_integration/historical-harness-audit-20261006.json).
+Both corrected jobs used 2 H200 / 16 CPU / 240 GiB and ran in parallel. They have now ended with 493/900 episodes; [the corrected partial table and final accounting](#arm-rltasks-corrected-partial-20261006) supersede the submission snapshot. This adds no budget. The continuation-branch experiment already has its prompt assets pinned and is unaffected by this omission. [Aggregate audit and coverage](arm_results/rl_integration/historical-harness-audit-20261006.json).
 
 <a id="arm-rltasks-three-arm-20261006"></a>
 ## Fresh comparison of original and RL-task SelectionARM — October 6

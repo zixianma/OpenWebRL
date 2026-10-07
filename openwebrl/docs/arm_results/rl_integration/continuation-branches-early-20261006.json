@@ -1,59 +1,64 @@
 {
-  "states_with_continuation_records": 19,
-  "analyzed_states": 19,
+  "states_with_continuation_records": 72,
+  "analyzed_states": 68,
   "estimates": {
-    "before": 0.3742690058479532,
-    "after": 0.3508771929824561,
-    "difference": -0.02339181286549708,
-    "uniform": 0.3192982456140351,
-    "before_repeat_disagreement": 0.21052631578947367,
-    "after_repeat_disagreement": 0.14619883040935672,
-    "before_after_disagreement": 0.37037037037037035,
-    "excess_disagreement": 0.19200779727095516
+    "before": 0.45588235294117646,
+    "after": 0.46078431372549017,
+    "difference": 0.004901960784313724,
+    "uniform": 0.42549019607843136,
+    "before_repeat_disagreement": 0.3137254901960784,
+    "after_repeat_disagreement": 0.18790849673202614,
+    "before_after_disagreement": 0.4466230936819172,
+    "excess_disagreement": 0.19580610021786493
   },
   "state_bootstrap_95_intervals": {
     "before": [
-      0.17543859649122806,
-      0.5789473684210527
+      0.35294117647058826,
+      0.5604575163398693
     ],
     "after": [
-      0.15789473684210525,
-      0.543859649122807
+      0.35784313725490197,
+      0.5669934640522876
     ],
     "difference": [
-      -0.052631578947368425,
-      0
+      -0.026143790849673203,
+      0.03594771241830066
     ],
     "uniform": [
-      0.1473684210526316,
-      0.4982456140350877
+      0.33431372549019606,
+      0.5186274509803922
     ],
     "before_repeat_disagreement": [
-      0.07017543859649122,
-      0.3508771929824561
+      0.23039215686274508,
+      0.39705882352941174
     ],
     "after_repeat_disagreement": [
-      0.04678362573099415,
-      0.27485380116959063
+      0.13071895424836602,
+      0.24509803921568626
     ],
     "before_after_disagreement": [
-      0.20857699805068225,
-      0.5458089668615984
+      0.3562091503267974,
+      0.5359477124183006
     ],
     "excess_disagreement": [
-      0.059454191033138405,
-      0.34795321637426896
+      0.12690631808278865,
+      0.2696078431372549
     ]
   },
   "common_valid_selected_pairs": {
-    "before": 0.3987341772151899,
-    "after": 0.379746835443038,
-    "pairs": 158,
-    "difference": -0.01898734177215189
+    "before": 0.4750430292598967,
+    "after": 0.4836488812392427,
+    "pairs": 581,
+    "difference": 0.008605851979345991
   },
   "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
   "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
-  "exclusion_counts": {},
+  "committed_activation_failure_count": 1,
+  "post_release_continuation_attempts": 1079,
+  "activation_failure_note": "Committed release-read failures stay invalid and count zero; no execution is invented and no attempt is replaced.",
+  "exclusion_counts": {
+    "incomplete_valid_teacher_repeats": 4
+  },
   "execution_phase_sensitivity": {
     "reserve800-prefetch-v1": {
       "states_with_continuation_records": 5,
@@ -174,63 +179,65 @@
       "exclusion_counts": {}
     },
     "terminal-capture-transport-v1": {
-      "states_with_continuation_records": 5,
-      "analyzed_states": 5,
+      "states_with_continuation_records": 58,
+      "analyzed_states": 54,
       "estimates": {
-        "before": 0.2,
-        "after": 0.2,
-        "difference": 0,
-        "uniform": 0.15999999999999998,
-        "before_repeat_disagreement": 0,
-        "after_repeat_disagreement": 0.08888888888888888,
-        "before_after_disagreement": 0.4222222222222222,
-        "excess_disagreement": 0.37777777777777777
+        "before": 0.4609053497942387,
+        "after": 0.47530864197530864,
+        "difference": 0.014403292181069957,
+        "uniform": 0.4382716049382716,
+        "before_repeat_disagreement": 0.32098765432098764,
+        "after_repeat_disagreement": 0.1934156378600823,
+        "before_after_disagreement": 0.47119341563786005,
+        "excess_disagreement": 0.2139917695473251
       },
       "state_bootstrap_95_intervals": {
         "before": [
-          0,
-          0.6
+          0.3497942386831276,
+          0.5761316872427984
         ],
         "after": [
-          0,
-          0.6
+          0.36213991769547327,
+          0.5925925925925926
         ],
         "difference": [
-          0,
-          0
+          -0.022633744855967076,
+          0.053497942386831275
         ],
         "uniform": [
-          0,
-          0.4533333333333333
+          0.3419753086419753,
+          0.5419753086419753
         ],
         "before_repeat_disagreement": [
-          0,
-          0
+          0.22839506172839505,
+          0.41358024691358025
         ],
         "after_repeat_disagreement": [
-          0,
-          0.17777777777777776
+          0.1337448559670782,
+          0.257201646090535
         ],
         "before_after_disagreement": [
-          0.02222222222222222,
-          0.8222222222222222
+          0.3676268861454047,
+          0.5720164609053497
         ],
         "excess_disagreement": [
-          0.0,
-          0.7777777777777778
+          0.1337448559670782,
+          0.2993827160493827
         ]
       },
       "common_valid_selected_pairs": {
-        "before": 0.23076923076923078,
-        "after": 0.23076923076923078,
-        "pairs": 39,
-        "difference": 0.0
+        "before": 0.4805194805194805,
+        "after": 0.49783549783549785,
+        "pairs": 462,
+        "difference": 0.01731601731601734
       },
       "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
       "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval.",
-      "continuations": 75,
-      "invalid_continuations": 6,
-      "exclusion_counts": {}
+      "continuations": 870,
+      "invalid_continuations": 95,
+      "exclusion_counts": {
+        "incomplete_valid_teacher_repeats": 4
+      }
     },
     "visible-replay-v2": {
       "states_with_continuation_records": 3,
@@ -352,48 +359,50 @@
     }
   },
   "execution_phase_note": "All completed primary outcomes are retained. Repair-phase cohorts differ; phase comparisons are descriptive, not randomized effects.",
-  "epoch": 1791323909.8915136,
+  "epoch": 1791339492.0628834,
+  "plan_sha256": "4dcec4024c7947d3f1b98e3da3c1f187b78ec90f3871c79a999ee1e2502f3586",
   "protocol_stage": "visible-replay-v2",
   "target_states": 100,
   "target_continuations": 1500,
-  "completed_states": 19,
-  "completed_continuations": 285,
-  "valid_continuations": 265,
+  "completed_states": 72,
+  "completed_continuations": 1080,
+  "valid_continuations": 971,
   "released_states_pending": 0,
   "replay_exclusions": {
-    "At least one reconstruction failed before release": 119,
-    "anchor_not_captured": 20
+    "At least one reconstruction failed before release": 330,
+    "anchor_not_captured": 57,
+    "Malformed fixed candidate panel": 1
   },
   "candidate_diversity_counts": {
-    "5": 7,
-    "1": 1,
-    "4": 6,
-    "3": 3,
-    "2": 2
+    "5": 35,
+    "1": 5,
+    "4": 18,
+    "3": 9,
+    "2": 5
   },
-  "verified_teacher_requests": 266,
-  "valid_teacher_judgments": 266,
+  "verified_teacher_requests": 980,
+  "valid_teacher_judgments": 980,
   "teacher_response_models": {
-    "gpt-6-luna": 266
+    "gpt-6-luna": 980
   },
   "judge_response_models": {
-    "o4-mini-2025-04-16": 176
+    "o4-mini-2025-04-16": 773
   },
   "regular_teacher_tokens": {
-    "before_input_tokens": 444258,
-    "before_output_tokens": 36370,
-    "after_input_tokens": 6201900,
-    "after_output_tokens": 65679
+    "before_input_tokens": 1525965,
+    "before_output_tokens": 104781,
+    "after_input_tokens": 20099772,
+    "after_output_tokens": 228987
   },
   "all_attempt_counters": {
-    "active_browsers": 2.0,
-    "browsers:L01": 959.0,
-    "browser_sessions": 959.0,
-    "local_sft_generations": 4360.0,
-    "om2w_judge_http_attempts": 176.0,
-    "canonical_judge_usd": 1.2792659000000006,
-    "luna_selector_requests": 266.0,
-    "luna_usd": 0.9967920000000005
+    "active_browsers": 1.0,
+    "browsers:L01": 2631.0,
+    "browser_sessions": 2631.0,
+    "local_sft_generations": 13166.0,
+    "om2w_judge_http_attempts": 773.0,
+    "canonical_judge_usd": 5.644113200000002,
+    "luna_selector_requests": 980.0,
+    "luna_usd": 3.242206749999998
   },
   "scheduler": [
     {
@@ -429,41 +438,15 @@
     {
       "job_id": "347282",
       "state": "RUNNING",
-      "elapsed_seconds": 3705
+      "elapsed_seconds": 19284
     }
   ],
-  "all_attempt_allocation_seconds": 12168,
+  "all_attempt_allocation_seconds": 27747,
   "allocation_seconds_cap": 28800,
-  "unsettled_reservations": 2,
+  "unsettled_reservations": 1,
   "final_accounting_verified": false,
   "collection_target_verified": false,
   "verified_complete": false,
   "status": "partial",
-  "scope": "Continuation and teacher diagnostic on replayable training states; not a full OM2W evaluation. All-attempt counters include earlier failed protocol stages. No effect claim before adequate paired sample.",
-  "current_job_id": "347282",
-  "prior_attempts_final_accounting_verified": true,
-  "prior_allocation_seconds": 8463,
-  "replacement_limit_seconds": 20280,
-  "state_direction_counts": {
-    "ties": 16,
-    "before_better": 3,
-    "after_better": 0
-  },
-  "repair": {
-    "name": "terminal_capture_transport_v1",
-    "server_capture_seconds": 15,
-    "rpc_seconds": 30,
-    "wrapper_seconds": 35,
-    "tests_passed": 57,
-    "loopback_fixture_seconds": 16.04606726579368,
-    "completed_outcomes_preserved": true
-  },
-  "new_invalid_diagnosis": {
-    "count": 6,
-    "states": 1,
-    "primary_cause": "strict observation consistency rejection after page content changed",
-    "secondary_cause": "terminal connection failure after broken browser cleanup",
-    "completed_outcomes_preserved": true,
-    "transport_deadline_regression": false
-  }
+  "scope": "Continuation and teacher diagnostic on replayable training states; not a full OM2W evaluation. All-attempt counters include earlier failed protocol stages. No effect claim before adequate paired sample."
 }

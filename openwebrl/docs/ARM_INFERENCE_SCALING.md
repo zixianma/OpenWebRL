@@ -6,6 +6,7 @@
 
 ## Contents
 
+- [Learned ARM: corrected historical-protocol partial](#historical-corrected-partial-tracker-20261006)
 - [Which results need a corrected rerun?](#rerun-triage-20261006)
 - [Actor alone: current local-browser results](#local-jev-actor-results-20261006)
 - [Actor + selector: matched local-browser results](#local-sft-selector-results-20261006)
@@ -19,6 +20,17 @@
 - [Learned ARM and episode retries](#learned-arm-and-retries)
 - [Pilots and provenance](#luna-qwen-inference-20261004)
 
+<a id="historical-corrected-partial-tracker-20261006"></a>
+## Learned ARM: corrected historical protocol, partial
+
+| Actor | Selector | N | Paired success | Coverage / status |
+| --- | --- | ---: | ---: | --- |
+| Official OpenWebRL-SFT | None | 1 | 53/158 = **33.54%** | Partial matched cohort |
+| Official OpenWebRL-SFT | Piotr SelectionARM | 5 | 60/158 = **37.97%** | Partial matched cohort |
+| Official OpenWebRL-SFT | RL-task SelectionARM | 5 | 61/158 = **38.61%** | Partial matched cohort |
+
+**493/900 episodes saved; allocations ended within their separate caps.** Comparison uses the same 158 completed task blocks; 19 unmatched records are preserved. These are not full300 rates and may overrepresent faster tasks. Both gains have paired intervals including zero. Decoding is historical T=0.7/p=0.9/1,024 output tokens, separate from local v2 below. [Results, final accounting and three plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
+
 <a id="rerun-triage-20261006"></a>
 ## Which results need a corrected rerun? — October 6
 
@@ -26,13 +38,13 @@
 
 | Experiment family | Rerun assessment | What is still needed |
 | --- | --- | --- |
-| October 4 learned ARM versus episode pass@k | **Yes, before relying on the corrected-protocol cost/performance conclusion** | Both actor-only and ARM proposal generation omitted the browser policy. The queued historical-protocol SFT/Piotr/new-ARM study retests one episode per task and arm; it does **not** replace five actor-only episodes per task for pass@k. Repeat that controlled design under a pinned corrected harness if retaining the pass@k claim. |
+| October 4 learned ARM versus episode pass@k | **Yes, before relying on the corrected-protocol cost/performance conclusion** | Both actor-only and ARM proposal generation omitted the browser policy. The partial historical-protocol SFT/Piotr/new-ARM study retests one episode per task and arm; it does **not** replace five actor-only episodes per task for pass@k. Repeat that controlled design under a pinned corrected harness if retaining the pass@k claim. |
 | Luna medium, Luna high, Sol6.1 high as direct actors | **High priority** | Missing actor policy **and** lost native conversation state/call IDs. Verify the repaired live provider loop first, then collect fresh matched full300 cohorts; old scores are not clean capability comparisons. |
 | SFT + Luna N=10 | **High priority for action-count scaling** | The old N=5/N=10 pair both omitted the actor policy. N=5 already has a local v2 replacement; N=10 does not. Compare a fresh N=10 with v2 N=5, retaining collection-date caveats; a contemporaneous N=5 control would remove that remaining timing mismatch. |
 | Qwen3-VL-4B-Thinking alone and + Luna N=5 | **Next actor ablation** | Both older rows omitted the actor policy. Repeat the pair under the same corrected protocol to test whether its observed selector gain persists. |
 | Historical hosted SFT + Jev / Kev27B | **Already replaced for the main local comparison** | The SFT proposers omitted the policy, but the new local v2 selector rows above supersede them for the matched comparison. Browser, selector evidence and judge-adapter differences also changed; the score changes cannot be attributed solely to the policy repair. |
 | Kev27B direct actor, hosted | **Optional matched-protocol extension** | No evidence establishes the same VLM-policy-file defect in this native DOM actor. A local v2 cohort is needed to join the local actor-versus-selector comparison, not because this particular bug was demonstrated. |
-| September learned-ARM / action-only / Sol-selector results | **No automatic repeat solely for this defect** | The audited September baseline and SelectionARM requests contain the actor policy. The queued three-arm replication tests the historical baseline/Piotr comparison; other September ablations retain their collection-date and protocol limitations. |
+| September learned-ARM / action-only / Sol-selector results | **No automatic repeat solely for this defect** | The audited September baseline and SelectionARM requests contain the actor policy. The partial three-arm replication tests the historical baseline/Piotr comparison; other September ablations retain their collection-date and protocol limitations. |
 | Small pilots | **No priority to repeat** | Preserve them as diagnostics and use the full300 corrected cohorts for conclusions. The coordinate-corrupted Luna pilot stays withdrawn. |
 
 The five v2 results do not validate the older incomplete harness, and the historical-protocol three-arm correction uses different decoding from local v2. Keep those protocols separate. The additional reruns above are recommendations, without a new allocation or transfer from existing budgets. All rates remain outcomes under the documented canonical judge, including its partial-progress allowances. [Actor-policy/history audit](#api-actor-stopping-audit-20261005) · [Historical learned-ARM audit](ARM_INFERENCE.md#arm-historical-harness-audit-20261006).
