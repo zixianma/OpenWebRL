@@ -1,0 +1,139 @@
+{
+  "status": "prepared_not_approved",
+  "created_epoch": 1791355553.6827958,
+  "tasks": 300,
+  "primary_episodes": 900,
+  "conditions": [
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": null,
+      "n": 1
+    },
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "gpt-5.6-sol",
+      "n": 5
+    },
+    {
+      "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+      "selector": "gpt-5.5-2026-04-23",
+      "n": 5
+    }
+  ],
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": null,
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "gpt-5.6-sol",
+    "additional_selector_model": "gpt-5.5-2026-04-23",
+    "selector_reasoning_effort": "medium",
+    "selector_max_output_tokens": 2048,
+    "selector_format": "strict_json_schema_index_only",
+    "selector_images": "high-detail current screenshot, historical selection_messages builder",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "server_seed_base": 4200,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "same300 tasks, fresh SFT alone and SFT plus each API selector; interleaved random arm order",
+    "historical_reference": "September Sol294221:132/300; GPT5.5 online historical reference not located",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "api-selector-september-reproduction-v1",
+    "seed_realization": "Explicit server seeds4200/4201; FlashInfer request seeds ignored; no deterministic replication claim.",
+    "comparability": "Contemporaneous controlled comparison. Historical websites, server versions and API aliases may drift."
+  },
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "independent_shards": 2,
+  "resources_per_shard": {
+    "gpus": 1,
+    "gpu_type": "H200",
+    "cpus": 16,
+    "memory_gib": 120,
+    "total_seconds": 14400
+  },
+  "total_gpu_hours_cap": 8,
+  "shared_api_caps": {
+    "judge_usd": 10.0,
+    "judge_calls": 3960,
+    "sol_usd": 125.0,
+    "sol_calls": 9900,
+    "gpt55_usd": 175.0,
+    "gpt55_calls": 9900
+  },
+  "max_total_api_usd": 310,
+  "historical_sol": {
+    "successes": 132,
+    "tasks": 300,
+    "success_rate": 0.44,
+    "api_calls": 4040,
+    "api_usd": 84.8546892
+  },
+  "gpt55_historical_online_reference": "not located; found teacher labeling only; proposed fresh matched arm",
+  "model_availability_readonly_verified": [
+    "gpt-5.6-sol",
+    "gpt-5.5-2026-04-23"
+  ],
+  "prices_per_million": {
+    "gpt-5.6-sol": {
+      "input": 4,
+      "cached": 0.4,
+      "output": 20
+    },
+    "gpt-5.5-2026-04-23": {
+      "input": 5,
+      "cached": 0.5,
+      "output": 30
+    }
+  },
+  "price_sources": [
+    "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+    "https://developers.openai.com/api/docs/models/gpt-5.5"
+  ],
+  "telemetry": [
+    "paired overall/valid-only success and task bootstrap",
+    "per-task raw verdict and judge reason",
+    "input/output/cached/reasoning tokens",
+    "API actual/base and conservative upper cost",
+    "wall/request/browser latency",
+    "browser steps",
+    "all-attempt allocation GPU-hours and device utilization/power"
+  ],
+  "diagnosis": [
+    "Byte-identical historical selector prompt builder and modalities checked offline",
+    "Restored historical actor system policy checked on actual requests",
+    "All300 task IDs/order hashed; fresh SFT control contemporaneous",
+    "Both selectors use medium reasoning,2048 output cap,strict selection-index JSON; actor max1024 unchanged",
+    "Same saved screenshot/candidates can be replayed offline through prompt construction; paid rescoring not included",
+    "Non-reproduction can reflect harness defect, website drift, model/provider changes or stochastic trajectories"
+  ],
+  "approved": false,
+  "allocated_jobs": [],
+  "paid_generation_calls": 0,
+  "offline_validation": {
+    "tests_passed": 8,
+    "tests_failed": 0,
+    "actual_http_request_route_tested": true,
+    "shared_concurrent_budget_tested": true,
+    "ambiguous_usage_preserved": true,
+    "historical_sol_wrapper_sha256": "d1132587f43af9eedafffd45571d590e5f5470ed270c800fc372590c3b2605f5",
+    "historical_prompt_wrapper_byte_identical": true,
+    "gpu_startup_not_yet_run": true
+  }
+}

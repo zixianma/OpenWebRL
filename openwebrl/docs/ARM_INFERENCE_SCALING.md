@@ -6,12 +6,37 @@
 
 Both headline comparisons cover all 300 Online-Mind2Web tasks. Recorded invalid and unjudged outcomes count as zero. Success is the canonical o4-mini/AgentTrek verdict, which allows partial progress—not strict task completion. **N** is the number of proposed actions; one is executed.
 
+## Actors alone
+
+<a id="local-jev-actor-results-20261006"></a>
+
+<!-- local-v2-actor-results:start -->
+| Local v2 actor | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Official SFT | 300 | 94 | 31.33% | 254 | 46 | 37.01% |
+| Jev + GPT-4.1-mini typing | 300 | 14 | 4.67% | 260 | 40 | 5.38% |
+<!-- local-v2-actor-results:end -->
+
+Jev is a separate complete actor system, not a selector ablation. Its judge-input adapter was repaired and all 23 valid DONE episodes rejudged from unchanged saved evidence. [Audit](arm_results/jev_actor_local_full300_20261006.json).
+
+Other actor-only experiments remain recorded below. Known-bug scores are kept in the archive and are not valid model rankings.
+
+| Actor-only experiment | Recorded tasks | Status / where to review |
+| --- | ---: | --- |
+| Qwen3-VL-4B-Thinking | 300 | Missing actor policy; corrected rerun still needed |
+| GPT-6 Luna, medium | 300 | Missing policy / native conversation-state bugs; corrected rerun still needed |
+| GPT-6 Luna, high | 300 | Same API actor bugs; corrected rerun still needed |
+| GPT-6.1 Sol, high | 300 | Same API actor bugs; corrected rerun still needed |
+| Kev27B direct actor | 300 | Hosted browser and its own DOM policy; separate from local v2 |
+
+[Preserved actor-only counts and scores](https://github.com/zixianma/OpenWebRL/blob/a0a6db4e677c7f1959a53f0498ffc9a18d9c9ca0/openwebrl/docs/ARM_INFERENCE_SCALING.md#actor-selector-experiment-tracker-20261004) · [API actor bug audit](arm_results/reasoning_actors_full300_20261005/pipeline-debug.json).
+
 <a id="sft-piotr-repeat-tracker-20261006"></a>
-## Piotr SelectionARM: initial run + two repeats
+## Piotr SelectionARM: two full300 repeats + one partial run
 
 Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens, 30 turns**. Piotr **SelectionARM**, N=5, greedy selection; this is not ScalarARM.
 
-**Three runs total:** the initial corrected run stopped early; both additional repeats completed all 300 tasks. The two tables below use different, explicitly matched cohorts.
+**Three runs were launched; only two completed full300.** The first corrected run stopped after collecting both SFT/Piotr outcomes for 160 tasks, with too little approved allocation time left to restart. Every run used the same 300-task list; the remaining tasks were not filtered out.
 
 ### Full300: the two completed repeats
 
@@ -31,9 +56,9 @@ Mean gain: **+5.00 pp; paired 95% interval [+1.50, +8.50]**. Bootstrap resamples
 Plots: repeat 1 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/tokens.png); repeat 2 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/tokens.png). Compute is estimated decoder work, not dollars or total measured FLOPs. [Final audit and accounting](ARM_INFERENCE.md#sft-piotr-repeats-20261006) · [Combined aggregate](arm_results/rl_integration/sft-piotr-repeats-final-20261006/combined.json).
 
 <a id="sft-piotr-three-run-summary-20261006"></a>
-### All three runs: same 160 tasks
+### Supplementary three-run average: 160 tasks with all six outcomes
 
-**Same 160 tasks in all three runs.** The initial corrected run stopped early, so this is a duration-selected subset, not a three-run full300 estimate. September is excluded.
+Each included task has SFT-alone and SFT+Piotr outcomes in all three runs: **160 tasks × 2 methods × 3 runs = 960 episodes**. This is the overlap with the unfinished first run, not a three-run full300 estimate. September is excluded.
 
 | Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -79,18 +104,7 @@ Partial collection: 493 episodes saved; 900 planned. Both selector-versus-baseli
 </details>
 
 <details>
-<summary>Supplementary: direct Jev actor, validity and protocol/accounting</summary>
-
-<a id="local-jev-actor-results-20261006"></a>
-
-<!-- local-v2-actor-results:start -->
-| Local v2 actor | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Official SFT | 300 | 94 | 31.33% | 254 | 46 | 37.01% |
-| Jev + GPT-4.1-mini typing | 300 | 14 | 4.67% | 260 | 40 | 5.38% |
-<!-- local-v2-actor-results:end -->
-
-Jev is a separate complete actor system, not a selector ablation. Its judge-input adapter was repaired and all 23 valid DONE episodes rejudged from unchanged saved evidence. [Audit](arm_results/jev_actor_local_full300_20261006.json).
+<summary>Supplementary: validity and final accounting</summary>
 
 | Local v2 condition | Tasks | Successes | Valid tasks | Invalid tasks | Valid-only success |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -113,6 +127,8 @@ Jev is a separate complete actor system, not a selector ablation. Its judge-inpu
 Local v2 judges only completed episodes using full actor thoughts/actions and a fresh terminal screenshot. Every valid record has terminal evidence; 186 of 194 invalid SFT records lack fresh terminal evidence. All invalids remain zero. One SFT shard's cleanup used scheduler-cgroup/child-closure evidence rather than a post-exit process scan. [Full protocol and audit limitations](arm_results/local_sft_selector_controlled_20261006.json).
 
 </details>
+
+[Next: matched SFT / GPT-5.6 Sol / GPT-5.5 comparison](ARM_INFERENCE.md#api-selector-september-reproduction-20261006) — prepared; exact new resource/API caps await approval.
 
 <details>
 <summary>Historical September results — separate reference, excluded from current averages</summary>

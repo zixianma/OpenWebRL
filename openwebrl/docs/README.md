@@ -1,6 +1,8 @@
 # OpenWebRL project documentation
 
-[SFT versus Piotr ARM: clean three-run table, mean ± sample SD on the same 160 tasks; unchanged 300-task manifest verified](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006).
+[September API-selector reproduction: fresh SFT control plus GPT-5.6 Sol/GPT-5.5; prepared protocol and exact budget proposal](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
+
+[SFT versus Piotr ARM: supplementary three-run average on the 160-task overlap; first run incomplete, both later runs full300](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006).
 
 [SFT versus Piotr ARM: both full300 repeats complete; SFT 33.00%, ARM 38.00%, mean gain +5.00 pp. Final accounting and compute/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
 
@@ -13,7 +15,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Inference-time scaling: Piotr repeat averages and matched Luna/Jev/Kev selector comparison](ARM_INFERENCE_SCALING.md).
+[Inference-time scaling: visible actor-alone results and inventory, Piotr repeat averages and matched Luna/Jev/Kev selectors](ARM_INFERENCE_SCALING.md).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
 [Continuation allocation closed: 74 complete states / 1,110 records; partial target and final accounting verified](ARM_INTEGRATION_PLAN.md#arm-continuation-branches-20261006).

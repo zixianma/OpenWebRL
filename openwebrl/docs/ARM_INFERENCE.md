@@ -989,3 +989,22 @@ variation and differing unavailable subsets remain comparison limitations.
 The full task-set/API/W&B verification is runtime
 `evaluations/sol-selection300-294221/completion-audit.json`; raw per-task results,
 selection traces, API receipts and comparison are preserved in that directory.
+
+
+<a id="api-selector-september-reproduction-20261006"></a>
+
+### September API-selector reproduction: prepared, awaiting exact budget approval
+
+| Fresh condition | Tasks | Candidate actions | Selector reasoning |
+| --- | ---: | ---: | --- |
+| Official OpenWebRL-4B-SFT alone | 300 | 1 | — |
+| SFT + GPT-5.6 Sol | 300 | 5 | Medium |
+| SFT + GPT-5.5 (2026-04-23) | 300 | 5 | Medium |
+
+Same 300-task file, full historical browser policy, actor T=0.7 / top-p=0.9 / 1,024 output tokens / 30 turns. Both selectors receive the historical full-candidate prompt, task, history and current screenshot; strict index-only JSON and 2,048 output tokens. o4-mini/AgentTrek judging, 4,096-token cap. Fresh episodes interleave all three conditions on each task; matched overall and common-valid analyses retain invalid outcomes. Save verdicts, every physical attempt, tokens including reasoning/cache usage, API cost, request/episode latency, browser steps, allocation time and GPU telemetry.
+
+September Sol completed 132 successes on 300 tasks (44.00%), using 4,040 API requests and $84.85. Its original prompt-wrapper source hash still matches exactly. **No September GPT-5.5 online selector benchmark has been located**; current evidence identifies GPT-5.5 as a training-data teacher. The proposed GPT-5.5 arm is therefore a fresh comparison. Both exact API model IDs passed read-only availability checks.
+
+Proposed ceiling: **two parallel shards, each 1 H200 / 16 CPUs / 120 GiB × 4 hours**; **8 H200-hours total** across all attempts. Shared, nontransferable API ceilings: **Sol $125 / 9,900 calls; GPT-5.5 $175 / 9,900 calls; judge $10 / 3,960 calls**. All pilots and retries consume these caps. No allocations or paid generation calls submitted. Eight offline tests passed, including historical prompt parity, the actual HTTP route, concurrent shared reservations, restart accounting, and fail-closed API errors; GPU/browser startup remains an in-allocation gate.
+
+A changed result is a reason to investigate, not proof of a code bug. Compare the fresh selector-minus-SFT effects first; preserved prompts, candidates, screenshots and verdicts support separating harness changes from website/provider drift and sampling. Sol uses the same API model ID as September; no immutable September backend snapshot is exposed. Prices checked against [GPT-5.6 Sol](https://developers.openai.com/api/docs/models/gpt-5.6-sol) and [GPT-5.5](https://developers.openai.com/api/docs/models/gpt-5.5). [Prepared protocol, caps and validation](arm_results/api-selector-september-reproduction-plan-20261006.json).
