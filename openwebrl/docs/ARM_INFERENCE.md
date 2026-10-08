@@ -160,31 +160,47 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 </details>
 
 <a id="confidence-benefit-20261008"></a>
-## Selecting a threshold by measured ARM benefit — October 8, queued
+## Selecting a threshold by measured ARM benefit — October 8, fit blocked
 
-**Question:** does a low first-candidate likelihood identify decisions where Piotr improves downstream success? Select the rule using 300 fitting tasks, freeze it, then check 150 separate verification tasks. The existing exploratory run keeps its original cutoff.
+**No threshold has been fitted or verified.** Targeted recovery raised shard 0's resolved pairs from 17 to 26, but 12 prospectively eligible pairs still lack complete outcomes. The unchanged fitter rejects missing eligible evidence. Shard 1 started at 04:00 PDT and is collecting independently. The audited coverage snapshot below predates its startup (03:58 PDT).
 
-| Stage | Tasks | Reference episodes | Maximum paired continuations | Use |
-| --- | ---: | ---: | ---: | --- |
-| Fit | 300 | 300 | 600 | Choose among never, fit-score q25/q50/q75 cutoffs, and always using Piotr |
-| Verification | 150 | 150 | 300 | Evaluate the frozen rule; no threshold retuning |
+| Fitting shard | Planned tasks | Task dispositions | Eligible pairs | Resolved pairs | Unresolved pairs | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| 0 | 150 | 150 | 38 | 26 | 12 | Controlled stop; evidence preserved |
+| 1 | 150 | 0 | — | — | — | Pending at snapshot |
 
-At one uniformly hash-selected reached decision per task, preserve the first candidate and sample four more from the identical prompt. Compare executing the first candidate with Piotr's selection from that same pool, followed by ordinary SFT continuations within the original 30-decision horizon. Choose the fitting rule with highest paired success; break ties by fewer ARM calls.
-
-This measures **one-action benefit on replayable SFT states**, not calibrated action correctness or the benefit of gating at every step. Replay failures reduce usable counts and remain in coverage reports. A threshold may be inconclusive; never/always ARM may win.
-
-[Teacher-rationale analysis](ARM_TEACHER_REASONING.md) is complementary: saved explanations describe preferences, while this study measures paired continuation outcomes.
+All **450 reference episodes** are preserved. The **150 held-out tasks remain unopened for paired continuations**; no held-out utility or coverage estimate exists. Replay eligibility and missing outcomes are different: an eligible pair with missing evidence cannot be silently excluded or counted as failure. [Aggregate progress and diagnostics](arm_results/selectionarm_confidence_benefit_20261008/progress.json).
 
 <details>
-<summary>Fixed design, task separation and resource request</summary>
+<summary>Question and fixed design</summary>
 
-The task split comes from the existing 2,000-task ARM curation pool: 300 fitting and 150 verification tasks with no exact task-ID or normalized-instruction overlap with the evaluation 300. Shared websites are allowed; the pool's difficulty filtering limits representativeness. Task selection does not use success outcomes.
+Does low first-candidate likelihood identify decisions where Piotr improves downstream success? Use 300 fitting tasks to choose among never, fit-score q25/q50/q75 cutoffs, and always using Piotr; freeze the rule before checking 150 separate verification tasks. Choose highest paired success, breaking ties by fewer ARM calls. The earlier exploratory gate retains its original cutoff.
 
-Use the current SFT model/frontend, T=0.7, top-p=0.9, 1,024 response tokens, 30 decisions, native untempered full-response mean log-probability and unchanged Piotr selector. Preserve malformed and duplicate proposals. Lock the selected state and both replay checks before either candidate action executes; do not replace failed replays with easier states. Quantile cutoffs use every scored selected fitting anchor, including replay-rejected anchors; utility fitting uses the common eligible paired subset. Canonical invalid/unfinished outcomes retain zero; unresolved evidence blocks fitting rather than being silently dropped.
+At one uniformly hash-selected reached decision per task, preserve the first candidate and sample four more from the identical prompt. Compare the first candidate with Piotr's selection from that pool, followed by ordinary SFT continuations within the original 30-decision horizon. This measures **one-action benefit on replayable SFT states**, not calibrated action correctness or gating at every step. [Teacher rationales](ARM_TEACHER_REASONING.md) describe preferences, not measured continuation outcomes.
 
-Only fitting outcomes select the rule. Freeze the rule before verification continuations; report paired success differences versus first-candidate and always-Piotr choices, task-bootstrap 95% intervals, and replay coverage by decision, site and score. These intervals condition on the frozen rule and usable task sample; one continuation per branch gives noisy benefit estimates. Replay verifies observable browser state, not a clone of remote server state. Shared seeds do not guarantee matched random draws under FlashInfer. Full-episode evaluation of repeated gating is a separate follow-up.
+The split uses the existing 2,000-task ARM curation pool, with no exact task-ID or normalized-instruction overlap with the evaluation 300. Shared websites are allowed; prior difficulty filtering limits representativeness. Task selection uses no success outcomes.
 
-**Approved and queued:** two independent shards, each **2 H200 / 16 CPUs / 240 GiB × 4 hours total**, and **USD 5 / 1,320 judge calls**, across all attempts. Combined cap: 16 H200-hours and USD 10 / 2,640 calls, with no transfers. Up to 450 reference episodes and 900 paired continuations; completion is not guaranteed within the cap. Raw tasks and continuations remain private.
+Use the current SFT model/frontend, T=0.7, top-p=0.9, 1,024 response tokens, 30 decisions, native untempered full-response mean log-probability and unchanged index-only Piotr selector. Preserve malformed and duplicate proposals. Lock the selected state and both replay checks before either candidate action executes; never replace a failed replay with an easier state. Quantiles use every scored selected fitting anchor, including replay-rejected anchors; utility fitting requires complete outcomes for every prospectively eligible pair. Canonical invalid/unfinished outcomes retain zero; unresolved evidence blocks fitting.
+
+Only fitting outcomes may select the rule. Planned reporting includes held-out paired differences against first-candidate and always-Piotr choices, task-bootstrap 95% intervals, and coverage by decision, site and score. These intervals condition on the frozen rule and usable sample; one continuation per branch gives noisy benefit estimates. Observable replay matching does not clone remote server state, and shared seeds do not guarantee matched FlashInfer draws. Full-episode repeated gating is a separate experiment.
+
+</details>
+
+<details>
+<summary>Recovery, remaining blocker and accounting</summary>
+
+Shard 0 has 108 replay-ineligible tasks and four tasks without a reached state, leaving 38 eligible pairs. A bounded capture repair retries observations up to three times within the original 30-second deadline, without redispatching the action or relaxing equality. One recovery pass targeted 31 missing endpoints while preserving all original states, pools, Piotr choices and 11 surviving counterparts. Surviving counterparts were replay witnesses only: no candidate intervention, suffix draw or judge call.
+
+The pass recovered **11 endpoints** (five judged, six canonical zeros), completing nine more pairs. **20 endpoints remain unresolved:** 14 have independently verified image drift from the saved actor inputs; six fail the unchanged capture check. Existing draws can only be reused for identical inputs. Fresh draws on changed images, relaxed replay matching or fitting only resolved pairs would change the frozen design. All attempts remain available; no unchanged retry was launched. Recovery in a fresh browser does not establish identity with the original hidden browser/server state.
+
+| Shard | Allocated seconds used, all attempts | Original cap, seconds | Unused seconds | Judge calls | Judge cost, USD | Judge cap, USD |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 5,635 | 14,400 | 8,765 | 31 | 0.262348 | 5.00 |
+| 1, before latest attempt | 3,585 | 14,400 | 10,815 | — | — | 5.00 |
+
+Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. The recovery used 457 allocation seconds, 195 new suffix draws, 13 cached-draw reuses and five new judge calls. Cached reuses add no inference calls. Terminal model/browser cleanup and W&B identity are verified for shard 0. The shard 1 replacement reserved 10,800 of its 10,815 unused seconds at startup; its final API accounting remains pending.
+
+[Coverage](arm_results/selectionarm_confidence_benefit_20261008/coverage.png) · [Sampled decisions](arm_results/selectionarm_confidence_benefit_20261008/decision_depth.png) · [Recovery dispositions](arm_results/selectionarm_confidence_benefit_20261008/recovery_dispositions.png). These are partial data-quality diagnostics, not a fitted threshold or ARM-effect estimate. Raw tasks, images and trajectories remain private.
 
 </details>
 

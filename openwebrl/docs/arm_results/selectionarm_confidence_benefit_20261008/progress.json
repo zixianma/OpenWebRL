@@ -1,0 +1,128 @@
+{
+  "schema": "benefit_threshold_partial_aggregate_v2",
+  "snapshot_epoch": 1791457100.600342,
+  "status": "partial_fit_evidence",
+  "verified_complete": false,
+  "planned_tasks": 450,
+  "references_complete": 450,
+  "fit_planned_tasks": 300,
+  "fit_dispositions": 150,
+  "pending_fit_tasks": 150,
+  "heldout": {
+    "planned_tasks": 150,
+    "unopened_tasks": 150,
+    "paired_dispatched": 0,
+    "paired_utility": null
+  },
+  "threshold_frozen": false,
+  "selected_rule": null,
+  "shards": [
+    {
+      "shard": 0,
+      "status": "fit_blocked_preserved",
+      "references_complete": 225,
+      "planned_fit_tasks": 150,
+      "fit_dispositions": 150,
+      "pending_fit_tasks": 0,
+      "disposition_counts": {
+        "Replay ineligible": 108,
+        "Resolved pair": 26,
+        "Unresolved pair": 12,
+        "No reached state": 4
+      },
+      "eligible_pairs": 38,
+      "resolved_pairs": 26,
+      "unresolved_pairs": 12,
+      "resolved_percent_of_planned_fit": 17.333333333333332,
+      "heldout_unopened": 75,
+      "accounting": {
+        "allocation_seconds": 5635,
+        "remaining_seconds": 8765,
+        "h200_hours": 3.1305555555555555,
+        "judge_calls": 31,
+        "judge_usd": 0.2623478,
+        "accounting_status": "terminal_all_attempts",
+        "pending_selector_token_work_unknown": true
+      }
+    },
+    {
+      "shard": 1,
+      "status": "queued_fit_pending",
+      "references_complete": 225,
+      "planned_fit_tasks": 150,
+      "fit_dispositions": 0,
+      "pending_fit_tasks": 150,
+      "disposition_counts": {
+        "Pending fit": 150
+      },
+      "eligible_pairs": null,
+      "resolved_pairs": null,
+      "unresolved_pairs": null,
+      "resolved_percent_of_planned_fit": 0.0,
+      "heldout_unopened": 75,
+      "accounting": {
+        "accounting_status": "prior_terminal_plus_pending_reservation",
+        "allocation_seconds": 3585,
+        "reserved_future_seconds": 10800,
+        "judge_calls": null,
+        "judge_usd": null
+      }
+    }
+  ],
+  "recovery_shard0": {
+    "newly_resolved_pairs": 9,
+    "newly_resolved_endpoints": 11,
+    "attempted_pairs": 21,
+    "attempted_endpoints": 31,
+    "preserved_valid_counterparts": 11,
+    "remaining_endpoint_failures": {
+      "exact_saved_actor_request_mismatch": 14,
+      "persistent_capture_mismatch_after_three_observations": 6
+    },
+    "remaining_endpoints": 20
+  },
+  "fit_reference_decision_distribution": {
+    "No state": {
+      "No reached state": 4,
+      "Pending fit": 4
+    },
+    "1": {
+      "Replay ineligible": 39,
+      "Resolved pair": 12,
+      "Unresolved pair": 10,
+      "Pending fit": 38
+    },
+    "2\u20133": {
+      "Replay ineligible": 13,
+      "Resolved pair": 5,
+      "Unresolved pair": 2,
+      "Pending fit": 48
+    },
+    "4\u20135": {
+      "Replay ineligible": 16,
+      "Resolved pair": 3,
+      "Pending fit": 24
+    },
+    "6\u201310": {
+      "Replay ineligible": 21,
+      "Resolved pair": 2,
+      "Pending fit": 18
+    },
+    "11\u201315": {
+      "Replay ineligible": 13,
+      "Pending fit": 5
+    },
+    "16\u201330": {
+      "Replay ineligible": 6,
+      "Resolved pair": 4,
+      "Pending fit": 13
+    }
+  },
+  "limitations": [
+    "Partial coverage only; no success-rate comparison or fitted confidence threshold.",
+    "Missing endpoints remain missing, never zero or excluded. Pending tasks have no inferred eligibility.",
+    "Recovery labels and historical surviving counterparts were collected at different times.",
+    "Exact saved-input assertions are code-bound; a second full replay-context copy was not persisted.",
+    "450 completed reference episodes do not mean 450 completed paired task dispositions."
+  ]
+}

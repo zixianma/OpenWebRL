@@ -134,7 +134,7 @@ Sample one candidate; below **−0.215576 nats/token** full-response mean base-p
 
 The gate triggered on **907 of 4,844 decisions (18.72%)**, averaging **1.749 candidates**. Its gain over SFT is inconclusive, and it trails always-Piotr by **−6.33 pp [−12.00, −0.67]**. Controls were collected separately; this does not establish noninferiority or matched wall-clock savings.
 
-**Calibration limitation:** the frozen cutoff is the 25th percentile of 278 saved SFT final-decision responses from these same evaluation tasks. The separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) uses 300 fitting and 150 held-out verification tasks and is now queued. [Protocol, calibration limits and final accounting](ARM_INFERENCE.md#likelihood-scaling-20261007).
+**Calibration limitation:** the frozen cutoff is the 25th percentile of 278 saved SFT final-decision responses from these same evaluation tasks. The separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) uses 300 fitting and 150 held-out verification tasks. Its fit remains blocked by missing eligible-pair outcomes; no new threshold or held-out result is available. [Protocol, calibration limits and final accounting](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
 ## Supporting evidence and history
 
