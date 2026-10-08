@@ -9422,14 +9422,21 @@ startup, training, full300 local T0/GPT-4.1 evaluations10/20 and all retries.
 The initial target is20, subject to these shared caps; reaching20 is not
 guaranteed within24h and no new allocation is authorized by this plan.
 
+**Initial target20 complete:** both scheduled evaluations and final controller/accounting checks passed independent review within the approved caps. The historical comparison does not isolate the effect of group count. [Result table and comparison limits](RL_EVALUATION.md#outcome56-iter20-results-20261007). No continuation beyond20 is implied.
+
+<details>
+<summary>First-milestone history</summary>
+
 **October7 first milestone:** checkpoint10 (native9) has178 Adam updates and
 scheduler45568. Its full300 evaluation is independently verified at88/300
 **29.33% overall** and88/251 **35.06% valid-only**, with49 invalid attempts.
-Training restored native9 and resumed collection11; target20 remains pending.
+At this milestone, training restored native9 and resumed collection11; only evaluation10 had been verified.
 The original-pool historical
 iteration10 comparison is descriptive; dates and optimizer work differ.
 [Results, protocol and audit](RL_EVALUATION.md#outcome56-iter10-results-20261007) ·
 [Interactive curve](rl_results/arm_rl_interactive.html).
+
+</details>
 
 <a id="arm-expanded-outcome-to90-20261005"></a>
 ### Expanded outcome-only continuation: capped at60 on October5
