@@ -35,8 +35,8 @@ Same SFT actor and decoding as above; **300 tasks per arm in every row**.
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | SFT alone — baseline | 1 | 300 | 99 | 33.00% | — | — |
 | Random-of-five | 5 | 300 | 100 | 33.33% | +0.33 | [−4.67, +5.67] |
-| Piotr, Oct 7 | 5 | 300 | 120 | 40.00% | +7.00 | [+2.33, +11.67] |
 | Highest likelihood of five | 5 | 300 | 80 | 26.67% | −6.33 | [−11.33, −1.33] |
+| **Piotr SelectionARM, Oct 7** | 5 | 300 | 120 | 40.00% | +7.00 | [+2.33, +11.67] |
 
 **50 steps: Piotr, using a fresh 50-step SFT control**
 
