@@ -160,16 +160,16 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 </details>
 
 <a id="confidence-benefit-20261008"></a>
-## Selecting a threshold by measured ARM benefit — October 8, recovery approved
+## Selecting a threshold by measured ARM benefit — October 8, one replay blocker
 
-**No threshold has been fitted or verified.** All 300 fitting tasks have dispositions: 60 pairs are eligible, 44 have complete outcomes and 16 remain unresolved. The unchanged fitter rejects missing eligible evidence. An approved amendment schedules one fresh pair for each unresolved state; the original evidence remains preserved.
+**No threshold has been fitted or verified.** The approved redraw recovered 15 of 16 missing pairs: **59 of 60 eligible fitting pairs now have complete outcomes**. One fixed anchor still fails the unchanged screenshot replay check before either intervention. The fitter remains blocked; all earlier evidence is preserved.
 
 | Fitting shard | Planned tasks | Task dispositions | Eligible pairs | Resolved pairs | Unresolved pairs | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 0 | 150 | 150 | 38 | 26 | 12 | Controlled stop; evidence preserved |
-| 1 | 150 | 150 | 22 | 18 | 4 | Controlled stop; evidence preserved |
+| 0 | 150 | 150 | 38 | 38 | 0 | Fit ready; allocation preserved |
+| 1 | 150 | 150 | 22 | 21 | 1 | Replay blocked; allocation preserved |
 
-All **450 planned tasks are accounted for:** 300 fitting dispositions and 150 held-out tasks blocked before paired continuations. All reference episodes are preserved. No held-out utility estimate exists. The resolved pairs cover **14.67% of the planned fitting tasks**; replay rejection and missing eligible outcomes limit representativeness. Missing outcomes remain unresolved, without exclusion or failure labels. [Aggregate progress and diagnostics](arm_results/selectionarm_confidence_benefit_20261008/progress.json).
+All **450 planned tasks are accounted for:** 300 fitting dispositions and 150 held-out tasks blocked before paired continuations. All reference episodes are preserved. No held-out utility estimate exists. The resolved pairs cover **19.67% of the planned fitting tasks**; replay rejection and missing eligible outcomes limit representativeness. Missing outcomes remain unresolved, without exclusion or failure labels. [Redraw result and accounting](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-result.json).
 
 <details>
 <summary>Question and fixed design</summary>
@@ -191,24 +191,30 @@ Only fitting outcomes may select the rule. Planned reporting includes held-out p
 
 **Approved October 8 amendment:** recollect both branches for all 16 fixed unresolved anchors, producing at most 32 fresh continuation outcomes. Keep the 44 complete pairs, all historical missing evidence, fixed states, candidate pools, Piotr choices and replay checks. Only suffix draws after the saved intervention are new. Use each designated new pair regardless of its outcome; no old-counterpart fallback or favorable-attempt selection. Renewed missing evidence still blocks the unchanged fitter. This mixes original and recollected pairs and does not remove replay-selection or missingness bias; report collection-version sensitivity. The 150 held-out tasks remain gated on complete fit evidence and a frozen threshold.
 
-Recovery jobs **350607 / 350608** were released with verified active-agent supervision after 34 worker/controller tests and 23 supervisor tests. At this update, shard 0 has passed its native-probability probe and begun fresh suffix generation; shard 1 is queued for priority. Their time limits are **2h26m / 2h41m**, inside the remaining original per-shard allowances below. A tested capture repair spaces the same three observation attempts by 1s/2s inside the original 30-second deadline; matching criteria and action dispatch are unchanged. The restart adds no budget. [Approved protocol and launch aggregate](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-amendment.json).
+Recovery jobs **350607 / 350608** ended after **1,451 / 284 allocation seconds**, respectively. Shard 0 completed all 12 replacement pairs and stopped at the fit barrier to preserve its remaining budget while shard 1 queued. Shard 1 completed three replacement pairs; its last pair failed replay before any candidate intervention or suffix generation. Both owned model/browser cleanups are verified. The 30 recovered endpoints contain 10 judged outcomes and 20 canonical zeros; the two missing endpoints remain missing. [Approved protocol](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-amendment.json) · [Terminal redraw audit](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-result.json).
 
-**Original collection and recovery evidence:**
+**Remaining blocker:** both replay screenshots differ only in the top promotional banner; all pixels below that region are identical. Mean RGB differences are 1.616 and 1.047 against the fixed limit 0.5; pixels with any channel difference over 8 cover 1.545% and 1.044%, against the fixed limit 0.1%. DOM/URL/viewport checks passed. Banner animation is a plausible explanation, not a demonstrated repair: waiting for a stable frame need not reproduce the originally captured frame. The approved one-physical-attempt limit has been used; another replay requires a narrow amendment. No image masking, tolerance change, replacement state or missing-outcome imputation was applied.
+
+A verification-only handoff is prepared and tested, but inactive: it requires both successful fit handoffs and a threshold frozen by the unchanged fitter before GPU startup. It cannot rerun fitting continuations or refit a lost threshold. All 150 held-out tasks remain blocked. No new compute or judge budget was added.
+
+**Historical evidence before the approved redraw:**
 
 Shard 0 has 108 replay-ineligible tasks and four tasks without a reached state, leaving 38 eligible pairs. A bounded capture repair retries observations up to three times within the original 30-second deadline, without redispatching the action or relaxing equality. One recovery pass targeted 31 missing endpoints while preserving all original states, pools, Piotr choices and 11 surviving counterparts. Surviving counterparts were replay witnesses only: no candidate intervention, suffix draw or judge call.
 
-The pass recovered **11 endpoints** (five judged, six canonical zeros), completing nine more pairs. **20 endpoints remain unresolved:** 14 have independently verified image drift from the saved actor inputs; six fail the unchanged capture check. Existing draws can only be reused for identical inputs. Fresh draws on changed images, relaxed replay matching or fitting only resolved pairs would change the frozen design. All attempts remain available; no unchanged retry was launched. Recovery in a fresh browser does not establish identity with the original hidden browser/server state.
+The pass recovered **11 endpoints** (five judged, six canonical zeros), completing nine more pairs. **20 endpoints remained unresolved at that earlier cutoff:** 14 have independently verified image drift from the saved actor inputs; six fail the unchanged capture check. Existing draws can only be reused for identical inputs. Fresh draws on changed images, relaxed replay matching or fitting only resolved pairs would change the frozen design. All attempts remain available; no unchanged retry was launched. Recovery in a fresh browser does not establish identity with the original hidden browser/server state.
 
 Shard 1 recorded all 150 fitting dispositions, with **18 resolved and four unresolved eligible pairs**. Its eight missing endpoints comprise six persistent capture mismatches and two verified raster mismatches after eligibility release. All four are same-choice repeat controls; choosing the same action does not establish equal rollout outcomes. No missing endpoint has an unlinked verdict or restorable browser state. There is no demonstrated further mechanical repair under the unchanged rules. Fresh paired trajectories would require a separately declared protocol amendment.
 
+**Current accounting after the redraw:**
+
 | Shard | Allocated seconds used, all attempts | Original cap, seconds | Unused seconds | Judge calls | Judge cost, USD | Judge cap, USD |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 0 | 5,635 | 14,400 | 8,765 | 31 | 0.262348 | 5.00 |
-| 1 | 4,723 | 14,400 | 9,677 | 19 | 0.150442 | 5.00 |
+| 0 | 7,086 | 14,400 | 7,314 | 38 | 0.327405 | 5.00 |
+| 1 | 5,007 | 14,400 | 9,393 | 22 | 0.188586 | 5.00 |
 
-Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. The recovery used 457 allocation seconds, 195 new suffix draws, 13 cached-draw reuses and five new judge calls. Cached reuses add no inference calls. Model/browser cleanup, W&B identity and terminal status are verified for both shards. Shard 1 used 1,138 seconds in its latest attempt and received all 969 new native actor responses. W&B's final shard 1 summary lags by one disposition/request/judge call; durable records and reconciled usage receipts supply the totals above. Four historical selector attempts per shard have unknown token usage; no zero usage is imputed.
+Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. Accounting above includes both new attempts and every earlier attempt. Original model identities, native probability probes and W&B run identities are verified. Scheduler/W&B failure labels reflect the controlled stops, not successful study completion; durable evidence and reconciled ledgers determine the scientific disposition and usage. Four historical selector attempts per shard have unknown token usage; no zero usage is imputed.
 
-[Coverage](arm_results/selectionarm_confidence_benefit_20261008/coverage.png) · [Sampled decisions](arm_results/selectionarm_confidence_benefit_20261008/decision_depth.png) · [Recovery dispositions](arm_results/selectionarm_confidence_benefit_20261008/recovery_dispositions.png). These are partial data-quality diagnostics, not a fitted threshold or ARM-effect estimate. Raw tasks, images and trajectories remain private.
+**Historical pre-redraw diagnostics:** [Coverage](arm_results/selectionarm_confidence_benefit_20261008/coverage.png) · [Sampled decisions](arm_results/selectionarm_confidence_benefit_20261008/decision_depth.png) · [Recovery dispositions](arm_results/selectionarm_confidence_benefit_20261008/recovery_dispositions.png). These are partial data-quality diagnostics, not a fitted threshold or ARM-effect estimate. Raw tasks, images and trajectories remain private.
 
 </details>
 
