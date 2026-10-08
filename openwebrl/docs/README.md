@@ -18,7 +18,7 @@
 
 [Corrected ARM comparison: 493/900 records, 158 paired tasks; final accounting and cost/latency/token plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
 
-[Inference scaling: controlled full300 results, separate count/rate columns, concise takeaways; buggy history collapsed](ARM_INFERENCE_SCALING.md).
+[Inference scaling: selector overview grouped by protocol, separate baselines and count/rate columns; buggy history collapsed](ARM_INFERENCE_SCALING.md).
 
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.

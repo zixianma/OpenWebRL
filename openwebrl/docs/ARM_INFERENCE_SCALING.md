@@ -4,7 +4,7 @@
 - **Random of five at every step:** **33.33%**, close to SFT’s **33.00%**; Piotr SelectionARM reaches **40.00%**, **+6.67 pp** over random.
 - **Piotr SelectionARM:** **+5.67 percentage points** across three full300 runs; latest same-day gain **+7.00 pp**.
 - **Local v2 selectors:** Luna and Kev27B each add about **9 points**; they differ by one success. Jev's **+2-point** interval includes zero.
-- **Compare within each table.** Decoding, selector inputs and collection dates differ between studies; cross-table model rankings are not controlled.
+- **Compare within each protocol group.** Decoding, selector inputs and collection dates differ between studies; cross-protocol model rankings are not controlled.
 
 All headline comparisons cover the same 300 Online-Mind2Web tasks. Recorded invalid and unjudged outcomes count as zero. Success is the canonical o4-mini/AgentTrek verdict, which allows partial progress—not strict task completion. **N** is the number of proposed actions; one is executed.
 
@@ -34,15 +34,30 @@ Other actor-only experiments remain recorded below. Known-bug scores are kept in
 [Preserved actor-only counts and scores](https://github.com/zixianma/OpenWebRL/blob/a0a6db4e677c7f1959a53f0498ffc9a18d9c9ca0/openwebrl/docs/ARM_INFERENCE_SCALING.md#actor-selector-experiment-tracker-20261004) · [API actor bug audit](arm_results/reasoning_actors_full300_20261005/pipeline-debug.json).
 
 <a id="api-selector-results-20261007"></a>
-## API selectors: September reproduction
+<a id="local-sft-selector-results-20261006"></a>
+<a id="matched-sft-control"></a>
+## Selectors: overview by protocol
 
-Official SFT; **T=0.7, p=0.9, 1,024 actor output tokens, 30 turns**. N=5 selectors use **medium reasoning**, 2,048 output tokens and the historical full-candidate prompt with a screenshot. One complete run per condition.
+Same 300 tasks, official SFT checkpoint and canonical judge. **Each gain uses its own protocol's SFT baseline.** Different actor decoding, selector inputs and stopping rules prevent a controlled ranking across the two groups.
 
-| Selector | N | Tasks | Successes | Success | Gain, pp | Paired 95% interval, pp |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| None | 1 | 300 | 95 | **31.67%** | — | — |
-| GPT-5.6 Sol | 5 | 300 | 130 | **43.33%** | +11.67 | [+6.33, +17.00] |
-| GPT-5.5 | 5 | 300 | 126 | **42.00%** | +10.33 | [+5.00, +15.67] |
+| Protocol | Selector | N | Tasks | Successes | Success | Gain, pp | Paired 95% interval, pp |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| September reproduction | None / SFT | 1 | 300 | 95 | **31.67%** | — | — |
+| September reproduction | GPT-5.6 Sol | 5 | 300 | 130 | **43.33%** | +11.67 | [+6.33, +17.00] |
+| September reproduction | GPT-5.5 | 5 | 300 | 126 | **42.00%** | +10.33 | [+5.00, +15.67] |
+| Local v2 | None / SFT | 1 | 300 | 94 | **31.33%** | — | — |
+| Local v2 | GPT-6 Luna, medium | 5 | 300 | 121 | **40.33%** | +9.00 | [+3.33, +14.67] |
+| Local v2 | Jev 1.13.0 | 5 | 300 | 100 | **33.33%** | +2.00 | [−3.67, +7.67] |
+| Local v2 | Kev27B | 5 | 300 | 122 | **40.67%** | +9.33 | [+3.67, +15.00] |
+
+| Protocol | Actor T / top-p | Actor output cap | Selector observation | Episode limit |
+| --- | --- | ---: | --- | --- |
+| September reproduction | 0.7 / 0.9 | 1,024 tokens | Current screenshot + full candidates; historical prompt | 30 turns |
+| Local v2 | 1.0 / 0.95 | 4,096 tokens | Text/DOM + full candidates + five recent actions; no images | 30 browser operations / 60 decisions |
+
+One complete run per condition. Sol/GPT-5.5 use medium reasoning and 2,048 selector output tokens; Luna uses medium reasoning and 4,096. Jev and Kev use choice classifiers. [Local v2 audit](arm_results/local_sft_selector_controlled_20261006.json) · [Local v2 protocol](arm_results/local_inference_rerun_plan_20261006.json). Paired intervals quantify task sampling, not judge error or website drift.
+
+### September reproduction: historical comparison and efficiency
 
 - Sol is close to September’s 44.00%; the fresh gain is +11.67 pp versus September’s +14.00 pp.
 - Sol versus GPT-5.5: **+1.33 pp**, interval **[−3.67, +6.33]**. No clear winner. No September GPT-5.5 online selector result was found.
@@ -130,23 +145,6 @@ Each included task has SFT-alone and SFT+Piotr outcomes in all three runs: **160
 [Three-run aggregate and unchanged task-file verification](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json).
 
 </details>
-
-<a id="local-sft-selector-results-20261006"></a>
-<a id="matched-sft-control"></a>
-## Luna / Jev / Kev: matched local v2 comparison
-
-Same official SFT actor; **T=1.0, p=0.95, top-k off, 4,096 output tokens, 30 action attempts**. All selectors receive the same text/DOM view and full candidates, without images. Fresh baseline; all four conditions complete.
-
-<!-- local-v2-selector-results:start -->
-| Selector | N | Tasks | Successes | Success | Gain, pp | Paired 95% interval, pp |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| None | 1 | 300 | 94 | **31.33%** | — | — |
-| GPT-6 Luna, medium | 5 | 300 | 121 | **40.33%** | +9.00 | [+3.33, +14.67] |
-| Jev 1.13.0 | 5 | 300 | 100 | **33.33%** | +2.00 | [-3.67, +7.67] |
-| Kev27B | 5 | 300 | 122 | **40.67%** | +9.33 | [+3.67, +15.00] |
-<!-- local-v2-selector-results:end -->
-
-[Audited counts and paired comparisons](arm_results/local_sft_selector_controlled_20261006.json) · [Pinned protocol](arm_results/local_inference_rerun_plan_20261006.json). Paired intervals quantify task sampling, not judge error or website drift.
 
 <details>
 <summary>Supplementary: partial three-arm RL-task comparison</summary>
