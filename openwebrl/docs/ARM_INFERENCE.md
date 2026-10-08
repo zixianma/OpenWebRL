@@ -162,14 +162,14 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 <a id="confidence-benefit-20261008"></a>
 ## Selecting a threshold by measured ARM benefit — October 8, one replay blocker
 
-**No threshold has been fitted or verified.** The approved redraw recovered 15 of 16 missing pairs: **59 of 60 eligible fitting pairs now have complete outcomes**. One fixed anchor still fails the unchanged screenshot replay check before either intervention. The fitter remains blocked; all earlier evidence is preserved.
+**No threshold has been fitted or verified.** **59 of 60 eligible fitting pairs have complete outcomes.** The additional approved 30-second replay windows also failed to match the last saved state: none of 32 captured frames passed the unchanged checks. Neither candidate action was dispatched. The fitter remains blocked; all earlier evidence is preserved.
 
 | Fitting shard | Planned tasks | Task dispositions | Eligible pairs | Resolved pairs | Unresolved pairs | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | 0 | 150 | 150 | 38 | 38 | 0 | Fit ready; allocation preserved |
 | 1 | 150 | 150 | 22 | 21 | 1 | Replay blocked; allocation preserved |
 
-All **450 planned tasks are accounted for:** 300 fitting dispositions and 150 held-out tasks blocked before paired continuations. All reference episodes are preserved. No held-out utility estimate exists. The resolved pairs cover **19.67% of the planned fitting tasks**; replay rejection and missing eligible outcomes limit representativeness. Missing outcomes remain unresolved, without exclusion or failure labels. [Redraw result and accounting](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-result.json).
+All **450 planned tasks are accounted for:** 300 fitting dispositions and 150 held-out tasks blocked before paired continuations. All reference episodes are preserved. No held-out utility estimate exists. The resolved pairs cover **19.67% of the planned fitting tasks**; replay rejection and missing eligible outcomes limit representativeness. Missing outcomes remain unresolved, without exclusion or failure labels. [Latest replay audit and accounting](arm_results/selectionarm_confidence_benefit_20261008/banner-replay-result.json).
 
 <details>
 <summary>Question and fixed design</summary>
@@ -193,7 +193,9 @@ Only fitting outcomes may select the rule. Planned reporting includes held-out p
 
 Recovery jobs **350607 / 350608** ended after **1,451 / 284 allocation seconds**, respectively. Shard 0 completed all 12 replacement pairs and stopped at the fit barrier to preserve its remaining budget while shard 1 queued. Shard 1 completed three replacement pairs; its last pair failed replay before any candidate intervention or suffix generation. Both owned model/browser cleanups are verified. The 30 recovered endpoints contain 10 judged outcomes and 20 canonical zeros; the two missing endpoints remain missing. [Approved protocol](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-amendment.json) · [Terminal redraw audit](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-result.json).
 
-**Remaining blocker:** both replay screenshots differ only in the top promotional banner; all pixels below that region are identical. Mean RGB differences are 1.616 and 1.047 against the fixed limit 0.5; pixels with any channel difference over 8 cover 1.545% and 1.044%, against the fixed limit 0.1%. DOM/URL/viewport checks passed. Banner animation is a plausible explanation, not a demonstrated repair: waiting for a stable frame need not reproduce the originally captured frame. The approved one-physical-attempt limit has been used; another replay requires a narrow amendment. No image masking, tolerance change, replacement state or missing-outcome imputation was applied.
+**Additional bounded replay, job 350741:** the user approved one more physical pair with a 30-second read-only observation window per role and unchanged matching. It exhausted those windows, producing 16 rejected frames per role and no candidate interventions, suffix draws or judge calls. The startup probability check used one synthetic generation and one teacher-forced scoring request; these are separate from scientific task inference. Cleanup is verified. This attempt used 105 allocation seconds and preserved all 59 complete pairs and the other 299 fitting dispositions.
+
+**Remaining blocker:** every captured frame differs from the saved state only in the promotional banner (rows 44–95); all pixels below it are identical. The closest first-candidate frame has mean RGB difference 1.423 and 1.351% of pixels with a channel difference over 8; the closest Piotr frame has 0.520 and 0.647%, respectively. The unchanged limits are 0.5 and 0.1%. Both windows settle on another repeated banner frame that also fails. These finite windows do not prove no matching frame can ever recur, but they provide no demonstrated repair. The additional physical-attempt authorization is exhausted. No image masking, tolerance change, replacement state or missing-outcome imputation was applied. [Bounded replay audit](arm_results/selectionarm_confidence_benefit_20261008/banner-replay-result.json).
 
 A verification-only handoff is prepared and tested, but inactive: it requires both successful fit handoffs and a threshold frozen by the unchanged fitter before GPU startup. It cannot rerun fitting continuations or refit a lost threshold. All 150 held-out tasks remain blocked. No new compute or judge budget was added.
 
@@ -205,14 +207,14 @@ The pass recovered **11 endpoints** (five judged, six canonical zeros), completi
 
 Shard 1 recorded all 150 fitting dispositions, with **18 resolved and four unresolved eligible pairs**. Its eight missing endpoints comprise six persistent capture mismatches and two verified raster mismatches after eligibility release. All four are same-choice repeat controls; choosing the same action does not establish equal rollout outcomes. No missing endpoint has an unlinked verdict or restorable browser state. There is no demonstrated further mechanical repair under the unchanged rules. Fresh paired trajectories would require a separately declared protocol amendment.
 
-**Current accounting after the redraw:**
+**Current accounting after the bounded replay:**
 
 | Shard | Allocated seconds used, all attempts | Original cap, seconds | Unused seconds | Judge calls | Judge cost, USD | Judge cap, USD |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | 0 | 7,086 | 14,400 | 7,314 | 38 | 0.327405 | 5.00 |
-| 1 | 5,007 | 14,400 | 9,393 | 22 | 0.188586 | 5.00 |
+| 1 | 5,112 | 14,400 | 9,288 | 22 | 0.188586 | 5.00 |
 
-Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. Accounting above includes both new attempts and every earlier attempt. Original model identities, native probability probes and W&B run identities are verified. Scheduler/W&B failure labels reflect the controlled stops, not successful study completion; durable evidence and reconciled ledgers determine the scientific disposition and usage. Four historical selector attempts per shard have unknown token usage; no zero usage is imputed.
+Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. Accounting includes all original and recovery attempts. Original model identities, native probability probes and W&B run identities are verified. Scheduler/W&B failure labels reflect the controlled stops, not successful study completion; durable evidence and reconciled ledgers determine the scientific disposition and usage. Four historical selector attempts per shard have unknown token usage; no zero usage is imputed.
 
 **Historical pre-redraw diagnostics:** [Coverage](arm_results/selectionarm_confidence_benefit_20261008/coverage.png) · [Sampled decisions](arm_results/selectionarm_confidence_benefit_20261008/decision_depth.png) · [Recovery dispositions](arm_results/selectionarm_confidence_benefit_20261008/recovery_dispositions.png). These are partial data-quality diagnostics, not a fitted threshold or ARM-effect estimate. Raw tasks, images and trajectories remain private.
 

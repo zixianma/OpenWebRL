@@ -1,0 +1,111 @@
+{
+  "schema": "benefit_bounded_banner_replay_aggregate_v1",
+  "updated_epoch": 1791503174.1334102,
+  "scientifically_complete": false,
+  "stage": "reviewed_terminal_incomplete",
+  "planned_tasks": 450,
+  "fit_tasks": 300,
+  "heldout_tasks": 150,
+  "eligible_fit_pairs": 60,
+  "resolved_fit_pairs": 59,
+  "unresolved_fit_pairs": 1,
+  "resolved_fit_coverage_percent": 19.666666666666664,
+  "redraw_target_pairs": 16,
+  "redraw_resolved_pairs": 15,
+  "redraw_resolved_outcomes": 30,
+  "redraw_missing_outcomes": 2,
+  "redraw_judged_outcomes": 10,
+  "redraw_canonical_zero_outcomes": 20,
+  "original_complete_pairs_retained": 44,
+  "threshold_frozen": false,
+  "heldout_pairs_dispatched": 0,
+  "all_old_evidence_retained": true,
+  "new_budget": false,
+  "fitter_unchanged": true,
+  "replay_checks_unchanged": true,
+  "attempt_cap_exhausted_for_unresolved_anchor": true,
+  "blocker": {
+    "type": "preintervention_raster_replay_mismatch_after_bounded_observation_window",
+    "affected_anchors": 1,
+    "affected_outcomes": 2,
+    "captured_frames": 32,
+    "passing_frames": 0,
+    "other_replay_checks_pass": true,
+    "difference_region": "promotional banner only; rows44 through95, all other pixels identical",
+    "best_mean_rgb_difference_by_role": {
+      "first": 1.4225166666666667,
+      "piotr": 0.5204192708333333
+    },
+    "best_fraction_pixels_channel_delta_over_8_by_role": {
+      "first": 0.01351171875,
+      "piotr": 0.006471875
+    },
+    "maximum_mean_rgb_difference": 0.5,
+    "maximum_fraction_pixels_channel_delta_over_8": 0.001,
+    "timing_hypothesis_verified_as_repair": false,
+    "no_intervention_or_native_suffix_dispatched": true,
+    "physical_attempt_authorization_exhausted": true
+  },
+  "shards": [
+    {
+      "shard": 0,
+      "eligible_pairs": 38,
+      "resolved_pairs": 38,
+      "unresolved_pairs": 0,
+      "latest_attempt_seconds": 1451,
+      "all_attempt_seconds": 7086,
+      "original_seconds_cap": 14400,
+      "remaining_seconds": 7314,
+      "judge_calls": 38,
+      "judge_usd": 0.32740510000000006
+    },
+    {
+      "shard": 1,
+      "eligible_pairs": 22,
+      "resolved_pairs": 21,
+      "unresolved_pairs": 1,
+      "latest_attempt_seconds": 105,
+      "all_attempt_seconds": 5112,
+      "original_seconds_cap": 14400,
+      "remaining_seconds": 9288,
+      "judge_calls": 22,
+      "judge_usd": 0.18858620000000004
+    }
+  ],
+  "per_shard_resources": {
+    "h200": 2,
+    "cpus": 16,
+    "memory_gib": 240,
+    "seconds_all_attempts": 14400,
+    "judge_usd_cap": 5,
+    "judge_calls_cap": 1320
+  },
+  "limitations": [
+    "Coverage is conditional on replay eligibility; missing eligible outcomes still block fitting.",
+    "One continuation per branch yields noisy single-action benefit estimates.",
+    "Original44 and recovered15 pairs mix collection versions.",
+    "Prepared verification-only resume has not executed.",
+    "No threshold, heldout utility, or successful-completion claim.",
+    "The two finite30-second observation windows do not exhaust all possible page frames; no further matching repair is demonstrated."
+  ],
+  "banner_replay_target_pairs": 1,
+  "banner_replay_resolved_pairs": 0,
+  "banner_replay_missing_outcomes": 2,
+  "banner_replay_maximum_new_outcomes": 2,
+  "banner_replay_physical_attempts_per_role": 1,
+  "banner_replay_candidate_observations_per_role": 16,
+  "banner_replay_observation_window_seconds": 30,
+  "banner_replay_candidate_interventions": 0,
+  "banner_replay_suffix_generations": 0,
+  "banner_replay_judge_calls": 0,
+  "other_fit_dispositions_preserved": 299,
+  "complete_pairs_preserved": 59,
+  "native_probability_startup_probe": {
+    "synthetic_generation_requests": 1,
+    "teacher_forced_scoring_requests": 1,
+    "verified": true,
+    "scientific_task_requests": 0
+  },
+  "cleanup_verified": true,
+  "conditional_verification_handoff_submitted": false
+}
