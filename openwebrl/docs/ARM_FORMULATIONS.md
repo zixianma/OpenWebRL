@@ -124,6 +124,37 @@ The approved cohort amendment freezes these 124 states and all 1,860 original ou
 
 </details>
 
+<a id="branch-selector-scaleup-20261008"></a>
+
+## Can a trained selector generalize beyond the branching states?
+
+**Proposed next experiment, not launched:** collect more states and eight continuations per candidate, then fit a selector to estimated candidate success. The current LOO result motivates this test; it does not establish that a learned selector will reproduce the gain.
+
+| Dataset role | Target states | What is held out? | Outcomes at five candidates × eight draws |
+| --- | ---: | --- | ---: |
+| Training | 1,000 | — | 40,000 |
+| Seen-task validation | 250 | New decision states and discovery trajectories from training tasks | 10,000 |
+| Unseen-task validation | 250 | Entire task groups | 10,000 |
+
+Task and state assignments must be fixed **before collection outcomes are observed**. All candidates, draws and retries from one state stay together. Seen-task validation requires distinct pre-action inputs and an accepted training state from the same task. The 124 previously inspected task groups are training-only; their historical outcomes remain a separate diagnostic cohort for the first fit. Additional task groups stay locked for final testing. “Unseen” means unseen by this selector fit, not proven absent from backbone pretraining.
+
+Train a fresh adapter on released SelectionARM using each candidate’s success count out of eight, retaining ties and all-equal panels. The proposed loss is independent sigmoid/binomial BCE over five candidate-index logits; serving still returns one index. Inputs contain only pre-action information and the candidate panel. Primary targets count committed invalid outcomes as zero, matching the operational-success estimand; valid-only sensitivity keeps its own denominators. Missing records are unresolved, not invented failures. This is outcome adaptation of a teacher-pretrained model.
+
+Evaluate selected-action continuation success separately on both validation sets against actor-first, uniform and the frozen selector. A rollout-based reference selects on six draws and scores the other two. Bootstrap whole tasks because multiple states share a task. Keep the final task test unopened during checkpoint selection, and label selected-checkpoint validation scores accordingly. Judge limitations and replayability selection remain; this does not yet establish end-to-end benchmark improvement or superiority to matched teacher-label training.
+
+<details>
+<summary>Prepared split, collection feasibility and exact pilot request</summary>
+
+The CPU-only draft groups 2,090 eligible task identities and allocates three decision slots per task across decisions 1–3, 4–9 and 10–15. It contains 3,118 training opportunities, 1,373 seen-task validation opportunities, 1,218 unseen-task validation opportunities and 561 locked-test opportunities. These are candidate slots, not collected states. Seven CPU tests pass for alias grouping, protected exclusions, outcome independence, deterministic assignment and split isolation. Benchmark/retention and near-duplicate exclusions still need a final production audit.
+
+The recent later-state collection produced 38 accepted states from 1,173 discoveries in 39,868 seconds on four H200s, consuming 2,695 browser starts with three draws per action. Eight draws per action require all 40 isolated replay contexts to pass the unchanged readiness gate; the existing 30-context limit is insufficient. The new profile must be validated. Applying the old acceptance rate to the draft's 5,709 collectible slots would yield about 185 states, not 1,500; this is a diagnostic extrapolation, not a forecast for the new depth mix. Broader audited task coverage or additional prespecified slots will likely be needed.
+
+**Request only a feasibility pilot first:** four H200s, 40 CPUs, 480 GiB, 43,200 seconds total including startup, validation and retries; 5,000 browser-start attempts with 40 concurrent browsers; 100,000 local SFT call attempts; 2,000 canonical judge HTTP attempts and $25; no new teacher calls. Target at most 32 accepted states / 1,280 committed continuations from at most 1,200 prespecified opportunities. Yield is not guaranteed. Stop at the first binding cap, preserve every failed attempt, and diagnose if the first 24 resolved replay groups yield no accepted state. Validate whole-group admission, exact replay and cleanup before scaling.
+
+The 1,500-state collection and later selector fit do not yet have new resource approval. A provisional offline fitting allowance is one H200, eight CPUs, 120 GiB and two hours total, subject to data and new-loss validation; it is not included in the pilot request. The existing 124-state extra-two run retains its own approved caps and protocol. [Machine-readable proposal](arm_results/rl_integration/branch-selector-scaleup-proposal-20261008.json).
+
+</details>
+
 <details>
 <summary>Earlier snapshots and historical plots</summary>
 

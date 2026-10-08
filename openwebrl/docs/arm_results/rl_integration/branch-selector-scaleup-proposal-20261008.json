@@ -1,0 +1,138 @@
+{
+  "schema": "branch-selector-scaleup-proposal-v1",
+  "date": "2026-10-08",
+  "status": "prepared_not_launched_exact_new_budget_approval_pending",
+  "approved_for_execution": false,
+  "full_science_target": {
+    "train_states": 1000,
+    "seen_task_validation_new_states": 250,
+    "unseen_task_validation_states": 250,
+    "candidate_responses_per_state": 5,
+    "continuations_per_candidate": 8,
+    "outcomes": 60000,
+    "guaranteed_yield": false,
+    "locked_test_tasks_reserved": true
+  },
+  "split_preparation": {
+    "candidate_state_slots": 6270,
+    "prior_diagnostic_groups": 124,
+    "state_roles": {
+      "locked_test": 561,
+      "train": 3118,
+      "validation_seen_task": 1373,
+      "validation_unseen_task": 1218
+    },
+    "task_groups": 2090,
+    "task_roles": {
+      "locked_test": 187,
+      "train_seen_pool": 1497,
+      "unseen_validation": 406
+    }
+  },
+  "split_rules": [
+    "Assign task aliases and decision slots before outcomes; no continuation-level random splitting.",
+    "New states from seen tasks require independently seeded discovery, disjoint trajectories and distinct pre-action input fingerprints, plus an accepted training state from the same task.",
+    "Previously inspected 124 diagnostic task groups are training-only; historical 3/5-draw records remain a separate diagnostic cohort for the first fit.",
+    "All actions, draws and retries stay with their state. Unseen-task validation and locked test hold out entire task groups.",
+    "Unseen refers to the new selector fit, not guaranteed backbone or actor pretraining exclusion.",
+    "Protected benchmark, retention and near-duplicate screening must finish before production release.",
+    "Depth-slot and role admission may depend on replay checks but never continuation successes, ties or teacher preference."
+  ],
+  "collection_protocol": {
+    "actor": "official OpenWebRL SFT, frozen checkpoint",
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": "off",
+    "max_response_tokens": 4096,
+    "total_actions_including_prefix": 30,
+    "replay": "unchanged strict observable-state checks; all forty isolated contexts ready before candidate dispatch",
+    "judge": "canonical o4-mini/AgentTrek terminal-success",
+    "new_teacher_calls": 0,
+    "candidate_intervention": "full sampled response including reasoning/action in continuation history",
+    "same_protocol_as_current": false,
+    "explicit_changes": [
+      "multiple prespecified states per task",
+      "eight draws per candidate",
+      "forty-context profile"
+    ],
+    "current_extra_two_modified": false
+  },
+  "selector_fit": {
+    "base": "released OpenWebRL-4B-SelectionARM",
+    "fresh_adapter_and_optimizer": true,
+    "vision_and_projector": "frozen",
+    "output": "one candidate index",
+    "target": "five candidate success counts divided by eight committed draws",
+    "loss": "mean independent sigmoid/binomial BCE on the five candidate index logits at a fixed output prefix",
+    "primary_invalid_handling": "committed invalid outcomes count zero, matching the operational-success comparison; missing/unresolved records never fabricated as labels",
+    "secondary": "valid-only sensitivity with valid denominators and failure reasons; not a replacement primary estimand",
+    "ties_and_all_equal_panels": "retain; no forced hard winner",
+    "input": "pre-action goal, screenshot, allowed causal history and fixed candidate panel only",
+    "forbidden_inputs": [
+      "continuation suffix",
+      "judge verdict",
+      "observed success counts",
+      "after-action evidence"
+    ],
+    "implementation_status": "loss adapter and GPU parity/save-reload validation still required",
+    "interpretation": "outcome adaptation of a teacher-pretrained selector, not purely outcome-only pretraining"
+  },
+  "evaluation": {
+    "primary": "mean continuation success of the learned selected action, separately on seen-task/new-state and unseen-task validation",
+    "baselines": [
+      "actor first candidate",
+      "uniform over five entries",
+      "frozen released selector"
+    ],
+    "oracle_reference": "select using first six draws; score fresh final two; tie-break without held-out outcomes",
+    "uncertainty": "resample whole task groups; preserve paired states, candidates and draws",
+    "checkpoint_selection": "validation only, with selected-checkpoint validation scores labeled selection-biased; final locked task test untouched",
+    "controls": "No claim of superiority over matched teacher-label training without that additional training control. Frozen judge semantic limitations remain."
+  },
+  "pilot_request": {
+    "approved": false,
+    "jobs": 1,
+    "h200_gpus": 4,
+    "cpus": 40,
+    "memory_gib": 480,
+    "total_wall_seconds_including_startup_tests_and_retries": 43200,
+    "gpu_hours": 48,
+    "browser_start_attempts": 5000,
+    "browser_concurrency": 40,
+    "local_sft_call_attempts": 100000,
+    "judge_http_attempts": 2000,
+    "judge_usd": 25,
+    "teacher_calls": 0,
+    "target_and_max_accepted_states": 32,
+    "max_committed_outcomes": 1280,
+    "max_prespecified_task_state_opportunities": 1200,
+    "first_binding_cap_stops_work": true,
+    "admission_gate": "validate forty-context resource ownership and strict replay before scaling; reserve budget for a whole group and cleanup",
+    "zero_yield_stop": "pause for diagnosis if first 24 resolved replay groups have zero accepted states; not a statistical proof of infeasibility",
+    "retries": "charge all failed/rejected attempts and retain first-cause evidence; no full-budget reset",
+    "yield_guaranteed": false
+  },
+  "later_training_estimate_not_requested": {
+    "h200_gpus": 1,
+    "cpus": 8,
+    "memory_gib": 120,
+    "total_seconds": 7200,
+    "api_calls": 0,
+    "approval": false
+  },
+  "feasibility": {
+    "observed_reference_new_states": 38,
+    "observed_reference_discoveries": 1173,
+    "observed_reference_seconds": 39868,
+    "observed_reference_browser_starts": 2695,
+    "reference_draws_per_action": 3,
+    "warning": "Eight-draw all-context acceptance is unmeasured. Three slots on 2090 tasks provide 5709 collectible opportunities, not 1500 guaranteed states. Expand audited source coverage or slots only after role/depth-specific pilot yield and cost review.",
+    "larger_source_pool_status": "metadata available; requires separate exclusions/source audit and budget approval"
+  },
+  "validation": {
+    "cpu_split_tests": 7,
+    "gpu_validation_completed": false,
+    "new_collection_started": false,
+    "training_started": false
+  }
+}
