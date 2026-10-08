@@ -1,0 +1,1715 @@
+{
+  "collected_at_utc": "2026-10-08T09:04:09.106057+00:00",
+  "completed_records": 600,
+  "expected_records": 600,
+  "snapshot_complete": true,
+  "approved_resources_per_shard": {
+    "gpus": 1,
+    "gpu_type": "H200",
+    "cpus": 8,
+    "memory_gib": 120,
+    "total_seconds": 14400
+  },
+  "shared_caps": {
+    "judge_usd": 10.0,
+    "judge_calls": 2640,
+    "sol3_usd": 125.0,
+    "sol3_calls": 9900,
+    "sol10_usd": 200.0,
+    "sol10_calls": 9900,
+    "browser_attempts": 660,
+    "browser_attempts_per_mode": 330,
+    "browser_concurrency": 16
+  },
+  "allocation_campaign": {
+    "charged_seconds": 20057,
+    "allocated_h200_hours": 5.5713888888888885,
+    "allocated_cpu_hours": 44.57111111111111,
+    "memory_allocation_gib_hours": 668.5666666666667,
+    "by_shard": [
+      {
+        "shard": 0,
+        "charged_seconds": 10138,
+        "cap_seconds": 14400
+      },
+      {
+        "shard": 1,
+        "charged_seconds": 9919,
+        "cap_seconds": 14400
+      }
+    ],
+    "per_arm_gpu_hours": null,
+    "flops": null
+  },
+  "browser_episode_attempts": {
+    "total": 618,
+    "by_arm": {
+      "N3": 310,
+      "N10": 308
+    },
+    "committed_attempts": 600,
+    "uncommitted_attempts": 18
+  },
+  "all_attempt_actor_receipts": {
+    "N3": {
+      "all": {
+        "request_receipts": 13299,
+        "status_counts": {
+          "received": 13271,
+          "failed": 28
+        },
+        "error_type_counts": {
+          "HTTPStatusError": 21,
+          "CancelledError": 7
+        },
+        "receipts_with_usage": 13271,
+        "receipts_without_usage": 28,
+        "known_input_tokens": 128574272,
+        "known_output_tokens": 4399211,
+        "known_cached_input_tokens": 108641325,
+        "client_request_seconds": {
+          "count": 13299,
+          "sum": 91163.92860493623,
+          "mean": 6.85494613165924,
+          "median": 6.442327864933759,
+          "p95": 11.245953499805182
+        },
+        "backend_e2e_seconds": {
+          "count": 13271,
+          "sum": 88845.58097863197,
+          "mean": 6.694716372438548,
+          "median": 6.300200939178467,
+          "p95": 11.03875994682312
+        }
+      },
+      "committed": {
+        "request_receipts": 12990,
+        "status_counts": {
+          "received": 12969,
+          "failed": 21
+        },
+        "error_type_counts": {
+          "HTTPStatusError": 21
+        },
+        "receipts_with_usage": 12969,
+        "receipts_without_usage": 21,
+        "known_input_tokens": 126300357,
+        "known_output_tokens": 4302641,
+        "known_cached_input_tokens": 106821982,
+        "client_request_seconds": {
+          "count": 12990,
+          "sum": 89098.11493239785,
+          "mean": 6.85897728501908,
+          "median": 6.436613843543455,
+          "p95": 11.256402502767742
+        },
+        "backend_e2e_seconds": {
+          "count": 12969,
+          "sum": 86878.37625265121,
+          "mean": 6.698926382346458,
+          "median": 6.297586917877197,
+          "p95": 11.054942846298218
+        }
+      },
+      "uncommitted": {
+        "request_receipts": 309,
+        "status_counts": {
+          "received": 302,
+          "failed": 7
+        },
+        "error_type_counts": {
+          "CancelledError": 7
+        },
+        "receipts_with_usage": 302,
+        "receipts_without_usage": 7,
+        "known_input_tokens": 2273915,
+        "known_output_tokens": 96570,
+        "known_cached_input_tokens": 1819343,
+        "client_request_seconds": {
+          "count": 309,
+          "sum": 2065.813672538381,
+          "mean": 6.68548114090091,
+          "median": 6.5539629980921745,
+          "p95": 10.590076039079577
+        },
+        "backend_e2e_seconds": {
+          "count": 302,
+          "sum": 1967.2047259807587,
+          "mean": 6.513922933711122,
+          "median": 6.409858584403992,
+          "p95": 10.248089790344238
+        }
+      }
+    },
+    "N10": {
+      "all": {
+        "request_receipts": 43250,
+        "status_counts": {
+          "received": 43120,
+          "failed": 130
+        },
+        "error_type_counts": {
+          "HTTPStatusError": 95,
+          "CancelledError": 35
+        },
+        "receipts_with_usage": 43120,
+        "receipts_without_usage": 130,
+        "known_input_tokens": 432605990,
+        "known_output_tokens": 14476957,
+        "known_cached_input_tokens": 411433647,
+        "client_request_seconds": {
+          "count": 43250,
+          "sum": 349077.1104817041,
+          "mean": 8.071147063160788,
+          "median": 7.593199955066666,
+          "p95": 13.290286443196237
+        },
+        "backend_e2e_seconds": {
+          "count": 43120,
+          "sum": 328112.98539710045,
+          "mean": 7.609299290285261,
+          "median": 7.194591164588928,
+          "p95": 12.702025413513184
+        }
+      },
+      "committed": {
+        "request_receipts": 42150,
+        "status_counts": {
+          "received": 42050,
+          "failed": 100
+        },
+        "error_type_counts": {
+          "HTTPStatusError": 95,
+          "CancelledError": 5
+        },
+        "receipts_with_usage": 42050,
+        "receipts_without_usage": 100,
+        "known_input_tokens": 421863180,
+        "known_output_tokens": 14115263,
+        "known_cached_input_tokens": 401224667,
+        "client_request_seconds": {
+          "count": 42150,
+          "sum": 340355.07073838636,
+          "mean": 8.07485339830098,
+          "median": 7.581959427567199,
+          "p95": 13.32266689883545
+        },
+        "backend_e2e_seconds": {
+          "count": 42050,
+          "sum": 319937.15560150146,
+          "mean": 7.608493593376967,
+          "median": 7.180771350860596,
+          "p95": 12.737415313720703
+        }
+      },
+      "uncommitted": {
+        "request_receipts": 1100,
+        "status_counts": {
+          "received": 1070,
+          "failed": 30
+        },
+        "error_type_counts": {
+          "CancelledError": 30
+        },
+        "receipts_with_usage": 1070,
+        "receipts_without_usage": 30,
+        "known_input_tokens": 10742810,
+        "known_output_tokens": 361694,
+        "known_cached_input_tokens": 10208980,
+        "client_request_seconds": {
+          "count": 1100,
+          "sum": 8722.039743317757,
+          "mean": 7.929127039379779,
+          "median": 8.046624130336568,
+          "p95": 11.119405660778284
+        },
+        "backend_e2e_seconds": {
+          "count": 1070,
+          "sum": 8175.829795598984,
+          "mean": 7.640962425793443,
+          "median": 7.671071529388428,
+          "p95": 10.853264331817627
+        }
+      }
+    }
+  },
+  "all_attempt_selector_api": {
+    "N3": {
+      "model": "gpt-5.6-sol",
+      "cap_calls": 9900,
+      "cap_usd": 125.0,
+      "ledger_calls": 4421,
+      "receipt_count": 4421,
+      "known_usage_calls": 4420,
+      "unknown_usage_calls": 1,
+      "ledger_status_counts": {
+        "received": 4420,
+        "reserved": 1
+      },
+      "receipt_error_counts": {
+        "InternalServerError": 1
+      },
+      "provider_usage": {
+        "input_tokens": 18869261,
+        "output_tokens": 357023,
+        "cached_input_tokens": 1218898,
+        "reasoning_output_tokens": 292125,
+        "cache_write_tokens_reported": 17637103
+      },
+      "receipt_calculated_base_cost_usd": 78.22947120000008,
+      "receipt_conservative_cost_upper_usd": 95.8798342,
+      "ledger_received_conservative_usd": 95.8798342,
+      "ledger_unresolved_reserved_usd": 0.304635,
+      "ledger_charged_or_reserved_usd": 96.1844692,
+      "service_seconds": {
+        "count": 4421,
+        "sum": 11508.134861197323,
+        "mean": 2.6030614931457414,
+        "median": 2.362751423381269,
+        "p95": 4.6251214211806655
+      },
+      "all_attempt_budget_usd_per_committed_episode": 0.3206148973333333,
+      "reconciliation": {
+        "ledger_calls_match_receipts": true,
+        "received_ledger_count_matches_usage_receipts": true,
+        "received_ledger_cost_matches_receipt_upper": true
+      }
+    },
+    "N10": {
+      "model": "gpt-5.6-sol",
+      "cap_calls": 9900,
+      "cap_usd": 200.0,
+      "ledger_calls": 4312,
+      "receipt_count": 4312,
+      "known_usage_calls": 4312,
+      "unknown_usage_calls": 0,
+      "ledger_status_counts": {
+        "received": 4312
+      },
+      "receipt_error_counts": {},
+      "provider_usage": {
+        "input_tokens": 28766907,
+        "output_tokens": 485687,
+        "cached_input_tokens": 660495,
+        "reasoning_output_tokens": 421505,
+        "cache_write_tokens_reported": 28093476
+      },
+      "receipt_calculated_base_cost_usd": 122.40358599999993,
+      "receipt_conservative_cost_upper_usd": 150.5099980000001,
+      "ledger_received_conservative_usd": 150.5099980000001,
+      "ledger_unresolved_reserved_usd": 0,
+      "ledger_charged_or_reserved_usd": 150.509998,
+      "service_seconds": {
+        "count": 4312,
+        "sum": 14103.162888168357,
+        "mean": 3.2706778497607507,
+        "median": 2.9111056034453213,
+        "p95": 5.941692702006549
+      },
+      "all_attempt_budget_usd_per_committed_episode": 0.5016999933333334,
+      "reconciliation": {
+        "ledger_calls_match_receipts": true,
+        "received_ledger_count_matches_usage_receipts": true,
+        "received_ledger_cost_matches_receipt_upper": true
+      }
+    }
+  },
+  "all_attempt_judge_api": {
+    "model": "o4-mini",
+    "ledger_calls": 400,
+    "receipt_count": 400,
+    "ledger_charged_or_reserved_usd": 3.348754200000001,
+    "received_usd": 3.3487542,
+    "reserved_usd": 0,
+    "status_counts": {
+      "received": 400
+    },
+    "provider_usage": {
+      "input_tokens": 2375594,
+      "output_tokens": 167182,
+      "cached_input_tokens": 0,
+      "reasoning_output_tokens": 116480,
+      "cache_write_tokens_reported": 0
+    },
+    "all_attempt_by_arm": {
+      "N3": {
+        "calls_with_attribution": 195,
+        "receipt_cost_usd": 1.5964938000000004,
+        "usage": {
+          "input_tokens": 1132190,
+          "output_tokens": 79792,
+          "cached_input_tokens": 0,
+          "reasoning_output_tokens": 55232,
+          "cache_write_tokens_reported": 0
+        }
+      },
+      "N10": {
+        "calls_with_attribution": 205,
+        "receipt_cost_usd": 1.752260399999999,
+        "usage": {
+          "input_tokens": 1243404,
+          "output_tokens": 87390,
+          "cached_input_tokens": 0,
+          "reasoning_output_tokens": 61248,
+          "cache_write_tokens_reported": 0
+        }
+      }
+    },
+    "unattributed_usage_receipts": 0,
+    "reconciliation": {
+      "ledger_calls_match_receipts": true,
+      "ledger_cost_matches_receipts": true,
+      "received_count_matches_attribution_files": true
+    }
+  },
+  "all_attempt_api_campaign": {
+    "charged_or_reserved_usd": 250.0432214,
+    "unresolved_reserved_usd": 0.304635,
+    "receipt_calculated_base_usd": 203.9818114,
+    "model_call_reservations": 9133
+  },
+  "committed_episode_metrics": {
+    "N3": {
+      "episodes": 300,
+      "successes": 121,
+      "invalid": 34,
+      "metrics": {
+        "actor_requests": {
+          "count": 300,
+          "sum": 12990,
+          "mean": 43.3,
+          "median": 33.0,
+          "p95": 90
+        },
+        "actor_input_tokens": {
+          "count": 300,
+          "sum": 126300357,
+          "mean": 421001.19,
+          "median": 248454.0,
+          "p95": 1101429
+        },
+        "actor_output_tokens": {
+          "count": 300,
+          "sum": 4302641,
+          "mean": 14342.136666666667,
+          "median": 11241.0,
+          "p95": 33571
+        },
+        "actor_client_request_seconds": {
+          "count": 300,
+          "sum": 88955.03135734657,
+          "mean": 296.5167711911552,
+          "median": 231.7855632668361,
+          "p95": 712.7753175464459
+        },
+        "actor_receipt_wait_seconds": {
+          "count": 300,
+          "sum": 31.639901457820088,
+          "mean": 0.10546633819273363,
+          "median": 0.06921788561157882,
+          "p95": 0.3050791397690773
+        },
+        "selector_calls": {
+          "count": 300,
+          "sum": 4323,
+          "mean": 14.41,
+          "median": 11.0,
+          "p95": 30
+        },
+        "selector_input_tokens": {
+          "count": 300,
+          "sum": 18471025,
+          "mean": 61570.083333333336,
+          "median": 47287.5,
+          "p95": 140609
+        },
+        "selector_output_tokens": {
+          "count": 300,
+          "sum": 348898,
+          "mean": 1162.9933333333333,
+          "median": 849.0,
+          "p95": 3039
+        },
+        "selector_service_seconds": {
+          "count": 300,
+          "sum": 11247.645807442255,
+          "mean": 37.49215269147418,
+          "median": 29.695577644975856,
+          "p95": 86.52900304784998
+        },
+        "browser_steps": {
+          "count": 300,
+          "sum": 4317,
+          "mean": 14.39,
+          "median": 11.0,
+          "p95": 30
+        },
+        "browser_step_seconds": {
+          "count": 300,
+          "sum": 17898.747694049496,
+          "mean": 59.66249231349832,
+          "median": 35.01508203684352,
+          "p95": 191.8612772608176
+        },
+        "elapsed_seconds": {
+          "count": 300,
+          "sum": 65813.21021924587,
+          "mean": 219.37736739748624,
+          "median": 171.47324889316224,
+          "p95": 522.6248799366876
+        }
+      }
+    },
+    "N10": {
+      "episodes": 300,
+      "successes": 141,
+      "invalid": 36,
+      "metrics": {
+        "actor_requests": {
+          "count": 300,
+          "sum": 42150,
+          "mean": 140.5,
+          "median": 120.0,
+          "p95": 300
+        },
+        "actor_input_tokens": {
+          "count": 300,
+          "sum": 421863180,
+          "mean": 1406210.6,
+          "median": 821740.0,
+          "p95": 3715630
+        },
+        "actor_output_tokens": {
+          "count": 300,
+          "sum": 14115263,
+          "mean": 47050.87666666666,
+          "median": 38689.5,
+          "p95": 107747
+        },
+        "actor_client_request_seconds": {
+          "count": 300,
+          "sum": 337523.9678662536,
+          "mean": 1125.079892887512,
+          "median": 900.5085795396008,
+          "p95": 2604.111633629538
+        },
+        "actor_receipt_wait_seconds": {
+          "count": 300,
+          "sum": 103.45120779844001,
+          "mean": 0.34483735932813336,
+          "median": 0.22772294445894659,
+          "p95": 0.9126061606220901
+        },
+        "selector_calls": {
+          "count": 300,
+          "sum": 4205,
+          "mean": 14.016666666666667,
+          "median": 12.0,
+          "p95": 30
+        },
+        "selector_input_tokens": {
+          "count": 300,
+          "sum": 28042807,
+          "mean": 93476.02333333333,
+          "median": 76358.5,
+          "p95": 213645
+        },
+        "selector_output_tokens": {
+          "count": 300,
+          "sum": 476037,
+          "mean": 1586.79,
+          "median": 1221.0,
+          "p95": 3946
+        },
+        "selector_service_seconds": {
+          "count": 300,
+          "sum": 13799.283410614822,
+          "mean": 45.99761136871607,
+          "median": 39.001142794964835,
+          "p95": 110.35076309088618
+        },
+        "browser_steps": {
+          "count": 300,
+          "sum": 4204,
+          "mean": 14.013333333333334,
+          "median": 12.0,
+          "p95": 30
+        },
+        "browser_step_seconds": {
+          "count": 300,
+          "sum": 16942.041700491216,
+          "mean": 56.47347233497072,
+          "median": 38.336473470553756,
+          "p95": 198.30132178217173
+        },
+        "elapsed_seconds": {
+          "count": 300,
+          "sum": 74972.56475765118,
+          "mean": 249.90854919217063,
+          "median": 203.1414848328568,
+          "p95": 592.6773175760172
+        }
+      }
+    }
+  },
+  "common_phase_sensitivity": {
+    "awaited_thread_v1": {
+      "common_tasks": 300,
+      "by_arm": {
+        "N3": {
+          "episodes": 300,
+          "successes": 121,
+          "invalid": 34,
+          "metrics": {
+            "actor_requests": {
+              "count": 300,
+              "sum": 12990,
+              "mean": 43.3,
+              "median": 33.0,
+              "p95": 90
+            },
+            "actor_input_tokens": {
+              "count": 300,
+              "sum": 126300357,
+              "mean": 421001.19,
+              "median": 248454.0,
+              "p95": 1101429
+            },
+            "actor_output_tokens": {
+              "count": 300,
+              "sum": 4302641,
+              "mean": 14342.136666666667,
+              "median": 11241.0,
+              "p95": 33571
+            },
+            "actor_client_request_seconds": {
+              "count": 300,
+              "sum": 88955.03135734657,
+              "mean": 296.5167711911552,
+              "median": 231.7855632668361,
+              "p95": 712.7753175464459
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 300,
+              "sum": 31.639901457820088,
+              "mean": 0.10546633819273363,
+              "median": 0.06921788561157882,
+              "p95": 0.3050791397690773
+            },
+            "selector_calls": {
+              "count": 300,
+              "sum": 4323,
+              "mean": 14.41,
+              "median": 11.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 300,
+              "sum": 18471025,
+              "mean": 61570.083333333336,
+              "median": 47287.5,
+              "p95": 140609
+            },
+            "selector_output_tokens": {
+              "count": 300,
+              "sum": 348898,
+              "mean": 1162.9933333333333,
+              "median": 849.0,
+              "p95": 3039
+            },
+            "selector_service_seconds": {
+              "count": 300,
+              "sum": 11247.645807442255,
+              "mean": 37.49215269147418,
+              "median": 29.695577644975856,
+              "p95": 86.52900304784998
+            },
+            "browser_steps": {
+              "count": 300,
+              "sum": 4317,
+              "mean": 14.39,
+              "median": 11.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 300,
+              "sum": 17898.747694049496,
+              "mean": 59.66249231349832,
+              "median": 35.01508203684352,
+              "p95": 191.8612772608176
+            },
+            "elapsed_seconds": {
+              "count": 300,
+              "sum": 65813.21021924587,
+              "mean": 219.37736739748624,
+              "median": 171.47324889316224,
+              "p95": 522.6248799366876
+            }
+          }
+        },
+        "N10": {
+          "episodes": 300,
+          "successes": 141,
+          "invalid": 36,
+          "metrics": {
+            "actor_requests": {
+              "count": 300,
+              "sum": 42150,
+              "mean": 140.5,
+              "median": 120.0,
+              "p95": 300
+            },
+            "actor_input_tokens": {
+              "count": 300,
+              "sum": 421863180,
+              "mean": 1406210.6,
+              "median": 821740.0,
+              "p95": 3715630
+            },
+            "actor_output_tokens": {
+              "count": 300,
+              "sum": 14115263,
+              "mean": 47050.87666666666,
+              "median": 38689.5,
+              "p95": 107747
+            },
+            "actor_client_request_seconds": {
+              "count": 300,
+              "sum": 337523.9678662536,
+              "mean": 1125.079892887512,
+              "median": 900.5085795396008,
+              "p95": 2604.111633629538
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 300,
+              "sum": 103.45120779844001,
+              "mean": 0.34483735932813336,
+              "median": 0.22772294445894659,
+              "p95": 0.9126061606220901
+            },
+            "selector_calls": {
+              "count": 300,
+              "sum": 4205,
+              "mean": 14.016666666666667,
+              "median": 12.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 300,
+              "sum": 28042807,
+              "mean": 93476.02333333333,
+              "median": 76358.5,
+              "p95": 213645
+            },
+            "selector_output_tokens": {
+              "count": 300,
+              "sum": 476037,
+              "mean": 1586.79,
+              "median": 1221.0,
+              "p95": 3946
+            },
+            "selector_service_seconds": {
+              "count": 300,
+              "sum": 13799.283410614822,
+              "mean": 45.99761136871607,
+              "median": 39.001142794964835,
+              "p95": 110.35076309088618
+            },
+            "browser_steps": {
+              "count": 300,
+              "sum": 4204,
+              "mean": 14.013333333333334,
+              "median": 12.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 300,
+              "sum": 16942.041700491216,
+              "mean": 56.47347233497072,
+              "median": 38.336473470553756,
+              "p95": 198.30132178217173
+            },
+            "elapsed_seconds": {
+              "count": 300,
+              "sum": 74972.56475765118,
+              "mean": 249.90854919217063,
+              "median": 203.1414848328568,
+              "p95": 592.6773175760172
+            }
+          }
+        }
+      },
+      "all_episodes_in_phase": {
+        "N3": {
+          "episodes": 300,
+          "successes": 121,
+          "invalid": 34,
+          "metrics": {
+            "actor_requests": {
+              "count": 300,
+              "sum": 12990,
+              "mean": 43.3,
+              "median": 33.0,
+              "p95": 90
+            },
+            "actor_input_tokens": {
+              "count": 300,
+              "sum": 126300357,
+              "mean": 421001.19,
+              "median": 248454.0,
+              "p95": 1101429
+            },
+            "actor_output_tokens": {
+              "count": 300,
+              "sum": 4302641,
+              "mean": 14342.136666666667,
+              "median": 11241.0,
+              "p95": 33571
+            },
+            "actor_client_request_seconds": {
+              "count": 300,
+              "sum": 88955.03135734657,
+              "mean": 296.5167711911552,
+              "median": 231.7855632668361,
+              "p95": 712.7753175464459
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 300,
+              "sum": 31.639901457820088,
+              "mean": 0.10546633819273363,
+              "median": 0.06921788561157882,
+              "p95": 0.3050791397690773
+            },
+            "selector_calls": {
+              "count": 300,
+              "sum": 4323,
+              "mean": 14.41,
+              "median": 11.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 300,
+              "sum": 18471025,
+              "mean": 61570.083333333336,
+              "median": 47287.5,
+              "p95": 140609
+            },
+            "selector_output_tokens": {
+              "count": 300,
+              "sum": 348898,
+              "mean": 1162.9933333333333,
+              "median": 849.0,
+              "p95": 3039
+            },
+            "selector_service_seconds": {
+              "count": 300,
+              "sum": 11247.645807442255,
+              "mean": 37.49215269147418,
+              "median": 29.695577644975856,
+              "p95": 86.52900304784998
+            },
+            "browser_steps": {
+              "count": 300,
+              "sum": 4317,
+              "mean": 14.39,
+              "median": 11.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 300,
+              "sum": 17898.747694049496,
+              "mean": 59.66249231349832,
+              "median": 35.01508203684352,
+              "p95": 191.8612772608176
+            },
+            "elapsed_seconds": {
+              "count": 300,
+              "sum": 65813.21021924587,
+              "mean": 219.37736739748624,
+              "median": 171.47324889316224,
+              "p95": 522.6248799366876
+            }
+          }
+        },
+        "N10": {
+          "episodes": 300,
+          "successes": 141,
+          "invalid": 36,
+          "metrics": {
+            "actor_requests": {
+              "count": 300,
+              "sum": 42150,
+              "mean": 140.5,
+              "median": 120.0,
+              "p95": 300
+            },
+            "actor_input_tokens": {
+              "count": 300,
+              "sum": 421863180,
+              "mean": 1406210.6,
+              "median": 821740.0,
+              "p95": 3715630
+            },
+            "actor_output_tokens": {
+              "count": 300,
+              "sum": 14115263,
+              "mean": 47050.87666666666,
+              "median": 38689.5,
+              "p95": 107747
+            },
+            "actor_client_request_seconds": {
+              "count": 300,
+              "sum": 337523.9678662536,
+              "mean": 1125.079892887512,
+              "median": 900.5085795396008,
+              "p95": 2604.111633629538
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 300,
+              "sum": 103.45120779844001,
+              "mean": 0.34483735932813336,
+              "median": 0.22772294445894659,
+              "p95": 0.9126061606220901
+            },
+            "selector_calls": {
+              "count": 300,
+              "sum": 4205,
+              "mean": 14.016666666666667,
+              "median": 12.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 300,
+              "sum": 28042807,
+              "mean": 93476.02333333333,
+              "median": 76358.5,
+              "p95": 213645
+            },
+            "selector_output_tokens": {
+              "count": 300,
+              "sum": 476037,
+              "mean": 1586.79,
+              "median": 1221.0,
+              "p95": 3946
+            },
+            "selector_service_seconds": {
+              "count": 300,
+              "sum": 13799.283410614822,
+              "mean": 45.99761136871607,
+              "median": 39.001142794964835,
+              "p95": 110.35076309088618
+            },
+            "browser_steps": {
+              "count": 300,
+              "sum": 4204,
+              "mean": 14.013333333333334,
+              "median": 12.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 300,
+              "sum": 16942.041700491216,
+              "mean": 56.47347233497072,
+              "median": 38.336473470553756,
+              "p95": 198.30132178217173
+            },
+            "elapsed_seconds": {
+              "count": 300,
+              "sum": 74972.56475765118,
+              "mean": 249.90854919217063,
+              "median": 203.1414848328568,
+              "p95": 592.6773175760172
+            }
+          }
+        }
+      }
+    }
+  },
+  "common_execution_source_sensitivity": {
+    "initial_collection": {
+      "common_tasks": 94,
+      "by_arm": {
+        "N3": {
+          "episodes": 94,
+          "successes": 41,
+          "invalid": 14,
+          "metrics": {
+            "actor_requests": {
+              "count": 94,
+              "sum": 3723,
+              "mean": 39.6063829787234,
+              "median": 30.0,
+              "p95": 90
+            },
+            "actor_input_tokens": {
+              "count": 94,
+              "sum": 36028224,
+              "mean": 383278.97872340423,
+              "median": 182370.0,
+              "p95": 1099233
+            },
+            "actor_output_tokens": {
+              "count": 94,
+              "sum": 1233858,
+              "mean": 13126.148936170213,
+              "median": 8544.5,
+              "p95": 33946
+            },
+            "actor_client_request_seconds": {
+              "count": 94,
+              "sum": 25124.738020942546,
+              "mean": 267.28444703130367,
+              "median": 175.07781754923053,
+              "p95": 710.6628779880702
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 94,
+              "sum": 8.245528624858707,
+              "mean": 0.08771838962615645,
+              "median": 0.05853563896380365,
+              "p95": 0.24240033933892846
+            },
+            "selector_calls": {
+              "count": 94,
+              "sum": 1240,
+              "mean": 13.191489361702128,
+              "median": 10.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 94,
+              "sum": 5285574,
+              "mean": 56229.51063829787,
+              "median": 37005.5,
+              "p95": 141133
+            },
+            "selector_output_tokens": {
+              "count": 94,
+              "sum": 104670,
+              "mean": 1113.5106382978724,
+              "median": 753.0,
+              "p95": 3071
+            },
+            "selector_service_seconds": {
+              "count": 94,
+              "sum": 3374.127003310714,
+              "mean": 35.894968120326745,
+              "median": 24.745571853592992,
+              "p95": 90.20618947874755
+            },
+            "browser_steps": {
+              "count": 94,
+              "sum": 1239,
+              "mean": 13.180851063829786,
+              "median": 10.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 94,
+              "sum": 4935.21423873771,
+              "mean": 52.50227913550755,
+              "median": 26.054726546164602,
+              "p95": 197.45296749984846
+            },
+            "elapsed_seconds": {
+              "count": 94,
+              "sum": 18808.85250355862,
+              "mean": 200.09417556977257,
+              "median": 144.66085750004277,
+              "p95": 530.083705379162
+            }
+          }
+        },
+        "N10": {
+          "episodes": 94,
+          "successes": 44,
+          "invalid": 17,
+          "metrics": {
+            "actor_requests": {
+              "count": 94,
+              "sum": 11760,
+              "mean": 125.1063829787234,
+              "median": 100.0,
+              "p95": 300
+            },
+            "actor_input_tokens": {
+              "count": 94,
+              "sum": 116005000,
+              "mean": 1234095.744680851,
+              "median": 674635.0,
+              "p95": 3523990
+            },
+            "actor_output_tokens": {
+              "count": 94,
+              "sum": 3858383,
+              "mean": 41046.62765957447,
+              "median": 30239.5,
+              "p95": 107167
+            },
+            "actor_client_request_seconds": {
+              "count": 94,
+              "sum": 91427.11345364247,
+              "mean": 972.6288665281113,
+              "median": 694.6181850987487,
+              "p95": 2600.4675475247204
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 94,
+              "sum": 29.7107141232118,
+              "mean": 0.31607142684267875,
+              "median": 0.1835648852866143,
+              "p95": 0.8596762893721461
+            },
+            "selector_calls": {
+              "count": 94,
+              "sum": 1172,
+              "mean": 12.46808510638298,
+              "median": 10.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 94,
+              "sum": 7699681,
+              "mean": 81911.5,
+              "median": 59157.0,
+              "p95": 212717
+            },
+            "selector_output_tokens": {
+              "count": 94,
+              "sum": 129416,
+              "mean": 1376.7659574468084,
+              "median": 916.5,
+              "p95": 3727
+            },
+            "selector_service_seconds": {
+              "count": 94,
+              "sum": 3558.8250824110582,
+              "mean": 37.8598413022453,
+              "median": 27.29023811989464,
+              "p95": 94.84227912593633
+            },
+            "browser_steps": {
+              "count": 94,
+              "sum": 1172,
+              "mean": 12.46808510638298,
+              "median": 10.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 94,
+              "sum": 4481.31938809948,
+              "mean": 47.6736105116966,
+              "median": 32.06486347364262,
+              "p95": 192.14840987883508
+            },
+            "elapsed_seconds": {
+              "count": 94,
+              "sum": 20358.226147595793,
+              "mean": 216.57687391059355,
+              "median": 152.38011179608293,
+              "p95": 579.773647621274
+            }
+          }
+        }
+      },
+      "all_episodes_in_phase": {
+        "N3": {
+          "episodes": 97,
+          "successes": 43,
+          "invalid": 14,
+          "metrics": {
+            "actor_requests": {
+              "count": 97,
+              "sum": 3885,
+              "mean": 40.05154639175258,
+              "median": 30,
+              "p95": 90
+            },
+            "actor_input_tokens": {
+              "count": 97,
+              "sum": 37504590,
+              "mean": 386645.25773195876,
+              "median": 188484,
+              "p95": 1099233
+            },
+            "actor_output_tokens": {
+              "count": 97,
+              "sum": 1280814,
+              "mean": 13204.268041237114,
+              "median": 8845,
+              "p95": 33946
+            },
+            "actor_client_request_seconds": {
+              "count": 97,
+              "sum": 26103.69180494733,
+              "mean": 269.11022479327147,
+              "median": 184.23210226697847,
+              "p95": 710.6628779880702
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 97,
+              "sum": 8.71492698835209,
+              "mean": 0.08984460812734113,
+              "median": 0.05968310358002782,
+              "p95": 0.25281505892053246
+            },
+            "selector_calls": {
+              "count": 97,
+              "sum": 1294,
+              "mean": 13.34020618556701,
+              "median": 10,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 97,
+              "sum": 5503717,
+              "mean": 56739.35051546392,
+              "median": 38245,
+              "p95": 141133
+            },
+            "selector_output_tokens": {
+              "count": 97,
+              "sum": 107047,
+              "mean": 1103.5773195876288,
+              "median": 787,
+              "p95": 3071
+            },
+            "selector_service_seconds": {
+              "count": 97,
+              "sum": 3478.523821853567,
+              "mean": 35.861070328387285,
+              "median": 25.33168155234307,
+              "p95": 90.20618947874755
+            },
+            "browser_steps": {
+              "count": 97,
+              "sum": 1293,
+              "mean": 13.329896907216495,
+              "median": 10,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 97,
+              "sum": 5650.798678970896,
+              "mean": 58.25565648423604,
+              "median": 29.950249769259244,
+              "p95": 200.2792872916907
+            },
+            "elapsed_seconds": {
+              "count": 97,
+              "sum": 20009.579586206935,
+              "mean": 206.28432563099932,
+              "median": 148.58726298995316,
+              "p95": 533.5264414441772
+            }
+          }
+        },
+        "N10": {
+          "episodes": 98,
+          "successes": 46,
+          "invalid": 17,
+          "metrics": {
+            "actor_requests": {
+              "count": 98,
+              "sum": 12510,
+              "mean": 127.65306122448979,
+              "median": 100.0,
+              "p95": 300
+            },
+            "actor_input_tokens": {
+              "count": 98,
+              "sum": 123329400,
+              "mean": 1258463.2653061224,
+              "median": 676095.0,
+              "p95": 3523990
+            },
+            "actor_output_tokens": {
+              "count": 98,
+              "sum": 4127448,
+              "mean": 42116.816326530614,
+              "median": 30497.5,
+              "p95": 107167
+            },
+            "actor_client_request_seconds": {
+              "count": 98,
+              "sum": 97543.3638180336,
+              "mean": 995.3404471227918,
+              "median": 701.9609462618828,
+              "p95": 2600.4675475247204
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 98,
+              "sum": 31.687675707042217,
+              "mean": 0.3233436296636961,
+              "median": 0.18406633124686778,
+              "p95": 1.2393927881494164
+            },
+            "selector_calls": {
+              "count": 98,
+              "sum": 1247,
+              "mean": 12.724489795918368,
+              "median": 10.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 98,
+              "sum": 8222118,
+              "mean": 83899.16326530612,
+              "median": 59707.0,
+              "p95": 212717
+            },
+            "selector_output_tokens": {
+              "count": 98,
+              "sum": 136526,
+              "mean": 1393.1224489795918,
+              "median": 927.5,
+              "p95": 3727
+            },
+            "selector_service_seconds": {
+              "count": 98,
+              "sum": 3778.6274599721655,
+              "mean": 38.557423060940465,
+              "median": 28.029084148351103,
+              "p95": 94.84227912593633
+            },
+            "browser_steps": {
+              "count": 98,
+              "sum": 1247,
+              "mean": 12.724489795918368,
+              "median": 10.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 98,
+              "sum": 4898.638557704631,
+              "mean": 49.98610773167991,
+              "median": 32.66153195500374,
+              "p95": 199.45160864526406
+            },
+            "elapsed_seconds": {
+              "count": 98,
+              "sum": 21740.15457794862,
+              "mean": 221.83831201988386,
+              "median": 155.59240257763304,
+              "p95": 581.6663043852895
+            }
+          }
+        }
+      }
+    },
+    "recovery_collection": {
+      "common_tasks": 199,
+      "by_arm": {
+        "N3": {
+          "episodes": 199,
+          "successes": 75,
+          "invalid": 20,
+          "metrics": {
+            "actor_requests": {
+              "count": 199,
+              "sum": 8892,
+              "mean": 44.68341708542714,
+              "median": 36,
+              "p95": 90
+            },
+            "actor_input_tokens": {
+              "count": 199,
+              "sum": 86841849,
+              "mean": 436391.2010050251,
+              "median": 298506,
+              "p95": 1124766
+            },
+            "actor_output_tokens": {
+              "count": 199,
+              "sum": 2949030,
+              "mean": 14819.24623115578,
+              "median": 12591,
+              "p95": 33946
+            },
+            "actor_client_request_seconds": {
+              "count": 199,
+              "sum": 61460.638286740985,
+              "mean": 308.84742857658784,
+              "median": 250.48024052707478,
+              "p95": 734.0067999721505
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 199,
+              "sum": 22.434471037704498,
+              "mean": 0.11273603536534924,
+              "median": 0.0756904543377459,
+              "p95": 0.3202942721545696
+            },
+            "selector_calls": {
+              "count": 199,
+              "sum": 2958,
+              "mean": 14.864321608040202,
+              "median": 12,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 199,
+              "sum": 12659294,
+              "mean": 63614.54271356784,
+              "median": 52426,
+              "p95": 140529
+            },
+            "selector_output_tokens": {
+              "count": 199,
+              "sum": 235612,
+              "mean": 1183.9798994974874,
+              "median": 953,
+              "p95": 3023
+            },
+            "selector_service_seconds": {
+              "count": 199,
+              "sum": 7577.2471950678155,
+              "mean": 38.07661907069254,
+              "median": 31.46742222039029,
+              "p95": 86.07557499036193
+            },
+            "browser_steps": {
+              "count": 199,
+              "sum": 2953,
+              "mean": 14.839195979899497,
+              "median": 12,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 199,
+              "sum": 12021.709762800485,
+              "mean": 60.410601823118014,
+              "median": 37.17053777864203,
+              "p95": 186.71235334966332
+            },
+            "elapsed_seconds": {
+              "count": 199,
+              "sum": 44815.13034125557,
+              "mean": 225.2016600063094,
+              "median": 178.02321081003174,
+              "p95": 505.53105595195666
+            }
+          }
+        },
+        "N10": {
+          "episodes": 199,
+          "successes": 93,
+          "invalid": 19,
+          "metrics": {
+            "actor_requests": {
+              "count": 199,
+              "sum": 29190,
+              "mean": 146.68341708542712,
+              "median": 130,
+              "p95": 300
+            },
+            "actor_input_tokens": {
+              "count": 199,
+              "sum": 293479890,
+              "mean": 1474773.3165829147,
+              "median": 940170,
+              "p95": 3735730
+            },
+            "actor_output_tokens": {
+              "count": 199,
+              "sum": 9835305,
+              "mean": 49423.6432160804,
+              "median": 42605,
+              "p95": 109956
+            },
+            "actor_client_request_seconds": {
+              "count": 199,
+              "sum": 236269.33281088667,
+              "mean": 1187.2830794516917,
+              "median": 1010.1214259923436,
+              "p95": 2644.3477704809047
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 199,
+              "sum": 70.5863840430975,
+              "mean": 0.35470544745275123,
+              "median": 0.2662602891214192,
+              "p95": 0.9175569186918437
+            },
+            "selector_calls": {
+              "count": 199,
+              "sum": 2913,
+              "mean": 14.638190954773869,
+              "median": 13,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 199,
+              "sum": 19520294,
+              "mean": 98091.9296482412,
+              "median": 83364,
+              "p95": 213973
+            },
+            "selector_output_tokens": {
+              "count": 199,
+              "sum": 334541,
+              "mean": 1681.110552763819,
+              "median": 1323,
+              "p95": 4327
+            },
+            "selector_service_seconds": {
+              "count": 199,
+              "sum": 9866.84576941235,
+              "mean": 49.582139544785676,
+              "median": 42.62775221373886,
+              "p95": 118.72413903195411
+            },
+            "browser_steps": {
+              "count": 199,
+              "sum": 2912,
+              "mean": 14.633165829145728,
+              "median": 13,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 199,
+              "sum": 11720.850073397625,
+              "mean": 58.89874408742525,
+              "median": 40.87327110115439,
+              "p95": 198.30132178217173
+            },
+            "elapsed_seconds": {
+              "count": 199,
+              "sum": 52268.45418438362,
+              "mean": 262.65554866524434,
+              "median": 216.40268364921212,
+              "p95": 596.7822214108892
+            }
+          }
+        }
+      },
+      "all_episodes_in_phase": {
+        "N3": {
+          "episodes": 203,
+          "successes": 78,
+          "invalid": 20,
+          "metrics": {
+            "actor_requests": {
+              "count": 203,
+              "sum": 9105,
+              "mean": 44.85221674876847,
+              "median": 42,
+              "p95": 90
+            },
+            "actor_input_tokens": {
+              "count": 203,
+              "sum": 88795767,
+              "mean": 437417.5714285714,
+              "median": 301728,
+              "p95": 1102401
+            },
+            "actor_output_tokens": {
+              "count": 203,
+              "sum": 3021827,
+              "mean": 14885.847290640395,
+              "median": 12646,
+              "p95": 33571
+            },
+            "actor_client_request_seconds": {
+              "count": 203,
+              "sum": 62851.33955239924,
+              "mean": 309.6125101103411,
+              "median": 252.3956697206013,
+              "p95": 732.3031750447117
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 203,
+              "sum": 22.924974469467998,
+              "mean": 0.11293090871659112,
+              "median": 0.07769161695614457,
+              "p95": 0.3164986134506762
+            },
+            "selector_calls": {
+              "count": 203,
+              "sum": 3029,
+              "mean": 14.921182266009852,
+              "median": 14,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 203,
+              "sum": 12967308,
+              "mean": 63878.3645320197,
+              "median": 55237,
+              "p95": 139861
+            },
+            "selector_output_tokens": {
+              "count": 203,
+              "sum": 241851,
+              "mean": 1191.384236453202,
+              "median": 997,
+              "p95": 2996
+            },
+            "selector_service_seconds": {
+              "count": 203,
+              "sum": 7769.121985588688,
+              "mean": 38.27153687482112,
+              "median": 31.72523719491437,
+              "p95": 84.26408901438117
+            },
+            "browser_steps": {
+              "count": 203,
+              "sum": 3024,
+              "mean": 14.89655172413793,
+              "median": 14,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 203,
+              "sum": 12247.9490150786,
+              "mean": 60.334724212209856,
+              "median": 37.17053777864203,
+              "p95": 185.38963244808838
+            },
+            "elapsed_seconds": {
+              "count": 203,
+              "sum": 45803.630633038934,
+              "mean": 225.63364843861544,
+              "median": 178.27531395480037,
+              "p95": 505.4559202841483
+            }
+          }
+        },
+        "N10": {
+          "episodes": 202,
+          "successes": 95,
+          "invalid": 19,
+          "metrics": {
+            "actor_requests": {
+              "count": 202,
+              "sum": 29640,
+              "mean": 146.73267326732673,
+              "median": 130.0,
+              "p95": 300
+            },
+            "actor_input_tokens": {
+              "count": 202,
+              "sum": 298533780,
+              "mean": 1477890,
+              "median": 919825.0,
+              "p95": 3735730
+            },
+            "actor_output_tokens": {
+              "count": 202,
+              "sum": 9987815,
+              "mean": 49444.62871287129,
+              "median": 42283.5,
+              "p95": 109739
+            },
+            "actor_client_request_seconds": {
+              "count": 202,
+              "sum": 239980.60404821998,
+              "mean": 1188.0227923179207,
+              "median": 1010.0431680197362,
+              "p95": 2644.3477704809047
+            },
+            "actor_receipt_wait_seconds": {
+              "count": 202,
+              "sum": 71.76353209139779,
+              "mean": 0.3552650103534544,
+              "median": 0.2642405293881893,
+              "p95": 0.9126061606220901
+            },
+            "selector_calls": {
+              "count": 202,
+              "sum": 2958,
+              "mean": 14.643564356435643,
+              "median": 13.0,
+              "p95": 30
+            },
+            "selector_input_tokens": {
+              "count": 202,
+              "sum": 19820689,
+              "mean": 98122.22277227722,
+              "median": 82980.5,
+              "p95": 213664
+            },
+            "selector_output_tokens": {
+              "count": 202,
+              "sum": 339511,
+              "mean": 1680.7475247524753,
+              "median": 1312.5,
+              "p95": 4145
+            },
+            "selector_service_seconds": {
+              "count": 202,
+              "sum": 10020.655950642657,
+              "mean": 49.607207676448795,
+              "median": 42.60926544922404,
+              "p95": 118.03939460543916
+            },
+            "browser_steps": {
+              "count": 202,
+              "sum": 2957,
+              "mean": 14.638613861386139,
+              "median": 13.0,
+              "p95": 30
+            },
+            "browser_step_seconds": {
+              "count": 202,
+              "sum": 12043.403142786585,
+              "mean": 59.62080763755735,
+              "median": 40.98846592241898,
+              "p95": 198.30132178217173
+            },
+            "elapsed_seconds": {
+              "count": 202,
+              "sum": 53232.410179702565,
+              "mean": 263.52678306783446,
+              "median": 215.5432438426651,
+              "p95": 596.7822214108892
+            }
+          }
+        }
+      }
+    }
+  },
+  "actor_record_receipt_consistency": {
+    "N3": {
+      "actor_requests_record_sum": 12990,
+      "actor_receipt_count": 12990,
+      "input_token_record_sum": 126300357,
+      "input_token_receipt_sum": 126300357,
+      "output_token_record_sum": 4302641,
+      "output_token_receipt_sum": 4302641,
+      "record_actor_client_seconds": 88955.03135734657,
+      "final_receipt_actor_client_seconds": 89098.11493239785,
+      "mean_final_receipt_actor_client_seconds_per_episode": 296.99371644132617,
+      "actor_client_latency_mismatched_episode_count": 1,
+      "actor_client_latency_late_tail_seconds": 143.08357505127788
+    },
+    "N10": {
+      "actor_requests_record_sum": 42150,
+      "actor_receipt_count": 42150,
+      "input_token_record_sum": 421863180,
+      "input_token_receipt_sum": 421863180,
+      "output_token_record_sum": 14115263,
+      "output_token_receipt_sum": 14115263,
+      "record_actor_client_seconds": 337523.9678662536,
+      "final_receipt_actor_client_seconds": 340355.07073838636,
+      "mean_final_receipt_actor_client_seconds_per_episode": 1134.5169024612878,
+      "actor_client_latency_mismatched_episode_count": 8,
+      "actor_client_latency_late_tail_seconds": 2831.1028721327893
+    }
+  },
+  "limitations": [
+    "Known token totals exclude requests lacking response usage; unknown tokens are not zero.",
+    "Actor accounting covers persisted receipts. Abruptly interrupted requests may leave no receipt, so all-attempt actor token totals are observed lower bounds rather than an exhaustive backend billing ledger.",
+    "Actor requests can contain transport retries; receipts count metered logical requests, not unobserved backend attempts.",
+    "Actor client and backend latencies overlap across candidates and episodes; their sums are not GPU time or episode wall time.",
+    "Nine committed episodes snapshot actor client latency before all failing sibling requests finish. Final receipt latency includes this tail; token and request counts reconcile exactly. The saved episode wall-time is time to result, not time until every sibling request is quiescent.",
+    "Episode elapsed time includes browser, generation, selection, judging, and artifact work; logging-phase differences affect it.",
+    "Both arms share each allocation and GPU; exact per-arm GPU-hours/FLOPs are unavailable.",
+    "Selector receipt base costs omit uncertain cache-write surcharge; ledgers conservatively charge upper usage costs, plus unresolved reservations. Neither is a provider invoice.",
+    "All-attempt costs include interrupted/uncommitted episodes; committed means use only the final selected record per task and arm.",
+    "Common-phase results are sensitivity subsets; full600 remains the primary cohort.",
+    "Both execution phases use the same awaited logging policy. Initial/recovery source sensitivity separately exposes retry and error-handling repairs; its task subsets are not randomly assigned.",
+    "Actor backend e2e latency is optional; only receipts carrying it contribute to its denominator."
+  ],
+  "caps_within_limits": true
+}

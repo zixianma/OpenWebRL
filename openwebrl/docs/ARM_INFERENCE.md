@@ -1402,3 +1402,57 @@ Both jobs and W&B runs finished; teardown and all caps passed. Verified **4,603 
 [Final aggregate](arm_results/selectionarm_random5_sameday30_20261007/aggregate.json) · [Independent audit](arm_results/selectionarm_random5_sameday30_20261007/independent-audit.json) · [Frozen plan](arm_results/selectionarm-random5-sameday30-plan-20261007.json).
 
 [Compute proxy](arm_results/selectionarm_random5_sameday30_20261007/cost.png) · [Latency](arm_results/selectionarm_random5_sameday30_20261007/latency.png) · [Tokens](arm_results/selectionarm_random5_sameday30_20261007/tokens.png). Compute is a generated-token estimate, not measured total FLOPs or dollars.
+
+<a id="sol-candidate-scaling-september-20261007"></a>
+## Sol candidate count: N=3 versus N=10, completed October 8
+
+All 600 episodes and 300 task pairs are verified. Increasing Sol's candidate count from 3 to 10 gives **+6.67 pp [95% paired interval: +2.00, +11.67]**, with 3.28× the actor output tokens. See the [results and cost tables](ARM_INFERENCE_SCALING.md#sol-candidate-counts-20261007); the reused N=5 reference was collected earlier.
+
+<details>
+<summary>Scientific configuration and comparison</summary>
+
+| Component | Frozen setting |
+| --- | --- |
+| Actor | Official OpenWebRL-4B-SFT, iteration 0; revision `15e777db2ddba2e0e82080ebccd3ad8d215b7f0a` |
+| Actor input | Complete corrected historical policy, full action history, one current screenshot; 32,768-token context |
+| Actor decoding | Temperature 0.7, top-p 0.9, 1,024 output tokens; top-k omitted to retain the native endpoint default |
+| Selector | `gpt-5.6-sol`, medium reasoning, 2,048 output tokens; strict index-only JSON over 3 or 10 full reasoning/action candidates and a high-detail screenshot |
+| Browser / horizon | Local browser, 30 steps, 1,800-second episode timeout |
+| Judge | Canonical Online-Mind2Web/AgentTrek `o4-mini-2025-04-16`, 4,096 response tokens |
+| Pairing | Same 300 tasks; two disjoint 150-task shards; fresh N=3/N=10 episodes interleaved by seeded arm order |
+| Seeds | Schedule seed 42; actor server seeds 4200/4201. FlashInfer ignores request seeds; exact deterministic replication is not claimed |
+
+Actor policy SHA256: `7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9`. No optimizer updates. The API backend is not an immutable model snapshot. N=3 and N=10 are the contemporaneous comparison; earlier N=5 and SFT-alone runs are references only.
+
+Both arms succeed on 103 tasks, only N=10 on 38, only N=3 on 18, and neither on 141. The paired task-bootstrap interval uses 10,000 resamples, seed 42; exact two-sided McNemar p=0.0105. The 255 common-valid tasks give +7.45 pp [1.96, 12.94]. Canonical verdicts permit partial progress. Targeted screenshot review flagged three N=3 positives for incomplete or underverified constraints; this nonrandom review is not an estimate of overall judge error, and canonical labels were preserved.
+
+</details>
+
+<details>
+<summary>Recovery, artifact verification and final accounting</summary>
+
+An upstream Sol internal-server error stopped the original collection after 195 saved records. Recovery preserved every committed record and all 18 interrupted browser attempts, retained the first-cause receipt and unresolved reservation, and repaired halt-cause preservation, bookkeeping and error handling under CPU tests. Scientific settings remained fixed. Only unfinished work resumed; interrupted provider-halt attempts are not extra task failures.
+
+All 600 final records, exact paired coverage, actor candidate counts and selected-action alignment, saved rollouts/screenshots, verdict identities and immutable earlier hashes passed verification. Both scheduler jobs completed, both evaluation W&B runs finished with 300 records, and both controllers confirmed owned-process teardown. W&B project: `openwebrl-evals`. Source-phase sensitivity covers 94 initial and 199 recovery task pairs; seven cross-source pairs remain in the primary 300. These subsets were not randomly assigned.
+
+| Resource | Used, including every attempt | Approved cap |
+| --- | ---: | ---: |
+| Shard 0 scheduler seconds | 10,138 | 14,400 |
+| Shard 1 scheduler seconds | 9,919 | 14,400 |
+| Total H200-hours | 5.5714 | 8.0000 |
+| N=3 browser attempts | 310 | 330 |
+| N=10 browser attempts | 308 | 330 |
+| Sol N=3 API calls | 4,421 | 9,900 |
+| Sol N=10 API calls | 4,312 | 9,900 |
+| Judge API calls | 400 | 2,640 |
+| Sol N=3 charged/reserved USD | 96.1845 | 125.0000 |
+| Sol N=10 charged/reserved USD | 150.5100 | 200.0000 |
+| Judge charged/reserved USD | 3.3488 | 10.0000 |
+
+Each shard used one H200, eight CPUs and 120 GiB; browser concurrency stayed at 16 across the study. Total API charge/reservation is $250.0432, including the unchanged $0.304635 unresolved failed-request reservation. Conservative ledger values account for uncertain cache-write costs; they are not provider invoices. Not every episode invokes the terminal API judge: invalid and unjudged outcomes remain zero.
+
+Known all-attempt actor usage is 561,180,262 input and 18,876,168 output tokens; 158 receipts lack usage, and abrupt interruptions may leave no receipt. These totals are observed lower bounds. Nine saved episode counters precede failing sibling requests finishing: use finalized receipt timing for request totals. Episode latency measures time to result; overlapping request seconds cannot be converted into per-arm GPU-hours or FLOPs.
+
+[Aggregate and audit hashes](arm_results/sol_candidate_scaling_september_20261007/aggregate.json) · [Full aggregate accounting and sensitivities](arm_results/sol_candidate_scaling_september_20261007/accounting.json). Raw task payloads, trajectories and screenshots remain private.
+
+</details>

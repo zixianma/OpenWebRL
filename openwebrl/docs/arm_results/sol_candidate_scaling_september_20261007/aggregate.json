@@ -1,0 +1,187 @@
+{
+  "study": "Sol candidate count under the corrected September harness",
+  "verified_complete": true,
+  "completed_utc": "2026-10-08",
+  "tasks": 300,
+  "records": 600,
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": null,
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": null,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "gpt-5.6-sol",
+    "candidates_by_mode": {
+      "arm": 3,
+      "sol10": 10
+    },
+    "selector_reasoning_effort": "medium",
+    "selector_max_output_tokens": 2048,
+    "selector_format": "strict_json_schema_index_only",
+    "selector_images": "high-detail current screenshot, historical selection_messages builder",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 42,
+    "server_seed_base": 4200,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "same300 tasks, fresh Sol N3/N10 episodes; interleaved random arm order; reuse completed N5 and SFT controls",
+    "historical_reference": "Corrected September reproduction: Sol N5 130/300; SFT alone95/300, October7",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "sol-candidate-scaling-september-20261007-v1",
+    "seed_realization": "Explicit server seeds4200/4201; FlashInfer request seeds ignored; no deterministic replication claim.",
+    "comparability": "N3/N10 collected together; reused N5/SFT controls differ in collection time. Same frozen corrected September harness; API backend is not an immutable snapshot."
+  },
+  "by_mode": {
+    "arm": {
+      "completed": 300,
+      "successes": 121,
+      "valid": 266,
+      "invalid": 34,
+      "overall": 0.4033333333333333,
+      "valid_only": 0.4548872180451128,
+      "actor_requests": 12990,
+      "actor_output_tokens": 4302641,
+      "actor_input_tokens": 126300357,
+      "actor_client_request_seconds": 88955.03135734657,
+      "browser_steps": 4317,
+      "browser_step_seconds": 17898.747694049496,
+      "selector_calls": 4323,
+      "selector_input_tokens": 18471025,
+      "selector_output_tokens": 348898,
+      "selector_service_seconds": 11247.645807442255,
+      "elapsed_seconds": 65813.21021924587,
+      "committed_means": {
+        "elapsed_seconds": 219.37736739748624,
+        "actor_requests": 43.3,
+        "actor_input_tokens": 421001.19,
+        "actor_output_tokens": 14342.136666666667,
+        "selector_calls": 14.41,
+        "selector_input_tokens": 61570.083333333336,
+        "selector_output_tokens": 1162.9933333333333,
+        "browser_steps": 14.39
+      },
+      "committed_latency_quantiles_seconds": {
+        "p50": 171.47324889316224,
+        "p95": 522.7283879525494
+      }
+    },
+    "sol10": {
+      "completed": 300,
+      "successes": 141,
+      "valid": 264,
+      "invalid": 36,
+      "overall": 0.47,
+      "valid_only": 0.5340909090909091,
+      "actor_requests": 42150,
+      "actor_output_tokens": 14115263,
+      "actor_input_tokens": 421863180,
+      "actor_client_request_seconds": 337523.9678662536,
+      "browser_steps": 4204,
+      "browser_step_seconds": 16942.041700491216,
+      "selector_calls": 4205,
+      "selector_input_tokens": 28042807,
+      "selector_output_tokens": 476037,
+      "selector_service_seconds": 13799.283410614822,
+      "elapsed_seconds": 74972.56475765118,
+      "committed_means": {
+        "elapsed_seconds": 249.90854919217063,
+        "actor_requests": 140.5,
+        "actor_input_tokens": 1406210.6,
+        "actor_output_tokens": 47050.87666666666,
+        "selector_calls": 14.016666666666667,
+        "selector_input_tokens": 93476.02333333333,
+        "selector_output_tokens": 1586.79,
+        "browser_steps": 14.013333333333334
+      },
+      "committed_latency_quantiles_seconds": {
+        "p50": 203.1414848328568,
+        "p95": 592.8825627677609
+      }
+    }
+  },
+  "paired": {
+    "sol10_minus_arm": {
+      "difference": 0.06666666666666667,
+      "bootstrap95": [
+        0.02,
+        0.11666666666666667
+      ],
+      "first_only": 38,
+      "second_only": 18,
+      "common_valid_tasks": 255,
+      "common_valid_first_successes": 137,
+      "common_valid_second_successes": 118,
+      "exact_mcnemar_two_sided_p": 0.010454818321892184,
+      "table": {
+        "both_success": 103,
+        "n3_only": 18,
+        "n10_only": 38,
+        "neither_success": 141
+      },
+      "common_valid_difference": 0.07450980392156863,
+      "common_valid_bootstrap95": [
+        0.0196078431372549,
+        0.12941176470588237
+      ]
+    }
+  },
+  "denominator": "All300 scheduled tasks per arm; committed infrastructure-invalid outcomes count zero. Interrupted provider-halt attempts remain preserved and charged but are not extra task failures.",
+  "bootstrap_unit": "Task; paired N10 minus N3;10000 resamples,seed42.",
+  "comparability": "N3/N10 collected together; reused corrected N5 and SFT-alone references differ in time. Canonical judge permits partial progress; targeted flags are not an exhaustive relabeling.",
+  "targeted_semantic_review": {
+    "flagged_positives": 3,
+    "mode": "arm",
+    "raw_outcomes_unchanged": true,
+    "exhaustive": false,
+    "categories": [
+      "incomplete_result",
+      "underverified_constraints",
+      "waived_source_constraint"
+    ]
+  },
+  "invalid_record_error_fields": {
+    "arm": {
+      "ValueError": 21,
+      "none": 13
+    },
+    "sol10": {
+      "none": 15,
+      "ValueError": 21
+    }
+  },
+  "invalid_error_note": "Record error_type is not a complete root-cause classification; none does not mean no invalidity.",
+  "accounting_file": "accounting.json",
+  "evidence_sha256": {
+    "integrity": "86b139af403dd71f655d3e29973a6b7507e34232540f342e4c63b3468af17047",
+    "coverage": "8f621f9472687289e7fb1c61727c60e850d9348394ad4a4f9293e11c5e1a2a61",
+    "paired": "5200fd264cefdbc2577932f745b7509016c0a5e065a286cffd79f28660dfd1e1",
+    "accounting": "4d867c3ee8256e4492a107f520cb08d3fafe253f6823d1ec02e154d437558db6",
+    "terminal_wandb": "7d4e5adb7f05c04ecd740ae409e25d2e5e6f1cd13387d69d777f2f5a9bcc12bc",
+    "visual": "294aaa8c500937804b58d27d3aa620ed90d66a1030404959ac0939357953dc72"
+  },
+  "audit": {
+    "records_verified": 600,
+    "paired_tasks_verified": 300,
+    "original_records_preserved": 195,
+    "interrupted_attempts_preserved": 18,
+    "integrity_issues": 0,
+    "remote_wandb_finished": true,
+    "owned_workers_torn_down": true
+  },
+  "timing_note": "Record-level actor client timing has a nine-episode snapshot-tail limitation; finalized receipt timing and limitations are in accounting.json. Episode wall time is time to result, not GPU time."
+}

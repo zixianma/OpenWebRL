@@ -71,6 +71,33 @@ Sol/GPT-5.5 use medium reasoning and 2,048 selector tokens; Luna uses medium rea
 
 **Sol reproduces a similar rate to September:** 43.33% now versus 44.00% then. Sol versus GPT-5.5 is inconclusive: **+1.33 pp [−3.67, +6.33]**. Luna/Kev differ by one success; Jev's gain interval includes zero. [API aggregate](arm_results/api_selector_september_reproduction_20261006/aggregate.json) · [Local v2 audit](arm_results/local_sft_selector_controlled_20261006.json) · [Local v2 protocol](arm_results/local_inference_rerun_plan_20261006.json).
 
+<a id="sol-candidate-counts-20261007"></a>
+## Sol: does increasing the candidate count help?
+
+**N=10 improves over N=3 by +6.67 pp [95% paired interval: +2.00, +11.67]**, at **3.28× the mean actor output tokens**. Both arms used the corrected September protocol above and were collected together on the same 300 tasks.
+
+| Candidates | Collection | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 3 | Fresh paired study | 300 | 121 | 40.33% | 266 | 34 | 45.49% |
+| 5 | Earlier reference | 300 | 130 | 43.33% | 268 | 32 | 48.51% |
+| 10 | Fresh paired study | 300 | 141 | 47.00% | 264 | 36 | 53.41% |
+
+N=10 wins alone on 38 tasks; N=3 wins alone on 18. Invalid episodes remain zero in the primary denominator. N=5 is reused from the [earlier API-selector study](#api-selector-results-20261007); collection time differs, so its intermediate rate is descriptive. These are canonical o4-mini/AgentTrek scores, which permit partial progress; three targeted positive flags remain documented without relabeling.
+
+<details>
+<summary>Cost and paired sensitivity</summary>
+
+| Candidates | Mean actor output tokens/task | Mean episode latency, s | All-attempt selector charge/reservation, USD |
+| --- | ---: | ---: | ---: |
+| 3 | 14,342 | 219.38 | 96.18 |
+| 10 | 47,051 | 249.91 | 150.51 |
+
+On the 255 tasks valid in both arms, the gain is +7.45 pp [95% paired interval: +1.96, +12.94]. Primary intervals use 10,000 task bootstrap draws, seed 42; they do not include judge error or website drift. Latency is time to result and includes overlapping work, not GPU compute. Shared campaign usage was 5.57 H200-hours and 618 browser attempts, including interrupted attempts. API charges/reservations are conservative ledger values, not invoices.
+
+</details>
+
+[Aggregate](arm_results/sol_candidate_scaling_september_20261007/aggregate.json) · [Accounting](arm_results/sol_candidate_scaling_september_20261007/accounting.json) · [Protocol and recovery audit](ARM_INFERENCE.md#sol-candidate-scaling-september-20261007).
+
 ## Actors alone
 
 <a id="local-jev-actor-results-20261006"></a>
