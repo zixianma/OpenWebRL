@@ -34,7 +34,7 @@ Caps are independent, with no transfers. Startup episodes remain in the final de
 
 | Question | Decision rule |
 | --- | --- |
-| Can selective sampling save compute? | Sample one candidate. If its mean base-policy log-probability is below the frozen threshold, sample four more and apply unchanged Piotr selection to all five; otherwise execute the first. |
+| Can selective sampling save compute? **Exploratory** | Sample one candidate. If its mean base-policy log-probability is below the frozen threshold, sample four more and apply unchanged Piotr selection to all five; otherwise execute the first. |
 | Can the actor select its own proposals? | Always sample five; choose the highest mean base-policy log-probability, breaking ties by the first index. |
 
 The score covers the **full generated response**, including reasoning and action. Native generated tokens count; synthetic delimiter/newline repairs do not. Duplicates and malformed candidates remain eligible. Likelihood is a confidence heuristic, not a calibrated success probability. All 300 task IDs remain in each evaluation denominator, with invalid/unjudged outcomes zero.
@@ -42,9 +42,11 @@ The score covers the **full generated response**, including reasoning and action
 <details>
 <summary>Calibration, probability verification and comparison limits</summary>
 
+**The uncertainty-gated run is exploratory:** its threshold uses final-decision states from the same evaluation tasks, not an independent, representative calibration set. The always-five likelihood arm uses no calibration threshold.
+
 The gate threshold is the 25th percentile, linearly interpolated at `(n−1)×0.25`, of base-policy scores on **278 saved final-decision states** from the previous SFT N=1 run. Of 300 episodes, 21 lack a saved state and one fails response-token reconstruction; these exclusions use artifact availability and identity checks, never success labels. Historical token IDs were not retained: reconstructed prompt, screenshot and response-token counts are checked against saved receipts. The frozen cutoff is **−0.21557618820922406 nats/token**, independently recomputed from 111,018 scored tokens before adaptive episodes began. Trigger only when the first candidate’s mean score is strictly below this value.
 
-This calibration sample emphasizes late decisions; its quartile does not promise a 25% trigger frequency on the new trajectories. Report the observed trigger fraction and mean candidates per decision. Calibration and startup probes consume the newly approved allocation and retain all request receipts.
+Of the 278 calibration states, **86 are from decision 30**. Final-state sampling and reuse of the evaluation tasks limit generalization even without success-label filtering. Receipt verification establishes score correctness, not representative or held-out calibration; the quartile does not promise a 25% online trigger frequency. Report the observed trigger fraction and mean candidates per decision. Calibration and startup probes consume the approved allocation and retain all request receipts.
 
 SGLang normally reports temperature-scaled output probabilities. These runs enable `SGLANG_RETURN_ORIGINAL_LOGPROB=1`; source and actual actor-environment checks verify the pre-temperature, pre-top-p path. A live multimodal generation/teacher-forcing probe must also pass before collection. Sampling remains T=0.7/p=0.9.
 

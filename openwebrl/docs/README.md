@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Selective sampling and policy-likelihood selection: two submitted SFT conditions, 300 episodes each; frozen confidence scoring, calibration and caps](ARM_INFERENCE.md#likelihood-scaling-20261007).
+[Exploratory uncertainty gating and always-five likelihood selection: 300 SFT episodes each; calibration limits and caps](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
 [RL actor + Piotr SelectionARM: fresh paired full300 study collecting with the previous 30-step decoding and frozen SFT frontend](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 

@@ -98,10 +98,10 @@ SFT actor, the same 300 tasks and 30-step decoding as the Piotr comparisons; **3
 
 | Method | Candidates per decision | Selection rule | Planned episodes |
 | --- | --- | --- | ---: |
-| Uncertainty-gated Piotr | One; four more if the first has low likelihood | Execute the first, or let Piotr choose among all five | 300 |
+| Uncertainty-gated Piotr **(exploratory)** | One; four more if the first has low likelihood | Execute the first, or let Piotr choose among all five | 300 |
 | Policy likelihood | Five | Highest mean base-policy token log-probability | 300 |
 
-The score includes the full generated response, including reasoning and action, and excludes synthetic formatting tokens. The gate triggers below **−0.215576 nats/token**, the frozen 25th percentile of 278 saved SFT final-decision responses, calibrated without success labels. This late-decision sample does not guarantee a 25% trigger rate online. Reused SFT/Piotr/random controls have separate collection times. [Protocol and caps](ARM_INFERENCE.md#likelihood-scaling-20261007) · [Frozen design](arm_results/likelihood_scaling_plan_20261007.json).
+Scores include reasoning and action; synthetic formatting tokens are excluded. The gate cutoff is **−0.215576 nats/token**, the frozen 25th percentile of 278 saved SFT final-decision responses. Always-five likelihood uses no threshold. Reused controls have separate collection times. [Protocol, same-task calibration limits and caps](ARM_INFERENCE.md#likelihood-scaling-20261007) · [Design record](arm_results/likelihood_scaling_plan_20261007.json).
 
 ## Supporting evidence and history
 

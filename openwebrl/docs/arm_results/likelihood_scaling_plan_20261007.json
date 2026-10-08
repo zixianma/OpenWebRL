@@ -40,16 +40,23 @@
     "quantile": 0.25,
     "quantile_method": "linear interpolation at (n-1)*q",
     "uses_success_labels": false,
-    "limitation": "Last preserved decision per episode; late-decision bias. Calibration quartile does not imply 25% online gating.",
+    "same_tasks_as_evaluation": true,
+    "independent_calibration_set": false,
+    "representative_decision_sample": false,
+    "states_at_decision_30": 86,
+    "limitation": "Last preserved decision per episode on the same evaluation tasks; final-state and late-decision bias. Label-blind calibration is not independent or representative. Calibration quartile does not imply 25% online gating.",
     "scored_tokens": 111018,
     "verified": true,
     "finished_epoch": 1791441846.3528683,
-    "independent_evidence_audit_verified": true
+    "independent_evidence_audit_verified": true,
+    "verification_scope": "Receipt identity and score/threshold computation; does not establish representative or held-out calibration."
   },
   "studies": [
     {
       "study": "selectionarm-adaptive5-sft30-20261007",
       "selection_rule": "uncertainty_gated_piotr",
+      "interpretation": "exploratory",
+      "uses_calibration_threshold": true,
       "planned_episodes": 300,
       "shards": 2,
       "resources_per_shard": {
@@ -79,6 +86,7 @@
     {
       "study": "selectionarm-likelihood5-sft30-20261007",
       "selection_rule": "policy_likelihood_n5",
+      "uses_calibration_threshold": false,
       "planned_episodes": 300,
       "shards": 2,
       "resources_per_shard": {
