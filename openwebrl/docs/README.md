@@ -47,7 +47,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
 | [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Audited local actor-alone and matched SFT + selector results; historical comparisons, configs, efficiency and audit limits |
-| [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, and checkpoint procedures |
+| [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, checkpoint procedures, and [explicit action comparison](ARM_SFT.md#arm-comparison-sft-20261007) |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |
 | [RL_RESULTS.md](RL_RESULTS.md) | Tables-only RL checkpoint scores; overall, valid-only, invalid counts, and separate protocols |

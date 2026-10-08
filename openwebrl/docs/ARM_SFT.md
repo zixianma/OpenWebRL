@@ -11,8 +11,133 @@ C2 rollout collection, action-level filtering, original SFT, optimizer ablation 
 - [Next action-level filtered-SFT ablations](#arm-filtered-sft-ablations)
 - [C2 checkpoint scaling evaluation](#arm-c2-scaling-eval)
 - [C2 update-500/update-700 full evaluation](#arm-c2-full300-eval)
+- [SFT with explicit action comparison](#arm-comparison-sft-20261007)
 
 ---
+
+<a id="arm-comparison-sft-20261007"></a>
+## SFT with explicit action comparison — 2026-10-07
+
+**Proposal:** augment the existing filtered examples with a short comparison of
+plausible actions, followed by one chosen executable action. This is a method
+proposal; annotation, training and evaluation have not been launched.
+
+The existing C2/1A targets already include the winning response's reasoning and
+action. The additional supervision here is **why one action is preferable to
+the alternatives at the same state**. “All actions” means all members of a
+bounded candidate set; browser actions include arbitrary coordinates and text,
+so exhaustive enumeration is not a practical target.
+
+### Training example and deployment
+
+Let `x` be the goal, current screenshot/URL and prior executed history. Recover
+the saved five-action draw for a retained training state and deduplicate exact
+executable actions, preserving the executed winner. Keep two to five distinct
+options, without padding or assuming nearby coordinates identify the same
+control. States without a usable comparison remain in ordinary filtered SFT.
+
+Construct one concise response that describes every retained option, its
+visible supporting evidence, expected contribution to the goal and important
+limitation, then explains the choice. Unexecuted effects are predictions, and
+two options may both be reasonable. A successful trajectory does not prove its
+executed action was uniquely optimal.
+
+```text
+<think>
+Goal: find the return window.
+A. Open the visible Returns link: directly addresses the requested policy.
+B. Use site search for "returns": plausible, but adds a search step.
+C. Scroll further: could expose more links; the relevant link is already visible.
+Decision: choose A because it directly opens the relevant policy from this page.
+</think>
+<tool_call>{the chosen action in the existing tool schema}</tool_call>
+```
+
+This example is schematic. Actual data must bind the final tool call to the
+original selected action and its screenshot. Candidate descriptions are inert
+text; only the final call is executable. Reuse the ordinary reasoning/tool-call
+format and verify the parser cannot execute quoted alternatives. At deployment
+the student receives only `x` and generates the comparison and action in one
+response; no external candidate list or selector is assumed. The initial
+comparison budget is 256–512 tokens for the entire comparison text, a proposed
+cap to audit for coverage rather than an established optimum. Reserve separate
+space for the complete final tool call; never truncate it to satisfy this cap.
+Keep the complete response in saved traces. For carried history, extract the
+single final paragraph beginning `Decision:` and the executed action. Apply
+this deterministic projection to reconstructed training histories and runtime
+histories in every arm. Responses without that marker retain their ordinary
+reasoning; missing/ambiguous markers in comparison outputs are flagged, with
+full reasoning retained rather than silently guessing a summary. Measure these
+fallbacks and context growth in the free-generation check.
+
+### Annotation and filtering
+
+Use the existing training split, exact pre-action observations and saved
+candidate actions. A frozen annotation teacher sees the state and shuffled
+candidate actions, with their original rationales, ARM scores, winner identity
+and future outcomes hidden. It writes fresh grounded comparisons and chooses
+an action, allowing explicit ties or insufficient evidence. Initially retain
+comparison targets only when its blind choice agrees with the executed winner
+(or includes it in an explicit tied-best set). Preserve all other original SFT
+examples and report agreement, coverage and exclusions by task/action type.
+This agreement gate is a data-selection decision, not independent proof of
+optimality. Never relabel unexecuted alternatives as observed failures.
+
+Keep terminal labels in the offline filtering record. No future screenshot,
+branch outcome or held-out benchmark trajectory enters an annotation prompt
+or student target. Recheck image joins, action identity, task-disjoint splits,
+token bounds and hallucinated controls before training. Candidate order must
+not encode the chosen index.
+
+### Objective and comparison
+
+For each retained state, `y` is the original winning response and `z` is the
+new comparison followed by that same final action. Use response-only,
+per-example token-mean cross-entropy, masking image/prompt/history tokens:
+
+$$
+\mathcal L(\theta)=\mathbb E_{i\sim D_{\rm filtered}}\left[
+ (1-\rho m_i)\operatorname{CE}(y_i\mid x_i)
+ +\rho m_i\operatorname{CE}(z_i\mid x_i)\right],
+\qquad m_i=\mathbf 1[\text{comparison target available}].
+$$
+
+Start with `rho = 0.5` as an explicit, unvalidated mixture proposal for eligible
+states. Keep the original state-ID sampling schedule, then sample one target
+form per presentation; ineligible states always use the original target.
+Report the resulting fraction of augmented presentations. Do not silently
+double optimizer updates by appending rewritten duplicates or oversample the
+agreement-filtered subset. The matched control uses the same state-ID schedule,
+substituting original targets at every comparison slot. Initialize each arm from the same
+original SFT model with fresh optimizer state. Hold LoRA, optimizer, image
+processing and action protocol fixed to the selected filtered-SFT reference.
+
+| Control | Target at comparison slots | Question |
+| --- | --- | --- |
+| Matched filtered SFT | Original selected response | Does the augmentation help beyond the same states/exposure? |
+| Rationale control | Fresh rationale for the winner only | Is the gain from better annotations alone? |
+| Explicit comparison | All retained options, comparison, selected action | Does considering alternatives add value? |
+
+Match state exposure first; report supervised tokens, GPU time and inference
+latency separately. A token/compute-matched comparison is needed before claiming
+an efficiency advantage. Evaluate all arms on contemporaneous paired tasks
+under one frozen browser/actor/judge protocol, with overall success primary,
+valid-only rates, invalid actions, loops, truncation and per-turn latency.
+
+### What the earlier serial experiment teaches us
+
+The [September serial-alternatives experiment](ARM_RESULTS.md#arm-serial-sft-comparison)
+concatenated independently generated candidate rationales and a selected index;
+it had no comparative teacher rationale. It encountered a prompt-order mismatch
+and failed subsequent free-generation protocol checks. Those results do not
+establish whether grounded action comparison improves task success. This
+proposal uses fresh comparative labels and the existing response format.
+
+Before a full evaluation, require an actual free-generation panel from ordinary
+state-only inputs, exact train/evaluation prompt parity, valid final actions,
+coverage of alternatives and no truncation. Report opening/boundary-token and
+final-action losses separately: low teacher-forced loss can reflect copying
+an action already supplied in the target prefix. Benefit remains unmeasured.
 
 <!-- document:ARM_FILTERED_SFT_PLAN.md:start -->
 <a id="arm-filtered-sft-plan"></a>
