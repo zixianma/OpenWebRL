@@ -39,10 +39,10 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Branch continuations: held-out selection 38.12% versus actor-first 29.84%; fixed pool exhausted at 124/149 states, extra draws held; matched 119-state teacher comparison and limitations](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
+[Branch continuations: held-out selection 38.12% versus actor-first 29.84%; fixed pool exhausted at 124/149 states, approved extra draws queued; matched 119-state teacher comparison and limitations](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
-[Branch collection: fixed pool exhausted at 124/149 states and 1,860 outcomes; decision groups 1–3/4–9/10–15 contain 74/27/23 states; extra draws held pending cohort decision](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
+[Branch collection: fixed pool exhausted at 124/149 states and 1,860 outcomes; decision groups 1–3/4–9/10–15 contain 74/27/23 states; approved same-state extra draws queued](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
 [Original early-state readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).

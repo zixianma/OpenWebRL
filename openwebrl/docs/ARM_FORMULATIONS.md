@@ -22,7 +22,7 @@ Both teachers choose without seeing continuation outcomes; the after-execution t
 
 <a id="arm-continuation-branches-results-20261007"></a>
 
-**Collection stopped short of its target:** all 2,090 fixed candidate tasks were considered, yielding **124 of 149 states** under unchanged replay checks and depth quotas. At the October 8, 17:58 UTC audit cutoff, these states have all five actions × three continuations: **1,860 outcomes**, including 1,710 valid and 150 invalid outcomes. Invalids remain zero. The target is not marked complete, and the two extra draws have not started.
+**Collection stopped short of its target:** all 2,090 fixed candidate tasks were considered, yielding **124 of 149 states** under unchanged replay checks and depth quotas. At the October 8, 17:58 UTC audit cutoff, these states have all five actions × three continuations: **1,860 outcomes**, including 1,710 valid and 150 invalid outcomes. Invalids remain zero. The 149-state target remains incomplete. A separately approved extension is queued to add two fresh continuations per action on these same 124 states; no extra-draw outcomes are included below.
 
 ### Can observed continuation outcomes improve the root-action choice?
 
@@ -126,7 +126,7 @@ Teacher: unchanged index-only Luna-high, three before judgments and three after 
 
 Every state contributes equally. Ten thousand bootstrap draws resample whole states, retaining candidates, repetitions and overlapping folds. Main tables use the LOO aggregation seed; repeat controls use their original seed. Intervals are exploratory and not adjusted for multiple comparisons. Saved outcome/teacher fingerprints and independent exact LOO calculations agree. Task-level artifacts remain private.
 
-The planned next stage adds two fresh continuations for each existing action, selecting on the original three and scoring the fresh two; five-fold LOO is secondary. It remains held because its approved binding requires 149 verified primary states. Using the audited 124-state cohort instead requires an explicit cohort amendment; no extra-draw outcomes are included here. The candidate pool was exhausted without relaxing quotas, replay checks or scientific settings. [Collection protocol and history](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
+The approved cohort amendment freezes these 124 states and all 1,860 original outcomes. The released extension queues 1,240 new continuations (two per existing action), for 3,100 outcomes in total. Its primary comparison selects using the original three draws and scores the fresh two; five-fold LOO is secondary. No candidates or teachers are regenerated. The extension uses its existing four-H200, eight-hour total allowance, including retries, and the remaining shared browser/API caps; no primary unused time or additional budget is transferred. The original 149-state target remains unmet even if this 124-state extension completes. The candidate pool was exhausted without relaxing quotas, replay checks or scientific settings. [Collection protocol and history](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
 
 </details>
 
