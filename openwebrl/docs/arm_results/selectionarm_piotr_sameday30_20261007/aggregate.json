@@ -1,0 +1,368 @@
+{
+  "epoch": 1791418447.549235,
+  "complete": true,
+  "verified_complete": true,
+  "status": "verified_complete",
+  "episodes": 600,
+  "tasks": 300,
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT:iteration0",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "seed": 45,
+    "server_seed_base": 4500,
+    "repetition": 1,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "Fresh full300 SFT and Piotr SelectionARM pair, same-day30 control for the completed50-step pair",
+    "historical_reference": "ARM_SUMMARY first table: 30.0% baseline and42.7% SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "selectionarm-piotr-sameday30-20261007",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Same task list, models, prompts, decoding, seed45 and runtime as the completed50-step pair; step cap50 to30. Fresh browsers and outcomes. Same-day later collection does not remove within-day website drift; FlashInfer does not promise identical prefixes.",
+    "actor_control_source": "same campaign; randomized interleaved paired arms"
+  },
+  "by_mode": {
+    "actor0": {
+      "episodes": 300,
+      "successes": 99,
+      "valid": 271,
+      "invalid": 29,
+      "success_rate": 0.33,
+      "valid_only": 0.36531365313653136,
+      "totals": {
+        "actor_requests": 4466,
+        "actor_input_tokens": 43060178,
+        "actor_output_tokens": 1441155,
+        "actor_client_request_seconds": 23953.696565948427,
+        "browser_steps": 4452,
+        "browser_step_seconds": 15720.814852782525,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 44010.54857133608
+      },
+      "means": {
+        "actor_requests": 14.886666666666667,
+        "actor_input_tokens": 143533.92666666667,
+        "actor_output_tokens": 4803.85,
+        "actor_client_request_seconds": 79.84565521982809,
+        "browser_steps": 14.84,
+        "browser_step_seconds": 52.40271617594175,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 146.70182857112027
+      },
+      "missing_metric_episodes": {}
+    },
+    "arm": {
+      "episodes": 300,
+      "successes": 120,
+      "valid": 261,
+      "invalid": 39,
+      "success_rate": 0.4,
+      "valid_only": 0.45977011494252873,
+      "totals": {
+        "actor_requests": 22975,
+        "actor_input_tokens": 236375310,
+        "actor_output_tokens": 7772205,
+        "actor_client_request_seconds": 141738.73433811823,
+        "browser_steps": 4569,
+        "browser_step_seconds": 18692.375423583668,
+        "selector_calls": 4580,
+        "selector_input_tokens": 17317004,
+        "selector_output_tokens": 39475,
+        "selector_service_seconds": 2384.7392247905955,
+        "elapsed_seconds": 57941.188986482564
+      },
+      "means": {
+        "actor_requests": 76.58333333333333,
+        "actor_input_tokens": 787917.7,
+        "actor_output_tokens": 25907.35,
+        "actor_client_request_seconds": 472.46244779372745,
+        "browser_steps": 15.23,
+        "browser_step_seconds": 62.307918078612225,
+        "selector_calls": 15.266666666666667,
+        "selector_input_tokens": 57723.346666666665,
+        "selector_output_tokens": 131.58333333333334,
+        "selector_service_seconds": 7.949130749301985,
+        "elapsed_seconds": 193.13729662160856
+      },
+      "missing_metric_episodes": {}
+    }
+  },
+  "paired_arm_minus_sft": {
+    "tasks": 300,
+    "difference": 0.07,
+    "bootstrap95": [
+      0.023333333333333334,
+      0.11666666666666667
+    ],
+    "first_only": 36,
+    "second_only": 15,
+    "common_valid_tasks": 256,
+    "common_valid_arm_successes": 119,
+    "common_valid_actor_successes": 97
+  },
+  "old30_mean_paired": {
+    "difference": 0.05,
+    "bootstrap95": [
+      0.013333333333333334,
+      0.085
+    ]
+  },
+  "same_day50_paired": {
+    "tasks": 300,
+    "difference": 0.09333333333333334,
+    "bootstrap95": [
+      0.04,
+      0.14666666666666667
+    ],
+    "first_only": 49,
+    "second_only": 21,
+    "common_valid_tasks": 215,
+    "common_valid_arm_successes": 115,
+    "common_valid_actor_successes": 87
+  },
+  "three_full30_runs": {
+    "runs": 3,
+    "per_run": [
+      {
+        "run": "repeat-1-seed43",
+        "tasks_per_method": 300,
+        "successes": {
+          "actor0": 100,
+          "arm": 115
+        },
+        "success_rates": {
+          "actor0": 0.3333333333333333,
+          "arm": 0.38333333333333336
+        },
+        "gain": 0.050000000000000044
+      },
+      {
+        "run": "repeat-2-seed44",
+        "tasks_per_method": 300,
+        "successes": {
+          "actor0": 98,
+          "arm": 113
+        },
+        "success_rates": {
+          "actor0": 0.32666666666666666,
+          "arm": 0.37666666666666665
+        },
+        "gain": 0.04999999999999999
+      },
+      {
+        "run": "selectionarm-piotr-sameday30-20261007",
+        "tasks_per_method": 300,
+        "successes": {
+          "actor0": 99,
+          "arm": 120
+        },
+        "success_rates": {
+          "actor0": 0.33,
+          "arm": 0.4
+        },
+        "gain": 0.07
+      }
+    ],
+    "success_rate_mean": {
+      "actor0": 0.33,
+      "arm": 0.38666666666666666
+    },
+    "success_rate_sample_sd": {
+      "actor0": 0.003333333333333327,
+      "arm": 0.012018504251546647
+    },
+    "gain_mean": 0.05666666666666668,
+    "gain_sample_sd": 0.011547005383792509,
+    "paired_task_cluster_mean_gain": {
+      "difference": 0.056666666666666664,
+      "bootstrap95": [
+        0.02666666666666667,
+        0.08666666666666667
+      ]
+    },
+    "note": "Three full300 runs; sample SD across run rates, task bootstrap retains all repetitions. Dates differ."
+  },
+  "same_day_rl_task_arm": {
+    "tasks": 300,
+    "successes": 123,
+    "success_rate": 0.41,
+    "rl_task_minus_piotr": {
+      "difference": 0.01,
+      "bootstrap95": [
+        -0.03333333333333333,
+        0.05333333333333334
+      ]
+    },
+    "note": "Independent same-day deployments and different seeds; not interleaved or identical trajectories."
+  },
+  "horizon_interaction_50_minus_30": {
+    "difference": 0.023333333333333334,
+    "bootstrap95": [
+      -0.04666666666666667,
+      0.09333333333333334
+    ]
+  },
+  "method_change_50_minus_30": {
+    "actor0": {
+      "difference": -0.023333333333333334,
+      "bootstrap95": [
+        -0.07,
+        0.023333333333333334
+      ]
+    },
+    "arm": {
+      "difference": 0.0,
+      "bootstrap95": [
+        -0.04666666666666667,
+        0.04666666666666667
+      ]
+    }
+  },
+  "termination_reasons": {
+    "actor0": {
+      "task_completed": 180,
+      "max_steps_exhausted": 87,
+      "zero_step_reset_or_navigation": 21,
+      "generation_length_limit": 3,
+      "generation_error": 4,
+      "env_step_error": 4,
+      "format_error_failed": 1
+    },
+    "arm": {
+      "max_steps_exhausted": 67,
+      "task_completed": 186,
+      "zero_step_reset_or_navigation": 21,
+      "generation_length_limit": 8,
+      "generation_error": 15,
+      "env_step_error": 3
+    }
+  },
+  "invalid_reasons": {
+    "actor0": {
+      "zero_step_reset_or_navigation": 21,
+      "generation_error": 4,
+      "env_step_error": 4
+    },
+    "arm": {
+      "zero_step_reset_or_navigation": 21,
+      "generation_error": 15,
+      "env_step_error": 3
+    }
+  },
+  "episodes_reaching_step30": {
+    "actor0": 85,
+    "arm": 65
+  },
+  "all_attempt_actor_tokens": {
+    "actor0": {
+      "requests": 4466,
+      "received_requests": 4462,
+      "input_tokens": 43060178,
+      "output_tokens": 1441155,
+      "failed_or_unmetered_requests": 4
+    },
+    "arm": {
+      "requests": 22975,
+      "received_requests": 22900,
+      "input_tokens": 236375310,
+      "output_tokens": 7772205,
+      "failed_or_unmetered_requests": 75
+    }
+  },
+  "accounting_by_shard": [
+    {
+      "shard": 0,
+      "attempts": [
+        {
+          "job_id": "348957",
+          "state": "COMPLETED",
+          "seconds": 6835
+        }
+      ],
+      "all_attempt_seconds": 6835,
+      "cap_seconds": 10800,
+      "remaining_seconds": 3965,
+      "allocated_h200_hours": 3.797222222222222,
+      "judge": {
+        "calls": 189,
+        "usd": 1.5606095999999998,
+        "unsettled": 0
+      },
+      "judge_cap": {
+        "calls": 1320,
+        "usd": 5
+      }
+    },
+    {
+      "shard": 1,
+      "attempts": [
+        {
+          "job_id": "348958",
+          "state": "COMPLETED",
+          "seconds": 6995
+        }
+      ],
+      "all_attempt_seconds": 6995,
+      "cap_seconds": 10800,
+      "remaining_seconds": 3805,
+      "allocated_h200_hours": 3.886111111111111,
+      "judge": {
+        "calls": 177,
+        "usd": 1.4223307999999981,
+        "unsettled": 0
+      },
+      "judge_cap": {
+        "calls": 1320,
+        "usd": 5
+      }
+    }
+  ],
+  "final_accounting_verified": true,
+  "wandb_states": [
+    "finished",
+    "finished"
+  ],
+  "no_transfers": true,
+  "new_budget": 0,
+  "limitations": [
+    "Same-day 50 versus30 uses independent browser episodes collected at different times; website drift remains possible.",
+    "Three full300 30-step runs have run-level sample SD; task-cluster bootstrap keeps repetitions together.",
+    "Task intervals do not measure all run variance, website drift or judge error.",
+    "Context remains32K, output cap1024 and task timeout1800 seconds; neither step cap guarantees that many executable steps.",
+    "Invalid and unjudged outcomes remain zero; canonical AgentTrek success allows partial progress.",
+    "FlashInfer ignores request seeds; distinct server seeds were verified, not deterministic trajectory matching.",
+    "Compute proxy excludes prefill, attention, vision and caching; it is neither measured FLOPs nor dollars.",
+    "Token totals include all metered actor attempts; unmetered failures are reported separately.",
+    "Terminal screenshots decoded and matched to saved receipts; no independent human adjudication."
+  ],
+  "plot_review_verified": true
+}

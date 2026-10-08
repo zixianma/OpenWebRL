@@ -1,9 +1,14 @@
 # ARM inference and judge protocol
 
+[Current full300 results: three complete SFT/Piotr runs and same-day 30/50 comparison](#selectionarm-piotr-sameday30-20261007).
+
+<details>
+<summary>Historical October 6 partial three-run overlap: 160 tasks</summary>
+
 <a id="sft-piotr-three-run-summary-20261006"></a>
 ## SFT versus Piotr ARM: three-run mean and standard deviation
 
-**Same 160 tasks in every column; 960 recorded episodes.** The three runs are the October 6 corrected initial collection and its two stochastic repeats. September is a separate historical reference. Because the initial corrected collection stopped early, a three-run **full300** average is unavailable. This common subset is selected by collection duration and should not be read as a full-benchmark result.
+**Same 160 tasks in every column; 960 recorded episodes.** The three runs are the October 6 corrected initial collection and its two stochastic repeats. September is a separate historical reference. At the October 6 cutoff, the initial corrected collection was incomplete. The new October 7 run now supplies a [separate three-run full300 summary](#selectionarm-piotr-sameday30-20261007). This common subset is selected by collection duration and should not be read as a full-benchmark result.
 
 | Metric | Initial corrected run | Repeat 1 | Repeat 2 | Three-run mean ± SD |
 | --- | ---: | ---: | ---: | ---: |
@@ -16,6 +21,9 @@ SD is the **sample standard deviation across the three run-level rates** (`ddof=
 Actor/model/policy/decoding and judge settings match across these three October runs. Scheduling differs: the initial collection also ran the RL-task selector. Request seed labels are 42/43/44; FlashInfer does not honor those per-request labels, while the fresh repeats use explicit distinct server RNG seeds. Interpret the SD as observed run-to-run variability, not a pure seed-only variance estimate.
 
 [Aggregate counts, mean/SD and task-identity verification](arm_results/rl_integration/sft-piotr-three-run-summary-20261006.json) · [Full300 repeat progress and efficiency plots](#sft-piotr-repeats-20261006).
+
+
+</details>
 
 <a id="sft-piotr-repeats-20261006"></a>
 ## SFT versus Piotr ARM: both full300 repeats complete — October 6
@@ -123,7 +131,7 @@ The three plots use the same 158 tasks and task-bootstrap intervals. Cost is sho
 <a id="arm-historical-harness-audit-20261006"></a>
 ## High-priority historical-gain audit — October 6
 
-**A recent harness bug is confirmed: the actor's browser system policy was missing.** The frozen October4 controlled-inference source and October6 three-arm source omitted `system_prompt_browser_env.md`; their loader silently substituted an empty string. Saved historical trajectories contain the 4,180-character policy, byte-identical to the repository asset (SHA256 `7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9`). Recent saved trajectories have an empty system message. Task goals and tool schemas were still supplied. This corrects our earlier claim of historical actor-prompt equivalence.
+**A recent harness bug is confirmed: the actor's browser system policy was missing.** The frozen October4 controlled-inference source and October 6 three-arm source omitted `system_prompt_browser_env.md`; their loader silently substituted an empty string. Saved historical trajectories contain the 4,180-character policy, byte-identical to the repository asset (SHA256 `7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9`). Recent saved trajectories have an empty system message. Task goals and tool schemas were still supplied. This corrects our earlier claim of historical actor-prompt equivalence.
 
 | Cohort | Episodes audited | Saved policies available | Empty policies | Overall success |
 | --- | ---: | ---: | ---: | ---: |
@@ -131,15 +139,15 @@ The three plots use the same 158 tasks and task-bootstrap intervals. Cost is sho
 | September Piotr SelectionARM | 300 | 275 | 0 | 128/300 = 42.67% |
 | October4 ordinary actor0 | 300 | 279 | 279 | 106/300 = 35.33% |
 | October4 Piotr SelectionARM | 300 | 279 | 279 | 118/300 = 39.33% |
-| October6 SFT baseline, stopped | 134 | 124 | 124 | 52/134 = 38.81% |
-| October6 Piotr ARM, stopped | 132 | 121 | 121 | 56/132 = 42.42% |
-| October6 RL-task ARM, stopped | 136 | 125 | 125 | 56/136 = 41.18% |
+| October 6 SFT baseline, stopped | 134 | 124 | 124 | 52/134 = 38.81% |
+| October 6 Piotr ARM, stopped | 132 | 121 | 121 | 56/132 = 42.42% |
+| October 6 RL-task ARM, stopped | 136 | 125 | 125 | 56/136 = 41.18% |
 
-Episodes that failed before creating message history have no saved policy to inspect. The unequal October6 rows above are an artifact audit, not a paired performance comparison. October4 ordinary pass@1 remains the mean over five episodes, 35.20%; actor0 is shown here to make its trace coverage explicit. The completed October4 cost/pass@k comparison remains evidence for its **blank-policy harness**, not a controlled replication of September.
+Episodes that failed before creating message history have no saved policy to inspect. The unequal October 6 rows above are an artifact audit, not a paired performance comparison. October4 ordinary pass@1 remains the mean over five episodes, 35.20%; actor0 is shown here to make its trace coverage explicit. The completed October4 cost/pass@k comparison remains evidence for its **blank-policy harness**, not a controlled replication of September.
 
 **The causal contribution to the smaller ARM gain is still unmeasured.** Removing the policy changes the actor's proposal distribution and potentially the selector's benefit; the direction and magnitude cannot be read off these cross-date results. Neither historical inflation nor complete explanation of the 12.67pp → 4.13pp change has been established.
 
-**A second control problem concerns sampling seeds.** Historical and recent server logs show FlashInfer sampling with deterministic inference disabled and varying global server seeds. The currently installed sampler only materializes per-request seeds when deterministic inference is enabled; its FlashInfer top-p call does not pass the request seed. Among historical first decisions with identical saved prompt/image/request-seed inputs, all 67 pairs produced different candidate0 outputs; October6 baseline/Piotr gives 44/44. Thus recorded request seeds did not establish repeatable or shared draws. These checks are evidence of a reproducibility limitation; the complete historical dependency environment was not immutably archived. The policy repair keeps the sampler unchanged to avoid combining two interventions.
+**A second control problem concerns sampling seeds.** Historical and recent server logs show FlashInfer sampling with deterministic inference disabled and varying global server seeds. The currently installed sampler only materializes per-request seeds when deterministic inference is enabled; its FlashInfer top-p call does not pass the request seed. Among historical first decisions with identical saved prompt/image/request-seed inputs, all 67 pairs produced different candidate0 outputs; October 6 baseline/Piotr gives 44/44. Thus recorded request seeds did not establish repeatable or shared draws. These checks are evidence of a reproducibility limitation; the complete historical dependency environment was not immutably archived. The policy repair keeps the sampler unchanged to avoid combining two interventions.
 
 **What the saved-data audit did not find:** candidate-seed bookkeeping, one-based selector-index conversion and chosen-response/assistant-history mapping all pass across 24,386 audited decisions. No selector fallback occurred. Historical versus October4 Piotr ARM chose candidate0 on 56.5% versus 56.5% of decisions; all five executable actions were identical on 30.4% versus 30.4%. There is no evidence here of an index bug or a collapse in proposal diversity. Assistant-history matching establishes that the chosen response reached execution parsing, not that the website applied it successfully. Nineteen historical interrupted-prefix decisions were preserved separately before matching the final committed attempts.
 
@@ -255,7 +263,7 @@ The eleven completed Qwen/SFT/GPT-6/Jev/Kev comparisons, costs, pilots and harne
 <a id="arm-controlled-inference-20261004"></a>
 ## Controlled full300 ARM versus episode pass@5 — October4
 
-**October6 correction:** this completed comparison used an empty actor system policy because its frozen source omitted the prompt asset. Its within-harness results remain recorded, but historical prompt equivalence is withdrawn. See the [harness audit and repair](#arm-historical-harness-audit-20261006).
+**October 6 correction:** this completed comparison used an empty actor system policy because its frozen source omitted the prompt asset. Its within-harness results remain recorded, but historical prompt equivalence is withdrawn. See the [harness audit and repair](#arm-historical-harness-audit-20261006).
 
 **Completed and independently verified: all1,800 episodes, all300 paired task
 blocks, original result/decision-trace hashes, final Slurm accounting and both
@@ -379,7 +387,7 @@ FLOP arithmetic, subset averaging and cache-sharing checks passed; the existing
 <a id="arm-historical-reconciliation-20261004"></a>
 ### Why the fresh result differs from the historical30% →43%
 
-**October6 correction: the October4 runs had the same missing-system-policy bug as the initial October6 runs.** Their frozen source omitted the actor's browser policy file and silently substituted an empty system message. September trajectories include the 4,180-character policy. Task goals and tool definitions were still supplied. Every saved policy inspected in October4 actor0 and ARM was empty (279/279 in each; the other episodes failed before saving message history). The same frozen loader served all five ordinary modes.
+**October 6 correction: the October4 runs had the same missing-system-policy bug as the initial October 6 runs.** Their frozen source omitted the actor's browser policy file and silently substituted an empty system message. September trajectories include the 4,180-character policy. Task goals and tool definitions were still supplied. Every saved policy inspected in October4 actor0 and ARM was empty (279/279 in each; the other episodes failed before saving message history). The same frozen loader served all five ordinary modes.
 
 The smaller observed gain, **4.13pp versus 12.67pp**, is therefore **not a comparison under matching actor prompts**. We have confirmed the bug's presence, not how much of the gain difference it caused. Recorded request seeds also failed to guarantee reproducible draws in both historical and recent serving; live websites, scheduling and runtime differ as well. [Saved-artifact evidence and corrected recovery](#arm-historical-harness-audit-20261006).
 
@@ -1124,19 +1132,49 @@ Each shard stayed within its independent 2 H200 / 16 CPU / 240 GiB × 4h and $5 
 [Compute proxy](arm_results/selectionarm_piotr_steps50_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_steps50_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_steps50_20261007/tokens.png) · [Independent audit](arm_results/selectionarm_piotr_steps50_20261007/independent-audit.json). Compute is a generated-token estimate, excluding prefill/attention/vision/cache, rather than measured FLOPs or dollars. All metered actor attempts count toward token work; unmetered failed requests are listed separately. Terminal screenshots were decoded and matched to saved verdicts, without independent human adjudication.
 
 <a id="selectionarm-piotr-sameday30-20261007"></a>
-## Same-day Piotr 30-step control — running 2026-10-07
+## Same-day Piotr 30-step control — complete October 7
 
-**Approved and running.** Both shards started October7; active-agent repair callbacks are enabled. Fresh SFT and SFT + Piotr SelectionARM on the same 300 tasks: **600 new episodes**, with randomized method order within each task.
+**600/600 episodes verified; both methods cover the same 300 tasks.** Model, seed, native decoding, action traces, saved terminal evidence, judge receipts, teardown and W&B completion passed independent checks.
 
-Reuse the completed 50-step run's frozen runtime, checkpoints, prompts, local browser and o4-mini/AgentTrek judge. Actor **T=0.7, top-p=0.9, 1,024 output tokens**, 32K context; **N=5**, greedy SelectionARM. Set **max_steps=30**; retain seed45 and the same shard seeds. Fresh browser sessions; the sampler does not guarantee identical trajectory prefixes.
+| Method | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT | 300 | 99 | 33.00% | 271 | 29 | 36.53% |
+| SFT + Piotr SelectionARM | 300 | 120 | 40.00% | 261 | 39 | 45.98% |
 
-| New request | Per shard | Total, two parallel shards |
-| --- | --- | --- |
-| Compute, including all retries | 2 H200, 16 CPUs, 240 GiB, 3 hours | 12 H200-hours |
-| Judge cap, including all retries | $5 / 1,320 calls | $10 / 2,640 calls |
-| Episodes | 150 tasks × 2 methods | 600 |
+**Paired ARM gain: +7.00 pp, 95% interval [+2.33, +11.67].** ARM-only successes: 36; SFT-only: 15. Invalid/unjudged outcomes remain zero; canonical AgentTrek success allows partial progress.
 
-Compare the new paired ARM gain with today's 50-step pair and the RL-task ARM result; report task-paired confidence intervals. Same-day collection reduces the date gap but does not remove within-day website drift. Keep the two earlier 30-step runs separate and add a third complete run only after all600 outcomes pass verification. Publish aggregate success, cost, latency and token results only. No prior budget or results transferred. **Four preparation tests passed**; model, source and task identities validated. [Frozen plan](arm_results/selectionarm-piotr-sameday30-plan-20261007.json).
+Same frozen runtime as the 50-step pair; official SFT and Piotr SelectionARM, local browsers, actor T=0.7 / p=0.9, 1,024 response tokens, 32K context, 30 steps, seed 45 / server seeds 4500 and 4501, N=5 greedy selection and o4-mini/AgentTrek judging. Fresh browsers and stochastic trajectories; no deterministic prefix matching.
+
+### Three complete 30-step runs
+
+| Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| October 6: seed 43 | 300 | 100 | 33.33% | 115 | 38.33% | +5.00 pp |
+| October 6: seed 44 | 300 | 98 | 32.67% | 113 | 37.67% | +5.00 pp |
+| October 7: seed 45 | 300 | 99 | 33.00% | 120 | 40.00% | +7.00 pp |
+| **Mean ± sample SD** | 300 | — | **33.00 ± 0.33%** | — | **38.67 ± 1.20%** | **+5.67 ± 1.15 pp** |
+
+Task-cluster 95% interval on mean gain: **[+2.67, +8.67] pp**. SD uses the three run-level rates (ddof=1); it is not a confidence interval. The incomplete 160-task initial run is excluded.
+
+### Same-day horizon comparison
+
+| Step cap | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 30 | 99 | 33.00% | 120 | 40.00% | +7.00 pp |
+| 50 | 92 | 30.67% | 120 | 40.00% | +9.33 pp |
+
+Change in ARM gain (50−30): **+2.33 pp [-4.67, +9.33]**. No clear horizon effect; same-day episodes still differ in time and trajectory. 32K context and 1,800-second task limits remain unchanged.
+
+RL-task ARM versus Piotr, same day: +1.00 pp [-3.33, +5.33]; independent deployments with different seeds, so no controlled checkpoint ranking.
+
+| Shard | Allocation seconds | Cap seconds | Unused seconds | Judge calls | Judge USD |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 6835 | 10800 | 3965 | 189 | 1.5606096 |
+| 1 | 6995 | 10800 | 3805 | 177 | 1.4223308 |
+
+Each shard respected 2 H200 / 16 CPU / 240 GiB × 3h and $5 / 1,320 judge calls across every attempt. All usage settled; no transfers or additional budget. Total allocated H200-hours: 7.6833.
+
+[Compute proxy](arm_results/selectionarm_piotr_sameday30_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_sameday30_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_sameday30_20261007/tokens.png) · [Aggregate](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json) · [Independent audit](arm_results/selectionarm_piotr_sameday30_20261007/independent-audit.json). Token accounting includes every metered actor attempt; failures without usage stay separate. Compute proxy excludes prefill, attention, vision and caching. Saved evidence was verified; no independent human adjudication.
 
 <a id="selectionarm-random5-sameday30-20261007"></a>
 ## Random-of-five at every step — running 2026-10-07
@@ -1151,6 +1189,6 @@ Compare against the [same-day SFT/Piotr pair](#selectionarm-piotr-sameday30-2026
 | Judge cap | $2.50 / 660 calls | $5 / 1,320 calls |
 | New episodes | 150 | 300 |
 
-**Approved and running.** Both shards started October7, with active-agent supervision verified. Eight offline tests passed, including uniform content-independent selection, five calls per step, no selector calls, unchanged decoding and budget guards. No existing budget transferred.
+**Approved and running.** Both shards started October 7, with active-agent supervision verified. Eight offline tests passed, including uniform content-independent selection, five calls per step, no selector calls, unchanged decoding and budget guards. No existing budget transferred.
 
 Report task-paired success differences for random versus SFT and Piotr versus random, plus cost, latency and tokens. Collection starts later the same day in independent browsers. Browser concurrency stays eight; the random arm uses fewer host resources, so latency is descriptive, not a hardware-matched comparison. [Frozen plan](arm_results/selectionarm-random5-sameday30-plan-20261007.json).

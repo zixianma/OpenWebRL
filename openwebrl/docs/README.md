@@ -2,7 +2,7 @@
 
 [Random-of-five at every step: full300 control running against today's SFT/Piotr pair](ARM_INFERENCE.md#selectionarm-random5-sameday30-20261007).
 
-[Same-day SFT/Piotr 30-step control: 600 fresh episodes running with approved independent shard caps](ARM_INFERENCE.md#selectionarm-piotr-sameday30-20261007).
+[Same-day SFT/Piotr30-step pair complete: gain +7.00 pp; three full300 runs summarized](ARM_INFERENCE.md#selectionarm-piotr-sameday30-20261007).
 
 [Piotr SelectionARM at 50 steps: full300 paired results, comparison with 30 steps and three plots](ARM_INFERENCE.md#selectionarm-piotr-steps50-results-20261007).
 
@@ -10,7 +10,7 @@
 
 [API-selector reproduction complete: SFT 31.67%, Sol 43.33%, GPT-5.5 42.00%; 900 episodes, paired results and three plots](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
 
-[SFT versus Piotr ARM: supplementary three-run average on the 160-task overlap; first run incomplete, both later runs full300](ARM_INFERENCE.md#sft-piotr-three-run-summary-20261006).
+[SFT versus Piotr SelectionARM: three complete full300 runs, mean ± sample SD](ARM_INFERENCE.md#selectionarm-piotr-sameday30-20261007).
 
 [SFT versus Piotr ARM: both full300 repeats complete; SFT 33.00%, ARM 38.00%, mean gain +5.00 pp. Final accounting and compute/latency/token plots](ARM_INFERENCE.md#sft-piotr-repeats-20261006).
 
@@ -62,7 +62,7 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Iteration 90 stealth: five-method table with three-repeat means, sample SDs and overall 95% task-cluster BCa CIs](ARM_SUMMARY.md#arm-stealth90-five-method-summary-20261007). Baseline, Additive and Gate B were collected September 29–30; mixed-only bonus and reweight were collected October 6 (PDT). Cross-period comparisons remain descriptive. [CI method and limits](RL_EVALUATION.md#arm-stealth90-five-method-summary-20261007) · [Aggregate](arm_results/rl_integration/stealth-iteration90-five-method-overall-ci.json).
 
-[Matched iteration90 uncertainty: paired95% CIs and Holm-corrected tests; no significant pair among outcome-only, Additive and Gate B](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930).
+[Matched iteration90 uncertainty: paired 95% CIs and Holm-corrected tests; no significant pair among outcome-only, Additive and Gate B](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930).
 
 [ARM method presentation guide](ARM_SUMMARY.md#arm-methods-at-a-glance): three stages, group composition, Gate B/C credit and bonus versus reweighting, with downloadable PNG/SVG figures.
 
@@ -85,7 +85,7 @@ for the work you are doing, then follow its contents to dated experiment records
 [Quality-screening protocol and trust audit: Jev/GPT/code comparison, blind human review, and separate browser validation](ARM_INTEGRATION_PLAN.md#arm-task-quality-human-review-20260929).
 [Interactive manual review:10 paired cached cases,65 additional Jev cases,12 unlabeled broad-pool examples; model reveal and JSON export](arm_results/rl_integration/jev-quality-review-v2.html).
 
-[Training pipeline profile, October6: recent37.87min cycles; PPO50.5%, collection36.9%, checkpoint save0.8%. Prioritized systems checks; no deployed performance change or demonstrated end-to-end speedup](RL_RUNTIME.md#training-pipeline-profile-20261006).
+[Training pipeline profile, October 6: recent37.87min cycles; PPO50.5%, collection36.9%, checkpoint save0.8%. Prioritized systems checks; no deployed performance change or demonstrated end-to-end speedup](RL_RUNTIME.md#training-pipeline-profile-20261006).
 [ARM timing audit:48GiB cycles now40–46min; training/save time per update down27–29% in adjacent batches](RL_RUNTIME.md#arm-iteration-throughput-20260927).
 [Full browser availability audit complete:96,779 available URLs covering155,512 candidate tasks;21,328 inconclusive and7,654 unavailable URLs; instruction quality/actor difficulty still unassessed](ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-full-20260929).
 [Benchmark-site grouping:59,115 available tasks on185 benchmark-associated sites;96,397 on82,021 sites with no known match; WebVoyager/OM2W/WebTailBench/DeepShop flags and WebTailBench coverage caveat](ARM_INTEGRATION_PLAN.md#arm-task-pool-benchmark-websites-20260930).

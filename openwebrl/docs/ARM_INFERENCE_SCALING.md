@@ -1,7 +1,7 @@
 # ARM inference scaling: controlled results
 
 - **API selectors:** Sol **43.33%**, close to September’s **44.00%**; fresh gains are **+11.67 pp** for Sol and **+10.33 pp** for GPT-5.5. Their difference is inconclusive.
-- **Piotr SelectionARM:** **+5.00 percentage points** across two full300 repeats, at **6.3× tokens** and **1.48× episode latency**.
+- **Piotr SelectionARM:** **+5.67 percentage points** across three full300 runs; latest same-day gain **+7.00 pp**.
 - **Local v2 selectors:** Luna and Kev27B each add about **9 points**; they differ by one success. Jev's **+2-point** interval includes zero.
 - **Compare within each table.** Decoding, selector inputs and collection dates differ between studies; cross-table model rankings are not controlled.
 
@@ -63,37 +63,34 @@ Official OpenWebRL-4B-SFT; actor **T=0.7, p=0.9, 1,024 output tokens**; step cap
 
 | SelectionARM comparison | Step cap | Complete full300 runs | SFT successes | ARM successes | SFT success | ARM success | ARM gain | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Piotr, two-repeat mean | 30 | 2 | 198 | 228 | 33.00 ± 0.47% | 38.00 ± 0.47% | +5.00 ± 0.00 pp | Complete; counts pooled over 600 episodes per arm |
+| Piotr, three-run mean | 30 | 3 | 297 | 348 | 33.00 ± 0.33% | 38.67 ± 1.20% | +5.67 ± 1.15 pp | Complete; counts pooled over 900 episodes per arm |
+| Piotr, same-day control | 30 | 1 | 99 | 120 | 33.00% | 40.00% | +7.00 pp | Complete; included in mean above |
 | RL-task SelectionARM repeat | 30 | 1 | 95 | 123 | 31.67% | 41.00% | +9.33 pp | Complete; earlier SFT control reused |
 | Piotr, longer horizon | 50 | 1 | 92 | 120 | 30.67% | 40.00% | +9.33 pp | Complete; fresh paired SFT control |
 
-New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collected its own SFT control. Each new comparison is one run; no run-level SD. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
+New runs use all 300 tasks. The RL-task arm reuses the fresh 30-step SFT control from the API-selector study; the 50-step pair collected its own SFT control. Single-run rows have no run-level SD; the Piotr mean combines three complete runs. [Frozen follow-up plans and resource requests](ARM_INFERENCE.md#selectionarm-followups-20261007).
 
 RL-task ARM: **+9.33 pp**, paired 95% interval **[+4.00, +14.67]**. One run with the earlier SFT control; no run-level SD or controlled cross-checkpoint ranking. [Audit and accounting](ARM_INFERENCE.md#selectionarm-rltasks-repeat-results-20261007) · [compute proxy](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) · [latency](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) · [tokens](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png).
 
-Piotr at 50 steps: **+9.33 pp [+4.00, +14.67]**, versus **+5.00 pp** at 30 steps. Change in gain: **+4.33 pp [-2.00, +10.50]**. The estimated change in ARM gain remains uncertain. The 32K context and task-time limits remain unchanged. [Audit](ARM_INFERENCE.md#selectionarm-piotr-steps50-results-20261007) · [compute proxy](arm_results/selectionarm_piotr_steps50_20261007/cost.png) · [latency](arm_results/selectionarm_piotr_steps50_20261007/latency.png) · [tokens](arm_results/selectionarm_piotr_steps50_20261007/tokens.png).
+Piotr gain at 50 steps: **+9.33 pp**; same-day 30-step gain: **+7.00 pp**. Change in gain: **+2.33 pp [-4.67, +9.33]**. This does not establish a horizon effect; browser episodes were independent and collected at different times. [Same-day audit](ARM_INFERENCE.md#selectionarm-piotr-sameday30-20261007).
 
-### Piotr: the two completed repeats
+### Piotr: three complete full300 runs
 
 | Run | Tasks per arm | SFT successes | SFT success | ARM successes | ARM success | ARM gain |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Run 2: repeat 1 | 300 | 100 | 33.33% | 115 | 38.33% | +5.00 pp |
-| Run 3: repeat 2 | 300 | 98 | 32.67% | 113 | 37.67% | +5.00 pp |
-| **Mean ± sample SD** | 300 | — | **33.00 ± 0.47%** | — | **38.00 ± 0.47%** | **+5.00 ± 0.00 pp** |
+| October 6: seed 43 | 300 | 100 | 33.33% | 115 | 38.33% | +5.00 pp |
+| October 6: seed 44 | 300 | 98 | 32.67% | 113 | 37.67% | +5.00 pp |
+| October 7: seed 45 | 300 | 99 | 33.00% | 120 | 40.00% | +7.00 pp |
+| **Mean ± sample SD** | 300 | — | **33.00 ± 0.33%** | — | **38.67 ± 1.20%** | **+5.67 ± 1.15 pp** |
 
-Mean gain: **+5.00 pp; paired 95% interval [+1.50, +8.50]**. Bootstrap resamples 300 task clusters with both repeats retained. SD describes the two observed run rates; identical gains do not imply zero uncertainty.
+Mean gain: **+5.67 pp; paired 95% interval [+2.67, +8.67]**. Intervals resample 300 task clusters with all repetitions retained. Sample SD describes three observed run rates across two dates.
 
-| Method | Mean latency, s | Mean input + output tokens | Mean browser steps |
-| --- | ---: | ---: | ---: |
-| SFT alone | 144.8 | 146,124 | 14.76 |
-| SFT + Piotr SelectionARM | 214.6 | 926,945 | 16.20 |
-
-Plots: repeat 1 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-1/tokens.png); repeat 2 — [compute](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/cost.png), [latency](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/latency.png), [tokens](arm_results/rl_integration/sft-piotr-repeats-final-20261006/repeat-2/tokens.png). Compute is estimated decoder work, not dollars or total measured FLOPs. [Final audit and accounting](ARM_INFERENCE.md#sft-piotr-repeats-20261006) · [Combined aggregate](arm_results/rl_integration/sft-piotr-repeats-final-20261006/combined.json).
+[Compute proxy](arm_results/selectionarm_piotr_sameday30_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_sameday30_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_sameday30_20261007/tokens.png). [Full aggregate](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json). Compute is an estimated generated-token proxy, not dollars or measured total FLOPs. The earlier [two-repeat aggregate](arm_results/rl_integration/sft-piotr-repeats-final-20261006/combined.json) remains available.
 
 <details>
 <summary>Supplementary: incomplete first run and the 160-task overlap</summary>
 
-**Three runs were launched; only two completed full300.** The first corrected run stopped after collecting both SFT/Piotr outcomes for 160 tasks, with too little approved allocation time left to restart. Every run used the same 300-task list; the remaining tasks were not filtered out.
+**The original October 6 series launched three runs; only two completed full300.** The new October 7 run supplies the third full300 run in the main table. The first corrected run stopped after collecting both SFT/Piotr outcomes for 160 tasks, with too little approved allocation time left to restart. Every run used the same 300-task list; the remaining tasks were not filtered out.
 
 <a id="sft-piotr-three-run-summary-20261006"></a>
 ### Supplementary three-run average: 160 tasks with all six outcomes

@@ -1,0 +1,30 @@
+{
+  "epoch": 1791418451.131851,
+  "passed": true,
+  "episodes_verified": 600,
+  "matched_tasks": 300,
+  "old_control_episodes_verified": 1200,
+  "same_day_50_episodes_verified": 600,
+  "same_day_rl_task_arm_episodes_verified": 300,
+  "evidence_checks": {
+    "status:Status.FAILED": 155,
+    "verified_action_traces": 9042,
+    "verified_action_traces:arm": 4580,
+    "status:Status.COMPLETED": 366,
+    "terminal_images_verified": 366,
+    "saved_verdicts_receipt_matched": 366,
+    "verified_action_traces:actor0": 4462,
+    "status:exception": 42,
+    "status:Status.TRUNCATED": 11,
+    "status:Status.ABORTED": 26
+  },
+  "model_seed_decoding_verified": true,
+  "all_caps_verified": true,
+  "teardown_verified": true,
+  "wandb_finished": true,
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 42,
+    "unit": "task; all repetitions kept together"
+  }
+}
