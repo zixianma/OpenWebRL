@@ -1,13 +1,23 @@
 {
-  "schema": "benefit_threshold_partial_aggregate_v2",
-  "snapshot_epoch": 1791457100.600342,
-  "status": "partial_fit_evidence",
+  "schema": "benefit_threshold_partial_aggregate_v3",
+  "snapshot_epoch": 1791458801.1546297,
+  "status": "fit_blocked_terminal",
   "verified_complete": false,
   "planned_tasks": 450,
   "references_complete": 450,
   "fit_planned_tasks": 300,
-  "fit_dispositions": 150,
-  "pending_fit_tasks": 150,
+  "task_disposition_counts": {
+    "fit_records": 300,
+    "heldout_blocked_by_unfrozen_fit": 150
+  },
+  "fit_coverage": {
+    "eligible_pairs": 60,
+    "resolved_pairs": 44,
+    "unresolved_pairs": 16,
+    "unresolved_branch_endpoints": 28
+  },
+  "fit_dispositions": 300,
+  "pending_fit_tasks": 0,
   "heldout": {
     "planned_tasks": 150,
     "unopened_tasks": 150,
@@ -20,6 +30,10 @@
     {
       "shard": 0,
       "status": "fit_blocked_preserved",
+      "remaining_endpoint_failures": {
+        "exact_saved_actor_request_mismatch": 14,
+        "persistent_capture_mismatch_after_three_observations": 6
+      },
       "references_complete": 225,
       "planned_fit_tasks": 150,
       "fit_dispositions": 150,
@@ -42,30 +56,43 @@
         "judge_calls": 31,
         "judge_usd": 0.2623478,
         "accounting_status": "terminal_all_attempts",
-        "pending_selector_token_work_unknown": true
+        "queue_only_cancelled_attempts": 0,
+        "pending_selector_token_work_unknown": true,
+        "wandb_final_summary_lag": false
       }
     },
     {
       "shard": 1,
-      "status": "queued_fit_pending",
+      "status": "fit_blocked_preserved",
+      "remaining_endpoint_failures": {
+        "persistent_capture_mismatch": 6,
+        "released_pre_dispatch_raster_drift": 2
+      },
       "references_complete": 225,
       "planned_fit_tasks": 150,
-      "fit_dispositions": 0,
-      "pending_fit_tasks": 150,
+      "fit_dispositions": 150,
+      "pending_fit_tasks": 0,
       "disposition_counts": {
-        "Pending fit": 150
+        "Resolved pair": 18,
+        "Replay ineligible": 124,
+        "No reached state": 4,
+        "Unresolved pair": 4
       },
-      "eligible_pairs": null,
-      "resolved_pairs": null,
-      "unresolved_pairs": null,
-      "resolved_percent_of_planned_fit": 0.0,
+      "eligible_pairs": 22,
+      "resolved_pairs": 18,
+      "unresolved_pairs": 4,
+      "resolved_percent_of_planned_fit": 12.0,
       "heldout_unopened": 75,
       "accounting": {
-        "accounting_status": "prior_terminal_plus_pending_reservation",
-        "allocation_seconds": 3585,
-        "reserved_future_seconds": 10800,
-        "judge_calls": null,
-        "judge_usd": null
+        "allocation_seconds": 4723,
+        "remaining_seconds": 9677,
+        "h200_hours": 2.6238888888888887,
+        "judge_calls": 19,
+        "judge_usd": 0.1504415,
+        "accounting_status": "terminal_all_attempts",
+        "queue_only_cancelled_attempts": 1,
+        "pending_selector_token_work_unknown": true,
+        "wandb_final_summary_lag": true
       }
     }
   ],
@@ -83,39 +110,32 @@
   },
   "fit_reference_decision_distribution": {
     "No state": {
-      "No reached state": 4,
-      "Pending fit": 4
+      "No reached state": 8
     },
     "1": {
-      "Replay ineligible": 39,
-      "Resolved pair": 12,
-      "Unresolved pair": 10,
-      "Pending fit": 38
+      "Replay ineligible": 69,
+      "Resolved pair": 17,
+      "Unresolved pair": 13
     },
     "2\u20133": {
-      "Replay ineligible": 13,
-      "Resolved pair": 5,
-      "Unresolved pair": 2,
-      "Pending fit": 48
+      "Replay ineligible": 56,
+      "Resolved pair": 9,
+      "Unresolved pair": 3
     },
     "4\u20135": {
-      "Replay ineligible": 16,
-      "Resolved pair": 3,
-      "Pending fit": 24
+      "Replay ineligible": 37,
+      "Resolved pair": 6
     },
     "6\u201310": {
-      "Replay ineligible": 21,
-      "Resolved pair": 2,
-      "Pending fit": 18
+      "Replay ineligible": 37,
+      "Resolved pair": 4
     },
     "11\u201315": {
-      "Replay ineligible": 13,
-      "Pending fit": 5
+      "Replay ineligible": 18
     },
     "16\u201330": {
-      "Replay ineligible": 6,
-      "Resolved pair": 4,
-      "Pending fit": 13
+      "Replay ineligible": 15,
+      "Resolved pair": 8
     }
   },
   "limitations": [
@@ -123,6 +143,7 @@
     "Missing endpoints remain missing, never zero or excluded. Pending tasks have no inferred eligibility.",
     "Recovery labels and historical surviving counterparts were collected at different times.",
     "Exact saved-input assertions are code-bound; a second full replay-context copy was not persisted.",
-    "450 completed reference episodes do not mean 450 completed paired task dispositions."
+    "450 completed reference episodes do not mean 450 completed paired task dispositions.",
+    "Durable receipts govern counts; shard1 W&B terminal summary omits its final disposition."
   ]
 }

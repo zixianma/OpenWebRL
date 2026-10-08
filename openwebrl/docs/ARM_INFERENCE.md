@@ -155,21 +155,21 @@ Score only native tool-call payload tokens, including payload whitespace and exc
 
 The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need the declared fallback; six otherwise scoreable selected pairs cannot both be parsed. Duplicate actions explain much of the index/action gap. Independent runtime masks match every saved candidate; including tool wrappers changes 28 of 5,184 choices. No alternative actions were executed: **this is not a success-rate estimate**. [Aggregate and caveats](arm_results/selectionarm_likelihood5_sft30_20261007/action-only-offline.json).
 
-**Fresh rollout deferred while the benefit-based threshold study runs.** The prepared design keeps the same 300 tasks, SFT model/prompt, five candidates, T=0.7/top-p=0.9, 1,024 tokens and 30-step horizon. Its separate resource request remains unapproved: two shards, each **1 H200 / 8 CPUs / 120 GiB × 3 hours total**, plus **USD 2.50 / 660 judge calls**, including retries; combined 6 H200-hours and USD 5, with no transfers. Prior controls were collected separately.
+**Fresh rollout remains deferred; the benefit-based threshold study is blocked at fitting.** The prepared design keeps the same 300 tasks, SFT model/prompt, five candidates, T=0.7/top-p=0.9, 1,024 tokens and 30-step horizon. Its separate resource request remains unapproved: two shards, each **1 H200 / 8 CPUs / 120 GiB × 3 hours total**, plus **USD 2.50 / 660 judge calls**, including retries; combined 6 H200-hours and USD 5, with no transfers. Prior controls were collected separately.
 
 </details>
 
 <a id="confidence-benefit-20261008"></a>
 ## Selecting a threshold by measured ARM benefit — October 8, fit blocked
 
-**No threshold has been fitted or verified.** Targeted recovery raised shard 0's resolved pairs from 17 to 26, but 12 prospectively eligible pairs still lack complete outcomes. The unchanged fitter rejects missing eligible evidence. Shard 1 started at 04:00 PDT and is collecting independently. The audited coverage snapshot below predates its startup (03:58 PDT).
+**No threshold has been fitted or verified.** All 300 fitting tasks have dispositions: 60 pairs are eligible, 44 have complete outcomes and 16 remain unresolved. The unchanged fitter rejects missing eligible evidence; both shards stopped with their evidence preserved.
 
 | Fitting shard | Planned tasks | Task dispositions | Eligible pairs | Resolved pairs | Unresolved pairs | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | 0 | 150 | 150 | 38 | 26 | 12 | Controlled stop; evidence preserved |
-| 1 | 150 | 0 | — | — | — | Pending at snapshot |
+| 1 | 150 | 150 | 22 | 18 | 4 | Controlled stop; evidence preserved |
 
-All **450 reference episodes** are preserved. The **150 held-out tasks remain unopened for paired continuations**; no held-out utility or coverage estimate exists. Replay eligibility and missing outcomes are different: an eligible pair with missing evidence cannot be silently excluded or counted as failure. [Aggregate progress and diagnostics](arm_results/selectionarm_confidence_benefit_20261008/progress.json).
+All **450 planned tasks are accounted for:** 300 fitting dispositions and 150 held-out tasks blocked before paired continuations. All reference episodes are preserved. No held-out utility estimate exists. The resolved pairs cover **14.67% of the planned fitting tasks**; replay rejection and missing eligible outcomes limit representativeness. Missing outcomes remain unresolved, without exclusion or failure labels. [Aggregate progress and diagnostics](arm_results/selectionarm_confidence_benefit_20261008/progress.json).
 
 <details>
 <summary>Question and fixed design</summary>
@@ -193,12 +193,14 @@ Shard 0 has 108 replay-ineligible tasks and four tasks without a reached state, 
 
 The pass recovered **11 endpoints** (five judged, six canonical zeros), completing nine more pairs. **20 endpoints remain unresolved:** 14 have independently verified image drift from the saved actor inputs; six fail the unchanged capture check. Existing draws can only be reused for identical inputs. Fresh draws on changed images, relaxed replay matching or fitting only resolved pairs would change the frozen design. All attempts remain available; no unchanged retry was launched. Recovery in a fresh browser does not establish identity with the original hidden browser/server state.
 
+Shard 1 recorded all 150 fitting dispositions, with **18 resolved and four unresolved eligible pairs**. Its eight missing endpoints comprise six persistent capture mismatches and two verified raster mismatches after eligibility release. All four are same-choice repeat controls; choosing the same action does not establish equal rollout outcomes. No missing endpoint has an unlinked verdict or restorable browser state. There is no demonstrated further mechanical repair under the unchanged rules. Fresh paired trajectories would require a separately declared protocol amendment.
+
 | Shard | Allocated seconds used, all attempts | Original cap, seconds | Unused seconds | Judge calls | Judge cost, USD | Judge cap, USD |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | 0 | 5,635 | 14,400 | 8,765 | 31 | 0.262348 | 5.00 |
-| 1, before latest attempt | 3,585 | 14,400 | 10,815 | — | — | 5.00 |
+| 1 | 4,723 | 14,400 | 9,677 | 19 | 0.150442 | 5.00 |
 
-Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. The recovery used 457 allocation seconds, 195 new suffix draws, 13 cached-draw reuses and five new judge calls. Cached reuses add no inference calls. Terminal model/browser cleanup and W&B identity are verified for shard 0. The shard 1 replacement reserved 10,800 of its 10,815 unused seconds at startup; its final API accounting remains pending.
+Each shard is independently capped at **2 H200 / 16 CPUs / 240 GiB × 4 hours total** and **USD 5 / 1,320 judge calls**, including every attempt; no transfers. The recovery used 457 allocation seconds, 195 new suffix draws, 13 cached-draw reuses and five new judge calls. Cached reuses add no inference calls. Model/browser cleanup, W&B identity and terminal status are verified for both shards. Shard 1 used 1,138 seconds in its latest attempt and received all 969 new native actor responses. W&B's final shard 1 summary lags by one disposition/request/judge call; durable records and reconciled usage receipts supply the totals above. Four historical selector attempts per shard have unknown token usage; no zero usage is imputed.
 
 [Coverage](arm_results/selectionarm_confidence_benefit_20261008/coverage.png) · [Sampled decisions](arm_results/selectionarm_confidence_benefit_20261008/decision_depth.png) · [Recovery dispositions](arm_results/selectionarm_confidence_benefit_20261008/recovery_dispositions.png). These are partial data-quality diagnostics, not a fitted threshold or ARM-effect estimate. Raw tasks, images and trajectories remain private.
 

@@ -6,9 +6,9 @@
 
 [Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).
 
-[Benefit-based threshold study: recovery improved pair coverage; missing eligible outcomes still block fitting](ARM_INFERENCE.md#confidence-benefit-20261008).
+[Benefit-based threshold study: 300 fit tasks accounted for; 44 resolved pairs, 16 unresolved; no threshold](ARM_INFERENCE.md#confidence-benefit-20261008).
 
-[Action-only likelihood: offline reranking changes parsed actions on 27.89% of comparable decisions; fresh rollout deferred while the benefit-based threshold study runs](ARM_INFERENCE.md#action-only-likelihood-20261008).
+[Action-only likelihood: offline reranking changes parsed actions on 27.89% of comparable decisions; fresh rollout deferred; benefit-threshold fitting is blocked](ARM_INFERENCE.md#action-only-likelihood-20261008).
 
 [Likelihood-of-five 26.67%; exploratory gated Piotr 33.67%; both full300 complete, paired comparisons, calibration limits and plots](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
