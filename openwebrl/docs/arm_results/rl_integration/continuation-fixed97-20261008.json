@@ -1,0 +1,1495 @@
+{
+  "bootstrap_samples": 10000,
+  "bootstrap_unit": "Whole states; all candidates and repetitions retained together.",
+  "candidates_per_state": 5,
+  "contains_task_payloads": false,
+  "continuations": 1455,
+  "continuations_per_candidate": 3,
+  "denominators": "Collection and outcome-only LOO include all 97 states and invalid outcomes score zero. Teacher-comparable analysis excludes four historical states with invalid ordinary teacher panels, leaving 93; these states remain in collection and outcome-only LOO. All 23 later states have complete valid ordinary teacher panels.",
+  "depth_coverage": [
+    {
+      "candidate_decision": 1,
+      "completed_states": 33,
+      "paired_states": 31
+    },
+    {
+      "candidate_decision": 2,
+      "completed_states": 23,
+      "paired_states": 22
+    },
+    {
+      "candidate_decision": 3,
+      "completed_states": 18,
+      "paired_states": 17
+    },
+    {
+      "candidate_decision": 4,
+      "completed_states": 4,
+      "paired_states": 4
+    },
+    {
+      "candidate_decision": 5,
+      "completed_states": 4,
+      "paired_states": 4
+    },
+    {
+      "candidate_decision": 6,
+      "completed_states": 1,
+      "paired_states": 1
+    },
+    {
+      "candidate_decision": 7,
+      "completed_states": 2,
+      "paired_states": 2
+    },
+    {
+      "candidate_decision": 8,
+      "completed_states": 0,
+      "paired_states": 0
+    },
+    {
+      "candidate_decision": 9,
+      "completed_states": 1,
+      "paired_states": 1
+    },
+    {
+      "candidate_decision": 10,
+      "completed_states": 1,
+      "paired_states": 1
+    },
+    {
+      "candidate_decision": 11,
+      "completed_states": 3,
+      "paired_states": 3
+    },
+    {
+      "candidate_decision": 12,
+      "completed_states": 1,
+      "paired_states": 1
+    },
+    {
+      "candidate_decision": 13,
+      "completed_states": 0,
+      "paired_states": 0
+    },
+    {
+      "candidate_decision": 14,
+      "completed_states": 3,
+      "paired_states": 3
+    },
+    {
+      "candidate_decision": 15,
+      "completed_states": 3,
+      "paired_states": 3
+    }
+  ],
+  "disjoint_depth_bin_definitions": {
+    "decision_10_to_15": "10 <= candidate decision <= 15",
+    "decision_4_to_9": "4 <= candidate decision < 10"
+  },
+  "disjoint_depth_bins": {
+    "decision_10_to_15": {
+      "complete_states": 11,
+      "continuations": 165,
+      "loo_all_complete": {
+        "estimates": {
+          "actor_first_rate": 0.2121212121212121,
+          "after_teacher_rate": 0.2727272727272727,
+          "before_teacher_rate": 0.25252525252525254,
+          "fixed_first_tie_rate": 0.2424242424242424,
+          "hindsight_oracle_rate": 0.3333333333333333,
+          "loo_success_rate": 0.27171717171717175,
+          "uniform_rate": 0.2303030303030303
+        },
+        "folds": 33,
+        "hindsight_tied_top_states": 9,
+        "loo_success_fraction": "269/990",
+        "paired_comparisons": {
+          "after_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.06060606060606061,
+            "state_bootstrap_95_interval": [
+              0.0,
+              0.18181818181818182
+            ]
+          },
+          "after_teacher_rate_minus_before_teacher_rate": {
+            "difference": 0.020202020202020166,
+            "state_bootstrap_95_interval": [
+              0.0,
+              0.06060606060606061
+            ]
+          },
+          "after_teacher_rate_minus_uniform_rate": {
+            "difference": 0.04242424242424242,
+            "state_bootstrap_95_interval": [
+              0.006060606060606058,
+              0.08484848484848484
+            ]
+          },
+          "before_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.04040404040404044,
+            "state_bootstrap_95_interval": [
+              -0.06060606060606058,
+              0.1818181818181818
+            ]
+          },
+          "before_teacher_rate_minus_uniform_rate": {
+            "difference": 0.022222222222222254,
+            "state_bootstrap_95_interval": [
+              -0.0282828282828283,
+              0.0727272727272727
+            ]
+          },
+          "loo_minus_actor_first_rate": {
+            "difference": 0.05959595959595965,
+            "state_bootstrap_95_interval": [
+              -0.02323232323232316,
+              0.20707070707070707
+            ]
+          },
+          "loo_minus_after_teacher_rate": {
+            "difference": -0.001010101010100961,
+            "state_bootstrap_95_interval": [
+              -0.023232323232323215,
+              0.02525252525252525
+            ]
+          },
+          "loo_minus_before_teacher_rate": {
+            "difference": 0.019191919191919204,
+            "state_bootstrap_95_interval": [
+              -0.010101010101010097,
+              0.0565656565656566
+            ]
+          },
+          "loo_minus_fixed_first_tie_rate": {
+            "difference": 0.029292929292929343,
+            "state_bootstrap_95_interval": [
+              -0.012121212121212088,
+              0.08585858585858588
+            ]
+          },
+          "loo_minus_hindsight_oracle_rate": {
+            "difference": -0.06161616161616157,
+            "state_bootstrap_95_interval": [
+              -0.14444444444444438,
+              0.0
+            ]
+          },
+          "loo_minus_uniform_rate": {
+            "difference": 0.04141414141414146,
+            "state_bootstrap_95_interval": [
+              0.0,
+              0.09999999999999998
+            ]
+          }
+        },
+        "state_bootstrap_95_intervals": {
+          "actor_first_rate": [
+            0.0,
+            0.45454545454545453
+          ],
+          "after_teacher_rate": [
+            0.0606060606060606,
+            0.5151515151515151
+          ],
+          "before_teacher_rate": [
+            0.0606060606060606,
+            0.47474747474747475
+          ],
+          "fixed_first_tie_rate": [
+            0.0,
+            0.4848484848484849
+          ],
+          "hindsight_oracle_rate": [
+            0.09090909090909091,
+            0.6060606060606061
+          ],
+          "loo_success_rate": [
+            0.0707070707070707,
+            0.5181818181818182
+          ],
+          "uniform_rate": [
+            0.048484848484848485,
+            0.44848484848484843
+          ]
+        },
+        "states": 11,
+        "states_with_different_candidate_success_counts": 4,
+        "tied_training_max_folds": 30,
+        "unique_training_max_folds": 3
+      },
+      "loo_paired_teacher": {
+        "estimates": {
+          "actor_first_rate": 0.2121212121212121,
+          "after_teacher_rate": 0.2727272727272727,
+          "before_teacher_rate": 0.25252525252525254,
+          "fixed_first_tie_rate": 0.2424242424242424,
+          "hindsight_oracle_rate": 0.3333333333333333,
+          "loo_success_rate": 0.27171717171717175,
+          "uniform_rate": 0.2303030303030303
+        },
+        "folds": 33,
+        "hindsight_tied_top_states": 9,
+        "loo_success_fraction": "269/990",
+        "paired_comparisons": {
+          "after_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.06060606060606061,
+            "state_bootstrap_95_interval": [
+              0.0,
+              0.18181818181818182
+            ]
+          },
+          "after_teacher_rate_minus_before_teacher_rate": {
+            "difference": 0.020202020202020166,
+            "state_bootstrap_95_interval": [
+              0.0,
+              0.06060606060606061
+            ]
+          },
+          "after_teacher_rate_minus_uniform_rate": {
+            "difference": 0.04242424242424242,
+            "state_bootstrap_95_interval": [
+              0.006060606060606058,
+              0.08484848484848484
+            ]
+          },
+          "before_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.04040404040404044,
+            "state_bootstrap_95_interval": [
+              -0.06060606060606058,
+              0.1818181818181818
+            ]
+          },
+          "before_teacher_rate_minus_uniform_rate": {
+            "difference": 0.022222222222222254,
+            "state_bootstrap_95_interval": [
+              -0.0282828282828283,
+              0.0727272727272727
+            ]
+          },
+          "loo_minus_actor_first_rate": {
+            "difference": 0.05959595959595965,
+            "state_bootstrap_95_interval": [
+              -0.02323232323232316,
+              0.20707070707070707
+            ]
+          },
+          "loo_minus_after_teacher_rate": {
+            "difference": -0.001010101010100961,
+            "state_bootstrap_95_interval": [
+              -0.023232323232323215,
+              0.02525252525252525
+            ]
+          },
+          "loo_minus_before_teacher_rate": {
+            "difference": 0.019191919191919204,
+            "state_bootstrap_95_interval": [
+              -0.010101010101010097,
+              0.0565656565656566
+            ]
+          },
+          "loo_minus_fixed_first_tie_rate": {
+            "difference": 0.029292929292929343,
+            "state_bootstrap_95_interval": [
+              -0.012121212121212088,
+              0.08585858585858588
+            ]
+          },
+          "loo_minus_hindsight_oracle_rate": {
+            "difference": -0.06161616161616157,
+            "state_bootstrap_95_interval": [
+              -0.14444444444444438,
+              0.0
+            ]
+          },
+          "loo_minus_uniform_rate": {
+            "difference": 0.04141414141414146,
+            "state_bootstrap_95_interval": [
+              0.0,
+              0.09999999999999998
+            ]
+          }
+        },
+        "state_bootstrap_95_intervals": {
+          "actor_first_rate": [
+            0.0,
+            0.45454545454545453
+          ],
+          "after_teacher_rate": [
+            0.0606060606060606,
+            0.5151515151515151
+          ],
+          "before_teacher_rate": [
+            0.0606060606060606,
+            0.47474747474747475
+          ],
+          "fixed_first_tie_rate": [
+            0.0,
+            0.4848484848484849
+          ],
+          "hindsight_oracle_rate": [
+            0.09090909090909091,
+            0.6060606060606061
+          ],
+          "loo_success_rate": [
+            0.0707070707070707,
+            0.5181818181818182
+          ],
+          "uniform_rate": [
+            0.048484848484848485,
+            0.44848484848484843
+          ]
+        },
+        "states": 11,
+        "states_with_different_candidate_success_counts": 4,
+        "tied_training_max_folds": 30,
+        "unique_training_max_folds": 3
+      },
+      "paired": {
+        "analyzed_states": 11,
+        "common_valid_selected_pairs": {
+          "after": 0.2727272727272727,
+          "before": 0.25252525252525254,
+          "difference": 0.020202020202020166,
+          "pairs": 99
+        },
+        "estimates": {
+          "after": 0.2727272727272727,
+          "after_repeat_disagreement": 0.30303030303030304,
+          "before": 0.25252525252525254,
+          "before_after_disagreement": 0.4175084175084175,
+          "before_repeat_disagreement": 0.3636363636363636,
+          "difference": 0.0202020202020202,
+          "excess_disagreement": 0.08417508417508418,
+          "uniform": 0.23030303030303031
+        },
+        "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+        "state_bootstrap_95_intervals": {
+          "after": [
+            0.0606060606060606,
+            0.5151515151515151
+          ],
+          "after_repeat_disagreement": [
+            0.1111111111111111,
+            0.5151515151515151
+          ],
+          "before": [
+            0.0606060606060606,
+            0.47474747474747475
+          ],
+          "before_after_disagreement": [
+            0.23232323232323232,
+            0.6094276094276094
+          ],
+          "before_repeat_disagreement": [
+            0.1818181818181818,
+            0.5454545454545454
+          ],
+          "difference": [
+            0.0,
+            0.0606060606060606
+          ],
+          "excess_disagreement": [
+            -0.03703703703703705,
+            0.2828282828282828
+          ],
+          "uniform": [
+            0.048484848484848485,
+            0.4484848484848485
+          ]
+        },
+        "states_with_continuation_records": 11,
+        "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval."
+      },
+      "paired_states": 11
+    },
+    "decision_4_to_9": {
+      "complete_states": 12,
+      "continuations": 180,
+      "loo_all_complete": {
+        "estimates": {
+          "actor_first_rate": 0.2777777777777778,
+          "after_teacher_rate": 0.3981481481481481,
+          "before_teacher_rate": 0.4074074074074074,
+          "fixed_first_tie_rate": 0.3888888888888889,
+          "hindsight_oracle_rate": 0.5555555555555555,
+          "loo_success_rate": 0.4185185185185185,
+          "uniform_rate": 0.33888888888888896
+        },
+        "folds": 36,
+        "hindsight_tied_top_states": 8,
+        "loo_success_fraction": "113/270",
+        "paired_comparisons": {
+          "after_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.1203703703703703,
+            "state_bootstrap_95_interval": [
+              0.0185185185185186,
+              0.25
+            ]
+          },
+          "after_teacher_rate_minus_before_teacher_rate": {
+            "difference": -0.0092592592592593,
+            "state_bootstrap_95_interval": [
+              -0.02777777777777779,
+              0.0
+            ]
+          },
+          "after_teacher_rate_minus_uniform_rate": {
+            "difference": 0.05925925925925912,
+            "state_bootstrap_95_interval": [
+              -0.024074074074074137,
+              0.16666666666666669
+            ]
+          },
+          "before_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.1296296296296296,
+            "state_bootstrap_95_interval": [
+              0.02777777777777779,
+              0.25925925925925913
+            ]
+          },
+          "before_teacher_rate_minus_uniform_rate": {
+            "difference": 0.06851851851851842,
+            "state_bootstrap_95_interval": [
+              -0.01296296296296301,
+              0.17412037037036973
+            ]
+          },
+          "loo_minus_actor_first_rate": {
+            "difference": 0.14074074074074072,
+            "state_bootstrap_95_interval": [
+              -0.031481481481481444,
+              0.33611111111111114
+            ]
+          },
+          "loo_minus_after_teacher_rate": {
+            "difference": 0.020370370370370428,
+            "state_bootstrap_95_interval": [
+              -0.0777777777777778,
+              0.1305555555555556
+            ]
+          },
+          "loo_minus_before_teacher_rate": {
+            "difference": 0.011111111111111127,
+            "state_bootstrap_95_interval": [
+              -0.08703703703703702,
+              0.12314814814814806
+            ]
+          },
+          "loo_minus_fixed_first_tie_rate": {
+            "difference": 0.029629629629629617,
+            "state_bootstrap_95_interval": [
+              -0.0444444444444444,
+              0.11666666666666647
+            ]
+          },
+          "loo_minus_hindsight_oracle_rate": {
+            "difference": -0.13703703703703696,
+            "state_bootstrap_95_interval": [
+              -0.20740740740740735,
+              -0.06756944444444467
+            ]
+          },
+          "loo_minus_uniform_rate": {
+            "difference": 0.07962962962962955,
+            "state_bootstrap_95_interval": [
+              -0.020370370370370372,
+              0.19629629629629625
+            ]
+          }
+        },
+        "state_bootstrap_95_intervals": {
+          "actor_first_rate": [
+            0.08333333333333333,
+            0.5
+          ],
+          "after_teacher_rate": [
+            0.17592592592592593,
+            0.6388888888888888
+          ],
+          "before_teacher_rate": [
+            0.19421296296296314,
+            0.638888888888889
+          ],
+          "fixed_first_tie_rate": [
+            0.16666666666666666,
+            0.638888888888889
+          ],
+          "hindsight_oracle_rate": [
+            0.3333333333333333,
+            0.7777777777777778
+          ],
+          "loo_success_rate": [
+            0.1953703703703704,
+            0.6574305555555553
+          ],
+          "uniform_rate": [
+            0.15,
+            0.5444444444444445
+          ]
+        },
+        "states": 12,
+        "states_with_different_candidate_success_counts": 8,
+        "tied_training_max_folds": 26,
+        "unique_training_max_folds": 10
+      },
+      "loo_paired_teacher": {
+        "estimates": {
+          "actor_first_rate": 0.2777777777777778,
+          "after_teacher_rate": 0.3981481481481481,
+          "before_teacher_rate": 0.4074074074074074,
+          "fixed_first_tie_rate": 0.3888888888888889,
+          "hindsight_oracle_rate": 0.5555555555555555,
+          "loo_success_rate": 0.4185185185185185,
+          "uniform_rate": 0.33888888888888896
+        },
+        "folds": 36,
+        "hindsight_tied_top_states": 8,
+        "loo_success_fraction": "113/270",
+        "paired_comparisons": {
+          "after_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.1203703703703703,
+            "state_bootstrap_95_interval": [
+              0.0185185185185186,
+              0.25
+            ]
+          },
+          "after_teacher_rate_minus_before_teacher_rate": {
+            "difference": -0.0092592592592593,
+            "state_bootstrap_95_interval": [
+              -0.02777777777777779,
+              0.0
+            ]
+          },
+          "after_teacher_rate_minus_uniform_rate": {
+            "difference": 0.05925925925925912,
+            "state_bootstrap_95_interval": [
+              -0.024074074074074137,
+              0.16666666666666669
+            ]
+          },
+          "before_teacher_rate_minus_actor_first_rate": {
+            "difference": 0.1296296296296296,
+            "state_bootstrap_95_interval": [
+              0.02777777777777779,
+              0.25925925925925913
+            ]
+          },
+          "before_teacher_rate_minus_uniform_rate": {
+            "difference": 0.06851851851851842,
+            "state_bootstrap_95_interval": [
+              -0.01296296296296301,
+              0.17412037037036973
+            ]
+          },
+          "loo_minus_actor_first_rate": {
+            "difference": 0.14074074074074072,
+            "state_bootstrap_95_interval": [
+              -0.031481481481481444,
+              0.33611111111111114
+            ]
+          },
+          "loo_minus_after_teacher_rate": {
+            "difference": 0.020370370370370428,
+            "state_bootstrap_95_interval": [
+              -0.0777777777777778,
+              0.1305555555555556
+            ]
+          },
+          "loo_minus_before_teacher_rate": {
+            "difference": 0.011111111111111127,
+            "state_bootstrap_95_interval": [
+              -0.08703703703703702,
+              0.12314814814814806
+            ]
+          },
+          "loo_minus_fixed_first_tie_rate": {
+            "difference": 0.029629629629629617,
+            "state_bootstrap_95_interval": [
+              -0.0444444444444444,
+              0.11666666666666647
+            ]
+          },
+          "loo_minus_hindsight_oracle_rate": {
+            "difference": -0.13703703703703696,
+            "state_bootstrap_95_interval": [
+              -0.20740740740740735,
+              -0.06756944444444467
+            ]
+          },
+          "loo_minus_uniform_rate": {
+            "difference": 0.07962962962962955,
+            "state_bootstrap_95_interval": [
+              -0.020370370370370372,
+              0.19629629629629625
+            ]
+          }
+        },
+        "state_bootstrap_95_intervals": {
+          "actor_first_rate": [
+            0.08333333333333333,
+            0.5
+          ],
+          "after_teacher_rate": [
+            0.17592592592592593,
+            0.6388888888888888
+          ],
+          "before_teacher_rate": [
+            0.19421296296296314,
+            0.638888888888889
+          ],
+          "fixed_first_tie_rate": [
+            0.16666666666666666,
+            0.638888888888889
+          ],
+          "hindsight_oracle_rate": [
+            0.3333333333333333,
+            0.7777777777777778
+          ],
+          "loo_success_rate": [
+            0.1953703703703704,
+            0.6574305555555553
+          ],
+          "uniform_rate": [
+            0.15,
+            0.5444444444444445
+          ]
+        },
+        "states": 12,
+        "states_with_different_candidate_success_counts": 8,
+        "tied_training_max_folds": 26,
+        "unique_training_max_folds": 10
+      },
+      "paired": {
+        "analyzed_states": 12,
+        "common_valid_selected_pairs": {
+          "after": 0.43,
+          "before": 0.44,
+          "difference": -0.010000000000000009,
+          "pairs": 100
+        },
+        "estimates": {
+          "after": 0.39814814814814814,
+          "after_repeat_disagreement": 0.35185185185185186,
+          "before": 0.4074074074074074,
+          "before_after_disagreement": 0.4876543209876543,
+          "before_repeat_disagreement": 0.3055555555555555,
+          "difference": -0.009259259259259259,
+          "excess_disagreement": 0.1589506172839506,
+          "uniform": 0.3388888888888889
+        },
+        "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+        "state_bootstrap_95_intervals": {
+          "after": [
+            0.17592592592592593,
+            0.6388888888888888
+          ],
+          "after_repeat_disagreement": [
+            0.17592592592592593,
+            0.5277777777777778
+          ],
+          "before": [
+            0.19444444444444445,
+            0.6481481481481481
+          ],
+          "before_after_disagreement": [
+            0.3055555555555556,
+            0.6604938271604939
+          ],
+          "before_repeat_disagreement": [
+            0.1111111111111111,
+            0.5277777777777778
+          ],
+          "difference": [
+            -0.027777777777777776,
+            0.0
+          ],
+          "excess_disagreement": [
+            0.012345679012345645,
+            0.3472222222222222
+          ],
+          "uniform": [
+            0.15555555555555556,
+            0.5444444444444445
+          ]
+        },
+        "states_with_continuation_records": 12,
+        "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval."
+      },
+      "paired_states": 12
+    }
+  },
+  "excluded_teacher_state_count": 4,
+  "fixed_db_cutoff_epoch": 1791454052.4598145,
+  "frozen_teacher": {
+    "factored_enabled": false,
+    "form": "index_only",
+    "max_output_tokens": 4096,
+    "model": "gpt-6-luna",
+    "reasoning_effort": "high",
+    "source": "unchanged saved receipts; no fresh calls"
+  },
+  "historical_matched_snapshots": [
+    {
+      "actor_first": 0.38211382113821135,
+      "after": 0.4268292682926829,
+      "aggregate_sha256": "16509350e7a66ce9e983dd193cd1e2655ff625ac0975a0818ddd0453e13fa00d",
+      "before": 0.42005420054200543,
+      "completed_states": 86,
+      "continuations": 1290,
+      "hindsight_oracle": 0.556910569105691,
+      "loo": 0.4339430894308943,
+      "paired_states": 82,
+      "uniform": 0.3959349593495935
+    },
+    {
+      "actor_first": 0.37698412698412703,
+      "after": 0.42063492063492064,
+      "aggregate_sha256": "84fecfec6bee0c0a0b129ad228fcf64cfeefd7adcdf5187f38ad73f60ebce5a8",
+      "before": 0.414021164021164,
+      "completed_states": 88,
+      "continuations": 1320,
+      "hindsight_oracle": 0.5515873015873014,
+      "loo": 0.42691798941798936,
+      "paired_states": 84,
+      "uniform": 0.3896825396825397
+    }
+  ],
+  "inference_caveats": [
+    "No critic was trained. Outcome-informed LOO uses two continuations per candidate, whereas the before/after teachers never see continuation outcomes.",
+    "All rates are conditional on a nonrandom sample of accepted replayable training states, not full-task benchmark pass@1.",
+    "Ten thousand whole-state percentile bootstrap draws preserve overlapping folds; intervals are exploratory and not adjusted for multiple comparisons.",
+    "Candidate zero is the first actor sample, not greedy decoding or a separately executed original trajectory. Duplicate sampled candidate entries remain separate."
+  ],
+  "invalid_continuations": 120,
+  "limitations": [
+    "LOO estimates a continuation-informed selector conditional on replayable states; it is not benchmark pass@1.",
+    "Hindsight oracle uses evaluation outcomes and is optimistic, not held out.",
+    "Early/later cohorts are descriptive replayability-selected strata, not randomized depth effects.",
+    "One historical committed activation failure remains invalid and scores zero; preserved censored states remain outside the primary cohort."
+  ],
+  "loo": {
+    "all_completed": {
+      "estimates": {
+        "actor_first_rate": 0.3573883161512028,
+        "fixed_first_tie_rate": 0.4158075601374569,
+        "hindsight_oracle_rate": 0.5395189003436425,
+        "loo_success_rate": 0.41517754868270323,
+        "uniform_rate": 0.372508591065292
+      },
+      "folds": 291,
+      "hindsight_tied_top_states": 69,
+      "loo_success_fraction": "7249/17460",
+      "paired_comparisons": {
+        "loo_minus_actor_first_rate": {
+          "difference": 0.05778923253150042,
+          "state_bootstrap_95_interval": [
+            0.010648625429553341,
+            0.10773482245131753
+          ]
+        },
+        "loo_minus_fixed_first_tie_rate": {
+          "difference": -0.000630011454753665,
+          "state_bootstrap_95_interval": [
+            -0.0272064719358535,
+            0.02588774341351669
+          ]
+        },
+        "loo_minus_hindsight_oracle_rate": {
+          "difference": -0.12434135166093924,
+          "state_bootstrap_95_interval": [
+            -0.15504009163802968,
+            -0.09507302405498283
+          ]
+        },
+        "loo_minus_uniform_rate": {
+          "difference": 0.04266895761741124,
+          "state_bootstrap_95_interval": [
+            0.009507445589919838,
+            0.07686139747995413
+          ]
+        }
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_first_rate": [
+          0.2714776632302406,
+          0.4398625429553265
+        ],
+        "fixed_first_tie_rate": [
+          0.3298969072164948,
+          0.5017182130584191
+        ],
+        "hindsight_oracle_rate": [
+          0.4536082474226804,
+          0.6219931271477664
+        ],
+        "loo_success_rate": [
+          0.33155641466208474,
+          0.4973668384879724
+        ],
+        "uniform_rate": [
+          0.29690721649484525,
+          0.44675257731958756
+        ]
+      },
+      "states": 97,
+      "states_with_different_candidate_success_counts": 55,
+      "tied_training_max_folds": 230,
+      "unique_training_max_folds": 61
+    },
+    "early_all_74": {
+      "estimates": {
+        "actor_first_rate": 0.39189189189189194,
+        "fixed_first_tie_rate": 0.44594594594594594,
+        "hindsight_oracle_rate": 0.5675675675675674,
+        "loo_success_rate": 0.4359609609609609,
+        "uniform_rate": 0.39909909909909896
+      },
+      "folds": 222,
+      "hindsight_tied_top_states": 52,
+      "loo_success_fraction": "5807/13320",
+      "paired_comparisons": {
+        "loo_minus_actor_first_rate": {
+          "difference": 0.044069069069068934,
+          "state_bootstrap_95_interval": [
+            -0.007434309309309396,
+            0.09834834834834838
+          ]
+        },
+        "loo_minus_fixed_first_tie_rate": {
+          "difference": -0.009984984984985068,
+          "state_bootstrap_95_interval": [
+            -0.04189376876876884,
+            0.02027027027027034
+          ]
+        },
+        "loo_minus_hindsight_oracle_rate": {
+          "difference": -0.13160660660660656,
+          "state_bootstrap_95_interval": [
+            -0.1677927927927929,
+            -0.09752064564564557
+          ]
+        },
+        "loo_minus_uniform_rate": {
+          "difference": 0.03686186186186191,
+          "state_bootstrap_95_interval": [
+            -0.001876876876876933,
+            0.07777777777777778
+          ]
+        }
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_first_rate": [
+          0.2972972972972972,
+          0.490990990990991
+        ],
+        "fixed_first_tie_rate": [
+          0.34684684684684686,
+          0.5450450450450451
+        ],
+        "hindsight_oracle_rate": [
+          0.4684684684684685,
+          0.6621621621621623
+        ],
+        "loo_success_rate": [
+          0.34083708708708704,
+          0.5341629129129127
+        ],
+        "uniform_rate": [
+          0.3117117117117117,
+          0.4900900900900902
+        ]
+      },
+      "states": 74,
+      "states_with_different_candidate_success_counts": 43,
+      "tied_training_max_folds": 174,
+      "unique_training_max_folds": 48
+    },
+    "early_paired_70": {
+      "estimates": {
+        "actor_first_rate": 0.4047619047619048,
+        "after_teacher_rate": 0.44761904761904775,
+        "before_teacher_rate": 0.4428571428571429,
+        "fixed_first_tie_rate": 0.46190476190476204,
+        "hindsight_oracle_rate": 0.5857142857142856,
+        "loo_success_rate": 0.44976190476190475,
+        "uniform_rate": 0.41428571428571415
+      },
+      "folds": 210,
+      "hindsight_tied_top_states": 49,
+      "loo_success_fraction": "1889/4200",
+      "paired_comparisons": {
+        "after_teacher_rate_minus_actor_first_rate": {
+          "difference": 0.04285714285714293,
+          "state_bootstrap_95_interval": [
+            0.0,
+            0.0936507936507936
+          ]
+        },
+        "after_teacher_rate_minus_before_teacher_rate": {
+          "difference": 0.004761904761904856,
+          "state_bootstrap_95_interval": [
+            -0.025396825396825362,
+            0.034920634920635074
+          ]
+        },
+        "after_teacher_rate_minus_uniform_rate": {
+          "difference": 0.033333333333333603,
+          "state_bootstrap_95_interval": [
+            -0.0044444444444444176,
+            0.07365079365079347
+          ]
+        },
+        "before_teacher_rate_minus_actor_first_rate": {
+          "difference": 0.03809523809523807,
+          "state_bootstrap_95_interval": [
+            -0.006349206349206382,
+            0.08734126984126944
+          ]
+        },
+        "before_teacher_rate_minus_uniform_rate": {
+          "difference": 0.028571428571428747,
+          "state_bootstrap_95_interval": [
+            -0.009849206349206422,
+            0.07015873015873009
+          ]
+        },
+        "loo_minus_actor_first_rate": {
+          "difference": 0.04499999999999993,
+          "state_bootstrap_95_interval": [
+            -0.007779761904761788,
+            0.10373214285714305
+          ]
+        },
+        "loo_minus_after_teacher_rate": {
+          "difference": 0.002142857142857002,
+          "state_bootstrap_95_interval": [
+            -0.048095238095238135,
+            0.052698412698412744
+          ]
+        },
+        "loo_minus_before_teacher_rate": {
+          "difference": 0.006904761904761858,
+          "state_bootstrap_95_interval": [
+            -0.044922619047619204,
+            0.05769841269841253
+          ]
+        },
+        "loo_minus_fixed_first_tie_rate": {
+          "difference": -0.012142857142857288,
+          "state_bootstrap_95_interval": [
+            -0.045238095238095244,
+            0.01952579365079376
+          ]
+        },
+        "loo_minus_hindsight_oracle_rate": {
+          "difference": -0.13595238095238088,
+          "state_bootstrap_95_interval": [
+            -0.17388888888888893,
+            -0.1004742063492063
+          ]
+        },
+        "loo_minus_uniform_rate": {
+          "difference": 0.035476190476190606,
+          "state_bootstrap_95_interval": [
+            -0.005238095238095155,
+            0.07880952380952383
+          ]
+        }
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_first_rate": [
+          0.30476190476190473,
+          0.5047619047619047
+        ],
+        "after_teacher_rate": [
+          0.34444444444444455,
+          0.5492063492063491
+        ],
+        "before_teacher_rate": [
+          0.3412698412698413,
+          0.5460317460317459
+        ],
+        "fixed_first_tie_rate": [
+          0.3571428571428572,
+          0.5619047619047618
+        ],
+        "hindsight_oracle_rate": [
+          0.4857142857142858,
+          0.680952380952381
+        ],
+        "loo_success_rate": [
+          0.351031746031746,
+          0.5465119047619049
+        ],
+        "uniform_rate": [
+          0.32285714285714284,
+          0.5057142857142857
+        ]
+      },
+      "states": 70,
+      "states_with_different_candidate_success_counts": 42,
+      "tied_training_max_folds": 164,
+      "unique_training_max_folds": 46
+    },
+    "later": {
+      "estimates": {
+        "actor_first_rate": 0.24637681159420288,
+        "after_teacher_rate": 0.3381642512077294,
+        "before_teacher_rate": 0.3333333333333333,
+        "fixed_first_tie_rate": 0.3188405797101449,
+        "hindsight_oracle_rate": 0.4492753623188405,
+        "loo_success_rate": 0.34830917874396145,
+        "uniform_rate": 0.28695652173913044
+      },
+      "folds": 69,
+      "hindsight_tied_top_states": 17,
+      "loo_success_fraction": "721/2070",
+      "paired_comparisons": {
+        "after_teacher_rate_minus_actor_first_rate": {
+          "difference": 0.09178743961352653,
+          "state_bootstrap_95_interval": [
+            0.019323671497584516,
+            0.18357487922705318
+          ]
+        },
+        "after_teacher_rate_minus_before_teacher_rate": {
+          "difference": 0.004830917874396101,
+          "state_bootstrap_95_interval": [
+            -0.01449275362318836,
+            0.02898550724637683
+          ]
+        },
+        "after_teacher_rate_minus_uniform_rate": {
+          "difference": 0.05120772946859897,
+          "state_bootstrap_95_interval": [
+            0.003864734299516892,
+            0.1111111111111111
+          ]
+        },
+        "before_teacher_rate_minus_actor_first_rate": {
+          "difference": 0.08695652173913043,
+          "state_bootstrap_95_interval": [
+            0.009661835748792258,
+            0.18357487922705307
+          ]
+        },
+        "before_teacher_rate_minus_uniform_rate": {
+          "difference": 0.04637681159420287,
+          "state_bootstrap_95_interval": [
+            -0.003864734299516893,
+            0.10821256038647342
+          ]
+        },
+        "loo_minus_actor_first_rate": {
+          "difference": 0.10193236714975856,
+          "state_bootstrap_95_interval": [
+            -0.007729468599033784,
+            0.22754830917874394
+          ]
+        },
+        "loo_minus_after_teacher_rate": {
+          "difference": 0.010144927536232029,
+          "state_bootstrap_95_interval": [
+            -0.0444444444444444,
+            0.0705314009661836
+          ]
+        },
+        "loo_minus_before_teacher_rate": {
+          "difference": 0.01497584541062813,
+          "state_bootstrap_95_interval": [
+            -0.040096618357487956,
+            0.07584541062801936
+          ]
+        },
+        "loo_minus_fixed_first_tie_rate": {
+          "difference": 0.029468599033816545,
+          "state_bootstrap_95_interval": [
+            -0.014975845410627964,
+            0.08164251207729473
+          ]
+        },
+        "loo_minus_hindsight_oracle_rate": {
+          "difference": -0.10096618357487908,
+          "state_bootstrap_95_interval": [
+            -0.15652173913043482,
+            -0.049275362318840554
+          ]
+        },
+        "loo_minus_uniform_rate": {
+          "difference": 0.061352657004831,
+          "state_bootstrap_95_interval": [
+            0.0033816425120772875,
+            0.1289855072463768
+          ]
+        }
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_first_rate": [
+          0.10144927536231883,
+          0.42028985507246375
+        ],
+        "after_teacher_rate": [
+          0.18357487922705315,
+          0.5120772946859904
+        ],
+        "before_teacher_rate": [
+          0.18357487922705315,
+          0.5024154589371982
+        ],
+        "fixed_first_tie_rate": [
+          0.15942028985507245,
+          0.4927536231884058
+        ],
+        "hindsight_oracle_rate": [
+          0.2753623188405797,
+          0.6376811594202898
+        ],
+        "loo_success_rate": [
+          0.18937198067632852,
+          0.5217512077294686
+        ],
+        "uniform_rate": [
+          0.1536231884057971,
+          0.43768115942028984
+        ]
+      },
+      "states": 23,
+      "states_with_different_candidate_success_counts": 12,
+      "tied_training_max_folds": 56,
+      "unique_training_max_folds": 13
+    },
+    "paired_teacher": {
+      "estimates": {
+        "actor_first_rate": 0.36559139784946243,
+        "after_teacher_rate": 0.42054958183990443,
+        "before_teacher_rate": 0.4157706093189964,
+        "fixed_first_tie_rate": 0.42652329749103934,
+        "hindsight_oracle_rate": 0.5519713261648743,
+        "loo_success_rate": 0.4246714456391875,
+        "uniform_rate": 0.38279569892473114
+      },
+      "folds": 279,
+      "hindsight_tied_top_states": 66,
+      "loo_success_fraction": "7109/16740",
+      "paired_comparisons": {
+        "after_teacher_rate_minus_actor_first_rate": {
+          "difference": 0.054958183990442,
+          "state_bootstrap_95_interval": [
+            0.016726403823178027,
+            0.09796893667861423
+          ]
+        },
+        "after_teacher_rate_minus_before_teacher_rate": {
+          "difference": 0.004778972520908031,
+          "state_bootstrap_95_interval": [
+            -0.01792114695340502,
+            0.02867383512544802
+          ]
+        },
+        "after_teacher_rate_minus_uniform_rate": {
+          "difference": 0.03775388291517329,
+          "state_bootstrap_95_interval": [
+            0.007168458781361962,
+            0.07192353643966548
+          ]
+        },
+        "before_teacher_rate_minus_actor_first_rate": {
+          "difference": 0.05017921146953397,
+          "state_bootstrap_95_interval": [
+            0.010752688172043057,
+            0.09438470728793319
+          ]
+        },
+        "before_teacher_rate_minus_uniform_rate": {
+          "difference": 0.032974910394265255,
+          "state_bootstrap_95_interval": [
+            0.0011947431302269385,
+            0.06786140979689365
+          ]
+        },
+        "loo_minus_actor_first_rate": {
+          "difference": 0.05908004778972509,
+          "state_bootstrap_95_interval": [
+            0.009914874551971514,
+            0.11302419354838733
+          ]
+        },
+        "loo_minus_after_teacher_rate": {
+          "difference": 0.0041218637992830875,
+          "state_bootstrap_95_interval": [
+            -0.03596176821983271,
+            0.04486409796893665
+          ]
+        },
+        "loo_minus_before_teacher_rate": {
+          "difference": 0.008900836320191119,
+          "state_bootstrap_95_interval": [
+            -0.0315412186379927,
+            0.05125597371565121
+          ]
+        },
+        "loo_minus_fixed_first_tie_rate": {
+          "difference": -0.0018518518518518268,
+          "state_bootstrap_95_interval": [
+            -0.029689366786140654,
+            0.024313022700119317
+          ]
+        },
+        "loo_minus_hindsight_oracle_rate": {
+          "difference": -0.1272998805256868,
+          "state_bootstrap_95_interval": [
+            -0.15848416965352477,
+            -0.09743130227001195
+          ]
+        },
+        "loo_minus_uniform_rate": {
+          "difference": 0.041875746714456374,
+          "state_bootstrap_95_interval": [
+            0.007825567502986904,
+            0.07867383512544812
+          ]
+        }
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_first_rate": [
+          0.2795698924731183,
+          0.4551971326164875
+        ],
+        "after_teacher_rate": [
+          0.3333333333333333,
+          0.5101553166069296
+        ],
+        "before_teacher_rate": [
+          0.32974910394265233,
+          0.5053763440860216
+        ],
+        "fixed_first_tie_rate": [
+          0.3369175627240144,
+          0.5161290322580644
+        ],
+        "hindsight_oracle_rate": [
+          0.4659498207885305,
+          0.6379928315412187
+        ],
+        "loo_success_rate": [
+          0.3401403823178016,
+          0.510937873357228
+        ],
+        "uniform_rate": [
+          0.30609318996415763,
+          0.4616487455197131
+        ]
+      },
+      "states": 93,
+      "states_with_different_candidate_success_counts": 54,
+      "tied_training_max_folds": 220,
+      "unique_training_max_folds": 59
+    }
+  },
+  "loo_bootstrap_seed": 20261007,
+  "paired": {
+    "analyzed_states": 93,
+    "common_valid_selected_pairs": {
+      "after": 0.44150943396226416,
+      "before": 0.4339622641509434,
+      "difference": 0.007547169811320753,
+      "pairs": 795
+    },
+    "estimates": {
+      "after": 0.42054958183990443,
+      "after_repeat_disagreement": 0.2186379928315412,
+      "before": 0.4157706093189964,
+      "before_after_disagreement": 0.4496216646754281,
+      "before_repeat_disagreement": 0.3118279569892473,
+      "difference": 0.004778972520908004,
+      "excess_disagreement": 0.18438868976503384,
+      "uniform": 0.3827956989247312
+    },
+    "estimator": "Equal weight per state; average all three execution repetitions and all three teacher calls. Invalid continuations count as zero in failure-inclusive estimates; missing teacher panels are excluded explicitly. Permutation calls are controls only. No best-of-repetition selection.",
+    "state_bootstrap_95_intervals": {
+      "after": [
+        0.3345280764635603,
+        0.5089605734767025
+      ],
+      "after_repeat_disagreement": [
+        0.16367980884109917,
+        0.2735961768219833
+      ],
+      "before": [
+        0.32974910394265233,
+        0.5029868578255675
+      ],
+      "before_after_disagreement": [
+        0.3747510951812027,
+        0.5236957387495021
+      ],
+      "before_repeat_disagreement": [
+        0.24372759856630824,
+        0.38351254480286734
+      ],
+      "difference": [
+        -0.01792114695340502,
+        0.02867383512544803
+      ],
+      "excess_disagreement": [
+        0.12385503783353244,
+        0.24910394265232974
+      ],
+      "uniform": [
+        0.3075268817204301,
+        0.46021505376344085
+      ]
+    },
+    "states_with_continuation_records": 97,
+    "uncertainty": "Percentile bootstrap over states; fewer than two states has no interval."
+  },
+  "paired_bootstrap_seed": 0,
+  "prior_fixed93_delta": {
+    "all_prior_records_unchanged": true,
+    "all_prior_teacher_judgments_unchanged": true,
+    "current_complete_states": 97,
+    "current_cutoff_epoch": 1791454052.4598145,
+    "interpretation": "Descriptive cohort enlargement; changes do not identify learning or a causal depth effect.",
+    "new_candidate_decisions": {
+      "14": 1,
+      "15": 1,
+      "4": 1,
+      "5": 1
+    },
+    "new_complete_states": 4,
+    "new_continuations": 60,
+    "new_teacher_judgments": 56,
+    "paired_estimate_change": {
+      "after": 0.003570805310566083,
+      "after_repeat_disagreement": -0.004832668841367654,
+      "before": 0.0037855905924046307,
+      "before_after_disagreement": -0.0043941488909473025,
+      "before_repeat_disagreement": -0.006524102935846321,
+      "difference": -0.0002147852818385615,
+      "excess_disagreement": 0.0012842369976597268,
+      "uniform": -0.002223027667029087
+    },
+    "prior_complete_states": 93,
+    "prior_cutoff_epoch": 1791451738.944809
+  },
+  "private_audit_receipt_sha256": {
+    "aggregate.json": "a833f4492acc52584f1a3c6f8c51e63c97af729f9dac45a95b45d7d1d6341981",
+    "hash-receipt.json": "a8fed441053afc50406f89a3b7a7ec0b6a5b06d9c5f696f177ecdfd090c8abc2",
+    "independent-formula-verification.json": "b4ff6ea33f8b517f0a486bce7f459439e2aa67cf01c0a6323c59afc298a8f8ed"
+  },
+  "protocol": {
+    "actor": "official OpenWebRL SFT",
+    "after_teacher_repeats_per_execution": 3,
+    "before_teacher_repeats_per_state": 3,
+    "browser_operation_budget_including_prefix": 30,
+    "judge": "o4-mini / AgentTrek terminal success",
+    "judge_limitation": "Canonical success can credit partial progress; this unchanged judge does not establish strict independent task completion.",
+    "max_output_tokens": 4096,
+    "order_controls_scored_in_primary_estimate": false,
+    "teacher": "gpt-6-luna",
+    "teacher_form": "index_only",
+    "teacher_reasoning_effort": "high",
+    "temperature": 1.0,
+    "top_k": "off",
+    "top_p": 0.95
+  },
+  "schema": "continuation_branch_fixed97_aggregate_v1",
+  "snapshot_utc": "2026-10-08T10:07:32.459815+00:00",
+  "states": 97,
+  "successful_continuations": 542,
+  "target_continuations": 2235,
+  "target_states": 149,
+  "teacher_oracle_action_agreement": {
+    "definition": "Hindsight best actions maximize successes across all3 continuations; any-best credits membership in tied maxima. Uniformly tiebroken-oracle match instead credits1/number_of_tied_best. These reuse outcome data and are descriptive, not held-out validation.",
+    "paired_all_states": {
+      "estimates": {
+        "actor_natural_any_best": 0.6344086021505376,
+        "after_any_best": 0.7013142174432497,
+        "after_uniformly_tiebroken_oracle_match": 0.22604540023894862,
+        "before_any_best": 0.7060931899641576,
+        "before_uniformly_tiebroken_oracle_match": 0.2341099163679809,
+        "uniform_any_best": 0.6408602150537634
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_natural_any_best": [
+          0.5376344086021505,
+          0.7311827956989247
+        ],
+        "after_any_best": [
+          0.6129032258064515,
+          0.7849462365591398
+        ],
+        "after_uniformly_tiebroken_oracle_match": [
+          0.1842293906810035,
+          0.2737569693349261
+        ],
+        "before_any_best": [
+          0.6200716845878136,
+          0.7885304659498209
+        ],
+        "before_uniformly_tiebroken_oracle_match": [
+          0.1915755675029867,
+          0.28189964157706066
+        ],
+        "uniform_any_best": [
+          0.5677419354838713,
+          0.7118279569892475
+        ]
+      },
+      "states": 93
+    },
+    "paired_unique_hindsight_best_states": {
+      "estimates": {
+        "actor_natural_any_best": 0.14814814814814814,
+        "after_any_best": 0.20576131687242796,
+        "after_uniformly_tiebroken_oracle_match": 0.20576131687242796,
+        "before_any_best": 0.2345679012345679,
+        "before_uniformly_tiebroken_oracle_match": 0.2345679012345679,
+        "uniform_any_best": 0.20000000000000004
+      },
+      "state_bootstrap_95_intervals": {
+        "actor_natural_any_best": [
+          0.037037037037037035,
+          0.2962962962962963
+        ],
+        "after_any_best": [
+          0.07407407407407407,
+          0.35802469135802467
+        ],
+        "after_uniformly_tiebroken_oracle_match": [
+          0.07407407407407407,
+          0.35802469135802467
+        ],
+        "before_any_best": [
+          0.09876543209876543,
+          0.3827160493827161
+        ],
+        "before_uniformly_tiebroken_oracle_match": [
+          0.09876543209876543,
+          0.3827160493827161
+        ],
+        "uniform_any_best": [
+          0.20000000000000007,
+          0.20000000000000007
+        ]
+      },
+      "states": 27
+    }
+  },
+  "teacher_receipt_judgments": 1358,
+  "teacher_receipt_states": 97,
+  "tie_policy": "Select uniformly among candidates with maximum successes on the two training continuations; evaluate exact expected success on the held-out continuation, never use held-out success to choose tie winners.",
+  "valid_continuations": 1335,
+  "valid_teacher_judgments": 1330,
+  "validation": {
+    "independent_exact_LOO_and_fixed_first_formulas_passed": true,
+    "new_image_artifact_audit_issues": 0,
+    "new_primary_outcomes": 60,
+    "new_primary_outcomes_all_valid": true,
+    "new_successes": 20,
+    "old93_results_unchanged": true,
+    "saved_outcomes_and_teacher_receipt_hashes_checked": true
+  },
+  "verified_complete": false
+}
