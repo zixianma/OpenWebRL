@@ -60,28 +60,32 @@ ablation and new browser data remain later-stage planning.
 
 
 <a id="arm-continuation-finish100-20261007"></a>
-**October 7 depth expansion: running as job 349338 after clean handoffs from 349137 and 349236.** Target **75 later states / 1,125 continuations**, preserving the 74 early states: **149 states / 2,235 records total**. Existing later states count toward the new target.
+**October 7 depth expansion: closed partial after job 349338.** Verified **86/149 states and 1,290/2,235 continuations**: 74 early + 12 later. All 86 teacher panels are saved; 82 have valid ordinary judgments for pairing. The four exclusions are early states. All 111 invalid continuations remain zero, and the previously censored state remains separate.
 
-| Candidate decisions | Later-state target |
-| --- | ---: |
-| 4–7 | 25 |
-| 8–11 | 25 |
-| 12–15 | 25 |
+| Candidate decisions | Completed states | Target states |
+| --- | ---: | ---: |
+| 4–7 | 5 | 25 |
+| 8–11 | 4 | 25 |
+| 12–15 | 3 | 25 |
 
-Six per exact decision, plus one at 4, 9, and 15. Cycle depths through never-attempted tasks in the fixed reserve order; all attempted depths and results stay unchanged. Membership is fixed at the 15-browser replay release, before continuation outcomes. Invalid outcomes remain included; teacher validity never triggers replacement. Report attempted, captured, released, completed, and teacher-valid counts separately by decision. Unfilled quotas stay visible; none move to easier depths. Six prefetched early anchors remain deferred, and the allocation-censored early state stays separate.
+Exact later counts by decision 4–15: **2, 2, 0, 1, 0, 1, 0, 3, 0, 0, 1, 2**. Targets remain six per decision, plus one at 4, 9 and 15. No quota transfers or outcome-based replacement. Membership was fixed at the unchanged 15-browser replay release; the 30-action budget includes the prefix.
 
-| Extension | Approved cap |
-| --- | --- |
-| Additional compute, all retries | 4 H200 × 4 hours; 32 CPUs / 480 GiB |
-| Browser sessions, cumulative | 5,000; 30 concurrent |
-| Luna, cumulative | $15 / 2,200 calls, unchanged |
-| Judge, cumulative | $25 / 6,600 calls, unchanged |
+| Resource | Used across all attempts | Approved cap |
+| --- | ---: | ---: |
+| Allocation seconds, 4 H200 / 32 CPU / 480 GiB | 40,012 | 43,147 |
+| Extension allocation seconds | 11,265 | 14,400 |
+| Browser sessions | 3,501 | 5,000 |
+| SFT generations | 18,267 | 110,000 |
+| Luna calls | 1,176 | 2,200 |
+| Luna cost | $4.321348 | $15 |
+| Judge calls | 877 | 6,600 |
+| Judge cost | $6.533281 | $25 |
 
-**Verified handoff snapshot: 81/149 states and 1,215/2,235 continuations** (74 early + 7 later; 81 saved teacher panels, 77 valid paired panels). The reserve now includes all **2,090 eligible training tasks** in the same fixed order; the original 800 tasks, depths and attempts are unchanged. Strict replay still limits later-state yield.
+All 11 scheduler attempts are terminal; all provider reservations are settled and owned teardown is verified. Extension attempts used 1,495 + 6,295 + 3,475 seconds. **3,135 seconds remain preserved**, but even zero startup leaves 2,955 seconds after the 180-second shutdown margin, below the unchanged 3,000-second admission minimum. No further cohort can start under this approval. The original unused 53 seconds are not added. Slurm `COMPLETED` and W&B `failed` describe a controlled partial closeout, not a completed scientific target.
 
-Jobs 349137 and 349236 consumed 1,495 and 6,295 seconds. Job 349338 receives **1h50m**, leaving ten unallocated rounding seconds within the same four-hour extension. Original unused time is not added. All results and charges are preserved; 95 reserve/migration tests and 28 analyzer tests passed. Active-agent supervision follows the replacement.
+The fixed reserve contains 2,090 eligible training tasks; all original tasks, assignments and attempts remain intact. Strict replay limits later-state yield. Source/migration checks passed 95 tests; the receipt analyzer passed 28 tests. Final results use 10,000 state bootstrap samples with early/later and remaining-action strata kept separate.
 
-The 30-action total includes each prefix; record remaining actions and decision depth. Every state must pass the unchanged 15-browser release barrier. Completion and teacher-valid coverage are separate; four early panels lack valid paired evidence. The broader target may remain incomplete within the existing caps. [Depth-expansion receipt](arm_results/rl_integration/continuation-depth-balanced-extension-20261007.json) · [Original extension receipt](arm_results/rl_integration/continuation-finish100-extension-20261007.json).
+Later after − before is **+1.85 pp [0.00, +5.56]**, based on only 12 states. Repeat disagreement is **33.33% before / 42.59% after**; the early-state repeatability improvement does not generalize to this small sample. No clear downstream success benefit is established. [Concise findings](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007) · [Final partial aggregate and three plots](arm_results/rl_integration/continuation-depth-balanced-partial-20261007/aggregate.json) · [Depth-expansion receipt](arm_results/rl_integration/continuation-depth-balanced-extension-20261007.json) · [Original extension receipt](arm_results/rl_integration/continuation-finish100-extension-20261007.json).
 
 **Closed allocation audit, October 6: 74/100 complete states and 1,110/1,500 records in complete-state groups.** Of these, 1,000 have valid terminal evidence and 110 remain invalid. One committed release-read failure occurred before candidate execution, leaving 1,109 post-release attempts in these groups. Four additional finished continuations are preserved in a 75th, incomplete state whose other 11 continuations were interrupted; that state has no complete teacher panel and is excluded from the paired analysis. The requested cohort is incomplete.
 

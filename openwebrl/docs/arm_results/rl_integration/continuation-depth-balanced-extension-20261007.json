@@ -1,10 +1,10 @@
 {
   "schema": "arm_continuation_depth_expansion_v2",
-  "as_of_epoch": 1791427271.3990283,
-  "status": "running_partial",
+  "as_of_epoch": 1791430562.8038692,
+  "status": "closed_partial",
   "job_id": "349338",
   "preserved_early_complete_states": 74,
-  "existing_later_complete_states": 7,
+  "existing_later_complete_states": 12,
   "later_state_target": 75,
   "total_state_target": 149,
   "total_continuation_target": 2235,
@@ -24,19 +24,19 @@
   },
   "analysis_bands": [
     {
-      "complete_states": 3,
+      "complete_states": 5,
       "first_decision": 4,
       "last_decision": 7,
       "target": 25
     },
     {
-      "complete_states": 2,
+      "complete_states": 4,
       "first_decision": 8,
       "last_decision": 11,
       "target": 25
     },
     {
-      "complete_states": 2,
+      "complete_states": 3,
       "first_decision": 12,
       "last_decision": 15,
       "target": 25
@@ -71,7 +71,12 @@
         "job_id": "349236",
         "seconds": 6295
       }
-    ]
+    ],
+    "current_attempt_actual_seconds": 3475,
+    "cumulative_actual_seconds": 40012,
+    "extension_actual_seconds": 11265,
+    "remaining_approved_seconds": 3135,
+    "all_attempts_terminal": true
   },
   "cumulative_caps": {
     "browser_sessions": 5000,
@@ -89,17 +94,17 @@
   },
   "active_agent_supervisor_verified": true,
   "limitations": [
-    "Target coverage remains conditional on reachability, strict replay and existing budget caps; the reserve now contains all 2,090 eligible training tasks.",
+    "Only 12 of 75 later states completed; the 149-state target remains incomplete. Strict replay and the unchanged time guard limited coverage.",
     "Per-decision shortfalls are reported, never reassigned to easier decisions.",
     "Early and later results remain separate; later states have fewer remaining browser operations."
   ],
   "contains_task_payloads": false,
-  "completed_states": 81,
-  "completed_continuations": 1215,
-  "teacher_receipt_states": 81,
-  "paired_teacher_valid_states": 77,
+  "completed_states": 86,
+  "completed_continuations": 1290,
+  "teacher_receipt_states": 86,
+  "paired_teacher_valid_states": 82,
   "verified_complete": false,
-  "final_accounting_verified": false,
+  "final_accounting_verified": true,
   "candidate_reserve": {
     "previous_tasks": 800,
     "current_tasks": 2090,
@@ -111,27 +116,37 @@
     "new_budget_added": false
   },
   "completed_later_states_by_decision": {
-    "4": 1,
-    "5": 2,
-    "6": 0,
-    "7": 0,
-    "8": 0,
-    "9": 1,
     "10": 0,
-    "11": 1,
+    "11": 3,
     "12": 0,
     "13": 0,
-    "14": 0,
-    "15": 2
+    "14": 1,
+    "15": 2,
+    "4": 2,
+    "5": 2,
+    "6": 0,
+    "7": 1,
+    "8": 0,
+    "9": 1
   },
   "usage_at_snapshot": {
-    "browser_sessions": 3236.0,
-    "local_sft_generations": 16642.0,
-    "luna_selector_requests": 1106.0,
-    "luna_usd": 3.850441250000001,
-    "om2w_judge_http_attempts": 848.0,
-    "canonical_judge_usd": 6.328900600000003
+    "active_browsers": 0.0,
+    "browsers:L01": 3501.0,
+    "browser_sessions": 3501.0,
+    "local_sft_generations": 18267.0,
+    "om2w_judge_http_attempts": 877.0,
+    "canonical_judge_usd": 6.533280600000008,
+    "luna_selector_requests": 1176.0,
+    "luna_usd": 4.321348000000003
   },
   "resumed_actor_identity_and_decoding_verified": true,
-  "coverage_snapshot_epoch": 1791427062.9513445
+  "coverage_snapshot_epoch": 1791430562.8038692,
+  "remaining_approved_seconds": 3135,
+  "restart_feasible_under_unchanged_guard": false,
+  "aggregate": "continuation-depth-balanced-partial-20261007/aggregate.json",
+  "plots": [
+    "continuation-depth-balanced-partial-20261007/paired-success.png",
+    "continuation-depth-balanced-partial-20261007/repeat-controls.png",
+    "continuation-depth-balanced-partial-20261007/depth-coverage.png"
+  ]
 }

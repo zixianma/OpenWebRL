@@ -25,11 +25,11 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Inference-time scaling: visible actor-alone results and inventory, Piotr repeat averages and matched Luna/Jev/Kev selectors](ARM_INFERENCE_SCALING.md).
 
-[Before/after continuation selection: choices change and become more repeatable, but success gain is +0.48 pp with 95% interval [−2.38, +3.65]; 70 paired states](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
+[Before/after continuation selection: 70 early + 12 later paired states; no clear success gain, with greater repeatability only in the early sample](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
-[Continuation depth expansion: retain 74 early states; target 75 later states spread across decisions 4–15 within unchanged caps](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
-[Continuation readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
+[Continuation depth expansion closed partial: 74 early + 12 later states; 1,290 outcomes, final accounting and depth-stratified plots](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
+[Original early-state readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
 [October4 critic data inventory: 24 sources/derived views, actual supervision, conversion readiness and benchmark exclusions](ARM_JOINT_DATA.md#arm-critic-source-inventory-20261004).
 [Piotr post-execution audit: 2,673 verified transitions, recovered tool receipts, missing labels and next-experiment priorities](ARM_JOINT_DATA.md#piotr-post-execution-audit-20261006).
 [October4 controlled inference completed: ARM39.33%, pass@1 35.20%, pass@5 59.33%; paired FLOP/cache and browser-cost comparisons](ARM_INFERENCE.md#arm-controlled-inference-results-20261004).
