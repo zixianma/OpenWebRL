@@ -2,7 +2,7 @@
 
 - **SFT actor + Piotr SelectionARM:** **+5.67 ± 1.15 percentage points** (mean ± sample SD) across three complete runs.
 - **RL actor + Piotr:** **42.67% → 54.00%**, a **+11.33-point gain [+5.33, +17.33]** in one complete paired run.
-- **Random control:** random-of-five reaches **33.33%**, versus **33.00%** for SFT and **40.00%** for Piotr in the October 7 comparison.
+- **Selection rule:** random-of-five reaches **33.33%** and highest-likelihood-of-five **26.67%**, versus **33.00%** for SFT and **40.00%** for Piotr. Controls were collected separately.
 - **Other selectors:** Sol/GPT-5.5 add **10–12 points**; Luna/Kev add about **9 points** under a different protocol. These are not controlled cross-protocol rankings.
 - **Still unresolved:** whether 50 steps or an RL-trained actor increases Piotr's gain relative to the SFT 30-step comparison.
 
@@ -33,10 +33,12 @@ Same SFT actor and decoding as above; **300 tasks per arm in every row**.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Random-of-five, Oct 7 | 30 | 99 | 100 | 33.00% | 33.33% | +0.33 | [−4.67, +5.67] |
 | Piotr, Oct 7 | 30 | 99 | 120 | 33.00% | 40.00% | +7.00 | [+2.33, +11.67] |
+| Highest likelihood of five | 30 | 99 | 80 | 33.00% | 26.67% | −6.33 | [−11.33, −1.33] |
 | Piotr, longer horizon | 50 | 92 | 120 | 30.67% | 40.00% | +9.33 | [+4.00, +14.67] |
 | RL-task-trained SelectionARM | 30 | 95 | 123 | 31.67% | 41.00% | +9.33 | [+4.00, +14.67] |
 
 - **Random control:** pick uniformly among five candidate indices at **every step**, including duplicates and malformed candidates. It reuses the Oct 7 SFT/Piotr episodes above. Piotr beats random by **+6.67 pp [+1.00, +12.33]**; random shows no detectable gain over SFT.
+- **Likelihood control:** choose the highest mean native base-policy log-probability of the full response, including reasoning. It trails random by **−6.67 pp [−12.00, −1.33]** and Piotr by **−13.33 pp [−18.67, −8.00]**. This is one run with reused controls, not a general test of confidence gating.
 - **Horizon:** the 50-step pair has a fresh SFT control. Its gain exceeds the same-day 30-step gain by **+2.33 pp [−4.67, +9.33]**; no clear horizon effect.
 - **Selector training:** RL-task-trained SelectionARM changes the **selector**, while the actor stays SFT. It reuses the earlier SFT control from the API-selector study below; this is not a matched ranking against Piotr.
 
@@ -95,18 +97,11 @@ Jev is a separate actor system. Its judge-input adapter was repaired and all 23 
 
 The gain exceeds the latest SFT pair's gain by **+4.33 pp [−3.00, +11.33]**: a stronger benefit on RL is not established. This comparison reuses SFT episodes collected at a different time. [Aggregate and plots](arm_results/selectionarm_piotr_rlactor30_20261007/aggregate.json) · [Four-outcome paired comparison](arm_results/selectionarm_piotr_rlactor30_20261007/sft_rl_gain_comparison.json) · [Protocol and final accounting](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 
-## In progress: selective sampling and policy likelihood
+## Selective sampling: still in progress
 
-SFT actor, the same 300 tasks and 30-step decoding as the Piotr comparisons; **300 new episodes per method**. Results are pending.
+**Exploratory uncertainty-gated Piotr:** sample one candidate; if its full-response mean base-policy log-probability is below **−0.215576 nats/token**, sample four more and let Piotr choose from all five. Otherwise execute the first. The 300-episode run is finishing; no partial success rate is reported.
 
-| Method | Candidates per decision | Selection rule | Planned episodes |
-| --- | --- | --- | ---: |
-| Uncertainty-gated Piotr **(exploratory)** | One; four more if the first has low likelihood | Execute the first, or let Piotr choose among all five | 300 |
-| Policy likelihood | Five | Highest mean base-policy token log-probability | 300 |
-
-Scores include reasoning and action; synthetic formatting tokens are excluded. The gate cutoff is **−0.215576 nats/token**, the frozen 25th percentile of 278 saved SFT final-decision responses. Always-five likelihood uses no threshold. Reused controls have separate collection times. [Protocol, same-task calibration limits and caps](ARM_INFERENCE.md#likelihood-scaling-20261007) · [Design record](arm_results/likelihood_scaling_plan_20261007.json).
-
-A separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) is in preparation: 300 fitting tasks and 150 held-out verification tasks; exact compute approval is pending.
+The frozen cutoff is the 25th percentile of 278 saved SFT final-decision responses from these same evaluation tasks. This limits calibration validity. The separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) uses 300 fitting and 150 held-out verification tasks; exact compute approval is pending. [Protocol and calibration limits](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
 ## Supporting evidence and history
 
@@ -117,6 +112,7 @@ A separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-2
 | --- | --- | --- | --- | --- |
 | Piotr 30 steps / three-run summary | [Data](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json) | [Plot](arm_results/selectionarm_piotr_sameday30_20261007/cost.png) | [Plot](arm_results/selectionarm_piotr_sameday30_20261007/latency.png) | [Plot](arm_results/selectionarm_piotr_sameday30_20261007/tokens.png) |
 | RL actor + Piotr, 30 steps | [Data](arm_results/selectionarm_piotr_rlactor30_20261007/aggregate.json) | [Plot](arm_results/selectionarm_piotr_rlactor30_20261007/cost.png) | [Plot](arm_results/selectionarm_piotr_rlactor30_20261007/latency.png) | [Plot](arm_results/selectionarm_piotr_rlactor30_20261007/tokens.png) |
+| Highest likelihood of five | [Data](arm_results/selectionarm_likelihood5_sft30_20261007/publication-aggregate.json) | [Plot](arm_results/selectionarm_likelihood5_sft30_20261007/cost.png) | [Plot](arm_results/selectionarm_likelihood5_sft30_20261007/latency.png) | [Plot](arm_results/selectionarm_likelihood5_sft30_20261007/tokens.png) |
 | Random-of-five | [Data](arm_results/selectionarm_random5_sameday30_20261007/aggregate.json) | [Plot](arm_results/selectionarm_random5_sameday30_20261007/cost.png) | [Plot](arm_results/selectionarm_random5_sameday30_20261007/latency.png) | [Plot](arm_results/selectionarm_random5_sameday30_20261007/tokens.png) |
 | Piotr 50 steps | [Data](arm_results/selectionarm_piotr_steps50_20261007/aggregate.json) | [Plot](arm_results/selectionarm_piotr_steps50_20261007/cost.png) | [Plot](arm_results/selectionarm_piotr_steps50_20261007/latency.png) | [Plot](arm_results/selectionarm_piotr_steps50_20261007/tokens.png) |
 | RL-task-trained selector | [Data](arm_results/selectionarm_rltasks_repeat_20261007/aggregate.json) | [Plot](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) | [Plot](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) | [Plot](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png) |

@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Exploratory uncertainty gating and always-five likelihood selection: 300 SFT episodes each; calibration limits and caps](ARM_INFERENCE.md#likelihood-scaling-20261007).
+[Likelihood-of-five complete: 26.67% versus reused SFT 33.00%; paired results, accounting and three plots. Exploratory gating still running](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
 [RL actor + Piotr complete: 42.67% to 54.00%, paired gain +11.33 pp; frozen SFT frontend, final accounting and three plots](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 

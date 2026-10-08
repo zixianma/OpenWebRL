@@ -65,9 +65,9 @@ The compute proxy is 2 × 4B × generated actor/selector tokens; it excludes pre
 </details>
 
 <a id="likelihood-scaling-20261007"></a>
-## Selective sampling and policy likelihood — October 7, submitted
+## Selective sampling and policy likelihood — October 7
 
-**Two new SFT conditions, 300 episodes each, on the same 300 tasks.** Both retain T=0.7, top-p=0.9, 1,024 response tokens, 30 steps, request seed 45, the frozen actor prompt, local browsers and canonical o4-mini/AgentTrek judging. Results are pending. [Design and launch record](arm_results/likelihood_scaling_plan_20261007.json).
+**Two new SFT conditions, 300 episodes each, on the same 300 tasks.** Both retain T=0.7, top-p=0.9, 1,024 response tokens, 30 steps, request seed 45, the frozen actor prompt, local browsers and canonical o4-mini/AgentTrek judging. **Likelihood selection is complete; exploratory uncertainty gating is still running.** [Design and launch record](arm_results/likelihood_scaling_plan_20261007.json).
 
 | Question | Decision rule |
 | --- | --- |
@@ -75,6 +75,24 @@ The compute proxy is 2 × 4B × generated actor/selector tokens; it excludes pre
 | Can the actor select its own proposals? | Always sample five; choose the highest mean base-policy log-probability, breaking ties by the first index. |
 
 The score covers the **full generated response**, including reasoning and action. Native generated tokens count; synthetic delimiter/newline repairs do not. Duplicates and malformed candidates remain eligible. Likelihood is a confidence heuristic, not a calibrated success probability. All 300 task IDs remain in each evaluation denominator, with invalid/unjudged outcomes zero.
+
+**Completed likelihood result:** 80 successes on 300 tasks (**26.67%**), versus SFT’s 99 (**33.00%**): **−6.33 pp [−11.33, −1.33]**, with 21 likelihood-only and 40 SFT-only wins. It also trails random-of-five by **−6.67 pp [−12.00, −1.33]** and Piotr by **−13.33 pp [−18.67, −8.00]**. Controls share tasks and decoding but were collected separately; intervals are task-paired, not across-run uncertainty. [Aggregate](arm_results/selectionarm_likelihood5_sft30_20261007/publication-aggregate.json).
+
+<details>
+<summary>Likelihood result: validity, final accounting and three plots</summary>
+
+| Method | Tasks | Successes | Valid tasks | Invalid tasks | Success | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT N=1, reused | 300 | 99 | 271 | 29 | 33.00% | 36.53% |
+| Highest likelihood of five | 300 | 80 | 263 | 37 | 26.67% | 30.42% |
+
+All 5,187 decisions independently reproduce native scores and choose from exactly five candidates; no selector calls or additional inference scoring passes. Both W&B runs finished and teardown was verified. Across all attempts, each shard used 4,443 and 4,372 of its 10,800 approved seconds: **2.449 H200-hours total**, **135 judge calls / USD 0.972124**, with no unsettled receipts or transfers.
+
+Metered actor usage: 264,310,975 input and 8,086,124 output tokens. All 26,000 physical requests are retained, including 65 failures without returned token usage. The eight startup/probability-probe requests include two unmetered failures; successful probes add 44,596 input and 32 output tokens. Mean episode wall time is 209.84 seconds; different hardware and collection times prevent a controlled latency comparison. Bootstrap uses 10,000 paired-task resamples, seed 42; intervals omit website drift, judge error, across-run variation and multiple-comparison correction.
+
+[Compute proxy](arm_results/selectionarm_likelihood5_sft30_20261007/cost.png) · [Latency](arm_results/selectionarm_likelihood5_sft30_20261007/latency.png) · [Tokens](arm_results/selectionarm_likelihood5_sft30_20261007/tokens.png). The proxy is 2 × 4B × generated actor/selector tokens, excluding prefill, vision, attention, cache effects and likelihood computation; it is not measured FLOPs or dollars. Raw trajectories remain private.
+
+</details>
 
 <details>
 <summary>Calibration, probability verification and comparison limits</summary>
