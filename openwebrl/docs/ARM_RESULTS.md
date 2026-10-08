@@ -2789,9 +2789,9 @@ B's continuation saved69 before a CUDA allocator OOM during iteration70;
 <a id="local-webvoyager-deepshop90-20261007"></a>
 ## Local WebVoyager and DeepShop at iteration 90 — October 8
 
-**No clear ARM gain in this single repeat:** all four ARM overall point estimates are below the outcome-only baseline on both benchmarks, and every pointwise paired 95% interval includes zero. Five methods have completed both benchmarks. Original's [training 90 and OM2W300 evaluation](RL_EVALUATION.md#arm-original-iter90-results-20261008) are verified; its local benchmark pair remains pending, so the six-method suite remains incomplete.
+**No clear ARM gain in these completed cohorts:** all five ARM WebVoyager point estimates and all four ARM DeepShop estimates are below the outcome-only baseline; every pointwise paired 95% interval includes zero. Original bonus now has verified WebVoyager results; its DeepShop evaluation is running. Five methods have completed both benchmarks, so the six-method suite remains incomplete. Original was collected later than the earlier five methods; these single-repeat comparisons do not control website or judge drift.
 
-### WebVoyager: five verified cohorts
+### WebVoyager: six verified cohorts
 
 | Method | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -2800,6 +2800,7 @@ B's continuation saved69 before a CUDA allocator OOM during iteration70;
 | Gate B | 595 | 269 | 464 | 131 | 45.21 | 57.97 |
 | Mixed-only bonus | 595 | 268 | 442 | 153 | 45.04 | 60.63 |
 | Mixed-only outcome reweight | 595 | 270 | 469 | 126 | 45.38 | 57.57 |
+| Original bonus | 595 | 261 | 459 | 136 | 43.87 | 56.86 |
 
 ### DeepShop: five verified cohorts
 
@@ -2822,8 +2823,9 @@ Shared protocol: native89 weights (training iteration 90), local browsers, T=0.6
 | Gate B | -2.86 | [-7.39, +1.68] |
 | Mixed-only bonus | -3.03 | [-7.73, +1.68] |
 | Mixed-only outcome reweight | -2.69 | [-7.39, +1.85] |
+| Original bonus | -4.20 | [-8.91, +0.34] |
 
-10,000 paired task bootstrap draws, seed 42; no multiplicity adjustment across the four contrasts. These intervals describe task sampling, not judge error or website drift. Collections overlapped but did not occur at identical times. Higher invalidity can affect the overall differences; valid-only rates are not corrected population rates.
+10,000 paired task bootstrap draws, seed 42 reset per comparison, with lexicographically sorted task IDs; no multiplicity adjustment across the five contrasts. These intervals describe task sampling, not judge error or website drift. Collections for the earlier five methods overlapped; Original was collected later on October 8, after those cohorts completed. Its comparison is descriptive. Higher invalidity can affect the overall differences; valid-only rates are not corrected population rates.
 
 </details>
 
@@ -2844,7 +2846,7 @@ All 150 tasks, 10,000 paired bootstrap draws, seed 42; invalid outcomes remain z
 <details>
 <summary>Verification, accounting and remaining work</summary>
 
-All 3,725 records (2,975 WebVoyager and 750 DeepShop) passed exact task coverage, saved-payload and valid-trajectory image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Every completed method stayed within its separate total scheduler cap, including all prior attempts:
+All 4,320 records (3,570 WebVoyager and 750 DeepShop) passed exact task coverage, saved-payload and valid-trajectory image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Every completed method stayed within its separate total scheduler cap, including all prior attempts:
 
 | Method | All-attempt scheduler seconds | Cap, seconds |
 | --- | ---: | ---: |
@@ -2854,9 +2856,9 @@ All 3,725 records (2,975 WebVoyager and 750 DeepShop) passed exact task coverage
 | Mixed-only bonus | 15,259 | 43,200 |
 | Mixed-only outcome reweight | 14,009 | 43,200 |
 
-Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no saved images; their native zero outcomes are preserved without fabricated screenshots. Canonical labels are preserved; targeted review found a WebVoyager arithmetic false positive, so artifact verification must not be read as semantic certification of every verdict.
+Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no saved images; their native zero outcomes are preserved. Canonical labels are preserved; targeted review found a WebVoyager arithmetic false positive, so artifact verification must not be read as semantic certification of every verdict.
 
-Each method has a separate one-H200/eight-CPU/240-GiB/12-hour total budget, eight local browsers and only repeat 1. DeepShop follows WebVoyager per method after the prior worker exits. Original's separate four-H200/32-CPU/480-GiB/18-hour continuation and owned OM2W300 eval90 are verified, with optimizer/scheduler/cursor preserved through native89. Its separately approved local pair remains pending verification. No stealth run or repeats 2/3 are enabled. Active supervision of the remaining work checks every 30 minutes and queues the owner for recovery; routine reports are limited to meaningful hourly changes.
+Each method has a separate one-H200/eight-CPU/240-GiB/12-hour total budget, eight local browsers and only repeat 1. DeepShop follows WebVoyager per method after the prior worker exits. Original's separate four-H200/32-CPU/480-GiB/18-hour continuation and owned OM2W300 eval90 are verified, with optimizer/scheduler/cursor preserved through native89. Original’s WebVoyager stage is verified; DeepShop is running within its separately approved local allocation. Its final method accounting remains pending and is excluded from the completed-method table above. Its finished WebVoyager W&B run has a runtime-only summary; all 39 task/evaluation metric fields reconcile with durable remote history. No stealth run or repeats 2/3 are enabled. Active supervision of the remaining work checks every 30 minutes and queues the owner for recovery; routine reports are limited to meaningful hourly changes.
 
 </details>
 

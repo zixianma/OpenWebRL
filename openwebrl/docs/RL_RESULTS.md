@@ -445,6 +445,7 @@
 | Gate B | 595 | 269 | 464 | 131 | 45.21 | 57.97 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
 | Mixed-only bonus | 595 | 268 | 442 | 153 | 45.04 | 60.63 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
 | Mixed-only outcome reweight | 595 | 270 | 469 | 126 | 45.38 | 57.57 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+| Original bonus (later collection) | 595 | 261 | 459 | 136 | 43.87 | 56.86 | [Audit / comparability](RL_EVALUATION.md#local-webvoyager-deepshop90-audit-20261008) |
 
 ## DeepShop · local · iteration90 · GPT-4o · T0.6/p0.95/k20 · repeat1
 

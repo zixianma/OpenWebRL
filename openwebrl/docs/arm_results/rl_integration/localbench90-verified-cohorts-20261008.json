@@ -174,6 +174,25 @@
       "verified_complete": true,
       "stage_review_sha256": "52393939691809425ffea37929d4a68010baa9a43e6b7201ff00aa05dd6cb8ba",
       "scientific_plan_sha256": "308a0e632ad83cbdf09ed3f76b9ce5ae1b3d30742f6e48435f2afce2d6587883"
+    },
+    {
+      "method": "original",
+      "benchmark": "webvoyager",
+      "counts": {
+        "tasks": 595,
+        "successes": 261,
+        "valid": 459,
+        "invalid": 136
+      },
+      "overall": 0.43865546218487395,
+      "valid_only": 0.5686274509803921,
+      "verified_complete": true,
+      "stage_review_sha256": "0ec2c9cd5ec20d4652eabad66723d7eec5bd2d0b8fabccd3a7c8c02bfcb728fe",
+      "scientific_plan_sha256": "aee79082cfe966643dd6c96ca2da4301db2c85f25a7d3b6bb43cba49d89d2728",
+      "source_manifest_sha256": "129bb0189765a19d19b08ffb0c9c63ca9895ddfd8a822ff7a3039bf4ac32c94d",
+      "collection_timing": "October 8, after the earlier five method cohorts completed",
+      "wandb_task_metrics_verified_in_history": true,
+      "wandb_summary_limitation": "Finished run summary contains runtime fields only; all 39 numeric task/evaluation fields verified in durable remote history."
     }
   ],
   "webvoyager_paired_vs_baseline": {
@@ -216,10 +235,20 @@
       "method_only": 90,
       "baseline_only": 106,
       "tasks": 595
+    },
+    "original": {
+      "difference": -0.04201680672268908,
+      "bootstrap95": [
+        -0.08907563025210084,
+        0.0033613445378151263
+      ],
+      "method_only": 87,
+      "baseline_only": 112,
+      "tasks": 595
     }
   },
-  "bootstrap": "10000 paired task resamples, seed42; pointwise intervals, no correction across four contrasts",
-  "comparability": "Same tasks and controlled protocol, collections overlap but differ in wall-clock time; one repeat. Invalid outcomes remain zero. Canonical GPT4o labels unchanged.",
+  "bootstrap": "10000 paired task resamples, numpy.default_rng seed42 reset per comparison; lexicographically sorted task_id; pointwise percentile95% intervals, no correction across five WebVoyager contrasts",
+  "comparability": "Same frozen tasks and controlled protocol; one repeat. Earlier five method collection periods overlapped, but Original was collected later on October 8 after those cohorts completed. Comparisons are descriptive and do not control website or judge drift. Invalid outcomes remain zero. Canonical GPT-4o labels unchanged.",
   "baseline_all_attempt_seconds": 13914,
   "cap_seconds_per_method": 43200,
   "resources_per_method": {
@@ -237,7 +266,11 @@
     "mixed_reweight_owner_reconciliation": "601ee549d831d4d97500f3b16e635cbf1ff81ac2ac9202fa7062c46b77c8ab79",
     "mixed_bonus_final_resource_review": "ac3e181d54db4e01dfd9bfb55371b952ab77fb254f6a0c7160d8f52ee3eb37a0",
     "deepshop_paired_five_provisional_analysis": "335339720b0a15bc2b6dcd27e1ce4c322a07cfb185e7c8dfea123f0bc46394a9",
-    "deepshop_paired_five_provisional_receipt": "6314fb804f3dd91af6135c0d1f555588f997326f44de8cce0b81a0b990d8413c"
+    "deepshop_paired_five_provisional_receipt": "6314fb804f3dd91af6135c0d1f555588f997326f44de8cce0b81a0b990d8413c",
+    "original_webvoyager_paired_analysis": "775d5e6db0bc45491c4263aaab8da89f6600c8ccd2963f85cc50ecbaca71971c",
+    "original_webvoyager_paired_receipt": "bd686674e8f8927c481742414279ff2167c9ae300517dbaba1716f669ab6e672",
+    "original_webvoyager_independent_paired_review": "22caf239276eb0761040b276e77fbb368b7b2d000897061b8f49a2a8bf4f6a52",
+    "original_webvoyager_independent_endpoint_review": "a3e494013fba1de03cf59c028e5212ad984987e8157470725e076b2824c20725"
   },
   "limitations": [
     "One local-browser repeat; historical stealth cohorts are separate.",
@@ -249,8 +282,8 @@
     "Mixed-only bonus DeepShop includes four valid truncated trajectories assigned native zero reward without a judge call; canonical outcomes are preserved.",
     "Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no archived images; their native invalid/zero outcomes are preserved. All valid trajectories have decoded images."
   ],
-  "remaining": "Original remains in training toward iteration90; its sixth local WebVoyager595/DeepShop150 pair awaits independently verified native89. The six-method suite is incomplete.",
-  "verified_records": 3725,
+  "remaining": "Original training iteration90 and OM2W300 eval90 are verified; its WebVoyager595 stage is independently verified and DeepShop150 is running. Five full local benchmark pairs are complete; the six-method suite remains incomplete. Original final method accounting remains pending.",
+  "verified_records": 4320,
   "completed_method_accounting": {
     "baseline": {
       "all_attempt_seconds": 13914,
@@ -355,5 +388,14 @@
     "task_denominator": 150
   },
   "bootstrap_scope": "webvoyager",
-  "deepshop_paired_completion_note": "The canonical paired source is the final verified five-cohort aggregate and its clean owner reconciliation. All paired values and saved labels are unchanged; historical provisional analysis and receipt hashes are retained separately."
+  "deepshop_paired_completion_note": "The canonical paired source is the final verified five-cohort aggregate and its clean owner reconciliation. All paired values and saved labels are unchanged; historical provisional analysis and receipt hashes are retained separately.",
+  "verified_cohort_count": 11,
+  "webvoyager_bootstrap": {
+    "resamples": 10000,
+    "seed": 42,
+    "rng": "numpy.default_rng; independent seed42 reset per contrast",
+    "task_order": "lexicographically sorted task_id",
+    "interval": "pointwise percentile 95%; no multiplicity correction",
+    "invalids_zero": true
+  }
 }
