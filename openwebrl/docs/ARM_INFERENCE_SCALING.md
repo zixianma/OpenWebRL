@@ -29,13 +29,28 @@ Mean gain: **+5.67 pp**, paired 95% interval **[+2.67, +8.67]**. The same 300 ta
 
 Same SFT actor and decoding as above; **300 tasks per arm in every row**.
 
-| Variant | Step cap | SFT successes | Variant successes | SFT success | Variant success | Gain, pp | Paired 95% interval, pp |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Random-of-five, Oct 7 | 30 | 99 | 100 | 33.00% | 33.33% | +0.33 | [−4.67, +5.67] |
-| Piotr, Oct 7 | 30 | 99 | 120 | 33.00% | 40.00% | +7.00 | [+2.33, +11.67] |
-| Highest likelihood of five | 30 | 99 | 80 | 33.00% | 26.67% | −6.33 | [−11.33, −1.33] |
-| Piotr, longer horizon | 50 | 92 | 120 | 30.67% | 40.00% | +9.33 | [+4.00, +14.67] |
-| RL-task-trained SelectionARM | 30 | 95 | 123 | 31.67% | 41.00% | +9.33 | [+4.00, +14.67] |
+**30 steps: selection rules, using the Oct 7 SFT control**
+
+| Condition | N | Tasks | Successes | Success | Gain vs SFT, pp | Paired 95% interval, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| SFT alone — baseline | 1 | 300 | 99 | 33.00% | — | — |
+| Random-of-five | 5 | 300 | 100 | 33.33% | +0.33 | [−4.67, +5.67] |
+| Piotr, Oct 7 | 5 | 300 | 120 | 40.00% | +7.00 | [+2.33, +11.67] |
+| Highest likelihood of five | 5 | 300 | 80 | 26.67% | −6.33 | [−11.33, −1.33] |
+
+**50 steps: Piotr, using a fresh 50-step SFT control**
+
+| Condition | N | Tasks | Successes | Success | Gain vs SFT, pp | Paired 95% interval, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| SFT alone — baseline | 1 | 300 | 92 | 30.67% | — | — |
+| Piotr | 5 | 300 | 120 | 40.00% | +9.33 | [+4.00, +14.67] |
+
+**30 steps: RL-task-trained selector, using the earlier API-study SFT control**
+
+| Condition | N | Tasks | Successes | Success | Gain vs SFT, pp | Paired 95% interval, pp |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| SFT alone — baseline | 1 | 300 | 95 | 31.67% | — | — |
+| RL-task-trained SelectionARM | 5 | 300 | 123 | 41.00% | +9.33 | [+4.00, +14.67] |
 
 - **Random control:** pick uniformly among five candidate indices at **every step**, including duplicates and malformed candidates. It reuses the Oct 7 SFT/Piotr episodes above. Piotr beats random by **+6.67 pp [+1.00, +12.33]**; random shows no detectable gain over SFT.
 - **Likelihood control:** choose the highest mean native base-policy log-probability of the full response, including reasoning. It trails random by **−6.67 pp [−12.00, −1.33]** and Piotr by **−13.33 pp [−18.67, −8.00]**. This is one run with reused controls, not a general test of confidence gating. [Action-only follow-up](ARM_INFERENCE.md#action-only-likelihood-20261008).
@@ -76,12 +91,12 @@ Sol/GPT-5.5 use medium reasoning and 2,048 selector tokens; Luna uses medium rea
 
 **N=10 improves over N=3 by +6.67 pp [95% paired interval: +2.00, +11.67]**, at **3.28× the mean actor output tokens**. Both arms used the corrected September protocol above and were collected together on the same 300 tasks.
 
-| Condition | N | Collection | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
-| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT alone / no selector | 1 | Earlier control | 300 | 95 | 31.67% | 273 | 27 | 34.80% |
-| SFT + Sol | 3 | Fresh paired study | 300 | 121 | 40.33% | 266 | 34 | 45.49% |
-| SFT + Sol | 5 | Earlier reference | 300 | 130 | 43.33% | 268 | 32 | 48.51% |
-| SFT + Sol | 10 | Fresh paired study | 300 | 141 | 47.00% | 264 | 36 | 53.41% |
+| Condition | N | Collection | Tasks | Successes | Success | Gain vs SFT, pp | Valid tasks | Invalid tasks | Valid-only success |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT alone / no selector | 1 | Earlier control | 300 | 95 | 31.67% | — | 273 | 27 | 34.80% |
+| SFT + Sol | 3 | Fresh paired study | 300 | 121 | 40.33% | +8.67 | 266 | 34 | 45.49% |
+| SFT + Sol | 5 | Earlier reference | 300 | 130 | 43.33% | +11.67 | 268 | 32 | 48.51% |
+| SFT + Sol | 10 | Fresh paired study | 300 | 141 | 47.00% | +15.33 | 264 | 36 | 53.41% |
 
 N=10 wins alone on 38 tasks; N=3 wins alone on 18. Invalid episodes remain zero in the primary denominator. The SFT-alone control and N=5 reference come from the [earlier API-selector study](#api-selector-results-20261007) under the same corrected September protocol; comparisons with N=3/N=10 include collection-date differences. These are canonical o4-mini/AgentTrek scores, which permit partial progress; three targeted positive flags remain documented without relabeling.
 
