@@ -25,7 +25,44 @@ This is an RL-weight comparison under the frozen SFT harness, not the released R
 | Allocation, all attempts | 2 H200 / 16 CPUs / 240 GiB × 3 hours | 12 H200-hours |
 | Judge cap | USD 5 / 1,320 calls | USD 10 / 2,640 calls |
 
-Caps are independent, with no transfers. Startup episodes remain in the final denominator. Initial approval-check failures consumed four and three seconds before model startup; those attempts are preserved and deducted. Replacement jobs **349466 / 349467** use at most 2h59m each. The first shard has verified model services and saved episodes; the second is queued. Active-agent continuation is enabled. No results are included in the existing SFT averages.
+Caps are independent, with no transfers. Startup episodes remain in the final denominator. Initial approval-check failures consumed four and three seconds before model startup; those attempts are preserved and deducted. Replacement jobs **349466 / 349467** use at most 2h59m each. Both shards passed startup verification and are collecting. Active-agent continuation is enabled. No results are included in the existing SFT averages.
+
+<a id="likelihood-scaling-20261007"></a>
+## Selective sampling and policy likelihood — October 7, submitted
+
+**Two new SFT conditions, 300 episodes each, on the same 300 tasks.** Both retain T=0.7, top-p=0.9, 1,024 response tokens, 30 steps, request seed 45, the frozen actor prompt, local browsers and canonical o4-mini/AgentTrek judging. Results are pending. [Design and launch record](arm_results/likelihood_scaling_plan_20261007.json).
+
+| Question | Decision rule |
+| --- | --- |
+| Can selective sampling save compute? | Sample one candidate. If its mean base-policy log-probability is below the frozen threshold, sample four more and apply unchanged Piotr selection to all five; otherwise execute the first. |
+| Can the actor select its own proposals? | Always sample five; choose the highest mean base-policy log-probability, breaking ties by the first index. |
+
+The score covers the **full generated response**, including reasoning and action. Native generated tokens count; synthetic delimiter/newline repairs do not. Duplicates and malformed candidates remain eligible. Likelihood is a confidence heuristic, not a calibrated success probability. All 300 task IDs remain in each evaluation denominator, with invalid/unjudged outcomes zero.
+
+<details>
+<summary>Calibration, probability verification and comparison limits</summary>
+
+The gate threshold is the 25th percentile, linearly interpolated at `(n−1)×0.25`, of base-policy scores on **278 saved final-decision states** from the previous SFT N=1 run. Of 300 episodes, 21 lack a saved state and one fails response-token reconstruction; these exclusions use artifact availability and identity checks, never success labels. Historical token IDs were not retained: reconstructed prompt, screenshot and response-token counts are checked against saved receipts. The numerical cutoff is frozen after teacher-forced scoring, before new adaptive episodes.
+
+This calibration sample emphasizes late decisions; its quartile does not promise a 25% trigger frequency on the new trajectories. Report the observed trigger fraction and mean candidates per decision. Calibration and startup probes consume the newly approved allocation and retain all request receipts.
+
+SGLang normally reports temperature-scaled output probabilities. These runs enable `SGLANG_RETURN_ORIGINAL_LOGPROB=1`; source and actual actor-environment checks verify the pre-temperature, pre-top-p path. A live multimodal generation/teacher-forcing probe must also pass before collection. Sampling remains T=0.7/p=0.9.
+
+Compare against the existing seed-45 SFT, always-five Piotr and random-five results using paired task-bootstrap intervals. Reused controls have different collection times; this is not a contemporaneous or compute-matched comparison. Request seeds do not imply identical trajectories under the unchanged FlashInfer sampler. Report success counts/rates, paired gains, candidate/selector use, latency, tokens and all-attempt costs; keep calibration overhead explicit.
+
+</details>
+
+<details>
+<summary>Approved allocations and supervision</summary>
+
+| Method | Shards | GPUs per shard | CPUs per shard | Memory per shard, GiB | Hours per shard, all attempts | Judge USD per shard | Judge-call cap per shard | Initial jobs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Uncertainty-gated Piotr | 2 | 2 H200 | 16 | 240 | 3 | 2.50 | 660 | 349547, 349548 |
+| Policy likelihood | 2 | 1 H200 | 8 | 120 | 3 | 2.50 | 660 | 349545, 349546 |
+
+Total cap: **18 H200-hours and USD 10 / 2,640 judge calls**, including calibration, probes and all retries. Shard budgets are independent with no transfers. Controllers own model, scoring and browser workers through teardown. Active-agent callbacks support diagnosis and recovery; completion requires all 600 episodes, paired analyses, final accounting and three plots per study. Only aggregates and plots are published.
+
+</details>
 
 <details>
 <summary>Historical October 6 partial three-run overlap: 160 tasks</summary>

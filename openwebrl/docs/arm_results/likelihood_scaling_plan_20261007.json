@@ -1,0 +1,109 @@
+{
+  "schema": "likelihood_scaling_design_v1",
+  "created_epoch": 1791440254.4734845,
+  "results_complete": false,
+  "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+  "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+  "protocol": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "seed": 45,
+    "server_seeds": [
+      4500,
+      4501
+    ],
+    "judge": "o4-mini/AgentTrek",
+    "judge_max_tokens": 4096,
+    "browser": "local_process",
+    "context_screenshots": 1,
+    "history": "full"
+  },
+  "score": {
+    "definition": "Mean base-policy log probability over native generated response tokens, including reasoning and action; synthetic formatting tokens excluded.",
+    "unit": "nats per token",
+    "return_original_logprob": true,
+    "threshold": null,
+    "threshold_status": "awaiting allocation-local GPU calibration"
+  },
+  "calibration": {
+    "source": "selectionarm-piotr-sameday30-20261007/SFT N=1",
+    "episodes": 300,
+    "saved_final_states": 279,
+    "reconstructable_states": 278,
+    "missing_saved_states": 21,
+    "token_reconstruction_mismatches": 1,
+    "manifest_sha256": "0f889b0286def746a9d3233e14135f691ac8c3aa3e46caeb5bab87323cc943a3",
+    "quantile": 0.25,
+    "quantile_method": "linear interpolation at (n-1)*q",
+    "uses_success_labels": false,
+    "limitation": "Last preserved decision per episode; late-decision bias. Calibration quartile does not imply 25% online gating."
+  },
+  "studies": [
+    {
+      "study": "selectionarm-adaptive5-sft30-20261007",
+      "selection_rule": "uncertainty_gated_piotr",
+      "planned_episodes": 300,
+      "shards": 2,
+      "resources_per_shard": {
+        "gpus": 2,
+        "gpu_type": "H200",
+        "cpus": 16,
+        "memory_gib": 240,
+        "total_seconds": 10800
+      },
+      "limits_per_shard": {
+        "judge_usd": 2.5,
+        "judge_calls": 660
+      },
+      "jobs": [
+        "349547",
+        "349548"
+      ],
+      "status": "submitted_results_pending",
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed"
+    },
+    {
+      "study": "selectionarm-likelihood5-sft30-20261007",
+      "selection_rule": "policy_likelihood_n5",
+      "planned_episodes": 300,
+      "shards": 2,
+      "resources_per_shard": {
+        "gpus": 1,
+        "gpu_type": "H200",
+        "cpus": 8,
+        "memory_gib": 120,
+        "total_seconds": 10800
+      },
+      "limits_per_shard": {
+        "judge_usd": 2.5,
+        "judge_calls": 660
+      },
+      "jobs": [
+        "349545",
+        "349546"
+      ],
+      "status": "submitted_results_pending",
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed"
+    }
+  ],
+  "all_attempt_caps": {
+    "h200_hours": 18,
+    "judge_usd": 10,
+    "judge_calls": 2640
+  },
+  "no_budget_transfers": true,
+  "comparison_controls": {
+    "sft": "selectionarm-piotr-sameday30-20261007",
+    "piotr": "selectionarm-piotr-sameday30-20261007",
+    "random5": "selectionarm-random5-sameday30-20261007"
+  },
+  "comparison_limitations": [
+    "Same300 tasks/protocol but separate collection times; reused controls are not contemporaneous.",
+    "One run per new method; paired task-bootstrap uncertainty does not measure across-run or website drift uncertainty.",
+    "Per-request seed does not guarantee identical trajectories under FlashInfer.",
+    "Calibration/probe overhead and different resource profiles are separately accounted; no compute-matched causal claim."
+  ]
+}

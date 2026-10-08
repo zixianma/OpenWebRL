@@ -92,6 +92,17 @@ Jev is a separate actor system. Its judge-input adapter was repaired and all 23 
 
 Both arms are fresh. **Only actor weights change:** prompt, tokenizer, preprocessing and decoding stay frozen to the SFT comparison; Piotr retains its original SFT base. **30 steps, T=0.7, top-p=0.9, 1,024 tokens, seed 45.** Full paired results are pending. [Protocol and approved caps](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 
+## In progress: selective sampling and policy likelihood
+
+SFT actor, the same 300 tasks and 30-step decoding as the Piotr comparisons; **300 new episodes per method**. Results are pending.
+
+| Method | Candidates per decision | Selection rule | Planned episodes |
+| --- | --- | --- | ---: |
+| Uncertainty-gated Piotr | One; four more if the first has low likelihood | Execute the first, or let Piotr choose among all five | 300 |
+| Policy likelihood | Five | Highest mean base-policy token log-probability | 300 |
+
+The score includes the full generated response, including reasoning and action, and excludes synthetic formatting tokens. The gate uses a frozen 25th-percentile threshold from 278 recoverable saved SFT final-decision states, without success labels; the numerical cutoff awaits GPU calibration. This late-decision sample does not guarantee a 25% trigger rate online. Reused SFT/Piotr/random controls have separate collection times. [Protocol and caps](ARM_INFERENCE.md#likelihood-scaling-20261007) · [Frozen design](arm_results/likelihood_scaling_plan_20261007.json).
+
 ## Supporting evidence and history
 
 <details>
