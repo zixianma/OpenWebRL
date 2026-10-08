@@ -89,6 +89,50 @@ or student target. Recheck image joins, action identity, task-disjoint splits,
 token bounds and hallucinated controls before training. Candidate order must
 not encode the chosen index.
 
+### First milestone: establish comparison quality
+
+The first experiment should audit the **comparisons themselves before student
+training**. Fluent explanations and agreement with an ARM winner do not show
+that the explanations identify useful differences between actions.
+
+For each candidate, request three short fields: **visible evidence**, **expected
+next effect**, and **why that effect helps or hinders the current goal**. Then
+request the decisive difference supporting the choice, or a tie/insufficient-
+evidence judgment. Require a concrete comparison: for example, a visible
+Returns link directly targets the requested policy, while site search is a
+plausible extra step. "A is more relevant than B" alone is insufficient.
+
+Use a frozen, task-disjoint diagnostic panel, including clear choices, two
+plausible alternatives, nearly identical actions and sets with no clearly good
+option. Assess all sampled states before applying the winner-agreement filter,
+so the audit cannot hide disagreements by selecting only easy accepted rows.
+
+| Property | Evidence to check |
+| --- | --- |
+| Grounded | Claimed controls, labels and constraints exist in the pre-action observation. |
+| Discriminative | The rationale identifies a task-relevant difference between the actual candidates. |
+| Predictive | Predicted immediate effects match saved execution evidence where available. |
+| Useful for selection | Chosen actions have better held-out continuation outcomes than random selection, with uncertainty reported. |
+| Stable | Shuffling candidate IDs preserves the mapped preference or explicit tied set. |
+| Honest about uncertainty | Equivalent, unsupported or uniformly poor options are not assigned invented decisive advantages. |
+
+Reuse suitable saved branch executions for an initial diagnostic after checking
+state equivalence, source separation and candidate identity. Hold execution
+feedback and continuation outcomes out of the explanation prompt; use them
+only to audit its predictions and choices. A few stochastic continuations are
+noisy evidence, not ground-truth action values. Report state-level paired
+uncertainty and distinguish immediate-effect accuracy from eventual task success.
+Existing branch collections are diagnostic evidence only, not automatic new
+training data. States without trustworthy execution evidence can support
+format/grounding checks, but cannot establish predictive accuracy.
+
+Compare the new teacher's choices with its choice-only outputs, the existing
+selector labels and random choice on the same candidate sets. Better prose
+without better grounding or useful selection does not justify scaling the
+annotation or SFT run. Retain ordinary filtered targets when an augmentation
+fails the audit. Annotation-model selection, a measured cost estimate and exact
+resource approval remain separate from this method proposal.
+
 ### Objective and comparison
 
 For each retained state, `y` is the original winning response and `z` is the
