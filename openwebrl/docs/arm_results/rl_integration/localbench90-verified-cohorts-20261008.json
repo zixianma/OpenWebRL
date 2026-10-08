@@ -157,7 +157,8 @@
       "native_valid_reward_categories": {
         "structured_native_verdict": 114,
         "native_truncated_zero_without_judge_call": 4
-      }
+      },
+      "invalid_first_turn_empty_response_without_images": 2
     },
     {
       "method": "mixed-reweight",
@@ -231,10 +232,12 @@
     "paired_analysis": "8ae9b5bc99b6d1d505c15119f26eee1a62999a923c9365088266c58057781996",
     "deepshop_paired_analysis": "520122749938039d5c3e024b9027f3f6f20873a1577420346ff1edcb42eb3c7e",
     "deepshop_owner_reconciliation": "6e3eddacff785aee2b7f76fbbeccba1d4130d556f846652cd9062945295b6316",
-    "deepshop_paired_five_analysis": "335339720b0a15bc2b6dcd27e1ce4c322a07cfb185e7c8dfea123f0bc46394a9",
-    "deepshop_paired_five_receipt": "6314fb804f3dd91af6135c0d1f555588f997326f44de8cce0b81a0b990d8413c",
+    "deepshop_paired_five_analysis": "dd7ba4622ac252df48ed330b2b9249e7a5fb64f41d3cc7042fe47c557e21c03a",
+    "deepshop_paired_five_receipt": "25c2b7d9c39405e8530355b2383af8dad59549b711478082f6e8be011c7085e4",
     "mixed_reweight_owner_reconciliation": "601ee549d831d4d97500f3b16e635cbf1ff81ac2ac9202fa7062c46b77c8ab79",
-    "mixed_bonus_final_resource_review": "ac3e181d54db4e01dfd9bfb55371b952ab77fb254f6a0c7160d8f52ee3eb37a0"
+    "mixed_bonus_final_resource_review": "ac3e181d54db4e01dfd9bfb55371b952ab77fb254f6a0c7160d8f52ee3eb37a0",
+    "deepshop_paired_five_provisional_analysis": "335339720b0a15bc2b6dcd27e1ce4c322a07cfb185e7c8dfea123f0bc46394a9",
+    "deepshop_paired_five_provisional_receipt": "6314fb804f3dd91af6135c0d1f555588f997326f44de8cce0b81a0b990d8413c"
   },
   "limitations": [
     "One local-browser repeat; historical stealth cohorts are separate.",
@@ -243,7 +246,8 @@
     "Full archive CRC checks bind stable file fingerprints but are not full-file cryptographic hashes.",
     "Paired intervals are pointwise, not simultaneous across methods; they omit judge error and website drift.",
     "The top-level legacy W&B aggregate is turn-weighted; these results use task-level metrics.",
-    "Mixed-only bonus DeepShop includes four valid truncated trajectories assigned native zero reward without a judge call; canonical outcomes are preserved."
+    "Mixed-only bonus DeepShop includes four valid truncated trajectories assigned native zero reward without a judge call; canonical outcomes are preserved.",
+    "Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no archived images; their native invalid/zero outcomes are preserved. All valid trajectories have decoded images."
   ],
   "remaining": "Original remains in training toward iteration90; its sixth local WebVoyager595/DeepShop150 pair awaits independently verified native89. The six-method suite is incomplete.",
   "verified_records": 3725,
@@ -351,5 +355,5 @@
     "task_denominator": 150
   },
   "bootstrap_scope": "webvoyager",
-  "deepshop_paired_completion_note": "The five-cohort paired analysis was computed while mixed-bonus verification was pending. Its counts and saved labels subsequently match the hash-bound independent completed stage and method reviews; all four comparisons are now verified."
+  "deepshop_paired_completion_note": "The canonical paired source is the final verified five-cohort aggregate and its clean owner reconciliation. All paired values and saved labels are unchanged; historical provisional analysis and receipt hashes are retained separately."
 }

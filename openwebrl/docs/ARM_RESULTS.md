@@ -2844,7 +2844,7 @@ All 150 tasks, 10,000 paired bootstrap draws, seed 42; invalid outcomes remain z
 <details>
 <summary>Verification, accounting and remaining work</summary>
 
-All 3,725 records (2,975 WebVoyager and 750 DeepShop) passed exact task coverage, saved-payload/image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Every completed method stayed within its separate total scheduler cap, including all prior attempts:
+All 3,725 records (2,975 WebVoyager and 750 DeepShop) passed exact task coverage, saved-payload and valid-trajectory image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Every completed method stayed within its separate total scheduler cap, including all prior attempts:
 
 | Method | All-attempt scheduler seconds | Cap, seconds |
 | --- | ---: | ---: |
@@ -2854,7 +2854,7 @@ All 3,725 records (2,975 WebVoyager and 750 DeepShop) passed exact task coverage
 | Mixed-only bonus | 15,259 | 43,200 |
 | Mixed-only outcome reweight | 14,009 | 43,200 |
 
-Canonical labels are preserved; targeted review found a WebVoyager arithmetic false positive, so artifact verification must not be read as semantic certification of every verdict.
+Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no saved images; their native zero outcomes are preserved without fabricated screenshots. Canonical labels are preserved; targeted review found a WebVoyager arithmetic false positive, so artifact verification must not be read as semantic certification of every verdict.
 
 Each method has a separate one-H200/eight-CPU/240-GiB/12-hour total budget, eight local browsers and only repeat 1. DeepShop follows WebVoyager per method after the prior worker exits. Original's separate four-H200/32-CPU/480-GiB/18-hour continuation preserves optimizer/scheduler/cursor from 80 through 90 and owns OM2W300 eval90. Its separately approved local pair awaits independently verified native89. No stealth run or repeats 2/3 are enabled. Active supervision of the remaining work checks every 30 minutes and queues the owner for recovery; routine reports are limited to meaningful hourly changes.
 
