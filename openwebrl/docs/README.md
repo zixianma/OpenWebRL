@@ -6,6 +6,8 @@
 
 [Sol candidate count complete: N=3 40.33%, N=10 47.00%; paired gain +6.67 pp, with cost and validity audit](ARM_INFERENCE_SCALING.md#sol-candidate-counts-20261007).
 
+[Sol action diversity: ten candidates add 3.61 distinct parsed specifications beyond the first three at the same saved states; coordinate/wording sensitivity and actual N=3/5/10 coverage](ARM_INFERENCE_SCALING.md#sol-action-diversity-20261008).
+
 [Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).
 
 [Benefit-based threshold study: 300 fit tasks accounted for; 44 resolved pairs, 16 unresolved; no threshold](ARM_INFERENCE.md#confidence-benefit-20261008).

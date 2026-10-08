@@ -1,0 +1,1421 @@
+{
+  "schema_version": 1,
+  "analysis": "Sol saved candidate action diversity",
+  "created_epoch": 1791493291.7116294,
+  "method": {
+    "action_equivalence": "Native Qwen25 parsed ordered tool-call sequence and arguments;  sorted JSON keys, integral floats normalized; ignores candidate thoughts, JSON formatting within accepted tool wrappers and non-tool prose. Exact argument strings and coordinates are retained. This is not DOM target equivalence or verified executability.",
+    "weighting": "Mean across panels within task, then equal-weight mean across tasks with at least one observed panel. Tasks with no candidate panels excluded from diversity means and reported explicitly.",
+    "uncertainty": "10000 percentile task bootstrap replicates, seed 20261008; within-panel differences computed before task averaging. Descriptive exploratory intervals, no multiplicity correction.",
+    "malformed": "No native parsed tool-call or nonobject arguments excluded from unique counts and valid-pair denominators; reported separately. Known-tool/schema diagnostics do not modify primary parseability.",
+    "same_state": "Within each saved N10 panel compare first 3, first 5 and all 10 generated candidates. This is an offline subset analysis at N10-visited states; not a rerun with N3 or N5 selection.",
+    "subset_expectation": "Exact mean distinct count over every k-of-10 subset: sum_a [1-C(10-count(a),k)/C(10,k)]. A finite-panel descriptive quantity, requiring no iid/exchangeability claim.",
+    "selection_novelty": "Whether the selected N10 parsed action is absent from the first k candidates, among panels with parseable selected action; does not imply the selector would choose a different action when shown k candidates.",
+    "sensitivity": "collapse_done merges all done arguments; grid25/grid50 additionally bins point_2d in 25/50 actor-coordinate units. These are proxies, not semantic element matching. All other arguments remain exact. executor additionally fills consumed defaults and removes ignored fields from known tools according to frozen web_env; executor_collapse_done also merges terminal wording. Invalid inputs remain unnormalized.",
+    "cross_run": "Actual N3/N5/N10 episodes visit different states; N5 was collected earlier. Equal task IDs do not establish matched decision states.",
+    "seed_limitation": "Recorded candidate request seeds verified against hash derivation; frozen protocol says FlashInfer ignores request seeds, so no deterministic cross-run reproduction claim."
+  },
+  "coverage": {
+    "3": {
+      "episodes": 300,
+      "episodes_with_panels": 279,
+      "panels": 4323,
+      "candidate_counts": {
+        "native_regex_differences": 1,
+        "candidates": 12969,
+        "parseable": 12934,
+        "multiple_tool_calls": 1724,
+        "candidates_with_unknown_tool": 0,
+        "candidates_missing_required_args": 59,
+        "fallbacks": 0,
+        "selected_unparseable": 6,
+        "length_finish_candidates": 8,
+        "selected_length_finish": 1
+      },
+      "parse_errors": {
+        "no_native_tool_call": 35
+      },
+      "selected_index_counts": {
+        "0": 2771,
+        "1": 911,
+        "2": 641
+      },
+      "successes": 121
+    },
+    "5": {
+      "episodes": 300,
+      "episodes_with_panels": 279,
+      "panels": 4221,
+      "candidate_counts": {
+        "native_regex_differences": 3,
+        "candidates": 21105,
+        "parseable": 21052,
+        "multiple_tool_calls": 3171,
+        "candidates_with_unknown_tool": 0,
+        "candidates_missing_required_args": 66,
+        "fallbacks": 0,
+        "selected_unparseable": 4,
+        "length_finish_candidates": 11,
+        "selected_length_finish": 0
+      },
+      "parse_errors": {
+        "no_native_tool_call": 53
+      },
+      "selected_index_counts": {
+        "0": 2241,
+        "1": 637,
+        "2": 519,
+        "3": 477,
+        "4": 347
+      },
+      "successes": 130
+    },
+    "10": {
+      "episodes": 300,
+      "episodes_with_panels": 279,
+      "panels": 4205,
+      "candidate_counts": {
+        "native_regex_differences": 7,
+        "candidates": 42050,
+        "parseable": 41930,
+        "multiple_tool_calls": 7664,
+        "candidates_with_unknown_tool": 0,
+        "candidates_missing_required_args": 130,
+        "fallbacks": 0,
+        "selected_unparseable": 1,
+        "length_finish_candidates": 42,
+        "selected_length_finish": 1
+      },
+      "parse_errors": {
+        "no_native_tool_call": 120
+      },
+      "selected_index_counts": {
+        "0": 1870,
+        "1": 486,
+        "2": 345,
+        "3": 260,
+        "4": 218,
+        "5": 206,
+        "6": 190,
+        "7": 197,
+        "8": 191,
+        "9": 242
+      },
+      "successes": 141
+    }
+  },
+  "actual_runs": {
+    "3": {
+      "unique": {
+        "mean": 2.274768410706664,
+        "ci95": [
+          2.2176454765899516,
+          2.329236678663875
+        ],
+        "tasks": 279,
+        "panels": 4323,
+        "panel_weighted_mean": 2.057830210501966
+      },
+      "valid_candidates": {
+        "mean": 2.990456091426858,
+        "ci95": [
+          2.980300389315116,
+          2.997401777723774
+        ],
+        "tasks": 279,
+        "panels": 4323,
+        "panel_weighted_mean": 2.9919037705297247
+      },
+      "unparseable_fraction": {
+        "mean": 0.0031813028577138617,
+        "ci95": [
+          0.0008660740920753389,
+          0.006566536894961393
+        ],
+        "tasks": 279,
+        "panels": 4323,
+        "panel_weighted_mean": 0.0026987431567584244
+      },
+      "duplicate_fraction": {
+        "mean": 0.23893188758071812,
+        "ci95": [
+          0.2207301484158638,
+          0.25807591459740814
+        ],
+        "tasks": 279,
+        "panels": 4318,
+        "panel_weighted_mean": 0.3117569862590705
+      },
+      "pairwise_distinct_fraction": {
+        "mean": 0.6798122866937627,
+        "ci95": [
+          0.6510015960840919,
+          0.7067980674003114
+        ],
+        "tasks": 279,
+        "panels": 4315,
+        "panel_weighted_mean": 0.5689455388180765
+      },
+      "unique_tool_name_sequences": {
+        "mean": 1.3678292180161333,
+        "ci95": [
+          1.3302855475379547,
+          1.4079992933162069
+        ],
+        "tasks": 279,
+        "panels": 4323,
+        "panel_weighted_mean": 1.303261623872311
+      },
+      "unique_action_text": {
+        "mean": 2.274768410706664,
+        "ci95": [
+          2.2176454765899516,
+          2.329236678663875
+        ],
+        "tasks": 279,
+        "panels": 4323,
+        "panel_weighted_mean": 2.057830210501966
+      }
+    },
+    "5": {
+      "unique": {
+        "mean": 3.4351718756255645,
+        "ci95": [
+          3.3349838659744333,
+          3.5315991930671844
+        ],
+        "tasks": 279,
+        "panels": 4221,
+        "panel_weighted_mean": 3.050935797204454
+      },
+      "valid_candidates": {
+        "mean": 4.986749696996377,
+        "ci95": [
+          4.976559481818811,
+          4.994111408656001
+        ],
+        "tasks": 279,
+        "panels": 4221,
+        "panel_weighted_mean": 4.98744373371239
+      },
+      "unparseable_fraction": {
+        "mean": 0.002650060600724738,
+        "ci95": [
+          0.0011777182687998627,
+          0.004688103636237728
+        ],
+        "tasks": 279,
+        "panels": 4221,
+        "panel_weighted_mean": 0.0025112532575219137
+      },
+      "duplicate_fraction": {
+        "mean": 0.31061709948082084,
+        "ci95": [
+          0.2910528019821423,
+          0.33084122299834845
+        ],
+        "tasks": 279,
+        "panels": 4218,
+        "panel_weighted_mean": 0.3877548601232812
+      },
+      "pairwise_distinct_fraction": {
+        "mean": 0.7036857245818772,
+        "ci95": [
+          0.677835630635671,
+          0.7284579095752627
+        ],
+        "tasks": 279,
+        "panels": 4218,
+        "panel_weighted_mean": 0.6048285127232497
+      },
+      "unique_tool_name_sequences": {
+        "mean": 1.5698126504533154,
+        "ci95": [
+          1.5145946237703904,
+          1.6293243889434421
+        ],
+        "tasks": 279,
+        "panels": 4221,
+        "panel_weighted_mean": 1.4697938877043355
+      },
+      "unique_action_text": {
+        "mean": 3.4351718756255645,
+        "ci95": [
+          3.3349838659744333,
+          3.5315991930671844
+        ],
+        "tasks": 279,
+        "panels": 4221,
+        "panel_weighted_mean": 3.050935797204454
+      }
+    },
+    "10": {
+      "unique": {
+        "mean": 5.9795218808542385,
+        "ci95": [
+          5.778564278263018,
+          6.1702471136595225
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 5.269441141498216
+      },
+      "valid_candidates": {
+        "mean": 9.973912843364529,
+        "ci95": [
+          9.959746880635171,
+          9.985707246380063
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 9.971462544589775
+      },
+      "unparseable_fraction": {
+        "mean": 0.0026087156635470395,
+        "ci95": [
+          0.0014292753619936584,
+          0.004025311936482918
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.0028537455410225917
+      },
+      "duplicate_fraction": {
+        "mean": 0.3998280646635795,
+        "ci95": [
+          0.380569512892059,
+          0.4200708153968442
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.47077392748617475
+      },
+      "pairwise_distinct_fraction": {
+        "mean": 0.7305676785567777,
+        "ci95": [
+          0.7075480562790464,
+          0.7521906433725267
+        ],
+        "tasks": 279,
+        "panels": 4203,
+        "panel_weighted_mean": 0.6502685156860745
+      },
+      "unique_tool_name_sequences": {
+        "mean": 1.8563040039253609,
+        "ci95": [
+          1.7851801330218624,
+          1.932334715714312
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7719381688466112
+      },
+      "unique_action_text": {
+        "mean": 5.9795218808542385,
+        "ci95": [
+          5.778564278263018,
+          6.1702471136595225
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 5.269441141498216
+      }
+    }
+  },
+  "within_n10": {
+    "unique_first_3": {
+      "mean": 2.374308727888988,
+      "ci95": [
+        2.325911539214356,
+        2.4208872995490607
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 2.2054696789536266
+    },
+    "unique_random_subset_3": {
+      "mean": 2.373398849109475,
+      "ci95": [
+        2.3267972646719404,
+        2.4170673826167963
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 2.20957590170432
+    },
+    "unique_first_5": {
+      "mean": 3.5234399536915935,
+      "ci95": [
+        3.42996704807728,
+        3.6113579675205623
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 3.1966706302021404
+    },
+    "unique_random_subset_5": {
+      "mean": 3.5293459481919296,
+      "ci95": [
+        3.4377702383642683,
+        3.616614819651355
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 3.2017694354793047
+    },
+    "unique_first_10": {
+      "mean": 5.9795218808542385,
+      "ci95": [
+        5.778564278263018,
+        6.1702471136595225
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 5.269441141498216
+    },
+    "unique_random_subset_10": {
+      "mean": 5.9795218808542385,
+      "ci95": [
+        5.778564278263018,
+        6.1702471136595225
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 5.269441141498216
+    },
+    "additional_unique_beyond_3": {
+      "mean": 3.6052131529652502,
+      "ci95": [
+        3.4492320001107597,
+        3.7552555824643616
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 3.0639714625445897
+    },
+    "any_new_action_beyond_3": {
+      "mean": 0.8433440618281527,
+      "ci95": [
+        0.8201105699254065,
+        0.8650019555071541
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.7731272294887039
+    },
+    "selected_action_new_beyond_3": {
+      "mean": 0.3812891608255361,
+      "ci95": [
+        0.35768812998909955,
+        0.40539268655601896
+      ],
+      "tasks": 279,
+      "panels": 4204,
+      "panel_weighted_mean": 0.32778306374881067
+    },
+    "expected_additional_vs_random_subset_beyond_3": {
+      "mean": 3.606123031744763,
+      "ci95": [
+        3.4516779995734854,
+        3.755961545016109
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 3.059865239793896
+    },
+    "pooled_counts_beyond_3": {
+      "panels": 4205,
+      "panels_with_new_action": 3251.0,
+      "panels_with_parseable_selected_action": 4204,
+      "panels_selected_action_new": 1378.0,
+      "total_additional_unique_actions": 12884
+    },
+    "additional_unique_beyond_5": {
+      "mean": 2.4560819271626446,
+      "ci95": [
+        2.3448246237083357,
+        2.565727107951144
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 2.072770511296076
+    },
+    "any_new_action_beyond_5": {
+      "mean": 0.7919287538485759,
+      "ci95": [
+        0.76678604281465,
+        0.8156836229593388
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.7146254458977408
+    },
+    "selected_action_new_beyond_5": {
+      "mean": 0.2494420822826028,
+      "ci95": [
+        0.22914687976267875,
+        0.27105848531467164
+      ],
+      "tasks": 279,
+      "panels": 4204,
+      "panel_weighted_mean": 0.21717411988582302
+    },
+    "expected_additional_vs_random_subset_beyond_5": {
+      "mean": 2.450175932662308,
+      "ci95": [
+        2.341362154403149,
+        2.556571780277115
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 2.0676717060189116
+    },
+    "pooled_counts_beyond_5": {
+      "panels": 4205,
+      "panels_with_new_action": 3005.0,
+      "panels_with_parseable_selected_action": 4204,
+      "panels_selected_action_new": 913.0,
+      "total_additional_unique_actions": 8716
+    }
+  },
+  "sensitivity": {
+    "collapse_done": {
+      "unique_first_3": {
+        "mean": 2.162961599450613,
+        "ci95": [
+          2.1232664209143275,
+          2.2014091740573556
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.0877526753864446
+      },
+      "unique_random_subset_3": {
+        "mean": 2.1602588601817803,
+        "ci95": [
+          2.123560052898072,
+          2.1951241722032924
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.091922314704717
+      },
+      "unique_first_5": {
+        "mean": 3.073653386270372,
+        "ci95": [
+          2.998928614191296,
+          3.1449345816215604
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.946254458977408
+      },
+      "unique_random_subset_5": {
+        "mean": 3.077191831492051,
+        "ci95": [
+          3.0069698553420343,
+          3.144973691260404
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.949028933808958
+      },
+      "unique_first_10": {
+        "mean": 4.906600613707453,
+        "ci95": [
+          4.757158207729983,
+          5.048558045626465
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 4.661117717003568
+      },
+      "unique_random_subset_10": {
+        "mean": 4.906600613707453,
+        "ci95": [
+          4.757158207729983,
+          5.048558045626465
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 4.661117717003568
+      },
+      "additional_unique_beyond_3": {
+        "mean": 2.7436390142568405,
+        "ci95": [
+          2.6268053878976008,
+          2.8569776797323483
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.5733650416171225
+      },
+      "any_new_action_beyond_3": {
+        "mean": 0.759877383567795,
+        "ci95": [
+          0.738323915150479,
+          0.7807901562815593
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.7272294887039239
+      },
+      "selected_action_new_beyond_3": {
+        "mean": 0.3155834672034918,
+        "ci95": [
+          0.29403014173596254,
+          0.3377440634004917
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.2990009514747859
+      },
+      "expected_additional_vs_random_subset_beyond_3": {
+        "mean": 2.7463417535256736,
+        "ci95": [
+          2.6317565336575925,
+          2.8556042787341793
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.5691954022988504
+      },
+      "pooled_counts_beyond_3": {
+        "panels": 4205,
+        "panels_with_new_action": 3058.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 1257.0,
+        "total_additional_unique_actions": 10821
+      },
+      "additional_unique_beyond_5": {
+        "mean": 1.832947227437081,
+        "ci95": [
+          1.7502181533729704,
+          1.9138597207924224
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7148632580261594
+      },
+      "any_new_action_beyond_5": {
+        "mean": 0.6937846893715083,
+        "ci95": [
+          0.6713304070451976,
+          0.715688445419362
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.6556480380499405
+      },
+      "selected_action_new_beyond_5": {
+        "mean": 0.20384341473656312,
+        "ci95": [
+          0.18662501409783677,
+          0.22156469724697744
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.19790675547098002
+      },
+      "expected_additional_vs_random_subset_beyond_5": {
+        "mean": 1.8294087822154022,
+        "ci95": [
+          1.7485764764131757,
+          1.907182285033289
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7120887831946094
+      },
+      "pooled_counts_beyond_5": {
+        "panels": 4205,
+        "panels_with_new_action": 2757.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 832.0,
+        "total_additional_unique_actions": 7211
+      }
+    },
+    "grid25": {
+      "unique_first_3": {
+        "mean": 1.7690634742933993,
+        "ci95": [
+          1.72851004988288,
+          1.8093702491564416
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7379310344827585
+      },
+      "unique_random_subset_3": {
+        "mean": 1.7761795208150586,
+        "ci95": [
+          1.7397471146004546,
+          1.8123498295827094
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7483115338882282
+      },
+      "unique_first_5": {
+        "mean": 2.282597219539886,
+        "ci95": [
+          2.214157085507144,
+          2.3513330995240356
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.233293697978597
+      },
+      "unique_random_subset_5": {
+        "mean": 2.2852786195916246,
+        "ci95": [
+          2.218229331462136,
+          2.351954053621498
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.2398222071230394
+      },
+      "unique_first_10": {
+        "mean": 3.182946082544592,
+        "ci95": [
+          3.0553327980075706,
+          3.308585683057386
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.1120095124851366
+      },
+      "unique_random_subset_10": {
+        "mean": 3.182946082544592,
+        "ci95": [
+          3.0553327980075706,
+          3.308585683057386
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.1120095124851366
+      },
+      "additional_unique_beyond_3": {
+        "mean": 1.4138826082511926,
+        "ci95": [
+          1.3174232347362913,
+          1.5109224848308702
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.374078478002378
+      },
+      "any_new_action_beyond_3": {
+        "mean": 0.6105550286350238,
+        "ci95": [
+          0.5831576357884747,
+          0.6371644304897106
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.5926278240190249
+      },
+      "selected_action_new_beyond_3": {
+        "mean": 0.2658751745191477,
+        "ci95": [
+          0.24394002539957266,
+          0.2885493085031668
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.2528544243577545
+      },
+      "expected_additional_vs_random_subset_beyond_3": {
+        "mean": 1.4067665617295333,
+        "ci95": [
+          1.3149638161663082,
+          1.4984678908008355
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.3636979785969086
+      },
+      "pooled_counts_beyond_3": {
+        "panels": 4205,
+        "panels_with_new_action": 2492.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 1063.0,
+        "total_additional_unique_actions": 5778
+      },
+      "additional_unique_beyond_5": {
+        "mean": 0.9003488630047058,
+        "ci95": [
+          0.8341616553300105,
+          0.9660576092759589
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.8787158145065398
+      },
+      "any_new_action_beyond_5": {
+        "mean": 0.4946066053906438,
+        "ci95": [
+          0.46773551127709095,
+          0.5211276986837098
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.47847800237812127
+      },
+      "selected_action_new_beyond_5": {
+        "mean": 0.1637824030630096,
+        "ci95": [
+          0.14698588473945198,
+          0.1814171217680271
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.15818268315889628
+      },
+      "expected_additional_vs_random_subset_beyond_5": {
+        "mean": 0.8976674629529676,
+        "ci95": [
+          0.8357427024949002,
+          0.9593911625140185
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.8721873053620973
+      },
+      "pooled_counts_beyond_5": {
+        "panels": 4205,
+        "panels_with_new_action": 2012.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 665.0,
+        "total_additional_unique_actions": 3695
+      }
+    },
+    "grid50": {
+      "unique_first_3": {
+        "mean": 1.7388886352157813,
+        "ci95": [
+          1.6976711524899315,
+          1.7799931463589085
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7074910820451843
+      },
+      "unique_random_subset_3": {
+        "mean": 1.744849838304863,
+        "ci95": [
+          1.7075672599098333,
+          1.782316762934826
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7179231074118113
+      },
+      "unique_first_5": {
+        "mean": 2.2263198035977227,
+        "ci95": [
+          2.157445295010817,
+          2.2957693033207995
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.1785969084423304
+      },
+      "unique_random_subset_5": {
+        "mean": 2.228386780174481,
+        "ci95": [
+          2.1607647777898533,
+          2.29577315888007
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.183682501934583
+      },
+      "unique_first_10": {
+        "mean": 3.0723956599307005,
+        "ci95": [
+          2.945207929440435,
+          3.197520757294873
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.00166468489893
+      },
+      "unique_random_subset_10": {
+        "mean": 3.0723956599307005,
+        "ci95": [
+          2.945207929440435,
+          3.197520757294873
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.00166468489893
+      },
+      "additional_unique_beyond_3": {
+        "mean": 1.333507024714919,
+        "ci95": [
+          1.238260616467185,
+          1.428538640683828
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.2941736028537456
+      },
+      "any_new_action_beyond_3": {
+        "mean": 0.5897422712052807,
+        "ci95": [
+          0.5622769572640018,
+          0.6166278190340121
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.5719381688466112
+      },
+      "selected_action_new_beyond_3": {
+        "mean": 0.2604357402475034,
+        "ci95": [
+          0.23822422817927033,
+          0.2832175888686018
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.24809705042816366
+      },
+      "expected_additional_vs_random_subset_beyond_3": {
+        "mean": 1.3275458216258376,
+        "ci95": [
+          1.2366118016909,
+          1.417742070256592
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.2837415774871186
+      },
+      "pooled_counts_beyond_3": {
+        "panels": 4205,
+        "panels_with_new_action": 2405.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 1043.0,
+        "total_additional_unique_actions": 5442
+      },
+      "additional_unique_beyond_5": {
+        "mean": 0.8460758563329781,
+        "ci95": [
+          0.7812540585949596,
+          0.9112244046304057
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.8230677764565992
+      },
+      "any_new_action_beyond_5": {
+        "mean": 0.47813964901090183,
+        "ci95": [
+          0.4507492340579405,
+          0.5053002070272447
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.45992865636147445
+      },
+      "selected_action_new_beyond_5": {
+        "mean": 0.16002891515220516,
+        "ci95": [
+          0.14312329099155696,
+          0.17767283720796087
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.15509039010466222
+      },
+      "expected_additional_vs_random_subset_beyond_5": {
+        "mean": 0.84400887975622,
+        "ci95": [
+          0.7823788251096351,
+          0.9050327482923398
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.8179821829643471
+      },
+      "pooled_counts_beyond_5": {
+        "panels": 4205,
+        "panels_with_new_action": 1934.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 652.0,
+        "total_additional_unique_actions": 3461
+      }
+    },
+    "executor": {
+      "unique_first_3": {
+        "mean": 2.3723150755830864,
+        "ci95": [
+          2.3238864987942067,
+          2.419035754775338
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.203091557669441
+      },
+      "unique_random_subset_3": {
+        "mean": 2.3705160292080176,
+        "ci95": [
+          2.323923032819485,
+          2.414021312438197
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.206779627427666
+      },
+      "unique_first_5": {
+        "mean": 3.516045905217777,
+        "ci95": [
+          3.423282592225956,
+          3.6036911170702424
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.1907253269916764
+      },
+      "unique_random_subset_5": {
+        "mean": 3.522656792597426,
+        "ci95": [
+          3.431044189493154,
+          3.609833929203773
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.1959977728705433
+      },
+      "unique_first_10": {
+        "mean": 5.961219251703689,
+        "ci95": [
+          5.762739387277263,
+          6.1524537475771615
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 5.255885850178359
+      },
+      "unique_random_subset_10": {
+        "mean": 5.961219251703689,
+        "ci95": [
+          5.762739387277263,
+          6.1524537475771615
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 5.255885850178359
+      },
+      "additional_unique_beyond_3": {
+        "mean": 3.5889041761206024,
+        "ci95": [
+          3.4338434991247295,
+          3.738808048528597
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.052794292508918
+      },
+      "any_new_action_beyond_3": {
+        "mean": 0.8422479819427316,
+        "ci95": [
+          0.819039760461141,
+          0.863809237433735
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.7717003567181926
+      },
+      "selected_action_new_beyond_3": {
+        "mean": 0.3810502121994907,
+        "ci95": [
+          0.35741546041142785,
+          0.40518290109137706
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.3273073263558516
+      },
+      "expected_additional_vs_random_subset_beyond_3": {
+        "mean": 3.59070322249567,
+        "ci95": [
+          3.4371559439494845,
+          3.739752812894744
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 3.049106222750693
+      },
+      "pooled_counts_beyond_3": {
+        "panels": 4205,
+        "panels_with_new_action": 3245.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 1376.0,
+        "total_additional_unique_actions": 12837
+      },
+      "additional_unique_beyond_5": {
+        "mean": 2.4451733464859124,
+        "ci95": [
+          2.334009800131362,
+          2.555292695407835
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.0651605231866825
+      },
+      "any_new_action_beyond_5": {
+        "mean": 0.7911952167061203,
+        "ci95": [
+          0.7661986874899553,
+          0.8150575738911806
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.7139120095124851
+      },
+      "selected_action_new_beyond_5": {
+        "mean": 0.2493226079695801,
+        "ci95": [
+          0.22908585188877958,
+          0.2709604855285093
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.21693625118934348
+      },
+      "expected_additional_vs_random_subset_beyond_5": {
+        "mean": 2.4385624591062625,
+        "ci95": [
+          2.330746393925582,
+          2.54399874667069
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.0598880773078156
+      },
+      "pooled_counts_beyond_5": {
+        "panels": 4205,
+        "panels_with_new_action": 3002.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 912.0,
+        "total_additional_unique_actions": 8684
+      }
+    },
+    "executor_collapse_done": {
+      "unique_first_3": {
+        "mean": 2.1609679471447114,
+        "ci95": [
+          2.1213342211735564,
+          2.199575405405244
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.085374554102259
+      },
+      "unique_random_subset_3": {
+        "mean": 2.1573760402803233,
+        "ci95": [
+          2.1206763887377815,
+          2.1924351979386842
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.0891260404280616
+      },
+      "unique_first_5": {
+        "mean": 3.0662593377965552,
+        "ci95": [
+          2.991831441766139,
+          3.1373182652932528
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.9403091557669443
+      },
+      "unique_random_subset_5": {
+        "mean": 3.070502675897547,
+        "ci95": [
+          3.0001503244356997,
+          3.1382044167174468
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.943257271200196
+      },
+      "unique_first_10": {
+        "mean": 4.888297984556903,
+        "ci95": [
+          4.73905673183491,
+          5.0314286255305305
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 4.64756242568371
+      },
+      "unique_random_subset_10": {
+        "mean": 4.888297984556903,
+        "ci95": [
+          4.73905673183491,
+          5.0314286255305305
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 4.64756242568371
+      },
+      "additional_unique_beyond_3": {
+        "mean": 2.7273300374121927,
+        "ci95": [
+          2.6107303823358894,
+          2.8403139093550287
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.562187871581451
+      },
+      "any_new_action_beyond_3": {
+        "mean": 0.758781303682374,
+        "ci95": [
+          0.7372800779513052,
+          0.7797511358109319
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.7258026159334126
+      },
+      "selected_action_new_beyond_3": {
+        "mean": 0.3153445185774464,
+        "ci95": [
+          0.2937510491625721,
+          0.3375351811187331
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.2985252140818268
+      },
+      "expected_additional_vs_random_subset_beyond_3": {
+        "mean": 2.7309219442765804,
+        "ci95": [
+          2.6167790187607984,
+          2.840696814906423
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 2.558436385255648
+      },
+      "pooled_counts_beyond_3": {
+        "panels": 4205,
+        "panels_with_new_action": 3052.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 1255.0,
+        "total_additional_unique_actions": 10774
+      },
+      "additional_unique_beyond_5": {
+        "mean": 1.8220386467603484,
+        "ci95": [
+          1.7390580229128096,
+          1.9026569108075726
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7072532699167657
+      },
+      "any_new_action_beyond_5": {
+        "mean": 0.6928520283740148,
+        "ci95": [
+          0.670346805431256,
+          0.7146956161235436
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 0.6546967895362663
+      },
+      "selected_action_new_beyond_5": {
+        "mean": 0.20372394042354042,
+        "ci95": [
+          0.1864990504378923,
+          0.22148119220417944
+        ],
+        "tasks": 279,
+        "panels": 4204,
+        "panel_weighted_mean": 0.19766888677450048
+      },
+      "expected_additional_vs_random_subset_beyond_5": {
+        "mean": 1.817795308659357,
+        "ci95": [
+          1.7374442655794822,
+          1.8950169074821872
+        ],
+        "tasks": 279,
+        "panels": 4205,
+        "panel_weighted_mean": 1.7043051544835137
+      },
+      "pooled_counts_beyond_5": {
+        "panels": 4205,
+        "panels_with_new_action": 2753.0,
+        "panels_with_parseable_selected_action": 4204,
+        "panels_selected_action_new": 831.0,
+        "total_additional_unique_actions": 7179
+      }
+    }
+  },
+  "cross_run_initial_state_overlap": {
+    "3_vs_10": {
+      "tasks_with_first_panel_both": 279,
+      "matching_prompt_hash": 278,
+      "matching_screenshot_hash": 87,
+      "matching_both": 87
+    },
+    "5_vs_10": {
+      "tasks_with_first_panel_both": 279,
+      "matching_prompt_hash": 279,
+      "matching_screenshot_hash": 70,
+      "matching_both": 70
+    }
+  },
+  "additional_unique_distribution_beyond_3": {
+    "0": {
+      "mean": 0.15665593817184734,
+      "ci95": [
+        0.13499804449284594,
+        0.17988943007459346
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.22687277051129606
+    },
+    "1": {
+      "mean": 0.10427819041706513,
+      "ci95": [
+        0.091988439071837,
+        0.11690272542693556
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.12033293697978596
+    },
+    "2": {
+      "mean": 0.1040986758647713,
+      "ci95": [
+        0.09190502667195546,
+        0.11686297313154505
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.10820451843043995
+    },
+    "3": {
+      "mean": 0.1026611377571193,
+      "ci95": [
+        0.08919388918099867,
+        0.11699223709821151
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.1065398335315101
+    },
+    "4": {
+      "mean": 0.12416697555550088,
+      "ci95": [
+        0.10746161778934822,
+        0.14161359415042304
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.11010701545778835
+    },
+    "5": {
+      "mean": 0.12729401828637427,
+      "ci95": [
+        0.11206459821884378,
+        0.1432110610904379
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.11414982164090369
+    },
+    "6": {
+      "mean": 0.11429924373784235,
+      "ci95": [
+        0.09962404674057565,
+        0.12996284108607117
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.10011890606420927
+    },
+    "7": {
+      "mean": 0.1665458202094794,
+      "ci95": [
+        0.14794194182197898,
+        0.18589573626405637
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.11367419738406659
+    }
+  },
+  "same_panel_type_diversity": {
+    "additional_type_sequences_beyond_3": {
+      "mean": 0.4760605281282745,
+      "ci95": [
+        0.42905089079680286,
+        0.527299416096353
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.4347205707491082
+    },
+    "additional_type_sequences_beyond_5": {
+      "mean": 0.2764619978284191,
+      "ci95": [
+        0.24841299746701084,
+        0.30595512199773084
+      ],
+      "tasks": 279,
+      "panels": 4205,
+      "panel_weighted_mean": 0.25850178359096315
+    }
+  },
+  "valid_episode_sensitivity": {
+    "3": {
+      "panels": 4115,
+      "unique_actions": {
+        "mean": 2.2741540255815216,
+        "ci95": [
+          2.2165226123112367,
+          2.3322524274960883
+        ],
+        "tasks": 266,
+        "panels": 4115,
+        "panel_weighted_mean": 2.05224787363305
+      }
+    },
+    "5": {
+      "panels": 4054,
+      "unique_actions": {
+        "mean": 3.4316222788129713,
+        "ci95": [
+          3.3281838326985502,
+          3.5319376273765233
+        ],
+        "tasks": 268,
+        "panels": 4054,
+        "panel_weighted_mean": 3.03330044400592
+      }
+    },
+    "10": {
+      "panels": 3921,
+      "unique_actions": {
+        "mean": 5.9919513757112055,
+        "ci95": [
+          5.790271337252549,
+          6.193427636767105
+        ],
+        "tasks": 264,
+        "panels": 3921,
+        "panel_weighted_mean": 5.2593726090283095
+      }
+    }
+  }
+}
