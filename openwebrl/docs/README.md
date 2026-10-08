@@ -20,12 +20,10 @@
 
 [Corrected ARM comparison: 493/900 records, 158 paired tasks; final accounting and cost/latency/token plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
 
-[Inference scaling: selector overview grouped by protocol, separate baselines and count/rate columns; buggy history collapsed](ARM_INFERENCE_SCALING.md).
+[Inference scaling: three-run Piotr results, random/horizon controls, selectors by protocol, actors alone and pending RL-actor comparison; supporting evidence and history collapsed](ARM_INFERENCE_SCALING.md).
 
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
-
-[Inference-time scaling: visible actor-alone results and inventory, Piotr repeat averages and matched Luna/Jev/Kev selectors](ARM_INFERENCE_SCALING.md).
 
 [Before/after continuation selection: 70 early + 12 later paired states; no clear success gain, with greater repeatability only in the early sample](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
 
@@ -46,7 +44,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
-| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Audited local actor-alone and matched SFT + selector results; historical comparisons, configs, efficiency and audit limits |
+| [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Controlled inference results, repeats and ablations; actor/selector comparisons, pending studies and collapsible evidence/history |
 | [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, checkpoint procedures, and [explicit action comparison](ARM_SFT.md#arm-comparison-sft-20261007) |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |
