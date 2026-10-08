@@ -4,7 +4,9 @@
   "verified_methods": [
     "baseline",
     "additive",
-    "gate-b"
+    "gate-b",
+    "mixed-bonus",
+    "mixed-reweight"
   ],
   "training_iteration": 90,
   "native_checkpoint_index": 89,
@@ -137,6 +139,40 @@
       "valid_only": 0.5756929637526652,
       "verified_complete": true,
       "stage_review_sha256": "8024fce78d0714885444ce690c1c83d490893a8e8ce8ed46f2620480bb1d516e"
+    },
+    {
+      "method": "mixed-bonus",
+      "benchmark": "deepshop",
+      "counts": {
+        "tasks": 150,
+        "successes": 55,
+        "valid": 118,
+        "invalid": 32
+      },
+      "overall": 0.36666666666666664,
+      "valid_only": 0.4661016949152542,
+      "verified_complete": true,
+      "stage_review_sha256": "3005fd1a53e7edc6f6512ef0a6505f9261a01b4feaf1b620a28660b0698b2d47",
+      "scientific_plan_sha256": "ae590d2253deb998410c3faf91e492ba5bf1076ecd484b224814215930f71046",
+      "native_valid_reward_categories": {
+        "structured_native_verdict": 114,
+        "native_truncated_zero_without_judge_call": 4
+      }
+    },
+    {
+      "method": "mixed-reweight",
+      "benchmark": "deepshop",
+      "counts": {
+        "tasks": 150,
+        "successes": 51,
+        "valid": 122,
+        "invalid": 28
+      },
+      "overall": 0.34,
+      "valid_only": 0.4180327868852459,
+      "verified_complete": true,
+      "stage_review_sha256": "52393939691809425ffea37929d4a68010baa9a43e6b7201ff00aa05dd6cb8ba",
+      "scientific_plan_sha256": "308a0e632ad83cbdf09ed3f76b9ce5ae1b3d30742f6e48435f2afce2d6587883"
     }
   ],
   "webvoyager_paired_vs_baseline": {
@@ -194,7 +230,11 @@
     "resource_review": "ab59ae3a28db1c88138bb4f9caf9350f0b81121e9ffe2d240802077e2ea3f63b",
     "paired_analysis": "8ae9b5bc99b6d1d505c15119f26eee1a62999a923c9365088266c58057781996",
     "deepshop_paired_analysis": "520122749938039d5c3e024b9027f3f6f20873a1577420346ff1edcb42eb3c7e",
-    "deepshop_owner_reconciliation": "6e3eddacff785aee2b7f76fbbeccba1d4130d556f846652cd9062945295b6316"
+    "deepshop_owner_reconciliation": "6e3eddacff785aee2b7f76fbbeccba1d4130d556f846652cd9062945295b6316",
+    "deepshop_paired_five_analysis": "335339720b0a15bc2b6dcd27e1ce4c322a07cfb185e7c8dfea123f0bc46394a9",
+    "deepshop_paired_five_receipt": "6314fb804f3dd91af6135c0d1f555588f997326f44de8cce0b81a0b990d8413c",
+    "mixed_reweight_owner_reconciliation": "601ee549d831d4d97500f3b16e635cbf1ff81ac2ac9202fa7062c46b77c8ab79",
+    "mixed_bonus_final_resource_review": "ac3e181d54db4e01dfd9bfb55371b952ab77fb254f6a0c7160d8f52ee3eb37a0"
   },
   "limitations": [
     "One local-browser repeat; historical stealth cohorts are separate.",
@@ -202,10 +242,11 @@
     "Canonical benchmark labels are unchanged; artifact verification does not certify every semantic judgment.",
     "Full archive CRC checks bind stable file fingerprints but are not full-file cryptographic hashes.",
     "Paired intervals are pointwise, not simultaneous across methods; they omit judge error and website drift.",
-    "The top-level legacy W&B aggregate is turn-weighted; these results use task-level metrics."
+    "The top-level legacy W&B aggregate is turn-weighted; these results use task-level metrics.",
+    "Mixed-only bonus DeepShop includes four valid truncated trajectories assigned native zero reward without a judge call; canonical outcomes are preserved."
   ],
-  "remaining": "Mixed-only bonus and mixed-only outcome reweight are collecting DeepShop; Original training continues to90 before its sixth local pair.",
-  "verified_records": 3425,
+  "remaining": "Original remains in training toward iteration90; its sixth local WebVoyager595/DeepShop150 pair awaits independently verified native89. The six-method suite is incomplete.",
+  "verified_records": 3725,
   "completed_method_accounting": {
     "baseline": {
       "all_attempt_seconds": 13914,
@@ -221,6 +262,16 @@
       "all_attempt_seconds": 15300,
       "cap_seconds": 43200,
       "method_completion_sha256": "451a1a12bfa528c4ce93a771cdddcf9a51608c11b429229e963c3b1d9aff1db5"
+    },
+    "mixed-bonus": {
+      "all_attempt_seconds": 15259,
+      "cap_seconds": 43200,
+      "method_completion_sha256": "9e402759bcfc525120fca9cc9c29a45affb6bb0d664aa17af22aa16759b26c89"
+    },
+    "mixed-reweight": {
+      "all_attempt_seconds": 14009,
+      "cap_seconds": 43200,
+      "method_completion_sha256": "3713f0275426902069c866bfa7e6b0b688702893b4885c63697fb2536161f077"
     }
   },
   "deepshop_paired_vs_baseline": {
@@ -255,6 +306,38 @@
         7.333333333333333
       ],
       "tasks": 150
+    },
+    "mixed-bonus": {
+      "baseline_only_success": 25,
+      "baseline_success_percent": 42.66666666666667,
+      "baseline_successes": 64,
+      "both_success": 39,
+      "difference_pp": -6.0,
+      "method_only_success": 16,
+      "method_success_percent": 36.666666666666664,
+      "method_successes": 55,
+      "neither_success": 70,
+      "paired_bootstrap_95_percent_ci_pp": [
+        -14.000000000000002,
+        2.0
+      ],
+      "tasks": 150
+    },
+    "mixed-reweight": {
+      "baseline_only_success": 30,
+      "baseline_success_percent": 42.66666666666667,
+      "baseline_successes": 64,
+      "both_success": 34,
+      "difference_pp": -8.666666666666668,
+      "method_only_success": 17,
+      "method_success_percent": 34.0,
+      "method_successes": 51,
+      "neither_success": 69,
+      "paired_bootstrap_95_percent_ci_pp": [
+        -17.333333333333336,
+        0.0
+      ],
+      "tasks": 150
     }
   },
   "deepshop_bootstrap": {
@@ -267,5 +350,6 @@
     "invalids_scored_zero": true,
     "task_denominator": 150
   },
-  "bootstrap_scope": "webvoyager"
+  "bootstrap_scope": "webvoyager",
+  "deepshop_paired_completion_note": "The five-cohort paired analysis was computed while mixed-bonus verification was pending. Its counts and saved labels subsequently match the hash-bound independent completed stage and method reviews; all four comparisons are now verified."
 }
