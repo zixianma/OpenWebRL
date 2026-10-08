@@ -2,6 +2,22 @@
 
 **Outcome-informed selection reaches 38.12%, versus 29.84% for the actor’s first sample, on 124 replayable states. Immediate execution evidence has not established a gain over the before-execution teacher.** No critic was trained; these are conditional continuation results, not benchmark pass@1.
 
+<a id="branching-design"></a>
+
+## How the branching experiment works
+
+At each replayable state:
+
+```mermaid
+flowchart LR
+    A["5 actions × 3 SFT continuations"] --> Y["One shared pool: 15 outcomes"]
+    Y --> B["Score saved before picks"]
+    Y --> C["Score saved after picks"]
+    Y --> R["Average all: uniform score"]
+```
+
+Both teachers choose without seeing continuation outcomes; the after-execution teacher additionally sees each action's immediate execution evidence. **Before, after and uniform selection are scored from the same outcome pool.** Uniform selection averages all five candidate entries and their three continuations, including duplicate actions; it needs no separate random-action rollout set.
+
 ## Does execution improve action selection?
 
 <a id="arm-continuation-branches-results-20261007"></a>
