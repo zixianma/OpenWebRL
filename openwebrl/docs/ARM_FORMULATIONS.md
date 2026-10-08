@@ -57,7 +57,7 @@ flowchart LR
 
 **Early states only:** 30 site families, 57 distinct screenshots, and 37 states with five distinct actions. Eighteen states show blank/access/error pages; their outcomes remain included. Completion rates include discovery and replay attrition.
 
-**Approved extension: decisions 5, 10, and 15.** Cycle these targets through unused tasks; keep strict prefix replay and report the new cohort separately. The 30-action budget includes the prefix, so record actions remaining as well as depth. One decision can contain several browser actions. [Extension](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007) · [Coverage data](arm_results/rl_integration/continuation-state-diversity-20261007/aggregate.json).
+**Expanded target: 75 later states across decisions 4–15**, giving 149 states with the preserved early cohort. Aim for 6 per decision, plus one at 4, 9, and 15: 25 each from decisions 4–7, 8–11, and 12–15. Select tasks in fixed order; retain outcomes regardless of success. Strict replay and existing resource caps still apply, so report shortfalls by decision. The 30-action budget includes the prefix; one decision may contain several browser actions. [Extension](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007) · [Coverage data](arm_results/rl_integration/continuation-state-diversity-20261007/aggregate.json).
 
 <details>
 <summary>State diversity plot</summary>

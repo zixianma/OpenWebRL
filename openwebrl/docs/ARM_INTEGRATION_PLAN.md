@@ -60,7 +60,15 @@ ablation and new browser data remain later-stage planning.
 
 
 <a id="arm-continuation-finish100-20261007"></a>
-**October 7 continuation: approved and queued as job 349137.** Target 26 new complete states / 390 continuations at **decisions 5, 10, and 15**, cycling through the unused fixed reserve. Retain the 74 early states and report later states separately. Six prefetched early anchors are preserved but deferred. The allocation-censored 75th state stays separate with its four finished and 11 interrupted records. No sealed outcome is rerun.
+**October 7 depth expansion: submitted as job 349236 after a clean handoff from 349137.** Target **75 later states / 1,125 continuations**, preserving the 74 early states: **149 states / 2,235 records total**. Existing later states count toward the new target.
+
+| Candidate decisions | Later-state target |
+| --- | ---: |
+| 4–7 | 25 |
+| 8–11 | 25 |
+| 12–15 | 25 |
+
+Six per exact decision, plus one at 4, 9, and 15. Cycle depths through never-attempted tasks in the fixed reserve order; all attempted depths and results stay unchanged. Membership is fixed at the 15-browser replay release, before continuation outcomes. Invalid outcomes remain included; teacher validity never triggers replacement. Report attempted, captured, released, completed, and teacher-valid counts separately by decision. Unfilled quotas stay visible; none move to easier depths. Six prefetched early anchors remain deferred, and the allocation-censored early state stays separate.
 
 | Extension | Approved cap |
 | --- | --- |
@@ -69,7 +77,9 @@ ablation and new browser data remain later-stage planning.
 | Luna, cumulative | $15 / 2,200 calls, unchanged |
 | Judge, cumulative | $25 / 6,600 calls, unchanged |
 
-The original 53 unused seconds are recorded separately and not added. Atomic publication, bounded capture retries, resume preservation and the depth amendment passed 65 tests; the controller leaves time for a full cohort before shutdown. Collection completeness and valid paired-teacher coverage remain separate: four existing panels lack valid paired evidence. The replaced queued job349105 consumed zero seconds. The original 30-action budget includes each prefix; new receipts record depth, remaining actions and termination reasons. The initial later-state gate stops for diagnosis if the first18 considered states yield zero releases. Active-agent supervision follows the new job. [Extension receipt](arm_results/rl_integration/continuation-finish100-extension-20261007.json).
+Job 349137 consumed 1,495 seconds; its replacement receives **3h35m**, preserving the four-hour extension cap across both attempts. Five rounding seconds and the original 53 unused seconds are not added. All saved attempts, outcomes, reservations and costs are preserved. Quota/resume checks passed 90 tests; supervisor checks passed four. Active-agent supervision follows the replacement and the 149-state target.
+
+The 30-action total includes each prefix; record remaining actions and decision depth. Every state must pass the unchanged 15-browser release barrier. Completion and teacher-valid coverage are separate; four early panels lack valid paired evidence. The broader target may remain incomplete within the existing caps. [Depth-expansion receipt](arm_results/rl_integration/continuation-depth-balanced-extension-20261007.json) · [Original extension receipt](arm_results/rl_integration/continuation-finish100-extension-20261007.json).
 
 **Closed allocation audit, October 6: 74/100 complete states and 1,110/1,500 records in complete-state groups.** Of these, 1,000 have valid terminal evidence and 110 remain invalid. One committed release-read failure occurred before candidate execution, leaving 1,109 post-release attempts in these groups. Four additional finished continuations are preserved in a 75th, incomplete state whose other 11 continuations were interrupted; that state has no complete teacher panel and is excluded from the paired analysis. The requested cohort is incomplete.
 
