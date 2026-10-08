@@ -4,6 +4,11 @@
 Qwen, official SFT, GPT-6, Jev and Kev in one report. Detailed Jev/Kev operational
 records remain below.
 
+<a id="rl-actor-piotr-20261007"></a>
+## Released RL actor with Piotr SelectionARM — October 7
+
+The complete 300-task pair shows **+11.33 pp [+5.33, +17.33]** from Piotr. It changes actor weights to the released RL checkpoint while retaining the SFT frontend, 30-step decoding and original SFT selector base. It is not a native-RL prompting evaluation. The gain difference from the earlier SFT pair is inconclusive and subject to collection-time differences. [Counts](RL_RESULTS.md) · [Controlled comparison](ARM_INFERENCE_SCALING.md#piotr-rl-actor-20261007) · [Protocol, validity, final accounting and plots](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
+
 <a id="arm-mixed-bonus-iter90-results-20261002"></a>
 ## Mixed-only bonus iteration90 — October2
 

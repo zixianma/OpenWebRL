@@ -1,9 +1,10 @@
 # ARM inference scaling
 
-- **Piotr SelectionARM:** **+5.67 ± 1.15 percentage points** (mean ± sample SD) across three complete runs.
+- **SFT actor + Piotr SelectionARM:** **+5.67 ± 1.15 percentage points** (mean ± sample SD) across three complete runs.
+- **RL actor + Piotr:** **42.67% → 54.00%**, a **+11.33-point gain [+5.33, +17.33]** in one complete paired run.
 - **Random control:** random-of-five reaches **33.33%**, versus **33.00%** for SFT and **40.00%** for Piotr in the October 7 comparison.
 - **Other selectors:** Sol/GPT-5.5 add **10–12 points**; Luna/Kev add about **9 points** under a different protocol. These are not controlled cross-protocol rankings.
-- **Still unresolved:** whether 50 steps increases Piotr's gain, and whether Piotr helps an RL-trained actor. The RL-actor pair is collecting.
+- **Still unresolved:** whether 50 steps or an RL-trained actor increases Piotr's gain relative to the SFT 30-step comparison.
 
 Every main result uses the same **300 Online-Mind2Web tasks**. Invalid and unjudged episodes count as zero. “Success” is the canonical o4-mini/AgentTrek verdict, which permits partial progress. **N** means candidates generated per decision; one is executed. Gains are percentage points (**pp**); intervals quantify task sampling, not judge error or website drift.
 
@@ -81,16 +82,18 @@ Sol/GPT-5.5 use medium reasoning and 2,048 selector tokens; Luna uses medium rea
 
 Jev is a separate actor system. Its judge-input adapter was repaired and all 23 valid DONE episodes rejudged from unchanged saved evidence. [Audit](arm_results/jev_actor_local_full300_20261006.json). Other actor runs and their limitations remain in the archive below.
 
-## In progress: Piotr with an RL actor
+## Piotr with an RL actor
 
 <a id="piotr-rl-actor-20261007"></a>
 
-| Actor | Selector | N | Planned episodes | Status |
-| --- | --- | ---: | ---: | --- |
-| Released OpenWebRL-4B RL | None | 1 | 300 | Collecting |
-| Released OpenWebRL-4B RL | Piotr SelectionARM | 5 | 300 | Collecting |
+| Actor | Selector | N | Tasks | Successes | Success |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Released OpenWebRL-4B RL | None | 1 | 300 | 128 | 42.67% |
+| Released OpenWebRL-4B RL | Piotr SelectionARM | 5 | 300 | 162 | 54.00% |
 
-Both arms are fresh. **Only actor weights change:** prompt, tokenizer, preprocessing and decoding stay frozen to the SFT comparison; Piotr retains its original SFT base. **30 steps, T=0.7, top-p=0.9, 1,024 tokens, seed 45.** Full paired results are pending. [Protocol and approved caps](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
+**Paired gain: +11.33 pp [+5.33, +17.33]**; 59 ARM-only wins and 25 actor-only wins. Both arms are fresh. Relative to the SFT setup, only actor weights change: **30 steps, T=0.7, top-p=0.9, 1,024 tokens, seed 45**, with the frozen SFT prompt/frontend and Piotr's original SFT base. This is one run, not the RL model's native prompting benchmark.
+
+The gain exceeds the latest SFT pair's gain by **+4.33 pp [−3.00, +11.33]**: a stronger benefit on RL is not established. This comparison reuses SFT episodes collected at a different time. [Aggregate and plots](arm_results/selectionarm_piotr_rlactor30_20261007/aggregate.json) · [Four-outcome paired comparison](arm_results/selectionarm_piotr_rlactor30_20261007/sft_rl_gain_comparison.json) · [Protocol and final accounting](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 
 ## In progress: selective sampling and policy likelihood
 
@@ -111,6 +114,7 @@ Scores include reasoning and action; synthetic formatting tokens are excluded. T
 | Study | Aggregate / audit | Compute or API cost | Latency | Tokens |
 | --- | --- | --- | --- | --- |
 | Piotr 30 steps / three-run summary | [Data](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json) | [Plot](arm_results/selectionarm_piotr_sameday30_20261007/cost.png) | [Plot](arm_results/selectionarm_piotr_sameday30_20261007/latency.png) | [Plot](arm_results/selectionarm_piotr_sameday30_20261007/tokens.png) |
+| RL actor + Piotr, 30 steps | [Data](arm_results/selectionarm_piotr_rlactor30_20261007/aggregate.json) | [Plot](arm_results/selectionarm_piotr_rlactor30_20261007/cost.png) | [Plot](arm_results/selectionarm_piotr_rlactor30_20261007/latency.png) | [Plot](arm_results/selectionarm_piotr_rlactor30_20261007/tokens.png) |
 | Random-of-five | [Data](arm_results/selectionarm_random5_sameday30_20261007/aggregate.json) | [Plot](arm_results/selectionarm_random5_sameday30_20261007/cost.png) | [Plot](arm_results/selectionarm_random5_sameday30_20261007/latency.png) | [Plot](arm_results/selectionarm_random5_sameday30_20261007/tokens.png) |
 | Piotr 50 steps | [Data](arm_results/selectionarm_piotr_steps50_20261007/aggregate.json) | [Plot](arm_results/selectionarm_piotr_steps50_20261007/cost.png) | [Plot](arm_results/selectionarm_piotr_steps50_20261007/latency.png) | [Plot](arm_results/selectionarm_piotr_steps50_20261007/tokens.png) |
 | RL-task-trained selector | [Data](arm_results/selectionarm_rltasks_repeat_20261007/aggregate.json) | [Plot](arm_results/selectionarm_rltasks_repeat_20261007/cost.png) | [Plot](arm_results/selectionarm_rltasks_repeat_20261007/latency.png) | [Plot](arm_results/selectionarm_rltasks_repeat_20261007/tokens.png) |

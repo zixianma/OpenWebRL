@@ -1,0 +1,296 @@
+{
+  "epoch": 1791443512.9409957,
+  "complete": true,
+  "verified_complete": true,
+  "status": "verified_complete",
+  "episodes": 600,
+  "tasks": 300,
+  "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+  "protocol": {
+    "actor": "OpenWebRL/OpenWebRL-4B:released-RL-weights",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "browser": "local_process",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": "omitted, original native generate endpoint default",
+    "max_new_tokens": 1024,
+    "max_steps": 30,
+    "context_length": 32768,
+    "context_num_screenshots": 1,
+    "history": "full",
+    "judge": "o4-mini",
+    "judge_protocol": "online_mind2web/AgentTrek",
+    "judge_response_tokens": 4096,
+    "candidates": 5,
+    "candidate_representation": "full",
+    "optimizer_updates": 0,
+    "selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+    "piotr_selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "actor_revision": "616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7",
+    "seed": 45,
+    "server_seed_base": 4500,
+    "repetition": 1,
+    "sampling_request": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 1024
+    },
+    "design": "Fresh full300 RL actor alone versus the same RL actor with Piotr SelectionARM",
+    "actor_system_policy_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+    "cohort_revision": "selectionarm-piotr-rlactor30-20261007",
+    "seed_realization": "Independent stochastic repetition with an explicit distinct server RNG seed per shard. Per-request seeds remain logged but are not honored by the unchanged FlashInfer sampler; batch-independent reproducibility is not claimed.",
+    "comparability": "Same settings and SFT frontend as the seed45 full300 comparison; only actor weights change. Historical SFT comparisons are across independent collection times.",
+    "actor_control_source": "same campaign; randomized interleaved paired arms",
+    "actor_frontend": "frozen SFT tokenizer/processor/template/config/generation assets; native RL weights",
+    "selector_base_model": "OpenWebRL/OpenWebRL-4B-SFT",
+    "selector_base_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a"
+  },
+  "by_mode": {
+    "actor0": {
+      "episodes": 300,
+      "successes": 128,
+      "valid": 277,
+      "invalid": 23,
+      "success_rate": 0.4266666666666667,
+      "valid_only": 0.4620938628158845,
+      "totals": {
+        "actor_requests": 3352,
+        "actor_input_tokens": 27412232,
+        "actor_output_tokens": 1424130,
+        "actor_client_request_seconds": 21635.53843885567,
+        "browser_steps": 3334,
+        "browser_step_seconds": 13518.121793763712,
+        "selector_calls": 0,
+        "selector_input_tokens": 0,
+        "selector_output_tokens": 0,
+        "selector_service_seconds": 0,
+        "elapsed_seconds": 40036.26098708622
+      },
+      "means": {
+        "actor_requests": 11.173333333333334,
+        "actor_input_tokens": 91374.10666666667,
+        "actor_output_tokens": 4747.1,
+        "actor_client_request_seconds": 72.11846146285224,
+        "browser_steps": 11.113333333333333,
+        "browser_step_seconds": 45.060405979212376,
+        "selector_calls": 0.0,
+        "selector_input_tokens": 0.0,
+        "selector_output_tokens": 0.0,
+        "selector_service_seconds": 0.0,
+        "elapsed_seconds": 133.4542032902874
+      },
+      "missing_metric_episodes": {}
+    },
+    "arm": {
+      "episodes": 300,
+      "successes": 162,
+      "valid": 272,
+      "invalid": 28,
+      "success_rate": 0.54,
+      "valid_only": 0.5955882352941176,
+      "totals": {
+        "actor_requests": 17875,
+        "actor_input_tokens": 158646650,
+        "actor_output_tokens": 7911154,
+        "actor_client_request_seconds": 127778.64422950288,
+        "browser_steps": 3568,
+        "browser_step_seconds": 14544.553354467265,
+        "selector_calls": 3575,
+        "selector_input_tokens": 16172640,
+        "selector_output_tokens": 30393,
+        "selector_service_seconds": 2047.8991748956032,
+        "elapsed_seconds": 52206.682585626375
+      },
+      "means": {
+        "actor_requests": 59.583333333333336,
+        "actor_input_tokens": 528822.1666666666,
+        "actor_output_tokens": 26370.513333333332,
+        "actor_client_request_seconds": 425.92881409834297,
+        "browser_steps": 11.893333333333333,
+        "browser_step_seconds": 48.48184451489089,
+        "selector_calls": 11.916666666666666,
+        "selector_input_tokens": 53908.8,
+        "selector_output_tokens": 101.31,
+        "selector_service_seconds": 6.826330582985344,
+        "elapsed_seconds": 174.02227528542124
+      },
+      "missing_metric_episodes": {}
+    }
+  },
+  "paired_arm_minus_rl": {
+    "tasks": 300,
+    "difference": 0.11333333333333333,
+    "bootstrap95": [
+      0.05333333333333334,
+      0.17333333333333334
+    ],
+    "first_only": 59,
+    "second_only": 25,
+    "common_valid_tasks": 270,
+    "common_valid_arm_successes": 162,
+    "common_valid_actor_successes": 124,
+    "common_valid_paired": {
+      "difference": 0.14074074074074075,
+      "bootstrap95": [
+        0.07777777777777778,
+        0.2037037037037037
+      ]
+    }
+  },
+  "labels": {
+    "actor0": "RL",
+    "arm": "RL + Piotr SelectionARM"
+  },
+  "termination_reasons": {
+    "actor0": {
+      "task_completed": 256,
+      "max_steps_exhausted": 5,
+      "generation_length_limit": 16,
+      "zero_step_reset_or_navigation": 21,
+      "env_step_error": 2
+    },
+    "arm": {
+      "task_completed": 263,
+      "zero_step_reset_or_navigation": 22,
+      "env_step_error": 6,
+      "max_steps_exhausted": 7,
+      "generation_length_limit": 2
+    }
+  },
+  "invalid_reasons": {
+    "actor0": {
+      "zero_step_reset_or_navigation": 21,
+      "env_step_error": 2
+    },
+    "arm": {
+      "zero_step_reset_or_navigation": 22,
+      "env_step_error": 6
+    }
+  },
+  "episodes_reaching_step30": {
+    "actor0": 6,
+    "arm": 8
+  },
+  "all_attempt_actor_tokens": {
+    "actor0": {
+      "requests": 3352,
+      "received_requests": 3352,
+      "input_tokens": 27412232,
+      "output_tokens": 1424130
+    },
+    "arm": {
+      "requests": 17875,
+      "received_requests": 17875,
+      "input_tokens": 158646650,
+      "output_tokens": 7911154
+    }
+  },
+  "all_attempt_selector_tokens": {
+    "actor0": {},
+    "arm": {
+      "calls": 3575,
+      "input_tokens": 16172640,
+      "output_tokens": 30393,
+      "service_seconds": 2047.8991748956032
+    }
+  },
+  "final_accounting_verified": true,
+  "wandb_states": [
+    "finished",
+    "finished"
+  ],
+  "no_transfers": true,
+  "new_budget": 0,
+  "limitations": [
+    "Released RL weights use the frozen SFT frontend and browser policy; this is not native RL default prompting.",
+    "Actor-only and Piotr arms use fresh randomized interleaved browser episodes; website drift and stochastic generation remain.",
+    "One full300 run; paired task-bootstrap intervals do not measure across-run variance, website drift or judge error.",
+    "Context remains32K, output cap1024 and task timeout1800 seconds; the step cap does not guarantee30 executable steps.",
+    "Invalid and unjudged outcomes remain zero; canonical AgentTrek success allows partial progress.",
+    "FlashInfer ignores request seeds; server seeds were verified, not deterministic trajectory matching.",
+    "Compute proxy excludes prefill, attention, vision and caching; it is neither measured FLOPs nor dollars.",
+    "Token totals include all saved metered actor/selector attempts; unmetered failures and interrupted unsaved selector work cannot be reconstructed.",
+    "Terminal screenshots decoded; saved judge verdicts matched to API receipts. No judge-input image hash or independent human adjudication."
+  ],
+  "verification": {
+    "episodes": 600,
+    "matched_tasks": 300,
+    "model_seed_decoding": true,
+    "all_attempt_caps": true,
+    "teardown": true,
+    "settled_judge_receipts": true,
+    "wandb_finished": true,
+    "plots_visually_reviewed": true,
+    "independent_audit_sha256": "9dae64ba7d7cd8b64a00df0d0a565bcc61f93c323598a2d2ac75d8b01906f5dd",
+    "source_aggregate_sha256": "5458a4449d2d9601f4632a5e12e9963b1428e2dd0a00e18cb6154b8ec3e2a1cb",
+    "plot_review_sha256": "677c692feaca30cca0645074d16bc38a9a7cc4c40345a4cef7a654f0a5c69113",
+    "bootstrap": {
+      "samples": 10000,
+      "seed": 42,
+      "unit": "paired task"
+    }
+  },
+  "accounting_by_shard": [
+    {
+      "shard": 0,
+      "all_attempt_seconds": 6106,
+      "cap_seconds": 10800,
+      "remaining_seconds": 4694,
+      "allocated_h200_hours": 3.3922222222222222,
+      "physical_attempts": 300,
+      "uncommitted_physical_attempts": 0,
+      "duplicate_judge_responses": 0,
+      "judge": {
+        "calls": 265,
+        "usd": 2.7008949000000015,
+        "unsettled": 0
+      },
+      "judge_cap": {
+        "calls": 1320,
+        "usd": 5
+      },
+      "attempt_count": 2,
+      "initial_failed_attempt_seconds": 4,
+      "final_attempt_seconds": 6102
+    },
+    {
+      "shard": 1,
+      "all_attempt_seconds": 6343,
+      "cap_seconds": 10800,
+      "remaining_seconds": 4457,
+      "allocated_h200_hours": 3.523888888888889,
+      "physical_attempts": 300,
+      "uncommitted_physical_attempts": 0,
+      "duplicate_judge_responses": 0,
+      "judge": {
+        "calls": 254,
+        "usd": 2.688331799999999,
+        "unsettled": 0
+      },
+      "judge_cap": {
+        "calls": 1320,
+        "usd": 5
+      },
+      "attempt_count": 2,
+      "initial_failed_attempt_seconds": 3,
+      "final_attempt_seconds": 6340
+    }
+  ],
+  "total_accounting": {
+    "allocated_h200_hours": 6.916111111111111,
+    "judge_calls": 519,
+    "judge_usd": 5.3892267,
+    "all_attempts_preserved": true,
+    "no_transfers": true,
+    "new_budget": 0
+  },
+  "model_verification": {
+    "actor_revision": "616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7",
+    "selector_revision": "81b452d800d9f859687074f82680dd5257e02d89",
+    "selector_base_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "native_rl_weight_hashes_verified": true,
+    "frozen_sft_frontend_hashes_verified": true,
+    "tensor_shapes_and_tied_head_verified": true
+  }
+}

@@ -4,6 +4,18 @@
 | --- | --- | --- | --- |
 | Online-Mind2Web, 300 tasks | [qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) | 2026-09-24 | [RL_EVALUATION.md](RL_EVALUATION.md) |
 
+## Released RL actor · frozen SFT frontend · 30 steps · o4-mini · October 7
+
+| Condition | N | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Source |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| OpenWebRL-4B RL | 1 | 300 | 128 | 277 | 23 | 42.67 | 46.21 | [Protocol and analysis](RL_EVALUATION.md#rl-actor-piotr-20261007) |
+| OpenWebRL-4B RL + Piotr SelectionARM | 5 | 300 | 162 | 272 | 28 | 54.00 | 59.56 | [Aggregate](arm_results/selectionarm_piotr_rlactor30_20261007/aggregate.json) |
+
+| Comparison | Task pairs | Gain, pp | Paired 95% interval, pp | Source |
+| --- | ---: | ---: | --- | --- |
+| RL + Piotr − RL | 300 | +11.33 | [+5.33, +17.33] | [Final audit](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007) |
+| RL gain − existing SFT gain; different collection times | 300 | +4.33 | [−3.00, +11.33] | [Four-outcome comparison](arm_results/selectionarm_piotr_rlactor30_20261007/sft_rl_gain_comparison.json) |
+
 ## DOM decision models · first 10-task pilot · Browser Use · o4-mini
 
 | Decision model | Text helper | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Record |

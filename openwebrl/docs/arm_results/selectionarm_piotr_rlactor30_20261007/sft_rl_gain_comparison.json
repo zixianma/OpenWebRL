@@ -1,0 +1,132 @@
+{
+  "epoch": 1791443547.3972068,
+  "comparison": "Descriptive difference of paired ARM gains: RL minus SFT",
+  "tasks": 300,
+  "episodes": 1200,
+  "cohort_complete": true,
+  "by_arm": {
+    "sft_actor0": {
+      "tasks": 300,
+      "successes": 99,
+      "valid": 271,
+      "invalid": 29,
+      "success_percentage": 33.0
+    },
+    "sft_arm": {
+      "tasks": 300,
+      "successes": 120,
+      "valid": 261,
+      "invalid": 39,
+      "success_percentage": 40.0
+    },
+    "rl_actor0": {
+      "tasks": 300,
+      "successes": 128,
+      "valid": 277,
+      "invalid": 23,
+      "success_percentage": 42.666666666666664
+    },
+    "rl_arm": {
+      "tasks": 300,
+      "successes": 162,
+      "valid": 272,
+      "invalid": 28,
+      "success_percentage": 54.0
+    }
+  },
+  "estimates": {
+    "sft_arm_minus_sft": {
+      "difference": 0.07,
+      "difference_percentage_points": 7.000000000000001,
+      "bootstrap95": [
+        0.023333333333333334,
+        0.11666666666666667
+      ],
+      "bootstrap95_percentage_points": [
+        2.3333333333333335,
+        11.666666666666666
+      ]
+    },
+    "rl_arm_minus_rl": {
+      "difference": 0.11333333333333333,
+      "difference_percentage_points": 11.333333333333332,
+      "bootstrap95": [
+        0.05333333333333334,
+        0.17333333333333334
+      ],
+      "bootstrap95_percentage_points": [
+        5.333333333333334,
+        17.333333333333336
+      ]
+    },
+    "rl_gain_minus_sft_gain": {
+      "difference": 0.04333333333333332,
+      "difference_percentage_points": 4.333333333333332,
+      "bootstrap95": [
+        -0.03,
+        0.11333333333333333
+      ],
+      "bootstrap95_percentage_points": [
+        -3.0,
+        11.333333333333332
+      ]
+    }
+  },
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 42,
+    "unit": "whole task ID retaining all four outcomes",
+    "interval": "two-sided percentile, linear interpolation (type 7)",
+    "invalid_outcomes": "zero in fixed 300-task denominator"
+  },
+  "matched_protocol_fields": [
+    "actor_system_policy_sha256",
+    "browser",
+    "candidate_representation",
+    "candidates",
+    "context_length",
+    "context_num_screenshots",
+    "history",
+    "judge",
+    "judge_protocol",
+    "judge_response_tokens",
+    "max_new_tokens",
+    "max_steps",
+    "optimizer_updates",
+    "piotr_selector_model",
+    "piotr_selector_revision",
+    "sampling_request",
+    "seed",
+    "selector_model",
+    "selector_revision",
+    "server_seed_base",
+    "temperature",
+    "top_k",
+    "top_p"
+  ],
+  "sources": [
+    {
+      "cohort": "selectionarm-piotr-sameday30-20261007",
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+      "aggregate_sha256": "f67f71260af6a8f04efa264cdb23adeb06cba120099fc6433dfbd4a5b27b7998",
+      "audit_sha256": "96a988eba2549609381457450de9f474d33f0353b80ec3725157d10381a27394",
+      "records_manifest_sha256": "aebd343ea7f2e39a3bc5e3160acb8427c13aa0ad12d3ecf9ca94936e3bf16125"
+    },
+    {
+      "cohort": "selectionarm-piotr-rlactor30-20261007",
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+      "aggregate_sha256": "5458a4449d2d9601f4632a5e12e9963b1428e2dd0a00e18cb6154b8ec3e2a1cb",
+      "audit_sha256": "9dae64ba7d7cd8b64a00df0d0a565bcc61f93c323598a2d2ac75d8b01906f5dd",
+      "records_manifest_sha256": "9370f8d0c06fbd13a7366bc5df6c6379060a303f4d20120b0eabb8f62032b735"
+    }
+  ],
+  "limitations": [
+    "The SFT pair is an existing control collected at a different time from the RL pair; this is not a contemporaneous randomized actor-by-selector experiment.",
+    "A positive or negative difference does not isolate a causal actor-by-selector interaction: website drift, collection timing, stochastic generation and judge variability remain.",
+    "The paired task bootstrap preserves all four outcomes within each sampled task; it does not measure across-run variance or account for dependence among tasks on the same website.",
+    "One full run per actor; matched nominal seeds do not imply matched trajectories under FlashInfer.",
+    "RL weights use the frozen SFT frontend and browser policy. Invalid and unjudged outcomes count as zero."
+  ],
+  "new_allocations": 0,
+  "new_api_calls": 0
+}

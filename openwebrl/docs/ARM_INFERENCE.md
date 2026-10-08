@@ -3,29 +3,66 @@
 [Current full300 results: three complete SFT/Piotr runs and same-day 30/50 comparison](#selectionarm-piotr-sameday30-20261007).
 
 <a id="selectionarm-piotr-rlactor30-20261007"></a>
-## RL actor with Piotr SelectionARM — October 7, collecting
+## RL actor with Piotr SelectionARM — October 7 cohort, complete
 
-**600 fresh episodes:** released OpenWebRL-4B alone and with Piotr SelectionARM, 300 identical tasks per arm. One paired run; results pending.
+**All 600 episodes verified. Piotr adds +11.33 percentage points, paired 95% interval [+5.33, +17.33].** Both arms use fresh browser episodes on the same 300 Online-Mind2Web tasks; invalid and unjudged episodes remain zero.
+
+| Released RL actor | N | Tasks | Successes | Success | Valid tasks | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Alone | 1 | 300 | 128 | 42.67% | 277 | 46.21% |
+| With Piotr SelectionARM | 5 | 300 | 162 | 54.00% | 272 | 59.56% |
+
+There are 59 ARM-only wins and 25 actor-only wins. **Only actor weights change relative to the SFT setup:** the SFT prompt/frontend and Piotr's SFT base stay fixed, with 30 steps, T=0.7, top-p=0.9, 1,024 response tokens and seed 45. This is one paired run under that harness, not the released RL model's native prompting benchmark.
+
+Compared with the existing seed-45 SFT pair (+7.00 pp), the gain difference is **+4.33 pp [−3.00, +11.33]**. The interval does not establish a larger benefit on RL; the SFT episodes also have different collection times. [Aggregate](arm_results/selectionarm_piotr_rlactor30_20261007/aggregate.json) · [Four-outcome task-bootstrap comparison](arm_results/selectionarm_piotr_rlactor30_20261007/sft_rl_gain_comparison.json).
+
+<details>
+<summary>Frozen protocol, paired analysis and validity</summary>
 
 | Setting | Frozen choice |
 | --- | --- |
-| Actor weights | [OpenWebRL/OpenWebRL-4B](https://huggingface.co/OpenWebRL/OpenWebRL-4B/tree/616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7), revision `616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7` |
-| Actor frontend | Previous SFT prompt, tokenizer, image preprocessing and thinking prefill; only actor weights change |
-| Selector | Piotr SelectionARM revision `81b452d800d9f859687074f82680dd5257e02d89`; original SFT base and greedy canonical index selection |
-| Actor decoding | T=0.7, top-p=0.9, top-k omitted; 1,024 response tokens, 32K context, 30 steps |
-| Candidates | One for actor alone; five full candidates for SelectionARM |
-| Seeds | Request seed 45; server seeds 4500/4501, matching the latest SFT run |
-| Browser / judge | Local process browser; canonical o4-mini/AgentTrek, 4,096 judge tokens |
-| Analysis | All 300 task pairs; invalid/unjudged outcomes remain zero; paired success, compute-proxy, latency and token plots |
+| Actor weights | OpenWebRL/OpenWebRL-4B, revision `616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7` |
+| Actor frontend | Previous SFT prompt, tokenizer, image preprocessing and thinking prefill; native RL weight bytes |
+| Selector | Piotr SelectionARM revision `81b452d800d9f859687074f82680dd5257e02d89`; original SFT base, greedy canonical index selection |
+| Decoding | T=0.7, top-p=0.9, top-k omitted; 1,024 response tokens, 32K context, 30 steps |
+| Seeds | Request seed 45; server seeds 4500/4501 |
+| Browser / judge | Local process browser; o4-mini/AgentTrek, 4,096 judge tokens |
+| Pairing / uncertainty | All 300 task pairs; 10,000 whole-task bootstrap draws, seed 42 |
 
-This is an RL-weight comparison under the frozen SFT harness, not the released RL model's native chat-template benchmark. Piotr's selector base stays SFT. The unchanged FlashInfer sampler does not honor per-request seeds; recorded seeds do not imply identical trajectories. The earlier RL-task SelectionARM study instead changed the selector while retaining the SFT actor.
+The four-outcome comparison resamples each task with both actors and both selector conditions together. Its interval retains their covariance but does not establish a causal actor-by-selector interaction across collection times. A single run does not estimate across-run variance, website drift or judge error. FlashInfer does not honor request seeds; recorded seeds do not guarantee identical trajectories.
 
-| Approved resources | Per shard | Total, two shards |
-| --- | --- | --- |
-| Allocation, all attempts | 2 H200 / 16 CPUs / 240 GiB × 3 hours | 12 H200-hours |
-| Judge cap | USD 5 / 1,320 calls | USD 10 / 2,640 calls |
+| Endpoint | RL alone | RL + Piotr |
+| --- | ---: | ---: |
+| Terminal episodes with saved judge verdict | 256 | 263 |
+| Step-cap zero | 5 | 7 |
+| Response-length-cap zero | 16 | 2 |
+| Browser reset/navigation invalid | 21 | 22 |
+| Browser-step invalid | 2 | 6 |
 
-Caps are independent, with no transfers. Startup episodes remain in the final denominator. Initial approval-check failures consumed four and three seconds before model startup; those attempts are preserved and deducted. Replacement jobs **349466 / 349467** use at most 2h59m each. Both shards passed startup verification and are collecting. Active-agent continuation is enabled. No results are included in the existing SFT averages.
+The 270 common-valid tasks have 124 actor-alone and 162 ARM successes: conditional paired gain +14.07 pp [+7.78, +20.37]. This subset is supplementary; the primary denominator stays 300. Canonical AgentTrek success permits partial progress. All saved verdicts match API receipts and terminal images decode, but no judge-input image hash or independent human adjudication is available.
+
+</details>
+
+<details>
+<summary>Final accounting, efficiency and three plots</summary>
+
+| Shard | Attempts | Allocated seconds, all attempts | Approved seconds | Remaining seconds | Judge calls | Judge USD | Judge cap USD |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 2 | 6,106 | 10,800 | 4,694 | 265 | 2.7009 | 5.00 |
+| 1 | 2 | 6,343 | 10,800 | 4,457 | 254 | 2.6883 | 5.00 |
+
+Each shard used 2 H200 / 16 CPUs / 240 GiB and retained its independent 1,320 judge-call cap. Total use is **6.9161 allocated H200-hours and USD 5.3892 for 519 judge calls**. Initial pre-model failures consumed four and three seconds; all attempts are included. Both final jobs completed, W&B finished at 300 records per shard, all API receipts settled, and model/browser process cleanup passed. No added budget or transfers.
+
+| Condition | Mean episode latency, s | Actor + selector input/output tokens per episode | Mean browser steps |
+| --- | ---: | ---: | ---: |
+| RL alone | 133.5 | 96,121 | 11.11 |
+| RL + Piotr | 174.0 | 609,203 | 11.89 |
+
+[Compute proxy](arm_results/selectionarm_piotr_rlactor30_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_rlactor30_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_rlactor30_20261007/tokens.png).
+
+The compute proxy is 2 × 4B × generated actor/selector tokens; it excludes prefill, attention, vision and cache effects, and is neither measured FLOPs nor dollars. Tokens cover all metered attempts. Latency is episode wall time under this campaign's concurrency. Native weight/frontend hashes, serving identities, action/selection traces, fixed task pairing, saved artifacts, all-attempt accounting and the three plots passed final review. Raw task payloads remain private.
+
+</details>
 
 <a id="likelihood-scaling-20261007"></a>
 ## Selective sampling and policy likelihood — October 7, submitted

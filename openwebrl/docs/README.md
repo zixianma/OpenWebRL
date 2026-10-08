@@ -2,7 +2,7 @@
 
 [Exploratory uncertainty gating and always-five likelihood selection: 300 SFT episodes each; calibration limits and caps](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
-[RL actor + Piotr SelectionARM: fresh paired full300 study collecting with the previous 30-step decoding and frozen SFT frontend](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
+[RL actor + Piotr complete: 42.67% to 54.00%, paired gain +11.33 pp; frozen SFT frontend, final accounting and three plots](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 
 [Random-of-five complete: SFT 33.00%, random 33.33%, Piotr SelectionARM 40.00%; paired comparisons and three plots](ARM_INFERENCE_SCALING.md#random5-sameday-results-20261007).
 
@@ -22,7 +22,7 @@
 
 [Corrected ARM comparison: 493/900 records, 158 paired tasks; final accounting and cost/latency/token plots](ARM_INFERENCE.md#arm-rltasks-corrected-partial-20261006).
 
-[Inference scaling: three-run Piotr results, random/horizon controls, selectors by protocol, actors alone and pending RL-actor comparison; supporting evidence and history collapsed](ARM_INFERENCE_SCALING.md).
+[Inference scaling: three-run Piotr results, random/horizon controls, selectors by protocol, actors alone and completed RL-actor comparison; supporting evidence and history collapsed](ARM_INFERENCE_SCALING.md).
 
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
