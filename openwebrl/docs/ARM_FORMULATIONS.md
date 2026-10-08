@@ -6,17 +6,11 @@
 
 ## How the branching experiment works
 
-At each replayable state:
+The original design uses the same five fixed candidate actions at each accepted state:
 
-```mermaid
-flowchart LR
-    A["5 actions × 3 SFT continuations"] --> Y["One shared pool: 15 outcomes"]
-    Y --> B["Score saved before picks"]
-    Y --> C["Score saved after picks"]
-    Y --> R["Average all: uniform score"]
-```
+![Saved prefix replayed into isolated browsers, checked against the same observable state, then five candidate actions with three separate SFT continuations each](arm_results/rl_integration/branching-experiment-design.svg)
 
-Both teachers choose without seeing continuation outcomes; the after-execution teacher additionally sees each action's immediate execution evidence. **Before, after and uniform selection are scored from the same outcome pool.** Uniform selection averages all five candidate entries and their three continuations, including duplicate actions; it needs no separate random-action rollout set.
+Each green box is a separate SFT continuation after executing its candidate action, with its own prefix replay. Both teachers choose without seeing continuation outcomes; after additionally sees immediate execution evidence. **Before, after and uniform selection are scored from the same 15 outcomes.** Uniform selection requires no separate rollout set. [PNG](arm_results/rl_integration/branching-experiment-design.png).
 
 ## Does execution improve action selection?
 
