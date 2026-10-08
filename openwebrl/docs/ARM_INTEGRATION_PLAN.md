@@ -60,7 +60,7 @@ ablation and new browser data remain later-stage planning.
 
 
 <a id="arm-continuation-finish100-20261007"></a>
-**October 7 depth expansion: submitted as job 349236 after a clean handoff from 349137.** Target **75 later states / 1,125 continuations**, preserving the 74 early states: **149 states / 2,235 records total**. Existing later states count toward the new target.
+**October 7 depth expansion: running as job 349338 after clean handoffs from 349137 and 349236.** Target **75 later states / 1,125 continuations**, preserving the 74 early states: **149 states / 2,235 records total**. Existing later states count toward the new target.
 
 | Candidate decisions | Later-state target |
 | --- | ---: |
@@ -77,7 +77,9 @@ Six per exact decision, plus one at 4, 9, and 15. Cycle depths through never-att
 | Luna, cumulative | $15 / 2,200 calls, unchanged |
 | Judge, cumulative | $25 / 6,600 calls, unchanged |
 
-Job 349137 consumed 1,495 seconds; its replacement receives **3h35m**, preserving the four-hour extension cap across both attempts. Five rounding seconds and the original 53 unused seconds are not added. All saved attempts, outcomes, reservations and costs are preserved. Quota/resume checks passed 90 tests; supervisor checks passed four. Active-agent supervision follows the replacement and the 149-state target.
+**Verified handoff snapshot: 81/149 states and 1,215/2,235 continuations** (74 early + 7 later; 81 saved teacher panels, 77 valid paired panels). The reserve now includes all **2,090 eligible training tasks** in the same fixed order; the original 800 tasks, depths and attempts are unchanged. Strict replay still limits later-state yield.
+
+Jobs 349137 and 349236 consumed 1,495 and 6,295 seconds. Job 349338 receives **1h50m**, leaving ten unallocated rounding seconds within the same four-hour extension. Original unused time is not added. All results and charges are preserved; 95 reserve/migration tests and 28 analyzer tests passed. Active-agent supervision follows the replacement.
 
 The 30-action total includes each prefix; record remaining actions and decision depth. Every state must pass the unchanged 15-browser release barrier. Completion and teacher-valid coverage are separate; four early panels lack valid paired evidence. The broader target may remain incomplete within the existing caps. [Depth-expansion receipt](arm_results/rl_integration/continuation-depth-balanced-extension-20261007.json) · [Original extension receipt](arm_results/rl_integration/continuation-finish100-extension-20261007.json).
 
