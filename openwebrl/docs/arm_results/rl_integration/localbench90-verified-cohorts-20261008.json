@@ -1,12 +1,13 @@
 {
   "as_of_utc": "2026-10-08",
-  "suite_verified_complete": false,
+  "suite_verified_complete": true,
   "verified_methods": [
     "baseline",
     "additive",
     "gate-b",
     "mixed-bonus",
-    "mixed-reweight"
+    "mixed-reweight",
+    "original"
   ],
   "training_iteration": 90,
   "native_checkpoint_index": 89,
@@ -193,6 +194,35 @@
       "collection_timing": "October 8, after the earlier five method cohorts completed",
       "wandb_task_metrics_verified_in_history": true,
       "wandb_summary_limitation": "Finished run summary contains runtime fields only; all 39 numeric task/evaluation fields verified in durable remote history."
+    },
+    {
+      "method": "original",
+      "benchmark": "deepshop",
+      "counts": {
+        "tasks": 150,
+        "successes": 63,
+        "valid": 122,
+        "invalid": 28
+      },
+      "overall": 0.42,
+      "valid_only": 0.5163934426229508,
+      "verified_complete": true,
+      "stage_review_sha256": "29cab9d92e01b0c11d6c1b9362e4ff0e8611f34597f506a0435413c2c752d388",
+      "scientific_plan_sha256": "b2ab151e505758e16ce215d92ad08f15f8d49551709891cd1541495c2cc5bef8",
+      "collection_timing": "October8, after earlier five method cohorts completed",
+      "native_valid_reward_categories": {
+        "native_judged_success": 63,
+        "native_judged_failure": 57,
+        "native_truncated_zero_no_judge": 2
+      },
+      "native_truncation_reason": "generation_length_limit",
+      "invalid_categories": {
+        "empty_env_step_error_exact_cause_unrecorded": 25,
+        "local_browser_reset_300s_timeout": 2,
+        "rollout_task_timeout_600s": 1
+      },
+      "wandb_task_metrics_verified_in_history": true,
+      "wandb_summary_limitation": "Finished run summary contains runtime fields only; all 39 numeric task/evaluation fields verified in durable remote history."
     }
   ],
   "webvoyager_paired_vs_baseline": {
@@ -270,7 +300,14 @@
     "original_webvoyager_paired_analysis": "775d5e6db0bc45491c4263aaab8da89f6600c8ccd2963f85cc50ecbaca71971c",
     "original_webvoyager_paired_receipt": "bd686674e8f8927c481742414279ff2167c9ae300517dbaba1716f669ab6e672",
     "original_webvoyager_independent_paired_review": "22caf239276eb0761040b276e77fbb368b7b2d000897061b8f49a2a8bf4f6a52",
-    "original_webvoyager_independent_endpoint_review": "a3e494013fba1de03cf59c028e5212ad984987e8157470725e076b2824c20725"
+    "original_webvoyager_independent_endpoint_review": "a3e494013fba1de03cf59c028e5212ad984987e8157470725e076b2824c20725",
+    "original_deepshop_paired_analysis": "055136f2c69fbbffca0a1ad4d3bbc367caff725e36e3bdd8b049fd600546f003",
+    "original_deepshop_paired_receipt": "433b52e6a7f1ede555f46ff8433e5d42a1727ae5692e2dc12c33f36a1e27eb4e",
+    "original_deepshop_independent_paired_review": "6f06026ac68d4dd2c27a1e22f2014fab8c36fca51923e273b44a1a13bb2e889c",
+    "all_six_endpoint_review": "e6d309247437eb8d1a2ea76911ba785401b39f528f252b0cf5b3098c98109b93",
+    "original_deepshop_invalid_classification": "756046a72ea42d3751c7c6e6c8132b3a64fa9d2026f870b361d4232a8abc0a01",
+    "original_deepshop_semantic_sample_review": "bdf31c304643d748fee10ff15c9d62c827654ef7ee1dc1417c0adf0f5cd9754b",
+    "original_deepshop_final_wandb_review": "a5d7ea0416e76d22f18acbc37d3edc968c0a67692b2f74c6729850b6b909276a"
   },
   "limitations": [
     "One local-browser repeat; historical stealth cohorts are separate.",
@@ -280,10 +317,13 @@
     "Paired intervals are pointwise, not simultaneous across methods; they omit judge error and website drift.",
     "The top-level legacy W&B aggregate is turn-weighted; these results use task-level metrics.",
     "Mixed-only bonus DeepShop includes four valid truncated trajectories assigned native zero reward without a judge call; canonical outcomes are preserved.",
-    "Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no archived images; their native invalid/zero outcomes are preserved. All valid trajectories have decoded images."
+    "Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no archived images; their native invalid/zero outcomes are preserved. All valid trajectories have decoded images.",
+    "Original DeepShop preserves two valid generation-length-limit native zeros without judge calls, distinct from its 28 invalids; the exact causes of 25 empty environment-step errors were not recorded.",
+    "One Original DeepShop native success terminal-image sample has a response/image price mismatch and does not establish all return, bestseller-filter or shipping conditions; paperback price and rating are supported. This sample does not adjudicate the whole trajectory or estimate cohort judge error. Native labels are unchanged.",
+    "Original WebVoyager and DeepShop finished W&B summaries contain runtime fields only; 39 numeric task/evaluation metrics per run match durable remote history."
   ],
-  "remaining": "Original training iteration90 and OM2W300 eval90 are verified; its WebVoyager595 stage is independently verified and DeepShop150 is running. Five full local benchmark pairs are complete; the six-method suite remains incomplete. Original final method accounting remains pending.",
-  "verified_records": 4320,
+  "remaining": "None. All six local WebVoyager595/DeepShop150 pairs and their final all-attempt accounting are independently verified; repeat1 only. Original training iteration90 and owned OM2W300 evaluation are separately verified.",
+  "verified_records": 4470,
   "completed_method_accounting": {
     "baseline": {
       "all_attempt_seconds": 13914,
@@ -309,6 +349,11 @@
       "all_attempt_seconds": 14009,
       "cap_seconds": 43200,
       "method_completion_sha256": "3713f0275426902069c866bfa7e6b0b688702893b4885c63697fb2536161f077"
+    },
+    "original": {
+      "all_attempt_seconds": 14211,
+      "cap_seconds": 43200,
+      "method_completion_sha256": "5fece6ecf2f1fcb275e1e678d2333a811952089110c8c607aa6b2c37e69bdb32"
     }
   },
   "deepshop_paired_vs_baseline": {
@@ -375,6 +420,22 @@
         0.0
       ],
       "tasks": 150
+    },
+    "original": {
+      "tasks": 150,
+      "method_successes": 63,
+      "baseline_successes": 64,
+      "method_success_percent": 42.0,
+      "baseline_success_percent": 42.66666666666667,
+      "difference_pp": -0.6666666666666667,
+      "paired_bootstrap_95_percent_ci_pp": [
+        -9.333333333333334,
+        8.0
+      ],
+      "both_success": 40,
+      "method_only_success": 23,
+      "baseline_only_success": 24,
+      "neither_success": 63
     }
   },
   "deepshop_bootstrap": {
@@ -388,8 +449,8 @@
     "task_denominator": 150
   },
   "bootstrap_scope": "webvoyager",
-  "deepshop_paired_completion_note": "The canonical paired source is the final verified five-cohort aggregate and its clean owner reconciliation. All paired values and saved labels are unchanged; historical provisional analysis and receipt hashes are retained separately.",
-  "verified_cohort_count": 11,
+  "deepshop_paired_completion_note": "All six cohorts have canonical independent stage/method completion proofs. Earlier five paired results and saved labels are unchanged; Original is bound to its separate final verified paired analysis and receipt. Historical provisional source hashes remain preserved.",
+  "verified_cohort_count": 12,
   "webvoyager_bootstrap": {
     "resamples": 10000,
     "seed": 42,

@@ -2789,7 +2789,7 @@ B's continuation saved69 before a CUDA allocator OOM during iteration70;
 <a id="local-webvoyager-deepshop90-20261007"></a>
 ## Local WebVoyager and DeepShop at iteration 90 — October 8
 
-**No clear ARM gain in these completed cohorts:** all five ARM WebVoyager point estimates and all four ARM DeepShop estimates are below the outcome-only baseline; every pointwise paired 95% interval includes zero. Original bonus now has verified WebVoyager results; its DeepShop evaluation is running. Five methods have completed both benchmarks, so the six-method suite remains incomplete. Original was collected later than the earlier five methods; these single-repeat comparisons do not control website or judge drift.
+**All ARM overall point estimates are below the outcome-only baseline** on both benchmarks in this single repeat. All six methods now have independently verified WebVoyager and DeepShop cohorts. Every pointwise paired 95% interval includes zero. Original was collected later than the earlier five methods; these descriptive comparisons do not control website or judge drift.
 
 ### WebVoyager: six verified cohorts
 
@@ -2802,7 +2802,7 @@ B's continuation saved69 before a CUDA allocator OOM during iteration70;
 | Mixed-only outcome reweight | 595 | 270 | 469 | 126 | 45.38 | 57.57 |
 | Original bonus | 595 | 261 | 459 | 136 | 43.87 | 56.86 |
 
-### DeepShop: five verified cohorts
+### DeepShop: six verified cohorts
 
 | Method | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -2811,6 +2811,7 @@ B's continuation saved69 before a CUDA allocator OOM during iteration70;
 | Gate B | 150 | 63 | 124 | 26 | 42.00 | 50.81 |
 | Mixed-only bonus | 150 | 55 | 118 | 32 | 36.67 | 46.61 |
 | Mixed-only outcome reweight | 150 | 51 | 122 | 28 | 34.00 | 41.80 |
+| Original bonus | 150 | 63 | 122 | 28 | 42.00 | 51.64 |
 
 Shared protocol: native89 weights (training iteration 90), local browsers, T=0.6/top-p=0.95/top-k=20, 4,096 output tokens, 30 turns, and benchmark-specific GPT-4o judges. One repeat per method. Invalid episodes stay in the overall denominator; valid-only rates use different task subsets. Keep historical stealth results separate.
 
@@ -2838,15 +2839,16 @@ Shared protocol: native89 weights (training iteration 90), local browsers, T=0.6
 | Gate B | -0.67 | [-8.67, +7.33] |
 | Mixed-only bonus | -6.00 | [-14.00, +2.00] |
 | Mixed-only outcome reweight | -8.67 | [-17.33, 0.00] |
+| Original bonus | -0.67 | [-9.33, +8.00] |
 
-All 150 tasks, 10,000 paired bootstrap draws, seed 42; invalid outcomes remain zero. These are pointwise intervals for four contrasts, with the same single-repeat, judge-error and website-drift limitations as WebVoyager. The reweight interval touches zero; none excludes zero.
+All 150 tasks, 10,000 paired bootstrap draws, seed 42; invalid outcomes remain zero. These are pointwise intervals for five contrasts, with the same single-repeat, judge-error and website-drift limitations as WebVoyager. The reweight interval touches zero; none excludes zero.
 
 </details>
 
 <details>
 <summary>Verification, accounting and remaining work</summary>
 
-All 4,320 records (3,570 WebVoyager and 750 DeepShop) passed exact task coverage, saved-payload and valid-trajectory image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Every completed method stayed within its separate total scheduler cap, including all prior attempts:
+All 4,470 records (3,570 WebVoyager and 900 DeepShop) passed exact task coverage, saved-payload and valid-trajectory image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Every completed method stayed within its separate total scheduler cap, including all prior attempts:
 
 | Method | All-attempt scheduler seconds | Cap, seconds |
 | --- | ---: | ---: |
@@ -2855,10 +2857,11 @@ All 4,320 records (3,570 WebVoyager and 750 DeepShop) passed exact task coverage
 | Gate B | 15,300 | 43,200 |
 | Mixed-only bonus | 15,259 | 43,200 |
 | Mixed-only outcome reweight | 14,009 | 43,200 |
+| Original bonus | 14,211 | 43,200 |
 
 Two invalid mixed-only bonus DeepShop episodes failed on the first turn with empty responses and have no saved images; their native zero outcomes are preserved. Canonical labels are preserved; targeted review found a WebVoyager arithmetic false positive, so artifact verification must not be read as semantic certification of every verdict.
 
-Each method has a separate one-H200/eight-CPU/240-GiB/12-hour total budget, eight local browsers and only repeat 1. DeepShop follows WebVoyager per method after the prior worker exits. Original's separate four-H200/32-CPU/480-GiB/18-hour continuation and owned OM2W300 eval90 are verified, with optimizer/scheduler/cursor preserved through native89. Original’s WebVoyager stage is verified; DeepShop is running within its separately approved local allocation. Its final method accounting remains pending and is excluded from the completed-method table above. Its finished WebVoyager W&B run has a runtime-only summary; all 39 task/evaluation metric fields reconcile with durable remote history. No stealth run or repeats 2/3 are enabled. Active supervision of the remaining work checks every 30 minutes and queues the owner for recovery; routine reports are limited to meaningful hourly changes.
+Each method has a separate one-H200/eight-CPU/240-GiB/12-hour total budget, eight local browsers and only repeat 1. DeepShop follows WebVoyager per method after the prior worker exits. Original's separate four-H200/32-CPU/480-GiB/18-hour continuation and owned OM2W300 eval90 are verified, with optimizer/scheduler/cursor preserved through native89. Original’s local pair and final all-attempt accounting are now independently verified. Its finished WebVoyager W&B run has a runtime-only summary; all 39 task/evaluation metric fields reconcile with durable remote history. No stealth run or repeats 2/3 are enabled. The six-method local suite is complete.
 
 </details>
 

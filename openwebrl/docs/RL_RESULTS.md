@@ -456,3 +456,4 @@
 | Gate B | 150 | 63 | 124 | 26 | 42.00 | 50.81 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
 | Mixed-only bonus | 150 | 55 | 118 | 32 | 36.67 | 46.61 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
 | Mixed-only outcome reweight | 150 | 51 | 122 | 28 | 34.00 | 41.80 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+| Original bonus (later collection) | 150 | 63 | 122 | 28 | 42.00 | 51.64 | [Audit / comparability](RL_EVALUATION.md#local-webvoyager-deepshop90-audit-20261008) |
