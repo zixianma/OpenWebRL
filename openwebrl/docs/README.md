@@ -1,6 +1,12 @@
 # OpenWebRL project documentation
 
-[Likelihood-of-five complete: 26.67% versus reused SFT 33.00%; paired results, accounting and three plots. Exploratory gating still running](ARM_INFERENCE.md#likelihood-scaling-20261007).
+[Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).
+
+[Benefit-based threshold study queued: fit on 300 tasks, freeze the rule, verify on 150 held-out tasks](ARM_INFERENCE.md#confidence-benefit-20261008).
+
+[Action-only likelihood: offline reranking changes parsed actions on 27.89% of comparable decisions; fresh rollout deferred while the benefit-based threshold study runs](ARM_INFERENCE.md#action-only-likelihood-20261008).
+
+[Likelihood-of-five 26.67%; exploratory gated Piotr 33.67%; both full300 complete, paired comparisons, calibration limits and plots](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
 [RL actor + Piotr complete: 42.67% to 54.00%, paired gain +11.33 pp; frozen SFT frontend, final accounting and three plots](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
 

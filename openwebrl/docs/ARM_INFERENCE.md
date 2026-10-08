@@ -67,7 +67,7 @@ The compute proxy is 2 × 4B × generated actor/selector tokens; it excludes pre
 <a id="likelihood-scaling-20261007"></a>
 ## Selective sampling and policy likelihood — October 7
 
-**Two new SFT conditions, 300 episodes each, on the same 300 tasks.** Both retain T=0.7, top-p=0.9, 1,024 response tokens, 30 steps, request seed 45, the frozen actor prompt, local browsers and canonical o4-mini/AgentTrek judging. **Likelihood selection is complete; exploratory uncertainty gating is still running.** [Design and launch record](arm_results/likelihood_scaling_plan_20261007.json).
+**Two new SFT conditions, 300 episodes each, on the same 300 tasks.** Both retain T=0.7, top-p=0.9, 1,024 response tokens, 30 steps, request seed 45, the frozen actor prompt, local browsers and canonical o4-mini/AgentTrek judging. **Both 300-episode conditions are complete.** [Design and launch record](arm_results/likelihood_scaling_plan_20261007.json).
 
 | Question | Decision rule |
 | --- | --- |
@@ -75,6 +75,25 @@ The compute proxy is 2 × 4B × generated actor/selector tokens; it excludes pre
 | Can the actor select its own proposals? | Always sample five; choose the highest mean base-policy log-probability, breaking ties by the first index. |
 
 The score covers the **full generated response**, including reasoning and action. Native generated tokens count; synthetic delimiter/newline repairs do not. Duplicates and malformed candidates remain eligible. Likelihood is a confidence heuristic, not a calibrated success probability. All 300 task IDs remain in each evaluation denominator, with invalid/unjudged outcomes zero.
+
+**Completed exploratory gate:** 101 successes on 300 tasks (**33.67%**), a **+0.67 pp [−4.33, +5.67]** paired difference from SFT; 29 gated-only and 27 SFT-only wins. It trails always-Piotr by **−6.33 pp [−12.00, −0.67]**. Gate activation was **18.72%** (907 of 4,844 decisions), averaging **1.749 candidates**. The cutoff used final-decision responses from the same evaluation tasks; this is not independent calibration or a noninferiority result. [Combined aggregate](arm_results/selectionarm_adaptive5_sft30_20261007/publication-aggregate.json).
+
+<details>
+<summary>Exploratory gate: final validity, accounting and three plots</summary>
+
+| Method | Tasks | Successes | Valid tasks | Invalid tasks | Success | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Gated Piotr | 300 | 101 | 263 | 37 | 33.67% | 38.40% |
+
+Both jobs and W&B runs finished, all saved verdicts match settled receipts, and teardown was verified. Each shard used **4,423 and 3,936 of 10,800 approved seconds**, including the 48-second failed startup each: **4.644 H200-hours total**, **169 judge calls / USD 1.382707**, with no transfers. All 8,472 returned candidates' native scores were independently recomputed, with 907 Piotr calls and zero selector fallbacks.
+
+Metered actor usage is 79,296,206 input and 2,789,103 output tokens across 8,483 physical requests; 11 failures have no returned token usage. Piotr adds 3,151,229 input and 7,809 output tokens. Calibration/probes add 3,481,230 metered input and 32 output tokens across 286 requests, including 278 calibration requests and two unmetered startup failures. Mean episode wall time is 187.20 seconds; hardware and collection times differ from controls.
+
+A versioned auditor repair accepts the actual selector-health schema (pinned checkpoint path) and binds it to approved plans, manifests and checkpoint size/mtime fingerprints. It does not replace those fingerprints with a claim of newly computed weight-content hashes. Four regression tests pass; execution source, threshold and saved data are unchanged.
+
+[Compute proxy](arm_results/selectionarm_adaptive5_sft30_20261007/cost.png) · [Latency](arm_results/selectionarm_adaptive5_sft30_20261007/latency.png) · [Tokens](arm_results/selectionarm_adaptive5_sft30_20261007/tokens.png). These five-way plots include reused SFT/Piotr/random controls; no compute-matched causal inference is claimed. The generated-token proxy excludes prefill, vision, attention, cache effects and likelihood computation; latency is not hardware-matched. Paired-task intervals omit across-run variation, website drift and judge error, and are not multiplicity-adjusted.
+
+</details>
 
 **Completed likelihood result:** 80 successes on 300 tasks (**26.67%**), versus SFT’s 99 (**33.00%**): **−6.33 pp [−11.33, −1.33]**, with 21 likelihood-only and 40 SFT-only wins. It also trails random-of-five by **−6.67 pp [−12.00, −1.33]** and Piotr by **−13.33 pp [−18.67, −8.00]**. Controls share tasks and decoding but were collected separately; intervals are task-paired, not across-run uncertainty. [Aggregate](arm_results/selectionarm_likelihood5_sft30_20261007/publication-aggregate.json).
 
@@ -119,12 +138,29 @@ Compare against the existing seed-45 SFT, always-five Piotr and random-five resu
 
 The initial startup probes failed before evaluation because image-pad IDs entered vocabulary likelihood indexing. Scoring now starts at the native expanded prompt boundary; both replacement likelihood probes pass. Initial attempts consumed **48 seconds per adaptive shard** and **40 seconds per likelihood shard**; replacement jobs 349551/349552 and 349549/349550 respectively are limited to 179 minutes each, within the unchanged total caps.
 
-Total cap: **18 H200-hours and USD 10 / 2,640 judge calls**, including calibration, probes and all retries. Shard budgets are independent with no transfers. Controllers own model, scoring and browser workers through teardown. Active-agent callbacks support diagnosis and recovery; completion requires all 600 episodes, paired analyses, final accounting and three plots per study. Only aggregates and plots are published.
+Total cap: **18 H200-hours and USD 10 / 2,640 judge calls**, including calibration, probes and all retries. Shard budgets are independent with no transfers. Controllers own model, scoring and browser workers through teardown. Both studies finished with all 600 episodes, paired analyses, final accounting and three plots per study verified. Only aggregates and plots are published.
+
+</details>
+
+<a id="action-only-likelihood-20261008"></a>
+<details>
+<summary>Action-only likelihood: offline diagnostic and proposed rollout</summary>
+
+Score only native tool-call payload tokens, including payload whitespace and excluding reasoning, wrappers, EOS and synthetic formatting. Probabilities remain conditioned on each candidate's own reasoning. Preserve all five proposals; if any lacks an unambiguous nonempty span, select candidate0 for the whole decision. Invalid JSON remains scoreable when its raw span exists.
+
+| Offline comparison | Changed choices | Compared decisions | Changed |
+| --- | ---: | ---: | ---: |
+| Candidate index | 3,373 | 5,184 | 65.07% |
+| Parsed action bundle | 1,444 | 5,178 | 27.89% |
+
+The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need the declared fallback; six otherwise scoreable selected pairs cannot both be parsed. Duplicate actions explain much of the index/action gap. Independent runtime masks match every saved candidate; including tool wrappers changes 28 of 5,184 choices. No alternative actions were executed: **this is not a success-rate estimate**. [Aggregate and caveats](arm_results/selectionarm_likelihood5_sft30_20261007/action-only-offline.json).
+
+**Fresh rollout deferred while the benefit-based threshold study runs.** The prepared design keeps the same 300 tasks, SFT model/prompt, five candidates, T=0.7/top-p=0.9, 1,024 tokens and 30-step horizon. Its separate resource request remains unapproved: two shards, each **1 H200 / 8 CPUs / 120 GiB × 3 hours total**, plus **USD 2.50 / 660 judge calls**, including retries; combined 6 H200-hours and USD 5, with no transfers. Prior controls were collected separately.
 
 </details>
 
 <a id="confidence-benefit-20261008"></a>
-## Selecting a threshold by measured ARM benefit — October 8, preparation
+## Selecting a threshold by measured ARM benefit — October 8, queued
 
 **Question:** does a low first-candidate likelihood identify decisions where Piotr improves downstream success? Select the rule using 300 fitting tasks, freeze it, then check 150 separate verification tasks. The existing exploratory run keeps its original cutoff.
 
@@ -137,6 +173,8 @@ At one uniformly hash-selected reached decision per task, preserve the first can
 
 This measures **one-action benefit on replayable SFT states**, not calibrated action correctness or the benefit of gating at every step. Replay failures reduce usable counts and remain in coverage reports. A threshold may be inconclusive; never/always ARM may win.
 
+[Teacher-rationale analysis](ARM_TEACHER_REASONING.md) is complementary: saved explanations describe preferences, while this study measures paired continuation outcomes.
+
 <details>
 <summary>Fixed design, task separation and resource request</summary>
 
@@ -146,7 +184,7 @@ Use the current SFT model/frontend, T=0.7, top-p=0.9, 1,024 response tokens, 30 
 
 Only fitting outcomes select the rule. Freeze the rule before verification continuations; report paired success differences versus first-candidate and always-Piotr choices, task-bootstrap 95% intervals, and replay coverage by decision, site and score. These intervals condition on the frozen rule and usable task sample; one continuation per branch gives noisy benefit estimates. Replay verifies observable browser state, not a clone of remote server state. Shared seeds do not guarantee matched random draws under FlashInfer. Full-episode evaluation of repeated gating is a separate follow-up.
 
-Proposed, **not yet resource-approved**: two independent shards, each **2 H200 / 16 CPUs / 240 GiB × 4 hours total**, and **USD 5 / 1,320 judge calls**, across all attempts. Combined cap: 16 H200-hours and USD 10 / 2,640 calls, with no transfers. Up to 450 reference episodes and 900 paired continuations; completion is not guaranteed within the cap. Raw tasks and continuations remain private.
+**Approved and queued:** two independent shards, each **2 H200 / 16 CPUs / 240 GiB × 4 hours total**, and **USD 5 / 1,320 judge calls**, across all attempts. Combined cap: 16 H200-hours and USD 10 / 2,640 calls, with no transfers. Up to 450 reference episodes and 900 paired continuations; completion is not guaranteed within the cap. Raw tasks and continuations remain private.
 
 </details>
 

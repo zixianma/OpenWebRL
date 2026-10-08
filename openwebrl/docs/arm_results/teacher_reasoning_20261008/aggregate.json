@@ -1,0 +1,434 @@
+{
+  "schema": "cleaned_piotr_teacher_rationale_descriptive_v1",
+  "source_revision": "0d83b48c1659cac47a1044ef88fb573d3c16e180",
+  "rows": {
+    "rows": 2292,
+    "unique": {
+      "base_id": 2292,
+      "draw_id": 2292,
+      "source_state_id": 2292,
+      "identity": 2292,
+      "task_group": 379,
+      "episode_id": 398
+    },
+    "pair_types": {
+      "scroll_choice": 614,
+      "multi_action": 712,
+      "termination_vs_continue": 544,
+      "navigation": 246,
+      "typing_or_keys": 159,
+      "wait_choice": 16,
+      "click_choice": 1
+    },
+    "chosen_index_zero_based": {
+      "2": 356,
+      "4": 304,
+      "0": 692,
+      "3": 337,
+      "1": 603
+    },
+    "rationale_characters": {
+      "min": 218,
+      "p25": 365,
+      "median": 403.0,
+      "p75": 442,
+      "p95": 499,
+      "max": 637
+    },
+    "rationale_whitespace_words": {
+      "min": 34,
+      "p25": 58,
+      "median": 64.0,
+      "p75": 70,
+      "p95": 78,
+      "max": 98
+    },
+    "most_common_character_lengths": [
+      [
+        414,
+        23
+      ],
+      [
+        407,
+        22
+      ],
+      [
+        372,
+        21
+      ],
+      [
+        384,
+        21
+      ],
+      [
+        395,
+        21
+      ],
+      [
+        361,
+        20
+      ],
+      [
+        368,
+        20
+      ],
+      [
+        379,
+        20
+      ]
+    ],
+    "ends_without_sentence_punctuation": 21,
+    "lexical_marker_counts": {
+      "visible_state": 2042,
+      "task_goal": 1308,
+      "history_or_previous_action": 731,
+      "termination_or_answer": 562,
+      "navigation_or_search": 1498,
+      "efficiency_or_redundancy": 1138,
+      "error_or_unverified_claim": 557,
+      "action_geometry": 1169,
+      "text_assertion_or_reasoning_reference": 152,
+      "actor_reasoning_terms": 30,
+      "prospective_modality": 1577,
+      "equivalence_terms": 434,
+      "candidate_comparison": 2140
+    },
+    "chosen_actor_think_boundary": 2292,
+    "terminal_outcome_present": 0
+  },
+  "by_split": {
+    "train": {
+      "rows": 2076,
+      "unique": {
+        "base_id": 2076,
+        "draw_id": 2076,
+        "source_state_id": 2076,
+        "identity": 2076,
+        "task_group": 342,
+        "episode_id": 360
+      },
+      "pair_types": {
+        "scroll_choice": 547,
+        "multi_action": 659,
+        "termination_vs_continue": 492,
+        "navigation": 220,
+        "typing_or_keys": 142,
+        "wait_choice": 15,
+        "click_choice": 1
+      },
+      "chosen_index_zero_based": {
+        "2": 329,
+        "4": 281,
+        "0": 627,
+        "3": 300,
+        "1": 539
+      },
+      "rationale_characters": {
+        "min": 222,
+        "p25": 365,
+        "median": 404.0,
+        "p75": 443,
+        "p95": 500,
+        "max": 637
+      },
+      "rationale_whitespace_words": {
+        "min": 39,
+        "p25": 58,
+        "median": 64.0,
+        "p75": 70,
+        "p95": 78,
+        "max": 98
+      },
+      "most_common_character_lengths": [
+        [
+          414,
+          23
+        ],
+        [
+          395,
+          21
+        ],
+        [
+          420,
+          20
+        ],
+        [
+          384,
+          19
+        ],
+        [
+          391,
+          19
+        ],
+        [
+          407,
+          19
+        ],
+        [
+          368,
+          18
+        ],
+        [
+          379,
+          18
+        ]
+      ],
+      "ends_without_sentence_punctuation": 17,
+      "lexical_marker_counts": {
+        "visible_state": 1846,
+        "task_goal": 1178,
+        "history_or_previous_action": 661,
+        "termination_or_answer": 511,
+        "navigation_or_search": 1359,
+        "efficiency_or_redundancy": 1025,
+        "error_or_unverified_claim": 508,
+        "action_geometry": 1056,
+        "text_assertion_or_reasoning_reference": 142,
+        "actor_reasoning_terms": 27,
+        "prospective_modality": 1429,
+        "equivalence_terms": 388,
+        "candidate_comparison": 1936
+      },
+      "chosen_actor_think_boundary": 2076,
+      "terminal_outcome_present": 0
+    },
+    "validation": {
+      "rows": 216,
+      "unique": {
+        "base_id": 216,
+        "draw_id": 216,
+        "source_state_id": 216,
+        "identity": 216,
+        "task_group": 37,
+        "episode_id": 38
+      },
+      "pair_types": {
+        "scroll_choice": 67,
+        "termination_vs_continue": 52,
+        "navigation": 26,
+        "multi_action": 53,
+        "typing_or_keys": 17,
+        "wait_choice": 1
+      },
+      "chosen_index_zero_based": {
+        "1": 64,
+        "4": 23,
+        "0": 65,
+        "3": 37,
+        "2": 27
+      },
+      "rationale_characters": {
+        "min": 218,
+        "p25": 357,
+        "median": 392.5,
+        "p75": 438,
+        "p95": 484,
+        "max": 544
+      },
+      "rationale_whitespace_words": {
+        "min": 34,
+        "p25": 57,
+        "median": 62.0,
+        "p75": 69,
+        "p95": 77,
+        "max": 82
+      },
+      "most_common_character_lengths": [
+        [
+          345,
+          4
+        ],
+        [
+          372,
+          4
+        ],
+        [
+          374,
+          4
+        ],
+        [
+          378,
+          4
+        ],
+        [
+          422,
+          4
+        ],
+        [
+          441,
+          4
+        ],
+        [
+          329,
+          3
+        ],
+        [
+          361,
+          3
+        ]
+      ],
+      "ends_without_sentence_punctuation": 4,
+      "lexical_marker_counts": {
+        "visible_state": 196,
+        "task_goal": 130,
+        "history_or_previous_action": 70,
+        "termination_or_answer": 51,
+        "navigation_or_search": 139,
+        "efficiency_or_redundancy": 113,
+        "error_or_unverified_claim": 49,
+        "action_geometry": 113,
+        "text_assertion_or_reasoning_reference": 10,
+        "actor_reasoning_terms": 3,
+        "prospective_modality": 148,
+        "equivalence_terms": 46,
+        "candidate_comparison": 204
+      },
+      "chosen_actor_think_boundary": 216,
+      "terminal_outcome_present": 0
+    }
+  },
+  "split_overlap": {
+    "base_id": 0,
+    "identity": 0,
+    "task_group": 0,
+    "episode_id": 0
+  },
+  "conflicting_draws_preserved_in_quarantine": 176,
+  "retained_rows_from_conflicting_draws": 0,
+  "marker_definition": "Case-insensitive regex presence at most once per rationale; overlapping heuristic markers, not validated semantic classifications.",
+  "marker_patterns": {
+    "visible_state": "\\b(?:screenshot|visible|shows?|displayed|screen|page|tab|currently|current)\\b",
+    "task_goal": "\\b(?:task|goal|user|requested|wants?|needs?|require[ds]?)\\b",
+    "history_or_previous_action": "\\b(?:history|previous(?:ly)?|already|again|last|earlier|prior|repeat(?:ed|ing)?)\\b",
+    "termination_or_answer": "\\b(?:done|finish(?:ed)?|complet(?:e|ed|ion)|terminat\\w*|answer|final|report|stop)\\b",
+    "navigation_or_search": "\\b(?:navigat\\w*|search|url|link|address|website|visit|open)\\b",
+    "efficiency_or_redundancy": "\\b(?:direct(?:ly)?|efficient\\w*|unnecessary|redundant|extra|wast\\w*|duplicate|shorter|fewer|avoid)\\b",
+    "error_or_unverified_claim": "\\b(?:wrong|incorrect|unsupported|hallucinat\\w*|fabricat\\w*|unverified|premature|fail\\w*|error|risk\\w*|irrelevant)\\b",
+    "action_geometry": "\\b(?:coordinate\\w*|point|position|location|center|target|button|click|scroll)\\b",
+    "text_assertion_or_reasoning_reference": "\\b(?:reasoning|rationale|thoughts?|explanation|claims?|says?|mentions?|notes?)\\b",
+    "actor_reasoning_terms": "\\b(?:reasoning|rationale|thoughts?)\\b",
+    "prospective_modality": "\\b(?:likely|should|may|could|probably|suggest\\w*)\\b",
+    "equivalence_terms": "\\b(?:equivalent|identical|indistinguishable)\\b",
+    "candidate_comparison": "\\b(?:candidate|option|alternative|others?|both|all five|best|better|rather|whereas|unlike)\\b"
+  },
+  "new_teacher_calls": 0,
+  "new_model_calls": 0,
+  "new_browser_calls": 0,
+  "limitations": [
+    "One retained draw per unique cleaned state; multiple states share tasks/episodes, so rows are not independent trials.",
+    "Teacher text expresses prospective comparisons; candidate outcomes are unobserved.",
+    "The hand-read sample deliberately covers rare pair types and validation rows; it is not prevalence-weighted.",
+    "Stored teacher explanations are available; this audit does not establish access to complete internal reasoning or verify screenshot-grounding claims."
+  ],
+  "qualitative_sample": {
+    "states": 32,
+    "selection_rule": "SHA256 deterministic rank; up to4 per cleaned pair type, including one validation and distinct chosen indices when available; fill to32 by global rank.",
+    "pair_type_counts": {
+      "click_choice": 1,
+      "multi_action": 7,
+      "navigation": 4,
+      "scroll_choice": 7,
+      "termination_vs_continue": 4,
+      "typing_or_keys": 5,
+      "wait_choice": 4
+    },
+    "split_counts": {
+      "train": 20,
+      "validation": 12
+    },
+    "ranking_salt": "piotr-teacher-rationale-audit-v1|",
+    "selection_ids_sha256": "2e2d28b0b325efccabaf01b8679c85791ad8824c87a14280f2606677541fa57e",
+    "unique_task_groups": 31,
+    "unique_episodes": 31,
+    "independently_read_teacher_rationales": 32,
+    "independently_read_all_five_action_bundles": 32,
+    "actor_thought_excerpts_read": 6
+  },
+  "clustering": {
+    "states_per_task_group": {
+      "median": 5,
+      "max": 37
+    },
+    "states_per_episode": {
+      "median": 4.5,
+      "max": 24
+    }
+  },
+  "qualitative_review": {
+    "reviewer": "assistant reading of saved text/action bundles; one qualitative review, no inter-rater reliability claim",
+    "scope": "Purposive deterministic32-state sample; code counts describe this sample only and do not estimate full-cohort prevalence.",
+    "codebook": {
+      "execute_more_than_focus": {
+        "definition": "Explicitly favors an action that submits, writes or navigates over merely focusing/opening a control or tab.",
+        "sample_count": 6,
+        "denominator": 32
+      },
+      "constraint_or_information_coverage": {
+        "definition": "Uses a particular task constraint or missing information to favor a query, navigation, scroll or continued evidence gathering.",
+        "sample_count": 10,
+        "denominator": 32
+      },
+      "history_or_failed_path": {
+        "definition": "Explicit prior failure, mistaken navigation, repeated attempt or failed search informs the preference.",
+        "sample_count": 6,
+        "denominator": 32
+      },
+      "stop_or_continue_judgment": {
+        "definition": "Discusses whether the agent should answer/finish now or keep gathering evidence.",
+        "sample_count": 5,
+        "denominator": 32
+      },
+      "loading_or_obstruction": {
+        "definition": "Loading, page blockage or an overlay informs waiting, switching service or clearing an obstruction.",
+        "sample_count": 4,
+        "denominator": 32
+      },
+      "explicit_equivalence_or_same_action_group": {
+        "definition": "Explicitly discusses identical, equivalent, same or grouped alternatives; may still nominate a single winner.",
+        "sample_count": 11,
+        "denominator": 32
+      },
+      "actor_thought_action_relationship": {
+        "definition": "Explicitly invokes actor thoughts/planning: either rejects thought/action mismatch or favors clearer reasoning among the same immediate actions.",
+        "sample_count": 2,
+        "denominator": 32
+      },
+      "formatting_or_key_name_preference": {
+        "definition": "Mentions a standard URL, Enter spelling or key formatting in justifying a choice; effectiveness is not verified.",
+        "sample_count": 4,
+        "denominator": 32
+      },
+      "approximate_answer_accepted": {
+        "definition": "Acknowledges an approximate answer while choosing it over more unsuccessful navigation.",
+        "sample_count": 1,
+        "denominator": 32
+      },
+      "targeting_or_focus_reliability": {
+        "definition": "Compares coordinate, focus or key reliability rather than only relevance.",
+        "sample_count": 6,
+        "denominator": 32
+      }
+    },
+    "grounding_claims_checked_against_screenshots": false,
+    "counterfactual_candidate_outcomes_observed": false,
+    "conclusions": [
+      "The rationales express prospective comparative judgments about task relevance, current state, history, local progress and whether to stop.",
+      "Several examples distinguish executing a useful command sequence from merely describing it in actor thoughts.",
+      "The teacher can still favor clearer actor reasoning among identical immediate actions; this is a response-level preference, not necessarily action-level benefit.",
+      "Equivalence groups, URL/key formatting preferences and approximate-answer acceptance caution against treating each strict winning index as a measured quality margin.",
+      "The annotations can supervise explanation-plus-selection or critic features. They do not supply measured selector uplift, success probabilities or calibrated threshold targets."
+    ]
+  },
+  "source_hashes": {
+    "train": "9e5cc9fe1e262e4116cd29060e082d77fc2c27957b8a181ac2475ecff0d54767",
+    "validation": "544bebbf5375c849321ddb08169caf488740e172b9b8150b82920183db414806",
+    "labels_drawlevel.jsonl": "e8c3dfab56f7ac2a7052530059bf85df0c1501774e42a5cffeacb9ae77cbc765"
+  },
+  "audit_hashes": {
+    "analyze.py": "f125eaa72ff7c5c014b0959f91afc7f39537d94dc89a1473a29f19021a438887",
+    "finish_review.py": "3c443d0cfcdf093e41a69f40fec61aceff896881528c76d113f93ed8af77eafe",
+    "sample.private.json": "917d0025a8c2e112ecf73ca754bc06809760978326e819d404e7459ed4fece63",
+    "qualitative-review.private.json": "e3ae7e6d9a7aa038ba4f3b24ecb40b8ca9fcfc8c86f10f0276d74745663f02c3",
+    "provenance.private.json": "012357942590049cbbc6cefa4b5ff209391255a5b973ae410d174f4bedae3420"
+  }
+}

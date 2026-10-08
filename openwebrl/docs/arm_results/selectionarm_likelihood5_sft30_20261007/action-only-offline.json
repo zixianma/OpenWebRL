@@ -1,0 +1,73 @@
+{
+  "schema": "action_only_likelihood_offline_v1",
+  "evidence": "Offline reranking of all saved candidate pools from the completed full-response likelihood policy.",
+  "episodes": 300,
+  "decisions": 5187,
+  "candidates": 25935,
+  "definition": "Mean native base-policy log probability of payload tokens inside complete nonnested tool-call blocks after the first reasoning-close tag, or throughout the output if that tag is absent. Include native payload whitespace; exclude tool wrappers, reasoning, EOS, and synthetic normalization.",
+  "conditioning": "Action probabilities remain conditioned on each candidate own reasoning and preceding tokens.",
+  "fallback": "If any candidate lacks a nonempty unambiguous native payload span, execute candidate0 for that whole decision; do not filter the candidate pool. Malformed JSON and unknown tools remain scoreable when the raw span exists.",
+  "counts": {
+    "candidates": 25935,
+    "scoreable_candidates": 25932,
+    "native_payload_tokens": 878387,
+    "scoreable_but_parser_has_no_action_candidates": 24,
+    "scoreable_length_finish_candidates": 0,
+    "scoreable_abort_finish_candidates": 0,
+    "scoreable_multiple_block_candidates": 3797,
+    "reasoning_tool_blocks_ignored_candidates": 0,
+    "scoreable_without_reasoning_boundary_candidates": 0,
+    "decisions": 5187,
+    "eligible_five_candidate_decisions": 5184,
+    "whole_decision_candidate0_fallbacks": 3,
+    "strict_reasoning_requirement_additional_fallback_decisions": 0,
+    "strict_reasoning_requirement_changes_winner": 0,
+    "overall_index_disagrees_original_full": 3376,
+    "overall_index_disagrees_full_with_same_fallback": 3373,
+    "fallback_alone_changes_original_full_winner": 3,
+    "eligible_index_disagrees_original_full": 3373,
+    "payload_vs_wrappers_winner_disagreements": 28,
+    "payload_exact_tie_decisions": 1513,
+    "payload_near_tie_decisions_1e9": 1516,
+    "wrappers_exact_tie_decisions": 1514,
+    "overall_parser_comparable_chosen_actions": 5180,
+    "overall_executable_action_disagrees_original_full": 1446,
+    "eligible_parser_comparable_chosen_actions": 5178,
+    "eligible_executable_action_disagrees_original_full": 1444,
+    "overall_selected_action_comparison_undefined": 7,
+    "unique_observed_tasks": 279,
+    "tasks_with_primary_index_change": 277,
+    "tasks_with_primary_parsed_action_change": 274,
+    "winning_score_ties_with_distinct_parsed_action_bundles": 0,
+    "winning_score_ties_with_single_parsed_action_bundle": 1513
+  },
+  "rates": {
+    "candidate_coverage": 0.9998843262001157,
+    "five_candidate_pool_coverage": 0.9994216310005783,
+    "eligible_index_disagreement": 0.6506558641975309,
+    "overall_index_disagreement": 0.6508579140158087,
+    "overall_disagreement_vs_full_with_same_fallback": 0.6502795450163871,
+    "wrappers_sensitivity": 0.005401234567901234,
+    "eligible_parsed_action_bundle_disagreement": 0.27887215140981075
+  },
+  "failure_reasons": {
+    "unclosed_open_tag": 2,
+    "no_complete_tool_block": 1
+  },
+  "action_comparison": "Equality of the ordered parsed tool-name and argument bundles; six otherwise scoreable pools lacked a comparable parsed action for one of the two selected candidates.",
+  "boundary_sensitivity": {
+    "wrappers_inclusive_changed_indices": 28,
+    "compared_decisions": 5184
+  },
+  "validation": {
+    "native_candidate_reconstruction": 25935,
+    "independent_runtime_mask_matches": 25935,
+    "fixture_checks": 20,
+    "source_records_unchanged": true
+  },
+  "limitations": [
+    "Saved states come from the original full-response likelihood policy; alternative actions were not executed.",
+    "This estimates neither counterfactual success nor new-policy state distribution, cost or performance.",
+    "The GUI parser receives the whole response, so the score is defined on the post-reasoning segment rather than universally guaranteed executed-token equivalence. No pre-reasoning tool calls appeared in these saved candidates."
+  ]
+}
