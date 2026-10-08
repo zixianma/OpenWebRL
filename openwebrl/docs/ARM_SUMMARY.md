@@ -371,13 +371,17 @@ Blue is independent GPT-4.1-judged full300 task success; orange is the mean cent
 Same task set and actor-only protocol: o4-mini/AgentTrek, T0.6/p0.95/k20,
 4,096 response tokens and 30 turns. All 15 cohorts are verified.
 
-| Method | Collection dates (PDT) | Overall mean ± sample SD | Overall 95% task-cluster BCa CI | Valid-only mean ± sample SD |
-| --- | --- | ---: | --- | ---: |
-| Outcome-only baseline | Sep 29–30 | **55.22 ± 2.14%** | [50.89, 59.44]% | 57.65 ± 1.77% |
-| Additive bonus | Sep 29–30 | **58.44 ± 1.35%** | [54.33, 62.56]% | 61.45 ± 1.19% |
-| Gate B: relaxed gate | Sep 29–30 | **58.78 ± 3.89%** | [54.44, 63.00]% | 61.36 ± 3.88% |
-| Mixed-only bonus + relaxed B | Oct 6 | **59.00 ± 2.60%** | [54.89, 63.00]% | 59.67 ± 2.71% |
-| Mixed-only reweight + relaxed B | Oct 6 | **56.22 ± 0.77%** | [52.11, 60.22]% | 56.79 ± 0.45% |
+Δ columns show percentage-point differences from the outcome-only baseline,
+computed from unrounded means. **Bold** marks the largest delta in each metric.
+The 95% CI column describes the overall success rate.
+
+| Method | Collection dates (PDT) | Overall mean ± sample SD | Overall 95% task-cluster BCa CI | Overall Δ (pp) | Valid-only mean ± sample SD | Valid-only Δ (pp) |
+| --- | --- | ---: | --- | ---: | ---: | ---: |
+| Outcome-only baseline | Sep 29–30 | 55.22 ± 2.14% | [50.89, 59.44]% | +0.00 | 57.65 ± 1.77% | +0.00 |
+| Additive bonus | Sep 29–30 | 58.44 ± 1.35% | [54.33, 62.56]% | +3.22 | 61.45 ± 1.19% | **+3.80** |
+| Gate B: relaxed gate | Sep 29–30 | 58.78 ± 3.89% | [54.44, 63.00]% | +3.56 | 61.36 ± 3.88% | +3.71 |
+| Mixed-only bonus + relaxed B | Oct 6 | 59.00 ± 2.60% | [54.89, 63.00]% | **+3.78** | 59.67 ± 2.71% | +2.02 |
+| Mixed-only reweight + relaxed B | Oct 6 | 56.22 ± 0.77% | [52.11, 60.22]% | +1.00 | 56.79 ± 0.45% | -0.86 |
 
 Sample SD describes variation among the three evaluation rates. The separate
 95% confidence interval describes uncertainty across tasks in the mean overall
@@ -456,19 +460,19 @@ so a consistent gain over outcome-only RL is not yet established.
 
 **OM2W difficulty breakdown: iteration 90, three stealth evaluations per method.**
 
-Mean **overall / valid-only** success rates use human reference steps:
-easy 1–5, medium 6–10, hard 11+. **Bold** highlights the largest observed
-gain over the outcome-only baseline in each split and metric, with the
-percentage-point delta in parentheses. Deltas use unrounded means;
-comparisons across collection dates are descriptive.
+Both success-rate and Δ columns list **overall / valid-only**. Difficulty uses
+human reference steps: easy 1–5, medium 6–10, hard 11+. Δ is the difference
+from the outcome-only baseline in percentage points, computed from unrounded
+means. **Bold** marks the largest delta in each split and metric. Comparisons
+across collection dates are descriptive.
 
-| Method | Collection dates (PDT) | Easy (80 tasks) | Medium (141 tasks) | Hard (79 tasks) |
-| --- | --- | ---: | ---: | ---: |
-| Outcome-only baseline | Sep 29–30 | 70.00% / 72.11% | 55.79% / 58.49% | 39.24% / 41.14% |
-| Additive | Sep 29–30 | 74.58% / 75.86% | 56.74% / 60.92% | **45.15% (+5.91 pp)** / **47.37% (+6.23 pp)** |
-| Gate B | Sep 29–30 | 67.92% / 69.64% | **62.65% (+6.86 pp)** / **65.73% (+7.24 pp)** | 42.62% / 44.92% |
-| Mixed-only bonus + relaxed B | Oct 6 | **75.83% (+5.83 pp)** / **76.43% (+4.33 pp)** | 57.45% / 58.15% | 44.73% / 45.29% |
-| Mixed-only reweight + relaxed B | Oct 6 | 71.25% / 71.25% | 56.26% / 57.49% | 40.93% / 40.93% |
+| Method | Collection dates (PDT) | Easy (80 tasks) | Easy Δ (pp) | Medium (141 tasks) | Medium Δ (pp) | Hard (79 tasks) | Hard Δ (pp) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only baseline | Sep 29–30 | 70.00% / 72.11% | +0.00 / +0.00 | 55.79% / 58.49% | +0.00 / +0.00 | 39.24% / 41.14% | +0.00 / +0.00 |
+| Additive | Sep 29–30 | 74.58% / 75.86% | +4.58 / +3.76 | 56.74% / 60.92% | +0.95 / +2.43 | 45.15% / 47.37% | **+5.91** / **+6.23** |
+| Gate B | Sep 29–30 | 67.92% / 69.64% | -2.08 / -2.47 | 62.65% / 65.73% | **+6.86** / **+7.24** | 42.62% / 44.92% | +3.38 / +3.78 |
+| Mixed-only bonus + relaxed B | Oct 6 | 75.83% / 76.43% | **+5.83** / **+4.33** | 57.45% / 58.15% | +1.65 / -0.34 | 44.73% / 45.29% | +5.49 / +4.15 |
+| Mixed-only reweight + relaxed B | Oct 6 | 71.25% / 71.25% | +1.25 / -0.86 | 56.26% / 57.49% | +0.47 / -1.00 | 40.93% / 40.93% | +1.69 / -0.21 |
 
 Largest observed gains over baseline: **Gate B on medium tasks,
 +6.86 pp overall / +7.24 pp valid-only**.
