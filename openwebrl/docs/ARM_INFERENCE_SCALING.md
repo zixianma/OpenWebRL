@@ -125,6 +125,18 @@ Mean gain: **+5.67 pp; paired 95% interval [+2.67, +8.67]**. Intervals resample 
 
 [Compute proxy](arm_results/selectionarm_piotr_sameday30_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_sameday30_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_sameday30_20261007/tokens.png). [Full aggregate](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json). Compute is an estimated generated-token proxy, not dollars or measured total FLOPs. The earlier [two-repeat aggregate](arm_results/rl_integration/sft-piotr-repeats-final-20261006/combined.json) remains available.
 
+<a id="piotr-rl-actor-20261007"></a>
+### Piotr SelectionARM with an RL actor — collecting
+
+One fresh paired run on the same 300 tasks: **released OpenWebRL-4B RL weights**, with the SFT comparison's prompt, preprocessing and decoding frozen. This tests whether Piotr still helps after actor RL; the earlier “RL-task SelectionARM” row changes the selector, not the actor.
+
+| Actor | Selector | N | Planned episodes | Successes | Success | Status |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| OpenWebRL-4B RL | None | 1 | 300 | — | — | Collecting |
+| OpenWebRL-4B RL | Piotr SelectionARM | 5 | 300 | — | — | Collecting |
+
+**30 steps, T=0.7, p=0.9, 1,024 tokens; seed 45.** Both controls are fresh. Results pending. [Protocol, model revision and approved caps](ARM_INFERENCE.md#selectionarm-piotr-rlactor30-20261007).
+
 <details>
 <summary>Supplementary: incomplete first run and the 160-task overlap</summary>
 

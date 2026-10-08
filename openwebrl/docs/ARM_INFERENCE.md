@@ -2,6 +2,31 @@
 
 [Current full300 results: three complete SFT/Piotr runs and same-day 30/50 comparison](#selectionarm-piotr-sameday30-20261007).
 
+<a id="selectionarm-piotr-rlactor30-20261007"></a>
+## RL actor with Piotr SelectionARM — October 7, collecting
+
+**600 fresh episodes:** released OpenWebRL-4B alone and with Piotr SelectionARM, 300 identical tasks per arm. One paired run; results pending.
+
+| Setting | Frozen choice |
+| --- | --- |
+| Actor weights | [OpenWebRL/OpenWebRL-4B](https://huggingface.co/OpenWebRL/OpenWebRL-4B/tree/616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7), revision `616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7` |
+| Actor frontend | Previous SFT prompt, tokenizer, image preprocessing and thinking prefill; only actor weights change |
+| Selector | Piotr SelectionARM revision `81b452d800d9f859687074f82680dd5257e02d89`; original SFT base and greedy canonical index selection |
+| Actor decoding | T=0.7, top-p=0.9, top-k omitted; 1,024 response tokens, 32K context, 30 steps |
+| Candidates | One for actor alone; five full candidates for SelectionARM |
+| Seeds | Request seed 45; server seeds 4500/4501, matching the latest SFT run |
+| Browser / judge | Local process browser; canonical o4-mini/AgentTrek, 4,096 judge tokens |
+| Analysis | All 300 task pairs; invalid/unjudged outcomes remain zero; paired success, compute-proxy, latency and token plots |
+
+This is an RL-weight comparison under the frozen SFT harness, not the released RL model's native chat-template benchmark. Piotr's selector base stays SFT. The unchanged FlashInfer sampler does not honor per-request seeds; recorded seeds do not imply identical trajectories. The earlier RL-task SelectionARM study instead changed the selector while retaining the SFT actor.
+
+| Approved resources | Per shard | Total, two shards |
+| --- | --- | --- |
+| Allocation, all attempts | 2 H200 / 16 CPUs / 240 GiB × 3 hours | 12 H200-hours |
+| Judge cap | USD 5 / 1,320 calls | USD 10 / 2,640 calls |
+
+Caps are independent, with no transfers. Startup episodes remain in the final denominator. Initial approval-check failures consumed four and three seconds before model startup; those attempts are preserved and deducted. Replacement jobs **349466 / 349467** use at most 2h59m each. The first shard has verified model services and saved episodes; the second is queued. Active-agent continuation is enabled. No results are included in the existing SFT averages.
+
 <details>
 <summary>Historical October 6 partial three-run overlap: 160 tasks</summary>
 
