@@ -1,6 +1,7 @@
 # ARM inference scaling: controlled results
 
 - **API selectors:** Sol **43.33%**, close to September’s **44.00%**; fresh gains are **+11.67 pp** for Sol and **+10.33 pp** for GPT-5.5. Their difference is inconclusive.
+- **Random of five at every step:** **33.33%**, close to SFT’s **33.00%**; Piotr SelectionARM reaches **40.00%**, **+6.67 pp** over random.
 - **Piotr SelectionARM:** **+5.67 percentage points** across three full300 runs; latest same-day gain **+7.00 pp**.
 - **Local v2 selectors:** Luna and Kev27B each add about **9 points**; they differ by one success. Jev's **+2-point** interval includes zero.
 - **Compare within each table.** Decoding, selector inputs and collection dates differ between studies; cross-table model rankings are not controlled.
@@ -55,6 +56,28 @@ Official SFT; **T=0.7, p=0.9, 1,024 actor output tokens, 30 turns**. N=5 selecto
 Tokens and API cost include all attempts; 107 failed actor requests have no token usage. Latency averages committed episodes. GPU and judge costs are separate. All caps passed; **6.84 allocated H200-hours** including retries. GPT-5.5’s 13 output-cap failures remain zero.
 
 Plots: [API cost](arm_results/api_selector_september_reproduction_20261006/cost.png) · [latency](arm_results/api_selector_september_reproduction_20261006/latency.png) · [tokens](arm_results/api_selector_september_reproduction_20261006/tokens.png). [Final aggregate](arm_results/api_selector_september_reproduction_20261006/aggregate.json) · [Protocol, validity and accounting](ARM_INFERENCE.md#api-selector-september-reproduction-20261006).
+
+<a id="random5-sameday-results-20261007"></a>
+## Random selection at every step
+
+Same 300 tasks, official SFT, **T=0.7, p=0.9, 1,024 tokens, 30 steps**. Random-of-five generates five candidates, picks one uniformly, executes it, then repeats; duplicates and malformed outputs keep their 20% chance.
+
+| Method | N | Tasks | Successes | Success |
+| --- | ---: | ---: | ---: | ---: |
+| SFT alone | 1 | 300 | 99 | 33.00% |
+| SFT + random choice | 5 | 300 | 100 | 33.33% |
+| SFT + Piotr SelectionARM | 5 | 300 | 120 | 40.00% |
+
+| Paired comparison | Gain, pp | 95% interval, pp |
+| --- | ---: | --- |
+| Random − SFT | +0.33 | [−4.67, +5.67] |
+| Piotr − random | +6.67 | [+1.00, +12.33] |
+| Piotr − SFT | +7.00 | [+2.33, +11.67] |
+
+- Random selection shows no detectable gain over one SFT sample; this does not establish equivalence.
+- Piotr improves over random selection in this run. The gain is consistent with useful selection rather than candidate generation alone.
+
+The 300 random episodes reuse today's 600 SFT/Piotr control episodes. Independent deployments and collection times; latency is not hardware-matched. [Audit and accounting](ARM_INFERENCE.md#selectionarm-random5-sameday30-20261007) · [aggregate](arm_results/selectionarm_random5_sameday30_20261007/aggregate.json) · [compute proxy](arm_results/selectionarm_random5_sameday30_20261007/cost.png) · [latency](arm_results/selectionarm_random5_sameday30_20261007/latency.png) · [tokens](arm_results/selectionarm_random5_sameday30_20261007/tokens.png).
 
 <a id="sft-piotr-repeat-tracker-20261006"></a>
 ## SelectionARM: full300 comparisons

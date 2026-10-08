@@ -82,7 +82,7 @@ Compare it with SFT alone and SFT + the pre-action SelectionARM, using the same 
 
 If candidates are independent, identically distributed actor samples, a random pick has the same action distribution as one actor sample. The full-episode run tests that expectation in the actual five-candidate pipeline.
 
-**Running:** 300 tasks, 30 steps, random choice among five candidates at every step; compare with today's fresh SFT/Piotr pair. Eight offline tests passed; the separate compute/judge caps are approved and active-agent supervision is enabled. [Run plan](ARM_INFERENCE.md#selectionarm-random5-sameday30-20261007).
+**Complete:** random selection at every step succeeds on **100/300 tasks (33.33%)**, versus SFT **99/300 (33.00%)** and Piotr SelectionARM **120/300 (40.00%)**. Random − SFT: **+0.33 pp [−4.67, +5.67]**; Piotr − random: **+6.67 pp [+1.00, +12.33]**. This supports useful learned selection in this run; random and SFT equivalence is not established. [Full-episode comparison](ARM_INFERENCE_SCALING.md#random5-sameday-results-20261007).
 
 <details>
 <summary>Protocol and limitations</summary>

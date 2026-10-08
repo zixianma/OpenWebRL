@@ -1,0 +1,28 @@
+{
+  "epoch": 1791418878.8447914,
+  "passed": true,
+  "episodes_verified": 300,
+  "matched_tasks": 300,
+  "reused_control_episodes_verified": 600,
+  "evidence_checks": {
+    "status:Status.COMPLETED": 182,
+    "terminal_images_verified": 182,
+    "saved_verdicts_receipt_matched": 182,
+    "verified_action_traces": 4603,
+    "verified_action_traces:random5": 4603,
+    "status:Status.FAILED": 84,
+    "status:exception": 22,
+    "status:Status.TRUNCATED": 4,
+    "status:Status.ABORTED": 8
+  },
+  "model_seed_decoding_verified": true,
+  "uniform_choices_verified": true,
+  "all_caps_verified": true,
+  "teardown_verified": true,
+  "wandb_finished": true,
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 42,
+    "unit": "task"
+  }
+}

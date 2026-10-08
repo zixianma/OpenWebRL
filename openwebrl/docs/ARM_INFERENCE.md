@@ -1177,18 +1177,42 @@ Each shard respected 2 H200 / 16 CPU / 240 GiB × 3h and $5 / 1,320 judge calls 
 [Compute proxy](arm_results/selectionarm_piotr_sameday30_20261007/cost.png) · [Latency](arm_results/selectionarm_piotr_sameday30_20261007/latency.png) · [Tokens](arm_results/selectionarm_piotr_sameday30_20261007/tokens.png) · [Aggregate](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json) · [Independent audit](arm_results/selectionarm_piotr_sameday30_20261007/independent-audit.json). Token accounting includes every metered actor attempt; failures without usage stay separate. Compute proxy excludes prefill, attention, vision and caching. Saved evidence was verified; no independent human adjudication.
 
 <a id="selectionarm-random5-sameday30-20261007"></a>
-## Random-of-five at every step — running 2026-10-07
+## Random-of-five at every step — complete 2026-10-07
 
-**Generate five actor candidates → choose one uniformly → execute → repeat**, up to 30 steps on all 300 tasks. Every candidate entry keeps a 20% chance, including duplicates and malformed outputs; no scoring, filtering or selector model. Save all candidates and the selected index.
+**Generate five actor candidates → choose one uniformly → execute → repeat**, up to 30 steps on all 300 tasks. Every entry keeps a 20% chance, including duplicates and malformed outputs. No scoring, filtering, selector model or fallback selection. This is a full-episode control, distinct from the branching study's one-action random estimate.
 
-Compare against the [same-day SFT/Piotr pair](#selectionarm-piotr-sameday30-20261007): same tasks, official SFT, prompts, local browser, T=0.7, p=0.9, 1,024 tokens, 32K context and o4-mini/AgentTrek judge. These are **300 new full episodes**, distinct from the branching study's one-action random control.
+Same task file and actor/browser/decoding/judge as the [same-day SFT/Piotr pair](#selectionarm-piotr-sameday30-20261007): official SFT, T=0.7, p=0.9, 1,024 output tokens, 32K context, local browsers, seed 45 and o4-mini/AgentTrek. **300 new random episodes + 600 reused control episodes**; control costs are not charged again.
 
-| Additional request, including retries | Per shard | Total, two parallel shards |
-| --- | --- | --- |
-| Compute | 1 H200, 8 CPUs, 120 GiB, 3 hours | 6 H200-hours |
-| Judge cap | $2.50 / 660 calls | $5 / 1,320 calls |
-| New episodes | 150 | 300 |
+| Method | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT alone | 300 | 99 | 33.00% | 271 | 29 | 36.53% |
+| SFT + random of five | 300 | 100 | 33.33% | 270 | 30 | 37.04% |
+| SFT + Piotr SelectionARM | 300 | 120 | 40.00% | 261 | 39 | 45.98% |
 
-**Approved and running.** Both shards started October 7, with active-agent supervision verified. Eight offline tests passed, including uniform content-independent selection, five calls per step, no selector calls, unchanged decoding and budget guards. No existing budget transferred.
+| Paired comparison | Gain, pp | 95% interval, pp | First-only successes | Second-only successes |
+| --- | ---: | --- | ---: | ---: |
+| Random − SFT | +0.33 | [−4.67, +5.67] | 33 | 32 |
+| Piotr − random | +6.67 | [+1.00, +12.33] | 48 | 28 |
+| Piotr − SFT | +7.00 | [+2.33, +11.67] | 36 | 15 |
 
-Report task-paired success differences for random versus SFT and Piotr versus random, plus cost, latency and tokens. Collection starts later the same day in independent browsers. Browser concurrency stays eight; the random arm uses fewer host resources, so latency is descriptive, not a hardware-matched comparison. [Frozen plan](arm_results/selectionarm-random5-sameday30-plan-20261007.json).
+**Takeaway:** random selection is consistent with SFT alone; Piotr's learned selection improves over random in this run. One run cannot establish equivalence or remove website drift and judge variability. Intervals use 10,000 paired task-bootstrap draws. Invalid/unjudged episodes remain zero; canonical success permits partial progress.
+
+| Method | Mean latency, seconds | Mean metered input + output tokens |
+| --- | ---: | ---: |
+| SFT alone | 146.7 | 148,338 |
+| SFT + random of five | 183.5 | 765,903 |
+| SFT + Piotr SelectionARM | 193.1 | 871,680 |
+
+Eight browsers per shard; random used 1 H200 / 8 CPUs / 120 GiB, controls used 2 H200 / 16 CPUs / 240 GiB. Latency is descriptive, not hardware-matched. Sampling request seeds are logged but ignored by the unchanged FlashInfer sampler; server seeds 4500/4501 were verified, not identical trajectories. Random collection began later the same day.
+
+| Random shard | All-attempt seconds | Approved seconds | H200-hours | Judge calls | Judge USD | Judge ceiling |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| 0 | 4,031 | 10,800 | 1.120 | 83 | 0.6747730 | $2.50 / 660 calls |
+| 1 | 3,631 | 10,800 | 1.009 | 99 | 0.8458329 | $2.50 / 660 calls |
+| **Total** | **7,662** | **21,600** | **2.128** | **182** | **1.5206059** | **$5 / 1,320 calls; no transfers** |
+
+Both jobs and W&B runs finished; teardown and all caps passed. Verified **4,603 uniform choices**, **23,030 actor requests**, **182 saved verdicts and terminal images**. All attempts are preserved; 15 failed actor requests lack token usage. No new budget or episode retries.
+
+[Final aggregate](arm_results/selectionarm_random5_sameday30_20261007/aggregate.json) · [Independent audit](arm_results/selectionarm_random5_sameday30_20261007/independent-audit.json) · [Frozen plan](arm_results/selectionarm-random5-sameday30-plan-20261007.json).
+
+[Compute proxy](arm_results/selectionarm_random5_sameday30_20261007/cost.png) · [Latency](arm_results/selectionarm_random5_sameday30_20261007/latency.png) · [Tokens](arm_results/selectionarm_random5_sameday30_20261007/tokens.png). Compute is a generated-token estimate, not measured total FLOPs or dollars.
