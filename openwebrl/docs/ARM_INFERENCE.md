@@ -42,7 +42,7 @@ The score covers the **full generated response**, including reasoning and action
 <details>
 <summary>Calibration, probability verification and comparison limits</summary>
 
-The gate threshold is the 25th percentile, linearly interpolated at `(n−1)×0.25`, of base-policy scores on **278 saved final-decision states** from the previous SFT N=1 run. Of 300 episodes, 21 lack a saved state and one fails response-token reconstruction; these exclusions use artifact availability and identity checks, never success labels. Historical token IDs were not retained: reconstructed prompt, screenshot and response-token counts are checked against saved receipts. The numerical cutoff is frozen after teacher-forced scoring, before new adaptive episodes.
+The gate threshold is the 25th percentile, linearly interpolated at `(n−1)×0.25`, of base-policy scores on **278 saved final-decision states** from the previous SFT N=1 run. Of 300 episodes, 21 lack a saved state and one fails response-token reconstruction; these exclusions use artifact availability and identity checks, never success labels. Historical token IDs were not retained: reconstructed prompt, screenshot and response-token counts are checked against saved receipts. The frozen cutoff is **−0.21557618820922406 nats/token**, independently recomputed from 111,018 scored tokens before adaptive episodes began. Trigger only when the first candidate’s mean score is strictly below this value.
 
 This calibration sample emphasizes late decisions; its quartile does not promise a 25% trigger frequency on the new trajectories. Report the observed trigger fraction and mean candidates per decision. Calibration and startup probes consume the newly approved allocation and retain all request receipts.
 

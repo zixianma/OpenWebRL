@@ -25,8 +25,9 @@
     "definition": "Mean base-policy log probability over native generated response tokens, including reasoning and action; synthetic formatting tokens excluded.",
     "unit": "nats per token",
     "return_original_logprob": true,
-    "threshold": null,
-    "threshold_status": "awaiting allocation-local GPU calibration"
+    "threshold": -0.21557618820922406,
+    "threshold_status": "frozen_before_adaptive_evaluation",
+    "threshold_receipt_sha256": "14b1e516458edd2a0bfda81856c6215841c3f5c36ba902728d845288850131d3"
   },
   "calibration": {
     "source": "selectionarm-piotr-sameday30-20261007/SFT N=1",
@@ -39,7 +40,11 @@
     "quantile": 0.25,
     "quantile_method": "linear interpolation at (n-1)*q",
     "uses_success_labels": false,
-    "limitation": "Last preserved decision per episode; late-decision bias. Calibration quartile does not imply 25% online gating."
+    "limitation": "Last preserved decision per episode; late-decision bias. Calibration quartile does not imply 25% online gating.",
+    "scored_tokens": 111018,
+    "verified": true,
+    "finished_epoch": 1791441846.3528683,
+    "independent_evidence_audit_verified": true
   },
   "studies": [
     {
@@ -58,7 +63,7 @@
         "judge_usd": 2.5,
         "judge_calls": 660
       },
-      "status": "queued_for_calibration",
+      "status": "first_shard_collecting_second_shard_queued",
       "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
       "initial_jobs": [
         "349547",
@@ -118,7 +123,7 @@
     "Per-request seed does not guarantee identical trajectories under FlashInfer.",
     "Calibration/probe overhead and different resource profiles are separately accounted; no compute-matched causal claim."
   ],
-  "updated_epoch": 1791440714.8512108,
+  "updated_epoch": 1791441905.7574332,
   "startup_repair": {
     "reason": "Teacher-forcing probe incorrectly requested input likelihoods for multimodal image-pad IDs; vocabulary indexing failed before evaluation.",
     "fix": "Start input likelihoods at the saved native expanded prompt boundary, retaining exact response-token alignment.",
