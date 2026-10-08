@@ -2785,3 +2785,51 @@ Different evaluation dates and invalid sets remain a limitation.
 [Audits and provenance](RL_EVALUATION.md#arm-gate-b-iter50-60-results-20260926).
 B's continuation saved69 before a CUDA allocator OOM during iteration70;
 [bounded recovery331767](RL_RUNTIME.md#arm-progress-20260926) targets90.
+
+<a id="local-webvoyager-deepshop90-20261007"></a>
+## Local WebVoyager and DeepShop at iteration 90 — October 8
+
+**The first local WebVoyager pass shows no clear ARM gain:** all four ARM variants are 2.52–3.03 points below the outcome-only baseline, with paired 95% intervals spanning zero. Baseline has also completed DeepShop. The other four methods are collecting DeepShop; Original must finish training to 90 before its local evaluations. The six-method suite remains incomplete.
+
+### WebVoyager: all five available checkpoints verified
+
+| Method | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only baseline | 595 | 286 | 477 | 118 | 48.07 | 59.96 |
+| Additive ARM | 595 | 271 | 465 | 130 | 45.55 | 58.28 |
+| Gate B | 595 | 269 | 464 | 131 | 45.21 | 57.97 |
+| Mixed-only bonus | 595 | 268 | 442 | 153 | 45.04 | 60.63 |
+| Mixed-only outcome reweight | 595 | 270 | 469 | 126 | 45.38 | 57.57 |
+
+### DeepShop: completed cohorts only
+
+| Method | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only baseline | 150 | 64 | 128 | 22 | 42.67 | 50.00 |
+
+Shared protocol: native89 weights (training iteration 90), local browsers, T=0.6/top-p=0.95/top-k=20, 4,096 output tokens, 30 turns, and benchmark-specific GPT-4o judges. One repeat per method. Invalid episodes stay in the overall denominator; valid-only rates use different task subsets. Keep historical stealth results separate.
+
+<details>
+<summary>Paired WebVoyager uncertainty</summary>
+
+| Comparison with baseline | Gain, pp | Pointwise paired 95% interval, pp |
+| --- | ---: | --- |
+| Additive ARM | -2.52 | [-7.06, +2.02] |
+| Gate B | -2.86 | [-7.39, +1.68] |
+| Mixed-only bonus | -3.03 | [-7.73, +1.68] |
+| Mixed-only outcome reweight | -2.69 | [-7.39, +1.85] |
+
+10,000 paired task bootstrap draws, seed 42; no multiplicity adjustment across the four contrasts. These intervals describe task sampling, not judge error or website drift. Collections overlapped but did not occur at identical times. Higher invalidity can affect the overall differences; valid-only rates are not corrected population rates.
+
+</details>
+
+<details>
+<summary>Verification and remaining work</summary>
+
+All 2,975 WebVoyager records and baseline's 150 DeepShop records passed exact task coverage, saved-payload/image checks, full ZIP-member CRC, checkpoint/protocol identity, task-metric and W&B review. Baseline's controller completed both stages in 13,914 total scheduler seconds, including prior attempts, within its 43,200-second cap. Canonical labels are preserved; targeted review found a WebVoyager arithmetic false positive, so artifact verification must not be read as semantic certification of every verdict.
+
+Each method has a separate one-H200/eight-CPU/240-GiB/12-hour total budget, eight local browsers and only repeat 1. DeepShop follows WebVoyager immediately per method after the prior worker exits; no duplicate model stack or cross-method barrier. Original's separate four-H200/32-CPU/480-GiB/18-hour continuation preserves optimizer/scheduler/cursor from 80 through 90 and owns OM2W300 eval90. Its separately approved local pair awaits independently verified native89. No stealth run or repeats 2/3 are enabled. Active supervision checks every 30 minutes and queues the owner for recovery; routine reports are limited to meaningful hourly changes.
+
+</details>
+
+[Verified aggregate](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) · [Protocol and audit limits](RL_EVALUATION.md#local-webvoyager-deepshop90-audit-20261008).

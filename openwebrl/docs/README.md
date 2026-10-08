@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Local iteration90 benchmarks: five WebVoyager cohorts verified; baseline DeepShop 42.67%; paired comparisons and audit](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007).
+
 [Sol candidate count complete: N=3 40.33%, N=10 47.00%; paired gain +6.67 pp, with cost and validity audit](ARM_INFERENCE_SCALING.md#sol-candidate-counts-20261007).
 
 [Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).

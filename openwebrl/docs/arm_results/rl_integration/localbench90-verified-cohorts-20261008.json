@@ -1,0 +1,174 @@
+{
+  "as_of_utc": "2026-10-08",
+  "suite_verified_complete": false,
+  "verified_methods": [
+    "baseline"
+  ],
+  "training_iteration": 90,
+  "native_checkpoint_index": 89,
+  "protocol": {
+    "browser": "local_process",
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 20,
+    "max_response_tokens": 4096,
+    "max_turns": 30,
+    "judge_model": "gpt-4o",
+    "judge_prompt_variants": [
+      "webvoyager",
+      "deepshop"
+    ],
+    "browsers_per_job": 8,
+    "repeat": 1
+  },
+  "cohorts": [
+    {
+      "method": "baseline",
+      "benchmark": "webvoyager",
+      "counts": {
+        "tasks": 595,
+        "successes": 286,
+        "valid": 477,
+        "invalid": 118
+      },
+      "overall": 0.48067226890756304,
+      "valid_only": 0.59958071278826,
+      "verified_complete": true,
+      "stage_review_sha256": "372052cbe0b88fe689f9173cd60c275f164679fefd9f6de7be3bbfaf0b105046"
+    },
+    {
+      "method": "baseline",
+      "benchmark": "deepshop",
+      "counts": {
+        "tasks": 150,
+        "successes": 64,
+        "valid": 128,
+        "invalid": 22
+      },
+      "overall": 0.4266666666666667,
+      "valid_only": 0.5,
+      "verified_complete": true,
+      "stage_review_sha256": "eef9f0a0a0c4f32c23942125297e1584b2aa820d46ecf13bad614615cd2a92d7"
+    },
+    {
+      "method": "additive",
+      "benchmark": "webvoyager",
+      "counts": {
+        "tasks": 595,
+        "successes": 271,
+        "valid": 465,
+        "invalid": 130
+      },
+      "overall": 0.45546218487394957,
+      "valid_only": 0.5827956989247312,
+      "verified_complete": true,
+      "stage_review_sha256": "e2d8e0f9bd2aef03b280796dc471d3a281cd69cfa0e172280b59c984b8d37972"
+    },
+    {
+      "method": "gate-b",
+      "benchmark": "webvoyager",
+      "counts": {
+        "tasks": 595,
+        "successes": 269,
+        "valid": 464,
+        "invalid": 131
+      },
+      "overall": 0.45210084033613446,
+      "valid_only": 0.5797413793103449,
+      "verified_complete": true,
+      "stage_review_sha256": "57682e44f71e048f2563d11d3952cf0dbcef63db78fe8c8e966171c810d51d67"
+    },
+    {
+      "method": "mixed-bonus",
+      "benchmark": "webvoyager",
+      "counts": {
+        "tasks": 595,
+        "successes": 268,
+        "valid": 442,
+        "invalid": 153
+      },
+      "overall": 0.4504201680672269,
+      "valid_only": 0.6063348416289592,
+      "verified_complete": true,
+      "stage_review_sha256": "e9f04ee72ffa872d50937e98401c897d095c715a7d1e1f963f1f60cb3547ca69"
+    },
+    {
+      "method": "mixed-reweight",
+      "benchmark": "webvoyager",
+      "counts": {
+        "tasks": 595,
+        "successes": 270,
+        "valid": 469,
+        "invalid": 126
+      },
+      "overall": 0.453781512605042,
+      "valid_only": 0.5756929637526652,
+      "verified_complete": true,
+      "stage_review_sha256": "8024fce78d0714885444ce690c1c83d490893a8e8ce8ed46f2620480bb1d516e"
+    }
+  ],
+  "webvoyager_paired_vs_baseline": {
+    "additive": {
+      "difference": -0.025210084033613446,
+      "bootstrap95": [
+        -0.07058823529411765,
+        0.020168067226890758
+      ],
+      "method_only": 86,
+      "baseline_only": 101,
+      "tasks": 595
+    },
+    "gate-b": {
+      "difference": -0.02857142857142857,
+      "bootstrap95": [
+        -0.07394957983193277,
+        0.01680672268907563
+      ],
+      "method_only": 85,
+      "baseline_only": 102,
+      "tasks": 595
+    },
+    "mixed-bonus": {
+      "difference": -0.030252100840336135,
+      "bootstrap95": [
+        -0.0773109243697479,
+        0.01680672268907563
+      ],
+      "method_only": 94,
+      "baseline_only": 112,
+      "tasks": 595
+    },
+    "mixed-reweight": {
+      "difference": -0.02689075630252101,
+      "bootstrap95": [
+        -0.07394957983193277,
+        0.01852941176470527
+      ],
+      "method_only": 90,
+      "baseline_only": 106,
+      "tasks": 595
+    }
+  },
+  "bootstrap": "10000 paired task resamples, seed42; pointwise intervals, no correction across four contrasts",
+  "comparability": "Same tasks and controlled protocol, collections overlap but differ in wall-clock time; one repeat. Invalid outcomes remain zero. Canonical GPT4o labels unchanged.",
+  "baseline_all_attempt_seconds": 13914,
+  "cap_seconds_per_method": 43200,
+  "resources_per_method": {
+    "H200": 1,
+    "cpus": 8,
+    "memory_gib": 240
+  },
+  "evidence_sha256": {
+    "resource_review": "ab59ae3a28db1c88138bb4f9caf9350f0b81121e9ffe2d240802077e2ea3f63b",
+    "paired_analysis": "8ae9b5bc99b6d1d505c15119f26eee1a62999a923c9365088266c58057781996"
+  },
+  "limitations": [
+    "One local-browser repeat; historical stealth cohorts are separate.",
+    "Invalid episodes count zero overall; valid-only results condition on different task subsets.",
+    "Canonical benchmark labels are unchanged; artifact verification does not certify every semantic judgment.",
+    "Full archive CRC checks bind stable file fingerprints but are not full-file cryptographic hashes.",
+    "Paired intervals are pointwise, not simultaneous across methods; they omit judge error and website drift.",
+    "The top-level legacy W&B aggregate is turn-weighted; these results use task-level metrics."
+  ],
+  "remaining": "Four methods collecting DeepShop; Original training continues to90 before its sixth local pair."
+}

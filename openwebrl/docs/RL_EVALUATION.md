@@ -4589,3 +4589,21 @@ claims. The iteration20 advantage has not persisted through30/40.
 Saved trajectories and verdicts are under runtime
 `evaluations/arm-gate-c-iter30-318935/rollouts/` and
 `evaluations/arm-gate-c-iter40-318935/rollouts/`.
+
+<a id="local-webvoyager-deepshop90-audit-20261008"></a>
+## Local WebVoyager/DeepShop iteration90 audit — October 8
+
+The [local benchmark table](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007) now includes five independently verified WebVoyager595 cohorts and baseline DeepShop150. It contains only completed cohorts; the full six-method suite is incomplete. All rows share native89 weights, local browsers, T=0.6/top-p=0.95/top-k=20, 4,096 tokens, 30 turns and benchmark-specific GPT-4o judges.
+
+<details>
+<summary>Artifact and metric verification</summary>
+
+Exact planned task IDs, saved JSON hashes, tensor payloads and terminal images were verified. Full ZIP-member CRC checks passed for every completed cohort against stable archive fingerprints; this is not a full-file cryptographic digest or a new model evaluation. Native89 restoration, successful worker exit, actual sampling and final task metrics match evaluation W&B history. All separate evaluations use `openwebrl-evals`. Use task-level successes/trajectories; the legacy top-level W&B statistic is turn-weighted.
+
+Baseline completed both benchmarks within 13,914/43,200 approved scheduler seconds, including 162 seconds from earlier attempts. DeepShop's 22 invalids comprise 19 environment-step errors and three generation errors with empty detail. Raw verdicts and invalids remain unchanged; no selective retries or rejudging. A targeted WebVoyager review flagged a clear arithmetic false positive; spot checks do not estimate overall judge accuracy. Baseline's DeepShop positive screenshot sample supports the visible item constraints and conditional free-shipping options.
+
+The four WebVoyager contrasts with baseline use 10,000 paired task bootstrap samples, seed 42. Intervals are pointwise, not simultaneous; all span zero. Invalid outcomes remain zero overall. Valid-only rates condition on different subsets and do not remove judge or environment uncertainty. Original's evaluation remains gated on verified native89; its training continuation preserves the historical source and state. Historical stealth results and local results remain separate.
+
+[Aggregate, paired intervals and proof hashes](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json).
+
+</details>

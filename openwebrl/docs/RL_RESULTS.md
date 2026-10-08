@@ -433,3 +433,20 @@
 | Outcome-only | 100 | 37 | 68 | 32 | 37.00 | 54.41 | [318933, slice of full300](RL_EVALUATION.md#baseline-iter100-results-20260924) |
 | Additive bonus | 100 | 31 | 65 | 35 | 31.00 | 47.69 | [313669, slice of full300](RL_EVALUATION.md#arm-additive-iter100-results-20260921) |
 | All-failure bonus | 100 | 26 | 66 | 34 | 26.00 | 39.39 | [316392, slice of full300](RL_EVALUATION.md#arm-allfailure-iter100-results-20260921) |
+
+<a id="local-webvoyager-deepshop90-results-20261008"></a>
+## WebVoyager · local · iteration90 · GPT-4o · T0.6/p0.95/k20 · repeat1
+
+| Method | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Source |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Outcome-only baseline | 595 | 286 | 477 | 118 | 48.07 | 59.96 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+| Additive ARM | 595 | 271 | 465 | 130 | 45.55 | 58.28 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+| Gate B | 595 | 269 | 464 | 131 | 45.21 | 57.97 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+| Mixed-only bonus | 595 | 268 | 442 | 153 | 45.04 | 60.63 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+| Mixed-only outcome reweight | 595 | 270 | 469 | 126 | 45.38 | 57.57 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
+
+## DeepShop · local · iteration90 · GPT-4o · T0.6/p0.95/k20 · repeat1
+
+| Method | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Source |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Outcome-only baseline | 150 | 64 | 128 | 22 | 42.67 | 50.00 | [Audit](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json) |
