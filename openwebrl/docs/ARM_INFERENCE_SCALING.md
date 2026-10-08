@@ -76,13 +76,14 @@ Sol/GPT-5.5 use medium reasoning and 2,048 selector tokens; Luna uses medium rea
 
 **N=10 improves over N=3 by +6.67 pp [95% paired interval: +2.00, +11.67]**, at **3.28× the mean actor output tokens**. Both arms used the corrected September protocol above and were collected together on the same 300 tasks.
 
-| Candidates | Collection | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 3 | Fresh paired study | 300 | 121 | 40.33% | 266 | 34 | 45.49% |
-| 5 | Earlier reference | 300 | 130 | 43.33% | 268 | 32 | 48.51% |
-| 10 | Fresh paired study | 300 | 141 | 47.00% | 264 | 36 | 53.41% |
+| Condition | N | Collection | Tasks | Successes | Success | Valid tasks | Invalid tasks | Valid-only success |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT alone / no selector | 1 | Earlier control | 300 | 95 | 31.67% | 273 | 27 | 34.80% |
+| SFT + Sol | 3 | Fresh paired study | 300 | 121 | 40.33% | 266 | 34 | 45.49% |
+| SFT + Sol | 5 | Earlier reference | 300 | 130 | 43.33% | 268 | 32 | 48.51% |
+| SFT + Sol | 10 | Fresh paired study | 300 | 141 | 47.00% | 264 | 36 | 53.41% |
 
-N=10 wins alone on 38 tasks; N=3 wins alone on 18. Invalid episodes remain zero in the primary denominator. N=5 is reused from the [earlier API-selector study](#api-selector-results-20261007); collection time differs, so its intermediate rate is descriptive. These are canonical o4-mini/AgentTrek scores, which permit partial progress; three targeted positive flags remain documented without relabeling.
+N=10 wins alone on 38 tasks; N=3 wins alone on 18. Invalid episodes remain zero in the primary denominator. The SFT-alone control and N=5 reference come from the [earlier API-selector study](#api-selector-results-20261007) under the same corrected September protocol; comparisons with N=3/N=10 include collection-date differences. These are canonical o4-mini/AgentTrek scores, which permit partial progress; three targeted positive flags remain documented without relabeling.
 
 <details>
 <summary>Cost and paired sensitivity</summary>
