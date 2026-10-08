@@ -58,12 +58,18 @@
         "judge_usd": 2.5,
         "judge_calls": 660
       },
-      "jobs": [
+      "status": "queued_for_calibration",
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+      "initial_jobs": [
         "349547",
         "349548"
       ],
-      "status": "submitted_results_pending",
-      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed"
+      "current_jobs": [
+        "349551",
+        "349552"
+      ],
+      "initial_attempt_seconds_per_shard": 48,
+      "current_attempt_limit_seconds_per_shard": 10740
     },
     {
       "study": "selectionarm-likelihood5-sft30-20261007",
@@ -81,12 +87,18 @@
         "judge_usd": 2.5,
         "judge_calls": 660
       },
-      "jobs": [
+      "status": "collecting_after_verified_probability_probe",
+      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed",
+      "initial_jobs": [
         "349545",
         "349546"
       ],
-      "status": "submitted_results_pending",
-      "task_file_sha256": "8343c23be98d6d63856e9b53ff3884222be099cc0f55ad5edb475176f54317ed"
+      "current_jobs": [
+        "349549",
+        "349550"
+      ],
+      "initial_attempt_seconds_per_shard": 40,
+      "current_attempt_limit_seconds_per_shard": 10740
     }
   ],
   "all_attempt_caps": {
@@ -105,5 +117,15 @@
     "One run per new method; paired task-bootstrap uncertainty does not measure across-run or website drift uncertainty.",
     "Per-request seed does not guarantee identical trajectories under FlashInfer.",
     "Calibration/probe overhead and different resource profiles are separately accounted; no compute-matched causal claim."
-  ]
+  ],
+  "updated_epoch": 1791440714.8512108,
+  "startup_repair": {
+    "reason": "Teacher-forcing probe incorrectly requested input likelihoods for multimodal image-pad IDs; vocabulary indexing failed before evaluation.",
+    "fix": "Start input likelihoods at the saved native expanded prompt boundary, retaining exact response-token alignment.",
+    "science_changed": false,
+    "new_budget": 0,
+    "initial_attempt_evaluation_episodes": 0,
+    "initial_attempt_judge_calls": 0,
+    "replacement_likelihood_probes_verified": true
+  }
 }

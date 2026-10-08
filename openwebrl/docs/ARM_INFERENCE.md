@@ -60,6 +60,8 @@ Compare against the existing seed-45 SFT, always-five Piotr and random-five resu
 | Uncertainty-gated Piotr | 2 | 2 H200 | 16 | 240 | 3 | 2.50 | 660 | 349547, 349548 |
 | Policy likelihood | 2 | 1 H200 | 8 | 120 | 3 | 2.50 | 660 | 349545, 349546 |
 
+The initial startup probes failed before evaluation because image-pad IDs entered vocabulary likelihood indexing. Scoring now starts at the native expanded prompt boundary; both replacement likelihood probes pass. Initial attempts consumed **48 seconds per adaptive shard** and **40 seconds per likelihood shard**; replacement jobs 349551/349552 and 349549/349550 respectively are limited to 179 minutes each, within the unchanged total caps.
+
 Total cap: **18 H200-hours and USD 10 / 2,640 judge calls**, including calibration, probes and all retries. Shard budgets are independent with no transfers. Controllers own model, scoring and browser workers through teardown. Active-agent callbacks support diagnosis and recovery; completion requires all 600 episodes, paired analyses, final accounting and three plots per study. Only aggregates and plots are published.
 
 </details>
