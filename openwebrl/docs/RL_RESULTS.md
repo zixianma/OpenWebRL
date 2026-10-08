@@ -396,6 +396,7 @@
 | Additive bonus | 80 | 111 | 212 | 88 | 37.00 | 52.36 | [309686](RL_EVALUATION.md#arm-iter80-launch-20260919) |
 | All-failure bonus | 80 | 92 | 218 | 82 | 30.67 | 42.20 | [309687](RL_EVALUATION.md#arm-iter80-launch-20260919) |
 | Outcome-only · historical | 90 | 101 | 222 | 78 | 33.67 | 45.50 | [Baseline](RL_EVALUATION.md#arm-iter90-results-20260921) |
+| Original bonus | 90 | 121 | 228 | 72 | 40.33 | 53.07 | [October 8 audit](RL_EVALUATION.md#arm-original-iter90-results-20261008) |
 | All-failure bonus | 90 | 101 | 217 | 83 | 33.67 | 46.54 | [313188](RL_EVALUATION.md#arm-iter90-results-20260921) |
 | Additive bonus | 90 | 118 | 216 | 84 | 39.33 | 54.63 | [313408](RL_EVALUATION.md#arm-iter90-results-20260921) |
 | Outcome-only | 100 | 104 | 227 | 73 | 34.67 | 45.81 | [318933](RL_EVALUATION.md#baseline-iter100-results-20260924) |

@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Original bonus iteration 90: local OM2W300 verified; counts, validity and historical comparison](RL_EVALUATION.md#arm-original-iter90-results-20261008).
+
 [Local iteration90 benchmarks: five WebVoyager/DeepShop pairs verified; Original pending; results, paired comparisons and audit](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007).
 
 [Sol candidate count complete: N=3 40.33%, N=10 47.00%; paired gain +6.67 pp, with cost and validity audit](ARM_INFERENCE_SCALING.md#sol-candidate-counts-20261007).

@@ -1,0 +1,119 @@
+{
+  "schema": "public_original_bonus_iteration90_local_aggregate_v1",
+  "method": "Original ARM bonus",
+  "evaluation_date": "2026-10-08",
+  "endpoint_verified_complete": true,
+  "separate_local_webvoyager_deepshop_verified_complete": false,
+  "checkpoint": {
+    "completed_training_iteration": 90,
+    "native_index": 89,
+    "adam_updates": 1064,
+    "scheduler_num_steps": 272384,
+    "optimizer_scheduler_task_cursor_preserved": true,
+    "continued_from_completed_iteration": 80
+  },
+  "evaluation_run_iteration": 1,
+  "metric_prefix": "eval/online-mind2web-monitor",
+  "counts": {
+    "tasks": 300,
+    "valid": 228,
+    "invalid": 72,
+    "successes": 121
+  },
+  "rates": {
+    "overall": 0.4033333333333333,
+    "valid_only": 0.5307017543859649
+  },
+  "outcome_categories": {
+    "saved_model_verdicts": 220,
+    "valid_protocol_zeros_without_judge": 8,
+    "valid_unjudged_failed": 6,
+    "valid_unjudged_truncated": 2,
+    "invalid_without_judge": 72,
+    "successes_on_completed_trajectories": 121
+  },
+  "protocol": {
+    "browser": "local_process",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "top_k": 1,
+    "max_turns": 30,
+    "max_response_tokens": 4096,
+    "judge_model": "gpt-4.1",
+    "judge_prompt_variant": "action_history",
+    "n_samples_per_task": 1
+  },
+  "invalid_categories": {
+    "initial_navigation_http2_error": 5,
+    "environment_step_error": 49,
+    "initial_navigation_error": 16,
+    "timeout": 2
+  },
+  "environment_step_errors_with_unavailable_underlying_exception_details": 46,
+  "historical_comparison": {
+    "completed_training_iteration": 80,
+    "evaluation_date": "2026-09-20",
+    "tasks": 300,
+    "successes": 100,
+    "valid": 222,
+    "invalid": 78,
+    "overall": 0.3333333333333333,
+    "valid_only": 0.45045045045045046,
+    "overall_difference_percentage_points": 7.0,
+    "collection_dates_differ": true,
+    "valid_task_sets_differ": true,
+    "causal_effect_established": false,
+    "reference": "../../RL_EVALUATION.md#arm-iter80-launch-20260919"
+  },
+  "artifact_audit": {
+    "exact_unique_task_coverage": 300,
+    "native_payloads_and_verdicts_verified": 300,
+    "per_task_archives_full_zip_crc_verified": 300,
+    "per_task_archive_bytes": 91550387058,
+    "separate_recovery_archive_full_zip_crc_verified": true,
+    "separate_recovery_archive_bytes": 91549965621,
+    "decoded_stored_final_and_judge_images": 703,
+    "finished_wandb_native_metric_fields_reconciled": 41,
+    "all_semantic_judge_decisions_independently_certified": false
+  },
+  "accounting": {
+    "attempts": 1,
+    "gpus": 4,
+    "gpu_type": "H200",
+    "cpus": 32,
+    "memory_gib": 480,
+    "scheduler_seconds_used": 34181,
+    "scheduler_seconds_approved_total": 64800,
+    "scheduler_seconds_unused": 30619,
+    "gpu_hours_used": 37.97888888888889,
+    "gpu_hours_approved_total": 72
+  },
+  "teardown": {
+    "browser_pool_total_acquired": 300,
+    "browser_pool_total_released": 300,
+    "browser_pool_active": 0,
+    "allocation_and_all_recorded_slurm_steps_completed_exit_zero": true,
+    "recorded_numbered_slurm_steps": 19,
+    "batch_and_extern_completed_exit_zero": true,
+    "physical_post_exit_process_scan_performed": false
+  },
+  "proof_sha256": {
+    "endpoint": "a5a35252333cc5c8a67d9546f59ef9c47e02d117de09feb9bc522bb793074984",
+    "checkpoint90": "91572be146b470e4bb5d2739c1dcbd84a4dd5e1192cf8759e702d96f07910028",
+    "checkpoint90_training_wandb": "a094c90ffc7e7ca22ab36288001c44e3ec5481c3a09f212ed8179c6bcbef8067",
+    "evaluation_record_audit": "7fdc3c753f9c6a0f27d7171b6c74e973a369be40bd89886dbd75b2c266e6cd25",
+    "separate_recovery_archive_crc": "2633ee04db72b814609c633171927f804a5b9babf55c0bfd93d8aeac6a52bd02",
+    "evaluation_wandb": "ec6c85751f5c7095085a69bdaa665e42b879f8c619af3f349780a01807eed816",
+    "outcome_categories": "a15b8f22129e8de535dc6ffb2ff75d9b6df04a0ae64ba9d387b1da22e7c5b272",
+    "invalid_diagnostics": "47d17944be6bfc675b76f9050b743a912203590063a02c476c61db2a01e252b2",
+    "owner_endpoint_completion": "157356badd0db8c2d0a92cf91d50913194a1f7a062553814a4d0842ea2dfaea7",
+    "owner_final_teardown": "8c9660de12998e16652bcfc945dcd8c54841e1f6c1f36d743d061097a269af95"
+  },
+  "limitations": [
+    "Invalid attempts remain in the overall denominator; only the valid-only denominator excludes them.",
+    "Eight native valid zero outcomes bypass the judge under the frozen harness.",
+    "Historical iteration-80 comparison does not isolate a causal training effect.",
+    "Artifact integrity and saved verdict reconciliation do not establish universal semantic judge correctness.",
+    "Original local WebVoyager and DeepShop results remain pending verification."
+  ]
+}

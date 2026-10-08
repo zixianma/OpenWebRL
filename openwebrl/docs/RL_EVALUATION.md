@@ -4,6 +4,58 @@
 Qwen, official SFT, GPT-6, Jev and Kev in one report. Detailed Jev/Kev operational
 records remain below.
 
+<a id="arm-original-iter90-results-20261008"></a>
+## Original bonus iteration 90: verified local OM2W300 — October 8
+
+Original bonus reaches **40.33% overall success** under the local-browser,
+GPT-4.1/action_history, temperature-0 protocol. The historical iteration-80
+comparison is descriptive: evaluation dates and valid-task sets differ, so the
++7.00 percentage-point change does not isolate the effect of further training.
+
+| Checkpoint | Evaluation date | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 80, historical | 2026-09-20 | 300 | 100 | 222 | 78 | 33.33 | 45.05 |
+| 90 | 2026-10-08 | 300 | 121 | 228 | 72 | 40.33 | 53.07 |
+
+The 228 valid outcomes comprise 220 saved model verdicts and eight protocol-valid
+zeros without a judge call (six failed, two truncated). The 72 invalid attempts
+remain in the overall denominator and are excluded only from valid-only success.
+All 121 successes are completed trajectories. Original's separate local
+[WebVoyager/DeepShop pair](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007)
+remains pending verification.
+
+<details>
+<summary>Protocol, checkpoint, artifact audit and accounting</summary>
+
+Each task has one local-browser rollout: temperature 0, top-p 1, top-k 1,
+4,096 response tokens and 30 turns, with GPT-4.1/action_history judging.
+Native checkpoint 89 represents completed training iteration 90 and preserves
+1,064 Adam updates, scheduler step 272,384 and the task cursor from the unchanged
+iteration-80 continuation. The separate evaluation has native run iteration 1;
+it performs no optimizer updates and logs to `openwebrl-evals`.
+
+The independent audit verifies exact 300-task coverage, matching native payloads
+and terminal verdicts, full ZIP CRCs and SHA-256 fingerprints for every task
+archive and the separate recovery archive, and 703 stored final-observation/judge
+images. All 41 native aggregate metric fields reconcile with finished W&B
+history. This verifies artifact integrity; it does not independently certify
+all semantic judge decisions. Invalids comprise 49 environment-step errors,
+21 initial-navigation errors and two timeouts. Underlying exception details
+remain unavailable for 46 environment-step errors.
+
+The four-H200/32-CPU/480-GiB continuation and owned evaluation consumed
+34,181 of 64,800 approved scheduler seconds across all attempts (37.979 of
+72 GPU-hours). The final browser-pool log records 300 acquisitions, 300 releases
+and zero active slots. The allocation and every recorded Slurm step, including
+batch and extern, completed with exit code zero; this is log/scheduler evidence,
+not a physical post-exit process scan.
+
+[Aggregate and proof hashes](arm_results/rl_integration/original-bonus-iteration90-local-20261008.json)
+· [Historical iteration-80 audit](#arm-iter80-launch-20260919)
+· [Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/arm-original-iter90-349508).
+
+</details>
+
 <a id="rl-actor-piotr-20261007"></a>
 ## Released RL actor with Piotr SelectionARM — October 7
 
@@ -29,6 +81,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 
 ## Contents
 
+- [Original bonus iteration 90: verified local OM2W300](#arm-original-iter90-results-20261008)
 - [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
 - [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
@@ -4593,7 +4646,7 @@ Saved trajectories and verdicts are under runtime
 <a id="local-webvoyager-deepshop90-audit-20261008"></a>
 ## Local WebVoyager/DeepShop iteration90 audit — October 8
 
-The [local benchmark table](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007) includes five independently verified WebVoyager595/DeepShop150 pairs: baseline, Additive, Gate B, mixed-only bonus and mixed-only outcome reweight. These 3,725 records complete the five available checkpoints, while Original is still training toward 90; the full six-method suite remains incomplete. All rows share native89 weights, local browsers, T=0.6/top-p=0.95/top-k=20, 4,096 tokens, 30 turns and benchmark-specific GPT-4o judges.
+The [local benchmark table](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007) includes five independently verified WebVoyager595/DeepShop150 pairs: baseline, Additive, Gate B, mixed-only bonus and mixed-only outcome reweight. These 3,725 records complete five local benchmark pairs. Original's local pair remains pending verification, while its [training 90 and OM2W300 evaluation](#arm-original-iter90-results-20261008) are now verified; the six-method local suite remains incomplete. All rows share native89 weights, local browsers, T=0.6/top-p=0.95/top-k=20, 4,096 tokens, 30 turns and benchmark-specific GPT-4o judges.
 
 <details>
 <summary>Artifact and metric verification</summary>
