@@ -2,7 +2,9 @@
   "as_of_utc": "2026-10-08",
   "suite_verified_complete": false,
   "verified_methods": [
-    "baseline"
+    "baseline",
+    "additive",
+    "gate-b"
   ],
   "training_iteration": 90,
   "native_checkpoint_index": 89,
@@ -65,6 +67,21 @@
       "stage_review_sha256": "e2d8e0f9bd2aef03b280796dc471d3a281cd69cfa0e172280b59c984b8d37972"
     },
     {
+      "method": "additive",
+      "benchmark": "deepshop",
+      "counts": {
+        "tasks": 150,
+        "successes": 56,
+        "valid": 126,
+        "invalid": 24
+      },
+      "overall": 0.37333333333333335,
+      "valid_only": 0.4444444444444444,
+      "verified_complete": true,
+      "stage_review_sha256": "dda9b595e720026fc2d1b82af29dcf1cd1515e64736dcf595ca1a5c216549b0a",
+      "scientific_plan_sha256": "31fecb9a795a2ec03681367d747d86aa9947a6fb1a2fcffcddbc460818a54720"
+    },
+    {
       "method": "gate-b",
       "benchmark": "webvoyager",
       "counts": {
@@ -77,6 +94,21 @@
       "valid_only": 0.5797413793103449,
       "verified_complete": true,
       "stage_review_sha256": "57682e44f71e048f2563d11d3952cf0dbcef63db78fe8c8e966171c810d51d67"
+    },
+    {
+      "method": "gate-b",
+      "benchmark": "deepshop",
+      "counts": {
+        "tasks": 150,
+        "successes": 63,
+        "valid": 124,
+        "invalid": 26
+      },
+      "overall": 0.42,
+      "valid_only": 0.5080645161290323,
+      "verified_complete": true,
+      "stage_review_sha256": "acaacc940f048fb6b4532acd1e4d75b6a04515bb9625f8dcd94b625aa31c91c1",
+      "scientific_plan_sha256": "20a172b73d6c708bae62c5c7d7709a0a3052f67f80e9026a8880cf91ae549e86"
     },
     {
       "method": "mixed-bonus",
@@ -160,7 +192,9 @@
   },
   "evidence_sha256": {
     "resource_review": "ab59ae3a28db1c88138bb4f9caf9350f0b81121e9ffe2d240802077e2ea3f63b",
-    "paired_analysis": "8ae9b5bc99b6d1d505c15119f26eee1a62999a923c9365088266c58057781996"
+    "paired_analysis": "8ae9b5bc99b6d1d505c15119f26eee1a62999a923c9365088266c58057781996",
+    "deepshop_paired_analysis": "520122749938039d5c3e024b9027f3f6f20873a1577420346ff1edcb42eb3c7e",
+    "deepshop_owner_reconciliation": "6e3eddacff785aee2b7f76fbbeccba1d4130d556f846652cd9062945295b6316"
   },
   "limitations": [
     "One local-browser repeat; historical stealth cohorts are separate.",
@@ -170,5 +204,68 @@
     "Paired intervals are pointwise, not simultaneous across methods; they omit judge error and website drift.",
     "The top-level legacy W&B aggregate is turn-weighted; these results use task-level metrics."
   ],
-  "remaining": "Four methods collecting DeepShop; Original training continues to90 before its sixth local pair."
+  "remaining": "Mixed-only bonus and mixed-only outcome reweight are collecting DeepShop; Original training continues to90 before its sixth local pair.",
+  "verified_records": 3425,
+  "completed_method_accounting": {
+    "baseline": {
+      "all_attempt_seconds": 13914,
+      "cap_seconds": 43200,
+      "method_completion_sha256": "dc10023ac5752a08b19c63965cf68ac3ba8818ba3005d9cd6d05e609d43d53f7"
+    },
+    "additive": {
+      "all_attempt_seconds": 15541,
+      "cap_seconds": 43200,
+      "method_completion_sha256": "8a7f5f8450c62fdb4ed4a9b22f7e338514109e55ddbe9a16c41b1ef17ea2f94a"
+    },
+    "gate-b": {
+      "all_attempt_seconds": 15300,
+      "cap_seconds": 43200,
+      "method_completion_sha256": "451a1a12bfa528c4ce93a771cdddcf9a51608c11b429229e963c3b1d9aff1db5"
+    }
+  },
+  "deepshop_paired_vs_baseline": {
+    "additive": {
+      "baseline_only_success": 23,
+      "baseline_success_percent": 42.66666666666667,
+      "baseline_successes": 64,
+      "both_success": 41,
+      "difference_pp": -5.333333333333334,
+      "method_only_success": 15,
+      "method_success_percent": 37.333333333333336,
+      "method_successes": 56,
+      "neither_success": 71,
+      "paired_bootstrap_95_percent_ci_pp": [
+        -13.333333333333334,
+        2.666666666666667
+      ],
+      "tasks": 150
+    },
+    "gate-b": {
+      "baseline_only_success": 19,
+      "baseline_success_percent": 42.66666666666667,
+      "baseline_successes": 64,
+      "both_success": 45,
+      "difference_pp": -0.6666666666666667,
+      "method_only_success": 18,
+      "method_success_percent": 42.0,
+      "method_successes": 63,
+      "neither_success": 68,
+      "paired_bootstrap_95_percent_ci_pp": [
+        -8.666666666666668,
+        7.333333333333333
+      ],
+      "tasks": 150
+    }
+  },
+  "deepshop_bootstrap": {
+    "bootstrap_resamples": 10000,
+    "bootstrap_rng": "numpy.default_rng; independent seed42 reset per comparison",
+    "bootstrap_seed": 42,
+    "bootstrap_unit": "paired task",
+    "comparison_scope": "Same local browser/native89/GPT-4o/T.6 p.95 k20 protocol; one repeat. Canonical saved labels, including qualitative judge concerns, preserved.",
+    "interval": "pointwise percentile95%; not simultaneous intervals",
+    "invalids_scored_zero": true,
+    "task_denominator": 150
+  },
+  "bootstrap_scope": "webvoyager"
 }
