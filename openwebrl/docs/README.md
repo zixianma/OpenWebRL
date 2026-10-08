@@ -41,7 +41,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Proposed outcome-trained selector: task/state-separated validation, eight continuations per candidate, and a bounded collection pilot awaiting exact budget approval](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008).
+[Outcome-trained selector: approved32-state pilot with eight continuations per candidate, retained124 training states, and task/state-separated validation](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008).
 
 [Branch continuations: held-out selection 38.12% versus actor-first 29.84%; fixed pool exhausted at 124/149 states, approved extra draws queued; matched 119-state teacher comparison and limitations](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007).
 

@@ -1,41 +1,61 @@
 {
-  "schema": "branch-selector-scaleup-proposal-v1",
+  "schema": "branch-selector-scaleup-proposal-v2",
   "date": "2026-10-08",
-  "status": "prepared_not_launched_exact_new_budget_approval_pending",
-  "approved_for_execution": false,
+  "status": "pilot_approved_released_queued",
+  "approved_for_execution": true,
   "full_science_target": {
     "train_states": 1000,
     "seen_task_validation_new_states": 250,
     "unseen_task_validation_states": 250,
     "candidate_responses_per_state": 5,
     "continuations_per_candidate": 8,
-    "outcomes": 60000,
     "guaranteed_yield": false,
-    "locked_test_tasks_reserved": true
+    "locked_test_tasks_reserved": true,
+    "train_includes_existing_states": 124,
+    "new_train_states": 876,
+    "new_states": 1376,
+    "new_outcomes": 55040,
+    "combined_outcomes_with_old3": 56900,
+    "combined_outcomes_after_existing_extra2": 58140,
+    "approved_for_execution": false
   },
   "split_preparation": {
-    "candidate_state_slots": 6270,
-    "prior_diagnostic_groups": 124,
-    "state_roles": {
-      "locked_test": 561,
-      "train": 3118,
-      "validation_seen_task": 1373,
-      "validation_unseen_task": 1218
+    "historical_overlap_prior_states": 25,
+    "historical_overlap_task_groups": 366,
+    "pilot_depth_bands": {
+      "1-3": 400,
+      "10-15": 400,
+      "4-9": 400
     },
+    "pilot_opportunities": 1200,
+    "pilot_splits": {
+      "train": 600,
+      "validation_seen_task": 300,
+      "validation_unseen_task": 300
+    },
+    "pilot_task_groups": 400,
+    "prior_training_states": 124,
+    "state_roles": {
+      "locked_test": 600,
+      "train": 2978,
+      "validation_seen_task": 1489,
+      "validation_unseen_task": 1203
+    },
+    "state_slots": 6270,
     "task_groups": 2090,
     "task_roles": {
-      "locked_test": 187,
-      "train_seen_pool": 1497,
-      "unseen_validation": 406
+      "locked_test": 200,
+      "train_seen_pool": 1489,
+      "unseen_validation": 401
     }
   },
   "split_rules": [
     "Assign task aliases and decision slots before outcomes; no continuation-level random splitting.",
     "New states from seen tasks require independently seeded discovery, disjoint trajectories and distinct pre-action input fingerprints, plus an accepted training state from the same task.",
-    "Previously inspected 124 diagnostic task groups are training-only; historical 3/5-draw records remain a separate diagnostic cohort for the first fit.",
+    "Previously collected124 states are training eligible with their actual3/5 draw counts. Their task groups stay out of unseen-task validation/test; genuinely distinct independently seeded new states may enter seen-task validation.",
     "All actions, draws and retries stay with their state. Unseen-task validation and locked test hold out entire task groups.",
     "Unseen refers to the new selector fit, not guaranteed backbone or actor pretraining exclusion.",
-    "Protected benchmark, retention and near-duplicate screening must finish before production release.",
+    "Protected benchmark exact task/normalized-goal overlap audit passed; semantic near-duplicate/pretraining exclusion is not established. Historical selector dev/future/retention and joint-validation labels are study-specific, retained unchanged; reuse prevents independent evaluation on those reused historical sets.",
     "Depth-slot and role admission may depend on replay checks but never continuation successes, ties or teacher preference."
   ],
   "collection_protocol": {
@@ -62,7 +82,7 @@
     "fresh_adapter_and_optimizer": true,
     "vision_and_projector": "frozen",
     "output": "one candidate index",
-    "target": "five candidate success counts divided by eight committed draws",
+    "target": "five candidate success counts divided by actual committed draw count:3/5 for retained historical states and8 for new states",
     "loss": "mean independent sigmoid/binomial BCE on the five candidate index logits at a fixed output prefix",
     "primary_invalid_handling": "committed invalid outcomes count zero, matching the operational-success comparison; missing/unresolved records never fabricated as labels",
     "secondary": "valid-only sensitivity with valid denominators and failure reasons; not a replacement primary estimand",
@@ -90,10 +110,10 @@
     "controls": "No claim of superiority over matched teacher-label training without that additional training control. Frozen judge semantic limitations remain."
   },
   "pilot_request": {
-    "approved": false,
+    "approved": true,
     "jobs": 1,
     "h200_gpus": 4,
-    "cpus": 40,
+    "cpus": 32,
     "memory_gib": 480,
     "total_wall_seconds_including_startup_tests_and_retries": 43200,
     "gpu_hours": 48,
@@ -110,7 +130,9 @@
     "admission_gate": "validate forty-context resource ownership and strict replay before scaling; reserve budget for a whole group and cleanup",
     "zero_yield_stop": "pause for diagnosis if first 24 resolved replay groups have zero accepted states; not a statistical proof of infeasibility",
     "retries": "charge all failed/rejected attempts and retain first-cause evidence; no full-budget reset",
-    "yield_guaranteed": false
+    "yield_guaranteed": false,
+    "user_approved_cpu_ceiling": 40,
+    "cpu_reduction_reason": "Scheduler submission policy allows at most8CPUs perGPU; all othercaps unchanged."
   },
   "later_training_estimate_not_requested": {
     "h200_gpus": 1,
@@ -126,13 +148,25 @@
     "observed_reference_seconds": 39868,
     "observed_reference_browser_starts": 2695,
     "reference_draws_per_action": 3,
-    "warning": "Eight-draw all-context acceptance is unmeasured. Three slots on 2090 tasks provide 5709 collectible opportunities, not 1500 guaranteed states. Expand audited source coverage or slots only after role/depth-specific pilot yield and cost review.",
+    "warning": "Eight-draw all-context acceptance is unmeasured. Three slots on2090 tasks provide5670 collectible opportunities, not guaranteed targetstates. Expand audited source coverage or slots only after role/depth-specific pilot yield and cost review.",
     "larger_source_pool_status": "metadata available; requires separate exclusions/source audit and budget approval"
   },
   "validation": {
-    "cpu_split_tests": 7,
+    "cpu_split_tests": 8,
     "gpu_validation_completed": false,
     "new_collection_started": false,
-    "training_started": false
-  }
+    "training_started": false,
+    "source_and_split_verification_checks": 12
+  },
+  "job_id": "350648",
+  "historical_reuse_caveat": {
+    "overlapping_task_groups_with_previous_study_holdouts": 366,
+    "overlapping_old_states": 25,
+    "decision": "Reuse permitted for this new fit as requested; no claim of independence on reused historical evaluation sets."
+  },
+  "approval_scope": "pilot_request_only",
+  "scheduler_status_as_of_epoch": 1791497412.7528777,
+  "effective_plan_sha256": "e9c1fc57022f5b9b152b72d11438ee05448c0f85ab2548a09c7ba4a4e44ac15b",
+  "active_agent_supervision_verified": true,
+  "supervision_interval_seconds": 1800
 }
