@@ -160,9 +160,9 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 </details>
 
 <a id="confidence-benefit-20261008"></a>
-## Selecting a threshold by measured ARM benefit — October 8, fit blocked
+## Selecting a threshold by measured ARM benefit — October 8, recovery approved
 
-**No threshold has been fitted or verified.** All 300 fitting tasks have dispositions: 60 pairs are eligible, 44 have complete outcomes and 16 remain unresolved. The unchanged fitter rejects missing eligible evidence; both shards stopped with their evidence preserved.
+**No threshold has been fitted or verified.** All 300 fitting tasks have dispositions: 60 pairs are eligible, 44 have complete outcomes and 16 remain unresolved. The unchanged fitter rejects missing eligible evidence. An approved amendment schedules one fresh pair for each unresolved state; the original evidence remains preserved.
 
 | Fitting shard | Planned tasks | Task dispositions | Eligible pairs | Resolved pairs | Unresolved pairs | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
@@ -188,6 +188,12 @@ Only fitting outcomes may select the rule. Planned reporting includes held-out p
 
 <details>
 <summary>Recovery, remaining blocker and accounting</summary>
+
+**Approved October 8 amendment:** recollect both branches for all 16 fixed unresolved anchors, producing at most 32 fresh continuation outcomes. Keep the 44 complete pairs, all historical missing evidence, fixed states, candidate pools, Piotr choices and replay checks. Only suffix draws after the saved intervention are new. Use each designated new pair regardless of its outcome; no old-counterpart fallback or favorable-attempt selection. Renewed missing evidence still blocks the unchanged fitter. This mixes original and recollected pairs and does not remove replay-selection or missingness bias; report collection-version sensitivity. The 150 held-out tasks remain gated on complete fit evidence and a frozen threshold.
+
+Recovery jobs **350607 / 350608** were released with verified active-agent supervision after 34 worker/controller tests and 23 supervisor tests. At this update, shard 0 has passed its native-probability probe and begun fresh suffix generation; shard 1 is queued for priority. Their time limits are **2h26m / 2h41m**, inside the remaining original per-shard allowances below. A tested capture repair spaces the same three observation attempts by 1s/2s inside the original 30-second deadline; matching criteria and action dispatch are unchanged. The restart adds no budget. [Approved protocol and launch aggregate](arm_results/selectionarm_confidence_benefit_20261008/paired-redraw-amendment.json).
+
+**Original collection and recovery evidence:**
 
 Shard 0 has 108 replay-ineligible tasks and four tasks without a reached state, leaving 38 eligible pairs. A bounded capture repair retries observations up to three times within the original 30-second deadline, without redispatching the action or relaxing equality. One recovery pass targeted 31 missing endpoints while preserving all original states, pools, Piotr choices and 11 surviving counterparts. Surviving counterparts were replay witnesses only: no candidate intervention, suffix draw or judge call.
 
