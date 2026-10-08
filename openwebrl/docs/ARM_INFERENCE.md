@@ -105,6 +105,33 @@ Total cap: **18 H200-hours and USD 10 / 2,640 judge calls**, including calibrati
 
 </details>
 
+<a id="confidence-benefit-20261008"></a>
+## Selecting a threshold by measured ARM benefit — October 8, preparation
+
+**Question:** does a low first-candidate likelihood identify decisions where Piotr improves downstream success? Select the rule using 300 fitting tasks, freeze it, then check 150 separate verification tasks. The existing exploratory run keeps its original cutoff.
+
+| Stage | Tasks | Reference episodes | Maximum paired continuations | Use |
+| --- | ---: | ---: | ---: | --- |
+| Fit | 300 | 300 | 600 | Choose among never, fit-score q25/q50/q75 cutoffs, and always using Piotr |
+| Verification | 150 | 150 | 300 | Evaluate the frozen rule; no threshold retuning |
+
+At one uniformly hash-selected reached decision per task, preserve the first candidate and sample four more from the identical prompt. Compare executing the first candidate with Piotr's selection from that same pool, followed by ordinary SFT continuations within the original 30-decision horizon. Choose the fitting rule with highest paired success; break ties by fewer ARM calls.
+
+This measures **one-action benefit on replayable SFT states**, not calibrated action correctness or the benefit of gating at every step. Replay failures reduce usable counts and remain in coverage reports. A threshold may be inconclusive; never/always ARM may win.
+
+<details>
+<summary>Fixed design, task separation and resource request</summary>
+
+The task split comes from the existing 2,000-task ARM curation pool: 300 fitting and 150 verification tasks with no exact task-ID or normalized-instruction overlap with the evaluation 300. Shared websites are allowed; the pool's difficulty filtering limits representativeness. Task selection does not use success outcomes.
+
+Use the current SFT model/frontend, T=0.7, top-p=0.9, 1,024 response tokens, 30 decisions, native untempered full-response mean log-probability and unchanged Piotr selector. Preserve malformed and duplicate proposals. Lock the selected state and both replay checks before either candidate action executes; do not replace failed replays with easier states. Quantile cutoffs use every scored selected fitting anchor, including replay-rejected anchors; utility fitting uses the common eligible paired subset. Canonical invalid/unfinished outcomes retain zero; unresolved evidence blocks fitting rather than being silently dropped.
+
+Only fitting outcomes select the rule. Freeze the rule before verification continuations; report paired success differences versus first-candidate and always-Piotr choices, task-bootstrap 95% intervals, and replay coverage by decision, site and score. These intervals condition on the frozen rule and usable task sample; one continuation per branch gives noisy benefit estimates. Replay verifies observable browser state, not a clone of remote server state. Shared seeds do not guarantee matched random draws under FlashInfer. Full-episode evaluation of repeated gating is a separate follow-up.
+
+Proposed, **not yet resource-approved**: two independent shards, each **2 H200 / 16 CPUs / 240 GiB × 4 hours total**, and **USD 5 / 1,320 judge calls**, across all attempts. Combined cap: 16 H200-hours and USD 10 / 2,640 calls, with no transfers. Up to 450 reference episodes and 900 paired continuations; completion is not guaranteed within the cap. Raw tasks and continuations remain private.
+
+</details>
+
 <details>
 <summary>Historical October 6 partial three-run overlap: 160 tasks</summary>
 

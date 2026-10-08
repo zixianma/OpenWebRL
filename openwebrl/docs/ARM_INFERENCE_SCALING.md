@@ -106,6 +106,8 @@ SFT actor, the same 300 tasks and 30-step decoding as the Piotr comparisons; **3
 
 Scores include reasoning and action; synthetic formatting tokens are excluded. The gate cutoff is **−0.215576 nats/token**, the frozen 25th percentile of 278 saved SFT final-decision responses. Always-five likelihood uses no threshold. Reused controls have separate collection times. [Protocol, same-task calibration limits and caps](ARM_INFERENCE.md#likelihood-scaling-20261007) · [Design record](arm_results/likelihood_scaling_plan_20261007.json).
 
+A separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) is in preparation: 300 fitting tasks and 150 held-out verification tasks; exact compute approval is pending.
+
 ## Supporting evidence and history
 
 <details>
