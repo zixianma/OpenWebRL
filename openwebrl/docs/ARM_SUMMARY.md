@@ -479,8 +479,66 @@ for this analysis; saved labels remain preserved.
 · [Five-method aggregate](arm_results/rl_integration/stealth-o4-t06-iteration90-five-method-difficulty.json).
 
 
+<a id="arm-localbench90-summary-20261008"></a>
 <details>
-<summary><strong>WebVoyager evaluation · iteration 90 · full 595</strong></summary>
+<summary><strong>WebVoyager and DeepShop evaluations · iteration 90</strong></summary>
+
+**October 8 local-browser results: no clear overall ARM gain in this repeat.**
+All five methods have verified results on both benchmarks. The outcome-only
+baseline has the highest overall point estimate on each; every paired 95%
+interval for an ARM-minus-baseline difference includes zero.
+
+Shared protocol: iteration 90 checkpoints, local browsers, actor
+T=0.6/top-p=0.95/top-k=20, 4,096 response tokens, 30 turns and benchmark-specific
+GPT-4o judges. These are single evaluations of fixed checkpoints. Invalid
+episodes remain zero in the overall denominator; valid-only rates condition
+on different task subsets.
+
+**WebVoyager — 595 tasks per method**
+
+| Method | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only baseline | 286 | 477 | 118 | **48.07%** | 59.96% |
+| Additive bonus | 271 | 465 | 130 | 45.55% | 58.28% |
+| Gate B: relaxed gate | 269 | 464 | 131 | 45.21% | 57.97% |
+| Mixed-only bonus + relaxed B | 268 | 442 | 153 | 45.04% | 60.63% |
+| Mixed-only reweight + relaxed B | 270 | 469 | 126 | 45.38% | 57.57% |
+
+**DeepShop — 150 tasks per method**
+
+| Method | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only baseline | 64 | 128 | 22 | **42.67%** | 50.00% |
+| Additive bonus | 56 | 126 | 24 | 37.33% | 44.44% |
+| Gate B: relaxed gate | 63 | 124 | 26 | 42.00% | 50.81% |
+| Mixed-only bonus + relaxed B | 55 | 118 | 32 | 36.67% | 46.61% |
+| Mixed-only reweight + relaxed B | 51 | 122 | 28 | 34.00% | 41.80% |
+
+**Overall differences from outcome-only baseline**
+
+| Method | WebVoyager Δ (pp) | Paired 95% CI (pp) | DeepShop Δ (pp) | Paired 95% CI (pp) |
+| --- | ---: | --- | ---: | --- |
+| Additive bonus | -2.52 | [-7.06, +2.02] | -5.33 | [-13.33, +2.67] |
+| Gate B: relaxed gate | -2.86 | [-7.39, +1.68] | -0.67 | [-8.67, +7.33] |
+| Mixed-only bonus + relaxed B | -3.03 | [-7.73, +1.68] | -6.00 | [-14.00, +2.00] |
+| Mixed-only reweight + relaxed B | -2.69 | [-7.39, +1.85] | -8.67 | [-17.33, 0.00] |
+
+Intervals use 10,000 paired task-bootstrap resamples, seed 42. They are pointwise,
+without correction across the four contrasts per benchmark, and describe task
+sampling uncertainty rather than training-seed variation, judge error or website
+drift. Collection windows overlap but are not identical. Reweight's DeepShop
+interval touches zero. Canonical labels are unchanged, including four valid
+mixed-only bonus DeepShop truncations assigned zero without a judge call;
+artifact verification does not certify every semantic judgment.
+
+The original strict-gate bonus's local benchmark pair remains pending
+verification; repeats 2/3 remain disabled pending review of all first-repeat
+results and explicit approval.
+[Results, accounting and audit limits](ARM_RESULTS.md#local-webvoyager-deepshop90-20261007)
+· [Verified aggregate and paired intervals](arm_results/rl_integration/localbench90-verified-cohorts-20261008.json).
+
+<details>
+<summary>Historical September 30 WebVoyager stealth evaluation</summary>
 
 **WebVoyager, iteration90 — September30:** stealth, actor T0.6, GPT-4o/WebVoyager,
 all595 tasks; one evaluation per fixed checkpoint.
@@ -494,6 +552,8 @@ all595 tasks; one evaluation per fixed checkpoint.
 Gate B is effectively tied with baseline on this pass; Additive is lower.
 The53 date-updated instructions limit exact comparison with paper scores.
 [Audited results and protocol](ARM_RESULTS.md#arm-webvoyager90-results-20260930).
+
+</details>
 
 </details>
 
