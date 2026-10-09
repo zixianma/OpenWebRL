@@ -108,12 +108,168 @@
  },
  "job": {
   "id": 351647,
-  "resources": "gpu-h200, 1 H200, 8 CPU, 120 GiB, 3 h",
-  "estimated_usd": 2.7,
-  "status_at_writing": "running: training-panel feature extraction"
+  "resources": "gpu-h200, 1 H200, 8 CPU, 120 GiB, 3 h approved",
+  "elapsed": "01:58:00",
+  "state": "COMPLETED",
+  "estimated_usd_approved": 2.7
  },
  "code": {
   "branch": "arm-selection-head",
   "commit": "87a204b"
+ },
+ "selection_heads": {
+  "features": "frozen OpenWebRL-4B-SFT bf16; layers 18/27/36 x (thought mean, action mean, end token) + prompt last token",
+  "training": "GPT-5.5 teacher choices, 35,916 train panels; checkpoint by validation agreement",
+  "listwise": {
+   "best_epoch": 6,
+   "epochs": 20,
+   "validation_teacher_agreement": 0.6552,
+   "validation_teacher_agreement_informative": 0.6031,
+   "train_teacher_agreement": 0.7918,
+   "branch_same_index_as_piotr": 47,
+   "branch_same_action_as_piotr": 72,
+   "subsets": {
+    "all": {
+     "states": 124,
+     "head": 0.336,
+     "minus_uniform": 0.0118,
+     "minus_uniform_ci": [
+      -0.0194,
+      0.0441
+     ],
+     "minus_actor_first": 0.0376,
+     "minus_actor_first_ci": [
+      -0.0027,
+      0.0806
+     ],
+     "minus_piotr_arm": -0.0215,
+     "minus_piotr_arm_ci": [
+      -0.0565,
+      0.0134
+     ],
+     "minus_pointwise": -0.0108,
+     "minus_pointwise_ci": [
+      -0.0323,
+      0.0081
+     ]
+    },
+    "prompt_verified": {
+     "states": 114,
+     "head": 0.345,
+     "minus_uniform": 0.0146,
+     "minus_uniform_ci": [
+      -0.0187,
+      0.0491
+     ],
+     "minus_actor_first": 0.038,
+     "minus_actor_first_ci": [
+      -0.0058,
+      0.0848
+     ],
+     "minus_piotr_arm": -0.0146,
+     "minus_piotr_arm_ci": [
+      -0.0526,
+      0.0205
+     ],
+     "minus_pointwise": -0.0117,
+     "minus_pointwise_ci": [
+      -0.0351,
+      0.0088
+     ]
+    },
+    "verified_no_piotr_task": {
+     "states": 105,
+     "head": 0.3429,
+     "minus_uniform": 0.0095,
+     "minus_uniform_ci": [
+      -0.0229,
+      0.0432
+     ],
+     "minus_actor_first": 0.0317,
+     "minus_actor_first_ci": [
+      -0.0159,
+      0.0794
+     ],
+     "minus_piotr_arm": -0.0254,
+     "minus_piotr_arm_ci": [
+      -0.0635,
+      0.0095
+     ],
+     "minus_pointwise": -0.0127,
+     "minus_pointwise_ci": [
+      -0.0349,
+      0.0063
+     ]
+    }
+   }
+  },
+  "pointwise": {
+   "best_epoch": 13,
+   "epochs": 20,
+   "validation_teacher_agreement": 0.6544,
+   "validation_teacher_agreement_informative": 0.6021,
+   "train_teacher_agreement": 0.8999,
+   "branch_same_index_as_piotr": 55,
+   "branch_same_action_as_piotr": 78,
+   "subsets": {
+    "all": {
+     "states": 124,
+     "head": 0.3468,
+     "minus_uniform": 0.0226,
+     "minus_uniform_ci": [
+      -0.0113,
+      0.057
+     ],
+     "minus_actor_first": 0.0484,
+     "minus_actor_first_ci": [
+      0.0027,
+      0.0968
+     ],
+     "minus_piotr_arm": -0.0108,
+     "minus_piotr_arm_ci": [
+      -0.043,
+      0.0215
+     ]
+    },
+    "prompt_verified": {
+     "states": 114,
+     "head": 0.3567,
+     "minus_uniform": 0.0263,
+     "minus_uniform_ci": [
+      -0.0105,
+      0.0637
+     ],
+     "minus_actor_first": 0.0497,
+     "minus_actor_first_ci": [
+      -0.0,
+      0.1023
+     ],
+     "minus_piotr_arm": -0.0029,
+     "minus_piotr_arm_ci": [
+      -0.0351,
+      0.0292
+     ]
+    },
+    "verified_no_piotr_task": {
+     "states": 105,
+     "head": 0.3556,
+     "minus_uniform": 0.0222,
+     "minus_uniform_ci": [
+      -0.0127,
+      0.0578
+     ],
+     "minus_actor_first": 0.0444,
+     "minus_actor_first_ci": [
+      -0.0063,
+      0.0984
+     ],
+     "minus_piotr_arm": -0.0127,
+     "minus_piotr_arm_ci": [
+      -0.0444,
+      0.019
+     ]
+    }
+   }
+  }
  }
 }

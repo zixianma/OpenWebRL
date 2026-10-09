@@ -266,36 +266,48 @@ The [97-state](arm_results/rl_integration/continuation-fixed97-20261008.json) an
 
 <a id="selection-head-20261009"></a>
 
-## Can the actor's own features select actions? Piotr SelectionARM reference — October 9
+## Can the actor's own features select actions? Shared selection head — October 9
 
-**The released Piotr SelectionARM, run offline on the 124 fixed panels, chooses actions with 35.75% continuation success: +5.91 points over the actor's first sample and +3.33 points over uniform.** This is the outcome reference for the shared actor–selector head now being trained (job `351647`). Scores average each chosen action's three SFT continuations, with invalid outcomes counted as zero. Paired intervals use 20,000 state-bootstrap draws; each state is a distinct task.
+**Heads trained on frozen SFT-actor hidden states match the GPT-5.5 teacher on 65.5% of held-out-task panels, but they do not choose better actions than the released Piotr SelectionARM.** On the 124 fixed branch panels, the one-candidate-at-a-time head picks actions with 34.68% continuation success, the joint-comparison head 33.60%, and Piotr ARM 35.75%. Neither head is distinguishable from Piotr ARM or from uniform choice. Joint comparison did not beat scoring candidates one at a time. Scores average each chosen action's three SFT continuations, with invalid outcomes counted as zero. Paired intervals use 20,000 state-bootstrap draws; each state is a distinct task.
 
-| States | Count | Piotr ARM | Actor first | Uniform | ARM − uniform, pp [95%] | ARM − first, pp [95%] |
+| Selector, 124 branch panels | Continuation success | − Uniform, pp [95%] | − Actor first, pp [95%] | − Piotr ARM, pp [95%] |
+| --- | ---: | --- | --- | --- |
+| Piotr SelectionARM (separate 4B model) | 35.75% | +3.33 [+0.11, +6.72] | +5.91 [+1.88, +10.22] | — |
+| Head, one candidate at a time | 34.68% | +2.26 [−1.18, +5.75] | +4.84 [+0.27, +9.68] | −1.08 [−4.30, +2.15] |
+| Head, joint comparison | 33.60% | +1.18 [−1.94, +4.41] | +3.76 [−0.27, +8.06] | −2.15 [−5.65, +1.34] |
+| Uniform candidate | 32.42% | — | — | — |
+| Actor first sample | 29.84% | — | — | — |
+
+Joint minus one-at-a-time: −1.08 pp [−3.23, +0.81]. The heads choose the same action as Piotr ARM on 72/124 (joint) and 78/124 (one at a time) panels. Results on the 114 prompt-verified states, and on the 105 whose tasks are absent from Piotr's release, lead to the same conclusions. Luna before execution scores 35.11% on a 119-state subset ([above](#arm-continuation-branches-results-20261007)). These are conditional continuation results, not benchmark pass@1.
+
+**Teacher agreement shows the gap.** Both heads reach the same held-out agreement, well above the baselines, yet that does not carry over to continuation success. The heads also overfit: the one-at-a-time head reaches 90.0% agreement on training panels.
+
+| Teacher agreement, held-out task groups | All 3,759 panels | 3,265 non-identical panels | Best epoch / 20 |
+| --- | ---: | ---: | ---: |
+| Head, joint comparison | 65.5% | 60.3% | 6 |
+| Head, one candidate at a time | 65.4% | 60.2% | 13 |
+| Most common action | 50.0% | 42.6% | — |
+| Uniform candidate | 44.7% | 36.3% | — |
+
+Agreement counts a choice as correct when it is action-equivalent to the teacher's pick: identical calls, with clicks within five normalized units. Validation selected each checkpoint, so these are not untouched test scores.
+
+**Method.** A small transformer head without position embeddings reads the frozen OpenWebRL-4B-SFT actor's bf16 hidden states from layers 18, 27 and 36. For each candidate it uses the mean reasoning state, the mean action state and the end-token state; it also reads the prompt's last token. At serving, these states are a by-product of generating the candidates, so selection needs no second 4B model. Training uses only GPT-5.5 teacher choices from Piotr's release (35,916 panels); the branch outcomes are used for evaluation only.
+
+<details>
+<summary>Piotr ARM by subset, prompt reconstruction, feature checks, data and budget</summary>
+
+| Piotr ARM subset | Count | Piotr ARM | Actor first | Uniform | ARM − uniform, pp [95%] | ARM − first, pp [95%] |
 | --- | ---: | ---: | ---: | ---: | --- | --- |
 | All | 124 | 35.75% | 29.84% | 32.42% | +3.33 [+0.11, +6.72] | +5.91 [+1.88, +10.22] |
 | Prompt-verified | 114 | 35.96% | 30.70% | 33.04% | +2.92 [−0.53, +6.61] | +5.26 [+1.17, +9.94] |
 | Verified, task absent from Piotr's release | 105 | 36.83% | 31.11% | 33.33% | +3.49 [+0.25, +6.92] | +5.71 [+1.27, +10.48] |
 
-Luna before execution scores 35.11% on a 119-state subset ([above](#arm-continuation-branches-results-20261007)); the two selectors have not been compared on identical states. Piotr ARM returned a valid selection on all 124 panels and chose candidate 0 on 62. Nine tasks also occur in Piotr's training release, hence the last row. These are conditional continuation results, not benchmark pass@1.
-
-**Head under evaluation.** A small permutation-equivariant transformer reads the frozen SFT actor's hidden states — the prompt's last token, plus each candidate's mean reasoning, mean action and end-token states from layers 9/18/27/36 — and scores the five candidates jointly. At serving, these states are a by-product of generating the candidates, so selection needs no second 4B model. The head trains only on GPT-5.5 teacher choices from Piotr's release; the branching outcomes are used for evaluation only. A pointwise variant tests whether joint comparison matters.
-
-| Teacher-labeled panels | Panels | Teacher agreement: uniform | First candidate | Most common action |
-| --- | ---: | ---: | ---: | ---: |
-| Train | 35,916 | 42.4% | 41.9% | 47.7% |
-| Validation, held-out task groups | 3,759 | 44.7% | 44.5% | 50.1% |
-| Validation, non-identical panels | 3,265 | 36.3% | 36.1% | 42.6% |
-
-Agreement counts a choice as correct when it is action-equivalent to the teacher's pick: identical calls, with clicks within five normalized units. Validation selects the checkpoint, so its head score will not be an untouched test score.
-
-<details>
-<summary>Prompt reconstruction, feature checks, data exclusions and budget</summary>
-
-- **Prompts.** Branch anchors do not save the actor prompt. It is rebuilt from continuation-rollout conversations and accepted only when its SHA-256 equals the hash journaled at candidate sampling: 114/124 match. All 114 also reproduce the server's prompt token count, including image tokens. In the other 10, replayed prefixes word the tool feedback differently from discovery; they use the replay prompt and appear only in the "All" row (token differences −23 to +9).
-- **Candidates.** The head reads the actor's exact generated token ids. Re-tokenizing the saved text would change 47/620 candidates.
-- **Features.** Cached-prefix, batched extraction matches full forwards exactly in a float32 unit test. On the real bf16 4B model the relative L2 difference is 1.43–1.48% on two checked states, under the 2% abort threshold.
+- **Piotr ARM.** Run offline through the serving code: canonical prompt builder, JSON-schema decoding. It returned a valid selection on all 124 panels and chose candidate 0 on 62.
+- **Prompts.** Branch anchors do not save the actor prompt. It is rebuilt from continuation-rollout conversations and accepted only when its SHA-256 equals the hash journaled at candidate sampling: 114/124 match. All 114 also reproduce the server's prompt token count, including image tokens. In the other 10, replayed prefixes word the tool feedback differently from discovery; they use the replay prompt and enter only the 124-state rows (token differences −23 to +9).
+- **Candidates.** The heads read the actor's exact generated token ids. Re-tokenizing the saved text would change 47/620 candidates.
+- **Features.** Cached-prefix, batched extraction matches full forwards exactly in a float32 unit test. On the real bf16 model the relative L2 difference is 1.43–1.48% on two checked states, under the 2% abort threshold.
 - **Teacher panels.** Pinned release `0d83b48`, joint-data v2 task split and quarantine: 39,675 panels over 2,982 states. Excluded draw records: 300 conflicting draw IDs, 80 quarantined, 61 missing teacher selections and 32 outside the split.
-- **Budget.** Job `351647`: approved 1 H200, 8 CPUs, 120 GiB, 3 h (estimated $2.70), including retries; no API calls or browsers. Code: branch `arm-selection-head`, commit `87a204b`.
+- **Budget.** Job `351647` completed in 1 h 58 m of an approved 1 H200, 8 CPUs, 120 GiB, 3 h (estimated $2.70); no API calls or browsers. Code: branch `arm-selection-head`, commit `87a204b`.
 
 [Aggregate estimates and accounting](arm_results/rl_integration/selection-head-20261009.json).
 
