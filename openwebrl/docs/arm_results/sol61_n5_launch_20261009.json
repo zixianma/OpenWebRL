@@ -1,8 +1,8 @@
 {
   "study": "GPT-6.1 Sol selector N5",
   "date": "2026-10-09",
-  "status": "running_with_om2w_and_deepshop_verified",
-  "verified_complete": false,
+  "status": "verified_complete",
+  "verified_complete": true,
   "actor": "OpenWebRL/OpenWebRL-4B-SFT",
   "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
   "selector": "gpt-6.1-sol",
@@ -183,8 +183,124 @@
       "judge_model": "gpt-4o",
       "selector_usd_cap": 200,
       "judge_usd_cap": 30,
-      "status": "running",
-      "verified_complete": false
+      "status": "verified_complete",
+      "verified_complete": true,
+      "results": {
+        "records": 595,
+        "valid": 565,
+        "invalid": 30,
+        "successes": 345,
+        "native_valid_judged": 461,
+        "native_judge_responses": 463,
+        "native_judge_invalid_parses": 2,
+        "native_valid_unjudged_zeros": 104,
+        "native_outcome_categories": {
+          "native_judged": 461,
+          "valid_unjudged_max_steps_exhausted": 100,
+          "invalid_exception_absent_turn_samples": 10,
+          "valid_unjudged_generation_length_limit": 3,
+          "invalid_env_step_error": 5,
+          "invalid_actor_generation_http400": 13,
+          "invalid_native_judge_parse": 2,
+          "valid_unjudged_format_error_failed": 1
+        },
+        "overall_success_rate": 0.5798319327731093,
+        "valid_only_success_rate": 0.6106194690265486
+      },
+      "committed_episode_metrics": {
+        "actor_requests": {
+          "sum": 35580.0,
+          "mean_per_task": 59.79831932773109
+        },
+        "actor_input_tokens": {
+          "sum": 323819835.0,
+          "mean_per_task": 544235.0168067227
+        },
+        "actor_output_tokens": {
+          "sum": 11704118.0,
+          "mean_per_task": 19670.78655462185
+        },
+        "actor_client_request_seconds": {
+          "sum": 225622.0852911123,
+          "mean_per_task": 379.19678200186945
+        },
+        "browser_steps": {
+          "sum": 7088.0,
+          "mean_per_task": 11.912605042016807
+        },
+        "browser_step_seconds": {
+          "sum": 29438.496521460358,
+          "mean_per_task": 49.47646474195018
+        },
+        "selector_calls": {
+          "sum": 7103.0,
+          "mean_per_task": 11.93781512605042
+        },
+        "selector_input_tokens": {
+          "sum": 34393576.0,
+          "mean_per_task": 57804.32941176471
+        },
+        "selector_output_tokens": {
+          "sum": 302949.0,
+          "mean_per_task": 509.1579831932773
+        },
+        "selector_service_seconds": {
+          "sum": 20061.248282567598,
+          "mean_per_task": 33.71638366818084
+        },
+        "selector_fallbacks": {
+          "sum": 0.0,
+          "mean_per_task": 0.0
+        },
+        "elapsed_seconds": {
+          "sum": 108695.77043407457,
+          "mean_per_task": 182.68196711609173
+        }
+      },
+      "accounting": {
+        "all_attempt_seconds": 14024,
+        "approved_total_seconds": 36000,
+        "physical_browser_attempts": 595,
+        "browser_attempts_cap": 655,
+        "selector_http_requests": 7103,
+        "judge_http_requests": 463,
+        "observed_received_api_cost_usd": 87.6141281,
+        "unknown_reserved_usd": 0,
+        "selector_conservative_charged_usd": 85.5520876,
+        "judge_cost_usd": 2.072695,
+        "total_conservative_charged_usd": 87.6247826
+      },
+      "audit": {
+        "all595_artifacts_verified": true,
+        "actor_sampling_receipts": 35580,
+        "failed_actor_receipts_preserved": 65,
+        "selector_input_trace_bindings": 7103,
+        "native_judge_bindings": 463,
+        "available_saved_rollout_samples": 585,
+        "native_exception_records_without_rollout": 10,
+        "all_available_committed_images_fully_pixel_decoded": true,
+        "exact_unique_image_total_claimed": false,
+        "frozen_source_unchanged": true,
+        "wandb_finished_and_all595_history_reconciled": true,
+        "owned_teardown_verified": true,
+        "physical_postexit_node_scan_verified": false,
+        "proof_sha256": {
+          "webvoyager_artifacts": "a524f7b6bfe60dcf1ed31e6a252427fb5ff16304ad49c7d41f13e3503407bf94",
+          "all_attempt_accounting_wandb_source_teardown": "492cc592e203f651d9eaf90277ae9f69f037729fbe5c59a78f3d9c0eca435a49",
+          "record_union": "01b621ae5f5707ed9036a71f41dc81b00c72636a918d51a97aa3264fcfc17f84",
+          "independent_metadata_and_pair": "16c90b17f075dc529d85e8a180840b69cf8eb07dfb50373c8895075200becbb2",
+          "webvoyager_record_metrics": "032961e7458fe3d195dee70fe93a8595fb0e346952296bb33e6dc20e874aa69e",
+          "cpu_audit_repair": "3a5397f6485cf2e27cded4e6811fa729e2737d6851e48a1986cd291a97e5719f"
+        }
+      },
+      "limitations": [
+        "Artifact integrity/protocol audit does not independently semantically rejudge native labels.",
+        "Native failed/truncated/no-answer unjudged zeros remain valid and native invalid outcomes remain null.",
+        "Image metadata indexes inherited partial-prefix caches, so no exact unique-image total is claimed.",
+        "Actor telemetry lacks independent raw candidate response text; candidates are bound to exact selector requests, actor prompt hashes reconstruct from saved history, and executed actions match saved assistant messages.",
+        "GPU/API accounting, teardown and publication/completion flags are separately owned.",
+        "Physical postexit SSH denied by scheduler PAM policy; teardown evidence is scoped to owned groups, scheduler/cgroup completion, and the released controller lock."
+      ]
     },
     {
       "benchmark": "deepshop",
@@ -311,10 +427,11 @@
     "controller_dry_runs_passed": 4,
     "actual_api_request_and_gpu_startup_audit_pending": false,
     "all_four_initial_startup_reviews_passed": true,
-    "campaign_final_audit_pending": true,
+    "campaign_final_audit_pending": false,
     "completed_conditions": [
       "online_mind2web-medium",
       "online_mind2web-high",
+      "webvoyager-medium",
       "deepshop-medium"
     ]
   },
@@ -416,5 +533,48 @@
     "authoritative_conservative_api_charge_usd": 116.0615759,
     "unknown_reserved_usd": 0,
     "cost_basis": "Usage-derived observed cost follows bound model rates including actual cache_write_tokens. Authoritative caps remain conservative ledgers; no actual provider invoice or refund claim. Unknown reservations, if any, remain charged."
+  },
+  "campaign_accounting": {
+    "all_attempt_seconds_by_job": {
+      "om2w-shard-0": 10558,
+      "om2w-shard-1": 9602,
+      "webvoyager-medium": 14024,
+      "deepshop-medium": 7646
+    },
+    "approved_seconds_by_job": {
+      "om2w-shard-0": 21600,
+      "om2w-shard-1": 21600,
+      "webvoyager-medium": 36000,
+      "deepshop-medium": 14400
+    },
+    "all_attempt_seconds_sum": 41830,
+    "gpu_hours_used": 11.619444444444444,
+    "gpu_hours_cap": 26,
+    "physical_browser_attempts": 1354,
+    "browser_attempts_cap": 1480,
+    "extra_interrupted_deepshop_attempts": 9,
+    "selector_http_calls": 18801,
+    "selector_http_calls_cap": 44400,
+    "judge_http_calls": 955,
+    "judge_http_calls_cap": 5920,
+    "received_usage_cost_usd": 246.2441161,
+    "unknown_reserved_usd": 0.166405,
+    "received_usage_plus_unknown_reservation_usd": 246.4105211,
+    "conservative_charged_or_reserved_usd": 246.4387211,
+    "original_api_usd_cap": 625,
+    "shared_om_ledgers_counted_once": true,
+    "per_job_caps_not_transferred": true,
+    "pricing_limitation": "Received usage costs include actual cache_write_tokens at the bound rate; authoritative ledgers conservatively charge all uncached selector input at cache-write rate. Usage-derived amounts are not provider invoices. DS527 unknown503 remains reserved; no refund or rejudge."
+  },
+  "campaign_endpoint_audit": {
+    "all1345_requested_records_verified": true,
+    "previously_verified_records_reused": 750,
+    "newly_verified_webvoyager_records": 595,
+    "paired_online_mind2web_verified": true,
+    "native_invalid_outcomes_preserved": 107,
+    "native_valid_unjudged_zero_outcomes_preserved": 285,
+    "owner_composition_sha256": "7d15331f33d86a772f79259af147c9adc4c177cc19832a5ea9becb19d517a38f",
+    "independent_metadata_review_sha256": "16c90b17f075dc529d85e8a180840b69cf8eb07dfb50373c8895075200becbb2",
+    "all_attempt_accounting_sha256": "492cc592e203f651d9eaf90277ae9f69f037729fbe5c59a78f3d9c0eca435a49"
   }
 }

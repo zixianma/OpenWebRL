@@ -151,14 +151,14 @@ Means first average observed decisions within task, then weight tasks equally. I
 <a id="sol61-n5-launch-20261009"></a>
 ## GPT-6.1 Sol at N=5: medium versus high
 
-**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. DeepShop medium is also verified; WebVoyager medium remains incomplete.
+**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. All four conditions are verified: medium scored **57.98% on WebVoyager** and **46.00% on DeepShop**.
 
 | Benchmark | Selector reasoning | N | Tasks | Successes | Valid | Invalid | Overall | Valid-only | Status |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | Online-Mind2Web | Medium | 5 | 300 | 137 | 269 | 31 | 45.67% | 50.93% | Verified |
 | Online-Mind2Web | High | 5 | 300 | 131 | 257 | 43 | 43.67% | 50.97% | Verified |
 | DeepShop | Medium | 5 | 150 | 69 | 147 | 3 | 46.00% | 46.94% | Verified |
-| WebVoyager | Medium | 5 | 595 | — | — | — | — | — | Running |
+| WebVoyager | Medium | 5 | 595 | 345 | 565 | 30 | 57.98% | 61.06% | Verified |
 
 Overall includes invalid records as zero; valid-only excludes each condition's invalids. On the **same 250 tasks valid in both OM2W conditions**, medium succeeded on **134** and high on **128**: high minus medium **−2.40 pp [−8.40, +3.60]**. Neither comparison supports a reliable effort effect. This tests reasoning effort within N=5; there is no contemporaneous actor-only control, and historical actor/harness differences prevent a controlled selector-gain claim.
 
@@ -219,7 +219,20 @@ DeepShop's exhaustive audit covered all 150 records, 13,685 actor sampling recei
 
 Received DeepShop API usage costs **$42.5816541** at frozen prices, including cache-write tokens; an additional **$0.166405** remains reserved for the interrupted provider-error request. The authoritative conservative total is **$42.7523626**, including that reservation. These are receipt-based calculations, not an independently verified provider invoice. Every attempt remains charged; no budget was added or transferred.
 
-The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 physical browser attempts**, with eight concurrent episodes per job. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Budgets are separate from branching. Campaign completion still requires all 1,345 records and the remaining WebVoyager artifact/accounting audit.
+The WebVoyager audit covers all 595 records, 35,580 actor sampling receipts, 7,103 full N=5 selector bindings and 463 native GPT-4o judge responses. Of the 565 valid outcomes, 461 received parsed native verdicts and 104 are native unjudged zeros: 100 step limits, three generation-length limits and one format failure. Two of the 463 judge responses lacked the required verdict tokens and remain invalid. The other 28 invalids comprise 13 actor HTTP400 generation failures, ten missing-turn-sample exceptions and five environment-step errors. All native outcomes are preserved without selective retries or rejudging. Frozen source, all 595 finished W&B task-history rows and owned process-group teardown passed. Physical postexit inspection was denied by the scheduler's PAM policy; teardown evidence is scoped to owned groups, scheduler/cgroup completion and the released controller lock.
+
+| WebVoyager accounting | Used or charged | Approved cap |
+| --- | ---: | ---: |
+| Allocation seconds, all attempts | 14,024 | 36,000 |
+| Physical browser episode attempts | 595 | 655 |
+| Selector HTTP requests | 7,103 | 19,650 |
+| Judge HTTP requests | 463 | 2,620 |
+| Selector conservative USD | 85.5520876 | 200 |
+| Judge USD | 2.0726950 | 30 |
+
+All WebVoyager requests settled. Received API usage costs **$87.6141281** at frozen prices, including cache-write tokens; the authoritative conservative charge is **$87.6247826**.
+
+The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 physical browser attempts**, with eight concurrent episodes per job. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Budgets are separate from branching. All **1,345 requested records** and the paired OM2W comparison are verified. The campaign used 41,830 allocation seconds (11.6194 H200-hours), 1,354 browser attempts and $246.4387211 in conservative API charges/reservations. The one unresolved DeepShop reservation remains charged; no budget was added or transferred.
 
 </details>
 
