@@ -82,10 +82,10 @@
     "fresh_adapter_and_optimizer": true,
     "vision_and_projector": "frozen",
     "output": "one candidate index",
-    "target": "five candidate success counts divided by actual committed draw count:3/5 for retained historical states and8 for new states",
+    "target": "Per candidate native successes / actual valid committed draws, preserving success and valid counts; applies to retained historical and newly collected states.",
     "loss": "mean independent sigmoid/binomial BCE on the five candidate index logits at a fixed output prefix",
-    "primary_invalid_handling": "committed invalid outcomes count zero, matching the operational-success comparison; missing/unresolved records never fabricated as labels",
-    "secondary": "valid-only sensitivity with valid denominators and failure reasons; not a replacement primary estimand",
+    "primary_invalid_handling": "User amendment 2026-10-08: exclude native invalid observations from targets and success-rate denominators; preserve raw outcomes, reasons and all costs. No selective retries.",
+    "secondary": "Previously published operational invalid-as-zero analyses remain immutable historical estimates; distinguish them from new valid-only estimates.",
     "ties_and_all_equal_panels": "retain; no forced hard winner",
     "input": "pre-action goal, screenshot, allowed causal history and fixed candidate panel only",
     "forbidden_inputs": [
@@ -95,19 +95,23 @@
       "after-action evidence"
     ],
     "implementation_status": "loss adapter and GPU parity/save-reload validation still required",
-    "interpretation": "outcome adaptation of a teacher-pretrained selector, not purely outcome-only pretraining"
+    "interpretation": "outcome adaptation of a teacher-pretrained selector, not purely outcome-only pretraining",
+    "zero_valid_draws": "Null target; mask this candidate from loss. Keep other measured candidates in the state.",
+    "valid_native_zeros": "Keep valid unsuccessful outcomes, including native unjudged action-limit zeros."
   },
   "evaluation": {
-    "primary": "mean continuation success of the learned selected action, separately on seen-task/new-state and unseen-task validation",
+    "primary": "Valid-only continuation success of the learned selected action, separately on seen-task/new-state and unseen-task validation; report actual valid denominator and omitted measurements.",
     "baselines": [
       "actor first candidate",
       "uniform over five entries",
       "frozen released selector"
     ],
-    "oracle_reference": "select using first six draws; score fresh final two; tie-break without held-out outcomes",
+    "oracle_reference": "Select using valid observations within the first six draws; score valid observations in the final two; tie-break without held-out outcomes.",
     "uncertainty": "resample whole task groups; preserve paired states, candidates and draws",
     "checkpoint_selection": "validation only, with selected-checkpoint validation scores labeled selection-biased; final locked task test untouched",
-    "controls": "No claim of superiority over matched teacher-label training without that additional training control. Frozen judge semantic limitations remain."
+    "controls": "No claim of superiority over matched teacher-label training without that additional training control. Frozen judge semantic limitations remain.",
+    "paired_coverage": "For paired full-five reference comparisons use common states with at least one valid selection and one valid held-out draw per candidate. Report omitted states and actual counts; never renormalize the five-entry candidate set after seeing held-out validity.",
+    "validity_limitation": "Conditional on measurement availability, which may differ by candidate; not directly comparable to historical operational invalid-as-zero rates."
   },
   "pilot_request": {
     "approved": true,
@@ -168,5 +172,15 @@
   "scheduler_status_as_of_epoch": 1791497412.7528777,
   "effective_plan_sha256": "e9c1fc57022f5b9b152b72d11438ee05448c0f85ab2548a09c7ba4a4e44ac15b",
   "active_agent_supervision_verified": true,
-  "supervision_interval_seconds": 1800
+  "supervision_interval_seconds": 1800,
+  "analysis_policy_amendment": {
+    "date": "2026-10-08",
+    "user_approved": true,
+    "native_invalid_excluded": true,
+    "frozen_collection_plan_unchanged": true,
+    "caps_unchanged": true,
+    "raw_results_preserved": true,
+    "invalid_retries_requested": false,
+    "selector_training_started": false
+  }
 }
