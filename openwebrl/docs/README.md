@@ -46,11 +46,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Branching pilot verified: 32 states × five actions × eight draws; preliminary held-out selection and depth coverage](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [extra-24 partial: 2,200 new records; 24-draw versus eight-draw selection +3.52 pp, interval includes zero](ARM_FORMULATIONS.md#branch-extra24-20261008).
-
-[Shared selection head on frozen actor features is weaker than Piotr SelectionARM: 61.7% versus 73.2% agreement with an independent Luna teacher on 124 branch panels; continuation success cannot separate them](ARM_FORMULATIONS.md#selection-head-20261009).
-
-[Fresh branch continuations: old-three selection 34.54% versus uniform 26.03%; actor/teacher gains uncertain; 58 of 124 states reconstructed, 2,440 preserved records](ARM_FORMULATIONS.md#branch-extra2-heldout58-20261008).
+[Branching studies: two data families, matched results and remaining tests for post-action evidence and selector training](ARM_FORMULATIONS.md#branching-experiment-map). [Latest continuation-count comparison](ARM_FORMULATIONS.md#branch-extra24-20261008) · [Separately teacher-trained actor heads](ARM_FORMULATIONS.md#selection-head-20261009).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
 [Original early-state readout: 70 paired states; after-execution choices are more repeatable, while the success difference remains unresolved](ARM_INTEGRATION_PLAN.md#arm-continuation-early-signal-20261006).
@@ -64,7 +60,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | Document | Contents |
 | --- | --- |
 | [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results; presentation figures for the three stages and RL variants; static/interactive plots; collapsed WebVoyager results |
-| [ARM_FORMULATIONS.md](ARM_FORMULATIONS.md) | Before/after results, a [simple branching diagram](ARM_FORMULATIONS.md#branching-design), random-selection control and local examples |
+| [ARM_FORMULATIONS.md](ARM_FORMULATIONS.md) | Branching experiment map; matched pre/post evidence, held-out outcome selection, continuation scaling, teacher-trained heads and planned student controls |
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
