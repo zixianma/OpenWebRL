@@ -149,25 +149,62 @@ Means first average observed decisions within task, then weight tasks equally. I
 </details>
 
 <a id="sol61-n5-launch-20261009"></a>
-## GPT-6.1 Sol at N=5: DeepShop verified
+## GPT-6.1 Sol at N=5: medium versus high
 
-**Official OpenWebRL SFT + GPT-6.1 Sol medium achieved 46.00% overall on DeepShop.** Every decision proposes five actions. Online-Mind2Web medium/high and WebVoyager medium are still collecting; the paired reasoning-effort comparison is pending.
+**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. DeepShop medium is also verified; WebVoyager medium remains incomplete.
 
-| Benchmark | Selector reasoning | N | Requested tasks | Successes | Valid | Invalid | Overall | Valid-only | Status |
+| Benchmark | Selector reasoning | N | Tasks | Successes | Valid | Invalid | Overall | Valid-only | Status |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Online-Mind2Web | Medium | 5 | 300 | 137 | 269 | 31 | 45.67% | 50.93% | Verified |
+| Online-Mind2Web | High | 5 | 300 | 131 | 257 | 43 | 43.67% | 50.97% | Verified |
 | DeepShop | Medium | 5 | 150 | 69 | 147 | 3 | 46.00% | 46.94% | Verified |
-| Online-Mind2Web | Medium | 5 | 300 | — | — | — | — | — | Running |
-| Online-Mind2Web | High | 5 | 300 | — | — | — | — | — | Running |
 | WebVoyager | Medium | 5 | 595 | — | — | — | — | — | Running |
 
-DeepShop overall uses all 150 tasks; valid-only excludes three environment-step errors. Its native protocol keeps **50 unjudged step-limit outcomes as valid zeros**; the other 97 valid outcomes received the native GPT-4o verdict. The audit verifies saved evidence and protocol integrity without independently rejudging semantic correctness. Earlier local RL actor-only DeepShop rows differ in actor weights and decoding, so these rates do not establish a controlled selector gain.
+Overall includes invalid records as zero; valid-only excludes each condition's invalids. On the **same 250 tasks valid in both OM2W conditions**, medium succeeded on **134** and high on **128**: high minus medium **−2.40 pp [−8.40, +3.60]**. Neither comparison supports a reliable effort effect. This tests reasoning effort within N=5; there is no contemporaneous actor-only control, and historical actor/harness differences prevent a controlled selector-gain claim.
+
+<details>
+<summary>Paired comparison, latency and outcome definitions</summary>
+
+Across all 300 OM2W tasks, both conditions succeeded on 101, only medium on 36, only high on 30, and neither on 133. Intervals use the frozen paired task bootstrap: 10,000 resamples, seed 42. They quantify task sampling, not website drift, model-alias drift or judge error. The common-valid analysis conditions on measurement availability in both conditions.
+
+| Per-task mean, all 300 committed episodes | Medium | High |
+| --- | ---: | ---: |
+| Actor output tokens across all five proposals | 23,843.10 | 25,273.64 |
+| Selector output tokens, including reasoning | 631.78 | 1,465.80 |
+| Selector service seconds | 41.42 | 61.51 |
+| Episode elapsed seconds | 225.18 | 259.35 |
+
+These are committed-episode measurements, including invalid episodes; service times are summed within each episode and are not allocated GPU time. Two task shards interleaved medium and high, so per-shard allocation time cannot be attributed to one reasoning effort. Failed attempts and all API reservations are accounted separately.
+
+Native unjudged zero outcomes remain valid: OM2W has 63 in medium and 68 in high, including step limits, generation-length failures and format failures. Its other 395 valid outcomes received the native o4-mini verdict. DeepShop has 50 step-limit zeros and 97 native GPT-4o-judged outcomes. Invalid records remain saved and excluded only from valid-only rates. OM2W's invalids include browser reset/navigation failures, missing observations, a native episode timeout and actor requests whose prompt plus reserved output exceeded the context limit. The frozen client guard checks prompt length alone; this boundary mismatch is retained as a harness limitation, with no selective retries or changed labels. The native judge action-history parser omits unsupported tool names, including observed `select_option` calls; saved canonical requests and verdicts are preserved. The audit verifies integrity and protocol, without independently rejudging semantic correctness.
+
+</details>
 
 <details>
 <summary>Controlled protocol, endpoint verification and accounting</summary>
 
-All four conditions use the corrected September proposal protocol: local browsers, actor T=0.7/top-p=0.9, native default top-k, 1,024 actor tokens and 30 turns. GPT-6.1 Sol selects an index from the full proposals and current screenshot, with the same 2,048-token output cap for medium and high. Incomplete responses retain their validity and cost consequences.
+All four conditions use the corrected September proposal protocol: local browsers, actor T=0.7/top-p=0.9, native default top-k, 1,024 actor tokens and 30 turns. GPT-6.1 Sol selects an index from the full proposals and current screenshot, with the same 2,048-token output cap for medium and high. Incomplete responses retain their validity and cost consequences. The arms share the proposal protocol; stochastic trajectories and candidates differ. Recorded server seeds 4200/4201 do not establish deterministic replay because FlashInfer ignores request seeds.
 
 Online-Mind2Web uses canonical o4-mini/AgentTrek; WebVoyager and DeepShop use their native GPT-4o prompts and parsers, up to 30 screenshots, and an explicit 4,096-token judge cap. The earlier GPT-5.6 Sol N=5 result is a historical reference. Earlier local RL actor-only WebVoyager/DeepShop cohorts use different weights and T=0.6/top-p=0.95/top-k=20/4,096-token actor decoding.
+
+The OM2W audit covered all 600 records, 44,240 actor sampling receipts, 8,828 full N=5 selector input/trace bindings and 395 native judge bindings, preserving every available rollout/image and all invalid outcomes. Frozen source, finished W&B histories and owned-process teardown passed. Direct postexit node inspection was unavailable because SSH authentication was denied; teardown verification uses owned process-group receipts, scheduler/cgroup completion and released controller locks.
+
+| OM2W accounting | Used or charged | Approved cap |
+| --- | ---: | ---: |
+| Shard 0 allocation seconds, all attempts | 10,558 | 21,600 |
+| Shard 1 allocation seconds, all attempts | 9,602 | 21,600 |
+| Medium physical browser attempts | 300 | 330 |
+| High physical browser attempts | 300 | 330 |
+| Medium selector HTTP requests | 4,296 | 9,900 |
+| High selector HTTP requests | 4,532 | 9,900 |
+| Medium judge HTTP requests | 206 | 1,320 |
+| High judge HTTP requests | 189 | 1,320 |
+| Medium selector conservative USD | 53.7529163 | 100 |
+| High selector conservative USD | 58.9326232 | 200 |
+| Medium judge USD | 1.7440951 | 5 |
+| High judge USD | 1.6319413 | 5 |
+
+Shared OM2W API ledgers are counted once across the two shards. All requests settled, with zero unresolved reservations. Usage-derived API cost is **$116.0483339**, including cache-write tokens; the authoritative conservative charge is **$116.0615759**. Nominal diagnostic cost fields omit cache-write premiums and are not used for accounting.
 
 DeepShop's exhaustive audit covered all 150 records, 13,685 actor sampling receipts, 2,737 selector input/trace bindings, all 97 native judge bindings, and full pixel decoding of 2,364 unique committed images. The original 23 records and all interrupted-attempt evidence were preserved. Frozen source, finished W&B history, final scheduler accounting and owned-process teardown passed independent checks.
 
@@ -180,9 +217,9 @@ DeepShop's exhaustive audit covered all 150 records, 13,685 actor sampling recei
 | Selector conservative charged/reserved USD | 42.2210126 | 75 |
 | Judge charged/reserved USD | 0.53135 | 10 |
 
-Received API usage costs **$42.5816541** at frozen prices, including cache-write tokens; an additional **$0.166405** remains reserved for the interrupted provider-error request. The authoritative conservative total is **$42.7523626**, including that reservation. These are receipt-based calculations, not an independently verified provider invoice. Every attempt remains charged; no budget was added or transferred.
+Received DeepShop API usage costs **$42.5816541** at frozen prices, including cache-write tokens; an additional **$0.166405** remains reserved for the interrupted provider-error request. The authoritative conservative total is **$42.7523626**, including that reservation. These are receipt-based calculations, not an independently verified provider invoice. Every attempt remains charged; no budget was added or transferred.
 
-The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 physical browser attempts**, with eight concurrent episodes per job. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Budgets are separate from branching. Campaign completion still requires all 1,345 records, paired Online-Mind2Web analysis and the remaining artifact/accounting audits.
+The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 physical browser attempts**, with eight concurrent episodes per job. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Budgets are separate from branching. Campaign completion still requires all 1,345 records and the remaining WebVoyager artifact/accounting audit.
 
 </details>
 

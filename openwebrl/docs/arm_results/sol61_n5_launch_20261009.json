@@ -1,7 +1,7 @@
 {
   "study": "GPT-6.1 Sol selector N5",
   "date": "2026-10-09",
-  "status": "running_with_deepshop_verified",
+  "status": "running_with_om2w_and_deepshop_verified",
   "verified_complete": false,
   "actor": "OpenWebRL/OpenWebRL-4B-SFT",
   "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -16,8 +16,80 @@
       "judge_model": "o4-mini",
       "selector_usd_cap": 100,
       "judge_usd_cap": 5,
-      "status": "running",
-      "verified_complete": false
+      "status": "verified_complete",
+      "verified_complete": true,
+      "results": {
+        "records": 300,
+        "valid": 269,
+        "successes": 137,
+        "invalid": 31,
+        "native_judged": 206,
+        "native_valid_unjudged_zeros": 63,
+        "native_zero_max_steps_exhausted": 58,
+        "native_zero_generation_length_limit": 5,
+        "overall_success_rate": 0.45666666666666667,
+        "valid_only_success_rate": 0.5092936802973977
+      },
+      "committed_episode_metrics": {
+        "actor_requests": {
+          "sum": 21515,
+          "mean_per_task": 71.71666666666667
+        },
+        "actor_output_tokens": {
+          "sum": 7152929,
+          "mean_per_task": 23843.096666666668
+        },
+        "actor_input_tokens": {
+          "sum": 208573905,
+          "mean_per_task": 695246.35
+        },
+        "actor_client_request_seconds": {
+          "sum": 134010.94720322127,
+          "mean_per_task": 446.70315734407086
+        },
+        "browser_steps": {
+          "sum": 4294,
+          "mean_per_task": 14.313333333333333
+        },
+        "browser_step_seconds": {
+          "sum": 20560.79467676254,
+          "mean_per_task": 68.53598225587513
+        },
+        "selector_calls": {
+          "sum": 4296,
+          "mean_per_task": 14.32
+        },
+        "selector_input_tokens": {
+          "sum": 21196379,
+          "mean_per_task": 70654.59666666666
+        },
+        "selector_output_tokens": {
+          "sum": 189534,
+          "mean_per_task": 631.78
+        },
+        "selector_service_seconds": {
+          "sum": 12426.914497619495,
+          "mean_per_task": 41.42304832539832
+        },
+        "elapsed_seconds": {
+          "sum": 67554.67785277124,
+          "mean_per_task": 225.1822595092375
+        },
+        "selector_fallbacks": {
+          "sum": 0,
+          "mean_per_task": 0.0
+        }
+      },
+      "accounting": {
+        "browser_attempts": 300,
+        "browser_attempts_cap": 330,
+        "selector_http_requests": 4296,
+        "judge_http_requests": 206,
+        "selector_observed_received_cost_usd": 53.7464723,
+        "selector_conservative_charged_usd": 53.7529163,
+        "judge_cost_usd": 1.7440951000000002,
+        "unsettled_reservations": 0
+      }
     },
     {
       "benchmark": "online_mind2web",
@@ -27,8 +99,81 @@
       "judge_model": "o4-mini",
       "selector_usd_cap": 200,
       "judge_usd_cap": 5,
-      "status": "running",
-      "verified_complete": false
+      "status": "verified_complete",
+      "verified_complete": true,
+      "results": {
+        "records": 300,
+        "valid": 257,
+        "successes": 131,
+        "invalid": 43,
+        "native_judged": 189,
+        "native_valid_unjudged_zeros": 68,
+        "native_zero_max_steps_exhausted": 64,
+        "native_zero_generation_length_limit": 2,
+        "native_zero_format_error_failed": 2,
+        "overall_success_rate": 0.43666666666666665,
+        "valid_only_success_rate": 0.5097276264591439
+      },
+      "committed_episode_metrics": {
+        "actor_requests": {
+          "sum": 22725,
+          "mean_per_task": 75.75
+        },
+        "actor_output_tokens": {
+          "sum": 7582091,
+          "mean_per_task": 25273.636666666665
+        },
+        "actor_input_tokens": {
+          "sum": 228624130,
+          "mean_per_task": 762080.4333333333
+        },
+        "actor_client_request_seconds": {
+          "sum": 144081.48249721574,
+          "mean_per_task": 480.27160832405247
+        },
+        "browser_steps": {
+          "sum": 4524,
+          "mean_per_task": 15.08
+        },
+        "browser_step_seconds": {
+          "sum": 21930.122093822807,
+          "mean_per_task": 73.10040697940936
+        },
+        "selector_calls": {
+          "sum": 4532,
+          "mean_per_task": 15.106666666666667
+        },
+        "selector_input_tokens": {
+          "sum": 22564244,
+          "mean_per_task": 75214.14666666667
+        },
+        "selector_output_tokens": {
+          "sum": 439739,
+          "mean_per_task": 1465.7966666666666
+        },
+        "selector_service_seconds": {
+          "sum": 18452.12295194948,
+          "mean_per_task": 61.50707650649827
+        },
+        "elapsed_seconds": {
+          "sum": 77804.25548776472,
+          "mean_per_task": 259.34751829254907
+        },
+        "selector_fallbacks": {
+          "sum": 0,
+          "mean_per_task": 0.0
+        }
+      },
+      "accounting": {
+        "browser_attempts": 300,
+        "browser_attempts_cap": 330,
+        "selector_http_requests": 4532,
+        "judge_http_requests": 189,
+        "selector_observed_received_cost_usd": 58.9258252,
+        "selector_conservative_charged_usd": 58.9326232,
+        "judge_cost_usd": 1.6319413,
+        "unsettled_reservations": 0
+      }
     },
     {
       "benchmark": "webvoyager",
@@ -166,7 +311,12 @@
     "controller_dry_runs_passed": 4,
     "actual_api_request_and_gpu_startup_audit_pending": false,
     "all_four_initial_startup_reviews_passed": true,
-    "campaign_final_audit_pending": true
+    "campaign_final_audit_pending": true,
+    "completed_conditions": [
+      "online_mind2web-medium",
+      "online_mind2web-high",
+      "deepshop-medium"
+    ]
   },
   "comparability": [
     "Earlier GPT-5.6 Sol N5 OM2W is a historical reference with a different collection date.",
@@ -175,5 +325,96 @@
     "Both reasoning efforts share a2048-token selector cap; incomplete responses remain visible in validity/cost accounting."
   ],
   "analysis": "Report overall and valid-only success, invalid counts, paired OM2W high-minus-medium task bootstrap, and all-attempt compute/API cost and latency. Preserve valid unjudged action-limit zeros and native invalids.",
-  "budget_isolation": "Separate from all branching studies; every retry consumes original per-job and per-condition residual caps."
+  "budget_isolation": "Separate from all branching studies; every retry consumes original per-job and per-condition residual caps.",
+  "paired_online_mind2web": {
+    "overall_all300": {
+      "tasks": 300,
+      "high_successes": 131,
+      "medium_successes": 137,
+      "high_only": 30,
+      "medium_only": 36,
+      "both_success": 101,
+      "neither_success": 133,
+      "high_minus_medium": -0.02,
+      "bootstrap95": [
+        -0.07333333333333333,
+        0.03333333333333333
+      ]
+    },
+    "common_valid": {
+      "tasks": 250,
+      "high_successes": 128,
+      "medium_successes": 134,
+      "high_only": 27,
+      "medium_only": 33,
+      "both_success": 101,
+      "neither_success": 89,
+      "high_minus_medium": -0.024,
+      "bootstrap95": [
+        -0.084,
+        0.036
+      ]
+    },
+    "bootstrap": {
+      "draws": 10000,
+      "seed": 42,
+      "unit": "task",
+      "method": "Paired resampling, fixed schedule task order; sorted indices249and9749; matches native frozen summarizer."
+    },
+    "interpretation": "No established improvement from high effort under the shared N5 and2048-output-token protocol; both paired intervals include zero.",
+    "limitations": [
+      "Overall includes invalid outcomes as zero; common-valid is conditional on both arms being valid.",
+      "Native valid unjudged failure zeros are retained (step limits and other frozen native failure categories); category counts come from the independent artifact audit.",
+      "Task bootstrap does not include website drift, provider alias drift, or judge error.",
+      "No matched contemporaneous actor-only control; this isolates selector effort within this N5 protocol.",
+      "Metric totals and latency are for committed episodes; failed attempts and API reservations are accounted separately."
+    ]
+  },
+  "om2w_endpoint_audit": {
+    "all600_artifacts_and_paired_statistics_verified": true,
+    "actor_sampling_receipts": 44240,
+    "failed_actor_sampling_receipts_preserved": 100,
+    "full_candidate_selector_bindings": 8828,
+    "native_judge_bindings": 395,
+    "saved_rollout_samples": 556,
+    "unique_images_fully_pixel_decoded_by_shard": [
+      3464,
+      3306
+    ],
+    "canonical_native_invalids_preserved": 74,
+    "canonical_native_valid_unjudged_zeros": 131,
+    "frozen_source_unchanged": true,
+    "wandb_finished_and_history_reconciled": true,
+    "owned_teardown_verified": true,
+    "postexit_physical_node_scan_verified": false,
+    "teardown_scope": "All explicitly owned controller process groups gone, actor/selector/worker shutdown receipts and successful batch/extern cgroup lifecycle, terminal0 scheduler and released controller locks.",
+    "limitations": [
+      "Direct postexit SSH denied publickey; no whole-node process/GPU idleness claim.",
+      "Native actor context guard checks input alone; prompt+reserved-output overflow remains invalid.",
+      "Native judge parser omits unsupported tool names; saved canonical verdicts remain unchanged.",
+      "Integrity and protocol coverage do not independently establish semantic judge correctness."
+    ],
+    "proof_sha256": {
+      "artifacts_shard0": "f951690027803bb6d7bffdbba8ff3cf9eace817e96926b7b3051592ae9e327de",
+      "artifacts_shard1": "d44683cbb3431435e72170dff3f5842946beb96361b6e08d693b5c368c8f0df8",
+      "accounting_wandb_source_teardown": "103769784d986ce6b5824c5d7bfccfe4f9acfb38cd06b4ca5d44e7487188abc9",
+      "paired_statistics_and_api_protocol": "f9483c2caabc2b906636d4eb2937969749725a6d0937e413b90bc0b010b130d9",
+      "analysis": "40343b0ecabe42b3daea6f0b5312e99a374763d9a1d94fa65e18f8c4291526c8",
+      "native_parser_reconstruction": "290c770b881b794a68c8736fc2002bd1ef92446bedb681703c4061e30c425498"
+    }
+  },
+  "om2w_shared_accounting": {
+    "scope": "Counted once across the two interleaved task shards; no mode or job budget transfers.",
+    "all_attempt_seconds_by_shard": [
+      10558,
+      9602
+    ],
+    "approved_seconds_per_shard": 21600,
+    "physical_browser_attempts": 600,
+    "browser_attempts_cap": 660,
+    "observed_received_api_cost_usd": 116.0483339,
+    "authoritative_conservative_api_charge_usd": 116.0615759,
+    "unknown_reserved_usd": 0,
+    "cost_basis": "Usage-derived observed cost follows bound model rates including actual cache_write_tokens. Authoritative caps remain conservative ledgers; no actual provider invoice or refund claim. Unknown reservations, if any, remain charged."
+  }
 }
