@@ -1,7 +1,7 @@
 {
   "schema": "branch-selector-scaleup-proposal-v2",
   "date": "2026-10-08",
-  "status": "pilot_approved_released_queued",
+  "status": "pilot_running_extra24_running_startup_validation",
   "approved_for_execution": true,
   "full_science_target": {
     "train_states": 1000,
@@ -152,15 +152,16 @@
     "observed_reference_seconds": 39868,
     "observed_reference_browser_starts": 2695,
     "reference_draws_per_action": 3,
-    "warning": "Eight-draw all-context acceptance is unmeasured. Three slots on2090 tasks provide5670 collectible opportunities, not guaranteed targetstates. Expand audited source coverage or slots only after role/depth-specific pilot yield and cost review.",
+    "warning": "Eight-draw all-context acceptance has been observed in the pilot, but full32state yield is not guaranteed. Three slots on2090 tasks provide5670 collectible opportunities. Expand source coverage or slots only after role/depth-specific yield and cost review.",
     "larger_source_pool_status": "metadata available; requires separate exclusions/source audit and budget approval"
   },
   "validation": {
     "cpu_split_tests": 8,
-    "gpu_validation_completed": false,
-    "new_collection_started": false,
+    "gpu_validation_completed": true,
+    "new_collection_started": true,
     "training_started": false,
-    "source_and_split_verification_checks": 12
+    "source_and_split_verification_checks": 12,
+    "scope": "Original eight-draw pilot startup and initialcollections verified; extra24 GPUstartup pending. Neitherendpoint fullyaudited."
   },
   "job_id": "350648",
   "historical_reuse_caveat": {
@@ -168,7 +169,7 @@
     "overlapping_old_states": 25,
     "decision": "Reuse permitted for this new fit as requested; no claim of independence on reused historical evaluation sets."
   },
-  "approval_scope": "pilot_request_only",
+  "approval_scope": "pilot_request_and_fixed_parent_extra24_extension_only",
   "scheduler_status_as_of_epoch": 1791497412.7528777,
   "effective_plan_sha256": "e9c1fc57022f5b9b152b72d11438ee05448c0f85ab2548a09c7ba4a4e44ac15b",
   "active_agent_supervision_verified": true,
@@ -196,5 +197,72 @@
     "scaling_gate": "Audit valid panel yield, immediate evidence availability, depth coverage and all-attempt costs; prepare separate exact collection, labeling and training requests while current collection continues.",
     "current_zero_teacher_cap_unchanged": true,
     "new_critic_or_training_budget_approved": false
+  },
+  "extra24_extension": {
+    "approved": true,
+    "job_id": "351591",
+    "status": "running_startup_validation",
+    "snapshot_epoch": 1791528256.6652994,
+    "plan_sha256": "1afc8da27a25727d15741169398c7047418d007cd0f82ca8c941be7a61c38090",
+    "user_approval_sha256": "9ffccb136b8f1fe4d4840310759d1560cb4a48b2667618069c1cdf33cb783a64",
+    "activation_review_sha256": "3ba733c04acdb756debc9ab862f211b71d287da05c3676a23640ae0289d7c8cb",
+    "max_parent_states": 32,
+    "fixed_candidates_per_state": 5,
+    "original_draws": [
+      0,
+      7
+    ],
+    "new_draws": [
+      8,
+      31
+    ],
+    "additional_outcomes_max": 3840,
+    "combined_outcomes_max": 5120,
+    "audited_admitted_parent_states_at_launch": 17,
+    "original_records_bound_at_launch": 680,
+    "resources": {
+      "h200_gpus": 4,
+      "cpus": 32,
+      "memory_gib": 480,
+      "total_wall_seconds_all_attempts": 57600
+    },
+    "caps": {
+      "browser_attempts": 5000,
+      "browser_concurrency": 40,
+      "sft_calls": 240000,
+      "judge_http_attempts": 8000,
+      "judge_usd": 75,
+      "teacher_calls": 0
+    },
+    "admission": "Append only independently audited states in parent acceptance order; max32, no outcome filtering or proposal regeneration.",
+    "comparison": {
+      "fit_draws_small": [
+        0,
+        7
+      ],
+      "fit_draws_large": [
+        0,
+        23
+      ],
+      "shared_heldout_draws": [
+        24,
+        31
+      ],
+      "tie_handling": "exact uniform expectation over fitting-only tied winners",
+      "coverage": "common fixed-five valid fitting/heldout panel; no heldout-validity renormalization; report excluded states",
+      "uncertainty": "Planned paired whole-task bootstrap; split identities preserved.",
+      "interpretation": "Fixed proposal and continuation-policy reference; all32same-data maximum is optimistic hindsight."
+    },
+    "supervision": {
+      "active_agent_callback_verified": true,
+      "interval_seconds": 1800,
+      "parent_supervisor_unchanged": true
+    },
+    "startup_verified": false,
+    "verified_complete": false,
+    "budgets_separate": true,
+    "full_scale_and_training_approved": false,
+    "audited_admitted_parent_states_current": 19,
+    "original_records_bound_current": 760
   }
 }

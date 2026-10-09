@@ -41,7 +41,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Branching priority: next-screenshot critic comparison and pre-action distillation; approved32-state pilot and valid-only targets](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008).
+[Branching: next-screenshot critic comparison and pre-action distillation](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [approved extension to 32 continuations per fixed action](ARM_FORMULATIONS.md#branch-extra24-20261008).
 
 [Fresh branch continuations: old-three selection 34.54% versus uniform 26.03%; actor/teacher gains uncertain; 58 of 124 states reconstructed, 2,440 preserved records](ARM_FORMULATIONS.md#branch-extra2-heldout58-20261008).
 
