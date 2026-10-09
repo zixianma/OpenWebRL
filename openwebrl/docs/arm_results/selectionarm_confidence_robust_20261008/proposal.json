@@ -1,25 +1,40 @@
 {
+  "data_supply": {
+    "action": "Expand and audit task inputs before outcome collection for the balanced design. Unequal weighting requires a separately frozen estimand and recalculated precision; do not silently concentrate on convenient sites.",
+    "available_for_fit_and_heldout": 1277,
+    "equal_eight_site_available": 488,
+    "equal_site_bottleneck": "95 families at the smallest site minus4 pilot minus30 online leaves61 stage2 attempts per site.",
+    "fresh_pilot_families": 32,
+    "major_site_available": 1198,
+    "ring_fenced_online_reserve": 240,
+    "unused_caveat": "Unused by old confidence study, not certified model-training-unseen.",
+    "unused_normalized_families": 1549
+  },
   "exact_new_resource_request_approved": false,
+  "fitting_sample_size_caveat": "Match the heldout usable-state target for planning; this is not a power-derived fitting minimum.",
   "frozen_input_manifest_hashes": {
     "fresh32": "f7666ed43f716697018ba06542f98eaa1ac52d8808f8ae461b9a1ab04c1657d9",
     "historical16": "e203777cebebbe925db254e864b3f3c0cfae14e12836aaab44b80c39bb286e2a"
   },
   "larger_stages": {
     "choices": 2,
-    "fit_tasks": 240,
-    "fresh_policy_validation_tasks": 240,
+    "fit_usable_states_provisional": 448,
+    "five_pp_fit_and_heldout_each": 1664,
+    "fresh_policy_family_reserve": 240,
+    "fresh_policy_validation_tasks": null,
     "future_required_checks": [
       "post-action capture reliability",
       "fixed primary fitting method and contrasts",
       "missing-repeat handling",
       "fresh every-step evaluation"
     ],
+    "heldout_usable_states_planning": 448,
     "methods": "Prespecify first-response features and one primary gate; freeze before verification; compare against outcome-independent matched random invocation.",
     "planning_only": true,
     "repeats_per_choice": 3,
     "separate_resources_not_requested": true,
     "split_caveat": "New relative to completed calibration, not certified unseen by actor/selector training.",
-    "state_verification_tasks": 240
+    "task_attempts": "Determined from full-resolution yield and fixed precollection caps; former240per split superseded."
   },
   "measured_old_heldout": {
     "eligible_complete_pairs": 20,
@@ -134,15 +149,128 @@
     "websites": 8
   },
   "precision_planning": {
-    "assumptions_not_measurements": true,
-    "caveat": "Equal site sizes and exchangeable positive correlations are planning approximations. Unequal replay yield may reduce effective site count. Three repeats do not create three independent task clusters; eight sites are too few for confident unseen-site inference.",
-    "conservative_normal95_halfwidth_pp": 13.4685642177748,
-    "moderate_normal95_halfwidth_pp": 8.263933764060592,
-    "repeats_per_choice": 3,
-    "sites": 8,
-    "usable_states": 120
+    "contrasts": 2,
+    "familywise_alpha": 0.05,
+    "interpretation": "Conditional on the trained/frozen gate achieving the stated gain in BOTH contrasts and each state-level contrast variance respecting its planning scenario; not probability of learning a beneficial rule.",
+    "marginal_target_power": 0.9,
+    "method": "Noncentral-t planning proxy, df=n-1; approximate for bounded outcomes and nonlinear matched-random contrast. No finite-sample guarantee.",
+    "minimum_joint_power_by_union_bound": 0.8,
+    "per_contrast_two_sided_alpha": 0.025,
+    "repeats": "Three repeats do not triple independent states. For averaged exchangeable repeat contrasts only, V=single_repeat_variance*(1+2*rho)/3. Not a derivation of matched-random influence variance.",
+    "site_sensitivity": [
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 10.169893047463194,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 10.0,
+        "site_icc": 0.02,
+        "sites": 8
+      },
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 10.169893047463194,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 5.0,
+        "site_icc": 0.02,
+        "sites": 8
+      },
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 16.08001279514729,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 10.0,
+        "site_icc": 0.05,
+        "sites": 8
+      },
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 16.08001279514729,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 5.0,
+        "site_icc": 0.05,
+        "sites": 8
+      }
+    ],
+    "table": [
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9198343126828541,
+        "minimum_heldout_states": 210,
+        "rounded_heldout_states": 224,
+        "scenario": "moderate",
+        "state_contrast_sd": 0.408248290463863,
+        "state_contrast_variance": 0.16666666666666666
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9007713105324469,
+        "minimum_heldout_states": 830,
+        "rounded_heldout_states": 832,
+        "scenario": "moderate",
+        "state_contrast_sd": 0.408248290463863,
+        "state_contrast_variance": 0.16666666666666666
+      },
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9213695289871893,
+        "minimum_heldout_states": 417,
+        "rounded_heldout_states": 448,
+        "scenario": "planning",
+        "state_contrast_sd": 0.5773502691896257,
+        "state_contrast_variance": 0.3333333333333333
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9012371037581198,
+        "minimum_heldout_states": 1658,
+        "rounded_heldout_states": 1664,
+        "scenario": "planning",
+        "state_contrast_sd": 0.5773502691896257,
+        "state_contrast_variance": 0.3333333333333333
+      },
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9081202279653072,
+        "minimum_heldout_states": 624,
+        "rounded_heldout_states": 640,
+        "scenario": "higher_variance",
+        "state_contrast_sd": 0.7071067811865476,
+        "state_contrast_variance": 0.5
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9013918236690152,
+        "minimum_heldout_states": 2485,
+        "rounded_heldout_states": 2496,
+        "scenario": "higher_variance",
+        "state_contrast_sd": 0.7071067811865476,
+        "state_contrast_variance": 0.5
+      },
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9010821118629005,
+        "minimum_heldout_states": 1244,
+        "rounded_heldout_states": 1248,
+        "scenario": "stress",
+        "state_contrast_sd": 1.0,
+        "state_contrast_variance": 1.0
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9015462719922432,
+        "minimum_heldout_states": 4967,
+        "rounded_heldout_states": 4992,
+        "scenario": "stress",
+        "state_contrast_sd": 1.0,
+        "state_contrast_variance": 1.0
+      }
+    ],
+    "variance": "Variance of each final state-level contrast/influence function, not automatically Var(Piotr-first). Gate frequency estimated on heldout is accounted for."
   },
-  "schema": "confidence_robust_followup_aggregate_v1",
+  "sample_size_artifact": "sample-size.json",
+  "sample_size_sha256": "d77d3ce70ab1ad7cd96bdd2d72b4bc84faa5ee4a5f166aa9ced203fbb3140682",
+  "schema": "confidence_robust_followup_aggregate_v2",
+  "sizing_revision": "2026-10-09",
   "status": "offline_preparation_no_paid_execution",
   "user_scientific_direction_approved": true
 }

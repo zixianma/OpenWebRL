@@ -160,7 +160,18 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 </details>
 
 <a id="confidence-robust-20261008"></a>
-## More robust confidence study — preparation, October 8
+## More robust confidence study — sizing revised October 9
+
+**Plan by usable independent states, not attempted tasks.** The former 240-task-per-split placeholder is superseded. The initial recommendation targets a 10-percentage-point gain in both the frozen gate versus first action and the frozen gate versus random invocation matched in expansion count.
+
+| Detectable gain in each comparison | Fitting states, provisional | Held-out states | Continuation endpoints at those state counts |
+| --- | ---: | ---: | ---: |
+| **10 pp: initial recommendation** | **448** | **448** | **5,376** |
+| 5 pp: larger option | 1,664 | 1,664 | 19,968 |
+
+Held-out sizing assumes state-level contrast variance at most **1/3**, two-sided familywise α=0.05 across the two comparisons, and 90% power per comparison, giving at least 80% joint power under the planning model. These are conditional estimates for the declared sites, not measured power or a guarantee of learning a useful threshold. The fitting counts are development budgets to assess with fit-only learning curves; the held-out power calculation does not establish a required fitting sample size. Three continuations per choice reduce noise without tripling the independent state count. [Reproducible sizing and sensitivity scenarios](arm_results/selectionarm_confidence_robust_20261008/sample-size.json).
+
+**Task supply must grow.** At 50% full-resolution yield, the 10-point design provisions 960 attempted tasks per split under an illustrative binomial model; only 1,277 families remain after pilot and final-policy reservations. Equal allocation across the eight sites is more constrained still. Expand and audit the input pool before outcome collection; neither easy-site substitution nor replacement based on missing outcomes is part of this plan. The old evidence and completed-study budgets remain unchanged.
 
 **First test whether diverse states can be reproduced reliably.** The follow-up starts with 32 fixed fresh tasks across eight websites and target decisions **2, 5, 10 and 15**. At each reached state, six independent browsers must reproduce the same complete actor input before any future action-choice comparison. A task ending early stays in the denominator; an easier state cannot replace it.
 
@@ -188,13 +199,38 @@ Run the fresh cohort first, then historical diagnostics, in a fixed order. The t
 <details>
 <summary>Outcome study and fresh policy validation: staged roadmap</summary>
 
-After the pilot, prepare exact resources using measured throughput. The planning target is 240 fitting tasks and 240 untouched state-level verification tasks, one fixed state per task and three continuations for each of two choices. Both choices use one saved five-candidate pool; duplicate/same-choice cases remain. Average the three paired outcome differences within each task before fitting or uncertainty analysis. Repeats reduce continuation noise; they do not triple the number of independent states.
+After the replay pilot and bounded post-action reliability validation, prepare exact resources from measured throughput and **full six-endpoint resolution yield**. A pre-action replay pass fraction alone cannot supply that yield. Use one fixed state per distinct task family and one saved five-candidate pool for both choices; duplicate/same-choice cases remain. Preserve all six endpoints, pairing repeat seeds across choices. Freeze the task list, admission criteria, attempted-task cap and treatment of missing evidence before outcomes; finish every planned disposition. Shortfall reduces precision and does not authorize replacements or extra physical attempts.
 
 Compare a small, prespecified set of first-response features: full-response likelihood, action-only likelihood and a simple benefit predictor. Features requiring the extra four candidates cannot decide whether to generate them. Finalize one primary gate and its fitting procedure before outcome collection, freeze it before verification, and compare with first action, always-Piotr and an outcome-independent random gate matched in invocation rate. Report task-level intervals, site/depth coverage and sensitivity to leaving out each website.
 
-A further 240 reserved task families would support fresh, concurrent **every-step** evaluation of first action, the frozen gate and a random gate. Matching random invocation probability gives expected sampling use, not identical realized cost on diverging trajectories; measure actual candidates, tokens, latency and success. This later validation is necessary because one-action interventions do not establish an every-step policy effect. Its allocation is separate and not yet requested.
+Keep a provisional reserve of 240 further task families for fresh, concurrent **every-step** evaluation of first action, the frozen gate and a random gate. This reserve is bookkeeping, not a power-derived final sample size; the policy study needs its own sizing and exact allocation. Matching random invocation probability gives expected sampling use, not identical realized cost on diverging trajectories. Measure actual candidates, tokens, latency and success. One-action interventions do not establish an every-step policy effect.
 
-The source pool has 1,549 normalized task families unused by the old confidence study. Pilot/fit/verification/final-policy cohorts must be disjoint, but “unused” does not mean unseen during model training. Larger-stage assignments and resources remain provisional. At 120 usable verification states, illustrative repeat/site-correlation assumptions give approximately 8–14 percentage-point interval half-widths; this scale would still be exploratory for small gains. These are planning assumptions, not measured power.
+Pilot, fit, verification and final-policy cohorts must be task-family disjoint; “unused” does not mean unseen during model training. Keep held-out outcomes inaccessible until the fitting procedure, score transformation, threshold and primary contrasts are frozen. Assess fitting adequacy using family-grouped five-fold learning curves at 25%, 50%, 75% and 100% of each training fold, out-of-fold utility, expansion frequency and bootstrap rule stability. A stable always/never rule is allowed. Any additional fitting or nuisance-variance-based sizing happens before held-out results are opened, with separate exact resources; do not grow evaluation until a positive result appears. [Selection and evaluation separation](https://jmlr.org/papers/v11/cawley10a.html).
+
+</details>
+
+<details>
+<summary>Power, yield, site coverage and resource assumptions</summary>
+
+For each state, let D be the mean of three paired Piotr-minus-first outcomes, g the frozen gate, and q the held-out expansion fraction. Gate-minus-first is mean(gD); gain over expected count-matched random invocation is mean(gD)−mean(g)mean(D). The second comparison's influence function is (g−q)(D−mean(D))−gain. Its variance is not automatically the raw Piotr-minus-first variance. Recompute q within every task-family bootstrap and retain all repeats together.
+
+The sizing calculation uses the noncentral-t paired-test approximation with α=0.025 per comparison and 90% marginal power. Minimum held-out counts under variance 1/3 are 417 and 1,658; round upward to multiples of 32 for eight site strata and four depth targets. The nonlinear random-gate contrast and bounded outcomes make this a planning approximation. At variance 1/2, the rounded counts rise to 640 and 2,496; at variance 1, to 1,248 and 4,992. These are alternative assumptions, not estimated properties of the new population. [Power formula](https://support.minitab.com/en-us/minitab/help-and-how-to/statistics/power-and-sample-size/how-to/hypothesis-tests/power-and-sample-size-for-paired-t/methods-and-formulas/methods-and-formulas/).
+
+The claim is conditional on the fitted gate truly having the target benefit in **both** comparisons. It says nothing about the probability that fitting discovers such a gate. Synthetic bounded-outcome checks validate the estimator algebra and null behavior; they do not validate real replay coverage or scientific power. Fitting and evaluation counts remain distinct decisions.
+
+| Assumed full-resolution yield | Fit attempts provisioned | Held-out attempts provisioned | Total attempted tasks | Fits current aggregate reserve? |
+| --- | ---: | ---: | ---: | --- |
+| 80% | 608 | 608 | 1,216 | Yes; equal eight-site supply still insufficient |
+| 50% | 960 | 960 | 1,920 | No |
+| Old fit 19.67%, old held-out 13.33% | 2,496 | 3,680 | 6,176 | No |
+
+Each row provisions at least 97.5% modeled probability of reaching 448 usable states within each split, giving at least 95% jointly under independent, homogeneous task-resolution assumptions. This provisions the total count only: rounding allocations to 32 does not guarantee usable quotas in all site/depth cells. Heterogeneous site/depth failures can invalidate the model; uneven usable cells require a new weighted-precision calculation. Simple n/y would give only expected yield, not that probability. These are fixed precollection attempt estimates, not an instruction to stop or replace based on outcomes.
+
+The current pool has 1,549 unused families; reserving 32 pilot and 240 later-policy families leaves 1,277, of which 1,198 are on the eight major sites. The smallest major site has 95 families: after its four pilot and 30 later-policy reservations, only 61 remain for both stage-2 splits. Equal site allocation therefore permits at most 488 stage-2 attempts from this pool. More source tasks are required even for the optimistic balanced design. Any unequal weighting must be declared before collection and its weighted variance recalculated; actual missing cells cannot be hidden by the overall count.
+
+Power applies to independent task-family states with balanced usable strata and fixed represented-site inference. Unequal usable counts require stratified weighted variance accounting. Generalization to new sites needs more independent sites: under an illustrative eight-site random-effects model with variance 1/3 and site ICC 0.02, even arbitrarily many tasks retain a 10.17-pp detectable-effect floor for the joint claim. Do not reinterpret a larger task count as stronger unseen-site evidence.
+
+At the target state counts there are six endpoints per state; issued failures and any separately authorized retries add work. At the 50% provision, the ceiling is 11,520 scientific endpoint slots if all 1,920 planned states qualify, before retries. Startup, prefixes, selectors, suffixes, judge calls and cleanup must all enter the final allocation estimate. Exact GPU-hours and judge dollars remain unset until measured throughput and receipts are available. The prepared two-hour replay pilot remains separately awaiting exact approval; no new allocation was submitted.
 
 </details>
 

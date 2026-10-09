@@ -1,0 +1,384 @@
+{
+  "assumptions_not_measurements": true,
+  "calculation_script_sha256": "19182c0aec88d17d4d3c22d6f1e732754ac457c3ac780a2d5c2d62529b2459d4",
+  "data_supply": {
+    "action": "Expand and audit task inputs before outcome collection for the balanced design. Unequal weighting requires a separately frozen estimand and recalculated precision; do not silently concentrate on convenient sites.",
+    "available_for_fit_and_heldout": 1277,
+    "equal_eight_site_available": 488,
+    "equal_site_bottleneck": "95 families at the smallest site minus4 pilot minus30 online leaves61 stage2 attempts per site.",
+    "fresh_pilot_families": 32,
+    "major_site_available": 1198,
+    "ring_fenced_online_reserve": 240,
+    "unused_caveat": "Unused by old confidence study, not certified model-training-unseen.",
+    "unused_normalized_families": 1549
+  },
+  "date": "2026-10-09",
+  "estimators": {
+    "D": "mean of three (Piotr minus first) binary-outcome differences within a state",
+    "g": "frozen gate, 0 or 1",
+    "gate_minus_first": "mean(g*D)",
+    "gate_minus_random": "mean(g*D)-mean(g)*mean(D)",
+    "q": "mean(g) on the eligible heldout cohort",
+    "random_contrast_influence": "(g-q)*(D-mean(D))-theta",
+    "uncertainty": "Resample entire task families within declared site strata, all repeats together; recompute q inside each bootstrap. Coherent prespecified weights must be used throughout."
+  },
+  "fitting": {
+    "adaptation": "Any fit expansion and exact budget are decided using fitting evidence only before heldout outcomes are opened; heldout sizing may use conservatively bounded fit-based nuisance variance, not heldout effect-driven stopping.",
+    "criteria": "Fit-only nested task-family learning curves and bootstrap selection/expansion stability; keep model/grid small and frozen before collection. Stable always/never rules are allowed.",
+    "learning_curve_scope": "Fractions of each outer fold training pool, never fractions of heldout evaluation. Report OOF paired utility uncertainty and expansion rate; split site/depth diagnostics.",
+    "learning_curve_train_fractions": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "limitation": "No universal guarantee that a finite threshold is learnable from any chosen N.",
+    "outer_folds": 5,
+    "provisional_allocation": "Match the heldout usable-state target for planning; this is not a power-derived fitting minimum."
+  },
+  "five_point_option": {
+    "gain_pp": 5.0,
+    "heldout_usable_states": 1664,
+    "outcomes_per_state": 6,
+    "provisional_fit_usable_states": 1664,
+    "target_outcome_endpoints": 19968,
+    "yield_scenarios": [
+      {
+        "expected_only_attempts_by_split": [
+          2080,
+          2080
+        ],
+        "expected_only_attempts_total": 4160,
+        "fit_yield": 0.8,
+        "heldout_yield": 0.8,
+        "iid_95percent_joint_provision_attempts_by_split": [
+          2144,
+          2144
+        ],
+        "iid_95percent_joint_provision_attempts_total": 4288,
+        "name": "optimistic_80percent",
+        "outcome_endpoints_maximum_for_full_provision": 25728,
+        "within_aggregate_pool": false,
+        "within_equal_site_pool": false
+      },
+      {
+        "expected_only_attempts_by_split": [
+          3328,
+          3328
+        ],
+        "expected_only_attempts_total": 6656,
+        "fit_yield": 0.5,
+        "heldout_yield": 0.5,
+        "iid_95percent_joint_provision_attempts_by_split": [
+          3456,
+          3456
+        ],
+        "iid_95percent_joint_provision_attempts_total": 6912,
+        "name": "planning_50percent",
+        "outcome_endpoints_maximum_for_full_provision": 41472,
+        "within_aggregate_pool": false,
+        "within_equal_site_pool": false
+      },
+      {
+        "expected_only_attempts_by_split": [
+          8462,
+          12480
+        ],
+        "expected_only_attempts_total": 20942,
+        "fit_yield": 0.19666666666666666,
+        "heldout_yield": 0.13333333333333333,
+        "iid_95percent_joint_provision_attempts_by_split": [
+          8832,
+          13056
+        ],
+        "iid_95percent_joint_provision_attempts_total": 21888,
+        "name": "old_observed_split_yields",
+        "outcome_endpoints_maximum_for_full_provision": 131328,
+        "within_aggregate_pool": false,
+        "within_equal_site_pool": false
+      }
+    ]
+  },
+  "gate_features": "Only first-response features available before additional candidates are sampled.",
+  "new_jobs": 0,
+  "new_model_browser_judge_calls": 0,
+  "power": {
+    "contrasts": 2,
+    "familywise_alpha": 0.05,
+    "interpretation": "Conditional on the trained/frozen gate achieving the stated gain in BOTH contrasts and each state-level contrast variance respecting its planning scenario; not probability of learning a beneficial rule.",
+    "marginal_target_power": 0.9,
+    "method": "Noncentral-t planning proxy, df=n-1; approximate for bounded outcomes and nonlinear matched-random contrast. No finite-sample guarantee.",
+    "minimum_joint_power_by_union_bound": 0.8,
+    "per_contrast_two_sided_alpha": 0.025,
+    "repeats": "Three repeats do not triple independent states. For averaged exchangeable repeat contrasts only, V=single_repeat_variance*(1+2*rho)/3. Not a derivation of matched-random influence variance.",
+    "site_sensitivity": [
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 10.169893047463194,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 10.0,
+        "site_icc": 0.02,
+        "sites": 8
+      },
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 10.169893047463194,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 5.0,
+        "site_icc": 0.02,
+        "sites": 8
+      },
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 16.08001279514729,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 10.0,
+        "site_icc": 0.05,
+        "sites": 8
+      },
+      {
+        "approximate_required_tasks": null,
+        "asymptotic_detectable_gain_pp": 16.08001279514729,
+        "finite_task_count_suffices_in_this_model": false,
+        "gain_pp": 5.0,
+        "site_icc": 0.05,
+        "sites": 8
+      }
+    ],
+    "table": [
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9198343126828541,
+        "minimum_heldout_states": 210,
+        "rounded_heldout_states": 224,
+        "scenario": "moderate",
+        "state_contrast_sd": 0.408248290463863,
+        "state_contrast_variance": 0.16666666666666666
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9007713105324469,
+        "minimum_heldout_states": 830,
+        "rounded_heldout_states": 832,
+        "scenario": "moderate",
+        "state_contrast_sd": 0.408248290463863,
+        "state_contrast_variance": 0.16666666666666666
+      },
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9213695289871893,
+        "minimum_heldout_states": 417,
+        "rounded_heldout_states": 448,
+        "scenario": "planning",
+        "state_contrast_sd": 0.5773502691896257,
+        "state_contrast_variance": 0.3333333333333333
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9012371037581198,
+        "minimum_heldout_states": 1658,
+        "rounded_heldout_states": 1664,
+        "scenario": "planning",
+        "state_contrast_sd": 0.5773502691896257,
+        "state_contrast_variance": 0.3333333333333333
+      },
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9081202279653072,
+        "minimum_heldout_states": 624,
+        "rounded_heldout_states": 640,
+        "scenario": "higher_variance",
+        "state_contrast_sd": 0.7071067811865476,
+        "state_contrast_variance": 0.5
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9013918236690152,
+        "minimum_heldout_states": 2485,
+        "rounded_heldout_states": 2496,
+        "scenario": "higher_variance",
+        "state_contrast_sd": 0.7071067811865476,
+        "state_contrast_variance": 0.5
+      },
+      {
+        "gain_pp": 10.0,
+        "marginal_power_at_rounded": 0.9010821118629005,
+        "minimum_heldout_states": 1244,
+        "rounded_heldout_states": 1248,
+        "scenario": "stress",
+        "state_contrast_sd": 1.0,
+        "state_contrast_variance": 1.0
+      },
+      {
+        "gain_pp": 5.0,
+        "marginal_power_at_rounded": 0.9015462719922432,
+        "minimum_heldout_states": 4967,
+        "rounded_heldout_states": 4992,
+        "scenario": "stress",
+        "state_contrast_sd": 1.0,
+        "state_contrast_variance": 1.0
+      }
+    ],
+    "variance": "Variance of each final state-level contrast/influence function, not automatically Var(Piotr-first). Gate frequency estimated on heldout is accounted for."
+  },
+  "primary_contrasts": [
+    "frozen_gate_minus_first",
+    "frozen_gate_minus_expected_count_matched_random"
+  ],
+  "prior_aggregate_sha256": "9f9f4aeb059e575bb748672e7447a930b71016a3efe6fd376240464eafa48e91",
+  "recommended_initial_design": {
+    "gain_pp": 10.0,
+    "heldout_usable_states": 448,
+    "outcomes_per_state": 6,
+    "provisional_fit_usable_states": 448,
+    "target_outcome_endpoints": 5376,
+    "yield_scenarios": [
+      {
+        "expected_only_attempts_by_split": [
+          560,
+          560
+        ],
+        "expected_only_attempts_total": 1120,
+        "fit_yield": 0.8,
+        "heldout_yield": 0.8,
+        "iid_95percent_joint_provision_attempts_by_split": [
+          608,
+          608
+        ],
+        "iid_95percent_joint_provision_attempts_total": 1216,
+        "name": "optimistic_80percent",
+        "outcome_endpoints_maximum_for_full_provision": 7296,
+        "within_aggregate_pool": true,
+        "within_equal_site_pool": false
+      },
+      {
+        "expected_only_attempts_by_split": [
+          896,
+          896
+        ],
+        "expected_only_attempts_total": 1792,
+        "fit_yield": 0.5,
+        "heldout_yield": 0.5,
+        "iid_95percent_joint_provision_attempts_by_split": [
+          960,
+          960
+        ],
+        "iid_95percent_joint_provision_attempts_total": 1920,
+        "name": "planning_50percent",
+        "outcome_endpoints_maximum_for_full_provision": 11520,
+        "within_aggregate_pool": false,
+        "within_equal_site_pool": false
+      },
+      {
+        "expected_only_attempts_by_split": [
+          2278,
+          3360
+        ],
+        "expected_only_attempts_total": 5638,
+        "fit_yield": 0.19666666666666666,
+        "heldout_yield": 0.13333333333333333,
+        "iid_95percent_joint_provision_attempts_by_split": [
+          2496,
+          3680
+        ],
+        "iid_95percent_joint_provision_attempts_total": 6176,
+        "name": "old_observed_split_yields",
+        "outcome_endpoints_maximum_for_full_provision": 37056,
+        "within_aggregate_pool": false,
+        "within_equal_site_pool": false
+      }
+    ]
+  },
+  "resources": {
+    "budget_status": "Requires measured startup, prefix, selector, suffix, judge and cleanup throughput/receipts. Cannot infer GPU-hours or USD from this offline power analysis.",
+    "larger_study_exact_gpu_budget": null,
+    "larger_study_exact_judge_budget": null,
+    "online_validation": "Old240-task reserve is bookkeeping only; final every-step study needs its own power analysis and resource approval.",
+    "outcome_count_caveat": "Target endpoints are for resolved target states only; issued/failed endpoints, retries and startup count in the separately approved cap.",
+    "pilot": "Unchanged prepared1 H200/16CPU/240GiB x2h all-attempt cap; exact approval still absent;0 selector/judge/API spend."
+  },
+  "schema": "confidence_effect_sizing_v4",
+  "scope": "One intervention per replay-eligible state; fixed represented sites. No every-step or unseen-site claim.",
+  "sources": [
+    {
+      "title": "Minitab paired-t power equations",
+      "url": "https://support.minitab.com/en-us/minitab/help-and-how-to/statistics/power-and-sample-size/how-to/hypothesis-tests/power-and-sample-size-for-paired-t/methods-and-formulas/methods-and-formulas/"
+    },
+    {
+      "title": "MRC CBU paired-sample normal approximation",
+      "url": "https://imaging.mrc-cbu.cam.ac.uk/statswiki/FAQ/power/onesamp"
+    },
+    {
+      "title": "Cawley and Talbot2010 model-selection bias",
+      "url": "https://jmlr.org/papers/v11/cawley10a.html"
+    }
+  ],
+  "status": "offline_sizing_complete_no_paid_execution",
+  "supersedes": "240 attempted fit tasks +240 attempted heldout tasks; not a cap",
+  "task_collection": {
+    "inflation": "Expected-only n/y is not a high-probability guarantee. Provision table uses per-split P(Binomial(A,y)>=n)>=.975, hence>=.95 jointly by union bound under the iid yield model. Heterogeneous site failures can invalidate this approximation.",
+    "missing": "Keep pre-action failures and released missing endpoints distinct and visible. Never impute or relabel missing evidence. Falling below usable target reduces precision; it does not authorize a retry or replacement.",
+    "resolution_yield": "Full six-endpoint resolution yield; a pre-action-only replay pass fraction cannot estimate it.",
+    "stopping": "Freeze task manifest, attempt caps and admission rules before outcomes; complete all planned dispositions. No outcome-dependent replacement or stop-on-significance.",
+    "target_unit": "Distinct task-family state with all prespecified repeated endpoints resolved"
+  },
+  "validation": {
+    "checks": [
+      "minimal integer power thresholds",
+      "normal approximation constant7.848879734349088",
+      "single-primary V=.5, delta=.1 requires395 under noncentral-t",
+      "bounded paired-outcome simulation for both estimators",
+      "null marginal false-positive check"
+    ],
+    "synthetic_scenarios": [
+      {
+        "caveat": "Synthetic fixed-site illustration only; not observed study power.",
+        "gain_each_contrast": 0.1,
+        "joint_rejection_rate": 0.9903,
+        "marginal_rejection_rates": [
+          0.9903,
+          1.0
+        ],
+        "mean_estimated_contrast_variances": [
+          0.2132441781186747,
+          0.10130424852699377
+        ],
+        "seed": 20261009,
+        "trials": 10000,
+        "usable_states": 448
+      },
+      {
+        "caveat": "Synthetic fixed-site illustration only; not observed study power.",
+        "gain_each_contrast": 0.05,
+        "joint_rejection_rate": 0.9846,
+        "marginal_rejection_rates": [
+          0.9846,
+          1.0
+        ],
+        "mean_estimated_contrast_variances": [
+          0.21586993435638532,
+          0.10654409078436408
+        ],
+        "seed": 20261009,
+        "trials": 10000,
+        "usable_states": 1664
+      },
+      {
+        "caveat": "Synthetic fixed-site illustration only; not observed study power.",
+        "gain_each_contrast": 0.0,
+        "joint_rejection_rate": 0.0082,
+        "marginal_rejection_rates": [
+          0.0254,
+          0.0243
+        ],
+        "mean_estimated_contrast_variances": [
+          0.2165779313589716,
+          0.10784146010946631
+        ],
+        "seed": 20261009,
+        "trials": 10000,
+        "usable_states": 448
+      }
+    ]
+  }
+}
