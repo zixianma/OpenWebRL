@@ -183,7 +183,10 @@
         "group": 25,
         "matched": 0
       }
-    ]
+    ],
+    "matched_pairs_differing_from_discovery_target": 6,
+    "matched_anchors_differing_from_discovery_target": 2,
+    "acceptance": "Agreement between current replicas; discovery-reference agreement is diagnostic only."
   },
   "acceptance": [
     {
@@ -286,12 +289,15 @@
     "fixed_dwell_role_checks": 120,
     "native_decisions_checked": 195,
     "positive_cohorts_checked": 24,
-    "strict_prefix_replays_checked": 102
+    "strict_prefix_replays_checked": 102,
+    "supplemental_cpu_reencoded_role_frames": 60,
+    "supplemental_cpu_unique_inputs": 10
   },
   "outcome_study_complete": false,
   "verified_epoch": 1791534759.7441096,
   "audit_proof_sha256": {
     "scientific": "bfca829282193e3abe8ccf92f03fabaa3b99959b801d8439008daebd68b65d17",
-    "accounting": "27ba52cd726f2516ef1d05749bfc7f360418e5091cb2f6d5daede692468d5c7e"
+    "accounting": "27ba52cd726f2516ef1d05749bfc7f360418e5091cb2f6d5daede692468d5c7e",
+    "frontend_reencoding": "82699354034f1a5021725000e806162f53cc54d0dcc140302b36c4306afeca85"
   }
 }

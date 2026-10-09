@@ -181,7 +181,7 @@ Nineteen reached fresh targets failed the replay contract. Of ten unreached targ
 
 ![Fresh-task replay coverage by origin site](arm_results/selectionarm_confidence_robust_20261008/replay-pilot-coverage.png)
 
-The separate historical diagnostic cohort recorded all 48 two-browser repeat pairs across 16 old states: 21 pairs matched and remained stable (43.8%), comprising three passes each for seven states. These dependent diagnostic repeats are excluded from every fresh-cohort acceptance denominator.
+The separate historical diagnostic cohort recorded all 48 two-browser repeat pairs across 16 old states: 21 pairs matched and remained stable (43.8%), comprising three passes each for seven states. Six accepted historical repeat pairs (two anchors) agreed between current replicas but differed from their old discovery target; old-target agreement is diagnostic-only under the frozen pilot contract. These dependent repeats are excluded from every fresh-cohort acceptance denominator.
 
 The independent review checked fixed membership, first captures, frontend/image/token parity, sampled stability, native receipts, all-attempt accounting and recorded process teardown. Per-cohort 180-second deadlines were enforced by the pinned worker but their absolute start timestamps were not separately persisted; the audit cannot independently reconstruct that narrower deadline from the final admission receipt. The native numerical probability check belongs to attempt 351667; the final attempt verified model/runtime continuity and issued no additional synthetic probe.
 
