@@ -148,6 +148,31 @@ Means first average observed decisions within task, then weight tasks equally. I
 
 </details>
 
+<a id="sol61-n5-launch-20261009"></a>
+## GPT-6.1 Sol at N=5: running
+
+The new study compares **medium versus high reasoning on the same 300 Online-Mind2Web tasks**, and evaluates medium on WebVoyager and DeepShop. The actor remains official OpenWebRL SFT; every decision proposes **five actions**. Results are pending verification.
+
+| Benchmark | Selector reasoning | N | Requested episodes | Status |
+| --- | --- | ---: | ---: | --- |
+| Online-Mind2Web | Medium | 5 | 300 | Running |
+| Online-Mind2Web | High | 5 | 300 | Running |
+| WebVoyager | Medium | 5 | 595 | Running |
+| DeepShop | Medium | 5 | 150 | Running |
+
+<details>
+<summary>Controlled protocol, accounting and comparison limits</summary>
+
+All four conditions use the corrected September proposal protocol: local browsers, actor T=0.7/top-p=0.9, native default top-k, 1,024 actor tokens and 30 turns. GPT-6.1 Sol selects an index from the full proposals and current screenshot, with the same 2,048-token output cap for medium and high. Incomplete responses retain their validity and cost consequences.
+
+Online-Mind2Web uses canonical o4-mini/AgentTrek; WebVoyager and DeepShop use their native GPT-4o prompts and parsers, up to 30 screenshots, and an explicit 4,096-token judge cap. The earlier GPT-5.6 Sol N=5 result is a historical reference. Earlier local RL actor-only WebVoyager/DeepShop rows differ in actor weights and decoding, so they are not a controlled selector comparison.
+
+The approved ceilings are **26 H200-hours** across four jobs and **$625** across selectors and judges, including every failed attempt and unresolved reservation. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Browser use is capped at 1,480 physical episode attempts and eight concurrent episodes per job. Budgets are separate from branching. Final reporting requires all 1,345 records, paired Online-Mind2Web analysis, artifact and accounting audits.
+
+</details>
+
+[Launch aggregate](arm_results/sol61_n5_launch_20261009.json) · [Official model settings and pricing](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
+
 ## Actors alone
 
 <a id="local-jev-actor-results-20261006"></a>

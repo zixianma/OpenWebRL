@@ -1,0 +1,119 @@
+{
+  "study": "GPT-6.1 Sol selector N5",
+  "date": "2026-10-09",
+  "status": "running_pending_startup_and_final_audit",
+  "verified_complete": false,
+  "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+  "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+  "selector": "gpt-6.1-sol",
+  "candidates_per_decision": 5,
+  "conditions": [
+    {
+      "benchmark": "online_mind2web",
+      "tasks": 300,
+      "reasoning_effort": "medium",
+      "selector_max_output_tokens": 2048,
+      "judge_model": "o4-mini",
+      "selector_usd_cap": 100,
+      "judge_usd_cap": 5
+    },
+    {
+      "benchmark": "online_mind2web",
+      "tasks": 300,
+      "reasoning_effort": "high",
+      "selector_max_output_tokens": 2048,
+      "judge_model": "o4-mini",
+      "selector_usd_cap": 200,
+      "judge_usd_cap": 5
+    },
+    {
+      "benchmark": "webvoyager",
+      "tasks": 595,
+      "reasoning_effort": "medium",
+      "selector_max_output_tokens": 2048,
+      "judge_model": "gpt-4o",
+      "selector_usd_cap": 200,
+      "judge_usd_cap": 30
+    },
+    {
+      "benchmark": "deepshop",
+      "tasks": 150,
+      "reasoning_effort": "medium",
+      "selector_max_output_tokens": 2048,
+      "judge_model": "gpt-4o",
+      "selector_usd_cap": 75,
+      "judge_usd_cap": 10
+    }
+  ],
+  "primary_episodes": 1345,
+  "protocol": {
+    "browser": "local_process",
+    "actor_temperature": 0.7,
+    "actor_top_p": 0.9,
+    "actor_top_k": "native endpoint default, omitted from request",
+    "actor_response_tokens": 1024,
+    "episode_turns": 30,
+    "selector_output_tokens_including_reasoning": 2048,
+    "selector_format": "strict JSON schema index only",
+    "selector_input": "current screenshot and full candidate proposals",
+    "judge_output_tokens": 4096,
+    "om2w_judge_protocol": "o4-mini Online-Mind2Web/AgentTrek",
+    "wv_ds_judge_protocol": "native GPT-4o benchmark prompt and parser; up to30 screenshots"
+  },
+  "design": "OM2W medium/high randomized within task and interleaved across two disjoint task shards; WV/DS each one medium cohort.",
+  "approved_lifetime_caps": {
+    "jobs": 4,
+    "expected_records": 1345,
+    "gpu_hours_cap": 26,
+    "cpu_hours_cap": 208,
+    "memory_gib_hours_cap": 3120,
+    "concurrent_gpus_max": 4,
+    "concurrent_cpus_max": 32,
+    "concurrent_memory_gib_max": 480,
+    "browser_concurrency_max": 32,
+    "browser_episode_attempts_cap": 1480,
+    "selector_http_calls_cap": 44400,
+    "judge_http_calls_cap": 5920,
+    "selector_usd_cap": 575,
+    "judge_usd_cap": 50,
+    "all_api_usd_cap": 625
+  },
+  "compute_profiles": {
+    "om2w_shards": {
+      "count": 2,
+      "gpus_each": 1,
+      "gpu_type": "H200",
+      "cpus_each": 8,
+      "memory_gib_each": 120,
+      "hours_each": 6
+    },
+    "webvoyager": {
+      "gpus": 1,
+      "gpu_type": "H200",
+      "cpus": 8,
+      "memory_gib": 120,
+      "hours": 10
+    },
+    "deepshop": {
+      "gpus": 1,
+      "gpu_type": "H200",
+      "cpus": 8,
+      "memory_gib": 120,
+      "hours": 4
+    }
+  },
+  "validation": {
+    "offline_source_tests_passed": 16,
+    "independent_adapter_tests_passed": 6,
+    "controller_dry_runs_passed": 4,
+    "actual_api_request_and_gpu_startup_audit_pending": true
+  },
+  "comparability": [
+    "Earlier GPT-5.6 Sol N5 OM2W is a historical reference with a different collection date.",
+    "Prior local RL actor-only WV/DS cohorts differ in weights and actor decoding (.6/.95/k20/4096).",
+    "WV/DS keep native judge prompts/parsers but now explicitly cap judge responses at4096 tokens.",
+    "Both reasoning efforts share a2048-token selector cap; incomplete responses remain visible in validity/cost accounting."
+  ],
+  "analysis": "Report overall and valid-only success, invalid counts, paired OM2W high-minus-medium task bootstrap, and all-attempt compute/API cost and latency. Preserve valid unjudged action-limit zeros and native invalids.",
+  "budget_isolation": "Separate from all branching studies; every retry consumes original per-job and per-condition residual caps."
+}
