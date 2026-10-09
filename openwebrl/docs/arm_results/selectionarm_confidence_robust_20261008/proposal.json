@@ -10,7 +10,7 @@
     "unused_caveat": "Unused by old confidence study, not certified model-training-unseen.",
     "unused_normalized_families": 1549
   },
-  "exact_new_resource_request_approved": false,
+  "exact_new_resource_request_approved": true,
   "fitting_sample_size_caveat": "Match the heldout usable-state target for planning; this is not a power-derived fitting minimum.",
   "frozen_input_manifest_hashes": {
     "fresh32": "f7666ed43f716697018ba06542f98eaa1ac52d8808f8ae461b9a1ab04c1657d9",
@@ -49,7 +49,7 @@
     "usable_decisions1_to3": 17,
     "usable_websites": 3
   },
-  "new_paid_jobs": 0,
+  "new_paid_jobs": 3,
   "old_fit_pair_definition": {
     "choices": [
       "first candidate",
@@ -81,12 +81,31 @@
       "min_six_way_matched_fresh_states": 20,
       "min_six_way_replay_pass_fraction_among_reached": 0.8
     },
+    "active_agent_supervision": true,
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
     "admission": "Original strict state comparator plus exact normal frontend/images/token identities; fixed-prefix replay checks retained",
+    "approved_cpu_ceiling": 16,
     "context_length": 32768,
+    "current_attempt": {
+      "browser_collection_started": true,
+      "job_id": "351682",
+      "original_total_seconds": 7200,
+      "prior_elapsed_seconds": 124,
+      "snapshot_epoch": 1791532913.4292746,
+      "stage": "collecting",
+      "startup_verified": true,
+      "state": "RUNNING",
+      "time_limit_seconds": 7020,
+      "unallocated_rounding_seconds": 56
+    },
     "fresh_tasks": 32,
     "historical_diagnostic_states": 16,
     "historical_pairs_per_state": 3,
+    "independent_recovery_audit": {
+      "historical_mutable_refs_not_claimed_revalidated": true,
+      "historical_mutable_supervision_references": 3,
+      "immutable_references_verified": 763
+    },
     "limitations": [
       "Pre-action parity and sampled stability do not prove hidden-state equality or post-action/suffix reliability.",
       "Historical diagnostic states are not part of the fresh coverage denominator.",
@@ -111,15 +130,55 @@
       "teacher_calls": 0,
       "unit_wall_seconds": 180
     },
+    "native_probability_evidence": {
+      "additional_probe_requests": 0,
+      "current_model_runtime_identity_verification_required": true,
+      "current_model_runtime_identity_verified": true,
+      "fresh_current_numeric_validation": false,
+      "source_job_id": "351667",
+      "source_numeric_probe_verified": true
+    },
     "no_old_budget_transfer": true,
     "no_scientific_outcomes": true,
     "no_target_action": true,
     "order": "fixed fresh32 first, then fixed historical48 diagnostic pairs",
     "planned_dispositions": 80,
     "primary_population": "Current visible actor inputs of six prefix replicas, first target capture, preassigned role0 reference",
+    "prior_attempts": [
+      {
+        "browsers_started": 0,
+        "cause": "Metadata internal-state response loop was not started with HTTP warmup disabled.",
+        "cleanup_verified": true,
+        "elapsed_seconds": 70,
+        "job_id": "351659",
+        "scientific_requests": 0,
+        "state": "FAILED",
+        "synthetic_requests": 0
+      },
+      {
+        "browsers_started": 0,
+        "cause": "Stale16CPU worker admission guard after approved reduction to8.",
+        "cleanup_verified": true,
+        "elapsed_seconds": 54,
+        "job_id": "351667",
+        "scientific_requests": 0,
+        "state": "FAILED",
+        "synthetic_requests": 2
+      }
+    ],
+    "repair_validation": {
+      "actual_worker_execution_config_tested": true,
+      "bootstrap_cpu_tests": 5,
+      "cgroup_fixture_mocked": true,
+      "continuity_tests": 20,
+      "installed_package_unchanged": true,
+      "isolated_production_imports_passed": true,
+      "launcher_fault_tests": 22,
+      "worker_regression_tests": 22
+    },
     "replicas_per_fresh_state": 6,
     "resources": {
-      "cpus": 16,
+      "cpus": 8,
       "gpu_type": "H200",
       "gpus": 1,
       "memory_gib": 240,
@@ -147,6 +206,14 @@
     },
     "time_bound": "7200 allocated seconds total; all attempts, startup and cleanup included; unstarted units retain dispositions",
     "websites": 8
+  },
+  "pool_expansion_audit": {
+    "current_availability_or_full_resolution_yield_validated": false,
+    "eight_sites_rubric_at_least_3_unused_families": 26905,
+    "eight_sites_rubric_at_least_5_unused_families": 3790,
+    "existing_difficulty_sites_short": 5,
+    "per_site_required_families": 270,
+    "population_change_frozen": false
   },
   "precision_planning": {
     "contrasts": 2,
@@ -271,6 +338,6 @@
   "sample_size_sha256": "d77d3ce70ab1ad7cd96bdd2d72b4bc84faa5ee4a5f166aa9ced203fbb3140682",
   "schema": "confidence_robust_followup_aggregate_v2",
   "sizing_revision": "2026-10-09",
-  "status": "offline_preparation_no_paid_execution",
+  "status": "approved_pilot_collecting",
   "user_scientific_direction_approved": true
 }

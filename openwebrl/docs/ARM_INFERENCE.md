@@ -160,7 +160,7 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 </details>
 
 <a id="confidence-robust-20261008"></a>
-## More robust confidence study — sizing revised October 9
+## More robust confidence study — replay pilot approved October 9
 
 **Plan by usable independent states, not attempted tasks.** The former 240-task-per-split placeholder is superseded. The initial recommendation targets a 10-percentage-point gain in both the frozen gate versus first action and the frozen gate versus random invocation matched in expansion count.
 
@@ -175,7 +175,7 @@ Held-out sizing assumes state-level contrast variance at most **1/3**, two-sided
 
 **First test whether diverse states can be reproduced reliably.** The follow-up starts with 32 fixed fresh tasks across eight websites and target decisions **2, 5, 10 and 15**. At each reached state, six independent browsers must reproduce the same complete actor input before any future action-choice comparison. A task ending early stays in the denominator; an easier state cannot replace it.
 
-This is a proposed confidence-replay pilot, separate from the branching/distillation pilot. Six browsers anticipate **three continuations per choice** in the later outcome study; this first stage executes no target action, selector or judged continuation. Sixteen old states provide separate failure diagnostics and do not count toward fresh coverage. A pass establishes pre-action feasibility only: it cannot certify reliable post-action captures or complete continuation outcomes.
+This approved confidence-replay pilot is separate from the branching/distillation pilot. Six browsers anticipate **three continuations per choice** in the later outcome study; this first stage executes no target action, selector or judged continuation. Sixteen old states provide separate failure diagnostics and do not count toward fresh coverage. A pass establishes pre-action feasibility only: it cannot certify reliable post-action captures or complete continuation outcomes.
 
 | Pilot scope | Fixed states/tasks | Maximum browser sessions |
 | --- | ---: | ---: |
@@ -183,7 +183,7 @@ This is a proposed confidence-replay pilot, separate from the branching/distilla
 | Fresh prefixes and six replicas each | 32 | 224 |
 | **Total** | **48** | **320** |
 
-**Proposed new allocation:** 1 H200, 16 CPUs, 240 GiB, at most **2 hours total across all attempts**; at most 224 local SFT prefix generations plus two synthetic probability checks; **zero selector/judge calls and USD 0 API spend**. Paid execution is not yet approved or launched. [Aggregate proposal](arm_results/selectionarm_confidence_robust_20261008/proposal.json).
+**Approved pilot:** 1 H200, 8 CPUs, 240 GiB, at most **2 hours total across all attempts**; at most 224 local SFT prefix generations plus two synthetic probability checks; **zero selector/judge calls and USD 0 API spend**. Recovery job **351682** is running: startup validation passed and browser collection has begun, with a 117-minute cap and an active agent callback. Both prior attempts remain charged to the same two-hour total. [Aggregate proposal](arm_results/selectionarm_confidence_robust_20261008/proposal.json).
 
 <details>
 <summary>Prospective replay contract and expansion criteria</summary>
@@ -192,7 +192,18 @@ Preserve the SFT checkpoint, prompt/frontend, temperature 0.7, top-p 0.9, 1,024 
 
 Before expanding to outcome collection, require all 32 dispositions, at least 24 reached targets, at least 80% of reached targets and at least 20 total states passing the six-replica contract, six sites with at least two passes each, eight passes at decision ≥5 and four at ≥10. These are engineering criteria, not an estimated population guarantee. Report timeouts, early termination and mismatches separately; apparent ARM benefit cannot affect acceptance. A failed pilot stops expansion and preserves its fixed inputs and failures.
 
+The deployed eight CPUs remain below the approved 16-CPU ceiling and satisfy the partition limit. Two startup failures consumed **124 seconds** before any browser sessions: a metadata-loop deadlock, then a stale 16-CPU worker check. Both were repaired; all attempts and scientific inputs remain preserved. The second attempt completed the two authorized numerical probability requests. Recovery explicitly inherits that immutable numerical result while checking the new actor identity, sampler, code and environment; it does not claim a fresh numerical probe or issue extra requests. The 117-minute recovery cap leaves 56 seconds unallocated because of scheduler minute granularity.
+
 Run the fresh cohort first, then historical diagnostics, in a fixed order. The two-hour hard limit may leave some units unstarted; record those dispositions and count them against coverage rather than claiming all physical trials finished. The new allocation includes startup, failures and cleanup; old-study balances are not transferred. Native request accounting and browser ownership must pass before launch. Offline contract tests do not demonstrate live replay reliability.
+
+</details>
+
+<details>
+<summary>Offline task-pool expansion audit</summary>
+
+After the released exclusions, family deduplication and removal of the old confidence and pilot families, the broader source contains 3,790 unused families on the original eight sites at the existing difficulty rubric ≥5. Five sites still fall short of the proposed 270 families each: 120 fit, 120 held-out and 30 reserved for later policy evaluation. Adding other sites at the same rubric cannot supply eight equally sized sites. Lowering the rubric to ≥3 supplies 26,905 families and clears that metadata quota, but changes the study population. Unequal site quotas also require new weights and a revised precision calculation; neither change is frozen here.
+
+Historical availability receipts cover only 16 start-page probes, not every task. These counts establish source supply, not current reachability, replay yield or training-unseen status. The fixed pilot proceeds independently; no broader pool has been dispatched.
 
 </details>
 
@@ -230,7 +241,7 @@ The current pool has 1,549 unused families; reserving 32 pilot and 240 later-pol
 
 Power applies to independent task-family states with balanced usable strata and fixed represented-site inference. Unequal usable counts require stratified weighted variance accounting. Generalization to new sites needs more independent sites: under an illustrative eight-site random-effects model with variance 1/3 and site ICC 0.02, even arbitrarily many tasks retain a 10.17-pp detectable-effect floor for the joint claim. Do not reinterpret a larger task count as stronger unseen-site evidence.
 
-At the target state counts there are six endpoints per state; issued failures and any separately authorized retries add work. At the 50% provision, the ceiling is 11,520 scientific endpoint slots if all 1,920 planned states qualify, before retries. Startup, prefixes, selectors, suffixes, judge calls and cleanup must all enter the final allocation estimate. Exact GPU-hours and judge dollars remain unset until measured throughput and receipts are available. The prepared two-hour replay pilot remains separately awaiting exact approval; no new allocation was submitted.
+At the target state counts there are six endpoints per state; issued failures and any separately authorized retries add work. At the 50% provision, the ceiling is 11,520 scientific endpoint slots if all 1,920 planned states qualify, before retries. Startup, prefixes, selectors, suffixes, judge calls and cleanup must all enter the final allocation estimate. Exact GPU-hours and judge dollars remain unset until measured throughput and receipts are available. The two-hour replay pilot is approved separately; this does not authorize the larger outcome-study allocation.
 
 </details>
 
