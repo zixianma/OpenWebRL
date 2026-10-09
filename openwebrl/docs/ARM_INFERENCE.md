@@ -160,7 +160,38 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 </details>
 
 <a id="confidence-robust-20261008"></a>
-## More robust confidence study — replay pilot approved October 9
+## Confidence scaling — replay pilot failed its expansion criteria
+
+**Collection is verified complete; reliable diverse-state replay is not established.** All 32 fixed fresh tasks were attempted: 22 reached their assigned target, and **3 produced six matching browser inputs stable at +5 and +15 seconds**. That is **9.4% of planned tasks** and **13.6% of reached targets**, below the frozen requirements of at least 20 matches and 80% of reached targets. Only one matched state was at decision ≥5. Outcome-study expansion remains stopped.
+
+| Target decision | Fixed tasks | Reached target | Six-way matched and stable | Match rate, all fixed tasks |
+| --- | ---: | ---: | ---: | ---: |
+| 2 | 8 | 7 | 2 | 25.0% |
+| 5 | 8 | 5 | 0 | 0.0% |
+| 10 | 8 | 5 | 0 | 0.0% |
+| 15 | 8 | 5 | 1 | 12.5% |
+| **Total** | **32** | **22** | **3** | **9.4%** |
+
+The pilot finished in **25.3 H200-minutes across all three attempts**, including the two repaired startup failures. It used 260 browser sessions, 195 prefix generations and the two authorized synthetic probability requests; selector, judge, target-candidate and suffix calls were all zero, with **USD 0 API spend**. All failures remain recorded; no state was replaced or replay criterion relaxed. [Aggregate results and accounting](arm_results/selectionarm_confidence_robust_20261008/replay-pilot.json).
+
+<details>
+<summary>Replay diagnostics, coverage and audit limits</summary>
+
+Nineteen reached fresh targets failed the replay contract. Of ten unreached targets, seven prefixes ended with an actor stop and three ended with an environment error; none was replaced. The three matching states came from two origin-site strata: arXiv (decisions 2 and 15) and Allrecipes (decision 2). The Allrecipes-origin trajectory was actually on BBC Good Food at the target, so origin-site coverage is not active-page coverage. Only arXiv contributed two matches. These descriptive rates apply to this fixed pilot; they do not establish reliability on a broader task pool.
+
+![Fresh-task replay coverage by origin site](arm_results/selectionarm_confidence_robust_20261008/replay-pilot-coverage.png)
+
+The separate historical diagnostic cohort recorded all 48 two-browser repeat pairs across 16 old states: 21 pairs matched and remained stable (43.8%), comprising three passes each for seven states. These dependent diagnostic repeats are excluded from every fresh-cohort acceptance denominator.
+
+The independent review checked fixed membership, first captures, frontend/image/token parity, sampled stability, native receipts, all-attempt accounting and recorded process teardown. Per-cohort 180-second deadlines were enforced by the pinned worker but their absolute start timestamps were not separately persisted; the audit cannot independently reconstruct that narrower deadline from the final admission receipt. The native numerical probability check belongs to attempt 351667; the final attempt verified model/runtime continuity and issued no additional synthetic probe.
+
+This systems pilot executed no target actions or judged continuations. Even a matching pre-action state would not establish hidden-state equality, post-action parity or complete suffix-outcome yield. A new collection intervention needs a concrete prospective design and exact resource approval; unused allocation time does not authorize automatic retries.
+
+</details>
+
+
+<details>
+<summary>Provisional outcome-study sizing, conditional on reliable collection</summary>
 
 **Plan by usable independent states, not attempted tasks.** The former 240-task-per-split placeholder is superseded. The initial recommendation targets a 10-percentage-point gain in both the frozen gate versus first action and the frozen gate versus random invocation matched in expansion count.
 
@@ -173,26 +204,16 @@ Held-out sizing assumes state-level contrast variance at most **1/3**, two-sided
 
 **Task supply must grow.** At 50% full-resolution yield, the 10-point design provisions 960 attempted tasks per split under an illustrative binomial model; only 1,277 families remain after pilot and final-policy reservations. Equal allocation across the eight sites is more constrained still. Expand and audit the input pool before outcome collection; neither easy-site substitution nor replacement based on missing outcomes is part of this plan. The old evidence and completed-study budgets remain unchanged.
 
-**First test whether diverse states can be reproduced reliably.** The follow-up starts with 32 fixed fresh tasks across eight websites and target decisions **2, 5, 10 and 15**. At each reached state, six independent browsers must reproduce the same complete actor input before any future action-choice comparison. A task ending early stays in the denominator; an easier state cannot replace it.
-
-This approved confidence-replay pilot is separate from the branching/distillation pilot. Six browsers anticipate **three continuations per choice** in the later outcome study; this first stage executes no target action, selector or judged continuation. Sixteen old states provide separate failure diagnostics and do not count toward fresh coverage. A pass establishes pre-action feasibility only: it cannot certify reliable post-action captures or complete continuation outcomes.
-
-| Pilot scope | Fixed states/tasks | Maximum browser sessions |
-| --- | ---: | ---: |
-| Historical replay diagnostics, three pairs each | 16 | 96 |
-| Fresh prefixes and six replicas each | 32 | 224 |
-| **Total** | **48** | **320** |
-
-**Approved pilot:** 1 H200, 8 CPUs, 240 GiB, at most **2 hours total across all attempts**; at most 224 local SFT prefix generations plus two synthetic probability checks; **zero selector/judge calls and USD 0 API spend**. Recovery job **351682** is running: startup validation passed and browser collection has begun, with a 117-minute cap and an active agent callback. Both prior attempts remain charged to the same two-hour total. [Aggregate proposal](arm_results/selectionarm_confidence_robust_20261008/proposal.json).
+</details>
 
 <details>
 <summary>Prospective replay contract and expansion criteria</summary>
 
 Preserve the SFT checkpoint, prompt/frontend, temperature 0.7, top-p 0.9, 1,024 response tokens and 32K context. Pin full observations, images, histories and processed inputs from the live browsers. Preassign replica 0 as the reference and use each replica’s first complete target observation, with the existing bounded internal capture checks; do not repeatedly observe until replicas happen to match. Capture age and cross-replica skew must be at most 30 seconds. Read-only observations at +5 and +15 seconds must remain equal to the admitted inputs. Agreement among current replicas is a **new prospective observation population**; historical-reference agreement is recorded separately. Do not insert a matching screenshot into a frontend built from a different observation, mask page regions, weaken old checks or revise the completed study. Visible-input agreement cannot prove equality of unobserved website state. These checks establish parity and sampled short-term stability; a later bounded post-action validation is still required before outcome collection.
 
-Before expanding to outcome collection, require all 32 dispositions, at least 24 reached targets, at least 80% of reached targets and at least 20 total states passing the six-replica contract, six sites with at least two passes each, eight passes at decision ≥5 and four at ≥10. These are engineering criteria, not an estimated population guarantee. Report timeouts, early termination and mismatches separately; apparent ARM benefit cannot affect acceptance. A failed pilot stops expansion and preserves its fixed inputs and failures.
+The frozen expansion criteria require all 32 dispositions, at least 24 reached targets, at least 80% of reached targets and at least 20 total states passing the six-replica contract, six sites with at least two passes each, eight passes at decision ≥5 and four at ≥10. These are engineering criteria, not an estimated population guarantee. Report timeouts, early termination and mismatches separately; apparent ARM benefit cannot affect acceptance. A failed pilot stops expansion and preserves its fixed inputs and failures.
 
-The deployed eight CPUs remain below the approved 16-CPU ceiling and satisfy the partition limit. Two startup failures consumed **124 seconds** before any browser sessions: a metadata-loop deadlock, then a stale 16-CPU worker check. Both were repaired; all attempts and scientific inputs remain preserved. The second attempt completed the two authorized numerical probability requests. Recovery explicitly inherits that immutable numerical result while checking the new actor identity, sampler, code and environment; it does not claim a fresh numerical probe or issue extra requests. The 117-minute recovery cap leaves 56 seconds unallocated because of scheduler minute granularity.
+The deployed eight CPUs remain below the approved 16-CPU ceiling and satisfy the partition limit. Two startup failures consumed **124 seconds** before any browser sessions: a metadata-loop deadlock, then a stale 16-CPU worker check. Both were repaired; all attempts and scientific inputs remain preserved. The second attempt completed the two authorized numerical probability requests. Recovery explicitly inherits that immutable numerical result while checking the new actor identity, sampler, code and environment; it does not claim a fresh numerical probe or issue extra requests. The final attempt used 1,394 seconds of its 117-minute cap; all attempts together used 1,518 seconds of the 7,200-second approval.
 
 Run the fresh cohort first, then historical diagnostics, in a fixed order. The two-hour hard limit may leave some units unstarted; record those dispositions and count them against coverage rather than claiming all physical trials finished. The new allocation includes startup, failures and cleanup; old-study balances are not transferred. Native request accounting and browser ownership must pass before launch. Offline contract tests do not demonstrate live replay reliability.
 
@@ -203,7 +224,7 @@ Run the fresh cohort first, then historical diagnostics, in a fixed order. The t
 
 After the released exclusions, family deduplication and removal of the old confidence and pilot families, the broader source contains 3,790 unused families on the original eight sites at the existing difficulty rubric ≥5. Five sites still fall short of the proposed 270 families each: 120 fit, 120 held-out and 30 reserved for later policy evaluation. Adding other sites at the same rubric cannot supply eight equally sized sites. Lowering the rubric to ≥3 supplies 26,905 families and clears that metadata quota, but changes the study population. Unequal site quotas also require new weights and a revised precision calculation; neither change is frozen here.
 
-Historical availability receipts cover only 16 start-page probes, not every task. These counts establish source supply, not current reachability, replay yield or training-unseen status. The fixed pilot proceeds independently; no broader pool has been dispatched.
+Historical availability receipts cover only 16 start-page probes, not every task. These counts establish source supply, not current reachability, replay yield or training-unseen status. The completed pilot failed its expansion criteria; no broader pool has been dispatched.
 
 </details>
 

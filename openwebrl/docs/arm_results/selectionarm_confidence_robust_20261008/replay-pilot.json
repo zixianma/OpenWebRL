@@ -1,0 +1,297 @@
+{
+  "schema": "confidence_replay_pilot_final_aggregate_v1",
+  "status": "verified_pilot_complete_expansion_gate_failed",
+  "pilot_collection_complete": true,
+  "pilot_verified_complete": true,
+  "expansion_gate_passed": false,
+  "fresh": {
+    "planned": 32,
+    "dispositions": 32,
+    "reached": 22,
+    "unreached": 10,
+    "matched_stable": 3,
+    "matched_fraction_of_planned": 0.09375,
+    "matched_fraction_of_reached": 0.13636363636363635,
+    "by_decision": [
+      {
+        "decision": 2,
+        "planned": 8,
+        "reached": 7,
+        "matched_stable": 2,
+        "matched_fraction_of_planned": 0.25,
+        "matched_fraction_of_reached": 0.2857142857142857
+      },
+      {
+        "decision": 5,
+        "planned": 8,
+        "reached": 5,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      },
+      {
+        "decision": 10,
+        "planned": 8,
+        "reached": 5,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      },
+      {
+        "decision": 15,
+        "planned": 8,
+        "reached": 5,
+        "matched_stable": 1,
+        "matched_fraction_of_planned": 0.125,
+        "matched_fraction_of_reached": 0.2
+      }
+    ],
+    "by_origin_site": [
+      {
+        "site": "allrecipes.com",
+        "planned": 4,
+        "reached": 2,
+        "matched_stable": 1,
+        "matched_fraction_of_planned": 0.25,
+        "matched_fraction_of_reached": 0.5
+      },
+      {
+        "site": "amazon.com",
+        "planned": 4,
+        "reached": 4,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      },
+      {
+        "site": "apple.com",
+        "planned": 4,
+        "reached": 4,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      },
+      {
+        "site": "arxiv.org",
+        "planned": 4,
+        "reached": 3,
+        "matched_stable": 2,
+        "matched_fraction_of_planned": 0.5,
+        "matched_fraction_of_reached": 0.6666666666666666
+      },
+      {
+        "site": "bbc.com",
+        "planned": 4,
+        "reached": 0,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": null
+      },
+      {
+        "site": "espn.com",
+        "planned": 4,
+        "reached": 4,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      },
+      {
+        "site": "github.com",
+        "planned": 4,
+        "reached": 2,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      },
+      {
+        "site": "wolframalpha.com",
+        "planned": 4,
+        "reached": 3,
+        "matched_stable": 0,
+        "matched_fraction_of_planned": 0.0,
+        "matched_fraction_of_reached": 0.0
+      }
+    ],
+    "unreached_episode_dispositions": {
+      "actor_stop": 7,
+      "environment_step_error": 3
+    },
+    "reached_rejection_errors": {
+      "Replay screenshot exceeds fixed raster tolerance": 1,
+      "ValueError: Replay screenshot exceeds fixed raster tolerance": 5,
+      "ValueError: Strict saved prefix frontend differs": 2,
+      "ValueError: Visible replay state differs": 10,
+      "Visible replay state differs": 1
+    },
+    "matched_active_hosts": {
+      "arxiv.org": 2,
+      "www.bbcgoodfood.com": 1
+    }
+  },
+  "historical": {
+    "states": 16,
+    "pair_repeats_per_state": 3,
+    "dispositions": 48,
+    "matched_pairs": 21,
+    "matched_fraction": 0.4375,
+    "states_with_three_matched_repeats": 7,
+    "states_with_zero_matched_repeats": 9,
+    "excluded_from_fresh_denominator": true,
+    "by_decision": [
+      {
+        "dispositions": 21,
+        "group": 1,
+        "matched": 18
+      },
+      {
+        "dispositions": 6,
+        "group": 2,
+        "matched": 3
+      },
+      {
+        "dispositions": 3,
+        "group": 3,
+        "matched": 0
+      },
+      {
+        "dispositions": 3,
+        "group": 6,
+        "matched": 0
+      },
+      {
+        "dispositions": 3,
+        "group": 8,
+        "matched": 0
+      },
+      {
+        "dispositions": 3,
+        "group": 10,
+        "matched": 0
+      },
+      {
+        "dispositions": 3,
+        "group": 17,
+        "matched": 0
+      },
+      {
+        "dispositions": 3,
+        "group": 21,
+        "matched": 0
+      },
+      {
+        "dispositions": 3,
+        "group": 25,
+        "matched": 0
+      }
+    ]
+  },
+  "acceptance": [
+    {
+      "criterion": "min_reached_targets",
+      "observed": 22,
+      "passed": false,
+      "required": 24
+    },
+    {
+      "criterion": "min_six_way_matched_fresh_states",
+      "observed": 3,
+      "passed": false,
+      "required": 20
+    },
+    {
+      "criterion": "min_six_way_replay_pass_fraction_among_reached",
+      "observed": 0.13636363636363635,
+      "passed": false,
+      "required": 0.8
+    },
+    {
+      "criterion": "min_sites_with_at_least_two_matched_states",
+      "observed": 1,
+      "passed": false,
+      "required": 6
+    },
+    {
+      "criterion": "min_matched_states_at_decision_at_least_5",
+      "observed": 1,
+      "passed": false,
+      "required": 8
+    },
+    {
+      "criterion": "min_matched_states_at_decision_at_least_10",
+      "observed": 1,
+      "passed": false,
+      "required": 4
+    }
+  ],
+  "accounting": {
+    "attempts": [
+      {
+        "job_id": "351659",
+        "state": "FAILED",
+        "seconds": 70
+      },
+      {
+        "job_id": "351667",
+        "state": "FAILED",
+        "seconds": 54
+      },
+      {
+        "job_id": "351682",
+        "state": "COMPLETED",
+        "seconds": 1394
+      }
+    ],
+    "all_attempt_seconds": 1518,
+    "approved_total_seconds": 7200,
+    "unused_seconds": 5682,
+    "h200_hours": 0.4216666666666667,
+    "browser_sessions": 260,
+    "browser_cap": 320,
+    "local_prefix_requests": 195,
+    "prefix_cap": 224,
+    "synthetic_requests": 2,
+    "total_local_model_requests": 197,
+    "selector_calls": 0,
+    "judge_calls": 0,
+    "candidate_calls": 0,
+    "suffix_calls": 0,
+    "api_usd": 0,
+    "native_generated_tokens": 59685,
+    "wandb": {
+      "mode": "disabled",
+      "artifacts_found": 0
+    }
+  },
+  "limitations": [
+    "Fixed eight-origin-site, four-depth pilot; descriptive proportions are not a population reliability guarantee.",
+    "Origin site differs from active host for the Allrecipes-origin matched state: active host is BBC Good Food.",
+    "Historical diagnostic repeat pairs are dependent within state and excluded from fresh acceptance.",
+    "Pre-action visible-input parity and sampled stability do not establish hidden-state equality or post-action/suffix reliability.",
+    "Native numerical validation belongs to351667;351682 verified continuity and did not spend two more synthetic calls.",
+    "No automatic expansion, state replacement or additional physical retry.",
+    "Independent cleanup audit uses saved in-allocation process-group receipts plus terminal scheduler status, without a new remote process probe.",
+    "This is a pre-action replay feasibility pilot; no action-selection utility, post-action, or suffix outcomes were collected.",
+    "Historical diagnostics use two roles and three repeats; they cannot be pooled into the fresh six-role primary denominator.",
+    "Passed stability is sampled at 5 and 15 seconds, not continuous stability or a guarantee of future action equivalence.",
+    "Visible matching excludes local storage/session internals and does not clone remote hidden state.",
+    "Accepted allrecipes-origin task is active on bbcgoodfood.com; report nominal origin and active host separately.",
+    "Unit deadline and final browser cleanup were enforced online but unit deadline timestamps were not serialized; scientific audit independently checks the absolute work deadline, with resource/cleanup audit separate.",
+    "Early task_completed is the actor done signal, not a judged success. Three unreached BBC cases aborted environment action execution without a screenshot.",
+    "Probability numeric validation was inherited explicitly from job351667; no new numeric probe is claimed for job351682."
+  ],
+  "independent_checks": {
+    "assertions": 9802,
+    "capture_observations_checked": 499,
+    "first_role_frames_checked": 60,
+    "fixed_dwell_role_checks": 120,
+    "native_decisions_checked": 195,
+    "positive_cohorts_checked": 24,
+    "strict_prefix_replays_checked": 102
+  },
+  "outcome_study_complete": false,
+  "verified_epoch": 1791534759.7441096,
+  "audit_proof_sha256": {
+    "scientific": "bfca829282193e3abe8ccf92f03fabaa3b99959b801d8439008daebd68b65d17",
+    "accounting": "27ba52cd726f2516ef1d05749bfc7f360418e5091cb2f6d5daede692468d5c7e"
+  }
+}

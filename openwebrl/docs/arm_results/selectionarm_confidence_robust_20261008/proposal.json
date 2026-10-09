@@ -81,7 +81,7 @@
       "min_six_way_matched_fresh_states": 20,
       "min_six_way_replay_pass_fraction_among_reached": 0.8
     },
-    "active_agent_supervision": true,
+    "active_agent_supervision": false,
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
     "admission": "Original strict state comparator plus exact normal frontend/images/token identities; fixed-prefix replay checks retained",
     "approved_cpu_ceiling": 16,
@@ -91,12 +91,13 @@
       "job_id": "351682",
       "original_total_seconds": 7200,
       "prior_elapsed_seconds": 124,
-      "snapshot_epoch": 1791532913.4292746,
-      "stage": "collecting",
+      "snapshot_epoch": 1791534759.749581,
+      "stage": "verified_pilot_complete_expansion_gate_failed",
       "startup_verified": true,
-      "state": "RUNNING",
+      "state": "COMPLETED",
       "time_limit_seconds": 7020,
-      "unallocated_rounding_seconds": 56
+      "unallocated_rounding_seconds": 56,
+      "elapsed_seconds": 1394
     },
     "fresh_tasks": 32,
     "historical_diagnostic_states": 16,
@@ -205,7 +206,12 @@
       ]
     },
     "time_bound": "7200 allocated seconds total; all attempts, startup and cleanup included; unstarted units retain dispositions",
-    "websites": 8
+    "websites": 8,
+    "final_results_artifact": "replay-pilot.json",
+    "verified_complete": true,
+    "expansion_gate_passed": false,
+    "all_attempt_seconds": 1518,
+    "remaining_original_seconds": 5682
   },
   "pool_expansion_audit": {
     "current_availability_or_full_resolution_yield_validated": false,
@@ -338,6 +344,6 @@
   "sample_size_sha256": "d77d3ce70ab1ad7cd96bdd2d72b4bc84faa5ee4a5f166aa9ced203fbb3140682",
   "schema": "confidence_robust_followup_aggregate_v2",
   "sizing_revision": "2026-10-09",
-  "status": "approved_pilot_collecting",
+  "status": "verified_pilot_complete_expansion_gate_failed",
   "user_scientific_direction_approved": true
 }

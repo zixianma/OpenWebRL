@@ -13,7 +13,7 @@
 
 [Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).
 
-[Confidence follow-up: approved replay pilot, effect-based sample sizes and fresh validation](ARM_INFERENCE.md#confidence-robust-20261008).
+[Confidence replay pilot verified: 3/32 fresh states matched; expansion criteria failed](ARM_INFERENCE.md#confidence-robust-20261008).
 
 [Benefit-based threshold study verified: first action 50% versus Piotr 35% on 20 usable held-out pairs; wide interval and low coverage](ARM_INFERENCE.md#confidence-benefit-20261008).
 
