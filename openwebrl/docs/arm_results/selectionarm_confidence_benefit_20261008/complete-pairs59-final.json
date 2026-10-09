@@ -1,0 +1,633 @@
+{
+  "schema": "confidence_benefit_complete_pairs59_final_aggregate_v1",
+  "study": "One sampled intervention on replay-eligible SFT states",
+  "scientific_amendment": "complete-pairs59-v1",
+  "fixed_tasks": {
+    "total": 450,
+    "fit": 300,
+    "heldout": 150
+  },
+  "fit": {
+    "original_eligible_pairs": 60,
+    "complete_pairs_used": 59,
+    "missing_pairs_retained": 1,
+    "fit_options": [
+      {
+        "expansion_rate": 0.0,
+        "hypothetical_ARM_calls": 0,
+        "paired_states": 59,
+        "rule": {
+          "mode": "never",
+          "name": "never",
+          "threshold": null
+        },
+        "success_rate": 0.4576271186440678,
+        "successes": 27
+      },
+      {
+        "expansion_rate": 0.3050847457627119,
+        "hypothetical_ARM_calls": 18,
+        "paired_states": 59,
+        "rule": {
+          "mode": "threshold",
+          "name": "q25",
+          "quantile": 0.25,
+          "threshold": -0.20164764855409809
+        },
+        "success_rate": 0.4067796610169492,
+        "successes": 24
+      },
+      {
+        "expansion_rate": 0.6271186440677966,
+        "hypothetical_ARM_calls": 37,
+        "paired_states": 59,
+        "rule": {
+          "mode": "threshold",
+          "name": "q50",
+          "quantile": 0.5,
+          "threshold": -0.17092938111383263
+        },
+        "success_rate": 0.3898305084745763,
+        "successes": 23
+      },
+      {
+        "expansion_rate": 0.7457627118644068,
+        "hypothetical_ARM_calls": 44,
+        "paired_states": 59,
+        "rule": {
+          "mode": "threshold",
+          "name": "q75",
+          "quantile": 0.75,
+          "threshold": -0.13696537697595199
+        },
+        "success_rate": 0.3728813559322034,
+        "successes": 22
+      },
+      {
+        "expansion_rate": 1.0,
+        "hypothetical_ARM_calls": 59,
+        "paired_states": 59,
+        "rule": {
+          "mode": "always",
+          "name": "always",
+          "threshold": null
+        },
+        "success_rate": 0.3728813559322034,
+        "successes": 22
+      }
+    ],
+    "identical_choice_repeat_controls": 36,
+    "interpretation": "Selected among five prespecified single-intervention rules; not globally optimal or a calibrated correctness probability",
+    "objective": "mean[Y_first + gate(score)*(Y_piotr-Y_first)]",
+    "paired_states": 59,
+    "score_grid_anchors": 292,
+    "score_grid_population": "all_selected_native_scored_fit_anchors_before_replay_exclusions",
+    "selected_rule": {
+      "mode": "never",
+      "name": "never",
+      "threshold": null
+    },
+    "tie_break": "fewer ARM calls, then lower cutoff, then prespecified option order"
+  },
+  "heldout": {
+    "coverage": {
+      "by_depth": {
+        "1-3": {
+          "eligible_pairs": 17,
+          "ineligible_tasks": 81,
+          "planned_tasks": 98,
+          "reached_anchors": 98,
+          "resolved_pairs": 17,
+          "unresolved_pairs": 0
+        },
+        "11-20": {
+          "eligible_pairs": 1,
+          "ineligible_tasks": 10,
+          "planned_tasks": 11,
+          "reached_anchors": 11,
+          "resolved_pairs": 1,
+          "unresolved_pairs": 0
+        },
+        "21-30": {
+          "eligible_pairs": 2,
+          "ineligible_tasks": 3,
+          "planned_tasks": 5,
+          "reached_anchors": 5,
+          "resolved_pairs": 2,
+          "unresolved_pairs": 0
+        },
+        "4-10": {
+          "eligible_pairs": 0,
+          "ineligible_tasks": 34,
+          "planned_tasks": 34,
+          "reached_anchors": 34,
+          "resolved_pairs": 0,
+          "unresolved_pairs": 0
+        },
+        "no_state": {
+          "eligible_pairs": 0,
+          "ineligible_tasks": 2,
+          "planned_tasks": 2,
+          "reached_anchors": 0,
+          "resolved_pairs": 0,
+          "unresolved_pairs": 0
+        }
+      },
+      "by_fit_score_bin": {
+        "fit_quantile_bin_1": {
+          "eligible_pairs": 7,
+          "ineligible_tasks": 44,
+          "planned_tasks": 51,
+          "reached_anchors": 51,
+          "resolved_pairs": 7,
+          "unresolved_pairs": 0
+        },
+        "fit_quantile_bin_2": {
+          "eligible_pairs": 5,
+          "ineligible_tasks": 22,
+          "planned_tasks": 27,
+          "reached_anchors": 27,
+          "resolved_pairs": 5,
+          "unresolved_pairs": 0
+        },
+        "fit_quantile_bin_3": {
+          "eligible_pairs": 4,
+          "ineligible_tasks": 29,
+          "planned_tasks": 33,
+          "reached_anchors": 33,
+          "resolved_pairs": 4,
+          "unresolved_pairs": 0
+        },
+        "fit_quantile_bin_4": {
+          "eligible_pairs": 4,
+          "ineligible_tasks": 33,
+          "planned_tasks": 37,
+          "reached_anchors": 37,
+          "resolved_pairs": 4,
+          "unresolved_pairs": 0
+        },
+        "no_state": {
+          "eligible_pairs": 0,
+          "ineligible_tasks": 2,
+          "planned_tasks": 2,
+          "reached_anchors": 0,
+          "resolved_pairs": 0,
+          "unresolved_pairs": 0
+        }
+      },
+      "canonical_zero_branches": 14,
+      "eligible_paired_states": 20,
+      "ineligible_reasons": {
+        "no_reached_decision": 2,
+        "paired_state_mismatch": 0,
+        "pre_action_browser_unavailable": 0,
+        "prefix_replay_invalid": 128
+      },
+      "ineligible_tasks": 130,
+      "interpretation": "Coverage is conditional on reached states and prospective replay eligibility; no promised number of eligible pairs.",
+      "judged_branches": 26,
+      "planned_tasks": 150,
+      "reached_tasks": 148,
+      "resolved_pairs": 20,
+      "score_bin_cutoffs": [
+        -0.20164764855409809,
+        -0.17092938111383263,
+        -0.13696537697595199
+      ],
+      "unresolved_pairs": 0
+    },
+    "descriptive_choice_groups": {
+      "grouping": "Selected candidate index, not parsed-action distinctness; duplicate candidates are retained.",
+      "candidate0_repeat_control": {
+        "first_successes": 3,
+        "first_wins": 1,
+        "interpretation": "Descriptive subgroup only; no heldout threshold tuning.",
+        "paired_states": 9,
+        "piotr_minus_first": -0.1111111111111111,
+        "piotr_successes": 2,
+        "piotr_wins": 0,
+        "ties": 8
+      },
+      "another_candidate_index": {
+        "first_successes": 7,
+        "first_wins": 3,
+        "interpretation": "Descriptive subgroup only; no heldout threshold tuning.",
+        "paired_states": 11,
+        "piotr_minus_first": -0.18181818181818182,
+        "piotr_successes": 5,
+        "piotr_wins": 1,
+        "ties": 7
+      }
+    },
+    "bootstrap_repetitions": 10000,
+    "identical_choice_repeat_controls": 9,
+    "interpretation": "Held-out one-intervention continuation utility conditional on reached replay-eligible states; not full adaptive-agent performance",
+    "paired_comparisons": [
+      {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "comparator": "first",
+        "exact_paired_binomial_p": 1.0,
+        "gain": 0.0,
+        "gate_losses": 0,
+        "gate_wins": 0,
+        "paired_states": 20,
+        "uncertainty": "marginal percentile task-cluster bootstrap; not simultaneous multiplicity-adjusted inference"
+      },
+      {
+        "ci95": [
+          -0.05,
+          0.35
+        ],
+        "comparator": "always_piotr",
+        "exact_paired_binomial_p": 0.375,
+        "gain": 0.15,
+        "gate_losses": 1,
+        "gate_wins": 4,
+        "paired_states": 20,
+        "uncertainty": "marginal percentile task-cluster bootstrap; not simultaneous multiplicity-adjusted inference"
+      }
+    ],
+    "policies": [
+      {
+        "expansion_rate": 0.0,
+        "hypothetical_ARM_calls": 0,
+        "paired_states": 20,
+        "rule": {
+          "mode": "never",
+          "name": "first",
+          "threshold": null
+        },
+        "success_rate": 0.5,
+        "successes": 10
+      },
+      {
+        "expansion_rate": 0.0,
+        "hypothetical_ARM_calls": 0,
+        "paired_states": 20,
+        "rule": {
+          "mode": "never",
+          "name": "frozen_gate",
+          "threshold": null
+        },
+        "success_rate": 0.5,
+        "successes": 10
+      },
+      {
+        "expansion_rate": 1.0,
+        "hypothetical_ARM_calls": 20,
+        "paired_states": 20,
+        "rule": {
+          "mode": "always",
+          "name": "always_piotr",
+          "threshold": null
+        },
+        "success_rate": 0.35,
+        "successes": 7
+      }
+    ],
+    "repeat_control": {
+      "ci95": [
+        -0.3333333333333333,
+        0.0
+      ],
+      "first_branch_wins": 1,
+      "gain": -0.1111111111111111,
+      "interpretation": "Both branches execute the same first action; discordance measures continuation/browser/judge variation, not an ARM action benefit.",
+      "paired_states": 9,
+      "piotr_branch_wins": 0
+    },
+    "selected_rule": {
+      "mode": "never",
+      "name": "never",
+      "threshold": null
+    },
+    "usable_pairs_by_site": {
+      "allrecipes.com": 8,
+      "arxiv.org": 11,
+      "wolframalpha.com": 1
+    }
+  },
+  "accounting": {
+    "accounting_complete": true,
+    "epoch": 1791527235.4837003,
+    "limitations": [
+      "Four historical pending selector attempts per shard may have consumed work with unknown token usage; known received subsets are not whole-run totals and all-attempt selector tokens remain null.",
+      "W&B final sessions are finished and synchronized, but their final periodic summaries lag durable end-state receipts; local final accounting is authoritative.",
+      "Native actor counts cover durable physical collection and startup-probe receipts, without equating browser actions or replay attempts with model requests.",
+      "Compute accounting is allocated H200 time; no dollar compute price was assumed. Judge dollars are the reconciled saved-usage charges at recorded protocol rates, without cached-token discount; no provider invoice was consulted."
+    ],
+    "new_budget": false,
+    "no_transfers": true,
+    "schema": "complete_pairs59_aggregate_accounting_v1",
+    "shards": [
+      {
+        "accounting_complete": true,
+        "actor_native_collection_all_attempts": {
+          "failed": 0,
+          "input_tokens": 36588607,
+          "output_tokens": 1412761,
+          "received": 4383,
+          "requests": 4383
+        },
+        "actor_native_collection_latest_attempt": {
+          "failed": 0,
+          "input_tokens": 3991785,
+          "output_tokens": 161640,
+          "received": 538,
+          "requests": 538
+        },
+        "all_attempt_gpu_hours": 4.37,
+        "all_attempt_gpu_seconds": 15732,
+        "all_attempt_seconds": 7866,
+        "attempts_total": 6,
+        "attempts_with_allocated_time": 6,
+        "cleanup": {
+          "all_started_attempts_verified": true,
+          "latest_browser_process_groups": 148,
+          "latest_direct_process_groups": 5,
+          "latest_remaining_owned_processes": 0
+        },
+        "judge": {
+          "cached_input_tokens": 0,
+          "calls": 50,
+          "calls_cap": 1320,
+          "calls_remaining": 1270,
+          "charged_usd": 0.4195466,
+          "input_tokens": 288362,
+          "latest_attempt": {
+            "calls": 12,
+            "charged_usd": 0.0921415
+          },
+          "output_tokens": 23261,
+          "reasoning_tokens": 16768,
+          "unresolved_reserved_calls": 0,
+          "unresolved_reserved_usd": 0,
+          "usd_cap": 5,
+          "usd_remaining": 4.5804534
+        },
+        "latest_attempt_seconds": 780,
+        "new_budget": false,
+        "prior_attempt_seconds": 7086,
+        "remaining_original_seconds": 6534,
+        "resources": {
+          "cpus": 16,
+          "gpu_type": "H200",
+          "gpus": 2,
+          "memory_gib": 240,
+          "total_seconds": 14400
+        },
+        "scheduler_terminal_state": "COMPLETED",
+        "scientific_validation_owned_separately": true,
+        "selector": {
+          "all_attempt_input_tokens": null,
+          "all_attempt_output_tokens": null,
+          "historical_pending_attempts": 4,
+          "historical_pending_tokens_unknown": true,
+          "known_input_tokens": 593232,
+          "known_output_tokens": 1934,
+          "no_pending_work_imputed_as_zero": true,
+          "records_with_known_token_usage": 220,
+          "records_with_unknown_token_usage": 0,
+          "saved_selection_records": 220
+        },
+        "shard": 0,
+        "startup_probability_probes": {
+          "failed": 0,
+          "generation_requests": 6,
+          "input_tokens": 38172,
+          "output_tokens": 48,
+          "requests": 12,
+          "teacher_forced_requests": 6
+        },
+        "transfers": false,
+        "wandb": {
+          "end_state_summary_complete": false,
+          "final_session_sync_confirmed": true,
+          "last_summary_lags": {
+            "judge/calls": {
+              "durable_final": 50,
+              "remote_last_summary": 49
+            },
+            "judge/charged_or_reserved_usd": {
+              "durable_final": 0.4195466,
+              "remote_last_summary": 0.4092384999999999
+            },
+            "pairs_complete": {
+              "durable_final": 225,
+              "remote_last_summary": 224
+            }
+          },
+          "project": "openwebrl-evals",
+          "remote_state": "finished",
+          "uploaded_file_count": 5
+        }
+      },
+      {
+        "accounting_complete": true,
+        "actor_native_collection_all_attempts": {
+          "failed": 0,
+          "input_tokens": 29378667,
+          "output_tokens": 1187654,
+          "received": 3660,
+          "requests": 3660
+        },
+        "actor_native_collection_latest_attempt": {
+          "failed": 0,
+          "input_tokens": 3842908,
+          "output_tokens": 161057,
+          "received": 524,
+          "requests": 524
+        },
+        "all_attempt_gpu_hours": 3.34,
+        "all_attempt_gpu_seconds": 12024,
+        "all_attempt_seconds": 6012,
+        "attempts_total": 7,
+        "attempts_with_allocated_time": 6,
+        "cleanup": {
+          "all_started_attempts_verified": true,
+          "latest_browser_process_groups": 148,
+          "latest_direct_process_groups": 5,
+          "latest_remaining_owned_processes": 0
+        },
+        "judge": {
+          "cached_input_tokens": 1664,
+          "calls": 36,
+          "calls_cap": 1320,
+          "calls_remaining": 1284,
+          "charged_usd": 0.3071046,
+          "input_tokens": 214874,
+          "latest_attempt": {
+            "calls": 14,
+            "charged_usd": 0.1185184
+          },
+          "output_tokens": 16078,
+          "reasoning_tokens": 11392,
+          "unresolved_reserved_calls": 0,
+          "unresolved_reserved_usd": 0,
+          "usd_cap": 5,
+          "usd_remaining": 4.6928954
+        },
+        "latest_attempt_seconds": 900,
+        "new_budget": false,
+        "prior_attempt_seconds": 5112,
+        "remaining_original_seconds": 8388,
+        "resources": {
+          "cpus": 16,
+          "gpu_type": "H200",
+          "gpus": 2,
+          "memory_gib": 240,
+          "total_seconds": 14400
+        },
+        "scheduler_terminal_state": "COMPLETED",
+        "scientific_validation_owned_separately": true,
+        "selector": {
+          "all_attempt_input_tokens": null,
+          "all_attempt_output_tokens": null,
+          "historical_pending_attempts": 4,
+          "historical_pending_tokens_unknown": true,
+          "known_input_tokens": 601507,
+          "known_output_tokens": 1914,
+          "no_pending_work_imputed_as_zero": true,
+          "records_with_known_token_usage": 220,
+          "records_with_unknown_token_usage": 0,
+          "saved_selection_records": 220
+        },
+        "shard": 1,
+        "startup_probability_probes": {
+          "failed": 0,
+          "generation_requests": 6,
+          "input_tokens": 38172,
+          "output_tokens": 48,
+          "requests": 12,
+          "teacher_forced_requests": 6
+        },
+        "transfers": false,
+        "wandb": {
+          "end_state_summary_complete": false,
+          "final_session_sync_confirmed": true,
+          "last_summary_lags": {
+            "actor_input_tokens_this_attempt": {
+              "durable_final": 3842908,
+              "remote_last_summary": 3825319
+            },
+            "actor_output_tokens_this_attempt": {
+              "durable_final": 161057,
+              "remote_last_summary": 160694
+            },
+            "judge/calls": {
+              "durable_final": 36,
+              "remote_last_summary": 35
+            },
+            "judge/charged_or_reserved_usd": {
+              "durable_final": 0.3071046,
+              "remote_last_summary": 0.29639719999999997
+            },
+            "native_received_this_attempt": {
+              "durable_final": 524,
+              "remote_last_summary": 523
+            },
+            "native_requests_this_attempt": {
+              "durable_final": 524,
+              "remote_last_summary": 523
+            },
+            "pairs_complete": {
+              "durable_final": 225,
+              "remote_last_summary": 224
+            }
+          },
+          "project": "openwebrl-evals",
+          "remote_state": "finished",
+          "uploaded_file_count": 5
+        }
+      }
+    ],
+    "total": {
+      "all_attempt_gpu_hours": 7.71,
+      "all_attempt_gpu_seconds": 27756,
+      "all_attempt_seconds": 13878,
+      "judge_calls": 86,
+      "judge_charged_usd": 0.7266512
+    }
+  },
+  "evidence_sha256": {
+    "frozen_fit": "f56b316a4701bd6a72a7439d1c83f970b548257551a7d4f4713597296cd745a9",
+    "strict_verification": "20c439a31ba69db4b33b3c90acf527ca4cc58ad40b6a723f11ce4ce157376806",
+    "independent_scientific_audit": "277461674c796d3fd50c88258d22faaa2359e4a9e46d5da72a243f327bc81941",
+    "final_accounting_aggregate": "f7dccc53226a7d024fa66bc5495c8a4268963755c444dc73fe8fc49af2b31297"
+  },
+  "limitations": [
+    "One intervention per task; not full-episode repeated gating or benchmark accuracy.",
+    "Utility is conditional on prospective replay eligibility; low coverage limits representativeness.",
+    "Complete-case fit amendment excludes one unresolved fitting pair from utility only; missingness is not assumed random.",
+    "The frozen never rule and first-candidate control share the same outcomes by construction.",
+    "One continuation per branch; same-action repeats capture continuation, browser and judge variation.",
+    "Paired bootstrap intervals are marginal, conditional on the frozen rule and usable tasks; no simultaneous multiplicity correction."
+  ],
+  "publication": "Aggregates only; no task IDs, raw trajectories, images or private receipt paths.",
+  "status": "verified_under_complete_pairs59_amendment",
+  "fit_collection_version_sensitivity": {
+    "aggregation_only": true,
+    "counts": {
+      "fit_tasks": 300,
+      "fixed_tasks": 450,
+      "heldout_tasks": 150,
+      "original_eligible_fit_pairs": 60,
+      "score_grid_anchors": 292,
+      "unresolved_eligible_fit_pairs": 1,
+      "utility_fit_pairs": 59
+    },
+    "created_epoch": 1791526956.2211888,
+    "frozen_fit_sha256": "f56b316a4701bd6a72a7439d1c83f970b548257551a7d4f4713597296cd745a9",
+    "frozen_rule": {
+      "mode": "never",
+      "name": "never",
+      "threshold": null
+    },
+    "group_assignment": "Membership in the immutable 16-target paired-redraw manifest, defined before redraw outcomes; all other eligible pairs are untouched originals.",
+    "groups": {
+      "completed_redraw": {
+        "first_success_rate": 0.3333333333333333,
+        "first_successes": 5,
+        "first_wins": 2,
+        "frozen_rule_success_rate": 0.3333333333333333,
+        "frozen_rule_successes": 5,
+        "identical_choice_repeat_controls": 11,
+        "original_eligible_pairs": 16,
+        "piotr_minus_first_rate": -0.06666666666666667,
+        "piotr_minus_first_successes": -1,
+        "piotr_success_rate": 0.26666666666666666,
+        "piotr_successes": 4,
+        "piotr_wins": 1,
+        "resolved_utility_pairs": 15,
+        "ties": 12,
+        "unresolved_pairs": 1
+      },
+      "untouched_original": {
+        "first_success_rate": 0.5,
+        "first_successes": 22,
+        "first_wins": 6,
+        "frozen_rule_success_rate": 0.5,
+        "frozen_rule_successes": 22,
+        "identical_choice_repeat_controls": 25,
+        "original_eligible_pairs": 44,
+        "piotr_minus_first_rate": -0.09090909090909091,
+        "piotr_minus_first_successes": -4,
+        "piotr_success_rate": 0.4090909090909091,
+        "piotr_successes": 18,
+        "piotr_wins": 2,
+        "resolved_utility_pairs": 44,
+        "ties": 36,
+        "unresolved_pairs": 0
+      }
+    },
+    "heldout_tuning_performed": false,
+    "interpretation": "Descriptive collection-version comparison on resolved FIT pairs; groups were not randomized and differ in original evidence availability. Differences cannot be attributed causally to collection version. One target pair remains eligible and missing/null, excluded only under the approved complete-case fit amendment. Official frozen fit is unchanged.",
+    "new_model_browser_judge_calls": 0,
+    "refitting_performed": false,
+    "schema": "complete_pairs59_fit_collection_version_sensitivity_v1",
+    "target_manifest_sha256": "e5ae3f8b224148527611ac29d71bfc670fc735e189e2cd08c12be8ee964e372b"
+  }
+}
