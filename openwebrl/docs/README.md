@@ -10,6 +10,8 @@
 
 [Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).
 
+[Confidence follow-up: diverse replay pilot, repeated outcomes and fresh validation; prepared proposal, not launched](ARM_INFERENCE.md#confidence-robust-20261008).
+
 [Benefit-based threshold study verified: first action 50% versus Piotr 35% on 20 usable held-out pairs; wide interval and low coverage](ARM_INFERENCE.md#confidence-benefit-20261008).
 
 [Action-only likelihood: offline reranking changes parsed actions on 27.89% of comparable decisions; fresh rollout deferred](ARM_INFERENCE.md#action-only-likelihood-20261008).

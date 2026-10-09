@@ -159,6 +159,45 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 
 </details>
 
+<a id="confidence-robust-20261008"></a>
+## More robust confidence study — preparation, October 8
+
+**First test whether diverse states can be reproduced reliably.** The follow-up starts with 32 fixed fresh tasks across eight websites and target decisions **2, 5, 10 and 15**. At each reached state, six independent browsers must reproduce the same complete actor input before any future action-choice comparison. A task ending early stays in the denominator; an easier state cannot replace it.
+
+This is a proposed confidence-replay pilot, separate from the branching/distillation pilot. Six browsers anticipate **three continuations per choice** in the later outcome study; this first stage executes no target action, selector or judged continuation. Sixteen old states provide separate failure diagnostics and do not count toward fresh coverage. A pass establishes pre-action feasibility only: it cannot certify reliable post-action captures or complete continuation outcomes.
+
+| Pilot scope | Fixed states/tasks | Maximum browser sessions |
+| --- | ---: | ---: |
+| Historical replay diagnostics, three pairs each | 16 | 96 |
+| Fresh prefixes and six replicas each | 32 | 224 |
+| **Total** | **48** | **320** |
+
+**Proposed new allocation:** 1 H200, 16 CPUs, 240 GiB, at most **2 hours total across all attempts**; at most 224 local SFT prefix generations plus two synthetic probability checks; **zero selector/judge calls and USD 0 API spend**. Paid execution is not yet approved or launched. [Aggregate proposal](arm_results/selectionarm_confidence_robust_20261008/proposal.json).
+
+<details>
+<summary>Prospective replay contract and expansion criteria</summary>
+
+Preserve the SFT checkpoint, prompt/frontend, temperature 0.7, top-p 0.9, 1,024 response tokens and 32K context. Pin full observations, images, histories and processed inputs from the live browsers. Preassign replica 0 as the reference and use each replica’s first complete target observation, with the existing bounded internal capture checks; do not repeatedly observe until replicas happen to match. Capture age and cross-replica skew must be at most 30 seconds. Read-only observations at +5 and +15 seconds must remain equal to the admitted inputs. Agreement among current replicas is a **new prospective observation population**; historical-reference agreement is recorded separately. Do not insert a matching screenshot into a frontend built from a different observation, mask page regions, weaken old checks or revise the completed study. Visible-input agreement cannot prove equality of unobserved website state. These checks establish parity and sampled short-term stability; a later bounded post-action validation is still required before outcome collection.
+
+Before expanding to outcome collection, require all 32 dispositions, at least 24 reached targets, at least 80% of reached targets and at least 20 total states passing the six-replica contract, six sites with at least two passes each, eight passes at decision ≥5 and four at ≥10. These are engineering criteria, not an estimated population guarantee. Report timeouts, early termination and mismatches separately; apparent ARM benefit cannot affect acceptance. A failed pilot stops expansion and preserves its fixed inputs and failures.
+
+Run the fresh cohort first, then historical diagnostics, in a fixed order. The two-hour hard limit may leave some units unstarted; record those dispositions and count them against coverage rather than claiming all physical trials finished. The new allocation includes startup, failures and cleanup; old-study balances are not transferred. Native request accounting and browser ownership must pass before launch. Offline contract tests do not demonstrate live replay reliability.
+
+</details>
+
+<details>
+<summary>Outcome study and fresh policy validation: staged roadmap</summary>
+
+After the pilot, prepare exact resources using measured throughput. The planning target is 240 fitting tasks and 240 untouched state-level verification tasks, one fixed state per task and three continuations for each of two choices. Both choices use one saved five-candidate pool; duplicate/same-choice cases remain. Average the three paired outcome differences within each task before fitting or uncertainty analysis. Repeats reduce continuation noise; they do not triple the number of independent states.
+
+Compare a small, prespecified set of first-response features: full-response likelihood, action-only likelihood and a simple benefit predictor. Features requiring the extra four candidates cannot decide whether to generate them. Finalize one primary gate and its fitting procedure before outcome collection, freeze it before verification, and compare with first action, always-Piotr and an outcome-independent random gate matched in invocation rate. Report task-level intervals, site/depth coverage and sensitivity to leaving out each website.
+
+A further 240 reserved task families would support fresh, concurrent **every-step** evaluation of first action, the frozen gate and a random gate. Matching random invocation probability gives expected sampling use, not identical realized cost on diverging trajectories; measure actual candidates, tokens, latency and success. This later validation is necessary because one-action interventions do not establish an every-step policy effect. Its allocation is separate and not yet requested.
+
+The source pool has 1,549 normalized task families unused by the old confidence study. Pilot/fit/verification/final-policy cohorts must be disjoint, but “unused” does not mean unseen during model training. Larger-stage assignments and resources remain provisional. At 120 usable verification states, illustrative repeat/site-correlation assumptions give approximately 8–14 percentage-point interval half-widths; this scale would still be exploratory for small gains. These are planning assumptions, not measured power.
+
+</details>
+
 <a id="confidence-benefit-20261008"></a>
 ## Selecting a threshold by measured ARM benefit — October 8
 
@@ -171,6 +210,16 @@ The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need 
 | Always use Piotr's choice | 7 | 20 | 35.00% |
 
 The frozen rule and first-action control reuse the same outcomes: their difference is zero by construction. This study changes **one sampled action per task**, then resumes ordinary SFT; it is not the full-episode, every-step selector benchmark above. All **450 fixed task dispositions** are retained. The approved fitting amendment uses 59 complete pairs and preserves one missing eligible pair; all 20 eligible held-out pairs are complete.
+
+**What are the 59 pairs?** Each is one sampled state from a different fitting task, with two recorded continuation outcomes: execute the first candidate, or execute Piotr's choice from the same five candidates, then continue with ordinary SFT. Thus 59 pairs contain **118 outcomes**. Of 300 fitting tasks, 60 yielded eligible states; 59 have both outcomes and one remains missing. Piotr picked candidate 0 on 36 of the 59 states, so those pairs compare separate continuations after the same proposed action.
+
+```mermaid
+flowchart LR
+    S["Same task state"] --> F["First candidate"]
+    S --> P["Piotr's choice from five"]
+    F --> YF["SFT continuation → outcome"]
+    P --> YP["SFT continuation → outcome"]
+```
 
 [Held-out utility and paired interval](arm_results/selectionarm_confidence_benefit_20261008/complete-pairs59-heldout-utility.png) · [Coverage](arm_results/selectionarm_confidence_benefit_20261008/complete-pairs59-coverage.png) · [State depth](arm_results/selectionarm_confidence_benefit_20261008/complete-pairs59-heldout-depth.png) · [Verified aggregate results](arm_results/selectionarm_confidence_benefit_20261008/complete-pairs59-final.json).
 

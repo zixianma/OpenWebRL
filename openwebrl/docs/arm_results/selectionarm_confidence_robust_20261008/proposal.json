@@ -1,0 +1,148 @@
+{
+  "exact_new_resource_request_approved": false,
+  "frozen_input_manifest_hashes": {
+    "fresh32": "f7666ed43f716697018ba06542f98eaa1ac52d8808f8ae461b9a1ab04c1657d9",
+    "historical16": "e203777cebebbe925db254e864b3f3c0cfae14e12836aaab44b80c39bb286e2a"
+  },
+  "larger_stages": {
+    "choices": 2,
+    "fit_tasks": 240,
+    "fresh_policy_validation_tasks": 240,
+    "future_required_checks": [
+      "post-action capture reliability",
+      "fixed primary fitting method and contrasts",
+      "missing-repeat handling",
+      "fresh every-step evaluation"
+    ],
+    "methods": "Prespecify first-response features and one primary gate; freeze before verification; compare against outcome-independent matched random invocation.",
+    "planning_only": true,
+    "repeats_per_choice": 3,
+    "separate_resources_not_requested": true,
+    "split_caveat": "New relative to completed calibration, not certified unseen by actor/selector training.",
+    "state_verification_tasks": 240
+  },
+  "measured_old_heldout": {
+    "eligible_complete_pairs": 20,
+    "first_successes": 10,
+    "paired95_interval_pp": [
+      -5,
+      35
+    ],
+    "paired_gain_pp": 15,
+    "piotr_successes": 7,
+    "planned_tasks": 150,
+    "usable_decisions1_to3": 17,
+    "usable_websites": 3
+  },
+  "new_paid_jobs": 0,
+  "old_fit_pair_definition": {
+    "choices": [
+      "first candidate",
+      "Piotr choice from the same5 candidates"
+    ],
+    "complete_pairs": 59,
+    "completed_redraw_pairs": 15,
+    "eligible_states": 60,
+    "missing_eligible_pairs": 1,
+    "outcomes": 118,
+    "piotr_selected_candidate0_pairs": 36,
+    "planned_tasks": 300,
+    "reached_states": 292,
+    "suffix": "ordinary SFT after one intervention",
+    "untouched_original_pairs": 44
+  },
+  "original_missing_fit_endpoint_categories": {
+    "post_action_capture_mismatch": 35,
+    "pre_dispatch_raster_mismatch": 2,
+    "pre_dispatch_visible_snapshot_mismatch": 2
+  },
+  "pilot": {
+    "acceptance": {
+      "forbidden_effect_based_acceptance": true,
+      "min_matched_states_at_decision_at_least_10": 4,
+      "min_matched_states_at_decision_at_least_5": 8,
+      "min_reached_targets": 24,
+      "min_sites_with_at_least_two_matched_states": 6,
+      "min_six_way_matched_fresh_states": 20,
+      "min_six_way_replay_pass_fraction_among_reached": 0.8
+    },
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "admission": "Original strict state comparator plus exact normal frontend/images/token identities; fixed-prefix replay checks retained",
+    "context_length": 32768,
+    "fresh_tasks": 32,
+    "historical_diagnostic_states": 16,
+    "historical_pairs_per_state": 3,
+    "limitations": [
+      "Pre-action parity and sampled stability do not prove hidden-state equality or post-action/suffix reliability.",
+      "Historical diagnostic states are not part of the fresh coverage denominator.",
+      "Fixed time cap may leave physical trials unstarted; no replacement or budget extension.",
+      "CPU checks are not live-browser validation; numerical native-probability startup must pass in an approved allocation."
+    ],
+    "limits": {
+      "browser_sessions": 320,
+      "concurrent_browsers": 12,
+      "fresh_replicas": 6,
+      "fresh_states": 32,
+      "historical_repeats": 3,
+      "historical_states": 16,
+      "judge_calls": 0,
+      "judge_usd": 0,
+      "reference_prefix_generation_requests": 224,
+      "scientific_candidate_calls": 0,
+      "scientific_suffix_calls": 0,
+      "selector_calls": 0,
+      "synthetic_generation_requests": 1,
+      "synthetic_teacher_forced_requests": 1,
+      "teacher_calls": 0,
+      "unit_wall_seconds": 180
+    },
+    "no_old_budget_transfer": true,
+    "no_scientific_outcomes": true,
+    "no_target_action": true,
+    "order": "fixed fresh32 first, then fixed historical48 diagnostic pairs",
+    "planned_dispositions": 80,
+    "primary_population": "Current visible actor inputs of six prefix replicas, first target capture, preassigned role0 reference",
+    "replicas_per_fresh_state": 6,
+    "resources": {
+      "cpus": 16,
+      "gpu_type": "H200",
+      "gpus": 1,
+      "memory_gib": 240,
+      "total_seconds": 7200
+    },
+    "sampling": {
+      "max_new_tokens": 1024,
+      "temperature": 0.7,
+      "top_p": 0.9
+    },
+    "target_decisions": [
+      2,
+      5,
+      10,
+      15
+    ],
+    "temporal_contract": {
+      "max_capture_age_seconds": 30,
+      "max_capture_skew_seconds": 30,
+      "outer_match_seeking_recapture": false,
+      "read_only_dwell_offsets_seconds": [
+        5,
+        15
+      ]
+    },
+    "time_bound": "7200 allocated seconds total; all attempts, startup and cleanup included; unstarted units retain dispositions",
+    "websites": 8
+  },
+  "precision_planning": {
+    "assumptions_not_measurements": true,
+    "caveat": "Equal site sizes and exchangeable positive correlations are planning approximations. Unequal replay yield may reduce effective site count. Three repeats do not create three independent task clusters; eight sites are too few for confident unseen-site inference.",
+    "conservative_normal95_halfwidth_pp": 13.4685642177748,
+    "moderate_normal95_halfwidth_pp": 8.263933764060592,
+    "repeats_per_choice": 3,
+    "sites": 8,
+    "usable_states": 120
+  },
+  "schema": "confidence_robust_followup_aggregate_v1",
+  "status": "offline_preparation_no_paid_execution",
+  "user_scientific_direction_approved": true
+}
