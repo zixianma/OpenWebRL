@@ -1,6 +1,6 @@
 # ARM formulations: outcome-based selection and execution evidence
 
-**Fresh continuations support outcome-based action selection over uniform selection; its advantage over actor-first or the saved Luna selector remains uncertain.** On the 58 states that passed repeat replay, selecting from the original three draws scores 34.54% on two fresh draws. No selector has been trained; these are conditional continuation results, not benchmark pass@1.
+**Immediate execution evidence has not yet established an advantage for the critic.** On the 119 matched historical states, Luna after execution improves continuation success over Luna before execution by +2.24 percentage points, with a 95% interval of [−0.28, +4.95]. These frozen operational estimates count invalid outcomes as zero. Separately, fresh continuations support outcome-based selection over uniform selection on 58 replayable states, but its advantage over actor-first or Luna remains uncertain. No selector has been trained; these are conditional continuation results, not benchmark pass@1.
 
 <a id="branching-design"></a>
 
@@ -191,6 +191,20 @@ The cohort amendment froze these 124 states and all 1,860 original outcomes. The
 ## Can a trained selector generalize beyond the branching states?
 
 **The approved 32-state collection pilot is running, with startup and initial collections verified; the full pilot endpoint remains incomplete.** The larger goal is outcome-based selector adaptation with eight continuations per new candidate and separate seen-task/new-state and unseen-task validation. The held-out continuation results motivate this test; they do not establish that a learned selector will reproduce the gain. No selector has been trained in this study.
+
+<a id="branch-post-to-pre-study-20261008"></a>
+
+**Research priority, October 8: establish the value of the next screenshot, then test whether that signal transfers to a pre-action critic.** The current pilot supplies branches and continuation targets; its zero-teacher-call budget does not include new pre/post critic judgments.
+
+| Question | Matched comparison | Evidence required |
+| --- | --- | --- |
+| Does immediate execution evidence help? | Same frozen critic and repeated index-only selection protocol, with versus without each candidate’s immediate next screenshot | Paired selected-action success on held-out continuations; task-bootstrap interval and valid-panel coverage |
+| Can it train a better pre-action critic? | Identical pre-action students, training states and optimization budgets; targets from pre-action versus post-action teacher choices | Improvement on distinct seen-task states and unseen tasks, using only pre-action inputs at inference |
+| How informative are the continuation outcomes themselves? | Separately labeled continuation-return-supervised selector/reference | Held-out outcomes that never enter its selection or training targets |
+
+The post-action input must be the screenshot immediately after the fixed candidate action, bound to its execution receipt. A terminal screenshot or later suffix cannot substitute. Prespecify the evidence draw independently of outcomes; do not choose the successful or clearest-looking transition. Teachers receive no continuation returns or future screenshots. Repeated teacher choices can supply matched target distributions for distillation; both students use the same loss and see only the original state and candidates. Keep teacher labels and continuation-derived targets distinct. Missing evidence excludes a paired comparison, with coverage reported, while other valid targets remain usable.
+
+Keep collection active while preparing these comparisons from saved artifacts. Size the next collection request from valid candidate-panel yield, depth coverage and all-attempt cost, rather than raw accepted-state count alone. Larger collection, new critic calls and student training still require their own exact budget approvals.
 
 | Dataset role | Total target states | Retained existing states | New state target | New continuation target |
 | --- | ---: | ---: | ---: | ---: |

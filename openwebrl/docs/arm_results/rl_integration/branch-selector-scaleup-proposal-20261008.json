@@ -182,5 +182,19 @@
     "raw_results_preserved": true,
     "invalid_retries_requested": false,
     "selector_training_started": false
+  },
+  "research_priority": {
+    "date": "2026-10-08",
+    "user_requested": true,
+    "primary_questions": [
+      "Does immediate post-action evidence improve the critic on independent continuation outcomes?",
+      "Can post-action teacher choices improve a student that sees only pre-action information?"
+    ],
+    "matched_teacher_comparison": "Same frozen critic, candidate set, prompt and repeated index-only protocol; post condition adds bound immediate execution evidence from a prespecified draw; no future suffix, terminal screenshot or outcomes.",
+    "matched_students": "Same initialization, training states, pre-action inputs, loss and optimization budget; targets are repeated pre-action versus post-action teacher choice distributions.",
+    "return_signal_control": "Retain separately labeled continuation-return supervision; do not equate oracle outcome selection with post-action critic performance.",
+    "scaling_gate": "Audit valid panel yield, immediate evidence availability, depth coverage and all-attempt costs; prepare separate exact collection, labeling and training requests while current collection continues.",
+    "current_zero_teacher_cap_unchanged": true,
+    "new_critic_or_training_budget_approved": false
   }
 }
