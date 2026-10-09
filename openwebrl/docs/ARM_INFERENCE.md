@@ -155,21 +155,45 @@ Score only native tool-call payload tokens, including payload whitespace and exc
 
 The scan covers all 5,187 saved decisions / 25,935 candidates. Three pools need the declared fallback; six otherwise scoreable selected pairs cannot both be parsed. Duplicate actions explain much of the index/action gap. Independent runtime masks match every saved candidate; including tool wrappers changes 28 of 5,184 choices. No alternative actions were executed: **this is not a success-rate estimate**. [Aggregate and caveats](arm_results/selectionarm_likelihood5_sft30_20261007/action-only-offline.json).
 
-**Fresh rollout remains deferred; the benefit-based threshold study is blocked at fitting.** The prepared design keeps the same 300 tasks, SFT model/prompt, five candidates, T=0.7/top-p=0.9, 1,024 tokens and 30-step horizon. Its separate resource request remains unapproved: two shards, each **1 H200 / 8 CPUs / 120 GiB × 3 hours total**, plus **USD 2.50 / 660 judge calls**, including retries; combined 6 H200-hours and USD 5, with no transfers. Prior controls were collected separately.
+**Fresh rollout remains deferred; the benefit-based threshold study now uses the approved 59-pair fit below.** The prepared design keeps the same 300 tasks, SFT model/prompt, five candidates, T=0.7/top-p=0.9, 1,024 tokens and 30-step horizon. Its separate resource request remains unapproved: two shards, each **1 H200 / 8 CPUs / 120 GiB × 3 hours total**, plus **USD 2.50 / 660 judge calls**, including retries; combined 6 H200-hours and USD 5, with no transfers. Prior controls were collected separately.
 
 </details>
 
 <a id="confidence-benefit-20261008"></a>
-## Selecting a threshold by measured ARM benefit — October 8, one replay blocker
+## Selecting a threshold by measured ARM benefit — October 8
 
-**No threshold has been fitted or verified.** **59 of 60 eligible fitting pairs have complete outcomes.** The additional approved 30-second replay windows also failed to match the last saved state: none of 32 captured frames passed the unchanged checks. Neither candidate action was dispatched. The fitter remains blocked; all earlier evidence is preserved.
+**The 59-pair fit selects “keep the first action” (never invoke Piotr).** It has the most successful continuations among the five prespecified rules. These are fitting results; held-out verification is pending.
 
-| Fitting shard | Planned tasks | Task dispositions | Eligible pairs | Resolved pairs | Unresolved pairs | Status |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 0 | 150 | 150 | 38 | 38 | 0 | Fit ready; allocation preserved |
-| 1 | 150 | 150 | 22 | 21 | 1 | Replay blocked; allocation preserved |
+| Rule at the sampled decision | Successful continuations | Complete fitting pairs | Success rate | Decisions invoking Piotr |
+| --- | ---: | ---: | ---: | ---: |
+| **Keep the first action — selected** | **27** | **59** | **45.76%** | **0** |
+| Invoke Piotr below score q25 | 24 | 59 | 40.68% | 18 |
+| Invoke Piotr below score q50 | 23 | 59 | 38.98% | 37 |
+| Invoke Piotr below score q75 | 22 | 59 | 37.29% | 44 |
+| Always invoke Piotr | 22 | 59 | 37.29% | 59 |
 
-All **450 planned tasks are accounted for:** 300 fitting dispositions and 150 held-out tasks blocked before paired continuations. All reference episodes are preserved. No held-out utility estimate exists. The resolved pairs cover **19.67% of the planned fitting tasks**; replay rejection and missing eligible outcomes limit representativeness. Missing outcomes remain unresolved, without exclusion or failure labels. [Latest replay audit and accounting](arm_results/selectionarm_confidence_benefit_20261008/banner-replay-result.json).
+[Fit comparison plot](arm_results/selectionarm_confidence_benefit_20261008/complete-pairs59-fit.png).
+
+**Approved amendment:** fit on the 59 complete pairs and omit the last unresolved pair from the utility calculation. The omitted pair remains prospectively eligible with two missing outcomes in the original 300-task record. All 292 scored fitting states still define the candidate cutoffs. This is a complete-case analysis adopted after replay failures; missingness is not assumed random. The usable pairs cover **19.67%** of planned fitting tasks. [Frozen fit and amendment aggregates](arm_results/selectionarm_confidence_benefit_20261008/complete-pairs59-fit.json).
+
+The original 150 held-out tasks remain separate. Since the selected rule keeps the first action, its comparison with the first-action control will be identical by construction; verification will still compare it with always-Piotr and measure coverage and repeat-control variation. This study tests **one sampled intervention per task**, not selection at every agent step.
+
+<details>
+<summary>Fitting coverage and amendment</summary>
+
+| Shard | Planned fitting tasks | Scored states | Originally eligible pairs | Complete pairs used | Missing pairs omitted from utility |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 | 150 | 146 | 38 | 38 | 0 |
+| 1 | 150 | 146 | 22 | 21 | 1 |
+| Total | 300 | 292 | 60 | 59 | 1 |
+
+The q25/q50/q75 cutoffs remain −0.20164765 / −0.17092938 / −0.13696538 in mean native full-response log-probability; expansion uses strict score < cutoff. The objective, five rules and tie-breaking are unchanged. Only admission of the one explicitly approved missing fitting pair changed. Held-out missing-outcome requirements remain strict. The 36 same-choice pairs among the 59 complete pairs measure variation after the same action; equal selected actions do not imply equal continuation outcomes.
+
+As a sensitivity check, all four hypothetical binary outcome combinations for the missing pair still select the first-action rule. These are bounds on the decision, not observed or imputed outcomes.
+
+All fixed tasks, saved actions, prospective eligibility, native probability receipts and failed attempts are preserved. No new fitting replay or additional budget was authorized. [Earlier bounded replay audit](arm_results/selectionarm_confidence_benefit_20261008/banner-replay-result.json).
+
+</details>
 
 <details>
 <summary>Question and fixed design</summary>
@@ -180,14 +204,14 @@ At one uniformly hash-selected reached decision per task, preserve the first can
 
 The split uses the existing 2,000-task ARM curation pool, with no exact task-ID or normalized-instruction overlap with the evaluation 300. Shared websites are allowed; prior difficulty filtering limits representativeness. Task selection uses no success outcomes.
 
-Use the current SFT model/frontend, T=0.7, top-p=0.9, 1,024 response tokens, 30 decisions, native untempered full-response mean log-probability and unchanged index-only Piotr selector. Preserve malformed and duplicate proposals. Lock the selected state and both replay checks before either candidate action executes; never replace a failed replay with an easier state. Quantiles use every scored selected fitting anchor, including replay-rejected anchors; utility fitting requires complete outcomes for every prospectively eligible pair. Canonical invalid/unfinished outcomes retain zero; unresolved evidence blocks fitting.
+Use the current SFT model/frontend, T=0.7, top-p=0.9, 1,024 response tokens, 30 decisions, native untempered full-response mean log-probability and unchanged index-only Piotr selector. Preserve malformed and duplicate proposals. Lock the selected state and both replay checks before either candidate action executes; never replace a failed replay with an easier state. Quantiles use every scored selected fitting anchor, including replay-rejected anchors; the original utility fit required complete outcomes for every prospectively eligible pair. The subsequent explicit amendment omits exactly one missing fitting pair, as described above. Canonical invalid/unfinished outcomes retain zero; other unresolved evidence is not silently excluded.
 
 Only fitting outcomes may select the rule. Planned reporting includes held-out paired differences against first-candidate and always-Piotr choices, task-bootstrap 95% intervals, and coverage by decision, site and score. These intervals condition on the frozen rule and usable sample; one continuation per branch gives noisy benefit estimates. Observable replay matching does not clone remote server state, and shared seeds do not guarantee matched FlashInfer draws. Full-episode repeated gating is a separate experiment.
 
 </details>
 
 <details>
-<summary>Recovery, remaining blocker and accounting</summary>
+<summary>Historical replay failures and remaining-budget accounting</summary>
 
 **Approved October 8 amendment:** recollect both branches for all 16 fixed unresolved anchors, producing at most 32 fresh continuation outcomes. Keep the 44 complete pairs, all historical missing evidence, fixed states, candidate pools, Piotr choices and replay checks. Only suffix draws after the saved intervention are new. Use each designated new pair regardless of its outcome; no old-counterpart fallback or favorable-attempt selection. Renewed missing evidence still blocks the unchanged fitter. This mixes original and recollected pairs and does not remove replay-selection or missingness bias; report collection-version sensitivity. The 150 held-out tasks remain gated on complete fit evidence and a frozen threshold.
 
@@ -195,9 +219,9 @@ Recovery jobs **350607 / 350608** ended after **1,451 / 284 allocation seconds**
 
 **Additional bounded replay, job 350741:** the user approved one more physical pair with a 30-second read-only observation window per role and unchanged matching. It exhausted those windows, producing 16 rejected frames per role and no candidate interventions, suffix draws or judge calls. The startup probability check used one synthetic generation and one teacher-forced scoring request; these are separate from scientific task inference. Cleanup is verified. This attempt used 105 allocation seconds and preserved all 59 complete pairs and the other 299 fitting dispositions.
 
-**Remaining blocker:** every captured frame differs from the saved state only in the promotional banner (rows 44–95); all pixels below it are identical. The closest first-candidate frame has mean RGB difference 1.423 and 1.351% of pixels with a channel difference over 8; the closest Piotr frame has 0.520 and 0.647%, respectively. The unchanged limits are 0.5 and 0.1%. Both windows settle on another repeated banner frame that also fails. These finite windows do not prove no matching frame can ever recur, but they provide no demonstrated repair. The additional physical-attempt authorization is exhausted. No image masking, tolerance change, replacement state or missing-outcome imputation was applied. [Bounded replay audit](arm_results/selectionarm_confidence_benefit_20261008/banner-replay-result.json).
+**Replay blocker before the complete-case amendment:** every captured frame differs from the saved state only in the promotional banner (rows 44–95); all pixels below it are identical. The closest first-candidate frame has mean RGB difference 1.423 and 1.351% of pixels with a channel difference over 8; the closest Piotr frame has 0.520 and 0.647%, respectively. The unchanged limits are 0.5 and 0.1%. Both windows settle on another repeated banner frame that also fails. These finite windows do not prove no matching frame can ever recur, but they provide no demonstrated repair. The additional physical-attempt authorization is exhausted. No image masking, tolerance change, replacement state or missing-outcome imputation was applied. [Bounded replay audit](arm_results/selectionarm_confidence_benefit_20261008/banner-replay-result.json).
 
-A verification-only handoff is prepared and tested, but inactive: it requires both successful fit handoffs and a threshold frozen by the unchanged fitter before GPU startup. It cannot rerun fitting continuations or refit a lost threshold. All 150 held-out tasks remain blocked. No new compute or judge budget was added.
+That replay attempt ended without a threshold. The later complete-case amendment permits fitting on the 59 complete pairs and then resuming only the original held-out tasks. It does not authorize another fitting replay or a replacement state. No new compute or judge budget was added.
 
 **Historical evidence before the approved redraw:**
 
@@ -207,7 +231,7 @@ The pass recovered **11 endpoints** (five judged, six canonical zeros), completi
 
 Shard 1 recorded all 150 fitting dispositions, with **18 resolved and four unresolved eligible pairs**. Its eight missing endpoints comprise six persistent capture mismatches and two verified raster mismatches after eligibility release. All four are same-choice repeat controls; choosing the same action does not establish equal rollout outcomes. No missing endpoint has an unlinked verdict or restorable browser state. There is no demonstrated further mechanical repair under the unchanged rules. Fresh paired trajectories would require a separately declared protocol amendment.
 
-**Current accounting after the bounded replay:**
+**Accounting before the held-out continuation (all fitting/recovery attempts):**
 
 | Shard | Allocated seconds used, all attempts | Original cap, seconds | Unused seconds | Judge calls | Judge cost, USD | Judge cap, USD |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

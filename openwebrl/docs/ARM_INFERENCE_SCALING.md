@@ -184,7 +184,7 @@ Sample one candidate; below **−0.215576 nats/token** full-response mean base-p
 
 The gate triggered on **907 of 4,844 decisions (18.72%)**, averaging **1.749 candidates**. Its gain over SFT is inconclusive, and it trails always-Piotr by **−6.33 pp [−12.00, −0.67]**. Controls were collected separately; this does not establish noninferiority or matched wall-clock savings.
 
-**Calibration limitation:** the frozen cutoff is the 25th percentile of 278 saved SFT final-decision responses from these same evaluation tasks. The separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) uses 300 fitting and 150 held-out verification tasks. All 300 fitting tasks are accounted for, with **59/60 eligible pairs complete**. The additional bounded replay also failed to match the last saved state. No new threshold or held-out result is available. [Protocol, calibration limits and final accounting](ARM_INFERENCE.md#likelihood-scaling-20261007).
+**Calibration limitation:** the frozen cutoff is the 25th percentile of 278 saved SFT final-decision responses from these same evaluation tasks. The separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) uses 300 fitting and 150 held-out verification tasks. The approved complete-case fit uses **59 complete pairs** from 60 originally eligible states and selects **keep the first action**: 27 successes, versus 24/23/22 for q25/q50/q75 and 22 for always-Piotr. The missing pair remains documented. These are fitting results; held-out verification is pending. [Protocol, calibration limits and final accounting](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
 <a id="training-task-pass5-pass8-20261006"></a>
 ## Frozen SFT training-pool coverage: five attempts to eight

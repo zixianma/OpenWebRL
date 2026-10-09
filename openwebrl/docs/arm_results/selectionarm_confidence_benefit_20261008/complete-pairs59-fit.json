@@ -1,0 +1,488 @@
+{
+  "schema": "complete_pairs59_fit_aggregate_v1",
+  "study": "Single-intervention confidence benefit calibration",
+  "status": "fit_frozen_heldout_pending",
+  "analysis_population": "59 complete pairs after explicit amendment; original eligible60, missing1 retained",
+  "counts": {
+    "fit_tasks": 300,
+    "fixed_tasks": 450,
+    "heldout_tasks": 150,
+    "original_eligible_fit_pairs": 60,
+    "score_grid_anchors": 292,
+    "unresolved_eligible_fit_pairs": 1,
+    "utility_fit_pairs": 59
+  },
+  "fit": {
+    "fit_options": [
+      {
+        "expansion_rate": 0.0,
+        "hypothetical_ARM_calls": 0,
+        "paired_states": 59,
+        "rule": {
+          "mode": "never",
+          "name": "never",
+          "threshold": null
+        },
+        "success_rate": 0.4576271186440678,
+        "successes": 27
+      },
+      {
+        "expansion_rate": 0.3050847457627119,
+        "hypothetical_ARM_calls": 18,
+        "paired_states": 59,
+        "rule": {
+          "mode": "threshold",
+          "name": "q25",
+          "quantile": 0.25,
+          "threshold": -0.20164764855409809
+        },
+        "success_rate": 0.4067796610169492,
+        "successes": 24
+      },
+      {
+        "expansion_rate": 0.6271186440677966,
+        "hypothetical_ARM_calls": 37,
+        "paired_states": 59,
+        "rule": {
+          "mode": "threshold",
+          "name": "q50",
+          "quantile": 0.5,
+          "threshold": -0.17092938111383263
+        },
+        "success_rate": 0.3898305084745763,
+        "successes": 23
+      },
+      {
+        "expansion_rate": 0.7457627118644068,
+        "hypothetical_ARM_calls": 44,
+        "paired_states": 59,
+        "rule": {
+          "mode": "threshold",
+          "name": "q75",
+          "quantile": 0.75,
+          "threshold": -0.13696537697595199
+        },
+        "success_rate": 0.3728813559322034,
+        "successes": 22
+      },
+      {
+        "expansion_rate": 1.0,
+        "hypothetical_ARM_calls": 59,
+        "paired_states": 59,
+        "rule": {
+          "mode": "always",
+          "name": "always",
+          "threshold": null
+        },
+        "success_rate": 0.3728813559322034,
+        "successes": 22
+      }
+    ],
+    "identical_choice_repeat_controls": 36,
+    "interpretation": "Selected among five prespecified single-intervention rules; not globally optimal or a calibrated correctness probability",
+    "objective": "mean[Y_first + gate(score)*(Y_piotr-Y_first)]",
+    "paired_states": 59,
+    "score_grid_anchors": 292,
+    "score_grid_population": "all_selected_native_scored_fit_anchors_before_replay_exclusions",
+    "selected_rule": {
+      "mode": "never",
+      "name": "never",
+      "threshold": null
+    },
+    "tie_break": "fewer ARM calls, then lower cutoff, then prespecified option order"
+  },
+  "frozen_fit_sha256": "f56b316a4701bd6a72a7439d1c83f970b548257551a7d4f4713597296cd745a9",
+  "original_fitter_sha256": "469b1ab0ca95fa10343cca90ccf9907adaf5157e188731c847687ddd635978f9",
+  "amended_fitter_sha256": "64c7926632bf63fa6ea9a724dba56e02bfd3a8acf8b0a10c6ab50514b02c2100",
+  "amendment_sha256": "1f26a0ee6b0cd2d7a5044a28edcebc7f26cdf7cb7001381eb935c49b241c9213",
+  "frozen_epoch": 1791524704.4816864,
+  "fit_coverage_rate": 0.19666666666666666,
+  "fit_complete_among_original_eligible_rate": 0.9833333333333333,
+  "heldout": {
+    "planned_tasks": 150,
+    "dispatched_pairs": 0,
+    "verified_complete": false
+  },
+  "accounting_before_heldout": [
+    {
+      "shard": 0,
+      "used_seconds": 7086,
+      "remaining_seconds": 7314,
+      "new_job_limit_seconds": 7260,
+      "judge_ledger": {
+        "calls": 38,
+        "charged_or_reserved_usd": 0.32740510000000006
+      }
+    },
+    {
+      "shard": 1,
+      "used_seconds": 5112,
+      "remaining_seconds": 9288,
+      "new_job_limit_seconds": 9240,
+      "judge_ledger": {
+        "calls": 22,
+        "charged_or_reserved_usd": 0.18858620000000004
+      }
+    }
+  ],
+  "missing_pair_sensitivity": {
+    "adopted_as_evidence": false,
+    "all_selected_rules_equal_official": true,
+    "interpretation": "Exhaustive hypothetical binary outcomes of the missing pair under the unchanged 292-anchor grid. This is sensitivity analysis, not imputation or observed 60-pair evidence.",
+    "is_observed_result": false,
+    "new_calls": 0,
+    "official_selected_rule": {
+      "mode": "never",
+      "name": "never",
+      "threshold": null
+    },
+    "official_utility_pairs": 59,
+    "scenarios": [
+      {
+        "fit": {
+          "fit_options": [
+            {
+              "expansion_rate": 0.0,
+              "hypothetical_ARM_calls": 0,
+              "paired_states": 60,
+              "rule": {
+                "mode": "never",
+                "name": "never",
+                "threshold": null
+              },
+              "success_rate": 0.45,
+              "successes": 27
+            },
+            {
+              "expansion_rate": 0.31666666666666665,
+              "hypothetical_ARM_calls": 19,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q25",
+                "quantile": 0.25,
+                "threshold": -0.20164764855409809
+              },
+              "success_rate": 0.4,
+              "successes": 24
+            },
+            {
+              "expansion_rate": 0.6333333333333333,
+              "hypothetical_ARM_calls": 38,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q50",
+                "quantile": 0.5,
+                "threshold": -0.17092938111383263
+              },
+              "success_rate": 0.38333333333333336,
+              "successes": 23
+            },
+            {
+              "expansion_rate": 0.75,
+              "hypothetical_ARM_calls": 45,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q75",
+                "quantile": 0.75,
+                "threshold": -0.13696537697595199
+              },
+              "success_rate": 0.36666666666666664,
+              "successes": 22
+            },
+            {
+              "expansion_rate": 1.0,
+              "hypothetical_ARM_calls": 60,
+              "paired_states": 60,
+              "rule": {
+                "mode": "always",
+                "name": "always",
+                "threshold": null
+              },
+              "success_rate": 0.36666666666666664,
+              "successes": 22
+            }
+          ],
+          "identical_choice_repeat_controls": 37,
+          "interpretation": "Selected among five prespecified single-intervention rules; not globally optimal or a calibrated correctness probability",
+          "objective": "mean[Y_first + gate(score)*(Y_piotr-Y_first)]",
+          "paired_states": 60,
+          "score_grid_anchors": 292,
+          "score_grid_population": "all_selected_native_scored_fit_anchors_before_replay_exclusions",
+          "selected_rule": {
+            "mode": "never",
+            "name": "never",
+            "threshold": null
+          },
+          "tie_break": "fewer ARM calls, then lower cutoff, then prespecified option order"
+        },
+        "hypothetical_first_success": 0,
+        "hypothetical_paired_states": 60,
+        "hypothetical_piotr_success": 0
+      },
+      {
+        "fit": {
+          "fit_options": [
+            {
+              "expansion_rate": 0.0,
+              "hypothetical_ARM_calls": 0,
+              "paired_states": 60,
+              "rule": {
+                "mode": "never",
+                "name": "never",
+                "threshold": null
+              },
+              "success_rate": 0.45,
+              "successes": 27
+            },
+            {
+              "expansion_rate": 0.31666666666666665,
+              "hypothetical_ARM_calls": 19,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q25",
+                "quantile": 0.25,
+                "threshold": -0.20164764855409809
+              },
+              "success_rate": 0.4166666666666667,
+              "successes": 25
+            },
+            {
+              "expansion_rate": 0.6333333333333333,
+              "hypothetical_ARM_calls": 38,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q50",
+                "quantile": 0.5,
+                "threshold": -0.17092938111383263
+              },
+              "success_rate": 0.4,
+              "successes": 24
+            },
+            {
+              "expansion_rate": 0.75,
+              "hypothetical_ARM_calls": 45,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q75",
+                "quantile": 0.75,
+                "threshold": -0.13696537697595199
+              },
+              "success_rate": 0.38333333333333336,
+              "successes": 23
+            },
+            {
+              "expansion_rate": 1.0,
+              "hypothetical_ARM_calls": 60,
+              "paired_states": 60,
+              "rule": {
+                "mode": "always",
+                "name": "always",
+                "threshold": null
+              },
+              "success_rate": 0.38333333333333336,
+              "successes": 23
+            }
+          ],
+          "identical_choice_repeat_controls": 37,
+          "interpretation": "Selected among five prespecified single-intervention rules; not globally optimal or a calibrated correctness probability",
+          "objective": "mean[Y_first + gate(score)*(Y_piotr-Y_first)]",
+          "paired_states": 60,
+          "score_grid_anchors": 292,
+          "score_grid_population": "all_selected_native_scored_fit_anchors_before_replay_exclusions",
+          "selected_rule": {
+            "mode": "never",
+            "name": "never",
+            "threshold": null
+          },
+          "tie_break": "fewer ARM calls, then lower cutoff, then prespecified option order"
+        },
+        "hypothetical_first_success": 0,
+        "hypothetical_paired_states": 60,
+        "hypothetical_piotr_success": 1
+      },
+      {
+        "fit": {
+          "fit_options": [
+            {
+              "expansion_rate": 0.0,
+              "hypothetical_ARM_calls": 0,
+              "paired_states": 60,
+              "rule": {
+                "mode": "never",
+                "name": "never",
+                "threshold": null
+              },
+              "success_rate": 0.4666666666666667,
+              "successes": 28
+            },
+            {
+              "expansion_rate": 0.31666666666666665,
+              "hypothetical_ARM_calls": 19,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q25",
+                "quantile": 0.25,
+                "threshold": -0.20164764855409809
+              },
+              "success_rate": 0.4,
+              "successes": 24
+            },
+            {
+              "expansion_rate": 0.6333333333333333,
+              "hypothetical_ARM_calls": 38,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q50",
+                "quantile": 0.5,
+                "threshold": -0.17092938111383263
+              },
+              "success_rate": 0.38333333333333336,
+              "successes": 23
+            },
+            {
+              "expansion_rate": 0.75,
+              "hypothetical_ARM_calls": 45,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q75",
+                "quantile": 0.75,
+                "threshold": -0.13696537697595199
+              },
+              "success_rate": 0.36666666666666664,
+              "successes": 22
+            },
+            {
+              "expansion_rate": 1.0,
+              "hypothetical_ARM_calls": 60,
+              "paired_states": 60,
+              "rule": {
+                "mode": "always",
+                "name": "always",
+                "threshold": null
+              },
+              "success_rate": 0.36666666666666664,
+              "successes": 22
+            }
+          ],
+          "identical_choice_repeat_controls": 37,
+          "interpretation": "Selected among five prespecified single-intervention rules; not globally optimal or a calibrated correctness probability",
+          "objective": "mean[Y_first + gate(score)*(Y_piotr-Y_first)]",
+          "paired_states": 60,
+          "score_grid_anchors": 292,
+          "score_grid_population": "all_selected_native_scored_fit_anchors_before_replay_exclusions",
+          "selected_rule": {
+            "mode": "never",
+            "name": "never",
+            "threshold": null
+          },
+          "tie_break": "fewer ARM calls, then lower cutoff, then prespecified option order"
+        },
+        "hypothetical_first_success": 1,
+        "hypothetical_paired_states": 60,
+        "hypothetical_piotr_success": 0
+      },
+      {
+        "fit": {
+          "fit_options": [
+            {
+              "expansion_rate": 0.0,
+              "hypothetical_ARM_calls": 0,
+              "paired_states": 60,
+              "rule": {
+                "mode": "never",
+                "name": "never",
+                "threshold": null
+              },
+              "success_rate": 0.4666666666666667,
+              "successes": 28
+            },
+            {
+              "expansion_rate": 0.31666666666666665,
+              "hypothetical_ARM_calls": 19,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q25",
+                "quantile": 0.25,
+                "threshold": -0.20164764855409809
+              },
+              "success_rate": 0.4166666666666667,
+              "successes": 25
+            },
+            {
+              "expansion_rate": 0.6333333333333333,
+              "hypothetical_ARM_calls": 38,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q50",
+                "quantile": 0.5,
+                "threshold": -0.17092938111383263
+              },
+              "success_rate": 0.4,
+              "successes": 24
+            },
+            {
+              "expansion_rate": 0.75,
+              "hypothetical_ARM_calls": 45,
+              "paired_states": 60,
+              "rule": {
+                "mode": "threshold",
+                "name": "q75",
+                "quantile": 0.75,
+                "threshold": -0.13696537697595199
+              },
+              "success_rate": 0.38333333333333336,
+              "successes": 23
+            },
+            {
+              "expansion_rate": 1.0,
+              "hypothetical_ARM_calls": 60,
+              "paired_states": 60,
+              "rule": {
+                "mode": "always",
+                "name": "always",
+                "threshold": null
+              },
+              "success_rate": 0.38333333333333336,
+              "successes": 23
+            }
+          ],
+          "identical_choice_repeat_controls": 37,
+          "interpretation": "Selected among five prespecified single-intervention rules; not globally optimal or a calibrated correctness probability",
+          "objective": "mean[Y_first + gate(score)*(Y_piotr-Y_first)]",
+          "paired_states": 60,
+          "score_grid_anchors": 292,
+          "score_grid_population": "all_selected_native_scored_fit_anchors_before_replay_exclusions",
+          "selected_rule": {
+            "mode": "never",
+            "name": "never",
+            "threshold": null
+          },
+          "tie_break": "fewer ARM calls, then lower cutoff, then prespecified option order"
+        },
+        "hypothetical_first_success": 1,
+        "hypothetical_paired_states": 60,
+        "hypothetical_piotr_success": 1
+      }
+    ],
+    "schema": "complete_pairs59_hypothetical_missing_pair_sensitivity_v1",
+    "score_grid_anchors": 292
+  },
+  "limitations": [
+    "Complete-case amendment after replay failures; missingness is not assumed random.",
+    "Fitting results are optimistically selected; heldout verification pending.",
+    "One sampled decision per task, not full-episode repeated gating.",
+    "The frozen never rule equals the first-candidate control by construction."
+  ],
+  "publication": "Aggregates only; private task IDs, receipts and raw trajectories omitted."
+}
