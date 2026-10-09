@@ -46,7 +46,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Branching: next-screenshot critic comparison and pre-action distillation](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [approved extension to 32 continuations per fixed action](ARM_FORMULATIONS.md#branch-extra24-20261008).
+[Branching pilot verified: 32 states × five actions × eight draws; preliminary held-out selection and depth coverage](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [extra-24 draws running on all 32 frozen states](ARM_FORMULATIONS.md#branch-extra24-20261008).
 
 [Shared selection head on frozen actor features: 65.5% held-out teacher agreement, but 34.68% chosen-action continuation success versus 35.75% for Piotr SelectionARM on 124 branch panels](ARM_FORMULATIONS.md#selection-head-20261009).
 

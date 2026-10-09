@@ -1,7 +1,7 @@
 {
   "schema": "branch-selector-scaleup-proposal-v2",
   "date": "2026-10-08",
-  "status": "pilot_running_extra24_running_startup_validation",
+  "status": "pilot_verified_complete_extra24_running_incomplete",
   "approved_for_execution": true,
   "full_science_target": {
     "train_states": 1000,
@@ -152,7 +152,7 @@
     "observed_reference_seconds": 39868,
     "observed_reference_browser_starts": 2695,
     "reference_draws_per_action": 3,
-    "warning": "Eight-draw all-context acceptance has been observed in the pilot, but full32state yield is not guaranteed. Three slots on2090 tasks provide5670 collectible opportunities. Expand source coverage or slots only after role/depth-specific yield and cost review.",
+    "warning": "Pilot32 target reached, but27/32states are at decisions1\u20133; larger balanced-depth yield and independent selector generalization remain unestablished.",
     "larger_source_pool_status": "metadata available; requires separate exclusions/source audit and budget approval"
   },
   "validation": {
@@ -161,7 +161,7 @@
     "new_collection_started": true,
     "training_started": false,
     "source_and_split_verification_checks": 12,
-    "scope": "Original eight-draw pilot startup and initialcollections verified; extra24 GPUstartup pending. Neitherendpoint fullyaudited."
+    "scope": "Eight-draw32-state pilot endpoint independently verified; extra24 startup/useful progress verified, full extension coverage and final held-out analysis incomplete."
   },
   "job_id": "350648",
   "historical_reuse_caveat": {
@@ -201,8 +201,8 @@
   "extra24_extension": {
     "approved": true,
     "job_id": "351591",
-    "status": "running_startup_validation",
-    "snapshot_epoch": 1791528256.6652994,
+    "status": "running_incomplete",
+    "snapshot_epoch": 1791541959.6117475,
     "plan_sha256": "1afc8da27a25727d15741169398c7047418d007cd0f82ca8c941be7a61c38090",
     "user_approval_sha256": "9ffccb136b8f1fe4d4840310759d1560cb4a48b2667618069c1cdf33cb783a64",
     "activation_review_sha256": "3ba733c04acdb756debc9ab862f211b71d287da05c3676a23640ae0289d7c8cb",
@@ -258,11 +258,915 @@
       "interval_seconds": 1800,
       "parent_supervisor_unchanged": true
     },
-    "startup_verified": false,
+    "startup_verified": true,
     "verified_complete": false,
     "budgets_separate": true,
     "full_scale_and_training_approved": false,
-    "audited_admitted_parent_states_current": 19,
-    "original_records_bound_current": 760
+    "audited_admitted_parent_states_current": 32,
+    "original_records_bound_current": 1280,
+    "final_parent_prefix_consumed": true,
+    "rejected_batches_preserved": true,
+    "coverage_caveat": "Strict-replay rejected batches remain excluded; processing all96opportunities is not full3840-record completion. No selective invalid retry or relaxed replay.",
+    "final_parent_admission_sha256": "24f52986db58b9b93495b363e9c020b9b2664e80a5e115f5907eb38073a24c2e"
+  },
+  "pilot_verified_complete": true,
+  "full_scale_verified_complete": false,
+  "pilot_results": {
+    "all_native_terminal_reasons": {
+      "None": 272,
+      "action_limit": 224,
+      "done": 784
+    },
+    "artifact_audit_owned_separately": true,
+    "counts": {
+      "candidate_panels": 160,
+      "common6plus2_states": 25,
+      "full_five_valid8_states": 28,
+      "invalid": 272,
+      "records": 1280,
+      "states": 32,
+      "successes": 431,
+      "tasks": 29,
+      "valid": 1008,
+      "valid_native_unjudged_zeros": 224,
+      "zero_valid_candidates": 15
+    },
+    "counts_by_depth": {
+      "1-3": {
+        "candidate_panels": 135,
+        "common6plus2_states": 20,
+        "full_five_valid8_states": 23,
+        "invalid": 266,
+        "records": 1080,
+        "states": 27,
+        "successes": 333,
+        "tasks": 27,
+        "valid": 814,
+        "valid_native_unjudged_zeros": 146,
+        "zero_valid_candidates": 15
+      },
+      "10-15": {
+        "candidate_panels": 15,
+        "common6plus2_states": 3,
+        "full_five_valid8_states": 3,
+        "invalid": 3,
+        "records": 120,
+        "states": 3,
+        "successes": 58,
+        "tasks": 3,
+        "valid": 117,
+        "valid_native_unjudged_zeros": 51,
+        "zero_valid_candidates": 0
+      },
+      "4-9": {
+        "candidate_panels": 10,
+        "common6plus2_states": 2,
+        "full_five_valid8_states": 2,
+        "invalid": 3,
+        "records": 80,
+        "states": 2,
+        "successes": 40,
+        "tasks": 2,
+        "valid": 77,
+        "valid_native_unjudged_zeros": 27,
+        "zero_valid_candidates": 0
+      }
+    },
+    "counts_by_split": {
+      "train": {
+        "candidate_panels": 115,
+        "common6plus2_states": 18,
+        "full_five_valid8_states": 21,
+        "invalid": 201,
+        "records": 920,
+        "states": 23,
+        "successes": 284,
+        "tasks": 23,
+        "valid": 719,
+        "valid_native_unjudged_zeros": 129,
+        "zero_valid_candidates": 9
+      },
+      "validation_seen_task": {
+        "candidate_panels": 20,
+        "common6plus2_states": 4,
+        "full_five_valid8_states": 4,
+        "invalid": 1,
+        "records": 160,
+        "states": 4,
+        "successes": 103,
+        "tasks": 4,
+        "valid": 159,
+        "valid_native_unjudged_zeros": 29,
+        "zero_valid_candidates": 0
+      },
+      "validation_unseen_task": {
+        "candidate_panels": 25,
+        "common6plus2_states": 3,
+        "full_five_valid8_states": 3,
+        "invalid": 70,
+        "records": 200,
+        "states": 5,
+        "successes": 44,
+        "tasks": 4,
+        "valid": 130,
+        "valid_native_unjudged_zeros": 66,
+        "zero_valid_candidates": 6
+      }
+    },
+    "created_epoch": 1791541741.7500448,
+    "descriptive8_common_full_five": {
+      "bootstrap_note": "10000 draws, seed20261007; whole task groups retain all states; summed state scores divided by sampled state count. Pointwise exploratory percentile intervals; no multiplicity correction.",
+      "estimates": {
+        "actor": {
+          "percent": 44.83418367346939,
+          "percent_interval": [
+            29.92857142857143,
+            59.5467032967033
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.2992857142857143,
+            0.595467032967033
+          ],
+          "rate": 0.4483418367346939
+        },
+        "hindsight": {
+          "percent": 56.76020408163265,
+          "percent_interval": [
+            43.349012497719386,
+            69.21182266009853
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.43349012497719386,
+            0.6921182266009853
+          ],
+          "rate": 0.5676020408163265
+        },
+        "hindsight_minus_actor": {
+          "percent": 11.926020408163266,
+          "percent_interval": [
+            6.249999999999999,
+            18.226600985221676
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.06249999999999999,
+            0.18226600985221675
+          ],
+          "rate": 0.11926020408163265
+        },
+        "hindsight_minus_uniform": {
+          "percent": 16.057823129251698,
+          "percent_interval": [
+            11.134608843537416,
+            20.89868608733815
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.11134608843537416,
+            0.2089868608733815
+          ],
+          "rate": 0.160578231292517
+        },
+        "uniform": {
+          "percent": 40.70238095238095,
+          "percent_interval": [
+            27.92585034013606,
+            53.920771756978645
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.2792585034013606,
+            0.5392077175697865
+          ],
+          "rate": 0.4070238095238095
+        }
+      },
+      "states": 28,
+      "task_groups": 25
+    },
+    "distribution": {
+      "decision_position_states": {
+        "1": 12,
+        "10": 1,
+        "11": 1,
+        "13": 1,
+        "2": 8,
+        "3": 7,
+        "4": 1,
+        "9": 1
+      },
+      "depth_band_states": {
+        "1-3": 27,
+        "10-15": 3,
+        "4-9": 2
+      },
+      "site_states": {
+        "allrecipes.com": 3,
+        "apple.com": 2,
+        "arxiv.org": 1,
+        "be.wikipedia.org": 1,
+        "booking.com": 1,
+        "cappex.com": 1,
+        "ceb.wikipedia.org": 2,
+        "cy.wikipedia.org": 1,
+        "developer.toradex.com": 1,
+        "dga.wikipedia.org": 1,
+        "dictionary.cambridge.org": 1,
+        "edition.cnn.com": 1,
+        "eo.wikipedia.org": 1,
+        "help.duckduckgo.com": 1,
+        "huggingface.co": 1,
+        "imdb.com": 1,
+        "io.wikipedia.org": 1,
+        "libertytax.com": 2,
+        "money.cnn.com": 1,
+        "nov.wikipedia.org": 1,
+        "os.wikipedia.org": 2,
+        "sah.wikipedia.org": 1,
+        "tampax.com": 1,
+        "thestarphoenix.com": 1,
+        "transcripts.cnn.com": 1,
+        "za.wikipedia.org": 1
+      },
+      "source_states": {
+        "webvoyager": 32
+      },
+      "source_tasks": {
+        "webvoyager": 29
+      },
+      "split_depth_cross": {
+        "train": {
+          "1-3": 22,
+          "4-9": 1
+        },
+        "validation_seen_task": {
+          "1-3": 2,
+          "10-15": 2
+        },
+        "validation_unseen_task": {
+          "1-3": 3,
+          "10-15": 1,
+          "4-9": 1
+        }
+      },
+      "split_states": {
+        "train": 23,
+        "validation_seen_task": 4,
+        "validation_unseen_task": 5
+      },
+      "states_per_task_histogram": {
+        "1": 26,
+        "2": 3
+      },
+      "unique_action_keys_per_state": {
+        "1": 2,
+        "2": 7,
+        "3": 5,
+        "4": 5,
+        "5": 13
+      }
+    },
+    "eight_draw_ties": {
+      "all_equal_states": 6,
+      "common_states": 28,
+      "distinguishing_states": 22,
+      "tied_maximum_states": 13,
+      "winner_count_histogram": {
+        "1": 15,
+        "2": 5,
+        "3": 1,
+        "4": 1,
+        "5": 6
+      }
+    },
+    "evidence_sha256": {
+      "aggregate_receipt": "8923b1dd4d313f5861e5ff517ef69eb6a093ece7601864cad5756de44bbca70f",
+      "analysis_policy": "ada5629c72bd61f94edadac30f0218bf046d097d49161ee4a52b51e0dce9ab51",
+      "analysis_script": "360725859aa8446f98ad42bd4623f7f5132a0041b099bc1d3cb1502c235ee1a4",
+      "independent_artifact_proof": "fc8fa3925e85c08bf3509d453001fbaaea38dc035beaf2d51985ac2927ac9693",
+      "independent_statistical_validation": "4d2f88af74700e5ea70816e104f33563c1b1caacdad12755fd22013104e1834c",
+      "prespecified_proposal_blob": "338fff95606a96cee29c9a62bf8a3fe2cb728ec6aea5bcd05756f07440cfb74f",
+      "private_aggregate": "30ae87fde0c9a1b86c8566027bd200f2c5414585e1d3d8f835d00a730e842bfe"
+    },
+    "extra24_outcomes_used": false,
+    "heldout_by_split": {
+      "train": {
+        "bootstrap_note": "10000 draws, seed20261007; whole task groups retain all states; summed state scores divided by sampled state count. Pointwise exploratory percentile intervals; no multiplicity correction.",
+        "estimates": {
+          "actor": {
+            "percent": 38.88888888888889,
+            "percent_interval": [
+              19.444444444444446,
+              58.333333333333336
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.19444444444444445,
+              0.5833333333333334
+            ],
+            "rate": 0.3888888888888889
+          },
+          "selected": {
+            "percent": 44.675925925925924,
+            "percent_interval": [
+              25.925925925925924,
+              63.19444444444444
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.25925925925925924,
+              0.6319444444444444
+            ],
+            "rate": 0.44675925925925924
+          },
+          "selected_minus_actor": {
+            "percent": 5.787037037037036,
+            "percent_interval": [
+              -5.324074074074074,
+              17.824074074074073
+            ],
+            "pointwise_task_bootstrap_95": [
+              -0.05324074074074074,
+              0.17824074074074073
+            ],
+            "rate": 0.057870370370370364
+          },
+          "selected_minus_uniform": {
+            "percent": 6.898148148148148,
+            "percent_interval": [
+              -1.4814814814814816,
+              17.59259259259259
+            ],
+            "pointwise_task_bootstrap_95": [
+              -0.014814814814814817,
+              0.17592592592592593
+            ],
+            "rate": 0.06898148148148148
+          },
+          "uniform": {
+            "percent": 37.77777777777778,
+            "percent_interval": [
+              21.111111111111114,
+              54.44444444444445
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.21111111111111114,
+              0.5444444444444445
+            ],
+            "rate": 0.37777777777777777
+          }
+        },
+        "states": 18,
+        "task_groups": 18
+      },
+      "validation_seen_task": {
+        "bootstrap_note": "10000 draws, seed20261007; whole task groups retain all states; summed state scores divided by sampled state count. Pointwise exploratory percentile intervals; no multiplicity correction.",
+        "estimates": {
+          "actor": {
+            "percent": 50.0,
+            "percent_interval": [
+              12.5,
+              87.5
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.125,
+              0.875
+            ],
+            "rate": 0.5
+          },
+          "selected": {
+            "percent": 64.58333333333334,
+            "percent_interval": [
+              41.666666666666664,
+              87.5
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.41666666666666663,
+              0.875
+            ],
+            "rate": 0.6458333333333334
+          },
+          "selected_minus_actor": {
+            "percent": 14.583333333333332,
+            "percent_interval": [
+              -20.833333333333336,
+              70.83333333333334
+            ],
+            "pointwise_task_bootstrap_95": [
+              -0.20833333333333337,
+              0.7083333333333334
+            ],
+            "rate": 0.14583333333333331
+          },
+          "selected_minus_uniform": {
+            "percent": 9.583333333333332,
+            "percent_interval": [
+              -1.250000000000004,
+              23.333333333333336
+            ],
+            "pointwise_task_bootstrap_95": [
+              -0.012500000000000039,
+              0.23333333333333336
+            ],
+            "rate": 0.09583333333333333
+          },
+          "uniform": {
+            "percent": 54.99999999999999,
+            "percent_interval": [
+              35.0,
+              75.0
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.35,
+              0.75
+            ],
+            "rate": 0.5499999999999999
+          }
+        },
+        "states": 4,
+        "task_groups": 4
+      },
+      "validation_unseen_task": {
+        "bootstrap_note": "10000 draws, seed20261007; whole task groups retain all states; summed state scores divided by sampled state count. Pointwise exploratory percentile intervals; no multiplicity correction.",
+        "estimates": {
+          "actor": {
+            "percent": 33.33333333333333,
+            "percent_interval": [
+              25.0,
+              50.0
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.25,
+              0.5
+            ],
+            "rate": 0.3333333333333333
+          },
+          "selected": {
+            "percent": 50.0,
+            "percent_interval": [
+              50.0,
+              50.0
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.5,
+              0.5
+            ],
+            "rate": 0.5
+          },
+          "selected_minus_actor": {
+            "percent": 16.666666666666664,
+            "percent_interval": [
+              0.0,
+              25.0
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.0,
+              0.25
+            ],
+            "rate": 0.16666666666666666
+          },
+          "selected_minus_uniform": {
+            "percent": 6.666666666666667,
+            "percent_interval": [
+              -19.999999999999996,
+              20.0
+            ],
+            "pointwise_task_bootstrap_95": [
+              -0.19999999999999996,
+              0.19999999999999998
+            ],
+            "rate": 0.06666666666666667
+          },
+          "uniform": {
+            "percent": 43.333333333333336,
+            "percent_interval": [
+              30.000000000000004,
+              70.0
+            ],
+            "pointwise_task_bootstrap_95": [
+              0.30000000000000004,
+              0.7
+            ],
+            "rate": 0.43333333333333335
+          }
+        },
+        "states": 3,
+        "task_groups": 2
+      }
+    },
+    "heldout_first6_final2_common_full_five": {
+      "bootstrap_note": "10000 draws, seed20261007; whole task groups retain all states; summed state scores divided by sampled state count. Pointwise exploratory percentile intervals; no multiplicity correction.",
+      "estimates": {
+        "actor": {
+          "percent": 40.0,
+          "percent_interval": [
+            24.0,
+            56.52173913043478
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.24,
+            0.5652173913043478
+          ],
+          "rate": 0.4
+        },
+        "selected": {
+          "percent": 48.5,
+          "percent_interval": [
+            34.23913043478261,
+            61.6328125
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.3423913043478261,
+            0.616328125
+          ],
+          "rate": 0.485
+        },
+        "selected_minus_actor": {
+          "percent": 8.5,
+          "percent_interval": [
+            -2.7175654960981053,
+            20.139583333333327
+          ],
+          "pointwise_task_bootstrap_95": [
+            -0.027175654960981052,
+            0.20139583333333327
+          ],
+          "rate": 0.085
+        },
+        "selected_minus_uniform": {
+          "percent": 7.300000000000001,
+          "percent_interval": [
+            0.24305555555555622,
+            15.166666666666664
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.002430555555555562,
+            0.15166666666666664
+          ],
+          "rate": 0.07300000000000001
+        },
+        "uniform": {
+          "percent": 41.199999999999996,
+          "percent_interval": [
+            28.4,
+            54.28726708074533
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.284,
+            0.5428726708074533
+          ],
+          "rate": 0.412
+        }
+      },
+      "states": 25,
+      "task_groups": 22
+    },
+    "invalid_reasons": {
+      "generation_aborted": 111,
+      "infrastructure_or_input_budget_invalid": 2,
+      "missing_fresh_terminal_evidence": 159
+    },
+    "limitations": [
+      "Native validity exclusion changes the estimand from historical invalid-as-zero results; keep valid unsuccessful and native unjudged action-limit zeros.",
+      "All rates are conditional on observable-state replay admission and action-dependent measurement availability; neither task/state sampling nor missingness is random.",
+      "The candidate-zero natural action is the first actor proposal, followed by the unchanged SFT continuation policy. Five candidate entries, including duplicate actions, retain their original weight.",
+      "Same-data eight-draw maximum is optimistic hindsight, not a true upper bound or a trained critic result.",
+      "Six/two estimates use the prespecified first-six/final-two partition on common full-five-valid panels. The extra24 comparison on common held-out draws24..31 is still incomplete and not computed here.",
+      "No new pre/post teacher calls, post-action critic comparison or selector training was performed by this pilot.",
+      "Whole task groups, not independent states/draws, determine uncertainty; small pilot split cohorts are descriptive and exploratory.",
+      "Native judge labels remain unchanged and retain recorded semantic caveats; this is aggregate analysis, not semantic rejudging."
+    ],
+    "mutations": {
+      "api_calls": false,
+      "images": false,
+      "pointers": false,
+      "publication": false,
+      "raw_outcomes": false,
+      "source": false,
+      "training": false
+    },
+    "natural_actor0_all_available8": {
+      "bootstrap_note": "10000 draws, seed20261007; whole task groups retain all states; summed state scores divided by sampled state count. Pointwise exploratory percentile intervals; no multiplicity correction.",
+      "estimates": {
+        "actor": {
+          "percent": 44.511904761904766,
+          "percent_interval": [
+            30.283185256861362,
+            58.845238095238095
+          ],
+          "pointwise_task_bootstrap_95": [
+            0.3028318525686136,
+            0.588452380952381
+          ],
+          "rate": 0.44511904761904764
+        }
+      },
+      "states": 30,
+      "task_groups": 27
+    },
+    "paired_coverage_detail": {
+      "accepted_states": 32,
+      "common_panel_per_candidate": {
+        "0": {
+          "fit_successes": 67,
+          "fit_valid": 143,
+          "heldout_successes": 20,
+          "heldout_valid": 49
+        },
+        "1": {
+          "fit_successes": 60,
+          "fit_valid": 144,
+          "heldout_successes": 18,
+          "heldout_valid": 45
+        },
+        "2": {
+          "fit_successes": 68,
+          "fit_valid": 145,
+          "heldout_successes": 25,
+          "heldout_valid": 48
+        },
+        "3": {
+          "fit_successes": 62,
+          "fit_valid": 143,
+          "heldout_successes": 21,
+          "heldout_valid": 49
+        },
+        "4": {
+          "fit_successes": 56,
+          "fit_valid": 146,
+          "heldout_successes": 16,
+          "heldout_valid": 50
+        }
+      },
+      "common_states": 25,
+      "fit_draws": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "fit_tied_maximum_states": 13,
+      "heldout_draws": [
+        6,
+        7
+      ],
+      "mixed_split_caution": "Combined descriptive panel includes18 train,4 seen-task-validation and3 unseen-task-validation states; it is not a validation-only score or learned-selector result.",
+      "omission_rule": "Omit a state if any original candidate has no native-valid fit observation or no native-valid held-out observation; preserve raw observations and original five-entry weights.",
+      "omitted_by_split": {
+        "train": 5,
+        "validation_unseen_task": 2
+      },
+      "omitted_states": 7,
+      "possible_fit_draws": 750,
+      "possible_heldout_draws": 250,
+      "split_states": {
+        "train": 18,
+        "validation_seen_task": 4,
+        "validation_unseen_task": 3
+      },
+      "task_groups": 22,
+      "valid_fit_draws": 721,
+      "valid_heldout_draws": 241
+    },
+    "per_candidate_index": {
+      "0": {
+        "committed": 256,
+        "fit_valid_count_histogram": {
+          "0": 3,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "6": 22
+        },
+        "heldout_valid_count_histogram": {
+          "0": 4,
+          "1": 4,
+          "2": 24
+        },
+        "successes": 95,
+        "valid": 205,
+        "valid_count_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "7": 3,
+          "8": 21
+        },
+        "zero_valid_states": 2
+      },
+      "1": {
+        "committed": 256,
+        "fit_valid_count_histogram": {
+          "0": 3,
+          "1": 1,
+          "2": 2,
+          "4": 1,
+          "5": 4,
+          "6": 21
+        },
+        "heldout_valid_count_histogram": {
+          "0": 5,
+          "1": 6,
+          "2": 21
+        },
+        "successes": 83,
+        "valid": 203,
+        "valid_count_histogram": {
+          "0": 3,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "5": 1,
+          "6": 2,
+          "7": 4,
+          "8": 19
+        },
+        "zero_valid_states": 3
+      },
+      "2": {
+        "committed": 256,
+        "fit_valid_count_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 2,
+          "3": 1,
+          "5": 5,
+          "6": 20
+        },
+        "heldout_valid_count_histogram": {
+          "0": 6,
+          "1": 3,
+          "2": 23
+        },
+        "successes": 97,
+        "valid": 203,
+        "valid_count_histogram": {
+          "0": 2,
+          "1": 2,
+          "2": 1,
+          "3": 2,
+          "7": 7,
+          "8": 18
+        },
+        "zero_valid_states": 2
+      },
+      "3": {
+        "committed": 256,
+        "fit_valid_count_histogram": {
+          "0": 4,
+          "1": 3,
+          "4": 1,
+          "5": 5,
+          "6": 19
+        },
+        "heldout_valid_count_histogram": {
+          "0": 7,
+          "1": 1,
+          "2": 24
+        },
+        "successes": 84,
+        "valid": 195,
+        "valid_count_histogram": {
+          "0": 4,
+          "1": 3,
+          "6": 2,
+          "7": 4,
+          "8": 19
+        },
+        "zero_valid_states": 4
+      },
+      "4": {
+        "committed": 256,
+        "fit_valid_count_histogram": {
+          "0": 4,
+          "1": 1,
+          "2": 2,
+          "5": 4,
+          "6": 21
+        },
+        "heldout_valid_count_histogram": {
+          "0": 6,
+          "1": 1,
+          "2": 25
+        },
+        "successes": 72,
+        "valid": 202,
+        "valid_count_histogram": {
+          "0": 4,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "7": 4,
+          "8": 21
+        },
+        "zero_valid_states": 4
+      }
+    },
+    "per_draw": {
+      "0": {
+        "committed": 160,
+        "successes": 50,
+        "valid": 126
+      },
+      "1": {
+        "committed": 160,
+        "successes": 51,
+        "valid": 124
+      },
+      "2": {
+        "committed": 160,
+        "successes": 64,
+        "valid": 130
+      },
+      "3": {
+        "committed": 160,
+        "successes": 56,
+        "valid": 129
+      },
+      "4": {
+        "committed": 160,
+        "successes": 47,
+        "valid": 125
+      },
+      "5": {
+        "committed": 160,
+        "successes": 59,
+        "valid": 125
+      },
+      "6": {
+        "committed": 160,
+        "successes": 44,
+        "valid": 118
+      },
+      "7": {
+        "committed": 160,
+        "successes": 60,
+        "valid": 131
+      }
+    },
+    "pooled_counts_only": {
+      "actor0_success": 95,
+      "actor0_valid": 205,
+      "note": "Pooled draw counts are supplementary; main estimates weight states equally and candidate-specific rates before averaging."
+    },
+    "prespecified_evaluation": {
+      "blob_sha256": "338fff95606a96cee29c9a62bf8a3fe2cb728ec6aea5bcd05756f07440cfb74f",
+      "fit_draws": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "git_commit": "cd132ad6",
+      "heldout_draws": [
+        6,
+        7
+      ],
+      "original_rule": "Select using valid observations within the first six draws; score valid observations in the final two; tie-break without held-out outcomes.",
+      "path": "openwebrl/docs/arm_results/rl_integration/branch-selector-scaleup-proposal-20261008.json",
+      "ties": "Exact uniform expectation over all maximizers of fit success/valid_count, compared as rational numbers; no held-out tie selection."
+    },
+    "schema": "pilot32-native-valid-only-endpoint-aggregate-v1",
+    "scope": "32 newly accepted pilot states only; fixed5 proposals and draws0..7; preliminary eight-draw analysis, not full32-draw oracle.",
+    "scope_note": "Pilot only; extra24 draws8\u201331 are excluded, and no extension outcome estimate was computed.",
+    "six_draw_ties": {
+      "common_states": 25,
+      "tied_maximum_states": 13,
+      "winner_count_histogram": {
+        "1": 12,
+        "2": 3,
+        "3": 2,
+        "4": 3,
+        "5": 5
+      }
+    }
+  },
+  "pilot_completion": {
+    "states": 32,
+    "records": 1280,
+    "all_requested_records_verified": true,
+    "all_attempt_accounting_verified": true,
+    "teardown_verified": true,
+    "all_attempt_seconds": 27263,
+    "approved_total_seconds": 43200,
+    "browser_attempts": 3360,
+    "local_sft_generations": 14439,
+    "judge_http_attempts": 784,
+    "canonical_judge_conservative_budget_charge_usd": 6.2050626,
+    "teacher_calls": 0,
+    "unsettled_reservations": 0,
+    "wandb_finished_and_reconciled": true,
+    "source_protocol_verified": true,
+    "teardown_scope": "Owned process groups, actor drains, scheduler batch/extern and free controller lock; physical postexit SSH denied by PAM. No node/GPU-idle claim.",
+    "proof_sha256": {
+      "artifact": "fc8fa3925e85c08bf3509d453001fbaaea38dc035beaf2d51985ac2927ac9693",
+      "accounting_source_wandb_teardown": "b02996cb0f4680d93a708713ee5dddd0077d63987958b1d6143ffb20d1c9cb7a",
+      "independent_six_two_statistics": "4d2f88af74700e5ea70816e104f33563c1b1caacdad12755fd22013104e1834c"
+    },
+    "verified_epoch": 1791541867.4445755
   }
 }
