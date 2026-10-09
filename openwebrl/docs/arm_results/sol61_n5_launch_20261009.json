@@ -1,7 +1,7 @@
 {
   "study": "GPT-6.1 Sol selector N5",
   "date": "2026-10-09",
-  "status": "running_pending_startup_and_final_audit",
+  "status": "running_with_deepshop_verified",
   "verified_complete": false,
   "actor": "OpenWebRL/OpenWebRL-4B-SFT",
   "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -15,7 +15,9 @@
       "selector_max_output_tokens": 2048,
       "judge_model": "o4-mini",
       "selector_usd_cap": 100,
-      "judge_usd_cap": 5
+      "judge_usd_cap": 5,
+      "status": "running",
+      "verified_complete": false
     },
     {
       "benchmark": "online_mind2web",
@@ -24,7 +26,9 @@
       "selector_max_output_tokens": 2048,
       "judge_model": "o4-mini",
       "selector_usd_cap": 200,
-      "judge_usd_cap": 5
+      "judge_usd_cap": 5,
+      "status": "running",
+      "verified_complete": false
     },
     {
       "benchmark": "webvoyager",
@@ -33,7 +37,9 @@
       "selector_max_output_tokens": 2048,
       "judge_model": "gpt-4o",
       "selector_usd_cap": 200,
-      "judge_usd_cap": 30
+      "judge_usd_cap": 30,
+      "status": "running",
+      "verified_complete": false
     },
     {
       "benchmark": "deepshop",
@@ -42,7 +48,59 @@
       "selector_max_output_tokens": 2048,
       "judge_model": "gpt-4o",
       "selector_usd_cap": 75,
-      "judge_usd_cap": 10
+      "judge_usd_cap": 10,
+      "status": "verified_complete",
+      "verified_complete": true,
+      "results": {
+        "expected": 150,
+        "valid": 147,
+        "successes": 69,
+        "invalid": 3,
+        "native_judged": 97,
+        "native_valid_unjudged_limit_zeros": 50,
+        "overall_success_rate": 0.46,
+        "valid_only_success_rate": 0.46938775510204084
+      },
+      "accounting": {
+        "all_attempt_seconds": 7646,
+        "approved_total_seconds": 14400,
+        "physical_browser_attempts": 159,
+        "browser_attempts_cap": 165,
+        "selector_http_requests": 2870,
+        "selector_received_responses": 2869,
+        "selector_unresolved_requests": 1,
+        "judge_http_requests": 97,
+        "observed_received_api_cost_usd": 42.5816541,
+        "unknown_reserved_usd": 0.166405,
+        "observed_plus_unknown_reservation_usd": 42.7480591,
+        "selector_conservative_charged_or_reserved_usd": 42.2210126,
+        "judge_charged_or_reserved_usd": 0.53135,
+        "total_conservative_charged_or_reserved_usd": 42.7523626,
+        "cost_basis": "Receipt usage at frozen prices, including cache-write tokens; provider invoice not independently verified."
+      },
+      "audit": {
+        "all_requested_records_verified": true,
+        "actor_sampling_receipts": 13685,
+        "selector_input_trace_bindings": 2737,
+        "native_judge_bindings": 97,
+        "unique_images_fully_pixel_decoded": 2364,
+        "original_records_preserved": 23,
+        "replacement_records": 127,
+        "frozen_source_unchanged": true,
+        "wandb_finished_and_reconciled": true,
+        "owned_process_teardown_verified": true,
+        "proof_sha256": {
+          "artifacts": "4674cf19dcffefed53b1848e2d66ec3f3bec6ec10c972669b149473a4a040ddc",
+          "accounting_wandb_source_teardown": "a27b8294fc458c5057d4c81d0acf1451c59f5bb29cccc1bf6540ae1c1c1ddde9",
+          "record_identity_metrics": "e7ab20c75b03162df521a48ab4975d715796822b76cd2f513b3d38dd4f5c371f",
+          "prior_record_preservation": "2c69393d8b9e9ad7cd3ef564f1b6723f787c3948b82e01ac00aa3c0d5976a446"
+        }
+      },
+      "limitations": [
+        "Three native environment-step errors remain invalid.",
+        "50 native step-limit outcomes are valid zero rewards without judge calls.",
+        "Integrity/protocol audit preserves canonical labels; no independent semantic rejudging."
+      ]
     }
   ],
   "primary_episodes": 1345,
@@ -106,7 +164,9 @@
     "offline_source_tests_passed": 16,
     "independent_adapter_tests_passed": 6,
     "controller_dry_runs_passed": 4,
-    "actual_api_request_and_gpu_startup_audit_pending": true
+    "actual_api_request_and_gpu_startup_audit_pending": false,
+    "all_four_initial_startup_reviews_passed": true,
+    "campaign_final_audit_pending": true
   },
   "comparability": [
     "Earlier GPT-5.6 Sol N5 OM2W is a historical reference with a different collection date.",

@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[GPT-6.1 Sol N=5 launched: Online-Mind2Web medium/high, WebVoyager and DeepShop medium; results pending](ARM_INFERENCE_SCALING.md#sol61-n5-launch-20261009).
+[GPT-6.1 Sol N=5: DeepShop verified at 46.00% overall; Online-Mind2Web medium/high and WebVoyager still running](ARM_INFERENCE_SCALING.md#sol61-n5-launch-20261009).
 
 
 [Original bonus iteration 90: local OM2W300 verified; counts, validity and historical comparison](RL_EVALUATION.md#arm-original-iter90-results-20261008).

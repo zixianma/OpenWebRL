@@ -149,29 +149,44 @@ Means first average observed decisions within task, then weight tasks equally. I
 </details>
 
 <a id="sol61-n5-launch-20261009"></a>
-## GPT-6.1 Sol at N=5: running
+## GPT-6.1 Sol at N=5: DeepShop verified
 
-The new study compares **medium versus high reasoning on the same 300 Online-Mind2Web tasks**, and evaluates medium on WebVoyager and DeepShop. The actor remains official OpenWebRL SFT; every decision proposes **five actions**. Results are pending verification.
+**Official OpenWebRL SFT + GPT-6.1 Sol medium achieved 46.00% overall on DeepShop.** Every decision proposes five actions. Online-Mind2Web medium/high and WebVoyager medium are still collecting; the paired reasoning-effort comparison is pending.
 
-| Benchmark | Selector reasoning | N | Requested episodes | Status |
-| --- | --- | ---: | ---: | --- |
-| Online-Mind2Web | Medium | 5 | 300 | Running |
-| Online-Mind2Web | High | 5 | 300 | Running |
-| WebVoyager | Medium | 5 | 595 | Running |
-| DeepShop | Medium | 5 | 150 | Running |
+| Benchmark | Selector reasoning | N | Requested tasks | Successes | Valid | Invalid | Overall | Valid-only | Status |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| DeepShop | Medium | 5 | 150 | 69 | 147 | 3 | 46.00% | 46.94% | Verified |
+| Online-Mind2Web | Medium | 5 | 300 | — | — | — | — | — | Running |
+| Online-Mind2Web | High | 5 | 300 | — | — | — | — | — | Running |
+| WebVoyager | Medium | 5 | 595 | — | — | — | — | — | Running |
+
+DeepShop overall uses all 150 tasks; valid-only excludes three environment-step errors. Its native protocol keeps **50 unjudged step-limit outcomes as valid zeros**; the other 97 valid outcomes received the native GPT-4o verdict. The audit verifies saved evidence and protocol integrity without independently rejudging semantic correctness. Earlier local RL actor-only DeepShop rows differ in actor weights and decoding, so these rates do not establish a controlled selector gain.
 
 <details>
-<summary>Controlled protocol, accounting and comparison limits</summary>
+<summary>Controlled protocol, endpoint verification and accounting</summary>
 
 All four conditions use the corrected September proposal protocol: local browsers, actor T=0.7/top-p=0.9, native default top-k, 1,024 actor tokens and 30 turns. GPT-6.1 Sol selects an index from the full proposals and current screenshot, with the same 2,048-token output cap for medium and high. Incomplete responses retain their validity and cost consequences.
 
-Online-Mind2Web uses canonical o4-mini/AgentTrek; WebVoyager and DeepShop use their native GPT-4o prompts and parsers, up to 30 screenshots, and an explicit 4,096-token judge cap. The earlier GPT-5.6 Sol N=5 result is a historical reference. Earlier local RL actor-only WebVoyager/DeepShop rows differ in actor weights and decoding, so they are not a controlled selector comparison.
+Online-Mind2Web uses canonical o4-mini/AgentTrek; WebVoyager and DeepShop use their native GPT-4o prompts and parsers, up to 30 screenshots, and an explicit 4,096-token judge cap. The earlier GPT-5.6 Sol N=5 result is a historical reference. Earlier local RL actor-only WebVoyager/DeepShop cohorts use different weights and T=0.6/top-p=0.95/top-k=20/4,096-token actor decoding.
 
-The approved ceilings are **26 H200-hours** across four jobs and **$625** across selectors and judges, including every failed attempt and unresolved reservation. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Browser use is capped at 1,480 physical episode attempts and eight concurrent episodes per job. Budgets are separate from branching. Final reporting requires all 1,345 records, paired Online-Mind2Web analysis, artifact and accounting audits.
+DeepShop's exhaustive audit covered all 150 records, 13,685 actor sampling receipts, 2,737 selector input/trace bindings, all 97 native judge bindings, and full pixel decoding of 2,364 unique committed images. The original 23 records and all interrupted-attempt evidence were preserved. Frozen source, finished W&B history, final scheduler accounting and owned-process teardown passed independent checks.
+
+| DeepShop accounting | Used or reserved | Approved cap |
+| --- | ---: | ---: |
+| Allocation seconds, all attempts | 7,646 | 14,400 |
+| Physical browser episode attempts | 159 | 165 |
+| Selector HTTP requests, including one unresolved reservation | 2,870 | 4,950 |
+| Judge HTTP requests | 97 | 660 |
+| Selector conservative charged/reserved USD | 42.2210126 | 75 |
+| Judge charged/reserved USD | 0.53135 | 10 |
+
+Received API usage costs **$42.5816541** at frozen prices, including cache-write tokens; an additional **$0.166405** remains reserved for the interrupted provider-error request. The authoritative conservative total is **$42.7523626**, including that reservation. These are receipt-based calculations, not an independently verified provider invoice. Every attempt remains charged; no budget was added or transferred.
+
+The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 physical browser attempts**, with eight concurrent episodes per job. Each job has one H200, eight CPUs and 120 GiB RAM; the two Online-Mind2Web shards have six hours each, WebVoyager ten and DeepShop four. Budgets are separate from branching. Campaign completion still requires all 1,345 records, paired Online-Mind2Web analysis and the remaining artifact/accounting audits.
 
 </details>
 
-[Launch aggregate](arm_results/sol61_n5_launch_20261009.json) · [Official model settings and pricing](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
+[Results and approval aggregate](arm_results/sol61_n5_launch_20261009.json) · [Official model settings and pricing](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
 
 ## Actors alone
 
