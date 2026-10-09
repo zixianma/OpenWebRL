@@ -186,6 +186,44 @@ The gate triggered on **907 of 4,844 decisions (18.72%)**, averaging **1.749 can
 
 **Calibration limitation:** the frozen cutoff is the 25th percentile of 278 saved SFT final-decision responses from these same evaluation tasks. The separate [benefit-based threshold study](ARM_INFERENCE.md#confidence-benefit-20261008) uses 300 fitting and 150 held-out verification tasks. All 300 fitting tasks are accounted for, with **59/60 eligible pairs complete**. The additional bounded replay also failed to match the last saved state. No new threshold or held-out result is available. [Protocol, calibration limits and final accounting](ARM_INFERENCE.md#likelihood-scaling-20261007).
 
+<a id="training-task-pass5-pass8-20261006"></a>
+## Frozen SFT training-pool coverage: five attempts to eight
+
+**Observed task coverage rises from 64.65% to 73.20% (+8.55 percentage points).** Three fresh ordinary attempts rescue **171 of 707** tasks missed by the historical five. This uses the separate **2,000-task training screen** and the SFT checkpoint at iteration 0; it is not a held-out Online-Mind2Web evaluation or a trained-policy result.
+
+| Coverage endpoint | Successful tasks | Rate |
+| --- | ---: | ---: |
+| Historical five attempts | 1,293 / 2,000 | 64.65% |
+| Historical five + three fresh attempts on misses | 1,464 / 2,000 | **73.20%** |
+| Rescue among historical misses | 171 / 707 | 24.19% |
+| Rescue among five-valid-failure tasks | 166 / 682 | 24.34% |
+| Rescue among misses containing invalid attempts | 5 / 25 | 20.00% |
+
+The extension has **249 / 2,121 successful episodes (11.74% overall; 249 / 2,108 = 11.81% valid-only)**, with 13 invalid attempts. These episode rates apply only to historical misses, not to a fresh all-task pass@1 or pass@3 cohort. The collection uses local browsers, official SFT, T=0.8 / p=1 / k off, 1,024 response tokens, 15 turns and GPT-4.1/action_history judging.
+
+All 10,000 historical records and 2,121 new primary records were audited, including terminal images for every valid new trajectory. The 1,293 prior successes required no new attempts. All four W&B runs finished with matching final metrics. Usage, including failed/interrupted physical attempts, is **21.23 H200-hours**, 2,137 browser dispatches, 602 judge calls and **$6.29 charged or reserved** within four separate approved caps. [Final aggregate and accounting](arm_results/rl_integration/training-sft-pass8-20261006.json).
+
+This is historical-five plus fresh-three coverage across dates, not an exchangeable eight-sample estimator. Website drift remains possible. Native judge labels are unchanged; purposive checks found permissive positives, so the figures are judge-based rather than manually certified completion. The earlier guided follow-up rescued 78 / 682 five-valid-failure tasks; its dates and attempt budget differ from the fresh ordinary retries, preventing a matched-compute ARM comparison.
+
+<details>
+<summary>Original pass@k curve and rubric-difficulty analysis</summary>
+
+The dataset difficulty value is the **number of reference rubric facts**, verified on all 2,000 tasks. Pass@1–4 below average subsets of the same five historical outcomes; invalid attempts count as no success.
+
+| Rubric facts | Tasks | pass@1 | pass@2 | pass@3 | pass@4 | pass@5 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 5 | 1,297 | 37.22% | 51.27% | 58.91% | 63.82% | 67.23% |
+| 6 | 542 | 32.47% | 44.58% | 51.51% | 56.31% | 59.96% |
+| 7 | 111 | 38.92% | 51.44% | 56.94% | 60.00% | 62.16% |
+| 8+ | 50 | 34.80% | 44.00% | 48.80% | 52.00% | 54.00% |
+| All | 2,000 | 35.97% | 49.29% | 56.54% | 61.28% | 64.65% |
+
+Spearman correlations with pass@1 through pass@5 are −0.052, −0.054, −0.057, −0.069 and −0.073. The pass@5 correlation's 95% website-bootstrap interval is **[−0.171, +0.033]** from 2,000 resamples over 76 websites. This selected difficulty ≥5 pool provides no clear monotonic relationship; rubric length is not a direct measure of browser interaction difficulty. Only 50 tasks have eight or more facts. [Aggregate counts, correlations, validity checks and input hashes](arm_results/rl_integration/training-sft-difficulty-passk-20261006.json).
+
+</details>
+
+Training with eight rollouts is a separate experiment on the original **2,102-task** pool. Its [uniform-G8 pilot reached iteration 10](RL_EVALUATION.md#uniform8-iter10-results-20261007), scoring 88 / 300 (29.33%) in an actor-only pass@1 evaluation. The pilot does not establish a training benefit from the screening coverage increase. Its [approved continuation to 60](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008) remains queued.
+
 ## Supporting evidence and history
 
 <details>

@@ -1,0 +1,306 @@
+{
+  "audit_complete": true,
+  "verified_complete": true,
+  "tasks": 2000,
+  "old_successes": 1293,
+  "historical_pass5_rate": 0.6465,
+  "new_primary_attempts": 2121,
+  "targeted_historical_misses": 707,
+  "rescued_tasks": 171,
+  "combined_successes": 1464,
+  "combined_pass8_rate": 0.732,
+  "pass8_minus_pass5": 0.0855,
+  "rescues_all_misses": {
+    "denominator": 707,
+    "successes_observed": 171,
+    "rate": 0.24186704384724186
+  },
+  "rescues_five_valid_failures": {
+    "denominator": 682,
+    "successes_observed": 166,
+    "rate": 0.2434017595307918
+  },
+  "rescues_invalid_misses": {
+    "denominator": 25,
+    "successes_observed": 5,
+    "rate": 0.2
+  },
+  "historical_invalid_episodes": 64,
+  "new_invalid_episodes": 13,
+  "new_tasks_with_invalid_episodes": 9,
+  "new_native_format_failure_episodes": 23,
+  "valid_new_trajectories_with_verified_terminal_images": 2108,
+  "cost": {
+    "h200_gpu_hours": 21.232222222222223,
+    "physical_dispatches_charged": 2137,
+    "judge_http_calls_charged": 602,
+    "judge_charged_or_reserved_usd": 6.294226000000001,
+    "actor_requests_known": 27975,
+    "actor_output_tokens_known": 9009912,
+    "actor_work_unknown_physical_attempts": 16
+  },
+  "by_source": {
+    "insta-v3": {
+      "historical_tasks": 86,
+      "historical_successes": 32,
+      "extension_tasks": 54,
+      "rescued": 4,
+      "rescue_rate": 0.07407407407407407,
+      "combined_successes": 36,
+      "combined_rate": 0.4186046511627907
+    },
+    "pae-webvoyager": {
+      "historical_tasks": 1914,
+      "historical_successes": 1261,
+      "extension_tasks": 653,
+      "rescued": 167,
+      "rescue_rate": 0.2557427258805513,
+      "combined_successes": 1428,
+      "combined_rate": 0.7460815047021944
+    }
+  },
+  "by_invalid_history_stratum": {
+    "five_valid_failures": {
+      "historical_tasks": 682,
+      "historical_successes": 0,
+      "extension_tasks": 682,
+      "rescued": 166,
+      "rescue_rate": 0.2434017595307918,
+      "combined_successes": 166,
+      "combined_rate": 0.2434017595307918
+    },
+    "previously_successful": {
+      "historical_tasks": 1293,
+      "historical_successes": 1293,
+      "extension_tasks": 0,
+      "rescued": 0,
+      "rescue_rate": null,
+      "combined_successes": 1293,
+      "combined_rate": 1.0
+    },
+    "zero_success_with_invalid_attempts": {
+      "historical_tasks": 25,
+      "historical_successes": 0,
+      "extension_tasks": 25,
+      "rescued": 5,
+      "rescue_rate": 0.2,
+      "combined_successes": 5,
+      "combined_rate": 0.2
+    }
+  },
+  "by_rubric_fact_count": {
+    "10": {
+      "historical_tasks": 3,
+      "historical_successes": 2,
+      "extension_tasks": 1,
+      "rescued": 0,
+      "rescue_rate": 0.0,
+      "combined_successes": 2,
+      "combined_rate": 0.6666666666666666
+    },
+    "12": {
+      "historical_tasks": 1,
+      "historical_successes": 0,
+      "extension_tasks": 1,
+      "rescued": 0,
+      "rescue_rate": 0.0,
+      "combined_successes": 0,
+      "combined_rate": 0.0
+    },
+    "5": {
+      "historical_tasks": 1297,
+      "historical_successes": 872,
+      "extension_tasks": 425,
+      "rescued": 108,
+      "rescue_rate": 0.2541176470588235,
+      "combined_successes": 980,
+      "combined_rate": 0.7555898226676947
+    },
+    "6": {
+      "historical_tasks": 542,
+      "historical_successes": 325,
+      "extension_tasks": 217,
+      "rescued": 50,
+      "rescue_rate": 0.2304147465437788,
+      "combined_successes": 375,
+      "combined_rate": 0.6918819188191881
+    },
+    "7": {
+      "historical_tasks": 111,
+      "historical_successes": 69,
+      "extension_tasks": 42,
+      "rescued": 11,
+      "rescue_rate": 0.2619047619047619,
+      "combined_successes": 80,
+      "combined_rate": 0.7207207207207207
+    },
+    "8": {
+      "historical_tasks": 26,
+      "historical_successes": 11,
+      "extension_tasks": 15,
+      "rescued": 2,
+      "rescue_rate": 0.13333333333333333,
+      "combined_successes": 13,
+      "combined_rate": 0.5
+    },
+    "9": {
+      "historical_tasks": 20,
+      "historical_successes": 14,
+      "extension_tasks": 6,
+      "rescued": 0,
+      "rescue_rate": 0.0,
+      "combined_successes": 14,
+      "combined_rate": 0.7
+    }
+  },
+  "by_rubric_fact_count_group": {
+    "5": {
+      "historical_tasks": 1297,
+      "historical_successes": 872,
+      "extension_tasks": 425,
+      "rescued": 108,
+      "rescue_rate": 0.2541176470588235,
+      "combined_successes": 980,
+      "combined_rate": 0.7555898226676947
+    },
+    "6": {
+      "historical_tasks": 542,
+      "historical_successes": 325,
+      "extension_tasks": 217,
+      "rescued": 50,
+      "rescue_rate": 0.2304147465437788,
+      "combined_successes": 375,
+      "combined_rate": 0.6918819188191881
+    },
+    "7": {
+      "historical_tasks": 111,
+      "historical_successes": 69,
+      "extension_tasks": 42,
+      "rescued": 11,
+      "rescue_rate": 0.2619047619047619,
+      "combined_successes": 80,
+      "combined_rate": 0.7207207207207207
+    },
+    "8+": {
+      "historical_tasks": 50,
+      "historical_successes": 27,
+      "extension_tasks": 23,
+      "rescued": 2,
+      "rescue_rate": 0.08695652173913043,
+      "combined_successes": 29,
+      "combined_rate": 0.58
+    }
+  },
+  "by_prior_valid_attempt_count": {
+    "0": {
+      "historical_tasks": 1,
+      "historical_successes": 0,
+      "extension_tasks": 1,
+      "rescued": 0,
+      "rescue_rate": 0.0,
+      "combined_successes": 0,
+      "combined_rate": 0.0
+    },
+    "1": {
+      "historical_tasks": 1,
+      "historical_successes": 0,
+      "extension_tasks": 1,
+      "rescued": 1,
+      "rescue_rate": 1.0,
+      "combined_successes": 1,
+      "combined_rate": 1.0
+    },
+    "2": {
+      "historical_tasks": 2,
+      "historical_successes": 0,
+      "extension_tasks": 2,
+      "rescued": 0,
+      "rescue_rate": 0.0,
+      "combined_successes": 0,
+      "combined_rate": 0.0
+    },
+    "3": {
+      "historical_tasks": 9,
+      "historical_successes": 7,
+      "extension_tasks": 2,
+      "rescued": 0,
+      "rescue_rate": 0.0,
+      "combined_successes": 7,
+      "combined_rate": 0.7777777777777778
+    },
+    "4": {
+      "historical_tasks": 31,
+      "historical_successes": 12,
+      "extension_tasks": 19,
+      "rescued": 4,
+      "rescue_rate": 0.21052631578947367,
+      "combined_successes": 16,
+      "combined_rate": 0.5161290322580645
+    },
+    "5": {
+      "historical_tasks": 1956,
+      "historical_successes": 1274,
+      "extension_tasks": 682,
+      "rescued": 166,
+      "rescue_rate": 0.2434017595307918,
+      "combined_successes": 1440,
+      "combined_rate": 0.7361963190184049
+    }
+  },
+  "by_prior_format_failure_count": {
+    "0": {
+      "historical_tasks": 1924,
+      "historical_successes": 1254,
+      "extension_tasks": 670,
+      "rescued": 158,
+      "rescue_rate": 0.23582089552238805,
+      "combined_successes": 1412,
+      "combined_rate": 0.7338877338877339
+    },
+    "1": {
+      "historical_tasks": 73,
+      "historical_successes": 38,
+      "extension_tasks": 35,
+      "rescued": 12,
+      "rescue_rate": 0.34285714285714286,
+      "combined_successes": 50,
+      "combined_rate": 0.684931506849315
+    },
+    "2": {
+      "historical_tasks": 3,
+      "historical_successes": 1,
+      "extension_tasks": 2,
+      "rescued": 1,
+      "rescue_rate": 0.5,
+      "combined_successes": 2,
+      "combined_rate": 0.6666666666666666
+    }
+  },
+  "difficulty_label_note": "Recorded difficulty is rubric-fact count, not intrinsic interaction difficulty. This selected pool has at least five facts per task; invalid history is a separate reliability stratum.",
+  "fresh_pass3_on_all_tasks_measured": false,
+  "limitations": "Ordered historical-five plus three new attempts only on its 707 zero-success tasks. The 1,293 prior successes are preserved without new attempts; overall coverage uses all 2,000 tasks. Collection dates differ; website and provider drift remain possible. This does not measure fresh pass@3 on all tasks, complete eight-attempt groups, or an exchangeable random-eight/subset estimator. Invalid attempts remain distinct from valid failures.",
+  "optimizer_updates": 0,
+  "fresh_episode_successes": 249,
+  "fresh_episode_overall_rate": 0.1173974540311174,
+  "fresh_episode_valid_only_rate": 0.11812144212523719,
+  "fresh_valid_episodes": 2108,
+  "verification": "Full archive/image/identity/accounting audit and remote W&B reconciliation completed; native verdicts retained.",
+  "protocol": {
+    "actor": "OpenWebRL-4B-SFT, iteration0",
+    "browser": "local_process",
+    "temperature": 0.8,
+    "top_p": 1.0,
+    "top_k": -1,
+    "max_response_tokens": 1024,
+    "max_turns": 15,
+    "judge": "gpt-4.1/action_history",
+    "attempt_indices": [
+      5,
+      6,
+      7
+    ]
+  },
+  "audit_sha256": "abf43b15e80c4c02e0030d3f7079d739dde8940afdaf18a77231dcd72107013b",
+  "judge_caveat": "Spot review found permissive positives; these are native-judge rates, not manually certified success. No verdict was changed.",
+  "archive_verification": "Deep semantic/image checks, JSON hashes and archive size identities; not full archive-byte hashing."
+}

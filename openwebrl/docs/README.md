@@ -109,6 +109,12 @@ for the work you are doing, then follow its contents to dated experiment records
 [Difficulty-first 2K vs. weighted coverage over score≥5: exact task mix, 61.25% overlap and local reviews](ARM_INTEGRATION_PLAN.md#arm-task-pool-difficulty-comparison-20260930).
 [Selected ≥5 weighted2K pool: all10,000 actor attempts verified;682 five-valid-failure tasks,1,061 mixed,213 all-success,44 unresolved;43.86GPUh/$52.62 used](ARM_INTEGRATION_PLAN.md#arm-task-pool-actor-screen-20260930) · [Local selected-task review](http://localhost:8765/arm_min5_weighted_tasks.html).
 [Actor + ARM rescue collection complete:78/682 rescued;11.44% overall,11.49% valid-only; all rollouts/verdicts/candidate traces verified;9.33GPUh/$1.68 used](ARM_INTEGRATION_PLAN.md#arm-task-pool-guided-682-20261002).
+[Uniform G8 outcome-only pilot: iteration 10 verified, 88/300 overall and 88/241 valid-only; comparison limits and artifact audit](RL_EVALUATION.md#uniform8-iter10-results-20261007).
+
+[Batch-56 and uniform-G8 continuation to 60: separately approved 48h/$300 and 72h/$400 caps; queued October 8, full300 evaluations every ten iterations](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008).
+
+[Training-pool SFT coverage: historical five attempts plus three on misses improves 64.65% to 73.20%; rubric-difficulty analysis and sampling limits](ARM_INFERENCE_SCALING.md#training-task-pass5-pass8-20261006).
+
 [Original2,102-task outcome-only56-group control: target20 and both evaluations verified; result table and historical comparison limits](RL_EVALUATION.md#outcome56-iter20-results-20261007) · [Control method and approved caps](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006).
 [Expanded-pool throughput audit:68.45min/iteration; two g011 GPUs have confirmed thermal throttling. Phase timing and safe recovery follow-up](RL_RUNTIME.md#expanded4102-thermal-throughput-20261003).
 [Expanded4,102-task outcome-only baseline: complete through60 and all six full300 evaluations verified. Final32.33% overall /39.43% valid-only (97 successes,246 valid); best observed40=39.00% overall. Interactive curve includes10–60; historical comparisons remain descriptive](RL_EVALUATION.md#expanded4102-iter10-results-20261003) · [Method and continuation](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005) · [Browser repair](RL_RUNTIME.md#expanded4102-egl-regression-20261003).

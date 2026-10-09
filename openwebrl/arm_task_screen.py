@@ -31,8 +31,11 @@ def verify_record(record, task, attempt):
             sidecar['judge_prompt_variant'] != 'action_history' or
             sidecar['metrics']['valid_trajectories'] != int(record['valid'])):
         raise ValueError('Saved verdict/validity mismatch')
-    if record['valid'] and record['reward'] not in (0., 1.):
-        raise ValueError('Valid trajectory needs a binary native outcome')
+    # Native OpenWebRL also emits -1 for actor formatting failures. Preserve
+    # that raw reward; binary task success is (reward == 1), as in its evals.
+    # Environment/judge invalidity remains in record['valid'], not this sign.
+    if record['valid'] and record['reward'] not in (-1., 0., 1.):
+        raise ValueError('Valid trajectory needs a supported native outcome')
     if record['valid'] and sidecar['reward_metadata'].get('combined') != record['reward']:
         raise ValueError('Saved terminal reward differs from screening record')
 
@@ -66,6 +69,7 @@ def summarize(records, ids, require_complete=False, verify_artifacts=True):
     return dict(complete=complete, tasks=len(ids), primary_attempts=len(records),
         expected_attempts=len(allowed), valid_attempts=valid, successes=wins,
         invalid_attempts=len(records)-valid,
+        native_format_failure_attempts=sum(r['valid'] and r['reward'] == -1. for r in records),
         overall=wins/len(records) if records else None,
         valid_only=wins/valid if valid else None,
         task_counts=dict(Counter(dispositions.values())), dispositions=dispositions,

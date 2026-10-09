@@ -75,20 +75,38 @@
 | 90 | 101 | 222 | 78 | 33.67 | 45.50 |
 | 100 | 104 | 227 | 73 | 34.67 | 45.81 |
 
-## Outcome-only56-group control · original2,102 tasks · local browser · GPT-4.1 · T0
 
-| Method | Iteration | Accepted groups/iteration | Adam updates | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Historical outcome-only |10 |48 |— |70 |234 |66 |23.33 |29.91 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
-| Outcome-only56-group control |10 |56 |178 |88 |251 |49 |29.33 |35.06 |[October7 audit](arm_results/rl_integration/outcome56-iteration10-audit.json) |
-| Historical outcome-only |20 |48 |— |95 |232 |68 |31.67 |40.95 |[Historical counts](rl_results/baseline_vs_arm_full300.json) |
-| Outcome-only56-group control |20 |56 |338 |93 |243 |57 |31.00 |38.27 |[Verified audit](arm_results/rl_integration/outcome56-iteration20-audit.json) |
+## Frozen SFT training-pool coverage · 2,000 tasks · five historical attempts plus three on misses
+
+| Population / measure | Successes | Denominator | Rate % | Source |
+| --- | ---: | ---: | ---: | --- |
+| Historical five-attempt task coverage | 1,293 | 2,000 | 64.65 | [Difficulty and pass@k audit](arm_results/rl_integration/training-sft-difficulty-passk-20261006.json) |
+| Historical five + three fresh attempts on misses | 1,464 | 2,000 | 73.20 | [Verified aggregate](arm_results/rl_integration/training-sft-pass8-20261006.json) |
+| Rescued historical misses | 171 | 707 | 24.19 | [Protocol and limits](ARM_INFERENCE_SCALING.md#training-task-pass5-pass8-20261006) |
+| Fresh episodes on historical misses, overall | 249 | 2,121 | 11.74 | [Verified aggregate](arm_results/rl_integration/training-sft-pass8-20261006.json) |
+| Fresh episodes on historical misses, valid-only | 249 | 2,108 | 11.81 | [Verified aggregate](arm_results/rl_integration/training-sft-pass8-20261006.json) |
+
+## Outcome-only rollout controls · original2,102 tasks · local browser · GPT-4.1 · T0
+
+| Method | Iteration | Rollouts/task | Accepted groups/iteration | Adam updates | Successes | Valid | Invalid | Overall % | Valid-only % | Record |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Historical outcome-only |10 |5 |48 |— |70 |234 |66 |23.33 |29.91 |[Historical evaluation](RL_EVALUATION.md#baseline-checkpoint-evaluation--first-comparison) |
+| Outcome-only56-group control |10 |5 |56 |178 |88 |251 |49 |29.33 |35.06 |[October7 audit](arm_results/rl_integration/outcome56-iteration10-audit.json) |
+| Historical outcome-only |20 |5 |48 |— |95 |232 |68 |31.67 |40.95 |[Historical counts](rl_results/baseline_vs_arm_full300.json) |
+| Outcome-only56-group control |20 |5 |56 |338 |93 |243 |57 |31.00 |38.27 |[Verified audit](arm_results/rl_integration/outcome56-iteration20-audit.json) |
+| Uniform G8 |10 |8 |48 |244 |88 |241 |59 |29.33 |36.51 |[October7 audit](arm_results/rl_integration/uniform8-iteration10-audit.json) |
 
 | Comparison / status | Value | Source |
 | --- | --- | --- |
 |56-group − historical48-group, iteration10 |+6.00pp overall /+5.15pp valid-only |[Historical comparison and caveats](RL_EVALUATION.md#outcome56-iter10-results-20261007) |
 |56-group − historical48-group, iteration20 |-0.67pp overall / -2.68pp valid-only |[Comparability caveats](RL_EVALUATION.md#outcome56-iter20-results-20261007) |
-| Initial target / verified evaluations |20 complete /10 and20 verified |[Approved control](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006) |
+|56-group target / verified evaluations |20 complete /10 and20 verified |[Approved control](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006) |
+| G8 target / verified evaluations |10 /10 complete |[Final audit and comparison limits](RL_EVALUATION.md#uniform8-iter10-results-20261007) |
+
+| Continuation approved October 8 | Verified starting point | Target | New allocation cap | New judge cap | Status / source |
+| --- | ---: | ---: | --- | ---: | --- |
+| G5 / 56 groups | 20 | 60 | 8 H200 × 48h; 64 CPUs / 960 GiB | $300 | [Queued snapshot and scope](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008) |
+| G8 / 48 groups | 10 | 60 | 8 H200 × 72h; 64 CPUs / 960 GiB | $400 | [Queued snapshot and scope](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008) |
 
 ## Expanded task pool · outcome-only · local browser · GPT-4.1 · temperature 0 · full 300
 

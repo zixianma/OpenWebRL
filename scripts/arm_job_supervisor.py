@@ -6,17 +6,29 @@ diagnoses failures and verifies fixes within the recorded remaining approval.
 """
 import argparse
 from datetime import datetime, timezone
+import faulthandler
 import fcntl
 import json
 import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 import time
 
 
 RUNTIME = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime')
 DEFAULT = RUNTIME/'arm-turn-bonus-preparation/mixed-reweight-20260927/supervisor'
+
+
+def install_diagnostics(root):
+    """Preserve uncaught exceptions and fatal-signal traces outside the journal."""
+    stream = (root/'diagnostics.log').open('a', buffering=1)
+    sys.stderr = stream
+    faulthandler.enable(file=stream, all_threads=True)
+    print(json.dumps(dict(epoch=time.time(), pid=os.getpid(),
+                          event='supervisor_start')), file=stream, flush=True)
+    return stream
 
 
 def read(path):
@@ -250,11 +262,14 @@ def acknowledge(root):
 
 
 def continuation_prompt(root):
+    registry = read(root/'registry.json')
+    job = next((j for j in registry.get('jobs', []) if j.get('key') == 'outcome-expanded4102'), {})
+    target = int(job.get('target_iteration', 90))
     prompt = (
         '[Automatic continuation of authorized ARM supervision] '
         f'Read {root}/latest.json and registry.json. '
         'Run python3 scripts/arm_job_supervisor.py --acknowledge, then check live jobs, logs, '
-        'W&B, checkpoints and results. Prioritize the expanded4102 outcome-only run to60 and full300 evals every10. '
+        f'W&B, checkpoints and results. Prioritize the expanded4102 outcome-only run to{target} and full300 evals every10. '
         'Diagnose failures, test fixes and relaunch within remaining original approvals; '
         'preserve state and count all consumed time. Update registry/watchers for replacement IDs. '
         'Routine reports hourly; alert sooner for failures, stalls or completion. Mark verified_complete only after artifact checks; '
@@ -273,6 +288,7 @@ def main():
     root.mkdir(parents=True, exist_ok=True)
     if args.acknowledge:
         acknowledge(root); print('Agent review acknowledged'); return
+    diagnostics = install_diagnostics(root)
     lock = (root/'supervisor.lock').open('a')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     state = read(root/'dispatch-state.json')

@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "tasks": 2000,
+  "primary_attempts": 10000,
+  "actor": "OpenWebRL/OpenWebRL-4B-SFT:iteration0",
+  "protocol": {
+    "temperature": 0.8,
+    "top_p": 1.0,
+    "top_k": -1,
+    "max_response_tokens": 1024,
+    "max_turns": 15,
+    "browser": "local",
+    "judge": "gpt-4.1/action_history"
+  },
+  "difficulty_definition": "Number of evaluator-reference rubric facts; verified on all 2000 tasks",
+  "estimator": "mean_task[1 - C(5 - successes, k) / C(5,k)], invalids count as no success",
+  "input_hashes": {
+    "native_tasks_sha256": "4f8f5b0c8b128934727d49fcdac32ed665ac2c64d562562236d7247f4060c6a6",
+    "frozen_tasks_sha256": "3380c013ba68c60c6c0334679d7ab517a677d04a01f88a37293d654dee6152e3",
+    "ordered_record_manifest_sha256": "a7afdac3a9c3ca0e43ea768dfb55c063f377808985b7d0a21dfd982b712542fb"
+  },
+  "overall": {
+    "tasks": 2000,
+    "attempts": 10000,
+    "valid_attempts": 9936,
+    "all_five_valid_tasks": 1956,
+    "tasks_with_success": 1293,
+    "zero_success_tasks": 707,
+    "success_count_histogram": {
+      "0": 707,
+      "1": 337,
+      "2": 274,
+      "3": 229,
+      "4": 240,
+      "5": 213
+    },
+    "pass_at_k": {
+      "1": 0.35969999999999996,
+      "2": 0.49285,
+      "3": 0.5654,
+      "4": 0.6127999999999999,
+      "5": 0.6465
+    }
+  },
+  "difficulty_counts": {
+    "5": 1297,
+    "6": 542,
+    "7": 111,
+    "8": 26,
+    "9": 20,
+    "10": 3,
+    "12": 1
+  },
+  "by_difficulty": {
+    "5": {
+      "tasks": 1297,
+      "attempts": 6485,
+      "valid_attempts": 6445,
+      "all_five_valid_tasks": 1269,
+      "tasks_with_success": 872,
+      "zero_success_tasks": 425,
+      "success_count_histogram": {
+        "0": 425,
+        "1": 221,
+        "2": 196,
+        "3": 156,
+        "4": 162,
+        "5": 137
+      },
+      "pass_at_k": {
+        "1": 0.3722436391673092,
+        "2": 0.51272166538165,
+        "3": 0.5890516576715498,
+        "4": 0.6382420971472629,
+        "5": 0.6723207401696222
+      }
+    },
+    "6": {
+      "tasks": 542,
+      "attempts": 2710,
+      "valid_attempts": 2690,
+      "all_five_valid_tasks": 529,
+      "tasks_with_success": 325,
+      "zero_success_tasks": 217,
+      "success_count_histogram": {
+        "0": 217,
+        "1": 99,
+        "2": 62,
+        "3": 54,
+        "4": 55,
+        "5": 55
+      },
+      "pass_at_k": {
+        "1": 0.3247232472324723,
+        "2": 0.4457564575645757,
+        "3": 0.5151291512915129,
+        "4": 0.56309963099631,
+        "5": 0.5996309963099631
+      }
+    },
+    "7": {
+      "tasks": 111,
+      "attempts": 555,
+      "valid_attempts": 552,
+      "all_five_valid_tasks": 109,
+      "tasks_with_success": 69,
+      "zero_success_tasks": 42,
+      "success_count_histogram": {
+        "0": 42,
+        "1": 12,
+        "2": 10,
+        "3": 17,
+        "4": 17,
+        "5": 13
+      },
+      "pass_at_k": {
+        "1": 0.3891891891891892,
+        "2": 0.5144144144144144,
+        "3": 0.5693693693693694,
+        "4": 0.6,
+        "5": 0.6216216216216216
+      }
+    },
+    "8": {
+      "tasks": 26,
+      "attempts": 130,
+      "valid_attempts": 130,
+      "all_five_valid_tasks": 26,
+      "tasks_with_success": 11,
+      "zero_success_tasks": 15,
+      "success_count_histogram": {
+        "0": 15,
+        "1": 0,
+        "2": 2,
+        "3": 1,
+        "4": 3,
+        "5": 5
+      },
+      "pass_at_k": {
+        "1": 0.3384615384615385,
+        "2": 0.3961538461538462,
+        "3": 0.4153846153846154,
+        "4": 0.4230769230769231,
+        "5": 0.4230769230769231
+      }
+    },
+    "9": {
+      "tasks": 20,
+      "attempts": 100,
+      "valid_attempts": 100,
+      "all_five_valid_tasks": 20,
+      "tasks_with_success": 14,
+      "zero_success_tasks": 6,
+      "success_count_histogram": {
+        "0": 6,
+        "1": 5,
+        "2": 3,
+        "3": 1,
+        "4": 3,
+        "5": 2
+      },
+      "pass_at_k": {
+        "1": 0.36000000000000004,
+        "2": 0.5,
+        "3": 0.585,
+        "4": 0.65,
+        "5": 0.7
+      }
+    },
+    "10": {
+      "tasks": 3,
+      "attempts": 15,
+      "valid_attempts": 14,
+      "all_five_valid_tasks": 2,
+      "tasks_with_success": 2,
+      "zero_success_tasks": 1,
+      "success_count_histogram": {
+        "0": 1,
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "pass_at_k": {
+        "1": 0.4666666666666666,
+        "2": 0.5666666666666667,
+        "3": 0.6333333333333333,
+        "4": 0.6666666666666666,
+        "5": 0.6666666666666666
+      }
+    },
+    "12": {
+      "tasks": 1,
+      "attempts": 5,
+      "valid_attempts": 5,
+      "all_five_valid_tasks": 1,
+      "tasks_with_success": 0,
+      "zero_success_tasks": 1,
+      "success_count_histogram": {
+        "0": 1,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "pass_at_k": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    }
+  },
+  "by_difficulty_group": {
+    "5": {
+      "tasks": 1297,
+      "attempts": 6485,
+      "valid_attempts": 6445,
+      "all_five_valid_tasks": 1269,
+      "tasks_with_success": 872,
+      "zero_success_tasks": 425,
+      "success_count_histogram": {
+        "0": 425,
+        "1": 221,
+        "2": 196,
+        "3": 156,
+        "4": 162,
+        "5": 137
+      },
+      "pass_at_k": {
+        "1": 0.3722436391673092,
+        "2": 0.51272166538165,
+        "3": 0.5890516576715498,
+        "4": 0.6382420971472629,
+        "5": 0.6723207401696222
+      }
+    },
+    "6": {
+      "tasks": 542,
+      "attempts": 2710,
+      "valid_attempts": 2690,
+      "all_five_valid_tasks": 529,
+      "tasks_with_success": 325,
+      "zero_success_tasks": 217,
+      "success_count_histogram": {
+        "0": 217,
+        "1": 99,
+        "2": 62,
+        "3": 54,
+        "4": 55,
+        "5": 55
+      },
+      "pass_at_k": {
+        "1": 0.3247232472324723,
+        "2": 0.4457564575645757,
+        "3": 0.5151291512915129,
+        "4": 0.56309963099631,
+        "5": 0.5996309963099631
+      }
+    },
+    "7": {
+      "tasks": 111,
+      "attempts": 555,
+      "valid_attempts": 552,
+      "all_five_valid_tasks": 109,
+      "tasks_with_success": 69,
+      "zero_success_tasks": 42,
+      "success_count_histogram": {
+        "0": 42,
+        "1": 12,
+        "2": 10,
+        "3": 17,
+        "4": 17,
+        "5": 13
+      },
+      "pass_at_k": {
+        "1": 0.3891891891891892,
+        "2": 0.5144144144144144,
+        "3": 0.5693693693693694,
+        "4": 0.6,
+        "5": 0.6216216216216216
+      }
+    },
+    "8+": {
+      "tasks": 50,
+      "attempts": 250,
+      "valid_attempts": 249,
+      "all_five_valid_tasks": 49,
+      "tasks_with_success": 27,
+      "zero_success_tasks": 23,
+      "success_count_histogram": {
+        "0": 23,
+        "1": 5,
+        "2": 6,
+        "3": 2,
+        "4": 6,
+        "5": 8
+      },
+      "pass_at_k": {
+        "1": 0.34800000000000003,
+        "2": 0.44,
+        "3": 0.488,
+        "4": 0.52,
+        "5": 0.54
+      }
+    }
+  },
+  "correlations": {
+    "1": {
+      "pearson": -0.02723139513947665,
+      "spearman": -0.05221161673062177,
+      "pearson_website_bootstrap_95ci": [
+        -0.13675480796168576,
+        0.10017593582610886
+      ],
+      "spearman_website_bootstrap_95ci": [
+        -0.16223323609733148,
+        0.07745073128399368
+      ]
+    },
+    "2": {
+      "pearson": -0.04662905874569226,
+      "spearman": -0.05391942194011123,
+      "pearson_website_bootstrap_95ci": [
+        -0.15287197136546515,
+        0.08197595014609453
+      ],
+      "spearman_website_bootstrap_95ci": [
+        -0.16279934979570954,
+        0.07389092585820763
+      ]
+    },
+    "3": {
+      "pearson": -0.057513426719313164,
+      "spearman": -0.05720903981910741,
+      "pearson_website_bootstrap_95ci": [
+        -0.16270483918660922,
+        0.06656888927574708
+      ],
+      "spearman_website_bootstrap_95ci": [
+        -0.16330147580420035,
+        0.06719799048746518
+      ]
+    },
+    "4": {
+      "pearson": -0.06297421560440451,
+      "spearman": -0.06949970042213542,
+      "pearson_website_bootstrap_95ci": [
+        -0.166564521512782,
+        0.05516996013383242
+      ],
+      "spearman_website_bootstrap_95ci": [
+        -0.17261092820119273,
+        0.05070216890456589
+      ]
+    },
+    "5": {
+      "pearson": -0.06471672671140871,
+      "spearman": -0.07280159291511545,
+      "pearson_website_bootstrap_95ci": [
+        -0.16457759471320346,
+        0.04652320729438963
+      ],
+      "spearman_website_bootstrap_95ci": [
+        -0.17061420945178418,
+        0.03334726017367158
+      ]
+    }
+  },
+  "bootstrap": {
+    "unit": "website",
+    "websites": 76,
+    "replicates": 2000,
+    "seed": 20261006
+  },
+  "all_five_valid": {
+    "tasks": 1956,
+    "attempts": 9780,
+    "valid_attempts": 9780,
+    "all_five_valid_tasks": 1956,
+    "tasks_with_success": 1274,
+    "zero_success_tasks": 682,
+    "success_count_histogram": {
+      "0": 682,
+      "1": 328,
+      "2": 271,
+      "3": 226,
+      "4": 236,
+      "5": 213
+    },
+    "pass_at_k": {
+      "1": 0.3637014314928425,
+      "2": 0.497597137014315,
+      "3": 0.570398773006135,
+      "4": 0.6177914110429447,
+      "5": 0.6513292433537833
+    },
+    "correlations": {
+      "1": {
+        "pearson": -0.025974070434926833,
+        "spearman": -0.052503085930169745
+      },
+      "2": {
+        "pearson": -0.04585219210167642,
+        "spearman": -0.054178363040411466
+      },
+      "3": {
+        "pearson": -0.057113669076705675,
+        "spearman": -0.05764041284259196
+      },
+      "4": {
+        "pearson": -0.0626461238954367,
+        "spearman": -0.07132703487284442
+      },
+      "5": {
+        "pearson": -0.06417028573953806,
+        "spearman": -0.07437809728641902
+      }
+    }
+  },
+  "by_source": {
+    "insta-v3": {
+      "tasks": 86,
+      "attempts": 430,
+      "valid_attempts": 416,
+      "all_five_valid_tasks": 74,
+      "tasks_with_success": 32,
+      "zero_success_tasks": 54,
+      "success_count_histogram": {
+        "0": 54,
+        "1": 10,
+        "2": 6,
+        "3": 9,
+        "4": 2,
+        "5": 5
+      },
+      "pass_at_k": {
+        "1": 0.19069767441860463,
+        "2": 0.2709302325581395,
+        "3": 0.31860465116279074,
+        "4": 0.3488372093023256,
+        "5": 0.37209302325581395
+      },
+      "correlations": {
+        "1": {
+          "pearson": -0.22867055971174566,
+          "spearman": -0.20667806475354095
+        },
+        "2": {
+          "pearson": -0.20647098199926794,
+          "spearman": -0.20672362138405337
+        },
+        "3": {
+          "pearson": -0.18816610960783864,
+          "spearman": -0.19617227432614284
+        },
+        "4": {
+          "pearson": -0.17334641070473644,
+          "spearman": -0.18878827456888528
+        },
+        "5": {
+          "pearson": -0.1591156504820535,
+          "spearman": -0.1538711613699406
+        }
+      }
+    },
+    "pae-webvoyager": {
+      "tasks": 1914,
+      "attempts": 9570,
+      "valid_attempts": 9520,
+      "all_five_valid_tasks": 1882,
+      "tasks_with_success": 1261,
+      "zero_success_tasks": 653,
+      "success_count_histogram": {
+        "0": 653,
+        "1": 327,
+        "2": 268,
+        "3": 220,
+        "4": 238,
+        "5": 208
+      },
+      "pass_at_k": {
+        "1": 0.3672936259143156,
+        "2": 0.5028213166144201,
+        "3": 0.5764890282131662,
+        "4": 0.6246603970741901,
+        "5": 0.6588296760710554
+      },
+      "correlations": {
+        "1": {
+          "pearson": -0.01464732435880374,
+          "spearman": -0.03891931197009173
+        },
+        "2": {
+          "pearson": -0.034887526957418674,
+          "spearman": -0.04096582647604095
+        },
+        "3": {
+          "pearson": -0.04666728880562922,
+          "spearman": -0.04481807580481292
+        },
+        "4": {
+          "pearson": -0.05292894072483844,
+          "spearman": -0.05821465963868361
+        },
+        "5": {
+          "pearson": -0.05541724207939725,
+          "spearman": -0.06395484125337961
+        }
+      }
+    }
+  },
+  "within_source_website_pearson": {
+    "1": -0.06499426927567081,
+    "2": -0.06992014506670338,
+    "3": -0.07080413715316872,
+    "4": -0.0694204170503066,
+    "5": -0.06653889171236207
+  },
+  "rescue_partition": {
+    "original_success_tasks": 1293,
+    "zero_success_tasks": 707,
+    "five_valid_failure_tasks": 682,
+    "zero_success_with_invalid_tasks": 25,
+    "extension_tasks_needed_for_observed_cumulative_pass8": 707,
+    "extension_primary_episodes": 2121
+  },
+  "limitations": [
+    "Selected training pool with minimum rubric difficulty 5, not full difficulty range or OM2W.",
+    "Only 50 tasks have difficulty >=8; upper levels should not be interpreted separately.",
+    "Rubric fact count does not measure interaction difficulty directly.",
+    "Estimated pass@1..5 share outcomes and are not independent evidence.",
+    "Website bootstrap quantifies between-task/site uncertainty, not systematic judge error.",
+    "Coverage across historical five plus fresh three is not a contemporaneous eight-rollout study."
+  ]
+}

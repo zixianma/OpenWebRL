@@ -10,12 +10,14 @@ import asyncio
 import base64
 import contextlib
 import fcntl
+import hashlib
 import logging
 import os
 import signal
 import socket
 import sys
 import time
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import aiohttp
@@ -77,6 +79,21 @@ _DEFAULT_PORT_LOCK_DIR = "/tmp/slime_browser_local_process_ports"
 
 _ENV_DIR = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.abspath(os.path.join(_ENV_DIR, "..", "..", ".."))
+
+
+def _server_module(local_cfg: Dict[str, Any]) -> str:
+    """Default server unchanged; a controlled-eval extension must be pinned."""
+    module = local_cfg.get("server_module", "openwebrl.docker.env_server")
+    if module == "openwebrl.docker.env_server":
+        return module
+    if module != "openwebrl.controlled_browser_server":
+        raise ValueError("Unsupported local browser server module")
+    source = Path(__file__).resolve().parents[1] / "controlled_browser_server.py"
+    expected = local_cfg.get("server_module_sha256")
+    if (not isinstance(expected, str) or len(expected) != 64
+            or hashlib.sha256(source.read_bytes()).hexdigest() != expected):
+        raise ValueError("Controlled browser server source is not pinned")
+    return module
 
 
 def _get_env_int(name: str, default: int) -> int:
@@ -582,6 +599,7 @@ async def _wait_until_healthy(
 
 async def create_local_process_env(local_cfg: Dict[str, Any]) -> LocalProcessWebEnv:
     """Create a local env_server subprocess and return a LocalProcessWebEnv."""
+    server_module = _server_module(local_cfg)
     host = _cfg_str(local_cfg, "host", "SLIME_BROWSER_LOCAL_PROCESS_HOST", _DEFAULT_HOST)
     port_start = _cfg_int(local_cfg, "port_start", "SLIME_BROWSER_LOCAL_PROCESS_PORT_START", _DEFAULT_PORT_START)
     port_end = _cfg_int(local_cfg, "port_end", "SLIME_BROWSER_LOCAL_PROCESS_PORT_END", _DEFAULT_PORT_END)
@@ -652,7 +670,7 @@ async def create_local_process_env(local_cfg: Dict[str, Any]) -> LocalProcessWeb
         proc = await asyncio.create_subprocess_exec(
             python_bin,
             "-m",
-            "openwebrl.docker.env_server",
+            server_module,
             "--host",
             host,
             "--port",

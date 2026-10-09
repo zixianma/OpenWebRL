@@ -34,18 +34,18 @@ def cohorts():
     return dict(task_file_sha256=source['task_file_sha256'],cohorts=shards)
 
 
-def prepare():
+def prepare(objectives=None):
     from train_arm_joint_ddp import frozen_config
     CONFIG_DIR.mkdir(parents=True,exist_ok=True)
     write_json(CONFIG_DIR/'om2w-shards.json',cohorts())
-    for objective in ['sft','dpo']:
+    for objective in objectives or ['sft','dpo','dpo_action']:
         config=frozen_config(objective)
         config['eval_shards_sha256']=digest(CONFIG_DIR/'om2w-shards.json')
         config['handoff_hashes']={name:digest(REPO/'scripts'/name) for name in
                                 ['merge_arm_c2_student.py','run_arm_full300_checkpoint_eval.py']}
         path=CONFIG_DIR/f'{objective}-2gpu-config.json';write_json(path,config)
         print(json.dumps(dict(config=str(path),objective=objective,gpus=2,
-                 hours=3 if objective=='sft' else 5,updates=174,evaluation_tasks=300,submitted=False)))
+                 hours=3 if objective=='sft' else 4,updates=174,evaluation_tasks=300,submitted=False)))
 
 
 def aggregate(root,objective,shards):
@@ -69,8 +69,11 @@ def aggregate(root,objective,shards):
     write_json(root/'evaluation/all300-summary.json',report)
     write_json(root/'evaluation/all300-records.json',records)
     rates=report['rates']
-    doc=REPO/f'openwebrl/docs/ARM_JOINT_{objective.upper()}_RESULTS.md'
-    write_document_section(doc,f'# Joint-data {objective.upper()}: endpoint OM2W evaluation\n\n'
+    display={'sft':'SFT','dpo':'DPO','dpo_action':'action-masked DPO'}[objective]
+    legacy={'sft':'ARM_JOINT_SFT_RESULTS.md','dpo':'ARM_JOINT_DPO_RESULTS.md',
+            'dpo_action':'ARM_JOINT_ACTION_DPO_RESULTS.md'}[objective]
+    doc=REPO/'openwebrl/docs'/legacy
+    write_document_section(doc,f'# Joint-data {display}: endpoint OM2W evaluation\n\n'
       f"Update 174, 5,540 training states, fresh evaluation of all 300 tasks.\n\n"
       f"- Overall: {rates['successes']}/300 = {percent(rates['overall'])}.\n"
       f"- Valid-only: {rates['successes']}/{rates['valid']} = {percent(rates['valid_only'])}.\n"
@@ -79,7 +82,19 @@ def aggregate(root,objective,shards):
       f"Unavailable results were not silently replaced.\n\n"
       f"[Full report]({root}/evaluation/all300-summary.json) · "
       f"[Rollouts]({root}/evaluation)\n")
-    # The later finisher creates the paired report without launching more compute.
+    if objective=='dpo_action':
+        controls={name:RUNTIME/f'runs/joint-v2-{name}-2gpu-r2/evaluation/all300-records.json'
+                  for name in ['sft','dpo']}
+        if all(path.exists() for path in controls.values()):
+            control_records={name:json.loads(path.read_text()) for name,path in controls.items()}
+            comparison=dict(rates={objective:rate_report(records,ids),
+                                   **{name:rate_report(rows,ids) for name,rows in control_records.items()}},
+                paired_common_valid={f'dpo_action_vs_{name}':paired_report(rows,records,ids)
+                                     for name,rows in control_records.items()},
+                note='Same base actor, frozen data/order/exposure; endpoint evaluations occurred at different times.')
+            write_json(CONFIG_DIR/'joint-action-dpo-comparison-om2w.json',comparison)
+        return
+    # The later finisher creates the paired SFT/full-response-DPO report without more compute.
     other='dpo' if objective=='sft' else 'sft'
     other_file=RUNTIME/f'runs/joint-v2-{other}-2gpu/evaluation/all300-records.json'
     if other_file.exists():
@@ -147,7 +162,7 @@ def run(args):
         if stopping:return
         status('evaluating_all300')
         workers=[]
-        base_port=23110 if args.objective=='sft' else 24110
+        base_port={'sft':23110,'dpo':24110,'dpo_action':25110}[args.objective]
         for rank in range(2):
             port=base_port+rank*300;env=os.environ.copy();env['CUDA_VISIBLE_DEVICES']=devices[rank].split(',',1)[0]
             command=[str(PYTHON),str(REPO/'scripts/run_arm_full300_checkpoint_eval.py'),
@@ -184,10 +199,10 @@ def run(args):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--objective',choices=['sft','dpo'])
+    parser.add_argument('--objective',choices=['sft','dpo','dpo_action'])
     parser.add_argument('--config',type=Path)
     parser.add_argument('--prepare',action='store_true')
     args=parser.parse_args()
-    if args.prepare:prepare()
+    if args.prepare:prepare([args.objective] if args.objective else None)
     elif args.objective:run(args)
     else:parser.error('--objective is required to run')

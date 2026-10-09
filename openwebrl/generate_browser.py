@@ -666,9 +666,14 @@ def _load_local_resources(
     policy_relpath = response_mode.policy_relpath or env_config.get("path_to_policy")
     if policy_relpath:
         _policy_path = os.path.join(_BROWSER_DIR, policy_relpath)
-        if os.path.exists(_policy_path):
-            with open(_policy_path, "r") as f:
-                policy = f.read()
+        if not os.path.isfile(_policy_path):
+            raise ValueError(f"Required browser policy file is missing: {_policy_path}")
+        with open(_policy_path, "r") as f:
+            policy = f.read()
+        if not policy.strip():
+            raise ValueError(f"Required browser policy file is empty: {_policy_path}")
+    else:
+        raise ValueError("No browser policy file configured")
     policy = rewrite_policy_thinking_tags(policy, response_mode)
 
     task_metadata = dict(task_metadata or {})
@@ -928,6 +933,9 @@ async def _initialize_resources(args: Any, task_id: str, task_metadata: dict[str
     env_config = _apply_browser_env_mode_override(env_config)
     env_config = _apply_sandbox_env_overrides(env_config)
     env_config = _apply_local_process_env_overrides(env_config)
+    actor_policy = getattr(args, "browser_action_selector", None)
+    if getattr(actor_policy, "browser_coordinate_space", None) == "viewport_pixels":
+        env_config = dict(env_config, resize_output_coords=False)
 
     ENV_REGISTRY.register(
         name=env_name,

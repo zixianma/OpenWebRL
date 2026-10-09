@@ -52,6 +52,24 @@ class ScreenAccountingTest(unittest.TestCase):
         record = self.record('task',0)
         with self.assertRaises(ValueError): verify_record(dict(record,reward=1.),'task',0)
 
+    def test_native_format_penalty_is_preserved_and_counts_as_failure(self):
+        rows = [self.record('task',a,reward=-1. if a == 4 else 0.) for a in range(5)]
+        result = summarize(rows,['task'],require_complete=True)
+        self.assertEqual(result['dispositions']['task'],'all_failure')
+        self.assertEqual(result['valid_attempts'],5)
+        self.assertEqual(result['native_format_failure_attempts'],1)
+        self.assertEqual(result['successes'],0)
+        self.assertEqual(rows[-1]['reward'],-1.)
+        with self.assertRaises(ValueError):
+            verify_record(dict(rows[-1],reward=-2.),'task',4)
+
+    def test_format_failure_and_invalid_environment_stay_distinct(self):
+        rows = [self.record('task',a,reward=-1.,valid=a!=4) for a in range(5)]
+        result = summarize(rows,['task'],require_complete=True)
+        self.assertEqual(result['dispositions']['task'],'unresolved_invalid')
+        self.assertEqual(result['valid_attempts'],4)
+        self.assertEqual(result['native_format_failure_attempts'],4)
+
 
 if __name__ == '__main__':
     unittest.main()

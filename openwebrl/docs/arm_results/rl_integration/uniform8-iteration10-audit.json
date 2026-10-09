@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-07",
+  "run_id": "outcome-uniform8-original2102-20261006",
+  "status": "verified_complete",
+  "scope": "Uniform G8 outcome-only RL, completed iteration10 and held-out actor-only full300 evaluation10",
+  "training": {
+    "initial_model": "OpenWebRL-4B-SFT",
+    "fresh_iteration0": true,
+    "fresh_optimizer_scheduler_cursor": true,
+    "task_pool_size": 2102,
+    "seed": 42,
+    "samples_per_task": 8,
+    "accepted_groups_per_iteration": 48,
+    "filter": "native nonempty/nonzero reward variance; invalid trajectories dropped",
+    "objective": "outcome-only GRPO",
+    "arm_or_demonstration_loss": false,
+    "ppo_epochs": 2,
+    "global_batch_size": 256,
+    "micro_batch_size": 1,
+    "learning_rate": 1e-06,
+    "lr_schedule": "constant",
+    "temperature": 0.8,
+    "top_p": 1.0,
+    "top_k": -1,
+    "response_tokens": 1024,
+    "context_tokens": 32768,
+    "max_turns": 15,
+    "tp": 2,
+    "dp": 4,
+    "browser_env": "local_process",
+    "browser_concurrency": 64,
+    "judge_model": "gpt-4.1",
+    "judge_prompt_variant": "action_history"
+  },
+  "checkpoint": {
+    "completed_iterations": 10,
+    "native_index": 9,
+    "completed_adam_updates": 244,
+    "scheduler_num_steps": 62464,
+    "scheduler_offset_updates": 0,
+    "dataset_group_cursor": 1104,
+    "dataset_sample_cursor": 8832,
+    "epoch": 0,
+    "shard_files": 16,
+    "shard_bytes": 62134994285,
+    "metadata_extents_checked": 3525,
+    "sampled_cpu_tensor_bytes": 411648,
+    "sampled_cpu_tensors_finite": true,
+    "actor_gpu_restore_verified": true,
+    "full_optimizer_tensor_reload_at_final_audit": false,
+    "train_step_label_note": "Existing train/step labels are not cumulative Adam counts; use checkpoint counters."
+  },
+  "evaluation": {
+    "judge_model": "gpt-4.1",
+    "judge_prompt_variant": "action_history",
+    "actor_temperature": 0.0,
+    "top_p": 1.0,
+    "top_k": 1,
+    "response_tokens": 4096,
+    "max_turns": 30,
+    "n_samples_per_eval_prompt": 1,
+    "browser_env": "local_process",
+    "wandb_project": "openwebrl-evals",
+    "completed_training_iterations": 10,
+    "tasks": 300,
+    "successes": 88,
+    "valid": 241,
+    "invalid": 59,
+    "overall_success_rate": 0.29333333333333333,
+    "valid_only_success_rate": 0.3651452282157676,
+    "pass_k": 1,
+    "invalid_reason_histogram": {
+      "browser_reset_failure": 22,
+      "browser_step_failure": 33,
+      "task_timeout": 4
+    },
+    "terminal_status_histogram": {
+      "aborted": 59,
+      "completed": 161,
+      "truncated": 5,
+      "failed": 75
+    },
+    "canonical_rewards_unchanged": true
+  },
+  "audit": {
+    "all_expected_unique_task_ids_matched": true,
+    "canonical_records": 300,
+    "rollout_archives": 300,
+    "saved_turns": 4513,
+    "current_image_turns": 4487,
+    "base64_and_image_checks": 4487,
+    "positive_pixel_tensor_shapes": 4487,
+    "last_screenshots_fully_decoded": 274,
+    "invalid_image_free_stubs": 26,
+    "valid_without_images": 0,
+    "metadata_bytes_read": 2223496122,
+    "tensor_storage_bytes_read": 0,
+    "anomalies": [],
+    "scope": "All archive metadata and saved current images audited; full tensor content/CRC not read. Final checkpoint metadata/counters/extents and sampled CPU tensors checked; actor restored on GPU."
+  },
+  "judge_review": {
+    "sampling": "five purposive last-screenshot checks",
+    "checked": 5,
+    "questionable_canonical_positives": 2,
+    "examples": "One no-results search and one unused calculator were accepted; original labels retained.",
+    "judge_error_rate_estimated": false,
+    "caution": "Audit confirms evidence and protocol consistency, not strict task-completion correctness."
+  },
+  "accounting": {
+    "resources": {
+      "gpus": 8,
+      "gpu_type": "H200",
+      "cpus": 64,
+      "memory_gib": 960
+    },
+    "approved_total_seconds": 57600,
+    "charged_total_seconds": 44849,
+    "unused_seconds": 12751,
+    "gpu_hours": 99.66444444444444,
+    "attempts": [
+      {
+        "job_id": "347884",
+        "state": "FAILED",
+        "exit_code": "1:0",
+        "charged_seconds": 39206
+      },
+      {
+        "job_id": "349155",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "charged_seconds": 5643
+      }
+    ],
+    "judge_calls": 5902,
+    "judge_call_cap": 8000,
+    "judge_charged_or_reserved_usd": 56.114976,
+    "judge_usd_cap": 100,
+    "received_usage_usd": 50.902832,
+    "unresolved_old_reservations": 13,
+    "unresolved_old_reservations_usd": 5.212144,
+    "post_extension_received_calls": 702,
+    "post_extension_usage_sidecars_complete": true,
+    "browser_dispatches": 9900,
+    "training_browser_dispatches": 9600,
+    "evaluation_browser_dispatches": 300,
+    "browser_dispatch_cap": 12000,
+    "browser_concurrency_cap": 64,
+    "failed_attempts_preserved_and_charged": true
+  },
+  "wandb": {
+    "training": {
+      "url": "https://wandb.ai/zixianma/openwebrl/runs/outcome-uniform8-original2102-20261006",
+      "project": "openwebrl",
+      "state": "finished"
+    },
+    "evaluation": {
+      "url": "https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-uniform8-original2102-20261006-iter10",
+      "project": "openwebrl-evals",
+      "state": "finished"
+    },
+    "cloud_task_metrics_match": true
+  },
+  "comparison": {
+    "historical_G5_48groups": {
+      "successes": 70,
+      "tasks": 300,
+      "valid": 234,
+      "invalid": 66,
+      "overall_success_rate": 0.23333333333333334
+    },
+    "G5_56groups": {
+      "successes": 88,
+      "tasks": 300,
+      "valid": 251,
+      "invalid": 49,
+      "adam_updates": 178,
+      "overall_success_rate": 0.29333333333333333
+    },
+    "G8_minus_G5_56_overall_pp": 0.0,
+    "G8_minus_G5_56_adam_updates": 66,
+    "matched_compute": false,
+    "paired_or_repeated_inference": false,
+    "caution": "Training data exposure, accepted groups, optimizer work, live collection dates and valid-task sets differ; no causal rollout-size effect established."
+  },
+  "adaptive_run_status": "paused_by_user"
+}

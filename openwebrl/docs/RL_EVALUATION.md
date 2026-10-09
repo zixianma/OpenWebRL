@@ -81,6 +81,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [Original bonus iteration 90: verified local OM2W300](#arm-original-iter90-results-20261008)
+- [Uniform G8 outcome-only RL: verified iteration 10](#uniform8-iter10-results-20261007)
 - [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
 - [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
@@ -1516,6 +1517,66 @@ only task ID, validity and reward instead of retaining screenshot payloads.
 The topic commits also include shared ARM reward, resume and
 transport modules imported by the evaluation controllers; they are necessary
 code dependencies, not new experiment launches.
+
+<a id="uniform8-iter10-results-20261007"></a>
+## Uniform G8 outcome-only RL: iteration 10 — October 7
+
+**Completed and independently audited: 88/300 (29.33%) overall; 88/241
+(36.51%) valid-only.** All 59 invalid episodes remain in the overall denominator.
+This is an actor-only **pass@1** evaluation after training with eight rollouts per
+task; it is separate from the frozen SFT pass@8 screening study.
+
+| Original 2,102-task outcome-only training | Rollouts/task | Accepted groups/iteration | Adam updates at 10 | Successes /300 | Valid | Invalid | Overall | Valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Historical baseline | 5 | 48 | — | 70 | 234 | 66 | 23.33% | 29.91% |
+| 56-group control | 5 | 56 | 178 | 88 | 251 | 49 | 29.33% | 35.06% |
+| Uniform G8 | 8 | 48 | 244 | 88 | 241 | 59 | 29.33% | 36.51% |
+
+G8 has the same success count as the [G5/56-group control](#outcome56-iter10-results-20261007)
+after 66 more Adam updates (+37.1%), and 18 more successes than the historical
+G5/48-group baseline. These are descriptive comparisons: accepted-group counts,
+training samples, optimizer work, live collection dates and valid-task sets
+differ. This pilot does not establish an advantage from G8 or a comparison at
+equal compute. The adaptive failure-rescue experiment remains paused.
+
+Training started at iteration 0 from official OpenWebRL-4B-SFT with fresh
+optimizer, scheduler and cursor on the original 2,102 tasks, not the separate
+2,000-task screening pool. It uses G8, 48 accepted groups, the native
+nonempty/nonzero-reward-variance filter, outcome-only GRPO, two PPO epochs, global batch 256,
+microbatch 1, constant LR 1e-6 and seed 42; no ARM or demonstration loss. Training
+decoding is T=0.8 / p=1 / k=−1, 1,024 response tokens, 32,768 context tokens and 15 turns;
+TP2/DP4, 64 local browsers and 48 GiB cache guard. Evaluation uses the established
+local-browser **GPT-4.1/action_history, T=0 / p=1 / k=1, 4,096 tokens, 30 turns**, one
+trajectory per held-out task. It must not be pooled with the o4-mini/AgentTrek
+inference-selector tables.
+
+Checkpoint 10 (native 9) contains 244 Adam updates, scheduler 62,464 with zero offset,
+and cursor 1,104 groups /8,832 samples. All 16 shard extents and sampled CPU tensors
+passed; the evaluated actor restored on GPU. Existing W&B `train/step` labels
+are not cumulative optimizer counts, so the table uses the saved Adam counters.
+Both training and evaluation W&B runs are finished in their correct projects.
+
+The audit matched all 300 task identities and rollout/verdict records, checked
+all 4,487 current images across 4,513 saved turns, and fully decoded 274 last
+screenshots. The 26 image-free records are invalid; every valid record has image
+evidence. Invalids comprise 22 browser resets, 33 browser-step failures and 4 task
+timeouts. Archive metadata was streamed without reading tensor storage; this is
+not a full tensor-content/CRC audit. Five purposive visual checks flagged two
+permissive canonical positives (a no-results search and an unused calculator).
+Labels are unchanged for protocol consistency; these checks do not estimate a
+judge error rate or certify strict task completion.
+
+Final usage including the failed attempt is 44,849 /57,600 scheduler seconds
+(99.66 allocated H200-hours), 9,900 /12,000 browser dispatches, 5,902 /8,000 judge
+calls and $56.114976 /$100 charged or reserved. All 13 unresolved old reservations
+remain charged. Job 347884 consumed 39,206s; recovery 349155 completed in 5,643s,
+restoring its own optimizer, scheduler and cursor. No compute budget was added.
+
+[Aggregate audit](arm_results/rl_integration/uniform8-iteration10-audit.json) ·
+[Training W&B](https://wandb.ai/zixianma/openwebrl/runs/outcome-uniform8-original2102-20261006) ·
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-uniform8-original2102-20261006-iter10).
+
+The pilot endpoint is complete. Its separately approved [continuation to iteration 60](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008) is queued; no later checkpoint result is available.
 
 <a id="outcome56-iter20-results-20261007"></a>
 ## Outcome-only56-group control: complete through20 — October 7

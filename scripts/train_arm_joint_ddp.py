@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Two-H200 matched joint-data SFT / full-response DPO; no implicit allocation."""
+"""Two-H200 matched joint-data SFT / DPO variants; no implicit allocation."""
 import argparse
 from collections import defaultdict
 from contextlib import nullcontext
@@ -41,15 +41,20 @@ def backward_mode(actor,dropout):
 
 
 def frozen_config(objective):
-    if objective not in ('sft','dpo'): raise ValueError('Unsupported objective')
+    if objective not in ('sft','dpo','dpo_action'): raise ValueError('Unsupported objective')
     common=json.loads((REPO/'openwebrl/docs/arm_results/joint_data_v2/sft-config.json').read_text())
+    output_name='joint-v2-dpo-action-2gpu' if objective=='dpo_action' else f'joint-v2-{objective}-2gpu'
     return dict(common,objective=objective,world_size=2,beta=.1,gradient_accumulation_per_rank=16,
-                output=str(RUNTIME/f'runs/joint-v2-{objective}-2gpu'),
+                output=str(RUNTIME/f'runs/{output_name}'),
                 code_hashes={name:digest(REPO/'scripts'/name) for name in
                              ['train_arm_joint_ddp.py','train_arm_joint_sft.py','run_arm_joint_pipeline.py']},
-                full_response_score='sum',auxiliary_sft_weight=0 if objective=='dpo' else 1,
+                preference_score='action_sum' if objective=='dpo_action' else 'full_response_sum',
+                auxiliary_sft_weight=0 if objective.startswith('dpo') else 1,
                 reference='original SFT actor with adapters disabled',
-                dropout_policy='train: 0.05; validation/reference/rehearsal: disabled')
+                dropout_policy='train: 0.05; validation/reference/rehearsal: disabled',
+                beta_calibration=(dict(method='match_median_initial_gradient_norm',initial_beta=.1,
+                    target_gradient_norm=3.1692339181900024,source='joint-v2-dpo-2gpu-r2 smoke, four fixed 32-state batches',
+                    clamp=[.1,1.0]) if objective=='dpo_action' else None))
 
 
 def main():
@@ -79,7 +84,8 @@ def main():
         if digest(Path(config['data'])/name)!=checksum: raise ValueError(f'Frozen data changed: {name}')
     for name,checksum in config['model_metadata_hashes'].items():
         if digest(Path(config['actor'])/name)!=checksum: raise ValueError(f'Model metadata changed: {name}')
-    objective=config['objective'];root=Path(config['output']);student=root/'student'
+    objective=config['objective'];is_dpo=objective.startswith('dpo');score_field='action' if objective=='dpo_action' else 'full'
+    root=Path(config['output']);student=root/'student'
     student.mkdir(parents=True,exist_ok=True)
     random.seed(config['seed']);torch.manual_seed(config['seed']);torch.cuda.manual_seed_all(config['seed'])
     rows=read_rows(Path(config['data'])/'joint_pairs.train.jsonl')
@@ -159,7 +165,8 @@ def main():
             reference[item['id']]=item['scores']
     local_training=[rows[i] for i in order[rank::world]]
     local_panels=panels[rank::world]
-    reference_rows=(local_training if objective=='dpo' else [])+local_panels
+    reference_rows=(local_training if is_dpo else [])+local_panels
+    effective_beta=config['beta']
     try:
         if rank==0:
             write_json(root/'dataset-audit.json',dict(dataset=str(Path(config['data'])/'joint_pairs.train.jsonl'),
@@ -183,14 +190,16 @@ def main():
             metrics=torch.zeros(5,device='cuda',dtype=torch.float32)
             for offset,index in enumerate(indices):
                 row=rows[index];chosen=make_example(row,processor)
-                rejected=make_example(row,processor,'rejected') if objective=='dpo' else None
+                rejected=make_example(row,processor,'rejected') if is_dpo else None
                 with policy.no_sync() if offset+1<len(indices) else nullcontext():
                     winner,loser=policy(chosen,rejected)
                     ce=-winner.mean()
-                    if objective=='dpo':
+                    if is_dpo:
                         ref=reference[row['id']]
-                        raw=winner.sum()-loser.sum()
-                        loss,relative=dpo_loss(winner,loser,ref['chosen']['full'],ref['rejected']['full'],config['beta'])
+                        winner_score=winner.sum() if score_field=='full' else winner[row['chosen']['action_token_indices']].sum()
+                        loser_score=loser.sum() if score_field=='full' else loser[row['rejected']['action_token_indices']].sum()
+                        raw=winner_score-loser_score
+                        loss,relative=dpo_loss(winner_score,loser_score,ref['chosen'][score_field],ref['rejected'][score_field],effective_beta)
                     else:
                         raw=relative=ce.detach()*0;loss=ce
                     if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
@@ -206,10 +215,12 @@ def main():
             with torch.no_grad():
                 for index in indices:
                     row=rows[index];chosen=token_logps(actor,make_example(row,processor))
-                    if objective=='dpo':
+                    if is_dpo:
                         rejected=token_logps(actor,make_example(row,processor,'rejected'))
                         ref=reference[row['id']]
-                        z=config['beta']*(chosen.sum()-rejected.sum()-ref['chosen']['full']+ref['rejected']['full'])
+                        chosen_score=chosen.sum() if score_field=='full' else chosen[row['chosen']['action_token_indices']].sum()
+                        rejected_score=rejected.sum() if score_field=='full' else rejected[row['rejected']['action_token_indices']].sum()
+                        z=effective_beta*(chosen_score-rejected_score-ref['chosen'][score_field]+ref['rejected'][score_field])
                         values.append(torch.nn.functional.softplus(-z).item())
                     else:values.append(-chosen.mean().item())
             total=torch.tensor(sum(values)/len(values),device='cuda');dist.all_reduce(total);return total.item()/world
@@ -238,7 +249,7 @@ def main():
             # Verify longest-sequence backward with no lasting weight/RNG changes.
             longest=max(range(len(rows)),key=lambda i:rows[i]['prompt_tokens']+max(rows[i][b]['tokens'] for b in ['chosen','rejected']))
             row=rows[longest]
-            if objective=='dpo' and row['id'] not in reference:
+            if is_dpo and row['id'] not in reference:
                 with torch.no_grad(),actor.disable_adapter():
                     reference[row['id']]={b:score_values(token_logps(actor,make_example(row,processor,b)),row,b) for b in ['chosen','rejected']}
             batch_backward([longest],0,dropout=False)
@@ -249,6 +260,13 @@ def main():
                 check_stop();metrics,norm=batch_backward(rank_batch(order,begin,rank),1e-5,dropout=False)
                 calibration.append(dict(batch=begin//32,loss=metrics[0].item(),grad_norm=norm,mean_abs_z=metrics[4].item()))
                 set_peft_model_state_dict(actor,snapshot);optimizer.state.clear();set_rng(initial_rng)
+            if objective=='dpo_action':
+                import statistics
+                observed=statistics.median(item['grad_norm'] for item in calibration)
+                rule=config['beta_calibration'];selected=rule['initial_beta']*rule['target_gradient_norm']/observed
+                selected=max(rule['clamp'][0],min(rule['clamp'][1],selected))
+                selected_box=[selected if rank==0 else None];dist.broadcast_object_list(selected_box,src=0)
+                effective_beta=selected_box[0]
             repeated=rank_batch(order,0,rank);before=probe_loss(repeated)
             for _ in range(3):batch_backward(repeated,1e-5,dropout=False)
             after=probe_loss(repeated)
@@ -272,10 +290,17 @@ def main():
                     if torch.is_tensor(tensor) and not torch.allclose(tensor,other,atol=2e-5,rtol=1e-4):
                         raise ValueError('Resume replay optimizer mismatch')
             set_peft_model_state_dict(actor,snapshot);optimizer.state.clear();optimizer.zero_grad(set_to_none=True);set_rng(initial_rng)
-            if rank==0:write_json(root/'smoke-passed.json',dict(calibration=calibration,beta=config['beta'],
+            if rank==0:write_json(root/'smoke-passed.json',dict(calibration=calibration,beta=effective_beta,
+                 beta_calibration=config.get('beta_calibration'),score_field=score_field,
                  repeated_loss_before=before,repeated_loss_after=after,resume_max_error=error,
                  native_parser=True,longest_sequence_backward=True,actual_training_updates=0))
             del snapshot,expected,expected_opt,restored,actual
+        elif objective=='dpo_action':
+            effective_beta=json.loads((root/'smoke-passed.json').read_text())['beta']
+        if rank==0:
+            write_json(root/'resolved-objective.json',dict(objective=objective,score_field=score_field,
+                       configured_beta=config['beta'],effective_beta=effective_beta,
+                       beta_calibration=config.get('beta_calibration')))
         tracking=None
         if rank==0:
             from dotenv import load_dotenv
@@ -286,6 +311,7 @@ def main():
             write_json(identity_path,identity)
             tracking=wandb.init(project='openwebrl-arm',id=identity['id'],resume='allow',name=f'joint-v2-{objective}',
                 group='arm-joint-v2',job_type=objective,dir=str(root),config=config,settings=wandb.Settings(init_timeout=60))
+            tracking.config.update({'effective_beta':effective_beta,'score_field':score_field},allow_val_change=True)
             write_json(identity_path,dict(identity,url=tracking.url))
         def emit(values):
             if rank==0:
@@ -302,8 +328,8 @@ def main():
                     if offset%16==0:check_stop()
                     values={b:score_values(token_logps(actor,make_example(row,processor,b)),row,b) for b in ['chosen','rejected']}
                     ref=reference[row['id']]
-                    delta=values['chosen']['full']-values['rejected']['full']-ref['chosen']['full']+ref['rejected']['full']
-                    values.update(relative_margin=delta,dpo_loss=float(torch.nn.functional.softplus(torch.tensor(-config['beta']*delta))))
+                    delta=values['chosen'][score_field]-values['rejected'][score_field]-ref['chosen'][score_field]+ref['rejected'][score_field]
+                    values.update(relative_margin=delta,dpo_loss=float(torch.nn.functional.softplus(torch.tensor(-effective_beta*delta))))
                     results.append(dict(id=row['id'],source=row['source'],task_group=row['task_group'],**values))
             gathered=[None]*world;dist.all_gather_object(gathered,results)
             if rank==0:
@@ -326,7 +352,8 @@ def main():
             emit({'train/loss':metrics[0].item(),'train/winner_ce':metrics[1].item(),
                   'train/raw_margin':metrics[2].item(),'train/relative_margin':metrics[3].item(),
                   'train/mean_abs_z':metrics[4].item(),'train/gradient_norm':norm,
-                  'train/learning_rate':lr,'train/update_seconds':time.monotonic()-started})
+                  'train/learning_rate':lr,'train/effective_beta':effective_beta,
+                  'train/update_seconds':time.monotonic()-started})
             if rank==0:write_json(root/'training-status.json',dict(phase='training',allocation=job,**state))
             if state['updates'] in config['checkpoint_updates']:save()
             if state['updates'] in config['validation_updates']:evaluate()

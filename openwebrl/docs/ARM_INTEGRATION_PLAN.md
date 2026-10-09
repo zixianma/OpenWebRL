@@ -9422,7 +9422,7 @@ startup, training, full300 local T0/GPT-4.1 evaluations10/20 and all retries.
 The initial target is20, subject to these shared caps; reaching20 is not
 guaranteed within24h and no new allocation is authorized by this plan.
 
-**Initial target20 complete:** both scheduled evaluations and final controller/accounting checks passed independent review within the approved caps. The historical comparison does not isolate the effect of group count. [Result table and comparison limits](RL_EVALUATION.md#outcome56-iter20-results-20261007). No continuation beyond20 is implied.
+**Initial target20 complete:** both scheduled evaluations and final controller/accounting checks passed independent review within the approved caps. The historical comparison does not isolate the effect of group count. [Result table and comparison limits](RL_EVALUATION.md#outcome56-iter20-results-20261007). The pilot approval did not authorize continuation beyond 20; the separate October 8 extension is recorded [below](#outcome56-uniform8-to60-20261008).
 
 <details>
 <summary>First-milestone history</summary>
@@ -9437,6 +9437,24 @@ iteration10 comparison is descriptive; dates and optimizer work differ.
 [Interactive curve](rl_results/arm_rl_interactive.html).
 
 </details>
+
+<a id="outcome56-uniform8-to60-20261008"></a>
+### October 8: outcome-only batch-56 and uniform-G8 continuations to 60
+
+**Approved and queued; no extension training result yet.** The scheduler snapshot supplied by active supervision on **October 8 PDT / October 9 UTC** has batch-56 job 350633 and uniform-G8 job 350637 pending for priority; their successors are dependency-pending. Both continue their own verified checkpoints with optimizer, scheduler, task cursor and W&B lineage preserved. No new experiment starts from a later model.
+
+| Continuation | Verified starting iteration / Adam updates | Training groups × rollouts | New allocation budget, all attempts | New judge budget | Sequential jobs |
+| --- | --- | --- | --- | ---: | --- |
+| Original-pool batch-56 | 20 / 338 | 56 × 5 | 8 H200 × 48h; 64 CPUs / 960 GiB | $300 | 350633 → 350636 |
+| Original-pool uniform G8 | 10 / 244 | 48 × 8 | 8 H200 × 72h; 64 CPUs / 960 GiB | $400 | 350637 → 350638 → 350639 |
+
+The combined new ceiling is **960 H200-hours and $700 judge cost**. Each lineage keeps its own all-attempt ledger; unused pilot time or spending allowances are not transferred. Uniform G8 additionally caps 40,000 judge calls and 65,000 browser dispatches. All extension allocations are unstarted at this snapshot, so no new extension GPU time has been consumed. Completion within these caps is a target, not a guarantee.
+
+Both retain the original 2,102-task pool, outcome-only objective, global batch 256, PPO2, microbatch 1, constant LR 1e−6, TP2/DP4, 64 local browsers and 48 GiB cache guard. Training sampling remains T=0.8 / p=1 / k=−1, 1,024 response tokens and 15 turns. No ARM loss, new data or efficiency intervention is introduced. The adaptive rollout-rescue arm remains paused.
+
+Controllers own and await training workers in stages of at most two iterations and run each full300 local-browser **GPT-4.1/action_history, T=0 / p=1 / k=1, 4,096-token / 30-turn** evaluation inside the allocation: batch-56 at 30/40/50/60; G8 at 20/30/40/50/60. Previously verified cohorts are not repeated. Successful budget handoffs use sequential dependencies; a failed worker requires diagnosis and a reviewed recovery within the remaining cap. Checkpoint and storage gates apply before later stages. Saved current/future training recovery archives and evaluation evidence remain protected; checkpoint retention keeps every tenth iteration, the latest durable checkpoint and active dependencies.
+
+[Batch-56 endpoint 20](RL_EVALUATION.md#outcome56-iter20-results-20261007) · [Uniform-G8 endpoint 10](RL_EVALUATION.md#uniform8-iter10-results-20261007). The 56-group control matches the maximum group count of 48 mixed + up to 8 all-failure ARM groups, not their composition or auxiliary loss. Compare iterations alongside optimizer updates, accepted/submitted groups and rollout cost; historical single-cohort differences do not establish causality.
 
 <a id="arm-expanded-outcome-to90-20261005"></a>
 ### Expanded outcome-only continuation: capped at60 on October5

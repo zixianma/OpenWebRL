@@ -1,6 +1,8 @@
 """Controller completion must still wake an agent for the independent audit."""
 from pathlib import Path
 import os
+import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -20,6 +22,35 @@ def snapshot(*, complete=True, reviewed=False, verified=True, code=0):
 
 
 class EvaluationNotificationTests(unittest.TestCase):
+    def test_uncaught_error_is_preserved_when_journal_is_unavailable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            code = (
+                "import sys; from pathlib import Path; "
+                "sys.path.insert(0, sys.argv[1]); "
+                "import arm_job_supervisor as s; "
+                "stream=s.install_diagnostics(Path(sys.argv[2])); "
+                "raise RuntimeError('diagnostic-test-failure')"
+            )
+            result = subprocess.run(
+                [sys.executable, '-c', code, str(Path(supervisor.__file__).parent), directory],
+                capture_output=True, text=True, timeout=10)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(result.stderr, '')
+            text = (Path(directory)/'diagnostics.log').read_text()
+            self.assertEqual(json.loads(text.splitlines()[0])['event'], 'supervisor_start')
+            self.assertIn('Traceback', text)
+            self.assertIn('diagnostic-test-failure', text)
+
+    def test_continuation_uses_reduced_registry_endpoint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'registry.json').write_text(json.dumps({'jobs': [
+                {'key':'outcome-expanded4102', 'target_iteration':60}]}))
+            prompt = supervisor.continuation_prompt(root)
+            self.assertIn('run to60', prompt)
+            self.assertNotIn('run to90', prompt)
+            self.assertLessEqual(len(prompt.encode()), 1000)
+
     def test_native_generate_phase_is_observed_as_collection(self):
         status = {'stage': 'training'}
         for phase in ['generate', 'generate_rollout']:

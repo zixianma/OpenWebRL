@@ -122,7 +122,7 @@ async def request_selection_result(endpoint, payload, timeout, connect_timeout=N
 class ActionSelector:
     """Sample five iid proposals at one live state, score, execute one unchanged."""
     def __init__(self, mode, endpoint, output, seed=42, candidates=5, timeout=180, exporter=None, connect_timeout=None,
-                 candidate_representation="full", shadow_modulus=0):
+                 candidate_representation="full", shadow_modulus=0, record_telemetry=False):
         if mode not in ("baseline", "selection", "scalar"):
             raise ValueError(mode)
         self.mode, self.endpoint = mode, endpoint.rstrip("/")
@@ -131,6 +131,7 @@ class ActionSelector:
         if (candidate_representation != "full" or shadow_modulus) and mode != "selection":
             raise ValueError("Candidate ablation is SelectionARM-only")
         self.candidate_representation, self.shadow_modulus = candidate_representation, shadow_modulus
+        self.record_telemetry = record_telemetry
         self.output, self.seed = Path(output), seed
         self.candidates = 1 if mode == "baseline" else candidates
         self.timeout = timeout
@@ -187,6 +188,7 @@ class ActionSelector:
                   "screenshot_sha256": hashlib.sha256(observation["screenshot"]).hexdigest()}
         if self.candidate_representation != "full":
             record["candidate_representation"] = self.candidate_representation
+        if self.mode != "baseline" and (self.candidate_representation != "full" or self.record_telemetry):
             record["selector_telemetry"] = {k: result.get(k) for k in ("input_tokens", "output_tokens", "seconds")}
         if self.shadow_modulus and candidate_seed(self.seed, task_id, turn, 999) % self.shadow_modulus == 0:
             # Shadow scoring cannot change the executed branch or invalidate it.
@@ -200,7 +202,7 @@ class ActionSelector:
             except Exception as exc:
                 record["shadow_full"] = {"error": str(exc)}
         path = self.output / (hashlib.sha256(str(task_id).encode()).hexdigest()[:20] + ".jsonl")
-        if self.exporter is not None:
+        if self.exporter is not None or self.record_telemetry:
             from openwebrl.artifact_io import run_artifact_io
             await run_artifact_io(self._persist, path, record, input_text, images, outputs)
         else:
