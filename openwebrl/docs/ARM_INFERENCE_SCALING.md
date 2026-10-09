@@ -153,14 +153,36 @@ Means first average observed decisions within task, then weight tasks equally. I
 
 **Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. All four conditions are verified: medium scored **57.98% on WebVoyager** and **46.00% on DeepShop**.
 
-| Benchmark | Selector reasoning | N | Tasks | Successes | Valid | Invalid | Overall | Valid-only | Status |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Online-Mind2Web | Medium | 5 | 300 | 137 | 269 | 31 | 45.67% | 50.93% | Verified |
-| Online-Mind2Web | High | 5 | 300 | 131 | 257 | 43 | 43.67% | 50.97% | Verified |
-| DeepShop | Medium | 5 | 150 | 69 | 147 | 3 | 46.00% | 46.94% | Verified |
-| WebVoyager | Medium | 5 | 595 | 345 | 565 | 30 | 57.98% | 61.06% | Verified |
+| Benchmark | Condition | N | Collection | Tasks | Successes | Valid | Invalid | Overall | Valid-only |
+| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Online-Mind2Web | **SFT alone: closest historical control** | **1** | **Oct 7, seed 45** | **300** | **99** | **271** | **29** | **33.00%** | **36.53%** |
+| Online-Mind2Web | SFT alone: earlier API-study sensitivity | 1 | Oct 7, seed 42 | 300 | 95 | 273 | 27 | 31.67% | 34.80% |
+| Online-Mind2Web | Sol61 medium | 5 | Oct 9, seed 42 | 300 | 137 | 269 | 31 | 45.67% | 50.93% |
+| Online-Mind2Web | Sol61 high | 5 | Oct 9, seed 42 | 300 | 131 | 257 | 43 | 43.67% | 50.97% |
+| DeepShop | Sol61 medium | 5 | Oct 9 | 150 | 69 | 147 | 3 | 46.00% | 46.94% |
+| WebVoyager | Sol61 medium | 5 | Oct 9 | 595 | 345 | 565 | 30 | 57.98% | 61.06% |
 
-Overall includes invalid records as zero; valid-only excludes each condition's invalids. On the **same 250 tasks valid in both OM2W conditions**, medium succeeded on **134** and high on **128**: high minus medium **−2.40 pp [−8.40, +3.60]**. Neither comparison supports a reliable effort effect. This tests reasoning effort within N=5; there is no contemporaneous actor-only control, and historical actor/harness differences prevent a controlled selector-gain claim.
+All displayed cohorts are verified complete. Against the closest historical SFT control, Sol61 medium and high are descriptively **+12.67 and +10.67 percentage points** overall. Against the earlier seed-42 control, the gaps are +14.00 and +12.00 points. These comparisons reuse October 7 outcomes; they do not isolate a causal selector gain from collection-date, seed or runtime differences. [Closest control aggregate](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json) · [Earlier API-study control](arm_results/api_selector_september_reproduction_20261006/aggregate.json).
+
+Overall includes invalid records as zero; valid-only excludes each condition's invalids. On the **same 250 tasks valid in both Sol61 OM2W conditions**, medium succeeded on **134** and high on **128**: high minus medium **−2.40 pp [−8.40, +3.60]**. Neither comparison supports a reliable effort effect. This tests reasoning effort within N=5. The historical controls match the nominal SFT actor/judge protocol, but there is no contemporaneous N=1 control.
+
+<a id="sol61-actor-controls-20261009"></a>
+
+**Matching SFT N=1 controls are still missing for WebVoyager and DeepShop.** The existing local actor-only cohorts use RL iteration-90 weights and different decoding; they are not controls for this SFT-proposal study. Fresh official-SFT controls are being prepared with the Sol61 actor, local browser and native benchmark judge protocol, with the selector removed.
+
+| Prepared control | N | Requested tasks | Status |
+| --- | ---: | ---: | --- |
+| Official SFT alone, WebVoyager | 1 | 595 | Awaiting exact allocation approval; not launched |
+| Official SFT alone, DeepShop | 1 | 150 | Awaiting exact allocation approval; not launched |
+
+<details>
+<summary>Historical-control match and remaining comparability gaps</summary>
+
+Both OM2W controls use the same 300-task file, official SFT revision, pinned actor-policy hash, local browsers, T=0.7/top-p=0.9/native default top-k, 1,024 actor tokens, 30 turns, full text history/latest screenshot and canonical o4-mini/AgentTrek judge as Sol61. The shared actor, browser, reward and native evaluator source files are byte-identical. The October 7 seed-45 control is the latest completed matching control located; the earlier API-study control also matches Sol61's seed-42/server-4200 settings.
+
+The seed-45 control uses server seeds 4500/4501, versus 4200/4201 for Sol61 and the API-study control. FlashInfer ignores per-request seeds, so matching seed labels do not imply identical trajectories. Campaign wrappers, interleaving and collection times differ; core-file identity does not prove complete runtime equivalence. Website/judge drift and differing invalid sets remain. No new paired interval or common-valid Sol61-versus-control estimate is claimed here. Existing native outcomes, including valid unjudged zeros, are unchanged.
+
+</details>
 
 <details>
 <summary>Paired comparison, latency and outcome definitions</summary>

@@ -576,5 +576,106 @@
     "owner_composition_sha256": "7d15331f33d86a772f79259af147c9adc4c177cc19832a5ea9becb19d517a38f",
     "independent_metadata_review_sha256": "16c90b17f075dc529d85e8a180840b69cf8eb07dfb50373c8895075200becbb2",
     "all_attempt_accounting_sha256": "492cc592e203f651d9eaf90277ae9f69f037729fbe5c59a78f3d9c0eca435a49"
+  },
+  "historical_controls": {
+    "as_of": "2026-10-09",
+    "scope": "Separate historical cohorts; not part of the four-condition Sol61 campaign or its 1345 records/accounting.",
+    "controls": [
+      {
+        "role": "closest_historical",
+        "benchmark": "online_mind2web",
+        "condition": "official_sft_alone",
+        "n": 1,
+        "collection_date": "2026-10-07",
+        "seed": 45,
+        "server_seed_base": 4500,
+        "verified_complete": true,
+        "tasks": 300,
+        "successes": 99,
+        "valid": 271,
+        "invalid": 29,
+        "overall_success_rate": 0.33,
+        "valid_only_success_rate": 0.36531365313653136,
+        "source_aggregate": "selectionarm_piotr_sameday30_20261007/aggregate.json",
+        "source_aggregate_sha256": "f67f71260af6a8f04efa264cdb23adeb06cba120099fc6433dfbd4a5b27b7998"
+      },
+      {
+        "role": "earlier_api_study_sensitivity",
+        "benchmark": "online_mind2web",
+        "condition": "official_sft_alone",
+        "n": 1,
+        "collection_date": "2026-10-07",
+        "seed": 42,
+        "server_seed_base": 4200,
+        "verified_complete": true,
+        "tasks": 300,
+        "successes": 95,
+        "valid": 273,
+        "invalid": 27,
+        "overall_success_rate": 0.31666666666666665,
+        "valid_only_success_rate": 0.34798534798534797,
+        "source_aggregate": "api_selector_september_reproduction_20261006/aggregate.json",
+        "source_aggregate_sha256": "4752db14ca013c7feae089f4ccf52b02423597847330b3eea3601b794e178822"
+      }
+    ],
+    "matched_nominal_fields": [
+      "task_file",
+      "official_sft_actor_revision",
+      "actor_system_policy_hash",
+      "local_browser",
+      "actor_temperature_top_p_native_top_k",
+      "actor_token_cap",
+      "turn_cap",
+      "context_length",
+      "full_history_latest_screenshot",
+      "canonical_om2w_judge"
+    ],
+    "shared_core_source_byte_identical": [
+      "openwebrl/generate_browser.py",
+      "openwebrl/browser_actor_protocol.py",
+      "openwebrl/env/browser_runtime.py",
+      "openwebrl/env/browser_use_env.py",
+      "openwebrl/env/eval/evaluators.py",
+      "openwebrl/reward_browser.py"
+    ],
+    "descriptive_overall_difference_pp": {
+      "medium_minus_closest": 12.666666666666666,
+      "high_minus_closest": 10.666666666666666,
+      "medium_minus_earlier_api": 14.0,
+      "high_minus_earlier_api": 12.0
+    },
+    "controlled_causal_selector_gain_claimed": false,
+    "paired_interval_recomputed": false,
+    "limitations": [
+      "October7 controls and October9 selector conditions are not contemporaneous.",
+      "Latest control uses seed45/server4500; earlier API control and Sol61 use seed42/server4200. FlashInfer request seeds are ignored.",
+      "Campaign wrappers and interleaving differ; byte-identical core files do not establish full runtime equivalence.",
+      "Website/judge drift and condition-specific invalid sets remain; no new common-valid comparison."
+    ],
+    "private_inventory_receipt_sha256": "7cfe090704c0150a4abadc78b0d99d354094e3b36f05e9f6ec63b203361e3ee6"
+  },
+  "prepared_controls": {
+    "as_of": "2026-10-09",
+    "status": "preparing_awaiting_exact_allocation_approval",
+    "approved_for_new_allocation": false,
+    "launched": false,
+    "n": 1,
+    "actor": "OpenWebRL/OpenWebRL-4B-SFT",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "conditions": [
+      {
+        "benchmark": "webvoyager",
+        "requested_tasks": 595
+      },
+      {
+        "benchmark": "deepshop",
+        "requested_tasks": 150
+      }
+    ],
+    "protocol": "Preserve Sol61 SFT actor/decoding/local-browser/native-benchmark-judge settings; remove selector.",
+    "existing_local_rl_cohorts_are_matching_sft_controls": false,
+    "excluded_rl_cohorts_reason": "Native89 iteration90 RL weights and .6/.95/k20/4096 actor decoding differ.",
+    "new_results": null,
+    "new_budget_spent": 0
   }
 }
