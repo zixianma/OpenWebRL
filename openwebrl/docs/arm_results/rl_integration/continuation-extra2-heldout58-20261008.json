@@ -1,0 +1,706 @@
+{
+  "accounting": {
+    "extra_all_attempt_seconds": 14238,
+    "extra_approved_seconds": 28800,
+    "extra_counters": {
+      "active_browsers": 0.0,
+      "browser_sessions": 727.0,
+      "browsers:L01": 727.0,
+      "canonical_judge_usd": 2.4066789999999996,
+      "local_sft_generations": 6788.0,
+      "om2w_judge_http_attempts": 303.0
+    },
+    "shared_lifetime_counters": {
+      "active_browsers": 0.0,
+      "browser_sessions": 6923.0,
+      "browsers:L01": 6923.0,
+      "canonical_judge_usd": 11.546954100000015,
+      "local_sft_generations": 40512.0,
+      "luna_selector_requests": 1698.0,
+      "luna_usd": 6.529902499999987,
+      "om2w_judge_http_attempts": 1438.0
+    },
+    "unused_seconds": 14562
+  },
+  "analysis_verified": true,
+  "approved_targets": {
+    "combined_records": 3100,
+    "fresh_records": 1240,
+    "states": 124
+  },
+  "audit_hashes": {
+    "analysis_script": "c236887f593af51076691595270583ab5d56362a879dc28e46538450ce4055ca",
+    "artifact_join": "5de7fdf6c302eaebc5b94e5305e42a79daa13b025a540a7597bf656a820066a4",
+    "heldout_analysis_binding": "8343f06c996c2a5ae9798d3cfc9b01daf7b21db0a997a7411bb38ec6ff223399",
+    "independent_numerical_check": "e497634d9047fcaec7e14aba67ea6c59a2340156e886ebf54e9e0d21face1024",
+    "runtime_accounting_teardown": "43e3e091896f5fe04e860d33b9acda2b398aa4969011a3daa036bdebf1f0c118"
+  },
+  "caveats": [
+    "Conditional on original replayable states and fresh all-ten-context admission;58 states are not a random sample of all124 or a benchmarkpass@1 cohort.",
+    "Fresh browser observations occur later than old draws; temporal website drift and replay-selection effects limit generalization.",
+    "Old3 hindsight and pooled five-draw hindsight are in-sample; fivefoldLOO mixes collection times and is secondary.",
+    "Canonical judge semantic limitations from existing reviews remain; no relabel or rejudge.",
+    "Independent final audits bind all 2,440 available records and terminal accounting. The approved 3,100-record target remains incomplete; the pass is audited partial."
+  ],
+  "counts": {
+    "before_teacher_matched_states": 58,
+    "before_teacher_unavailable_states": 0,
+    "combined_preserved_records": 2440,
+    "finished_attempt_counts": {
+      "all_finished": 727,
+      "released": 580,
+      "unreleased": 147
+    },
+    "fresh_complete_only": {
+      "committed_with_native_released_false": 0,
+      "invalid": 57,
+      "records": 580,
+      "successes": 151,
+      "valid": 523
+    },
+    "fresh_complete_states": 58,
+    "fresh_incomplete_states": 66,
+    "full_five_draw_records58": 1450,
+    "old_all": {
+      "committed_with_native_released_false": 1,
+      "invalid": 150,
+      "records": 1860,
+      "successes": 603,
+      "valid": 1710
+    },
+    "old_matched58": {
+      "committed_with_native_released_false": 1,
+      "invalid": 92,
+      "records": 870,
+      "successes": 211,
+      "valid": 778
+    },
+    "registry_states": 124,
+    "remaining_old_three_records66": 990
+  },
+  "cutoff_epoch": 1791521723.7443955,
+  "depth_counts": {
+    "fresh58": {
+      "1": 16,
+      "10": 3,
+      "11": 3,
+      "12": 1,
+      "14": 3,
+      "15": 1,
+      "2": 14,
+      "3": 6,
+      "4": 1,
+      "5": 3,
+      "6": 2,
+      "7": 4,
+      "8": 1
+    },
+    "old124": {
+      "1": 33,
+      "10": 4,
+      "11": 6,
+      "12": 3,
+      "13": 1,
+      "14": 5,
+      "15": 4,
+      "2": 23,
+      "3": 18,
+      "4": 7,
+      "5": 6,
+      "6": 6,
+      "7": 4,
+      "8": 2,
+      "9": 2
+    }
+  },
+  "endpoint_status": "audited_partial_no_replay_retry",
+  "fresh_native_reward_provenance": {
+    "invalid_native_zero": 57,
+    "judged": 303,
+    "labels_changed": 0,
+    "new_teacher_calls": 0,
+    "valid_native_unjudged_zero": 220
+  },
+  "full_target_verified_complete": false,
+  "matched_old3_separate": {
+    "estimates": {
+      "actor_old3": {
+        "ci95": [
+          0.09770114942528735,
+          0.26436781609195403
+        ],
+        "ci95_percent": [
+          9.770114942528735,
+          26.436781609195403
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "31/3",
+        "percent": 17.816091954022987,
+        "rate": 0.1781609195402299
+      },
+      "hindsight_old3": {
+        "ci95": [
+          0.31034482758620685,
+          0.5229885057471264
+        ],
+        "ci95_percent": [
+          31.034482758620683,
+          52.29885057471264
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "24",
+        "percent": 41.37931034482759,
+        "rate": 0.41379310344827586
+      },
+      "loo_old3": {
+        "ci95": [
+          0.21599377394636018,
+          0.4154334291187738
+        ],
+        "ci95_percent": [
+          21.59937739463602,
+          41.54334291187738
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "3287/180",
+        "percent": 31.484674329501917,
+        "rate": 0.31484674329501916
+      },
+      "uniform_old3": {
+        "ci95": [
+          0.1597701149425287,
+          0.3310344827586207
+        ],
+        "ci95_percent": [
+          15.97701149425287,
+          33.10344827586207
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "211/15",
+        "percent": 24.25287356321839,
+        "rate": 0.2425287356321839
+      }
+    },
+    "paired_differences": {
+      "loo_old3_minus_actor_old3": {
+        "ci95": [
+          0.07289032567049808,
+          0.2065134099616858
+        ],
+        "ci95_percentage_points": [
+          7.289032567049808,
+          20.651340996168578
+        ],
+        "difference": 0.13668582375478927,
+        "percentage_points": 13.668582375478927
+      },
+      "loo_old3_minus_uniform_old3": {
+        "ci95": [
+          0.030842911877394637,
+          0.11887212643678156
+        ],
+        "ci95_percentage_points": [
+          3.084291187739464,
+          11.887212643678156
+        ],
+        "difference": 0.07231800766283525,
+        "percentage_points": 7.231800766283525
+      }
+    },
+    "states": 58,
+    "task_clusters": 58
+  },
+  "method": {
+    "bootstrap_samples": 10000,
+    "bootstrap_seed": 20261007,
+    "interval": "Pointwise percentile95%; no multiplicity adjustment.",
+    "invalids": "All committed invalid outcomes are zero in operational-success estimand, including preserved historical release-read failure with native released=False. Missing fresh outcomes for66 states are excluded, never manufactured. New unreleased failed reconstruction attempts are accounting evidence, not continuation outcomes.",
+    "primary": "For each state choose among maximum old3 success-count actions; evaluate fresh2 only; exact uniform expectation over tied maximizers. Actor is candidate0; uniform is exact mean over5 candidates.",
+    "secondary": "FivefoldLOO selects using four draws and evaluates heldout fifth; exact uniform ties. Hindsight best-of-five-draw action rate is in-sample and optimistic.",
+    "teacher": "Average saved valid before-Luna choices from original-order teacher repeats0,1,2; score only fresh2. Entire three-choice panel required; no calls. Matched subset contrasts share denominator.",
+    "weights": "Equal weight per completed state. Bootstrap resamples whole task-alias clusters with replacement, sums selected state metrics and divides by sampled state count (ratio normalization), retaining all paired outcomes."
+  },
+  "original149_verified_complete": false,
+  "primary_heldout": {
+    "estimates": {
+      "actor_fresh2": {
+        "ci95": [
+          0.1724137931034483,
+          0.3706896551724138
+        ],
+        "ci95_percent": [
+          17.24137931034483,
+          37.06896551724138
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "31/2",
+        "percent": 26.724137931034484,
+        "rate": 0.2672413793103448
+      },
+      "heldout_old3_selected_fresh2": {
+        "ci95": [
+          0.2396551724137931,
+          0.45229885057471264
+        ],
+        "ci95_percent": [
+          23.96551724137931,
+          45.229885057471265
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "601/30",
+        "percent": 34.54022988505747,
+        "rate": 0.3454022988505747
+      },
+      "uniform_fresh2": {
+        "ci95": [
+          0.17758620689655172,
+          0.3482758620689655
+        ],
+        "ci95_percent": [
+          17.75862068965517,
+          34.82758620689655
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "151/10",
+        "percent": 26.03448275862069,
+        "rate": 0.2603448275862069
+      }
+    },
+    "paired_differences": {
+      "heldout_old3_selected_fresh2_minus_actor_fresh2": {
+        "ci95": [
+          -0.0025862068965517206,
+          0.16839080459770117
+        ],
+        "ci95_percentage_points": [
+          -0.25862068965517204,
+          16.839080459770116
+        ],
+        "difference": 0.07816091954022988,
+        "percentage_points": 7.816091954022989
+      },
+      "heldout_old3_selected_fresh2_minus_uniform_fresh2": {
+        "ci95": [
+          0.034475574712643675,
+          0.14367816091954022
+        ],
+        "ci95_percentage_points": [
+          3.4475574712643677,
+          14.367816091954023
+        ],
+        "difference": 0.0850574712643678,
+        "percentage_points": 8.50574712643678
+      }
+    },
+    "states": 58,
+    "task_clusters": 58
+  },
+  "reconstruction_first_failure_state_counts": {
+    "frozen_page_mismatch": 1,
+    "frozen_raster_mismatch": 5,
+    "frozen_visible_snapshot_mismatch": 58,
+    "initial_navigation_60s_timeout": 1,
+    "prefix_capture_page_evaluate_timeout": 1
+  },
+  "reference_all124_old3": {
+    "estimates": {
+      "actor_old3": {
+        "ci95": [
+          0.228494623655914,
+          0.3709677419354839
+        ],
+        "ci95_percent": [
+          22.8494623655914,
+          37.096774193548384
+        ],
+        "denominator_states": 124,
+        "expected_state_success_sum_fraction": "37",
+        "percent": 29.838709677419356,
+        "rate": 0.29838709677419356
+      },
+      "hindsight_old3": {
+        "ci95": [
+          0.42473118279569894,
+          0.575268817204301
+        ],
+        "ci95_percent": [
+          42.473118279569896,
+          57.5268817204301
+        ],
+        "denominator_states": 124,
+        "expected_state_success_sum_fraction": "62",
+        "percent": 50.0,
+        "rate": 0.5
+      },
+      "loo_old3": {
+        "ci95": [
+          0.3106182795698925,
+          0.4531362007168459
+        ],
+        "ci95_percent": [
+          31.06182795698925,
+          45.31362007168459
+        ],
+        "denominator_states": 124,
+        "expected_state_success_sum_fraction": "8509/180",
+        "percent": 38.12275985663082,
+        "rate": 0.3812275985663082
+      },
+      "uniform_old3": {
+        "ci95": [
+          0.26129032258064516,
+          0.3897849462365591
+        ],
+        "ci95_percent": [
+          26.129032258064516,
+          38.97849462365591
+        ],
+        "denominator_states": 124,
+        "expected_state_success_sum_fraction": "201/5",
+        "percent": 32.41935483870968,
+        "rate": 0.3241935483870968
+      }
+    },
+    "paired_differences": {},
+    "states": 124,
+    "task_clusters": 124
+  },
+  "rejected66_old3_descriptive": {
+    "estimates": {
+      "actor_old3": {
+        "ci95": [
+          0.303030303030303,
+          0.51010101010101
+        ],
+        "ci95_percent": [
+          30.303030303030297,
+          51.010101010101
+        ],
+        "denominator_states": 66,
+        "expected_state_success_sum_fraction": "80/3",
+        "percent": 40.4040404040404,
+        "rate": 0.40404040404040403
+      },
+      "hindsight_old3": {
+        "ci95": [
+          0.4747474747474747,
+          0.6767676767676767
+        ],
+        "ci95_percent": [
+          47.47474747474747,
+          67.67676767676767
+        ],
+        "denominator_states": 66,
+        "expected_state_success_sum_fraction": "38",
+        "percent": 57.57575757575758,
+        "rate": 0.5757575757575758
+      },
+      "loo_old3": {
+        "ci95": [
+          0.3388867845117845,
+          0.540580808080808
+        ],
+        "ci95_percent": [
+          33.88867845117845,
+          54.0580808080808
+        ],
+        "denominator_states": 66,
+        "expected_state_success_sum_fraction": "2611/90",
+        "percent": 43.956228956228955,
+        "rate": 0.43956228956228954
+      },
+      "uniform_old3": {
+        "ci95": [
+          0.305050505050505,
+          0.4878787878787879
+        ],
+        "ci95_percent": [
+          30.5050505050505,
+          48.78787878787879
+        ],
+        "denominator_states": 66,
+        "expected_state_success_sum_fraction": "392/15",
+        "percent": 39.5959595959596,
+        "rate": 0.39595959595959596
+      }
+    },
+    "paired_differences": {},
+    "states": 66,
+    "task_clusters": 66
+  },
+  "saved_before_teacher_matched": {
+    "estimates": {
+      "actor_fresh2": {
+        "ci95": [
+          0.1724137931034483,
+          0.3706896551724138
+        ],
+        "ci95_percent": [
+          17.24137931034483,
+          37.06896551724138
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "31/2",
+        "percent": 26.724137931034484,
+        "rate": 0.2672413793103448
+      },
+      "before_teacher_fresh2": {
+        "ci95": [
+          0.20114942528735635,
+          0.4224137931034483
+        ],
+        "ci95_percent": [
+          20.114942528735636,
+          42.241379310344826
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "18",
+        "percent": 31.03448275862069,
+        "rate": 0.3103448275862069
+      },
+      "before_teacher_old3": {
+        "ci95": [
+          0.16666666666666666,
+          0.367816091954023
+        ],
+        "ci95_percent": [
+          16.666666666666664,
+          36.7816091954023
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "46/3",
+        "percent": 26.436781609195403,
+        "rate": 0.26436781609195403
+      },
+      "heldout_old3_selected_fresh2": {
+        "ci95": [
+          0.2396551724137931,
+          0.45229885057471264
+        ],
+        "ci95_percent": [
+          23.96551724137931,
+          45.229885057471265
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "601/30",
+        "percent": 34.54022988505747,
+        "rate": 0.3454022988505747
+      },
+      "uniform_fresh2": {
+        "ci95": [
+          0.17758620689655172,
+          0.3482758620689655
+        ],
+        "ci95_percent": [
+          17.75862068965517,
+          34.82758620689655
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "151/10",
+        "percent": 26.03448275862069,
+        "rate": 0.2603448275862069
+      }
+    },
+    "paired_differences": {
+      "before_teacher_fresh2_minus_actor_fresh2": {
+        "ci95": [
+          -0.014367816091954021,
+          0.10632183908045978
+        ],
+        "ci95_percentage_points": [
+          -1.4367816091954022,
+          10.632183908045977
+        ],
+        "difference": 0.04310344827586208,
+        "percentage_points": 4.310344827586208
+      },
+      "before_teacher_fresh2_minus_uniform_fresh2": {
+        "ci95": [
+          -0.006896551724137933,
+          0.11149425287356322
+        ],
+        "ci95_percentage_points": [
+          -0.6896551724137933,
+          11.149425287356323
+        ],
+        "difference": 0.04999999999999999,
+        "percentage_points": 4.999999999999999
+      },
+      "heldout_old3_selected_fresh2_minus_before_teacher_fresh2": {
+        "ci95": [
+          -0.028448275862068963,
+          0.10804597701149424
+        ],
+        "ci95_percentage_points": [
+          -2.8448275862068964,
+          10.804597701149424
+        ],
+        "difference": 0.03505747126436781,
+        "percentage_points": 3.5057471264367814
+      }
+    },
+    "states": 58,
+    "task_clusters": 58
+  },
+  "schema": "extra2-heldout58-final-analysis-v1",
+  "secondary_five_draw": {
+    "estimates": {
+      "actor_five": {
+        "ci95": [
+          0.13103448275862067,
+          0.30353448275861955
+        ],
+        "ci95_percent": [
+          13.103448275862068,
+          30.353448275861954
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "62/5",
+        "percent": 21.379310344827587,
+        "rate": 0.21379310344827587
+      },
+      "hindsight_five": {
+        "ci95": [
+          0.3103448275862069,
+          0.5172413793103449
+        ],
+        "ci95_percent": [
+          31.03448275862069,
+          51.724137931034484
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "24",
+        "percent": 41.37931034482759,
+        "rate": 0.41379310344827586
+      },
+      "loo_five": {
+        "ci95": [
+          0.23942241379310347,
+          0.4416135057471264
+        ],
+        "ci95_percent": [
+          23.942241379310346,
+          44.161350574712635
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "1969/100",
+        "percent": 33.94827586206897,
+        "rate": 0.33948275862068966
+      },
+      "uniform_five": {
+        "ci95": [
+          0.16758620689655176,
+          0.33655172413793105
+        ],
+        "ci95_percent": [
+          16.758620689655178,
+          33.6551724137931
+        ],
+        "denominator_states": 58,
+        "expected_state_success_sum_fraction": "362/25",
+        "percent": 24.96551724137931,
+        "rate": 0.2496551724137931
+      }
+    },
+    "paired_differences": {
+      "loo_five_minus_actor_five": {
+        "ci95": [
+          0.06298850574712644,
+          0.19752873563218393
+        ],
+        "ci95_percentage_points": [
+          6.298850574712644,
+          19.752873563218394
+        ],
+        "difference": 0.1256896551724138,
+        "percentage_points": 12.568965517241379
+      },
+      "loo_five_minus_uniform_five": {
+        "ci95": [
+          0.04344827586206897,
+          0.14155172413793105
+        ],
+        "ci95_percentage_points": [
+          4.344827586206898,
+          14.155172413793105
+        ],
+        "difference": 0.08982758620689656,
+        "percentage_points": 8.982758620689655
+      }
+    },
+    "states": 58,
+    "task_clusters": 58
+  },
+  "ties": {
+    "five_loo_tied_folds": 187,
+    "five_loo_total_folds": 290,
+    "five_top_multiplicity": {
+      "1": 23,
+      "2": 7,
+      "3": 2,
+      "4": 2,
+      "5": 24
+    },
+    "five_top_tied": 35,
+    "five_unique_best": 23,
+    "old3_all_equal_success_count": {
+      "0": 25,
+      "3": 4
+    },
+    "old3_informative": 29,
+    "old3_top_multiplicity": {
+      "1": 19,
+      "2": 7,
+      "3": 1,
+      "4": 2,
+      "5": 29
+    },
+    "old3_top_tied": 39,
+    "old3_unique_best": 19,
+    "states": 58
+  },
+  "valid_only_sensitivity": {
+    "confidence_intervals": "Not computed for this supplemental descriptive sensitivity.",
+    "estimand": "Supplemental conditional-on-valid outcome estimator, not the operational-success primary. Sum fixed action-weighted successes over both fresh draws and states, divided by sum fixed action-weighted valid outcomes. Equal prior weight per state; no per-state valid-rate renormalization and no reselection on fresh validity.",
+    "methods": {
+      "actor": {
+        "percent": 29.523809523809526,
+        "rate": 0.29523809523809524,
+        "states": 58,
+        "weighted_invalid_outcome_mass_fraction": "11",
+        "weighted_success_mass_fraction": "31",
+        "weighted_total_outcome_mass": 116,
+        "weighted_valid_outcome_mass_fraction": "105"
+      },
+      "before_luna": {
+        "percent": 33.9622641509434,
+        "rate": 0.33962264150943394,
+        "states": 58,
+        "weighted_invalid_outcome_mass_fraction": "10",
+        "weighted_success_mass_fraction": "36",
+        "weighted_total_outcome_mass": 116,
+        "weighted_valid_outcome_mass_fraction": "106"
+      },
+      "old3_selected": {
+        "percent": 37.83443500157381,
+        "rate": 0.37834435001573813,
+        "states": 58,
+        "weighted_invalid_outcome_mass_fraction": "101/10",
+        "weighted_success_mass_fraction": "601/15",
+        "weighted_total_outcome_mass": 116,
+        "weighted_valid_outcome_mass_fraction": "1059/10"
+      },
+      "uniform": {
+        "percent": 28.87189292543021,
+        "rate": 0.2887189292543021,
+        "states": 58,
+        "weighted_invalid_outcome_mass_fraction": "57/5",
+        "weighted_success_mass_fraction": "151/5",
+        "weighted_total_outcome_mass": 116,
+        "weighted_valid_outcome_mass_fraction": "523/5"
+      }
+    },
+    "selection": "Old3 maximizers and saved Luna choices unchanged from primary; exact tie/repeated-teacher weights retained."
+  },
+  "verified_complete": false
+}

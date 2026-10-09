@@ -1,6 +1,6 @@
-# ARM formulations: before versus after execution
+# ARM formulations: outcome-based selection and execution evidence
 
-**Outcome-informed selection reaches 38.12%, versus 29.84% for the actor’s first sample, on 124 replayable states. Immediate execution evidence has not established a gain over the before-execution teacher.** No critic was trained; these are conditional continuation results, not benchmark pass@1.
+**Fresh continuations support outcome-based action selection over uniform selection; its advantage over actor-first or the saved Luna selector remains uncertain.** On the 58 states that passed repeat replay, selecting from the original three draws scores 34.54% on two fresh draws. No selector has been trained; these are conditional continuation results, not benchmark pass@1.
 
 <a id="branching-design"></a>
 
@@ -12,11 +12,71 @@ The original design uses the same five fixed candidate actions at each accepted 
 
 Each green box is a separate SFT continuation after executing its candidate action, with its own prefix replay. Both teachers choose without seeing continuation outcomes; after additionally sees immediate execution evidence. **Before, after and uniform selection are scored from the same 15 outcomes.** Uniform selection requires no separate rollout set. [PNG](arm_results/rl_integration/branching-experiment-design.png).
 
+<a id="branch-extra2-heldout58-20261008"></a>
+
+## Does selection from old outcomes improve fresh continuations?
+
+**The fixed extra-two pass ended with an audited partial result:** 58 of 124 states passed strict replay, adding 580 outcomes. All 1,860 original records are unchanged, giving **2,440 saved outcome records**. The remaining 66 states failed reconstruction; their 660 missing continuations are not counted as zero. The approved 3,100-record target and original 149-state target remain incomplete.
+
+Each row below uses the **same 58 states from 58 task groups, with 580 fresh records and two draws per candidate**. The outcome-based choice uses only the three original draws. Tied best actions receive their exact uniform expected score. Luna’s score averages the fresh outcomes of its three saved before-execution choices; no new teacher calls were made. Committed invalid outcomes count as zero.
+
+| Root-action choice | States | Continuation success | 95% task-bootstrap interval |
+| --- | ---: | ---: | --- |
+| Actor’s first candidate | 58 | 26.72% | [17.24%, 37.07%] |
+| Uniform over five candidates | 58 | 26.03% | [17.76%, 34.83%] |
+| Saved Luna before execution | 58 | 31.03% | [20.11%, 42.24%] |
+| Select on original three; score fresh two | 58 | 34.54% | [23.97%, 45.23%] |
+
+The outcome-based choice gains **+8.51 percentage points over uniform [3.45, 14.37]**. Its gains over actor-first, **+7.82 points [−0.26, 16.84]**, and Luna, **+3.51 points [−2.84, 10.80]**, remain unresolved. These exploratory, pointwise intervals support a useful continuation-outcome signal; they do not establish a trained selector’s performance or superiority to teacher-label training. [Aggregate estimates and audit hashes](arm_results/rl_integration/continuation-extra2-heldout58-20261008.json).
+
+**Replay selection materially changes the cohort.** Using only original draws, actor-first scored 17.82% on these 58 states versus 40.40% on the 66 that later failed reconstruction. Consequently, comparing fresh 34.54% directly with the earlier 124-state LOO result of 38.12% would confound cohort composition, draw count and collection time. The accepted states span candidate decisions 1–3/4–9/10–15 with 36/11/11 states respectively. Frozen observable-state checks do not guarantee identical hidden state or eliminate website drift.
+
+<details>
+<summary>Five-draw sensitivity, ties, uncertainty and judge limitations</summary>
+
+These secondary rows pool old and fresh draws on the same 58 states, yielding 1,450 outcome records. Five-fold LOO selects with four draws and scores the fifth, averaging all overlapping folds. It mixes collection times; the temporally separated old-three/fresh-two comparison above remains primary.
+
+| Root-action choice | States | Pooled continuation success | 95% task-bootstrap interval |
+| --- | ---: | ---: | --- |
+| Actor’s first candidate | 58 | 21.38% | [13.10%, 30.35%] |
+| Uniform candidate | 58 | 24.97% | [16.76%, 33.66%] |
+| Select on four; score held-out fifth | 58 | 33.95% | [23.94%, 44.16%] |
+| Same-data five-draw hindsight oracle | 58 | 41.38% | [31.03%, 51.72%] |
+
+The hindsight row chooses and scores on the same outcomes and is optimistic. Original-three selection ties at the top in 39/58 states; 29/58 give every candidate equal success counts, including 25 all-zero panels. Five-draw hindsight still ties in 35/58 states. Five-fold training maxima tie in 187/290 folds. Ties and duplicate candidates are retained.
+
+Every state has equal weight. Ten thousand bootstrap draws, seed 20261007, resample whole task groups with all their states and normalize by sampled state count. The 58 groups each contain one state here. Intervals are pointwise, exploratory and unadjusted for multiple comparisons. Exact tie expectations avoid choosing winners from held-out outcomes. Valid-only sensitivity, with its own weighted denominators, is included in the aggregate.
+
+The official SFT actor and decoding remain temperature 1.0, top-p 0.95, top-k off and 4,096 response tokens, with the original 30-action budget including replayed prefixes. Canonical o4-mini/AgentTrek labels remain unchanged. Of the 580 fresh records, 523 are valid and 57 invalid; 303 received a judge call and 220 valid records retain native unjudged zero outcomes. Qualitative checks found positives that conflate website statistics or accept a different language edition. These scores measure the frozen judge’s operational reward, not independently established factual or instruction-complete success. Source and identity checks support seed assignment; an independently echoed request seed was unavailable.
+
+</details>
+
+<details>
+<summary>Partial collection, reconstruction failures and final accounting</summary>
+
+| Coverage | States | Saved outcome records |
+| --- | ---: | ---: |
+| Full five draws per action | 58 | 1,450 |
+| Original three only | 66 | 990 |
+| Preserved combined data | 124 | 2,440 |
+| Approved combined target | 124 | 3,100 |
+
+All 124 states were processed once under the frozen reconstruction rule. The first failures on 66 rejected states were 58 visible-snapshot mismatches, five raster mismatches, one page mismatch, one prefix-capture timeout and one initial-navigation timeout. Their 147 unreleased attempt receipts and 513 untouched queue slots remain evidence of missing continuations. They are not added to the outcome dataset. One historical post-commit release-read invalid remains among the original records as previously audited; no candidate execution is invented.
+
+The sole extra-two allocation consumed 14,238 of 28,800 approved seconds on four H200s / 32 CPUs / 480 GiB; 14,562 seconds remain unused and are not transferred. All 727 attempts are charged. Extra-two used 727 browser starts, 6,788 SFT calls and 303 judge calls / $2.406679, with no teacher calls. Combined with prior charges, the shared ledger contains 6,923/9,000 browser starts, 40,512/110,000 SFT calls, 1,438/6,600 judge calls / $11.5469541 of $25, and 1,698/2,200 Luna calls / $6.5299025 of $15.
+
+Scheduler and W&B finished. Independent audits reconciled artifacts, all-attempt accounting, the original-record hashes and controller-owned actor/browser teardown. Post-allocation SSH was unavailable, so teardown does not claim an independent physical node scan. The pass is closed as audited partial, with full-target completion false. The frozen rule forbids replacement or outcome-based replay after reconstruction rejection; no automatic rerun or relaxed replay was used. The separately approved 32-state pilot remains a separate experiment and budget.
+
+</details>
+
+<details>
+<summary>Original three-draw results: 124 states and the matched teacher comparison</summary>
+
 ## Does execution improve action selection?
 
 <a id="arm-continuation-branches-results-20261007"></a>
 
-**Collection stopped short of its target:** all 2,090 fixed candidate tasks were considered, yielding **124 of 149 states** under unchanged replay checks and depth quotas. At the October 8, 17:58 UTC audit cutoff, these states have all five actions × three continuations: **1,860 outcomes**, including 1,710 valid and 150 invalid outcomes. Invalids remain zero. The 149-state target remains incomplete. A separately approved extension is queued to add two fresh continuations per action on these same 124 states; no extra-draw outcomes are included below.
+**Collection stopped short of its target:** all 2,090 fixed candidate tasks were considered, yielding **124 of 149 states** under unchanged replay checks and depth quotas. At the October 8, 17:58 UTC audit cutoff, these states have all five actions × three continuations: **1,860 outcomes**, including 1,710 valid and 150 invalid outcomes. Invalids remain zero. The 149-state target remains incomplete. The later extra-two campaign is reported above; none of its outcomes enter these original-three-draw estimates.
 
 ### Can observed continuation outcomes improve the root-action choice?
 
@@ -120,7 +180,9 @@ Teacher: unchanged index-only Luna-high, three before judgments and three after 
 
 Every state contributes equally. Ten thousand bootstrap draws resample whole states, retaining candidates, repetitions and overlapping folds. Main tables use the LOO aggregation seed; repeat controls use their original seed. Intervals are exploratory and not adjusted for multiple comparisons. Saved outcome/teacher fingerprints and independent exact LOO calculations agree. Task-level artifacts remain private.
 
-The approved cohort amendment freezes these 124 states and all 1,860 original outcomes. The released extension queues 1,240 new continuations (two per existing action), for 3,100 outcomes in total. Its primary comparison selects using the original three draws and scores the fresh two; five-fold LOO is secondary. No candidates or teachers are regenerated. The extension uses its existing four-H200, eight-hour total allowance, including retries, and the remaining shared browser/API caps; no primary unused time or additional budget is transferred. The original 149-state target remains unmet even if this 124-state extension completes. The candidate pool was exhausted without relaxing quotas, replay checks or scientific settings. [Collection protocol and history](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
+The cohort amendment froze these 124 states and all 1,860 original outcomes. The extra-two pass subsequently preserved these records and added 580 outcomes on 58 states; its full 1,240-new-outcome target remains incomplete. No candidates or teachers were regenerated. The original 149-state target remains unmet. The candidate pool was exhausted without relaxing quotas, replay checks or scientific settings. [Collection protocol and history](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
+
+</details>
 
 </details>
 
@@ -128,7 +190,7 @@ The approved cohort amendment freezes these 124 states and all 1,860 original ou
 
 ## Can a trained selector generalize beyond the branching states?
 
-**The approved 32-state collection pilot is released and queued for resources; GPU startup and collection are not yet verified.** The larger goal is outcome-based selector adaptation with eight continuations per new candidate and separate seen-task/new-state and unseen-task validation. The current LOO result motivates this test; it does not establish that a learned selector will reproduce the gain. No selector has been trained in this study.
+**The approved 32-state collection pilot is running, with startup and initial collections verified; the full pilot endpoint remains incomplete.** The larger goal is outcome-based selector adaptation with eight continuations per new candidate and separate seen-task/new-state and unseen-task validation. The held-out continuation results motivate this test; they do not establish that a learned selector will reproduce the gain. No selector has been trained in this study.
 
 | Dataset role | Total target states | Retained existing states | New state target | New continuation target |
 | --- | ---: | ---: | ---: | ---: |
@@ -136,7 +198,7 @@ The approved cohort amendment freezes these 124 states and all 1,860 original ou
 | Seen-task validation | 250 | 0 | 250 | 10,000 |
 | Unseen-task validation | 250 | 0 | 250 | 10,000 |
 
-New states use five candidates × eight draws. Existing 124 states remain training eligible with their actual observations: 1,860 original outcomes, or 3,100 after the separately approved extra-two campaign completes. Thus the full aspirational design requires 55,040 new outcomes and 56,900 or 58,140 combined outcomes; it does not require topping up historical states to eight draws. Full collection and selector-fitting allocations remain unapproved.
+New states use five candidates × eight draws. Existing 124 states remain training eligible with their actual observations: 2,440 audited records, comprising five draws per action on 58 states and three on 66 states. Thus the full aspirational design requires 55,040 new outcomes and 57,480 combined outcomes; it does not require topping up historical states to eight draws. Full collection and selector-fitting allocations remain unapproved.
 
 Task and state assignments are fixed before new outcomes. All candidates, draws and retries from one state stay together. Seen-task validation requires independently seeded discovery trajectories, distinct pre-action task/screenshot/history inputs, and an accepted training state from the same task. A different candidate panel alone does not create a new state. Previously collected task groups cannot enter unseen-task validation or test, but genuinely new states from those tasks may enter seen-task validation. Additional task groups remain locked for final testing. “Unseen” means unseen by this selector fit, not proven absent from backbone pretraining.
 
@@ -151,7 +213,7 @@ The full draft groups 2,090 task identities and defines three decision slots per
 
 Exact task/normalized-goal comparison found no overlap with protected OM2W, WebVoyager, DeepShop or WebGym test cohorts. This does not establish semantic decontamination. Earlier selector dev/future/retention and joint-validation splits overlap 366 task groups, including 25 old states. Those historical splits are study-specific and remain untouched: retaining these examples is allowed for this new fit, but reused historical cohorts cannot support independent evaluation claims for it.
 
-The recent later-state collection produced 38 accepted states from 1,173 discoveries in 39,868 seconds on four H200s, consuming 2,695 browser starts with three draws per action. Eight draws require all 40 isolated replay contexts to pass the unchanged readiness gate before candidate dispatch. This profile needs actual startup validation. The existing pool cannot guarantee the full state target; source expansion or more prespecified slots will be budgeted from measured pilot yield.
+The recent later-state collection produced 38 accepted states from 1,173 discoveries in 39,868 seconds on four H200s, consuming 2,695 browser starts with three draws per action. Eight draws require all 40 isolated replay contexts to pass the unchanged readiness gate before candidate dispatch. Pilot startup and initial replay groups have been validated; the complete 32-state endpoint still requires audit. The existing pool cannot guarantee the full state target; source expansion or more prespecified slots will be budgeted from measured pilot yield.
 
 **Approved pilot only:** four H200s, up to 40 CPUs, 480 GiB and 43,200 seconds total including startup, tests and retries. The scheduler requires at most eight CPUs per GPU, so the deployed request uses 32 CPUs. Caps: 5,000 browser-start attempts / 40 concurrent browsers, 100,000 local SFT call attempts, 2,000 canonical judge HTTP attempts / $25, no teacher calls. Stop at 32 newly accepted states / 1,280 new continuations, 1,200 opportunities, or the first binding cap. Diagnose zero acceptance among the first 24 resolved replay groups. Preserve every attempt and reserve time for cleanup. Scheduler admission, GPU startup and scientific completion are separate milestones.
 
