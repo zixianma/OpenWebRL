@@ -656,8 +656,8 @@
   },
   "prepared_controls": {
     "as_of": "2026-10-09",
-    "status": "preparing_awaiting_exact_allocation_approval",
-    "approved_for_new_allocation": false,
+    "status": "submitted_pending_live_startup",
+    "approved_for_new_allocation": true,
     "launched": false,
     "n": 1,
     "actor": "OpenWebRL/OpenWebRL-4B-SFT",
@@ -665,17 +665,80 @@
     "conditions": [
       {
         "benchmark": "webvoyager",
-        "requested_tasks": 595
+        "requested_tasks": 595,
+        "job_id": "353195",
+        "status": "queued",
+        "resources": {
+          "gpus": 1,
+          "gpu_type": "H200",
+          "cpus": 8,
+          "memory_gib": 120,
+          "total_seconds": 21600
+        },
+        "limits": {
+          "selectors": {},
+          "judges": {
+            "actor0": {
+              "usd": 30.0,
+              "calls": 2620
+            }
+          },
+          "browser": {
+            "total": 655,
+            "by_mode": {
+              "actor0": 655
+            }
+          },
+          "browser_concurrency_per_job": 8
+        }
       },
       {
         "benchmark": "deepshop",
-        "requested_tasks": 150
+        "requested_tasks": 150,
+        "job_id": "353196",
+        "status": "queued",
+        "resources": {
+          "gpus": 1,
+          "gpu_type": "H200",
+          "cpus": 8,
+          "memory_gib": 120,
+          "total_seconds": 10800
+        },
+        "limits": {
+          "selectors": {},
+          "judges": {
+            "actor0": {
+              "usd": 10.0,
+              "calls": 660
+            }
+          },
+          "browser": {
+            "total": 165,
+            "by_mode": {
+              "actor0": 165
+            }
+          },
+          "browser_concurrency_per_job": 8
+        }
       }
     ],
     "protocol": "Preserve Sol61 SFT actor/decoding/local-browser/native-benchmark-judge settings; remove selector.",
     "existing_local_rl_cohorts_are_matching_sft_controls": false,
     "excluded_rl_cohorts_reason": "Native89 iteration90 RL weights and .6/.95/k20/4096 actor decoding differ.",
     "new_results": null,
-    "new_budget_spent": 0
+    "new_budget_spent": 0,
+    "submitted": true,
+    "live_startup_verified": false,
+    "approved_totals": {
+      "gpu_hours_all_attempts": 9,
+      "judge_usd": 40,
+      "browser_attempts": 820,
+      "judge_http_calls": 3280,
+      "max_concurrent_browsers": 16
+    },
+    "cpu_tests_passed": 12,
+    "independent_preparation_review_passed": true,
+    "supervisor_active": true,
+    "status_epoch": 1791589248.9734604
   }
 }

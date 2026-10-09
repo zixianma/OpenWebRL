@@ -168,15 +168,17 @@ Overall includes invalid records as zero; valid-only excludes each condition's i
 
 <a id="sol61-actor-controls-20261009"></a>
 
-**Matching SFT N=1 controls are still missing for WebVoyager and DeepShop.** The existing local actor-only cohorts use RL iteration-90 weights and different decoding; they are not controls for this SFT-proposal study. Fresh official-SFT controls are being prepared with the Sol61 actor, local browser and native benchmark judge protocol, with the selector removed.
+**Matching SFT N=1 controls are still missing for WebVoyager and DeepShop.** The existing local actor-only cohorts use RL iteration-90 weights and different decoding; they are not controls for this SFT-proposal study. Fresh official-SFT controls are submitted with the Sol61 actor, local browser and native benchmark judge protocol, with the selector removed. Startup and results remain unverified.
 
-| Prepared control | N | Requested tasks | Status |
+| Submitted control | N | Requested tasks | Status |
 | --- | ---: | ---: | --- |
-| Official SFT alone, WebVoyager | 1 | 595 | Awaiting exact allocation approval; not launched |
-| Official SFT alone, DeepShop | 1 | 150 | Awaiting exact allocation approval; not launched |
+| Official SFT alone, WebVoyager | 1 | 595 | Job 353195 submitted; results pending |
+| Official SFT alone, DeepShop | 1 | 150 | Job 353196 submitted; results pending |
 
 <details>
-<summary>Historical-control match and remaining comparability gaps</summary>
+<summary>Control matching, approved budgets and remaining comparability gaps</summary>
+
+The independently reviewed controls each have one H200, eight CPUs, 120 GiB RAM and eight local browsers. All-attempt limits are six hours plus $30 in native GPT-4o judging for WebVoyager, and three hours plus $10 for DeepShop. These separate budgets include recovery; no selector or teacher calls are allowed.
 
 Both OM2W controls use the same 300-task file, official SFT revision, pinned actor-policy hash, local browsers, T=0.7/top-p=0.9/native default top-k, 1,024 actor tokens, 30 turns, full text history/latest screenshot and canonical o4-mini/AgentTrek judge as Sol61. The shared actor, browser, reward and native evaluator source files are byte-identical. The October 7 seed-45 control is the latest completed matching control located; the earlier API-study control also matches Sol61's seed-42/server-4200 settings.
 
