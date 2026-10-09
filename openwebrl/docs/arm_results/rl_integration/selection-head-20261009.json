@@ -271,5 +271,55 @@
     }
    }
   }
+ },
+ "independent_teacher_agreement": {
+  "teacher": "Luna before execution (index-only), 4 valid judgments per panel",
+  "states": 124,
+  "equivalence": "identical calls, clicks within 5 normalized units",
+  "luna_vs_luna": 0.802,
+  "piotr_arm": [
+   0.732,
+   [
+    0.663,
+    0.796
+   ]
+  ],
+  "head_pointwise": [
+   0.617,
+   [
+    0.542,
+    0.692
+   ]
+  ],
+  "head_listwise": [
+   0.607,
+   [
+    0.53,
+    0.681
+   ]
+  ],
+  "actor_first": [
+   0.562,
+   [
+    0.484,
+    0.639
+   ]
+  ],
+  "uniform": 0.469,
+  "head_pointwise_minus_piotr_pp": [
+   -11.5,
+   [
+    -18.5,
+    -4.6
+   ]
+  ],
+  "head_listwise_minus_piotr_pp": [
+   -12.5,
+   [
+    -20.0,
+    -5.4
+   ]
+  ],
+  "bootstrap": "20,000 state draws, seed 0"
  }
 }

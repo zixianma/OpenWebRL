@@ -296,7 +296,18 @@ The [97-state](arm_results/rl_integration/continuation-fixed97-20261008.json) an
 
 ## Can the actor's own features select actions? Shared selection head — October 9
 
-**Heads trained on frozen SFT-actor hidden states match the GPT-5.5 teacher on 65.5% of held-out-task panels, but they do not choose better actions than the released Piotr SelectionARM.** On the 124 fixed branch panels, the one-candidate-at-a-time head picks actions with 34.68% continuation success, the joint-comparison head 33.60%, and Piotr ARM 35.75%. Neither head is distinguishable from Piotr ARM or from uniform choice. Joint comparison did not beat scoring candidates one at a time. Scores average each chosen action's three SFT continuations, with invalid outcomes counted as zero. Paired intervals use 20,000 state-bootstrap draws; each state is a distinct task.
+**Heads trained on frozen SFT-actor hidden states are weaker selectors than the released Piotr SelectionARM.** On the 124 fixed branch panels, they are scored against an independent teacher that neither was trained on: Luna before execution, four judgments per panel. Piotr ARM matches those choices on 73.2% of judgments; the heads match on 61.7% (one candidate at a time) and 60.7% (joint comparison). The heads are 11.5 and 12.5 points lower. Chosen-action continuation success points the same way, but its intervals cannot separate the selectors: 34.68% and 33.60% for the heads versus 35.75% for Piotr ARM. Joint comparison did not beat scoring candidates one at a time. Scores average each chosen action's three SFT continuations, with invalid outcomes counted as zero. Paired intervals use 20,000 state-bootstrap draws; each state is a distinct task.
+
+| Agreement with Luna before execution, 124 branch panels | Agreement [95%] | − Piotr ARM, pp [95%] |
+| --- | --- | --- |
+| Luna judgment versus another Luna judgment (ceiling reference) | 80.2% | — |
+| Piotr SelectionARM | 73.2% [66.3, 79.6] | — |
+| Head, one candidate at a time | 61.7% [54.2, 69.2] | −11.5 [−18.5, −4.6] |
+| Head, joint comparison | 60.7% [53.0, 68.1] | −12.5 [−20.0, −5.4] |
+| Actor first sample | 56.2% [48.4, 63.9] | — |
+| Uniform candidate | 46.9% | — |
+
+Agreement averages, per panel, the share of Luna's four judgments that pick an action-equivalent candidate. Neither selector was trained on Luna labels or on these states; Piotr ARM and the heads were both trained on GPT-5.5 choices.
 
 | Selector, 124 branch panels | Continuation success | − Uniform, pp [95%] | − Actor first, pp [95%] | − Piotr ARM, pp [95%] |
 | --- | ---: | --- | --- | --- |
@@ -308,7 +319,7 @@ The [97-state](arm_results/rl_integration/continuation-fixed97-20261008.json) an
 
 Joint minus one-at-a-time: −1.08 pp [−3.23, +0.81]. The heads choose the same action as Piotr ARM on 72/124 (joint) and 78/124 (one at a time) panels. Results on the 114 prompt-verified states, and on the 105 whose tasks are absent from Piotr's release, lead to the same conclusions. Luna before execution scores 35.11% on a 119-state subset ([above](#arm-continuation-branches-results-20261007)). These are conditional continuation results, not benchmark pass@1.
 
-**Teacher agreement shows the gap.** Both heads reach the same held-out agreement, well above the baselines, yet that does not carry over to continuation success. The heads also overfit: the one-at-a-time head reaches 90.0% agreement on training panels.
+**GPT-5.5 teacher agreement on held-out task groups.** Both heads reach about 65.5%, well above the simple baselines, and overfit the training panels (79–90%). Piotr ARM is not scored here: it was trained on this release with a draw-level split, so these held-out tasks were very likely in its training data.
 
 | Teacher agreement, held-out task groups | All 3,759 panels | 3,265 non-identical panels | Best epoch / 20 |
 | --- | ---: | ---: | ---: |
