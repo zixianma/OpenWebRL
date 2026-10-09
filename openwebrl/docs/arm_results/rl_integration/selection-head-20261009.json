@@ -1,0 +1,119 @@
+{
+ "section": "ARM_FORMULATIONS.md#selection-head-20261009",
+ "estimand": "mean continuation success of the chosen root action; 3 SFT continuations per action; invalid = 0",
+ "bootstrap": {
+  "unit": "state (one state per task here)",
+  "draws": 20000,
+  "seed": 0,
+  "interval": "95% percentile"
+ },
+ "piotr_selection_arm": {
+  "model": "PTeterwak/OpenWebRL-4B-SelectionARM@81b452d800d9f859687074f82680dd5257e02d89",
+  "decoding": "canonical no-CoT JSON schema via scripts/serve_arm.py, run offline",
+  "unparseable": 0,
+  "candidate0_picks": 62,
+  "panels": 124
+ },
+ "subsets": {
+  "all": {
+   "states": 124,
+   "piotr_arm": 0.3575,
+   "actor_first": 0.2984,
+   "uniform": 0.3242,
+   "hindsight_oracle": 0.5,
+   "arm_minus_uniform": 0.0333,
+   "arm_minus_uniform_ci": [
+    0.0011,
+    0.0672
+   ],
+   "arm_minus_first": 0.0591,
+   "arm_minus_first_ci": [
+    0.0188,
+    0.1022
+   ]
+  },
+  "prompt_verified": {
+   "states": 114,
+   "piotr_arm": 0.3596,
+   "actor_first": 0.307,
+   "uniform": 0.3304,
+   "hindsight_oracle": 0.5088,
+   "arm_minus_uniform": 0.0292,
+   "arm_minus_uniform_ci": [
+    -0.0053,
+    0.0661
+   ],
+   "arm_minus_first": 0.0526,
+   "arm_minus_first_ci": [
+    0.0117,
+    0.0994
+   ]
+  },
+  "verified_no_piotr_task": {
+   "states": 105,
+   "piotr_arm": 0.3683,
+   "actor_first": 0.3111,
+   "uniform": 0.3333,
+   "hindsight_oracle": 0.5016,
+   "arm_minus_uniform": 0.0349,
+   "arm_minus_uniform_ci": [
+    0.0025,
+    0.0692
+   ],
+   "arm_minus_first": 0.0571,
+   "arm_minus_first_ci": [
+    0.0127,
+    0.1048
+   ]
+  }
+ },
+ "prompt_reconstruction": {
+  "states": 124,
+  "hash_verified": 114,
+  "replay_feedback_unverified": 10,
+  "verified_token_count_matches_server": "114/114",
+  "unverified_token_differences": "-23 to +9"
+ },
+ "teacher_panels": {
+  "source": "PTeterwak/action-reward-models-data@0d83b48c1659cac47a1044ef88fb573d3c16e180",
+  "split": "joint-data v2 task groups",
+  "train_panels": 35916,
+  "validation_panels": 3759,
+  "base_states": 2982,
+  "excluded_draw_records": {
+   "conflicting_draw_ids": 300,
+   "joint_v2_quarantine": 80,
+   "missing_teacher_selection": 61,
+   "not_in_split": 32
+  },
+  "validation_teacher_agreement_baselines": {
+   "uniform": 0.447,
+   "first_candidate": 0.445,
+   "plurality": 0.501
+  },
+  "validation_informative_baselines": {
+   "panels": 3265,
+   "uniform": 0.363,
+   "first_candidate": 0.361,
+   "plurality": 0.426
+  }
+ },
+ "feature_extraction_check": {
+  "cached_batched_vs_full_forward_relative_l2": [
+   0.0143,
+   0.0148
+  ],
+  "threshold": 0.02,
+  "dtype": "bf16"
+ },
+ "job": {
+  "id": 351647,
+  "resources": "gpu-h200, 1 H200, 8 CPU, 120 GiB, 3 h",
+  "estimated_usd": 2.7,
+  "status_at_writing": "running: training-panel feature extraction"
+ },
+ "code": {
+  "branch": "arm-selection-head",
+  "commit": "87a204b"
+ }
+}

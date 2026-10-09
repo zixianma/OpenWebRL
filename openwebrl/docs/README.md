@@ -45,6 +45,8 @@ for the work you are doing, then follow its contents to dated experiment records
 
 [Branching: next-screenshot critic comparison and pre-action distillation](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [approved extension to 32 continuations per fixed action](ARM_FORMULATIONS.md#branch-extra24-20261008).
 
+[Piotr SelectionARM on the 124 branch panels: 35.75% chosen-action continuation success, +3.33 pp over uniform; shared actor–selector head in training](ARM_FORMULATIONS.md#selection-head-20261009).
+
 [Fresh branch continuations: old-three selection 34.54% versus uniform 26.03%; actor/teacher gains uncertain; 58 of 124 states reconstructed, 2,440 preserved records](ARM_FORMULATIONS.md#branch-extra2-heldout58-20261008).
 
 [Luna-high independent 200-task teacher diagnostic completed: 32/200 labels change; 100-task repeat controls, evidence review and plots](ARM_RESULTS.md#arm-teacher-evidence-primary200-20261006).
