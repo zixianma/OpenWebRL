@@ -1,0 +1,690 @@
+{
+  "input": {
+    "states": 32,
+    "tasks": 29,
+    "actual_records": 3480,
+    "valid_records": 2644,
+    "excluded_invalid_records": 836,
+    "successes": 1173,
+    "valid_failures": 1471,
+    "complete_160_record_states": 18,
+    "split_states": {
+      "train": 23,
+      "validation_unseen_task": 5,
+      "validation_seen_task": 4
+    }
+  },
+  "requested_extra_records": 3840,
+  "observed_extra_records": 2200,
+  "preserved_original_records": 1280,
+  "combined_target_records": 5120,
+  "shared_holdout_draws": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "coverage_on_common_panel": {
+    "fit8": {
+      "actual_records": 560,
+      "valid_records": 483,
+      "excluded_invalid_records": 77,
+      "successes": 221
+    },
+    "fit24": {
+      "actual_records": 1680,
+      "valid_records": 1452,
+      "excluded_invalid_records": 228,
+      "successes": 662
+    },
+    "holdout8": {
+      "actual_records": 560,
+      "valid_records": 480,
+      "excluded_invalid_records": 80,
+      "successes": 228
+    }
+  },
+  "ties_on_common_panel": {
+    "fit8": 5,
+    "fit24": 6
+  },
+  "common_panel": {
+    "states": 14,
+    "tasks": 11,
+    "weighting": "equal state; paired differences use these same states",
+    "heldout_means": {
+      "select8": {
+        "numerator": 122,
+        "denominator": 245,
+        "value": 0.49795918367346936
+      },
+      "select24": {
+        "numerator": 209,
+        "denominator": 392,
+        "value": 0.5331632653061225
+      },
+      "actor_candidate0": {
+        "numerator": 179,
+        "denominator": 392,
+        "value": 0.45663265306122447
+      },
+      "uniform_fixed5": {
+        "numerator": 5639,
+        "denominator": 11760,
+        "value": 0.4795068027210884
+      }
+    },
+    "paired_differences": {
+      "select24_minus_select8": {
+        "numerator": 69,
+        "denominator": 1960,
+        "value": 0.03520408163265306
+      },
+      "select24_minus_actor_candidate0": {
+        "numerator": 15,
+        "denominator": 196,
+        "value": 0.07653061224489796
+      },
+      "select24_minus_uniform_fixed5": {
+        "numerator": 631,
+        "denominator": 11760,
+        "value": 0.053656462585034016
+      },
+      "select8_minus_actor_candidate0": {
+        "numerator": 81,
+        "denominator": 1960,
+        "value": 0.0413265306122449
+      },
+      "select8_minus_uniform_fixed5": {
+        "numerator": 31,
+        "denominator": 1680,
+        "value": 0.018452380952380953
+      }
+    },
+    "uncertainty": {
+      "unit": "whole canonical task/alias group",
+      "paired": true,
+      "replicates": 10000,
+      "seed": 20261008,
+      "rng": "Python random.Random (Mersenne Twister)",
+      "confidence_level": 0.95,
+      "interval_method": "pointwise percentile with linear interpolation; no multiplicity adjustment",
+      "task_clusters": 11,
+      "state_count": 14,
+      "cluster_state_counts": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
+        1,
+        1,
+        1
+      ],
+      "weighting": "sum sampled task state-score totals divided by sampled state count; not equal-task means",
+      "cohort_fixed_before_resampling": true,
+      "fit_and_tie_weights_reselected_in_bootstrap": false,
+      "heldout_mean_ci95": {
+        "select8": {
+          "lower": 0.2727272727272727,
+          "upper": 0.7169674744897959
+        },
+        "select24": {
+          "lower": 0.3125,
+          "upper": 0.7366145833333332
+        },
+        "actor_candidate0": {
+          "lower": 0.2614795918367347,
+          "upper": 0.65625
+        },
+        "uniform_fixed5": {
+          "lower": 0.27115384615384613,
+          "upper": 0.6827005494505494
+        }
+      },
+      "paired_difference_ci95": {
+        "select24_minus_select8": {
+          "lower": -0.0011904761904761904,
+          "upper": 0.07352941176470588
+        },
+        "select24_minus_actor_candidate0": {
+          "lower": -0.05654761904761905,
+          "upper": 0.1607142857142857
+        },
+        "select24_minus_uniform_fixed5": {
+          "lower": -0.021212121212121213,
+          "upper": 0.11301587301587301
+        },
+        "select8_minus_actor_candidate0": {
+          "lower": -0.0721938775510204,
+          "upper": 0.11643080357142853
+        },
+        "select8_minus_uniform_fixed5": {
+          "lower": -0.04911210317460317,
+          "upper": 0.08241758241758242
+        }
+      },
+      "unavailable_reason": null,
+      "undefined_statistics": []
+    },
+    "optimistic_all32_same_data_max_mean": {
+      "numerator": 62694323,
+      "denominator": 110756800,
+      "value": 0.5660539398032446
+    }
+  },
+  "by_split": {
+    "train": {
+      "states": 10,
+      "tasks": 10,
+      "weighting": "equal state; paired differences use these same states",
+      "heldout_means": {
+        "select8": {
+          "numerator": 1287,
+          "denominator": 2800,
+          "value": 0.45964285714285713
+        },
+        "select24": {
+          "numerator": 139,
+          "denominator": 280,
+          "value": 0.49642857142857144
+        },
+        "actor_candidate0": {
+          "numerator": 267,
+          "denominator": 560,
+          "value": 0.4767857142857143
+        },
+        "uniform_fixed5": {
+          "numerator": 253,
+          "denominator": 525,
+          "value": 0.4819047619047619
+        }
+      },
+      "paired_differences": {
+        "select24_minus_select8": {
+          "numerator": 103,
+          "denominator": 2800,
+          "value": 0.03678571428571428
+        },
+        "select24_minus_actor_candidate0": {
+          "numerator": 11,
+          "denominator": 560,
+          "value": 0.019642857142857142
+        },
+        "select24_minus_uniform_fixed5": {
+          "numerator": 61,
+          "denominator": 4200,
+          "value": 0.014523809523809524
+        },
+        "select8_minus_actor_candidate0": {
+          "numerator": -3,
+          "denominator": 175,
+          "value": -0.017142857142857144
+        },
+        "select8_minus_uniform_fixed5": {
+          "numerator": -187,
+          "denominator": 8400,
+          "value": -0.02226190476190476
+        }
+      },
+      "uncertainty": {
+        "unit": "whole canonical task/alias group",
+        "paired": true,
+        "replicates": 10000,
+        "seed": 20261008,
+        "rng": "Python random.Random (Mersenne Twister)",
+        "confidence_level": 0.95,
+        "interval_method": "pointwise percentile with linear interpolation; no multiplicity adjustment",
+        "task_clusters": 10,
+        "state_count": 10,
+        "cluster_state_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "weighting": "sum sampled task state-score totals divided by sampled state count; not equal-task means",
+        "cohort_fixed_before_resampling": true,
+        "fit_and_tie_weights_reselected_in_bootstrap": false,
+        "heldout_mean_ci95": {
+          "select8": {
+            "lower": 0.1875,
+            "upper": 0.7471428571428571
+          },
+          "select24": {
+            "lower": 0.24642857142857144,
+            "upper": 0.75
+          },
+          "actor_candidate0": {
+            "lower": 0.225,
+            "upper": 0.7428571428571429
+          },
+          "uniform_fixed5": {
+            "lower": 0.2283214285714286,
+            "upper": 0.746904761904762
+          }
+        },
+        "paired_difference_ci95": {
+          "select24_minus_select8": {
+            "lower": -0.002142857142857143,
+            "upper": 0.1125
+          },
+          "select24_minus_actor_candidate0": {
+            "lower": -0.11964285714285713,
+            "upper": 0.1392857142857143
+          },
+          "select24_minus_uniform_fixed5": {
+            "lower": -0.05573214285714284,
+            "upper": 0.08071428571428571
+          },
+          "select8_minus_actor_candidate0": {
+            "lower": -0.13857142857142857,
+            "upper": 0.0757142857142857
+          },
+          "select8_minus_uniform_fixed5": {
+            "lower": -0.10583333333333333,
+            "upper": 0.05714285714285714
+          }
+        },
+        "unavailable_reason": null,
+        "undefined_statistics": []
+      },
+      "optimistic_all32_same_data_max_mean": {
+        "numerator": 10824987,
+        "denominator": 19778000,
+        "value": 0.5473246536555769
+      }
+    },
+    "validation_seen_task": {
+      "states": 2,
+      "tasks": 2,
+      "weighting": "equal state; paired differences use these same states",
+      "heldout_means": {
+        "select8": {
+          "numerator": 7,
+          "denominator": 8,
+          "value": 0.875
+        },
+        "select24": {
+          "numerator": 13,
+          "denominator": 16,
+          "value": 0.8125
+        },
+        "actor_candidate0": {
+          "numerator": 5,
+          "denominator": 8,
+          "value": 0.625
+        },
+        "uniform_fixed5": {
+          "numerator": 27,
+          "denominator": 40,
+          "value": 0.675
+        }
+      },
+      "paired_differences": {
+        "select24_minus_select8": {
+          "numerator": -1,
+          "denominator": 16,
+          "value": -0.0625
+        },
+        "select24_minus_actor_candidate0": {
+          "numerator": 3,
+          "denominator": 16,
+          "value": 0.1875
+        },
+        "select24_minus_uniform_fixed5": {
+          "numerator": 11,
+          "denominator": 80,
+          "value": 0.1375
+        },
+        "select8_minus_actor_candidate0": {
+          "numerator": 1,
+          "denominator": 4,
+          "value": 0.25
+        },
+        "select8_minus_uniform_fixed5": {
+          "numerator": 1,
+          "denominator": 5,
+          "value": 0.2
+        }
+      },
+      "uncertainty": {
+        "unit": "whole canonical task/alias group",
+        "paired": true,
+        "replicates": 10000,
+        "seed": 20261008,
+        "rng": "Python random.Random (Mersenne Twister)",
+        "confidence_level": 0.95,
+        "interval_method": "pointwise percentile with linear interpolation; no multiplicity adjustment",
+        "task_clusters": 2,
+        "state_count": 2,
+        "cluster_state_counts": [
+          1,
+          1
+        ],
+        "weighting": "sum sampled task state-score totals divided by sampled state count; not equal-task means",
+        "cohort_fixed_before_resampling": true,
+        "fit_and_tie_weights_reselected_in_bootstrap": false,
+        "heldout_mean_ci95": {
+          "select8": {
+            "lower": 0.75,
+            "upper": 1.0
+          },
+          "select24": {
+            "lower": 0.75,
+            "upper": 0.875
+          },
+          "actor_candidate0": {
+            "lower": 0.375,
+            "upper": 0.875
+          },
+          "uniform_fixed5": {
+            "lower": 0.5,
+            "upper": 0.85
+          }
+        },
+        "paired_difference_ci95": {
+          "select24_minus_select8": {
+            "lower": -0.125,
+            "upper": 0.0
+          },
+          "select24_minus_actor_candidate0": {
+            "lower": 0.0,
+            "upper": 0.375
+          },
+          "select24_minus_uniform_fixed5": {
+            "lower": 0.025,
+            "upper": 0.25
+          },
+          "select8_minus_actor_candidate0": {
+            "lower": 0.125,
+            "upper": 0.375
+          },
+          "select8_minus_uniform_fixed5": {
+            "lower": 0.15,
+            "upper": 0.25
+          }
+        },
+        "unavailable_reason": null,
+        "undefined_statistics": []
+      },
+      "optimistic_all32_same_data_max_mean": {
+        "numerator": 13,
+        "denominator": 16,
+        "value": 0.8125
+      }
+    },
+    "validation_unseen_task": {
+      "states": 2,
+      "tasks": 1,
+      "weighting": "equal state; paired differences use these same states",
+      "heldout_means": {
+        "select8": {
+          "numerator": 5,
+          "denominator": 16,
+          "value": 0.3125
+        },
+        "select24": {
+          "numerator": 7,
+          "denominator": 16,
+          "value": 0.4375
+        },
+        "actor_candidate0": {
+          "numerator": 3,
+          "denominator": 16,
+          "value": 0.1875
+        },
+        "uniform_fixed5": {
+          "numerator": 457,
+          "denominator": 1680,
+          "value": 0.2720238095238095
+        }
+      },
+      "paired_differences": {
+        "select24_minus_select8": {
+          "numerator": 1,
+          "denominator": 8,
+          "value": 0.125
+        },
+        "select24_minus_actor_candidate0": {
+          "numerator": 1,
+          "denominator": 4,
+          "value": 0.25
+        },
+        "select24_minus_uniform_fixed5": {
+          "numerator": 139,
+          "denominator": 840,
+          "value": 0.16547619047619047
+        },
+        "select8_minus_actor_candidate0": {
+          "numerator": 1,
+          "denominator": 8,
+          "value": 0.125
+        },
+        "select8_minus_uniform_fixed5": {
+          "numerator": 17,
+          "denominator": 420,
+          "value": 0.04047619047619048
+        }
+      },
+      "uncertainty": {
+        "unit": "whole canonical task/alias group",
+        "paired": true,
+        "replicates": 10000,
+        "seed": 20261008,
+        "rng": "Python random.Random (Mersenne Twister)",
+        "confidence_level": 0.95,
+        "interval_method": "pointwise percentile with linear interpolation; no multiplicity adjustment",
+        "task_clusters": 1,
+        "state_count": 2,
+        "cluster_state_counts": [
+          2
+        ],
+        "weighting": "sum sampled task state-score totals divided by sampled state count; not equal-task means",
+        "cohort_fixed_before_resampling": true,
+        "fit_and_tie_weights_reselected_in_bootstrap": false,
+        "heldout_mean_ci95": {
+          "select8": null,
+          "select24": null,
+          "actor_candidate0": null,
+          "uniform_fixed5": null
+        },
+        "paired_difference_ci95": {
+          "select24_minus_select8": null,
+          "select24_minus_actor_candidate0": null,
+          "select24_minus_uniform_fixed5": null,
+          "select8_minus_actor_candidate0": null,
+          "select8_minus_uniform_fixed5": null
+        },
+        "unavailable_reason": "fewer_than_two_task_clusters",
+        "undefined_statistics": []
+      },
+      "optimistic_all32_same_data_max_mean": {
+        "numerator": 767,
+        "denominator": 1856,
+        "value": 0.41325431034482757
+      }
+    }
+  },
+  "limitations": [
+    "Conditional valid-only comparison; validity and replay selection may be action dependent.",
+    "Unequal valid denominators yield unequal precision; report candidate counts alongside rates.",
+    "Later collection can introduce website and judge drift; eight-versus-24 shares the fresh held-out block.",
+    "Bootstrap conditions on observed fit outcomes and exact tie weights; it does not resample continuations or measure selector-fitting uncertainty.",
+    "Few independent task clusters limit interval reliability; fewer than two clusters yields no interval, not a degenerate certainty claim.",
+    "Native labels are preserved, including known semantic-label noise; this is not evidence of critic effectiveness.",
+    "No collection, model training, benchmark pass@k estimate or true upper-bound claim is performed.",
+    "Only 14 of 32 admitted states qualify; 18 complete grids exist, and the requested full collection is incomplete.",
+    "Previously verified small record hashes were rechecked. Prior payload checks were bounded; this analysis does not claim an exhaustive new trajectory or image audit.",
+    "The combined panel is a descriptive collection diagnostic, not a trained-critic validation score."
+  ],
+  "schema": "branch-extra24-partial-heldout-aggregate-v1",
+  "date": "2026-10-09",
+  "status": "terminal_partial",
+  "verified_complete": false,
+  "collection_target_met": false,
+  "missing_extra_records": 1640,
+  "accepted_parent_states": 32,
+  "released_blocks": 55,
+  "strict_replay_rejected_blocks": 41,
+  "resolved_blocks": 96,
+  "noncommitted_browser_attempts_excluded_from_outcomes": 392,
+  "scientific_protocol": {
+    "actor": "official OpenWebRL-4B-SFT",
+    "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
+    "candidate_count": 5,
+    "preserved_draws": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "extra_draws": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "fit8_draws": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "fit24_draws": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "holdout_draws": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": -1,
+    "max_new_tokens": 4096,
+    "judge": "o4-mini-2025-04-16 canonical Online-Mind2Web",
+    "ties": "exact uniform weight over maximum valid-only empirical rates",
+    "invalids": "native valid:false excluded; valid unjudged zeros retained",
+    "weighting": "candidate-specific valid holdout means, then equal states"
+  },
+  "accounting": {
+    "gpus": 4,
+    "gpu_type": "H200",
+    "cpus": 32,
+    "memory_gib": 480,
+    "allocation_seconds": {
+      "consumed": 19371,
+      "approved": 57600,
+      "unused": 38229
+    },
+    "browser_attempts": {
+      "consumed": 2592,
+      "cap": 5000,
+      "concurrent_cap": 40
+    },
+    "sft_call_attempts": {
+      "consumed": 16607,
+      "cap": 240000
+    },
+    "judge_http_attempts": {
+      "consumed": 1287,
+      "cap": 8000
+    },
+    "judge_usd": {
+      "charged": 9.7330376,
+      "cap": 75
+    },
+    "teacher_calls": 0,
+    "active_browsers_final_ledger": 0,
+    "unsettled_reservations": 0,
+    "budget_transfer_or_increase": false
+  },
+  "audit_scope": {
+    "small_result_and_ready_hashes_checked": true,
+    "original1280_hashes_unchanged": true,
+    "new_exhaustive_trajectory_image_audit": false,
+    "prior_payload_reviews": "bounded native trajectory/judge/image reviews reused",
+    "owned_teardown_verified": true,
+    "scheduler_exit": "COMPLETED 0:0",
+    "remote_wandb_state": "failed",
+    "wandb_state_explanation": "Intentional exit1 marks incomplete collection; final summary reconciles.",
+    "stale_wandb_active_browser_sample": 1
+  },
+  "provenance_hashes": {
+    "partial_endpoint_review": "5884a6ef320ea8c085cc027c675fb90c5f8a99b844c5cff13af9ad8b0d142ffa",
+    "private_analysis_summary": "6dc472903718857955aa7adf04b03d8f9cdbbdf692da8cbb2b54c3657e29f4d1",
+    "analysis_helper": "5059c5f7b15b4dd6a7b60f4a7c4a031617cc82eed710a57517075e17cfa60895",
+    "normalized_input": "adb7d8872f891181861cb2fc663e7e0df9adc58fb8a34d9e232114625daf38fa",
+    "remote_wandb_review": "528353a6293d8dda50980f6e172e3201752bb17c50e0d1413643c3b322e8fc50"
+  }
+}

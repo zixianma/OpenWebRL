@@ -46,7 +46,7 @@
 Documents are organized by topic. Start with the results or operational guide
 for the work you are doing, then follow its contents to dated experiment records.
 
-[Branching pilot verified: 32 states × five actions × eight draws; preliminary held-out selection and depth coverage](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [extra-24 draws running on all 32 frozen states](ARM_FORMULATIONS.md#branch-extra24-20261008).
+[Branching pilot verified: 32 states × five actions × eight draws; preliminary held-out selection and depth coverage](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008); [extra-24 partial: 2,200 new records; 24-draw versus eight-draw selection +3.52 pp, interval includes zero](ARM_FORMULATIONS.md#branch-extra24-20261008).
 
 [Shared selection head on frozen actor features is weaker than Piotr SelectionARM: 61.7% versus 73.2% agreement with an independent Luna teacher on 124 branch panels; continuation success cannot separate them](ARM_FORMULATIONS.md#selection-head-20261009).
 

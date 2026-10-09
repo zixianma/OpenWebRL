@@ -201,7 +201,7 @@ The cohort amendment froze these 124 states and all 1,860 original outcomes. The
 | Training / seen-task validation / unseen-task validation states | 23 / 4 / 5 |
 | States at decisions 1–3 / 4–9 / 10–15 | 27 / 2 / 3 |
 
-The valid set retains 224 native unjudged action-limit zeros. These are new states from the released WebVoyager-source training pool, not the WebVoyager benchmark evaluation cohort. Replayable early decisions dominate the accepted sample. The separately approved [extra-24 continuation run](#branch-extra24-20261008) now has all 32 audited parent states and will compare eight-draw and 24-draw selection on the same untouched final eight draws; its endpoint remains incomplete.
+The valid set retains 224 native unjudged action-limit zeros. These are new states from the released WebVoyager-source training pool, not the WebVoyager benchmark evaluation cohort. Replayable early decisions dominate the accepted sample. The separately approved [extra-24 continuation run](#branch-extra24-20261008) ended partially with 2,200 new records. Its shared final-eight-draw comparison is available on 14 states; the requested full endpoint remains incomplete.
 
 <details>
 <summary>Eight-draw pilot selection estimate, coverage and accounting</summary>
@@ -261,11 +261,57 @@ The recent later-state collection produced 38 accepted states from 1,173 discove
 
 <a id="branch-extra24-20261008"></a>
 
-**Approved continuation-precision extension:** the existing four-H200 run is collecting draws 8–31 for the same five frozen candidate responses. All 32 independently audited parent states and their 1,280 original records are now bound in acceptance order; draws 0–7 remain unchanged. The requested maximum is 3,840 additional outcomes and 5,120 combined outcomes. Some 40-context batches have failed strict replay and remain excluded; processed batches do not imply complete draw coverage. The run does not regenerate proposals, choose states by outcomes or relax replay checks.
+**Extra-24 collection ended partially; more fitting draws have not yet established a reliable gain.** On the same 14 eligible states from 11 task groups, selecting with 24 draws scores **53.32%** on fresh draws 24–31, versus **49.80%** when selecting with eight. The paired difference is **+3.52 percentage points, 95% task-bootstrap interval [−0.12, +7.35]**. The interval includes zero. This is a descriptive outcome-selection diagnostic combining the pilot's prespecified roles, not a learned selector validation score or evidence that a post-action critic helps.
 
-Compare action selection using the first eight versus first 24 draws, scoring both on the **same untouched final eight draws (24–31)**. Use valid observations and exact uniform averaging over tied winners; require a common five-candidate panel with valid fitting and held-out observations and report missing coverage. Keep task splits intact and bootstrap whole tasks. This tests how much more sampling improves action-value estimates. It estimates held-out performance of outcome-based selection within the fixed proposal set and continuation policy; a maximum selected and scored on all 32 draws is an optimistic hindsight diagnostic, not a true upper bound or evidence that a trained critic achieves it.
+| Policy on the same fresh held-out panel | States | Task groups | Valid-only held-out success |
+| --- | ---: | ---: | ---: |
+| Actor's first candidate | 14 | 11 | 45.66% |
+| Uniform over all five candidates | 14 | 11 | 47.95% |
+| Select using draws 0–7 | 14 | 11 | 49.80% |
+| Select using draws 0–23 | 14 | 11 | 53.32% |
 
-The separately approved cap is **four H200s, 32 CPUs, 480 GiB and 57,600 seconds across all attempts**, with 5,000 browser starts / 40 concurrent, 240,000 SFT calls, 8,000 judge HTTP attempts / $75 and zero teacher calls. Three sequential 40-context batches per state retain strict replay checks. Failed attempts remain charged; rejected or missing measurements are not replaced by invented outcomes. The extension has its own verified 30-minute agent-callback supervisor and does not borrow unused time from the pilot or historical extra-two campaign. Startup and useful progress have been verified. The requested full output coverage, common held-out analysis and final accounting remain incomplete; a partial collection will remain labeled incomplete.
+Twenty-four-draw selection minus actor-first is +7.65 pp [−5.65, +16.07]; minus uniform it is +5.37 pp [−2.12, +11.30]. Both intervals include zero. The proposed critic comparison and selector training remain unperformed. [Aggregate, split-specific results and evidence hashes](arm_results/rl_integration/branch-extra24-partial-20261009.json).
+
+The run saved **2,200 of 3,840 requested extra records**, preserving all **1,280 original records**: 3,480 of 5,120 combined. All 96 scheduled blocks resolved: 55 released and 41 failed strict replay. Eighteen states have complete 160-record grids; four of those lack a usable valid-only five-candidate panel, leaving 14 eligible states. The other 14 admitted states lack a complete extra-draw grid. Missing and rejected measurements remain missing; the full study stays **incomplete**. No proposals were regenerated, no retry replaced a rejected draw, and no budget cap was exhausted.
+
+<details>
+<summary>Coverage, split isolation and uncertainty</summary>
+
+For each candidate, fit its success fraction using native-valid observations from draws 0–7 or 0–23; evaluate both choices only on draws 24–31. Require every original candidate to have a positive valid fitting and held-out denominator, retain duplicate candidate indices, and use exact uniform weights over tied maxima. Average valid held-out rates within candidates, then states equally; these percentages are not pooled episode fractions. Fitting ties occur in five of 14 states with eight draws and six of 14 with 24 draws. Native invalids are excluded; valid failures, including unjudged action-limit zeros, remain failures.
+
+| Panel on the common 14 states | Observed draws | Valid draws | Excluded invalid draws |
+| --- | ---: | ---: | ---: |
+| Fit, draws 0–7 | 560 | 483 | 77 |
+| Fit, draws 0–23 | 1,680 | 1,452 | 228 |
+| Holdout, draws 24–31 | 560 | 480 | 80 |
+
+| Prespecified role | States | Task groups | Actor first | Uniform | Select with eight | Select with 24 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Train | 10 | 10 | 47.68% | 48.19% | 45.96% | 49.64% |
+| Seen-task validation | 2 | 2 | 62.50% | 67.50% | 87.50% | 81.25% |
+| Unseen-task validation | 2 | 1 | 18.75% | 27.20% | 31.25% | 43.75% |
+
+Ten thousand paired whole-task bootstrap resamples, seed 20261008, keep each task's states together and normalize by sampled state count. Intervals are pointwise percentile intervals with linear interpolation, condition on the observed fitting panels and tie weights, and are unadjusted for multiple comparisons. Two seen-task clusters are insufficient for stable inference; the unseen split has only one task cluster, so no interval is reported. These tiny validation subsets cannot establish generalization. Replayability, unequal valid denominators, later website/judge drift and native judge errors further limit interpretation. A same-data maximum across 32 draws is optimistic and is not a true upper bound.
+
+</details>
+
+<details>
+<summary>Partial endpoint audit and all-attempt accounting</summary>
+
+All 3,480 committed small outcome records are bound by hashes to preserved parent or extra records; the 2,200 extra records also retain their audited ready/release identities. Native trajectory, judge and image checks reuse prior bounded reviews; this partial analysis does not claim a new exhaustive payload audit. The 392 finished reconstruction attempts without released outcomes remain charged and excluded from outcome denominators. Owned process/browser teardown passed. Slurm ended with exit 0; W&B intentionally records a failed run because the full collection target was unmet, and its remote final counts/costs reconcile. A stale final W&B browser sample is one; the authoritative final ledger and teardown show zero active browsers.
+
+| Resource, including all attempts | Consumed | Approved cap |
+| --- | ---: | ---: |
+| Allocation seconds, four H200s / 32 CPUs / 480 GiB | 19,371 | 57,600 |
+| Browser attempts | 2,592 | 5,000 |
+| Local SFT call attempts | 16,607 | 240,000 |
+| Canonical judge HTTP attempts | 1,287 | 8,000 |
+| Judge charge, USD | 9.7330376 | 75 |
+| Teacher calls | 0 | 0 |
+
+The 38,229 unused allocation seconds remain separate from the pilot and historical extra-two budgets. All scheduled blocks have been processed under the approved no-retry rule; remaining budget does not justify relaxing replay checks or replacing outcomes. No additional collection is active.
+
+</details>
 
 The later fitting estimate remains one H200, eight CPUs, 120 GiB and two hours total, pending separate exact approval and validated data/loss code. The existing 124-state extra-two campaign retains its own budget and protocol. [Machine-readable approved pilot and larger proposal](arm_results/rl_integration/branch-selector-scaleup-proposal-20261008.json).
 
