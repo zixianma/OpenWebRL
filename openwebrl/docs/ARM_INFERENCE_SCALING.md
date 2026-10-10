@@ -282,18 +282,20 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 [Results and approval aggregate](arm_results/sol61_n5_launch_20261009.json) · [Official model settings and pricing](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
 
 <a id="molmoweb-sol61-plan-20261010"></a>
-## MolmoWeb 4B/8B: matched actor controls and Sol selection — preparation
+## MolmoWeb 4B/8B: controls first; Sol selection awaits review
 
-**Question:** does the N=5 Sol selection benefit transfer to the official MolmoWeb actors? The prepared comparison uses MolmoWeb 4B and 8B, each with **N=1 actor-only** and **N=5 + GPT-6.1 Sol medium**, on WebVoyager, DeepShop and Online-Mind2Web. **No MolmoWeb performance result is available.** Checkpoints are downloaded and hash-verified; GPU execution and throughput remain unvalidated. Launch awaits the exact new compute/API approval below.
+**The next result is the actor-only control.** Run official MolmoWeb 4B and 8B with **N=1 and zero selector calls** on all three benchmarks, then review their scores and protocol comparability before authorizing **N=5 + GPT-6.1 Sol medium**. No MolmoWeb performance result is available yet. The execution and spending gates currently allow N1 only; completion of the controls does not launch ARM automatically.
 
-| Benchmark | Tasks per condition | Actor sizes | Conditions per actor | Primary episodes | Scoring |
-| --- | ---: | --- | ---: | ---: | --- |
-| WebVoyager | 595 | 4B, 8B | 2 | 2,380 | Native MolmoWeb GPT-4o |
-| DeepShop | 150 | 4B, 8B | 2 | 600 | Native MolmoWeb GPT-4o |
-| Online-Mind2Web | 300 | 4B, 8B | 2 | 1,200 | Native MolmoWeb and AgentTrek, reported separately |
-| **Total** | **1,045 unique benchmark tasks** | **2** | **2** | **4,180** | **12 primary conditions** |
+| Benchmark | Tasks per actor | Actors | N1 control episodes | Scoring |
+| --- | ---: | --- | ---: | --- |
+| WebVoyager | 595 | 4B, 8B | 1,190 | Native MolmoWeb GPT-4o |
+| DeepShop | 150 | 4B, 8B | 300 | Native MolmoWeb GPT-4o |
+| Online-Mind2Web | 300 | 4B, 8B | 600 | Native MolmoWeb and AgentTrek, reported separately |
+| **Total** | **1,045 unique benchmark tasks** | **2** | **2,090** | **Six controls** |
 
-For each actor and benchmark, the primary comparison is the **task-paired N=5 minus N=1 success difference**, with a paired task-bootstrap interval. Overall success retains every requested task, invalid outcomes count as zero, and valid-only rates and coverage are reported separately. Missing infrastructure/judge outcomes remain unresolved, rather than being silently labeled failures. A budget-limited partial run remains incomplete. N1/N5 task order is interleaved within each job to reduce temporal confounding; this is not a repeated-seed estimate.
+The control report will show success counts, overall and valid-only success rates, validity and judged coverage, with protocol differences next to the scores. Invalid outcomes count as zero overall; missing infrastructure/judge outcomes remain unresolved. A partial run remains incomplete. Local browsers differ from the paper's Browserbase/advanced-stealth environment, so paper scores are contextual, not matched controls.
+
+After user review and approval, the planned comparison is the **task-paired N=5 minus N=1 success difference**, with a paired task-bootstrap interval. Controls and ARM are now collected sequentially, so website changes over time remain a comparability caveat. This is not a repeated-seed estimate. The full potential comparison remains 4,180 episodes across 12 conditions; the six N5 conditions are blocked.
 
 **Both Online-Mind2Web judges score the same saved actor episodes; they do not trigger extra continuations.** The native MolmoWeb judge decomposes the goal, assesses each supplied screenshot, then produces a final verdict: **S+2 logical calls for S screenshots**, before retries. The prior AgentTrek protocol instead uses the task, action history and last supplied actor observation in one terminal assessment, with its existing completed-episode eligibility rule. Truncated and format-ineligible episodes retain explicit unjudged zeros in that protocol. Report each judge's eligible/judged counts, overall and valid-only rates, and disagreement on the commonly judged subset. Never select the better judge outcome or pool the two scores.
 
@@ -309,9 +311,9 @@ Source, checkpoint, task, candidate, screenshot, verdict and API identities are 
 </details>
 
 <details>
-<summary>Exact proposed resource caps — pending approval</summary>
+<summary>Approved resource ceilings and controls-only execution</summary>
 
-Each row is one paired N1/N5 job with **1 H200, 16 CPUs, 120 GiB and eight browser workers total**, including startup checks and every recovery attempt. At most four jobs run concurrently: **4 H200, 64 CPUs, 480 GiB and 32 browsers**. These are hard ceilings, not a throughput forecast or a guarantee of full coverage.
+Each row is a lifetime N1/N5 budget with **1 H200, 8 CPUs, 120 GiB and eight browser workers total**, including startup checks and every recovery attempt. CPUs were reduced from the approved ceiling of 16 to meet the cluster limit. At most four jobs run concurrently: **4 H200, 32 CPUs, 480 GiB and 32 browsers**. These are hard ceilings, not a throughput forecast or a guarantee of full coverage.
 
 | Actor | Benchmark | All-attempt H200 hours | Sol ceiling, USD | Native judge ceiling, USD | AgentTrek ceiling, USD | Total API ceiling, USD |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
@@ -322,6 +324,8 @@ Each row is one paired N1/N5 job with **1 H200, 16 CPUs, 120 GiB and eight brows
 | 8B | DeepShop | 12 | 75 | 20 | 0 | 95 |
 | 8B | Online-Mind2Web | 18 | 100 | 300 | 10 | 410 |
 | **Total** | | **90** | **750** | **760** | **20** | **1,530** |
+
+**The initial N1-only allocations reserve 45 of the approved 90 H200 hours:** 4B WV/DS/OM receive 8/4/6 hours; 8B receive 12/6/9 hours. Controls have their existing $390 judge envelope ($380 native plus $10 AgentTrek), 2,300 browser starts and 69,000 local generations; selector allowance is zero. Actual time from every attempt charges the corresponding lifetime row, and unused time is never reset or transferred. N5 remains blocked pending explicit review of the control results.
 
 Native judge ceilings split equally between N1 and N5 within each row; all Sol allowance belongs to N5. Each OM condition has a separate $5 AgentTrek allowance. Compute cannot transfer between jobs; API/browser caps cannot transfer between conditions or from other experiments. Aggregate limits are **4,600 browser starts, 414,000 local candidate generations and 256,360 actual HTTP attempts**. Every retry reserves its own physical HTTP attempt and worst-case cost before dispatch; unresolved charges retain their reservation. The first binding limit stops further paid work. Ordinary committed invalid outcomes are never selectively rerun, and a replacement receives only the unspent total allocation time.
 
