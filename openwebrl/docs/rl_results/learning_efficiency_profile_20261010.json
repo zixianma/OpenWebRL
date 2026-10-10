@@ -1,0 +1,66 @@
+{
+  "schema": "openwebrl.learning-efficiency-profile.v1",
+  "review_date": "2026-10-10",
+  "source_analysis_sha256": "5aff49461fcd23137259c7543731fb7236fc519cd8077d8418e39c361a2e4252",
+  "measurement_scope": "Finished extension collection/training cycles only; excludes milestone evaluations, startup/restart/storage-review idle and failed partial collections. Native phase timer boundaries differ; no causal between-run speedup claim.",
+  "provenance": "Aggregated from completed native training-cycle logs; raw operational paths and trajectories retained privately.",
+  "lineages": {
+    "batch56": {
+      "iterations": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "mean_rollout_minutes": 20.062776606707345,
+      "mean_training_minutes": 25.41386982372829,
+      "mean_native_step_minutes": 46.08527901853834,
+      "native_training_share_of_step": 0.5514530966277814,
+      "completed_cycles": 14,
+      "native_timer_totals_seconds": {
+        "rollout_time": 16852.73234963417,
+        "train_time": 21347.650651931763,
+        "actor_train_time": 19036.034076690674,
+        "step_time": 38711.634375572205
+      },
+      "hypothetical_speedup_halving_only_collection": 1.2782331699676672
+    },
+    "uniform8": {
+      "iterations": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "mean_rollout_minutes": 24.7924601800514,
+      "mean_training_minutes": 45.37645013801979,
+      "mean_native_step_minutes": 70.84872830708822,
+      "native_training_share_of_step": 0.640469507671883,
+      "completed_cycles": 11,
+      "native_timer_totals_seconds": {
+        "rollout_time": 16363.023718833923,
+        "train_time": 29948.457091093063,
+        "actor_train_time": 27015.6967420578,
+        "step_time": 46760.16068267822
+      },
+      "hypothetical_speedup_halving_only_collection": 1.212073572013851
+    }
+  }
+}
