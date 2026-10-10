@@ -321,5 +321,259 @@
    ]
   ],
   "bootstrap": "20,000 state draws, seed 0"
+ },
+ "frozen_feature_sweep": {
+  "job": 353150,
+  "selection_rule": "checkpoint by GPT-5.5 validation agreement; Luna and outcomes reported only",
+  "head": "pointwise, 10 epochs",
+  "configs": {
+   "L09": {
+    "args": {
+     "layers": "9",
+     "pools": "thought_mean,action_mean,last",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 7,
+    "validation_teacher_agreement": 0.6188,
+    "validation_teacher_agreement_informative": 0.5611,
+    "train_teacher_agreement": 0.8664,
+    "luna_agreement": 0.5585,
+    "continuation_success": 0.3065,
+    "minus_uniform": -0.0177,
+    "minus_uniform_ci": [
+     -0.0516,
+     0.0177
+    ],
+    "minus_piotr_arm": -0.0511,
+    "minus_piotr_arm_ci": [
+     -0.0968,
+     -0.0054
+    ]
+   },
+   "L18": {
+    "args": {
+     "layers": "18",
+     "pools": "thought_mean,action_mean,last",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 9,
+    "validation_teacher_agreement": 0.6297,
+    "validation_teacher_agreement_informative": 0.5737,
+    "train_teacher_agreement": 0.8642,
+    "luna_agreement": 0.5766,
+    "continuation_success": 0.3602,
+    "minus_uniform": 0.036,
+    "minus_uniform_ci": [
+     0.0043,
+     0.0683
+    ],
+    "minus_piotr_arm": 0.0027,
+    "minus_piotr_arm_ci": [
+     -0.0323,
+     0.0349
+    ]
+   },
+   "L27": {
+    "args": {
+     "layers": "27",
+     "pools": "thought_mean,action_mean,last",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 4,
+    "validation_teacher_agreement": 0.6459,
+    "validation_teacher_agreement_informative": 0.5923,
+    "train_teacher_agreement": 0.7688,
+    "luna_agreement": 0.6008,
+    "continuation_success": 0.3656,
+    "minus_uniform": 0.0414,
+    "minus_uniform_ci": [
+     0.0075,
+     0.0763
+    ],
+    "minus_piotr_arm": 0.0081,
+    "minus_piotr_arm_ci": [
+     -0.0296,
+     0.0484
+    ]
+   },
+   "L36": {
+    "args": {
+     "layers": "36",
+     "pools": "thought_mean,action_mean,last",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 10,
+    "validation_teacher_agreement": 0.6472,
+    "validation_teacher_agreement_informative": 0.5939,
+    "train_teacher_agreement": 0.8513,
+    "luna_agreement": 0.6089,
+    "continuation_success": 0.3306,
+    "minus_uniform": 0.0065,
+    "minus_uniform_ci": [
+     -0.0253,
+     0.0387
+    ],
+    "minus_piotr_arm": -0.0269,
+    "minus_piotr_arm_ci": [
+     -0.0591,
+     0.0054
+    ]
+   },
+   "L09-36": {
+    "args": {
+     "layers": "9,18,27,36",
+     "pools": "thought_mean,action_mean,last",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 8,
+    "validation_teacher_agreement": 0.6449,
+    "validation_teacher_agreement_informative": 0.5911,
+    "train_teacher_agreement": 0.8637,
+    "luna_agreement": 0.5827,
+    "continuation_success": 0.3414,
+    "minus_uniform": 0.0172,
+    "minus_uniform_ci": [
+     -0.0151,
+     0.0516
+    ],
+    "minus_piotr_arm": -0.0161,
+    "minus_piotr_arm_ci": [
+     -0.0538,
+     0.0215
+    ]
+   },
+   "L18-36_action": {
+    "args": {
+     "layers": "18,27,36",
+     "pools": "action_mean",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 4,
+    "validation_teacher_agreement": 0.6457,
+    "validation_teacher_agreement_informative": 0.592,
+    "train_teacher_agreement": 0.7557,
+    "luna_agreement": 0.6391,
+    "continuation_success": 0.3602,
+    "minus_uniform": 0.036,
+    "minus_uniform_ci": [
+     0.0027,
+     0.0699
+    ],
+    "minus_piotr_arm": 0.0027,
+    "minus_piotr_arm_ci": [
+     -0.0269,
+     0.0323
+    ]
+   },
+   "L18-36_thought": {
+    "args": {
+     "layers": "18,27,36",
+     "pools": "thought_mean",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 1,
+    "validation_teacher_agreement": 0.5573,
+    "validation_teacher_agreement_informative": 0.4904,
+    "train_teacher_agreement": 0.5936,
+    "luna_agreement": 0.5766,
+    "continuation_success": 0.3253,
+    "minus_uniform": 0.0011,
+    "minus_uniform_ci": [
+     -0.0306,
+     0.0339
+    ],
+    "minus_piotr_arm": -0.0323,
+    "minus_piotr_arm_ci": [
+     -0.0699,
+     0.0027
+    ]
+   },
+   "L18-36_last": {
+    "args": {
+     "layers": "18,27,36",
+     "pools": "last",
+     "d_model": "512",
+     "dropout": "0.1",
+     "weight_decay": "0.05",
+     "epochs": "10"
+    },
+    "best_epoch": 7,
+    "validation_teacher_agreement": 0.6055,
+    "validation_teacher_agreement_informative": 0.5458,
+    "train_teacher_agreement": 0.7263,
+    "luna_agreement": 0.619,
+    "continuation_success": 0.3253,
+    "minus_uniform": 0.0011,
+    "minus_uniform_ci": [
+     -0.0333,
+     0.036
+    ],
+    "minus_piotr_arm": -0.0323,
+    "minus_piotr_arm_ci": [
+     -0.0726,
+     0.0054
+    ]
+   },
+   "L18-36_small": {
+    "args": {
+     "layers": "18,27,36",
+     "pools": "thought_mean,action_mean,last",
+     "d_model": "128",
+     "dropout": "0.3",
+     "weight_decay": "0.1",
+     "epochs": "10"
+    },
+    "best_epoch": 8,
+    "validation_teacher_agreement": 0.6587,
+    "validation_teacher_agreement_informative": 0.607,
+    "train_teacher_agreement": 0.7612,
+    "luna_agreement": 0.5605,
+    "continuation_success": 0.3522,
+    "minus_uniform": 0.028,
+    "minus_uniform_ci": [
+     -0.0065,
+     0.0634
+    ],
+    "minus_piotr_arm": -0.0054,
+    "minus_piotr_arm_ci": [
+     -0.043,
+     0.0323
+    ]
+   }
+  },
+  "note": "nine configurations; post-hoc maxima of the reported endpoints are subject to selection bias"
+ },
+ "adapter": {
+  "job": 353150,
+  "status": "training",
+  "top_layers": 8,
+  "rank": 16,
+  "init_head": "heads/pointwise",
+  "probe": "100 validation states (1,254 panels)",
+  "probe_agreement": {
+   "step_0": 0.638,
+   "step_100": 0.6148
+  }
  }
 }

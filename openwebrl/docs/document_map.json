@@ -88,6 +88,10 @@
     "ARM_FORMULATIONS.md": {
       "title": "ARM branching: action quality, execution evidence and selector training",
       "sources": []
+    },
+    "ARM_SELECTION_HEAD.md": {
+      "title": "ARM selection head: choosing actions from the actor's own hidden states",
+      "sources": []
     }
   },
   "documents": {

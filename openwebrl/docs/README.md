@@ -61,6 +61,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | --- | --- |
 | [ARM_SUMMARY.md](ARM_SUMMARY.md) | Concise methods and headline results; presentation figures for the three stages and RL variants; static/interactive plots; collapsed WebVoyager results |
 | [ARM_FORMULATIONS.md](ARM_FORMULATIONS.md) | Branching experiment map; matched pre/post evidence, held-out outcome selection, continuation scaling, teacher-trained heads and planned student controls |
+| [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md) | Selection head on the actor's hidden states: three evaluations, Piotr ARM comparison, frozen-feature sweep and scoring adapter |
 | [ARM_RESULTS.md](ARM_RESULTS.md) | Detailed ARM results and analysis, online-RL coverage/admission audits, C2/1A/joint comparisons, and curves |
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |

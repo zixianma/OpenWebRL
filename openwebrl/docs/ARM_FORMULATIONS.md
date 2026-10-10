@@ -314,70 +314,15 @@ All 1,280 record identities, fixed candidate responses, strict replay releases, 
 
 ## Selectors trained on existing teacher labels: evaluation on the historical 124 states
 
-**The frozen-actor heads agree less with Luna than Piotr SelectionARM, but continuation success does not clearly separate them.** These heads were trained on GPT-5.5 choices from Piotr's release, not on branching returns or post-action labels. They reuse the original 124-state, three-draw outcomes for evaluation; this is a model comparison on the historical family, not another branching collection.
+**The frozen-actor heads agree less with Luna than Piotr SelectionARM, but continuation success does not clearly separate them.** These heads were trained on GPT-5.5 choices from Piotr's release, not on branching returns or post-action labels. They reuse the original 124-state, three-draw outcomes for evaluation; this is a model comparison on the historical family, not another branching collection. Invalid outcomes count as zero.
 
-All rows use those same 124 states. Invalid outcomes count as zero; paired intervals use 20,000 state-bootstrap draws, with one state per task. The outcome-selected and hindsight references for this same cohort are in the [original-three-draw details](#branch-original-three-details).
+| Selector, 124 branch states | Luna agreement | − Piotr, pp [95%] | Continuation success | − Piotr, pp [95%] |
+| --- | ---: | --- | ---: | --- |
+| Piotr SelectionARM | 73.2% | — | 35.75% | — |
+| Head on frozen actor features, one candidate at a time | 61.7% | −11.5 [−18.5, −4.6] | 34.68% | −1.08 [−4.30, +2.15] |
+| Uniform candidate | 46.9% | — | 32.42% | — |
 
-| Selector, 124 branch panels | Continuation success | − Uniform, pp [95%] | − Actor first, pp [95%] | − Piotr ARM, pp [95%] |
-| --- | ---: | --- | --- | --- |
-| Piotr SelectionARM (separate 4B model) | 35.75% | +3.33 [+0.11, +6.72] | +5.91 [+1.88, +10.22] | — |
-| Head, one candidate at a time | 34.68% | +2.26 [−1.13, +5.70] | +4.84 [+0.27, +9.68] | −1.08 [−4.30, +2.15] |
-| Head, joint comparison | 33.60% | +1.18 [−1.94, +4.41] | +3.76 [−0.27, +8.06] | −2.15 [−5.65, +1.34] |
-| Uniform candidate | 32.42% | — | — | — |
-| Actor first sample | 29.84% | — | — | — |
-
-Joint minus one-at-a-time: −1.08 pp [−3.23, +0.81]. The heads choose the same action as Piotr ARM on 72/124 (joint) and 78/124 (one at a time) panels. Results on the 114 prompt-verified states, and on the 105 whose tasks are absent from Piotr's release, lead to the same conclusions. Luna before execution scores 35.11% on a 119-state subset ([above](#arm-continuation-branches-results-20261007)). These are conditional continuation results, not benchmark pass@1.
-
-**Method.** A small transformer head without position embeddings reads the frozen OpenWebRL-4B-SFT actor's bf16 hidden states from layers 18, 27 and 36. For each candidate it uses the mean reasoning state, the mean action state and the end-token state; it also reads the prompt's last token. At serving, these states are a by-product of generating the candidates, so selection needs no second 4B model. Training uses only GPT-5.5 teacher choices from Piotr's release (35,916 panels); the branch outcomes are used for evaluation only.
-
-<details>
-<summary>Teacher agreement: independent Luna comparison and GPT-5.5 checkpoint validation</summary>
-
-On the branch panels, Luna supplies four before-execution judgments per panel. Piotr ARM agrees on 73.2%; the heads agree on 61.7% (one candidate at a time) and 60.7% (joint comparison). These 11.5- and 12.5-point deficits have intervals excluding zero. Joint comparison did not beat one-at-a-time scoring. Agreement is a separate endpoint from continuation success and does not measure factual correctness.
-
-| Agreement with Luna before execution, 124 branch panels | Agreement [95%] | − Piotr ARM, pp [95%] |
-| --- | --- | --- |
-| Luna judgment versus another Luna judgment (ceiling reference) | 80.2% | — |
-| Piotr SelectionARM | 73.2% [66.3, 79.6] | — |
-| Head, one candidate at a time | 61.7% [54.2, 69.2] | −11.5 [−18.5, −4.6] |
-| Head, joint comparison | 60.7% [53.0, 68.1] | −12.5 [−20.0, −5.4] |
-| Actor first sample | 56.2% [48.4, 63.9] | — |
-| Uniform candidate | 46.9% | — |
-
-Agreement averages, per panel, the share of Luna's four judgments that pick an action-equivalent candidate. Neither selector was trained on Luna labels or on these states; Piotr ARM and the heads were both trained on GPT-5.5 choices.
-
-**GPT-5.5 teacher agreement on held-out task groups.** Both heads reach about 65.5%, well above the simple baselines, and overfit the training panels (79–90%). Piotr ARM is not scored here: it was trained on this release with a draw-level split, so these held-out tasks were very likely in its training data.
-
-| Teacher agreement, held-out task groups | All 3,759 panels | 3,265 non-identical panels | Best epoch / 20 |
-| --- | ---: | ---: | ---: |
-| Head, joint comparison | 65.5% | 60.3% | 6 |
-| Head, one candidate at a time | 65.4% | 60.2% | 13 |
-| Most common action | 50.1% | 42.6% | — |
-| Uniform candidate | 44.7% | 36.3% | — |
-
-Agreement counts a choice as correct when it is action-equivalent to the teacher's pick: identical calls, with clicks within five normalized units. Validation selected each checkpoint, so these are not untouched test scores.
-
-</details>
-
-<details>
-<summary>Piotr ARM by subset, prompt reconstruction, feature checks, data and budget</summary>
-
-| Piotr ARM subset | Count | Piotr ARM | Actor first | Uniform | ARM − uniform, pp [95%] | ARM − first, pp [95%] |
-| --- | ---: | ---: | ---: | ---: | --- | --- |
-| All | 124 | 35.75% | 29.84% | 32.42% | +3.33 [+0.11, +6.72] | +5.91 [+1.88, +10.22] |
-| Prompt-verified | 114 | 35.96% | 30.70% | 33.04% | +2.92 [−0.53, +6.61] | +5.26 [+1.17, +9.94] |
-| Verified, task absent from Piotr's release | 105 | 36.83% | 31.11% | 33.33% | +3.49 [+0.25, +6.92] | +5.71 [+1.27, +10.48] |
-
-- **Piotr ARM.** Run offline through the serving code: canonical prompt builder, JSON-schema decoding. It returned a valid selection on all 124 panels and chose candidate 0 on 62.
-- **Prompts.** Branch anchors do not save the actor prompt. It is rebuilt from continuation-rollout conversations and accepted only when its SHA-256 equals the hash journaled at candidate sampling: 114/124 match. All 114 also reproduce the server's prompt token count, including image tokens. In the other 10, replayed prefixes word the tool feedback differently from discovery; they use the replay prompt and enter only the 124-state rows (token differences −23 to +9).
-- **Candidates.** The heads read the actor's exact generated token ids. Re-tokenizing the saved text would change 47/620 candidates.
-- **Features.** Cached-prefix, batched extraction matches full forwards exactly in a float32 unit test. On the real bf16 model the relative L2 difference is 1.43–1.48% on two checked states, under the 2% abort threshold.
-- **Teacher panels.** Pinned release `0d83b48`, joint-data v2 task split and quarantine: 39,675 panels over 2,982 states. Excluded draw records: 300 conflicting draw IDs, 80 quarantined, 61 missing teacher selections and 32 outside the split.
-- **Budget.** Job `351647` completed in 1 h 58 m of an approved 1 H200, 8 CPUs, 120 GiB, 3 h (estimated $2.70); no API calls or browsers. Code: branch `arm-selection-head`, commit `87a204b`.
-
-[Aggregate estimates and accounting](arm_results/rl_integration/selection-head-20261009.json).
-
-</details>
+A nine-configuration sweep found no frozen layer or pooling that closes the gap, and a top-layer scoring adapter is training. Method, all three evaluations, the sweep and accounting are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md). The outcome-selected and hindsight references for this cohort are in the [original-three-draw details](#branch-original-three-details).
 
 <a id="branch-post-to-pre-study-20261008"></a>
 
