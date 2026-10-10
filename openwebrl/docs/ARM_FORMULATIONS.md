@@ -8,7 +8,7 @@
 | Can old continuation outcomes select better than uniform on fresh outcomes? | 58 | +8.51, select on three − uniform | [+3.45, +14.37] | Evidence of outcome signal; gains over actor-first and Luna remain uncertain |
 | Does selecting with 24 continuations beat selecting with eight? | 14 | +3.52, select with 24 − select with eight | [−0.12, +7.35] | Inconclusive on the same fresh, valid-only holdout |
 
-The first interval resamples states; the others resample task groups. All are exploratory, pointwise intervals. **No selector has yet been trained from these branching outcomes or matched post-action labels.** The [actor-feature heads](#selection-head-20261009) were trained separately on existing teacher choices: they have lower Luna agreement than Piotr ARM, while continuation-success differences remain uncertain.
+The first interval resamples states; the others resample task groups. All are exploratory, pointwise intervals. **No selector has yet been trained from these branching outcomes or matched post-action labels.** The [actor-based selectors](#selection-head-20261009) were trained separately on existing teacher choices. Heads on frozen actor features have lower Luna agreement than Piotr ARM. A Kev-style pass through all of the actor's layers is not distinguishable from it (69.6% versus 73.2%). Continuation-success differences remain uncertain.
 
 <a id="branching-experiment-map"></a>
 
@@ -314,22 +314,22 @@ All 1,280 record identities, fixed candidate responses, strict replay releases, 
 
 ## Selectors trained on existing teacher labels: evaluation on the historical 124 states
 
-**The frozen-actor heads agree less with Luna than Piotr SelectionARM, but continuation success does not clearly separate them.** These heads were trained on GPT-5.5 choices from Piotr's release, not on branching returns or post-action labels. They reuse the original 124-state, three-draw outcomes for evaluation; this is a model comparison on the historical family, not another branching collection. Invalid outcomes count as zero.
+**Comparing candidates inside the actor at every layer closes most of the gap to Piotr SelectionARM; actor-feature designs that keep the lower layers frozen do not.** These selectors were trained on GPT-5.5 choices from Piotr's release, not on branching returns or post-action labels. They reuse the original 124-state, three-draw outcomes for evaluation; this is a model comparison on the historical family, not another branching collection. Invalid outcomes count as zero.
 
 | Selector, 124 branch states | Luna agreement | − Piotr, pp [95%] | Continuation success | − Piotr, pp [95%] |
 | --- | ---: | --- | ---: | --- |
 | Piotr SelectionARM | 73.2% | — | 35.75% | — |
-| Head on frozen actor features, one candidate at a time | 61.7% | −11.5 [−18.5, −4.6] | 34.68% | −1.08 [−4.30, +2.15] |
+| Kev-style pass on the actor's weights, 150 training steps | 69.6% | −3.6 [−10.3, +2.8] | 34.14% | −1.6 [−5.1, +1.9] |
+| Head on frozen actor features | 61.7% | −11.5 [−18.6, −4.8] | 34.68% | −1.1 [−4.3, +2.1] |
 | Uniform candidate | 46.9% | — | 32.42% | — |
-
-A nine-configuration sweep found no frozen layer or pooling that closes the gap, and fine-tuning the top eight layers did not help (held-out agreement 65.5% versus 65.4%). The likely missing piece is comparison between candidates: none of the actor-based selectors so far let candidates interact. Two Kev-inspired variants add a `<decide>` token that reads every candidate inside the actor:
 
 ![Five selector designs compared by weights, inputs, candidate interaction, order effects, readout, added cost and status](arm_results/methods/selection_designs_compared.svg)
 
-- **Joint top layers** reuses the actor's generation-time states for layers 1–28 and compares candidates only in the eight adapted layers, keeping scoring cheap. Its comparison pointer learned to 56.8% agreement on its own but never improved on the head.
-- **Kev-style pass** re-encodes everything through all 36 adapted layers, like Kev, and costs about one actor pass per step, similar to Piotr ARM.
-- Both are order-invariant by construction, unlike Piotr ARM (candidate 1 on 62/124 states) and Kev-27B.
- Method, all three evaluations, the sweep and accounting are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md). The outcome-selected and hindsight references for this cohort are in the [original-three-draw details](#branch-original-three-details).
+- **Frozen lower layers plateau.** A frozen-feature head, a top-8 adapter, and `<decide>` comparison in the top 8 layers only all stay at 57–62% Luna agreement.
+- **Kev-style pass.** Re-encoding prompt, screenshot and candidates together through all 36 adapted layers, with a `<decide>` token and pointer, reaches 69.6%: +7.9 pp [+1.6, +14.3] over the frozen head. It costs about one actor pass per step, similar to Piotr ARM.
+- **Caveats.** This is one short exploratory run, and continuation success separates none of these selectors.
+
+Method, all evaluations, learning curves and accounting are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md). The outcome-selected and hindsight references for this cohort are in the [original-three-draw details](#branch-original-three-details).
 
 <a id="branch-post-to-pre-study-20261008"></a>
 

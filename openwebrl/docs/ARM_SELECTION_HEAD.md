@@ -1,6 +1,6 @@
 # ARM selection head: choosing actions from the actor's own hidden states
 
-**A small head on the frozen SFT actor's hidden states is a weaker action selector than the released Piotr SelectionARM.** On 124 fixed branching states, the best preselected head matches an independent teacher (Luna before execution) on 61.7% of judgments, against 73.2% for Piotr ARM: −11.5 pp [−18.5, −4.6]. No frozen layer, pooling or head size closes the gap. Chosen-action continuation success is too noisy to separate the selectors: Piotr ARM, Luna and the heads all land at roughly 34–37%. Fine-tuning the actor's top eight layers did not help either, with candidates encoded one at a time or compared through a Kev-style `<decide>` token in those layers. That token's pointer learned to 56.8% agreement on its own, below the head's 65%. A full Kev-style pass through all 36 layers is built but not yet run ([designs](#selection-head-designs)).
+**Comparing candidates inside the actor at every layer closes most of the gap to Piotr SelectionARM; designs that leave the lower layers frozen do not.** On 124 fixed branching states, a Kev-style decision pass on the actor's own weights matches an independent teacher (Luna before execution) on 69.6% of judgments. It re-encodes the prompt, screenshot and five candidates together through all 36 LoRA-adapted layers and reads them out with a `<decide>` token and pointer. Piotr ARM scores 73.2% (−3.6 pp [−10.3, +2.8]), and the best frozen-feature head 61.7%: the Kev-style pass is +7.9 pp [+1.6, +14.3] above it. That checkpoint had trained for only 150 steps, from scratch. Designs that keep layers 1–28 frozen stay at 57–62%: a head on frozen features, a top-8 adapter, or `<decide>` comparison in the top 8 layers only. Chosen-action continuation success cannot separate any of these selectors (32–36%). The Kev-style pass costs about one actor pass per step, like Piotr ARM, so it gives up the frozen head's near-free scoring.
 
 The question is whether selection can be built into the actor ([integration option 3](ARM_INTEGRATION_PLAN.md)). Today's best-of-N pipeline samples five candidates from the actor, then runs a separate 4B selector over the screenshot and all candidates. A head that reads the hidden states the actor computes while generating would need no second model.
 
@@ -24,20 +24,25 @@ A choice counts as agreeing when it is action-equivalent to the reference choice
 
 <a id="selection-head-results"></a>
 
-## Head versus Piotr SelectionARM on the 124 branching states
+## Selectors compared on the 124 branching states
 
-| Selector | States | Luna agreement [95%] | − Piotr, pp [95%] | Continuation success | − Piotr, pp [95%] |
-| --- | ---: | --- | --- | ---: | --- |
-| Luna judgment versus another Luna judgment | 124 | 80.2% | — | — | — |
-| Piotr SelectionARM (separate 4B model) | 124 | 73.2% [66.3, 79.6] | — | 35.75% | — |
-| Head, one candidate at a time | 124 | 61.7% [54.2, 69.2] | −11.5 [−18.5, −4.6] | 34.68% | −1.08 [−4.30, +2.15] |
-| Head, joint comparison | 124 | 60.7% [53.0, 68.1] | −12.5 [−20.0, −5.4] | 33.60% | −2.15 [−5.65, +1.34] |
-| Actor first sample | 124 | 56.2% [48.4, 63.9] | — | 29.84% | — |
-| Uniform candidate | 124 | 46.9% | — | 32.42% | — |
+| Selector | Luna agreement | − Piotr, pp [95%] | Continuation success | − Piotr, pp [95%] | Held-out GPT-5.5 agreement |
+| --- | ---: | --- | ---: | --- | ---: |
+| Luna judgment versus another Luna judgment | 80.2% | — | — | — | — |
+| Piotr SelectionARM (separate 4B model) | 73.2% | — | 35.75% | — | not measurable |
+| **Kev-style pass on the actor, step 150** | **69.6%** | **−3.6 [−10.3, +2.8]** | 34.14% | −1.6 [−5.1, +1.9] | 61.5% |
+| Frozen-feature head, one candidate at a time | 61.7% | −11.5 [−18.6, −4.8] | 34.68% | −1.1 [−4.3, +2.1] | 65.4% |
+| Frozen-feature head, joint comparison | 60.7% | −12.5 [−19.6, −5.2] | 33.60% | −2.1 [−5.7, +1.3] | 65.5% |
+| Top-8 adapter, best checkpoint | 58.7% | −14.5 [−22.0, −7.5] | 33.60% | −2.1 [−5.9, +1.3] | 65.5% |
+| Joint top layers, pointer alone, latest checkpoint | 57.5% | −15.7 [−24.4, −7.5] | 31.72% | −4.0 [−8.1, −0.5] | 53.6% |
+| Actor first sample | 56.2% | — | 29.84% | — | 44.5% |
+| Uniform candidate | 46.9% | — | 32.42% | — | 44.7% |
 
-Luna before execution itself scores 35.11% continuation success on 119 of these states ([branching results](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007)). The heads choose the same action as Piotr ARM on 78/124 (one at a time) and 72/124 (joint) states. Joint comparison did not help: joint minus one-at-a-time continuation success is −1.08 pp [−3.23, +0.81], with equal teacher agreement.
+All rows use the same 124 states and one bootstrap run (20,000 state draws; each state is a distinct task). Agreement averages, per state, the share of Luna's four judgments matched by an action-equivalent candidate. Continuation success averages the chosen action's three SFT continuations, with invalid outcomes counted as zero. Held-out GPT-5.5 agreement uses 3,759 panels from held-out task groups; Piotr ARM cannot be scored there because its training data likely covers those tasks. Luna before execution scores 35.11% continuation success on 119 of these states ([branching results](ARM_FORMULATIONS.md#arm-continuation-branches-results-20261007)).
 
-On held-out GPT-5.5 panels, both heads agree with the teacher on about 65.5%. The baselines score 50.1% for the most common action and 44.7% for a uniform choice. Both heads overfit: training-panel agreement reaches 79–90%.
+- **The Kev-style pass is the only actor-based selector significantly above the frozen head on Luna agreement.** It is not distinguishable from Piotr ARM.
+- **Imitation and transfer diverge.** The Kev-style pass agrees less with its own training teacher on held-out tasks (61.5% versus 65.4%) yet more with Luna. A plausible reading, not yet tested, is that the frozen-feature heads fit GPT-5.5's particular choices (79–90% training-panel agreement), while adapting the whole network learns judgments that transfer to another strong judge.
+- **Continuation success separates none of the trained selectors from Piotr ARM.** Paired intervals are about ±3.5 points.
 
 <a id="selection-head-sweep"></a>
 
@@ -100,8 +105,8 @@ Kev ([jaredpalmer/kev](https://github.com/jaredpalmer/kev), an open reproduction
 
 | Variant | What runs | Trained | Readout | Warm start | Status |
 | --- | --- | --- | --- | --- | --- |
-| Joint top layers | Layers 1–28 reused per candidate; layers 29–36 once over [candidates, `<decide>`], `<decide>` reading every candidate | LoRA on top 8 layers, pointer, head | One-at-a-time head + gated pointer | Exact | No gain; pointer alone reaches 56.8% |
-| Kev-style pass | Prompt, screenshot, candidates and `<decide>` re-encoded through all 36 layers; panels packed like Kev's questions | LoRA on all 36 layers, pointer, `<decide>` embedding | Pointer only | None | Built and tested; GPU job prepared |
+| Joint top layers | Layers 1–28 reused per candidate; layers 29–36 once over [candidates, `<decide>`], `<decide>` reading every candidate | LoRA on top 8 layers, pointer, head | One-at-a-time head + gated pointer | Exact | No gain; pointer alone 57.5% Luna agreement |
+| Kev-style pass | Prompt, screenshot, candidates and `<decide>` re-encoded through all 36 layers; panels packed like Kev's questions | LoRA on all 36 layers, pointer, `<decide>` embedding | Pointer only | None | 69.6% Luna agreement after 150 steps |
 
 Differences from Kev itself: the input is the actor's own prompt with the screenshot rather than a text page description; there is no question instruction; candidates are the actor's generated responses; Kev-27B cannot isolate options (it is a hybrid DeltaNet model), so its options see earlier ones; and Kev is trained on general decision datasets with a fitted temperature, not on GPT-5.5 web choices. Unit tests on a small Qwen3-VL confirm exact warm start (joint), candidate isolation at generation positions, order and packing invariance, and gradients reaching only the trained parts.
 
@@ -113,12 +118,23 @@ Differences from Kev itself: the input is the actor's own prompt with the screen
 | 150 | 64.0% | 55.8% | 0.012 |
 | 300 | 63.9% | 56.8% | −0.005 |
 
-The probe has 250 states; the run trained 373 optimizer steps over 2,987 states. An earlier attempt (`353319`) initialized the gate at zero without a pointer loss, which gave the pointer no gradient; it was stopped after 150 steps with the gate at 0.0021. The trained pointer's weights are in the saved latest checkpoint but have not been scored on the branching states.
+The probe has 250 states; the run trained 373 optimizer steps over 2,987 states. Scored separately (job `353554`), its latest checkpoint is weaker than the frozen head. The pointer alone reaches 53.6% held-out agreement, 57.5% Luna agreement and 31.72% continuation success; the combined score reaches 64.9%, 56.9% and 32.26%. An earlier attempt (`353319`) initialized the gate at zero without a pointer loss, which gave the pointer no gradient; it was stopped after 150 steps with the gate at 0.0021. The trained pointer's weights are in the saved latest checkpoint but have not been scored on the branching states.
+
+**Kev-style pass: fast learning from scratch.** In job `353512` the pointer started at chance and reached 61.0% on the 250-state validation probe after 150 optimizer steps, about 1,200 training states. The run then trained to step 244 before its time limit, too few steps for a second probe check, so the step-150 checkpoint is the one scored above. Each training state runs the prompt and four panels of five candidates with gradients through all 36 layers: about 4 s per state on one H200 with gradient checkpointing, using about 57 GB.
+
+| Step | Probe agreement | Held-out validation | Luna agreement | Continuation success |
+| ---: | ---: | ---: | ---: | ---: |
+| 0 | 45.5% | — | — | — |
+| 150 | 61.0% | 61.5% | 69.6% | 34.14% |
+
+This is one short run, chosen after the other variants' results were known. Its latest checkpoint (step 244) is saved but unscored, and longer training is untested.
 
 <a id="selection-head-next"></a>
 
 ## What would settle the comparison
 
+- **Longer Kev-style training.** The 69.6% comes from 150 steps of a from-scratch run; its latest checkpoint and longer training are unmeasured.
+- **Benchmark impact.** Only a matched full300 run (SFT alone, SFT + Piotr ARM, SFT + Kev-style pass) can show whether the agreement gain changes task success.
 - **Power.** With 124 states, continuation success cannot resolve differences of 1–3 points. The planned outcome-labeled scale-up ([branching proposal](ARM_FORMULATIONS.md#branch-selector-scaleup-20261008)) would also allow outcome-supervised heads instead of teacher imitation.
 - **Supervision.** Every selector here imitates GPT-5.5. Luna agreement and continuation success are only loosely related, so better imitation need not mean better actions.
 - **Serving.** A deployed head needs the serving engine to return hidden states, or a sidecar scorer. Neither has been benchmarked.
@@ -155,9 +171,11 @@ The probe has 250 states; the run trained 373 optimizer steps over 2,987 states.
 | `353205` | same budget | Adapter run 2 | 1 h 03 m 45 s | Stopped |
 | `353247` | same budget, 2 h 10 m limit | Adapter run 3 | 2 h 08 m 20 s | Completed |
 | `353260`, `353319`, `353389` | 1 H200, 2 CPUs, 120 GiB; 3 h approved for all joint runs | Joint top layers: bf16 crash at smoke; inert-gate run; final run | 46 s, 53 m 47 s, 1 h 56 m 09 s | Failed, stopped, completed |
+| `353512` | 1 H200, 2 CPUs, 120 GiB, 3 h approved | Kev-style pass | 2 h 59 m 25 s | Completed |
+| `353554` | 1 H200, 2 CPUs, 120 GiB, 45 m approved | Evaluation-only: joint latest checkpoint (Kev-style step skipped, already complete) | 15 m 24 s | Completed |
 
 CPU-only jobs `353141` and `353145`, and the 8-CPU GPU job `353148`, were cancelled while pending because no node had enough idle CPUs. They consumed no allocation. No API calls or browsers were used.
 
-Code is on branch `arm-selection-head`: `openwebrl/selection_head.py`, `selection_head_features.py`, `selection_adapter.py` and the scripts they call. Runtime artifacts are under `openwebrl-runtime/selection-head-20261008/`. [Aggregate estimates and accounting](arm_results/rl_integration/selection-head-20261009.json).
+Code is on branch `arm-selection-head`: `openwebrl/selection_head.py`, `selection_head_features.py`, `selection_adapter.py`, `selection_joint.py`, `selection_kev.py` and the scripts they call. Runtime artifacts are under `openwebrl-runtime/selection-head-20261008/`. [Aggregate estimates and accounting](arm_results/rl_integration/selection-head-20261009.json).
 
 </details>

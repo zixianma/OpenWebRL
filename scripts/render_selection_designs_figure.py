@@ -35,7 +35,7 @@ ROWS = [
                     ['≈8/36 pass over', 'candidate tokens'], ['≈ one full 4B pass', '(prompt + candidates)'],
                     ['full 27B pass over', 'page text + candidates']]),
     ('Status', [['Luna agreement 73.2%'], ['Luna agreement 61.7%;', 'top-8 adapter: no gain'],
-                ['pointer alone 56.8%;', 'no gain over the head'], ['built and tested;', 'GPU job prepared'], ['not run on these states']]),
+                ['pointer alone: Luna', 'agreement 57.5%'], ['Luna agreement 69.6%', 'after 150 steps'], ['not run on these states']]),
 ]
 # Attention among [cand 1, cand 2, cand 3, <decide>]: rows = queries, columns = keys.
 MASKS = [
