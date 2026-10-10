@@ -16,6 +16,7 @@ REMOTE = 'https://github.com/zixianma/OpenWebRL/blob/arm/openwebrl/docs/'
 SPECS = [
     ('outcome_only', 'Outcome-only baseline', '#2563eb', True, 'baseline'),
     ('outcome56', 'Outcome-only · 56 groups (2,102 tasks)', '#111827', True, 'outcome56'),
+    ('uniform8', 'Outcome-only · uniform G8, 48 groups (2,102 tasks)', '#0f766e', True, 'uniform8'),
     ('expanded4102', 'Outcome-only · expanded 4,102 tasks', '#ea580c', True, 'expanded4102'),
     ('all_failure', 'All-failure ARM', '#dc2626', True, 'allfailure'),
     ('additive', 'Additive ARM', '#16803c', True, 'additive'),
@@ -65,7 +66,15 @@ def build_data():
                 assert data.get('iteration', data.get('completed_iterations', iteration)) == iteration
                 if key in {'expanded4102', 'outcome56'}:
                     assert data.get('evaluation_verified_complete') is True, path
+                if key == 'uniform8':
+                    assert (data.get('evaluation_verified_complete') is True or
+                            (iteration == 10 and data.get('status') == 'verified_complete')), path
                 counts = data.get('full300')
+                if counts is None and key == 'uniform8':
+                    m = data['evaluation']
+                    counts = dict(tasks=m['tasks'], successes=m['successes'],
+                                  valid=m['valid'], overall=m['overall_success_rate'],
+                                  valid_only=m['valid_only_success_rate'])
                 if counts is None:
                     m = data['metrics']
                     counts = dict(tasks=m['trajectories'], successes=m['successes'],
@@ -74,8 +83,9 @@ def build_data():
                                   valid_only=m['success_rate_valid'])
                 points[iteration] = point(iteration, counts,
                                           'arm_results/rl_integration/' + path.name)
-                if key == 'outcome56':
-                    updates = data['checkpoint_adam_updates']
+                if key in {'outcome56', 'uniform8'}:
+                    updates = data.get('checkpoint_adam_updates',
+                                       data.get('checkpoint', {}).get('completed_adam_updates'))
                     assert isinstance(updates, int) and updates >= 0, path
                     points[iteration]['adam_updates'] = updates
         assert points, key

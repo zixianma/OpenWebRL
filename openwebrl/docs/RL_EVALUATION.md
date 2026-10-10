@@ -81,7 +81,7 @@ Reference-policy checkpoint evaluations, the separate Browser Use protocol, and 
 ## Contents
 
 - [Original bonus iteration 90: verified local OM2W300](#arm-original-iter90-results-20261008)
-- [Uniform G8 outcome-only RL: verified iteration 10](#uniform8-iter10-results-20261007)
+- [Uniform G8 outcome-only RL: iteration 20 verified; target 60 incomplete](#uniform8-iter20-results-20261009)
 - [Evaluation harness: code map, protocols, commands and tests](#evaluation-harness-guide)
 - [Jev Ultrafast: completed10-task pilot](#jev-ultrafast-online-mind2web-20261004)
 - [Kev0.8B/27B completed paired pilot](#kev-paired-online-mind2web-20261004)
@@ -1518,7 +1518,71 @@ The topic commits also include shared ARM reward, resume and
 transport modules imported by the evaluation controllers; they are necessary
 code dependencies, not new experiment launches.
 
+<a id="uniform8-iter20-results-20261009"></a>
+## Uniform G8 outcome-only RL: iteration 20 verified — October 9
+
+Iteration 20 scores **32.00% overall / 40.85% valid-only** on full 300
+Online-Mind2Web. This milestone is independently verified; training through
+60 remains incomplete.
+
+| Method | Iteration | Rollouts/task | Accepted groups | Adam updates | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Historical outcome-only |20 |5 |48 |— |300 |95 |232 |68 |31.67 |40.95 |
+| Outcome-only 56-group control |20 |5 |56 |338 |300 |93 |243 |57 |31.00 |38.27 |
+| Uniform G8 |20 |8 |48 |492 |300 |96 |235 |65 |32.00 |40.85 |
+
+| Descriptive comparison | Overall delta (pp) | Valid-only delta (pp) |
+| --- | ---: | ---: |
+| G8 iteration 20 − its iteration 10 |+2.67 |+4.34 |
+| G8 − G5/56 groups at 20 |+1.00 |+2.58 |
+| G8 − historical G5/48 groups at 20 |+0.33 |−0.10 |
+
+Overall includes all 300 attempts; valid-only excludes 65 invalid attempts.
+All three training controls use the original 2,102-task pool. G8 uses eight
+rollouts per training task and 48 accepted mixed groups, compared with five
+rollouts and 56 groups in the batch-56 control. Collection dates, valid-task sets,
+sampled training data and optimizer work differ. These single-cohort differences
+do not isolate a causal rollout-count effect or establish statistical significance.
+Expanded 4,102-task training remains a separate data ablation.
+
+Evaluation uses one rollout per task: local browser, GPT-4.1/action_history,
+actor T0/p1/k1, 4,096 response tokens and 30 turns. Training preserves its own
+optimizer, scheduler and cursor from iteration 10 and the unchanged outcome-only
+recipe. Stealth T0.6/o4-mini results remain separate.
+
+[Aggregate audit](arm_results/rl_integration/uniform8-iteration20-audit.json) ·
+[Interactive full 300 curves](rl_results/arm_rl_interactive.html) ·
+[Continuation scope](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008).
+
+<details>
+<summary>Checkpoint and independent evaluation checks</summary>
+
+Checkpoint 20 is native 19, with 492 Adam updates and scheduler counter 125952.
+The bounded CPU review checked metadata, all 16 shard extents, small finite
+samples and cursor continuity; the evaluation independently verified the native 19
+actor GPU restoration. A subsequent training-optimizer GPU reload or exhaustive
+checkpoint tensor scan is not claimed.
+
+All 300 expected task identities and saved rollout/verdict pairs reconcile.
+All 300 archives passed full ZIP-member CRC checks. All ten task metrics
+recomputed from saved records match the finished evaluation W&B history; worker
+and launcher exited successfully, and the controller awaited the evaluation.
+Valid-only success counts terminal reward 1; mean valid reward is separately
+0.4043 and is not used as the success rate. No task was selectively retried or
+rescored. Raw task identities and trajectories remain private.
+
+Evaluations 10/20 are verified. Training through 60 and evaluations 30/40/50/60
+remain outstanding within the separately approved extension; the adaptive arm
+stays paused. This milestone does not add compute or API budget.
+
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-uniform8-original2102-20261006-iter20).
+
+</details>
+
 <a id="uniform8-iter10-results-20261007"></a>
+<details>
+<summary>Iteration 10 pilot history and training recipe</summary>
+
 ## Uniform G8 outcome-only RL: iteration 10 — October 7
 
 **Completed and independently audited: 88/300 (29.33%) overall; 88/241
@@ -1576,7 +1640,9 @@ restoring its own optimizer, scheduler and cursor. No compute budget was added.
 [Training W&B](https://wandb.ai/zixianma/openwebrl/runs/outcome-uniform8-original2102-20261006) ·
 [Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-uniform8-original2102-20261006-iter10).
 
-The pilot endpoint is complete. Its separately approved [continuation to iteration 60](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008) is active; the next full300 evaluation is at20, and no later evaluation is yet verified.
+The pilot endpoint is complete. Its separately approved continuation has now reached [verified evaluation 20](#uniform8-iter20-results-20261009); target 60 remains incomplete.
+
+</details>
 
 <a id="outcome56-iter30-results-20261009"></a>
 ## Outcome-only56-group control: iteration30 verified — October 9
