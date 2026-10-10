@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1190" viewBox="0 0 1600 1190" role="img" aria-labelledby="title desc">
+<title id="title">Selection head inside the actor: inference and training workflows</title><desc id="desc">Inference: the frozen SFT actor samples five candidates; a small head scores them from the actor&#x27;s own hidden states, read directly or after a top-layer scoring adapter, instead of a separate 4B selector. Training: stage 1 trains the head on cached frozen features; stage 2 trains LoRA on the top eight language layers plus the head, with the prompt encoded by the unadapted actor.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>
+<rect x="0" y="0" width="1600" height="1190" fill="#fff"/>
+<text x="40" y="52" font-size="34" fill="#182b44" font-weight="700" text-anchor="start">Selection head inside the actor</text>
+<text x="40" y="86" font-size="19" fill="#50647a" font-weight="400" text-anchor="start">Generation always uses the frozen SFT actor; selection reads that actor&#x27;s hidden states instead of running a second 4B selector.</text>
+<rect x="40" y="106" width="26" height="20" rx="4" fill="#eaf1fb" stroke="#2563b0" stroke-width="2"/>
+<text x="76" y="122" font-size="15" fill="#182b44" font-weight="400" text-anchor="start">Frozen SFT actor</text>
+<rect x="228" y="106" width="26" height="20" rx="4" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="264" y="122" font-size="15" fill="#182b44" font-weight="400" text-anchor="start">Learned / trainable</text>
+<rect x="440" y="106" width="26" height="20" rx="4" fill="#eef8f6" stroke="#14776c" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="476" y="122" font-size="15" fill="#182b44" font-weight="400" text-anchor="start">Reused / cached</text>
+<rect x="620" y="106" width="26" height="20" rx="4" fill="#f2edf8" stroke="#7350a2" stroke-width="2"/>
+<text x="656" y="122" font-size="15" fill="#182b44" font-weight="400" text-anchor="start">Teacher data</text>
+<rect x="776" y="106" width="26" height="20" rx="4" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="812" y="122" font-size="15" fill="#182b44" font-weight="400" text-anchor="start">Other step</text>
+<rect x="24" y="142" width="1552" height="438" rx="14" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="46" y="176" font-size="19" fill="#2563b0" font-weight="700" text-anchor="start">A   INFERENCE · one browser step</text>
+<rect x="46" y="196" width="196" height="196" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="144.0" y="270.699" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="46,196,196,196">Browser state</text>
+<text x="144.0" y="290.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,196,196,196">task</text>
+<text x="144.0" y="309.633" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,196,196,196">action history</text>
+<text x="144.0" y="328.53299999999996" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,196,196,196">current screenshot</text>
+<rect x="272" y="196" width="268" height="196" rx="10" fill="#eaf1fb" stroke="#2563b0" stroke-width="2"/>
+<text x="406.0" y="251.79899999999998" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="272,196,268,196">Frozen SFT actor</text>
+<text x="406.0" y="271.83299999999997" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="272,196,268,196">Qwen3-VL-4B, 36 layers</text>
+<text x="406.0" y="290.73299999999995" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="272,196,268,196">1. prefill prompt once</text>
+<text x="406.0" y="309.6329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="272,196,268,196">→ prompt KV cache</text>
+<text x="406.0" y="328.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="272,196,268,196">2. sample 5 candidates</text>
+<text x="406.0" y="347.4329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="272,196,268,196">(reasoning + action)</text>
+<rect x="570" y="196" width="236" height="196" rx="10" fill="#eef8f6" stroke="#14776c" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="688.0" y="261.249" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="570,196,236,196">Hidden states</text>
+<text x="688.0" y="281.283" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="570,196,236,196">of all 5 candidates</text>
+<text x="688.0" y="300.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="570,196,236,196">by-product of generation</text>
+<text x="688.0" y="319.08299999999997" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="570,196,236,196">every token, every layer</text>
+<text x="688.0" y="337.98299999999995" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="570,196,236,196">no extra forward pass</text>
+<rect x="836" y="196" width="280" height="90" rx="10" fill="#eaf1fb" stroke="#2563b0" stroke-width="2"/>
+<text x="976.0" y="236.599" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="836,196,280,90">Frozen head</text>
+<text x="976.0" y="256.633" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="836,196,280,90">read layers 18 / 27 / 36 as is</text>
+<rect x="836" y="302" width="280" height="90" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="976.0" y="333.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="836,302,280,90">Scoring adapter</text>
+<text x="976.0" y="353.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="836,302,280,90">re-run top 8 layers on candidate</text>
+<text x="976.0" y="372.08299999999997" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="836,302,280,90">tokens with LoRA; prompt KV reused</text>
+<rect x="1146" y="196" width="200" height="196" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1246.0" y="261.249" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1146,196,200,196">Pool per candidate</text>
+<text x="1246.0" y="281.283" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1146,196,200,196">reasoning mean</text>
+<text x="1246.0" y="300.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1146,196,200,196">action mean</text>
+<text x="1246.0" y="319.08299999999997" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1146,196,200,196">end token</text>
+<text x="1246.0" y="337.98299999999995" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1146,196,200,196">+ prompt last token</text>
+<rect x="1376" y="196" width="178" height="196" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="1465.0" y="251.79899999999998" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1376,196,178,196">Selection head</text>
+<text x="1465.0" y="271.83299999999997" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1376,196,178,196">standardize</text>
+<text x="1465.0" y="290.73299999999995" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1376,196,178,196">→ MLP per candidate</text>
+<text x="1465.0" y="309.6329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1376,196,178,196">→ 5 scores</text>
+<text x="1465.0" y="328.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1376,196,178,196">→ argmax</text>
+<text x="1465.0" y="347.4329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1376,196,178,196">→ execute</text>
+<path d="M242,294.0 L268,294.0" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M540,294.0 L566,294.0" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M806,294.0 L820,294.0 L820,241 L832,241" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M806,294.0 L820,294.0 L820,347 L832,347" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M1116,241 L1131,241 L1131,294.0 L1142,294.0" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M1116,347 L1131,347 L1131,294.0 L1142,294.0" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M1346,294.0 L1372,294.0" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="46" y="418" width="760" height="140" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="60" y="464.699" font-size="17" fill="#182b44" font-weight="700" text-anchor="start" data-box="46,418,760,140">Added cost per step</text>
+<text x="60" y="484.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="start" data-box="46,418,760,140">Frozen head: no extra 4B forward — features come from generation</text>
+<text x="60" y="503.633" font-size="14" fill="#50647a" font-weight="400" text-anchor="start" data-box="46,418,760,140">Adapter: ≈ 8/36 of one forward over the candidate tokens only</text>
+<text x="60" y="522.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="start" data-box="46,418,760,140">One set of 4B weights to serve</text>
+<rect x="836" y="418" width="718" height="140" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="850" y="464.699" font-size="17" fill="#182b44" font-weight="700" text-anchor="start" data-box="836,418,718,140">Baseline: Piotr SelectionARM</text>
+<text x="850" y="484.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="start" data-box="836,418,718,140">A separate 4B model re-reads the screenshot and all 5 candidates</text>
+<text x="850" y="503.633" font-size="14" fill="#50647a" font-weight="400" text-anchor="start" data-box="836,418,718,140">(≈ 3.8k input tokens per step) and outputs {&quot;selection&quot;: N}</text>
+<text x="850" y="522.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="start" data-box="836,418,718,140">Two sets of 4B weights to serve</text>
+<rect x="24" y="604" width="1552" height="568" rx="14" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="46" y="638" font-size="19" fill="#ad5b13" font-weight="700" text-anchor="start">B   TRAINING · teacher-labeled panels; the generating actor is never updated</text>
+<rect x="46" y="664" width="250" height="190" rx="10" fill="#f2edf8" stroke="#7350a2" stroke-width="2"/>
+<text x="171.0" y="716.799" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="46,664,250,190">Teacher-labeled panels</text>
+<text x="171.0" y="736.833" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,664,250,190">Piotr release, GPT-5.5 choice</text>
+<text x="171.0" y="755.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,664,250,190">prompt + screenshot</text>
+<text x="171.0" y="774.6329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,664,250,190">5 sampled candidates</text>
+<text x="171.0" y="793.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,664,250,190">35,916 train · 3,759 held-out</text>
+<text x="171.0" y="812.4329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,664,250,190">(split by task group)</text>
+<rect x="46" y="878" width="250" height="130" rx="10" fill="#f2edf8" stroke="#7350a2" stroke-width="2"/>
+<text x="171.0" y="919.699" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="46,878,250,130">Soft target</text>
+<text x="171.0" y="939.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,878,250,130">uniform over candidates</text>
+<text x="171.0" y="958.6329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,878,250,130">action-equivalent to</text>
+<text x="171.0" y="977.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="46,878,250,130">the teacher&#x27;s pick</text>
+<text x="330" y="668" font-size="16" fill="#182b44" font-weight="700" text-anchor="start">Stage 1 · frozen features</text>
+<rect x="330" y="682" width="270" height="120" rx="10" fill="#eaf1fb" stroke="#2563b0" stroke-width="2"/>
+<text x="465.0" y="718.699" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="330,682,270,120">Frozen actor</text>
+<text x="465.0" y="738.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,682,270,120">teacher-forced</text>
+<text x="465.0" y="757.6329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,682,270,120">prompt once → KV cache</text>
+<text x="465.0" y="776.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,682,270,120">→ 5 candidates per panel</text>
+<rect x="630" y="682" width="240" height="120" rx="10" fill="#eef8f6" stroke="#14776c" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="750.0" y="728.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="630,682,240,120">Feature cache (once)</text>
+<text x="750.0" y="748.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="630,682,240,120">39,675 panels · 12 GB</text>
+<text x="750.0" y="767.083" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="630,682,240,120">≈ 2 GPU-hours</text>
+<rect x="900" y="682" width="250" height="120" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="1025.0" y="728.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="900,682,250,120">Train head only</text>
+<text x="1025.0" y="748.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="900,682,250,120">soft cross-entropy</text>
+<text x="1025.0" y="767.083" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="900,682,250,120">≈ 3 s per epoch</text>
+<rect x="1180" y="682" width="374" height="120" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1367.0" y="728.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1180,682,374,120">Choose checkpoint</text>
+<text x="1367.0" y="748.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1180,682,374,120">held-out GPT-5.5 agreement</text>
+<text x="1367.0" y="767.083" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1180,682,374,120">≈ 65.5% (most common action 50.1%)</text>
+<path d="M296,742 L326,742" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M600,742 L626,742" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M870,742 L896,742" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M1150,742 L1176,742" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="330" y="846" font-size="16" fill="#182b44" font-weight="700" text-anchor="start">Stage 2 · top-layer scoring adapter (warm-started from stage 1)</text>
+<rect x="330" y="860" width="196" height="130" rx="10" fill="#eef8f6" stroke="#14776c" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="428.0" y="901.699" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="330,860,196,130">Prompt</text>
+<text x="428.0" y="921.733" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,860,196,130">adapter off, no gradient</text>
+<text x="428.0" y="940.6329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,860,196,130">(as at generation)</text>
+<text x="428.0" y="959.5329999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,860,196,130">→ KV cache</text>
+<rect x="556" y="860" width="196" height="130" rx="10" fill="#eaf1fb" stroke="#2563b0" stroke-width="2"/>
+<text x="654.0" y="911.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="556,860,196,130">Layers 1–28</text>
+<text x="654.0" y="931.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="556,860,196,130">candidate tokens</text>
+<text x="654.0" y="950.083" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="556,860,196,130">frozen</text>
+<rect x="782" y="860" width="216" height="130" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="890.0" y="911.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="782,860,216,130">Layers 29–36</text>
+<text x="890.0" y="931.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="782,860,216,130">+ LoRA, rank 16</text>
+<text x="890.0" y="950.083" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="782,860,216,130">trainable</text>
+<rect x="1028" y="860" width="150" height="130" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1103.0" y="920.599" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1028,860,150,130">Pool</text>
+<text x="1103.0" y="940.633" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1028,860,150,130">per candidate</text>
+<rect x="1208" y="860" width="170" height="130" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="1293.0" y="911.149" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1208,860,170,130">Head</text>
+<text x="1293.0" y="931.183" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1208,860,170,130">trainable</text>
+<text x="1293.0" y="950.083" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1208,860,170,130">starts at stage 1</text>
+<rect x="1408" y="860" width="146" height="130" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1481.0" y="920.599" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1408,860,146,130">Soft CE loss</text>
+<text x="1481.0" y="940.633" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1408,860,146,130">vs soft target</text>
+<path d="M296,810 L313,810 L313,925 L326,925" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M526,925 L552,925" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M752,925 L778,925" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M998,925 L1024,925" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M1178,925 L1204,925" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M1378,925 L1404,925" fill="none" stroke="#7d8fa3" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="330" y="1022" font-size="15" fill="#50647a" font-weight="400" text-anchor="start">Gradients reach only the LoRA weights and the head; the vision tower, base weights and generation are unchanged.</text>
+<rect x="330" y="1046" width="1224" height="104" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="942.0" y="1084.1490000000001" font-size="17" fill="#182b44" font-weight="700" text-anchor="middle" data-box="330,1046,1224,104">Evaluation — never used for training or checkpoint choice</text>
+<text x="942.0" y="1104.1830000000002" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,1046,1224,104">124 branching states: agreement with Luna (independent teacher) and chosen-action continuation success,</text>
+<text x="942.0" y="1123.0830000000003" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="330,1046,1224,104">compared with Piotr SelectionARM run offline on the same states</text>
+</svg>
