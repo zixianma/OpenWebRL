@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1710" height="1040" viewBox="0 0 1710 1040" role="img" aria-labelledby="title desc">
+<title id="title">Five ways to choose among sampled actions</title><desc id="desc">Compares Piotr SelectionARM, the one-at-a-time actor-feature head, the joint top-layer variant, a Kev-style decision pass on the actor and Kev itself: weights, inputs, how candidates interact, order effects, readout, added cost and current status.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>
+<rect x="0" y="0" width="1710" height="1040" fill="#fff"/>
+<text x="30" y="52" font-size="34" fill="#182b44" font-weight="700" text-anchor="start">Five ways to choose among sampled actions</text>
+<text x="30" y="86" font-size="19" fill="#50647a" font-weight="400" text-anchor="start">From a separate selector to scoring inside the actor; the small grids show which candidates each one can attend to.</text>
+<text x="30" y="116" font-size="15" fill="#50647a" font-weight="400" text-anchor="start">Grid rows are queries, columns are keys: c1–c3 candidates, D the &lt;decide&gt; token; filled = may attend.</text>
+<rect x="186" y="140" width="288" height="72" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="172.193" font-size="19" fill="#182b44" font-weight="700" text-anchor="middle" data-box="186,140,288,72">Piotr SelectionARM</text>
+<text x="330.0" y="192.983" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,140,288,72">baseline</text>
+<rect x="486" y="140" width="288" height="72" rx="10" fill="#eaf1fb" stroke="#2563b0" stroke-width="2"/>
+<text x="630.0" y="172.193" font-size="19" fill="#182b44" font-weight="700" text-anchor="middle" data-box="486,140,288,72">One-at-a-time head</text>
+<text x="630.0" y="192.983" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,140,288,72">frozen actor (+ top-8 adapter)</text>
+<rect x="786" y="140" width="288" height="72" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="930.0" y="172.193" font-size="19" fill="#182b44" font-weight="700" text-anchor="middle" data-box="786,140,288,72">Joint top layers</text>
+<text x="930.0" y="192.983" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,140,288,72">Kev-inspired, inside the actor</text>
+<rect x="1086" y="140" width="288" height="72" rx="10" fill="#fdf0e4" stroke="#ad5b13" stroke-width="2"/>
+<text x="1230.0" y="172.193" font-size="19" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1086,140,288,72">Kev-style pass</text>
+<text x="1230.0" y="192.983" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,140,288,72">Kev design on the actor&#x27;s weights</text>
+<rect x="1386" y="140" width="288" height="72" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="172.193" font-size="19" fill="#182b44" font-weight="700" text-anchor="middle" data-box="1386,140,288,72">Kev</text>
+<text x="1530.0" y="192.983" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,140,288,72">external reference</text>
+<text x="30" y="273.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Model</text>
+<rect x="186" y="224" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="261.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,224,288,86">Separate 4B</text>
+<text x="330.0" y="280.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,224,288,86">vision-language selector</text>
+<rect x="486" y="224" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="630.0" y="252.258" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,224,288,86">Frozen 4B actor</text>
+<text x="630.0" y="271.158" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,224,288,86">+ small head; adapter:</text>
+<text x="630.0" y="290.058" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,224,288,86">LoRA on top 8 layers</text>
+<rect x="786" y="224" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="930.0" y="261.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,224,288,86">4B actor, layers 1–28 frozen</text>
+<text x="930.0" y="280.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,224,288,86">+ LoRA on top 8 layers</text>
+<rect x="1086" y="224" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1230.0" y="261.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,224,288,86">4B actor + LoRA on all</text>
+<text x="1230.0" y="280.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,224,288,86">36 layers, as a separate pass</text>
+<rect x="1386" y="224" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="261.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,224,288,86">Separate 0.8–27B</text>
+<text x="1530.0" y="280.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,224,288,86">decision model</text>
+<text x="30" y="379.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Reads</text>
+<rect x="186" y="330" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="367.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,330,288,86">screenshot + task +</text>
+<text x="330.0" y="386.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,330,288,86">5 candidate texts</text>
+<rect x="486" y="330" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="630.0" y="367.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,330,288,86">actor&#x27;s prompt + screenshot;</text>
+<text x="630.0" y="386.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,330,288,86">its own candidate states</text>
+<rect x="786" y="330" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="930.0" y="367.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,330,288,86">same as left; candidate</text>
+<text x="930.0" y="386.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,330,288,86">states from generation</text>
+<rect x="1086" y="330" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1230.0" y="367.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,330,288,86">prompt + screenshot +</text>
+<text x="1230.0" y="386.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,330,288,86">candidates, re-encoded</text>
+<rect x="1386" y="330" width="288" height="86" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="367.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,330,288,86">text-only page JSON +</text>
+<text x="1530.0" y="386.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,330,288,86">candidate texts</text>
+<text x="30" y="531.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Interaction</text>
+<rect x="186" y="436" width="288" height="178" rx="10" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="295.0" y="482" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c1</text>
+<text x="314.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c1</text>
+<rect x="303.0" y="466" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="325.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="347.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="295.0" y="504" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c2</text>
+<text x="336.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c2</text>
+<rect x="303.0" y="488" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="325.0" y="488" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="347.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="295.0" y="526" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c3</text>
+<text x="358.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c3</text>
+<rect x="303.0" y="510" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="325.0" y="510" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="347.0" y="510" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<text x="330.0" y="574" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,436,288,178">one causal sequence:</text>
+<text x="330.0" y="593" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,436,288,178">later see earlier</text>
+<rect x="486" y="436" width="288" height="178" rx="10" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="595.0" y="482" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c1</text>
+<text x="614.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c1</text>
+<rect x="603.0" y="466" width="20" height="20" rx="3" fill="#2563b0" stroke="none"/>
+<rect x="625.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="647.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="595.0" y="504" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c2</text>
+<text x="636.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c2</text>
+<rect x="603.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="625.0" y="488" width="20" height="20" rx="3" fill="#2563b0" stroke="none"/>
+<rect x="647.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="595.0" y="526" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c3</text>
+<text x="658.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c3</text>
+<rect x="603.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="625.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="647.0" y="510" width="20" height="20" rx="3" fill="#2563b0" stroke="none"/>
+<text x="630.0" y="574" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,436,288,178">none: each</text>
+<text x="630.0" y="593" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,436,288,178">candidate alone</text>
+<rect x="786" y="436" width="288" height="178" rx="10" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="884.0" y="482" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c1</text>
+<text x="903.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c1</text>
+<rect x="892.0" y="466" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="914.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="936.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="958.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="884.0" y="504" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c2</text>
+<text x="925.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c2</text>
+<rect x="892.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="914.0" y="488" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="936.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="958.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="884.0" y="526" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c3</text>
+<text x="947.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c3</text>
+<rect x="892.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="914.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="936.0" y="510" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="958.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="884.0" y="548" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">D</text>
+<text x="969.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">D</text>
+<rect x="892.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="914.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="936.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="958.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<text x="930.0" y="574" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,436,288,178">&lt;decide&gt; reads all,</text>
+<text x="930.0" y="593" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,436,288,178">top 8 layers only</text>
+<rect x="1086" y="436" width="288" height="178" rx="10" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="1184.0" y="482" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c1</text>
+<text x="1203.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c1</text>
+<rect x="1192.0" y="466" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="1214.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1236.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1258.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="1184.0" y="504" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c2</text>
+<text x="1225.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c2</text>
+<rect x="1192.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1214.0" y="488" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="1236.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1258.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="1184.0" y="526" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c3</text>
+<text x="1247.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c3</text>
+<rect x="1192.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1214.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1236.0" y="510" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="1258.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="1184.0" y="548" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">D</text>
+<text x="1269.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">D</text>
+<rect x="1192.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="1214.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="1236.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<rect x="1258.0" y="532" width="20" height="20" rx="3" fill="#ad5b13" stroke="none"/>
+<text x="1230.0" y="574" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,436,288,178">&lt;decide&gt; reads all,</text>
+<text x="1230.0" y="593" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,436,288,178">in every layer</text>
+<rect x="1386" y="436" width="288" height="178" rx="10" fill="#ffffff" stroke="#d6dfeb" stroke-width="2"/>
+<text x="1484.0" y="482" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c1</text>
+<text x="1503.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c1</text>
+<rect x="1492.0" y="466" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1514.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1536.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1558.0" y="466" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="1484.0" y="504" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c2</text>
+<text x="1525.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c2</text>
+<rect x="1492.0" y="488" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1514.0" y="488" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1536.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<rect x="1558.0" y="488" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="1484.0" y="526" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">c3</text>
+<text x="1547.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">c3</text>
+<rect x="1492.0" y="510" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1514.0" y="510" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1536.0" y="510" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1558.0" y="510" width="20" height="20" rx="3" fill="#eef2f7" stroke="none"/>
+<text x="1484.0" y="548" font-size="12" fill="#50647a" font-weight="400" text-anchor="end">D</text>
+<text x="1569.0" y="460" font-size="12" fill="#50647a" font-weight="400" text-anchor="middle">D</text>
+<rect x="1492.0" y="532" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1514.0" y="532" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1536.0" y="532" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<rect x="1558.0" y="532" width="20" height="20" rx="3" fill="#7d8fa3" stroke="none"/>
+<text x="1530.0" y="574" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,436,288,178">later options see</text>
+<text x="1530.0" y="593" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,436,288,178">earlier + &lt;decide&gt;</text>
+<text x="30" y="677.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Order effects</text>
+<rect x="186" y="634" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="665.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,634,288,74">yes: picks candidate 1</text>
+<text x="330.0" y="684.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,634,288,74">on 62/124 states</text>
+<rect x="486" y="634" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="630.0" y="675.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,634,288,74">none</text>
+<rect x="786" y="634" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="930.0" y="675.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,634,288,74">none: shared positions</text>
+<rect x="1086" y="634" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1230.0" y="675.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,634,288,74">none: shared positions</text>
+<rect x="1386" y="634" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="665.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,634,288,74">yes in Kev-27B;</text>
+<text x="1530.0" y="684.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,634,288,74">we shuffle per state</text>
+<text x="30" y="771.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Readout</text>
+<rect x="186" y="728" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="759.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,728,288,74">generates</text>
+<text x="330.0" y="778.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,728,288,74">{&quot;selection&quot;: N}</text>
+<rect x="486" y="728" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="630.0" y="759.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,728,288,74">pooled states</text>
+<text x="630.0" y="778.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,728,288,74">→ MLP per candidate</text>
+<rect x="786" y="728" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="930.0" y="759.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,728,288,74">pooled head</text>
+<text x="930.0" y="778.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,728,288,74">+ gated pointer</text>
+<rect x="1086" y="728" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1230.0" y="759.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,728,288,74">pointer only:</text>
+<text x="1230.0" y="778.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,728,288,74">q(&lt;decide&gt;) · k(end)</text>
+<rect x="1386" y="728" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="759.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,728,288,74">pointer</text>
+<text x="1530.0" y="778.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,728,288,74">+ fitted temperature</text>
+<text x="30" y="865.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Added cost</text>
+<rect x="186" y="822" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="853.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,822,288,74">full 4B pass:</text>
+<text x="330.0" y="872.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,822,288,74">≈3.8k tokens + image</text>
+<rect x="486" y="822" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="630.0" y="853.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,822,288,74">≈0 (frozen head);</text>
+<text x="630.0" y="872.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,822,288,74">≈8/36 pass (adapter)</text>
+<rect x="786" y="822" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="930.0" y="853.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,822,288,74">≈8/36 pass over</text>
+<text x="930.0" y="872.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,822,288,74">candidate tokens</text>
+<rect x="1086" y="822" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1230.0" y="853.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,822,288,74">≈ one full 4B pass</text>
+<text x="1230.0" y="872.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,822,288,74">(prompt + candidates)</text>
+<rect x="1386" y="822" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="853.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,822,288,74">full 27B pass over</text>
+<text x="1530.0" y="872.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,822,288,74">page text + candidates</text>
+<text x="30" y="959.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Status</text>
+<rect x="186" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="330.0" y="957.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,916,288,74">Luna agreement 73.2%</text>
+<rect x="486" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="630.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,916,288,74">Luna agreement 61.7%;</text>
+<text x="630.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,916,288,74">adapter: no gain yet</text>
+<rect x="786" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="930.0" y="957.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,916,288,74">job 353260 queued</text>
+<rect x="1086" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1230.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,916,288,74">built and tested;</text>
+<text x="1230.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,916,288,74">GPU job prepared</text>
+<rect x="1386" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
+<text x="1530.0" y="957.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,916,288,74">not run on these states</text>
+</svg>

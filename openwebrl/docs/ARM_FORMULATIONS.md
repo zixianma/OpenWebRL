@@ -322,7 +322,14 @@ All 1,280 record identities, fixed candidate responses, strict replay releases, 
 | Head on frozen actor features, one candidate at a time | 61.7% | −11.5 [−18.5, −4.6] | 34.68% | −1.08 [−4.30, +2.15] |
 | Uniform candidate | 46.9% | — | 32.42% | — |
 
-A nine-configuration sweep found no frozen layer or pooling that closes the gap, and a top-layer scoring adapter is training. Method, all three evaluations, the sweep and accounting are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md). The outcome-selected and hindsight references for this cohort are in the [original-three-draw details](#branch-original-three-details).
+A nine-configuration sweep found no frozen layer or pooling that closes the gap, and fine-tuning the top eight layers has not helped so far. The likely missing piece is comparison between candidates: none of the actor-based selectors so far let candidates interact. Two Kev-inspired variants add a `<decide>` token that reads every candidate inside the actor:
+
+![Five selector designs compared by weights, inputs, candidate interaction, order effects, readout, added cost and status](arm_results/methods/selection_designs_compared.svg)
+
+- **Joint top layers** reuses the actor's generation-time states for layers 1–28 and compares candidates only in the eight adapted layers, keeping scoring cheap.
+- **Kev-style pass** re-encodes everything through all 36 adapted layers, like Kev, and costs about one actor pass per step, similar to Piotr ARM.
+- Both are order-invariant by construction, unlike Piotr ARM (candidate 1 on 62/124 states) and Kev-27B.
+ Method, all three evaluations, the sweep and accounting are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md). The outcome-selected and hindsight references for this cohort are in the [original-three-draw details](#branch-original-three-details).
 
 <a id="branch-post-to-pre-study-20261008"></a>
 
