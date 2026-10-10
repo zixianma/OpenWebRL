@@ -1,6 +1,6 @@
 # ARM selection head: choosing actions from the actor's own hidden states
 
-**A small head on the frozen SFT actor's hidden states is a weaker action selector than the released Piotr SelectionARM.** On 124 fixed branching states, the best preselected head matches an independent teacher (Luna before execution) on 61.7% of judgments, against 73.2% for Piotr ARM: −11.5 pp [−18.5, −4.6]. No frozen layer, pooling or head size closes the gap. Chosen-action continuation success is too noisy to separate the selectors: Piotr ARM, Luna and the heads all land at roughly 34–37%. Fine-tuning the actor's top eight layers while candidates are still encoded one at a time has not improved held-out agreement so far; two Kev-inspired variants that let candidates be compared inside the actor are prepared ([designs](#selection-head-designs)).
+**A small head on the frozen SFT actor's hidden states is a weaker action selector than the released Piotr SelectionARM.** On 124 fixed branching states, the best preselected head matches an independent teacher (Luna before execution) on 61.7% of judgments, against 73.2% for Piotr ARM: −11.5 pp [−18.5, −4.6]. No frozen layer, pooling or head size closes the gap. Chosen-action continuation success is too noisy to separate the selectors: Piotr ARM, Luna and the heads all land at roughly 34–37%. Fine-tuning the actor's top eight layers did not help either, with candidates encoded one at a time or compared through a Kev-style `<decide>` token in those layers. That token's pointer learned to 56.8% agreement on its own, below the head's 65%. A full Kev-style pass through all 36 layers is built but not yet run ([designs](#selection-head-designs)).
 
 The question is whether selection can be built into the actor ([integration option 3](ARM_INTEGRATION_PLAN.md)). Today's best-of-N pipeline samples five candidates from the actor, then runs a separate 4B selector over the screenshot and all candidates. A head that reads the hidden states the actor computes while generating would need no second model.
 
@@ -63,23 +63,30 @@ All nine configurations use the one-at-a-time head, train for ten epochs and cho
 
 <a id="selection-head-adapter"></a>
 
-## Top-layer scoring adapter: no gain so far
+## Top-layer scoring adapter: no gain
 
-**Hypothesis:** frozen features miss what Piotr's separately fine-tuned 4B selector learns. The adapter adds rank-16 LoRA on the last eight of 36 language layers and is used **only to score candidates**:
+**Fine-tuning the actor's top eight layers for scoring, with candidates still encoded one at a time, does not improve on the frozen head.** The adapter (rank-16 LoRA on the last eight of 36 language layers) scores candidates only: the frozen SFT actor still generates them, and the prompt keeps the KV cache the actor computed with the adapter off. Training starts exactly at the one-at-a-time head, because LoRA starts as an identity, and uses the same GPT-5.5 teacher panels.
 
-1. The frozen SFT actor generates all five candidates, so candidates match the SFT and SFT + Piotr ARM baselines.
-2. The prompt keeps the KV cache the actor already computed, with the adapter off.
-3. Only candidate tokens pass through the adapted top layers. Scoring adds roughly 8/36 of one forward pass over the candidate tokens, against a full second 4B model for Piotr ARM.
+| Selector | Held-out GPT-5.5 agreement | Luna agreement | Continuation success |
+| --- | ---: | ---: | ---: |
+| Frozen one-at-a-time head | 65.4% | 61.7% | 34.68% |
+| Top-8 adapter, best checkpoint (step 150 of 525) | 65.5% | 58.7% | 33.60% |
+| Piotr SelectionARM | — | 73.2% | 35.75% |
 
-Training starts exactly at the one-at-a-time head, because LoRA starts as an identity, and uses GPT-5.5 choices from the same 35,916 training panels. The first two runs stopped early: neither beat its step-0 checkpoint on a 100-state validation probe, and neither saved a resumable checkpoint. Each had seen at most 9,600 panels, about a quarter of one pass, so this is no improvement within a short run, not an established failure.
+The final run froze the head for its first 100 steps and used learning rates of 5e-5 (adapter) and 1e-5 (head). It trained for 525 optimizer steps over 4,205 states, about 0.47 of a pass over all panels. On a fixed 250-state validation probe it stayed within 64.4–65.2% of its 65.0% start, with training loss near 0.92. Its latest checkpoint is saved and can be extended. The Luna and continuation differences are within the 124-state noise.
 
-| Run | Adapter / head learning rate | Probe agreement, step 0 → 100 → 200 → 300 | Training loss at 100 / 200 / 300 | Status |
+<details>
+<summary>Earlier adapter attempts</summary>
+
+Two earlier runs used a 100-state probe, about ±2 points of chance movement, and saved only their best checkpoint, which stayed at step 0.
+
+| Run | Adapter / head learning rate | Probe agreement by step | Training loss | Elapsed |
 | --- | --- | --- | --- | --- |
-| `353150` | 1e-4 / 1e-4 | 63.8% → 61.5% → 61.8% | 0.958 / 1.039 | Stopped at 43 m 55 s |
-| `353205` | 2e-5 / 1e-5 | 63.8% → 63.2% → 61.7% → 62.1% | 0.909 / 0.948 / 0.924 | Stopped at 1 h 03 m 45 s |
-| `353247` | 5e-5 / 1e-5; head frozen for 100 steps | 65.0% at step 0 on a fixed 250-state probe | — | Running |
+| `353150` | 1e-4 / 1e-4 | 63.8% → 61.5% → 61.8% (steps 0, 100, 200) | 0.958 → 1.039 | 43 m 55 s, stopped |
+| `353205` | 2e-5 / 1e-5 | 63.8% → 63.2% → 61.7% → 62.1% (steps 0–300) | 0.909 → 0.948 → 0.924 | 1 h 03 m 45 s, stopped |
+| `353247` | 5e-5 / 1e-5, head frozen 100 steps | 65.0% → 65.2% → 64.4% → 64.5% (steps 0–450; 250-state probe) | 0.923 → 0.939 → 0.922 | 2 h 08 m 20 s, completed |
 
-The probes cover 100 or 250 states; panels from one state are correlated, so the 100-state probe moves by roughly ±2 points by chance. The third run saves both the latest and the best checkpoint and is scored on full validation and the branching states at the end.
+</details>
 
 <a id="selection-head-designs"></a>
 
@@ -93,10 +100,20 @@ Kev ([jaredpalmer/kev](https://github.com/jaredpalmer/kev), an open reproduction
 
 | Variant | What runs | Trained | Readout | Warm start | Status |
 | --- | --- | --- | --- | --- | --- |
-| Joint top layers | Layers 1–28 reused per candidate; layers 29–36 once over [candidates, `<decide>`], `<decide>` reading every candidate | LoRA on top 8 layers, pointer, head | One-at-a-time head + gated pointer | Exact | Job `353260` queued |
+| Joint top layers | Layers 1–28 reused per candidate; layers 29–36 once over [candidates, `<decide>`], `<decide>` reading every candidate | LoRA on top 8 layers, pointer, head | One-at-a-time head + gated pointer | Exact | No gain; pointer alone reaches 56.8% |
 | Kev-style pass | Prompt, screenshot, candidates and `<decide>` re-encoded through all 36 layers; panels packed like Kev's questions | LoRA on all 36 layers, pointer, `<decide>` embedding | Pointer only | None | Built and tested; GPU job prepared |
 
 Differences from Kev itself: the input is the actor's own prompt with the screenshot rather than a text page description; there is no question instruction; candidates are the actor's generated responses; Kev-27B cannot isolate options (it is a hybrid DeltaNet model), so its options see earlier ones; and Kev is trained on general decision datasets with a fitted temperature, not on GPT-5.5 web choices. Unit tests on a small Qwen3-VL confirm exact warm start (joint), candidate isolation at generation positions, order and packing invariance, and gradients reaching only the trained parts.
+
+**Joint top layers: the comparison pointer learns, but stays below the head.** In job `353389`, the pointer's own validation-probe agreement rose from chance to 56.8%; the head alone scores 65%. The gate weighting the pointer stayed near zero, so the combined score never beat the step-0 checkpoint. The selected checkpoint is therefore the frozen head: held-out agreement 65.4%, Luna agreement 60.9%, continuation success 34.95%.
+
+| Step | Combined probe agreement | Pointer alone | Gate |
+| ---: | ---: | ---: | ---: |
+| 0 | 64.9% | 46.5% | 0 |
+| 150 | 64.0% | 55.8% | 0.012 |
+| 300 | 63.9% | 56.8% | −0.005 |
+
+The probe has 250 states; the run trained 373 optimizer steps over 2,987 states. An earlier attempt (`353319`) initialized the gate at zero without a pointer loss, which gave the pointer no gradient; it was stopped after 150 steps with the gate at 0.0021. The trained pointer's weights are in the saved latest checkpoint but have not been scored on the branching states.
 
 <a id="selection-head-next"></a>
 
@@ -136,8 +153,8 @@ Differences from Kev itself: the input is the actor's own prompt with the screen
 | `351647` | 1 H200, 8 CPUs, 120 GiB, 3 h approved | Features for 39,675 panels and 124 states; Piotr ARM offline; two heads | 1 h 58 m | Completed |
 | `353150` | 1 H200, 2 CPUs, 120 GiB; 4 h approved for all adapter runs | GPU smoke test, nine-configuration sweep, adapter run 1 | 43 m 55 s | Stopped |
 | `353205` | same budget | Adapter run 2 | 1 h 03 m 45 s | Stopped |
-| `353247` | same budget, 2 h 10 m limit | Adapter run 3 | — | Running |
-| `353260` | 1 H200, 2 CPUs, 120 GiB, 3 h approved | Joint top-layer variant | — | Queued |
+| `353247` | same budget, 2 h 10 m limit | Adapter run 3 | 2 h 08 m 20 s | Completed |
+| `353260`, `353319`, `353389` | 1 H200, 2 CPUs, 120 GiB; 3 h approved for all joint runs | Joint top layers: bf16 crash at smoke; inert-gate run; final run | 46 s, 53 m 47 s, 1 h 56 m 09 s | Failed, stopped, completed |
 
 CPU-only jobs `353141` and `353145`, and the 8-CPU GPU job `353148`, were cancelled while pending because no node had enough idle CPUs. They consumed no allocation. No API calls or browsers were used.
 
