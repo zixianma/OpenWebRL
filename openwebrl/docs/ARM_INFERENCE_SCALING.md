@@ -281,6 +281,52 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 
 [Results and approval aggregate](arm_results/sol61_n5_launch_20261009.json) · [Official model settings and pricing](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
 
+<a id="molmoweb-sol61-plan-20261010"></a>
+## MolmoWeb 4B/8B: matched actor controls and Sol selection — preparation
+
+**Question:** does the N=5 Sol selection benefit transfer to the official MolmoWeb actors? The prepared comparison uses MolmoWeb 4B and 8B, each with **N=1 actor-only** and **N=5 + GPT-6.1 Sol medium**, on WebVoyager, DeepShop and Online-Mind2Web. **No MolmoWeb performance result is available.** Checkpoints are downloaded and hash-verified; GPU execution and throughput remain unvalidated. Launch awaits the exact new compute/API approval below.
+
+| Benchmark | Tasks per condition | Actor sizes | Conditions per actor | Primary episodes | Scoring |
+| --- | ---: | --- | ---: | ---: | --- |
+| WebVoyager | 595 | 4B, 8B | 2 | 2,380 | Native MolmoWeb GPT-4o |
+| DeepShop | 150 | 4B, 8B | 2 | 600 | Native MolmoWeb GPT-4o |
+| Online-Mind2Web | 300 | 4B, 8B | 2 | 1,200 | Native MolmoWeb and AgentTrek, reported separately |
+| **Total** | **1,045 unique benchmark tasks** | **2** | **2** | **4,180** | **12 primary conditions** |
+
+For each actor and benchmark, the primary comparison is the **task-paired N=5 minus N=1 success difference**, with a paired task-bootstrap interval. Overall success retains every requested task, invalid outcomes count as zero, and valid-only rates and coverage are reported separately. Missing infrastructure/judge outcomes remain unresolved, rather than being silently labeled failures. A budget-limited partial run remains incomplete. N1/N5 task order is interleaved within each job to reduce temporal confounding; this is not a repeated-seed estimate.
+
+**Both Online-Mind2Web judges score the same saved actor episodes; they do not trigger extra continuations.** The native MolmoWeb judge decomposes the goal, assesses each supplied screenshot, then produces a final verdict: **S+2 logical calls for S screenshots**, before retries. The prior AgentTrek protocol instead uses the task, action history and last supplied actor observation in one terminal assessment, with its existing completed-episode eligibility rule. Truncated and format-ineligible episodes retain explicit unjudged zeros in that protocol. Report each judge's eligible/judged counts, overall and valid-only rates, and disagreement on the commonly judged subset. Never select the better judge outcome or pool the two scores.
+
+<details>
+<summary>Frozen scientific design, source and comparability</summary>
+
+Use the official [MolmoWeb repository](https://github.com/allenai/molmoweb/tree/bab3fc3f1bff5b42c0624c073b68ddf9ad651d91) at `bab3fc3`, its native predictor, prompt, action parser and history handling. Checkpoints are [MolmoWeb-4B-Native](https://huggingface.co/allenai/MolmoWeb-4B-Native/tree/7623f7161ab00dd130e5a9f6e755d2a7cc32629c) and [MolmoWeb-8B-Native](https://huggingface.co/allenai/MolmoWeb-8B-Native/tree/b91f4f718120011a53643d3c1efc607f8b92e514). Both arms use temperature 0.7, top-p 0.8, one beam, at most 1,024 generated tokens, 30 decisions, ten prior actions and the current screenshot. N1 draws one action and makes no selector call. N5 draws exactly five from the same state/prompt, retains duplicate or malformed raw proposals, and lets Sol medium return a strict index into that unchanged panel; no candidate replacement, deduplication or actor fallback. The selected action enters native history once. Sol uses a 2,048-token output cap.
+
+Local SimpleEnv browsers are used throughout. This is **not a reproduction of the paper's Browserbase/advanced-stealth environment**; historical paper success rates and the earlier OpenWebRL-SFT decoding settings are contextual comparisons, not matching controls. Native MolmoWeb judge inputs are unchanged. The AgentTrek adapter serializes MolmoWeb's native actions rather than applying the SFT-specific tool parser, preserving all executed actions. A separately saved immediate post-action screenshot is audit evidence and does not replace the last supplied observation in AgentTrek's input. Native OM uses o4-mini/2,048 completion tokens; AgentTrek retains o4-mini/4,096 completion tokens and its existing prompt/schema/seed/eligibility rules.
+
+Source, checkpoint, task, candidate, screenshot, verdict and API identities are retained privately. Separate evaluation runs go to `openwebrl-evals`. Final completion requires exhaustive record/image/verdict checks, paired analysis, all-attempt accounting and owned-worker/browser teardown; count coverage alone is insufficient.
+
+</details>
+
+<details>
+<summary>Exact proposed resource caps — pending approval</summary>
+
+Each row is one paired N1/N5 job with **1 H200, 16 CPUs, 120 GiB and eight browser workers total**, including startup checks and every recovery attempt. At most four jobs run concurrently: **4 H200, 64 CPUs, 480 GiB and 32 browsers**. These are hard ceilings, not a throughput forecast or a guarantee of full coverage.
+
+| Actor | Benchmark | All-attempt H200 hours | Sol ceiling, USD | Native judge ceiling, USD | AgentTrek ceiling, USD | Total API ceiling, USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 4B | WebVoyager | 16 | 200 | 60 | 0 | 260 |
+| 4B | DeepShop | 8 | 75 | 20 | 0 | 95 |
+| 4B | Online-Mind2Web | 12 | 100 | 300 | 10 | 410 |
+| 8B | WebVoyager | 24 | 200 | 60 | 0 | 260 |
+| 8B | DeepShop | 12 | 75 | 20 | 0 | 95 |
+| 8B | Online-Mind2Web | 18 | 100 | 300 | 10 | 410 |
+| **Total** | | **90** | **750** | **760** | **20** | **1,530** |
+
+Native judge ceilings split equally between N1 and N5 within each row; all Sol allowance belongs to N5. Each OM condition has a separate $5 AgentTrek allowance. Compute cannot transfer between jobs; API/browser caps cannot transfer between conditions or from other experiments. Aggregate limits are **4,600 browser starts, 414,000 local candidate generations and 256,360 actual HTTP attempts**. Every retry reserves its own physical HTTP attempt and worst-case cost before dispatch; unresolved charges retain their reservation. The first binding limit stops further paid work. Ordinary committed invalid outcomes are never selectively rerun, and a replacement receives only the unspent total allocation time.
+
+</details>
+
 ## Actors alone
 
 <a id="local-jev-actor-results-20261006"></a>
