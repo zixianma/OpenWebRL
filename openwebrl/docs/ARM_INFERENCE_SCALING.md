@@ -151,9 +151,9 @@ Means first average observed decisions within task, then weight tasks equally. I
 <a id="sol61-n5-launch-20261009"></a>
 ## GPT-6.1 Sol at N=5: actor controls and reasoning effort
 
-**DeepShop does not yet show a reliable N5 selector gain over its matching SFT N1 control:** **+3.33 pp [95% paired interval: −5.33, +11.33]**. The control scored **42.67%**, versus **46.00%** for Sol medium; these are separate collections of the same 150 tasks.
+**WebVoyager shows a measured benefit from the Sol61 medium N=5 pipeline over its matching SFT N=1 control:** **57.98% versus 46.72%**, a **+11.26 pp** difference with a **95% paired task-bootstrap interval of [+7.39, +15.13]**. DeepShop remains inconclusive: **46.00% versus 42.67%**, or **+3.33 pp [−5.33, +11.33]**. These controls match weights, decoding, tasks, browsers and native judges, but were collected sequentially; the intervals do not cover website/judge drift or run-to-run variability.
 
-**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. All four N5 conditions are verified: medium scored **57.98% on WebVoyager** and **46.00% on DeepShop**.
+**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [−7.33, +3.33]**. Those contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap.
 
 | Benchmark | Condition | N | Collection | Tasks | Successes | Valid | Invalid | Overall | Valid-only |
 | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -163,6 +163,7 @@ Means first average observed decisions within task, then weight tasks equally. I
 | Online-Mind2Web | Sol61 high | 5 | Oct 9, seed 42 | 300 | 131 | 257 | 43 | 43.67% | 50.97% |
 | DeepShop | SFT alone: matching control | 1 | Oct 9 | 150 | 64 | 145 | 5 | 42.67% | 44.14% |
 | DeepShop | Sol61 medium | 5 | Oct 9 | 150 | 69 | 147 | 3 | 46.00% | 46.94% |
+| WebVoyager | SFT alone: matching control | 1 | Oct 9 | 595 | 278 | 573 | 22 | 46.72% | 48.52% |
 | WebVoyager | Sol61 medium | 5 | Oct 9 | 595 | 345 | 565 | 30 | 57.98% | 61.06% |
 
 All displayed cohorts are verified complete. Against the closest historical SFT control, Sol61 medium and high are descriptively **+12.67 and +10.67 percentage points** overall. Against the earlier seed-42 control, the gaps are +14.00 and +12.00 points. These comparisons reuse October 7 outcomes; they do not isolate a causal selector gain from collection-date, seed or runtime differences. [Closest control aggregate](arm_results/selectionarm_piotr_sameday30_20261007/aggregate.json) · [Earlier API-study control](arm_results/api_selector_september_reproduction_20261006/aggregate.json).
@@ -171,24 +172,32 @@ Overall includes invalid records as zero; valid-only excludes each condition's i
 
 <a id="sol61-actor-controls-20261009"></a>
 
-**DeepShop’s matching SFT N=1 control is verified; WebVoyager’s control remains queued.** Both controls preserve the Sol61 official-SFT weights, actor decoding, local browser and native benchmark judge, with the selector removed. The DeepShop comparison is inconclusive in both the primary and common-valid analyses:
+**Both matching SFT N=1 controls are verified.** They preserve the official-SFT weights, actor decoding, local browser and native benchmark judge used by Sol61, with zero selector calls. The positive WebVoyager result persists on the tasks valid in both conditions; DeepShop's intervals include zero in both analyses.
 
-| DeepShop paired population | Tasks | N1 successes | N5 successes | N5 − N1, pp | Paired 95% interval, pp |
-| --- | ---: | ---: | ---: | ---: | --- |
-| All tasks; invalids count as zero | 150 | 64 | 69 | +3.33 | [−5.33, +11.33] |
-| Valid in both conditions | 143 | 63 | 69 | +4.20 | [−4.20, +12.59] |
+| Benchmark | Paired population | Tasks | N1 successes | N5 successes | N5 − N1, pp | Paired 95% interval, pp |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| WebVoyager | All tasks; invalids count as zero | 595 | 278 | 345 | +11.26 | [+7.39, +15.13] |
+| WebVoyager | Valid in both conditions | 547 | 274 | 337 | +11.52 | [+7.31, +15.54] |
+| DeepShop | All tasks; invalids count as zero | 150 | 64 | 69 | +3.33 | [−5.33, +11.33] |
+| DeepShop | Valid in both conditions | 143 | 63 | 69 | +4.20 | [−4.20, +12.59] |
 
-The primary comparison has 23 N5-only successes and 18 N1-only successes. Pairing controls task identity; sequential collection still permits website/judge drift and stochastic trajectory differences. The common-valid estimate excludes seven tasks and conditions on availability in both arms. Both intervals use 10,000 paired task-bootstrap resamples with seed 42. Neither interval establishes a reliable benefit or equivalence. [Aggregate and paired analysis](arm_results/sol61_n5_launch_20261009.json).
-
-| SFT control | N | Requested tasks | Status |
-| --- | ---: | ---: | --- |
-| WebVoyager | 1 | 595 | Job 353195 queued; no control result yet |
-| DeepShop | 1 | 150 | Independently verified complete |
+WebVoyager has 107 N5-only successes and 40 N1-only successes; DeepShop has 23 and 18. Pairing controls task identity. Common-valid estimates exclude 48 and seven tasks respectively, conditioning on availability in both arms. Intervals use 10,000 paired task-bootstrap resamples with seed 42. The WebVoyager result supports this N=5 selection pipeline under the saved native labels; it does not isolate selection from the additional proposal generation or establish a general gain across benchmarks. DeepShop's result establishes neither a reliable benefit nor equivalence. [Aggregate, paired analysis and audit hashes](arm_results/sol61_n5_launch_20261009.json).
 
 <details>
-<summary>Control matching, approved budgets and remaining comparability gaps</summary>
+<summary>Control audits, accounting and remaining comparability gaps</summary>
 
-The independently reviewed controls each have one H200, eight CPUs, 120 GiB RAM and eight local browsers. All-attempt limits are six hours plus $30 in native GPT-4o judging for WebVoyager, and three hours plus $10 for DeepShop. These separate budgets include recovery; no selector or teacher calls are allowed. DeepShop used 4,954 of 10,800 seconds, 150 of 165 browser attempts and 101 of 660 judge HTTP calls; its conservative judge charge was $0.5487225 of $10. Every attempt is retained. The full artifact review checked all 150 records, available saved images, actor decisions and native verdicts; it verified zero selector calls. Of 145 native-valid N1 trajectories, 101 received a GPT-4o verdict and 44 retained unjudged native zero rewards (42 turn limits and two generation length limits). The five invalids comprise four environment-step errors and one failed actor request. No selective retries or rejudging were performed. Finished W&B metrics, controller-owned process-group teardown, all final Slurm steps and browser releases reconcile. Postexit SSH was denied by PAM; teardown verification uses the owned-resource and scheduler/cgroup evidence.
+The control campaign audited all 745 records with zero selector or teacher calls. Each condition used one H200, eight CPUs, 120 GiB RAM and eight local browsers. Every attempt remains charged to its own approved cap; no budgets were transferred.
+
+| SFT N1 control | Allocation seconds | Cap, seconds | Browser attempts | Browser cap | Judge HTTP calls | Call cap | Conservative judge charge, $ | Cap, $ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| WebVoyager | 8,796 | 21,600 | 595 | 655 | 420 | 2,620 | 1.8753300 | 30 |
+| DeepShop | 4,954 | 10,800 | 150 | 165 | 101 | 660 | 0.5487225 | 10 |
+
+The WebVoyager audit checked all 595 records, 7,595 one-proposal decisions, 7,604 actor receipts, all available saved images and native judge bindings. Of 573 native-valid N1 trajectories, 417 received parsed GPT-4o verdicts and 156 retained native unjudged zeros (137 turn limits, 14 generation-length limits and 5 format failures). The 22 invalids comprise 5 missing-turn-sample exceptions, 4 environment-step errors, 9 failed actor requests, 3 native judge parse failures and 1 episode timeout. The audit preserves partial exception payloads and checks their available saved history; it does not invent missing terminal images or verdicts.
+
+DeepShop's full review checked all 150 records, available saved images, 2,618 one-proposal decisions, 2,619 actor receipts and native verdicts. Of 145 native-valid N1 trajectories, 101 received a GPT-4o verdict and 44 retained unjudged native zeros (42 turn limits and two generation-length limits). Its five invalids comprise four environment-step errors and one failed actor request.
+
+Both controls have finished W&B runs and reconciled lifetime accounting, with no selective outcome retries or rejudging. DeepShop has 150 explicit browser-exit messages. WebVoyager has 590 normal exit messages; five initial screenshot/reset failures take a separate frozen, awaited cleanup path, supported by later port reuse, no cleanup warnings and final scheduler/cgroup evidence. Pool-counter logs were not retained for those five. Controller-owned process groups, zero-exit Slurm batch/extern steps and released controller locks were verified. Postexit SSH was denied by PAM, so this is scoped resource teardown evidence rather than a physical whole-node scan.
 
 Both OM2W controls use the same 300-task file, official SFT revision, pinned actor-policy hash, local browsers, T=0.7/top-p=0.9/native default top-k, 1,024 actor tokens, 30 turns, full text history/latest screenshot and canonical o4-mini/AgentTrek judge as Sol61. The shared actor, browser, reward and native evaluator source files are byte-identical. The October 7 seed-45 control is the latest completed matching control located; the earlier API-study control also matches Sol61's seed-42/server-4200 settings.
 

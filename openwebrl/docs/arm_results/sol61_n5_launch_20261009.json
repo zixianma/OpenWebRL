@@ -656,7 +656,7 @@
   },
   "prepared_controls": {
     "as_of": "2026-10-09",
-    "status": "deepshop_verified_webvoyager_queued",
+    "status": "verified_complete",
     "approved_for_new_allocation": true,
     "launched": true,
     "n": 1,
@@ -667,7 +667,7 @@
         "benchmark": "webvoyager",
         "requested_tasks": 595,
         "job_id": "353195",
-        "status": "queued",
+        "status": "verified_complete",
         "resources": {
           "gpus": 1,
           "gpu_type": "H200",
@@ -691,8 +691,19 @@
           },
           "browser_concurrency_per_job": 8
         },
-        "verified_complete": false,
-        "live_startup_verified": false
+        "verified_complete": true,
+        "live_startup_verified": true,
+        "summary": {
+          "tasks": 595,
+          "successes": 278,
+          "valid": 573,
+          "invalid": 22,
+          "overall_success_rate": 0.4672268907563025,
+          "valid_only_success_rate": 0.4851657940663176,
+          "mean_episode_seconds": 115.09486816583451,
+          "mean_actor_output_tokens": 4177.9042016806725,
+          "selector_calls": 0
+        }
       },
       {
         "benchmark": "deepshop",
@@ -834,10 +845,104 @@
           "Task bootstrap does not cover judge error, website drift or run-to-run variability.",
           "This calculation does not independently establish artifact, accounting or teardown completion."
         ]
+      },
+      "webvoyager": {
+        "schema": "sft-n1-versus-sol61-n5-paired-v1",
+        "epoch": 1791611315.2466054,
+        "benchmark": "webvoyager",
+        "condition_counts": {
+          "n1": {
+            "tasks": 595,
+            "successes": 278,
+            "valid": 573,
+            "invalid": 22,
+            "overall_success_rate": 0.4672268907563025,
+            "valid_only_success_rate": 0.4851657940663176,
+            "mean_episode_seconds": 115.09486816583451,
+            "mean_actor_output_tokens": 4177.9042016806725,
+            "selector_calls": 0
+          },
+          "n5": {
+            "tasks": 595,
+            "successes": 345,
+            "valid": 565,
+            "invalid": 30,
+            "overall_success_rate": 0.5798319327731093,
+            "valid_only_success_rate": 0.6106194690265486,
+            "mean_episode_seconds": 182.68196711609173,
+            "mean_actor_output_tokens": 19670.78655462185,
+            "selector_calls": 7103
+          }
+        },
+        "overall": {
+          "tasks": 595,
+          "n1_successes": 278,
+          "n5_successes": 345,
+          "both_success": 238,
+          "only_n1_success": 40,
+          "only_n5_success": 107,
+          "neither_success": 210,
+          "n1_success_rate": 0.4672268907563025,
+          "n5_success_rate": 0.5798319327731093,
+          "n5_minus_n1": 0.11260504201680673,
+          "bootstrap95": [
+            0.07394957983193277,
+            0.15126050420168066
+          ]
+        },
+        "common_valid": {
+          "tasks": 547,
+          "n1_successes": 274,
+          "n5_successes": 337,
+          "both_success": 238,
+          "only_n1_success": 36,
+          "only_n5_success": 99,
+          "neither_success": 174,
+          "n1_success_rate": 0.5009140767824497,
+          "n5_success_rate": 0.6160877513711152,
+          "n5_minus_n1": 0.11517367458866545,
+          "bootstrap95": [
+            0.07312614259597806,
+            0.15539305301645337
+          ]
+        },
+        "excluded_from_common_valid": 48,
+        "bootstrap": {
+          "resamples": 10000,
+          "seed": 42,
+          "unit": "task",
+          "quantiles": "sorted draw indices 249 and 9749; fixed schedule order"
+        },
+        "matched_protocol_fields": [
+          "actor",
+          "actor_revision",
+          "browser",
+          "temperature",
+          "top_p",
+          "top_k",
+          "max_new_tokens",
+          "max_steps",
+          "context_length",
+          "context_num_screenshots",
+          "history",
+          "judge",
+          "judge_protocol",
+          "judge_response_tokens",
+          "actor_system_policy_sha256",
+          "seed",
+          "server_seed_base"
+        ],
+        "limitations": [
+          "Sequential collection; task pairing does not remove website/API/judge drift or stochastic sampling differences.",
+          "Overall counts native invalid episodes as zero; common-valid analysis conditions on availability in both arms.",
+          "Frozen native valid unjudged zeros and canonical labels are retained; no semantic rejudging.",
+          "Task bootstrap does not cover judge error, website drift or run-to-run variability.",
+          "This calculation does not independently establish artifact, accounting or teardown completion."
+        ]
       }
     },
     "submitted": true,
-    "live_startup_verified": false,
+    "live_startup_verified": true,
     "approved_totals": {
       "gpu_hours_all_attempts": 9,
       "judge_usd": 40,
@@ -847,30 +952,10 @@
     },
     "cpu_tests_passed": 12,
     "independent_preparation_review_passed": true,
-    "supervisor_active": true,
-    "status_epoch": 1791598338.7586317,
-    "verified_complete": false,
-    "accounting_so_far": {
-      "deepshop": {
-        "all_attempt_seconds": 4954,
-        "approved_seconds": 10800,
-        "unused_seconds": 5846,
-        "browser_attempts": 150,
-        "browser_cap": 165,
-        "judge_http_calls": 101,
-        "judge_call_cap": 660,
-        "judge_conservative_usd": 0.5487225,
-        "judge_cap_usd": 10.0,
-        "unknown_reserved_usd": 0.0
-      },
-      "webvoyager": {
-        "all_attempt_seconds": 0,
-        "judge_http_calls": 0,
-        "browser_attempts": 0,
-        "stage": "queued"
-      }
-    },
-    "live_startup_scope": "DeepShop verified; WebVoyager is queued, so both-condition startup remains false.",
+    "supervisor_active": false,
+    "status_epoch": 1791611917.3650634,
+    "verified_complete": true,
+    "live_startup_scope": "Both conditions independently verified through complete saved artifacts, native verdicts, task-paired N5 analysis and final accounting.",
     "deepshop_final_proofs": {
       "immutable_owner_completion_sha256": "53b65557f22a6fab25ed60dcb60406312e05f48d6cdde63003eef2e2bbc1afdc",
       "artifacts_sha256": "5b3ac9faad615c1ccbcac4c07c394cb40c05508fe52cd1d4e265479f9bd58f3b",
@@ -900,6 +985,86 @@
       "native_labels_preserved": true,
       "semantic_rejudging": false,
       "teardown_scope": "Owned process groups, terminal scheduler/cgroup evidence, browser releases and free controller lock. Postexit SSH denied by PAM; no physical postexit node/GPU scan."
-    }
+    },
+    "final_accounting": {
+      "deepshop": {
+        "all_attempt_seconds": 4954,
+        "approved_seconds": 10800,
+        "unused_seconds": 5846,
+        "browser_attempts": 150,
+        "browser_cap": 165,
+        "judge_http_calls": 101,
+        "judge_call_cap": 660,
+        "judge_conservative_usd": 0.5487225,
+        "judge_cap_usd": 10.0,
+        "unknown_reserved_usd": 0.0
+      },
+      "webvoyager": {
+        "all_attempt_seconds": 8796,
+        "approved_seconds": 21600,
+        "unused_seconds": 12804,
+        "browser_attempts": 595,
+        "browser_cap": 655,
+        "judge_http_calls": 420,
+        "judge_call_cap": 2620,
+        "judge_conservative_usd": 1.87533,
+        "judge_cap_usd": 30.0,
+        "unknown_reserved_usd": 0.0
+      }
+    },
+    "campaign_accounting": {
+      "audited_records": 745,
+      "all_attempt_seconds": 13750,
+      "approved_total_seconds": 32400,
+      "remaining_seconds": 18650,
+      "browser_attempts": 745,
+      "browser_cap": 820,
+      "judge_calls": 521,
+      "judge_call_cap": 3280,
+      "conservative_judge_usd": "2.4240525",
+      "judge_usd_cap": 40,
+      "unsettled_reservations": 0,
+      "selector_calls": 0,
+      "no_budget_transfer": true
+    },
+    "webvoyager_final_proofs": {
+      "immutable_owner_completion_sha256": "c852343648a95f046154364960886ff5b3615404b865719be93c375e1b8c5456",
+      "artifacts_sha256": "bf1dcca2646b7ab6093733da83bb9e5724e3990438e6c17b7fc6732017cfe836",
+      "accounting_wandb_sha256": "60ad7e7c4a027bd8b12ccfd2988c6bc46c040b1dcbc63a0b7dc9e04d54cebcd2",
+      "wandb_history_sha256": "786a5c54e32277a90a29333e549a7b6736c28280982d7717e367e6436c735279",
+      "paired_analysis_sha256": "fb490301c95ec2917357aa694ae0defea6245389a86848f9868bef3be130679a",
+      "paired_analysis_receipt_sha256": "e98862e5f9d42a2bd0b3a17b70bedc0ebcc6d690247a16ef6375c39ab93e2173",
+      "independent_paired_sha256": "25d63a8ccab232eb53e6d17a1969880fc62ff1914f1cbd9e71fc29641527b39c",
+      "n5_reuse_sha256": "90d0038dbaf48c761ea0088c2f312d534a2f59bafda446ad12266b2b3c4b4611",
+      "n5_api_fingerprints_sha256": "7e5afb53d61eea518cfc3fd1c72c863feeb32559bcf11e733cd21660d9fc29f8",
+      "reset_cleanup_scope_sha256": "9e63ae8885072b249859a0817a48fe2cc544457b8646bb51c03aa5948c1f990b",
+      "independent_reset_cleanup_sha256": "d1a3da5e214db29bfd2c74a790ad4095a8aab23044a876a4f14797772bd17cb9",
+      "postexit_scope_sha256": "2f5ca8590d1feee11268db312b406e044a4f817f689e457afb0dd99cfba1cc40",
+      "plan_sha256": "3ee742015efdd5fe9d77ee88b6f4f3de440f5e2f68cfdd73dd365d91adf426d6",
+      "approval_sha256": "d87b84092b3ea2cf9f5af0ed9682a69056840702f704d05e0067d05521b0709b",
+      "canonical_summary_sha256": "499af23d396616ba8499071f2b27da9e5f1651da9f628c434d26daaaefc216d1",
+      "frozen_source_manifest_sha256": "fd5254eca225793a84d2e64343ca6b8c73df163c135a35b14d9d6214ee7875a1"
+    },
+    "webvoyager_audit": {
+      "all_records": 595,
+      "all_available_saved_images_checked": true,
+      "actor_decisions_checked": 7595,
+      "actor_receipts": 7604,
+      "selector_calls": 0,
+      "native_judged": 417,
+      "valid_unjudged_zero": 156,
+      "valid_unjudged_max_steps": 137,
+      "valid_unjudged_generation_length_limit": 14,
+      "valid_unjudged_format_error": 5,
+      "invalid_missing_native_turn_samples": 5,
+      "invalid_episode_timeout": 1,
+      "invalid_environment_step_error": 4,
+      "invalid_actor_generation_error": 9,
+      "invalid_native_judge_parse_or_timeout": 3,
+      "native_labels_preserved": true,
+      "semantic_rejudging": false,
+      "teardown_scope": "590 explicit normal exit messages and five initialization failures reconciled through frozen awaited cleanup, reused ports, zero cleanup warnings, owned process groups and terminal scheduler/cgroup evidence; no physical postexit node/GPU scan."
+    },
+    "deepshop_campaign_reuse_sha256": "0d4975dc9d3a779eca7e616827ab2d3ae7f38d30e9df75edcc99c231c4346cf4"
   }
 }
