@@ -1,0 +1,65 @@
+{
+  "schema": "molmoweb-n1-judge-amendment-aggregate-v1",
+  "date": "2026-10-10",
+  "explicit_user_approval": true,
+  "scope": "Native judge dollar caps for the six MolmoWeb controls; only four WV/DS N1 caps change",
+  "changes": [
+    {
+      "actor": "4B",
+      "benchmark": "WebVoyager",
+      "condition": "n1",
+      "old_usd": 30,
+      "approved_usd": 40,
+      "increase_usd": 10
+    },
+    {
+      "actor": "4B",
+      "benchmark": "DeepShop",
+      "condition": "n1",
+      "old_usd": 10,
+      "approved_usd": 12,
+      "increase_usd": 2
+    },
+    {
+      "actor": "8B",
+      "benchmark": "WebVoyager",
+      "condition": "n1",
+      "old_usd": 30,
+      "approved_usd": 40,
+      "increase_usd": 10
+    },
+    {
+      "actor": "8B",
+      "benchmark": "DeepShop",
+      "condition": "n1",
+      "old_usd": 10,
+      "approved_usd": 12,
+      "increase_usd": 2
+    }
+  ],
+  "additional_api_usd": 24,
+  "control_api_total_usd": 414,
+  "full_suite_api_ceiling_usd": 1554,
+  "additional_compute_seconds": 0,
+  "additional_browser_attempts": 0,
+  "additional_HTTP_attempts": 0,
+  "no_budget_transfer": true,
+  "N5_blocked_pending_explicit_control_review": true,
+  "recovery_policy": {
+    "preserve_every_attempt_and_uncertain_API_reservation": true,
+    "preserve_original_scientific_plan_and_protocol": true,
+    "reuse_complete_unjudged_rollouts": true,
+    "no_selective_recollection_or_rejudging_of_committed_outcomes": true,
+    "replacement_time_only_from_each_control_stage_residual": true,
+    "max_simultaneous_jobs": 4,
+    "max_simultaneous_browsers": 32
+  },
+  "verification": {
+    "offline_tests_passed": 150,
+    "DS4_committed_records_unchanged": 132,
+    "DS4_saved_unjudged_rollouts_validated_for_reuse": 2,
+    "DS4_collateral_rollout_interruptions_reviewed": 6,
+    "controls_verified_complete": false
+  },
+  "execution_note": "Healthy older frozen WebVoyager workers retain their original stricter caps until a bounded recovery. The amendment is available to updated controllers; it does not trigger N5 or add compute."
+}

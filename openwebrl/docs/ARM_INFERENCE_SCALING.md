@@ -317,17 +317,17 @@ Each row is a lifetime N1/N5 budget with **1 H200, 8 CPUs, 120 GiB and eight bro
 
 | Actor | Benchmark | All-attempt H200 hours | Sol ceiling, USD | Native judge ceiling, USD | AgentTrek ceiling, USD | Total API ceiling, USD |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| 4B | WebVoyager | 16 | 200 | 60 | 0 | 260 |
-| 4B | DeepShop | 8 | 75 | 20 | 0 | 95 |
+| 4B | WebVoyager | 16 | 200 | 70 | 0 | 270 |
+| 4B | DeepShop | 8 | 75 | 22 | 0 | 97 |
 | 4B | Online-Mind2Web | 12 | 100 | 300 | 10 | 410 |
-| 8B | WebVoyager | 24 | 200 | 60 | 0 | 260 |
-| 8B | DeepShop | 12 | 75 | 20 | 0 | 95 |
+| 8B | WebVoyager | 24 | 200 | 70 | 0 | 270 |
+| 8B | DeepShop | 12 | 75 | 22 | 0 | 97 |
 | 8B | Online-Mind2Web | 18 | 100 | 300 | 10 | 410 |
-| **Total** | | **90** | **750** | **760** | **20** | **1,530** |
+| **Total** | | **90** | **750** | **784** | **20** | **1,554** |
 
-**The initial N1-only allocations reserve 45 of the approved 90 H200 hours:** 4B WV/DS/OM receive 8/4/6 hours; 8B receive 12/6/9 hours. Controls have their existing $390 judge envelope ($380 native plus $10 AgentTrek), 2,300 browser starts and 69,000 local generations; selector allowance is zero. Actual time from every attempt charges the corresponding lifetime row, and unused time is never reset or transferred. N5 remains blocked pending explicit review of the control results.
+**The initial N1-only allocations reserve 45 of the approved 90 H200 hours:** 4B WV/DS/OM receive 8/4/6 hours; 8B receive 12/6/9 hours. The October 10 approved amendment adds $24 solely to N1 native judging: WebVoyager $30 → $40 and DeepShop $10 → $12 for each actor. Controls therefore have a $414 judge envelope ($404 native plus $10 AgentTrek), 2,300 browser starts and 69,000 local generations; selector allowance is zero. Compute and HTTP/browser counts are unchanged. [Amendment accounting](arm_results/molmoweb_n1_judge_amendment_20261010.json). Actual time from every attempt charges the corresponding lifetime row, and unused time is never reset or transferred. N5 remains blocked pending explicit review of the control results.
 
-Native judge ceilings split equally between N1 and N5 within each row; all Sol allowance belongs to N5. Each OM condition has a separate $5 AgentTrek allowance. Compute cannot transfer between jobs; API/browser caps cannot transfer between conditions or from other experiments. Aggregate limits are **4,600 browser starts, 414,000 local candidate generations and 256,360 actual HTTP attempts**. Every retry reserves its own physical HTTP attempt and worst-case cost before dispatch; unresolved charges retain their reservation. The first binding limit stops further paid work. Ordinary committed invalid outcomes are never selectively rerun, and a replacement receives only the unspent total allocation time.
+Native judge ceilings are N1/N5 $40/$30 for each WebVoyager actor, $12/$10 for each DeepShop actor, and $150/$150 for each OM actor; all Sol allowance belongs to N5. Each OM condition has a separate $5 AgentTrek allowance. Compute cannot transfer between jobs; API/browser caps cannot transfer between conditions or from other experiments. Aggregate limits are **4,600 browser starts, 414,000 local candidate generations and 256,360 actual HTTP attempts**. Every retry reserves its own physical HTTP attempt and worst-case cost before dispatch; unresolved charges retain their reservation. The first binding limit stops further paid work. Ordinary committed invalid outcomes are never selectively rerun, and a replacement receives only the unspent total allocation time.
 
 </details>
 
