@@ -1,0 +1,45 @@
+{
+  "schema": "molmoweb_n1_runtime_repair_v1",
+  "date": "2026-10-10",
+  "status": "recovered_collection_running",
+  "scope": "MolmoWeb-8B Online-Mind2Web N1",
+  "requested_records": 300,
+  "preserved_committed_records": 183,
+  "audited_saved_artifacts": 16431,
+  "decoded_saved_images": 4417,
+  "infrastructure_interrupted_rollouts": 8,
+  "cause": {
+    "type": "upstream_default_RoPE_position_table_capacity",
+    "input_tokens": 9320,
+    "generation_allowance": 1024,
+    "native_table_positions": 10240,
+    "required_positions": 10344
+  },
+  "repair": {
+    "default_RoPE_table_sized_to_input_plus_generation": true,
+    "weights_and_model_config_unchanged": true,
+    "prompt_image_history_sampling_and_token_limit_unchanged": true,
+    "existing_positions_CPU_bitwise_identical": true,
+    "CPU_upstream_boundary_reproduced": true,
+    "offline_tests_passed": 187,
+    "GPU_saved_trigger_validation": {
+      "passed": true,
+      "input_tokens": 9320,
+      "output_tokens": 1024,
+      "same_input_tokens_image_and_seed": true,
+      "charged_local_generations": 1,
+      "browser_starts": 0,
+      "API_calls": 0
+    }
+  },
+  "compute_accounting_seconds": {
+    "prior_attempts": 15060,
+    "replacement_reservation": 17340,
+    "N1_all_attempt_cap": 32400
+  },
+  "additional_budget": 0,
+  "N5_blocked": true,
+  "controls_verified_complete": false,
+  "private_artifacts_omitted": true,
+  "production_generations_verified_after_recovery": 9
+}

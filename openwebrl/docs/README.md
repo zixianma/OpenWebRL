@@ -4,7 +4,7 @@
 
 [GPT-6.1 Sol N=5: verified OM2W medium 45.67%, high 43.67%; WebVoyager 57.98%; DeepShop 46.00%](ARM_INFERENCE_SCALING.md#sol61-n5-launch-20261009). [Verified matching SFT controls: Sol N5 gains +11.26 pp [+7.39, +15.13] on WebVoyager; DeepShop +3.33 pp [−5.33, +11.33] remains inconclusive](ARM_INFERENCE_SCALING.md#sol61-actor-controls-20261009).
 
-[MolmoWeb 4B/8B: six N1 controls with dual OM2W judges; approved N1 judge envelope $414; N5 Sol selection blocked pending control review](ARM_INFERENCE_SCALING.md#molmoweb-sol61-plan-20261010).
+[MolmoWeb 4B/8B: six N1 controls with dual OM2W judges; approved N1 judge envelope $414 and validated runtime recovery; N5 Sol selection blocked pending control review](ARM_INFERENCE_SCALING.md#molmoweb-sol61-plan-20261010).
 
 
 [Original bonus iteration 90: local OM2W300 verified; counts, validity and historical comparison](RL_EVALUATION.md#arm-original-iter90-results-20261008).
