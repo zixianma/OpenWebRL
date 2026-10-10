@@ -656,9 +656,9 @@
   },
   "prepared_controls": {
     "as_of": "2026-10-09",
-    "status": "submitted_pending_live_startup",
+    "status": "deepshop_verified_webvoyager_queued",
     "approved_for_new_allocation": true,
-    "launched": false,
+    "launched": true,
     "n": 1,
     "actor": "OpenWebRL/OpenWebRL-4B-SFT",
     "actor_revision": "15e777db2ddba2e0e82080ebccd3ad8d215b7f0a",
@@ -690,13 +690,15 @@
             }
           },
           "browser_concurrency_per_job": 8
-        }
+        },
+        "verified_complete": false,
+        "live_startup_verified": false
       },
       {
         "benchmark": "deepshop",
         "requested_tasks": 150,
         "job_id": "353196",
-        "status": "queued",
+        "status": "verified_complete",
         "resources": {
           "gpus": 1,
           "gpu_type": "H200",
@@ -719,14 +721,121 @@
             }
           },
           "browser_concurrency_per_job": 8
+        },
+        "verified_complete": true,
+        "live_startup_verified": true,
+        "summary": {
+          "tasks": 150,
+          "successes": 64,
+          "valid": 145,
+          "invalid": 5,
+          "overall_success_rate": 0.4266666666666667,
+          "valid_only_success_rate": 0.4413793103448276,
+          "mean_episode_seconds": 238.76841524361322,
+          "mean_actor_output_tokens": 6686.993333333333,
+          "selector_calls": 0
         }
       }
     ],
     "protocol": "Preserve Sol61 SFT actor/decoding/local-browser/native-benchmark-judge settings; remove selector.",
     "existing_local_rl_cohorts_are_matching_sft_controls": false,
     "excluded_rl_cohorts_reason": "Native89 iteration90 RL weights and .6/.95/k20/4096 actor decoding differ.",
-    "new_results": null,
-    "new_budget_spent": 0,
+    "new_results": {
+      "deepshop": {
+        "schema": "sft-n1-versus-sol61-n5-paired-v1",
+        "epoch": 1791597825.1296334,
+        "benchmark": "deepshop",
+        "condition_counts": {
+          "n1": {
+            "tasks": 150,
+            "successes": 64,
+            "valid": 145,
+            "invalid": 5,
+            "overall_success_rate": 0.4266666666666667,
+            "valid_only_success_rate": 0.4413793103448276,
+            "mean_episode_seconds": 238.76841524361322,
+            "mean_actor_output_tokens": 6686.993333333333,
+            "selector_calls": 0
+          },
+          "n5": {
+            "tasks": 150,
+            "successes": 69,
+            "valid": 147,
+            "invalid": 3,
+            "overall_success_rate": 0.46,
+            "valid_only_success_rate": 0.46938775510204084,
+            "mean_episode_seconds": 355.5944544219505,
+            "mean_actor_output_tokens": 37809.32666666667,
+            "selector_calls": 2737
+          }
+        },
+        "overall": {
+          "tasks": 150,
+          "n1_successes": 64,
+          "n5_successes": 69,
+          "both_success": 46,
+          "only_n1_success": 18,
+          "only_n5_success": 23,
+          "neither_success": 63,
+          "n1_success_rate": 0.4266666666666667,
+          "n5_success_rate": 0.46,
+          "n5_minus_n1": 0.03333333333333333,
+          "bootstrap95": [
+            -0.05333333333333334,
+            0.11333333333333333
+          ]
+        },
+        "common_valid": {
+          "tasks": 143,
+          "n1_successes": 63,
+          "n5_successes": 69,
+          "both_success": 46,
+          "only_n1_success": 17,
+          "only_n5_success": 23,
+          "neither_success": 57,
+          "n1_success_rate": 0.4405594405594406,
+          "n5_success_rate": 0.4825174825174825,
+          "n5_minus_n1": 0.04195804195804196,
+          "bootstrap95": [
+            -0.04195804195804196,
+            0.1258741258741259
+          ]
+        },
+        "excluded_from_common_valid": 7,
+        "bootstrap": {
+          "resamples": 10000,
+          "seed": 42,
+          "unit": "task",
+          "quantiles": "sorted draw indices 249 and 9749; fixed schedule order"
+        },
+        "matched_protocol_fields": [
+          "actor",
+          "actor_revision",
+          "browser",
+          "temperature",
+          "top_p",
+          "top_k",
+          "max_new_tokens",
+          "max_steps",
+          "context_length",
+          "context_num_screenshots",
+          "history",
+          "judge",
+          "judge_protocol",
+          "judge_response_tokens",
+          "actor_system_policy_sha256",
+          "seed",
+          "server_seed_base"
+        ],
+        "limitations": [
+          "Sequential collection; task pairing does not remove website/API/judge drift or stochastic sampling differences.",
+          "Overall counts native invalid episodes as zero; common-valid analysis conditions on availability in both arms.",
+          "Frozen native valid unjudged zeros and canonical labels are retained; no semantic rejudging.",
+          "Task bootstrap does not cover judge error, website drift or run-to-run variability.",
+          "This calculation does not independently establish artifact, accounting or teardown completion."
+        ]
+      }
+    },
     "submitted": true,
     "live_startup_verified": false,
     "approved_totals": {
@@ -739,6 +848,58 @@
     "cpu_tests_passed": 12,
     "independent_preparation_review_passed": true,
     "supervisor_active": true,
-    "status_epoch": 1791589248.9734604
+    "status_epoch": 1791598338.7586317,
+    "verified_complete": false,
+    "accounting_so_far": {
+      "deepshop": {
+        "all_attempt_seconds": 4954,
+        "approved_seconds": 10800,
+        "unused_seconds": 5846,
+        "browser_attempts": 150,
+        "browser_cap": 165,
+        "judge_http_calls": 101,
+        "judge_call_cap": 660,
+        "judge_conservative_usd": 0.5487225,
+        "judge_cap_usd": 10.0,
+        "unknown_reserved_usd": 0.0
+      },
+      "webvoyager": {
+        "all_attempt_seconds": 0,
+        "judge_http_calls": 0,
+        "browser_attempts": 0,
+        "stage": "queued"
+      }
+    },
+    "live_startup_scope": "DeepShop verified; WebVoyager is queued, so both-condition startup remains false.",
+    "deepshop_final_proofs": {
+      "immutable_owner_completion_sha256": "53b65557f22a6fab25ed60dcb60406312e05f48d6cdde63003eef2e2bbc1afdc",
+      "artifacts_sha256": "5b3ac9faad615c1ccbcac4c07c394cb40c05508fe52cd1d4e265479f9bd58f3b",
+      "accounting_wandb_sha256": "f9776957512c66daac34ecc69867e8bdfe0764110ceee7adcef13e8ecd09a424",
+      "paired_analysis_sha256": "a25eb7e0d1ba25040ceff4359acbf16b325e103a4449c4acb11dcfd55bb0d4ba",
+      "paired_analysis_receipt_sha256": "ee10956e15cd77ae97aedcb62595bff69b9ccac1f58137bb5953d699164dd3ad",
+      "independent_paired_sha256": "d55fb371cc7448226be12f6c5c505dd0fa51d5e68eeec05533a1b0c897e882de",
+      "n5_reuse_sha256": "63b375e103e6e1833b42a312cacd015d1515645d6922451a290d00d5339bab86",
+      "postexit_scope_sha256": "4d14eda840b91ce028955cbd7c547fbafb50f00113b808d8fce65bf8b1df17d0",
+      "plan_sha256": "52b469007bae36a795165e236fd7db5c8a2fc33935b276043beb051fda8804f1",
+      "approval_sha256": "2bd0e2f977f1bc86c9ee85404eecfdf5cefbd460b7b53a1d04f91e1f39ddf273",
+      "canonical_summary_sha256": "b646672d98590b2098d1f1af24ddbe5e554c8b2bbb606f9cdc1802fc0e3b0011",
+      "frozen_source_manifest_sha256": "fd5254eca225793a84d2e64343ca6b8c73df163c135a35b14d9d6214ee7875a1"
+    },
+    "deepshop_audit": {
+      "all_records": 150,
+      "all_available_saved_images_checked": true,
+      "actor_decisions_checked": 2618,
+      "actor_receipts": 2619,
+      "selector_calls": 0,
+      "native_judged": 101,
+      "valid_unjudged_zero": 44,
+      "valid_unjudged_max_steps": 42,
+      "valid_unjudged_generation_length_limit": 2,
+      "invalid_environment_step_error": 4,
+      "invalid_actor_generation_error": 1,
+      "native_labels_preserved": true,
+      "semantic_rejudging": false,
+      "teardown_scope": "Owned process groups, terminal scheduler/cgroup evidence, browser releases and free controller lock. Postexit SSH denied by PAM; no physical postexit node/GPU scan."
+    }
   }
 }

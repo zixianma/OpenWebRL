@@ -149,9 +149,11 @@ Means first average observed decisions within task, then weight tasks equally. I
 </details>
 
 <a id="sol61-n5-launch-20261009"></a>
-## GPT-6.1 Sol at N=5: medium versus high
+## GPT-6.1 Sol at N=5: actor controls and reasoning effort
 
-**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. All four conditions are verified: medium scored **57.98% on WebVoyager** and **46.00% on DeepShop**.
+**DeepShop does not yet show a reliable N5 selector gain over its matching SFT N1 control:** **+3.33 pp [95% paired interval: −5.33, +11.33]**. The control scored **42.67%**, versus **46.00%** for Sol medium; these are separate collections of the same 150 tasks.
+
+**Higher selector effort did not establish an improvement on Online-Mind2Web:** medium scored **45.67%** and high **43.67%**, with high minus medium **−2.00 pp [95% paired interval: −7.33, +3.33]**. These contemporaneous runs use the same 300 tasks, five SFT action proposals per decision, and a shared 2,048-token selector output cap. All four N5 conditions are verified: medium scored **57.98% on WebVoyager** and **46.00% on DeepShop**.
 
 | Benchmark | Condition | N | Collection | Tasks | Successes | Valid | Invalid | Overall | Valid-only |
 | --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -159,6 +161,7 @@ Means first average observed decisions within task, then weight tasks equally. I
 | Online-Mind2Web | SFT alone: earlier API-study sensitivity | 1 | Oct 7, seed 42 | 300 | 95 | 273 | 27 | 31.67% | 34.80% |
 | Online-Mind2Web | Sol61 medium | 5 | Oct 9, seed 42 | 300 | 137 | 269 | 31 | 45.67% | 50.93% |
 | Online-Mind2Web | Sol61 high | 5 | Oct 9, seed 42 | 300 | 131 | 257 | 43 | 43.67% | 50.97% |
+| DeepShop | SFT alone: matching control | 1 | Oct 9 | 150 | 64 | 145 | 5 | 42.67% | 44.14% |
 | DeepShop | Sol61 medium | 5 | Oct 9 | 150 | 69 | 147 | 3 | 46.00% | 46.94% |
 | WebVoyager | Sol61 medium | 5 | Oct 9 | 595 | 345 | 565 | 30 | 57.98% | 61.06% |
 
@@ -168,21 +171,28 @@ Overall includes invalid records as zero; valid-only excludes each condition's i
 
 <a id="sol61-actor-controls-20261009"></a>
 
-**Matching SFT N=1 controls are still missing for WebVoyager and DeepShop.** The existing local actor-only cohorts use RL iteration-90 weights and different decoding; they are not controls for this SFT-proposal study. Fresh official-SFT controls are submitted with the Sol61 actor, local browser and native benchmark judge protocol, with the selector removed. Startup and results remain unverified.
+**DeepShop’s matching SFT N=1 control is verified; WebVoyager’s control remains queued.** Both controls preserve the Sol61 official-SFT weights, actor decoding, local browser and native benchmark judge, with the selector removed. The DeepShop comparison is inconclusive in both the primary and common-valid analyses:
 
-| Submitted control | N | Requested tasks | Status |
+| DeepShop paired population | Tasks | N1 successes | N5 successes | N5 − N1, pp | Paired 95% interval, pp |
+| --- | ---: | ---: | ---: | ---: | --- |
+| All tasks; invalids count as zero | 150 | 64 | 69 | +3.33 | [−5.33, +11.33] |
+| Valid in both conditions | 143 | 63 | 69 | +4.20 | [−4.20, +12.59] |
+
+The primary comparison has 23 N5-only successes and 18 N1-only successes. Pairing controls task identity; sequential collection still permits website/judge drift and stochastic trajectory differences. The common-valid estimate excludes seven tasks and conditions on availability in both arms. Both intervals use 10,000 paired task-bootstrap resamples with seed 42. Neither interval establishes a reliable benefit or equivalence. [Aggregate and paired analysis](arm_results/sol61_n5_launch_20261009.json).
+
+| SFT control | N | Requested tasks | Status |
 | --- | ---: | ---: | --- |
-| Official SFT alone, WebVoyager | 1 | 595 | Job 353195 submitted; results pending |
-| Official SFT alone, DeepShop | 1 | 150 | Job 353196 submitted; results pending |
+| WebVoyager | 1 | 595 | Job 353195 queued; no control result yet |
+| DeepShop | 1 | 150 | Independently verified complete |
 
 <details>
 <summary>Control matching, approved budgets and remaining comparability gaps</summary>
 
-The independently reviewed controls each have one H200, eight CPUs, 120 GiB RAM and eight local browsers. All-attempt limits are six hours plus $30 in native GPT-4o judging for WebVoyager, and three hours plus $10 for DeepShop. These separate budgets include recovery; no selector or teacher calls are allowed.
+The independently reviewed controls each have one H200, eight CPUs, 120 GiB RAM and eight local browsers. All-attempt limits are six hours plus $30 in native GPT-4o judging for WebVoyager, and three hours plus $10 for DeepShop. These separate budgets include recovery; no selector or teacher calls are allowed. DeepShop used 4,954 of 10,800 seconds, 150 of 165 browser attempts and 101 of 660 judge HTTP calls; its conservative judge charge was $0.5487225 of $10. Every attempt is retained. The full artifact review checked all 150 records, available saved images, actor decisions and native verdicts; it verified zero selector calls. Of 145 native-valid N1 trajectories, 101 received a GPT-4o verdict and 44 retained unjudged native zero rewards (42 turn limits and two generation length limits). The five invalids comprise four environment-step errors and one failed actor request. No selective retries or rejudging were performed. Finished W&B metrics, controller-owned process-group teardown, all final Slurm steps and browser releases reconcile. Postexit SSH was denied by PAM; teardown verification uses the owned-resource and scheduler/cgroup evidence.
 
 Both OM2W controls use the same 300-task file, official SFT revision, pinned actor-policy hash, local browsers, T=0.7/top-p=0.9/native default top-k, 1,024 actor tokens, 30 turns, full text history/latest screenshot and canonical o4-mini/AgentTrek judge as Sol61. The shared actor, browser, reward and native evaluator source files are byte-identical. The October 7 seed-45 control is the latest completed matching control located; the earlier API-study control also matches Sol61's seed-42/server-4200 settings.
 
-The seed-45 control uses server seeds 4500/4501, versus 4200/4201 for Sol61 and the API-study control. FlashInfer ignores per-request seeds, so matching seed labels do not imply identical trajectories. Campaign wrappers, interleaving and collection times differ; core-file identity does not prove complete runtime equivalence. Website/judge drift and differing invalid sets remain. No new paired interval or common-valid Sol61-versus-control estimate is claimed here. Existing native outcomes, including valid unjudged zeros, are unchanged.
+The seed-45 control uses server seeds 4500/4501, versus 4200/4201 for Sol61 and the API-study control. FlashInfer ignores per-request seeds, so matching seed labels do not imply identical trajectories. Campaign wrappers, interleaving and collection times differ; core-file identity does not prove complete runtime equivalence. Website/judge drift and differing invalid sets remain. No new paired interval or common-valid estimate is claimed for the historical OM2W controls. Existing native outcomes, including valid unjudged zeros, are unchanged.
 
 </details>
 
@@ -200,7 +210,7 @@ Across all 300 OM2W tasks, both conditions succeeded on 101, only medium on 36, 
 
 These are committed-episode measurements, including invalid episodes; service times are summed within each episode and are not allocated GPU time. Two task shards interleaved medium and high, so per-shard allocation time cannot be attributed to one reasoning effort. Failed attempts and all API reservations are accounted separately.
 
-Native unjudged zero outcomes remain valid: OM2W has 63 in medium and 68 in high, including step limits, generation-length failures and format failures. Its other 395 valid outcomes received the native o4-mini verdict. DeepShop has 50 step-limit zeros and 97 native GPT-4o-judged outcomes. Invalid records remain saved and excluded only from valid-only rates. OM2W's invalids include browser reset/navigation failures, missing observations, a native episode timeout and actor requests whose prompt plus reserved output exceeded the context limit. The frozen client guard checks prompt length alone; this boundary mismatch is retained as a harness limitation, with no selective retries or changed labels. The native judge action-history parser omits unsupported tool names, including observed `select_option` calls; saved canonical requests and verdicts are preserved. The audit verifies integrity and protocol, without independently rejudging semantic correctness.
+Native unjudged zero outcomes remain valid: OM2W has 63 in medium and 68 in high, including step limits, generation-length failures and format failures. Its other 395 valid outcomes received the native o4-mini verdict. DeepShop N5 has 50 step-limit zeros and 97 native GPT-4o-judged outcomes. Invalid records remain saved and excluded only from valid-only rates. OM2W's invalids include browser reset/navigation failures, missing observations, a native episode timeout and actor requests whose prompt plus reserved output exceeded the context limit. The frozen client guard checks prompt length alone; this boundary mismatch is retained as a harness limitation, with no selective retries or changed labels. The native judge action-history parser omits unsupported tool names, including observed `select_option` calls; saved canonical requests and verdicts are preserved. The audit verifies integrity and protocol, without independently rejudging semantic correctness.
 
 </details>
 
