@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1710" height="1040" viewBox="0 0 1710 1040" role="img" aria-labelledby="title desc">
-<title id="title">Five ways to choose among sampled actions</title><desc id="desc">Compares Piotr SelectionARM, the one-at-a-time actor-feature head, the joint top-layer variant, a Kev-style decision pass on the actor and Kev itself: weights, inputs, how candidates interact, order effects, readout, added cost and current status.</desc>
+<title id="title">Five ways to choose among sampled actions</title><desc id="desc">Compares Piotr SelectionARM, the one-at-a-time actor-feature head, the joint top-layer variant, a Kev-style decision pass on the actor and Kev itself: weights, inputs, how candidates interact, order effects, readout, added cost and current status (Luna agreement on 124 states; held-out continuation success minus uniform on 138 states).</desc>
 <style>text{font-family:Arial,Helvetica,sans-serif}</style>
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>
 <rect x="0" y="0" width="1710" height="1040" fill="#fff"/>
@@ -219,16 +219,17 @@
 <text x="1530.0" y="872.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,822,288,74">page text + candidates</text>
 <text x="30" y="959.0" font-size="17" fill="#182b44" font-weight="700" text-anchor="start">Status</text>
 <rect x="186" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
-<text x="330.0" y="957.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,916,288,74">Luna agreement 73.2%</text>
+<text x="330.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,916,288,74">Luna 73.2%; held-out</text>
+<text x="330.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="186,916,288,74">success +2.5 pp</text>
 <rect x="486" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
-<text x="630.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,916,288,74">Luna agreement 61.7%;</text>
-<text x="630.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,916,288,74">top-8 adapter: no gain</text>
+<text x="630.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,916,288,74">Luna 61.7%; held-out</text>
+<text x="630.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="486,916,288,74">success +2.0 pp</text>
 <rect x="786" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
 <text x="930.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,916,288,74">pointer alone: Luna</text>
 <text x="930.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="786,916,288,74">agreement 57.5%</text>
 <rect x="1086" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
-<text x="1230.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,916,288,74">Luna agreement 69.6%</text>
-<text x="1230.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,916,288,74">after 150 steps</text>
+<text x="1230.0" y="947.708" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,916,288,74">Luna 66.1% (step 600);</text>
+<text x="1230.0" y="966.608" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1086,916,288,74">held-out success +1.1 pp</text>
 <rect x="1386" y="916" width="288" height="74" rx="10" fill="#f8fafc" stroke="#b7c4d4" stroke-width="2"/>
 <text x="1530.0" y="957.1579999999999" font-size="14" fill="#50647a" font-weight="400" text-anchor="middle" data-box="1386,916,288,74">not run on these states</text>
 </svg>

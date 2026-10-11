@@ -1,0 +1,1614 @@
+{
+ "section": "ARM_SELECTION_HEAD.md#selection-head-outcomes-20261010",
+ "as_of": "2026-10-10 evening PDT; saved released branch records read-only from campaign ledgers",
+ "estimands": {
+  "continuation_success": "Mean over states of the chosen root action's SFT continuation success; invalid draws count as zero unless labelled valid-only. Only the root action differs between rules.",
+  "held_out_protocol_8draw": "States with draws 0-7 for all five actions. Outcome selection picks the best candidate on k draws (exact uniform weight over tied maxima) and is scored on the other 8-k; averaged over all C(8,k) splits. Fixed selectors are scored on the same held-out draws (equivalently the mean over draws 0-7). Hindsight best = max over candidates of the held-out mean (optimistic).",
+  "luna_after_leakage_free": "Luna after-execution judgments saw immediate post-action evidence from execution draws 0-2; all rules are scored on fresh draws 3-7 only. Outcome selection fits on draws 0-2.",
+  "agreement": "Share of a reference teacher's judgments matched by an action-equivalent candidate (identical tool calls; clicks within five normalized units).",
+  "bootstrap": "124-state analyses: 20,000 state resamples (each state is its own task), seed 0. 8-draw cross-lineage analyses: 10,000 whole-task-group resamples, seed 0."
+ },
+ "cross_lineage_8draw_k5": {
+  "All": {
+   "states": 138,
+   "groups": 120,
+   "rows": {
+    "Outcome: best on 5 draws": [
+     36.99,
+     [
+      5.32,
+      3.09,
+      7.62
+     ],
+     [
+      2.84,
+      -0.24,
+      6.14
+     ]
+    ],
+    "Uniform": [
+     31.67,
+     [
+      0.0,
+      0.0,
+      0.0
+     ],
+     [
+      -2.48,
+      -5.21,
+      0.14
+     ]
+    ],
+    "Hindsight best (3 held-out draws)": [
+     50.03,
+     [
+      18.36,
+      15.48,
+      21.24
+     ],
+     [
+      15.88,
+      12.27,
+      19.79
+     ]
+    ],
+    "Piotr ARM": [
+     34.15,
+     [
+      2.48,
+      -0.14,
+      5.21
+     ],
+     [
+      0.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "Frozen pointwise": [
+     33.7,
+     [
+      2.03,
+      -0.26,
+      4.36
+     ],
+     [
+      -0.45,
+      -3.3,
+      2.13
+     ]
+    ],
+    "Listwise": [
+     31.88,
+     [
+      0.22,
+      -2.63,
+      3.08
+     ],
+     [
+      -2.26,
+      -5.54,
+      0.63
+     ]
+    ],
+    "L27 head": [
+     31.79,
+     [
+      0.13,
+      -2.72,
+      2.94
+     ],
+     [
+      -2.36,
+      -5.93,
+      0.96
+     ]
+    ],
+    "L18-36 action head": [
+     31.34,
+     [
+      -0.33,
+      -2.74,
+      2.19
+     ],
+     [
+      -2.81,
+      -5.97,
+      0.09
+     ]
+    ],
+    "Kev-style step 150": [
+     32.16,
+     [
+      0.49,
+      -2.01,
+      2.99
+     ],
+     [
+      -1.99,
+      -4.5,
+      0.27
+     ]
+    ],
+    "Top-8 adapter": [
+     33.24,
+     [
+      1.58,
+      -0.73,
+      3.98
+     ],
+     [
+      -0.91,
+      -3.69,
+      1.62
+     ]
+    ],
+    "Kev-style step 600": [
+     32.79,
+     [
+      1.12,
+      -1.38,
+      3.75
+     ],
+     [
+      -1.36,
+      -3.43,
+      0.56
+     ]
+    ],
+    "Actor first": [
+     33.33,
+     [
+      1.67,
+      -1.05,
+      4.3
+     ],
+     [
+      -0.82,
+      -4.07,
+      2.27
+     ]
+    ]
+   }
+  },
+  "Historical": {
+   "states": 51,
+   "groups": 51,
+   "rows": {
+    "Outcome: best on 5 draws": [
+     29.08,
+     [
+      5.7,
+      1.93,
+      9.9
+     ],
+     [
+      3.34,
+      -1.07,
+      8.4
+     ]
+    ],
+    "Uniform": [
+     23.38,
+     [
+      0.0,
+      0.0,
+      0.0
+     ],
+     [
+      -2.35,
+      -6.67,
+      1.76
+     ]
+    ],
+    "Hindsight best (3 held-out draws)": [
+     39.16,
+     [
+      15.77,
+      11.41,
+      20.31
+     ],
+     [
+      13.42,
+      8.49,
+      19.05
+     ]
+    ],
+    "Piotr ARM": [
+     25.74,
+     [
+      2.35,
+      -1.76,
+      6.67
+     ],
+     [
+      0.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "Frozen pointwise": [
+     26.23,
+     [
+      2.84,
+      -1.03,
+      7.01
+     ],
+     [
+      0.49,
+      -2.45,
+      3.68
+     ]
+    ],
+    "Listwise": [
+     25.0,
+     [
+      1.62,
+      -2.6,
+      5.98
+     ],
+     [
+      -0.74,
+      -4.9,
+      3.19
+     ]
+    ],
+    "L27 head": [
+     28.68,
+     [
+      5.29,
+      1.23,
+      9.75
+     ],
+     [
+      2.94,
+      -1.72,
+      8.09
+     ]
+    ],
+    "L18-36 action head": [
+     26.96,
+     [
+      3.58,
+      -0.44,
+      7.84
+     ],
+     [
+      1.23,
+      -2.21,
+      4.9
+     ]
+    ],
+    "Kev-style step 150": [
+     23.04,
+     [
+      -0.34,
+      -3.97,
+      3.53
+     ],
+     [
+      -2.7,
+      -7.6,
+      1.72
+     ]
+    ],
+    "Top-8 adapter": [
+     26.96,
+     [
+      3.58,
+      -0.44,
+      7.94
+     ],
+     [
+      1.23,
+      -0.98,
+      4.17
+     ]
+    ],
+    "Kev-style step 600": [
+     24.75,
+     [
+      1.37,
+      -2.89,
+      5.93
+     ],
+     [
+      -0.98,
+      -4.9,
+      2.7
+     ]
+    ],
+    "Actor first": [
+     21.32,
+     [
+      -2.06,
+      -5.83,
+      1.72
+     ],
+     [
+      -4.41,
+      -10.05,
+      0.25
+     ]
+    ]
+   }
+  },
+  "Pilot 32": {
+   "states": 32,
+   "groups": 29,
+   "rows": {
+    "Outcome: best on 5 draws": [
+     38.5,
+     [
+      4.83,
+      0.47,
+      9.27
+     ],
+     [
+      4.52,
+      -2.74,
+      11.74
+     ]
+    ],
+    "Uniform": [
+     33.67,
+     [
+      0.0,
+      0.0,
+      0.0
+     ],
+     [
+      -0.31,
+      -5.4,
+      4.61
+     ]
+    ],
+    "Hindsight best (3 held-out draws)": [
+     53.7,
+     [
+      20.03,
+      14.91,
+      24.95
+     ],
+     [
+      19.72,
+      12.1,
+      27.47
+     ]
+    ],
+    "Piotr ARM": [
+     33.98,
+     [
+      0.31,
+      -4.57,
+      5.4
+     ],
+     [
+      0.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "Frozen pointwise": [
+     35.94,
+     [
+      2.27,
+      -1.14,
+      5.78
+     ],
+     [
+      1.95,
+      -3.63,
+      6.99
+     ]
+    ],
+    "Listwise": [
+     36.33,
+     [
+      2.66,
+      -1.14,
+      6.88
+     ],
+     [
+      2.34,
+      -1.29,
+      6.44
+     ]
+    ],
+    "L27 head": [
+     31.64,
+     [
+      -2.03,
+      -5.63,
+      1.83
+     ],
+     [
+      -2.34,
+      -6.9,
+      1.52
+     ]
+    ],
+    "L18-36 action head": [
+     33.59,
+     [
+      -0.08,
+      -3.91,
+      4.19
+     ],
+     [
+      -0.39,
+      -6.05,
+      4.78
+     ]
+    ],
+    "Kev-style step 150": [
+     33.59,
+     [
+      -0.08,
+      -3.95,
+      4.3
+     ],
+     [
+      -0.39,
+      -2.82,
+      1.84
+     ]
+    ],
+    "Top-8 adapter": [
+     34.77,
+     [
+      1.09,
+      -2.79,
+      5.08
+     ],
+     [
+      0.78,
+      -4.58,
+      5.21
+     ]
+    ],
+    "Kev-style step 600": [
+     33.59,
+     [
+      -0.08,
+      -4.92,
+      5.17
+     ],
+     [
+      -0.39,
+      -2.08,
+      1.25
+     ]
+    ],
+    "Actor first": [
+     37.11,
+     [
+      3.44,
+      -1.29,
+      8.15
+     ],
+     [
+      3.12,
+      -3.63,
+      9.47
+     ]
+    ]
+   }
+  },
+  "Fresh": {
+   "states": 55,
+   "groups": 45,
+   "rows": {
+    "Outcome: best on 5 draws": [
+     43.44,
+     [
+      5.26,
+      2.14,
+      8.82
+     ],
+     [
+      1.4,
+      -3.41,
+      6.83
+     ]
+    ],
+    "Uniform": [
+     38.18,
+     [
+      0.0,
+      0.0,
+      0.0
+     ],
+     [
+      -3.86,
+      -8.4,
+      0.51
+     ]
+    ],
+    "Hindsight best (3 held-out draws)": [
+     57.97,
+     [
+      19.78,
+      15.01,
+      24.5
+     ],
+     [
+      15.92,
+      9.92,
+      22.53
+     ]
+    ],
+    "Piotr ARM": [
+     42.05,
+     [
+      3.86,
+      -0.51,
+      8.4
+     ],
+     [
+      0.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "Frozen pointwise": [
+     39.32,
+     [
+      1.14,
+      -2.8,
+      5.29
+     ],
+     [
+      -2.73,
+      -8.48,
+      2.12
+     ]
+    ],
+    "Listwise": [
+     35.68,
+     [
+      -2.5,
+      -7.82,
+      2.63
+     ],
+     [
+      -6.36,
+      -13.17,
+      -0.91
+     ]
+    ],
+    "L27 head": [
+     34.77,
+     [
+      -3.41,
+      -8.59,
+      1.53
+     ],
+     [
+      -7.27,
+      -14.39,
+      -1.25
+     ]
+    ],
+    "L18-36 action head": [
+     34.09,
+     [
+      -4.09,
+      -8.1,
+      -0.35
+     ],
+     [
+      -7.95,
+      -14.29,
+      -2.7
+     ]
+    ],
+    "Kev-style step 150": [
+     39.77,
+     [
+      1.59,
+      -2.9,
+      6.25
+     ],
+     [
+      -2.27,
+      -6.49,
+      1.5
+     ]
+    ],
+    "Top-8 adapter": [
+     38.18,
+     [
+      -0.0,
+      -3.77,
+      3.95
+     ],
+     [
+      -3.86,
+      -9.72,
+      1.16
+     ]
+    ],
+    "Kev-style step 600": [
+     39.77,
+     [
+      1.59,
+      -2.2,
+      5.64
+     ],
+     [
+      -2.27,
+      -5.82,
+      0.96
+     ]
+    ],
+    "Actor first": [
+     42.27,
+     [
+      4.09,
+      -0.74,
+      8.95
+     ],
+     [
+      0.23,
+      -4.25,
+      5.21
+     ]
+    ]
+   }
+  }
+ },
+ "historical124_rescoring": {
+  "Original 3 draws (as reported)": {
+   "states": 124,
+   "mean_draws": 3.0,
+   "success": {
+    "Piotr ARM": 35.75,
+    "Kev-style s150": 34.14,
+    "Frozen pointwise": 34.68,
+    "Listwise": 33.6,
+    "Top-8 adapter": 33.6,
+    "Joint pointer": 31.72,
+    "Sweep L27 (post hoc best)": 36.56,
+    "Sweep L18-36 action": 36.02,
+    "Actor first": 29.84,
+    "Plurality vote": 30.38,
+    "Luna before (4 judgments)": 34.14,
+    "Uniform": 32.42,
+    "Hindsight oracle (same draws)": 50.0
+   },
+   "diffs": {
+    "Kev-style s150 - Piotr ARM": [
+     -1.61,
+     -5.11,
+     1.61
+    ],
+    "Kev-style s150 - Frozen pointwise": [
+     -0.54,
+     -3.76,
+     2.69
+    ],
+    "Piotr ARM - Uniform": [
+     3.33,
+     0.05,
+     6.77
+    ],
+    "Kev-style s150 - Uniform": [
+     1.72,
+     -1.45,
+     5.0
+    ],
+    "Frozen pointwise - Uniform": [
+     2.26,
+     -1.08,
+     5.75
+    ],
+    "Piotr ARM - Actor first": [
+     5.91,
+     1.88,
+     10.22
+    ],
+    "Plurality vote - Uniform": [
+     -2.04,
+     -4.46,
+     0.38
+    ],
+    "Sweep L27 (post hoc best) - Piotr ARM": [
+     0.81,
+     -3.23,
+     4.57
+    ],
+    "Luna before (4 judgments) - Uniform": [
+     1.72,
+     -0.83,
+     4.42
+    ]
+   }
+  },
+  "All draws, invalid = 0": {
+   "states": 124,
+   "mean_draws": 5.19,
+   "success": {
+    "Piotr ARM": 36.98,
+    "Kev-style s150": 34.8,
+    "Frozen pointwise": 35.95,
+    "Listwise": 34.91,
+    "Top-8 adapter": 34.37,
+    "Joint pointer": 33.19,
+    "Sweep L27 (post hoc best)": 36.69,
+    "Sweep L18-36 action": 37.11,
+    "Actor first": 32.21,
+    "Plurality vote": 31.63,
+    "Luna before (4 judgments)": 35.17,
+    "Uniform": 33.11,
+    "Hindsight oracle (same draws)": 49.13
+   },
+   "diffs": {
+    "Kev-style s150 - Piotr ARM": [
+     -2.18,
+     -5.51,
+     0.91
+    ],
+    "Kev-style s150 - Frozen pointwise": [
+     -1.15,
+     -3.9,
+     1.61
+    ],
+    "Piotr ARM - Uniform": [
+     3.87,
+     0.81,
+     7.05
+    ],
+    "Kev-style s150 - Uniform": [
+     1.69,
+     -1.19,
+     4.73
+    ],
+    "Frozen pointwise - Uniform": [
+     2.84,
+     -0.06,
+     5.86
+    ],
+    "Piotr ARM - Actor first": [
+     4.77,
+     0.9,
+     8.99
+    ],
+    "Plurality vote - Uniform": [
+     -1.48,
+     -3.84,
+     0.91
+    ],
+    "Sweep L27 (post hoc best) - Piotr ARM": [
+     -0.3,
+     -3.93,
+     3.26
+    ],
+    "Luna before (4 judgments) - Uniform": [
+     2.06,
+     -0.36,
+     4.65
+    ]
+   }
+  },
+  "All draws, valid only": {
+   "states": 119,
+   "mean_draws": 5.15,
+   "success": {
+    "Piotr ARM": 38.47,
+    "Kev-style s150": 37.19,
+    "Frozen pointwise": 38.07,
+    "Listwise": 37.2,
+    "Top-8 adapter": 36.11,
+    "Joint pointer": 34.86,
+    "Sweep L27 (post hoc best)": 39.3,
+    "Sweep L18-36 action": 39.2,
+    "Actor first": 33.67,
+    "Plurality vote": 33.72,
+    "Luna before (4 judgments)": 36.92,
+    "Uniform": 34.99,
+    "Hindsight oracle (same draws)": 51.24
+   },
+   "diffs": {
+    "Kev-style s150 - Piotr ARM": [
+     -1.28,
+     -4.57,
+     1.71
+    ],
+    "Kev-style s150 - Frozen pointwise": [
+     -0.88,
+     -3.79,
+     1.95
+    ],
+    "Piotr ARM - Uniform": [
+     3.48,
+     0.42,
+     6.7
+    ],
+    "Kev-style s150 - Uniform": [
+     2.2,
+     -0.65,
+     5.11
+    ],
+    "Frozen pointwise - Uniform": [
+     3.08,
+     0.27,
+     6.0
+    ],
+    "Piotr ARM - Actor first": [
+     4.8,
+     0.76,
+     9.15
+    ],
+    "Plurality vote - Uniform": [
+     -1.27,
+     -3.86,
+     1.42
+    ],
+    "Sweep L27 (post hoc best) - Piotr ARM": [
+     0.83,
+     -2.79,
+     4.46
+    ],
+    "Luna before (4 judgments) - Uniform": [
+     1.93,
+     -0.49,
+     4.5
+    ]
+   }
+  },
+  "Fresh draws only (repeats 3-7), invalid = 0": {
+   "states": 59,
+   "mean_draws": 4.59,
+   "success": {
+    "Piotr ARM": 28.64,
+    "Kev-style s150": 26.1,
+    "Frozen pointwise": 30.0,
+    "Listwise": 28.98,
+    "Top-8 adapter": 30.0,
+    "Joint pointer": 29.83,
+    "Sweep L27 (post hoc best)": 30.68,
+    "Sweep L18-36 action": 30.17,
+    "Actor first": 25.59,
+    "Plurality vote": 25.59,
+    "Luna before (4 judgments)": 28.81,
+    "Uniform": 26.07,
+    "Hindsight oracle (same draws)": 41.69
+   },
+   "diffs": {
+    "Kev-style s150 - Piotr ARM": [
+     -2.54,
+     -7.46,
+     1.86
+    ],
+    "Kev-style s150 - Frozen pointwise": [
+     -3.9,
+     -9.15,
+     0.68
+    ],
+    "Piotr ARM - Uniform": [
+     2.58,
+     -2.17,
+     7.46
+    ],
+    "Kev-style s150 - Uniform": [
+     0.03,
+     -4.17,
+     4.47
+    ],
+    "Frozen pointwise - Uniform": [
+     3.93,
+     -0.34,
+     8.47
+    ],
+    "Piotr ARM - Actor first": [
+     3.05,
+     -2.88,
+     9.32
+    ],
+    "Plurality vote - Uniform": [
+     -0.47,
+     -3.93,
+     3.12
+    ],
+    "Sweep L27 (post hoc best) - Piotr ARM": [
+     2.03,
+     -3.73,
+     8.47
+    ],
+    "Luna before (4 judgments) - Uniform": [
+     2.75,
+     -1.49,
+     7.24
+    ]
+   }
+  },
+  "Fresh draws only, valid only": {
+   "states": 55,
+   "mean_draws": 4.56,
+   "success": {
+    "Piotr ARM": 30.73,
+    "Kev-style s150": 29.82,
+    "Frozen pointwise": 33.15,
+    "Listwise": 33.3,
+    "Top-8 adapter": 32.79,
+    "Joint pointer": 32.42,
+    "Sweep L27 (post hoc best)": 34.73,
+    "Sweep L18-36 action": 34.06,
+    "Actor first": 28.73,
+    "Plurality vote": 28.55,
+    "Luna before (4 judgments)": 31.7,
+    "Uniform": 29.15,
+    "Hindsight oracle (same draws)": 44.52
+   },
+   "diffs": {
+    "Kev-style s150 - Piotr ARM": [
+     -0.91,
+     -5.09,
+     3.36
+    ],
+    "Kev-style s150 - Frozen pointwise": [
+     -3.33,
+     -8.61,
+     1.18
+    ],
+    "Piotr ARM - Uniform": [
+     1.58,
+     -3.4,
+     6.63
+    ],
+    "Kev-style s150 - Uniform": [
+     0.67,
+     -3.7,
+     5.26
+    ],
+    "Frozen pointwise - Uniform": [
+     4.0,
+     -0.65,
+     8.85
+    ],
+    "Piotr ARM - Actor first": [
+     2.0,
+     -4.55,
+     8.91
+    ],
+    "Plurality vote - Uniform": [
+     -0.61,
+     -3.98,
+     2.69
+    ],
+    "Sweep L27 (post hoc best) - Piotr ARM": [
+     4.0,
+     -1.45,
+     10.55
+    ],
+    "Luna before (4 judgments) - Uniform": [
+     2.55,
+     -1.75,
+     7.13
+    ]
+   }
+  }
+ },
+ "luna_after_and_outcome_selection_124": {
+  "Fit on draws 0-2, evaluate on fresh draws 3-7 (invalid = 0)": {
+   "states": 57,
+   "success": {
+    "Outcome: best on fitting draws": 34.2,
+    "Luna after (10 judgments)": 31.6,
+    "Luna before (4 judgments)": 29.82,
+    "Piotr ARM": 29.65,
+    "Kev-style s150": 27.02,
+    "Frozen pointwise": 31.05,
+    "Listwise": 30.0,
+    "Top-8 adapter": 31.05,
+    "Sweep L27 (post hoc best)": 31.75,
+    "Actor first": 26.49,
+    "Plurality vote": 26.49,
+    "Uniform": 26.98,
+    "Hindsight oracle on held-out draws": 43.16
+   },
+   "diffs": {
+    "Outcome: best on fitting draws - Uniform": [
+     7.22,
+     2.88,
+     12.21
+    ],
+    "Outcome: best on fitting draws - Piotr ARM": [
+     4.55,
+     -0.93,
+     10.85
+    ],
+    "Luna after (10 judgments) - Luna before (4 judgments)": [
+     1.77,
+     -0.51,
+     4.4
+    ],
+    "Luna after (10 judgments) - Uniform": [
+     4.61,
+     0.39,
+     9.16
+    ],
+    "Outcome: best on fitting draws - Luna after (10 judgments)": [
+     2.6,
+     -1.63,
+     7.85
+    ],
+    "Piotr ARM - Uniform": [
+     2.67,
+     -2.21,
+     7.72
+    ],
+    "Kev-style s150 - Uniform": [
+     0.04,
+     -4.25,
+     4.67
+    ]
+   }
+  },
+  "Fit on draws 0-2, evaluate on fresh draws 3-7 (valid only)": {
+   "states": 55,
+   "success": {
+    "Outcome: best on fitting draws": 34.61,
+    "Luna after (10 judgments)": 33.04,
+    "Luna before (4 judgments)": 31.7,
+    "Piotr ARM": 30.73,
+    "Kev-style s150": 29.82,
+    "Frozen pointwise": 33.15,
+    "Listwise": 33.3,
+    "Top-8 adapter": 32.79,
+    "Sweep L27 (post hoc best)": 34.73,
+    "Actor first": 28.73,
+    "Plurality vote": 28.55,
+    "Uniform": 29.15,
+    "Hindsight oracle on held-out draws": 44.52
+   },
+   "diffs": {
+    "Outcome: best on fitting draws - Uniform": [
+     5.46,
+     1.31,
+     10.41
+    ],
+    "Outcome: best on fitting draws - Piotr ARM": [
+     3.89,
+     -1.95,
+     10.5
+    ],
+    "Luna after (10 judgments) - Luna before (4 judgments)": [
+     1.34,
+     -1.27,
+     4.2
+    ],
+    "Luna after (10 judgments) - Uniform": [
+     3.89,
+     -0.36,
+     8.41
+    ],
+    "Outcome: best on fitting draws - Luna after (10 judgments)": [
+     1.57,
+     -2.83,
+     6.89
+    ],
+    "Piotr ARM - Uniform": [
+     1.58,
+     -3.4,
+     6.63
+    ],
+    "Kev-style s150 - Uniform": [
+     0.67,
+     -3.7,
+     5.26
+    ]
+   }
+  },
+  "8-draw states: select on 1, evaluate on remaining 7, all 8 splits (invalid = 0)": {
+   "states": 49,
+   "success": {
+    "Outcome: best on fitting draws": 26.8,
+    "Luna after (10 judgments)": 29.21,
+    "Luna before (4 judgments)": 26.59,
+    "Piotr ARM": 26.79,
+    "Kev-style s150": 23.98,
+    "Frozen pointwise": 27.3,
+    "Listwise": 26.02,
+    "Top-8 adapter": 28.06,
+    "Sweep L27 (post hoc best)": 29.85,
+    "Actor first": 22.19,
+    "Plurality vote": 23.72,
+    "Uniform": 24.34,
+    "Hindsight oracle on held-out draws": 37.54
+   },
+   "diffs": {
+    "Outcome: best on fitting draws - Uniform": [
+     2.46,
+     0.81,
+     4.45
+    ],
+    "Outcome: best on fitting draws - Piotr ARM": [
+     0.01,
+     -4.38,
+     4.81
+    ],
+    "Piotr ARM - Uniform": [
+     2.45,
+     -1.84,
+     7.04
+    ],
+    "Kev-style s150 - Uniform": [
+     -0.36,
+     -4.18,
+     3.72
+    ]
+   }
+  },
+  "8-draw states: select on 3, evaluate on remaining 5, all 56 splits (invalid = 0)": {
+   "states": 49,
+   "success": {
+    "Outcome: best on fitting draws": 29.21,
+    "Luna after (10 judgments)": 29.21,
+    "Luna before (4 judgments)": 26.59,
+    "Piotr ARM": 26.79,
+    "Kev-style s150": 23.98,
+    "Frozen pointwise": 27.3,
+    "Listwise": 26.02,
+    "Top-8 adapter": 28.06,
+    "Sweep L27 (post hoc best)": 29.85,
+    "Actor first": 22.19,
+    "Plurality vote": 23.72,
+    "Uniform": 24.34,
+    "Hindsight oracle on held-out draws": 38.75
+   },
+   "diffs": {
+    "Outcome: best on fitting draws - Uniform": [
+     4.88,
+     1.82,
+     8.4
+    ],
+    "Outcome: best on fitting draws - Piotr ARM": [
+     2.43,
+     -1.85,
+     7.31
+    ],
+    "Piotr ARM - Uniform": [
+     2.45,
+     -1.84,
+     7.04
+    ],
+    "Kev-style s150 - Uniform": [
+     -0.36,
+     -4.18,
+     3.72
+    ]
+   }
+  },
+  "8-draw states: select on 5, evaluate on remaining 3, all 56 splits (invalid = 0)": {
+   "states": 49,
+   "success": {
+    "Outcome: best on fitting draws": 30.26,
+    "Luna after (10 judgments)": 29.21,
+    "Luna before (4 judgments)": 26.59,
+    "Piotr ARM": 26.79,
+    "Kev-style s150": 23.98,
+    "Frozen pointwise": 27.3,
+    "Listwise": 26.02,
+    "Top-8 adapter": 28.06,
+    "Sweep L27 (post hoc best)": 29.85,
+    "Actor first": 22.19,
+    "Plurality vote": 23.72,
+    "Uniform": 24.34,
+    "Hindsight oracle on held-out draws": 40.76
+   },
+   "diffs": {
+    "Outcome: best on fitting draws - Uniform": [
+     5.93,
+     2.07,
+     10.3
+    ],
+    "Outcome: best on fitting draws - Piotr ARM": [
+     3.48,
+     -1.12,
+     8.75
+    ],
+    "Piotr ARM - Uniform": [
+     2.45,
+     -1.84,
+     7.04
+    ],
+    "Kev-style s150 - Uniform": [
+     -0.36,
+     -4.18,
+     3.72
+    ]
+   }
+  },
+  "8-draw states: select on 7, evaluate on remaining 1, all 8 splits (invalid = 0)": {
+   "states": 49,
+   "success": {
+    "Outcome: best on fitting draws": 30.09,
+    "Luna after (10 judgments)": 29.21,
+    "Luna before (4 judgments)": 26.59,
+    "Piotr ARM": 26.79,
+    "Kev-style s150": 23.98,
+    "Frozen pointwise": 27.3,
+    "Listwise": 26.02,
+    "Top-8 adapter": 28.06,
+    "Sweep L27 (post hoc best)": 29.85,
+    "Actor first": 22.19,
+    "Plurality vote": 23.72,
+    "Uniform": 24.34,
+    "Hindsight oracle on held-out draws": 45.92
+   },
+   "diffs": {
+    "Outcome: best on fitting draws - Uniform": [
+     5.76,
+     1.41,
+     10.6
+    ],
+    "Outcome: best on fitting draws - Piotr ARM": [
+     3.31,
+     -1.61,
+     8.84
+    ],
+    "Piotr ARM - Uniform": [
+     2.45,
+     -1.84,
+     7.04
+    ],
+    "Kev-style s150 - Uniform": [
+     -0.36,
+     -4.18,
+     3.72
+    ]
+   }
+  }
+ },
+ "luna_agreement_robustness_124": {
+  "subsets": {
+   "all 124": {
+    "states": 124,
+    "agreement": {
+     "Piotr ARM": 73.19,
+     "Kev-style s150": 69.56,
+     "Frozen pointwise": 61.69,
+     "Plurality vote": 50.0,
+     "Actor first": 56.25,
+     "Uniform": 46.85
+    },
+    "kev_minus_piotr": [
+     -3.63,
+     -10.28,
+     2.82
+    ]
+   },
+   "prompt-verified 114": {
+    "states": 114,
+    "agreement": {
+     "Piotr ARM": 72.81,
+     "Kev-style s150": 68.86,
+     "Frozen pointwise": 60.75,
+     "Plurality vote": 48.46,
+     "Actor first": 56.14,
+     "Uniform": 45.7
+    },
+    "kev_minus_piotr": [
+     -3.95,
+     -10.75,
+     2.85
+    ]
+   },
+   "verified, no Piotr-task overlap": {
+    "states": 105,
+    "agreement": {
+     "Piotr ARM": 71.9,
+     "Kev-style s150": 66.67,
+     "Frozen pointwise": 60.24,
+     "Plurality vote": 50.24,
+     "Actor first": 56.19,
+     "Uniform": 46.62
+    },
+    "kev_minus_piotr": [
+     -5.24,
+     -12.38,
+     1.67
+    ]
+   },
+   "depth 0 (first decision)": {
+    "states": 33,
+    "agreement": {
+     "Piotr ARM": 62.88,
+     "Kev-style s150": 59.09,
+     "Frozen pointwise": 46.97,
+     "Plurality vote": 37.88,
+     "Actor first": 40.91,
+     "Uniform": 35.3
+    },
+    "kev_minus_piotr": [
+     -3.79,
+     -18.18,
+     9.85
+    ]
+   },
+   "depth >= 1": {
+    "states": 91,
+    "agreement": {
+     "Piotr ARM": 76.92,
+     "Kev-style s150": 73.35,
+     "Frozen pointwise": 67.03,
+     "Plurality vote": 54.4,
+     "Actor first": 61.81,
+     "Uniform": 51.04
+    },
+    "kev_minus_piotr": [
+     -3.57,
+     -10.99,
+     3.57
+    ]
+   }
+  },
+  "single_judgments": {
+   "0": {
+    "agreement": {
+     "Piotr ARM": 70.97,
+     "Kev-style s150": 69.35,
+     "Frozen pointwise": 58.87
+    },
+    "kev_minus_piotr": [
+     -1.61,
+     -8.87,
+     5.65
+    ]
+   },
+   "1": {
+    "agreement": {
+     "Piotr ARM": 75.81,
+     "Kev-style s150": 70.97,
+     "Frozen pointwise": 63.71
+    },
+    "kev_minus_piotr": [
+     -4.84,
+     -12.9,
+     3.23
+    ]
+   },
+   "2": {
+    "agreement": {
+     "Piotr ARM": 69.35,
+     "Kev-style s150": 66.94,
+     "Frozen pointwise": 60.48
+    },
+    "kev_minus_piotr": [
+     -2.42,
+     -10.48,
+     5.65
+    ]
+   },
+   "3": {
+    "agreement": {
+     "Piotr ARM": 76.61,
+     "Kev-style s150": 70.97,
+     "Frozen pointwise": 63.71
+    },
+    "kev_minus_piotr": [
+     -5.65,
+     -13.71,
+     2.42
+    ]
+   }
+  },
+  "luna_distinct_indices_over_4": {
+   "1": 49,
+   "2": 54,
+   "3": 20,
+   "4": 1
+  }
+ },
+ "kev_style_step600": {
+  "job": 353914,
+  "optimizer_steps": 714,
+  "best_probe": {
+   "step": 600,
+   "panels": 3283,
+   "agreement": 0.67,
+   "agreement_informative": 0.62
+  },
+  "held_out_teacher_agreement": {
+   "panels": 3759,
+   "agreement": 0.67,
+   "agreement_informative": 0.62
+  },
+  "branch124_outcomes_3draw": {
+   "states": 124,
+   "uniform": 0.32,
+   "hindsight_oracle": 0.5,
+   "head": 0.34,
+   "head_states": 124,
+   "actor_first": 0.3,
+   "actor_first_states": 124,
+   "plurality_first_tie": 0.3,
+   "plurality_first_tie_states": 124,
+   "piotr_arm": 0.36,
+   "piotr_arm_states": 124
+  },
+  "branch124_luna_agreement": {
+   "states": 124,
+   "uniform": 0.47,
+   "head": 0.66,
+   "head_states": 124,
+   "actor_first": 0.56,
+   "actor_first_states": 124,
+   "piotr_arm": 0.73,
+   "piotr_arm_states": 124
+  }
+ },
+ "reproduction_control_124": {
+  "job": 354319,
+  "picks_identical": {
+   "piotr": {
+    "same": 124,
+    "states": 124
+   },
+   "pointwise": {
+    "same": 124,
+    "states": 124
+   },
+   "listwise": {
+    "same": 124,
+    "states": 124
+   },
+   "L27": {
+    "same": 124,
+    "states": 124
+   },
+   "L18-36_action": {
+    "same": 124,
+    "states": 124
+   },
+   "kev": {
+    "same": 124,
+    "states": 124
+   },
+   "adapter": {
+    "same": 124,
+    "states": 124
+   }
+  }
+ },
+ "outcome_training_data": {
+  "eight_draw_states_all_lineages": {
+   "states": 188,
+   "task_groups": 151,
+   "outcomes": 9720,
+   "actions_differ": 133,
+   "all_actions_fail": 40,
+   "all_actions_succeed": 15
+  },
+  "by_lineage": {
+   "historical": {
+    "states": 51,
+    "task_groups": 51,
+    "outcomes": 2040,
+    "actions_differ": 30,
+    "all_actions_fail": 17,
+    "all_actions_succeed": 4
+   },
+   "pilot32": {
+    "states": 32,
+    "task_groups": 29,
+    "outcomes": 3480,
+    "actions_differ": 25,
+    "all_actions_fail": 6,
+    "all_actions_succeed": 1
+   },
+   "fresh64": {
+    "states": 64,
+    "task_groups": 52,
+    "outcomes": 2560,
+    "actions_differ": 46,
+    "all_actions_fail": 13,
+    "all_actions_succeed": 5
+   },
+   "fresh64-successor": {
+    "states": 41,
+    "task_groups": 32,
+    "outcomes": 1640,
+    "actions_differ": 32,
+    "all_actions_fail": 4,
+    "all_actions_succeed": 5
+   }
+  },
+  "piotr_teacher_data_used_for_heads": {
+   "train_panels": 35916,
+   "train_states": 2692,
+   "train_task_groups": 353,
+   "validation_panels": 3759,
+   "validation_states": 290,
+   "validation_task_groups": 38
+  }
+ },
+ "jobs": [
+  {
+   "job": 353914,
+   "purpose": "Kev-style continuation from step 244",
+   "resources": "1 H200, 2 CPUs, 120 GiB, 6 h approved",
+   "elapsed": "05:43:29",
+   "status": "completed"
+  },
+  {
+   "job": 354318,
+   "purpose": "score saved selectors on new branch states",
+   "resources": "1 H200, 2 CPUs, 120 GiB, 1.5 h approved",
+   "elapsed": "00:00:12",
+   "status": "failed at import (source snapshot); no GPU work"
+  },
+  {
+   "job": 354319,
+   "purpose": "retry of 354318 within the same budget",
+   "elapsed": "00:10:00",
+   "status": "completed"
+  },
+  {
+   "job": 354320,
+   "purpose": "score Kev-style step 600 on new branch states",
+   "resources": "1 H200, 2 CPUs, 120 GiB, 30 min approved",
+   "elapsed": "00:01:29",
+   "status": "completed"
+  }
+ ],
+ "code": "branch arm-selection-head commits 0accd4d, 0aa2dd4; analysis scripts kept with runtime artifacts",
+ "cross_lineage_outcome_selection_by_k": {
+  "states": 138,
+  "note": "select on k draws, score on the other 8-k; all splits",
+  "1": {
+   "success": 34.1,
+   "minus_uniform": [
+    2.43,
+    1.39,
+    3.55
+   ],
+   "minus_piotr": [
+    -0.05,
+    -2.87,
+    2.89
+   ]
+  },
+  "3": {
+   "success": 36.01,
+   "minus_uniform": [
+    4.35,
+    2.56,
+    6.22
+   ],
+   "minus_piotr": [
+    1.87,
+    -1.12,
+    5.06
+   ]
+  },
+  "5": {
+   "success": 36.99,
+   "minus_uniform": [
+    5.32,
+    3.09,
+    7.62
+   ],
+   "minus_piotr": [
+    2.84,
+    -0.24,
+    6.14
+   ]
+  },
+  "7": {
+   "success": 38.0,
+   "minus_uniform": [
+    6.33,
+    3.75,
+    9.01
+   ],
+   "minus_piotr": [
+    3.85,
+    0.67,
+    7.16
+   ]
+  }
+ }
+}

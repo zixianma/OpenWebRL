@@ -34,8 +34,9 @@ ROWS = [
     ('Added cost', [['full 4B pass:', '≈3.8k tokens + image'], ['≈0 (frozen head);', '≈8/36 pass (adapter)'],
                     ['≈8/36 pass over', 'candidate tokens'], ['≈ one full 4B pass', '(prompt + candidates)'],
                     ['full 27B pass over', 'page text + candidates']]),
-    ('Status', [['Luna agreement 73.2%'], ['Luna agreement 61.7%;', 'top-8 adapter: no gain'],
-                ['pointer alone: Luna', 'agreement 57.5%'], ['Luna agreement 69.6%', 'after 150 steps'], ['not run on these states']]),
+    ('Status', [['Luna 73.2%; held-out', 'success +2.5 pp'], ['Luna 61.7%; held-out', 'success +2.0 pp'],
+                ['pointer alone: Luna', 'agreement 57.5%'], ['Luna 66.1% (step 600);', 'held-out success +1.1 pp'],
+                ['not run on these states']]),
 ]
 # Attention among [cand 1, cand 2, cand 3, <decide>]: rows = queries, columns = keys.
 MASKS = [
@@ -68,7 +69,7 @@ def figure():
     f = Figure(width, height, 'Five ways to choose among sampled actions',
                'Compares Piotr SelectionARM, the one-at-a-time actor-feature head, the joint top-layer variant, '
                'a Kev-style decision pass on the actor and Kev itself: weights, inputs, how candidates interact, '
-               'order effects, readout, added cost and current status.')
+               'order effects, readout, added cost and current status (Luna agreement on 124 states; held-out continuation success minus uniform on 138 states).')
     f.text(x0, 52, 'Five ways to choose among sampled actions', 34, INK, 700)
     f.text(x0, 86, 'From a separate selector to scoring inside the actor; the small grids show which candidates '
                    'each one can attend to.', 19, MUTED)
