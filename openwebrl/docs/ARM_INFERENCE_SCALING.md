@@ -284,19 +284,20 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 <a id="molmoweb-sol61-plan-20261010"></a>
 ## MolmoWeb 4B/8B: controls first; Sol selection awaits review
 
-**Both Online-Mind2Web controls are independently verified, with 300 task slots per actor. The model ranking changes with the judge:** 8B has more native-judge successes, while 4B has more AgentTrek successes. These single-draw cohorts were collected at different times; they do not establish a reliable actor ranking. Two of six N1 cohorts are verified; four WebVoyager/DeepShop controls remain active. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
+**Three of six controls are independently verified: MolmoWeb 4B reaches 28.67% on DeepShop, and both Online-Mind2Web cohorts are complete.** On Online-Mind2Web, the model ranking changes with the judge: 8B has more native-judge successes, while 4B has more AgentTrek successes. These single-draw cohorts were collected at different times; they do not establish a reliable actor ranking. Both WebVoyager controls and 8B DeepShop remain active. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
 
-| N1 actor | Judge | Task slots | Valid rollouts | Eligible / judged | Successes | Overall success | Valid-only success |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| MolmoWeb-4B-Native | Native MolmoWeb, o4-mini | 300 | 287 | 287 | 38 | 12.67% | 13.24% |
-| MolmoWeb-4B-Native | AgentTrek, o4-mini | 300 | 287 | 105 | 81 | 27.00% | 28.22% |
-| MolmoWeb-8B-Native | Native MolmoWeb, o4-mini | 300 | 289 | 289 | 48 | 16.00% | 16.61% |
-| MolmoWeb-8B-Native | AgentTrek, o4-mini | 300 | 289 | 92 | 76 | 25.33% | 26.30% |
+| Benchmark | N1 actor | Judge | Task slots | Valid rollouts | Eligible / judged | Successes | Overall success | Valid-only success |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| DeepShop | MolmoWeb-4B-Native | Native MolmoWeb, GPT-4o | 150 | 150 | 150 | 43 | 28.67% | 28.67% |
+| Online-Mind2Web | MolmoWeb-4B-Native | Native MolmoWeb, o4-mini | 300 | 287 | 287 | 38 | 12.67% | 13.24% |
+| Online-Mind2Web | MolmoWeb-4B-Native | AgentTrek, o4-mini | 300 | 287 | 105 | 81 | 27.00% | 28.22% |
+| Online-Mind2Web | MolmoWeb-8B-Native | Native MolmoWeb, o4-mini | 300 | 289 | 289 | 48 | 16.00% | 16.61% |
+| Online-Mind2Web | MolmoWeb-8B-Native | AgentTrek, o4-mini | 300 | 289 | 92 | 76 | 25.33% | 26.30% |
 
-Overall rates divide by all 300 slots; valid-only rates use each actor's valid-rollout count. Invalid outcomes remain zero. AgentTrek additionally assigns unjudged zero to valid episodes without a terminal `[EXIT]`: 182 for 4B and 197 for 8B. Its judged subset is not the benchmark denominator. Both judges use the same saved episodes for each actor. Local SimpleEnv differs from the paper's Browserbase/advanced-stealth environment. All selector counts are zero. [Verified aggregates](arm_results/molmoweb_n1_controls_20261010.json), [4B W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e), [8B W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/861583d7b358498abf6a5db526d6cd3d).
+Overall rates divide by the task slots shown; valid-only rates use the corresponding valid-rollout count. Invalid outcomes remain zero. On Online-Mind2Web, AgentTrek additionally assigns unjudged zero to valid episodes without a terminal `[EXIT]`: 182 for 4B and 197 for 8B. Its judged subset is not the benchmark denominator. Both judges use the same saved episodes for each actor. Local SimpleEnv differs from the paper's Browserbase/advanced-stealth environment. All selector counts are zero. [Verified aggregates](arm_results/molmoweb_n1_controls_20261010.json), [4B OM W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e), [8B OM W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/861583d7b358498abf6a5db526d6cd3d).
 
 <details>
-<summary>Judge disagreement, exhaustive audits and final cohort accounting</summary>
+<summary>Online-Mind2Web judge disagreement, audits and accounting</summary>
 
 The native and AgentTrek labels differ substantially even on episodes eligible for both judges. This disagreement cannot be explained by eligibility alone and does not determine which judge is correct. Keep both verdict sets separate.
 
@@ -331,6 +332,23 @@ All task identities, frozen N1 decoding, source/checkpoint identities, separate 
 | AgentTrek cost plus unresolved reservation, USD | 0.559662 | 5 | 0.481468 | 5 |
 
 All 4B API charges settled. The 8B native total includes $0.229012 retained for one HTTP 400 response without usage; it remains fully reserved, with every settled response reconciled. Local-generation totals also charge interrupted attempts and the 8B runtime regression test, so they exceed completed receipts attached to final records. The six-control suite remains incomplete.
+
+</details>
+
+<details>
+<summary>DeepShop 4B audit, recovery preservation and final accounting</summary>
+
+All 150 task identities, 17,287 artifact files, 3,646 decoded images, 3,646 native generation receipts and 150 settled GPT-4o response receipts passed the independent audit. Frozen actor/judge inputs, zero selector calls, W&B synchronization and owned teardown were verified. All 132 outcomes committed before the budget stop were retained; two completed unjudged rollouts were scored from saved evidence without recollection. Only reviewed interrupted work and untouched tasks resumed. [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/7096821e0e834b30ab696da1556ef05a).
+
+| Resource | Used across all attempts | N1 cap |
+| --- | ---: | ---: |
+| One-H200 allocation seconds | 10,500 | 14,400 |
+| Browser attempts | 156 | 165 |
+| Local generations | 3,709 | 4,950 |
+| Native judge HTTP attempts | 151 | 660 |
+| Native judge cost plus unresolved reservation, USD | 11.080914 | 12 |
+
+The API total includes $0.483840 retained for one interrupted request without a response. Its charge remains reserved; all 150 final verdicts and every settled charge are present. Unused compute and API balances remain in this control's original budget.
 
 </details>
 

@@ -5,8 +5,8 @@
   "n5_blocked_pending_control_review": true,
   "requested_control_cohorts": 6,
   "requested_control_records": 2090,
-  "verified_control_cohorts": 2,
-  "verified_control_records": 600,
+  "verified_control_cohorts": 3,
+  "verified_control_records": 750,
   "cohorts": [
     {
       "actor": "MolmoWeb-4B-Native",
@@ -139,6 +139,52 @@
         "artifact_audit_sha256": "501d3ce70151e78db4db2ee248af647994a89db170bf5b795a31f9ddbeb02ed8"
       },
       "wandb": "https://wandb.ai/zixianma/openwebrl-evals/runs/861583d7b358498abf6a5db526d6cd3d"
+    },
+    {
+      "actor": "MolmoWeb-4B-Native",
+      "benchmark": "DeepShop",
+      "condition": "N1",
+      "verified_complete": true,
+      "requested_tasks": 150,
+      "saved_records": 150,
+      "valid_records": 150,
+      "invalid_records": 0,
+      "ordinary_invalid_records": 0,
+      "episode_wall_timeouts": 0,
+      "native_judge": {
+        "protocol": "official MolmoWeb deepshop_judge",
+        "model": "gpt-4o",
+        "successes": 43,
+        "eligible": 150,
+        "judged": 150,
+        "overall_success_rate": 0.2866666666666667,
+        "valid_only_success_rate": 0.2866666666666667,
+        "physical_http_attempts": 151,
+        "charged_micro_usd": 10597074,
+        "reserved_micro_usd": 483840,
+        "charged_or_reserved_micro_usd": 11080914
+      },
+      "accounting": {
+        "all_attempt_seconds": 10500,
+        "n1_stage_cap_seconds": 14400,
+        "browser_attempts": 156,
+        "browser_cap": 165,
+        "local_generation_attempts": 3709,
+        "local_generation_cap": 4950,
+        "selector_calls": 0,
+        "unresolved_API_reservations": 1,
+        "unresolved_API_reserved_micro_usd": 483840,
+        "owned_teardown_verified": true
+      },
+      "audit": {
+        "artifact_files": 17287,
+        "decoded_images": 3646,
+        "native_generation_receipts_verified": 3646,
+        "http_response_receipts_verified": 150,
+        "settled_http_response_receipts_verified": 150,
+        "artifact_audit_sha256": "b3425ccb871713d724ea3b87250339b3a6ebc37c93d0af993b6159247fe93c36"
+      },
+      "wandb": "https://wandb.ai/zixianma/openwebrl-evals/runs/7096821e0e834b30ab696da1556ef05a"
     }
   ],
   "comparability": {
@@ -146,6 +192,6 @@
     "environment": "Local SimpleEnv; different from paper Browserbase/advanced-stealth environment",
     "agenttrek": "Completed EXIT episodes only; task, full native action history and last supplied actor observation; other outcomes remain zero overall",
     "no_pooled_or_best_of_judge_score": true,
-    "remaining_control_cohorts": "Four WebVoyager/DeepShop cohorts not yet independently verified; actor comparisons are single draws collected at different times"
+    "remaining_control_cohorts": "Both WebVoyager actors and 8B DeepShop not yet independently verified; actor comparisons are single draws collected at different times"
   }
 }
