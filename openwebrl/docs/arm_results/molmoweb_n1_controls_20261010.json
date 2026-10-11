@@ -192,6 +192,48 @@
     "environment": "Local SimpleEnv; different from paper Browserbase/advanced-stealth environment",
     "agenttrek": "Completed EXIT episodes only; task, full native action history and last supplied actor observation; other outcomes remain zero overall",
     "no_pooled_or_best_of_judge_score": true,
-    "remaining_control_cohorts": "Both WebVoyager actors and 8B DeepShop not yet independently verified; actor comparisons are single draws collected at different times"
-  }
+    "remaining_control_cohorts": "4B WebVoyager is partial and blocked by residual N1 allocation time; 8B WebVoyager and 8B DeepShop remain running. Missing outcomes are unresolved, not failures."
+  },
+  "incomplete_cohorts": [
+    {
+      "actor": "MolmoWeb-4B-Native",
+      "benchmark": "WebVoyager",
+      "condition": "N1",
+      "verified_complete": false,
+      "partial_artifacts_verified": true,
+      "status": "partial_n1_budget_blocked",
+      "requested_tasks": 595,
+      "saved_records": 582,
+      "valid_saved_records": 582,
+      "observed_successes": 263,
+      "unresolved_records": 13,
+      "allocation_interrupted_rollouts": 8,
+      "untouched_tasks": 5,
+      "full_benchmark_success_rate": null,
+      "remaining_n1_stage_seconds": 184,
+      "accounting": {
+        "all_attempt_seconds": 28616,
+        "n1_stage_cap_seconds": 28800,
+        "browser_attempts": 596,
+        "browser_cap": 655,
+        "local_generation_attempts": 11699,
+        "local_generation_cap": 19650,
+        "native_judge_http_attempts": 582,
+        "native_judge_http_cap": 2620,
+        "native_judge_micro_usd": 33430103,
+        "native_judge_cap_usd": 40,
+        "unresolved_API_reservations": 0,
+        "selector_calls": 0,
+        "owned_teardown_verified": true
+      },
+      "audit": {
+        "artifact_files": 56562,
+        "decoded_images": 11521,
+        "native_generation_receipts_verified": 11521,
+        "http_response_receipts_verified": 582,
+        "artifact_audit_sha256": "896ce25880b0c493618e0977f6f27b258f493017f2403705f72e3a6f21ead2d0"
+      },
+      "wandb": "https://wandb.ai/zixianma/openwebrl-evals/runs/007f4d8cd1bd49c9891f1aee4b16cf17"
+    }
+  ]
 }

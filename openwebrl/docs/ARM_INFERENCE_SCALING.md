@@ -284,7 +284,9 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 <a id="molmoweb-sol61-plan-20261010"></a>
 ## MolmoWeb 4B/8B: controls first; Sol selection awaits review
 
-**Three of six controls are independently verified: MolmoWeb 4B reaches 28.67% on DeepShop, and both Online-Mind2Web cohorts are complete.** On Online-Mind2Web, the model ranking changes with the judge: 8B has more native-judge successes, while 4B has more AgentTrek successes. These single-draw cohorts were collected at different times; they do not establish a reliable actor ranking. Both WebVoyager controls and 8B DeepShop remain active. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
+**Three of six controls are independently verified: MolmoWeb 4B reaches 28.67% on DeepShop, and both Online-Mind2Web cohorts are complete.** On Online-Mind2Web, the model ranking changes with the judge: 8B has more native-judge successes, while 4B has more AgentTrek successes. These single-draw cohorts were collected at different times; they do not establish a reliable actor ranking. The two 8B WebVoyager/DeepShop controls remain active; 4B WebVoyager is budget-blocked and incomplete. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
+
+**4B WebVoyager stopped with 582 of 595 outcomes saved.** Eight rollouts were interrupted by the allocation shutdown and five tasks had not started; all 13 remain unresolved. Its 184 seconds of unused N1 time cannot cover another launch with the fixed shutdown reserve. The saved outcomes passed their artifact audit, but this is not a completed control or a full-benchmark score. No extra compute or budget transfer was used.
 
 | Benchmark | N1 actor | Judge | Task slots | Valid rollouts | Eligible / judged | Successes | Overall success | Valid-only success |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -349,6 +351,24 @@ All 150 task identities, 17,287 artifact files, 3,646 decoded images, 3,646 nati
 | Native judge cost plus unresolved reservation, USD | 11.080914 | 12 |
 
 The API total includes $0.483840 retained for one interrupted request without a response. Its charge remains reserved; all 150 final verdicts and every settled charge are present. Unused compute and API balances remain in this control's original budget.
+
+</details>
+
+<details>
+<summary>Incomplete WebVoyager 4B: retained coverage and allocation accounting</summary>
+
+The immutable partial cohort contains 582 valid saved outcomes, including 263 successes. The missing 13 tasks have no final verdict and are not assigned failure labels. All 56,562 committed artifact files, 11,521 images, native generation receipts and 582 settled judge responses passed verification; every interrupted artifact remains preserved. The stopped allocation and its owned processes are terminal. [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/007f4d8cd1bd49c9891f1aee4b16cf17).
+
+| Resource / coverage | Used or saved | N1 target / cap |
+| --- | ---: | ---: |
+| Task outcomes | 582 | 595 |
+| One-H200 allocation seconds | 28,616 | 28,800 |
+| Browser attempts | 596 | 655 |
+| Local generations | 11,699 | 19,650 |
+| Native judge HTTP attempts | 582 | 2,620 |
+| Native judge cost, USD | 33.430103 | 40 |
+
+All attempted work is charged. The remaining 184 seconds round down to a three-minute allocation, entirely consumed by the existing 180-second shutdown reserve. API/browser headroom cannot substitute for allocation time; blocked N5 resources and other controls' balances are unavailable. This cohort and the six-control suite remain incomplete.
 
 </details>
 
