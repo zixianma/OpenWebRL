@@ -284,41 +284,53 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 <a id="molmoweb-sol61-plan-20261010"></a>
 ## MolmoWeb 4B/8B: controls first; Sol selection awaits review
 
-**First verified control: MolmoWeb 4B on Online-Mind2Web scores 12.67% with the native judge and 27.00% with AgentTrek on the same 300 task slots.** The judge protocols produce materially different labels, including on their common eligible subset. One of six N1 cohorts is independently verified; the other five remain in progress or queued. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
+**Both Online-Mind2Web controls are independently verified, with 300 task slots per actor. The model ranking changes with the judge:** 8B has more native-judge successes, while 4B has more AgentTrek successes. These single-draw cohorts were collected at different times; they do not establish a reliable actor ranking. Two of six N1 cohorts are verified; four WebVoyager/DeepShop controls remain active. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
 
-| N1 actor / benchmark | Judge | Task slots | Valid rollouts | Eligible / judged | Successes | Overall success | Valid-only success |
+| N1 actor | Judge | Task slots | Valid rollouts | Eligible / judged | Successes | Overall success | Valid-only success |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| MolmoWeb 4B / Online-Mind2Web | Native MolmoWeb, o4-mini | 300 | 287 | 287 | 38 | 12.67% | 13.24% |
-| Same saved episodes | AgentTrek, o4-mini | 300 | 287 | 105 | 81 | 27.00% | 28.22% |
+| MolmoWeb-4B-Native | Native MolmoWeb, o4-mini | 300 | 287 | 287 | 38 | 12.67% | 13.24% |
+| MolmoWeb-4B-Native | AgentTrek, o4-mini | 300 | 287 | 105 | 81 | 27.00% | 28.22% |
+| MolmoWeb-8B-Native | Native MolmoWeb, o4-mini | 300 | 289 | 289 | 48 | 16.00% | 16.61% |
+| MolmoWeb-8B-Native | AgentTrek, o4-mini | 300 | 289 | 92 | 76 | 25.33% | 26.30% |
 
-Overall rates divide by all 300 slots; valid-only rates divide by the 287 valid rollouts. The 13 invalid outcomes (10 ordinary environment failures, three fixed episode timeouts) remain zero. AgentTrek additionally assigns unjudged zero to 182 valid episodes without a terminal `[EXIT]`; its 105 judged episodes are a selected subset, not the benchmark denominator. Local SimpleEnv browsers differ from the paper's Browserbase/advanced-stealth environment. These are actor-only results with zero selector calls. [Verified aggregates](arm_results/molmoweb_n1_controls_20261010.json), [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e).
+Overall rates divide by all 300 slots; valid-only rates use each actor's valid-rollout count. Invalid outcomes remain zero. AgentTrek additionally assigns unjudged zero to valid episodes without a terminal `[EXIT]`: 182 for 4B and 197 for 8B. Its judged subset is not the benchmark denominator. Both judges use the same saved episodes for each actor. Local SimpleEnv differs from the paper's Browserbase/advanced-stealth environment. All selector counts are zero. [Verified aggregates](arm_results/molmoweb_n1_controls_20261010.json), [4B W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e), [8B W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/861583d7b358498abf6a5db526d6cd3d).
 
 <details>
-<summary>Judge disagreement, exhaustive audit and final cohort accounting</summary>
+<summary>Judge disagreement, exhaustive audits and final cohort accounting</summary>
 
-On the **105 episodes judged by both**, native succeeds on 33 (31.43%) and AgentTrek on 81 (77.14%). All 48 disagreements favor AgentTrek; eligibility alone therefore does not explain the score difference. These observations do not determine which judge is correct. Keep both verdict sets and the common-subset comparison separate.
+The native and AgentTrek labels differ substantially even on episodes eligible for both judges. This disagreement cannot be explained by eligibility alone and does not determine which judge is correct. Keep both verdict sets separate.
 
-| Common-subset verdict | Episodes |
-| --- | ---: |
-| Both succeed | 33 |
-| Native only succeeds | 0 |
-| AgentTrek only succeeds | 48 |
-| Both fail | 24 |
-| **Total** | **105** |
-
-The independent audit verified all 300 task identities, 47,771 artifact files, 6,913 decoded images and native generation receipts, and 7,524 physical judge HTTP receipts. Frozen N1 decoding, unchanged task/source identities, retained invalid outcomes, separate judge inputs, W&B synchronization, all-attempt accounting and owned scheduler teardown passed. All API charges settled. No selector or N5 calls occurred.
-
-| Resource | Used across all attempts | N1 cap |
+| Common-subset verdict / denominator | 4B episodes | 8B episodes |
 | --- | ---: | ---: |
-| One-H200 allocation seconds | 18,452 | 21,600 |
-| Browser attempts | 307 | 330 |
-| Local generations | 7,015 | 9,900 |
-| Native judge HTTP attempts | 7,419 | 42,240 |
-| Native judge cost, USD | 31.156880 | 150 |
-| AgentTrek HTTP attempts | 105 | 1,320 |
-| AgentTrek cost, USD | 0.559662 | 5 |
+| Both succeed | 33 | 41 |
+| Native only succeeds | 0 | 0 |
+| AgentTrek only succeeds | 48 | 35 |
+| Both fail | 24 | 16 |
+| Total judged by both | 105 | 92 |
 
-The local-generation total includes failed or interrupted attempts; it exceeds the 6,913 completed decision receipts attached to the final records. The full six-control suite remains incomplete.
+| Retained outcome / audit coverage | 4B | 8B |
+| --- | ---: | ---: |
+| Valid rollouts | 287 | 289 |
+| Ordinary environment failures | 10 | 10 |
+| Fixed episode timeouts | 3 | 1 |
+| Artifact files verified | 47,771 | 49,354 |
+| Images decoded | 6,913 | 7,143 |
+| Native generation receipts verified | 6,913 | 7,143 |
+| Physical judge HTTP response receipts | 7,524 | 7,805 |
+
+All task identities, frozen N1 decoding, source/checkpoint identities, separate judge inputs, W&B synchronization, all-attempt accounting and owned scheduler teardown passed. No selector or N5 calls occurred.
+
+| Resource | 4B used | 4B N1 cap | 8B used | 8B N1 cap |
+| --- | ---: | ---: | ---: | ---: |
+| One-H200 allocation seconds | 18,452 | 21,600 | 23,950 | 32,400 |
+| Browser attempts | 307 | 330 | 308 | 330 |
+| Local generations | 7,015 | 9,900 | 7,276 | 9,900 |
+| Native judge HTTP attempts | 7,419 | 42,240 | 7,713 | 42,240 |
+| Native judge cost plus unresolved reservation, USD | 31.156880 | 150 | 32.163615 | 150 |
+| AgentTrek HTTP attempts | 105 | 1,320 | 92 | 1,320 |
+| AgentTrek cost plus unresolved reservation, USD | 0.559662 | 5 | 0.481468 | 5 |
+
+All 4B API charges settled. The 8B native total includes $0.229012 retained for one HTTP 400 response without usage; it remains fully reserved, with every settled response reconciled. Local-generation totals also charge interrupted attempts and the 8B runtime regression test, so they exceed completed receipts attached to final records. The six-control suite remains incomplete.
 
 </details>
 

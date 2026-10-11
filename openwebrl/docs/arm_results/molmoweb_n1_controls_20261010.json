@@ -5,8 +5,8 @@
   "n5_blocked_pending_control_review": true,
   "requested_control_cohorts": 6,
   "requested_control_records": 2090,
-  "verified_control_cohorts": 1,
-  "verified_control_records": 300,
+  "verified_control_cohorts": 2,
+  "verified_control_records": 600,
   "cohorts": [
     {
       "actor": "MolmoWeb-4B-Native",
@@ -70,6 +70,75 @@
         "artifact_audit_sha256": "3577b41cc9675dcfbfbf554a64d888f8b0c982be559875d16d778232d5902b09"
       },
       "wandb": "https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e"
+    },
+    {
+      "actor": "MolmoWeb-8B-Native",
+      "benchmark": "Online-Mind2Web",
+      "condition": "N1",
+      "verified_complete": true,
+      "requested_tasks": 300,
+      "saved_records": 300,
+      "valid_records": 289,
+      "invalid_records": 11,
+      "ordinary_invalid_records": 10,
+      "episode_wall_timeouts": 1,
+      "native_judge": {
+        "protocol": "official MolmoWeb webjudge_online_mind2web",
+        "model": "o4-mini",
+        "successes": 48,
+        "eligible": 289,
+        "judged": 289,
+        "overall_success_rate": 0.16,
+        "valid_only_success_rate": 0.16608996539792387,
+        "physical_http_attempts": 7713,
+        "charged_micro_usd": 31934603,
+        "reserved_micro_usd": 229012,
+        "charged_or_reserved_micro_usd": 32163615
+      },
+      "agenttrek_judge": {
+        "protocol": "agenttrek_o4mini_molmo_action_serialization_v1",
+        "model": "o4-mini",
+        "successes": 76,
+        "eligible": 92,
+        "judged": 92,
+        "overall_success_rate": 0.25333333333333335,
+        "valid_only_success_rate": 0.2629757785467128,
+        "physical_http_attempts": 92,
+        "charged_micro_usd": 481468,
+        "reserved_micro_usd": 0,
+        "charged_or_reserved_micro_usd": 481468,
+        "unjudged_valid_episodes_without_terminal_exit": 197
+      },
+      "common_judged": {
+        "episodes": 92,
+        "native_successes": 41,
+        "agenttrek_successes": 76,
+        "both_success": 41,
+        "native_only_success": 0,
+        "agenttrek_only_success": 35,
+        "both_failure": 16
+      },
+      "accounting": {
+        "all_attempt_seconds": 23950,
+        "n1_stage_cap_seconds": 32400,
+        "browser_attempts": 308,
+        "browser_cap": 330,
+        "local_generation_attempts": 7276,
+        "local_generation_cap": 9900,
+        "selector_calls": 0,
+        "unresolved_API_reservations": 1,
+        "unresolved_API_reserved_micro_usd": 229012,
+        "owned_teardown_verified": true
+      },
+      "audit": {
+        "artifact_files": 49354,
+        "decoded_images": 7143,
+        "native_generation_receipts_verified": 7143,
+        "http_response_receipts_verified": 7805,
+        "settled_http_response_receipts_verified": 7804,
+        "artifact_audit_sha256": "501d3ce70151e78db4db2ee248af647994a89db170bf5b795a31f9ddbeb02ed8"
+      },
+      "wandb": "https://wandb.ai/zixianma/openwebrl-evals/runs/861583d7b358498abf6a5db526d6cd3d"
     }
   ],
   "comparability": {
@@ -77,6 +146,6 @@
     "environment": "Local SimpleEnv; different from paper Browserbase/advanced-stealth environment",
     "agenttrek": "Completed EXIT episodes only; task, full native action history and last supplied actor observation; other outcomes remain zero overall",
     "no_pooled_or_best_of_judge_score": true,
-    "other_five_control_cohorts": "not yet independently verified"
+    "remaining_control_cohorts": "Four WebVoyager/DeepShop cohorts not yet independently verified; actor comparisons are single draws collected at different times"
   }
 }
