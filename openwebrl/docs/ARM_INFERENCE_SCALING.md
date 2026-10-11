@@ -284,7 +284,45 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 <a id="molmoweb-sol61-plan-20261010"></a>
 ## MolmoWeb 4B/8B: controls first; Sol selection awaits review
 
-**The next result is the actor-only control.** Run official MolmoWeb 4B and 8B with **N=1 and zero selector calls** on all three benchmarks, then review their scores and protocol comparability before authorizing **N=5 + GPT-6.1 Sol medium**. No MolmoWeb performance result is available yet. The execution and spending gates currently allow N1 only; completion of the controls does not launch ARM automatically.
+**First verified control: MolmoWeb 4B on Online-Mind2Web scores 12.67% with the native judge and 27.00% with AgentTrek on the same 300 task slots.** The judge protocols produce materially different labels, including on their common eligible subset. One of six N1 cohorts is independently verified; the other five remain in progress or queued. **N=5 + GPT-6.1 Sol medium remains blocked pending user review and explicit approval.**
+
+| N1 actor / benchmark | Judge | Task slots | Valid rollouts | Eligible / judged | Successes | Overall success | Valid-only success |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| MolmoWeb 4B / Online-Mind2Web | Native MolmoWeb, o4-mini | 300 | 287 | 287 | 38 | 12.67% | 13.24% |
+| Same saved episodes | AgentTrek, o4-mini | 300 | 287 | 105 | 81 | 27.00% | 28.22% |
+
+Overall rates divide by all 300 slots; valid-only rates divide by the 287 valid rollouts. The 13 invalid outcomes (10 ordinary environment failures, three fixed episode timeouts) remain zero. AgentTrek additionally assigns unjudged zero to 182 valid episodes without a terminal `[EXIT]`; its 105 judged episodes are a selected subset, not the benchmark denominator. Local SimpleEnv browsers differ from the paper's Browserbase/advanced-stealth environment. These are actor-only results with zero selector calls. [Verified aggregates](arm_results/molmoweb_n1_controls_20261010.json), [W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e).
+
+<details>
+<summary>Judge disagreement, exhaustive audit and final cohort accounting</summary>
+
+On the **105 episodes judged by both**, native succeeds on 33 (31.43%) and AgentTrek on 81 (77.14%). All 48 disagreements favor AgentTrek; eligibility alone therefore does not explain the score difference. These observations do not determine which judge is correct. Keep both verdict sets and the common-subset comparison separate.
+
+| Common-subset verdict | Episodes |
+| --- | ---: |
+| Both succeed | 33 |
+| Native only succeeds | 0 |
+| AgentTrek only succeeds | 48 |
+| Both fail | 24 |
+| **Total** | **105** |
+
+The independent audit verified all 300 task identities, 47,771 artifact files, 6,913 decoded images and native generation receipts, and 7,524 physical judge HTTP receipts. Frozen N1 decoding, unchanged task/source identities, retained invalid outcomes, separate judge inputs, W&B synchronization, all-attempt accounting and owned scheduler teardown passed. All API charges settled. No selector or N5 calls occurred.
+
+| Resource | Used across all attempts | N1 cap |
+| --- | ---: | ---: |
+| One-H200 allocation seconds | 18,452 | 21,600 |
+| Browser attempts | 307 | 330 |
+| Local generations | 7,015 | 9,900 |
+| Native judge HTTP attempts | 7,419 | 42,240 |
+| Native judge cost, USD | 31.156880 | 150 |
+| AgentTrek HTTP attempts | 105 | 1,320 |
+| AgentTrek cost, USD | 0.559662 | 5 |
+
+The local-generation total includes failed or interrupted attempts; it exceeds the 6,913 completed decision receipts attached to the final records. The full six-control suite remains incomplete.
+
+</details>
+
+The approved collection covers six N1 controls before the user reviews comparability and authorizes any ARM run:
 
 | Benchmark | Tasks per actor | Actors | N1 control episodes | Scoring |
 | --- | ---: | --- | ---: | --- |
@@ -293,7 +331,7 @@ The campaign ceilings remain **26 H200-hours**, **$625** for APIs and **1,480 ph
 | Online-Mind2Web | 300 | 4B, 8B | 600 | Native MolmoWeb and AgentTrek, reported separately |
 | **Total** | **1,045 unique benchmark tasks** | **2** | **2,090** | **Six controls** |
 
-The control report will show success counts, overall and valid-only success rates, validity and judged coverage, with protocol differences next to the scores. Invalid outcomes count as zero overall; missing infrastructure/judge outcomes remain unresolved. A partial run remains incomplete. Local browsers differ from the paper's Browserbase/advanced-stealth environment, so paper scores are contextual, not matched controls.
+Each remaining control requires the same complete record, image, verdict and accounting audit. Missing infrastructure/judge outcomes remain unresolved; partial collection stays incomplete.
 
 After user review and approval, the planned comparison is the **task-paired N=5 minus N=1 success difference**, with a paired task-bootstrap interval. Controls and ARM are now collected sequentially, so website changes over time remain a comparability caveat. This is not a repeated-seed estimate. The full potential comparison remains 4,180 episodes across 12 conditions; the six N5 conditions are blocked.
 

@@ -1,0 +1,82 @@
+{
+  "schema": "molmoweb-n1-control-aggregates-v1",
+  "date": "2026-10-10",
+  "suite_controls_verified_complete": false,
+  "n5_blocked_pending_control_review": true,
+  "requested_control_cohorts": 6,
+  "requested_control_records": 2090,
+  "verified_control_cohorts": 1,
+  "verified_control_records": 300,
+  "cohorts": [
+    {
+      "actor": "MolmoWeb-4B-Native",
+      "benchmark": "Online-Mind2Web",
+      "condition": "N1",
+      "verified_complete": true,
+      "requested_tasks": 300,
+      "saved_records": 300,
+      "valid_records": 287,
+      "invalid_records": 13,
+      "ordinary_invalid_records": 10,
+      "episode_wall_timeouts": 3,
+      "native_judge": {
+        "protocol": "official MolmoWeb webjudge_online_mind2web",
+        "model": "o4-mini",
+        "successes": 38,
+        "eligible": 287,
+        "judged": 287,
+        "overall_success_rate": 0.12666666666666668,
+        "valid_only_success_rate": 0.13240418118466898,
+        "physical_http_attempts": 7419,
+        "charged_micro_usd": 31156880
+      },
+      "agenttrek_judge": {
+        "protocol": "agenttrek_o4mini_molmo_action_serialization_v1",
+        "model": "o4-mini",
+        "successes": 81,
+        "eligible": 105,
+        "judged": 105,
+        "unjudged_valid_episodes_without_terminal_exit": 182,
+        "overall_success_rate": 0.27,
+        "valid_only_success_rate": 0.28222996515679444,
+        "physical_http_attempts": 105,
+        "charged_micro_usd": 559662
+      },
+      "common_judged": {
+        "episodes": 105,
+        "native_successes": 33,
+        "agenttrek_successes": 81,
+        "both_success": 33,
+        "native_only_success": 0,
+        "agenttrek_only_success": 48,
+        "both_failure": 24
+      },
+      "accounting": {
+        "all_attempt_seconds": 18452,
+        "n1_stage_cap_seconds": 21600,
+        "browser_attempts": 307,
+        "browser_cap": 330,
+        "local_generation_attempts": 7015,
+        "local_generation_cap": 9900,
+        "selector_calls": 0,
+        "unresolved_API_reservations": 0,
+        "owned_teardown_verified": true
+      },
+      "audit": {
+        "artifact_files": 47771,
+        "decoded_images": 6913,
+        "native_generation_receipts_verified": 6913,
+        "http_response_receipts_verified": 7524,
+        "artifact_audit_sha256": "3577b41cc9675dcfbfbf554a64d888f8b0c982be559875d16d778232d5902b09"
+      },
+      "wandb": "https://wandb.ai/zixianma/openwebrl-evals/runs/da89a7c667e34365a09d3c380dc90d4e"
+    }
+  ],
+  "comparability": {
+    "actor": "Official native predictor, checkpoint, parser and prompt; T0.7/p0.8, one beam, 1024 tokens, 30 decisions, 10 prior actions, current screenshot only",
+    "environment": "Local SimpleEnv; different from paper Browserbase/advanced-stealth environment",
+    "agenttrek": "Completed EXIT episodes only; task, full native action history and last supplied actor observation; other outcomes remain zero overall",
+    "no_pooled_or_best_of_judge_score": true,
+    "other_five_control_cohorts": "not yet independently verified"
+  }
+}
