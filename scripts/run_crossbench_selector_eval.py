@@ -181,6 +181,10 @@ def base_environment():
     env.update(PYTHONPATH=str(REPO), WANDB_PROJECT='openwebrl-evals', OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1',
                HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', SLIME_BROWSER_ENV_MODE='local_process')
     env.setdefault('FLASHINFER_WORKSPACE_BASE', str(core.RUNTIME))
+    # Keep local model servers off the inherited cluster proxy: pilot 367523/367524 warmup hit squid and died.
+    bypass = {item.strip() for name in ('NO_PROXY', 'no_proxy') for item in env.get(name, '').split(',') if item.strip()}
+    bypass.update(('localhost', '127.0.0.1', '::1'))
+    env['NO_PROXY'] = env['no_proxy'] = ','.join(sorted(bypass))
     return env
 
 
@@ -246,6 +250,7 @@ def cmd_execute(a):
     left = seconds_left(job)
     deadline = time.time() + left - 600 if left else None          # leave 10 min for teardown and summaries
     env = base_environment()
+    os.environ.update(NO_PROXY=env['NO_PROXY'], no_proxy=env['no_proxy'])   # this process polls the servers too
     journal = cond_dir / 'scheduler-attempts' / str(job)
     journal.mkdir(parents=True, exist_ok=False)
     capture_dir = f'/dev/shm/actorhead-{job}-{first["condition"]["slug"]}'
