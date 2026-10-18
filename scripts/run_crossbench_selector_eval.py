@@ -51,8 +51,12 @@ def cmd_prepare(a):
     base = condition_dir(a.root, a.condition)
     out = {}
     for bench in a.benchmarks:
+        if (a.temperature is None) != (a.top_p is None):
+            raise SystemExit('--temperature and --top-p go together')
+        decoding = dict(temperature=a.temperature, top_p=a.top_p) if a.temperature is not None else None
+        subset_of = condition_dir(a.subset_of_root, a.condition) / bench / 'plan.json' if a.subset_of_root else None
         plan = core.build_plan(base / bench, benchmark=bench, condition=a.condition, n=a.n, seed=a.seed,
-                               actor=a.actor, judge_caps=caps[bench])
+                               actor=a.actor, judge_caps=caps[bench], decoding=decoding, subset_of=subset_of)
         out[bench] = dict(plan=str(base / bench / 'plan.json'), tasks=len(plan['task_ids']),
                           first_tasks=plan['task_ids'][:3], judge_caps=plan['judge_caps'],
                           head_sha256=plan['condition']['head_sha256'])
@@ -397,6 +401,9 @@ def main(argv=None):
     pr.add_argument('--actor', default=str(core.ACTOR))
     pr.add_argument('--judge-max-usd', nargs='*', help='per-benchmark overrides, e.g. webvoyager=20')
     pr.add_argument('--judge-max-calls', type=int)
+    pr.add_argument('--temperature', type=float, help='actor decoding override (with --top-p); default T 0.7 / top-p 0.9')
+    pr.add_argument('--top-p', type=float)
+    pr.add_argument('--subset-of-root', help='take the first --n tasks of the same condition/benchmark plan under this root')
     ls = sub.add_parser('launch-script')
     ls.add_argument('--root', required=True)
     ls.add_argument('--condition', required=True)

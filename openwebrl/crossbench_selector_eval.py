@@ -361,15 +361,17 @@ def sample_subset(task_ids, n, seed):
     return random.Random(f'{REVISION}/subset/{seed}').sample(unique, n)
 
 
-def protocol_for(benchmark, condition):
+def protocol_for(benchmark, condition, decoding=None):
+    """Frozen protocol; ``decoding`` (dict(temperature, top_p)) overrides the default T 0.7 / top-p 0.9 actor sampling."""
     route = route_for(benchmark)
     cond = parse_condition(condition) if isinstance(condition, str) else condition
+    temperature, top_p = (decoding['temperature'], decoding['top_p']) if decoding else (.7, .9)
     return dict(
         actor='OpenWebRL-4B-SFT:iteration0', actor_revision='15e777db2ddba2e0e82080ebccd3ad8d215b7f0a',
-        browser='local_process', browser_concurrency=8, temperature=.7, top_p=.9,
+        browser='local_process', browser_concurrency=8, temperature=temperature, top_p=top_p,
         top_k='omitted, native generate endpoint default', max_new_tokens=1024, max_steps=30, context_length=32768,
         context_num_screenshots=1, history='full', seed=42, server_seed=4200,
-        sampling_request=dict(temperature=.7, top_p=.9, max_new_tokens=1024),
+        sampling_request=dict(temperature=temperature, top_p=top_p, max_new_tokens=1024),
         actor_system_policy_sha256=SYSTEM_POLICY_SHA256,
         benchmark=benchmark, judge=route['model'], judge_protocol=route['protocol'], judge_api=route['api'],
         judge_max_attached_imgs=route['images'], judge_response_tokens=JUDGE_MAX_COMPLETION_TOKENS,
@@ -411,7 +413,8 @@ def source_drift(plan, repo=REPO):
     return {k: dict(planned=v, now=now.get(k)) for k, v in plan['source_digests'].items() if now.get(k) != v}
 
 
-def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_source=None, judge_caps=None, repo=REPO):
+def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_source=None, judge_caps=None, repo=REPO,
+               decoding=None, subset_of=None):
     """Freeze one (condition, benchmark) cohort in ``directory``; refuse to change an existing different plan."""
     directory = Path(directory).resolve()
     cond = parse_condition(condition)
@@ -425,14 +428,20 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
     ids = read_task_ids(source_path)
     if source['count'] is not None and len(ids) != source['count']:
         raise ValueError(f'{benchmark} task count changed')
-    subset = sample_subset(ids, n, seed)
+    if subset_of is not None:                      # the first n tasks of an existing frozen plan (paired comparisons)
+        parent = read_json(subset_of)
+        if parent['benchmark'] != benchmark or not set(parent['task_ids']) <= set(ids):
+            raise ValueError('subset_of plan is for another benchmark or task source')
+        subset = parent['task_ids'][:n]
+    else:
+        subset = sample_subset(ids, n, seed)
     policy = Path(repo) / 'openwebrl/env/prompts/system_prompt_browser_env.md'
     if sha256_file(policy) != SYSTEM_POLICY_SHA256:
         raise ValueError('Actor system policy differs from the Sol61/selectors-samehw protocol')
     actor = Path(actor).resolve()
     if not (actor / 'config.json').exists():
         raise ValueError(f'Actor checkpoint missing: {actor}')
-    protocol = protocol_for(benchmark, cond)
+    protocol = protocol_for(benchmark, cond, decoding)
     caps = dict(judge_caps or default_judge_caps(benchmark, n))
     frozen_tasks = directory / 'tasks-source.jsonl'
     plan = dict(revision=REVISION, root=str(directory), benchmark=benchmark, condition=cond, subset_seed=seed, n=n,
@@ -442,6 +451,10 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
                 judge_budget_root=str(directory / 'judge-budget'), collection=str(directory / 'collection'),
                 source=str(Path(repo).resolve()), source_digests=source_digests(repo),
                 keys={t: attempt_key(benchmark, cond['slug'], t, protocol['seed']) for t in subset})
+    if decoding:
+        plan['decoding'] = dict(temperature=float(decoding['temperature']), top_p=float(decoding['top_p']))
+    if subset_of is not None:
+        plan['subset_of'] = str(Path(subset_of).resolve())
     path = directory / 'plan.json'
     if path.exists():
         old = read_json(path)
@@ -461,7 +474,7 @@ def validate_plan(directory, *, allow_source_drift=False, repo=REPO):
         raise ValueError('Plan moved or from another revision')
     if sha256_file(plan['task_file']) != plan['task_source_sha256']:
         raise ValueError('Frozen task file changed')
-    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition']) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
+    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding')) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
         raise ValueError('Protocol changed since the plan was frozen')
     if plan['condition']['head_path'] and sha256_file(plan['condition']['head_path']) != plan['condition']['head_sha256']:
         raise ValueError('Selection head file changed since the plan was frozen')

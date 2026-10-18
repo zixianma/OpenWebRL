@@ -507,3 +507,14 @@ class Cli(Fixture):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+def test_decoding_override_changes_only_sampling():
+    from openwebrl import crossbench_selector_eval as core
+    base = core.protocol_for('webvoyager', 'sft1')
+    assert (base['temperature'], base['top_p']) == (.7, .9) and base['sampling_request']['temperature'] == .7
+    assert core.protocol_for('webvoyager', 'sft1', None) == base
+    alt = core.protocol_for('webvoyager', 'sft1', dict(temperature=.6, top_p=.95))
+    assert alt['sampling_request'] == dict(temperature=.6, top_p=.95, max_new_tokens=1024)
+    assert {k: v for k, v in alt.items() if k not in ('temperature', 'top_p', 'sampling_request')} == \
+           {k: v for k, v in base.items() if k not in ('temperature', 'top_p', 'sampling_request')}
