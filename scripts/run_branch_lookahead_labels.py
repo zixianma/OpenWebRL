@@ -116,6 +116,8 @@ def states():
             plan = read(plan_path); done = Path(plan_path).parent / "judgments"
             out += [e for e in plan["states"] if (done / f"{e['state']}.json").exists() and read(done / f"{e['state']}.json")]
         return out
+    if os.environ.get("LOOKAHEAD_STATE_LIST"):      # explicit [{state, collection, root}] across campaign ledgers
+        return read(os.environ["LOOKAHEAD_STATE_LIST"])
     if os.environ.get("LOOKAHEAD_COLLECTION"):
         return collection_states(os.environ["LOOKAHEAD_COLLECTION"])
     keep = scoreable()
@@ -408,7 +410,7 @@ def main():
         write(root / "plan.json", dict(root=str(root), model=MODEL, effort=EFFORT, lookahead_steps=K, evidence_draw=DRAW,
               price_usd_per_million=PRICE, calls_per_state=calls_per_state() * len(CONDITIONS), orders=ORDERS, states=sts, source=str(src),
               hide_final_answer=HIDE_ANSWER, conditions=CONDITIONS, collection=os.environ.get("LOOKAHEAD_COLLECTION"),
-              history_images=HISTORY_IMAGES, states_from=os.environ.get("LOOKAHEAD_STATES_FROM"),
+              history_images=HISTORY_IMAGES, states_from=os.environ.get("LOOKAHEAD_STATES_FROM"), state_list=os.environ.get("LOOKAHEAD_STATE_LIST"),
               history_format=HISTORY_FORMAT, history_steps=HISTORY_STEPS, action_chars=ACTION_CHARS, lookahead_feedback=FEEDBACK, images=IMAGES, state_text=STATE_TEXT,
               note="Luna after-execution request with K-step actor lookahead from draw 0; scoring draws 3-7 never read"))
         print(json.dumps(dict(states=len(sts))))

@@ -24,6 +24,8 @@ def main():
     ap.add_argument("--batch-size", type=int, default=64); ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--weight-decay", type=float, default=0.05); ap.add_argument("--device", default="cpu")
     ap.add_argument("--save-heads", action="store_true", help="save each trained head (deployment); --test-fold -1 trains on every fold")
+    ap.add_argument("--train-frac", type=float, default=1.0, help="learning curve: keep this fraction of training tasks (seeded)")
+    ap.add_argument("--frac-seed", type=int, default=20261017)
     args = ap.parse_args()
     import torch
     from openwebrl.selection_head import CandidateSetHead, HeadConfig, selection_loss
@@ -38,10 +40,17 @@ def main():
     index = {r["state_id"]: i for i, r in enumerate(rows)}
     usable = [s for s in index if s in targets and all(src in targets[s]["targets"] for src in sources)]
     train_ids = [s for s in usable if targets[s]["fold"] != args.test_fold]
+    if args.train_frac < 1:                                # subsample whole training tasks, nested across fractions
+        import random
+        tasks = sorted({targets[s]["task"] for s in train_ids})
+        random.Random(args.frac_seed).shuffle(tasks)
+        keep = set(tasks[:max(1, round(args.train_frac * len(tasks)))])
+        train_ids = [s for s in train_ids if targets[s]["task"] in keep]
     test_ids = [s for s in index if s in targets and targets[s]["fold"] == args.test_fold]
     tr, te = torch.tensor([index[s] for s in train_ids]), torch.tensor([index[s] for s in test_ids])
     hidden = state.shape[-1] // 3
     out = dict(train_states=len(train_ids), test_states=len(test_ids), test_fold=args.test_fold, sources=sources,
+               train_frac=args.train_frac, train_tasks=len({targets[s].get("task") for s in train_ids}),
                missing_features=sum(s not in index for s in targets), picks={})
     for src in sources:
         y = torch.tensor([targets[s]["targets"][src] for s in train_ids], dtype=torch.float32)
