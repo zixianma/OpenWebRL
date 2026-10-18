@@ -7,6 +7,9 @@ Each method keeps its own prompt and scoring rule; only the model is Luna (the s
   the same labels by token probabilities, which Luna does not return); pick the best score.
 - WebArbiter: the official WebPRMBench pairwise template (rendered by `load_arbiter_causal_renderer`), the native
   verdict parser and the viewer's knockout tournament over the five candidates.
+- WebArbiter + lookahead K = 1 (`arbiter_k1`): the same pairwise template, tournament and parser, with each response's
+  execution evidence appended (the recommended lookahead labeller's K = 1 view: the screenshot right after the action
+  on draw 0, the same fixed actor's next action and the screenshot after it; any final answer hidden).
 - PRO-CUA: the paper's PRM grading prompt (appendix, verbatim) with the current screenshot annotated at the action's
   target; one call per candidate, binary correct/incorrect; pick among the correct ones.
 Adaptations forced by the states: the page text is the saved accessibility tree rendered as `[id] tag "text"`
@@ -188,10 +191,50 @@ class Methods:
                                       thought2=right["thought"], action2=browsergym_action(right["calls"], s["obs"]))
         return to_responses([dict(role="user", content=prompt)])
 
+    def arbiter_compare_k1(self, s, left, right, ev):
+        p = self.arbiter_compare(s, left, right)
+        content = p["input"][0]["content"]
+        content.append({"type": "input_text", "text": "Execution evidence: the same fixed browser agent executed each response "
+                        "once. For each response: the screenshot right after its action, the agent's next action, and the "
+                        "screenshot after that next action."})
+        for j, cand in ((1, left), (2, right)):
+            e = ev[cand["index"]]
+            content += [{"type": "input_text", "text": f"Response {j}: screenshot right after executing its action"},
+                        {"type": "input_image", "image_url": e["after"], "detail": "high"}]
+            for step in e["steps"]:
+                shown = "[the episode ended here; any final answer is not shown]" if step["final"] and e["ended"] else step["action"]
+                content.append({"type": "input_text", "text": f"Response {j}: the agent's next action: {shown}"})
+                if step["screenshot"] and not step["final"]:
+                    content += [{"type": "input_text", "text": f"Response {j}: screenshot after that next action"},
+                                {"type": "input_image", "image_url": step["screenshot"], "detail": "high"}]
+        content.append({"type": "input_text", "text": "Use this execution evidence when comparing the two responses, and answer "
+                        "in the required format."})
+        return p
+
     def procua_grade(self, s, cand, step_index):
         text = (self.procua.replace("{instruction}", s["intent"]).replace("{history_actions}", s["history_native"])
                 .replace("{step_index}", str(step_index)).replace("{action_code}", f"Thought: {cand['thought']}\nAction: {cand['native']}"))
         return to_responses([dict(role="user", content=text)], images=[annotate(load_image(s["obs"]), cand["calls"])])
+
+
+def lookahead_evidence(entry, anchor):
+    """Per candidate: draw-0 screenshot right after the action and the next K = 1 actor step (lookahead labeller code)."""
+    import base64
+    for k, v in (("LOOKAHEAD_K", "1"), ("LOOKAHEAD_STATE_TEXT", "none"), ("LOOKAHEAD_HIDE_ANSWER", "1")):
+        os.environ.setdefault(k, v)
+    import run_branch_lookahead_labels as la
+    assert la.K == 1, "arbiter_k1 needs LOOKAHEAD_K=1"
+    ev = la.draw0(entry)
+    if sorted(ev) != list(range(len(anchor["candidates"]))):
+        return None
+    out = {}
+    for c, (attempt, row) in ev.items():
+        look = la.lookahead(attempt, anchor["depth"], anchor["candidates"][c]["output"][0])
+        if look is None:
+            return None
+        out[c] = dict(after="data:image/png;base64," + base64.b64encode(load_image(row["observation"])).decode(),
+                      steps=look["steps"], ended=look["ended"])
+    return out
 
 
 # ---- parsing -----------------------------------------------------------------------------------------------------
@@ -270,8 +313,13 @@ async def run_state(method, entry, M, client, key, ledger, sem, outdir):
         best = max(valid) if valid else None
         picks = [c["index"] for c, x in zip(cands, scores) if best is not None and x == best] or [c["index"] for c in cands]
         detail = dict(checklist=checklist, scores=scores)
-    elif method == "arbiter":
+    elif method in ("arbiter", "arbiter_k1"):
         from openwebrl.webprm_worker import native_tournament
+        ev = lookahead_evidence(entry, s["anchor"]) if method == "arbiter_k1" else None
+        if method == "arbiter_k1" and ev is None:
+            write(out, dict(state=entry["state"], method=method, picks=None, detail=dict(skipped="no aligned draw-0 lookahead"), calls=[]))
+            return
+        compare = (lambda a, b: M.arbiter_compare_k1(s, a, b, ev)) if ev else (lambda a, b: M.arbiter_compare(s, a, b))
         pending = {}
 
         def compare_sync(left, right):
@@ -280,7 +328,7 @@ async def run_state(method, entry, M, client, key, ledger, sem, outdir):
         queue, verdicts = list(cands), {}
         while len(queue) > 1:
             pairs = [(queue[k], queue[k + 1]) for k in range(0, len(queue) - 1, 2)]
-            texts = await asyncio.gather(*[call(M.arbiter_compare(s, a, b), client, key, ledger, sem, log) for a, b in pairs])
+            texts = await asyncio.gather(*[call(compare(a, b), client, key, ledger, sem, log) for a, b in pairs])
             winners = []
             for (a, b), t in zip(pairs, texts):
                 v = M.arbiter.parse_answer(t)
@@ -324,11 +372,13 @@ def main():
         print(json.dumps(dict(states=len(states), methods=args.methods.split(","))))
     elif args.command == "dry-run":
         plan = read(root / "plan.json"); M = Methods()
-        per_state = {"shepherd": 6, "arbiter": 4, "procua": 5}
+        per_state = {"shepherd": 6, "arbiter": 4, "arbiter_k1": 4, "procua": 5}
         calls = sum(per_state[m] for m in plan["methods"]) * len(plan["states"])
         s = state_inputs(plan["states"][0]); c = s["candidates"]
         samples = {"shepherd_checklist": M.shepherd_checklist(s), "shepherd_judge": M.shepherd_judge(s, "Checklist 1: (generated checklist here)", c[0]),
-                   "arbiter_compare": M.arbiter_compare(s, c[0], c[1]), "procua_grade": M.procua_grade(s, c[0], len(s["anchor"].get("prefix", [])) + 1)}
+                   "arbiter_compare": M.arbiter_compare(s, c[0], c[1]),
+                   **({"arbiter_k1_compare": M.arbiter_compare_k1(s, c[0], c[1], lookahead_evidence(plan["states"][0], s["anchor"]))}
+                      if "arbiter_k1" in plan["methods"] else {}), "procua_grade": M.procua_grade(s, c[0], len(s["anchor"].get("prefix", [])) + 1)}
         (root / "samples").mkdir(exist_ok=True)
         bounds = {}
         for k, p in samples.items():
