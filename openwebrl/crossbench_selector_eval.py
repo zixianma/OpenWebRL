@@ -361,16 +361,19 @@ def sample_subset(task_ids, n, seed):
     return random.Random(f'{REVISION}/subset/{seed}').sample(unique, n)
 
 
-def protocol_for(benchmark, condition, decoding=None):
-    """Frozen protocol; ``decoding`` (dict(temperature, top_p)) overrides the default T 0.7 / top-p 0.9 actor sampling."""
+def protocol_for(benchmark, condition, decoding=None, horizon=None):
+    """Frozen protocol; ``decoding`` (dict(temperature, top_p)) overrides the default T 0.7 / top-p 0.9 actor sampling;
+    ``horizon`` (dict(max_steps, history_full_turns)) overrides the 30-step full-history default."""
     route = route_for(benchmark)
     cond = parse_condition(condition) if isinstance(condition, str) else condition
     temperature, top_p = (decoding['temperature'], decoding['top_p']) if decoding else (.7, .9)
     return dict(
         actor='OpenWebRL-4B-SFT:iteration0', actor_revision='15e777db2ddba2e0e82080ebccd3ad8d215b7f0a',
         browser='local_process', browser_concurrency=8, temperature=temperature, top_p=top_p,
-        top_k='omitted, native generate endpoint default', max_new_tokens=1024, max_steps=30, context_length=32768,
-        context_num_screenshots=1, history='full', seed=42, server_seed=4200,
+        top_k='omitted, native generate endpoint default', max_new_tokens=1024,
+        max_steps=int(horizon['max_steps']) if horizon else 30, context_length=32768, context_num_screenshots=1,
+        history=(f"last {int(horizon['history_full_turns'])} turns full; older turns: action and tool result line only"
+                 if horizon and horizon.get('history_full_turns') else 'full'), seed=42, server_seed=4200,
         sampling_request=dict(temperature=temperature, top_p=top_p, max_new_tokens=1024),
         actor_system_policy_sha256=SYSTEM_POLICY_SHA256,
         benchmark=benchmark, judge=route['model'], judge_protocol=route['protocol'], judge_api=route['api'],
@@ -414,7 +417,7 @@ def source_drift(plan, repo=REPO):
 
 
 def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_source=None, judge_caps=None, repo=REPO,
-               decoding=None, subset_of=None):
+               decoding=None, subset_of=None, horizon=None):
     """Freeze one (condition, benchmark) cohort in ``directory``; refuse to change an existing different plan."""
     directory = Path(directory).resolve()
     cond = parse_condition(condition)
@@ -441,7 +444,7 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
     actor = Path(actor).resolve()
     if not (actor / 'config.json').exists():
         raise ValueError(f'Actor checkpoint missing: {actor}')
-    protocol = protocol_for(benchmark, cond, decoding)
+    protocol = protocol_for(benchmark, cond, decoding, horizon)
     caps = dict(judge_caps or default_judge_caps(benchmark, n))
     frozen_tasks = directory / 'tasks-source.jsonl'
     plan = dict(revision=REVISION, root=str(directory), benchmark=benchmark, condition=cond, subset_seed=seed, n=n,
@@ -455,6 +458,8 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
         plan['decoding'] = dict(temperature=float(decoding['temperature']), top_p=float(decoding['top_p']))
     if subset_of is not None:
         plan['subset_of'] = str(Path(subset_of).resolve())
+    if horizon:
+        plan['horizon'] = dict(max_steps=int(horizon['max_steps']), history_full_turns=int(horizon.get('history_full_turns') or 0))
     path = directory / 'plan.json'
     if path.exists():
         old = read_json(path)
@@ -474,7 +479,7 @@ def validate_plan(directory, *, allow_source_drift=False, repo=REPO):
         raise ValueError('Plan moved or from another revision')
     if sha256_file(plan['task_file']) != plan['task_source_sha256']:
         raise ValueError('Frozen task file changed')
-    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding')) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
+    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding'), plan.get('horizon')) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
         raise ValueError('Protocol changed since the plan was frozen')
     if plan['condition']['head_path'] and sha256_file(plan['condition']['head_path']) != plan['condition']['head_sha256']:
         raise ValueError('Selection head file changed since the plan was frozen')
@@ -816,6 +821,7 @@ class LiveRuntime:
         args = evaluation.EvalArgs(**eval_args_kwargs(plan, config['actor_port'], root))
         args.rollout_temperature = plan['protocol']['temperature']
         args.rollout_max_response_len = plan['protocol']['max_new_tokens']
+        args.browser_history_full_turns = (plan.get('horizon') or {}).get('history_full_turns', 0)   # read via getattr by the generator
         init_http_client(args)
         return args
 
@@ -838,7 +844,8 @@ def eval_args_kwargs(plan, actor_port, root):
                 rollout_max_context_len=p['context_length'],
                 judge_api_model=route['model'], judge_max_attached_imgs=route['images'], judge_api_mode='served',
                 judge_timeout_secs=180, browser_response_format_mode='browser_env', turn_history_reasoning_mode='full',
-                browser_include_tool_response=1, inference_step_timeout_secs=180, task_timeout_secs=1800,
+                browser_include_tool_response=1, inference_step_timeout_secs=180,
+                task_timeout_secs=1800 if p['max_steps'] <= 30 else 1800 * p['max_steps'] // 30,
                 path_to_save_generated_samples=str(Path(root) / 'samples'))
 
 

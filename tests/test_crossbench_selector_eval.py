@@ -518,3 +518,29 @@ def test_decoding_override_changes_only_sampling():
     assert alt['sampling_request'] == dict(temperature=.6, top_p=.95, max_new_tokens=1024)
     assert {k: v for k, v in alt.items() if k not in ('temperature', 'top_p', 'sampling_request')} == \
            {k: v for k, v in base.items() if k not in ('temperature', 'top_p', 'sampling_request')}
+
+
+def test_horizon_override_and_default_protocol_unchanged():
+    from openwebrl import crossbench_selector_eval as core
+    base = core.protocol_for('deepshop', 'sft1', dict(temperature=1.0, top_p=.9))
+    assert base['max_steps'] == 30 and base['history'] == 'full'
+    assert core.protocol_for('deepshop', 'sft1', dict(temperature=1.0, top_p=.9), None) == base
+    long = core.protocol_for('deepshop', 'sft1', dict(temperature=1.0, top_p=.9), dict(max_steps=100, history_full_turns=20))
+    assert long['max_steps'] == 100 and long['history'].startswith('last 20 turns full')
+
+
+def test_history_window_keeps_recent_turns_and_task():
+    from types import SimpleNamespace
+    from openwebrl.generate_browser import _compress_turn_history_messages
+    args = SimpleNamespace(browser_history_full_turns=2, browser_history_reasoning_max_turns=0, browser_response_format_mode='browser_env')
+    msgs = [dict(role='system', content='sys'), dict(role='user', content=[dict(type='text', text='TASK <observation>first</observation>')])]
+    for k in range(4):
+        msgs.append(dict(role='assistant', content=f'<think>reason {k}</think>\n<tool_call>{{"name": "click", "k": {k}}}</tool_call>'))
+        msgs.append(dict(role='user', content=[dict(type='text', text=f'<tool_response>\nSucceed {k}\n\n<observation>\ntabs {k}\n</observation>\n</tool_response>')]))
+    out = _compress_turn_history_messages(msgs, 'full', args)
+    assert out[1] == msgs[1]                                         # task message untouched
+    assert out[2]['content'].startswith('<tool_call>') and 'reason 0' not in out[2]['content']
+    assert 'tabs 0' not in out[3]['content'][0]['text'] and 'Succeed 0' in out[3]['content'][0]['text']
+    assert out[6:] == msgs[6:]                                        # last two turns and their feedback unchanged
+    short = msgs[:6]
+    assert _compress_turn_history_messages(short, 'full', args) == short
