@@ -347,7 +347,15 @@ def parse_condition(condition):
         digest = sha256_file(path)
         return dict(name='head5', kind='actor_cache_head', candidates=5, slug=f'head5-{digest[:12]}', head_path=str(path),
                     head_sha256=digest, selection_rule='argmax_head_score_ties_first')
-    raise ValueError(f'Unknown condition {condition!r}; expected sft1, piotr5 or head5:<head.pt>')
+    if condition.startswith('head5x:'):
+        path = Path(condition.split(':', 1)[1]).resolve()
+        if not path.is_file():
+            raise ValueError(f'Selection head not found: {path}')
+        digest = sha256_file(path)
+        return dict(name='head5x', kind='frozen_head_scorer', candidates=5, slug=f'head5x-{digest[:12]}', head_path=str(path),
+                    head_sha256=digest, selection_rule='argmax_head_score_ties_first',
+                    encoder=str(ACTOR), encoder_revision=ACTORS[str(ACTOR.resolve())]['revision'])
+    raise ValueError(f'Unknown condition {condition!r}; expected sft1, piotr5, head5:<head.pt> or head5x:<head.pt>')
 
 
 def task_id_of(row, index):
@@ -400,6 +408,8 @@ def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None):
                          if cond['kind'] == 'actor_cache_head' else ''),
         selector_serving={'selection': 'sglang on the actor GPU, mem-fraction .30, behind serve_arm_sglang /select',
                           'actor_cache_head': 'CPU head over hidden states exported by the actor server',
+                          'frozen_head_scorer': 'OpenWebRL-4B-SFT encoder (transformers, bf16) on the actor GPU re-encodes the '
+                                                'prompt + candidates; unchanged head scores them (serve_frozen_head_scorer.py)',
                           'baseline': None}[cond['kind']],
         optimizer_updates=0, cohort_revision=REVISION)
 
@@ -532,14 +542,14 @@ def candidate_seed(seed, task_id, turn, candidate):
     return int.from_bytes(hashlib.sha256(key).digest()[:4], 'big') % (2**31 - 1)
 
 
-async def request_selection_result(endpoint, payload, timeout, connect_timeout=10):
-    """POST /select; retry only connections that failed before the request was submitted."""
+async def request_selection_result(endpoint, payload, timeout, connect_timeout=10, raw_path=False):
+    """POST /select (or ``endpoint`` itself with raw_path); retry only connections that failed before submission."""
     import httpx
     limits = httpx.Timeout(timeout, connect=min(timeout, connect_timeout))
     for attempt in range(3):
         try:
             async with httpx.AsyncClient(timeout=limits, trust_env=False) as client:
-                response = await client.post(endpoint + '/select', json=payload)
+                response = await client.post(endpoint if raw_path else endpoint + '/select', json=payload)
                 response.raise_for_status()
                 return response.json()
         except (httpx.ConnectTimeout, httpx.ConnectError):
@@ -576,10 +586,10 @@ class CrossbenchSelector:
 
     def __init__(self, kind, output, *, seed, candidates, endpoint=None, head=None, timeout=180,
                  request_fn=request_selection_result):
-        if kind not in ('baseline', 'selection', 'actor_cache_head'):
+        if kind not in ('baseline', 'selection', 'actor_cache_head', 'frozen_head_scorer'):
             raise ValueError(kind)
-        if kind == 'selection' and not endpoint:
-            raise ValueError('selection needs a /select endpoint')
+        if kind in ('selection', 'frozen_head_scorer') and not endpoint:
+            raise ValueError(f'{kind} needs an endpoint')
         if kind == 'actor_cache_head' and head is None:
             raise ValueError('actor_cache_head needs a HeadBackend')
         self.kind, self.output, self.seed = kind, Path(output), seed
@@ -611,6 +621,14 @@ class CrossbenchSelector:
             scores = result['scores']
             if len(scores) != len(candidates) or not all(math.isfinite(x) for x in scores):
                 raise ValueError('Invalid cached-head score vector')
+            index = max(range(len(scores)), key=lambda j: (scores[j], -j))
+            telemetry = {k: v for k, v in result.items() if k != 'scores'}
+        elif self.kind == 'frozen_head_scorer':
+            payload = {'prompt_text': input_text, 'image': images, 'candidate_ids': [list(o[1]) for o in outputs]}
+            result = await self.request_fn(self.endpoint + '/score', payload, self.timeout, raw_path=True)
+            scores = result['scores']
+            if len(scores) != len(candidates) or not all(math.isfinite(x) for x in scores):
+                raise ValueError('Invalid frozen-head score vector')
             index = max(range(len(scores)), key=lambda j: (scores[j], -j))
             telemetry = {k: v for k, v in result.items() if k != 'scores'}
         elif self.kind == 'selection':
@@ -826,6 +844,13 @@ class LiveRuntime:
                 if r.json().get('forward_hooks') != hook_specs(layers):
                     raise ValueError('Actor server lacks the capture hooks')
                 services['hooks'] = hook_specs(layers)
+            elif kind == 'frozen_head_scorer':
+                r = await client.get(config['selector_endpoint'] + '/health')
+                r.raise_for_status()
+                health = r.json()
+                if health.get('mode') != 'frozen_head_scorer' or health.get('head_sha256') != plan['condition']['head_sha256']:
+                    raise ValueError('Wrong frozen-head scorer service')
+                services['scorer'] = health
             elif kind == 'selection':
                 r = await client.get(config['selector_endpoint'] + '/health')
                 r.raise_for_status()

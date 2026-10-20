@@ -498,6 +498,13 @@ class Cli(Fixture):
             self.assertIn('--mem-fraction-static .30', stages[0][0]['argv'][-1])
             self.assertFalse(stages[2][0]['gpu'])
             self.assertIn('--port 20001', ' '.join(stages[2][0]['argv']))
+            frozen = self.plan(condition=f'head5x:{self.head}', name='x')
+            stages = self.cli.server_stages(frozen, 20000, '/dev/shm/c')
+            self.assertEqual([[s['name'] for s in st] for st in stages], [['actor'], ['scorer']])
+            self.assertNotIn('--forward-hooks', stages[0][0]['argv'][-1])
+            self.assertTrue(stages[1][0]['gpu'])
+            self.assertIn('serve_frozen_head_scorer.py', stages[1][0]['argv'][-1])
+            self.assertIn('--port 20001', stages[1][0]['argv'][-1])
 
     def test_judge_cap_overrides(self):
         caps = self.cli.parse_caps(['webvoyager=20'], ['online_mind2web', 'webvoyager'], 100)

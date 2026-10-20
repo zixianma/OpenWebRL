@@ -158,6 +158,14 @@ def server_stages(plan, port, capture_dir):
                          ACTORHEAD_PARAMS=str(core.actor_info(plan['actor'])['params']))
     actor = dict(name='actor', argv=source_command(actor_argv), env=actor_env, gpu=True,
                  health=f'http://127.0.0.1:{port}/get_model_info', expect=('model_path', plan['actor']), timeout=1200)
+    if cond['kind'] == 'frozen_head_scorer':
+        # the actor claims its .45 first; the transformers encoder then loads into the remaining memory
+        scorer = dict(name='scorer', gpu=True, env=dict(PYTHONPATH=f'{REPO}:{REPO / "scripts"}'), timeout=1200,
+            argv=source_command([str(PYTHON), str(REPO / 'scripts/serve_frozen_head_scorer.py'), '--model', cond['encoder'],
+                                 '--head', cond['head_path'], '--actor', plan['actor'], '--port', str(port + 1),
+                                 '--params', str(core.actor_info(cond['encoder'])['params'])]),
+            health=f'http://127.0.0.1:{port + 1}/health', expect=('mode', 'frozen_head_scorer'))
+        return [[actor], [scorer]]
     if cond['kind'] != 'selection':
         return [[actor]]
     # piotr5: the selector's sglang server claims its .30 first, then the actor its .45 (as selectors-samehw).
