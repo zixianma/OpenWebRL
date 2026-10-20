@@ -1595,6 +1595,11 @@ All-attempt model API cost totals **$0.5172**, excluding **$0.0079** of judge co
 [Audited separate retry aggregate](arm_results/sol6_luna_browsercode300_20261018/retry79.json).
 
 
+<details>
+<summary>Pre-amendment headline snapshot and accounting · October 19, 2026</summary>
+
+Superseded by the [verified October 20 DeepShop completion](#deepshop-sol-budget-recovery-20261019); retained as the original accounting snapshot.
+
 <a id="sol6-luna-three-benchmarks-20261019"></a>
 
 ### Four methods across three benchmarks on October 19, 2026
@@ -1618,6 +1623,8 @@ Model cost is **$253.0385**, excluding **$93.2940** of judge cost. Received usag
 
 </details>
 
+
+</details>
 
 <a id="cuawright-om2w-comparability-20261019"></a>
 ### Why the OM2W scores differ from CUAWright
@@ -1645,5 +1652,26 @@ The [released persistent configuration](https://github.com/microsoft/CUAWright/b
 A prospective diagnosis should first audit saved failures for missing evidence/final answers and repair browser startup independently. Then compare 30 versus 100 decisions with the same model, tasks, browser, prompts and terminal judge, separating that from a matched CUAWright harness comparison. Any new API calls or allocations require their own explicit budget; none were used for this recount. Preserve original headline results and report subsequent experiments separately.
 
 [Aggregate recount and source digests](arm_results/sol6_luna_three_benchmarks_20261019/om2w_step_limit_diagnostic.json).
+
+</details>
+
+
+<a id="deepshop-sol-budget-recovery-20261019"></a>
+### DeepShop Sol budget recovery: four-arm evaluation complete on October 20, 2026
+
+<!-- deepshop-sol-budget-recovery-20261019 -->
+
+The 31 budget-affected Sol cells were physically rerun after explicit approval of an additional $50 model ceiling, $10 per original Sol shard. No compute, model-call, judge or browser cap was extended, and no budget was transferred. All 150 original Sol dispositions were hash-preserved; this section supersedes the earlier budget-blocked status.
+
+All 600 DeepShop and 2,380 WebVoyager latest dispositions are independently audited, with all attempts included in accounting. DeepShop Sol now has 66 successes, 145 valid and 5 invalid outcomes across 150 tasks. Four-arm matched metrics use 140 DeepShop tasks; the earlier 145-task three-Luna cohort remains historical. [Current headline performance, cost and efficiency](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
+
+<details>
+<summary>Amended accounting, validity and completion checks</summary>
+
+Total all-attempt model cost is $264.8018, excluding $94.2567 of judge work. Final caps remain per-shard: the five Sol model ceilings are $20 each and the campaign ceiling is $575 model plus $300 judge. Every failed attempt, unknown-usage conservative reservation and browser startup session is included. The original accounting snapshot remains preserved separately.
+
+Native request/model identity, selected-only execution, benchmark-native GPT-4o judges, image binding, all-attempt token/cost/call/browser ledgers, allocation time, W&B completion and owned teardown passed independent checks. Completion means every fixed evaluation cell has a physically attempted disposition; it does not mean every task succeeded or every outcome is valid. Original OM2W outcomes and separate retries remain unchanged, and matched OM2W Luna single remains unrun.
+
+[Aggregate metrics, recovery summary and audit digests](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json).
 
 </details>
