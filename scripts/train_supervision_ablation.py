@@ -27,9 +27,17 @@ def main():
     ap.add_argument("--train-frac", type=float, default=1.0, help="learning curve: keep this fraction of training tasks (seeded)")
     ap.add_argument("--frac-seed", type=int, default=20261017)
     ap.add_argument("--layers", default="18,27,36", help="actor layers the head reads (e.g. 14,21,28 for a 28-layer actor)")
+    ap.add_argument("--interaction", choices=("joint", "independent"), default="joint",
+                    help="joint: each candidate's score can depend on the others; independent: scored alone")
+    ap.add_argument("--scorer", choices=("transformer", "mlp"), default="transformer")
+    ap.add_argument("--mlp-depth", type=int, default=1)
+    ap.add_argument("--loss", choices=("softce", "bce"), default="softce",
+                    help="softce: softmax over the five vs the target distribution; bce: per-candidate binary target")
+    ap.add_argument("--d-model", type=int, default=512); ap.add_argument("--depth", type=int, default=2)
     args = ap.parse_args()
     import torch
-    from openwebrl.selection_head import CandidateSetHead, HeadConfig, selection_loss
+    from openwebrl.selection_head import CandidateSetHead, HeadConfig, pointwise_bce_loss, selection_loss
+    loss_fn = selection_loss if args.loss == "softce" else pointwise_bce_loss
     from train_selection_head import load
 
     targets = json.loads(args.targets.read_text())["states"]
@@ -52,6 +60,7 @@ def main():
     tr, te = torch.tensor([index[s] for s in train_ids]), torch.tensor([index[s] for s in test_ids])
     hidden = state.shape[-1] // len(layers)
     out = dict(train_states=len(train_ids), test_states=len(test_ids), test_fold=args.test_fold, sources=sources,
+               interaction=args.interaction, scorer=args.scorer, mlp_depth=args.mlp_depth, loss=args.loss,
                train_frac=args.train_frac, train_tasks=len({targets[s].get("task") for s in train_ids}),
                missing_features=sum(s not in index for s in targets), picks={})
     for src in sources:
@@ -59,7 +68,8 @@ def main():
         for seed in [int(x) for x in args.seeds.split(",")]:
             torch.manual_seed(seed)
             config = HeadConfig(hidden_size=hidden, layers=layers, pools=("thought_mean", "action_mean", "last"),
-                                d_model=512, depth=2, dropout=0.1, listwise=True)
+                                d_model=args.d_model, depth=args.depth, dropout=0.1, listwise=args.interaction == "joint",
+                                interaction=args.interaction, scorer=args.scorer, mlp_depth=args.mlp_depth)
             head = CandidateSetHead(config); head.fit_standardizers(cand[tr], state[tr]); head.to(args.device)
             opt = torch.optim.AdamW(head.parameters(), lr=args.lr, weight_decay=args.weight_decay)
             steps = args.epochs * ((len(tr) + args.batch_size - 1) // args.batch_size)
@@ -74,7 +84,7 @@ def main():
                     perm = torch.argsort(torch.rand(len(idx), 5), -1)          # candidate order is never informative
                     c = cand[b].gather(1, perm[..., None].expand(-1, -1, cand.shape[-1]))
                     logits, _ = head(c.to(args.device), state[b].to(args.device))
-                    loss = selection_loss(logits, y[idx].gather(1, perm).to(args.device), mask[:len(idx)])
+                    loss = loss_fn(logits, y[idx].gather(1, perm).to(args.device), mask[:len(idx)])
                     opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(head.parameters(), 1.); opt.step(); sched.step()
             head.eval()
             with torch.no_grad():
@@ -82,7 +92,8 @@ def main():
             out["picks"][f"{src}/seed{seed}"] = {s: int(k) for s, k in zip(test_ids, logits.argmax(-1).tolist())} if test_ids else {}
             if args.save_heads:
                 d = args.output / "heads" / src / f"seed{seed}"; d.mkdir(parents=True, exist_ok=True)
-                torch.save({"config": config.to_json(), "state_dict": {k: v.cpu() for k, v in head.state_dict().items()}, "objective": "soft_ce",
+                torch.save({"config": config.to_json(), "state_dict": {k: v.cpu() for k, v in head.state_dict().items()},
+                            "objective": "soft_ce", "loss": args.loss, "params": sum(p.numel() for p in head.parameters()),
                             "source": src, "seed": seed, "train_states": len(train_ids)}, d / "head.pt")
             print(json.dumps(dict(source=src, seed=seed, seconds=round(time.time() - started, 1))), flush=True)
     args.output.mkdir(parents=True, exist_ok=True)

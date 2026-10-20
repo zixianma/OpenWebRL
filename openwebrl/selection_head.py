@@ -34,6 +34,19 @@ class HeadConfig:
     depth: int = 2
     dropout: float = 0.1
     listwise: bool = True  # False: score each candidate alone (pointwise ablation)
+    # Factorial switches (None = derived from `listwise`, so older heads load unchanged):
+    # interaction "joint" lets each candidate's score depend on the others, "independent" does not;
+    # scorer "transformer" or "mlp"; mlp_depth hidden layers for the MLP scorer.
+    interaction: str | None = None
+    scorer: str | None = None
+    mlp_depth: int = 1
+
+    def resolved(self):
+        joint = self.listwise if self.interaction is None else self.interaction == "joint"
+        scorer = self.scorer or ("transformer" if self.listwise else "mlp")
+        if scorer not in ("transformer", "mlp"):
+            raise ValueError(f"unknown scorer {scorer!r}")
+        return ("joint" if joint else "independent"), scorer
 
     @property
     def candidate_dim(self):
@@ -50,7 +63,7 @@ class HeadConfig:
     def from_json(cls, text):
         data = json.loads(text)
         data["layers"], data["pools"] = tuple(data["layers"]), tuple(data["pools"])
-        return cls(**data)
+        return cls(**{k: v for k, v in data.items() if k in cls.__dataclass_fields__})
 
 
 class Standardize(nn.Module):
@@ -88,14 +101,19 @@ class CandidateSetHead(nn.Module):
         self.state_proj = _projector(config.state_dim, d, config.dropout)
         self.type_embed = nn.Parameter(torch.zeros(2, d))  # 0 = state, 1 = candidate
         nn.init.normal_(self.type_embed, std=0.02)
-        if config.listwise and config.depth > 0:
+        self.interaction, self.scorer = config.resolved()
+        if self.scorer == "transformer" and config.depth > 0:
             layer = nn.TransformerEncoderLayer(d, config.n_heads, 4 * d, config.dropout,
                                                activation="gelu", batch_first=True, norm_first=True)
             self.encoder = nn.TransformerEncoder(layer, config.depth, enable_nested_tensor=False)
         else:
             self.encoder = None
-            self.pointwise = nn.Sequential(nn.LayerNorm(2 * d), nn.Linear(2 * d, d), nn.GELU(),
-                                           nn.Dropout(config.dropout))
+            # MLP scorer on [candidate, state] (independent) or [candidate, state, candidate - mean of the others] (joint)
+            width = (3 if self.interaction == "joint" else 2) * d
+            mlp = [nn.LayerNorm(width), nn.Linear(width, d), nn.GELU(), nn.Dropout(config.dropout)]
+            for _ in range(max(config.mlp_depth, 1) - 1):
+                mlp += [nn.Linear(d, d), nn.GELU(), nn.Dropout(config.dropout)]
+            self.pointwise = nn.Sequential(*mlp)
         self.out_norm = nn.LayerNorm(d)
         self.select = nn.Linear(d, 1)
         self.value = nn.Linear(d, 1)
@@ -120,9 +138,20 @@ class CandidateSetHead(nn.Module):
         if self.encoder is not None:
             tokens = torch.cat([s, c], 1)
             padding = torch.cat([torch.zeros_like(mask[:, :1]), ~mask], 1)
-            c = self.encoder(tokens, src_key_padding_mask=padding)[:, 1:]
+            attn = None
+            if self.interaction == "independent":
+                # each candidate attends only to the state and itself; the state attends only to itself
+                n = count + 1
+                attn = ~torch.eye(n, dtype=torch.bool, device=c.device)
+                attn[1:, 0] = False
+            c = self.encoder(tokens, mask=attn, src_key_padding_mask=padding)[:, 1:]
         else:
-            c = self.pointwise(torch.cat([c, s.expand_as(c)], -1))
+            parts = [c, s.expand_as(c)]
+            if self.interaction == "joint":
+                m = mask[..., None].to(c.dtype)
+                others = ((c * m).sum(1, keepdim=True) - c * m) / (m.sum(1, keepdim=True) - m).clamp_min(1)
+                parts.append(c - others)
+            c = self.pointwise(torch.cat(parts, -1))
         c = self.out_norm(c)
         logits = self.select(c).squeeze(-1).masked_fill(~mask, float("-inf"))
         return logits, self.value(c).squeeze(-1)
@@ -132,6 +161,13 @@ def selection_loss(logits, target, mask):
     """Soft cross-entropy against a target distribution over real candidates."""
     logp = torch.log_softmax(logits, -1).masked_fill(~mask, 0.)
     return -(target * logp).sum(-1).mean()
+
+
+def pointwise_bce_loss(logits, target, mask):
+    """Per-candidate binary cross-entropy: each candidate's target is its own share of the label (no softmax over the set)."""
+    finite = logits.masked_fill(~mask, 0.)
+    loss = F.binary_cross_entropy_with_logits(finite, target.clamp(0, 1), reduction="none")
+    return (loss * mask).sum() / mask.sum().clamp_min(1)
 
 
 def value_loss(value_logits, successes, trials, mask):
