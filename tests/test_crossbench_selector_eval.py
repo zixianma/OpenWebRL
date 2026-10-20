@@ -480,7 +480,7 @@ class Cli(Fixture):
         self.assertEqual(self.cli.default_time('sft1', ['a']), '02:00:00')
 
     def test_server_stages_per_condition(self):
-        with mock.patch.object(self.cli, 'hook_specs_json', lambda: '[{"name": "actorhead-18"}]'):
+        with mock.patch.object(self.cli, 'hook_specs_json', lambda layers=(18, 27, 36): '[{"name": "actorhead-18"}]'):
             sft = self.plan(name='s')
             stages = self.cli.server_stages(sft, 20000, '/dev/shm/c')
             self.assertEqual([[s['name'] for s in st] for st in stages], [['actor']])
@@ -544,3 +544,13 @@ def test_history_window_keeps_recent_turns_and_task():
     assert out[6:] == msgs[6:]                                        # last two turns and their feedback unchanged
     short = msgs[:6]
     assert _compress_turn_history_messages(short, 'full', args) == short
+
+
+def test_actor_registry_keeps_4b_protocol_and_adds_2b():
+    from openwebrl import crossbench_selector_eval as core
+    base = core.protocol_for('webvoyager', 'sft1', dict(temperature=1.0, top_p=.9))
+    assert core.protocol_for('webvoyager', 'sft1', dict(temperature=1.0, top_p=.9), None, str(core.ACTOR)) == base
+    assert base['actor'] == 'OpenWebRL-4B-SFT:iteration0'
+    two = core.protocol_for('webvoyager', 'sft1', dict(temperature=1.0, top_p=.9), None, str(core.ACTOR_2B))
+    assert two['actor'].endswith('qwen3-vl-2b-thinking-openwebrl-sft') and two['actor_revision'].startswith('95d5b13')
+    assert core.actor_info(core.ACTOR_2B)['capture_layers'] == (14, 21, 28)

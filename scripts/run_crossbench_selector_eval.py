@@ -138,9 +138,9 @@ def lease_ports(job, size=64):
     raise RuntimeError('No free isolated model-server port block')
 
 
-def hook_specs_json():
+def hook_specs_json(layers=(18, 27, 36)):
     from openwebrl.actor_head_capture import hook_specs
-    return json.dumps(hook_specs())
+    return json.dumps(hook_specs(tuple(layers)))
 
 
 def server_stages(plan, port, capture_dir):
@@ -153,9 +153,9 @@ def server_stages(plan, port, capture_dir):
                   '--random-seed', str(plan['protocol']['server_seed'])]
     actor_env = {}
     if cond['kind'] == 'actor_cache_head':
-        actor_argv += ['--forward-hooks', hook_specs_json()]
+        actor_argv += ['--forward-hooks', hook_specs_json(core.actor_info(plan['actor'])['capture_layers'])]
         actor_env = dict(ACTORHEAD_DIR=capture_dir, ACTORHEAD_HEAD=cond['head_path'], ACTORHEAD_TOKENIZER=plan['actor'],
-                         ACTORHEAD_PARAMS=str(core.ACTOR_PARAMS))
+                         ACTORHEAD_PARAMS=str(core.actor_info(plan['actor'])['params']))
     actor = dict(name='actor', argv=source_command(actor_argv), env=actor_env, gpu=True,
                  health=f'http://127.0.0.1:{port}/get_model_info', expect=('model_path', plan['actor']), timeout=1200)
     if cond['kind'] != 'selection':

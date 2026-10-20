@@ -68,6 +68,19 @@ ACTOR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT')
 PIOTR_SELECTION = Path('/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection/81b452d800d9f859687074f82680dd5257e02d89')
 PIOTR_SGLANG_DIR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection-sglang-81b452d')
 ACTOR_PARAMS = 4022468096 + 415347712          # FLOP accounting for head follow-ups (as selectors-samehw)
+ACTOR_2B = Path('/gpfs/scrubbed/zixianma/checkpoints/web/qwen3-vl-2b-thinking-openwebrl-sft-95d5b13')
+# Actor identity, FLOP-accounting parameters (language model + vision tower) and the layers a selection head reads.
+ACTORS = {
+    str(ACTOR.resolve()): dict(name='OpenWebRL-4B-SFT:iteration0', revision='15e777db2ddba2e0e82080ebccd3ad8d215b7f0a',
+                     params=ACTOR_PARAMS, capture_layers=(18, 27, 36)),
+    str(ACTOR_2B.resolve()): dict(name='davidan03/qwen3-vl-2b-thinking-openwebrl-sft', revision='95d5b133ab91dd5729030ae3be2d5281d60fcb20',
+                        params=2127532032, capture_layers=(14, 21, 28)),
+}
+
+
+def actor_info(actor=None):
+    """Registered actor identity; any other path keeps the original 4B protocol identity (the pre-registry behaviour)."""
+    return ACTORS.get(str(Path(actor or ACTOR).resolve()), ACTORS[str(ACTOR.resolve())])
 REVISION = 'crossbench-selector-eval-v1'
 BENCHMARKS = ('online_mind2web', 'webvoyager', 'deepshop')
 SYSTEM_POLICY_SHA256 = '7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9'
@@ -361,14 +374,15 @@ def sample_subset(task_ids, n, seed):
     return random.Random(f'{REVISION}/subset/{seed}').sample(unique, n)
 
 
-def protocol_for(benchmark, condition, decoding=None, horizon=None):
+def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None):
     """Frozen protocol; ``decoding`` (dict(temperature, top_p)) overrides the default T 0.7 / top-p 0.9 actor sampling;
     ``horizon`` (dict(max_steps, history_full_turns)) overrides the 30-step full-history default."""
     route = route_for(benchmark)
     cond = parse_condition(condition) if isinstance(condition, str) else condition
     temperature, top_p = (decoding['temperature'], decoding['top_p']) if decoding else (.7, .9)
+    info = actor_info(actor)
     return dict(
-        actor='OpenWebRL-4B-SFT:iteration0', actor_revision='15e777db2ddba2e0e82080ebccd3ad8d215b7f0a',
+        actor=info['name'], actor_revision=info['revision'],
         browser='local_process', browser_concurrency=8, temperature=temperature, top_p=top_p,
         top_k='omitted, native generate endpoint default', max_new_tokens=1024,
         max_steps=int(horizon['max_steps']) if horizon else 30, context_length=32768, context_num_screenshots=1,
@@ -382,7 +396,8 @@ def protocol_for(benchmark, condition, decoding=None, horizon=None):
         selection_rule=cond['selection_rule'], head_sha256=cond['head_sha256'],
         selector_model=cond.get('selector_model'), selector_revision=cond.get('selector_revision'),
         actor_serving='sglang, one H200, mem-fraction .45, CUDA graphs max batch 48'
-                      + (', forward hooks capture layers 18/27/36' if cond['kind'] == 'actor_cache_head' else ''),
+                      + (', forward hooks capture layers ' + '/'.join(map(str, info['capture_layers']))
+                         if cond['kind'] == 'actor_cache_head' else ''),
         selector_serving={'selection': 'sglang on the actor GPU, mem-fraction .30, behind serve_arm_sglang /select',
                           'actor_cache_head': 'CPU head over hidden states exported by the actor server',
                           'baseline': None}[cond['kind']],
@@ -444,7 +459,7 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
     actor = Path(actor).resolve()
     if not (actor / 'config.json').exists():
         raise ValueError(f'Actor checkpoint missing: {actor}')
-    protocol = protocol_for(benchmark, cond, decoding, horizon)
+    protocol = protocol_for(benchmark, cond, decoding, horizon, actor)
     caps = dict(judge_caps or default_judge_caps(benchmark, n))
     frozen_tasks = directory / 'tasks-source.jsonl'
     plan = dict(revision=REVISION, root=str(directory), benchmark=benchmark, condition=cond, subset_seed=seed, n=n,
@@ -479,7 +494,7 @@ def validate_plan(directory, *, allow_source_drift=False, repo=REPO):
         raise ValueError('Plan moved or from another revision')
     if sha256_file(plan['task_file']) != plan['task_source_sha256']:
         raise ValueError('Frozen task file changed')
-    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding'), plan.get('horizon')) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
+    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding'), plan.get('horizon'), plan['actor']) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
         raise ValueError('Protocol changed since the plan was frozen')
     if plan['condition']['head_path'] and sha256_file(plan['condition']['head_path']) != plan['condition']['head_sha256']:
         raise ValueError('Selection head file changed since the plan was frozen')
@@ -807,9 +822,10 @@ class LiveRuntime:
                 from openwebrl.actor_head_capture import hook_specs
                 r = await client.get(f"http://127.0.0.1:{config['actor_port']}/server_info")
                 r.raise_for_status()
-                if r.json().get('forward_hooks') != hook_specs():
+                layers = actor_info(plan['actor'])['capture_layers']
+                if r.json().get('forward_hooks') != hook_specs(layers):
                     raise ValueError('Actor server lacks the capture hooks')
-                services['hooks'] = hook_specs()
+                services['hooks'] = hook_specs(layers)
             elif kind == 'selection':
                 r = await client.get(config['selector_endpoint'] + '/health')
                 r.raise_for_status()
@@ -853,7 +869,7 @@ def make_selector(plan, config, directory):
     cond = plan['condition']
     head = None
     if cond['kind'] == 'actor_cache_head':
-        head = HeadBackend(cond['head_path'], plan['actor'], config['capture_dir'])
+        head = HeadBackend(cond['head_path'], plan['actor'], config['capture_dir'], params=actor_info(plan['actor'])['params'])
     return CrossbenchSelector(cond['kind'], Path(directory) / 'selections', seed=plan['protocol']['seed'],
                               candidates=cond['candidates'], endpoint=config.get('selector_endpoint'), head=head)
 

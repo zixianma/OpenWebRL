@@ -26,6 +26,7 @@ def main():
     ap.add_argument("--save-heads", action="store_true", help="save each trained head (deployment); --test-fold -1 trains on every fold")
     ap.add_argument("--train-frac", type=float, default=1.0, help="learning curve: keep this fraction of training tasks (seeded)")
     ap.add_argument("--frac-seed", type=int, default=20261017)
+    ap.add_argument("--layers", default="18,27,36", help="actor layers the head reads (e.g. 14,21,28 for a 28-layer actor)")
     args = ap.parse_args()
     import torch
     from openwebrl.selection_head import CandidateSetHead, HeadConfig, selection_loss
@@ -33,7 +34,8 @@ def main():
 
     targets = json.loads(args.targets.read_text())["states"]
     sources = args.sources.split(",")
-    cfg = SimpleNamespace(panels=args.panels, layers="18,27,36", pools="thought_mean,action_mean,last")
+    cfg = SimpleNamespace(panels=args.panels, layers=args.layers, pools="thought_mean,action_mean,last")
+    layers = tuple(int(x) for x in args.layers.split(","))
     data, _ = load(cfg, torch, panels=args.panels, features=args.features)
     rows = [r for split in data.values() for r in split["rows"]]
     cand = torch.cat([split["candidates"] for split in data.values()]); state = torch.cat([split["state"] for split in data.values()])
@@ -48,7 +50,7 @@ def main():
         train_ids = [s for s in train_ids if targets[s]["task"] in keep]
     test_ids = [s for s in index if s in targets and targets[s]["fold"] == args.test_fold]
     tr, te = torch.tensor([index[s] for s in train_ids]), torch.tensor([index[s] for s in test_ids])
-    hidden = state.shape[-1] // 3
+    hidden = state.shape[-1] // len(layers)
     out = dict(train_states=len(train_ids), test_states=len(test_ids), test_fold=args.test_fold, sources=sources,
                train_frac=args.train_frac, train_tasks=len({targets[s].get("task") for s in train_ids}),
                missing_features=sum(s not in index for s in targets), picks={})
@@ -56,7 +58,7 @@ def main():
         y = torch.tensor([targets[s]["targets"][src] for s in train_ids], dtype=torch.float32)
         for seed in [int(x) for x in args.seeds.split(",")]:
             torch.manual_seed(seed)
-            config = HeadConfig(hidden_size=hidden, layers=(18, 27, 36), pools=("thought_mean", "action_mean", "last"),
+            config = HeadConfig(hidden_size=hidden, layers=layers, pools=("thought_mean", "action_mean", "last"),
                                 d_model=512, depth=2, dropout=0.1, listwise=True)
             head = CandidateSetHead(config); head.fit_standardizers(cand[tr], state[tr]); head.to(args.device)
             opt = torch.optim.AdamW(head.parameters(), lr=args.lr, weight_decay=args.weight_decay)
