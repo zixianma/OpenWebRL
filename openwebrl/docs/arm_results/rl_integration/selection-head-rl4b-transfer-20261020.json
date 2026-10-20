@@ -1,0 +1,50 @@
+{
+ "sft4b_features": {
+  "label": "SFT-only 4B head; RL-actor states; SFT-4B features",
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sftrl-heads-20261017/ablation-sftonly/heads-all/heads/teacher_k1/seed0/head.pt",
+  "features": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sftrl-heads-20261017/features",
+  "states_requested": 465,
+  "states_scored": 444,
+  "tasks": 270,
+  "success": {
+   "head": 52.39,
+   "uniform": 52.65,
+   "first": 53.19,
+   "oracle": 74.07
+  },
+  "head_minus_uniform": [
+   -0.2575075075075071,
+   -1.9592982456140347,
+   1.4246575342465757
+  ],
+  "head_minus_first": [
+   -0.7920420420420421,
+   -3.337236533957846,
+   1.7710583153347732
+  ]
+ },
+ "rl4b_features": {
+  "label": "SFT-only 4B head; RL-actor states; RL-4B features",
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sftrl-heads-20261017/ablation-sftonly/heads-all/heads/teacher_k1/seed0/head.pt",
+  "features": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/rl4b-head-check-20261020/features-rl4b",
+  "states_requested": 465,
+  "states_scored": 444,
+  "tasks": 270,
+  "success": {
+   "head": 51.53,
+   "uniform": 52.65,
+   "first": 53.19,
+   "oracle": 74.07
+  },
+  "head_minus_uniform": [
+   -1.1208708708708703,
+   -2.9489559164733175,
+   0.6681818181818184
+  ],
+  "head_minus_first": [
+   -1.6554054054054055,
+   -4.192156862745098,
+   0.878995433789954
+  ]
+ }
+}

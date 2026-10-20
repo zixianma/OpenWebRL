@@ -87,6 +87,32 @@
 
 </details>
 
+<a id="selection-head-other-actors-20261020"></a>
+
+**Other actors: the head does not transfer, even to an RL fine-tune of its own actor** (2026-10-19/20). A head trained on one actor's candidates did not rank another actor's candidates better than chance, offline or live.
+
+| Actor | Test | Head | Head − baseline, pp [95% CI] |
+| --- | --- | --- | ---: |
+| Qwen3-VL-2B OpenWebRL SFT (`davidan03/qwen3-vl-2b-thinking-openwebrl-sft` @ `95d5b13`) | Live, full Online-Mind2Web (300 tasks), T 1.0, 30 steps | Head retrained on 2B features (layers 14/21/28), K = 1 labels on the 1,631 SFT-actor states (4B-sampled candidates) | **−8.3 [−13.3, −3.3]** vs SFT-2B, 1 sample |
+| OpenWebRL-4B (RL) @ `616cc8f` | Offline, 444 RL-actor states (270 tasks), held-out draws 3–7 | Frozen SFT-only 4B head, reading SFT-4B features | −0.26 [−1.96, +1.42] vs uniform |
+| OpenWebRL-4B (RL) @ `616cc8f` | Same, as it would run live | Frozen SFT-only 4B head, reading the RL actor's own features | −1.12 [−2.95, +0.67] vs uniform |
+
+| Full Online-Mind2Web, 2B actor | Successes (of 300) | Valid | Overall | − SFT-2B, pp [95% CI] | PFLOP per step | Seconds per decision | Browser steps per episode | Context overflows |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT-2B, 1 sample | 80 | 268 | 26.7% | — | 0.009 | 1.60 | 16.0 | 7 |
+| Piotr SelectionARM (4B selector) + 2B | **85** | 267 | **28.3%** | +1.7 [−3.7, +7.0] | 0.060 | 6.69 | 19.3 | 5 |
+| 2B selection head | 55 | 252 | 18.3% | −8.3 [−13.3, −3.3] | 0.024 | 6.21 | 21.0 | 15 |
+
+- **Offline looked fine; live did not.**
+  - Offline, the 2B head matched the 4B head (−0.07 pp [−2.23, +2.94] on the shared test fold), but those states' candidates came from the 4B actor.
+  - Live, the 2B writes the candidates. The head ranks them confidently (median score spread 6.2) but badly: episodes run longer (21.0 vs 16.0 steps) and overflow the context twice as often.
+  - The live captures were complete: all five candidates at every one of 6,287 decisions, no fallbacks.
+  - Not yet ruled out: a mismatch between live sglang captures and the offline extractor for this actor. A 100-decision replay check would settle it.
+- **Selection helps less with the weaker actor.** Piotr SelectionARM gains +1.7 pp with the 2B, against +4.7 with the 4B on the same tasks.
+- **RL-4B check.** RL-actor states are easier: uniform 52.7% vs about 33.5% on SFT-actor states. A small shift in the candidate distribution is enough to erase the head's advantage (about +2 to +3 pp over uniform on SFT-actor states).
+- **Implication.** Train the head on states whose candidates come from the actor it serves. A head trained on RL-actor states, tested with 5-fold cross-validation, is planned once the current RL-state collection finishes.
+- Evidence: [2B Online-Mind2Web](arm_results/rl_integration/crossbench-2b-om2w-20261020.json), [RL-4B offline transfer](arm_results/rl_integration/selection-head-rl4b-transfer-20261020.json). Runtime `evaluations/crossbench-2b-t10-r2-20261019/` (jobs 373113–373115), `selection-head-20261008/{actor2b-head-20261019,rl4b-head-check-20261020}/`. Code `3643a4c` (actor registry), `9302f64` (frozen-head scorer).
+
 <a id="selection-head-factorial-plan-20261019"></a>
 
 <details>
