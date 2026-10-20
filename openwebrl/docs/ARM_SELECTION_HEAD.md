@@ -109,7 +109,7 @@
 
 | Head | Actor whose features it reads (layers) | Training data | Label | Train states (all folds) | ≥ 2 distinct effective actions | Parameters | Evaluated |
 | --- | --- | --- | --- | ---: | ---: | ---: | --- |
-| Pointwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states (35,916 panels) | GPT-5.5 pick | 2,692 states | — | 22.6 M | Online-Mind2Web same-hardware; WebVoyager + DeepShop 100-task |
+| Pointwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states (35,916 panels) | GPT-5.5 pick | 2,692 states | — | 16.8 M | Online-Mind2Web same-hardware; WebVoyager + DeepShop 100-task |
 | Listwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states | GPT-5.5 pick | 2,692 states | — | 22.6 M | full sets, 30 steps |
 | Listwise, our SFT + RL states | OpenWebRL-4B-SFT (18/27/36) | 1,474 SFT-actor + 434 RL-actor branching states | Luna lookahead K = 1 votes | 1,908 | 1,410 | 22.6 M | full sets, 30 steps |
 | Listwise, our SFT-actor states | OpenWebRL-4B-SFT (18/27/36) | SFT-actor branching states only | Luna lookahead K = 1 votes | 1,631 | 1,186 | 22.6 M | full sets, 30 steps |
