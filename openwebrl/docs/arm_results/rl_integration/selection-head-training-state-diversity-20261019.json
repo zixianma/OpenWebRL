@@ -1,0 +1,40 @@
+{
+ "SFT-actor states, K = 1 labels (2B and 4B SFT-only heads)": {
+  "states": 1631,
+  "exact": {
+   "1": 193,
+   "2": 245,
+   "3": 248,
+   "4": 341,
+   "5": 604
+  },
+  "effective": {
+   "1": 445,
+   "2": 464,
+   "3": 355,
+   "4": 279,
+   "5": 88
+  },
+  "effective_at_least_2": 1186,
+  "exact_at_least_2": 1438
+ },
+ "SFT + RL states with both labels (4B SFT + RL head)": {
+  "states": 1908,
+  "exact": {
+   "1": 193,
+   "2": 250,
+   "3": 268,
+   "4": 382,
+   "5": 815
+  },
+  "effective": {
+   "1": 498,
+   "2": 541,
+   "3": 406,
+   "4": 320,
+   "5": 143
+  },
+  "effective_at_least_2": 1410,
+  "exact_at_least_2": 1715
+ }
+}

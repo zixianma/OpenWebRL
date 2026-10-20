@@ -71,7 +71,9 @@
 
 ![Selection head: (A) at inference the frozen actor samples five candidates, their hidden states at layers 18/27/36 are captured during generation and a small head scores them; (B) in training the frozen actor encodes teacher-labelled panels once and only the head is trained](arm_results/methods/selection_head_method.svg)
 
-- **Inference.** The frozen SFT actor samples five candidates. While it generates, forward hooks inside its sglang server capture the residual stream at layers 18, 27 and 36. The head pools these per candidate (reasoning mean, action mean, end token) together with the prompt's last token, and scores each candidate with a small MLP. The highest-scoring candidate is executed.
+- **Inference.** The frozen SFT actor samples five candidates. While it generates, forward hooks inside its sglang server capture the residual stream at layers 18, 27 and 36. The head pools these per candidate (reasoning mean, action mean, end token) together with the prompt's last token and scores the candidates. The highest-scoring candidate is executed.
+  - The *pointwise* head of the same-hardware runs scores each candidate alone with a small MLP.
+  - The *listwise* heads (all later heads) add a 2-layer transformer across the five candidates. Details: [training recipe](#selection-head-training-recipe).
 - **Training.** The frozen actor encodes the Piotr release's GPT-5.5-labelled panels once (2,692 training states), and only the head is trained, with soft cross-entropy on the teacher's choice. The actor's weights never change. A detailed figure, including the top-layer adapter variant, is in the method section.
 
 <details>
@@ -82,6 +84,45 @@
 **Agreement with teachers does not track action quality.** The Kev-style decision pass on the actor's weights, trained to step 600, matches held-out GPT-5.5 choices best of any actor-based selector: 67.1%, versus 65.4% for the frozen-feature head. On the original 124 states it matches an independent teacher (Luna before execution) on 66.1% of judgments, versus 73.2% for Piotr ARM. Its chosen actions succeed on 32.79% of held-out draws, +1.12 pp [−1.38, +3.75] over uniform.
 
 **Supervising the selector with outcomes needs more states than exist now.** 188 states have eight draws for all five actions: 9,720 outcomes in 151 task groups, 14× fewer states than the 2,692 teacher-labelled training states ([data comparison](#selection-head-outcome-data-20261010)). A pre-registered five-fold [adaptation pilot](#selection-head-outcome-adaptation-20261010) on 138 of these states overfits: it fits training folds but does not beat uniform on held-out tasks. Ridge probes, a combined teacher-plus-outcome loss and selector combinations also find [no held-out gain](#selection-head-early-signal-20261010). Confirming a 3 pp selector difference needs about 200 states with eight draws, and confirming Piotr's ~2.5 pp gain over uniform about 300.
+
+</details>
+
+<a id="selection-head-training-recipe"></a>
+
+<details>
+<summary>Head training recipe: every evaluated head, data, architecture and hyperparameters</summary>
+
+**Shared recipe.** The actor is frozen and only the head is trained.
+
+- **Features.** The actor reads each state's prompt and current screenshot once, then teacher-forces each of the five candidates after it (`selection_head_features.extract`; `scripts/extract_selection_head_features.py`).
+  - The head reads three layers. State: the prompt's last token at each layer. Each candidate: reasoning-token mean, action-token mean and final token at each layer, giving 9 vectors.
+- **Architecture** (`openwebrl/selection_head.py`, `CandidateSetHead`).
+  1. Per-dimension standardization fitted on the training features, then a projector to d_model 512 (Linear → GELU → dropout 0.1 → Linear), one for the state and one for the candidates.
+  2. Listwise: a 2-layer pre-norm transformer encoder (8 heads, feed-forward 2,048, dropout 0.1) over the state token plus the five candidate tokens. Pointwise: an MLP on each candidate joined with the state, with no interaction between candidates.
+  3. LayerNorm, then a linear score per candidate.
+  - Width 512 and depth 2 are the original defaults (2026-10-08) and have not been tuned; the feature sweep varied layers and pooling only.
+- **Objective and optimizer** (`scripts/train_supervision_ablation.py`).
+  - Soft cross-entropy between the softmax over five scores and the target distribution. Candidate order is permuted every batch.
+  - AdamW, learning rate 3e-4, weight decay 0.05, batch 64, 20 epochs, one-cycle schedule (5% warm-up), gradient clip 1.0.
+  - No validation split or early stopping.
+- **Training cost.** Feature extraction: about 6 min (2B) to 70 min (4B) per 1,600–2,100 states on one H200. Head training: 3–20 s per head. Every head is saved with its config, seed and state count.
+
+| Head | Actor whose features it reads (layers) | Training data | Label | Train states (all folds) | ≥ 2 distinct effective actions | Parameters | Evaluated |
+| --- | --- | --- | --- | ---: | ---: | ---: | --- |
+| Pointwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states (35,916 panels) | GPT-5.5 pick | 2,692 states | — | 22.6 M | Online-Mind2Web same-hardware; WebVoyager + DeepShop 100-task |
+| Listwise, Piotr's data | OpenWebRL-4B-SFT (18/27/36) | Piotr's 2,692 states | GPT-5.5 pick | 2,692 states | — | 22.6 M | full sets, 30 steps |
+| Listwise, our SFT + RL states | OpenWebRL-4B-SFT (18/27/36) | 1,474 SFT-actor + 434 RL-actor branching states | Luna lookahead K = 1 votes | 1,908 | 1,410 | 22.6 M | full sets, 30 steps |
+| Listwise, our SFT-actor states | OpenWebRL-4B-SFT (18/27/36) | SFT-actor branching states only | Luna lookahead K = 1 votes | 1,631 | 1,186 | 22.6 M | full sets, 30 steps |
+| Listwise, our SFT-actor states, 2B actor | Qwen3-VL-2B OpenWebRL SFT `95d5b13` (14/21/28) | SFT-actor branching states only (candidates sampled by the 4B actor) | Luna lookahead K = 1 votes | 1,631 | 1,186 | 19.4 M | pending |
+| Listwise students (outcomes, pre-execution, K = 1, K = 3) | OpenWebRL-4B-SFT (18/27/36) | supervision-ablation folds 1–4 | per source | 840 | — | 22.6 M | 100-task subsets, T 0.7 |
+
+- **Distinct actions.**
+  - Effective = action type plus target (element under a click, URL, typed text, scroll direction, keys), as in the [diversity analysis](ARM_FORMULATIONS.md).
+  - 445 of the 1,631 SFT-actor states (27%) have a single effective action across all five candidates.
+  - The exact tool-call text is distinct in 1,438 of them.
+  - [Composition](arm_results/rl_integration/selection-head-training-state-diversity-20261019.json).
+- **Held-out check, 2B head.** Trained on 1,325 states with test fold 0 held out (3 seeds), it matches the 4B-feature head on the same 210 original test states: −0.07 pp [−2.23, +2.94] (o4-mini) and +0.92 pp [−1.34, +4.08] (Luna).
+- **Heads and runtime:** `selection-head-20261008/{heads,sftrl-heads-20261017,actor2b-head-20261019}/…/head.pt`; code `arm-selection-head` at `3643a4c` (trainer `--layers`, actor registry).
 
 </details>
 
