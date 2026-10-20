@@ -1645,16 +1645,53 @@ The hypothetical rates hold every other outcome fixed; they are diagnostic arith
 <details>
 <summary>Other protocol differences and a controlled follow-up</summary>
 
-Our OM2W judge receives selected command text and one final raw screenshot, using o4-mini; the agent's final-answer field is not directly included. The paper describes critical-point screenshots, action logs and official automated evaluation, but does not pin the OM2W judge identity. Evidence coverage and grading are therefore not established as matched. Startup `Page.goto` failures affected 25/25/26 original outcomes; their prevalence in CUAWright's run is unknown.
+Our OM2W judge receives selected action JSON and one final raw screenshot, using o4-mini. **Correction from the October 20 request audit:** nonempty final answers are included inside serialized `selected_action.final_response`; executed tool outputs are omitted. The earlier claim implying final answers were absent was incorrect. The paper describes critical-point screenshots, action logs and official automated evaluation, but does not pin the OM2W judge identity. Evidence coverage and grading are therefore not established as matched. Startup `Page.goto` failures affected 25/25/26 original outcomes; their prevalence in CUAWright's run is unknown.
 
 The [released persistent configuration](https://github.com/microsoft/CUAWright/blob/main/src/cuawright/webwright/config/best_default_judge_json_persistent_cli.yaml) additionally specifies xhigh effort, 20,000 output tokens, Browserbase, 240-second commands and trajectory self-reflection with judge feedback. Our frozen comparison uses high, 12,288 tokens, local Chromium/CDP, 120-second commands and no helper-model completion gate. **Current repository configuration is not an immutable manifest of the published run**; these are additional comparability questions, not measured explanations of the score gap.
 
-A prospective diagnosis should first audit saved failures for missing evidence/final answers and repair browser startup independently. Then compare 30 versus 100 decisions with the same model, tasks, browser, prompts and terminal judge, separating that from a matched CUAWright harness comparison. Any new API calls or allocations require their own explicit budget; none were used for this recount. Preserve original headline results and report subsequent experiments separately.
+The October 20 offline audit below supersedes this initial diagnostic proposal. It preserves original headline results and separates grading, browser reliability and the controlled model pilot. No new API calls or browser allocations were used for either offline audit.
 
 [Aggregate recount and source digests](arm_results/sol6_luna_three_benchmarks_20261019/om2w_step_limit_diagnostic.json).
 
 </details>
 
+
+
+<a id="om2w-grading-browser-audit-20261020"></a>
+### OM2W grading and browser audit: offline findings and proposed experiments
+
+**The offline review identifies one independently corroborated grading false negative and a recurring browser-startup problem; it does not establish a population score correction or explain the full CUAWright gap.** Original headline rewards remain unchanged. No new API calls, browser sessions or scheduler jobs were used. [Aggregate audit and proposed caps](arm_results/sol6_luna_three_benchmarks_20261019/om2w_grading_browser_audit.json).
+
+The original 900 dispositions contain 802 valid judged outcomes. All 743 nonempty final answers and all 12,616 selected actions appear in the transmitted judge text; all 802 final images match saved captures and all 802 strict status parses agree with rewards. Executed tool outputs were omitted. Intermediate screenshots exist for 624 valid episodes, totaling 4,423 PNGs; availability does not establish complete coverage or exact action binding.
+
+| Blinded Sol diagnostic stratum | Cases | Supported success | Supported failure | Insufficient evidence |
+|---|---:|---:|---:|---:|
+| Originally unsuccessful |16|1|13|2|
+| Originally successful controls |8|5|0|3|
+
+This deterministic, stratified sample is an offline assistant review, **not human ground truth or an estimate of overall grading accuracy**. Reviewers saved judgments before opening original labels. Two reviewers independently found the requested yearly chart visible in one failed case, corroborated by executed-tool output; the native judge inferred the wrong interval. Five cases remain uncertain. The frozen rubric also permits partial credit for more than eight correct actions or one of two subtasks, so stricter task-completion grading could lower scores. Richer evidence need not increase them.
+
+Startup errors comprise 60 navigation timeouts, 15 download-start events and one tunnel error: 76 cells across 26 tasks, with 25 tasks affected in all three arms. These are distinct from pages that load but deny access, and from valid unsuccessful interactions. Three inspected search traces show correct query URLs/titles with irrelevant results; proxy, cache or cross-episode leakage is not established. Original navigation already uses `DOMContentLoaded`, so merely switching away from `load` is not a repair.
+
+<details>
+<summary>Frozen sequence and exact proposed resource ceilings — not approved or launched</summary>
+
+1. **Paired grading test:** the same 24 saved outcomes under a 2×2 rubric/evidence design: frozen native versus strict task-completion rubric, each with original evidence versus saved executed outputs and intermediate captures. Verify capture order and identity first; retain missing evidence as missing. Keep o4-mini-2025-04-16, seed42 and 4,096 output tokens fixed. One job, 0 GPU /4 CPU /16 GiB ×1 hour across all attempts; at most96 judge calls and $25 judge, $0 actor, zero browser starts. No automatic failed-call retry. Compare paired verdict changes and uncertainty, without altering historical scores.
+2. **Local browser reliability test:** 26 startup-error tasks plus four deterministic successful controls under original fail-fast readiness versus bounded content inspection and explicit timeout/download classification:60 sessions. Add six fixed diagnostic search queries with two prespecified trials each:12 sessions. One job, 0 GPU /4 CPU /16 GiB ×1 hour across all attempts; maximum80 starts including reserves, two concurrent browsers, three navigations per session, $0 API and $0 paid browser services. Record query/URL, response metadata, content and screenshots. Loaded block pages do not count as recovered usable content. These are planned conditions/replicates, with no automatic unchanged failure retries.
+3. **Controlled model pilot after those gates:** 60 outcome-independent hash-selected tasks, identical across BrowserCode30, BrowserCode100, CUAWright30 and CUAWright100. Fix gpt-6-sol high,12,288 output tokens, verified browser backend, observation budget, command deadline, completion criterion and terminal judge. Use a common compaction policy every20 decisions and a common3,600-second episode deadline in all four cells; this is a fresh controlled protocol, not a continuation of the original30/no-compaction result. Counterbalance order and retain blocked tasks. Primary analysis is paired overall success and invalidity, with horizon/harness effects and paired uncertainty; common-valid performance, latency, tokens/cost and browser operations are secondary.
+
+| Proposed pilot cell | Tasks | GPUs | CPUs | GiB | Hours, all attempts | Model USD cap | Model-call cap | Judge USD cap | Judge-call cap | Browser-start cap |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| BrowserCode30 |60|0|4|16|8|40|2000|6|70|70|
+| BrowserCode100 |60|0|4|16|8|100|6500|6|70|70|
+| CUAWright30 |60|0|4|16|8|40|2000|6|70|70|
+| CUAWright100 |60|0|4|16|8|100|6500|6|70|70|
+
+The pilot proposal totals four jobs,32 job-hours, $280 model and $24 judge; at most eight concurrent browsers per job. Every attempt consumes its own cell's caps, no transfers; stop at a cap and report partial coverage if necessary. All request identities, selected-only execution, W&B evaluation project, usage reservations and owned teardown must be audited. Judge-only cost and latency remain separate from actor metrics. Exact resource approval is required before any of these jobs or paid calls launch.
+
+The missing Luna single-high OM2W300 baseline remains a separate pending proposal under the original30-decision protocol. A later paper-settings reproduction with GPT-5.4, xhigh, Browserbase or self-reflection would be labeled separately; changing those together would not identify a step-limit effect.
+
+</details>
 
 <a id="deepshop-sol-budget-recovery-20261019"></a>
 ### DeepShop Sol budget recovery: four-arm evaluation complete on October 20, 2026

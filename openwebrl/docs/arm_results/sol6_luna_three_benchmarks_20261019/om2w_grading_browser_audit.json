@@ -1,0 +1,288 @@
+{
+  "scope": "Original900; offline audits only, original headline rewards unchanged",
+  "grading_protocol": {
+    "valid_judged": 802,
+    "invalid": 98,
+    "selected_actions_present": 12616,
+    "nonempty_final_answers_present": 743,
+    "final_image_identity_pass": 802,
+    "strict_status_agreement": 802,
+    "execution_outputs_in_judge_text": false,
+    "valid_episodes_with_intermediate_png": 624,
+    "valid_intermediate_png_count": 4423,
+    "counts_by_arm": {
+      "parallel3_select_high": {
+        "recorded": 300,
+        "valid": 269,
+        "failure": 89,
+        "judge_receipts": 269,
+        "all_selected_actions_in_judge": 269,
+        "selected_actions": 4228,
+        "selected_actions_present": 4228,
+        "episodes_nonempty_selected_final_response": 249,
+        "nonempty_selected_final_response_actions": 249,
+        "nonempty_selected_final_response_present": 249,
+        "agent_nonempty_final_answer": 249,
+        "agent_final_answer_in_selected_action": 249,
+        "strict_status_failure": 89,
+        "judge_image_count_1": 269,
+        "judge_image_matches_final_png": 269,
+        "episodes_with_saved_step_png": 0,
+        "saved_step_png_count": 0,
+        "success": 180,
+        "strict_status_success": 180,
+        "strict_status_other": 0,
+        "invalid": 31
+      },
+      "parallel5_select_high": {
+        "recorded": 300,
+        "valid": 267,
+        "success": 188,
+        "judge_receipts": 267,
+        "all_selected_actions_in_judge": 267,
+        "selected_actions": 4159,
+        "selected_actions_present": 4159,
+        "episodes_nonempty_selected_final_response": 252,
+        "nonempty_selected_final_response_actions": 252,
+        "nonempty_selected_final_response_present": 252,
+        "agent_nonempty_final_answer": 252,
+        "agent_final_answer_in_selected_action": 252,
+        "strict_status_success": 188,
+        "judge_image_count_1": 267,
+        "judge_image_matches_final_png": 267,
+        "episodes_with_saved_step_png": 0,
+        "saved_step_png_count": 0,
+        "strict_status_other": 0,
+        "failure": 79,
+        "strict_status_failure": 79,
+        "invalid": 33
+      },
+      "serial_high": {
+        "recorded": 300,
+        "valid": 266,
+        "success": 171,
+        "judge_receipts": 266,
+        "all_selected_actions_in_judge": 266,
+        "selected_actions": 4229,
+        "selected_actions_present": 4229,
+        "episodes_nonempty_selected_final_response": 242,
+        "nonempty_selected_final_response_actions": 242,
+        "nonempty_selected_final_response_present": 242,
+        "agent_nonempty_final_answer": 242,
+        "agent_final_answer_in_selected_action": 242,
+        "strict_status_other": 0,
+        "judge_image_count_1": 266,
+        "judge_image_matches_final_png": 266,
+        "episodes_with_saved_step_png": 0,
+        "saved_step_png_count": 0,
+        "strict_status_success": 171,
+        "invalid": 34,
+        "failure": 95,
+        "strict_status_failure": 95
+      }
+    }
+  },
+  "blinded_review": {
+    "review_type": "Offline assistant evidence review; not human groundtruth or representative accuracy estimate",
+    "sample": "Deterministic hash-stratified originalSol sample:12Submitted failures,4LimitsExceeded failures,8success controls; labels hidden until judgments saved",
+    "original_failures": {
+      "count": 16,
+      "supported_failure": 13,
+      "supported_success": 1,
+      "insufficient_evidence": 2
+    },
+    "original_success_controls": {
+      "count": 8,
+      "supported_success": 5,
+      "insufficient_evidence": 3
+    },
+    "disagreement": "Both reviewers support requested yearly chart visible in saved screenshot and corroborated by executed-tool output; nativejudge inferred all-time interval. No original score overwritten."
+  },
+  "browser": {
+    "records": 900,
+    "startup_errors": 76,
+    "startup_timeouts": 60,
+    "startup_download_started": 15,
+    "startup_tunnel_failure": 1,
+    "unique_startup_error_tasks": 26,
+    "tasks_with_startup_error_all_three_arms": 25,
+    "all_intermediate_png_count": 4603,
+    "counts_by_arm": {
+      "parallel3_select_high": {
+        "records": 300,
+        "valid": 269,
+        "episodes_with_intermediate_png": 177,
+        "intermediate_png_count": 1023,
+        "valid_with_intermediate_png": 172,
+        "valid_failures": 89,
+        "valid_failure_observation_blocked_or_challenge": 68,
+        "valid_failure_observation_network_error": 22,
+        "invalid": 31,
+        "initial_navigation_timeout": 20,
+        "native_bridge_deadline": 3,
+        "initial_navigation_download_started": 5,
+        "output_token_limit": 1,
+        "api_budget_halted": 1,
+        "provider_api_520": 1
+      },
+      "parallel5_select_high": {
+        "records": 300,
+        "valid": 267,
+        "episodes_with_intermediate_png": 191,
+        "intermediate_png_count": 1112,
+        "valid_with_intermediate_png": 187,
+        "valid_failures": 79,
+        "valid_failure_observation_blocked_or_challenge": 54,
+        "valid_failure_observation_network_error": 24,
+        "invalid": 33,
+        "initial_navigation_timeout": 20,
+        "initial_navigation_download_started": 5,
+        "initial_navigation_tunnel_error": 1,
+        "output_token_limit": 1,
+        "startup_active_port_parse_error": 1,
+        "native_bridge_deadline": 4,
+        "api_budget_halted": 1
+      },
+      "serial_high": {
+        "records": 300,
+        "valid": 266,
+        "episodes_with_intermediate_png": 274,
+        "intermediate_png_count": 2468,
+        "valid_with_intermediate_png": 265,
+        "invalid": 34,
+        "native_bridge_deadline": 8,
+        "initial_navigation_timeout": 20,
+        "valid_failures": 95,
+        "valid_failure_observation_blocked_or_challenge": 78,
+        "valid_failure_observation_network_error": 22,
+        "initial_navigation_download_started": 5,
+        "final_capture_error": 1
+      }
+    },
+    "search_anomaly_traces_reviewed": 3,
+    "interpretation": "Correct query URL/title with irrelevant results; cause unresolved. Block/challenge keyword matches are screening, not causal labels or task impossibility."
+  },
+  "proposed_tests": {
+    "stage": "prepared_not_launched_pending_exact_budget_approval",
+    "original_results_unchanged": true,
+    "order": [
+      "offline_audits_completed",
+      "paid_paired_grading_test",
+      "zero_api_local_browser_reliability_test",
+      "final_model_pilot_only_after_gates"
+    ],
+    "grading_test": {
+      "tasks": 24,
+      "arms": 4,
+      "factors": {
+        "rubric": [
+          "frozen_native",
+          "strict_task_completion"
+        ],
+        "evidence": [
+          "original_selected_actions_plus_final_image",
+          "selected_actions_plus_execution_outputs_plus_saved_intermediate_images_plus_final_image"
+        ]
+      },
+      "judge": "o4-mini-2025-04-16",
+      "max_completion_tokens": 4096,
+      "seed": 42,
+      "judge_calls_cap_all_attempts": 96,
+      "judge_usd_cap_all_attempts": 25,
+      "model_usd_cap": 0,
+      "browser_starts_cap": 0,
+      "compute": {
+        "jobs": 1,
+        "gpu": 0,
+        "cpu": 4,
+        "memory_gib": 16,
+        "wall_seconds_all_attempts": 3600
+      },
+      "no_automatic_retry": true,
+      "success_gate": "Report paired disagreements separately for rubric and evidence, all uncertain cases retained. Verify image ordering/identity before rich grading; missing evidence stays missing. No extrapolated population correction or overwritten headline."
+    },
+    "browser_test": {
+      "compute": {
+        "jobs": 1,
+        "gpu": 0,
+        "cpu": 4,
+        "memory_gib": 16,
+        "wall_seconds_all_attempts": 3600
+      },
+      "api_usd_cap": 0,
+      "paid_browser_usd_cap": 0,
+      "browser_starts_cap_all_attempts": 80,
+      "concurrent_browsers_cap": 2,
+      "navigations_per_session_cap": 3,
+      "startup_design": "26 unique original startup-error tasks plus4 deterministic success controls, two prespecified readiness conditions each=60 starts. Original fail-fast DOMContentLoaded30s versus same navigation plus bounded content inspection/readiness and explicit timeout/download classification; do not treat a blockpage as usable content. Same browser/proxy otherwise.",
+      "search_design": "6 fixed diagnostic queries, two prespecified trials each=12 starts; verify URL/query/DOM/screenshot/timestamps and response metadata. No automatic failure retry.",
+      "reserve_starts": 8,
+      "backend": "original local Chromium/CDP only; no Browserbase reservation authorized",
+      "success_gate": "Classify transport failure, block page, valid content and query/result mismatch; report paired recovery and controls. Freeze/test any mechanical repair before model pilot."
+    },
+    "model_pilot_proposal": {
+      "stage": "design_only_no_allocation_approved",
+      "tasks": 60,
+      "task_selection": "Deterministic outcome-independent hash sample from pinned300, same tasks all four cells; counterbalance order. No dropping blocked tasks.",
+      "factorial": [
+        "BrowserCode30",
+        "BrowserCode100",
+        "CUAWright30",
+        "CUAWright100"
+      ],
+      "model": "gpt-6-sol",
+      "effort": "high",
+      "output_token_cap": 12288,
+      "common_settings": "Same verified browser backend, tasks, observation budget, prompt information, command deadline, completion criterion and terminal judge. Common compaction policy every20 decisions for all four cells, with identical retained fields;3600second task deadline all four cells. Pin revisions and effective requests before launch.",
+      "primary": "Paired overall success, invalid separately; horizon main effect and harness interaction with paired uncertainty. Judge costs and latency excluded from actor metrics.",
+      "secondary": "common-valid success, pre-judge latency, selected decisions and primitive browser operations separately, all-attempt tokens/cost, cap consumption",
+      "budget": {
+        "approval_status": "proposed_only",
+        "jobs": 4,
+        "gpu_per_job": 0,
+        "cpu_per_job": 4,
+        "memory_gib_per_job": 16,
+        "wall_seconds_per_job_all_attempts": 28800,
+        "concurrent_browsers_per_job": 8,
+        "browser_starts_per_job_all_attempts": 70,
+        "model_caps_by_cell": {
+          "BrowserCode30": {
+            "usd": 40,
+            "calls": 2000
+          },
+          "BrowserCode100": {
+            "usd": 100,
+            "calls": 6500
+          },
+          "CUAWright30": {
+            "usd": 40,
+            "calls": 2000
+          },
+          "CUAWright100": {
+            "usd": 100,
+            "calls": 6500
+          }
+        },
+        "judge_per_job": {
+          "usd": 6,
+          "calls": 70
+        },
+        "total_model_usd": 280,
+        "total_judge_usd": 24,
+        "no_transfers": true,
+        "all_attempts_included": true,
+        "stop_at_caps_report_partial_if_needed": true
+      },
+      "later_steps": "Keep missing Luna single300 at original30 protocol separate. Paper-settings reproduction (GPT5.4/xhigh/Browserbase/self-reflection) separate from controlled pilot; do not change these jointly and call it a step effect."
+    }
+  },
+  "audit_sha256": {
+    "analysis/grading-audit-20261020/evidence-audit-v2.json": "d36705a22cb4cc506227d7eab4eb3c4c9a7f34090cfe135d53830aad1a7de49a",
+    "analysis/grading-audit-20261020/reviewer-agent-cases01-12.json": "8276ac06a0cb9e39cda4842131983eead860e61716fa0afb6018752dee0954b0",
+    "analysis/grading-audit-20261020/reviewer-root-cases13-24.json": "9de2cee601fac053e4b6bfd72705798402a27a6f21988bbcb2944da29a2e3757",
+    "analysis/grading-audit-20261020/reviewer-agent-case21-adjudication.json": "7b8a2e08255eb99eea7a14f160851af49cb18c6509d8fee2e688592e3cc371b9",
+    "analysis/browser-reliability-audit-20261020.json": "bcde4265bde6fbc895d8dbb8ebe77337efef62208a74ff1a68d60e72831f874a"
+  },
+  "new_paid_calls": 0,
+  "new_browser_starts": 0
+}
