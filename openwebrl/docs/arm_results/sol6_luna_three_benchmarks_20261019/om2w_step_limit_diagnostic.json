@@ -1,0 +1,50 @@
+{
+  "epoch": 1792474978.0486948,
+  "scope": "Original900 dispositions only; separate retry cohorts excluded",
+  "counts": {
+    "parallel3_select_high": {
+      "tasks": 300,
+      "successes": 180,
+      "valid": 269,
+      "invalid": 31,
+      "valid_limit_failures": 14,
+      "valid_failure_decisions_ge30": 15,
+      "valid_submitted_failure_before30": 74,
+      "startup_page_goto_errors": 25,
+      "prespecified_900second_deadline_errors": 0
+    },
+    "parallel5_select_high": {
+      "tasks": 300,
+      "successes": 188,
+      "valid": 267,
+      "invalid": 33,
+      "valid_limit_failures": 12,
+      "valid_failure_decisions_ge30": 13,
+      "valid_submitted_failure_before30": 66,
+      "startup_page_goto_errors": 26,
+      "prespecified_900second_deadline_errors": 0
+    },
+    "serial_high": {
+      "tasks": 300,
+      "successes": 171,
+      "valid": 266,
+      "invalid": 34,
+      "valid_limit_failures": 18,
+      "valid_failure_decisions_ge30": 19,
+      "valid_submitted_failure_before30": 76,
+      "startup_page_goto_errors": 25,
+      "prespecified_900second_deadline_errors": 0
+    }
+  },
+  "preserved_manifest_sha256": "2a1dbaaad09eba46471891893ec48e4b6435f67e24b81c88e8003edc359d4922",
+  "source_result_set_sha256": "25ee6c893a35d3ed1925a67b21bde10403bb65856dd0b68375242e0d1da6e16f",
+  "protocol_source_sha256": {
+    "worker.py": "f6efdb7cb4d971201520cc275f1457116b11a9ececece403ef57cc5b09be593f",
+    "common_judge.py": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+    "campaign-plan.json": "4ec40a3d8ab3e9f57d3ceae1a2beb0e013e489defdc6b9d84d0187c13ebe33b0"
+  },
+  "interpretation": "Converting only observed LimitsExceeded valid failures to successes while holding all other outcomes fixed is a diagnostic counterfactual, not an estimated100-step effect. A changed horizon/prompt can also change earlier actions.",
+  "paper_url": "https://arxiv.org/html/2610.04116v1",
+  "released_config_url": "https://raw.githubusercontent.com/microsoft/CUAWright/main/src/cuawright/webwright/config/best_default_judge_json_persistent_cli.yaml",
+  "paid_calls": 0
+}

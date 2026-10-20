@@ -1617,3 +1617,33 @@ Model cost is **$253.0385**, excluding **$93.2940** of judge cost. Received usag
 [Aggregate metrics and source audit hashes](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json).
 
 </details>
+
+
+<a id="cuawright-om2w-comparability-20261019"></a>
+### Why the OM2W scores differ from CUAWright
+
+<!-- cuawright-om2w-comparability-20261019 -->
+**The step cap is one difference; the original traces do not support attributing the full score gap to it.** CUAWright reports GPT-5.4 at 88.1% on 300 OM2W tasks with a 100-step cap, 24,000-character observations and compaction every 20 steps. Our BrowserCode comparison uses 30 decisions, no compaction and different models. One decision may execute several browser operations. [Paper §3.1 and Appendix A.2](https://arxiv.org/html/2610.04116v1).
+
+The following recount uses the original 900 dispositions, excluding separate retry cohorts. A limit failure means a valid unsuccessful episode whose native endpoint is `LimitsExceeded`; all such episodes reached 30 decisions.
+
+| Original OM2W300 arm | Tasks | Successes | Overall success | Valid limit failures | Hypothetical success after converting only these failures | Startup navigation errors |
+|---|---:|---:|---:|---:|---:|---:|
+| Sol single high |300|171|57.0%|18|63.0%|25|
+| Luna N3 high |300|180|60.0%|14|64.7%|25|
+| Luna N5 high |300|188|62.7%|12|66.7%|26|
+
+The hypothetical rates hold every other outcome fixed; they are diagnostic arithmetic, **not predictions or causal estimates for a 100-step rerun**. Each arm also has one valid failed submission at decision 30; including those changes the arithmetic to 63.3%,65.0% and67.0%. Increasing the configured horizon can change earlier actions as well. There were no explicit 900-second deadline failures; 76/74/66 valid failures were submitted before 30 decisions.
+
+<details>
+<summary>Other protocol differences and a controlled follow-up</summary>
+
+Our OM2W judge receives selected command text and one final raw screenshot, using o4-mini; the agent's final-answer field is not directly included. The paper describes critical-point screenshots, action logs and official automated evaluation, but does not pin the OM2W judge identity. Evidence coverage and grading are therefore not established as matched. Startup `Page.goto` failures affected 25/25/26 original outcomes; their prevalence in CUAWright's run is unknown.
+
+The [released persistent configuration](https://github.com/microsoft/CUAWright/blob/main/src/cuawright/webwright/config/best_default_judge_json_persistent_cli.yaml) additionally specifies xhigh effort, 20,000 output tokens, Browserbase, 240-second commands and trajectory self-reflection with judge feedback. Our frozen comparison uses high, 12,288 tokens, local Chromium/CDP, 120-second commands and no helper-model completion gate. **Current repository configuration is not an immutable manifest of the published run**; these are additional comparability questions, not measured explanations of the score gap.
+
+A prospective diagnosis should first audit saved failures for missing evidence/final answers and repair browser startup independently. Then compare 30 versus 100 decisions with the same model, tasks, browser, prompts and terminal judge, separating that from a matched CUAWright harness comparison. Any new API calls or allocations require their own explicit budget; none were used for this recount. Preserve original headline results and report subsequent experiments separately.
+
+[Aggregate recount and source digests](arm_results/sol6_luna_three_benchmarks_20261019/om2w_step_limit_diagnostic.json).
+
+</details>
