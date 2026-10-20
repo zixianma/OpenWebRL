@@ -87,6 +87,40 @@
 
 </details>
 
+<a id="selection-head-factorial-plan-20261019"></a>
+
+<details>
+<summary>Planned: head architecture, loss and data-scale factorial (prepared 2026-10-19; runs after the next state collection)</summary>
+
+**Question.** Which head choices matter: interaction between candidates, the scorer, the loss, and data scale?
+
+| Dimension | Levels | Isolation |
+| --- | --- | --- |
+| Cross-candidate interaction | independent / joint | Transformer: independent masks attention so each candidate sees only the state and itself. MLP: joint adds the candidate minus the mean of the other four. |
+| Scorer | MLP / 2-layer transformer | Same interaction and loss |
+| Loss | per-candidate binary cross-entropy / softmax cross-entropy over the five | Same architecture; the pick is always the top score |
+| Data scale | 12.5, 25, 50, 100% of training tasks (then the newly collected states) | Nested by task (frac seed 20261017) |
+
+- **Held fixed.**
+  - Features: OpenWebRL-4B-SFT layers 18/27/36, three summaries per candidate.
+  - Labels: Luna lookahead K = 1 on SFT-actor states.
+  - Training: d_model 512, dropout 0.1; AdamW 3e-4, weight decay 0.05, batch 64, 20 epochs, one-cycle schedule.
+- **Offline protocol.**
+  - 5-fold task-grouped cross-validation × 3 seeds: 160 CPU array tasks, `scripts/run_head_factorial.py`, code `f02599b` and the following commit.
+  - Each test state's pick is scored by held-out success (draws 3–7, valid only).
+  - Reported per cell: success and gain over uniform. Each dimension's paired contrast is averaged over the other two dimensions' four cells, at every data scale, with task-clustered bootstrap intervals.
+- **Live check** (needs GPU approval): the best and worst variants and two or three data scales on full Online-Mind2Web at T 1.0, 30 steps, about 3.5 GPU-hours each. Offline scores have not predicted live gains well.
+- **New states, once collected.**
+  1. K = 1 labels (Luna, about USD 4.40 per 1,000 states).
+  2. Panels and targets (CPU).
+  3. 4B features (about 35 min per 1,000 states on one H200).
+- **Pilot (fold 0, seed 0, 1,631 SFT states; 285 test states, 65 tasks).**
+  - All eight variants: 36.06–37.24% against 33.71% uniform.
+  - Joint − independent −0.30 pp [−1.61, +0.89]; transformer − MLP +0.46 [−0.41, +1.91]; softmax − BCE −0.12 [−1.11, +0.79].
+  - [Pilot results](arm_results/rl_integration/selection-head-factorial-pilot-20261019.json).
+
+</details>
+
 <a id="selection-head-training-recipe"></a>
 
 <details>

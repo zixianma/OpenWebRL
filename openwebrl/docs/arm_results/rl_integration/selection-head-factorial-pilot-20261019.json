@@ -1,0 +1,89 @@
+{
+ "states": 285,
+ "tasks": 65,
+ "uniform": 33.71,
+ "cells": {
+  "independent-mlp-bce@1": {
+   "success": 36.15,
+   "minus_uniform": [
+    2.44327485380117,
+    -0.918879056047197,
+    4.670260557053011
+   ]
+  },
+  "independent-mlp-softce@1": {
+   "success": 36.85,
+   "minus_uniform": [
+    3.1450292397660826,
+    -0.7832422586520938,
+    5.77985285795133
+   ]
+  },
+  "independent-transformer-bce@1": {
+   "success": 37.24,
+   "minus_uniform": [
+    3.5309941520467842,
+    -0.24525043177892883,
+    6.03001579778831
+   ]
+  },
+  "independent-transformer-softce@1": {
+   "success": 36.44,
+   "minus_uniform": [
+    2.7356725146198833,
+    -0.9397590361445782,
+    5.182882882882883
+   ]
+  },
+  "joint-mlp-bce@1": {
+   "success": 36.06,
+   "minus_uniform": [
+    2.3497076023391816,
+    -1.693333333333332,
+    5.134640522875817
+   ]
+  },
+  "joint-mlp-softce@1": {
+   "success": 36.1,
+   "minus_uniform": [
+    2.390643274853802,
+    -1.8288288288288281,
+    5.33710407239819
+   ]
+  },
+  "joint-transformer-bce@1": {
+   "success": 36.87,
+   "minus_uniform": [
+    3.1625730994152046,
+    -0.06547619047619022,
+    5.310035842293908
+   ]
+  },
+  "joint-transformer-softce@1": {
+   "success": 36.44,
+   "minus_uniform": [
+    2.7356725146198833,
+    -0.5541125541125536,
+    4.968468468468469
+   ]
+  }
+ },
+ "contrasts": {
+  "interaction: joint - independent @ scale 1": [
+   -0.304093567251462,
+   -1.6053299492385789,
+   0.8884803921568629
+  ],
+  "scorer: transformer - mlp @ scale 1": [
+   0.45906432748538023,
+   -0.41271347248576845,
+   1.911057692307692
+  ],
+  "loss: softce - bce @ scale 1": [
+   -0.11988304093567254,
+   -1.1117788461538463,
+   0.7902298850574712
+  ]
+ },
+ "missing_runs": []
+}
