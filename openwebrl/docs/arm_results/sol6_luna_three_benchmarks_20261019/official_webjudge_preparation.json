@@ -1,5 +1,5 @@
 {
-  "status": "Prepared; exact new resource/API approval pending; no paid calls or scheduler jobs",
+  "status": "Historical preparation; exact caps subsequently approved and the regrade completed",
   "source_repository": "https://github.com/OSU-NLP-Group/Online-Mind2Web",
   "source_commit": "f0d805ee0e9e0b3ea70911e45e5264b72968f3dc",
   "judge_model": "gpt-4o-2024-08-06",
@@ -142,5 +142,6 @@
     "plan_sha256": "453ce768f4ee5acb7e3d334502fdfcd44d418b2dda6b05b205762d3592a0c583",
     "inventory_sha256": "99319ab2fb8e4434893f34c9bedae918715791e238e97f60e9558d817f82646a",
     "official_judge_sha256": "e3cd499b7c1fc92cbd51d3c4216c95ebab774c2c2cd998c5ad6dad94710780c4"
-  }
+  },
+  "result_ref": "official_webjudge_results.json"
 }

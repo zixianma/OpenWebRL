@@ -1694,25 +1694,43 @@ The missing Luna single-high OM2W300 baseline remains a separate pending proposa
 </details>
 
 
-<a id="official-webjudge-regrade-prepared-20261020"></a>
-### Official WebJudge regrading: prepared against the existing 100-task comparison
+<a id="official-webjudge-regrade-results-20261020"></a>
+### Official WebJudge regrading of the existing 100-task harness comparison
 
-**Reuse the existing BrowserCode/CUAWright30 results first.** The selected next test changes grading only: official Online-Mind2Web WebJudge applied to the saved four-cell,100-task comparison. It replaces the custom rubric experiment and postpones additional harness/horizon runs. No new actor execution, browser sessions or paid grading calls have been made; original scores remain unchanged.
+**Official WebJudge changes the historical overall scores by −1 to +3 percentage points; grading alone does not explain the large gap to CUAWright’s reported paper result.** All 342 originally valid trajectories were regraded, preserving 58 original invalid dispositions and all historical rewards. One grading outcome was flagged for truncated, unparseable image relevance output. Among the 341 unflagged regrades, the grading protocol changed 19 failures to successes and 15 successes to failures (202 original versus 206 verified regraded successes). These pooled counts describe repeated task/cell outcomes across 100 tasks, not independent tasks. [Aggregate results and audit digests](arm_results/sol6_luna_three_benchmarks_20261019/official_webjudge_results.json).
 
-The private inventory verifies400 original dispositions:342 valid trajectories to regrade and58 original invalids retained as invalid. It binds876 saved captures to recorded observations, explicit selected screenshot commands or the terminal capture. All retained capture references resolve;73 trajectories have only one capture. This is regrading available saved evidence, not reconstruction of uncaptured intermediate states. Coverage differs by harness/policy and will be reported alongside paired verdict changes.
+| Harness / policy | Tasks | Original valid | Regrade valid | Old successes | Old overall (%) | New successes | Verified new overall (%) | Failure→success | Success→failure |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| CUAWright / high |100|87|86|51|51.0|50|50.0|4|4|
+| BrowserCode / high |100|70|70|45|45.0|44|44.0|2|3|
+| CUAWright / N3 low + low |100|95|95|51|51.0|54|54.0|7|4|
+| BrowserCode / N3 low + low |100|90|90|56|56.0|58|58.0|6|4|
 
-The evaluator is pinned to [official source revision `f0d805ee`](https://github.com/OSU-NLP-Group/Online-Mind2Web/tree/f0d805ee0e9e0b3ea70911e45e5264b72968f3dc): one key-point extraction, one relevance call per capture, then a final verdict using the first50 captures scoring at least3. Retain its exact prompts, JPEG encoding, temperature0 and512-token output limit, with pinned gpt-4o-2024-08-06. This matches the released evaluator family/default settings; CUAWright's exact paper-run judge identity remains unverified. The strict WebJudge rubric may lower some previous AgentTrek successes, while richer captures may support some previous failures.
+Overall rates retain the original 100-task denominator per cell, with original invalids counted as non-success. Verified new rates count only unflagged successes and are lower bounds where grader outcomes remain unresolved; each unresolved outcome can add one percentage point in its cell. Label-transition counts and paired statistics exclude flagged outputs. Actor: GPT-6.1 Sol, 30 decisions, original local-browser runs; N3 uses three low-effort proposals and a low-effort selector. **This is a grading-protocol comparison on saved trajectories, not a fresh actor run or exact reproduction of CUAWright’s GPT-5.4 paper result.**
+
+| Policy, matched valid tasks | Tasks | BrowserCode new successes | CUAWright new successes | CUAWright − BrowserCode (pp; paired 95% CI) | Exact McNemar p |
+|---|---:|---:|---:|---|---:|
+| High |66|41|36|-7.6 [-18.2, +3.0]|0.267|
+| N3 low + low |90|58|50|-8.9 [-17.8, -1.1]|0.077|
 
 <details>
-<summary>Ready-to-review caps, canary gate, tests and reporting</summary>
+<summary>Official grading protocol, evidence coverage and all-attempt closeout</summary>
 
-The fixed pass requires1,560 calls. Proposed ceilings are **$60 judge /1,600 calls**, **$0 actor and zero browser starts**, in **one0-GPU /4-CPU /16-GiB job for three hours across all attempts**. No transfers or automatic unchanged retries. Every request is reserved before dispatch, raw usage/response retained, and failed or unknown-usage calls keep conservative reservations. The worker disables SDK retries; the official prompts and selection algorithm remain unchanged. The current preparation is not authorized to launch until those exact new caps are approved.
+Pinned official Online-Mind2Web source `f0d805ee0e9e0b3ea70911e45e5264b72968f3dc`, gpt-4o-2024-08-06, temperature 0, 512 output tokens: one key-point call per trajectory, one relevance call per saved image, then final judgment using the first 50 images scoring at least 3. Prompts and image selection are unchanged from the release. Official and strict status parsing are both retained. This changes judge model, rubric and image evidence together relative to the old o4-mini AgentTrek protocol, so their individual effects are not isolated.
 
-Four deterministic canaries cover all cells. An independent request/model/usage/image-identity audit must release the full pass. Separate native verdicts from strict parse failures, truncated outputs and unknown usage; retain these as unresolved grading outcomes rather than silently changing original task validity. Report per-cell paired verdict changes, shared-valid comparisons, regrading coverage, and the original100-task denominator next to any fixed-grid rate. Keep original actor costs/latencies separate from new judge-only cost.
+All 876 retained saved captures have hashed source/chronology bindings and verified native-request JPEG bytes. Seventy-three trajectories have only one capture; no missing historical state was synthesized. Both graders saw the same selected execution history, including already-recorded final answers; the official protocol additionally evaluated the retained intermediate captures. Capture coverage differs across harness/policy cells and is reported in the preparation aggregate. Eleven raw CUAWright captures use a smaller 780×437 viewport after tab creation/switching; 865 captures are 1280×1800. Source checks of those 11 smaller captures confirmed raw browser screenshots rather than downloaded or synthesized assets. No human relabeling was performed; agreement with a benchmark judge is not ground truth.
 
-Offline tests passed for official threshold/selection behavior, real saved-image encoding with all four canaries, metered caps/resume/no-retry controls, and independent canary image binding. Deterministic stub responses in those tests are fixtures, not benchmark verdicts. The batch controller owns both stages and waits for release within the same bounded allocation. Evaluation tracking uses `openwebrl-evals`; only aggregate results will be published.
+The four-cell canary passed independent native request/model/settings/image/usage checks before full release. Independent closeout verified all 400 dispositions, every physical judge request/response, exact prompt and selected-image bindings, original artifact hashes, all-attempt caps, terminal scheduler/W&B state and controller/exit-receipt teardown evidence. Direct post-completion process inspection was denied by the host because no active allocation remained; no browser sessions were created. Paired bootstrap intervals use 10,000 task resamples, seed 20261020; McNemar tests are exact and two-sided. Multiple diagnostic comparisons are exploratory.
 
-[Aggregate preparation, coverage and audit digests](arm_results/sol6_luna_three_benchmarks_20261019/official_webjudge_preparation.json).
+New judge-only cost is **$8.3928** from recorded usage, with a conservative uncached upper charge of **$8.5392**, across 1560 calls. No actor calls or browser sessions were added, and none of this judge work enters original actor latency or model cost. The approved ceiling was $60 / 1,600 calls and one 0-GPU / 4-CPU / 16-GiB ×3-hour allocation, including all attempts, with no transfers. [Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/official-webjudge-regrade-paired100-20261020-v1).
+
+</details>
+
+<a id="official-webjudge-regrade-prepared-20261020"></a>
+<details>
+<summary>Original preparation and offline test record</summary>
+
+The user approved the exact caps after source, evidence and metering tests passed. Four canaries were independently audited before full release. [Preparation aggregate and offline test receipts](arm_results/sol6_luna_three_benchmarks_20261019/official_webjudge_preparation.json). Original actor outcomes remain unchanged.
 
 </details>
 

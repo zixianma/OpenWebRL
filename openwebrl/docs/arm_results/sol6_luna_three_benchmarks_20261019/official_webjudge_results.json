@@ -1,0 +1,274 @@
+{
+  "verified_complete": true,
+  "dispositions": {
+    "complete": 342,
+    "skipped": 58
+  },
+  "flags": {
+    "truncated_calls": 1,
+    "truncation_flag": 1,
+    "unknown_usage_flag": 0,
+    "image_parse_failure_flag": 1,
+    "missing_intermediate_frames": 0,
+    "strict_parse_failure": 0,
+    "official_strict_disagreement": 0
+  },
+  "original_artifacts_unchanged": true,
+  "image_relevance_requests_bound_to_saved_capture_and_record": 876,
+  "final_selected_images_bound_in_order": 463,
+  "physical_judge_calls": 1560,
+  "cache_reuse_events": 0,
+  "stage_counts": {
+    "key_points": 342,
+    "image_relevance": 876,
+    "outcome": 342
+  },
+  "judge_usage": {
+    "input_tokens": 2829671,
+    "cached_input_tokens": 117120,
+    "output_tokens": 146502
+  },
+  "judge_cost_uncached_upper_usd_known": 8.539197499999986,
+  "judge_cost_cached_rate_usd_known": 8.392797499999988,
+  "judge_all_attempt_usd_upper_including_unknown_reservations": 8.539197499999986,
+  "judge_only_cost_excluded_from_actor_cost_and_latency": true,
+  "cell_summary": {
+    "browsercode/parallel3_select_low": {
+      "original_planned": 100,
+      "original_valid": 90,
+      "original_successes": 56,
+      "regraded_complete": 90,
+      "regraded_valid": 90,
+      "official_successes_complete": 58,
+      "strict_successes_regrade_valid": 58,
+      "paired_old_to_new_on_regrade_valid": {
+        "01": 6,
+        "00": 28,
+        "11": 52,
+        "10": 4
+      },
+      "paired_old_new_statistics": {
+        "n": 90,
+        "second_minus_first_mean": 0.022222222222222223,
+        "paired_bootstrap95_second_minus_first": [
+          -0.044444444444444446,
+          0.08888888888888889
+        ],
+        "exact_mcnemar_two_sided_p": 0.75390625,
+        "discordant_01": 6,
+        "discordant_10": 4,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      },
+      "original_successes_on_regrade_valid": 56,
+      "denominator_warning": "Original 100 includes unchanged invalids; regrade-valid denominator conditions on original validity and unflagged judge outputs."
+    },
+    "browsercode/serial_high": {
+      "original_planned": 100,
+      "original_valid": 70,
+      "original_successes": 45,
+      "regraded_complete": 70,
+      "regraded_valid": 70,
+      "official_successes_complete": 44,
+      "strict_successes_regrade_valid": 44,
+      "paired_old_to_new_on_regrade_valid": {
+        "00": 23,
+        "11": 42,
+        "01": 2,
+        "10": 3
+      },
+      "paired_old_new_statistics": {
+        "n": 70,
+        "second_minus_first_mean": -0.014285714285714285,
+        "paired_bootstrap95_second_minus_first": [
+          -0.08571428571428572,
+          0.04285714285714286
+        ],
+        "exact_mcnemar_two_sided_p": 1.0,
+        "discordant_01": 2,
+        "discordant_10": 3,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      },
+      "original_successes_on_regrade_valid": 45,
+      "denominator_warning": "Original 100 includes unchanged invalids; regrade-valid denominator conditions on original validity and unflagged judge outputs."
+    },
+    "cuawright/parallel3_select_low": {
+      "original_planned": 100,
+      "original_valid": 95,
+      "original_successes": 51,
+      "regraded_complete": 95,
+      "regraded_valid": 95,
+      "official_successes_complete": 54,
+      "strict_successes_regrade_valid": 54,
+      "paired_old_to_new_on_regrade_valid": {
+        "00": 37,
+        "11": 47,
+        "01": 7,
+        "10": 4
+      },
+      "paired_old_new_statistics": {
+        "n": 95,
+        "second_minus_first_mean": 0.031578947368421054,
+        "paired_bootstrap95_second_minus_first": [
+          -0.031578947368421054,
+          0.10526315789473684
+        ],
+        "exact_mcnemar_two_sided_p": 0.548828125,
+        "discordant_01": 7,
+        "discordant_10": 4,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      },
+      "original_successes_on_regrade_valid": 51,
+      "denominator_warning": "Original 100 includes unchanged invalids; regrade-valid denominator conditions on original validity and unflagged judge outputs."
+    },
+    "cuawright/serial_high": {
+      "original_planned": 100,
+      "original_valid": 87,
+      "original_successes": 51,
+      "regraded_complete": 87,
+      "regraded_valid": 86,
+      "official_successes_complete": 50,
+      "strict_successes_regrade_valid": 50,
+      "paired_old_to_new_on_regrade_valid": {
+        "01": 4,
+        "00": 32,
+        "11": 46,
+        "10": 4
+      },
+      "paired_old_new_statistics": {
+        "n": 86,
+        "second_minus_first_mean": 0.0,
+        "paired_bootstrap95_second_minus_first": [
+          -0.06976744186046512,
+          0.06976744186046512
+        ],
+        "exact_mcnemar_two_sided_p": 1.0,
+        "discordant_01": 4,
+        "discordant_10": 4,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      },
+      "original_successes_on_regrade_valid": 50,
+      "denominator_warning": "Original 100 includes unchanged invalids; regrade-valid denominator conditions on original validity and unflagged judge outputs."
+    }
+  },
+  "paired_harness": {
+    "serial_high": {
+      "common_original_and_regrade_valid": 66,
+      "browsercode_old_successes": 42,
+      "cuawright_old_successes": 35,
+      "browsercode_new_successes": 41,
+      "cuawright_new_successes": 36,
+      "new_pair_counts_browsercode_cuawright": {
+        "11": 32,
+        "01": 4,
+        "00": 21,
+        "10": 9
+      },
+      "old_harness_statistics": {
+        "n": 66,
+        "second_minus_first_mean": -0.10606060606060606,
+        "paired_bootstrap95_second_minus_first": [
+          -0.18181818181818182,
+          -0.045454545454545456
+        ],
+        "exact_mcnemar_two_sided_p": 0.015625,
+        "discordant_01": 0,
+        "discordant_10": 7,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      },
+      "new_harness_statistics": {
+        "n": 66,
+        "second_minus_first_mean": -0.07575757575757576,
+        "paired_bootstrap95_second_minus_first": [
+          -0.18181818181818182,
+          0.030303030303030304
+        ],
+        "exact_mcnemar_two_sided_p": 0.266845703125,
+        "discordant_01": 4,
+        "discordant_10": 9,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      }
+    },
+    "parallel3_select_low": {
+      "common_original_and_regrade_valid": 90,
+      "browsercode_old_successes": 56,
+      "cuawright_old_successes": 48,
+      "browsercode_new_successes": 58,
+      "cuawright_new_successes": 50,
+      "new_pair_counts_browsercode_cuawright": {
+        "11": 46,
+        "00": 28,
+        "10": 12,
+        "01": 4
+      },
+      "old_harness_statistics": {
+        "n": 90,
+        "second_minus_first_mean": -0.08888888888888889,
+        "paired_bootstrap95_second_minus_first": [
+          -0.16666666666666666,
+          -0.022222222222222223
+        ],
+        "exact_mcnemar_two_sided_p": 0.03857421875,
+        "discordant_01": 2,
+        "discordant_10": 10,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      },
+      "new_harness_statistics": {
+        "n": 90,
+        "second_minus_first_mean": -0.08888888888888889,
+        "paired_bootstrap95_second_minus_first": [
+          -0.17777777777777778,
+          -0.011111111111111112
+        ],
+        "exact_mcnemar_two_sided_p": 0.076812744140625,
+        "discordant_01": 4,
+        "discordant_10": 12,
+        "bootstrap_draws": 10000,
+        "seed": 20261020
+      }
+    }
+  },
+  "inventory_sha256": "99319ab2fb8e4434893f34c9bedae918715791e238e97f60e9558d817f82646a",
+  "plan_sha256": "453ce768f4ee5acb7e3d334502fdfcd44d418b2dda6b05b205762d3592a0c583",
+  "limitations": [
+    "All results regrade existing saved evidence, not a fresh actor rerun.",
+    "Official parser retained separately from strict and unflagged judge validity.",
+    "Pinned released WebJudge is not a verified exact CUAWright paper-run judge revision."
+  ],
+  "judge_model": "gpt-4o-2024-08-06",
+  "official_source_commit": "f0d805ee0e9e0b3ea70911e45e5264b72968f3dc",
+  "original_tasks": 100,
+  "original_dispositions": 400,
+  "original_invalid_preserved": 58,
+  "saved_images": 876,
+  "single_capture_trajectories": 73,
+  "capture_dimensions": {
+    "1280x1800": 865,
+    "780x437": 11
+  },
+  "actor_calls": 0,
+  "browser_starts": 0,
+  "exact_caps": {
+    "judge_usd": 60,
+    "judge_calls": 1600,
+    "gpus": 0,
+    "cpus": 4,
+    "memory_gib": 16,
+    "seconds_all_attempts": 10800
+  },
+  "scheduler_elapsed_seconds": 1788,
+  "owned_teardown_evidence": "scheduler/controller/exit-receipt/W&B",
+  "direct_process_inspection_verified": false,
+  "physical_access_limitation": "Direct post-completion process inspection denied by pam_slurm_adopt because no active jobs remain. Teardown established from completed Slurm allocation, awaited worker completion, allocation-exit receipt and terminal W&B; no browser sessions were created.",
+  "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/official-webjudge-regrade-paired100-20261020-v1",
+  "audit_sha256": {
+    "scientific_accounting": "0c8968edc2f4399ad73d4c35e1d7517a6d71d432747b2c913e8ecc5179c3a570",
+    "terminal": "d04c081147ff97b6cda47142ffa7d7ac7e1d8c9fb8db2319c336922eef75d11e"
+  }
+}
