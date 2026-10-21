@@ -40,6 +40,11 @@ class HeadConfig:
     interaction: str | None = None
     scorer: str | None = None
     mlp_depth: int = 1
+    # MLP scorer hidden width (None = d_model, the original layout); widen it to match the transformer's parameters
+    mlp_width: int | None = None
+    # readout "linear": one logit per candidate from its own output; "pointer" (joint transformer only): a learned
+    # <decide> token attends to every candidate and scores q(decide) . k(candidate), as in Kev's pointer
+    readout: str = "linear"
 
     def resolved(self):
         joint = self.listwise if self.interaction is None else self.interaction == "joint"
@@ -109,11 +114,21 @@ class CandidateSetHead(nn.Module):
         else:
             self.encoder = None
             # MLP scorer on [candidate, state] (independent) or [candidate, state, candidate - mean of the others] (joint)
-            width = (3 if self.interaction == "joint" else 2) * d
-            mlp = [nn.LayerNorm(width), nn.Linear(width, d), nn.GELU(), nn.Dropout(config.dropout)]
+            width, h = (3 if self.interaction == "joint" else 2) * d, config.mlp_width or d
+            mlp = [nn.LayerNorm(width), nn.Linear(width, h), nn.GELU(), nn.Dropout(config.dropout)]
             for _ in range(max(config.mlp_depth, 1) - 1):
-                mlp += [nn.Linear(d, d), nn.GELU(), nn.Dropout(config.dropout)]
+                mlp += [nn.Linear(h, h), nn.GELU(), nn.Dropout(config.dropout)]
+            if h != d:
+                mlp.append(nn.Linear(h, d))
             self.pointwise = nn.Sequential(*mlp)
+        if config.readout == "pointer":
+            if self.encoder is None or self.interaction != "joint":
+                raise ValueError("the pointer readout needs the joint transformer scorer")
+            self.decide = nn.Parameter(torch.zeros(d))
+            nn.init.normal_(self.decide, std=0.02)
+            self.pointer_q, self.pointer_k = nn.Linear(d, d), nn.Linear(d, d)
+        elif config.readout != "linear":
+            raise ValueError(f"unknown readout {config.readout!r}")
         self.out_norm = nn.LayerNorm(d)
         self.select = nn.Linear(d, 1)
         self.value = nn.Linear(d, 1)
@@ -135,16 +150,24 @@ class CandidateSetHead(nn.Module):
             mask = torch.ones(batch, count, dtype=torch.bool, device=candidates.device)
         c = self.candidate_proj(candidates) + self.type_embed[1]
         s = self.state_proj(state)[:, None] + self.type_embed[0]
+        pointer = self.config.readout == "pointer"
         if self.encoder is not None:
-            tokens = torch.cat([s, c], 1)
-            padding = torch.cat([torch.zeros_like(mask[:, :1]), ~mask], 1)
+            lead = [s, self.decide.expand(batch, 1, -1)] if pointer else [s]
+            tokens = torch.cat(lead + [c], 1)
+            padding = torch.cat([torch.zeros_like(mask[:, :1])] * len(lead) + [~mask], 1)
             attn = None
             if self.interaction == "independent":
                 # each candidate attends only to the state and itself; the state attends only to itself
                 n = count + 1
                 attn = ~torch.eye(n, dtype=torch.bool, device=c.device)
                 attn[1:, 0] = False
-            c = self.encoder(tokens, mask=attn, src_key_padding_mask=padding)[:, 1:]
+            out = self.encoder(tokens, mask=attn, src_key_padding_mask=padding)
+            c = out[:, len(lead):]
+            if pointer:
+                c = self.out_norm(c)
+                q, k = self.pointer_q(self.out_norm(out[:, 1])), self.pointer_k(c)
+                logits = (k @ q[..., None]).squeeze(-1) / math.sqrt(k.shape[-1])
+                return logits.masked_fill(~mask, float("-inf")), self.value(c).squeeze(-1)
         else:
             parts = [c, s.expand_as(c)]
             if self.interaction == "joint":
