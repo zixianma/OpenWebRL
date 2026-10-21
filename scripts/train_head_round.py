@@ -77,6 +77,39 @@ def load_features(features, layers, torch):
     return cand, state
 
 
+def load_extra(args, rec, layers, torch):
+    """Train-split five-candidate panels with teacher targets, excluding every task of our test split."""
+    from build_selection_head_branch_eval import norm
+    from openwebrl.selection_head import CANDIDATE_POOLS
+    import re
+    test_tasks = {norm(x["task"]) for x in rec.values() if x["split"] == "test"}
+    task = {}
+    with open(args.extra_states) as stream:
+        for line in stream:
+            r = json.loads(line)
+            found = re.findall(r"<user_request>(.*?)</user_request>", r["prompt_text"], re.S)
+            task[r["state_id"]] = norm(found[-1]) if found else None
+    rows = {}
+    excluded = 0
+    for line in open(args.extra_panels):
+        r = json.loads(line)
+        if r["split"] != "train":
+            continue
+        if task.get(r["base_state_id"]) in test_tasks:
+            excluded += 1; continue
+        rows[r["state_id"]] = r
+    c, s, t = [], [], []
+    for path in sorted(args.extra_features.glob("shard*-chunk*.pt")):
+        chunk = torch.load(path, map_location="cpu")
+        stored = list(chunk["layers"]); keep = [stored.index(l) for l in layers]
+        for sid, panel in chunk["panels"].items():
+            if sid in rows:
+                c.append(panel.view(5, len(stored), len(CANDIDATE_POOLS), -1)[:, keep].reshape(5, -1))
+                s.append(chunk["states"][rows[sid]["base_state_id"]][keep].reshape(-1)); t.append(rows[sid]["target"])
+    info = dict(panels=len(c), base_states=len({rows[k]["base_state_id"] for k in rows}), excluded_test_task_panels=excluded)
+    return torch.stack(c), torch.stack(s), torch.tensor(t, dtype=torch.float32), info
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", type=Path, required=True); ap.add_argument("--labels", type=Path, required=True)
@@ -93,6 +126,10 @@ def main():
     ap.add_argument("--loss", choices=("softce", "bce"), default="softce")
     ap.add_argument("--train-view", choices=("distinct", "natural"), default="distinct")
     ap.add_argument("--train-frac", type=float, default=1.0); ap.add_argument("--frac-seed", type=int, default=20261021)
+    ap.add_argument("--extra-panels", type=Path, help="add five-candidate teacher panels (e.g. Piotr's GPT-5.5 picks, "
+                    "`target` per row) from their train split to training; tasks of our test split are excluded")
+    ap.add_argument("--extra-features", type=Path); ap.add_argument("--extra-states", type=Path,
+                    help="states_full.jsonl of the extra panels (task text, to exclude our test tasks)")
     args = ap.parse_args()
     import torch
     from openwebrl.selection_head import CandidateSetHead, HeadConfig, pointwise_bce_loss, selection_loss
@@ -116,6 +153,7 @@ def main():
         keep = set(tasks[:max(1, round(args.train_frac * len(tasks)))])
         train_ids = [s for s in train_ids if rec[s]["task_id"] in keep]
     test_ids = sorted(s for s in rec if rec[s]["split"] == "test" and s in cand)
+    extra_c, extra_s, extra_t, extra_info = load_extra(args, rec, layers, torch) if args.extra_panels else (None, None, None, {})
 
     def slot_draws(x):
         """Feature row of every SFT proposal, with its action index."""
@@ -157,16 +195,27 @@ def main():
                         mlp_depth=args.mlp_depth, mlp_width=args.mlp_width, readout=args.readout)
     head = CandidateSetHead(config)
     fit = torch.cat([cand[s][:len(rec[s]["actions"])].float() for s in train_ids])
-    head.fit_standardizers(fit, torch.stack([state[s].float() for s in train_ids]))
+    fit_state = torch.stack([state[s].float() for s in train_ids])
+    if extra_c is not None:
+        fit, fit_state = torch.cat([fit, extra_c.reshape(-1, extra_c.shape[-1]).float()]), torch.cat([fit_state, extra_s.float()])
+    head.fit_standardizers(fit, fit_state)
+    items = [("ours", s) for s in train_ids] + [("extra", i) for i in range(0 if extra_c is None else len(extra_c))]
     params = sum(p.numel() for p in head.parameters())
     opt = torch.optim.AdamW(head.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    steps = args.epochs * ((len(train_ids) + args.batch_size - 1) // args.batch_size)
+    steps = args.epochs * ((len(items) + args.batch_size - 1) // args.batch_size)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, args.lr, total_steps=steps, pct_start=0.05)
     started = time.time()
     for _ in range(args.epochs):
-        head.train(); ids = train_ids[:]; rng.shuffle(ids)
-        for i in range(0, len(ids), args.batch_size):
-            c, s, m, t, _ = batch(ids[i:i + args.batch_size], args.train_view, rng)
+        head.train(); order = items[:]; rng.shuffle(order)
+        for i in range(0, len(order), args.batch_size):
+            chunk = order[i:i + args.batch_size]
+            ours = [x for k, x in chunk if k == "ours"]; extra = torch.tensor([x for k, x in chunk if k == "extra"], dtype=torch.long)
+            parts = [batch(ours, args.train_view, rng)[:4]] if ours else []
+            if len(extra):
+                perm = torch.argsort(torch.rand(len(extra), 5), -1)          # candidate order is never informative
+                ec = extra_c[extra].gather(1, perm[..., None].expand(-1, -1, extra_c.shape[-1])).float()
+                parts.append((ec, extra_s[extra].float(), torch.ones(len(extra), 5, dtype=torch.bool), extra_t[extra].gather(1, perm)))
+            c, s, m, t = (torch.cat(x) for x in zip(*parts))
             logits, _ = head(c, s, m)
             loss = loss_fn(logits, t, m)
             opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(head.parameters(), 1.); opt.step(); sched.step()
@@ -201,7 +250,7 @@ def main():
     mean = lambda v: round(100 * sum(v) / len(v), 2)
     res = dict(source=args.source, interaction=args.interaction, scorer=args.scorer, loss=args.loss,
                mlp_depth=args.mlp_depth, mlp_width=args.mlp_width, readout=args.readout, train_view=args.train_view,
-               train_frac=args.train_frac, seed=args.seed, params=params, train_states=len(train_ids),
+               train_frac=args.train_frac, seed=args.seed, params=params, train_states=len(train_ids), extra=extra_info,
                train_tasks=len({rec[s]["task_id"] for s in train_ids}), test_states=len(scored), test_tasks=len(set(g)),
                train_seconds=round(time.time() - started, 1),
                success=dict(head=mean(head_r), head_natural_panels=mean(nat), uniform=mean(uni), sft_sample=mean(sft),
@@ -211,7 +260,7 @@ def main():
                natural_minus_sft_sample=cluster_boot([a - b for a, b in zip(nat, sft)], g))
     args.output.mkdir(parents=True, exist_ok=True)
     torch.save({"config": config.to_json(), "state_dict": {k: v.cpu() for k, v in head.state_dict().items()},
-                "objective": args.loss, "params": params, "source": args.source, "seed": args.seed,
+                "objective": "soft_ce", "loss": args.loss, "params": params, "source": args.source, "seed": args.seed,
                 "train_states": len(train_ids), "train_view": args.train_view}, args.output / "head.pt")
     (args.output / "train-states.json").write_text(json.dumps(train_ids))
     (args.output / "picks.json").write_text(json.dumps(dict(picks=picks, natural=natural)))
