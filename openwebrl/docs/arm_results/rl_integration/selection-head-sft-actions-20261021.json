@@ -1,0 +1,3689 @@
+{
+ "note": "SFT-action ablation (2026-10-21). Offline: 1,738 SFT-actor states with >=2 SFT-proposed actions, one task-grouped split (1,390 train / 348 test, 86 test tasks), seed 0; picks scored by held-out success (draws 3-7, valid only); intervals task-clustered bootstrap. Online: SFT-action ablation heads, online: the first 50 tasks of each benchmark's full-run sft1 plan (T 1.0 / top-p 0.9,\n30 steps), one episode per task per head. Baselines SFT1, Piotr SelectionARM and the earlier K = 1 head (1,908 SFT+RL\nstates) come from crossbench-full-t10-20261018 restricted to the same tasks. Overall counts invalid as failure;\nvalid-only pairs tasks valid under both arms. Paired differences: 95% bootstrap over tasks (10,000, seed 20261021).",
+ "data": {
+  "counts": {
+   "accepted": 1738,
+   "skipped_lt2_actions": 167,
+   "prompt_unverified": 16,
+   "sft_draw_truncated": 5
+  },
+  "states": 1738,
+  "tasks": 437,
+  "split": {
+   "train": 1390,
+   "test": 348,
+   "test_tasks": 86
+  },
+  "actions_per_state": {
+   "2": 743,
+   "3": 604,
+   "4": 311,
+   "5": 80
+  },
+  "actions_rl_exec": 294,
+  "feature_candidates": 13852,
+  "legacy": 950
+ },
+ "offline": {
+  "round1/outcome": {
+   "source": "outcome",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 36.97,
+    "head_natural_panels": 35.65,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    0.7128758398230572,
+    -1.0432545118217629,
+    2.57226491203571
+   ],
+   "head_minus_sft_sample": [
+    1.343758477251558,
+    -0.8798725235708318,
+    3.869194203626921
+   ],
+   "natural_minus_sft_sample": [
+    0.018818973319313623,
+    -1.556044054809154,
+    1.5923147880384725
+   ]
+  },
+  "round1/teacher_k1": {
+   "source": "teacher_k1",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.29,
+    "head_natural_panels": 38.06,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.0280735563365633,
+    -0.5444242982086482,
+    2.584493345891268
+   ],
+   "head_minus_sft_sample": [
+    1.6589561937650639,
+    -0.09781092493928005,
+    3.488931028985893
+   ],
+   "natural_minus_sft_sample": [
+    2.4269957850805173,
+    1.1886892087298275,
+    3.7435909277504105
+   ]
+  },
+  "round1/teacher_k3": {
+   "source": "teacher_k3",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 36.69,
+    "head_natural_panels": 37.68,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    0.4335856603513897,
+    -1.411869017485671,
+    2.293885809445222
+   ],
+   "head_minus_sft_sample": [
+    1.0644682977798903,
+    -0.8995149694646601,
+    3.177966358163236
+   ],
+   "natural_minus_sft_sample": [
+    2.0519447715313186,
+    0.6488436039422881,
+    3.5971065313949877
+   ]
+  },
+  "round1/teacher_pre": {
+   "source": "teacher_pre",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 36.44,
+    "head_natural_panels": 36.31,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    0.18185480063504905,
+    -1.5223475355054301,
+    1.8587026332691075
+   ],
+   "head_minus_sft_sample": [
+    0.8127374380635498,
+    -0.9096630139731468,
+    2.640293151010469
+   ],
+   "natural_minus_sft_sample": [
+    0.6817508480252357,
+    -0.8508041476748867,
+    2.3420901567717514
+   ]
+  },
+  "round2/independent-mlp-bce": {
+   "source": "teacher_k1",
+   "interaction": "independent",
+   "scorer": "mlp",
+   "loss": "bce",
+   "mlp_depth": 2,
+   "mlp_width": 1856,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22559874,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.09,
+    "head_natural_panels": 37.15,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    0.8300029487831971,
+    -0.80794618839682,
+    2.417631418289313
+   ],
+   "head_minus_sft_sample": [
+    1.4608855862116978,
+    -0.18894463398380326,
+    3.20524795529339
+   ],
+   "natural_minus_sft_sample": [
+    1.5178779233764488,
+    0.27681803715638287,
+    2.877637998685238
+   ]
+  },
+  "round2/independent-mlp-softce": {
+   "source": "teacher_k1",
+   "interaction": "independent",
+   "scorer": "mlp",
+   "loss": "softce",
+   "mlp_depth": 2,
+   "mlp_width": 1856,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22559874,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.56,
+    "head_natural_panels": 37.61,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.3034566980990152,
+    -0.5277472287684383,
+    3.0677973440116073
+   ],
+   "head_minus_sft_sample": [
+    1.934339335527516,
+    -0.021257287239839034,
+    3.9632333300356146
+   ],
+   "natural_minus_sft_sample": [
+    1.978400638209508,
+    0.5953154407810712,
+    3.3839654739325793
+   ]
+  },
+  "round2/independent-transformer-bce": {
+   "source": "teacher_k1",
+   "interaction": "independent",
+   "scorer": "transformer",
+   "loss": "bce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.67,
+    "head_natural_panels": 37.68,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.4142941365226607,
+    -0.2439027757695519,
+    3.1216931216931214
+   ],
+   "head_minus_sft_sample": [
+    2.0451767739511615,
+    0.16623737603417127,
+    4.154127133309464
+   ],
+   "natural_minus_sft_sample": [
+    2.0520413971950946,
+    0.5790297446691162,
+    3.7628715156211134
+   ]
+  },
+  "round2/independent-transformer-softce": {
+   "source": "teacher_k1",
+   "interaction": "independent",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 38.07,
+    "head_natural_panels": 37.85,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.8111195333480576,
+    0.08627768062528611,
+    3.571140815000464
+   ],
+   "head_minus_sft_sample": [
+    2.4420021707765582,
+    0.4139426725856033,
+    4.630797132695972
+   ],
+   "natural_minus_sft_sample": [
+    2.2235315449783464,
+    0.8120192902722142,
+    3.776786194781432
+   ]
+  },
+  "round2/joint-mlp-bce": {
+   "source": "teacher_k1",
+   "interaction": "joint",
+   "scorer": "mlp",
+   "loss": "bce",
+   "mlp_depth": 2,
+   "mlp_width": 1686,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22560530,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.47,
+    "head_natural_panels": 37.25,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.2052766214706627,
+    -0.572153838898321,
+    2.962388930745405
+   ],
+   "head_minus_sft_sample": [
+    1.8361592588991633,
+    -0.10063028075533875,
+    3.8917888665763787
+   ],
+   "natural_minus_sft_sample": [
+    1.6241199412563978,
+    0.32983161829488417,
+    2.9510459291660784
+   ]
+  },
+  "round2/joint-mlp-softce": {
+   "source": "teacher_k1",
+   "interaction": "joint",
+   "scorer": "mlp",
+   "loss": "softce",
+   "mlp_depth": 2,
+   "mlp_width": 1686,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22560530,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 38.26,
+    "head_natural_panels": 37.98,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    2.0026904145741113,
+    0.2757830120430657,
+    3.831104013953379
+   ],
+   "head_minus_sft_sample": [
+    2.6335730520026117,
+    0.8342745742360077,
+    4.657180029584665
+   ],
+   "natural_minus_sft_sample": [
+    2.3545979562171713,
+    0.9734037069510837,
+    3.9118152359779153
+   ]
+  },
+  "round2/joint-transformer-bce": {
+   "source": "teacher_k1",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "bce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.7,
+    "head_natural_panels": 37.26,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.4375563149572528,
+    -0.1230618595418209,
+    3.013085484060716
+   ],
+   "head_minus_sft_sample": [
+    2.0684389523857534,
+    0.3618206105541631,
+    3.9836490780522738
+   ],
+   "natural_minus_sft_sample": [
+    1.6332537672005683,
+    0.4352041437920195,
+    2.9739665383697336
+   ]
+  },
+  "round2/joint-transformer-softce-pointer": {
+   "source": "teacher_k1",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "pointer",
+   "train_view": "distinct",
+   "params": 23088642,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 38.15,
+    "head_natural_panels": 37.68,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.8925371578691303,
+    0.20325227471325505,
+    3.5745655806182124
+   ],
+   "head_minus_sft_sample": [
+    2.523419795297631,
+    0.8429459205828483,
+    4.322771569458328
+   ],
+   "natural_minus_sft_sample": [
+    2.051037930674387,
+    0.6875864966389877,
+    3.4560819096671342
+   ]
+  },
+  "round3/k1-natural": {
+   "source": "teacher_k1",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "natural",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 38.0,
+    "head_natural_panels": 38.04,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.7386922966739968,
+    -0.05526607354092716,
+    3.591701001240475
+   ],
+   "head_minus_sft_sample": [
+    2.3695749341024976,
+    0.21414615499654494,
+    4.735270089246278
+   ],
+   "natural_minus_sft_sample": [
+    2.406960663752293,
+    0.8343084273182956,
+    4.1941619301229265
+   ],
+   "extra": {}
+  },
+  "round3/pre-plus-piotr": {
+   "source": "teacher_pre",
+   "interaction": "joint",
+   "scorer": "transformer",
+   "loss": "softce",
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "readout": "linear",
+   "train_view": "distinct",
+   "params": 22562818,
+   "train_states": 1380,
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": {
+    "head": 37.53,
+    "head_natural_panels": 36.9,
+    "uniform": 36.26,
+    "sft_sample": 35.63,
+    "oracle": 47.96
+   },
+   "head_minus_uniform": [
+    1.2657426812561423,
+    -0.19700719122569205,
+    2.8894423915305905
+   ],
+   "head_minus_sft_sample": [
+    1.896625318684643,
+    -0.003323020762253656,
+    4.01322598043404
+   ],
+   "natural_minus_sft_sample": [
+    1.2688657857526957,
+    -0.2937205583987984,
+    3.0102697497085598
+   ],
+   "extra": {
+    "panels": 34518,
+    "base_states": 2587,
+    "excluded_test_task_panels": 1398
+   }
+  }
+ },
+ "online": {
+  "heads": {
+   "round1/teacher_pre": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-2af75856eeed",
+   "round1/teacher_k1": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-fd5bf58b5fa6",
+   "round1/teacher_k3": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-11d5eff8ffe1",
+   "round1/outcome": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-7586978ccf07",
+   "round2/independent-mlp-bce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-ee8eed27994e",
+   "round2/independent-mlp-softce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-aa8ddbf856e3",
+   "round2/independent-transformer-bce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-dbfdd42d9af0",
+   "round2/independent-transformer-softce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-1a3c6edd3b17",
+   "round2/joint-mlp-bce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-9d8cc4ef4a77",
+   "round2/joint-mlp-softce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-0e845701b1a2",
+   "round2/joint-transformer-bce": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-eb0b0820bc71",
+   "round2/joint-transformer-softce-pointer": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-8ffb71daa3e2",
+   "round3/k1-natural": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-f12c5de72df5",
+   "round3/pre-plus-piotr": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/sft-actions-150-20261021/head5-58843da3d473"
+  },
+  "rows": [
+   {
+    "condition": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 34.0,
+    "valid_only": 36.2,
+    "steps_per_episode": 14.7,
+    "pflop_per_step": 0.018,
+    "decision_seconds_mean": 2.33,
+    "selection_seconds_mean": 0.0,
+    "fallback_decisions": 0,
+    "decisions": 735
+   },
+   {
+    "condition": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 38.0,
+    "valid_only": 38.8,
+    "steps_per_episode": 14.38,
+    "pflop_per_step": 0.0184,
+    "decision_seconds_mean": 4.04,
+    "selection_seconds_mean": 0.0,
+    "fallback_decisions": 0,
+    "decisions": 719
+   },
+   {
+    "condition": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 50,
+    "invalid": 0,
+    "overall": 34.0,
+    "valid_only": 34.0,
+    "steps_per_episode": 15.22,
+    "pflop_per_step": 0.0202,
+    "decision_seconds_mean": 3.75,
+    "selection_seconds_mean": 0.0,
+    "fallback_decisions": 0,
+    "decisions": 761
+   },
+   {
+    "condition": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 53,
+    "valid": 146,
+    "invalid": 4,
+    "overall": 35.3,
+    "valid_only": 36.3,
+    "steps_per_episode": 14.77,
+    "pflop_per_step": 0.0189,
+    "decision_seconds_mean": 3.37,
+    "selection_seconds_mean": 0.0,
+    "fallback_decisions": 0,
+    "decisions": 2215
+   },
+   {
+    "condition": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 45,
+    "invalid": 5,
+    "overall": 34.0,
+    "valid_only": 37.8,
+    "steps_per_episode": 15.48,
+    "pflop_per_step": 0.0972,
+    "decision_seconds_mean": 9.77,
+    "selection_seconds_mean": 0.552,
+    "fallback_decisions": 0,
+    "decisions": 774
+   },
+   {
+    "condition": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 25,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 50.0,
+    "valid_only": 51.0,
+    "steps_per_episode": 15.12,
+    "pflop_per_step": 0.0964,
+    "decision_seconds_mean": 9.37,
+    "selection_seconds_mean": 0.702,
+    "fallback_decisions": 0,
+    "decisions": 756
+   },
+   {
+    "condition": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 25,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 50.0,
+    "valid_only": 51.0,
+    "steps_per_episode": 18.9,
+    "pflop_per_step": 0.1053,
+    "decision_seconds_mean": 10.52,
+    "selection_seconds_mean": 0.566,
+    "fallback_decisions": 0,
+    "decisions": 945
+   },
+   {
+    "condition": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 67,
+    "valid": 143,
+    "invalid": 7,
+    "overall": 44.7,
+    "valid_only": 46.9,
+    "steps_per_episode": 16.5,
+    "pflop_per_step": 0.1,
+    "decision_seconds_mean": 9.94,
+    "selection_seconds_mean": 0.603,
+    "fallback_decisions": 0,
+    "decisions": 2475
+   },
+   {
+    "condition": "K1 head, 1,908 SFT+RL (full run)",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 20,
+    "valid": 43,
+    "invalid": 7,
+    "overall": 40.0,
+    "valid_only": 46.5,
+    "steps_per_episode": 16.88,
+    "pflop_per_step": 0.0645,
+    "decision_seconds_mean": 8.98,
+    "selection_seconds_mean": 0.021,
+    "fallback_decisions": 0,
+    "decisions": 844
+   },
+   {
+    "condition": "K1 head, 1,908 SFT+RL (full run)",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 20,
+    "valid": 48,
+    "invalid": 2,
+    "overall": 40.0,
+    "valid_only": 41.7,
+    "steps_per_episode": 14.12,
+    "pflop_per_step": 0.061,
+    "decision_seconds_mean": 8.14,
+    "selection_seconds_mean": 0.022,
+    "fallback_decisions": 0,
+    "decisions": 706
+   },
+   {
+    "condition": "K1 head, 1,908 SFT+RL (full run)",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 25,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 50.0,
+    "valid_only": 51.0,
+    "steps_per_episode": 15.52,
+    "pflop_per_step": 0.0658,
+    "decision_seconds_mean": 8.73,
+    "selection_seconds_mean": 0.022,
+    "fallback_decisions": 0,
+    "decisions": 776
+   },
+   {
+    "condition": "K1 head, 1,908 SFT+RL (full run)",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 65,
+    "valid": 140,
+    "invalid": 10,
+    "overall": 43.3,
+    "valid_only": 46.4,
+    "steps_per_episode": 15.51,
+    "pflop_per_step": 0.0638,
+    "decision_seconds_mean": 8.64,
+    "selection_seconds_mean": 0.022,
+    "fallback_decisions": 0,
+    "decisions": 2326
+   },
+   {
+    "condition": "round1/outcome",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 20,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 40.0,
+    "valid_only": 42.6,
+    "steps_per_episode": 14.04,
+    "pflop_per_step": 0.0746,
+    "decision_seconds_mean": 21.91,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 702
+   },
+   {
+    "condition": "round1/outcome",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 24,
+    "valid": 50,
+    "invalid": 0,
+    "overall": 48.0,
+    "valid_only": 48.0,
+    "steps_per_episode": 12.16,
+    "pflop_per_step": 0.0725,
+    "decision_seconds_mean": 22.16,
+    "selection_seconds_mean": 0.014,
+    "fallback_decisions": 0,
+    "decisions": 608
+   },
+   {
+    "condition": "round1/outcome",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 24,
+    "valid": 50,
+    "invalid": 0,
+    "overall": 48.0,
+    "valid_only": 48.0,
+    "steps_per_episode": 14.62,
+    "pflop_per_step": 0.0766,
+    "decision_seconds_mean": 24.73,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 731
+   },
+   {
+    "condition": "round1/outcome",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 68,
+    "valid": 147,
+    "invalid": 3,
+    "overall": 45.3,
+    "valid_only": 46.3,
+    "steps_per_episode": 13.61,
+    "pflop_per_step": 0.0747,
+    "decision_seconds_mean": 22.99,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 2041
+   },
+   {
+    "condition": "round1/teacher_k1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 45,
+    "invalid": 5,
+    "overall": 34.0,
+    "valid_only": 37.8,
+    "steps_per_episode": 17.04,
+    "pflop_per_step": 0.059,
+    "decision_seconds_mean": 7.35,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 852
+   },
+   {
+    "condition": "round1/teacher_k1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 26,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 52.0,
+    "valid_only": 53.1,
+    "steps_per_episode": 14.96,
+    "pflop_per_step": 0.062,
+    "decision_seconds_mean": 8.14,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 748
+   },
+   {
+    "condition": "round1/teacher_k1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 22,
+    "valid": 48,
+    "invalid": 2,
+    "overall": 44.0,
+    "valid_only": 45.8,
+    "steps_per_episode": 17.3,
+    "pflop_per_step": 0.0638,
+    "decision_seconds_mean": 9.26,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 865
+   },
+   {
+    "condition": "round1/teacher_k1",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 65,
+    "valid": 142,
+    "invalid": 8,
+    "overall": 43.3,
+    "valid_only": 45.8,
+    "steps_per_episode": 16.43,
+    "pflop_per_step": 0.0616,
+    "decision_seconds_mean": 8.26,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 2465
+   },
+   {
+    "condition": "round1/teacher_k3",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 45,
+    "invalid": 5,
+    "overall": 38.0,
+    "valid_only": 42.2,
+    "steps_per_episode": 16.74,
+    "pflop_per_step": 0.0625,
+    "decision_seconds_mean": 7.56,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 837
+   },
+   {
+    "condition": "round1/teacher_k3",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 25,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 50.0,
+    "valid_only": 53.2,
+    "steps_per_episode": 15.16,
+    "pflop_per_step": 0.0634,
+    "decision_seconds_mean": 8.31,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 758
+   },
+   {
+    "condition": "round1/teacher_k3",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 23,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 46.0,
+    "valid_only": 46.9,
+    "steps_per_episode": 15.64,
+    "pflop_per_step": 0.0657,
+    "decision_seconds_mean": 8.66,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 782
+   },
+   {
+    "condition": "round1/teacher_k3",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 67,
+    "valid": 141,
+    "invalid": 9,
+    "overall": 44.7,
+    "valid_only": 47.5,
+    "steps_per_episode": 15.85,
+    "pflop_per_step": 0.0638,
+    "decision_seconds_mean": 8.16,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2377
+   },
+   {
+    "condition": "round1/teacher_pre",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 11,
+    "valid": 41,
+    "invalid": 9,
+    "overall": 22.0,
+    "valid_only": 26.8,
+    "steps_per_episode": 18.16,
+    "pflop_per_step": 0.0678,
+    "decision_seconds_mean": 41.88,
+    "selection_seconds_mean": 0.049,
+    "fallback_decisions": 0,
+    "decisions": 908
+   },
+   {
+    "condition": "round1/teacher_pre",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 20,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 40.0,
+    "valid_only": 40.8,
+    "steps_per_episode": 18.02,
+    "pflop_per_step": 0.0621,
+    "decision_seconds_mean": 8.17,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 901
+   },
+   {
+    "condition": "round1/teacher_pre",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 50,
+    "invalid": 0,
+    "overall": 38.0,
+    "valid_only": 38.0,
+    "steps_per_episode": 16.12,
+    "pflop_per_step": 0.0668,
+    "decision_seconds_mean": 10.29,
+    "selection_seconds_mean": 0.022,
+    "fallback_decisions": 0,
+    "decisions": 806
+   },
+   {
+    "condition": "round1/teacher_pre",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 50,
+    "valid": 140,
+    "invalid": 10,
+    "overall": 33.3,
+    "valid_only": 35.7,
+    "steps_per_episode": 17.43,
+    "pflop_per_step": 0.0655,
+    "decision_seconds_mean": 20.53,
+    "selection_seconds_mean": 0.029,
+    "fallback_decisions": 0,
+    "decisions": 2615
+   },
+   {
+    "condition": "round2/independent-mlp-bce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 46,
+    "invalid": 4,
+    "overall": 38.0,
+    "valid_only": 41.3,
+    "steps_per_episode": 14.74,
+    "pflop_per_step": 0.0607,
+    "decision_seconds_mean": 7.02,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 737
+   },
+   {
+    "condition": "round2/independent-mlp-bce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 22,
+    "valid": 48,
+    "invalid": 2,
+    "overall": 44.0,
+    "valid_only": 45.8,
+    "steps_per_episode": 14.96,
+    "pflop_per_step": 0.0616,
+    "decision_seconds_mean": 7.9,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 748
+   },
+   {
+    "condition": "round2/independent-mlp-bce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 21,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 42.0,
+    "valid_only": 42.9,
+    "steps_per_episode": 15.24,
+    "pflop_per_step": 0.0644,
+    "decision_seconds_mean": 8.43,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 762
+   },
+   {
+    "condition": "round2/independent-mlp-bce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 62,
+    "valid": 143,
+    "invalid": 7,
+    "overall": 41.3,
+    "valid_only": 43.4,
+    "steps_per_episode": 14.98,
+    "pflop_per_step": 0.0623,
+    "decision_seconds_mean": 7.79,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2247
+   },
+   {
+    "condition": "round2/independent-mlp-softce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 43,
+    "invalid": 7,
+    "overall": 34.0,
+    "valid_only": 39.5,
+    "steps_per_episode": 15.96,
+    "pflop_per_step": 0.0625,
+    "decision_seconds_mean": 7.26,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 798
+   },
+   {
+    "condition": "round2/independent-mlp-softce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 21,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 42.0,
+    "valid_only": 44.7,
+    "steps_per_episode": 17.46,
+    "pflop_per_step": 0.0632,
+    "decision_seconds_mean": 8.26,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 873
+   },
+   {
+    "condition": "round2/independent-mlp-softce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 20,
+    "valid": 48,
+    "invalid": 2,
+    "overall": 40.0,
+    "valid_only": 41.7,
+    "steps_per_episode": 18.6,
+    "pflop_per_step": 0.066,
+    "decision_seconds_mean": 9.13,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 930
+   },
+   {
+    "condition": "round2/independent-mlp-softce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 58,
+    "valid": 138,
+    "invalid": 12,
+    "overall": 38.7,
+    "valid_only": 42.0,
+    "steps_per_episode": 17.34,
+    "pflop_per_step": 0.064,
+    "decision_seconds_mean": 8.27,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2601
+   },
+   {
+    "condition": "round2/independent-transformer-bce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 18,
+    "valid": 43,
+    "invalid": 7,
+    "overall": 36.0,
+    "valid_only": 41.9,
+    "steps_per_episode": 15.54,
+    "pflop_per_step": 0.0602,
+    "decision_seconds_mean": 7.29,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 777
+   },
+   {
+    "condition": "round2/independent-transformer-bce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 21,
+    "valid": 48,
+    "invalid": 2,
+    "overall": 42.0,
+    "valid_only": 43.8,
+    "steps_per_episode": 15.68,
+    "pflop_per_step": 0.0596,
+    "decision_seconds_mean": 7.79,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 784
+   },
+   {
+    "condition": "round2/independent-transformer-bce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 26,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 52.0,
+    "valid_only": 53.1,
+    "steps_per_episode": 18.12,
+    "pflop_per_step": 0.0639,
+    "decision_seconds_mean": 9.34,
+    "selection_seconds_mean": 0.018,
+    "fallback_decisions": 0,
+    "decisions": 906
+   },
+   {
+    "condition": "round2/independent-transformer-bce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 65,
+    "valid": 140,
+    "invalid": 10,
+    "overall": 43.3,
+    "valid_only": 46.4,
+    "steps_per_episode": 16.45,
+    "pflop_per_step": 0.0614,
+    "decision_seconds_mean": 8.2,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 2467
+   },
+   {
+    "condition": "round2/independent-transformer-softce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 15,
+    "valid": 46,
+    "invalid": 4,
+    "overall": 30.0,
+    "valid_only": 32.6,
+    "steps_per_episode": 14.7,
+    "pflop_per_step": 0.0594,
+    "decision_seconds_mean": 6.85,
+    "selection_seconds_mean": 0.023,
+    "fallback_decisions": 0,
+    "decisions": 735
+   },
+   {
+    "condition": "round2/independent-transformer-softce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 23,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 46.0,
+    "valid_only": 48.9,
+    "steps_per_episode": 16.24,
+    "pflop_per_step": 0.0605,
+    "decision_seconds_mean": 7.77,
+    "selection_seconds_mean": 0.02,
+    "fallback_decisions": 0,
+    "decisions": 812
+   },
+   {
+    "condition": "round2/independent-transformer-softce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 26,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 52.0,
+    "valid_only": 53.1,
+    "steps_per_episode": 15.96,
+    "pflop_per_step": 0.064,
+    "decision_seconds_mean": 8.77,
+    "selection_seconds_mean": 0.02,
+    "fallback_decisions": 0,
+    "decisions": 798
+   },
+   {
+    "condition": "round2/independent-transformer-softce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 64,
+    "valid": 142,
+    "invalid": 8,
+    "overall": 42.7,
+    "valid_only": 45.1,
+    "steps_per_episode": 15.63,
+    "pflop_per_step": 0.0614,
+    "decision_seconds_mean": 7.82,
+    "selection_seconds_mean": 0.021,
+    "fallback_decisions": 0,
+    "decisions": 2345
+   },
+   {
+    "condition": "round2/joint-mlp-bce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 14,
+    "valid": 42,
+    "invalid": 8,
+    "overall": 28.0,
+    "valid_only": 33.3,
+    "steps_per_episode": 18.74,
+    "pflop_per_step": 0.0618,
+    "decision_seconds_mean": 7.44,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 937
+   },
+   {
+    "condition": "round2/joint-mlp-bce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 24,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 48.0,
+    "valid_only": 51.1,
+    "steps_per_episode": 16.6,
+    "pflop_per_step": 0.0611,
+    "decision_seconds_mean": 7.8,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 830
+   },
+   {
+    "condition": "round2/joint-mlp-bce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 18,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 36.0,
+    "valid_only": 36.7,
+    "steps_per_episode": 19.0,
+    "pflop_per_step": 0.0639,
+    "decision_seconds_mean": 8.44,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 950
+   },
+   {
+    "condition": "round2/joint-mlp-bce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 56,
+    "valid": 138,
+    "invalid": 12,
+    "overall": 37.3,
+    "valid_only": 40.6,
+    "steps_per_episode": 18.11,
+    "pflop_per_step": 0.0623,
+    "decision_seconds_mean": 7.9,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2717
+   },
+   {
+    "condition": "round2/joint-mlp-softce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 46,
+    "invalid": 4,
+    "overall": 34.0,
+    "valid_only": 37.0,
+    "steps_per_episode": 17.08,
+    "pflop_per_step": 0.062,
+    "decision_seconds_mean": 7.51,
+    "selection_seconds_mean": 0.018,
+    "fallback_decisions": 0,
+    "decisions": 854
+   },
+   {
+    "condition": "round2/joint-mlp-softce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 26,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 52.0,
+    "valid_only": 53.1,
+    "steps_per_episode": 16.18,
+    "pflop_per_step": 0.0621,
+    "decision_seconds_mean": 8.0,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 809
+   },
+   {
+    "condition": "round2/joint-mlp-softce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 38.0,
+    "valid_only": 38.8,
+    "steps_per_episode": 18.64,
+    "pflop_per_step": 0.0653,
+    "decision_seconds_mean": 9.16,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 932
+   },
+   {
+    "condition": "round2/joint-mlp-softce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 62,
+    "valid": 144,
+    "invalid": 6,
+    "overall": 41.3,
+    "valid_only": 43.1,
+    "steps_per_episode": 17.3,
+    "pflop_per_step": 0.0632,
+    "decision_seconds_mean": 8.25,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2595
+   },
+   {
+    "condition": "round2/joint-transformer-bce",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 18,
+    "valid": 46,
+    "invalid": 4,
+    "overall": 36.0,
+    "valid_only": 39.1,
+    "steps_per_episode": 15.86,
+    "pflop_per_step": 0.0636,
+    "decision_seconds_mean": 7.84,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 793
+   },
+   {
+    "condition": "round2/joint-transformer-bce",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 24,
+    "valid": 47,
+    "invalid": 3,
+    "overall": 48.0,
+    "valid_only": 51.1,
+    "steps_per_episode": 16.12,
+    "pflop_per_step": 0.0631,
+    "decision_seconds_mean": 8.45,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 806
+   },
+   {
+    "condition": "round2/joint-transformer-bce",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 22,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 44.0,
+    "valid_only": 44.9,
+    "steps_per_episode": 17.72,
+    "pflop_per_step": 0.0646,
+    "decision_seconds_mean": 9.02,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 886
+   },
+   {
+    "condition": "round2/joint-transformer-bce",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 64,
+    "valid": 142,
+    "invalid": 8,
+    "overall": 42.7,
+    "valid_only": 45.1,
+    "steps_per_episode": 16.57,
+    "pflop_per_step": 0.0638,
+    "decision_seconds_mean": 8.46,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2485
+   },
+   {
+    "condition": "round2/joint-transformer-softce-pointer",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 44,
+    "invalid": 6,
+    "overall": 38.0,
+    "valid_only": 43.2,
+    "steps_per_episode": 16.22,
+    "pflop_per_step": 0.0618,
+    "decision_seconds_mean": 7.18,
+    "selection_seconds_mean": 0.018,
+    "fallback_decisions": 0,
+    "decisions": 811
+   },
+   {
+    "condition": "round2/joint-transformer-softce-pointer",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 19,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 38.0,
+    "valid_only": 38.8,
+    "steps_per_episode": 18.12,
+    "pflop_per_step": 0.0614,
+    "decision_seconds_mean": 8.32,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 906
+   },
+   {
+    "condition": "round2/joint-transformer-softce-pointer",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 22,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 44.0,
+    "valid_only": 44.9,
+    "steps_per_episode": 16.8,
+    "pflop_per_step": 0.0657,
+    "decision_seconds_mean": 9.15,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 840
+   },
+   {
+    "condition": "round2/joint-transformer-softce-pointer",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 60,
+    "valid": 142,
+    "invalid": 8,
+    "overall": 40.0,
+    "valid_only": 42.3,
+    "steps_per_episode": 17.05,
+    "pflop_per_step": 0.0629,
+    "decision_seconds_mean": 8.23,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 2557
+   },
+   {
+    "condition": "round3/k1-natural",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 15,
+    "valid": 45,
+    "invalid": 5,
+    "overall": 30.0,
+    "valid_only": 33.3,
+    "steps_per_episode": 17.14,
+    "pflop_per_step": 0.0617,
+    "decision_seconds_mean": 7.77,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 857
+   },
+   {
+    "condition": "round3/k1-natural",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 21,
+    "valid": 46,
+    "invalid": 4,
+    "overall": 42.0,
+    "valid_only": 45.7,
+    "steps_per_episode": 16.92,
+    "pflop_per_step": 0.0612,
+    "decision_seconds_mean": 8.27,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 846
+   },
+   {
+    "condition": "round3/k1-natural",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 22,
+    "valid": 48,
+    "invalid": 2,
+    "overall": 44.0,
+    "valid_only": 45.8,
+    "steps_per_episode": 17.8,
+    "pflop_per_step": 0.0661,
+    "decision_seconds_mean": 9.52,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 890
+   },
+   {
+    "condition": "round3/k1-natural",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 58,
+    "valid": 139,
+    "invalid": 11,
+    "overall": 38.7,
+    "valid_only": 41.7,
+    "steps_per_episode": 17.29,
+    "pflop_per_step": 0.063,
+    "decision_seconds_mean": 8.53,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2593
+   },
+   {
+    "condition": "round3/pre-plus-piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "successes": 21,
+    "valid": 43,
+    "invalid": 7,
+    "overall": 42.0,
+    "valid_only": 48.8,
+    "steps_per_episode": 15.66,
+    "pflop_per_step": 0.0646,
+    "decision_seconds_mean": 7.84,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 783
+   },
+   {
+    "condition": "round3/pre-plus-piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "successes": 20,
+    "valid": 49,
+    "invalid": 1,
+    "overall": 40.0,
+    "valid_only": 40.8,
+    "steps_per_episode": 15.46,
+    "pflop_per_step": 0.0618,
+    "decision_seconds_mean": 7.75,
+    "selection_seconds_mean": 0.015,
+    "fallback_decisions": 0,
+    "decisions": 773
+   },
+   {
+    "condition": "round3/pre-plus-piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "successes": 17,
+    "valid": 50,
+    "invalid": 0,
+    "overall": 34.0,
+    "valid_only": 34.0,
+    "steps_per_episode": 18.98,
+    "pflop_per_step": 0.0674,
+    "decision_seconds_mean": 9.45,
+    "selection_seconds_mean": 0.017,
+    "fallback_decisions": 0,
+    "decisions": 949
+   },
+   {
+    "condition": "round3/pre-plus-piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "successes": 58,
+    "valid": 142,
+    "invalid": 8,
+    "overall": 38.7,
+    "valid_only": 40.8,
+    "steps_per_episode": 16.7,
+    "pflop_per_step": 0.0648,
+    "decision_seconds_mean": 8.42,
+    "selection_seconds_mean": 0.016,
+    "fallback_decisions": 0,
+    "decisions": 2505
+   }
+  ],
+  "paired": [
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     6.0,
+     -10.0,
+     22.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     9.3,
+     -7.0,
+     25.6
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -10.0,
+     14.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     2.1,
+     -10.4,
+     16.7
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     16.0,
+     0.0,
+     32.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     18.4,
+     4.1,
+     32.7
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     8.0,
+     0.0,
+     16.0
+    ],
+    "valid_tasks": 140,
+    "valid_only": [
+     10.0,
+     1.4,
+     18.6
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     6.0,
+     -4.0,
+     16.0
+    ],
+    "valid_tasks": 41,
+    "valid_only": [
+     9.8,
+     0.0,
+     22.0
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -10.0,
+     -26.0,
+     6.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -10.6,
+     -27.7,
+     6.4
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -16.0,
+     16.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     0.0,
+     -14.6,
+     14.6
+    ]
+   },
+   {
+    "a": "K1 head, 1,908 SFT+RL (full run)",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -1.3,
+     -10.0,
+     6.7
+    ],
+    "valid_tasks": 136,
+    "valid_only": [
+     -0.7,
+     -9.6,
+     8.1
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     6.0,
+     -6.0,
+     20.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     4.3,
+     -8.7,
+     17.4
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     -2.0,
+     22.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     10.2,
+     -2.0,
+     22.4
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     14.0,
+     0.0,
+     28.0
+    ],
+    "valid_tasks": 50,
+    "valid_only": [
+     14.0,
+     0.0,
+     28.0
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     10.0,
+     2.7,
+     17.3
+    ],
+    "valid_tasks": 145,
+    "valid_only": [
+     9.7,
+     2.1,
+     17.2
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     6.0,
+     -8.0,
+     20.0
+    ],
+    "valid_tasks": 44,
+    "valid_only": [
+     2.3,
+     -11.4,
+     18.2
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -2.0,
+     -16.0,
+     10.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     -2.0,
+     -16.3,
+     10.2
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -2.0,
+     -16.0,
+     12.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     -4.1,
+     -18.4,
+     10.2
+    ]
+   },
+   {
+    "a": "round1/outcome",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     0.7,
+     -7.3,
+     8.7
+    ],
+    "valid_tasks": 142,
+    "valid_only": [
+     -1.4,
+     -9.2,
+     6.3
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -16.0,
+     16.0
+    ],
+    "valid_tasks": 45,
+    "valid_only": [
+     0.0,
+     -17.8,
+     17.8
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     14.0,
+     2.0,
+     26.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     14.6,
+     2.1,
+     27.1
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     -2.0,
+     22.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     12.5,
+     0.0,
+     25.0
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     8.0,
+     0.0,
+     16.0
+    ],
+    "valid_tasks": 141,
+    "valid_only": [
+     9.2,
+     0.7,
+     17.7
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -12.0,
+     12.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     0.0,
+     -14.0,
+     14.0
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -14.0,
+     18.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     2.1,
+     -12.5,
+     18.8
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -22.0,
+     10.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -8.5,
+     -23.4,
+     6.4
+    ]
+   },
+   {
+    "a": "round1/teacher_k1",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -1.3,
+     -9.3,
+     6.7
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     -2.2,
+     -10.9,
+     6.5
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 44,
+    "valid_only": [
+     4.5,
+     -11.4,
+     20.5
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     12.0,
+     2.0,
+     22.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     10.9,
+     0.0,
+     21.7
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     12.0,
+     0.0,
+     26.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     12.2,
+     0.0,
+     26.5
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     9.3,
+     2.0,
+     16.7
+    ],
+    "valid_tasks": 139,
+    "valid_only": [
+     9.4,
+     1.4,
+     17.3
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     4.7,
+     -11.6,
+     20.9
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -16.0,
+     16.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     2.1,
+     -14.9,
+     19.1
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -4.0,
+     -18.0,
+     10.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -4.2,
+     -18.8,
+     10.4
+    ]
+   },
+   {
+    "a": "round1/teacher_k3",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     0.0,
+     -8.7,
+     8.7
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     0.7,
+     -8.7,
+     10.1
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -12.0,
+     -24.0,
+     0.0
+    ],
+    "valid_tasks": 41,
+    "valid_only": [
+     -12.2,
+     -26.8,
+     2.4
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -12.0,
+     16.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     2.0,
+     -12.2,
+     16.3
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 50,
+    "valid_only": [
+     4.0,
+     -10.0,
+     18.0
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -2.0,
+     -10.0,
+     6.0
+    ],
+    "valid_tasks": 140,
+    "valid_only": [
+     -1.4,
+     -9.3,
+     6.4
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -12.0,
+     -26.0,
+     0.0
+    ],
+    "valid_tasks": 40,
+    "valid_only": [
+     -12.5,
+     -27.5,
+     2.5
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -10.0,
+     -24.0,
+     4.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -10.4,
+     -25.0,
+     4.2
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -12.0,
+     -26.0,
+     2.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     -12.2,
+     -26.5,
+     0.0
+    ]
+   },
+   {
+    "a": "round1/teacher_pre",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -11.3,
+     -19.3,
+     -3.3
+    ],
+    "valid_tasks": 137,
+    "valid_only": [
+     -11.7,
+     -20.4,
+     -2.9
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 45,
+    "valid_only": [
+     2.2,
+     -13.3,
+     17.8
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     6.0,
+     -8.0,
+     20.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     6.2,
+     -8.3,
+     20.8
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     8.0,
+     -6.0,
+     22.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     8.2,
+     -6.1,
+     22.4
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     6.0,
+     -2.0,
+     14.0
+    ],
+    "valid_tasks": 142,
+    "valid_only": [
+     5.6,
+     -2.8,
+     14.1
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 44,
+    "valid_only": [
+     2.3,
+     -11.4,
+     18.2
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -22.0,
+     10.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -6.4,
+     -23.4,
+     10.6
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -8.0,
+     -22.0,
+     6.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -8.3,
+     -22.9,
+     6.2
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -3.3,
+     -11.3,
+     4.7
+    ],
+    "valid_tasks": 139,
+    "valid_only": [
+     -4.3,
+     -13.7,
+     4.3
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -12.0,
+     12.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     2.3,
+     -11.6,
+     16.3
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     2.2,
+     -10.9,
+     15.2
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     6.0,
+     -8.0,
+     20.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     8.3,
+     -6.2,
+     22.9
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     3.3,
+     -4.0,
+     10.7
+    ],
+    "valid_tasks": 137,
+    "valid_only": [
+     4.4,
+     -3.6,
+     12.4
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -14.0,
+     14.0
+    ],
+    "valid_tasks": 41,
+    "valid_only": [
+     0.0,
+     -17.1,
+     17.1
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -8.0,
+     -24.0,
+     8.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -8.5,
+     -25.5,
+     8.5
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -10.0,
+     -24.0,
+     4.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -8.5,
+     -23.4,
+     6.4
+    ]
+   },
+   {
+    "a": "round2/independent-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -6.0,
+     -14.7,
+     2.7
+    ],
+    "valid_tasks": 135,
+    "valid_only": [
+     -5.9,
+     -15.6,
+     3.7
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -14.0,
+     18.0
+    ],
+    "valid_tasks": 42,
+    "valid_only": [
+     4.8,
+     -11.9,
+     21.4
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -8.0,
+     16.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     2.1,
+     -10.6,
+     14.9
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     18.0,
+     2.0,
+     34.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     18.4,
+     2.0,
+     34.7
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     8.0,
+     0.0,
+     16.7
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     8.7,
+     0.0,
+     18.1
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -10.0,
+     14.0
+    ],
+    "valid_tasks": 42,
+    "valid_only": [
+     4.8,
+     -9.5,
+     19.0
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -8.0,
+     -24.0,
+     8.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -8.3,
+     -25.0,
+     8.3
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -14.0,
+     18.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     2.1,
+     -16.7,
+     18.8
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -1.3,
+     -10.0,
+     7.3
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     -0.7,
+     -10.1,
+     8.7
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -4.0,
+     -18.0,
+     10.0
+    ],
+    "valid_tasks": 45,
+    "valid_only": [
+     -2.2,
+     -17.8,
+     11.2
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     8.0,
+     -4.0,
+     20.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     6.5,
+     -6.5,
+     19.6
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     18.0,
+     4.0,
+     32.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     18.4,
+     4.1,
+     32.7
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     7.3,
+     -0.7,
+     15.3
+    ],
+    "valid_tasks": 140,
+    "valid_only": [
+     7.9,
+     0.0,
+     16.4
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -4.0,
+     -18.0,
+     10.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     -2.3,
+     -18.6,
+     14.0
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -4.0,
+     -20.0,
+     12.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -4.3,
+     -21.3,
+     12.8
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -14.0,
+     18.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     0.0,
+     -16.7,
+     16.7
+    ]
+   },
+   {
+    "a": "round2/independent-transformer-softce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -2.0,
+     -10.7,
+     6.7
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     -2.2,
+     -11.6,
+     7.2
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -20.0,
+     8.0
+    ],
+    "valid_tasks": 42,
+    "valid_only": [
+     -7.1,
+     -23.8,
+     9.5
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     -2.0,
+     22.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     8.7,
+     -4.3,
+     21.7
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -10.0,
+     14.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     2.0,
+     -10.2,
+     14.3
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     2.0,
+     -5.3,
+     9.3
+    ],
+    "valid_tasks": 137,
+    "valid_only": [
+     1.5,
+     -6.6,
+     9.5
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -18.0,
+     6.0
+    ],
+    "valid_tasks": 40,
+    "valid_only": [
+     -7.5,
+     -22.5,
+     7.5
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -2.0,
+     -16.0,
+     12.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     -2.2,
+     -17.4,
+     13.0
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -14.0,
+     -28.0,
+     0.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -12.5,
+     -27.1,
+     2.1
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-bce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -7.3,
+     -15.3,
+     0.7
+    ],
+    "valid_tasks": 134,
+    "valid_only": [
+     -7.5,
+     -16.4,
+     1.5
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -12.0,
+     12.0
+    ],
+    "valid_tasks": 44,
+    "valid_only": [
+     0.0,
+     -13.6,
+     13.6
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     14.0,
+     2.0,
+     26.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     14.3,
+     2.0,
+     26.5
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -10.0,
+     18.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     4.1,
+     -10.2,
+     18.4
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     6.0,
+     -1.3,
+     13.3
+    ],
+    "valid_tasks": 142,
+    "valid_only": [
+     6.3,
+     -1.4,
+     14.1
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -14.0,
+     14.0
+    ],
+    "valid_tasks": 42,
+    "valid_only": [
+     -2.4,
+     -16.7,
+     11.9
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -12.0,
+     18.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     2.1,
+     -14.6,
+     16.7
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -12.0,
+     -28.0,
+     4.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -12.5,
+     -29.2,
+     4.2
+    ]
+   },
+   {
+    "a": "round2/joint-mlp-softce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -3.3,
+     -12.0,
+     5.3
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     -4.3,
+     -13.8,
+     5.1
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -12.0,
+     16.0
+    ],
+    "valid_tasks": 45,
+    "valid_only": [
+     0.0,
+     -15.6,
+     15.6
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     0.0,
+     20.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     10.6,
+     0.0,
+     21.3
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     -6.0,
+     26.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     10.2,
+     -6.1,
+     26.5
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     7.3,
+     -0.7,
+     15.3
+    ],
+    "valid_tasks": 141,
+    "valid_only": [
+     7.1,
+     -1.4,
+     15.6
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -12.0,
+     16.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     -2.3,
+     -16.3,
+     14.0
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -2.0,
+     -14.0,
+     10.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     -2.2,
+     -15.2,
+     10.9
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -22.0,
+     12.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -6.2,
+     -22.9,
+     10.4
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-bce",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -2.0,
+     -10.7,
+     6.7
+    ],
+    "valid_tasks": 137,
+    "valid_only": [
+     -3.6,
+     -12.4,
+     5.8
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -8.0,
+     16.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     4.7,
+     -9.3,
+     18.6
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -16.0,
+     16.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     0.0,
+     -16.7,
+     16.7
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     -6.0,
+     26.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     10.2,
+     -6.1,
+     26.5
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     4.7,
+     -4.0,
+     13.3
+    ],
+    "valid_tasks": 140,
+    "valid_only": [
+     5.0,
+     -4.3,
+     14.3
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -8.0,
+     16.0
+    ],
+    "valid_tasks": 42,
+    "valid_only": [
+     4.8,
+     -7.1,
+     19.0
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -12.0,
+     -28.0,
+     4.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -10.4,
+     -27.1,
+     6.2
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -22.0,
+     8.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -6.2,
+     -20.8,
+     8.4
+    ]
+   },
+   {
+    "a": "round2/joint-transformer-softce-pointer",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -4.7,
+     -13.3,
+     4.0
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     -4.3,
+     -13.0,
+     4.3
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -4.0,
+     -18.0,
+     10.0
+    ],
+    "valid_tasks": 44,
+    "valid_only": [
+     -2.3,
+     -18.2,
+     13.6
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     4.0,
+     -8.0,
+     14.0
+    ],
+    "valid_tasks": 46,
+    "valid_only": [
+     4.3,
+     -6.5,
+     15.2
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     10.0,
+     -4.0,
+     26.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     10.4,
+     -4.2,
+     25.0
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     3.3,
+     -4.7,
+     11.3
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     4.3,
+     -4.3,
+     13.0
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     -4.0,
+     -16.0,
+     8.0
+    ],
+    "valid_tasks": 43,
+    "valid_only": [
+     -2.3,
+     -16.3,
+     11.6
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -8.0,
+     -22.0,
+     6.0
+    ],
+    "valid_tasks": 45,
+    "valid_only": [
+     -6.7,
+     -22.2,
+     8.9
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -6.0,
+     -22.0,
+     8.0
+    ],
+    "valid_tasks": 47,
+    "valid_only": [
+     -6.4,
+     -23.4,
+     8.5
+    ]
+   },
+   {
+    "a": "round3/k1-natural",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -6.0,
+     -14.0,
+     2.0
+    ],
+    "valid_tasks": 135,
+    "valid_only": [
+     -5.2,
+     -14.1,
+     3.7
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "SFT1",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     8.0,
+     -8.0,
+     24.0
+    ],
+    "valid_tasks": 42,
+    "valid_only": [
+     9.5,
+     -9.5,
+     28.6
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "SFT1",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     2.0,
+     -10.0,
+     14.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     2.1,
+     -10.4,
+     14.6
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "SFT1",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     0.0,
+     -16.0,
+     16.0
+    ],
+    "valid_tasks": 50,
+    "valid_only": [
+     0.0,
+     -16.0,
+     16.0
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "SFT1",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     3.3,
+     -5.3,
+     12.0
+    ],
+    "valid_tasks": 140,
+    "valid_only": [
+     3.6,
+     -5.7,
+     12.9
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "Piotr",
+    "benchmark": "online_mind2web",
+    "tasks": 50,
+    "overall": [
+     8.0,
+     -8.0,
+     24.0
+    ],
+    "valid_tasks": 41,
+    "valid_only": [
+     9.8,
+     -7.3,
+     26.8
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "Piotr",
+    "benchmark": "webvoyager",
+    "tasks": 50,
+    "overall": [
+     -10.0,
+     -24.0,
+     4.0
+    ],
+    "valid_tasks": 48,
+    "valid_only": [
+     -10.4,
+     -25.0,
+     4.2
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "Piotr",
+    "benchmark": "deepshop",
+    "tasks": 50,
+    "overall": [
+     -16.0,
+     -28.0,
+     -4.0
+    ],
+    "valid_tasks": 49,
+    "valid_only": [
+     -16.3,
+     -28.6,
+     -4.1
+    ]
+   },
+   {
+    "a": "round3/pre-plus-piotr",
+    "b": "Piotr",
+    "benchmark": "all",
+    "tasks": 150,
+    "overall": [
+     -6.0,
+     -14.0,
+     2.0
+    ],
+    "valid_tasks": 138,
+    "valid_only": [
+     -6.5,
+     -15.2,
+     2.2
+    ]
+   }
+  ]
+ }
+}

@@ -137,3 +137,23 @@ For a matched comparison across the full cohort, the following rows use only the
 [Detailed comparison and audit](ARM_INFERENCE_SCALING.md#sol6-luna-browsercode300-20261018) · [Audited aggregate metrics](arm_results/sol6_luna_browsercode300_20261018/aggregate.json)
 
 </details>
+
+<a id="final-selection-head-ablations-20261021"></a>
+
+## Selection head: which training labels work (October 21, 2026)
+
+**A 22.6 M-parameter head on the frozen SFT-4B actor, trained on lookahead or observed-outcome labels for 1,380 of our SFT-actor states, matches Piotr SelectionARM live. Pre-execution labels do not help.** These are 150 live tasks: the first 50 of Online-Mind2Web, WebVoyager and DeepShop. Settings: T 1.0 / top-p 0.9, 30 steps, one episode per task.
+
+| Method | Successes (of 150) | Valid | Overall | − SFT, pp [95% CI] | − Piotr, pp [95% CI] | PFLOP per step |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, 1 sample | 53 | 146 | 35.3% | — | — | 0.019 |
+| Piotr SelectionARM (4.44 B selector) | 67 | 143 | 44.7% | +9.3 | — | 0.100 |
+| Head, pre-execution labels | 50 | 140 | 33.3% | −2.0 [−10.0, +6.0] | −11.3 [−19.3, −3.3] | 0.066 |
+| Head, lookahead K = 1 labels | 65 | 142 | 43.3% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] | 0.062 |
+| Head, lookahead K = 3 labels | 67 | 141 | 44.7% | +9.3 [+2.0, +16.7] | 0.0 [−8.7, +8.7] | 0.064 |
+| Head, observed-outcome labels | 68 | 147 | 45.3% | +10.0 [+2.7, +17.3] | +0.7 [−7.3, +8.7] | 0.075 |
+
+- "Overall" counts invalid episodes as failures. Differences are paired over tasks.
+- Eight head architectures and two data changes (natural-frequency panels; adding Piotr's 34,518 panels) were not distinguishable live or offline.
+- The pre-execution head's Online-Mind2Web episodes ran mostly on a degraded node, so that row may understate it.
+- [Details, offline results and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · [Evidence](arm_results/rl_integration/selection-head-sft-actions-20261021.json)

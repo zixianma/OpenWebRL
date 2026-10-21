@@ -22,6 +22,7 @@
 - **Training data.**
   - "Piotr's data": GPT-5.5 picks on Piotr's 2,692 states (35,916 five-candidate panels). The head's weights are the same-hardware study's listwise head; Piotr SelectionARM is a LoRA fine-tune of the 4B model on the same data.
   - "Our K = 1 labels": Luna lookahead K = 1 votes on 1,908 branching states, 434 of them from the RL actor, with one panel per state.
+- **Ablations on 1,738 SFT-actor states** ([details](#selection-head-sft-actions-20261021)): on 150 live tasks, heads trained on lookahead K = 1 / K = 3 or observed-outcome labels for 1,380 states gain +8.0 to +10.0 pp over SFT and are level with Piotr SelectionARM (−1.3 to +0.7 pp). Pre-execution labels gain nothing: −2.0 pp vs SFT, −11.3 pp [−19.3, −3.3] vs Piotr. Eight architecture variants and two data changes are within live noise and within 1.6 pp offline.
 - **100 steps** ([details](#selection-head-100-steps-20261019)): raising the step limit from 30 to 100 adds +5.8 pp [+2.9, +8.8] for SFT and +4.8 pp [+1.8, +7.9] for Piotr SelectionARM; Piotr's lead over SFT holds at +5.9 pp [+3.0, +9.0]. The heads have not been run at 100 steps.
 - **Model × data.** On Piotr's data the head matches Piotr's 4B selector: +0.5 pp [−2.5, +3.4]. On our data it trails the Piotr-data head by 2.9 pp [−0.1, +5.9], a gap that likely reflects about 19× fewer labelled choices. Training only on our SFT-actor states (1,631) changes little: −0.8 pp [−3.6, +2.1] against the SFT + RL head ([details](#selection-head-crossbench-full-20261018)).
 - **Details:** [full-benchmark section](#selection-head-crossbench-full-20261018) (per-benchmark tables, cost accounting, decoding test), [evidence](arm_results/rl_integration/crossbench-full-t10-20261018.json).
@@ -87,6 +88,108 @@
 
 </details>
 
+<a id="selection-head-sft-actions-20261021"></a>
+
+## Label, architecture and data ablations on SFT-proposed actions (2026-10-21)
+
+**Labels matter more than anything else we varied. Heads trained on lookahead (K = 1, K = 3) or observed-outcome labels for 1,380 SFT-actor states gain +8 to +10 pp over single-sample SFT on 150 live tasks. Each is level with Piotr SelectionARM, which trained on about 25× more panels. The pre-execution-label head gains nothing.** Eight architecture variants and two data changes all fall within the live noise. Offline, the variants differ by at most 1.6 pp.
+
+**Online (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
+
+| Head (training labels / variant) | Online-Mind2Web successes (of 50) | WebVoyager successes (of 50) | DeepShop successes (of 50) | All successes (of 150) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, 1 sample | 17 | 19 | 17 | 53 | 146 | 35.3% | 36.3% | — | — |
+| Piotr SelectionARM | 17 | 25 | 25 | 67 | 143 | 44.7% | 46.9% | +9.3 | — |
+| Earlier K = 1 head, 1,908 SFT + RL states | 20 | 20 | 25 | 65 | 140 | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
+| **Labels** (default head: joint transformer, soft CE) | | | | | | | | | |
+| Pre-execution (Luna) | 11 | 20 | 19 | 50 | 140 | 33.3% | 35.7% | −2.0 [−10.0, +6.0] | **−11.3 [−19.3, −3.3]** |
+| Lookahead K = 1 (Luna) | 17 | 26 | 22 | 65 | 142 | 43.3% | 45.8% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] |
+| Lookahead K = 3 (Luna) | 19 | 25 | 23 | 67 | 141 | 44.7% | 47.5% | **+9.3 [+2.0, +16.7]** | 0.0 [−8.7, +8.7] |
+| Observed outcome (draws 0–2) | 20 | 24 | 24 | **68** | 147 | **45.3%** | 46.3% | **+10.0 [+2.7, +17.3]** | +0.7 [−7.3, +8.7] |
+| **Architecture** (K = 1 labels) | | | | | | | | | |
+| Joint transformer, BCE | 18 | 24 | 22 | 64 | 142 | 42.7% | 45.1% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
+| Independent transformer, soft CE | 15 | 23 | 26 | 64 | 142 | 42.7% | 45.1% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
+| Independent transformer, BCE | 18 | 21 | 26 | 65 | 140 | 43.3% | 46.4% | +8.0 [0.0, +16.7] | −1.3 [−10.0, +7.3] |
+| Joint MLP, soft CE | 17 | 26 | 19 | 62 | 144 | 41.3% | 43.1% | +6.0 [−1.3, +13.3] | −3.3 [−12.0, +5.3] |
+| Joint MLP, BCE | 14 | 24 | 18 | 56 | 138 | 37.3% | 40.6% | +2.0 [−5.3, +9.3] | −7.3 [−15.3, +0.7] |
+| Independent MLP, soft CE | 17 | 21 | 20 | 58 | 138 | 38.7% | 42.0% | +3.3 [−4.0, +10.7] | −6.0 [−14.7, +2.7] |
+| Independent MLP, BCE | 19 | 22 | 21 | 62 | 143 | 41.3% | 43.4% | +6.0 [−2.0, +14.0] | −3.3 [−11.3, +4.7] |
+| `<decide>` pointer readout, soft CE | 19 | 19 | 22 | 60 | 142 | 40.0% | 42.3% | +4.7 [−4.0, +13.3] | −4.7 [−13.3, +4.0] |
+| **Data** (default head) | | | | | | | | | |
+| K = 1, natural-frequency panels | 15 | 21 | 22 | 58 | 139 | 38.7% | 41.7% | +3.3 [−4.7, +11.3] | −6.0 [−14.0, +2.0] |
+| Pre-execution + Piotr's 34,518 panels | 21 | 20 | 17 | 58 | 142 | 38.7% | 40.8% | +3.3 [−5.3, +12.0] | −6.0 [−14.0, +2.0] |
+
+- **Setup.**
+  - Actor OpenWebRL-4B-SFT, T 1.0 / top-p 0.9, 30 steps, five candidates per decision. One H200 per head. Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop.
+  - SFT, Piotr and the earlier head are the [full-benchmark runs](#selection-head-crossbench-full-20261018) restricted to the same 150 tasks.
+  - Differences are paired over tasks: 95% bootstrap, 10,000 resamples. "Overall" counts invalid episodes as failures.
+- **Resolution.** With 150 tasks, a head-vs-head interval spans about ±8 pp. Only label differences of about 10 pp are resolved. The architecture and data rows cannot be ranked against each other or against the default.
+- **Cost is the same for every head.** Each has 22.6–23.1 M parameters and costs 0.061–0.065 PFLOP per step, with 15–23 ms per selection and no fallbacks in any of 2,000–2,700 decisions. Piotr SelectionARM costs 0.100 PFLOP per step and 0.60 s per selection.
+- **Node caveats.**
+  - The pre-execution head's first job (376526) ran on node g013, which decoded about 4.7× slower than other nodes at equal load. It was cancelled after 48 Online-Mind2Web episodes and resumed on g006 (376616).
+  - Its Online-Mind2Web row (11 of 50, 9 invalid) may be depressed by episode-time limits. On WebVoyager and DeepShop, both run on the healthy node, it scored 39 of 100, against 36 for SFT and 50 for Piotr.
+  - The outcome head ran on a node about 2× slower (g021). Seconds per decision for these two heads (21–23 s) reflect the nodes, not the heads; the other heads took 7.8–8.5 s.
+
+**Offline (348 held-out test states, 86 tasks; picks scored by held-out success on draws 3–7, valid only).**
+
+| Head | Distinct-action panels | Natural panels | Natural − SFT sample, pp [95% CI] | Parameters |
+| --- | ---: | ---: | ---: | ---: |
+| Uniform pick | 36.26% | — | — | — |
+| SFT sample (actor's own frequency) | 35.63% | 35.63% | — | — |
+| Oracle | 47.96% | — | — | — |
+| Pre-execution | 36.44% | 36.31% | +0.68 [−0.85, +2.34] | 22.56 M |
+| Lookahead K = 1 | 37.29% | **38.06%** | **+2.43 [+1.19, +3.74]** | 22.56 M |
+| Lookahead K = 3 | 36.69% | 37.68% | +2.05 [+0.65, +3.60] | 22.56 M |
+| Observed outcome | 36.97% | 35.65% | +0.02 [−1.56, +1.59] | 22.56 M |
+| K = 1, joint transformer, BCE | 37.70% | 37.26% | +1.63 [+0.44, +2.97] | 22.56 M |
+| K = 1, independent transformer, soft CE | 38.07% | 37.85% | +2.22 [+0.81, +3.78] | 22.56 M |
+| K = 1, independent transformer, BCE | 37.67% | 37.68% | +2.05 [+0.58, +3.76] | 22.56 M |
+| K = 1, joint MLP, soft CE | **38.26%** | 37.98% | +2.35 [+0.97, +3.91] | 22.56 M |
+| K = 1, joint MLP, BCE | 37.47% | 37.25% | +1.62 [+0.33, +2.95] | 22.56 M |
+| K = 1, independent MLP, soft CE | 37.56% | 37.61% | +1.98 [+0.60, +3.38] | 22.56 M |
+| K = 1, independent MLP, BCE | 37.09% | 37.15% | +1.52 [+0.28, +2.88] | 22.56 M |
+| K = 1, pointer readout | 38.15% | 37.68% | +2.05 [+0.69, +3.46] | 23.09 M |
+| K = 1, natural-frequency training | 38.00% | 38.04% | +2.41 [+0.83, +4.19] | 22.56 M |
+| Pre-execution + Piotr's panels | 37.53% | 36.90% | +1.27 [−0.29, +3.01] | 22.56 M |
+
+- **Panels.**
+  - "Distinct-action panels" show one candidate per distinct action.
+  - "Natural panels" are five SFT proposals drawn at the actor's own frequencies (20 seeded panels per state). They mirror live selection, where duplicates are common.
+- **Offline results agree with the live labels except for outcome.**
+  - Lookahead labels lead on natural panels, and pre-execution trails, as live.
+  - The outcome head is null offline on natural panels (+0.02) but best live.
+  - Soft CE beats BCE in all four architecture pairings offline, by 0.4–1.0 pp. Live, those pairs split 2–2.
+- **Data changes.**
+  - Natural-frequency training equals distinct-panel training on natural panels (38.04% vs 38.06%).
+  - Piotr's panels raise the pre-execution head by about 0.6–1.1 pp offline. That still leaves it short of K = 1 trained on our 1,380 states alone.
+
+<details>
+<summary>States, actions, labels and training</summary>
+
+- **States.** There are 1,905 SFT-actor branching states in the collector's self-reached, usable, ≥ 2-distinct export. 1,738 keep at least two **SFT-proposed** actions (437 tasks); 167 were dropped.
+  - An action is a distinct effective (type, target) key under the collector's diverse rule v2 that the SFT actor proposed and that some executed panel candidate carries.
+  - RL-proposed text never enters a panel. When an action's executed candidate came from the RL actor (294 actions), the SFT actor's first proposal of the same key represents it. Its outcomes stay those of the executed candidate, since continuations are always by the SFT actor.
+  - Actions per state: two in 743 states, three in 604, four in 311, five in 80.
+- **Split.** One seeded, task-grouped split (seed 20261021): 1,390 train / 348 test states, 86 test tasks.
+  - Every label arm trains on the same 1,380 train states, those with all four labels available.
+  - One training seed (0), no cross-validation.
+- **Labels.**
+  - Luna, screenshots only, no history, two random candidate orders, final answers hidden. Conditions: before execution, lookahead K = 1 and K = 3. Luna sees only the state's SFT actions.
+  - Outcome labels: best success on draws 0–2, valid draws only, ties split. Draws 3–7 are used only for scoring.
+  - Labelling cost USD 13.92 of the USD 30 cap.
+- **Architectures** (`openwebrl/selection_head.py`).
+  - Interaction: joint, or independent through an attention mask (MLP: no other-candidate term). Scorer: 2-layer transformer, or a depth-2 MLP width-matched to 22.56 M parameters (1,686 joint / 1,856 independent). Loss: soft CE, or per-candidate BCE on the vote share.
+  - Pointer: a learned `<decide>` token in the joint transformer, scoring q·k / √d against each candidate (Kev-style readout).
+- **Training.** Frozen OpenWebRL-4B-SFT features from layers 18/27/36, extracted with the cached prefix as at inference. AdamW 3e-4, weight decay 0.05, batch 64, 20 epochs, one-cycle schedule.
+  - Pre + Piotr adds Piotr's 34,518 training panels (2,587 base states). The 1,398 panels whose tasks are in our test set were excluded.
+  - Every head is saved with config, seed and state list.
+- **Not run.** The approved priority list did not include the 1/4 and 1/2 data-scale runs, so they await confirmation. Also not run: Piotr's 4B LoRA trained on our data, and heads on RL-actor states or RL-proposed candidates.
+- **Evidence:** [offline and online results](arm_results/rl_integration/selection-head-sft-actions-20261021.json).
+  - Runtime: `selection-head-20261008/sft-actions-20261021/` (panels, labels, `round{1,2,3}/*/head.pt`) and `evaluations/sft-actions-150-20261021/` (jobs 376523–376554, 376616; `analysis/analyze.py`).
+  - Code `arm-selection-head` at `4511da2`: `scripts/build_sft_action_panels.py`, `scripts/train_head_round.py`.
+
+</details>
+
 <a id="selection-head-other-actors-20261020"></a>
 
 **Other actors: the head does not transfer, even to an RL fine-tune of its own actor** (2026-10-19/20). A head trained on one actor's candidates did not rank another actor's candidates better than chance, offline or live.
@@ -116,7 +219,7 @@
 <a id="selection-head-factorial-plan-20261019"></a>
 
 <details>
-<summary>Planned: head architecture, loss and data-scale factorial (prepared 2026-10-19; runs after the next state collection)</summary>
+<summary>Earlier plan: head architecture, loss and data-scale factorial (2026-10-19; run as the <a href="#selection-head-sft-actions-20261021">2026-10-21 ablation</a>)</summary>
 
 **Question.** Which head choices matter: interaction between candidates, the scorer, the loss, and data scale?
 
