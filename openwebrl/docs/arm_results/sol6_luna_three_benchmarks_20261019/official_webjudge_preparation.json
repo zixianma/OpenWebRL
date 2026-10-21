@@ -1,0 +1,146 @@
+{
+  "status": "Prepared; exact new resource/API approval pending; no paid calls or scheduler jobs",
+  "source_repository": "https://github.com/OSU-NLP-Group/Online-Mind2Web",
+  "source_commit": "f0d805ee0e9e0b3ea70911e45e5264b72968f3dc",
+  "judge_model": "gpt-4o-2024-08-06",
+  "temperature": 0,
+  "max_output_tokens": 512,
+  "score_threshold": 3,
+  "max_selected_images": 50,
+  "original_dispositions": 400,
+  "original_valid_regrade_targets": 342,
+  "original_invalid_preserved": 58,
+  "ordered_saved_images": 876,
+  "single_capture_trajectories": 73,
+  "planned_calls": 1560,
+  "judge_usd_cap_proposed": 60,
+  "judge_call_cap_proposed": 1600,
+  "resources_proposed": {
+    "gpus": 0,
+    "cpus": 4,
+    "memory_gib": 16,
+    "jobs": 1,
+    "total_seconds_all_attempts": 10800
+  },
+  "actor_calls": 0,
+  "browser_starts": 0,
+  "all_attempts_included": true,
+  "no_transfers": true,
+  "no_automatic_retries": true,
+  "summary_by_cell": {
+    "browsercode/parallel3_select_low": {
+      "all": 100,
+      "original_valid": 90,
+      "original_successes": 56,
+      "eligible": 90,
+      "chronological_images_valid": 151,
+      "calls_images_plus_two_valid": 331,
+      "missing_referenced_images_valid": 0,
+      "unreferenced_images_valid": 0,
+      "single_or_terminal_capture_only_valid": 52,
+      "no_images_valid": 0
+    },
+    "browsercode/serial_high": {
+      "all": 100,
+      "original_valid": 70,
+      "original_successes": 45,
+      "eligible": 70,
+      "chronological_images_valid": 205,
+      "calls_images_plus_two_valid": 345,
+      "missing_referenced_images_valid": 0,
+      "unreferenced_images_valid": 0,
+      "single_or_terminal_capture_only_valid": 6,
+      "no_images_valid": 0
+    },
+    "cuawright/parallel3_select_low": {
+      "all": 100,
+      "original_valid": 95,
+      "original_successes": 51,
+      "eligible": 95,
+      "chronological_images_valid": 225,
+      "calls_images_plus_two_valid": 415,
+      "missing_referenced_images_valid": 0,
+      "unreferenced_images_valid": 0,
+      "single_or_terminal_capture_only_valid": 12,
+      "no_images_valid": 0
+    },
+    "cuawright/serial_high": {
+      "all": 100,
+      "original_valid": 87,
+      "original_successes": 51,
+      "eligible": 87,
+      "chronological_images_valid": 295,
+      "calls_images_plus_two_valid": 469,
+      "missing_referenced_images_valid": 0,
+      "unreferenced_images_valid": 0,
+      "single_or_terminal_capture_only_valid": 3,
+      "no_images_valid": 0
+    }
+  },
+  "paper_comparability": "Official released WebJudge, not verified exact CUAWright paper judge identity. Saved capture coverage differs across arms. No actor rerun or inferred missing capture.",
+  "test_receipts": {
+    "official-protocol-offline-test.json": {
+      "passed": true,
+      "checks": [
+        "keypoint cleaning, threshold3, malformed relevance score0, action preservation",
+        "all55 frames screened; first50 retained in chronological input order",
+        "no relevant images produces text-only outcome prompt"
+      ],
+      "paid_calls": 0,
+      "browser_starts": 0,
+      "real_images_read": 0,
+      "scope": "stub model and image encoding verify upstream control flow, not model judgment accuracy or Pillow encoding"
+    },
+    "real-image-offline-smoke.json": {
+      "passed": true,
+      "fixtures": [
+        {
+          "cell": "browsercode/parallel3_select_low",
+          "images": 1,
+          "stub_calls": 3
+        },
+        {
+          "cell": "browsercode/serial_high",
+          "images": 4,
+          "stub_calls": 6
+        },
+        {
+          "cell": "cuawright/parallel3_select_low",
+          "images": 3,
+          "stub_calls": 5
+        },
+        {
+          "cell": "cuawright/serial_high",
+          "images": 4,
+          "stub_calls": 6
+        }
+      ],
+      "paid_calls": 0,
+      "browser_starts": 0,
+      "versions": {
+        "openai": "1.68.2",
+        "Pillow": "11.1.0",
+        "backoff": "2.2.1"
+      },
+      "scope": "Real saved images and official JPEG encoding/prompts with deterministic fake model; no judgment accuracy claim"
+    },
+    "canary-audit-offline-test.json": {
+      "passed": true,
+      "stub_native_requests": 20,
+      "paid_calls": 0,
+      "browser_starts": 0,
+      "checks": [
+        "Real upstream image prompts/encoding through fake native transport",
+        "Separate per-case per-stage metering",
+        "Independent canary validates model usage and screenshot identities",
+        "Release hash binds exact four canary result files"
+      ],
+      "scope": "Private isolated fixture only; no actual canary or benchmark label was produced"
+    }
+  },
+  "source_digests": {
+    "plan_sha256": "453ce768f4ee5acb7e3d334502fdfcd44d418b2dda6b05b205762d3592a0c583",
+    "inventory_sha256": "99319ab2fb8e4434893f34c9bedae918715791e238e97f60e9558d817f82646a",
+    "official_judge_sha256": "e3cd499b7c1fc92cbd51d3c4216c95ebab774c2c2cd998c5ad6dad94710780c4"
+  }
+}

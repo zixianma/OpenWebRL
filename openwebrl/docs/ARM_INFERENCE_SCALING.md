@@ -1674,7 +1674,7 @@ This deterministic, stratified sample is an offline assistant review, **not huma
 Startup errors comprise 60 navigation timeouts, 15 download-start events and one tunnel error: 76 cells across 26 tasks, with 25 tasks affected in all three arms. These are distinct from pages that load but deny access, and from valid unsuccessful interactions. Three inspected search traces show correct query URLs/titles with irrelevant results; proxy, cache or cross-episode leakage is not established. Original navigation already uses `DOMContentLoaded`, so merely switching away from `load` is not a repair.
 
 <details>
-<summary>Frozen sequence and exact proposed resource ceilings — not approved or launched</summary>
+<summary>Earlier diagnostic proposal — superseded by the official WebJudge preparation below; never launched</summary>
 
 1. **Paired grading test:** the same 24 saved outcomes under a 2×2 rubric/evidence design: frozen native versus strict task-completion rubric, each with original evidence versus saved executed outputs and intermediate captures. Verify capture order and identity first; retain missing evidence as missing. Keep o4-mini-2025-04-16, seed42 and 4,096 output tokens fixed. One job, 0 GPU /4 CPU /16 GiB ×1 hour across all attempts; at most96 judge calls and $25 judge, $0 actor, zero browser starts. No automatic failed-call retry. Compare paired verdict changes and uncertainty, without altering historical scores.
 2. **Local browser reliability test:** 26 startup-error tasks plus four deterministic successful controls under original fail-fast readiness versus bounded content inspection and explicit timeout/download classification:60 sessions. Add six fixed diagnostic search queries with two prespecified trials each:12 sessions. One job, 0 GPU /4 CPU /16 GiB ×1 hour across all attempts; maximum80 starts including reserves, two concurrent browsers, three navigations per session, $0 API and $0 paid browser services. Record query/URL, response metadata, content and screenshots. Loaded block pages do not count as recovered usable content. These are planned conditions/replicates, with no automatic unchanged failure retries.
@@ -1690,6 +1690,29 @@ Startup errors comprise 60 navigation timeouts, 15 download-start events and one
 The pilot proposal totals four jobs,32 job-hours, $280 model and $24 judge; at most eight concurrent browsers per job. Every attempt consumes its own cell's caps, no transfers; stop at a cap and report partial coverage if necessary. All request identities, selected-only execution, W&B evaluation project, usage reservations and owned teardown must be audited. Judge-only cost and latency remain separate from actor metrics. Exact resource approval is required before any of these jobs or paid calls launch.
 
 The missing Luna single-high OM2W300 baseline remains a separate pending proposal under the original30-decision protocol. A later paper-settings reproduction with GPT-5.4, xhigh, Browserbase or self-reflection would be labeled separately; changing those together would not identify a step-limit effect.
+
+</details>
+
+
+<a id="official-webjudge-regrade-prepared-20261020"></a>
+### Official WebJudge regrading: prepared against the existing 100-task comparison
+
+**Reuse the existing BrowserCode/CUAWright30 results first.** The selected next test changes grading only: official Online-Mind2Web WebJudge applied to the saved four-cell,100-task comparison. It replaces the custom rubric experiment and postpones additional harness/horizon runs. No new actor execution, browser sessions or paid grading calls have been made; original scores remain unchanged.
+
+The private inventory verifies400 original dispositions:342 valid trajectories to regrade and58 original invalids retained as invalid. It binds876 saved captures to recorded observations, explicit selected screenshot commands or the terminal capture. All retained capture references resolve;73 trajectories have only one capture. This is regrading available saved evidence, not reconstruction of uncaptured intermediate states. Coverage differs by harness/policy and will be reported alongside paired verdict changes.
+
+The evaluator is pinned to [official source revision `f0d805ee`](https://github.com/OSU-NLP-Group/Online-Mind2Web/tree/f0d805ee0e9e0b3ea70911e45e5264b72968f3dc): one key-point extraction, one relevance call per capture, then a final verdict using the first50 captures scoring at least3. Retain its exact prompts, JPEG encoding, temperature0 and512-token output limit, with pinned gpt-4o-2024-08-06. This matches the released evaluator family/default settings; CUAWright's exact paper-run judge identity remains unverified. The strict WebJudge rubric may lower some previous AgentTrek successes, while richer captures may support some previous failures.
+
+<details>
+<summary>Ready-to-review caps, canary gate, tests and reporting</summary>
+
+The fixed pass requires1,560 calls. Proposed ceilings are **$60 judge /1,600 calls**, **$0 actor and zero browser starts**, in **one0-GPU /4-CPU /16-GiB job for three hours across all attempts**. No transfers or automatic unchanged retries. Every request is reserved before dispatch, raw usage/response retained, and failed or unknown-usage calls keep conservative reservations. The worker disables SDK retries; the official prompts and selection algorithm remain unchanged. The current preparation is not authorized to launch until those exact new caps are approved.
+
+Four deterministic canaries cover all cells. An independent request/model/usage/image-identity audit must release the full pass. Separate native verdicts from strict parse failures, truncated outputs and unknown usage; retain these as unresolved grading outcomes rather than silently changing original task validity. Report per-cell paired verdict changes, shared-valid comparisons, regrading coverage, and the original100-task denominator next to any fixed-grid rate. Keep original actor costs/latencies separate from new judge-only cost.
+
+Offline tests passed for official threshold/selection behavior, real saved-image encoding with all four canaries, metered caps/resume/no-retry controls, and independent canary image binding. Deterministic stub responses in those tests are fixtures, not benchmark verdicts. The batch controller owns both stages and waits for release within the same bounded allocation. Evaluation tracking uses `openwebrl-evals`; only aggregate results will be published.
+
+[Aggregate preparation, coverage and audit digests](arm_results/sol6_luna_three_benchmarks_20261019/official_webjudge_preparation.json).
 
 </details>
 
