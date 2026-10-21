@@ -174,11 +174,21 @@ def build(src, entry):
     from openwebrl.arm_branch_teacher import request
     ref = read(Path(entry["root"]) / "states" / entry["state"] / "anchor-reference.json")
     anchor = read(ref["path"])
-    canonical = list(range(len(anchor["candidates"])))
     ev = draw0(entry)
-    if sorted(ev) != canonical:
+    if sorted(ev) != list(range(len(anchor["candidates"]))):
         return []
-    looks = [lookahead(ev[c][0], anchor["depth"], anchor["candidates"][c]["output"][0]) for c in canonical]
+    shown = entry.get("candidates")
+    if shown:
+        # a per-state subset of the executed candidates, optionally each shown with another text of the same action
+        # (`texts`); execution evidence and lookahead stay the executed candidate's (alignment is checked on its text)
+        looks = [lookahead(ev[c][0], anchor["depth"], anchor["candidates"][c]["output"][0]) for c in shown]
+        texts = entry.get("texts") or [anchor["candidates"][c]["output"][0] for c in shown]
+        anchor = dict(anchor, candidates=[dict(anchor["candidates"][c], output=[t] + list(anchor["candidates"][c]["output"][1:]))
+                                          for c, t in zip(shown, texts)])
+        ev = {j: ev[c] for j, c in enumerate(shown)}
+    canonical = list(range(len(anchor["candidates"])))
+    if not shown:
+        looks = [lookahead(ev[c][0], anchor["depth"], anchor["candidates"][c]["output"][0]) for c in canonical]
     if any(x is None for x in looks):
         return []
     rows = [ev[c][1] for c in canonical]
@@ -370,7 +380,10 @@ async def label_state(entry, src, ledger, client, sem, key, outdir):
                 f.write(json.dumps(dict(label=label, status=r.status_code, response=raw)) + "\n")
             try:
                 r.raise_for_status(); value = parse(raw, len(order))
-                judgments.append(dict(label, valid=True, candidate=order[value["selection"] - 1], output=value, usage=usage))
+                position = order[value["selection"] - 1]       # index into the shown candidates
+                shown = entry.get("candidates")
+                judgments.append(dict(label, valid=True, candidate=shown[position] if shown else position,
+                                      shown_position=position, output=value, usage=usage))
             except Exception as exc:
                 judgments.append(dict(label, valid=False, reason=type(exc).__name__))
     write(out, judgments)

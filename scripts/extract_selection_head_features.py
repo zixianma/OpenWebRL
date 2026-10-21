@@ -77,15 +77,16 @@ def main():
                 "prefix_tokens_match": expected is None or expected == prefix["input_ids"].shape[1],
                 "image_grid_thw": prefix["image_grid_thw"].tolist(),
                 "candidate_tokens": [len(ids) for ids, _ in cands]}
-        return state, feats.view(len(rows), 5, *feats.shape[1:]), meta
+        # panels may hold any number of candidates (five in the original release panels)
+        return state, feats.split([len(row["candidates"]) for row in rows]), meta
 
     checks = []
     for base in bases[:args.verify_states]:
         rows = panels[base][:1]
         _, fast, _ = encode(base, rows=rows)
         _, slow, _ = encode(base, reuse=False, rows=rows)
-        diff = (fast.float() - slow.float()).abs()
-        rel = (diff.norm() / slow.float().norm()).item()
+        diff = (fast[0].float() - slow[0].float()).abs()
+        rel = (diff.norm() / slow[0].float().norm()).item()
         checks.append({"base_state_id": base, "max_abs": diff.max().item(), "relative": rel})
         if rel > 2e-2:
             raise SystemExit(f"Cached features differ from full forward: {checks[-1]}")

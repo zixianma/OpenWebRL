@@ -54,7 +54,8 @@ def cmd_prepare(a):
         if (a.temperature is None) != (a.top_p is None):
             raise SystemExit('--temperature and --top-p go together')
         decoding = dict(temperature=a.temperature, top_p=a.top_p) if a.temperature is not None else None
-        subset_of = condition_dir(a.subset_of_root, a.condition) / bench / 'plan.json' if a.subset_of_root else None
+        subset_of = (condition_dir(a.subset_of_root, a.subset_of_condition or a.condition) / bench / 'plan.json'
+                     if a.subset_of_root else None)
         horizon = dict(max_steps=a.max_steps, history_full_turns=a.history_full_turns) if a.max_steps else None
         plan = core.build_plan(base / bench, benchmark=bench, condition=a.condition, n=a.n, seed=a.seed,
                                actor=a.actor, judge_caps=caps[bench], decoding=decoding, subset_of=subset_of, horizon=horizon)
@@ -413,6 +414,8 @@ def main(argv=None):
     pr.add_argument('--temperature', type=float, help='actor decoding override (with --top-p); default T 0.7 / top-p 0.9')
     pr.add_argument('--top-p', type=float)
     pr.add_argument('--subset-of-root', help='take the first --n tasks of the same condition/benchmark plan under this root')
+    pr.add_argument('--subset-of-condition', help='with --subset-of-root: take the tasks from this condition\'s plan '
+                    '(e.g. sft1) instead of the same condition\'s')
     pr.add_argument('--max-steps', type=int, help='horizon override (default 30)')
     pr.add_argument('--history-full-turns', type=int, default=0, help='with --max-steps: keep the last N turns full, older turns action + result line only')
     ls = sub.add_parser('launch-script')
