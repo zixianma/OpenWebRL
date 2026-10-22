@@ -1,0 +1,670 @@
+{
+ "note": "N = 3 selectors on Online-Mind2Web (300) and SFT 8B single sample on all three benchmarks (2026-10-21), against the\nfull-set N = 5 / SFT 4B runs of crossbench-full-t10-20261018 (same task order, T 1.0 / top-p 0.9, 30 steps, one episode\nper task, one condition-benchmark per H200). Metrics and cost exactly as full_analysis_5cond.py: actor PFLOP = 2 x params x\n(uncached prompt + generated tokens); Piotr's selector 2 x 4.44e9 x its tokens; head FLOPs as logged. Model time per\nepisode = mean decision seconds x decisions / tasks. Paired 95% bootstrap over tasks (10,000 resamples, seed 20261018).",
+ "rows": [
+  {
+   "key": "sft1",
+   "condition": "SFT 4B, 1 sample",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 109,
+   "valid": 275,
+   "overall": 36.3,
+   "valid_only": 39.6,
+   "steps_per_episode": 14.26,
+   "pflop_per_step": 0.0184,
+   "pflop_per_episode": 0.262,
+   "decisions": 4279,
+   "decision_seconds_mean": 2.81,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 40.1
+  },
+  {
+   "key": "sft1",
+   "condition": "SFT 4B, 1 sample",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "successes": 264,
+   "valid": 587,
+   "overall": 44.4,
+   "valid_only": 45.0,
+   "steps_per_episode": 12.47,
+   "pflop_per_step": 0.0182,
+   "pflop_per_episode": 0.226,
+   "decisions": 7418,
+   "decision_seconds_mean": 2.69,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 33.5
+  },
+  {
+   "key": "sft1",
+   "condition": "SFT 4B, 1 sample",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "successes": 51,
+   "valid": 149,
+   "overall": 34.0,
+   "valid_only": 34.2,
+   "steps_per_episode": 16.78,
+   "pflop_per_step": 0.0202,
+   "pflop_per_episode": 0.339,
+   "decisions": 2517,
+   "decision_seconds_mean": 3.16,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 53.0
+  },
+  {
+   "key": "sft1",
+   "condition": "SFT 4B, 1 sample",
+   "benchmark": "all",
+   "tasks": 1045,
+   "successes": 424,
+   "valid": 1011,
+   "overall": 40.6,
+   "valid_only": 41.9,
+   "steps_per_episode": 13.6,
+   "pflop_per_step": 0.0186,
+   "pflop_per_episode": 0.253,
+   "decisions": 14214,
+   "decision_seconds_mean": 2.81,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 38.2
+  },
+  {
+   "key": "sft8b",
+   "condition": "SFT 8B, 1 sample",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 109,
+   "valid": 273,
+   "overall": 36.3,
+   "valid_only": 39.9,
+   "steps_per_episode": 13.49,
+   "pflop_per_step": 0.0357,
+   "pflop_per_episode": 0.482,
+   "decisions": 4046,
+   "decision_seconds_mean": 3.24,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 43.6
+  },
+  {
+   "key": "sft8b",
+   "condition": "SFT 8B, 1 sample",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "successes": 291,
+   "valid": 585,
+   "overall": 48.9,
+   "valid_only": 49.7,
+   "steps_per_episode": 12.31,
+   "pflop_per_step": 0.0358,
+   "pflop_per_episode": 0.44,
+   "decisions": 7324,
+   "decision_seconds_mean": 3.26,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 40.1
+  },
+  {
+   "key": "sft8b",
+   "condition": "SFT 8B, 1 sample",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "successes": 59,
+   "valid": 148,
+   "overall": 39.3,
+   "valid_only": 39.9,
+   "steps_per_episode": 19.07,
+   "pflop_per_step": 0.0395,
+   "pflop_per_episode": 0.753,
+   "decisions": 2861,
+   "decision_seconds_mean": 3.58,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 68.3
+  },
+  {
+   "key": "sft8b",
+   "condition": "SFT 8B, 1 sample",
+   "benchmark": "all",
+   "tasks": 1045,
+   "successes": 459,
+   "valid": 1006,
+   "overall": 43.9,
+   "valid_only": 45.6,
+   "steps_per_episode": 13.62,
+   "pflop_per_step": 0.0365,
+   "pflop_per_episode": 0.497,
+   "decisions": 14231,
+   "decision_seconds_mean": 3.32,
+   "selection_seconds_mean": 0.0,
+   "model_seconds_per_episode": 45.2
+  },
+  {
+   "key": "piotr5",
+   "condition": "Piotr SelectionARM, N = 5",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 123,
+   "valid": 263,
+   "overall": 41.0,
+   "valid_only": 46.8,
+   "steps_per_episode": 14.86,
+   "pflop_per_step": 0.0949,
+   "pflop_per_episode": 1.411,
+   "decisions": 4458,
+   "decision_seconds_mean": 8.42,
+   "selection_seconds_mean": 0.496,
+   "model_seconds_per_episode": 125.2
+  },
+  {
+   "key": "piotr5",
+   "condition": "Piotr SelectionARM, N = 5",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "successes": 312,
+   "valid": 580,
+   "overall": 52.4,
+   "valid_only": 53.8,
+   "steps_per_episode": 12.88,
+   "pflop_per_step": 0.0932,
+   "pflop_per_episode": 1.201,
+   "decisions": 7665,
+   "decision_seconds_mean": 8.04,
+   "selection_seconds_mean": 0.497,
+   "model_seconds_per_episode": 103.6
+  },
+  {
+   "key": "piotr5",
+   "condition": "Piotr SelectionARM, N = 5",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "successes": 62,
+   "valid": 148,
+   "overall": 41.3,
+   "valid_only": 41.9,
+   "steps_per_episode": 18.43,
+   "pflop_per_step": 0.1071,
+   "pflop_per_episode": 1.973,
+   "decisions": 2764,
+   "decision_seconds_mean": 10.89,
+   "selection_seconds_mean": 0.532,
+   "model_seconds_per_episode": 200.6
+  },
+  {
+   "key": "piotr5",
+   "condition": "Piotr SelectionARM, N = 5",
+   "benchmark": "all",
+   "tasks": 1045,
+   "successes": 497,
+   "valid": 991,
+   "overall": 47.6,
+   "valid_only": 50.2,
+   "steps_per_episode": 14.25,
+   "pflop_per_step": 0.0963,
+   "pflop_per_episode": 1.372,
+   "decisions": 14887,
+   "decision_seconds_mean": 8.68,
+   "selection_seconds_mean": 0.504,
+   "model_seconds_per_episode": 123.7
+  },
+  {
+   "key": "piotr3",
+   "condition": "Piotr SelectionARM, N = 3",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 134,
+   "valid": 259,
+   "overall": 44.7,
+   "valid_only": 51.7,
+   "steps_per_episode": 15.53,
+   "pflop_per_step": 0.0795,
+   "pflop_per_episode": 1.235,
+   "decisions": 4660,
+   "decision_seconds_mean": 5.97,
+   "selection_seconds_mean": 0.42,
+   "model_seconds_per_episode": 92.7
+  },
+  {
+   "key": "head5-755d4cd49137",
+   "condition": "Head, Piotr's data (joint), N = 5",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 131,
+   "valid": 265,
+   "overall": 43.7,
+   "valid_only": 49.4,
+   "steps_per_episode": 14.68,
+   "pflop_per_step": 0.0599,
+   "pflop_per_episode": 0.879,
+   "decisions": 4404,
+   "decision_seconds_mean": 7.79,
+   "selection_seconds_mean": 0.018,
+   "model_seconds_per_episode": 114.4
+  },
+  {
+   "key": "head5-755d4cd49137",
+   "condition": "Head, Piotr's data (joint), N = 5",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "successes": 305,
+   "valid": 571,
+   "overall": 51.3,
+   "valid_only": 53.4,
+   "steps_per_episode": 12.26,
+   "pflop_per_step": 0.0608,
+   "pflop_per_episode": 0.745,
+   "decisions": 7293,
+   "decision_seconds_mean": 7.67,
+   "selection_seconds_mean": 0.017,
+   "model_seconds_per_episode": 94.0
+  },
+  {
+   "key": "head5-755d4cd49137",
+   "condition": "Head, Piotr's data (joint), N = 5",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "successes": 66,
+   "valid": 147,
+   "overall": 44.0,
+   "valid_only": 44.9,
+   "steps_per_episode": 17.0,
+   "pflop_per_step": 0.0669,
+   "pflop_per_episode": 1.137,
+   "decisions": 2550,
+   "decision_seconds_mean": 10.93,
+   "selection_seconds_mean": 0.021,
+   "model_seconds_per_episode": 185.9
+  },
+  {
+   "key": "head5-755d4cd49137",
+   "condition": "Head, Piotr's data (joint), N = 5",
+   "benchmark": "all",
+   "tasks": 1045,
+   "successes": 502,
+   "valid": 983,
+   "overall": 48.0,
+   "valid_only": 51.1,
+   "steps_per_episode": 13.63,
+   "pflop_per_step": 0.0616,
+   "pflop_per_episode": 0.84,
+   "decisions": 14247,
+   "decision_seconds_mean": 8.29,
+   "selection_seconds_mean": 0.018,
+   "model_seconds_per_episode": 113.1
+  },
+  {
+   "key": "head3-755d4cd49137",
+   "condition": "Head, Piotr's data (joint), N = 3",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 127,
+   "valid": 269,
+   "overall": 42.3,
+   "valid_only": 47.2,
+   "steps_per_episode": 14.2,
+   "pflop_per_step": 0.0518,
+   "pflop_per_episode": 0.735,
+   "decisions": 4259,
+   "decision_seconds_mean": 5.39,
+   "selection_seconds_mean": 0.011,
+   "model_seconds_per_episode": 76.5
+  },
+  {
+   "key": "head3-26c57559ccb4",
+   "condition": "Head, Piotr's data (pointwise), N = 3",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "successes": 124,
+   "valid": 264,
+   "overall": 41.3,
+   "valid_only": 47.0,
+   "steps_per_episode": 14.22,
+   "pflop_per_step": 0.0507,
+   "pflop_per_episode": 0.72,
+   "decisions": 4265,
+   "decision_seconds_mean": 5.4,
+   "selection_seconds_mean": 0.01,
+   "model_seconds_per_episode": 76.7
+  }
+ ],
+ "paired": [
+  {
+   "a": "sft8b",
+   "b": "sft1",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    0.0,
+    -5.3,
+    5.3
+   ],
+   "valid_tasks": 268,
+   "valid_only": [
+    0.4,
+    -5.6,
+    6.0
+   ]
+  },
+  {
+   "a": "sft8b",
+   "b": "sft1",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "overall": [
+    4.5,
+    0.7,
+    8.6
+   ],
+   "valid_tasks": 579,
+   "valid_only": [
+    4.5,
+    0.5,
+    8.5
+   ]
+  },
+  {
+   "a": "sft8b",
+   "b": "sft1",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "overall": [
+    5.3,
+    -2.7,
+    13.3
+   ],
+   "valid_tasks": 147,
+   "valid_only": [
+    5.4,
+    -2.7,
+    14.3
+   ]
+  },
+  {
+   "a": "sft8b",
+   "b": "sft1",
+   "benchmark": "all",
+   "tasks": 1045,
+   "overall": [
+    3.3,
+    0.4,
+    6.3
+   ],
+   "valid_tasks": 994,
+   "valid_only": [
+    3.5,
+    0.4,
+    6.6
+   ]
+  },
+  {
+   "a": "piotr3",
+   "b": "sft1",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    8.3,
+    2.3,
+    14.0
+   ],
+   "valid_tasks": 256,
+   "valid_only": [
+    10.9,
+    4.3,
+    17.6
+   ]
+  },
+  {
+   "a": "piotr3",
+   "b": "piotr5",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    3.7,
+    -1.7,
+    9.0
+   ],
+   "valid_tasks": 249,
+   "valid_only": [
+    4.4,
+    -1.6,
+    10.4
+   ]
+  },
+  {
+   "a": "head3-755d4cd49137",
+   "b": "sft1",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    6.0,
+    0.3,
+    11.7
+   ],
+   "valid_tasks": 266,
+   "valid_only": [
+    6.4,
+    0.0,
+    12.4
+   ]
+  },
+  {
+   "a": "head3-755d4cd49137",
+   "b": "head5-755d4cd49137",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    -1.3,
+    -7.3,
+    4.3
+   ],
+   "valid_tasks": 261,
+   "valid_only": [
+    -2.3,
+    -8.8,
+    4.2
+   ]
+  },
+  {
+   "a": "head3-755d4cd49137",
+   "b": "piotr3",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    -2.3,
+    -8.0,
+    3.3
+   ],
+   "valid_tasks": 253,
+   "valid_only": [
+    -4.7,
+    -11.1,
+    1.6
+   ]
+  },
+  {
+   "a": "head3-26c57559ccb4",
+   "b": "sft1",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    5.0,
+    -0.7,
+    10.7
+   ],
+   "valid_tasks": 261,
+   "valid_only": [
+    6.5,
+    0.0,
+    12.6
+   ]
+  },
+  {
+   "a": "head3-26c57559ccb4",
+   "b": "head3-755d4cd49137",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    -1.0,
+    -6.7,
+    4.7
+   ],
+   "valid_tasks": 259,
+   "valid_only": [
+    0.8,
+    -5.4,
+    6.9
+   ]
+  },
+  {
+   "a": "head3-26c57559ccb4",
+   "b": "piotr3",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    -3.3,
+    -8.3,
+    1.7
+   ],
+   "valid_tasks": 248,
+   "valid_only": [
+    -2.8,
+    -8.9,
+    2.8
+   ]
+  },
+  {
+   "a": "piotr5",
+   "b": "sft8b",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    4.7,
+    -1.0,
+    10.3
+   ],
+   "valid_tasks": 256,
+   "valid_only": [
+    5.9,
+    -0.4,
+    12.5
+   ]
+  },
+  {
+   "a": "piotr5",
+   "b": "sft8b",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "overall": [
+    3.5,
+    -0.5,
+    7.7
+   ],
+   "valid_tasks": 571,
+   "valid_only": [
+    3.5,
+    -0.7,
+    7.7
+   ]
+  },
+  {
+   "a": "piotr5",
+   "b": "sft8b",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "overall": [
+    2.0,
+    -7.3,
+    11.3
+   ],
+   "valid_tasks": 146,
+   "valid_only": [
+    2.7,
+    -6.2,
+    11.6
+   ]
+  },
+  {
+   "a": "piotr5",
+   "b": "sft8b",
+   "benchmark": "all",
+   "tasks": 1045,
+   "overall": [
+    3.6,
+    0.5,
+    6.7
+   ],
+   "valid_tasks": 973,
+   "valid_only": [
+    4.0,
+    0.7,
+    7.3
+   ]
+  },
+  {
+   "a": "head5-755d4cd49137",
+   "b": "sft8b",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "overall": [
+    7.3,
+    1.7,
+    13.0
+   ],
+   "valid_tasks": 261,
+   "valid_only": [
+    8.0,
+    1.9,
+    14.2
+   ]
+  },
+  {
+   "a": "head5-755d4cd49137",
+   "b": "sft8b",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "overall": [
+    2.4,
+    -1.8,
+    6.6
+   ],
+   "valid_tasks": 563,
+   "valid_only": [
+    3.4,
+    -0.9,
+    7.6
+   ]
+  },
+  {
+   "a": "head5-755d4cd49137",
+   "b": "sft8b",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "overall": [
+    4.7,
+    -4.0,
+    13.3
+   ],
+   "valid_tasks": 147,
+   "valid_only": [
+    4.8,
+    -4.1,
+    13.6
+   ]
+  },
+  {
+   "a": "head5-755d4cd49137",
+   "b": "sft8b",
+   "benchmark": "all",
+   "tasks": 1045,
+   "overall": [
+    4.1,
+    1.0,
+    7.3
+   ],
+   "valid_tasks": 971,
+   "valid_only": [
+    4.8,
+    1.5,
+    8.0
+   ]
+  }
+ ]
+}

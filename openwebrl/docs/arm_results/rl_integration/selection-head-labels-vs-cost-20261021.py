@@ -1,5 +1,6 @@
 """Overall success on all 1,045 tasks vs parameters, PFLOP per episode and model time per episode (2026-10-21).
-Data: selection-head-sft-actions-full-20261021.json (rows with benchmark == 'all')."""
+Data: selection-head-sft-actions-full-20261021.json and, for SFT 8B, selection-n3-sft8b-full-20261021.json (rows with
+benchmark == 'all')."""
 import json
 from pathlib import Path
 import matplotlib
@@ -9,9 +10,12 @@ import matplotlib.pyplot as plt
 HERE = Path(__file__).parent
 rows = {r["condition"]: r for r in json.loads((HERE / "selection-head-sft-actions-full-20261021.json").read_text())["rows"]
         if r["benchmark"] == "all"}
+rows["SFT8B"] = next(r for r in json.loads((HERE / "selection-n3-sft8b-full-20261021.json").read_text())["rows"]
+                     if r["key"] == "sft8b" and r["benchmark"] == "all")
 HEAD_P = 4.44e9 + 22.6e6
 methods = [  # label, condition, params, color, marker
     ("SFT 4B, 1 sample", "SFT1", 4.44e9, "#898781", "s"),
+    ("SFT 8B, 1 sample", "SFT8B", 8.77e9, "#4a4844", "s"),
     ("Piotr SelectionARM", "Piotr", 8.88e9, "#eb6834", "D"),
     ("Head, Piotr's data", "Head, Piotr's data (GPT-5.5)", HEAD_P, "#2a78d6", "o"),
     ("Head, outcome labels", "Head, Observed outcome, 1,380 SFT states", HEAD_P, "#1baf7a", "o"),
@@ -37,7 +41,7 @@ for ax, (k, xlabel) in zip(axes, panels):
 axes[0].set_ylabel("Overall success, 1,045 tasks (%)")
 axes[0].set_xlim(3.5, 9.5)
 axes[0].set_ylim(39.3, 48.8)
-axes[0].annotate("SFT 4.44 B; every head 4.46 B", (4.6, 39.6), fontsize=8.5, color="#55534d")
+axes[0].annotate("SFT 4B 4.44 B; every head 4.46 B", (4.6, 39.6), fontsize=8.5, color="#55534d")
 handles, labels = axes[0].get_legend_handles_labels()
 fig.legend(handles, labels, loc="lower center", ncol=4, frameon=False, bbox_to_anchor=(0.5, -0.02))
 fig.suptitle("Selection methods on Online-Mind2Web + WebVoyager + DeepShop (T 1.0 / top-p 0.9, 30 steps)", y=0.99)
