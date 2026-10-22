@@ -2,86 +2,101 @@
 
 ## Headline performance cost and efficiency
 
-<!-- three-benchmark-headlines-v1 -->
-**Four methods × three benchmarks · BrowserCode · Updated October 20, 2026.** Both single-call methods use high effort; N3/N5 use high proposals and a high selector. Limits are 12,288 output tokens per call and 30 decisions.
+<!-- three-benchmark-headlines-v2 -->
+**Four methods × three benchmarks · BrowserCode · Updated October 22, 2026.** Both single-call methods use high effort; N3/N5 use high proposals and a high selector. Limits are 12,288 output tokens per call and 30 decisions.
 
-**WebVoyager and DeepShop are complete across all four methods.** DeepShop Sol includes the explicitly approved recovery of 31 budget-affected cells; every original disposition and attempt cost is preserved. OM2W Luna single remains **Not run**.
+**All twelve method–benchmark cells are complete and independently audited.** OM2W Luna single was collected later on the same fixed tasks; live-site drift is not controlled. The archived original three-arm and primary new-200 comparisons remain below. DeepShop Sol includes the approved 31-cell budget recovery.
 
 ### Matched task success
 
-Common-valid cohorts: **256 OM2W tasks across Sol/N3/N5, 489 WebVoyager tasks across all four methods, and 140 DeepShop tasks across all four methods**. These rates condition on validity; full fixed-task rates follow.
+Common-valid cohorts across all four methods: **254 OM2W tasks, 489 WebVoyager tasks and 140 DeepShop tasks**. These rates condition on validity; full fixed-task rates follow.
 
-| Method | Online-Mind2Web · 256 | WebVoyager · 489 | DeepShop · 140 |
+| Method | Online-Mind2Web · 254 | WebVoyager · 489 | DeepShop · 140 |
 |---|---:|---:|---:|
-| GPT-6 Sol single high | 64.5% | 72.2% | 45.0% |
-| GPT-6 Luna single high | — | 69.1% | 50.0% |
-| GPT-6 Luna N3 high | 66.8% | 69.9% | 55.7% |
-| GPT-6 Luna N5 high | 69.5% | 72.0% | 52.9% |
+| GPT-6 Sol single high | 65.0% | 72.2% | 45.0% |
+| GPT-6 Luna single high | 62.6% | 69.1% | 50.0% |
+| GPT-6 Luna N3 high | 66.5% | 69.9% | 55.7% |
+| GPT-6 Luna N5 high | 69.7% | 72.0% | 52.9% |
 
 ### Overall task success
 
-Rates use every fixed task, including invalid outcomes as unsuccessful. Counts and validity are listed separately below.
+Rates divide successes by every fixed task, counting invalid outcomes as unsuccessful. Counts and validity are separate below.
 
 | Method | Online-Mind2Web · 300 | WebVoyager · 595 | DeepShop · 150 |
 |---|---:|---:|---:|
 | GPT-6 Sol single high | 57.0% | 64.7% | 44.0% |
-| GPT-6 Luna single high | Not run | 65.5% | 48.7% |
+| GPT-6 Luna single high | 56.0% | 65.5% | 48.7% |
 | GPT-6 Luna N3 high | 60.0% | 66.1% | 54.0% |
 | GPT-6 Luna N5 high | 62.7% | 65.4% | 51.3% |
 
-OM2W uses the original 300-task secondary cohort; the primary comparison on 200 new tasks is retained below. DeepShop reports the latest budget-amended Sol outcomes, including genuine remaining invalids, without replacing the archived original evidence.
+OM2W uses the original 300-task secondary cohort for Sol/N3/N5 plus the later fresh Luna single arm. Separate OM2W retry cohorts are excluded; original outcomes remain unchanged.
 
 ### Model API cost across all attempts
 
-Includes every proposal/selector and invalid attempt, with conservative unknown-call charges; DeepShop Sol also includes all pre-amendment attempts. Judge and compute costs are excluded. Dollar amounts are frozen-rate receipt estimates. Separate OM2W retry cohorts and the Sol multi-proposal pilot remain excluded.
+Includes every proposal/selector, invalid or aborted attempt and conservative unknown-call reservation. Judge and compute costs are excluded. Dollar amounts are frozen-rate receipt estimates. DeepShop Sol includes all pre-amendment attempts.
 
 | Method | Online-Mind2Web | WebVoyager | DeepShop |
 |---|---:|---:|---:|
 | GPT-6 Sol single high | $57.21 | $115.60 | $59.64 |
-| GPT-6 Luna single high | Not run | $4.61 | $2.10 |
+| GPT-6 Luna single high | $2.64 | $4.61 | $2.10 |
 | GPT-6 Luna N3 high | $15.75 | $25.81 | $13.20 |
 | GPT-6 Luna N5 high | $19.68 | $27.61 | $16.22 |
 
 ### Matched efficiency
 
-All metrics below use the same common-valid tasks within each benchmark: **OM2W 256, WebVoyager 489, DeepShop 140**. OM2W includes its three run methods; the other benchmarks include all four. Latency excludes judge-only work. Browser steps count selected BrowserCode batches.
+All metrics use the same common-valid tasks across all four methods within each benchmark. Task latency measures actor-loop wall time, excluding browser setup, final judge-only capture and external judging; online model work is included. Browser steps count selected BrowserCode batches, each potentially containing multiple browser operations.
 
 #### Mean model API cost per matched task
 
 | Method | Online-Mind2Web | WebVoyager | DeepShop |
 |---|---:|---:|---:|
-| GPT-6 Sol single high | $0.2046 | $0.1882 | $0.3861 |
-| GPT-6 Luna single high | — | $0.0073 | $0.0138 |
-| GPT-6 Luna N3 high | $0.0546 | $0.0407 | $0.0871 |
-| GPT-6 Luna N5 high | $0.0699 | $0.0443 | $0.1088 |
+| GPT-6 Sol single high | $0.2031 | $0.1882 | $0.3861 |
+| GPT-6 Luna single high | $0.0094 | $0.0073 | $0.0138 |
+| GPT-6 Luna N3 high | $0.0543 | $0.0407 | $0.0871 |
+| GPT-6 Luna N5 high | $0.0693 | $0.0443 | $0.1088 |
 
 #### Mean task latency
 
 | Method | Online-Mind2Web | WebVoyager | DeepShop |
 |---|---:|---:|---:|
-| GPT-6 Sol single high | 91.5 s | 89.5 s | 151.4 s |
-| GPT-6 Luna single high | — | 94.1 s | 152.8 s |
-| GPT-6 Luna N3 high | 177.7 s | 156.9 s | 254.8 s |
-| GPT-6 Luna N5 high | 208.0 s | 167.0 s | 279.7 s |
+| GPT-6 Sol single high | 90.7 s | 89.5 s | 151.4 s |
+| GPT-6 Luna single high | 93.3 s | 94.1 s | 152.8 s |
+| GPT-6 Luna N3 high | 177.1 s | 156.9 s | 254.8 s |
+| GPT-6 Luna N5 high | 207.5 s | 167.0 s | 279.7 s |
 
 #### Mean browser steps
 
 | Method | Online-Mind2Web | WebVoyager | DeepShop |
 |---|---:|---:|---:|
-| GPT-6 Sol single high | 14.9 | 12.7 | 21.1 |
-| GPT-6 Luna single high | — | 12.9 | 20.4 |
-| GPT-6 Luna N3 high | 14.8 | 11.3 | 17.8 |
-| GPT-6 Luna N5 high | 14.7 | 10.5 | 17.4 |
+| GPT-6 Sol single high | 14.8 | 12.7 | 21.1 |
+| GPT-6 Luna single high | 16.5 | 12.9 | 20.4 |
+| GPT-6 Luna N3 high | 14.7 | 11.3 | 17.8 |
+| GPT-6 Luna N5 high | 14.6 | 10.5 | 17.4 |
 
-[Audited aggregate metrics](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json) · [Completion audit and recovery scope](ARM_INFERENCE_SCALING.md#deepshop-sol-budget-recovery-20261019)
+### Performance versus cost and latency
+
+Each benchmark has equal weight (one third). Both axes use the four-method common-valid cohorts above; cost and latency are averaged per task within each benchmark before averaging across benchmarks. These are descriptive point estimates across different collection dates. Judge-only work is excluded.
+
+![API performance versus cost and latency, averaged equally across three benchmarks](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.png)
+
+| Method | Mean success | Mean model cost / task | Mean task latency |
+|---|---:|---:|---:|
+| Sol single high | 60.72% | $0.2591 | 110.5 s |
+| Luna single high | 60.57% | $0.0102 | 113.4 s |
+| Luna N3 high + high | 64.06% | $0.0607 | 196.3 s |
+| Luna N5 high + high | 64.84% | $0.0742 | 218.1 s |
+
+[Cost plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.svg) · [Latency plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.svg) · [Combined SVG](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.svg) · [Mean values (CSV)](arm_results/sol6_luna_three_benchmarks_20261019/api_tradeoffs_means.csv) · [Plot source](arm_results/sol6_luna_three_benchmarks_20261019/plot_api_tradeoffs.py)
+
+[Audited aggregate metrics](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json) · [OM2W completion and accounting](ARM_INFERENCE_SCALING.md#luna-single-high-om2w300-20261022) · [DeepShop recovery scope](ARM_INFERENCE_SCALING.md#deepshop-sol-budget-recovery-20261019)
 
 <details>
 <summary>Coverage and success counts</summary>
 
 | Benchmark | Method | Fixed tasks | Successes | Valid | Invalid | Status |
-|---|---|---:|---:|---:|---:|---|
+|---|---:|---:|---:|---:|---:|---:|
 | Online-Mind2Web | GPT-6 Sol single high | 300 | 171 | 266 | 34 | Audited |
-| Online-Mind2Web | GPT-6 Luna single high | 300 | — | — | — | Not run |
+| Online-Mind2Web | GPT-6 Luna single high | 300 | 168 | 269 | 31 | Audited |
 | Online-Mind2Web | GPT-6 Luna N3 high | 300 | 180 | 269 | 31 | Audited |
 | Online-Mind2Web | GPT-6 Luna N5 high | 300 | 188 | 267 | 33 | Audited |
 | WebVoyager | GPT-6 Sol single high | 595 | 385 | 553 | 42 | Audited |

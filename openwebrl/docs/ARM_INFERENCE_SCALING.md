@@ -1,5 +1,61 @@
 # ARM inference scaling
 
+<a id="luna-single-high-om2w300-20261022"></a>
+
+## Luna single high completes the OM2W four-method comparison (October 22, 2026)
+
+Luna single high records **168 successes on 300 fixed tasks (56.0% overall)**, with 269 valid and 31 invalid outcomes. Across the 254 tasks valid in all four methods, its success rate is **62.6%**, mean model cost is **$0.0094**, mean actor-loop latency is **93.3 s**, and mean selected browser steps are **16.5**.
+
+This adds a later-collected Luna single arm to the original Sol/N3/N5 300-task secondary cohort. The live-site collection dates differ; this is not a contemporaneous controlled model/policy comparison. Original 900 outcomes and separate retry cohorts remain unchanged. The four-arm common-valid denominator replaces the three-arm 256 denominator only in the headline comparison.
+
+[Four-method, three-benchmark headline tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency) · [Audited aggregate metrics](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json)
+
+<details>
+<summary>Accounting, validity, step limits and resource scope</summary>
+
+All 300 Luna dispositions, all physical model/judge calls, W&B termination and owned browser teardown passed independent completion checks. All-attempt model cost is **$2.636070**, including invalid/aborted calls and conservative reservations. Matched per-task costs use the same valid task set and include spend on valid failures; they exclude infrastructure-invalid attempts. Judge cost is accounted separately and is excluded from model costs.
+
+The approved allocation was five CPU-only shards, each four CPUs/16 GiB for at most three hours across all attempts. Each shard had independent $3 model/5,000-call, $3 judge/70-call and 70-browser-start caps; campaign caps were $15 model plus $15 judge with no transfers. The final independent audit verified every per-shard cap and owned teardown.
+
+Actor-loop latency excludes initial browser setup, final judge-only screenshot capture and terminal judging. Browser steps count selected BrowserCode batches, potentially multiple operations each. Output tokens include reasoning tokens; those must not be added twice.
+
+| Method | Tasks | Valid failures | Explicit 30-decision limit failures | Share of all tasks | Share of valid failures |
+|---|---:|---:|---:|---:|---:|
+| GPT-6 Sol single high | 300 | 95 | 18 | 6.0% | 18.9% |
+| GPT-6 Luna single high | 300 | 101 | 26 | 8.7% | 25.7% |
+| GPT-6 Luna N3 high | 300 | 89 | 14 | 4.7% | 15.7% |
+| GPT-6 Luna N5 high | 300 | 79 | 12 | 4.0% | 15.2% |
+
+| All-attempt Luna single accounting | Count or amount |
+|---|---:|
+| Model generation calls | 4823 |
+| Native input-token count calls | 1450 |
+| Budget-counted model calls including native counts | 6273 |
+| External judge calls | 269 |
+| Model received cost excluding judge | $2.636070 |
+| Model conservative unknown reservation | $0.000000 |
+| Judge charged or reserved cost, separate | $2.628656 |
+| Judge conservative unknown reservation | $0.000000 |
+| Unknown model usage calls | 0 |
+| Unknown judge usage calls | 0 |
+| Browser starts including preflights | 305 |
+| Allocation seconds across all attempts | 15769 |
+| Logical shards | 5 |
+| Scheduler attempts | 5 |
+
+| Received model tokens across all attempts | Tokens |
+|---|---:|
+| input tokens | 97159989 |
+| cached input tokens | 88486031 |
+| cache write tokens | 8659489 |
+| output tokens | 1334653 |
+| reported reasoning tokens | 694031 |
+
+Explicit `LimitsExceeded` failures and reaching 30 decisions are diagnostics, not evidence that a longer horizon would succeed. Infrastructure-invalid outcomes remain invalid.
+
+</details>
+
+
 - **SFT actor + Piotr SelectionARM:** **+5.67 ± 1.15 percentage points** (mean ± sample SD) across three complete runs.
 - **RL actor + Piotr:** **42.67% → 54.00%**, a **+11.33-point gain [+5.33, +17.33]** in one complete paired run.
 - **Selection rule:** random-of-five reaches **33.33%** and highest-likelihood-of-five **26.67%**, versus **33.00%** for SFT and **40.00%** for Piotr. Controls were collected separately.

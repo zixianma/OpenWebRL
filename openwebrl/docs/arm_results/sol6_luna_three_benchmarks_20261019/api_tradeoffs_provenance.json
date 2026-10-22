@@ -1,0 +1,13 @@
+{
+  "aggregate_sha256": "ea2aa9c9b2e8cde6a6684fe312c8572a71a041f62fb07ed41522cdedf2fa062b",
+  "benchmark_weighting": "unweighted arithmetic mean over three benchmarks",
+  "cohort": "four-method common-valid within each benchmark",
+  "cost_scope": "model USD/task, including valid failures; judge excluded",
+  "latency_scope": "task seconds excluding judge-only work",
+  "benchmark_common_valid_tasks": {
+    "Online-Mind2Web": 254,
+    "WebVoyager": 489,
+    "DeepShop": 140
+  },
+  "uncertainty": "Point estimates only; no uncertainty inferred from aggregate data."
+}

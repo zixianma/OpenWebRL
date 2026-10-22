@@ -1,6 +1,11 @@
 # OpenWebRL project documentation
 
+[OM2W Luna single high complete: all four methods on the original 300 tasks, common-valid efficiency, all-attempt cost and 30-decision failures](ARM_INFERENCE_SCALING.md#luna-single-high-om2w300-20261022).
+
+
 [Final headline results: four Sol/Luna methods across OM2W, WebVoyager and DeepShop — performance, cost and efficiency](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
+
+[API performance versus cost and latency: equal averages across three benchmarks](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency).
 
 [Full300 GPT-6 Sol versus Luna N3/N5: 900 audited dispositions; primary new200 paired success, all-call cost, latency, tokens and browser work](ARM_INFERENCE_SCALING.md#sol6-luna-browsercode300-20261018).
 

@@ -1,6 +1,6 @@
 {
-  "schema": "sol6-luna-four-method-three-benchmark-headlines-v1",
-  "updated_date": "2026-10-20",
+  "schema": "sol6-luna-four-method-three-benchmark-headlines-v2",
+  "updated_date": "2026-10-22",
   "models": {
     "serial_high": "gpt-6-sol",
     "luna_single_high": "gpt-6-luna",
@@ -14,7 +14,7 @@
   "benchmarks": {
     "Online-Mind2Web": {
       "tasks_per_method": 300,
-      "status": "original300_secondary_cohort",
+      "status": "four_arms_audited_original300_secondary_cohort",
       "by_method": {
         "serial_high": {
           "status": "audited",
@@ -24,8 +24,11 @@
           "successes": 171,
           "overall_success": 0.57,
           "valid_only_success": 0.6428571428571429,
-          "all_attempt_model_usd_excluding_judge": 57.20936370000002,
           "valid_episode_metrics": {
+            "mean_model_usd_per_task": 0.20770943759398497,
+            "mean_task_seconds": 92.65773511359622,
+            "mean_browser_steps": 14.988721804511279,
+            "mean_model_decisions": 15.898496240601503,
             "mean_tokens_per_task": {
               "input_tokens": 431031.3270676692,
               "cached_input_tokens": 391329.63157894736,
@@ -33,11 +36,33 @@
               "output_tokens": 3021.312030075188,
               "reported_reasoning_tokens": 754.484962406015
             },
-            "mean_model_usd_per_task": 0.20770943759398497,
-            "mean_task_seconds": 92.65773511359622,
-            "mean_browser_steps": 14.988721804511279,
             "unknown_usage_calls_on_valid_episodes": 0
-          }
+          },
+          "all_attempt_model_usd_excluding_judge": 57.20936370000002
+        },
+        "luna_single_high": {
+          "status": "audited",
+          "tasks": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 168,
+          "overall_success": 0.56,
+          "valid_only_success": 0.6245353159851301,
+          "valid_episode_metrics": {
+            "mean_model_usd_per_task": 0.00951399934944238,
+            "mean_task_seconds": 94.92736618077343,
+            "mean_browser_steps": 16.63197026022305,
+            "mean_model_decisions": 17.486988847583643,
+            "mean_tokens_per_task": {
+              "input_tokens": 348464.3531598513,
+              "cached_input_tokens": 317107.9925650558,
+              "cache_write_tokens": 31303.899628252788,
+              "output_tokens": 4849.371747211896,
+              "reported_reasoning_tokens": 2526.4163568773233
+            },
+            "unknown_usage_calls_on_valid_episodes": 0
+          },
+          "all_attempt_model_usd_excluding_judge": 2.6360698350000016
         },
         "parallel3_select_high": {
           "status": "audited",
@@ -47,18 +72,21 @@
           "successes": 180,
           "overall_success": 0.6,
           "valid_only_success": 0.6691449814126395,
-          "all_attempt_model_usd_excluding_judge": 15.751733894999994,
           "valid_episode_metrics": {
-            "mean_tokens_per_task": {
-              "input_tokens": 1162394.936802974,
-              "output_tokens": 17289.9219330855,
-              "reported_reasoning_tokens": 10625.420074349442
-            },
             "mean_model_usd_per_task": 0.054963019237918215,
             "mean_task_seconds": 178.0883317464566,
             "mean_browser_steps": 14.79182156133829,
+            "mean_model_decisions": 15.717472118959108,
+            "mean_tokens_per_task": {
+              "input_tokens": 1162394.936802974,
+              "cached_input_tokens": null,
+              "cache_write_tokens": null,
+              "output_tokens": 17289.9219330855,
+              "reported_reasoning_tokens": 10625.420074349442
+            },
             "unknown_usage_calls_on_valid_episodes": 0
-          }
+          },
+          "all_attempt_model_usd_excluding_judge": 15.751733894999994
         },
         "parallel5_select_high": {
           "status": "audited",
@@ -68,44 +96,113 @@
           "successes": 188,
           "overall_success": 0.6266666666666667,
           "valid_only_success": 0.704119850187266,
-          "all_attempt_model_usd_excluding_judge": 19.680758059999985,
           "valid_episode_metrics": {
-            "mean_tokens_per_task": {
-              "input_tokens": 1863864.8539325842,
-              "output_tokens": 26811.958801498127,
-              "reported_reasoning_tokens": 15766.067415730337
-            },
             "mean_model_usd_per_task": 0.0696033554494382,
             "mean_task_seconds": 207.8937416237685,
             "mean_browser_steps": 14.632958801498127,
+            "mean_model_decisions": 15.576779026217228,
+            "mean_tokens_per_task": {
+              "input_tokens": 1863864.8539325842,
+              "cached_input_tokens": null,
+              "cache_write_tokens": null,
+              "output_tokens": 26811.958801498127,
+              "reported_reasoning_tokens": 15766.067415730337
+            },
             "unknown_usage_calls_on_valid_episodes": 0
-          }
+          },
+          "all_attempt_model_usd_excluding_judge": 19.680758059999985
         }
       },
-      "efficiency_common_valid_tasks": 256,
+      "efficiency_common_valid_tasks": 254,
       "efficiency": {
         "serial_high": {
-          "mean_model_usd_per_task": 0.20463666171875,
-          "mean_task_seconds": 91.46480008915864,
-          "mean_browser_steps": 14.8828125,
+          "mean_model_usd_per_task": 0.20307836062992127,
+          "mean_task_seconds": 90.67070817740796,
+          "mean_browser_steps": 14.78740157480315,
           "successes": 165,
-          "success_rate": 0.64453125
+          "success_rate": 0.6496062992125984
+        },
+        "luna_single_high": {
+          "mean_model_usd_per_task": 0.009421766653543308,
+          "mean_task_seconds": 93.251763440356,
+          "mean_browser_steps": 16.476377952755904,
+          "successes": 159,
+          "success_rate": 0.6259842519685039
         },
         "parallel3_select_high": {
-          "mean_model_usd_per_task": 0.05456018328125,
-          "mean_task_seconds": 177.68258941188583,
-          "mean_browser_steps": 14.79296875,
-          "successes": 171,
-          "success_rate": 0.66796875
+          "mean_model_usd_per_task": 0.054282533503937004,
+          "mean_task_seconds": 177.1468708066251,
+          "mean_browser_steps": 14.744094488188976,
+          "successes": 169,
+          "success_rate": 0.6653543307086615
         },
         "parallel5_select_high": {
-          "mean_model_usd_per_task": 0.0698910564453125,
-          "mean_task_seconds": 208.00888903788757,
-          "mean_browser_steps": 14.69921875,
-          "successes": 178,
-          "success_rate": 0.6953125
+          "mean_model_usd_per_task": 0.06930268096456693,
+          "mean_task_seconds": 207.49139678096535,
+          "mean_browser_steps": 14.649606299212598,
+          "successes": 177,
+          "success_rate": 0.6968503937007874
         }
-      }
+      },
+      "step_limit_failures": {
+        "serial_high": {
+          "tasks": 300,
+          "valid": 266,
+          "valid_failures": 95,
+          "valid_limit_failures": 18,
+          "fraction_all_tasks": 0.06,
+          "fraction_valid_failures": 0.18947368421052632,
+          "valid_failure_decisions_ge30": 19,
+          "submitted_valid_failures_at30": 1,
+          "successful_LimitsExceeded": 6,
+          "invalid_LimitsExceeded": 1
+        },
+        "luna_single_high": {
+          "tasks": 300,
+          "valid": 269,
+          "valid_failures": 101,
+          "valid_limit_failures": 26,
+          "fraction_all_tasks": 0.08666666666666667,
+          "fraction_valid_failures": 0.25742574257425743,
+          "valid_failure_decisions_ge30": 28,
+          "submitted_valid_failures_at30": 2,
+          "successful_LimitsExceeded": 13,
+          "invalid_LimitsExceeded": 1
+        },
+        "parallel3_select_high": {
+          "tasks": 300,
+          "valid": 269,
+          "valid_failures": 89,
+          "valid_limit_failures": 14,
+          "fraction_all_tasks": 0.04666666666666667,
+          "fraction_valid_failures": 0.15730337078651685,
+          "valid_failure_decisions_ge30": 15,
+          "submitted_valid_failures_at30": 1,
+          "successful_LimitsExceeded": 6,
+          "invalid_LimitsExceeded": 0
+        },
+        "parallel5_select_high": {
+          "tasks": 300,
+          "valid": 267,
+          "valid_failures": 79,
+          "valid_limit_failures": 12,
+          "fraction_all_tasks": 0.04,
+          "fraction_valid_failures": 0.1518987341772152,
+          "valid_failure_decisions_ge30": 13,
+          "submitted_valid_failures_at30": 1,
+          "successful_LimitsExceeded": 3,
+          "invalid_LimitsExceeded": 1
+        }
+      },
+      "cohort_label": "Original Sol/N3/N5 300-task secondary cohort plus later fresh Luna single-high300. Separate retry22/remaining79 outcomes excluded.",
+      "latency_scope": "Actor loop wall time; excludes initial browser setup, final judge-only screenshot capture and terminal judge. Same original protocol.",
+      "limitations": [
+        "New Luna single collected later; live-site drift is not controlled. No contemporaneous causal model/policy claim.",
+        "Common-valid denominator changes across all four arms; archived three-arm256 and primary new200 comparisons remain separate.",
+        "Reaching30 decisions or explicit LimitsExceeded does not prove more steps would produce success.",
+        "All-attempt costs include invalid/aborted requests and conservative unknown reservations; matched per-task metrics use only the same valid task set. Judge excluded.",
+        "Browser steps mean selected BrowserCode batches, which can include multiple operations. Output tokens include reasoning; do not add reasoning twice."
+      ]
     },
     "WebVoyager": {
       "tasks_per_method": 595,
@@ -1065,13 +1162,7 @@
       }
     }
   },
-  "missing_cells": [
-    {
-      "benchmark": "Online-Mind2Web",
-      "method": "luna_single_high",
-      "status": "not_run"
-    }
-  ],
+  "missing_cells": [],
   "source_aggregate_sha256": {
     "om2w": "3fd25ed68067ef7747862c47631a1420655a9271b292181b0db70d04fd9732aa",
     "webvoyager": "95f61d879a51491edfe28528bda1ec304d691123ad0055ce788a7e08f9b81c8b",
@@ -1079,16 +1170,18 @@
     "deepshop_n3": "6d3c92b7fa92c454d2afe45d661fc92ab8d14df7799c598b26db6eb447c129ff",
     "deepshop_n5": "bfaed7b7e5fce9d4da2d4e546f7c08925c107220e0fccd85e0af87d32520e578",
     "deepshop_luna_common": "1d4903153396fcf355f7ecb80a758b2f150deef661db838f4fea7a0810dda448",
-    "deepshop_four_arm150_amended": "e34b0efe271ae67325dcc5730c2314b347a0894cd434fac14357e038f396cdfa"
+    "deepshop_four_arm150_amended": "e34b0efe271ae67325dcc5730c2314b347a0894cd434fac14357e038f396cdfa",
+    "om2w_luna_single_completion": "faf5ed94d0bf2c019a14a60ace10ed37bc823bb6e597b9d55aefd7c8633e4396"
   },
   "definitions": {
     "overall_success": "Successes divided by the full fixed benchmark task count; invalid outcomes are unsuccessful. Incomplete and unrun method cells have no headline rate.",
     "model_cost": "Every attempt, proposal and selector; conservative unknown-call reservations included. Judge and compute costs excluded. Frozen-rate receipt estimates, not provider invoices.",
-    "efficiency": "Matched common-valid tasks within each benchmark:OM2W three original methods, WebVoyager all four, DeepShop three Luna methods.",
+    "efficiency": "All four methods use the same common-valid tasks within each benchmark. OM2W common-valid denominator is recomputed across four arms; prior three-arm256 remains historical. WebVoyager and DeepShop cohorts are unchanged.",
     "browser_steps": "Selected BrowserCode batches, which may each contain multiple browser operations.",
-    "om2w": "Original300 secondary cohort retained unchanged; first100 Luna tasks had already been observed. Primary new200 controlled comparison remains separately documented; retries are not pooled."
+    "om2w": "Original Sol/N3/N5 300-task secondary cohort plus later fresh Luna single300. Original900 dispositions unchanged; separate retry22/remaining79 excluded. Original primary new200 and historical three-arm256 comparisons remain separately documented. Later live-site collection is not a contemporaneous controlled comparison.",
+    "latency": "Actor-loop task wall time excludes browser setup, final judge-only capture and external judging. Online actor calls remain included."
   },
-  "all_twelve_method_benchmark_cells_complete": false,
+  "all_twelve_method_benchmark_cells_complete": true,
   "original_disposition_accounting": {
     "status": "terminal_budget_blocked",
     "recorded_dispositions": 2980,
@@ -1153,5 +1246,85 @@
     "deepshop_four_arm150_amended_audit_sha256": "e34b0efe271ae67325dcc5730c2314b347a0894cd434fac14357e038f396cdfa",
     "amendment_approval_sha256": "024aba1391664597f04133117d88ca4206b5bf8baa92c0b0102645a94ed432e6",
     "pre_amendment_accounting_closeout_sha256": "0e46c8967153b963883eaa97dc51933d9c4eb9219aee34777df2dd6197cefe76"
-  }
+  },
+  "disposition_accounting_scope": {
+    "original_disposition_accounting": "Historical pre-amendment WV595/DS150 campaign only:2980 cells. Counts remain unchanged.",
+    "latest_disposition_accounting": "Latest amended WV595/DS150 campaign only:2980 cells. Counts and all-attempt accounting remain unchanged. Neither field includes OM2W.",
+    "om2w": "Separate original900 plus Luna single300 outcome cohorts; original retry campaigns excluded."
+  },
+  "om2w_disposition_accounting": {
+    "recorded_dispositions": 1200,
+    "tasks_per_method": 300,
+    "original_three_arm_dispositions": 900,
+    "new_luna_single_dispositions": 300,
+    "valid_dispositions": 1071,
+    "invalid_dispositions": 129,
+    "cohort": "original_three_arm300_plus_later_luna_single300",
+    "separate_retry_outcomes_included": false,
+    "full300_luna_single_independently_audited": true
+  },
+  "om2w_luna_single_all_attempt_accounting": {
+    "model_generation_calls": 4823,
+    "native_input_token_count_calls": 1450,
+    "judge_calls": 269,
+    "unknown_model_usage_calls": 0,
+    "unknown_judge_usage_calls": 0,
+    "model_received_usd_excluding_judge": 2.636069835000002,
+    "judge_received_usd_separate": 2.6286557,
+    "model_unknown_reserved_usd": 0.0,
+    "judge_unknown_reserved_usd": 0.0,
+    "model_tokens": {
+      "input_tokens": 97159989,
+      "cached_input_tokens": 88486031,
+      "cache_write_tokens": 8659489,
+      "output_tokens": 1334653,
+      "reported_reasoning_tokens": 694031
+    },
+    "model_budget_calls_including_native_counts": 6273,
+    "model_charged_or_reserved_usd_excluding_judge": 2.6360698350000016,
+    "judge_charged_or_reserved_usd_separate": 2.6286557,
+    "browser_starts_including_preflights": 305,
+    "allocation_seconds_all_attempts": 15769,
+    "logical_shards": 5,
+    "scheduler_attempts": 5,
+    "campaign_caps": {
+      "jobs": 5,
+      "gpus": 0,
+      "concurrent_cpus": 20,
+      "concurrent_memory_gib": 80,
+      "allocation_job_hours": 15,
+      "model_usd": 15,
+      "judge_usd": 15,
+      "total_api_usd": 30,
+      "model_calls_including_token_counts": 25000,
+      "judge_calls": 350,
+      "browsers": 350
+    },
+    "per_shard_caps": {
+      "model_usd_all_attempts": 3,
+      "model_calls_all_attempts": 5000,
+      "judge_usd_all_attempts": 3,
+      "judge_calls_all_attempts": 70,
+      "browser_sessions_all_attempts": 70
+    },
+    "resource_cap_per_shard": {
+      "billing_account": "vlm",
+      "cpus": 4,
+      "gpus": 0,
+      "memory_gib": 16,
+      "total_seconds_all_attempts": 10800
+    },
+    "owned_browser_teardown_independently_verified": true
+  },
+  "om2w_completion_evidence_sha256": {
+    "analysis/independent-phase-audit.json": "f192d9d708ef3ff45a0247345bb008bfd6df60914cce3e5fe4da4c831acdef1c",
+    "completion.json": "faf5ed94d0bf2c019a14a60ace10ed37bc823bb6e597b9d55aefd7c8633e4396",
+    "analysis/terminal-wandb.json": "f44d9924f6d7ba73f9f5a1dabc908df13ff37b89077724c4dfc54b236925abbd",
+    "original/completion.json": "d597ae0ed3b245777ed3ede077b1f43766eb0c525cfbe51c6a363116b1b4a776",
+    "original/analysis/final-aggregate.json": "3fd25ed68067ef7747862c47631a1420655a9271b292181b0db70d04fd9732aa",
+    "original/analysis/step-limit-independent-recount-20261020.json": "cf254946552fc2f90d73c4b21b159b176ae19703dada077e3fcbb6e03621a4bf",
+    "original/analysis/preserved-episode-costs.json": "54c36c110af688eb38f5eac5a4ae2419e4a3a2eba2acbd65840de9620296803b"
+  },
+  "om2w_disposition_evidence_sha256": "f6d4ba39c2369148a13aaf4f06f86ff1410c464f13ffb8122fa34df06ea94a6b",
+  "om2w_common_valid_task_set_sha256": "ad8b93a90b5bcac591d3bc96d28953211fb5043602920cd88445517984ac5b7f"
 }
