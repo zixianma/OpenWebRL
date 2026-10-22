@@ -11,8 +11,8 @@
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B | — (1 sample) | — | 39.6% | 45.0% | 34.2% | 38.2% | 39.6% | — | −6.7 [−10.4, −3.0] |
 | SFT 8B | — (1 sample) | — | 39.9% | 49.7% | 39.9% | 41.5% | 43.2% | +3.3 [−0.3, +6.9] | −3.4 [−7.3, +0.4] |
-| SFT 4B | Piotr SelectionARM (4B LoRA) | 2,692 (Piotr's) / 35,916 of 5 sampled / GPT-5.5 pick | 46.8% | **53.8%** | 41.9% | 44.9% | 47.5% | **+6.7 [+3.0, +10.4]** | — |
-| SFT 4B | **Head (22.6 M)** | 2,692 (Piotr's) / 35,916 of 5 sampled / GPT-5.5 pick | **49.4%** | 53.4% | **44.9%** | **46.3%** | **49.2%** | **+8.1 [+4.4, +11.8]** | +1.4 [−2.1, +4.9] |
+| SFT 4B | Piotr SelectionARM (4B LoRA) | 2,692 (Piotr's) / 35,916 of 5 sampled / GPT-5.5, before | 46.8% | **53.8%** | 41.9% | 44.9% | 47.5% | **+6.7 [+3.0, +10.4]** | — |
+| SFT 4B | **Head (22.6 M)** | 2,692 (Piotr's) / 35,916 of 5 sampled / GPT-5.5, before | **49.4%** | 53.4% | **44.9%** | **46.3%** | **49.2%** | **+8.1 [+4.4, +11.8]** | +1.4 [−2.1, +4.9] |
 | SFT 4B | **Head (22.6 M)** | 1,380 (branch) / 1,380 of 2–5 distinct / observed outcome | 42.2% | 53.0% | 42.6% | 44.1% | 45.9% | **+5.9 [+2.5, +9.4]** | −0.8 [−4.5, +2.8] |
 | SFT 4B | **Head (22.6 M)** | 1,380 (branch) / 1,380 of 2–5 distinct / Luna, 3 steps after | 43.1% | 52.0% | 42.7% | 44.0% | 45.9% | **+5.8 [+2.1, +9.5]** | −0.9 [−4.5, +2.7] |
 | SFT 4B | Head (22.6 M) | 1,380 (branch) / 1,380 of 2–5 distinct / Luna, 1 step after | 38.6% | 50.5% | 38.8% | 40.4% | 42.6% | +2.2 [−1.5, +5.8] | −4.5 [−8.3, −0.8] |
@@ -22,15 +22,15 @@
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B | — | — | 4.44 B | 0.019 | 0.28 | 42 s | 14.5 |
 | SFT 8B | — | — | 8.77 B | 0.037 | 0.56 | 51 s | 15.0 |
-| SFT 4B | Piotr SelectionARM | GPT-5.5 pick | 4.44 B + 4.44 B | 0.098 | 1.53 | 143 s | 15.4 |
-| SFT 4B | Head | GPT-5.5 pick | 4.44 B + 22.6 M | 0.063 | 0.92 | 131 s | 14.6 |
+| SFT 4B | Piotr SelectionARM | GPT-5.5, before | 4.44 B + 4.44 B | 0.098 | 1.53 | 143 s | 15.4 |
+| SFT 4B | Head | GPT-5.5, before | 4.44 B + 22.6 M | 0.063 | 0.92 | 131 s | 14.6 |
 | SFT 4B | Head | Observed outcome | 4.44 B + 22.6 M | 0.062 | 0.86 | 109 s | 13.8 |
 | SFT 4B | Head | Luna, K = 3 | 4.44 B + 22.6 M | 0.062 | 1.00 | 142 s | 16.0 |
 | SFT 4B | Head | Luna, K = 1 | 4.44 B + 22.6 M | 0.062 | 1.05 | 149 s | 16.8 |
 | SFT 4B | Head | Luna, before execution | 4.44 B + 22.6 M | 0.062 | 1.05 | 155 s | 16.8 |
 
 - **Columns.** "Overall" counts invalid episodes as failures; "valid-only" divides successes by valid episodes. "Mean" weights each benchmark equally (one third), for success and cost alike. Differences are paired on the same tasks: 95% bootstrap, tasks resampled within each benchmark; valid-only differences (tasks valid under both) agree within 1.1 pp. Parameters are those loaded at inference; the head's 22.6 M are its only trained weights. Model time is decision time summed over an episode, excluding browser execution; times come from live runs on different nodes.
-- **Methods.** Every selector picks one of five candidates the frozen actor samples per step; "branch" data are the SFT-actor branching states collected for this project ([collection and labels](ARM_FORMULATIONS.md#lookahead-labels-current)), "Piotr's" the GPT-5.5-labelled panels of Piotr's release. SFT rows take a single sample. Training data reads states / panels (with the actions in each panel) / labels. Differences are on the mean overall rate. Piotr's panels are five sampled actions each (about 13 per state), duplicates included, each with one GPT-5.5 pick. Branch panels are one per state holding its 2–5 distinct SFT-proposed actions, reshuffled each epoch.
+- **Methods.** Every selector picks one of five candidates the frozen actor samples per step; "branch" data are the SFT-actor branching states collected for this project ([collection and labels](ARM_FORMULATIONS.md#lookahead-labels-current)), "Piotr's" the GPT-5.5-labelled panels of Piotr's release. SFT rows take a single sample. Training data reads states / panels (with the actions in each panel) / labels. Differences are on the mean overall rate. Piotr's panels are five sampled actions each (about 13 per state), duplicates included, each with one GPT-5.5 pick made before execution (from the screenshot and candidates only). Branch panels are one per state holding its 2–5 distinct SFT-proposed actions, reshuffled each epoch.
 - **Labels.** The four label heads share one architecture and the same 1,380 SFT-actor training states; only the label differs. Outcome = the action with the best success on continuation draws 0–2 (draws 3–7 are kept for offline scoring); K = 1 / K = 3 = Luna judging one or three steps after execution; pre-execution = Luna before execution. Online-Mind2Web is where the branch labels fall short: no label head clearly beats SFT there, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]). Details: [ablations](#selection-head-sft-actions-20261021).
 - **Why time barely drops.** Generating five candidates dominates each 8–9 s decision; the head saves 36% of compute per step but only about 0.5 s per decision. Fewer candidates help more: **with three candidates on Online-Mind2Web, Piotr and the Piotr-data head lose no measurable success and save 26–33% of model time** ([details](#selection-head-n3-8b-20261022)).
 - **Scaling the actor is not a substitute for selection.** SFT 8B gains on WebVoyager and DeepShop but not on Online-Mind2Web (+0.0 pp), and the Piotr-data head beats it by +4.8 pp [+1.0, +8.5] (Piotr +3.4 [−0.4, +7.3]) at 1.6× its compute per episode (Piotr 2.7×) ([details](#selection-head-n3-8b-20261022)).
@@ -108,11 +108,11 @@
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B | — | — | 1 | 36.3% | 39.6% | — | 0.26 | 2.81 | 40 s |
 | SFT 8B | — | — | 1 | 36.3% | 39.9% | +0.0 [−5.3, +5.3] | 0.48 | 3.24 | 44 s |
-| SFT 4B | Piotr SelectionARM (4B LoRA) | GPT-5.5 pick, Piotr's 2,692 states | 5 | 41.0% | 46.8% | +4.7 [−1.0, +10.0] | 1.41 | 8.42 | 125 s |
-| SFT 4B | Piotr SelectionARM (4B LoRA) | GPT-5.5 pick, Piotr's 2,692 states | 3 | **44.7%** | **51.7%** | **+8.3 [+2.3, +14.0]** | 1.24 | 5.97 | 93 s |
-| SFT 4B | Joint head (22.6 M) | GPT-5.5 pick, Piotr's 2,692 states | 5 | 43.7% | 49.4% | **+7.3 [+1.7, +13.0]** | 0.88 | 7.79 | 114 s |
-| SFT 4B | Joint head (22.6 M) | GPT-5.5 pick, Piotr's 2,692 states | 3 | 42.3% | 47.2% | **+6.0 [+0.3, +11.7]** | 0.74 | 5.39 | 77 s |
-| SFT 4B | Pointwise head (16.8 M) | GPT-5.5 pick, Piotr's 2,692 states | 3 | 41.3% | 47.0% | +5.0 [−0.7, +10.7] | 0.72 | 5.40 | 77 s |
+| SFT 4B | Piotr SelectionARM (4B LoRA) | GPT-5.5 before, Piotr's 2,692 states | 5 | 41.0% | 46.8% | +4.7 [−1.0, +10.0] | 1.41 | 8.42 | 125 s |
+| SFT 4B | Piotr SelectionARM (4B LoRA) | GPT-5.5 before, Piotr's 2,692 states | 3 | **44.7%** | **51.7%** | **+8.3 [+2.3, +14.0]** | 1.24 | 5.97 | 93 s |
+| SFT 4B | Joint head (22.6 M) | GPT-5.5 before, Piotr's 2,692 states | 5 | 43.7% | 49.4% | **+7.3 [+1.7, +13.0]** | 0.88 | 7.79 | 114 s |
+| SFT 4B | Joint head (22.6 M) | GPT-5.5 before, Piotr's 2,692 states | 3 | 42.3% | 47.2% | **+6.0 [+0.3, +11.7]** | 0.74 | 5.39 | 77 s |
+| SFT 4B | Pointwise head (16.8 M) | GPT-5.5 before, Piotr's 2,692 states | 3 | 41.3% | 47.0% | +5.0 [−0.7, +10.7] | 0.72 | 5.40 | 77 s |
 
 - **N = 3 vs N = 5 (overall, pp [95% CI]):** Piotr +3.7 [−1.7, +9.0], joint head −1.3 [−7.3, +4.3]. At N = 3, joint head − Piotr −2.3 [−8.0, +3.3]; pointwise − joint −1.0 [−6.7, +4.7]. Valid only, the same comparisons are +4.4, −2.3, −4.7 and +0.8 pp, none excluding 0.
 - **Time.** A decision waits for the slowest of its parallel candidates, and eight episodes share each GPU, so three candidates cut decisions from about 8 s to 5.4–6.0 s.
@@ -131,8 +131,8 @@
 
 | Selector (actor SFT 4B, five candidates) | Training labels | Online-Mind2Web − SFT 4B, pp [95% CI] | WebVoyager − SFT 4B | DeepShop − SFT 4B |
 | --- | --- | ---: | ---: | ---: |
-| Piotr SelectionARM | GPT-5.5 pick, Piotr's 2,692 states | +4.7 [−0.7, +10.3] | **+8.1 [+4.0, +11.8]** | +7.3 [−1.3, +16.0] |
-| Head (22.6 M) | GPT-5.5 pick, Piotr's 2,692 states | **+7.3 [+1.7, +13.0]** | **+6.9 [+2.9, +10.9]** | **+10.0 [+1.3, +18.7]** |
+| Piotr SelectionARM | GPT-5.5 before, Piotr's 2,692 states | +4.7 [−0.7, +10.3] | **+8.1 [+4.0, +11.8]** | +7.3 [−1.3, +16.0] |
+| Head (22.6 M) | GPT-5.5 before, Piotr's 2,692 states | **+7.3 [+1.7, +13.0]** | **+6.9 [+2.9, +10.9]** | **+10.0 [+1.3, +18.7]** |
 | Head (22.6 M) | Observed outcome, the 1,380 branch states | +1.7 [−3.3, +6.7] | **+7.9 [+3.9, +12.1]** | +8.0 [0.0, +16.0] |
 | Head (22.6 M) | Luna K = 3, the 1,380 branch states | +2.0 [−3.7, +8.0] | **+6.7 [+2.9, +10.6]** | +8.7 [0.0, +17.3] |
 | Head (22.6 M) | Luna K = 1, the 1,380 branch states | −2.3 [−7.3, +2.7] | **+4.9 [+0.7, +8.9]** | +4.0 [−4.7, +12.7] |
