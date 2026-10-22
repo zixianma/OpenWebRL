@@ -1,5 +1,5 @@
-"""Overall success vs parameters, PFLOP per episode and model time per episode (2026-10-21/22). Top row: all 1,045 tasks
-(Online-Mind2Web + WebVoyager + DeepShop). Bottom row: Online-Mind2Web 300 only, adding the N = 3 selector runs; lines
+"""Overall success vs parameters, PFLOP per episode and model time per episode (2026-10-21/22). Top row: mean over Online-Mind2Web,
+WebVoyager and DeepShop, each benchmark weighted equally (success and per-episode cost alike). Bottom row: Online-Mind2Web 300 only, adding the N = 3 selector runs; lines
 join each selector's N = 3 (triangle) and N = 5 runs.
 Data: selection-head-sft-actions-full-20261021.json (heads, Piotr, SFT 4B) and selection-n3-sft8b-full-20261021.json
 (SFT 8B, N = 3 runs)."""
@@ -29,21 +29,32 @@ methods = [  # label, (source, id), params, color, marker, hollow
 links = [("Piotr SelectionARM", "Piotr SelectionARM, N = 3", "#eb6834"), ("Head, Piotr's data", "Head, Piotr's data, N = 3", "#2a78d6")]
 
 
-def row(src, bench):
+BENCH = ("online_mind2web", "webvoyager", "deepshop")
+
+
+def one(src, bench):
     s, key = src
     rows = full if s == "full" else new
-    return next((r for r in rows if r.get("condition" if s == "full" else "key") == key and r["benchmark"] == bench), None)
+    r = next((r for r in rows if r.get("condition" if s == "full" else "key") == key and r["benchmark"] == bench), None)
+    return r and dict(overall=r["overall"], pflop=r["pflop_per_step"] * r["steps_per_episode"],
+                      seconds=r["decision_seconds_mean"] * r["decisions"] / r["tasks"])
+
+
+def row(src, bench):
+    if bench != "mean":
+        return one(src, bench)
+    rs = [one(src, b) for b in BENCH]
+    return None if None in rs else {k: sum(r[k] for r in rs) / 3 for k in rs[0]}
 
 
 def x_of(r, p, k):
-    return {"params": p / 1e9, "pflop": r["pflop_per_step"] * r["steps_per_episode"],
-            "seconds": r["decision_seconds_mean"] * r["decisions"] / r["tasks"]}[k]
+    return p / 1e9 if k == "params" else r[k]
 
 
 cols = [("params", "Parameters, actor + selector (B)"), ("pflop", "PFLOP per episode"), ("seconds", "Model time per episode (s)")]
 plt.rcParams.update({"font.size": 10, "axes.spines.top": False, "axes.spines.right": False})
 fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), sharey="row")
-for ax_row, bench, ylabel in ((axes[0], "all", "All 1,045 tasks: overall success (%)"),
+for ax_row, bench, ylabel in ((axes[0], "mean", "Mean of 3 benchmarks: overall success (%)"),
                               (axes[1], "online_mind2web", "Online-Mind2Web 300: overall success (%)")):
     pts = {m[0]: (row(m[1], bench), m[2]) for m in methods}
     for ax, (k, xlabel) in zip(ax_row, cols):
@@ -62,9 +73,9 @@ for ax_row, bench, ylabel in ((axes[0], "all", "All 1,045 tasks: overall success
         ax.grid(True, color="#e6e5e0", linewidth=0.8); ax.set_axisbelow(True)
         ax.tick_params(colors="#55534d"); [s.set_color("#c3c2b7") for s in ax.spines.values()]
     ax_row[0].set_ylabel(ylabel); ax_row[0].set_xlim(3.5, 9.5)
-axes[0, 0].set_ylim(39.3, 48.8)
+axes[0, 0].set_ylim(36.6, 47.4)
 axes[1, 0].set_ylim(31.8, 45.8)
-for ax, y in ((axes[0, 0], 39.6), (axes[1, 0], 32.2)):
+for ax, y in ((axes[0, 0], 36.9), (axes[1, 0], 32.2)):
     ax.annotate("SFT 4B 4.44 B; every head 4.46 B", (4.6, y), fontsize=8.5, color="#55534d")
 axes[1, 1].annotate("SFT 4B and 8B both 36.3%", (0.27, 35.3), fontsize=8.5, color="#55534d")
 handles, labels = axes[1, 0].get_legend_handles_labels()

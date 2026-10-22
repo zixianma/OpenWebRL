@@ -1,0 +1,361 @@
+{
+ "note": "Equal-weight three-benchmark means (Online-Mind2Web, WebVoyager, DeepShop each one third) of overall and valid-only success,\nand paired differences on that mean: within each benchmark, tasks are resampled (10,000 stratified bootstrap draws, seed\n20261022); overall uses every task, valid-only the tasks valid under both methods; the three benchmark differences are then\naveraged equally. Same runs as selection-head-sft-actions-full-20261021.json and selection-n3-sft8b-full-20261021.json.",
+ "rows": {
+  "SFT 4B": {
+   "valid_only": {
+    "online_mind2web": 39.6,
+    "webvoyager": 45.0,
+    "deepshop": 34.2
+   },
+   "overall": {
+    "online_mind2web": 36.3,
+    "webvoyager": 44.4,
+    "deepshop": 34.0
+   },
+   "mean_overall": 38.2,
+   "mean_valid_only": 39.6
+  },
+  "SFT 8B": {
+   "valid_only": {
+    "online_mind2web": 39.9,
+    "webvoyager": 49.7,
+    "deepshop": 39.9
+   },
+   "overall": {
+    "online_mind2web": 36.3,
+    "webvoyager": 48.9,
+    "deepshop": 39.3
+   },
+   "mean_overall": 41.5,
+   "mean_valid_only": 43.2
+  },
+  "Piotr SelectionARM": {
+   "valid_only": {
+    "online_mind2web": 46.8,
+    "webvoyager": 53.8,
+    "deepshop": 41.9
+   },
+   "overall": {
+    "online_mind2web": 41.0,
+    "webvoyager": 52.4,
+    "deepshop": 41.3
+   },
+   "mean_overall": 44.9,
+   "mean_valid_only": 47.5
+  },
+  "Head, Piotr's data": {
+   "valid_only": {
+    "online_mind2web": 49.4,
+    "webvoyager": 53.4,
+    "deepshop": 44.9
+   },
+   "overall": {
+    "online_mind2web": 43.7,
+    "webvoyager": 51.3,
+    "deepshop": 44.0
+   },
+   "mean_overall": 46.3,
+   "mean_valid_only": 49.2
+  },
+  "Head, outcome": {
+   "valid_only": {
+    "online_mind2web": 42.2,
+    "webvoyager": 53.0,
+    "deepshop": 42.6
+   },
+   "overall": {
+    "online_mind2web": 38.0,
+    "webvoyager": 52.3,
+    "deepshop": 42.0
+   },
+   "mean_overall": 44.1,
+   "mean_valid_only": 45.9
+  },
+  "Head, K = 3": {
+   "valid_only": {
+    "online_mind2web": 43.1,
+    "webvoyager": 52.0,
+    "deepshop": 42.7
+   },
+   "overall": {
+    "online_mind2web": 38.3,
+    "webvoyager": 51.1,
+    "deepshop": 42.7
+   },
+   "mean_overall": 44.0,
+   "mean_valid_only": 45.9
+  },
+  "Head, K = 1": {
+   "valid_only": {
+    "online_mind2web": 38.6,
+    "webvoyager": 50.5,
+    "deepshop": 38.8
+   },
+   "overall": {
+    "online_mind2web": 34.0,
+    "webvoyager": 49.2,
+    "deepshop": 38.0
+   },
+   "mean_overall": 40.4,
+   "mean_valid_only": 42.6
+  },
+  "Head, pre-execution": {
+   "valid_only": {
+    "online_mind2web": 36.9,
+    "webvoyager": 47.1,
+    "deepshop": 34.2
+   },
+   "overall": {
+    "online_mind2web": 33.0,
+    "webvoyager": 45.7,
+    "deepshop": 34.0
+   },
+   "mean_overall": 37.6,
+   "mean_valid_only": 39.4
+  },
+  "Head, K = 1, 1,908 SFT + RL states": {
+   "valid_only": {
+    "online_mind2web": 42.9,
+    "webvoyager": 50.4,
+    "deepshop": 46.6
+   },
+   "overall": {
+    "online_mind2web": 37.3,
+    "webvoyager": 49.1,
+    "deepshop": 45.3
+   },
+   "mean_overall": 43.9,
+   "mean_valid_only": 46.6
+  }
+ },
+ "paired": {
+  "SFT 4B - Piotr SelectionARM": {
+   "mean_overall": [
+    -6.7,
+    -10.3,
+    -3.1
+   ],
+   "mean_valid_only": [
+    -7.3,
+    -11.1,
+    -3.3
+   ]
+  },
+  "SFT 8B - SFT 4B": {
+   "mean_overall": [
+    3.3,
+    -0.3,
+    6.9
+   ],
+   "mean_valid_only": [
+    3.4,
+    -0.3,
+    7.3
+   ]
+  },
+  "SFT 8B - Piotr SelectionARM": {
+   "mean_overall": [
+    -3.4,
+    -7.3,
+    0.4
+   ],
+   "mean_valid_only": [
+    -4.0,
+    -8.0,
+    0.0
+   ]
+  },
+  "Piotr SelectionARM - SFT 4B": {
+   "mean_overall": [
+    6.7,
+    3.0,
+    10.4
+   ],
+   "mean_valid_only": [
+    7.3,
+    3.4,
+    11.1
+   ]
+  },
+  "Head, Piotr's data - SFT 4B": {
+   "mean_overall": [
+    8.1,
+    4.4,
+    11.8
+   ],
+   "mean_valid_only": [
+    9.1,
+    5.2,
+    13.0
+   ]
+  },
+  "Head, Piotr's data - Piotr SelectionARM": {
+   "mean_overall": [
+    1.4,
+    -2.1,
+    4.9
+   ],
+   "mean_valid_only": [
+    1.5,
+    -2.2,
+    5.2
+   ]
+  },
+  "Head, outcome - SFT 4B": {
+   "mean_overall": [
+    5.9,
+    2.5,
+    9.4
+   ],
+   "mean_valid_only": [
+    6.3,
+    2.8,
+    9.8
+   ]
+  },
+  "Head, outcome - Piotr SelectionARM": {
+   "mean_overall": [
+    -0.8,
+    -4.5,
+    2.8
+   ],
+   "mean_valid_only": [
+    -1.7,
+    -5.6,
+    2.2
+   ]
+  },
+  "Head, K = 3 - SFT 4B": {
+   "mean_overall": [
+    5.8,
+    2.1,
+    9.5
+   ],
+   "mean_valid_only": [
+    6.0,
+    2.2,
+    9.9
+   ]
+  },
+  "Head, K = 3 - Piotr SelectionARM": {
+   "mean_overall": [
+    -0.9,
+    -4.5,
+    2.7
+   ],
+   "mean_valid_only": [
+    -1.6,
+    -5.4,
+    2.1
+   ]
+  },
+  "Head, K = 1 - SFT 4B": {
+   "mean_overall": [
+    2.2,
+    -1.5,
+    5.8
+   ],
+   "mean_valid_only": [
+    2.1,
+    -1.8,
+    5.9
+   ]
+  },
+  "Head, K = 1 - Piotr SelectionARM": {
+   "mean_overall": [
+    -4.5,
+    -8.3,
+    -0.8
+   ],
+   "mean_valid_only": [
+    -5.0,
+    -8.9,
+    -1.0
+   ]
+  },
+  "Head, pre-execution - SFT 4B": {
+   "mean_overall": [
+    -0.7,
+    -4.2,
+    2.8
+   ],
+   "mean_valid_only": [
+    -0.5,
+    -4.2,
+    3.2
+   ]
+  },
+  "Head, pre-execution - Piotr SelectionARM": {
+   "mean_overall": [
+    -7.4,
+    -11.1,
+    -3.8
+   ],
+   "mean_valid_only": [
+    -8.1,
+    -11.9,
+    -4.4
+   ]
+  },
+  "Head, K = 1, 1,908 SFT + RL states - SFT 4B": {
+   "mean_overall": [
+    5.7,
+    2.0,
+    9.4
+   ],
+   "mean_valid_only": [
+    6.6,
+    2.9,
+    10.3
+   ]
+  },
+  "Head, K = 1, 1,908 SFT + RL states - Piotr SelectionARM": {
+   "mean_overall": [
+    -1.0,
+    -4.5,
+    2.5
+   ],
+   "mean_valid_only": [
+    -0.8,
+    -4.5,
+    2.8
+   ]
+  },
+  "Head, outcome - Head, Piotr's data": {
+   "mean_overall": [
+    -2.2,
+    -5.9,
+    1.4
+   ],
+   "mean_valid_only": [
+    -3.3,
+    -7.1,
+    0.6
+   ]
+  },
+  "Head, K = 3 - Head, Piotr's data": {
+   "mean_overall": [
+    -2.3,
+    -5.8,
+    1.3
+   ],
+   "mean_valid_only": [
+    -3.3,
+    -7.0,
+    0.4
+   ]
+  },
+  "SFT 8B - Head, Piotr's data": {
+   "mean_overall": [
+    -4.8,
+    -8.5,
+    -1.0
+   ],
+   "mean_valid_only": [
+    -5.4,
+    -9.4,
+    -1.5
+   ]
+  }
+ }
+}
