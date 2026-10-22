@@ -147,7 +147,7 @@
 
 **Architecture variants.** The screen below crosses interaction (joint / independent) with the scorer (transformer / MLP) and the loss (soft CE / per-candidate BCE); every variant reads the same frozen actor features and has about 22.6 M parameters.
 
-![Selection-head variants: a joint transformer lets every candidate attend to every other, an independent one masks attention so each candidate sees only the state and itself; a joint MLP adds the candidate minus the mean of the others, an independent MLP sees only the candidate and the state; soft cross-entropy fits a softmax over the panel to the label shares, per-candidate BCE fits each logit to its own share](arm_results/methods/selection-head-variants-20261022.png)
+![Selection-head variants: a joint transformer uses full bidirectional attention without position embeddings, so every candidate attends to every other and order does not matter, an independent one masks attention so each candidate sees only the state and itself; a joint MLP adds the candidate minus the mean of the others, an independent MLP sees only the candidate and the state; a worked example with a 3 : 1 target shows soft cross-entropy on the softmax (0.84) and per-candidate BCE on each sigmoid (0.77) for the same logits](arm_results/methods/selection-head-variants-20261022.png)
 
 *[Figure script](arm_results/methods/selection-head-variants-20261022.py); code `openwebrl/selection_head.py` (`CandidateSetHead`, `selection_loss`, `pointwise_bce_loss`).*
 
