@@ -1,0 +1,215 @@
+{
+ "note": "SelectionARM LoRA (Piotr arm_lora recipe on OpenWebRL-4B-SFT) trained on the selection heads' 1,380 distinct-action SFT-actor training states (10 orderings, ties all), scored on 345 test states with held-out draws 3-7. distinct = 5 orderings of one candidate per action; natural = 5 seeded five-proposal panels. Pick = argmax over candidate digits after the training (train_) or serving (serving_) response prefix. Differences: task-clustered bootstrap [mean, lo, hi] in pp.",
+ "training": {
+  "teacher_k3": {
+   "job": 377608,
+   "examples": 14510,
+   "steps": 1814,
+   "train_loss": 0.0556
+  },
+  "outcome": {
+   "job": 377610,
+   "examples": 10170,
+   "steps": 1272,
+   "train_loss": 0.0835
+  }
+ },
+ "lora_teacher_k3": {
+  "model": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/arm-lora/lora/teacher_k3/merged",
+  "test_states": 345,
+  "test_tasks": 86,
+  "seconds": 720.7,
+  "panels": 3450,
+  "uniform": 36.01,
+  "sft_sample": 35.38,
+  "oracle": 47.8,
+  "train_distinct": {
+   "success": 37.22,
+   "minus_uniform": [
+    1.2132994523345404,
+    -0.72454420364637,
+    3.1220384332425803
+   ],
+   "minus_sft_sample": [
+    1.8424216489290859,
+    -0.6329611714582929,
+    4.405928841913527
+   ],
+   "digit_mass": 0.9994
+  },
+  "train_natural": {
+   "success": 37.54,
+   "minus_uniform": [
+    1.5352504651322352,
+    -0.06361937686450587,
+    3.146932705326535
+   ],
+   "minus_sft_sample": [
+    2.1643726617267807,
+    0.4338367980726767,
+    4.082996381751081
+   ],
+   "digit_mass": 0.9987
+  },
+  "serving_distinct": {
+   "success": 37.16,
+   "minus_uniform": [
+    1.1588372097716115,
+    -0.8041024901847728,
+    3.088215447590448
+   ],
+   "minus_sft_sample": [
+    1.7879594063661572,
+    -0.7085074940641076,
+    4.354662698412699
+   ],
+   "digit_mass": 0.9992
+  },
+  "serving_natural": {
+   "success": 37.53,
+   "minus_uniform": [
+    1.5207577115090467,
+    -0.06135177836566719,
+    3.1392491645781124
+   ],
+   "minus_sft_sample": [
+    2.149879908103592,
+    0.40486692248512046,
+    4.06744799369023
+   ],
+   "digit_mass": 0.9984
+  }
+ },
+ "piotr": {
+  "model": "/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection-sglang-81b452d",
+  "test_states": 345,
+  "test_tasks": 86,
+  "seconds": 727.2,
+  "panels": 3450,
+  "uniform": 36.01,
+  "sft_sample": 35.38,
+  "oracle": 47.8,
+  "train_distinct": {
+   "success": 39.05,
+   "minus_uniform": [
+    3.0418611948550933,
+    1.551305208314705,
+    4.704454573505094
+   ],
+   "minus_sft_sample": [
+    3.6709833914496386,
+    1.7796913318241843,
+    5.986434837092731
+   ],
+   "digit_mass": 0.992
+  },
+  "train_natural": {
+   "success": 38.39,
+   "minus_uniform": [
+    2.3885600676409227,
+    1.0563172095064748,
+    3.7794555166759642
+   ],
+   "minus_sft_sample": [
+    3.0176822642354684,
+    1.519144198588034,
+    4.691834692605832
+   ],
+   "digit_mass": 0.9996
+  },
+  "serving_distinct": {
+   "success": 39.06,
+   "minus_uniform": [
+    3.053455397753644,
+    1.5515929847293977,
+    4.724525294159093
+   ],
+   "minus_sft_sample": [
+    3.682577594348189,
+    1.7780876900355285,
+    6.01579469507101
+   ],
+   "digit_mass": 0.9912
+  },
+  "serving_natural": {
+   "success": 38.42,
+   "minus_uniform": [
+    2.411748473438024,
+    1.0687028561742522,
+    3.823366570823788
+   ],
+   "minus_sft_sample": [
+    3.040870670032569,
+    1.5556399602743338,
+    4.729574857133337
+   ],
+   "digit_mass": 0.9995
+  }
+ },
+ "lora_outcome": {
+  "model": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/arm-lora/lora/outcome/merged",
+  "test_states": 345,
+  "test_tasks": 86,
+  "seconds": 727.8,
+  "panels": 3450,
+  "uniform": 36.01,
+  "sft_sample": 35.38,
+  "oracle": 47.8,
+  "train_distinct": {
+   "success": 36.43,
+   "minus_uniform": [
+    0.4209695938719587,
+    -1.336570930013205,
+    2.3120110461338537
+   ],
+   "minus_sft_sample": [
+    1.0500917904665044,
+    -1.0792117481503951,
+    3.54303017027664
+   ],
+   "digit_mass": 0.9993
+  },
+  "train_natural": {
+   "success": 36.37,
+   "minus_uniform": [
+    0.3688465325955793,
+    -0.8856861905653813,
+    1.679851212231969
+   ],
+   "minus_sft_sample": [
+    0.997968729190125,
+    -0.11895318476706099,
+    2.320607207120365
+   ],
+   "digit_mass": 0.9989
+  },
+  "serving_distinct": {
+   "success": 36.36,
+   "minus_uniform": [
+    0.35430292720529216,
+    -1.3881796892495,
+    2.258113329651186
+   ],
+   "minus_sft_sample": [
+    0.9834251237998377,
+    -1.1217393477322253,
+    3.501236902330783
+   ],
+   "digit_mass": 0.9989
+  },
+  "serving_natural": {
+   "success": 36.64,
+   "minus_uniform": [
+    0.63873381117851,
+    -0.6392940055330955,
+    1.9959681813228727
+   ],
+   "minus_sft_sample": [
+    1.2678560077730558,
+    0.09308484786389443,
+    2.6808450893119087
+   ],
+   "digit_mass": 0.9986
+  }
+ }
+}

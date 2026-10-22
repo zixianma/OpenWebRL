@@ -113,6 +113,23 @@
 - **Nodes.** All twelve runs excluded the degraded node g013; two WebVoyager runs hit CUDA faults on g014 and resumed from their saved records on other nodes. Every task has exactly one recorded episode.
 - [Evidence](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json)
 
+**Same data, larger selector (offline).** Piotr's SelectionARM recipe (LoRA rank 32 on OpenWebRL-4B-SFT, `{"selection": N}`, 2 epochs) trained on exactly the heads' 1,380 training states and labels does no better than the 22.6 M head. Scored on the 345 test states, held-out draws 3–7, argmax pick:
+
+| Selector (training data) | Distinct-action panels | Natural five-proposal panels | Natural − uniform, pp [95% CI] |
+| --- | ---: | ---: | ---: |
+| Uniform over actions | 36.0% | — | — |
+| SFT sample (actor frequency) | 35.4% | — | — |
+| Oracle | 47.8% | — | — |
+| Head, K = 3 labels | 36.4% | 37.4% | — |
+| LoRA 4B, K = 3 labels | 37.2% | 37.5% | +1.5 [−0.1, +3.1] |
+| Head, outcome labels | 36.7% | 35.4% | — |
+| LoRA 4B, outcome labels | 36.4% | 36.6% | +0.6 [−0.6, +2.0] |
+| Piotr SelectionARM (his 34,518 panels) | 39.1% | 38.4% | **+2.4 [+1.1, +3.8]** |
+
+- LoRA − head on the same states: K = 3 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on our data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
+- Distinct panels average 5 candidate orderings per state; natural panels are 5 seeded five-proposal panels. Reading the pick after the serving prefix instead of the training prefix changes success by under 0.3 pp. Head rows are the round-1 heads restricted to these 345 states (one distinct ordering).
+- Not yet run live. [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
+
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
 | Head (training labels / variant) | Online-Mind2Web successes (of 50) | WebVoyager successes (of 50) | DeepShop successes (of 50) | All successes (of 150) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] |
