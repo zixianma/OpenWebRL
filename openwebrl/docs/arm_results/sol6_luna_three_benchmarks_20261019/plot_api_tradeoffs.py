@@ -134,13 +134,18 @@ def main():
         for ext in ("png", "svg"):
             save_figure(fig, args.output_dir / f"api_performance_vs_{suffix}.{ext}")
         plt.close(fig)
-    fig, axes = plt.subplots(1, 2, figsize=(15.5, 5.6))
+    fig, axes = plt.subplots(1, 3, figsize=(20, 5.6), sharey=True)
     draw(axes[0], means, "mean_model_usd_per_task")
     draw(axes[1], means, "mean_task_seconds")
-    fig.text(0.075, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
-    fig.subplots_adjust(left=0.075, right=0.77, bottom=0.22, top=0.88, wspace=0.25)
+    draw(axes[2], means, "mean_browser_steps")
+    for ax in axes[1:]:
+        ax.set_ylabel("")
+    for ax in axes:
+        ax.title.set_fontsize(13)
+    fig.text(0.05, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
+    fig.subplots_adjust(left=0.05, right=0.82, bottom=0.22, top=0.88, wspace=0.22)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(0.795, 0.56),
+    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(0.835, 0.56),
                frameon=False, fontsize=10, labelspacing=1.4)
     for ext in ("png", "svg"):
         save_figure(fig, args.output_dir / f"api_performance_tradeoffs.{ext}")
