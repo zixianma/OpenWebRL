@@ -153,33 +153,34 @@
 
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
-| Head (training labels / variant) | Online-Mind2Web successes (of 50) | WebVoyager successes (of 50) | DeepShop successes (of 50) | All successes (of 150) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, 1 sample | 17 | 19 | 17 | 53 | 146 | 35.3% | 36.3% | — | — |
-| Piotr SelectionARM | 17 | 25 | 25 | 67 | 143 | 44.7% | 46.9% | +9.3 | — |
-| Earlier K = 1 head, 1,908 SFT + RL states | 20 | 20 | 25 | 65 | 140 | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
-| **Labels** (default head: joint transformer, soft CE) | | | | | | | | | |
-| Pre-execution (Luna) | 11 | 20 | 19 | 50 | 140 | 33.3% | 35.7% | −2.0 [−10.0, +6.0] | **−11.3 [−19.3, −3.3]** |
-| Lookahead K = 1 (Luna) | 17 | 26 | 22 | 65 | 142 | 43.3% | 45.8% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] |
-| Lookahead K = 3 (Luna) | 19 | 25 | 23 | 67 | 141 | 44.7% | 47.5% | **+9.3 [+2.0, +16.7]** | 0.0 [−8.7, +8.7] |
-| Observed outcome (draws 0–2) | 20 | 24 | 24 | **68** | 147 | **45.3%** | 46.3% | **+10.0 [+2.7, +17.3]** | +0.7 [−7.3, +8.7] |
-| **Architecture** (K = 1 labels) | | | | | | | | | |
-| Joint transformer, BCE | 18 | 24 | 22 | 64 | 142 | 42.7% | 45.1% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
-| Independent transformer, soft CE | 15 | 23 | 26 | 64 | 142 | 42.7% | 45.1% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
-| Independent transformer, BCE | 18 | 21 | 26 | 65 | 140 | 43.3% | 46.4% | +8.0 [0.0, +16.7] | −1.3 [−10.0, +7.3] |
-| Joint MLP, soft CE | 17 | 26 | 19 | 62 | 144 | 41.3% | 43.1% | +6.0 [−1.3, +13.3] | −3.3 [−12.0, +5.3] |
-| Joint MLP, BCE | 14 | 24 | 18 | 56 | 138 | 37.3% | 40.6% | +2.0 [−5.3, +9.3] | −7.3 [−15.3, +0.7] |
-| Independent MLP, soft CE | 17 | 21 | 20 | 58 | 138 | 38.7% | 42.0% | +3.3 [−4.0, +10.7] | −6.0 [−14.7, +2.7] |
-| Independent MLP, BCE | 19 | 22 | 21 | 62 | 143 | 41.3% | 43.4% | +6.0 [−2.0, +14.0] | −3.3 [−11.3, +4.7] |
-| `<decide>` pointer readout, soft CE | 19 | 19 | 22 | 60 | 142 | 40.0% | 42.3% | +4.7 [−4.0, +13.3] | −4.7 [−13.3, +4.0] |
-| **Data** (default head) | | | | | | | | | |
-| K = 1, natural-frequency panels | 15 | 21 | 22 | 58 | 139 | 38.7% | 41.7% | +3.3 [−4.7, +11.3] | −6.0 [−14.0, +2.0] |
-| Pre-execution + Piotr's 34,518 panels | 21 | 20 | 17 | 58 | 142 | 38.7% | 40.8% | +3.3 [−5.3, +12.0] | −6.0 [−14.0, +2.0] |
+| Head (training labels / variant) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT, pp<br>[95% CI] | − Piotr, pp<br>[95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, 1 sample | 36.2% | 38.8% | 34.0% | 35.3% | 36.3% | — | — |
+| Piotr SelectionARM | 37.8% | 51.0% | 51.0% | 44.7% | 46.6% | +9.3 | — |
+| Earlier K = 1 head, 1,908 SFT + RL states | 46.5% | 41.7% | 51.0% | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
+| **Labels** (default head: joint transformer, soft CE) | | | | | | | |
+| Pre-execution (Luna) | 26.8% | 40.8% | 38.0% | 33.3% | 35.2% | −2.0 [−10.0, +6.0] | **−11.3 [−19.3, −3.3]** |
+| Lookahead K = 1 (Luna) | 37.8% | 53.1% | 45.8% | 43.3% | 45.6% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] |
+| Lookahead K = 3 (Luna) | 42.2% | 53.2% | 46.9% | 44.7% | 47.5% | **+9.3 [+2.0, +16.7]** | 0.0 [−8.7, +8.7] |
+| Observed outcome (draws 0–2) | 42.6% | 48.0% | 48.0% | 45.3% | 46.2% | **+10.0 [+2.7, +17.3]** | +0.7 [−7.3, +8.7] |
+| **Architecture** (K = 1 labels) | | | | | | | |
+| Joint transformer, BCE | 39.1% | 51.1% | 44.9% | 42.7% | 45.0% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
+| Independent transformer, soft CE | 32.6% | 48.9% | 53.1% | 42.7% | 44.9% | +7.3 [−0.7, +15.3] | −2.0 [−10.7, +6.7] |
+| Independent transformer, BCE | 41.9% | 43.8% | 53.1% | 43.3% | 46.2% | +8.0 [0.0, +16.7] | −1.3 [−10.0, +7.3] |
+| Joint MLP, soft CE | 37.0% | 53.1% | 38.8% | 41.3% | 42.9% | +6.0 [−1.3, +13.3] | −3.3 [−12.0, +5.3] |
+| Joint MLP, BCE | 33.3% | 51.1% | 36.7% | 37.3% | 40.4% | +2.0 [−5.3, +9.3] | −7.3 [−15.3, +0.7] |
+| Independent MLP, soft CE | 39.5% | 44.7% | 41.7% | 38.7% | 42.0% | +3.3 [−4.0, +10.7] | −6.0 [−14.7, +2.7] |
+| Independent MLP, BCE | 41.3% | 45.8% | 42.9% | 41.3% | 43.3% | +6.0 [−2.0, +14.0] | −3.3 [−11.3, +4.7] |
+| `<decide>` pointer readout, soft CE | 43.2% | 38.8% | 44.9% | 40.0% | 42.3% | +4.7 [−4.0, +13.3] | −4.7 [−13.3, +4.0] |
+| **Data** (default head) | | | | | | | |
+| K = 1, natural-frequency panels | 33.3% | 45.7% | 45.8% | 38.7% | 41.6% | +3.3 [−4.7, +11.3] | −6.0 [−14.0, +2.0] |
+| Pre-execution + Piotr's 34,518 panels | 48.8% | 40.8% | 34.0% | 38.7% | 41.2% | +3.3 [−5.3, +12.0] | −6.0 [−14.0, +2.0] |
 
 - **Setup.**
   - Actor OpenWebRL-4B-SFT, T 1.0 / top-p 0.9, 30 steps, five candidates per decision. One H200 per head. Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop.
   - SFT, Piotr and the earlier head are the [full-benchmark runs](#selection-head-crossbench-full-20261018) restricted to the same 150 tasks.
-  - Differences are paired over tasks: 95% bootstrap, 10,000 resamples. "Overall" counts invalid episodes as failures.
+  - "Overall" counts invalid episodes as failures; "valid-only" divides successes by valid episodes. "Mean" weights the three benchmarks equally; with 50 tasks each, mean overall equals the rate over all 150 tasks.
+  - Differences are on overall success, paired over tasks: 95% bootstrap, 10,000 resamples.
 - **Resolution.** With 150 tasks, a head-vs-head interval spans about ±8 pp. Only label differences of about 10 pp are resolved. The architecture and data rows cannot be ranked against each other or against the default.
 - **Cost is the same for every head.** Each has 22.6–23.1 M parameters and costs 0.061–0.065 PFLOP per step, with 15–23 ms per selection and no fallbacks in any of 2,000–2,700 decisions. Piotr SelectionARM costs 0.100 PFLOP per step and 0.60 s per selection.
 - **Node caveats.**
