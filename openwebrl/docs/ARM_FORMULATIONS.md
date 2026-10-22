@@ -1,6 +1,21 @@
 # ARM branching: action quality, execution evidence and selector training
 
-**Continuation outcomes contain useful action-selection signal; the value of immediate post-action evidence is still unresolved.** The studies below address different parts of that question. Their principal controlled results are:
+**Looking ahead is what makes a teacher's action choice better; immediate post-action evidence adds nothing.** On 1,037 SFT-actor branching states (329 tasks), GPT-6 Luna judging each candidate after the actor's next three steps (lookahead K = 3) beats judging it right after execution by about 2 pp under both outcome judges, while judging after execution is level with judging before it. Every teacher formulation beats a uniform pick; the WebArbiter, WebShepherd and PRO-CUA formulations land at or below our pre-execution baseline. Scored on held-out continuation draws 3–7, valid draws only; [method](#branching-design), [details](#lookahead-main-results).
+
+| Question | States | Paired difference, pp: o4-mini judge [95%] | Same, GPT-6 Luna judge [95%] | Takeaway |
+| --- | ---: | --- | --- | --- |
+| Does immediate execution evidence help? | 1,037 | post − pre +0.32 [−0.90, +1.48] | +0.58 [−0.47, +1.55] | No |
+| Does looking ahead help? | 1,037 | K = 3 − post +2.18 [+1.09, +3.33] | +2.38 [+1.58, +3.22] | Yes; K = 1 is within 0.6 pp of K = 3 |
+| Do teachers beat a uniform pick? | 1,037 | K = 3 +4.76 [+3.53, +5.94]; pre +2.26 [+1.17, +3.33] | +3.97 [+2.96, +5.03]; +1.02 [+0.27, +1.81] | Yes, all of them; the actor's first sample does not (−0.04) |
+| Do prior-work judge formulations do better? | 1,037 | K = 3 − WebArbiter +2.63 [+1.44, +3.74] | +1.97 [+0.81, +3.06] | No; WebArbiter is the best of the three, level with pre-execution |
+| Does a stronger teacher help? | 194 | GPT-6.1 Sol − Luna, both after execution: +0.41 [−1.17, +1.89] | — | No ([details](#teacher-labels-211-20261011)) |
+| Does selecting with 24 continuations beat eight? | 14 | +3.52 [−0.12, +7.35] | — | Inconclusive ([details](#branch-extra24-20261008)) |
+| Do trained selectors beat uniform offline (natural five-proposal panels)? | 345 | Piotr SelectionARM +2.4 [+1.1, +3.8] | — | Piotr's does, possibly helped by having trained on other states of the same tasks; 4B LoRAs trained on our K = 3 or outcome labels +1.5 [−0.1, +3.1] and +0.6 [−0.6, +2.0] ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-lora-20261021)) |
+
+Intervals resample whole tasks. The Luna-judge column re-judges the same continuations with GPT-6 Luna, a much stricter judge. Whether these labels train better selectors live is answered in [ARM_SELECTION_HEAD](ARM_SELECTION_HEAD.md#headline-results): heads trained on K = 3 or outcome labels match Piotr SelectionARM on 1,045 benchmark tasks; heads trained on pre-execution labels gain nothing. [Paired-difference evidence](arm_results/rl_integration/lookahead-full-set-pairs-20261022.json).
+
+<details>
+<summary>Earlier summary on smaller, older state sets (superseded)</summary>
 
 | Question | Matched states | Paired difference, percentage points | 95% interval | Takeaway |
 | --- | ---: | ---: | --- | --- |
@@ -12,24 +27,9 @@
 | Does multi-step lookahead help? | 194 | Luna lookahead (answers hidden) − immediate +1.98 | [+0.08, +3.98] | Modest gain; reaches the outcome reference; showing final answers hurts ([details](#lookahead-labels-20261011)) |
 | Does the lookahead gain replicate on fresh Piotr-matched states? (prespecified primary test) | 121 | Luna lookahead (answers hidden) − immediate +4.75 | [+1.58, +8.27] | Yes; lookahead also beats uniform (+4.19) and is within 1 pp of the outcome reference ([stage a](#lookahead-stage-a-20261012)) |
 
-The first interval resamples states; the others resample task groups. All are exploratory, pointwise intervals. **Students trained on branching outcomes or on matched pre- and post-action labels have so far stayed at uniform** ([student results](#teacher-labels-211-20261011)). Selectors trained on teacher choices (Piotr ARM and the [actor-based selectors](#selection-head-20261009)) do not clearly beat a uniform pick on held-out draws of 138 eight-draw states, while selecting by outcomes on five draws does: +5.32 pp [+3.09, +7.62].
+The first interval resamples states; the others resample task groups. Selectors trained on teacher choices did not clearly beat a uniform pick on held-out draws of 138 eight-draw states, while selecting by outcomes on five draws did: +5.32 pp [+3.09, +7.62].
 
-<a id="branching-experiment-map"></a>
-
-## Two data families, each with a continuation extension
-
-An extension adds **continuations after the same five fixed candidate actions**, not additional action proposals. The historical family and the new pilot are separate collections; their extensions are not independent replications.
-
-| Family | Initial states | Initial draws per action | Added draws per action | States with all added draws | Primary outcome rule |
-| --- | ---: | ---: | ---: | ---: | --- |
-| [Historical 124 + extra two](#arm-continuation-branches-results-20261007) | 124 | 3 | 2 | 58 | Committed invalid outcomes count as zero |
-| [New pilot 32 + extra 24](#branch-selector-scaleup-20261008) | 32 | 8 | 24 | 18 | Invalid outcomes excluded; valid-only success |
-
-The historical target was 149 states; 124 were collected and frozen. The new pilot collected its full 32-state target from the released WebVoyager-source **training pool**, not the WebVoyager evaluation benchmark. It introduced multiple prespecified states per task and train/seen-task/unseen-task roles. The extra24 analysis qualifies only 14 of its 18 complete grids because every candidate needs valid selection and held-out observations.
-
-**Group these records by lineage; do not pool their success rates.** Cohort, task mix, collection time, holdout draws and invalid-outcome policy differ. In particular, the pilot's 48.50% and extra24's 53.32% are not a controlled improvement. The matched eight-versus-24 comparison is 49.80% versus 53.32% on the same 14 states. Both extensions ended partially; no further collection is active.
-
-[Historical teacher comparison](#arm-continuation-branches-results-20261007) · [Fresh extra-two test](#branch-extra2-heldout58-20261008) · [Extra24 common-holdout test](#branch-extra24-20261008) · [Teacher-trained heads](#selection-head-20261009) · [Remaining experiments](#branch-post-to-pre-study-20261008)
+</details>
 
 <a id="branching-design"></a>
 
@@ -57,373 +57,9 @@ All families use official OpenWebRL SFT with temperature 1.0, top-p 0.95, top-k 
 
 </details>
 
-<a id="arm-continuation-branches-results-20261007"></a>
+<a id="lookahead-labels-current"></a>
 
-## Historical family: 124 states, three draws, then two fresh draws
-
-### Does immediate execution evidence help the critic?
-
-Both index-only Luna-high conditions choose among the same candidates without seeing continuation returns. After-execution additionally sees each candidate's immediate execution evidence. The paired comparison uses **119 states and 1,785 outcomes**; four invalid teacher panels and one unavailable-after panel are excluded only here. Their states remain in the 124-state outcome analyses. Committed invalid outcomes count as zero.
-
-| Critic input | Matched states | Continuation success | 95% state-bootstrap interval |
-| --- | ---: | ---: | --- |
-| Before execution | 119 | 35.11% | [27.73%, 42.67%] |
-| After immediate execution | 119 | 37.35% | [29.88%, 45.10%] |
-
-The paired after-minus-before interval in the overview includes zero. After-execution judgments saw the immediate result of execution draws 0–2, which are also the first steps of the continuations scored here. Scoring only on draws 3–7 avoids that overlap. On 57 states with such draws, after minus before is +1.77 pp [−0.51, +4.40]; after minus uniform is +4.61 [+0.39, +9.16]. Choosing by outcomes of draws 0–2 gives +7.22 [+2.88, +12.21] over uniform ([aggregate](arm_results/rl_integration/selection-outcomes-20261010.json)). Repeated teacher choices average over the same saved outcomes; they add no rollout data. Repeat consistency and label changes are diagnostics, not evidence of better action success. [Original aggregate and paired audit](arm_results/rl_integration/continuation-fixed124-20261008.json).
-
-<details>
-<summary>What one Luna judgment sees, and why there are 4 before and 10 after judgments per state</summary>
-
-Each call is one independent GPT-6 Luna request at high reasoning effort. The request contains the task, the last five history entries, the original screenshot and the five candidate responses, and Luna returns one candidate index (`openwebrl/arm_branch_teacher.py`). An after-execution call also receives, for every candidate, the screenshot and tool feedback **immediately after that candidate's action in one execution draw**. No call sees later steps of a continuation, final screenshots or rewards.
-
-| Condition | Evidence | Calls per state |
-| --- | --- | ---: |
-| Before | State and candidates only | 3 repeats + 1 with candidates shuffled = 4 |
-| After, execution draw 0 | Immediate results from draw 0 | 3 repeats + 1 shuffled = 4 |
-| After, execution draw 1 | Immediate results from draw 1 | 3 repeats |
-| After, execution draw 2 | Immediate results from draw 2 | 3 repeats |
-
-- **Repeats** send identical input, to measure Luna's own variability.
-- **Shuffled calls** test whether Luna favors candidates by position.
-- **The three draws** show the same actions' immediate screens from separate browser replays, which can differ.
-- **Coverage.** Every state planned 14 calls. All 14 are valid on 119 states. Two states have 4 before and 6 after judgments; three have 4 before and none after.
-
-Reported "before" and "after" scores average each condition's valid calls per state. Because after-evidence comes from draws 0–2, which are also the first steps of the continuations scored on those draws, the [leakage-free check](#arm-continuation-branches-results-20261007) scores only draws 3–7. Applying this script unchanged to an eight-draw panel would request after-judgments for all eight draws. A labelling manifest must instead fix the evidence draws in advance and keep held-out draws out of the teacher's view.
-
-</details>
-
-<a id="branch-extra2-heldout58-20261008"></a>
-
-### Does selection from old outcomes improve fresh continuations?
-
-**The extra-two pass is audited partial:** 58 of 124 states passed strict replay, adding 580 outcomes. All 1,860 original records are unchanged, giving **2,440 saved outcome records**. The remaining 66 states failed reconstruction; their 660 missing continuations are not counted as zero. The approved 3,100-record target and original 149-state target remain incomplete.
-
-Each row below uses the **same 58 states from 58 task groups, with 580 fresh records and two draws per candidate**. The outcome-based choice uses only the three original draws. Tied best actions receive their exact uniform expected score. Luna’s score averages the fresh outcomes of its three saved before-execution choices; no new teacher calls were made. Committed invalid outcomes count as zero.
-
-| Root-action choice | States | Continuation success | 95% task-bootstrap interval |
-| --- | ---: | ---: | --- |
-| Actor’s first candidate | 58 | 26.72% | [17.24%, 37.07%] |
-| Uniform over five candidates | 58 | 26.03% | [17.76%, 34.83%] |
-| Saved Luna before execution | 58 | 31.03% | [20.11%, 42.24%] |
-| Select on original three; score fresh two | 58 | 34.54% | [23.97%, 45.23%] |
-
-The outcome-based choice gains **+8.51 percentage points over uniform [3.45, 14.37]**. Its gains over actor-first, **+7.82 points [−0.26, 16.84]**, and Luna, **+3.51 points [−2.84, 10.80]**, remain unresolved. These exploratory, pointwise intervals support a useful continuation-outcome signal; they do not establish a trained selector’s performance or superiority to teacher-label training. [Aggregate estimates and audit hashes](arm_results/rl_integration/continuation-extra2-heldout58-20261008.json).
-
-**Replay selection materially changes the cohort.** Using only original draws, actor-first scored 17.82% on these 58 states versus 40.40% on the 66 that later failed reconstruction. Consequently, comparing fresh 34.54% directly with the earlier 124-state LOO result of 38.12% would confound cohort composition, draw count and collection time. The accepted states span candidate decisions 1–3/4–9/10–15 with 36/11/11 states respectively. Frozen observable-state checks do not guarantee identical hidden state or eliminate website drift.
-
-<details>
-<summary>Five-draw sensitivity, ties, uncertainty and judge limitations</summary>
-
-These secondary rows pool old and fresh draws on the same 58 states, yielding 1,450 outcome records. Five-fold LOO selects with four draws and scores the fifth, averaging all overlapping folds. It mixes collection times; the temporally separated old-three/fresh-two comparison above remains primary.
-
-| Root-action choice | States | Pooled continuation success | 95% task-bootstrap interval |
-| --- | ---: | ---: | --- |
-| Actor’s first candidate | 58 | 21.38% | [13.10%, 30.35%] |
-| Uniform candidate | 58 | 24.97% | [16.76%, 33.66%] |
-| Select on four; score held-out fifth | 58 | 33.95% | [23.94%, 44.16%] |
-| Same-data five-draw hindsight oracle | 58 | 41.38% | [31.03%, 51.72%] |
-
-The hindsight row chooses and scores on the same outcomes and is optimistic. Original-three selection ties at the top in 39/58 states; 29/58 give every candidate equal success counts, including 25 all-zero panels. Five-draw hindsight still ties in 35/58 states. Five-fold training maxima tie in 187/290 folds. Ties and duplicate candidates are retained.
-
-Every state has equal weight. Ten thousand bootstrap draws, seed 20261007, resample whole task groups with all their states and normalize by sampled state count. The 58 groups each contain one state here. Intervals are pointwise, exploratory and unadjusted for multiple comparisons. Exact tie expectations avoid choosing winners from held-out outcomes. Valid-only sensitivity, with its own weighted denominators, is included in the aggregate.
-
-The official SFT actor and decoding remain temperature 1.0, top-p 0.95, top-k off and 4,096 response tokens, with the original 30-action budget including replayed prefixes. Canonical o4-mini/AgentTrek labels remain unchanged. Of the 580 fresh records, 523 are valid and 57 invalid; 303 received a judge call and 220 valid records retain native unjudged zero outcomes. Qualitative checks found positives that conflate website statistics or accept a different language edition. These scores measure the frozen judge’s operational reward, not independently established factual or instruction-complete success. Source and identity checks support seed assignment; an independently echoed request seed was unavailable.
-
-</details>
-
-<details>
-<summary>Partial collection, reconstruction failures and final accounting</summary>
-
-| Coverage | States | Saved outcome records |
-| --- | ---: | ---: |
-| Full five draws per action | 58 | 1,450 |
-| Original three only | 66 | 990 |
-| Preserved combined data | 124 | 2,440 |
-| Approved combined target | 124 | 3,100 |
-
-All 124 states were processed once under the frozen reconstruction rule. The first failures on 66 rejected states were 58 visible-snapshot mismatches, five raster mismatches, one page mismatch, one prefix-capture timeout and one initial-navigation timeout. Their 147 unreleased attempt receipts and 513 untouched queue slots remain evidence of missing continuations. They are not added to the outcome dataset. One historical post-commit release-read invalid remains among the original records as previously audited; no candidate execution is invented.
-
-The sole extra-two allocation consumed 14,238 of 28,800 approved seconds on four H200s / 32 CPUs / 480 GiB; 14,562 seconds remain unused and are not transferred. All 727 attempts are charged. Extra-two used 727 browser starts, 6,788 SFT calls and 303 judge calls / $2.406679, with no teacher calls. Combined with prior charges, the shared ledger contains 6,923/9,000 browser starts, 40,512/110,000 SFT calls, 1,438/6,600 judge calls / $11.5469541 of $25, and 1,698/2,200 Luna calls / $6.5299025 of $15.
-
-Scheduler and W&B finished. Independent audits reconciled artifacts, all-attempt accounting, the original-record hashes and controller-owned actor/browser teardown. Post-allocation SSH was unavailable, so teardown does not claim an independent physical node scan. The pass is closed as audited partial, with full-target completion false. The frozen rule forbids replacement or outcome-based replay after reconstruction rejection; no automatic rerun or relaxed replay was used. The separately approved 32-state pilot remains a separate experiment and budget.
-
-</details>
-
-<a id="branch-original-three-details"></a>
-
-<details>
-<summary>Original three-draw reference, depth, repeat controls and judge limitations</summary>
-
-All 2,090 fixed candidate tasks were considered under the frozen replay checks and depth quotas, yielding 124 of the 149 target states: 1,860 outcomes, with 1,710 valid and 150 invalid. The original 149-state target remains incomplete. These estimates use only the original draws, before the extra-two pass.
-
-### Original 124-state outcome comparison
-
-| Root-action choice | States | Continuation success | 95% state-bootstrap interval |
-| --- | ---: | ---: | --- |
-| Actor’s first sample | 124 | 29.84% | [22.85%, 37.10%] |
-| Uniform candidate | 124 | 32.42% | [26.13%, 38.98%] |
-| Select on two continuations; score held-out third | 124 | 38.12% | [31.06%, 45.31%] |
-| Same-data hindsight action oracle | 124 | 50.00% | [42.47%, 57.53%] |
-
-Leave-one-out selection improves over the actor’s first sample by **+8.28 percentage points [+3.84, +12.99]** and over uniform selection by **+5.70 points [+2.60, +9.03]**. For each state, select using two continuations per action, score the held-out third, and average all three overlapping folds. Ties use their exact uniform expectation without consulting the held-out outcome. Candidate 0 is the first actor sample; uniform selection averages all five entries, including duplicates.
-
-The hindsight oracle chooses and scores using the **same three outcomes**, making its 50.00% optimistic. It does not select a successful trajectory from all 15. LOO uses additional continuation outcomes and does not measure a trained selector’s performance.
-
-### Where are the states, and how does selection perform by depth?
-
-The groups below are disjoint. These are descriptive strata: tasks, replayability and remaining action budgets differ, so these rows do not identify a causal depth effect.
-
-| Candidate decisions | States | Share | Actor first | Uniform | LOO selection | Hindsight oracle |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1–3 | 74 | 59.7% | 39.19% | 39.91% | 43.60% | 56.76% |
-| 4–9 | 27 | 21.8% | 16.05% | 22.96% | 32.55% | 43.21% |
-| 10–15 | 23 | 18.5% | 15.94% | 19.42% | 27.05% | 36.23% |
-
-The early 74-state cohort is unchanged; **50 of the targeted 75 later states** were collected. Adding later states changes cohort composition, not the actor or teacher. Per-stratum intervals are in the aggregate.
-
-### Exact decision counts and teacher-matched depth comparisons
-
-| Candidate decision | Complete states | Teacher-matched states |
-| --- | ---: | ---: |
-| 1 | 33 | 31 |
-| 2 | 23 | 22 |
-| 3 | 18 | 17 |
-| 4 | 7 | 7 |
-| 5 | 6 | 6 |
-| 6 | 6 | 5 |
-| 7 | 4 | 4 |
-| 8 | 2 | 2 |
-| 9 | 2 | 2 |
-| 10 | 4 | 4 |
-| 11 | 6 | 6 |
-| 12 | 3 | 3 |
-| 13 | 1 | 1 |
-| 14 | 5 | 5 |
-| 15 | 4 | 4 |
-
-| Candidate decisions | Matched states | Actor first | Before teacher | After teacher | LOO selection |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| 1–3 | 70 | 40.48% | 44.29% | 44.76% | 44.98% |
-| 4–9 | 26 | 16.67% | 24.36% | 25.64% | 31.24% |
-| 10–15 | 23 | 15.94% | 19.32% | 28.02% | 27.05% |
-
-Matched groups total 119 states and use different denominators from the all-state rows above.
-
-
-
-### Repeat controls, oracle-action agreement and ties
-
-| Choice disagreement | Matched states | Rate |
-| --- | ---: | ---: |
-| Before versus before repeat | 119 | 32.77% |
-| After versus after repeat | 119 | 24.28% |
-| Before versus after | 119 | 46.62% |
-
-Cross-condition disagreement exceeds mean within-condition disagreement by +18.10 points [+12.53, +23.93]. More consistent choices do not by themselves establish better success. Presentation-order controls are separate from primary estimates and mix order sensitivity with teacher stochasticity; they do not identify a causal order effect.
-
-Oracle-action agreement credits any candidate tied for the highest observed success across three continuations. This is a noisy same-data label; all-equal candidates make agreement automatic.
-
-| Oracle subset | Matched states | Before agreement | After agreement | Actor-first agreement | Uniform agreement |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Any tied best action | 119 | 68.07% | 69.37% | 59.66% | 63.70% |
-| Unique best action | 36 | 22.22% | 21.91% | 11.11% | 20.00% |
-
-Across 124 states, **86 have tied hindsight maxima (69.35%)** and **70 distinguish candidate success counts (56.45%)**. LOO training maxima tie in **286 of 372 folds (76.88%)**. Always choosing the lowest-index tied action gives 36.83%, versus 38.12% for uniform ties; this is a sensitivity calculation, not an independently validated selection rule. Agreement uncertainty and independent uniform tie-breaking are retained in the aggregate.
-
-
-
-### Method, uncertainty, judge limitations and next continuations
-
-Actor: official OpenWebRL SFT, temperature 1.0, top-p 0.95, top-k off, 4,096 response tokens. The 30-action budget includes the replayed prefix. Isolated browsers must pass strict observable-state replay checks; hidden state need not match. The accepted cohort is not a random sample of tasks or decision points.
-
-Teacher: unchanged index-only Luna-high, three before judgments and three after judgments per execution repetition, plus separate order controls. Judge: unchanged canonical o4-mini/AgentTrek terminal-success protocol. Saved positive examples retain partial-progress, temporal-grounding, absence-claim and filter-application concerns. Additional examples accept goal reinterpretation and conflate page/article or registered-user/active-editor metrics. Native labels remain unchanged; these rates do not establish strict independently verified task completion.
-
-Every state contributes equally. Ten thousand bootstrap draws resample whole states, retaining candidates, repetitions and overlapping folds. Main tables use the LOO aggregation seed; repeat controls use their original seed. Intervals are exploratory and not adjusted for multiple comparisons. Saved outcome/teacher fingerprints and independent exact LOO calculations agree. Task-level artifacts remain private.
-
-The cohort amendment froze these 124 states and all 1,860 original outcomes. The extra-two pass subsequently preserved these records and added 580 outcomes on 58 states; its full 1,240-new-outcome target remains incomplete. No candidates or teachers were regenerated. The original 149-state target remains unmet. The candidate pool was exhausted without relaxing quotas, replay checks or scientific settings. [Collection protocol and history](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
-
-</details>
-
-<a id="branch-selector-scaleup-20261008"></a>
-
-## New family: 32-state pilot and extra24 continuation extension
-
-**The initial eight-draw pilot is verified complete; the extension is audited partial.** Both use the same 32 states, 29 task groups and five fixed candidates per state. The pilot saved 1,280 records: 1,008 valid and 272 invalid. Its valid set retains 224 native unjudged action-limit zeros. Existing records and candidates were preserved when adding draws 8–31.
-
-| Coverage dimension | Category | Accepted states |
-| --- | --- | ---: |
-| Prespecified role | Train | 23 |
-| Prespecified role | Seen-task validation | 4 |
-| Prespecified role | Unseen-task validation | 5 |
-| Candidate decision | 1–3 | 27 |
-| Candidate decision | 4–9 | 2 |
-| Candidate decision | 10–15 | 3 |
-
-Replayable early decisions dominate. Both reported pilot analyses pool the prespecified roles as collection diagnostics; neither is a trained-selector validation score.
-
-<a id="branch-extra24-20261008"></a>
-
-### Do more selection continuations improve the action choice?
-
-**Extra-24 collection ended partially; more selection draws have not yet established a reliable gain.** On the same 14 eligible states from 11 task groups, selecting with 24 draws scores **53.32%** on fresh draws 24–31, versus **49.80%** when selecting with eight. The paired difference is **+3.52 percentage points, 95% task-bootstrap interval [−0.12, +7.35]**. The interval includes zero. This is a descriptive outcome-selection diagnostic combining the pilot's prespecified roles, not a learned selector validation score or evidence that a post-action critic helps.
-
-| Policy on the same fresh held-out panel | States | Task groups | Valid-only held-out success |
-| --- | ---: | ---: | ---: |
-| Actor's first candidate | 14 | 11 | 45.66% |
-| Uniform over all five candidates | 14 | 11 | 47.95% |
-| Select using draws 0–7 | 14 | 11 | 49.80% |
-| Select using draws 0–23 | 14 | 11 | 53.32% |
-
-Twenty-four-draw selection minus actor-first is +7.65 pp [−5.65, +16.07]; minus uniform it is +5.37 pp [−2.12, +11.30]. Both intervals include zero. The matched pre/post critic comparison on this new cohort, and training from its branch outcomes, remain unperformed. [Aggregate, split-specific results and evidence hashes](arm_results/rl_integration/branch-extra24-partial-20261009.json).
-
-The run saved **2,200 of 3,840 requested extra records**, preserving all **1,280 original records**: 3,480 of 5,120 combined. All 96 scheduled blocks resolved: 55 released and 41 failed strict replay. Eighteen states have complete 160-record grids; four of those lack a usable valid-only five-candidate panel, leaving 14 eligible states. The other 14 admitted states lack a complete extra-draw grid. Missing and rejected measurements remain missing; the full study stays **incomplete**. No proposals were regenerated, no retry replaced a rejected draw, and no budget cap was exhausted.
-
-<details>
-<summary>Coverage, split isolation and uncertainty</summary>
-
-For each candidate, fit its success fraction using native-valid observations from draws 0–7 or 0–23; evaluate both choices only on draws 24–31. Require every original candidate to have a positive valid fitting and held-out denominator, retain duplicate candidate indices, and use exact uniform weights over tied maxima. Average valid held-out rates within candidates, then states equally; these percentages are not pooled episode fractions. Fitting ties occur in five of 14 states with eight draws and six of 14 with 24 draws. Native invalids are excluded; valid failures, including unjudged action-limit zeros, remain failures.
-
-| Panel on the common 14 states | Observed draws | Valid draws | Excluded invalid draws |
-| --- | ---: | ---: | ---: |
-| Fit, draws 0–7 | 560 | 483 | 77 |
-| Fit, draws 0–23 | 1,680 | 1,452 | 228 |
-| Holdout, draws 24–31 | 560 | 480 | 80 |
-
-| Prespecified role | States | Task groups | Actor first | Uniform | Select with eight | Select with 24 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Train | 10 | 10 | 47.68% | 48.19% | 45.96% | 49.64% |
-| Seen-task validation | 2 | 2 | 62.50% | 67.50% | 87.50% | 81.25% |
-| Unseen-task validation | 2 | 1 | 18.75% | 27.20% | 31.25% | 43.75% |
-
-Ten thousand paired whole-task bootstrap resamples, seed 20261008, keep each task's states together and normalize by sampled state count. Intervals are pointwise percentile intervals with linear interpolation, condition on the observed fitting panels and tie weights, and are unadjusted for multiple comparisons. Two seen-task clusters are insufficient for stable inference; the unseen split has only one task cluster, so no interval is reported. These tiny validation subsets cannot establish generalization. Replayability, unequal valid denominators, later website/judge drift and native judge errors further limit interpretation. A same-data maximum across 32 draws is optimistic and is not a true upper bound.
-
-</details>
-
-<details>
-<summary>Partial endpoint audit and all-attempt accounting</summary>
-
-All 3,480 committed small outcome records are bound by hashes to preserved parent or extra records; the 2,200 extra records also retain their audited ready/release identities. Native trajectory, judge and image checks reuse prior bounded reviews; this partial analysis does not claim a new exhaustive payload audit. The 392 finished reconstruction attempts without released outcomes remain charged and excluded from outcome denominators. Owned process/browser teardown passed. Slurm ended with exit 0; W&B intentionally records a failed run because the full collection target was unmet, and its remote final counts/costs reconcile. A stale final W&B browser sample is one; the authoritative final ledger and teardown show zero active browsers.
-
-| Resource, including all attempts | Consumed | Approved cap |
-| --- | ---: | ---: |
-| Allocation seconds, four H200s / 32 CPUs / 480 GiB | 19,371 | 57,600 |
-| Browser attempts | 2,592 | 5,000 |
-| Local SFT call attempts | 16,607 | 240,000 |
-| Canonical judge HTTP attempts | 1,287 | 8,000 |
-| Judge charge, USD | 9.7330376 | 75 |
-| Teacher calls | 0 | 0 |
-
-The 38,229 unused allocation seconds remain separate from the pilot and historical extra-two budgets. All scheduled blocks have been processed under the approved no-retry rule; remaining budget does not justify relaxing replay checks or replacing outcomes. No additional collection is active.
-
-</details>
-
-<details>
-<summary>Earlier eight-draw pilot: 6/2 selection, split coverage and verified accounting</summary>
-
-Select using draws 0–5 and score valid observations from draws 6–7. Use the same unchanged five-candidate panel for every method: all candidates must have at least one valid fitting draw and one valid held-out draw. This leaves 25 states from 22 task groups and excludes seven states: five train and two unseen-task validation states. The common panel contains 18 train, four seen-task validation and three unseen-task validation states, with 721 valid fitting draws out of 750 and 241 valid held-out draws out of 250. Average valid held-out success within each candidate, then average states equally. Selection ties occur in 13 of these 25 states and receive exact uniform averaging without consulting held-out outcomes. These state-averaged rates are not pooled episode success fractions.
-
-| Method on the same held-out panel | States | Task groups | Held-out success |
-| --- | ---: | ---: | ---: |
-| Actor's first candidate | 25 | 22 | 40.00% |
-| Uniform over five entries | 25 | 22 | 41.20% |
-| Select by six-draw valid success rate | 25 | 22 | 48.50% |
-
-Selection minus actor-first is +8.50 pp [−2.72, +20.14]. Selection minus uniform is +7.30 pp, 95% task-bootstrap interval [+0.24, +15.17]. Intervals are exploratory, use 10,000 whole-task resamples and preserve paired states/candidates. This pools the pilot's prespecified roles for collection diagnostics; it is not a learned selector validation score. Native invalid records remain saved and charged but excluded from these rates. Valid-only performance is conditional on measurement availability, which can differ by action. The historical invalid-as-zero results above estimate a different quantity.
-
-All 1,280 record identities, fixed candidate responses, strict replay releases, immediate post-action images, saved continuation and native judge bindings passed independent artifact checks. Prior completed payload audits were reused only after fingerprint verification. Native judge labels are preserved; integrity checks do not independently establish semantic correctness. The pilot used 27,263 of 43,200 approved allocation seconds, 3,360 of 5,000 browser attempts, 14,439 of 100,000 local SFT calls and 784 of 2,000 judge HTTP attempts, with a conservative judge-budget charge of $6.2050626 against $25. Discovery, failed reconstruction and every other attempt remain accounted for; no teacher calls or additional budget were used.
-
-</details>
-
-<a id="selection-head-20261009"></a>
-
-## Selectors trained on teacher labels: do they pick better actions?
-
-**No.** Piotr ARM and every actor-based selector were trained on GPT-5.5 choices, not on branching outcomes. Scored on held-out draws of every state that has eight draws for all five actions, none is clearly above a uniform pick. Selecting by observed outcomes on five draws is. Each fixed selector is scored on draws 0–7 of its chosen action. The outcome-selected reference picks on five draws and is scored on the other three, averaged over all 56 splits. Invalid outcomes count as zero, and intervals resample 120 task groups.
-
-| Selector, 138 states | Held-out success | − Uniform, pp [95%] |
-| --- | ---: | --- |
-| Outcome-selected on five draws (privileged reference) | 36.99% | +5.32 [+3.09, +7.62] |
-| Piotr SelectionARM | 34.15% | +2.48 [−0.14, +5.21] |
-| Frozen-feature actor head | 33.70% | +2.03 [−0.26, +4.36] |
-| Actor's first sample | 33.33% | +1.67 [−1.05, +4.30] |
-| Kev-style pass on the actor, step 600 | 32.79% | +1.12 [−1.38, +3.75] |
-| Uniform candidate | 31.67% | — |
-
-The 138 states are 51 historical (topped up to eight draws), 32 pilot and 55 fresh states. Outcome selection gains about 5 pp in each collection. Teacher agreement does not predict these outcomes: the Kev-style pass matches held-out GPT-5.5 choices best of any actor-based selector (67.1%), yet its chosen actions succeed no more often than uniform. Outcome-labelled data now covers 188 eight-draw states in 151 task groups; that is 14× fewer states than the 2,692 teacher-labelled training states.
-
-![Five selector designs compared by weights, inputs, candidate interaction, order effects, readout, added cost and status](arm_results/methods/selection_designs_compared.svg)
-
-Method, metric definitions, teacher-agreement results, robustness checks and data sufficiency are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md#selection-head-outcomes-20261010). The original 124-state, three-draw comparison is in its [robustness details](ARM_SELECTION_HEAD.md#selection-head-teacher-agreement).
-
-<a id="teacher-labels-211-20261011"></a>
-
-## Execution evidence and a stronger teacher on 211 states
-
-**Neither immediate execution evidence nor a stronger teacher measurably improves action choice; every teacher sits about 3 pp above uniform, still below a pick from three observed continuations.** Each teacher's judgments are scored directly as picks on held-out continuation draws 3–7, which no teacher evidence touched. After-execution judgments saw only the immediate results of draws 0–2 (Luna) or draw 0 (Sol). The 211 states are the 160 new pilot, fresh and successor states, plus the 51 historical states with draws 3–7 for every action. Invalid draws count as zero, and intervals resample whole task groups.
-
-**The 2×2: teacher strength × execution evidence.** These pairs share an identical layout: 3 repeats + 1 shuffled order per state, with after-evidence from draw 0. They are paired on the 194 states with complete draw-0 evidence.
-
-| Paired comparison, 194 states | Difference, pp [95%] |
-| --- | --- |
-| Luna: after − before | +0.15 [−1.86, +2.10] |
-| Sol: after − before | −0.31 [−2.40, +1.68] |
-| After execution: Sol − Luna | +0.41 [−1.17, +1.89] |
-| Outcome reference (best on draws 0–2) − Sol after | +1.83 [−0.98, +4.73] |
-
-| Picker | States | Success, draws 3–7 | − Uniform, pp [95%] |
-| --- | ---: | ---: | --- |
-| Outcome reference: best on draws 0–2 | 211 | 39.16% | +5.68 [+3.67, +7.85] |
-| Sol after (draw-0 evidence) | 194 | 39.20% | +3.45 [+1.17, +5.84] |
-| Luna after (draw-0 evidence) | 194 | 38.79% | +3.04 [+0.82, +5.34] |
-| Luna after (evidence draws 0–2, 10 calls) | 201 | 38.37% | +3.44 [+1.31, +5.72] |
-| Sol before | 211 | 36.78% | +3.30 [+1.07, +5.63] |
-| Piotr SelectionARM | 138 | 35.51% | +3.54 [+0.53, +6.59] |
-| Luna before | 211 | 35.92% | +2.45 [+0.34, +4.64] |
-| Actor's first sample | 211 | 35.55% | — |
-| Uniform candidate | 211 | 33.48% | — |
-
-On all 211 states, Sol before − Luna before is +0.85 [−0.79, +2.51] pp, and Luna's full 10-call after − before is +0.73 [−1.08, +2.51] pp. The historical states alone gave +2.37 for Luna after − before (49 states), consistent with the earlier +2.24; the new states give +0.20.
-
-<details>
-<summary>Why immediate post-action evidence does not help here: diagnostics on 194 states</summary>
-
-These diagnostics use saved data only (`scripts/analyze_post_action_value.py`). The 194 states have draw-0 evidence and held-out draws 3–7 (146 new, 48 historical). After-picks are each teacher's draw-0 judgments.
-
-| Check | Luna | Sol |
-| --- | ---: | ---: |
-| States whose majority action changes after execution | 69 (36%) | 49 (25%) |
-| Changed picks: better / worse / tied on draws 3–7 | 21 / 15 / 33 | 16 / 10 / 23 |
-| After − before on changed states, pp [95%] | +0.58 [−3.88, +4.93] | +0.10 [−7.10, +6.98] |
-| Share of picks on visibly failed candidates (error or unchanged screen), before → after | 18.0% → 15.1% | 15.6% → 15.3% |
-
-- **The evidence often cannot discriminate.**
-  - In 39 states all five candidates are the same action.
-  - In 18 states every distinct action produces the same screen and URL.
-  - In 60 states some do.
-  - Only 77 states (40%) show a distinct result for every distinct action.
-- **Visible failures are rare and not costly.**
-  - Only 4 of 970 candidate executions report a tool error.
-  - 134 leave the screen unchanged, and those candidates succeed only 1.0 pp less than their state's mean.
-  - Teachers already pick them less often than uniform (20%) before execution.
-- **The kind of immediate result barely predicts the outcome.** Within-state relative success by immediate-result type, draw 0:
-
-| Immediate result | Candidates | Relative success, pp |
-| --- | ---: | ---: |
-| navigated to a new URL | 482 | +0.7 |
-| same URL, screen changed | 329 | −0.4 |
-| terminated (done) | 81 | −3.3 |
-| screen unchanged | 74 | +0.6 |
-| errored | 4 | −2.0 |
-
-- **The evidence replays consistently.** 98% of later draws reach the same URL as draw 0, and 76% the same screenshot.
-- **No stratum shows a gain.** After − before stays within ±1.3 pp when states are split by whether the evidence distinguishes the actions, or by how much the actions' outcomes differ on draws 0–2. The draw-0–2 split is independent of the scored draws.
-- **Changed picks (qualitative).**
-  - The largest losses pick a page that looks closer to the goal: a direct article URL instead of a search, or an official site instead of a news hub. From there the fixed SFT continuation then fails more often.
-  - Several other changes switch between near-identical actions, whose outcome differences are draw noise.
-  - The teachers judge apparent progress. The outcome depends on whether this particular continuation policy can finish from the new page, and one post-action screen does not reveal that.
-
-</details>
+## Lookahead teacher labels: the current comparison on 1,037 states
 
 <a id="lookahead-setups"></a>
 
@@ -628,6 +264,11 @@ Every condition is the same GPT-6 Luna request (`gpt-6-luna`, high reasoning eff
 
 #### Robustness: how many observed outcomes is lookahead worth?
 
+*Superseded by the main-set figure in [main results](#lookahead-main-results) (1,037 states, same method).*
+
+<details>
+<summary>Earlier version on the Piotr-task states (about 480 states)</summary>
+
 **With the recommended labeller (screenshots only, no history), K = 3 beats the actor's first sample by about 7 pp at every split and matches an oracle that picks on 3–5 observed outcomes; pre- and post-execution stay well below.**
 
 ![Success vs evaluation continuations, screenshot-only no-history conditions, paired bands](arm_results/rl_integration/lookahead-draw-split-20261013/lookahead_draw_split_piotr_absolute_valid_only_s.png)
@@ -646,6 +287,8 @@ Every condition is the same GPT-6 Luna request (`gpt-6-luna`, high reasoning eff
 | Uniform | 32.4 | 32.0 | 32.1 | 31.9 | 31.5 |
 | Actor (first sample) | 31.9 | 30.9 | 31.0 | 30.6 | 30.3 |
 | States | 465 | 484 | 484 | 481 | 463 |
+
+</details>
 
 <a id="lookahead-costs"></a>
 
@@ -809,9 +452,420 @@ Every condition is the same GPT-6 Luna request (`gpt-6-luna`, high reasoning eff
 
 </details>
 
+<a id="branching-experiment-map"></a>
+
+## Two data families, each with a continuation extension
+
+An extension adds **continuations after the same five fixed candidate actions**, not additional action proposals. The historical family and the new pilot are separate collections; their extensions are not independent replications.
+
+| Family | Initial states | Initial draws per action | Added draws per action | States with all added draws | Primary outcome rule |
+| --- | ---: | ---: | ---: | ---: | --- |
+| [Historical 124 + extra two](#arm-continuation-branches-results-20261007) | 124 | 3 | 2 | 58 | Committed invalid outcomes count as zero |
+| [New pilot 32 + extra 24](#branch-selector-scaleup-20261008) | 32 | 8 | 24 | 18 | Invalid outcomes excluded; valid-only success |
+
+The historical target was 149 states; 124 were collected and frozen. The new pilot collected its full 32-state target from the released WebVoyager-source **training pool**, not the WebVoyager evaluation benchmark. It introduced multiple prespecified states per task and train/seen-task/unseen-task roles. The extra24 analysis qualifies only 14 of its 18 complete grids because every candidate needs valid selection and held-out observations.
+
+**Group these records by lineage; do not pool their success rates.** Cohort, task mix, collection time, holdout draws and invalid-outcome policy differ. In particular, the pilot's 48.50% and extra24's 53.32% are not a controlled improvement. The matched eight-versus-24 comparison is 49.80% versus 53.32% on the same 14 states. Both extensions ended partially; no further collection is active.
+
+[Historical teacher comparison](#arm-continuation-branches-results-20261007) · [Fresh extra-two test](#branch-extra2-heldout58-20261008) · [Extra24 common-holdout test](#branch-extra24-20261008) · [Teacher-trained heads](#selection-head-20261009) · [Remaining experiments](#branch-post-to-pre-study-20261008)
+
+<a id="arm-continuation-branches-results-20261007"></a>
+
+## Historical family: 124 states, three draws, then two fresh draws
+
+*Superseded by the [1,037-state teacher comparison](#lookahead-main-results), which measures pre- versus post-execution judgments and outcome selection versus uniform on about 8× more states.*
+
+<details>
+<summary>Historical results: 119-state before/after comparison, 58-state fresh-draw test, depth, repeat and tie diagnostics</summary>
+
+### Does immediate execution evidence help the critic?
+
+Both index-only Luna-high conditions choose among the same candidates without seeing continuation returns. After-execution additionally sees each candidate's immediate execution evidence. The paired comparison uses **119 states and 1,785 outcomes**; four invalid teacher panels and one unavailable-after panel are excluded only here. Their states remain in the 124-state outcome analyses. Committed invalid outcomes count as zero.
+
+| Critic input | Matched states | Continuation success | 95% state-bootstrap interval |
+| --- | ---: | ---: | --- |
+| Before execution | 119 | 35.11% | [27.73%, 42.67%] |
+| After immediate execution | 119 | 37.35% | [29.88%, 45.10%] |
+
+The paired after-minus-before interval in the overview includes zero. After-execution judgments saw the immediate result of execution draws 0–2, which are also the first steps of the continuations scored here. Scoring only on draws 3–7 avoids that overlap. On 57 states with such draws, after minus before is +1.77 pp [−0.51, +4.40]; after minus uniform is +4.61 [+0.39, +9.16]. Choosing by outcomes of draws 0–2 gives +7.22 [+2.88, +12.21] over uniform ([aggregate](arm_results/rl_integration/selection-outcomes-20261010.json)). Repeated teacher choices average over the same saved outcomes; they add no rollout data. Repeat consistency and label changes are diagnostics, not evidence of better action success. [Original aggregate and paired audit](arm_results/rl_integration/continuation-fixed124-20261008.json).
+
+<details>
+<summary>What one Luna judgment sees, and why there are 4 before and 10 after judgments per state</summary>
+
+Each call is one independent GPT-6 Luna request at high reasoning effort. The request contains the task, the last five history entries, the original screenshot and the five candidate responses, and Luna returns one candidate index (`openwebrl/arm_branch_teacher.py`). An after-execution call also receives, for every candidate, the screenshot and tool feedback **immediately after that candidate's action in one execution draw**. No call sees later steps of a continuation, final screenshots or rewards.
+
+| Condition | Evidence | Calls per state |
+| --- | --- | ---: |
+| Before | State and candidates only | 3 repeats + 1 with candidates shuffled = 4 |
+| After, execution draw 0 | Immediate results from draw 0 | 3 repeats + 1 shuffled = 4 |
+| After, execution draw 1 | Immediate results from draw 1 | 3 repeats |
+| After, execution draw 2 | Immediate results from draw 2 | 3 repeats |
+
+- **Repeats** send identical input, to measure Luna's own variability.
+- **Shuffled calls** test whether Luna favors candidates by position.
+- **The three draws** show the same actions' immediate screens from separate browser replays, which can differ.
+- **Coverage.** Every state planned 14 calls. All 14 are valid on 119 states. Two states have 4 before and 6 after judgments; three have 4 before and none after.
+
+Reported "before" and "after" scores average each condition's valid calls per state. Because after-evidence comes from draws 0–2, which are also the first steps of the continuations scored on those draws, the [leakage-free check](#arm-continuation-branches-results-20261007) scores only draws 3–7. Applying this script unchanged to an eight-draw panel would request after-judgments for all eight draws. A labelling manifest must instead fix the evidence draws in advance and keep held-out draws out of the teacher's view.
+
+</details>
+
+<a id="branch-extra2-heldout58-20261008"></a>
+
+### Does selection from old outcomes improve fresh continuations?
+
+**The extra-two pass is audited partial:** 58 of 124 states passed strict replay, adding 580 outcomes. All 1,860 original records are unchanged, giving **2,440 saved outcome records**. The remaining 66 states failed reconstruction; their 660 missing continuations are not counted as zero. The approved 3,100-record target and original 149-state target remain incomplete.
+
+Each row below uses the **same 58 states from 58 task groups, with 580 fresh records and two draws per candidate**. The outcome-based choice uses only the three original draws. Tied best actions receive their exact uniform expected score. Luna’s score averages the fresh outcomes of its three saved before-execution choices; no new teacher calls were made. Committed invalid outcomes count as zero.
+
+| Root-action choice | States | Continuation success | 95% task-bootstrap interval |
+| --- | ---: | ---: | --- |
+| Actor’s first candidate | 58 | 26.72% | [17.24%, 37.07%] |
+| Uniform over five candidates | 58 | 26.03% | [17.76%, 34.83%] |
+| Saved Luna before execution | 58 | 31.03% | [20.11%, 42.24%] |
+| Select on original three; score fresh two | 58 | 34.54% | [23.97%, 45.23%] |
+
+The outcome-based choice gains **+8.51 percentage points over uniform [3.45, 14.37]**. Its gains over actor-first, **+7.82 points [−0.26, 16.84]**, and Luna, **+3.51 points [−2.84, 10.80]**, remain unresolved. These exploratory, pointwise intervals support a useful continuation-outcome signal; they do not establish a trained selector’s performance or superiority to teacher-label training. [Aggregate estimates and audit hashes](arm_results/rl_integration/continuation-extra2-heldout58-20261008.json).
+
+**Replay selection materially changes the cohort.** Using only original draws, actor-first scored 17.82% on these 58 states versus 40.40% on the 66 that later failed reconstruction. Consequently, comparing fresh 34.54% directly with the earlier 124-state LOO result of 38.12% would confound cohort composition, draw count and collection time. The accepted states span candidate decisions 1–3/4–9/10–15 with 36/11/11 states respectively. Frozen observable-state checks do not guarantee identical hidden state or eliminate website drift.
+
+<details>
+<summary>Five-draw sensitivity, ties, uncertainty and judge limitations</summary>
+
+These secondary rows pool old and fresh draws on the same 58 states, yielding 1,450 outcome records. Five-fold LOO selects with four draws and scores the fifth, averaging all overlapping folds. It mixes collection times; the temporally separated old-three/fresh-two comparison above remains primary.
+
+| Root-action choice | States | Pooled continuation success | 95% task-bootstrap interval |
+| --- | ---: | ---: | --- |
+| Actor’s first candidate | 58 | 21.38% | [13.10%, 30.35%] |
+| Uniform candidate | 58 | 24.97% | [16.76%, 33.66%] |
+| Select on four; score held-out fifth | 58 | 33.95% | [23.94%, 44.16%] |
+| Same-data five-draw hindsight oracle | 58 | 41.38% | [31.03%, 51.72%] |
+
+The hindsight row chooses and scores on the same outcomes and is optimistic. Original-three selection ties at the top in 39/58 states; 29/58 give every candidate equal success counts, including 25 all-zero panels. Five-draw hindsight still ties in 35/58 states. Five-fold training maxima tie in 187/290 folds. Ties and duplicate candidates are retained.
+
+Every state has equal weight. Ten thousand bootstrap draws, seed 20261007, resample whole task groups with all their states and normalize by sampled state count. The 58 groups each contain one state here. Intervals are pointwise, exploratory and unadjusted for multiple comparisons. Exact tie expectations avoid choosing winners from held-out outcomes. Valid-only sensitivity, with its own weighted denominators, is included in the aggregate.
+
+The official SFT actor and decoding remain temperature 1.0, top-p 0.95, top-k off and 4,096 response tokens, with the original 30-action budget including replayed prefixes. Canonical o4-mini/AgentTrek labels remain unchanged. Of the 580 fresh records, 523 are valid and 57 invalid; 303 received a judge call and 220 valid records retain native unjudged zero outcomes. Qualitative checks found positives that conflate website statistics or accept a different language edition. These scores measure the frozen judge’s operational reward, not independently established factual or instruction-complete success. Source and identity checks support seed assignment; an independently echoed request seed was unavailable.
+
+</details>
+
+<details>
+<summary>Partial collection, reconstruction failures and final accounting</summary>
+
+| Coverage | States | Saved outcome records |
+| --- | ---: | ---: |
+| Full five draws per action | 58 | 1,450 |
+| Original three only | 66 | 990 |
+| Preserved combined data | 124 | 2,440 |
+| Approved combined target | 124 | 3,100 |
+
+All 124 states were processed once under the frozen reconstruction rule. The first failures on 66 rejected states were 58 visible-snapshot mismatches, five raster mismatches, one page mismatch, one prefix-capture timeout and one initial-navigation timeout. Their 147 unreleased attempt receipts and 513 untouched queue slots remain evidence of missing continuations. They are not added to the outcome dataset. One historical post-commit release-read invalid remains among the original records as previously audited; no candidate execution is invented.
+
+The sole extra-two allocation consumed 14,238 of 28,800 approved seconds on four H200s / 32 CPUs / 480 GiB; 14,562 seconds remain unused and are not transferred. All 727 attempts are charged. Extra-two used 727 browser starts, 6,788 SFT calls and 303 judge calls / $2.406679, with no teacher calls. Combined with prior charges, the shared ledger contains 6,923/9,000 browser starts, 40,512/110,000 SFT calls, 1,438/6,600 judge calls / $11.5469541 of $25, and 1,698/2,200 Luna calls / $6.5299025 of $15.
+
+Scheduler and W&B finished. Independent audits reconciled artifacts, all-attempt accounting, the original-record hashes and controller-owned actor/browser teardown. Post-allocation SSH was unavailable, so teardown does not claim an independent physical node scan. The pass is closed as audited partial, with full-target completion false. The frozen rule forbids replacement or outcome-based replay after reconstruction rejection; no automatic rerun or relaxed replay was used. The separately approved 32-state pilot remains a separate experiment and budget.
+
+</details>
+
+<a id="branch-original-three-details"></a>
+
+<details>
+<summary>Original three-draw reference, depth, repeat controls and judge limitations</summary>
+
+All 2,090 fixed candidate tasks were considered under the frozen replay checks and depth quotas, yielding 124 of the 149 target states: 1,860 outcomes, with 1,710 valid and 150 invalid. The original 149-state target remains incomplete. These estimates use only the original draws, before the extra-two pass.
+
+### Original 124-state outcome comparison
+
+| Root-action choice | States | Continuation success | 95% state-bootstrap interval |
+| --- | ---: | ---: | --- |
+| Actor’s first sample | 124 | 29.84% | [22.85%, 37.10%] |
+| Uniform candidate | 124 | 32.42% | [26.13%, 38.98%] |
+| Select on two continuations; score held-out third | 124 | 38.12% | [31.06%, 45.31%] |
+| Same-data hindsight action oracle | 124 | 50.00% | [42.47%, 57.53%] |
+
+Leave-one-out selection improves over the actor’s first sample by **+8.28 percentage points [+3.84, +12.99]** and over uniform selection by **+5.70 points [+2.60, +9.03]**. For each state, select using two continuations per action, score the held-out third, and average all three overlapping folds. Ties use their exact uniform expectation without consulting the held-out outcome. Candidate 0 is the first actor sample; uniform selection averages all five entries, including duplicates.
+
+The hindsight oracle chooses and scores using the **same three outcomes**, making its 50.00% optimistic. It does not select a successful trajectory from all 15. LOO uses additional continuation outcomes and does not measure a trained selector’s performance.
+
+### Where are the states, and how does selection perform by depth?
+
+The groups below are disjoint. These are descriptive strata: tasks, replayability and remaining action budgets differ, so these rows do not identify a causal depth effect.
+
+| Candidate decisions | States | Share | Actor first | Uniform | LOO selection | Hindsight oracle |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1–3 | 74 | 59.7% | 39.19% | 39.91% | 43.60% | 56.76% |
+| 4–9 | 27 | 21.8% | 16.05% | 22.96% | 32.55% | 43.21% |
+| 10–15 | 23 | 18.5% | 15.94% | 19.42% | 27.05% | 36.23% |
+
+The early 74-state cohort is unchanged; **50 of the targeted 75 later states** were collected. Adding later states changes cohort composition, not the actor or teacher. Per-stratum intervals are in the aggregate.
+
+### Exact decision counts and teacher-matched depth comparisons
+
+| Candidate decision | Complete states | Teacher-matched states |
+| --- | ---: | ---: |
+| 1 | 33 | 31 |
+| 2 | 23 | 22 |
+| 3 | 18 | 17 |
+| 4 | 7 | 7 |
+| 5 | 6 | 6 |
+| 6 | 6 | 5 |
+| 7 | 4 | 4 |
+| 8 | 2 | 2 |
+| 9 | 2 | 2 |
+| 10 | 4 | 4 |
+| 11 | 6 | 6 |
+| 12 | 3 | 3 |
+| 13 | 1 | 1 |
+| 14 | 5 | 5 |
+| 15 | 4 | 4 |
+
+| Candidate decisions | Matched states | Actor first | Before teacher | After teacher | LOO selection |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1–3 | 70 | 40.48% | 44.29% | 44.76% | 44.98% |
+| 4–9 | 26 | 16.67% | 24.36% | 25.64% | 31.24% |
+| 10–15 | 23 | 15.94% | 19.32% | 28.02% | 27.05% |
+
+Matched groups total 119 states and use different denominators from the all-state rows above.
+
+
+
+### Repeat controls, oracle-action agreement and ties
+
+| Choice disagreement | Matched states | Rate |
+| --- | ---: | ---: |
+| Before versus before repeat | 119 | 32.77% |
+| After versus after repeat | 119 | 24.28% |
+| Before versus after | 119 | 46.62% |
+
+Cross-condition disagreement exceeds mean within-condition disagreement by +18.10 points [+12.53, +23.93]. More consistent choices do not by themselves establish better success. Presentation-order controls are separate from primary estimates and mix order sensitivity with teacher stochasticity; they do not identify a causal order effect.
+
+Oracle-action agreement credits any candidate tied for the highest observed success across three continuations. This is a noisy same-data label; all-equal candidates make agreement automatic.
+
+| Oracle subset | Matched states | Before agreement | After agreement | Actor-first agreement | Uniform agreement |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Any tied best action | 119 | 68.07% | 69.37% | 59.66% | 63.70% |
+| Unique best action | 36 | 22.22% | 21.91% | 11.11% | 20.00% |
+
+Across 124 states, **86 have tied hindsight maxima (69.35%)** and **70 distinguish candidate success counts (56.45%)**. LOO training maxima tie in **286 of 372 folds (76.88%)**. Always choosing the lowest-index tied action gives 36.83%, versus 38.12% for uniform ties; this is a sensitivity calculation, not an independently validated selection rule. Agreement uncertainty and independent uniform tie-breaking are retained in the aggregate.
+
+
+
+### Method, uncertainty, judge limitations and next continuations
+
+Actor: official OpenWebRL SFT, temperature 1.0, top-p 0.95, top-k off, 4,096 response tokens. The 30-action budget includes the replayed prefix. Isolated browsers must pass strict observable-state replay checks; hidden state need not match. The accepted cohort is not a random sample of tasks or decision points.
+
+Teacher: unchanged index-only Luna-high, three before judgments and three after judgments per execution repetition, plus separate order controls. Judge: unchanged canonical o4-mini/AgentTrek terminal-success protocol. Saved positive examples retain partial-progress, temporal-grounding, absence-claim and filter-application concerns. Additional examples accept goal reinterpretation and conflate page/article or registered-user/active-editor metrics. Native labels remain unchanged; these rates do not establish strict independently verified task completion.
+
+Every state contributes equally. Ten thousand bootstrap draws resample whole states, retaining candidates, repetitions and overlapping folds. Main tables use the LOO aggregation seed; repeat controls use their original seed. Intervals are exploratory and not adjusted for multiple comparisons. Saved outcome/teacher fingerprints and independent exact LOO calculations agree. Task-level artifacts remain private.
+
+The cohort amendment froze these 124 states and all 1,860 original outcomes. The extra-two pass subsequently preserved these records and added 580 outcomes on 58 states; its full 1,240-new-outcome target remains incomplete. No candidates or teachers were regenerated. The original 149-state target remains unmet. The candidate pool was exhausted without relaxing quotas, replay checks or scientific settings. [Collection protocol and history](ARM_INTEGRATION_PLAN.md#arm-continuation-finish100-20261007).
+
+</details>
+
+</details>
+
+<a id="branch-selector-scaleup-20261008"></a>
+
+## New family: 32-state pilot and extra24 continuation extension
+
+**The initial eight-draw pilot is verified complete; the extension is audited partial.** Both use the same 32 states, 29 task groups and five fixed candidates per state. The pilot saved 1,280 records: 1,008 valid and 272 invalid. Its valid set retains 224 native unjudged action-limit zeros. Existing records and candidates were preserved when adding draws 8–31.
+
+| Coverage dimension | Category | Accepted states |
+| --- | --- | ---: |
+| Prespecified role | Train | 23 |
+| Prespecified role | Seen-task validation | 4 |
+| Prespecified role | Unseen-task validation | 5 |
+| Candidate decision | 1–3 | 27 |
+| Candidate decision | 4–9 | 2 |
+| Candidate decision | 10–15 | 3 |
+
+Replayable early decisions dominate. Both reported pilot analyses pool the prespecified roles as collection diagnostics; neither is a trained-selector validation score.
+
+<a id="branch-extra24-20261008"></a>
+
+### Do more selection continuations improve the action choice?
+
+**Extra-24 collection ended partially; more selection draws have not yet established a reliable gain.** On the same 14 eligible states from 11 task groups, selecting with 24 draws scores **53.32%** on fresh draws 24–31, versus **49.80%** when selecting with eight. The paired difference is **+3.52 percentage points, 95% task-bootstrap interval [−0.12, +7.35]**. The interval includes zero. This is a descriptive outcome-selection diagnostic combining the pilot's prespecified roles, not a learned selector validation score or evidence that a post-action critic helps.
+
+| Policy on the same fresh held-out panel | States | Task groups | Valid-only held-out success |
+| --- | ---: | ---: | ---: |
+| Actor's first candidate | 14 | 11 | 45.66% |
+| Uniform over all five candidates | 14 | 11 | 47.95% |
+| Select using draws 0–7 | 14 | 11 | 49.80% |
+| Select using draws 0–23 | 14 | 11 | 53.32% |
+
+Twenty-four-draw selection minus actor-first is +7.65 pp [−5.65, +16.07]; minus uniform it is +5.37 pp [−2.12, +11.30]. Both intervals include zero. The matched pre/post critic comparison on this new cohort, and training from its branch outcomes, remain unperformed. [Aggregate, split-specific results and evidence hashes](arm_results/rl_integration/branch-extra24-partial-20261009.json).
+
+The run saved **2,200 of 3,840 requested extra records**, preserving all **1,280 original records**: 3,480 of 5,120 combined. All 96 scheduled blocks resolved: 55 released and 41 failed strict replay. Eighteen states have complete 160-record grids; four of those lack a usable valid-only five-candidate panel, leaving 14 eligible states. The other 14 admitted states lack a complete extra-draw grid. Missing and rejected measurements remain missing; the full study stays **incomplete**. No proposals were regenerated, no retry replaced a rejected draw, and no budget cap was exhausted.
+
+<details>
+<summary>Coverage, split isolation and uncertainty</summary>
+
+For each candidate, fit its success fraction using native-valid observations from draws 0–7 or 0–23; evaluate both choices only on draws 24–31. Require every original candidate to have a positive valid fitting and held-out denominator, retain duplicate candidate indices, and use exact uniform weights over tied maxima. Average valid held-out rates within candidates, then states equally; these percentages are not pooled episode fractions. Fitting ties occur in five of 14 states with eight draws and six of 14 with 24 draws. Native invalids are excluded; valid failures, including unjudged action-limit zeros, remain failures.
+
+| Panel on the common 14 states | Observed draws | Valid draws | Excluded invalid draws |
+| --- | ---: | ---: | ---: |
+| Fit, draws 0–7 | 560 | 483 | 77 |
+| Fit, draws 0–23 | 1,680 | 1,452 | 228 |
+| Holdout, draws 24–31 | 560 | 480 | 80 |
+
+| Prespecified role | States | Task groups | Actor first | Uniform | Select with eight | Select with 24 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Train | 10 | 10 | 47.68% | 48.19% | 45.96% | 49.64% |
+| Seen-task validation | 2 | 2 | 62.50% | 67.50% | 87.50% | 81.25% |
+| Unseen-task validation | 2 | 1 | 18.75% | 27.20% | 31.25% | 43.75% |
+
+Ten thousand paired whole-task bootstrap resamples, seed 20261008, keep each task's states together and normalize by sampled state count. Intervals are pointwise percentile intervals with linear interpolation, condition on the observed fitting panels and tie weights, and are unadjusted for multiple comparisons. Two seen-task clusters are insufficient for stable inference; the unseen split has only one task cluster, so no interval is reported. These tiny validation subsets cannot establish generalization. Replayability, unequal valid denominators, later website/judge drift and native judge errors further limit interpretation. A same-data maximum across 32 draws is optimistic and is not a true upper bound.
+
+</details>
+
+<details>
+<summary>Partial endpoint audit and all-attempt accounting</summary>
+
+All 3,480 committed small outcome records are bound by hashes to preserved parent or extra records; the 2,200 extra records also retain their audited ready/release identities. Native trajectory, judge and image checks reuse prior bounded reviews; this partial analysis does not claim a new exhaustive payload audit. The 392 finished reconstruction attempts without released outcomes remain charged and excluded from outcome denominators. Owned process/browser teardown passed. Slurm ended with exit 0; W&B intentionally records a failed run because the full collection target was unmet, and its remote final counts/costs reconcile. A stale final W&B browser sample is one; the authoritative final ledger and teardown show zero active browsers.
+
+| Resource, including all attempts | Consumed | Approved cap |
+| --- | ---: | ---: |
+| Allocation seconds, four H200s / 32 CPUs / 480 GiB | 19,371 | 57,600 |
+| Browser attempts | 2,592 | 5,000 |
+| Local SFT call attempts | 16,607 | 240,000 |
+| Canonical judge HTTP attempts | 1,287 | 8,000 |
+| Judge charge, USD | 9.7330376 | 75 |
+| Teacher calls | 0 | 0 |
+
+The 38,229 unused allocation seconds remain separate from the pilot and historical extra-two budgets. All scheduled blocks have been processed under the approved no-retry rule; remaining budget does not justify relaxing replay checks or replacing outcomes. No additional collection is active.
+
+</details>
+
+<details>
+<summary>Earlier eight-draw pilot: 6/2 selection, split coverage and verified accounting</summary>
+
+Select using draws 0–5 and score valid observations from draws 6–7. Use the same unchanged five-candidate panel for every method: all candidates must have at least one valid fitting draw and one valid held-out draw. This leaves 25 states from 22 task groups and excludes seven states: five train and two unseen-task validation states. The common panel contains 18 train, four seen-task validation and three unseen-task validation states, with 721 valid fitting draws out of 750 and 241 valid held-out draws out of 250. Average valid held-out success within each candidate, then average states equally. Selection ties occur in 13 of these 25 states and receive exact uniform averaging without consulting held-out outcomes. These state-averaged rates are not pooled episode success fractions.
+
+| Method on the same held-out panel | States | Task groups | Held-out success |
+| --- | ---: | ---: | ---: |
+| Actor's first candidate | 25 | 22 | 40.00% |
+| Uniform over five entries | 25 | 22 | 41.20% |
+| Select by six-draw valid success rate | 25 | 22 | 48.50% |
+
+Selection minus actor-first is +8.50 pp [−2.72, +20.14]. Selection minus uniform is +7.30 pp, 95% task-bootstrap interval [+0.24, +15.17]. Intervals are exploratory, use 10,000 whole-task resamples and preserve paired states/candidates. This pools the pilot's prespecified roles for collection diagnostics; it is not a learned selector validation score. Native invalid records remain saved and charged but excluded from these rates. Valid-only performance is conditional on measurement availability, which can differ by action. The historical invalid-as-zero results above estimate a different quantity.
+
+All 1,280 record identities, fixed candidate responses, strict replay releases, immediate post-action images, saved continuation and native judge bindings passed independent artifact checks. Prior completed payload audits were reused only after fingerprint verification. Native judge labels are preserved; integrity checks do not independently establish semantic correctness. The pilot used 27,263 of 43,200 approved allocation seconds, 3,360 of 5,000 browser attempts, 14,439 of 100,000 local SFT calls and 784 of 2,000 judge HTTP attempts, with a conservative judge-budget charge of $6.2050626 against $25. Discovery, failed reconstruction and every other attempt remain accounted for; no teacher calls or additional budget were used.
+
+</details>
+
+<a id="selection-head-20261009"></a>
+
+## Selectors trained on teacher labels: do they pick better actions?
+
+*Superseded by the offline scoring of Piotr SelectionARM and the selection heads on 345 held-out SFT-actor states ([ARM_SELECTION_HEAD](ARM_SELECTION_HEAD.md#selection-head-sft-actions-lora-20261021): Piotr +2.4 pp [+1.1, +3.8] over uniform) and by their live evaluation on 1,045 benchmark tasks ([headline](ARM_SELECTION_HEAD.md#headline-results)).*
+
+<details>
+<summary>Earlier result on 138 eight-draw states</summary>
+
+**No.** Piotr ARM and every actor-based selector were trained on GPT-5.5 choices, not on branching outcomes. Scored on held-out draws of every state that has eight draws for all five actions, none is clearly above a uniform pick. Selecting by observed outcomes on five draws is. Each fixed selector is scored on draws 0–7 of its chosen action. The outcome-selected reference picks on five draws and is scored on the other three, averaged over all 56 splits. Invalid outcomes count as zero, and intervals resample 120 task groups.
+
+| Selector, 138 states | Held-out success | − Uniform, pp [95%] |
+| --- | ---: | --- |
+| Outcome-selected on five draws (privileged reference) | 36.99% | +5.32 [+3.09, +7.62] |
+| Piotr SelectionARM | 34.15% | +2.48 [−0.14, +5.21] |
+| Frozen-feature actor head | 33.70% | +2.03 [−0.26, +4.36] |
+| Actor's first sample | 33.33% | +1.67 [−1.05, +4.30] |
+| Kev-style pass on the actor, step 600 | 32.79% | +1.12 [−1.38, +3.75] |
+| Uniform candidate | 31.67% | — |
+
+The 138 states are 51 historical (topped up to eight draws), 32 pilot and 55 fresh states. Outcome selection gains about 5 pp in each collection. Teacher agreement does not predict these outcomes: the Kev-style pass matches held-out GPT-5.5 choices best of any actor-based selector (67.1%), yet its chosen actions succeed no more often than uniform. Outcome-labelled data now covers 188 eight-draw states in 151 task groups; that is 14× fewer states than the 2,692 teacher-labelled training states.
+
+![Five selector designs compared by weights, inputs, candidate interaction, order effects, readout, added cost and status](arm_results/methods/selection_designs_compared.svg)
+
+Method, metric definitions, teacher-agreement results, robustness checks and data sufficiency are in [ARM_SELECTION_HEAD.md](ARM_SELECTION_HEAD.md#selection-head-outcomes-20261010). The original 124-state, three-draw comparison is in its [robustness details](ARM_SELECTION_HEAD.md#selection-head-teacher-agreement).
+
+</details>
+
+<a id="teacher-labels-211-20261011"></a>
+
+## Execution evidence and a stronger teacher on 211 states
+
+*Pre- versus post-execution is superseded by the [1,037-state comparison](#lookahead-main-results). The teacher-strength comparison is only here: on 194 states, GPT-6.1 Sol after execution − GPT-6 Luna after execution is +0.41 pp [−1.17, +1.89], and Sol before − Luna before on 211 states is +0.85 pp [−0.79, +2.51].*
+
+<details>
+<summary>Earlier results on 211 states: teacher strength × execution evidence, post-action diagnostics</summary>
+
+**Neither immediate execution evidence nor a stronger teacher measurably improves action choice; every teacher sits about 3 pp above uniform, still below a pick from three observed continuations.** Each teacher's judgments are scored directly as picks on held-out continuation draws 3–7, which no teacher evidence touched. After-execution judgments saw only the immediate results of draws 0–2 (Luna) or draw 0 (Sol). The 211 states are the 160 new pilot, fresh and successor states, plus the 51 historical states with draws 3–7 for every action. Invalid draws count as zero, and intervals resample whole task groups.
+
+**The 2×2: teacher strength × execution evidence.** These pairs share an identical layout: 3 repeats + 1 shuffled order per state, with after-evidence from draw 0. They are paired on the 194 states with complete draw-0 evidence.
+
+| Paired comparison, 194 states | Difference, pp [95%] |
+| --- | --- |
+| Luna: after − before | +0.15 [−1.86, +2.10] |
+| Sol: after − before | −0.31 [−2.40, +1.68] |
+| After execution: Sol − Luna | +0.41 [−1.17, +1.89] |
+| Outcome reference (best on draws 0–2) − Sol after | +1.83 [−0.98, +4.73] |
+
+| Picker | States | Success, draws 3–7 | − Uniform, pp [95%] |
+| --- | ---: | ---: | --- |
+| Outcome reference: best on draws 0–2 | 211 | 39.16% | +5.68 [+3.67, +7.85] |
+| Sol after (draw-0 evidence) | 194 | 39.20% | +3.45 [+1.17, +5.84] |
+| Luna after (draw-0 evidence) | 194 | 38.79% | +3.04 [+0.82, +5.34] |
+| Luna after (evidence draws 0–2, 10 calls) | 201 | 38.37% | +3.44 [+1.31, +5.72] |
+| Sol before | 211 | 36.78% | +3.30 [+1.07, +5.63] |
+| Piotr SelectionARM | 138 | 35.51% | +3.54 [+0.53, +6.59] |
+| Luna before | 211 | 35.92% | +2.45 [+0.34, +4.64] |
+| Actor's first sample | 211 | 35.55% | — |
+| Uniform candidate | 211 | 33.48% | — |
+
+On all 211 states, Sol before − Luna before is +0.85 [−0.79, +2.51] pp, and Luna's full 10-call after − before is +0.73 [−1.08, +2.51] pp. The historical states alone gave +2.37 for Luna after − before (49 states), consistent with the earlier +2.24; the new states give +0.20.
+
+<details>
+<summary>Why immediate post-action evidence does not help here: diagnostics on 194 states</summary>
+
+These diagnostics use saved data only (`scripts/analyze_post_action_value.py`). The 194 states have draw-0 evidence and held-out draws 3–7 (146 new, 48 historical). After-picks are each teacher's draw-0 judgments.
+
+| Check | Luna | Sol |
+| --- | ---: | ---: |
+| States whose majority action changes after execution | 69 (36%) | 49 (25%) |
+| Changed picks: better / worse / tied on draws 3–7 | 21 / 15 / 33 | 16 / 10 / 23 |
+| After − before on changed states, pp [95%] | +0.58 [−3.88, +4.93] | +0.10 [−7.10, +6.98] |
+| Share of picks on visibly failed candidates (error or unchanged screen), before → after | 18.0% → 15.1% | 15.6% → 15.3% |
+
+- **The evidence often cannot discriminate.**
+  - In 39 states all five candidates are the same action.
+  - In 18 states every distinct action produces the same screen and URL.
+  - In 60 states some do.
+  - Only 77 states (40%) show a distinct result for every distinct action.
+- **Visible failures are rare and not costly.**
+  - Only 4 of 970 candidate executions report a tool error.
+  - 134 leave the screen unchanged, and those candidates succeed only 1.0 pp less than their state's mean.
+  - Teachers already pick them less often than uniform (20%) before execution.
+- **The kind of immediate result barely predicts the outcome.** Within-state relative success by immediate-result type, draw 0:
+
+| Immediate result | Candidates | Relative success, pp |
+| --- | ---: | ---: |
+| navigated to a new URL | 482 | +0.7 |
+| same URL, screen changed | 329 | −0.4 |
+| terminated (done) | 81 | −3.3 |
+| screen unchanged | 74 | +0.6 |
+| errored | 4 | −2.0 |
+
+- **The evidence replays consistently.** 98% of later draws reach the same URL as draw 0, and 76% the same screenshot.
+- **No stratum shows a gain.** After − before stays within ±1.3 pp when states are split by whether the evidence distinguishes the actions, or by how much the actions' outcomes differ on draws 0–2. The draw-0–2 split is independent of the scored draws.
+- **Changed picks (qualitative).**
+  - The largest losses pick a page that looks closer to the goal: a direct article URL instead of a search, or an official site instead of a news hub. From there the fixed SFT continuation then fails more often.
+  - Several other changes switch between near-identical actions, whose outcome differences are draw noise.
+  - The teachers judge apparent progress. The outcome depends on whether this particular continuation policy can finish from the new page, and one post-action screen does not reveal that.
+
+</details>
+
+</details>
+
 <a id="lookahead-labels-20261011"></a>
 
 ### Does multi-step lookahead help where immediate evidence did not?
+
+*Superseded by the [1,037-state comparison](#lookahead-main-results); the student-training table is superseded by the [label ablations on 1,380 states](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021). One finding is only here: showing the actor's final answers in the lookahead hurts Luna's picks, −1.49 pp [−2.64, −0.42] on 194 states, which is why every later lookahead hides them.*
+
+<details>
+<summary>Earlier lookahead studies: first 194-state study, 121-state replication (stage a), students on 124 states</summary>
 
 **Yes, modestly: showing the fixed actor's next three steps improves Luna's picks over immediate evidence, and only when its final answers are hidden.** For each candidate, Luna additionally sees the SFT actor's next three actions in draw 0, each with the screenshot it produced. In arm A, an episode that ended within those steps is marked only as ended, without the final answer. In arm B, the final answer is shown; in 192 of 970 candidate continuations the actor submits one within three steps. No arm sees a judge verdict or reward, and scoring uses draws 3–7 only. All 194 states have complete draw-0 evidence, and every comparison is paired on them.
 
@@ -889,6 +943,8 @@ Outcome labels exist only where draws 0–2 separate the actions (59 states).
 - **Luna coverage.** 144 states have all 14 judgments. 16 states lack evidence for some candidate in one or more of draws 0–2, because the action failed to execute; those after-calls are recorded invalid without a request. Every API call returned a valid choice.
 - **Sol run.** It sends the same request as Luna before, with only the model and effort changed: 3 repeats and 1 shuffled order per state, with no execution evidence. It covers the 160 new states and all 124 historical states. Its own ledger reserved each call's worst case before dispatch and settled actual usage; all 1,136 calls were valid.
 - **Compute.** Both runs were CPU-only Slurm jobs, without GPUs.
+
+</details>
 
 </details>
 
