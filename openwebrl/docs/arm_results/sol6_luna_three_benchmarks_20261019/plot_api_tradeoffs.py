@@ -68,30 +68,19 @@ def write_csv(path, rows):
 
 
 def draw(ax, means, metric):
-    offsets = {
-        "serial_high": (-10, -28),
-        "luna_single_high": (12, -22),
-        "parallel3_select_high": (12, -28),
-        "parallel5_select_high": (12, 12),
-    }
     for row in means:
         method = row["method"]
         label, color, marker = METHODS[method]
         x, y = row[metric], 100 * row["mean_success_rate"]
         ax.scatter(x, y, s=115, color=color, marker=marker,
-                   edgecolors="white", linewidths=0.9, zorder=3)
-        dx, dy = offsets[method]
-        ax.annotate(f"{label}\n{y:.2f}%", (x, y), xytext=(dx, dy),
-                    textcoords="offset points", fontsize=10,
-                    ha="right" if dx < 0 else "left", va="center",
-                    color=color, fontweight="medium")
+                   edgecolors="white", linewidths=0.9, zorder=3, label=label)
     ax.set_ylabel("Mean benchmark success (%)")
     ax.yaxis.set_major_formatter(PercentFormatter(xmax=100, decimals=0))
     values = [100 * row["mean_success_rate"] for row in means]
     span = max(values) - min(values)
     pad = max(3.0, span * 0.8)
     ax.set_ylim(max(0, min(values) - pad), min(100, max(values) + pad))
-    ax.set_xlim(left=0, right=max(row[metric] for row in means) * 1.35)
+    ax.set_xlim(left=0, right=max(row[metric] for row in means) * 1.12)
     if metric == "mean_model_usd_per_task":
         ax.set_xlabel("Mean model cost per task (USD)")
         ax.xaxis.set_major_formatter(StrMethodFormatter("${x:.2f}"))
@@ -103,6 +92,12 @@ def draw(ax, means, metric):
     ax.spines[["top", "right"]].set_visible(False)
     for side in ("left", "bottom"):
         ax.spines[side].set_color("#B7BEC7")
+
+
+def save_figure(fig, path):
+    fig.savefig(path, dpi=240)
+    if path.suffix == ".svg":
+        path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
 
 
 def main():
@@ -121,20 +116,26 @@ def main():
               "Same four-method common-valid cohort within each benchmark; judge-only work excluded.")
     for metric, suffix in (("mean_model_usd_per_task", "cost"),
                            ("mean_task_seconds", "latency")):
-        fig, ax = plt.subplots(figsize=(8.4, 5.6))
+        fig, ax = plt.subplots(figsize=(10.4, 5.6))
         draw(ax, means, metric)
         fig.text(0.12, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
-        fig.subplots_adjust(left=0.12, right=0.97, bottom=0.22, top=0.88)
+        fig.subplots_adjust(left=0.10, right=0.70, bottom=0.22, top=0.88)
+        handles, labels = ax.get_legend_handles_labels()
+        fig.legend(handles, labels, loc="center left", bbox_to_anchor=(0.73, 0.56),
+                   frameon=False, fontsize=10, labelspacing=1.4)
         for ext in ("png", "svg"):
-            fig.savefig(args.output_dir / f"api_performance_vs_{suffix}.{ext}", dpi=240)
+            save_figure(fig, args.output_dir / f"api_performance_vs_{suffix}.{ext}")
         plt.close(fig)
     fig, axes = plt.subplots(1, 2, figsize=(15.5, 5.6))
     draw(axes[0], means, "mean_model_usd_per_task")
     draw(axes[1], means, "mean_task_seconds")
     fig.text(0.075, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
-    fig.subplots_adjust(left=0.075, right=0.985, bottom=0.22, top=0.88, wspace=0.25)
+    fig.subplots_adjust(left=0.075, right=0.77, bottom=0.22, top=0.88, wspace=0.25)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(0.795, 0.56),
+               frameon=False, fontsize=10, labelspacing=1.4)
     for ext in ("png", "svg"):
-        fig.savefig(args.output_dir / f"api_performance_tradeoffs.{ext}", dpi=240)
+        save_figure(fig, args.output_dir / f"api_performance_tradeoffs.{ext}")
     plt.close(fig)
     (args.output_dir / "api_tradeoffs_provenance.json").write_text(json.dumps({
         "aggregate_sha256": hashlib.sha256(args.aggregate.read_bytes()).hexdigest(),
