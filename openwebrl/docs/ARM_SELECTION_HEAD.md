@@ -157,7 +157,6 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | SFT 4B, 1 sample | 36.2% | 38.8% | 34.0% | 35.3% | 36.3% | — | — |
 | Piotr SelectionARM | 37.8% | 51.0% | 51.0% | 44.7% | 46.6% | +9.3 | — |
-| Earlier K = 1 head, 1,908 SFT + RL states | 46.5% | 41.7% | 51.0% | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
 | **Labels** (default head: joint transformer, soft CE) | | | | | | | |
 | Pre-execution (Luna) | 26.8% | 40.8% | 38.0% | 33.3% | 35.2% | −2.0 [−10.0, +6.0] | **−11.3 [−19.3, −3.3]** |
 | Lookahead K = 1 (Luna) | 37.8% | 53.1% | 45.8% | 43.3% | 45.6% | +8.0 [0.0, +16.0] | −1.3 [−9.3, +6.7] |
@@ -175,6 +174,7 @@
 | **Data** (default head) | | | | | | | |
 | K = 1, natural-frequency panels | 33.3% | 45.7% | 45.8% | 38.7% | 41.6% | +3.3 [−4.7, +11.3] | −6.0 [−14.0, +2.0] |
 | Pre-execution + Piotr's 34,518 panels | 48.8% | 40.8% | 34.0% | 38.7% | 41.2% | +3.3 [−5.3, +12.0] | −6.0 [−14.0, +2.0] |
+| K = 1, 1,908 SFT + RL states (earlier head) | 46.5% | 41.7% | 51.0% | 43.3% | 46.4% | +8.0 [0.0, +16.0] | −1.3 [−10.0, +6.7] |
 
 - **Setup.**
   - Actor OpenWebRL-4B-SFT, T 1.0 / top-p 0.9, 30 steps, five candidates per decision. One H200 per head. Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop.
