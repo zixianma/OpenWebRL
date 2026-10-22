@@ -189,6 +189,12 @@
   - Its Online-Mind2Web row (11 of 50, 9 invalid) may be depressed by episode-time limits. On WebVoyager and DeepShop, both run on the healthy node, it scored 39 of 100, against 36 for SFT and 50 for Piotr.
   - The outcome head ran on a node about 2× slower (g021). Seconds per decision for these two heads (21–23 s) reflect the nodes, not the heads; the other heads took 7.8–8.5 s.
 
+**How the offline evaluation works.** Labels come from draws 0–2 (outcome) or from what draw 0 shows a teacher; every picker, teacher or trained head, is scored on the same held-out draws 3–7 of test states it never trained on.
+
+![Offline evaluation: each branching state has 2–5 SFT-proposed actions with 8 continuation draws each; lookahead teachers see draw 0, outcome labels use draws 0–2, and scoring uses only draws 3–7; the selection head is trained on 1,380 training states' labels and scored on 348 test states by its top action's success on draws 3–7, against uniform, SFT-sample and oracle references](arm_results/methods/selection-offline-eval-20261022.png)
+
+*[Figure script](arm_results/methods/selection-offline-eval-20261022.py); labels and scoring: `scripts/train_head_round.py` (`targets`, `held_rate`). The grid is a made-up example.*
+
 **Offline (348 held-out test states, 86 tasks; picks scored by held-out success on draws 3–7, valid only).**
 
 | Head | Distinct-action panels | Natural panels | Natural − SFT sample, pp [95% CI] | Parameters |
