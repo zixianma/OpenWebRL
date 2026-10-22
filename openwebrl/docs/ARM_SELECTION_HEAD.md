@@ -126,7 +126,7 @@
 
 ## Label, architecture and data ablations on SFT-proposed actions (2026-10-21)
 
-**Labels matter more than anything else we varied. On the three benchmarks (1,045 tasks, each benchmark weighted equally), heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 56–65% of its compute per episode. Lookahead K = 1 labels gain about a third as much; pre-execution labels gain nothing.** Eight architecture variants and two data changes all fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
+**Labels matter more than anything else we varied. On the three benchmarks (1,045 tasks, each benchmark weighted equally), heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 56–65% of its compute per episode. Lookahead K = 1 labels gain about a third as much; pre-execution labels gain nothing.** Architecture barely matters: on all 1,045 tasks the four transformer heads crossing joint / independent attention with soft CE / BCE are within 1.3 pp of each other. The MLP, pointer and data variants fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
 
 **Full benchmarks, per benchmark (Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks; one episode per task; default head: joint transformer, soft CE).** Success rates and mean differences are in the [headline table](#headline-results); this table splits the overall-success difference from SFT 4B by benchmark.
 
@@ -151,6 +151,25 @@
 ![Selection-head variants: a joint transformer uses full bidirectional attention without position embeddings, so every candidate attends to every other and order does not matter, an independent one masks attention so each candidate sees only the state and itself; a joint MLP adds the candidate minus the mean of the others, an independent MLP sees only the candidate and the state; a worked example with a 3 : 1 target shows soft cross-entropy on the softmax (0.84) and per-candidate BCE on each sigmoid (0.77) for the same logits](arm_results/methods/selection-head-variants-20261022.png)
 
 *[Figure script](arm_results/methods/selection-head-variants-20261022.py); code `openwebrl/selection_head.py` (`CandidateSetHead`, `selection_loss`, `pointwise_bce_loss`).*
+
+<a id="selection-head-arch-full-20261022"></a>
+
+**Full benchmarks, interaction × loss (all K = 1 Luna labels on the same 1,380 branch states; Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks).** The 150-task screen could not separate the transformer variants, so all four were run on every task.
+
+| Head (K = 1 labels) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] | PFLOP per<br>episode |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, 1 sample | 39.6% | 45.0% | 34.2% | 38.2% | 39.6% | — | 0.28 |
+| Piotr SelectionARM | 46.8% | 53.8% | 41.9% | 44.9% | 47.5% | **+6.7 [+3.0, +10.4]** | 1.53 |
+| Joint transformer, soft CE (default) | 38.6% | 50.5% | 38.8% | 40.4% | 42.6% | +2.2 [−1.5, +5.8] | 1.05 |
+| Joint transformer, BCE | 35.9% | 51.1% | 44.6% | 41.5% | 43.9% | +3.3 [−0.2, +6.9] | 1.01 |
+| Independent transformer, soft CE | 37.4% | 51.6% | 37.8% | 40.2% | 42.3% | +2.0 [−1.5, +5.6] | 0.98 |
+| Independent transformer, BCE | 41.2% | 48.5% | 36.9% | 40.3% | 42.2% | +2.1 [−1.6, +5.7] | 0.99 |
+
+- **Main effects on the mean overall rate, pp [95% CI]:** joint − independent +0.7 [−2.1, +3.4] (soft CE +0.2, BCE +1.2); soft CE − BCE −0.6 [−3.1, +1.9] (joint −1.1, independent 0.0); interaction term −1.1 [−6.0, +3.8]. Valid-only differences agree within 0.5 pp.
+- **Against Piotr,** every K = 1 head is 3.4–4.7 pp lower; three of the four intervals exclude zero. The gap to Piotr is a label effect: outcome and K = 3 labels on the default head close it (see the [headline table](#headline-results)).
+- **Setup.** Same actor, decoding, judges and task order as the label runs above; one H200 per run, nodes g013, g014 and g019 excluded. One Online-Mind2Web run lost its first two tasks to a Chromium launch failure on g019; those records were set aside and the tasks rerun. Every task has exactly one recorded episode and no selector fell back.
+- **Differences:** stratified bootstrap, tasks resampled within each benchmark (10,000 draws); each benchmark weighted one third. Valid-only uses tasks valid under all compared heads.
+- Evidence: [runs and contrasts](arm_results/rl_integration/selection-head-arch-2x2-full-20261022.json) · [script](arm_results/rl_integration/selection-head-arch-2x2-full-20261022.py)
 
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
