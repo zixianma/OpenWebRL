@@ -170,7 +170,9 @@ For a matched comparison across the full cohort, the following rows use only the
 | Head, K3 labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 38.3% | 43.1% | 51.1% | 52.0% | 42.7% | 42.7% | 46.2% | 48.2% | 0.061 | 0.91 | 125 s | 14.9 |
 | Head, outcome labels | 1,380 states / 1,380 panels, outcomes on draws 0–2 | 4.44 B + 22.6 M | 38.0% | 42.2% | 52.3% | 53.0% | 42.0% | 42.6% | 46.7% | 48.6% | 0.062 | 0.81 | 100 s | 13.1 |
 
-![Overall success on all 1,045 tasks versus parameters (left), PFLOP per episode (middle) and model time per episode (right), one point per method](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.png)
+![Overall success versus parameters (left), PFLOP per episode (middle) and model time per episode (right); top row all 1,045 tasks, bottom row Online-Mind2Web only with the N = 3 runs joined to their N = 5 runs](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.png)
+
+*Top row: all 1,045 tasks. Bottom row: Online-Mind2Web 300 only, adding the three-candidate runs ([below](#final-selection-n3-om2w-20261022)); lines join each selector's N = 3 (triangle) and N = 5 runs.*
 
 - **Definitions.** "Overall" counts invalid episodes as failures; "valid-only" divides by valid episodes. Model time is actor + selector decision time summed over an episode, excluding browser execution. PFLOP per episode = PFLOP per step × steps per episode.
 - **Paired differences (all 1,045 tasks, 95% bootstrap).** vs SFT: Piotr +7.0 [+4.1, +10.0], Piotr-data head +7.5 [+4.4, +10.5], outcome +6.1 [+3.2, +9.0], K3 +5.6 [+2.7, +8.7], K1 +2.7 [−0.4, +5.7], pre-execution −0.2 [−3.2, +2.7]. vs Piotr: outcome −0.9 [−4.0, +2.2], K3 −1.3 [−4.4, +1.6], K1 −4.3 [−7.4, −1.4], pre-execution −7.2 [−10.2, −4.1]. SFT 8B vs SFT 4B: +3.3 [+0.4, +6.3] (Online-Mind2Web +0.0, WebVoyager +4.5, DeepShop +5.3); vs SFT 8B: Piotr +3.6 [+0.5, +6.7], Piotr-data head +4.1 [+1.0, +7.3].
@@ -180,9 +182,11 @@ For a matched comparison across the full cohort, the following rows use only the
 - A 4B LoRA trained with Piotr's recipe on our 1,380 states does no better than the head offline ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021)).
 - [Details, per-benchmark intervals and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · Evidence: [heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json) · [Plot script](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py)
 
+<a id="final-selection-n3-om2w-20261022"></a>
+
 ### Three candidates instead of five (Online-Mind2Web)
 
-**On Online-Mind2Web, cutting each selector from five to three candidates per decision costs no measurable success and saves 26–33% of model time per episode. All three N = 3 selectors still beat SFT 4B; differences among them are within noise.** 300 tasks, same task order, decoding and judge as above; one run per method. The pointwise head is the per-candidate MLP (16.8 M parameters) trained on the same Piotr data; it has no N = 5 full-set run.
+**On Online-Mind2Web, cutting each selector from five to three candidates per decision costs no measurable success and saves 26–33% of model time per episode. All three N = 3 selectors still beat SFT 4B; differences among them are within noise.** Plotted in the bottom row of the figure above. 300 tasks, same task order, decoding and judge as above; one run per method. The pointwise head is the per-candidate MLP (16.8 M parameters) trained on the same Piotr data; it has no N = 5 full-set run.
 
 | Method | Candidates | Params (actor + selector) | Successes | Valid episodes | Overall | Valid-only | PFLOP per step | PFLOP per episode | Model time per episode | Steps per episode |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -194,9 +198,7 @@ For a matched comparison across the full cohort, the following rows use only the
 | Joint head, Piotr's data | 3 | 4.44 B + 22.6 M | 127 | 269 | 42.3% | 47.2% | 0.052 | 0.74 | 77 s | 14.2 |
 | Pointwise head, Piotr's data | 3 | 4.44 B + 16.8 M | 124 | 264 | 41.3% | 47.0% | 0.051 | 0.72 | 77 s | 14.2 |
 
-![Online-Mind2Web overall success versus PFLOP per episode (left) and model time per episode (right); lines join each selector's N = 3 and N = 5 runs](arm_results/rl_integration/selection-n3-om2w-vs-cost-20261021.png)
-
 - **Paired differences (300 tasks, 95% bootstrap, overall).** N = 3 vs N = 5: Piotr +3.7 [−1.7, +9.0], joint head −1.3 [−7.3, +4.3]. vs SFT 4B: Piotr N = 3 +8.3 [+2.3, +14.0], joint head N = 3 +6.0 [+0.3, +11.7], pointwise head N = 3 +5.0 [−0.7, +10.7]. At N = 3: joint head − Piotr −2.3 [−8.0, +3.3], pointwise − joint −1.0 [−6.7, +4.7].
 - **Time.** A decision takes 6.0 s for Piotr and 5.4 s for the heads at N = 3, against 8.4 s and 7.8 s at N = 5: the slowest of fewer parallel candidates finishes sooner and the GPU serves fewer requests.
 - **Caveat.** Piotr's N = 3 gain over N = 5 is not significant and comes from one run per method on one benchmark; WebVoyager and DeepShop were not run at N = 3.
-- [Evidence](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json) · [Analysis script](arm_results/rl_integration/selection-n3-sft8b-full-20261021-analysis.py) · [Plot script](arm_results/rl_integration/selection-n3-om2w-vs-cost-20261021.py)
+- [Evidence](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json) · [Analysis script](arm_results/rl_integration/selection-n3-sft8b-full-20261021-analysis.py) · Plot: bottom row of the figure above
