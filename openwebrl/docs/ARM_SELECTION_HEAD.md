@@ -128,6 +128,7 @@
 
 - LoRA − head on the same states: K = 3 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on our data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
 - Distinct panels average 5 candidate orderings per state; natural panels are 5 seeded five-proposal panels. Reading the pick after the serving prefix instead of the training prefix changes success by under 0.3 pp. Head rows are the round-1 heads restricted to these 345 states (one distinct ordering).
+- **Caveat for the Piotr row:** our branching states were collected on the tasks of Piotr's ARM training split, so his selector has trained on other states of the same tasks; the heads and LoRAs have not (task-grouped split). His offline lead may be partly task familiarity.
 - Not yet run live. [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
 
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
