@@ -165,10 +165,10 @@ For a matched comparison across the full cohort, the following rows use only the
 | SFT 8B, 1 sample | — | 8.77 B | 36.3% | 39.9% | 48.9% | 49.7% | 39.3% | 39.9% | 43.9% | 45.6% | 0.037 | 0.50 | 45 s | 13.6 |
 | Piotr SelectionARM | 2,692 states / 35,916 panels, GPT-5.5 picks | 4.44 B + 4.44 B | 41.0% | 46.8% | **52.4%** | **53.8%** | 41.3% | 41.9% | 47.6% | 50.2% | 0.096 | 1.37 | 124 s | 14.3 |
 | Head, Piotr's data | 2,692 states / 35,916 panels, GPT-5.5 picks | 4.44 B + 22.6 M | **43.7%** | **49.4%** | 51.3% | 53.4% | **44.0%** | **44.9%** | **48.0%** | **51.1%** | 0.062 | 0.84 | 113 s | 13.6 |
-| Head, pre-execution labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 33.0% | 36.9% | 45.7% | 47.1% | 34.0% | 34.2% | 40.4% | 42.5% | 0.061 | 0.95 | 134 s | 15.6 |
-| Head, K1 labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 34.0% | 38.6% | 49.2% | 50.5% | 38.0% | 38.8% | 43.3% | 45.6% | 0.061 | 0.96 | 133 s | 15.7 |
-| Head, K3 labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 38.3% | 43.1% | 51.1% | 52.0% | 42.7% | 42.7% | 46.2% | 48.2% | 0.061 | 0.91 | 125 s | 14.9 |
-| Head, outcome labels | 1,380 states / 1,380 panels, outcomes on draws 0–2 | 4.44 B + 22.6 M | 38.0% | 42.2% | 52.3% | 53.0% | 42.0% | 42.6% | 46.7% | 48.6% | 0.062 | 0.81 | 100 s | 13.1 |
+| Head, pre-execution labels | 1,380 states, 1 panel each (reshuffled per epoch), Luna votes | 4.44 B + 22.6 M | 33.0% | 36.9% | 45.7% | 47.1% | 34.0% | 34.2% | 40.4% | 42.5% | 0.061 | 0.95 | 134 s | 15.6 |
+| Head, K1 labels | 1,380 states, 1 panel each (reshuffled per epoch), Luna votes | 4.44 B + 22.6 M | 34.0% | 38.6% | 49.2% | 50.5% | 38.0% | 38.8% | 43.3% | 45.6% | 0.061 | 0.96 | 133 s | 15.7 |
+| Head, K3 labels | 1,380 states, 1 panel each (reshuffled per epoch), Luna votes | 4.44 B + 22.6 M | 38.3% | 43.1% | 51.1% | 52.0% | 42.7% | 42.7% | 46.2% | 48.2% | 0.061 | 0.91 | 125 s | 14.9 |
+| Head, outcome labels | 1,380 states, 1 panel each (reshuffled per epoch), outcomes on draws 0–2 | 4.44 B + 22.6 M | 38.0% | 42.2% | 52.3% | 53.0% | 42.0% | 42.6% | 46.7% | 48.6% | 0.062 | 0.81 | 100 s | 13.1 |
 
 ![Overall success versus parameters (left), PFLOP per episode (middle) and model time per episode (right); top row all 1,045 tasks, bottom row Online-Mind2Web only with the N = 3 runs joined to their N = 5 runs](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.png)
 
@@ -179,7 +179,7 @@ For a matched comparison across the full cohort, the following rows use only the
 - **Online-Mind2Web is where our labels fall short.** On WebVoyager and DeepShop the outcome and K3 heads match Piotr; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
 - **Why time barely drops.** Generating five candidates takes about 8.2 s of each 8–9 s decision; Piotr's selector adds 0.50 s and the head 0.02 s. Selector FLOPs are a fast prefill, while decoding is bandwidth-bound, so the head's 36% compute saving per step becomes only about 0.5 s per decision, roughly offset by its hidden-state capture. Episode length matters as much: the outcome head is cheapest per episode because it takes the fewest steps. Times come from live runs on different nodes, not a matched timing study.
 - **Training data.** Piotr's panels are five actor samples each (about 13 per state), labelled with one GPT-5.5 pick; our panels are one per state with 2–5 distinct actions, reshuffled each epoch. Our states come from the tasks of Piotr's training split.
-- A 4B LoRA trained with Piotr's recipe on our 1,380 states does no better than the head offline ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021)).
+- A 4B LoRA trained with Piotr's recipe on our 1,380 states does no better than the head offline ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-lora-20261021)).
 - [Details, per-benchmark intervals and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · Evidence: [heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json) · [Plot script](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py)
 
 <a id="final-selection-n3-om2w-20261022"></a>

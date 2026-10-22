@@ -22,7 +22,7 @@
 - **Training data.**
   - "Piotr's data": GPT-5.5 picks on Piotr's 2,692 states (35,916 five-candidate panels). The head's weights are the same-hardware study's listwise head; Piotr SelectionARM is a LoRA fine-tune of the 4B model on the same data.
   - "Our K = 1 labels": Luna lookahead K = 1 votes on 1,908 branching states, 434 of them from the RL actor, with one panel per state.
-- **Ablations on 1,738 SFT-actor states** ([details](#selection-head-sft-actions-20261021)): on all 1,045 tasks of the three benchmarks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 states gain +6.1 pp [+3.2, +9.0] and +5.6 pp [+2.7, +8.7] over SFT and are level with Piotr SelectionARM (−0.9 [−4.0, +2.2] and −1.3 [−4.4, +1.6]) at 64% of its compute. K = 1 labels gain less (+2.7 pp [−0.4, +5.7]; −4.3 [−7.4, −1.4] vs Piotr) and pre-execution labels gain nothing (−0.2 pp). Eight architecture variants and two data changes are within live noise on 150 tasks and within 1.6 pp offline.
+- **Ablations on 1,738 SFT-actor states** ([details](#selection-head-sft-actions-20261021)): on all 1,045 tasks of the three benchmarks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 states gain +6.1 pp [+3.2, +9.0] and +5.6 pp [+2.7, +8.7] over SFT and are level with Piotr SelectionARM (−0.9 [−4.0, +2.2] and −1.3 [−4.4, +1.6]) at 59–66% of its compute per episode. K = 1 labels gain less (+2.7 pp [−0.4, +5.7]; −4.3 [−7.4, −1.4] vs Piotr) and pre-execution labels gain nothing (−0.2 pp). Eight architecture variants and two data changes are within live noise on 150 tasks and within 1.6 pp offline.
 - **100 steps** ([details](#selection-head-100-steps-20261019)): raising the step limit from 30 to 100 adds +5.8 pp [+2.9, +8.8] for SFT and +4.8 pp [+1.8, +7.9] for Piotr SelectionARM; Piotr's lead over SFT holds at +5.9 pp [+3.0, +9.0]. The heads have not been run at 100 steps.
 - **Model × data.** On Piotr's data the head matches Piotr's 4B selector: +0.5 pp [−2.5, +3.4]. On our data it trails the Piotr-data head by 2.9 pp [−0.1, +5.9], a gap that likely reflects about 19× fewer labelled choices. Training only on our SFT-actor states (1,631) changes little: −0.8 pp [−3.6, +2.1] against the SFT + RL head ([details](#selection-head-crossbench-full-20261018)).
 - **Details:** [full-benchmark section](#selection-head-crossbench-full-20261018) (per-benchmark tables, cost accounting, decoding test), [evidence](arm_results/rl_integration/crossbench-full-t10-20261018.json).
@@ -92,7 +92,7 @@
 
 ## Label, architecture and data ablations on SFT-proposed actions (2026-10-21)
 
-**Labels matter more than anything else we varied. On all 1,045 tasks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 64% of its compute. Lookahead K = 1 labels gain about half as much; pre-execution labels gain nothing.** Eight architecture variants and two data changes all fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
+**Labels matter more than anything else we varied. On all 1,045 tasks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 59–66% of its compute per episode. Lookahead K = 1 labels gain about half as much; pre-execution labels gain nothing.** Eight architecture variants and two data changes all fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
 
 **Full benchmarks (all 1,045 tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150; one episode per task; default head: joint transformer, soft CE).**
 
@@ -112,24 +112,6 @@
 - **K = 1 regressed from the 150-task screen** (+8.0 pp there, +2.7 pp here), a reminder that the screen resolves only about ±8 pp.
 - **Nodes.** All twelve runs excluded the degraded node g013; two WebVoyager runs hit CUDA faults on g014 and resumed from their saved records on other nodes. Every task has exactly one recorded episode.
 - [Evidence](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json)
-
-**Same data, larger selector (offline).** Piotr's SelectionARM recipe (LoRA rank 32 on OpenWebRL-4B-SFT, `{"selection": N}`, 2 epochs) trained on exactly the heads' 1,380 training states and labels does no better than the 22.6 M head. Scored on the 345 test states, held-out draws 3–7, argmax pick:
-
-| Selector (training data) | Distinct-action panels | Natural five-proposal panels | Natural − uniform, pp [95% CI] |
-| --- | ---: | ---: | ---: |
-| Uniform over actions | 36.0% | — | — |
-| SFT sample (actor frequency) | 35.4% | — | — |
-| Oracle | 47.8% | — | — |
-| Head, K = 3 labels | 36.4% | 37.4% | — |
-| LoRA 4B, K = 3 labels | 37.2% | 37.5% | +1.5 [−0.1, +3.1] |
-| Head, outcome labels | 36.7% | 35.4% | — |
-| LoRA 4B, outcome labels | 36.4% | 36.6% | +0.6 [−0.6, +2.0] |
-| Piotr SelectionARM (his 34,518 panels) | 39.1% | 38.4% | **+2.4 [+1.1, +3.8]** |
-
-- LoRA − head on the same states: K = 3 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on our data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
-- Distinct panels average 5 candidate orderings per state; natural panels are 5 seeded five-proposal panels. Reading the pick after the serving prefix instead of the training prefix changes success by under 0.3 pp. Head rows are the round-1 heads restricted to these 345 states (one distinct ordering).
-- **Caveat for the Piotr row:** our branching states were collected on the tasks of Piotr's ARM training split, so his selector has trained on other states of the same tasks; the heads and LoRAs have not (task-grouped split). His offline lead may be partly task familiarity.
-- Not yet run live. [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
 
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
@@ -200,6 +182,26 @@
   - Natural-frequency training equals distinct-panel training on natural panels (38.04% vs 38.06%).
   - Piotr's panels raise the pre-execution head by about 0.6–1.1 pp offline. That still leaves it short of K = 1 trained on our 1,380 states alone.
 
+<a id="selection-head-sft-actions-lora-20261021"></a>
+
+**Same data, larger selector (offline).** Piotr's SelectionARM recipe (LoRA rank 32 on OpenWebRL-4B-SFT, `{"selection": N}`, 2 epochs) trained on exactly the heads' 1,380 training states and labels does no better than the 22.6 M head. Scored on 345 of the 348 test states (3 lack a label set or replay anchor that the LoRA panel builder requires), held-out draws 3–7, argmax pick:
+
+| Selector (training data) | Distinct-action panels | Natural five-proposal panels | Natural − uniform, pp [95% CI] |
+| --- | ---: | ---: | ---: |
+| Uniform over actions | 36.0% | — | — |
+| SFT sample (actor frequency) | 35.4% | — | — |
+| Oracle | 47.8% | — | — |
+| Head, K = 3 labels | 36.4% | 37.4% | — |
+| LoRA 4B, K = 3 labels | 37.2% | 37.5% | +1.5 [−0.1, +3.1] |
+| Head, outcome labels | 36.7% | 35.4% | — |
+| LoRA 4B, outcome labels | 36.4% | 36.6% | +0.6 [−0.6, +2.0] |
+| Piotr SelectionARM (his 34,518 panels) | 39.1% | 38.4% | **+2.4 [+1.1, +3.8]** |
+
+- LoRA − head on the same states: K = 3 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on our data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
+- Distinct panels average 5 candidate orderings per state; natural panels are 5 seeded five-proposal panels. Reading the pick after the serving prefix instead of the training prefix changes success by under 0.3 pp. Head rows are the round-1 heads of the offline table above, restricted to these 345 states (one distinct ordering), so they differ slightly from that table.
+- **Caveat for the Piotr row:** our branching states were collected on the tasks of Piotr's ARM training split, so his selector has trained on other states of the same tasks; the heads and LoRAs have not (task-grouped split). His offline lead may be partly task familiarity.
+- Not yet run live. [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
+
 <details>
 <summary>States, actions, labels and training</summary>
 
@@ -220,7 +222,7 @@
 - **Training.** Frozen OpenWebRL-4B-SFT features from layers 18/27/36, extracted with the cached prefix as at inference. AdamW 3e-4, weight decay 0.05, batch 64, 20 epochs, one-cycle schedule.
   - Pre + Piotr adds Piotr's 34,518 training panels (2,587 base states). The 1,398 panels whose tasks are in our test set were excluded.
   - Every head is saved with config, seed and state list.
-- **Not run.** The approved priority list did not include the 1/4 and 1/2 data-scale runs, so they await confirmation. Also not run: Piotr's 4B LoRA trained on our data, and heads on RL-actor states or RL-proposed candidates.
+- **Not run.** The approved priority list did not include the 1/4 and 1/2 data-scale runs, so they await confirmation. Also not run: heads on RL-actor states or RL-proposed candidates. Piotr's 4B LoRA trained on our data was scored offline only ([above](#selection-head-sft-actions-lora-20261021)), not live.
 - **Evidence:** [offline and online results](arm_results/rl_integration/selection-head-sft-actions-20261021.json).
   - Runtime: `selection-head-20261008/sft-actions-20261021/` (panels, labels, `round{1,2,3}/*/head.pt`) and `evaluations/sft-actions-150-20261021/` (jobs 376523–376554, 376616; `analysis/analyze.py`).
   - Code `arm-selection-head` at `4511da2`: `scripts/build_sft_action_panels.py`, `scripts/train_head_round.py`.
