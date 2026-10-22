@@ -22,7 +22,7 @@
 - **Training data.**
   - "Piotr's data": GPT-5.5 picks on Piotr's 2,692 states (35,916 five-candidate panels). The head's weights are the same-hardware study's listwise head; Piotr SelectionARM is a LoRA fine-tune of the 4B model on the same data.
   - "Our K = 1 labels": Luna lookahead K = 1 votes on 1,908 branching states, 434 of them from the RL actor, with one panel per state.
-- **Ablations on 1,738 SFT-actor states** ([details](#selection-head-sft-actions-20261021)): on 150 live tasks, heads trained on lookahead K = 1 / K = 3 or observed-outcome labels for 1,380 states gain +8.0 to +10.0 pp over SFT and are level with Piotr SelectionARM (−1.3 to +0.7 pp). Pre-execution labels gain nothing: −2.0 pp vs SFT, −11.3 pp [−19.3, −3.3] vs Piotr. Eight architecture variants and two data changes are within live noise and within 1.6 pp offline.
+- **Ablations on 1,738 SFT-actor states** ([details](#selection-head-sft-actions-20261021)): on all 1,045 tasks of the three benchmarks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 states gain +6.1 pp [+3.2, +9.0] and +5.6 pp [+2.7, +8.7] over SFT and are level with Piotr SelectionARM (−0.9 [−4.0, +2.2] and −1.3 [−4.4, +1.6]) at 64% of its compute. K = 1 labels gain less (+2.7 pp [−0.4, +5.7]; −4.3 [−7.4, −1.4] vs Piotr) and pre-execution labels gain nothing (−0.2 pp). Eight architecture variants and two data changes are within live noise on 150 tasks and within 1.6 pp offline.
 - **100 steps** ([details](#selection-head-100-steps-20261019)): raising the step limit from 30 to 100 adds +5.8 pp [+2.9, +8.8] for SFT and +4.8 pp [+1.8, +7.9] for Piotr SelectionARM; Piotr's lead over SFT holds at +5.9 pp [+3.0, +9.0]. The heads have not been run at 100 steps.
 - **Model × data.** On Piotr's data the head matches Piotr's 4B selector: +0.5 pp [−2.5, +3.4]. On our data it trails the Piotr-data head by 2.9 pp [−0.1, +5.9], a gap that likely reflects about 19× fewer labelled choices. Training only on our SFT-actor states (1,631) changes little: −0.8 pp [−3.6, +2.1] against the SFT + RL head ([details](#selection-head-crossbench-full-20261018)).
 - **Details:** [full-benchmark section](#selection-head-crossbench-full-20261018) (per-benchmark tables, cost accounting, decoding test), [evidence](arm_results/rl_integration/crossbench-full-t10-20261018.json).
@@ -92,9 +92,28 @@
 
 ## Label, architecture and data ablations on SFT-proposed actions (2026-10-21)
 
-**Labels matter more than anything else we varied. Heads trained on lookahead (K = 1, K = 3) or observed-outcome labels for 1,380 SFT-actor states gain +8 to +10 pp over single-sample SFT on 150 live tasks. Each is level with Piotr SelectionARM, which trained on about 25× more panels. The pre-execution-label head gains nothing.** Eight architecture variants and two data changes all fall within the live noise. Offline, the variants differ by at most 1.6 pp.
+**Labels matter more than anything else we varied. On all 1,045 tasks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 64% of its compute. Lookahead K = 1 labels gain about half as much; pre-execution labels gain nothing.** Eight architecture variants and two data changes all fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
 
-**Online (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
+**Full benchmarks (all 1,045 tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150; one episode per task; default head: joint transformer, soft CE).**
+
+| Method | Online-Mind2Web successes (of 300) | WebVoyager successes (of 595) | DeepShop successes (of 150) | All successes (of 1,045) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] | PFLOP per step |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, 1 sample | 109 | 264 | 51 | 424 | 1,011 | 40.6% | 41.9% | — | — | 0.019 |
+| Piotr SelectionARM (4.44 B selector) | 123 | 312 | 62 | 497 | 991 | 47.6% | 50.2% | +7.0 [+4.1, +10.0] | — | 0.096 |
+| Head, Piotr's data (GPT-5.5 labels) | 131 | 305 | 66 | 502 | 983 | 48.0% | 51.1% | +7.5 [+4.4, +10.5] | +0.5 [−2.5, +3.3] | 0.062 |
+| Head, pre-execution labels | 99 | 272 | 51 | 422 | 994 | 40.4% | 42.5% | −0.2 [−3.2, +2.7] | **−7.2 [−10.2, −4.1]** | 0.061 |
+| Head, lookahead K = 1 labels | 102 | 293 | 57 | 452 | 991 | 43.3% | 45.6% | +2.7 [−0.4, +5.7] | **−4.3 [−7.4, −1.4]** | 0.061 |
+| Head, lookahead K = 3 labels | 115 | 304 | 64 | 483 | 1,002 | 46.2% | 48.2% | **+5.6 [+2.7, +8.7]** | −1.3 [−4.4, +1.6] | 0.061 |
+| Head, observed-outcome labels | 114 | 311 | 63 | **488** | 1,005 | **46.7%** | 48.6% | **+6.1 [+3.2, +9.0]** | −0.9 [−4.0, +2.2] | 0.062 |
+
+- **Setup** as in the 150-task screen below; SFT, Piotr and the Piotr-data head are the [full-benchmark runs](#selection-head-crossbench-full-20261018). The four label heads share one architecture and the same 1,380 training states; only the label differs.
+- **Ranking.** Outcome ≈ K = 3 > K = 1 > pre-execution. Against the Piotr-data head, outcome and K = 3 are −1.3 pp [−4.4, +1.7] and −1.8 pp [−4.8, +1.2]; K = 1 and pre-execution are −4.8 [−7.8, −1.8] and −7.7 [−10.7, −4.6].
+- **Per benchmark.** The gains come mostly from WebVoyager (outcome +7.9 pp [+3.9, +12.1], K = 3 +6.7 [+2.9, +10.6]) and DeepShop (+8.0 and +8.7 pp, intervals touching 0). On Online-Mind2Web no label head clearly beats SFT (−3.3 to +2.0 pp), while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
+- **K = 1 regressed from the 150-task screen** (+8.0 pp there, +2.7 pp here), a reminder that the screen resolves only about ±8 pp.
+- **Nodes.** All twelve runs excluded the degraded node g013; two WebVoyager runs hit CUDA faults on g014 and resumed from their saved records on other nodes. Every task has exactly one recorded episode.
+- [Evidence](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json)
+
+**150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
 | Head (training labels / variant) | Online-Mind2Web successes (of 50) | WebVoyager successes (of 50) | DeepShop successes (of 50) | All successes (of 150) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
