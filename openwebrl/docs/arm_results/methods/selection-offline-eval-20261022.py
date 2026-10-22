@@ -1,89 +1,127 @@
-"""How labels are made and how teachers and selection heads are scored offline on SFT-actor branching states
-(scripts/train_head_round.py: targets, held_rate; 2026-10-21 ablation)."""
+"""Offline evaluation on SFT-actor branching states (scripts/train_head_round.py: targets, held_rate; 2026-10-21 ablation).
+(a) one branching state: 2-5 SFT-proposed actions, each executed in a replayed browser and continued 8 times by the frozen SFT
+actor to a judged outcome; (b) training labels; (c) training the head and scoring every picker on held-out draws."""
 from pathlib import Path
+import random
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, Rectangle, FancyArrowPatch
 
-INK, MUTED, GRID = "#2b2a27", "#6b6962", "#c3c2b7"
-WIN, LOSE = "#1baf7a", "#e8e6df"
-TEACH, OUTC, HELD, STU = "#6250d6", "#eda100", "#2a78d6", "#eb6834"
-plt.rcParams.update({"font.size": 10, "text.color": INK})
-fig = plt.figure(figsize=(15, 8.4))
-ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 15); ax.set_ylim(0, 8.4); ax.axis("off")
+INK, MUTED, LINE = "#26251f", "#6b6962", "#b9b7ad"
+WIN, FAIL = "#1a9e6e", "#c9c6bc"
+TEACH, OUTC, HELD, STU = "#6250d6", "#d48a00", "#2a78d6", "#e05a24"
+OUTC_BG, HELD_BG = "#fdf3df", "#e6effb"
+plt.rcParams.update({"font.size": 9, "text.color": INK, "font.family": "DejaVu Sans"})
+fig = plt.figure(figsize=(16, 8.6))
+ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 16); ax.set_ylim(0, 8.6); ax.axis("off")
 
 
-def box(x, y, w, h, ec=GRID, fc="white", lw=1.3):
-    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.12", fc=fc, ec=ec, lw=lw))
+def rbox(x, y, w, h, ec=LINE, fc="white", lw=1.0, r=0.08):
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0.0,rounding_size={r}", fc=fc, ec=ec, lw=lw))
 
 
-def arrow(x0, y0, x1, y1, color=MUTED):
-    ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=14, color=color, lw=1.6))
+def arrow(x0, y0, x1, y1, color=MUTED, lw=1.1, style="-|>", ms=10):
+    ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle=style, mutation_scale=ms, color=color, lw=lw, shrinkA=0, shrinkB=0))
 
 
-def step(n, x, y, title):
-    ax.add_patch(plt.Circle((x + 0.18, y), 0.17, color=INK))
-    ax.text(x + 0.18, y, str(n), color="white", ha="center", va="center", fontsize=10, weight="bold")
-    ax.text(x + 0.45, y, title, va="center", fontsize=12, weight="bold")
+def screen(x, y, w, h, ec=LINE, lw=1.0, label=None):
+    rbox(x, y, w, h, ec=ec, lw=lw, r=0.04)
+    ax.add_patch(Rectangle((x, y + h - 0.09), w, 0.09, fc="#efeee9", ec="none"))
+    for k in range(3):
+        ax.add_patch(Rectangle((x + 0.08, y + h - 0.25 - k * 0.12), w * (0.75 - 0.2 * k), 0.05, fc="#dedcd5", ec="none"))
+    if label:
+        ax.text(x + w / 2, y - 0.1, label, ha="center", va="top", fontsize=8.5)
 
 
-# 1. data
-step(1, 0.2, 8.0, "Branching state: every action gets 8 continuations")
-box(0.2, 1.0, 6.3, 6.6)
-ax.text(0.45, 7.3, "State s: task + screenshot + history at one step of an SFT-4B episode", fontsize=9.5)
-ax.text(0.45, 7.0, "2–5 distinct actions the SFT actor proposed there", fontsize=9, color=MUTED)
-draws = [[1, 0, 1, 1, 0, 1, 1, 0], [0, 0, 1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 0, 0, 0, 1, 0, 0]]
-x0, cw, top = 1.55, 0.5, 6.3
-for k in range(8):
-    ax.text(x0 + k * cw + cw / 2, top + 0.25, str(k), ha="center", fontsize=9, color=MUTED)
-ax.text(x0 - 0.15, top + 0.25, "draw", ha="right", fontsize=9, color=MUTED)
-for i, row in enumerate(draws):
-    y = top - (i + 1) * 0.6
-    ax.text(x0 - 0.15, y + 0.22, f"action a{i + 1}", ha="right", va="center", fontsize=9.5)
-    for k, v in enumerate(row):
-        ax.add_patch(Rectangle((x0 + k * cw + 0.04, y), cw - 0.08, 0.44, fc=WIN if v else LOSE, ec="white"))
-yb = top - 4 * 0.6 - 0.15
-def bracket(k0, k1, color, label, dy):
-    xa, xb = x0 + k0 * cw + 0.04, x0 + (k1 + 1) * cw - 0.04
-    ax.plot([xa, xa, xb, xb], [yb - dy + 0.12, yb - dy, yb - dy, yb - dy + 0.12], color=color, lw=2)
-    ax.text((xa + xb) / 2, yb - dy - 0.12, label, ha="center", va="top", fontsize=9, color=color, weight="bold")
-bracket(0, 0, TEACH, "teacher\nevidence", 0.0)
-bracket(0, 2, OUTC, "outcome label", 0.75)
-bracket(3, 7, HELD, "held-out scoring (draws 3–7)", 0.0)
-ax.add_patch(Rectangle((x0 + 0.02, top - 4 * 0.6 - 0.02), cw - 0.04, 4 * 0.6 + 0.04, fc="none", ec=TEACH, lw=2))
-ax.text(0.45, 1.75, "Each draw executes the action in a replayed browser, then the frozen SFT actor\n"
-        "continues to the end; o4-mini judges task success (green). Invalid draws are dropped.", fontsize=8.8, color=MUTED)
-ax.text(0.45, 1.2, "1,738 states, 437 tasks; split by task: 1,390 train / 348 test (86 tasks).", fontsize=9.2)
+# ---------------- (a) one branching state ----------------
+ax.text(0.15, 8.35, "(a)", fontsize=12, weight="bold")
+ax.text(0.6, 8.35, "One branching state and its continuations", fontsize=11.5, weight="bold")
+# history
+screen(0.25, 4.15, 0.55, 0.45, label="t−2")
+screen(1.0, 4.15, 0.55, 0.45, label="t−1")
+arrow(0.82, 4.37, 0.98, 4.37)
+screen(1.8, 3.95, 0.95, 0.85, ec=INK, lw=1.6)
+arrow(1.57, 4.37, 1.78, 4.37)
+ax.text(2.27, 3.82, "state sₜ", ha="center", va="top", fontsize=9.5, weight="bold")
+ax.text(1.45, 3.45, "task + screenshot + history\nfrom an SFT-4B episode", ha="center", va="top", fontsize=8, color=MUTED)
 
-# 2. labels
-step(2, 6.9, 8.0, "Labels on training states")
-ax.text(7.35, 7.68, "soft targets over the actions", fontsize=9, color=MUTED)
-items = [("Lookahead K = 1 / K = 3", TEACH, "GPT-6 Luna sees s, every action, and the next K\nsteps of draw 0 (screenshots; final answer hidden);\nvote share over 2 randomized-order calls"),
-         ("Pre-execution", TEACH, "GPT-6 Luna sees s and every action only;\nvote share over 2 calls"),
-         ("Observed outcome", OUTC, "action(s) with the best success on draws 0–2;\nties split evenly.  Example: a3 (3 of 3) → target 1 on a3")]
-for j, (title, color, text) in enumerate(items):
-    y = 6.15 - j * 1.6
-    box(6.9, y, 4.0, 1.35, ec=color, lw=1.8)
-    ax.text(7.05, y + 1.1, title, fontsize=10, weight="bold", color=color)
-    ax.text(7.05, y + 0.88, text, fontsize=8.6, va="top")
-ax.text(7.05, 1.2, "No label ever uses draws 3–7.", fontsize=9.5, weight="bold", color=HELD)
-arrow(6.5, 5.2, 6.88, 5.2)
+actions = ['click "Search"', 'type "red shoes"', "scroll down", 'click "Deals"']
+outcomes = [[1, 0, 1, 1, 0, 1, 1, 0], [0, 0, 1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 0, 0, 0, 1, 0, 0]]
+rng = random.Random(7)
+row_h, gap = 0.155, 0.42
+group_h = 8 * row_h
+tops = [7.75 - i * (group_h + gap) for i in range(4)]
+ax_x, roll_x0, roll_x1, end_x = 3.05, 5.0, 8.55, 8.75
+ax.text(ax_x + 0.6, 8.0, "proposed actions", ha="center", fontsize=8.5, color=MUTED)
+ax.text((roll_x0 + roll_x1) / 2, 8.0, "8 continuations per action (draws 0–7)", ha="center", fontsize=8.5, color=MUTED)
+ax.text(end_x + 0.05, 8.0, "success", ha="center", fontsize=8.5, color=MUTED)
+for i, (name, outs) in enumerate(zip(actions, outcomes)):
+    top = tops[i]; mid = top - group_h / 2
+    # edge from state to action
+    arrow(2.77, 4.37, ax_x - 0.02, mid, color=LINE, lw=1.0, ms=8)
+    rbox(ax_x, mid - 0.2, 1.2, 0.4, ec=INK, lw=1.0)
+    ax.text(ax_x + 0.6, mid, f"a{i + 1}", ha="center", va="center", fontsize=9, weight="bold")
+    ax.text(ax_x + 0.6, mid - 0.3, name, ha="center", va="top", fontsize=7.6, color=MUTED)
+    # draw bands
+    ax.add_patch(Rectangle((roll_x0 - 0.42, top - 3 * row_h), roll_x1 - roll_x0 + 0.85, 3 * row_h, fc=OUTC_BG, ec="none", zorder=0))
+    ax.add_patch(Rectangle((roll_x0 - 0.42, top - 8 * row_h), roll_x1 - roll_x0 + 0.85, 5 * row_h, fc=HELD_BG, ec="none", zorder=0))
+    for d, o in enumerate(outs):
+        y = top - (d + 0.5) * row_h
+        ax.plot([ax_x + 1.2, roll_x0 - 0.47], [mid, y], color=LINE, lw=0.5, zorder=1)
+        ax.text(roll_x0 - 0.22, y, str(d), ha="center", va="center", fontsize=6.5, color=MUTED)
+        n = rng.randint(4, 12)
+        xs = [roll_x0 + (roll_x1 - roll_x0) * k / 12 for k in range(n)]
+        ax.plot([xs[0], xs[-1]], [y, y], color="#8d8b83", lw=0.7, zorder=2)
+        ax.scatter(xs, [y] * n, s=5, color="#8d8b83", zorder=3)
+        if d == 0:     # lookahead window seen by the teacher
+            ax.add_patch(Rectangle((xs[0] - 0.07, y - 0.065), xs[2] - xs[0] + 0.14, 0.13, fc="none", ec=TEACH, lw=1.4, zorder=4))
+        ax.text(end_x, y, "✓" if o else "✗", ha="center", va="center", fontsize=8, color=WIN if o else "#9a978d", weight="bold")
+    a, h = sum(outs[:3]), sum(outs[3:])
+    ax.text(end_x + 0.3, top - 1.5 * row_h, f"{a}/3", va="center", fontsize=8, color=OUTC, weight="bold")
+    ax.text(end_x + 0.3, top - 5.5 * row_h, f"{h}/5 = {20 * h}%", va="center", fontsize=8, color=HELD, weight="bold")
+# legend for (a)
+ly = 0.55
+ax.add_patch(Rectangle((0.3, ly - 0.07), 0.3, 0.14, fc="none", ec=TEACH, lw=1.4))
+ax.text(0.7, ly, "first K steps of draw 0: all a lookahead teacher sees", va="center", fontsize=8.5)
+ax.add_patch(Rectangle((4.3, ly - 0.08), 0.3, 0.16, fc=OUTC_BG, ec=OUTC, lw=0.6))
+ax.text(4.7, ly, "draws 0–2: used for outcome labels", va="center", fontsize=8.5)
+ax.add_patch(Rectangle((7.2, ly - 0.08), 0.3, 0.16, fc=HELD_BG, ec=HELD, lw=0.6))
+ax.text(7.6, ly, "draws 3–7: evaluation only", va="center", fontsize=8.5)
+ax.text(0.3, 0.15, "Each draw re-opens sₜ in a fresh replayed browser, executes the action, and lets the frozen SFT actor finish the task; "
+        "o4-mini judges success. Invalid draws are dropped. Example values.", fontsize=8, color=MUTED)
 
-# 3. student
-step(3, 11.3, 8.0, "Student and scoring")
-box(11.3, 5.6, 3.5, 2.0, ec=STU, lw=1.8)
-ax.text(11.45, 7.32, "Selection head (student)", fontsize=10, weight="bold", color=STU)
-ax.text(11.45, 7.05, "frozen SFT-4B hidden states of s and\neach action (layers 18/27/36)\n→ 22.6 M head → one score per action\n"
-        "trained with soft CE on the 1,380\ntraining states' labels", fontsize=8.6, va="top")
-arrow(10.9, 6.3, 11.28, 6.3)
-box(11.3, 1.0, 3.5, 4.25, ec=HELD, lw=1.8)
-ax.text(11.45, 4.97, "Score on the 348 test states", fontsize=10, weight="bold", color=HELD)
-ax.text(11.45, 4.72, "pick = the head's top-scoring action\n(or the teacher's own pick)\n→ score = that action's success\n    on its valid draws 3–7", fontsize=8.8, va="top")
-ax.text(11.45, 3.6, "Example (grid at left): pick a3 → 4/5 = 80%\nuniform = mean(60, 20, 80, 20) = 45%\noracle = best on draws 3–7 = 80%", fontsize=8.8, va="top", color=HELD)
-ax.text(11.45, 2.55, "average per state, then over states\n(each state counts once)\nreferences on the same draws: uniform\n(mean over actions), SFT sample (actor's\nown frequencies), oracle (best action)", fontsize=8.3, va="top", color=MUTED)
-arrow(13.05, 5.58, 13.05, 5.27, STU)
-ax.text(0.2, 0.45, "Views: distinct-action panels (one candidate per action, as above) and natural panels (5 SFT proposals drawn at the actor's own "
-        "frequencies, duplicates kept, 20 seeded panels per state). Teachers are scored the same way on the 1,037-state labelling study.",
-        fontsize=8.8, color=MUTED)
-fig.savefig(Path(__file__).with_suffix(".png"), dpi=150, bbox_inches="tight", facecolor="white")
+# ---------------- (b) labels ----------------
+bx = 10.15
+ax.plot([9.85, 9.85], [0.4, 8.3], color="#e3e1da", lw=1)
+ax.text(bx, 8.35, "(b)", fontsize=12, weight="bold")
+ax.text(bx + 0.45, 8.35, "Training labels (per training state)", fontsize=11.5, weight="bold")
+labels = [("Pre-execution", TEACH, "GPT-6 Luna sees sₜ and the actions"),
+          ("Lookahead K = 1 / 3", TEACH, "Luna also sees the first K steps of draw 0\nfor every action (final answer hidden)"),
+          ("Observed outcome", OUTC, "best success on draws 0–2\n(here a3, 3/3)")]
+for j, (title, color, text) in enumerate(labels):
+    y = 7.55 - j * 0.85
+    ax.add_patch(Rectangle((bx, y - 0.32), 0.06, 0.7, fc=color, ec="none"))
+    ax.text(bx + 0.18, y + 0.22, title, fontsize=9.5, weight="bold", color=color)
+    ax.text(bx + 0.18, y + 0.02, text, fontsize=8.3, va="top")
+ax.text(bx + 0.18, 5.15, "Each gives a soft target over the actions (vote shares; ties split evenly).\nNo label uses draws 3–7.", fontsize=8.3, va="center", color=MUTED)
+
+# ---------------- (c) train and score ----------------
+ax.text(bx, 4.65, "(c)", fontsize=12, weight="bold")
+ax.text(bx + 0.45, 4.65, "Train the head, score every picker", fontsize=11.5, weight="bold")
+rbox(bx, 3.2, 2.55, 1.1, ec=STU, lw=1.3)
+ax.text(bx + 0.12, 4.08, "Selection head (22.6 M)", fontsize=9, weight="bold", color=STU)
+ax.text(bx + 0.12, 3.85, "frozen SFT-4B features of sₜ\nand each action → one score\neach; soft CE on (b), 1,380\ntrain states", fontsize=7.9, va="top")
+rbox(bx + 2.85, 3.2, 2.85, 1.1, ec=HELD, lw=1.3)
+ax.text(bx + 2.97, 4.08, "348 test states (86 unseen tasks)", fontsize=9, weight="bold", color=HELD)
+ax.text(bx + 2.97, 3.85, "pick = top-scoring action\n(teachers: their own pick)\nscore = its success on draws 3–7", fontsize=7.9, va="top")
+arrow(bx + 2.57, 3.75, bx + 2.83, 3.75, color=STU)
+ax.text(bx, 2.75, "Example at left", fontsize=9, weight="bold")
+rows = [("pick a3", "80%"), ("uniform (mean of a1–a4)", "45%"), ("SFT sample (actor's own frequencies)", "weighted mean"), ("oracle (best on draws 3–7)", "80%")]
+for k, (lab, val) in enumerate(rows):
+    y = 2.45 - k * 0.28
+    ax.text(bx + 0.1, y, lab, fontsize=8.5)
+    ax.text(bx + 4.2, y, val, fontsize=8.5, ha="right", color=HELD, weight="bold")
+ax.text(bx, 1.0, "Average per state, then over states. Distinct view: one candidate per action\n(as at left); natural view: 5 SFT proposals at the "
+        "actor's own frequencies.", fontsize=8, color=MUTED, va="top")
+fig.savefig(Path(__file__).with_suffix(".png"), dpi=170, bbox_inches="tight", facecolor="white")

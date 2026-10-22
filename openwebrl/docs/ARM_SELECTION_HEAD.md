@@ -191,9 +191,9 @@
 
 **How the offline evaluation works.** Labels come from draws 0–2 (outcome) or from what draw 0 shows a teacher; every picker, teacher or trained head, is scored on the same held-out draws 3–7 of test states it never trained on.
 
-![Offline evaluation: each branching state has 2–5 SFT-proposed actions with 8 continuation draws each; lookahead teachers see draw 0, outcome labels use draws 0–2, and scoring uses only draws 3–7; the selection head is trained on 1,380 training states' labels and scored on 348 test states by its top action's success on draws 3–7, against uniform, SFT-sample and oracle references](arm_results/methods/selection-offline-eval-20261022.png)
+![Offline evaluation. (a) A branching state from an SFT-4B episode fans out into its proposed actions; each action gets 8 continuation rollouts by the frozen SFT actor, judged success or failure. Lookahead teachers see only the first K steps of draw 0, outcome labels use draws 0–2, and draws 3–7 are kept for evaluation. (b) Pre-execution, lookahead and outcome labels give soft targets on training states. (c) The head is trained on 1,380 training states and every picker is scored by its pick's success on draws 3–7 of 348 test states, against uniform, SFT-sample and oracle references](arm_results/methods/selection-offline-eval-20261022.png)
 
-*[Figure script](arm_results/methods/selection-offline-eval-20261022.py); labels and scoring: `scripts/train_head_round.py` (`targets`, `held_rate`). The grid is a made-up example.*
+*[Figure script](arm_results/methods/selection-offline-eval-20261022.py); labels and scoring: `scripts/train_head_round.py` (`targets`, `held_rate`). Rollouts and outcomes in (a) are an illustrative example.*
 
 **Offline (348 held-out test states, 86 tasks; picks scored by held-out success on draws 3–7, valid only).**
 
