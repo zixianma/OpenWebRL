@@ -49,20 +49,22 @@ def read_rows(path):
                 common_valid_tasks=cohort, successes=metrics["successes"],
                 success_rate=success,
                 mean_model_usd_per_task=metrics["mean_model_usd_per_task"],
-                mean_task_seconds=metrics["mean_task_seconds"]))
+                mean_task_seconds=metrics["mean_task_seconds"],
+                mean_browser_steps=metrics["mean_browser_steps"]))
     means = []
     for method, (label, _, _) in METHODS.items():
         selected = [row for row in rows if row["method"] == method]
         means.append(dict(method=method, label=label,
             mean_success_rate=statistics.mean(row["success_rate"] for row in selected),
             mean_model_usd_per_task=statistics.mean(row["mean_model_usd_per_task"] for row in selected),
-            mean_task_seconds=statistics.mean(row["mean_task_seconds"] for row in selected)))
+            mean_task_seconds=statistics.mean(row["mean_task_seconds"] for row in selected),
+            mean_browser_steps=statistics.mean(row["mean_browser_steps"] for row in selected)))
     return rows, means
 
 
 def write_csv(path, rows):
     with path.open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -85,9 +87,14 @@ def draw(ax, means, metric):
         ax.set_xlabel("Mean model cost per task (USD)")
         ax.xaxis.set_major_formatter(StrMethodFormatter("${x:.2f}"))
         ax.set_title("Performance vs. API cost", loc="left", pad=15)
-    else:
+    elif metric == "mean_task_seconds":
         ax.set_xlabel("Mean task latency (seconds)")
         ax.set_title("Performance vs. latency", loc="left", pad=15)
+    else:
+        ax.set_xlabel("Mean selected browser steps per task")
+        ax.set_title("Performance vs. browser steps", loc="left", pad=15)
+        xs = [row[metric] for row in means]
+        ax.set_xlim(max(0, min(xs) - 1), max(xs) + 1)
     ax.grid(True, color="#E2E6EA", linewidth=0.7, zorder=0)
     ax.spines[["top", "right"]].set_visible(False)
     for side in ("left", "bottom"):
@@ -115,7 +122,8 @@ def main():
     footer = ("Equal weight: Online-Mind2Web, WebVoyager, DeepShop.\n"
               "Same four-method common-valid cohort within each benchmark; judge-only work excluded.")
     for metric, suffix in (("mean_model_usd_per_task", "cost"),
-                           ("mean_task_seconds", "latency")):
+                           ("mean_task_seconds", "latency"),
+                           ("mean_browser_steps", "browser_steps")):
         fig, ax = plt.subplots(figsize=(10.4, 5.6))
         draw(ax, means, metric)
         fig.text(0.12, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
@@ -143,6 +151,7 @@ def main():
         "cohort": "four-method common-valid within each benchmark",
         "cost_scope": "model USD/task, including valid failures; judge excluded",
         "latency_scope": "task seconds excluding judge-only work",
+        "browser_steps_scope": "selected BrowserCode batches per task, averaged equally across benchmarks",
         "benchmark_common_valid_tasks": {r["benchmark"]: r["common_valid_tasks"] for r in rows},
         "uncertainty": "Point estimates only; no uncertainty inferred from aggregate data."
     }, indent=2) + "\n")

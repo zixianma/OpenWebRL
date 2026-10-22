@@ -4,6 +4,7 @@
   "cohort": "four-method common-valid within each benchmark",
   "cost_scope": "model USD/task, including valid failures; judge excluded",
   "latency_scope": "task seconds excluding judge-only work",
+  "browser_steps_scope": "selected BrowserCode batches per task, averaged equally across benchmarks",
   "benchmark_common_valid_tasks": {
     "Online-Mind2Web": 254,
     "WebVoyager": 489,
