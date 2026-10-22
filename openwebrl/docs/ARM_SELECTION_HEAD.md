@@ -145,6 +145,12 @@
 - **Nodes.** All twelve runs excluded the degraded node g013; two WebVoyager runs hit CUDA faults on g014 and resumed from their saved records on other nodes. Every task has exactly one recorded episode.
 - Evidence: [per-benchmark runs](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json)
 
+**Architecture variants.** The screen below crosses interaction (joint / independent) with the scorer (transformer / MLP) and the loss (soft CE / per-candidate BCE); every variant reads the same frozen actor features and has about 22.6 M parameters.
+
+![Selection-head variants: a joint transformer lets every candidate attend to every other, an independent one masks attention so each candidate sees only the state and itself; a joint MLP adds the candidate minus the mean of the others, an independent MLP sees only the candidate and the state; soft cross-entropy fits a softmax over the panel to the label shares, per-candidate BCE fits each logit to its own share](arm_results/methods/selection-head-variants-20261022.png)
+
+*[Figure script](arm_results/methods/selection-head-variants-20261022.py); code `openwebrl/selection_head.py` (`CandidateSetHead`, `selection_loss`, `pointwise_bce_loss`).*
+
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
 | Head (training labels / variant) | Online-Mind2Web successes (of 50) | WebVoyager successes (of 50) | DeepShop successes (of 50) | All successes (of 150) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] |
