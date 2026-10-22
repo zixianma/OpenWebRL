@@ -142,19 +142,24 @@ For a matched comparison across the full cohort, the following rows use only the
 
 ## Selection head: which training labels work (October 21, 2026)
 
-**A 22.6 M-parameter head on the frozen SFT-4B actor, trained on observed-outcome or lookahead K = 3 labels for 1,380 of our SFT-actor states, is level with Piotr SelectionARM on all 1,045 tasks at 64% of its compute. Lookahead K = 1 labels gain about half as much and pre-execution labels gain nothing.** Online-Mind2Web 300, WebVoyager 595, DeepShop 150; T 1.0 / top-p 0.9, 30 steps, one episode per task.
+**A 22.6 M-parameter head on the frozen SFT-4B actor, trained on observed-outcome or lookahead K = 3 labels for 1,380 of our SFT-actor states, is level with Piotr SelectionARM on all 1,045 tasks at 60–66% of its compute per episode. Lookahead K = 1 labels gain about half as much and pre-execution labels gain nothing. Trained on Piotr's data, the same head is the best method overall.** Online-Mind2Web 300, WebVoyager 595, DeepShop 150; T 1.0 / top-p 0.9, 30 steps, five candidates per decision, one episode per task.
 
-| Method | Successes (of 1,045) | Valid | Overall | − SFT, pp [95% CI] | − Piotr, pp [95% CI] | PFLOP per step |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, 1 sample | 424 | 1,011 | 40.6% | — | — | 0.019 |
-| Piotr SelectionARM (4.44 B selector) | 497 | 991 | 47.6% | +7.0 [+4.1, +10.0] | — | 0.096 |
-| Head, Piotr's data (GPT-5.5 labels) | 502 | 983 | 48.0% | +7.5 [+4.4, +10.5] | +0.5 [−2.5, +3.3] | 0.062 |
-| Head, pre-execution labels | 422 | 994 | 40.4% | −0.2 [−3.2, +2.7] | −7.2 [−10.2, −4.1] | 0.061 |
-| Head, lookahead K = 1 labels | 452 | 991 | 43.3% | +2.7 [−0.4, +5.7] | −4.3 [−7.4, −1.4] | 0.061 |
-| Head, lookahead K = 3 labels | 483 | 1,002 | 46.2% | +5.6 [+2.7, +8.7] | −1.3 [−4.4, +1.6] | 0.061 |
-| Head, observed-outcome labels | 488 | 1,005 | 46.7% | +6.1 [+3.2, +9.0] | −0.9 [−4.0, +2.2] | 0.062 |
+| Method | Training data | Params (actor + selector) | OM2W overall | OM2W valid-only | WebVoyager overall | WebVoyager valid-only | DeepShop overall | DeepShop valid-only | All overall | All valid-only | PFLOP per step | PFLOP per episode | Model time per episode | Steps per episode |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, 1 sample | — | 4.44 B | 36.3% | 39.6% | 44.4% | 45.0% | 34.0% | 34.2% | 40.6% | 41.9% | 0.019 | 0.25 | 38 s | 13.6 |
+| Piotr SelectionARM | 2,692 states / 35,916 panels, GPT-5.5 picks | 4.44 B + 4.44 B | 41.0% | 46.8% | **52.4%** | **53.8%** | 41.3% | 41.9% | 47.6% | 50.2% | 0.096 | 1.37 | 124 s | 14.3 |
+| Head, Piotr's data | 2,692 states / 35,916 panels, GPT-5.5 picks | 4.44 B + 22.6 M | **43.7%** | **49.4%** | 51.3% | 53.4% | **44.0%** | **44.9%** | **48.0%** | **51.1%** | 0.062 | 0.84 | 113 s | 13.6 |
+| Head, pre-execution labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 33.0% | 36.9% | 45.7% | 47.1% | 34.0% | 34.2% | 40.4% | 42.5% | 0.061 | 0.95 | 134 s | 15.6 |
+| Head, K1 labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 34.0% | 38.6% | 49.2% | 50.5% | 38.0% | 38.8% | 43.3% | 45.6% | 0.061 | 0.96 | 133 s | 15.7 |
+| Head, K3 labels | 1,380 states / 1,380 panels, Luna votes | 4.44 B + 22.6 M | 38.3% | 43.1% | 51.1% | 52.0% | 42.7% | 42.7% | 46.2% | 48.2% | 0.061 | 0.91 | 125 s | 14.9 |
+| Head, outcome labels | 1,380 states / 1,380 panels, outcomes on draws 0–2 | 4.44 B + 22.6 M | 38.0% | 42.2% | 52.3% | 53.0% | 42.0% | 42.6% | 46.7% | 48.6% | 0.062 | 0.81 | 100 s | 13.1 |
 
-- "Overall" counts invalid episodes as failures. Differences are paired over tasks.
-- The label heads gain mostly on WebVoyager and DeepShop; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
-- Eight head architectures and two data changes were not distinguishable on a 150-task screen or offline.
-- [Details, per-benchmark results and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · [Evidence](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json)
+![Overall success on all 1,045 tasks versus parameters (left), PFLOP per episode (middle) and model time per episode (right), one point per method](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.png)
+
+- **Definitions.** "Overall" counts invalid episodes as failures; "valid-only" divides by valid episodes. Model time is actor + selector decision time summed over an episode, excluding browser execution. PFLOP per episode = PFLOP per step × steps per episode.
+- **Paired differences (all 1,045 tasks, 95% bootstrap).** vs SFT: Piotr +7.0 [+4.1, +10.0], Piotr-data head +7.5 [+4.4, +10.5], outcome +6.1 [+3.2, +9.0], K3 +5.6 [+2.7, +8.7], K1 +2.7 [−0.4, +5.7], pre-execution −0.2 [−3.2, +2.7]. vs Piotr: outcome −0.9 [−4.0, +2.2], K3 −1.3 [−4.4, +1.6], K1 −4.3 [−7.4, −1.4], pre-execution −7.2 [−10.2, −4.1].
+- **Online-Mind2Web is where our labels fall short.** On WebVoyager and DeepShop the outcome and K3 heads match Piotr; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
+- **Why time barely drops.** Generating five candidates takes about 8.2 s of each 8–9 s decision; Piotr's selector adds 0.50 s and the head 0.02 s. Selector FLOPs are a fast prefill, while decoding is bandwidth-bound, so the head's 36% compute saving per step becomes only about 0.5 s per decision, roughly offset by its hidden-state capture. Episode length matters as much: the outcome head is cheapest per episode because it takes the fewest steps. Times come from live runs on different nodes, not a matched timing study.
+- **Training data.** Piotr's panels are five actor samples each (about 13 per state), labelled with one GPT-5.5 pick; our panels are one per state with 2–5 distinct actions, reshuffled each epoch. Our states come from the tasks of Piotr's training split.
+- A 4B LoRA trained with Piotr's recipe on our 1,380 states does no better than the head offline ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021)).
+- [Details, per-benchmark intervals and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · [Evidence](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json) · [Plot script](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py)
