@@ -4,37 +4,38 @@
 
 ## Headline results
 
-**On all 1,045 tasks of Online-Mind2Web, WebVoyager and DeepShop, a 22.6 M-parameter head on the frozen SFT-4B actor matches Piotr SelectionARM's 4.44 B selector when trained on Piotr's data (+0.5 pp [−2.5, +3.3]). Trained on observed-outcome or lookahead K = 3 labels for only 1,380 of our states, it is level with Piotr (−0.9 and −1.3 pp, intervals spanning 0) at 59–66% of his compute per episode. The training labels matter most; selector size does not, and doubling the actor to 8B without selection gains only +3.3 pp.**
+**On Online-Mind2Web, WebVoyager and DeepShop (1,045 tasks, each benchmark weighted equally), a 22.6 M-parameter head on the frozen SFT-4B actor matches Piotr SelectionARM's 4.44 B selector when trained on Piotr's data (+1.4 pp [−2.1, +4.9]). Trained on observed-outcome or lookahead K = 3 labels for only 1,380 of our states, it is level with Piotr (−0.8 and −0.9 pp, intervals spanning 0) at 56–65% of his compute per episode. The training labels matter most; selector size does not, and an 8B actor without selection gains +3.3 pp [−0.3, +6.9].**
 - **Setup:** every task of each benchmark, one episode per task, the same tasks for every method. Actor OpenWebRL-4B-SFT unless noted, T 1.0 / top-p 0.9, 30 steps, five candidates per decision; one H200 per method and benchmark. Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop. Paired 95% bootstrap over tasks.
 
-| Method | Training data | Online-Mind2Web successes (of 300) | WebVoyager successes (of 595) | DeepShop successes (of 150) | All successes (of 1,045) | All overall | − SFT 4B, pp [95% CI] | − Piotr, pp [95% CI] |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, 1 sample | — | 109 | 264 | 51 | 424 | 40.6% | — | −7.0 [−10.0, −4.1] |
-| SFT 8B, 1 sample | — | 109 | 291 | 59 | 459 | 43.9% | +3.3 [+0.4, +6.3] | −3.6 [−6.7, −0.5] |
-| Piotr SelectionARM | Piotr's 2,692 states, GPT-5.5 picks | 123 | **312** | 62 | 497 | 47.6% | **+7.0 [+4.1, +10.0]** | — |
-| **Head, Piotr's data** | Piotr's 2,692 states, GPT-5.5 picks | **131** | 305 | **66** | **502** | **48.0%** | **+7.5 [+4.4, +10.5]** | +0.5 [−2.5, +3.3] |
-| **Head, outcome labels** | 1,380 of our states | 114 | 311 | 63 | 488 | 46.7% | **+6.1 [+3.2, +9.0]** | −0.9 [−4.0, +2.2] |
-| **Head, K = 3 labels** | 1,380 of our states | 115 | 304 | 64 | 483 | 46.2% | **+5.6 [+2.7, +8.7]** | −1.3 [−4.4, +1.6] |
-| Head, K = 1 labels | 1,380 of our states | 102 | 293 | 57 | 452 | 43.3% | +2.7 [−0.4, +5.7] | −4.3 [−7.4, −1.4] |
-| Head, pre-execution labels | 1,380 of our states | 99 | 272 | 51 | 422 | 40.4% | −0.2 [−3.2, +2.7] | −7.2 [−10.2, −4.1] |
+| Actor | Selector | Candidates per step | Training states | Panels (actions per panel) | Labels | Online-Mind2Web valid-only | WebVoyager valid-only | DeepShop valid-only | Mean overall | Mean valid-only | − SFT 4B, mean overall, pp [95% CI] | − Piotr, mean overall, pp [95% CI] |
+| --- | --- | ---: | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B | — | 1 | — | — | — | 39.6% | 45.0% | 34.2% | 38.2% | 39.6% | — | −6.7 [−10.4, −3.0] |
+| SFT 8B | — | 1 | — | — | — | 39.9% | 49.7% | 39.9% | 41.5% | 43.2% | +3.3 [−0.3, +6.9] | −3.4 [−7.3, +0.4] |
+| SFT 4B | Piotr SelectionARM (4B LoRA) | 5 | 2,692, Piotr's | 35,916 (5 sampled, repeats kept) | GPT-5.5 pick | 46.8% | **53.8%** | 41.9% | 44.9% | 47.5% | **+6.7 [+3.0, +10.4]** | — |
+| SFT 4B | **Head (22.6 M)** | 5 | 2,692, Piotr's | 35,916 (5 sampled, repeats kept) | GPT-5.5 pick | **49.4%** | 53.4% | **44.9%** | **46.3%** | **49.2%** | **+8.1 [+4.4, +11.8]** | +1.4 [−2.1, +4.9] |
+| SFT 4B | **Head (22.6 M)** | 5 | 1,380, ours | 1,380 (2–5 distinct) | Observed outcome, draws 0–2 | 42.2% | 53.0% | 42.6% | 44.1% | 45.9% | **+5.9 [+2.5, +9.4]** | −0.8 [−4.5, +2.8] |
+| SFT 4B | **Head (22.6 M)** | 5 | 1,380, ours | 1,380 (2–5 distinct) | GPT-6 Luna, 3 steps after execution (K = 3) | 43.1% | 52.0% | 42.7% | 44.0% | 45.9% | **+5.8 [+2.1, +9.5]** | −0.9 [−4.5, +2.7] |
+| SFT 4B | Head (22.6 M) | 5 | 1,380, ours | 1,380 (2–5 distinct) | GPT-6 Luna, 1 step after execution (K = 1) | 38.6% | 50.5% | 38.8% | 40.4% | 42.6% | +2.2 [−1.5, +5.8] | −4.5 [−8.3, −0.8] |
+| SFT 4B | Head (22.6 M) | 5 | 1,380, ours | 1,380 (2–5 distinct) | GPT-6 Luna, before execution | 36.9% | 47.1% | 34.2% | 37.6% | 39.4% | −0.7 [−4.2, +2.8] | −7.4 [−11.1, −3.8] |
 
-| Method | Parameters | Added for selection | PFLOP per step | PFLOP per episode | Seconds per decision | Model time per episode | Browser steps per episode |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, 1 sample | 4.44 B | — | 0.019 | 0.25 | 2.81 | 38 s | 13.6 |
-| SFT 8B, 1 sample | 8.77 B | — | 0.037 | 0.50 | 3.32 | 45 s | 13.6 |
-| Piotr SelectionARM | 8.88 B | 4.44 B | 0.096 | 1.37 | 8.68 | 124 s | 14.3 |
-| Head, Piotr's data | 4.46 B | 22.6 M | 0.062 | 0.84 | 8.29 | 113 s | 13.6 |
-| Head, outcome labels | 4.46 B | 22.6 M | 0.062 | 0.81 | 7.61 | 100 s | 13.1 |
-| Head, K = 3 labels | 4.46 B | 22.6 M | 0.061 | 0.91 | 8.41 | 125 s | 14.9 |
-| Head, K = 1 labels | 4.46 B | 22.6 M | 0.061 | 0.96 | 8.43 | 133 s | 15.7 |
-| Head, pre-execution labels | 4.46 B | 22.6 M | 0.061 | 0.95 | 8.60 | 134 s | 15.6 |
+| Actor | Selector | Labels | Params (actor + selector) | PFLOP per step | PFLOP per episode | Model time per episode | Steps per episode |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B | — | — | 4.44 B | 0.019 | 0.28 | 42 s | 14.5 |
+| SFT 8B | — | — | 8.77 B | 0.037 | 0.56 | 51 s | 15.0 |
+| SFT 4B | Piotr SelectionARM | GPT-5.5 pick | 4.44 B + 4.44 B | 0.098 | 1.53 | 143 s | 15.4 |
+| SFT 4B | Head | GPT-5.5 pick | 4.44 B + 22.6 M | 0.063 | 0.92 | 131 s | 14.6 |
+| SFT 4B | Head | Observed outcome | 4.44 B + 22.6 M | 0.062 | 0.86 | 109 s | 13.8 |
+| SFT 4B | Head | Luna, K = 3 | 4.44 B + 22.6 M | 0.062 | 1.00 | 142 s | 16.0 |
+| SFT 4B | Head | Luna, K = 1 | 4.44 B + 22.6 M | 0.062 | 1.05 | 149 s | 16.8 |
+| SFT 4B | Head | Luna, before execution | 4.44 B + 22.6 M | 0.062 | 1.05 | 155 s | 16.8 |
 
-- **Columns.** "Overall" counts invalid episodes as failures. Parameters are those loaded at inference; the head's 22.6 M are its only trained weights. Model time is decision time summed over an episode, excluding browser execution; times come from live runs on different nodes.
+- **Columns.** "Overall" counts invalid episodes as failures; "valid-only" divides successes by valid episodes. "Mean" weights each benchmark equally (one third), for success and cost alike. Differences are paired on the same tasks: 95% bootstrap, tasks resampled within each benchmark; valid-only differences (tasks valid under both) agree within 1.1 pp. Parameters are those loaded at inference; the head's 22.6 M are its only trained weights. Model time is decision time summed over an episode, excluding browser execution; times come from live runs on different nodes.
+- **Methods.** Every selector picks one of the frozen actor's candidates. Piotr's panels are five sampled actions each (about 13 per state), duplicates included, each with one GPT-5.5 pick. Our panels are one per state holding its 2–5 distinct SFT-proposed actions, reshuffled each epoch.
 - **Labels.** The four label heads share one architecture and the same 1,380 SFT-actor training states; only the label differs. Outcome = the action with the best success on continuation draws 0–2 (draws 3–7 are kept for offline scoring); K = 1 / K = 3 = Luna judging one or three steps after execution; pre-execution = Luna before execution. Online-Mind2Web is where our labels fall short: no label head clearly beats SFT there, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]). Details: [ablations](#selection-head-sft-actions-20261021).
 - **Why time barely drops.** Generating five candidates dominates each 8–9 s decision; the head saves 36% of compute per step but only about 0.5 s per decision. Fewer candidates help more: **with three candidates on Online-Mind2Web, Piotr and the Piotr-data head lose no measurable success and save 26–33% of model time** ([details](#selection-head-n3-8b-20261022)).
-- **Scaling the actor is not a substitute for selection.** SFT 8B gains on WebVoyager and DeepShop but not on Online-Mind2Web (+0.0 pp), and Piotr and the Piotr-data head both beat it (+3.6 and +4.1 pp) at 2.7× and 1.7× its compute per episode ([details](#selection-head-n3-8b-20261022)).
-- **Earlier heads.** The K = 1 head trained on 1,908 SFT + RL states (October 18) scored 45.2%, +4.6 pp [+1.5, +7.6] over SFT ([details](#selection-head-crossbench-full-20261018)). At 100 steps, SFT gains +5.8 pp and Piotr +4.8 pp, and Piotr's lead holds ([details](#selection-head-100-steps-20261019)); the heads have not been run at 100 steps.
-- **Evidence:** [label heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json). Plot: [final results](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
+- **Scaling the actor is not a substitute for selection.** SFT 8B gains on WebVoyager and DeepShop but not on Online-Mind2Web (+0.0 pp), and the Piotr-data head beats it by +4.8 pp [+1.0, +8.5] (Piotr +3.4 [−0.4, +7.3]) at 1.6× its compute per episode (Piotr 2.7×) ([details](#selection-head-n3-8b-20261022)).
+- **Earlier heads.** The K = 1 head trained on 1,908 SFT + RL states (October 18) scores 43.9% mean overall, +5.7 pp [+2.0, +9.4] over SFT 4B and −1.0 [−4.5, +2.5] against Piotr ([details](#selection-head-crossbench-full-20261018)). At 100 steps, SFT gains +5.8 pp and Piotr +4.8 pp, and Piotr's lead holds ([details](#selection-head-100-steps-20261019)); the heads have not been run at 100 steps.
+- **Evidence:** [label heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json). Plot: [final results](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
 **Earlier, Online-Mind2Web on identical hardware (3 × 300 tasks, T 0.7; head trained on Piotr's teacher labels): the selection head matches Piotr SelectionARM's success with 36% less compute and 11% lower latency per decision.**
 - **Setup:** Online-Mind2Web, 300 tasks, three independent repetitions per method.
@@ -103,15 +104,15 @@
 **On Online-Mind2Web, cutting from five to three candidates per decision costs no measurable success and saves 26–33% of model time per episode; all three N = 3 selectors still beat SFT 4B. SFT 8B with one sample gains +3.3 pp over SFT 4B on all 1,045 tasks, nothing on Online-Mind2Web, and stays below both five-candidate selectors on the 4B actor.**
 - **Setup** as in the [headline](#headline-results): same task order, T 1.0 / top-p 0.9, 30 steps, one episode per task, one H200 per run. N = 3 was run on Online-Mind2Web only (300 tasks). The pointwise head is the per-candidate MLP (16.8 M parameters) trained on the same Piotr data; it has no N = 5 full-set run. SFT 8B is OpenWebRL-8B-SFT at revision `838c4a4`, run on all three benchmarks.
 
-| Online-Mind2Web | Candidates | Successes (of 300) | Valid | Overall | Valid only | − SFT 4B, pp [95% CI] | PFLOP per episode | Seconds per decision | Model time per episode |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, 1 sample | 1 | 109 | 275 | 36.3% | 39.6% | — | 0.26 | 2.81 | 40 s |
-| SFT 8B, 1 sample | 1 | 109 | 273 | 36.3% | 39.9% | +0.0 [−5.3, +5.3] | 0.48 | 3.24 | 44 s |
-| Piotr SelectionARM | 5 | 123 | 263 | 41.0% | 46.8% | +4.7 [−1.0, +10.0] | 1.41 | 8.42 | 125 s |
-| Piotr SelectionARM | 3 | **134** | 259 | **44.7%** | **51.7%** | **+8.3 [+2.3, +14.0]** | 1.24 | 5.97 | 93 s |
-| Joint head, Piotr's data | 5 | 131 | 265 | 43.7% | 49.4% | **+7.3 [+1.7, +13.0]** | 0.88 | 7.79 | 114 s |
-| Joint head, Piotr's data | 3 | 127 | 269 | 42.3% | 47.2% | **+6.0 [+0.3, +11.7]** | 0.74 | 5.39 | 77 s |
-| Pointwise head, Piotr's data | 3 | 124 | 264 | 41.3% | 47.0% | +5.0 [−0.7, +10.7] | 0.72 | 5.40 | 77 s |
+| Actor | Selector | Training labels | Candidates per step | Online-Mind2Web overall | Online-Mind2Web valid-only | − SFT 4B, overall, pp [95% CI] | PFLOP per episode | Seconds per decision | Model time per episode |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B | — | — | 1 | 36.3% | 39.6% | — | 0.26 | 2.81 | 40 s |
+| SFT 8B | — | — | 1 | 36.3% | 39.9% | +0.0 [−5.3, +5.3] | 0.48 | 3.24 | 44 s |
+| SFT 4B | Piotr SelectionARM (4B LoRA) | GPT-5.5 pick, Piotr's 2,692 states | 5 | 41.0% | 46.8% | +4.7 [−1.0, +10.0] | 1.41 | 8.42 | 125 s |
+| SFT 4B | Piotr SelectionARM (4B LoRA) | GPT-5.5 pick, Piotr's 2,692 states | 3 | **44.7%** | **51.7%** | **+8.3 [+2.3, +14.0]** | 1.24 | 5.97 | 93 s |
+| SFT 4B | Joint head (22.6 M) | GPT-5.5 pick, Piotr's 2,692 states | 5 | 43.7% | 49.4% | **+7.3 [+1.7, +13.0]** | 0.88 | 7.79 | 114 s |
+| SFT 4B | Joint head (22.6 M) | GPT-5.5 pick, Piotr's 2,692 states | 3 | 42.3% | 47.2% | **+6.0 [+0.3, +11.7]** | 0.74 | 5.39 | 77 s |
+| SFT 4B | Pointwise head (16.8 M) | GPT-5.5 pick, Piotr's 2,692 states | 3 | 41.3% | 47.0% | +5.0 [−0.7, +10.7] | 0.72 | 5.40 | 77 s |
 
 - **N = 3 vs N = 5 (overall, pp [95% CI]):** Piotr +3.7 [−1.7, +9.0], joint head −1.3 [−7.3, +4.3]. At N = 3, joint head − Piotr −2.3 [−8.0, +3.3]; pointwise − joint −1.0 [−6.7, +4.7]. Valid only, the same comparisons are +4.4, −2.3, −4.7 and +0.8 pp, none excluding 0.
 - **Time.** A decision waits for the slowest of its parallel candidates, and eight episodes share each GPU, so three candidates cut decisions from about 8 s to 5.4–6.0 s.
@@ -124,26 +125,25 @@
 
 ## Label, architecture and data ablations on SFT-proposed actions (2026-10-21)
 
-**Labels matter more than anything else we varied. On all 1,045 tasks, heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 59–66% of its compute per episode. Lookahead K = 1 labels gain about half as much; pre-execution labels gain nothing.** Eight architecture variants and two data changes all fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
+**Labels matter more than anything else we varied. On the three benchmarks (1,045 tasks, each benchmark weighted equally), heads trained on observed-outcome or lookahead K = 3 labels for 1,380 SFT-actor states gain about +6 pp over single-sample SFT and are level with Piotr SelectionARM, which trained on about 25× more panels, at 56–65% of its compute per episode. Lookahead K = 1 labels gain about a third as much; pre-execution labels gain nothing.** Eight architecture variants and two data changes all fall within the live noise of a 150-task screen. Offline, the variants differ by at most 1.6 pp.
 
-**Full benchmarks (all 1,045 tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150; one episode per task; default head: joint transformer, soft CE).**
+**Full benchmarks, per benchmark (Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks; one episode per task; default head: joint transformer, soft CE).** Success rates and mean differences are in the [headline table](#headline-results); this table splits the overall-success difference from SFT 4B by benchmark.
 
-| Method | Online-Mind2Web successes (of 300) | WebVoyager successes (of 595) | DeepShop successes (of 150) | All successes (of 1,045) | Valid | Overall | Valid only | − SFT, pp [95% CI] | − Piotr, pp [95% CI] | PFLOP per step |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, 1 sample | 109 | 264 | 51 | 424 | 1,011 | 40.6% | 41.9% | — | — | 0.019 |
-| Piotr SelectionARM (4.44 B selector) | 123 | 312 | 62 | 497 | 991 | 47.6% | 50.2% | +7.0 [+4.1, +10.0] | — | 0.096 |
-| Head, Piotr's data (GPT-5.5 labels) | 131 | 305 | 66 | 502 | 983 | 48.0% | 51.1% | +7.5 [+4.4, +10.5] | +0.5 [−2.5, +3.3] | 0.062 |
-| Head, pre-execution labels | 99 | 272 | 51 | 422 | 994 | 40.4% | 42.5% | −0.2 [−3.2, +2.7] | **−7.2 [−10.2, −4.1]** | 0.061 |
-| Head, lookahead K = 1 labels | 102 | 293 | 57 | 452 | 991 | 43.3% | 45.6% | +2.7 [−0.4, +5.7] | **−4.3 [−7.4, −1.4]** | 0.061 |
-| Head, lookahead K = 3 labels | 115 | 304 | 64 | 483 | 1,002 | 46.2% | 48.2% | **+5.6 [+2.7, +8.7]** | −1.3 [−4.4, +1.6] | 0.061 |
-| Head, observed-outcome labels | 114 | 311 | 63 | **488** | 1,005 | **46.7%** | 48.6% | **+6.1 [+3.2, +9.0]** | −0.9 [−4.0, +2.2] | 0.062 |
+| Selector (actor SFT 4B, five candidates) | Training labels | Online-Mind2Web − SFT 4B, pp [95% CI] | WebVoyager − SFT 4B | DeepShop − SFT 4B |
+| --- | --- | ---: | ---: | ---: |
+| Piotr SelectionARM | GPT-5.5 pick, Piotr's 2,692 states | +4.7 [−0.7, +10.3] | **+8.1 [+4.0, +11.8]** | +7.3 [−1.3, +16.0] |
+| Head (22.6 M) | GPT-5.5 pick, Piotr's 2,692 states | **+7.3 [+1.7, +13.0]** | **+6.9 [+2.9, +10.9]** | **+10.0 [+1.3, +18.7]** |
+| Head (22.6 M) | Observed outcome, our 1,380 states | +1.7 [−3.3, +6.7] | **+7.9 [+3.9, +12.1]** | +8.0 [0.0, +16.0] |
+| Head (22.6 M) | Luna K = 3, our 1,380 states | +2.0 [−3.7, +8.0] | **+6.7 [+2.9, +10.6]** | +8.7 [0.0, +17.3] |
+| Head (22.6 M) | Luna K = 1, our 1,380 states | −2.3 [−7.3, +2.7] | **+4.9 [+0.7, +8.9]** | +4.0 [−4.7, +12.7] |
+| Head (22.6 M) | Luna before execution, our 1,380 states | −3.3 [−8.7, +1.7] | +1.3 [−2.5, +5.4] | 0.0 [−8.0, +8.7] |
 
 - **Setup** as in the 150-task screen below; SFT, Piotr and the Piotr-data head are the [full-benchmark runs](#selection-head-crossbench-full-20261018). The four label heads share one architecture and the same 1,380 training states; only the label differs.
-- **Ranking.** Outcome ≈ K = 3 > K = 1 > pre-execution. Against the Piotr-data head, outcome and K = 3 are −1.3 pp [−4.4, +1.7] and −1.8 pp [−4.8, +1.2]; K = 1 and pre-execution are −4.8 [−7.8, −1.8] and −7.7 [−10.7, −4.6].
-- **Per benchmark.** The gains come mostly from WebVoyager (outcome +7.9 pp [+3.9, +12.1], K = 3 +6.7 [+2.9, +10.6]) and DeepShop (+8.0 and +8.7 pp, intervals touching 0). On Online-Mind2Web no label head clearly beats SFT (−3.3 to +2.0 pp), while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
-- **K = 1 regressed from the 150-task screen** (+8.0 pp there, +2.7 pp here), a reminder that the screen resolves only about ±8 pp.
+- **Ranking.** Outcome ≈ K = 3 > K = 1 > pre-execution. On the mean overall rate, outcome and K = 3 are −2.2 pp [−5.9, +1.4] and −2.3 pp [−5.8, +1.3] against the Piotr-data head.
+- **Per benchmark.** Our label heads gain on WebVoyager and DeepShop; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does.
+- **K = 1 regressed from the 150-task screen** (+8.0 pp there, +2.7 pp pooled over all 1,045 tasks here), a reminder that the screen resolves only about ±8 pp.
 - **Nodes.** All twelve runs excluded the degraded node g013; two WebVoyager runs hit CUDA faults on g014 and resumed from their saved records on other nodes. Every task has exactly one recorded episode.
-- [Evidence](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json)
+- Evidence: [per-benchmark runs](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json)
 
 **150-task screen (first 50 tasks of each benchmark's full-run plan, 150 tasks; one episode per task).**
 
