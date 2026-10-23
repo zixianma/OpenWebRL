@@ -112,7 +112,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
 
-[Interactive RL comparison](rl_results/arm_rl_interactive.html): includes both mixed-only runs through90 and the expanded4,102-task outcome-only run through50; toggle runs, select bias-corrected EMA or centered Gaussian smoothing, switch overall/valid-only and export raw data; fixed0–60% y-axis. Download and open the standalone HTML in a browser; no server required.
+[Interactive RL comparison](rl_results/arm_rl_interactive.html): includes the 56-group outcome-only control through 90, uniform G8 through 60, both mixed-only runs through90 and the expanded4,102-task outcome-only run through50; toggle runs, select bias-corrected EMA or centered Gaussian smoothing, switch overall/valid-only and export raw data; fixed0–60% y-axis. Download and open the standalone HTML in a browser; no server required.
 
 [Reward-hacking diagnostic](ARM_RESULTS.md#arm-reward-hacking-curves-20261003):673 saved training collections across nine ARM variants; independent full300 task success versus ARM bonus/proxy, with separate failure buffers, label coverage and credited selection. [Interactive view](rl_results/arm_rl_interactive.html#reward-hacking) · [Figure](rl_results/arm_reward_hacking.png) · [PDF](rl_results/arm_reward_hacking.pdf).
 
@@ -150,13 +150,13 @@ for the work you are doing, then follow its contents to dated experiment records
 [Difficulty-first 2K vs. weighted coverage over score≥5: exact task mix, 61.25% overlap and local reviews](ARM_INTEGRATION_PLAN.md#arm-task-pool-difficulty-comparison-20260930).
 [Selected ≥5 weighted2K pool: all10,000 actor attempts verified;682 five-valid-failure tasks,1,061 mixed,213 all-success,44 unresolved;43.86GPUh/$52.62 used](ARM_INTEGRATION_PLAN.md#arm-task-pool-actor-screen-20260930) · [Local selected-task review](http://localhost:8765/arm_min5_weighted_tasks.html).
 [Actor + ARM rescue collection complete:78/682 rescued;11.44% overall,11.49% valid-only; all rollouts/verdicts/candidate traces verified;9.33GPUh/$1.68 used](ARM_INTEGRATION_PLAN.md#arm-task-pool-guided-682-20261002).
-[Uniform G8 outcome-only RL: iteration 40 verified at 34.67% overall / 43.70% valid-only; target 60 incomplete, with comparison limits and artifact audit](RL_EVALUATION.md#uniform8-iter40-results-20261011).
+[Uniform G8 outcome-only RL: target 60 complete, all six evaluations verified; iteration 60 = 42.33% overall / 54.27% valid-only, with comparison limits](RL_EVALUATION.md#uniform8-iter60-results-20261012).
 
 [Batch-56 and uniform-G8 continuation to 60: separately approved 48h/$300 and 72h/$400 caps; queued October 8, full300 evaluations every ten iterations](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008).
 
 [Training-pool SFT coverage: historical five attempts plus three on misses improves 64.65% to 73.20%; rubric-difficulty analysis and sampling limits](ARM_INFERENCE_SCALING.md#training-task-pass5-pass8-20261006).
 
-[Original2,102-task outcome-only56-group control: iteration40 verified at34.33% overall /42.92% valid-only; target60 incomplete, with historical comparison limits](RL_EVALUATION.md#outcome56-iter40-results-20261010) · [Control method and approved caps](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006).
+[Original2,102-task outcome-only56-group control: complete through 90, all nine evaluations verified; best observed 80 = 41.33% overall / 50.00% valid-only, 90 = 35.67% / 45.15%](RL_EVALUATION.md#outcome56-iter90-results-20261023) · [Control method and approved caps](ARM_INTEGRATION_PLAN.md#outcome56-control-20261006).
 [Expanded-pool throughput audit:68.45min/iteration; two g011 GPUs have confirmed thermal throttling. Phase timing and safe recovery follow-up](RL_RUNTIME.md#expanded4102-thermal-throughput-20261003).
 [Expanded4,102-task outcome-only baseline: complete through60 and all six full300 evaluations verified. Final32.33% overall /39.43% valid-only (97 successes,246 valid); best observed40=39.00% overall. Interactive curve includes10–60; historical comparisons remain descriptive](RL_EVALUATION.md#expanded4102-iter10-results-20261003) · [Method and continuation](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005) · [Browser repair](RL_RUNTIME.md#expanded4102-egl-regression-20261003).
 [Original extension approval:96h compute/$400 additional judge allowance; current stop60, unchanged recipe and full300 every10, with unused allocations released after final verification](ARM_INTEGRATION_PLAN.md#arm-expanded-outcome-to90-20261005).

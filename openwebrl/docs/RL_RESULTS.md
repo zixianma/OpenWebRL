@@ -105,10 +105,16 @@
 | Historical outcome-only |40 |5 |48 |— |100 |231 |69 |33.33 |43.29 |[Historical counts](rl_results/baseline_vs_arm_full300.json) |
 | Outcome-only56-group control |40 |5 |56 |626 |103 |240 |60 |34.33 |42.92 |[October 10 audit](arm_results/rl_integration/outcome56-iteration40-audit.json) |
 | Outcome-only56-group control |50 |5 |56 |762 |102 |239 |61 |34.00 |42.68 |[October 11 audit](arm_results/rl_integration/outcome56-iteration50-audit.json) |
+| Outcome-only56-group control |60 |5 |56 |888 |117 |245 |55 |39.00 |47.76 |[October 11 audit](arm_results/rl_integration/outcome56-iteration60-audit.json) |
+| Outcome-only56-group control |70 |5 |56 |1020 |112 |243 |57 |37.33 |46.09 |[October 23 audit](arm_results/rl_integration/outcome56-iteration70-audit.json) |
+| Outcome-only56-group control |80 |5 |56 |1136 |124 |248 |52 |41.33 |50.00 |[October 23 audit](arm_results/rl_integration/outcome56-iteration80-audit.json) |
+| Outcome-only56-group control |90 |5 |56 |1256 |107 |237 |63 |35.67 |45.15 |[October 23 audit](arm_results/rl_integration/outcome56-iteration90-audit.json) |
 | Uniform G8 |10 |8 |48 |244 |88 |241 |59 |29.33 |36.51 |[October7 audit](arm_results/rl_integration/uniform8-iteration10-audit.json) |
 | Uniform G8 |20 |8 |48 |492 |96 |235 |65 |32.00 |40.85 |[October 9 audit](arm_results/rl_integration/uniform8-iteration20-audit.json) |
 | Uniform G8 |30 |8 |48 |716 |101 |241 |59 |33.67 |41.91 |[October 11 audit](arm_results/rl_integration/uniform8-iteration30-audit.json) |
 | Uniform G8 |40 |8 |48 |928 |104 |238 |62 |34.67 |43.70 |[October 11 audit](arm_results/rl_integration/uniform8-iteration40-audit.json) |
+| Uniform G8 |50 |8 |48 |1130 |113 |239 |61 |37.67 |47.28 |[October 12 audit](arm_results/rl_integration/uniform8-iteration50-audit.json) |
+| Uniform G8 |60 |8 |48 |1318 |127 |234 |66 |42.33 |54.27 |[October 12 audit](arm_results/rl_integration/uniform8-iteration60-audit.json) |
 
 | Comparison / status | Value | Source |
 | --- | --- | --- |
@@ -119,7 +125,9 @@
 |56-group − historical48-group, iteration40 |+1.00pp overall /−0.37pp valid-only |[Comparability caveats](RL_EVALUATION.md#outcome56-iter40-results-20261010) |
 |56-group iteration40 − iteration30 |+2.00pp overall /+4.12pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#outcome56-iter40-results-20261010) |
 |56-group iteration50 − iteration40 |−0.33pp overall /−0.24pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#outcome56-iter50-results-20261011) |
-|56-group target / verified evaluations |60 incomplete /10,20,30,40,50 verified |[Verified milestone and remaining scope](RL_EVALUATION.md#outcome56-iter50-results-20261011) |
+|56-group iteration60 − iteration50 |+5.00pp overall /+5.08pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#outcome56-iter60-results-20261011) |
+|56-group − historical48-group, iteration90 |+2.00pp overall / −0.35pp valid-only |[Comparability caveats](RL_EVALUATION.md#outcome56-iter90-results-20261023) |
+|56-group target / verified evaluations |90 complete /10–90 verified (70–90 retrospective audit) |[Verification scope](RL_EVALUATION.md#outcome56-iter90-results-20261023) |
 | G8 iteration 20 − iteration 10 |+2.67 pp overall / +4.34 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter20-results-20261009) |
 | G8 − G5/56 groups, iteration 20 |+1.00 pp overall / +2.58 pp valid-only |[Comparability caveats](RL_EVALUATION.md#uniform8-iter20-results-20261009) |
 | G8 iteration 30 − iteration 20 |+1.67 pp overall / +1.06 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter30-results-20261011) |
@@ -128,12 +136,14 @@
 | G8 iteration 40 − iteration 30 |+1.00 pp overall / +1.79 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter40-results-20261011) |
 | G8 − G5/56 groups, iteration 40 |+0.33 pp overall / +0.78 pp valid-only |[Comparability caveats](RL_EVALUATION.md#uniform8-iter40-results-20261011) |
 | G8 − historical G5/48 groups, iteration 40 |+1.33 pp overall / +0.41 pp valid-only |[Comparability caveats](RL_EVALUATION.md#uniform8-iter40-results-20261011) |
-| G8 target / verified evaluations |60 incomplete / 10, 20, 30, 40 verified |[Verified milestone and remaining scope](RL_EVALUATION.md#uniform8-iter40-results-20261011) |
+| G8 iteration 50 − iteration 40 |+3.00 pp overall / +3.58 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter50-results-20261012) |
+| G8 iteration 60 − iteration 50 |+4.67 pp overall / +6.99 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
+| G8 target / verified evaluations |60 complete / 10, 20, 30, 40, 50, 60 verified |[Endpoint audit](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
 
 | Continuation approved October 8 | Verified starting point | Target | New allocation cap | New judge cap | Status / source |
 | --- | ---: | ---: | --- | ---: | --- |
-| G5 / 56 groups | 20 | 60 | 8 H200 × 48h; 64 CPUs / 960 GiB | $300 | [Iteration40 evaluation verified; target60 incomplete](RL_EVALUATION.md#outcome56-iter40-results-20261010) |
-| G8 / 48 groups | 10 | 60 | 8 H200 × 72h; 64 CPUs / 960 GiB | $400 | [Iteration 40 evaluation verified; target 60 incomplete](RL_EVALUATION.md#uniform8-iter40-results-20261011) |
+| G5 / 56 groups | 20 | 60 | 8 H200 × 48h; 64 CPUs / 960 GiB | $300 | [Target 60 complete; continued to 90, all nine evaluations verified](RL_EVALUATION.md#outcome56-iter90-results-20261023) |
+| G8 / 48 groups | 10 | 60 | 8 H200 × 72h; 64 CPUs / 960 GiB | $400 | [Target 60 complete; all six evaluations verified](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
 
 ## Expanded task pool · outcome-only · local browser · GPT-4.1 · temperature 0 · full 300
 

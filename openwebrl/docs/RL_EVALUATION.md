@@ -1518,6 +1518,106 @@ The topic commits also include shared ARM reward, resume and
 transport modules imported by the evaluation controllers; they are necessary
 code dependencies, not new experiment launches.
 
+<a id="uniform8-iter60-results-20261012"></a>
+## Uniform G8 outcome-only RL: iteration 60 verified — October 12
+
+Uniform G8 completed training through iteration 60 and all requested full-300
+milestone evaluations. Its final cohort scores **42.33% overall / 54.27% valid-only**:
+127 successes among 300 attempted tasks, with 234 valid and 66 invalid outcomes.
+This is 14 more successes than iteration 50 (+4.67 / +6.99 percentage points).
+Collection dates, valid-task sets and optimizer work differ, so these are
+descriptive checkpoint comparisons, without a causal or significance claim.
+
+| Iteration | Rollouts/task | Accepted groups | Adam updates | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|50 |8 |48 |1130 |300 |113 |239 |61 |37.67 |47.28 |
+|60 |8 |48 |1318 |300 |127 |234 |66 |42.33 |54.27 |
+
+The local-browser evaluation uses GPT-4.1/action_history, actor T0/p1/k1,
+4,096 response tokens, 30 turns and one rollout per task. Training retains the
+original 2,102-task pool, eight rollouts per task and 48 accepted mixed groups.
+Overall includes all 300 attempts; valid-only excludes the 66 invalid outcomes.
+Local GPT-4.1/T0 and stealth o4-mini/T0.6 cohorts remain separate.
+
+[Aggregate audit](arm_results/rl_integration/uniform8-iteration60-audit.json) ·
+[Interactive full-300 curves](rl_results/arm_rl_interactive.html) ·
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-uniform8-original2102-20261006-iter60).
+
+<details>
+<summary>Endpoint, artifacts and accounting</summary>
+
+The independent final review reconciles all 300 expected task identities,
+saved outcome records, native archive CRCs, final task metrics and finished
+W&B history. Invalid records without judge text remain in the overall denominator.
+The controller awaited the evaluation and released its storage reservation.
+
+Checkpoint 60 is native 59: 1,318 Adam updates, scheduler counter 337408, and the
+preserved dataset cursor. Metadata, all 16 shard extents, finite tensor samples,
+optimizer/scheduler/cursor continuity and the actual GPU evaluation actor restore
+are verified. This is not an exhaustive native-checkpoint tensor scan or a
+separate full training-optimizer GPU reload.
+
+All 16 registered allocation attempts consumed 206,341 seconds against the
+separate 259,200-second extension cap. The shared judge/browser ledger records
+30,515 HTTP attempts, $329.71 charged or reserved, and 43,356 browser dispatches,
+within the approved 40,000-call/$400/65,000-dispatch caps. Every failed attempt is included;
+unused time was not transferred. The unused successor was cancelled before
+allocation. Saved batches, rollouts and verdicts remain preserved, no artifacts
+were deleted during finalization, and adaptive training stays paused.
+
+</details>
+
+<a id="uniform8-iter50-results-20261012"></a>
+## Uniform G8 outcome-only RL: iteration 50 verified — October 12
+
+Iteration 50 scores **37.67% overall / 47.28% valid-only**, with nine more
+successes than iteration 40 (**+3.00 / +3.58 percentage points**). This is a
+descriptive checkpoint comparison: live-web collection dates, valid-task sets
+and optimizer work differ, so it does not establish a contemporaneous controlled
+improvement or statistical significance. The full300 evaluation is independently
+verified; training through iteration 60 and its final evaluation remain incomplete.
+
+| Iteration | Rollouts/task | Accepted groups | Adam updates | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|40 |8 |48 |928 |300 |104 |238 |62 |34.67 |43.70 |
+|50 |8 |48 |1130 |300 |113 |239 |61 |37.67 |47.28 |
+
+Overall includes all 300 attempted tasks; valid-only excludes the 61 invalid
+attempts at iteration 50. Evaluation uses one rollout per task with the local
+browser, GPT-4.1/action_history, actor T0/p1/k1, 4,096 response tokens and 30 turns.
+The unchanged [training recipe](#uniform8-iter10-results-20261007) uses eight
+rollouts per task and 48 accepted mixed groups on the original 2,102-task pool.
+Iterations are not matched optimizer-update counts. Expanded-pool training and
+stealth T0.6/o4-mini evaluations remain separate.
+
+[Aggregate audit](arm_results/rl_integration/uniform8-iteration50-audit.json) ·
+[Interactive full300 curves](rl_results/arm_rl_interactive.html) ·
+[Continuation scope](ARM_INTEGRATION_PLAN.md#outcome56-uniform8-to60-20261008).
+
+<details>
+<summary>Checkpoint and artifact verification</summary>
+
+Checkpoint 50 is native 49, with 1,130 Adam updates and scheduler counter 289280.
+Independent checks verified checkpoint metadata, shard extents, finite tensor
+samples and optimizer/scheduler/cursor continuity. Evaluation actor restoration
+on GPU is verified; this is not an exhaustive native-checkpoint tensor scan or
+proof of a later training-optimizer GPU reload.
+
+All 300 expected task identities and saved outcome records reconcile. All 300
+rollout archives passed full ZIP-member CRC checks. Saved records, final metrics,
+successful worker/launcher exits and the finished evaluation W&B history agree.
+The controller awaited evaluation completion before resuming training. Invalid
+outcomes remain in the overall denominator, including records without native
+judge text. Raw tasks and trajectories remain private. Evaluations 10/20/30/40/50
+are verified; target 60 remains incomplete, and adaptive training stays paused.
+
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-uniform8-original2102-20261006-iter50).
+
+</details>
+
+<details>
+<summary>Historical iteration 40 evaluation — October 11</summary>
+
 <a id="uniform8-iter40-results-20261011"></a>
 ## Uniform G8 outcome-only RL: iteration 40 verified — October 11
 
@@ -1779,6 +1879,83 @@ restoring its own optimizer, scheduler and cursor. No compute budget was added.
 The pilot endpoint is complete. Its separately approved continuation has now reached [verified evaluation 40](#uniform8-iter40-results-20261011); target 60 remains incomplete.
 
 </details>
+
+<a id="outcome56-iter90-results-20261023"></a>
+## Outcome-only 56-group control: complete through iteration 90 — October 23
+
+The continuation to 90 (job 363328) finished its 70/80/90 full300 evaluations on
+October 16–17; they were audited and added here on October 23. Iteration 80 is the
+best observed checkpoint at **41.33% overall / 50.00% valid-only**; iteration 90
+scores **35.67% / 45.15%**. Differences of this size between single evaluations are
+within live-web and valid-task-set variation; this is not evidence of a peak or decline.
+
+| Iteration | Mixed groups | Adam updates | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|60 |56 |888 |300 |117 |245 |55 |39.00 |47.76 |
+|70 |56 |1020 |300 |112 |243 |57 |37.33 |46.09 |
+|80 |56 |1136 |300 |124 |248 |52 |41.33 |50.00 |
+|90 |56 |1256 |300 |107 |237 |63 |35.67 |45.15 |
+
+At 90 the historical 48-group outcome-only run scored 33.67% / 45.50%
+(+2.00 / −0.35 pp); collection dates and valid-task sets differ. Protocol is unchanged
+from the iteration 60 section below.
+
+<details><summary>Verification scope</summary>
+
+The October 23 retrospective audit recounted all 300 saved verdicts per checkpoint,
+matched the exact 300 expected task IDs, checked one nonempty rollout archive per
+verdict, the evaluator exit code, the GPU restore line and Adam/scheduler counters
+(scheduler − optimizer = 0). The same recount reproduces the published iteration 60
+audit exactly. Not repeated: full archive CRC and W&B history cross-check.
+[Audit 70](arm_results/rl_integration/outcome56-iteration70-audit.json) ·
+[Audit 80](arm_results/rl_integration/outcome56-iteration80-audit.json) ·
+[Audit 90](arm_results/rl_integration/outcome56-iteration90-audit.json).
+
+</details>
+
+<a id="outcome56-iter60-results-20261011"></a>
+## Outcome-only 56-group control: complete through iteration 60 — October 11
+
+The completed iteration 60 evaluation scores **39.00% overall / 47.76% valid-only**:
+15 more successes than iteration 50, a descriptive increase of **5.00 / 5.08
+percentage points**. Live-web collection times and valid-task sets differ; this
+is not a contemporaneous controlled comparison or evidence of significance.
+Training through 60 and all six scheduled full300 evaluations are independently
+verified complete.
+
+| Iteration | Mixed groups | Adam updates | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|50 |56 |762 |300 |102 |239 |61 |34.00 |42.68 |
+|60 |56 |888 |300 |117 |245 |55 |39.00 |47.76 |
+
+Overall includes all 300 attempted tasks; valid-only excludes the 55 invalid
+attempts at iteration 60. Evaluation uses one rollout per task with the local browser,
+GPT-4.1/action_history, actor T0/p1/k1, 4,096 response tokens and 30 turns.
+Training retains the original 2,102 tasks, five rollouts per task and 56 accepted
+mixed groups. Iterations are not matched optimizer-update counts.
+
+[Aggregate audit](arm_results/rl_integration/outcome56-iteration60-audit.json) ·
+[Interactive full300 curves](rl_results/arm_rl_interactive.html) ·
+[Training recipe](#outcome56-iter10-results-20261007).
+
+<details>
+<summary>Checkpoint and verification scope</summary>
+
+Checkpoint 60 is native 59, with 888 Adam updates and scheduler counter 227328.
+Independent checkpoint and stage-gate reviews passed. All 300 saved task records
+reconcile, and all 300 rollout archives passed independent CRC checks. Worker and
+launcher exits, status, metrics and the finished evaluation W&B run agree; the
+controller exited successfully and released its storage reservation. Native
+checkpoint inspection covered metadata, counters, shard extents and finite tensor
+samples; it was not an exhaustive tensor reload. Raw task identities and
+trajectories remain private, and adaptive training stays paused.
+
+[Evaluation W&B](https://wandb.ai/zixianma/openwebrl-evals/runs/outcome-only-56groups-20261006-iter60).
+
+</details>
+
+<details>
+<summary>Historical iteration50 evaluation — October 11</summary>
 
 <a id="outcome56-iter50-results-20261011"></a>
 ## Outcome-only 56-group control: iteration50 verified — October 11
