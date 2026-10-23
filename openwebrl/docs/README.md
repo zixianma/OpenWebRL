@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Native CUAWright local100: 81.0% overall, 84.4% valid-only; qualified result with failed browser-start budget audit](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023).
+
 [OM2W Luna single high complete: all four methods on the original 300 tasks, common-valid efficiency, all-attempt cost and 30-decision failures](ARM_INFERENCE_SCALING.md#luna-single-high-om2w300-20261022).
 
 

@@ -1,0 +1,82 @@
+{
+  "schema": "qualified-native-cuawright-local100-public-whitelist-v1",
+  "method": "Native CUAWright, GPT-5.4 xhigh",
+  "protocol": {
+    "benchmark": "Online-Mind2Web",
+    "fixed_task_subset": 100,
+    "actor_decision_cap": 100,
+    "actor_output_token_cap": 20000,
+    "summary_every_decisions": 20,
+    "browser": "Local Chromium",
+    "persistent_terminal": true,
+    "self_reflection_gate": true,
+    "external_judge": "Independent official WebJudge, GPT-4o-2024-08-06"
+  },
+  "status": {
+    "qualified_descriptive_results": true,
+    "scientific_integrity_passed": true,
+    "budget_audit_passed": false,
+    "cap_compliant": false,
+    "fully_verified_complete": false,
+    "browser_start_caps_exceeded_count": 2,
+    "confirmed_excess_starts_lower_bound": 8,
+    "cases_with_episode_cleanup_or_actual_concurrency_unverified": 1,
+    "allocation_terminal_verified": true
+  },
+  "performance": {
+    "tasks": 100,
+    "valid_count": 96,
+    "invalid_count": 4,
+    "success_count": 81,
+    "overall_success_percent": 81,
+    "valid_only_success_percent": 84.375
+  },
+  "valid_only_efficiency": {
+    "task_latency_seconds": {
+      "mean": 1495.693454734981,
+      "denominator": 96
+    },
+    "browser_steps": {
+      "mean": 24.9375,
+      "denominator": 96
+    },
+    "actor_decisions": {
+      "mean": 58.78125,
+      "denominator": 96
+    }
+  },
+  "all_attempt_accounting": {
+    "model": {
+      "physical_calls_all_attempts": 12135,
+      "known_usage_calls": 12128,
+      "unknown_usage_calls": 7,
+      "known_usage_cost_usd": 348.6495555,
+      "unknown_usage_conservative_reservations_usd": 4.932825,
+      "conservative_accounted_cost_usd": 353.5823805,
+      "input_tokens_known": 211201161,
+      "cached_input_tokens_known": 164936192,
+      "output_tokens_known": 12783539,
+      "reasoning_output_tokens_known": 9478472
+    },
+    "judge": {
+      "physical_calls_all_attempts": 1284,
+      "known_usage_calls": 1284,
+      "unknown_usage_calls": 0,
+      "known_usage_cost_usd": 7.506035000000001,
+      "unknown_usage_conservative_reservations_usd": 0.0,
+      "conservative_accounted_cost_usd": 7.506035000000001,
+      "input_tokens_known": 2477854,
+      "cached_input_tokens_known": 157312,
+      "output_tokens_known": 150804,
+      "reasoning_output_tokens_known": 0
+    }
+  },
+  "valid_failures_at_100_decisions": 8,
+  "cost_definition": "Actor and online helpers included. External judge excluded from model cost. Conservative accounted total includes reservations for unknown usage; it is not observed billed cost.",
+  "latency_definition": "Valid-task mean includes actor, online helpers and owned cleanup; external judging excluded. Episode cleanup is independently unverified for the qualified local-CDP case.",
+  "comparability": "Different model, agent, horizon and grading protocol from the four-method/three-benchmark headline table. This is a 100-task local-browser subset, not a full 300 paper reproduction or causal horizon experiment.",
+  "audit_digests": {
+    "scientific_and_qualification_audit_sha256": "9c58b9a00c7637a5f49f022f46af5915765c48962530a8de1e6cdda7cb54ec44",
+    "terminal_receipt_sha256": "d8cb254d3ea42445b5d12cd9c11093878e7b4e15bb8f15636a0557dc839b8d2a"
+  }
+}

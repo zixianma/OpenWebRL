@@ -1809,3 +1809,29 @@ Native request/model identity, selected-only execution, benchmark-native GPT-4o 
 [Aggregate metrics, recovery summary and audit digests](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json).
 
 </details>
+
+<a id="cuawright-native-local100-closeout-20261023"></a>
+
+## Native CUAWright local100: qualified evidence and accounting (October 23, 2026)
+
+**Scientific evidence checked; budget audit failed.** 81 successes across 100 fixed tasks; 96 valid and 4 invalid dispositions. Valid-only success is 84.4%. Two individual browser-start caps were exceeded by at least 8 starts in total. Scheduler allocations are terminal; episode-end cleanup and actual concurrency remain unverified for one actor-launched local-CDP browser.
+
+<details>
+<summary>Protocol, all-attempt accounting and comparability</summary>
+
+Native CUAWright runs GPT-5.4 xhigh with 20,000 output tokens, 100 decisions, compaction every 20 decisions, persistent terminal/browser sessions and the native self-reflection completion gate, using local Chromium. Independent official WebJudge uses GPT-4o-2024-08-06. Saved original outcomes, mechanical recovery attempts and external regrades remain preserved.
+
+| Accounting scope | Physical calls | Known-usage calls | Unknown-usage calls | Known-usage cost, USD | Unknown-usage reserves, USD | Conservative accounted cost, USD |
+|---|---:|---:|---:|---:|---:|---:|
+| Actor and online helpers, all attempts |12135|12128|7|348.649556|4.932825|353.582380|
+| External judge, all attempts |1284|1284|0|7.506035|0.000000|7.506035|
+
+Unknown-usage reservations are conservative accounting bounds, not observed billed cost. Model cost and task latency exclude external judging; online helpers remain included. Efficiency means condition on 96 valid tasks. 8 valid failures reached the 100-decision cap; this count alone does not identify a horizon effect.
+
+Different model, native agent/helper behavior, browser conditions and horizon prevent a causal comparison with earlier 30-decision wrappers. The subset contains 100 tasks rather than the paper's full 300.
+
+Scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af5915765c48962530a8de1e6cdda7cb54ec44`. Terminal receipt SHA-256: `d8cb254d3ea42445b5d12cd9c11093878e7b4e15bb8f15636a0557dc839b8d2a`.
+
+</details>
+
+[Results table](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023) · [Aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)

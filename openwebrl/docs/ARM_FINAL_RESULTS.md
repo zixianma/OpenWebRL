@@ -157,6 +157,28 @@ For a matched comparison across the full cohort, the following rows use only the
 
 </details>
 
+<a id="cuawright-native-local100-20261023"></a>
+
+## Native CUAWright: qualified 100-task local reproduction
+
+**Budget audit failed:** two browser-start caps were exceeded; one case lacks verified episode-end cleanup and actual concurrency. The following is an independently checked, qualified descriptive result.
+
+| Method | Tasks | Valid | Invalid | Successes | Overall success | Valid-only success |
+|---|---:|---:|---:|---:|---:|---:|
+| Native CUAWright · GPT-5.4 xhigh · 100 decisions |100|96|4|81|81.0%|84.4%|
+
+| Valid-task efficiency | Mean | Tasks |
+|---|---:|---:|
+| Task latency, seconds; external judge excluded |1495.7|96|
+| Recorded browser batches |24.9|96|
+| Actor decisions |58.8|96|
+
+All attempts incurred **$348.65 in known-usage model cost**, plus **$4.93 reserved for unknown usage**: **$353.58 conservatively accounted**, including online helpers. External judging is separate: **$7.51**.
+
+This 100-task local-Chromium subset uses the native persistent-terminal/reflection agent and differs from the four-method/three-benchmark headline protocol. It is neither a full 300 paper reproduction nor a causal test of the 100-decision horizon.
+
+[Protocol and audit](ARM_INFERENCE_SCALING.md#cuawright-native-local100-closeout-20261023) · [Aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
+
 <a id="final-selection-head-ablations-20261021"></a>
 
 ## Selection head: which training labels work (October 21, 2026)
