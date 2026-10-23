@@ -5,7 +5,7 @@
 ## Headline results
 
 **On Online-Mind2Web, WebVoyager and DeepShop (1,045 tasks, each benchmark weighted equally), a 22.6 M-parameter head on the frozen SFT-4B actor matches Piotr SelectionARM's 4.44 B selector when trained on Piotr's data (+1.4 pp [−2.1, +4.9]). Trained on observed-outcome or lookahead K = 3 labels for only 1,380 branch states, it is level with Piotr (−0.8 and −0.9 pp, intervals spanning 0) at 56–65% of his compute per episode. The training labels matter most; selector size does not, and an 8B actor without selection gains +3.3 pp [−0.3, +6.9].**
-- **Setup:** every task of each benchmark, one episode per task, the same tasks for every method. Actor OpenWebRL-4B-SFT unless noted, T 1.0 / top-p 0.9, 30 steps, five candidates per decision; one H200 per method and benchmark. Judges: o4-mini for Online-Mind2Web; GPT-4o for WebVoyager and DeepShop. Paired 95% bootstrap over tasks.
+- **Setup:** every task of each benchmark, one episode per task, the same tasks for every method. Actor OpenWebRL-4B-SFT unless noted, T 1.0 / top-p 0.9, 30 steps, five candidates per decision; one H200 per method and benchmark. Judges: o4-mini for Online-Mind2Web (retired 2026-10-23; [re-judged with gpt-5.6-terra](#selection-head-data-scale-20261023)); GPT-4o for WebVoyager and DeepShop. Paired 95% bootstrap over tasks.
 
 | Actor | Selector | Training data: states / panels / labels | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -95,6 +95,69 @@
 **Agreement with teachers does not track action quality.** The Kev-style decision pass on the actor's weights, trained to step 600, matches held-out GPT-5.5 choices best of any actor-based selector: 67.1%, versus 65.4% for the frozen-feature head. On the original 124 states it matches an independent teacher (Luna before execution) on 66.1% of judgments, versus 73.2% for Piotr ARM. Its chosen actions succeed on 32.79% of held-out draws, +1.12 pp [−1.38, +3.75] over uniform.
 
 **Supervising the selector with outcomes needs more states than exist now.** 188 states have eight draws for all five actions: 9,720 outcomes in 151 task groups, 14× fewer states than the 2,692 teacher-labelled training states ([data comparison](#selection-head-outcome-data-20261010)). A pre-registered five-fold [adaptation pilot](#selection-head-outcome-adaptation-20261010) on 138 of these states overfits: it fits training folds but does not beat uniform on held-out tasks. Ridge probes, a combined teacher-plus-outcome loss and selector combinations also find [no held-out gain](#selection-head-early-signal-20261010). Confirming a 3 pp selector difference needs about 200 states with eight draws, and confirming Piotr's ~2.5 pp gain over uniform about 300.
+
+</details>
+
+<a id="selection-head-data-scale-20261023"></a>
+
+## Teacher-data scaling, and the Online-Mind2Web judge change (2026-10-23)
+
+**More of Piotr's GPT-5.5 panels does not make a better head. From 254 to 2,587 training states, the head's offline gain over one SFT sample stays at +2.3 to +3.0 pp, and its Online-Mind2Web success stays within noise (36.3% at 254 states, 33.3% at 2,587; −3.0 pp [−8.3, +2.0]). At equal size, one Piotr panel per state for 1,393 states matches our 1,380 branch states on K = 3 labels both offline (+2.0 vs +2.0 pp) and live (−0.3 pp [−5.3, +4.7]).** Validation agreement with GPT-5.5 does rise with data (58% → 66%), so the head learns the teacher better without picking better actions.
+- **Judge change.** OpenAI retired o4-mini on 2026-10-23 (both `o4-mini` and `o4-mini-2025-04-16` return `model_not_found`). Online-Mind2Web is now judged by **gpt-5.6-terra** with the same AgentTrek prompt, final screenshot and parser. All earlier Online-Mind2Web references below are **re-judged** by replaying each episode's saved judge request with only the model swapped. Terra is stricter: it agrees with o4-mini on 88–95% of episodes and lowers success by up to 6.7 pp ([below](#selection-head-terra-rejudge-20261023)). Online-Mind2Web numbers elsewhere in this document are o4-mini; WebVoyager and DeepShop still use GPT-4o.
+- **Setup.** Joint transformer head (soft CE) on SFT-4B features, trained only on Piotr's training panels, seed 0. Subsets add whole tasks in a fixed random order (seed 20261023) until the state count is reached, so they are nested; the 86 tasks of our offline test set are excluded throughout. Recipe as the Piotr-data head: batch 256, 20 epochs, epoch chosen on Piotr's validation split (280 states). The one-panel row keeps one random panel per state and uses our branch recipe (batch 64, last of 20 epochs). Live: Online-Mind2Web 300 tasks, the [headline](#headline-results) task order, T 1.0 / top-p 0.9, 30 steps, five candidates, one H200 per run.
+- **Offline metric (now the primary one).** On our 348 test states (86 tasks), the head picks among the **first five SFT proposals** by draw index, duplicates kept, as in live decoding; the baseline is one SFT sample from the same five (35.65%; the best of the five is 46.74%). Success on held-out continuation draws 3–7, valid draws only; 95% bootstrap over tasks.
+
+| Training data | States | Panels | Tasks | GPT-5.5 validation agreement | Offline: fixed five | Offline − SFT sample, pp [95% CI] | OM2W valid | OM2W successes | OM2W overall | OM2W valid-only | OM2W − SFT 4B, pp [95% CI] | OM2W − Piotr ARM, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Piotr's panels | 254 | 3,302 | 31 | 58.1% | 37.91% | +2.3 [+0.3, +4.5] | 264 | 109 | 36.3% | 41.3% | +4.7 [−1.3, +10.7] | −2.7 [−8.0, +2.7] |
+| Piotr's panels | 501 | 6,527 | 60 | 60.7% | 38.70% | +3.0 [+1.4, +4.9] | 262 | 106 | 35.3% | 40.5% | +3.7 [−2.3, +9.3] | −3.7 [−9.0, +2.0] |
+| Piotr's panels | 1,011 | 13,263 | 123 | 63.1% | 38.05% | +2.4 [+0.2, +4.6] | 260 | 107 | 35.7% | 41.2% | +4.0 [−2.0, +10.0] | −3.3 [−8.3, +1.7] |
+| Piotr's panels, all | 2,587 | 34,518 | 344 | 66.2% | 38.31% | +2.7 [+0.6, +4.8] | 258 | 100 | 33.3% | 38.8% | +1.7 [−4.3, +7.7] | **−5.7 [−10.7, −0.7]** |
+| Piotr's panels, one per state | 1,393 | 1,393 | 184 | 59.2% | 37.65% | +2.0 [−0.0, +4.3] | 263 | 98 | 32.7% | 37.3% | +1.0 [−4.7, +6.3] | **−6.3 [−11.3, −1.3]** |
+| *Re-judged references (run 2026-10-18 to 10-21)* | | | | | | | | | | | | |
+| SFT 4B, one sample | — | — | — | — | 35.65% | — | 275 | 95 | 31.7% | 34.5% | — | **−7.3 [−13.0, −1.7]** |
+| Piotr SelectionARM (4B LoRA) | 2,692 | 35,916 | — | — | — | — | 263 | 117 | 39.0% | 44.5% | **+7.3 [+1.7, +13.0]** | — |
+| Earlier Piotr-data head | 2,692 | 35,916 | — | — | — | — | 265 | 113 | 37.7% | 42.6% | **+6.0 [+0.7, +11.3]** | −1.3 [−6.3, +3.7] |
+| Ours, K = 3 labels | 1,380 | 1,380 | — | — | 37.68% | +2.0 [+0.3, +3.9] | 267 | 99 | 33.0% | 37.1% | +1.3 [−4.0, +6.3] | **−6.0 [−11.3, −1.0]** |
+| Ours, observed outcome | 1,380 | 1,380 | — | — | 35.31% | −0.3 [−2.1, +1.4] | 270 | 94 | 31.3% | 34.8% | −0.3 [−5.3, +4.7] | **−7.7 [−13.0, −2.3]** |
+| Ours, K = 1 labels | 1,380 | 1,380 | — | — | 37.74% | +2.1 [+0.6, +3.7] | 264 | 93 | 31.0% | 35.2% | −0.7 [−5.7, +4.3] | **−8.0 [−13.0, −3.0]** |
+| Ours, pre-execution labels | 1,380 | 1,380 | — | — | 36.76% | +1.1 [−0.6, +2.9] | 268 | 90 | 30.0% | 33.6% | −1.7 [−6.7, +3.3] | **−9.0 [−14.0, −4.0]** |
+
+- **Columns.** OM2W = Online-Mind2Web, 300 tasks, gpt-5.6-terra judge. "Overall" counts invalid episodes as failures; differences are paired by task on the overall rate (95% bootstrap). The earlier Piotr-data head trained on all 2,692 of Piotr's states (no test-task exclusion; [recipe](#selection-head-sft-actions-20261021)). "Ours" rows are the [label ablation](#selection-head-sft-actions-20261021) heads; their offline numbers are the same fixed-five metric.
+- **Within the scaling runs (overall, pp [95% CI]):** 2,587 − 254 states −3.0 [−8.3, +2.0]; 1,011 − 254 −0.7 [−5.3, +4.0]; one-panel 1,393 − all 2,587 −0.7 [−5.0, +3.7]. One-panel − ours outcome +1.3 [−4.0, +6.3].
+- **Caveats.** One seed per size. The new runs and the references ran on different days, and sites change: the new all-data head scores −4.3 pp [−10.0, +1.3] against the earlier Piotr-data head trained on nearly the same data, about as large as any scaling effect here. Read the scaling rows against each other; read differences against the references with that in mind.
+- **Offline, distinct-action view** (head − uniform over distinct actions): +1.4, +2.7, +2.8, +3.5 pp for 254 → 2,587 states, +2.1 for one panel per state; ours outcome +0.7, K = 3 +0.4, K = 1 +1.0, pre-execution +0.2. Only this view, which removes duplicates, shows a weak trend with data.
+- [Evidence](arm_results/rl_integration/selection-data-scale-20261023.json) · [analysis script](arm_results/rl_integration/selection-data-scale-20261023-analysis.py). Runtime `selection-head-20261008/data-scale-20261023/` (heads, `fixed-five.json` beside each) and `evaluations/data-scale-20261023/` (jobs 383632–383636, 11.1 H200-hours).
+
+<a id="selection-head-terra-rejudge-20261023"></a>
+
+<details>
+<summary>Re-judging the earlier Online-Mind2Web runs with gpt-5.6-terra: agreement and success by run</summary>
+
+- **Method.** For each committed episode, the last received judge request of its committed attempt is replayed with `model` set to `gpt-5.6-terra` (same messages, final screenshot and seed 42) and parsed with the native parser (`scripts/rejudge_crossbench_om2w.py`). Before any call, every saved o4-mini reply was re-parsed and matched the recorded reward. Invalid episodes stay invalid; episodes that never reached the judge keep reward 0. All 2,911 calls returned a verdict; cost $44.46 at $2.50 / $15 per M tokens (an upper bound on the current price). CPU job 383637.
+- **Result.** Terra agrees with o4-mini on 88–95% of episodes valid under both. Disagreements are mostly o4-mini success → Terra failure (8–26 per run against 2–9 the other way), so success drops by up to 6.7 pp (one run rises 0.3 pp). Piotr SelectionARM and the Piotr-data heads stay ahead of SFT 4B and of every branch-label head.
+
+| Run | Valid | o4-mini successes | o4-mini overall | Terra successes | Terra overall | Terra valid-only | Agree | o4-mini 1 → Terra 0 | o4-mini 0 → Terra 1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B | 275 | 109 | 36.3% | 95 | 31.7% | 34.5% | 251 | 19 | 5 |
+| SFT 8B | 273 | 109 | 36.3% | 100 | 33.3% | 36.6% | 256 | 13 | 4 |
+| Piotr SelectionARM, N = 5 | 263 | 123 | 41.0% | 117 | 39.0% | 44.5% | 249 | 10 | 4 |
+| Piotr SelectionARM, N = 3 | 259 | 134 | 44.7% | 119 | 39.7% | 45.9% | 236 | 19 | 4 |
+| Piotr-data joint head, N = 5 | 265 | 131 | 43.7% | 113 | 37.7% | 42.6% | 235 | 24 | 6 |
+| Piotr-data joint head, N = 3 | 269 | 127 | 42.3% | 110 | 36.7% | 40.9% | 240 | 23 | 6 |
+| Piotr-data pointwise head, N = 3 | 264 | 124 | 41.3% | 115 | 38.3% | 43.6% | 241 | 16 | 7 |
+| K = 1 head, SFT + RL 1,908 states (10-18) | 261 | 112 | 37.3% | 103 | 34.3% | 39.5% | 246 | 12 | 3 |
+| K = 1 head, SFT-only states (10-18) | 259 | 105 | 35.0% | 97 | 32.3% | 37.5% | 237 | 15 | 7 |
+| Outcome head | 270 | 114 | 38.0% | 94 | 31.3% | 34.8% | 238 | 26 | 6 |
+| K = 3 head | 267 | 115 | 38.3% | 99 | 33.0% | 37.1% | 241 | 21 | 5 |
+| K = 1 head | 264 | 102 | 34.0% | 93 | 31.0% | 35.2% | 251 | 11 | 2 |
+| Pre-execution head | 268 | 99 | 33.0% | 90 | 30.0% | 33.6% | 251 | 13 | 4 |
+| Independent transformer, soft CE | 265 | 99 | 33.0% | 91 | 30.3% | 34.3% | 245 | 14 | 6 |
+| Independent transformer, BCE | 267 | 110 | 36.7% | 100 | 33.3% | 37.5% | 253 | 12 | 2 |
+| Joint transformer, BCE | 256 | 92 | 30.7% | 93 | 31.0% | 36.3% | 239 | 8 | 9 |
+
+- **Note.** Under Terra, the outcome head falls from 38.0% to 31.3% on Online-Mind2Web, the largest drop of any run, so its Online-Mind2Web standing in the [headline](#headline-results) partly reflects o4-mini leniency.
+- Per-run summaries and verdicts: runtime `evaluations/rejudge-terra-20261023/out/`; summary copies in the [evidence JSON](arm_results/rl_integration/selection-data-scale-20261023.json).
 
 </details>
 
