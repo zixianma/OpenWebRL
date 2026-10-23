@@ -1,7 +1,7 @@
 """Offline evaluation on SFT-actor branching states (scripts/train_head_round.py: targets, held_rate; 2026-10-21 ablation).
 (a) one branching state on a timeline: 2-5 SFT-proposed actions, each executed in a replayed browser and continued 8 times by the
-frozen SFT actor to a judged outcome; brackets show what each teacher reads; (b) labels; (c) each picker's score on this example,
-computed on held-out draws 3-7. Rollouts, outcomes and picks are illustrative."""
+frozen SFT actor to a judged outcome; brackets show what each teacher reads; (b) each picker's score on this example, computed on
+held-out draws 3-7. Rollouts, outcomes and picks are illustrative."""
 from pathlib import Path
 import random
 import matplotlib
@@ -45,15 +45,16 @@ def bracket(x0, x1, y, color, text):
 ax.text(0.15, 7.45, "(a)", fontsize=12, weight="bold")
 ax.text(0.6, 7.45, "One branching state and its continuations", fontsize=11.5, weight="bold")
 
-hist_x, st_x, act_x, act_w = (0.45, 1.05), 1.95, 2.65, 1.2
-cols = [4.75 + 0.55 * k for k in range(5)]          # s_{t+1} .. s_{t+5}
+
+hist_x, st_x, act_x, act_w = (0.45, 1.05), 1.95, 2.65, 1.5
+cols = [5.0 + 0.55 * k for k in range(5)]           # s_{t+1} .. s_{t+5}
 dots_x, end_x, cnt_x = cols[-1] + 0.5, cols[-1] + 0.95, cols[-1] + 1.25
 gw, gh = 0.27, 0.09                                  # rollout glyph
 row_h, gap = 0.11, 0.13
 group_h = 8 * row_h
 tops = [5.95 - i * (group_h + gap) for i in range(5)]
 y_head = 6.08
-for x, lab in [(hist_x[0], "sₜ₋₂"), (hist_x[1], "sₜ₋₁"), (st_x, "sₜ"), (act_x + act_w / 2, "action")] + \
+for x, lab in [(hist_x[0], "sₜ₋₂"), (hist_x[1], "sₜ₋₁"), (st_x, "sₜ"), (act_x + act_w / 2, "action  (● = picked by)")] + \
               [(c, f"sₜ₊{'₁₂₃₄₅'[k]}") for k, c in enumerate(cols)] + [(dots_x, "…"), (end_x, "judge")]:
     ax.text(x, y_head, lab, ha="center", va="bottom", fontsize=9, color=MUTED)
 ax.text(cols[0] - 0.3, y_head, "draw", ha="right", va="bottom", fontsize=7.5, color=MUTED)
@@ -61,7 +62,7 @@ ax.text(cols[0] - 0.3, y_head, "draw", ha="right", va="bottom", fontsize=7.5, co
 # what each teacher reads: brackets over the timeline columns
 bracket(hist_x[0] - 0.3, act_x + act_w, 6.45, PRE, "pre-execution: history, sₜ, action texts (no draw)")
 bracket(hist_x[0] - 0.3, cols[0] + gw / 2 + 0.05, 6.7, POST, "post-execution: + sₜ₊₁ of draw 0")
-bracket(hist_x[0] - 0.3, cols[3] + gw / 2 + 0.05, 6.95, TEACH, "lookahead K = 3: + sₜ₊₁ … sₜ₊₄ of draw 0")
+bracket(hist_x[0] - 0.3, cols[3] + gw / 2 + 0.05, 6.95, TEACH, "lookahead K = 3: + sₜ₊₁ … sₜ₊₄ of draw 0 (K = 1: up to sₜ₊₂)")
 
 mid_all = (tops[0] + tops[-1] - group_h) / 2
 screen(hist_x[0], mid_all, 0.42, 0.32)
@@ -79,8 +80,10 @@ for i, (name, outs) in enumerate(zip(actions, outcomes)):
     top = tops[i]; mid = top - group_h / 2
     ax.plot([st_x + 0.32, act_x], [mid_all, mid], color=LINE, lw=1.0, zorder=1)
     rbox(act_x, mid - 0.21, act_w, 0.42, ec=INK, lw=1.0)
-    ax.text(act_x + act_w / 2, mid + 0.07, f"a{i + 1}", ha="center", va="center", fontsize=9, weight="bold")
-    ax.text(act_x + act_w / 2, mid - 0.11, name, ha="center", va="center", fontsize=7.4, color=MUTED)
+    ax.text(act_x + 0.55, mid + 0.07, f"a{i + 1}", ha="center", va="center", fontsize=9, weight="bold")
+    ax.text(act_x + 0.55, mid - 0.11, name, ha="center", va="center", fontsize=7.4, color=MUTED)
+    for j, color in enumerate(PICKS.get(f"a{i + 1}", [])):      # which picker chose this action
+        ax.scatter(act_x + 1.1 + 0.15 * j, mid, s=48, color=color, edgecolor="white", linewidth=1, zorder=6)
     band_x0, band_x1 = cols[0] - 0.42, end_x + 0.18
     ax.add_patch(Rectangle((band_x0, top - 3 * row_h), band_x1 - band_x0, 3 * row_h, fc=OUTC_BG, ec="none", zorder=0))
     ax.add_patch(Rectangle((band_x0, top - 8 * row_h), band_x1 - band_x0, 5 * row_h, fc=HELD_BG, ec="none", zorder=0))
@@ -102,42 +105,34 @@ for i, (name, outs) in enumerate(zip(actions, outcomes)):
     a, h = sum(outs[:3]), sum(outs[3:])
     ax.text(cnt_x, top - 1.5 * row_h, f"{a}/3", va="center", fontsize=8.5, color=OUTC, weight="bold")
     ax.text(cnt_x, top - 5.5 * row_h, f"{h}/5 = {20 * h}%", va="center", fontsize=8.5, color=HELD, weight="bold")
-    for j, color in enumerate(PICKS.get(f"a{i + 1}", [])):      # which picker chose this action
-        ax.scatter(cnt_x + 0.98 + 0.2 * j, top - 5.5 * row_h, s=70, color=color, edgecolor="white", linewidth=1.2, zorder=6)
 
-ky = 0.55
-for x, fc, ec, text in [(0.3, OUTC_BG, OUTC, "draws 0–2: outcome labels"), (3.0, HELD_BG, HELD, "draws 3–7: evaluation only")]:
+# legend for (a)
+ky = 0.78
+for x, fc, ec, text in [(0.3, OUTC_BG, OUTC, "draws 0–2: outcome label (best success; here a3, 3/3)"), (5.2, HELD_BG, HELD, "draws 3–7: held out for scoring")]:
     ax.add_patch(Rectangle((x, ky - 0.07), 0.28, 0.14, fc=fc, ec=ec, lw=0.8))
     ax.text(x + 0.38, ky, text, va="center", fontsize=8.5)
-ax.text(5.6, ky, "K = 1 reads draw 0 up to sₜ₊₂.", va="center", fontsize=8.5, color=TEACH)
-ax.text(0.3, 0.17, "Each draw re-opens sₜ in a fresh replayed browser, executes the action and lets the frozen SFT actor finish; "
-        "o4-mini judges success. Invalid draws are dropped. Example values.", fontsize=7.8, color=MUTED, va="center")
+ky = 0.5
+ax.text(0.3, ky, "picked by:", va="center", fontsize=8.5, color=MUTED)
+x = 1.25
+for color, text in [(PRE, "pre-execution"), (POST, "post-execution"), (TEACH, "lookahead K = 3"), (OUTC, "observed outcome"), (INK, "oracle")]:
+    ax.scatter(x, ky, s=48, color=color, edgecolor="white", linewidth=1, zorder=6)
+    ax.text(x + 0.13, ky, text, va="center", fontsize=8.5)
+    x += 0.32 + 0.075 * len(text)
+ax.text(0.3, 0.27, "Teachers are GPT-6 Luna; lookahead hides any final answer; post-execution is a teacher only (no head is trained on it). Each label is\n"
+        "a soft target over the actions (vote shares; ties split); none uses draws 3–7. Each draw re-opens sₜ in a fresh replayed browser, executes\n"
+        "the action and lets the frozen SFT actor finish; o4-mini judges success; invalid draws are dropped. Example values.",
+        fontsize=7.6, color=MUTED, va="top", linespacing=1.4)
 
-# ---------------- (b) labels ----------------
+# ---------------- (b) worked scores ----------------
 bx = 10.15
 ax.plot([9.85, 9.85], [0.3, 7.45], color="#e3e1da", lw=1)
 ax.text(bx, 7.45, "(b)", fontsize=12, weight="bold")
-ax.text(bx + 0.45, 7.45, "Teachers and labels", fontsize=11.5, weight="bold")
-labels = [("Pre-execution", PRE, "GPT-6 Luna reads the history, sₜ and the action texts"),
-          ("Post-execution", POST, "also each action's sₜ₊₁ in draw 0 (teacher only, no head)"),
-          ("Lookahead K = 1 / 3", TEACH, "also draw 0 up to sₜ₊₂ / sₜ₊₄; final answer hidden"),
-          ("Observed outcome", OUTC, "best success on draws 0–2 (here a3, 3/3)")]
-for j, (title, color, text) in enumerate(labels):
-    y = 6.95 - j * 0.5
-    ax.add_patch(Rectangle((bx, y - 0.3), 0.05, 0.42, fc=color, ec="none"))
-    ax.text(bx + 0.15, y, title, fontsize=9.2, weight="bold", color=color, va="center")
-    ax.text(bx + 0.15, y - 0.2, text, fontsize=8.2, va="center")
-ax.text(bx + 0.15, 4.85, "Each label is a soft target over the actions (vote shares; ties split). No label uses draws 3–7.",
-        fontsize=8, va="center", color=MUTED)
-
-# ---------------- (c) worked scores ----------------
-ax.text(bx, 4.35, "(c)", fontsize=12, weight="bold")
-ax.text(bx + 0.45, 4.35, "Score every picker on draws 3–7 (example at left)", fontsize=11.5, weight="bold")
-ax.text(bx + 0.1, 3.95, "held-out success:  a1 60%   a2 20%   a3 80%   a4 20%   a5 40%", fontsize=8.6, color=HELD, weight="bold")
+ax.text(bx + 0.45, 7.45, "Score every picker on draws 3–7 (example at left)", fontsize=11.5, weight="bold")
+ax.text(bx + 0.1, 6.95, "held-out success:  a1 60%   a2 20%   a3 80%   a4 20%   a5 40%", fontsize=8.6, color=HELD, weight="bold")
 c_pick, c_calc, c_val = bx + 2.35, bx + 3.25, bx + 5.75
-ax.plot([bx, c_val + 0.05], [3.73, 3.73], color="#e3e1da", lw=0.8)
+ax.plot([bx, c_val + 0.05], [6.7, 6.7], color="#e3e1da", lw=0.8)
 for x, t, ha in [(bx + 0.1, "picker", "left"), (c_pick, "pick", "left"), (c_calc, "calculation", "left"), (c_val, "score", "right")]:
-    ax.text(x, 3.6, t, fontsize=8, color=MUTED, ha=ha, va="center")
+    ax.text(x, 6.55, t, fontsize=8, color=MUTED, ha=ha, va="center")
 rows = [("Uniform", None, "all 5", "(60 + 20 + 80 + 20 + 40) / 5", 44),
         ("SFT sample", None, "5 samples", "each action once: = uniform", 44),
         ("Pre-execution", PRE, "a1", "a1's rate", 60),
@@ -146,17 +141,17 @@ rows = [("Uniform", None, "all 5", "(60 + 20 + 80 + 20 + 40) / 5", 44),
         ("Observed outcome", OUTC, "a3", "a3's rate", 80),
         ("Oracle", INK, "a3", "best rate", 80)]
 for k, (name, color, pick, calc, val) in enumerate(rows):
-    y = 3.35 - k * 0.255
+    y = 6.28 - k * 0.27
     if color:
-        ax.scatter(bx + 0.18, y, s=55, color=color, edgecolor="white", linewidth=1, zorder=6)
+        ax.scatter(bx + 0.18, y, s=48, color=color, edgecolor="white", linewidth=1, zorder=6)
     ax.text(bx + 0.35, y, name, fontsize=8.6, color=color or MUTED, weight="bold" if color not in (None, INK) else "normal", va="center")
     ax.text(c_pick, y, pick, fontsize=8.6, va="center")
     ax.text(c_calc, y, calc, fontsize=8.6, va="center", color=MUTED)
     ax.text(c_val, y, f"{val}%", fontsize=8.6, va="center", ha="right", color=HELD, weight="bold")
-ax.plot([bx, c_val + 0.05], [1.6, 1.6], color="#e3e1da", lw=0.8)
-ax.text(bx + 0.1, 1.42, "Dots in (a) mark each picker's choice. SFT sample weights actions by how often the actor proposed them;\nhere all five proposals differ, so it equals uniform. A tied pick scores the mean of the tied actions.",
-        fontsize=7.8, color=MUTED, va="top")
-ax.text(bx + 0.1, 0.98, "A selection head (22.6 M, frozen SFT-4B features) is trained with soft CE on a label from (b) over 1,380\n"
-        "training states and scored the same way on its top-scoring action. Every score is averaged over the 348\n"
-        "test states (86 unseen tasks).", fontsize=7.8, va="top")
+ax.plot([bx, c_val + 0.05], [4.3, 4.3], color="#e3e1da", lw=0.8)
+ax.text(bx + 0.1, 4.12, "SFT sample weights actions by how often the actor proposed them; here all five\nproposals differ, so it equals uniform. "
+        "A tied pick scores the mean of the tied actions.", fontsize=7.8, color=MUTED, va="top", linespacing=1.4)
+ax.text(bx + 0.1, 3.5, "A selection head (22.6 M, frozen SFT-4B features) is trained with soft CE on one\nteacher's labels over 1,380 "
+        "training states and scored the same way on its\ntop-scoring action. Every score is averaged over the 348 test states (86 unseen tasks).",
+        fontsize=7.8, va="top", linespacing=1.4)
 fig.savefig(Path(__file__).with_suffix(".png"), dpi=170, bbox_inches="tight", facecolor="white")
