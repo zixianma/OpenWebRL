@@ -48,10 +48,10 @@ ax.text(0.6, 7.45, "One branching state and its continuations", fontsize=11.5, w
 hist_x, st_x, act_x, act_w = (0.45, 1.05), 1.95, 2.65, 1.2
 cols = [4.75 + 0.55 * k for k in range(5)]          # s_{t+1} .. s_{t+5}
 dots_x, end_x, cnt_x = cols[-1] + 0.5, cols[-1] + 0.95, cols[-1] + 1.25
-gw, gh = 0.27, 0.11                                  # rollout glyph
-row_h, gap = 0.135, 0.17
+gw, gh = 0.27, 0.09                                  # rollout glyph
+row_h, gap = 0.11, 0.13
 group_h = 8 * row_h
-tops = [5.95 - i * (group_h + gap) for i in range(4)]
+tops = [5.95 - i * (group_h + gap) for i in range(5)]
 y_head = 6.08
 for x, lab in [(hist_x[0], "sₜ₋₂"), (hist_x[1], "sₜ₋₁"), (st_x, "sₜ"), (act_x + act_w / 2, "action")] + \
               [(c, f"sₜ₊{'₁₂₃₄₅'[k]}") for k, c in enumerate(cols)] + [(dots_x, "…"), (end_x, "judge")]:
@@ -71,15 +71,16 @@ screen(st_x, mid_all, 0.62, 0.46, ec=INK, lw=1.4)
 arrow(hist_x[1] + 0.22, mid_all, st_x - 0.32, mid_all, ms=7, lw=0.9)
 ax.text(st_x, mid_all - 0.33, "task + history", ha="center", va="top", fontsize=7.8, color=MUTED)
 
-actions = ['click "Search"', 'type "red shoes"', "scroll down", 'click "Deals"']
-outcomes = [[1, 0, 1, 1, 0, 1, 1, 0], [0, 0, 1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 0, 0, 0, 1, 0, 0]]
+actions = ['click "Search"', 'type "red shoes"', "scroll down", 'click "Deals"', "go back"]
+outcomes = [[1, 0, 1, 1, 0, 1, 1, 0], [0, 0, 1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 1, 1, 1], [0, 0, 0, 0, 0, 1, 0, 0], [0, 1, 0, 1, 0, 0, 1, 0]]
+PICKS = {"a1": [PRE, POST], "a3": [TEACH, OUTC, INK]}      # illustrative picks; INK = oracle
 rng = random.Random(7)
 for i, (name, outs) in enumerate(zip(actions, outcomes)):
     top = tops[i]; mid = top - group_h / 2
     ax.plot([st_x + 0.32, act_x], [mid_all, mid], color=LINE, lw=1.0, zorder=1)
-    rbox(act_x, mid - 0.24, act_w, 0.48, ec=INK, lw=1.0)
-    ax.text(act_x + act_w / 2, mid + 0.08, f"a{i + 1}", ha="center", va="center", fontsize=9, weight="bold")
-    ax.text(act_x + act_w / 2, mid - 0.12, name, ha="center", va="center", fontsize=7.4, color=MUTED)
+    rbox(act_x, mid - 0.21, act_w, 0.42, ec=INK, lw=1.0)
+    ax.text(act_x + act_w / 2, mid + 0.07, f"a{i + 1}", ha="center", va="center", fontsize=9, weight="bold")
+    ax.text(act_x + act_w / 2, mid - 0.11, name, ha="center", va="center", fontsize=7.4, color=MUTED)
     band_x0, band_x1 = cols[0] - 0.42, end_x + 0.18
     ax.add_patch(Rectangle((band_x0, top - 3 * row_h), band_x1 - band_x0, 3 * row_h, fc=OUTC_BG, ec="none", zorder=0))
     ax.add_patch(Rectangle((band_x0, top - 8 * row_h), band_x1 - band_x0, 5 * row_h, fc=HELD_BG, ec="none", zorder=0))
@@ -101,6 +102,8 @@ for i, (name, outs) in enumerate(zip(actions, outcomes)):
     a, h = sum(outs[:3]), sum(outs[3:])
     ax.text(cnt_x, top - 1.5 * row_h, f"{a}/3", va="center", fontsize=8.5, color=OUTC, weight="bold")
     ax.text(cnt_x, top - 5.5 * row_h, f"{h}/5 = {20 * h}%", va="center", fontsize=8.5, color=HELD, weight="bold")
+    for j, color in enumerate(PICKS.get(f"a{i + 1}", [])):      # which picker chose this action
+        ax.scatter(cnt_x + 0.98 + 0.2 * j, top - 5.5 * row_h, s=70, color=color, edgecolor="white", linewidth=1.2, zorder=6)
 
 ky = 0.55
 for x, fc, ec, text in [(0.3, OUTC_BG, OUTC, "draws 0–2: outcome labels"), (3.0, HELD_BG, HELD, "draws 3–7: evaluation only")]:
@@ -130,27 +133,28 @@ ax.text(bx + 0.15, 4.85, "Each label is a soft target over the actions (vote sha
 # ---------------- (c) worked scores ----------------
 ax.text(bx, 4.35, "(c)", fontsize=12, weight="bold")
 ax.text(bx + 0.45, 4.35, "Score every picker on draws 3–7 (example at left)", fontsize=11.5, weight="bold")
-rate = {"a1": 60, "a2": 20, "a3": 80, "a4": 20}
-ax.text(bx + 0.1, 3.95, "held-out success:  a1 60%   a2 20%   a3 80%   a4 20%", fontsize=8.6, color=HELD, weight="bold")
+ax.text(bx + 0.1, 3.95, "held-out success:  a1 60%   a2 20%   a3 80%   a4 20%   a5 40%", fontsize=8.6, color=HELD, weight="bold")
 c_pick, c_calc, c_val = bx + 2.35, bx + 3.25, bx + 5.75
 ax.plot([bx, c_val + 0.05], [3.73, 3.73], color="#e3e1da", lw=0.8)
 for x, t, ha in [(bx + 0.1, "picker", "left"), (c_pick, "pick", "left"), (c_calc, "calculation", "left"), (c_val, "score", "right")]:
     ax.text(x, 3.6, t, fontsize=8, color=MUTED, ha=ha, va="center")
-rows = [("Uniform", MUTED, "all 4", "(60 + 20 + 80 + 20) / 4", 45),
-        ("SFT sample", MUTED, "5 samples", "(2·60 + 20 + 80 + 20) / 5", 48),
-        ("Pre-execution", PRE, "a2", "a2's rate", 20),
+rows = [("Uniform", None, "all 5", "(60 + 20 + 80 + 20 + 40) / 5", 44),
+        ("SFT sample", None, "5 samples", "each action once: = uniform", 44),
+        ("Pre-execution", PRE, "a1", "a1's rate", 60),
         ("Post-execution", POST, "a1", "a1's rate", 60),
         ("Lookahead K = 3", TEACH, "a3", "a3's rate", 80),
         ("Observed outcome", OUTC, "a3", "a3's rate", 80),
-        ("Oracle", MUTED, "a3", "best rate", 80)]
+        ("Oracle", INK, "a3", "best rate", 80)]
 for k, (name, color, pick, calc, val) in enumerate(rows):
     y = 3.35 - k * 0.255
-    ax.text(bx + 0.1, y, name, fontsize=8.6, color=color, weight="bold" if color != MUTED else "normal", va="center")
+    if color:
+        ax.scatter(bx + 0.18, y, s=55, color=color, edgecolor="white", linewidth=1, zorder=6)
+    ax.text(bx + 0.35, y, name, fontsize=8.6, color=color or MUTED, weight="bold" if color not in (None, INK) else "normal", va="center")
     ax.text(c_pick, y, pick, fontsize=8.6, va="center")
     ax.text(c_calc, y, calc, fontsize=8.6, va="center", color=MUTED)
     ax.text(c_val, y, f"{val}%", fontsize=8.6, va="center", ha="right", color=HELD, weight="bold")
 ax.plot([bx, c_val + 0.05], [1.6, 1.6], color="#e3e1da", lw=0.8)
-ax.text(bx + 0.1, 1.42, "SFT sample: the actor proposed a1 twice and a2, a3, a4 once each.\nA tied pick scores the mean of the tied actions.",
+ax.text(bx + 0.1, 1.42, "Dots in (a) mark each picker's choice. SFT sample weights actions by how often the actor proposed them;\nhere all five proposals differ, so it equals uniform. A tied pick scores the mean of the tied actions.",
         fontsize=7.8, color=MUTED, va="top")
 ax.text(bx + 0.1, 0.98, "A selection head (22.6 M, frozen SFT-4B features) is trained with soft CE on a label from (b) over 1,380\n"
         "training states and scored the same way on its top-scoring action. Every score is averaged over the 348\n"
