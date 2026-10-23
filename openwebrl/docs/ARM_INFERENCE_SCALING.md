@@ -1812,26 +1812,55 @@ Native request/model identity, selected-only execution, benchmark-native GPT-4o 
 
 <a id="cuawright-native-local100-closeout-20261023"></a>
 
-## Native CUAWright local100: qualified evidence and accounting (October 23, 2026)
+## Native CUAWright local100: Luna high and qualified GPT-5.4 (October 23, 2026)
 
-**Scientific evidence checked; budget audit failed.** 81 successes across 100 fixed tasks; 96 valid and 4 invalid dispositions. Valid-only success is 84.4%. Two individual browser-start caps were exceeded by at least 8 starts in total. Scheduler allocations are terminal; episode-end cleanup and actual concurrency remain unverified for one actor-launched local-CDP browser.
+**GPT-6 Luna high achieved 68 successes on 100 fixed tasks: 93 valid, 7 invalid, 68.0% overall and 73.1% valid-only.** All 19 registered attempts are terminal, and the independent audit passes scientific settings, every attempt's usage, per-shard caps, browser ownership/teardown and canonical W&B reconciliation. GPT-5.4 xhigh achieved 81.0% overall on the same task subset, but its browser-start budget audit failed; it remains a qualified descriptive result.
 
 <details>
-<summary>Protocol, all-attempt accounting and comparability</summary>
+<summary>Protocol and comparability</summary>
 
-Native CUAWright runs GPT-5.4 xhigh with 20,000 output tokens, 100 decisions, compaction every 20 decisions, persistent terminal/browser sessions and the native self-reflection completion gate, using local Chromium. Independent official WebJudge uses GPT-4o-2024-08-06. Saved original outcomes, mechanical recovery attempts and external regrades remain preserved.
+Both native runs use local Chromium, 20,000 actor output tokens, up to 100 decisions, compaction every 20 decisions, persistent terminal/browser sessions and native self-reflection. Luna uses high reasoning; GPT-5.4 uses xhigh. Independent official WebJudge uses GPT-4o-2024-08-06. Online helpers are included in model usage and task latency; external judging is excluded from both and accounted separately. Saved original outcomes, mechanical recoveries and grading attempts remain preserved.
 
-| Accounting scope | Physical calls | Known-usage calls | Unknown-usage calls | Known-usage cost, USD | Unknown-usage reserves, USD | Conservative accounted cost, USD |
-|---|---:|---:|---:|---:|---:|---:|
-| Actor and online helpers, all attempts |12135|12128|7|348.649556|4.932825|353.582380|
-| External judge, all attempts |1284|1284|0|7.506035|0.000000|7.506035|
+This is a local-browser, 100-task subset, rather than the paper's full 300-task environment. Model/reasoning differences, source adaptations, recovery history and live web conditions prevent a causal model-only or horizon-only interpretation. The separate four-method/three-benchmark BrowserCode tables and plots retain their existing protocol and denominators.
 
-Unknown-usage reservations are conservative accounting bounds, not observed billed cost. Model cost and task latency exclude external judging; online helpers remain included. Efficiency means condition on 96 valid tasks. 8 valid failures reached the 100-decision cap; this count alone does not identify a horizon effect.
-
-Different model, native agent/helper behavior, browser conditions and horizon prevent a causal comparison with earlier 30-decision wrappers. The subset contains 100 tasks rather than the paper's full 300.
-
-Scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af5915765c48962530a8de1e6cdda7cb54ec44`. Terminal receipt SHA-256: `d8cb254d3ea42445b5d12cd9c11093878e7b4e15bb8f15636a0557dc839b8d2a`.
+Luna's valid-task mean latency is 1,102.2 seconds, with 31.4 recorded browser batches and 59.1 actor decisions (93 tasks); GPT-5.4's corresponding means are 1,495.7 seconds, 24.9 batches and 58.8 decisions (96 tasks). Real command stalls and cleanup remain in latency. Means condition on different valid-task sets.
 
 </details>
 
-[Results table](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023) · [Aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
+<details>
+<summary>All-attempt accounting and caps</summary>
+
+| Method and accounting scope | Physical calls | Known-usage calls | Unknown-usage calls | Known-usage cost, USD | Unknown-usage reserves, USD | Conservative accounted cost, USD |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna actor, compaction and online helpers |23375|23368|7|8.612796|0.060627|8.673423|
+| Luna external judge |1807|1807|0|9.759095|0.000000|9.759095|
+| GPT-5.4 actor and online helpers |12135|12128|7|348.649556|4.932825|353.582380|
+| GPT-5.4 external judge |1284|1284|0|7.506035|0.000000|7.506035|
+
+Luna's model pool includes 23,182 generation calls and 193 metered input-token-count calls. Those 193 calls consume physical call slots at zero model cost; their counts are separate from generated tokens. Known generation usage totals 198,475,909 input tokens (168,956,830 cached), 6,472,678 output tokens and 3,965,679 reasoning output tokens. Unknown-usage reservations are conservative bounds, not observed billed cost.
+
+All Luna compute and API/browser caps pass independently, including prior failures and repairs; unused balances were not transferred. Three tasks exhausted their shard's 3,100-model-call cap and remain execution-invalid. Exact per-shard bounds were preserved; the campaign was not extended to force all episodes through 100 decisions. All scheduler allocations are terminal and all physical browser reservations/owned teardown are reconciled.
+
+</details>
+
+<details>
+<summary>Invalid outcomes, horizon limits and historical qualifications</summary>
+
+Luna has seven invalid outcomes: three model-call-cap failures, one remaining input-admission failure and three native-complete episodes whose paid judge responses could not be parsed. The remaining admission case had 41 model calls available, insufficient to fund a full 100-decision path plus compaction before helpers; an early submission was possible, so this is a full-horizon feasibility choice rather than a claim that the gateway prohibited every possible retry. Valid outcomes were preserved; no unchanged episode or grading retries were performed.
+
+Of Luna's 25 valid failures, 22 reached the 100-decision limit. GPT-5.4 had eight such failures among 15 valid failures. These counts identify truncated trajectories, not successes recoverable by increasing the horizon.
+
+GPT-5.4 exceeded two individual browser-start caps by at least eight starts in total. One actor-launched local-CDP browser lacks verified episode-end cleanup and actual concurrency; allocation termination alone does not resolve those omissions. Its scientific result remains qualified rather than cap-compliant.
+
+</details>
+
+<details>
+<summary>Evidence digests</summary>
+
+Luna independent full audit SHA-256: `ee57545625545ad1c664397e1659d7d533a6fa0ec25d440de699bfaaa23b6ede`. Terminal/W&B receipt SHA-256: `2d6967f9b874b604a7660768f13ab9e2c522e108c5aad7bf196585d839e5dabd`. Every prior attempt and original outcome remains in the private evidence inventory; only arm aggregates are published.
+
+GPT-5.4 scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af5915765c48962530a8de1e6cdda7cb54ec44`. Terminal receipt SHA-256: `d8cb254d3ea42445b5d12cd9c11093878e7b4e15bb8f15636a0557dc839b8d2a`.
+
+</details>
+
+[Results table](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023) · [Luna aggregate metrics](arm_results/cuawright_luna_high_local100_20261023/aggregate.json) · [GPT-5.4 aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)

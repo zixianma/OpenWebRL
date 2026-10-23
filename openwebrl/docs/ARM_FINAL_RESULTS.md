@@ -159,25 +159,37 @@ For a matched comparison across the full cohort, the following rows use only the
 
 <a id="cuawright-native-local100-20261023"></a>
 
-## Native CUAWright: qualified 100-task local reproduction
+## Native CUAWright: 100-task local results
 
-**Budget audit failed:** two browser-start caps were exceeded; one case lacks verified episode-end cleanup and actual concurrency. The following is an independently checked, qualified descriptive result.
+**Luna high: 68.0% overall success, 73.1% valid-only; all attempts, caps and teardown independently verified.** The GPT-5.4 result remains qualified by its failed browser-start budget audit. Both use the same fixed 100 Online-Mind2Web tasks and local Chromium.
 
-| Method | Tasks | Valid | Invalid | Successes | Overall success | Valid-only success |
-|---|---:|---:|---:|---:|---:|---:|
-| Native CUAWright · GPT-5.4 xhigh · 100 decisions |100|96|4|81|81.0%|84.4%|
+| Method | Tasks | Valid | Invalid | Successes | Overall success | Valid-only success | Audit status |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Native CUAWright · GPT-6 Luna high · 100 decisions |100|93|7|68|68.0%|73.1%|Passed|
+| Native CUAWright · GPT-5.4 xhigh · 100 decisions |100|96|4|81|81.0%|84.4%|Budget audit failed; qualified|
 
-| Valid-task efficiency | Mean | Tasks |
-|---|---:|---:|
-| Task latency, seconds; external judge excluded |1495.7|96|
-| Recorded browser batches |24.9|96|
-| Actor decisions |58.8|96|
+| Method | Mean task latency, seconds | Mean browser batches | Mean actor decisions | Valid tasks |
+|---|---:|---:|---:|---:|
+| GPT-6 Luna high |1102.2|31.4|59.1|93|
+| GPT-5.4 xhigh |1495.7|24.9|58.8|96|
 
-All attempts incurred **$348.65 in known-usage model cost**, plus **$4.93 reserved for unknown usage**: **$353.58 conservatively accounted**, including online helpers. External judging is separate: **$7.51**.
+Latency excludes external judging and includes online helpers and actual tool stalls. Efficiency means condition on each method's valid tasks. These native 100-task results are separate from the four-method/three-benchmark BrowserCode comparison; model, reasoning settings, recovery history and live web conditions prevent causal attribution.
 
-This 100-task local-Chromium subset uses the native persistent-terminal/reflection agent and differs from the four-method/three-benchmark headline protocol. It is neither a full 300 paper reproduction nor a causal test of the 100-decision horizon.
+<details>
+<summary>All-attempt cost, remaining invalids and audit qualifications</summary>
 
-[Protocol and audit](ARM_INFERENCE_SCALING.md#cuawright-native-local100-closeout-20261023) · [Aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
+| Method | Known-usage model cost, USD | Unknown-usage reserves, USD | Conservative model total, USD | External judge cost, USD |
+|---|---:|---:|---:|---:|
+| GPT-6 Luna high |8.612796|0.060627|8.673423|9.759095|
+| GPT-5.4 xhigh |348.649556|4.932825|353.582380|7.506035|
+
+Model costs include online helpers and every attempt; external judging is separate. Reservations bound unknown historical usage and are not observed billed charges. Luna's seven invalid outcomes comprise three model-call-cap failures, one unrecovered input-admission failure, and three native-complete tasks with invalid judge parses. No unchanged episode or grading retries were used to replace these outcomes. Of Luna's 25 valid failures, 22 reached 100 decisions; that does not establish that a longer horizon would succeed.
+
+GPT-5.4 exceeded two browser-start caps by at least eight starts in total; one case lacks verified episode-end cleanup and actual concurrency. Its descriptive performance is preserved with these limitations.
+
+</details>
+
+[Protocol and audit](ARM_INFERENCE_SCALING.md#cuawright-native-local100-closeout-20261023) · [Luna aggregate metrics](arm_results/cuawright_luna_high_local100_20261023/aggregate.json) · [GPT-5.4 aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
 
 <a id="final-selection-head-ablations-20261021"></a>
 

@@ -1,0 +1,83 @@
+{
+  "schema": "cuawright-luna-high-local100-public-aggregate-v1",
+  "verified_complete": true,
+  "task_count": 100,
+  "valid_count": 93,
+  "invalid_count": 7,
+  "success_count": 68,
+  "limit_reached_count": 38,
+  "valid_failures_at_100_decisions": 22,
+  "overall_success_percent": 68,
+  "valid_success_percent": 73.11827956989248,
+  "all_recorded": {
+    "task_latency_seconds": {
+      "mean": 1114.5878556251525,
+      "denominator": 100
+    },
+    "actor_decisions": {
+      "mean": 60.26,
+      "denominator": 100
+    },
+    "browser_steps": {
+      "mean": 31.84,
+      "denominator": 100
+    }
+  },
+  "valid_only": {
+    "task_latency_seconds": {
+      "mean": 1102.2305134163107,
+      "denominator": 93
+    },
+    "actor_decisions": {
+      "mean": 59.096774193548384,
+      "denominator": 93
+    },
+    "browser_steps": {
+      "mean": 31.365591397849464,
+      "denominator": 93
+    }
+  },
+  "all_attempt_accounting": {
+    "model": {
+      "calls": 23375,
+      "known_calls": 23368,
+      "input_count_calls": 193,
+      "input_count_known_calls": 193,
+      "generation_calls": 23182,
+      "generation_known_calls": 23175,
+      "input_tokens": 198475909,
+      "cached_input_tokens": 168956830,
+      "cache_write_input_tokens": 29399215,
+      "cache_write_telemetry_missing_calls": 0,
+      "cache_write_conservative_input_upper_tokens": 29399215,
+      "output_tokens": 6472678,
+      "reasoning_output_tokens": 3965679,
+      "known_usd": 8.612795575000007,
+      "unknown_reserved_usd": 0.060627,
+      "all_attempt_charge_and_reservations_usd": 8.673422575000007
+    },
+    "judge": {
+      "calls": 1807,
+      "known_calls": 1807,
+      "input_count_calls": 0,
+      "input_count_known_calls": 0,
+      "generation_calls": 1807,
+      "generation_known_calls": 1807,
+      "input_tokens": 3291002,
+      "cached_input_tokens": 380800,
+      "cache_write_input_tokens": 0,
+      "cache_write_telemetry_missing_calls": 0,
+      "cache_write_conservative_input_upper_tokens": 0,
+      "output_tokens": 200759,
+      "reasoning_output_tokens": 0,
+      "known_usd": 9.759095,
+      "unknown_reserved_usd": 0.0,
+      "all_attempt_charge_and_reservations_usd": 9.759095
+    }
+  },
+  "independent_audit_sha256": "ee57545625545ad1c664397e1659d7d533a6fa0ec25d440de699bfaaa23b6ede",
+  "terminal_receipt_sha256": "2d6967f9b874b604a7660768f13ab9e2c522e108c5aad7bf196585d839e5dabd",
+  "cost_definition": "Model cost includes actor and online helpers; external judge is separate. Known observed charges and conservative reservations for unknown historical receipts are reported separately.",
+  "latency_definition": "Canonical task latency includes actor, online helpers and owned cleanup; excludes external judge. Each mean has its own denominator.",
+  "comparison_scope": "Native CUAWright with local Chromium, GPT-6 Luna high, up to100 decisions; descriptive result, not an exact paper-environment reproduction."
+}
