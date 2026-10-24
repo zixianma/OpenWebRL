@@ -1864,3 +1864,44 @@ GPT-5.4 scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af591
 </details>
 
 [Results table](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023) · [Luna aggregate metrics](arm_results/cuawright_luna_high_local100_20261023/aggregate.json) · [GPT-5.4 aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
+
+
+<a id="cuawright-native-selection-plan-20261023"></a>
+
+## Native CUAWright: three-arm selection comparison (awaiting approval)
+
+**Requested, not launched:** evaluate Luna high with three proposals and a Luna high selector, GPT-6 Sol high single, and GPT-6 Sol high with three proposals and a Sol high selector on the same fixed 100 Online-Mind2Web tasks. Reuse the independently audited Luna high single result (68 successes, 93 valid, 100 tasks) as a historical reference; preserve its outcomes and costs.
+
+| New arm | Proposal model / reasoning | Proposals per decision | Selector model / reasoning | Tasks | Planning model cost, USD | Hard model cap, USD |
+|---|---|---:|---|---:|---:|---:|
+| Luna N=3 + selection | GPT-6 Luna / high |3|GPT-6 Luna / high|100|22|100|
+| Sol single | GPT-6 Sol / high |1|—|100|173|500|
+| Sol N=3 + selection | GPT-6 Sol / high |3|GPT-6 Sol / high|100|437|1000|
+
+Planning estimates total about $632 for models plus $29 for external judging, approximately $662. These extrapolate recorded Luna role usage and frozen token prices; selector reasoning, changed action paths, cache behavior and Sol latency are unmeasured. The **hard API ceiling is $1,750: $1,600 models plus $150 external judging**. Approval of the exact new resources and caps is still required.
+
+Estimation sources: [audited native Luna accounting](#cuawright-native-local100-closeout-20261023), [official GPT-6 Sol pricing](https://developers.openai.com/api/docs/models/gpt-6-sol) and [official GPT-6 Luna pricing](https://developers.openai.com/api/docs/models/gpt-6-luna). At the frozen short-context rates, Sol costs 20 times Luna per input, cached-input, cache-write and output token; this is not a latency prediction.
+
+<details>
+<summary>Method, resource request and release gates</summary>
+
+N=3 applies at each normal native action/completion decision: generate three proposals from the same canonical history, select one with a separate same-model high-reasoning call, and execute only that proposal. Only the selected native response, reasoning state and tool-call identifiers enter subsequent actor history. Unselected proposals never execute, and the selector has no future outcomes or external-judge labels. A malformed candidate/selection or fatal transport error fails closed; no automatic resampling or first-candidate fallback is allowed.
+
+Preserve 100 native decisions, 20,000 output tokens per proposal and selector, compaction every 20 committed decisions, persistent terminal/browser sessions, local Chromium and the native self-reflection completion gate. Compaction remains one call per summary boundary. Helpers run only from selected native actions with the arm's exact model and retain their native request patterns, defaults and explicitly allowed overrides. Sol means exact `gpt-6-sol`. Single-call Sol leaves native action querying unchanged. N=3 is an explicit native-harness method intervention, not a claim of unchanged paper behavior.
+
+Request 10 CPU shards per arm, 10 tasks each: **30 jobs, each 0 GPUs, 4 CPUs, 16 GiB and 8 hours total across all attempts** (maximum 960 CPU-hours). At most two jobs per arm run concurrently: six jobs, 12 native tasks/browsers and 48 in-flight model requests globally. Each job allows two concurrent native tasks, eight in-flight model requests across all roles and 60 browser starts including failed starts. The new arms share this concurrency policy; the completed Luna single reference was collected earlier under different systems conditions, so its latency comparison is descriptive.
+
+| Per-shard limit, all attempts | Luna N=3 | Sol single | Sol N=3 |
+|---|---:|---:|---:|
+| Model cost, USD |10|50|100|
+| Physical model calls, including helpers and token-count probes |18000|10000|18000|
+| External judge cost, USD |5|5|5|
+| External judge calls |1100|1100|1100|
+| Browser starts |60|60|60|
+| Wall-clock budget, hours |8|8|8|
+
+No balances transfer across shards or arms; every failed attempt consumes the same original shard budget. The previous 3,100-model-call limit cannot fund a full N=3 horizon: ten tasks reaching 100 decisions require at least 4,000 proposal/selection generations, before summaries, helpers or token-count probes. Larger call limits do not waive dollar/time caps or guarantee uncensored completion.
+
+Two canaries per arm must independently pass native protocol, selected-only execution, physical usage, external judging and browser ownership checks before that arm's held shards are released. Independent arms can proceed concurrently. The adapter is an offline prototype; live metering, controller and confinement integration is not yet launch-ready. Validate those integrations offline before paid canaries; no live calls or jobs are authorized by preparation alone. Audit all 300 latest dispositions and every attempt, reconcile evaluation-only W&B runs and teardown, and publish only arm aggregates. Model cost and task latency include proposals, selection and online helpers, and exclude external judging. Reuse the frozen official GPT-4o WebJudge protocol for all three arms.
+
+</details>

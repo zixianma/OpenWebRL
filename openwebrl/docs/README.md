@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Native CUAWright three-arm selection plan: same 100 tasks, exact resources and API caps; awaiting approval](ARM_INFERENCE_SCALING.md#cuawright-native-selection-plan-20261023).
+
 [Native CUAWright local100: Luna high 68.0% overall / 73.1% valid-only, all-attempt audit passed; GPT-5.4 qualified result retained](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023).
 
 [OM2W Luna single high complete: all four methods on the original 300 tasks, common-valid efficiency, all-attempt cost and 30-decision failures](ARM_INFERENCE_SCALING.md#luna-single-high-om2w300-20261022).
