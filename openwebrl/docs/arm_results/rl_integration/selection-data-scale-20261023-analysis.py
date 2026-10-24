@@ -4,7 +4,8 @@
 Live: data-scale-20261023 runs (judged by terra at collection). References: earlier runs re-judged by replaying each
 committed judge request with gpt-5.6-terra (scripts/rejudge_crossbench_om2w.py). Overall = invalid counted as failure;
 paired bootstrap over the 300 tasks (10,000 resamples, seed 0). Offline: fixed-five.json / scores.json of each head.
-Writes selection-data-scale-20261023.json next to this script.
+WebVoyager / DeepShop (GPT-4o judge, unchanged) read directly; "mean" weights each benchmark 1/3 and is bootstrapped with
+tasks resampled within each benchmark. Writes selection-data-scale-20261023.json next to this script.
 """
 import json, glob, random, sys
 from pathlib import Path
@@ -62,4 +63,49 @@ for n in ('n250', 'n500', 'n1000', 'nall', 'n1380-1panel'):
     OUT['offline'][n] = dict(train=s['extra'], recipe=dict(batch_size=s['batch_size'], epochs=s['epochs'], last_epoch=s.get('last_epoch', False)),
                             validation=s['extra_validation'], fixed_five=f, distinct_head_minus_uniform=s['head_minus_uniform'])
 ledger = json.loads((RJ / 'ledger.json').read_text()); OUT['rejudge_cost'] = ledger
+(Path(__file__).resolve().parent / 'selection-data-scale-20261023.json').write_text(json.dumps(OUT, indent=1))
+
+# ---- WebVoyager + DeepShop and the three-benchmark mean ----
+def records(root):
+    out = {}
+    for f in (Path(root) / 'collection/records').glob('*.json'):
+        r = json.loads(f.read_text()); out[r.get('task_id', r['key'])] = r['reward'] if r['valid'] else None
+    return out
+SLUG = {'SFT 4B': 'sft1', 'Piotr ARM': 'piotr5', 'Piotr-data head (listwise, old)': 'head5-755d4cd49137',
+        'Ours outcome': 'head5-7586978ccf07', 'Ours K3': 'head5-11d5eff8ffe1', 'Ours K1': 'head5-fd5bf58b5fa6', 'Ours pre': 'head5-2af75856eeed',
+        'Piotr 250': 'head5-280d633b0ca8', 'Piotr 500': 'head5-605054a42c08', 'Piotr 1000': 'head5-18b1c8afcbbb',
+        'Piotr all 2587': 'head5-fc589b57c9e0', 'Piotr 1380 one-panel': 'head5-878e69f9264f'}
+def wvds_root(name, b):
+    s = SLUG[name]
+    base = {'SFT 4B': 'crossbench-full-t10-20261018', 'Piotr ARM': 'crossbench-full-t10-20261018',
+            'Piotr-data head (listwise, old)': 'crossbench-full-t10-20261018'}.get(name, 'sft-actions-full-20261021' if name.startswith('Ours') else 'data-scale-20261023')
+    return EV / base / b / s / b
+ALL = {n: {'online_mind2web': R[n]} for n in R}
+for n in R:
+    for b in ('webvoyager', 'deepshop'):
+        ALL[n][b] = records(wvds_root(n, b))
+BK = {b: sorted(ALL['SFT 4B'][b]) for b in ('online_mind2web', 'webvoyager', 'deepshop')}
+for n in ALL:
+    for b in BK: assert set(ALL[n][b]) == set(BK[b]), (n, b)
+def vec(n, b): return [1 if ALL[n][b][k] == 1 else 0 for k in BK[b]]
+def boot_mean(a, b_, n=10000):
+    rng = random.Random(0); diffs = {bb: [x - y for x, y in zip(vec(a, bb), vec(b_, bb))] for bb in BK}
+    point = sum(sum(d) / len(d) for d in diffs.values()) / 3
+    s = sorted(sum(sum(d[rng.randrange(len(d))] for _ in range(len(d))) / len(d) for d in diffs.values()) / 3 for _ in range(n))
+    return round(100 * point, 1), round(100 * s[int(.025 * n)], 1), round(100 * s[int(.975 * n)], 1)
+OUT['three_benchmarks'] = {}
+print(f"\n{'name':34s}  OM2W   WV     DS   | mean ov  mean vo | -SFT [CI] | -Piotr [CI]")
+for n in ALL:
+    row = {}
+    for b in BK:
+        v = ALL[n][b]; val = sum(x is not None for x in v.values()); suc = sum(x == 1 for x in v.values())
+        row[b] = dict(tasks=len(v), valid=val, success=suc, overall=round(100 * suc / len(v), 2), valid_only=round(100 * suc / val, 2))
+    row['mean_overall'] = round(sum(row[b]['overall'] for b in BK) / 3, 2); row['mean_valid_only'] = round(sum(row[b]['valid_only'] for b in BK) / 3, 2)
+    row['minus_sft4b'] = boot_mean(n, 'SFT 4B'); row['minus_piotr'] = boot_mean(n, 'Piotr ARM')
+    OUT['three_benchmarks'][n] = row
+    print(f"{n:34s} {row['online_mind2web']['overall']:5.1f} {row['webvoyager']['overall']:5.1f} {row['deepshop']['overall']:5.1f} | {row['mean_overall']:6.2f} {row['mean_valid_only']:6.2f} | {row['minus_sft4b']} | {row['minus_piotr']}")
+PAIRS = [('Piotr all 2587', 'Piotr 250'), ('Piotr 1000', 'Piotr 250'), ('Piotr all 2587', 'Piotr-data head (listwise, old)'),
+         ('Piotr 1380 one-panel', 'Ours K3'), ('Piotr 1380 one-panel', 'Ours outcome'), ('Piotr 1380 one-panel', 'Piotr all 2587')]
+OUT['three_benchmark_pairs'] = {f'{a} - {b}': boot_mean(a, b) for a, b in PAIRS}
+for k, v in OUT['three_benchmark_pairs'].items(): print(k, v)
 (Path(__file__).resolve().parent / 'selection-data-scale-20261023.json').write_text(json.dumps(OUT, indent=1))

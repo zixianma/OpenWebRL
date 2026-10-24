@@ -922,5 +922,459 @@
   "model": "gpt-5.6-terra",
   "spent_usd": 44.4648924999982,
   "calls": 2911
+ },
+ "three_benchmarks": {
+  "SFT 4B": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 275,
+    "success": 95,
+    "overall": 31.67,
+    "valid_only": 34.55
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 587,
+    "success": 264,
+    "overall": 44.37,
+    "valid_only": 44.97
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 149,
+    "success": 51,
+    "overall": 34.0,
+    "valid_only": 34.23
+   },
+   "mean_overall": 36.68,
+   "mean_valid_only": 37.92,
+   "minus_sft4b": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "minus_piotr": [
+    -7.6,
+    -11.3,
+    -4.0
+   ]
+  },
+  "Piotr ARM": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 263,
+    "success": 117,
+    "overall": 39.0,
+    "valid_only": 44.49
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 580,
+    "success": 312,
+    "overall": 52.44,
+    "valid_only": 53.79
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 148,
+    "success": 62,
+    "overall": 41.33,
+    "valid_only": 41.89
+   },
+   "mean_overall": 44.26,
+   "mean_valid_only": 46.72,
+   "minus_sft4b": [
+    7.6,
+    4.0,
+    11.3
+   ],
+   "minus_piotr": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "Piotr-data head (listwise, old)": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 265,
+    "success": 113,
+    "overall": 37.67,
+    "valid_only": 42.64
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 571,
+    "success": 305,
+    "overall": 51.26,
+    "valid_only": 53.42
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 147,
+    "success": 66,
+    "overall": 44.0,
+    "valid_only": 44.9
+   },
+   "mean_overall": 44.31,
+   "mean_valid_only": 46.99,
+   "minus_sft4b": [
+    7.6,
+    3.9,
+    11.3
+   ],
+   "minus_piotr": [
+    0.1,
+    -3.5,
+    3.7
+   ]
+  },
+  "Ours outcome": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 270,
+    "success": 94,
+    "overall": 31.33,
+    "valid_only": 34.81
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 587,
+    "success": 311,
+    "overall": 52.27,
+    "valid_only": 52.98
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 148,
+    "success": 63,
+    "overall": 42.0,
+    "valid_only": 42.57
+   },
+   "mean_overall": 41.87,
+   "mean_valid_only": 43.45,
+   "minus_sft4b": [
+    5.2,
+    1.8,
+    8.6
+   ],
+   "minus_piotr": [
+    -2.4,
+    -6.1,
+    1.3
+   ]
+  },
+  "Ours K3": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 267,
+    "success": 99,
+    "overall": 33.0,
+    "valid_only": 37.08
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 585,
+    "success": 304,
+    "overall": 51.09,
+    "valid_only": 51.97
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 150,
+    "success": 64,
+    "overall": 42.67,
+    "valid_only": 42.67
+   },
+   "mean_overall": 42.25,
+   "mean_valid_only": 43.91,
+   "minus_sft4b": [
+    5.6,
+    2.0,
+    9.2
+   ],
+   "minus_piotr": [
+    -2.0,
+    -5.5,
+    1.6
+   ]
+  },
+  "Ours K1": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 264,
+    "success": 93,
+    "overall": 31.0,
+    "valid_only": 35.23
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 580,
+    "success": 293,
+    "overall": 49.24,
+    "valid_only": 50.52
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 147,
+    "success": 57,
+    "overall": 38.0,
+    "valid_only": 38.78
+   },
+   "mean_overall": 39.41,
+   "mean_valid_only": 41.51,
+   "minus_sft4b": [
+    2.7,
+    -0.9,
+    6.4
+   ],
+   "minus_piotr": [
+    -4.8,
+    -8.6,
+    -1.1
+   ]
+  },
+  "Ours pre": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 268,
+    "success": 90,
+    "overall": 30.0,
+    "valid_only": 33.58
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 577,
+    "success": 272,
+    "overall": 45.71,
+    "valid_only": 47.14
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 149,
+    "success": 51,
+    "overall": 34.0,
+    "valid_only": 34.23
+   },
+   "mean_overall": 36.57,
+   "mean_valid_only": 38.32,
+   "minus_sft4b": [
+    -0.1,
+    -3.7,
+    3.5
+   ],
+   "minus_piotr": [
+    -7.7,
+    -11.4,
+    -4.1
+   ]
+  },
+  "Piotr 250": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 264,
+    "success": 109,
+    "overall": 36.33,
+    "valid_only": 41.29
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 574,
+    "success": 313,
+    "overall": 52.61,
+    "valid_only": 54.53
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 148,
+    "success": 54,
+    "overall": 36.0,
+    "valid_only": 36.49
+   },
+   "mean_overall": 41.65,
+   "mean_valid_only": 44.1,
+   "minus_sft4b": [
+    5.0,
+    1.1,
+    8.9
+   ],
+   "minus_piotr": [
+    -2.6,
+    -6.3,
+    1.1
+   ]
+  },
+  "Piotr 500": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 262,
+    "success": 106,
+    "overall": 35.33,
+    "valid_only": 40.46
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 586,
+    "success": 326,
+    "overall": 54.79,
+    "valid_only": 55.63
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 147,
+    "success": 55,
+    "overall": 36.67,
+    "valid_only": 37.41
+   },
+   "mean_overall": 42.26,
+   "mean_valid_only": 44.5,
+   "minus_sft4b": [
+    5.6,
+    1.7,
+    9.4
+   ],
+   "minus_piotr": [
+    -2.0,
+    -5.8,
+    1.8
+   ]
+  },
+  "Piotr 1000": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 260,
+    "success": 107,
+    "overall": 35.67,
+    "valid_only": 41.15
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 585,
+    "success": 318,
+    "overall": 53.45,
+    "valid_only": 54.36
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 145,
+    "success": 47,
+    "overall": 31.33,
+    "valid_only": 32.41
+   },
+   "mean_overall": 40.15,
+   "mean_valid_only": 42.64,
+   "minus_sft4b": [
+    3.5,
+    -0.2,
+    7.2
+   ],
+   "minus_piotr": [
+    -4.1,
+    -7.6,
+    -0.7
+   ]
+  },
+  "Piotr all 2587": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 258,
+    "success": 100,
+    "overall": 33.33,
+    "valid_only": 38.76
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 586,
+    "success": 320,
+    "overall": 53.78,
+    "valid_only": 54.61
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 148,
+    "success": 47,
+    "overall": 31.33,
+    "valid_only": 31.76
+   },
+   "mean_overall": 39.48,
+   "mean_valid_only": 41.71,
+   "minus_sft4b": [
+    2.8,
+    -1.0,
+    6.6
+   ],
+   "minus_piotr": [
+    -4.8,
+    -8.2,
+    -1.3
+   ]
+  },
+  "Piotr 1380 one-panel": {
+   "online_mind2web": {
+    "tasks": 300,
+    "valid": 263,
+    "success": 98,
+    "overall": 32.67,
+    "valid_only": 37.26
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "valid": 579,
+    "success": 317,
+    "overall": 53.28,
+    "valid_only": 54.75
+   },
+   "deepshop": {
+    "tasks": 150,
+    "valid": 142,
+    "success": 42,
+    "overall": 28.0,
+    "valid_only": 29.58
+   },
+   "mean_overall": 37.98,
+   "mean_valid_only": 40.53,
+   "minus_sft4b": [
+    1.3,
+    -2.5,
+    5.2
+   ],
+   "minus_piotr": [
+    -6.3,
+    -9.9,
+    -2.6
+   ]
+  }
+ },
+ "three_benchmark_pairs": {
+  "Piotr all 2587 - Piotr 250": [
+   -2.2,
+   -5.9,
+   1.7
+  ],
+  "Piotr 1000 - Piotr 250": [
+   -1.5,
+   -5.2,
+   2.2
+  ],
+  "Piotr all 2587 - Piotr-data head (listwise, old)": [
+   -4.8,
+   -8.5,
+   -1.1
+  ],
+  "Piotr 1380 one-panel - Ours K3": [
+   -4.3,
+   -8.1,
+   -0.5
+  ],
+  "Piotr 1380 one-panel - Ours outcome": [
+   -3.9,
+   -7.4,
+   -0.3
+  ],
+  "Piotr 1380 one-panel - Piotr all 2587": [
+   -1.5,
+   -5.0,
+   2.1
+  ]
  }
 }
