@@ -1,0 +1,400 @@
+{
+ "note": "From per-task outcome records saved for every evaluation (turn count, terminal status); no task payloads.",
+ "runs": {
+  "additive": {
+   "100": {
+    "episodes": 300,
+    "valid": 217,
+    "successes": 109,
+    "mean_steps_valid": 12.01,
+    "mean_steps_success": 9.77,
+    "mean_steps_failure": 14.28,
+    "turn_limit_failures": 4,
+    "aborted": 83,
+    "terminal_status": {
+     "aborted": 83,
+     "completed": 213,
+     "failed": 2,
+     "truncated": 2
+    }
+   },
+   "80": {
+    "episodes": 300,
+    "valid": 212,
+    "successes": 111,
+    "mean_steps_valid": 11.1,
+    "mean_steps_success": 8.49,
+    "mean_steps_failure": 13.97,
+    "turn_limit_failures": 6,
+    "aborted": 88,
+    "terminal_status": {
+     "aborted": 88,
+     "completed": 189,
+     "failed": 6,
+     "truncated": 17
+    }
+   },
+   "90": {
+    "episodes": 300,
+    "valid": 216,
+    "successes": 118,
+    "mean_steps_valid": 11.76,
+    "mean_steps_success": 9.5,
+    "mean_steps_failure": 14.49,
+    "turn_limit_failures": 9,
+    "aborted": 84,
+    "terminal_status": {
+     "aborted": 84,
+     "completed": 201,
+     "failed": 8,
+     "truncated": 7
+    }
+   }
+  },
+  "gate-b": {
+   "100": {
+    "episodes": 300,
+    "valid": 225,
+    "successes": 110,
+    "mean_steps_valid": 9.54,
+    "mean_steps_success": 8.55,
+    "mean_steps_failure": 10.49,
+    "turn_limit_failures": 2,
+    "aborted": 75,
+    "terminal_status": {
+     "aborted": 75,
+     "completed": 210,
+     "failed": 2,
+     "truncated": 13
+    }
+   },
+   "20": {
+    "episodes": 300,
+    "valid": 228,
+    "successes": 101,
+    "mean_steps_valid": 12.88,
+    "mean_steps_success": 9.78,
+    "mean_steps_failure": 15.35,
+    "turn_limit_failures": 31,
+    "aborted": 72,
+    "terminal_status": {
+     "aborted": 72,
+     "completed": 193,
+     "failed": 31,
+     "truncated": 4
+    }
+   },
+   "30": {
+    "episodes": 300,
+    "valid": 234,
+    "successes": 102,
+    "mean_steps_valid": 11.88,
+    "mean_steps_success": 8.86,
+    "mean_steps_failure": 14.21,
+    "turn_limit_failures": 22,
+    "aborted": 66,
+    "terminal_status": {
+     "aborted": 66,
+     "completed": 209,
+     "failed": 22,
+     "truncated": 3
+    }
+   },
+   "40": {
+    "episodes": 300,
+    "valid": 228,
+    "successes": 108,
+    "mean_steps_valid": 12.11,
+    "mean_steps_success": 9.87,
+    "mean_steps_failure": 14.13,
+    "turn_limit_failures": 21,
+    "aborted": 72,
+    "terminal_status": {
+     "aborted": 72,
+     "completed": 202,
+     "failed": 20,
+     "truncated": 6
+    }
+   },
+   "50": {
+    "episodes": 300,
+    "valid": 232,
+    "successes": 113,
+    "mean_steps_valid": 11.74,
+    "mean_steps_success": 9.55,
+    "mean_steps_failure": 13.82,
+    "turn_limit_failures": 14,
+    "aborted": 68,
+    "terminal_status": {
+     "aborted": 68,
+     "completed": 210,
+     "failed": 13,
+     "truncated": 9
+    }
+   },
+   "60": {
+    "episodes": 300,
+    "valid": 228,
+    "successes": 112,
+    "mean_steps_valid": 10.36,
+    "mean_steps_success": 9.01,
+    "mean_steps_failure": 11.67,
+    "turn_limit_failures": 1,
+    "aborted": 72,
+    "terminal_status": {
+     "aborted": 72,
+     "completed": 221,
+     "failed": 1,
+     "truncated": 6
+    }
+   },
+   "70": {
+    "episodes": 300,
+    "valid": 229,
+    "successes": 112,
+    "mean_steps_valid": 10.08,
+    "mean_steps_success": 9.04,
+    "mean_steps_failure": 11.07,
+    "turn_limit_failures": 3,
+    "aborted": 71,
+    "terminal_status": {
+     "aborted": 71,
+     "completed": 211,
+     "failed": 3,
+     "truncated": 15
+    }
+   },
+   "80": {
+    "episodes": 300,
+    "valid": 226,
+    "successes": 107,
+    "mean_steps_valid": 10.05,
+    "mean_steps_success": 9.05,
+    "mean_steps_failure": 10.95,
+    "turn_limit_failures": 2,
+    "aborted": 74,
+    "terminal_status": {
+     "aborted": 74,
+     "completed": 217,
+     "failed": 1,
+     "truncated": 8
+    }
+   },
+   "90": {
+    "episodes": 300,
+    "valid": 234,
+    "successes": 129,
+    "mean_steps_valid": 10.0,
+    "mean_steps_success": 9.26,
+    "mean_steps_failure": 10.9,
+    "turn_limit_failures": 1,
+    "aborted": 66,
+    "terminal_status": {
+     "aborted": 66,
+     "completed": 223,
+     "failed": 1,
+     "truncated": 10
+    }
+   }
+  },
+  "mixed-bonus": {
+   "90": {
+    "episodes": 300,
+    "valid": 233,
+    "successes": 122,
+    "mean_steps_valid": 9.57,
+    "mean_steps_success": 8.56,
+    "mean_steps_failure": 10.68,
+    "turn_limit_failures": 5,
+    "aborted": 67,
+    "terminal_status": {
+     "aborted": 67,
+     "completed": 219,
+     "failed": 5,
+     "truncated": 9
+    }
+   }
+  },
+  "outcome56": {
+   "10": {
+    "episodes": 300,
+    "valid": 251,
+    "successes": 88,
+    "mean_steps_valid": 16.1,
+    "mean_steps_success": 11.18,
+    "mean_steps_failure": 18.75,
+    "turn_limit_failures": 60,
+    "aborted": 49,
+    "terminal_status": {
+     "aborted": 49,
+     "completed": 181,
+     "failed": 62,
+     "truncated": 8
+    }
+   },
+   "20": {
+    "episodes": 300,
+    "valid": 243,
+    "successes": 93,
+    "mean_steps_valid": 14.62,
+    "mean_steps_success": 10.83,
+    "mean_steps_failure": 16.97,
+    "turn_limit_failures": 47,
+    "aborted": 57,
+    "terminal_status": {
+     "aborted": 57,
+     "completed": 190,
+     "failed": 47,
+     "truncated": 6
+    }
+   },
+   "30": {
+    "episodes": 300,
+    "valid": 250,
+    "successes": 97,
+    "mean_steps_valid": 11.72,
+    "mean_steps_success": 9.62,
+    "mean_steps_failure": 13.06,
+    "turn_limit_failures": 18,
+    "aborted": 50,
+    "terminal_status": {
+     "aborted": 50,
+     "completed": 229,
+     "failed": 18,
+     "truncated": 3
+    }
+   },
+   "40": {
+    "episodes": 300,
+    "valid": 240,
+    "successes": 103,
+    "mean_steps_valid": 11.15,
+    "mean_steps_success": 9.73,
+    "mean_steps_failure": 12.22,
+    "turn_limit_failures": 7,
+    "aborted": 60,
+    "terminal_status": {
+     "aborted": 60,
+     "completed": 226,
+     "failed": 7,
+     "truncated": 7
+    }
+   },
+   "50": {
+    "episodes": 300,
+    "valid": 239,
+    "successes": 102,
+    "mean_steps_valid": 10.8,
+    "mean_steps_success": 8.28,
+    "mean_steps_failure": 12.68,
+    "turn_limit_failures": 7,
+    "aborted": 61,
+    "terminal_status": {
+     "aborted": 61,
+     "completed": 225,
+     "failed": 7,
+     "truncated": 7
+    }
+   },
+   "60": {
+    "episodes": 300,
+    "valid": 245,
+    "successes": 117,
+    "mean_steps_valid": 12.27,
+    "mean_steps_success": 10.47,
+    "mean_steps_failure": 13.91,
+    "turn_limit_failures": 9,
+    "aborted": 55,
+    "terminal_status": {
+     "aborted": 55,
+     "completed": 228,
+     "failed": 9,
+     "truncated": 8
+    }
+   },
+   "70": {
+    "episodes": 300,
+    "valid": 243,
+    "successes": 112,
+    "mean_steps_valid": 10.97,
+    "mean_steps_success": 9.1,
+    "mean_steps_failure": 12.56,
+    "turn_limit_failures": 6,
+    "aborted": 57,
+    "terminal_status": {
+     "aborted": 57,
+     "completed": 232,
+     "failed": 6,
+     "truncated": 5
+    }
+   },
+   "80": {
+    "episodes": 300,
+    "valid": 248,
+    "successes": 124,
+    "mean_steps_valid": 10.18,
+    "mean_steps_success": 8.57,
+    "mean_steps_failure": 11.79,
+    "turn_limit_failures": 1,
+    "aborted": 52,
+    "terminal_status": {
+     "aborted": 52,
+     "completed": 235,
+     "failed": 1,
+     "truncated": 12
+    }
+   },
+   "90": {
+    "episodes": 300,
+    "valid": 237,
+    "successes": 107,
+    "mean_steps_valid": 9.59,
+    "mean_steps_success": 8.08,
+    "mean_steps_failure": 10.83,
+    "turn_limit_failures": 0,
+    "aborted": 63,
+    "terminal_status": {
+     "aborted": 63,
+     "completed": 228,
+     "truncated": 9
+    }
+   }
+  },
+  "uniform8": {
+   "60": {
+    "episodes": 300,
+    "valid": 234,
+    "successes": 127,
+    "mean_steps_valid": 10.57,
+    "mean_steps_success": 9.5,
+    "mean_steps_failure": 11.85,
+    "turn_limit_failures": 5,
+    "aborted": 66,
+    "terminal_status": {
+     "aborted": 66,
+     "completed": 227,
+     "failed": 3,
+     "truncated": 4
+    }
+   }
+  },
+  "outcome48": {
+   "100": {
+    "episodes": 300,
+    "valid": 227,
+    "successes": 104,
+    "mean_steps_valid": 9.62,
+    "mean_steps_success": 8.19,
+    "mean_steps_failure": 10.82,
+    "turn_limit_failures": 4,
+    "aborted": 73,
+    "terminal_status": {
+     "aborted": 73,
+     "completed": 218,
+     "failed": 4,
+     "truncated": 5
+    }
+   }
+  }
+ }
+}

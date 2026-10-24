@@ -17,7 +17,7 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
 3. **RL taught the policy to finish, then to finish too early.** Hitting the 30-turn limit
    falls from 59 to 0 episodes (56-group run, iterations 10 → 90). Over the same period
    wrong answers rise from 16 to 56 and failed episodes shorten from 18.8 to 10.8 steps.
-4. **A harness error is the largest growing failure.** Invalid episodes with an empty-message
+4. **A harness error is the largest growing failure** ([cause and fix](#rl-behavior-step-error-20261024)). Invalid episodes with an empty-message
    browser step error grow from 24 to 40–44 per 300 tasks. No task has one in all five
    checkpoints examined, and 7 of the 40 at 56-group iteration 90 occurred on the agent's
    final `done` call. During training (48-group run) 10–15% of rollouts are invalid and
@@ -30,6 +30,13 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
 7. **Larger groups make more groups usable, but at a cost.** Among first-iteration groups
    (SFT checkpoint), 41–48% are mixed with 5 rollouts and 53% with 8, which costs 1.6× more
    rollouts per group. Clean pass@K for K = 5, 8 and 16 is [pending](#rl-behavior-passk-20261024).
+
+![RL behavior overview](rl_results/rl_behavior_overview.png)
+
+*(a) Held-out episode categories for the 56-group run. (b) Mean steps of failed valid
+episodes for four runs, with 30-turn failures as bars. (c) Training-rollout behavior of the
+48-group run.* [PDF](rl_results/rl_behavior_overview.pdf) · script
+`scripts/plot_rl_behavior.py` · [episode lengths](arm_results/rl_integration/behavior/rl-eval-episode-length-20261024.json)
 
 <a id="rl-behavior-noise-20261024"></a>
 ## Evaluation noise and fair comparison
@@ -156,6 +163,42 @@ These use only fields saved for every evaluation, so Gate B and additive are inc
   once but only 20 at every checkpoint. For Gate B the figures are 225 and 22. Most solved
   tasks are solved only some of the time.
 
+<a id="rl-behavior-step-error-20261024"></a>
+## Empty-message browser step error: cause and fix
+
+**Symptom.** The client logs `env.step() failed, marking as ABORTED:` with an empty
+message, and the episode becomes invalid.
+
+**Cause.** The local env client gives each `/step` request 300 seconds, and an
+`aiohttp`/`asyncio` timeout carries no message. On the server, every step runs a
+clickable-element scan (`page.evaluate`) before and after the action, then a screenshot and
+the title of every open tab. Only the screenshot had a timeout. A page whose JavaScript
+thread is busy, or one stalled tab, can therefore hold the step until the client gives up.
+
+- **Timing evidence:** one failed task (56-group, iteration 90) took 7.4 minutes in
+  total, consistent with ordinary steps followed by a single step held to the 300-second
+  limit.
+- **The failing call can be `done`:** of 422 step errors across the analyzed checkpoints,
+  64 happened on `done`, which itself does nothing. The failure must therefore come from the
+  observation around it.
+- **Tabs are only weakly linked:** episodes that opened a new tab have step errors in
+  13.3% of cases, against 10.5% for single-tab episodes.
+- **Dialogs are not the cause:** they are already intercepted.
+
+**Fix** (commit `c9caa02`, `tests/test_env_step_bounds.py`). It applies to sources prepared
+from now on; running jobs use frozen sources.
+1. The clickable-element scan is limited to 30 s and falls back to an empty list.
+2. Each tab-title read is limited to 5 s and falls back to an empty title.
+3. Steps slower than 20 s log cumulative per-phase times, so the next runs show exactly
+   which call stalls.
+4. If `env.step` fails on a step that contains `done`, the episode keeps the agent's final
+   answer and is judged normally (`env_error_after_done` is recorded) instead of being
+   discarded.
+
+**Validation pending.** The fix has not yet run on GPUs. Expect fewer invalid episodes,
+so evaluations with the fix are not directly comparable to earlier ones; compare them on a
+paired re-run.
+
 <a id="rl-behavior-training-20261024"></a>
 ## Training-time behavior · outcome-only 48 groups
 
@@ -223,4 +266,4 @@ logs (SFT checkpoint) give this fraction for free:
 | Iteration-90 repeats ×3: 48 groups, 56 groups, Gate B | 385593 | Repeat-level noise at a matched endpoint on one harness; action-level trajectories for three of the four runs |
 | Step-0 pass@K | 385599 | Clean pass@K and mixed-group probability for K = 5, 8, 16 |
 | Uniform G8 60 → 90 | 385579 → 385580 | G8 at the same endpoint as the other runs |
-| Empty-message step error | CPU diagnosis | Root cause of the growing invalid rate |
+| Step-error fix validation | Next GPU run with the fixed source | Invalid-rate change; slow-phase logs locate the stalling call |
