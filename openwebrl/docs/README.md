@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Native CUAWright three-arm selection plan: same 100 tasks, approved exact resources and API caps; Luna N=3 released after independent canary audit](ARM_INFERENCE_SCALING.md#cuawright-native-selection-plan-20261023).
+[Native CUAWright three-arm selection plan: same 100 tasks, all three arms released after independent canary audits; full results pending](ARM_INFERENCE_SCALING.md#cuawright-native-selection-plan-20261023).
 
 [Native CUAWright local100: Luna high 68.0% overall / 73.1% valid-only, all-attempt audit passed; GPT-5.4 qualified result retained](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023).
 
