@@ -1868,9 +1868,9 @@ GPT-5.4 scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af591
 
 <a id="cuawright-native-selection-plan-20261023"></a>
 
-## Native CUAWright: three-arm selection comparison (awaiting approval)
+## Native CUAWright: three-arm selection comparison (canaries queued)
 
-**Requested, not launched:** evaluate Luna high with three proposals and a Luna high selector, GPT-6 Sol high single, and GPT-6 Sol high with three proposals and a Sol high selector on the same fixed 100 Online-Mind2Web tasks. Reuse the independently audited Luna high single result (68 successes, 93 valid, 100 tasks) as a historical reference; preserve its outcomes and costs.
+**Approved; canaries queued:** evaluate Luna high with three proposals and a Luna high selector, GPT-6 Sol high single, and GPT-6 Sol high with three proposals and a Sol high selector on the same fixed 100 Online-Mind2Web tasks. Reuse the independently audited Luna high single result (68 successes, 93 valid, 100 tasks) as a historical reference; preserve its outcomes and costs.
 
 | New arm | Proposal model / reasoning | Proposals per decision | Selector model / reasoning | Tasks | Planning model cost, USD | Hard model cap, USD |
 |---|---|---:|---|---:|---:|---:|
@@ -1878,7 +1878,7 @@ GPT-5.4 scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af591
 | Sol single | GPT-6 Sol / high |1|—|100|173|500|
 | Sol N=3 + selection | GPT-6 Sol / high |3|GPT-6 Sol / high|100|437|1000|
 
-Planning estimates total about $632 for models plus $29 for external judging, approximately $662. These extrapolate recorded Luna role usage and frozen token prices; selector reasoning, changed action paths, cache behavior and Sol latency are unmeasured. The **hard API ceiling is $1,750: $1,600 models plus $150 external judging**. Approval of the exact new resources and caps is still required.
+Planning estimates total about $632 for models plus $29 for external judging, approximately $662. These extrapolate recorded Luna role usage and frozen token prices; selector reasoning, changed action paths, cache behavior and Sol latency are unmeasured. The **hard API ceiling is $1,750: $1,600 models plus $150 external judging**. The user approved these exact resources and caps; approval does not waive the independent release gates.
 
 Estimation sources: [audited native Luna accounting](#cuawright-native-local100-closeout-20261023), [official GPT-6 Sol pricing](https://developers.openai.com/api/docs/models/gpt-6-sol) and [official GPT-6 Luna pricing](https://developers.openai.com/api/docs/models/gpt-6-luna). At the frozen short-context rates, Sol costs 20 times Luna per input, cached-input, cache-write and output token; this is not a latency prediction.
 
@@ -1902,6 +1902,6 @@ Request 10 CPU shards per arm, 10 tasks each: **30 jobs, each 0 GPUs, 4 CPUs, 16
 
 No balances transfer across shards or arms; every failed attempt consumes the same original shard budget. The previous 3,100-model-call limit cannot fund a full N=3 horizon: ten tasks reaching 100 decisions require at least 4,000 proposal/selection generations, before summaries, helpers or token-count probes. Larger call limits do not waive dollar/time caps or guarantee uncensored completion.
 
-Two canaries per arm must independently pass native protocol, selected-only execution, physical usage, external judging and browser ownership checks before that arm's held shards are released. Independent arms can proceed concurrently. The adapter is an offline prototype; live metering, controller and confinement integration is not yet launch-ready. Validate those integrations offline before paid canaries; no live calls or jobs are authorized by preparation alone. Audit all 300 latest dispositions and every attempt, reconcile evaluation-only W&B runs and teardown, and publish only arm aggregates. Model cost and task latency include proposals, selection and online helpers, and exclude external judging. Reuse the frozen official GPT-4o WebJudge protocol for all three arms.
+Two canaries per arm must independently pass native protocol, selected-only execution, physical usage, external judging and browser ownership checks before that arm's held shards are released. Independent arms can proceed concurrently. Independent prelaunch review passed after full confined tests of all three arms, the real local gateway with mocked provider responses, selected-only execution and private-evidence isolation. No provider calls were used for preparation. All 30 CPU jobs are registered; three canary jobs are released and pending scheduler priority, while 27 remain held. Each released job first runs a model-free browser diagnostic, then its two fixed canaries. No arm receives full release before its independent live canary audit. A persistent supervisor queues active-agent checks for startup, diagnosis and repair within the original caps. Audit all 300 latest dispositions and every attempt, reconcile evaluation-only W&B runs and teardown, and publish only arm aggregates. Model cost and task latency include proposals, selection and online helpers, and exclude external judging. Reuse the frozen official GPT-4o WebJudge protocol for all three arms.
 
 </details>
