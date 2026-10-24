@@ -1,0 +1,210 @@
+{
+ "note": "Failure categories need saved trajectories; Gate B and additive evaluation trajectories were pruned earlier, so those cohorts are excluded here (outcomes only, see rl-behavior-20261024.json).",
+ "rule": "first match: success; invalid:<cause>; turn_limit; repeat_loop (identical non-wait action >=3); claims_infeasible (done answer says impossible); tool_errors (>=30% failed tool calls); wrong_answer",
+ "cohorts": {
+  "arm-mixed-bonus-iter90-340425": {
+   "tasks": 300,
+   "categories": {
+    "success": 122,
+    "wrong_answer": 52,
+    "invalid:env_step_error": 44,
+    "claims_infeasible": 25,
+    "invalid:start_page_failed": 21,
+    "repeat_loop": 18,
+    "no_done_other": 11,
+    "turn_limit": 5,
+    "invalid:rollout_timeout": 2
+   },
+   "valid_failures": 111,
+   "mean_steps_valid_failure": 10.675675675675675,
+   "mean_steps_success": 8.557377049180328
+  },
+  "outcome-only-56groups-20261006-iter10": {
+   "tasks": 300,
+   "categories": {
+    "success": 88,
+    "turn_limit": 59,
+    "repeat_loop": 40,
+    "claims_infeasible": 37,
+    "invalid:env_step_error": 24,
+    "invalid:start_page_failed": 22,
+    "wrong_answer": 16,
+    "no_done_other": 11,
+    "invalid:rollout_timeout": 3
+   },
+   "valid_failures": 163,
+   "mean_steps_valid_failure": 18.791411042944784,
+   "mean_steps_success": 11.181818181818182
+  },
+  "outcome-only-56groups-20261006-iter20": {
+   "tasks": 300,
+   "categories": {
+    "success": 93,
+    "turn_limit": 48,
+    "repeat_loop": 42,
+    "claims_infeasible": 38,
+    "invalid:env_step_error": 32,
+    "invalid:start_page_failed": 21,
+    "wrong_answer": 17,
+    "no_done_other": 5,
+    "invalid:rollout_timeout": 4
+   },
+   "valid_failures": 150,
+   "mean_steps_valid_failure": 16.986666666666668,
+   "mean_steps_success": 10.827956989247312
+  },
+  "outcome-only-56groups-20261006-iter30": {
+   "tasks": 300,
+   "categories": {
+    "success": 97,
+    "claims_infeasible": 52,
+    "repeat_loop": 50,
+    "wrong_answer": 29,
+    "invalid:env_step_error": 26,
+    "invalid:start_page_failed": 22,
+    "turn_limit": 19,
+    "no_done_other": 3,
+    "invalid:rollout_timeout": 2
+   },
+   "valid_failures": 153,
+   "mean_steps_valid_failure": 13.065359477124183,
+   "mean_steps_success": 9.618556701030927
+  },
+  "outcome-only-56groups-20261006-iter40": {
+   "tasks": 300,
+   "categories": {
+    "success": 103,
+    "repeat_loop": 52,
+    "claims_infeasible": 44,
+    "invalid:env_step_error": 35,
+    "wrong_answer": 27,
+    "invalid:start_page_failed": 22,
+    "turn_limit": 7,
+    "no_done_other": 7,
+    "invalid:rollout_timeout": 3
+   },
+   "valid_failures": 137,
+   "mean_steps_valid_failure": 12.218978102189782,
+   "mean_steps_success": 9.728155339805825
+  },
+  "outcome-only-56groups-20261006-iter50": {
+   "tasks": 300,
+   "categories": {
+    "success": 102,
+    "repeat_loop": 52,
+    "claims_infeasible": 47,
+    "invalid:env_step_error": 39,
+    "wrong_answer": 24,
+    "invalid:start_page_failed": 21,
+    "no_done_other": 7,
+    "turn_limit": 7,
+    "invalid:rollout_timeout": 1
+   },
+   "valid_failures": 137,
+   "mean_steps_valid_failure": 12.678832116788321,
+   "mean_steps_success": 8.284313725490197
+  },
+  "outcome-only-56groups-20261006-iter60": {
+   "tasks": 300,
+   "categories": {
+    "success": 117,
+    "repeat_loop": 53,
+    "wrong_answer": 44,
+    "invalid:env_step_error": 33,
+    "invalid:start_page_failed": 21,
+    "claims_infeasible": 14,
+    "turn_limit": 9,
+    "no_done_other": 8,
+    "invalid:rollout_timeout": 1
+   },
+   "valid_failures": 128,
+   "mean_steps_valid_failure": 13.921875,
+   "mean_steps_success": 10.47008547008547
+  },
+  "outcome-only-56groups-20261006-iter70": {
+   "tasks": 300,
+   "categories": {
+    "success": 112,
+    "repeat_loop": 54,
+    "wrong_answer": 46,
+    "invalid:env_step_error": 36,
+    "invalid:start_page_failed": 20,
+    "claims_infeasible": 19,
+    "no_done_other": 6,
+    "turn_limit": 6,
+    "invalid:rollout_timeout": 1
+   },
+   "valid_failures": 131,
+   "mean_steps_valid_failure": 12.564885496183207,
+   "mean_steps_success": 9.098214285714286
+  },
+  "outcome-only-56groups-20261006-iter80": {
+   "tasks": 300,
+   "categories": {
+    "success": 124,
+    "repeat_loop": 45,
+    "wrong_answer": 40,
+    "invalid:env_step_error": 28,
+    "claims_infeasible": 26,
+    "invalid:start_page_failed": 22,
+    "no_done_other": 11,
+    "turn_limit": 2,
+    "invalid:rollout_timeout": 2
+   },
+   "valid_failures": 124,
+   "mean_steps_valid_failure": 11.806451612903226,
+   "mean_steps_success": 8.57258064516129
+  },
+  "outcome-only-56groups-20261006-iter90": {
+   "tasks": 300,
+   "categories": {
+    "success": 107,
+    "wrong_answer": 56,
+    "invalid:env_step_error": 40,
+    "repeat_loop": 39,
+    "claims_infeasible": 25,
+    "invalid:start_page_failed": 21,
+    "no_done_other": 10,
+    "invalid:rollout_timeout": 2
+   },
+   "valid_failures": 130,
+   "mean_steps_valid_failure": 10.838461538461539,
+   "mean_steps_success": 8.08411214953271
+  },
+  "outcome-uniform8-original2102-20261006-iter60": {
+   "tasks": 300,
+   "categories": {
+    "success": 127,
+    "invalid:env_step_error": 42,
+    "repeat_loop": 36,
+    "wrong_answer": 33,
+    "claims_infeasible": 31,
+    "invalid:start_page_failed": 21,
+    "no_done_other": 4,
+    "turn_limit": 3,
+    "invalid:rollout_timeout": 3
+   },
+   "valid_failures": 107,
+   "mean_steps_valid_failure": 11.85981308411215,
+   "mean_steps_success": 9.496062992125983
+  },
+  "outcome48-iter100": {
+   "tasks": 300,
+   "categories": {
+    "success": 104,
+    "repeat_loop": 53,
+    "invalid:env_step_error": 43,
+    "wrong_answer": 38,
+    "invalid:start_page_failed": 27,
+    "claims_infeasible": 23,
+    "no_done_other": 5,
+    "turn_limit": 4,
+    "invalid:rollout_timeout": 2,
+    "invalid:generation_error": 1
+   },
+   "valid_failures": 123,
+   "mean_steps_valid_failure": 10.821138211382113,
+   "mean_steps_success": 8.192307692307692
+  }
+ }
+}

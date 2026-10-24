@@ -110,6 +110,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [RL_RESULTS.md](RL_RESULTS.md) | Tables-only RL checkpoint scores; overall, valid-only, invalid counts, and separate protocols |
 | [RL_LEARNING_EFFICIENCY.md](RL_LEARNING_EFFICIENCY.md) | Five fresh iteration0→10 action-credit pilots; pending GPU validation, exact comparison limits and learning-efficiency evidence |
 | [RL_RUNTIME.md](RL_RUNTIME.md) | Reference baseline resume, GPU scaling, archives, and runtime history |
+| [RL_BEHAVIOR.md](RL_BEHAVIOR.md) | Evaluation noise and fair comparison, failure categories across checkpoints, episode length, training-time behavior, step-0 group usefulness |
 | [RL_EVALUATION.md](RL_EVALUATION.md) | Evaluation harness code map, protocols, commands/tests, checkpoint results and scheduling |
 | [RL_METRICS.md](RL_METRICS.md) | Metric definitions, paper reward comparisons, and gradient diagnostics |
 | [RL_EXPERIMENTS.md](RL_EXPERIMENTS.md) | Prepared RL recipe experiments and validation |
