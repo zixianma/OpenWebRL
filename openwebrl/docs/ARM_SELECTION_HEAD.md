@@ -98,6 +98,26 @@
 
 </details>
 
+<a id="selection-head-outcome-objectives-20261025"></a>
+
+## Outcome labels as advantages rather than a single best action (2026-10-25)
+
+**Training on how much better each action did, not only which did best, does not clearly help offline: centred advantage regression is +0.7 pp [−0.3, +1.9] over the current best-action target, the other two objectives are level.** Same 1,380 SFT-action train states, joint transformer head (22.6 M), 20 epochs, seeds 0–2; every objective reads the same draws 0–2 (valid draws only), and the 348 test states (86 tasks) are scored on held-out draws 3–7. Live Online-Mind2Web runs of all three new heads (seed 0) are in progress.
+
+| Objective | Target per action (from draws 0–2) | Held-out success, distinct actions | Held-out success, fixed five | − best action, pp [95% CI] | States with a different pick |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Best action, soft CE (current) | 1 on the best rate, ties split | 36.97% | 35.59% | — | — |
+| Soft CE, softmax(rate / 0.25) | smoothed ranking | 37.14% | 35.51% | +0.17 [−0.75, +1.16] | 65 of 348 |
+| **Centred advantage MSE** | score − panel mean regresses rate − panel mean | **37.67%** | **36.10%** | **+0.69 [−0.30, +1.85]** | 85 of 348 |
+| Count-weighted binomial BCE | sigmoid(score) fits the rate, weight = valid draws | 36.98% | 35.98% | +0.01 [−1.32, +1.59] | 90 of 348 |
+| *References* | uniform over actions 36.26%, one SFT sample of the fixed five 35.65%, oracle 47.96% | | | | |
+
+- **Columns.** Success is the held-out rate of the picked action, averaged over states and over the three seeds (seed-to-seed range ±0.5 pp). Distinct actions = one representative per action; fixed five = the state's first five SFT proposals, as served live. Differences are paired per state on the seed-averaged pick, task-clustered bootstrap.
+- **Why three draws limit every objective.** A rate from draws 0–2 can only be 0, ⅓, ⅔ or 1. In the training state `bff8e3b6…` (arXiv, find a quantum-computing paper) the draw-0–2 winner, opening the subject dropdown (2/3), never succeeds on draws 3–7 (0/5), while the "Quantum Physics" link (1/3) is the held-out best (2/5). The best-action target trains all mass toward the dropdown; the advantage target (+0.32, +0.05, −0.35, −0.02 for the four actions) keeps the other actions' relative order; the binomial target treats 2/3 versus 1/3 as weak evidence.
+- **Binomial BCE changes the most picks but gains nothing**, plausibly because it also spends capacity predicting each state's difficulty, which never affects the pick; the advantage loss removes it by construction.
+- **Offline gaps are small for every head here** (about +1 pp over uniform against a 12 pp oracle gap), and offline differences have not predicted live ones: the current outcome head was +0.7 pp over uniform offline but +5.9 pp over SFT live.
+- [Evidence](arm_results/rl_integration/selection-outcome-objectives-20261025.json) · [analysis script](arm_results/rl_integration/selection-outcome-objectives-20261025-analysis.py) · trainer `scripts/train_head_round.py --source outcome_soft | outcome_rate --loss advmse | binom`, losses `advantage_mse_loss` and `binomial_rate_loss` in `openwebrl/selection_head.py`. Runtime `selection-head-20261008/sft-actions-20261021/advantage-20261025/` (heads, configs and logs saved per seed).
+
 <a id="selection-head-data-scale-20261023"></a>
 
 ## Teacher-data scaling, and the Online-Mind2Web judge change (2026-10-23/24)

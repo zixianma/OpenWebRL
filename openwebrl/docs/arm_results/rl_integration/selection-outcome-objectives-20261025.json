@@ -1,0 +1,131 @@
+{
+ "note": "Outcome-label objectives for the selection head (2026-10-25), offline. Joint transformer head (22.6 M), the 1,380\nSFT-action branch train states, 20 epochs, seeds 0-2; targets from draws 0-2 (valid draws only): best action(s) with\nties split (current), softmax(rate / 0.25), centred advantage MSE, count-weighted binomial BCE on the rate\n(scripts/train_head_round.py --source outcome | outcome_soft | outcome_rate --loss advmse | binom). Scored on held-out\ndraws 3-7 of the 348 test states (86 tasks): distinct-action view (head \u2212 uniform over actions) and the fixed five\n(first five SFT proposals, head \u2212 one SFT sample). Paired difference vs the current objective: per state the held-out\nrate of the picked action, averaged over the three seeds, task-clustered bootstrap (5,000 resamples, seed 0).",
+ "rows": [
+  {
+   "key": "best",
+   "objective": "Best action, soft CE (current)",
+   "seeds": 3,
+   "distinct": [
+    36.97,
+    37.04,
+    36.91
+   ],
+   "fixed_five": [
+    35.31,
+    35.71,
+    35.76
+   ],
+   "distinct_mean": 36.97,
+   "fixed_five_mean": 35.59,
+   "uniform": 36.26,
+   "sft_sample_fixed_five": 35.65,
+   "oracle": 47.96,
+   "test_states": 348,
+   "train_states": 1380
+  },
+  {
+   "key": "soft",
+   "objective": "Soft CE to softmax(rate / 0.25)",
+   "seeds": 3,
+   "distinct": [
+    37.22,
+    37.49,
+    36.72
+   ],
+   "fixed_five": [
+    35.88,
+    35.83,
+    34.82
+   ],
+   "distinct_mean": 37.14,
+   "fixed_five_mean": 35.51,
+   "uniform": 36.26,
+   "sft_sample_fixed_five": 35.65,
+   "oracle": 47.96,
+   "test_states": 348,
+   "train_states": 1380
+  },
+  {
+   "key": "adv",
+   "objective": "Centred advantage MSE",
+   "seeds": 3,
+   "distinct": [
+    38.03,
+    37.4,
+    37.58
+   ],
+   "fixed_five": [
+    36.55,
+    35.66,
+    36.1
+   ],
+   "distinct_mean": 37.67,
+   "fixed_five_mean": 36.1,
+   "uniform": 36.26,
+   "sft_sample_fixed_five": 35.65,
+   "oracle": 47.96,
+   "test_states": 348,
+   "train_states": 1380
+  },
+  {
+   "key": "binom",
+   "objective": "Count-weighted binomial BCE",
+   "seeds": 3,
+   "distinct": [
+    37.01,
+    36.31,
+    37.62
+   ],
+   "fixed_five": [
+    36.12,
+    35.65,
+    36.16
+   ],
+   "distinct_mean": 36.98,
+   "fixed_five_mean": 35.98,
+   "uniform": 36.26,
+   "sft_sample_fixed_five": 35.65,
+   "oracle": 47.96,
+   "test_states": 348,
+   "train_states": 1380
+  }
+ ],
+ "paired": [
+  {
+   "a": "soft",
+   "b": "best",
+   "states": 348,
+   "tasks": 86,
+   "diff_pp": 0.17,
+   "ci_pp": [
+    -0.75,
+    1.16
+   ],
+   "states_where_picks_differ": 65
+  },
+  {
+   "a": "adv",
+   "b": "best",
+   "states": 348,
+   "tasks": 86,
+   "diff_pp": 0.69,
+   "ci_pp": [
+    -0.3,
+    1.85
+   ],
+   "states_where_picks_differ": 85
+  },
+  {
+   "a": "binom",
+   "b": "best",
+   "states": 348,
+   "tasks": 86,
+   "diff_pp": 0.01,
+   "ci_pp": [
+    -1.32,
+    1.59
+   ],
+   "states_where_picks_differ": 90
+  }
+ ]
+}
