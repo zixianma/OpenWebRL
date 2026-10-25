@@ -139,6 +139,7 @@ $$
 - **1A filtered SFT:** use the same 8,394-turn C2 dataset and LoRA/optimizer settings, but microbatch 1 with accumulation 32 (effective batch 32) and one pass (263 updates); this isolates optimizer/exposure from the original effective batch 16 recipe.
 - **Joint C2 + Piotr SFT:** concatenate 3,464 C2 and 2,076 Piotr retained states and apply the same full-response SFT objective for one pass.
 - **Joint C2 + Piotr DPO:** use the same chosen/rejected pairs and frozen starting actor as reference, with full-response DPO, `beta=0.1`, and no auxiliary SFT term.
+- **Original five candidates:** joint rows keep only the chosen/rejected pair; each links back to its five-candidate C2 turn record (candidates sampled from `OpenWebRL-4B-SFT`) or Piotr draw. [Source locations and join keys](ARM_JOINT_DATA_SOURCES.md).
 
 **Conclusion:** Offline training transfers only modestly compared with the
 inference-time selector. DPO is the best measured endpoint, but its advantage

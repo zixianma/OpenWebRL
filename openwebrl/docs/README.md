@@ -108,6 +108,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, checkpoint procedures, and [explicit action comparison](ARM_SFT.md#arm-comparison-sft-20261007) |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |
+| [ARM_JOINT_DATA_SOURCES.md](ARM_JOINT_DATA_SOURCES.md) | Original five-candidate C2 and Piotr records behind the joint data; paths, generator, and join keys |
 | [RL_RESULTS.md](RL_RESULTS.md) | Tables-only RL checkpoint scores; overall, valid-only, invalid counts, and separate protocols |
 | [RL_LEARNING_EFFICIENCY.md](RL_LEARNING_EFFICIENCY.md) | Five fresh iteration0→10 action-credit pilots; pending GPU validation, exact comparison limits and learning-efficiency evidence |
 | [RL_RUNTIME.md](RL_RUNTIME.md) | Reference baseline resume, GPU scaling, archives, and runtime history |

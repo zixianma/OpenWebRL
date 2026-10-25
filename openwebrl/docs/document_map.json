@@ -43,6 +43,10 @@
         "ARM_JOINT_SFT_HISTORY_EXAMPLE.md"
       ]
     },
+    "ARM_JOINT_DATA_SOURCES.md": {
+      "title": "ARM joint data sources: original five-candidate records",
+      "sources": []
+    },
     "ARM_RESULTS.md": {
       "title": "ARM results: inference, C2, 1A, joint SFT, and DPO",
       "sources": [
