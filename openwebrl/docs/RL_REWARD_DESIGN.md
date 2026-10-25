@@ -127,6 +127,97 @@ then scaled to the full valid-only cohort, because the audit sample is stratifie
   correspondingly more all-zero GRPO groups early on (see Risks).
 - **Same caveat as above:** `G` and the second judge use the same model.
 
+<a id="outcome-reward-verifier-evaluation-20261024"></a>
+### The outcome reward as a verifier: human labels and the eval judge
+
+The training reward and the gate were scored as verifiers on two benchmarks:
+
+- **CUAVerifierBench:** Fara-7B trajectories with human outcome labels.
+- **Our saved held-out episodes,** scored against the Online-Mind2Web eval judge.
+
+**Takeaways**
+
+- **On human labels, the training reward is too lenient.** It accepts about half of the
+  trajectories humans reject. In that it matches the legacy verifiers and our OM2W eval judge.
+- **The gate cuts false positives from 51% to 11%,** but it also misses about half of true
+  successes.
+- **The Universal Verifier is clearly better than both.**
+- **During RL, the training reward drifts away from the eval judge.** Under the eval judge,
+  held-out success does not rise between iterations 10 and 90.
+
+**CUAVerifierBench, Online-Mind2Web split** (106 tasks, 17 human successes; reference = final
+adjudicated human label; 95% task-bootstrap intervals):
+
+| Verifier | Accepted | TP | FP | FN | TN | Accuracy | Cohen's κ | Recall | False-positive rate |
+|---|---|---|---|---|---|---|---|---|---|
+| Training reward (GPT-4.1 action_history) | 61 | 16 | 45 | 1 | 44 | 56.6% | 0.21 [0.11, 0.33] | 94.1% | 50.6% [39.5, 60.9] |
+| Gated `J · G` | 19 | 9 | 10 | 8 | 79 | 83.0% | 0.40 [0.15, 0.62] | 52.9% | 11.2% [5.2, 18.0] |
+| OM2W eval judge (AgentTrek, gpt-5.6-terra) | 66 | 17 | 49 | 0 | 40 | 53.8% | 0.21 [0.11, 0.31] | 100% | 55.1% [44.2, 65.6] |
+| Universal Verifier (dataset column) | 15 | 11 | 4 | 6 | 85 | 90.6% | 0.63 [0.39, 0.83] | 64.7% | 4.5% [1.1, 9.2] |
+| Legacy multimodal verifier (dataset column) | 55 | 14 | 41 | 3 | 48 | 58.5% | 0.19 [0.06, 0.33] | 82.4% | 46.1% [35.6, 56.8] |
+| Legacy text verifier (dataset column) | 53 | 12 | 41 | 5 | 48 | 56.6% | 0.13 [−0.01, 0.27] | 70.6% | 46.1% [36.0, 56.7] |
+| Individual reviewer, before seeing UV (215 annotations) | 81 | 34 | 47 | 1 | 133 | 77.7% | 0.46 [0.35, 0.58] | 97.1% | 26.1% [20.0, 32.6] |
+
+- **The final label is strict.** It was adjudicated after reviewers saw the Universal Verifier,
+  and individual UV-blind reviewers accept many trajectories it rejects. The reviewer row is not
+  independent of the final label.
+- **One agent, a different distribution.** All trajectories are Fara-7B's, not our actor's.
+  Fara has no browser text responses, so the reward sees actions only, plus the screenshots
+  before the last 3 steps.
+- **Mapping to our inputs:** thought → reasoning, action → tool call, terminate →
+  `done(response)`. Screenshot k−1 is the page before step k; on this split screenshots number
+  steps + 1.
+
+**Our held-out episodes versus the eval judge** (outcome-only 56-group, full300; agreement on
+episodes that ended with an answer, `terminal_status = completed`):
+
+| Iteration | Completed episodes | Eval-judge successes | Reward | Accepted | Agree | κ | Eval-judge successes accepted | Eval-judge failures accepted |
+|---|---|---|---|---|---|---|---|---|
+| 10 | 181 | 95 | Training reward | 88 | 162 | 0.79 [0.69, 0.88] | 82 (86.3%) | 6 of 86 (7.0%) |
+| 10 | 181 | 95 | Gated | 52 | 134 | 0.49 [0.38, 0.61] | 50 (52.6%) | 2 of 86 (2.3%) |
+| 90 | 228 | 85 | Training reward | 107 | 190 | 0.66 [0.56, 0.76] | 77 (90.6%) | 30 of 143 (21.0%) |
+| 90 | 228 | 85 | Gated | 41 | 184 | 0.54 [0.43, 0.65] | 41 (48.2%) | 0 of 143 (0.0%) |
+
+- **The disagreement triples.** The share of eval-judge failures the training reward accepts
+  goes from 7.0% to 21.0%. This is the same drift the second-judge audit found.
+- **Held-out success on all valid episodes** (episodes that did not end with an answer score 0):
+
+  | Reward | Iteration 10 (of 251) | Iteration 90 (of 237) |
+  |---|---|---|
+  | Training reward | 88 (35.1%) | 107 (45.1%) |
+  | Eval judge | 95 (37.8%) | 85 (35.9%) |
+  | Gated | 52 (20.7%) | 41 (17.3%) |
+
+  The gated values are exact: every GPT-4.1 success was grounded. They agree with the sampled
+  estimate above.
+- **Caveat:** the eval judge is itself lenient on human labels (table above), so agreeing with
+  it is a weak criterion.
+
+<details><summary>Internal split, run details and cost</summary>
+
+- **Internal split (154 Microsoft tasks):** 101 of the 154 trajectories have no screenshots in
+  the dataset. On those, the eval judge scores 0 without being called, and the gate finds no
+  evidence. The dataset's Universal Verifier verdicts were made with the original logs, so this
+  split does not compare like with like.
+  - On the 53 trajectories with screenshots, κ is 0.62 for the training reward, 0.15 for the
+    gate, 0.49 for the eval judge and 0.48 for the Universal Verifier. Intervals are wide
+    (about ±0.25).
+  - Screenshots there are fewer than steps and carry no step labels, which hurts the gate in
+    particular.
+- **Run:** CPU job 386326 under a $40 API cap; spent $16.77 over 1,037 calls.
+  - The 150 earlier grounding results were reused; 45 new held-out episodes were grounded.
+  - One CUAVerifierBench training-reward call returned no verdict and is excluded.
+- **Script:** `scripts/eval_outcome_reward.py`. It uses the training judge's code path
+  unchanged and the eval judge's prompt and parser from `openwebrl/eval/reward_online_mind2web.py`.
+- **Dataset:** `microsoft/CUAVerifierBench@c19eb32` (MIT), stored in runtime
+  `datasets/cuaverifierbench-c19eb32/`.
+- **Outputs:**
+  - per-item verdicts (private): runtime `analysis/reward-eval-20261024/`;
+  - aggregate:
+    [reward-eval-20261024.json](arm_results/rl_integration/behavior/reward-eval-20261024.json).
+
+</details>
+
 ## Proposed reward
 
 **Base success is gated, not augmented.** Let `J` be the current GPT-4.1 `action_history`
@@ -213,6 +304,13 @@ Wait for its iteration-60 result before combining.
      - how often each reward would have changed the sign of a GRPO advantage within a group,
        using saved training groups if available (outcome-only 48 archive, iterations 24–100).
    - Reuse the existing audit code rather than writing new judge plumbing.
+   - **Done on CUAVerifierBench human labels:**
+     [verifier evaluation](#outcome-reward-verifier-evaluation-20261024). On the OM2W split,
+     (b) beats (a): κ 0.40 vs 0.21, false-positive rate 11% vs 51%. But it halves recall and
+     stays below the Universal Verifier (κ 0.63).
+   - **Next candidates on the same two benchmarks:**
+     - (c), to see whether the checklist recovers recall;
+     - a Universal-Verifier-style rubric reward (`microsoft/fara`, MMRubricAgent).
 3. **Training** (needs explicit GPU and judge budget approval). Proceed only if (b) or (c)
    clearly beats (a) on human labels.
    - Run a fresh uniform-G8 run from **iteration 0**: SFT checkpoint, fresh optimizer and
@@ -326,6 +424,7 @@ actual usage afterwards.
 | Training reward entry | `openwebrl/reward_browser.py` (`reward_func`, `_score_single_sample`, `compute_judge_reward_actionhistory`) |
 | Second-judge audit (budget-capped client, sample rebuild) | `scripts/audit_judge_agreement.py` |
 | Answer-grounding audit (prompt, claim schema, summary) | `scripts/audit_answer_grounding.py` |
+| Verifier evaluation (CUAVerifierBench + eval-judge agreement) | `scripts/eval_outcome_reward.py`; [aggregate](arm_results/rl_integration/behavior/reward-eval-20261024.json) |
 | Spot-check page builder (private output) | `scripts/build_judge_spotcheck.py` |
 | Failure taxonomy | `scripts/analyze_rl_eval_failures.py`; results in [RL_BEHAVIOR.md](RL_BEHAVIOR.md#why-held-out-episodes-fail) |
 | Aggregate audit summaries | [second judge](arm_results/rl_integration/behavior/judge-audit-second-judge-20261024.json), [grounding](arm_results/rl_integration/behavior/judge-audit-grounding-20261024.json) |
