@@ -125,24 +125,26 @@ ax.add_patch(Rectangle((5.70, y_low), 0.60, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((6.49, y_low), 0.48, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
+# One neutral enclosure groups rollout 0's prefixes and terminal outcomes
+# across all candidates. State colors retain their evidence-method association.
+rollout_box = box(1.50, y_low - 0.02, xs[0] + 0.11 - 1.50,
+                  y_high - y_low + 0.04, edge=ROLLOUT, fill="#F5F6F7",
+                  lw=0.8, radius=0.045)
+rollout_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
-    # One enclosure makes the prefix/outcome association explicit for rollout 0.
-    capsule = box(1.50, y - 0.10, xs[0] + 0.11 - 1.50, 0.20,
-                  edge=ROLLOUT, fill="#F5F6F7", lw=0.8, radius=0.045)
-    capsule.set_zorder(0.5)
     arrow(0.57, mid, 0.77, y, color=LINE)
     box(0.79, y - 0.10, 0.63, 0.20)
     text(0.925, y, rf"$a_t^{{{i + 1}}}$", size=8, ha="center")
     for j, color in enumerate(pick_colors.get(i, ())):
         ax.add_patch(Circle((1.15 + 0.13 * j, y), 0.027,
                            facecolor=color, edgecolor="white", linewidth=0.4, zorder=3))
-    arrow(1.44, y, 1.56, y, color=ROLLOUT)
+    arrow(1.44, y, 1.56, y, color=POST)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
-            state_card(x, y, k + 1, ROLLOUT,
+            state_card(x, y, k + 1, POST if k == 0 else LOOK,
                        width=0.36, height=0.19, candidate=i + 1)
             if k:
-                arrow(trajectory_x[k - 1] + 0.185, y, x - 0.185, y, color=ROLLOUT)
+                arrow(trajectory_x[k - 1] + 0.185, y, x - 0.185, y, color=LOOK)
         text(3.48, y, "…", color=MUTED, ha="center")
     else:
         text(2.47, y, r"$\cdots$", size=11, color=ROLLOUT, ha="center")
