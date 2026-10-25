@@ -193,6 +193,24 @@ def pointwise_bce_loss(logits, target, mask):
     return (loss * mask).sum() / mask.sum().clamp_min(1)
 
 
+def pairwise_teacher_loss(scores, target, mask):
+    """Winner-class versus other candidates; no comparisons among losers.
+
+    `target` is the equivalence-aware teacher target. Each informative panel
+    contributes one mean loss regardless of the size of its chosen class.
+    Panels where every real candidate is equivalent carry no ranking signal.
+    """
+    positive = (target > 0) & mask
+    negative = (target == 0) & mask
+    pairs = positive[:, :, None] & negative[:, None, :]
+    counts = pairs.sum((1, 2))
+    if not (counts > 0).any():
+        return scores.sum() * 0.
+    margin = scores[:, :, None] - scores[:, None, :]
+    per_panel = (F.softplus(-margin) * pairs).sum((1, 2)) / counts.clamp_min(1)
+    return per_panel[counts > 0].mean()
+
+
 def value_loss(value_logits, successes, trials, mask):
     """Binomial NLL for observed continuation counts; slots with no trials are ignored."""
     weight = trials * mask

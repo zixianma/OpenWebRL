@@ -5,10 +5,11 @@ from pathlib import Path
 import torch
 
 from openwebrl.selection_head import (
-    CandidateSetHead, HeadConfig, equivalence_target, parse_calls, selection_loss,
+    CandidateSetHead, HeadConfig, equivalence_target, pairwise_teacher_loss, parse_calls, selection_loss,
     topk_agreement, value_loss,
 )
 from openwebrl.selection_head_features import candidate_tokens, candidate_tokens_from_ids, extract, pool_candidate
+from openwebrl.actor_head_scoring import score as score_captured_head
 
 SFT = Path("/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B-SFT")
 
@@ -72,8 +73,31 @@ class Head(unittest.TestCase):
         self.assertEqual(logits.grad[0, 1].item(), 0.)
         self.assertAlmostEqual(loss.item(), 0.6931, places=3)
 
+    def test_pairwise_teacher_loss_compares_only_winner_class_to_other_actions(self):
+        scores = torch.zeros(2, 5, requires_grad=True)
+        targets = torch.tensor([[.5, .5, 0., 0., 0.], [.2, .2, .2, .2, .2]])
+        mask = torch.ones_like(targets, dtype=torch.bool)
+        loss = pairwise_teacher_loss(scores, targets, mask)
+        self.assertAlmostEqual(loss.item(), torch.log(torch.tensor(2.)).item(), places=6)
+        loss.backward()
+        self.assertTrue((scores.grad[0, :2] < 0).all())
+        self.assertTrue((scores.grad[0, 2:] > 0).all())
+        self.assertTrue((scores.grad[1] == 0).all())
+        better = torch.tensor([[2., 2., 0., 0., 0.]])
+        self.assertLess(pairwise_teacher_loss(better, targets[:1], mask[:1]), loss)
+
     def test_config_round_trip(self):
         self.assertEqual(HeadConfig.from_json(self.config.to_json()), self.config)
+
+    def test_live_scoring_uses_the_output_trained_by_pairwise_objective(self):
+        class OpposedOutputs(torch.nn.Module):
+            def forward(self, candidates, state):
+                return torch.tensor([[5., 0., 0., 0., 0.]]), torch.tensor([[0., 5., 0., 0., 0.]])
+
+        features = [(torch.zeros(2, 8), torch.zeros(6, 8)) for _ in range(5)]
+        head = OpposedOutputs()
+        self.assertEqual(max(range(5), key=lambda i: score_captured_head(head, self.config, features)[i]), 0)
+        self.assertEqual(max(range(5), key=lambda i: score_captured_head(head, self.config, features, "value")[i]), 1)
 
 
 class Targets(unittest.TestCase):
