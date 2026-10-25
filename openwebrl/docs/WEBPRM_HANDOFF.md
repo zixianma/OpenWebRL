@@ -1,5 +1,32 @@
 # WebPRM Table 5 handoff
 
+<a id="webprm-status-20261025"></a>
+## Status — October 25, 2026 (Pacific)
+
+**WebArena-Lite Reddit native 18×3 is complete and far below the published Table 5; OM2W rerun300 is finishing completion and invalid-retry jobs.** This section supersedes the October 24 supervision section below. Results file: `webarena-subset-review-20261021/results-native54/table.json` (paths below are under `/gpfs/scrubbed/zixianma/openwebrl-runtime/webprm-webarena-20261011/next-stage-preparation/`).
+
+### WebArena-Lite Reddit, GPT-4o 2024-08-06 actor, 18 released single-site tasks
+
+| Method | Cells | Valid | Successes | Valid-only success (%) | Invalid as failure (%) | Published Table 5 (%) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| No search | 18 | 15 | 1 | 6.7 | 5.6 | 28.6 |
+| WebArbiter-7B | 18 | 13 | 2 | 15.4 | 11.1 | 52.6 |
+| WebShepherd-8B | 18 | 15 | 1 | 6.7 | 5.6 | 47.6 |
+
+Successes: no search task 14; WebArbiter tasks 14 and 134; WebShepherd task 132. Differences between methods are within noise at these denominators. The earlier gpt-4o-2024-05-13 cohort was also far below the paper (15.8 / 5.3 / 10.5 %), so the gap is not caused by the actor substitution. Task 5 (original 27) is excluded; the paper denominators appear to be 19–21 tasks.
+
+<details><summary>Invalid cells, audits and packages</summary>
+
+- Invalid (10): tasks 139/140 × 3 methods call the retired `gpt-4-1106-preview` fuzzy judge (6). An offline replay of each saved evaluator transcript with gpt-4.1-2025-04-14 substituted inside the released `llm_fuzzy_match` scores all six as failures: no post was published and `url_match` fails (`fuzzy-rescore-gpt41/`). gpt-4.1 called an empty answer "correct" in 3 of 6 calls, so it is not a reliable substitute in general; the outcome here does not depend on it. Model emitted `send_msg_to_user …` without call syntax (3). Released `ScriptBrowserEnv` crashed when an action opened a new tab without a CDP client, `envs.py:156–179` (2).
+- Independent audit: 53/54 verified; no-search task 132 (valid, failed) fails only exact replay because the released coordinator runs post-action state diff/terminal detection in a background thread (`step_management.py:647`).
+- Packages: no search = `v7e` (tasks 14, 97, 98, 131, 132) + `v7k-ns-b`; WebArbiter = `v7k-arb-a/b`; WebShepherd = `v7j-shep-a/b`, all under `webarena-subset-review-20261021/launch-preparation-*`. Fixes on the way: browser v2 (geometry/nav), JSON mode + fence strip, auditor v2/v3 (54-cell cohort; v3 adds `start_url` to the Shepherd context), Reddit storage scan 300 s/1800 s and 1 TiB scratch, block packages ($50 cap bound in the worker), Shepherd 2048-token health preflight, phase-write lock for concurrent tournament comparisons. Builders `v7-tools/build_v7.py` / `build_v7k.py` are hash-frozen by their packages: copy, never edit.
+</details>
+
+### OM2W rerun300 (gpt-4o-2024-08-06 actor, gpt-5.6-terra judge)
+
+Interim (before completions/retries): no search 28.3 %, Piotr 31.3 %, WebArbiter 25.7 %, random-of-five 15.2 %, WebShepherd 12.8 % of valid cells; on 223 tasks with all five valid, random5 (p<0.001) and Shepherd (p=0.0001) are below no search, Arbiter and Piotr are not distinguishable. Remaining cells run as completion packages (`rerun300-j*-completion{2,3}-vlm`, J1/J2 under the user cap raise) and one labelled retry of every invalid cell (`rerun300-j*-retry1-vlm`, user approval `rerun300-0806-20261023/user-approval-retry-20261025.json`). Final table: `rerun300-0806-20261023/final_table.py`. The launcher's 15 s `scontrol` startup timeout has failed three single attempts; packages now allow two attempts.
+
+
 **Table 5 is incomplete.** As of 2026-10-12 (late), Reddit successor **357126 is queued**, and **CMS hosting/reset validation passed** (job 357831). Supervision was an interactive Claude Code session monitor, not an unattended supervisor. This handoff records the state as of 2026-10-12. Read the current execution pointer before acting; this document is not new resource authorization.
 
 The goal is to reconstruct **WebArbiter Table 5 and add Piotr’s released SelectionARM**, then evaluate Online-Mind2Web separately. The fixed comparison contains **155 single-site tasks × 2 actors × 5 selectors = 1,550 episodes**. Exact historical Table 5 membership/settings remain unresolved, so describe this as a **disclosed reconstruction**, not an exact reproduction.
