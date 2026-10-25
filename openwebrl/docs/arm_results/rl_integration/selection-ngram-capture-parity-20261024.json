@@ -1,0 +1,89 @@
+{
+ "description": "Selection-head hidden-state capture inside the sglang actor server: parity vs HF teacher-forced features (40 branch124 states x 5 candidates, T1.0/top-p 0.9, CUDA graphs, 1 H200). Code: openwebrl/actor_head_capture.py, scripts/test_actor_head_capture.py (arm-selection-head f5f5d67).",
+ "runs": {
+  "ngram_before_fix": {
+   "job": "386206",
+   "note": "deferred <|im_end|> lost when it closed an accepted path (16 states fail)",
+   "ngram": true,
+   "capture_failures": 16,
+   "parity": {
+    "picks_agree": 23,
+    "states": 24,
+    "prompt_token_counts_match": 24,
+    "tails_aligned": 120,
+    "candidates": 120,
+    "max_score_abs_diff": 0.6328024864196777,
+    "mean_score_abs_diff": 0.1784537931283315,
+    "min_feature_cosine": 0.9989165663719177,
+    "mean_feature_cosine": 0.9999376058026597
+   },
+   "follow_ups": 4,
+   "wall_seconds": {
+    "hooks_capture": 29.718004746944644,
+    "hooks_no_capture": 34.321633246028796,
+    "plain": 32.85071337001864
+   },
+   "generated_tokens": {
+    "hooks_capture": 56022,
+    "hooks_no_capture": 57206,
+    "plain": 56554
+   }
+  },
+  "no_ngram_control": {
+   "job": "386206",
+   "note": "",
+   "ngram": false,
+   "capture_failures": 0,
+   "parity": {
+    "picks_agree": 36,
+    "states": 40,
+    "prompt_token_counts_match": 40,
+    "tails_aligned": 200,
+    "candidates": 200,
+    "max_score_abs_diff": 0.573077917098999,
+    "mean_score_abs_diff": 0.19517091251909732,
+    "min_feature_cosine": 0.9993377327919006,
+    "mean_feature_cosine": 0.9999393779039383
+   },
+   "follow_ups": 4,
+   "wall_seconds": {
+    "hooks_capture": 29.95839759905357,
+    "hooks_no_capture": 32.296327671036124,
+    "plain": 30.543331619002856
+   },
+   "generated_tokens": {
+    "hooks_capture": 56095,
+    "hooks_no_capture": 56523,
+    "plain": 55897
+   }
+  },
+  "ngram_fixed": {
+   "job": "386218",
+   "note": "",
+   "ngram": true,
+   "capture_failures": 0,
+   "parity": {
+    "picks_agree": 39,
+    "states": 40,
+    "prompt_token_counts_match": 40,
+    "tails_aligned": 199,
+    "candidates": 200,
+    "max_score_abs_diff": 0.6118817329406738,
+    "mean_score_abs_diff": 0.23033649548888208,
+    "min_feature_cosine": 0.9978429675102234,
+    "mean_feature_cosine": 0.999936573141151
+   },
+   "follow_ups": 4,
+   "wall_seconds": {
+    "hooks_capture": 30.302963641937822,
+    "hooks_no_capture": 34.315845255041495,
+    "plain": 34.45106870296877
+   },
+   "generated_tokens": {
+    "hooks_capture": 55520,
+    "hooks_no_capture": 55592,
+    "plain": 58448
+   }
+  }
+ }
+}
