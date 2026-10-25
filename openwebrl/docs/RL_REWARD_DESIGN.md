@@ -141,6 +141,8 @@ The training reward and the gate were scored as verifiers on two benchmarks:
   trajectories humans reject. In that it matches the legacy verifiers and our OM2W eval judge.
 - **The gate cuts false positives from 51% to 11%,** but it also misses about half of true
   successes.
+- **The checklist gate `C` trades the other way:** about the same κ, more of the true successes
+  (77%), more false positives (21%). Combining the two gates does not help.
 - **The Universal Verifier is clearly better than both.**
 - **During RL, the training reward drifts away from the eval judge.** Under the eval judge,
   held-out success does not rise between iterations 10 and 90.
@@ -152,6 +154,8 @@ adjudicated human label; 95% task-bootstrap intervals):
 |---|---|---|---|---|---|---|---|---|---|
 | Training reward (GPT-4.1 action_history) | 61 | 16 | 45 | 1 | 44 | 56.6% | 0.21 [0.11, 0.33] | 94.1% | 50.6% [39.5, 60.9] |
 | Gated `J · G` | 19 | 9 | 10 | 8 | 79 | 83.0% | 0.40 [0.15, 0.62] | 52.9% | 11.2% [5.2, 18.0] |
+| Checklist `J · C` | 32 | 13 | 19 | 4 | 70 | 78.3% | 0.41 [0.21, 0.60] | 76.5% | 21.3% [13.3, 30.4] |
+| Both gates `J · G · C` | 17 | 8 | 9 | 9 | 80 | 83.0% | 0.37 [0.11, 0.59] | 47.1% | 10.1% [4.4, 16.7] |
 | OM2W eval judge (AgentTrek, gpt-5.6-terra) | 66 | 17 | 49 | 0 | 40 | 53.8% | 0.21 [0.11, 0.31] | 100% | 55.1% [44.2, 65.6] |
 | Universal Verifier (dataset column) | 15 | 11 | 4 | 6 | 85 | 90.6% | 0.63 [0.39, 0.83] | 64.7% | 4.5% [1.1, 9.2] |
 | Legacy multimodal verifier (dataset column) | 55 | 14 | 41 | 3 | 48 | 58.5% | 0.19 [0.06, 0.33] | 82.4% | 46.1% [35.6, 56.8] |
@@ -177,6 +181,8 @@ episodes that ended with an answer, `terminal_status = completed`):
 | 10 | 181 | 95 | Gated | 52 | 134 | 0.49 [0.38, 0.61] | 50 (52.6%) | 2 of 86 (2.3%) |
 | 90 | 228 | 85 | Training reward | 107 | 190 | 0.66 [0.56, 0.76] | 77 (90.6%) | 30 of 143 (21.0%) |
 | 90 | 228 | 85 | Gated | 41 | 184 | 0.54 [0.43, 0.65] | 41 (48.2%) | 0 of 143 (0.0%) |
+| 10 | 181 | 95 | Checklist `J · C` | 65 | 145 | 0.61 [0.50, 0.72] | 62 (65.3%) | 3 of 86 (3.5%) |
+| 90 | 228 | 85 | Checklist `J · C` | 61 | 202 | 0.74 [0.65, 0.83] | 60 (70.6%) | 1 of 143 (0.7%) |
 
 - **The disagreement triples.** The share of eval-judge failures the training reward accepts
   goes from 7.0% to 21.0%. This is the same drift the second-judge audit found.
@@ -187,6 +193,7 @@ episodes that ended with an answer, `terminal_status = completed`):
   | Training reward | 88 (35.1%) | 107 (45.1%) |
   | Eval judge | 95 (37.8%) | 85 (35.9%) |
   | Gated | 52 (20.7%) | 41 (17.3%) |
+  | Checklist `J · C` | 65 (25.9%) | 61 (25.7%) |
 
   The gated values are exact: every GPT-4.1 success was grounded. They agree with the sampled
   estimate above.
@@ -204,7 +211,22 @@ episodes that ended with an answer, `terminal_status = completed`):
     (about ±0.25).
   - Screenshots there are fewer than steps and carry no step labels, which hurts the gate in
     particular.
-- **Run:** CPU job 386326 under a $40 API cap; spent $16.77 over 1,037 calls.
+- **Checklist gate `C`:** requirements are extracted once per task from the task text alone,
+  then frozen. The extraction prompt targets ranking, filters, dates, location, quantity and the
+  required end state. The check sees the same R/A/T/S evidence as `G` and marks each requirement
+  satisfied, not satisfied or not verifiable. `C = 1` only if every requirement is satisfied.
+  - Run as CPU job 386405, on GPT-4.1 successes only: 195 held-out episodes and 61 OM2W-split
+    trajectories, with 129 checklists extracted.
+- **Run:** CPU job 386326 under a $40 API cap; spent $16.77 over 1,037 calls. With job 386405
+  and the Universal Verifier probe, total spend is $27.02 of the cap.
+- **Universal Verifier cost probe:** the released `MMRubricAgent` pipeline run unchanged on 3
+  OM2W-split trajectories, both judge roles on gpt-5.6-terra. The release uses gpt-5 + o4-mini,
+  and o4-mini is retired here.
+  - **Cost:** about $0.60, 40 calls and 60 s per trajectory.
+  - **Verdicts:** 2 of 3 match the dataset's UV verdict and the human label.
+  - **Runner:** `scripts/run_universal_verifier.py`.
+  - **Implication:** as an RL reward on GPT-4.1 successes only, this would cost roughly $80 per
+    iteration, about 16× the gate.
   - The 150 earlier grounding results were reused; 45 new held-out episodes were grounded.
   - One CUAVerifierBench training-reward call returned no verdict and is excluded.
 - **Script:** `scripts/eval_outcome_reward.py`. It uses the training judge's code path
@@ -311,6 +333,8 @@ Wait for its iteration-60 result before combining.
    - **Next candidates on the same two benchmarks:**
      - (c), to see whether the checklist recovers recall;
      - a Universal-Verifier-style rubric reward (`microsoft/fara`, MMRubricAgent).
+   - **Result for (c):** κ 0.41 on human labels, the same as (b), with higher recall and more
+     false positives. It agrees best with the eval judge on held-out episodes.
 3. **Training** (needs explicit GPU and judge budget approval). Proceed only if (b) or (c)
    clearly beats (a) on human labels.
    - Run a fresh uniform-G8 run from **iteration 0**: SFT checkpoint, fresh optimizer and
