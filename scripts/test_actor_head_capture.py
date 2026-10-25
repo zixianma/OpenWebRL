@@ -36,6 +36,7 @@ def free_port():
 
 
 GRAPHS = False      # --cuda-graph: decode through captured CUDA graphs (capture via graph buffers)
+NGRAM = False       # --ngram: n-gram speculative decoding (TARGET_VERIFY forwards; capture keeps accepted rows)
 
 
 def start_server(port, hooks, capture_dir, log):
@@ -43,7 +44,8 @@ def start_server(port, hooks, capture_dir, log):
     cmd = [str(RUNTIME / "venv/bin/python"), "-m", "sglang.launch_server", "--model-path", MODEL, "--host", "127.0.0.1",
            "--port", str(port), "--dtype", "bfloat16", "--tp", "1", "--mem-fraction-static", ".45",
            "--context-length", "32768", "--max-running-requests", "40", "--chunked-prefill-size", "4096",
-           "--random-seed", "4500"] + (["--cuda-graph-max-bs", "48"] if GRAPHS else ["--disable-cuda-graph"])
+           "--random-seed", "4500"] + (["--cuda-graph-max-bs", "48"] if GRAPHS else ["--disable-cuda-graph"]) \
+          + (["--speculative-algorithm", "NGRAM"] if NGRAM else [])
     if hooks:
         cmd += ["--forward-hooks", json.dumps(hook_specs())]
     env = dict(os.environ, PYTHONPATH=str(REPO), ACTORHEAD_DIR=str(capture_dir))
@@ -130,10 +132,13 @@ def main():
     ap.add_argument("--skip-plain", action="store_true", help="skip the no-hook latency phase")
     ap.add_argument("--cuda-graph", action="store_true", help="serve with CUDA graphs (both phases)")
     ap.add_argument("--concurrency", type=int, default=8, help="states in flight (5 requests each)")
+    ap.add_argument("--ngram", action="store_true", help="serve with n-gram speculative decoding (both phases)")
+    ap.add_argument("--temperature", type=float, default=0.7)
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args()
-    global GRAPHS
-    GRAPHS = args.cuda_graph
+    global GRAPHS, NGRAM
+    GRAPHS, NGRAM = args.cuda_graph, args.ngram
+    SAMPLING["temperature"] = args.temperature
     args.out.mkdir(parents=True, exist_ok=True)
     import torch
     from PIL import Image
@@ -155,7 +160,8 @@ def main():
 
     capture_dir = capture_root()
     capture_dir.mkdir(parents=True, exist_ok=True)
-    report = dict(states=len(states), concurrency=args.concurrency, layers=list(layers), pools=list(config.pools))
+    report = dict(states=len(states), concurrency=args.concurrency, layers=list(layers), pools=list(config.pools),
+                  cuda_graph=GRAPHS, ngram=NGRAM, sampling=dict(SAMPLING))
 
     # Phase A: capture server
     port = free_port()
