@@ -19,7 +19,7 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-api-tradeoff-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.ticker import PercentFormatter, StrMethodFormatter
+from matplotlib.ticker import MaxNLocator, StrMethodFormatter
 
 BENCHMARKS = ("Online-Mind2Web", "WebVoyager", "DeepShop")
 METHODS = {
@@ -28,6 +28,7 @@ METHODS = {
     "parallel3_select_high": ("Luna N3 high + high", "#D55E00", "^"),
     "parallel5_select_high": ("Luna N5 high + high", "#CC79A7", "D"),
 }
+LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 
 
 def read_rows(path):
@@ -74,35 +75,39 @@ def draw(ax, means, metric):
         method = row["method"]
         label, color, marker = METHODS[method]
         x, y = row[metric], 100 * row["mean_success_rate"]
-        ax.scatter(x, y, s=115, color=color, marker=marker,
-                   edgecolors="white", linewidths=0.9, zorder=3, label=label)
-    ax.set_ylabel("Mean benchmark success (%)")
-    ax.yaxis.set_major_formatter(PercentFormatter(xmax=100, decimals=0))
+        # A hollow square keeps the nearly coincident single-call latency
+        # points distinguishable at the final paper size.
+        hollow = method == "luna_single_high"
+        ax.scatter(x, y, s=32, facecolors="white" if hollow else color, marker=marker,
+                   edgecolors=color if hollow else "white", linewidths=0.9 if hollow else 0.5,
+                   zorder=3, label=label)
+    ax.set_ylabel("Mean success (%)")
     values = [100 * row["mean_success_rate"] for row in means]
     span = max(values) - min(values)
-    pad = max(3.0, span * 0.8)
+    pad = max(0.6, span * 0.15)
     ax.set_ylim(max(0, min(values) - pad), min(100, max(values) + pad))
-    ax.set_xlim(left=0, right=max(row[metric] for row in means) * 1.12)
+    ax.yaxis.set_major_locator(MaxNLocator(nbins=4, integer=True))
+    ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
+    xs = [row[metric] for row in means]
+    xpad = (max(xs) - min(xs)) * 0.12
+    ax.set_xlim(max(0, min(xs) - xpad), max(xs) + xpad)
     if metric == "mean_model_usd_per_task":
-        ax.set_xlabel("Mean model cost per task (USD)")
+        ax.set_xlabel("Model cost / task ($)")
         ax.xaxis.set_major_formatter(StrMethodFormatter("${x:.2f}"))
-        ax.set_title("Performance vs. API cost", loc="left", pad=15)
     elif metric == "mean_task_seconds":
-        ax.set_xlabel("Mean task latency (seconds)")
-        ax.set_title("Performance vs. latency", loc="left", pad=15)
+        ax.set_xlabel("Task latency (s)")
     else:
-        ax.set_xlabel("Mean selected browser steps per task")
-        ax.set_title("Performance vs. browser steps", loc="left", pad=15)
-        xs = [row[metric] for row in means]
-        ax.set_xlim(max(0, min(xs) - 1), max(xs) + 1)
-    ax.grid(True, color="#E2E6EA", linewidth=0.7, zorder=0)
+        ax.set_xlabel("Browser steps / task")
+    ax.grid(False, which="both")
     ax.spines[["top", "right"]].set_visible(False)
+    ax.tick_params(length=3, width=0.6, pad=2)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#B7BEC7")
+        ax.spines[side].set_color("#555555")
+        ax.spines[side].set_linewidth(0.6)
 
 
 def save_figure(fig, path):
-    fig.savefig(path, dpi=240)
+    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)
     if path.suffix == ".svg":
         path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
 
@@ -116,38 +121,35 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.output_dir / "api_tradeoffs_by_benchmark.csv", rows)
     write_csv(args.output_dir / "api_tradeoffs_means.csv", means)
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
-                        "axes.titlesize": 15, "svg.fonttype": "none",
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
+                        "xtick.labelsize": 7, "ytick.labelsize": 7,
+                        "axes.labelpad": 3, "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
-    footer = ("Equal weight: Online-Mind2Web, WebVoyager, DeepShop.\n"
-              "Same four-method common-valid cohort within each benchmark; judge-only work excluded.")
     for metric, suffix in (("mean_model_usd_per_task", "cost"),
                            ("mean_task_seconds", "latency"),
                            ("mean_browser_steps", "browser_steps")):
-        fig, ax = plt.subplots(figsize=(10.4, 5.6))
+        fig, ax = plt.subplots(figsize=(3.35, 2.15))
         draw(ax, means, metric)
-        fig.text(0.12, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
-        fig.subplots_adjust(left=0.10, right=0.70, bottom=0.22, top=0.88)
+        fig.subplots_adjust(left=0.16, right=0.98, bottom=0.20, top=0.77)
         handles, labels = ax.get_legend_handles_labels()
-        fig.legend(handles, labels, loc="center left", bbox_to_anchor=(0.73, 0.56),
-                   frameon=False, fontsize=10, labelspacing=1.4)
-        for ext in ("png", "svg"):
+        fig.legend(handles, LEGEND_LABELS, loc="upper center", bbox_to_anchor=(0.54, 1.01),
+                   ncol=2, frameon=False, fontsize=7, handletextpad=0.4, columnspacing=1.0)
+        for ext in ("png", "svg", "pdf"):
             save_figure(fig, args.output_dir / f"api_performance_vs_{suffix}.{ext}")
         plt.close(fig)
-    fig, axes = plt.subplots(1, 3, figsize=(20, 5.6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(7, 1.75), sharey=True)
     draw(axes[0], means, "mean_model_usd_per_task")
     draw(axes[1], means, "mean_task_seconds")
     draw(axes[2], means, "mean_browser_steps")
     for ax in axes[1:]:
         ax.set_ylabel("")
-    for ax in axes:
-        ax.title.set_fontsize(13)
-    fig.text(0.05, 0.025, footer, fontsize=9, color="#5A6470", linespacing=1.5)
-    fig.subplots_adjust(left=0.05, right=0.82, bottom=0.22, top=0.88, wspace=0.22)
+    for letter, ax in zip("abc", axes):
+        ax.set_xlabel(f"({letter}) {ax.get_xlabel()}")
+    fig.subplots_adjust(left=0.075, right=0.985, bottom=0.23, top=0.80, wspace=0.16)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(0.835, 0.56),
-               frameon=False, fontsize=10, labelspacing=1.4)
-    for ext in ("png", "svg"):
+    fig.legend(handles, LEGEND_LABELS, loc="upper center", bbox_to_anchor=(0.53, 1.01),
+               ncol=4, frameon=False, fontsize=8, handletextpad=0.4, columnspacing=1.5)
+    for ext in ("png", "svg", "pdf"):
         save_figure(fig, args.output_dir / f"api_performance_tradeoffs.{ext}")
     plt.close(fig)
     (args.output_dir / "api_tradeoffs_provenance.json").write_text(json.dumps({

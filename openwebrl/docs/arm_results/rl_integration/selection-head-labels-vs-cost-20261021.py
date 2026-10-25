@@ -4,10 +4,13 @@ join each selector's N = 3 (triangle) and N = 5 runs.
 Data: selection-head-sft-actions-full-20261021.json (heads, Piotr, SFT 4B) and selection-n3-sft8b-full-20261021.json
 (SFT 8B, N = 3 runs)."""
 import json
+import os
 from pathlib import Path
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-selection-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 HERE = Path(__file__).parent
 full = json.loads((HERE / "selection-head-sft-actions-full-20261021.json").read_text())["rows"]
@@ -51,35 +54,51 @@ def x_of(r, p, k):
     return p / 1e9 if k == "params" else r[k]
 
 
-cols = [("params", "Parameters, actor + selector (B)"), ("pflop", "PFLOP per episode"), ("seconds", "Model time per episode (s)")]
-plt.rcParams.update({"font.size": 10, "axes.spines.top": False, "axes.spines.right": False})
-fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), sharey="row")
-for ax_row, bench, ylabel in ((axes[0], "mean", "Mean of 3 benchmarks: overall success (%)"),
-                              (axes[1], "online_mind2web", "Online-Mind2Web 300: overall success (%)")):
+cols = [("params", "Actor + selector (B)"), ("pflop", "PFLOP / episode"), ("seconds", "Model time / episode (s)")]
+plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
+                     "xtick.labelsize": 7, "ytick.labelsize": 7,
+                     "axes.labelpad": 3, "axes.spines.top": False, "axes.spines.right": False,
+                     "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
+fig, axes = plt.subplots(2, 3, figsize=(7, 3.35), sharey="row")
+for ax_row, bench, ylabel in ((axes[0], "mean", "3-benchmark mean\nSuccess (%)"),
+                              (axes[1], "online_mind2web", "Online-Mind2Web\nSuccess (%)")):
     pts = {m[0]: (row(m[1], bench), m[2]) for m in methods}
     for ax, (k, xlabel) in zip(ax_row, cols):
         for a, b, color in links:
             if pts[a][0] and pts[b][0]:
                 ax.plot([x_of(*pts[a], k), x_of(*pts[b], k)], [pts[a][0]["overall"], pts[b][0]["overall"]], color=color,
-                        linewidth=2, alpha=0.45, zorder=2)
+                        linewidth=1.2, alpha=0.55, zorder=2)
         for label, src, p, color, marker, hollow in methods:
             r = pts[label][0]
             if r is None:
                 continue
-            ax.scatter(x_of(r, p, k), r["overall"], s=95 if marker == "v" else 70, marker=marker, zorder=4 if label.startswith("SFT 4B") else 3,
-                       facecolor="white" if hollow else color, edgecolor=color if hollow else "white", linewidth=1.6 if hollow else 2,
+            ax.scatter(x_of(r, p, k), r["overall"], s=32 if marker == "v" else 24, marker=marker, zorder=4 if label.startswith("SFT 4B") else 3,
+                       facecolor="white" if hollow else color, edgecolor=color if hollow else "white", linewidth=1.0 if hollow else 0.6,
                        label=label)
-        ax.set_xlabel(xlabel)
-        ax.grid(True, color="#e6e5e0", linewidth=0.8); ax.set_axisbelow(True)
-        ax.tick_params(colors="#55534d"); [s.set_color("#c3c2b7") for s in ax.spines.values()]
+        ax.grid(False, which="both")
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
+        ax.yaxis.set_major_locator(MaxNLocator(nbins=4, integer=True))
+        ax.tick_params(colors="#444444", length=3, width=0.6, pad=2)
+        for spine in ax.spines.values():
+            spine.set_color("#555555")
+            spine.set_linewidth(0.6)
     ax_row[0].set_ylabel(ylabel); ax_row[0].set_xlim(3.5, 9.5)
+    ax_row[0].set_xticks([4.44, 6.5, 8.88], ["4.44", "6.5", "8.88"])
 axes[0, 0].set_ylim(36.6, 47.4)
 axes[1, 0].set_ylim(31.8, 45.8)
-for ax, y in ((axes[0, 0], 36.9), (axes[1, 0], 32.2)):
-    ax.annotate("SFT 4B 4.44 B; every head 4.46 B", (4.6, y), fontsize=8.5, color="#55534d")
-axes[1, 1].annotate("SFT 4B and 8B both 36.3%", (0.27, 35.3), fontsize=8.5, color="#55534d")
+for letter, ax, (_, xlabel) in zip("abc", axes[1], cols):
+    ax.set_xlabel(f"({letter}) {xlabel}")
 handles, labels = axes[1, 0].get_legend_handles_labels()
-fig.legend(handles, labels, loc="lower center", ncol=4, frameon=False, bbox_to_anchor=(0.5, -0.01))
-fig.suptitle("Selection methods, T 1.0 / top-p 0.9, 30 steps (N = 5 candidates unless marked N = 3)", y=0.995)
-fig.tight_layout(rect=(0, 0.09, 1, 0.98))
-fig.savefig(HERE / "selection-head-labels-vs-cost-20261021.png", dpi=160, bbox_inches="tight")
+short_labels = ["SFT 4B", "SFT 8B", "Piotr, N = 5", "Piotr, N = 3",
+                "Head: Piotr, N = 5", "Head: Piotr, N = 3", "Pointwise: Piotr, N = 3",
+                "Head: outcome", "Head: K = 3", "Head: K = 1", "Head: pre-execution"]
+fig.legend(handles, short_labels, loc="upper center", ncol=4, frameon=False,
+           bbox_to_anchor=(0.52, 1.005), fontsize=7,
+           handletextpad=0.35, columnspacing=1.2, labelspacing=0.5)
+fig.subplots_adjust(left=0.095, right=0.985, bottom=0.12, top=0.79, hspace=0.22, wspace=0.15)
+for ext in ("png", "svg", "pdf"):
+    path = HERE / f"selection-head-labels-vs-cost-20261021.{ext}"
+    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)
+    if ext == "svg":
+        path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+plt.close(fig)
