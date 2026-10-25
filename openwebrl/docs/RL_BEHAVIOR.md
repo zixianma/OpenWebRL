@@ -36,7 +36,9 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
    does not show this.
 8. **Larger groups make more groups usable, but at a cost.** Among first-iteration groups
    (SFT checkpoint), 41–48% are mixed with 5 rollouts and 53% with 8, which costs 1.6× more
-   rollouts per group. Clean pass@K for K = 5, 8 and 16 is [pending](#rl-behavior-passk-20261024).
+   rollouts per group. A clean step-0 measurement gives mixed-group probabilities of 47%, 56% and
+   67% at K = 5, 8 and 16, but mixed groups per 100 rollouts fall from 9.4 to 7.0 to 4.2, and
+   27% of tasks never succeed in 16 draws ([pass@K](#rl-behavior-passk-20261024)).
 
 ![Outcome-only 56-group held-out episodes by category](rl_results/rl_behavior_categories_56.png)
 
@@ -339,9 +341,32 @@ logs (SFT checkpoint) give this fraction for free:
 | Mixed-only action-only | 5 | 48 / 117 | 41 |
 | Uniform G8 | 8 | 48 / 90 | 53 |
 
-- **Pending:** a clean measurement (16 rollouts × 128 seed-0 training tasks, unbiased
-  pass@1/5/8/16 and mixed-group probability) is queued as job 385599
-  (`scripts/run_passk_step0.py`).
+**Clean measurement · October 25.** SFT checkpoint, 16 rollouts on each of 128 seed-0
+training tasks, uniform-G8 sampling (T0.8, 15 browser steps, GPT-4.1 action_history judge);
+unbiased estimators over the 16 draws. Invalid draws (205 of 2,048) count as failures.
+
+| K | Tasks | pass@K % | Mixed-group probability % | Mixed groups per 100 rollouts |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 128 | 35.7 | — | — |
+| 5 | 128 | 59.9 | 47.0 | 9.4 |
+| 8 | 128 | 65.4 | 56.3 | 7.0 |
+| 16 | 128 | 73.4 | 67.2 | 4.2 |
+
+- **G16 buys usable groups at a steep rollout cost.** Going from 8 to 16 rollouts raises the
+  chance a group is mixed by 11 pp (56 → 67%) but halves mixed groups per rollout. It pays
+  only if per-group signal quality (more distinct outcomes per group) matters more than the
+  number of groups.
+- **Dead and solved tasks.** 34 of 128 tasks (27%) have 0 successes in 16 draws and 8 (6%)
+  have 16; no group size gives these a learning signal. Filtering or curriculum on
+  0-of-16 tasks would cut wasted rollouts more than a larger G.
+- **Valid draws only** (tasks need ≥K valid draws): pass@1 40.0%, mixed 45.4% at K5
+  (125 tasks), 54.8% at K8 (124), 57.4% at K16 (47 tasks; few tasks have 16 valid draws).
+- **Matches the logs:** 47% at K5 and 56% at K8 agree with the first-iteration log fractions
+  above (41–48% and 53%).
+- **Sources:** [aggregate](arm_results/rl_integration/behavior/passk-step0-20261025.json) ·
+  `scripts/run_passk_step0.py` (job 385599, $25.88 of the $40 judge cap). Some invalid
+  trajectories carried a `webvoyager/` task-id prefix; the aggregate merges them with their
+  task.
 - **Log caveat:** the log fractions are counted when collection stopped, and groups may be
   dropped because of invalid rollouts.
 
@@ -350,6 +375,5 @@ logs (SFT checkpoint) give this fraction for free:
 
 | Item | Job | Adds |
 | --- | --- | --- |
-| Step-0 pass@K | 385599 | Clean pass@K and mixed-group probability for K = 5, 8, 16 |
 | Uniform G8 60 → 90 | 385579 → 385580 | G8 at the same endpoint as the other runs |
 | Step-error fix validation | Next GPU run with the fixed source | Invalid-rate change; slow-phase logs locate the stalling call |

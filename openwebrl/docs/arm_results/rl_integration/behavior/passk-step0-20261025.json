@@ -1,0 +1,80 @@
+{
+ "all_draws_invalid_as_failure": {
+  "k1": {
+   "tasks": 128,
+   "pass_at_k": 0.357421875,
+   "mixed_group_probability": 0.0
+  },
+  "k5": {
+   "tasks": 128,
+   "pass_at_k": 0.5993393000228938,
+   "mixed_group_probability": 0.4699089972527474
+  },
+  "k8": {
+   "tasks": 128,
+   "pass_at_k": 0.6544823232323232,
+   "mixed_group_probability": 0.5630147630147628
+  },
+  "k16": {
+   "tasks": 128,
+   "pass_at_k": 0.734375,
+   "mixed_group_probability": 0.671875
+  }
+ },
+ "valid_draws_only": {
+  "k1": {
+   "tasks": 128,
+   "pass_at_k": 0.400491110452048,
+   "mixed_group_probability": 0.0
+  },
+  "k5": {
+   "tasks": 125,
+   "pass_at_k": 0.6186746031746032,
+   "mixed_group_probability": 0.4544643134643136
+  },
+  "k8": {
+   "tasks": 124,
+   "pass_at_k": 0.6646937292098583,
+   "mixed_group_probability": 0.54771509852155
+  },
+  "k16": {
+   "tasks": 47,
+   "pass_at_k": 0.7446808510638298,
+   "mixed_group_probability": 0.574468085106383
+  }
+ },
+ "valid_draws_histogram": {
+  "16": 47,
+  "6": 1,
+  "8": 1,
+  "9": 2,
+  "2": 1,
+  "12": 6,
+  "14": 19,
+  "15": 40,
+  "13": 6,
+  "11": 3,
+  "4": 2
+ },
+ "task_success_count_histogram": {
+  "0": 34,
+  "1": 16,
+  "2": 6,
+  "3": 6,
+  "4": 3,
+  "5": 7,
+  "6": 5,
+  "7": 5,
+  "8": 2,
+  "9": 3,
+  "10": 6,
+  "11": 6,
+  "12": 8,
+  "13": 4,
+  "14": 6,
+  "15": 3,
+  "16": 8
+ },
+ "invalid_trajectories": 205,
+ "note": "task ids normalized (some invalid trajectories carried a 'webvoyager/' prefix); recomputed from passk-per-task.json"
+}
