@@ -311,22 +311,24 @@
 
 <a id="offline-selector-evaluation-schematic"></a>
 
-**How the offline evaluation works.** Labels come from rollouts 0–2 (outcome) or from what rollout 0 shows a teacher; every picker, teacher or trained head, is scored on the same held-out rollouts 3–7 of test states it never trained on.
+**Offline evaluation.** Labels use rollout 0's evidence or outcome rates on rollouts 0–2. All picks are scored on held-out rollouts 3–7.
 
-![Offline evaluation schematic. (a) The common state st branches into five candidate actions. A purple enclosure joins each action's rollout-0 state sequence through st+1, st+2, st+3 and st+4 to its terminal outcome under column 0. Rollouts 1–7 show terminal outcomes only. Amber marks label rollouts 0–2 and blue marks held-out scoring rollouts 3–7. The explicit four-method color legend identifies candidate pick markers and the method rows below: pink pre-execution, teal post-execution, purple lookahead K = 3, and amber observed outcome. (b) Every Luna teacher compares all five candidates with the same task, history and current state. Pre-execution adds no future evidence; post-execution adds each candidate's immediate result; lookahead adds the next three actor steps. Each returns one chosen action, scored using the held-out rates from (a). Observed-outcome labels use an argmax over the amber label-pool rates](arm_results/methods/selection-offline-eval-20261022.png)
+![Offline evaluation. (a) Five actions, eight rollouts each. Each purple enclosure joins rollout 0's state sequence to its outcome; other rollouts show outcomes only. Green means success and red means failure. The four-method legend identifies candidate picks. (b) Pre-execution uses shared context, post-execution adds the immediate result, and lookahead adds three actor steps. Observed outcome picks the best label-pool rate. Blue scores use held-out rollouts](arm_results/methods/selection-offline-eval-20261022.png)
 
-*Illustrative outcomes and picks, not measured performance. Each GPT-6 Luna teacher returns one candidate index per call, not per-action success rates. Inputs include the shared decision context plus the displayed evidence for **every** candidate; future states include screenshots/observations and tool feedback, with continuation actions u₁, u₂, u₃ supplied for lookahead. Evidence comes only from rollout 0 (purple outline); judge verdicts are withheld and final answers are hidden from lookahead. K = 3 adds three actor steps after the candidate action, reaching sₜ₊₄; K = 1 reaches sₜ₊₂. Outcome labels instead choose the best valid success rate on rollouts 0–2, without a Luna call.*
-
-*Every rollout replays the state in a fresh browser, executes the fixed action and lets the frozen SFT actor finish; o4-mini judges success. Only rollout 0's state sequence is expanded in (a); the other seven trajectories are summarized by their terminal outcomes. Each rollout-0 enclosure includes its state prefix and its own outcome, with the outcome withheld from teacher inputs. The illustrated prefixes are schematic; actual continuations may terminate earlier. The chosen action's score uses valid held-out rollouts 3–7 only; all eight example rollouts per action are valid. The worked scores are pre/post 60% and lookahead/outcome 80%; the reference scores are oracle 80% and uniform/SFT sample 44%. Tied picks average the tied actions' rates. SFT sample weights distinct actions by proposal frequency; all five example proposals differ, so its expectation equals uniform.*
+*Illustrative example; valid rollouts only. Rollout 0 is expanded; rollouts 1–7 show outcomes. Pink, teal, purple and amber identify pre-execution, post-execution, lookahead K = 3 and observed outcome. Luna compares all five actions and returns one index. Future evidence comes from rollout 0; judge verdicts are hidden. Outcome labels use rates on rollouts 0–2; scores use rollouts 3–7.*
 
 <details>
-<summary>Head supervision and task split</summary>
+<summary>Protocol, scoring and head training</summary>
 
-Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts calls selecting action i and N counts valid calls; outcome ties split target mass equally. Post-execution is a teacher comparison only, with no head trained on its labels. The head uses pre-action features, not teacher-only future evidence. Heads train on 1,380 states and are evaluated on 348 states from 86 unseen tasks.
+Each rollout replays the state in a fresh browser, executes the fixed action and lets the frozen SFT actor finish; o4-mini judges success. State symbols represent screenshots/observations and tool feedback. Continuation actions u₁, u₂, u₃ extend lookahead K = 3 to sₜ₊₄; K = 1 ends at sₜ₊₂. Prefixes are schematic and may end earlier. GPT-6 Luna returns a candidate index, not success rates; final answers are hidden from lookahead, and terminal verdicts are withheld from all teacher inputs.
+
+All eight example rollouts per action are valid. Scores are pre/post 60%, lookahead/outcome/oracle 80%, and uniform/SFT sample 44%. Tied picks average the tied actions' rates. SFT sample weights actions by proposal frequency; the five example proposals differ, so it equals uniform.
+
+Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts calls selecting action i and N counts valid calls. Outcome ties split target mass equally. Post-execution is a teacher comparison only; no head is trained on its labels. Heads use pre-action features, train on 1,380 states and are evaluated on 348 states from 86 unseen tasks.
 
 </details>
 
-[Paper PDF](arm_results/methods/selection-offline-eval-20261022.pdf) · [Editable SVG](arm_results/methods/selection-offline-eval-20261022.svg) · [Figure script](arm_results/methods/selection-offline-eval-20261022.py). Seven-inch canvas, fonts at least 7 pt, embedded PDF fonts and 300 dpi PNG. Labels and scoring: `scripts/train_head_round.py` (`targets`, `held_rate`).
+[PDF](arm_results/methods/selection-offline-eval-20261022.pdf) · [SVG](arm_results/methods/selection-offline-eval-20261022.svg) · [Source](arm_results/methods/selection-offline-eval-20261022.py). Seven-inch canvas, ≥7 pt text, embedded PDF fonts, 300 dpi PNG. Labels/scoring: `scripts/train_head_round.py` (`targets`, `held_rate`).
 
 **Offline (348 held-out test states, 86 tasks; picks scored by held-out success on rollouts 3–7, valid only).**
 
