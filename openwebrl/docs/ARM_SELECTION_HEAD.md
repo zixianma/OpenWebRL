@@ -799,6 +799,27 @@ Intervals resample tasks (10,000 resamples). Per benchmark, only two differences
 
 </details>
 
+<a id="selection-inference-serving-20261024"></a>
+
+## Actor serving options: replay test (2026-10-24)
+
+**Of four serving changes, only n-gram speculative decoding speeds up decisions materially: −15% decision time and +23% decode throughput, with the same output distribution. Asking sglang for five samples in one request saves about 5%; a cache-filling request before the five candidates saves about 1%; a 40× larger image cache saves nothing.**
+- **Setup.** Eight saved DeepShop episodes (2,587-state head run) replayed concurrently, as the eval's eight browsers per GPU, 12 steps each, five candidates per step: 96 decisions and 480 requests per configuration. Each step's prompt and screenshot are rebuilt from the saved episode; there is no browser time. One H200 (job 385920), the eval's actor-server flags, T 1.0 / top-p 0.9, 1,024 new tokens. The current setting was run twice (before and after the other single-server modes) to gauge noise.
+
+| Serving option | Decision time, mean | Decision time, p90 | Decode throughput (tokens/s) | Prompt tokens from cache | − current, decision time |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Current: five seeded requests (two runs) | 9.66 s / 9.54 s | 13.4 s / 12.6 s | 1,391 / 1,419 | 85% | — |
+| Image cache 4 GB instead of 100 MB | 9.66 s | 14.1 s | 1,417 | 85% | +0% |
+| Cache-filling request (`max_new_tokens=0`) first, then five seeded requests | 9.48 s | 13.6 s | 1,426 | 96% | −1% |
+| One request with `n=5` | 9.11 s | 13.7 s | 1,491 | ≈100% | −5% |
+| N-gram speculative decoding (`--speculative-algorithm NGRAM`) | **8.18 s** | **11.8 s** | **1,741** | 94% | **−15%** |
+
+- **Why the caches barely matter.** Decoding about 400 tokens per candidate is about 90% of a decision. Removing the repeated processing of each step's new 2k prompt tokens (the cache-filling request and `n=5` rows) saves at most a few percent; the cache-filling request also adds a 0.28 s round trip. The image cache never mattered: when siblings re-process a step, the screenshot embedding was already cached or recomputed cheaply.
+- **N-gram decoding.** Guesses come from repeated token sequences in the prompt and output, and the actor verifies them in one pass. At temperature > 0 sglang verifies by rejection sampling after temperature and top-p (thresholds 1.0), so the sampled distribution is unchanged; per-request seeds are not honoured, so runs are not bit-reproducible.
+- **Caveats before production.** Single runs; the two current-setting runs differ by about 1%. The replay had no selection-head capture hooks; speculative verification runs the actor over guessed tokens that may be rejected, so the hidden-state capture for the head must be checked to use accepted tokens only. `n=5` uses one seed per request, also breaking per-candidate seeding.
+- **Multi-token prediction.** sglang 0.5.6 runs built-in prediction heads only for models trained with them (DeepSeek-V3/R1, Qwen3-Next, GLM-4.5/4.6, MiMo, Ling, LongCat-Flash). Qwen3-VL has none; an EAGLE-3 draft head would need training and Qwen3-VL support in sglang's model code.
+- [Evidence](arm_results/rl_integration/selection-inference-efficiency-20261024.json) · [replay script](arm_results/rl_integration/selection-inference-efficiency-20261024-bench.py). Runtime `evaluations/inference-efficiency-20261024/`.
+
 <a id="selection-head-latency-20261012"></a>
 
 ## Latency on identical hardware
