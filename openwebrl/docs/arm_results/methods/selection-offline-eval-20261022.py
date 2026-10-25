@@ -182,7 +182,6 @@ text(2.235, 2.28, r"Shared: task · history · $s_t$ · $K=5$ actions", color=SH
 shared_x = 4.68
 ax.plot([4.35, shared_x, shared_x], [2.28, 2.28, 0.92],
         color=SHARED, linewidth=0.95, zorder=1)
-text(4.88, 2.28, "GPT-6 Luna", color=MUTED)
 text(1.43, 2.03, "Candidates + rollout 0", color=MUTED)
 text(6.035, 2.03, "Pick", color=MUTED, ha="center")
 text(6.74, 2.03, "Eval %", color=HELD, ha="center")
@@ -247,7 +246,6 @@ text(6.74, y, "80%", color=HELD, weight="bold", ha="center")
 
 
 
-text(0.12, 0.10, "Illustrative · valid rollouts", color=MUTED)
 
 for ext in ("png", "svg", "pdf"):
     path = Path(__file__).with_suffix(f".{ext}")
