@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, POST, LOOK, OUTCOME, HELD = "#B84071", "#087F83", "#6250BE", "#AD750C", "#2164A5"
+PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#008AC4", "#6250BE", "#AD750C", "#2164A5"
 SUCCESS, FAILURE = "#31785A", "#C53A36"
 LABEL_BG, HELD_BG = "#FCF5E6", "#EDF3FA"
 # Same 5 x 8 outcomes and picks as the original worked example.
@@ -74,6 +74,11 @@ def state_card(x, y, step, color, width=0.40, height=0.21, candidate="i"):
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
                            facecolor=color, edgecolor="none", alpha=0.15, zorder=2))
     text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", ha="center", color=color)
+
+
+def percent(rate):
+    """Compact display, rounded to at most one decimal; calculations stay exact."""
+    return f"{100 * rate:.1f}".rstrip("0").rstrip(".") + "%"
 
 
 label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
@@ -142,7 +147,7 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
         ax.add_patch(Circle((xs[d], y), 0.025,
             facecolor=SUCCESS if success else FAILURE,
             edgecolor=SUCCESS if success else FAILURE, linewidth=0.65, zorder=3))
-    text(6.00, y, f"{sum(outcomes[:3])}/3", color=OUTCOME, ha="center",
+    text(6.00, y, percent(label_rates[i]), color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
     text(6.74, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
 for x, fill, label in ((0.17, SUCCESS, "Success"), (0.91, FAILURE, "Failure")):
@@ -157,7 +162,7 @@ text(1.65, 2.98, "Rollout 0 expanded; 1–7 summarized.", color=MUTED)
 
 # Explicit method legend for candidate pick markers and teacher lanes.
 METHOD_COLORS = (("Pre-execution", PRE), ("Post-execution", POST),
-                 ("Lookahead K = 3", LOOK), ("Observed outcome", OUTCOME))
+                 ("Lookahead K = 3", LOOK), ("Oracle (observed rollouts)", OUTCOME))
 text(0.12, 2.74, "Methods", color=MUTED)
 for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
     ax.add_patch(Circle((x, 2.74), 0.032, facecolor=color,
@@ -168,7 +173,7 @@ for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
 # all five candidates; the indexed trajectory below is supplied for EACH one.
 text(0.12, 2.50, "(b)  Selection", size=8.5, weight="bold")
 text(0.12, 2.28, r"Shared: task, history, $s_t$, $a_t^{1},\ldots,a_t^{5}$", color=MUTED)
-text(4.66, 2.28, "Luna: no verdicts", color=MUTED)
+text(4.66, 2.28, "Teacher: GPT-6 Luna · no verdicts", color=MUTED)
 text(0.12, 2.03, "Method", color=MUTED)
 text(1.43, 2.03, r"Rollout 0 input (per action)", color=LOOK)
 text(4.88, 2.03, "Selector", color=MUTED, ha="center")
@@ -200,7 +205,7 @@ for y, label, color, n_states in lane_rows:
     arrow(future_x[n_states - 1] + 0.21 if n_states else 4.29,
           y, 4.53, y, color=color)
     box(4.55, y - 0.13, 0.66, 0.26, edge=color)
-    text(4.88, y, "Luna", color=color, ha="center")
+    text(4.88, y, "Teacher", color=color, ha="center")
     arrow(5.23, y, 5.48, y, color=color)
     pick = PICKS[label]
     box(5.50, y - 0.13, 0.70, 0.26, edge=color)
@@ -210,13 +215,13 @@ for y, label, color, n_states in lane_rows:
 text(1.43, 0.67, "Subscript: time · superscript: candidate", color=MUTED)
 # Outcome-derived labels are a separate operation, not a Luna response.
 y = 0.36
-text(0.12, y, "Observed outcome", color=OUTCOME)
+text(0.12, y, "Oracle (0–2)", color=OUTCOME)
 ax.add_patch(Rectangle((1.40, y - 0.12), 2.86, 0.24,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
-text(1.43, y, "0–2:  [2/3, 1/3, 3/3, 0/3, 1/3]", color=OUTCOME)
+text(1.43, y, "0–2:  [" + ", ".join(percent(rate) for rate in label_rates) + "]", color=OUTCOME)
 arrow(4.29, y, 4.53, y, color=OUTCOME)
 box(4.55, y - 0.13, 0.66, 0.26, edge=OUTCOME)
-text(4.88, y, "Best rate", color=OUTCOME, ha="center")
+text(4.88, y, "Argmax", color=OUTCOME, ha="center")
 arrow(5.23, y, 5.48, y, color=OUTCOME)
 box(5.50, y - 0.13, 0.70, 0.26, edge=OUTCOME)
 text(5.85, y, r"$a_t^{3}$", size=9, color=OUTCOME, ha="center")
