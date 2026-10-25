@@ -183,6 +183,101 @@ Wait for its iteration-60 result before combining.
    - Report held-out success under **both** GPT-4.1 and the grounded reward, so the gain is not
      measured only by the reward being optimized.
 
+## Judge specifications as run (for reuse)
+
+These are the exact settings behind the evidence tables. Reuse them as the starting point for the
+grounding term `G`; change one thing at a time and re-validate offline.
+
+<details><summary>Answer-grounding judge (<code>scripts/audit_answer_grounding.py</code>)</summary>
+
+**Model and call.**
+
+- Model: `gpt-5.6-terra`, OpenAI chat completions, `response_format={"type": "json_object"}`,
+  `seed=42`, default temperature.
+- Calls run with concurrency 4.
+- One call per episode, no retries beyond the client's defaults.
+- Unparseable replies are stored raw with `grounding=null`. None occurred in the 150 episodes.
+
+**Inputs, built from the saved per-turn trajectory.**
+
+- **Task:** `metadata.intent` of the first turn.
+- **Final answer:** the `response` argument of the last `done` tool call. The tool call uses
+  key `arguments`, not `args`.
+- **Per step `k` (1-based):**
+  - `R<k>`: the turn's response with the `<tool_call>…` part removed and think tags stripped,
+    last 700 characters;
+  - `A<k>`: the tool-call JSON;
+  - `T<k>`: `metadata.step_tool_responses[*].tool_response`, each truncated to 400 characters
+    and joined with `|`.
+- **Screenshots:** the last image of each turn that has one. Keep the last 6, labeled `S<k>`
+  (the page before acting at step k), sent as `detail: high` image parts after the text.
+  The training judge shows only the last 3.
+
+**System prompt (verbatim).**
+
+```
+You audit whether a web agent's final answer is grounded in what it actually observed.
+You get the task, the agent's final answer, and the trajectory as numbered items:
+  R<k> = the agent's own reasoning before step k (NOT evidence by itself),
+  A<k> = the action it took at step k,
+  T<k> = the browser's text response to step k,
+  S<k> = a screenshot of the page the agent saw before acting at step k.
+Split the final answer into its atomic factual claims (ignore politeness and restated task text).
+For each claim decide whether the observations support it:
+  "supported": a screenshot or browser response shows it; cite those ids.
+  "partial": only part of it is visible, or it is only weakly implied; cite ids and say what is missing.
+  "not_found": no screenshot or browser response shows it (it may appear only in reasoning; cite R ids if so).
+Also report whether the answer actually completes the task. Reply with JSON only:
+{"claims":[{"claim":"...","status":"supported|partial|not_found","evidence":["S3","T4"],"note":"..."}],
+ "answer_completes_task": true|false, "unsupported_claims": <int>, "summary": "<one sentence>"}
+```
+
+User message: `TASK: …\n\nFINAL ANSWER: …\n\nTRAJECTORY:\n` followed by the `R/A/T` blocks
+separated by blank lines, then `S<k>:` text labels each followed by its image.
+
+**Aggregation used in the tables.**
+
+- Statuses outside the three labels count as `not_found`.
+- "Episodes with ≥1 not-found claim" counts episodes with any `status == not_found`.
+- "Answer completes task" counts `answer_completes_task == true`.
+- The proposed `G` would be: no `not_found` claim **and** `answer_completes_task`. `partial` is
+  allowed, pending human-label calibration.
+
+**Cost:** 150 episodes for about $5.5, about $0.037 per episode. Budget accounting reserves an
+upper-bound cost before each request ($2.5 / $15 per M input/output tokens) and settles the
+actual usage afterwards.
+
+</details>
+
+<details><summary>Second-judge audit (<code>scripts/audit_judge_agreement.py</code>)</summary>
+
+- **Prompt and inputs:** exactly the training judge,
+  `reward_browser.compute_judge_reward_actionhistory`: the same action-history text, final
+  answer and last **3** trajectory screenshots (`_collect_recent_trajectory_images(samples, 3)`).
+  Only the model changes.
+- **Sample rebuild:** `Sample.from_dict` for every saved turn. The judge runs on the turn with
+  `metadata.is_last_turn`.
+- **Episodes:** valid held-out episodes of the 56-group run at iterations 10 and 90, stratified
+  by the original GPT-4.1 verdict. 75 per cell, `random.Random(0)`.
+- **Pipeline check first:** 10 episodes re-judged with GPT-4.1 itself; 9 matched.
+- **Budget:** the shared budget file caps the audit and the grounding check together at $30
+  (spent $11.20).
+
+</details>
+
+<details><summary>Where the code lives</summary>
+
+- **Location:** both scripts are committed on the local feature branch `arm-selection-head`,
+  commits `a613e86` (audit) and `61a1827` (grounding). They have not been pushed to GitHub yet.
+- **Imports:**
+  - `audit_answer_grounding.py` imports `TOOL_CALL` from `scripts/analyze_rl_eval_failures.py`
+    and `Budget`, `capped_client` and `load_episode` from `audit_judge_agreement.py`.
+  - Both import `openwebrl.reward_browser` for the served OpenAI client.
+- **How to run:** run them as CPU Slurm jobs; rebuilding the trajectory samples does not fit the
+  login node's memory. Credentials come from the repo `.env`.
+
+</details>
+
 ## Code and data pointers
 
 | What | Where |
