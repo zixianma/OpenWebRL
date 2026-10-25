@@ -826,6 +826,16 @@ Intervals resample tasks (10,000 resamples). Per benchmark, only two differences
 | N-gram (job 386218) | 40 / 40 | 39 / 40 | 0.9978 / 0.99994 |
 
   The first n-gram run lost the final `<|im_end|>` state in 16 / 40 states (sglang re-checks finish after a verify step without adding a token, consuming the capture's one-step end-token deferral); the fix holds the deferral until a token is appended. The test's 30 s latency phases are too short to measure the n-gram speedup, but show no added cost from the capture hooks under n-gram (30.3 s with capture vs 34.5 s plain, single runs). [Evidence](arm_results/rl_integration/selection-ngram-capture-parity-20261024.json).
+- **Live check with n-gram: no sign of a performance change.** The old Piotr-data head with n-gram on (job 386408, 2026-10-24) on the first 100 Online-Mind2Web tasks of the 10-18 full-run order, same protocol, judge gpt-5.6-terra, against the same 100 tasks from the 10-18 runs re-judged by terra:
+
+| Run | Successes | Valid | Valid-only | Hit 30-step limit | Seconds per browser step |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Old head, n-gram (2026-10-24) | 35 | 87 | 40.2% | 27 | 13.0 |
+| Old head (2026-10-18) | 37 | 86 | 43.0% | 16 | 13.9 |
+| Piotr ARM (2026-10-18) | 35 | 88 | 39.8% | 23 | 16.8 |
+| SFT 4B (2026-10-18) | 30 | 93 | 32.3% | 26 | 7.9 |
+
+  Successes are out of 100. On the 80 tasks valid in both old-head runs, n-gram alone succeeds on 10 and the 10-18 run alone on 11. One 100-task run has a standard error of about ±5 points, and the runs are six days apart on live sites. Zero selector fallbacks; five episodes ended on an actor 400 error (four in the 10-18 run). Seconds per step depend on shard load and site latency, so they do not isolate the n-gram speedup.
 - **Multi-token prediction.** sglang 0.5.6 runs built-in prediction heads only for models trained with them (DeepSeek-V3/R1, Qwen3-Next, GLM-4.5/4.6, MiMo, Ling, LongCat-Flash). Qwen3-VL has none; an EAGLE-3 draft head would need training and Qwen3-VL support in sglang's model code.
 - [Evidence](arm_results/rl_integration/selection-inference-efficiency-20261024.json) · [replay script](arm_results/rl_integration/selection-inference-efficiency-20261024-bench.py). Runtime `evaluations/inference-efficiency-20261024/`.
 
