@@ -5,8 +5,8 @@ from pathlib import Path
 import torch
 
 from openwebrl.selection_head import (
-    CandidateSetHead, HeadConfig, equivalence_target, pairwise_teacher_loss, parse_calls, selection_loss,
-    topk_agreement, value_loss,
+    CandidateSetHead, HeadConfig, advantage_mse_loss, binomial_rate_loss, equivalence_target, pairwise_teacher_loss,
+    parse_calls, selection_loss, topk_agreement, value_loss,
 )
 from openwebrl.selection_head_features import candidate_tokens, candidate_tokens_from_ids, extract, pool_candidate
 from openwebrl.actor_head_scoring import score as score_captured_head
@@ -85,6 +85,26 @@ class Head(unittest.TestCase):
         self.assertTrue((scores.grad[1] == 0).all())
         better = torch.tensor([[2., 2., 0., 0., 0.]])
         self.assertLess(pairwise_teacher_loss(better, targets[:1], mask[:1]), loss)
+
+    def test_advantage_mse_ignores_state_difficulty_and_padding(self):
+        rate = torch.tensor([[2 / 3, 2 / 5, 0., 1 / 3, 0.]])
+        mask = torch.tensor([[True, True, True, True, False]])
+        adv = rate[0, :4] - rate[0, :4].mean()
+        exact = torch.cat([adv, torch.tensor([float("-inf")])])[None]
+        self.assertAlmostEqual(advantage_mse_loss(exact, rate, mask).item(), 0., places=6)
+        self.assertAlmostEqual(advantage_mse_loss(exact + 7., rate, mask).item(), 0., places=5)   # a constant shift is free
+        self.assertAlmostEqual(advantage_mse_loss(exact, rate + .3, mask).item(), 0., places=5)   # so is an easier state
+        self.assertGreater(advantage_mse_loss(torch.zeros(1, 5), rate, mask).item(), 0.)
+
+    def test_binomial_rate_loss_is_minimised_at_the_rate_and_weights_draws(self):
+        rate = torch.tensor([[2 / 3, 2 / 5, .5]]); trials = torch.tensor([[3., 5., 0.]])
+        mask = torch.tensor([[True, True, True]])
+        logits = torch.zeros(1, 3, requires_grad=True)
+        binomial_rate_loss(logits, rate, trials, mask).backward()
+        self.assertLess(logits.grad[0, 0].item(), 0.); self.assertGreater(logits.grad[0, 1].item(), 0.)
+        self.assertEqual(logits.grad[0, 2].item(), 0.)                       # no valid draws, no gradient
+        at_rate = torch.logit(rate)
+        self.assertLess(binomial_rate_loss(at_rate, rate, trials, mask), binomial_rate_loss(at_rate + .5, rate, trials, mask))
 
     def test_config_round_trip(self):
         self.assertEqual(HeadConfig.from_json(self.config.to_json()), self.config)

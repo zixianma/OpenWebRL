@@ -193,6 +193,21 @@ def pointwise_bce_loss(logits, target, mask):
     return (loss * mask).sum() / mask.sum().clamp_min(1)
 
 
+def advantage_mse_loss(logits, rate, mask):
+    """Centred score versus advantage: (score - panel mean score) regresses (rate - panel mean rate)."""
+    m = mask.float(); k = m.sum(-1, keepdim=True).clamp_min(1)
+    score = logits.masked_fill(~mask, 0.); score = score - score.sum(-1, keepdim=True) / k
+    adv = rate * m; adv = adv - adv.sum(-1, keepdim=True) / k
+    return (((score - adv) ** 2) * m).sum() / m.sum().clamp_min(1)
+
+
+def binomial_rate_loss(logits, rate, trials, mask):
+    """sigmoid(score) fits each candidate's observed success rate, weighted by its number of valid draws."""
+    weight = trials * mask
+    loss = F.binary_cross_entropy_with_logits(logits.masked_fill(~mask, 0.), rate.clamp(0, 1), reduction="none")
+    return (loss * weight).sum() / weight.sum().clamp_min(1)
+
+
 def pairwise_teacher_loss(scores, target, mask):
     """Winner-class versus other candidates; no comparisons among losers.
 

@@ -6,7 +6,10 @@ are never seen). Every source trains on the same states: those with a target fro
 
 Label sources (one target per action): teacher_pre / teacher_k1 / teacher_k3 = Luna vote share over the state's
 actions (judgments under --labels/<pre|k1|k3>); outcome = the action(s) with the best observed success on draws 0-2,
-valid draws only, ties split. Held-out draws 3-7 only score.
+valid draws only, ties split. Held-out draws 3-7 only score. Outcome variants on the same draws 0-2: outcome_soft =
+softmax(rate / --tau) over actions; outcome_rate = each action's rate and valid-draw count, trained with --loss advmse
+(centred score regresses rate minus the state's mean rate) or --loss binom (sigmoid(score) fits the rate, weighted by
+draws).
 
 Panel views: "distinct" = one representative per action (2-5 candidates); "natural" = five SFT proposals drawn at
 the actor's own frequencies (each SFT proposal of an action's key; a state with fewer labelled proposals uses all),
@@ -30,6 +33,7 @@ Piotr-data head did. Our test states are only scored.
 import argparse
 from collections import defaultdict
 import json
+import math
 from pathlib import Path
 import random
 import sys
@@ -48,14 +52,24 @@ def held_rate(action, draws):
     return sum(c[1] for c in cells) / len(cells) if cells else None
 
 
-def targets(records, labels, source):
+def held_count(action, draws):
+    return sum(1 for d in draws for c in action["outcomes"][str(d)] if c and c[0])
+
+
+def targets(records, labels, source, tau=0.25):
     out = {}
-    if source == "outcome":
+    if source.startswith("outcome"):
         for x in records:
             rates = [held_rate(a, range(3)) for a in x["actions"]]
             if None in rates:
                 continue
-            best = max(rates); w = [float(r == best) for r in rates]
+            if source == "outcome":                        # best action(s), ties split
+                best = max(rates); w = [float(r == best) for r in rates]
+            elif source == "outcome_soft":                 # softmax(rate / tau)
+                w = [math.exp((r - max(rates)) / tau) for r in rates]
+            else:                                          # outcome_rate: (success rate, valid draw count) per action
+                out[x["state_id"]] = [(r, held_count(a, range(3))) for r, a in zip(rates, x["actions"])]
+                continue
             out[x["state_id"]] = [v / sum(w) for v in w]
         return out
     judged = labels / SOURCES[source] / "judgments"
@@ -162,7 +176,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", type=Path, required=True); ap.add_argument("--labels", type=Path, required=True)
     ap.add_argument("--features", type=Path); ap.add_argument("--output", type=Path, required=True)
-    ap.add_argument("--source", required=True, choices=[*SOURCES, "outcome"])
+    ap.add_argument("--source", required=True, choices=[*SOURCES, "outcome", "outcome_soft", "outcome_rate"],
+                    help="outcome_soft: softmax(rate / --tau) on draws 0-2; outcome_rate: per-action rates for "
+                         "--loss advmse/binom")
+    ap.add_argument("--tau", type=float, default=0.25, help="outcome_soft temperature")
     ap.add_argument("--common-sources", default="teacher_pre,teacher_k1,teacher_k3,outcome")
     ap.add_argument("--seed", type=int, default=0); ap.add_argument("--epochs", type=int, default=20)
     ap.add_argument("--batch-size", type=int, default=64); ap.add_argument("--lr", type=float, default=3e-4)
@@ -171,7 +188,9 @@ def main():
     ap.add_argument("--scorer", choices=("transformer", "mlp"), default="transformer")
     ap.add_argument("--mlp-depth", type=int, default=1); ap.add_argument("--mlp-width", type=int)
     ap.add_argument("--readout", choices=("linear", "pointer"), default="linear")
-    ap.add_argument("--loss", choices=("softce", "bce"), default="softce")
+    ap.add_argument("--loss", choices=("softce", "bce", "advmse", "binom"), default="softce",
+                    help="advmse: centred score vs advantage (rate minus the state's mean rate); binom: per-candidate BCE "
+                         "on the success rate, weighted by valid draws (both need --source outcome_rate)")
     ap.add_argument("--train-view", choices=("distinct", "natural"), default="distinct")
     ap.add_argument("--train-frac", type=float, default=1.0); ap.add_argument("--frac-seed", type=int, default=20261021)
     ap.add_argument("--extra-panels", type=Path, help="add five-candidate teacher panels (e.g. Piotr's GPT-5.5 picks, "
@@ -189,10 +208,16 @@ def main():
     if args.extra_only and not args.extra_panels:
         ap.error("--extra-only needs --extra-panels")
     import torch
-    from openwebrl.selection_head import CandidateSetHead, HeadConfig, pointwise_bce_loss, selection_loss
+    from openwebrl.selection_head import (CandidateSetHead, HeadConfig, advantage_mse_loss, binomial_rate_loss,
+                                         pointwise_bce_loss, selection_loss)
     from selection_outcome_experiments import cluster_boot
     torch.set_num_threads(int(__import__("os").environ.get("OMP_NUM_THREADS", "1")))
-    loss_fn = selection_loss if args.loss == "softce" else pointwise_bce_loss
+    if (args.loss in ("advmse", "binom")) != (args.source == "outcome_rate"):
+        ap.error("--loss advmse/binom go with --source outcome_rate")
+
+    loss_fn = {"softce": selection_loss, "bce": pointwise_bce_loss,          # outcome_rate targets: [..., 0] rate, [..., 1] draws
+               "advmse": lambda logits, t, m: advantage_mse_loss(logits, t[..., 0], m),
+               "binom": lambda logits, t, m: binomial_rate_loss(logits, t[..., 0], t[..., 1], m)}[args.loss]
     layers = tuple(int(x) for x in args.layers.split(","))
 
     records = load_actions(args.data)
@@ -201,7 +226,7 @@ def main():
     for src in args.common_sources.split(","):
         ids = set(targets(records, args.labels, src))
         common = ids if common is None else common & ids
-    y = targets(records, args.labels, args.source)
+    y = targets(records, args.labels, args.source, args.tau)
     rec = {x["state_id"]: x for x in records}
     train_ids = sorted(s for s in common if rec[s]["split"] == "train" and s in cand)
     if args.train_frac < 1:                                       # whole training tasks, nested across fractions
@@ -237,7 +262,7 @@ def main():
     def batch(ids, view, rng, with_target=True):
         N = 5
         c = torch.zeros(len(ids), N, cand[ids[0]].shape[-1]); m = torch.zeros(len(ids), N, dtype=torch.bool)
-        t = torch.zeros(len(ids), N); acts = []
+        t = torch.zeros(len(ids), N, 2) if args.source == "outcome_rate" else torch.zeros(len(ids), N); acts = []
         for b, s in enumerate(ids):
             rows, a = panel(rec[s], view, rng)
             c[b, :len(rows)] = cand[s][rows].float(); m[b, :len(rows)] = True; acts.append(a)
@@ -247,7 +272,10 @@ def main():
                     count[k] += 1
                 for i, k in enumerate(a):
                     # softce: an action's mass is split over its duplicates; bce: each copy carries the action's value
-                    t[b, i] = share[k] / count[k] if args.loss == "softce" else share[k]
+                    if args.source == "outcome_rate":         # each copy carries the action's rate and count
+                        t[b, i, 0], t[b, i, 1] = share[k]
+                    else:
+                        t[b, i] = share[k] / count[k] if args.loss == "softce" else share[k]
         return c, torch.stack([state[s].float() for s in ids]), m, t, acts
 
     torch.manual_seed(args.seed); rng = random.Random(args.seed)
@@ -325,7 +353,8 @@ def main():
     uni = [sum(per[s]["rates"]) / len(per[s]["rates"]) for s in scored]
     sft = [per[s]["sft"] for s in scored]; nat = [natural[s] for s in scored]
     mean = lambda v: round(100 * sum(v) / len(v), 2)
-    res = dict(source=args.source, interaction=args.interaction, scorer=args.scorer, loss=args.loss,
+    tau = args.tau if args.source == "outcome_soft" else None
+    res = dict(source=args.source, tau=tau, interaction=args.interaction, scorer=args.scorer, loss=args.loss,
                mlp_depth=args.mlp_depth, mlp_width=args.mlp_width, readout=args.readout, train_view=args.train_view,
                train_frac=args.train_frac, seed=args.seed, params=params, train_states=len(train_ids), extra=extra_info,
                train_tasks=len({rec[s]["task_id"] for s in train_ids}), test_states=len(scored), test_tasks=len(set(g)),
@@ -345,7 +374,7 @@ def main():
                natural_minus_sft_sample=cluster_boot([a - b for a, b in zip(nat, sft)], g))
     args.output.mkdir(parents=True, exist_ok=True)
     torch.save({"config": config.to_json(), "state_dict": {k: v.cpu() for k, v in head.state_dict().items()},
-                "objective": "soft_ce", "loss": args.loss, "params": params, "source": args.source, "seed": args.seed,
+                "objective": "soft_ce", "loss": args.loss, "params": params, "source": args.source, "tau": tau, "seed": args.seed,
                 "train_states": len(train_ids), "train_view": args.train_view,
                 "extra_base_states": len(extra_ids), "extra_only": args.extra_only}, args.output / "head.pt")
     (args.output / "train-states.json").write_text(json.dumps(train_ids + extra_ids))
