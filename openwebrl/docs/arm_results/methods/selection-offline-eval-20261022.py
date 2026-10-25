@@ -73,7 +73,7 @@ def state_card(x, y, step, color, width=0.40, height=0.21, candidate="i"):
     box(x - width / 2, y - height / 2, width, height, edge=color, fill="white")
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
                            facecolor=color, edgecolor="none", alpha=0.15, zorder=2))
-    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{({candidate})}}$", ha="center", color=color)
+    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", ha="center", color=color)
 
 
 label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
@@ -109,7 +109,7 @@ text(2.63, 4.48, "Rollout 0 (expanded)", color=LOOK, ha="center")
 text(4.53, 4.71, "Rollout outcomes", color=MUTED, ha="center")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 4.26,
-         rf"$a_{{t+{k}}}^{{(i)}}$", color=MUTED, ha="center")
+         rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
 # Match the picked candidates to the source colors in panel (b), directly.
 pick_colors = {}
 for label, color in (("Pre-execution", PRE), ("Post-execution", POST),
@@ -126,7 +126,7 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     capsule.set_zorder(0.5)
     arrow(0.57, mid, 0.77, y, color=LINE)
     box(0.79, y - 0.10, 0.63, 0.20)
-    text(0.925, y, rf"$a_t^{{({i + 1})}}$", size=8, ha="center")
+    text(0.925, y, rf"$a_t^{{{i + 1}}}$", size=8, ha="center")
     for j, color in enumerate(pick_colors.get(i, ())):
         ax.add_patch(Circle((1.15 + 0.13 * j, y), 0.027,
                            facecolor=color, edgecolor="white", linewidth=0.4, zorder=3))
@@ -167,7 +167,7 @@ for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
 # (b) Aligned input -> teacher -> chosen action lanes. All teachers compare
 # all five candidates; the indexed trajectory below is supplied for EACH one.
 text(0.12, 2.50, "(b)  Selection", size=8.5, weight="bold")
-text(0.12, 2.28, r"Shared: task, history, $s_t$, $a_t^{(1)},\ldots,a_t^{(5)}$", color=MUTED)
+text(0.12, 2.28, r"Shared: task, history, $s_t$, $a_t^{1},\ldots,a_t^{5}$", color=MUTED)
 text(4.66, 2.28, "Luna: no verdicts", color=MUTED)
 text(0.12, 2.03, "Method", color=MUTED)
 text(1.43, 2.03, r"Rollout 0 input (per action)", color=LOOK)
@@ -189,14 +189,14 @@ for y, label, color, n_states in lane_rows:
         text(2.83, y, "Shared input only", color=MUTED, ha="center")
     else:
         box(1.43, y - 0.10, 0.34, 0.20, edge=color)
-        text(1.60, y, r"$a_t^{(i)}$", size=8, color=color, ha="center")
+        text(1.60, y, r"$a_t^{i}$", size=8, color=color, ha="center")
         arrow(1.79, y, 1.88, y, color=color)
         for k, x in enumerate(future_x[:n_states]):
             state_card(x, y, k + 1, color)
             if k:
                 arrow(future_x[k - 1] + 0.21, y, x - 0.21, y, color=color)
                 text((future_x[k - 1] + x) / 2, y + 0.14,
-                     rf"$a_{{t+{k}}}^{{(i)}}$", color=MUTED, ha="center")
+                     rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
     arrow(future_x[n_states - 1] + 0.21 if n_states else 4.29,
           y, 4.53, y, color=color)
     box(4.55, y - 0.13, 0.66, 0.26, edge=color)
@@ -204,7 +204,7 @@ for y, label, color, n_states in lane_rows:
     arrow(5.23, y, 5.48, y, color=color)
     pick = PICKS[label]
     box(5.50, y - 0.13, 0.70, 0.26, edge=color)
-    text(5.85, y, rf"$a_t^{{({pick + 1})}}$", size=9, color=color, ha="center")
+    text(5.85, y, rf"$a_t^{{{pick + 1}}}$", size=9, color=color, ha="center")
     arrow(6.23, y, 6.51, y, color=HELD)
     text(6.74, y, f"{100 * held_rates[pick]:.0f}%", color=HELD, weight="bold", ha="center")
 text(1.43, 0.67, "Subscript: time · superscript: candidate", color=MUTED)
@@ -219,7 +219,7 @@ box(4.55, y - 0.13, 0.66, 0.26, edge=OUTCOME)
 text(4.88, y, "Best rate", color=OUTCOME, ha="center")
 arrow(5.23, y, 5.48, y, color=OUTCOME)
 box(5.50, y - 0.13, 0.70, 0.26, edge=OUTCOME)
-text(5.85, y, r"$a_t^{(3)}$", size=9, color=OUTCOME, ha="center")
+text(5.85, y, r"$a_t^{3}$", size=9, color=OUTCOME, ha="center")
 arrow(6.23, y, 6.51, y, color=HELD)
 text(6.74, y, "80%", color=HELD, weight="bold", ha="center")
 
