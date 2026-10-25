@@ -1,4 +1,4 @@
-# ARM branch states: prefixes, live replay and record-and-replay
+# ARM branch states collection
 
 How a branch state is reached, and how the 40 branches (5 actions × 8 continuation draws) re-open it, under the
 standard live-replay protocol and the record-and-replay (RR) prototype used by two SFT cohorts.
