@@ -1,0 +1,495 @@
+{
+ "coarse_rule": "success; invalid split by turns<=1 (start page/timeout) vs later (step error); turn limit = status failed or 30 turns; finished failure = completed, judged failure; other = truncated",
+ "difficulty_rule": "human reference length 1-5 easy, 6-10 medium, 11+ hard (80/141/79 tasks)",
+ "runs": {
+  "outcome56": {
+   "10": {
+    "categories": {
+     "finished_failure": 92,
+     "turn_limit": 63,
+     "success": 88,
+     "invalid_step": 24,
+     "invalid_start": 25,
+     "other_valid": 8
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 40,
+      "valid": 72
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 34,
+      "valid": 110
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 14,
+      "valid": 69
+     }
+    }
+   },
+   "20": {
+    "categories": {
+     "finished_failure": 97,
+     "success": 93,
+     "invalid_step": 32,
+     "turn_limit": 47,
+     "invalid_start": 25,
+     "other_valid": 6
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 39,
+      "valid": 65
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 38,
+      "valid": 110
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 16,
+      "valid": 68
+     }
+    }
+   },
+   "30": {
+    "categories": {
+     "finished_failure": 132,
+     "invalid_start": 24,
+     "success": 97,
+     "turn_limit": 18,
+     "invalid_step": 26,
+     "other_valid": 3
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 43,
+      "valid": 71
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 38,
+      "valid": 113
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 16,
+      "valid": 66
+     }
+    }
+   },
+   "40": {
+    "categories": {
+     "finished_failure": 123,
+     "success": 103,
+     "invalid_start": 25,
+     "turn_limit": 7,
+     "other_valid": 7,
+     "invalid_step": 35
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 40,
+      "valid": 74
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 44,
+      "valid": 108
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 19,
+      "valid": 58
+     }
+    }
+   },
+   "50": {
+    "categories": {
+     "finished_failure": 123,
+     "success": 102,
+     "other_valid": 7,
+     "invalid_start": 23,
+     "invalid_step": 38,
+     "turn_limit": 7
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 38,
+      "valid": 65
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 44,
+      "valid": 115
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 20,
+      "valid": 59
+     }
+    }
+   },
+   "60": {
+    "categories": {
+     "finished_failure": 111,
+     "invalid_step": 31,
+     "success": 117,
+     "invalid_start": 24,
+     "turn_limit": 9,
+     "other_valid": 8
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 39,
+      "valid": 72
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 54,
+      "valid": 116
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 24,
+      "valid": 57
+     }
+    }
+   },
+   "70": {
+    "categories": {
+     "finished_failure": 120,
+     "other_valid": 5,
+     "success": 112,
+     "invalid_start": 23,
+     "turn_limit": 6,
+     "invalid_step": 34
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 40,
+      "valid": 70
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 50,
+      "valid": 114
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 22,
+      "valid": 59
+     }
+    }
+   },
+   "80": {
+    "categories": {
+     "finished_failure": 111,
+     "turn_limit": 1,
+     "success": 124,
+     "invalid_step": 28,
+     "invalid_start": 24,
+     "other_valid": 12
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 45,
+      "valid": 71
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 58,
+      "valid": 117
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 21,
+      "valid": 60
+     }
+    }
+   },
+   "90": {
+    "categories": {
+     "finished_failure": 121,
+     "invalid_step": 40,
+     "success": 107,
+     "invalid_start": 23,
+     "other_valid": 9
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 42,
+      "valid": 71
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 45,
+      "valid": 102
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 20,
+      "valid": 64
+     }
+    }
+   }
+  },
+  "gate-b": {
+   "20": {
+    "categories": {
+     "finished_failure": 91,
+     "success": 101,
+     "turn_limit": 32,
+     "invalid_start": 33,
+     "invalid_step": 39,
+     "other_valid": 4
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 37,
+      "valid": 60
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 49,
+      "valid": 113
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 15,
+      "valid": 55
+     }
+    }
+   },
+   "30": {
+    "categories": {
+     "finished_failure": 107,
+     "success": 102,
+     "invalid_step": 35,
+     "invalid_start": 31,
+     "turn_limit": 22,
+     "other_valid": 3
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 40,
+      "valid": 62
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 49,
+      "valid": 109
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 13,
+      "valid": 63
+     }
+    }
+   },
+   "40": {
+    "categories": {
+     "finished_failure": 93,
+     "invalid_step": 43,
+     "success": 108,
+     "invalid_start": 29,
+     "turn_limit": 21,
+     "other_valid": 6
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 42,
+      "valid": 64
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 44,
+      "valid": 101
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 22,
+      "valid": 63
+     }
+    }
+   },
+   "50": {
+    "categories": {
+     "invalid_step": 37,
+     "finished_failure": 96,
+     "success": 113,
+     "invalid_start": 31,
+     "other_valid": 9,
+     "turn_limit": 14
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 39,
+      "valid": 66
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 52,
+      "valid": 107
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 22,
+      "valid": 59
+     }
+    }
+   },
+   "60": {
+    "categories": {
+     "finished_failure": 109,
+     "success": 112,
+     "invalid_start": 29,
+     "invalid_step": 43,
+     "other_valid": 6,
+     "turn_limit": 1
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 41,
+      "valid": 64
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 51,
+      "valid": 108
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 20,
+      "valid": 56
+     }
+    }
+   },
+   "70": {
+    "categories": {
+     "finished_failure": 99,
+     "success": 112,
+     "invalid_start": 28,
+     "invalid_step": 43,
+     "turn_limit": 3,
+     "other_valid": 15
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 45,
+      "valid": 67
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 46,
+      "valid": 107
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 21,
+      "valid": 55
+     }
+    }
+   },
+   "80": {
+    "categories": {
+     "other_valid": 8,
+     "finished_failure": 109,
+     "success": 107,
+     "invalid_start": 31,
+     "invalid_step": 43,
+     "turn_limit": 2
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 40,
+      "valid": 63
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 54,
+      "valid": 115
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 13,
+      "valid": 48
+     }
+    }
+   },
+   "90": {
+    "categories": {
+     "finished_failure": 94,
+     "invalid_step": 36,
+     "success": 129,
+     "invalid_start": 30,
+     "other_valid": 10,
+     "turn_limit": 1
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 44,
+      "valid": 65
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 59,
+      "valid": 114
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 26,
+      "valid": 55
+     }
+    }
+   },
+   "100": {
+    "categories": {
+     "finished_failure": 100,
+     "success": 110,
+     "invalid_step": 46,
+     "invalid_start": 29,
+     "other_valid": 13,
+     "turn_limit": 2
+    },
+    "difficulty": {
+     "easy": {
+      "tasks": 80,
+      "successes": 43,
+      "valid": 66
+     },
+     "medium": {
+      "tasks": 141,
+      "successes": 49,
+      "valid": 105
+     },
+     "hard": {
+      "tasks": 79,
+      "successes": 18,
+      "valid": 54
+     }
+    }
+   }
+  }
+ }
+}

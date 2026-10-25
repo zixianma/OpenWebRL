@@ -31,12 +31,51 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
    (SFT checkpoint), 41–48% are mixed with 5 rollouts and 53% with 8, which costs 1.6× more
    rollouts per group. Clean pass@K for K = 5, 8 and 16 is [pending](#rl-behavior-passk-20261024).
 
-![RL behavior overview](rl_results/rl_behavior_overview.png)
+![Outcome-only 56-group held-out episodes by category](rl_results/rl_behavior_categories_56.png)
 
-*(a) Held-out episode categories for the 56-group run. (b) Mean steps of failed valid
-episodes for four runs, with 30-turn failures as bars. (c) Training-rollout behavior of the
-48-group run.* [PDF](rl_results/rl_behavior_overview.pdf) · script
-`scripts/plot_rl_behavior.py` · [episode lengths](arm_results/rl_integration/behavior/rl-eval-episode-length-20261024.json)
+*Outcome-only 56 groups: held-out episodes per category at each checkpoint (full
+categories; [rules](#rl-behavior-failures-20261024)).* [PDF](rl_results/rl_behavior_categories_56.pdf)
+
+<a id="rl-behavior-56-vs-gateb-20261024"></a>
+### Outcome-only 56 groups vs Gate B
+
+Gate B trajectories were pruned, so this comparison uses coarse categories built only from
+fields saved for every evaluation. On the 56-group run, where both exist, "finished,
+judged failure" is about 99% wrong answers, repeated actions and impossibility claims. An
+invalid episode that stopped by step 1 is a start-page failure or timeout; a later one is
+the step error.
+
+![Coarse categories, 56 groups vs Gate B](rl_results/rl_behavior_categories_56_vs_gateb.png)
+
+![Success by difficulty, 56 groups vs Gate B](rl_results/rl_behavior_difficulty_56_vs_gateb.png)
+
+| Difficulty (tasks) | 56 groups, iteration 10 | 56 groups, mean of 70/80/90 | Gate B, iteration 20 | Gate B, mean of 80/90/100 |
+| --- | ---: | ---: | ---: | ---: |
+| Easy (80) | 50.0% | 52.9% | 46.2% | 52.9% |
+| Medium (141) | 24.1% | 36.2% | 34.8% | 38.3% |
+| Hard (79) | 17.7% | 26.6% | 19.0% | 24.1% |
+
+- **RL gains come from medium and hard tasks.** Easy tasks stay near 50% throughout both
+  runs. Medium rises by about 12 pp and hard by about 9 pp (56-group run).
+- **Gate B gets to medium-task gains earlier.** At iteration 20 it is already at 35% on
+  medium tasks, against 27% for the 56-group run. By the end the two runs are within noise
+  in every band.
+- **Gate B has more invalid episodes** (start-page and step errors: 66–75 per 300, against
+  49–63). Its evaluations ran on earlier dates, so site availability differs and this is not
+  a matched comparison.
+- **Noise:** one checkpoint's band rate has a binomial SE of about 4–6 pp. The dashed lines
+  are 3-checkpoint means. Overall success counts invalid episodes as failures.
+
+<details>
+<summary>Sources</summary>
+
+- **Counts:** [per checkpoint and band](arm_results/rl_integration/behavior/rl-eval-coarse-difficulty-20261024.json).
+- **Difficulty bins:** human reference length 1–5 / 6–10 / 11+ steps, the published
+  Online-Mind2Web rule (80/141/79 tasks; the [earlier difficulty table](RL_RESULTS.md)
+  uses the same bins).
+- **Script:** `scripts/plot_rl_behavior.py`.
+- **Earlier overview figure:** [mean failed-episode length and 48-group training trends](rl_results/rl_behavior_overview.png).
+</details>
 
 <a id="rl-behavior-noise-20261024"></a>
 ## Evaluation noise and fair comparison
