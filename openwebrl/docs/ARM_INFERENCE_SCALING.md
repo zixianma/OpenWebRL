@@ -1926,9 +1926,9 @@ Private immutable audit pointers: final 30-receipt release SHA-256 `2d1eab5545e9
 
 <a id="cuawright-native-full300-four-methods-20261025"></a>
 
-## Native CUAWright: approved four-method full300 extension
+## Native CUAWright: running four-method full300 extension
 
-The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. No full300 native results are available yet.
+The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. No full300 native results are available yet. All four methods passed independent audits of their two fixed fresh-task canaries and entered bulk execution. These eight canaries produced six successes, one valid failure and one preserved frozen-judge parse invalid; the fixed canaries qualify execution and are not a performance estimate. Their outcomes remain in the final task denominators.
 
 | Method | Reused task outcomes | New task outcomes | Final task outcomes | New CPU shards | Model USD cap | External judge USD cap |
 |---|---:|---:|---:|---:|---:|---:|

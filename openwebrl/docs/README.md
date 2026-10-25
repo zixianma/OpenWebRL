@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Native CUAWright full300 extension: approved Luna single, N=3, N=5 and Sol single; 900 new outcomes plus 300 preserved outcomes](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).
+[Native CUAWright full300 extension running: all four canary audits passed; 900 new outcomes plus 300 preserved outcomes](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).
 
 [Native CUAWright selection complete: Sol single 80/100, Sol N=3 72/100, Luna N=3 68/100; shared-task success, all-attempt cost, latency and audited aggregates](ARM_INFERENCE_SCALING.md#cuawright-native-selection-results-20261024).
 
