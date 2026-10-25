@@ -143,6 +143,28 @@ The training reward and the gate were scored as verifiers on two benchmarks:
   successes.
 - **The checklist gate `C` trades the other way:** about the same κ, more of the true successes
   (77%), more false positives (21%). Combining the two gates does not help.
+- **Our own run of the Universal Verifier does not reproduce its published quality.** We ran
+  the released code with gpt-5.6-terra in both judge roles. On the 54 trajectories it finished,
+  it accepts 37% of human failures, versus 6.5% for the dataset's UV verdicts on the same
+  trajectories. Its agreement with those verdicts is κ 0.24. Its κ against humans, 0.28, is no
+  better than the gates. So the dataset's UV row is not evidence that we can get UV quality.
+
+**Universal Verifier re-run subset** (54 OM2W-split trajectories, 8 human successes; every
+verifier scored on the same subset):
+
+| Verifier | Accepted | TP | FP | FN | TN | Cohen's κ | Recall | False-positive rate |
+|---|---|---|---|---|---|---|---|---|
+| Training reward | 34 | 8 | 26 | 0 | 20 | 0.19 [0.07, 0.34] | 100% | 56.5% |
+| Gated `J · G` | 13 | 5 | 8 | 3 | 38 | 0.36 [0.04, 0.65] | 62.5% | 17.4% |
+| Checklist `J · C` | 18 | 7 | 11 | 1 | 35 | 0.42 [0.14, 0.67] | 87.5% | 23.9% |
+| Universal Verifier, dataset verdicts | 9 | 6 | 3 | 2 | 43 | 0.65 [0.30, 0.91] | 75.0% | 6.5% |
+| Universal Verifier, our re-run (gpt-5.6-terra) | 24 | 7 | 17 | 1 | 29 | 0.28 [0.07, 0.49] | 87.5% | 37.0% |
+
+- **Not a random sample:** the subset is the first task ids alphabetically, because the budget
+  ran out.
+- **Why the re-run is lenient is not established.** It may be the model swap: the release uses
+  gpt-5 + o4-mini; o4-mini is retired here. Or the dataset's verdicts may come from a different
+  pipeline version or configuration than the released commit `a675d6d`.
 - **The Universal Verifier is clearly better than both.**
 - **During RL, the training reward drifts away from the eval judge.** Under the eval judge,
   held-out success does not rise between iterations 10 and 90.
@@ -227,6 +249,13 @@ episodes that ended with an answer, `terminal_status = completed`):
   - **Runner:** `scripts/run_universal_verifier.py`.
   - **Implication:** as an RL reward on GPT-4.1 successes only, this would cost roughly $80 per
     iteration, about 16× the gate.
+- **Full re-run (job 386440, separately approved $75 cap):**
+  - **Cost:** $70.44, about $1.30 per trajectory, twice the probe's estimate. It covered 57 of
+    106 OM2W-split trajectories, including the 3 probe trajectories.
+  - **Excluded:** 3 trajectories that finished after the cap was hit mid-run, since some of
+    their calls failed. One more trajectory had no outcome verdict, which leaves 54.
+  - **Outputs (private):** raw rows in `cuavb/uv-raw-386440.jsonl`; subset metrics in
+    `summary-uv-subset.json`.
   - The 150 earlier grounding results were reused; 45 new held-out episodes were grounded.
   - One CUAVerifierBench training-reward call returned no verdict and is excluded.
 - **Script:** `scripts/eval_outcome_reward.py`. It uses the training judge's code path
@@ -335,6 +364,11 @@ Wait for its iteration-60 result before combining.
      - a Universal-Verifier-style rubric reward (`microsoft/fara`, MMRubricAgent).
    - **Result for (c):** κ 0.41 on human labels, the same as (b), with higher recall and more
      false positives. It agrees best with the eval judge on held-out episodes.
+   - **Result for the Universal Verifier:** our re-run did not reproduce its published quality
+     (κ 0.28 vs 0.65 on the same trajectories), at about $1.30 per trajectory. It is not a
+     usable reward as run.
+   - **Best candidate so far:** a gate, `G` or `C`. Both are about twice the training reward's
+     κ on human labels and cheap enough for training.
 3. **Training** (needs explicit GPU and judge budget approval). Proceed only if (b) or (c)
    clearly beats (a) on human labels.
    - Run a fresh uniform-G8 run from **iteration 0**: SFT checkpoint, fresh optimizer and

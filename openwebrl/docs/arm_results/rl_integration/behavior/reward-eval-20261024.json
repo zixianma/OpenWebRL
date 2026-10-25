@@ -2429,5 +2429,397 @@
   "action_model": "gpt-5.6-terra",
   "agree_with_dataset_uv": 2,
   "agree_with_human": 2
+ },
+ "uv_rerun_386440_subset": {
+  "reference": "human (final adjudicated label)",
+  "items": 54,
+  "scores": {
+   "train": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 8,
+    "fp": 26,
+    "fn": 0,
+    "tn": 20,
+    "accuracy": 0.5185185185185185,
+    "kappa": 0.185614849187935,
+    "precision": 0.23529411764705882,
+    "recall": 1.0,
+    "false_positive_rate": 0.5652173913043478,
+    "predicted_success_rate": 0.6296296296296297,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.3888888888888889,
+     0.6481481481481481
+    ],
+    "kappa_ci95": [
+     0.0689655172413793,
+     0.33579335793357945
+    ],
+    "precision_ci95": [
+     0.0967741935483871,
+     0.38235294117647056
+    ],
+    "recall_ci95": [
+     1.0,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.4222222222222222,
+     0.7111111111111111
+    ]
+   },
+   "gated": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 5,
+    "fp": 8,
+    "fn": 3,
+    "tn": 38,
+    "accuracy": 0.7962962962962963,
+    "kappa": 0.3585313174946003,
+    "precision": 0.38461538461538464,
+    "recall": 0.625,
+    "false_positive_rate": 0.17391304347826086,
+    "predicted_success_rate": 0.24074074074074073,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.6851851851851852,
+     0.8888888888888888
+    ],
+    "kappa_ci95": [
+     0.041420118343195395,
+     0.6511627906976745
+    ],
+    "precision_ci95": [
+     0.1111111111111111,
+     0.6666666666666666
+    ],
+    "recall_ci95": [
+     0.25,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.06818181818181818,
+     0.2857142857142857
+    ]
+   },
+   "checklist": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 7,
+    "fp": 11,
+    "fn": 1,
+    "tn": 35,
+    "accuracy": 0.7777777777777778,
+    "kappa": 0.4193548387096775,
+    "precision": 0.3888888888888889,
+    "recall": 0.875,
+    "false_positive_rate": 0.2391304347826087,
+    "predicted_success_rate": 0.3333333333333333,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.6666666666666666,
+     0.8888888888888888
+    ],
+    "kappa_ci95": [
+     0.1443661971830986,
+     0.6735751295336787
+    ],
+    "precision_ci95": [
+     0.15384615384615385,
+     0.631578947368421
+    ],
+    "recall_ci95": [
+     0.5833333333333334,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.11904761904761904,
+     0.3673469387755102
+    ]
+   },
+   "gated_checklist": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 4,
+    "fp": 8,
+    "fn": 4,
+    "tn": 38,
+    "accuracy": 0.7777777777777778,
+    "kappa": 0.2702702702702702,
+    "precision": 0.3333333333333333,
+    "recall": 0.5,
+    "false_positive_rate": 0.17391304347826086,
+    "predicted_success_rate": 0.2222222222222222,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.6666666666666666,
+     0.8888888888888888
+    ],
+    "kappa_ci95": [
+     -0.04480651731160886,
+     0.5659163987138266
+    ],
+    "precision_ci95": [
+     0.07692307692307693,
+     0.625
+    ],
+    "recall_ci95": [
+     0.14285714285714285,
+     0.875
+    ],
+    "false_positive_rate_ci95": [
+     0.06818181818181818,
+     0.2857142857142857
+    ]
+   },
+   "eval": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 8,
+    "fp": 25,
+    "fn": 0,
+    "tn": 21,
+    "accuracy": 0.5370370370370371,
+    "kappa": 0.19928825622775806,
+    "precision": 0.24242424242424243,
+    "recall": 1.0,
+    "false_positive_rate": 0.5434782608695652,
+    "predicted_success_rate": 0.6111111111111112,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.4074074074074074,
+     0.6666666666666666
+    ],
+    "kappa_ci95": [
+     0.07407407407407418,
+     0.357947434292866
+    ],
+    "precision_ci95": [
+     0.1,
+     0.3939393939393939
+    ],
+    "recall_ci95": [
+     1.0,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.40425531914893614,
+     0.6888888888888889
+    ]
+   },
+   "dataset_uv": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 6,
+    "fp": 3,
+    "fn": 2,
+    "tn": 43,
+    "accuracy": 0.9074074074074074,
+    "kappa": 0.6511627906976745,
+    "precision": 0.6666666666666666,
+    "recall": 0.75,
+    "false_positive_rate": 0.06521739130434782,
+    "predicted_success_rate": 0.16666666666666666,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.8148148148148148,
+     0.9814814814814815
+    ],
+    "kappa_ci95": [
+     0.29739776951672836,
+     0.9126213592233011
+    ],
+    "precision_ci95": [
+     0.3,
+     1.0
+    ],
+    "recall_ci95": [
+     0.4,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.0,
+     0.14634146341463414
+    ]
+   },
+   "dataset_legacy_mm": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 8,
+    "fp": 26,
+    "fn": 0,
+    "tn": 20,
+    "accuracy": 0.5185185185185185,
+    "kappa": 0.185614849187935,
+    "precision": 0.23529411764705882,
+    "recall": 1.0,
+    "false_positive_rate": 0.5652173913043478,
+    "predicted_success_rate": 0.6296296296296297,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.37037037037037035,
+     0.6481481481481481
+    ],
+    "kappa_ci95": [
+     0.06688963210702338,
+     0.33333333333333326
+    ],
+    "precision_ci95": [
+     0.09375,
+     0.38235294117647056
+    ],
+    "recall_ci95": [
+     1.0,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.4186046511627907,
+     0.7142857142857143
+    ]
+   },
+   "dataset_legacy_text": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 6,
+    "fp": 22,
+    "fn": 2,
+    "tn": 24,
+    "accuracy": 0.5555555555555556,
+    "kappa": 0.13368983957219252,
+    "precision": 0.21428571428571427,
+    "recall": 0.75,
+    "false_positive_rate": 0.4782608695652174,
+    "predicted_success_rate": 0.5185185185185185,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.42592592592592593,
+     0.6851851851851852
+    ],
+    "kappa_ci95": [
+     -0.04464285714285718,
+     0.32765399737876805
+    ],
+    "precision_ci95": [
+     0.06896551724137931,
+     0.38095238095238093
+    ],
+    "recall_ci95": [
+     0.4,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.3333333333333333,
+     0.625
+    ]
+   },
+   "dataset_gpt": {
+    "invalid_or_missing": 22,
+    "n": 32,
+    "tp": 3,
+    "fp": 14,
+    "fn": 0,
+    "tn": 15,
+    "accuracy": 0.5625,
+    "kappa": 0.16728624535315986,
+    "precision": 0.17647058823529413,
+    "recall": 1.0,
+    "false_positive_rate": 0.4827586206896552,
+    "predicted_success_rate": 0.53125,
+    "reference_success_rate": 0.09375,
+    "accuracy_ci95": [
+     0.40625,
+     0.71875
+    ],
+    "kappa_ci95": [
+     0.0,
+     0.38461538461538464
+    ],
+    "precision_ci95": [
+     0.0,
+     0.38461538461538464
+    ],
+    "recall_ci95": [
+     1.0,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.3076923076923077,
+     0.6551724137931034
+    ]
+   },
+   "uv_rerun_terra": {
+    "invalid_or_missing": 0,
+    "n": 54,
+    "tp": 7,
+    "fp": 17,
+    "fn": 1,
+    "tn": 29,
+    "accuracy": 0.6666666666666666,
+    "kappa": 0.27678571428571425,
+    "precision": 0.2916666666666667,
+    "recall": 0.875,
+    "false_positive_rate": 0.3695652173913043,
+    "predicted_success_rate": 0.4444444444444444,
+    "reference_success_rate": 0.14814814814814814,
+    "accuracy_ci95": [
+     0.5370370370370371,
+     0.7962962962962963
+    ],
+    "kappa_ci95": [
+     0.07407407407407418,
+     0.4881516587677725
+    ],
+    "precision_ci95": [
+     0.10526315789473684,
+     0.4782608695652174
+    ],
+    "recall_ci95": [
+     0.5833333333333334,
+     1.0
+    ],
+    "false_positive_rate_ci95": [
+     0.23404255319148937,
+     0.5
+    ]
+   }
+  },
+  "uv_rerun_vs_dataset_uv": {
+   "n": 54,
+   "tp": 7,
+   "fp": 17,
+   "fn": 2,
+   "tn": 28,
+   "accuracy": 0.6481481481481481,
+   "kappa": 0.2399999999999999,
+   "precision": 0.2916666666666667,
+   "recall": 0.7777777777777778,
+   "false_positive_rate": 0.37777777777777777,
+   "predicted_success_rate": 0.4444444444444444,
+   "reference_success_rate": 0.16666666666666666,
+   "accuracy_ci95": [
+    0.5185185185185185,
+    0.7777777777777778
+   ],
+   "kappa_ci95": [
+    0.02929427430093214,
+    0.4608985024958403
+   ],
+   "precision_ci95": [
+    0.1111111111111111,
+    0.4782608695652174
+   ],
+   "recall_ci95": [
+    0.5,
+    1.0
+   ],
+   "false_positive_rate_ci95": [
+    0.24324324324324326,
+    0.5294117647058824
+   ]
+  },
+  "subset": "54 OM2W-split trajectories with a clean UV re-run (first task ids alphabetically; budget ran out)",
+  "spent_usd": 70.44
  }
 }
