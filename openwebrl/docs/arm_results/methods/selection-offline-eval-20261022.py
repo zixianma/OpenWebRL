@@ -87,7 +87,7 @@ label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 
 # (a) The exact original 5 x 8 outcomes; labels never use the blue columns.
-text(0.12, 4.71, "(a)  Eight rollouts per action", size=8.5, weight="bold")
+text(0.12, 4.71, "(a)  Rollouts", size=8.5, weight="bold")
 xs = [3.76 + 0.22 * d for d in range(8)]
 trajectory_x = [1.76 + 0.48 * k for k in range(4)]
 ys = [4.04 - 0.22 * i for i in range(5)]
@@ -112,8 +112,7 @@ box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
 text(0.345, mid, r"$s_t$", size=9, ha="center")
 # Spell out rollout 0's states for candidates 1 and 5; ellipses omit 2--4.
 # Every candidate and all eight terminal outcomes remain in the matrix.
-text(2.63, 4.48, "Rollout 0 (expanded)", color=ROLLOUT, weight="bold", ha="center")
-text(4.53, 4.71, "Rollout outcomes", color=MUTED, ha="center")
+text(2.63, 4.48, "Rollout 0", color=ROLLOUT, weight="bold", ha="center")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 4.26,
          rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
@@ -164,14 +163,11 @@ for x, fill, label in ((0.17, SUCCESS, "Success"), (0.91, FAILURE, "Failure")):
 
 
 
-# Source labels and fills sit on the data itself; no separate routing boxes.
-text(1.65, 2.98, "Rollout 0: actions 1 and 5 expanded.", color=ROLLOUT)
 
 # Explicit method legend for candidate pick markers and teacher lanes.
-METHOD_COLORS = (("Pre-execution", PRE), ("Post-execution", POST),
-                 ("Lookahead H = 3", LOOK), ("Oracle (observed rollouts)", OUTCOME))
-text(0.12, 2.74, "Methods", color=MUTED)
-for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
+METHOD_COLORS = (("Pre-exec", PRE), ("Post-exec", POST),
+                 ("Lookahead H = 3", LOOK), ("Oracle (0–2)", OUTCOME))
+for x, (label, color) in zip((0.17, 1.71, 3.34, 5.55), METHOD_COLORS):
     ax.add_patch(Circle((x, 2.74), 0.032, facecolor=color,
                        edgecolor="white", linewidth=0.4, zorder=3))
     text(x + 0.09, 2.74, label, color=color)
@@ -182,14 +178,12 @@ text(0.12, 2.50, "(b)  Selection", size=8.5, weight="bold")
 # A neutral gray context box fans into all three teacher inputs. Junction dots
 # explicitly join the shared context and each complete candidate/evidence set.
 box(0.12, 2.145, 4.23, 0.27, edge=SHARED, fill=SHARED_BG, lw=0.95)
-text(2.235, 2.28, r"Shared input: task · history · $s_t$ · $K=5$ actions", color=SHARED, ha="center")
+text(2.235, 2.28, r"Shared: task · history · $s_t$ · $K=5$ actions", color=SHARED, ha="center")
 shared_x = 4.68
 ax.plot([4.35, shared_x, shared_x], [2.28, 2.28, 0.92],
         color=SHARED, linewidth=0.95, zorder=1)
-text(4.88, 2.28, "GPT-6 Luna · no verdicts", color=MUTED)
-text(0.12, 2.03, "Method", color=MUTED)
-text(1.43, 2.03, r"$K=5$ candidates + rollout 0 evidence", color=MUTED)
-text(5.15, 2.03, "Selector", color=MUTED, ha="center")
+text(4.88, 2.28, "GPT-6 Luna", color=MUTED)
+text(1.43, 2.03, "Candidates + rollout 0", color=MUTED)
 text(6.035, 2.03, "Pick", color=MUTED, ha="center")
 text(6.74, 2.03, "Eval %", color=HELD, ha="center")
 text(6.74, 1.87, "3–7", color=HELD, ha="center")
@@ -202,11 +196,11 @@ lane_rows = ((1.68, "Pre-execution", PRE, 0),
              (1.30, "Post-execution", POST, 1),
              (0.92, "Lookahead K = 3", LOOK, 4))
 for y, label, color, n_states in lane_rows:
-    display_label = "Lookahead H = 3" if label == "Lookahead K = 3" else label
+    display_label = {"Pre-execution": "Pre-exec", "Post-execution": "Post-exec",
+                     "Lookahead K = 3": "Lookahead H = 3"}[label]
     text(0.12, y, display_label, color=color)
     if n_states == 0:
         text(2.54, y, r"$\{a_t^{i}\}_{i=1}^{K}$", size=9, color=color, ha="center")
-        text(3.66, y, "no rollout", color=MUTED, ha="center")
         input_end = 4.29
     else:
         # The entire candidate/evidence pair is inside an i=1..K set (K=5). All five
@@ -236,13 +230,12 @@ for y, label, color, n_states in lane_rows:
     text(6.035, y, rf"$a_t^{{{pick + 1}}}$", size=9, color=color, ha="center")
     arrow(6.34, y, 6.51, y, color=HELD)
     text(6.74, y, f"{100 * held_rates[pick]:.0f}%", color=HELD, weight="bold", ha="center")
-text(1.43, 0.67, "Subscript: time · superscript: candidate", color=MUTED)
 # Outcome-derived labels are a separate operation, not a Luna response.
 y = 0.36
-text(0.12, y, "Oracle (0–2)", color=OUTCOME)
+text(0.12, y, "Oracle", color=OUTCOME)
 ax.add_patch(Rectangle((1.40, y - 0.12), 2.86, 0.24,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
-text(1.43, y, "0–2:  [" + ", ".join(percent(rate) for rate in label_rates) + "]", color=OUTCOME)
+text(1.43, y, "[" + ", ".join(percent(rate) for rate in label_rates) + "]", color=OUTCOME)
 arrow(4.29, y, 4.80, y, color=OUTCOME)
 box(4.82, y - 0.13, 0.66, 0.26, edge=OUTCOME)
 text(5.15, y, "Argmax", color=OUTCOME, ha="center")
@@ -254,7 +247,7 @@ text(6.74, y, "80%", color=HELD, weight="bold", ha="center")
 
 
 
-text(0.12, 0.10, "Illustrative example · valid rollouts only", color=MUTED)
+text(0.12, 0.10, "Illustrative · valid rollouts", color=MUTED)
 
 for ext in ("png", "svg", "pdf"):
     path = Path(__file__).with_suffix(f".{ext}")
