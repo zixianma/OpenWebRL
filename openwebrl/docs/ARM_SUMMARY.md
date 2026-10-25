@@ -325,32 +325,46 @@ The interactive curve now includes all six checkpoints10–60. This separate dat
 ablation does not change the task pool used by the ARM runs above.
 [Expanded-pool results and comparison caveats](RL_EVALUATION.md#expanded4102-iter10-results-20261003).
 
-The separate **outcome-only 56-group control on the original 2,102 tasks** has verified evaluations through iteration50.
+The separate **outcome-only 56-group control on the original 2,102 tasks** is complete through iteration 90, with all nine full-300 evaluations verified.
 
-| Iteration | Successes | Tasks | Valid | Invalid | Overall % | Valid-only % |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-|50 |102 |300 |239 |61 |34.00 |42.68 |
+| Iteration | Adam updates | Successes | Tasks | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|10 |178 |88 |300 |251 |49 |29.33 |35.06 |
+|20 |338 |93 |300 |243 |57 |31.00 |38.27 |
+|30 |488 |97 |300 |250 |50 |32.33 |38.80 |
+|40 |626 |103 |300 |240 |60 |34.33 |42.92 |
+|50 |762 |102 |300 |239 |61 |34.00 |42.68 |
+|60 |888 |117 |300 |245 |55 |39.00 |47.76 |
+|70 |1020 |112 |300 |243 |57 |37.33 |46.09 |
+|80 |1136 |124 |300 |248 |52 |**41.33** |**50.00** |
+|90 |1256 |107 |300 |237 |63 |35.67 |45.15 |
 
-The change from iteration40 is −0.33pp overall / −0.24pp valid-only; training
-to60 remains incomplete. It tests increased accepted mixed groups with global
-batch and PPO settings unchanged. Dates, valid-task sets and optimizer work
-differ, so comparisons remain descriptive.
-[Verified results and comparison limits](RL_EVALUATION.md#outcome56-iter50-results-20261011) ·
+Iteration 80 is the best single evaluation; iteration 90 is 2.00pp above the historical
+48-group baseline overall (−0.35pp valid-only). It tests more accepted mixed groups with
+global batch and PPO settings unchanged. These are single cohorts on different dates and
+valid-task sets; the matched iteration-90 repeats below are the controlled comparison.
+[Verified results and comparison limits](RL_EVALUATION.md#outcome56-iter90-results-20261023) ·
 [Interactive curve](rl_results/arm_rl_interactive.html).
 
-The **uniform G8 outcome-only control** has verified evaluations through iteration 40.
+The **uniform G8 outcome-only control** (eight rollouts per task, 48 accepted mixed groups,
+original 2,102 tasks) has verified evaluations through iteration 80; training to 90 continues.
 
-| Iteration | Successes | Tasks | Valid | Invalid | Overall % | Valid-only % |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-|40 |104 |300 |238 |62 |34.67 |43.70 |
+| Iteration | Adam updates | Successes | Tasks | Valid | Invalid | Overall % | Valid-only % |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+|10 |244 |88 |300 |241 |59 |29.33 |36.51 |
+|20 |492 |96 |300 |235 |65 |32.00 |40.85 |
+|30 |716 |101 |300 |241 |59 |33.67 |41.91 |
+|40 |928 |104 |300 |238 |62 |34.67 |43.70 |
+|50 |1130 |113 |300 |239 |61 |37.67 |47.28 |
+|60 |1318 |127 |300 |234 |66 |**42.33** |**54.27** |
+|70 |1488 |115 |300 |236 |64 |38.33 |48.73 |
+|80 |1652 |119 |300 |242 |58 |39.67 |49.17 |
 
-Overall increased by 1.00pp from iteration 30. Training uses eight rollouts per
-task and 48 accepted mixed groups on the original 2,102 tasks. At iteration 40
-it exceeds the five-rollout/56-group control by 0.33pp overall, with more Adam
-updates (928 versus 626) and different live collection dates and valid-task sets.
-These single-cohort comparisons do not isolate a causal rollout-count effect or
-establish significance. Training to 60 remains incomplete; adaptive stays paused.
-[Verified results and comparison limits](RL_EVALUATION.md#uniform8-iter40-results-20261011).
+After iteration 60 the curve is flat within single-evaluation noise (repeat evaluations of
+one checkpoint differ by up to 4pp). G8 makes more Adam updates than the 56-group control at
+every checkpoint, and collection dates and valid-task sets differ, so these single-cohort
+comparisons do not isolate a rollout-count effect.
+[Verified results and comparison limits](RL_EVALUATION.md#uniform8-iter60-results-20261012).
 
 Original-bonus full300 at20/30/50/60 was evaluated September27;40 combines
 the saved historical100 with a new disjoint200. Earlier fixed100 values at20/30
@@ -471,8 +485,33 @@ fixed checkpoints and observed evaluation windows, not training-seed variability
 Gate B iteration 90 reaches **43.00% overall**, versus **33.67%** for the
 historical baseline and **39.33%** for additive at the same iteration. This is
 Gate B's best evaluated local-browser checkpoint so far; dates and valid-task sets differ,
-so a consistent gain over outcome-only RL is not yet established.
+so this single cohort alone does not establish a gain; the [matched three-repeat
+comparison](#arm-iter90-local-repeats-20261025) does (+5.22pp over the 56-group control, Holm p=0.014).
 [Counts and audit](RL_EVALUATION.md#arm-gate-b-iter90-results-20260928). Iteration100 finishes at **36.67% /48.89%**, below90 and2.00pp above historical baseline100 overall. [Iteration100 audit](RL_EVALUATION.md#arm-gate-b-iter100-results-20260929).
+
+<a id="arm-iter90-local-repeats-20261025"></a>
+**Matched iteration-90 comparison (October 25).** Three contemporaneous full-300 repeats per
+checkpoint on one harness (local browser, GPT-4.1 action-history judge, T0, 30 turns).
+Gate B beats both outcome-only controls; the two outcome-only controls do not differ.
+
+| Checkpoint | Successes r1 / r2 / r3 | Valid r1 / r2 / r3 | Mean overall % | Valid-only % |
+| --- | --- | --- | ---: | ---: |
+| Outcome-only, 48 groups (historical) | 103 / 95 / 109 | 234 / 233 / 246 | 34.11 | 43.06 |
+| Outcome-only, 56 groups | 114 / 102 / 102 | 234 / 237 / 237 | 35.33 | 44.92 |
+| Gate B: relaxed gate | 123 / 117 / 125 | 238 / 232 / 245 | **40.56** | **51.05** |
+
+| Comparison (overall, per-task mean of 3 repeats) | Difference | Paired 95% CI | Holm p |
+| --- | ---: | --- | ---: |
+| Gate B − 56 groups | +5.22pp | [+1.56, +8.89]pp | 0.014 |
+| Gate B − 48 groups | +6.44pp | [+2.67, +10.22]pp | 0.004 |
+| 56 groups − 48 groups | +1.22pp | [−2.22, +4.67]pp | n.s. |
+
+Invalid episodes count as failures; 20,000-draw paired task bootstrap and sign-flip
+permutation tests. Uncertainty covers tasks and evaluation repeats for fixed checkpoints,
+not training seeds. Under the stealth protocol above, Gate B and the baseline did not differ
+significantly, so the gain is specific to this protocol until replicated.
+[Analysis](RL_BEHAVIOR.md#rl-behavior-iter90-repeats-20261025) ·
+[Aggregate](arm_results/rl_integration/behavior/iter90-repeats-20261025.json).
 
 <a id="arm-failure-sampling-history"></a>
 <a id="all-failure-arm-full-300-curve"></a>

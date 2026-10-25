@@ -115,6 +115,8 @@
 | Uniform G8 |40 |8 |48 |928 |104 |238 |62 |34.67 |43.70 |[October 11 audit](arm_results/rl_integration/uniform8-iteration40-audit.json) |
 | Uniform G8 |50 |8 |48 |1130 |113 |239 |61 |37.67 |47.28 |[October 12 audit](arm_results/rl_integration/uniform8-iteration50-audit.json) |
 | Uniform G8 |60 |8 |48 |1318 |127 |234 |66 |42.33 |54.27 |[October 12 audit](arm_results/rl_integration/uniform8-iteration60-audit.json) |
+| Uniform G8 |70 |8 |48 |1488 |115 |236 |64 |38.33 |48.73 |[Controller audit, October 24](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
+| Uniform G8 |80 |8 |48 |1652 |119 |242 |58 |39.67 |49.17 |[Controller audit, October 25](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
 
 | Comparison / status | Value | Source |
 | --- | --- | --- |
@@ -138,7 +140,7 @@
 | G8 − historical G5/48 groups, iteration 40 |+1.33 pp overall / +0.41 pp valid-only |[Comparability caveats](RL_EVALUATION.md#uniform8-iter40-results-20261011) |
 | G8 iteration 50 − iteration 40 |+3.00 pp overall / +3.58 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter50-results-20261012) |
 | G8 iteration 60 − iteration 50 |+4.67 pp overall / +6.99 pp valid-only |[Checkpoint comparison limits](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
-| G8 target / verified evaluations |60 complete / 10, 20, 30, 40, 50, 60 verified |[Endpoint audit](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
+| G8 target / verified evaluations |90 in progress / 10–80 verified |[Endpoint audit](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
 
 | Continuation approved October 8 | Verified starting point | Target | New allocation cap | New judge cap | Status / source |
 | --- | ---: | ---: | --- | ---: | --- |
