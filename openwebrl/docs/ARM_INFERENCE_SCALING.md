@@ -1880,7 +1880,7 @@ Sol selection used 4.03 times the model cost and 1.57 times the native latency o
 <details>
 <summary>Controlled protocol, comparability and uncertainty</summary>
 
-Each new method used the exact same fixed 100 Online-Mind2Web tasks, local Chromium, exact GPT-6 Luna or Sol with high reasoning, 20,000 output tokens, 100 native decisions, summary every 20 committed decisions, persistent terminal/browser sessions and native self-reflection. N=3 generated three proposals from the same canonical history and used a separate same-model high-reasoning selector. Only the selected proposal executed and entered actor history; unselected execution was independently checked absent. Helpers used the arm's model and their native request patterns. N=3 is a native-harness method intervention. All arms used the frozen official GPT-4o WebJudge protocol (GPT-4o-2024-08-06, temperature 0, 512 response tokens, first 50 snapshots, relevance threshold 3).
+Each new method used the exact same fixed 100 Online-Mind2Web tasks, local Chromium, exact GPT-6 Luna or Sol with high reasoning, 20,000 output tokens, 100 native decisions, summary every 20 committed decisions, persistent terminal/browser sessions and native self-reflection. N=3 generated three proposals from the same canonical history and used a separate same-model high-reasoning selector. Only the selected proposal executed and entered actor history; unselected execution was independently checked absent. Helpers used the arm's model and their native request patterns. N=3 is a native-harness method intervention. All arms used the frozen official GPT-4o WebJudge protocol (GPT-4o-2024-08-06, temperature 0, 512 response tokens; relevance scoring of all current images, followed by the first 50 images meeting relevance threshold 3).
 
 The new arms shared a two-jobs-per-arm/six-global policy, two native tasks per job and eight model requests in flight per job across all roles. Scheduler overlap, actual physical calls and browser ownership were checked independently. Two fixed canaries per arm passed independent audits before that arm's remaining shards were released. The historical Luna single reference has the same task identities and frozen grading protocol but an earlier web window and different systems policy, so comparisons to it are descriptive. This local-browser reproduction does not establish the paper's absolute rate under its original environment.
 
@@ -1920,5 +1920,33 @@ A native allocation timeout occurred before the 100-decision horizon and remains
 Each of 30 logical shards retained its original 0-GPU/4-CPU/16-GiB allocation and eight-hour total across all attempts, two native tasks, eight model requests in flight across roles and 60 browser starts. Per-shard model limits remained Luna N=3 $10/18,000 calls, Sol single $50/10,000 calls and Sol N=3 $100/18,000 calls; each retained $5/1,100 external judge calls. Every shard passed its individual caps, clock and selected-only execution checks. Maximum observed scheduler concurrency was two per arm and six globally. No balances transferred and no retries reset a clock. Hard campaign ceilings were $1,600 model and $150 external judge; the historical Luna single budget is separate.
 
 Private immutable audit pointers: final 30-receipt release SHA-256 `2d1eab5545e9463235642f7ba2e5344787cb3b50766e528d613c75b626127631`; independent aggregation-source review SHA-256 `743426e94662265f223ea09c65586a9097f812ffdf302092b4927e936f753a51`; all-attempt W&B read-only receipt SHA-256 `49c2caefb65ccf87154717454fd184e06c280d7ad9afcc4ac4d99f747bd206fc`. Only arm aggregates are published; task-level payloads remain private.
+
+</details>
+
+
+<a id="cuawright-native-full300-four-methods-20261025"></a>
+
+## Native CUAWright: approved four-method full300 extension
+
+The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. No full300 native results are available yet.
+
+| Method | Reused task outcomes | New task outcomes | Final task outcomes | New CPU shards | Model USD cap | External judge USD cap |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna single high |100|200|300|20|100|100|
+| Luna N=3 high + high selector |100|200|300|20|200|100|
+| Luna N=5 high + high selector |0|300|300|30|450|150|
+| Sol single high |100|200|300|20|1000|100|
+| Total |300|900|1200|90|1750|450|
+
+The primary comparison uses the same 200 newly run tasks across all four methods. Combined 300-task results are secondary: the three reused 100-task cohorts were collected in an earlier web window. Reuse retains every original invalid outcome, cost and latency; it does not select successful or valid tasks. The earlier 100 tasks are a strict subset of the frozen 300, rather than its first 100 entries.
+
+<details>
+<summary>Approved execution, accounting and release gates</summary>
+
+Each logical shard has 0 GPUs, 4 CPUs, 16 GiB and eight hours total across all attempts; at most two jobs per method and six globally may run. Each runs ten new tasks, with two concurrent native tasks, eight physical model HTTP requests in flight across all roles, and 60 browser starts. Per-shard model limits are respectively $5/10,000 calls, $10/18,000, $15/26,000 and $50/10,000. Each shard has a separate $5/1,100-call external judge allowance. The combined new API ceiling is $2,200, with no transfers or retry clock resets. Historical budgets are separate.
+
+The native protocol retains high reasoning, 20,000 output tokens, 100 decisions, summaries every 20 committed decisions, persistent terminal/browser sessions, self-reflection and local Chromium. Selection executes and retains only the chosen proposal. Online helpers, selection, counters, cache writes and all model attempts are accounted for; external judging and judge-only work are excluded from native task latency and model cost. Frozen WebJudge scores relevance for all supplied current images, then passes the first 50 relevance-qualified images to its outcome stage. The judge call ceiling remains binding for image-heavy trajectories.
+
+Two fixed fresh-task canaries per method require independent execution, source, usage, grading and teardown audits before that method's remaining tasks are released. No unchanged episode or paid-judge retry and no model substitution is authorized. Final reporting requires all 1,200 dispositions, all attempts and individual budget/clock/ownership checks. Only method aggregates are published.
 
 </details>
