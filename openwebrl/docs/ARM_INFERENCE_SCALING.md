@@ -1866,42 +1866,59 @@ GPT-5.4 scientific/qualification audit SHA-256: `9c58b9a00c7637a5f49f022f46af591
 [Results table](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023) · [Luna aggregate metrics](arm_results/cuawright_luna_high_local100_20261023/aggregate.json) · [GPT-5.4 aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
 
 
+<a id="cuawright-native-selection-results-20261024"></a>
 <a id="cuawright-native-selection-plan-20261023"></a>
 
-## Native CUAWright: three-arm selection comparison (all arms released)
+## Native CUAWright: completed three-arm selection comparison
 
-**All three arms released after independent canary audits:** evaluate Luna high with three proposals and a Luna high selector, GPT-6 Sol high single, and GPT-6 Sol high with three proposals and a Sol high selector on the same fixed 100 Online-Mind2Web tasks. Reuse the independently audited Luna high single result (68 successes, 93 valid, 100 tasks) as a historical reference; preserve its outcomes and costs.
+**Sol single high achieved 80/100 successes at $1.143 per task and 7.48 minutes mean native latency. Sol N=3 achieved 72/100 at $4.601 and 11.72 minutes; Luna N=3 achieved 68/100 at $0.258 and 18.93 minutes.** The historical Luna single reference also achieved 68/100 at $0.087 per task. These costs include all model attempts and online helpers and exclude external judging; latency is native task time with external and judge-only work excluded. All means use all 100 tasks, including invalids.
 
-| New arm | Proposal model / reasoning | Proposals per decision | Selector model / reasoning | Tasks | Planning model cost, USD | Hard model cap, USD |
-|---|---|---:|---|---:|---:|---:|
-| Luna N=3 + selection | GPT-6 Luna / high |3|GPT-6 Luna / high|100|22|100|
-| Sol single | GPT-6 Sol / high |1|—|100|173|500|
-| Sol N=3 + selection | GPT-6 Sol / high |3|GPT-6 Sol / high|100|437|1000|
+Sol selection used 4.03 times the model cost and 1.57 times the native latency of Sol single, with lower overall success. The all-task difference includes differing failure rates. On the 83 tasks valid in all three new methods, Sol single succeeded on 72, Sol N=3 on 68, and Luna N=3 on 64. The exact paired Sol N=3 versus single p-value is 0.125 on that conditional cohort. These results do not show a benefit from the tested N=3 policy.
 
-Planning estimates total about $632 for models plus $29 for external judging, approximately $662. These extrapolate recorded Luna role usage and frozen token prices; selector reasoning, changed action paths, cache behavior and Sol latency are unmeasured. The **hard API ceiling is $1,750: $1,600 models plus $150 external judging**. The user approved these exact resources and caps; approval does not waive the independent release gates.
-
-Estimation sources: [audited native Luna accounting](#cuawright-native-local100-closeout-20261023), [official GPT-6 Sol pricing](https://developers.openai.com/api/docs/models/gpt-6-sol) and [official GPT-6 Luna pricing](https://developers.openai.com/api/docs/models/gpt-6-luna). At the frozen short-context rates, Sol costs 20 times Luna per input, cached-input, cache-write and output token; this is not a latency prediction.
+[Full success and matched-efficiency tables](ARM_FINAL_RESULTS.md#cuawright-native-local100-20261023) · [Audited aggregate metrics](arm_results/cuawright_native_selection_local100_20261023/aggregate.json)
 
 <details>
-<summary>Method, resource request and release gates</summary>
+<summary>Controlled protocol, comparability and uncertainty</summary>
 
-N=3 applies at each normal native action/completion decision: generate three proposals from the same canonical history, select one with a separate same-model high-reasoning call, and execute only that proposal. Only the selected native response, reasoning state and tool-call identifiers enter subsequent actor history. Unselected proposals never execute, and the selector has no future outcomes or external-judge labels. A malformed candidate/selection or fatal transport error fails closed; no automatic resampling or first-candidate fallback is allowed.
+Each new method used the exact same fixed 100 Online-Mind2Web tasks, local Chromium, exact GPT-6 Luna or Sol with high reasoning, 20,000 output tokens, 100 native decisions, summary every 20 committed decisions, persistent terminal/browser sessions and native self-reflection. N=3 generated three proposals from the same canonical history and used a separate same-model high-reasoning selector. Only the selected proposal executed and entered actor history; unselected execution was independently checked absent. Helpers used the arm's model and their native request patterns. N=3 is a native-harness method intervention. All arms used the frozen official GPT-4o WebJudge protocol (GPT-4o-2024-08-06, temperature 0, 512 response tokens, first 50 snapshots, relevance threshold 3).
 
-Preserve 100 native decisions, 20,000 output tokens per proposal and selector, compaction every 20 committed decisions, persistent terminal/browser sessions, local Chromium and the native self-reflection completion gate. Compaction remains one call per summary boundary. Helpers run only from selected native actions with the arm's exact model and retain their native request patterns, defaults and explicitly allowed overrides. Sol means exact `gpt-6-sol`. Single-call Sol leaves native action querying unchanged. N=3 is an explicit native-harness method intervention, not a claim of unchanged paper behavior.
+The new arms shared a two-jobs-per-arm/six-global policy, two native tasks per job and eight model requests in flight per job across all roles. Scheduler overlap, actual physical calls and browser ownership were checked independently. Two fixed canaries per arm passed independent audits before that arm's remaining shards were released. The historical Luna single reference has the same task identities and frozen grading protocol but an earlier web window and different systems policy, so comparisons to it are descriptive. This local-browser reproduction does not establish the paper's absolute rate under its original environment.
 
-Request 10 CPU shards per arm, 10 tasks each: **30 jobs, each 0 GPUs, 4 CPUs, 16 GiB and 8 hours total across all attempts** (maximum 960 CPU-hours). At most two jobs per arm run concurrently: six jobs, 12 native tasks/browsers and 48 in-flight model requests globally. Each job allows two concurrent native tasks, eight in-flight model requests across all roles and 60 browser starts including failed starts. The new arms share this concurrency policy; the completed Luna single reference was collected earlier under different systems conditions, so its latency comparison is descriptive.
+Overall success counts invalids as failures. The four-method common-valid cohort contains 79 tasks; it is selected after execution and may be biased. The three-new-method common-valid cohort contains 83. On all 100 tasks, Sol N=3 minus Sol single was −8.0 pp (paired bootstrap 95% percentile interval −14.0 to −2.0; exact two-sided McNemar p=0.0215, nine single-only successes and one N=3-only success). On the common-valid 83, the difference was −4.8 pp (four single-only and zero N=3-only successes; exact p=0.125). Bootstrap uses 20,000 paired resamples with a fixed seed; reported pairwise tests are exploratory without multiplicity adjustment. Neither this finite sample nor the conditional cohort proves an intrinsic model-quality disadvantage.
 
-| Per-shard limit, all attempts | Luna N=3 | Sol single | Sol N=3 |
-|---|---:|---:|---:|
-| Model cost, USD |10|50|100|
-| Physical model calls, including helpers and token-count probes |18000|10000|18000|
-| External judge cost, USD |5|5|5|
-| External judge calls |1100|1100|1100|
-| Browser starts |60|60|60|
-| Wall-clock budget, hours |8|8|8|
+Browser batches count recorded native browser-command batches; a batch can contain multiple browser operations. Native decisions, browser batches, physical HTTP calls and token-count probes are different units. Model calls include proposals, selection, online helpers and counter probes. Cache input and cache-write counts are accounting categories and should not be added to total input as independent text volume; reasoning tokens are part of output tokens.
 
-No balances transfer across shards or arms; every failed attempt consumes the same original shard budget. The previous 3,100-model-call limit cannot fund a full N=3 horizon: ten tasks reaching 100 decisions require at least 4,000 proposal/selection generations, before summaries, helpers or token-count probes. Larger call limits do not waive dollar/time caps or guarantee uncensored completion.
+</details>
 
-Two canaries per arm must independently pass native protocol, selected-only execution, physical usage, external judging and browser ownership checks before that arm's held shards are released. Independent arms can proceed concurrently. Independent prelaunch review passed after full confined tests of all three arms, the real local gateway with mocked provider responses, selected-only execution and private-evidence isolation. No provider calls were used for preparation. All three arms passed independent audits of their two fixed canaries: exact actor/selector identity, selected-only execution and history, native compaction, frozen external judging, all physical usage/caps, evaluation W&B and owned browser teardown. All six canaries were valid: Luna N=3 and Sol single each had two successes; Sol N=3 had one success and one valid task failure, preserved without retry. Each job starts with a model-free browser diagnostic. All 30 CPU jobs are registered, and remaining tasks are released progressively under the two-job-per-arm, six-job-global limit. These release checks cover two tasks per arm; the full 100-task arm results remain pending. A persistent supervisor queues active-agent checks for startup, diagnosis and repair within the original caps. Audit all 300 latest dispositions and every attempt, reconcile evaluation-only W&B runs and teardown, and publish only arm aggregates. Model cost and task latency include proposals, selection and online helpers, and exclude external judging. Reuse the frozen official GPT-4o WebJudge protocol for all three arms.
+<details>
+<summary>All-attempt costs, tokens, invalids and bounded recovery</summary>
+
+| New method | Model calls | Known model USD | Unknown reserves USD | Conservative model USD | External judge calls | External judge USD | Browser starts |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Luna N=3 high + high selector | 29,567 | 25.729981 | 0.077359 | 25.807340 | 1,366 | 7.445303 | 164 |
+| Sol single high | 10,615 | 114.305724 | 0.000000 | 114.305724 | 1,602 | 9.033492 | 143 |
+| Sol N=3 high + high selector | 24,603 | 459.015217 | 1.074790 | 460.090007 | 1,671 | 9.375773 | 138 |
+
+The three new arms total $600.203071 conservative model usage/reservations and $25.854568 external judging. Unknown reservations retain each full allowance; these are conservative accounting totals, not invoice claims. Seven model calls have unknown usage; known token totals below do not invent their tokens. All reported cache-write telemetry was available. One interrupted proposal group retains five unused credits ($0.1043585) separately from physical model charges. No reservation was refunded to improve the result.
+
+| New method | Input tokens | Cached input tokens | Cache-write tokens | Output tokens | Reasoning output tokens |
+|---|---:|---:|---:|---:|---:|
+| Luna N=3 high + high selector | 464,634,654 | 328,569,855 | 135,964,413 | 10,877,385 | 6,556,075 |
+| Sol single high | 140,547,991 | 113,256,643 | 27,246,279 | 2,344,856 | 763,301 |
+| Sol N=3 high + high selector | 462,205,130 | 326,942,116 | 135,177,172 | 5,551,218 | 1,860,610 |
+
+| New method | Valid successes | Valid failures | Native invalids | Judging invalids |
+|---|---:|---:|---:|---:|
+| Luna N=3 high + high selector | 68 | 22 | 8 | 2 |
+| Sol single high | 80 | 18 | 0 | 2 |
+| Sol N=3 high + high selector | 72 | 18 | 8 | 2 |
+
+All 300 latest dispositions and all 49 registered attempts were independently audited: 30 original allocations, seven native continuations and 12 judge-only stages. Native continuations admitted only tasks that had never started; original interrupted or malformed episodes remain invalid. Saved grading recovery used only independently source-bound existing evidence for mechanical pre-call gaps. Six paid judging failures remain invalid, including one failure during saved-evidence recovery; no unchanged paid judge retries were used. Original verdicts and all prior attempts are retained, with canonical merged metrics derived separately. W&B identities, configs, terminal states and each attempt's own raw counters were audited read-only; original histories remain unchanged.
+
+A native allocation timeout occurred before the 100-decision horizon and remains invalid. Its missing native result/close metadata is preserved. An exact independent replay of host command and namespace evidence verifies physical closure; it does not promote native completion or task success. No owned process remains unaccounted for. This timeout must not be labeled a 100-step failure.
+
+Each of 30 logical shards retained its original 0-GPU/4-CPU/16-GiB allocation and eight-hour total across all attempts, two native tasks, eight model requests in flight across roles and 60 browser starts. Per-shard model limits remained Luna N=3 $10/18,000 calls, Sol single $50/10,000 calls and Sol N=3 $100/18,000 calls; each retained $5/1,100 external judge calls. Every shard passed its individual caps, clock and selected-only execution checks. Maximum observed scheduler concurrency was two per arm and six globally. No balances transferred and no retries reset a clock. Hard campaign ceilings were $1,600 model and $150 external judge; the historical Luna single budget is separate.
+
+Private immutable audit pointers: final 30-receipt release SHA-256 `2d1eab5545e9463235642f7ba2e5344787cb3b50766e528d613c75b626127631`; independent aggregation-source review SHA-256 `743426e94662265f223ea09c65586a9097f812ffdf302092b4927e936f753a51`; all-attempt W&B read-only receipt SHA-256 `49c2caefb65ccf87154717454fd184e06c280d7ad9afcc4ac4d99f747bd206fc`. Only arm aggregates are published; task-level payloads remain private.
 
 </details>

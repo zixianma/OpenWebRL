@@ -159,37 +159,60 @@ For a matched comparison across the full cohort, the following rows use only the
 
 <a id="cuawright-native-local100-20261023"></a>
 
-## Native CUAWright: 100-task local results
+## Native CUAWright: four methods on 100 tasks
 
-**Luna high: 68.0% overall success, 73.1% valid-only; all attempts, caps and teardown independently verified.** The GPT-5.4 result remains qualified by its failed browser-start budget audit. Both use the same fixed 100 Online-Mind2Web tasks and local Chromium.
+**Sol single high achieved 80 successes; Sol N=3 achieved 72; Luna N=3 and the historical Luna single each achieved 68, out of the same fixed 100 Online-Mind2Web tasks.** All 300 new dispositions and all 49 attempts passed independent source, usage, cap, W&B and physical teardown audits. Overall success counts invalid outcomes as failures.
 
-| Method | Tasks | Valid | Invalid | Successes | Overall success | Valid-only success | Audit status |
-|---|---:|---:|---:|---:|---:|---:|---|
-| Native CUAWright · GPT-6 Luna high · 100 decisions |100|93|7|68|68.0%|73.1%|Passed|
-| Native CUAWright · GPT-5.4 xhigh · 100 decisions |100|96|4|81|81.0%|84.4%|Budget audit failed; qualified|
+| Method | Tasks | Valid | Invalid | Successes | Overall success | Valid-only success |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna single high (historical) | 100 | 93 | 7 | 68 | 68.0% | 73.1% |
+| Luna N=3 high + high selector | 100 | 90 | 10 | 68 | 68.0% | 75.6% |
+| Sol single high | 100 | 98 | 2 | 80 | 80.0% | 81.6% |
+| Sol N=3 high + high selector | 100 | 90 | 10 | 72 | 72.0% | 80.0% |
 
-| Method | Mean task latency, seconds | Mean browser batches | Mean actor decisions | Valid tasks |
+Efficiency below averages all 100 tasks per method. Model cost includes every attempt, selection and online helpers, with conservative reserves for unknown usage; it excludes external judging. Native task latency excludes external judging and separate grading recovery. Browser batches are recorded native browser-command batches, not individual DOM actions.
+
+| Method | Model cost / task | Mean native latency | Mean browser batches | Mean native decisions |
 |---|---:|---:|---:|---:|
-| GPT-6 Luna high |1102.2|31.4|59.1|93|
-| GPT-5.4 xhigh |1495.7|24.9|58.8|96|
+| Luna single high (historical) | $0.087 | 18.58 min | 31.8 | 60.3 |
+| Luna N=3 high + high selector | $0.258 | 18.93 min | 30.0 | 46.2 |
+| Sol single high | $1.143 | 7.48 min | 32.8 | 47.6 |
+| Sol N=3 high + high selector | $4.601 | 11.72 min | 33.6 | 46.0 |
 
-Latency excludes external judging and includes online helpers and actual tool stalls. Efficiency means condition on each method's valid tasks. These native 100-task results are separate from the four-method/three-benchmark BrowserCode comparison; model, reasoning settings, recovery history and live web conditions prevent causal attribution.
+Luna single was collected earlier under a different concurrency policy and live web conditions; its comparisons are descriptive. These native 100-task results are separate from the three-benchmark BrowserCode averages above.
 
 <details>
-<summary>All-attempt cost, remaining invalids and audit qualifications</summary>
+<summary>Matched valid tasks, uncertainty and accounting</summary>
 
-| Method | Known-usage model cost, USD | Unknown-usage reserves, USD | Conservative model total, USD | External judge cost, USD |
-|---|---:|---:|---:|---:|
-| GPT-6 Luna high |8.612796|0.060627|8.673423|9.759095|
-| GPT-5.4 xhigh |348.649556|4.932825|353.582380|7.506035|
+The same 79 tasks were valid in all four methods. This is a conditional cohort selected after execution; it can favor different tasks from the full 100-task cohort.
 
-Model costs include online helpers and every attempt; external judging is separate. Reservations bound unknown historical usage and are not observed billed charges. Luna's seven invalid outcomes comprise three model-call-cap failures, one unrecovered input-admission failure, and three native-complete tasks with invalid judge parses. No unchanged episode or grading retries were used to replace these outcomes. Of Luna's 25 valid failures, 22 reached 100 decisions; that does not establish that a longer horizon would succeed.
+| Method | Shared valid tasks | Successes | Success rate | Model cost / task | Mean native latency | Mean browser batches |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna single high (historical) | 79 | 60 | 75.9% | $0.086 | 16.86 min | 29.6 |
+| Luna N=3 high + high selector | 79 | 61 | 77.2% | $0.247 | 18.04 min | 29.0 |
+| Sol single high | 79 | 69 | 87.3% | $0.965 | 6.57 min | 29.9 |
+| Sol N=3 high + high selector | 79 | 65 | 82.3% | $4.313 | 10.91 min | 31.4 |
 
-GPT-5.4 exceeded two browser-start caps by at least eight starts in total; one case lacks verified episode-end cleanup and actual concurrency. Its descriptive performance is preserved with these limitations.
+Among the three newly run methods, 83 tasks were valid in all three: Luna N=3 succeeded on 64 (77.1%), Sol single on 72 (86.7%), and Sol N=3 on 68 (81.9%). Sol N=3 versus Sol single was −8.0 percentage points on all 100 tasks (paired bootstrap 95% interval −14.0 to −2.0; exact McNemar p=0.0215). On the 83 common-valid tasks it was −4.8 points (exact p=0.125). The paired tests are exploratory and unadjusted for multiple comparisons; the conditional analysis does not establish a reliable quality gain from selection.
+
+The new arms consumed $600.203071 in conservative model charges/reservations and $25.854568 in external judging, within separate $1,600/$150 caps and every original per-shard limit. All 22 invalid outcomes remain: 16 native failures and six judging failures. No unchanged native episode or paid grading retries replaced them. A timed-out native episode remains invalid; independent host evidence verifies physical cleanup despite missing native completion metadata. Its five unused call credits ($0.1043585) remain recorded separately from model charges.
 
 </details>
 
-[Protocol and audit](ARM_INFERENCE_SCALING.md#cuawright-native-local100-closeout-20261023) · [Luna aggregate metrics](arm_results/cuawright_luna_high_local100_20261023/aggregate.json) · [GPT-5.4 aggregate metrics](arm_results/cuawright_native_local100_20261023/aggregate.json)
+<details>
+<summary>Earlier GPT-5.4 reproduction: qualified historical result</summary>
+
+| Method | Tasks | Valid | Invalid | Successes | Overall success | Valid-only success | Audit status |
+|---|---:|---:|---:|---:|---:|---:|---|
+| GPT-5.4 xhigh, native CUAWright, 100 decisions | 100 | 96 | 4 | 81 | 81.0% | 84.4% | Browser-start budget audit failed; qualified |
+
+Its conservative all-attempt model total was $353.582380 ($348.649556 known usage plus $4.932825 reserved unknown usage); external judging cost $7.506035. Mean latency was 1,495.7 seconds and mean browser batches 24.9 across its 96 valid tasks. Two shards exceeded browser-start caps by at least eight starts in total; one case lacks verified episode-end cleanup and actual concurrency. Preserve this descriptive result with those limitations.
+
+[Earlier protocol and audit](ARM_INFERENCE_SCALING.md#cuawright-native-local100-closeout-20261023) · [GPT-5.4 aggregate](arm_results/cuawright_native_local100_20261023/aggregate.json)
+
+</details>
+
+[Completed comparison and methodology](ARM_INFERENCE_SCALING.md#cuawright-native-selection-results-20261024) · [Audited aggregate metrics](arm_results/cuawright_native_selection_local100_20261023/aggregate.json) · [Historical Luna audit](arm_results/cuawright_luna_high_local100_20261023/aggregate.json)
 
 <a id="final-selection-head-ablations-20261021"></a>
 
