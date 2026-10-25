@@ -1,0 +1,94 @@
+{
+ "protocol": "local browser, GPT-4.1 action_history judge, actor T0, 30 turns, full 300; job 385593",
+ "tasks": 300,
+ "runs": {
+  "outcome48": {
+   "label": "Outcome-only 48 groups",
+   "successes": [
+    103,
+    95,
+    109
+   ],
+   "valid": [
+    234,
+    233,
+    246
+   ],
+   "overall_mean_pct": 34.111111111111114,
+   "valid_only_mean_pct": 43.05750350631136,
+   "original_evaluation": null
+  },
+  "outcome56": {
+   "label": "Outcome-only 56 groups",
+   "successes": [
+    114,
+    102,
+    102
+   ],
+   "valid": [
+    234,
+    237,
+    237
+   ],
+   "overall_mean_pct": 35.333333333333336,
+   "valid_only_mean_pct": 44.91525423728814,
+   "original_evaluation": {
+    "cohort": "outcome-only-56groups-20261006-iter90",
+    "successes": 107,
+    "valid": 237
+   }
+  },
+  "gate-b": {
+   "label": "Gate B (ARM)",
+   "successes": [
+    123,
+    117,
+    125
+   ],
+   "valid": [
+    238,
+    232,
+    245
+   ],
+   "overall_mean_pct": 40.55555555555556,
+   "valid_only_mean_pct": 51.04895104895105,
+   "original_evaluation": {
+    "cohort": "arm-gate-b-iter90-335729",
+    "successes": 129,
+    "valid": 234
+   }
+  }
+ },
+ "comparisons": [
+  {
+   "comparison": "gate-b - outcome56",
+   "delta_pp": 5.222222222222221,
+   "ci95_pp": [
+    1.5555555555555551,
+    8.888888888888891
+   ],
+   "p_perm": 0.006999650017499125,
+   "p_holm": 0.01399930003499825
+  },
+  {
+   "comparison": "gate-b - outcome48",
+   "delta_pp": 6.444444444444444,
+   "ci95_pp": [
+    2.6666666666666643,
+    10.222222222222229
+   ],
+   "p_perm": 0.0012999350032498376,
+   "p_holm": 0.003899805009749513
+  },
+  {
+   "comparison": "outcome56 - outcome48",
+   "delta_pp": 1.222222222222222,
+   "ci95_pp": [
+    -2.222222222222222,
+    4.666666666666668
+   ],
+   "p_perm": 0.5304234788260587,
+   "p_holm": 0.5304234788260587
+  }
+ ]
+}

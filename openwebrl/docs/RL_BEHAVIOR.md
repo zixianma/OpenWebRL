@@ -6,28 +6,35 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
 [RL_EVALUATION.md](RL_EVALUATION.md).
 
 <a id="rl-behavior-takeaways-20261024"></a>
-## Takeaways · October 24
+## Takeaways · October 25
 
-1. **The controlled runs are statistically indistinguishable on the local protocol.**
+1. **Gate B beats outcome-only at iteration 90 on matched repeats.** Three contemporaneous
+   full-300 repeats per checkpoint on one harness give Gate B 40.6% overall against 35.3%
+   (56 groups) and 34.1% (48 groups): +5.2 pp [+1.6, +8.9] and +6.4 pp [+2.7, +10.2],
+   Holm p = 0.014 and 0.004 ([details](#rl-behavior-iter90-repeats-20261025)). The judge is
+   GPT-4.1, whose success verdicts loosen over training
+   ([audit](RL_REWARD_DESIGN.md#evidence)); a second-judge re-score of these repeats is the
+   open check.
+2. **The other controlled runs are statistically indistinguishable on the local protocol.**
    Their last-three-checkpoint means are 38.1–38.6% overall, every paired difference is
    below 0.5 pp, and the 95% intervals are about ±3.8 pp.
-2. **Single checkpoints are noisy.** About 76 of 300 tasks (25%) change outcome between
+3. **Single checkpoints are noisy.** About 76 of 300 tasks (25%) change outcome between
    adjacent checkpoints of the same run, and the overall rate moves by a mean of 2.4 pp
    (at most 5.7 pp). A one-checkpoint difference below roughly 4 pp is not evidence.
-3. **RL taught the policy to finish, then to finish too early.** Hitting the 30-turn limit
+4. **RL taught the policy to finish, then to finish too early.** Hitting the 30-turn limit
    falls from 59 to 0 episodes (56-group run, iterations 10 → 90). Over the same period
    wrong answers rise from 16 to 56 and failed episodes shorten from 18.8 to 10.8 steps.
-4. **A harness error is the largest growing failure** ([cause and fix](#rl-behavior-step-error-20261024)). Invalid episodes with an empty-message
+5. **A harness error is the largest growing failure** ([cause and fix](#rl-behavior-step-error-20261024)). Invalid episodes with an empty-message
    browser step error grow from 24 to 40–44 per 300 tasks. No task has one in all five
    checkpoints examined, and 7 of the 40 at 56-group iteration 90 occurred on the agent's
    final `done` call. During training (48-group run) 10–15% of rollouts are invalid and
    about 40% of groups contain at least one invalid rollout.
-5. **About 21 tasks always fail to load their start page.** These are the same dead or
+6. **About 21 tasks always fail to load their start page.** These are the same dead or
    blocked sites at every checkpoint, so they cap every method equally.
-6. **The mixed-only ARM bonus halves repeated-action loops.** At iteration 90 it has 18
+7. **The mixed-only ARM bonus halves repeated-action loops.** At iteration 90 it has 18
    looping failures against 39 for the 56-group outcome-only run. The overall success rate
    does not show this.
-7. **Larger groups make more groups usable, but at a cost.** Among first-iteration groups
+8. **Larger groups make more groups usable, but at a cost.** Among first-iteration groups
    (SFT checkpoint), 41–48% are mixed with 5 rollouts and 53% with 8, which costs 1.6× more
    rollouts per group. Clean pass@K for K = 5, 8 and 16 is [pending](#rl-behavior-passk-20261024).
 
@@ -62,7 +69,7 @@ the step error.
   in every band.
 - **Gate B has more invalid episodes** (start-page and step errors: 66–75 per 300, against
   49–63). Its evaluations ran on earlier dates, so site availability differs and this is not
-  a matched comparison.
+  a matched comparison; on matched dates the counts agree ([repeats](#rl-behavior-iter90-repeats-20261025)).
 - **Noise:** one checkpoint's band rate has a binomial SE of about 4–6 pp. The dashed lines
   are 3-checkpoint means. Overall success counts invalid episodes as failures.
 
@@ -120,6 +127,47 @@ share the 2,102-task pool and SFT start.
   −2.44 pp, CI [−6.11, +1.11]).
 - **Sources:** [aggregate](arm_results/rl_integration/behavior/rl-eval-noise-20261024.json) ·
   script `scripts/analyze_rl_eval_noise.py`.
+</details>
+
+<a id="rl-behavior-iter90-repeats-20261025"></a>
+### Iteration-90 repeats on one harness · October 25
+
+Three new full-300 evaluations per checkpoint, collected back to back on October 24–25 by
+one job (385593) with the same harness, browser pool and judge (local browser · GPT-4.1
+action_history · actor T0 · 30 turns). Overall counts invalid episodes as failures.
+
+| Checkpoint (iteration 90) | Successes r1 / r2 / r3 | Valid r1 / r2 / r3 | Overall mean % | Valid-only % | Earlier single evaluation, successes / valid |
+| --- | --- | --- | ---: | ---: | --- |
+| Outcome-only 48 groups | 103 / 95 / 109 | 234 / 233 / 246 | 34.11 | 43.06 | 101 / 222 (September) |
+| Outcome-only 56 groups | 114 / 102 / 102 | 234 / 237 / 237 | 35.33 | 44.92 | 107 / 237 |
+| Gate B (ARM) | 123 / 117 / 125 | 238 / 232 / 245 | 40.56 | 51.05 | 129 / 234 |
+
+| Paired comparison, repeat-mean per task | Δ overall, pp | 95% CI, pp | Permutation p | Holm p |
+| --- | ---: | --- | ---: | ---: |
+| Gate B − 56 groups | +5.22 | [+1.56, +8.89] | 0.007 | 0.014 |
+| Gate B − 48 groups | +6.44 | [+2.67, +10.22] | 0.001 | 0.004 |
+| 56 groups − 48 groups | +1.22 | [−2.22, +4.67] | 0.530 | 0.530 |
+
+- **Gate B's lead holds on matched dates.** Its invalid counts (55–68) now match the
+  outcome-only runs (54–67), so the earlier site-availability caveat does not explain it.
+  Repeat-to-repeat SD is 1.4–2.3 pp per checkpoint.
+- **Same direction as the stealth protocol.** Under o4-mini/T0.6 stealth, Gate B −
+  outcome-only was +3.56 pp [−0.22, +7.22] ([RL_RESULTS](RL_RESULTS.md)).
+- **Open check:** GPT-4.1 increasingly accepts unsupported answers late in training
+  ([judge audit](RL_REWARD_DESIGN.md#evidence)). Re-scoring these 2,700 episodes with the
+  second judge (about $0.02 per episode) would show whether the gap survives a stricter judge.
+
+<details>
+<summary>Method and limits</summary>
+
+- **CI and p:** per-task success averaged over the three repeats; paired percentile bootstrap
+  over 300 tasks and paired sign-flip permutation test (20,000 draws each), Holm over the
+  three comparisons.
+- **Scope:** one checkpoint per run. The CI covers task and evaluation noise, not
+  training-seed variation; Gate B has a different training history (auxiliary failure groups,
+  relaxed gate) and is one lineage.
+- **Sources:** [aggregate](arm_results/rl_integration/behavior/iter90-repeats-20261025.json) ·
+  script `scripts/analyze_iter90_repeats.py`.
 </details>
 
 <a id="rl-behavior-failures-20261024"></a>
@@ -302,7 +350,6 @@ logs (SFT checkpoint) give this fraction for free:
 
 | Item | Job | Adds |
 | --- | --- | --- |
-| Iteration-90 repeats ×3: 48 groups, 56 groups, Gate B | 385593 | Repeat-level noise at a matched endpoint on one harness; action-level trajectories for three of the four runs |
 | Step-0 pass@K | 385599 | Clean pass@K and mixed-group probability for K = 5, 8, 16 |
 | Uniform G8 60 → 90 | 385579 → 385580 | G8 at the same endpoint as the other runs |
 | Step-error fix validation | Next GPU run with the fixed source | Invalid-rate change; slow-phase logs locate the stalling call |

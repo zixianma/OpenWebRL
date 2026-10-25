@@ -294,6 +294,20 @@
 | WebVoyager595 ×1 | Gate B − Outcome-only |+0.17 |[-4.20, +4.54] |1.0000 |1.0000 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
 | WebVoyager595 ×1 | Gate B − Additive |+2.69 |[-1.68, +7.23] |0.2714 |0.8141 |[Analysis](ARM_RESULTS.md#arm-stealth90-paired-inference-20260930) |
 
+## Iteration 90 · local browser · GPT-4.1 · T0 · three contemporaneous repeats · October 25
+
+| Checkpoint | Successes r1/r2/r3 | Valid r1/r2/r3 | Overall mean % | Valid-only % | Record |
+| --- | --- | --- | ---: | ---: | --- |
+| Outcome-only 48 groups |103 /95 /109 |234 /233 /246 |34.11 |43.06 |[Aggregate](arm_results/rl_integration/behavior/iter90-repeats-20261025.json) |
+| Outcome-only 56 groups |114 /102 /102 |234 /237 /237 |35.33 |44.92 |[Aggregate](arm_results/rl_integration/behavior/iter90-repeats-20261025.json) |
+| Gate B |123 /117 /125 |238 /232 /245 |40.56 |51.05 |[Aggregate](arm_results/rl_integration/behavior/iter90-repeats-20261025.json) |
+
+| Comparison | Δ overall pp | Paired 95% CI pp | Permutation p | Holm p | Record |
+| --- | ---: | --- | ---: | ---: | --- |
+| Gate B − 56 groups |+5.22 |[+1.56, +8.89] |0.007 |0.014 |[Analysis](RL_BEHAVIOR.md#rl-behavior-iter90-repeats-20261025) |
+| Gate B − 48 groups |+6.44 |[+2.67, +10.22] |0.001 |0.004 |[Analysis](RL_BEHAVIOR.md#rl-behavior-iter90-repeats-20261025) |
+| 56 groups − 48 groups |+1.22 |[−2.22, +4.67] |0.530 |0.530 |[Analysis](RL_BEHAVIOR.md#rl-behavior-iter90-repeats-20261025) |
+
 ## OM2W difficulty · iteration90 stealth · o4-mini · T0.6 · three-repeat mean ± sample SD
 
 | Method | Collection dates (PDT) | Difficulty | Tasks/repeat | Overall mean ± sample SD | Valid-only mean ± sample SD | Overall Δ vs Sep baseline | Valid counts, repeats 1/2/3 |
