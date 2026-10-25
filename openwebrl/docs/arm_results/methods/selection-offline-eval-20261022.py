@@ -18,11 +18,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#C86212", "#2164A5"
+PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#ED7D00", "#2164A5"
 ROLLOUT, ROLLOUT_BG = "#168C9E", "#EAF7FA"
-SHARED, SHARED_BG = "#997348", "#FBF5E9"
+SHARED, SHARED_BG = "#737A83", "#F3F4F5"
 SUCCESS, FAILURE = "#31785A", "#C53A36"
-LABEL_BG, HELD_BG = "#FFF2E5", "#EDF3FA"
+LABEL_BG, HELD_BG = "#FFF0DD", "#EDF3FA"
 # Same 5 x 8 outcomes and picks as the original worked example.
 OUTCOMES = (
     (1, 0, 1, 1, 0, 1, 1, 0),
@@ -179,7 +179,7 @@ for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
 # (b) Aligned input -> teacher -> chosen action lanes. All teachers compare
 # all five candidates; the indexed trajectory below is supplied for EACH one.
 text(0.12, 2.50, "(b)  Selection", size=8.5, weight="bold")
-# A warm-colored context box fans into all three teacher inputs. Junction dots
+# A neutral gray context box fans into all three teacher inputs. Junction dots
 # explicitly join the shared context and each complete candidate/evidence set.
 box(0.12, 2.145, 4.23, 0.27, edge=SHARED, fill=SHARED_BG, lw=0.95)
 text(2.235, 2.28, r"Shared input: task · history · $s_t$ · $K=5$ actions", color=SHARED, ha="center")
