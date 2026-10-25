@@ -87,6 +87,46 @@ Coverage: all 150 GPT-4.1 successes from the audit above.
   and exported as JSON.
 - The audit covers one run at two checkpoints.
 
+### Re-scoring the held-out evaluations with the saved audits
+
+No new API calls. The gate `G` (no `not_found` claim and `answer_completes_task`, `partial`
+allowed) is applied to the 75 audited GPT-4.1 successes per checkpoint. The kept fraction is
+then scaled to the full valid-only cohort, because the audit sample is stratified by verdict.
+
+**Under the stricter rewards, held-out success does not rise between iterations 10 and 90.**
+
+| Reward | Iteration 10 valid-only success | Iteration 90 valid-only success | Change, 90 − 10 | 95% interval of change |
+|---|---|---|---|---|
+| (a) GPT-4.1 alone | 35.1% | 45.1% | +10.1 pp | — (full cohort, no audit sampling) |
+| (b) `J · G` (no checklist) | 22.0% | 16.3% | −5.7 pp | −11.9 to +0.7 pp |
+| gpt-5.6-terra as judge | 28.8% | 24.8% | −4.0 pp | −10.6 to +2.9 pp |
+
+- **Denominators:** 251 valid episodes at iteration 10 (88 GPT-4.1 successes) and 237 at
+  iteration 90 (107), from [RL_RESULTS.md](RL_RESULTS.md).
+- **`J · G` scaling:** GPT-4.1 successes × the kept fraction among audited successes (47 of 75 at
+  iteration 10; 27 of 75 at iteration 90). The gate cannot add successes, so GPT-4.1 failures
+  stay at 0.
+- **gpt-5.6-terra scaling:** both strata are reweighted, including the few GPT-4.1 failures it
+  accepts (3 of 75 and 1 of 75).
+- **Interval:** bootstrap over the audit samples only (4,000 resamples). It leaves out
+  evaluation-to-evaluation noise, so the real uncertainty is wider.
+
+**How the gate compares with the second judge** (audited GPT-4.1 successes, 75 per checkpoint):
+
+| Iteration | Both accept | Only `G` accepts | Only second judge accepts | Both reject |
+|---|---|---|---|---|
+| 10 | 44 | 3 | 12 | 16 |
+| 90 | 27 | 0 | 13 | 35 |
+
+- **`G` rejects every second-judge rejection at iteration 90 (35 of 35).** It also rejects about
+  a quarter of second-judge acceptances (12 of 56; 13 of 40). The human labels should settle
+  these 25 cases. They are where the gate may be too strict.
+- **Also rejecting `partial` claims is far too strict.** That version keeps 22 and 12 of 75,
+  and it rejects 35 and 28 second-judge acceptances.
+- **Training signal:** at iteration 10 the gate keeps about 63% of GPT-4.1 successes. Expect
+  correspondingly more all-zero GRPO groups early on (see Risks).
+- **Same caveat as above:** `G` and the second judge use the same model.
+
 ## Proposed reward
 
 **Base success is gated, not augmented.** Let `J` be the current GPT-4.1 `action_history`
@@ -168,7 +208,8 @@ Wait for its iteration-60 result before combining.
      - (c) `J · G` with the checklist.
    - Report:
      - agreement with human labels (precision/recall of "success");
-     - the success rate each reward would assign;
+     - the success rate each reward would assign (done for (a) and (b) from the saved audits;
+       see [re-scoring](#re-scoring-the-held-out-evaluations-with-the-saved-audits));
      - how often each reward would have changed the sign of a GRPO advantage within a group,
        using saved training groups if available (outcome-only 48 archive, iterations 24–100).
    - Reuse the existing audit code rather than writing new judge plumbing.
