@@ -12,12 +12,20 @@ Panel views: "distinct" = one representative per action (2-5 candidates); "natur
 the actor's own frequencies (each SFT proposal of an action's key; a state with fewer labelled proposals uses all),
 resampled every epoch; duplicates of an action share its target mass.
 
-Offline score on test states (all actions with >= 1 valid held-out draw): success of the picked action on held-out
-draws, against uniform over actions, the SFT-sample baseline (actions weighted by the actor's proposal frequency) and
-the oracle; task-clustered bootstrap differences. Natural-panel view: 20 seeded five-proposal panels per test state.
+Offline score on test states (all actions with >= 1 valid held-out draw), on held-out draws 3-7:
+  * fixed five (primary, as served): the state's first five SFT proposals by draw index, duplicates kept (all of them
+    when it has fewer); the head picks one; baseline = one SFT sample from the same five (mean over the five);
+  * distinct actions (diagnostic): one representative per action; baseline uniform over actions; also the SFT-sample
+    baseline over all proposals and the oracle; natural view: 20 seeded five-proposal panels per test state.
+Task-clustered bootstrap differences.
 
   train_head_round.py --data D --labels L --source teacher_k1 --output O [--interaction ... --scorer ... --loss ...
                       --mlp-depth 2 --mlp-width 1686 --readout linear|pointer --train-view distinct|natural --train-frac 1]
+
+Teacher-data scaling (--extra-only): train on the extra panels alone (none of our states), on the first
+--extra-max-states base states of whole tasks in a seeded order (nested across sizes), and keep the epoch with the best
+agreement on the extra panels' own validation split (tasks of our test split excluded there too), as the live
+Piotr-data head did. Our test states are only scored.
 """
 import argparse
 from collections import defaultdict
@@ -65,6 +73,26 @@ def targets(records, labels, source):
     return out
 
 
+def fixed_five(x):
+    """Feature rows and action indices of the state's first five SFT proposals by draw index (duplicates kept)."""
+    pos = {d: i for i, d in enumerate(x["feature_draws"])}
+    slots = sorted((d, a) for a, act in enumerate(x["actions"]) for d in act["sft_draws"])[:5]
+    return [pos[d] for d, _ in slots], [a for _, a in slots]
+
+
+def score_fixed_five(head, ids, rec, cand, state, rates, torch):
+    """Per state: (head's pick success, one-SFT-sample success, best in panel) on the fixed five proposals."""
+    out = {}
+    with torch.no_grad():
+        for sid in ids:
+            rows, acts = fixed_five(rec[sid])
+            c = cand[sid][rows].float()[None]; m = torch.ones(1, len(rows), dtype=torch.bool)
+            pick = acts[head(c, state[sid].float()[None], m)[0].argmax(-1).item()]
+            r = rates[sid]
+            out[sid] = (r[pick], sum(r[a] for a in acts) / len(acts), max(r[a] for a in acts))
+    return out
+
+
 def load_features(features, layers, torch):
     from openwebrl.selection_head import CANDIDATE_POOLS
     cand, state, stored = {}, {}, None
@@ -77,8 +105,9 @@ def load_features(features, layers, torch):
     return cand, state
 
 
-def load_extra(args, rec, layers, torch):
-    """Train-split five-candidate panels with teacher targets, excluding every task of our test split."""
+def load_extra(args, rec, layers, torch, split="train"):
+    """Five-candidate panels of one split with teacher targets, excluding every task of our test split.
+    --extra-max-states keeps whole tasks, in a seeded order, until that many base states are covered."""
     from build_selection_head_branch_eval import norm
     from openwebrl.selection_head import CANDIDATE_POOLS
     import re
@@ -93,11 +122,28 @@ def load_extra(args, rec, layers, torch):
     excluded = 0
     for line in open(args.extra_panels):
         r = json.loads(line)
-        if r["split"] != "train":
+        if r["split"] != split:
             continue
         if task.get(r["base_state_id"]) in test_tasks:
             excluded += 1; continue
         rows[r["state_id"]] = r
+    if split == "train" and args.extra_max_states:
+        by_task = defaultdict(set)
+        for r in rows.values():
+            by_task[task.get(r["base_state_id"]) or r["task_group"]].add(r["base_state_id"])
+        order = sorted(by_task); random.Random(args.extra_subset_seed).shuffle(order)
+        keep = set()
+        for t in order:
+            if len(keep) >= args.extra_max_states:
+                break
+            keep |= by_task[t]
+        rows = {k: r for k, r in rows.items() if r["base_state_id"] in keep}
+    if split == "train" and args.extra_panels_per_state:          # seeded choice of panels within each base state
+        per = defaultdict(list)
+        for k in sorted(rows):
+            per[rows[k]["base_state_id"]].append(k)
+        pick = random.Random(args.extra_subset_seed)
+        rows = {k: rows[k] for b in sorted(per) for k in pick.sample(per[b], min(len(per[b]), args.extra_panels_per_state))}
     c, s, t = [], [], []
     for path in sorted(args.extra_features.glob("shard*-chunk*.pt")):
         chunk = torch.load(path, map_location="cpu")
@@ -106,7 +152,9 @@ def load_extra(args, rec, layers, torch):
             if sid in rows:
                 c.append(panel.view(5, len(stored), len(CANDIDATE_POOLS), -1)[:, keep].reshape(5, -1))
                 s.append(chunk["states"][rows[sid]["base_state_id"]][keep].reshape(-1)); t.append(rows[sid]["target"])
-    info = dict(panels=len(c), base_states=len({rows[k]["base_state_id"] for k in rows}), excluded_test_task_panels=excluded)
+    info = dict(panels=len(c), base_states=len({rows[k]["base_state_id"] for k in rows}), excluded_test_task_panels=excluded,
+                tasks=len({task.get(r["base_state_id"]) or r["task_group"] for r in rows.values()}),
+                base_state_ids=sorted({r["base_state_id"] for r in rows.values()}))
     return torch.stack(c), torch.stack(s), torch.tensor(t, dtype=torch.float32), info
 
 
@@ -130,7 +178,16 @@ def main():
                     "`target` per row) from their train split to training; tasks of our test split are excluded")
     ap.add_argument("--extra-features", type=Path); ap.add_argument("--extra-states", type=Path,
                     help="states_full.jsonl of the extra panels (task text, to exclude our test tasks)")
+    ap.add_argument("--extra-only", action="store_true", help="train on the extra panels alone; select the epoch on "
+                    "their validation split")
+    ap.add_argument("--extra-max-states", type=int, help="first N base states of whole extra tasks (seeded order)")
+    ap.add_argument("--extra-subset-seed", type=int, default=20261023)
+    ap.add_argument("--extra-panels-per-state", type=int, help="keep at most this many panels per extra base state")
+    ap.add_argument("--last-epoch", action="store_true", help="--extra-only: keep the last epoch (as our branch-state "
+                    "heads do) instead of the best on the extra validation split; the curve is still logged")
     args = ap.parse_args()
+    if args.extra_only and not args.extra_panels:
+        ap.error("--extra-only needs --extra-panels")
     import torch
     from openwebrl.selection_head import CandidateSetHead, HeadConfig, pointwise_bce_loss, selection_loss
     from selection_outcome_experiments import cluster_boot
@@ -154,6 +211,11 @@ def main():
         train_ids = [s for s in train_ids if rec[s]["task_id"] in keep]
     test_ids = sorted(s for s in rec if rec[s]["split"] == "test" and s in cand)
     extra_c, extra_s, extra_t, extra_info = load_extra(args, rec, layers, torch) if args.extra_panels else (None, None, None, {})
+    extra_ids = extra_info.pop("base_state_ids", [])
+    if args.extra_only:
+        train_ids = []
+        val_c, val_s, val_t, val_info = load_extra(args, rec, layers, torch, split="validation")
+        val_info.pop("base_state_ids")
 
     def slot_draws(x):
         """Feature row of every SFT proposal, with its action index."""
@@ -189,22 +251,23 @@ def main():
         return c, torch.stack([state[s].float() for s in ids]), m, t, acts
 
     torch.manual_seed(args.seed); rng = random.Random(args.seed)
-    config = HeadConfig(hidden_size=state[train_ids[0]].shape[-1] // len(layers), layers=layers,
+    config = HeadConfig(hidden_size=state[test_ids[0]].shape[-1] // len(layers), layers=layers,
                         pools=("thought_mean", "action_mean", "last"), d_model=512, depth=2, dropout=0.1,
                         listwise=args.interaction == "joint", interaction=args.interaction, scorer=args.scorer,
                         mlp_depth=args.mlp_depth, mlp_width=args.mlp_width, readout=args.readout)
     head = CandidateSetHead(config)
-    fit = torch.cat([cand[s][:len(rec[s]["actions"])].float() for s in train_ids])
-    fit_state = torch.stack([state[s].float() for s in train_ids])
+    fit = [cand[s][:len(rec[s]["actions"])].float() for s in train_ids]
+    fit_state = [state[s].float() for s in train_ids]
     if extra_c is not None:
-        fit, fit_state = torch.cat([fit, extra_c.reshape(-1, extra_c.shape[-1]).float()]), torch.cat([fit_state, extra_s.float()])
-    head.fit_standardizers(fit, fit_state)
+        fit.append(extra_c.reshape(-1, extra_c.shape[-1]).float()); fit_state += list(extra_s.float())
+    head.fit_standardizers(torch.cat(fit), torch.stack(fit_state))
     items = [("ours", s) for s in train_ids] + [("extra", i) for i in range(0 if extra_c is None else len(extra_c))]
     params = sum(p.numel() for p in head.parameters())
     opt = torch.optim.AdamW(head.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     steps = args.epochs * ((len(items) + args.batch_size - 1) // args.batch_size)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, args.lr, total_steps=steps, pct_start=0.05)
     started = time.time()
+    curve, best = [], None
     for _ in range(args.epochs):
         head.train(); order = items[:]; rng.shuffle(order)
         for i in range(0, len(order), args.batch_size):
@@ -219,6 +282,19 @@ def main():
             logits, _ = head(c, s, m)
             loss = loss_fn(logits, t, m)
             opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(head.parameters(), 1.); opt.step(); sched.step()
+        if args.extra_only:                                       # teacher agreement on the extra validation split
+            head.eval()
+            with torch.no_grad():
+                hit = []
+                for i in range(0, len(val_c), 1024):
+                    lg = head(val_c[i:i + 1024].float(), val_s[i:i + 1024].float(), torch.ones(len(val_c[i:i + 1024]), 5, dtype=torch.bool))[0]
+                    hit.append(val_t[i:i + 1024].gather(1, lg.argmax(-1, keepdim=True))[:, 0] > 0)
+            agree = torch.cat(hit).float().mean().item()
+            curve.append(round(agree, 4))
+            if best is None or agree > best[0]:
+                best = (agree, len(curve), {k: v.clone() for k, v in head.state_dict().items()})
+    if args.extra_only and not args.last_epoch:
+        head.load_state_dict(best[2])
     head.eval()
 
     # offline scoring on held-out draws 3-7
@@ -243,6 +319,7 @@ def main():
                 c, s, m, _, acts = batch([sid], "natural", nrng, with_target=False)
                 got.append(per[sid]["rates"][acts[0][head(c, s, m)[0].argmax(-1).item()]])
             natural[sid] = sum(got) / len(got)
+    five = score_fixed_five(head, scored, rec, cand, state, {s: per[s]["rates"] for s in scored}, torch)
     g = [rec[s]["task_id"] for s in scored]
     head_r = [per[s]["rates"][picks[s]] for s in scored]
     uni = [sum(per[s]["rates"]) / len(per[s]["rates"]) for s in scored]
@@ -252,7 +329,15 @@ def main():
                mlp_depth=args.mlp_depth, mlp_width=args.mlp_width, readout=args.readout, train_view=args.train_view,
                train_frac=args.train_frac, seed=args.seed, params=params, train_states=len(train_ids), extra=extra_info,
                train_tasks=len({rec[s]["task_id"] for s in train_ids}), test_states=len(scored), test_tasks=len(set(g)),
+               extra_only=args.extra_only, extra_max_states=args.extra_max_states, extra_subset_seed=args.extra_subset_seed,
+               extra_panels_per_state=args.extra_panels_per_state, last_epoch=args.last_epoch,
+               batch_size=args.batch_size, epochs=args.epochs,
+               extra_validation=(dict(val_info, agreement_by_epoch=curve, best_epoch=best[1], best_agreement=round(best[0], 4))
+                                 if args.extra_only else None),
                train_seconds=round(time.time() - started, 1),
+               fixed_five=dict(head=mean([five[s][0] for s in scored]), sft_sample=mean([five[s][1] for s in scored]),
+                               oracle=mean([five[s][2] for s in scored]),
+                               head_minus_sft_sample=cluster_boot([five[s][0] - five[s][1] for s in scored], g)),
                success=dict(head=mean(head_r), head_natural_panels=mean(nat), uniform=mean(uni), sft_sample=mean(sft),
                             oracle=mean([max(per[s]["rates"]) for s in scored])),
                head_minus_uniform=cluster_boot([a - b for a, b in zip(head_r, uni)], g),
@@ -261,8 +346,9 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     torch.save({"config": config.to_json(), "state_dict": {k: v.cpu() for k, v in head.state_dict().items()},
                 "objective": "soft_ce", "loss": args.loss, "params": params, "source": args.source, "seed": args.seed,
-                "train_states": len(train_ids), "train_view": args.train_view}, args.output / "head.pt")
-    (args.output / "train-states.json").write_text(json.dumps(train_ids))
+                "train_states": len(train_ids), "train_view": args.train_view,
+                "extra_base_states": len(extra_ids), "extra_only": args.extra_only}, args.output / "head.pt")
+    (args.output / "train-states.json").write_text(json.dumps(train_ids + extra_ids))
     (args.output / "picks.json").write_text(json.dumps(dict(picks=picks, natural=natural)))
     (args.output / "scores.json").write_text(json.dumps(res, indent=1))
     print(json.dumps(res))
