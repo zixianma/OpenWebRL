@@ -12,6 +12,7 @@ import fcntl
 import json
 import os
 from pathlib import Path
+import re
 import shlex
 import shutil
 import signal
@@ -58,7 +59,8 @@ def cmd_prepare(a):
                      if a.subset_of_root else None)
         horizon = dict(max_steps=a.max_steps, history_full_turns=a.history_full_turns) if a.max_steps else None
         plan = core.build_plan(base / bench, benchmark=bench, condition=a.condition, n=a.n, seed=a.seed,
-                               actor=a.actor, judge_caps=caps[bench], decoding=decoding, subset_of=subset_of, horizon=horizon)
+                               actor=a.actor, judge_caps=caps[bench], decoding=decoding, subset_of=subset_of, horizon=horizon,
+                               speculative=a.speculative)
         out[bench] = dict(plan=str(base / bench / 'plan.json'), tasks=len(plan['task_ids']),
                           first_tasks=plan['task_ids'][:3], judge_caps=plan['judge_caps'],
                           head_sha256=plan['condition']['head_sha256'])
@@ -66,7 +68,7 @@ def cmd_prepare(a):
 
 
 def default_time(condition_name, benchmarks):
-    hours = STARTUP_HOURS + HOURS_PER_BENCHMARK[condition_name] * len(benchmarks)
+    hours = STARTUP_HOURS + HOURS_PER_BENCHMARK[re.sub(r'^(piotr|head)\d', r'\g<1>5', condition_name).rstrip('x')] * len(benchmarks)
     minutes = int(round(min(hours, 24) * 60))
     return f'{minutes // 60:02d}:{minutes % 60:02d}:00'
 
@@ -152,6 +154,8 @@ def server_stages(plan, port, capture_dir):
                   '--context-length', str(plan['protocol']['context_length']), '--max-running-requests', '40',
                   '--chunked-prefill-size', '4096', '--cuda-graph-max-bs', '48',
                   '--random-seed', str(plan['protocol']['server_seed'])]
+    if plan.get('speculative') == 'ngram':
+        actor_argv += ['--speculative-algorithm', 'NGRAM']
     actor_env = {}
     if cond['kind'] == 'actor_cache_head':
         actor_argv += ['--forward-hooks', hook_specs_json(core.actor_info(plan['actor'])['capture_layers'])]
@@ -404,7 +408,7 @@ def main(argv=None):
     sub = p.add_subparsers(dest='command', required=True)
     pr = sub.add_parser('prepare')
     pr.add_argument('--root', required=True)
-    pr.add_argument('--condition', required=True, help='sft1 | piotr5 | head5:<path/to/head.pt>')
+    pr.add_argument('--condition', required=True, help='sft1 | piotr<N> | head<N>:<path/to/head.pt> (N = 2-5 samples per step)')
     pr.add_argument('--benchmarks', nargs='+', default=list(core.BENCHMARKS), choices=core.BENCHMARKS)
     pr.add_argument('--n', type=int, default=100)
     pr.add_argument('--seed', type=int, required=True, help='task-subset seed')
@@ -418,6 +422,7 @@ def main(argv=None):
                     '(e.g. sft1) instead of the same condition\'s')
     pr.add_argument('--max-steps', type=int, help='horizon override (default 30)')
     pr.add_argument('--history-full-turns', type=int, default=0, help='with --max-steps: keep the last N turns full, older turns action + result line only')
+    pr.add_argument('--speculative', choices=('ngram',), help='serve the actor with sglang n-gram speculative decoding')
     ls = sub.add_parser('launch-script')
     ls.add_argument('--root', required=True)
     ls.add_argument('--condition', required=True)

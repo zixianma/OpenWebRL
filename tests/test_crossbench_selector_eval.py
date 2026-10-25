@@ -53,7 +53,7 @@ class PlanFreezing(Fixture):
         plan = self.plan(condition=f'head5:{self.head}')
         self.assertEqual(plan['condition']['head_sha256'], core.sha256_file(self.head))
         self.assertTrue(plan['condition']['slug'].startswith('head5-'))
-        self.assertEqual(plan['protocol']['judge'], 'o4-mini')
+        self.assertEqual(plan['protocol']['judge'], 'gpt-5.6-terra')
         self.assertEqual((plan['protocol']['temperature'], plan['protocol']['top_p'], plan['protocol']['max_new_tokens'],
                           plan['protocol']['max_steps'], plan['protocol']['seed'], plan['protocol']['server_seed']),
                          (.7, .9, 1024, 30, 42, 4200))
@@ -86,6 +86,29 @@ class PlanFreezing(Fixture):
             core.parse_condition('luna5')
         with self.assertRaises(ValueError):
             core.parse_condition(f'head5:{self.tmp}/missing.pt')
+        for bad in ('piotr1', 'piotr6', 'head6:x.pt'):
+            with self.assertRaises(ValueError):
+                core.parse_condition(bad)
+
+    def test_candidate_count_conditions(self):
+        head = Path(self.tmp) / 'head.pt'
+        head.write_bytes(b'head')
+        five, three = core.parse_condition(f'head5:{head}'), core.parse_condition(f'head3:{head}')
+        self.assertEqual((five['name'], five['candidates'], five['kind']), ('head5', 5, 'actor_cache_head'))
+        self.assertEqual((three['name'], three['candidates'], three['kind']), ('head3', 3, 'actor_cache_head'))
+        self.assertEqual(three['slug'], 'head3-' + five['slug'].split('-', 1)[1])
+        x = core.parse_condition(f'head3x:{head}')
+        self.assertEqual((x['name'], x['candidates'], x['kind']), ('head3x', 3, 'frozen_head_scorer'))
+        p5, p3 = core.parse_condition('piotr5'), core.parse_condition('piotr3')
+        self.assertEqual((p5['slug'], p5['candidates']), ('piotr5', 5))
+        self.assertEqual((p3['slug'], p3['candidates'], p3['kind']), ('piotr3', 3, 'selection'))
+        self.assertEqual(p3['selector_model'], p5['selector_model'])
+
+    def test_8b_actor_registered(self):
+        info = core.actor_info(core.ACTOR_8B)
+        self.assertEqual(info['revision'], '838c4a4842555a2a61e81d7a28bac7b2e8144800')
+        self.assertEqual(info['params'], 8767123696)
+        self.assertEqual(core.actor_info()['params'], core.ACTOR_PARAMS)
 
 
 class SubsetSampling(unittest.TestCase):
@@ -151,7 +174,7 @@ MESSAGES = [dict(role='user', content=[dict(type='text', text='judge this'), dic
 
 class JudgeRouting(Fixture):
     def test_routes_per_benchmark(self):
-        expected = {'online_mind2web': ('o4-mini', 3, 'create', 'reward_online_mind2web'),
+        expected = {'online_mind2web': ('gpt-5.6-terra', 3, 'create', 'reward_online_mind2web'),
                     'webvoyager': ('gpt-4o', 30, 'create', 'reward_webvoyager'),
                     'deepshop': ('gpt-4o', 30, 'parse', 'reward_deepshop')}
         for bench, (model, images, api, module) in expected.items():
@@ -176,23 +199,23 @@ class JudgeRouting(Fixture):
     def test_capped_judge_enforces_route_model_and_output_cap(self):
         async def go():
             om2w = core.NativeCappedJudge(self.tmp / 'j1', 'online_mind2web', max_calls=5, max_usd=5.,
-                                          attempt_context=core.ATTEMPT, client=FakeJudgeClient('o4-mini'))
-            await om2w.chat.completions.create(model='o4-mini', messages=MESSAGES, seed=42)
+                                          attempt_context=core.ATTEMPT, client=FakeJudgeClient('gpt-5.6-terra'))
+            await om2w.chat.completions.create(model='gpt-5.6-terra', messages=MESSAGES, seed=42)
             sent = om2w.client.calls[0][1]
             self.assertEqual((sent['max_completion_tokens'], sent['store']), (4096, False))
             with self.assertRaises(ValueError):
                 await om2w.chat.completions.create(model='gpt-4o', messages=MESSAGES)
             with self.assertRaises(ValueError):
-                await om2w.beta.chat.completions.parse(model='o4-mini', messages=MESSAGES)
+                await om2w.beta.chat.completions.parse(model='gpt-5.6-terra', messages=MESSAGES)
             with self.assertRaises(ValueError):
-                await om2w.chat.completions.create(model='o4-mini', messages=MESSAGES, max_tokens=10)
+                await om2w.chat.completions.create(model='gpt-5.6-terra', messages=MESSAGES, max_tokens=10)
             ds = core.NativeCappedJudge(self.tmp / 'j2', 'deepshop', max_calls=5, max_usd=5.,
                                         attempt_context=core.ATTEMPT, client=FakeJudgeClient('gpt-4o'))
             await ds.beta.chat.completions.parse(model='gpt-4o', messages=MESSAGES)
             self.assertEqual(ds.client.calls[0][0], 'parse')
             state = core.read_json(self.tmp / 'j1' / 'ledger.json')
             self.assertEqual(state['calls'], 1)
-            self.assertAlmostEqual(state['charged_or_reserved_usd'], (1000 * 1.1 + 50 * 4.4) / 1e6)
+            self.assertAlmostEqual(state['charged_or_reserved_usd'], (1000 * 2.5 + 50 * 15.) / 1e6)
         asyncio.run(go())
 
     def test_cap_halts_and_persists(self):
@@ -384,7 +407,7 @@ class Worker(Fixture):
     def test_full_run_records_and_summary(self):
         for condition, picks in (('sft1', 0), ('piotr5', 1), (f'head5:{self.head}', 3)):
             plan = self.plan(condition=condition, n=4, name=condition.split(':')[0])
-            runtime = FakeRuntime('o4-mini', verdicts={plan['task_ids'][0]: 0.0})
+            runtime = FakeRuntime('gpt-5.6-terra', verdicts={plan['task_ids'][0]: 0.0})
             summary = self.collect(plan, runtime)
             self.assertEqual((summary['completed'], summary['successes'], summary['valid']), (4, 3, 4))
             self.assertEqual(summary['success_rate_scheduled'], .75)
@@ -401,28 +424,28 @@ class Worker(Fixture):
 
     def test_resume_skips_completed_and_detects_tampering(self):
         plan = self.plan(n=5)
-        self.collect(plan, FakeRuntime('o4-mini'))
+        self.collect(plan, FakeRuntime('gpt-5.6-terra'))
         # drop one record (its attempt directory stays): only that task is re-run, as physical attempt 2
         key = plan['keys'][plan['task_ids'][3]]
         record_path = Path(plan['collection']) / 'records' / f'{key}.json'
         record_path.rename(self.tmp / 'moved.json')
-        runtime = FakeRuntime('o4-mini')
+        runtime = FakeRuntime('gpt-5.6-terra')
         summary = self.collect(plan, runtime)
         self.assertEqual(runtime.evaluated, [plan['task_ids'][3]])
         self.assertEqual(summary['completed'], 5)
         self.assertEqual(core.read_json(record_path)['physical_attempt'], 2)
         self.assertEqual(len(list((Path(plan['collection']) / 'attempts' / key).iterdir())), 2)
-        runtime = FakeRuntime('o4-mini')
+        runtime = FakeRuntime('gpt-5.6-terra')
         self.collect(plan, runtime)
         self.assertEqual(runtime.evaluated, [])
         Path(core.read_json(record_path)['artifact']).write_text('{}')
         with self.assertRaisesRegex(ValueError, 'hash'):
-            self.collect(plan, FakeRuntime('o4-mini'))
+            self.collect(plan, FakeRuntime('gpt-5.6-terra'))
 
     def test_judge_cap_halts_without_committing(self):
         plan = self.plan(n=6, caps=dict(max_calls=3, max_usd=100.))
         with self.assertRaises(core.JudgeHalted):
-            self.collect(plan, FakeRuntime('o4-mini'))
+            self.collect(plan, FakeRuntime('gpt-5.6-terra'))
         records = core.load_records(plan)
         # only episodes whose judge call succeeded and that finished before the halt are committed; none is capped
         self.assertIn(len(records), (2, 3))
@@ -431,7 +454,7 @@ class Worker(Fixture):
         self.assertEqual((state['calls'], state['halted']), (3, True))
         summary = core.read_json(Path(plan['collection']) / 'summary.json')
         self.assertTrue(summary['judge_halted'])
-        runtime = FakeRuntime('o4-mini')
+        runtime = FakeRuntime('gpt-5.6-terra')
         with self.assertRaises(core.JudgeHalted):       # a halted ledger refuses to start again
             self.collect(plan, runtime)
         self.assertEqual(runtime.evaluated, [])
@@ -439,7 +462,7 @@ class Worker(Fixture):
     def test_startup_gate_requires_functioning_episode(self):
         plan = self.plan(condition='piotr5', n=4)
         with self.assertRaisesRegex(RuntimeError, 'Startup gate'):
-            self.collect(plan, FakeRuntime('o4-mini', steps=0))
+            self.collect(plan, FakeRuntime('gpt-5.6-terra', steps=0))
 
     def test_episode_exception_is_committed_invalid(self):
         plan = self.plan(n=3)
@@ -449,7 +472,7 @@ class Worker(Fixture):
                 if task['task_id'] == plan['task_ids'][2]:
                     raise TimeoutError('browser died')
                 return await super().evaluate(args, task, sampling)
-        summary = self.collect(plan, Crashy('o4-mini'))
+        summary = self.collect(plan, Crashy('gpt-5.6-terra'))
         self.assertEqual((summary['completed'], summary['valid'], summary['errors']), (3, 2, 1))
 
 
@@ -509,7 +532,7 @@ class Cli(Fixture):
     def test_judge_cap_overrides(self):
         caps = self.cli.parse_caps(['webvoyager=20'], ['online_mind2web', 'webvoyager'], 100)
         self.assertEqual(caps['webvoyager'], dict(max_calls=400, max_usd=20.))
-        self.assertEqual(caps['online_mind2web'], dict(max_calls=400, max_usd=3.))
+        self.assertEqual(caps['online_mind2web'], dict(max_calls=400, max_usd=6.))
 
 
 if __name__ == '__main__':

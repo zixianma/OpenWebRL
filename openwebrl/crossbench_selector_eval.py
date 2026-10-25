@@ -69,12 +69,15 @@ PIOTR_SELECTION = Path('/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection/81
 PIOTR_SGLANG_DIR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection-sglang-81b452d')
 ACTOR_PARAMS = 4022468096 + 415347712          # FLOP accounting for head follow-ups (as selectors-samehw)
 ACTOR_2B = Path('/gpfs/scrubbed/zixianma/checkpoints/web/qwen3-vl-2b-thinking-openwebrl-sft-95d5b13')
+ACTOR_8B = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-8B-SFT-sglang')   
 # Actor identity, FLOP-accounting parameters (language model + vision tower) and the layers a selection head reads.
 ACTORS = {
     str(ACTOR.resolve()): dict(name='OpenWebRL-4B-SFT:iteration0', revision='15e777db2ddba2e0e82080ebccd3ad8d215b7f0a',
                      params=ACTOR_PARAMS, capture_layers=(18, 27, 36)),
     str(ACTOR_2B.resolve()): dict(name='davidan03/qwen3-vl-2b-thinking-openwebrl-sft', revision='95d5b133ab91dd5729030ae3be2d5281d60fcb20',
                         params=2127532032, capture_layers=(14, 21, 28)),
+    str(ACTOR_8B.resolve()): dict(name='OpenWebRL/OpenWebRL-8B-SFT', revision='838c4a4842555a2a61e81d7a28bac7b2e8144800',
+                        params=8767123696, capture_layers=None),
 }
 
 
@@ -100,8 +103,10 @@ TASK_SOURCES = {
 
 # --- copied from Sol61 sol61_benchmark_judge.py -------------------------------------------------------------------
 ROUTES = {
-    'online_mind2web': dict(module='reward_online_mind2web', model='o4-mini', protocol='online_mind2web/AgentTrek',
-                            images=3, api='create', input_price=1.1, output_price=4.4),
+    # o4-mini was retired (404 model_not_found, 2026-10-23); gpt-5.6-terra is its official replacement. Same AgentTrek
+    # prompt, image and parser. Prices are the pre-July-30 list rates ($2.50/$15 per M), an upper bound on the current ones.
+    'online_mind2web': dict(module='reward_online_mind2web', model='gpt-5.6-terra', protocol='online_mind2web/AgentTrek',
+                            images=3, api='create', input_price=2.5, output_price=15.),
     'webvoyager': dict(module='reward_webvoyager', model='gpt-4o', protocol='webvoyager', images=30, api='create',
                        input_price=2.5, output_price=10.),
     'deepshop': dict(module='reward_deepshop', model='gpt-4o', protocol='deepshop', images=30, api='parse',
@@ -111,7 +116,7 @@ JUDGE_MAX_COMPLETION_TOKENS = 4096
 # Per (condition, benchmark) caps for a 100-task subset; cumulative across retries/resumes. Calls: the native rewards
 # retry up to 4 times per episode. USD leaves headroom for 8 in-flight conservative reservations (30 images x 20k
 # tokens = $1.5 per gpt-4o reservation) above the expected ~$0.05/episode actual spend.
-DEFAULT_JUDGE_USD = {'online_mind2web': 3.0, 'webvoyager': 15.0, 'deepshop': 12.0}
+DEFAULT_JUDGE_USD = {'online_mind2web': 6.0, 'webvoyager': 15.0, 'deepshop': 12.0}   # OM2W: terra ~2.3x o4-mini
 
 
 def route_for(benchmark):
@@ -332,30 +337,30 @@ class NativeCappedJudge:
 
 # --- conditions, tasks, plans ---------------------------------------------------------------------------------------
 def parse_condition(condition):
-    """``sft1`` | ``piotr5`` | ``head5:<path/to/head.pt>`` -> normalized description (head sha256 pinned)."""
+    """``sft1`` | ``piotr<N>`` | ``head<N>:<path/to/head.pt>`` | ``head<N>x:<head.pt>`` -> normalized description (head
+    sha256 pinned). N = actor samples per step (2-5); ``piotr5`` / ``head5`` keep their original names and slugs."""
     if condition == 'sft1':
         return dict(name='sft1', kind='baseline', candidates=1, slug='sft1', head_path=None, head_sha256=None,
                     selection_rule='single_sample')
-    if condition == 'piotr5':
-        return dict(name='piotr5', kind='selection', candidates=5, slug='piotr5', head_path=None, head_sha256=None,
+    m = re.fullmatch(r'piotr([2-5])', condition)
+    if m:
+        return dict(name=condition, kind='selection', candidates=int(m[1]), slug=condition, head_path=None, head_sha256=None,
                     selection_rule='canonical_no_cot_json_schema_sglang_first_candidate_fallback',
                     selector_model=str(PIOTR_SELECTION), selector_revision='81b452d800d9f859687074f82680dd5257e02d89')
-    if condition.startswith('head5:'):
-        path = Path(condition.split(':', 1)[1]).resolve()
+    m = re.fullmatch(r'head([2-5])(x?):(.+)', condition)
+    if m:
+        n, external, path = int(m[1]), m[2], Path(m[3]).resolve()
         if not path.is_file():
             raise ValueError(f'Selection head not found: {path}')
         digest = sha256_file(path)
-        return dict(name='head5', kind='actor_cache_head', candidates=5, slug=f'head5-{digest[:12]}', head_path=str(path),
+        name = f'head{n}{external}'
+        if external:
+            return dict(name=name, kind='frozen_head_scorer', candidates=n, slug=f'{name}-{digest[:12]}', head_path=str(path),
+                        head_sha256=digest, selection_rule='argmax_head_score_ties_first',
+                        encoder=str(ACTOR), encoder_revision=ACTORS[str(ACTOR.resolve())]['revision'])
+        return dict(name=name, kind='actor_cache_head', candidates=n, slug=f'{name}-{digest[:12]}', head_path=str(path),
                     head_sha256=digest, selection_rule='argmax_head_score_ties_first')
-    if condition.startswith('head5x:'):
-        path = Path(condition.split(':', 1)[1]).resolve()
-        if not path.is_file():
-            raise ValueError(f'Selection head not found: {path}')
-        digest = sha256_file(path)
-        return dict(name='head5x', kind='frozen_head_scorer', candidates=5, slug=f'head5x-{digest[:12]}', head_path=str(path),
-                    head_sha256=digest, selection_rule='argmax_head_score_ties_first',
-                    encoder=str(ACTOR), encoder_revision=ACTORS[str(ACTOR.resolve())]['revision'])
-    raise ValueError(f'Unknown condition {condition!r}; expected sft1, piotr5, head5:<head.pt> or head5x:<head.pt>')
+    raise ValueError(f'Unknown condition {condition!r}; expected sft1, piotr<N>, head<N>:<head.pt> or head<N>x:<head.pt>')
 
 
 def task_id_of(row, index):
@@ -382,9 +387,13 @@ def sample_subset(task_ids, n, seed):
     return random.Random(f'{REVISION}/subset/{seed}').sample(unique, n)
 
 
-def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None):
+def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None, speculative=None):
     """Frozen protocol; ``decoding`` (dict(temperature, top_p)) overrides the default T 0.7 / top-p 0.9 actor sampling;
-    ``horizon`` (dict(max_steps, history_full_turns)) overrides the 30-step full-history default."""
+    ``horizon`` (dict(max_steps, history_full_turns)) overrides the 30-step full-history default; ``speculative``
+    ('ngram') serves the actor with sglang n-gram speculative decoding (same sampled distribution; per-request seeds are
+    not honoured)."""
+    if speculative not in (None, 'ngram'):
+        raise ValueError(f'Unsupported speculative decoding {speculative!r}')
     route = route_for(benchmark)
     cond = parse_condition(condition) if isinstance(condition, str) else condition
     temperature, top_p = (decoding['temperature'], decoding['top_p']) if decoding else (.7, .9)
@@ -405,7 +414,8 @@ def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None):
         selector_model=cond.get('selector_model'), selector_revision=cond.get('selector_revision'),
         actor_serving='sglang, one H200, mem-fraction .45, CUDA graphs max batch 48'
                       + (', forward hooks capture layers ' + '/'.join(map(str, info['capture_layers']))
-                         if cond['kind'] == 'actor_cache_head' else ''),
+                         if cond['kind'] == 'actor_cache_head' else '')
+                      + (', n-gram speculative decoding (--speculative-algorithm NGRAM)' if speculative else ''),
         selector_serving={'selection': 'sglang on the actor GPU, mem-fraction .30, behind serve_arm_sglang /select',
                           'actor_cache_head': 'CPU head over hidden states exported by the actor server',
                           'frozen_head_scorer': 'OpenWebRL-4B-SFT encoder (transformers, bf16) on the actor GPU re-encodes the '
@@ -442,7 +452,7 @@ def source_drift(plan, repo=REPO):
 
 
 def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_source=None, judge_caps=None, repo=REPO,
-               decoding=None, subset_of=None, horizon=None):
+               decoding=None, subset_of=None, horizon=None, speculative=None):
     """Freeze one (condition, benchmark) cohort in ``directory``; refuse to change an existing different plan."""
     directory = Path(directory).resolve()
     cond = parse_condition(condition)
@@ -469,7 +479,7 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
     actor = Path(actor).resolve()
     if not (actor / 'config.json').exists():
         raise ValueError(f'Actor checkpoint missing: {actor}')
-    protocol = protocol_for(benchmark, cond, decoding, horizon, actor)
+    protocol = protocol_for(benchmark, cond, decoding, horizon, actor, speculative)
     caps = dict(judge_caps or default_judge_caps(benchmark, n))
     frozen_tasks = directory / 'tasks-source.jsonl'
     plan = dict(revision=REVISION, root=str(directory), benchmark=benchmark, condition=cond, subset_seed=seed, n=n,
@@ -485,6 +495,8 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
         plan['subset_of'] = str(Path(subset_of).resolve())
     if horizon:
         plan['horizon'] = dict(max_steps=int(horizon['max_steps']), history_full_turns=int(horizon.get('history_full_turns') or 0))
+    if speculative:
+        plan['speculative'] = speculative
     path = directory / 'plan.json'
     if path.exists():
         old = read_json(path)
@@ -504,7 +516,8 @@ def validate_plan(directory, *, allow_source_drift=False, repo=REPO):
         raise ValueError('Plan moved or from another revision')
     if sha256_file(plan['task_file']) != plan['task_source_sha256']:
         raise ValueError('Frozen task file changed')
-    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding'), plan.get('horizon'), plan['actor']) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
+    if plan['protocol'] != protocol_for(plan['benchmark'], plan['condition'], plan.get('decoding'), plan.get('horizon'), plan['actor'],
+                                        plan.get('speculative')) or protocol_sha(plan['protocol']) != plan['protocol_sha256']:
         raise ValueError('Protocol changed since the plan was frozen')
     if plan['condition']['head_path'] and sha256_file(plan['condition']['head_path']) != plan['condition']['head_sha256']:
         raise ValueError('Selection head file changed since the plan was frozen')
