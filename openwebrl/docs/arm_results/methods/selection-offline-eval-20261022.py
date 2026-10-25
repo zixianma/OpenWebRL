@@ -1,8 +1,8 @@
 """Paper figure for offline selector evaluation (October 21 ablation).
 
 The outcomes and teacher picks are illustrative, preserved from the original
-figure. Draws 0--2 supply outcome labels; teachers see only draw 0, and all
-pickers are scored on held-out draws 3--7. Invalid draws are excluded from the
+figure. Rollouts 0--2 supply outcome labels; teachers see only rollout 0, and all
+pickers are scored on held-out rollouts 3--7. Invalid rollouts are excluded from the
 rate denominator. No experiment artifacts or API calls are needed to render.
 
 Usage: python3 selection-offline-eval-20261022.py
@@ -38,7 +38,7 @@ plt.rcParams.update({
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })
-W, H = 7.0, 4.70
+W, H = 7.0, 4.92
 fig = plt.figure(figsize=(W, H))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set(xlim=(0, W), ylim=(0, H))
@@ -80,39 +80,35 @@ label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 
 # (a) The exact original 5 x 8 outcomes; labels never use the blue columns.
-text(0.12, 4.49, "(a)  Collect eight continuation draws per action", size=8.5, weight="bold")
+text(0.12, 4.71, "(a)  Collect eight continuation rollouts per action", size=8.5, weight="bold")
 xs = [3.76 + 0.22 * d for d in range(8)]
 trajectory_x = [1.76 + 0.48 * k for k in range(4)]
-ys = [3.82 - 0.22 * i for i in range(5)]
+ys = [4.04 - 0.22 * i for i in range(5)]
 y_low, y_high = ys[-1] - 0.10, ys[0] + 0.10
 ax.add_patch(Rectangle((xs[0] - 0.11, y_low), 3 * 0.22, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((xs[3] - 0.11, y_low), 5 * 0.22, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
-ax.add_patch(Rectangle((xs[0] - 0.095, y_low), 0.19, y_high - y_low,
-                       facecolor="none", edgecolor=LOOK, linewidth=0.7, zorder=1))
 for first, last, title, color in ((0, 2, "Label pool", OUTCOME), (3, 7, "Held out", HELD)):
-    rule(xs[first] - 0.105, xs[last] + 0.105, 4.14, color, 1.1)
-    text((xs[first] + xs[last]) / 2, 4.26, title, color=color, ha="center")
+    rule(xs[first] - 0.105, xs[last] + 0.105, 4.36, color, 1.1)
+    text((xs[first] + xs[last]) / 2, 4.48, title, color=color, ha="center")
     for d in range(first, last + 1):
-        text(xs[d], 4.04, str(d), color=LOOK if d == 0 else MUTED,
+        text(xs[d], 4.26, str(d), color=LOOK if d == 0 else MUTED,
              weight="bold" if d == 0 else "normal", ha="center")
-text(1.105, 4.04, "Candidate / picks", color=MUTED, ha="center")
-text(6.00, 4.26, "Outcome", color=OUTCOME, ha="center")
-text(6.00, 4.04, "0–2", color=MUTED, ha="center")
-text(6.74, 4.26, r"Score $q_i$", color=HELD, ha="center")
-text(6.74, 4.04, "3–7", color=HELD, ha="center")
+text(1.105, 4.26, "Candidate / picks", color=MUTED, ha="center")
+text(6.00, 4.48, "Outcome", color=OUTCOME, ha="center")
+text(6.00, 4.26, "0–2", color=MUTED, ha="center")
+text(6.74, 4.48, r"Score $q_i$", color=HELD, ha="center")
+text(6.74, 4.26, "3–7", color=HELD, ha="center")
 mid = sum(ys) / len(ys)
 box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
 text(0.345, mid, r"$s_t$", size=9, ha="center")
-# Draw 0's saved state sequence is shown once per candidate. Other draws
+# Rollout 0's saved state sequence is shown once per candidate. Other rollouts
 # retain their terminal outcomes in the matrix; their trajectories are omitted.
-ax.add_patch(Rectangle((1.53, y_low), 1.88, y_high - y_low,
-                       facecolor="#F6F3FC", edgecolor=LOOK, linewidth=0.6, zorder=0))
-text(2.47, 4.26, "Draw 0 trajectory", color=LOOK, ha="center")
-text(4.53, 4.49, "Terminal outcome by draw", color=MUTED, ha="center")
+text(2.63, 4.48, "Rollout 0: states → outcome", color=LOOK, ha="center")
+text(4.53, 4.71, "Terminal outcome by rollout", color=MUTED, ha="center")
 for k in range(1, 4):
-    text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 4.04,
+    text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 4.26,
          rf"$u_{k}$", color=MUTED, ha="center")
 # Match the picked candidates to the source colors in panel (b), directly.
 pick_colors = {}
@@ -124,6 +120,10 @@ ax.add_patch(Rectangle((5.70, y_low), 0.60, y_high - y_low,
 ax.add_patch(Rectangle((6.49, y_low), 0.48, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
+    # One enclosure makes the prefix/outcome association explicit for rollout 0.
+    capsule = box(1.50, y - 0.10, xs[0] + 0.11 - 1.50, 0.20,
+                  edge=LOOK, fill="#F6F3FC", lw=0.8, radius=0.045)
+    capsule.set_zorder(0.5)
     arrow(0.57, mid, 0.77, y, color=LINE)
     box(0.79, y - 0.075, 0.63, 0.15)
     text(0.925, y, rf"$a_{i + 1}$", size=8, ha="center")
@@ -140,20 +140,28 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     for d, success in enumerate(outcomes):
         ax.add_patch(Circle((xs[d], y), 0.025,
             facecolor=SUCCESS if success else "white",
-            edgecolor=SUCCESS if success else "#88919C", linewidth=0.65))
+            edgecolor=SUCCESS if success else "#88919C", linewidth=0.65, zorder=3))
     text(6.00, y, f"{sum(outcomes[:3])}/3", color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
     text(6.74, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
 for x, fill, label in ((0.17, SUCCESS, "success"), (0.91, "white", "failure")):
-    ax.add_patch(Circle((x, 2.76), 0.025, facecolor=fill,
+    ax.add_patch(Circle((x, 2.98), 0.025, facecolor=fill,
                        edgecolor=SUCCESS if fill != "white" else "#88919C", linewidth=0.6))
-    text(x + 0.08, 2.76, label, color=MUTED)
+    text(x + 0.08, 2.98, label, color=MUTED)
 
 
 
 # Source labels and fills sit on the data itself; no separate routing boxes.
-text(2.46, 2.76, "Draw 0 evidence", color=LOOK, ha="center")
-text(4.92, 2.76, "Colored dots: picks below", color=MUTED, ha="center")
+text(1.65, 2.98, "Only rollout 0 is expanded; rollouts 1–7 show terminal outcomes.", color=MUTED)
+
+# Explicit method legend for candidate pick markers and teacher lanes.
+METHOD_COLORS = (("Pre-execution", PRE), ("Post-execution", POST),
+                 ("Lookahead K = 3", LOOK), ("Observed outcome", OUTCOME))
+text(0.12, 2.74, "Method:", color=MUTED)
+for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
+    ax.add_patch(Circle((x, 2.74), 0.032, facecolor=color,
+                       edgecolor="white", linewidth=0.4, zorder=3))
+    text(x + 0.09, 2.74, label, color=color)
 
 # (b) Aligned input -> teacher -> chosen action lanes. All teachers compare
 # all five candidates; the indexed trajectory below is supplied for EACH one.
@@ -161,7 +169,7 @@ text(0.12, 2.50, "(b)  Choose and score", size=8.5, weight="bold")
 text(0.12, 2.28, r"Shared input: task + history + current state $s_t$ + all five candidate texts $a_1,\ldots,a_5$", color=MUTED)
 text(4.66, 2.28, "Luna sees no outcome verdicts", color=MUTED)
 text(0.12, 2.03, "Label source", color=MUTED)
-text(1.43, 2.03, r"Draw 0 evidence for each candidate $a_i$", color=LOOK)
+text(1.43, 2.03, r"Rollout 0 evidence for each candidate $a_i$", color=LOOK)
 text(4.88, 2.03, "Operation", color=MUTED, ha="center")
 text(5.85, 2.03, "Output: choice", color=MUTED, ha="center")
 text(6.74, 2.03, r"Score $q_i$", color=HELD, ha="center")
@@ -216,7 +224,7 @@ text(6.74, y, "80%", color=HELD, weight="bold", ha="center")
 
 
 
-text(0.12, 0.10, "Illustrative values · valid draws only. Teacher inputs omit outcome verdicts; draws 3–7 are reserved for scoring.", color=MUTED)
+text(0.12, 0.10, "Illustrative values · valid rollouts only. Teacher inputs omit outcome verdicts; rollouts 3–7 are reserved for scoring.", color=MUTED)
 
 for ext in ("png", "svg", "pdf"):
     path = Path(__file__).with_suffix(f".{ext}")
