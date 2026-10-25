@@ -19,6 +19,7 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
 PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#AD750C", "#2164A5"
+ROLLOUT = "#7C838D"
 SUCCESS, FAILURE = "#31785A", "#C53A36"
 LABEL_BG, HELD_BG = "#FCF5E6", "#EDF3FA"
 # Same 5 x 8 outcomes and picks as the original worked example.
@@ -98,9 +99,9 @@ for first, last, title, color in ((0, 2, "Labels", OUTCOME), (3, 7, "Held out", 
     rule(xs[first] - 0.105, xs[last] + 0.105, 4.36, color, 1.1)
     text((xs[first] + xs[last]) / 2, 4.48, title, color=color, ha="center")
     for d in range(first, last + 1):
-        text(xs[d], 4.26, str(d), color=LOOK if d == 0 else MUTED,
+        text(xs[d], 4.26, str(d), color=ROLLOUT if d == 0 else MUTED,
              weight="bold" if d == 0 else "normal", ha="center")
-text(1.105, 4.26, "Actions / picks", color=MUTED, ha="center")
+text(1.105, 4.26, r"$K=5$ actions", color=MUTED, ha="center")
 text(6.00, 4.48, "Rate", color=OUTCOME, ha="center")
 text(6.00, 4.26, "0–2", color=MUTED, ha="center")
 text(6.74, 4.48, "Score", color=HELD, ha="center")
@@ -110,7 +111,7 @@ box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
 text(0.345, mid, r"$s_t$", size=9, ha="center")
 # Spell out rollout 0's states for candidates 1 and 5; ellipses omit 2--4.
 # Every candidate and all eight terminal outcomes remain in the matrix.
-text(2.63, 4.48, "Rollout 0 (expanded)", color=LOOK, ha="center")
+text(2.63, 4.48, "Rollout 0 (expanded)", color=ROLLOUT, ha="center")
 text(4.53, 4.71, "Rollout outcomes", color=MUTED, ha="center")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 4.26,
@@ -127,7 +128,7 @@ ax.add_patch(Rectangle((6.49, y_low), 0.48, y_high - y_low,
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     # One enclosure makes the prefix/outcome association explicit for rollout 0.
     capsule = box(1.50, y - 0.10, xs[0] + 0.11 - 1.50, 0.20,
-                  edge=LOOK, fill="#F6F3FC", lw=0.8, radius=0.045)
+                  edge=ROLLOUT, fill="#F5F6F7", lw=0.8, radius=0.045)
     capsule.set_zorder(0.5)
     arrow(0.57, mid, 0.77, y, color=LINE)
     box(0.79, y - 0.10, 0.63, 0.20)
@@ -135,16 +136,16 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     for j, color in enumerate(pick_colors.get(i, ())):
         ax.add_patch(Circle((1.15 + 0.13 * j, y), 0.027,
                            facecolor=color, edgecolor="white", linewidth=0.4, zorder=3))
-    arrow(1.44, y, 1.56, y, color=LOOK)
+    arrow(1.44, y, 1.56, y, color=ROLLOUT)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
-            state_card(x, y, k + 1, POST if k == 0 else LOOK,
+            state_card(x, y, k + 1, ROLLOUT,
                        width=0.36, height=0.19, candidate=i + 1)
             if k:
-                arrow(trajectory_x[k - 1] + 0.185, y, x - 0.185, y, color=LOOK)
+                arrow(trajectory_x[k - 1] + 0.185, y, x - 0.185, y, color=ROLLOUT)
         text(3.48, y, "…", color=MUTED, ha="center")
     else:
-        text(2.47, y, r"$\cdots$", size=11, color=LOOK, ha="center")
+        text(2.47, y, r"$\cdots$", size=11, color=ROLLOUT, ha="center")
     arrow(3.57, y, 3.64, y, color=LINE)
     for d, success in enumerate(outcomes):
         ax.add_patch(Circle((xs[d], y), 0.025,
@@ -165,7 +166,7 @@ text(1.65, 2.98, "Rollout 0: actions 1 and 5 expanded.", color=MUTED)
 
 # Explicit method legend for candidate pick markers and teacher lanes.
 METHOD_COLORS = (("Pre-execution", PRE), ("Post-execution", POST),
-                 ("Lookahead K = 3", LOOK), ("Oracle (observed rollouts)", OUTCOME))
+                 ("Lookahead H = 3", LOOK), ("Oracle (observed rollouts)", OUTCOME))
 text(0.12, 2.74, "Methods", color=MUTED)
 for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
     ax.add_patch(Circle((x, 2.74), 0.032, facecolor=color,
@@ -175,30 +176,37 @@ for x, (label, color) in zip((0.79, 2.10, 3.57, 5.25), METHOD_COLORS):
 # (b) Aligned input -> teacher -> chosen action lanes. All teachers compare
 # all five candidates; the indexed trajectory below is supplied for EACH one.
 text(0.12, 2.50, "(b)  Selection", size=8.5, weight="bold")
-text(0.12, 2.28, r"Shared: task, history, $s_t$, $a_t^{1},\ldots,a_t^{5}$", color=MUTED)
-text(4.66, 2.28, "Teacher: GPT-6 Luna · no verdicts", color=MUTED)
+# A single neutral context box fans into all three teacher inputs. Junction dots
+# explicitly join the shared context and each complete candidate/evidence set.
+box(0.12, 2.145, 4.23, 0.27, edge=ROLLOUT, fill="#F5F6F7")
+text(2.235, 2.28, r"Shared input: task · history · $s_t$ · $K=5$ actions", ha="center")
+shared_x = 4.68
+ax.plot([4.35, shared_x, shared_x], [2.28, 2.28, 0.92],
+        color=ROLLOUT, linewidth=0.8, zorder=1)
+text(4.88, 2.28, "GPT-6 Luna · no verdicts", color=MUTED)
 text(0.12, 2.03, "Method", color=MUTED)
-text(1.43, 2.03, "All 5 actions + rollout 0 evidence", color=LOOK)
+text(1.43, 2.03, r"$K=5$ candidates + rollout 0 evidence", color=MUTED)
 text(5.15, 2.03, "Selector", color=MUTED, ha="center")
 text(6.035, 2.03, "Pick", color=MUTED, ha="center")
 text(6.74, 2.03, "Score", color=HELD, ha="center")
 text(6.74, 1.87, "3–7", color=HELD, ha="center")
 ax.add_patch(Rectangle((6.49, 0.20), 0.48, 1.63,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
-future_x = [2.25 + 0.59 * k for k in range(4)]
+future_x = [2.25 + 0.55 * k for k in range(4)]
 
 
 lane_rows = ((1.68, "Pre-execution", PRE, 0),
              (1.30, "Post-execution", POST, 1),
              (0.92, "Lookahead K = 3", LOOK, 4))
 for y, label, color, n_states in lane_rows:
-    text(0.12, y, label, color=color)
+    display_label = "Lookahead H = 3" if label == "Lookahead K = 3" else label
+    text(0.12, y, display_label, color=color)
     if n_states == 0:
-        text(2.54, y, r"$\{a_t^{i}\}_{i=1}^{5}$", size=9, color=color, ha="center")
+        text(2.54, y, r"$\{a_t^{i}\}_{i=1}^{K}$", size=9, color=color, ha="center")
         text(3.66, y, "no rollout", color=MUTED, ha="center")
         input_end = 4.29
     else:
-        # The entire candidate/evidence pair is inside an i=1..5 set. All five
+        # The entire candidate/evidence pair is inside an i=1..K set (K=5). All five
         # pairs are supplied together in ONE teacher prompt, not separate calls.
         text(1.45, y, r"$\{$", size=14, color=color, ha="center")
         box(1.63, y - 0.10, 0.34, 0.20, edge=color)
@@ -211,9 +219,12 @@ for y, label, color, n_states in lane_rows:
                 text((future_x[k - 1] + x) / 2, y + 0.14,
                      rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
         last_x = future_x[n_states - 1]
-        text(last_x + 0.23, y, r"$\}_{i=1}^{5}$", size=14, color=color)
+        text(last_x + 0.23, y, r"$\}_{i=1}^{K}$", size=14, color=color)
         input_end = last_x + 0.66
-    arrow(input_end, y, 4.80, y, color=color)
+    rule(input_end, shared_x, y, color=color)
+    ax.add_patch(Circle((shared_x, y), 0.019, facecolor=ROLLOUT,
+                        edgecolor="white", linewidth=0.3, zorder=3))
+    arrow(shared_x, y, 4.80, y, color=color)
     box(4.82, y - 0.13, 0.66, 0.26, edge=color)
     text(5.15, y, "Teacher", color=color, ha="center")
     arrow(5.50, y, 5.73, y, color=color)
