@@ -38,7 +38,7 @@ plt.rcParams.update({
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })
-W, H = 7.0, 3.95
+W, H = 7.0, 4.50
 fig = plt.figure(figsize=(W, H))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set(xlim=(0, W), ylim=(0, H))
@@ -67,102 +67,131 @@ def rule(x0, x1, y, color=LINE, lw=0.6):
     ax.plot([x0, x1], [y, y], color=color, linewidth=lw, zorder=1)
 
 
-# (a) Each outcome dot summarizes a complete independently replayed rollout.
-text(0.12, 3.74, "(a)  Branch and collect", size=8.5, weight="bold")
-text(0.12, 3.51, r"Each draw: replay $s_t$ → action → frozen actor → judge", color=MUTED)
+# (a) Aligned input -> teacher -> chosen action lanes. All teachers compare
+# all five candidates; the indexed trajectory below is supplied for EACH one.
+text(0.12, 4.30, "(a)  Teacher inputs and outputs", size=8.5, weight="bold")
+text(0.12, 4.08, r"Shared input: task + history + current state $s_t$ + all five candidate texts $a_1,\ldots,a_5$", color=MUTED)
+text(4.66, 4.08, "Luna sees no outcome verdicts", color=MUTED)
+text(0.12, 3.83, "Label source", color=MUTED)
+text(1.43, 3.83, r"Additional input for each candidate $a_i$", color=MUTED)
+text(4.88, 3.83, "Operation", color=MUTED, ha="center")
+text(5.85, 3.83, "Output: choice", color=MUTED, ha="center")
+text(6.74, 3.83, "Score", color=HELD, ha="center")
+text(6.74, 3.67, "on 3–7", color=HELD, ha="center")
+future_x = [2.10 + 0.65 * k for k in range(4)]
+label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
+held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
+
+
+def state_card(x, y, step, color):
+    # Every state is a screenshot/observation, rather than an outcome verdict.
+    box(x - 0.20, y - 0.105, 0.40, 0.21, edge=color, fill="white")
+    ax.add_patch(Rectangle((x - 0.20, y + 0.061), 0.40, 0.044,
+                           facecolor=color, edgecolor="none", alpha=0.15, zorder=2))
+    text(x, y - 0.014, rf"$s_{{t+{step}}}$", ha="center", color=color)
+
+
+lane_rows = ((3.48, "Pre-execution", PRE, 0),
+             (3.10, "Post-execution", POST, 1),
+             (2.72, "Lookahead K = 3", LOOK, 4))
+for y, label, color, n_states in lane_rows:
+    text(0.12, y, label, color=color)
+    if n_states == 0:
+        text(2.83, y, "Shared input only; no execution", color=MUTED, ha="center")
+    else:
+        box(1.43, y - 0.10, 0.34, 0.20, edge=color)
+        text(1.60, y, r"$a_i$", size=8, color=color, ha="center")
+        arrow(1.79, y, 1.88, y, color=color)
+        for k, x in enumerate(future_x[:n_states]):
+            state_card(x, y, k + 1, color)
+            if k:
+                arrow(future_x[k - 1] + 0.21, y, x - 0.21, y, color=color)
+                text((future_x[k - 1] + x) / 2, y + 0.14,
+                     rf"$u_{k}$", color=MUTED, ha="center")
+    arrow(future_x[n_states - 1] + 0.21 if n_states else 4.29,
+          y, 4.53, y, color=color)
+    box(4.55, y - 0.13, 0.66, 0.26, edge=color)
+    text(4.88, y, "GPT-6 Luna", color=color, ha="center")
+    arrow(5.23, y, 5.48, y, color=color)
+    pick = PICKS[label]
+    box(5.50, y - 0.13, 0.70, 0.26, edge=color)
+    text(5.85, y, rf"$a_{pick + 1}$", size=9, color=color, ha="center")
+    arrow(6.23, y, 6.51, y, color=HELD)
+    text(6.74, y, f"{100 * held_rates[pick]:.0f}%", color=HELD, weight="bold", ha="center")
+text(1.43, 2.47, r"Draw 0 only; $u_1,u_2,u_3$: actor steps. K = 1 stops at $s_{t+2}$.", color=MUTED)
+# Outcome-derived labels are a separate operation, not a Luna response.
+y = 2.16
+text(0.12, y, "Observed outcome", color=OUTCOME)
+text(1.43, y, "Draws 0–2:  [2/3, 1/3, 3/3, 0/3, 1/3]", color=OUTCOME)
+arrow(4.29, y, 4.53, y, color=OUTCOME)
+box(4.55, y - 0.13, 0.66, 0.26, edge=OUTCOME)
+text(4.88, y, "Argmax rate", color=OUTCOME, ha="center")
+arrow(5.23, y, 5.48, y, color=OUTCOME)
+box(5.50, y - 0.13, 0.70, 0.26, edge=OUTCOME)
+text(5.85, y, r"$a_3$", size=9, color=OUTCOME, ha="center")
+arrow(6.23, y, 6.51, y, color=HELD)
+text(6.74, y, "80%", color=HELD, weight="bold", ha="center")
+rule(0.12, 6.90, 1.94)
+
+# (b) The exact original 5 x 8 outcomes; labels never use the blue columns.
+text(0.12, 1.76, "(b)  Independent label and scoring draws", size=8.5, weight="bold")
 xs = [1.48 + 0.17 * d for d in range(8)]
-ys = [2.77 - 0.32 * i for i in range(5)]
-y_low, y_high = ys[-1] - 0.15, ys[0] + 0.15
+ys = [1.18 - 0.19 * i for i in range(5)]
+y_low, y_high = ys[-1] - 0.09, ys[0] + 0.09
 ax.add_patch(Rectangle((xs[0] - 0.085, y_low), 3 * 0.17, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((xs[3] - 0.085, y_low), 5 * 0.17, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
-# The draw-0 column is the only continuation evidence available to teachers.
 ax.add_patch(Rectangle((xs[0] - 0.074, y_low), 0.148, y_high - y_low,
                        facecolor="none", edgecolor=LOOK, linewidth=0.7, zorder=1))
 for first, last, title, color in ((0, 2, "Label pool", OUTCOME), (3, 7, "Held out", HELD)):
-    rule(xs[first] - 0.08, xs[last] + 0.08, 3.18, color, 1.1)
-    text((xs[first] + xs[last]) / 2, 3.31, title, color=color, weight="bold", ha="center")
+    rule(xs[first] - 0.08, xs[last] + 0.08, 1.50, color, 1.1)
+    text((xs[first] + xs[last]) / 2, 1.60, title, color=color, ha="center")
     for d in range(first, last + 1):
-        text(xs[d], 3.01, str(d), color=MUTED, ha="center")
-text(1.02, 3.01, "Action", color=MUTED, ha="center")
-text(3.06, 3.31, "Label", color=OUTCOME, weight="bold", ha="center")
-text(3.06, 3.01, "0–2", color=MUTED, ha="center")
-text(3.58, 3.31, "Score", color=HELD, weight="bold", ha="center")
-text(3.58, 3.01, "3–7", color=MUTED, ha="center")
+        text(xs[d], 1.36, str(d), color=MUTED, ha="center")
+text(1.015, 1.36, "Action", color=MUTED, ha="center")
+text(3.06, 1.60, "Label", color=OUTCOME, ha="center")
+text(3.06, 1.36, "0–2", color=MUTED, ha="center")
+text(3.58, 1.60, "Score", color=HELD, ha="center")
+text(3.58, 1.36, "3–7", color=MUTED, ha="center")
 mid = sum(ys) / len(ys)
-box(0.13, mid - 0.23, 0.43, 0.46, edge=INK)
+box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
 text(0.345, mid, r"$s_t$", size=9, ha="center")
-text(0.345, mid - 0.33, "Task +", color=MUTED, ha="center")
-text(0.345, mid - 0.46, "history", color=MUTED, ha="center")
-label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
-held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.57, mid, 0.80, y, color=LINE)
-    box(0.81, y - 0.10, 0.41, 0.20)
+    box(0.81, y - 0.075, 0.41, 0.15)
     text(1.015, y, rf"$a_{i + 1}$", size=8, ha="center")
     arrow(1.23, y, 1.36, y, color=LINE)
     for d, success in enumerate(outcomes):
-        ax.add_patch(Circle((xs[d], y), 0.028,
+        ax.add_patch(Circle((xs[d], y), 0.025,
             facecolor=SUCCESS if success else "white",
             edgecolor=SUCCESS if success else "#88919C", linewidth=0.65))
     text(3.06, y, f"{sum(outcomes[:3])}/3", color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
     text(3.58, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
-ax.add_patch(Circle((0.17, 1.17), 0.025, facecolor=SUCCESS, edgecolor=SUCCESS, linewidth=0.6))
-text(0.24, 1.17, "success", color=MUTED)
-ax.add_patch(Circle((0.86, 1.17), 0.025, facecolor="white", edgecolor="#88919C", linewidth=0.6))
-text(0.93, 1.17, "failure", color=MUTED)
-text(1.58, 1.17, r"Outcome label: $a_3$ (best on 0–2)", color=OUTCOME)
-text(0.12, 0.91, "Train a head: 1,380 training states · soft CE", weight="bold")
-for x, w, label in ((0.13, 1.13, "Frozen SFT-4B\nfeatures"),
-                     (1.49, 1.12, "Selection head\n22.6 M parameters"),
-                     (2.84, 0.94, "Argmax action\nsame scoring")):
-    box(x, 0.35, w, 0.38)
-    text(x + w / 2, 0.54, label, ha="center", linespacing=1.35)
-arrow(1.27, 0.54, 1.48, 0.54)
-arrow(2.62, 0.54, 2.83, 0.54)
+for x, fill, label in ((0.17, SUCCESS, "success"), (0.91, "white", "failure")):
+    ax.add_patch(Circle((x, 0.23), 0.025, facecolor=fill,
+                       edgecolor=SUCCESS if fill != "white" else "#88919C", linewidth=0.6))
+    text(x + 0.08, 0.23, label, color=MUTED)
+text(1.63, 0.23, "Draw 0: teacher evidence", color=LOOK)
 
-# (b) One shared timeline replaces forty miniature browser trajectories.
-ax.plot([3.90, 3.90], [0.33, 3.82], color=LINE, linewidth=0.6)
-text(4.03, 3.74, "(b)  Evidence used for labels", size=8.5, weight="bold")
-text(4.03, 3.51, r"Common input: task, history, $s_t$, actions", color=MUTED)
-future_x = [5.35 + 0.43 * k for k in range(4)]
-for k, x in enumerate(future_x):
-    text(x, 3.28, rf"$s_{{t+{k + 1}}}$", size=7, color=MUTED, ha="center")
-for y, label, color, visible in ((3.06, "Pre-execution", PRE, 0),
-                                  (2.81, "Post-execution", POST, 1),
-                                  (2.56, "Lookahead K = 3", LOOK, 4)):
-    text(4.03, y, label, color=color)
-    if not visible:
-        text((future_x[0] + future_x[-1]) / 2, y, "No future states", color=MUTED, ha="center")
-        continue
-    rule(future_x[0], future_x[-1], y, color=LINE)
-    for k, x in enumerate(future_x):
-        box(x - 0.08, y - 0.045, 0.16, 0.09,
-            edge=color if k < visible else LINE,
-            fill=color if k < visible else "white", radius=0.012)
-text(4.03, 2.32, r"Draw 0 only; K = 1 ends at $s_{t+2}$.", color=MUTED)
-text(4.03, 2.16, "Final answers are hidden from lookahead.", color=MUTED)
-
-# (c) Every number below is derived from the matrix, not a measured result.
-text(4.03, 1.92, "(c)  Score on held-out draws 3–7", size=8.5, weight="bold")
-for x, title, align in ((4.03, "Picker", "left"), (6.04, "Pick", "center"), (6.83, "Score", "right")):
-    text(x, 1.70, title, color=MUTED, ha=align)
-rule(4.03, 6.86, 1.59)
-rows = [("Uniform", MUTED, "all 5", sum(held_rates) / 5),
-        ("SFT sample", MUTED, "all 5", sum(held_rates) / 5)]
-colors = {"Pre-execution": PRE, "Post-execution": POST, "Lookahead K = 3": LOOK,
-          "Observed outcome": OUTCOME, "Oracle": INK}
-for label, pick in PICKS.items():
-    rows.append((label, colors[label], rf"$a_{pick + 1}$", held_rates[pick]))
-for i, (label, color, pick, score) in enumerate(rows):
-    y = 1.45 - 0.17 * i
-    text(4.03, y, label, color=color)
-    text(6.04, y, pick, ha="center")
-    text(6.83, y, f"{100 * score:.0f}%", color=HELD, weight="bold", ha="right")
-rule(4.03, 6.86, 0.31)
-text(0.12, 0.12, "Illustrative example · valid draws only. Test mean: 348 states from 86 unseen tasks.", color=MUTED)
+# (c) A common target space does not imply identical sources or predictions.
+ax.plot([3.90, 3.90], [0.31, 1.83], color=LINE, linewidth=0.6)
+text(4.03, 1.76, "(c)  Train a pre-action selection head", size=8.5, weight="bold")
+text(4.03, 1.52, r"Pre / lookahead: vote shares $p_i = n_i/N$", color=MUTED)
+text(4.03, 1.31, r"Outcome: $p=(0,0,1,0,0)$ in this example", color=OUTCOME)
+for x, w, label in ((4.03, 1.04, "Frozen SFT-4B\nfeatures"),
+                     (5.37, 0.95, "22.6 M head")):
+    box(x, 0.79, w, 0.34)
+    text(x + w / 2, 0.96, label, ha="center", linespacing=1.3)
+arrow(5.09, 0.96, 5.35, 0.96)
+arrow(5.85, 1.22, 5.85, 1.15, color=MUTED)
+text(6.39, 1.20, "soft CE", color=MUTED, ha="center")
+arrow(6.34, 0.96, 6.57, 0.96)
+text(6.77, 0.96, r"$\hat{a}$", size=9, ha="center")
+text(4.03, 0.61, "Train: 1,380 states · test: 348 states, 86 tasks", color=MUTED)
+text(4.03, 0.40, "Uniform / SFT sample: 44% · oracle: 80%", color=HELD)
+text(0.12, 0.06, "Illustrative values · valid draws only. Label construction and head training never use draws 3–7.", color=MUTED)
 
 for ext in ("png", "svg", "pdf"):
     path = Path(__file__).with_suffix(f".{ext}")
