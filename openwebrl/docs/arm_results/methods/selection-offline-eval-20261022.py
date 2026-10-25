@@ -18,11 +18,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#AD750C", "#2164A5"
+PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#C86212", "#2164A5"
 ROLLOUT, ROLLOUT_BG = "#168C9E", "#EAF7FA"
 SHARED, SHARED_BG = "#997348", "#FBF5E9"
 SUCCESS, FAILURE = "#31785A", "#C53A36"
-LABEL_BG, HELD_BG = "#FCF5E6", "#EDF3FA"
+LABEL_BG, HELD_BG = "#FFF2E5", "#EDF3FA"
 # Same 5 x 8 outcomes and picks as the original worked example.
 OUTCOMES = (
     (1, 0, 1, 1, 0, 1, 1, 0),
@@ -96,16 +96,16 @@ ax.add_patch(Rectangle((xs[0] - 0.11, y_low), 3 * 0.22, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((xs[3] - 0.11, y_low), 5 * 0.22, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
-for first, last, title, color in ((0, 2, "Labels", OUTCOME), (3, 7, "Held out", HELD)):
+for first, last, title, color in ((0, 2, "Train labels", OUTCOME), (3, 7, "Held-out eval", HELD)):
     rule(xs[first] - 0.105, xs[last] + 0.105, 4.36, color, 1.1)
     text((xs[first] + xs[last]) / 2, 4.48, title, color=color, ha="center")
     for d in range(first, last + 1):
         text(xs[d], 4.26, str(d), color=ROLLOUT if d == 0 else MUTED,
              weight="bold" if d == 0 else "normal", ha="center")
 text(1.105, 4.26, r"$K=5$ actions", color=MUTED, ha="center")
-text(6.00, 4.48, "Rate", color=OUTCOME, ha="center")
-text(6.00, 4.26, "0–2", color=MUTED, ha="center")
-text(6.74, 4.48, "Score", color=HELD, ha="center")
+text(6.00, 4.48, "Train %", color=OUTCOME, ha="center")
+text(6.00, 4.26, "0–2", color=OUTCOME, ha="center")
+text(6.74, 4.48, "Eval %", color=HELD, ha="center")
 text(6.74, 4.26, "3–7", color=HELD, ha="center")
 mid = sum(ys) / len(ys)
 box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
@@ -191,7 +191,7 @@ text(0.12, 2.03, "Method", color=MUTED)
 text(1.43, 2.03, r"$K=5$ candidates + rollout 0 evidence", color=MUTED)
 text(5.15, 2.03, "Selector", color=MUTED, ha="center")
 text(6.035, 2.03, "Pick", color=MUTED, ha="center")
-text(6.74, 2.03, "Score", color=HELD, ha="center")
+text(6.74, 2.03, "Eval %", color=HELD, ha="center")
 text(6.74, 1.87, "3–7", color=HELD, ha="center")
 ax.add_patch(Rectangle((6.49, 0.20), 0.48, 1.63,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
