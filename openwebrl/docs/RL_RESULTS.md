@@ -115,8 +115,8 @@
 | Uniform G8 |40 |8 |48 |928 |104 |238 |62 |34.67 |43.70 |[October 11 audit](arm_results/rl_integration/uniform8-iteration40-audit.json) |
 | Uniform G8 |50 |8 |48 |1130 |113 |239 |61 |37.67 |47.28 |[October 12 audit](arm_results/rl_integration/uniform8-iteration50-audit.json) |
 | Uniform G8 |60 |8 |48 |1318 |127 |234 |66 |42.33 |54.27 |[October 12 audit](arm_results/rl_integration/uniform8-iteration60-audit.json) |
-| Uniform G8 |70 |8 |48 |1488 |115 |236 |64 |38.33 |48.73 |[Controller audit, October 24](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
-| Uniform G8 |80 |8 |48 |1652 |119 |242 |58 |39.67 |49.17 |[Controller audit, October 25](RL_EVALUATION.md#uniform8-iter60-results-20261012) |
+| Uniform G8 |70 |8 |48 |1488 |115 |236 |64 |38.33 |48.73 |[October 24 audit](arm_results/rl_integration/uniform8-iteration70-audit.json) |
+| Uniform G8 |80 |8 |48 |1652 |119 |242 |58 |39.67 |49.17 |[October 25 audit](arm_results/rl_integration/uniform8-iteration80-audit.json) |
 
 | Comparison / status | Value | Source |
 | --- | --- | --- |

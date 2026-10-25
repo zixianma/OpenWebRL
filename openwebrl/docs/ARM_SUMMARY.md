@@ -378,11 +378,14 @@ success; teacher action consistency is58% under reversed-order re-query.
 [Method, table and caveats](ARM_RESULTS.md#arm-offline-forward-transfer-results-20260925).
 
 <a id="baseline-comparison"></a>
-![Local-browser baseline and ARM curves, including both mixed-only runs through iteration90, with separate matched stealth results](rl_results/baseline_vs_arm_allfailure_full300.png)
+![Local-browser baseline and ARM curves, including both mixed-only runs through iteration90, the 56-group and G8 outcome-only controls (overall), matched local iteration-90 three-repeat means (X) and separate matched stealth results (diamonds)](rl_results/baseline_vs_arm_allfailure_full300.png)
+
+The X markers at iteration 90 are the matched local three-repeat means (October 25); each single-cohort
+line point at 90 is one earlier evaluation of the same checkpoint.
 
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
 Both mixed-only curves include iterations10–90 and are visible by default; use **Mixed-only pair** to compare them with the outcome-only baseline.
-**Outcome-only · expanded 4,102 tasks** is also visible by default, with verified full300 results at10/20/30/40/50. Its curve stops at50 until evaluation60 is complete; this data-pool ablation uses2,000 additional training tasks.
+The outcome-only controls are visible by default: **56 groups** (iterations 10–90), **uniform G8** (10–80; training to 90 continues) and **expanded 4,102 tasks** (10–60; this data-pool ablation uses 2,000 additional training tasks). Hover a G8 or 56-group point for its Adam-update count.
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
 original bonus starts hidden. The y-axis is fixed at0–60%. Smoothing is off by
