@@ -1,0 +1,51 @@
+{
+ "model": "gpt-5.6-terra",
+ "episodes": "GPT-4.1 action_history successes from the judge audit",
+ "budget": {
+  "spent_usd": 11.198685999999991,
+  "reserved_usd": -1.6653345369377348e-15,
+  "calls": 461
+ },
+ "cells": {
+  "iter10_second_judge_success": {
+   "episodes": 56,
+   "parsed": 56,
+   "claims": 362,
+   "supported": 278,
+   "partial": 66,
+   "not_found": 18,
+   "episodes_with_unsupported": 11,
+   "answer_completes_task": 50
+  },
+  "iter10_second_judge_failure": {
+   "episodes": 19,
+   "parsed": 19,
+   "claims": 114,
+   "supported": 64,
+   "partial": 33,
+   "not_found": 17,
+   "episodes_with_unsupported": 10,
+   "answer_completes_task": 3
+  },
+  "iter90_second_judge_success": {
+   "episodes": 40,
+   "parsed": 40,
+   "claims": 284,
+   "supported": 199,
+   "partial": 58,
+   "not_found": 27,
+   "episodes_with_unsupported": 10,
+   "answer_completes_task": 34
+  },
+  "iter90_second_judge_failure": {
+   "episodes": 35,
+   "parsed": 35,
+   "claims": 272,
+   "supported": 123,
+   "partial": 84,
+   "not_found": 65,
+   "episodes_with_unsupported": 27,
+   "answer_completes_task": 3
+  }
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "model": "gpt-5.6-terra",
+ "reference": "gpt-4.1 action_history (original verdict)",
+ "budget": {
+  "spent_usd": 5.6602535,
+  "reserved_usd": -9.43689570931383e-16,
+  "calls": 311
+ },
+ "pipeline_check": {
+  "gpt41_rejudged": 10,
+  "agreements": 9
+ },
+ "cells": {
+  "iter10_originalsuccess": {
+   "n": 75,
+   "agree": 56,
+   "flipped": 19,
+   "unparsed": 0
+  },
+  "iter10_originalfailure": {
+   "n": 75,
+   "agree": 72,
+   "flipped": 3,
+   "unparsed": 0
+  },
+  "iter90_originalsuccess": {
+   "n": 75,
+   "agree": 40,
+   "flipped": 35,
+   "unparsed": 0
+  },
+  "iter90_originalfailure": {
+   "n": 75,
+   "agree": 74,
+   "flipped": 1,
+   "unparsed": 0
+  }
+ },
+ "definitions": {
+  "flipped_among_original_success": "second judge says failure where GPT-4.1 said success (possible false positive)",
+  "flipped_among_original_failure": "second judge says success where GPT-4.1 said failure (possible false negative)"
+ }
+}
