@@ -279,3 +279,24 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 - **Time.** A decision takes 6.0 s for Piotr and 5.4 s for the heads at N = 3, against 8.4 s and 7.8 s at N = 5: the slowest of fewer parallel candidates finishes sooner and the GPU serves fewer requests.
 - **Caveat.** Piotr's N = 3 gain over N = 5 is not significant and comes from one run per method on one benchmark; WebVoyager and DeepShop were not run at N = 3.
 - [Evidence](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json) · [Analysis script](arm_results/rl_integration/selection-n3-sft8b-full-20261021-analysis.py) · Plot: bottom row of the figure above
+
+<a id="final-selection-data-scale-20261023"></a>
+
+### More teacher data (Piotr's GPT-5.5 panels)
+
+**Training the head on more of Piotr's GPT-5.5-labelled states does not help: 254 states gain as much over one SFT sample as all 2,587 (2,587 − 254: −2.2 pp [−5.9, +1.7]).** Same joint head and recipe as the Piotr-data head above, one seed per size, whole tasks added in a fixed order; all 1,045 tasks, T 1.0 / top-p 0.9, 30 steps. Online-Mind2Web judged by gpt-5.6-terra (o4-mini was retired on 2026-10-23; the references are re-judged), WebVoyager and DeepShop by GPT-4o.
+
+| Training data | States | Online-Mind2Web overall | WebVoyager overall | DeepShop overall | Mean overall | − SFT 4B, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Piotr's panels | 254 | 36.3% | 52.6% | 36.0% | 41.6% | **+5.0 [+1.1, +8.9]** |
+| Piotr's panels | 501 | 35.3% | 54.8% | 36.7% | 42.3% | **+5.6 [+1.7, +9.4]** |
+| Piotr's panels | 1,011 | 35.7% | 53.5% | 31.3% | 40.1% | +3.5 [−0.2, +7.2] |
+| Piotr's panels, all | 2,587 | 33.3% | 53.8% | 31.3% | 39.5% | +2.8 [−1.0, +6.6] |
+| Piotr's panels, one per state | 1,393 | 32.7% | 53.3% | 28.0% | 38.0% | +1.3 [−2.5, +5.2] |
+| *SFT 4B, one sample (10-18)* | — | 31.7% | 44.4% | 34.0% | 36.7% | — |
+| *Earlier Piotr-data head (10-18)* | 2,692 | 37.7% | 51.3% | 44.0% | 44.3% | **+7.6 [+3.9, +11.3]** |
+
+- **The head learns the teacher better without picking better actions.** Validation agreement with GPT-5.5 rises from 58% to 66% with data, while the offline gain over one SFT sample stays at +2.3 to +3.0 pp at every size.
+- **Our branch states are worth more per state.** One Piotr panel per state (1,393 states) is −4.3 pp [−8.1, −0.5] below our 1,380-state K = 3 head live.
+- **Caveat: DeepShop drifted between run dates.** Same-day reruns on 10-24 dropped SFT 4B from 34.0% to 28.0% and the earlier head from 44.0% to 34.0%; against that same-day head the new heads differ by −6.0 to +2.7 pp on DeepShop (all intervals span 0). DeepShop columns, and so the means, are not comparable across dates; Online-Mind2Web and WebVoyager are flat.
+- [Details](ARM_SELECTION_HEAD.md#selection-head-data-scale-20261023) · [Evidence](arm_results/rl_integration/selection-data-scale-20261023.json) · [Analysis script](arm_results/rl_integration/selection-data-scale-20261023-analysis.py)
