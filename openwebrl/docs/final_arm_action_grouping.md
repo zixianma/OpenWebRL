@@ -12,9 +12,9 @@ and the known weak spots of the rule. The teacher labels built on these actions 
   tool name alone.
 - **Executed set:** of 16 samples, the first proposal of each distinct action in sampling order, up to 5. States with
   fewer than 2 distinct actions are skipped before any execution.
-- **Main weak spot: `done` merges different answers.** Among the 357 dataset states with at least two `done` proposals,
-  about a quarter (8 of 30 read by hand) contain answers that disagree on the asked fact. That is roughly 3% of all
-  2,886 states, and mostly on Wikipedia tasks (7 of the 8).
+- **Main weak spot: `done` merges different answers.** Of the 356 checked dataset states with at least two `done`
+  proposals, Luna finds conflicting answers in **153 (43%)**: 120 of 253 on Wikipedia tasks (47%) and 33 of 103 elsewhere
+  (32%). That is 5.3% of all 2,886 states. In 30 of the 153 the executed `done` answer is not the most common one.
 
 ## Grouping rule
 
@@ -134,35 +134,32 @@ pilot), and no head test tasks.
 
 ## How often `done` hides conflicting answers
 
-`done` proposals in the published branch-state dataset (2,886 states, own-checkpoint proposals):
+For each dataset state with at least two `done` proposals, `gpt-6-luna` (effort high, text only, one call) received the
+task and the distinct final answers with their counts, and partitioned them into groups giving the same answer to the
+task: wording, formatting, extra support and caveats ignored; any different requested fact, value, name, date, count,
+list member or yes/no conclusion, or "not found" versus an answer, split. It was not asked which answer is correct.
 
-| States | Count |
-| --- | ---: |
-| All | 2,886 |
-| With ≥ 1 `done` proposal | 498 |
-| With ≥ 2 `done` proposals | 357 |
-| … all answers identical after normalization | 6 |
-| … on Wikipedia tasks | 213 |
+| States (≥ 2 `done` proposals) | Checked | Conflicting | Executed answer not the most common, of conflicting |
+| --- | ---: | ---: | ---: |
+| All | 356 | 153 (43%) | 30 |
+| Wikipedia tasks | 253 | 120 (47%) | 23 |
+| Other tasks | 103 | 33 (32%) | 7 |
 
-Text overlap does not separate rewording from disagreement, so 30 of the 357 states were read by hand (random, seed 1):
+- **Context.** 498 of the 2,886 states have any `done` proposal and 357 have two or more (one call failed). Conflicting
+  states have 2–18 answer groups (2 in 78, 3 in 34, 4+ in 41); on average 41% of their `done` proposals are outside the
+  most common group, and the executed answer's group holds 53%.
+- **Kinds of conflict.** Different values (Vasco da Gama reached India in 1492, 1480 or 1498; a creation date of
+  July 3, 2025 versus March 7, 2025; Žilina's population 41,397 versus 80,020); "found" versus "not found" (Maastricht's
+  city rights in 1255 versus "the article gives no year", 7 versus 4 proposals); different list members (Pangasinan
+  tourist spots); and different instructions for the same task (Textual re-download: a transition-guidance link, 35
+  proposals, versus the App Store purchases page, 28).
+- **A hand read undercounts.** An earlier reading of 30 states, showing at most five answers per state, found 8
+  conflicts; Luna also catches minority answers beyond those five (for example 1 of 26 Central African Wikipedia
+  answers reporting 1,929 pages instead of 376 articles).
 
-| Reading | States |
-| --- | ---: |
-| Same answer, reworded or with more detail | 20 |
-| Conflicting answer to the asked fact | 8 |
-| Partly different (same conclusion, different supporting facts or coverage) | 2 |
-
-Conflicts were 7 of 16 sampled Wikipedia states and 1 of 14 others. Examples:
-- Vasco da Gama reached India "in 1498" versus "in 1492".
-- Village census: "29 inhabitants, 12 households" versus "12 people, 29 households".
-- Stockholm population: 1,312,624 (2020), 901,379 (2028) and 1,351,953 (2016) at one state.
-- Žilina population: 41,397 versus 80,020.
-- Pangasinan tourist spots: the second spot differs between answers.
-
-When answers conflict, the merged action carries only the first `done` proposal's answer: the teacher judges it, and
-its continuation outcome scores it, while other proposals of the same action may say something else. At about 3% of
-states (≈ 357 × 8/30 of 2,886) this is a small share of the data, and the planned labels-only collection excludes
-Wikipedia, where most conflicts occur.
+**Consequence.** The merged action carries only the first `done` proposal's answer: the teacher judges it and its
+continuation outcome scores it, while other proposals of the same action answer differently. At deployment the head
+scores each proposal's own text, so different answers are different choices there.
 
 <details><summary>Method and code</summary>
 
@@ -170,8 +167,8 @@ Wikipedia, where most conflicts occur.
   `openwebrl/arm_branch_worker.py`.
 - Element list: `openwebrl/env/utils/js.py`; boxes normalized in `openwebrl/env/web_env.py`
   (`find_all_clickable_elements`); captured with the screenshot in `openwebrl/controlled_browser_server.py`.
-- `done` count: every proposal's last `done` call after `</think>`; answer = its `response` argument. The hand reading
-  showed up to five distinct answers per state; a state counts as conflicting when two answers give different values
-  for the asked fact.
+- `done` answers: every proposal's `done` call after `</think>`; answer = its `response` argument. Agreement check and
+  per-state groups: runtime `branch-selector-scaleup-20261008/fast1k-20261012/review-cohorts/final/v2/done-check/`
+  (`done_check.py`, `summary.json`, `results/`); 362 calls, USD 0.15.
 - The `diverse_candidates` docstring mentions a 50-unit grid; the code uses 100.
 </details>
