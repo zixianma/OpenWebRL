@@ -1,0 +1,211 @@
+{
+ "note": "Same-day rerun (2026-10-25, jobs 386994-386999) of the two heads trained on Piotr's GPT-5.5 panels: the earlier\nhead (heads/listwise, train_selection_head.py, 2,692 states, run 2026-10-18) and the all-data scaling head\n(data-scale-20261023/heads/nall/seed0, train_head_round.py --extra-only, 2,587 states with our test tasks excluded, run\n2026-10-23). Same protocol as the earlier runs: SFT-4B actor, T 1.0 / top-p 0.9, 30 steps, five candidates, full task\norder; Online-Mind2Web judged by gpt-5.6-terra (earlier OM2W runs re-judged by replaying saved requests), WebVoyager and\nDeepShop by GPT-4o. Overall counts invalid episodes as failures. \"Mean\" weights each benchmark 1/3; paired 95% bootstrap\nresamples tasks within each benchmark (10,000 resamples, seed 20261018).",
+ "rows": [
+  {
+   "key": "early-1025",
+   "condition": "Earlier Piotr-data head, run 10-25",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 110,
+    "valid": 263,
+    "overall": 36.7,
+    "valid_only": 41.8
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 315,
+    "valid": 584,
+    "overall": 52.9,
+    "valid_only": 53.9
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 55,
+    "valid": 144,
+    "overall": 36.7,
+    "valid_only": 38.2
+   },
+   "mean_overall": 42.1,
+   "mean_valid_only": 44.6
+  },
+  {
+   "key": "all-1025",
+   "condition": "All-data scaling head, run 10-25",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 105,
+    "valid": 264,
+    "overall": 35.0,
+    "valid_only": 39.8
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 311,
+    "valid": 580,
+    "overall": 52.3,
+    "valid_only": 53.6
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 42,
+    "valid": 146,
+    "overall": 28.0,
+    "valid_only": 28.8
+   },
+   "mean_overall": 38.4,
+   "mean_valid_only": 40.7
+  },
+  {
+   "key": "early-1018",
+   "condition": "Earlier Piotr-data head, run 10-18",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 113,
+    "valid": 265,
+    "overall": 37.7,
+    "valid_only": 42.6
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 305,
+    "valid": 571,
+    "overall": 51.3,
+    "valid_only": 53.4
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 66,
+    "valid": 147,
+    "overall": 44.0,
+    "valid_only": 44.9
+   },
+   "mean_overall": 44.3,
+   "mean_valid_only": 47.0
+  },
+  {
+   "key": "all-1023",
+   "condition": "All-data scaling head, run 10-23/24",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 100,
+    "valid": 258,
+    "overall": 33.3,
+    "valid_only": 38.8
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 320,
+    "valid": 586,
+    "overall": 53.8,
+    "valid_only": 54.6
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 47,
+    "valid": 148,
+    "overall": 31.3,
+    "valid_only": 31.8
+   },
+   "mean_overall": 39.5,
+   "mean_valid_only": 41.7
+  }
+ ],
+ "paired": [
+  {
+   "a": "all-1025",
+   "b": "early-1025",
+   "online_mind2web": [
+    -1.7,
+    -6.7,
+    3.3
+   ],
+   "webvoyager": [
+    -0.7,
+    -4.5,
+    3.2
+   ],
+   "deepshop": [
+    -8.7,
+    -17.3,
+    0.0
+   ],
+   "mean": [
+    -3.7,
+    -7.2,
+    -0.1
+   ]
+  },
+  {
+   "a": "early-1025",
+   "b": "early-1018",
+   "online_mind2web": [
+    -1.0,
+    -6.7,
+    4.3
+   ],
+   "webvoyager": [
+    1.7,
+    -2.4,
+    5.5
+   ],
+   "deepshop": [
+    -7.3,
+    -16.0,
+    1.3
+   ],
+   "mean": [
+    -2.2,
+    -5.9,
+    1.5
+   ]
+  },
+  {
+   "a": "all-1025",
+   "b": "all-1023",
+   "online_mind2web": [
+    1.7,
+    -3.0,
+    6.3
+   ],
+   "webvoyager": [
+    -1.5,
+    -5.4,
+    2.5
+   ],
+   "deepshop": [
+    -3.3,
+    -12.0,
+    5.3
+   ],
+   "mean": [
+    -1.1,
+    -4.7,
+    2.6
+   ]
+  },
+  {
+   "a": "all-1023",
+   "b": "early-1018",
+   "online_mind2web": [
+    -4.3,
+    -10.0,
+    1.0
+   ],
+   "webvoyager": [
+    2.5,
+    -1.5,
+    6.6
+   ],
+   "deepshop": [
+    -12.7,
+    -21.3,
+    -4.0
+   ],
+   "mean": [
+    -4.8,
+    -8.5,
+    -1.2
+   ]
+  }
+ ]
+}

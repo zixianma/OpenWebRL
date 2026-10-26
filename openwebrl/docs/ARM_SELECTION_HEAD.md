@@ -102,7 +102,25 @@
 
 ## Outcome labels as advantages rather than a single best action (2026-10-25)
 
-**Training on how much better each action did, not only which did best, does not clearly help offline: centred advantage regression is +0.7 pp [−0.3, +1.9] over the current best-action target, the other two objectives are level.** Same 1,380 SFT-action train states, joint transformer head (22.6 M), 20 epochs, seeds 0–2; every objective reads the same draws 0–2 (valid draws only), and the 348 test states (86 tasks) are scored on held-out draws 3–7. Live Online-Mind2Web runs of all three new heads (seed 0) are in progress.
+**Training on how much better each action did, not only which did best, does not clearly help, offline or live. Offline, centred advantage regression is +0.7 pp [−0.3, +1.9] over the current best-action target and the other two objectives are level. Live on Online-Mind2Web 300, the softmax soft-CE head is highest (33.7% overall, +2.3 pp [−3.0, +7.7] over the best-action head), advantage MSE is level (+0.0 [−6.0, +6.0]), and all three stay below Piotr SelectionARM (−5.3 to −7.7 pp, every interval excluding 0).** Same 1,380 SFT-action train states, joint transformer head (22.6 M), 20 epochs, seeds 0–2; every objective reads the same draws 0–2 (valid draws only), and the 348 test states (86 tasks) are scored on held-out draws 3–7.
+
+**Live, Online-Mind2Web 300** (seed-0 heads, 2026-10-25; SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, same task order; all rows judged by gpt-5.6-terra, the references by replaying their saved judge requests). Differences are paired over tasks, 95% bootstrap; valid-only differences use tasks valid under both runs.
+
+| Selector | Valid | Successes | Overall | Valid-only | Steps per episode | − best action, pp [95% CI] | − SFT 4B, pp [95% CI] | − Piotr ARM, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| **Soft CE, softmax(rate / 0.25)** | 264 | 101 | **33.7%** | **38.3%** | 14.0 | +2.3 [−3.0, +7.7] | +2.0 [−3.3, +7.7] | **−5.3 [−10.7, −0.3]** |
+| Count-weighted binomial BCE | 266 | 98 | 32.7% | 36.8% | 15.7 | +1.3 [−4.0, +6.7] | +1.0 [−4.3, +6.3] | **−6.3 [−12.0, −0.7]** |
+| Centred advantage MSE | 265 | 94 | 31.3% | 35.5% | 15.0 | +0.0 [−6.0, +6.0] | −0.3 [−6.0, +5.3] | **−7.7 [−13.3, −2.0]** |
+| *Best action, soft CE (current, 10-21)* | 270 | 94 | 31.3% | 34.8% | 13.9 | — | −0.3 [−5.3, +4.7] | **−7.7 [−13.0, −2.3]** |
+| *SFT 4B, one sample (10-18)* | 275 | 95 | 31.7% | 34.5% | 14.3 | | — | |
+| *Piotr SelectionARM (10-18)* | 263 | 117 | 39.0% | 44.5% | 14.9 | | | — |
+
+- **Valid-only differences** over the best-action head: soft CE +4.7 [−1.2, +10.5], binomial +2.3 [−3.5, +8.1], advantage +2.3 [−3.9, +8.6] pp. The live ranking (soft > binomial > advantage) does not follow the offline one (advantage first), consistent with the note below that offline gaps this small do not predict live ones.
+- **WebVoyager and DeepShop for the soft-CE head** are running (jobs 388858, 388859; 2026-10-26, same protocol, GPT-4o judge capped at $10 and $4; runtime `evaluations/advantage-heads-20261025/{webvoyager,deepshop}-r2/`).
+- **Run note.** The OpenAI organisation hit its spend limit mid-run (13:52 PDT); 429-refused judge calls were not billed, their ledger reservations were released and the 10 affected committed episodes (9 binomial, 1 advantage) were moved to `collection/quarantine-judge-spend-limit-429-20261025/` and rerun under the same frozen plan (jobs 388501–388502). Every reported episode has a real judge verdict.
+- [Live evidence](arm_results/rl_integration/selection-outcome-objectives-live-20261025.json) · [live analysis script](arm_results/rl_integration/selection-outcome-objectives-live-20261025-analysis.py) · runtime `evaluations/advantage-heads-20261025/om2w-r2/` (jobs 386977–386979, resumed 388501–388502).
+
+**Offline** (held-out draws 3–7 of the 348 test states):
 
 | Objective | Target per action (from draws 0–2) | Held-out success, distinct actions | Held-out success, fixed five | − best action, pp [95% CI] | States with a different pick |
 | --- | --- | ---: | ---: | ---: | ---: |
@@ -117,6 +135,33 @@
 - **Binomial BCE changes the most picks but gains nothing**, plausibly because it also spends capacity predicting each state's difficulty, which never affects the pick; the advantage loss removes it by construction.
 - **Offline gaps are small for every head here** (about +1 pp over uniform against a 12 pp oracle gap), and offline differences have not predicted live ones: the current outcome head was +0.7 pp over uniform offline but +5.9 pp over SFT live.
 - [Evidence](arm_results/rl_integration/selection-outcome-objectives-20261025.json) · [analysis script](arm_results/rl_integration/selection-outcome-objectives-20261025-analysis.py) · trainer `scripts/train_head_round.py --source outcome_soft | outcome_rate --loss advmse | binom`, losses `advantage_mse_loss` and `binomial_rate_loss` in `openwebrl/selection_head.py`. Runtime `selection-head-20261008/sft-actions-20261021/advantage-20261025/` (heads, configs and logs saved per seed).
+
+<a id="selection-piotr-head-sameday-20261025"></a>
+
+## Same-day rerun of the two Piotr-data heads (2026-10-25)
+
+**Run on the same day, the all-data scaling head is 3.7 pp [−7.2, −0.1] below the earlier Piotr-data head on the three-benchmark mean. Online-Mind2Web and WebVoyager are level; the gap is DeepShop (−8.7 [−17.3, 0.0]). Run-date drift explains only about a quarter of the original cross-day gap of −4.8 pp: each head rerun against itself moves −2.2 and −1.1 pp on the mean, neither significant.** The two heads share architecture and recipe (joint transformer, soft CE, batch 256, 20 epochs, epoch chosen on Piotr's validation split) and differ in data and trainer. The earlier head (10-18) was trained by `train_selection_head.py` on all 2,692 of Piotr's states. The all-data head (10-23, `train_head_round.py --extra-only`, seed 0) used 2,587 states, excluding the 86 tasks of our offline test set. All 1,045 tasks in the full-run order, SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps. Online-Mind2Web is judged by gpt-5.6-terra (the 10-18 run re-judged); WebVoyager and DeepShop by GPT-4o. The mean weights each benchmark 1/3, and the 95% bootstrap resamples tasks within each benchmark.
+
+| Head, run date | OM2W valid | OM2W successes | OM2W overall | WebVoyager valid | WebVoyager successes | WebVoyager overall | DeepShop valid | DeepShop successes | DeepShop overall | Mean overall | Mean valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Earlier Piotr-data head, 10-25 | 263 | 110 | 36.7% | 584 | 315 | 52.9% | 144 | 55 | 36.7% | 42.1% | 44.6% |
+| All-data head, 10-25 | 264 | 105 | 35.0% | 580 | 311 | 52.3% | 146 | 42 | 28.0% | 38.4% | 40.7% |
+| *Earlier Piotr-data head, 10-18* | 265 | 113 | 37.7% | 571 | 305 | 51.3% | 147 | 66 | 44.0% | 44.3% | 47.0% |
+| *All-data head, 10-23/24* | 258 | 100 | 33.3% | 586 | 320 | 53.8% | 148 | 47 | 31.3% | 39.5% | 41.7% |
+
+Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
+
+| Paired difference, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | ---: | ---: | ---: | ---: |
+| All-data − earlier, same day (10-25) | −1.7 [−6.7, +3.3] | −0.7 [−4.5, +3.2] | −8.7 [−17.3, 0.0] | **−3.7 [−7.2, −0.1]** |
+| All-data (10-23) − earlier (10-18), the original comparison | −4.3 [−10.0, +1.0] | +2.5 [−1.5, +6.6] | **−12.7 [−21.3, −4.0]** | **−4.8 [−8.5, −1.2]** |
+| Earlier head, 10-25 − 10-18 (run-date drift) | −1.0 [−6.7, +4.3] | +1.7 [−2.4, +5.5] | −7.3 [−16.0, +1.3] | −2.2 [−5.9, +1.5] |
+| All-data head, 10-25 − 10-23 (run-date drift) | +1.7 [−3.0, +6.3] | −1.5 [−5.4, +2.5] | −3.3 [−12.0, +5.3] | −1.1 [−4.7, +2.6] |
+
+- **DeepShop carries both the gap and the drift.** With 150 tasks, its interval spans about ±8.7 pp. The earlier head's 44.0% on 10-18 is its highest of three DeepShop runs (34.0% on 10-24, 36.7% on 10-25), so the original cross-day DeepShop gap of −12.7 pp was inflated by a high reference draw. The same-day gap of −8.7 pp still points the same way.
+- **Reading.** The all-data head is likely somewhat worse than the earlier head, mainly on DeepShop. This agrees with the [data-scaling result](#selection-head-data-scale-20261023): more of Piotr's panels does not help. The two heads differ in 105 states (the excluded test tasks) and in trainer code, so this rerun cannot say which difference matters.
+- **Run note.** The OpenAI org spend limit stopped all six jobs mid-run (13:52 PDT). Refused calls were not billed. Their 75 committed episodes were moved to `collection/quarantine-judge-spend-limit-429-20261025/` and rerun under the same frozen plans (jobs 386994–386999, resumed 388504–388509). The WebVoyager all-data job lost its actor server to a CUDA illegal-memory-access crash at 390/595 and was resumed as 388719. Every reported episode has a real judge verdict.
+- [Evidence](arm_results/rl_integration/selection-piotr-head-sameday-20261025.json) · [analysis script](arm_results/rl_integration/selection-piotr-head-sameday-20261025-analysis.py) · runtime `evaluations/piotr-head-sameday-20261025/` (`jobs.txt` lists every attempt).
 
 <a id="selection-head-data-scale-20261023"></a>
 
@@ -878,7 +923,7 @@ Intervals resample tasks (10,000 resamples). Per benchmark, only two differences
 | N-gram (job 386218) | 40 / 40 | 39 / 40 | 0.9978 / 0.99994 |
 
   The first n-gram run lost the final `<|im_end|>` state in 16 / 40 states (sglang re-checks finish after a verify step without adding a token, consuming the capture's one-step end-token deferral); the fix holds the deferral until a token is appended. The test's 30 s latency phases are too short to measure the n-gram speedup, but show no added cost from the capture hooks under n-gram (30.3 s with capture vs 34.5 s plain, single runs). [Evidence](arm_results/rl_integration/selection-ngram-capture-parity-20261024.json).
-- **Live check with n-gram: no sign of a performance change.** The old Piotr-data head with n-gram on (job 386408, 2026-10-24) on the first 100 Online-Mind2Web tasks of the 10-18 full-run order, same protocol, judge gpt-5.6-terra, against the same 100 tasks from the 10-18 runs re-judged by terra:
+- **Live check with n-gram, first 100 tasks: no clear change (the full 300 below shows a drop).** The old Piotr-data head with n-gram on (job 386408, 2026-10-24) on the first 100 Online-Mind2Web tasks of the 10-18 full-run order, same protocol, judge gpt-5.6-terra, against the same 100 tasks from the 10-18 runs re-judged by terra:
 
 | Run | Successes | Valid | Valid-only | Hit 30-step limit | Seconds per browser step |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -888,6 +933,14 @@ Intervals resample tasks (10,000 resamples). Per benchmark, only two differences
 | SFT 4B (2026-10-18) | 30 | 93 | 32.3% | 26 | 7.9 |
 
   Successes are out of 100. On the 80 tasks valid in both old-head runs, n-gram alone succeeds on 10 and the 10-18 run alone on 11. One 100-task run has a standard error of about ±5 points, and the runs are six days apart on live sites. Zero selector fallbacks; five episodes ended on an actor 400 error (four in the 10-18 run). Seconds per step depend on shard load and site latency, so they do not isolate the n-gram speedup.
+- **Full 300 tasks: n-gram is 8 pp lower, so it is not adopted.** The same head with n-gram on all 300 Online-Mind2Web tasks (jobs 386408 + 386899, finished 387006/388503 on 2026-10-25), against its 10-18 run re-judged by terra; same order and protocol, both judged by gpt-5.6-terra:
+
+| Run | Valid | Successes | Overall | Valid-only | Steps per episode | Hit 30-step limit | Decision time | Model time per episode | PFLOP per episode | Accepted tokens per verify |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Old head, n-gram (2026-10-24/25) | 255 | 89 | 29.7% | 34.9% | 16.4 | 94 | 5.79 s | 94.7 s | 0.55 | 3.82 |
+| Old head (2026-10-18) | 265 | 113 | 37.7% | 42.6% | 14.7 | 63 | 7.79 s | 114.4 s | 0.88 | — |
+
+  Paired n-gram − 10-18: overall **−8.0 [−13.3, −2.7]** pp; valid-only (245 tasks valid in both) **−6.9 [−13.1, −0.8]** pp, n-gram alone succeeding on 20 tasks and the 10-18 run alone on 37. Decisions are 26% faster, but episodes are 11% longer and 31% more hit the step limit, so model time per episode falls only 17%. Rejection-sampling verification should leave the sampling distribution unchanged, and capture parity holds, so the drop is not explained; the runs are also a week apart on live sites (same-day reruns of this head on 10-25 measure that drift: [below](#selection-piotr-head-sameday-20261025)). The PFLOP column counts actor tokens and head FLOPs, not draft verification. During the rerun, 133 judge calls refused by a mis-seeded ledger cap and 7 refused by the OpenAI spend limit were quarantined uncharged and rerun. [Evidence](arm_results/rl_integration/selection-ngram-om2w-full-20261025.json) · [analysis script](arm_results/rl_integration/selection-ngram-om2w-full-20261025-analysis.py) · runtime `evaluations/ngram-om2w-20261024/full300/`.
 - **Multi-token prediction.** sglang 0.5.6 runs built-in prediction heads only for models trained with them (DeepSeek-V3/R1, Qwen3-Next, GLM-4.5/4.6, MiMo, Ling, LongCat-Flash). Qwen3-VL has none; an EAGLE-3 draft head would need training and Qwen3-VL support in sglang's model code.
 - [Evidence](arm_results/rl_integration/selection-inference-efficiency-20261024.json) · [replay script](arm_results/rl_integration/selection-inference-efficiency-20261024-bench.py). Runtime `evaluations/inference-efficiency-20261024/`.
 

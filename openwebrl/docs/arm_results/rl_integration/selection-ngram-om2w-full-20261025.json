@@ -1,0 +1,59 @@
+{
+ "note": "Joint head (Piotr's data, N = 5) on Online-Mind2Web 300 with the actor served under sglang n-gram speculative decoding\n(2026-10-24/25: first 100 tasks job 386408, remaining 200 job 386899), against the same head's 2026-10-18 run without it\n(crossbench-full-t10-20261018) re-judged by gpt-5.6-terra on the saved trajectories (rejudge-terra-20261023). Both rows use\nthe terra judge; same task order, T 1.0 / top-p 0.9, 30 steps, one episode per task. Cost as selection-n3-sft8b-full-20261021-analysis.py:\nactor PFLOP = 2 x params x (uncached prompt + generated tokens), head FLOPs as logged (n-gram draft verification not counted);\nmodel time per episode = summed decision seconds / tasks. Paired 95% bootstrap over tasks (10,000 resamples, seed 20261018).",
+ "rows": [
+  {
+   "key": "head5-terra",
+   "condition": "Head, Piotr's data (joint), N = 5, 10-18, terra re-judge",
+   "tasks": 300,
+   "successes": 113,
+   "valid": 265,
+   "overall": 37.7,
+   "valid_only": 42.6,
+   "steps_per_episode": 14.68,
+   "pflop_per_step": 0.0599,
+   "pflop_per_episode": 0.879,
+   "decisions": 4404,
+   "decision_seconds_mean": 7.79,
+   "generation_seconds_mean": 7.77,
+   "model_seconds_per_episode": 114.4,
+   "hit_30_steps": 63,
+   "spec_accept_length_mean": null
+  },
+  {
+   "key": "head5-ngram",
+   "condition": "Head, Piotr's data (joint), N = 5, n-gram, terra",
+   "tasks": 300,
+   "successes": 89,
+   "valid": 255,
+   "overall": 29.7,
+   "valid_only": 34.9,
+   "steps_per_episode": 16.35,
+   "pflop_per_step": 0.0333,
+   "pflop_per_episode": 0.545,
+   "decisions": 4906,
+   "decision_seconds_mean": 5.79,
+   "generation_seconds_mean": 5.77,
+   "model_seconds_per_episode": 94.7,
+   "hit_30_steps": 94,
+   "spec_accept_length_mean": 3.82
+  }
+ ],
+ "paired": {
+  "a": "head5-ngram",
+  "b": "head5-terra",
+  "tasks": 300,
+  "overall": [
+   -8.0,
+   -13.3,
+   -2.7
+  ],
+  "valid_tasks": 245,
+  "valid_only": [
+   -6.9,
+   -13.1,
+   -0.8
+  ],
+  "a_only_wins": 20,
+  "b_only_wins": 37
+ }
+}
