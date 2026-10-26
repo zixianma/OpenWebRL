@@ -12,8 +12,10 @@ labels become training targets. Results are in [ARM_SELECTION_HEAD.md](ARM_SELEC
   That is 2–5 actions per state (median 3), not always 5.
 - **Label:** 2 calls per state, each with the actions in a different random order. The training target is the vote
   share per action, for example `[0, 1, 0]`, or `[0.5, 0.5, 0]` when the calls disagree.
-- **Training data:** 1,738 states (1,390 train / 348 test, no shared task), published as the private HF dataset
-  `zixianma/openwebrl-selection-head-data`. Labelling cost USD 7.14 for 3,454 calls.
+- **Training data:** 1,738 labelled-pool states (1,390 train / 348 test, no shared task). The heads train on the 1,380
+  train states that have every compared label type and are scored on all 348 test states; exactly those states and
+  the fields the trainer reads are published as the private HF dataset `zixianma/openwebrl-selection-head-data`.
+  Labelling cost USD 7.14 for 3,454 calls.
 
 ## Terms
 
@@ -118,7 +120,7 @@ Labels are at `selection-head-20261008/sft-actions-20261021/labels/k3-sets/`.
 
 | Item | Location |
 | --- | --- |
-| Head training table (HF, private) | `zixianma/openwebrl-selection-head-data`: one row per state with `proposals`, `actions`, outcome counts, `teacher_k3_picks`, `teacher_k3_target` |
+| Head training table (HF, private) | `zixianma/openwebrl-selection-head-data`: 1,380 train + 348 test states; `screenshot`, `actor_prompt`, `proposals`, `actions` (held-out outcome counts on `test` only), `teacher_k3_target` |
 | Branch-state table (HF, public) | `zixianma/openwebrl-branch-states`, `states` columns `teacher_k3_shown` / `teacher_k3_picks` / `teacher_k3_best` (indices into the 5 executed candidates) |
 | Labels | runtime `selection-head-20261008/sft-actions-20261021/labels/k3/` (`plan.json`, `judgments/`, `approval.json`) |
 | Labeller | `scripts/run_branch_lookahead_labels.py` (frozen copy in the label root's `source/`); teacher request `openwebrl/arm_branch_teacher.py` |
