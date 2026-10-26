@@ -161,7 +161,7 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     text(6.74, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
 # One right-aligned legend combines status and method keys.
 METHOD_COLORS = (("Pre-exec", PRE), ("Post-exec", POST),
-                 ("Lookahead H = 3", LOOK), ("Oracle (1–3)", OUTCOME))
+                 ("Lookahead H = 3", LOOK), ("Oracle", OUTCOME))
 LEGEND_ITEMS = (("Success", SUCCESS), ("Failure", FAILURE), ("|", MUTED)) + METHOD_COLORS
 renderer = fig.canvas.get_renderer()
 legend_right = 6.97
@@ -191,7 +191,6 @@ ax.plot([4.35, shared_x, shared_x], [1.88, 1.88, 0.63],
 text(1.43, 1.62, "Candidates + rollout 1", color=MUTED)
 text(6.035, 1.62, "Pick", color=MUTED, ha="center")
 text(6.74, 1.62, "Eval %", color=HELD, ha="center")
-text(6.74, 1.46, "4–8", color=HELD, ha="center")
 ax.add_patch(Rectangle((6.49, 0.07), 0.48, 1.38,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 future_x = [2.25 + 0.55 * k for k in range(4)]
