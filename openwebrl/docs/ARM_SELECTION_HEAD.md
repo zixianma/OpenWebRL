@@ -102,7 +102,7 @@
 
 ## Outcome labels as advantages rather than a single best action (2026-10-25)
 
-**Training on how much better each action did, not only which did best, does not clearly help, offline or live. Offline, centred advantage regression is +0.7 pp [−0.3, +1.9] over the current best-action target and the other two objectives are level. Live on Online-Mind2Web 300, the softmax soft-CE head is highest (33.7% overall, +2.3 pp [−3.0, +7.7] over the best-action head), advantage MSE is level (+0.0 [−6.0, +6.0]), and all three stay below Piotr SelectionARM (−5.3 to −7.7 pp, every interval excluding 0).** Same 1,380 SFT-action train states, joint transformer head (22.6 M), 20 epochs, seeds 0–2; every objective reads the same draws 0–2 (valid draws only), and the 348 test states (86 tasks) are scored on held-out draws 3–7.
+**Training on how much better each action did, not only which did best, does not clearly help, offline or live. Offline, centred advantage regression is +0.7 pp [−0.3, +1.9] over the current best-action target and the other two objectives are level. Live on Online-Mind2Web 300, the softmax soft-CE head is highest (33.7% overall, +2.3 pp [−3.0, +7.7] over the best-action head), advantage MSE is level (+0.0 [−6.0, +6.0]), and all three stay below Piotr SelectionARM (−5.3 to −7.7 pp, every interval excluding 0). On all three benchmarks the soft-CE head is 5.3 pp [−8.8, −1.8] below the best-action head and level with one SFT sample (−0.1 [−3.6, +3.4]): its Online-Mind2Web edge does not carry over to WebVoyager (−4.2 [−8.2, −0.3]) or DeepShop. The best-action target stays.** Same 1,380 SFT-action train states, joint transformer head (22.6 M), 20 epochs, seeds 0–2; every objective reads the same draws 0–2 (valid draws only), and the 348 test states (86 tasks) are scored on held-out draws 3–7.
 
 **Live, Online-Mind2Web 300** (seed-0 heads, 2026-10-25; SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, same task order; all rows judged by gpt-5.6-terra, the references by replaying their saved judge requests). Differences are paired over tasks, 95% bootstrap; valid-only differences use tasks valid under both runs.
 
@@ -116,7 +116,22 @@
 | *Piotr SelectionARM (10-18)* | 263 | 117 | 39.0% | 44.5% | 14.9 | | | — |
 
 - **Valid-only differences** over the best-action head: soft CE +4.7 [−1.2, +10.5], binomial +2.3 [−3.5, +8.1], advantage +2.3 [−3.9, +8.6] pp. The live ranking (soft > binomial > advantage) does not follow the offline one (advantage first), consistent with the note below that offline gaps this small do not predict live ones.
-- **WebVoyager and DeepShop for the soft-CE head** are running (jobs 388858, 388859; 2026-10-26, same protocol, GPT-4o judge capped at $10 and $4; runtime `evaluations/advantage-heads-20261025/{webvoyager,deepshop}-r2/`).
+- **All three benchmarks, soft-CE head** (WebVoyager 595 and DeepShop 150 run 2026-10-26, GPT-4o judge; mean weights each benchmark 1/3, bootstrap resamples tasks within each benchmark):
+
+| Selector | OM2W valid | OM2W successes | OM2W overall | WebVoyager valid | WebVoyager successes | WebVoyager overall | DeepShop valid | DeepShop successes | DeepShop overall | Mean overall | Mean valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Soft CE, softmax(rate / 0.25) | 264 | 101 | 33.7% | 580 | 286 | 48.1% | 149 | 42 | 28.0% | 36.6% | 38.6% |
+| *Best action, soft CE (current, 10-21)* | 270 | 94 | 31.3% | 587 | 311 | 52.3% | 148 | 63 | 42.0% | 41.9% | 43.5% |
+| *SFT 4B, one sample (10-18)* | 275 | 95 | 31.7% | 587 | 264 | 44.4% | 149 | 51 | 34.0% | 36.7% | 37.9% |
+| *Piotr SelectionARM (10-18)* | 263 | 117 | 39.0% | 580 | 312 | 52.4% | 148 | 62 | 41.3% | 44.2% | 46.7% |
+
+| Soft CE − …, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | ---: | ---: | ---: | ---: |
+| Best-action head | +2.3 [−3.0, +7.7] | **−4.2 [−8.2, −0.3]** | **−14.0 [−22.0, −6.0]** | **−5.3 [−8.8, −1.8]** |
+| SFT 4B | +2.0 [−3.3, +7.3] | +3.7 [−0.5, +7.9] | −6.0 [−14.0, +2.0] | −0.1 [−3.6, +3.4] |
+| Piotr SelectionARM | **−5.3 [−10.3, −0.3]** | −4.4 [−8.7, 0.0] | **−13.3 [−21.3, −5.3]** | **−7.7 [−11.2, −4.2]** |
+
+  DeepShop drifted between run dates ([same-day rerun](#selection-piotr-head-sameday-20261025)), so its −14.0 pp overstates the gap. Against same-day DeepShop references, soft CE equals SFT 4B (10-24, 28.0%: 0.0 [−8.0, +8.7]) and is below the earlier Piotr-data head (10-24 34.0%: −6.0 [−15.3, +3.3]; 10-25 36.7%: −8.7 [−17.3, 0.0]). WebVoyager has not drifted measurably (the earlier head moved +1.7 pp between dates), so the WebVoyager deficit is the cleaner evidence. Two actor-server crashes (CUDA illegal memory access, DeepShop job 388859 at 139/150) were resumed under the same frozen plan (388967). Root `{webvoyager,deepshop}-r2/` because the 10-25 plans predate the `selection_head.py` loss additions. [Evidence](arm_results/rl_integration/selection-soft-outcome-crossbench-20261026.json) · [analysis script](arm_results/rl_integration/selection-soft-outcome-crossbench-20261026-analysis.py).
 - **Run note.** The OpenAI organisation hit its spend limit mid-run (13:52 PDT); 429-refused judge calls were not billed, their ledger reservations were released and the 10 affected committed episodes (9 binomial, 1 advantage) were moved to `collection/quarantine-judge-spend-limit-429-20261025/` and rerun under the same frozen plan (jobs 388501–388502). Every reported episode has a real judge verdict.
 - [Live evidence](arm_results/rl_integration/selection-outcome-objectives-live-20261025.json) · [live analysis script](arm_results/rl_integration/selection-outcome-objectives-live-20261025-analysis.py) · runtime `evaluations/advantage-heads-20261025/om2w-r2/` (jobs 386977–386979, resumed 388501–388502).
 

@@ -1,0 +1,231 @@
+{
+ "note": "Soft-CE outcome head (softmax(rate / 0.25), seed 0; selection-outcome-objectives-20261025) on all three benchmarks:\nOnline-Mind2Web 300 (2026-10-25, job 386978), WebVoyager 595 and DeepShop 150 (2026-10-26, jobs 388858 and\n388859/388967), against the best-action outcome head (2026-10-21), SFT 4B one sample and Piotr SelectionARM (2026-10-18).\nSFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, full task order. Online-Mind2Web judged by gpt-5.6-terra\n(older runs by replaying their saved judge requests), WebVoyager and DeepShop by GPT-4o. DeepShop drifted between run\ndates, so it is also compared with the 2026-10-24/25 same-day DeepShop runs. Overall counts invalid episodes as\nfailures; \"mean\" weights each benchmark 1/3; paired 95% bootstrap resamples tasks within each benchmark (10,000\nresamples, seed 20261018).",
+ "rows": [
+  {
+   "key": "soft",
+   "condition": "Head, soft CE to softmax(rate / 0.25) (10-25/26)",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 101,
+    "valid": 264,
+    "overall": 33.7,
+    "valid_only": 38.3
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 286,
+    "valid": 580,
+    "overall": 48.1,
+    "valid_only": 49.3
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 42,
+    "valid": 149,
+    "overall": 28.0,
+    "valid_only": 28.2
+   },
+   "mean_overall": 36.6,
+   "mean_valid_only": 38.6
+  },
+  {
+   "key": "best",
+   "condition": "Head, best-action outcome target (10-21)",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 94,
+    "valid": 270,
+    "overall": 31.3,
+    "valid_only": 34.8
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 311,
+    "valid": 587,
+    "overall": 52.3,
+    "valid_only": 53.0
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 63,
+    "valid": 148,
+    "overall": 42.0,
+    "valid_only": 42.6
+   },
+   "mean_overall": 41.9,
+   "mean_valid_only": 43.5
+  },
+  {
+   "key": "sft1",
+   "condition": "SFT 4B, one sample (10-18)",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 95,
+    "valid": 275,
+    "overall": 31.7,
+    "valid_only": 34.5
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 264,
+    "valid": 587,
+    "overall": 44.4,
+    "valid_only": 45.0
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 51,
+    "valid": 149,
+    "overall": 34.0,
+    "valid_only": 34.2
+   },
+   "mean_overall": 36.7,
+   "mean_valid_only": 37.9
+  },
+  {
+   "key": "piotr5",
+   "condition": "Piotr SelectionARM (10-18)",
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 117,
+    "valid": 263,
+    "overall": 39.0,
+    "valid_only": 44.5
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 312,
+    "valid": 580,
+    "overall": 52.4,
+    "valid_only": 53.8
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 62,
+    "valid": 148,
+    "overall": 41.3,
+    "valid_only": 41.9
+   },
+   "mean_overall": 44.2,
+   "mean_valid_only": 46.7
+  }
+ ],
+ "paired": [
+  {
+   "a": "soft",
+   "b": "best",
+   "online_mind2web": [
+    2.3,
+    -3.0,
+    7.7
+   ],
+   "webvoyager": [
+    -4.2,
+    -8.2,
+    -0.3
+   ],
+   "deepshop": [
+    -14.0,
+    -22.0,
+    -6.0
+   ],
+   "mean": [
+    -5.3,
+    -8.8,
+    -1.8
+   ]
+  },
+  {
+   "a": "soft",
+   "b": "sft1",
+   "online_mind2web": [
+    2.0,
+    -3.3,
+    7.3
+   ],
+   "webvoyager": [
+    3.7,
+    -0.5,
+    7.9
+   ],
+   "deepshop": [
+    -6.0,
+    -14.0,
+    2.0
+   ],
+   "mean": [
+    -0.1,
+    -3.6,
+    3.4
+   ]
+  },
+  {
+   "a": "soft",
+   "b": "piotr5",
+   "online_mind2web": [
+    -5.3,
+    -10.3,
+    -0.3
+   ],
+   "webvoyager": [
+    -4.4,
+    -8.7,
+    0.0
+   ],
+   "deepshop": [
+    -13.3,
+    -21.3,
+    -5.3
+   ],
+   "mean": [
+    -7.7,
+    -11.2,
+    -4.2
+   ]
+  }
+ ],
+ "deepshop_sameday": [
+  {
+   "key": "sft1-1024",
+   "condition": "SFT 4B, one sample (DeepShop 10-24)",
+   "tasks": 150,
+   "successes": 42,
+   "valid": 149,
+   "overall": 28.0,
+   "valid_only": 28.2,
+   "soft_minus": [
+    0.0,
+    -8.0,
+    8.7
+   ]
+  },
+  {
+   "key": "early-1024",
+   "condition": "Earlier Piotr-data head (DeepShop 10-24)",
+   "tasks": 150,
+   "successes": 51,
+   "valid": 146,
+   "overall": 34.0,
+   "valid_only": 34.9,
+   "soft_minus": [
+    -6.0,
+    -15.3,
+    3.3
+   ]
+  },
+  {
+   "key": "early-1025",
+   "condition": "Earlier Piotr-data head (DeepShop 10-25)",
+   "tasks": 150,
+   "successes": 55,
+   "valid": 144,
+   "overall": 36.7,
+   "valid_only": 38.2,
+   "soft_minus": [
+    -8.7,
+    -17.3,
+    0.0
+   ]
+  }
+ ]
+}
