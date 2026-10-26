@@ -2,6 +2,10 @@
   "version": 1,
   "description": "Topic consolidation map; SHA256 values preserve the source records before migration.",
   "targets": {
+    "final_arm_teacher_design.md": {
+      "title": "Final ARM teacher design: candidates, K = 3 lookahead labels and selection-head training data",
+      "sources": []
+    },
     "ARM_INFERENCE_SCALING.md": {
       "title": "ARM inference-time scaling: actors and selectors",
       "sources": []
