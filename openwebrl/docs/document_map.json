@@ -2,6 +2,10 @@
   "version": 1,
   "description": "Topic consolidation map; SHA256 values preserve the source records before migration.",
   "targets": {
+    "final_arm_action_grouping.md": {
+      "title": "Final ARM action grouping: from sampled proposals to distinct actions",
+      "sources": []
+    },
     "final_arm_teacher_design.md": {
       "title": "Final ARM teacher design: candidates, K = 3 lookahead labels and selection-head training data",
       "sources": []
