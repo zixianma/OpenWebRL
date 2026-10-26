@@ -15,6 +15,8 @@
 
 [Offline selector evaluation: compact data collection and teacher labeling schematic, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 
+[Joint versus independent scoring: standalone transformer-mask and MLP-input figure (PDF)](arm_results/methods/selection-head-joint-independent-20261026.pdf) · [Caption and architecture](ARM_SELECTION_HEAD.md#selection-head-joint-independent).
+
 [Full300 GPT-6 Sol versus Luna N3/N5: 900 audited dispositions; primary new200 paired success, all-call cost, latency, tokens and browser work](ARM_INFERENCE_SCALING.md#sol6-luna-browsercode300-20261018).
 
 [Luna N3/N5 versus single GPT-6.1 Sol on 100 fixed BrowserCode tasks: 69 common-valid tasks, paired success, all-call model cost and latency](ARM_INFERENCE_SCALING.md#luna-sol-browsercode100-20261018).

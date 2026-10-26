@@ -249,9 +249,22 @@
 
 **Architecture variants.** The screen below crosses interaction (joint / independent) with the scorer (transformer / MLP) and the loss (soft CE / per-candidate BCE); every variant reads the same frozen actor features and has about 22.6 M parameters.
 
-![Selection-head variants: a joint transformer uses full bidirectional attention without position embeddings, so every candidate attends to every other and order does not matter, an independent one masks attention so each candidate sees only the state and itself; a joint MLP adds the candidate minus the mean of the others, an independent MLP sees only the candidate and the state; a worked example with a 3 : 1 target shows soft cross-entropy on the softmax (0.84) and per-candidate BCE on each sigmoid (0.77) for the same logits](arm_results/methods/selection-head-variants-20261022.png)
+<a id="selection-head-joint-independent"></a>
 
-*[Figure script](arm_results/methods/selection-head-variants-20261022.py); code `openwebrl/selection_head.py` (`CandidateSetHead`, `selection_loss`, `pointwise_bce_loss`).*
+![Joint versus independent candidate scoring. Shared state and K=5 candidate features feed both architectures. Transformer attention masks show queries by row and keys by column: gray permits state/self connections, teal adds joint-only connections, and pale cells are masked. The joint MLP adds each candidate minus the mean of the others; the independent MLP uses only that candidate and the state](arm_results/methods/selection-head-joint-independent-20261026.png)
+
+*Joint versus independent scoring. State $s$ and candidate tokens $c_i$ are projections of the frozen actor's features. (a) A two-layer transformer produces one selection logit $z_i$ per candidate. Joint attention is fully bidirectional; independent attention restricts every candidate to the state and itself, and the state to itself. Rows query columns. Both omit position embeddings, so the candidate outputs are permutation-equivariant. (b) The joint MLP additionally receives $c_i-\bar c_{-i}$, where $\bar c_{-i}$ averages the other candidates; the independent MLP receives $[c_i,s]$. Each MLP shares its weights across candidates. MLPs have two hidden layers and are width-matched to the transformer (about 22.6 M head parameters).*
+
+[PDF](arm_results/methods/selection-head-joint-independent-20261026.pdf) · [SVG](arm_results/methods/selection-head-joint-independent-20261026.svg) · [Source](arm_results/methods/selection-head-joint-independent-20261026.py). Standalone 7 × 3.65-inch figure, ≥7 pt text, embedded PDF fonts, 300 dpi PNG. Architecture: `openwebrl/selection_head.py` (`CandidateSetHead`).
+
+<details>
+<summary>Loss functions and original worked example</summary>
+
+![Architecture and loss worked example: identical logits give soft cross-entropy 0.84 and per-candidate BCE 0.77 for a 3:1 teacher-vote target](arm_results/methods/selection-head-variants-20261022.png)
+
+[Original figure script](arm_results/methods/selection-head-variants-20261022.py). Both losses use the same logits and target vote shares. Soft CE applies a softmax over the candidate set; BCE fits each sigmoid to its target share and averages over real candidates. The loss choice is separate from the joint/independent interaction choice. Code: `openwebrl/selection_head.py` (`selection_loss`, `pointwise_bce_loss`).
+
+</details>
 
 <a id="selection-head-arch-full-20261022"></a>
 
