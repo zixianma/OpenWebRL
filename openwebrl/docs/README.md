@@ -36,7 +36,7 @@
 [Episode validity unified across RL, branch collection and MolmoWeb: the Sep 10–24 RL runs kept 940 infrastructure failures (1.39%) as reward 0](EPISODE_VALIDITY.md#episode-validity-20261012).
 
 [WebPRM baselines: all 12 attempts audited, two guarded successes; Reddit allocation cap exhausted](WEBPRM_BASELINES.md#table5-plan-20261010).
-[Baseline comparison: on 253 paired Online-Mind2Web tasks no selector beats no search (Piotr +3.2 pp, WebArbiter −1.2 pp, WebShepherd −13.8 pp); WebArena-Lite Reddit 1–2/18 successes per method](baseline_comparison.md).
+[Baseline comparison: on 284 paired Online-Mind2Web tasks no selector beats no search (Piotr +2.5 pp, WebArbiter −2.8 pp, WebShepherd −14.8 pp); WebArena-Lite Reddit after harness fixes: no search 26.7%, WebArbiter 31.2%, WebShepherd 8.3%](baseline_comparison.md).
 [WebPRM agent handoff: verified results, repairs, approval limits and next actions](WEBPRM_HANDOFF.md).
 
 [Faster reward improvement: five fresh iteration0→10 action-credit pilots, pending native GPU validation, controlled comparisons and recent evidence](RL_LEARNING_EFFICIENCY.md#action-credit-implementation-20261011).
