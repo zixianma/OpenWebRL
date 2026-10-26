@@ -226,6 +226,14 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 
 *Seed-0 heads on 254 / 501 / 1,011 / 2,587 of Piotr's states (one-panel head excluded); overall success per benchmark, 95% Wilson intervals; dashed = SFT 4B. [Plot script](arm_results/rl_integration/selection-data-scale-benchmarks-20261026-plot.py).*
 
+**Paired view.** The interval that answers "does this head beat SFT 4B?" is the paired difference on the same tasks, not each run's own interval; neither includes training-seed variance (one seed per head) or run-date drift.
+
+![Piotr-data heads: success minus SFT 4B per benchmark and on both means vs. training states, paired 95% intervals](arm_results/rl_integration/selection-data-scale-paired-20261026.png)
+
+![Every head's gain over SFT 4B on the three-benchmark mean and the Online-Mind2Web + WebVoyager mean, paired 95% intervals](arm_results/rl_integration/selection-heads-vs-sft-20261026.png)
+
+*Paired 95% bootstrap over tasks (resampled within each benchmark for the means). [Plot script](arm_results/rl_integration/selection-data-scale-paired-20261026-plot.py).*
+
 - **SFT 4B row:** the two difference columns give its own success rate (three-benchmark mean and Online-Mind2Web + WebVoyager mean, overall), the level every other row is compared with.
 - **OM2W + WebVoyager column** weights those two benchmarks 1/2 each and leaves out DeepShop, which drifted between run dates; bootstrap resamples tasks within each benchmark. On it the Piotr-data heads are flat with data (+5.0 to +7.0 pp over SFT 4B at every size) and level with the earlier Piotr-data head (+6.4) and Piotr SelectionARM (+7.7). Our K = 3 and outcome heads gain less here (+4.0, +3.8); their three-benchmark lead over the scaling heads comes from DeepShop, run on 10-21.
 - **Within the scaling runs (pp [95% CI]), Online-Mind2Web / three-benchmark mean:** 2,587 − 254 states −3.0 [−8.3, +2.0] / −2.2 [−5.9, +1.7]; 1,011 − 254 −0.7 [−5.3, +4.0] / −1.5 [−5.2, +2.2]; one-panel 1,393 − all 2,587 −0.7 [−5.0, +3.7] / −1.5 [−5.0, +2.1]. One-panel − ours outcome +1.3 [−4.0, +6.3] / **−3.9 [−7.4, −0.3]**.

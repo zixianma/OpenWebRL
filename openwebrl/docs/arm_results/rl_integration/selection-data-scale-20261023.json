@@ -962,7 +962,24 @@
     0.0,
     0.0,
     0.0
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "webvoyager": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "deepshop": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
   },
   "Piotr ARM": {
    "online_mind2web": {
@@ -1002,7 +1019,24 @@
     7.7,
     4.4,
     11.1
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     7.3,
+     1.7,
+     13.0
+    ],
+    "webvoyager": [
+     8.1,
+     4.4,
+     11.9
+    ],
+    "deepshop": [
+     7.3,
+     -1.3,
+     16.0
+    ]
+   }
   },
   "Piotr-data head (listwise, old)": {
    "online_mind2web": {
@@ -1042,7 +1076,24 @@
     6.4,
     3.2,
     9.9
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     6.0,
+     0.7,
+     11.3
+    ],
+    "webvoyager": [
+     6.9,
+     2.9,
+     10.8
+    ],
+    "deepshop": [
+     10.0,
+     1.3,
+     18.7
+    ]
+   }
   },
   "Ours outcome": {
    "online_mind2web": {
@@ -1082,7 +1133,24 @@
     3.8,
     0.5,
     7.0
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     -0.3,
+     -5.3,
+     4.7
+    ],
+    "webvoyager": [
+     7.9,
+     3.9,
+     11.9
+    ],
+    "deepshop": [
+     8.0,
+     0.0,
+     16.0
+    ]
+   }
   },
   "Ours K3": {
    "online_mind2web": {
@@ -1122,7 +1190,24 @@
     4.0,
     0.8,
     7.2
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     1.3,
+     -4.0,
+     6.3
+    ],
+    "webvoyager": [
+     6.7,
+     2.9,
+     10.6
+    ],
+    "deepshop": [
+     8.7,
+     0.0,
+     18.0
+    ]
+   }
   },
   "Ours K1": {
    "online_mind2web": {
@@ -1162,7 +1247,24 @@
     2.1,
     -1.1,
     5.4
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     -0.7,
+     -5.7,
+     4.3
+    ],
+    "webvoyager": [
+     4.9,
+     0.8,
+     8.9
+    ],
+    "deepshop": [
+     4.0,
+     -4.7,
+     12.7
+    ]
+   }
   },
   "Ours pre": {
    "online_mind2web": {
@@ -1202,7 +1304,24 @@
     -0.2,
     -3.3,
     2.9
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     -1.7,
+     -6.7,
+     3.3
+    ],
+    "webvoyager": [
+     1.3,
+     -2.5,
+     5.2
+    ],
+    "deepshop": [
+     0.0,
+     -8.7,
+     8.0
+    ]
+   }
   },
   "Piotr 250": {
    "online_mind2web": {
@@ -1242,7 +1361,24 @@
     6.5,
     2.9,
     10.0
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     4.7,
+     -1.3,
+     10.7
+    ],
+    "webvoyager": [
+     8.2,
+     4.2,
+     12.3
+    ],
+    "deepshop": [
+     2.0,
+     -7.3,
+     11.3
+    ]
+   }
   },
   "Piotr 500": {
    "online_mind2web": {
@@ -1282,7 +1418,24 @@
     7.0,
     3.5,
     10.6
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     3.7,
+     -2.3,
+     9.3
+    ],
+    "webvoyager": [
+     10.4,
+     6.4,
+     14.6
+    ],
+    "deepshop": [
+     2.7,
+     -6.7,
+     12.0
+    ]
+   }
   },
   "Piotr 1000": {
    "online_mind2web": {
@@ -1322,7 +1475,24 @@
     6.5,
     3.0,
     10.0
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     4.0,
+     -2.0,
+     10.0
+    ],
+    "webvoyager": [
+     9.1,
+     4.9,
+     13.1
+    ],
+    "deepshop": [
+     -2.7,
+     -11.3,
+     6.0
+    ]
+   }
   },
   "Piotr all 2587": {
    "online_mind2web": {
@@ -1362,7 +1532,24 @@
     5.5,
     1.9,
     9.1
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     1.7,
+     -4.3,
+     7.7
+    ],
+    "webvoyager": [
+     9.4,
+     5.5,
+     13.4
+    ],
+    "deepshop": [
+     -2.7,
+     -11.3,
+     6.0
+    ]
+   }
   },
   "Piotr 1380 one-panel": {
    "online_mind2web": {
@@ -1402,7 +1589,24 @@
     5.0,
     1.5,
     8.3
-   ]
+   ],
+   "minus_sft4b_by_benchmark": {
+    "online_mind2web": [
+     1.0,
+     -4.7,
+     6.3
+    ],
+    "webvoyager": [
+     8.9,
+     4.9,
+     13.1
+    ],
+    "deepshop": [
+     -6.0,
+     -15.3,
+     3.3
+    ]
+   }
   }
  },
  "three_benchmark_pairs": {

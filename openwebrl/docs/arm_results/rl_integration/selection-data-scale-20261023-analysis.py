@@ -104,6 +104,7 @@ for n in ALL:
     row['minus_sft4b'] = boot_mean(n, 'SFT 4B'); row['minus_piotr'] = boot_mean(n, 'Piotr ARM')
     # Online-Mind2Web + WebVoyager only (each 1/2): leaves out DeepShop, which drifted between run dates
     row['minus_sft4b_om2w_wv'] = boot_mean(n, 'SFT 4B', benches=('online_mind2web', 'webvoyager'))
+    row['minus_sft4b_by_benchmark'] = {b: boot(vec(n, b), vec('SFT 4B', b)) for b in BK}   # paired, per benchmark
     OUT['three_benchmarks'][n] = row
     print(f"{n:34s} {row['online_mind2web']['overall']:5.1f} {row['webvoyager']['overall']:5.1f} {row['deepshop']['overall']:5.1f} | {row['mean_overall']:6.2f} {row['mean_valid_only']:6.2f} | {row['minus_sft4b']} | {row['minus_piotr']} | OM2W+WV -SFT {row['minus_sft4b_om2w_wv']}")
 PAIRS = [('Piotr all 2587', 'Piotr 250'), ('Piotr 1000', 'Piotr 250'), ('Piotr all 2587', 'Piotr-data head (listwise, old)'),
