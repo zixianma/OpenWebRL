@@ -5,7 +5,7 @@ Live: data-scale-20261023 runs (judged by terra at collection). References: earl
 committed judge request with gpt-5.6-terra (scripts/rejudge_crossbench_om2w.py). Overall = invalid counted as failure;
 paired bootstrap over the 300 tasks (10,000 resamples, seed 0). Offline: fixed-five.json / scores.json of each head.
 WebVoyager / DeepShop (GPT-4o judge, unchanged) read directly; "mean" weights each benchmark 1/3 and is bootstrapped with
-tasks resampled within each benchmark. Writes selection-data-scale-20261023.json next to this script.
+tasks resampled within each benchmark; "OM2W+WV" weights those two 1/2 each. Writes selection-data-scale-20261023.json next to this script.
 """
 import json, glob, random, sys
 from pathlib import Path
@@ -88,10 +88,10 @@ BK = {b: sorted(ALL['SFT 4B'][b]) for b in ('online_mind2web', 'webvoyager', 'de
 for n in ALL:
     for b in BK: assert set(ALL[n][b]) == set(BK[b]), (n, b)
 def vec(n, b): return [1 if ALL[n][b][k] == 1 else 0 for k in BK[b]]
-def boot_mean(a, b_, n=10000):
-    rng = random.Random(0); diffs = {bb: [x - y for x, y in zip(vec(a, bb), vec(b_, bb))] for bb in BK}
-    point = sum(sum(d) / len(d) for d in diffs.values()) / 3
-    s = sorted(sum(sum(d[rng.randrange(len(d))] for _ in range(len(d))) / len(d) for d in diffs.values()) / 3 for _ in range(n))
+def boot_mean(a, b_, n=10000, benches=None):
+    rng = random.Random(0); diffs = {bb: [x - y for x, y in zip(vec(a, bb), vec(b_, bb))] for bb in benches or BK}
+    point = sum(sum(d) / len(d) for d in diffs.values()) / len(diffs)
+    s = sorted(sum(sum(d[rng.randrange(len(d))] for _ in range(len(d))) / len(d) for d in diffs.values()) / len(diffs) for _ in range(n))
     return round(100 * point, 1), round(100 * s[int(.025 * n)], 1), round(100 * s[int(.975 * n)], 1)
 OUT['three_benchmarks'] = {}
 print(f"\n{'name':34s}  OM2W   WV     DS   | mean ov  mean vo | -SFT [CI] | -Piotr [CI]")
@@ -102,8 +102,10 @@ for n in ALL:
         row[b] = dict(tasks=len(v), valid=val, success=suc, overall=round(100 * suc / len(v), 2), valid_only=round(100 * suc / val, 2))
     row['mean_overall'] = round(sum(row[b]['overall'] for b in BK) / 3, 2); row['mean_valid_only'] = round(sum(row[b]['valid_only'] for b in BK) / 3, 2)
     row['minus_sft4b'] = boot_mean(n, 'SFT 4B'); row['minus_piotr'] = boot_mean(n, 'Piotr ARM')
+    # Online-Mind2Web + WebVoyager only (each 1/2): leaves out DeepShop, which drifted between run dates
+    row['minus_sft4b_om2w_wv'] = boot_mean(n, 'SFT 4B', benches=('online_mind2web', 'webvoyager'))
     OUT['three_benchmarks'][n] = row
-    print(f"{n:34s} {row['online_mind2web']['overall']:5.1f} {row['webvoyager']['overall']:5.1f} {row['deepshop']['overall']:5.1f} | {row['mean_overall']:6.2f} {row['mean_valid_only']:6.2f} | {row['minus_sft4b']} | {row['minus_piotr']}")
+    print(f"{n:34s} {row['online_mind2web']['overall']:5.1f} {row['webvoyager']['overall']:5.1f} {row['deepshop']['overall']:5.1f} | {row['mean_overall']:6.2f} {row['mean_valid_only']:6.2f} | {row['minus_sft4b']} | {row['minus_piotr']} | OM2W+WV -SFT {row['minus_sft4b_om2w_wv']}")
 PAIRS = [('Piotr all 2587', 'Piotr 250'), ('Piotr 1000', 'Piotr 250'), ('Piotr all 2587', 'Piotr-data head (listwise, old)'),
          ('Piotr 1380 one-panel', 'Ours K3'), ('Piotr 1380 one-panel', 'Ours outcome'), ('Piotr 1380 one-panel', 'Piotr all 2587')]
 OUT['three_benchmark_pairs'] = {f'{a} - {b}': boot_mean(a, b) for a, b in PAIRS}

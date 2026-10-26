@@ -205,23 +205,24 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 
 **All three benchmarks** (1,045 tasks; Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o; mean weights each benchmark 1/3, bootstrap resamples tasks within each benchmark):
 
-| Training data | States | OM2W overall | WebVoyager overall | DeepShop overall | Mean overall | Mean valid-only | − SFT 4B, pp [95% CI] | − Piotr ARM, pp [95% CI] |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Piotr's panels | 254 | 36.3% | 52.6% | 36.0% | 41.6% | 44.1% | **+5.0 [+1.1, +8.9]** | −2.6 [−6.3, +1.1] |
-| Piotr's panels | 501 | 35.3% | 54.8% | 36.7% | 42.3% | 44.5% | **+5.6 [+1.7, +9.4]** | −2.0 [−5.8, +1.8] |
-| Piotr's panels | 1,011 | 35.7% | 53.5% | 31.3% | 40.1% | 42.6% | +3.5 [−0.2, +7.2] | **−4.1 [−7.6, −0.7]** |
-| Piotr's panels, all | 2,587 | 33.3% | 53.8% | 31.3% | 39.5% | 41.7% | +2.8 [−1.0, +6.6] | **−4.8 [−8.2, −1.3]** |
-| Piotr's panels, one per state | 1,393 | 32.7% | 53.3% | 28.0% | 38.0% | 40.5% | +1.3 [−2.5, +5.2] | **−6.3 [−9.9, −2.6]** |
-| *References (run 2026-10-18 to 10-21)* | | | | | | | | |
-| SFT 4B, one sample | — | 31.7% | 44.4% | 34.0% | 36.7% | 37.9% | — | **−7.6 [−11.3, −4.0]** |
-| Piotr SelectionARM (4B LoRA) | 2,692 | 39.0% | 52.4% | 41.3% | 44.3% | 46.7% | **+7.6 [+4.0, +11.3]** | — |
-| Earlier Piotr-data head | 2,692 | 37.7% | 51.3% | 44.0% | 44.3% | 47.0% | **+7.6 [+3.9, +11.3]** | +0.1 [−3.5, +3.7] |
-| Ours, K = 3 labels | 1,380 | 33.0% | 51.1% | 42.7% | 42.2% | 43.9% | **+5.6 [+2.0, +9.2]** | −2.0 [−5.5, +1.6] |
-| Ours, observed outcome | 1,380 | 31.3% | 52.3% | 42.0% | 41.9% | 43.5% | **+5.2 [+1.8, +8.6]** | −2.4 [−6.1, +1.3] |
-| Ours, K = 1 labels | 1,380 | 31.0% | 49.2% | 38.0% | 39.4% | 41.5% | +2.7 [−0.9, +6.4] | **−4.8 [−8.6, −1.1]** |
-| Ours, pre-execution labels | 1,380 | 30.0% | 45.7% | 34.0% | 36.6% | 38.3% | −0.1 [−3.7, +3.5] | **−7.7 [−11.4, −4.1]** |
+| Training data | States | OM2W overall | WebVoyager overall | DeepShop overall | Mean overall | Mean valid-only | − SFT 4B, pp [95% CI] | OM2W + WebVoyager − SFT 4B, pp [95% CI] | − Piotr ARM, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Piotr's panels | 254 | 36.3% | 52.6% | 36.0% | 41.6% | 44.1% | **+5.0 [+1.1, +8.9]** | **+6.5 [+2.9, +10.0]** | −2.6 [−6.3, +1.1] |
+| Piotr's panels | 501 | 35.3% | 54.8% | 36.7% | 42.3% | 44.5% | **+5.6 [+1.7, +9.4]** | **+7.0 [+3.5, +10.6]** | −2.0 [−5.8, +1.8] |
+| Piotr's panels | 1,011 | 35.7% | 53.5% | 31.3% | 40.1% | 42.6% | +3.5 [−0.2, +7.2] | **+6.5 [+3.0, +10.0]** | **−4.1 [−7.6, −0.7]** |
+| Piotr's panels, all | 2,587 | 33.3% | 53.8% | 31.3% | 39.5% | 41.7% | +2.8 [−1.0, +6.6] | **+5.5 [+1.9, +9.1]** | **−4.8 [−8.2, −1.3]** |
+| Piotr's panels, one per state | 1,393 | 32.7% | 53.3% | 28.0% | 38.0% | 40.5% | +1.3 [−2.5, +5.2] | **+5.0 [+1.5, +8.3]** | **−6.3 [−9.9, −2.6]** |
+| *References (run 2026-10-18 to 10-21)* | | | | | | | | | |
+| SFT 4B, one sample | — | 31.7% | 44.4% | 34.0% | 36.7% | 37.9% | — | — | **−7.6 [−11.3, −4.0]** |
+| Piotr SelectionARM (4B LoRA) | 2,692 | 39.0% | 52.4% | 41.3% | 44.3% | 46.7% | **+7.6 [+4.0, +11.3]** | **+7.7 [+4.4, +11.1]** | — |
+| Earlier Piotr-data head | 2,692 | 37.7% | 51.3% | 44.0% | 44.3% | 47.0% | **+7.6 [+3.9, +11.3]** | **+6.4 [+3.2, +9.9]** | +0.1 [−3.5, +3.7] |
+| Ours, K = 3 labels | 1,380 | 33.0% | 51.1% | 42.7% | 42.2% | 43.9% | **+5.6 [+2.0, +9.2]** | **+4.0 [+0.8, +7.2]** | −2.0 [−5.5, +1.6] |
+| Ours, observed outcome | 1,380 | 31.3% | 52.3% | 42.0% | 41.9% | 43.5% | **+5.2 [+1.8, +8.6]** | **+3.8 [+0.5, +7.0]** | −2.4 [−6.1, +1.3] |
+| Ours, K = 1 labels | 1,380 | 31.0% | 49.2% | 38.0% | 39.4% | 41.5% | +2.7 [−0.9, +6.4] | +2.1 [−1.1, +5.4] | **−4.8 [−8.6, −1.1]** |
+| Ours, pre-execution labels | 1,380 | 30.0% | 45.7% | 34.0% | 36.6% | 38.3% | −0.1 [−3.7, +3.5] | −0.2 [−3.3, +2.9] | **−7.7 [−11.4, −4.1]** |
 
 - **Columns.** OM2W = Online-Mind2Web, 300 tasks, gpt-5.6-terra judge. "Overall" counts invalid episodes as failures; differences are paired by task on the overall rate (95% bootstrap). The earlier Piotr-data head trained on all 2,692 of Piotr's states (no test-task exclusion; [recipe](#selection-head-sft-actions-20261021)). "Ours" rows are the [label ablation](#selection-head-sft-actions-20261021) heads; their offline numbers are the same fixed-five metric.
+- **OM2W + WebVoyager column** weights those two benchmarks 1/2 each and leaves out DeepShop, which drifted between run dates; bootstrap resamples tasks within each benchmark. On it the Piotr-data heads are flat with data (+5.0 to +7.0 pp over SFT 4B at every size) and level with the earlier Piotr-data head (+6.4) and Piotr SelectionARM (+7.7). Our K = 3 and outcome heads gain less here (+4.0, +3.8); their three-benchmark lead over the scaling heads comes from DeepShop, run on 10-21.
 - **Within the scaling runs (pp [95% CI]), Online-Mind2Web / three-benchmark mean:** 2,587 − 254 states −3.0 [−8.3, +2.0] / −2.2 [−5.9, +1.7]; 1,011 − 254 −0.7 [−5.3, +4.0] / −1.5 [−5.2, +2.2]; one-panel 1,393 − all 2,587 −0.7 [−5.0, +3.7] / −1.5 [−5.0, +2.1]. One-panel − ours outcome +1.3 [−4.0, +6.3] / **−3.9 [−7.4, −0.3]**.
 - **Caveats.** One seed per size. The new runs and the references ran on different days, and sites change: the new all-data head scores −4.3 pp [−10.0, +1.3] against the earlier Piotr-data head trained on nearly the same data, about as large as any scaling effect here. On the three-benchmark mean the gap is **−4.8 [−8.5, −1.1]** pp, driven by DeepShop (47 vs 66 of 150 successes; WebVoyager 53.8% vs 51.3% favours the new head). DeepShop episodes were equally valid (148 vs 147 of 150) and ended normally. **Same-day DeepShop reruns (10-24, jobs 385776–385777, runtime `evaluations/deepshop-sameday-20261024/`) confirm a site/day effect:** SFT 4B 51 → 42 of 150 (−6.0 pp [−14.0, +2.0]), earlier Piotr-data head 66 → 51 (−10.0 [−19.3, +0.0]). Against the same-day earlier head (34.0%), the new heads on DeepShop: 254 states +2.0 [−8.0, +12.0], 2,587 states −2.7 [−12.0, +6.7], one panel per state −6.0 [−16.0, +4.0]; earlier head − same-day SFT +6.0 [−3.3, +15.3]. So the new and earlier Piotr-data heads are indistinguishable live as well as offline, and the label-head references (DeepShop run 10-21) likely benefit from the earlier, easier DeepShop. The two heads are effectively the same model: same architecture, loss and recipe, and on our 348 test states they pick the same action in 85% of fixed-five panels and score 38.31% vs 37.99% (+0.3 pp [−0.3, +1.1]; CPU job 384787, runtime `data-scale-20261023/compare-old/`). The earlier head itself ranged 36.3–39.7% over three o4-mini repetitions ([same-hardware runs](#same-hardware-runs-three-repetitions-of-seven-methods)). Read the scaling rows against each other; read differences against the references with that in mind.
 - **Offline, distinct-action view** (head − uniform over distinct actions): +1.4, +2.7, +2.8, +3.5 pp for 254 → 2,587 states, +2.1 for one panel per state; ours outcome +0.7, K = 3 +0.4, K = 1 +1.0, pre-execution +0.2. Only this view, which removes duplicates, shows a weak trend with data.
