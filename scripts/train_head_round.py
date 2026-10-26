@@ -28,7 +28,8 @@ Task-clustered bootstrap differences.
 Teacher-data scaling (--extra-only): train on the extra panels alone (none of our states), on the first
 --extra-max-states base states of whole tasks in a seeded order (nested across sizes), and keep the epoch with the best
 agreement on the extra panels' own validation split (tasks of our test split excluded there too), as the live
-Piotr-data head did. Our test states are only scored.
+Piotr-data head did. Our test states are only scored. --extra-min-panels N keeps only states with at least N panels (after --extra-max-states), and
+--extra-nested-panels makes --extra-panels-per-state K draw a fixed per-state order, so panel subsets nest across K.
 """
 import argparse
 from collections import defaultdict
@@ -152,12 +153,21 @@ def load_extra(args, rec, layers, torch, split="train"):
                 break
             keep |= by_task[t]
         rows = {k: r for k, r in rows.items() if r["base_state_id"] in keep}
+    if split == "train" and args.extra_min_panels:                # base states with at least this many panels
+        n = defaultdict(int)
+        for r in rows.values():
+            n[r["base_state_id"]] += 1
+        rows = {k: r for k, r in rows.items() if n[r["base_state_id"]] >= args.extra_min_panels}
     if split == "train" and args.extra_panels_per_state:          # seeded choice of panels within each base state
         per = defaultdict(list)
         for k in sorted(rows):
             per[rows[k]["base_state_id"]].append(k)
-        pick = random.Random(args.extra_subset_seed)
-        rows = {k: rows[k] for b in sorted(per) for k in pick.sample(per[b], min(len(per[b]), args.extra_panels_per_state))}
+        if args.extra_nested_panels:                              # per-state seeded order: K panels nest inside 2K
+            order = {b: random.Random(f"{args.extra_subset_seed}:{b}").sample(v, len(v)) for b, v in per.items()}
+            rows = {k: rows[k] for b in sorted(per) for k in order[b][:args.extra_panels_per_state]}
+        else:
+            pick = random.Random(args.extra_subset_seed)
+            rows = {k: rows[k] for b in sorted(per) for k in pick.sample(per[b], min(len(per[b]), args.extra_panels_per_state))}
     c, s, t = [], [], []
     for path in sorted(args.extra_features.glob("shard*-chunk*.pt")):
         chunk = torch.load(path, map_location="cpu")
@@ -202,6 +212,10 @@ def main():
     ap.add_argument("--extra-max-states", type=int, help="first N base states of whole extra tasks (seeded order)")
     ap.add_argument("--extra-subset-seed", type=int, default=20261023)
     ap.add_argument("--extra-panels-per-state", type=int, help="keep at most this many panels per extra base state")
+    ap.add_argument("--extra-min-panels", type=int, help="keep only extra base states with at least this many training "
+                    "panels (applied after --extra-max-states)")
+    ap.add_argument("--extra-nested-panels", action="store_true", help="--extra-panels-per-state: draw each state's "
+                    "panels in a fixed seeded order, so smaller K are subsets of larger K")
     ap.add_argument("--last-epoch", action="store_true", help="--extra-only: keep the last epoch (as our branch-state "
                     "heads do) instead of the best on the extra validation split; the curve is still logged")
     args = ap.parse_args()
@@ -359,7 +373,8 @@ def main():
                train_frac=args.train_frac, seed=args.seed, params=params, train_states=len(train_ids), extra=extra_info,
                train_tasks=len({rec[s]["task_id"] for s in train_ids}), test_states=len(scored), test_tasks=len(set(g)),
                extra_only=args.extra_only, extra_max_states=args.extra_max_states, extra_subset_seed=args.extra_subset_seed,
-               extra_panels_per_state=args.extra_panels_per_state, last_epoch=args.last_epoch,
+               extra_panels_per_state=args.extra_panels_per_state, extra_min_panels=args.extra_min_panels,
+               extra_nested_panels=args.extra_nested_panels, last_epoch=args.last_epoch,
                batch_size=args.batch_size, epochs=args.epochs,
                extra_validation=(dict(val_info, agreement_by_epoch=curve, best_epoch=best[1], best_agreement=round(best[0], 4))
                                  if args.extra_only else None),
