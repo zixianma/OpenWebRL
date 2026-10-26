@@ -14,7 +14,12 @@ and the known weak spots of the rule. The teacher labels built on these actions 
   fewer than 2 distinct actions are skipped before any execution.
 - **Main weak spot: `done` merges different answers.** Of the 356 checked dataset states with at least two `done`
   proposals, Luna finds conflicting answers in **153 (43%)**: 120 of 253 on Wikipedia tasks (47%) and 33 of 103 elsewhere
-  (32%). That is 5.3% of all 2,886 states. In 30 of the 153 the executed `done` answer is not the most common one.
+  (32%). That is 5.3% of all 2,886 states (154 of 357 after the last state was checked). In 30 of the 153 the executed `done` answer is not the most common one.
+
+- **`done` is now split by answer (2026-10-26).** For teacher labels, `done` proposals are grouped by answer (one Luna
+  call per state) and each group is its own action; a group needs no execution, since finishing does not change the
+  page. Applied to the selection-head training data (46 train states) and to the planned labels-only collection; the
+  branch-state dataset flags affected states (`done_answer_groups`).
 
 ## Grouping rule
 
@@ -161,6 +166,21 @@ list member or yes/no conclusion, or "not found" versus an answer, split. It was
 continuation outcome scores it, while other proposals of the same action answer differently. At deployment the head
 scores each proposal's own text, so different answers are different choices there.
 
+## `done` split by answer group (2026-10-26)
+
+| Step | Rule |
+| --- | --- |
+| Group | Luna partitions a state's distinct `done` answers (same request as the check above), for states whose `done` proposals differ in text |
+| Split | each answer group is one action, ordered by its first proposal; its representative is the first proposal of the group's most common answer; at most 5 actions per state in first-proposal order |
+| Evidence | a group reuses the executed `done` candidate's evidence (screenshot unchanged, no lookahead) with the receipt's `Response:` replaced by the group's answer; all 238 rewritten receipts were checked against their candidate's own answer |
+| Label | the same frozen K = 3 Luna setup, 2 calls in random orders; picks index the split actions |
+
+| Dataset | Change |
+| --- | --- |
+| Selection-head data (`openwebrl-selection-head-data`) | 53 states have conflicting `done` answers (Luna, 170 calls, USD 0.06). The 46 train ones are split and re-labelled (92 calls, USD 0.15): 3, 4 and 5 actions in 16, 16 and 14 states; `action` ends in `#answer<k>`. The 7 test states keep the merged `done`, because only the executed answer has held-out outcomes. Column `done_answer_groups` on every state. Heads trained before 2026-10-26 used the merged version |
+| Branch-state data (`openwebrl-branch-states`) | Not split: only the executed answer has judged continuations. Column `done_answer_groups` (154 of the 357 states with at least two `done` proposals are above 1) |
+| Labels-only collection (planned) | Split at labelling time with the same steps; `done` groups take action slots but no execution |
+
 <details><summary>Method and code</summary>
 
 - Grouping: `openwebrl/arm_branch_protocol.py` (`action_key`, `_target`, `diverse_candidates`); sampling rounds:
@@ -169,6 +189,8 @@ scores each proposal's own text, so different answers are different choices ther
   (`find_all_clickable_elements`); captured with the screenshot in `openwebrl/controlled_browser_server.py`.
 - `done` answers: every proposal's `done` call after `</think>`; answer = its `response` argument. Agreement check and
   per-state groups: runtime `branch-selector-scaleup-20261008/fast1k-20261012/review-cohorts/final/v2/done-check/`
-  (`done_check.py`, `summary.json`, `results/`); 362 calls, USD 0.15.
+  (`done_check.py`, `summary.json`, `results/`); 366 calls, USD 0.16 (one 21-answer state needed a larger output limit).
+- Split and re-labels: runtime `selection-head-20261008/sft-actions-20261021/labels/donesplit/` (`build.py`, `split.jsonl`,
+  `k3/`, `verify_requests.py`); dataset builder `hf_head_data.py`; branch-state flag `fast1k-20261012/hf_v2_doneflag.py`.
 - The `diverse_candidates` docstring mentions a 50-unit grid; the code uses 100.
 </details>
