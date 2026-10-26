@@ -1,8 +1,8 @@
 """Paper figure for offline selector evaluation (October 21 ablation).
 
 The outcomes and teacher picks are illustrative, preserved from the original
-figure. Rollouts 0--2 supply outcome labels; teachers see only rollout 0, and all
-pickers are scored on held-out rollouts 3--7. Invalid rollouts are excluded from the
+figure. Displayed rollouts 1--3 supply outcome labels; teachers see only rollout 1, and all
+pickers are scored on held-out rollouts 4--8. Invalid rollouts are excluded from the
 rate denominator. No experiment artifacts or API calls are needed to render.
 
 Usage: python3 selection-offline-eval-20261022.py
@@ -92,7 +92,7 @@ text(0.12, 4.06, "a)  Data collection", size=8.5, weight="bold")
 xs = [3.76 + 0.22 * d for d in range(8)]
 trajectory_x = [1.76 + 0.48 * k for k in range(4)]
 ys = [3.43 - 0.21 * i for i in range(5)]
-text(4.53, 4.06, r"$R^{i,j}\in\{0,1\}$ · $j$: rollout index", size=7, color=MUTED, ha="center")
+text(4.53, 4.06, r"$R^{i,j}\in\{0,1\}$", size=7, color=MUTED, ha="center")
 y_low, y_high = ys[-1] - 0.10, ys[0] + 0.10
 ax.add_patch(Rectangle((xs[0] - 0.11, y_low), 3 * 0.22, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
@@ -102,19 +102,20 @@ for first, last, title, color in ((0, 2, "Train labels", OUTCOME), (3, 7, "Held-
     rule(xs[first] - 0.105, xs[last] + 0.105, 3.74, color, 1.1)
     text((xs[first] + xs[last]) / 2, 3.85, title, color=color, ha="center")
     for d in range(first, last + 1):
-        text(xs[d], 3.65, str(d), color=ROLLOUT if d == 0 else MUTED,
+        text(xs[d], 3.65, str(d + 1), color=ROLLOUT if d == 0 else MUTED,
              weight="bold" if d == 0 else "normal", ha="center")
+text(xs[0] - 0.17, 3.65, r"$j=$", color=MUTED, ha="right")
 text(1.105, 3.65, r"$K=5$ actions", color=MUTED, ha="center")
 text(6.00, 3.85, "Train %", color=OUTCOME, ha="center")
-text(6.00, 3.65, "0–2", color=OUTCOME, ha="center")
+text(6.00, 3.65, "1–3", color=OUTCOME, ha="center")
 text(6.74, 3.85, "Eval %", color=HELD, ha="center")
-text(6.74, 3.65, "3–7", color=HELD, ha="center")
+text(6.74, 3.65, "4–8", color=HELD, ha="center")
 mid = sum(ys) / len(ys)
 box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
 text(0.345, mid, r"$s_t$", size=9, ha="center")
-# Spell out rollout 0's states for candidates 1 and 5; ellipses omit 2--4.
+# Spell out rollout 1's states for candidates 1 and 5; ellipses omit 2--4.
 # Every candidate and all eight terminal outcomes remain in the matrix.
-text(2.63, 3.85, "Rollout 0", color=ROLLOUT, weight="bold", ha="center")
+text(2.63, 3.85, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
 for k in range(1, 4):
     text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 3.65,
          rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
@@ -127,7 +128,7 @@ ax.add_patch(Rectangle((5.70, y_low), 0.60, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((6.49, y_low), 0.48, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
-# One cyan enclosure groups rollout 0's prefixes and terminal outcomes
+# One cyan enclosure groups rollout 1's prefixes and terminal outcomes
 # across all candidates. State colors retain their evidence-method association.
 rollout_box = box(1.50, y_low - 0.02, xs[0] + 0.11 - 1.50,
                   y_high - y_low + 0.04, edge=ROLLOUT, fill=ROLLOUT_BG,
@@ -160,11 +161,15 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     text(6.74, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
 # One right-aligned legend combines status and method keys.
 METHOD_COLORS = (("Pre-exec", PRE), ("Post-exec", POST),
-                 ("Lookahead H = 3", LOOK), ("Oracle (0–2)", OUTCOME))
-LEGEND_ITEMS = (("Success", SUCCESS), ("Failure", FAILURE)) + METHOD_COLORS
+                 ("Lookahead H = 3", LOOK), ("Oracle (1–3)", OUTCOME))
+LEGEND_ITEMS = (("Success", SUCCESS), ("Failure", FAILURE), ("|", MUTED)) + METHOD_COLORS
 renderer = fig.canvas.get_renderer()
 legend_right = 6.97
 for label, color in reversed(LEGEND_ITEMS):
+    if label == "|":
+        text(legend_right + 0.035, 2.32, "|", color=MUTED, ha="right")
+        legend_right -= 0.05
+        continue
     label_width = renderer.get_text_width_height_descent(
         label, FontProperties(size=7), ismath=False)[0] / fig.dpi
     marker_x = legend_right - label_width - 0.08
@@ -183,10 +188,10 @@ text(2.235, 1.88, r"Shared: task · history · $s_t$ · $K=5$ actions", color=SH
 shared_x = 4.68
 ax.plot([4.35, shared_x, shared_x], [1.88, 1.88, 0.63],
         color=SHARED, linewidth=0.95, zorder=1)
-text(1.43, 1.62, "Candidates + rollout 0", color=MUTED)
+text(1.43, 1.62, "Candidates + rollout 1", color=MUTED)
 text(6.035, 1.62, "Pick", color=MUTED, ha="center")
 text(6.74, 1.62, "Eval %", color=HELD, ha="center")
-text(6.74, 1.46, "3–7", color=HELD, ha="center")
+text(6.74, 1.46, "4–8", color=HELD, ha="center")
 ax.add_patch(Rectangle((6.49, 0.07), 0.48, 1.38,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 future_x = [2.25 + 0.55 * k for k in range(4)]
