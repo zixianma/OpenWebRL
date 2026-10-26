@@ -222,6 +222,10 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 | Ours, pre-execution labels | 1,380 | 1,380 | 30.0% | 45.7% | 34.0% | 36.6% | 38.3% | −0.1 [−3.7, +3.5] | −0.2 [−3.3, +2.9] |
 
 - **Columns.** OM2W = Online-Mind2Web, 300 tasks, gpt-5.6-terra judge. "Overall" counts invalid episodes as failures; differences are paired by task on the overall rate (95% bootstrap). The earlier Piotr-data head trained on all 2,692 of Piotr's states (no test-task exclusion; [recipe](#selection-head-sft-actions-20261021)). "Ours" rows are the [label ablation](#selection-head-sft-actions-20261021) heads; their offline numbers are the same fixed-five metric.
+![Piotr-data heads: live success per benchmark vs. training states](arm_results/rl_integration/selection-data-scale-benchmarks-20261026.png)
+
+*Seed-0 heads on 254 / 501 / 1,011 / 2,587 of Piotr's states (one-panel head excluded); overall success per benchmark, 95% Wilson intervals; dashed = SFT 4B. [Plot script](arm_results/rl_integration/selection-data-scale-benchmarks-20261026-plot.py).*
+
 - **SFT 4B row:** the two difference columns give its own success rate (three-benchmark mean and Online-Mind2Web + WebVoyager mean, overall), the level every other row is compared with.
 - **OM2W + WebVoyager column** weights those two benchmarks 1/2 each and leaves out DeepShop, which drifted between run dates; bootstrap resamples tasks within each benchmark. On it the Piotr-data heads are flat with data (+5.0 to +7.0 pp over SFT 4B at every size) and level with the earlier Piotr-data head (+6.4) and Piotr SelectionARM (+7.7). Our K = 3 and outcome heads gain less here (+4.0, +3.8); their three-benchmark lead over the scaling heads comes from DeepShop, run on 10-21.
 - **Within the scaling runs (pp [95% CI]), Online-Mind2Web / three-benchmark mean:** 2,587 − 254 states −3.0 [−8.3, +2.0] / −2.2 [−5.9, +1.7]; 1,011 − 254 −0.7 [−5.3, +4.0] / −1.5 [−5.2, +2.2]; one-panel 1,393 − all 2,587 −0.7 [−5.0, +3.7] / −1.5 [−5.0, +2.1]. One-panel − ours outcome +1.3 [−4.0, +6.3] / **−3.9 [−7.4, −0.3]**.
