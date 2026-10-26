@@ -91,6 +91,7 @@ text(0.12, 4.71, "(a)  Rollouts", size=8.5, weight="bold")
 xs = [3.76 + 0.22 * d for d in range(8)]
 trajectory_x = [1.76 + 0.48 * k for k in range(4)]
 ys = [4.04 - 0.22 * i for i in range(5)]
+text(4.53, 4.71, r"$R^{i,j}\in\{0,1\}$", size=8, color=MUTED, ha="center")
 y_low, y_high = ys[-1] - 0.10, ys[0] + 0.10
 ax.add_patch(Rectangle((xs[0] - 0.11, y_low), 3 * 0.22, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
