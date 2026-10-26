@@ -347,7 +347,7 @@ valid-task sets; the matched iteration-90 repeats below are the controlled compa
 [Interactive curve](rl_results/arm_rl_interactive.html).
 
 The **uniform G8 outcome-only control** (eight rollouts per task, 48 accepted mixed groups,
-original 2,102 tasks) has verified evaluations through iteration 80; training to 90 continues.
+original 2,102 tasks) is complete through iteration 90, with verified evaluations at every tenth iteration.
 
 | Iteration | Adam updates | Successes | Tasks | Valid | Invalid | Overall % | Valid-only % |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -359,8 +359,9 @@ original 2,102 tasks) has verified evaluations through iteration 80; training to
 |60 |1318 |127 |300 |234 |66 |**42.33** |**54.27** |
 |70 |1488 |115 |300 |236 |64 |38.33 |48.73 |
 |80 |1652 |119 |300 |242 |58 |39.67 |49.17 |
+|90 |1810 |107 |300 |243 |57 |35.67 |44.03 |
 
-After iteration 60 the curve is flat within single-evaluation noise (repeat evaluations of
+After iteration 60 the curve is flat to slightly lower (107/300 at 90) within single-evaluation noise (repeat evaluations of
 one checkpoint differ by up to 4pp). G8 makes more Adam updates than the 56-group control at
 every checkpoint, and collection dates and valid-task sets differ, so these single-cohort
 comparisons do not isolate a rollout-count effect.
@@ -385,7 +386,7 @@ line point at 90 is one earlier evaluation of the same checkpoint.
 
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
 Both mixed-only curves include iterations10–90 and are visible by default; use **Mixed-only pair** to compare them with the outcome-only baseline.
-The outcome-only controls are visible by default: **56 groups** (iterations 10–90), **uniform G8** (10–80; training to 90 continues) and **expanded 4,102 tasks** (10–60; this data-pool ablation uses 2,000 additional training tasks). Hover a G8 or 56-group point for its Adam-update count.
+The outcome-only controls are visible by default: **56 groups** (iterations 10–90), **uniform G8** (10–90) and **expanded 4,102 tasks** (10–60; this data-pool ablation uses 2,000 additional training tasks). Hover a G8 or 56-group point for its Adam-update count.
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;
 original bonus starts hidden. The y-axis is fixed at0–60%. Smoothing is off by
