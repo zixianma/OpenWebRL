@@ -205,21 +205,21 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 
 **All three benchmarks** (1,045 tasks; Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o; mean weights each benchmark 1/3, bootstrap resamples tasks within each benchmark):
 
-| Training data | States | Panels | OM2W overall | WebVoyager overall | DeepShop overall | Mean overall | Mean valid-only | − SFT 4B, pp [95% CI] | OM2W + WebVoyager − SFT 4B, pp [95% CI] | − Piotr ARM, pp [95% CI] |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Piotr's panels | 254 | 3,302 | 36.3% | 52.6% | 36.0% | 41.6% | 44.1% | **+5.0 [+1.1, +8.9]** | **+6.5 [+2.9, +10.0]** | −2.6 [−6.3, +1.1] |
-| Piotr's panels | 501 | 6,527 | 35.3% | 54.8% | 36.7% | 42.3% | 44.5% | **+5.6 [+1.7, +9.4]** | **+7.0 [+3.5, +10.6]** | −2.0 [−5.8, +1.8] |
-| Piotr's panels | 1,011 | 13,263 | 35.7% | 53.5% | 31.3% | 40.1% | 42.6% | +3.5 [−0.2, +7.2] | **+6.5 [+3.0, +10.0]** | **−4.1 [−7.6, −0.7]** |
-| Piotr's panels, all | 2,587 | 34,518 | 33.3% | 53.8% | 31.3% | 39.5% | 41.7% | +2.8 [−1.0, +6.6] | **+5.5 [+1.9, +9.1]** | **−4.8 [−8.2, −1.3]** |
-| Piotr's panels, one per state | 1,393 | 1,393 | 32.7% | 53.3% | 28.0% | 38.0% | 40.5% | +1.3 [−2.5, +5.2] | **+5.0 [+1.5, +8.3]** | **−6.3 [−9.9, −2.6]** |
-| *References (run 2026-10-18 to 10-21)* | | |  | | | | | | | |
-| SFT 4B, one sample | — | — | 31.7% | 44.4% | 34.0% | 36.7% | 37.9% | *36.7% (level)* | *38.0% (level)* | **−7.6 [−11.3, −4.0]** |
-| Piotr SelectionARM (4B LoRA) | 2,692 | 35,916 | 39.0% | 52.4% | 41.3% | 44.3% | 46.7% | **+7.6 [+4.0, +11.3]** | **+7.7 [+4.4, +11.1]** | — |
-| Earlier Piotr-data head | 2,692 | 35,916 | 37.7% | 51.3% | 44.0% | 44.3% | 47.0% | **+7.6 [+3.9, +11.3]** | **+6.4 [+3.2, +9.9]** | +0.1 [−3.5, +3.7] |
-| Ours, K = 3 labels | 1,380 | 1,380 | 33.0% | 51.1% | 42.7% | 42.2% | 43.9% | **+5.6 [+2.0, +9.2]** | **+4.0 [+0.8, +7.2]** | −2.0 [−5.5, +1.6] |
-| Ours, observed outcome | 1,380 | 1,380 | 31.3% | 52.3% | 42.0% | 41.9% | 43.5% | **+5.2 [+1.8, +8.6]** | **+3.8 [+0.5, +7.0]** | −2.4 [−6.1, +1.3] |
-| Ours, K = 1 labels | 1,380 | 1,380 | 31.0% | 49.2% | 38.0% | 39.4% | 41.5% | +2.7 [−0.9, +6.4] | +2.1 [−1.1, +5.4] | **−4.8 [−8.6, −1.1]** |
-| Ours, pre-execution labels | 1,380 | 1,380 | 30.0% | 45.7% | 34.0% | 36.6% | 38.3% | −0.1 [−3.7, +3.5] | −0.2 [−3.3, +2.9] | **−7.7 [−11.4, −4.1]** |
+| Training data | States | Panels | OM2W overall | WebVoyager overall | DeepShop overall | Mean overall | Mean valid-only | − SFT 4B, pp [95% CI] | OM2W + WebVoyager − SFT 4B, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Piotr's panels | 254 | 3,302 | 36.3% | 52.6% | 36.0% | 41.6% | 44.1% | **+5.0 [+1.1, +8.9]** | **+6.5 [+2.9, +10.0]** |
+| Piotr's panels | 501 | 6,527 | 35.3% | 54.8% | 36.7% | 42.3% | 44.5% | **+5.6 [+1.7, +9.4]** | **+7.0 [+3.5, +10.6]** |
+| Piotr's panels | 1,011 | 13,263 | 35.7% | 53.5% | 31.3% | 40.1% | 42.6% | +3.5 [−0.2, +7.2] | **+6.5 [+3.0, +10.0]** |
+| Piotr's panels, all | 2,587 | 34,518 | 33.3% | 53.8% | 31.3% | 39.5% | 41.7% | +2.8 [−1.0, +6.6] | **+5.5 [+1.9, +9.1]** |
+| Piotr's panels, one per state | 1,393 | 1,393 | 32.7% | 53.3% | 28.0% | 38.0% | 40.5% | +1.3 [−2.5, +5.2] | **+5.0 [+1.5, +8.3]** |
+| *References (run 2026-10-18 to 10-21)* | | |  | | | | | | |
+| SFT 4B, one sample | — | — | 31.7% | 44.4% | 34.0% | 36.7% | 37.9% | *36.7% (level)* | *38.0% (level)* |
+| Piotr SelectionARM (4B LoRA) | 2,692 | 35,916 | 39.0% | 52.4% | 41.3% | 44.3% | 46.7% | **+7.6 [+4.0, +11.3]** | **+7.7 [+4.4, +11.1]** |
+| Earlier Piotr-data head | 2,692 | 35,916 | 37.7% | 51.3% | 44.0% | 44.3% | 47.0% | **+7.6 [+3.9, +11.3]** | **+6.4 [+3.2, +9.9]** |
+| Ours, K = 3 labels | 1,380 | 1,380 | 33.0% | 51.1% | 42.7% | 42.2% | 43.9% | **+5.6 [+2.0, +9.2]** | **+4.0 [+0.8, +7.2]** |
+| Ours, observed outcome | 1,380 | 1,380 | 31.3% | 52.3% | 42.0% | 41.9% | 43.5% | **+5.2 [+1.8, +8.6]** | **+3.8 [+0.5, +7.0]** |
+| Ours, K = 1 labels | 1,380 | 1,380 | 31.0% | 49.2% | 38.0% | 39.4% | 41.5% | +2.7 [−0.9, +6.4] | +2.1 [−1.1, +5.4] |
+| Ours, pre-execution labels | 1,380 | 1,380 | 30.0% | 45.7% | 34.0% | 36.6% | 38.3% | −0.1 [−3.7, +3.5] | −0.2 [−3.3, +2.9] |
 
 - **Columns.** OM2W = Online-Mind2Web, 300 tasks, gpt-5.6-terra judge. "Overall" counts invalid episodes as failures; differences are paired by task on the overall rate (95% bootstrap). The earlier Piotr-data head trained on all 2,692 of Piotr's states (no test-task exclusion; [recipe](#selection-head-sft-actions-20261021)). "Ours" rows are the [label ablation](#selection-head-sft-actions-20261021) heads; their offline numbers are the same fixed-five metric.
 - **SFT 4B row:** the two difference columns give its own success rate (three-benchmark mean and Online-Mind2Web + WebVoyager mean, overall), the level every other row is compared with.
