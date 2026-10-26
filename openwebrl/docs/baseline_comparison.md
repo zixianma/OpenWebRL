@@ -1,9 +1,9 @@
 # Baseline comparison: WebArbiter, WebShepherd and Piotr SelectionARM
 
-Results as of October 25, 2026. Actor: **gpt-4o-2024-08-06** in every cell (gpt-4o-2024-05-13 is retired). Methods select among actor-proposed actions at each step: *no search* executes the actor's action; *random-of-five* picks uniformly among five candidates; *WebArbiter-7B*, *WebShepherd-8B* and *Piotr SelectionARM* are the released selectors.
+Results as of October 26, 2026. Actor: **gpt-4o-2024-08-06** in every cell (gpt-4o-2024-05-13 is retired). Methods select among actor-proposed actions at each step: *no search* executes the actor's action; *random-of-five* picks uniformly among five candidates; *WebArbiter-7B*, *WebShepherd-8B* and *Piotr SelectionARM* are the released selectors.
 
 **Takeaways.**
-- **Online-Mind2Web (253 tasks with all five methods valid):** no selector beats no search. Piotr SelectionARM +3.2 pp and WebArbiter −1.2 pp are within noise; WebShepherd (−13.8 pp) and random-of-five (−11.9 pp) are significantly worse.
+- **Online-Mind2Web (284 tasks with all five methods valid):** no selector beats no search. Piotr SelectionARM +2.5 pp and WebArbiter −2.8 pp are within noise; WebShepherd (−14.8 pp) and random-of-five (−12.0 pp) are significantly worse.
 - **WebArena-Lite Reddit (18 tasks):** all three methods succeed on 1–2 tasks, far below the published WebArbiter Table 5 (28.6 / 52.6 / 47.6 %). Differences between methods are within noise.
 
 ## Online-Mind2Web, 300 tasks
@@ -13,15 +13,15 @@ Judge: gpt-5.6-terra (Online-Mind2Web terminal-success judge; o4-mini is retired
 <a id="om2w-paired-20261025"></a>
 ### Paired comparison with no search
 
-The paired set is the 253 tasks on which all five methods produced a valid episode. Difference = method minus no-search success rate on those tasks; 95% CI is a paired-proportion normal interval; p is the two-sided sign test on discordant tasks.
+The paired set is the 284 tasks on which all five methods produced a valid episode. Difference = method minus no-search success rate on those tasks; 95% CI is a paired-proportion normal interval; p is the two-sided sign test on discordant tasks.
 
 | Method | Paired tasks | Successes | Success (%) | Method-only wins | No-search-only wins | Difference (pp) | 95% CI (pp) | Sign-test p |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| No search | 253 | 70 | 27.7 | – | – | – | – | – |
-| Piotr SelectionARM | 253 | 78 | 30.8 | 34 | 26 | +3.2 | −2.8 to +9.2 | 0.37 |
-| WebArbiter-7B | 253 | 67 | 26.5 | 28 | 31 | −1.2 | −7.1 to +4.8 | 0.79 |
-| Random-of-five | 253 | 40 | 15.8 | 12 | 42 | −11.9 | −17.4 to −6.4 | 0.00005 |
-| WebShepherd-8B | 253 | 35 | 13.8 | 15 | 50 | −13.8 | −19.8 to −7.8 | 0.00002 |
+| No search | 284 | 78 | 27.5 | – | – | – | – | – |
+| Piotr SelectionARM | 284 | 85 | 29.9 | 37 | 30 | +2.5 | −3.2 to +8.1 | 0.46 |
+| WebArbiter-7B | 284 | 70 | 24.6 | 29 | 37 | −2.8 | −8.4 to +2.8 | 0.39 |
+| Random-of-five | 284 | 44 | 15.5 | 15 | 49 | −12.0 | −17.3 to −6.6 | 0.00002 |
+| WebShepherd-8B | 284 | 36 | 12.7 | 16 | 58 | −14.8 | −20.5 to −9.1 | 0.000001 |
 
 <a id="om2w-per-method-20261025"></a>
 ### Per-method rates on all 300 tasks
@@ -30,16 +30,16 @@ Valid-only rate = successes / valid cells (95% Wilson interval). The last column
 
 | Method | Valid cells | Invalid cells | Successes | Valid-only success (%) | 95% CI (%) | Invalid as failure (%) |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| No search | 287 | 13 | 77 | 26.8 | 22.0–32.2 | 25.7 |
-| Piotr SelectionARM | 273 | 27 | 81 | 29.7 | 24.6–35.3 | 27.0 |
-| WebArbiter-7B | 287 | 13 | 71 | 24.7 | 20.1–30.0 | 23.7 |
-| Random-of-five | 283 | 17 | 43 | 15.2 | 11.5–19.8 | 14.3 |
-| WebShepherd-8B | 288 | 12 | 36 | 12.5 | 9.2–16.8 | 12.0 |
+| No search | 294 | 6 | 79 | 26.9 | 22.1–32.2 | 26.3 |
+| Piotr SelectionARM | 288 | 12 | 85 | 29.5 | 24.5–35.0 | 28.3 |
+| WebArbiter-7B | 294 | 6 | 71 | 24.1 | 19.6–29.4 | 23.7 |
+| Random-of-five | 292 | 8 | 44 | 15.1 | 11.4–19.6 | 14.7 |
+| WebShepherd-8B | 292 | 8 | 36 | 12.3 | 9.0–16.6 | 12.0 |
 
 <details><summary>Retries, invalid cells and provenance</summary>
 
-- **Retries.** 94 cells with no valid first attempt received one labelled second attempt (`rerun300-j{1,2,3}-retry1-vlm`); 19 became valid. A retry replaces only an invalid first attempt; valid first attempts are never rerun. The paired set is 236 tasks without retries and 253 with them. Retried / recovered by method: no search 14 / 1, random-of-five 20 / 3, WebArbiter 12 / 0, Piotr 25 / 4, WebShepherd 23 / 11.
-- **Invalid cells (82).** All 41 `BrokerError` cells are retry attempts rejected with OpenAI HTTP 429 `organization_spend_limit_exceeded` rejections that began at 13:52 PDT on October 25 and ended all three retry jobs; these cells could be retried after the organization spend limit is raised. `Error` cells are browser/navigation failures, including four theweathernetwork.com tasks whose start page redirect-loops for every method. Piotr's `EvaluationNotReady`/`ValueError` cells come from its released prompt requiring five admissible original candidates.
+- **Retries.** 96 cells with no valid first attempt received labelled retries: a first round (`rerun300-j{1,2,3}-retry1-vlm`), ended early at 13:52 PDT on October 25 when OpenAI returned HTTP 429 `organization_spend_limit_exceeded`, and a second round (`retry2`) after the limit was lifted; 61 became valid. A retry replaces only an invalid earlier attempt; valid attempts are never rerun. The paired set is 236 tasks without retries and 284 with them. Retried / recovered by method: no search 14 / 8, random-of-five 20 / 12, WebArbiter 12 / 7, Piotr 27 / 19, WebShepherd 23 / 15. Five Piotr/WebArbiter retry2 cells were not reached before the job's time limit.
+- **Invalid cells (40).** `Error` cells (5 per method) are browser/navigation failures, mostly theweathernetwork.com tasks whose start page redirect-loops for every method. Piotr's `EvaluationNotReady`/`ValueError` cells come from its released prompt requiring five admissible original candidates; other `ValueError` cells are action-parse failures.
 - **Comparability.** Retries ran hours after first attempts on live websites, so a retried cell may see a different site state than the other methods on that task. Earlier cohorts with the gpt-4o-2024-05-13 actor or the o4-mini judge are not pooled.
 - **Source.** `/gpfs/scrubbed/zixianma/openwebrl-runtime/webprm-om2w-table5-20261012/rerun300-0806-20261023/final_table.py` → `final-table.json` (pools the rerun300 stage, completion and retry packages; asserts one primary attempt per cell).
 </details>
