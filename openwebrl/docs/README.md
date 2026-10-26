@@ -13,7 +13,7 @@
 
 [API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
-[Offline selector evaluation: terminal-success notation, joint K=5 teacher inputs and train/held-out rollout split (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
+[Offline selector evaluation: compact data collection and teacher labeling schematic, explicit rollout index and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 
 [Full300 GPT-6 Sol versus Luna N3/N5: 900 audited dispositions; primary new200 paired success, all-call cost, latency, tokens and browser work](ARM_INFERENCE_SCALING.md#sol6-luna-browsercode300-20261018).
 

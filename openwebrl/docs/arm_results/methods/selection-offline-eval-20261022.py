@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
+from matplotlib.font_manager import FontProperties
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
 PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#ED7D00", "#2164A5"
@@ -40,7 +41,7 @@ plt.rcParams.update({
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })
-W, H = 7.0, 4.92
+W, H = 7.0, 4.22
 fig = plt.figure(figsize=(W, H))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set(xlim=(0, W), ylim=(0, H))
@@ -87,35 +88,35 @@ label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 
 # (a) The exact original 5 x 8 outcomes; labels never use the blue columns.
-text(0.12, 4.71, "(a)  Rollouts", size=8.5, weight="bold")
+text(0.12, 4.06, "a)  Data collection", size=8.5, weight="bold")
 xs = [3.76 + 0.22 * d for d in range(8)]
 trajectory_x = [1.76 + 0.48 * k for k in range(4)]
-ys = [4.04 - 0.22 * i for i in range(5)]
-text(4.53, 4.71, r"$R^{i,j}\in\{0,1\}$", size=8, color=MUTED, ha="center")
+ys = [3.43 - 0.21 * i for i in range(5)]
+text(4.53, 4.06, r"$R^{i,j}\in\{0,1\}$ · $j$: rollout index", size=7, color=MUTED, ha="center")
 y_low, y_high = ys[-1] - 0.10, ys[0] + 0.10
 ax.add_patch(Rectangle((xs[0] - 0.11, y_low), 3 * 0.22, y_high - y_low,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((xs[3] - 0.11, y_low), 5 * 0.22, y_high - y_low,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 for first, last, title, color in ((0, 2, "Train labels", OUTCOME), (3, 7, "Held-out eval", HELD)):
-    rule(xs[first] - 0.105, xs[last] + 0.105, 4.36, color, 1.1)
-    text((xs[first] + xs[last]) / 2, 4.48, title, color=color, ha="center")
+    rule(xs[first] - 0.105, xs[last] + 0.105, 3.74, color, 1.1)
+    text((xs[first] + xs[last]) / 2, 3.85, title, color=color, ha="center")
     for d in range(first, last + 1):
-        text(xs[d], 4.26, str(d), color=ROLLOUT if d == 0 else MUTED,
+        text(xs[d], 3.65, str(d), color=ROLLOUT if d == 0 else MUTED,
              weight="bold" if d == 0 else "normal", ha="center")
-text(1.105, 4.26, r"$K=5$ actions", color=MUTED, ha="center")
-text(6.00, 4.48, "Train %", color=OUTCOME, ha="center")
-text(6.00, 4.26, "0–2", color=OUTCOME, ha="center")
-text(6.74, 4.48, "Eval %", color=HELD, ha="center")
-text(6.74, 4.26, "3–7", color=HELD, ha="center")
+text(1.105, 3.65, r"$K=5$ actions", color=MUTED, ha="center")
+text(6.00, 3.85, "Train %", color=OUTCOME, ha="center")
+text(6.00, 3.65, "0–2", color=OUTCOME, ha="center")
+text(6.74, 3.85, "Eval %", color=HELD, ha="center")
+text(6.74, 3.65, "3–7", color=HELD, ha="center")
 mid = sum(ys) / len(ys)
 box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
 text(0.345, mid, r"$s_t$", size=9, ha="center")
 # Spell out rollout 0's states for candidates 1 and 5; ellipses omit 2--4.
 # Every candidate and all eight terminal outcomes remain in the matrix.
-text(2.63, 4.48, "Rollout 0", color=ROLLOUT, weight="bold", ha="center")
+text(2.63, 3.85, "Rollout 0", color=ROLLOUT, weight="bold", ha="center")
 for k in range(1, 4):
-    text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 4.26,
+    text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 3.65,
          rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
 # Match the picked candidates to the source colors in panel (b), directly.
 pick_colors = {}
@@ -157,44 +158,43 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     text(6.00, y, percent(label_rates[i]), color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
     text(6.74, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
-for x, fill, label in ((0.17, SUCCESS, "Success"), (0.91, FAILURE, "Failure")):
-    ax.add_patch(Circle((x, 2.98), 0.025, facecolor=fill,
-                       edgecolor=fill, linewidth=0.6))
-    text(x + 0.08, 2.98, label, color=MUTED)
-
-
-
-
-# Explicit method legend for candidate pick markers and teacher lanes.
+# One right-aligned legend combines status and method keys.
 METHOD_COLORS = (("Pre-exec", PRE), ("Post-exec", POST),
                  ("Lookahead H = 3", LOOK), ("Oracle (0–2)", OUTCOME))
-for x, (label, color) in zip((0.17, 1.71, 3.34, 5.55), METHOD_COLORS):
-    ax.add_patch(Circle((x, 2.74), 0.032, facecolor=color,
+LEGEND_ITEMS = (("Success", SUCCESS), ("Failure", FAILURE)) + METHOD_COLORS
+renderer = fig.canvas.get_renderer()
+legend_right = 6.97
+for label, color in reversed(LEGEND_ITEMS):
+    label_width = renderer.get_text_width_height_descent(
+        label, FontProperties(size=7), ismath=False)[0] / fig.dpi
+    marker_x = legend_right - label_width - 0.08
+    ax.add_patch(Circle((marker_x, 2.32), 0.027, facecolor=color,
                        edgecolor="white", linewidth=0.4, zorder=3))
-    text(x + 0.09, 2.74, label, color=color)
+    text(legend_right, 2.32, label, color=color, ha="right")
+    legend_right = marker_x - 0.19
 
 # (b) Aligned input -> teacher -> chosen action lanes. All teachers compare
 # all five candidates; the indexed trajectory below is supplied for EACH one.
-text(0.12, 2.50, "(b)  Selection", size=8.5, weight="bold")
+text(0.12, 2.10, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
 # A neutral gray context box fans into all three teacher inputs. Junction dots
 # explicitly join the shared context and each complete candidate/evidence set.
-box(0.12, 2.145, 4.23, 0.27, edge=SHARED, fill=SHARED_BG, lw=0.95)
-text(2.235, 2.28, r"Shared: task · history · $s_t$ · $K=5$ actions", color=SHARED, ha="center")
+box(0.12, 1.745, 4.23, 0.27, edge=SHARED, fill=SHARED_BG, lw=0.95)
+text(2.235, 1.88, r"Shared: task · history · $s_t$ · $K=5$ actions", color=SHARED, ha="center")
 shared_x = 4.68
-ax.plot([4.35, shared_x, shared_x], [2.28, 2.28, 0.92],
+ax.plot([4.35, shared_x, shared_x], [1.88, 1.88, 0.63],
         color=SHARED, linewidth=0.95, zorder=1)
-text(1.43, 2.03, "Candidates + rollout 0", color=MUTED)
-text(6.035, 2.03, "Pick", color=MUTED, ha="center")
-text(6.74, 2.03, "Eval %", color=HELD, ha="center")
-text(6.74, 1.87, "3–7", color=HELD, ha="center")
-ax.add_patch(Rectangle((6.49, 0.20), 0.48, 1.63,
+text(1.43, 1.62, "Candidates + rollout 0", color=MUTED)
+text(6.035, 1.62, "Pick", color=MUTED, ha="center")
+text(6.74, 1.62, "Eval %", color=HELD, ha="center")
+text(6.74, 1.46, "3–7", color=HELD, ha="center")
+ax.add_patch(Rectangle((6.49, 0.07), 0.48, 1.38,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 future_x = [2.25 + 0.55 * k for k in range(4)]
 
 
-lane_rows = ((1.68, "Pre-execution", PRE, 0),
-             (1.30, "Post-execution", POST, 1),
-             (0.92, "Lookahead K = 3", LOOK, 4))
+lane_rows = ((1.31, "Pre-execution", PRE, 0),
+             (0.97, "Post-execution", POST, 1),
+             (0.63, "Lookahead K = 3", LOOK, 4))
 for y, label, color, n_states in lane_rows:
     display_label = {"Pre-execution": "Pre-exec", "Post-execution": "Post-exec",
                      "Lookahead K = 3": "Lookahead H = 3"}[label]
@@ -231,7 +231,7 @@ for y, label, color, n_states in lane_rows:
     arrow(6.34, y, 6.51, y, color=HELD)
     text(6.74, y, f"{100 * held_rates[pick]:.0f}%", color=HELD, weight="bold", ha="center")
 # Outcome-derived labels are a separate operation, not a Luna response.
-y = 0.36
+y = 0.21
 text(0.12, y, "Oracle", color=OUTCOME)
 ax.add_patch(Rectangle((1.40, y - 0.12), 2.86, 0.24,
                        facecolor=LABEL_BG, edgecolor="none", zorder=0))
