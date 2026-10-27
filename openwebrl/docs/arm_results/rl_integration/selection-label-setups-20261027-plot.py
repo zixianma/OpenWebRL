@@ -4,7 +4,7 @@
 (1) Offline, training states: the 1,380 SFT-action branch states the heads were trained on. Labels came from rollouts 0-2;
     each state's first five SFT proposals (duplicates kept) are scored on held-out rollouts 3-7.
 (2) Offline, held-out states: 345 test states (86 tasks), same five proposals and rollouts 3-7.
-    Teacher = the label's argmax among the five (ties averaged); head = mean of three seeds' picks
+    Teacher = the label's argmax among the five (ties averaged); head = the seed-0 head, the one run live
     (selection-label-same-state-20261027.json).
 (3) Live: the seed-0 head, three-benchmark mean overall success (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and
     DeepShop 150 by GPT-4o) (selection-data-scale-20261023.json; post-execution from selection-label-stages-20261027.json).
@@ -62,7 +62,7 @@ for ax, (title, split, base) in zip(axes, PANELS):
 axes[0].set_ylim(-4.5, 10); axes[0].set_ylabel("Gain over one SFT 4B actor sample (pp)", fontsize=9)
 handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewidth=1.4,
                   markerfacecolor="#555555" if f else "white") for m, f in (("o", False), ("s", True), ("D", True))]
-fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (mean of 3 seeds)", "Head, live (seed 0)"],
+fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (seed 0)", "Same head, live"],
            frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.06))
 fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on rollouts 3–7 (labels used rollouts 0–2 of the "
          "training states). Bars: paired 95% intervals (bootstrap over tasks). Each panel's baseline is one SFT sample on "

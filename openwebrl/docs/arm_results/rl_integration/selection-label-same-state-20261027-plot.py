@@ -4,7 +4,7 @@ SFT 4B actor at five points.
 
 Offline (selection-label-same-state-20261027.json): SFT-action branch states, each state's first five SFT proposals
 (duplicates kept) scored on held-out draws 3-7.
-  - Teacher: the label's argmax among the five (ties averaged). Head: the 22.6 M head, mean of three seeds' picks.
+  - Teacher: the label's argmax among the five (ties averaged). Head: the 22.6 M seed-0 head (the one run live).
   - Train states: the 1,380 states the heads were trained on (labels came from draws 0-2, so draws 3-7 are still held out).
   - Test states: 345 held-out states (86 tasks).
 Live: the seed-0 head, three-benchmark mean overall success (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and
@@ -70,8 +70,8 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6, markeredgewidt
                   markerfacecolor="#555555" if f else "white") for _, m, f, _ in MARK]
 ax.legend(handles, [l for l, *_ in MARK], frameon=False, fontsize=7.3, loc="upper center", bbox_to_anchor=(0.5, -0.15),
           ncol=3, columnspacing=1.2)
-fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, scored on held-out draws 3-7; head = mean of 3 seeds. "
-         "Live (shaded): seed-0 head. Bars: paired 95% intervals (bootstrap over tasks).\nEach point is relative to one SFT "
+fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, scored on held-out draws 3-7; head = seed 0, as live. "
+         "Live: shaded. Bars: paired 95% intervals (bootstrap over tasks).\nEach point is relative to one SFT "
          f"sample on its own states or tasks (train {S['train']['sft_sample']:.1f}%, test {S['test']['sft_sample']:.1f}%, "
          f"live 3-benchmark mean {LIVE['SFT 4B']['mean_overall']:.1f}%).", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.06, 1, 1))
