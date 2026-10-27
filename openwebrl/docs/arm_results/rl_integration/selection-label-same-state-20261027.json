@@ -1,0 +1,169 @@
+{
+ "note": "Same-state scoring (scripts/score_label_stages.py, arm-selection-head d0154b8; runtime selection-head-20261008/label-stages-20261027/stages-post.json, job 392770): on the SFT-action branch states, each state's first five SFT proposals (duplicates kept) scored on held-out draws 3-7. teacher = argmax label among the five (ties averaged); head = mean of three seeds' fixed-five picks; minus one SFT sample, [point, lo, hi] pp, paired 95% task-clustered bootstrap. Train = the 1,380 states the heads were trained on (labels used draws 0-2 only); test = 345 held-out states of 86 tasks with a target from every source.",
+ "splits": {
+  "train": {
+   "states": 1380,
+   "tasks": 347
+  },
+  "test": {
+   "states": 345,
+   "tasks": 86
+  }
+ },
+ "train": {
+  "sft_sample": 39.6,
+  "outcome": {
+   "teacher": 42.7,
+   "teacher_minus_sft": [
+    3.1,
+    2.29,
+    4.04
+   ],
+   "head": 42.68,
+   "seeds": 3,
+   "head_minus_sft": [
+    3.08,
+    2.19,
+    4.06
+   ]
+  },
+  "teacher_k3": {
+   "teacher": 42.45,
+   "teacher_minus_sft": [
+    2.85,
+    1.98,
+    3.76
+   ],
+   "head": 42.54,
+   "seeds": 3,
+   "head_minus_sft": [
+    2.95,
+    2.07,
+    3.87
+   ]
+  },
+  "teacher_k1": {
+   "teacher": 42.67,
+   "teacher_minus_sft": [
+    3.08,
+    2.21,
+    4.03
+   ],
+   "head": 42.57,
+   "seeds": 3,
+   "head_minus_sft": [
+    2.97,
+    2.1,
+    3.92
+   ]
+  },
+  "teacher_pre": {
+   "teacher": 41.05,
+   "teacher_minus_sft": [
+    1.45,
+    0.71,
+    2.21
+   ],
+   "head": 41.14,
+   "seeds": 3,
+   "head_minus_sft": [
+    1.54,
+    0.75,
+    2.35
+   ]
+  },
+  "teacher_post": {
+   "teacher": 41.79,
+   "teacher_minus_sft": [
+    2.19,
+    1.48,
+    2.94
+   ],
+   "head": 41.69,
+   "seeds": 3,
+   "head_minus_sft": [
+    2.1,
+    1.38,
+    2.86
+   ]
+  }
+ },
+ "test": {
+  "sft_sample": 35.39,
+  "outcome": {
+   "teacher": 40.61,
+   "teacher_minus_sft": [
+    5.22,
+    3.43,
+    7.26
+   ],
+   "head": 35.32,
+   "seeds": 3,
+   "head_minus_sft": [
+    -0.07,
+    -1.84,
+    1.67
+   ]
+  },
+  "teacher_k3": {
+   "teacher": 39.89,
+   "teacher_minus_sft": [
+    4.5,
+    2.57,
+    6.7
+   ],
+   "head": 37.21,
+   "seeds": 3,
+   "head_minus_sft": [
+    1.82,
+    0.24,
+    3.58
+   ]
+  },
+  "teacher_k1": {
+   "teacher": 40.12,
+   "teacher_minus_sft": [
+    4.73,
+    2.6,
+    7.14
+   ],
+   "head": 37.35,
+   "seeds": 3,
+   "head_minus_sft": [
+    1.96,
+    0.53,
+    3.51
+   ]
+  },
+  "teacher_pre": {
+   "teacher": 37.56,
+   "teacher_minus_sft": [
+    2.17,
+    0.57,
+    3.95
+   ],
+   "head": 36.37,
+   "seeds": 3,
+   "head_minus_sft": [
+    0.98,
+    -0.6,
+    2.64
+   ]
+  },
+  "teacher_post": {
+   "teacher": 40.25,
+   "teacher_minus_sft": [
+    4.86,
+    2.83,
+    7.19
+   ],
+   "head": 37.24,
+   "seeds": 3,
+   "head_minus_sft": [
+    1.85,
+    0.52,
+    3.24
+   ]
+  }
+ }
+}
