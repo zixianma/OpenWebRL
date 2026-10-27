@@ -1,0 +1,102 @@
+{
+  "status": "preliminary",
+  "snapshot_utc": "2026-10-27T22:08:52.364258+00:00",
+  "harness": "Native CUAWright",
+  "benchmark": "Online-Mind2Web",
+  "fresh_common_recorded_tasks": 185,
+  "fresh_common_valid_tasks": 128,
+  "tradeoffs": {
+    "luna_single_high": {
+      "tasks": 128,
+      "successes": 91,
+      "success_rate": 0.7109375,
+      "mean_model_usd_per_task": 0.09348561933593746,
+      "mean_task_seconds": 785.4396724291146,
+      "mean_browser_steps": 30.4609375
+    },
+    "parallel3_select_high": {
+      "tasks": 128,
+      "successes": 88,
+      "success_rate": 0.6875,
+      "mean_model_usd_per_task": 0.26980851617187507,
+      "mean_task_seconds": 1225.2140383087099,
+      "mean_browser_steps": 29.96875
+    },
+    "parallel5_select_high": {
+      "tasks": 128,
+      "successes": 96,
+      "success_rate": 0.75,
+      "mean_model_usd_per_task": 0.28760545519531255,
+      "mean_task_seconds": 1200.2540799491107,
+      "mean_browser_steps": 28.3828125
+    },
+    "serial_high": {
+      "tasks": 128,
+      "successes": 99,
+      "success_rate": 0.7734375,
+      "mean_model_usd_per_task": 1.2531928343749998,
+      "mean_task_seconds": 515.2630240675062,
+      "mean_browser_steps": 35.046875
+    }
+  },
+  "latest_recorded": {
+    "luna_single_high": {
+      "tasks": 300,
+      "successes": 189,
+      "success_rate": 0.63,
+      "recorded": 300,
+      "valid": 271
+    },
+    "parallel3_select_high": {
+      "tasks": 300,
+      "successes": 192,
+      "success_rate": 0.64,
+      "recorded": 300,
+      "valid": 270
+    },
+    "parallel5_select_high": {
+      "tasks": 277,
+      "successes": 183,
+      "success_rate": 0.6606498194945848,
+      "recorded": 277,
+      "valid": 247
+    },
+    "serial_high": {
+      "tasks": 300,
+      "successes": 222,
+      "success_rate": 0.74,
+      "recorded": 300,
+      "valid": 286
+    }
+  },
+  "matched_fresh_recorded": {
+    "luna_single_high": {
+      "tasks": 185,
+      "successes": 112,
+      "success_rate": 0.6054054054054054
+    },
+    "parallel3_select_high": {
+      "tasks": 185,
+      "successes": 114,
+      "success_rate": 0.6162162162162163
+    },
+    "parallel5_select_high": {
+      "tasks": 185,
+      "successes": 119,
+      "success_rate": 0.6432432432432432
+    },
+    "serial_high": {
+      "tasks": 185,
+      "successes": 131,
+      "success_rate": 0.7081081081081081
+    }
+  },
+  "evidence_sha256": "6267c2d036baee73f416dbf1b983c8dda9ffd3a3b4b2faecf67c2d3e83e8bb28",
+  "notes": [
+    "Provisional fixed-cutoff snapshot; not final audited campaign statistics.",
+    "Tradeoffs use the SAME fresh common-valid tasks across all four methods; success denominators differ from the185 matched recorded-task comparison.",
+    "Native model output budget20000tokens/100decisions; BrowserCode historical series uses12288tokens/30decisions and three-benchmark means.",
+    "Model dollars are conservative all-attempt MODEL-pool charges including helpers/counters/cache/unknown reserves; external judge excluded. Native seconds exclude external and saved-grade judging.",
+    "N5 includes two fresh tasks run with singleton admission within unchanged capacity2 after OOM; collection-window/contention differences limit latency comparison."
+  ]
+}

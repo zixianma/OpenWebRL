@@ -1,14 +1,24 @@
 {
   "aggregate_sha256": "ea2aa9c9b2e8cde6a6684fe312c8572a71a041f62fb07ed41522cdedf2fa062b",
-  "benchmark_weighting": "unweighted arithmetic mean over three benchmarks",
-  "cohort": "four-method common-valid within each benchmark",
-  "cost_scope": "model USD/task, including valid failures; judge excluded",
-  "latency_scope": "task seconds excluding judge-only work",
-  "browser_steps_scope": "selected BrowserCode batches per task, averaged equally across benchmarks",
-  "benchmark_common_valid_tasks": {
-    "Online-Mind2Web": 254,
-    "WebVoyager": 489,
-    "DeepShop": 140
+  "native_preliminary_aggregate_sha256": "23be2cb4c59a976094f7f89e22d34f1627cc861fd2f21ad4126b3f9e34159bc2",
+  "browsercode": {
+    "benchmark_weighting": "unweighted arithmetic mean over three benchmarks",
+    "cohort": "four-method common-valid within each benchmark",
+    "benchmark_common_valid_tasks": {
+      "Online-Mind2Web": 254,
+      "WebVoyager": 489,
+      "DeepShop": 140
+    }
   },
+  "native": {
+    "benchmark": "Online-Mind2Web only",
+    "status": "preliminary, incomplete and not final audited",
+    "scatter_fresh_common_valid_tasks": 128,
+    "snapshot_utc": "2026-10-27T22:08:52.364258+00:00"
+  },
+  "cost_scope": "all-attempt model USD/task including helpers and conservative unknown reserves; judge excluded",
+  "latency_scope": "harness-specific native task seconds excluding external judge and saved-grade recovery",
+  "browser_steps_scope": "recorded selected browser batches, not decisions or candidate proposals",
+  "comparability": "Different benchmarks, limits, harnesses and collection windows; descriptive comparison only",
   "uncertainty": "Point estimates only; no uncertainty inferred from aggregate data."
 }
