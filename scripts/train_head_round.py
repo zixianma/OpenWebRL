@@ -4,8 +4,8 @@
 One fixed task-grouped split (actions.jsonl `split`), one seed, fixed epochs (no validation; test labels and outcomes
 are never seen). Every source trains on the same states: those with a target from every source in --common-sources.
 
-Label sources (one target per action): teacher_pre / teacher_k1 / teacher_k3 = Luna vote share over the state's
-actions (judgments under --labels/<pre|k1|k3>); outcome = the action(s) with the best observed success on draws 0-2,
+Label sources (one target per action): teacher_pre / teacher_post / teacher_k1 / teacher_k3 = Luna vote share over the
+state's actions (judgments under --labels/<pre|post|k1|k3>; post = after execution, draw-0 immediate result only); outcome = the action(s) with the best observed success on draws 0-2,
 valid draws only, ties split. Held-out draws 3-7 only score. Outcome variants on the same draws 0-2: outcome_soft =
 softmax(rate / --tau) over actions; outcome_rate = each action's rate and valid-draw count, trained with --loss advmse
 (centred score regresses rate minus the state's mean rate) or --loss binom (sigmoid(score) fits the rate, weighted by
@@ -41,7 +41,7 @@ import sys
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-SOURCES = {"teacher_pre": "pre", "teacher_k1": "k1", "teacher_k3": "k3"}
+SOURCES = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "k1", "teacher_k3": "k3"}
 
 
 def load_actions(data):
