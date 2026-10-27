@@ -1,0 +1,48 @@
+{
+ "method": "mixed-only action-only + relaxed B (ARM term b only; outcome advantage dropped)",
+ "recipe": {
+  "ordinary_groups": 48,
+  "failure_groups": 0,
+  "candidate_gate": "min2",
+  "credit_assignment": "response_index",
+  "k": 5,
+  "scored_fraction": 0.2,
+  "beta": 0.5,
+  "advantage_mode": "action_only",
+  "advantage": "0.5*u per turn (no outcome advantage A); outcomes still select the 48 mixed groups via the native filter",
+  "initial_model": "OpenWebRL-4B-SFT",
+  "fresh_iteration0": true
+ },
+ "iteration": 40,
+ "job": "385788",
+ "full300": {
+  "tasks": 300,
+  "successes": 37,
+  "valid": 245,
+  "invalid": 55,
+  "overall": 0.12333333333333334,
+  "valid_only": 0.1510204081632653,
+  "saved_rollouts": 300,
+  "saved_verdicts": 300,
+  "mean_turns": 6.54,
+  "rollouts": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-action-only-iter40-385788/rollouts",
+  "checkpoint": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-action-only-385788-iter40/runtime/iter_0000039",
+  "verified_complete": true,
+  "root": "/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/arm-mixed-action-only-iter40-385788"
+ },
+ "checkpoint_adam_updates": 494,
+ "evaluation_verified_complete": true,
+ "protocol": {
+  "browser": "local",
+  "judge": "gpt-4.1",
+  "prompt": "action_history",
+  "temperature": 0,
+  "max_response_tokens": 4096,
+  "max_browser_turns": 30
+ },
+ "wandb_project": "openwebrl-evals",
+ "wandb_url": "https://wandb.ai/zixianma/openwebrl-evals/runs/arm-mixed-action-only-iter40-385788",
+ "audit_scope": "Recounted 2026-10-26 from the 300 saved per-task records (300 unique tasks, 300 rollout payloads, judge gpt-4.1/action_history); matches the controller evaluation record.",
+ "training_stopped": true,
+ "stop_rule": "User rule 2026-10-26: stop after iteration 40 if eval40 < eval30 (39/300); 37/300 triggered it. Iteration-40 checkpoint is the final durable checkpoint."
+}

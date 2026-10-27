@@ -24,6 +24,7 @@ SPECS = [
     ('gate_c', 'Gate C · duplicate-aware credit', '#a16207', False, 'gate-c'),
     ('mixed_bonus', 'Mixed-only bonus · relaxed B', '#0891b2', True, 'mixed-bonus'),
     ('mixed_reweight', 'Mixed-only reweight · relaxed B', '#db2777', True, 'mixed-reweight'),
+    ('mixed_action_only', 'Mixed-only action-only · relaxed B (ARM term only)', '#4f46e5', True, 'mixed-action-only'),
     ('original', 'Original bonus', '#64748b', False, None),
     ('failure_beta1', 'Failure bonus β = 1', '#be123c', False, 'failure-beta1'),
     ('failure_coverage', 'Failure sampling 40%', '#57534e', False, 'failure-coverage'),

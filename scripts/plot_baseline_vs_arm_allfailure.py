@@ -35,8 +35,8 @@ ax.plot(add_i,[100*x/y for x,y in zip(add_s,add_v)],marker='s',lw=2.0,ls=':',col
 ax.plot(gate_b_i,[100*r['successes']/r['tasks'] for r in gate_b_results],marker='o',lw=2.2,ls='-.',color='#7e22ce',label='Gate B (relaxed gate) · overall')
 ax.plot(gate_b_i,[100*r['successes']/r['valid'] for r in gate_b_results],marker='s',lw=2.0,ls='-.',color='#c026d3',label='Gate B (relaxed gate) · valid-only')
 # Use the same audited counts and colors as the interactive companion. Each
-# mixed-only lineage stops at its last evaluated checkpoint, currently90.
-mixed_styles = {'mixed_bonus': (0, (5, 2)), 'mixed_reweight': (0, (3, 1, 1, 1))}
+# mixed-only lineage stops at its last evaluated checkpoint (pair: 90; action-only: 40, stopped).
+mixed_styles = {'mixed_bonus': (0, (5, 2)), 'mixed_reweight': (0, (3, 1, 1, 1)), 'mixed_action_only': (0, (1, 1))}
 series_data = build_data()['series']
 # Outcome-only controls on the original pool: overall only, thin, to keep the figure readable.
 for series in series_data:
@@ -76,10 +76,10 @@ for key,label,color,offset in [('outcome48','48 groups (baseline)','#2563eb',-8)
     position=ax.transData+ScaledTranslation(offset/72,0,fig.dpi_scale_trans)
     ax.scatter([90],[r['overall_mean_pct']],transform=position,marker='X',s=95,color=color,edgecolors='white',linewidths=.8,zorder=8,
                label=f'Matched local 3-repeat {label} · overall')
-ax.text(10,21,'Iteration-90 stealth (diamonds) and matched local 3-repeat (X) symbols offset horizontally for visibility.',fontsize=8,color='#64748b')
+ax.text(10,11,'Iteration-90 stealth (diamonds) and matched local 3-repeat (X) symbols offset horizontally for visibility.',fontsize=8,color='#64748b')
 ax.set_xlabel('Checkpoint after training iteration'); ax.set_ylabel('Success rate (%)')
 ax.set_title('Outcome-only baseline vs ARM variants · 300 tasks\nLocal: GPT-4.1, T0 | Stealth: o4-mini, T0.6')
-ax.set_xlim(8,102); ax.set_ylim(20,66); ax.set_xticks([10,20,30,40,50,60,70,80,90,100])
+ax.set_xlim(8,102); ax.set_ylim(10,66); ax.set_xticks([10,20,30,40,50,60,70,80,90,100])
 handles,labels=ax.get_legend_handles_labels()
 order=list(range(0,len(handles),2))+list(range(1,len(handles),2))
 ax.legend([handles[i] for i in order],[labels[i] for i in order],frameon=True,loc='upper center',bbox_to_anchor=(.5,-.12),ncol=2,fontsize=8)
