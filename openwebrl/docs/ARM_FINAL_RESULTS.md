@@ -102,7 +102,7 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 ### Online-Mind2Web only: BrowserCode and native CUAWright
 
-**The scatter comparison uses the exact same 103 fresh tasks valid in all eight method–harness cells.** Valid failures remain included; none of these tasks belongs to either harness's historical 100 cohort. The separate BrowserCode three-benchmark plot above is unchanged. Full-cohort rates in the figure's table retain invalid outcomes as unsuccessful and have their own displayed denominators.
+**The scatter comparison uses the exact same 103 fresh tasks valid in all eight method–harness cells.** Valid failures remain included; none of these tasks belongs to either harness's historical 100 cohort. The separate BrowserCode three-benchmark plot above is unchanged. Full-cohort rates are reported separately in the results tables, with invalid outcomes counted as unsuccessful. The figure uses model color/shape and harness fill: blue square for Sol single, blue circle for Luna single, yellow circle for Luna N3 and orange circle for Luna N5; filled markers denote BrowserCode and outlined markers native CUAWright.
 
 ![OM2W-only cost, latency and browser-batch tradeoffs for four methods under BrowserCode and native CUAWright, using the exact same 103 fresh common-valid tasks](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
 

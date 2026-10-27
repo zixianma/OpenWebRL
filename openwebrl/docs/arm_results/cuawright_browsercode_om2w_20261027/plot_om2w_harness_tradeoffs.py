@@ -19,10 +19,10 @@ from matplotlib.ticker import PercentFormatter, StrMethodFormatter
 from matplotlib.lines import Line2D
 
 METHODS = {
-    "serial_high": ("Sol single high", "#0072B2", "o"),
-    "luna_single_high": ("Luna single high", "#009E73", "s"),
-    "parallel3_select_high": ("Luna N3 high + high", "#D55E00", "^"),
-    "parallel5_select_high": ("Luna N5 high + high", "#CC79A7", "D"),
+    "serial_high": ("Sol single high", "#0072B2", "s"),
+    "luna_single_high": ("Luna single high", "#0072B2", "o"),
+    "parallel3_select_high": ("Luna N3 high + high", "#E6B800", "o"),
+    "parallel5_select_high": ("Luna N5 high + high", "#E87500", "o"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 
@@ -110,31 +110,6 @@ def legends(fig, x=0.835, y=0.70):
                labelspacing=1.2)
 
 
-def status_table(fig, data, rect, comparison):
-    ax = fig.add_axes(rect)
-    ax.axis("off")
-    rows = []
-    for method, (label, _, _) in METHODS.items():
-        b = comparison["browsercode"]["latest_recorded"][method]
-        n = data["latest_recorded"][method]
-        rows.append([label.replace(" high + high", "").replace(" high", ""),
-                     str(b["recorded"]), str(b["successes"]), f'{100 * b["success_rate"]:.1f}%',
-                     str(n["recorded"]), str(n["successes"]), f'{100 * n["success_rate"]:.1f}%'])
-    table = ax.table(cellText=rows,
-                     colLabels=["Method", "BrowserCode\ntasks", "BrowserCode\nsuccesses", "BrowserCode\noverall", 
-                                "CUAWright\ntasks", "CUAWright\nsuccesses", "CUAWright\noverall"],
-                     cellLoc="center", loc="center", colWidths=[.19, .135, .135, .135, .135, .135, .135])
-    table.auto_set_font_size(False)
-    table.set_fontsize(9)
-    table.scale(1, 1.5)
-    for (i, j), cell in table.get_celld().items():
-        cell.set_edgecolor("#E2E6EA")
-        cell.set_facecolor("#EFF3F7" if i == 0 else "white")
-        if i == 0:
-            cell.set_text_props(weight="bold")
-            cell.set_height(cell.get_height() * 1.5)
-    ax.set_title("OM2W overall outcomes · invalids count as failures (separate from matched scatter cohort)",
-                 fontsize=11, loc="left", pad=10)
 
 def save_figure(fig, path):
     fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)
@@ -155,35 +130,30 @@ def main():
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
                         "axes.titlesize": 15, "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
-    footer = (f'Online-Mind2Web only: same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight method–harness cells; valid failures included. '
-              'Not a three-benchmark average.\n'
-              'Native 20,000 tokens / 100 decisions; BrowserCode 12,288 tokens / 30 decisions. '
-              'Different collection windows and task-time boundaries; descriptive comparison, not a harness-only causal effect.\n'
-              f'Native snapshot: {data["snapshot_utc"]}; N5 incomplete. External judging excluded. Native model costs include helpers/full unknown reserves; BrowserCode uses original proposal/selector receipt costs. '
-              'Overall table includes historical100 for three methods; invalids remain failures.')
+    footer = (f'OM2W only · same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight cells; valid failures included. Native snapshot: 2026-10-27 22:08:52 UTC, preliminary.\n'
+              'Native: 20,000 tokens / 100 decisions; BrowserCode: 12,288 / 30. Different collection dates and timing scopes; descriptive comparison. External judging excluded.\n'
+              'Cost: native per-task all-attempt model charges, helpers and full unknown reserves; BrowserCode original proposal/selector receipts. Tables are reported separately.')
     for metric, suffix in (("mean_model_usd_per_task", "cost"),
                            ("mean_task_seconds", "latency"),
                            ("mean_browser_steps", "browser_steps")):
-        fig, ax = plt.subplots(figsize=(12, 7.5))
+        fig, ax = plt.subplots(figsize=(10.5, 5.2))
         draw(ax, means, metric, native)
-        fig.subplots_adjust(left=.09, right=.66, bottom=.48, top=.90)
+        fig.subplots_adjust(left=.09, right=.66, bottom=.28, top=.88)
         legends(fig, x=.68, y=.91)
-        status_table(fig, data, [.09, .17, .84, .20], comparison)
         fig.text(.09, .025, footer.replace('; external judging excluded.', '; external judging excluded.\n'),
                  fontsize=7.3, color="#5A6470", linespacing=1.6)
         for ext in ("png", "svg", "pdf"):
             save_figure(fig, args.output_dir / f"om2w_harness_vs_{suffix}.{ext}")
         plt.close(fig)
-    fig, axes = plt.subplots(1, 3, figsize=(16, 7.2), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(16, 4.8), sharey=True)
     for ax, metric in zip(axes, ("mean_model_usd_per_task", "mean_task_seconds", "mean_browser_steps")):
         draw(ax, means, metric, native)
         ax.title.set_fontsize(13)
     for ax in axes[1:]:
         ax.set_ylabel("")
     fig.suptitle("Online-Mind2Web · BrowserCode and native CUAWright", x=.05, ha="left", fontsize=17, y=.97)
-    fig.subplots_adjust(left=.05, right=.80, bottom=.47, top=.88, wspace=.24)
+    fig.subplots_adjust(left=.05, right=.80, bottom=.28, top=.85, wspace=.24)
     legends(fig, x=.815, y=.89)
-    status_table(fig, data, [.05, .16, .73, .21], comparison)
     fig.text(.05, .025, footer, fontsize=8.5, color="#5A6470", linespacing=1.7)
     for ext in ("png", "svg", "pdf"):
         save_figure(fig, args.output_dir / f"om2w_harness_tradeoffs.{ext}")
