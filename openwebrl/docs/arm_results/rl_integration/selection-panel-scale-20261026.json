@@ -1,0 +1,430 @@
+{
+ "note": "Panel scaling at fixed states: joint selection head trained on the 1,393 Piotr states of the one-panel head with at\nmost K GPT-5.5 panels per state (K = 1: 1,393 panels; 8: 10,181; 16: every panel, 18,587; nested subsets for K = 8, 16;\nbatch 64, last of 20 epochs, seed 0). Live on Online-Mind2Web 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150\n(GPT-4o); SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, full task order. K = 8 / 16 ran 2026-10-26; K = 1 is\nthe one-panel head of the data-scaling runs (2026-10-23/24). SFT 4B: Online-Mind2Web / WebVoyager from 2026-10-18 (OM2W\nre-judged by terra), DeepShop same-day 2026-10-26. Overall counts invalid as failure; \"mean\" weights benchmarks equally;\npaired 95% bootstrap resamples tasks within each benchmark (10,000 resamples, seed 20261018). Offline: fixed-five score\nof all three seeds per K.",
+ "rows": [
+  {
+   "key": "k1",
+   "condition": "1 panel per state (10-23/24)",
+   "panels": 1393,
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 98,
+    "valid": 263,
+    "overall": 32.7,
+    "valid_only": 37.3
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 317,
+    "valid": 579,
+    "overall": 53.3,
+    "valid_only": 54.7
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 42,
+    "valid": 142,
+    "overall": 28.0,
+    "valid_only": 29.6
+   },
+   "mean_overall": 38.0,
+   "om2w_wv_overall": 43.0
+  },
+  {
+   "key": "k8",
+   "condition": "<= 8 panels per state (10-26)",
+   "panels": 10181,
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 106,
+    "valid": 259,
+    "overall": 35.3,
+    "valid_only": 40.9
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 308,
+    "valid": 571,
+    "overall": 51.8,
+    "valid_only": 53.9
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 51,
+    "valid": 147,
+    "overall": 34.0,
+    "valid_only": 34.7
+   },
+   "mean_overall": 40.4,
+   "om2w_wv_overall": 43.5
+  },
+  {
+   "key": "k16",
+   "condition": "<= 16 panels per state, all (10-26)",
+   "panels": 18587,
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 104,
+    "valid": 257,
+    "overall": 34.7,
+    "valid_only": 40.5
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 315,
+    "valid": 580,
+    "overall": 52.9,
+    "valid_only": 54.3
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 55,
+    "valid": 141,
+    "overall": 36.7,
+    "valid_only": 39.0
+   },
+   "mean_overall": 41.4,
+   "om2w_wv_overall": 43.8
+  },
+  {
+   "key": "sft1",
+   "condition": "SFT 4B, one sample",
+   "panels": null,
+   "online_mind2web": {
+    "tasks": 300,
+    "successes": 95,
+    "valid": 275,
+    "overall": 31.7,
+    "valid_only": 34.5
+   },
+   "webvoyager": {
+    "tasks": 595,
+    "successes": 264,
+    "valid": 587,
+    "overall": 44.4,
+    "valid_only": 45.0
+   },
+   "deepshop": {
+    "tasks": 150,
+    "successes": 48,
+    "valid": 148,
+    "overall": 32.0,
+    "valid_only": 32.4
+   },
+   "mean_overall": 36.0,
+   "om2w_wv_overall": 38.0
+  }
+ ],
+ "paired": [
+  {
+   "a": "k1",
+   "b": "sft1",
+   "online_mind2web": [
+    1.0,
+    -4.3,
+    6.3
+   ],
+   "webvoyager": [
+    8.9,
+    4.9,
+    12.9
+   ],
+   "deepshop": [
+    -4.0,
+    -13.3,
+    5.3
+   ],
+   "mean": [
+    2.0,
+    -1.8,
+    5.9
+   ],
+   "om2w_wv": [
+    5.0,
+    1.6,
+    8.4
+   ]
+  },
+  {
+   "a": "k8",
+   "b": "sft1",
+   "online_mind2web": [
+    3.7,
+    -2.0,
+    9.3
+   ],
+   "webvoyager": [
+    7.4,
+    3.4,
+    11.4
+   ],
+   "deepshop": [
+    2.0,
+    -6.7,
+    10.7
+   ],
+   "mean": [
+    4.4,
+    0.7,
+    8.0
+   ],
+   "om2w_wv": [
+    5.5,
+    2.0,
+    9.0
+   ]
+  },
+  {
+   "a": "k16",
+   "b": "sft1",
+   "online_mind2web": [
+    3.0,
+    -2.3,
+    8.3
+   ],
+   "webvoyager": [
+    8.6,
+    4.7,
+    12.4
+   ],
+   "deepshop": [
+    4.7,
+    -4.0,
+    13.3
+   ],
+   "mean": [
+    5.4,
+    1.8,
+    9.0
+   ],
+   "om2w_wv": [
+    5.8,
+    2.4,
+    9.1
+   ]
+  },
+  {
+   "a": "k8",
+   "b": "k1",
+   "online_mind2web": [
+    2.7,
+    -2.7,
+    7.7
+   ],
+   "webvoyager": [
+    -1.5,
+    -5.5,
+    2.7
+   ],
+   "deepshop": [
+    6.0,
+    -2.0,
+    14.0
+   ],
+   "mean": [
+    2.4,
+    -1.1,
+    5.9
+   ],
+   "om2w_wv": [
+    0.6,
+    -2.6,
+    3.8
+   ]
+  },
+  {
+   "a": "k16",
+   "b": "k1",
+   "online_mind2web": [
+    2.0,
+    -3.0,
+    7.0
+   ],
+   "webvoyager": [
+    -0.3,
+    -4.5,
+    3.9
+   ],
+   "deepshop": [
+    8.7,
+    0.0,
+    18.0
+   ],
+   "mean": [
+    3.4,
+    -0.3,
+    7.2
+   ],
+   "om2w_wv": [
+    0.8,
+    -2.4,
+    4.1
+   ]
+  },
+  {
+   "a": "k16",
+   "b": "k8",
+   "online_mind2web": [
+    -0.7,
+    -5.7,
+    4.3
+   ],
+   "webvoyager": [
+    1.2,
+    -2.7,
+    5.0
+   ],
+   "deepshop": [
+    2.7,
+    -6.0,
+    11.3
+   ],
+   "mean": [
+    1.1,
+    -2.6,
+    4.8
+   ],
+   "om2w_wv": [
+    0.3,
+    -3.0,
+    3.4
+   ]
+  }
+ ],
+ "offline": {
+  "1": {
+   "panels": 1393,
+   "states": 1393,
+   "fixed_five": [
+    37.66,
+    37.77,
+    38.31
+   ],
+   "sft_sample": 35.65,
+   "minus_sft_sample": [
+    [
+     2.01,
+     0.41,
+     3.73
+    ],
+    [
+     2.12,
+     0.54,
+     3.85
+    ],
+    [
+     2.66,
+     1.11,
+     4.39
+    ]
+   ]
+  },
+  "2": {
+   "panels": 2755,
+   "states": 1393,
+   "fixed_five": [
+    38.36,
+    38.02,
+    38.09
+   ],
+   "sft_sample": 35.65,
+   "minus_sft_sample": [
+    [
+     2.72,
+     0.69,
+     4.79
+    ],
+    [
+     2.37,
+     0.69,
+     4.13
+    ],
+    [
+     2.44,
+     0.78,
+     4.19
+    ]
+   ]
+  },
+  "4": {
+   "panels": 5358,
+   "states": 1393,
+   "fixed_five": [
+    37.07,
+    36.93,
+    37.05
+   ],
+   "sft_sample": 35.65,
+   "minus_sft_sample": [
+    [
+     1.42,
+     -0.58,
+     3.58
+    ],
+    [
+     1.28,
+     -0.54,
+     3.18
+    ],
+    [
+     1.4,
+     -0.46,
+     3.42
+    ]
+   ]
+  },
+  "8": {
+   "panels": 10181,
+   "states": 1393,
+   "fixed_five": [
+    37.95,
+    37.59,
+    37.91
+   ],
+   "sft_sample": 35.65,
+   "minus_sft_sample": [
+    [
+     2.3,
+     0.21,
+     4.49
+    ],
+    [
+     1.94,
+     -0.22,
+     4.14
+    ],
+    [
+     2.26,
+     0.27,
+     4.36
+    ]
+   ]
+  },
+  "16": {
+   "panels": 18587,
+   "states": 1393,
+   "fixed_five": [
+    38.17,
+    38.31,
+    38.17
+   ],
+   "sft_sample": 35.65,
+   "minus_sft_sample": [
+    [
+     2.52,
+     0.51,
+     4.59
+    ],
+    [
+     2.67,
+     0.73,
+     4.72
+    ],
+    [
+     2.52,
+     0.62,
+     4.54
+    ]
+   ]
+  }
+ }
+}
