@@ -77,25 +77,13 @@ All metrics use the same common-valid tasks across all four methods within each 
 
 ### Performance versus cost and latency
 
-**Harnesses are shown separately.** Filled markers retain the audited BrowserCode averages over Online-Mind2Web, WebVoyager and DeepShop (equal weight). Outlined markers add the preliminary native CUAWright Online-Mind2Web comparison on the same fresh tasks valid in all four methods. Native scatter points use the same **128 fresh tasks valid in all four methods**. Every scatter coordinate within a series uses its corresponding common-valid cohort, including valid failures. The table inside the figure separately shows the latest native overall rates, with invalids counted as failures.
-
-BrowserCode uses 12,288 output tokens and 30 decisions; native CUAWright uses 20,000 output tokens and 100 decisions. Different benchmark mixtures, harnesses, limits and collection windows prevent a causal harness-only interpretation. Both axes exclude external judging; native latency also excludes separate saved-evidence grading. Cost includes all-attempt model charges, helpers and conservative unknown reserves. Browser batches are recorded browser-command batches, not decisions or individual DOM actions.
+Each benchmark has equal weight (one third). Both axes use the four-method common-valid cohorts above; cost and latency are averaged per task within each benchmark before averaging across benchmarks. These are descriptive point estimates across different collection dates. Judge-only work is excluded.
 
 <a id="performance-versus-browser-steps"></a>
 
-![API performance versus cost, latency and browser batches: filled BrowserCode three-benchmark averages and outlined preliminary native CUAWright Online-Mind2Web results, with separate harness legends and a native overall-results table](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.png)
+![API performance versus cost, latency and browser steps in one row, averaged equally across three benchmarks](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.png)
 
-The native snapshot is frozen at **October 27, 2026, 22:08:52 UTC**; N5 has **277 of 300** outcomes. Final campaign, usage and teardown audits remain pending. Overall native results below include the historical100 for Luna single, Luna N3 and Sol single; the same185 fresh-task column excludes that history. Two independently audited OOM outcomes remain invalid failures in the denominators.
-
-| Native method | Recorded | Successes | Overall success | Fresh successes | Same185 fresh-task success |
-|---|---:|---:|---:|---:|---:|
-| Luna single high | 300 | 189 | 63.0% | 112 | 60.5% |
-| Luna N3 high + high | 300 | 192 | 64.0% | 114 | 61.6% |
-| Luna N5 high + high | 277 | 183 | 66.1% | 119 | 64.3% |
-| Sol single high | 300 | 222 | 74.0% | 131 | 70.8% |
-
-<details>
-<summary>Audited BrowserCode coordinates retained unchanged</summary>
+*All methods use high reasoning effort, including the N = 3/5 selectors. Success, cost, latency and browser steps are equal-benchmark means on the same four-method common-valid cohorts (254 / 489 / 140 tasks); judge-only work is excluded. Axes are cropped to the observed range; points are descriptive estimates without uncertainty bars, and collection dates differ.*
 
 | Method | Mean success | Mean model cost / task | Mean task latency | Mean browser steps |
 |---|---:|---:|---:|---:|
@@ -104,11 +92,37 @@ The native snapshot is frozen at **October 27, 2026, 22:08:52 UTC**; N5 has **27
 | Luna N3 high + high | 64.06% | $0.0607 | 196.3 s | 14.6 |
 | Luna N5 high + high | 64.84% | $0.0742 | 218.1 s | 14.2 |
 
-</details>
+[Cost plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.svg) · [Latency plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.svg) · [Browser steps plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps.svg) · [Combined SVG](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.svg) · [Mean values (CSV)](arm_results/sol6_luna_three_benchmarks_20261019/api_tradeoffs_means.csv) · [Plot source](arm_results/sol6_luna_three_benchmarks_20261019/plot_api_tradeoffs.py)
 
-[Cost plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.svg) · [Latency plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.svg) · [Browser batches plot (SVG)](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps.svg) · [Combined SVG](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.svg) · [BrowserCode means (CSV)](arm_results/sol6_luna_three_benchmarks_20261019/api_tradeoffs_means.csv) · [Preliminary native coordinates (CSV)](arm_results/sol6_luna_three_benchmarks_20261019/api_tradeoffs_native_preliminary.csv) · [Preliminary native aggregate and definitions](arm_results/sol6_luna_three_benchmarks_20261019/native_cuawright_preliminary.json) · [Plot source](arm_results/sol6_luna_three_benchmarks_20261019/plot_api_tradeoffs.py)
+[Paper PDF: combined](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_tradeoffs.pdf) · [Cost PDF](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_cost.pdf) · [Latency PDF](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_latency.pdf) · [Browser steps PDF](arm_results/sol6_luna_three_benchmarks_20261019/api_performance_vs_browser_steps.pdf). Combined layout: 7-inch canvas; individual panels: 3.35-inch canvas. Grid lines, in-figure protocol footers and repeated titles are omitted; vector PDFs embed TrueType fonts and PNG previews use 300 dpi.
 
 [Audited aggregate metrics](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json) · [OM2W completion and accounting](ARM_INFERENCE_SCALING.md#luna-single-high-om2w300-20261022) · [DeepShop recovery scope](ARM_INFERENCE_SCALING.md#deepshop-sol-budget-recovery-20261019)
+
+<a id="om2w-browsercode-native-cuawright-20261027"></a>
+
+### Online-Mind2Web only: BrowserCode and native CUAWright
+
+**The scatter comparison uses the exact same 103 fresh tasks valid in all eight method–harness cells.** Valid failures remain included; none of these tasks belongs to either harness's historical 100 cohort. The separate BrowserCode three-benchmark plot above is unchanged. Full-cohort rates in the figure's table retain invalid outcomes as unsuccessful and have their own displayed denominators.
+
+![OM2W-only cost, latency and browser-batch tradeoffs for four methods under BrowserCode and native CUAWright, using the exact same 103 fresh common-valid tasks](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+
+| Method | Shared tasks | BrowserCode successes | BrowserCode success | Native successes | Native success |
+|---|---:|---:|---:|---:|---:|
+| Sol single high | 103 | 65 | 63.1% | 79 | 76.7% |
+| Luna single high | 103 | 62 | 60.2% | 70 | 68.0% |
+| Luna N3 high + high | 103 | 71 | 68.9% | 69 | 67.0% |
+| Luna N5 high + high | 103 | 75 | 72.8% | 75 | 72.8% |
+
+Native data are a **preliminary snapshot at October 27, 2026, 22:08:52 UTC**, with 277/300 N5 outcomes; the campaign remains active and its final audit is pending. The common-valid cohort conditions on execution outcomes and can differ from the full task population. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100, with summary 20. Collection dates, timing boundaries and runtime contention also differ, so this is a descriptive comparison, not a controlled harness-only effect.
+
+<details>
+<summary>Accounting, latency and reproducibility</summary>
+
+BrowserCode model costs use the original audited per-episode proposal/selector receipt estimates; none of these 103 tasks has unknown model usage in any BrowserCode method. Native costs include all per-task attempts, model helpers, input counters, cache bounds and full unknown reserves at the fixed cutoff. Both exclude external judging. BrowserCode latency is actor-loop time excluding initial setup and final judge-only capture; native latency retains the original native task boundary and excludes external/saved-evidence grading. Browser steps are recorded selected batches, potentially containing several operations, rather than model decisions. Native singleton recovery and other contention differences remain latency comparability limitations.
+
+[Aggregate coordinates and definitions](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_preliminary.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
+
+</details>
 
 <details>
 <summary>Coverage and success counts</summary>
