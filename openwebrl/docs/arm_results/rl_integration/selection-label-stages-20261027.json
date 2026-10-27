@@ -1,5 +1,5 @@
 {
- "note": "Head offline: fixed-five pick of the seed-0 round-1 head on the 348 SFT-action test states (86 tasks), held-out draws 3-7, minus one SFT sample, [point, lo, hi] pp; copied from /gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/<source>/fixed-five.json. Live entries here override selection-data-scale-20261023.json (used for heads trained later).",
+ "note": "Head offline: fixed-five pick of the seed-0 round-1 head on the 348 SFT-action test states (86 tasks), held-out draws 3-7, minus one SFT sample, [point, lo, hi] pp; copied from /gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/<source>/fixed-five.json. Live entries here override selection-data-scale-20261023.json (used for heads trained later). 'Ours post' live: selection-post-label-20261027.json (same SFT 4B reference). teacher_post head offline: post-label-20261027/heads/teacher_post/seed0/fixed-five.json.",
  "head_offline": {
   "outcome": [
    -0.34,
@@ -20,13 +20,25 @@
    1.11,
    -0.56,
    2.89
+  ],
+  "teacher_post": [
+   1.85,
+   0.46,
+   3.33
   ]
  },
  "head_offline_rate": {
   "outcome": 35.31,
   "teacher_k3": 37.68,
   "teacher_k1": 37.74,
-  "teacher_pre": 36.76
+  "teacher_pre": 36.76,
+  "teacher_post": 37.5
  },
- "live": {}
+ "live": {
+  "Ours post": [
+   1.7,
+   -1.8,
+   5.2
+  ]
+ }
 }
