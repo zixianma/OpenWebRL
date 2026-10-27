@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Label sources, one panel per evaluation setup: gain over one SFT 4B actor sample, shared y-axis.
 
-(1) Offline, training states: the 1,380 SFT-action branch states the heads were trained on. Labels came from rollouts 0-2;
-    each state's first five SFT proposals (duplicates kept) are scored on held-out rollouts 3-7.
-(2) Offline, held-out states: 345 test states (86 tasks), same five proposals and rollouts 3-7.
+(1) Offline, training states: the 1,380 SFT-action branch states the heads were trained on. Labels came from rollouts 1-3;
+    each state's first five SFT proposals (duplicates kept) are scored on held-out rollouts 4-8.
+(2) Offline, held-out states: 345 test states (86 tasks), same five proposals and rollouts 4-8.
     Teacher = the label's argmax among the five (ties averaged); head = the seed-0 head, the one run live
     (selection-label-same-state-20261027.json).
 (3) Live: the seed-0 head, three-benchmark mean overall success (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and
@@ -23,16 +23,16 @@ LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["th
 EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).get("live", {})
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
-    ("Outcome", "#1baf7a", "outcome", "Ours outcome"),
-    ("Luna\n3 after", "#1f5fae", "teacher_k3", "Ours K3"),
-    ("Luna\n1 after", "#93bdef", "teacher_k1", "Ours K1"),
-    ("Luna\npost", "#eb6834", "teacher_post", "Ours post"),
-    ("Luna\npre", "#7b4fd0", "teacher_pre", "Ours pre")]
+    ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
+    ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
+    ("Lookahead\nH = 1", "#A99BE3", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
+    ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 tr, te = S["splits"]["train"], S["splits"]["test"]
 PANELS = [
-    (f"Offline · training states\n{tr['states']:,} states, {tr['tasks']} tasks; held-out rollouts 3–7", "train",
+    (f"Offline · training states\n{tr['states']:,} states, {tr['tasks']} tasks; held-out rollouts 4–8", "train",
      S["train"]["sft_sample"]),
-    (f"Offline · held-out test states\n{te['states']} states, {te['tasks']} tasks; held-out rollouts 3–7", "test",
+    (f"Offline · held-out test states\n{te['states']} states, {te['tasks']} tasks; held-out rollouts 4–8", "test",
      S["test"]["sft_sample"]),
     ("Live · 3 benchmarks\n1,045 tasks, mean overall success", "live", LIVE["SFT 4B"]["mean_overall"])]
 
@@ -44,7 +44,7 @@ def point(ax, x, v, color, marker, filled):
     ax.text(x, hi + 0.2, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5, color=INK)
 
 
-fig, axes = plt.subplots(1, 3, figsize=(11, 4.3), sharey=True, gridspec_kw=dict(width_ratios=[1.25, 1.25, 1]))
+fig, axes = plt.subplots(1, 3, figsize=(12, 4.4), sharey=True, gridspec_kw=dict(width_ratios=[1, 1, 1]))
 for ax, (title, split, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -64,8 +64,8 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewi
                   markerfacecolor="#555555" if f else "white") for m, f in (("o", False), ("s", True), ("D", True))]
 fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (seed 0)", "Same head, live"],
            frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.06))
-fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on rollouts 3–7 (labels used rollouts 0–2 of the "
-         "training states). Bars: paired 95% intervals (bootstrap over tasks). Each panel's baseline is one SFT sample on "
+fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on held-out rollouts 4–8 (labels used rollouts 1–3 of the "
+         "training states; Oracle = best action on rollouts 1–3).\nBars: paired 95% intervals (bootstrap over tasks). Each panel's baseline is one SFT sample on "
          "its own states or tasks.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.12, 1, 1))
 fig.savefig(HERE / "selection-label-setups-20261027.png", dpi=160); plt.close(fig)

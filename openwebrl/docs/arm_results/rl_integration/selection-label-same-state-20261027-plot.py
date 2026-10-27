@@ -3,9 +3,9 @@
 SFT 4B actor at five points.
 
 Offline (selection-label-same-state-20261027.json): SFT-action branch states, each state's first five SFT proposals
-(duplicates kept) scored on held-out draws 3-7.
+(duplicates kept) scored on held-out rollouts 4-8.
   - Teacher: the label's argmax among the five (ties averaged). Head: the 22.6 M seed-0 head (the one run live).
-  - Train states: the 1,380 states the heads were trained on (labels came from draws 0-2, so draws 3-7 are still held out).
+  - Train states: the 1,380 states the heads were trained on (labels came from rollouts 1-3, so rollouts 4-8 are still held out).
   - Test states: 345 held-out states (86 tasks).
 Live: the seed-0 head, three-benchmark mean overall success (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and
 DeepShop 150 by GPT-4o) minus SFT 4B (selection-data-scale-20261023.json; post-execution from
@@ -25,11 +25,11 @@ LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["th
 EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).get("live", {})
 INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
 ROWS = [  # label, colour, source key, live key
-    ("Observed\noutcome", "#1baf7a", "outcome", "Ours outcome"),
-    ("Luna,\n3 steps after", "#1f5fae", "teacher_k3", "Ours K3"),
-    ("Luna,\n1 step after", "#93bdef", "teacher_k1", "Ours K1"),
-    ("Luna,\npost-execution", "#eb6834", "teacher_post", "Ours post"),
-    ("Luna,\npre-execution", "#7b4fd0", "teacher_pre", "Ours pre")]
+    ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
+    ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
+    ("Lookahead\nH = 1", "#A99BE3", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
+    ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 tr, te = S["splits"]["train"], S["splits"]["test"]
 MARK = [  # legend, marker, filled, dx
     (f"Teacher, train states ({tr['states']:,})", "o", False, -0.32),
@@ -70,7 +70,7 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6, markeredgewidt
                   markerfacecolor="#555555" if f else "white") for _, m, f, _ in MARK]
 ax.legend(handles, [l for l, *_ in MARK], frameon=False, fontsize=7.3, loc="upper center", bbox_to_anchor=(0.5, -0.15),
           ncol=3, columnspacing=1.2)
-fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, scored on held-out draws 3-7; head = seed 0, as live. "
+fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, scored on held-out rollouts 4–8; Oracle = best action on rollouts 1–3; head = seed 0, as live. "
          "Live: shaded. Bars: paired 95% intervals (bootstrap over tasks).\nEach point is relative to one SFT "
          f"sample on its own states or tasks (train {S['train']['sft_sample']:.1f}%, test {S['test']['sft_sample']:.1f}%, "
          f"live 3-benchmark mean {LIVE['SFT 4B']['mean_overall']:.1f}%).", fontsize=6.5, color=MUTED)

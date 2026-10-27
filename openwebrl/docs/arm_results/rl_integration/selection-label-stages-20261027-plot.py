@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Labels from teacher to live: for each label source, gain over one sample of the same SFT 4B actor at three stages.
 
-(1) Teacher pick, offline: Luna's (or the oracle's) pick on the 1,010 main-set branch states, scored on held-out rollouts 3-7,
+(1) Teacher pick, offline: Luna's (or the oracle's) pick on the 1,010 main-set branch states, scored on held-out rollouts 4-8,
     minus the actor's first sample (valid draws only; paired 95% task-clustered interval;
     lookahead-draw-split-20261013/curve_fixedfit_main.json).
 (2) Head trained on those labels, offline: the 22.6 M head (seed 0) trained on the 1,380 branch states, fixed-five pick on
-    the 348 held-out test states (86 tasks), held-out draws 3-7, minus one SFT sample (paired 95% interval;
+    the 348 held-out test states (86 tasks), held-out rollouts 4-8, minus one SFT sample (paired 95% interval;
     round1/<source>/fixed-five.json, copied in selection-label-stages-20261027.json).
 (3) Same head, live: three-benchmark mean overall success (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and
     DeepShop 150 by GPT-4o) minus one SFT 4B sample (paired 95% bootstrap over tasks; selection-data-scale-20261023.json).
 The three stages use different states and tasks, so compare orderings within a stage, not magnitudes across stages.
-"Observed outcome" is the oracle at stage 1 (best action on rollouts 0-2) and the outcome-label head at stages 2-3. Prior
+"Oracle" is the best action on rollouts 1-3 (observed outcome) at stage 1 and the head trained on those labels at stages 2-3. Prior
 judge formulations (WebArbiter, WebShepherd, PRO-CUA, all Luna) exist only as teachers. Post-execution heads are filled in from
 selection-label-stages-20261027.json when present.
 """
@@ -27,11 +27,11 @@ STAGES = json.loads((HERE / "selection-label-stages-20261027.json").read_text())
 LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
 INK, MUTED, GRID = "#222222", "#666666", "#e6e6e6"
 ROWS = [  # label, colour, teacher key, head-offline key, live key
-    ("Observed\noutcome", "#1baf7a", "Best on observed draws", "outcome", "Ours outcome"),
-    ("Luna,\n3 steps after", "#1f5fae", "Lookahead K=3", "teacher_k3", "Ours K3"),
-    ("Luna,\n1 step after", "#93bdef", "Lookahead K=1", "teacher_k1", "Ours K1"),
-    ("Luna,\npost-execution", "#eb6834", "Immediate result", "teacher_post", "Ours post"),
-    ("Luna,\npre-execution", "#7b4fd0", "Before execution", "teacher_pre", "Ours pre"),
+    ("Pre-exec", "#4B5563", "Before execution", "teacher_pre", "Ours pre"),
+    ("Post-exec", "#D8877E", "Immediate result", "teacher_post", "Ours post"),
+    ("Lookahead\nH = 1", "#A99BE3", "Lookahead K=1", "teacher_k1", "Ours K1"),
+    ("Lookahead\nH = 3", "#6250BE", "Lookahead K=3", "teacher_k3", "Ours K3"),
+    ("Oracle", "#ED7D00", "Best on observed draws", "outcome", "Ours outcome"),
     ("Web-\nArbiter", "#8c6d31", "WebArbiter formulation", None, None),
     ("Web-\nShepherd", "#b5a33a", "WebShepherd formulation", None, None),
     ("PRO-\nCUA", "#4a8c8c", "PRO-CUA formulation", None, None)]
@@ -74,7 +74,7 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewi
                   markerfacecolor="#555555" if f == "filled" else "white") for _, m, f in MARK]
 ax.legend(handles, [l for l, _, _ in MARK], frameon=False, fontsize=7.5, loc="upper center", bbox_to_anchor=(0.45, -0.17), ncol=1)
 fig.text(0.01, 0.01, "Bars: paired 95% intervals (bootstrap over tasks). Stages use different states and tasks: compare orderings "
-         "within a stage, not magnitudes across stages.\nOne training seed per head. Observed outcome = oracle on rollouts 0-2 "
-         "as teacher, outcome-label head as head.", fontsize=6.5, color=MUTED)
+         "within a stage, not magnitudes across stages.\nOne training seed per head. Oracle = best action on rollouts 1–3 (observed "
+         "outcome); its head is trained on those labels. Rollouts numbered 1–8 as in the methods figure.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.05, 1, 1))
 fig.savefig(HERE / "selection-label-stages-20261027.png", dpi=160); plt.close(fig)
