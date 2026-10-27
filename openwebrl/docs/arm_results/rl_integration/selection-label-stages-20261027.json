@@ -1,0 +1,32 @@
+{
+ "note": "Head offline: fixed-five pick of the seed-0 round-1 head on the 348 SFT-action test states (86 tasks), held-out draws 3-7, minus one SFT sample, [point, lo, hi] pp; copied from /gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/<source>/fixed-five.json. Live entries here override selection-data-scale-20261023.json (used for heads trained later).",
+ "head_offline": {
+  "outcome": [
+   -0.34,
+   -2.15,
+   1.44
+  ],
+  "teacher_k3": [
+   2.04,
+   0.31,
+   3.87
+  ],
+  "teacher_k1": [
+   2.09,
+   0.61,
+   3.67
+  ],
+  "teacher_pre": [
+   1.11,
+   -0.56,
+   2.89
+  ]
+ },
+ "head_offline_rate": {
+  "outcome": 35.31,
+  "teacher_k3": 37.68,
+  "teacher_k1": 37.74,
+  "teacher_pre": 36.76
+ },
+ "live": {}
+}
