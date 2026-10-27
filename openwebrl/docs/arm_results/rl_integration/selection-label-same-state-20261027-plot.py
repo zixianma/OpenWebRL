@@ -33,10 +33,10 @@ ROWS = [  # label, colour, source key, live key
 tr, te = S["splits"]["train"], S["splits"]["test"]
 MARK = [  # legend, marker, filled, dx
     (f"Teacher, train states ({tr['states']:,})", "o", False, -0.32),
-    (f"Head, train states", "s", False, -0.18),
-    (f"Teacher, held-out test states ({te['states']})", "o", True, -0.02),
-    (f"Head, held-out test states", "s", True, 0.12),
-    ("Head, live (mean of 3 benchmarks, 1,045 tasks)", "D", True, 0.32)]
+    (f"Student head, train states", "o", True, -0.18),
+    (f"Teacher, held-out test states ({te['states']})", "s", False, -0.02),
+    (f"Student head, held-out test states", "s", True, 0.12),
+    ("Student head, live (mean of 3 benchmarks, 1,045 tasks)", "D", True, 0.32)]
 
 
 def values(src, live):
@@ -70,9 +70,10 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6, markeredgewidt
                   markerfacecolor="#555555" if f else "white") for _, m, f, _ in MARK]
 ax.legend(handles, [l for l, *_ in MARK], frameon=False, fontsize=7.3, loc="upper center", bbox_to_anchor=(0.5, -0.15),
           ncol=3, columnspacing=1.2)
-fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, scored on held-out rollouts 4–8; Oracle = best action on rollouts 1–3; head = seed 0, as live. "
-         "Live: shaded. Bars: paired 95% intervals (bootstrap over tasks).\nEach point is relative to one SFT "
-         f"sample on its own states or tasks (train {S['train']['sft_sample']:.1f}%, test {S['test']['sft_sample']:.1f}%, "
+fig.text(0.01, 0.01, "Hollow = teacher, solid = student head; circle = train states, square = held-out test states; live shaded. "
+         "Offline: first five SFT proposals per state, scored on held-out rollouts 4–8;\nOracle = best action on rollouts 1–3; "
+         "student head = seed 0, the one run live. Bars: paired 95% intervals (bootstrap over tasks). Each point is relative to one SFT "
+         f"sample on its own states or tasks\n(train {S['train']['sft_sample']:.1f}%, test {S['test']['sft_sample']:.1f}%, "
          f"live 3-benchmark mean {LIVE['SFT 4B']['mean_overall']:.1f}%).", fontsize=6.5, color=MUTED)
-fig.tight_layout(rect=(0, 0.06, 1, 1))
+fig.tight_layout(rect=(0, 0.08, 1, 1))
 fig.savefig(HERE / "selection-label-same-state-20261027.png", dpi=160); plt.close(fig)
