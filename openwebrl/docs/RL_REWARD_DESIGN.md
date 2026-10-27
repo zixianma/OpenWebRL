@@ -310,9 +310,10 @@ GPT-4.1 already passes, so it cannot reward anything GPT-4.1 rejects.
   early, not running too long.
 
 **Optional, ARM-compatible.** Add action-level credit for verification actions (applying a
-filter or sort, opening a detail page, confirming an end state). The running action-only ARM
-lineage (`arm-mixed-action-only-383265`, to iteration 60) tests a generic action-level signal.
-Wait for its iteration-60 result before combining.
+filter or sort, opening a detail page, confirming an end state). Keep it **added to** the
+outcome advantage, never in place of it: the action-only ARM lineage, which trained on the
+generic action-level term alone, collapsed from 82/300 at iteration 10 to 37/300 at 40 and was
+stopped ([audit](arm_results/rl_integration/mixed-action-only-iteration40-audit.json)).
 
 ### Cost
 

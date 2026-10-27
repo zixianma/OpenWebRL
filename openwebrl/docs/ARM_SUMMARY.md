@@ -198,6 +198,9 @@ reasoning-and-action response.
 - **Mixed-only reweight + relaxed B:** `48M; D≥2; A×w`. Use the same ARM labels
   to redistribute each trajectory's existing advantage across turns, preserving
   its mean and sign. Formula and example below; zero extra `F` groups.
+- **Mixed-only action-only + relaxed B:** `48M; D≥2; b`. Same ARM labels and gate, but the
+  outcome advantage `A` is dropped: each turn trains on `b=0.5·u` alone. Outcomes still select
+  which 48 mixed groups are kept. Stopped at 40 (see the table below).
 - **Failure β = 1:** `Additive + β_F:0.5→1`. Only the failure bonus is stronger;
   `β_M=0.5`, both `q=20%`, strict gate and response-index credit stay fixed.
 - **Failure sampling40%:** `Additive + q_F:20%→40%`. Only failure turns are
@@ -296,6 +299,16 @@ are the default; dates and valid-task sets differ, so differences are descriptiv
 |  |70 |38.00% /50.00% |**38.67% /49.57%** |
 |  |80 |37.00% /49.33% |**39.33% /51.08%** |
 |  |90 |39.00% /51.32% |**37.67% /49.78%** |
+| **Mixed-only action-only + relaxed B** |10 |— |**27.33% /34.02%** |
+|  |20 |— |**18.00% /23.18%** |
+|  |30 |— |**13.00% /15.92%** |
+|  |40 |— |**12.33% /15.10%** |
+
+**Action-only collapses.** Without the outcome advantage, full-300 success falls every
+checkpoint, from 82/300 at 10 to 37/300 at 40, while invalid counts stay flat (55–67). Mean
+episode length drops from 13.4 to 6.5 turns, so the policy learns to stop early. Training
+stopped at 40 under the rule "stop if eval40 < eval30" (39/300).
+[Audits](arm_results/rl_integration/mixed-action-only-iteration40-audit.json).
 
 Both runs completed60 and all six full300 evaluations. Their40/50/60 averages
 are36.56% /47.38% for bonus and36.33% /47.05% for reweight (overall/valid-only):
@@ -385,7 +398,7 @@ The X markers at iteration 90 are the matched local three-repeat means (October 
 line point at 90 is one earlier evaluation of the same checkpoint.
 
 [**Interactive local-browser comparison: toggle runs and overall / valid-only rates**](rl_results/arm_rl_interactive.html).
-Both mixed-only curves include iterations10–90 and are visible by default; use **Mixed-only pair** to compare them with the outcome-only baseline.
+Both mixed-only curves include iterations10–90 and are visible by default, as is the action-only ablation (10–40, stopped); use **Mixed-only pair** to compare them with the outcome-only baseline.
 The outcome-only controls are visible by default: **56 groups** (iterations 10–90), **uniform G8** (10–90) and **expanded 4,102 tasks** (10–60; this data-pool ablation uses 2,000 additional training tasks). Hover a G8 or 56-group point for its Adam-update count.
 Download the HTML and open it in a browser; it works offline. GitHub shows its source
 rather than running it. Includes Gate C, the mixed-only pair and optional ablations;

@@ -210,6 +210,10 @@
 |  |70 |116 |234 |66 |38.67 |49.57 |[October1 audit](arm_results/rl_integration/mixed-reweight-iteration70-audit.json) |
 |  |80 |118 |231 |69 |39.33 |51.08 |[October1 audit](arm_results/rl_integration/mixed-reweight-iteration80-audit.json) |
 |  |90 |113 |227 |73 |37.67 |49.78 |[October2 audit](arm_results/rl_integration/mixed-reweight-iteration90-audit.json) |
+| Mixed-only action-only + relaxed B |10 |82 |241 |59 |27.33 |34.02 |[October 26 audit](arm_results/rl_integration/mixed-action-only-iteration10-audit.json) |
+|  |20 |54 |233 |67 |18.00 |23.18 |[October 26 audit](arm_results/rl_integration/mixed-action-only-iteration20-audit.json) |
+|  |30 |39 |245 |55 |13.00 |15.92 |[October 26 audit](arm_results/rl_integration/mixed-action-only-iteration30-audit.json) |
+|  |40 |37 |245 |55 |12.33 |15.10 |[October 26 audit](arm_results/rl_integration/mixed-action-only-iteration40-audit.json) |
 
 ## Mixed-only40/50/60 checkpoint mean · full300
 
