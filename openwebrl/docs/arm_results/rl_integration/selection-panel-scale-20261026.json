@@ -1,9 +1,9 @@
 {
- "note": "Panel scaling at fixed states: joint selection head trained on the 1,393 Piotr states of the one-panel head with at\nmost K GPT-5.5 panels per state (K = 1: 1,393 panels; 8: 10,181; 16: every panel, 18,587; nested subsets for K = 8, 16;\nbatch 64, last of 20 epochs, seed 0). Live on Online-Mind2Web 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150\n(GPT-4o); SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, full task order. K = 8 / 16 ran 2026-10-26; K = 1 is\nthe one-panel head of the data-scaling runs (2026-10-23/24). SFT 4B: Online-Mind2Web / WebVoyager from 2026-10-18 (OM2W\nre-judged by terra), DeepShop same-day 2026-10-26. Overall counts invalid as failure; \"mean\" weights benchmarks equally;\npaired 95% bootstrap resamples tasks within each benchmark (10,000 resamples, seed 20261018). Offline: fixed-five score\nof all three seeds per K.",
+ "note": "Panel scaling at fixed states: joint selection head trained on the 1,393 Piotr states of the one-panel head with at\nmost K GPT-5.5 panels per state (K = 1: 1,393 panels; 8: 10,181; 16: every panel, 18,587; nested subsets for K = 8, 16;\nbatch 64, last of 20 epochs, seed 0). Live on Online-Mind2Web 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150\n(GPT-4o); SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, full task order. K = 8 / 16 ran 2026-10-26; K = 1 is\nthe one-panel head of the data-scaling runs (Online-Mind2Web / WebVoyager 2026-10-23/24; DeepShop rerun same-day 2026-10-26,\njob 391288; its first DeepShop run, 2026-10-24, is kept as k1_ds_1024 to show the date drift). SFT 4B: Online-Mind2Web / WebVoyager from 2026-10-18 (OM2W\nre-judged by terra), DeepShop same-day 2026-10-26. Overall counts invalid as failure; \"mean\" weights benchmarks equally;\npaired 95% bootstrap resamples tasks within each benchmark (10,000 resamples, seed 20261018). Offline: fixed-five score\nof all three seeds per K.",
  "rows": [
   {
    "key": "k1",
-   "condition": "1 panel per state (10-23/24)",
+   "condition": "1 panel per state (OM2W/WV 10-23/24, DS 10-26)",
    "panels": 1393,
    "online_mind2web": {
     "tasks": 300,
@@ -21,12 +21,12 @@
    },
    "deepshop": {
     "tasks": 150,
-    "successes": 42,
-    "valid": 142,
-    "overall": 28.0,
-    "valid_only": 29.6
+    "successes": 52,
+    "valid": 141,
+    "overall": 34.7,
+    "valid_only": 36.9
    },
-   "mean_overall": 38.0,
+   "mean_overall": 40.2,
    "om2w_wv_overall": 43.0
   },
   {
@@ -129,14 +129,14 @@
     12.9
    ],
    "deepshop": [
-    -4.0,
-    -13.3,
-    5.3
+    2.7,
+    -6.7,
+    12.0
    ],
    "mean": [
-    2.0,
-    -1.8,
-    5.9
+    4.2,
+    0.4,
+    8.0
    ],
    "om2w_wv": [
     5.0,
@@ -216,14 +216,14 @@
     2.7
    ],
    "deepshop": [
-    6.0,
-    -2.0,
-    14.0
+    -0.7,
+    -10.0,
+    8.7
    ],
    "mean": [
-    2.4,
-    -1.1,
-    5.9
+    0.2,
+    -3.6,
+    3.9
    ],
    "om2w_wv": [
     0.6,
@@ -245,14 +245,14 @@
     3.9
    ],
    "deepshop": [
-    8.7,
-    0.0,
-    18.0
+    2.0,
+    -7.3,
+    11.3
    ],
    "mean": [
-    3.4,
-    -0.3,
-    7.2
+    1.2,
+    -2.6,
+    5.0
    ],
    "om2w_wv": [
     0.8,
@@ -426,5 +426,17 @@
     ]
    ]
   }
+ },
+ "k1_ds_1024": {
+  "tasks": 150,
+  "successes": 42,
+  "valid": 142,
+  "overall": 28.0,
+  "valid_only": 29.6,
+  "rerun_minus_first": [
+   6.7,
+   -2.0,
+   15.3
+  ]
  }
 }

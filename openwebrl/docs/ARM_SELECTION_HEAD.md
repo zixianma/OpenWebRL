@@ -178,15 +178,57 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 - **Run note.** The OpenAI org spend limit stopped all six jobs mid-run (13:52 PDT). Refused calls were not billed. Their 75 committed episodes were moved to `collection/quarantine-judge-spend-limit-429-20261025/` and rerun under the same frozen plans (jobs 386994–386999, resumed 388504–388509). The WebVoyager all-data job lost its actor server to a CUDA illegal-memory-access crash at 390/595 and was resumed as 388719. Every reported episode has a real judge verdict.
 - [Evidence](arm_results/rl_integration/selection-piotr-head-sameday-20261025.json) · [analysis script](arm_results/rl_integration/selection-piotr-head-sameday-20261025-analysis.py) · runtime `evaluations/piotr-head-sameday-20261025/` (`jobs.txt` lists every attempt).
 
+<a id="selection-head-state-scale-1panel-20261027"></a>
+
+## State scaling at one panel per state (2026-10-27)
+
+**With one GPT-5.5 panel per state, growing Piotr's states tenfold (254 → 2,587) leaves every benchmark flat: the 2,587-state head is +1.5 [−2.0, +5.0] pp over the 254-state head on the Online-Mind2Web + WebVoyager mean and +1.9 [−2.0, +5.8] pp on the three-benchmark mean. Every head is +3.9 to +5.8 pp over SFT 4B on the two-benchmark mean, all driven by WebVoyager. Offline the five sizes score 37.3–38.2% (three seeds each).** This repeats the [all-panels state scaling](#selection-head-data-scale-20261023) and the [panel scaling](#selection-head-panel-scale-20261026) at a fixed one panel per state: a few hundred states with one teacher panel each already saturate this head.
+
+| States (1 panel each) | OM2W valid | OM2W successes | OM2W overall | WebVoyager valid | WebVoyager successes | WebVoyager overall | DeepShop valid | DeepShop successes | DeepShop overall | Mean overall | OM2W + WebVoyager mean |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 254 | 256 | 95 | 31.7% | 585 | 310 | 52.1% | 146 | 51 | 34.0% | 39.3% | 41.9% |
+| 501 | 263 | 107 | 35.7% | 583 | 309 | 51.9% | 150 | 48 | 32.0% | 39.9% | 43.8% |
+| 1,011 | 266 | 102 | 34.0% | 582 | 300 | 50.4% | 146 | 55 | 36.7% | 40.4% | 42.2% |
+| 1,393 (earlier one-panel head) | 263 | 98 | 32.7% | 579 | 317 | 53.3% | 141 | 52 | 34.7% | 40.2% | 43.0% |
+| 2,587 (every training state) | 257 | 107 | 35.7% | 577 | 304 | 51.1% | 145 | 55 | 36.7% | 41.2% | 43.4% |
+| *SFT 4B, one sample* | 275 | 95 | 31.7% | 587 | 264 | 44.4% | 150 | 50 | 33.3% | 36.5% | 38.0% |
+
+Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2Web and WebVoyager from 10-18 (Online-Mind2Web re-judged by gpt-5.6-terra); DeepShop same night (10-27).
+
+| Paired difference, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean | OM2W + WebVoyager |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 254 − SFT 4B | 0.0 [−6.0, +6.0] | **+7.7 [+3.5, +11.9]** | +0.7 [−9.3, +10.7] | +2.8 [−1.1, +7.0] | **+3.9 [+0.2, +7.5]** |
+| 501 − SFT 4B | +4.0 [−1.7, +9.7] | **+7.6 [+3.5, +11.8]** | −1.3 [−11.3, +8.7] | +3.4 [−0.7, +7.5] | **+5.8 [+2.2, +9.4]** |
+| 1,011 − SFT 4B | +2.3 [−3.0, +8.0] | **+6.1 [+2.2, +9.9]** | +3.3 [−6.0, +12.7] | **+3.9 [+0.1, +7.8]** | **+4.2 [+0.8, +7.5]** |
+| 1,393 − SFT 4B | +1.0 [−4.3, +6.3] | **+8.9 [+4.9, +12.9]** | +1.3 [−8.0, +10.7] | +3.7 [0.0, +7.5] | **+5.0 [+1.6, +8.3]** |
+| 2,587 − SFT 4B | +4.0 [−2.0, +9.7] | **+6.7 [+2.9, +10.6]** | +3.3 [−6.7, +12.7] | **+4.7 [+0.6, +8.7]** | **+5.4 [+1.9, +8.8]** |
+| 2,587 − 254 | +4.0 [−1.7, +9.7] | −1.0 [−5.0, +3.0] | +2.7 [−6.7, +12.0] | +1.9 [−2.0, +5.8] | +1.5 [−2.0, +5.0] |
+| 2,587 − 1,011 | +1.7 [−3.7, +7.0] | +0.7 [−3.2, +4.5] | 0.0 [−8.7, +8.7] | +0.8 [−2.8, +4.4] | +1.2 [−2.0, +4.4] |
+
+**Offline** (348 test states, fixed five, held-out draws 3–7; one SFT sample 35.65%):
+
+| States (1 panel each) | Seed 0 | Seed 1 | Seed 2 | Mean − SFT sample, pp |
+| ---: | ---: | ---: | ---: | ---: |
+| 254 | 37.03% | 37.82% | 37.46% | +1.8 |
+| 501 | 37.54% | 37.51% | 37.44% | +1.9 |
+| 1,011 | 37.11% | 37.47% | 37.35% | +1.7 |
+| 1,393 | 37.66% | 37.77% | 38.31% | +2.3 |
+| 2,587 | 38.07% | 38.31% | 38.35% | +2.6 |
+
+- **Setup.** States are whole tasks of Piotr's training split in the seeded order of the all-panels state scaling (subset seed 20261023), so smaller sets are subsets of larger ones; the counts are 254 / 501 / 1,011 / 2,587 because whole tasks are kept. 2,587 is every training state outside our 86 offline test tasks (Piotr's 2,692 minus 105). Each state keeps one panel from a fixed per-state order (`train_head_round.py --extra-panels-per-state 1 --extra-nested-panels`), the same panel as the panel-scale one-panel heads; the live 1,393 row is the earlier one-panel head, whose panel was drawn differently (offline 37.65% vs 37.66%). Recipe of the one-panel head: joint transformer, soft CE, batch 64, last of 20 epochs, so the 254-state head takes about 80 optimizer steps. Live heads are seed 0; seed spread offline is ≤ 0.8 pp.
+- **Caveats.** DeepShop is compared with the same-night SFT 4B run (10-27, 33.3%); the 1,393-state DeepShop run is from 10-26 (SFT 4B 32.0% that day). The 1,393-state Online-Mind2Web and WebVoyager runs are from 10-23/24; those benchmarks have not drifted measurably.
+- **Run note.** Thirteen jobs (391471–391483), one H200 each, all complete on the first attempt, 29.1 H200-h in total; every episode has a judge verdict (Online-Mind2Web gpt-5.6-terra, WebVoyager and DeepShop GPT-4o).
+- [Evidence](arm_results/rl_integration/selection-state-scale-1panel-20261027.json) · [analysis script](arm_results/rl_integration/selection-state-scale-1panel-20261027-analysis.py) · runtime `selection-head-20261008/state-scale-1panel-20261026/` (heads, `train.sbatch`, `submit_live.sh`) and `evaluations/state-scale-1panel-20261026/` (`jobs.txt`).
+
 <a id="selection-head-panel-scale-20261026"></a>
 
 ## Panel scaling at fixed states (2026-10-26)
 
-**On the same 1,393 Piotr states, training on up to 13× more GPT-5.5 panels does not change Online-Mind2Web or WebVoyager: each head gains +5.0 to +5.8 pp over SFT 4B on their mean, and the all-panels head is +0.8 [−2.4, +4.1] pp over the one-panel head. Offline the five panel counts are within 1.2 pp of each other (three seeds each). The only movement is DeepShop (+8.7 [0.0, +18.0] pp for all panels vs one), which compares runs from different dates.** Together with the [state scaling](#selection-head-data-scale-20261023), neither more states nor more panels per state improves the head beyond a few hundred states.
+**On the same 1,393 Piotr states, training on up to 13× more GPT-5.5 panels does not change Online-Mind2Web or WebVoyager: each head gains +5.0 to +5.8 pp over SFT 4B on their mean, and the all-panels head is +0.8 [−2.4, +4.1] pp over the one-panel head. Offline the five panel counts are within 1.2 pp of each other (three seeds each). DeepShop is flat too once run on the same day: all panels − one panel is +2.0 [−7.3, +11.3] pp; the earlier +8.7 compared against a 10-24 run, and the identical one-panel head scored 6.7 pp higher on its 10-26 rerun.** Together with the [state scaling](#selection-head-data-scale-20261023) and the [one-panel state scaling](#selection-head-state-scale-1panel-20261027), neither more states nor more panels per state improves the head beyond a few hundred states.
 
 | Panels per state (max) | Panels | OM2W valid | OM2W successes | OM2W overall | WebVoyager valid | WebVoyager successes | WebVoyager overall | DeepShop valid | DeepShop successes | DeepShop overall | Mean overall | OM2W + WebVoyager mean |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 (10-23/24) | 1,393 | 263 | 98 | 32.7% | 579 | 317 | 53.3% | 142 | 42 | 28.0% | 38.0% | 43.0% |
+| 1 (OM2W/WV 10-23/24, DeepShop 10-26) | 1,393 | 263 | 98 | 32.7% | 579 | 317 | 53.3% | 141 | 52 | 34.7% | 40.2% | 43.0% |
 | 8 (10-26) | 10,181 | 259 | 106 | 35.3% | 571 | 308 | 51.8% | 147 | 51 | 34.0% | 40.4% | 43.5% |
 | 16, all panels (10-26) | 18,587 | 257 | 104 | 34.7% | 580 | 315 | 52.9% | 141 | 55 | 36.7% | 41.4% | 43.8% |
 | *SFT 4B, one sample* | — | 275 | 95 | 31.7% | 587 | 264 | 44.4% | 148 | 48 | 32.0% | 36.0% | 38.0% |
@@ -195,11 +237,11 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 | Paired difference, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean | OM2W + WebVoyager |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 panel − SFT 4B | +1.0 [−4.3, +6.3] | **+8.9 [+4.9, +12.9]** | −4.0 [−13.3, +5.3] | +2.0 [−1.8, +5.9] | **+5.0 [+1.6, +8.4]** |
+| 1 panel − SFT 4B | +1.0 [−4.3, +6.3] | **+8.9 [+4.9, +12.9]** | +2.7 [−6.7, +12.0] | **+4.2 [+0.4, +8.0]** | **+5.0 [+1.6, +8.4]** |
 | ≤ 8 panels − SFT 4B | +3.7 [−2.0, +9.3] | **+7.4 [+3.4, +11.4]** | +2.0 [−6.7, +10.7] | **+4.4 [+0.7, +8.0]** | **+5.5 [+2.0, +9.0]** |
 | All panels − SFT 4B | +3.0 [−2.3, +8.3] | **+8.6 [+4.7, +12.4]** | +4.7 [−4.0, +13.3] | **+5.4 [+1.8, +9.0]** | **+5.8 [+2.4, +9.1]** |
-| ≤ 8 panels − 1 panel | +2.7 [−2.7, +7.7] | −1.5 [−5.5, +2.7] | +6.0 [−2.0, +14.0] | +2.4 [−1.1, +5.9] | +0.6 [−2.6, +3.8] |
-| All panels − 1 panel | +2.0 [−3.0, +7.0] | −0.3 [−4.5, +3.9] | +8.7 [0.0, +18.0] | +3.4 [−0.3, +7.2] | +0.8 [−2.4, +4.1] |
+| ≤ 8 panels − 1 panel | +2.7 [−2.7, +7.7] | −1.5 [−5.5, +2.7] | −0.7 [−10.0, +8.7] | +0.2 [−3.6, +3.9] | +0.6 [−2.6, +3.8] |
+| All panels − 1 panel | +2.0 [−3.0, +7.0] | −0.3 [−4.5, +3.9] | +2.0 [−7.3, +11.3] | +1.2 [−2.6, +5.0] | +0.8 [−2.4, +4.1] |
 | All panels − ≤ 8 panels | −0.7 [−5.7, +4.3] | +1.2 [−2.7, +5.0] | +2.7 [−6.0, +11.3] | +1.1 [−2.6, +4.8] | +0.3 [−3.0, +3.4] |
 
 **Offline** (348 test states, fixed five, held-out draws 3–7; one SFT sample 35.65%):
@@ -213,8 +255,8 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | 16, all | 18,587 | 38.17% | 38.31% | 38.17% | +2.6 |
 
 - **Setup.** The 1,393 states are those of the one-panel head (whole tasks in seeded order to ≥ 1,380 states; our 86 test tasks excluded). Piotr has at most 16 panels per state (852 states have 16), so "≤ 16" is every panel, 13.3× the one-panel set. The 2–16 heads draw panels in a fixed per-state order, so smaller sets are subsets of larger ones (`train_head_round.py --extra-panels-per-state K --extra-nested-panels`); the live one-panel row is the earlier one-panel head, whose single panel was drawn differently (offline 37.65% vs 37.66% for the nested one-panel head). Recipe held fixed: joint transformer, soft CE, batch 64, last of 20 epochs, so more panels also means more optimizer steps. Live heads are seed 0; seed spread offline is ≤ 0.65 pp.
-- **Caveats.** The one-panel live runs are from 10-23/24 and DeepShop drifts between dates (SFT 4B: 34.0% on 10-18, 28.0% on 10-24, 32.0% on 10-26), so the DeepShop rows against the one-panel head are not same-day comparisons. Online-Mind2Web and WebVoyager have not drifted measurably.
-- **Run note.** Seven jobs (390452–390462), one H200 each, all complete on the first attempt; every episode has a judge verdict (no judge-exhausted records, no budget halt).
+- **Caveats.** DeepShop drifts between dates (SFT 4B: 34.0% on 10-18, 28.0% on 10-24, 32.0% on 10-26, 33.3% on 10-27), so all DeepShop rows here are same-day (10-26). The one-panel head's first DeepShop run (10-24) scored 28.0% (42 / 150); its 10-26 rerun is +6.7 [−2.0, +15.3] pp above it, which accounts for most of the earlier cross-date +8.7 for all panels vs one. Its Online-Mind2Web and WebVoyager runs are from 10-23/24; those benchmarks have not drifted measurably.
+- **Run note.** Seven jobs (390452–390462) plus the one-panel DeepShop rerun (391288), one H200 each, all complete on the first attempt; every episode has a judge verdict (no judge-exhausted records, no budget halt).
 - [Evidence](arm_results/rl_integration/selection-panel-scale-20261026.json) · [analysis script](arm_results/rl_integration/selection-panel-scale-20261026-analysis.py) · runtime `selection-head-20261008/panel-scale-20261026/` (heads, `train.sbatch`, `submit_live.sh`) and `evaluations/panel-scale-20261026/` (`jobs.txt`).
 
 <a id="selection-head-data-scale-20261023"></a>

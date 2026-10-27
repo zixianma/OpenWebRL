@@ -2,7 +2,8 @@
 most K GPT-5.5 panels per state (K = 1: 1,393 panels; 8: 10,181; 16: every panel, 18,587; nested subsets for K = 8, 16;
 batch 64, last of 20 epochs, seed 0). Live on Online-Mind2Web 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150
 (GPT-4o); SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, full task order. K = 8 / 16 ran 2026-10-26; K = 1 is
-the one-panel head of the data-scaling runs (2026-10-23/24). SFT 4B: Online-Mind2Web / WebVoyager from 2026-10-18 (OM2W
+the one-panel head of the data-scaling runs (Online-Mind2Web / WebVoyager 2026-10-23/24; DeepShop rerun same-day 2026-10-26,
+job 391288; its first DeepShop run, 2026-10-24, is kept as k1_ds_1024 to show the date drift). SFT 4B: Online-Mind2Web / WebVoyager from 2026-10-18 (OM2W
 re-judged by terra), DeepShop same-day 2026-10-26. Overall counts invalid as failure; "mean" weights benchmarks equally;
 paired 95% bootstrap resamples tasks within each benchmark (10,000 resamples, seed 20261018). Offline: fixed-five score
 of all three seeds per K."""
@@ -18,7 +19,9 @@ PS, DS = EV / "panel-scale-20261026", EV / "data-scale-20261023"
 K8, K16, K1 = "head5-0f16963c46eb", "head5-87adc458c551", "head5-878e69f9264f"
 X18 = EV / "crossbench-full-t10-20261018"
 RUNS = {  # key: (label, panels, {benchmark: (collection dir, terra re-judge dir or None)})
-    "k1": ("1 panel per state (10-23/24)", 1393, {b: (DS / f"{b}/{K1}/{b}", None) for b in BENCH}),
+    "k1": ("1 panel per state (OM2W/WV 10-23/24, DS 10-26)", 1393, {
+        "online_mind2web": (DS / f"online_mind2web/{K1}/online_mind2web", None),
+        "webvoyager": (DS / f"webvoyager/{K1}/webvoyager", None), "deepshop": (PS / f"deepshop/{K1}/deepshop", None)}),
     "k8": ("<= 8 panels per state (10-26)", 10181, {b: (PS / f"{b}/{K8}/{b}", None) for b in BENCH}),
     "k16": ("<= 16 panels per state, all (10-26)", 18587, {b: (PS / f"{b}/{K16}/{b}", None) for b in BENCH}),
     "sft1": ("SFT 4B, one sample", None, {
@@ -81,8 +84,12 @@ for K in (1, 2, 4, 8, 16):
     offline[K] = dict(panels=s[0]["extra"]["panels"], states=s[0]["extra"]["base_states"],
                       fixed_five=[x["fixed_five"]["head"] for x in s], sft_sample=s[0]["fixed_five"]["sft_sample"],
                       minus_sft_sample=[[round(v, 2) for v in x["fixed_five"]["head_minus_sft_sample"]] for x in s])
+old = load(DS / f"deepshop/{K1}/deepshop"); new = data["k1", "deepshop"]
+x = np.array([new[t]["success"] - old[t]["success"] for t in new], float)
+k1_ds_1024 = dict(**stats(old), rerun_minus_first=[round(100 * x.mean(), 1), *ci(x[rng.integers(0, len(x), (10000, len(x)))].mean(1))])
+print("k1_ds_1024", k1_ds_1024)
 Path(__file__).with_name("selection-panel-scale-20261026.json").write_text(
-    json.dumps(dict(note=__doc__, rows=rows, paired=pairs, offline=offline), indent=1))
+    json.dumps(dict(note=__doc__, rows=rows, paired=pairs, offline=offline, k1_ds_1024=k1_ds_1024), indent=1))
 for r in rows:
     print(r["key"], {b: (r[b]["successes"], r[b]["valid"], r[b]["overall"]) for b in BENCH}, r["mean_overall"], r["om2w_wv_overall"])
 for p in pairs:
