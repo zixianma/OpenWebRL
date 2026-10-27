@@ -315,7 +315,7 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 
 ![Piotr-data heads: success per benchmark vs. training states, labelled with the gain over SFT 4B; paired 95% intervals](arm_results/rl_integration/selection-data-scale-paired-20261026.png)
 
-![Every head's success on the three-benchmark mean, labelled with the gain over SFT 4B; paired 95% intervals](arm_results/rl_integration/selection-heads-vs-sft-20261026.png)
+![Data-scaling heads only: success on the three-benchmark mean, labelled with the gain over SFT 4B; paired 95% intervals (label-ablation heads: see ARM_FINAL_RESULTS.md)](arm_results/rl_integration/selection-heads-vs-sft-20261026.png)
 
 *Y-axis: overall success; labels: gain over SFT 4B, pp. Bars: the paired 95% interval of that gain, drawn around the head's rate, so a bar clearing the dashed SFT line is a significant gain ([how the intervals are computed](ARM_FINAL_RESULTS.md#final-paired-bootstrap)). [Plot script](arm_results/rl_integration/selection-data-scale-paired-20261026-plot.py).*
 

@@ -6,7 +6,8 @@ its error bar is the paired 95% bootstrap interval of that gain drawn around the
 benchmark for the mean), so a bar clearing the dashed SFT line is a significant gain.
 (1) selection-data-scale-paired-20261026.png: Piotr-data heads (seed 0; 254 / 501 / 1,011 / 2,587 states, every panel;
     one-panel head excluded), one panel per benchmark.
-(2) selection-heads-vs-sft-20261026.png: every head in the table on the three-benchmark mean.
+(2) selection-heads-vs-sft-20261026.png: the data-scaling heads only (254 / 501 / 1,011 / 2,587 states, every panel; 1,393
+    states with one panel each, hollow) on the three-benchmark mean.
 Neither interval includes training-seed variance (one seed per head) or run-date drift (DeepShop).
 """
 import json
@@ -59,26 +60,28 @@ fig.text(0.01, 0.01, "Bars: paired 95% bootstrap of the gain over SFT 4B on the 
 fig.tight_layout(rect=(0, 0.08, 1, 0.95))
 fig.savefig(HERE / "selection-data-scale-paired-20261026.png"); plt.close(fig)
 
-# ---- (2) every head, three-benchmark mean, absolute
-ROWS = [("Piotr\n254", "Piotr 250"), ("Piotr\n501", "Piotr 500"), ("Piotr\n1,011", "Piotr 1000"),
-        ("Piotr\n2,587", "Piotr all 2587"), ("Piotr 1,393,\n1 panel", "Piotr 1380 one-panel"),
-        ("Earlier\nPiotr-data\nhead", "Piotr-data head (listwise, old)"), ("Piotr\nSelection-\nARM", "Piotr ARM"),
-        ("Ours,\nK = 3", "Ours K3"), ("Ours,\noutcome", "Ours outcome"), ("Ours,\nK = 1", "Ours K1"),
-        ("Ours,\npre-exec.", "Ours pre")]
-fig, ax = plt.subplots(figsize=(9.6, 4.4), dpi=150)
+# ---- (2) data-scaling heads only (label-ablation heads have their own figure,
+# selection-label-ablation-vs-sft-20261027.png), three-benchmark mean, absolute; wide y range (25-50%) so the intervals
+# read at the scale of the success rates
+ROWS = [("254 states", "Piotr 250"), ("501 states", "Piotr 500"), ("1,011 states", "Piotr 1000"),
+        ("2,587 states\n(all)", "Piotr all 2587"), ("1,393 states,\none panel each", "Piotr 1380 one-panel")]
+fig, ax = plt.subplots(figsize=(5.8, 3.6))
 sft = T["SFT 4B"]["mean_overall"]
-ax.axhline(sft, color=MUTED, lw=1, ls="--")
-ax.annotate(f"SFT 4B {sft:.1f}%", (-0.55, sft), xytext=(0, -10), textcoords="offset points", ha="left",
-            fontsize=7.5, color=MUTED)
+ax.axhline(sft, color=MUTED, lw=1, ls="--", zorder=0)
+ax.text(-0.45, sft - 0.5, f"SFT 4B, one sample: {sft:.1f}", ha="left", va="top", fontsize=7.5, color=MUTED)
 for x, (_, n) in enumerate(ROWS):
-    gain(ax, x, T[n]["mean_overall"], *T[n]["minus_sft4b"], BLUE)
-for x in (4.5, 6.5): ax.axvline(x, color=GRID, lw=1)
-ax.set_xticks(range(len(ROWS))); ax.set_xticklabels([r for r, _ in ROWS], fontsize=7.5); ax.set_xlim(-0.6, len(ROWS) - 0.4)
-ax.set_ylabel("Overall success, mean of 3 benchmarks, %", fontsize=9); style(ax)
-ax.set_ylim(top=ax.get_ylim()[1] + 0.8)
-ax.set_title("Live success of each selection head, labelled with the gain over one SFT 4B sample", fontsize=10.5)
-fig.text(0.01, 0.01, "Online-Mind2Web 300, WebVoyager 595, DeepShop 150, equal weight. Bars: paired 95% bootstrap of the gain, "
-         "drawn around the head's rate.\nOne training seed per head; run dates differ (DeepShop drifts).", fontsize=7,
-         color=MUTED)
-fig.tight_layout(rect=(0, 0.06, 1, 1))
-fig.savefig(HERE / "selection-heads-vs-sft-20261026.png"); plt.close(fig)
+    y = T[n]["mean_overall"]; d, lo, hi = T[n]["minus_sft4b"]; hollow = "one-panel" in n
+    ax.errorbar(x, y, yerr=[[d - lo], [hi - d]], fmt="o", ms=8, color=BLUE, ecolor="#333333", capsize=3, lw=1, zorder=3,
+                markerfacecolor="white" if hollow else BLUE, markeredgecolor=BLUE if hollow else "white",
+                markeredgewidth=1.6 if hollow else 1)
+    ax.text(x, y + hi - d + .4, f"{y:.1f}\n({d:+.1f})".replace("-", "\u2212"), ha="center", va="bottom", fontsize=8)
+ax.axvline(3.5, color=GRID, lw=1)
+ax.set_xticks(range(len(ROWS)), [r for r, _ in ROWS], fontsize=8); ax.set_xlim(-0.5, len(ROWS) - 0.5)
+ax.set_ylabel("Overall success, mean of 3 benchmarks (%)", fontsize=9)
+ax.set_ylim(25, 50); ax.set_yticks(range(25, 51, 5)); style(ax)
+fig.text(0.01, 0.01, "Heads trained on Piotr's GPT-5.5 panels (every panel unless noted), seed 0. Values: success (gain over SFT 4B, "
+         "pp).\nBars: paired 95% bootstrap of the gain, drawn around the head's rate. Online-Mind2Web 300 (gpt-5.6-terra),\n"
+         "WebVoyager 595, DeepShop 150 (GPT-4o), equal weight. Heads 10-23/24, SFT 4B 10-18 (DeepShop drifts).",
+         fontsize=6.5, color=MUTED)
+fig.tight_layout(rect=(0, 0.13, 1, 1))
+fig.savefig(HERE / "selection-heads-vs-sft-20261026.png", dpi=160); plt.close(fig)

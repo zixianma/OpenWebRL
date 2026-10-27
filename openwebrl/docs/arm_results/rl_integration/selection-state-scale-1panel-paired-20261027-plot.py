@@ -67,7 +67,7 @@ fig.savefig(HERE / "selection-state-scale-1panel-paired-20261027.png"); plt.clos
 
 fig, ax = plt.subplots(figsize=(5.2, 3.9), dpi=200)
 sft = draw(ax, "mean", GRAY, fs=8.5)
-ax.set_ylim(top=ax.get_ylim()[1] + 0.6)
+ax.set_ylim(25, 50); ax.set_yticks(range(25, 51, 5))  # wide range: intervals read at the scale of the rates
 ax.set_ylabel("Overall success, mean of 3 benchmarks, %", fontsize=9)
 ax.set_title(f"Selection head, one GPT-5.5 panel per state: success vs\ntraining states, labelled with gain over SFT 4B ({sft:.1f}%, dashed)",
              fontsize=10)

@@ -30,7 +30,7 @@ HEADS = [r for r in ROWS if r[1] != "SFT 4B"]
 fig, ax = plt.subplots(figsize=(5.8, 3.6))
 sft = T["SFT 4B"]["mean_overall"]
 ax.axhline(sft, color=MUTED, lw=1, ls="--", zorder=0)
-ax.text(-0.45, sft - 0.25, f"SFT 4B, one sample: {sft:.1f}", ha="left", va="top", fontsize=7.5, color=MUTED)
+ax.text(-0.45, sft - 0.5, f"SFT 4B, one sample: {sft:.1f}", ha="left", va="top", fontsize=7.5, color=MUTED)
 for x, (_, n) in enumerate(HEADS):
     y = T[n]["mean_overall"]; d, lo, hi = T[n]["minus_sft4b"]
     ax.errorbar(x, y, yerr=[[d - lo], [hi - d]], fmt="o", ms=8, color=COLORS[n], ecolor="#333333", capsize=3, lw=1,
@@ -38,7 +38,7 @@ for x, (_, n) in enumerate(HEADS):
     ax.text(x, y + hi - d + .3, f"{y:.1f}\n({d:+.1f})".replace("-", "\u2212"), ha="center", va="bottom", fontsize=8)
 ax.set_xticks(range(len(HEADS)), [r for r, _ in HEADS], fontsize=8); ax.set_xlim(-0.5, len(HEADS) - 0.5)
 ax.set_ylabel("Overall success, mean of 3 benchmarks (%)", fontsize=9)
-ax.set_ylim(32, 48); ax.set_yticks(range(32, 49, 2))
+ax.set_ylim(25, 50); ax.set_yticks(range(25, 51, 5))  # wide range: intervals read at the scale of the rates
 ax.grid(axis="y", alpha=.25)
 for side in ("top", "right"):
     ax.spines[side].set_visible(False)

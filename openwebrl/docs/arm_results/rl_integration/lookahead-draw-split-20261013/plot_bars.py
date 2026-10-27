@@ -25,7 +25,7 @@ keys = [k for k in STYLE if k in r and k != "Actor first sample"]
 a = r["Actor first sample"][0]
 fig, ax = plt.subplots(figsize=(7.6, 3.6))
 ax.axhline(a, color="#666666", lw=1, ls="--", zorder=0)
-ax.text(-0.45, a - .2, f"Actor, first sample: {a:.1f}", ha="left", va="top", fontsize=7.5, color="#666666")
+ax.text(-0.45, a - .5, f"Actor, first sample: {a:.1f}", ha="left", va="top", fontsize=7.5, color="#666666")
 for i, k in enumerate(keys):
     m = r[k][0]; d = r["minus_actor"][k]; lo, hi = a + d[1], a + d[2]
     ax.errorbar(i, m, yerr=[[m - lo], [hi - m]], fmt="D" if STYLE[k][2] == "-." else "o", ms=7.5, color=STYLE[k][1],
@@ -33,7 +33,7 @@ for i, k in enumerate(keys):
     ax.text(i, hi + .3, f"{m:.1f}", ha="center", va="bottom", fontsize=8)
 ax.set_xticks(range(len(keys)), [NAMES[k] for k in keys], fontsize=8); ax.set_xlim(-0.5, len(keys) - 0.5)
 ax.set_ylabel("Success on rollouts 3–7 (%)")
-ax.set_ylim(32, 44)
+ax.set_ylim(25, 50); ax.set_yticks(range(25, 51, 5))  # wide range: intervals read at the scale of the rates
 ax.grid(axis="y", alpha=.25)
 for side in ("top", "right"):
     ax.spines[side].set_visible(False)
