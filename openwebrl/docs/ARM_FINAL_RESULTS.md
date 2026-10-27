@@ -312,3 +312,30 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 - **Caveat: DeepShop drifted between run dates.** Same-day reruns on 10-24 dropped SFT 4B from 34.0% to 28.0% and the earlier head from 44.0% to 34.0%; against that same-day head the new heads differ by −6.0 to +2.7 pp on DeepShop (all intervals span 0). DeepShop columns, and so the means, are not comparable across dates; Online-Mind2Web and WebVoyager are flat.
 - **Same-day rerun of both full-data heads (10-25).** On one day and all 1,045 tasks, the all-data head (2,587 states) is **−3.7 pp [−7.2, −0.1]** below the earlier Piotr-data head (2,692 states) on the mean (42.1% vs 38.4% overall). Online-Mind2Web (−1.7) and WebVoyager (−0.7) are level; the gap is DeepShop (−8.7 [−17.3, 0.0]). Each head rerun against its own earlier run moves only −2.2 and −1.1 pp, so run-date drift explains about a quarter of the original −4.8 pp gap ([details](ARM_SELECTION_HEAD.md#selection-piotr-head-sameday-20261025)).
 - [Details](ARM_SELECTION_HEAD.md#selection-head-data-scale-20261023) · [Evidence](arm_results/rl_integration/selection-data-scale-20261023.json) · [Analysis script](arm_results/rl_integration/selection-data-scale-20261023-analysis.py)
+
+<a id="final-selection-state-scale-1panel-20261027"></a>
+
+### More states or more panels, one seed per head, same-day DeepShop (October 26–27)
+
+**With one GPT-5.5 panel per state, ten times more states (254 → 2,587) moves the gain over one SFT 4B sample on the three-benchmark mean only from +2.8 to +4.7 pp (2,587 − 254: +1.9 pp [−2.0, +5.8]). On a fixed 1,393 states, 13× more panels per state is also flat (all panels − one: +1.2 pp [−2.6, +5.0]).** Every head's gain comes mainly from WebVoyager (+6 to +9 pp, each significant); Online-Mind2Web and DeepShop are within noise. All runs compare DeepShop against a same-day SFT 4B run, which removes the date drift noted above. Same joint head, soft CE, batch 64, last of 20 epochs; states are whole tasks in a fixed order, our 86 offline test tasks excluded; all 1,045 tasks, T 1.0 / top-p 0.9, 30 steps.
+
+![Gain over one SFT 4B sample on the three-benchmark mean versus training states, one panel per state](arm_results/rl_integration/selection-state-scale-1panel-mean-20261027.png)
+
+![The same per benchmark](arm_results/rl_integration/selection-state-scale-1panel-paired-20261027.png)
+
+| Training data | States | Panels | Online-Mind2Web overall | WebVoyager overall | DeepShop overall | Mean overall | Mean − SFT 4B, pp [95% CI] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| One panel per state | 254 | 254 | 31.7% | 52.1% | 34.0% | 39.3% | +2.8 [−1.1, +7.0] |
+| One panel per state | 501 | 501 | 35.7% | 51.9% | 32.0% | 39.9% | +3.4 [−0.7, +7.5] |
+| One panel per state | 1,011 | 1,011 | 34.0% | 50.4% | 36.7% | 40.4% | **+3.9 [+0.1, +7.8]** |
+| One panel per state | 1,393 | 1,393 | 32.7% | 53.3% | 34.7% | 40.2% | **+4.2 [+0.4, +8.0]** |
+| One panel per state | 2,587 | 2,587 | 35.7% | 51.1% | 36.7% | 41.2% | **+4.7 [+0.6, +8.7]** |
+| ≤ 8 panels per state | 1,393 | 10,181 | 35.3% | 51.8% | 34.0% | 40.4% | **+4.4 [+0.7, +8.0]** |
+| Every panel (≤ 16 per state) | 1,393 | 18,587 | 34.7% | 52.9% | 36.7% | 41.4% | **+5.4 [+1.8, +9.0]** |
+
+SFT 4B: Online-Mind2Web 31.7% and WebVoyager 44.4% (10-18; Online-Mind2Web re-judged by gpt-5.6-terra); DeepShop 33.3% on 10-27 for the one-panel heads except 1,393, and 32.0% on 10-26 for the 1,393-state heads. Online-Mind2Web 300, WebVoyager 595, DeepShop 150 tasks; overall counts invalid episodes as failures; paired 95% bootstrap over tasks.
+
+- **Offline agrees.** On the 348 held-out test states (fixed five, three seeds each), the one-panel heads score 37.3–38.2% and the panel counts 37.0–38.2%, against 35.65% for one SFT sample.
+- **DeepShop drift explained the earlier panel effect.** Against a 10-24 run, all panels looked +8.7 pp better than one on DeepShop; rerunning the one-panel head on the same day as the others raised it by 6.7 pp, leaving +2.0 [−7.3, +11.3].
+- **Caveat.** One training seed per live head (offline seed spread ≤ 0.8 pp); the 1,393-state one-panel head's Online-Mind2Web and WebVoyager runs are from 10-23/24, and its single panel per state was drawn differently from the other one-panel heads.
+- [State-scaling details](ARM_SELECTION_HEAD.md#selection-head-state-scale-1panel-20261027) · [Panel-scaling details](ARM_SELECTION_HEAD.md#selection-head-panel-scale-20261026) · Evidence: [states](arm_results/rl_integration/selection-state-scale-1panel-20261027.json), [panels](arm_results/rl_integration/selection-panel-scale-20261026.json) · [Plot script](arm_results/rl_integration/selection-state-scale-1panel-paired-20261027-plot.py)

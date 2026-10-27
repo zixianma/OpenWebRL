@@ -215,7 +215,9 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. SFT 4B: Online-Mind2We
 | 1,393 | 37.66% | 37.77% | 38.31% | +2.3 |
 | 2,587 | 38.07% | 38.31% | 38.35% | +2.6 |
 
-![One-panel state scaling: paired gain over SFT 4B per benchmark](arm_results/rl_integration/selection-state-scale-1panel-paired-20261027.png)
+![One-panel state scaling: paired gain over SFT 4B on the three-benchmark mean](arm_results/rl_integration/selection-state-scale-1panel-mean-20261027.png)
+
+![One-panel state scaling: paired gain over SFT 4B per benchmark and on the mean](arm_results/rl_integration/selection-state-scale-1panel-paired-20261027.png)
 
 - **Setup.** States are whole tasks of Piotr's training split in the seeded order of the all-panels state scaling (subset seed 20261023), so smaller sets are subsets of larger ones; the counts are 254 / 501 / 1,011 / 2,587 because whole tasks are kept. 2,587 is every training state outside our 86 offline test tasks (Piotr's 2,692 minus 105). Each state keeps one panel from a fixed per-state order (`train_head_round.py --extra-panels-per-state 1 --extra-nested-panels`), the same panel as the panel-scale one-panel heads; the live 1,393 row is the earlier one-panel head, whose panel was drawn differently (offline 37.65% vs 37.66%). Recipe of the one-panel head: joint transformer, soft CE, batch 64, last of 20 epochs, so the 254-state head takes about 80 optimizer steps. Live heads are seed 0; seed spread offline is ≤ 0.8 pp.
 - **Caveats.** DeepShop is compared with the same-night SFT 4B run (10-27, 33.3%); the 1,393-state DeepShop run is from 10-26 (SFT 4B 32.0% that day). The 1,393-state Online-Mind2Web and WebVoyager runs are from 10-23/24; those benchmarks have not drifted measurably.
