@@ -19,7 +19,7 @@ and the known weak spots of the rule. The teacher labels built on these actions 
 - **`done` is now split by answer (2026-10-26).** For teacher labels, `done` proposals are grouped by answer (one Luna
   call per state) and each group is its own action; a group needs no execution, since finishing does not change the
   page. Applied to the selection-head training data (46 train states) and to the planned labels-only collection; the
-  branch-state dataset flags affected states (`done_answer_groups`).
+  branch-state dataset is not split.
 
 ## Grouping rule
 
@@ -177,8 +177,8 @@ scores each proposal's own text, so different answers are different choices ther
 
 | Dataset | Change |
 | --- | --- |
-| Selection-head data (`openwebrl-selection-head-data`) | 53 states have conflicting `done` answers (Luna, 170 calls, USD 0.06). The 46 train ones are split and re-labelled (92 calls, USD 0.15): 3, 4 and 5 actions in 16, 16 and 14 states; `action` ends in `#answer<k>`. The 7 test states keep the merged `done`, because only the executed answer has held-out outcomes. Column `done_answer_groups` on every state. Heads trained before 2026-10-26 used the merged version |
-| Branch-state data (`openwebrl-branch-states`) | Not split: only the executed answer has judged continuations. Column `done_answer_groups` (154 of the 357 states with at least two `done` proposals are above 1) |
+| Selection-head data (`openwebrl-selection-head-data`) | 53 states have conflicting `done` answers (Luna, 170 calls, USD 0.06). The 46 train ones are split and re-labelled (92 calls, USD 0.15): 3, 4 and 5 actions in 16, 16 and 14 states; `action` ends in `#answer<k>`. The 7 test states keep the merged `done`, because only the executed answer has held-out outcomes. Heads trained before 2026-10-26 used the merged version |
+| Branch-state data (`openwebrl-branch-states`) | Not split: only the executed answer has judged continuations (154 of the 357 states with at least two `done` proposals conflict) |
 | Labels-only collection (planned) | Split at labelling time with the same steps; `done` groups take action slots but no execution |
 
 <details><summary>Method and code</summary>
@@ -191,6 +191,6 @@ scores each proposal's own text, so different answers are different choices ther
   per-state groups: runtime `branch-selector-scaleup-20261008/fast1k-20261012/review-cohorts/final/v2/done-check/`
   (`done_check.py`, `summary.json`, `results/`); 366 calls, USD 0.16 (one 21-answer state needed a larger output limit).
 - Split and re-labels: runtime `selection-head-20261008/sft-actions-20261021/labels/donesplit/` (`build.py`, `split.jsonl`,
-  `k3/`, `verify_requests.py`); dataset builder `hf_head_data.py`; branch-state flag `fast1k-20261012/hf_v2_doneflag.py`.
+  `k3/`, `verify_requests.py`); dataset builder `hf_head_data.py`.
 - The `diverse_candidates` docstring mentions a 50-unit grid; the code uses 100.
 </details>
