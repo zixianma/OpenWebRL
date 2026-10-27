@@ -19,10 +19,10 @@ from matplotlib.ticker import PercentFormatter, StrMethodFormatter
 from matplotlib.lines import Line2D
 
 METHODS = {
-    "serial_high": ("Sol single high", "#0072B2", "s"),
-    "luna_single_high": ("Luna single high", "#0072B2", "o"),
-    "parallel3_select_high": ("Luna N3 high + high", "#E6B800", "o"),
-    "parallel5_select_high": ("Luna N5 high + high", "#E87500", "o"),
+    "serial_high": ("Sol single", "#0072B2", "s"),
+    "luna_single_high": ("Luna single", "#0072B2", "o"),
+    "parallel3_select_high": ("Luna N3", "#E6B800", "o"),
+    "parallel5_select_high": ("Luna N5", "#E87500", "o"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 
@@ -81,8 +81,8 @@ def draw(ax, means, metric, native):
         ax.xaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
         ax.set_title("Performance vs. latency", loc="left", pad=15)
     else:
-        ax.set_xlabel("Mean recorded browser batches / task")
-        ax.set_title("Performance vs. browser batches", loc="left", pad=15)
+        ax.set_xlabel("Mean browser-command executions / task")
+        ax.set_title("Performance vs. browser commands", loc="left", pad=15)
     xs = [r[metric] for r in means + native]
     if metric == "mean_browser_steps":
         ax.set_xlim(max(0, min(xs) - 2), max(xs) + 2)
@@ -132,27 +132,28 @@ def main():
                         "savefig.facecolor": "white"})
     footer = (f'OM2W only · same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight cells; valid failures included. Native snapshot: 2026-10-27 22:08:52 UTC, preliminary.\n'
               'Native: 20,000 tokens / 100 decisions; BrowserCode: 12,288 / 30. Different collection dates and timing scopes; descriptive comparison. External judging excluded.\n'
+              'One execution: a selected BrowserCode block or native browser-command log entry; either can contain several actions. This compares harness-level command volume, not standardized actions.\n'
               'Cost: native per-task all-attempt model charges, helpers and full unknown reserves; BrowserCode original proposal/selector receipts. Tables are reported separately.')
     for metric, suffix in (("mean_model_usd_per_task", "cost"),
                            ("mean_task_seconds", "latency"),
                            ("mean_browser_steps", "browser_steps")):
-        fig, ax = plt.subplots(figsize=(10.5, 5.2))
+        fig, ax = plt.subplots(figsize=(11.5, 5.7))
         draw(ax, means, metric, native)
-        fig.subplots_adjust(left=.09, right=.66, bottom=.28, top=.88)
+        fig.subplots_adjust(left=.09, right=.66, bottom=.33, top=.88)
         legends(fig, x=.68, y=.91)
         fig.text(.09, .025, footer.replace('; external judging excluded.', '; external judging excluded.\n'),
                  fontsize=7.3, color="#5A6470", linespacing=1.6)
         for ext in ("png", "svg", "pdf"):
             save_figure(fig, args.output_dir / f"om2w_harness_vs_{suffix}.{ext}")
         plt.close(fig)
-    fig, axes = plt.subplots(1, 3, figsize=(16, 4.8), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(16, 5.1), sharey=True)
     for ax, metric in zip(axes, ("mean_model_usd_per_task", "mean_task_seconds", "mean_browser_steps")):
         draw(ax, means, metric, native)
         ax.title.set_fontsize(13)
     for ax in axes[1:]:
         ax.set_ylabel("")
     fig.suptitle("Online-Mind2Web · BrowserCode and native CUAWright", x=.05, ha="left", fontsize=17, y=.97)
-    fig.subplots_adjust(left=.05, right=.80, bottom=.28, top=.85, wspace=.24)
+    fig.subplots_adjust(left=.05, right=.80, bottom=.33, top=.85, wspace=.24)
     legends(fig, x=.815, y=.89)
     fig.text(.05, .025, footer, fontsize=8.5, color="#5A6470", linespacing=1.7)
     for ext in ("png", "svg", "pdf"):
@@ -168,7 +169,7 @@ def main():
         "native_snapshot_utc": data["snapshot_utc"],
         "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
         "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
-        "browser_steps_scope": "recorded browser batches, not decisions or candidate proposals",
+        "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
         "comparability": "Different limits, collection windows and task-time boundaries; descriptive only",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")
