@@ -1,9 +1,10 @@
 # Baseline comparison: WebArbiter, WebShepherd and Piotr SelectionARM
 
-Results as of October 26, 2026. Actor: **gpt-4o-2024-08-06** in every cell (gpt-4o-2024-05-13 is retired). Methods select among actor-proposed actions at each step: *no search* executes the actor's action; *random-of-five* picks uniformly among five candidates; *WebArbiter-7B*, *WebShepherd-8B* and *Piotr SelectionARM* are the released selectors.
+Results as of October 28, 2026. Actor: **gpt-4o-2024-08-06** in every cell (gpt-4o-2024-05-13 is retired). Methods select among actor-proposed actions at each step: *no search* executes the actor's action; *random-of-five* picks uniformly among five candidates; *WebArbiter-7B*, *WebShepherd-8B* and *Piotr SelectionARM* are the released selectors.
 
 **Takeaways.**
 - **Online-Mind2Web (284 tasks with all five methods valid):** no selector beats no search. Piotr SelectionARM +2.5 pp and WebArbiter −2.8 pp are within noise; WebShepherd (−14.8 pp) and random-of-five (−12.0 pp) are significantly worse.
+- **WebArena-Lite, four sites (128 tasks, 1280×720, same harness):** gpt-4o + Piotr SelectionARM 15/101 valid (14.9%) vs no search 22/106 (20.8%); paired −4.0 pp (100 tasks, sign-test p = 0.39), negative but not significant under every scoring. [Details](#webarena-lite-4site-piotr-20261028).
 - **WebArena-Lite Reddit (18 tasks):** after fixing harness mismatches (October 26 rerun), no search reaches 4/15 valid (26.7%), close to the published 28.6%; WebArbiter 5/16 (31.2%) stays below the published 52.6%; WebShepherd 1/12 (8.3%) is far below 47.6%. At these denominators no between-method difference is reliable.
 
 ## Online-Mind2Web, 300 tasks
@@ -42,6 +43,76 @@ Valid-only rate = successes / valid cells (95% Wilson interval). The last column
 - **Invalid cells (40).** `Error` cells (5 per method) are browser/navigation failures, mostly theweathernetwork.com tasks whose start page redirect-loops for every method. Piotr's `EvaluationNotReady`/`ValueError` cells come from its released prompt requiring five admissible original candidates; other `ValueError` cells are action-parse failures.
 - **Comparability.** Retries ran hours after first attempts on live websites, so a retried cell may see a different site state than the other methods on that task. Earlier cohorts with the gpt-4o-2024-05-13 actor or the o4-mini judge are not pooled.
 - **Source.** `/gpfs/scrubbed/zixianma/openwebrl-runtime/webprm-om2w-table5-20261012/rerun300-0806-20261023/final_table.py` → `final-table.json` (pools the rerun300 stage, completion and retry packages; asserts one primary attempt per cell).
+</details>
+
+<a id="webarena-lite-4site-piotr-20261028"></a>
+## WebArena-Lite four sites: gpt-4o with and without Piotr SelectionARM (October 28)
+
+Controlled comparison on the 128 single-site WebArbiter Table 5 tasks (Shopping 45, CMS/shopping_admin 35, Reddit 18 without original task 27, GitLab 30; Map excluded as in WebArbiter Table 5). Both arms run in the same native harness (released WebArbiter coordinator, WebArena accessibility tree and released evaluator), at the same **1280×720** viewport, on the same tasks, with each task's two cells run back to back in the same job. *No search* executes gpt-4o's single action. *+ Piotr SelectionARM* asks gpt-4o for five candidates in one call (the OM2W protocol); Piotr picks one from the actor's own 1280×720 screenshot. One episode per task × method; all 256 cells have a final outcome.
+
+<a id="webarena-lite-4site-piotr-paired-20261028"></a>
+### Paired comparison
+
+Difference = ARM minus no-search success on the paired tasks; 95% CI is a paired-proportion normal interval; p is the two-sided sign test on discordant tasks.
+
+| Scoring | Paired tasks | No-search successes | ARM successes | ARM-only wins | No-search-only wins | Difference (pp) | 95% CI (pp) | Sign-test p |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| Valid cells only (primary) | 100 | 19 | 15 | 4 | 8 | −4.0 | −10.7 to +2.7 | 0.39 |
+| + gpt-4.1 re-score of fuzzy-judge cells | 116 | 24 | 19 | 4 | 9 | −4.3 | −10.4 to +1.7 | 0.27 |
+| + ARM CMS load timeouts counted as ARM failures | 124 | 27 | 19 | 4 | 12 | −6.5 | −12.7 to −0.2 | 0.077 |
+
+**Takeaway.** On WebArena, adding Piotr SelectionARM to gpt-4o does not help; the point estimate is negative under every scoring, but no difference is significant by the sign test. This contrasts with Online-Mind2Web, where Piotr was +2.5 pp (also not significant).
+
+<a id="webarena-lite-4site-piotr-sites-20261028"></a>
+### Per-site rates (valid cells only)
+
+| Site | No-search valid | No-search successes | No-search (%) | ARM valid | ARM successes | ARM (%) | v9 no search at 1024×2490 (successes / valid) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Shopping | 35 | 3 | 8.6 | 35 | 7 | 20.0 | 9 / 35 |
+| CMS | 29 | 9 | 31.0 | 23 | 3 | 13.0 | 6 / 29 |
+| GitLab | 26 | 7 | 26.9 | 27 | 3 | 11.1 | 6 / 26 |
+| Reddit | 16 | 3 | 18.8 | 16 | 2 | 12.5 | 6 / 16 |
+| **All** | **106** | **22** | **20.8** (95% CI 14.1–29.4) | **101** | **15** | **14.9** (9.2–23.1) | 27 / 106 (25.5%) |
+
+The ARM gains on Shopping (+4 successes) and loses on CMS (−6, partly the load timeouts below), GitLab (−4) and Reddit (−1). The v9 column is the October 26 Table 5 rerun's no-search arm (same harness, released 1024×2490 viewport); the smaller viewport costs no search mostly on Shopping and Reddit.
+
+**Invalid cells.**
+
+| Reason | No search | + ARM |
+| --- | ---: | ---: |
+| Retired fuzzy judge (`gpt-4-1106-preview`); final, re-scored with gpt-4.1 | 20 | 18 |
+| Repeated page-load timeout (two attempts, CMS only) | 0 | 8 |
+| Agent-chosen invalid action or task-81 evaluator config | 2 | 1 |
+| **Valid** | **106** | **101** |
+
+gpt-4.1 re-score (sensitivity, not the paper protocol): no search 5 successes of 18 rescorable cells, ARM 4 of 16; 2 cells per method cannot be replayed offline. Strict + re-scored: no search 27/124 (21.8%), ARM 19/117 (16.2%).
+
+<a id="webarena-lite-4site-piotr-diagnosis-20261028"></a>
+### Why the ARM does not help here
+
+- **Candidate pools and grounding are fine.** 1,465 of 1,688 ARM steps (86.8%) had five distinct candidates, 16 had one (no ARM call), and 5,608 of 5,610 candidates were grounded to an on-screen element.
+- **Piotr overrides gpt-4o's first candidate on 54% of steps** (slot 0 / 1 / 2 / 3 / 4: 771 / 482 / 207 / 139 / 73 of 1,672 calls). Override rates by site: Shopping 54%, CMS 54%, GitLab 49%, Reddit 62%. Overrides are rarer in successful ARM episodes (41% of 112 steps) than in failed ones (53% of 1,254) and invalid ones (60% of 306).
+- **No-search-only wins (8 tasks).** In 2 the ARM never overrode the actor, so the difference is actor sampling variance. In the others the first override comes at step 0–2; for GitLab task 49, no search clicked the same element as gpt-4o's first candidate (the commit list), while the ARM chose a search query and failed.
+- **CMS load timeouts (8 ARM cells, each failed twice).** The last action before the 30 s page-load timeout was the Magento admin REPORTS menu link in 5, the SALES menu in 1, a Bestsellers tab in 1 and a report date field in 1; 3 of the 8 were gpt-4o's first candidate. No search clicked REPORTS in 8 episodes and the ARM in 5 completed episodes without a timeout, so the click alone does not explain it; the cause (harness load wait on this CMS instance after these navigations) is unresolved. These cells are excluded from the primary row and counted as ARM failures in the sensitivity row.
+
+<a id="webarena-lite-4site-piotr-cost-20261028"></a>
+### Cost and latency
+
+| Method | Cells (incl. reruns) | Steps | Seconds per step | Candidate generation (s/step) | Selection (s/step) | Steps per cell | API USD per cell | API USD total |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| No search | 120 | 1,720 | 17.7 | 2.0 | 0 | 14.3 | 0.56 | 66.90 |
+| + Piotr SelectionARM | 125 | 1,760 | 18.5 | 4.4 | 0.16 (local GPU) | 14.1 | 0.52 | 64.61 |
+
+The five-candidate call costs about 2.4 s and 220 more completion tokens per step than no search's single action; Piotr itself adds 0.16 s per step and no API cost. Per-cell API cost includes the released terminal detector and state-difference calls, which both methods make.
+
+<details><summary>Comparability, protocol and accounting</summary>
+
+- **Viewport.** 1280×720 for actor and ARM (the ARM sees the actor's observation PNG unchanged). WebArena's own `browser_env` and the OM2W harness default to 1280×720; the released WebArbiter service uses 1024×2490 (`run_management.py:172`), which v8/v9 followed. A 1024×2490 alternative was built (v10) and not run, because the ARM would have seen only the top 576 px (66% of gpt-4o's element actions fell inside that region).
+- **Differences from OM2W.** The ARM chooses among 1–5 deduplicated admissible candidates (no ARM call when one survives); OM2W required exactly five and marked the cell invalid otherwise. Actions that cannot be described for the ARM get a placeholder descriptor. The harness is the native WebArena one, not OM2W's browser viewer.
+- **Reruns.** Only infrastructure invalids were rerun; fuzzy-judge, agent-chosen invalid actions and the task-81 evaluator config error are final. A cell that failed twice on infrastructure is final (`repeated_infra_invalid`). Jobs stopped at the harness's 1 TiB per-job scratch cap after about 21 cells, so remaining cells ran in replacement jobs (fresh site copy per cell).
+- **Startup bug.** The first submission (v11, jobs 392750–392757) died at the ARM's 8-token startup probe (`finish_reason=length`); v11b uses the selector-shaped probe from the earlier Reddit runs. No cells ran in v11.
+- **Budget.** Approved 8 × 1 H200 (29 H200-hours) and USD 280. Used 25.2 H200-hours (including the failed v11 attempt) and USD 148.91 API; gpt-4.1 re-score 36 judge calls.
+- **Packages.** `webarena-subset-review-20261021/launch-preparation-v11b-{shop-a,shop-b,shop-c,cms-a,cms-b,reddit-a,gitlab-a,gitlab-b}` and replacements `launch-preparation-v11c-*`; tools `v11-tools/`, `v11b-tools/` (pooling rule `replacement_blocks_v11r2.py`, cost/latency `cost_latency_v11.py` → `cost-latency-v11.json`); auditor `native-audit-v8`; ledger `gpu-budget-v11-20261027/`; re-score `fuzzy-rescore-gpt41-v11/`.
 </details>
 
 <a id="webarena-lite-reddit-20261026"></a>
