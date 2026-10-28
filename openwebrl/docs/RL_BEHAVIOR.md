@@ -255,7 +255,15 @@ harness (dots), bar = mean.* [PDF](rl_results/rl_repetition.pdf)
 | Gate B (ARM, failure-additive) | 20 / 23 / 27 | 23.3 | 20.3 |
 
 - **Matched evidence favors ARM.** Gate B's three repeats (20–27) all sit below every
-  outcome-only repeat (38–71), and its repetition rate is lower too.
+  outcome-only repeat (38–71), and its repetition rate is lower too. Paired over tasks
+  (each task's share of repeats ending in a loop), Gate B has **−21.7 [−31.3, −12.0]**
+  repeated-action failures per 300 against 56 groups and **−37.3 [−47.7, −27.3]** against
+  48 groups (95% bootstrap CI, 20,000 draws).
+
+![Iteration-90 matched repeats: repeated-action failures per 300 OM2W tasks](rl_results/rl_repetition_iter90.png)
+
+*Each dot is one full-300 evaluation of the same iteration-90 checkpoint; the three were
+collected back to back by job 385593 on one harness. Bar = mean.* [PDF](rl_results/rl_repetition_iter90.pdf)
 - **Repetition falls under any RL here.** The judge-independent rate drops from about 54% to
   14–23% at iteration 90 in every run that reached it; ARM runs end lowest, but G8
   (outcome-only, 8 rollouts per group) is close behind, so ARM is not the only route.
