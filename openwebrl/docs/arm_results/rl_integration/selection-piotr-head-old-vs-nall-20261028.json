@@ -1,0 +1,161 @@
+{
+ "configs": {
+  "old": {
+   "d_model": 512,
+   "depth": 2,
+   "dropout": 0.1,
+   "hidden_size": 2560,
+   "layers": [
+    18,
+    27,
+    36
+   ],
+   "listwise": true,
+   "n_heads": 8,
+   "pools": [
+    "thought_mean",
+    "action_mean",
+    "last"
+   ]
+  },
+  "nall0": {
+   "d_model": 512,
+   "depth": 2,
+   "dropout": 0.1,
+   "hidden_size": 2560,
+   "interaction": "joint",
+   "layers": [
+    18,
+    27,
+    36
+   ],
+   "listwise": true,
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "n_heads": 8,
+   "pools": [
+    "thought_mean",
+    "action_mean",
+    "last"
+   ],
+   "readout": "linear",
+   "scorer": "transformer"
+  },
+  "nall1": {
+   "d_model": 512,
+   "depth": 2,
+   "dropout": 0.1,
+   "hidden_size": 2560,
+   "interaction": "joint",
+   "layers": [
+    18,
+    27,
+    36
+   ],
+   "listwise": true,
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "n_heads": 8,
+   "pools": [
+    "thought_mean",
+    "action_mean",
+    "last"
+   ],
+   "readout": "linear",
+   "scorer": "transformer"
+  },
+  "nall2": {
+   "d_model": 512,
+   "depth": 2,
+   "dropout": 0.1,
+   "hidden_size": 2560,
+   "interaction": "joint",
+   "layers": [
+    18,
+    27,
+    36
+   ],
+   "listwise": true,
+   "mlp_depth": 1,
+   "mlp_width": null,
+   "n_heads": 8,
+   "pools": [
+    "thought_mean",
+    "action_mean",
+    "last"
+   ],
+   "readout": "linear",
+   "scorer": "transformer"
+  }
+ },
+ "saved_keys": {
+  "old": [
+   "config"
+  ],
+  "nall0": [
+   "config",
+   "extra_base_states",
+   "extra_only",
+   "loss",
+   "objective",
+   "params",
+   "seed",
+   "source",
+   "train_states",
+   "train_view"
+  ],
+  "nall1": [
+   "config",
+   "extra_base_states",
+   "extra_only",
+   "loss",
+   "objective",
+   "params",
+   "seed",
+   "source",
+   "train_states",
+   "train_view"
+  ],
+  "nall2": [
+   "config",
+   "extra_base_states",
+   "extra_only",
+   "loss",
+   "objective",
+   "params",
+   "seed",
+   "source",
+   "train_states",
+   "train_view"
+  ]
+ },
+ "params": {
+  "old": 22624258,
+  "nall0": 22624258,
+  "nall1": 22624258,
+  "nall2": 22624258
+ },
+ "same_param_names": true,
+ "standardizer_rel_diff": {
+  "candidate_proj.0.mean": 0.00239,
+  "candidate_proj.0.inv_std": 0.00355,
+  "state_proj.0.mean": 0.00234,
+  "state_proj.0.inv_std": 0.00408
+ },
+ "identical_init_seed0": true,
+ "states": 348,
+ "fixed5_success": {
+  "old": 37.99,
+  "nall0": 38.31,
+  "nall1": 38.65,
+  "nall2": 38.06
+ },
+ "pick_agreement_pct": {
+  "old~nall0": 84.77,
+  "old~nall1": 85.63,
+  "old~nall2": 83.62,
+  "nall0~nall1": 86.78,
+  "nall0~nall2": 85.92,
+  "nall1~nall2": 87.07
+ }
+}
