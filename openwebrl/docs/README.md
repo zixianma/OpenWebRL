@@ -39,7 +39,7 @@
 
 [WebPRM baselines: all 12 attempts audited, two guarded successes; Reddit allocation cap exhausted](WEBPRM_BASELINES.md#table5-plan-20261010).
 [Baseline comparison: on 284 paired Online-Mind2Web tasks no selector beats no search (Piotr +2.5 pp, WebArbiter −2.8 pp, WebShepherd −14.8 pp); WebArena-Lite Reddit after harness fixes: no search 26.7%, WebArbiter 31.2%, WebShepherd 8.3%; WebArena-Lite four sites at 1280×720: gpt-4o + Piotr 14.9% vs no search 20.8%, paired −4.0 pp, n.s.](baseline_comparison.md).
-[WebPRM agent handoff: verified results, repairs, approval limits and next actions](WEBPRM_HANDOFF.md).
+[WebPRM collaborator handover (October 28): Table 5 reproduction, OM2W and WebArena selector results, option C (OpenWebRL-4B-SFT ± Piotr) status, code map and pitfalls](WEBPRM_HANDOFF.md#webprm-baselines-handover-20261028).
 
 [Faster reward improvement: five fresh iteration0→10 action-credit pilots, pending native GPU validation, controlled comparisons and recent evidence](RL_LEARNING_EFFICIENCY.md#action-credit-implementation-20261011).
 
