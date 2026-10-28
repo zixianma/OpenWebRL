@@ -1,9 +1,9 @@
 {
-  "comparison_aggregate_sha256": "835b7a908ebb29a7dc82baec8314f805dce94fd30495c2831e243907734017fd",
+  "comparison_aggregate_sha256": "fa5a38985dacab908084e932deb65ed96ba4aa9a30e71c89c868fbf3fba5f794",
   "native_status_aggregate_sha256": "cc991c8a39756b0412d53f4d41edd9808c8e577708ccbd4e0ab1676e02299518",
   "benchmark": "Online-Mind2Web only",
   "tasks_per_cell": 300,
-  "cohort": "Exact same 300 tasks under all four methods and both harnesses; invalid outcomes unsuccessful",
+  "cohort": "300 attempted per cell; each success rate uses its own valid-outcome denominator; valid subsets differ",
   "native_status": "Full300 science/accounting verified; global cleanup uncertified",
   "native_snapshot_utc": "2026-10-28T01:04:20.688908+00:00",
   "metric_coverage": {
@@ -64,7 +64,7 @@
       }
     }
   },
-  "independent_full300_numeric_review_sha256": "fb0b3156afb151c88e4b69453fb2c81d4feea7fb1d3898f56cf67a2a08488430",
+  "full300_source_numeric_review_sha256": "fb0b3156afb151c88e4b69453fb2c81d4feea7fb1d3898f56cf67a2a08488430",
   "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
   "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
   "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",

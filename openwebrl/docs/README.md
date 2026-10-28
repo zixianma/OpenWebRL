@@ -13,7 +13,7 @@
 
 [API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
-[OM2W-only BrowserCode versus native CUAWright: same 300 tasks in all eight cells, invalids unsuccessful, with explicit metric coverage](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
+[OM2W-only BrowserCode versus native CUAWright: 300 attempted tasks per cell, valid-only success with explicit valid denominators and metric coverage](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
 [Offline selector evaluation: compact data collection and teacher labeling schematic, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 

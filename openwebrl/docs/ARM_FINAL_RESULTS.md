@@ -102,18 +102,18 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 ### Online-Mind2Web only: BrowserCode and native CUAWright
 
-**All eight method–harness cells have outcomes for the same 300 tasks; no task outcomes are missing.** The plot uses all 300 for success rates, counting invalid outcomes as unsuccessful. The previous 111-task restriction selected fresh tasks valid in every cell; it did not indicate unfinished runs. The [111-task common-valid figure](arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png) remains available as a conditional historical view. The BrowserCode three-benchmark plot above is unchanged.
+**All eight method–harness cells have outcomes for the same 300 tasks; no task outcomes are missing.** The plot reports **valid-only success: successes divided by valid outcomes in each method–harness cell**. Invalid outcomes are excluded from that success denominator; each cell’s valid subset can differ. The previous 111-task restriction selected fresh tasks valid in every cell; it did not indicate unfinished runs. The [111-task common-valid figure](arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png) remains available as a conditional historical view. The BrowserCode three-benchmark plot above is unchanged.
 
-![OM2W full300 success, cost, latency and browser-command tradeoffs](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+![OM2W valid-only success from300 attempted tasks, cost, latency and browser-command tradeoffs](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
 
-| Method (all high) | Tasks per harness | BrowserCode successes | BrowserCode success | BrowserCode invalid | Native successes | Native success | Native invalid |
+| Method (all high) | Attempted per harness | BrowserCode successes | BrowserCode valid | BrowserCode valid-only success | Native successes | Native valid | Native valid-only success |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Sol single | 300 | 171 | 57.0% | 34 | 222 | 74.0% | 14 |
-| Luna single | 300 | 168 | 56.0% | 31 | 189 | 63.0% | 29 |
-| Luna N3 | 300 | 180 | 60.0% | 31 | 192 | 64.0% | 30 |
-| Luna N5 | 300 | 188 | 62.7% | 33 | 202 | 67.3% | 30 |
+| Sol single | 300 | 171 | 266 | 64.3% | 222 | 286 | 77.6% |
+| Luna single | 300 | 168 | 269 | 62.5% | 189 | 271 | 69.7% |
+| Luna N3 | 300 | 180 | 269 | 66.9% | 192 | 270 | 71.1% |
+| Luna N5 | 300 | 188 | 267 | 70.4% | 202 | 270 | 74.8% |
 
-Success denominators are 300 in every cell. Cost, latency and command means use available measurements from valid and invalid episodes, with the coverage below; missing measurements are never filled with zero. This full300 view includes the historical 100 and different collection windows. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100 with summary setting 20. Timing boundaries and runtime contention differ, so this is a descriptive comparison rather than a controlled harness effect. The [native fresh200 paired analysis](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025) remains the primary within-native comparison. Global native post-job cleanup remains uncertified.
+Success denominators are the valid counts above, drawn from all 300 attempted tasks per cell; this is not a common-valid intersection. Cost, latency and command means use available measurements from valid and invalid episodes, with the coverage below; missing measurements are never filled with zero. This full300 view includes the historical 100 and different collection windows. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100 with summary setting 20. Timing boundaries and runtime contention differ, so this is a descriptive comparison rather than a controlled harness effect. The [native fresh200 paired analysis](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025) remains the primary within-native comparison. Global native post-job cleanup remains uncertified.
 
 <details>
 <summary>Metric coverage, definitions and reproducibility</summary>
@@ -131,7 +131,7 @@ BrowserCode latency excludes initial browser setup and final judge-only capture;
 
 The requested method encodings remain: blue square Sol single, blue circle Luna single, yellow circle N3, orange circle N5; filled BrowserCode and outlined native. There is no embedded table.
 
-[Full300 aggregate and coverage](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_full300.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
+[Valid-only success aggregate and attempt-metric coverage](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
 
 </details>
 
