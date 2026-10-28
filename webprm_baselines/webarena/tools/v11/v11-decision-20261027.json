@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-27",
+  "user_quotes": [
+    "ah I see. yes do A. so then we can use gpt4o + our ARM right? no need for openwebrl-sft",
+    "User chose the 1280x720 setup (option 2) [via coordinator]: rebuild as v11 packages where the actor viewport is 1280x720 for BOTH methods: no_search (rerun) and piotr_selectionarm, same 128 tasks"
+  ],
+  "decision": "v11: gpt-4o-2024-08-06 no_search (rerun) and gpt-4o + Piotr SelectionARM (Online-Mind2Web protocol) on the 128 WebArena-Lite Table 5 tasks (Shopping 45, CMS 35, Reddit 18 without released task 5 / original 27, GitLab 30), native harness, actor viewport 1280x720 for both methods; the ARM sees exactly the actor's 1280x720 screenshot (only the ARM processor view v3 resizes it inside the server). Each package interleaves the two methods per task. v10 packages are superseded, not modified.",
+  "viewport_sources": {
+    "v11": "1280x720 = WebArena browser_env default (arbiter viewer/src/browser_env/envs.py:73 ScriptBrowserEnv viewport_size)",
+    "v8_to_v10": "1024x2490 = released WebArbiter service default (viewer/src/server/service/run_management.py:172), current_viewport_only=True"
+  },
+  "unchanged": "actor gpt-4o-2024-08-06 for every model call; released coordinator, prompts, AX processor (current_viewport_only) and evaluator; v8 terminal/bracket changes; v9 sites, hosting, fuzzy-judge policy; v9b/v9c/v9e/v9f operational fixes",
+  "resources": "GPU jobs require separate exact approval; this decision file is not resource authority"
+}
