@@ -1,37 +1,64 @@
-# WebPRM Table 5 handoff
+# WebPRM baselines: handoff
 
 <a id="webprm-baselines-handover-20261028"></a>
-## Collaborator handover — October 28, 2026
+_Last updated October 28, 2026. This is the entry point for the WebPRM baseline work; older status logs are collapsed at the end._
 
-**Goal.** Reproduce WebArbiter's Table 5 (gpt-4o actor; no search vs WebShepherd-8B vs WebArbiter-7B on single-site WebArena-Lite tasks) and add our Piotr SelectionARM as an extra selector row. The same selector comparison was also run on live Online-Mind2Web (OM2W). This section supersedes the dated status sections below, which are kept as history.
+**Goal.** Reproduce WebArbiter's Table 5 (gpt-4o actor; no search vs WebShepherd-8B vs WebArbiter-7B on single-site WebArena-Lite tasks) and add our Piotr SelectionARM as an extra selector row. The same selector comparison was also run on live Online-Mind2Web (OM2W).
 
-**Code:** [`webprm_baselines/`](https://github.com/zixianma/OpenWebRL/tree/arm/webprm_baselines) on the `arm` branch (code map and run workflow in its [README](https://github.com/zixianma/OpenWebRL/blob/arm/webprm_baselines/README.md)), plus the `webprm_*` modules in `openwebrl/`, `scripts/` and `tests/`. **Runtime root:** `/gpfs/scrubbed/zixianma/openwebrl-runtime/` (`RT`); WebArena packages, ledgers and results under `D = RT/webprm-webarena-20261011/next-stage-preparation/webarena-subset-review-20261021/`; OM2W under `RT/webprm-om2w-table5-20261012/`.
+**Code:** [`webprm_baselines/`](https://github.com/zixianma/OpenWebRL/tree/arm/webprm_baselines) on `arm` ([README](https://github.com/zixianma/OpenWebRL/blob/arm/webprm_baselines/README.md): code map and workflow), plus `openwebrl/webprm_*.py`, `scripts/*webprm*`, `tests/test_*webprm*`.
+**Runtime:** `RT = /gpfs/scrubbed/zixianma/openwebrl-runtime/`; WebArena work under `D = RT/webprm-webarena-20261011/next-stage-preparation/webarena-subset-review-20261021/`; OM2W under `RT/webprm-om2w-table5-20261012/`.
 
-### Results at a glance
+## 1. Summary
 
-All rows use actor gpt-4o-2024-08-06 unless stated; valid-only rates; one episode per task × method.
+**Findings**
+1. **With a gpt-4o actor, no selector reliably beats no search.** OM2W: Piotr +2.5 pp (n.s.), WebArbiter −2.8 pp (n.s.), WebShepherd −14.8 pp (sig.). WebArena (v11): Piotr −4.0 pp (n.s.).
+2. **Table 5 is not reproduced in absolute terms.** Our v9 rerun is 9.5–19.4 pp below every published row; WebArbiter's gain over no search is +4.3 pp vs the published +14.2.
+3. **Piotr's ARM is out of distribution with gpt-4o candidates.** It was trained on OpenWebRL-4B-SFT candidates in OpenWebRL's screenshot + coordinate action space at 1280×1000. Option C (v12) tests it in that setting.
 
-| Benchmark (tasks) | Method | Valid cells | Successes | Valid-only success (%) | Published (%) |
-| --- | --- | ---: | ---: | ---: | ---: |
-| OM2W (300; paired set 284) | No search | 294 | 79 | 26.9 | – |
-| | Piotr SelectionARM | 288 | 85 | 29.5 | – |
-| | WebArbiter-7B | 294 | 71 | 24.1 | – |
-| | WebShepherd-8B | 292 | 36 | 12.3 | – |
-| WebArena-Lite 4 sites, 1024×2490 (v9; 128) | No search | 106 | 27 | 25.5 | 35.0 |
-| | WebArbiter-7B | 104 | 31 | 29.8 | 49.2 |
-| | WebShepherd-8B | 87 | 23 | 26.4 | 42.0 |
-| WebArena-Lite 4 sites, 1280×720 (v11; 128) | No search | 106 | 22 | 20.8 | – |
-| | Piotr SelectionARM | 101 | 15 | 14.9 | – |
-| WebArena-Lite 4 sites, 1280×1000, OpenWebRL-4B-SFT actor (v12, option C) | No search / + Piotr | – | – | – | smoke test failed at startup; see below |
+**Status**
 
-**Takeaways.**
-- **No selector reliably beats no search with a gpt-4o actor.** OM2W paired (284 tasks): Piotr +2.5 pp (−3.2 to +8.1, p 0.46), WebArbiter −2.8 pp, WebShepherd −14.8 pp (significant). WebArena v11 paired (100 tasks): Piotr −4.0 pp (−10.7 to +2.7, p 0.39); −6.5 pp (p 0.077) when the ARM's repeated CMS load timeouts count as failures. Details: [baseline comparison](baseline_comparison.md#webarena-lite-4site-piotr-20261028).
-- **Table 5 is not reproduced in absolute terms.** v9 is 9.5–19.4 pp below every published gpt-4o row, and the WebArbiter − no search gap is +4.3 pp vs the published +14.2. Reddit alone (v8, after harness fixes) matched the published no-search rate (26.7% vs 28.6%). Published no-search and WebShepherd rows come from the WebShepherd paper's BrowserGym harness, so only the WebArbiter row is a like-for-like reproduction target.
-- **Why Piotr does not help on WebArena (v11):** it overrides gpt-4o's first candidate on 54% of steps, and overrides are more frequent in failed (53%) and invalid (60%) episodes than successful ones (41%). The ARM was trained on OpenWebRL-4B-SFT candidates in OpenWebRL's coordinate action space at 1280×1000, not on gpt-4o accessibility-tree actions — the motivation for option C.
+| Experiment | Section | State |
+| --- | --- | --- |
+| OM2W selector comparison, 300 tasks × 5 methods | [§2.1](#webprm-om2w-20261028) | Done |
+| WebArena Table 5 rerun (v9), 128 tasks × 3 methods | [§2.2](#webprm-v9-20261028) | Done |
+| WebArena gpt-4o ± Piotr (v11), 128 tasks × 2 methods | [§2.3](#webprm-v11-20261028) | Done |
+| WebArena OpenWebRL-4B-SFT ± Piotr (v12, option C) | [§2.4](#webprm-option-c-v12-20261028) | Smoke test failed at startup; fix built, resubmission pending |
 
-<details><summary>WebArena v9 per site, gpt-4.1 re-score and cost (four-site Table 5 rerun, October 26–27)</summary>
+Common conventions: one episode per task × method; success rates are over valid cells; paired comparisons use tasks valid for both methods, with a two-sided sign test on discordant tasks.
 
-Protocol: released WebArbiter coordinator, WebArena accessibility tree, released evaluator, 1024×2490 viewport (released service default), paper protocol of 20 samples at T 1.0 → five most frequent as candidates for WebArbiter/WebShepherd. Shopping 45, CMS 35, Reddit 18 (original task 27 dropped: its only judge, `gpt-4-1106-preview`, is retired), GitLab 30; Map excluded as in Table 5.
+## 2. Experiments
+
+<a id="webprm-om2w-20261028"></a>
+### 2.1 Online-Mind2Web: gpt-4o actor × five selectors
+
+**Setup.** 300 live OM2W tasks; actor gpt-4o-2024-08-06; judge gpt-5.6-terra (o4-mini was retired on October 23); each invalid cell retried once. Selectors choose among five gpt-4o candidates; random-of-five is a control.
+
+| Method | Valid cells | Successes | Success (%) | Paired with no search (284 tasks): Δ pp | Sign-test p |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| No search | 294 | 79 | 26.9 | – | – |
+| Piotr SelectionARM | 288 | 85 | 29.5 | +2.5 | 0.46 |
+| WebArbiter-7B | 294 | 71 | 24.1 | −2.8 | 0.39 |
+| Random of five | 292 | 44 | 15.1 | −12.0 | <0.001 |
+| WebShepherd-8B | 292 | 36 | 12.3 | −14.8 | <0.001 |
+
+Source: `RT/webprm-om2w-table5-20261012/rerun300-0806-20261023/final-table.json` (`webprm_baselines/om2w/final_table.py`). Judge agreement study: `…/judge-agreement-20261023/`.
+
+<a id="webprm-v9-20261028"></a>
+### 2.2 WebArena Table 5 rerun (v9): gpt-4o × {no search, WebArbiter, WebShepherd}
+
+**Setup.** Released WebArbiter coordinator and evaluator, accessibility-tree actions, 1024×2490 viewport (released default). Paper protocol: 20 samples at T 1.0, the five most frequent become candidates. 128 tasks: Shopping 45, CMS 35, Reddit 18, GitLab 30. Map is excluded as in the paper; Reddit task 27 is dropped because its only judge (`gpt-4-1106-preview`) is retired.
+
+| Method | Valid cells | Successes | Success (%) | Published (%) | Gap (pp) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| No search | 106 | 27 | 25.5 | 35.0 | −9.5 |
+| WebArbiter-7B | 104 | 31 | 29.8 | 49.2 | −19.4 |
+| WebShepherd-8B | 87 | 23 | 26.4 | 42.0 | −15.6 |
+
+- Published no-search and WebShepherd rows come from the WebShepherd paper's BrowserGym harness, so only WebArbiter is a like-for-like target.
+- Reddit alone (v8, after harness fixes) matched the published no-search rate: 4/15 (26.7%) vs 28.6%.
+- Invalid cells: retired fuzzy judge 20 / 19 / 19 (no search / WebArbiter / WebShepherd); other 1 / 5 / 18.
+
+<details><summary>Per site, gpt-4.1 re-score, cost and sources</summary>
 
 | Site | No search valid | No search successes | No search (%) | WebArbiter valid | WebArbiter successes | WebArbiter (%) | WebShepherd valid | WebShepherd successes | WebShepherd (%) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -39,71 +66,111 @@ Protocol: released WebArbiter coordinator, WebArena accessibility tree, released
 | CMS | 29 | 6 | 20.7 | 28 | 7 | 25.0 | 23 | 5 | 21.7 |
 | GitLab | 26 | 6 | 23.1 | 27 | 7 | 25.9 | 21 | 7 | 33.3 |
 | Reddit | 16 | 6 | 37.5 | 16 | 7 | 43.8 | 13 | 4 | 30.8 |
-| **All** | **106** | **27** | **25.5** | **104** | **31** | **29.8** | **87** | **23** | **26.4** |
 
-- **Invalid cells.** Retired fuzzy judge: 20 / 19 / 19 (no search / WebArbiter / WebShepherd); other (agent-chosen invalid actions such as `none`, new-tab crash, one broker failure): 1 / 5 / 18. One GitLab no-search cell never produced an outcome (127 cells).
-- **gpt-4.1 re-score of fuzzy-judge cells** (sensitivity, not the paper protocol): no search 8 of 18 rescorable, WebArbiter 6 of 17, WebShepherd 7 of 17 → strict + re-scored 35/124 (28.2%), 37/121 (30.6%), 30/104 (28.8%).
-- **Cost and latency** (median seconds per step; mean API USD per cell): no search 13.0 s, generation 1.8 s, USD 0.66; WebArbiter 29.6 s, generation 7.5 s, selection 6.5 s, USD 0.97; WebShepherd 36.1 s, generation 7.6 s, selection 9.7 s, USD 1.10. Total API USD 369.94; 38.6 H200-hours (ledger `D/gpu-budget-v9-20261026/`).
-- **Sources.** `D/v9b-tools/summarize_v9.py` (pooling), `D/fuzzy-rescore-gpt41-v9/rescore-results.json`, `D/v9b-tools/cost-latency-v9.json`; packages `D/launch-preparation-v9{b,c,d,e,f}-*`; decision `D/v9b-tools/v9-decision-20261026.json`.
+- **gpt-4.1 re-score of fuzzy-judge cells** (sensitivity only): strict + re-scored 35/124 (28.2%), 37/121 (30.6%), 30/104 (28.8%).
+- **Cost** (median s/step; mean API USD per cell): no search 13.0 s, USD 0.66; WebArbiter 29.6 s (selection 6.5 s), USD 0.97; WebShepherd 36.1 s (selection 9.7 s), USD 1.10. Total USD 369.94 API, 38.6 H200-hours.
+- **Sources:** `D/v9b-tools/summarize_v9.py`, `D/v9b-tools/cost-latency-v9.json`, `D/fuzzy-rescore-gpt41-v9/rescore-results.json`; packages `D/launch-preparation-v9{b,c,d,e,f}-*`; ledger `D/gpu-budget-v9-20261026/`.
 </details>
+
+<a id="webprm-v11-20261028"></a>
+### 2.3 WebArena gpt-4o ± Piotr SelectionARM (v11)
+
+**Setup.** Same 128 tasks and evaluator as v9, at 1280×720. gpt-4o proposes five candidates in one call and Piotr picks one (OM2W adapter: each candidate becomes a described action with a target point on the screenshot). No search was rerun at 1280×720 in the same jobs, interleaved by task.
+
+| Site | No search valid | No search successes | Piotr valid | Piotr successes |
+| --- | ---: | ---: | ---: | ---: |
+| Shopping | 35 | 3 | 35 | 7 |
+| CMS | 29 | 9 | 23 | 3 |
+| GitLab | 26 | 7 | 27 | 3 |
+| Reddit | 16 | 3 | 16 | 2 |
+| **All** | **106** | **22 (20.8%)** | **101** | **15 (14.9%)** |
+
+| Paired comparison (Piotr − no search) | Tasks | Piotr only | No search only | Δ pp (95% CI) | Sign-test p |
+| --- | ---: | ---: | ---: | --- | ---: |
+| Strict | 100 | 4 | 8 | −4.0 (−10.7 to +2.7) | 0.39 |
+| + gpt-4.1 re-score of fuzzy-judge cells | 116 | 4 | 9 | −4.3 (−10.4 to +1.7) | 0.27 |
+| + 8 CMS page-load timeouts as Piotr failures | 124 | 4 | 12 | −6.5 (−12.7 to −0.2) | 0.077 |
+
+- **Diagnosis.** Inputs are fine (87% of steps had five distinct candidates; 5,608/5,610 grounded). Piotr overrides gpt-4o's first candidate on 54% of steps, and overrides are more frequent in failed (53%) and invalid (60%) episodes than successful ones (41%).
+- **Cost.** 18.5 s/step with Piotr vs 17.7 s without (Piotr call 0.16 s); USD 0.52 vs 0.56 per cell. Total 25.2 H200-hours, USD 148.91.
+- **Details:** [baseline_comparison.md](baseline_comparison.md#webarena-lite-4site-piotr-20261028). Sources: `D/v11b-tools/cost-latency-v11.json`, `D/fuzzy-rescore-gpt41-v11/`, `webprm_baselines/webarena/analysis/paired_v11.py`; ledger `D/gpu-budget-v11-20261027/`.
 
 <a id="webprm-option-c-v12-20261028"></a>
-### Option C (v12): OpenWebRL-4B-SFT ± Piotr SelectionARM — in progress
+### 2.4 Option C (v12): OpenWebRL-4B-SFT ± Piotr SelectionARM — in progress
 
-**Question.** Does Piotr help when both the actor and the ARM see their training distribution? The design reuses the crossbench full-set selector protocol (the one where Piotr gave +5.9 to +7.0 pp over OpenWebRL-4B-SFT on OM2W/WebVoyager/DeepShop) on the same 128 WebArena tasks and released evaluator.
+**Question.** Does Piotr help when both actor and ARM see their training distribution? On OM2W/WebVoyager/DeepShop this setup gave Piotr +5.9 to +7.0 pp over OpenWebRL-4B-SFT.
 
-- **Arms.** No search: OpenWebRL-4B-SFT (revision 15e777db), 1 sample per step. + Piotr: 5 samples per step, Piotr SelectionARM picks one. T 1.0 / top-p 0.9, 1,024 new tokens, full history, one screenshot in context, 30 steps; both arms of a task back to back in one job; actor and ARM sglang servers on one H200.
-- **Viewport 1280×1000.** OpenWebRL's default (`openwebrl/env/config.yaml`, since the initial release) and the size of all 3,085 of Piotr's ARM training states. v12 is therefore not directly comparable with the v11 gpt-4o rows at 1280×720.
-- **Answers.** `done(response)` becomes WebArena's final answer; step-limit, format and context endings get "N/A" (as in v11). Fuzzy-judge tasks remain invalid (gpt-4.1 re-score offline later).
-- **CPU validation passed:** all 65 valid saved v11 string-match cells re-score identically through the v12 path; an end-to-end dry run with stand-in model servers (real browser, agent loop, selector, relays, evaluator) checked 1280×1000 screenshots at every `/generate` and `/select` call and a click that lands only at the 1000-px height.
-- **Status.** The GPU smoke test (jobs 395121 Reddit tasks 14/97/132 and 395122 CMS tasks 0/40/101, both methods; 1 H200, 8 CPUs, 240 GiB each; caps 3.5 H200-hours and USD 16) **failed at startup after about 5 minutes: the launcher's actor `/server_info` check timed out.** A fix and resubmission are pending under the same approval; no cell ran.
-- **Pending full-run request (not yet approved):** 8 jobs on the v11 site split (Shopping 3 × 30 cells × 4 h, CMS 2 × 35 × 3.5 h, Reddit 1 × 36 × 3 h, GitLab 2 × 30 × 4 h), each 1 H200 / 8 CPUs / 240 GiB, account vlm; cap 32 H200-hours (29 planned + 3 for replacements) and USD 64 API (expected under USD 1; the actor and ARM are local).
-- **Open risks.** Final answers for string-match tasks depend on the actor calling `done` with the exact answer; Playwright 1.58 / bundled Chromium (crossbench) instead of v11's staged Chromium for site logins; GPU memory split (selector .30 + actor .45) and the namespace relays are unproven on hardware; heavy CMS report pages may hit the 30 s evaluation timeout.
-- **Files.** Tools `D/v12-tools/` (committed as `webprm_baselines/webarena/tools/v12/`), packages `D/launch-preparation-v12-{reddit,cms}-smoke`, ledger and approval `D/gpu-budget-v12-20261028/`, superseded 1280×720 build `D/v12-superseded-720-20261028/`.
+**Design**
+- Same 128 tasks and released evaluator; OpenWebRL's screenshot + coordinate action space and agent loop.
+- No search: OpenWebRL-4B-SFT, 1 sample per step. + Piotr: 5 samples per step, Piotr picks one. T 1.0 / top-p 0.9, 1,024 new tokens, full history, one screenshot in context, 30 steps. Both methods of a task run back to back; actor and ARM sglang servers share one H200.
+- **Viewport 1280×1000:** OpenWebRL's default (`openwebrl/env/config.yaml`) and the size of all 3,085 of Piotr's training states. Not directly comparable with v11 (1280×720).
+- `done(response)` becomes WebArena's final answer; other endings answer "N/A". Fuzzy-judge tasks stay invalid (gpt-4.1 re-score later).
 
-<details><summary>Harness pitfalls (read before launching anything)</summary>
+**Status**
+- CPU validation passed: 65/65 saved v11 string-match cells re-score identically; a stand-in-model dry run confirmed 1280×1000 screenshots at every model call.
+- GPU smoke test (395121 Reddit tasks 14/97/132, 395122 CMS tasks 0/40/101, both methods; 1 H200 / 8 CPUs / 240 GiB each; caps 3.5 H200-hours, USD 16) **failed at startup after about 5 minutes**: the launcher's actor `/server_info` check timed out. No cell ran. A fix is built; resubmission is pending under the same approval.
+- **Next request (not yet approved):** 8 jobs on the v11 site split, each 1 H200 / 8 CPUs / 240 GiB, 3–4 h; cap 32 H200-hours and USD 64 API (expected under USD 1).
 
-- **Retired OpenAI models.** `gpt-4-1106-preview` (WebArena fuzzy judge) returns 404: fuzzy-judge cells are final invalids, re-scored with gpt-4.1 only as sensitivity. `gpt-4o-2024-05-13` and o4-mini were shut down on October 23: actor is gpt-4o-2024-08-06, OM2W judge is gpt-5.6-terra; older cohorts are not pooled.
-- **Scratch cap.** Each job has a cumulative 1 TiB site-state cap (about 50 GB per cell), so a job admits about 21 cells unless the auditor verifies and disposes cells. Plan ≤ 20 cells per job or rely on audited disposal.
-- **`min_cell_budget_usd` = 6.** A job whose API cap is below USD 6 starts no cells (v11c gitlab-b-r1 ran nothing at USD 5).
-- **`min_start_seconds` = 1800.** No cell starts in a job's last 30 minutes; budget time accordingly.
-- **Consecutive-invalid halt.** A job stops after 4 consecutive invalid cells (v11c cms-a-r1 on deterministic CMS page-load timeouts). Cells with two infrastructure-invalid attempts are final (`replacement_blocks_v11r2.py`).
-- **ARM preflight.** An 8-token "Reply OK." probe ends with `finish_reason=length` and the worker rejects it; use the selector-shaped preflight (`webprm_piotr_preflight_v11b.json` / v12 `/select` probe). This killed all v11 jobs (392750–392757).
-- **CMS page-load timeouts.** Eight ARM cells on Magento admin REPORTS/SALES navigation timed out twice; no search clicked the same menu without timeouts. Cause unresolved.
-- **Frozen tooling.** Packages pin tool hashes; editing a referenced builder killed live jobs (v7). Copy tools to a new version directory instead.
-- **Slurm.** Never change a job's nice value (it drops the submit priority boost); use `--account=vlm` until 2026-11-16; GPU jobs need explicit user approval of exact resources.
-- **Spend accounting.** Actual API spend is the sum of `actual` on `settle` events in `campaign/shared-budget.json.events.jsonl`, not a `charged` field.
-</details>
+**Risks:** string-match tasks need the exact answer in `done`; site logins with Playwright 1.58 untested on hardware; GPU memory split (selector 0.30 + actor 0.45) unproven; heavy CMS report pages may hit the 30 s evaluation timeout.
 
-<details><summary>Where everything lives</summary>
+**Files:** tools `D/v12-tools/` (committed as `webprm_baselines/webarena/tools/v12/`), packages `D/launch-preparation-v12-*`, ledger and approval `D/gpu-budget-v12-20261028/`.
+
+## 3. Running an experiment (WebArena)
+
+Full details in the [code README](https://github.com/zixianma/OpenWebRL/blob/arm/webprm_baselines/README.md#workflow-webarena).
+
+1. **Build** packages in a CPU-only job: `tools/<ver>/build_*.py` → `D/launch-preparation-<ver>-<name>/`, then run the package tests.
+2. **Approve:** GPU jobs need explicit user approval of exact resources. Write `D/gpu-budget-<ver>-<date>/user-approval-*.json`; the ledger there binds GPU and API caps.
+3. **Submit:** `cd /tmp && Q='<quote>' tools/<ver>/submit_<ver>.sh <names>`.
+4. **Audit:** each cell is audited (`audit/native-audit-*`); verified cells release their site copy.
+5. **Replace** stopped jobs: `replace_v11c_r2.sh` computes remaining cells, builds and tests a replacement, and prints the submit command.
+6. **Analyse:** `summarize_v9.py` / `paired_v11.py`, gpt-4.1 re-score (`analysis/fuzzy-rescore-*`), `cost_latency*.py`.
+
+**Access needed:** the Tillicum `vlm` account; read access to `RT` (hosted site images, packages with pinned evaluators, Piotr weights under `/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection/`, OpenWebRL-4B-SFT weights, results); your own OpenAI key in `.env`. Paths are hard-coded to `RT`.
+
+## 4. Where everything lives
 
 | Item | Location |
 | --- | --- |
-| Code (this handover) | `arm` branch: `webprm_baselines/`, `openwebrl/webprm_*.py`, `scripts/*webprm*`, `tests/test_*webprm*` |
-| Results write-up | [baseline_comparison.md](baseline_comparison.md) (OM2W, v11, v8 Reddit); [WebPRM baselines history](WEBPRM_BASELINES.md) |
-| OM2W final table | `RT/webprm-om2w-table5-20261012/rerun300-0806-20261023/final-table.json` (`final_table.py`); judge agreement `…/judge-agreement-20261023/` |
-| WebArena v9 | packages `D/launch-preparation-v9{b..f}-*`, tools `D/v9b-tools/`, ledger `D/gpu-budget-v9-20261026/`, approval `D/user-approval-v9-20261026.json`, re-score `D/fuzzy-rescore-gpt41-v9/` |
-| WebArena v11 | packages `D/launch-preparation-v11b-*`, `D/launch-preparation-v11c-*`, tools `D/v11-tools/`, `D/v11b-tools/`, ledger `D/gpu-budget-v11-20261027/`, cost `D/v11b-tools/cost-latency-v11.json`, re-score `D/fuzzy-rescore-gpt41-v11/` |
-| WebArena v12 | see Option C above |
+| Code | `arm`: `webprm_baselines/`, `openwebrl/webprm_*.py`, `scripts/*webprm*`, `tests/test_*webprm*` |
+| Write-ups | This doc; [baseline_comparison.md](baseline_comparison.md) (OM2W, v8, v11 details); [WEBPRM_BASELINES.md](WEBPRM_BASELINES.md) (early plan and history) |
+| OM2W | `RT/webprm-om2w-table5-20261012/rerun300-0806-20261023/` (final table, packages, ledger) |
+| WebArena v9 | packages `D/launch-preparation-v9{b..f}-*`, tools `D/v9b-tools/`, ledger `D/gpu-budget-v9-20261026/`, re-score `D/fuzzy-rescore-gpt41-v9/` |
+| WebArena v11 | packages `D/launch-preparation-v11{b,c}-*`, tools `D/v11-tools/`, `D/v11b-tools/`, ledger `D/gpu-budget-v11-20261027/`, re-score `D/fuzzy-rescore-gpt41-v11/` |
+| WebArena v12 | tools `D/v12-tools/`, packages `D/launch-preparation-v12-*`, ledger `D/gpu-budget-v12-20261028/` |
 | Auditors | `D/native-audit-v8/` (v9/v11), `D/v12-tools/native-audit-v12/` |
+| Not in git | API keys, task configs with answers, evaluator sources, site images/state, trajectories, screenshots, weights, logs: all under `D/` and `RT/` |
 
-**What a collaborator needs beyond git:** access to the Tillicum `vlm` account and the runtime tree above (hosted WebArena site images and per-cell state, the released WebArbiter/WebArena evaluator sources pinned in each package, Piotr SelectionARM and OpenWebRL-4B-SFT weights at the paths recorded in each package's launcher configuration; Piotr's is under `/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection/`), and their own OpenAI key in the repo `.env` (never committed).
-</details>
+## 5. Pitfalls
 
-<details><summary>Open questions and next steps</summary>
+| Pitfall | What happens | What to do |
+| --- | --- | --- |
+| Retired OpenAI models | `gpt-4-1106-preview` (fuzzy judge) returns 404; `gpt-4o-2024-05-13` and o4-mini shut down October 23 | Fuzzy-judge cells are final invalids (gpt-4.1 re-score as sensitivity); actor gpt-4o-2024-08-06; OM2W judge gpt-5.6-terra; never pool cohorts across these changes |
+| Scratch cap | 1 TiB site state per job (~50 GB per cell) stops a job at ~21 cells | ≤ 20 cells per job, or rely on audited disposal |
+| `min_cell_budget_usd` = 6 | A job with API cap below USD 6 runs nothing | Give every job ≥ USD 8 |
+| `min_start_seconds` = 1800 | No cell starts in a job's last 30 minutes | Budget time accordingly |
+| Consecutive-invalid halt | 4 invalid cells in a row stop the job | Cells with 2 infrastructure-invalid attempts are final (`replacement_blocks_v11r2.py`) |
+| ARM startup probe | An 8-token "Reply OK." probe ends with `finish_reason=length` and is rejected (killed all first v11 jobs) | Use the selector-shaped preflight |
+| CMS page-load timeouts | 8 Piotr cells on Magento REPORTS/SALES timed out twice; no search did not | Unresolved |
+| Frozen tooling | Packages pin tool hashes; editing a referenced builder killed live jobs | Copy tools to a new version directory |
+| Slurm | Changing a job's nice value drops its priority boost | Never change nice; use `--account=vlm` until 2026-11-16 |
+| API spend | Shared-budget `charged` field is absent | Sum `actual` on `settle` events in `campaign/shared-budget.json.events.jsonl` |
 
-1. Fix the v12 launcher's actor `/server_info` startup check, rerun the 12-cell smoke test, then request the full v12 run.
-2. If Piotr helps under v12, the WebArena result says the ARM is actor/action-space specific; if not, WebArena admin/developer sites are out of its training distribution.
-3. Offline: a confidence threshold for overriding the actor's first candidate, tested on the saved v11 ARM decisions.
-4. Unresolved: the gap between v9 and the published Table 5 (largest on WebArbiter), and the CMS page-load timeouts.
-</details>
+## 6. Open questions and next steps
+
+1. Resubmit the v12 smoke test, then request the full v12 run.
+2. If Piotr helps under v12, its WebArena failure in v11 is actor/action-space mismatch; if not, WebArena's admin and developer sites are outside its training distribution.
+3. Offline: allow Piotr to override the actor's first candidate only above a confidence threshold, tested on saved v11 decisions.
+4. Unresolved: the v9 gap to published Table 5 (largest for WebArbiter) and the CMS page-load timeouts.
+
+<details><summary>Historical status logs (October 12–25, superseded by the sections above)</summary>
 
 <a id="webprm-status-20261025"></a>
-## Status — October 25, 2026 (Pacific)
+#### Status — October 25, 2026 (Pacific)
 
 **WebArena-Lite Reddit native 18×3 is complete and far below the published Table 5; OM2W rerun300 is finishing completion and invalid-retry jobs.** This section supersedes the October 24 supervision section below. Results file: `webarena-subset-review-20261021/results-native54/table.json` (paths below are under `/gpfs/scrubbed/zixianma/openwebrl-runtime/webprm-webarena-20261011/next-stage-preparation/`).
 
-### WebArena-Lite Reddit, GPT-4o 2024-08-06 actor, 18 released single-site tasks
+##### WebArena-Lite Reddit, GPT-4o 2024-08-06 actor, 18 released single-site tasks
 
 | Method | Cells | Valid | Successes | Valid-only success (%) | Invalid as failure (%) | Published Table 5 (%) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -120,7 +187,7 @@ Successes: no search task 14; WebArbiter tasks 14 and 134; WebShepherd task 132.
 - Packages: no search = `v7e` (tasks 14, 97, 98, 131, 132) + `v7k-ns-b`; WebArbiter = `v7k-arb-a/b`; WebShepherd = `v7j-shep-a/b`, all under `webarena-subset-review-20261021/launch-preparation-*`. Fixes on the way: browser v2 (geometry/nav), JSON mode + fence strip, auditor v2/v3 (54-cell cohort; v3 adds `start_url` to the Shepherd context), Reddit storage scan 300 s/1800 s and 1 TiB scratch, block packages ($50 cap bound in the worker), Shepherd 2048-token health preflight, phase-write lock for concurrent tournament comparisons. Builders `v7-tools/build_v7.py` / `build_v7k.py` are hash-frozen by their packages: copy, never edit.
 </details>
 
-### OM2W rerun300 (gpt-4o-2024-08-06 actor, gpt-5.6-terra judge)
+##### OM2W rerun300 (gpt-4o-2024-08-06 actor, gpt-5.6-terra judge)
 
 Interim (before completions/retries): no search 28.3 %, Piotr 31.3 %, WebArbiter 25.7 %, random-of-five 15.2 %, WebShepherd 12.8 % of valid cells; on 223 tasks with all five valid, random5 (p<0.001) and Shepherd (p=0.0001) are below no search, Arbiter and Piotr are not distinguishable. Remaining cells run as completion packages (`rerun300-j*-completion{2,3}-vlm`, J1/J2 under the user cap raise) and one labelled retry of every invalid cell (`rerun300-j*-retry1-vlm`, user approval `rerun300-0806-20261023/user-approval-retry-20261025.json`). Final table: `rerun300-0806-20261023/final_table.py`. The launcher's 15 s `scontrol` startup timeout has failed three single attempts; packages now allow two attempts.
 
@@ -142,7 +209,7 @@ N/reddit-terminal-independent-root-356127-v1/final-review.json
 
 `R`, `N`, and `C` above are path abbreviations used throughout this document.
 
-## Verified results
+#### Verified results
 
 Only the **190-cell Reddit subset** has execution approval. **26 cells have recorded outcomes; none were resampled.** The first 12 (jobs 356022–356127) are independently audited. The 14 from job 356527 have per-cell worker audits but **no independent audit yet**.
 
@@ -157,7 +224,7 @@ Task 5 shows zero after the explicit `N/A` scoring guard (five raw positives on 
 
 **164 Reddit cells remain unclaimed.** The other **1,360 cells** still need hosting-validated environments and execution budgets. Do not publish selector rankings or success percentages from this partial, mostly unaudited coverage.
 
-## Current jobs and immediate next actions
+#### Current jobs and immediate next actions
 
 | Job | What | Resources | Status |
 | --- | --- | --- | --- |
@@ -320,5 +387,7 @@ Operational constraints:
 - Preserve frozen science, task identities, actor/selector protocols, raw/effective verdicts, invalid attempts, source lineage and every resource charge.
 - Historical Online-Mind2Web diagnostics cannot populate this Table 5 comparison or a new matched Online-Mind2Web comparison.
 - Honor the standing requirement to commit/push substantial project documentation to `arm`, excluding unrelated changes and private payloads; verify publication before claiming it succeeded.
+
+</details>
 
 </details>
