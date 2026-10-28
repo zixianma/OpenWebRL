@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-26",
+  "user_quotes": [
+    "ah yes can we follow that config for webarbiter/webshepherd (read the papers again to confirm). also let's do B",
+    "yes I approve anything else u need"
+  ],
+  "decision": "v9 WebArena-Lite Table 5 rerun on the four Table 5 sites (Shopping, CMS, Reddit, GitLab single-site tasks; Map excluded as in WebArbiter Table 5) with the papers' candidate protocol for WebArbiter-7B and WebShepherd-8B.",
+  "papers_checked": {
+    "WebArbiter arXiv 2601.21872v1 Sec. 5.2.1": "Following WebShepherd, we adopt a Best-of-N sampling strategy; the policy model generates N=5 candidate actions for each step; WebArbiter selects through a Knockout Tournament. Map excluded.",
+    "WebShepherd arXiv 2505.15277v2 App. F.2": "we sample 20 output sequences using nucleus sampling with a temperature of 1.0; the top-n most frequent actions are candidates; highest reward executed, ties to the more frequent action."
+  },
+  "released_config_not_followed": "viewer/configs/reward_guided_agent.json (num_samples 10, num_calls 3, max_tournament_candidates 16, T 0.6-0.9) is read by no released code and contradicts the papers' N=5; the papers are followed, per the user's 'read the papers again to confirm'.",
+  "top_p": "1.0 (the papers give only temperature 1.0; released WebShepherd code has no policy-sampling code)",
+  "unchanged": "actor gpt-4o-2024-08-06 for every model call; v8 viewport/terminal/greedy-arbiter/bracket changes; no_search single-action control",
+  "resources": "GPU jobs require separate exact approval; this decision file is not resource authority"
+}
