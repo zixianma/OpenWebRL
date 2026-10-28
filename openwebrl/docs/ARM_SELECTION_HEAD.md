@@ -629,6 +629,19 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 - **Caveat for the Piotr row:** the branch states were collected on the tasks of Piotr's ARM training split, so his selector has trained on other states of the same tasks; the heads and LoRAs have not (task-grouped split). His offline lead may be partly task familiarity.
 - Not yet run live. [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
 
+**More one-panel data, larger selector (offline, 10-28).** The same LoRA recipe trained on all 2,612 one-panel K = 3 states (the 1,380 above plus 1,232 labels-only states; 28,150 examples, 10 orderings per state) still does not beat the all-states 22.6 M head on the heads' fixed-five metric. Same 345 test states / 86 tasks, held-out draws 3–7, one SFT sample 35.4%, oracle 46.6%:
+
+| Selector (training states) | Fixed five | − SFT sample, pp [95% CI] | − all-states head, pp [95% CI] |
+| --- | ---: | ---: | ---: |
+| Head, all states (2,612) | 37.9% | +2.5 [+0.9, +4.3] | — |
+| Head, n1000 | 37.4% | +2.0 [+0.2, +4.1] | −0.5 [−2.3, +1.4] |
+| Head, 1,380 | 37.4% | +2.0 [+0.3, +3.9] | −0.5 [−1.5, +0.6] |
+| LoRA 4B, 2,612 | 36.9% | +1.5 [−0.1, +3.2] | −1.0 [−2.9, +0.9] |
+| LoRA 4B, 1,380 | 36.6% | +1.3 [−0.8, +3.4] | −1.3 [−3.6, +1.3] |
+
+- Doubling the LoRA's states moves fixed five by +0.3 pp [−2.1, +2.7]. On distinct-action panels it gains more (38.8% vs 37.5%; natural 38.0% vs 37.5%), so the LoRA ranks distinct actions better but not the fixed five proposals the heads and live selection see.
+- The head row is 37.9% here vs 38.15% on all 348 test states (3 states lack a LoRA panel). Pick read after the training prefix; the serving prefix changes it by ≤ 0.1 pp. One training seed each. Not run live. [Evidence](arm_results/rl_integration/selection-lora-onepanel2612-offline-20261028.json)
+
 <details>
 <summary>States, actions, labels and training</summary>
 
