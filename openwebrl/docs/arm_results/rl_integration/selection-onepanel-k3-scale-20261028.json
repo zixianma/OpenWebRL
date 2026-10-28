@@ -1,0 +1,1342 @@
+{
+ "note": "Live state scaling of the one-panel-per-state Luna K=3 head on our branching states (onepanel-k3-scale-20261027):\n263 / 501 / 1,003 / 2,612 states (whole-task prefixes, recipe of the 1,380-state head: distinct view, vote-share target,\nbatch 64, last of 20 epochs, seed 0) vs the 1,380-state head, SFT 4B, the Luna-K3 Piotr-style-panel head and the\nPiotr-data head. SFT-4B actor, N=5, T1.0/p0.9, 30 steps, all tasks of OM2W (300), WebVoyager (595), DeepShop (150).\nOM2W judge gpt-5.6-terra (older runs re-judged, rejudge-terra-20261023); WebVoyager/DeepShop GPT-4o. DeepShop of the\n1,380-state head and SFT 4B are same-day reruns (10-27/28); their earlier DeepShop runs are reported as separate rows.\nOverall counts invalid as failure; mean = unweighted mean of the three benchmark rates. Paired 95% bootstrap over\ntasks (10,000, seed 20261028), benchmarks resampled independently for the mean.",
+ "judges": [
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-4b497ab0a73c",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   259
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-4b497ab0a73c",
+   "webvoyager",
+   "gpt-4o",
+   575
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-4b497ab0a73c",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-35255d70d9f1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   262
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-35255d70d9f1",
+   "webvoyager",
+   "gpt-4o",
+   586
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-35255d70d9f1",
+   "deepshop",
+   "gpt-4o",
+   148
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-9ab27026faef",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   259
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-9ab27026faef",
+   "webvoyager",
+   "gpt-4o",
+   573
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-9ab27026faef",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "online_mind2web",
+   "not judged (reward 0)",
+   94
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   173
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "webvoyager",
+   "gpt-4o",
+   585
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-11d5eff8ffe1",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-5ca25c38f7ad",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   260
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-5ca25c38f7ad",
+   "webvoyager",
+   "gpt-4o",
+   580
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-5ca25c38f7ad",
+   "deepshop",
+   "gpt-4o",
+   144
+  ],
+  [
+   "lunak3-panels-20261027",
+   "head5-cafea4f265cf",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   264
+  ],
+  [
+   "lunak3-panels-20261027",
+   "head5-cafea4f265cf",
+   "webvoyager",
+   "gpt-4o",
+   578
+  ],
+  [
+   "lunak3-panels-20261027",
+   "head5-cafea4f265cf",
+   "deepshop",
+   "gpt-4o",
+   139
+  ],
+  [
+   "data-scale-20261023",
+   "head5-fc589b57c9e0",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   258
+  ],
+  [
+   "data-scale-20261023",
+   "head5-fc589b57c9e0",
+   "webvoyager",
+   "gpt-4o",
+   586
+  ],
+  [
+   "data-scale-20261023",
+   "head5-fc589b57c9e0",
+   "deepshop",
+   "gpt-4o",
+   148
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "online_mind2web",
+   "not judged (reward 0)",
+   79
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   196
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "webvoyager",
+   "gpt-4o",
+   587
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "sft1",
+   "deepshop",
+   "gpt-4o",
+   149
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "deepshop",
+   "gpt-4o",
+   150
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "deepshop",
+   "gpt-4o",
+   149
+  ],
+  [
+   "lunak3-panels-20261027",
+   "sft1",
+   "deepshop",
+   "gpt-4o",
+   147
+  ]
+ ],
+ "rows": [
+  {
+   "condition": "263 states",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 259,
+   "successes": 98,
+   "overall": 32.7,
+   "valid_only": 37.8
+  },
+  {
+   "condition": "263 states",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 575,
+   "successes": 287,
+   "overall": 48.2,
+   "valid_only": 49.9
+  },
+  {
+   "condition": "263 states",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 45,
+   "overall": 30.0,
+   "valid_only": 30.8
+  },
+  {
+   "condition": "501 states",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 262,
+   "successes": 87,
+   "overall": 29.0,
+   "valid_only": 33.2
+  },
+  {
+   "condition": "501 states",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 586,
+   "successes": 288,
+   "overall": 48.4,
+   "valid_only": 49.1
+  },
+  {
+   "condition": "501 states",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 148,
+   "successes": 40,
+   "overall": 26.7,
+   "valid_only": 27.0
+  },
+  {
+   "condition": "1,003 states",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 259,
+   "successes": 97,
+   "overall": 32.3,
+   "valid_only": 37.5
+  },
+  {
+   "condition": "1,003 states",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 573,
+   "successes": 282,
+   "overall": 47.4,
+   "valid_only": 49.2
+  },
+  {
+   "condition": "1,003 states",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 50,
+   "overall": 33.3,
+   "valid_only": 34.2
+  },
+  {
+   "condition": "1,380 states",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 267,
+   "successes": 99,
+   "overall": 33.0,
+   "valid_only": 37.1
+  },
+  {
+   "condition": "1,380 states",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 585,
+   "successes": 304,
+   "overall": 51.1,
+   "valid_only": 52.0
+  },
+  {
+   "condition": "1,380 states",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 60,
+   "overall": 40.0,
+   "valid_only": 41.1
+  },
+  {
+   "condition": "2,612 states",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 260,
+   "successes": 103,
+   "overall": 34.3,
+   "valid_only": 39.6
+  },
+  {
+   "condition": "2,612 states",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 580,
+   "successes": 299,
+   "overall": 50.3,
+   "valid_only": 51.6
+  },
+  {
+   "condition": "2,612 states",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 144,
+   "successes": 48,
+   "overall": 32.0,
+   "valid_only": 33.3
+  },
+  {
+   "condition": "Luna-K3 Piotr-style panels",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 264,
+   "successes": 101,
+   "overall": 33.7,
+   "valid_only": 38.3
+  },
+  {
+   "condition": "Luna-K3 Piotr-style panels",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 578,
+   "successes": 289,
+   "overall": 48.6,
+   "valid_only": 50.0
+  },
+  {
+   "condition": "Luna-K3 Piotr-style panels",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 139,
+   "successes": 49,
+   "overall": 32.7,
+   "valid_only": 35.3
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 258,
+   "successes": 100,
+   "overall": 33.3,
+   "valid_only": 38.8
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 586,
+   "successes": 320,
+   "overall": 53.8,
+   "valid_only": 54.6
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 148,
+   "successes": 47,
+   "overall": 31.3,
+   "valid_only": 31.8
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 275,
+   "successes": 95,
+   "overall": 31.7,
+   "valid_only": 34.5
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 587,
+   "successes": 264,
+   "overall": 44.4,
+   "valid_only": 45.0
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 149,
+   "successes": 40,
+   "overall": 26.7,
+   "valid_only": 26.8
+  },
+  {
+   "condition": "1,380 states, DeepShop 10-21",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 150,
+   "successes": 64,
+   "overall": 42.7,
+   "valid_only": 42.7
+  },
+  {
+   "condition": "SFT 4B, DeepShop 10-18",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 149,
+   "successes": 51,
+   "overall": 34.0,
+   "valid_only": 34.2
+  },
+  {
+   "condition": "SFT 4B, DeepShop 10-27 (lunak3 round)",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 147,
+   "successes": 50,
+   "overall": 33.3,
+   "valid_only": 34.0
+  },
+  {
+   "condition": "263 states",
+   "benchmark": "mean",
+   "overall": 37.0,
+   "valid_only": 39.5
+  },
+  {
+   "condition": "501 states",
+   "benchmark": "mean",
+   "overall": 34.7,
+   "valid_only": 36.4
+  },
+  {
+   "condition": "1,003 states",
+   "benchmark": "mean",
+   "overall": 37.7,
+   "valid_only": 40.3
+  },
+  {
+   "condition": "1,380 states",
+   "benchmark": "mean",
+   "overall": 41.4,
+   "valid_only": 43.4
+  },
+  {
+   "condition": "2,612 states",
+   "benchmark": "mean",
+   "overall": 38.9,
+   "valid_only": 41.5
+  },
+  {
+   "condition": "Luna-K3 Piotr-style panels",
+   "benchmark": "mean",
+   "overall": 38.3,
+   "valid_only": 41.2
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "mean",
+   "overall": 39.5,
+   "valid_only": 41.7
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "mean",
+   "overall": 34.3,
+   "valid_only": 35.4
+  }
+ ],
+ "paired": [
+  {
+   "a": "263 states",
+   "b": "1,380 states",
+   "online_mind2web": {
+    "overall": [
+     -0.3,
+     -6.0,
+     5.7
+    ],
+    "valid_only": [
+     1.6,
+     -5.2,
+     8.4
+    ],
+    "valid_tasks": 251
+   },
+   "webvoyager": {
+    "overall": [
+     -2.9,
+     -7.1,
+     1.0
+    ],
+    "valid_only": [
+     -1.2,
+     -5.3,
+     2.8
+    ],
+    "valid_tasks": 565
+   },
+   "deepshop": {
+    "overall": [
+     -10.0,
+     -19.3,
+     -0.7
+    ],
+    "valid_only": [
+     -9.8,
+     -18.9,
+     0.0
+    ],
+    "valid_tasks": 143
+   },
+   "mean": {
+    "overall": [
+     -4.4,
+     -8.3,
+     -0.5
+    ],
+    "valid_only": [
+     -3.1,
+     -7.2,
+     1.0
+    ],
+    "valid_tasks": 959
+   }
+  },
+  {
+   "a": "501 states",
+   "b": "1,380 states",
+   "online_mind2web": {
+    "overall": [
+     -4.0,
+     -9.7,
+     1.7
+    ],
+    "valid_only": [
+     -2.4,
+     -8.7,
+     4.0
+    ],
+    "valid_tasks": 252
+   },
+   "webvoyager": {
+    "overall": [
+     -2.7,
+     -6.7,
+     1.3
+    ],
+    "valid_only": [
+     -2.1,
+     -6.1,
+     1.9
+    ],
+    "valid_tasks": 577
+   },
+   "deepshop": {
+    "overall": [
+     -13.3,
+     -22.0,
+     -4.7
+    ],
+    "valid_only": [
+     -13.9,
+     -22.9,
+     -4.9
+    ],
+    "valid_tasks": 144
+   },
+   "mean": {
+    "overall": [
+     -6.7,
+     -10.4,
+     -3.0
+    ],
+    "valid_only": [
+     -6.1,
+     -10.0,
+     -2.2
+    ],
+    "valid_tasks": 973
+   }
+  },
+  {
+   "a": "1,003 states",
+   "b": "1,380 states",
+   "online_mind2web": {
+    "overall": [
+     -0.7,
+     -6.3,
+     5.0
+    ],
+    "valid_only": [
+     1.2,
+     -5.2,
+     7.5
+    ],
+    "valid_tasks": 252
+   },
+   "webvoyager": {
+    "overall": [
+     -3.7,
+     -7.4,
+     0.2
+    ],
+    "valid_only": [
+     -3.5,
+     -7.3,
+     0.4
+    ],
+    "valid_tasks": 564
+   },
+   "deepshop": {
+    "overall": [
+     -6.7,
+     -15.3,
+     2.0
+    ],
+    "valid_only": [
+     -7.0,
+     -16.2,
+     1.4
+    ],
+    "valid_tasks": 142
+   },
+   "mean": {
+    "overall": [
+     -3.7,
+     -7.3,
+     -0.1
+    ],
+    "valid_only": [
+     -3.1,
+     -7.0,
+     0.7
+    ],
+    "valid_tasks": 958
+   }
+  },
+  {
+   "a": "2,612 states",
+   "b": "1,380 states",
+   "online_mind2web": {
+    "overall": [
+     1.3,
+     -4.0,
+     6.7
+    ],
+    "valid_only": [
+     3.6,
+     -2.4,
+     9.6
+    ],
+    "valid_tasks": 250
+   },
+   "webvoyager": {
+    "overall": [
+     -0.8,
+     -4.5,
+     2.9
+    ],
+    "valid_only": [
+     0.0,
+     -3.7,
+     3.7
+    ],
+    "valid_tasks": 572
+   },
+   "deepshop": {
+    "overall": [
+     -8.0,
+     -17.3,
+     1.3
+    ],
+    "valid_only": [
+     -7.1,
+     -17.0,
+     2.8
+    ],
+    "valid_tasks": 141
+   },
+   "mean": {
+    "overall": [
+     -2.5,
+     -6.2,
+     1.3
+    ],
+    "valid_only": [
+     -1.2,
+     -5.2,
+     2.9
+    ],
+    "valid_tasks": 963
+   }
+  },
+  {
+   "a": "263 states",
+   "b": "SFT 4B",
+   "online_mind2web": {
+    "overall": [
+     1.0,
+     -5.0,
+     7.0
+    ],
+    "valid_only": [
+     2.7,
+     -3.9,
+     9.4
+    ],
+    "valid_tasks": 256
+   },
+   "webvoyager": {
+    "overall": [
+     3.9,
+     0.0,
+     7.7
+    ],
+    "valid_only": [
+     3.7,
+     -0.4,
+     7.7
+    ],
+    "valid_tasks": 568
+   },
+   "deepshop": {
+    "overall": [
+     3.3,
+     -4.7,
+     11.3
+    ],
+    "valid_only": [
+     2.8,
+     -5.5,
+     11.0
+    ],
+    "valid_tasks": 145
+   },
+   "mean": {
+    "overall": [
+     2.7,
+     -0.8,
+     6.2
+    ],
+    "valid_only": [
+     3.1,
+     -0.8,
+     6.8
+    ],
+    "valid_tasks": 969
+   }
+  },
+  {
+   "a": "501 states",
+   "b": "SFT 4B",
+   "online_mind2web": {
+    "overall": [
+     -2.7,
+     -8.0,
+     2.7
+    ],
+    "valid_only": [
+     -1.2,
+     -6.9,
+     4.6
+    ],
+    "valid_tasks": 259
+   },
+   "webvoyager": {
+    "overall": [
+     4.0,
+     0.0,
+     8.1
+    ],
+    "valid_only": [
+     4.0,
+     0.0,
+     8.1
+    ],
+    "valid_tasks": 579
+   },
+   "deepshop": {
+    "overall": [
+     0.0,
+     -8.7,
+     8.7
+    ],
+    "valid_only": [
+     0.0,
+     -8.2,
+     8.2
+    ],
+    "valid_tasks": 147
+   },
+   "mean": {
+    "overall": [
+     0.5,
+     -3.1,
+     4.1
+    ],
+    "valid_only": [
+     0.9,
+     -2.8,
+     4.5
+    ],
+    "valid_tasks": 985
+   }
+  },
+  {
+   "a": "1,003 states",
+   "b": "SFT 4B",
+   "online_mind2web": {
+    "overall": [
+     0.7,
+     -5.0,
+     6.3
+    ],
+    "valid_only": [
+     2.7,
+     -3.5,
+     8.9
+    ],
+    "valid_tasks": 257
+   },
+   "webvoyager": {
+    "overall": [
+     3.0,
+     -1.0,
+     7.1
+    ],
+    "valid_only": [
+     2.8,
+     -1.4,
+     7.1
+    ],
+    "valid_tasks": 566
+   },
+   "deepshop": {
+    "overall": [
+     6.7,
+     -1.3,
+     14.7
+    ],
+    "valid_only": [
+     6.2,
+     -1.4,
+     13.8
+    ],
+    "valid_tasks": 145
+   },
+   "mean": {
+    "overall": [
+     3.5,
+     0.0,
+     6.9
+    ],
+    "valid_only": [
+     3.9,
+     0.2,
+     7.5
+    ],
+    "valid_tasks": 968
+   }
+  },
+  {
+   "a": "1,380 states",
+   "b": "SFT 4B",
+   "online_mind2web": {
+    "overall": [
+     1.3,
+     -3.7,
+     6.3
+    ],
+    "valid_only": [
+     1.9,
+     -3.8,
+     7.6
+    ],
+    "valid_tasks": 264
+   },
+   "webvoyager": {
+    "overall": [
+     6.7,
+     2.9,
+     10.8
+    ],
+    "valid_only": [
+     6.2,
+     2.3,
+     10.2
+    ],
+    "valid_tasks": 577
+   },
+   "deepshop": {
+    "overall": [
+     13.3,
+     5.3,
+     22.0
+    ],
+    "valid_only": [
+     13.1,
+     4.8,
+     21.4
+    ],
+    "valid_tasks": 145
+   },
+   "mean": {
+    "overall": [
+     7.1,
+     3.7,
+     10.7
+    ],
+    "valid_only": [
+     7.1,
+     3.4,
+     10.8
+    ],
+    "valid_tasks": 986
+   }
+  },
+  {
+   "a": "2,612 states",
+   "b": "SFT 4B",
+   "online_mind2web": {
+    "overall": [
+     2.7,
+     -3.0,
+     8.3
+    ],
+    "valid_only": [
+     5.4,
+     -0.8,
+     11.7
+    ],
+    "valid_tasks": 257
+   },
+   "webvoyager": {
+    "overall": [
+     5.9,
+     1.8,
+     9.7
+    ],
+    "valid_only": [
+     5.8,
+     1.7,
+     9.8
+    ],
+    "valid_tasks": 573
+   },
+   "deepshop": {
+    "overall": [
+     5.3,
+     -2.7,
+     12.7
+    ],
+    "valid_only": [
+     6.2,
+     -1.4,
+     14.6
+    ],
+    "valid_tasks": 144
+   },
+   "mean": {
+    "overall": [
+     4.6,
+     1.1,
+     8.1
+    ],
+    "valid_only": [
+     5.8,
+     2.1,
+     9.4
+    ],
+    "valid_tasks": 974
+   }
+  },
+  {
+   "a": "2,612 states",
+   "b": "263 states",
+   "online_mind2web": {
+    "overall": [
+     1.7,
+     -4.0,
+     7.3
+    ],
+    "valid_only": [
+     3.3,
+     -3.3,
+     9.8
+    ],
+    "valid_tasks": 246
+   },
+   "webvoyager": {
+    "overall": [
+     2.0,
+     -2.2,
+     6.1
+    ],
+    "valid_only": [
+     1.2,
+     -3.0,
+     5.3
+    ],
+    "valid_tasks": 563
+   },
+   "deepshop": {
+    "overall": [
+     2.0,
+     -7.3,
+     11.3
+    ],
+    "valid_only": [
+     2.1,
+     -7.9,
+     12.1
+    ],
+    "valid_tasks": 140
+   },
+   "mean": {
+    "overall": [
+     1.9,
+     -1.9,
+     5.8
+    ],
+    "valid_only": [
+     2.2,
+     -2.1,
+     6.5
+    ],
+    "valid_tasks": 949
+   }
+  },
+  {
+   "a": "2,612 states",
+   "b": "Luna-K3 Piotr-style panels",
+   "online_mind2web": {
+    "overall": [
+     0.7,
+     -4.3,
+     5.7
+    ],
+    "valid_only": [
+     1.6,
+     -4.4,
+     7.5
+    ],
+    "valid_tasks": 252
+   },
+   "webvoyager": {
+    "overall": [
+     1.7,
+     -2.4,
+     5.7
+    ],
+    "valid_only": [
+     2.1,
+     -1.8,
+     6.0
+    ],
+    "valid_tasks": 565
+   },
+   "deepshop": {
+    "overall": [
+     -0.7,
+     -9.3,
+     8.0
+    ],
+    "valid_only": [
+     -2.9,
+     -12.5,
+     6.6
+    ],
+    "valid_tasks": 136
+   },
+   "mean": {
+    "overall": [
+     0.6,
+     -3.2,
+     4.1
+    ],
+    "valid_only": [
+     0.3,
+     -3.8,
+     4.4
+    ],
+    "valid_tasks": 953
+   }
+  },
+  {
+   "a": "2,612 states",
+   "b": "Piotr data 10-23",
+   "online_mind2web": {
+    "overall": [
+     1.0,
+     -4.3,
+     6.0
+    ],
+    "valid_only": [
+     1.2,
+     -4.8,
+     7.3
+    ],
+    "valid_tasks": 248
+   },
+   "webvoyager": {
+    "overall": [
+     -3.5,
+     -7.6,
+     0.5
+    ],
+    "valid_only": [
+     -3.0,
+     -7.0,
+     1.0
+    ],
+    "valid_tasks": 572
+   },
+   "deepshop": {
+    "overall": [
+     0.7,
+     -8.7,
+     10.0
+    ],
+    "valid_only": [
+     0.7,
+     -8.4,
+     9.8
+    ],
+    "valid_tasks": 143
+   },
+   "mean": {
+    "overall": [
+     -0.6,
+     -4.3,
+     3.0
+    ],
+    "valid_only": [
+     -0.4,
+     -4.3,
+     3.5
+    ],
+    "valid_tasks": 963
+   }
+  },
+  {
+   "a": "1,380 states DeepShop 10-28 rerun",
+   "b": "same head 10-21",
+   "deepshop": {
+    "overall": [
+     -2.7,
+     -12.0,
+     6.7
+    ]
+   }
+  }
+ ],
+ "offline": [
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/sets-20261025/k3-s0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 37.68,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.0361872113233277,
+    0.3144204441740187,
+    3.8662384793709896
+   ],
+   "minus_base": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/heads/repro-k3-s0/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 37.68,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.0361872113233277,
+    0.3144204441740187,
+    3.8662384793709896
+   ],
+   "minus_base": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/heads/n250/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 37.05,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    1.4003783404872336,
+    -0.5071581503850701,
+    3.397896581945662
+   ],
+   "minus_base": [
+    -0.635808870836094,
+    -2.968700874048922,
+    1.5893033599696378
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/heads/n500/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 38.1,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.4464561787610792,
+    0.6989422554564922,
+    4.528537410007012
+   ],
+   "minus_base": [
+    0.4102689674377516,
+    -1.4626585566112036,
+    2.4664693913000324
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/heads/n1000/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 37.68,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.0287392331403225,
+    0.19294573429911768,
+    4.132703653543798
+   ],
+   "minus_base": [
+    -0.007447978183005415,
+    -1.8038586048454468,
+    1.9013457416150195
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/heads/all/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 38.15,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.5039694542870587,
+    0.8565748132112629,
+    4.275824364833653
+   ],
+   "minus_base": [
+    0.4677822429637312,
+    -0.5665566556655667,
+    1.498077024392814
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/data-scale-20261023/heads/nall/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 38.31,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.6584444828546463,
+    0.5799668663183384,
+    4.833038709626732
+   ],
+   "minus_base": [
+    0.6222572715313188,
+    -1.4641312482595379,
+    2.715171921698877
+   ]
+  },
+  {
+   "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/onepanel/../heads/luna-k3-best/seed0",
+   "test_states": 348,
+   "test_tasks": 86,
+   "success": 37.8,
+   "sft_sample": 35.65,
+   "oracle": 46.74,
+   "minus_sft_sample": [
+    2.1477568442178243,
+    0.6592222395751997,
+    3.828749711633866
+   ],
+   "minus_base": [
+    0.11156963289449685,
+    -1.5345100339501234,
+    1.7412495956697687
+   ]
+  }
+ ],
+ "training_data": {
+  "old_train": 1380,
+  "old_test": 348,
+  "lbt_train": 710,
+  "lbu_train": 522,
+  "new_feature_states": 1232,
+  "train_states": 2612,
+  "train_tasks": 470
+ },
+ "subsets": "250 0.06808510638297872 263 32\n500 0.16808510638297872 501 79\n1000 0.3404255319148936 1003 160\n"
+}
