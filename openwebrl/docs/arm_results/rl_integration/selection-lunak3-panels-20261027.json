@@ -1,0 +1,810 @@
+{
+ "note": "Live comparison of the Luna-K3 Piotr-style-panel head (lunak3-panels-20261027, head5-cafea4f265cf) against the\nPiotr-data head nall/seed0 (data-scale 10-23 and same-day rerun 10-25), the 1,380-state one-panel K3 head\n(sft-actions-full 10-21) and SFT 4B (crossbench 10-18; DeepShop also same-day 10-27). SFT-4B actor, N=5, T1.0/p0.9,\n30 steps, every task of OM2W (300), WebVoyager (595), DeepShop (150). OM2W judge gpt-5.6-terra (older runs re-judged,\nrejudge-terra-20261023); WebVoyager/DeepShop GPT-4o. Overall counts invalid as failure; valid-only pairs tasks valid in\nboth arms. Mean = unweighted mean of the three benchmark rates. Paired 95% bootstrap over tasks (10,000, seed 20261027),\nbenchmarks resampled independently for the mean.",
+ "judges": [
+  [
+   "lunak3-panels-20261027",
+   "head5-cafea4f265cf",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   264
+  ],
+  [
+   "lunak3-panels-20261027",
+   "head5-cafea4f265cf",
+   "webvoyager",
+   "gpt-4o",
+   578
+  ],
+  [
+   "lunak3-panels-20261027",
+   "head5-cafea4f265cf",
+   "deepshop",
+   "gpt-4o",
+   139
+  ],
+  [
+   "data-scale-20261023",
+   "head5-fc589b57c9e0",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   258
+  ],
+  [
+   "data-scale-20261023",
+   "head5-fc589b57c9e0",
+   "webvoyager",
+   "gpt-4o",
+   586
+  ],
+  [
+   "data-scale-20261023",
+   "head5-fc589b57c9e0",
+   "deepshop",
+   "gpt-4o",
+   148
+  ],
+  [
+   "piotr-head-sameday-20261025",
+   "head5-fc589b57c9e0",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   264
+  ],
+  [
+   "piotr-head-sameday-20261025",
+   "head5-fc589b57c9e0",
+   "webvoyager",
+   "gpt-4o",
+   580
+  ],
+  [
+   "piotr-head-sameday-20261025",
+   "head5-fc589b57c9e0",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "online_mind2web",
+   "not judged (reward 0)",
+   94
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   173
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "webvoyager",
+   "gpt-4o",
+   585
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "deepshop",
+   "gpt-4o",
+   150
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "online_mind2web",
+   "not judged (reward 0)",
+   79
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   196
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "webvoyager",
+   "gpt-4o",
+   587
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "deepshop",
+   "gpt-4o",
+   149
+  ],
+  [
+   "lunak3-panels-20261027",
+   "sft1",
+   "deepshop",
+   "gpt-4o",
+   147
+  ]
+ ],
+ "rows": [
+  {
+   "condition": "Luna-K3 panels (new)",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 264,
+   "successes": 101,
+   "overall": 33.7,
+   "valid_only": 38.3
+  },
+  {
+   "condition": "Luna-K3 panels (new)",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 578,
+   "successes": 289,
+   "overall": 48.6,
+   "valid_only": 50.0
+  },
+  {
+   "condition": "Luna-K3 panels (new)",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 139,
+   "successes": 49,
+   "overall": 32.7,
+   "valid_only": 35.3
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 258,
+   "successes": 100,
+   "overall": 33.3,
+   "valid_only": 38.8
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 586,
+   "successes": 320,
+   "overall": 53.8,
+   "valid_only": 54.6
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 148,
+   "successes": 47,
+   "overall": 31.3,
+   "valid_only": 31.8
+  },
+  {
+   "condition": "Piotr data 10-25",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 264,
+   "successes": 105,
+   "overall": 35.0,
+   "valid_only": 39.8
+  },
+  {
+   "condition": "Piotr data 10-25",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 580,
+   "successes": 311,
+   "overall": 52.3,
+   "valid_only": 53.6
+  },
+  {
+   "condition": "Piotr data 10-25",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 42,
+   "overall": 28.0,
+   "valid_only": 28.8
+  },
+  {
+   "condition": "K3 1,380 states 1-panel",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 267,
+   "successes": 99,
+   "overall": 33.0,
+   "valid_only": 37.1
+  },
+  {
+   "condition": "K3 1,380 states 1-panel",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 585,
+   "successes": 304,
+   "overall": 51.1,
+   "valid_only": 52.0
+  },
+  {
+   "condition": "K3 1,380 states 1-panel",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 150,
+   "successes": 64,
+   "overall": 42.7,
+   "valid_only": 42.7
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "online_mind2web",
+   "tasks": 300,
+   "valid": 275,
+   "successes": 95,
+   "overall": 31.7,
+   "valid_only": 34.5
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "webvoyager",
+   "tasks": 595,
+   "valid": 587,
+   "successes": 264,
+   "overall": 44.4,
+   "valid_only": 45.0
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 149,
+   "successes": 51,
+   "overall": 34.0,
+   "valid_only": 34.2
+  },
+  {
+   "condition": "SFT 4B (DS same-day)",
+   "benchmark": "deepshop",
+   "tasks": 150,
+   "valid": 147,
+   "successes": 50,
+   "overall": 33.3,
+   "valid_only": 34.0
+  },
+  {
+   "condition": "Luna-K3 panels (new)",
+   "benchmark": "mean",
+   "overall": 38.3,
+   "valid_only": 41.2
+  },
+  {
+   "condition": "Piotr data 10-23",
+   "benchmark": "mean",
+   "overall": 39.5,
+   "valid_only": 41.7
+  },
+  {
+   "condition": "Piotr data 10-25",
+   "benchmark": "mean",
+   "overall": 38.4,
+   "valid_only": 40.7
+  },
+  {
+   "condition": "K3 1,380 states 1-panel",
+   "benchmark": "mean",
+   "overall": 42.3,
+   "valid_only": 43.9
+  },
+  {
+   "condition": "SFT 4B",
+   "benchmark": "mean",
+   "overall": 36.7,
+   "valid_only": 37.9
+  }
+ ],
+ "paired": [
+  {
+   "a": "Luna-K3 panels (new)",
+   "b": "Piotr data 10-23",
+   "online_mind2web": {
+    "overall": [
+     0.3,
+     -4.7,
+     5.3
+    ],
+    "valid_only": [
+     -0.4,
+     -6.0,
+     5.2
+    ],
+    "valid_tasks": 250
+   },
+   "webvoyager": {
+    "overall": [
+     -5.2,
+     -9.2,
+     -1.3
+    ],
+    "valid_only": [
+     -4.4,
+     -8.6,
+     -0.4
+    ],
+    "valid_tasks": 570
+   },
+   "deepshop": {
+    "overall": [
+     1.3,
+     -7.3,
+     10.0
+    ],
+    "valid_only": [
+     4.3,
+     -4.3,
+     13.0
+    ],
+    "valid_tasks": 138
+   },
+   "mean": {
+    "overall": [
+     -1.2,
+     -4.9,
+     2.5
+    ],
+    "valid_only": [
+     -0.1,
+     -4.0,
+     3.6
+    ],
+    "valid_tasks": 958
+   }
+  },
+  {
+   "a": "Luna-K3 panels (new)",
+   "b": "Piotr data 10-25",
+   "online_mind2web": {
+    "overall": [
+     -1.3,
+     -6.3,
+     3.7
+    ],
+    "valid_only": [
+     -1.6,
+     -7.5,
+     4.3
+    ],
+    "valid_tasks": 255
+   },
+   "webvoyager": {
+    "overall": [
+     -3.7,
+     -7.7,
+     0.3
+    ],
+    "valid_only": [
+     -2.8,
+     -7.1,
+     1.2
+    ],
+    "valid_tasks": 566
+   },
+   "deepshop": {
+    "overall": [
+     4.7,
+     -4.0,
+     13.3
+    ],
+    "valid_only": [
+     6.6,
+     -2.2,
+     15.4
+    ],
+    "valid_tasks": 136
+   },
+   "mean": {
+    "overall": [
+     -0.1,
+     -3.7,
+     3.4
+    ],
+    "valid_only": [
+     0.7,
+     -3.1,
+     4.6
+    ],
+    "valid_tasks": 957
+   }
+  },
+  {
+   "a": "Luna-K3 panels (new)",
+   "b": "K3 1,380 states 1-panel",
+   "online_mind2web": {
+    "overall": [
+     0.7,
+     -5.0,
+     6.3
+    ],
+    "valid_only": [
+     2.4,
+     -3.9,
+     8.6
+    ],
+    "valid_tasks": 255
+   },
+   "webvoyager": {
+    "overall": [
+     -2.5,
+     -6.4,
+     1.3
+    ],
+    "valid_only": [
+     -0.9,
+     -4.7,
+     3.0
+    ],
+    "valid_tasks": 570
+   },
+   "deepshop": {
+    "overall": [
+     -10.0,
+     -18.0,
+     -2.0
+    ],
+    "valid_only": [
+     -7.2,
+     -15.8,
+     1.4
+    ],
+    "valid_tasks": 139
+   },
+   "mean": {
+    "overall": [
+     -4.0,
+     -7.6,
+     -0.2
+    ],
+    "valid_only": [
+     -1.9,
+     -5.7,
+     1.8
+    ],
+    "valid_tasks": 964
+   }
+  },
+  {
+   "a": "Luna-K3 panels (new)",
+   "b": "SFT 4B",
+   "online_mind2web": {
+    "overall": [
+     2.0,
+     -3.3,
+     7.7
+    ],
+    "valid_only": [
+     3.8,
+     -2.3,
+     10.0
+    ],
+    "valid_tasks": 261
+   },
+   "webvoyager": {
+    "overall": [
+     4.2,
+     0.2,
+     8.2
+    ],
+    "valid_only": [
+     4.4,
+     0.2,
+     8.6
+    ],
+    "valid_tasks": 572
+   },
+   "deepshop": {
+    "overall": [
+     -1.3,
+     -9.3,
+     6.7
+    ],
+    "valid_only": [
+     0.7,
+     -7.2,
+     8.7
+    ],
+    "valid_tasks": 138
+   },
+   "mean": {
+    "overall": [
+     1.6,
+     -1.8,
+     5.1
+    ],
+    "valid_only": [
+     3.0,
+     -0.7,
+     6.6
+    ],
+    "valid_tasks": 971
+   }
+  },
+  {
+   "a": "Luna-K3 panels (new)",
+   "b": "SFT 4B (DS same-day)",
+   "deepshop": {
+    "overall": [
+     -0.7,
+     -8.7,
+     7.3
+    ]
+   }
+  }
+ ],
+ "offline": {
+  "vs_piotr": [
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/data-scale-20261023/heads/nall/seed0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 38.31,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     2.6584444828546463,
+     0.5799668663183384,
+     4.833038709626732
+    ],
+    "minus_base": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/heads/luna-k3-best/seed0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 37.8,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     2.1477568442178243,
+     0.6592222395751997,
+     3.828749711633866
+    ],
+    "minus_base": [
+     -0.5106876386368219,
+     -2.426545086119554,
+     1.4190171561500438
+    ]
+   },
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/heads/luna-k3-last/seed0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 37.63,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     1.982737014951171,
+     0.4359864307232729,
+     3.7669902455669693
+    ],
+    "minus_base": [
+     -0.6757074679034751,
+     -2.5610059142189754,
+     1.1360023991602939
+    ]
+   }
+  ],
+  "vs_one_panel_k3": [
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/sets-20261025/k3-s0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 37.68,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     2.0361872113233277,
+     0.3144204441740187,
+     3.8662384793709896
+    ],
+    "minus_base": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/heads/luna-k3-best/seed0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 37.8,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     2.1477568442178243,
+     0.6592222395751997,
+     3.828749711633866
+    ],
+    "minus_base": [
+     0.11156963289449685,
+     -1.5345100339501234,
+     1.7412495956697687
+    ]
+   },
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/heads/luna-k3-last/seed0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 37.63,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     1.982737014951171,
+     0.4359864307232729,
+     3.7669902455669693
+    ],
+    "minus_base": [
+     -0.05345019637215641,
+     -1.8140589569160999,
+     1.632259840352326
+    ]
+   },
+   {
+    "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/data-scale-20261023/heads/nall/seed0",
+    "test_states": 348,
+    "test_tasks": 86,
+    "success": 38.31,
+    "sft_sample": 35.65,
+    "oracle": 46.74,
+    "minus_sft_sample": [
+     2.6584444828546463,
+     0.5799668663183384,
+     4.833038709626732
+    ],
+    "minus_base": [
+     0.6222572715313188,
+     -1.4641312482595379,
+     2.715171921698877
+    ]
+   }
+  ],
+  "epoch_scores_train_states": [
+   {
+    "epoch": 1,
+    "train": 41.36,
+    "train_valtasks": 54.81,
+    "test": 38.27
+   },
+   {
+    "epoch": 2,
+    "train": 41.11,
+    "train_valtasks": 52.63,
+    "test": 37.42
+   },
+   {
+    "epoch": 3,
+    "train": 41.25,
+    "train_valtasks": 53.81,
+    "test": 37.93
+   },
+   {
+    "epoch": 4,
+    "train": 41.35,
+    "train_valtasks": 54.13,
+    "test": 37.38
+   },
+   {
+    "epoch": 5,
+    "train": 42.05,
+    "train_valtasks": 54.44,
+    "test": 37.6
+   },
+   {
+    "epoch": 6,
+    "train": 41.75,
+    "train_valtasks": 55.67,
+    "test": 37.8
+   },
+   {
+    "epoch": 7,
+    "train": 42.06,
+    "train_valtasks": 55.53,
+    "test": 36.44
+   },
+   {
+    "epoch": 8,
+    "train": 41.63,
+    "train_valtasks": 53.95,
+    "test": 37.01
+   },
+   {
+    "epoch": 9,
+    "train": 42.11,
+    "train_valtasks": 55.38,
+    "test": 36.5
+   },
+   {
+    "epoch": 10,
+    "train": 41.71,
+    "train_valtasks": 54.61,
+    "test": 36.72
+   },
+   {
+    "epoch": 11,
+    "train": 41.95,
+    "train_valtasks": 53.8,
+    "test": 37.72
+   },
+   {
+    "epoch": 12,
+    "train": 41.99,
+    "train_valtasks": 54.45,
+    "test": 37.4
+   },
+   {
+    "epoch": 13,
+    "train": 42.1,
+    "train_valtasks": 55.48,
+    "test": 37.19
+   },
+   {
+    "epoch": 14,
+    "train": 42.07,
+    "train_valtasks": 54.3,
+    "test": 37.51
+   },
+   {
+    "epoch": 15,
+    "train": 42.02,
+    "train_valtasks": 54.68,
+    "test": 37.32
+   },
+   {
+    "epoch": 16,
+    "train": 42.16,
+    "train_valtasks": 54.43,
+    "test": 38.07
+   },
+   {
+    "epoch": 17,
+    "train": 42.15,
+    "train_valtasks": 54.3,
+    "test": 37.46
+   },
+   {
+    "epoch": 18,
+    "train": 42.24,
+    "train_valtasks": 54.91,
+    "test": 37.74
+   },
+   {
+    "epoch": 19,
+    "train": 42.25,
+    "train_valtasks": 54.45,
+    "test": 37.57
+   },
+   {
+    "epoch": 20,
+    "train": 42.25,
+    "train_valtasks": 54.45,
+    "test": 37.63
+   }
+  ],
+  "chosen_epoch": 6
+ },
+ "training_data": {
+  "old_panels": 7151,
+  "lbt_panels": 9039,
+  "lbu_panels": 6690,
+  "feature_panels": 22880,
+  "states": 2551,
+  "tasks": 467,
+  "val_tasks": 56,
+  "train_panels": 19527,
+  "informative": 20420
+ }
+}

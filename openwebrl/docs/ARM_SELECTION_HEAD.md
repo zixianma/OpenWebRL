@@ -178,6 +178,37 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150.
 - **Run note.** The OpenAI org spend limit stopped all six jobs mid-run (13:52 PDT). Refused calls were not billed. Their 75 committed episodes were moved to `collection/quarantine-judge-spend-limit-429-20261025/` and rerun under the same frozen plans (jobs 386994–386999, resumed 388504–388509). The WebVoyager all-data job lost its actor server to a CUDA illegal-memory-access crash at 390/595 and was resumed as 388719. Every reported episode has a real judge verdict.
 - [Evidence](arm_results/rl_integration/selection-piotr-head-sameday-20261025.json) · [analysis script](arm_results/rl_integration/selection-piotr-head-sameday-20261025-analysis.py) · runtime `evaluations/piotr-head-sameday-20261025/` (`jobs.txt` lists every attempt).
 
+<a id="selection-head-lunak3-panels-20261027"></a>
+
+## Luna K = 3 labels on Piotr-style panels (2026-10-27)
+
+**Swapping Piotr's GPT-5.5 picks for Luna K = 3 lookahead picks, on 2,551 of our branching states in Piotr's panel format (22,880 panels, same trainer and recipe), gives a head level with the Piotr-data head: −1.2 pp [−4.9, +2.5] on the three-benchmark mean against its 10-23 run and −0.1 [−3.7, +3.4] against its same-recipe 10-25 rerun. It is +1.6 [−1.8, +5.1] over SFT 4B and −4.0 [−7.6, −0.2] below the earlier 1,380-state one-panel K = 3 head, a gap that is all DeepShop (−10.0, run six days apart). Offline it scores 37.80% against 38.31% for the Piotr-data head (−0.51 [−2.43, +1.42]) and 37.68% for the one-panel K = 3 head.** Like the [state](#selection-head-state-scale-1panel-20261027) and [panel](#selection-head-panel-scale-20261026) scaling, more Luna-labelled panels and states do not lift the head, so further state collection for this purpose is not justified by these results.
+
+| Head (training data) | OM2W valid | OM2W successes | OM2W overall | WebVoyager valid | WebVoyager successes | WebVoyager overall | DeepShop valid | DeepShop successes | DeepShop overall | Mean overall | Mean valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| **Luna K = 3, Piotr-style panels: 2,551 states / 22,880 panels (10-27)** | 264 | 101 | 33.7% | 578 | 289 | 48.6% | 139 | 49 | 32.7% | 38.3% | 41.2% |
+| Piotr's GPT-5.5 panels: 2,587 states, all panels (10-23) | 258 | 100 | 33.3% | 586 | 320 | 53.8% | 148 | 47 | 31.3% | 39.5% | 41.7% |
+| Same head, rerun (10-25) | 264 | 105 | 35.0% | 580 | 311 | 52.3% | 146 | 42 | 28.0% | 38.4% | 40.7% |
+| Luna K = 3, one panel of distinct actions: 1,380 states (10-21) | 267 | 99 | 33.0% | 585 | 304 | 51.1% | 150 | 64 | 42.7% | 42.3% | 43.9% |
+| *SFT 4B, one sample (OM2W/WV 10-18; DeepShop 10-27: 50 of 147 valid, 33.3%)* | 275 | 95 | 31.7% | 587 | 264 | 44.4% | 149 | 51 | 34.0% | 36.7% | 37.9% |
+
+Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged by gpt-5.6-terra (10-18 and 10-21 runs re-judged); WebVoyager and DeepShop by GPT-4o, checked on every saved verdict.
+
+| Paired difference, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean | Mean, valid-only |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| New − Piotr data (10-23) | +0.3 [−4.7, +5.3] | **−5.2 [−9.2, −1.3]** | +1.3 [−7.3, +10.0] | −1.2 [−4.9, +2.5] | −0.1 [−4.0, +3.6] |
+| New − Piotr data (10-25) | −1.3 [−6.3, +3.7] | −3.7 [−7.7, +0.3] | +4.7 [−4.0, +13.3] | −0.1 [−3.7, +3.4] | +0.7 [−3.1, +4.6] |
+| New − one-panel K = 3 (10-21) | +0.7 [−5.0, +6.3] | −2.5 [−6.4, +1.3] | **−10.0 [−18.0, −2.0]** | **−4.0 [−7.6, −0.2]** | −1.9 [−5.7, +1.8] |
+| New − SFT 4B | +2.0 [−3.3, +7.7] | **+4.2 [+0.2, +8.2]** | −1.3 [−9.3, +6.7] | +1.6 [−1.8, +5.1] | +3.0 [−0.7, +6.6] |
+| New − SFT 4B, DeepShop same day | — | — | −0.7 [−8.7, +7.3] | — | — |
+
+- **Setup.** States: 1,329 of the 1,380 training states of the [label ablation](#selection-head-sft-actions-20261021) plus 1,222 newer branching states (collections lbt and lbu). Each state gets up to 13 random five-proposal panels drawn from its sampled proposals, duplicates included, as in Piotr's release, and one Luna K = 3 call per panel (screenshots only, no history; $87.70). The target is the picked proposal spread over its action-equivalent duplicates (`equivalence_target`, the function used on Piotr's panels). Training is the Piotr-data recipe (`train_head_round.py --extra-only`, joint transformer, soft CE, batch 256, 20 epochs, seed 0; features from layers 18/27/36), so only the labels and states differ. Our 86 offline test tasks are excluded by task text; 10% of tasks (56) form the validation split.
+- **Epoch.** The best validation epoch (6) is kept. Validation agreement is flat (0.50–0.52) across epochs, so fixed-five success on the 1,390 training states was checked per epoch: 41.4% at epoch 1, 41.8% at epoch 6 and 42.3% at epoch 20, a spread too small to justify a different choice. The last-epoch head scores 37.63% offline (348 test states).
+- **Offline** (348 test states, 86 tasks, fixed five, held-out draws 3–7, task-clustered bootstrap; one SFT sample 35.65%): new 37.80%, Piotr data (nall, seed 0) 38.31%, one-panel K = 3 37.68% (seeds 1–2: 37.31%, 37.40%). New − Piotr −0.51 [−2.43, +1.42]; new − one-panel K = 3 +0.11 [−1.53, +1.74].
+- **Caveats.** The one-panel K = 3 DeepShop run is from 10-21; the Piotr-data head's DeepShop moved −3.3 pp between 10-23 and 10-25 while SFT 4B moved −0.7 pp between 10-18 and 10-27, so part of the −10.0 may be date drift. WebVoyager, where the new head trails Piotr, does not drift measurably.
+- **Run note.** Three jobs plus a same-day SFT DeepShop run, one H200 each; WebVoyager 392797 crashed at 287/595 (sglang multimodal-embedding length mismatch) and resumed from its committed records as 393095. 9.0 H200-h in total; judge spend $5.70.
+- [Evidence](arm_results/rl_integration/selection-lunak3-panels-20261027.json) · [analysis script](arm_results/rl_integration/selection-lunak3-panels-20261027-analysis.py) · runtime `rl-actor-recollect-20261016/diverse2/collector-labels2/` (`panels/`, `compare/` heads, `epochs/`, `live/`) and `evaluations/lunak3-panels-20261027/` (`jobs.txt`).
+
 <a id="selection-head-state-scale-1panel-20261027"></a>
 
 ## State scaling at one panel per state (2026-10-27)
