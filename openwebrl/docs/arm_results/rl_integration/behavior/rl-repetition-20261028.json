@@ -1,0 +1,367 @@
+{
+ "note": "Held-out Online-Mind2Web full-300 evaluations, local GPT-4.1/action_history T0 protocol. repeat_loop_failures: first-match failure category (analyze_rl_eval_failures.classify). repetition_rate: valid episodes (successes included) with an identical non-wait, non-done action issued >= 3 times. Iteration-90 repeats were collected on one harness on matched dates.",
+ "curves": {
+  "outcome56": {
+   "10": {
+    "cohort": "outcome-only-56groups-20261006-iter10",
+    "tasks": 300,
+    "successes": 88,
+    "valid": 251,
+    "repeat_loop_failures": 40,
+    "valid_with_repeat": 136,
+    "repetition_rate": 0.5418326693227091
+   },
+   "20": {
+    "cohort": "outcome-only-56groups-20261006-iter20",
+    "tasks": 300,
+    "successes": 93,
+    "valid": 243,
+    "repeat_loop_failures": 42,
+    "valid_with_repeat": 117,
+    "repetition_rate": 0.48148148148148145
+   },
+   "30": {
+    "cohort": "outcome-only-56groups-20261006-iter30",
+    "tasks": 300,
+    "successes": 97,
+    "valid": 250,
+    "repeat_loop_failures": 50,
+    "valid_with_repeat": 94,
+    "repetition_rate": 0.376
+   },
+   "40": {
+    "cohort": "outcome-only-56groups-20261006-iter40",
+    "tasks": 300,
+    "successes": 103,
+    "valid": 240,
+    "repeat_loop_failures": 52,
+    "valid_with_repeat": 89,
+    "repetition_rate": 0.37083333333333335
+   },
+   "50": {
+    "cohort": "outcome-only-56groups-20261006-iter50",
+    "tasks": 300,
+    "successes": 102,
+    "valid": 239,
+    "repeat_loop_failures": 52,
+    "valid_with_repeat": 78,
+    "repetition_rate": 0.3263598326359833
+   },
+   "60": {
+    "cohort": "outcome-only-56groups-20261006-iter60",
+    "tasks": 300,
+    "successes": 117,
+    "valid": 245,
+    "repeat_loop_failures": 53,
+    "valid_with_repeat": 88,
+    "repetition_rate": 0.35918367346938773
+   },
+   "70": {
+    "cohort": "outcome-only-56groups-20261006-iter70",
+    "tasks": 300,
+    "successes": 112,
+    "valid": 243,
+    "repeat_loop_failures": 54,
+    "valid_with_repeat": 83,
+    "repetition_rate": 0.34156378600823045
+   },
+   "80": {
+    "cohort": "outcome-only-56groups-20261006-iter80",
+    "tasks": 300,
+    "successes": 124,
+    "valid": 248,
+    "repeat_loop_failures": 45,
+    "valid_with_repeat": 67,
+    "repetition_rate": 0.2701612903225806
+   },
+   "90": {
+    "cohort": "outcome-only-56groups-20261006-iter90",
+    "tasks": 300,
+    "successes": 107,
+    "valid": 237,
+    "repeat_loop_failures": 39,
+    "valid_with_repeat": 54,
+    "repetition_rate": 0.22784810126582278
+   }
+  },
+  "g8": {
+   "10": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter10",
+    "tasks": 300,
+    "successes": 88,
+    "valid": 241,
+    "repeat_loop_failures": 20,
+    "valid_with_repeat": 128,
+    "repetition_rate": 0.5311203319502075
+   },
+   "20": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter20",
+    "tasks": 300,
+    "successes": 96,
+    "valid": 235,
+    "repeat_loop_failures": 39,
+    "valid_with_repeat": 118,
+    "repetition_rate": 0.502127659574468
+   },
+   "30": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter30",
+    "tasks": 300,
+    "successes": 101,
+    "valid": 241,
+    "repeat_loop_failures": 38,
+    "valid_with_repeat": 103,
+    "repetition_rate": 0.42738589211618255
+   },
+   "40": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter40",
+    "tasks": 300,
+    "successes": 104,
+    "valid": 238,
+    "repeat_loop_failures": 46,
+    "valid_with_repeat": 91,
+    "repetition_rate": 0.38235294117647056
+   },
+   "50": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter50",
+    "tasks": 300,
+    "successes": 113,
+    "valid": 239,
+    "repeat_loop_failures": 34,
+    "valid_with_repeat": 66,
+    "repetition_rate": 0.27615062761506276
+   },
+   "60": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter60",
+    "tasks": 300,
+    "successes": 127,
+    "valid": 234,
+    "repeat_loop_failures": 36,
+    "valid_with_repeat": 67,
+    "repetition_rate": 0.2863247863247863
+   },
+   "70": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter70",
+    "tasks": 300,
+    "successes": 115,
+    "valid": 236,
+    "repeat_loop_failures": 32,
+    "valid_with_repeat": 48,
+    "repetition_rate": 0.2033898305084746
+   },
+   "80": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter80",
+    "tasks": 300,
+    "successes": 119,
+    "valid": 242,
+    "repeat_loop_failures": 19,
+    "valid_with_repeat": 31,
+    "repetition_rate": 0.128099173553719
+   },
+   "90": {
+    "cohort": "outcome-uniform8-original2102-20261006-iter90",
+    "tasks": 300,
+    "successes": 107,
+    "valid": 243,
+    "repeat_loop_failures": 21,
+    "valid_with_repeat": 42,
+    "repetition_rate": 0.1728395061728395
+   }
+  },
+  "outcome48": {
+   "100": {
+    "cohort": "outcome48-iter100",
+    "tasks": 300,
+    "successes": 104,
+    "valid": 227,
+    "repeat_loop_failures": 53,
+    "valid_with_repeat": 83,
+    "repetition_rate": 0.3656387665198238
+   }
+  },
+  "mixed_bonus": {
+   "70": {
+    "cohort": "arm-mixed-bonus-iter70-338904",
+    "tasks": 300,
+    "successes": 115,
+    "valid": 235,
+    "repeat_loop_failures": 20,
+    "valid_with_repeat": 43,
+    "repetition_rate": 0.1829787234042553
+   },
+   "80": {
+    "cohort": "arm-mixed-bonus-iter80-338904",
+    "tasks": 300,
+    "successes": 108,
+    "valid": 221,
+    "repeat_loop_failures": 20,
+    "valid_with_repeat": 35,
+    "repetition_rate": 0.1583710407239819
+   },
+   "90": {
+    "cohort": "arm-mixed-bonus-iter90-340425",
+    "tasks": 300,
+    "successes": 122,
+    "valid": 233,
+    "repeat_loop_failures": 18,
+    "valid_with_repeat": 33,
+    "repetition_rate": 0.14163090128755365
+   }
+  },
+  "mixed_reweight": {
+   "70": {
+    "cohort": "arm-mixed-reweight-iter70-338905",
+    "tasks": 300,
+    "successes": 116,
+    "valid": 234,
+    "repeat_loop_failures": 30,
+    "valid_with_repeat": 53,
+    "repetition_rate": 0.2264957264957265
+   },
+   "80": {
+    "cohort": "arm-mixed-reweight-iter80-338905",
+    "tasks": 300,
+    "successes": 118,
+    "valid": 231,
+    "repeat_loop_failures": 8,
+    "valid_with_repeat": 23,
+    "repetition_rate": 0.09956709956709957
+   },
+   "90": {
+    "cohort": "arm-mixed-reweight-iter90-340423",
+    "tasks": 300,
+    "successes": 113,
+    "valid": 227,
+    "repeat_loop_failures": 12,
+    "valid_with_repeat": 19,
+    "repetition_rate": 0.08370044052863436
+   }
+  },
+  "action_only": {
+   "10": {
+    "cohort": "arm-mixed-action-only-iter10-383265",
+    "tasks": 300,
+    "successes": 82,
+    "valid": 241,
+    "repeat_loop_failures": 17,
+    "valid_with_repeat": 113,
+    "repetition_rate": 0.46887966804979253
+   },
+   "20": {
+    "cohort": "arm-mixed-action-only-iter20-385787",
+    "tasks": 300,
+    "successes": 54,
+    "valid": 233,
+    "repeat_loop_failures": 10,
+    "valid_with_repeat": 71,
+    "repetition_rate": 0.30472103004291845
+   },
+   "30": {
+    "cohort": "arm-mixed-action-only-iter30-385787",
+    "tasks": 300,
+    "successes": 39,
+    "valid": 245,
+    "repeat_loop_failures": 9,
+    "valid_with_repeat": 35,
+    "repetition_rate": 0.14285714285714285
+   },
+   "40": {
+    "cohort": "arm-mixed-action-only-iter40-385788",
+    "tasks": 300,
+    "successes": 37,
+    "valid": 245,
+    "repeat_loop_failures": 9,
+    "valid_with_repeat": 26,
+    "repetition_rate": 0.10612244897959183
+   }
+  }
+ },
+ "iteration90_repeats": {
+  "outcome48": [
+   {
+    "cohort": "repeat-iter90-outcome48-r1-385593-a1",
+    "tasks": 300,
+    "successes": 103,
+    "valid": 234,
+    "repeat_loop_failures": 54,
+    "valid_with_repeat": 88,
+    "repetition_rate": 0.37606837606837606
+   },
+   {
+    "cohort": "repeat-iter90-outcome48-r2-385593-a1",
+    "tasks": 300,
+    "successes": 95,
+    "valid": 233,
+    "repeat_loop_failures": 57,
+    "valid_with_repeat": 90,
+    "repetition_rate": 0.38626609442060084
+   },
+   {
+    "cohort": "repeat-iter90-outcome48-r3-385593-a1",
+    "tasks": 300,
+    "successes": 109,
+    "valid": 246,
+    "repeat_loop_failures": 71,
+    "valid_with_repeat": 100,
+    "repetition_rate": 0.4065040650406504
+   }
+  ],
+  "outcome56": [
+   {
+    "cohort": "repeat-iter90-outcome56-r1-385593-a1",
+    "tasks": 300,
+    "successes": 114,
+    "valid": 234,
+    "repeat_loop_failures": 38,
+    "valid_with_repeat": 57,
+    "repetition_rate": 0.24358974358974358
+   },
+   {
+    "cohort": "repeat-iter90-outcome56-r2-385593-a1",
+    "tasks": 300,
+    "successes": 102,
+    "valid": 237,
+    "repeat_loop_failures": 53,
+    "valid_with_repeat": 78,
+    "repetition_rate": 0.3291139240506329
+   },
+   {
+    "cohort": "repeat-iter90-outcome56-r3-385593-a1",
+    "tasks": 300,
+    "successes": 102,
+    "valid": 237,
+    "repeat_loop_failures": 44,
+    "valid_with_repeat": 61,
+    "repetition_rate": 0.25738396624472576
+   }
+  ],
+  "gate-b": [
+   {
+    "cohort": "repeat-iter90-gate-b-r1-385593-a1",
+    "tasks": 300,
+    "successes": 123,
+    "valid": 238,
+    "repeat_loop_failures": 20,
+    "valid_with_repeat": 45,
+    "repetition_rate": 0.18907563025210083
+   },
+   {
+    "cohort": "repeat-iter90-gate-b-r2-385593-a1",
+    "tasks": 300,
+    "successes": 117,
+    "valid": 232,
+    "repeat_loop_failures": 23,
+    "valid_with_repeat": 47,
+    "repetition_rate": 0.2025862068965517
+   },
+   {
+    "cohort": "repeat-iter90-gate-b-r3-385593-a1",
+    "tasks": 300,
+    "successes": 125,
+    "valid": 245,
+    "repeat_loop_failures": 27,
+    "valid_with_repeat": 53,
+    "repetition_rate": 0.2163265306122449
+   }
+  ]
+ }
+}

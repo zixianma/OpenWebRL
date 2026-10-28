@@ -31,9 +31,12 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
    about 40% of groups contain at least one invalid rollout.
 6. **About 21 tasks always fail to load their start page.** These are the same dead or
    blocked sites at every checkpoint, so they cap every method equally.
-7. **The mixed-only ARM bonus halves repeated-action loops.** At iteration 90 it has 18
-   looping failures against 39 for the 56-group outcome-only run. The overall success rate
-   does not show this.
+7. **ARM action credit roughly halves repeated-action loops, but outcome-only G8 gets there
+   too.** On matched iteration-90 repeats, Gate B has 23.3 repeated-action failures per 300
+   tasks against 45.0 and 60.7 for outcome-only 56 and 48 groups. At single iteration-90
+   checkpoints the mixed-only bonus (18) and reweight (12) runs are also far below
+   56 groups (39), but outcome-only G8 reaches 21. The overall success rate does not show this
+   ([repetition](#rl-behavior-repetition-20261028)).
 8. **Larger groups make more groups usable, but at a cost.** Among first-iteration groups
    (SFT checkpoint), 41–48% are mixed with 5 rollouts and 53% with 8, which costs 1.6× more
    rollouts per group. A clean step-0 measurement gives mixed-group probabilities of 47%, 56% and
@@ -224,6 +227,57 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
   (next section).
 - **Sources:** [category counts](arm_results/rl_integration/behavior/rl-eval-failure-categories-20261024.json) ·
   scripts `scripts/analyze_rl_eval_failures.py` and `scripts/analyze_rl_behavior.py`.
+</details>
+
+<a id="rl-behavior-repetition-20261028"></a>
+## Repeated actions across runs · October 28
+
+![Repeated-action failures and repetition rate over training, and iteration-90 matched repeats](rl_results/rl_repetition.png)
+
+*Left: episodes whose failure category is repeated action (of 300 tasks). Middle: share of valid
+episodes, successes included, that issue an identical non-wait action ≥ 3 times; this does not
+depend on the judge. Right: iteration 90, three contemporaneous repeats per checkpoint on one
+harness (dots), bar = mean.* [PDF](rl_results/rl_repetition.pdf)
+
+| Run | Iteration | Repeated-action failures | Valid episodes repeating ≥ 3×, % | Successes |
+| --- | ---: | ---: | ---: | ---: |
+| Outcome-only 56 groups | 10 / 90 | 40 / 39 | 54.2 / 22.8 | 88 / 107 |
+| Outcome-only G8 | 10 / 90 | 20 / 21 | 53.1 / 17.3 | 88 / 107 |
+| Mixed-only ARM bonus | 70 / 90 | 20 / 18 | 18.3 / 14.2 | 115 / 122 |
+| Mixed-only ARM outcome reweight | 70 / 90 | 30 / 12 | 22.6 / 8.4 | 116 / 113 |
+| Mixed-only ARM action-only | 10 / 40 | 17 / 9 | 46.9 / 10.6 | 82 / 37 |
+| Outcome-only 48 groups | 100 | 53 | 36.6 | 104 |
+
+| Iteration-90 matched repeats | Repeated-action failures, r1 / r2 / r3 | Mean | Valid episodes repeating ≥ 3×, mean % |
+| --- | ---: | ---: | ---: |
+| Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | 39.0 |
+| Outcome-only 56 groups | 38 / 53 / 44 | 45.0 | 27.7 |
+| Gate B (ARM, failure-additive) | 20 / 23 / 27 | 23.3 | 20.3 |
+
+- **Matched evidence favors ARM.** Gate B's three repeats (20–27) all sit below every
+  outcome-only repeat (38–71), and its repetition rate is lower too.
+- **Repetition falls under any RL here.** The judge-independent rate drops from about 54% to
+  14–23% at iteration 90 in every run that reached it; ARM runs end lowest, but G8
+  (outcome-only, 8 rollouts per group) is close behind, so ARM is not the only route.
+- **Action-only removes repetition by ending episodes.** It falls fastest (10.6% by
+  iteration 40) while successes collapse and episodes shorten to about 6.5 turns, so low
+  repetition alone is not a sign of a better policy.
+- **Caveats.** Mixed bonus/reweight trajectories exist only for iterations 70–90, and
+  Gate B only for the matched repeats; other cohorts were pruned. Single-checkpoint
+  differences of a few episodes are within noise (repeat-to-repeat range up to 17 here).
+
+<details>
+<summary>Method and sources</summary>
+
+- **Rules:** the repeated-action category is the first-match rule of
+  [failure categories](#rl-behavior-failures-20261024) (an identical action, name and
+  arguments, issued ≥ 3 times, ignoring `wait`, after success, invalid and turn-limit are
+  excluded). The repetition rate applies the same repeat test to every valid episode.
+- **Protocol:** local GPT-4.1/action_history, temperature 0, full 300 tasks, verified from
+  saved verdicts. Repeats are the [iteration-90 repeats](#rl-behavior-iter90-repeats-20261025).
+- **Sources:** [aggregate](arm_results/rl_integration/behavior/rl-repetition-20261028.json) ·
+  scripts `scripts/analyze_rl_eval_failures.py` (CPU job 393884) and
+  `scripts/plot_rl_repetition.py`.
 </details>
 
 <a id="rl-behavior-episode-length-20261024"></a>
