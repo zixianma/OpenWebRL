@@ -24,6 +24,7 @@ for n in $V12_NAMES; do
   case $n in gitlab*) suites="$suites test_validate_webprm_gitlab_hosting test_webprm_gitlab_native test_webprm_gitlab_recovery";; esac
   { echo "=== $n v12 cell (venv; launcher-like PYTHONPATH)"; cd /tmp && PYTHONPATH=$NL:$P/source $VPY -B $T/test_v12.py 2>&1 | grep -vE "^\s+File|^    " | tail -40
     echo "=== $n v12 launcher"; cd /tmp && PYTHONPATH=$P/source $PY -B $T/test_v12_launcher.py 2>&1 | tail -12
+    echo "=== $n v12 server startup (r1 proxy regression)"; cd /tmp && PYTHONPATH=$P/source $PY -B $T/test_v12_server_startup.py 2>&1 | grep -E "^test|^Ran|^OK|FAILED|Error|passed|negative" | tail -8
     echo "=== $n package unit suites"; cd $P/source && for t in $suites; do echo "--- $t"; PYTHONPATH=$P/source $PY -B -m unittest tests.$t 2>&1 | tail -3; done
   } > $L 2>&1
   echo "$n: $(grep -c '^OK' $L) OK, $(grep -c 'FAILED\|Error' $L) fail-lines"

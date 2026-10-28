@@ -46,8 +46,16 @@ t = t[:_start] + '''    async def switch_critic(self,name):
         if getattr(self,'owrl_started',False):return
         import shlex
         o=self.owrl_ports
+        # v12 r1: keep loopback traffic off the inherited cluster squid proxy (jobs 395121/395122: sglang's own warmup
+        # request to 127.0.0.1 went through http_proxy, no_proxy lacked 127.0.0.1, so the servers never became ready and
+        # /server_info hung). Same fix as crossbench (run_crossbench_selector_eval.py, pilot 367523/367524).
+        bypass={item.strip() for name in ('NO_PROXY','no_proxy') for item in self.env.get(name,'').split(',') if item.strip()}
+        bypass.update(('localhost','127.0.0.1','::1'))
+        self.env['NO_PROXY']=self.env['no_proxy']=','.join(sorted(bypass))
+        os.environ.update(NO_PROXY=self.env['NO_PROXY'],no_proxy=self.env['no_proxy'])
         env={k:v for k,v in self.env.items() if k not in ('PYTHONPATH','NLTK_DATA')}
         env.update(CUDA_VISIBLE_DEVICES='0',PYTHONPATH='')
+        put(self.output/'owrl-server-environment.json',dict(no_proxy=env['no_proxy'],proxies_present=sorted(k for k in env if k.lower().endswith('_proxy'))))
         def sourced(argv):
             return ['bash','-c','set -euo pipefail\\nsource '+shlex.quote(str(V12_SNAPSHOT/'scripts/h200_env.sh'))+'\\nexec '+shlex.join(argv)]
         stages=[('selector-sglang',sourced([V12_PYTHON,'-m','sglang.launch_server','--model-path',V12_PIOTR_SGLANG,'--host','127.0.0.1',
@@ -74,7 +82,15 @@ t = t[:_start] + '''    async def switch_critic(self,name):
                     await asyncio.sleep(3);continue
                 if str(card.get(key))!=expected:raise ValueError(f'v12 {label} identity differs: {key}={card.get(key)!r}')
                 put(self.output/f'owrl-{label}-identity.json',card);break
-        with loopback_urlopen(f"http://127.0.0.1:{o['actor']}/server_info",timeout=10) as response:info=json.load(response)
+        until=min(self.context['deadline'],time.time()+600);info=None  # v12 r1: wait for sglang readiness (warmup)
+        while info is None:
+            self.check()
+            try:
+                with loopback_urlopen(f"http://127.0.0.1:{o['actor']}/server_info",timeout=15) as response:info=json.load(response)
+            except OSError:
+                if time.time()>=until:raise TimeoutError('v12 actor /server_info not ready')
+                await asyncio.sleep(5)
+        put(self.output/'owrl-startup-times.json',dict(servers_ready_epoch=time.time()))
         if info.get('random_seed')!=4200:raise ValueError('v12 actor server seed differs from the crossbench protocol')
         put(self.output/'owrl-actor-server-info.json',{k:info.get(k) for k in ('random_seed','sampling_backend','mem_fraction_static','cuda_graph_max_bs','context_length')})
         card=read(self.output/'owrl-selector-identity.json')

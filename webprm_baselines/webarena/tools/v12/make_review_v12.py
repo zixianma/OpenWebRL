@@ -9,7 +9,9 @@ v8 = D/'v8-tools/integration-review-v8-j2-arb-a.json'
 r = json.loads(v8.read_text())
 text = log.read_text()
 cellpart = text.split('=== ' + name + ' v12 launcher')[0]
-launchpart = text.split('=== ' + name + ' v12 launcher')[1].split('package unit suites')[0]
+launchpart = text.split('=== ' + name + ' v12 launcher')[1].split('v12 server startup')[0]
+startpart = text.split('v12 server startup (r1 proxy regression)')[1].split('package unit suites')[0]
+assert 'Ran 2 tests' in startpart and '\nOK' in startpart and 'FAILED' not in startpart and 'patched switch_critic passed under the cluster proxy env' in startpart and 'negative control' in startpart, 'v12 r1 startup regression did not pass'
 assert re.search(r'Ran 9 tests', cellpart) and '\nOK' in cellpart and 'FAILED' not in cellpart, 'v12 cell tests did not pass'
 for needle in ('import layout: harness from package', 'projection: done/N-A/mixed/negative ok', 'v11 string_match parity:',
                'no_search: ', 'piotr_selectionarm: ', 'screenshots 1280x1000', 'transcript replay verified, audit evidence verified, tampered picks rejected'):
@@ -30,6 +32,9 @@ r.update(amends=ref(v8), component_sha256={str(p): sha(p) for p in comp},
     v12_note=('v12 (user 2026-10-28: "ah yes try C"): OpenWebRL-4B-SFT no_search vs + Piotr SelectionARM in the OpenWebRL action space on '
               'the v11 hosted sites/evaluator at 1280x1000; crossbench agent loop/serving from the frozen owrl-snapshot; native-audit-v12. '
               'native_episode is retained only as the Chromium staging/identity component of the controller (the v12 worker does not run it).'),
+    v12_r1_fix=dict(note='jobs 395121/395122 failed at server bring-up: the inherited cluster http_proxy (no_proxy lacked 127.0.0.1) carried sglang self-warmup requests to squid, so the servers never became ready and /server_info timed out; r1 adds localhost/127.0.0.1/::1 to NO_PROXY for the launcher and every server (as crossbench) and polls /server_info until ready (600 s)',
+        patch=ref(T/'patch_v12_launcher.py'), test=ref(T/'test_v12_server_startup.py'), fake_server=ref(T/'fake_sglang_v12.py'),
+        evidence=[l for l in startpart.splitlines() if 'passed' in l or 'negative' in l]),
     v12_evidence=dict(tests=dict(log=ref(log), cell_test=ref(T/'test_v12.py'), launcher_test=ref(T/'test_v12_launcher.py'), lines=evidence,
         covers=['import layout (package harness, snapshot agent stack, venv packages ahead of the NLTK runtime)', 'trajectory projection incl. N/A fallback',
                 'released-evaluator parity on every saved valid v11 string_match-only final', 'end-to-end local site: real Chromium + snapshot WebEnv at 1280x1000 + '
