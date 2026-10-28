@@ -1,0 +1,14 @@
+{
+  "comparison_aggregate_sha256": "a030c8f208cef6d39d9681de98e9df6f2e1941ffda0af9823c5528996ba87270",
+  "native_status_aggregate_sha256": "cc991c8a39756b0412d53f4d41edd9808c8e577708ccbd4e0ab1676e02299518",
+  "benchmark": "Online-Mind2Web only",
+  "shared_fresh_common_valid_tasks": 111,
+  "cohort": "Exact same fresh tasks valid in all four methods under both harnesses, including valid failures",
+  "native_status": "collection_complete_final_global_audit_not_claimed",
+  "native_snapshot_utc": "2026-10-28T01:04:20.688908+00:00",
+  "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
+  "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
+  "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
+  "comparability": "Different limits, collection windows and task-time boundaries; descriptive only",
+  "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
+}

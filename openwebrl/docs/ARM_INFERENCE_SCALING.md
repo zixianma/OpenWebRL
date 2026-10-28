@@ -1937,7 +1937,7 @@ The approved extension compares Luna single high, Luna N=3 plus high selection, 
 | Luna N5 | 300 | 202 | 67.3% | 270 | 30 | 200 | 131 | 65.5% |
 | Sol single | 300 | 222 | 74.0% | 286 | 14 | 200 | 142 | 71.0% |
 
-Invalid outcomes count as unsuccessful. The separate [OM2W harness comparison](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027) uses the exact 111 fresh tasks valid in all eight cells, rather than these full-population denominators.
+Invalid outcomes count as unsuccessful. The separate [OM2W harness comparison](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027) now uses the same full300 tasks in all eight cells, counting invalids as unsuccessful and explicitly labeling metric coverage. The earlier 111-task fresh common-valid plot is preserved as a conditional historical view.
 
 | Method | Reused task outcomes | New task outcomes | Final task outcomes | New CPU shards | Model USD cap | External judge USD cap |
 |---|---:|---:|---:|---:|---:|---:|

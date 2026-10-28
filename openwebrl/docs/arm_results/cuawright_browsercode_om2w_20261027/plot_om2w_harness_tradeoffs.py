@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot matched fresh Online-Mind2Web tasks under BrowserCode and CUAWright.
+"""Plot all 300 matched Online-Mind2Web tasks under BrowserCode and CUAWright.
 Requires matplotlib. Uses aggregate-only JSON; no private task data is needed.
 """
 from __future__ import annotations
@@ -29,7 +29,7 @@ LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 
 def read_rows(path):
     data = json.loads(path.read_text())
-    n = data["shared_fresh_common_valid_tasks"]
+    n = data["tasks_per_cell"]
     if type(n) is not int or n <= 0:
         raise ValueError("Positive exact shared task denominator required")
     series = {}
@@ -66,7 +66,7 @@ def draw(ax, means, metric, native):
                        marker=marker, facecolors=color if filled else "white",
                        edgecolors="white" if filled else color,
                        linewidths=0.9 if filled else 2.0, zorder=3)
-    ax.set_ylabel("Success on common-valid tasks (%)")
+    ax.set_ylabel("Success on all 300 tasks (%)")
     ax.yaxis.set_major_formatter(PercentFormatter(xmax=100, decimals=0))
     values = [100 * r["mean_success_rate"] for r in means + native]
     ax.set_ylim(max(0, min(values) - 3), min(100, max(values) + 4))
@@ -104,7 +104,7 @@ def legends(fig, x=0.835, y=0.70):
                         label="BrowserCode · OM2W"),
                  Line2D([], [], linestyle="", marker="o", markerfacecolor="white",
                         markeredgecolor="#5A6470", markeredgewidth=2, markersize=8,
-                        label="Native CUAWright · OM2W\nAll 300 collected; same fresh tasks")]
+                        label="Native CUAWright · OM2W\nSame 300 tasks; invalids unsuccessful")]
     fig.legend(handles=harnesses, title="Harness / cohort", loc="upper left",
                bbox_to_anchor=(x, y - .29), frameon=False, fontsize=9, title_fontsize=11,
                labelspacing=1.2)
@@ -119,7 +119,7 @@ def save_figure(fig, path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--aggregate", type=Path, default=Path(__file__).with_name("om2w_harness_comparison_completed.json"))
+    parser.add_argument("--aggregate", type=Path, default=Path(__file__).with_name("om2w_harness_comparison_full300.json"))
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).parent)
     args = parser.parse_args()
     comparison, means, native = read_rows(args.aggregate)
@@ -130,16 +130,17 @@ def main():
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
                         "axes.titlesize": 15, "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
-    footer = (f'OM2W only · same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight cells; valid failures included. All four native methods: 300 outcomes each; collection complete.\n'
-              'Native: 20,000 tokens / 100 decisions; BrowserCode: 12,288 / 30. Different collection dates and timing scopes; descriptive comparison. External judging excluded.\n'
-              'One execution: a selected BrowserCode block or native browser-command log entry; either can contain several actions. This compares harness-level command volume, not standardized actions.\n'
-              'Cost: native per-task all-attempt model charges, helpers and full unknown reserves; BrowserCode original proposal/selector receipts. Tables are reported separately.')
+    footer = ('OM2W · same 300 tasks in all eight cells; invalid outcomes count as unsuccessful. Historical 100 included; collection windows differ.\n'
+              'Mean latency coverage (Sol / Luna / N3 / N5): BrowserCode 275 / 274 / 275 / 273; native 300 / 300 / 300 / 298. Missing values are not zero-filled.\n'
+              'Command coverage: BrowserCode 300 / 300 / 293 / 294; native 300 / 300 / 300 / 298. One execution can contain multiple actions.\n'
+              'Cost coverage 300 each: BrowserCode original receipts (N3 has one unknown-usage call); native includes helpers/full reserves. External judging excluded.\n'
+              'Native 20,000 tokens / 100 decisions; BrowserCode 12,288 / 30. Timing and execution granularity differ; descriptive comparison. Tables separate.')
     for metric, suffix in (("mean_model_usd_per_task", "cost"),
                            ("mean_task_seconds", "latency"),
                            ("mean_browser_steps", "browser_steps")):
         fig, ax = plt.subplots(figsize=(11.5, 5.7))
         draw(ax, means, metric, native)
-        fig.subplots_adjust(left=.09, right=.66, bottom=.33, top=.88)
+        fig.subplots_adjust(left=.09, right=.66, bottom=.37, top=.88)
         legends(fig, x=.68, y=.91)
         fig.text(.09, .025, footer.replace('; external judging excluded.', '; external judging excluded.\n'),
                  fontsize=7.3, color="#5A6470", linespacing=1.6)
@@ -153,7 +154,7 @@ def main():
     for ax in axes[1:]:
         ax.set_ylabel("")
     fig.suptitle("Online-Mind2Web · BrowserCode and native CUAWright", x=.05, ha="left", fontsize=17, y=.97)
-    fig.subplots_adjust(left=.05, right=.80, bottom=.33, top=.85, wspace=.24)
+    fig.subplots_adjust(left=.05, right=.80, bottom=.37, top=.85, wspace=.24)
     legends(fig, x=.815, y=.89)
     fig.text(.05, .025, footer, fontsize=8.5, color="#5A6470", linespacing=1.7)
     for ext in ("png", "svg", "pdf"):
@@ -163,10 +164,12 @@ def main():
         "comparison_aggregate_sha256": hashlib.sha256(args.aggregate.read_bytes()).hexdigest(),
         "native_status_aggregate_sha256": hashlib.sha256(Path(__file__).with_name("native_cuawright_completed.json").read_bytes()).hexdigest(),
         "benchmark": "Online-Mind2Web only",
-        "shared_fresh_common_valid_tasks": comparison["shared_fresh_common_valid_tasks"],
-        "cohort": "Exact same fresh tasks valid in all four methods under both harnesses, including valid failures",
-        "native_status": data["status"],
+        "tasks_per_cell": comparison["tasks_per_cell"],
+        "cohort": "Exact same 300 tasks under all four methods and both harnesses; invalid outcomes unsuccessful",
+        "native_status": "Full300 science/accounting verified; global cleanup uncertified",
         "native_snapshot_utc": data["snapshot_utc"],
+        "metric_coverage": {h: {a: {k:v for k,v in x.items() if k.endswith("_observed_tasks") or "unknown" in k} for a,x in comparison[h]["tradeoffs"].items()} for h in ("browsercode","native")},
+        "independent_full300_numeric_review_sha256": "fb0b3156afb151c88e4b69453fb2c81d4feea7fb1d3898f56cf67a2a08488430",
         "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
         "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",

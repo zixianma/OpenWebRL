@@ -1,0 +1,140 @@
+{
+  "schema": "om2w-full300-eight-cell-tradeoffs-v1",
+  "benchmark": "Online-Mind2Web",
+  "tasks_per_cell": 300,
+  "missing_task_outcomes": 0,
+  "cohort": "Exact same300 tasks in all eight cells; invalid outcomes count as unsuccessful. Historical100 included; collection windows differ.",
+  "browsercode": {
+    "tradeoffs": {
+      "serial_high": {
+        "tasks": 300,
+        "successes": 171,
+        "valid": 266,
+        "invalid": 34,
+        "success_rate": 0.57,
+        "mean_model_usd_per_task": 0.19069787900000001,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 93.23914989388209,
+        "mean_task_seconds_observed_tasks": 275,
+        "mean_browser_steps": 13.746666666666666,
+        "mean_browser_steps_observed_tasks": 300,
+        "unknown_model_usage_calls": 0,
+        "tasks_with_unknown_model_usage": 0,
+        "unknown_usage_counter_observed_tasks": 300
+      },
+      "luna_single_high": {
+        "tasks": 300,
+        "successes": 168,
+        "valid": 269,
+        "invalid": 31,
+        "success_rate": 0.56,
+        "mean_model_usd_per_task": 0.00878689945,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 97.93085904356201,
+        "mean_task_seconds_observed_tasks": 274,
+        "mean_browser_steps": 15.296666666666667,
+        "mean_browser_steps_observed_tasks": 300,
+        "unknown_model_usage_calls": 0,
+        "tasks_with_unknown_model_usage": 0,
+        "unknown_usage_counter_observed_tasks": 300
+      },
+      "parallel3_select_high": {
+        "tasks": 300,
+        "successes": 180,
+        "valid": 269,
+        "invalid": 31,
+        "success_rate": 0.6,
+        "mean_model_usd_per_task": 0.05084039466666666,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 180.5335066269191,
+        "mean_task_seconds_observed_tasks": 275,
+        "mean_browser_steps": 13.825938566552901,
+        "mean_browser_steps_observed_tasks": 293,
+        "unknown_model_usage_calls": 1,
+        "tasks_with_unknown_model_usage": 1,
+        "unknown_usage_counter_observed_tasks": 300
+      },
+      "parallel5_select_high": {
+        "tasks": 300,
+        "successes": 188,
+        "valid": 267,
+        "invalid": 33,
+        "success_rate": 0.6266666666666667,
+        "mean_model_usd_per_task": 0.06431873848333333,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 212.5820565415356,
+        "mean_task_seconds_observed_tasks": 273,
+        "mean_browser_steps": 13.72108843537415,
+        "mean_browser_steps_observed_tasks": 294,
+        "unknown_model_usage_calls": 0,
+        "tasks_with_unknown_model_usage": 0,
+        "unknown_usage_counter_observed_tasks": 300
+      }
+    }
+  },
+  "native": {
+    "tradeoffs": {
+      "serial_high": {
+        "tasks": 300,
+        "successes": 222,
+        "valid": 286,
+        "invalid": 14,
+        "success_rate": 0.74,
+        "mean_model_usd_per_task": 1.3001203906666667,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 544.3566113448143,
+        "mean_task_seconds_observed_tasks": 300,
+        "mean_browser_steps": 36.85333333333333,
+        "mean_browser_steps_observed_tasks": 300
+      },
+      "luna_single_high": {
+        "tasks": 300,
+        "successes": 189,
+        "valid": 271,
+        "invalid": 29,
+        "success_rate": 0.63,
+        "mean_model_usd_per_task": 0.09736501536666667,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 958.1347228121757,
+        "mean_task_seconds_observed_tasks": 300,
+        "mean_browser_steps": 32.45,
+        "mean_browser_steps_observed_tasks": 300
+      },
+      "parallel3_select_high": {
+        "tasks": 300,
+        "successes": 192,
+        "valid": 270,
+        "invalid": 30,
+        "success_rate": 0.64,
+        "mean_model_usd_per_task": 0.28150881866666666,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 1265.1887224706013,
+        "mean_task_seconds_observed_tasks": 300,
+        "mean_browser_steps": 31.483333333333334,
+        "mean_browser_steps_observed_tasks": 300
+      },
+      "parallel5_select_high": {
+        "tasks": 300,
+        "successes": 202,
+        "valid": 270,
+        "invalid": 30,
+        "success_rate": 0.6733333333333333,
+        "mean_model_usd_per_task": 0.315896251,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 1302.6523165886833,
+        "mean_task_seconds_observed_tasks": 298,
+        "mean_browser_steps": 29.93288590604027,
+        "mean_browser_steps_observed_tasks": 298
+      }
+    }
+  },
+  "definitions": {
+    "success": "Successes divided by300, including every invalid outcome as unsuccessful.",
+    "metrics": "Each mean uses all finite recorded measurements, including invalid episodes; coverage is explicit. Missing values are not zero-filled.",
+    "cost": "BrowserCode original received model cost estimates with historical backfill; unknown usage is explicitly counted and cost may be understated. Native conservative all-attempt model costs include helpers and full unknown reserves. External judge excluded.",
+    "latency": "Original harness-specific task time excludes external/saved grading; setup boundaries and collection windows differ. Two native N5 OOM outcomes lack latency and command counts.",
+    "commands": "Saved selected BrowserCode blocks versus literal native browser-command log entries; may contain several actions, not standardized actions.",
+    "limits": "BrowserCode12288 output tokens/30decisions; native20000/100 withsummary20. Descriptive comparison, not controlled causal harness effect.",
+    "cleanup": "Science/accounting verified; native global post-job cleanup remains uncertified under Slurm access restrictions."
+  }
+}
