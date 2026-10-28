@@ -1,0 +1,371 @@
+{
+ "note": "Agreement of teacher picks and head (student) picks with the oracle action, same states as score_label_stages.py.",
+ "sources": [
+  "outcome",
+  "teacher_k3",
+  "teacher_k1",
+  "teacher_pre",
+  "teacher_post"
+ ],
+ "heads": {
+  "outcome": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/outcome"
+  ],
+  "teacher_k3": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/teacher_k3"
+  ],
+  "teacher_k1": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/teacher_k1"
+  ],
+  "teacher_pre": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sft-actions-20261021/round1/teacher_pre"
+  ],
+  "teacher_post": [
+   "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/post-label-20261027/heads/teacher_post/seed0"
+  ]
+ },
+ "train": {
+  "all": {
+   "states": 1380,
+   "tasks": 347,
+   "chance": 65.04,
+   "outcome": {
+    "teacher": 72.6,
+    "teacher_minus_chance": [
+     7.56,
+     5.51,
+     9.7
+    ],
+    "head": 73.41,
+    "seeds": 1,
+    "head_minus_chance": [
+     8.36,
+     6.09,
+     10.7
+    ],
+    "head_picks_teacher_top": 99.49
+   },
+   "teacher_k3": {
+    "teacher": 72.36,
+    "teacher_minus_chance": [
+     7.31,
+     5.3,
+     9.34
+    ],
+    "head": 72.32,
+    "seeds": 1,
+    "head_minus_chance": [
+     7.28,
+     5.17,
+     9.46
+    ],
+    "head_picks_teacher_top": 97.68
+   },
+   "teacher_k1": {
+    "teacher": 72.68,
+    "teacher_minus_chance": [
+     7.64,
+     5.58,
+     9.78
+    ],
+    "head": 72.46,
+    "seeds": 1,
+    "head_minus_chance": [
+     7.42,
+     5.39,
+     9.53
+    ],
+    "head_picks_teacher_top": 98.41
+   },
+   "teacher_pre": {
+    "teacher": 69.54,
+    "teacher_minus_chance": [
+     4.5,
+     2.45,
+     6.59
+    ],
+    "head": 69.64,
+    "seeds": 1,
+    "head_minus_chance": [
+     4.59,
+     2.36,
+     6.88
+    ],
+    "head_picks_teacher_top": 98.7
+   },
+   "teacher_post": {
+    "teacher": 71.03,
+    "teacher_minus_chance": [
+     5.98,
+     3.9,
+     8.15
+    ],
+    "head": 70.58,
+    "seeds": 1,
+    "head_minus_chance": [
+     5.54,
+     3.34,
+     7.77
+    ],
+    "head_picks_teacher_top": 97.46
+   }
+  },
+  "informative": {
+   "states": 863,
+   "tasks": 269,
+   "chance": 44.1,
+   "outcome": {
+    "teacher": 56.18,
+    "teacher_minus_chance": [
+     12.08,
+     8.99,
+     15.2
+    ],
+    "head": 57.47,
+    "seeds": 1,
+    "head_minus_chance": [
+     13.37,
+     9.95,
+     16.73
+    ],
+    "head_picks_teacher_top": 99.54
+   },
+   "teacher_k3": {
+    "teacher": 55.79,
+    "teacher_minus_chance": [
+     11.69,
+     8.52,
+     14.73
+    ],
+    "head": 55.74,
+    "seeds": 1,
+    "head_minus_chance": [
+     11.63,
+     8.21,
+     14.89
+    ],
+    "head_picks_teacher_top": 98.26
+   },
+   "teacher_k1": {
+    "teacher": 56.32,
+    "teacher_minus_chance": [
+     12.21,
+     8.96,
+     15.54
+    ],
+    "head": 55.97,
+    "seeds": 1,
+    "head_minus_chance": [
+     11.87,
+     8.61,
+     15.12
+    ],
+    "head_picks_teacher_top": 98.38
+   },
+   "teacher_pre": {
+    "teacher": 51.29,
+    "teacher_minus_chance": [
+     7.19,
+     3.95,
+     10.46
+    ],
+    "head": 51.45,
+    "seeds": 1,
+    "head_minus_chance": [
+     7.35,
+     3.92,
+     10.78
+    ],
+    "head_picks_teacher_top": 98.61
+   },
+   "teacher_post": {
+    "teacher": 53.67,
+    "teacher_minus_chance": [
+     9.57,
+     6.2,
+     12.86
+    ],
+    "head": 52.95,
+    "seeds": 1,
+    "head_minus_chance": [
+     8.85,
+     5.38,
+     12.28
+    ],
+    "head_picks_teacher_top": 98.03
+   }
+  }
+ },
+ "test": {
+  "all": {
+   "states": 345,
+   "tasks": 86,
+   "chance": 65.04,
+   "outcome": {
+    "teacher": 74.52,
+    "teacher_minus_chance": [
+     9.47,
+     5.47,
+     14.06
+    ],
+    "head": 65.51,
+    "seeds": 1,
+    "head_minus_chance": [
+     0.46,
+     -3.79,
+     4.87
+    ],
+    "head_picks_teacher_top": 70.43
+   },
+   "teacher_k3": {
+    "teacher": 73.19,
+    "teacher_minus_chance": [
+     8.14,
+     3.27,
+     13.75
+    ],
+    "head": 69.28,
+    "seeds": 1,
+    "head_minus_chance": [
+     4.23,
+     0.14,
+     8.7
+    ],
+    "head_picks_teacher_top": 51.59
+   },
+   "teacher_k1": {
+    "teacher": 73.29,
+    "teacher_minus_chance": [
+     8.24,
+     3.02,
+     14.15
+    ],
+    "head": 68.41,
+    "seeds": 1,
+    "head_minus_chance": [
+     3.36,
+     -0.61,
+     7.2
+    ],
+    "head_picks_teacher_top": 62.32
+   },
+   "teacher_pre": {
+    "teacher": 70.14,
+    "teacher_minus_chance": [
+     5.1,
+     1.49,
+     8.98
+    ],
+    "head": 68.7,
+    "seeds": 1,
+    "head_minus_chance": [
+     3.65,
+     0.18,
+     7.24
+    ],
+    "head_picks_teacher_top": 74.78
+   },
+   "teacher_post": {
+    "teacher": 75.56,
+    "teacher_minus_chance": [
+     10.51,
+     5.95,
+     15.46
+    ],
+    "head": 70.43,
+    "seeds": 1,
+    "head_minus_chance": [
+     5.39,
+     1.51,
+     9.14
+    ],
+    "head_picks_teacher_top": 65.22
+   }
+  },
+  "informative": {
+   "states": 208,
+   "tasks": 71,
+   "chance": 42.02,
+   "outcome": {
+    "teacher": 57.73,
+    "teacher_minus_chance": [
+     15.71,
+     9.42,
+     22.84
+    ],
+    "head": 42.79,
+    "seeds": 1,
+    "head_minus_chance": [
+     0.77,
+     -6.32,
+     8.35
+    ],
+    "head_picks_teacher_top": 56.73
+   },
+   "teacher_k3": {
+    "teacher": 55.53,
+    "teacher_minus_chance": [
+     13.51,
+     5.54,
+     22.26
+    ],
+    "head": 49.04,
+    "seeds": 1,
+    "head_minus_chance": [
+     7.02,
+     0.17,
+     14.64
+    ],
+    "head_picks_teacher_top": 47.6
+   },
+   "teacher_k1": {
+    "teacher": 55.69,
+    "teacher_minus_chance": [
+     13.67,
+     5.27,
+     22.88
+    ],
+    "head": 47.6,
+    "seeds": 1,
+    "head_minus_chance": [
+     5.58,
+     -0.96,
+     12.0
+    ],
+    "head_picks_teacher_top": 55.77
+   },
+   "teacher_pre": {
+    "teacher": 50.48,
+    "teacher_minus_chance": [
+     8.46,
+     2.48,
+     14.9
+    ],
+    "head": 48.08,
+    "seeds": 1,
+    "head_minus_chance": [
+     6.06,
+     0.43,
+     12.19
+    ],
+    "head_picks_teacher_top": 74.52
+   },
+   "teacher_post": {
+    "teacher": 59.46,
+    "teacher_minus_chance": [
+     17.44,
+     10.23,
+     25.35
+    ],
+    "head": 50.96,
+    "seeds": 1,
+    "head_minus_chance": [
+     8.94,
+     2.67,
+     15.05
+    ],
+    "head_picks_teacher_top": 61.06
+   }
+  }
+ }
+}

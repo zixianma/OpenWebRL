@@ -1736,3 +1736,31 @@ CPU-only jobs `353141` and `353145`, and the 8-CPU GPU job `353148`, were cancel
 Code is on branch `arm-selection-head`: `openwebrl/selection_head.py`, `selection_head_features.py`, `selection_adapter.py`, `selection_joint.py`, `selection_kev.py` and the scripts they call. Runtime artifacts are under `openwebrl-runtime/selection-head-20261008/`. [Aggregate estimates and accounting](arm_results/rl_integration/selection-head-20261009.json) · [Outcome evaluation aggregate](arm_results/rl_integration/selection-outcomes-20261010.json).
 
 </details>
+
+<a id="selection-label-oracle-agreement-20261028"></a>
+
+## Teacher and student agreement with the oracle action (2026-10-28)
+
+**Every teacher picks an oracle action well above chance on both training and test states (+7 to +17 pp on informative states). The students reproduce their teacher on training states (97–99.5% the same pick) but keep at most about half of its edge on test states. The outcome-trained student falls to chance (+0.8 pp) although its teacher is among the best.** Same states, labels and seed-0 heads as the same-state comparison: train 1,380 states / 347 tasks, test 345 states / 86 tasks; fixed five (first five SFT proposals by draw index), held-out draws 3–7, valid draws only.
+
+- **Oracle set:** the actions among the five with the best held-out success; all tied best actions count.
+- **Teacher pick:** the teacher's top action(s), with ties averaged.
+- **Chance:** the share of the five proposals whose action is in the oracle set (one SFT sample).
+- **Informative states:** the oracle set does not cover all five proposals, so a pick can be wrong (863 of 1,380 train states, 208 of 345 test states).
+
+Oracle-action rate on informative states, % · difference from chance in pp [95% CI, whole-task bootstrap]:
+
+| Label | Teacher, train | Student, train | Teacher, test | Student, test | Student picks teacher's top action, test |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| *Chance* | *44.1* | *44.1* | *42.0* | *42.0* | — |
+| Oracle (observed outcome) | 56.2 · +12.1 [+9.0, +15.2] | 57.5 · +13.4 [+9.9, +16.7] | 57.7 · +15.7 [+9.4, +22.8] | 42.8 · +0.8 [−6.3, +8.3] | 56.7% |
+| Lookahead H = 3 | 55.8 · +11.7 [+8.5, +14.7] | 55.7 · +11.6 [+8.2, +14.9] | 55.5 · +13.5 [+5.5, +22.3] | 49.0 · +7.0 [+0.2, +14.6] | 47.6% |
+| Lookahead H = 1 | 56.3 · +12.2 [+9.0, +15.5] | 56.0 · +11.9 [+8.6, +15.1] | 55.7 · +13.7 [+5.3, +22.9] | 47.6 · +5.6 [−1.0, +12.0] | 55.8% |
+| Pre-exec | 51.3 · +7.2 [+4.0, +10.5] | 51.5 · +7.3 [+3.9, +10.8] | 50.5 · +8.5 [+2.5, +14.9] | 48.1 · +6.1 [+0.4, +12.2] | 74.5% |
+| Post-exec | 53.7 · +9.6 [+6.2, +12.9] | 53.0 · +8.8 [+5.4, +12.3] | 59.5 · +17.4 [+10.2, +25.4] | 51.0 · +8.9 [+2.7, +15.1] | 61.1% |
+
+- On training states the students pick the teacher's top action in 97.5–99.5% of states, so their oracle agreement equals the teacher's: they fit their training labels.
+- On test states student and teacher agree in only 48–75% of states. Pre-exec labels are the easiest to learn (74.5% agreement) but carry the least signal.
+- Over all states (including those where every pick is an oracle action, chance 65.0%) the pattern is the same, e.g. the H = 3 student on test +4.2 [+0.1, +8.7], the outcome student +0.5 [−3.8, +4.9].
+- Training-state student numbers are not held-out: the students saw those states' labels, though never draws 3–7.
+- [Evidence](arm_results/rl_integration/selection-label-oracle-agreement-20261028.json) · [analysis script](arm_results/rl_integration/selection-label-oracle-agreement-20261028-analysis.py) (CPU job 394863).
