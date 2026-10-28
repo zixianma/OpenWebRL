@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-28",
+  "user_quotes": [
+    "ah yes try C."
+  ],
+  "context": "Option C as offered after v11: openwebrl-sft with and without the ARM in OpenWebRL's own screenshot-and-coordinates action space, putting the ARM back on the kind of input it was trained on.",
+  "decision": "v12: OpenWebRL-4B-SFT (iteration0, revision 15e777db) no_search (1 sample/step) vs OpenWebRL-4B-SFT + Piotr SelectionARM (5 samples/step, ARM picks one) on the same 128 WebArena-Lite Table 5 tasks (Shopping 45, CMS 35, Reddit 18 without released task 5 / original 27, GitLab 30), hosted sites + released evaluator, 1280x1000 viewport (OpenWebRL native, user choice 2026-10-28; Piotr ARM training states are all 1280x1000), task-major interleaving. Agent loop, prompt, parser, history, sampling (T1.0/top-p 0.9), seeds and ARM serving are the crossbench full-set selector protocol (frozen v12-tools/owrl-snapshot, git HEAD in SNAPSHOT_GIT_HEAD plus the working-tree files used by the 2026-10-27/28 crossbench plans).",
+  "deviations_from_crossbench": ["WebArena hosted sites and released evaluator instead of the OM2W/WebVoyager/DeepShop judges", "max-step/format/context endings get the released WebArbiter N/A terminal answer before scoring (as v11)"],
+  "resources": "GPU jobs require separate exact approval; this decision file is not resource authority"
+}
