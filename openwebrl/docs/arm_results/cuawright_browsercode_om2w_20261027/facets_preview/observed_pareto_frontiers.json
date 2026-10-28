@@ -1,0 +1,32 @@
+{
+  "definition": "Minimize x and maximize valid-only success; at least one strict improvement for dominance",
+  "source_aggregate_sha256": "fa5a38985dacab908084e932deb65ed96ba4aa9a30e71c89c868fbf3fba5f794",
+  "frontiers": {
+    "browsercode/mean_model_usd_per_task": [
+      "luna_single_high",
+      "parallel3_select_high",
+      "parallel5_select_high"
+    ],
+    "browsercode/mean_browser_steps": [
+      "parallel5_select_high"
+    ],
+    "browsercode/mean_task_seconds": [
+      "serial_high",
+      "parallel3_select_high",
+      "parallel5_select_high"
+    ],
+    "native/mean_model_usd_per_task": [
+      "luna_single_high",
+      "parallel3_select_high",
+      "parallel5_select_high",
+      "serial_high"
+    ],
+    "native/mean_browser_steps": [
+      "parallel5_select_high",
+      "serial_high"
+    ],
+    "native/mean_task_seconds": [
+      "serial_high"
+    ]
+  }
+}

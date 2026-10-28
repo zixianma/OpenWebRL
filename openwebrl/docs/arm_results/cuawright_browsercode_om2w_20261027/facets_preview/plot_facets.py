@@ -16,7 +16,8 @@ fig.subplots_adjust(left=.075,right=.98,top=.81,bottom=.24,hspace=.90,wspace=.27
 fig.text(.075,.965,'Online-Mind2Web',fontsize=23,weight='bold',va='top')
 fig.text(.075,.922,'All methods high · 300 attempted tasks per cell · success among valid outcomes',fontsize=12,color='#535F6B')
 handles=[Line2D([],[],linestyle='',marker=m,color=c,markersize=8,label=l)for l,c,m in M.values()]
-# Direct point labels replace a separate method legend.
+fig.legend(handles=[Line2D([],[],color='#596875',linestyle='--',linewidth=1.5,label='Observed Pareto frontier')],loc='upper right',bbox_to_anchor=(.98,.895),frameon=False,fontsize=10)
+frontiers={}
 metrics=[('mean_model_usd_per_task','Model cost','USD / attempted task · log scale'),('mean_browser_steps','Browser commands','Recorded command executions / task'),('mean_task_seconds','Latency','Recorded task seconds · log scale')]
 for ri,(h,hlabel) in enumerate([('browsercode','BrowserCode'),('native','Native CUAWright')]):
  rows=D[h]['tradeoffs'];pos=axes[ri,0].get_position();fig.text(.075,pos.y1+.055,hlabel,fontsize=17,weight='bold',color='#243241')
@@ -35,9 +36,13 @@ for ri,(h,hlabel) in enumerate([('browsercode','BrowserCode'),('native','Native 
   else:
    # Per-harness ranges make within-harness differences visible; units stay identical.
    ax.set_xlim((12.8,16.5)if ri==0 else(27.5,39));ax.set_xticks([13,14,15,16]if ri==0 else[28,32,36,38])
+  frontier=[a for a,r in rows.items() if not any(q[metric]<=r[metric] and q['success_rate']>=r['success_rate'] and (q[metric]<r[metric] or q['success_rate']>r['success_rate']) for b,q in rows.items() if b!=a)]
+  frontier.sort(key=lambda a:rows[a][metric]);frontiers[h+'/'+metric]=frontier
+  if len(frontier)>1:ax.plot([rows[a][metric] for a in frontier],[100*rows[a]['success_rate'] for a in frontier],color='#596875',linestyle='--',linewidth=1.4,zorder=2)
   for method,(label,color,marker)in M.items():
    r=rows[method];assert abs(r['success_rate']-r['successes']/r['valid'])<1e-12
-   x,y=r[metric],100*r['success_rate'];ax.scatter(x,y,s=85 if method.startswith('parallel')else 70,marker=marker,color=color,edgecolor='white',linewidth=.8,zorder=4)
+   x,y=r[metric],100*r['success_rate'];ax.scatter(x,y,s=85 if method.startswith('parallel')else 70,marker=marker,color=color,edgecolor='white',linewidth=.8,zorder=4,alpha=1 if method in frontier else .35)
+   if method in frontier:ax.scatter(x,y,s=135,marker=marker,facecolors='none',edgecolors=color,linewidth=.9,zorder=3)
    dx,dy=7,8
    if method=='serial_high':dx,dy=7,-15 if ri==0 else-13
    if method=='parallel3_select_high':dx,dy=7,-15 if ri==1 else 8
@@ -46,13 +51,14 @@ for ri,(h,hlabel) in enumerate([('browsercode','BrowserCode'),('native','Native 
    ha='left'
    if method=='serial_high' and ci==2 and ri==0:dx,dy=7,8
    if method=='parallel3_select_high' and ci==1 and ri==1:dx,dy,ha=-8,-16,'right'
-   ax.annotate(label,(x,y),ha=ha,xytext=(dx,dy),textcoords='offset points',fontsize=10,color=color,weight='bold'if method.startswith('parallel')else'normal')
+   ax.annotate(label,(x,y),ha=ha,xytext=(dx,dy),textcoords='offset points',fontsize=10,color=color,alpha=1 if method in frontier else .55,weight='bold'if method.startswith('parallel')else'normal')
  # Concise honest comparison highlights the cost-performance tradeoff against Sol.
  base=rows['serial_high'];bits=[]
  for method,name in [('parallel3_select_high','N3'),('parallel5_select_high','N5')]:
   r=rows[method];delta=100*(r['success_rate']-base['success_rate']);saving=100*(1-r['mean_model_usd_per_task']/base['mean_model_usd_per_task']);bits.append(f'{name}: {delta:+.1f} pp success · {saving:.0f}% lower model cost')
  # Comparison is conveyed directly by the labeled points.
-footer=('Success = successes / valid outcomes; valid subsets differ. Valid counts (Sol / Luna / N3 / N5): BrowserCode 266 / 269 / 269 / 267; native 286 / 271 / 270 / 270.\n'
+footer=('Dashed lines join observed nondominated methods; rings mark frontier points. Point estimates only; segments do not imply attainable intermediate methods.\n'
+'Success = successes / valid outcomes; valid subsets differ. Valid counts (Sol / Luna / N3 / N5): BrowserCode 266 / 269 / 269 / 267; native 286 / 271 / 270 / 270.\n'
 'X-axis means include measured invalid attempts. Latency coverage: BrowserCode 275 / 274 / 275 / 273; native 300 / 300 / 300 / 298.\n'
 'Command coverage: BrowserCode 300 / 300 / 293 / 294; native 300 / 300 / 300 / 298. Executions can contain multiple actions; granularity differs.\n'
 'Cost coverage: 300 each. BrowserCode original receipts (N3: one unknown-usage call); native includes helpers and full reserves. External judging excluded.\n'
@@ -63,3 +69,5 @@ print(OUT/'om2w_harness_facets.png')
 
 f=OUT/'om2w_harness_facets.svg'
 f.write_text('\n'.join(x.rstrip() for x in f.read_text().splitlines())+'\n')
+
+(OUT/'observed_pareto_frontiers.json').write_text(json.dumps({'definition':'Minimize x and maximize valid-only success; at least one strict improvement for dominance','source_aggregate_sha256':hashlib.sha256((P/"om2w_harness_comparison_valid_only.json").read_bytes()).hexdigest(),'frontiers':frontiers},indent=2)+'\n')
