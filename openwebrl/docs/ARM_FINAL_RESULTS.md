@@ -102,25 +102,25 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 ### Online-Mind2Web only: BrowserCode and native CUAWright
 
-**The scatter comparison uses the exact same 103 fresh tasks valid in all eight method–harness cells.** Valid failures remain included; none of these tasks belongs to either harness's historical 100 cohort. The separate BrowserCode three-benchmark plot above is unchanged. Full-cohort rates are reported separately in the results tables, with invalid outcomes counted as unsuccessful. The figure uses model color/shape and harness fill: blue square for Sol single, blue circle for Luna single, yellow circle for Luna N3 and orange circle for Luna N5; filled markers denote BrowserCode and outlined markers native CUAWright.
+**The scatter comparison uses the exact same 111 fresh tasks valid in all eight method–harness cells.** Valid failures remain included; none of these tasks belongs to either harness's historical 100 cohort. The separate BrowserCode three-benchmark plot above is unchanged. Full-cohort rates are reported separately in the results tables, with invalid outcomes counted as unsuccessful. The figure uses model color/shape and harness fill: blue square for Sol single, blue circle for Luna single, yellow circle for Luna N3 and orange circle for Luna N5; filled markers denote BrowserCode and outlined markers native CUAWright.
 
-![OM2W-only cost, latency and browser-command execution tradeoffs for four methods under BrowserCode and native CUAWright, using the exact same 103 fresh common-valid tasks](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+![OM2W-only cost, latency and browser-command execution tradeoffs for four methods under BrowserCode and native CUAWright, using the exact same 111 fresh common-valid tasks](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
 
-| Method | Shared tasks | BrowserCode successes | BrowserCode success | Native successes | Native success |
+| Method (all high) | Shared tasks | BrowserCode successes | BrowserCode success | Native successes | Native success |
 |---|---:|---:|---:|---:|---:|
-| Sol single high | 103 | 65 | 63.1% | 79 | 76.7% |
-| Luna single high | 103 | 62 | 60.2% | 70 | 68.0% |
-| Luna N3 high + high | 103 | 71 | 68.9% | 69 | 67.0% |
-| Luna N5 high + high | 103 | 75 | 72.8% | 75 | 72.8% |
+| Sol single | 111 | 72 | 64.9% | 86 | 77.5% |
+| Luna single | 111 | 68 | 61.3% | 77 | 69.4% |
+| Luna N3 | 111 | 77 | 69.4% | 76 | 68.5% |
+| Luna N5 | 111 | 82 | 73.9% | 83 | 74.8% |
 
-Native data are a **preliminary snapshot at October 27, 2026, 22:08:52 UTC**, with 277/300 N5 outcomes; the campaign remains active and its final audit is pending. The common-valid cohort conditions on execution outcomes and can differ from the full task population. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100, with summary 20. Collection dates, timing boundaries and runtime contention also differ, so this is a descriptive comparison, not a controlled harness-only effect.
+All four native methods now have **300 canonical outcomes each**, including the completed N5 run. The independently checked plot extraction is bound to October 28, 2026, 01:04:20 UTC; campaign-wide final accounting and teardown qualification remain separate. The common-valid cohort conditions on execution outcomes and can differ from the full task population. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100, with summary 20. Collection dates, timing boundaries and runtime contention also differ, so this is a descriptive comparison, not a controlled harness-only effect.
 
 <details>
 <summary>Accounting, latency and reproducibility</summary>
 
-BrowserCode model costs use the original audited per-episode proposal/selector receipt estimates; none of these 103 tasks has unknown model usage in any BrowserCode method. Native costs include all per-task attempts, model helpers, input counters, cache bounds and full unknown reserves at the fixed cutoff. Both exclude external judging. BrowserCode latency is actor-loop time excluding initial setup and final judge-only capture; native latency retains the original native task boundary and excludes external/saved-evidence grading. **Browser-command executions per task** counts saved selected code blocks in BrowserCode and literal browser-command log entries in native CUAWright. Either execution can contain several clicks, typing operations or other actions. The same fresh task cohort and inclusion of valid failures make this a descriptive comparison of command volume under each harness; execution granularity differs, so it is not a standardized action count or an equal-work measure. Native singleton recovery and other contention differences remain latency comparability limitations.
+BrowserCode model costs use the original audited per-episode proposal/selector receipt estimates; none of these 111 tasks has unknown model usage in any BrowserCode method. Native costs include all per-task attempts, model helpers, input counters, cache bounds and full unknown reserves at the fixed cutoff. Both exclude external judging. BrowserCode latency is actor-loop time excluding initial setup and final judge-only capture; native latency retains the original native task boundary and excludes external/saved-evidence grading. **Browser-command executions per task** counts saved selected code blocks in BrowserCode and literal browser-command log entries in native CUAWright. Either execution can contain several clicks, typing operations or other actions. The same fresh task cohort and inclusion of valid failures make this a descriptive comparison of command volume under each harness; execution granularity differs, so it is not a standardized action count or an equal-work measure. Native singleton recovery and other contention differences remain latency comparability limitations.
 
-[Aggregate coordinates and definitions](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_preliminary.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
+[Aggregate coordinates and definitions](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_completed.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
 
 </details>
 

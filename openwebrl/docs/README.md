@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Native CUAWright full300 extension running: all four canary audits passed; 900 new outcomes plus 300 preserved outcomes](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).
+[Native CUAWright full300 collected: all four methods have 300 outcomes; final accounting and teardown qualification in progress](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).
 
 [Native CUAWright selection complete: Sol single 80/100, Sol N=3 72/100, Luna N=3 68/100; shared-task success, all-attempt cost, latency and audited aggregates](ARM_INFERENCE_SCALING.md#cuawright-native-selection-results-20261024).
 
@@ -13,7 +13,7 @@
 
 [API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
-[OM2W-only BrowserCode versus native CUAWright: exact same 103 fresh common-valid tasks across both harnesses; preliminary native snapshot](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
+[OM2W-only BrowserCode versus native CUAWright: exact same 111 fresh common-valid tasks across both harnesses; all four native methods collected300](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
 [Offline selector evaluation: compact data collection and teacher labeling schematic, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 

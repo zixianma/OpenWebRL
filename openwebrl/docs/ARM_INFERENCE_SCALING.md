@@ -1926,9 +1926,18 @@ Private immutable audit pointers: final 30-receipt release SHA-256 `2d1eab5545e9
 
 <a id="cuawright-native-full300-four-methods-20261025"></a>
 
-## Native CUAWright: running four-method full300 extension
+## Native CUAWright: four-method full300 extension
 
-The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. No full300 native results are available yet. All four methods passed independent audits of their two fixed fresh-task canaries and entered bulk execution. These eight canaries produced six successes, one valid failure and one preserved frozen-judge parse invalid; the fixed canaries qualify execution and are not a performance estimate. Their outcomes remain in the final task denominators.
+The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. All four methods have 300 canonical outcomes. The 900 new dispositions comprise 898 preserved native result records and two independently derived OOM invalids; all 300 historical outcomes, including invalids, remain in the combined denominator. Final all-attempt accounting and owned-teardown qualification are in progress.
+
+| Method (all high) | Combined tasks | Successes | Success | Valid | Invalid | Fresh shared tasks | Fresh successes | Fresh success |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Luna single | 300 | 189 | 63.0% | 271 | 29 | 200 | 121 | 60.5% |
+| Luna N3 | 300 | 192 | 64.0% | 270 | 30 | 200 | 124 | 62.0% |
+| Luna N5 | 300 | 202 | 67.3% | 270 | 30 | 200 | 131 | 65.5% |
+| Sol single | 300 | 222 | 74.0% | 286 | 14 | 200 | 142 | 71.0% |
+
+Invalid outcomes count as unsuccessful. The separate [OM2W harness comparison](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027) uses the exact 111 fresh tasks valid in all eight cells, rather than these full-population denominators.
 
 | Method | Reused task outcomes | New task outcomes | Final task outcomes | New CPU shards | Model USD cap | External judge USD cap |
 |---|---:|---:|---:|---:|---:|---:|

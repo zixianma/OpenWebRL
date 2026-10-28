@@ -104,7 +104,7 @@ def legends(fig, x=0.835, y=0.70):
                         label="BrowserCode · OM2W"),
                  Line2D([], [], linestyle="", marker="o", markerfacecolor="white",
                         markeredgecolor="#5A6470", markeredgewidth=2, markersize=8,
-                        label="Native CUAWright · OM2W\nPreliminary; same fresh tasks")]
+                        label="Native CUAWright · OM2W\nAll 300 collected; same fresh tasks")]
     fig.legend(handles=harnesses, title="Harness / cohort", loc="upper left",
                bbox_to_anchor=(x, y - .29), frameon=False, fontsize=9, title_fontsize=11,
                labelspacing=1.2)
@@ -119,18 +119,18 @@ def save_figure(fig, path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--aggregate", type=Path, default=Path(__file__).with_name("om2w_harness_comparison_preliminary.json"))
+    parser.add_argument("--aggregate", type=Path, default=Path(__file__).with_name("om2w_harness_comparison_completed.json"))
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).parent)
     args = parser.parse_args()
     comparison, means, native = read_rows(args.aggregate)
-    data = json.loads(Path(__file__).with_name("native_cuawright_preliminary.json").read_text())
+    data = json.loads(Path(__file__).with_name("native_cuawright_completed.json").read_text())
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.output_dir / "om2w_harness_tradeoff_coordinates.csv",
               [dict(harness=h, **r) for h, rows in (("BrowserCode", means), ("Native CUAWright", native)) for r in rows])
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
                         "axes.titlesize": 15, "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
-    footer = (f'OM2W only · same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight cells; valid failures included. Native snapshot: 2026-10-27 22:08:52 UTC, preliminary.\n'
+    footer = (f'OM2W only · same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight cells; valid failures included. All four native methods: 300 outcomes each; collection complete.\n'
               'Native: 20,000 tokens / 100 decisions; BrowserCode: 12,288 / 30. Different collection dates and timing scopes; descriptive comparison. External judging excluded.\n'
               'One execution: a selected BrowserCode block or native browser-command log entry; either can contain several actions. This compares harness-level command volume, not standardized actions.\n'
               'Cost: native per-task all-attempt model charges, helpers and full unknown reserves; BrowserCode original proposal/selector receipts. Tables are reported separately.')
@@ -161,11 +161,11 @@ def main():
     plt.close(fig)
     (args.output_dir / "om2w_harness_tradeoffs_provenance.json").write_text(json.dumps({
         "comparison_aggregate_sha256": hashlib.sha256(args.aggregate.read_bytes()).hexdigest(),
-        "native_status_aggregate_sha256": hashlib.sha256(Path(__file__).with_name("native_cuawright_preliminary.json").read_bytes()).hexdigest(),
+        "native_status_aggregate_sha256": hashlib.sha256(Path(__file__).with_name("native_cuawright_completed.json").read_bytes()).hexdigest(),
         "benchmark": "Online-Mind2Web only",
         "shared_fresh_common_valid_tasks": comparison["shared_fresh_common_valid_tasks"],
         "cohort": "Exact same fresh tasks valid in all four methods under both harnesses, including valid failures",
-        "native_status": "preliminary; N5 incomplete, not final campaign audited",
+        "native_status": data["status"],
         "native_snapshot_utc": data["snapshot_utc"],
         "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
         "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",

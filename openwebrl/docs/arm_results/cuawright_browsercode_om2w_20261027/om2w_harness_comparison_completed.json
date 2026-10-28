@@ -1,0 +1,122 @@
+{
+  "schema": "om2w-completed-eight-cell-exact-fresh-common-valid-tradeoffs-v1",
+  "status": "native_collection_complete_final_global_audit_not_claimed_browsercode_audited_original",
+  "benchmark": "Online-Mind2Web",
+  "snapshot_utc": "2026-10-28T01:04:20.688908+00:00",
+  "shared_fresh_common_recorded_tasks": 200,
+  "shared_fresh_common_valid_tasks": 111,
+  "browsercode": {
+    "harness": "BrowserCode",
+    "tradeoffs": {
+      "serial_high": {
+        "tasks": 111,
+        "successes": 72,
+        "success_rate": 0.6486486486486487,
+        "mean_model_usd_per_task": 0.194707990990991,
+        "mean_task_seconds": 86.81593359849307,
+        "mean_browser_steps": 14.17117117117117
+      },
+      "luna_single_high": {
+        "tasks": 111,
+        "successes": 68,
+        "success_rate": 0.6126126126126126,
+        "mean_model_usd_per_task": 0.008729590495495496,
+        "mean_task_seconds": 86.0213177930291,
+        "mean_browser_steps": 15.234234234234235
+      },
+      "parallel3_select_high": {
+        "tasks": 111,
+        "successes": 77,
+        "success_rate": 0.6936936936936937,
+        "mean_model_usd_per_task": 0.05460809842342342,
+        "mean_task_seconds": 177.5533823506075,
+        "mean_browser_steps": 14.486486486486486
+      },
+      "parallel5_select_high": {
+        "tasks": 111,
+        "successes": 82,
+        "success_rate": 0.7387387387387387,
+        "mean_model_usd_per_task": 0.06879935801801802,
+        "mean_task_seconds": 211.9783398186665,
+        "mean_browser_steps": 14.27027027027027
+      }
+    },
+    "latest_recorded": {
+      "serial_high": {
+        "recorded": 300,
+        "valid": 266,
+        "successes": 171,
+        "success_rate": 0.57
+      },
+      "luna_single_high": {
+        "recorded": 300,
+        "valid": 269,
+        "successes": 168,
+        "success_rate": 0.56
+      },
+      "parallel3_select_high": {
+        "recorded": 300,
+        "valid": 269,
+        "successes": 180,
+        "success_rate": 0.6
+      },
+      "parallel5_select_high": {
+        "recorded": 300,
+        "valid": 267,
+        "successes": 188,
+        "success_rate": 0.6266666666666667
+      }
+    },
+    "unknown_model_usage_calls_in_shared_valid_cohort": {
+      "serial_high": 0,
+      "luna_single_high": 0,
+      "parallel3_select_high": 0,
+      "parallel5_select_high": 0
+    }
+  },
+  "native": {
+    "harness": "Native CUAWright",
+    "tradeoffs": {
+      "serial_high": {
+        "tasks": 111,
+        "successes": 86,
+        "success_rate": 0.7747747747747747,
+        "mean_model_usd_per_task": 1.3178402198198198,
+        "mean_task_seconds": 500.7118681142996,
+        "mean_browser_steps": 34.585585585585584
+      },
+      "luna_single_high": {
+        "tasks": 111,
+        "successes": 77,
+        "success_rate": 0.6936936936936937,
+        "mean_model_usd_per_task": 0.09714116950450451,
+        "mean_task_seconds": 758.2151037680136,
+        "mean_browser_steps": 30.18018018018018
+      },
+      "parallel3_select_high": {
+        "tasks": 111,
+        "successes": 76,
+        "success_rate": 0.6846846846846847,
+        "mean_model_usd_per_task": 0.28136463918918925,
+        "mean_task_seconds": 1269.7611985958374,
+        "mean_browser_steps": 30.62162162162162
+      },
+      "parallel5_select_high": {
+        "tasks": 111,
+        "successes": 83,
+        "success_rate": 0.7477477477477478,
+        "mean_model_usd_per_task": 0.2900552068468469,
+        "mean_task_seconds": 1165.3285433580209,
+        "mean_browser_steps": 28.46846846846847
+      }
+    }
+  },
+  "definitions": {
+    "cohort": "Identical task IDs for all eight coordinates: completed native fresh four-method recorded200 and shared valid tasks, then exact validity intersection with all four audited original BrowserCode OM2W cells. Valid failures remain included; no success conditioning.",
+    "browser_steps": "BrowserCode: saved selected_code_batches per original audited definition; Native CUAWright: literal-LF browser-steps records, not model decisions. Each batch can contain several operations.",
+    "cost": "BrowserCode: original per-episode known proposal+selector receipt USD (judge excluded), with preserved100 cost backfill. Native: cutoff-bounded per-task all-attempt model-role charges/full unknown reserves, helpers included, external judge excluded. Campaign-wide invalid/aborted costs stay in separate all-attempt accounting.",
+    "latency": "BrowserCode actor loop excludes initial browser setup/final judge-only capture/terminal judge. Native original task_latency_seconds includes native-task work, excludes external/saved-evidence judging; startup and singleton-recovery/contention caveats retained. Harness timing scopes differ.",
+    "scientific_limits": "BrowserCode high12288 output/30 decisions; Native high20000/100 decisions, summary20. Different collection dates and harnesses; descriptive comparison, not a controlled causal harness effect.",
+    "snapshot": "Native collection completed at an independently terminal-bound cutoff; final global audit completion is not inferred from this plot. Original BrowserCode retry22/remaining79 excluded."
+  }
+}
