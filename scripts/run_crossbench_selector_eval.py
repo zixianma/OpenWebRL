@@ -27,7 +27,7 @@ sys.path.insert(0, str(REPO))
 from openwebrl import crossbench_selector_eval as core  # noqa: E402
 
 PYTHON = core.RUNTIME / 'venv/bin/python'
-HOURS_PER_BENCHMARK = {'sft1': 1.5, 'piotr5': 2.5, 'head5': 2.5}
+HOURS_PER_BENCHMARK = {'sft1': 1.5, 'piotr5': 2.5, 'head5': 2.5, 'arm5': 2.5}
 STARTUP_HOURS = 0.5
 
 
@@ -68,7 +68,7 @@ def cmd_prepare(a):
 
 
 def default_time(condition_name, benchmarks):
-    hours = STARTUP_HOURS + HOURS_PER_BENCHMARK[re.sub(r'^(piotr|head)\d', r'\g<1>5', condition_name).rstrip('x')] * len(benchmarks)
+    hours = STARTUP_HOURS + HOURS_PER_BENCHMARK[re.sub(r'^(piotr|head|arm)\d', r'\g<1>5', condition_name).rstrip('x')] * len(benchmarks)
     minutes = int(round(min(hours, 24) * 60))
     return f'{minutes // 60:02d}:{minutes % 60:02d}:00'
 
@@ -174,15 +174,17 @@ def server_stages(plan, port, capture_dir):
     if cond['kind'] != 'selection':
         return [[actor]]
     # piotr5: the selector's sglang server claims its .30 first, then the actor its .45 (as selectors-samehw).
+    # arm<N>: another merged SelectionARM, same serving (its assembled -sglang directory)
+    sglang_dir, model = cond.get('selector_sglang') or str(core.PIOTR_SGLANG_DIR), cond.get('selector_model') or str(core.PIOTR_SELECTION)
     selector_sglang = dict(name='selector-sglang', gpu=True, env={}, timeout=1200,
-        argv=source_command([str(PYTHON), '-m', 'sglang.launch_server', '--model-path', str(core.PIOTR_SGLANG_DIR),
+        argv=source_command([str(PYTHON), '-m', 'sglang.launch_server', '--model-path', sglang_dir,
                              '--host', '127.0.0.1', '--port', str(port + 2), '--dtype', 'bfloat16',
                              '--mem-fraction-static', '.30', '--context-length', '32768', '--grammar-backend', 'xgrammar',
                              '--cuda-graph-max-bs', '48', '--random-seed', '0']),
-        health=f'http://127.0.0.1:{port + 2}/get_model_info', expect=('model_path', str(core.PIOTR_SGLANG_DIR)))
+        health=f'http://127.0.0.1:{port + 2}/get_model_info', expect=('model_path', sglang_dir))
     selector = dict(name='selector', gpu=False, env=dict(PYTHONPATH=f'{REPO}:{REPO / "scripts"}'), timeout=600,
         argv=[str(PYTHON), str(REPO / 'scripts/serve_arm_sglang.py'), 'serve', '--sglang', f'http://127.0.0.1:{port + 2}',
-              '--port', str(port + 1)],
+              '--port', str(port + 1), '--model', model],
         health=f'http://127.0.0.1:{port + 1}/health', expect=('mode', 'selection'))
     return [[selector_sglang], [actor], [selector]]
 
@@ -408,7 +410,7 @@ def main(argv=None):
     sub = p.add_subparsers(dest='command', required=True)
     pr = sub.add_parser('prepare')
     pr.add_argument('--root', required=True)
-    pr.add_argument('--condition', required=True, help='sft1 | piotr<N> | head<N>:<path/to/head.pt> (N = 2-5 samples per step)')
+    pr.add_argument('--condition', required=True, help='sft1 | piotr<N> | arm<N>:<merged SelectionARM dir> | head<N>:<path/to/head.pt> (N = 2-5 samples per step)')
     pr.add_argument('--benchmarks', nargs='+', default=list(core.BENCHMARKS), choices=core.BENCHMARKS)
     pr.add_argument('--n', type=int, default=100)
     pr.add_argument('--seed', type=int, required=True, help='task-subset seed')

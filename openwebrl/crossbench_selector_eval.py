@@ -360,7 +360,23 @@ def parse_condition(condition):
                         encoder=str(ACTOR), encoder_revision=ACTORS[str(ACTOR.resolve())]['revision'])
         return dict(name=name, kind='actor_cache_head', candidates=n, slug=f'{name}-{digest[:12]}', head_path=str(path),
                     head_sha256=digest, selection_rule='argmax_head_score_ties_first')
-    raise ValueError(f'Unknown condition {condition!r}; expected sft1, piotr<N>, head<N>:<head.pt> or head<N>x:<head.pt>')
+    m = re.fullmatch(r'arm([2-5]):(.+)', condition)
+    if m:                     # another merged SelectionARM (e.g. the LoRA on our branch states), served as piotr<N>
+        n, path = int(m[1]), Path(m[2]).resolve()
+        sglang_dir = path.parent / f'{path.name}-sglang'
+        if not (path / 'model.safetensors.index.json').is_file() or not (sglang_dir / 'config.json').is_file():
+            raise ValueError(f'Merged selector or its assembled sglang directory missing: {path}, {sglang_dir} '
+                             '(scripts/serve_arm_sglang.py assemble --selection MODEL --out MODEL-sglang)')
+        # identity: directory, weight index and each shard's size and mtime (LoRA merges of one base share index and
+        # sizes; hashing ~8 GB of shards is left out of plan preparation)
+        shards = sorted(path.glob('model-*.safetensors'))
+        digest = hashlib.sha256((str(path) + sha256_file(path / 'model.safetensors.index.json')
+                                 + ''.join(f'{s.name}:{s.stat().st_size}:{s.stat().st_mtime_ns}' for s in shards)).encode()).hexdigest()
+        return dict(name=f'arm{n}', kind='selection', candidates=n, slug=f'arm{n}-{digest[:12]}', head_path=None,
+                    head_sha256=None, selection_rule='canonical_no_cot_json_schema_sglang_first_candidate_fallback',
+                    selector_model=str(path), selector_revision=digest, selector_sglang=str(sglang_dir))
+    raise ValueError(f'Unknown condition {condition!r}; expected sft1, piotr<N>, arm<N>:<merged model dir>, '
+                     'head<N>:<head.pt> or head<N>x:<head.pt>')
 
 
 def task_id_of(row, index):
@@ -868,7 +884,8 @@ class LiveRuntime:
                 r = await client.get(config['selector_endpoint'] + '/health')
                 r.raise_for_status()
                 health = r.json()
-                if health.get('mode') != 'selection' or health.get('model') != str(PIOTR_SELECTION) or health.get('adapter'):
+                if health.get('mode') != 'selection' or health.get('model') != (plan['condition'].get('selector_model') or str(PIOTR_SELECTION)) \
+                        or health.get('adapter'):
                     raise ValueError('Wrong selector service')
                 services['selector'] = health
         write_json(root / 'services.json', services)
