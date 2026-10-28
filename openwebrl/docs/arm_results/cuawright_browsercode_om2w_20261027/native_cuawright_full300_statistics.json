@@ -1,0 +1,1032 @@
+{
+  "schema": "native-cuawright-four-method-final-aggregate-statistics-v1",
+  "synthetic_fixture_only": false,
+  "statistics_generated_from_qualified_actual_collection": true,
+  "independent_final_aggregate_review_still_required": false,
+  "publication_release_approved": true,
+  "coverage": {
+    "methods": 4,
+    "tasks_per_method": 300,
+    "all_final_outcomes": 1200,
+    "new_outcomes": 900,
+    "reused_outcomes": 300,
+    "preserved_raw_new_native_dispositions": 898,
+    "independently_derived_oom_invalids": 2,
+    "primary_shared_fresh_tasks": 200
+  },
+  "fresh200_primary": [
+    {
+      "method": "Luna single",
+      "tasks": 200,
+      "successes": 121,
+      "valid_tasks": 178,
+      "invalid_tasks": 22,
+      "overall_success_denominator": 200,
+      "overall_success_percent": 60.5,
+      "valid_only_success_denominator": 178,
+      "valid_only_success_percent": 67.97752808988764,
+      "all_attempt_model_usd_conservative": 20.536082035,
+      "model_cost_coverage_tasks": 200,
+      "model_usd_conservative_per_task": 0.102680410175,
+      "external_judge_usd_observed": 16.792064999999994,
+      "external_judge_cost_coverage_tasks": 200,
+      "native_latency_observed_point_tasks": 200,
+      "native_latency_missing_point_tasks": 0,
+      "native_latency_missing_oom_point_tasks": 0,
+      "native_latency_mean_seconds": 879.9081564056874,
+      "native_latency_median_seconds": 611.6784218549728,
+      "native_latency_p90_seconds": 1784.528150653839,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 0,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 3,
+        "judge_other": 2,
+        "native_other": 17,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 22,
+      "invalid_reason_unavailable_tasks": 0
+    },
+    {
+      "method": "Luna N3 + selection",
+      "tasks": 200,
+      "successes": 124,
+      "valid_tasks": 180,
+      "invalid_tasks": 20,
+      "overall_success_denominator": 200,
+      "overall_success_percent": 62.0,
+      "valid_only_success_denominator": 180,
+      "valid_only_success_percent": 68.88888888888889,
+      "all_attempt_model_usd_conservative": 58.6453057,
+      "model_cost_coverage_tasks": 200,
+      "model_usd_conservative_per_task": 0.2932265285,
+      "external_judge_usd_observed": 18.026255,
+      "external_judge_cost_coverage_tasks": 200,
+      "native_latency_observed_point_tasks": 200,
+      "native_latency_missing_point_tasks": 0,
+      "native_latency_missing_oom_point_tasks": 0,
+      "native_latency_mean_seconds": 1329.858757787943,
+      "native_latency_median_seconds": 952.8558702468872,
+      "native_latency_p90_seconds": 2693.1632204055786,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 0,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 6,
+        "judge_other": 1,
+        "native_other": 13,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 20,
+      "invalid_reason_unavailable_tasks": 0
+    },
+    {
+      "method": "Luna N5 + selection",
+      "tasks": 200,
+      "successes": 131,
+      "valid_tasks": 178,
+      "invalid_tasks": 22,
+      "overall_success_denominator": 200,
+      "overall_success_percent": 65.5,
+      "valid_only_success_denominator": 178,
+      "valid_only_success_percent": 73.59550561797752,
+      "all_attempt_model_usd_conservative": 62.526804090000006,
+      "model_cost_coverage_tasks": 200,
+      "model_usd_conservative_per_task": 0.31263402045000005,
+      "external_judge_usd_observed": 17.790559999999996,
+      "external_judge_cost_coverage_tasks": 200,
+      "native_latency_observed_point_tasks": 198,
+      "native_latency_missing_point_tasks": 2,
+      "native_latency_missing_oom_point_tasks": 2,
+      "native_latency_mean_seconds": 1316.52782930509,
+      "native_latency_median_seconds": 797.4662480354309,
+      "native_latency_p90_seconds": 3111.9614896774297,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 2,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 4,
+        "judge_other": 1,
+        "native_other": 15,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 22,
+      "invalid_reason_unavailable_tasks": 0
+    },
+    {
+      "method": "Sol single",
+      "tasks": 200,
+      "successes": 142,
+      "valid_tasks": 188,
+      "invalid_tasks": 12,
+      "overall_success_denominator": 200,
+      "overall_success_percent": 71.0,
+      "valid_only_success_denominator": 188,
+      "valid_only_success_percent": 75.53191489361703,
+      "all_attempt_model_usd_conservative": 275.7303931000001,
+      "model_cost_coverage_tasks": 200,
+      "model_usd_conservative_per_task": 1.3786519655000005,
+      "external_judge_usd_observed": 18.843217499999998,
+      "external_judge_cost_coverage_tasks": 200,
+      "native_latency_observed_point_tasks": 200,
+      "native_latency_missing_point_tasks": 0,
+      "native_latency_missing_oom_point_tasks": 0,
+      "native_latency_mean_seconds": 592.2457049238682,
+      "native_latency_median_seconds": 454.5985425710678,
+      "native_latency_p90_seconds": 1155.8874855279923,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 0,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 6,
+        "judge_other": 0,
+        "native_other": 6,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 12,
+      "invalid_reason_unavailable_tasks": 0
+    }
+  ],
+  "paired_fresh200_all_six_pairs": [
+    {
+      "method_a": "Luna single",
+      "method_b": "Luna N3 + selection",
+      "tasks": 200,
+      "both_success": 98,
+      "a_only_success": 23,
+      "b_only_success": 26,
+      "neither_success": 53,
+      "discordant_tasks": 49,
+      "success_count_delta_b_minus_a": 3,
+      "success_rate_delta_percentage_points_b_minus_a": 1.5,
+      "mcnemar_exact_two_sided_p": 0.7754496546815659,
+      "delta_95_percentile_CI": {
+        "lower_percentage_points": -5.5,
+        "upper_percentage_points": 8.5
+      },
+      "mcnemar_holm_adjusted_p_six_primary_pairs": 0.783205821094981
+    },
+    {
+      "method_a": "Luna single",
+      "method_b": "Luna N5 + selection",
+      "tasks": 200,
+      "both_success": 107,
+      "a_only_success": 14,
+      "b_only_success": 24,
+      "neither_success": 55,
+      "discordant_tasks": 38,
+      "success_count_delta_b_minus_a": 10,
+      "success_rate_delta_percentage_points_b_minus_a": 5.0,
+      "mcnemar_exact_two_sided_p": 0.14330665429588407,
+      "delta_95_percentile_CI": {
+        "lower_percentage_points": -1.0,
+        "upper_percentage_points": 11.0
+      },
+      "mcnemar_holm_adjusted_p_six_primary_pairs": 0.5732266171835363
+    },
+    {
+      "method_a": "Luna single",
+      "method_b": "Sol single",
+      "tasks": 200,
+      "both_success": 102,
+      "a_only_success": 19,
+      "b_only_success": 40,
+      "neither_success": 39,
+      "discordant_tasks": 59,
+      "success_count_delta_b_minus_a": 21,
+      "success_rate_delta_percentage_points_b_minus_a": 10.5,
+      "mcnemar_exact_two_sided_p": 0.008641499683281734,
+      "delta_95_percentile_CI": {
+        "lower_percentage_points": 3.0,
+        "upper_percentage_points": 17.5
+      },
+      "mcnemar_holm_adjusted_p_six_primary_pairs": 0.0518489980996904
+    },
+    {
+      "method_a": "Luna N3 + selection",
+      "method_b": "Luna N5 + selection",
+      "tasks": 200,
+      "both_success": 103,
+      "a_only_success": 21,
+      "b_only_success": 28,
+      "neither_success": 48,
+      "discordant_tasks": 49,
+      "success_count_delta_b_minus_a": 7,
+      "success_rate_delta_percentage_points_b_minus_a": 3.5,
+      "mcnemar_exact_two_sided_p": 0.3916029105474905,
+      "delta_95_percentile_CI": {
+        "lower_percentage_points": -3.5,
+        "upper_percentage_points": 10.5
+      },
+      "mcnemar_holm_adjusted_p_six_primary_pairs": 0.783205821094981
+    },
+    {
+      "method_a": "Luna N3 + selection",
+      "method_b": "Sol single",
+      "tasks": 200,
+      "both_success": 104,
+      "a_only_success": 20,
+      "b_only_success": 38,
+      "neither_success": 38,
+      "discordant_tasks": 58,
+      "success_count_delta_b_minus_a": 18,
+      "success_rate_delta_percentage_points_b_minus_a": 9.0,
+      "mcnemar_exact_two_sided_p": 0.024746035842440797,
+      "delta_95_percentile_CI": {
+        "lower_percentage_points": 1.5,
+        "upper_percentage_points": 16.5
+      },
+      "mcnemar_holm_adjusted_p_six_primary_pairs": 0.12373017921220399
+    },
+    {
+      "method_a": "Luna N5 + selection",
+      "method_b": "Sol single",
+      "tasks": 200,
+      "both_success": 112,
+      "a_only_success": 19,
+      "b_only_success": 30,
+      "neither_success": 39,
+      "discordant_tasks": 49,
+      "success_count_delta_b_minus_a": 11,
+      "success_rate_delta_percentage_points_b_minus_a": 5.5,
+      "mcnemar_exact_two_sided_p": 0.15240777196147803,
+      "delta_95_percentile_CI": {
+        "lower_percentage_points": -1.5,
+        "upper_percentage_points": 12.5
+      },
+      "mcnemar_holm_adjusted_p_six_primary_pairs": 0.5732266171835363
+    }
+  ],
+  "combined300_secondary": [
+    {
+      "method": "Luna single",
+      "tasks": 300,
+      "successes": 189,
+      "valid_tasks": 271,
+      "invalid_tasks": 29,
+      "overall_success_denominator": 300,
+      "overall_success_percent": 63.0,
+      "valid_only_success_denominator": 271,
+      "valid_only_success_percent": 69.74169741697418,
+      "all_attempt_model_usd_conservative": 29.209504609999993,
+      "model_cost_coverage_tasks": 300,
+      "model_usd_conservative_per_task": 0.09736501536666664,
+      "external_judge_usd_observed": 16.792065,
+      "external_judge_cost_coverage_tasks": 200,
+      "native_latency_observed_point_tasks": 300,
+      "native_latency_missing_point_tasks": 0,
+      "native_latency_missing_oom_point_tasks": 0,
+      "native_latency_mean_seconds": 958.1347228121757,
+      "native_latency_median_seconds": 654.4140639305115,
+      "native_latency_p90_seconds": 1850.4568574666978,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 0,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 3,
+        "judge_other": 5,
+        "native_other": 21,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 29,
+      "invalid_reason_unavailable_tasks": 0
+    },
+    {
+      "method": "Luna N3 + selection",
+      "tasks": 300,
+      "successes": 192,
+      "valid_tasks": 270,
+      "invalid_tasks": 30,
+      "overall_success_denominator": 300,
+      "overall_success_percent": 64.0,
+      "valid_only_success_denominator": 270,
+      "valid_only_success_percent": 71.11111111111111,
+      "all_attempt_model_usd_conservative": 84.45264559999998,
+      "model_cost_coverage_tasks": 300,
+      "model_usd_conservative_per_task": 0.2815088186666666,
+      "external_judge_usd_observed": 25.471557499999996,
+      "external_judge_cost_coverage_tasks": 300,
+      "native_latency_observed_point_tasks": 300,
+      "native_latency_missing_point_tasks": 0,
+      "native_latency_missing_oom_point_tasks": 0,
+      "native_latency_mean_seconds": 1265.1887224706013,
+      "native_latency_median_seconds": 797.6555690765381,
+      "native_latency_p90_seconds": 2709.958413553239,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 0,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 7,
+        "judge_other": 2,
+        "native_other": 21,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 30,
+      "invalid_reason_unavailable_tasks": 0
+    },
+    {
+      "method": "Luna N5 + selection",
+      "tasks": 300,
+      "successes": 202,
+      "valid_tasks": 270,
+      "invalid_tasks": 30,
+      "overall_success_denominator": 300,
+      "overall_success_percent": 67.33333333333333,
+      "valid_only_success_denominator": 270,
+      "valid_only_success_percent": 74.81481481481481,
+      "all_attempt_model_usd_conservative": 94.76887529999999,
+      "model_cost_coverage_tasks": 300,
+      "model_usd_conservative_per_task": 0.31589625099999996,
+      "external_judge_usd_observed": 26.284429999999997,
+      "external_judge_cost_coverage_tasks": 300,
+      "native_latency_observed_point_tasks": 298,
+      "native_latency_missing_point_tasks": 2,
+      "native_latency_missing_oom_point_tasks": 2,
+      "native_latency_mean_seconds": 1302.6523165886833,
+      "native_latency_median_seconds": 768.0759465694427,
+      "native_latency_p90_seconds": 3123.0675678730013,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 2,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 6,
+        "judge_other": 1,
+        "native_other": 21,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 30,
+      "invalid_reason_unavailable_tasks": 0
+    },
+    {
+      "method": "Sol single",
+      "tasks": 300,
+      "successes": 222,
+      "valid_tasks": 286,
+      "invalid_tasks": 14,
+      "overall_success_denominator": 300,
+      "overall_success_percent": 74.0,
+      "valid_only_success_denominator": 286,
+      "valid_only_success_percent": 77.62237762237763,
+      "all_attempt_model_usd_conservative": 390.0361171999998,
+      "model_cost_coverage_tasks": 300,
+      "model_usd_conservative_per_task": 1.300120390666666,
+      "external_judge_usd_observed": 27.87670999999999,
+      "external_judge_cost_coverage_tasks": 300,
+      "native_latency_observed_point_tasks": 300,
+      "native_latency_missing_point_tasks": 0,
+      "native_latency_missing_oom_point_tasks": 0,
+      "native_latency_mean_seconds": 544.3566113448143,
+      "native_latency_median_seconds": 357.77334856987,
+      "native_latency_p90_seconds": 1130.426068544388,
+      "invalid_reason_counts": {
+        "owner_oom_interrupted": 0,
+        "allocation_deadline": 0,
+        "budget_admission": 0,
+        "frozen_judge_parse": 8,
+        "judge_other": 0,
+        "native_other": 6,
+        "reason_not_available": 0
+      },
+      "invalid_reason_classified_tasks": 14,
+      "invalid_reason_unavailable_tasks": 0
+    }
+  ],
+  "new900_execution_accounting": [
+    {
+      "method": "Luna single",
+      "new_task_outcomes": 200,
+      "logical_shards": 20,
+      "model_pool_all_attempts": {
+        "calls": 39655,
+        "known_calls": 39645,
+        "unknown": 10,
+        "usd": 20.536082035000007,
+        "known_usd": 20.452730035000002,
+        "unknown_reserved_usd": 0.083352
+      },
+      "external_judge_pool_all_attempts": {
+        "calls": 3141,
+        "known_calls": 3141,
+        "unknown": 0,
+        "usd": 16.792065,
+        "known_usd": 16.792065,
+        "unknown_reserved_usd": 0
+      },
+      "role_splits_new_execution_only": {
+        "single_actor": {
+          "calls": 10829,
+          "known_calls": 10828,
+          "unknown_calls": 1,
+          "known_usd": 7.187314325000002,
+          "unknown_reserved_usd": 0.020503125
+        },
+        "compaction": {
+          "calls": 462,
+          "known_calls": 462,
+          "unknown_calls": 0,
+          "known_usd": 0.80374781,
+          "unknown_reserved_usd": 0.0
+        },
+        "online_helper": {
+          "calls": 27074,
+          "known_calls": 27065,
+          "unknown_calls": 9,
+          "known_usd": 12.461667900000004,
+          "unknown_reserved_usd": 0.062848875
+        },
+        "input_counter": {
+          "calls": 1290,
+          "known_calls": 1290,
+          "unknown_calls": 0,
+          "known_usd": 0.0,
+          "unknown_reserved_usd": 0.0
+        },
+        "external_judge": {
+          "calls": 3141,
+          "known_calls": 3141,
+          "unknown_calls": 0,
+          "known_usd": 16.792064999999997,
+          "unknown_reserved_usd": 0.0
+        }
+      },
+      "known_usage_token_metrics_new_execution_only": {
+        "model": {
+          "input_tokens": {
+            "sum_observed": 381643654,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "output_tokens": {
+            "sum_observed": 10609083,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cached_input_tokens": {
+            "sum_observed": 283074436,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 6250040,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 98420895,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 98420895,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          }
+        },
+        "judge": {
+          "input_tokens": {
+            "sum_observed": 5645458,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "output_tokens": {
+            "sum_observed": 320306,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cached_input_tokens": {
+            "sum_observed": 419712,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          }
+        }
+      },
+      "browser_starts_all_attempts": 352,
+      "raw_unsettled_ledgers_with_independently_qualified_terminal_lifetimes": 0
+    },
+    {
+      "method": "Luna N3 + selection",
+      "new_task_outcomes": 200,
+      "logical_shards": 20,
+      "model_pool_all_attempts": {
+        "calls": 71842,
+        "known_calls": 71836,
+        "unknown": 6,
+        "usd": 58.6453057,
+        "known_usd": 58.581891325,
+        "unknown_reserved_usd": 0.06341437500000001
+      },
+      "external_judge_pool_all_attempts": {
+        "calls": 3339,
+        "known_calls": 3339,
+        "unknown": 0,
+        "usd": 18.026255,
+        "known_usd": 18.026255,
+        "unknown_reserved_usd": 0
+      },
+      "role_splits_new_execution_only": {
+        "compaction": {
+          "calls": 433,
+          "known_calls": 433,
+          "unknown_calls": 0,
+          "known_usd": 0.803398705,
+          "unknown_reserved_usd": 0.0
+        },
+        "proposal_candidate": {
+          "calls": 30927,
+          "known_calls": 30926,
+          "unknown_calls": 1,
+          "known_usd": 17.253607804999998,
+          "unknown_reserved_usd": 0.019548125
+        },
+        "proposal_selector": {
+          "calls": 10306,
+          "known_calls": 10306,
+          "unknown_calls": 0,
+          "known_usd": 27.03602555,
+          "unknown_reserved_usd": 0.0
+        },
+        "online_helper": {
+          "calls": 28829,
+          "known_calls": 28824,
+          "unknown_calls": 5,
+          "known_usd": 13.488859264999997,
+          "unknown_reserved_usd": 0.04386625
+        },
+        "input_counter": {
+          "calls": 1347,
+          "known_calls": 1347,
+          "unknown_calls": 0,
+          "known_usd": 0.0,
+          "unknown_reserved_usd": 0.0
+        },
+        "external_judge": {
+          "calls": 3339,
+          "known_calls": 3339,
+          "unknown_calls": 0,
+          "known_usd": 18.026255,
+          "unknown_reserved_usd": 0.0
+        }
+      },
+      "known_usage_token_metrics_new_execution_only": {
+        "model": {
+          "input_tokens": {
+            "sum_observed": 1042109305,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "output_tokens": {
+            "sum_observed": 24881691,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cached_input_tokens": {
+            "sum_observed": 731447635,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 15257200,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 310416099,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 310416099,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          }
+        },
+        "judge": {
+          "input_tokens": {
+            "sum_observed": 6064270,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "output_tokens": {
+            "sum_observed": 345182,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cached_input_tokens": {
+            "sum_observed": 468992,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          }
+        }
+      },
+      "browser_starts_all_attempts": 352,
+      "raw_unsettled_ledgers_with_independently_qualified_terminal_lifetimes": 0
+    },
+    {
+      "method": "Luna N5 + selection",
+      "new_task_outcomes": 300,
+      "logical_shards": 30,
+      "model_pool_all_attempts": {
+        "calls": 123040,
+        "known_calls": 123028,
+        "unknown": 12,
+        "usd": 94.7688753,
+        "known_usd": 94.61522480000002,
+        "unknown_reserved_usd": 0.1536505
+      },
+      "external_judge_pool_all_attempts": {
+        "calls": 4833,
+        "known_calls": 4833,
+        "unknown": 0,
+        "usd": 26.284429999999993,
+        "known_usd": 26.284429999999993,
+        "unknown_reserved_usd": 0
+      },
+      "role_splits_new_execution_only": {
+        "compaction": {
+          "calls": 571,
+          "known_calls": 571,
+          "unknown_calls": 0,
+          "known_usd": 1.0983237849999998,
+          "unknown_reserved_usd": 0.0
+        },
+        "proposal_candidate": {
+          "calls": 69440,
+          "known_calls": 69436,
+          "unknown_calls": 4,
+          "known_usd": 37.63937871000001,
+          "unknown_reserved_usd": 0.09856575000000001
+        },
+        "proposal_selector": {
+          "calls": 13876,
+          "known_calls": 13876,
+          "unknown_calls": 0,
+          "known_usd": 38.19432420000002,
+          "unknown_reserved_usd": 0.0
+        },
+        "online_helper": {
+          "calls": 37138,
+          "known_calls": 37130,
+          "unknown_calls": 8,
+          "known_usd": 17.683198104999995,
+          "unknown_reserved_usd": 0.05508475
+        },
+        "input_counter": {
+          "calls": 2015,
+          "known_calls": 2015,
+          "unknown_calls": 0,
+          "known_usd": 0.0,
+          "unknown_reserved_usd": 0.0
+        },
+        "external_judge": {
+          "calls": 4833,
+          "known_calls": 4833,
+          "unknown_calls": 0,
+          "known_usd": 26.28443,
+          "unknown_reserved_usd": 0.0
+        }
+      },
+      "known_usage_token_metrics_new_execution_only": {
+        "model": {
+          "input_tokens": {
+            "sum_observed": 2044909440,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "output_tokens": {
+            "sum_observed": 49474695,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "cached_input_tokens": {
+            "sum_observed": 1614985350,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 29376107,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 429424592,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 429424592,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          }
+        },
+        "judge": {
+          "input_tokens": {
+            "sum_observed": 8783688,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "output_tokens": {
+            "sum_observed": 516665,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "cached_input_tokens": {
+            "sum_observed": 673152,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 30,
+            "shards_total": 30
+          }
+        }
+      },
+      "browser_starts_all_attempts": 474,
+      "raw_unsettled_ledgers_with_independently_qualified_terminal_lifetimes": 2
+    },
+    {
+      "method": "Sol single",
+      "new_task_outcomes": 200,
+      "logical_shards": 20,
+      "model_pool_all_attempts": {
+        "calls": 25900,
+        "known_calls": 25896,
+        "unknown": 4,
+        "usd": 275.73039309999996,
+        "known_usd": 274.7143456,
+        "unknown_reserved_usd": 1.0160475
+      },
+      "external_judge_pool_all_attempts": {
+        "calls": 3410,
+        "known_calls": 3410,
+        "unknown": 0,
+        "usd": 18.843217499999998,
+        "known_usd": 18.843217499999998,
+        "unknown_reserved_usd": 0
+      },
+      "role_splits_new_execution_only": {
+        "single_actor": {
+          "calls": 11096,
+          "known_calls": 11096,
+          "unknown_calls": 0,
+          "known_usd": 130.32871189999997,
+          "unknown_reserved_usd": 0.0
+        },
+        "compaction": {
+          "calls": 476,
+          "known_calls": 476,
+          "unknown_calls": 0,
+          "known_usd": 12.5514056,
+          "unknown_reserved_usd": 0.0
+        },
+        "online_helper": {
+          "calls": 13563,
+          "known_calls": 13559,
+          "unknown_calls": 4,
+          "known_usd": 131.83422810000002,
+          "unknown_reserved_usd": 1.0160475
+        },
+        "input_counter": {
+          "calls": 765,
+          "known_calls": 765,
+          "unknown_calls": 0,
+          "known_usd": 0.0,
+          "unknown_reserved_usd": 0.0
+        },
+        "external_judge": {
+          "calls": 3410,
+          "known_calls": 3410,
+          "unknown_calls": 0,
+          "known_usd": 18.843217499999998,
+          "unknown_reserved_usd": 0.0
+        }
+      },
+      "known_usage_token_metrics_new_execution_only": {
+        "model": {
+          "input_tokens": {
+            "sum_observed": 333845709,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "output_tokens": {
+            "sum_observed": 5568097,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cached_input_tokens": {
+            "sum_observed": 267620028,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 1873979,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 66116016,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 66116016,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          }
+        },
+        "judge": {
+          "input_tokens": {
+            "sum_observed": 6274207,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "output_tokens": {
+            "sum_observed": 348938,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cached_input_tokens": {
+            "sum_observed": 265344,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "reasoning_output_tokens": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_observed": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "cache_write_tokens_charged_upper": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          },
+          "missing_cache_write_telemetry": {
+            "sum_observed": 0,
+            "shards_with_observed_field": 20,
+            "shards_total": 20
+          }
+        }
+      },
+      "browser_starts_all_attempts": 303,
+      "raw_unsettled_ledgers_with_independently_qualified_terminal_lifetimes": 1
+    }
+  ],
+  "historical_reuse_cost_and_latency_coverage": [
+    {
+      "method": "Luna single",
+      "reused_task_outcomes": 100,
+      "model_scalar_cost_coverage_tasks": 100,
+      "model_scalar_cost_usd_conservative": 8.673422575,
+      "external_judge_scalar_cost_coverage_tasks": 0,
+      "external_judge_scalar_cost_usd_observed": null,
+      "observed_native_latency_tasks": 100,
+      "historical_role_and_token_breakdown_in_this_payload": false
+    },
+    {
+      "method": "Luna N3 + selection",
+      "reused_task_outcomes": 100,
+      "model_scalar_cost_coverage_tasks": 100,
+      "model_scalar_cost_usd_conservative": 25.807339900000002,
+      "external_judge_scalar_cost_coverage_tasks": 100,
+      "external_judge_scalar_cost_usd_observed": 7.445302499999998,
+      "observed_native_latency_tasks": 100,
+      "historical_role_and_token_breakdown_in_this_payload": false
+    },
+    {
+      "method": "Luna N5 + selection",
+      "reused_task_outcomes": 0,
+      "model_scalar_cost_coverage_tasks": 0,
+      "model_scalar_cost_usd_conservative": null,
+      "external_judge_scalar_cost_coverage_tasks": 0,
+      "external_judge_scalar_cost_usd_observed": null,
+      "observed_native_latency_tasks": 0,
+      "historical_role_and_token_breakdown_in_this_payload": false
+    },
+    {
+      "method": "Sol single",
+      "reused_task_outcomes": 100,
+      "model_scalar_cost_coverage_tasks": 100,
+      "model_scalar_cost_usd_conservative": 114.30572409999998,
+      "external_judge_scalar_cost_coverage_tasks": 100,
+      "external_judge_scalar_cost_usd_observed": 9.033492499999998,
+      "observed_native_latency_tasks": 100,
+      "historical_role_and_token_breakdown_in_this_payload": false
+    }
+  ],
+  "analysis_choices": {
+    "bootstrap_replicates": 20000,
+    "bootstrap_seed": 20261027,
+    "bootstrap_unit": "Task; shared resampled indices across all four method columns",
+    "CI": "Pointwise95% paired percentile interval with linear interpolation; not simultaneous across six pairs",
+    "delta_direction": "Method B minus method A, percentage points",
+    "test": "Exact two-sided conditional McNemar; all six primary pairs form one Holm correction family",
+    "analysis_chosen_before_final_collection_not_preregistration": true
+  },
+  "definitions": {
+    "primary": "Same fresh200 tasks across all four methods. Invalid outcomes count as unsuccessful overall denominator entries, while canonical invalid rewards remain null.",
+    "valid_only": "Descriptive conditional success rate among valid outcomes; overall same-task rates are primary.",
+    "combined300": "Secondary comparison: three methods reuse historical100, while N5all300 is newly collected. Collection windows differ.",
+    "model_cost": "Conservative all-attempt MODEL-pool dollars include actor, proposals, selector, compaction, online helpers, input counters, cache-write bounds and full unknown reservations. External judge dollars excluded. Not invoice spending.",
+    "accounting_coverage": "Current90 ledger role/counter/token summaries cover new900 outcomes. Historical scalar model costs come from independently qualified canonical reuse rows; absent historical judge/role/token metrics are not imputed.",
+    "tokens": "Known physical usage telemetry only. Unknown reservation dollars never imply token counts. Missing telemetry fields remain explicit with coverage counts.",
+    "native_latency": "Observed native per-task seconds exclude external judge and saved-grade-only work. Null interrupted OOM points remain absent from latency statistics; upper-bound evidence is not a point observation.",
+    "memory_mitigation": "Two fresh N5 tasks used singleton admission within unchanged capacity2 following OOM. Different contention and memory-pressure conditions limit latency comparability.",
+    "uncertainty": "Task-aligned bootstrap intervals describe empirical task variability. Paired tests use all200 tasks with invalids unsuccessful; incomplete or differently selected task sets are rejected."
+  },
+  "collection_scope": "science_accounting_only",
+  "campaign_verified_complete": false,
+  "owned_teardown_complete": false,
+  "owned_teardown_limitation": {
+    "current_postterminal_node_absence_observed": false,
+    "current_postterminal_remote_lease_lockstate_observed": false,
+    "unresolved_owner_count": 115,
+    "unresolved_recorded_identity_count": 259048,
+    "identity_count_unit": "Owner-specific paired PID/starttick keys plus separately recorded unique PID-only values; possible overlap retained conservatively, not distinct physical process or leak count",
+    "description": "Science and accounting verified; recorded process identities remain unresolved and fresh postterminal node absence was not observed."
+  },
+  "published_numerical_aggregate_source_sha256": "a7f7217f1efbc1e21d2ccbe88dcc679e29a3e0b4bb04b10737b91a3d2cd79f3b",
+  "independent_numerical_publication_review_sha256": "61b39a4b84e8be7a44e52ab8accf8aafd946d3949863650bf7fd59d9f3e8e239",
+  "complete_campaign_release_approved": false,
+  "analysis_timing_clarification": "Analysis choices were specified during collection, before full completion; they were not preregistered."
+}

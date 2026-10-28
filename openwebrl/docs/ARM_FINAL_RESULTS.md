@@ -113,7 +113,7 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 | Luna N3 | 111 | 77 | 69.4% | 76 | 68.5% |
 | Luna N5 | 111 | 82 | 73.9% | 83 | 74.8% |
 
-All four native methods now have **300 canonical outcomes each**, including the completed N5 run. The independently checked plot extraction is bound to October 28, 2026, 01:04:20 UTC; campaign-wide final accounting and teardown qualification remain separate. The common-valid cohort conditions on execution outcomes and can differ from the full task population. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100, with summary 20. Collection dates, timing boundaries and runtime contention also differ, so this is a descriptive comparison, not a controlled harness-only effect.
+All four native methods now have **300 canonical outcomes each**, including the completed N5 run. The independently checked plot extraction is bound to October 28, 2026, 01:04:20 UTC; all-attempt accounting is independently verified, while global post-job cleanup remains uncertified. See the [full300 results, paired uncertainty and cleanup qualification](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025). The common-valid cohort conditions on execution outcomes and can differ from the full task population. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100, with summary 20. Collection dates, timing boundaries and runtime contention also differ, so this is a descriptive comparison, not a controlled harness-only effect.
 
 <details>
 <summary>Accounting, latency and reproducibility</summary>

@@ -1928,7 +1928,7 @@ Private immutable audit pointers: final 30-receipt release SHA-256 `2d1eab5545e9
 
 ## Native CUAWright: four-method full300 extension
 
-The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. All four methods have 300 canonical outcomes. The 900 new dispositions comprise 898 preserved native result records and two independently derived OOM invalids; all 300 historical outcomes, including invalids, remain in the combined denominator. Final all-attempt accounting and owned-teardown qualification are in progress.
+The approved extension compares Luna single high, Luna N=3 plus high selection, Luna N=5 plus high selection and Sol single high on the same fixed 300 Online-Mind2Web tasks. Sol N=3 is excluded from this extension; its completed 100-task results remain above. All four methods have 300 canonical outcomes. The 900 new dispositions comprise 898 preserved native result records and two independently derived OOM invalids; all 300 historical outcomes, including invalids, remain in the combined denominator. Outcome, all-attempt accounting and W&B checks are independently verified. Global post-job cleanup remains uncertified because host access is unavailable and saved lifecycle evidence is incomplete; the qualification below is part of these results.
 
 | Method (all high) | Combined tasks | Successes | Success | Valid | Invalid | Fresh shared tasks | Fresh successes | Fresh success |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -1948,6 +1948,50 @@ Invalid outcomes count as unsuccessful. The separate [OM2W harness comparison](A
 | Total |300|900|1200|90|1750|450|
 
 The primary comparison uses the same 200 newly run tasks across all four methods. Combined 300-task results are secondary: the three reused 100-task cohorts were collected in an earlier web window. Reuse retains every original invalid outcome, cost and latency; it does not select successful or valid tasks. The earlier 100 tasks are a strict subset of the frozen 300, rather than its first 100 entries.
+
+On the primary fresh 200 tasks, **N5 has an observed success rate 5.0 percentage points above Luna single**, with a pointwise 95% paired bootstrap interval of −1.0 to +11.0 points. This remains uncertain: its Holm-adjusted exact McNemar p-value is 0.5732, and none of the six paired comparisons passes the corrected 0.05 threshold.
+
+<details>
+<summary>Paired uncertainty on the same 200 fresh tasks</summary>
+
+Invalid outcomes count as unsuccessful. The 20,000 bootstrap replicates resample task indices jointly across all four methods (seed 20261027). Intervals are pointwise percentile intervals, not simultaneous intervals. Exact two-sided conditional McNemar tests form one six-pair Holm family. These analysis choices were specified during collection, before full completion; they were not preregistered.
+
+| Comparison (all high) | Success difference, pp | Pointwise 95% CI, pp | Exact p | Holm p |
+|---|---:|---:|---:|---:|
+| Luna N3 minus Luna single | +1.5 | -5.5 to +8.5 | 0.7754 | 0.7832 |
+| Luna N5 minus Luna single | +5.0 | -1.0 to +11.0 | 0.1433 | 0.5732 |
+| Sol single minus Luna single | +10.5 | +3.0 to +17.5 | 0.0086 | 0.0518 |
+| Luna N5 minus Luna N3 | +3.5 | -3.5 to +10.5 | 0.3916 | 0.7832 |
+| Sol single minus Luna N3 | +9.0 | +1.5 to +16.5 | 0.0247 | 0.1237 |
+| Sol single minus Luna N5 | +5.5 | -1.5 to +12.5 | 0.1524 | 0.5732 |
+
+</details>
+
+<details>
+<summary>All-attempt API accounting for the 900 new outcomes</summary>
+
+| Method (all high) | New outcomes | Model calls | Model USD, conservative | Judge calls | Judge USD |
+|---|---:|---:|---:|---:|---:|
+| Luna single | 200 | 39,655 | $20.54 | 3,141 | $16.79 |
+| Luna N3 | 200 | 71,842 | $58.65 | 3,339 | $18.03 |
+| Luna N5 | 300 | 123,040 | $94.77 | 4,833 | $26.28 |
+| Sol single | 200 | 25,900 | $275.73 | 3,410 | $18.84 |
+| Total | 900 | 260,437 | $449.68 | 14,723 | $79.95 |
+
+The combined accounted amount is **$529.63** against the separately capped $1,750 model and $450 judge allowances. Model dollars include every attempt, online helpers, counters, cache bounds and full reservations for 32 calls with unknown final usage ($1.316464375 reserved). They are conservative accounting amounts, not invoice spending. Totals use unrounded values. Each logical shard remains within its own dollar, call, browser-start and all-attempt clock limits; unused balances were not transferred. Historical reuse costs belong to their earlier approvals and are excluded from this new-execution budget.
+
+[Aggregate statistics, accounting and coverage](arm_results/cuawright_browsercode_om2w_20261027/native_cuawright_full300_statistics.json).
+
+</details>
+
+<details>
+<summary>Completion and cleanup qualification</summary>
+
+All 125 registered physical attempts and their 369 recorded Slurm job steps are terminal. All 90 logical shards passed their qualified outcome and accounting audits; the all-attempt clocks remain within each shard’s eight-hour allowance. Final read-only W&B verification covers all 125 owners: 121 initialized runs and four independently verified non-initializations.
+
+**Global cleanup remains uncertified.** Slurm denies post-job SSH access without an active allocation. Saved lifecycle evidence does not independently resolve every recorded child identity, particularly entries without a start tick or individual wait record. These unresolved records do not establish that processes remain alive. No fresh compute-node process, namespace or remote lease-lock absence is claimed. The local job watcher was retired after every registered job ended; it is not continuing unattended monitoring. No additional allocation was launched for this check.
+
+</details>
 
 <details>
 <summary>Approved execution, accounting and release gates</summary>
