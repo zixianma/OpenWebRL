@@ -12,14 +12,14 @@ _Last updated October 28, 2026. Earlier status logs are in this file's git histo
 
 1. **With a gpt-4o actor, no selector reliably beats no search.** OM2W: Piotr +2.5 pp (n.s.), WebArbiter −2.8 pp (n.s.), WebShepherd −14.8 pp (sig.). WebArena (v11): Piotr −4.0 pp (n.s.).
 2. **Table 5 is not reproduced in absolute terms.** Our v9 rerun is 9.5–19.4 pp below every published row.
-3. **Option C (v12)** tests Piotr with the actor it was trained on (OpenWebRL-4B-SFT, screenshot + coordinate actions, 1280×1000). It is at the smoke-test stage.
+3. **Option C (v12)** tests Piotr with the actor it was trained on (OpenWebRL-4B-SFT, screenshot + coordinate actions, 1280×1000). The smoke test passed; the full run is not yet submitted.
 
 | Experiment | Section | State |
 | --- | --- | --- |
 | OM2W, 300 tasks × 5 methods | [§2.1](#webprm-om2w-20261028) | Done |
 | WebArena Table 5 rerun (v9), 128 tasks × 3 methods | [§2.2](#webprm-v9-20261028) | Done |
 | WebArena gpt-4o ± Piotr (v11), 128 tasks × 2 methods | [§2.3](#webprm-v11-20261028) | Done |
-| WebArena OpenWebRL-4B-SFT ± Piotr (v12) | [§2.4](#webprm-option-c-v12-20261028) | Smoke test running |
+| WebArena OpenWebRL-4B-SFT ± Piotr (v12) | [§2.4](#webprm-option-c-v12-20261028) | Smoke test passed; full run awaiting approval |
 
 One episode per task × method; success rates are over valid cells; paired comparisons use tasks valid for both methods, with a two-sided sign test.
 
@@ -87,7 +87,16 @@ Paired (100 tasks): Piotr − no search −4.0 pp (95% CI −10.7 to +2.7), p 0.
 
 **Design.** Same 128 tasks and evaluator; OpenWebRL's agent loop and screenshot + coordinate actions; viewport 1280×1000 (OpenWebRL's default and the size of Piotr's training states). No search: 1 sample per step. + Piotr: 5 samples per step, Piotr picks one. T 1.0 / top-p 0.9, 30 steps. `done(response)` is the final answer.
 
-**Status.** CPU validation passed. The first smoke test (6 tasks × 2 methods) failed at server startup because of a proxy setting; fixed, resubmitted as jobs 395908 (Reddit) and 395909 (CMS). After it passes, the full run needs approval: 8 jobs × 1 H200, cap 32 H200-hours, USD 64 API.
+**Status.** Smoke test passed (Reddit 14/97/132 and CMS 0/40/101 × both methods; 0.63 H200-hours). Three harness bugs were fixed on the way: local servers inheriting the cluster proxy (`NO_PROXY`), the worker not writing the terminal artifact that audited disposal needs (worker `r2/`), and Chromium in the site namespace inheriting the proxy (stripped in `r2/`). Final smoke package: `launch-preparation-v12-cms-smoke3` (job 395971), with all 6 cells valid, audit-verified and their site state freed.
+
+| Smoke cells | No search valid | No search successes | + Piotr valid | + Piotr successes |
+| --- | ---: | ---: | ---: | ---: |
+| Reddit (job 395908, pre-`r2`; re-audited offline) | 3 | 1 | 3 | 2 |
+| CMS (job 395971) | 3 | 1 | 3 | 1 |
+
+Smoke cells are a pipeline check, not results. Throughput: about 3.7 s/step without search and 5.3 s/step with Piotr (5 samples + selection); ~89 of 141 GB GPU memory.
+
+**Next:** full run, 8 jobs × 1 H200 / 8 CPU / 240 GiB (Reddit 1 × 2.5 h, CMS 2 × 3 h, GitLab 2 × 3.5 h, Shopping 3 × 3.5 h), 30 H200-hour cap, USD 64 API cap. Build it from the `r2/` worker.
 
 **Files:** tools `D/v12-tools/` (committed as `webprm_baselines/webarena/tools/v12/`), packages `D/launch-preparation-v12-*`, ledger `D/gpu-budget-v12-20261028/`.
 
@@ -129,5 +138,5 @@ Details in the [code README](https://github.com/zixianma/OpenWebRL/blob/arm/webp
 
 ## 6. Next steps
 
-1. Finish the v12 smoke test, then request the full v12 run.
+1. Submit the full v12 run (needs approval), then compare against no search with the paired sign test.
 2. Open questions: the v9 gap to published Table 5 (largest for WebArbiter), and 8 CMS page-load timeouts that hit only Piotr in v11.
