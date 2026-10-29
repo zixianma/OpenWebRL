@@ -72,6 +72,15 @@
   "independent-mlp-bce|deepshop": [
    "gpt-4o"
   ],
+  "causal-transformer-softce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "causal-transformer-softce|webvoyager": [
+   "gpt-4o"
+  ],
+  "causal-transformer-softce|deepshop": [
+   "gpt-4o"
+  ],
   "piotr-data-head|online_mind2web": [
    "gpt-5.6-terra"
   ],
@@ -212,6 +221,21 @@
    ],
    "mean": 39.76
   },
+  "causal-transformer-softce": {
+   "online_mind2web": [
+    105,
+    300
+   ],
+   "webvoyager": [
+    307,
+    595
+   ],
+   "deepshop": [
+    48,
+    150
+   ],
+   "mean": 39.53
+  },
   "piotr-data-head": {
    "online_mind2web": [
     99,
@@ -241,6 +265,74 @@
     150
    ],
    "mean": 34.01
+  }
+ },
+ "valid": {
+  "joint-transformer-softce": {
+   "online_mind2web": 260,
+   "webvoyager": 584,
+   "deepshop": 145,
+   "mean_valid_only": 43.59
+  },
+  "joint-transformer-bce": {
+   "online_mind2web": 261,
+   "webvoyager": 582,
+   "deepshop": 146,
+   "mean_valid_only": 42.6
+  },
+  "independent-transformer-softce": {
+   "online_mind2web": 261,
+   "webvoyager": 579,
+   "deepshop": 149,
+   "mean_valid_only": 41.1
+  },
+  "independent-transformer-bce": {
+   "online_mind2web": 258,
+   "webvoyager": 588,
+   "deepshop": 146,
+   "mean_valid_only": 40.83
+  },
+  "joint-mlp-softce": {
+   "online_mind2web": 261,
+   "webvoyager": 584,
+   "deepshop": 143,
+   "mean_valid_only": 40.11
+  },
+  "joint-mlp-bce": {
+   "online_mind2web": 261,
+   "webvoyager": 584,
+   "deepshop": 148,
+   "mean_valid_only": 40.08
+  },
+  "independent-mlp-softce": {
+   "online_mind2web": 260,
+   "webvoyager": 580,
+   "deepshop": 148,
+   "mean_valid_only": 40.77
+  },
+  "independent-mlp-bce": {
+   "online_mind2web": 257,
+   "webvoyager": 579,
+   "deepshop": 148,
+   "mean_valid_only": 42.25
+  },
+  "causal-transformer-softce": {
+   "online_mind2web": 265,
+   "webvoyager": 579,
+   "deepshop": 146,
+   "mean_valid_only": 41.84
+  },
+  "piotr-data-head": {
+   "online_mind2web": 263,
+   "webvoyager": 575,
+   "deepshop": 141,
+   "mean_valid_only": 43.85
+  },
+  "sft-no-selector": {
+   "online_mind2web": 266,
+   "webvoyager": 587,
+   "deepshop": 146,
+   "mean_valid_only": 35.69
   }
  },
  "vs_sft": {
@@ -284,6 +376,11 @@
    2.07,
    9.58
   ],
+  "causal-transformer-softce": [
+   5.52,
+   1.91,
+   9.19
+  ],
   "piotr-data-head": [
    6.92,
    3.31,
@@ -326,6 +423,11 @@
    -4.99,
    2.45
   ],
+  "causal-transformer-softce": [
+   -1.45,
+   -5.17,
+   2.17
+  ],
   "piotr-data-head": [
    -0.04,
    -3.6,
@@ -362,6 +464,11 @@
    0.47,
    -2.17,
    3.19
+  ],
+  "causal - independent (transformer, softce)": [
+   0.72,
+   -2.78,
+   4.17
   ]
  }
 }

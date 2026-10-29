@@ -9,14 +9,14 @@ BENCH = ('online_mind2web', 'webvoyager', 'deepshop')
 C = {'joint-transformer-softce': 'head5-11d5eff8ffe1', 'joint-transformer-bce': 'head5-4a92d9e12332',
      'independent-transformer-softce': 'head5-040311428ed1', 'independent-transformer-bce': 'head5-6e2111c2c1e5',
      'joint-mlp-softce': 'head5-440292874f27', 'joint-mlp-bce': 'head5-fbac2672a438',
-     'independent-mlp-softce': 'head5-aba71a4d9890', 'independent-mlp-bce': 'head5-15ff2a7e9bce',
+     'independent-mlp-softce': 'head5-aba71a4d9890', 'independent-mlp-bce': 'head5-15ff2a7e9bce', 'causal-transformer-softce': 'head5-f76a5cad2863',
      'piotr-data-head': 'head5-755d4cd49137', 'sft-no-selector': 'sft1'}
-win, judges = {}, {}
+win, judges, valid = {}, {}, {}
 for name, slug in C.items():
     for b in BENCH:
         rows = {}
         for f in glob.glob(f'{E}/{b}/{slug}/{b}/collection/records/*.json'):
-            r = json.load(open(f)); rows[r['task_id']] = int(bool(r['valid'] and r['reward'] == 1))
+            r = json.load(open(f)); rows[r['task_id']] = int(bool(r['valid'] and r['reward'] == 1)); valid.setdefault((name, b), set()).update([r['task_id']] if r['valid'] else [])
             judges.setdefault((name, b), set()).add(r['judge_model'])
         win[name, b] = rows
 tasks = {b: sorted(win['sft-no-selector', b]) for b in BENCH}
@@ -32,6 +32,7 @@ def ci(a, b):
     return [round(float(np.mean([d[k].mean() for k in BENCH]) * 100), 2), round(float(np.percentile(s, 2.5)), 2), round(float(np.percentile(s, 97.5)), 2)]
 out = dict(judges={f'{k[0]}|{k[1]}': sorted(v) for k, v in judges.items()},
            rates={n: {b: [int(M[n][b].sum()), len(tasks[b])] for b in BENCH} | {'mean': round(float(np.mean([M[n][b].mean() for b in BENCH]) * 100), 2)} for n in C},
+           valid={n: {b: len(valid.get((n, b), ())) for b in BENCH} | {'mean_valid_only': round(float(np.mean([M[n][b].sum() / len(valid[n, b]) for b in BENCH]) * 100), 2)} for n in C},
            vs_sft={n: ci(n, 'sft-no-selector') for n in C if n != 'sft-no-selector'},
            vs_joint_tf_softce={n: ci(n, 'joint-transformer-softce') for n in C if n != 'joint-transformer-softce'},
            contrasts={})
@@ -49,3 +50,5 @@ con('joint - independent (transformer)', tf[:2], tf[2:])
 con('softce - bce (transformer)', tf[0::2], tf[1::2])
 json.dump(out, open(os.path.join(os.path.dirname(__file__), 'k3_ablation.json'), 'w'), indent=1)
 print(json.dumps(out, indent=1))
+con('causal - independent (transformer, softce)', ['causal-transformer-softce'], ['independent-transformer-softce'])
+json.dump(out, open(os.path.join(os.path.dirname(__file__), 'k3_ablation.json'), 'w'), indent=1)
