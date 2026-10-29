@@ -2096,6 +2096,24 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 
 </details>
 
+<details><summary>Offline: LoRA panel format (orders and Piotr-style panels)</summary>
+
+4B LoRA, Piotr's SelectionARM recipe, on our states with Luna K = 3 labels. Fixed-five success on 345 test states (first five SFT proposals, held-out draws; SFT one sample 35.39%, oracle 46.56%). Read after the training prefix; serving prefix in brackets.
+
+| Selector | Training panels | Examples | Fixed five | Fixed five − SFT sample, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: |
+| Head (22.6 M) | 2,612 states, one panel | — | 37.90% | +2.5 [+0.9, +4.3] |
+| 4B LoRA | 2,612 states, one panel in 10 shuffled orders | 28,150 | 36.93% (36.82%) | +1.5 [−0.1, +3.2] |
+| 4B LoRA | 2,612 states, one panel in 1 order | 2,815 | 37.55% (37.75%) | +2.2 [+0.4, +4.1] |
+| 4B LoRA | 2,551 states, 22K Piotr-style panels (checkpoint 3,600 of 3,852) | 19,527 panels | 36.41% (36.61%) | +1.0 [−0.9, +3.0] |
+| 4B LoRA | 1,380 states, one panel in 10 shuffled orders | — | 36.64% | +1.3 [−0.8, +3.4] |
+
+- **Ten orders are not needed:** one order × 2 epochs is level with ten (+0.6 pp) at a tenth of the examples.
+- **Piotr-style panels do not help the LoRA either,** matching the head (one vs all panels above).
+- **All within about 1.5 pp of each other,** which is the size of seed noise offline. The p22k run hit its 4 h limit at step 3,751; checkpoint 3,600 (epoch 1.87, learning rate about 1e-6) is scored. Jobs: data 397653, training 397654 / 397655 (4 H200 each), scoring 398557. [Scores](arm_results/rl_integration/selection-lora-panel-variants-20261029.json).
+
+</details>
+
 <details><summary>Run notes, compute and evidence</summary>
 
 - **Live jobs (one H200 / 8 CPU each, gpu-h200, ≤ 18 concurrent).** 397621–397641 (7 selectors × 3 benchmarks) and 397696–397698 (22K-panel head), all complete without retries, 57.0 H200-h. Plans are subsets of `crossbench-full-t10-20261018` sft1 (seed 20261018).

@@ -1,0 +1,194 @@
+{
+ "lora_o1": {
+  "model": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/lora-panel-variants-20261029/o1/lora/merged",
+  "test_states": 345,
+  "test_tasks": 86,
+  "seconds": 816.9,
+  "panels": 3795,
+  "uniform": 36.01,
+  "sft_sample": 35.38,
+  "oracle": 47.8,
+  "fixed5_sft_sample": 35.39,
+  "fixed5_oracle": 46.56,
+  "train_distinct": {
+   "success": 38.16,
+   "minus_uniform": [
+    2.15363337893849,
+    0.7002180722596154,
+    3.710593650208929
+   ],
+   "minus_sft_sample": [
+    2.782755575533036,
+    0.8233816047609664,
+    5.032012710840463
+   ],
+   "digit_mass": 0.9993
+  },
+  "train_natural": {
+   "success": 38.46,
+   "minus_uniform": [
+    2.457701520306402,
+    1.2289089569320981,
+    3.68865145319439
+   ],
+   "minus_sft_sample": [
+    3.086823716900948,
+    1.615846195457588,
+    4.773027476097651
+   ],
+   "digit_mass": 0.9995
+  },
+  "train_fixed5": {
+   "success": 37.55,
+   "minus_uniform": [
+    1.5403186912530926,
+    -0.16220886139699076,
+    3.1839888401321854
+   ],
+   "minus_sft_sample": [
+    2.1547540348455683,
+    0.36762245374685576,
+    4.074492589856144
+   ],
+   "digit_mass": 0.9995
+  },
+  "serving_distinct": {
+   "success": 38.11,
+   "minus_uniform": [
+    2.108222750919166,
+    0.6792591646321847,
+    3.6332452827181747
+   ],
+   "minus_sft_sample": [
+    2.7373449475137117,
+    0.8355197001358986,
+    4.971384134761327
+   ],
+   "digit_mass": 0.9989
+  },
+  "serving_natural": {
+   "success": 38.56,
+   "minus_uniform": [
+    2.555930183752457,
+    1.2938312148264721,
+    3.8324830694664405
+   ],
+   "minus_sft_sample": [
+    3.185052380347003,
+    1.679835772970258,
+    4.893295659019343
+   ],
+   "digit_mass": 0.9993
+  },
+  "serving_fixed5": {
+   "success": 37.75,
+   "minus_uniform": [
+    1.7432172419777303,
+    0.004110062087035879,
+    3.3846714397624384
+   ],
+   "minus_sft_sample": [
+    2.3576525855702055,
+    0.5769980506822615,
+    4.233598297173076
+   ],
+   "digit_mass": 0.9993
+  }
+ },
+ "lora_p22k_ckpt3600": {
+  "model": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/lora-panel-variants-20261029/p22k/lora/merged-ckpt3600",
+  "test_states": 345,
+  "test_tasks": 86,
+  "seconds": 827.0,
+  "panels": 3795,
+  "uniform": 36.01,
+  "sft_sample": 35.38,
+  "oracle": 47.8,
+  "fixed5_sft_sample": 35.39,
+  "fixed5_oracle": 46.56,
+  "train_distinct": {
+   "success": 38.63,
+   "minus_uniform": [
+    2.6250123093563222,
+    1.039665562541833,
+    4.4376669590257585
+   ],
+   "minus_sft_sample": [
+    3.254134505950868,
+    1.0900885025062657,
+    5.863449351333761
+   ],
+   "digit_mass": 0.9214
+  },
+  "train_natural": {
+   "success": 36.98,
+   "minus_uniform": [
+    0.9766268529617124,
+    -0.5278969366991144,
+    2.460031307844776
+   ],
+   "minus_sft_sample": [
+    1.6057490495562579,
+    -0.3230179832136473,
+    3.6217375195963157
+   ],
+   "digit_mass": 0.9998
+  },
+  "train_fixed5": {
+   "success": 36.41,
+   "minus_uniform": [
+    0.409163508610496,
+    -1.2712367476230255,
+    1.9774677579365085
+   ],
+   "minus_sft_sample": [
+    1.0235988522029713,
+    -0.9417148106923904,
+    2.971720030413112
+   ],
+   "digit_mass": 0.9988
+  },
+  "serving_distinct": {
+   "success": 38.66,
+   "minus_uniform": [
+    2.6539978166026987,
+    1.0843468330273272,
+    4.4456984394250165
+   ],
+   "minus_sft_sample": [
+    3.283120013197245,
+    1.116568403941581,
+    5.896208877392704
+   ],
+   "digit_mass": 0.9187
+  },
+  "serving_natural": {
+   "success": 36.97,
+   "minus_uniform": [
+    0.9647614406386341,
+    -0.5190220697374496,
+    2.422910562791957
+   ],
+   "minus_sft_sample": [
+    1.5938836372331795,
+    -0.30750093984962384,
+    3.5775287233968904
+   ],
+   "digit_mass": 0.9998
+  },
+  "serving_fixed5": {
+   "success": 36.61,
+   "minus_uniform": [
+    0.6024002235863414,
+    -1.0842906495182199,
+    2.2064827015993598
+   ],
+   "minus_sft_sample": [
+    1.2168355671788167,
+    -0.7419397815081268,
+    3.192394933922343
+   ],
+   "digit_mass": 0.9987
+  }
+ }
+}
