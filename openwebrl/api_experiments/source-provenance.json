@@ -1,0 +1,311 @@
+{
+  "schema": "api-evaluation-source-snapshots-v1",
+  "source_policy": "Byte-for-byte Python source snapshots; no production runtime edits or scientific setting changes. Host-specific paths and frozen external dependencies remain documented limitations.",
+  "snapshots": {
+    "browsercode_gpt_high": {
+      "campaign_directory": "sol6-single-high-vs-luna-n3-n5-browsercode300-20261018-v1",
+      "execution_manifest_sha256": null,
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222
+        },
+        {
+          "file": "worker.py",
+          "sha256": "f6efdb7cb4d971201520cc275f1457116b11a9ececece403ef57cc5b09be593f",
+          "bytes": 13584
+        },
+        {
+          "file": "controller.py",
+          "sha256": "50465660e530bc2c153155605c7b161363e380f9c2ba0d5f8ac7324ff8c68fd3",
+          "bytes": 5285
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255
+        },
+        {
+          "file": "episode_metrics.py",
+          "sha256": "3db48688bbf10103fa7da227395de74267f4f3f5df3fc097a264e09a11fda8e7",
+          "bytes": 2346
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "6ea320ed903a6ad68ff1a8ac1d075ce141a2e2890dc2229e51bfa849bb7d2c2f",
+          "bytes": 11634
+        }
+      ]
+    },
+    "browsercode_claude": {
+      "campaign_directory": "claude-browsercode-opus-sonnet-single-n3-n5-om2w300-20261028-v1",
+      "execution_manifest_sha256": "0704226805abb2f0ee6e33647a5fd11ce1557e3a789d99bc5874694ea976da9f",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222
+        },
+        {
+          "file": "worker.py",
+          "sha256": "04a6a8158520536da3c11ed654bffbdd5e4b7af65182db88dbc3027a1bc94f09",
+          "bytes": 16768
+        },
+        {
+          "file": "controller.py",
+          "sha256": "bcc9d699622b8d48f37e1ecd858b35ef4c935ea3c9bd9403b416550407affda5",
+          "bytes": 6784
+        },
+        {
+          "file": "environments.py",
+          "sha256": "10f755748df24f1f6f9d45a43a834816e270daea2e67fce09f876ee458c24eb9",
+          "bytes": 18883
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "0a1e3fe364e8169b6248afa600646eaa4f2fabec82ab241452426d38feb4c961",
+          "bytes": 12408
+        },
+        {
+          "file": "episode_metrics.py",
+          "sha256": "73cbaf1212b67bbb4cfa81cc232a6e7aafe273b3123824416d40655a5d2bfcba",
+          "bytes": 2341
+        },
+        {
+          "file": "claude_model.py",
+          "sha256": "0990864d03f4772fd8a10b7788ca3b0950afa57777b9b2976ac63671fbdd26ed",
+          "bytes": 18687
+        },
+        {
+          "file": "claude_budget.py",
+          "sha256": "25f0fe883d4cba3956219eb37869d43ab3f7ccee16b34a3cb8a3bd61ae48ea69",
+          "bytes": 9673
+        },
+        {
+          "file": "financial_plan.py",
+          "sha256": "d2ba15ca2437b4055ee9826a9ecf8a3d060d47202f812f4c20390711d27fcf75",
+          "bytes": 6646
+        },
+        {
+          "file": "judge_recovery.py",
+          "sha256": "9889730596e7c1da5ee51221bd744e4b8fe49b4caffd539474d16dd7efddb723",
+          "bytes": 6832
+        },
+        {
+          "file": "test_claude_adapter.py",
+          "sha256": "cb5a6d299657bb2e2b6ae28b27915e9b7e001e4c7daaa00dcf906d91ae3e99dd",
+          "bytes": 16708
+        },
+        {
+          "file": "test_integration.py",
+          "sha256": "fca401d0471cc6ad1e7603344c973bf1e39af0e7e91ef51b838b6a60b7b162af",
+          "bytes": 2978
+        },
+        {
+          "file": "test_judge_terra_migration.py",
+          "sha256": "aaec48702550f31522e8f080376c74f151ee4e5c463b6b62f5c7a0f087c72049",
+          "bytes": 11699
+        }
+      ],
+      "excluded_task_bound_recovery_sources": [
+        "terminal_sidecar.py",
+        "terminal_outcomes.py"
+      ]
+    },
+    "browsercode_luna_effort": {
+      "campaign_directory": "luna-browsercode-effort-single-xhigh-medium-low-n5-medium-low-om2w300-20261028-v1",
+      "execution_manifest_sha256": "037cc573b2f2f6107c69c2353298971b299e41534a27c3eecfa16f33542b8d25",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222
+        },
+        {
+          "file": "worker.py",
+          "sha256": "3faffbf8fd0fde8ecda788c1e16c4e88ba217a495bbd775b98d66a04e07e6d89",
+          "bytes": 15849
+        },
+        {
+          "file": "controller.py",
+          "sha256": "bcc9d699622b8d48f37e1ecd858b35ef4c935ea3c9bd9403b416550407affda5",
+          "bytes": 6784
+        },
+        {
+          "file": "environments.py",
+          "sha256": "10f755748df24f1f6f9d45a43a834816e270daea2e67fce09f876ee458c24eb9",
+          "bytes": 18883
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "0a1e3fe364e8169b6248afa600646eaa4f2fabec82ab241452426d38feb4c961",
+          "bytes": 12408
+        },
+        {
+          "file": "episode_metrics.py",
+          "sha256": "78b072cbc0cf029a363cb30998d2ff8bd13a3960437d1568e8646413c52605e8",
+          "bytes": 2450
+        },
+        {
+          "file": "luna_model.py",
+          "sha256": "804ab88145912a5ebd4056cc7c17f67432f27225880de300fc0f23b51ffb5f54",
+          "bytes": 14503
+        },
+        {
+          "file": "claude_budget.py",
+          "sha256": "25f0fe883d4cba3956219eb37869d43ab3f7ccee16b34a3cb8a3bd61ae48ea69",
+          "bytes": 9673
+        },
+        {
+          "file": "request_budget.py",
+          "sha256": "f9140ada5f1a0e6214d966f4f5d59fa18caf08ce2fa7c4d08310536e35efa05c",
+          "bytes": 13135
+        },
+        {
+          "file": "financial_plan.py",
+          "sha256": "3f14bb70478ed3155d81ecfb019efbec27641068eeb5be8c6468666a3cf4653a",
+          "bytes": 540
+        },
+        {
+          "file": "canary_scope.py",
+          "sha256": "a2c1c3db96ee47818c5cd4be2c004ba08752bbb4663b4412581004a1b5441044",
+          "bytes": 1503
+        },
+        {
+          "file": "test_luna_effort.py",
+          "sha256": "c16c5238d194c3d774dde52ab32427c66d55664c95d3dac86cc0fd841256b659",
+          "bytes": 10547
+        }
+      ]
+    },
+    "cuawright_native": {
+      "campaign_directory": "cuawright-native-luna-single-n3-n5-sol-single-local300-20261024-preparation-v1/runtime-template",
+      "execution_manifest_sha256": null,
+      "files": [
+        {
+          "file": "confinement.py",
+          "sha256": "a23112b44a546d45ea4de814d0909f3970894e8a5d300ea69a61fcfbc91d7d51",
+          "bytes": 19619
+        },
+        {
+          "file": "budget_gateway.py",
+          "sha256": "99117f6c5de90c43ad43f5a438397cdbfdb6516415021dd5076b4b438dca0a4b",
+          "bytes": 35587
+        },
+        {
+          "file": "browser_broker.py",
+          "sha256": "423aba6a38a7ba75960b073f3177fd7a7d5edb2b5e2afa6a07965f13a482b710",
+          "bytes": 21490
+        },
+        {
+          "file": "native_episode.py",
+          "sha256": "4a008939c8213eab8adde0a1d8e9b349f7bf84b0b3563f2350f0fe94e2b3e140",
+          "bytes": 11672
+        },
+        {
+          "file": "native_group_transport.py",
+          "sha256": "d5397f01c9dc0fb5acf8c2db55c0c222edd012be6c2c687d650b13591f00c07b",
+          "bytes": 4159
+        },
+        {
+          "file": "native_capture.py",
+          "sha256": "0abbb11eb36f837df75751905765180f004e583407a5560fc9595edaad673da9",
+          "bytes": 21766
+        },
+        {
+          "file": "browser_launcher.py",
+          "sha256": "b92941b72c0551a8d37d2b34076ed38b10ef077277e523392802bf240e3910cc",
+          "bytes": 1677
+        },
+        {
+          "file": "campaign_worker.py",
+          "sha256": "4aaa287d6df4fda19c8afa10ec3c60a85170a404baf72c227b0e7501bcf4f9e7",
+          "bytes": 16754
+        },
+        {
+          "file": "browser_namespace.py",
+          "sha256": "c482b07341972ad68bf544817f91aa8cd3dd27da35ad979350bd6505d8610639",
+          "bytes": 1743
+        },
+        {
+          "file": "native_group_relay.py",
+          "sha256": "3381c86bc40f5275500fdd3188926d3130ff2bb1301ec634eacea84d5a53b998",
+          "bytes": 2136
+        },
+        {
+          "file": "browser_broker_support.py",
+          "sha256": "94671b7321799b856af715b76f57234d7d558a7473eb000e6824548d7dc5ddca",
+          "bytes": 2107
+        },
+        {
+          "file": "command_timeout_guard.py",
+          "sha256": "2ef2bdc8c0c1b31531f8eebca3e6f9f682ac51583b2f708042b9eedbc7b20048",
+          "bytes": 15373
+        },
+        {
+          "file": "native_proposal_adapter.py",
+          "sha256": "4bc6ba78feef3f63ebb700e3bfa419f2ae7a6f57c141634d802b9c22ced72605",
+          "bytes": 18023
+        },
+        {
+          "file": "external_judge.py",
+          "sha256": "11031e8905b0baa81d08c5d41431d56f72a3ab50681ec1a06fcb000e066622f6",
+          "bytes": 80510
+        },
+        {
+          "file": "diagnostic_browser.py",
+          "sha256": "b7d3d6cb8835d6201adc2dac849bffa8a23e6796bdbcbaf204022354daeaf376",
+          "bytes": 8652
+        },
+        {
+          "file": "test_budget_gateway.py",
+          "sha256": "49d6b7f410c6a98d9b6edbc40cbe80fbca27f86a40f691a9f4feedb0fc69a688",
+          "bytes": 9848
+        },
+        {
+          "file": "test_native_group_transport.py",
+          "sha256": "becb2db5e380502a9f7cdca3123d99c3f534661e40b739f985ff1348772b8bab",
+          "bytes": 4125
+        },
+        {
+          "file": "test_native_group_integration.py",
+          "sha256": "4c89b425eee5f01b464576a3506564385ed22ca91c6f4b5a3bf8c5602f7f5f82",
+          "bytes": 9653
+        },
+        {
+          "file": "test_native_real_gateway_integration.py",
+          "sha256": "f8cafe9861f1d91fd375f2c5dde405997ab053ea8f1b590d1ee45b820b043758",
+          "bytes": 10475
+        },
+        {
+          "file": "test_diagnostic_import_confinement.py",
+          "sha256": "2533083c5f612be2104b4d634cb868e4f1c0bea785b35f88b326ba349db249df",
+          "bytes": 2090
+        }
+      ],
+      "initial_execution_preflight_sha256": "d10dcbec5ca71d500bf072f8922d518987fba15120173116771535a357f96ec3",
+      "matches_initial_execution_preflight_source_hashes": true
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[API evaluation source: frozen GPT/Claude adapters, browser workers, judges and accounting](../api_experiments/README.md).
+
 [API experiment methods: protocols, model adapters, candidate selection, judges, metrics, budgets and reproducibility](API_EXPERIMENT_METHODS.md).
 
 <!-- claude-browsercode-om2w300-v1:start -->
