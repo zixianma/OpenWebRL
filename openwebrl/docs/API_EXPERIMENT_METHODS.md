@@ -1,5 +1,7 @@
 # API browser evaluation methods
 
+For one-command BrowserCode runs using the original episode code, see the [Luna/Claude reproduction quickstart](../api_experiments/reproduce/README.md). These entry points require the configured runtime and default to a read-only dry run.
+
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. This tests whether spending more model work on each decision improves browser-task success, cost, browser activity or latency.
 
 The main results are in [ARM_FINAL_RESULTS.md](ARM_FINAL_RESULTS.md); study-specific comparisons and uncertainty are in [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md). This document explains the shared procedure and the differences that matter for interpreting those results.

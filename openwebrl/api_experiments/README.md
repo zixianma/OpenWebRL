@@ -1,5 +1,7 @@
 # API evaluation code
 
+For the shortest runnable entry points, see [reproduce/README.md](reproduce/README.md): one script for Luna and one for Claude, with read-only dry runs and explicit execution caps.
+
 Code is grouped by harness and function. Identical files are shared once; the [provenance index](source-provenance.json) maps every original campaign filename to its published source and SHA256. Experiment source bytes remain unchanged.
 
 [Methods](../docs/API_EXPERIMENT_METHODS.md) · [Results](../docs/ARM_FINAL_RESULTS.md)
