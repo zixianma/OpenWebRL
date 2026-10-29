@@ -1,0 +1,1379 @@
+{
+ "note": "Live results of the 10-27/28 selection-head experiments, organized by question:\n(1) Piotr's data vs our branching data, (2) decoder LoRA selector vs 22.6 M head on the same data, (3) data scale\n1,380 vs 2,612 of our states, (4) training device (CPU vs GPU) and rerun noise of identical weights.\nSFT-4B actor, N=5, T1.0/p0.9, 30 steps, all tasks of Online-Mind2Web (300), WebVoyager (595), DeepShop (150).\nOM2W judge gpt-5.6-terra (10-18 and 10-21 runs re-judged, rejudge-terra-20261023); WebVoyager/DeepShop GPT-4o.\nOverall counts invalid as failure; mean = unweighted mean of the three benchmark rates. A condition with several runs\n(copies or reruns) is pooled per task (mean success over runs). Paired 95% bootstrap over tasks (10,000, seed 20261028),\nbenchmarks resampled independently for the mean.",
+ "runs": {
+  "piotr_arm_1018": {
+   "online_mind2web": [
+    "crossbench-full-t10-20261018",
+    "piotr5",
+    "crossbench-full-t10-20261018:piotr5"
+   ],
+   "webvoyager": [
+    "crossbench-full-t10-20261018",
+    "piotr5",
+    null
+   ],
+   "deepshop": [
+    "crossbench-full-t10-20261018",
+    "piotr5",
+    null
+   ]
+  },
+  "piotr_head_orig_1018": {
+   "online_mind2web": [
+    "crossbench-full-t10-20261018",
+    "head5-755d4cd49137",
+    "crossbench-full-t10-20261018:head5-755d4cd49137"
+   ],
+   "webvoyager": [
+    "crossbench-full-t10-20261018",
+    "head5-755d4cd49137",
+    null
+   ],
+   "deepshop": [
+    "crossbench-full-t10-20261018",
+    "head5-755d4cd49137",
+    null
+   ]
+  },
+  "piotr_head_orig_1025": {
+   "online_mind2web": [
+    "piotr-head-sameday-20261025",
+    "head5-755d4cd49137",
+    null
+   ],
+   "webvoyager": [
+    "piotr-head-sameday-20261025",
+    "head5-755d4cd49137",
+    null
+   ],
+   "deepshop": [
+    "piotr-head-sameday-20261025",
+    "head5-755d4cd49137",
+    null
+   ]
+  },
+  "piotr_head_gpu_1028": {
+   "online_mind2web": [
+    "device-repro-20261028",
+    "head5-755d4cd49137",
+    null
+   ],
+   "webvoyager": [
+    "device-repro-20261028",
+    "head5-755d4cd49137",
+    null
+   ],
+   "deepshop": [
+    "device-repro-20261028",
+    "head5-755d4cd49137",
+    null
+   ]
+  },
+  "piotr_head_cpu_1028": {
+   "online_mind2web": [
+    "device-repro-20261028",
+    "head5-1c9a7d38a567",
+    null
+   ],
+   "webvoyager": [
+    "device-repro-20261028",
+    "head5-1c9a7d38a567",
+    null
+   ],
+   "deepshop": [
+    "device-repro-20261028",
+    "head5-1c9a7d38a567",
+    null
+   ]
+  },
+  "h2612_cpu_1027": {
+   "online_mind2web": [
+    "onepanel-k3-scale-20261027",
+    "head5-5ca25c38f7ad",
+    null
+   ],
+   "webvoyager": [
+    "onepanel-k3-scale-20261027",
+    "head5-5ca25c38f7ad",
+    null
+   ],
+   "deepshop": [
+    "onepanel-k3-scale-20261027",
+    "head5-5ca25c38f7ad",
+    null
+   ]
+  },
+  "h2612_cpu_1028": {
+   "online_mind2web": [
+    "device-2612-20261028",
+    "head5-5ca25c38f7ad",
+    null
+   ],
+   "webvoyager": [
+    "device-2612-20261028",
+    "head5-5ca25c38f7ad",
+    null
+   ],
+   "deepshop": [
+    "device-2612-20261028",
+    "head5-5ca25c38f7ad",
+    null
+   ]
+  },
+  "h2612_gpu_1028": {
+   "online_mind2web": [
+    "device-2612-20261028",
+    "head5-d15fea171bb7",
+    null
+   ],
+   "webvoyager": [
+    "device-2612-20261028",
+    "head5-d15fea171bb7",
+    null
+   ],
+   "deepshop": [
+    "device-2612-20261028",
+    "head5-d15fea171bb7",
+    null
+   ]
+  },
+  "h1380": {
+   "online_mind2web": [
+    "sft-actions-full-20261021",
+    "head5-11d5eff8ffe1",
+    "sft-actions-full-20261021:head5-11d5eff8ffe1"
+   ],
+   "webvoyager": [
+    "sft-actions-full-20261021",
+    "head5-11d5eff8ffe1",
+    null
+   ],
+   "deepshop": [
+    "onepanel-k3-scale-20261027",
+    "head5-11d5eff8ffe1",
+    null
+   ]
+  },
+  "h1380_ds_1021": {
+   "deepshop": [
+    "sft-actions-full-20261021",
+    "head5-11d5eff8ffe1",
+    null
+   ]
+  },
+  "lora2612_1028": {
+   "online_mind2web": [
+    "lora-selectors-20261028",
+    "arm5-03edd8c36a91",
+    null
+   ],
+   "webvoyager": [
+    "lora-selectors-20261028",
+    "arm5-03edd8c36a91",
+    null
+   ],
+   "deepshop": [
+    "lora-selectors-20261028",
+    "arm5-03edd8c36a91",
+    null
+   ]
+  },
+  "lora1380_1028": {
+   "online_mind2web": [
+    "lora-selectors-20261028",
+    "arm5-8dc8c40b7cfb",
+    null
+   ],
+   "webvoyager": [
+    "lora-selectors-20261028",
+    "arm5-8dc8c40b7cfb",
+    null
+   ],
+   "deepshop": [
+    "lora-selectors-20261028",
+    "arm5-8dc8c40b7cfb",
+    null
+   ]
+  },
+  "sft4b": {
+   "online_mind2web": [
+    "crossbench-full-t10-20261018",
+    "sft1",
+    "crossbench-full-t10-20261018:sft1"
+   ],
+   "webvoyager": [
+    "crossbench-full-t10-20261018",
+    "sft1",
+    null
+   ],
+   "deepshop": [
+    "onepanel-k3-scale-20261027",
+    "sft1",
+    null
+   ]
+  }
+ },
+ "judges": [
+  [
+   "crossbench-full-t10-20261018",
+   "head5-755d4cd49137",
+   "deepshop",
+   "gpt-4o",
+   147
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "head5-755d4cd49137",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   196
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "head5-755d4cd49137",
+   "online_mind2web",
+   "not judged (reward 0)",
+   69
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "head5-755d4cd49137",
+   "webvoyager",
+   "gpt-4o",
+   571
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "piotr5",
+   "deepshop",
+   "gpt-4o",
+   148
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "piotr5",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   203
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "piotr5",
+   "online_mind2web",
+   "not judged (reward 0)",
+   60
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "piotr5",
+   "webvoyager",
+   "gpt-4o",
+   580
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   196
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "online_mind2web",
+   "not judged (reward 0)",
+   79
+  ],
+  [
+   "crossbench-full-t10-20261018",
+   "sft1",
+   "webvoyager",
+   "gpt-4o",
+   587
+  ],
+  [
+   "device-2612-20261028",
+   "head5-5ca25c38f7ad",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "device-2612-20261028",
+   "head5-5ca25c38f7ad",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   256
+  ],
+  [
+   "device-2612-20261028",
+   "head5-5ca25c38f7ad",
+   "webvoyager",
+   "gpt-4o",
+   576
+  ],
+  [
+   "device-2612-20261028",
+   "head5-d15fea171bb7",
+   "deepshop",
+   "gpt-4o",
+   143
+  ],
+  [
+   "device-2612-20261028",
+   "head5-d15fea171bb7",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   262
+  ],
+  [
+   "device-2612-20261028",
+   "head5-d15fea171bb7",
+   "webvoyager",
+   "gpt-4o",
+   566
+  ],
+  [
+   "device-repro-20261028",
+   "head5-1c9a7d38a567",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "device-repro-20261028",
+   "head5-1c9a7d38a567",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   256
+  ],
+  [
+   "device-repro-20261028",
+   "head5-1c9a7d38a567",
+   "webvoyager",
+   "gpt-4o",
+   568
+  ],
+  [
+   "device-repro-20261028",
+   "head5-755d4cd49137",
+   "deepshop",
+   "gpt-4o",
+   147
+  ],
+  [
+   "device-repro-20261028",
+   "head5-755d4cd49137",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   254
+  ],
+  [
+   "device-repro-20261028",
+   "head5-755d4cd49137",
+   "webvoyager",
+   "gpt-4o",
+   571
+  ],
+  [
+   "lora-selectors-20261028",
+   "arm5-03edd8c36a91",
+   "deepshop",
+   "gpt-4o",
+   143
+  ],
+  [
+   "lora-selectors-20261028",
+   "arm5-03edd8c36a91",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   256
+  ],
+  [
+   "lora-selectors-20261028",
+   "arm5-03edd8c36a91",
+   "webvoyager",
+   "gpt-4o",
+   570
+  ],
+  [
+   "lora-selectors-20261028",
+   "arm5-8dc8c40b7cfb",
+   "deepshop",
+   "gpt-4o",
+   144
+  ],
+  [
+   "lora-selectors-20261028",
+   "arm5-8dc8c40b7cfb",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   256
+  ],
+  [
+   "lora-selectors-20261028",
+   "arm5-8dc8c40b7cfb",
+   "webvoyager",
+   "gpt-4o",
+   575
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-11d5eff8ffe1",
+   "deepshop",
+   "gpt-4o",
+   146
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-5ca25c38f7ad",
+   "deepshop",
+   "gpt-4o",
+   144
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-5ca25c38f7ad",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   260
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "head5-5ca25c38f7ad",
+   "webvoyager",
+   "gpt-4o",
+   580
+  ],
+  [
+   "onepanel-k3-scale-20261027",
+   "sft1",
+   "deepshop",
+   "gpt-4o",
+   149
+  ],
+  [
+   "piotr-head-sameday-20261025",
+   "head5-755d4cd49137",
+   "deepshop",
+   "gpt-4o",
+   144
+  ],
+  [
+   "piotr-head-sameday-20261025",
+   "head5-755d4cd49137",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   263
+  ],
+  [
+   "piotr-head-sameday-20261025",
+   "head5-755d4cd49137",
+   "webvoyager",
+   "gpt-4o",
+   584
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "deepshop",
+   "gpt-4o",
+   150
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "online_mind2web",
+   "gpt-5.6-terra",
+   173
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "online_mind2web",
+   "not judged (reward 0)",
+   94
+  ],
+  [
+   "sft-actions-full-20261021",
+   "head5-11d5eff8ffe1",
+   "webvoyager",
+   "gpt-4o",
+   585
+  ]
+ ],
+ "rows": [
+  {
+   "run": "piotr_arm_1018",
+   "benchmark": "online_mind2web",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 300,
+   "valid": 263,
+   "successes": 117,
+   "overall": 39.0,
+   "valid_only": 44.5
+  },
+  {
+   "run": "piotr_arm_1018",
+   "benchmark": "webvoyager",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 595,
+   "valid": 580,
+   "successes": 312,
+   "overall": 52.4,
+   "valid_only": 53.8
+  },
+  {
+   "run": "piotr_arm_1018",
+   "benchmark": "deepshop",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 150,
+   "valid": 148,
+   "successes": 62,
+   "overall": 41.3,
+   "valid_only": 41.9
+  },
+  {
+   "run": "piotr_arm_1018",
+   "benchmark": "mean",
+   "overall": 44.2
+  },
+  {
+   "run": "piotr_head_orig_1018",
+   "benchmark": "online_mind2web",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 300,
+   "valid": 265,
+   "successes": 113,
+   "overall": 37.7,
+   "valid_only": 42.6
+  },
+  {
+   "run": "piotr_head_orig_1018",
+   "benchmark": "webvoyager",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 595,
+   "valid": 571,
+   "successes": 305,
+   "overall": 51.3,
+   "valid_only": 53.4
+  },
+  {
+   "run": "piotr_head_orig_1018",
+   "benchmark": "deepshop",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 150,
+   "valid": 147,
+   "successes": 66,
+   "overall": 44.0,
+   "valid_only": 44.9
+  },
+  {
+   "run": "piotr_head_orig_1018",
+   "benchmark": "mean",
+   "overall": 44.3
+  },
+  {
+   "run": "piotr_head_orig_1025",
+   "benchmark": "online_mind2web",
+   "date_dir": "piotr-head-sameday-20261025",
+   "tasks": 300,
+   "valid": 263,
+   "successes": 110,
+   "overall": 36.7,
+   "valid_only": 41.8
+  },
+  {
+   "run": "piotr_head_orig_1025",
+   "benchmark": "webvoyager",
+   "date_dir": "piotr-head-sameday-20261025",
+   "tasks": 595,
+   "valid": 584,
+   "successes": 315,
+   "overall": 52.9,
+   "valid_only": 53.9
+  },
+  {
+   "run": "piotr_head_orig_1025",
+   "benchmark": "deepshop",
+   "date_dir": "piotr-head-sameday-20261025",
+   "tasks": 150,
+   "valid": 144,
+   "successes": 55,
+   "overall": 36.7,
+   "valid_only": 38.2
+  },
+  {
+   "run": "piotr_head_orig_1025",
+   "benchmark": "mean",
+   "overall": 42.1
+  },
+  {
+   "run": "piotr_head_gpu_1028",
+   "benchmark": "online_mind2web",
+   "date_dir": "device-repro-20261028",
+   "tasks": 300,
+   "valid": 254,
+   "successes": 110,
+   "overall": 36.7,
+   "valid_only": 43.3
+  },
+  {
+   "run": "piotr_head_gpu_1028",
+   "benchmark": "webvoyager",
+   "date_dir": "device-repro-20261028",
+   "tasks": 595,
+   "valid": 571,
+   "successes": 313,
+   "overall": 52.6,
+   "valid_only": 54.8
+  },
+  {
+   "run": "piotr_head_gpu_1028",
+   "benchmark": "deepshop",
+   "date_dir": "device-repro-20261028",
+   "tasks": 150,
+   "valid": 147,
+   "successes": 49,
+   "overall": 32.7,
+   "valid_only": 33.3
+  },
+  {
+   "run": "piotr_head_gpu_1028",
+   "benchmark": "mean",
+   "overall": 40.7
+  },
+  {
+   "run": "piotr_head_cpu_1028",
+   "benchmark": "online_mind2web",
+   "date_dir": "device-repro-20261028",
+   "tasks": 300,
+   "valid": 256,
+   "successes": 107,
+   "overall": 35.7,
+   "valid_only": 41.8
+  },
+  {
+   "run": "piotr_head_cpu_1028",
+   "benchmark": "webvoyager",
+   "date_dir": "device-repro-20261028",
+   "tasks": 595,
+   "valid": 568,
+   "successes": 304,
+   "overall": 51.1,
+   "valid_only": 53.5
+  },
+  {
+   "run": "piotr_head_cpu_1028",
+   "benchmark": "deepshop",
+   "date_dir": "device-repro-20261028",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 56,
+   "overall": 37.3,
+   "valid_only": 38.4
+  },
+  {
+   "run": "piotr_head_cpu_1028",
+   "benchmark": "mean",
+   "overall": 41.4
+  },
+  {
+   "run": "h2612_cpu_1027",
+   "benchmark": "online_mind2web",
+   "date_dir": "onepanel-k3-scale-20261027",
+   "tasks": 300,
+   "valid": 260,
+   "successes": 103,
+   "overall": 34.3,
+   "valid_only": 39.6
+  },
+  {
+   "run": "h2612_cpu_1027",
+   "benchmark": "webvoyager",
+   "date_dir": "onepanel-k3-scale-20261027",
+   "tasks": 595,
+   "valid": 580,
+   "successes": 299,
+   "overall": 50.3,
+   "valid_only": 51.6
+  },
+  {
+   "run": "h2612_cpu_1027",
+   "benchmark": "deepshop",
+   "date_dir": "onepanel-k3-scale-20261027",
+   "tasks": 150,
+   "valid": 144,
+   "successes": 48,
+   "overall": 32.0,
+   "valid_only": 33.3
+  },
+  {
+   "run": "h2612_cpu_1027",
+   "benchmark": "mean",
+   "overall": 38.9
+  },
+  {
+   "run": "h2612_cpu_1028",
+   "benchmark": "online_mind2web",
+   "date_dir": "device-2612-20261028",
+   "tasks": 300,
+   "valid": 256,
+   "successes": 94,
+   "overall": 31.3,
+   "valid_only": 36.7
+  },
+  {
+   "run": "h2612_cpu_1028",
+   "benchmark": "webvoyager",
+   "date_dir": "device-2612-20261028",
+   "tasks": 595,
+   "valid": 576,
+   "successes": 301,
+   "overall": 50.6,
+   "valid_only": 52.3
+  },
+  {
+   "run": "h2612_cpu_1028",
+   "benchmark": "deepshop",
+   "date_dir": "device-2612-20261028",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 39,
+   "overall": 26.0,
+   "valid_only": 26.7
+  },
+  {
+   "run": "h2612_cpu_1028",
+   "benchmark": "mean",
+   "overall": 36.0
+  },
+  {
+   "run": "h2612_gpu_1028",
+   "benchmark": "online_mind2web",
+   "date_dir": "device-2612-20261028",
+   "tasks": 300,
+   "valid": 262,
+   "successes": 93,
+   "overall": 31.0,
+   "valid_only": 35.5
+  },
+  {
+   "run": "h2612_gpu_1028",
+   "benchmark": "webvoyager",
+   "date_dir": "device-2612-20261028",
+   "tasks": 595,
+   "valid": 566,
+   "successes": 296,
+   "overall": 49.7,
+   "valid_only": 52.3
+  },
+  {
+   "run": "h2612_gpu_1028",
+   "benchmark": "deepshop",
+   "date_dir": "device-2612-20261028",
+   "tasks": 150,
+   "valid": 143,
+   "successes": 46,
+   "overall": 30.7,
+   "valid_only": 32.2
+  },
+  {
+   "run": "h2612_gpu_1028",
+   "benchmark": "mean",
+   "overall": 37.1
+  },
+  {
+   "run": "h1380",
+   "benchmark": "online_mind2web",
+   "date_dir": "sft-actions-full-20261021",
+   "tasks": 300,
+   "valid": 267,
+   "successes": 99,
+   "overall": 33.0,
+   "valid_only": 37.1
+  },
+  {
+   "run": "h1380",
+   "benchmark": "webvoyager",
+   "date_dir": "sft-actions-full-20261021",
+   "tasks": 595,
+   "valid": 585,
+   "successes": 304,
+   "overall": 51.1,
+   "valid_only": 52.0
+  },
+  {
+   "run": "h1380",
+   "benchmark": "deepshop",
+   "date_dir": "onepanel-k3-scale-20261027",
+   "tasks": 150,
+   "valid": 146,
+   "successes": 60,
+   "overall": 40.0,
+   "valid_only": 41.1
+  },
+  {
+   "run": "h1380",
+   "benchmark": "mean",
+   "overall": 41.4
+  },
+  {
+   "run": "h1380_ds_1021",
+   "benchmark": "deepshop",
+   "date_dir": "sft-actions-full-20261021",
+   "tasks": 150,
+   "valid": 150,
+   "successes": 64,
+   "overall": 42.7,
+   "valid_only": 42.7
+  },
+  {
+   "run": "lora2612_1028",
+   "benchmark": "online_mind2web",
+   "date_dir": "lora-selectors-20261028",
+   "tasks": 300,
+   "valid": 256,
+   "successes": 94,
+   "overall": 31.3,
+   "valid_only": 36.7
+  },
+  {
+   "run": "lora2612_1028",
+   "benchmark": "webvoyager",
+   "date_dir": "lora-selectors-20261028",
+   "tasks": 595,
+   "valid": 570,
+   "successes": 309,
+   "overall": 51.9,
+   "valid_only": 54.2
+  },
+  {
+   "run": "lora2612_1028",
+   "benchmark": "deepshop",
+   "date_dir": "lora-selectors-20261028",
+   "tasks": 150,
+   "valid": 143,
+   "successes": 51,
+   "overall": 34.0,
+   "valid_only": 35.7
+  },
+  {
+   "run": "lora2612_1028",
+   "benchmark": "mean",
+   "overall": 39.1
+  },
+  {
+   "run": "lora1380_1028",
+   "benchmark": "online_mind2web",
+   "date_dir": "lora-selectors-20261028",
+   "tasks": 300,
+   "valid": 256,
+   "successes": 103,
+   "overall": 34.3,
+   "valid_only": 40.2
+  },
+  {
+   "run": "lora1380_1028",
+   "benchmark": "webvoyager",
+   "date_dir": "lora-selectors-20261028",
+   "tasks": 595,
+   "valid": 575,
+   "successes": 314,
+   "overall": 52.8,
+   "valid_only": 54.6
+  },
+  {
+   "run": "lora1380_1028",
+   "benchmark": "deepshop",
+   "date_dir": "lora-selectors-20261028",
+   "tasks": 150,
+   "valid": 144,
+   "successes": 47,
+   "overall": 31.3,
+   "valid_only": 32.6
+  },
+  {
+   "run": "lora1380_1028",
+   "benchmark": "mean",
+   "overall": 39.5
+  },
+  {
+   "run": "sft4b",
+   "benchmark": "online_mind2web",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 300,
+   "valid": 275,
+   "successes": 95,
+   "overall": 31.7,
+   "valid_only": 34.5
+  },
+  {
+   "run": "sft4b",
+   "benchmark": "webvoyager",
+   "date_dir": "crossbench-full-t10-20261018",
+   "tasks": 595,
+   "valid": 587,
+   "successes": 264,
+   "overall": 44.4,
+   "valid_only": 45.0
+  },
+  {
+   "run": "sft4b",
+   "benchmark": "deepshop",
+   "date_dir": "onepanel-k3-scale-20261027",
+   "tasks": 150,
+   "valid": 149,
+   "successes": 40,
+   "overall": 26.7,
+   "valid_only": 26.8
+  },
+  {
+   "run": "sft4b",
+   "benchmark": "mean",
+   "overall": 34.3
+  }
+ ],
+ "pooled": {
+  "piotr_head_2copies_1028": {
+   "online_mind2web": 36.2,
+   "webvoyager": 51.8,
+   "deepshop": 35.0,
+   "mean": 41.0
+  },
+  "h2612_2copies_1028": {
+   "online_mind2web": 31.2,
+   "webvoyager": 50.2,
+   "deepshop": 28.3,
+   "mean": 36.6
+  },
+  "h2612_3runs": {
+   "online_mind2web": 32.2,
+   "webvoyager": 50.2,
+   "deepshop": 29.6,
+   "mean": 37.3
+  }
+ },
+ "paired": {
+  "1_recipe": [
+   {
+    "name": "Piotr-data head (2 copies) - 2,612 head (2 copies), same day",
+    "a": [
+     "piotr_head_cpu_1028",
+     "piotr_head_gpu_1028"
+    ],
+    "b": [
+     "h2612_cpu_1028",
+     "h2612_gpu_1028"
+    ],
+    "online_mind2web": [
+     5.0,
+     1.0,
+     9.2
+    ],
+    "webvoyager": [
+     1.7,
+     -1.4,
+     4.7
+    ],
+    "deepshop": [
+     6.7,
+     0.7,
+     12.3
+    ],
+    "mean": [
+     4.4,
+     1.9,
+     7.0
+    ]
+   },
+   {
+    "name": "Piotr-data head (2 copies) - 1,380 head",
+    "a": [
+     "piotr_head_cpu_1028",
+     "piotr_head_gpu_1028"
+    ],
+    "b": [
+     "h1380"
+    ],
+    "online_mind2web": [
+     3.2,
+     -2.0,
+     8.3
+    ],
+    "webvoyager": [
+     0.8,
+     -2.8,
+     4.5
+    ],
+    "deepshop": [
+     -5.0,
+     -12.7,
+     2.7
+    ],
+    "mean": [
+     -0.4,
+     -3.7,
+     3.0
+    ]
+   },
+   {
+    "name": "Piotr SelectionARM (10-18) - LoRA 2,612 (10-28)",
+    "a": [
+     "piotr_arm_1018"
+    ],
+    "b": [
+     "lora2612_1028"
+    ],
+    "online_mind2web": [
+     7.7,
+     2.3,
+     13.0
+    ],
+    "webvoyager": [
+     0.5,
+     -3.5,
+     4.5
+    ],
+    "deepshop": [
+     7.3,
+     -1.3,
+     16.0
+    ],
+    "mean": [
+     5.2,
+     1.5,
+     8.8
+    ]
+   },
+   {
+    "name": "Piotr SelectionARM (10-18) - LoRA 1,380 (10-28)",
+    "a": [
+     "piotr_arm_1018"
+    ],
+    "b": [
+     "lora1380_1028"
+    ],
+    "online_mind2web": [
+     4.7,
+     -1.0,
+     10.3
+    ],
+    "webvoyager": [
+     -0.3,
+     -4.5,
+     3.9
+    ],
+    "deepshop": [
+     10.0,
+     0.7,
+     19.3
+    ],
+    "mean": [
+     4.8,
+     1.0,
+     8.6
+    ]
+   }
+  ],
+  "2_lora_vs_head": [
+   {
+    "name": "LoRA 2,612 - 2,612 head (2 copies), same day",
+    "a": [
+     "lora2612_1028"
+    ],
+    "b": [
+     "h2612_cpu_1028",
+     "h2612_gpu_1028"
+    ],
+    "online_mind2web": [
+     0.2,
+     -4.3,
+     4.7
+    ],
+    "webvoyager": [
+     1.8,
+     -1.9,
+     5.4
+    ],
+    "deepshop": [
+     5.7,
+     -2.3,
+     13.7
+    ],
+    "mean": [
+     2.5,
+     -0.7,
+     5.8
+    ]
+   },
+   {
+    "name": "LoRA 1,380 - 1,380 head",
+    "a": [
+     "lora1380_1028"
+    ],
+    "b": [
+     "h1380"
+    ],
+    "online_mind2web": [
+     1.3,
+     -4.0,
+     6.7
+    ],
+    "webvoyager": [
+     1.7,
+     -2.4,
+     5.7
+    ],
+    "deepshop": [
+     -8.7,
+     -17.3,
+     0.0
+    ],
+    "mean": [
+     -1.9,
+     -5.5,
+     1.8
+    ]
+   },
+   {
+    "name": "Piotr SelectionARM - Piotr-data head, same day 10-18",
+    "a": [
+     "piotr_arm_1018"
+    ],
+    "b": [
+     "piotr_head_orig_1018"
+    ],
+    "online_mind2web": [
+     1.3,
+     -3.7,
+     6.3
+    ],
+    "webvoyager": [
+     1.2,
+     -2.7,
+     5.0
+    ],
+    "deepshop": [
+     -2.7,
+     -11.3,
+     5.3
+    ],
+    "mean": [
+     -0.1,
+     -3.5,
+     3.5
+    ]
+   }
+  ],
+  "3_scale": [
+   {
+    "name": "2,612 head (3 runs) - 1,380 head",
+    "a": [
+     "h2612_cpu_1027",
+     "h2612_cpu_1028",
+     "h2612_gpu_1028"
+    ],
+    "b": [
+     "h1380"
+    ],
+    "online_mind2web": [
+     -0.8,
+     -5.3,
+     3.6
+    ],
+    "webvoyager": [
+     -0.9,
+     -4.0,
+     2.3
+    ],
+    "deepshop": [
+     -10.4,
+     -18.0,
+     -2.9
+    ],
+    "mean": [
+     -4.0,
+     -7.2,
+     -0.9
+    ]
+   },
+   {
+    "name": "LoRA 2,612 - LoRA 1,380, same day",
+    "a": [
+     "lora2612_1028"
+    ],
+    "b": [
+     "lora1380_1028"
+    ],
+    "online_mind2web": [
+     -3.0,
+     -8.3,
+     2.3
+    ],
+    "webvoyager": [
+     -0.8,
+     -4.7,
+     3.0
+    ],
+    "deepshop": [
+     2.7,
+     -6.0,
+     11.3
+    ],
+    "mean": [
+     -0.4,
+     -4.1,
+     3.2
+    ]
+   }
+  ],
+  "4_device": [
+   {
+    "name": "Piotr-data head: GPU copy - CPU copy, same day",
+    "a": [
+     "piotr_head_gpu_1028"
+    ],
+    "b": [
+     "piotr_head_cpu_1028"
+    ],
+    "online_mind2web": [
+     1.0,
+     -4.0,
+     6.3
+    ],
+    "webvoyager": [
+     1.5,
+     -2.5,
+     5.2
+    ],
+    "deepshop": [
+     -4.7,
+     -14.7,
+     4.7
+    ],
+    "mean": [
+     -0.7,
+     -4.6,
+     3.1
+    ]
+   },
+   {
+    "name": "2,612 head: GPU copy - CPU copy, same day",
+    "a": [
+     "h2612_gpu_1028"
+    ],
+    "b": [
+     "h2612_cpu_1028"
+    ],
+    "online_mind2web": [
+     -0.3,
+     -5.3,
+     4.7
+    ],
+    "webvoyager": [
+     -0.8,
+     -4.7,
+     3.0
+    ],
+    "deepshop": [
+     4.7,
+     -3.3,
+     12.7
+    ],
+    "mean": [
+     1.2,
+     -2.3,
+     4.6
+    ]
+   },
+   {
+    "name": "Same weights, Piotr-data head: 10-28 - 10-25",
+    "a": [
+     "piotr_head_gpu_1028"
+    ],
+    "b": [
+     "piotr_head_orig_1025"
+    ],
+    "online_mind2web": [
+     0.0,
+     -5.7,
+     5.7
+    ],
+    "webvoyager": [
+     -0.3,
+     -4.4,
+     3.7
+    ],
+    "deepshop": [
+     -4.0,
+     -12.7,
+     4.7
+    ],
+    "mean": [
+     -1.4,
+     -5.1,
+     2.2
+    ]
+   },
+   {
+    "name": "Same weights, Piotr-data head: 10-28 - 10-18",
+    "a": [
+     "piotr_head_gpu_1028"
+    ],
+    "b": [
+     "piotr_head_orig_1018"
+    ],
+    "online_mind2web": [
+     -1.0,
+     -6.7,
+     4.3
+    ],
+    "webvoyager": [
+     1.3,
+     -2.7,
+     5.4
+    ],
+    "deepshop": [
+     -11.3,
+     -20.7,
+     -2.0
+    ],
+    "mean": [
+     -3.7,
+     -7.5,
+     0.1
+    ]
+   },
+   {
+    "name": "Same weights, 2,612 head: 10-28 - 10-27",
+    "a": [
+     "h2612_cpu_1028"
+    ],
+    "b": [
+     "h2612_cpu_1027"
+    ],
+    "online_mind2web": [
+     -3.0,
+     -8.0,
+     2.0
+    ],
+    "webvoyager": [
+     0.3,
+     -3.5,
+     4.2
+    ],
+    "deepshop": [
+     -6.0,
+     -14.7,
+     2.7
+    ],
+    "mean": [
+     -2.9,
+     -6.6,
+     0.7
+    ]
+   }
+  ]
+ }
+}

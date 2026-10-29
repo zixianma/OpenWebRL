@@ -1,0 +1,2883 @@
+{
+ "note": "Why our branching data trail Piotr's (q1) and why 2,612 states trail 1,380 (q3), 2026-10-28. Scripts and logs: runtime selection-head-20261008/why-2612-20261028/ (CPU jobs 396632-396732, 397481, 397506).",
+ "q1_paired_orig_minus_h2612": {
+  "orig-h2612": {
+   "tasks": {
+    "online_mind2web": 300,
+    "webvoyager": 595,
+    "deepshop": 150
+   },
+   "pp_ci": {
+    "online_mind2web": [
+     5.0,
+     1.0,
+     9.2
+    ],
+    "webvoyager": [
+     1.7,
+     -1.3,
+     4.5
+    ],
+    "deepshop": [
+     6.7,
+     0.7,
+     12.7
+    ],
+    "mean": [
+     4.4,
+     1.8,
+     7.0
+    ]
+   }
+  }
+ },
+ "q1_episodes": {
+  "orig_cpu/online_mind2web": {
+   "tasks": 300,
+   "success": 35.7,
+   "valid": 256,
+   "mean_steps": 14.06,
+   "terminate": {
+    "task_completed": 197,
+    "max_steps_exhausted": 56,
+    "null": 30,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:25120/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 8,
+    "env_step_error": 6,
+    "generation_length_limit": 3
+   }
+  },
+  "orig_cpu/webvoyager": {
+   "tasks": 595,
+   "success": 51.1,
+   "valid": 568,
+   "mean_steps": 12.29,
+   "terminate": {
+    "task_completed": 461,
+    "max_steps_exhausted": 105,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:24864/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 15,
+    "null": 9,
+    "env_step_error": 3,
+    "generation_length_limit": 2
+   }
+  },
+  "orig_cpu/deepshop": {
+   "tasks": 150,
+   "success": 37.3,
+   "valid": 146,
+   "mean_steps": 17.17,
+   "terminate": {
+    "task_completed": 111,
+    "max_steps_exhausted": 33,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:25376/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 3,
+    "generation_length_limit": 2,
+    "env_step_error": 1
+   }
+  },
+  "orig_gpu/online_mind2web": {
+   "tasks": 300,
+   "success": 36.7,
+   "valid": 254,
+   "mean_steps": 14.54,
+   "terminate": {
+    "task_completed": 196,
+    "max_steps_exhausted": 55,
+    "null": 29,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:25888/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 11,
+    "env_step_error": 6,
+    "generation_length_limit": 3
+   }
+  },
+  "orig_gpu/webvoyager": {
+   "tasks": 595,
+   "success": 52.6,
+   "valid": 571,
+   "mean_steps": 12.17,
+   "terminate": {
+    "task_completed": 462,
+    "max_steps_exhausted": 108,
+    "null": 13,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:25632/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 7,
+    "generation_length_limit": 3,
+    "env_step_error": 2
+   }
+  },
+  "orig_gpu/deepshop": {
+   "tasks": 150,
+   "success": 32.7,
+   "valid": 147,
+   "mean_steps": 17.58,
+   "terminate": {
+    "task_completed": 110,
+    "max_steps_exhausted": 35,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:26144/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 2,
+    "generation_length_limit": 2,
+    "env_step_error": 1
+   }
+  },
+  "h2612_cpu/online_mind2web": {
+   "tasks": 300,
+   "success": 31.3,
+   "valid": 256,
+   "mean_steps": 16.33,
+   "terminate": {
+    "task_completed": 162,
+    "max_steps_exhausted": 91,
+    "null": 31,
+    "env_step_error": 8,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:27936/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 5,
+    "generation_length_limit": 3
+   }
+  },
+  "h2612_cpu/webvoyager": {
+   "tasks": 595,
+   "success": 50.6,
+   "valid": 576,
+   "mean_steps": 12.56,
+   "terminate": {
+    "task_completed": 436,
+    "max_steps_exhausted": 118,
+    "generation_length_limit": 21,
+    "null": 10,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:27680/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 5,
+    "env_step_error": 3,
+    "format_error_failed": 2
+   }
+  },
+  "h2612_cpu/deepshop": {
+   "tasks": 150,
+   "success": 26.0,
+   "valid": 146,
+   "mean_steps": 20.81,
+   "terminate": {
+    "task_completed": 81,
+    "max_steps_exhausted": 61,
+    "generation_length_limit": 4,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:20000/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 3,
+    "env_step_error": 1
+   }
+  },
+  "h2612_gpu/online_mind2web": {
+   "tasks": 300,
+   "success": 31.0,
+   "valid": 262,
+   "mean_steps": 15.6,
+   "terminate": {
+    "task_completed": 173,
+    "max_steps_exhausted": 82,
+    "null": 32,
+    "generation_length_limit": 6,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:22816/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 4,
+    "env_step_error": 2,
+    "format_error_failed": 1
+   }
+  },
+  "h2612_gpu/webvoyager": {
+   "tasks": 595,
+   "success": 49.7,
+   "valid": 566,
+   "mean_steps": 12.92,
+   "terminate": {
+    "task_completed": 433,
+    "max_steps_exhausted": 117,
+    "generation_length_limit": 16,
+    "null": 14,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:22560/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 6,
+    "format_error_failed": 5,
+    "env_step_error": 2,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:20000/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 2
+   }
+  },
+  "h2612_gpu/deepshop": {
+   "tasks": 150,
+   "success": 30.7,
+   "valid": 143,
+   "mean_steps": 19.35,
+   "terminate": {
+    "task_completed": 95,
+    "max_steps_exhausted": 47,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:23072/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 4,
+    "null": 2,
+    "env_step_error": 1,
+    "generation_length_limit": 1
+   }
+  },
+  "lora2612/online_mind2web": {
+   "tasks": 300,
+   "success": 31.3,
+   "valid": 256,
+   "mean_steps": 15.51,
+   "terminate": {
+    "task_completed": 175,
+    "max_steps_exhausted": 71,
+    "null": 29,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:22048/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 9,
+    "generation_length_limit": 7,
+    "env_step_error": 6,
+    "format_error_failed": 3
+   }
+  },
+  "lora2612/webvoyager": {
+   "tasks": 595,
+   "success": 51.9,
+   "valid": 570,
+   "mean_steps": 12.56,
+   "terminate": {
+    "task_completed": 451,
+    "max_steps_exhausted": 112,
+    "null": 13,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:21792/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 10,
+    "format_error_failed": 5,
+    "generation_length_limit": 3,
+    "env_step_error": 1
+   }
+  },
+  "lora2612/deepshop": {
+   "tasks": 150,
+   "success": 34.0,
+   "valid": 143,
+   "mean_steps": 18.5,
+   "terminate": {
+    "task_completed": 97,
+    "max_steps_exhausted": 42,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:22304/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 6,
+    "generation_length_limit": 4,
+    "env_step_error": 1
+   }
+  },
+  "lora1380/online_mind2web": {
+   "tasks": 300,
+   "success": 34.3,
+   "valid": 256,
+   "mean_steps": 15.47,
+   "terminate": {
+    "task_completed": 175,
+    "max_steps_exhausted": 76,
+    "null": 28,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:22816/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 13,
+    "format_error_failed": 4,
+    "env_step_error": 2,
+    "generation_error: Server error '500 Internal Server Error' for url 'http://127.0.0.1:22817/select'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500": 1,
+    "generation_length_limit": 1
+   }
+  },
+  "lora1380/webvoyager": {
+   "tasks": 595,
+   "success": 52.8,
+   "valid": 575,
+   "mean_steps": 11.86,
+   "terminate": {
+    "task_completed": 466,
+    "max_steps_exhausted": 106,
+    "null": 10,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:23072/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 7,
+    "generation_length_limit": 3,
+    "format_error_failed": 2,
+    "env_step_error": 1
+   }
+  },
+  "lora1380/deepshop": {
+   "tasks": 150,
+   "success": 31.3,
+   "valid": 144,
+   "mean_steps": 17.32,
+   "terminate": {
+    "task_completed": 106,
+    "max_steps_exhausted": 35,
+    "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:23072/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 5,
+    "generation_length_limit": 2,
+    "format_error_failed": 1,
+    "env_step_error": 1
+   }
+  }
+ },
+ "q1_steps": {
+  "orig_cpu/online_mind2web": {
+   "steps": 4218,
+   "distinct_per_step": 2.76,
+   "plurality_pick": 72.6,
+   "repeat_prev_pick": 8.8,
+   "mean_pick_softmax": 0.428,
+   "picked_share": {
+    "click": 46.3,
+    "scroll": 12.1,
+    "click+2": 10.9,
+    "new_tab+2": 6.0,
+    "wait": 5.0,
+    "done": 4.7,
+    "goto_url": 4.6,
+    "click+1": 3.6
+   },
+   "offered_share": {
+    "click": 46.4,
+    "scroll": 12.5,
+    "click+2": 9.0,
+    "done": 8.5,
+    "wait": 5.2,
+    "go_back": 3.6,
+    "new_tab+2": 3.4,
+    "click+1": 2.8
+   }
+  },
+  "orig_cpu/webvoyager": {
+   "steps": 7312,
+   "distinct_per_step": 2.57,
+   "plurality_pick": 75.4,
+   "repeat_prev_pick": 12.1,
+   "mean_pick_softmax": 0.395,
+   "picked_share": {
+    "click": 53.2,
+    "scroll": 14.2,
+    "click+2": 10.1,
+    "done": 6.3,
+    "wait": 3.3,
+    "go_back": 3.3,
+    "goto_url": 2.4,
+    "click+1": 2.0
+   },
+   "offered_share": {
+    "click": 52.0,
+    "scroll": 14.2,
+    "done": 8.9,
+    "click+2": 8.0,
+    "go_back": 5.0,
+    "wait": 3.4,
+    "write": 2.0,
+    "click+1": 1.6
+   }
+  },
+  "orig_cpu/deepshop": {
+   "steps": 2575,
+   "distinct_per_step": 2.78,
+   "plurality_pick": 75.0,
+   "repeat_prev_pick": 8.6,
+   "mean_pick_softmax": 0.424,
+   "picked_share": {
+    "click": 51.7,
+    "scroll": 20.3,
+    "go_back": 8.7,
+    "click+2": 4.6,
+    "done": 4.3,
+    "write": 3.4,
+    "goto_url": 1.7,
+    "drag": 1.4
+   },
+   "offered_share": {
+    "click": 51.4,
+    "scroll": 17.3,
+    "done": 9.9,
+    "go_back": 9.1,
+    "write": 3.5,
+    "click+2": 2.4,
+    "wait": 1.5,
+    "press_keys": 1.4
+   }
+  },
+  "orig_gpu/online_mind2web": {
+   "steps": 4362,
+   "distinct_per_step": 2.77,
+   "plurality_pick": 72.5,
+   "repeat_prev_pick": 8.4,
+   "mean_pick_softmax": 0.404,
+   "picked_share": {
+    "click": 44.3,
+    "scroll": 14.5,
+    "click+2": 11.1,
+    "goto_url": 5.5,
+    "new_tab+2": 5.0,
+    "wait": 4.7,
+    "done": 4.5,
+    "click+1": 2.4
+   },
+   "offered_share": {
+    "click": 45.6,
+    "scroll": 13.5,
+    "click+2": 9.7,
+    "done": 8.7,
+    "wait": 4.9,
+    "go_back": 3.4,
+    "new_tab+2": 3.2,
+    "goto_url": 2.7
+   }
+  },
+  "orig_gpu/webvoyager": {
+   "steps": 7240,
+   "distinct_per_step": 2.58,
+   "plurality_pick": 76.6,
+   "repeat_prev_pick": 10.7,
+   "mean_pick_softmax": 0.376,
+   "picked_share": {
+    "click": 51.3,
+    "scroll": 14.7,
+    "click+2": 9.5,
+    "done": 6.4,
+    "wait": 4.1,
+    "go_back": 3.0,
+    "goto_url": 2.5,
+    "click+1": 1.9
+   },
+   "offered_share": {
+    "click": 52.0,
+    "scroll": 13.7,
+    "done": 8.9,
+    "click+2": 7.7,
+    "go_back": 4.2,
+    "wait": 4.0,
+    "write": 2.3,
+    "click+1": 1.6
+   }
+  },
+  "orig_gpu/deepshop": {
+   "steps": 2637,
+   "distinct_per_step": 2.81,
+   "plurality_pick": 77.2,
+   "repeat_prev_pick": 14.1,
+   "mean_pick_softmax": 0.401,
+   "picked_share": {
+    "click": 45.1,
+    "scroll": 26.8,
+    "go_back": 8.8,
+    "click+2": 6.3,
+    "done": 4.2,
+    "write": 2.7,
+    "goto_url": 2.4,
+    "wait": 0.9
+   },
+   "offered_share": {
+    "click": 49.9,
+    "scroll": 20.5,
+    "done": 9.6,
+    "go_back": 7.5,
+    "click+2": 3.8,
+    "write": 2.8,
+    "goto_url": 1.5,
+    "press_keys": 1.2
+   }
+  },
+  "h2612_cpu/online_mind2web": {
+   "steps": 4899,
+   "distinct_per_step": 2.58,
+   "plurality_pick": 77.5,
+   "repeat_prev_pick": 14.7,
+   "mean_pick_softmax": 0.562,
+   "picked_share": {
+    "click": 48.7,
+    "scroll": 15.5,
+    "click+2": 8.6,
+    "new_tab+2": 4.0,
+    "wait": 4.0,
+    "goto_url": 3.4,
+    "go_back": 3.4,
+    "done": 3.3
+   },
+   "offered_share": {
+    "click": 50.5,
+    "scroll": 13.4,
+    "click+2": 7.3,
+    "done": 6.4,
+    "wait": 4.1,
+    "go_back": 3.7,
+    "new_tab+2": 3.0,
+    "goto_url": 2.6
+   }
+  },
+  "h2612_cpu/webvoyager": {
+   "steps": 7471,
+   "distinct_per_step": 2.6,
+   "plurality_pick": 79.9,
+   "repeat_prev_pick": 13.4,
+   "mean_pick_softmax": 0.548,
+   "picked_share": {
+    "click": 49.6,
+    "scroll": 17.4,
+    "click+2": 9.0,
+    "done": 5.8,
+    "go_back": 4.8,
+    "write": 3.2,
+    "wait": 2.5,
+    "goto_url": 1.8
+   },
+   "offered_share": {
+    "click": 51.1,
+    "scroll": 15.2,
+    "click+2": 8.1,
+    "done": 8.0,
+    "go_back": 4.6,
+    "write": 3.4,
+    "wait": 2.8,
+    "click+1": 1.2
+   }
+  },
+  "h2612_cpu/deepshop": {
+   "steps": 3122,
+   "distinct_per_step": 2.66,
+   "plurality_pick": 80.0,
+   "repeat_prev_pick": 17.4,
+   "mean_pick_softmax": 0.563,
+   "picked_share": {
+    "click": 46.6,
+    "scroll": 25.4,
+    "go_back": 9.2,
+    "click+2": 8.2,
+    "write": 2.9,
+    "done": 2.6,
+    "wait": 1.3,
+    "press_keys": 0.8
+   },
+   "offered_share": {
+    "click": 51.5,
+    "scroll": 20.2,
+    "go_back": 7.2,
+    "done": 6.0,
+    "click+2": 5.7,
+    "write": 3.2,
+    "wait": 1.5,
+    "press_keys": 1.3
+   }
+  },
+  "h2612_gpu/online_mind2web": {
+   "steps": 4680,
+   "distinct_per_step": 2.72,
+   "plurality_pick": 75.9,
+   "repeat_prev_pick": 12.6,
+   "mean_pick_softmax": 0.579,
+   "picked_share": {
+    "click": 46.9,
+    "scroll": 16.5,
+    "click+2": 6.8,
+    "go_back": 5.5,
+    "goto_url": 4.4,
+    "new_tab+2": 3.9,
+    "done": 3.7,
+    "write": 3.5
+   },
+   "offered_share": {
+    "click": 48.4,
+    "scroll": 14.0,
+    "done": 7.2,
+    "click+2": 5.9,
+    "go_back": 5.5,
+    "write": 3.6,
+    "wait": 3.4,
+    "goto_url": 3.2
+   }
+  },
+  "h2612_gpu/webvoyager": {
+   "steps": 7689,
+   "distinct_per_step": 2.58,
+   "plurality_pick": 78.7,
+   "repeat_prev_pick": 14.5,
+   "mean_pick_softmax": 0.547,
+   "picked_share": {
+    "click": 48.8,
+    "scroll": 18.7,
+    "click+2": 8.5,
+    "done": 5.6,
+    "go_back": 5.2,
+    "wait": 2.9,
+    "write": 2.5,
+    "goto_url": 2.1
+   },
+   "offered_share": {
+    "click": 50.1,
+    "scroll": 16.5,
+    "done": 7.8,
+    "click+2": 7.6,
+    "go_back": 5.2,
+    "wait": 3.1,
+    "write": 2.7,
+    "goto_url": 1.4
+   }
+  },
+  "h2612_gpu/deepshop": {
+   "steps": 2902,
+   "distinct_per_step": 2.67,
+   "plurality_pick": 80.0,
+   "repeat_prev_pick": 19.1,
+   "mean_pick_softmax": 0.568,
+   "picked_share": {
+    "click": 47.6,
+    "scroll": 27.0,
+    "go_back": 7.9,
+    "write": 4.7,
+    "click+2": 4.5,
+    "done": 3.3,
+    "press_keys": 1.5,
+    "drag": 1.1
+   },
+   "offered_share": {
+    "click": 50.1,
+    "scroll": 22.0,
+    "go_back": 6.5,
+    "done": 6.2,
+    "write": 5.2,
+    "click+2": 3.8,
+    "press_keys": 2.0,
+    "drag": 1.4
+   }
+  },
+  "lora2612/online_mind2web": {
+   "steps": 4654,
+   "distinct_per_step": 2.68,
+   "plurality_pick": 76.3,
+   "repeat_prev_pick": 11.2,
+   "mean_pick_softmax": null,
+   "picked_share": {
+    "click": 49.4,
+    "scroll": 11.3,
+    "click+2": 8.4,
+    "go_back": 4.4,
+    "wait": 4.3,
+    "new_tab+2": 4.0,
+    "done": 3.8,
+    "write": 3.7
+   },
+   "offered_share": {
+    "click": 49.7,
+    "scroll": 11.0,
+    "click+2": 7.1,
+    "done": 6.6,
+    "go_back": 4.6,
+    "wait": 4.6,
+    "write": 3.9,
+    "new_tab+2": 2.8
+   }
+  },
+  "lora2612/webvoyager": {
+   "steps": 7475,
+   "distinct_per_step": 2.53,
+   "plurality_pick": 78.0,
+   "repeat_prev_pick": 14.7,
+   "mean_pick_softmax": null,
+   "picked_share": {
+    "click": 51.5,
+    "scroll": 14.5,
+    "click+2": 8.7,
+    "done": 6.0,
+    "go_back": 4.6,
+    "wait": 3.2,
+    "write": 2.4,
+    "new_tab+2": 1.9
+   },
+   "offered_share": {
+    "click": 51.6,
+    "scroll": 14.6,
+    "click+2": 7.9,
+    "done": 7.6,
+    "go_back": 4.6,
+    "wait": 3.3,
+    "write": 2.8,
+    "click+1": 1.3
+   }
+  },
+  "lora2612/deepshop": {
+   "steps": 2775,
+   "distinct_per_step": 2.86,
+   "plurality_pick": 76.2,
+   "repeat_prev_pick": 13.6,
+   "mean_pick_softmax": null,
+   "picked_share": {
+    "click": 53.8,
+    "scroll": 15.3,
+    "go_back": 8.7,
+    "click+2": 8.1,
+    "done": 3.5,
+    "write": 2.1,
+    "goto_url": 2.0,
+    "drag": 1.6
+   },
+   "offered_share": {
+    "click": 52.4,
+    "scroll": 16.2,
+    "done": 8.2,
+    "go_back": 7.1,
+    "click+2": 5.8,
+    "write": 2.2,
+    "drag": 1.7,
+    "wait": 1.7
+   }
+  },
+  "lora1380/online_mind2web": {
+   "steps": 4642,
+   "distinct_per_step": 2.57,
+   "plurality_pick": 79.1,
+   "repeat_prev_pick": 13.4,
+   "mean_pick_softmax": null,
+   "picked_share": {
+    "click": 49.4,
+    "scroll": 13.7,
+    "click+2": 6.6,
+    "go_back": 4.8,
+    "new_tab+2": 4.3,
+    "write": 3.9,
+    "done": 3.8,
+    "goto_url": 3.6
+   },
+   "offered_share": {
+    "click": 50.2,
+    "scroll": 13.2,
+    "done": 6.4,
+    "click+2": 5.9,
+    "go_back": 4.7,
+    "write": 4.2,
+    "wait": 3.2,
+    "goto_url": 3.0
+   }
+  },
+  "lora1380/webvoyager": {
+   "steps": 7054,
+   "distinct_per_step": 2.47,
+   "plurality_pick": 80.2,
+   "repeat_prev_pick": 15.4,
+   "mean_pick_softmax": null,
+   "picked_share": {
+    "click": 52.3,
+    "scroll": 14.1,
+    "click+2": 7.7,
+    "done": 6.6,
+    "go_back": 5.6,
+    "write": 3.3,
+    "wait": 2.3,
+    "goto_url": 1.9
+   },
+   "offered_share": {
+    "click": 53.1,
+    "scroll": 14.2,
+    "done": 7.3,
+    "click+2": 7.3,
+    "go_back": 5.0,
+    "write": 3.5,
+    "wait": 2.6,
+    "press_keys": 1.3
+   }
+  },
+  "lora1380/deepshop": {
+   "steps": 2598,
+   "distinct_per_step": 2.64,
+   "plurality_pick": 77.7,
+   "repeat_prev_pick": 16.7,
+   "mean_pick_softmax": null,
+   "picked_share": {
+    "click": 43.1,
+    "scroll": 21.0,
+    "go_back": 10.7,
+    "click+2": 9.2,
+    "goto_url": 4.1,
+    "done": 4.1,
+    "write": 2.7,
+    "press_keys": 1.3
+   },
+   "offered_share": {
+    "click": 46.4,
+    "scroll": 18.7,
+    "go_back": 8.3,
+    "click+2": 7.9,
+    "done": 7.2,
+    "goto_url": 3.2,
+    "write": 2.9,
+    "wait": 1.6
+   }
+  }
+ },
+ "q1_turn0": {
+  "online_mind2web": {
+   "tasks": 268,
+   "identical_candidates": 42,
+   "same_pick_given_identical": 42
+  },
+  "webvoyager": {
+   "tasks": 580,
+   "identical_candidates": 142,
+   "same_pick_given_identical": 142
+  },
+  "deepshop": {
+   "tasks": 150,
+   "identical_candidates": 115,
+   "same_pick_given_identical": 115
+  }
+ },
+ "q1_loops_done": {
+  "per_condition": {
+   "orig_cpu/online_mind2web": {
+    "episodes": 300,
+    "loop3": 5.0,
+    "step_limit": 18.7,
+    "steps_with_done_offered": 631,
+    "done_picked_when_offered": 31.2,
+    "done_picked_by_done_count": {
+     "1": [
+      186,
+      7.0
+     ],
+     "2": [
+      109,
+      11.0
+     ],
+     "3": [
+      94,
+      7.4
+     ],
+     "4": [
+      93,
+      17.2
+     ],
+     "5": [
+      149,
+      100.0
+     ]
+    }
+   },
+   "orig_cpu/webvoyager": {
+    "episodes": 595,
+    "loop3": 5.9,
+    "step_limit": 17.6,
+    "steps_with_done_offered": 1068,
+    "done_picked_when_offered": 43.0,
+    "done_picked_by_done_count": {
+     "1": [
+      287,
+      13.2
+     ],
+     "2": [
+      163,
+      12.3
+     ],
+     "3": [
+      162,
+      20.4
+     ],
+     "4": [
+      137,
+      35.8
+     ],
+     "5": [
+      319,
+      100.0
+     ]
+    }
+   },
+   "orig_cpu/deepshop": {
+    "episodes": 150,
+    "loop3": 0.7,
+    "step_limit": 22.0,
+    "steps_with_done_offered": 519,
+    "done_picked_when_offered": 21.4,
+    "done_picked_by_done_count": {
+     "1": [
+      203,
+      1.0
+     ],
+     "2": [
+      115,
+      2.6
+     ],
+     "3": [
+      58,
+      5.2
+     ],
+     "4": [
+      46,
+      13.0
+     ],
+     "5": [
+      97,
+      100.0
+     ]
+    }
+   },
+   "orig_gpu/online_mind2web": {
+    "episodes": 300,
+    "loop3": 3.0,
+    "step_limit": 18.3,
+    "steps_with_done_offered": 695,
+    "done_picked_when_offered": 28.2,
+    "done_picked_by_done_count": {
+     "1": [
+      232,
+      3.4
+     ],
+     "2": [
+      115,
+      7.8
+     ],
+     "3": [
+      95,
+      13.7
+     ],
+     "4": [
+      107,
+      18.7
+     ],
+     "5": [
+      146,
+      100.0
+     ]
+    }
+   },
+   "orig_gpu/webvoyager": {
+    "episodes": 595,
+    "loop3": 4.0,
+    "step_limit": 18.2,
+    "steps_with_done_offered": 1084,
+    "done_picked_when_offered": 42.4,
+    "done_picked_by_done_count": {
+     "1": [
+      314,
+      14.6
+     ],
+     "2": [
+      163,
+      14.1
+     ],
+     "3": [
+      153,
+      19.6
+     ],
+     "4": [
+      158,
+      41.1
+     ],
+     "5": [
+      296,
+      100.0
+     ]
+    }
+   },
+   "orig_gpu/deepshop": {
+    "episodes": 150,
+    "loop3": 2.7,
+    "step_limit": 23.3,
+    "steps_with_done_offered": 509,
+    "done_picked_when_offered": 21.6,
+    "done_picked_by_done_count": {
+     "1": [
+      195,
+      4.1
+     ],
+     "2": [
+      99,
+      3.0
+     ],
+     "3": [
+      69,
+      5.8
+     ],
+     "4": [
+      66,
+      22.7
+     ],
+     "5": [
+      80,
+      100.0
+     ]
+    }
+   },
+   "h2612_cpu/online_mind2web": {
+    "episodes": 300,
+    "loop3": 10.3,
+    "step_limit": 30.3,
+    "steps_with_done_offered": 588,
+    "done_picked_when_offered": 27.6,
+    "done_picked_by_done_count": {
+     "1": [
+      215,
+      3.7
+     ],
+     "2": [
+      99,
+      2.0
+     ],
+     "3": [
+      68,
+      8.8
+     ],
+     "4": [
+      88,
+      31.8
+     ],
+     "5": [
+      118,
+      100.0
+     ]
+    }
+   },
+   "h2612_cpu/webvoyager": {
+    "episodes": 595,
+    "loop3": 5.5,
+    "step_limit": 19.8,
+    "steps_with_done_offered": 1017,
+    "done_picked_when_offered": 42.8,
+    "done_picked_by_done_count": {
+     "1": [
+      288,
+      8.0
+     ],
+     "2": [
+      188,
+      16.0
+     ],
+     "3": [
+      132,
+      27.3
+     ],
+     "4": [
+      122,
+      48.4
+     ],
+     "5": [
+      287,
+      100.0
+     ]
+    }
+   },
+   "h2612_cpu/deepshop": {
+    "episodes": 150,
+    "loop3": 7.3,
+    "step_limit": 40.7,
+    "steps_with_done_offered": 431,
+    "done_picked_when_offered": 18.8,
+    "done_picked_by_done_count": {
+     "1": [
+      191,
+      3.1
+     ],
+     "2": [
+      102,
+      7.8
+     ],
+     "3": [
+      52,
+      11.5
+     ],
+     "4": [
+      37,
+      32.4
+     ],
+     "5": [
+      49,
+      100.0
+     ]
+    }
+   },
+   "h2612_gpu/online_mind2web": {
+    "episodes": 300,
+    "loop3": 6.3,
+    "step_limit": 27.3,
+    "steps_with_done_offered": 655,
+    "done_picked_when_offered": 26.3,
+    "done_picked_by_done_count": {
+     "1": [
+      251,
+      4.4
+     ],
+     "2": [
+      117,
+      6.0
+     ],
+     "3": [
+      83,
+      4.8
+     ],
+     "4": [
+      75,
+      28.0
+     ],
+     "5": [
+      129,
+      100.0
+     ]
+    }
+   },
+   "h2612_gpu/webvoyager": {
+    "episodes": 521,
+    "loop3": 6.3,
+    "step_limit": 19.0,
+    "steps_with_done_offered": 916,
+    "done_picked_when_offered": 41.9,
+    "done_picked_by_done_count": {
+     "1": [
+      271,
+      8.5
+     ],
+     "2": [
+      163,
+      16.0
+     ],
+     "3": [
+      119,
+      21.8
+     ],
+     "4": [
+      104,
+      48.1
+     ],
+     "5": [
+      259,
+      100.0
+     ]
+    }
+   },
+   "h2612_gpu/deepshop": {
+    "episodes": 150,
+    "loop3": 7.3,
+    "step_limit": 31.3,
+    "steps_with_done_offered": 410,
+    "done_picked_when_offered": 23.2,
+    "done_picked_by_done_count": {
+     "1": [
+      197,
+      9.6
+     ],
+     "2": [
+      76,
+      7.9
+     ],
+     "3": [
+      52,
+      15.4
+     ],
+     "4": [
+      35,
+      34.3
+     ],
+     "5": [
+      50,
+      100.0
+     ]
+    }
+   }
+  },
+  "flips": {
+   "online_mind2web: orig wins, h2612 loses": {
+    "tasks": 13,
+    "losing_terminate": {
+     "task_completed": 14,
+     "max_steps_exhausted": 10,
+     "null": 1,
+     "generation_length_limit": 1
+    },
+    "losing_loop3": 23.1,
+    "losing_mean_steps": 18.4
+   },
+   "online_mind2web: h2612 wins, orig loses": {
+    "tasks": 6,
+    "losing_terminate": {
+     "task_completed": 11,
+     "max_steps_exhausted": 1
+    },
+    "losing_loop3": 0.0,
+    "losing_mean_steps": 15.3
+   },
+   "webvoyager: orig wins, h2612 loses": {
+    "tasks": 22,
+    "losing_terminate": {
+     "task_completed": 22,
+     "max_steps_exhausted": 10,
+     "null": 6,
+     "generation_length_limit": 4,
+     "format_error_failed": 1,
+     "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:22560/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 1
+    },
+    "losing_loop3": 9.1,
+    "losing_mean_steps": 13.3
+   },
+   "webvoyager: h2612 wins, orig loses": {
+    "tasks": 13,
+    "losing_terminate": {
+     "task_completed": 11,
+     "max_steps_exhausted": 8,
+     "null": 6,
+     "generation_length_limit": 1
+    },
+    "losing_loop3": 19.2,
+    "losing_mean_steps": 14.1
+   },
+   "deepshop: orig wins, h2612 loses": {
+    "tasks": 4,
+    "losing_terminate": {
+     "max_steps_exhausted": 5,
+     "task_completed": 3
+    },
+    "losing_loop3": 0.0,
+    "losing_mean_steps": 26.9
+   },
+   "deepshop: h2612 wins, orig loses": {
+    "tasks": 3,
+    "losing_terminate": {
+     "max_steps_exhausted": 3,
+     "task_completed": 2,
+     "generation_error: Client error '400 Bad Request' for url 'http://127.0.0.1:25376/generate'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400": 1
+    },
+    "losing_loop3": 0.0,
+    "losing_mean_steps": 22.7
+   }
+  }
+ },
+ "q1_phase": {
+  "orig/online_mind2web": {
+   "valid_episodes": 510,
+   "end_before_10": 35.7,
+   "success_if_end_before_10": 62.6,
+   "reach_10": 328,
+   "late_finish_done": 64.3,
+   "late_step_limit": 33.8,
+   "success_if_reach_10": 31.4
+  },
+  "orig/webvoyager": {
+   "valid_episodes": 1139,
+   "end_before_10": 56.6,
+   "success_if_end_before_10": 70.1,
+   "reach_10": 494,
+   "late_finish_done": 56.3,
+   "late_step_limit": 43.1,
+   "success_if_reach_10": 33.4
+  },
+  "orig/deepshop": {
+   "valid_episodes": 293,
+   "end_before_10": 26.6,
+   "success_if_end_before_10": 56.4,
+   "reach_10": 215,
+   "late_finish_done": 66.5,
+   "late_step_limit": 31.6,
+   "success_if_reach_10": 28.4
+  },
+  "h2612/online_mind2web": {
+   "valid_episodes": 518,
+   "end_before_10": 29.2,
+   "success_if_end_before_10": 55.6,
+   "reach_10": 367,
+   "late_finish_done": 50.7,
+   "late_step_limit": 47.1,
+   "success_if_reach_10": 28.1
+  },
+  "h2612/webvoyager": {
+   "valid_episodes": 1142,
+   "end_before_10": 53.5,
+   "success_if_end_before_10": 67.8,
+   "reach_10": 531,
+   "late_finish_done": 52.5,
+   "late_step_limit": 44.3,
+   "success_if_reach_10": 34.5
+  },
+  "h2612/deepshop": {
+   "valid_episodes": 289,
+   "end_before_10": 20.8,
+   "success_if_end_before_10": 68.3,
+   "reach_10": 229,
+   "late_finish_done": 51.5,
+   "late_step_limit": 47.2,
+   "success_if_reach_10": 19.2
+  }
+ },
+ "q1_data_distribution": {
+  "note": "State distribution of the two training sets against the states the selectors actually meet live.",
+  "piotr_train": {
+   "states": 35916,
+   "turn_share": {
+    "0": 14.3,
+    "1-4": 43.1,
+    "5-9": 25.0,
+    "10-14": 10.9,
+    "15-19": 4.6,
+    "20-99": 2.1
+   },
+   "distinct": 3.32,
+   "done_offered": 28.0,
+   "repeat_offered": 7.7,
+   "stuck": 6.1,
+   "repeat_cases": 2776,
+   "picks_repeat": 39.1,
+   "repeat_chance": 42.2,
+   "stuck_cases": 1075,
+   "picks_repeat_when_stuck": 44.9,
+   "repeat_chance_when_stuck": 49.2,
+   "note": "per panel (about 13 per state)",
+   "base_states": 2692
+  },
+  "ours": {
+   "train": {
+    "states": 2612,
+    "turn_share": {
+     "0": 10.7,
+     "1-4": 56.6,
+     "5-9": 29.8,
+     "10-14": 2.8,
+     "15-19": 0.2,
+     "20-99": 0.0
+    },
+    "distinct": 2.56,
+    "done_offered": 10.5,
+    "repeat_offered": 22.1,
+    "stuck": 11.7,
+    "repeat_cases": 463,
+    "picks_repeat": 36.3,
+    "repeat_chance": 48.9,
+    "stuck_cases": 183,
+    "picks_repeat_when_stuck": 46.4,
+    "repeat_chance_when_stuck": 57.0,
+    "missing_anchor": 0
+   },
+   "test": {
+    "states": 348,
+    "turn_share": {
+     "0": 20.7,
+     "1-4": 52.0,
+     "5-9": 22.4,
+     "10-14": 4.9,
+     "15-19": 0.0,
+     "20-99": 0.0
+    },
+    "distinct": 2.64,
+    "done_offered": 14.1,
+    "repeat_offered": 25.0,
+    "stuck": 13.8,
+    "repeat_cases": 78,
+    "picks_repeat": 31.4,
+    "repeat_chance": 52.3,
+    "stuck_cases": 33,
+    "picks_repeat_when_stuck": 24.2,
+    "repeat_chance_when_stuck": 61.2,
+    "missing_anchor": 0
+   }
+  },
+  "live": {
+   "orig_cpu": {
+    "states": 14105,
+    "turn_share": {
+     "0": 7.1,
+     "1-4": 25.9,
+     "5-9": 22.9,
+     "10-14": 15.7,
+     "15-19": 11.6,
+     "20-99": 16.7
+    },
+    "distinct": 2.66,
+    "done_offered": 15.7,
+    "repeat_offered": 17.5,
+    "stuck": 10.1,
+    "repeat_cases": 1548,
+    "picks_repeat": 35.9,
+    "repeat_chance": 44.4,
+    "stuck_cases": 458,
+    "picks_repeat_when_stuck": 61.4,
+    "repeat_chance_when_stuck": 55.7
+   },
+   "orig_gpu": {
+    "states": 14239,
+    "turn_share": {
+     "0": 7.0,
+     "1-4": 25.7,
+     "5-9": 22.6,
+     "10-14": 15.8,
+     "15-19": 11.8,
+     "20-99": 17.0
+    },
+    "distinct": 2.68,
+    "done_offered": 16.1,
+    "repeat_offered": 17.3,
+    "stuck": 10.3,
+    "repeat_cases": 1658,
+    "picks_repeat": 43.0,
+    "repeat_chance": 45.4,
+    "stuck_cases": 562,
+    "picks_repeat_when_stuck": 64.6,
+    "repeat_chance_when_stuck": 53.6
+   },
+   "h2612_cpu": {
+    "states": 15492,
+    "turn_share": {
+     "0": 6.5,
+     "1-4": 23.9,
+     "5-9": 21.4,
+     "10-14": 15.5,
+     "15-19": 12.6,
+     "20-99": 20.1
+    },
+    "distinct": 2.61,
+    "done_offered": 13.2,
+    "repeat_offered": 21.3,
+    "stuck": 14.1,
+    "repeat_cases": 2059,
+    "picks_repeat": 49.9,
+    "repeat_chance": 46.3,
+    "stuck_cases": 788,
+    "picks_repeat_when_stuck": 66.9,
+    "repeat_chance_when_stuck": 53.7
+   },
+   "h2612_gpu": {
+    "states": 14722,
+    "turn_share": {
+     "0": 6.5,
+     "1-4": 24.1,
+     "5-9": 22.0,
+     "10-14": 16.5,
+     "15-19": 12.1,
+     "20-99": 18.7
+    },
+    "distinct": 2.64,
+    "done_offered": 13.9,
+    "repeat_offered": 22.2,
+    "stuck": 14.5,
+    "repeat_cases": 2110,
+    "picks_repeat": 49.3,
+    "repeat_chance": 46.5,
+    "stuck_cases": 801,
+    "picks_repeat_when_stuck": 69.5,
+    "repeat_chance_when_stuck": 55.1
+   }
+  }
+ },
+ "q1_training_data": {
+  "note": "Training data of the two recipes, side by side, plus a plurality-vote selector on our held-out outcomes.",
+  "piotr": {
+   "panels": 35916,
+   "states": 2692,
+   "temperature": {
+    "0.7": 26924,
+    "1.0": 8992
+   },
+   "distinct_per_panel": 3.32,
+   "teacher_plurality": 73.0,
+   "plurality_chance": 77.1,
+   "turn_share": {
+    "0": 14.3,
+    "1": 13.3,
+    "2": 11.4,
+    "3": 9.9,
+    "4": 8.6,
+    "5": 7.4,
+    "6": 5.9,
+    "7": 4.9,
+    "8": 3.8,
+    "9": 3.0,
+    "10": 2.6,
+    "11": 2.4,
+    "12": 2.3,
+    "13": 2.0,
+    "14": 1.6,
+    "15": 6.6
+   },
+   "offered": {
+    "click": 45.0,
+    "done": 21.0,
+    "click+2": 10.0,
+    "scroll": 9.4,
+    "new_tab+2": 2.2,
+    "go_back": 2.0,
+    "write": 1.9,
+    "goto_url": 1.4,
+    "unparsed": 1.4,
+    "press_keys": 1.2
+   },
+   "picked": {
+    "click": 44.7,
+    "done": 19.0,
+    "click+2": 12.6,
+    "scroll": 9.6,
+    "new_tab+2": 2.9,
+    "goto_url": 2.0,
+    "click+1": 1.7,
+    "go_back": 1.3,
+    "write+1": 1.3,
+    "press_keys": 1.3
+   }
+  },
+  "ours": {
+   "train": {
+    "states": 2612,
+    "distinct_in_fixed_five": 2.56,
+    "teacher_plurality": 46.7,
+    "plurality_chance": 71.2,
+    "depth_share": {
+     "0": 57.8,
+     "1": 8.7,
+     "2": 7.6,
+     "3": 6.1,
+     "4": 5.2,
+     "5": 4.1,
+     "6": 3.1,
+     "7": 2.6,
+     "8": 1.1,
+     "9": 0.7,
+     "10": 0.7,
+     "11": 0.7,
+     "12": 0.5,
+     "13": 0.5,
+     "14": 0.3,
+     "15": 0.2
+    },
+    "offered": {
+     "click": 40.2,
+     "scroll": 19.7,
+     "click+2": 13.3,
+     "go_back": 5.5,
+     "done": 4.5,
+     "goto_url": 4.3,
+     "write": 3.4,
+     "press_keys": 2.1,
+     "write+1": 1.3,
+     "new_tab+2": 1.1
+    },
+    "picked": {
+     "click": 39.4,
+     "scroll": 17.6,
+     "click+2": 15.0,
+     "goto_url": 6.0,
+     "go_back": 5.1,
+     "done": 3.7,
+     "press_keys": 2.7,
+     "write": 2.4,
+     "write+1": 2.1,
+     "new_tab+2": 1.6
+    }
+   },
+   "test": {
+    "states": 346,
+    "distinct_in_fixed_five": 2.64,
+    "teacher_plurality": 46.0,
+    "plurality_chance": 68.8,
+    "depth_share": {
+     "0": 20.5,
+     "1": 15.9,
+     "2": 12.4,
+     "3": 13.0,
+     "4": 10.7,
+     "5": 7.5,
+     "6": 6.9,
+     "7": 4.6,
+     "8": 1.7,
+     "9": 1.7,
+     "10": 1.2,
+     "11": 1.2,
+     "12": 1.4,
+     "13": 0.9,
+     "14": 0.3
+    },
+    "offered": {
+     "click": 36.4,
+     "scroll": 20.2,
+     "click+2": 17.7,
+     "done": 6.8,
+     "go_back": 6.6,
+     "write": 2.9,
+     "goto_url": 2.1,
+     "press_keys": 2.0,
+     "write+1": 1.4,
+     "new_tab+2": 1.3
+    },
+    "picked": {
+     "click": 38.9,
+     "click+2": 19.9,
+     "scroll": 17.2,
+     "go_back": 5.2,
+     "done": 4.6,
+     "goto_url": 3.5,
+     "write+1": 2.6,
+     "write": 2.2,
+     "new_tab+2": 1.6,
+     "press_keys": 1.4
+    }
+   },
+   "test_heldout_success": {
+    "plurality": {
+     "states": 348,
+     "success": 35.35
+    },
+    "minority_only": {
+     "states": 348,
+     "success": 37.13
+    },
+    "sft_sample": {
+     "states": 348,
+     "success": 35.65
+    },
+    "uniform_distinct": {
+     "states": 348,
+     "success": 36.16
+    },
+    "oracle": {
+     "states": 348,
+     "success": 46.74
+    },
+    "teacher_k3": {
+     "states": 346,
+     "success": 39.91
+    }
+   }
+  }
+ },
+ "q1_sites": {
+  "piotr_train": {
+   "states": 2692,
+   "episodes": 373,
+   "sites": 103,
+   "top_sites": [
+    [
+     "amazon.com",
+     199
+    ],
+    [
+     "apple.com",
+     170
+    ],
+    [
+     "coursera.org",
+     162
+    ],
+    [
+     "bbc.com",
+     157
+    ],
+    [
+     "google.com",
+     156
+    ],
+    [
+     "huggingface.co",
+     146
+    ],
+    [
+     "arxiv.org",
+     136
+    ],
+    [
+     "github.com",
+     135
+    ],
+    [
+     "espn.com",
+     112
+    ],
+    [
+     "wikipedia.org",
+     95
+    ],
+    [
+     "foodnetwork.com",
+     95
+    ],
+    [
+     "rottentomatoes.com",
+     82
+    ],
+    [
+     "wolframalpha.com",
+     74
+    ],
+    [
+     "weather.com",
+     66
+    ],
+    [
+     "bbcgoodfood.com",
+     60
+    ]
+   ]
+  },
+  "ours_train": {
+   "states": 2612,
+   "tasks": 470,
+   "sites": 128,
+   "task_sources": [
+    [
+     "webvoyager",
+     407
+    ],
+    [
+     "piotr_release",
+     63
+    ]
+   ],
+   "top_sites": [
+    [
+     "arxiv.org",
+     624
+    ],
+    [
+     "wikipedia.org",
+     609
+    ],
+    [
+     "apple.com",
+     142
+    ],
+    [
+     "huggingface.co",
+     130
+    ],
+    [
+     "bbcgoodfood.com",
+     94
+    ],
+    [
+     "cnn.com",
+     80
+    ],
+    [
+     "microsoft.com",
+     76
+    ],
+    [
+     "",
+     51
+    ],
+    [
+     "foodnetwork.com",
+     49
+    ],
+    [
+     "discord.com",
+     30
+    ],
+    [
+     "glycemicindex.com",
+     27
+    ],
+    [
+     "toradex.com",
+     27
+    ],
+    [
+     "wolframalpha.com",
+     23
+    ],
+    [
+     "coursera.org",
+     23
+    ],
+    [
+     "onlinelearningconsortium.org",
+     22
+    ]
+   ]
+  },
+  "live": {
+   "online_mind2web": {
+    "decisions": 9117,
+    "sites": 307,
+    "share_on_site_in_piotr": 28.4,
+    "share_on_site_in_ours": 19.1,
+    "top_sites": [
+     [
+      "google.com",
+      618
+     ],
+     [
+      "bing.com",
+      336
+     ],
+     [
+      "recreation.gov",
+      233
+     ],
+     [
+      "bbb.org",
+      232
+     ],
+     [
+      "craigslist.org",
+      231
+     ],
+     [
+      "healthgrades.com",
+      177
+     ],
+     [
+      "webmd.com",
+      167
+     ],
+     [
+      "akc.org",
+      151
+     ]
+    ]
+   },
+   "webvoyager": {
+    "decisions": 14783,
+    "sites": 109,
+    "share_on_site_in_piotr": 95.4,
+    "share_on_site_in_ours": 62.5,
+    "top_sites": [
+     [
+      "google.com",
+      2582
+     ],
+     [
+      "booking.com",
+      2338
+     ],
+     [
+      "huggingface.co",
+      1039
+     ],
+     [
+      "arxiv.org",
+      988
+     ],
+     [
+      "amazon.com",
+      963
+     ],
+     [
+      "espn.com",
+      839
+     ],
+     [
+      "bbc.com",
+      828
+     ],
+     [
+      "apple.com",
+      828
+     ]
+    ]
+   },
+   "deepshop": {
+    "decisions": 5697,
+    "sites": 15,
+    "share_on_site_in_piotr": 99.3,
+    "share_on_site_in_ours": 0.7,
+    "top_sites": [
+     [
+      "amazon.com",
+      5556
+     ],
+     [
+      "bestbuy.com",
+      48
+     ],
+     [
+      "zappos.com",
+      22
+     ],
+     [
+      "google.com",
+      14
+     ],
+     [
+      "walmart.com",
+      11
+     ],
+     [
+      "goodreads.com",
+      11
+     ],
+     [
+      "",
+      10
+     ],
+     [
+      "bing.com",
+      10
+     ]
+    ]
+   }
+  }
+ },
+ "q1_site_coverage_split": {
+  "online_mind2web": {
+   "site_in_ours": {
+    "tasks": 29,
+    "orig_minus_h2612_pp": [
+     13.8,
+     1.7,
+     27.6
+    ]
+   },
+   "site_not_in_ours": {
+    "tasks": 271,
+    "orig_minus_h2612_pp": [
+     4.1,
+     -0.2,
+     8.5
+    ]
+   }
+  },
+  "webvoyager": {
+   "site_in_ours": {
+    "tasks": 418,
+    "orig_minus_h2612_pp": [
+     4.1,
+     0.5,
+     7.7
+    ]
+   },
+   "site_not_in_ours": {
+    "tasks": 165,
+    "orig_minus_h2612_pp": [
+     -4.5,
+     -10.3,
+     1.2
+    ]
+   }
+  },
+  "deepshop": {
+   "site_not_in_ours": {
+    "tasks": 150,
+    "orig_minus_h2612_pp": [
+     6.7,
+     0.7,
+     12.3
+    ]
+   }
+  },
+  "all_benchmarks_pooled_tasks": {
+   "site_in_ours": {
+    "tasks": 447,
+    "orig_minus_h2612_pp": [
+     4.7,
+     1.5,
+     8.1
+    ]
+   },
+   "site_not_in_ours": {
+    "tasks": 586,
+    "orig_minus_h2612_pp": [
+     2.3,
+     -0.5,
+     5.1
+    ]
+   }
+  }
+ },
+ "q1_by_site": {
+  "effective_sites": {
+   "piotr": 40.1,
+   "ours": 21.7
+  },
+  "live": {
+   "orig_cpu": {
+    "not_ours/not_piotr": {
+     "states": 3154,
+     "repeat_cases": 320,
+     "picks_repeat": 27.2,
+     "repeat_chance": 43.0,
+     "stuck_cases": 62,
+     "picks_repeat_when_stuck": 62.9,
+     "repeat_chance_when_stuck": 60.0
+    },
+    "not_ours/piotr": {
+     "states": 5637,
+     "repeat_cases": 629,
+     "picks_repeat": 35.3,
+     "repeat_chance": 44.0,
+     "stuck_cases": 189,
+     "picks_repeat_when_stuck": 52.9,
+     "repeat_chance_when_stuck": 53.4
+    },
+    "ours/not_piotr": {
+     "states": 158,
+     "repeat_cases": 18,
+     "picks_repeat": 22.2,
+     "repeat_chance": 41.1,
+     "stuck_cases": 4,
+     "picks_repeat_when_stuck": 50.0,
+     "repeat_chance_when_stuck": 65.0
+    },
+    "ours/piotr": {
+     "states": 5156,
+     "repeat_cases": 581,
+     "picks_repeat": 41.8,
+     "repeat_chance": 45.7,
+     "stuck_cases": 203,
+     "picks_repeat_when_stuck": 69.0,
+     "repeat_chance_when_stuck": 56.3
+    }
+   },
+   "orig_gpu": {
+    "not_ours/not_piotr": {
+     "states": 3164,
+     "repeat_cases": 323,
+     "picks_repeat": 36.8,
+     "repeat_chance": 47.7,
+     "stuck_cases": 96,
+     "picks_repeat_when_stuck": 65.6,
+     "repeat_chance_when_stuck": 57.3
+    },
+    "not_ours/piotr": {
+     "states": 5957,
+     "repeat_cases": 728,
+     "picks_repeat": 45.9,
+     "repeat_chance": 44.8,
+     "stuck_cases": 260,
+     "picks_repeat_when_stuck": 64.6,
+     "repeat_chance_when_stuck": 53.4
+    },
+    "ours/not_piotr": {
+     "states": 165,
+     "repeat_cases": 20,
+     "picks_repeat": 35.0,
+     "repeat_chance": 39.0,
+     "stuck_cases": 7,
+     "picks_repeat_when_stuck": 71.4,
+     "repeat_chance_when_stuck": 40.0
+    },
+    "ours/piotr": {
+     "states": 4953,
+     "repeat_cases": 587,
+     "picks_repeat": 43.1,
+     "repeat_chance": 45.1,
+     "stuck_cases": 199,
+     "picks_repeat_when_stuck": 63.8,
+     "repeat_chance_when_stuck": 52.6
+    }
+   },
+   "h2612_cpu": {
+    "not_ours/not_piotr": {
+     "states": 3728,
+     "repeat_cases": 483,
+     "picks_repeat": 49.7,
+     "repeat_chance": 47.6,
+     "stuck_cases": 175,
+     "picks_repeat_when_stuck": 68.0,
+     "repeat_chance_when_stuck": 56.5
+    },
+    "not_ours/piotr": {
+     "states": 6066,
+     "repeat_cases": 881,
+     "picks_repeat": 51.9,
+     "repeat_chance": 45.9,
+     "stuck_cases": 349,
+     "picks_repeat_when_stuck": 67.3,
+     "repeat_chance_when_stuck": 52.3
+    },
+    "ours/not_piotr": {
+     "states": 206,
+     "repeat_cases": 18,
+     "picks_repeat": 50.0,
+     "repeat_chance": 43.3,
+     "stuck_cases": 6,
+     "picks_repeat_when_stuck": 83.3,
+     "repeat_chance_when_stuck": 56.7
+    },
+    "ours/piotr": {
+     "states": 5492,
+     "repeat_cases": 677,
+     "picks_repeat": 47.6,
+     "repeat_chance": 45.9,
+     "stuck_cases": 258,
+     "picks_repeat_when_stuck": 65.1,
+     "repeat_chance_when_stuck": 53.6
+    }
+   },
+   "h2612_gpu": {
+    "not_ours/not_piotr": {
+     "states": 3328,
+     "repeat_cases": 474,
+     "picks_repeat": 50.4,
+     "repeat_chance": 47.6,
+     "stuck_cases": 172,
+     "picks_repeat_when_stuck": 76.7,
+     "repeat_chance_when_stuck": 58.1
+    },
+    "not_ours/piotr": {
+     "states": 6038,
+     "repeat_cases": 927,
+     "picks_repeat": 51.8,
+     "repeat_chance": 46.7,
+     "stuck_cases": 376,
+     "picks_repeat_when_stuck": 71.3,
+     "repeat_chance_when_stuck": 54.4
+    },
+    "ours/not_piotr": {
+     "states": 160,
+     "repeat_cases": 26,
+     "picks_repeat": 38.5,
+     "repeat_chance": 43.1,
+     "stuck_cases": 11,
+     "picks_repeat_when_stuck": 54.5,
+     "repeat_chance_when_stuck": 49.1
+    },
+    "ours/piotr": {
+     "states": 5745,
+     "repeat_cases": 755,
+     "picks_repeat": 44.9,
+     "repeat_chance": 45.6,
+     "stuck_cases": 265,
+     "picks_repeat_when_stuck": 62.3,
+     "repeat_chance_when_stuck": 53.7
+    }
+   }
+  }
+ },
+ "q1_by_turn": {
+  "orig_cpu": {
+   "turn<10": {
+    "states": 7899,
+    "repeat_offered": 12.2,
+    "stuck": 5.4,
+    "repeat_cases": 689,
+    "picks_repeat": 32.2,
+    "repeat_chance": 43.8,
+    "stuck_cases": 151,
+    "picks_repeat_when_stuck": 55.0,
+    "repeat_chance_when_stuck": 54.8
+   },
+   "turn>=10": {
+    "states": 6206,
+    "repeat_offered": 24.3,
+    "stuck": 16.2,
+    "repeat_cases": 859,
+    "picks_repeat": 38.9,
+    "repeat_chance": 44.9,
+    "stuck_cases": 307,
+    "picks_repeat_when_stuck": 64.5,
+    "repeat_chance_when_stuck": 56.1
+   }
+  },
+  "orig_gpu": {
+   "turn<10": {
+    "states": 7892,
+    "repeat_offered": 12.1,
+    "stuck": 5.5,
+    "repeat_cases": 729,
+    "picks_repeat": 37.0,
+    "repeat_chance": 44.8,
+    "stuck_cases": 184,
+    "picks_repeat_when_stuck": 52.2,
+    "repeat_chance_when_stuck": 52.1
+   },
+   "turn>=10": {
+    "states": 6347,
+    "repeat_offered": 23.7,
+    "stuck": 16.4,
+    "repeat_cases": 929,
+    "picks_repeat": 47.7,
+    "repeat_chance": 45.9,
+    "stuck_cases": 378,
+    "picks_repeat_when_stuck": 70.6,
+    "repeat_chance_when_stuck": 54.3
+   }
+  },
+  "h2612_cpu": {
+   "turn<10": {
+    "states": 8024,
+    "repeat_offered": 13.6,
+    "stuck": 6.9,
+    "repeat_cases": 824,
+    "picks_repeat": 48.1,
+    "repeat_chance": 45.5,
+    "stuck_cases": 259,
+    "picks_repeat_when_stuck": 61.4,
+    "repeat_chance_when_stuck": 52.7
+   },
+   "turn>=10": {
+    "states": 7468,
+    "repeat_offered": 29.5,
+    "stuck": 21.9,
+    "repeat_cases": 1235,
+    "picks_repeat": 51.2,
+    "repeat_chance": 46.8,
+    "stuck_cases": 529,
+    "picks_repeat_when_stuck": 69.6,
+    "repeat_chance_when_stuck": 54.2
+   }
+  },
+  "h2612_gpu": {
+   "turn<10": {
+    "states": 7796,
+    "repeat_offered": 13.9,
+    "stuck": 7.1,
+    "repeat_cases": 793,
+    "picks_repeat": 44.9,
+    "repeat_chance": 45.2,
+    "stuck_cases": 228,
+    "picks_repeat_when_stuck": 61.0,
+    "repeat_chance_when_stuck": 52.9
+   },
+   "turn>=10": {
+    "states": 7012,
+    "repeat_offered": 31.4,
+    "stuck": 22.5,
+    "repeat_cases": 1327,
+    "picks_repeat": 51.7,
+    "repeat_chance": 47.2,
+    "stuck_cases": 576,
+    "picks_repeat_when_stuck": 72.7,
+    "repeat_chance_when_stuck": 55.9
+   }
+  }
+ },
+ "q1_offline_repeat": {
+  "train": {
+   "teacher": {
+    "cases": 512,
+    "picks_repeat": 38.4,
+    "repeat_chance": 49.0,
+    "heldout_success_when_picking_repeat": 31.4,
+    "heldout_success_when_picking_other": 40.9
+   },
+   "h2612": {
+    "cases": 512,
+    "picks_repeat": 38.1,
+    "repeat_chance": 49.0,
+    "heldout_success_when_picking_repeat": 31.8,
+    "heldout_success_when_picking_other": 41.3
+   },
+   "orig": {
+    "cases": 512,
+    "picks_repeat": 33.4,
+    "repeat_chance": 49.0,
+    "heldout_success_when_picking_repeat": 31.1,
+    "heldout_success_when_picking_other": 36.9
+   }
+  },
+  "test": {
+   "teacher": {
+    "cases": 80,
+    "picks_repeat": 31.9,
+    "repeat_chance": 52.2,
+    "heldout_success_when_picking_repeat": 22.6,
+    "heldout_success_when_picking_other": 44.3
+   },
+   "h2612": {
+    "cases": 80,
+    "picks_repeat": 31.2,
+    "repeat_chance": 52.2,
+    "heldout_success_when_picking_repeat": 27.9,
+    "heldout_success_when_picking_other": 37.4
+   },
+   "orig": {
+    "cases": 80,
+    "picks_repeat": 28.8,
+    "repeat_chance": 52.2,
+    "heldout_success_when_picking_repeat": 23.6,
+    "heldout_success_when_picking_other": 39.6
+   }
+  }
+ },
+ "q3_old_vs_added_states": {
+  "note": "Why does the 2,612-state one-panel K=3 head not beat the 1,380-state head trained on a subset of the same data?",
+  "training": {
+   "old": {
+    "states": 1380,
+    "missing_anchor": 0,
+    "tasks": 347,
+    "states_per_task": 3.98,
+    "tasks_also_in_old": 347,
+    "states_on_old_tasks": 1380,
+    "task_sources": [
+     [
+      "webvoyager",
+      1039
+     ],
+     [
+      "piotr_release",
+      341
+     ]
+    ],
+    "depth_share": {
+     "0": 20.2,
+     "1-4": 52.2,
+     "5-9": 22.0,
+     "10+": 5.5
+    },
+    "sites": 80,
+    "effective_sites": 8.9,
+    "top_sites": [
+     [
+      "wikipedia.org",
+      44.1
+     ],
+     [
+      "arxiv.org",
+      24.5
+     ],
+     [
+      "huggingface.co",
+      5.4
+     ],
+     [
+      "apple.com",
+      3.4
+     ],
+     [
+      "cnn.com",
+      2.1
+     ],
+     [
+      "coursera.org",
+      1.7
+     ],
+     [
+      "wolframalpha.com",
+      1.2
+     ],
+     [
+      "microsoft.com",
+      1.1
+     ]
+    ],
+    "states_on_sites_in_old": 100.0,
+    "distinct_actions_share": {
+     "2": 42.9,
+     "3": 34.8,
+     "4": 17.2,
+     "5": 5.1
+    },
+    "mean_distinct_actions": 2.84,
+    "done_offered": 14.0,
+    "repeat_offered": 24.3,
+    "action_types_offered": {
+     "click": 38.2,
+     "click+2": 22.1,
+     "scroll": 15.9,
+     "go_back": 5.4,
+     "done": 5.0,
+     "goto_url": 2.8,
+     "write": 2.5,
+     "write+1": 2.2
+    },
+    "label_mass_by_type": {
+     "click": 37.4,
+     "click+2": 21.0,
+     "scroll": 18.9,
+     "go_back": 5.2,
+     "done": 5.2,
+     "goto_url": 3.1,
+     "write": 2.4,
+     "write+1": 1.7
+    },
+    "labelled": 1380,
+    "label_top_share_mean": 0.916,
+    "both_calls_agree": 83.3,
+    "done_cases": 193,
+    "label_picks_done": 37.0,
+    "done_chance": 41.0,
+    "repeat_cases": 336,
+    "label_picks_repeat": 37.1,
+    "repeat_chance": 40.1
+   },
+   "lbt": {
+    "states": 710,
+    "missing_anchor": 0,
+    "tasks": 207,
+    "states_per_task": 3.43,
+    "tasks_also_in_old": 102,
+    "states_on_old_tasks": 437,
+    "task_sources": [
+     [
+      "webvoyager",
+      710
+     ]
+    ],
+    "depth_share": {
+     "0": 0.0,
+     "1-4": 63.2,
+     "5-9": 36.8,
+     "10+": 0.0
+    },
+    "sites": 87,
+    "effective_sites": 29.5,
+    "top_sites": [
+     [
+      "arxiv.org",
+      22.8
+     ],
+     [
+      "apple.com",
+      7.2
+     ],
+     [
+      "bbcgoodfood.com",
+      7.0
+     ],
+     [
+      "microsoft.com",
+      5.8
+     ],
+     [
+      "",
+      4.9
+     ],
+     [
+      "huggingface.co",
+      4.9
+     ],
+     [
+      "foodnetwork.com",
+      3.7
+     ],
+     [
+      "cnn.com",
+      3.7
+     ]
+    ],
+    "states_on_sites_in_old": 68.7,
+    "distinct_actions_share": {
+     "2": 29.3,
+     "3": 19.9,
+     "4": 18.3,
+     "5": 32.5
+    },
+    "mean_distinct_actions": 3.54,
+    "done_offered": 9.2,
+    "repeat_offered": 25.6,
+    "action_types_offered": {
+     "click": 41.2,
+     "scroll": 12.5,
+     "goto_url": 9.5,
+     "click+2": 9.3,
+     "go_back": 5.2,
+     "press_keys": 4.1,
+     "done": 3.4,
+     "write": 3.2
+    },
+    "label_mass_by_type": {
+     "click": 40.8,
+     "scroll": 14.7,
+     "goto_url": 11.0,
+     "click+2": 7.6,
+     "go_back": 4.8,
+     "press_keys": 4.6,
+     "write+1": 3.0,
+     "done": 2.7
+    },
+    "labelled": 710,
+    "label_top_share_mean": 0.92,
+    "both_calls_agree": 84.1,
+    "done_cases": 64,
+    "label_picks_done": 28.9,
+    "done_chance": 36.3,
+    "repeat_cases": 182,
+    "label_picks_repeat": 29.1,
+    "repeat_chance": 31.3
+   },
+   "lbu": {
+    "states": 522,
+    "missing_anchor": 0,
+    "tasks": 182,
+    "states_per_task": 2.87,
+    "tasks_also_in_old": 94,
+    "states_on_old_tasks": 334,
+    "task_sources": [
+     [
+      "webvoyager",
+      522
+     ]
+    ],
+    "depth_share": {
+     "0": 0.0,
+     "1-4": 59.2,
+     "5-9": 40.8,
+     "10+": 0.0
+    },
+    "sites": 79,
+    "effective_sites": 28.2,
+    "top_sites": [
+     [
+      "arxiv.org",
+      23.8
+     ],
+     [
+      "apple.com",
+      8.4
+     ],
+     [
+      "bbcgoodfood.com",
+      8.4
+     ],
+     [
+      "cnn.com",
+      4.8
+     ],
+     [
+      "foodnetwork.com",
+      4.4
+     ],
+     [
+      "huggingface.co",
+      4.0
+     ],
+     [
+      "microsoft.com",
+      3.8
+     ],
+     [
+      "",
+      3.1
+     ]
+    ],
+    "states_on_sites_in_old": 69.9,
+    "distinct_actions_share": {
+     "2": 28.7,
+     "3": 23.9,
+     "4": 16.3,
+     "5": 31.0
+    },
+    "mean_distinct_actions": 3.5,
+    "done_offered": 11.1,
+    "repeat_offered": 22.8,
+    "action_types_offered": {
+     "click": 40.9,
+     "scroll": 13.5,
+     "click+2": 10.5,
+     "goto_url": 6.2,
+     "go_back": 5.9,
+     "press_keys": 4.3,
+     "done": 4.2,
+     "write": 3.8
+    },
+    "label_mass_by_type": {
+     "click": 42.8,
+     "scroll": 18.0,
+     "click+2": 9.4,
+     "goto_url": 6.9,
+     "go_back": 5.2,
+     "press_keys": 3.8,
+     "done": 3.3,
+     "write": 2.4
+    },
+    "labelled": 522,
+    "label_top_share_mean": 0.919,
+    "both_calls_agree": 83.7,
+    "done_cases": 58,
+    "label_picks_done": 29.3,
+    "done_chance": 38.2,
+    "repeat_cases": 119,
+    "label_picks_repeat": 27.3,
+    "repeat_chance": 31.9
+   }
+  },
+  "live": {
+   "h1380/online_mind2web": {
+    "runs": 2,
+    "valid_episodes": 267,
+    "success": 43.1,
+    "mean_steps": 17.4,
+    "finish_done": 64.8,
+    "step_limit": 32.6,
+    "end_before_10": 30.0,
+    "success_if_end_before_10": 71.2,
+    "reach_10": 187,
+    "late_finish_done": 49.7,
+    "late_step_limit": 46.5,
+    "success_if_reach_10": 31.0,
+    "repeat_pick_early": [
+     208,
+     50.5,
+     44.4
+    ],
+    "repeat_pick_late": [
+     346,
+     51.2,
+     48.2
+    ],
+    "done_pick_when_mixed": [
+     396,
+     13.1,
+     42.8
+    ],
+    "picked_types": {
+     "click": 52.0,
+     "scroll": 14.1,
+     "click+2": 7.4,
+     "goto_url": 4.1,
+     "write": 3.8,
+     "done": 3.7,
+     "new_tab+2": 3.7
+    },
+    "offered_types": {
+     "click": 52.7,
+     "scroll": 13.1,
+     "done": 6.2,
+     "click+2": 6.1,
+     "go_back": 3.9,
+     "write": 3.8,
+     "goto_url": 3.1
+    }
+   },
+   "h1380/webvoyager": {
+    "runs": 2,
+    "valid_episodes": 585,
+    "success": 52.0,
+    "mean_steps": 13.3,
+    "finish_done": 74.5,
+    "step_limit": 23.1,
+    "end_before_10": 53.7,
+    "success_if_end_before_10": 71.3,
+    "reach_10": 271,
+    "late_finish_done": 48.3,
+    "late_step_limit": 49.8,
+    "success_if_reach_10": 29.5,
+    "repeat_pick_early": [
+     387,
+     47.5,
+     45.8
+    ],
+    "repeat_pick_late": [
+     539,
+     39.3,
+     43.6
+    ],
+    "done_pick_when_mixed": [
+     765,
+     17.6,
+     41.6
+    ],
+    "picked_types": {
+     "click": 54.0,
+     "scroll": 15.9,
+     "click+2": 6.9,
+     "done": 5.6,
+     "go_back": 3.7,
+     "write": 3.2,
+     "wait": 3.2
+    },
+    "offered_types": {
+     "click": 53.9,
+     "scroll": 14.9,
+     "done": 8.0,
+     "click+2": 6.4,
+     "go_back": 3.8,
+     "write": 3.3,
+     "wait": 2.9
+    }
+   },
+   "h1380/deepshop": {
+    "runs": 2,
+    "valid_episodes": 296,
+    "success": 41.9,
+    "mean_steps": 18.3,
+    "finish_done": 70.6,
+    "step_limit": 28.4,
+    "end_before_10": 23.0,
+    "success_if_end_before_10": 70.6,
+    "reach_10": 228,
+    "late_finish_done": 62.3,
+    "late_step_limit": 36.8,
+    "success_if_reach_10": 33.3,
+    "repeat_pick_early": [
+     274,
+     52.6,
+     42.0
+    ],
+    "repeat_pick_late": [
+     746,
+     60.6,
+     45.5
+    ],
+    "done_pick_when_mixed": [
+     611,
+     16.4,
+     38.6
+    ],
+    "picked_types": {
+     "click": 49.7,
+     "scroll": 29.4,
+     "go_back": 5.8,
+     "write": 4.3,
+     "done": 3.9,
+     "click+2": 3.0,
+     "drag": 1.5
+    },
+    "offered_types": {
+     "click": 53.0,
+     "scroll": 22.7,
+     "done": 6.4,
+     "go_back": 5.0,
+     "write": 4.3,
+     "click+2": 2.7,
+     "drag": 1.7
+    }
+   },
+   "h2612/online_mind2web": {
+    "runs": 3,
+    "valid_episodes": 778,
+    "success": 37.3,
+    "mean_steps": 17.5,
+    "finish_done": 67.1,
+    "step_limit": 30.8,
+    "end_before_10": 29.8,
+    "success_if_end_before_10": 54.3,
+    "reach_10": 546,
+    "late_finish_done": 53.8,
+    "late_step_limit": 44.0,
+    "success_if_reach_10": 30.0,
+    "repeat_pick_early": [
+     594,
+     45.5,
+     45.8
+    ],
+    "repeat_pick_late": [
+     1172,
+     50.3,
+     46.0
+    ],
+    "done_pick_when_mixed": [
+     1422,
+     9.6,
+     40.8
+    ],
+    "picked_types": {
+     "click": 47.6,
+     "scroll": 16.6,
+     "click+2": 7.4,
+     "go_back": 4.7,
+     "goto_url": 4.0,
+     "done": 3.8,
+     "new_tab+2": 3.7
+    },
+    "offered_types": {
+     "click": 49.6,
+     "scroll": 14.1,
+     "done": 7.1,
+     "click+2": 6.4,
+     "go_back": 4.8,
+     "wait": 3.4,
+     "write": 3.0
+    }
+   },
+   "h2612/webvoyager": {
+    "runs": 3,
+    "valid_episodes": 1722,
+    "success": 52.0,
+    "mean_steps": 13.2,
+    "finish_done": 74.5,
+    "step_limit": 22.0,
+    "end_before_10": 52.8,
+    "success_if_end_before_10": 68.8,
+    "reach_10": 812,
+    "late_finish_done": 50.5,
+    "late_step_limit": 46.7,
+    "success_if_reach_10": 33.3,
+    "repeat_pick_early": [
+     1308,
+     44.2,
+     44.9
+    ],
+    "repeat_pick_late": [
+     1523,
+     45.1,
+     46.1
+    ],
+    "done_pick_when_mixed": [
+     2175,
+     19.1,
+     41.5
+    ],
+    "picked_types": {
+     "click": 49.4,
+     "scroll": 18.1,
+     "click+2": 7.9,
+     "done": 5.7,
+     "go_back": 5.1,
+     "write": 3.0,
+     "wait": 2.7
+    },
+    "offered_types": {
+     "click": 50.9,
+     "scroll": 16.1,
+     "done": 7.8,
+     "click+2": 7.1,
+     "go_back": 4.8,
+     "write": 3.2,
+     "wait": 3.0
+    }
+   },
+   "h2612/deepshop": {
+    "runs": 3,
+    "valid_episodes": 433,
+    "success": 30.7,
+    "mean_steps": 19.9,
+    "finish_done": 60.7,
+    "step_limit": 37.4,
+    "end_before_10": 20.8,
+    "success_if_end_before_10": 67.8,
+    "reach_10": 343,
+    "late_finish_done": 51.3,
+    "late_step_limit": 47.2,
+    "success_if_reach_10": 21.0,
+    "repeat_pick_early": [
+     444,
+     51.4,
+     44.5
+    ],
+    "repeat_pick_late": [
+     1188,
+     57.7,
+     47.4
+    ],
+    "done_pick_when_mixed": [
+     1163,
+     9.8,
+     37.7
+    ],
+    "picked_types": {
+     "click": 48.7,
+     "scroll": 25.5,
+     "go_back": 8.9,
+     "click+2": 4.9,
+     "write": 4.0,
+     "done": 3.0,
+     "drag": 1.1
+    },
+    "offered_types": {
+     "click": 51.9,
+     "scroll": 20.3,
+     "go_back": 6.9,
+     "done": 6.8,
+     "write": 4.4,
+     "click+2": 3.4,
+     "press_keys": 1.6
+    }
+   }
+  }
+ },
+ "q3_labels_and_paired": {
+  "labels": {
+   "old": {
+    "states": 1380,
+    "mean_draws": 7.9,
+    "label_on_most_proposed": 42.3,
+    "label_on_most_proposed_if_random": 38.4,
+    "label_on_singletons": 42.8,
+    "singleton_actions_share": 46.1,
+    "singleton_share_of_proposals": 27.0
+   },
+   "lbt": {
+    "states": 710,
+    "mean_draws": 14.8,
+    "label_on_most_proposed": 38.4,
+    "label_on_most_proposed_if_random": 32.4,
+    "label_on_singletons": 33.0,
+    "singleton_actions_share": 36.9,
+    "singleton_share_of_proposals": 11.0
+   },
+   "lbu": {
+    "states": 522,
+    "mean_draws": 15.0,
+    "label_on_most_proposed": 36.1,
+    "label_on_most_proposed_if_random": 32.6,
+    "label_on_singletons": 33.4,
+    "singleton_actions_share": 36.8,
+    "singleton_share_of_proposals": 10.7
+   }
+  },
+  "paired": {
+   "webvoyager": {
+    "tasks": 595,
+    "runs": {
+     "h1380": 1,
+     "h2612": 3
+    },
+    "h1380_minus_h2612_pp": [
+     0.9,
+     -2.2,
+     4.0
+    ]
+   },
+   "deepshop": {
+    "tasks": 150,
+    "runs": {
+     "h1380": 2,
+     "h2612": 3
+    },
+    "h1380_minus_h2612_pp": [
+     11.8,
+     6.2,
+     17.3
+    ]
+   }
+  }
+ }
+}

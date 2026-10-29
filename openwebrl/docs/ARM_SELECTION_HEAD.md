@@ -632,7 +632,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 - LoRA − head on the same states: K = 3 +0.7 pp [−1.7, +3.2] distinct, +0.1 [−1.8, +2.0] natural; outcome −0.4 [−2.4, +1.8] and +1.3 [−0.2, +3.1]. **The 4B selector does not beat the head on branch data, while Piotr's data still gives the best offline selector**, consistent with the live finding that data, not selector size, sets the gap.
 - Distinct panels average 5 candidate orderings per state; natural panels are 5 seeded five-proposal panels. Reading the pick after the serving prefix instead of the training prefix changes success by under 0.3 pp. Head rows are the round-1 heads of the offline table above, restricted to these 345 states (one distinct ordering), so they differ slightly from that table.
 - **Caveat for the Piotr row:** the branch states were collected on the tasks of Piotr's ARM training split, so his selector has trained on other states of the same tasks; the heads and LoRAs have not (task-grouped split). His offline lead may be partly task familiarity.
-- Not yet run live. [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
+- Live (10-28): see [LoRA vs head](#selection-head-recipe-model-scale-device-20261028). [Evidence](arm_results/rl_integration/selection-lora-sft-actions-offline-20261021.json)
 
 **More one-panel data, larger selector (offline, 10-28).** The same LoRA recipe trained on all 2,612 one-panel K = 3 states (the 1,380 above plus 1,232 labels-only states; 28,150 examples, 10 orderings per state) still does not beat the all-states 22.6 M head on the heads' fixed-five metric. Same 345 test states / 86 tasks, held-out draws 3–7, one SFT sample 35.4%, oracle 46.6%:
 
@@ -645,7 +645,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 | LoRA 4B, 1,380 | 36.6% | +1.3 [−0.8, +3.4] | −1.3 [−3.6, +1.3] |
 
 - Doubling the LoRA's states moves fixed five by +0.3 pp [−2.1, +2.7]. On distinct-action panels it gains more (38.8% vs 37.5%; natural 38.0% vs 37.5%), so the LoRA ranks distinct actions better but not the fixed five proposals the heads and live selection see.
-- The head row is 37.9% here vs 38.15% on all 348 test states (3 states lack a LoRA panel). Pick read after the training prefix; the serving prefix changes it by ≤ 0.1 pp. One training seed each. Not run live. [Evidence](arm_results/rl_integration/selection-lora-onepanel2612-offline-20261028.json)
+- The head row is 37.9% here vs 38.15% on all 348 test states (3 states lack a LoRA panel). Pick read after the training prefix; the serving prefix changes it by ≤ 0.1 pp. One training seed each. Live (10-28): see [LoRA vs head](#selection-head-recipe-model-scale-device-20261028). [Evidence](arm_results/rl_integration/selection-lora-onepanel2612-offline-20261028.json)
 
 <details>
 <summary>States, actions, labels and training</summary>
@@ -1764,3 +1764,156 @@ Oracle-action rate on informative states, % · difference from chance in pp [95%
 - Over all states (including those where every pick is an oracle action, chance 65.0%) the pattern is the same, e.g. the H = 3 student on test +4.2 [+0.1, +8.7], the outcome student +0.5 [−3.8, +4.9].
 - Training-state student numbers are not held-out: the students saw those states' labels, though never draws 3–7.
 - [Evidence](arm_results/rl_integration/selection-label-oracle-agreement-20261028.json) · [analysis script](arm_results/rl_integration/selection-label-oracle-agreement-20261028-analysis.py) (CPU job 394863).
+
+
+<a id="selection-head-recipe-model-scale-device-20261028"></a>
+
+## Data source, selector model, data scale and training device (2026-10-27/28)
+
+**Four live comparisons from 10-27/28, with every head-to-head pair run on the same day. (1) Data source matters: on Piotr's data the head beats the same head on 2,612 of our branching states by +4.4 pp [+1.9, +7.0]. Our states almost never come from late in an episode, and that is where our head fails to finish. (2) The selector model does not matter: a 4B decoder LoRA and the 22.6 M head on the same data are level (+2.5 [−0.7, +5.8] on ours; −0.1 [−3.5, +3.5] on Piotr's). (3) More of our states do not help: 1,380 → 2,612 states is −0.4 [−4.1, +3.2] for the LoRA. The head's −4.0 [−7.2, −0.9] is all DeepShop, run on different days. (4) Training device does not matter: GPU − CPU copies of the same recipe are −0.7 [−4.6, +3.1] and +1.2 [−2.3, +4.6]. Identical weights rerun on another day move by up to −3.7 pp on the mean and −11.3 pp on DeepShop, so only same-day pairs are reliable.**
+
+| Selector | Training data | Run | OM2W valid | OM2W successes | OM2W overall | WebVoyager valid | WebVoyager successes | WebVoyager overall | DeepShop valid | DeepShop successes | DeepShop overall | Mean overall |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Piotr SelectionARM (4B LoRA) | Piotr's 2,692 states | 10-18 | 263 | 117 | 39.0% | 580 | 312 | 52.4% | 148 | 62 | 41.3% | 44.2% |
+| Head (22.6 M), original weights | Piotr's 2,692 states | 10-18 | 265 | 113 | 37.7% | 571 | 305 | 51.3% | 147 | 66 | 44.0% | 44.3% |
+| Same weights | | 10-25 | 263 | 110 | 36.7% | 584 | 315 | 52.9% | 144 | 55 | 36.7% | 42.1% |
+| Same weights = GPU copy | | 10-28 | 254 | 110 | 36.7% | 571 | 313 | 52.6% | 147 | 49 | 32.7% | 40.7% |
+| Head, CPU copy | | 10-28 | 256 | 107 | 35.7% | 568 | 304 | 51.1% | 146 | 56 | 37.3% | 41.4% |
+| Head (22.6 M), CPU-trained | Our 2,612 states | 10-27 | 260 | 103 | 34.3% | 580 | 299 | 50.3% | 144 | 48 | 32.0% | 38.9% |
+| Same weights | | 10-28 | 256 | 94 | 31.3% | 576 | 301 | 50.6% | 146 | 39 | 26.0% | 36.0% |
+| Head, GPU copy | | 10-28 | 262 | 93 | 31.0% | 566 | 296 | 49.7% | 143 | 46 | 30.7% | 37.1% |
+| 4B decoder LoRA | | 10-28 | 256 | 94 | 31.3% | 570 | 309 | 51.9% | 143 | 51 | 34.0% | 39.1% |
+| Head (22.6 M) | Our 1,380 states | 10-21; DeepShop 10-27 | 267 | 99 | 33.0% | 585 | 304 | 51.1% | 146 | 60 | 40.0% | 41.4% |
+| 4B decoder LoRA | | 10-28 | 256 | 103 | 34.3% | 575 | 314 | 52.8% | 144 | 47 | 31.3% | 39.5% |
+| *SFT 4B, one sample* | — | 10-18; DeepShop 10-28 | 275 | 95 | 31.7% | 587 | 264 | 44.4% | 149 | 40 | 26.7% | 34.3% |
+
+- **Setup.** All tasks of Online-Mind2Web (300), WebVoyager (595) and DeepShop (150), one episode per task. Actor: SFT 4B, five candidates per decision, T 1.0 / top-p 0.9, 30 steps.
+- **Judges.** Online-Mind2Web: gpt-5.6-terra, with the 10-18 and 10-21 runs re-judged ([judge change](#selection-head-data-scale-20261023)). WebVoyager and DeepShop: GPT-4o. All checked on the saved verdicts.
+- **Columns.** "Overall" counts invalid episodes as failures. "Mean" weights the three benchmarks equally.
+- **Paired differences.** Paired over tasks, 95% bootstrap, with benchmarks resampled independently for the mean. A selector with several runs (copies or reruns) is pooled per task.
+- **Labels.** Our states carry Luna K = 3 vote-share labels: one panel of 2–5 distinct actions per state ([data](#selection-head-onepanel-k3-scale-20261028)). Piotr's states carry GPT-5.5 pre-execution picks: about 13 five-proposal panels per state.
+- **Seeds.** One training seed per selector.
+
+### 1. Piotr's data vs our branching data
+
+| Paired difference, overall pp [95% CI] | Same day | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Head: Piotr's data (2 copies) − our 2,612 (2 copies) | yes | **+5.0 [+1.0, +9.2]** | +1.7 [−1.4, +4.7] | **+6.7 [+0.7, +12.3]** | **+4.4 [+1.9, +7.0]** |
+| Head: Piotr's data (2 copies) − our 1,380 | no | +3.2 [−2.0, +8.3] | +0.8 [−2.8, +4.5] | −5.0 [−12.7, +2.7] | −0.4 [−3.7, +3.0] |
+| 4B LoRA: Piotr SelectionARM − ours, 2,612 | no | **+7.7 [+2.3, +13.0]** | +0.5 [−3.5, +4.5] | +7.3 [−1.3, +16.0] | **+5.2 [+1.5, +8.8]** |
+| 4B LoRA: Piotr SelectionARM − ours, 1,380 | no | +4.7 [−1.0, +10.3] | −0.3 [−4.5, +3.9] | **+10.0 [+0.7, +19.3]** | **+4.8 [+1.0, +8.6]** |
+
+- **Piotr's data wins for both selector models.** The only same-day pair is the first row. The LoRA rows compare 10-18 with 10-28, and DeepShop drifted downward between those dates (section 4). Their Online-Mind2Web gaps (+4.7 and +7.7) are not affected, because Online-Mind2Web has not drifted.
+- **The 1,380-state head is the exception.** Its −0.4 rests on a DeepShop run from 10-27 (section 3).
+- **Offline the recipes tie.** Fixed-five success on our 348 test states: Piotr-data head 37.99%, our 2,612-state head 38.15%. The offline test set has no state at step 15 or later, so it cannot see the late-episode failure below.
+
+**Why: our states stop around step 10, and the 2,612-state head stops finishing tasks.**
+
+| State distribution | Piotr's training states | Our 2,612 training states | Live decisions (4 runs of both heads, 10-28) |
+| --- | ---: | ---: | ---: |
+| States | 2,692 (35,916 panels) | 2,612 | 14,105–15,492 per run |
+| At step 10 or later | 17.6% | 3.0% | 44–48% |
+| A `done` candidate offered | 28.0% | 10.5% | 13.2–16.1% |
+| Label picks that are `done` (share of picks) | 19.0% | 3.7% | — |
+| Effective number of sites | 40.1 | 21.7 | — |
+
+- **Where the states come from.** Piotr's states are every step of 373 demonstration episodes, run to completion. Ours are branching points sampled from SFT-actor rollouts, collected at prefix depths up to about 10 by design.
+- **Shares.** Piotr's shares are per panel. "Effective number of sites" is the exponential of the site entropy.
+
+| Episodes still running at step 10, both copies pooled | Online-Mind2Web: Piotr's data | Online-Mind2Web: our 2,612 | WebVoyager: Piotr's data | WebVoyager: our 2,612 | DeepShop: Piotr's data | DeepShop: our 2,612 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Episodes | 328 | 367 | 494 | 531 | 215 | 229 |
+| End with `done` | 64.3% | 50.7% | 56.3% | 52.5% | 66.5% | 51.5% |
+| Hit the 30-step limit | 33.8% | 47.1% | 43.1% | 44.3% | 31.6% | 47.2% |
+| Success | 31.4% | 28.1% | 33.4% | 34.5% | 28.4% | 19.2% |
+
+- **The gap opens where our data are thin.** Online-Mind2Web and DeepShop lose about 14 pp of `done` finishes once an episode reaches step 10. More of our head's episodes get there: Online-Mind2Web 29.2% end before step 10 vs 35.7%; DeepShop 20.8% vs 26.6%. WebVoyager, the benchmark without a significant gap, barely changes.
+- **Site coverage does not explain it.** Our training sites are narrower (arxiv and Wikipedia are 47% of states), and DeepShop's Amazon is absent. Yet the gap is no larger on tasks whose start site we never saw: +2.3 [−0.5, +5.1], against +4.7 [+1.5, +8.1] on covered sites (all benchmarks' tasks pooled). On WebVoyager it reverses on unseen sites (−4.5 [−10.3, +1.2]).
+- **The labels are not the problem.** The Luna K = 3 labels avoid repeating the previous action (36.3% vs 48.9% chance), and rightly so: on our test states, repeat picks succeed 22.6% of the time on held-out draws, other picks 44.3%. Both heads learn this offline (repeat picks 31.2% and 28.8% vs 52.2% chance). Live, our head repeats at about chance (49–50% vs 46–47%) while the Piotr-data copies stay at or below it (35.9% and 43.0%). This is a symptom of being off its training distribution, not a label defect.
+- **Ruled out.** Panel count (one panel ≈ 13 panels on Piotr's states, [panel scaling](#selection-head-panel-scale-20261026)). Stuck-state coverage: ours has more repeat-offered states than Piotr's (22.1% vs 7.7%).
+
+### 2. Decoder LoRA vs selection head on the same data
+
+| Paired difference, overall pp [95% CI] | Same day | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Our 2,612: LoRA − head (2 copies) | yes | +0.2 [−4.3, +4.7] | +1.8 [−1.9, +5.4] | +5.7 [−2.3, +13.7] | +2.5 [−0.7, +5.8] |
+| Piotr's data: SelectionARM − head | yes (10-18) | +1.3 [−3.7, +6.3] | +1.2 [−2.7, +5.0] | −2.7 [−11.3, +5.3] | −0.1 [−3.5, +3.5] |
+| Our 1,380: LoRA − head | no | +1.3 [−4.0, +6.7] | +1.7 [−2.4, +5.7] | −8.7 [−17.3, 0.0] | −1.9 [−5.5, +1.8] |
+
+- **A 4B selector buys nothing over the 22.6 M head.** No benchmark difference is significant on either data source. Offline the head is slightly ahead: fixed five on 345 test states, head 37.9% vs LoRA 36.9% (2,612 states) and 36.6% (1,380 states) ([offline](#selection-head-sft-actions-lora-20261021)).
+- **The LoRA costs much more.**
+  - Inference: a second 4.44 B model, 0.098 vs 0.063 PFLOP per step ([headline](#headline-results)).
+  - Training on 2,612 states: 4 H200 × 3 h 31 m (job 393844). The head trains in about 2 minutes.
+- **LoRA recipe.** Piotr's SelectionARM recipe on OpenWebRL-4B-SFT: LLaMA-Factory LoRA, rank 32 / alpha 64 on all linear layers, vision tower frozen, 2 epochs, lr 1e-4, output `{"selection": N}`. Same states and Luna K = 3 vote-share targets as the heads, distinct actions in 10 shuffled orders per state (28,150 training examples for 2,612 states). Served live as `arm5`.
+
+### 3. Data scale: 1,380 vs 2,612 of our states
+
+| Paired difference, overall pp [95% CI] | Same day | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | --- | ---: | ---: | ---: | ---: |
+| LoRA: 2,612 − 1,380 | yes | −3.0 [−8.3, +2.3] | −0.8 [−4.7, +3.0] | +2.7 [−6.0, +11.3] | −0.4 [−4.1, +3.2] |
+| Head: 2,612 (3 runs) − 1,380 | DeepShop only | −0.8 [−5.3, +3.6] | −0.9 [−4.0, +2.3] | **−10.4 [−18.0, −2.9]** | **−4.0 [−7.2, −0.9]** |
+
+- **The head's only loss is on DeepShop.** On 10-27, the night both heads ran DeepShop, the score was 32.0% vs 40.0% (−8.0 [−17.3, +1.3]). Head subsets of 263–1,003 states show no trend ([state scaling](#selection-head-onepanel-k3-scale-20261028)).
+- **The LoRA doesn't share the loss.** Trained on the same two datasets, it shows no gap, and its DeepShop difference has the opposite sign. With one training seed per head, a lucky 1,380-state head is not ruled out.
+
+**What the 1,232 added states change.** The 2,612 states are the 1,380 earlier states plus 1,232 labels-only states (collections lbt 710 and lbu 522). The labeller config is identical (Luna K = 3, two calls per state).
+
+| Training states | Earlier 1,380 | Added 1,232 (lbt / lbu) |
+| --- | ---: | ---: |
+| Tasks (also among the earlier 1,380 states' tasks) | 347 (347) | 207 (102) / 182 (94) |
+| Task source | 75% WebVoyager, 25% Piotr release | 100% WebVoyager |
+| At step 0 / step 10 or later | 20.2% / 5.5% | 0% / 0% |
+| Mean distinct actions (share with 5) | 2.84 (5.1%) | 3.54 (32.5%) / 3.50 (31.0%) |
+| SFT proposals per state the actions come from | 7.9 | 14.8 / 15.0 |
+| A `done` candidate offered | 14.0% | 9.2% / 11.1% |
+| Label picks `done` when some but not all candidates are `done` (random pick) | 37.0% (41.0%) | 28.9% (36.3%) / 29.3% (38.2%) |
+| Label weight on `done` | 5.2% | 2.7% / 3.3% |
+| Wikipedia share / effective number of sites | 44.1% / 8.9 | 0% / 29.5 (lbt), 28.2 (lbu) |
+| Both labeller calls agree | 83.3% | 84.1% / 83.7% |
+
+| Live behaviour, DeepShop | 1,380 head (2 runs) | 2,612 head (3 runs) |
+| --- | ---: | ---: |
+| Valid episodes | 296 | 433 |
+| End with `done` | 70.6% | 60.7% |
+| Hit the 30-step limit | 28.4% | 37.4% |
+| Success among episodes still running at step 10 | 33.3% | 21.0% |
+| Picks `done` when some but not all candidates are `done` (random pick) | 16.4% (38.6%) | 9.8% (37.7%) |
+
+- **The added states are all mid-episode and weaken the `done` signal.** They are steps 1–9 only, offer `done` less often, and their labels reject it more strongly. Together they cut the training mass on `done` from 5.2% to about 4.1%.
+- **They also don't look like live panels.** Their candidate sets were drawn from about 15 proposals, so they hold more rare actions than the 2–3 distinct actions a live five-proposal panel usually has.
+- **The `done` deficit matches the failure in section 1.** The 2,612-state head also picks `done` less on Online-Mind2Web (9.6% vs 13.1%), but not on WebVoyager (19.1% vs 17.6%), where the two heads tie.
+- **The labels are not worse.** Agreement, confidence (mean top vote share 0.92), and the preference for the most-proposed action (+4–6 pp over a random pick) match.
+
+### 4. Training device and rerun noise
+
+| Paired difference, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | ---: | ---: | ---: | ---: |
+| Piotr-data head: GPU copy − CPU copy (10-28) | +1.0 [−4.0, +6.3] | +1.5 [−2.5, +5.2] | −4.7 [−14.7, +4.7] | −0.7 [−4.6, +3.1] |
+| Our 2,612 head: GPU copy − CPU copy (10-28) | −0.3 [−5.3, +4.7] | −0.8 [−4.7, +3.0] | +4.7 [−3.3, +12.7] | +1.2 [−2.3, +4.6] |
+| Same weights, Piotr-data head: 10-28 − 10-25 | 0.0 [−5.7, +5.7] | −0.3 [−4.4, +3.7] | −4.0 [−12.7, +4.7] | −1.4 [−5.1, +2.2] |
+| Same weights, Piotr-data head: 10-28 − 10-18 | −1.0 [−6.7, +4.3] | +1.3 [−2.7, +5.4] | **−11.3 [−20.7, −2.0]** | −3.7 [−7.5, +0.1] |
+| Same weights, our 2,612 head: 10-28 − 10-27 | −3.0 [−8.0, +2.0] | +0.3 [−3.5, +4.2] | −6.0 [−14.7, +2.7] | −2.9 [−6.6, +0.7] |
+
+- **Device has no measurable effect.** Each recipe was retrained with seed 0 on CPU and on one GPU, and only the device differed.
+  - Piotr-data head: its frozen 10-09 trainer (`train_selection_head.py`). The GPU copy is byte-identical to the original head.
+  - Our 2,612-state head: `train_head_round.py` with a 4-line `--device` patch. The CPU copy is byte-identical to the original 10-27 head.
+- **The Piotr-vs-ours gap is not a device artifact.** With the device matched, Piotr's data still lead on the mean: GPU copies 40.7% vs 37.1%, CPU copies 41.4% vs 36.0%.
+- **DeepShop drifts downward over days.** Identical weights lost 11.3 pp between 10-18 and 10-28 (44.0 → 36.7 → 32.7%), and SFT 4B fell from 33.3% (10-27) to 26.7% (10-28). Online-Mind2Web and WebVoyager reruns stay within ±3 pp. Treat cross-day DeepShop differences of up to about ±11 pp as noise.
+
+<details><summary>Run notes, compute and evidence</summary>
+
+- **Live jobs (one H200 each).** All complete.
+  - LoRA: 394599–394604, about 14.5 H200-h.
+  - Piotr-data copies: 394771–394776, about 13.7 H200-h.
+  - 2,612-state copies: 394782–394784 and 394858–394860.
+    - The GPU copy's WebVoyager job lost its actor server to a CUDA error on g008 at 351/595. It resumed from its committed records as 396544 (g008 excluded).
+    - About 14.6 H200-h in total.
+  - Every reported episode has a saved judge verdict.
+- **Training.** LoRA 2,612: job 393844, 4 H200, 3 h 31 m. The device copies trained in minutes.
+- **Analysis.** CPU-only jobs 396632–396732, 397481, 397506 and 397579.
+- **Evidence.**
+  - Sections 1 and 3: [diagnostics](arm_results/rl_integration/selection-why-our-data-20261028.json) (state distributions, episode phase, site split, repeat picks, `done` picks; scripts in runtime `selection-head-20261008/why-2612-20261028/`).
+  - All tables above: [paired results](arm_results/rl_integration/selection-recipe-model-scale-device-20261028.json) · [analysis script](arm_results/rl_integration/selection-recipe-model-scale-device-20261028-analysis.py).
+  - Runtime `evaluations/{lora-selectors,device-repro,device-2612}-20261028/` (`jobs.txt`, `submit_live.sh`).
+
+</details>
