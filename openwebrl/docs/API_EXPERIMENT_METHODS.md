@@ -61,7 +61,7 @@ The Claude plots use each arm's valid cohort for success and all efficiency mean
 
 ## Code and frozen artifacts
 
-[Published API source index](../api_experiments/README.md) · [GPT Luna adapter](../api_experiments/snapshots/browsercode_luna_effort/luna_model.py) · [Claude adapter](../api_experiments/snapshots/browsercode_claude/claude_model.py) · [Native proposal adapter](../api_experiments/snapshots/cuawright_native/native_proposal_adapter.py). The published files match the original source bytes; the local runtime still supplies configuration and pinned dependencies.
+[Published API source index](../api_experiments/README.md) · [GPT Luna adapter](../api_experiments/browsercode/models/luna_model.py) · [Claude adapter](../api_experiments/browsercode/models/claude_model.py) · [Native proposal adapter](../api_experiments/cuawright/models/native_proposal_adapter.py). The published files match the original source bytes; the local runtime still supplies configuration and pinned dependencies.
 
 The exact recent executables are **frozen runtime snapshots**, not necessarily the current repository worktree. Under the local `evaluations/serial-vs-parallel-reasoning-20261013/` directory, use these campaign folders:
 
