@@ -1,0 +1,128 @@
+[
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/data-scale-20261023/heads/nall/seed0",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 38.31,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   2.6584444828546463,
+   0.5799668663183384,
+   4.833038709626732
+  ],
+  "minus_base": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/heads/luna-k3-best/seed0",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 37.8,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   2.1477568442178243,
+   0.6592222395751997,
+   3.828749711633866
+  ],
+  "minus_base": [
+   -0.5106876386368219,
+   -2.426545086119554,
+   1.4190171561500438
+  ]
+ },
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/panelcount/heads/all/seed1",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 37.18,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   1.5299407522638018,
+   -0.2801300271162076,
+   3.613883463106164
+  ],
+  "minus_base": [
+   -1.128503730590845,
+   -3.063983488132095,
+   0.788176061455414
+  ]
+ },
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/panelcount/heads/all/seed2",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 36.72,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   1.0716830390151626,
+   -0.7325635180229292,
+   2.9482566064283517
+  ],
+  "minus_base": [
+   -1.5867614438394835,
+   -3.150119064975458,
+   -0.07340859702125395
+  ]
+ },
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/panelcount/heads/p1/seed0",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 38.29,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   2.6439506332882012,
+   0.8527813876254423,
+   4.572268129068546
+  ],
+  "minus_base": [
+   -0.01449384956644487,
+   -1.8928220255653887,
+   1.7203112768798636
+  ]
+ },
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/panelcount/heads/p1/seed1",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 37.81,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   2.156831254381164,
+   0.38900012712941767,
+   4.051121577891088
+  ],
+  "minus_base": [
+   -0.5016132284734826,
+   -2.377986188876446,
+   1.2557208237986273
+  ]
+ },
+ {
+  "head": "/gpfs/scrubbed/zixianma/openwebrl-runtime/rl-actor-recollect-20261016/diverse2/collector-labels2/compare/panelcount/heads/p1/seed2",
+  "test_states": 348,
+  "test_tasks": 86,
+  "success": 37.54,
+  "sft_sample": 35.65,
+  "oracle": 46.74,
+  "minus_sft_sample": [
+   1.8939254265933034,
+   -0.04266822358927591,
+   3.9476022417559937
+  ],
+  "minus_base": [
+   -0.764519056261343,
+   -2.7213441767684516,
+   1.156925744594043
+  ]
+ }
+]

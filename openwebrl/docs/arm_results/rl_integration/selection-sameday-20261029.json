@@ -1,0 +1,1605 @@
+{
+ "note": "Same-day cohort 2026-10-29 (option B): every core selector of ARM_SELECTION_HEAD#selection-head-recipe-model-scale-device-20261028\nrerun in one window, plus the 22K Piotr-style-panel head when complete. SFT-4B actor, N=5, T1.0/p0.9, 30 steps, all tasks of\nOnline-Mind2Web (300, gpt-5.6-terra), WebVoyager (595, GPT-4o), DeepShop (150, GPT-4o). Overall counts invalid as failure; mean =\nunweighted mean of the three rates. Paired 95% bootstrap over tasks (10,000, seed 20261029), benchmarks resampled independently.\nAlso: the same weights today vs their earlier runs (rerun drift), and earlier+today pooled per task.",
+ "today_slugs": {
+  "piotr_head": "head5-755d4cd49137",
+  "h2612": "head5-5ca25c38f7ad",
+  "h1380": "head5-11d5eff8ffe1",
+  "h22k": "head5-cafea4f265cf",
+  "lora2612": "arm5-03edd8c36a91",
+  "lora1380": "arm5-8dc8c40b7cfb",
+  "piotr_arm": "piotr5",
+  "sft4b": "sft1"
+ },
+ "earlier_runs": {
+  "piotr_head": [
+   {
+    "online_mind2web": [
+     "crossbench-full-t10-20261018",
+     "head5-755d4cd49137",
+     "crossbench-full-t10-20261018:head5-755d4cd49137"
+    ],
+    "webvoyager": [
+     "crossbench-full-t10-20261018",
+     "head5-755d4cd49137",
+     null
+    ],
+    "deepshop": [
+     "crossbench-full-t10-20261018",
+     "head5-755d4cd49137",
+     null
+    ]
+   },
+   {
+    "online_mind2web": [
+     "piotr-head-sameday-20261025",
+     "head5-755d4cd49137",
+     null
+    ],
+    "webvoyager": [
+     "piotr-head-sameday-20261025",
+     "head5-755d4cd49137",
+     null
+    ],
+    "deepshop": [
+     "piotr-head-sameday-20261025",
+     "head5-755d4cd49137",
+     null
+    ]
+   },
+   {
+    "online_mind2web": [
+     "device-repro-20261028",
+     "head5-755d4cd49137",
+     null
+    ],
+    "webvoyager": [
+     "device-repro-20261028",
+     "head5-755d4cd49137",
+     null
+    ],
+    "deepshop": [
+     "device-repro-20261028",
+     "head5-755d4cd49137",
+     null
+    ]
+   }
+  ],
+  "h2612": [
+   {
+    "online_mind2web": [
+     "onepanel-k3-scale-20261027",
+     "head5-5ca25c38f7ad",
+     null
+    ],
+    "webvoyager": [
+     "onepanel-k3-scale-20261027",
+     "head5-5ca25c38f7ad",
+     null
+    ],
+    "deepshop": [
+     "onepanel-k3-scale-20261027",
+     "head5-5ca25c38f7ad",
+     null
+    ]
+   },
+   {
+    "online_mind2web": [
+     "device-2612-20261028",
+     "head5-5ca25c38f7ad",
+     null
+    ],
+    "webvoyager": [
+     "device-2612-20261028",
+     "head5-5ca25c38f7ad",
+     null
+    ],
+    "deepshop": [
+     "device-2612-20261028",
+     "head5-5ca25c38f7ad",
+     null
+    ]
+   }
+  ],
+  "h1380": [
+   {
+    "online_mind2web": [
+     "sft-actions-full-20261021",
+     "head5-11d5eff8ffe1",
+     "sft-actions-full-20261021:head5-11d5eff8ffe1"
+    ],
+    "webvoyager": [
+     "sft-actions-full-20261021",
+     "head5-11d5eff8ffe1",
+     null
+    ],
+    "deepshop": [
+     "onepanel-k3-scale-20261027",
+     "head5-11d5eff8ffe1",
+     null
+    ]
+   }
+  ],
+  "h22k": [
+   {
+    "online_mind2web": [
+     "lunak3-panels-20261027",
+     "head5-cafea4f265cf",
+     null
+    ],
+    "webvoyager": [
+     "lunak3-panels-20261027",
+     "head5-cafea4f265cf",
+     null
+    ],
+    "deepshop": [
+     "lunak3-panels-20261027",
+     "head5-cafea4f265cf",
+     null
+    ]
+   }
+  ],
+  "lora2612": [
+   {
+    "online_mind2web": [
+     "lora-selectors-20261028",
+     "arm5-03edd8c36a91",
+     null
+    ],
+    "webvoyager": [
+     "lora-selectors-20261028",
+     "arm5-03edd8c36a91",
+     null
+    ],
+    "deepshop": [
+     "lora-selectors-20261028",
+     "arm5-03edd8c36a91",
+     null
+    ]
+   }
+  ],
+  "lora1380": [
+   {
+    "online_mind2web": [
+     "lora-selectors-20261028",
+     "arm5-8dc8c40b7cfb",
+     null
+    ],
+    "webvoyager": [
+     "lora-selectors-20261028",
+     "arm5-8dc8c40b7cfb",
+     null
+    ],
+    "deepshop": [
+     "lora-selectors-20261028",
+     "arm5-8dc8c40b7cfb",
+     null
+    ]
+   }
+  ],
+  "piotr_arm": [
+   {
+    "online_mind2web": [
+     "crossbench-full-t10-20261018",
+     "piotr5",
+     "crossbench-full-t10-20261018:piotr5"
+    ],
+    "webvoyager": [
+     "crossbench-full-t10-20261018",
+     "piotr5",
+     null
+    ],
+    "deepshop": [
+     "crossbench-full-t10-20261018",
+     "piotr5",
+     null
+    ]
+   }
+  ],
+  "sft4b": [
+   {
+    "online_mind2web": [
+     "crossbench-full-t10-20261018",
+     "sft1",
+     "crossbench-full-t10-20261018:sft1"
+    ],
+    "webvoyager": [
+     "crossbench-full-t10-20261018",
+     "sft1",
+     null
+    ],
+    "deepshop": [
+     "onepanel-k3-scale-20261027",
+     "sft1",
+     null
+    ]
+   }
+  ]
+ },
+ "rates": {
+  "piotr_head": {
+   "online_mind2web": {
+    "successes": 99,
+    "valid": 263,
+    "tasks": 300,
+    "overall": 33.0
+   },
+   "webvoyager": {
+    "successes": 332,
+    "valid": 575,
+    "tasks": 595,
+    "overall": 55.8
+   },
+   "deepshop": {
+    "successes": 51,
+    "valid": 141,
+    "tasks": 150,
+    "overall": 34.0
+   },
+   "mean": 40.9
+  },
+  "h2612": {
+   "online_mind2web": {
+    "successes": 103,
+    "valid": 258,
+    "tasks": 300,
+    "overall": 34.3
+   },
+   "webvoyager": {
+    "successes": 305,
+    "valid": 587,
+    "tasks": 595,
+    "overall": 51.3
+   },
+   "deepshop": {
+    "successes": 47,
+    "valid": 147,
+    "tasks": 150,
+    "overall": 31.3
+   },
+   "mean": 39.0
+  },
+  "h1380": {
+   "online_mind2web": {
+    "successes": 111,
+    "valid": 260,
+    "tasks": 300,
+    "overall": 37.0
+   },
+   "webvoyager": {
+    "successes": 309,
+    "valid": 584,
+    "tasks": 595,
+    "overall": 51.9
+   },
+   "deepshop": {
+    "successes": 51,
+    "valid": 145,
+    "tasks": 150,
+    "overall": 34.0
+   },
+   "mean": 41.0
+  },
+  "h22k": {
+   "online_mind2web": {
+    "successes": 108,
+    "valid": 261,
+    "tasks": 300,
+    "overall": 36.0
+   },
+   "webvoyager": {
+    "successes": 310,
+    "valid": 582,
+    "tasks": 595,
+    "overall": 52.1
+   },
+   "deepshop": {
+    "successes": 44,
+    "valid": 143,
+    "tasks": 150,
+    "overall": 29.3
+   },
+   "mean": 39.1
+  },
+  "lora2612": {
+   "online_mind2web": {
+    "successes": 107,
+    "valid": 260,
+    "tasks": 300,
+    "overall": 35.7
+   },
+   "webvoyager": {
+    "successes": 318,
+    "valid": 589,
+    "tasks": 595,
+    "overall": 53.4
+   },
+   "deepshop": {
+    "successes": 58,
+    "valid": 145,
+    "tasks": 150,
+    "overall": 38.7
+   },
+   "mean": 42.6
+  },
+  "lora1380": {
+   "online_mind2web": {
+    "successes": 102,
+    "valid": 267,
+    "tasks": 300,
+    "overall": 34.0
+   },
+   "webvoyager": {
+    "successes": 321,
+    "valid": 583,
+    "tasks": 595,
+    "overall": 53.9
+   },
+   "deepshop": {
+    "successes": 54,
+    "valid": 148,
+    "tasks": 150,
+    "overall": 36.0
+   },
+   "mean": 41.3
+  },
+  "piotr_arm": {
+   "online_mind2web": {
+    "successes": 106,
+    "valid": 259,
+    "tasks": 300,
+    "overall": 35.3
+   },
+   "webvoyager": {
+    "successes": 323,
+    "valid": 583,
+    "tasks": 595,
+    "overall": 54.3
+   },
+   "deepshop": {
+    "successes": 50,
+    "valid": 134,
+    "tasks": 150,
+    "overall": 33.3
+   },
+   "mean": 41.0
+  },
+  "sft4b": {
+   "online_mind2web": {
+    "successes": 85,
+    "valid": 266,
+    "tasks": 300,
+    "overall": 28.3
+   },
+   "webvoyager": {
+    "successes": 264,
+    "valid": 587,
+    "tasks": 595,
+    "overall": 44.4
+   },
+   "deepshop": {
+    "successes": 44,
+    "valid": 146,
+    "tasks": 150,
+    "overall": 29.3
+   },
+   "mean": 34.0
+  }
+ },
+ "paired": {
+  "1_recipe": [
+   {
+    "a": "piotr_head",
+    "b": "h2612",
+    "today": {
+     "online_mind2web": [
+      -1.3,
+      -6.3,
+      3.7
+     ],
+     "webvoyager": [
+      4.5,
+      0.5,
+      8.6
+     ],
+     "deepshop": [
+      2.7,
+      -6.0,
+      11.3
+     ],
+     "mean": [
+      2.0,
+      -1.7,
+      5.6
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      2.7,
+      -0.4,
+      5.7
+     ],
+     "webvoyager": [
+      2.5,
+      0.2,
+      4.7
+     ],
+     "deepshop": [
+      7.1,
+      2.2,
+      11.9
+     ],
+     "mean": [
+      4.1,
+      2.0,
+      6.1
+     ]
+    }
+   },
+   {
+    "a": "piotr_head",
+    "b": "h1380",
+    "today": {
+     "online_mind2web": [
+      -4.0,
+      -9.3,
+      1.3
+     ],
+     "webvoyager": [
+      3.9,
+      0.0,
+      7.7
+     ],
+     "deepshop": [
+      0.0,
+      -8.0,
+      8.0
+     ],
+     "mean": [
+      -0.0,
+      -3.6,
+      3.4
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      1.0,
+      -2.2,
+      4.2
+     ],
+     "webvoyager": [
+      1.6,
+      -0.9,
+      4.2
+     ],
+     "deepshop": [
+      -0.2,
+      -5.7,
+      5.3
+     ],
+     "mean": [
+      0.8,
+      -1.5,
+      3.1
+     ]
+    }
+   },
+   {
+    "a": "piotr_head",
+    "b": "h22k",
+    "today": {
+     "online_mind2web": [
+      -3.0,
+      -8.0,
+      1.7
+     ],
+     "webvoyager": [
+      3.7,
+      -0.2,
+      7.6
+     ],
+     "deepshop": [
+      4.7,
+      -4.0,
+      13.3
+     ],
+     "mean": [
+      1.8,
+      -1.8,
+      5.3
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      1.2,
+      -2.0,
+      4.3
+     ],
+     "webvoyager": [
+      2.8,
+      0.3,
+      5.4
+     ],
+     "deepshop": [
+      5.8,
+      0.3,
+      11.5
+     ],
+     "mean": [
+      3.3,
+      1.0,
+      5.5
+     ]
+    }
+   },
+   {
+    "a": "piotr_arm",
+    "b": "lora2612",
+    "today": {
+     "online_mind2web": [
+      -0.3,
+      -5.7,
+      5.0
+     ],
+     "webvoyager": [
+      0.8,
+      -3.0,
+      4.9
+     ],
+     "deepshop": [
+      -5.3,
+      -14.7,
+      4.0
+     ],
+     "mean": [
+      -1.6,
+      -5.4,
+      2.2
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      3.7,
+      -0.2,
+      7.5
+     ],
+     "webvoyager": [
+      0.7,
+      -2.2,
+      3.6
+     ],
+     "deepshop": [
+      1.0,
+      -5.3,
+      7.7
+     ],
+     "mean": [
+      1.8,
+      -0.9,
+      4.5
+     ]
+    }
+   },
+   {
+    "a": "piotr_arm",
+    "b": "lora1380",
+    "today": {
+     "online_mind2web": [
+      1.3,
+      -4.0,
+      7.0
+     ],
+     "webvoyager": [
+      0.3,
+      -3.4,
+      4.0
+     ],
+     "deepshop": [
+      -2.7,
+      -11.3,
+      5.3
+     ],
+     "mean": [
+      -0.3,
+      -4.0,
+      3.3
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      3.0,
+      -1.0,
+      6.8
+     ],
+     "webvoyager": [
+      0.0,
+      -2.8,
+      2.9
+     ],
+     "deepshop": [
+      3.7,
+      -2.7,
+      10.0
+     ],
+     "mean": [
+      2.2,
+      -0.4,
+      4.9
+     ]
+    }
+   }
+  ],
+  "2_lora_vs_head": [
+   {
+    "a": "lora2612",
+    "b": "h2612",
+    "today": {
+     "online_mind2web": [
+      1.3,
+      -3.3,
+      6.0
+     ],
+     "webvoyager": [
+      2.2,
+      -1.8,
+      6.2
+     ],
+     "deepshop": [
+      7.3,
+      -2.0,
+      16.7
+     ],
+     "mean": [
+      3.6,
+      -0.1,
+      7.2
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      0.2,
+      -3.7,
+      3.9
+     ],
+     "webvoyager": [
+      2.0,
+      -0.9,
+      4.7
+     ],
+     "deepshop": [
+      6.6,
+      0.7,
+      12.3
+     ],
+     "mean": [
+      2.9,
+      0.4,
+      5.4
+     ]
+    }
+   },
+   {
+    "a": "lora1380",
+    "b": "h1380",
+    "today": {
+     "online_mind2web": [
+      -3.0,
+      -7.7,
+      1.7
+     ],
+     "webvoyager": [
+      2.0,
+      -2.0,
+      5.9
+     ],
+     "deepshop": [
+      2.0,
+      -7.3,
+      10.7
+     ],
+     "mean": [
+      0.3,
+      -3.3,
+      4.0
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      -0.8,
+      -4.5,
+      2.8
+     ],
+     "webvoyager": [
+      1.8,
+      -0.8,
+      4.5
+     ],
+     "deepshop": [
+      -3.3,
+      -10.0,
+      3.3
+     ],
+     "mean": [
+      -0.8,
+      -3.4,
+      1.8
+     ]
+    }
+   },
+   {
+    "a": "piotr_arm",
+    "b": "piotr_head",
+    "today": {
+     "online_mind2web": [
+      2.3,
+      -2.0,
+      6.7
+     ],
+     "webvoyager": [
+      -1.5,
+      -5.2,
+      2.0
+     ],
+     "deepshop": [
+      -0.7,
+      -9.3,
+      8.0
+     ],
+     "mean": [
+      0.1,
+      -3.4,
+      3.4
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      1.2,
+      -1.8,
+      4.1
+     ],
+     "webvoyager": [
+      0.2,
+      -2.1,
+      2.6
+     ],
+     "deepshop": [
+      0.5,
+      -5.0,
+      6.0
+     ],
+     "mean": [
+      0.6,
+      -1.6,
+      2.8
+     ]
+    }
+   }
+  ],
+  "3_scale": [
+   {
+    "a": "h2612",
+    "b": "h1380",
+    "today": {
+     "online_mind2web": [
+      -2.7,
+      -7.7,
+      2.0
+     ],
+     "webvoyager": [
+      -0.7,
+      -4.5,
+      3.2
+     ],
+     "deepshop": [
+      -2.7,
+      -12.0,
+      6.0
+     ],
+     "mean": [
+      -2.0,
+      -5.6,
+      1.7
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      -1.7,
+      -5.1,
+      1.7
+     ],
+     "webvoyager": [
+      -0.8,
+      -3.2,
+      1.7
+     ],
+     "deepshop": [
+      -7.2,
+      -13.1,
+      -1.3
+     ],
+     "mean": [
+      -3.2,
+      -5.6,
+      -0.9
+     ]
+    }
+   },
+   {
+    "a": "lora2612",
+    "b": "lora1380",
+    "today": {
+     "online_mind2web": [
+      1.7,
+      -3.3,
+      6.7
+     ],
+     "webvoyager": [
+      -0.5,
+      -4.0,
+      3.0
+     ],
+     "deepshop": [
+      2.7,
+      -6.7,
+      12.0
+     ],
+     "mean": [
+      1.3,
+      -2.4,
+      5.1
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      -0.7,
+      -4.5,
+      3.2
+     ],
+     "webvoyager": [
+      -0.7,
+      -3.3,
+      2.0
+     ],
+     "deepshop": [
+      2.7,
+      -3.7,
+      9.0
+     ],
+     "mean": [
+      0.4,
+      -2.2,
+      3.1
+     ]
+    }
+   }
+  ],
+  "4_lookahead_panels": [
+   {
+    "a": "h22k",
+    "b": "h2612",
+    "today": {
+     "online_mind2web": [
+      1.7,
+      -3.0,
+      6.3
+     ],
+     "webvoyager": [
+      0.8,
+      -3.0,
+      4.5
+     ],
+     "deepshop": [
+      -2.0,
+      -10.0,
+      6.0
+     ],
+     "mean": [
+      0.2,
+      -3.2,
+      3.7
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      1.5,
+      -1.9,
+      5.0
+     ],
+     "webvoyager": [
+      -0.4,
+      -2.9,
+      2.2
+     ],
+     "deepshop": [
+      1.2,
+      -4.4,
+      6.9
+     ],
+     "mean": [
+      0.8,
+      -1.6,
+      3.2
+     ]
+    }
+   },
+   {
+    "a": "h22k",
+    "b": "h1380",
+    "today": {
+     "online_mind2web": [
+      -1.0,
+      -6.0,
+      4.0
+     ],
+     "webvoyager": [
+      0.2,
+      -3.9,
+      4.2
+     ],
+     "deepshop": [
+      -4.7,
+      -13.3,
+      4.0
+     ],
+     "mean": [
+      -1.8,
+      -5.3,
+      1.7
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      -0.2,
+      -4.0,
+      3.7
+     ],
+     "webvoyager": [
+      -1.2,
+      -3.9,
+      1.7
+     ],
+     "deepshop": [
+      -6.0,
+      -12.3,
+      0.0
+     ],
+     "mean": [
+      -2.4,
+      -5.1,
+      0.1
+     ]
+    }
+   }
+  ],
+  "vs_sft": [
+   {
+    "a": "piotr_head",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      4.7,
+      -0.3,
+      9.7
+     ],
+     "webvoyager": [
+      11.4,
+      7.1,
+      15.6
+     ],
+     "deepshop": [
+      4.7,
+      -4.0,
+      14.0
+     ],
+     "mean": [
+      6.9,
+      3.2,
+      10.7
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      6.0,
+      2.7,
+      9.5
+     ],
+     "webvoyager": [
+      8.8,
+      6.1,
+      11.5
+     ],
+     "deepshop": [
+      8.8,
+      3.3,
+      14.5
+     ],
+     "mean": [
+      7.9,
+      5.5,
+      10.2
+     ]
+    }
+   },
+   {
+    "a": "h2612",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      6.0,
+      0.7,
+      11.3
+     ],
+     "webvoyager": [
+      6.9,
+      2.7,
+      11.1
+     ],
+     "deepshop": [
+      2.0,
+      -7.3,
+      11.3
+     ],
+     "mean": [
+      5.0,
+      1.3,
+      8.7
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      3.3,
+      -0.2,
+      6.9
+     ],
+     "webvoyager": [
+      6.3,
+      3.6,
+      9.1
+     ],
+     "deepshop": [
+      1.8,
+      -3.8,
+      7.4
+     ],
+     "mean": [
+      3.8,
+      1.4,
+      6.3
+     ]
+    }
+   },
+   {
+    "a": "h1380",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      8.7,
+      3.7,
+      13.7
+     ],
+     "webvoyager": [
+      7.6,
+      3.5,
+      11.6
+     ],
+     "deepshop": [
+      4.7,
+      -4.7,
+      14.0
+     ],
+     "mean": [
+      7.0,
+      3.3,
+      10.6
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      5.0,
+      1.5,
+      8.5
+     ],
+     "webvoyager": [
+      7.1,
+      4.1,
+      10.2
+     ],
+     "deepshop": [
+      9.0,
+      3.0,
+      15.0
+     ],
+     "mean": [
+      7.0,
+      4.5,
+      9.6
+     ]
+    }
+   },
+   {
+    "a": "h22k",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      7.7,
+      2.7,
+      12.7
+     ],
+     "webvoyager": [
+      7.7,
+      3.7,
+      11.9
+     ],
+     "deepshop": [
+      0.0,
+      -10.0,
+      10.0
+     ],
+     "mean": [
+      5.1,
+      1.1,
+      9.0
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      4.8,
+      1.0,
+      8.7
+     ],
+     "webvoyager": [
+      6.0,
+      3.0,
+      8.9
+     ],
+     "deepshop": [
+      3.0,
+      -3.0,
+      9.3
+     ],
+     "mean": [
+      4.6,
+      2.0,
+      7.2
+     ]
+    }
+   },
+   {
+    "a": "lora2612",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      7.3,
+      2.0,
+      12.7
+     ],
+     "webvoyager": [
+      9.1,
+      4.9,
+      13.3
+     ],
+     "deepshop": [
+      9.3,
+      0.0,
+      18.7
+     ],
+     "mean": [
+      8.6,
+      4.8,
+      12.5
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      3.5,
+      -0.2,
+      7.3
+     ],
+     "webvoyager": [
+      8.3,
+      5.3,
+      11.3
+     ],
+     "deepshop": [
+      8.3,
+      2.3,
+      14.3
+     ],
+     "mean": [
+      6.7,
+      4.2,
+      9.3
+     ]
+    }
+   },
+   {
+    "a": "lora1380",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      5.7,
+      0.7,
+      10.7
+     ],
+     "webvoyager": [
+      9.6,
+      5.4,
+      13.9
+     ],
+     "deepshop": [
+      6.7,
+      -2.0,
+      15.3
+     ],
+     "mean": [
+      7.3,
+      3.6,
+      11.0
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      4.2,
+      0.2,
+      8.3
+     ],
+     "webvoyager": [
+      9.0,
+      5.9,
+      12.2
+     ],
+     "deepshop": [
+      5.7,
+      -0.3,
+      12.3
+     ],
+     "mean": [
+      6.3,
+      3.6,
+      9.0
+     ]
+    }
+   },
+   {
+    "a": "piotr_arm",
+    "b": "sft4b",
+    "today": {
+     "online_mind2web": [
+      7.0,
+      2.3,
+      12.0
+     ],
+     "webvoyager": [
+      9.9,
+      5.7,
+      14.1
+     ],
+     "deepshop": [
+      4.0,
+      -4.0,
+      12.0
+     ],
+     "mean": [
+      7.0,
+      3.5,
+      10.4
+     ]
+    },
+    "pooled_all_runs": {
+     "online_mind2web": [
+      7.2,
+      3.5,
+      11.0
+     ],
+     "webvoyager": [
+      9.0,
+      6.1,
+      11.9
+     ],
+     "deepshop": [
+      9.3,
+      3.0,
+      16.0
+     ],
+     "mean": [
+      8.5,
+      5.9,
+      11.2
+     ]
+    }
+   }
+  ]
+ },
+ "drift": {
+  "piotr_head": [
+   {
+    "earlier_run": "crossbench-full-t10-20261018",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      -4.7,
+      -10.3,
+      1.0
+     ],
+     "webvoyager": [
+      4.5,
+      0.5,
+      8.6
+     ],
+     "deepshop": [
+      -10.0,
+      -18.0,
+      -2.0
+     ],
+     "mean": [
+      -3.4,
+      -6.9,
+      0.2
+     ]
+    }
+   },
+   {
+    "earlier_run": "piotr-head-sameday-20261025",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      -3.7,
+      -8.7,
+      1.7
+     ],
+     "webvoyager": [
+      2.9,
+      -0.8,
+      6.6
+     ],
+     "deepshop": [
+      -2.7,
+      -10.7,
+      5.3
+     ],
+     "mean": [
+      -1.2,
+      -4.5,
+      2.2
+     ]
+    }
+   },
+   {
+    "earlier_run": "device-repro-20261028",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      -3.7,
+      -9.0,
+      1.7
+     ],
+     "webvoyager": [
+      3.2,
+      -0.5,
+      7.1
+     ],
+     "deepshop": [
+      1.3,
+      -8.0,
+      10.0
+     ],
+     "mean": [
+      0.3,
+      -3.4,
+      3.9
+     ]
+    }
+   }
+  ],
+  "h2612": [
+   {
+    "earlier_run": "onepanel-k3-scale-20261027",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      0.0,
+      -5.0,
+      5.0
+     ],
+     "webvoyager": [
+      1.0,
+      -2.7,
+      4.7
+     ],
+     "deepshop": [
+      -0.7,
+      -9.3,
+      8.0
+     ],
+     "mean": [
+      0.1,
+      -3.3,
+      3.8
+     ]
+    }
+   },
+   {
+    "earlier_run": "device-2612-20261028",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      3.0,
+      -1.7,
+      7.7
+     ],
+     "webvoyager": [
+      0.7,
+      -3.2,
+      4.5
+     ],
+     "deepshop": [
+      5.3,
+      -2.7,
+      13.3
+     ],
+     "mean": [
+      3.0,
+      -0.4,
+      6.4
+     ]
+    }
+   }
+  ],
+  "h1380": [
+   {
+    "earlier_run": "sft-actions-full-20261021",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      4.0,
+      -1.7,
+      9.3
+     ],
+     "webvoyager": [
+      0.8,
+      -3.2,
+      4.9
+     ],
+     "deepshop": [
+      -6.0,
+      -15.3,
+      3.3
+     ],
+     "mean": [
+      -0.4,
+      -4.3,
+      3.4
+     ]
+    }
+   }
+  ],
+  "h22k": [
+   {
+    "earlier_run": "lunak3-panels-20261027",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      2.3,
+      -3.0,
+      7.7
+     ],
+     "webvoyager": [
+      3.5,
+      -0.3,
+      7.4
+     ],
+     "deepshop": [
+      -3.3,
+      -12.0,
+      4.7
+     ],
+     "mean": [
+      0.8,
+      -2.7,
+      4.4
+     ]
+    }
+   }
+  ],
+  "lora2612": [
+   {
+    "earlier_run": "lora-selectors-20261028",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      4.3,
+      -0.3,
+      9.0
+     ],
+     "webvoyager": [
+      1.5,
+      -2.5,
+      5.5
+     ],
+     "deepshop": [
+      4.7,
+      -4.7,
+      14.0
+     ],
+     "mean": [
+      3.5,
+      -0.2,
+      7.2
+     ]
+    }
+   }
+  ],
+  "lora1380": [
+   {
+    "earlier_run": "lora-selectors-20261028",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      -0.3,
+      -5.7,
+      5.0
+     ],
+     "webvoyager": [
+      1.2,
+      -2.9,
+      5.2
+     ],
+     "deepshop": [
+      4.7,
+      -4.7,
+      14.0
+     ],
+     "mean": [
+      1.8,
+      -1.9,
+      5.6
+     ]
+    }
+   }
+  ],
+  "piotr_arm": [
+   {
+    "earlier_run": "crossbench-full-t10-20261018",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      -3.7,
+      -9.0,
+      1.3
+     ],
+     "webvoyager": [
+      1.8,
+      -2.0,
+      5.7
+     ],
+     "deepshop": [
+      -8.0,
+      -16.7,
+      0.0
+     ],
+     "mean": [
+      -3.3,
+      -6.8,
+      0.2
+     ]
+    }
+   }
+  ],
+  "sft4b": [
+   {
+    "earlier_run": "crossbench-full-t10-20261018",
+    "today_minus_earlier": {
+     "online_mind2web": [
+      -3.3,
+      -8.7,
+      2.0
+     ],
+     "webvoyager": [
+      0.0,
+      -4.0,
+      3.9
+     ],
+     "deepshop": [
+      2.7,
+      -6.0,
+      10.7
+     ],
+     "mean": [
+      -0.2,
+      -3.8,
+      3.4
+     ]
+    }
+   }
+  ]
+ }
+}

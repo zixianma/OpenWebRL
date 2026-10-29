@@ -1772,6 +1772,8 @@ Oracle-action rate on informative states, % · difference from chance in pp [95%
 
 **Piotr's data beat our branching data (−4.4 pp for our 2,612 states, same day). A 4B decoder LoRA is level with the 22.6 M head on the same data. More of our states (1,380 → 2,612) do not help. Training on CPU vs GPU makes no difference, but identical weights rerun on another day can lose up to 11 pp on DeepShop, so only same-day pairs are reliable.**
 
+> **Superseded by the [10-29 same-day rerun](#selection-head-sameday-20261029):** run on one day, our 1,380-state head ties the Piotr-data head and our LoRAs are level with SelectionARM; the LoRA gaps below were mostly DeepShop drift since 10-18.
+
 Success rate, overall (invalid episodes count as failures), on all tasks of Online-Mind2Web (300), WebVoyager (595) and DeepShop (150). Mean = the three benchmarks weighted equally. The difference is paired over tasks against the row marked *reference* in the same block (95% bootstrap). Pooled rows average success per task over copies or reruns of the same recipe. SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps; one training seed per selector.
 
 ### 1. Piotr's data vs our branching data
@@ -1992,5 +1994,113 @@ Rerun rows measure day-to-day noise of identical weights. DeepShop accounts for 
   - Sections 1 and 3: [diagnostics](arm_results/rl_integration/selection-why-our-data-20261028.json) (state distributions, episode phase, site split, repeat picks, `done` picks; scripts in runtime `selection-head-20261008/why-2612-20261028/`).
   - All tables above: [paired results](arm_results/rl_integration/selection-recipe-model-scale-device-20261028.json) · [analysis script](arm_results/rl_integration/selection-recipe-model-scale-device-20261028-analysis.py).
   - Runtime `evaluations/{lora-selectors,device-repro,device-2612}-20261028/` (`jobs.txt`, `submit_live.sh`).
+
+</details>
+
+<a id="selection-head-sameday-20261029"></a>
+
+## Same-day rerun of every selector (2026-10-29)
+
+**Rerun on the same day, our branching data match Piotr's. The 1,380-state head ties the Piotr-data head (0.0 pp), and both of our LoRAs are level with Piotr's SelectionARM. Only our 2,612-state head still trails (+2.0, not significant today; +4.1 [+2.0, +6.1] across all its runs). Adding states hurts the head (−3.2 [−5.6, −0.9] across all runs) but not the LoRA, which beats the head on the 2,612 states (+2.9 [+0.4, +5.4]). The 22K-panel lookahead head behaves like the 2,612-state head. Day-to-day drift of identical weights is up to ±3.5 pp on the mean, so the cross-day gaps in [the 10-27/28 section](#selection-head-recipe-model-scale-device-20261028) were mostly drift.**
+
+Success rate, overall (invalid episodes count as failures), all tasks of Online-Mind2Web (300), WebVoyager (595) and DeepShop (150), every row run in one window on 10-29. Same setup as [the 10-27/28 section](#selection-head-recipe-model-scale-device-20261028): SFT-4B actor, five candidates, T 1.0 / top-p 0.9, 30 steps, one training seed per selector, Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o (checked on the saved verdicts).
+
+| Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean | Mean − Piotr's-data selector of the same model, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Head (22.6 M) | *Piotr's 2,692 states (reference)* | 33.0% | 55.8% | 34.0% | 40.9% | — |
+| Head (22.6 M) | Our 1,380 states, one panel each | 37.0% | 51.9% | 34.0% | 41.0% | 0.0 [−3.6, +3.4] |
+| Head (22.6 M) | Our 2,612 states, one panel each | 34.3% | 51.3% | 31.3% | 39.0% | −2.0 [−5.6, +1.7] |
+| Head (22.6 M) | Our 2,551 states, 22K Piotr-style panels | 36.0% | 52.1% | 29.3% | 39.1% | −1.8 [−5.3, +1.8] |
+| 4B LoRA (Piotr SelectionARM) | *Piotr's 2,692 states (reference)* | 35.3% | 54.3% | 33.3% | 41.0% | — |
+| 4B LoRA | Our 1,380 states | 34.0% | 53.9% | 36.0% | 41.3% | +0.3 [−3.3, +4.0] |
+| 4B LoRA | Our 2,612 states | 35.7% | 53.4% | 38.7% | **42.6%** | +1.6 [−2.2, +5.4] |
+| *SFT 4B, one sample* | — | 28.3% | 44.4% | 29.3% | 34.0% | — |
+
+Paired over tasks, 95% bootstrap with benchmarks resampled independently for the mean. Heads are compared with the Piotr-data head, LoRAs with Piotr's SelectionARM.
+
+| Question | Paired difference in the mean, pp [95% CI] | Same day (10-29) | All runs of these weights pooled per task |
+| --- | --- | ---: | ---: |
+| Data source, head | Piotr-data head − our 2,612 head | +2.0 [−1.7, +5.6] | **+4.1 [+2.0, +6.1]** |
+| | Piotr-data head − our 1,380 head | 0.0 [−3.6, +3.4] | +0.8 [−1.5, +3.1] |
+| | Piotr-data head − our 22K-panel head | +1.8 [−1.8, +5.3] | **+3.3 [+1.0, +5.5]** |
+| Data source, LoRA | Piotr SelectionARM − our LoRA 2,612 | −1.6 [−5.4, +2.2] | +1.8 [−0.9, +4.5] |
+| | Piotr SelectionARM − our LoRA 1,380 | −0.3 [−4.0, +3.3] | +2.2 [−0.4, +4.9] |
+| LoRA vs head | Our 2,612: LoRA − head | +3.6 [−0.1, +7.2] | **+2.9 [+0.4, +5.4]** |
+| | Our 1,380: LoRA − head | +0.3 [−3.3, +4.0] | −0.8 [−3.4, +1.8] |
+| | Piotr's data: SelectionARM − head | +0.1 [−3.4, +3.4] | +0.6 [−1.6, +2.8] |
+| Data scale | Head: 2,612 − 1,380 | −2.0 [−5.6, +1.7] | **−3.2 [−5.6, −0.9]** |
+| | LoRA: 2,612 − 1,380 | +1.3 [−2.4, +5.1] | +0.4 [−2.2, +3.1] |
+| Lookahead panels | 22K-panel head − 2,612 one-panel head | +0.2 [−3.2, +3.7] | +0.8 [−1.6, +3.2] |
+| | 22K-panel head − 1,380 one-panel head | −1.8 [−5.3, +1.7] | −2.4 [−5.1, +0.1] |
+
+"All runs" averages success per task over every run of the same weights (Piotr-data head 4 runs: 10-18, 10-25, 10-28, 10-29; 2,612 head 3; 22K-panel head, 1,380 head, LoRAs, SelectionARM 2 each). It adds power but mixes days unequally.
+
+<details><summary>Per-benchmark differences, rerun drift and counts</summary>
+
+| Paired difference, same day, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | ---: | ---: | ---: | ---: |
+| Piotr-data head − our 2,612 head | −1.3 [−6.3, +3.7] | **+4.5 [+0.5, +8.6]** | +2.7 [−6.0, +11.3] | +2.0 [−1.7, +5.6] |
+| Piotr-data head − our 1,380 head | −4.0 [−9.3, +1.3] | +3.9 [0.0, +7.7] | 0.0 [−8.0, +8.0] | 0.0 [−3.6, +3.4] |
+| Piotr-data head − our 22K-panel head | −3.0 [−8.0, +1.7] | +3.7 [−0.2, +7.6] | +4.7 [−4.0, +13.3] | +1.8 [−1.8, +5.3] |
+| Piotr SelectionARM − our LoRA 2,612 | −0.3 [−5.7, +5.0] | +0.8 [−3.0, +4.9] | −5.3 [−14.7, +4.0] | −1.6 [−5.4, +2.2] |
+| Piotr SelectionARM − our LoRA 1,380 | +1.3 [−4.0, +7.0] | +0.3 [−3.4, +4.0] | −2.7 [−11.3, +5.3] | −0.3 [−4.0, +3.3] |
+| Our 2,612: LoRA − head | +1.3 [−3.3, +6.0] | +2.2 [−1.8, +6.2] | +7.3 [−2.0, +16.7] | +3.6 [−0.1, +7.2] |
+| Our 1,380: LoRA − head | −3.0 [−7.7, +1.7] | +2.0 [−2.0, +5.9] | +2.0 [−7.3, +10.7] | +0.3 [−3.3, +4.0] |
+| Piotr's data: SelectionARM − head | +2.3 [−2.0, +6.7] | −1.5 [−5.2, +2.0] | −0.7 [−9.3, +8.0] | +0.1 [−3.4, +3.4] |
+| Head: 2,612 − 1,380 | −2.7 [−7.7, +2.0] | −0.7 [−4.5, +3.2] | −2.7 [−12.0, +6.0] | −2.0 [−5.6, +1.7] |
+| LoRA: 2,612 − 1,380 | +1.7 [−3.3, +6.7] | −0.5 [−4.0, +3.0] | +2.7 [−6.7, +12.0] | +1.3 [−2.4, +5.1] |
+| 22K-panel head − 2,612 one-panel head | +1.7 [−3.0, +6.3] | +0.8 [−3.0, +4.5] | −2.0 [−10.0, +6.0] | +0.2 [−3.2, +3.7] |
+
+- **Piotr's data now lead only on WebVoyager.** On Online-Mind2Web all three of our heads are ahead today (not significant). In the 10-28 same-day pair the Online-Mind2Web gap was +5.0 for Piotr's data, so it does not reproduce.
+- **Every selector beats SFT 4B** by 5.0–8.6 pp on the mean (all significant), mostly on WebVoyager and Online-Mind2Web.
+
+| Same weights: 10-29 − earlier run, overall pp [95% CI] | Online-Mind2Web | WebVoyager | DeepShop | Mean |
+| --- | ---: | ---: | ---: | ---: |
+| Piotr-data head − 10-18 | −4.7 [−10.3, +1.0] | **+4.5 [+0.5, +8.6]** | **−10.0 [−18.0, −2.0]** | −3.4 [−6.9, +0.2] |
+| Piotr-data head − 10-25 | −3.7 [−8.7, +1.7] | +2.9 [−0.8, +6.6] | −2.7 [−10.7, +5.3] | −1.2 [−4.5, +2.2] |
+| Piotr-data head − 10-28 | −3.7 [−9.0, +1.7] | +3.2 [−0.5, +7.1] | +1.3 [−8.0, +10.0] | +0.3 [−3.4, +3.9] |
+| Our 2,612 head − 10-27 | 0.0 [−5.0, +5.0] | +1.0 [−2.7, +4.7] | −0.7 [−9.3, +8.0] | +0.1 [−3.3, +3.8] |
+| Our 2,612 head − 10-28 | +3.0 [−1.7, +7.7] | +0.7 [−3.2, +4.5] | +5.3 [−2.7, +13.3] | +3.0 [−0.4, +6.4] |
+| Our 1,380 head − 10-21 (DeepShop 10-27) | +4.0 [−1.7, +9.3] | +0.8 [−3.2, +4.9] | −6.0 [−15.3, +3.3] | −0.4 [−4.3, +3.4] |
+| Our 22K-panel head − 10-27 | +2.3 [−3.0, +7.7] | +3.5 [−0.3, +7.4] | −3.3 [−12.0, +4.7] | +0.8 [−2.7, +4.4] |
+| LoRA 2,612 − 10-28 | +4.3 [−0.3, +9.0] | +1.5 [−2.5, +5.5] | +4.7 [−4.7, +14.0] | +3.5 [−0.2, +7.2] |
+| LoRA 1,380 − 10-28 | −0.3 [−5.7, +5.0] | +1.2 [−2.9, +5.2] | +4.7 [−4.7, +14.0] | +1.8 [−1.9, +5.6] |
+| Piotr SelectionARM − 10-18 | −3.7 [−9.0, +1.3] | +1.8 [−2.0, +5.7] | −8.0 [−16.7, 0.0] | −3.3 [−6.8, +0.2] |
+| SFT 4B − 10-18 (DeepShop 10-28) | −3.3 [−8.7, +2.0] | 0.0 [−4.0, +3.9] | +2.7 [−6.0, +10.7] | −0.2 [−3.8, +3.4] |
+
+The two selectors first run on 10-18 both lost about 3.3 pp since, almost all on DeepShop. That one day explains most of the earlier Piotr-vs-LoRA gap (−5.2 and −4.8 cross-day; −1.6 and −0.3 today).
+
+| Selector, 10-29 | OM2W valid | OM2W successes | WebVoyager valid | WebVoyager successes | DeepShop valid | DeepShop successes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Head, Piotr's data (`head5-755d4cd49137`) | 263 | 99 | 575 | 332 | 141 | 51 |
+| Head, our 1,380 (`head5-11d5eff8ffe1`) | 260 | 111 | 584 | 309 | 145 | 51 |
+| Head, our 2,612 (`head5-5ca25c38f7ad`) | 258 | 103 | 587 | 305 | 147 | 47 |
+| Head, our 22K panels (`head5-cafea4f265cf`) | 261 | 108 | 582 | 310 | 143 | 44 |
+| Piotr SelectionARM (`piotr5`) | 259 | 106 | 583 | 323 | 134 | 50 |
+| LoRA, our 1,380 (`arm5-8dc8c40b7cfb`) | 267 | 102 | 583 | 321 | 148 | 54 |
+| LoRA, our 2,612 (`arm5-03edd8c36a91`) | 260 | 107 | 589 | 318 | 145 | 58 |
+| SFT 4B (`sft1`) | 266 | 85 | 587 | 264 | 146 | 44 |
+
+</details>
+
+<details><summary>Offline: one vs all lookahead panels per state</summary>
+
+Same 22K Luna K = 3 Piotr-style panels (2,551 states) and trainer as the 22K-panel head; either one panel per state (seeded choice) or all panels (about 9 per state). Fixed-five success on our 348 test states; the Piotr-data head scores 38.31% here.
+
+| Panels per state | Seed 0 | Seed 1 | Seed 2 | Mean |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 38.29% | 37.81% | 37.54% | 37.88% |
+| All (about 9) | 37.80% | 37.18% | 36.72% | 37.23% |
+
+More panels from the same states do not help (as with Piotr's states, [panel scaling](#selection-head-panel-scale-20261026)). The lever is which states are labelled, not how many panels per state.
+
+</details>
+
+<details><summary>Run notes, compute and evidence</summary>
+
+- **Live jobs (one H200 / 8 CPU each, gpu-h200, ≤ 18 concurrent).** 397621–397641 (7 selectors × 3 benchmarks) and 397696–397698 (22K-panel head), all complete without retries, 57.0 H200-h. Plans are subsets of `crossbench-full-t10-20261018` sft1 (seed 20261018).
+- **Offline panel count.** CPU job 397649.
+- **Analysis.** CPU jobs 398312 onwards.
+- **Evidence.** [paired results](arm_results/rl_integration/selection-sameday-20261029.json) · [analysis script](arm_results/rl_integration/selection-sameday-20261029-analysis.py) · [panel count](arm_results/rl_integration/selection-lookahead-panelcount-20261029.json). Runtime `evaluations/sameday-20261029/` (`jobs.txt`, `submit_live.sh`, `analysis/`).
 
 </details>
