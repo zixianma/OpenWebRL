@@ -1,0 +1,367 @@
+{
+ "judges": {
+  "joint-transformer-softce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "joint-transformer-softce|webvoyager": [
+   "gpt-4o"
+  ],
+  "joint-transformer-softce|deepshop": [
+   "gpt-4o"
+  ],
+  "joint-transformer-bce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "joint-transformer-bce|webvoyager": [
+   "gpt-4o"
+  ],
+  "joint-transformer-bce|deepshop": [
+   "gpt-4o"
+  ],
+  "independent-transformer-softce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "independent-transformer-softce|webvoyager": [
+   "gpt-4o"
+  ],
+  "independent-transformer-softce|deepshop": [
+   "gpt-4o"
+  ],
+  "independent-transformer-bce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "independent-transformer-bce|webvoyager": [
+   "gpt-4o"
+  ],
+  "independent-transformer-bce|deepshop": [
+   "gpt-4o"
+  ],
+  "joint-mlp-softce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "joint-mlp-softce|webvoyager": [
+   "gpt-4o"
+  ],
+  "joint-mlp-softce|deepshop": [
+   "gpt-4o"
+  ],
+  "joint-mlp-bce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "joint-mlp-bce|webvoyager": [
+   "gpt-4o"
+  ],
+  "joint-mlp-bce|deepshop": [
+   "gpt-4o"
+  ],
+  "independent-mlp-softce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "independent-mlp-softce|webvoyager": [
+   "gpt-4o"
+  ],
+  "independent-mlp-softce|deepshop": [
+   "gpt-4o"
+  ],
+  "independent-mlp-bce|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "independent-mlp-bce|webvoyager": [
+   "gpt-4o"
+  ],
+  "independent-mlp-bce|deepshop": [
+   "gpt-4o"
+  ],
+  "piotr-data-head|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "piotr-data-head|webvoyager": [
+   "gpt-4o"
+  ],
+  "piotr-data-head|deepshop": [
+   "gpt-4o"
+  ],
+  "sft-no-selector|online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "sft-no-selector|webvoyager": [
+   "gpt-4o"
+  ],
+  "sft-no-selector|deepshop": [
+   "gpt-4o"
+  ]
+ },
+ "rates": {
+  "joint-transformer-softce": {
+   "online_mind2web": [
+    111,
+    300
+   ],
+   "webvoyager": [
+    309,
+    595
+   ],
+   "deepshop": [
+    51,
+    150
+   ],
+   "mean": 40.98
+  },
+  "joint-transformer-bce": {
+   "online_mind2web": [
+    106,
+    300
+   ],
+   "webvoyager": [
+    320,
+    595
+   ],
+   "deepshop": [
+    47,
+    150
+   ],
+   "mean": 40.15
+  },
+  "independent-transformer-softce": {
+   "online_mind2web": [
+    104,
+    300
+   ],
+   "webvoyager": [
+    320,
+    595
+   ],
+   "deepshop": [
+    42,
+    150
+   ],
+   "mean": 38.82
+  },
+  "independent-transformer-bce": {
+   "online_mind2web": [
+    89,
+    300
+   ],
+   "webvoyager": [
+    308,
+    595
+   ],
+   "deepshop": [
+    52,
+    150
+   ],
+   "mean": 38.7
+  },
+  "joint-mlp-softce": {
+   "online_mind2web": [
+    91,
+    300
+   ],
+   "webvoyager": [
+    299,
+    595
+   ],
+   "deepshop": [
+    49,
+    150
+   ],
+   "mean": 37.75
+  },
+  "joint-mlp-bce": {
+   "online_mind2web": [
+    93,
+    300
+   ],
+   "webvoyager": [
+    285,
+    595
+   ],
+   "deepshop": [
+    53,
+    150
+   ],
+   "mean": 38.08
+  },
+  "independent-mlp-softce": {
+   "online_mind2web": [
+    92,
+    300
+   ],
+   "webvoyager": [
+    316,
+    595
+   ],
+   "deepshop": [
+    48,
+    150
+   ],
+   "mean": 38.59
+  },
+  "independent-mlp-bce": {
+   "online_mind2web": [
+    100,
+    300
+   ],
+   "webvoyager": [
+    313,
+    595
+   ],
+   "deepshop": [
+    50,
+    150
+   ],
+   "mean": 39.76
+  },
+  "piotr-data-head": {
+   "online_mind2web": [
+    99,
+    300
+   ],
+   "webvoyager": [
+    332,
+    595
+   ],
+   "deepshop": [
+    51,
+    150
+   ],
+   "mean": 40.93
+  },
+  "sft-no-selector": {
+   "online_mind2web": [
+    85,
+    300
+   ],
+   "webvoyager": [
+    264,
+    595
+   ],
+   "deepshop": [
+    44,
+    150
+   ],
+   "mean": 34.01
+  }
+ },
+ "vs_sft": {
+  "joint-transformer-softce": [
+   6.97,
+   3.3,
+   10.7
+  ],
+  "joint-transformer-bce": [
+   6.14,
+   2.52,
+   9.81
+  ],
+  "independent-transformer-softce": [
+   4.8,
+   0.96,
+   8.64
+  ],
+  "independent-transformer-bce": [
+   4.69,
+   0.75,
+   8.57
+  ],
+  "joint-mlp-softce": [
+   3.74,
+   0.4,
+   7.24
+  ],
+  "joint-mlp-bce": [
+   4.07,
+   0.06,
+   8.12
+  ],
+  "independent-mlp-softce": [
+   4.58,
+   1.08,
+   8.03
+  ],
+  "independent-mlp-bce": [
+   5.75,
+   2.07,
+   9.58
+  ],
+  "piotr-data-head": [
+   6.92,
+   3.31,
+   10.75
+  ]
+ },
+ "vs_joint_tf_softce": {
+  "joint-transformer-bce": [
+   -0.83,
+   -4.55,
+   2.78
+  ],
+  "independent-transformer-softce": [
+   -2.16,
+   -5.66,
+   1.18
+  ],
+  "independent-transformer-bce": [
+   -2.28,
+   -6.39,
+   1.67
+  ],
+  "joint-mlp-softce": [
+   -3.23,
+   -6.73,
+   0.17
+  ],
+  "joint-mlp-bce": [
+   -2.9,
+   -6.56,
+   0.66
+  ],
+  "independent-mlp-softce": [
+   -2.39,
+   -6.16,
+   1.23
+  ],
+  "independent-mlp-bce": [
+   -1.22,
+   -4.99,
+   2.45
+  ],
+  "piotr-data-head": [
+   -0.04,
+   -3.6,
+   3.41
+  ],
+  "sft-no-selector": [
+   -6.97,
+   -10.7,
+   -3.3
+  ]
+ },
+ "contrasts": {
+  "joint - independent (all 8)": [
+   0.27,
+   -1.78,
+   2.33
+  ],
+  "softce - bce (all 8)": [
+   -0.14,
+   -2.09,
+   1.88
+  ],
+  "transformer - mlp (all 8)": [
+   1.12,
+   -0.69,
+   2.94
+  ],
+  "joint - independent (transformer)": [
+   1.81,
+   -0.97,
+   4.62
+  ],
+  "softce - bce (transformer)": [
+   0.47,
+   -2.17,
+   3.19
+  ]
+ }
+}
