@@ -1,5 +1,9 @@
 # OpenWebRL project documentation
 
+<!-- claude-browsercode-om2w300-v1:start -->
+[Claude BrowserCode OM2W300: four completed methods; valid-only success, model cost, native latency and selected-batch tradeoffs, with common-valid and cap-exclusion qualification](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
+<!-- claude-browsercode-om2w300-v1:end -->
+
 [Native CUAWright full300: 1,200 outcomes and all-attempt accounting verified; cleanup qualification, paired fresh200 uncertainty and $529.63 accounted API usage](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).
 
 [Native CUAWright selection complete: Sol single 80/100, Sol N=3 72/100, Luna N=3 68/100; shared-task success, all-attempt cost, latency and audited aggregates](ARM_INFERENCE_SCALING.md#cuawright-native-selection-results-20261024).

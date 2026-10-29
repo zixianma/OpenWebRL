@@ -1,0 +1,10 @@
+{
+  "approved_for_final_metric_plot_publication": true,
+  "aggregate_sha256": "174cf21802f3926f55e341a3e97d8a4408479230646e07df2935dcf2df08aebe",
+  "final_audit": {
+    "sha256": "b1c92cf0e176f5635a31e66b5abb876d15b2325f9ce0670fccea8619f35df90f",
+    "public_description": "Independent final1200 task-outcome and all-attempt accounting audit; invalids excluded from success denominators, unknown usage fully reserved"
+  },
+  "upstream_root_qualification_sha256": "1fa07aa4d477636090907a9e117667ff54974253584a87384a0307962348c58f",
+  "derivation": "Identical approved aggregate rows and definitions, with private evidence references excluded. Public export reviewed before commit."
+}

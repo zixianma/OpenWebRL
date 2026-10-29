@@ -1,5 +1,82 @@
 # Final inference results
 
+<!-- claude-browsercode-om2w300-v1:start -->
+<a id="claude-browsercode-om2w300"></a>
+
+## Claude BrowserCode: high effort on OM2W
+
+**On the 246 common-valid tasks, Sonnet N5 matches Sonnet single at 147 successes; N3 records 144. Both use fewer selected browser batches, higher model cost and longer native latency.** Opus records 199 successes on that same cohort.
+
+All four arms have audited outcomes for the same fixed 300 tasks; the table and primary figure use each arm’s own valid cohort.
+
+| Method | Recorded | Valid | Invalid | Successes | Valid-only success | Model $ / task | Latency (s) | Browser batches |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Opus single | 300 | 266 | 34 | 217 | 81.6% | 0.859 | 99.5 | 10.30 |
+| Sonnet single | 300 | 262 | 38 | 156 | 59.5% | 0.214 | 54.1 | 6.94 |
+| Sonnet N = 3 | 300 | 259 | 41 | 152 | 58.7% | 0.811 | 78.9 | 6.08 |
+| Sonnet N = 5 | 300 | 265 | 35 | 161 | 60.8% | 1.252 | 89.0 | 6.29 |
+
+Successes divide by valid outcomes in each arm; invalid outcomes stay in the separate count column. Model cost, latency and browser batches use exactly that arm's valid cohort, including valid failures. Cohorts can differ between arms and exclude cap-constrained episodes; these conditional rates do not establish a causal model-quality gain.
+
+![Claude BrowserCode performance versus model cost, browser batches and latency](arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs.png)
+
+*Opus 5.5 and Sonnet 5.5; 12,288 output tokens and 30 decisions. N = 3/5 samples candidates independently and executes only the selected batch. The thin gray line joins observed Pareto points within each panel; it implies neither interpolation nor statistical superiority. Axes are cropped; no uncertainty is inferred from aggregate points. Collections occur on live sites.*
+
+[Coordinates (CSV)](arm_results/claude_browsercode_om2w300_20261028/claude_coordinates.csv) · [Aggregate definitions](arm_results/claude_browsercode_om2w300_20261028/aggregate.json) · [SVG](arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs.svg) · [PDF](arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs.pdf) · [Plot source](arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py)
+
+<details>
+<summary>Matched common-valid alternative and accounting scope</summary>
+
+Model cost includes all candidate and selector calls in each included episode, including thinking output and conservative unknown reservations. Every plotted valid episode has known model usage; unknown reservations remain in the separate all-attempt accounting. Native latency measures actor-loop wall time, including online waits and browser execution, excluding browser setup, final judge-only capture, cleanup and external judging. A browser batch is one selected BrowserCode block and can contain multiple browser operations. GPT-5.6 Terra grades terminal success; historical GPT figures using another judge remain separately labeled.
+
+**Validity and budget exclusions.** Six Sonnet single, five N3 and five N5 outcomes were invalid because full conservative request reservations could not be admitted within their frozen caps. Shared-halt consequences remain invalid too. These are not judged failures; common-valid conditioning does not cure the resulting selection. All invalid and unknown charges remain in the separate all-attempt accounting.
+
+| Method | Invalid reason | Count |
+|---|---|---:|
+| Opus single | browser navigation download | 5 |
+| Opus single | browser navigation network or redirect error | 5 |
+| Opus single | browser navigation timeout | 20 |
+| Opus single | episode or tool timeout | 1 |
+| Opus single | native response json decode | 1 |
+| Opus single | terminal interruption | 1 |
+| Opus single | world output unicode encoding | 1 |
+| Sonnet single | actor budget reservation admission | 6 |
+| Sonnet single | browser navigation download | 5 |
+| Sonnet single | browser navigation network or redirect error | 4 |
+| Sonnet single | browser navigation timeout | 21 |
+| Sonnet single | terminal interruption | 2 |
+| Sonnet N = 3 | actor budget reservation admission | 5 |
+| Sonnet N = 3 | browser navigation download | 5 |
+| Sonnet N = 3 | browser navigation network or redirect error | 4 |
+| Sonnet N = 3 | browser navigation timeout | 19 |
+| Sonnet N = 3 | episode or tool timeout | 3 |
+| Sonnet N = 3 | native protocol or validation | 1 |
+| Sonnet N = 3 | provider or judge api error | 1 |
+| Sonnet N = 3 | shared halt after prior failure | 1 |
+| Sonnet N = 3 | terminal interruption | 2 |
+| Sonnet N = 5 | actor budget reservation admission | 5 |
+| Sonnet N = 5 | browser navigation download | 5 |
+| Sonnet N = 5 | browser navigation network or redirect error | 5 |
+| Sonnet N = 5 | browser navigation timeout | 20 |
+
+All four methods are valid on 246 common tasks. The following rates and all three metric means use that identical intersection; conditioning on validity excludes invalid outcomes and can alter the task mix.
+
+| Method | Common tasks | Successes | Success | Model $ / task | Latency (s) | Browser batches |
+|---|---:|---:|---:|---:|---:|---:|
+| Opus single | 246 | 199 | 80.9% | 0.827 | 97.3 | 10.06 |
+| Sonnet single | 246 | 147 | 59.8% | 0.200 | 51.4 | 6.77 |
+| Sonnet N = 3 | 246 | 144 | 58.5% | 0.728 | 73.4 | 5.81 |
+| Sonnet N = 5 | 246 | 147 | 59.8% | 1.111 | 82.9 | 6.01 |
+
+[Common-valid figure (SVG)](arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs_common_valid.svg). This OM2W-only result does not extend the earlier equal-weight three-benchmark mean. Valid-cohort costs above are distinct from all-attempt campaign spend, which includes every invalid/interrupted prior attempt and remains in the independently audited accounting record. External judge charges are excluded throughout the model-cost plots.
+
+All-attempt model charges/reservations total **$901.048412**, comprising $900.251168 known usage and $0.797244 reserved unknown usage. External judge charges/reservations are **$14.7273831**, including $0.2776961 unknown reservations, and are excluded from plotted model costs. These totals retain invalid/interrupted work and differ from the valid-cohort means above. [Per-arm accounting](arm_results/claude_browsercode_om2w300_20261028/accounting.json).
+
+Recorded in-allocation worker and private-process-group closure was verified. One raw workspace cleanup API interruption remains preserved; subsequent recorded worker/private-group closure was verified. No fresh global host-orphan scan is claimed.
+
+</details>
+<!-- claude-browsercode-om2w300-v1:end -->
+
 ## Headline performance cost and efficiency
 
 <!-- three-benchmark-headlines-v2 -->

@@ -1,5 +1,26 @@
 # ARM inference scaling
 
+<!-- claude-browsercode-om2w300-v1:start -->
+<a id="claude-browsercode-om2w300"></a>
+
+## Claude BrowserCode on OM2W
+
+[Final outcome counts and tradeoff figure](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) compare Opus 5.5 single, Sonnet 5.5 single, and Sonnet 5.5 with three or five candidates on the same fixed 300-task list. Each arm uses high effort, 12,288 output tokens and 30 decisions; selectors use the same effort and token limit. Only the selected BrowserCode batch executes. GPT-5.6 Terra grades the final image under the frozen terminal-success protocol.
+
+<details>
+<summary>Aggregate provenance and all-attempt accounting</summary>
+
+The primary figure divides successes by valid outcomes separately in each arm and uses that same valid cohort for cost, latency and browser-batch means. The common-valid alternative uses the identical four-arm task intersection for all four metrics. Both condition on validity; invalid outcomes stay separate, and the two cohort definitions must not be mixed. Frozen all-attempt caps can prevent admission of a conservative full request reservation, leaving cap-constrained episodes invalid. Shared-halt consequences remain invalid too. The common-valid intersection does not cure this selection, and neither view establishes a causal model-quality improvement. The aggregate lists invalid reasons; every invalid charge and unknown reservation stays in the separate all-attempt spending audit.
+
+Model cost sums every candidate and selector receipt in each included episode, including thinking output and conservative unknown reservations. Native task latency measures the actor loop, including budget/HTTP admission waits and selected browser execution, while excluding initial browser setup, final judge-only image capture, cleanup and external judging. Browser batches count selected executable blocks; internal CDP calls and terminal-answer decisions are separate diagnostics. These definitions match the earlier BrowserCode plot's actor-loop and selected-batch boundaries, but judge protocol, live-site dates and valid task subsets differ. The older three-benchmark and two-harness figures remain distinct comparisons.
+
+The [aggregate and metric definitions](arm_results/claude_browsercode_om2w300_20261028/aggregate.json) and [coordinates](arm_results/claude_browsercode_om2w300_20261028/claude_coordinates.csv) contain aggregate values only. Receipt joins independently check selected decision batches against saved execution scripts, enforce observed latency/metric coverage, and keep external judge roles out of model costs. Claude uses no separate native input-token-count endpoint in this campaign; its saved counter count is zero. Per-arm valid-cohort costs are not all-attempt campaign spending: the latter also retains invalid, interrupted and superseded attempts, unknown reservations and external judge spending as separately audited totals.
+
+The observed Pareto lines join nondominated aggregate points; they do not supply uncertainty, establish superiority, or imply intermediate configurations were tested. Scientific completion and all-attempt resource/fee qualification precede publication.
+
+</details>
+<!-- claude-browsercode-om2w300-v1:end -->
+
 <a id="luna-single-high-om2w300-20261022"></a>
 
 ## Luna single high completes the OM2W four-method comparison (October 22, 2026)

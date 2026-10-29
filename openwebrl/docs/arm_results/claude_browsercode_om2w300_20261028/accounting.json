@@ -1,0 +1,69 @@
+{
+  "scope": "All attempts and all physical roles, including invalid/interrupted work and original judge failures. External judge separated from model. Zero transfer or unknown refund inferred.",
+  "per_arm": [
+    {
+      "arm": "opus_single",
+      "model_charged_or_reserved_usd": "231.193332",
+      "external_judge_charged_or_reserved_usd": "4.33439590000000002",
+      "model_calls": 3039,
+      "external_judge_calls": 267,
+      "model_unknown_reserved_usd": "0",
+      "external_judge_unknown_reserved_usd": "0.07121840000000002",
+      "model_known_usage_usd": "231.193332",
+      "external_judge_known_usage_usd": "4.26317750000000000"
+    },
+    {
+      "arm": "sonnet_single",
+      "model_charged_or_reserved_usd": "65.481246",
+      "external_judge_charged_or_reserved_usd": "3.49886040000000002",
+      "model_calls": 2239,
+      "external_judge_calls": 263,
+      "model_unknown_reserved_usd": "0",
+      "external_judge_unknown_reserved_usd": "0.06970590000000002",
+      "model_known_usage_usd": "65.481246",
+      "external_judge_known_usage_usd": "3.42915450000000000"
+    },
+    {
+      "arm": "sonnet_n3",
+      "model_charged_or_reserved_usd": "254.349940",
+      "external_judge_charged_or_reserved_usd": "3.3830020",
+      "model_calls": 8005,
+      "external_judge_calls": 260,
+      "model_unknown_reserved_usd": "0.797244",
+      "external_judge_unknown_reserved_usd": "0.0676005",
+      "model_known_usage_usd": "253.552696",
+      "external_judge_known_usage_usd": "3.3154015"
+    },
+    {
+      "arm": "sonnet_n5",
+      "model_charged_or_reserved_usd": "350.023894",
+      "external_judge_charged_or_reserved_usd": "3.5111248",
+      "model_calls": 11950,
+      "external_judge_calls": 266,
+      "model_unknown_reserved_usd": "0",
+      "external_judge_unknown_reserved_usd": "0.0691713",
+      "model_known_usage_usd": "350.023894",
+      "external_judge_known_usage_usd": "3.4419535"
+    }
+  ],
+  "totals": {
+    "model_charged_or_reserved_usd": "901.048412",
+    "external_judge_charged_or_reserved_usd": "14.72738310000000004",
+    "model_known_usage_usd": "900.251168",
+    "model_unknown_reserved_usd": "0.797244",
+    "external_judge_known_usage_usd": "14.44968700000000000",
+    "external_judge_unknown_reserved_usd": "0.27769610000000004"
+  },
+  "audit_sha256": "b1c92cf0e176f5635a31e66b5abb876d15b2325f9ce0670fccea8619f35df90f",
+  "cleanup_scope": "Recorded in-allocation worker/private-group closure verified. One raw workspace cleanup API interruption retained, followed by recorded worker/private-group closure. No fresh global host-orphan scan claimed.",
+  "final_qualification_sha256": "b1e143aa9548e0674f732a5a18c3262982eebac2639c2179e167d75bc4a01650",
+  "terminal_resource_scope": {
+    "logical_shards": 120,
+    "physical_attempts": 142,
+    "all_registered_owners_terminal": true,
+    "maximum_registered_job_overlap": 6,
+    "maximum_per_arm_job_overlap": 2,
+    "all_attempt_time_and_per_shard_caps_verified": true,
+    "budget_transfers": false
+  }
+}
