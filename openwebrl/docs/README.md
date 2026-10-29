@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[API experiment methods: protocols, model adapters, candidate selection, judges, metrics, budgets and reproducibility](API_EXPERIMENT_METHODS.md).
+
 <!-- claude-browsercode-om2w300-v1:start -->
 [Claude BrowserCode OM2W300: four completed methods; valid-only success, model cost, native latency and selected-batch tradeoffs, with common-valid and cap-exclusion qualification](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
 <!-- claude-browsercode-om2w300-v1:end -->
