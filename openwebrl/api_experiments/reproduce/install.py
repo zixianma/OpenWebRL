@@ -35,6 +35,35 @@ def run(args, *, env, cwd=None):
     subprocess.run([str(value) for value in args], env=env, cwd=cwd, check=True)
 
 
+def installation_plan(*, profile="browsercode", legacy=False, previous=None):
+    """Select dependencies while retaining completed or interrupted upgrades.
+
+    The default needs CUAWright's shared agent library, not its native harness
+    or external WebJudge. The optional historical profile promotes to ``all``.
+    Existing source identities must match before any installation writes occur.
+    """
+    if profile not in ("browsercode", "all"):
+        raise ValueError("Unknown dependency profile: " + str(profile))
+    previous_sources = {} if previous is None else previous.get("sources", {})
+    for key, pin in previous_sources.items():
+        expected = PINS.get(key)
+        if expected is None or (pin.get("url"), pin.get("commit")) != (expected["url"], expected["commit"]):
+            raise ValueError("Existing installation has different source pins; choose a new prefix")
+    if previous is not None:
+        legacy = legacy or bool(previous.get("legacy_requirements_sha256"))
+        if previous.get("profile") == "all" or "official_webjudge" in previous_sources:
+            profile = "all"
+    if legacy:
+        profile = "all"
+    selected = ("cuawright_source", "browsercode_source") if profile == "browsercode" else tuple(PINS)
+    return {"schema": "openwebrl-api-dependencies-v1", "profile": profile,
+            "python": "3.12", "sources": {key: {**PINS[key], "paths": list(PINS[key]["paths"])} for key in selected},
+            "bun": dict(BUN), "npm": dict(NPM),
+            "requirements_sha256": digest(ROOT / "requirements.txt"),
+            "bun_lock_sha256": digest(ROOT / "bun.lock"),
+            "legacy_requirements_sha256": digest(ROOT / "requirements-legacy.txt") if legacy else None}
+
+
 def checkout(pin, output, env):
     """Fetch one immutable commit; a partial failed install can be retried."""
     if not output.exists():
@@ -58,26 +87,21 @@ def checkout(pin, output, env):
         raise ValueError("Dependency checkout contains modified tracked source: " + str(output))
 
 
-def install(prefix, *, legacy=False):
+def install(prefix, *, legacy=False, profile="browsercode"):
     if sys.version_info[:2] != (3, 12):
         raise ValueError("Run the installer with Python 3.12 (the executed runtime version)")
     if platform.system() != "Linux" or platform.machine() not in ("x86_64", "amd64"):
         raise ValueError("This pinned browser/runtime profile requires Linux x86_64")
-    prefix = prefix.resolve()
+    prefix = Path(prefix).resolve()
     if prefix.is_relative_to(Path("/gpfs/home/zixianma")):
         raise ValueError("Select a writable project or temporary installation prefix")
     marker = prefix / "installation-plan.json"
-    plan = {"schema": "openwebrl-api-dependencies-v1", "python": "3.12", "sources": PINS, "bun": BUN, "npm": NPM, "requirements_sha256": digest(ROOT / "requirements.txt"), "bun_lock_sha256": digest(ROOT / "bun.lock"), "legacy_requirements_sha256": digest(ROOT / "requirements-legacy.txt") if legacy else None}
     if prefix.exists() and not marker.is_file():
         raise ValueError("Prefix must be new or an earlier install.py prefix")
+    previous = json.loads(marker.read_text()) if marker.exists() else None
+    plan = installation_plan(profile=profile, legacy=legacy, previous=previous)
+    legacy = plan["legacy_requirements_sha256"] is not None
     prefix.mkdir(parents=True, exist_ok=True)
-    if marker.exists() and json.loads(marker.read_text()) != plan:
-        previous = json.loads(marker.read_text())
-        identity = lambda sources: {key: (value["url"], value["commit"]) for key, value in sources.items()}
-        if identity(previous["sources"]) != identity(PINS):
-            raise ValueError("Existing installation has different source pins; choose a new prefix")
-        # Resume an interrupted install or add the optional legacy CPU profile.
-        # All package versions are pinned and pip checks their consistency.
     marker.write_text(json.dumps(plan, indent=2) + "\n")
     env = os.environ.copy()
     for name in ("XDG_CACHE_HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "PIP_CACHE_DIR", "BUN_INSTALL_CACHE_DIR", "MPLCONFIGDIR", "HF_HOME", "WANDB_CACHE_DIR", "WANDB_CONFIG_DIR"):
@@ -94,7 +118,7 @@ def install(prefix, *, legacy=False):
         run([python, "-m", "pip", "install", "--no-deps", "--index-url", "https://download.pytorch.org/whl/cpu", "torch==2.9.1+cpu", "torchvision==0.24.1+cpu"], env=env)
         run([python, "-m", "pip", "install", "--constraint", ROOT / "requirements.txt", "--requirement", ROOT / "requirements-legacy.txt"], env=env)
     sources = {}
-    for key, pin in PINS.items():
+    for key, pin in plan["sources"].items():
         destination = prefix / "sources" / key
         checkout(pin, destination, env)
         sources[key] = str(destination)
@@ -131,7 +155,9 @@ def install(prefix, *, legacy=False):
     chromium = Path(executable)
     if not chromium.is_file():
         raise ValueError("Pinned Chromium executable missing after installation")
-    output = {**sources, "cuawright": sources["cuawright_source"], "python": str(python), "bun": str(bun), "chromium": str(chromium), "node_modules": str(javascript / "node_modules"), "browser_cache": str(browser_cache), "pins": plan}
+    output = {**sources, "profile": plan["profile"], "python": str(python), "bun": str(bun), "chromium": str(chromium), "node_modules": str(javascript / "node_modules"), "browser_cache": str(browser_cache), "pins": plan}
+    if "cuawright_source" in sources:
+        output["cuawright"] = sources["cuawright_source"]
     if legacy:
         tokenizer = prefix / "tokenizer"
         snippet = "from huggingface_hub import snapshot_download; snapshot_download(repo_id='Qwen/Qwen3-VL-4B-Thinking',revision='1de27d8c51f12e819435303b9e84c4e25ba8401e',allow_patterns=['*.json','*.txt','*.model','*.jinja'],local_dir=" + repr(str(tokenizer)) + ")"
@@ -147,13 +173,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prefix", type=Path, required=True)
     parser.add_argument("--install", action="store_true", help="Create the environment and download pinned dependencies; default prints the plan")
-    parser.add_argument("--legacy", action="store_true", help="Also install CPU vision/tokenizer support for historical coordinate-browser experiments; no model weights")
+    parser.add_argument("--profile", choices=("browsercode", "all"), default="browsercode", help="Default: BrowserCode and its shared agent library; all adds native WebJudge sources")
+    parser.add_argument("--legacy", action="store_true", help="Also install historical coordinate-browser CPU/tokenizer support; promotes to profile all, no model weights")
     args = parser.parse_args()
-    if not args.install:
-        print(json.dumps({"prefix": str(args.prefix.resolve()), "sources": PINS, "bun": BUN, "npm": NPM, "requirements": str(ROOT / "requirements.txt"), "legacy_requirements": str(ROOT / "requirements-legacy.txt") if args.legacy else None, "install": False}, indent=2))
-        return
     try:
-        install(args.prefix, legacy=args.legacy)
+        if not args.install:
+            marker = args.prefix.resolve() / "installation-plan.json"
+            previous = json.loads(marker.read_text()) if marker.is_file() else None
+            plan = installation_plan(profile=args.profile, legacy=args.legacy, previous=previous)
+            print(json.dumps({**plan, "prefix": str(args.prefix.resolve()), "requirements": str(ROOT / "requirements.txt"), "legacy_requirements": str(ROOT / "requirements-legacy.txt") if plan["legacy_requirements_sha256"] else None, "install": False}, indent=2))
+            return
+        install(args.prefix, legacy=args.legacy, profile=args.profile)
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         parser.error(str(error))
 

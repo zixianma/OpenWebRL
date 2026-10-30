@@ -1,19 +1,26 @@
-# API experiments
+# BrowserCode API experiments
 
-The **[API experiments guide](../docs/API_EXPERIMENT_METHODS.md)** is the main reference for the studies, methods, runnable commands, implementation and result evidence.
+Start with the **[BrowserCode guide](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart)**: one setup command prepares the dependencies and frozen runtime; one evaluation command runs the selected arm with explicit caps.
 
 <a id="start-here"></a>
-<a id="restore-an-original-campaign-layout"></a>
 
 | To… | Follow… |
 |---|---|
-| Understand the studies and their differences | [Experiments and protocols](../docs/API_EXPERIMENT_METHODS.md#experiments) |
-| Install and run the experiments | [Reproduction quickstart](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart) |
-| Trace workers, models, budgets, browsers and judges | [Campaign code map](../docs/API_EXPERIMENT_METHODS.md#code-and-frozen-artifacts) |
-| Restore original source filenames | [Source reconstruction](../docs/API_EXPERIMENT_METHODS.md#restore-an-original-campaign-layout) · [provenance index](source-provenance.json) |
-| Check the public code offline | [Validation commands and test scope](../docs/API_EXPERIMENT_METHODS.md#offline-validation) |
-| Find results and qualified evidence | [Results and analysis](../docs/API_EXPERIMENT_METHODS.md#results-and-analysis-pointers) |
+| Set up and run | [Quickstart](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart) · [browsercode.py](reproduce/browsercode.py) |
+| Choose models and methods | [Campaigns and arms](../docs/API_EXPERIMENT_METHODS.md#main-browsercode-experiments) |
+| Understand the protocol | [Experiments](../docs/API_EXPERIMENT_METHODS.md#experiments) · [metrics](../docs/API_EXPERIMENT_METHODS.md#metrics-and-comparability) |
+| Trace the implementation | [Code map](../docs/API_EXPERIMENT_METHODS.md#code-and-frozen-artifacts) · [offline checks](../docs/API_EXPERIMENT_METHODS.md#offline-validation) |
+| Find qualified results | [Results and analysis](../docs/API_EXPERIMENT_METHODS.md#results-and-analysis-pointers) |
 
 <a id="layout"></a>
 
-`browsercode/` and `cuawright/` preserve frozen source snapshots. [portable_assets/](portable_assets/) supplies scientific configs, prompts, support code and benchmark-ID rosters. [reproduce/](reproduce/) installs pinned dependencies, builds isolated runtimes and runs BrowserCode, native CUAWright and earlier coordinate-browser experiments. Start with the guide’s [clean setup commands](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart); credentials and run outputs stay local.
+[browsercode/](browsercode/) holds frozen source snapshots; [portable_assets/](portable_assets/) supplies configurations, prompts, support code and fixed task-ID rosters. [reproduce/browsercode.py](reproduce/browsercode.py) provides `setup`, `run`, `check` and `report`. Evaluation defaults to a read-only plan; add `--execute` to use the required run caps. Credentials and raw outputs stay local.
+
+<details>
+<summary>Archived implementations and source provenance</summary>
+
+<a id="restore-an-original-campaign-layout"></a>
+
+Earlier harnesses remain preserved for historical reproduction. See the guide's collapsed [archive](../docs/API_EXPERIMENT_METHODS.md#archived-implementations-and-campaign-records), [source reconstruction](../docs/API_EXPERIMENT_METHODS.md#restore-an-original-campaign-layout) and [provenance index](source-provenance.json).
+
+</details>

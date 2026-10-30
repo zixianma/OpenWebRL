@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[API experiments: clean setup, runnable BrowserCode/native/historical studies, protocols, code map and result evidence](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
+[BrowserCode API experiments: simplified setup, bounded evaluation, protocols, code map and qualified results](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
 
 <!-- claude-browsercode-om2w300-v1:start -->
 [Claude BrowserCode OM2W300: four completed methods; valid-only success, model cost, native latency and selected-batch tradeoffs, with common-valid and cap-exclusion qualification](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
