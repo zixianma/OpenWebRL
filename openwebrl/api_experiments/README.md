@@ -1,5 +1,7 @@
 # API experiments
 
+**Not yet complete for external reproduction:** a clean clone lacks required runtime code/configuration and some reported campaign variants. See the [coverage and dependency audit](../docs/API_EXPERIMENT_METHODS.md#external-reproducibility-status).
+
 The **[API experiments guide](../docs/API_EXPERIMENT_METHODS.md)** is the main reference for the studies, methods, runnable commands, implementation and result evidence.
 
 <a id="start-here"></a>
