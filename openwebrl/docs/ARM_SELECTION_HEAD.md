@@ -2056,9 +2056,33 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 <details><summary>Run notes, compute and evidence</summary>
 
 - **Live jobs (one H200 / 8 CPU each, gpu-h200, ≤ 18 concurrent).** Run 1: 397621–397641 (7 selectors × 3 benchmarks) and 397696–397698 (22K-panel head), 57.0 H200-h. Runs 2–3 (roots `rerun2/`, `rerun3/`): Piotr-data head, 1,380 head and SelectionARM 398822–398839 (resumes 399770, 399773); the other five 399807–399838 in 18 afterany slot chains (resume 400791). LoRA variants 398841–398846. Four jobs stopped at the 4 h limit with records missing and were resumed on the same root; every run was checked for all 300 / 595 / 150 records. Plans are subsets of `crossbench-full-t10-20261018` sft1 (seed 20261018).
-- **RL checkpoint as actor (not reported).** A same-window run with the OpenWebRL-4B RL checkpoint as actor is invalid: its longer reasoning hits the 1,024-token response cap, and the harness ends the episode, on 258 of 1,045 episodes alone (0 successes among them; SFT 4B alone 16) and 57 with SelectionARM. A rerun at 4,096 tokens (the paper's setting) is pending.
+- **RL checkpoint as actor (not reported).** A same-window run with the OpenWebRL-4B RL checkpoint as actor is invalid: its longer reasoning hits the 1,024-token response cap, and the harness ends the episode, on 258 of 1,045 episodes alone (0 successes among them; SFT 4B alone 16) and 57 with SelectionARM. Rerun at 4,096 tokens (the paper's setting): [below](#selection-head-rl-actor-20261030).
 - **Offline panel count.** CPU job 397649.
 - **Analysis.** CPU jobs 398312 onwards.
 - **Evidence.** Three-run tables: [paired results](arm_results/rl_integration/selection-sameday3-20261030.json) · [analysis script](arm_results/rl_integration/selection-sameday3-20261030-analysis.py). First run only: [paired results](arm_results/rl_integration/selection-sameday-20261029.json) · [analysis script](arm_results/rl_integration/selection-sameday-20261029-analysis.py) · [panel count](arm_results/rl_integration/selection-lookahead-panelcount-20261029.json). Runtime `evaluations/sameday-20261029/` (`jobs.txt`, `submit_live.sh`, `submit_reruns*.sh`, `analysis/`).
+
+</details>
+
+<a id="selection-head-rl-actor-20261030"></a>
+
+## Selection heads on the RL checkpoint actor, 4,096 tokens (2026-10-30)
+
+**A head trained on the RL actor's own branch states beats the SFT-trained 1,380-state head on the RL actor by +3.9 pp [+0.2, +7.7] (mean overall), mostly DeepShop.** Main table and protocol: [final results](ARM_FINAL_RESULTS.md#final-selection-rl-actor-20261030). Same-window baselines at 4,096 tokens (RL alone, RL + SelectionARM, SFT 4B alone) are running as jobs 401372–401380.
+
+<details>
+<summary>Run notes and counts</summary>
+
+| Run | Benchmark | Tasks | Valid | Successes | Episodes ended by the 4,096 cap | Selection steps | Steps offering a cut-off candidate | Cut-off picks |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT-trained head (head5x) | Online-Mind2Web | 300 | 261 | 97 | 1 | 3,397 | 38 | 1 |
+| SFT-trained head (head5x) | WebVoyager | 595 | 576 | 349 | 2 | 5,918 | 29 | 2 |
+| SFT-trained head (head5x) | DeepShop | 150 | 143 | 47 | 0 | 1,812 | 12 | 0 |
+| RL-state head (head5, rl4b seed 0) | Online-Mind2Web | 300 | 239 | 96 | 6 | 3,887 | 57 | 6 |
+| RL-state head (head5, rl4b seed 0) | WebVoyager | 595 | 577 | 358 | 3 | 6,397 | 43 | 3 |
+| RL-state head (head5, rl4b seed 0) | DeepShop | 150 | 147 | 63 | 2 | 2,091 | 11 | 2 |
+
+- Code: `--max-new-tokens` option and RL actor registration in `crossbench_selector_eval.py`, functional tokenizer check in `serve_frozen_head_scorer.py` (commit 1b4b1db on `arm-selection-head`).
+- Three runs stopped at the 4 h limit and were resumed on the same plan (399826 → 400791, 400966 → 401156, 400969 → 401178); every run has its full record count.
+- Runtime `evaluations/rlactor-4096-20261030/` (`submit.sh`, `jobs.txt`, `analysis/`); RL-state data and heads in `selection-head-20261008/rl-states-20261029/`.
 
 </details>

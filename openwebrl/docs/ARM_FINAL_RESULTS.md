@@ -535,3 +535,22 @@ SFT 4B: Online-Mind2Web 31.7% and WebVoyager 44.4% (10-18; Online-Mind2Web re-ju
 
 </details>
 
+
+<a id="final-selection-rl-actor-20261030"></a>
+
+### Selection on the RL checkpoint actor (October 30)
+
+**On the OpenWebRL-4B RL checkpoint as actor, a head trained on the RL actor's own branch states beats the SFT-trained 1,380-state head by +3.9 pp [+0.2, +7.7] on the three-benchmark mean, almost all on DeepShop (+10.7 [+2.0, +19.3]). Same-window RL-alone and SelectionARM baselines at 4,096 tokens are running (jobs 401372–401380); their rows will be filled in.** All 1,045 tasks, N = 5 candidates, T 1.0 / top-p 0.9, 30 steps, **4,096 response tokens** (the paper's setting). Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o.
+
+| Actor | Selector | Training data: states / panels / labels | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − RL alone, pp<br>[95% CI] | − SFT-trained head, pp<br>[95% CI] |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| RL 4B | — (1 sample) | — | *running* | *running* | *running* | *running* | *running* | — | *pending* |
+| RL 4B | Piotr SelectionARM (4B LoRA) | 2,692 (Piotr's) / 35,916 of 5 sampled / GPT-5.5, before | *running* | *running* | *running* | *running* | *running* | *pending* | *pending* |
+| RL 4B | Head (22.6 M) on frozen SFT-4B features | 1,380 (SFT branch) / 1,380 of 2–5 distinct / Luna, 3 steps after | 37.2% | 60.6% | 32.9% | 40.8% | 43.6% | *pending* | — |
+| RL 4B | Head (22.6 M) on the RL actor's own features | 939 (RL branch) / 939 of 2–5 distinct / Luna, 3 steps after | **40.2%** | **62.0%** | **42.9%** | **44.7%** | **48.4%** | *pending* | **+3.9 [+0.2, +7.7]** |
+| *SFT 4B* | *— (1 sample), matched control* | — | *running* | *running* | *running* | *running* | *running* | — | — |
+
+- **Per benchmark, RL-state head − SFT-trained head:** Online-Mind2Web −0.3 [−5.7, +5.0], WebVoyager +1.5 [−2.7, +5.9], DeepShop **+10.7 [+2.0, +19.3]** (overall rates, [paired 95% bootstrap](#final-paired-bootstrap)). Both heads ran in the same window.
+- **Features.** The SFT-trained head was trained on hidden states of the frozen SFT 4B, so on the RL actor a frozen SFT-4B encoder re-encodes each prompt and its candidates (same tokenizer, verified). The RL-state head reads the RL actor's own layer 18/27/36 states and was trained on 1,147 RL-actor branch states (939 train / 208 test, 372 tasks) with the same Luna K = 3 labels; offline it gains +2.3 to +3.1 pp over a uniform pick across 3 seeds.
+- **Why 4,096 tokens.** A first run at the harness's earlier 1,024-token cap was invalid: the RL actor's longer reasoning hit the cap, which ends the episode, on 258 of 1,045 episodes alone (0 successes among them). At 4,096 only 0–6 episodes per benchmark end that way; a cut-off candidate appears at 11–57 selection steps per benchmark and the heads pick one at 0–6 of them.
+- [Details](ARM_SELECTION_HEAD.md#selection-head-rl-actor-20261030) · [Evidence](arm_results/rl_integration/selection-rlactor-4096-20261030.json) · Scripts: [per-run rates](arm_results/rl_integration/selection-rlactor-4096-20261030-heads.py), [paired](arm_results/rl_integration/selection-rlactor-4096-20261030-paired.py)

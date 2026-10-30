@@ -1,0 +1,102 @@
+{
+ "protocol": "RL checkpoint OpenWebRL-4B@616cc8f, 4,096 response tokens, N=5, T1.0/top-p0.9, 30 steps; OM2W 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150 (GPT-4o)",
+ "runs": {
+  "rl4096_h1380x": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 261,
+    "succ": 97,
+    "overall": 32.3,
+    "valid_only": 37.2,
+    "length_limit_episodes": 1,
+    "selection_steps": 3397,
+    "steps_with_truncated_candidate": 38,
+    "truncated_picked": 1
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 576,
+    "succ": 349,
+    "overall": 58.7,
+    "valid_only": 60.6,
+    "length_limit_episodes": 2,
+    "selection_steps": 5918,
+    "steps_with_truncated_candidate": 29,
+    "truncated_picked": 2
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 143,
+    "succ": 47,
+    "overall": 31.3,
+    "valid_only": 32.9,
+    "length_limit_episodes": 0,
+    "selection_steps": 1812,
+    "steps_with_truncated_candidate": 12,
+    "truncated_picked": 0
+   },
+   "mean_overall": 40.8,
+   "mean_valid_only": 43.6
+  },
+  "rl4096_hrl": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 239,
+    "succ": 96,
+    "overall": 32.0,
+    "valid_only": 40.2,
+    "length_limit_episodes": 6,
+    "selection_steps": 3887,
+    "steps_with_truncated_candidate": 57,
+    "truncated_picked": 6
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 577,
+    "succ": 358,
+    "overall": 60.2,
+    "valid_only": 62.0,
+    "length_limit_episodes": 3,
+    "selection_steps": 6397,
+    "steps_with_truncated_candidate": 43,
+    "truncated_picked": 3
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 147,
+    "succ": 63,
+    "overall": 42.0,
+    "valid_only": 42.9,
+    "length_limit_episodes": 2,
+    "selection_steps": 2091,
+    "steps_with_truncated_candidate": 11,
+    "truncated_picked": 2
+   },
+   "mean_overall": 44.7,
+   "mean_valid_only": 48.4
+  }
+ },
+ "paired_rl_state_head_minus_sft_trained_head_overall_pp_ci95": {
+  "online_mind2web": [
+   -0.3,
+   -5.7,
+   5.0
+  ],
+  "webvoyager": [
+   1.5,
+   -2.7,
+   5.9
+  ],
+  "deepshop": [
+   10.7,
+   2.0,
+   19.3
+  ],
+  "mean": [
+   3.9,
+   0.2,
+   7.7
+  ]
+ },
+ "baselines_4096": "running (jobs 401372-401380), to be added"
+}
