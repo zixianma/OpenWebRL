@@ -387,19 +387,19 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
   ![Gain over one SFT 4B sample per label source in three panels: offline on training states (teacher and head), offline on held-out test states (teacher and head), and live (head)](arm_results/rl_integration/selection-label-setups-20261027.png)
 - **Online-Mind2Web is where the branch labels fall short.** On WebVoyager and DeepShop the outcome and K3 heads match Piotr; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
 - **Why time barely drops.** Generating five candidates takes about 8.2 s of each 8–9 s decision; Piotr's selector adds 0.50 s and the head 0.02 s. Selector FLOPs are a fast prefill, while decoding is bandwidth-bound, so the head's 36% compute saving per step becomes only about 0.5 s per decision, roughly offset by its hidden-state capture. Episode length matters as much: the outcome head is cheapest per episode because it takes the fewest steps. Times come from live runs on different nodes, not a matched timing study.
-- <a id="final-selection-arch-k3-20261029"></a>**Architecture barely matters (lookahead K = 3 labels, same day, 2026-10-29).** Eight heads crossing joint / independent attention, transformer / MLP scorer and soft CE / per-candidate BCE, all trained on the K = 3 labels of the same 1,380 branch states (seed 0, 20 epochs, batch 64, ≈22.6 M parameters each), run on all 1,045 tasks on one day together with the Piotr-data head and SFT 4B. Every head beats one SFT sample; no design choice separates from noise. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o. Per-benchmark columns are valid-only success (successes / valid episodes); "Mean overall" averages the three benchmarks' overall rates (invalid episodes count as failures) and "Mean valid-only" their valid-only rates, each benchmark weighted one third. Differences are on the mean overall rate, [paired 95% intervals](#final-paired-bootstrap), reading row − reference. The default head is joint · transformer · soft CE (bold).
+- <a id="final-selection-arch-k3-20261029"></a>**Architecture barely matters (lookahead K = 3 labels, same day, 2026-10-29).** Eight heads crossing joint / independent attention, transformer / MLP scorer and soft CE / per-candidate BCE, all trained on the K = 3 labels of the same 1,380 branch states (seed 0, 20 epochs, batch 64, ≈22.6 M parameters each), run on all 1,045 tasks on one day together with the Piotr-data head and SFT 4B. Every head beats one SFT sample; no design choice separates from noise. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o. Per-benchmark columns are valid-only success (successes / valid episodes); "Mean overall" averages the three benchmarks' overall rates (invalid episodes count as failures) and "Mean valid-only" their valid-only rates, each benchmark weighted one third. Differences are on the mean overall rate, [paired 95% intervals](#final-paired-bootstrap), reading row − reference. The default head is joint (bidirectional attention among the state and all candidates) · transformer · soft CE (bold); rows are sorted by mean overall.
 
   | Attention | Scorer | Loss | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] |
   | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-  | **Joint** | **Transformer** | **Soft CE** | 42.7% | 52.9% | 35.2% | 41.0% | 43.6% | **+7.0 [+3.3, +10.7]** |
-  | Joint | Transformer | BCE | 40.6% | 55.0% | 32.2% | 40.1% | 42.6% | **+6.1 [+2.5, +9.8]** |
+  | **Joint (bidir)** | **Transformer** | **Soft CE** | 42.7% | 52.9% | 35.2% | 41.0% | 43.6% | **+7.0 [+3.3, +10.7]** |
+  | Joint (bidir) | Transformer | BCE | 40.6% | 55.0% | 32.2% | 40.1% | 42.6% | **+6.1 [+2.5, +9.8]** |
+  | Independent | MLP | BCE | 38.9% | 54.1% | 33.8% | 39.8% | 42.3% | **+5.8 [+2.1, +9.6]** |
+  | Causal ¹ | Transformer | Soft CE | 39.6% | 53.0% | 32.9% | 39.5% | 41.8% | **+5.5 [+1.9, +9.2]** |
   | Independent | Transformer | Soft CE | 39.8% | 55.3% | 28.2% | 38.8% | 41.1% | **+4.8 [+1.0, +8.6]** |
   | Independent | Transformer | BCE | 34.5% | 52.4% | 35.6% | 38.7% | 40.8% | **+4.7 [+0.8, +8.6]** |
-  | Causal ¹ | Transformer | Soft CE | 39.6% | 53.0% | 32.9% | 39.5% | 41.8% | **+5.5 [+1.9, +9.2]** |
-  | Joint | MLP | Soft CE | 34.9% | 51.2% | 34.3% | 37.8% | 40.1% | **+3.7 [+0.4, +7.2]** |
-  | Joint | MLP | BCE | 35.6% | 48.8% | 35.8% | 38.1% | 40.1% | **+4.1 [+0.1, +8.1]** |
   | Independent | MLP | Soft CE | 35.4% | 54.5% | 32.4% | 38.6% | 40.8% | **+4.6 [+1.1, +8.0]** |
-  | Independent | MLP | BCE | 38.9% | 54.1% | 33.8% | 39.8% | 42.3% | **+5.8 [+2.1, +9.6]** |
+  | Joint (bidir) | MLP | BCE | 35.6% | 48.8% | 35.8% | 38.1% | 40.1% | **+4.1 [+0.1, +8.1]** |
+  | Joint (bidir) | MLP | Soft CE | 34.9% | 51.2% | 34.3% | 37.8% | 40.1% | **+3.7 [+0.4, +7.2]** |
   | *Piotr-data head (same day)* |  |  | 37.6% | 57.7% | 36.2% | 40.9% | 43.9% | **+6.9 [+3.3, +10.8]** |
   | *SFT 4B, 1 sample (same day)* |  |  | 32.0% | 45.0% | 30.1% | 34.0% | 35.7% | — |
 
