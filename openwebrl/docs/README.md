@@ -1,8 +1,6 @@
 # OpenWebRL project documentation
 
-[API evaluation source: frozen GPT/Claude adapters, browser workers, judges and accounting](../api_experiments/README.md).
-
-[API experiment methods: protocols, model adapters, candidate selection, judges, metrics, budgets and reproducibility](API_EXPERIMENT_METHODS.md).
+[API experiments: unified guide to studies, protocols, Luna/Claude reproduction commands, campaign code map, metrics and result evidence](API_EXPERIMENT_METHODS.md). [Source archive](../api_experiments/README.md).
 
 <!-- claude-browsercode-om2w300-v1:start -->
 [Claude BrowserCode OM2W300: four completed methods; valid-only success, model cost, native latency and selected-batch tradeoffs, with common-valid and cap-exclusion qualification](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).

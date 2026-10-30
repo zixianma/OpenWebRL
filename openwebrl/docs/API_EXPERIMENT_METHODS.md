@@ -1,27 +1,34 @@
-# API browser evaluation methods
-
-For one-command BrowserCode runs using the original episode code, see the [Luna/Claude reproduction quickstart](../api_experiments/reproduce/README.md). These entry points require the configured runtime and default to a read-only dry run.
+<a id="api-browser-evaluation-methods"></a>
+# API experiments: guide, methods and code
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. This tests whether spending more model work on each decision improves browser-task success, cost, browser activity or latency.
 
-The main results are in [ARM_FINAL_RESULTS.md](ARM_FINAL_RESULTS.md); study-specific comparisons and uncertainty are in [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md). This document explains the shared procedure and the differences that matter for interpreting those results.
+This is the main guide for the published [API experiment code](../api_experiments/). It connects the study protocols, runnable entry points, source archive and result evidence. The main results are in [ARM_FINAL_RESULTS.md](ARM_FINAL_RESULTS.md); study-specific comparisons and uncertainty are in [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md).
 
-[Experiments](#experiments) · [Episode procedure](#episode-procedure) · [Metrics](#metrics-and-comparability) · [Code](#code-and-frozen-artifacts) · [Results](#results-and-analysis-pointers) · [Audit details](#audit-and-operational-details)
+| To… | Start with… |
+|---|---|
+| Understand the comparisons | [Experiments](#experiments), [episode procedure](#episode-procedure) and [metric definitions](#metrics-and-comparability) |
+| Run Luna or Claude BrowserCode episodes | [Reproduction quickstart](#reproduction-quickstart); requires an existing configured runtime and defaults to a read-only dry run |
+| Trace or reconstruct the implementation | [Code map](#code-and-frozen-artifacts), [source reconstruction](#restore-an-original-campaign-layout) and [offline validation](#offline-validation) |
+| Interpret published outcomes | [Results and evidence](#results-and-analysis-pointers) |
+| Audit an original campaign | [Frozen runtime records](#frozen-runtime-records) and [operational details](#audit-and-operational-details) |
 
 ## Experiments
 
 | Study | Methods | Tasks per method | Output cap / decision limit | Terminal judge |
 |---|---|---|---|---|
-| GPT high, BrowserCode | Sol single; Luna single, N3, N5; all high | OM2W 300; WebVoyager 595; DeepShop 150 | 12,288 / 30 | Historical o4-mini cohort |
-| GPT high, native CUAWright | Sol single; Luna single, N3, N5; all high | OM2W 300 | 20,000 / 100; summary setting 20 | Separate native protocol; see its methods record |
+| GPT high, BrowserCode | Sol single; Luna single, N3, N5; all high | OM2W 300; WebVoyager 595; DeepShop 150 | 12,288 / 30 | OM2W: historical o4-mini; WebVoyager/DeepShop: benchmark-native GPT-4o |
+| GPT high, native CUAWright | Sol single; Luna single, N3, N5; all high | OM2W 300 | 20,000 / 100; summary setting 20 | Official WebJudge, GPT-4o; separate native protocol |
 | Claude, BrowserCode | Opus 5.5 single; Sonnet 5.5 single, N3, N5; all high | OM2W 300; completed | 12,288 / 30 | GPT-5.6 Terra |
-| GPT Luna effort, BrowserCode | Single xhigh/medium/low; N5 medium+medium and low+low | OM2W 300 targeted; ongoing | 12,288 / 30 | GPT-5.6 Terra |
+| GPT Luna effort, BrowserCode | Single xhigh/medium/low; N5 medium+medium and low+low | OM2W 300 targeted; no qualified full300 result linked here | 12,288 / 30 | GPT-5.6 Terra |
 
-The output cap applies to each candidate and selector request. In N5 medium+medium, both candidates and selector use medium effort. Effort and token caps do not enforce equal realized compute; we measure actual usage.
+The limits and judges are campaign-specific. BrowserCode executes selected JavaScript through `browser_execute`; native CUAWright uses its native shell/Playwright tool loop. Their command counts and latency measurements are not interchangeable. The output cap applies to each candidate and selector request. In N5 medium+medium, both candidates and selector use medium effort. Effort and token caps do not enforce equal realized compute; we measure actual usage.
 
 Each campaign fixes its task roster and shard assignments. Arms share task IDs but run independent browser trajectories. Pilot tasks count toward the final roster. The native extension reuses the earlier 100 outcomes, including invalids, for Sol single and Luna single/N3, adds 200 fresh tasks to each, and collects all 300 N5 tasks fresh. Its fresh-200 comparison is reported separately.
 
 ## Episode procedure
+
+The following loop describes recent Luna effort and Claude BrowserCode runs. Earlier benchmark campaigns and native CUAWright use their own evidence and grading paths; see the [campaign code map](#code-and-frozen-artifacts) and [result records](#results-and-analysis-pointers).
 
 1. **Start the browser.** Recent BrowserCode runs use owned local Chromium/CDP, the task's start URL, a 1280×1800 viewport and a 120-second command timeout. A mechanical startup check uses no model calls.
 2. **Generate proposals.** The actor receives the task, actual execution history and current browser evidence. N=1 generates one response; N3/N5 generate concurrent responses from identical input at that decision.
@@ -41,7 +48,7 @@ Every proposal must pass the frozen action-or-answer parser. A malformed proposa
 
 SDK retries are disabled. Every physical call has a stable ID, role, payload hash, reservation, timestamps, response/error and usage record. Provider model aliases are checked but do not identify immutable weight snapshots.
 
-Recent Claude and Luna effort runs use `gpt56-terra-terminal-success-v1`: `gpt-5.6-terra`, medium effort, 4,096 completion tokens and seed 42. The request contains the task, selected action history and final screenshot. `common_judge.py` loads the frozen prompts and validates the completed, non-refusal verdict. Earlier o4-mini and later Terra results remain separate judge cohorts. Historical Claude grading/recovery attempts and fees remain in the lineage.
+The GPT-high BrowserCode headline cohort retains historical o4-mini grading for OM2W and benchmark-native GPT-4o protocols for WebVoyager and DeepShop. The separate [official-WebJudge regrading study](ARM_INFERENCE_SCALING.md#om2w-grading-browser-audit-20261020) does not replace those headline outcomes. The archived native judge uses official WebJudge with `gpt-4o-2024-08-06`; follow its [methods record](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025) for evidence and qualification. Recent Claude and Luna effort runs use `gpt56-terra-terminal-success-v1`: `gpt-5.6-terra`, medium effort, 4,096 completion tokens and seed 42. The request contains the task, selected action history and final screenshot. `common_judge.py` loads the frozen prompts and validates the completed, non-refusal verdict. Earlier o4-mini and later Terra results remain separate judge cohorts. Historical Claude grading/recovery attempts and fees remain in the lineage.
 
 </details>
 
@@ -61,9 +68,93 @@ The Claude plots use each arm's valid cohort for success and all efficiency mean
 
 **Interpretation limits:** different valid subsets can change apparent rankings. Common-valid filtering does not remove selection from site, format or budget failures. Harness budgets, command semantics, judge protocols and live-site dates also differ. Treat cross-harness/model comparisons as descriptive where those controls differ. Pareto lines connect observed nondominated points; they do not supply uncertainty or prove superiority.
 
+## Reproduction quickstart
+
+Use [eval_luna.py](../api_experiments/reproduce/eval_luna.py) for GPT-6 Luna and [eval_claude.py](../api_experiments/reproduce/eval_claude.py) for Claude. Both call the original frozen `worker.episode`: same prompts, native tools, candidate/selector policy, 12,288 output tokens, 30 decisions, screenshots and GPT-5.6 Terra judge. The default is a **read-only dry run of one task**. Add `--execute` to spend API budget and start browsers.
+
+These entry points require an **existing configured campaign runtime** with frozen plan/configuration/task manifests, pinned support sources, provider SDKs and browser dependencies. The public archive preserves source code; it does not supply private tasks or a standalone runtime installation. Use the [runtime directory records](#frozen-runtime-records) to locate the original inputs. There are no equivalent reproduction wrappers for the older GPT-high or native CUAWright campaigns.
+
+### Dry-run commands
+
+Run from the repository root. Set `LUNA_RUNTIME` or `CLAUDE_RUNTIME` to the corresponding frozen campaign directory, and use its configured Python environment. Set `REPRO_OUTPUT_ROOT` to a writable directory accepted by that runtime's browser bridge; on the original host this is below `/gpfs/scrubbed/zixianma/openwebrl-runtime/`.
+
+```bash
+python3 -B openwebrl/api_experiments/reproduce/eval_luna.py \
+  --runtime "$LUNA_RUNTIME" --arm luna_n5_medium \
+  --output "$REPRO_OUTPUT_ROOT/luna-n5-medium-01" \
+  --model-usd 5 --judge-usd 1
+
+python3 -B openwebrl/api_experiments/reproduce/eval_claude.py \
+  --runtime "$CLAUDE_RUNTIME" --arm sonnet_n5 \
+  --output "$REPRO_OUTPUT_ROOT/claude-sonnet-n5-01" \
+  --model-usd 5 --judge-usd 1
+```
+
+Review the printed plan, then repeat the chosen command with `--execute`. The example dollar amounts are **explicit stop caps**, not estimates or permission to exceed an existing allocation. Execution requires actor credentials (`OPENAI_API_KEY` for Luna, `ANTHROPIC_API_KEY` for Claude) plus `JUDGE_API_KEY` or `OPENAI_API_KEY` for Terra. Supply them in the environment or with `--env-file /path/to/private.env`; never commit the key file.
+
+| Script | `--arm` choices |
+|---|---|
+| Luna | `luna_single_xhigh`, `luna_single_medium`, `luna_single_low`, `luna_n5_medium`, `luna_n5_low` |
+| Claude | `opus_single`, `sonnet_single`, `sonnet_n3`, `sonnet_n5` |
+
+Luna N5 medium/low uses the named effort for both candidates and selector. Claude arms use high effort. To evaluate the full frozen roster, add `--limit 300` and set explicitly approved run caps. `--limit` takes the first N tasks in frozen order. There is no sampling or replacement of invalid tasks.
+
+### What execution saves
+
+Each invocation requires a **new output directory** outside the source runtime. It owns separate model/judge ledgers, browser counter, HTTP gate, SDK caches, W&B identity, episode evidence and `summary.json`. It cannot resume or overwrite an earlier invocation. Provider retries are disabled; a shared halt stops the run for diagnosis. Unknown usage retains its full reservation, and invalid episodes remain in cost accounting.
+
+`summary.json` reports recorded/valid/invalid counts, valid-only success, valid-task mean latency and selected browser batches with observation counts, and separate all-attempt model/judge charges or reservations. Judge time is excluded from actor task latency. A browser batch is one selected executable snippet; it can contain several browser operations. Missing measurements are not zero. Raw outputs include private task content and should stay local.
+
+W&B defaults to offline under the output directory in `openwebrl-evals`. Use `--wandb-mode online` to sync or `--wandb-mode disabled` to omit tracking. `--model-calls`, `--judge-calls` and `--browser-starts` provide additional stop caps; browser starts default to N tasks plus one mechanical preflight. Model calls include candidates, selectors and token counters. Model/judge pools never transfer funds.
+
+### Scope of reproduction
+
+The scripts preserve the **episode protocol**. They run one episode at a time, retaining parallel candidates within each decision, and apply one pair of run-level USD/call caps. The original studies used separately capped shards and concurrent scheduler jobs, so these entry points do not recreate the original scheduling, contention, shard admission history or measured latency environment. They submit no Slurm jobs and reserve no compute. Full campaign replication requires the original [campaign controllers and frozen approvals](#frozen-runtime-records), including canary/pilot audits and all-attempt resource accounting.
+
+Startup checks verify the frozen plan, source hashes, task manifest and local browser dependencies before execution. They do not prove live provider access or site availability. Use `--help` on either entry point to inspect options without a runtime, browser or API call.
+
 ## Code and frozen artifacts
 
-[Published API source index](../api_experiments/README.md) · [GPT Luna adapter](../api_experiments/browsercode/models/luna_model.py) · [Claude adapter](../api_experiments/browsercode/models/claude_model.py) · [Native proposal adapter](../api_experiments/cuawright/models/native_proposal_adapter.py). The published files match the original source bytes; the local runtime still supplies configuration and pinned dependencies.
+The files under `api_experiments/` are **frozen source archives** grouped by harness and function. Original sibling imports and host-specific paths remain intact; they are not an installable Python package. Identical files are shared once. [source-provenance.json](../api_experiments/source-provenance.json) maps each campaign's original filename to its published path, SHA256 and byte count. Archived source bytes remain unchanged.
+
+For BrowserCode, read the worker first, then its model, budget, browser environment and judge. The reproduction wrappers import `worker` from the configured frozen runtime, rather than importing the grouped archive directly.
+
+| Campaign key | Episode worker | Actor and selector | Budget / admission | Browser and metrics | Judge |
+|---|---|---|---|---|---|
+| `browsercode_luna_effort` | [luna_effort_worker.py](../api_experiments/browsercode/workers/luna_effort_worker.py) | [luna_model.py](../api_experiments/browsercode/models/luna_model.py) | [request_budget.py](../api_experiments/browsercode/budgets/request_budget.py), [claude_budget.py](../api_experiments/browsercode/budgets/claude_budget.py) | [environments.py](../api_experiments/browsercode/runtime/environments.py), [metrics](../api_experiments/browsercode/runtime/luna_effort_episode_metrics.py) | [Terra](../api_experiments/browsercode/judges/terra.py) |
+| `browsercode_claude` | [claude_worker.py](../api_experiments/browsercode/workers/claude_worker.py) | [claude_model.py](../api_experiments/browsercode/models/claude_model.py) | [claude_budget.py](../api_experiments/browsercode/budgets/claude_budget.py) | [environments.py](../api_experiments/browsercode/runtime/environments.py), [metrics](../api_experiments/browsercode/runtime/claude_episode_metrics.py) | [Terra](../api_experiments/browsercode/judges/terra.py) |
+| `browsercode_gpt_high` | [gpt_high_worker.py](../api_experiments/browsercode/workers/gpt_high_worker.py) | [paired_model.py](../api_experiments/browsercode/models/paired_model.py) | [`ReservationBudget`](../api_experiments/browsercode/models/paired_model.py) in the model; browser `Budget` from frozen support | [environment](../api_experiments/browsercode/runtime/gpt_high_environments.py), [metrics](../api_experiments/browsercode/runtime/gpt_high_episode_metrics.py) | [Historical GPT](../api_experiments/browsercode/judges/historical_gpt.py) |
+| `cuawright_native` | [campaign_worker.py](../api_experiments/cuawright/workers/campaign_worker.py), [native_episode.py](../api_experiments/cuawright/runtime/native_episode.py) | [proposal adapter](../api_experiments/cuawright/models/native_proposal_adapter.py), [transport](../api_experiments/cuawright/models/native_group_transport.py), [relay](../api_experiments/cuawright/models/native_group_relay.py) | [budget_gateway.py](../api_experiments/cuawright/budgets/budget_gateway.py) | [browser broker](../api_experiments/cuawright/runtime/browser_broker.py), [capture](../api_experiments/cuawright/runtime/native_capture.py) | [Official WebJudge wrapper](../api_experiments/cuawright/judges/external_judge.py) |
+
+[BrowserCode controllers](../api_experiments/browsercode/controllers/) own batch workers; [protocols](../api_experiments/browsercode/protocols/) define financial enrollment and canary scope; [recovery](../api_experiments/browsercode/recovery/) preserves saved-judge recovery logic. Native CUAWright has its own broker, confinement and timeout helpers under [runtime/](../api_experiments/cuawright/runtime/). The table maps published snapshots, not every historical variant in the result cohorts; use the provenance index and each cohort's frozen manifest to resolve exact executed sources.
+
+### Restore an original campaign layout
+
+Use [materialize.py](../api_experiments/materialize.py) to reconstruct a campaign's original sibling filenames. Run from the repository root:
+
+```bash
+python3 -B openwebrl/api_experiments/materialize.py browsercode_luna_effort \
+  --output /tmp/luna-effort-source
+```
+
+The other keys are `browsercode_claude`, `browsercode_gpt_high` and `cuawright_native`. The output directory must be new. All source hashes are checked before any output files are written. This copies code only; it starts no workers or API requests. It does not create the configured runtime required by the reproduction wrappers.
+
+Credentials, `.env`, task data, screenshots, trajectories, request logs, ledgers and scheduler records are excluded. The private Claude terminal-interruption qualifiers are also excluded because they embed task identities; the original worker still references them for historical recovery. Execution additionally requires frozen configuration, effective approvals, pinned CUAWright/OpenWebRL support sources, SDKs and browser/bridge dependencies; native execution also needs its gateway configuration.
+
+### Offline validation
+
+Run the public materializer and reproduction boundary tests without browsers or API calls:
+
+```bash
+python3 -B -m unittest discover -s openwebrl/api_experiments/tests -v
+```
+
+[tests/](../api_experiments/tests/) checks source hashes/layout reconstruction and reproduction boundaries, including dry runs, caps, selected cohorts, output isolation and mocked execution. [validation/](../api_experiments/validation/) contains archived campaign tests that may require the original runtime; it is not the self-contained public test suite. Keep source snapshots byte-for-byte intact and update the provenance index when publishing an additional snapshot.
+
+### Frozen runtime records
+
+<details>
+<summary>Original runtime directories, configuration and lineage</summary>
 
 The exact recent executables are **frozen runtime snapshots**, not necessarily the current repository worktree. Under the local `evaluations/serial-vs-parallel-reasoning-20261013/` directory, use these campaign folders:
 
@@ -87,6 +178,8 @@ Within the Claude and Luna folders:
 
 Follow `source-manifest.json` to imported dependencies, including the pinned CUAWright `DefaultAgent` and shared helpers. Copying an adapter alone is not a complete reproduction. Native full300 has its own artifact layout; follow its [methods record](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).
 
+</details>
+
 Earlier local repository implementations are `openwebrl/sol_serial_parallel_policy.py` (selection), `sol_serial_parallel_transport.py` (native history), `sol_serial_parallel_eval.py` (evaluation), and `scripts/run_sol_serial_parallel_om2w.py` (entry point). These are development/history pointers, not substitutes for the frozen adapters.
 
 <details>
@@ -109,7 +202,7 @@ A logical shard's `attempts/attempt-*/episodes/` contains decisions, physical re
 | BrowserCode versus native on OM2W | [Harness comparison](ARM_FINAL_RESULTS.md#online-mind2web-only-browsercode-and-native-cuawright); [aggregate with coverage](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json) |
 | Completed Claude 300 per arm | [Result table and plots](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300); [aggregate](arm_results/claude_browsercode_om2w300_20261028/aggregate.json); [accounting](arm_results/claude_browsercode_om2w300_20261028/accounting.json); [plot source](arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py) |
 | Claude raw final qualification, local | `analysis/independent-full1200-final-audit-v1/audit.json`, `analysis/independent-full1200-final-audit-v1/independent-final-qualification-v1.json`, `analysis/native-metric-inputs-final-v4/aggregate-inputs.json`, `completion.json` inside its campaign |
-| Ongoing GPT effort study, local | `current.json`, `orchestration/registry.json`, `analysis/pilot-cost-projection-predeclaration-v1.json`, independent pilot audits and repair receipts inside its campaign; no full300 result claimed |
+| GPT effort qualification/status, local | `current.json`, `orchestration/registry.json`, `analysis/pilot-cost-projection-predeclaration-v1.json`, independent pilot audits and repair receipts inside its campaign; no qualified full300 result linked here |
 
 The completed Claude study records 1,200 dispositions across 142 physical attempts. On the 246 common-valid tasks, Sonnet single and N5 each solved 147; the observed N5 setup did not establish a success advantage. For earlier GPT results and all effect/uncertainty claims, use the linked primary cohort tables rather than mixing denominators or judging protocols. Live pilot counts belong in campaign status records until independently qualified, not as a final methods result.
 
