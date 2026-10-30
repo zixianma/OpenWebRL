@@ -183,7 +183,7 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 ![OM2W valid-only success from300 attempted tasks, cost, latency and browser-command tradeoffs](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
 
-*Each point is one observed method, labeled directly. Rows separate the harnesses; no lines connect methods. Both rows use the same cropped 61–80% y-axis for valid-only success; x-axis means retain recorded invalid attempts. N5 is highlighted; its observed gain over Luna single is +8.0 pp with BrowserCode and +5.1 pp with native CUAWright. Cost and latency axes are logarithmic, with different ranges per harness. Protocol limits, measurement coverage and live collection windows differ; this is a descriptive comparison.*
+*Each point is one observed method, labeled directly. Rows separate the harnesses; no lines connect methods. The valid-only success axes are cropped separately by row: BrowserCode 61–72%, native CUAWright 68–80%; the three panels within each row share their y-axis. Vertical distances should be compared within a row; x-axis means retain recorded invalid attempts. N5 is highlighted; its observed gain over Luna single is +8.0 pp with BrowserCode and +5.1 pp with native CUAWright. Cost and latency axes are logarithmic, with different ranges per harness. Protocol limits, measurement coverage and live collection windows differ; this is a descriptive comparison.*
 
 | Method (all high) | Attempted per harness | BrowserCode successes | BrowserCode valid | BrowserCode valid-only success | Native successes | Native valid | Native valid-only success |
 |---|---:|---:|---:|---:|---:|---:|---:|
