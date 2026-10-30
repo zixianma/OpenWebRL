@@ -55,6 +55,10 @@ def cmd_prepare(a):
         if (a.temperature is None) != (a.top_p is None):
             raise SystemExit('--temperature and --top-p go together')
         decoding = dict(temperature=a.temperature, top_p=a.top_p) if a.temperature is not None else None
+        if a.max_new_tokens:
+            if decoding is None:
+                raise SystemExit('--max-new-tokens needs --temperature/--top-p')
+            decoding['max_new_tokens'] = a.max_new_tokens
         subset_of = (condition_dir(a.subset_of_root, a.subset_of_condition or a.condition) / bench / 'plan.json'
                      if a.subset_of_root else None)
         horizon = dict(max_steps=a.max_steps, history_full_turns=a.history_full_turns) if a.max_steps else None
@@ -419,6 +423,7 @@ def main(argv=None):
     pr.add_argument('--judge-max-calls', type=int)
     pr.add_argument('--temperature', type=float, help='actor decoding override (with --top-p); default T 0.7 / top-p 0.9')
     pr.add_argument('--top-p', type=float)
+    pr.add_argument('--max-new-tokens', type=int, help='actor response cap per step (default 1,024; the paper uses 4,096)')
     pr.add_argument('--subset-of-root', help='take the first --n tasks of the same condition/benchmark plan under this root')
     pr.add_argument('--subset-of-condition', help='with --subset-of-root: take the tasks from this condition\'s plan '
                     '(e.g. sft1) instead of the same condition\'s')

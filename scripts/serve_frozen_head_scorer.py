@@ -13,17 +13,25 @@ The actor and the encoder must share the tokenizer and chat template (checked at
 import argparse
 import asyncio
 import base64
-import hashlib
 import io
 import threading
 import time
 from pathlib import Path
 
 
+PROBES = ("<|im_start|>assistant\n<think>\nThe page shows a search box.\n</think>\n\n<tool_call>\n{\"name\": \"click\"}\n</tool_call><|im_end|>",
+          "<|vision_start|><|image_pad|><|vision_end|> Ünïcødé, 数字 12345, emoji \U0001F600, tabs\tand  spaces")
+
+
 def same_tokenizer(a, b):
-    files = ("vocab.json", "merges.txt", "tokenizer.json", "chat_template.jinja")
-    digest = lambda d, f: hashlib.sha256((Path(d) / f).read_bytes()).hexdigest()
-    return all(digest(a, f) == digest(b, f) for f in files)
+    """Token ids transfer between actor and encoder: same vocabulary, special tokens and encodings. Chat templates may
+    differ (the OpenWebRL-4B release ships the Qwen3-VL instruct template, the SFT release the thinking one): the actor
+    sends the rendered prompt text and the candidate ids, so the encoder's template is never applied."""
+    from transformers import AutoTokenizer
+    ta, tb = (AutoTokenizer.from_pretrained(d, local_files_only=True) for d in (a, b))
+    added = lambda t: {i: x.content for i, x in t.added_tokens_decoder.items()}
+    return (ta.get_vocab() == tb.get_vocab() and added(ta) == added(tb)
+            and all(ta.encode(p, add_special_tokens=False) == tb.encode(p, add_special_tokens=False) for p in PROBES))
 
 
 def decode_image(value):
@@ -43,7 +51,7 @@ def main():
     ap.add_argument("--batch-size", type=int, default=5)
     args = ap.parse_args()
     if not same_tokenizer(args.model, args.actor):
-        raise SystemExit("actor and encoder tokenizers/chat templates differ; candidate ids would not transfer")
+        raise SystemExit("actor and encoder tokenizers differ; candidate ids would not transfer")
 
     import torch
     import uvicorn

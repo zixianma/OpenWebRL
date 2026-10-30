@@ -70,6 +70,7 @@ PIOTR_SGLANG_DIR = Path('/gpfs/scrubbed/zixianma/checkpoints/web/arm/selection-s
 ACTOR_PARAMS = 4022468096 + 415347712          # FLOP accounting for head follow-ups (as selectors-samehw)
 ACTOR_2B = Path('/gpfs/scrubbed/zixianma/checkpoints/web/qwen3-vl-2b-thinking-openwebrl-sft-95d5b13')
 ACTOR_8B = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-8B-SFT-sglang')   
+ACTOR_RL = Path('/gpfs/scrubbed/zixianma/checkpoints/web/OpenWebRL-4B/616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7')
 # Actor identity, FLOP-accounting parameters (language model + vision tower) and the layers a selection head reads.
 ACTORS = {
     str(ACTOR.resolve()): dict(name='OpenWebRL-4B-SFT:iteration0', revision='15e777db2ddba2e0e82080ebccd3ad8d215b7f0a',
@@ -78,6 +79,8 @@ ACTORS = {
                         params=2127532032, capture_layers=(14, 21, 28)),
     str(ACTOR_8B.resolve()): dict(name='OpenWebRL/OpenWebRL-8B-SFT', revision='838c4a4842555a2a61e81d7a28bac7b2e8144800',
                         params=8767123696, capture_layers=None),
+    str(ACTOR_RL.resolve()): dict(name='OpenWebRL/OpenWebRL-4B', revision='616cc8f2fbc5281b3554b0a11cf6206b8a6ed0f7',
+                        params=ACTOR_PARAMS, capture_layers=(18, 27, 36)),
 }
 
 
@@ -404,7 +407,8 @@ def sample_subset(task_ids, n, seed):
 
 
 def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None, speculative=None):
-    """Frozen protocol; ``decoding`` (dict(temperature, top_p)) overrides the default T 0.7 / top-p 0.9 actor sampling;
+    """Frozen protocol; ``decoding`` (dict(temperature, top_p[, max_new_tokens])) overrides the default T 0.7 / top-p 0.9 actor
+    sampling and the 1,024-token response cap;
     ``horizon`` (dict(max_steps, history_full_turns)) overrides the 30-step full-history default; ``speculative``
     ('ngram') serves the actor with sglang n-gram speculative decoding (same sampled distribution; per-request seeds are
     not honoured)."""
@@ -413,15 +417,16 @@ def protocol_for(benchmark, condition, decoding=None, horizon=None, actor=None, 
     route = route_for(benchmark)
     cond = parse_condition(condition) if isinstance(condition, str) else condition
     temperature, top_p = (decoding['temperature'], decoding['top_p']) if decoding else (.7, .9)
+    max_new_tokens = int((decoding or {}).get('max_new_tokens') or 1024)
     info = actor_info(actor)
     return dict(
         actor=info['name'], actor_revision=info['revision'],
         browser='local_process', browser_concurrency=8, temperature=temperature, top_p=top_p,
-        top_k='omitted, native generate endpoint default', max_new_tokens=1024,
+        top_k='omitted, native generate endpoint default', max_new_tokens=max_new_tokens,
         max_steps=int(horizon['max_steps']) if horizon else 30, context_length=32768, context_num_screenshots=1,
         history=(f"last {int(horizon['history_full_turns'])} turns full; older turns: action and tool result line only"
                  if horizon and horizon.get('history_full_turns') else 'full'), seed=42, server_seed=4200,
-        sampling_request=dict(temperature=temperature, top_p=top_p, max_new_tokens=1024),
+        sampling_request=dict(temperature=temperature, top_p=top_p, max_new_tokens=max_new_tokens),
         actor_system_policy_sha256=SYSTEM_POLICY_SHA256,
         benchmark=benchmark, judge=route['model'], judge_protocol=route['protocol'], judge_api=route['api'],
         judge_max_attached_imgs=route['images'], judge_response_tokens=JUDGE_MAX_COMPLETION_TOKENS,
@@ -507,6 +512,8 @@ def build_plan(directory, *, benchmark, condition, n, seed, actor=ACTOR, task_so
                 keys={t: attempt_key(benchmark, cond['slug'], t, protocol['seed']) for t in subset})
     if decoding:
         plan['decoding'] = dict(temperature=float(decoding['temperature']), top_p=float(decoding['top_p']))
+        if decoding.get('max_new_tokens'):
+            plan['decoding']['max_new_tokens'] = int(decoding['max_new_tokens'])
     if subset_of is not None:
         plan['subset_of'] = str(Path(subset_of).resolve())
     if horizon:
