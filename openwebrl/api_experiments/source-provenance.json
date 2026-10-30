@@ -1,6 +1,6 @@
 {
   "schema": "api-evaluation-source-index-v2",
-  "source_policy": "Byte-for-byte Python source snapshots; no production runtime edits or scientific setting changes. Host-specific paths and frozen external dependencies remain documented limitations.",
+  "source_policy": "Byte-for-byte Python source snapshots. Portable scientific assets and explicit host adaptation are indexed separately in portable_assets/provenance.json; original source hashes are preserved.",
   "snapshots": {
     "browsercode_gpt_high": {
       "campaign_directory": "sol6-single-high-vs-luna-n3-n5-browsercode300-20261018-v1",
@@ -53,6 +53,12 @@
           "sha256": "6ea320ed903a6ad68ff1a8ac1d075ce141a2e2890dc2229e51bfa849bb7d2c2f",
           "bytes": 11634,
           "published_path": "browsercode/models/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "37a867f527687e77051070096f4cc466d444f7268f872aa5d30977b821903767",
+          "bytes": 4276,
+          "published_path": "browsercode/variants/browsercode_gpt_high/preparation_gate.py"
         }
       ]
     },
@@ -361,8 +367,560 @@
       ],
       "initial_execution_preflight_sha256": "d10dcbec5ca71d500bf072f8922d518987fba15120173116771535a357f96ec3",
       "matches_initial_execution_preflight_source_hashes": true
+    },
+    "browsercode_luna_single_high": {
+      "campaign_directory": "luna-single-high-browsercode-om2w300-20261020-preparation-v1",
+      "execution_manifest_sha256": "a8bca9d128b1366380d8845539d47256423486ef1e73b5f8aaa26ec521a7eceb",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "4b4aa847ebcc54cfbd7ae003cd0f5100da8d62f8123c25066e215b3b6b68bd08",
+          "bytes": 14074,
+          "published_path": "browsercode/variants/browsercode_luna_single_high/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "8269771895daeda533957454aad8ff5f8b014fef79300d2e46189d60f622f492",
+          "bytes": 5361,
+          "published_path": "browsercode/variants/browsercode_luna_single_high/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "c3a8105feaec6fffe35f80b90cad1b84533b9abeeb513b8b67a1554ddb896925",
+          "bytes": 8395,
+          "published_path": "browsercode/variants/browsercode_luna_single_high/environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "episode_metrics.py",
+          "sha256": "3db48688bbf10103fa7da227395de74267f4f3f5df3fc097a264e09a11fda8e7",
+          "bytes": 2346,
+          "published_path": "browsercode/runtime/gpt_high_episode_metrics.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "9a5a6f0db298719a8d52d96b295e909bcc2eae3ec29086fc1d41a32068cebaf3",
+          "bytes": 11687,
+          "published_path": "browsercode/variants/browsercode_luna_single_high/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "1d89c27d15aa6e690cd27bb2384ab9a1137105be34a567dedb98f8deb5f81c22",
+          "bytes": 3513,
+          "published_path": "browsercode/variants/browsercode_luna_single_high/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_gpt_high_wv_ds": {
+      "campaign_directory": "sol6-single-high-vs-luna-n3-n5-browsercode-wv595-ds150-20261019-preparation-v1",
+      "execution_manifest_sha256": "7c49e533d7c511e5e3b08a019d1a5e39e268b7617d57a569e350b337d2a3a972",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "2eeffefbc7cff12cc46bec6ebf324e57f9c8e86475ad510dbcf0f99557aa6115",
+          "bytes": 14418,
+          "published_path": "browsercode/variants/browsercode_gpt_high_wv_ds/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "50465660e530bc2c153155605c7b161363e380f9c2ba0d5f8ac7324ff8c68fd3",
+          "bytes": 5285,
+          "published_path": "browsercode/controllers/gpt_high_controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "568dbd2e02d6b3fc2855faaa07a284b55cc2c8d04a9e183ad2c9fc2f284c61c6",
+          "bytes": 4958,
+          "published_path": "browsercode/variants/browsercode_gpt_high_wv_ds/common_judge.py"
+        },
+        {
+          "file": "episode_metrics.py",
+          "sha256": "3db48688bbf10103fa7da227395de74267f4f3f5df3fc097a264e09a11fda8e7",
+          "bytes": 2346,
+          "published_path": "browsercode/runtime/gpt_high_episode_metrics.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "ed4475ee0a8944d860365cbc12699f649f0af91d2692194b5dec9001407d1acf",
+          "bytes": 11687,
+          "published_path": "browsercode/variants/browsercode_gpt_high_wv_ds/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "c6a360b12e989394480b82bd45957bd3f53df0aee25fc61fc525c32cd5e86648",
+          "bytes": 4870,
+          "published_path": "browsercode/variants/browsercode_gpt_high_wv_ds/preparation_gate.py"
+        },
+        {
+          "file": "judge_capture.py",
+          "sha256": "f4d1f342e40b6f7a0b2894ba816f54eab6167ff4fd201aa5b9c36f1925b9481d",
+          "bytes": 924,
+          "published_path": "browsercode/variants/browsercode_gpt_high_wv_ds/judge_capture.py"
+        }
+      ]
+    },
+    "browsercode_sol61_pair20": {
+      "campaign_directory": "harness-paired20-preparation-v1",
+      "execution_manifest_sha256": "f5a9d62932e5910e0144a023c23d2ee00673d681fdd120ad68a8d3686a817501",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "1283aceb849978b0085c505e1efe7131c2b0140b62ca25f14e07aa7a1fbffd93",
+          "bytes": 11329,
+          "published_path": "browsercode/variants/browsercode_sol61_pair20/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "16e08fcd6993c6022ee1bcfb3cada41e23613f6a1656f15569e61c495c7696ed",
+          "bytes": 6388,
+          "published_path": "browsercode/variants/browsercode_sol61_pair20/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "5e0125c897331db7fd7e3950c3314ab4f2ee014d8410015de91bfb3989e39af7",
+          "bytes": 6557,
+          "published_path": "browsercode/variants/browsercode_sol61_pair20/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "d5a507eb92a94ff4956e21f5d42eccc57397fe4ebe6ba657466bf2180d45a3c9",
+          "bytes": 2264,
+          "published_path": "browsercode/variants/browsercode_sol61_pair20/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_sol61_pair80": {
+      "campaign_directory": "harness-paired100-extension-20261016-v1",
+      "execution_manifest_sha256": "55a6b99e4b8e1dbacdcfbe1f3f213ccc08c7524e1af2a125281c45018d705f4f",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "a0a6e5b68f7b0eb0360659fb47e97ef8363bf9c4ef416ad390c252db7ebc8b17",
+          "bytes": 11330,
+          "published_path": "browsercode/variants/browsercode_sol61_pair80/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "61f2517f5463cad96991cab9038c16517061a5e6cf2b4fbb1e0a01461811e758",
+          "bytes": 6391,
+          "published_path": "browsercode/variants/browsercode_sol61_pair80/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "5e0125c897331db7fd7e3950c3314ab4f2ee014d8410015de91bfb3989e39af7",
+          "bytes": 6557,
+          "published_path": "browsercode/variants/browsercode_sol61_pair20/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "b0bca1d49ada4a682b94356d57ca1073e2f08497280bcfaec1dda6988d38651a",
+          "bytes": 2462,
+          "published_path": "browsercode/variants/browsercode_sol61_pair80/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_sol61_onecall20": {
+      "campaign_directory": "browsercode-onecall3-20261017-v1",
+      "execution_manifest_sha256": "bfb4a38acc522c6018e20120785c8275330c1c81008a6c2c55796ba400a704f4",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "43e21b035892b22da2c3cdade73836f8aeef1a169cb4a8c290efd7df01abba0b",
+          "bytes": 11857,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall20/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "6fd8ff2cbaf9ca6f32b341acaee498956e3dcbb543c78011f6442bcefbc4cce9",
+          "bytes": 4882,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall20/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "f167728efb711eb9471a9df32282ff2f41ea7db8c4f3f955d6b6c9909d65c4f4",
+          "bytes": 6858,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall20/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "e123b184799228e6e0fe65b09b873b3dfb736b6eaa57e4a787aa9812ffc79e50",
+          "bytes": 2696,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall20/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_sol61_onecall80": {
+      "campaign_directory": "browsercode-onecall3-paired100-extension-20261017-v1",
+      "execution_manifest_sha256": "271028a6b999793652fbbe4ef170c3adbb095ca87395e3eaa916a4f520c515dd",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "1b428ccc3bb84b7cc4cf6c37f2e79ff810401d1a3a9ccd2e14ce08658faeab99",
+          "bytes": 11888,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall80/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "e036b2a5c19fe517ed961f7918be8185e45f9e5f3423125a5e860b95a1ec668d",
+          "bytes": 5197,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall80/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "f167728efb711eb9471a9df32282ff2f41ea7db8c4f3f955d6b6c9909d65c4f4",
+          "bytes": 6858,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall20/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "64a5ce02dfacb5a085d7cca639818a20fd76174892d4b99bca391364c9639072",
+          "bytes": 3122,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall80/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_sol61_low_medium30": {
+      "campaign_directory": "sol-single-low-medium-online30-20261016-v1",
+      "execution_manifest_sha256": "23ad1c2952f740d63f51e7222d0887717e0df303b3909528e8a0c645bb899a4e",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "0914a96ffa0e334ab9b24d626ee48f5cd6305649cd7fe9787040a9310425d042",
+          "bytes": 11698,
+          "published_path": "browsercode/variants/browsercode_sol61_low_medium30/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "59d1db3421dd617a0202ce41aa51750cb5ea92c962ffe87e03e21d28a07167a6",
+          "bytes": 6419,
+          "published_path": "browsercode/variants/browsercode_sol61_low_medium30/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "35465312b29a51956815a8214f4531b1ae331721cab8ca5739a231550d533ed9",
+          "bytes": 4728,
+          "published_path": "browsercode/variants/browsercode_sol61_low_medium30/paired_model.py"
+        }
+      ]
+    },
+    "browsercode_luna_high100": {
+      "campaign_directory": "luna-high-selector-n3-n5-browsercode100-20261018-completion-v1",
+      "execution_manifest_sha256": "19b5268434b36c4b9077c2425463219691cadbd222ffa59f6aa876192c5e547f",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "c85ccbea6cc58860079fd9ee55e6059b252aadfc8c81d4160ac3e234ecfddddf",
+          "bytes": 12069,
+          "published_path": "browsercode/variants/browsercode_luna_high100/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "50465660e530bc2c153155605c7b161363e380f9c2ba0d5f8ac7324ff8c68fd3",
+          "bytes": 5285,
+          "published_path": "browsercode/controllers/gpt_high_controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "4182e1b7f86766f6e20b9a4c5f075cf830c8f1f1e646d6c21c06822b9d1865eb",
+          "bytes": 11312,
+          "published_path": "browsercode/variants/browsercode_luna_high100/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "6296bdd618700fdc7eeee631f5ef94be650da1a923f46b6a48ee78352f256689",
+          "bytes": 3120,
+          "published_path": "browsercode/variants/browsercode_luna_high100/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_luna_high100_initial": {
+      "campaign_directory": "luna-high-selector-n3-n5-browsercode100-20261017-v1",
+      "execution_manifest_sha256": "c4b88ce7a072d34dcc4a43bfe7770b885a981429b3e0673729877170335a4fe2",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "64ed95cfabaaf231302737e1e42e32b438c5f0e3f54d33dc77009ef14ed074fd",
+          "bytes": 11793,
+          "published_path": "browsercode/variants/browsercode_luna_high100_initial/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "e036b2a5c19fe517ed961f7918be8185e45f9e5f3423125a5e860b95a1ec668d",
+          "bytes": 5197,
+          "published_path": "browsercode/variants/browsercode_sol61_onecall80/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "d21dd50abd5439ada2889cea2059a4c985695c29fc5756ce5c400023d229378e",
+          "bytes": 6364,
+          "published_path": "browsercode/variants/browsercode_luna_high100_initial/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "aac9e4feacfd213535c9369a1d68065846cadb4db61e4ef91dc523fbb4b0cf41",
+          "bytes": 2968,
+          "published_path": "browsercode/variants/browsercode_luna_high100_initial/preparation_gate.py"
+        }
+      ]
+    },
+    "browsercode_luna_high100_recovery4096": {
+      "campaign_directory": "luna-high-selector-n3-n5-browsercode100-20261017-recovery73-v2d",
+      "execution_manifest_sha256": "8e251e8d41a65930e15e3cdd745b1c6751752281c7641e885d0c7dee922a2f3a",
+      "files": [
+        {
+          "file": "bootstrap.py",
+          "sha256": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+          "bytes": 222,
+          "published_path": "browsercode/runtime/bootstrap.py"
+        },
+        {
+          "file": "worker.py",
+          "sha256": "64ed95cfabaaf231302737e1e42e32b438c5f0e3f54d33dc77009ef14ed074fd",
+          "bytes": 11793,
+          "published_path": "browsercode/variants/browsercode_luna_high100_initial/worker.py"
+        },
+        {
+          "file": "controller.py",
+          "sha256": "cd2d71aa12b87c97b772cd273080c5bd12e903d7043b3706892e8e4c8c748210",
+          "bytes": 5782,
+          "published_path": "browsercode/variants/browsercode_luna_high100_recovery4096/controller.py"
+        },
+        {
+          "file": "environments.py",
+          "sha256": "f637b6af2a762ac92bf80853f5b45aa31995eaf267f3aeeb8af3c44da870f303",
+          "bytes": 8288,
+          "published_path": "browsercode/runtime/gpt_high_environments.py"
+        },
+        {
+          "file": "sandbox.py",
+          "sha256": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+          "bytes": 3133,
+          "published_path": "browsercode/runtime/sandbox.py"
+        },
+        {
+          "file": "common_judge.py",
+          "sha256": "61f271583a1d2abf0dc60df8b4ea5bb50e262eb8a9c8653b241e812c451a6bde",
+          "bytes": 2255,
+          "published_path": "browsercode/judges/historical_gpt.py"
+        },
+        {
+          "file": "paired_model.py",
+          "sha256": "41855fd48ae945c36efe554784b550bb98c58e41a7b0b3fef60a72cc2dfc8fb3",
+          "bytes": 7061,
+          "published_path": "browsercode/variants/browsercode_luna_high100_recovery4096/paired_model.py"
+        },
+        {
+          "file": "preparation_gate.py",
+          "sha256": "15dff9c4376fef796658ee279fa8e16c8df89d91cd26c8bf28922c3ea9be82bc",
+          "bytes": 3457,
+          "published_path": "browsercode/variants/browsercode_luna_high100_recovery4096/preparation_gate.py"
+        }
+      ]
     }
   },
   "layout_policy": "Sources grouped by role and harness; byte-identical files shared once. Each original campaign filename maps to published_path and original SHA256; materialize.py restores the original layout without launching anything.",
-  "unique_python_source_files": 47
+  "unique_python_source_files": 84
 }

@@ -1,0 +1,27 @@
+{
+  "protocol": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "generation": "one Responses API call returns three distinct browser-action proposals plus selected_index; execute only selected proposal",
+    "max_output_tokens": 4096,
+    "temperature": 1.0,
+    "top_p": 0.98,
+    "selector": "model selects among own three proposals in same response",
+    "task_latency_excludes_judge": true,
+    "judge": "same pinned common judge and rubric as reference",
+    "browsercode_revision": "b200643fe0eb93ce5a3aadd4bb21cb6cceb2ed04"
+  },
+  "policy": "onecall3_low",
+  "harness": "browsercode",
+  "decision_cap_per_episode": 30,
+  "task_manifest_sha256": "b8b3548c92d5defa3b13c358a9b319049a10f9de31474889292b2eeb93c36754",
+  "task_selection": {
+    "source_manifest_sha256": "cf8817be350a85fb67a580ede87806c3ec6137cacd4afb2e25d741fcd096c552",
+    "sampling": "uniform random sample without replacement from all100 tasks",
+    "seed": 20261017,
+    "ids_sorted_for_execution": true
+  },
+  "schema": "portable-scientific-campaign-v1",
+  "campaign": "browsercode_sol61_onecall20",
+  "shards": []
+}

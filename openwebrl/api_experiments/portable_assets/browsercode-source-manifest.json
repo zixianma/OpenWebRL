@@ -1,0 +1,14 @@
+{
+  "revision": "b200643fe0eb93ce5a3aadd4bb21cb6cceb2ed04",
+  "url": "https://github.com/browser-use/browsercode",
+  "files": {
+    "packages/bcode-browser/src/browser-execute.ts": "42cd6f478131d698438e9f0d151bf4c0ed2c53742e612483da26c91aca1d5d42",
+    "packages/bcode-browser/src/session-store.ts": "814846dcd666589f28d972a4d84821d5924970f7e3699f8e4bc61e8f47ae7c9d",
+    "packages/bcode-browser/src/skills.ts": "712df8560cc82138b2d58e3604935a477b57b04dc4e9f7fa40fc7e33842e817e",
+    "packages/bcode-browser/src/cdp/session.ts": "41bb29509e57be70df580f4ca09cbad04548cde392538b9e41fa4934a9dfcd2f",
+    "packages/bcode-browser/src/cdp/generated.ts": "17d8b3718863d4a07046c6badc7e497c2d165d745a2cf9f04324ebb9acedf893",
+    "packages/bcode-browser/skills/browser-execute/SKILL.md": "f7923ae0fd908077e34a683b9d6e99900638061e375367740eb9aefc605b3309",
+    "packages/bcode-browser/package.json": "29474b526bb431b9c7fa1330446a30cce4fd730471145d9859d23904c6da69bf",
+    "LICENSE": "625f0f619133f89bbbb2abe37369613dfa1885eba1e50d02170deb62bb42cb6b"
+  }
+}

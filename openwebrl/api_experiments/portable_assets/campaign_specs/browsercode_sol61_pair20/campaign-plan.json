@@ -1,0 +1,494 @@
+{
+  "actor_protocol": {
+    "model": "gpt-6.1-sol",
+    "high_effort": "high",
+    "high_output_cap": 12288,
+    "low_effort": "low",
+    "low_output_cap": 4096,
+    "candidates": 3,
+    "selector_effort": "low",
+    "selector_output_cap": 2048,
+    "decision_cap": 30,
+    "command_timeout_seconds": 120,
+    "episode_deadline_seconds": 900,
+    "parallel_generation_only": true,
+    "only_selected_proposal_executes": true,
+    "same_history_within_candidates": true,
+    "no_compaction_or_auxiliary_model_calls": true
+  },
+  "browser_protocol": {
+    "chromium": "/gpfs/scrubbed/zixianma/openwebrl-runtime/browsers/chromium-1208/chrome-linux64/chrome",
+    "browser": "controller-owned local Chromium; same build/flags/viewport across allfour cells",
+    "viewport": [
+      1280,
+      1800
+    ],
+    "browser_sessions_are_fresh_per_episode": true,
+    "initial_navigation_timeout_seconds": 30,
+    "disable_http2": true,
+    "model_bound_browser_endpoint": true,
+    "browsercode_native_session_persists_across_selected_code_calls": true,
+    "task_latency_excludes_setup_and_judge": true,
+    "setup_latency_saved_separately": true,
+    "final_capture": "Common fresh raw viewport CDP Page.captureScreenshot with native PNG evidence; no font-ready wait or image synthesis.",
+    "network_setup_failures": "Remain invalid. Continue unrelated fixed tasks. No task replacement or silent retries."
+  },
+  "judge_protocol": "AgentTrek prompts and verdict parser; executed command/action history with blank thoughts plus final live screenshot",
+  "judge_model": "o4-mini-2025-04-16",
+  "cells": [
+    {
+      "harness": "cuawright",
+      "policy": "serial_high"
+    },
+    {
+      "harness": "cuawright",
+      "policy": "parallel3_select_low"
+    },
+    {
+      "harness": "browsercode",
+      "policy": "serial_high"
+    },
+    {
+      "harness": "browsercode",
+      "policy": "parallel3_select_low"
+    }
+  ],
+  "task_manifest_sha256": "866202b23f4fea208b87345f5a71780e15efed68e0260a23552d9b628ebb5496",
+  "ordering": "Four-cell cyclic order, balanced5 first positions per cell across20 tasks. Each shard runs both harnesses on the samefive tasks to reduce node/time confounding.",
+  "schema": "portable-scientific-campaign-v1",
+  "campaign": "browsercode_sol61_pair20",
+  "shards": [
+    {
+      "shard": 0,
+      "task_ids": [
+        "47b93b9e649eadeb8d96a6e3df715c2d",
+        "5e4e89c9b6fdaee7a41aca5601b82e04",
+        "636b07af4dd97c1793733db1fd1b90b8_110325",
+        "7abdceee212151f187ee1a1744c57606",
+        "26810ed9c123a62992e3eed31db3c5ee"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "47b93b9e649eadeb8d96a6e3df715c2d": [
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "5e4e89c9b6fdaee7a41aca5601b82e04": [
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          }
+        ],
+        "636b07af4dd97c1793733db1fd1b90b8_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "7abdceee212151f187ee1a1744c57606": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          }
+        ],
+        "26810ed9c123a62992e3eed31db3c5ee": [
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 1,
+      "task_ids": [
+        "78f397336b6fd1cbba0127db7a8cd502",
+        "9af05e392cf3f5a8ff17aa764ba5bda6",
+        "864244b6969e0f8733b0eb1ca06cd51f",
+        "a48e2f1ee8d87eaeea56fe5e730427e6",
+        "9bb63ad0e38d5691a618932a8b31c05a"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "78f397336b6fd1cbba0127db7a8cd502": [
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          }
+        ],
+        "9af05e392cf3f5a8ff17aa764ba5bda6": [
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "864244b6969e0f8733b0eb1ca06cd51f": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          }
+        ],
+        "a48e2f1ee8d87eaeea56fe5e730427e6": [
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "9bb63ad0e38d5691a618932a8b31c05a": [
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 2,
+      "task_ids": [
+        "271b36efd4346721b5542488ff997042",
+        "6ebde509dca8f15c0fa1bd74f071e8d6",
+        "85b284c18d7e78c9b5a9e074e7aa3b98",
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad",
+        "84f806c7fc15576673915f195efa72df"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "271b36efd4346721b5542488ff997042": [
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "6ebde509dca8f15c0fa1bd74f071e8d6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          }
+        ],
+        "85b284c18d7e78c9b5a9e074e7aa3b98": [
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad": [
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          }
+        ],
+        "84f806c7fc15576673915f195efa72df": [
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 3,
+      "task_ids": [
+        "b7a9a6b5d451164c09bbd27b670bc2ae",
+        "2e4e21cf1449c6894b17d571c47b77ea",
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325",
+        "5c00e9561eae94789443f405525a5869",
+        "255bf27c43fd3f9254d6b81a5f36d3a9"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "b7a9a6b5d451164c09bbd27b670bc2ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          }
+        ],
+        "2e4e21cf1449c6894b17d571c47b77ea": [
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325": [
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          }
+        ],
+        "5c00e9561eae94789443f405525a5869": [
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          }
+        ],
+        "255bf27c43fd3f9254d6b81a5f36d3a9": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "serial_high"
+          },
+          {
+            "harness": "cuawright",
+            "policy": "parallel3_select_low"
+          },
+          {
+            "harness": "browsercode",
+            "policy": "serial_high"
+          }
+        ]
+      }
+    }
+  ],
+  "arms": [
+    {
+      "arm": "serial_high",
+      "model": "gpt-6.1-sol",
+      "proposal_count": 1,
+      "selector_model": null,
+      "reasoning_effort": "high",
+      "output_tokens": 12288
+    },
+    {
+      "arm": "parallel3_select_low",
+      "model": "gpt-6.1-sol",
+      "proposal_count": 3,
+      "selector_model": "gpt-6.1-sol",
+      "reasoning_effort": "low",
+      "selector_reasoning_effort": "low",
+      "output_tokens": 4096,
+      "selector_output_tokens": 2048
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "model": "gpt-6.1-sol",
+  "states": "caller-provided immutable saved browser evidence",
+  "browsers": 0,
+  "judge_calls": 0,
+  "no_retries": true,
+  "efforts": [
+    "low",
+    "medium"
+  ],
+  "max_output_tokens": 2048,
+  "concurrent_pairs": 2,
+  "original_medium_reference_only": true,
+  "max_states": 100
+}

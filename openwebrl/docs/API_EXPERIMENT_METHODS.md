@@ -8,10 +8,10 @@ This is the main guide for the published [API experiment code](../api_experiment
 | To… | Start with… |
 |---|---|
 | Understand the comparisons | [Experiments](#experiments), [episode procedure](#episode-procedure) and [metric definitions](#metrics-and-comparability) |
-| Run Luna or Claude BrowserCode episodes | [Reproduction quickstart](#reproduction-quickstart); requires an existing configured runtime and defaults to a read-only dry run |
+| Run Luna or Claude BrowserCode episodes | [Reproduction quickstart](#reproduction-quickstart); install pinned dependencies, prepare a runtime, then use a read-only dry run |
 | Trace or reconstruct the implementation | [Code map](#code-and-frozen-artifacts), [source reconstruction](#restore-an-original-campaign-layout) and [offline validation](#offline-validation) |
 | Interpret published outcomes | [Results and evidence](#results-and-analysis-pointers) |
-| Audit an original campaign | [Frozen runtime records](#frozen-runtime-records) and [operational details](#audit-and-operational-details) |
+| Inspect historical campaign accounting | [Frozen runtime records](#frozen-runtime-records) and [operational details](#audit-and-operational-details) |
 
 ## Experiments
 
@@ -70,54 +70,159 @@ The Claude plots use each arm's valid cohort for success and all efficiency mean
 
 ## Reproduction quickstart
 
-Use [eval_luna.py](../api_experiments/reproduce/eval_luna.py) for GPT-6 Luna and [eval_claude.py](../api_experiments/reproduce/eval_claude.py) for Claude. Both call the original frozen `worker.episode`: same prompts, native tools, candidate/selector policy, 12,288 output tokens, 30 decisions, screenshots and GPT-5.6 Terra judge. The default is a **read-only dry run of one task**. Add `--execute` to spend API budget and start browsers.
+The public package includes the frozen scientific configurations, prompts, support code, benchmark-ID rosters and runtime builders. No original campaign directory, Slurm registration or private `.env` is needed. Use a separate working directory for dependencies, generated runtimes and new results.
 
-These entry points require an **existing configured campaign runtime** with frozen plan/configuration/task manifests, pinned support sources, provider SDKs and browser dependencies. The public archive preserves source code; it does not supply frozen campaign task manifests or a standalone runtime installation. Use the [runtime directory records](#frozen-runtime-records) to locate the original inputs. There are no equivalent reproduction wrappers for the older GPT-high or native CUAWright campaigns.
+### Install the pinned dependencies
+
+Use **Linux x86_64, Python 3.12 and Git**. The browser sandbox requires Landlock ABI ≥3; native CUAWright also requires unprivileged user/PID namespaces. Install the host libraries required by Playwright Chromium before the browser checks. All model inference uses hosted APIs; no GPU or model-weight download is needed.
+
+Run from the repository root:
+
+```bash
+export API_WORK=/tmp/openwebrl-api-reproduction
+python3.12 -B openwebrl/api_experiments/reproduce/install.py \
+  --prefix "$API_WORK/deps" --install
+export API_PY="$API_WORK/deps/venv/bin/python"
+```
+
+[install.py](../api_experiments/reproduce/install.py) installs the [CPU API dependency lock](../api_experiments/reproduce/requirements.txt), fetches pinned CUAWright/BrowserCode/official WebJudge source, verifies the Bun archive and binary hashes, installs the frozen [JavaScript lock](../api_experiments/reproduce/bun.lock), and downloads Playwright 1.58.0 Chromium. It writes `dependencies.json` with local paths. Without `--install`, it prints the installation plan. The optional historical coordinate-browser studies use `--legacy` as described below.
+
+### Prepare the episode runtime
+
+[prepare_browsercode.py](../api_experiments/reproduce/prepare_browsercode.py) reconstructs the source layout and imports public benchmark tasks in the frozen campaign order. It verifies source/browser pins and records every portability adaptation in `portable-build.json`. Use a new output directory:
+
+```bash
+"$API_PY" -B openwebrl/api_experiments/reproduce/prepare_browsercode.py \
+  --campaign browsercode_luna_effort \
+  --dependencies "$API_WORK/deps/dependencies.json" --output "$API_WORK/luna"
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/prepare_browsercode.py \
+  --campaign browsercode_claude \
+  --dependencies "$API_WORK/deps/dependencies.json" --output "$API_WORK/claude"
+```
+
+The published [OM2W](../data/eval/online-mind2web.jsonl), [WebVoyager](../data/eval/webvoyager_fara.jsonl) and [DeepShop](../data/eval/deepshop.jsonl) files supply instruction text, start URLs and grading references. [tasks.py](../api_experiments/reproduce/tasks.py) joins them to the exported task-ID rosters, preserving order and native benchmark identities. No saved private trajectories or teacher labels are transferred into fresh runs.
 
 ### Dry-run commands
 
-Run from the repository root. Set `LUNA_RUNTIME` or `CLAUDE_RUNTIME` to the corresponding frozen campaign directory, and use its configured Python environment. Set `REPRO_OUTPUT_ROOT` to a writable directory accepted by that runtime's browser bridge; on the original host this is below `/gpfs/scrubbed/zixianma/openwebrl-runtime/`.
+[eval_luna.py](../api_experiments/reproduce/eval_luna.py), [eval_claude.py](../api_experiments/reproduce/eval_claude.py) and [eval_gpt.py](../api_experiments/reproduce/eval_gpt.py) use the original episode code. They default to a **read-only plan for one task**:
 
 ```bash
-python3 -B openwebrl/api_experiments/reproduce/eval_luna.py \
-  --runtime "$LUNA_RUNTIME" --arm luna_n5_medium \
-  --output "$REPRO_OUTPUT_ROOT/luna-n5-medium-01" \
-  --model-usd 5 --judge-usd 1
+"$API_PY" -B openwebrl/api_experiments/reproduce/eval_luna.py \
+  --runtime "$API_WORK/luna" --arm luna_n5_medium \
+  --output "$API_WORK/luna-n5-medium-01" --model-usd 5 --judge-usd 1
 
-python3 -B openwebrl/api_experiments/reproduce/eval_claude.py \
-  --runtime "$CLAUDE_RUNTIME" --arm sonnet_n5 \
-  --output "$REPRO_OUTPUT_ROOT/claude-sonnet-n5-01" \
-  --model-usd 5 --judge-usd 1
+"$API_PY" -B openwebrl/api_experiments/reproduce/eval_claude.py \
+  --runtime "$API_WORK/claude" --arm sonnet_n5 \
+  --output "$API_WORK/claude-sonnet-n5-01" --model-usd 5 --judge-usd 1
 ```
 
-Review the printed plan, then repeat the chosen command with `--execute`. The example dollar amounts are **explicit stop caps**, not estimates or permission to exceed an existing allocation. Execution requires actor credentials (`OPENAI_API_KEY` for Luna, `ANTHROPIC_API_KEY` for Claude) plus `JUDGE_API_KEY` or `OPENAI_API_KEY` for Terra. Supply them in the environment or with `--env-file /path/to/private.env`; never commit the key file.
+Add `--execute` to run the selected command. Supply `OPENAI_API_KEY` for GPT/Luna, `ANTHROPIC_API_KEY` for Claude, and `JUDGE_API_KEY` or `OPENAI_API_KEY` for the external judge. BrowserCode wrappers also accept `--env-file /path/to/private.env`. Keep keys outside published source. The example dollar values are stop caps, not cost estimates. `--model-calls`, `--judge-calls` and `--browser-starts` impose additional caps; the default browser allowance includes one mechanical preflight.
 
-| Script | `--arm` choices |
+### Main BrowserCode experiments
+
+Prepare the named campaign using the same builder, then run its entry point and arm. `--limit` takes the first N tasks after an optional benchmark filter. To collect every method, run each arm into its own new output directory using the same roster and explicitly chosen caps.
+
+| Campaign key | Entry point | Arms | Full task count per arm |
+|---|---|---|---:|
+| `browsercode_luna_effort` | `eval_luna.py` | `luna_single_xhigh`, `luna_single_medium`, `luna_single_low`, `luna_n5_medium`, `luna_n5_low` | 300 |
+| `browsercode_claude` | `eval_claude.py` | `opus_single`, `sonnet_single`, `sonnet_n3`, `sonnet_n5` | 300 |
+| `browsercode_gpt_high` | `eval_gpt.py` | `serial_high` (Sol), `parallel3_select_high`, `parallel5_select_high` (Luna) | 300 |
+| `browsercode_luna_single_high` | `eval_gpt.py` | `luna_single_high` | 300 |
+| `browsercode_gpt_high_wv_ds` | `eval_gpt.py` | `serial_high`, `parallel3_select_high`, `parallel5_select_high`, `luna_single_high` | 745 |
+
+For the last campaign, pass `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`; the filter precedes `--limit`. Luna N5 medium/low uses the named effort for both candidates and selector. Claude uses high effort. GPT-high uses high effort and the benchmark-specific judge. Effective settings come from the exported configuration, rather than a shared universal protocol.
+
+### Native CUAWright experiments
+
+[native.py](../api_experiments/reproduce/native.py) builds its own runtime from the same dependency manifest. It supports `luna_high_single`, `luna_high_n3_select_high`, `luna_high_n5_select_high`, `sol_high_single` and `sol_high_n3_select_high`:
+
+```bash
+"$API_PY" -B openwebrl/api_experiments/reproduce/native.py \
+  --dependencies "$API_WORK/deps/dependencies.json" \
+  --arm luna_high_n5_select_high --limit 1 --output "$API_WORK/native-luna-n5-01" \
+  --model-usd 5 --judge-usd 1 --model-calls 250 --judge-calls 100 \
+  --browser-starts 2 --timeout-seconds 1800
+```
+
+This is a read-only plan. Add `--execute` with `OPENAI_API_KEY` set to run it; all six USD/call/browser/time caps are required for execution. The default task file is public OM2W; `--limit 300` collects the full roster, while `--task-id` filters named tasks before `--limit` (raise the limit when selecting several IDs). Its browser cap includes one startup probe, so the example permits one probe plus one task browser. Native runs retain high effort, 20,000 output tokens, 100 decisions, summaries every 20 decisions, selected-only execution and official GPT-4o WebJudge. Original native format-repair defaults remain intact; the metered gateway never automatically repeats a physical provider request after an unknown-usage failure.
+
+<details>
+<summary>Earlier Sol 6.1 and Luna studies</summary>
+
+The same BrowserCode builder also accepts:
+
+| Campaign key | Policies / executor |
 |---|---|
-| Luna | `luna_single_xhigh`, `luna_single_medium`, `luna_single_low`, `luna_n5_medium`, `luna_n5_low` |
-| Claude | `opus_single`, `sonnet_single`, `sonnet_n3`, `sonnet_n5` |
+| `browsercode_sol61_pair20`, `browsercode_sol61_pair80` | Sol 6.1 `serial_high` versus `parallel3_select_low`; use `--harness browsercode` or `--harness cuawright` |
+| `browsercode_sol61_onecall20`, `browsercode_sol61_onecall80` | Sol 6.1 `onecall3_low`; choose either paired executor |
+| `browsercode_sol61_low_medium30` | Sol 6.1 `single_low`, `single_medium`; choose either paired executor |
+| `browsercode_luna_high100` | Luna `parallel3_select_high`, `parallel5_select_high`; later 12,288-token phase, BrowserCode |
+| `browsercode_luna_high100_initial`, `browsercode_luna_high100_recovery4096` | Original and repaired 4,096-token Luna N3/N5 phases; BrowserCode |
 
-Luna N5 medium/low uses the named effort for both candidates and selector. Claude arms use high effort. To evaluate the full frozen roster, add `--limit 300` and set explicitly approved run caps. `--limit` takes the first N tasks in frozen order. There is no sampling or replacement of invalid tasks.
+Use `eval_gpt.py` with the prepared runtime; it validates that the arm/model/output limits match that campaign. The paired 20-task and 80-task extension cohorts have separate keys. Earlier cap-limited and later 12,288-token phases remain separate scientific records in the source inventory.
+
+The original coordinate-browser studies use [legacy.py](../api_experiments/reproduce/legacy.py). Install their optional CPU-only dependencies and pinned Qwen tokenizer/vision metadata with `install.py --prefix "$API_WORK/deps" --install --legacy`; this downloads no model weights. Then:
+
+```bash
+"$API_PY" -B openwebrl/api_experiments/reproduce/legacy.py prepare \
+  --campaign sol61_om2w100_medium --dependencies "$API_WORK/deps/dependencies.json" \
+  --output "$API_WORK/coordinate-medium"
+"$API_PY" -B openwebrl/api_experiments/reproduce/legacy.py run \
+  --runtime "$API_WORK/coordinate-medium" --output "$API_WORK/coordinate-medium-01" \
+  --limit 1 --model-usd 5 --judge-usd 1
+```
+
+Other keys are `sol61_om2w100_low`, `sol61_om2w200_medium`, `sol61_webvoyager100_low` and `sol61_deepshop100_low`. The default runs both original policies in their fixed within-task order; `--arm` selects one. Add `--execute` to run. These use their original coordinate observation/context and grading paths, distinct from BrowserCode and native CUAWright.
+
+</details>
+
+### Saved-state calibration and selector probes
+
+[snapshots.py](../api_experiments/reproduce/snapshots.py) runs the original Sol 6.1 calibration, medium-actor follow-up and low-versus-medium selector probe code. Prepare inputs from your own fresh coordinate-browser records:
+
+```bash
+"$API_PY" -B openwebrl/api_experiments/reproduce/snapshots.py extract-calibration \
+  --episodes "$API_WORK/coordinate-medium-01" --output "$API_WORK/calibration" --limit 30
+"$API_PY" -B openwebrl/api_experiments/reproduce/snapshots.py run-calibration \
+  --runtime "$API_WORK/calibration" --model-usd 5 --model-calls 150
+"$API_PY" -B openwebrl/api_experiments/reproduce/snapshots.py prepare-selector \
+  --episodes "$API_WORK/coordinate-medium-01" --output "$API_WORK/selector-probe" --limit 100
+"$API_PY" -B openwebrl/api_experiments/reproduce/snapshots.py run-selector \
+  --runtime "$API_WORK/selector-probe" --model-usd 5 --model-calls 200
+```
+
+Runs default to a read-only plan; add `--execute` to dispatch within the supplied caps. `prepare-medium` and `run-medium` provide the follow-up from calibration receipts. The [input schema](../api_experiments/portable_assets/snapshots/calibration/input-schema.json) also accepts externally supplied states with hash-bound screenshots. Fresh state sampling is deterministic and outcome-independent; it is a new cohort, distinct from the historical private balanced C2/Piotr states. The package preserves the historical proposal/selector protocols without publishing those private states or transferring their labels.
+
+### Compare fresh runs
+
+[report.py](../api_experiments/reproduce/report.py) reads the saved task dispositions, verifies their run identity and produces aggregate and paired comparisons:
+
+```bash
+"$API_PY" -B openwebrl/api_experiments/reproduce/report.py \
+  --run single="$API_WORK/luna-single-01" --run n5="$API_WORK/luna-n5-medium-01" \
+  --output "$API_WORK/luna-comparison.json"
+```
+
+It reports task counts separately from success rates, retains invalid/missing outcomes, distinguishes all-attempt model/judge charges from valid-task efficiency, and labels common-valid paired comparisons. Paired uncertainty uses saved task identities; differing harnesses, benchmarks and judge protocols are not silently treated as matched controls. Historical plotting scripts and their public aggregate inputs remain linked under [results](#results-and-analysis-pointers).
 
 ### What execution saves
 
-Each invocation requires a **new output directory** outside the source runtime. It owns separate model/judge ledgers, browser counter, HTTP gate, SDK caches, W&B identity, episode evidence and `summary.json`. It cannot resume or overwrite an earlier invocation. Provider retries are disabled; a shared halt stops the run for diagnosis. Unknown usage retains its full reservation, and invalid episodes remain in cost accounting.
+Each invocation requires a new output directory. It owns separate ledgers, browser counters, request evidence, tracking identity and per-task outcomes. Existing valid or invalid results are never silently overwritten or replaced. Unknown usage retains its reservation; invalid attempts remain in all-attempt accounting.
 
-`summary.json` reports recorded/valid/invalid counts, valid-only success, valid-task mean latency and selected browser batches with observation counts, and separate all-attempt model/judge charges or reservations. Judge time is excluded from actor task latency. A browser batch is one selected executable snippet; it can contain several browser operations. Missing measurements are not zero. Raw outputs include private task content and should stay local.
-
-W&B defaults to offline under the output directory in `openwebrl-evals`. Use `--wandb-mode online` to sync or `--wandb-mode disabled` to omit tracking. `--model-calls`, `--judge-calls` and `--browser-starts` provide additional stop caps; browser starts default to N tasks plus one mechanical preflight. Model calls include candidates, selectors and token counters. Model/judge pools never transfer funds.
+BrowserCode `summary.json` includes requested/recorded/valid/invalid counts, recorded and valid-only success rates, valid-task latency/browser-batch means with observation counts, separate model/judge fees or reservations and cleanup status. Native writes task `disposition.json` files and a summary with usage. Historical coordinate runs preserve their original per-task records. W&B defaults to offline in `openwebrl-evals`; `--wandb-mode disabled` omits it in BrowserCode/coordinate runs. Raw run outputs contain task content and should stay local.
 
 ### Scope of reproduction
 
-The scripts preserve the **episode protocol**. They run one episode at a time, retaining parallel candidates within each decision, and apply one pair of run-level USD/call caps. The original studies used separately capped shards and concurrent scheduler jobs, so these entry points do not recreate the original scheduling, contention, shard admission history or measured latency environment. They submit no Slurm jobs and reserve no compute. Full campaign replication requires the original [campaign controllers and frozen approvals](#frozen-runtime-records), including canary/pilot audits and all-attempt resource accounting.
+These commands perform **fresh collection** with the frozen episode protocols and public task cohorts. They preserve candidate/selector settings, selected-only history, action parsing, benchmark judges and explicit accounting, while adapting local paths, dependency assembly and process ownership. Generated manifests record those adaptations and source hashes. Archived source files remain unchanged.
 
-Startup checks verify the frozen plan, source hashes, task manifest and local browser dependencies before execution. They do not prove live provider access or site availability. Use `--help` on either entry point to inspect options without a runtime, browser or API call.
+The original campaigns used concurrent scheduler shards and sometimes reused earlier recorded cohorts. Fresh reproduction collects those cells anew; it does not recreate historical site state, provider alias snapshots, scheduler contention, reused outcomes or original latency conditions. Use identical fresh task panels across arms and keep harness/judge cohorts separate. A new live-site run can legitimately produce different outcomes. No command submits a Slurm job.
 
 ## Code and frozen artifacts
 
-The files under `api_experiments/` are **frozen source archives** grouped by harness and function. Original sibling imports and host-specific paths remain intact; they are not an installable Python package. Identical files are shared once. [source-provenance.json](../api_experiments/source-provenance.json) maps each campaign's original filename to its published path, SHA256 and byte count. Archived source bytes remain unchanged.
+The files under `api_experiments/` are **frozen source archives** grouped by harness and function. Original sibling imports and host-specific paths remain intact in the archive. The public [runtime builders](#reproduction-quickstart) assemble runnable copies with explicit portability overlays. Identical files are shared once. [source-provenance.json](../api_experiments/source-provenance.json) maps each campaign's original filename to its published path, SHA256 and byte count. Archived source bytes remain unchanged.
 
-For BrowserCode, read the worker first, then its model, budget, browser environment and judge. The reproduction wrappers import `worker` from the configured frozen runtime, rather than importing the grouped archive directly.
+For BrowserCode, read the worker first, then its model, budget, browser environment and judge. The reproduction wrappers import `worker` from the generated runtime. [portable_assets/](../api_experiments/portable_assets/) supplies exact frozen support sources, effective scientific configurations, browser bridge and task-ID rosters; [variants/](../api_experiments/browsercode/variants/) preserves the additional executed campaign source snapshots.
 
 | Campaign key | Episode worker | Actor and selector | Budget / admission | Browser and metrics | Judge |
 |---|---|---|---|---|---|
@@ -137,19 +242,33 @@ python3 -B openwebrl/api_experiments/materialize.py browsercode_luna_effort \
   --output /tmp/luna-effort-source
 ```
 
-The other keys are `browsercode_claude`, `browsercode_gpt_high` and `cuawright_native`. The output directory must be new. All source hashes are checked before any output files are written. This copies code only; it starts no workers or API requests. It does not create the configured runtime required by the reproduction wrappers.
+All campaign keys and file hashes are listed in [source-provenance.json](../api_experiments/source-provenance.json). The output directory must be new. All source hashes are checked before any output files are written. This copies code only; it starts no workers or API requests. For a runnable environment, use the installer and runtime builders above.
 
-Credentials, `.env`, task data, screenshots, trajectories, request logs, ledgers and scheduler records are excluded. The private Claude terminal-interruption qualifiers are also excluded because they embed task identities; the original worker still references them for historical recovery. Execution additionally requires frozen configuration, effective approvals, pinned CUAWright/OpenWebRL support sources, SDKs and browser/bridge dependencies; native execution also needs its gateway configuration.
+Credentials, `.env`, task data, screenshots, trajectories, request logs, ledgers and scheduler records are excluded. The private Claude terminal-interruption qualifiers are also excluded because they embed task identities; the original worker still references them for historical recovery. The public builders provide the scientific configuration, support code and gateway assembly; the installer supplies pinned external code and browser dependencies. Original private campaign approvals and scheduler records are neither required nor copied into collaborator runs.
 
 ### Offline validation
 
-Run the public materializer and reproduction boundary tests without browsers or API calls:
+Run archive, scientific-input and accounting tests without API calls:
 
 ```bash
 python3 -B -m unittest discover -s openwebrl/api_experiments/tests -v
 ```
 
-[tests/](../api_experiments/tests/) checks source hashes/layout reconstruction and reproduction boundaries, including dry runs, caps, selected cohorts, output isolation and mocked execution. [validation/](../api_experiments/validation/) contains archived campaign tests that may require the original runtime; it is not the self-contained public test suite. Keep source snapshots byte-for-byte intact and update the provenance index when publishing an additional snapshot.
+[tests/](../api_experiments/tests/) checks source/layout hashes, scientific rosters, dry runs, caps, output isolation, cleanup and accounting. Set `OPENWEBRL_API_DEPENDENCIES` to the installer manifest to enable full real-source runtime construction and import checks. [validation/](../api_experiments/validation/) contains archived campaign tests that may require the original runtime; it is not the self-contained public test suite. Keep source snapshots byte-for-byte intact and update the provenance index when publishing an additional snapshot.
+
+To verify the installed real sources and adapters, enable the integration checks:
+
+```bash
+OPENWEBRL_API_DEPENDENCIES="$API_WORK/deps/dependencies.json" \
+  "$API_PY" -B -m unittest discover -s openwebrl/api_experiments/tests -v
+"$API_PY" -B openwebrl/api_experiments/reproduce/verify_runtime.py \
+  --runtime "$API_WORK/luna" --browser-preflight
+"$API_PY" -B openwebrl/api_experiments/reproduce/native_check.py \
+  --dependencies "$API_WORK/deps/dependencies.json" \
+  --output "$API_WORK/native-install-check" --browser-preflight
+```
+
+The preflights start owned local browsers against diagnostic pages, exercise tools/screenshots and verify cleanup with zero provider calls. Coordinate runtimes also support `legacy.py verify --runtime PATH --browser-preflight`. [verify_legacy.py](../api_experiments/reproduce/verify_legacy.py) additionally runs the original episode loop on diagnostic tasks through a fake SDK boundary, with real Chromium and tokenization, without provider calls. These checks validate installation and protocol boundaries; fresh model/browser outcomes require the explicit episode commands above.
 
 ### Frozen runtime records
 
@@ -180,7 +299,7 @@ Follow `source-manifest.json` to imported dependencies, including the pinned CUA
 
 </details>
 
-Earlier local development used `openwebrl/sol_serial_parallel_policy.py` (selection), `sol_serial_parallel_transport.py` (native history), `sol_serial_parallel_eval.py` (evaluation), and `scripts/run_sol_serial_parallel_om2w.py` (entry point). These files are absent from the public checkout: they are historical names, not available reproduction entry points. The archived GPT-high adapter still imports the first helper, which is an additional unresolved source dependency.
+The earlier `sol_serial_parallel_policy.py`, `sol_serial_parallel_transport.py` and `sol_serial_parallel_eval.py` implementations are preserved in the exported [frozen support](../api_experiments/portable_assets/support/) and [historical source trees](../api_experiments/portable_assets/legacy/). The portable builders select the matching version; use the published reproduction entry points rather than the original Slurm launcher.
 
 <details>
 <summary>Source hashes and saved evidence</summary>
@@ -206,7 +325,8 @@ A logical shard's `attempts/attempt-*/episodes/` contains decisions, physical re
 
 The completed Claude study records 1,200 dispositions across 142 physical attempts. On the 246 common-valid tasks, Sonnet single and N5 each solved 147; the observed N5 setup did not establish a success advantage. For earlier GPT results and all effect/uncertainty claims, use the linked primary cohort tables rather than mixing denominators or judging protocols. Live pilot counts belong in campaign status records until independently qualified, not as a final methods result.
 
-## Audit and operational details
+<a id="audit-and-operational-details"></a>
+## Historical campaign accounting
 
 <details>
 <summary>Validity, failure handling and recovery</summary>

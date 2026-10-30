@@ -1,4 +1,4 @@
-"""Single-process BrowserCode reproduction using an existing frozen runtime."""
+"""Reproduce a prepared BrowserCode runtime with isolated all-attempt budgets."""
 from __future__ import annotations
 
 import argparse
@@ -17,6 +17,7 @@ import uuid
 ARMS = {
     "luna": ("luna_single_xhigh", "luna_single_medium", "luna_single_low", "luna_n5_medium", "luna_n5_low"),
     "claude": ("opus_single", "sonnet_single", "sonnet_n3", "sonnet_n5"),
+    "gpt": ("serial_high", "onecall3_low", "single_low", "single_medium", "parallel3_select_low", "parallel3_select_high", "parallel5_select_high", "luna_single_high"),
 }
 
 
@@ -44,8 +45,10 @@ def positive_money(value):
 
 def parser(provider):
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--runtime", type=Path, required=True, help="Existing configured frozen campaign directory")
+    p.add_argument("--runtime", type=Path, required=True, help="Isolated runtime produced by prepare_browsercode.py")
     p.add_argument("--arm", choices=ARMS[provider], required=True)
+    p.add_argument("--harness", choices=("browsercode", "cuawright"), default="browsercode", help="Earlier paired-harness campaigns support both executors")
+    p.add_argument("--benchmark", choices=("online-mind2web", "webvoyager", "deepshop"), help="Filter the prepared task roster before applying --limit")
     p.add_argument("--output", type=Path, required=True, help="New output directory outside the source runtime")
     p.add_argument("--limit", type=int, default=1, help="First N frozen tasks; default: 1")
     p.add_argument("--model-usd", type=positive_money, required=True)
@@ -69,6 +72,9 @@ def prepare(args, provider):
     if output.is_relative_to(runtime):
         raise ValueError("Place output outside the frozen source runtime")
     plan, config, tasks = (read(runtime / name) for name in ("campaign-plan.json", "runtime-config.json", "tasks.json"))
+    benchmark = getattr(args, "benchmark", None)
+    if benchmark:
+        tasks = [t for t in tasks if t.get("benchmark", "online-mind2web") == benchmark]
     if not 1 <= args.limit <= len(tasks):
         raise ValueError("limit must be between 1 and the frozen task count")
     if min(args.model_calls, args.judge_calls, args.browser_starts if args.browser_starts is not None else args.limit + 1) <= 0:
@@ -76,10 +82,18 @@ def prepare(args, provider):
     spec = next((a for a in plan["arms"] if a["arm"] == args.arm), None)
     if args.arm not in ARMS[provider] or spec is None:
         raise ValueError("Arm does not belong to this provider/runtime")
-    expected = "gpt-6-luna" if provider == "luna" else ("claude-opus-5-5" if args.arm == "opus_single" else "claude-sonnet-5-5")
-    if spec["model"] != expected or plan["protocol"]["max_decisions"] != 30 or spec["output_tokens"] != 12288:
+    expected = spec["model"]
+    allowed_models = {"luna": {"gpt-6-luna"}, "claude": {"claude-opus-5-5", "claude-sonnet-5-5"}, "gpt": {"gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol"}}
+    if expected not in allowed_models[provider]:
+        raise ValueError("Unexpected model for provider")
+    harness = getattr(args, "harness", "browsercode")
+    supported_harnesses = {cell["harness"] for cell in plan.get("cells", [])} or {"browsercode"}
+    if harness not in supported_harnesses:
+        raise ValueError("Harness is not supported by this frozen campaign")
+    expected_output = spec["output_tokens"]
+    if plan["protocol"]["max_decisions"] != 30 or expected_output not in (4096, 12288):
         raise ValueError("Runtime is not the frozen BrowserCode model/12288/30 protocol")
-    if config["judge_protocol"]["model"] != "gpt-5.6-terra":
+    if provider != "gpt" and config["judge_protocol"]["model"] != "gpt-5.6-terra":
         raise ValueError("Runtime must use the frozen Terra judge")
     manifest = read(runtime / "source-manifest.json")
     if manifest["plan_sha256"] != digest(runtime / "campaign-plan.json"):
@@ -101,11 +115,12 @@ def prepare(args, provider):
         raise ValueError("Configured bridge requires output below " + guard.group(1))
     chosen = tasks[:args.limit]
     ids = [t["task_id"] for t in chosen]
-    if len(set(ids)) != len(ids) or any(not re.fullmatch(r"[A-Za-z0-9_.-]+", x) or x in (".", "..") for x in ids):
+    if len(set(ids)) != len(ids) or any(not re.fullmatch(r"[A-Za-z0-9_. -]+", x) or x in (".", "..") for x in ids):
         raise ValueError("Task IDs must be unique safe filenames")
     return {"provider": provider, "arm": args.arm, "model": expected, "candidate_count": spec["proposal_count"],
-            "candidate_effort": spec["reasoning_effort"], "selector_effort": spec.get("selector_reasoning_effort", spec["reasoning_effort"] if spec["proposal_count"] > 1 else None),
-            "task_count": len(chosen), "max_output_tokens": 12288, "max_decisions": 30,
+            "candidate_effort": spec.get("reasoning_effort", "high"), "selector_effort": spec.get("selector_reasoning_effort", spec.get("reasoning_effort", "high") if spec["proposal_count"] > 1 else None),
+            "selector_max_output_tokens": spec.get("selector_output_tokens", plan["protocol"].get("selector_max_output_tokens")) if spec["proposal_count"] > 1 else None,
+            "task_count": len(chosen), "benchmark": benchmark, "harness": harness, "max_output_tokens": expected_output, "max_decisions": 30,
             "runtime": str(runtime), "output": str(output), "source_manifest_sha256": digest(runtime / "source-manifest.json"),
             "task_manifest_sha256": digest(runtime / "tasks.json"), "model_usd_cap": args.model_usd, "judge_usd_cap": args.judge_usd,
             "model_call_cap": args.model_calls, "judge_call_cap": args.judge_calls,
@@ -120,6 +135,7 @@ def summary(rows, pools, cleanup_verified):
         return {"mean": sum(values) / len(values) if values else None, "observations": len(values)}
     return {"recorded": len(rows), "valid": len(valid), "invalid": len(rows) - len(valid),
             "successes": sum(r.get("reward") == 1 for r in valid),
+            "recorded_success_rate": sum(r.get("reward") == 1 for r in valid) / len(rows) if rows else None,
             "valid_only_success": sum(r.get("reward") == 1 for r in valid) / len(valid) if valid else None,
             "valid_task_latency_seconds": mean("task_latency_seconds"), "valid_selected_browser_batches": mean("selected_code_batches"),
             "all_attempt_pools": pools, "owned_cleanup_verified": cleanup_verified}
@@ -130,7 +146,7 @@ def execute(args, plan, tasks):
     if args.env_file:
         from dotenv import dotenv_values
         keys.update({k: v for k, v in dotenv_values(args.env_file).items() if v})
-    actor_key = "OPENAI_API_KEY" if plan["provider"] == "luna" else "ANTHROPIC_API_KEY"
+    actor_key = "ANTHROPIC_API_KEY" if plan["provider"] == "claude" else "OPENAI_API_KEY"
     if not keys.get(actor_key) or not (keys.get("JUDGE_API_KEY") or keys.get("OPENAI_API_KEY")):
         raise ValueError("Set " + actor_key + " and OPENAI_API_KEY or JUDGE_API_KEY")
     root = Path(plan["output"])
@@ -144,26 +160,31 @@ def execute(args, plan, tasks):
     for name in ("WANDB_RUN_ID", "WANDB_RESUME", "WANDB_NAME", "WANDB_RUN_GROUP", "WANDB_SWEEP_ID", "WANDB_JOB_TYPE"):
         os.environ.pop(name, None)
     os.environ["WANDB_PROJECT"] = "openwebrl-evals"
+    os.environ["OPENWEBRL_REPRO_OUTPUT"] = str(root)
     if keys.get("WANDB_API_KEY"):
         os.environ["WANDB_API_KEY"] = keys["WANDB_API_KEY"]
     sys.path.insert(0, plan["runtime"])
     worker = importlib.import_module("worker")
     environments = importlib.import_module("environments")
-    budget_module = importlib.import_module("request_budget" if plan["provider"] == "luna" else "claude_budget")
-    gate = budget_module.SharedHTTPGate(root / "http-gate", 8)
-    original = worker.PairedModel
-    class ScopedModel(original):
-        def __init__(self, *positional, **kwargs):
-            kwargs["http_gate"] = gate
-            super().__init__(*positional, **kwargs)
-    worker.PairedModel = ScopedModel
-    budgets = {"actor": worker.ReservationBudget(root / "budget/model", args.model_usd, args.model_calls),
-               "judge": worker.ReservationBudget(root / "budget/judge", args.judge_usd, args.judge_calls),
+    if plan["provider"] != "gpt":
+        budget_module = importlib.import_module("request_budget" if plan["provider"] == "luna" else "claude_budget")
+        gate = budget_module.SharedHTTPGate(root / "http-gate", 8)
+        original = worker.PairedModel
+        class ScopedModel(original):
+            def __init__(self, *positional, **kwargs):
+                kwargs["http_gate"] = gate
+                super().__init__(*positional, **kwargs)
+        worker.PairedModel = ScopedModel
+    budget_type = getattr(worker, "ReservationBudget", worker.Budget)
+    model_cap = Decimal(args.model_usd) if plan["provider"] == "gpt" else args.model_usd
+    judge_cap = Decimal(args.judge_usd) if plan["provider"] == "gpt" else args.judge_usd
+    budgets = {"actor": budget_type(root / "budget/model", model_cap, args.model_calls),
+               "judge": budget_type(root / "budget/judge", judge_cap, args.judge_calls),
                "browser": worker.Budget(root / "budget/browser", plan["browser_start_cap"], plan["browser_start_cap"])}
     from openai import OpenAI
     judge = OpenAI(api_key=keys.get("JUDGE_API_KEY") or keys["OPENAI_API_KEY"], max_retries=0, timeout=180)
     try:
-        if plan["provider"] == "luna":
+        if plan["provider"] != "claude":
             actor = OpenAI(api_key=keys[actor_key], max_retries=0, timeout=180)
         else:
             from anthropic import Anthropic
@@ -183,9 +204,9 @@ def execute(args, plan, tasks):
         worker.preflight(root, budgets["browser"])
         for task in tasks:
             try:
-                row = worker.episode(root, task, {"harness": "browsercode", "policy": args.arm}, actor, judge, budgets, 0)
+                row = worker.episode(root, task, {"harness": plan.get("harness", "browsercode"), "policy": args.arm}, actor, judge, budgets, 0)
             except BaseException:
-                saved = root / "episodes" / (task["task_id"] + "-browsercode-" + args.arm) / "result.json"
+                saved = root / "episodes" / (task["task_id"] + "-" + plan.get("harness", "browsercode") + "-" + args.arm) / "result.json"
                 if saved.is_file():
                     rows.append(read(saved))
                 stopped = "Episode interrupted; inspect preserved evidence before continuation"
@@ -208,7 +229,12 @@ def execute(args, plan, tasks):
                     close()
                 except Exception as error:
                     finalization_errors.append({"component": component, "error_type": type(error).__name__})
-            pools = {name: {"calls": b.snapshot()["calls"], "charged_or_reserved_usd": b.snapshot()["charged_or_reserved_usd"]} for name, b in budgets.items() if name != "browser"}
+            pools = {}
+            for name, budget in budgets.items():
+                if name == "browser":
+                    continue
+                state = budget.snapshot() if hasattr(budget, "snapshot") else (read(budget.root / "ledger.json") if (budget.root / "ledger.json").exists() else {"calls": 0, "charged_or_reserved_usd": 0})
+                pools[name] = {key: state[key] for key in ("calls", "charged_or_reserved_usd")}
             result = summary(rows, pools, cleanup_ok)
             result["requested"] = len(tasks)
             result["unrecorded"] = len(tasks) - len(rows)
@@ -216,7 +242,7 @@ def execute(args, plan, tasks):
             result["finalization_errors"] = finalization_errors
             (root / "summary.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
-    return 1 if stopped or finalization_errors else 0
+    return 1 if stopped or finalization_errors or not cleanup_ok or len(rows) != len(tasks) or result["invalid"] else 0
 
 
 def main(provider):

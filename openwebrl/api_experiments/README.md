@@ -8,7 +8,7 @@ The **[API experiments guide](../docs/API_EXPERIMENT_METHODS.md)** is the main r
 | To… | Follow… |
 |---|---|
 | Understand the studies and their differences | [Experiments and protocols](../docs/API_EXPERIMENT_METHODS.md#experiments) |
-| Run Luna or Claude BrowserCode episodes | [Reproduction quickstart](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart) |
+| Install and run the experiments | [Reproduction quickstart](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart) |
 | Trace workers, models, budgets, browsers and judges | [Campaign code map](../docs/API_EXPERIMENT_METHODS.md#code-and-frozen-artifacts) |
 | Restore original source filenames | [Source reconstruction](../docs/API_EXPERIMENT_METHODS.md#restore-an-original-campaign-layout) · [provenance index](source-provenance.json) |
 | Check the public code offline | [Validation commands and test scope](../docs/API_EXPERIMENT_METHODS.md#offline-validation) |
@@ -16,4 +16,4 @@ The **[API experiments guide](../docs/API_EXPERIMENT_METHODS.md)** is the main r
 
 <a id="layout"></a>
 
-`browsercode/` and `cuawright/` preserve frozen source snapshots, grouped by harness and function. They retain original imports and runtime paths. [materialize.py](materialize.py) restores the original layout; [reproduce/](reproduce/) provides Luna/Claude wrappers into an existing configured runtime. Private task manifests and browser dependencies remain local. The guide explains these requirements and the distinction between reconstructing code and executing episodes.
+`browsercode/` and `cuawright/` preserve frozen source snapshots. [portable_assets/](portable_assets/) supplies scientific configs, prompts, support code and benchmark-ID rosters. [reproduce/](reproduce/) installs pinned dependencies, builds isolated runtimes and runs BrowserCode, native CUAWright and earlier coordinate-browser experiments. Start with the guide’s [clean setup commands](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart); credentials and run outputs stay local.

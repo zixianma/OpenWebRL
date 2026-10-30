@@ -1,0 +1,8 @@
+# Frozen browser environment sources are code, not virtual environments.
+!/portable_assets/legacy/sources/**/env/
+!/portable_assets/legacy/sources/**/env/**/
+!/portable_assets/legacy/sources/**/env/**/*.py
+!/portable_assets/legacy/sources/**/env/**/*.yaml
+!/portable_assets/legacy/sources/**/env/**/*.json
+!/portable_assets/legacy/sources/**/env/**/*.md
+!/portable_assets/legacy/sources/**/env/**/*.txt

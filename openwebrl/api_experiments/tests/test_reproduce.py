@@ -38,9 +38,9 @@ class ReproductionTests(unittest.TestCase):
         self.plan = {"protocol": {"max_decisions": 30}, "task_manifest_sha256": m.digest(self.runtime / "tasks.json"), "arms": []}
         for provider, arms in m.ARMS.items():
             for arm in arms:
-                count = 5 if "n5" in arm else 3 if "n3" in arm else 1
+                count = 5 if "n5" in arm or "parallel5" in arm else 3 if "n3" in arm or "parallel3" in arm else 1
                 effort = arm.rsplit("_", 1)[1] if provider == "luna" else "high"
-                model = "gpt-6-luna" if provider == "luna" else "claude-opus-5-5" if arm == "opus_single" else "claude-sonnet-5-5"
+                model = ("gpt-6-sol" if arm == "serial_high" else "gpt-6-luna") if provider in ("luna", "gpt") else "claude-opus-5-5" if arm == "opus_single" else "claude-sonnet-5-5"
                 self.plan["arms"].append(dict(arm=arm, proposal_count=count, model=model, reasoning_effort=effort, output_tokens=12288))
         self.seal()
 
@@ -59,7 +59,7 @@ class ReproductionTests(unittest.TestCase):
         for provider, arms in m.ARMS.items():
             for arm in arms:
                 plan, tasks = m.prepare(self.args(arm, provider), provider)
-                self.assertEqual(plan["candidate_count"], 5 if "n5" in arm else 3 if "n3" in arm else 1)
+                self.assertEqual(plan["candidate_count"], 5 if "n5" in arm or "parallel5" in arm else 3 if "n3" in arm or "parallel3" in arm else 1)
                 self.assertEqual((plan["max_output_tokens"], plan["max_decisions"], len(tasks)), (12288, 30, 1))
                 self.assertFalse(plan["execute"])
         self.assertFalse(self.output.exists())
@@ -97,12 +97,13 @@ class ReproductionTests(unittest.TestCase):
         result = m.summary([dict(valid=True, reward=1, task_latency_seconds=2), dict(valid=False, reward=0), dict(valid=True, reward=0)], {}, True)
         self.assertEqual((result["recorded"], result["valid"], result["invalid"], result["successes"]), (3, 2, 1, 1))
         self.assertEqual(result["valid_only_success"], .5)
+        self.assertEqual(result["recorded_success_rate"], 1 / 3)
         self.assertEqual(result["valid_task_latency_seconds"], {"mean": 2, "observations": 1})
         self.assertIsNone(result["valid_selected_browser_batches"]["mean"])
         self.assertIsNone(m.summary([], {}, True)["valid_only_success"])
 
     def fake_execute(self, provider, halted=False, tracking=False):
-        arm = "luna_n5_medium" if provider == "luna" else "sonnet_n5"
+        arm = "luna_n5_medium" if provider == "luna" else "serial_high" if provider == "gpt" else "sonnet_n5"
         args = self.args(arm, provider, ("--limit", "3", "--execute"))
         if tracking: args.wandb_mode = "offline"
         plan, tasks = m.prepare(args, provider)
@@ -120,7 +121,8 @@ class ReproductionTests(unittest.TestCase):
                 self.calls = 0
             def snapshot(self): return {"calls": self.calls, "charged_or_reserved_usd": str(self.calls)}
         class Model:
-            def __init__(self, **kwargs): gates.append(kwargs["http_gate"])
+            def __init__(self, **kwargs):
+                if "http_gate" in kwargs: gates.append(kwargs["http_gate"])
         class Gate:
             def __init__(self, root, capacity):
                 self.root, self.capacity = root, capacity
@@ -150,7 +152,7 @@ class ReproductionTests(unittest.TestCase):
         before = {str(p): p.read_bytes() for p in self.runtime.rglob("*") if p.is_file()}
         with patch.dict(os.environ, {"OPENAI_API_KEY": "offline-fake", "ANTHROPIC_API_KEY": "offline-fake", "WANDB_RUN_ID": "inherited-campaign", "WANDB_RESUME": "must"}), patch.dict(sys.modules, {"wandb": fake_wandb, "openai": types.SimpleNamespace(OpenAI=Client), "anthropic": types.SimpleNamespace(Anthropic=Client)}), patch.object(m.importlib, "import_module", side_effect=modules.__getitem__), patch.object(m.signal, "signal"), patch.object(sys, "path", list(sys.path)), contextlib.redirect_stdout(io.StringIO()):
             code = m.execute(args, plan, tasks)
-        self.assertEqual(code, int(halted))
+        self.assertEqual(code, 1)  # Invalid or budget-halted coverage must signal failure.
         self.assertEqual(len(calls), 1 if halted else 3)
         self.assertTrue(all(c.closed for c in clients))
         self.assertEqual(cleaned, [self.output])
@@ -165,6 +167,9 @@ class ReproductionTests(unittest.TestCase):
 
     def test_claude_execution_uses_independent_state_and_counts_invalid_cost(self):
         self.fake_execute("claude")
+
+    def test_older_gpt_execution_has_isolated_budgets_and_disabled_retries(self):
+        self.fake_execute("gpt")
 
     def test_tracking_cannot_resume_campaign_identity(self):
         self.fake_execute("luna", tracking=True)

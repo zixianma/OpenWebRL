@@ -1,0 +1,1098 @@
+{
+  "schema": "portable-frozen-tree-v1",
+  "source_campaign": "om2w100-v1",
+  "original_plan_sha256": "b9bb286714422a600ea509322818431b85c5ba4fd0875c3324ba7c7ca169fb37",
+  "files": {
+    "train.py": {
+      "published_path": "legacy/sources/common/train.py",
+      "sha256": "d69ec13c05594c52ba5161ab0280bfc5dc4aa7726bff5d685881e68a806d7793",
+      "manifest_sha256": "d69ec13c05594c52ba5161ab0280bfc5dc4aa7726bff5d685881e68a806d7793"
+    },
+    "slime/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/router/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/router/router.py": {
+      "published_path": "legacy/sources/common/slime/router/router.py",
+      "sha256": "18102fe9d6fa1152bdb40d55f2edc304b98f7477afea20447903248ea815cbd3",
+      "manifest_sha256": "18102fe9d6fa1152bdb40d55f2edc304b98f7477afea20447903248ea815cbd3"
+    },
+    "slime/router/middleware_hub/radix_tree.py": {
+      "published_path": "legacy/sources/common/slime/router/middleware_hub/radix_tree.py",
+      "sha256": "c55884b88fdbda9634f1ecaeb02cd9578f28a9947dd615a555001b1bcd305565",
+      "manifest_sha256": "c55884b88fdbda9634f1ecaeb02cd9578f28a9947dd615a555001b1bcd305565"
+    },
+    "slime/router/middleware_hub/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/router/middleware_hub/radix_tree_middleware.py": {
+      "published_path": "legacy/sources/common/slime/router/middleware_hub/radix_tree_middleware.py",
+      "sha256": "4a1505c0a0d21e977881a7c11f0615d1a8099a2d97bceefb7d82264e18763875",
+      "manifest_sha256": "4a1505c0a0d21e977881a7c11f0615d1a8099a2d97bceefb7d82264e18763875"
+    },
+    "slime/utils/http_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/http_utils.py",
+      "sha256": "d9458104ef72ca3a825405388e057cdca3baebbf2556f30f4ad5250f43190c24",
+      "manifest_sha256": "d9458104ef72ca3a825405388e057cdca3baebbf2556f30f4ad5250f43190c24"
+    },
+    "slime/utils/memory_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/memory_utils.py",
+      "sha256": "6e300762aff23794bc5281008079efc0197d5266193b340da08e080a543e2750",
+      "manifest_sha256": "6e300762aff23794bc5281008079efc0197d5266193b340da08e080a543e2750"
+    },
+    "slime/utils/ppo_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/ppo_utils.py",
+      "sha256": "42a60d08590e1d1773b80080a3eb1890c86ec2d54b298829462c906a486e0383",
+      "manifest_sha256": "42a60d08590e1d1773b80080a3eb1890c86ec2d54b298829462c906a486e0383"
+    },
+    "slime/utils/reloadable_process_group.py": {
+      "published_path": "legacy/sources/common/slime/utils/reloadable_process_group.py",
+      "sha256": "396eea28c9e4ab691999260ac3562a7576706e4c9afb780dae61e7fa14ba2bbf",
+      "manifest_sha256": "396eea28c9e4ab691999260ac3562a7576706e4c9afb780dae61e7fa14ba2bbf"
+    },
+    "slime/utils/routing_replay.py": {
+      "published_path": "legacy/sources/common/slime/utils/routing_replay.py",
+      "sha256": "f42c54b2c6f95642f8943a9249460a8c16fe9f819e40daed975a981f9f86f85f",
+      "manifest_sha256": "f42c54b2c6f95642f8943a9249460a8c16fe9f819e40daed975a981f9f86f85f"
+    },
+    "slime/utils/eval_config.py": {
+      "published_path": "legacy/sources/common/slime/utils/eval_config.py",
+      "sha256": "9a189061078dcd203925f115652ab09530077e7ff41b5dac02aa19b29fb6a2b0",
+      "manifest_sha256": "9a189061078dcd203925f115652ab09530077e7ff41b5dac02aa19b29fb6a2b0"
+    },
+    "slime/utils/data.py": {
+      "published_path": "legacy/sources/common/slime/utils/data.py",
+      "sha256": "e7e93f7199f16ad9b7e528a8cc9d456a20bc30e37de54875eb353d9f3215d93c",
+      "manifest_sha256": "e7e93f7199f16ad9b7e528a8cc9d456a20bc30e37de54875eb353d9f3215d93c"
+    },
+    "slime/utils/trajectory_metrics.py": {
+      "published_path": "legacy/sources/common/slime/utils/trajectory_metrics.py",
+      "sha256": "6a096d4306d41aeba34286985848b48d10ac9e00698d6ad3469780fb5c41f467",
+      "manifest_sha256": "6a096d4306d41aeba34286985848b48d10ac9e00698d6ad3469780fb5c41f467"
+    },
+    "slime/utils/distributed_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/distributed_utils.py",
+      "sha256": "e08551ffd141abfd73302408425c49e9f8209d9a61fef9fac7a69a760a3d7877",
+      "manifest_sha256": "e08551ffd141abfd73302408425c49e9f8209d9a61fef9fac7a69a760a3d7877"
+    },
+    "slime/utils/__init__.py": {
+      "published_path": "legacy/sources/common/slime/utils/__init__.py",
+      "sha256": "5043a8723e70046ef3298939bf3f45c11dabfdf15599dcd7519900edf83e332f",
+      "manifest_sha256": "5043a8723e70046ef3298939bf3f45c11dabfdf15599dcd7519900edf83e332f"
+    },
+    "slime/utils/async_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/async_utils.py",
+      "sha256": "09137ada1019891e726b443174ace12476135b6ba531d0262281b46e71952bab",
+      "manifest_sha256": "09137ada1019891e726b443174ace12476135b6ba531d0262281b46e71952bab"
+    },
+    "slime/utils/tensor_backper.py": {
+      "published_path": "legacy/sources/common/slime/utils/tensor_backper.py",
+      "sha256": "87997a4f4dea6ca333c4438d4d843a15c1f950815833a0a4c0267fe885d81730",
+      "manifest_sha256": "87997a4f4dea6ca333c4438d4d843a15c1f950815833a0a4c0267fe885d81730"
+    },
+    "slime/utils/timer.py": {
+      "published_path": "legacy/sources/common/slime/utils/timer.py",
+      "sha256": "bc97d346b44809954c9652db1251ce4593012274717acf1d50b2d4959d298505",
+      "manifest_sha256": "bc97d346b44809954c9652db1251ce4593012274717acf1d50b2d4959d298505"
+    },
+    "slime/utils/types.py": {
+      "published_path": "legacy/sources/common/slime/utils/types.py",
+      "sha256": "a9c806ba74b431d9571defcbc340a7b508e981167dceabae4b9f96d6a74c6e61",
+      "manifest_sha256": "a9c806ba74b431d9571defcbc340a7b508e981167dceabae4b9f96d6a74c6e61"
+    },
+    "slime/utils/rollout_transport.py": {
+      "published_path": "legacy/sources/common/slime/utils/rollout_transport.py",
+      "sha256": "b0e80075420029275c7a3ea532368b4a4fd8e9b3b0572db4e555a1128e82d934",
+      "manifest_sha256": "b0e80075420029275c7a3ea532368b4a4fd8e9b3b0572db4e555a1128e82d934"
+    },
+    "slime/utils/logging_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/logging_utils.py",
+      "sha256": "6d171d569f5e5111fdda01c7926b274833a3ced0d2385344f717d803d91cf05a",
+      "manifest_sha256": "6d171d569f5e5111fdda01c7926b274833a3ced0d2385344f717d803d91cf05a"
+    },
+    "slime/utils/mask_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/mask_utils.py",
+      "sha256": "aeba50e6d50a7bf0577f81a14e1221ce5248dbfdeccc77d0dfbd24559339908f",
+      "manifest_sha256": "aeba50e6d50a7bf0577f81a14e1221ce5248dbfdeccc77d0dfbd24559339908f"
+    },
+    "slime/utils/metric_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/metric_utils.py",
+      "sha256": "ad8f1b7466aeeb600056d37e21502d98e52963050ff59dba4a0d1a2459ae3b8e",
+      "manifest_sha256": "ad8f1b7466aeeb600056d37e21502d98e52963050ff59dba4a0d1a2459ae3b8e"
+    },
+    "slime/utils/train_metric_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/train_metric_utils.py",
+      "sha256": "4da85fd0aadb2ec36438cb294bf3a8468ebf9b94f85c4b6e9a5c7e1b20a03111",
+      "manifest_sha256": "4da85fd0aadb2ec36438cb294bf3a8468ebf9b94f85c4b6e9a5c7e1b20a03111"
+    },
+    "slime/utils/wandb_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/wandb_utils.py",
+      "sha256": "2738b840d320c9a723ffb98ffe435b28b5aac901947060ccf57da68bc3076ee1",
+      "manifest_sha256": "2738b840d320c9a723ffb98ffe435b28b5aac901947060ccf57da68bc3076ee1"
+    },
+    "slime/utils/seqlen_balancing.py": {
+      "published_path": "legacy/sources/common/slime/utils/seqlen_balancing.py",
+      "sha256": "2054f39c167898c104824666b514647c31008ed6be4cb90c07b3869f75550984",
+      "manifest_sha256": "2054f39c167898c104824666b514647c31008ed6be4cb90c07b3869f75550984"
+    },
+    "slime/utils/rocm_checkpoint_writer.py": {
+      "published_path": "legacy/sources/common/slime/utils/rocm_checkpoint_writer.py",
+      "sha256": "6f29a85785a5b40e09e3b28b34e4dfb8007730039ba059863d7bbacef557e6a4",
+      "manifest_sha256": "6f29a85785a5b40e09e3b28b34e4dfb8007730039ba059863d7bbacef557e6a4"
+    },
+    "slime/utils/flops_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/flops_utils.py",
+      "sha256": "1c28167d20159ce45129a59d84cfb619995fd4aaf123fc20508b6dbdf54c0f53",
+      "manifest_sha256": "1c28167d20159ce45129a59d84cfb619995fd4aaf123fc20508b6dbdf54c0f53"
+    },
+    "slime/utils/megatron_bridge_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/megatron_bridge_utils.py",
+      "sha256": "de8abf036db3bc73f99d76b4a3314c9fb708870e3ad7ce62ebd2e99a37516296",
+      "manifest_sha256": "de8abf036db3bc73f99d76b4a3314c9fb708870e3ad7ce62ebd2e99a37516296"
+    },
+    "slime/utils/misc.py": {
+      "published_path": "legacy/sources/common/slime/utils/misc.py",
+      "sha256": "60e0bfbe82f99d274a8d10e8cd8f05b0eb5176154ab7a9b9c468261d2c7ea60b",
+      "manifest_sha256": "60e0bfbe82f99d274a8d10e8cd8f05b0eb5176154ab7a9b9c468261d2c7ea60b"
+    },
+    "slime/utils/rollout_archive.py": {
+      "published_path": "legacy/sources/common/slime/utils/rollout_archive.py",
+      "sha256": "9a874102929832397f5f46d81032f927164d28e61bc55fe32f89cc25f77f79d7",
+      "manifest_sha256": "9a874102929832397f5f46d81032f927164d28e61bc55fe32f89cc25f77f79d7"
+    },
+    "slime/utils/arguments.py": {
+      "published_path": "legacy/sources/common/slime/utils/arguments.py",
+      "sha256": "6047bfc94bb49adc6ede1b7fdcd8707e94b348260aa0f2b3ff2467f79574482c",
+      "manifest_sha256": "6047bfc94bb49adc6ede1b7fdcd8707e94b348260aa0f2b3ff2467f79574482c"
+    },
+    "slime/utils/train_dump_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/train_dump_utils.py",
+      "sha256": "e22bf1ba45802670ca78ab1f0d9934b8c9c0450c65455b85604b80fc1ba6c5e6",
+      "manifest_sha256": "e22bf1ba45802670ca78ab1f0d9934b8c9c0450c65455b85604b80fc1ba6c5e6"
+    },
+    "slime/utils/health_monitor.py": {
+      "published_path": "legacy/sources/common/slime/utils/health_monitor.py",
+      "sha256": "72983f0c294264c8186a5580d8f55213b6eabbd7dbdc77c6e4334492ad6a428f",
+      "manifest_sha256": "72983f0c294264c8186a5580d8f55213b6eabbd7dbdc77c6e4334492ad6a428f"
+    },
+    "slime/utils/training_reward_metrics.py": {
+      "published_path": "legacy/sources/common/slime/utils/training_reward_metrics.py",
+      "sha256": "ce6626195194d1cb83bc1de7227642caaa620f05f15f51dba4a308021cd1bd5e",
+      "manifest_sha256": "ce6626195194d1cb83bc1de7227642caaa620f05f15f51dba4a308021cd1bd5e"
+    },
+    "slime/utils/tensorboard_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/tensorboard_utils.py",
+      "sha256": "f139800d769172d1c028d5251c768cb8f10458603b5630ee13995e496fb71229",
+      "manifest_sha256": "f139800d769172d1c028d5251c768cb8f10458603b5630ee13995e496fb71229"
+    },
+    "slime/utils/processing_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/processing_utils.py",
+      "sha256": "196b7c21ce50f6ea06926828032eb3984bbb6c5c4973e1aea7feba1a0022473e",
+      "manifest_sha256": "196b7c21ce50f6ea06926828032eb3984bbb6c5c4973e1aea7feba1a0022473e"
+    },
+    "slime/utils/profile_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/profile_utils.py",
+      "sha256": "50edb46932d997ab058e136dff0d507e47d540e884882233511a487f8d38cd0e",
+      "manifest_sha256": "50edb46932d997ab058e136dff0d507e47d540e884882233511a487f8d38cd0e"
+    },
+    "slime/utils/external_utils/typer_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/external_utils/typer_utils.py",
+      "sha256": "f1a917227e9a25042151c28486d6170f26bd4a8dc220c8133bd83ddc3afb0035",
+      "manifest_sha256": "f1a917227e9a25042151c28486d6170f26bd4a8dc220c8133bd83ddc3afb0035"
+    },
+    "slime/utils/external_utils/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/utils/external_utils/command_utils.py": {
+      "published_path": "legacy/sources/common/slime/utils/external_utils/command_utils.py",
+      "sha256": "4933f8389adcdd0b803422aa322fe69912ed0a8159940888fa7237419e3093d5",
+      "manifest_sha256": "4933f8389adcdd0b803422aa322fe69912ed0a8159940888fa7237419e3093d5"
+    },
+    "slime/backends/__init__.py": {
+      "published_path": "legacy/sources/common/slime/backends/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "manifest_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "slime/backends/sglang_utils/sglang_config.py": {
+      "published_path": "legacy/sources/common/slime/backends/sglang_utils/sglang_config.py",
+      "sha256": "3b53b1050daa923191711e898928638d0cb7a19406178e6cd49aeb07d813f58e",
+      "manifest_sha256": "3b53b1050daa923191711e898928638d0cb7a19406178e6cd49aeb07d813f58e"
+    },
+    "slime/backends/sglang_utils/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/backends/sglang_utils/sglang_engine.py": {
+      "published_path": "legacy/sources/common/slime/backends/sglang_utils/sglang_engine.py",
+      "sha256": "beb3727ec92f10e223d592b9f6cff36399472068f32cb1ff202c715be3b52a24",
+      "manifest_sha256": "beb3727ec92f10e223d592b9f6cff36399472068f32cb1ff202c715be3b52a24"
+    },
+    "slime/backends/sglang_utils/arguments.py": {
+      "published_path": "legacy/sources/common/slime/backends/sglang_utils/arguments.py",
+      "sha256": "64bde0858cdbdd0edb6e97c51edd3a0ff12a769fc56c2a3adf61575ac3c61bf8",
+      "manifest_sha256": "64bde0858cdbdd0edb6e97c51edd3a0ff12a769fc56c2a3adf61575ac3c61bf8"
+    },
+    "slime/backends/megatron_utils/initialize.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/initialize.py",
+      "sha256": "3c858fb9257125fec3259e43b9495e7d917874db95133ce9ca183a052ae6d29a",
+      "manifest_sha256": "3c858fb9257125fec3259e43b9495e7d917874db95133ce9ca183a052ae6d29a"
+    },
+    "slime/backends/megatron_utils/ci_utils.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/ci_utils.py",
+      "sha256": "fd55f6fed9d57f91666dd0764ba812c08de5ed2d7e83b1c3a7b577ff6dbd2e1c",
+      "manifest_sha256": "fd55f6fed9d57f91666dd0764ba812c08de5ed2d7e83b1c3a7b577ff6dbd2e1c"
+    },
+    "slime/backends/megatron_utils/streaming_checkpoint.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/streaming_checkpoint.py",
+      "sha256": "1f9f084cb6ed59886be55dd5c1fee2ba47047c55cf60a6c1402244beedd8d9ee",
+      "manifest_sha256": "1f9f084cb6ed59886be55dd5c1fee2ba47047c55cf60a6c1402244beedd8d9ee"
+    },
+    "slime/backends/megatron_utils/sglang.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/sglang.py",
+      "sha256": "45e85af89e82d12bfc97d83d10e125d93664568adbd2b8fd963ae06a07f265ea",
+      "manifest_sha256": "45e85af89e82d12bfc97d83d10e125d93664568adbd2b8fd963ae06a07f265ea"
+    },
+    "slime/backends/megatron_utils/model.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/model.py",
+      "sha256": "50b64b9084cedce403b6bbe85f638a81f53405e5e2468a69fb9ad6bfdca50911",
+      "manifest_sha256": "50b64b9084cedce403b6bbe85f638a81f53405e5e2468a69fb9ad6bfdca50911"
+    },
+    "slime/backends/megatron_utils/actor.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/actor.py",
+      "sha256": "ccfc554e87672475e0cc27cc65a6951b873337ae5dfc4c6d7518d0202767d143",
+      "manifest_sha256": "ccfc554e87672475e0cc27cc65a6951b873337ae5dfc4c6d7518d0202767d143"
+    },
+    "slime/backends/megatron_utils/cp_utils.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/cp_utils.py",
+      "sha256": "60f1edf5c95170c1967adf04144f68b5679612bc9343096e097a4b7bf3dbc7ae",
+      "manifest_sha256": "60f1edf5c95170c1967adf04144f68b5679612bc9343096e097a4b7bf3dbc7ae"
+    },
+    "slime/backends/megatron_utils/data.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/data.py",
+      "sha256": "f2cef15080c5bb25eac3b2a2b425ec490a8b042a3ccd5e8f0ee14ea439403865",
+      "manifest_sha256": "f2cef15080c5bb25eac3b2a2b425ec490a8b042a3ccd5e8f0ee14ea439403865"
+    },
+    "slime/backends/megatron_utils/__init__.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/__init__.py",
+      "sha256": "db6e859bdacf4c4b65ba85c37e718e11ad04a53c368217516853d47fb6abe88d",
+      "manifest_sha256": "db6e859bdacf4c4b65ba85c37e718e11ad04a53c368217516853d47fb6abe88d"
+    },
+    "slime/backends/megatron_utils/checkpoint.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/checkpoint.py",
+      "sha256": "d97301b28d2c1b694e088322a673fbcb7ad2c61d32021d77cde7b00919dfbde9",
+      "manifest_sha256": "d97301b28d2c1b694e088322a673fbcb7ad2c61d32021d77cde7b00919dfbde9"
+    },
+    "slime/backends/megatron_utils/misc_utils.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/misc_utils.py",
+      "sha256": "8031be98b7aedbf84a3ad0802821994c6fb091d01d9c743ef3c4a6ece52b71c7",
+      "manifest_sha256": "8031be98b7aedbf84a3ad0802821994c6fb091d01d9c743ef3c4a6ece52b71c7"
+    },
+    "slime/backends/megatron_utils/loss.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/loss.py",
+      "sha256": "6d5ddfa355a759977a4a0ee48ead162ac62ce1c1c330248dde349d362c38ad84",
+      "manifest_sha256": "6d5ddfa355a759977a4a0ee48ead162ac62ce1c1c330248dde349d362c38ad84"
+    },
+    "slime/backends/megatron_utils/model_provider.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/model_provider.py",
+      "sha256": "efd1012c47f3c137b9cb6ea057559098dfaf5959ef49d11bc6b59e6a8ee57411",
+      "manifest_sha256": "efd1012c47f3c137b9cb6ea057559098dfaf5959ef49d11bc6b59e6a8ee57411"
+    },
+    "slime/backends/megatron_utils/arguments.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/arguments.py",
+      "sha256": "52b1d8b62ae5463c91ee7636c752ae09c00dbc5b2644dabce005e58be479ec34",
+      "manifest_sha256": "52b1d8b62ae5463c91ee7636c752ae09c00dbc5b2644dabce005e58be479ec34"
+    },
+    "slime/backends/megatron_utils/update_weight/update_weight_from_tensor.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/update_weight/update_weight_from_tensor.py",
+      "sha256": "5f3a3851409d6785135fe36a0ff86d043815d89dc551f004925d2d63787dfbaf",
+      "manifest_sha256": "5f3a3851409d6785135fe36a0ff86d043815d89dc551f004925d2d63787dfbaf"
+    },
+    "slime/backends/megatron_utils/update_weight/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/backends/megatron_utils/update_weight/hf_weight_iterator_bridge.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/update_weight/hf_weight_iterator_bridge.py",
+      "sha256": "542a6e3b16db1d85bc9db52f92e47a39b56576251fb7c350a9a74dcb8fafd6c3",
+      "manifest_sha256": "542a6e3b16db1d85bc9db52f92e47a39b56576251fb7c350a9a74dcb8fafd6c3"
+    },
+    "slime/backends/megatron_utils/update_weight/update_weight_from_distributed.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/update_weight/update_weight_from_distributed.py",
+      "sha256": "ea2585a9c60e7c52023da584385806883436770c502124dca4697d6d006d3a76",
+      "manifest_sha256": "ea2585a9c60e7c52023da584385806883436770c502124dca4697d6d006d3a76"
+    },
+    "slime/backends/megatron_utils/update_weight/hf_weight_iterator_direct.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/update_weight/hf_weight_iterator_direct.py",
+      "sha256": "974c157deca517d481afc7dc603b0ef997cb2e310bcfab0cb54246ab77f881ac",
+      "manifest_sha256": "974c157deca517d481afc7dc603b0ef997cb2e310bcfab0cb54246ab77f881ac"
+    },
+    "slime/backends/megatron_utils/update_weight/common.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/update_weight/common.py",
+      "sha256": "cdda0f2d5ea1b48c9c5d0bfc6208a1f974e59334555aa8de5e061257ebef39d0",
+      "manifest_sha256": "cdda0f2d5ea1b48c9c5d0bfc6208a1f974e59334555aa8de5e061257ebef39d0"
+    },
+    "slime/backends/megatron_utils/update_weight/hf_weight_iterator_base.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/update_weight/hf_weight_iterator_base.py",
+      "sha256": "c774520ecf2b59ea76c02d4240780ed1e3fb9ffcfe5fda05c943f482ec78f0e0",
+      "manifest_sha256": "c774520ecf2b59ea76c02d4240780ed1e3fb9ffcfe5fda05c943f482ec78f0e0"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/llama.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/llama.py",
+      "sha256": "e9223b10d7bf62b9acb3314f909831b0b12502451595763668c541ae0cd28399",
+      "manifest_sha256": "e9223b10d7bf62b9acb3314f909831b0b12502451595763668c541ae0cd28399"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/qwen3_next.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/qwen3_next.py",
+      "sha256": "88792a45b2652b58ea7c6831a2f107ee8a71a24cd13de0ea081312b9eb926cf6",
+      "manifest_sha256": "88792a45b2652b58ea7c6831a2f107ee8a71a24cd13de0ea081312b9eb926cf6"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/qwen2.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/qwen2.py",
+      "sha256": "fb18f23241200815a3ef21ea9eba8dd303877af7286a31bb814857342f9a2804",
+      "manifest_sha256": "fb18f23241200815a3ef21ea9eba8dd303877af7286a31bb814857342f9a2804"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/__init__.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/__init__.py",
+      "sha256": "022d8fe344a0d7d4044e621d548961a1a8f60a8c55a8cb6fa2daa48a21e66a5b",
+      "manifest_sha256": "022d8fe344a0d7d4044e621d548961a1a8f60a8c55a8cb6fa2daa48a21e66a5b"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/qwen3moe.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/qwen3moe.py",
+      "sha256": "59aef122cc8e193e69e8bc46b2a22fbb73daa28b5f5b9da06bb53a471dbbc5b9",
+      "manifest_sha256": "59aef122cc8e193e69e8bc46b2a22fbb73daa28b5f5b9da06bb53a471dbbc5b9"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/qwen3_5.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/qwen3_5.py",
+      "sha256": "e83cd55ba2cf81936ab72a6b0a8ae3c2cbd02de6a232094aec5dc215939ee639",
+      "manifest_sha256": "e83cd55ba2cf81936ab72a6b0a8ae3c2cbd02de6a232094aec5dc215939ee639"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/qwen3_vl.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/qwen3_vl.py",
+      "sha256": "823f53abfd272697c8c82876698d53d83101a0c66271d4d84ef49653b5b8c7b8",
+      "manifest_sha256": "823f53abfd272697c8c82876698d53d83101a0c66271d4d84ef49653b5b8c7b8"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/processors/quantizer_fp8.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/processors/quantizer_fp8.py",
+      "sha256": "9013f2821ce1bceaf7342462433e9449239551dbf6a6efc469e2d44b7192df99",
+      "manifest_sha256": "9013f2821ce1bceaf7342462433e9449239551dbf6a6efc469e2d44b7192df99"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/processors/__init__.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/processors/__init__.py",
+      "sha256": "d6f6ce107ec288d4eafd437baf046b57b6b939deaf7a2b97f845cb4ebd078e0e",
+      "manifest_sha256": "d6f6ce107ec288d4eafd437baf046b57b6b939deaf7a2b97f845cb4ebd078e0e"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/processors/padding_remover.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/processors/padding_remover.py",
+      "sha256": "64223e774ad8dbf51e92fad6dca181cc0123e5ba80e99c86fa74a544c70e4659",
+      "manifest_sha256": "64223e774ad8dbf51e92fad6dca181cc0123e5ba80e99c86fa74a544c70e4659"
+    },
+    "slime/backends/megatron_utils/megatron_to_hf/processors/quantizer_compressed_tensors.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/megatron_to_hf/processors/quantizer_compressed_tensors.py",
+      "sha256": "5f667343d552e02058507d6a408b6a9e1fe2c7c686ce14db2ce4ba1064410aa9",
+      "manifest_sha256": "5f667343d552e02058507d6a408b6a9e1fe2c7c686ce14db2ce4ba1064410aa9"
+    },
+    "slime/backends/megatron_utils/kernels/fp8_kernel.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/kernels/fp8_kernel.py",
+      "sha256": "0c3f8121d9423de9b5109c9015f1b5e4bb0622574fa00b38c267e900ac4bd487",
+      "manifest_sha256": "0c3f8121d9423de9b5109c9015f1b5e4bb0622574fa00b38c267e900ac4bd487"
+    },
+    "slime/backends/megatron_utils/kernels/int4_qat/setup.py": {
+      "published_path": "legacy/sources/common/slime/backends/megatron_utils/kernels/int4_qat/setup.py",
+      "sha256": "f8a9389797532d24701698e96222ca35d6a81236fe02a4a0dbcc04515614cde6",
+      "manifest_sha256": "f8a9389797532d24701698e96222ca35d6a81236fe02a4a0dbcc04515614cde6"
+    },
+    "slime/rollout/base_types.py": {
+      "published_path": "legacy/sources/common/slime/rollout/base_types.py",
+      "sha256": "6195ae1d3f122e9b2fd3ed6b63f19aea239275ca79b47ee074babf2f8f2b3f40",
+      "manifest_sha256": "6195ae1d3f122e9b2fd3ed6b63f19aea239275ca79b47ee074babf2f8f2b3f40"
+    },
+    "slime/rollout/sft_rollout.py": {
+      "published_path": "legacy/sources/common/slime/rollout/sft_rollout.py",
+      "sha256": "a9c6f089d64306a2b7970b7ce04ab79634be435268552e5ad43fea6a92f46b9c",
+      "manifest_sha256": "a9c6f089d64306a2b7970b7ce04ab79634be435268552e5ad43fea6a92f46b9c"
+    },
+    "slime/rollout/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/rollout/sleep_rollout.py": {
+      "published_path": "legacy/sources/common/slime/rollout/sleep_rollout.py",
+      "sha256": "5c3dbcc2e9a595e785446ea8e3ff470a198396815216724a03d879375f6b4b9d",
+      "manifest_sha256": "5c3dbcc2e9a595e785446ea8e3ff470a198396815216724a03d879375f6b4b9d"
+    },
+    "slime/rollout/data_source.py": {
+      "published_path": "legacy/sources/common/slime/rollout/data_source.py",
+      "sha256": "b039db6ba0a0a3747e4a6ccfd892cfdb56d7fed6a4f5ad8039d9ef7e542c6083",
+      "manifest_sha256": "b039db6ba0a0a3747e4a6ccfd892cfdb56d7fed6a4f5ad8039d9ef7e542c6083"
+    },
+    "slime/rollout/on_policy_distillation.py": {
+      "published_path": "legacy/sources/common/slime/rollout/on_policy_distillation.py",
+      "sha256": "a0444ad2bcf708402dcec773879eb87777cd6e478041bdcf52998c690f691ca4",
+      "manifest_sha256": "a0444ad2bcf708402dcec773879eb87777cd6e478041bdcf52998c690f691ca4"
+    },
+    "slime/rollout/query_selector.py": {
+      "published_path": "legacy/sources/common/slime/rollout/query_selector.py",
+      "sha256": "779272cd6e27be4fe41b92453267ffd2da1ce5de9369b90c44528a41bd0235e0",
+      "manifest_sha256": "779272cd6e27be4fe41b92453267ffd2da1ce5de9369b90c44528a41bd0235e0"
+    },
+    "slime/rollout/sglang_rollout.py": {
+      "published_path": "legacy/sources/common/slime/rollout/sglang_rollout.py",
+      "sha256": "d9472754e989c1087a8712cb159fcd22e54f1913aaf95a331b7ddb8538c774b6",
+      "manifest_sha256": "d9472754e989c1087a8712cb159fcd22e54f1913aaf95a331b7ddb8538c774b6"
+    },
+    "slime/rollout/filter_hub/dynamic_sampling_filters.py": {
+      "published_path": "legacy/sources/common/slime/rollout/filter_hub/dynamic_sampling_filters.py",
+      "sha256": "b12a7ee2bf28512d07f8fbd3560f01ba23f308c7d5c8c5cb8787903aff0e3186",
+      "manifest_sha256": "b12a7ee2bf28512d07f8fbd3560f01ba23f308c7d5c8c5cb8787903aff0e3186"
+    },
+    "slime/rollout/filter_hub/base_types.py": {
+      "published_path": "legacy/sources/common/slime/rollout/filter_hub/base_types.py",
+      "sha256": "32a491931034bbf87a1f9bf48ff175fe2c4f05679515895f9ae283433e77d930",
+      "manifest_sha256": "32a491931034bbf87a1f9bf48ff175fe2c4f05679515895f9ae283433e77d930"
+    },
+    "slime/rollout/filter_hub/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/rollout/rm_hub/gpqa.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/gpqa.py",
+      "sha256": "cc79c1d6ddebabbe6d7c2a40c32e35151eddfe737a1efccb106d690b8756a4b1",
+      "manifest_sha256": "cc79c1d6ddebabbe6d7c2a40c32e35151eddfe737a1efccb106d690b8756a4b1"
+    },
+    "slime/rollout/rm_hub/math_dapo_utils.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/math_dapo_utils.py",
+      "sha256": "3d6b61357e2ee8f1704ba0eb1726ea2dd65dbf9c76e963f20d5ff6598b8f7b23",
+      "manifest_sha256": "3d6b61357e2ee8f1704ba0eb1726ea2dd65dbf9c76e963f20d5ff6598b8f7b23"
+    },
+    "slime/rollout/rm_hub/__init__.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/__init__.py",
+      "sha256": "d0bbd0cf462476f7e8c68a45ef420a6aad4be0acb4427e383cc8667c0ba31ec9",
+      "manifest_sha256": "d0bbd0cf462476f7e8c68a45ef420a6aad4be0acb4427e383cc8667c0ba31ec9"
+    },
+    "slime/rollout/rm_hub/f1.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/f1.py",
+      "sha256": "89457e8e95d7acdacd52a39044dd0a4b0c5d4cfa638dc1cdb8ce96e03620de6b",
+      "manifest_sha256": "89457e8e95d7acdacd52a39044dd0a4b0c5d4cfa638dc1cdb8ce96e03620de6b"
+    },
+    "slime/rollout/rm_hub/ifbench.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/ifbench.py",
+      "sha256": "fa3e2475b676714dedd0bef56ef45febe694f673eb331c3dcddf6b3bfb2ebb83",
+      "manifest_sha256": "fa3e2475b676714dedd0bef56ef45febe694f673eb331c3dcddf6b3bfb2ebb83"
+    },
+    "slime/rollout/rm_hub/math_utils.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/math_utils.py",
+      "sha256": "cd884f4686ab3a1e0664ea09b2c15a5ebbf2b7d40b799c68ae5bbc0978637d32",
+      "manifest_sha256": "cd884f4686ab3a1e0664ea09b2c15a5ebbf2b7d40b799c68ae5bbc0978637d32"
+    },
+    "slime/rollout/rm_hub/deepscaler.py": {
+      "published_path": "legacy/sources/common/slime/rollout/rm_hub/deepscaler.py",
+      "sha256": "7be863a12650d5054f5245bee0a9f01e1efe4b314db2e272c9d4261e18feb0a0",
+      "manifest_sha256": "7be863a12650d5054f5245bee0a9f01e1efe4b314db2e272c9d4261e18feb0a0"
+    },
+    "slime/ray/rollout.py": {
+      "published_path": "legacy/sources/common/slime/ray/rollout.py",
+      "sha256": "1492236a4c75faf514b804ca582db4a3c76366580b86007aa6a629b3a318b487",
+      "manifest_sha256": "1492236a4c75faf514b804ca582db4a3c76366580b86007aa6a629b3a318b487"
+    },
+    "slime/ray/ray_actor.py": {
+      "published_path": "legacy/sources/common/slime/ray/ray_actor.py",
+      "sha256": "4850b94683590d7e2248789e6a2ab271080cdbdbc98db8b8842ddfffc25f0556",
+      "manifest_sha256": "4850b94683590d7e2248789e6a2ab271080cdbdbc98db8b8842ddfffc25f0556"
+    },
+    "slime/ray/placement_group.py": {
+      "published_path": "legacy/sources/common/slime/ray/placement_group.py",
+      "sha256": "b576c8ffe25f80fbfc7728630f15f12628c583ab29b46f6c14fb8a8e2eb706c4",
+      "manifest_sha256": "b576c8ffe25f80fbfc7728630f15f12628c583ab29b46f6c14fb8a8e2eb706c4"
+    },
+    "slime/ray/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime/ray/utils.py": {
+      "published_path": "legacy/sources/common/slime/ray/utils.py",
+      "sha256": "0d3221ac0c39e4feebdc5955d51928d601678ca8915cb49520f734a0b35f4531",
+      "manifest_sha256": "0d3221ac0c39e4feebdc5955d51928d601678ca8915cb49520f734a0b35f4531"
+    },
+    "slime/ray/actor_group.py": {
+      "published_path": "legacy/sources/common/slime/ray/actor_group.py",
+      "sha256": "ba7a69cd59dd33712acb72315df6217bb191e26c73947873f1570b9c773c8745",
+      "manifest_sha256": "ba7a69cd59dd33712acb72315df6217bb191e26c73947873f1570b9c773c8745"
+    },
+    "slime/ray/train_actor.py": {
+      "published_path": "legacy/sources/common/slime/ray/train_actor.py",
+      "sha256": "f59d4fbf6a8571bc8275956c0bd8de520023955b4003e0f75cc1ad6507fe7cb3",
+      "manifest_sha256": "f59d4fbf6a8571bc8275956c0bd8de520023955b4003e0f75cc1ad6507fe7cb3"
+    },
+    "openwebrl/rl_recipe.py": {
+      "published_path": "legacy/sources/common/openwebrl/rl_recipe.py",
+      "sha256": "a7cbeb5e7b829c3faa668f439f0ff6c93ae01255fa1d574b64eb6a9bd7d5ea28",
+      "manifest_sha256": "a7cbeb5e7b829c3faa668f439f0ff6c93ae01255fa1d574b64eb6a9bd7d5ea28"
+    },
+    "openwebrl/arm_failure_aux.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_failure_aux.py",
+      "sha256": "d857e427f7c327cb55a89dbc71149f3d6706dbada9d9e2092b41a6bd7d364fff",
+      "manifest_sha256": "d857e427f7c327cb55a89dbc71149f3d6706dbada9d9e2092b41a6bd7d364fff"
+    },
+    "openwebrl/reward_browser.py": {
+      "published_path": "legacy/sources/common/openwebrl/reward_browser.py",
+      "sha256": "61cbb7a231985eed64bf451bde70cafa8d50b3cc495f9f52f453c1e6d32322af",
+      "manifest_sha256": "61cbb7a231985eed64bf451bde70cafa8d50b3cc495f9f52f453c1e6d32322af"
+    },
+    "openwebrl/responses_actor_history.py": {
+      "published_path": "legacy/sources/common/openwebrl/responses_actor_history.py",
+      "sha256": "2db00e613605ba7f3e596c19ae4acc7f6a797355d96824c12d5b82e34bbb3c8e",
+      "manifest_sha256": "2db00e613605ba7f3e596c19ae4acc7f6a797355d96824c12d5b82e34bbb3c8e"
+    },
+    "openwebrl/compute_eval_success_rate.py": {
+      "published_path": "legacy/sources/common/openwebrl/compute_eval_success_rate.py",
+      "sha256": "3ea6179fd941f49a7780f5a2ed53b4e2d2f35fddb5a1ca9e3a392587eccc8ef8",
+      "manifest_sha256": "3ea6179fd941f49a7780f5a2ed53b4e2d2f35fddb5a1ca9e3a392587eccc8ef8"
+    },
+    "openwebrl/arm_inference.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_inference.py",
+      "sha256": "c2666dbef1c8ac41a7d07deba18303663664810874d1ae3a7b30e6e0af7c3873",
+      "manifest_sha256": "c2666dbef1c8ac41a7d07deba18303663664810874d1ae3a7b30e6e0af7c3873"
+    },
+    "openwebrl/arm_turn_bonus.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_turn_bonus.py",
+      "sha256": "648752374b2bf84d9dce5fedba53b18c91e19dec792769cb054a0e55fb4ffd1a",
+      "manifest_sha256": "648752374b2bf84d9dce5fedba53b18c91e19dec792769cb054a0e55fb4ffd1a"
+    },
+    "openwebrl/browser_actor_protocol.py": {
+      "published_path": "legacy/sources/common/openwebrl/browser_actor_protocol.py",
+      "sha256": "0c84c09241deaba4b804e02f7dc3357a603c5dd351ce1639a06b2bc04bce4d37",
+      "manifest_sha256": "0c84c09241deaba4b804e02f7dc3357a603c5dd351ce1639a06b2bc04bce4d37"
+    },
+    "openwebrl/arm_quality_audit.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_quality_audit.py",
+      "sha256": "5b47ccfe434f22d7d55d4779e78cb9fd8f85b0f6389c0c39f8922f35787e2040",
+      "manifest_sha256": "5b47ccfe434f22d7d55d4779e78cb9fd8f85b0f6389c0c39f8922f35787e2040"
+    },
+    "openwebrl/response_format.py": {
+      "published_path": "legacy/sources/common/openwebrl/response_format.py",
+      "sha256": "125b2b16e8b9c2933a18786066c25de8354092b6968f675320a0342412be8a4c",
+      "manifest_sha256": "125b2b16e8b9c2933a18786066c25de8354092b6968f675320a0342412be8a4c"
+    },
+    "openwebrl/sol_serial_parallel_transport.py": {
+      "published_path": "legacy/sources/common/openwebrl/sol_serial_parallel_transport.py",
+      "sha256": "51eae60b111dc9fd7fb7dc3cfd789a7c2e2c1111ed4a8ac722d725e9125fb7a9",
+      "manifest_sha256": "51eae60b111dc9fd7fb7dc3cfd789a7c2e2c1111ed4a8ac722d725e9125fb7a9"
+    },
+    "openwebrl/visualize_eval_trajectory.py": {
+      "published_path": "legacy/sources/common/openwebrl/visualize_eval_trajectory.py",
+      "sha256": "417dd8763ca7a8ca307d728f5f7b45fbf866cd4656989a2060d1969069f0e973",
+      "manifest_sha256": "417dd8763ca7a8ca307d728f5f7b45fbf866cd4656989a2060d1969069f0e973"
+    },
+    "openwebrl/reasoning_actor_eval.py": {
+      "published_path": "legacy/sources/common/openwebrl/reasoning_actor_eval.py",
+      "sha256": "29ba6eafb3218a4f4d589cb43d2e9b3127cde606d392d10567139aeae004bc72",
+      "manifest_sha256": "29ba6eafb3218a4f4d589cb43d2e9b3127cde606d392d10567139aeae004bc72"
+    },
+    "openwebrl/arm_inference_flops.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_inference_flops.py",
+      "sha256": "57d7a038bf4b0aaf443ebcc13da841b37edd30f210ec730e8f11ab05526957ac",
+      "manifest_sha256": "57d7a038bf4b0aaf443ebcc13da841b37edd30f210ec730e8f11ab05526957ac"
+    },
+    "openwebrl/luna_qwen_eval.py": {
+      "published_path": "legacy/sources/common/openwebrl/luna_qwen_eval.py",
+      "sha256": "92197373cbeba28b50c409f045b458cd7f4844adbc67770f94907d951930423c",
+      "manifest_sha256": "92197373cbeba28b50c409f045b458cd7f4844adbc67770f94907d951930423c"
+    },
+    "openwebrl/arm_task_rescue.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_task_rescue.py",
+      "sha256": "6cec94db90a5670e2f431d7834cd2463e206913d7cf1c993fe9a5ad194acea16",
+      "manifest_sha256": "6cec94db90a5670e2f431d7834cd2463e206913d7cf1c993fe9a5ad194acea16"
+    },
+    "openwebrl/reasoning_actor_policy.py": {
+      "published_path": "legacy/sources/common/openwebrl/reasoning_actor_policy.py",
+      "sha256": "8a71c8c99e519e7657c141e192540c72ec5538cb783c1f06eb0d987aad057a9d",
+      "manifest_sha256": "8a71c8c99e519e7657c141e192540c72ec5538cb783c1f06eb0d987aad057a9d"
+    },
+    "openwebrl/luna_qwen_policy.py": {
+      "published_path": "legacy/sources/common/openwebrl/luna_qwen_policy.py",
+      "sha256": "a10f9e9e3189962262149e523e2d0eb8ecfe64eb557a90feddff4d32656e5f87",
+      "manifest_sha256": "a10f9e9e3189962262149e523e2d0eb8ecfe64eb557a90feddff4d32656e5f87"
+    },
+    "openwebrl/__init__.py": {
+      "published_path": "legacy/sources/common/openwebrl/__init__.py",
+      "sha256": "54601362f450ae27af230fb51317331c01b040f2f7db9ef65032410ebbf13573",
+      "manifest_sha256": "54601362f450ae27af230fb51317331c01b040f2f7db9ef65032410ebbf13573"
+    },
+    "openwebrl/luna_qwen_full_eval.py": {
+      "published_path": "legacy/sources/common/openwebrl/luna_qwen_full_eval.py",
+      "sha256": "cdb0cba76007eb918931d25add1e6c02eb6b6ab0c2ffb47d964dd77f9a015457",
+      "manifest_sha256": "cdb0cba76007eb918931d25add1e6c02eb6b6ab0c2ffb47d964dd77f9a015457"
+    },
+    "openwebrl/visualize_debug_trace.py": {
+      "published_path": "legacy/sources/common/openwebrl/visualize_debug_trace.py",
+      "sha256": "6b45d136bfa16325243bc17735a1e513555e91660a9dafd5d53cbab180f7755d",
+      "manifest_sha256": "6b45d136bfa16325243bc17735a1e513555e91660a9dafd5d53cbab180f7755d"
+    },
+    "openwebrl/generate_browser.py": {
+      "published_path": "legacy/sources/common/openwebrl/generate_browser.py",
+      "sha256": "ba3c4fb4e807f63e9fb8c9487826fbc71dac69594b78188c1fe3ec8ffaed54b8",
+      "manifest_sha256": "ba3c4fb4e807f63e9fb8c9487826fbc71dac69594b78188c1fe3ec8ffaed54b8"
+    },
+    "openwebrl/arm_terminal_budget.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_terminal_budget.py",
+      "sha256": "32839b1013daa791dacaa60535d06639126df3f55d55d0949540cdbaa42f468a",
+      "manifest_sha256": "32839b1013daa791dacaa60535d06639126df3f55d55d0949540cdbaa42f468a"
+    },
+    "openwebrl/arm_task_screen.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_task_screen.py",
+      "sha256": "3456d9238471d5ed4d4b40d527eb80185c39657f5b1ce735c19ced20d99de81a",
+      "manifest_sha256": "3456d9238471d5ed4d4b40d527eb80185c39657f5b1ce735c19ced20d99de81a"
+    },
+    "openwebrl/arm_failure_bonus.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_failure_bonus.py",
+      "sha256": "593190d62dedbede73ab682c894b9e169674155d1d1acaf78fe7cd5e4ac42421",
+      "manifest_sha256": "593190d62dedbede73ab682c894b9e169674155d1d1acaf78fe7cd5e4ac42421"
+    },
+    "openwebrl/arm_controlled_inference.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_controlled_inference.py",
+      "sha256": "ee3d789b22414d2dc263118d0b05a05de9378150c8aa11f977f492ba524c220b",
+      "manifest_sha256": "ee3d789b22414d2dc263118d0b05a05de9378150c8aa11f977f492ba524c220b"
+    },
+    "openwebrl/arm_failure_additive.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_failure_additive.py",
+      "sha256": "cee9f44e9d42eb103afedf44d327caf4d8a551066e0ca4d8931213bd2021244c",
+      "manifest_sha256": "cee9f44e9d42eb103afedf44d327caf4d8a551066e0ca4d8931213bd2021244c"
+    },
+    "openwebrl/arm_turn_bonus_cycles.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_turn_bonus_cycles.py",
+      "sha256": "db4e5f05866a691fdf59734f9a177f0bf119a98b68496c8e3ff0ec62aa78fd3b",
+      "manifest_sha256": "db4e5f05866a691fdf59734f9a177f0bf119a98b68496c8e3ff0ec62aa78fd3b"
+    },
+    "openwebrl/arm_turn_bonus_runtime.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_turn_bonus_runtime.py",
+      "sha256": "70c603e6093349195e4aaa230793d028626f755151d5c42e3c6c72d84db376c4",
+      "manifest_sha256": "70c603e6093349195e4aaa230793d028626f755151d5c42e3c6c72d84db376c4"
+    },
+    "openwebrl/recipe_data.py": {
+      "published_path": "legacy/sources/common/openwebrl/recipe_data.py",
+      "sha256": "79a4c7e1cb8e6932e0f69cad06c511376c6f696fb2b9e8cfa424b280f9de3ac6",
+      "manifest_sha256": "79a4c7e1cb8e6932e0f69cad06c511376c6f696fb2b9e8cfa424b280f9de3ac6"
+    },
+    "openwebrl/arm_task_success.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_task_success.py",
+      "sha256": "3cdd9b1d486e78463fa2e8f6ebb09fbc0c996399ec09c4ee2854a7edd9654011",
+      "manifest_sha256": "3cdd9b1d486e78463fa2e8f6ebb09fbc0c996399ec09c4ee2854a7edd9654011"
+    },
+    "openwebrl/luna_qwen_metrics.py": {
+      "published_path": "legacy/sources/common/openwebrl/luna_qwen_metrics.py",
+      "sha256": "62b07fdefda95185df5fddadf6f707e231de94545fa8383fb303a36882385125",
+      "manifest_sha256": "62b07fdefda95185df5fddadf6f707e231de94545fa8383fb303a36882385125"
+    },
+    "openwebrl/feedback_utils.py": {
+      "published_path": "legacy/sources/common/openwebrl/feedback_utils.py",
+      "sha256": "a3837ed1ad795a675cb4e3ccda6fa5e6b58248e7f1cc8ed074610b0e4d22ed8a",
+      "manifest_sha256": "a3837ed1ad795a675cb4e3ccda6fa5e6b58248e7f1cc8ed074610b0e4d22ed8a"
+    },
+    "openwebrl/arm_rescue_yield.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_rescue_yield.py",
+      "sha256": "8044098aa0b30418d2e0d25e694093adee2967cdd0c0bb8e1b3b0f16797f258e",
+      "manifest_sha256": "8044098aa0b30418d2e0d25e694093adee2967cdd0c0bb8e1b3b0f16797f258e"
+    },
+    "openwebrl/arm_task_screen_sharded.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_task_screen_sharded.py",
+      "sha256": "39ed8b8bc74ae3739ec0c6054c2d2b927b2536d8c558f41fdfab7bc249d106d4",
+      "manifest_sha256": "39ed8b8bc74ae3739ec0c6054c2d2b927b2536d8c558f41fdfab7bc249d106d4"
+    },
+    "openwebrl/outcome_validity.py": {
+      "published_path": "legacy/sources/common/openwebrl/outcome_validity.py",
+      "sha256": "4046dbe9394c698f0367916d2a5f99d57295def4822da56cf3e8ca059b96c18b",
+      "manifest_sha256": "4046dbe9394c698f0367916d2a5f99d57295def4822da56cf3e8ca059b96c18b"
+    },
+    "openwebrl/sol_serial_parallel_eval.py": {
+      "published_path": "legacy/sources/common/openwebrl/sol_serial_parallel_eval.py",
+      "sha256": "2332058a3368ed27c950a82dba714b0c8c6e1b8cc4feaf13ac9cb2ef3ba275f4",
+      "manifest_sha256": "2332058a3368ed27c950a82dba714b0c8c6e1b8cc4feaf13ac9cb2ef3ba275f4"
+    },
+    "openwebrl/sol_serial_parallel_lineage.py": {
+      "published_path": "legacy/sources/common/openwebrl/sol_serial_parallel_lineage.py",
+      "sha256": "fdc9b15a7745e97a91a547a5c614f0caeb3a40269859b23ba238b5426d360409",
+      "manifest_sha256": "fdc9b15a7745e97a91a547a5c614f0caeb3a40269859b23ba238b5426d360409"
+    },
+    "openwebrl/arm_prefix_pilot.py": {
+      "published_path": "legacy/sources/common/openwebrl/arm_prefix_pilot.py",
+      "sha256": "5157a6999ea9decc3dc1ab4effc9520fb68a843ce73459886d7d1ef8209ff95a",
+      "manifest_sha256": "5157a6999ea9decc3dc1ab4effc9520fb68a843ce73459886d7d1ef8209ff95a"
+    },
+    "openwebrl/run_evaluate.py": {
+      "published_path": "legacy/sources/common/openwebrl/run_evaluate.py",
+      "sha256": "7777e90346932493d0e4544806c1ae48a77f9ab65897151595d41934fe87b9ce",
+      "manifest_sha256": "7777e90346932493d0e4544806c1ae48a77f9ab65897151595d41934fe87b9ce"
+    },
+    "openwebrl/sol_serial_parallel_policy.py": {
+      "published_path": "legacy/sources/common/openwebrl/sol_serial_parallel_policy.py",
+      "sha256": "2696d6539f2439e7a04c647f2fd842a42cdd47f446cb824349b825184c46f4fa",
+      "manifest_sha256": "2696d6539f2439e7a04c647f2fd842a42cdd47f446cb824349b825184c46f4fa"
+    },
+    "openwebrl/eval_monitor.py": {
+      "published_path": "legacy/sources/common/openwebrl/eval_monitor.py",
+      "sha256": "8a37c01b9c5928979a1f1e8360dee954a5f87d69c5b110c82a2825ed5ea65549",
+      "manifest_sha256": "8a37c01b9c5928979a1f1e8360dee954a5f87d69c5b110c82a2825ed5ea65549"
+    },
+    "openwebrl/adapters/__init__.py": {
+      "published_path": "legacy/sources/common/openwebrl/adapters/__init__.py",
+      "sha256": "1d5052e9ce20a2ce4fd33f4a05b6e9b6781e52a342a48a085fbae4b4f83b86dd",
+      "manifest_sha256": "1d5052e9ce20a2ce4fd33f4a05b6e9b6781e52a342a48a085fbae4b4f83b86dd"
+    },
+    "openwebrl/adapters/browser_adapter.py": {
+      "published_path": "legacy/sources/common/openwebrl/adapters/browser_adapter.py",
+      "sha256": "ca873c9dee46970fe6b1535a25f301987fb861cfa9f88eb4921e0b069b3405a9",
+      "manifest_sha256": "ca873c9dee46970fe6b1535a25f301987fb861cfa9f88eb4921e0b069b3405a9"
+    },
+    "openwebrl/judge/single_file_openai_judge_inference.py": {
+      "published_path": "legacy/sources/common/openwebrl/judge/single_file_openai_judge_inference.py",
+      "sha256": "218b6ac9700abb06147edc78d0d094cf8ac90b4a2486ae921e406dfbaf2f8e81",
+      "manifest_sha256": "218b6ac9700abb06147edc78d0d094cf8ac90b4a2486ae921e406dfbaf2f8e81"
+    },
+    "openwebrl/judge/single_file_judge_inference.py": {
+      "published_path": "legacy/sources/common/openwebrl/judge/single_file_judge_inference.py",
+      "sha256": "42bd84d34d63b752a1d40acd1b020b8a5d0009e3f4ee81f618b8ff46be6c1321",
+      "manifest_sha256": "42bd84d34d63b752a1d40acd1b020b8a5d0009e3f4ee81f618b8ff46be6c1321"
+    },
+    "openwebrl/eval/_shared.py": {
+      "published_path": "legacy/sources/common/openwebrl/eval/_shared.py",
+      "sha256": "943933b29d04735e9225b8818d7333c887060dfefac3c672723e827eb74bde0d",
+      "manifest_sha256": "943933b29d04735e9225b8818d7333c887060dfefac3c672723e827eb74bde0d"
+    },
+    "openwebrl/eval/reward_online_mind2web.py": {
+      "published_path": "legacy/sources/common/openwebrl/eval/reward_online_mind2web.py",
+      "sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583",
+      "manifest_sha256": "b1f2c30c852b36d8049e23bd8ef4efb44a0786742449b5e7ef4e5a7ea55af583"
+    },
+    "openwebrl/eval/reward_webvoyager.py": {
+      "published_path": "legacy/sources/common/openwebrl/eval/reward_webvoyager.py",
+      "sha256": "433b946f79f5df2b73fffc3068ac4b8453dcb835210d299cce9b2adcea7368dd",
+      "manifest_sha256": "433b946f79f5df2b73fffc3068ac4b8453dcb835210d299cce9b2adcea7368dd"
+    },
+    "openwebrl/eval/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "openwebrl/eval/reward_deepshop.py": {
+      "published_path": "legacy/sources/common/openwebrl/eval/reward_deepshop.py",
+      "sha256": "e469895d8fe8bc67d1a965178febcb33d792245b12850da55925ee505b6f23bf",
+      "manifest_sha256": "e469895d8fe8bc67d1a965178febcb33d792245b12850da55925ee505b6f23bf"
+    },
+    "openwebrl/docker/env_server.py": {
+      "published_path": "legacy/sources/common/openwebrl/docker/env_server.py",
+      "sha256": "a3e4df8da9055648879a05beb375e030b07be3f9df0b7409cb18a7abf6b9ded7",
+      "manifest_sha256": "a3e4df8da9055648879a05beb375e030b07be3f9df0b7409cb18a7abf6b9ded7"
+    },
+    "openwebrl/base/adapter.py": {
+      "published_path": "legacy/sources/common/openwebrl/base/adapter.py",
+      "sha256": "818ac76f1a6c03628097cb928c2689d3d4ae32351a38a3cfbd51b95f8c9f86ab",
+      "manifest_sha256": "818ac76f1a6c03628097cb928c2689d3d4ae32351a38a3cfbd51b95f8c9f86ab"
+    },
+    "openwebrl/base/__init__.py": {
+      "published_path": "legacy/sources/common/openwebrl/base/__init__.py",
+      "sha256": "cf460ced651bd6e9d793518584eec8e7595ce471d07f0195909fc00f710f4df5",
+      "manifest_sha256": "cf460ced651bd6e9d793518584eec8e7595ce471d07f0195909fc00f710f4df5"
+    },
+    "openwebrl/base/utils.py": {
+      "published_path": "legacy/sources/common/openwebrl/base/utils.py",
+      "sha256": "843f0b98ce2502370544877214e7367faceb29c22fdf3c9d35751068144dc383",
+      "manifest_sha256": "843f0b98ce2502370544877214e7367faceb29c22fdf3c9d35751068144dc383"
+    },
+    "openwebrl/base/types.py": {
+      "published_path": "legacy/sources/common/openwebrl/base/types.py",
+      "sha256": "6a09147bae45c42e5a732c8560cf85b945980fc2e737a2adad31849380608c88",
+      "manifest_sha256": "6a09147bae45c42e5a732c8560cf85b945980fc2e737a2adad31849380608c88"
+    },
+    "openwebrl/base/registry.py": {
+      "published_path": "legacy/sources/common/openwebrl/base/registry.py",
+      "sha256": "101ef85eff6f42f2369de9c4541a5a1e535d97e46b62714cc403c1c1794a3791",
+      "manifest_sha256": "101ef85eff6f42f2369de9c4541a5a1e535d97e46b62714cc403c1c1794a3791"
+    },
+    "openwebrl/env/browser_runtime.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/browser_runtime.py",
+      "sha256": "16a14e40766a8f8f5c2d62995f49127b817b5f91ca6e90ad4b1c9e97a6e04069",
+      "manifest_sha256": "16a14e40766a8f8f5c2d62995f49127b817b5f91ca6e90ad4b1c9e97a6e04069"
+    },
+    "openwebrl/env/remote_env.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/remote_env.py",
+      "sha256": "589e1178f9b8d8ae24414295e3dc1ba4ef7d1cf0272d5d702b22631d674201c1",
+      "manifest_sha256": "589e1178f9b8d8ae24414295e3dc1ba4ef7d1cf0272d5d702b22631d674201c1"
+    },
+    "openwebrl/env/browser_use_env.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/browser_use_env.py",
+      "sha256": "fcac7c7e73d96cde643324b1036e985b5f645e5c7962258e91d9fd1e3cfaa5b9",
+      "manifest_sha256": "fcac7c7e73d96cde643324b1036e985b5f645e5c7962258e91d9fd1e3cfaa5b9"
+    },
+    "openwebrl/env/config.yaml": {
+      "published_path": "legacy/sources/common/openwebrl/env/config.yaml",
+      "sha256": "b51c9a155a76bc2680a6ab070bb07fa4e37ac7224dc81d6a74e6e390c58be245",
+      "manifest_sha256": "b51c9a155a76bc2680a6ab070bb07fa4e37ac7224dc81d6a74e6e390c58be245"
+    },
+    "openwebrl/env/sandbox_env.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/sandbox_env.py",
+      "sha256": "fbabeb2a2c0bcec833f39cea9548dd3418757bdb6ce55b072d63d4b972d9ef6b",
+      "manifest_sha256": "fbabeb2a2c0bcec833f39cea9548dd3418757bdb6ce55b072d63d4b972d9ef6b"
+    },
+    "openwebrl/env/local_process_env.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/local_process_env.py",
+      "sha256": "4018f6d2e6284cbab18b77fd9fe70e5923aa8a8ddd00bac796d3d78bd39a0ee4",
+      "manifest_sha256": "4018f6d2e6284cbab18b77fd9fe70e5923aa8a8ddd00bac796d3d78bd39a0ee4"
+    },
+    "openwebrl/env/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "openwebrl/env/web_env.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/web_env.py",
+      "sha256": "319cfdbae23c60563da3818b822d67e17093ed0ff81c637a1ab8afc7d04d4004",
+      "manifest_sha256": "319cfdbae23c60563da3818b822d67e17093ed0ff81c637a1ab8afc7d04d4004"
+    },
+    "openwebrl/env/base_env.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/base_env.py",
+      "sha256": "b4a55063ed11e10bad15af0be333049d6ed363a8ead06f4d1f3e5b247ac56986",
+      "manifest_sha256": "b4a55063ed11e10bad15af0be333049d6ed363a8ead06f4d1f3e5b247ac56986"
+    },
+    "openwebrl/env/utils/js.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/utils/js.py",
+      "sha256": "8beabfa1b36aededc78c6da8be1208b9360d50ea6461c4b213973f39cd823aa1",
+      "manifest_sha256": "8beabfa1b36aededc78c6da8be1208b9360d50ea6461c4b213973f39cd823aa1"
+    },
+    "openwebrl/env/utils/keyboard.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/utils/keyboard.py",
+      "sha256": "34d0f611a8e4f22cb74f714ca8005d6be98f7105e927b035f4c29b087b363b53",
+      "manifest_sha256": "34d0f611a8e4f22cb74f714ca8005d6be98f7105e927b035f4c29b087b363b53"
+    },
+    "openwebrl/env/eval/evaluators.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/eval/evaluators.py",
+      "sha256": "d1696cdf8c2c16781a28ee9402ea0a33f34fec0776a27d6c3ed7e529263b9cba",
+      "manifest_sha256": "d1696cdf8c2c16781a28ee9402ea0a33f34fec0776a27d6c3ed7e529263b9cba"
+    },
+    "openwebrl/env/eval/helper_functions.py": {
+      "published_path": "legacy/sources/common/openwebrl/env/eval/helper_functions.py",
+      "sha256": "0a70f64eb66841cc49f1b2921a3fbf26fb806785cefa7bf95b5e610641c63861",
+      "manifest_sha256": "0a70f64eb66841cc49f1b2921a3fbf26fb806785cefa7bf95b5e610641c63861"
+    },
+    "openwebrl/env/prompts/system_prompt.md": {
+      "published_path": "legacy/sources/common/openwebrl/env/prompts/system_prompt.md",
+      "sha256": "01e74c77097f7f50d6533a1d6707348d441487d24796663693c836b00223b604",
+      "manifest_sha256": "01e74c77097f7f50d6533a1d6707348d441487d24796663693c836b00223b604"
+    },
+    "openwebrl/env/prompts/system_prompt_api_browser.md": {
+      "published_path": "legacy/sources/common/openwebrl/env/prompts/system_prompt_api_browser.md",
+      "sha256": "b93fc0c1ea8e488c978dfcb240fede73252e86f43b223ef890e79e80c3f91023",
+      "manifest_sha256": "b93fc0c1ea8e488c978dfcb240fede73252e86f43b223ef890e79e80c3f91023"
+    },
+    "openwebrl/env/prompts/tools_all.json": {
+      "published_path": "legacy/sources/common/openwebrl/env/prompts/tools_all.json",
+      "sha256": "d01d9e3bb92e0f0e3239c2a7624823a8394bfe6991507b3dc2b7cd78bb888f11",
+      "manifest_sha256": "d01d9e3bb92e0f0e3239c2a7624823a8394bfe6991507b3dc2b7cd78bb888f11"
+    },
+    "openwebrl/env/prompts/tool_list.json": {
+      "published_path": "legacy/sources/common/openwebrl/env/prompts/tool_list.json",
+      "sha256": "e8d4051ee4e0ba743f90ebd9e5e40a60b82a48afe7b6a7079e39255916a9cdaa",
+      "manifest_sha256": "e8d4051ee4e0ba743f90ebd9e5e40a60b82a48afe7b6a7079e39255916a9cdaa"
+    },
+    "openwebrl/env/prompts/system_prompt_browser_env.md": {
+      "published_path": "legacy/sources/common/openwebrl/env/prompts/system_prompt_browser_env.md",
+      "sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9",
+      "manifest_sha256": "7028b29a14e6be1ff05e36a7ae708a89ab32529efad6cc47d2a388e531449aa9"
+    },
+    "openwebrl/data/convert_benchmark_jsonl_to_parquet.py": {
+      "published_path": "legacy/sources/common/openwebrl/data/convert_benchmark_jsonl_to_parquet.py",
+      "sha256": "1d2bfc9598143a96e974ae88578f981ee33ff29b3a00d516ad5db1f1328419f8",
+      "manifest_sha256": "1d2bfc9598143a96e974ae88578f981ee33ff29b3a00d516ad5db1f1328419f8"
+    },
+    "slime_plugins/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime_plugins/megatron_bridge/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime_plugins/mbridge/qwen3_next.py": {
+      "published_path": "legacy/sources/common/slime_plugins/mbridge/qwen3_next.py",
+      "sha256": "10aecfca2f170b1292be29e898ab0c1ef55ccc0744c0c7be8a0a2180661a86dd",
+      "manifest_sha256": "10aecfca2f170b1292be29e898ab0c1ef55ccc0744c0c7be8a0a2180661a86dd"
+    },
+    "slime_plugins/mbridge/__init__.py": {
+      "published_path": "legacy/sources/common/slime_plugins/mbridge/__init__.py",
+      "sha256": "5285c543ce6c86b0f36925bcc4d09fcd9f880539bb0838becea04b513afe0b34",
+      "manifest_sha256": "5285c543ce6c86b0f36925bcc4d09fcd9f880539bb0838becea04b513afe0b34"
+    },
+    "slime_plugins/mbridge/qwen3_5.py": {
+      "published_path": "legacy/sources/common/slime_plugins/mbridge/qwen3_5.py",
+      "sha256": "6b416ea6f08ea5128d12786820610ceb5d04f10bc5921af4070e541d370e76e6",
+      "manifest_sha256": "6b416ea6f08ea5128d12786820610ceb5d04f10bc5921af4070e541d370e76e6"
+    },
+    "slime_plugins/models/qwen3_next.py": {
+      "published_path": "legacy/sources/common/slime_plugins/models/qwen3_next.py",
+      "sha256": "bad914db79ae2658ad56a3a282229567e2670b9b3eba6cd73805748a7b5fefff",
+      "manifest_sha256": "bad914db79ae2658ad56a3a282229567e2670b9b3eba6cd73805748a7b5fefff"
+    },
+    "slime_plugins/models/__init__.py": {
+      "published_path": "legacy/sources/common/slime/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "manifest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "slime_plugins/models/flash_dot_product_attention.py": {
+      "published_path": "legacy/sources/common/slime_plugins/models/flash_dot_product_attention.py",
+      "sha256": "1656ddee9b149e591e7c994bc52d230b0ff03258088d5ad71e5f7174b7fe2256",
+      "manifest_sha256": "1656ddee9b149e591e7c994bc52d230b0ff03258088d5ad71e5f7174b7fe2256"
+    },
+    "slime_plugins/models/qwen3_5.py": {
+      "published_path": "legacy/sources/common/slime_plugins/models/qwen3_5.py",
+      "sha256": "0f2f35e160aa3e7cf42599681fb06dc0daf87cbc93dfb4b6d069d759561c74ff",
+      "manifest_sha256": "0f2f35e160aa3e7cf42599681fb06dc0daf87cbc93dfb4b6d069d759561c74ff"
+    },
+    "slime_plugins/models/learnable_softmax_attention.py": {
+      "published_path": "legacy/sources/common/slime_plugins/models/learnable_softmax_attention.py",
+      "sha256": "37db88778587f1a72528638a76ebbfee2b348f3ec7258ed8c2bcce8d7fc580d5",
+      "manifest_sha256": "37db88778587f1a72528638a76ebbfee2b348f3ec7258ed8c2bcce8d7fc580d5"
+    },
+    "slime_plugins/models/hf_attention.py": {
+      "published_path": "legacy/sources/common/slime_plugins/models/hf_attention.py",
+      "sha256": "9495172e56ced823ddd0f259f9ef77f2b704cfd8a13c09746d172d6dee3203a6",
+      "manifest_sha256": "9495172e56ced823ddd0f259f9ef77f2b704cfd8a13c09746d172d6dee3203a6"
+    },
+    "scripts/local_browser_smoke.py": {
+      "published_path": "legacy/sources/common/scripts/local_browser_smoke.py",
+      "sha256": "3a73f55cced0b6a8e294521c528212336276e0536f3a62a2c1267934b3d63256",
+      "manifest_sha256": "3a73f55cced0b6a8e294521c528212336276e0536f3a62a2c1267934b3d63256"
+    },
+    "scripts/run_browser_curriculum.py": {
+      "published_path": "legacy/sources/common/scripts/run_browser_curriculum.py",
+      "sha256": "d2ff7f5abf26968755c34a9c7efc4239ef0ab442adc3c8124184c48156b365ab",
+      "manifest_sha256": "d2ff7f5abf26968755c34a9c7efc4239ef0ab442adc3c8124184c48156b365ab"
+    },
+    "scripts/h200_smoke_reward.py": {
+      "published_path": "legacy/sources/common/scripts/h200_smoke_reward.py",
+      "sha256": "e6d222704afb6e63936a6986cb0d72ef01d623382f903c1eb591f3d424134075",
+      "manifest_sha256": "e6d222704afb6e63936a6986cb0d72ef01d623382f903c1eb591f3d424134075"
+    },
+    "scripts/report_luna_qwen_inference_original_four.py": {
+      "published_path": "legacy/sources/common/scripts/report_luna_qwen_inference_original_four.py",
+      "sha256": "1d660be86ca76946ad3b726b2d759e7d87dccfaec1b73789d776334204672b1a",
+      "manifest_sha256": "1d660be86ca76946ad3b726b2d759e7d87dccfaec1b73789d776334204672b1a"
+    },
+    "scripts/report_luna_qwen_full300.py": {
+      "published_path": "legacy/sources/common/scripts/report_luna_qwen_full300.py",
+      "sha256": "6c3f779f2c8723b22cf7377a2d7f9166ef6b6c7f63f67ab13526ea933829b675",
+      "manifest_sha256": "6c3f779f2c8723b22cf7377a2d7f9166ef6b6c7f63f67ab13526ea933829b675"
+    },
+    "scripts/gpu_nccl_smoke.py": {
+      "published_path": "legacy/sources/common/scripts/gpu_nccl_smoke.py",
+      "sha256": "b64263f42f697200c46df57262045dc405d6ab6e9dee1f3f43fc49dffb26877d",
+      "manifest_sha256": "b64263f42f697200c46df57262045dc405d6ab6e9dee1f3f43fc49dffb26877d"
+    },
+    "scripts/prepare_h200_fixture.py": {
+      "published_path": "legacy/sources/common/scripts/prepare_h200_fixture.py",
+      "sha256": "53604d5a39d3bbb525e4d36b722204b49843cf64e8fbf6e084db8969d74370cc",
+      "manifest_sha256": "53604d5a39d3bbb525e4d36b722204b49843cf64e8fbf6e084db8969d74370cc"
+    },
+    "scripts/run_arm_turn_bonus_calibration.py": {
+      "published_path": "legacy/sources/common/scripts/run_arm_turn_bonus_calibration.py",
+      "sha256": "663d0d75309ec9e796ae743325bfab18b2c567b4ca452b5bddcbf59d8fc8e4af",
+      "manifest_sha256": "663d0d75309ec9e796ae743325bfab18b2c567b4ca452b5bddcbf59d8fc8e4af"
+    },
+    "scripts/resume_baseline.py": {
+      "published_path": "legacy/sources/common/scripts/resume_baseline.py",
+      "sha256": "db7c44eb94d9f085ba601a2bd36248b9f703ac0087e1bc5caa5d299743250acc",
+      "manifest_sha256": "db7c44eb94d9f085ba601a2bd36248b9f703ac0087e1bc5caa5d299743250acc"
+    },
+    "scripts/check_cpu_preflight.py": {
+      "published_path": "legacy/sources/common/scripts/check_cpu_preflight.py",
+      "sha256": "b03bbfbd0ae662ac4078dba2b85c58de1c4df65f03a784bced490174e32fdd27",
+      "manifest_sha256": "b03bbfbd0ae662ac4078dba2b85c58de1c4df65f03a784bced490174e32fdd27"
+    },
+    "scripts/report_luna_qwen_inference.py": {
+      "published_path": "legacy/sources/common/scripts/report_luna_qwen_inference.py",
+      "sha256": "75e74f0f249b877db4245cae910e475ca106734218808940a8206bbd142131ed",
+      "manifest_sha256": "75e74f0f249b877db4245cae910e475ca106734218808940a8206bbd142131ed"
+    },
+    "scripts/gpu_model_smoke.py": {
+      "published_path": "legacy/sources/common/scripts/gpu_model_smoke.py",
+      "sha256": "cfcfcc1e8eef4f1b805b0a98f0e8d3599e5cd268659e13b80887e6879be3c473",
+      "manifest_sha256": "cfcfcc1e8eef4f1b805b0a98f0e8d3599e5cd268659e13b80887e6879be3c473"
+    },
+    "scripts/prepare_reference_baseline.py": {
+      "published_path": "legacy/sources/common/scripts/prepare_reference_baseline.py",
+      "sha256": "61f8322cc366e20f8a5d0506cd430a4c0e45b853317c69d94ddc156191abdc64",
+      "manifest_sha256": "61f8322cc366e20f8a5d0506cd430a4c0e45b853317c69d94ddc156191abdc64"
+    },
+    "scripts/audit_arm_preference_pairs.py": {
+      "published_path": "legacy/sources/common/scripts/audit_arm_preference_pairs.py",
+      "sha256": "5234bdc9cf93518b81fee1154747f80d95aa1eede88f59c8cb740fbe24863168",
+      "manifest_sha256": "5234bdc9cf93518b81fee1154747f80d95aa1eede88f59c8cb740fbe24863168"
+    },
+    "scripts/runtime_ports.py": {
+      "published_path": "legacy/sources/common/scripts/runtime_ports.py",
+      "sha256": "71da7cfc98d6df95b36800ef15219006cd872a18d17edf3396a522dbb753732f",
+      "manifest_sha256": "71da7cfc98d6df95b36800ef15219006cd872a18d17edf3396a522dbb753732f"
+    },
+    "scripts/prepare_luna_qwen_full300.py": {
+      "published_path": "legacy/sources/common/scripts/prepare_luna_qwen_full300.py",
+      "sha256": "86ffaf0437de50ec09a2c4bb43eab1b40fe0e5036ac24c552685d2bf827602ba",
+      "manifest_sha256": "86ffaf0437de50ec09a2c4bb43eab1b40fe0e5036ac24c552685d2bf827602ba"
+    },
+    "scripts/evaluate_baseline_checkpoint.py": {
+      "published_path": "legacy/sources/common/scripts/evaluate_baseline_checkpoint.py",
+      "sha256": "85675e97cc5ad9c96ade4a2656823f508fc54548e8e64088c4c5e9d7f6d28653",
+      "manifest_sha256": "85675e97cc5ad9c96ade4a2656823f508fc54548e8e64088c4c5e9d7f6d28653"
+    },
+    "scripts/run_luna_qwen_full300.py": {
+      "published_path": "legacy/sources/common/scripts/run_luna_qwen_full300.py",
+      "sha256": "9dbb39b2fb2592568954db044e4cdc5d9ae8a8c1c41b857ce92f29a853de4be0",
+      "manifest_sha256": "9dbb39b2fb2592568954db044e4cdc5d9ae8a8c1c41b857ce92f29a853de4be0"
+    },
+    "scripts/serve_arm.py": {
+      "published_path": "legacy/sources/common/scripts/serve_arm.py",
+      "sha256": "fb64d37a889c6d91269ba7daf37bfbd7857320eb0ae5bb003da765cdba8b642d",
+      "manifest_sha256": "fb64d37a889c6d91269ba7daf37bfbd7857320eb0ae5bb003da765cdba8b642d"
+    },
+    "scripts/run_reasoning_actors_full300.py": {
+      "published_path": "legacy/sources/common/scripts/run_reasoning_actors_full300.py",
+      "sha256": "d931c1770174dd7107c3aa497508dd2b7354ec5333243840e2abf3b2aab7cd3b",
+      "manifest_sha256": "d931c1770174dd7107c3aa497508dd2b7354ec5333243840e2abf3b2aab7cd3b"
+    },
+    "scripts/run_small_baseline.py": {
+      "published_path": "legacy/sources/common/scripts/run_small_baseline.py",
+      "sha256": "a81e2845ce5b9cc719c9654e6e0c8d71946c6e62cc142b28601962f639714f6d",
+      "manifest_sha256": "a81e2845ce5b9cc719c9654e6e0c8d71946c6e62cc142b28601962f639714f6d"
+    },
+    "scripts/run_arm_quality_audit.py": {
+      "published_path": "legacy/sources/common/scripts/run_arm_quality_audit.py",
+      "sha256": "0cbcf87f578a9290324cab9ff6f6351047c0647d42a7691775f1138d0efe9a11",
+      "manifest_sha256": "0cbcf87f578a9290324cab9ff6f6351047c0647d42a7691775f1138d0efe9a11"
+    },
+    "scripts/prepare_arm_turn_bonus.py": {
+      "published_path": "legacy/sources/common/scripts/prepare_arm_turn_bonus.py",
+      "sha256": "948e66f9937ec91f15f9f9ea1dba2a6382c75e637323922cd35a400d8d0f8e94",
+      "manifest_sha256": "948e66f9937ec91f15f9f9ea1dba2a6382c75e637323922cd35a400d8d0f8e94"
+    },
+    "scripts/run_sol_serial_parallel_om2w.py": {
+      "published_path": "legacy/sources/common/scripts/run_sol_serial_parallel_om2w.py",
+      "sha256": "d820bb1aec8d5d5b6db9d377759cd86e65ea54b7597229fbf9b5e2ea5e9f5c4c",
+      "manifest_sha256": "d820bb1aec8d5d5b6db9d377759cd86e65ea54b7597229fbf9b5e2ea5e9f5c4c"
+    }
+  },
+  "source_hash_mismatches": []
+}

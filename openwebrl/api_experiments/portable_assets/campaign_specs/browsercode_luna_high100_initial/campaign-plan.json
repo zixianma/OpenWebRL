@@ -1,0 +1,1548 @@
+{
+  "protocol": {
+    "harness": "browsercode",
+    "task_split": "same_verified_100_task_browsercode_cohort",
+    "max_steps": 30,
+    "actor_model": "gpt-6-luna",
+    "actor_effort": "high",
+    "selector_model": "gpt-6-luna",
+    "selector_effort": "high",
+    "candidate_counts": {
+      "parallel3_select_high": 3,
+      "parallel5_select_high": 5
+    },
+    "judge_model": "o4-mini-2025-04-16",
+    "judge_protocol": "same terminal-success protocol as paired BrowserCode comparison",
+    "latency": "episode/task latency excludes terminal judge",
+    "browsercode_revision": "b200643fe0eb93ce5a3aadd4bb21cb6cceb2ed04",
+    "actor_max_output_tokens": 4096,
+    "selector_max_output_tokens": 2048
+  },
+  "actor_protocol": {
+    "harness": "browsercode",
+    "task_split": "same_verified_100_task_browsercode_cohort",
+    "max_steps": 30,
+    "actor_model": "gpt-6-luna",
+    "actor_effort": "high",
+    "selector_model": "gpt-6-luna",
+    "selector_effort": "high",
+    "candidate_counts": {
+      "parallel3_select_high": 3,
+      "parallel5_select_high": 5
+    },
+    "judge_model": "o4-mini-2025-04-16",
+    "judge_protocol": "same terminal-success protocol as paired BrowserCode comparison",
+    "latency": "episode/task latency excludes terminal judge",
+    "browsercode_revision": "b200643fe0eb93ce5a3aadd4bb21cb6cceb2ed04",
+    "actor_max_output_tokens": 4096,
+    "selector_max_output_tokens": 2048
+  },
+  "harness": "browsercode",
+  "decision_cap_per_episode": 30,
+  "task_manifest_sha256": "cf8817be350a85fb67a580ede87806c3ec6137cacd4afb2e25d741fcd096c552",
+  "task_selection": {
+    "source_experiment": "browsercode-onecall3-paired100-extension-20261017-v1",
+    "source_manifest_sha256": "cf8817be350a85fb67a580ede87806c3ec6137cacd4afb2e25d741fcd096c552",
+    "exact_same_100_task_ids": true,
+    "balancing": "shared deterministic 5x20 partition stratified by source phase and difficulty"
+  },
+  "schema": "portable-scientific-campaign-v1",
+  "campaign": "browsercode_luna_high100_initial",
+  "shards": [
+    {
+      "shard": 0,
+      "arm": "parallel3_select_high",
+      "task_ids": [
+        "ade4c09ad3fdb1607209750924cd232f",
+        "fe33894188d20d7469f37a9fd855e7ff_110325",
+        "b962927dfe03bf2274a54381127ed433",
+        "9bb63ad0e38d5691a618932a8b31c05a",
+        "9af05e392cf3f5a8ff17aa764ba5bda6",
+        "2e4e21cf1449c6894b17d571c47b77ea",
+        "a96fca87a17d792644e736d1d10d3cbe",
+        "9d090a15c214eb070d9caa8a034d03c1",
+        "5d542a7ec1fa142ba73cc87d970caf39",
+        "47b93b9e649eadeb8d96a6e3df715c2d",
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325",
+        "85b284c18d7e78c9b5a9e074e7aa3b98",
+        "1fc28d91d25ccd1c6ba268101326a654",
+        "9ed3827266b3b804f485859c3d00401e",
+        "b3a7da968de13bbdcaed12ffe4993df6",
+        "271b36efd4346721b5542488ff997042",
+        "636b07af4dd97c1793733db1fd1b90b8_110325",
+        "a48e2f1ee8d87eaeea56fe5e730427e6",
+        "180ed2ec377ef3a4af9035a21522091a",
+        "c3a333968fc3c43d7f2688f425a0d633"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "ade4c09ad3fdb1607209750924cd232f": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "fe33894188d20d7469f37a9fd855e7ff_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b962927dfe03bf2274a54381127ed433": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "9bb63ad0e38d5691a618932a8b31c05a": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "9af05e392cf3f5a8ff17aa764ba5bda6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "2e4e21cf1449c6894b17d571c47b77ea": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "a96fca87a17d792644e736d1d10d3cbe": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "9d090a15c214eb070d9caa8a034d03c1": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "5d542a7ec1fa142ba73cc87d970caf39": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "47b93b9e649eadeb8d96a6e3df715c2d": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "85b284c18d7e78c9b5a9e074e7aa3b98": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "1fc28d91d25ccd1c6ba268101326a654": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "9ed3827266b3b804f485859c3d00401e": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b3a7da968de13bbdcaed12ffe4993df6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "271b36efd4346721b5542488ff997042": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "636b07af4dd97c1793733db1fd1b90b8_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "a48e2f1ee8d87eaeea56fe5e730427e6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "180ed2ec377ef3a4af9035a21522091a": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c3a333968fc3c43d7f2688f425a0d633": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 1,
+      "arm": "parallel3_select_high",
+      "task_ids": [
+        "0059adc6b12a3822305deb68929b2de8",
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad",
+        "b7a9a6b5d451164c09bbd27b670bc2ae",
+        "7abdceee212151f187ee1a1744c57606",
+        "461ab9b0c7b20ac5f912704480979c65",
+        "c6c9dc6079677cef594cec2fa6b16602",
+        "b922508886ded315c9835457a6eb43ea",
+        "5c00e9561eae94789443f405525a5869",
+        "6ebde509dca8f15c0fa1bd74f071e8d6",
+        "864244b6969e0f8733b0eb1ca06cd51f",
+        "5e1b8254c123c80178cc28e0afdb14f0_110325",
+        "199be0b54a436daee74247971fc684ee_110325",
+        "2c20d87a046fadcb6ff07ee877bfbf37",
+        "26810ed9c123a62992e3eed31db3c5ee",
+        "84f806c7fc15576673915f195efa72df",
+        "b6d10e9bd19b4009a02dea0e98f4e1ae",
+        "bb5d90e6f2fbc0ae146f7c1998c2b4a1",
+        "bc2ce7f206045dd2d322e5695a947219",
+        "78f397336b6fd1cbba0127db7a8cd502",
+        "82eb3bfedd78456a0230b389f4e7a938"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "0059adc6b12a3822305deb68929b2de8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b7a9a6b5d451164c09bbd27b670bc2ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "7abdceee212151f187ee1a1744c57606": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "461ab9b0c7b20ac5f912704480979c65": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c6c9dc6079677cef594cec2fa6b16602": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b922508886ded315c9835457a6eb43ea": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "5c00e9561eae94789443f405525a5869": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "6ebde509dca8f15c0fa1bd74f071e8d6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "864244b6969e0f8733b0eb1ca06cd51f": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "5e1b8254c123c80178cc28e0afdb14f0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "199be0b54a436daee74247971fc684ee_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "2c20d87a046fadcb6ff07ee877bfbf37": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "26810ed9c123a62992e3eed31db3c5ee": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "84f806c7fc15576673915f195efa72df": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b6d10e9bd19b4009a02dea0e98f4e1ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "bb5d90e6f2fbc0ae146f7c1998c2b4a1": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "bc2ce7f206045dd2d322e5695a947219": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "78f397336b6fd1cbba0127db7a8cd502": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "82eb3bfedd78456a0230b389f4e7a938": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 2,
+      "arm": "parallel3_select_high",
+      "task_ids": [
+        "dd44c665cec1e9c929a4c5f074e7844a_110325",
+        "da8f3823a827c7d3a492f383808e7912",
+        "5e4e89c9b6fdaee7a41aca5601b82e04",
+        "bd1e3770b7181f6fce9c35e18caa9785",
+        "71f8de1834599fba443f40dbbfab8edd",
+        "6b2cfae0ef25c73d1224b6ab74cb8b63",
+        "255bf27c43fd3f9254d6b81a5f36d3a9",
+        "34ccd15a8ea8fd3895af83f5ccf62369",
+        "e43cbc8a0bf9e999884928d11006f894_110325",
+        "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325",
+        "75a1b5dcd2c28508a971d98d51fe5767",
+        "59912927c1fddee6ded8a49986896bc2",
+        "b99c02965196d51e80ac7539e33f335b",
+        "bb518416a786fdb9b9bbf0c78515595e",
+        "28e7574e7bd6d14f36d2988a5ef2bd23",
+        "3084bc225219fcb73dc1cb0f97276c1c",
+        "871e7771cecb989972f138ecc373107b",
+        "cf757a775fa1224acfc7998489e199a8",
+        "65c4030f22fb6eb101acfee4825f1318",
+        "3dca7cbe7d086619d837ff9f5312cebc_110325"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "dd44c665cec1e9c929a4c5f074e7844a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "da8f3823a827c7d3a492f383808e7912": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "5e4e89c9b6fdaee7a41aca5601b82e04": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "bd1e3770b7181f6fce9c35e18caa9785": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "71f8de1834599fba443f40dbbfab8edd": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "6b2cfae0ef25c73d1224b6ab74cb8b63": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "255bf27c43fd3f9254d6b81a5f36d3a9": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "34ccd15a8ea8fd3895af83f5ccf62369": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "e43cbc8a0bf9e999884928d11006f894_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "75a1b5dcd2c28508a971d98d51fe5767": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "59912927c1fddee6ded8a49986896bc2": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b99c02965196d51e80ac7539e33f335b": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "bb518416a786fdb9b9bbf0c78515595e": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "28e7574e7bd6d14f36d2988a5ef2bd23": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "3084bc225219fcb73dc1cb0f97276c1c": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "871e7771cecb989972f138ecc373107b": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "cf757a775fa1224acfc7998489e199a8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "65c4030f22fb6eb101acfee4825f1318": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "3dca7cbe7d086619d837ff9f5312cebc_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 3,
+      "arm": "parallel3_select_high",
+      "task_ids": [
+        "b2f4fde2fce122a93c7b578086cb0585",
+        "070c907d34a4ce71dfdbea38f9c5d4d8",
+        "3f312ae3efc3c3e90ababe050dd4e7ae",
+        "c577a14301a725e09ccd269a3e0b271e_110325",
+        "7562d9b4e4829a44245aafce2e1f62db",
+        "561693d6eec7bbfba3fefe9e4b26decb",
+        "c8c1ff115879b3afd14280beb1559b13",
+        "9f1cba613830ca1c6a58f9498c06e679_110325",
+        "afcebfed28bea091d58f49ea6cb8194b",
+        "239a29bde438fe44fe17fe1390ef1634",
+        "f27c0a7b8b0bb33d37698dff227fc8d7",
+        "d9d8b7d84a3f8d057e368254fe8d65e2",
+        "d8e2a81fa621ce4737e5ea85671b630e_110325",
+        "01abae9608f2d8752a83e08f136f720c",
+        "f05e87c5b92d9869e08806103c1c15a1",
+        "c00437fd76a7a83b57f3dc4e5dbc41f8",
+        "27fa3ac20745d3d35e89fae157f63069",
+        "3c1ffc3f494e423b3c434c79e35da8f3_110325",
+        "d1970c16271496cbbe166ecbecc0a1d8",
+        "7c09c2c7c87cf6bb1138701eb54284ea"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "b2f4fde2fce122a93c7b578086cb0585": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "070c907d34a4ce71dfdbea38f9c5d4d8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "3f312ae3efc3c3e90ababe050dd4e7ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c577a14301a725e09ccd269a3e0b271e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "7562d9b4e4829a44245aafce2e1f62db": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "561693d6eec7bbfba3fefe9e4b26decb": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c8c1ff115879b3afd14280beb1559b13": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "9f1cba613830ca1c6a58f9498c06e679_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "afcebfed28bea091d58f49ea6cb8194b": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "239a29bde438fe44fe17fe1390ef1634": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "f27c0a7b8b0bb33d37698dff227fc8d7": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "d9d8b7d84a3f8d057e368254fe8d65e2": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "d8e2a81fa621ce4737e5ea85671b630e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "01abae9608f2d8752a83e08f136f720c": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "f05e87c5b92d9869e08806103c1c15a1": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c00437fd76a7a83b57f3dc4e5dbc41f8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "27fa3ac20745d3d35e89fae157f63069": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "3c1ffc3f494e423b3c434c79e35da8f3_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "d1970c16271496cbbe166ecbecc0a1d8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "7c09c2c7c87cf6bb1138701eb54284ea": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 4,
+      "arm": "parallel3_select_high",
+      "task_ids": [
+        "07ec4a12cba8090e2dc524d558ac7675",
+        "b7258ee05d75e6c50673a59914db412e_110325",
+        "0a0fa834ce41b5297c6474293383759d_110325",
+        "b320c68bffc1f3c7f2a8dc9d5478fb27",
+        "64345c365f544375357c7b67917f08a0_110325",
+        "62f1626ce249c31098854f8b38bdd6cf_110325",
+        "515f2e5811cfdd5e0e669e40f17886d8",
+        "c7c07ec10c668625a21ba64165d719bb",
+        "644a856c3897665e475e0dce50bf217d",
+        "1aeca99e6a60b0e3aefb3ef212bdce79",
+        "62c8d970b3d13891f355911e5a8f4030",
+        "92a3d4236f167af4afdc08876a902ba6",
+        "d730f4ff450da1bd60a836163736ef6a_110325",
+        "d1807551297ac60ecaaabbd2a2ed301a_110325",
+        "a69d2934fe54fef165490a5a2d95bf38",
+        "157f4a79d55e8fa3fd55ba772ba40fbc",
+        "323bd85e3559655d89e5496b951a25e8",
+        "4d3157aab34b54e5f0c4b965dfe930f3",
+        "15be05973fba714e490cd9c884e4f072",
+        "2fc51dd3febd447f0fdcdabca8d944ce_110325"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "07ec4a12cba8090e2dc524d558ac7675": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b7258ee05d75e6c50673a59914db412e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "0a0fa834ce41b5297c6474293383759d_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "b320c68bffc1f3c7f2a8dc9d5478fb27": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "64345c365f544375357c7b67917f08a0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "62f1626ce249c31098854f8b38bdd6cf_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "515f2e5811cfdd5e0e669e40f17886d8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "c7c07ec10c668625a21ba64165d719bb": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "644a856c3897665e475e0dce50bf217d": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "1aeca99e6a60b0e3aefb3ef212bdce79": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "62c8d970b3d13891f355911e5a8f4030": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "92a3d4236f167af4afdc08876a902ba6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "d730f4ff450da1bd60a836163736ef6a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "d1807551297ac60ecaaabbd2a2ed301a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "a69d2934fe54fef165490a5a2d95bf38": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "157f4a79d55e8fa3fd55ba772ba40fbc": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "323bd85e3559655d89e5496b951a25e8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "4d3157aab34b54e5f0c4b965dfe930f3": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "15be05973fba714e490cd9c884e4f072": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ],
+        "2fc51dd3febd447f0fdcdabca8d944ce_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel3_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 5,
+      "arm": "parallel5_select_high",
+      "task_ids": [
+        "ade4c09ad3fdb1607209750924cd232f",
+        "fe33894188d20d7469f37a9fd855e7ff_110325",
+        "b962927dfe03bf2274a54381127ed433",
+        "9bb63ad0e38d5691a618932a8b31c05a",
+        "9af05e392cf3f5a8ff17aa764ba5bda6",
+        "2e4e21cf1449c6894b17d571c47b77ea",
+        "a96fca87a17d792644e736d1d10d3cbe",
+        "9d090a15c214eb070d9caa8a034d03c1",
+        "5d542a7ec1fa142ba73cc87d970caf39",
+        "47b93b9e649eadeb8d96a6e3df715c2d",
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325",
+        "85b284c18d7e78c9b5a9e074e7aa3b98",
+        "1fc28d91d25ccd1c6ba268101326a654",
+        "9ed3827266b3b804f485859c3d00401e",
+        "b3a7da968de13bbdcaed12ffe4993df6",
+        "271b36efd4346721b5542488ff997042",
+        "636b07af4dd97c1793733db1fd1b90b8_110325",
+        "a48e2f1ee8d87eaeea56fe5e730427e6",
+        "180ed2ec377ef3a4af9035a21522091a",
+        "c3a333968fc3c43d7f2688f425a0d633"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "ade4c09ad3fdb1607209750924cd232f": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "fe33894188d20d7469f37a9fd855e7ff_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b962927dfe03bf2274a54381127ed433": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "9bb63ad0e38d5691a618932a8b31c05a": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "9af05e392cf3f5a8ff17aa764ba5bda6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "2e4e21cf1449c6894b17d571c47b77ea": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "a96fca87a17d792644e736d1d10d3cbe": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "9d090a15c214eb070d9caa8a034d03c1": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "5d542a7ec1fa142ba73cc87d970caf39": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "47b93b9e649eadeb8d96a6e3df715c2d": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "85b284c18d7e78c9b5a9e074e7aa3b98": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "1fc28d91d25ccd1c6ba268101326a654": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "9ed3827266b3b804f485859c3d00401e": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b3a7da968de13bbdcaed12ffe4993df6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "271b36efd4346721b5542488ff997042": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "636b07af4dd97c1793733db1fd1b90b8_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "a48e2f1ee8d87eaeea56fe5e730427e6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "180ed2ec377ef3a4af9035a21522091a": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c3a333968fc3c43d7f2688f425a0d633": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 6,
+      "arm": "parallel5_select_high",
+      "task_ids": [
+        "0059adc6b12a3822305deb68929b2de8",
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad",
+        "b7a9a6b5d451164c09bbd27b670bc2ae",
+        "7abdceee212151f187ee1a1744c57606",
+        "461ab9b0c7b20ac5f912704480979c65",
+        "c6c9dc6079677cef594cec2fa6b16602",
+        "b922508886ded315c9835457a6eb43ea",
+        "5c00e9561eae94789443f405525a5869",
+        "6ebde509dca8f15c0fa1bd74f071e8d6",
+        "864244b6969e0f8733b0eb1ca06cd51f",
+        "5e1b8254c123c80178cc28e0afdb14f0_110325",
+        "199be0b54a436daee74247971fc684ee_110325",
+        "2c20d87a046fadcb6ff07ee877bfbf37",
+        "26810ed9c123a62992e3eed31db3c5ee",
+        "84f806c7fc15576673915f195efa72df",
+        "b6d10e9bd19b4009a02dea0e98f4e1ae",
+        "bb5d90e6f2fbc0ae146f7c1998c2b4a1",
+        "bc2ce7f206045dd2d322e5695a947219",
+        "78f397336b6fd1cbba0127db7a8cd502",
+        "82eb3bfedd78456a0230b389f4e7a938"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "0059adc6b12a3822305deb68929b2de8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b7a9a6b5d451164c09bbd27b670bc2ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "7abdceee212151f187ee1a1744c57606": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "461ab9b0c7b20ac5f912704480979c65": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c6c9dc6079677cef594cec2fa6b16602": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b922508886ded315c9835457a6eb43ea": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "5c00e9561eae94789443f405525a5869": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "6ebde509dca8f15c0fa1bd74f071e8d6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "864244b6969e0f8733b0eb1ca06cd51f": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "5e1b8254c123c80178cc28e0afdb14f0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "199be0b54a436daee74247971fc684ee_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "2c20d87a046fadcb6ff07ee877bfbf37": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "26810ed9c123a62992e3eed31db3c5ee": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "84f806c7fc15576673915f195efa72df": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b6d10e9bd19b4009a02dea0e98f4e1ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "bb5d90e6f2fbc0ae146f7c1998c2b4a1": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "bc2ce7f206045dd2d322e5695a947219": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "78f397336b6fd1cbba0127db7a8cd502": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "82eb3bfedd78456a0230b389f4e7a938": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 7,
+      "arm": "parallel5_select_high",
+      "task_ids": [
+        "dd44c665cec1e9c929a4c5f074e7844a_110325",
+        "da8f3823a827c7d3a492f383808e7912",
+        "5e4e89c9b6fdaee7a41aca5601b82e04",
+        "bd1e3770b7181f6fce9c35e18caa9785",
+        "71f8de1834599fba443f40dbbfab8edd",
+        "6b2cfae0ef25c73d1224b6ab74cb8b63",
+        "255bf27c43fd3f9254d6b81a5f36d3a9",
+        "34ccd15a8ea8fd3895af83f5ccf62369",
+        "e43cbc8a0bf9e999884928d11006f894_110325",
+        "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325",
+        "75a1b5dcd2c28508a971d98d51fe5767",
+        "59912927c1fddee6ded8a49986896bc2",
+        "b99c02965196d51e80ac7539e33f335b",
+        "bb518416a786fdb9b9bbf0c78515595e",
+        "28e7574e7bd6d14f36d2988a5ef2bd23",
+        "3084bc225219fcb73dc1cb0f97276c1c",
+        "871e7771cecb989972f138ecc373107b",
+        "cf757a775fa1224acfc7998489e199a8",
+        "65c4030f22fb6eb101acfee4825f1318",
+        "3dca7cbe7d086619d837ff9f5312cebc_110325"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "dd44c665cec1e9c929a4c5f074e7844a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "da8f3823a827c7d3a492f383808e7912": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "5e4e89c9b6fdaee7a41aca5601b82e04": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "bd1e3770b7181f6fce9c35e18caa9785": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "71f8de1834599fba443f40dbbfab8edd": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "6b2cfae0ef25c73d1224b6ab74cb8b63": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "255bf27c43fd3f9254d6b81a5f36d3a9": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "34ccd15a8ea8fd3895af83f5ccf62369": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "e43cbc8a0bf9e999884928d11006f894_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "75a1b5dcd2c28508a971d98d51fe5767": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "59912927c1fddee6ded8a49986896bc2": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b99c02965196d51e80ac7539e33f335b": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "bb518416a786fdb9b9bbf0c78515595e": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "28e7574e7bd6d14f36d2988a5ef2bd23": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "3084bc225219fcb73dc1cb0f97276c1c": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "871e7771cecb989972f138ecc373107b": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "cf757a775fa1224acfc7998489e199a8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "65c4030f22fb6eb101acfee4825f1318": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "3dca7cbe7d086619d837ff9f5312cebc_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 8,
+      "arm": "parallel5_select_high",
+      "task_ids": [
+        "b2f4fde2fce122a93c7b578086cb0585",
+        "070c907d34a4ce71dfdbea38f9c5d4d8",
+        "3f312ae3efc3c3e90ababe050dd4e7ae",
+        "c577a14301a725e09ccd269a3e0b271e_110325",
+        "7562d9b4e4829a44245aafce2e1f62db",
+        "561693d6eec7bbfba3fefe9e4b26decb",
+        "c8c1ff115879b3afd14280beb1559b13",
+        "9f1cba613830ca1c6a58f9498c06e679_110325",
+        "afcebfed28bea091d58f49ea6cb8194b",
+        "239a29bde438fe44fe17fe1390ef1634",
+        "f27c0a7b8b0bb33d37698dff227fc8d7",
+        "d9d8b7d84a3f8d057e368254fe8d65e2",
+        "d8e2a81fa621ce4737e5ea85671b630e_110325",
+        "01abae9608f2d8752a83e08f136f720c",
+        "f05e87c5b92d9869e08806103c1c15a1",
+        "c00437fd76a7a83b57f3dc4e5dbc41f8",
+        "27fa3ac20745d3d35e89fae157f63069",
+        "3c1ffc3f494e423b3c434c79e35da8f3_110325",
+        "d1970c16271496cbbe166ecbecc0a1d8",
+        "7c09c2c7c87cf6bb1138701eb54284ea"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "b2f4fde2fce122a93c7b578086cb0585": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "070c907d34a4ce71dfdbea38f9c5d4d8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "3f312ae3efc3c3e90ababe050dd4e7ae": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c577a14301a725e09ccd269a3e0b271e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "7562d9b4e4829a44245aafce2e1f62db": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "561693d6eec7bbfba3fefe9e4b26decb": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c8c1ff115879b3afd14280beb1559b13": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "9f1cba613830ca1c6a58f9498c06e679_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "afcebfed28bea091d58f49ea6cb8194b": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "239a29bde438fe44fe17fe1390ef1634": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "f27c0a7b8b0bb33d37698dff227fc8d7": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "d9d8b7d84a3f8d057e368254fe8d65e2": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "d8e2a81fa621ce4737e5ea85671b630e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "01abae9608f2d8752a83e08f136f720c": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "f05e87c5b92d9869e08806103c1c15a1": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c00437fd76a7a83b57f3dc4e5dbc41f8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "27fa3ac20745d3d35e89fae157f63069": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "3c1ffc3f494e423b3c434c79e35da8f3_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "d1970c16271496cbbe166ecbecc0a1d8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "7c09c2c7c87cf6bb1138701eb54284ea": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 9,
+      "arm": "parallel5_select_high",
+      "task_ids": [
+        "07ec4a12cba8090e2dc524d558ac7675",
+        "b7258ee05d75e6c50673a59914db412e_110325",
+        "0a0fa834ce41b5297c6474293383759d_110325",
+        "b320c68bffc1f3c7f2a8dc9d5478fb27",
+        "64345c365f544375357c7b67917f08a0_110325",
+        "62f1626ce249c31098854f8b38bdd6cf_110325",
+        "515f2e5811cfdd5e0e669e40f17886d8",
+        "c7c07ec10c668625a21ba64165d719bb",
+        "644a856c3897665e475e0dce50bf217d",
+        "1aeca99e6a60b0e3aefb3ef212bdce79",
+        "62c8d970b3d13891f355911e5a8f4030",
+        "92a3d4236f167af4afdc08876a902ba6",
+        "d730f4ff450da1bd60a836163736ef6a_110325",
+        "d1807551297ac60ecaaabbd2a2ed301a_110325",
+        "a69d2934fe54fef165490a5a2d95bf38",
+        "157f4a79d55e8fa3fd55ba772ba40fbc",
+        "323bd85e3559655d89e5496b951a25e8",
+        "4d3157aab34b54e5f0c4b965dfe930f3",
+        "15be05973fba714e490cd9c884e4f072",
+        "2fc51dd3febd447f0fdcdabca8d944ce_110325"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "07ec4a12cba8090e2dc524d558ac7675": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b7258ee05d75e6c50673a59914db412e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "0a0fa834ce41b5297c6474293383759d_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "b320c68bffc1f3c7f2a8dc9d5478fb27": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "64345c365f544375357c7b67917f08a0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "62f1626ce249c31098854f8b38bdd6cf_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "515f2e5811cfdd5e0e669e40f17886d8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "c7c07ec10c668625a21ba64165d719bb": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "644a856c3897665e475e0dce50bf217d": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "1aeca99e6a60b0e3aefb3ef212bdce79": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "62c8d970b3d13891f355911e5a8f4030": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "92a3d4236f167af4afdc08876a902ba6": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "d730f4ff450da1bd60a836163736ef6a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "d1807551297ac60ecaaabbd2a2ed301a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "a69d2934fe54fef165490a5a2d95bf38": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "157f4a79d55e8fa3fd55ba772ba40fbc": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "323bd85e3559655d89e5496b951a25e8": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "4d3157aab34b54e5f0c4b965dfe930f3": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "15be05973fba714e490cd9c884e4f072": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ],
+        "2fc51dd3febd447f0fdcdabca8d944ce_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "parallel5_select_high"
+          }
+        ]
+      }
+    }
+  ],
+  "arms": [
+    "parallel3_select_high",
+    "parallel5_select_high"
+  ],
+  "reproduction_schedule": "Fresh same100 public task cohort under this phase-specific protocol; historical recovery admissions/retained outcomes are not replayed."
+}

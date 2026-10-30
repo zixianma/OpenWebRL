@@ -1,0 +1,46 @@
+mode: local_process
+sandbox:
+  orchestrator_url: ''
+  api_key: ''
+  image: ${BROWSER_SANDBOX_IMAGE:-browser-env:latest}
+  cpu: '1'
+  memory: 4Gi
+  block_network: false
+  max_sandboxes: 32
+  acquire_timeout_secs: 1800
+  max_retries: 10
+  retry_delay: 5
+  log_successful_requests: false
+browser_use:
+  api_key: ''
+  timeout: 10
+  profile_id: null
+  proxy_country_code: null
+local_process:
+  host: 127.0.0.1
+  port_start: 18000
+  port_end: 18999
+  startup_timeout_secs: 30
+  startup_poll_secs: 0.5
+  request_timeout_secs: 300
+  exit_timeout_secs: 10
+  kill_timeout_secs: 5
+  max_processes: 16
+  acquire_timeout_secs: 600
+  log_dir: /tmp/slime_browser_local_process_env_logs
+  port_lock_dir: /tmp/slime_browser_local_process_ports
+  python_bin: ''
+width: 1280
+height: 720
+dpr: 1
+max_retries: 3
+wait_timeout: 10000
+screenshot_timeout: 30000
+resize_output_coords: true
+resize_scale: 1000
+image_patch_size: 32
+path_to_policy: env/prompts/system_prompt.md
+path_to_tool_list: env/prompts/tool_list.json
+path_to_task_file: data/online-mind2web.jsonl
+use_screenshot: true
+use_a11ytree: false

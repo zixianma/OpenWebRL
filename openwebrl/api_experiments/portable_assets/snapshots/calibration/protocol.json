@@ -1,0 +1,23 @@
+{
+  "model": "gpt-6.1-sol",
+  "states": "caller-provided immutable saved browser evidence",
+  "browsers": 0,
+  "judge_calls": 0,
+  "no_retries": true,
+  "serial": {
+    "effort": "high",
+    "max_output_tokens": 12288
+  },
+  "parallel": {
+    "candidates": 3,
+    "effort": "low",
+    "max_output_tokens": 4096
+  },
+  "selector": {
+    "effort": "medium",
+    "max_output_tokens": 2048
+  },
+  "concurrent_states": 6,
+  "within_state_order_seed": "sol-pilot-v1/{state_id}",
+  "max_states": 30
+}

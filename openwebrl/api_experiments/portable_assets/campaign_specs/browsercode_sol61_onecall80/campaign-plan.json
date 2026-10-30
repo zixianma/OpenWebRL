@@ -1,0 +1,620 @@
+{
+  "protocol": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "generation": "one Responses API call returns three distinct browser-action proposals plus selected_index; execute only selected proposal",
+    "max_output_tokens": 4096,
+    "temperature": 1.0,
+    "top_p": 0.98,
+    "selector": "model selects among own three proposals in same response",
+    "task_latency_excludes_judge": true,
+    "judge": "same pinned common judge and rubric as reference",
+    "browsercode_revision": "b200643fe0eb93ce5a3aadd4bb21cb6cceb2ed04"
+  },
+  "policy": "onecall3_low",
+  "harness": "browsercode",
+  "decision_cap_per_episode": 30,
+  "task_manifest_sha256": "040347d0ab58088493d75b58725e47b4429a0be2f9d6567ba55ace85b8f56213",
+  "task_selection": {
+    "source_manifest_sha256": "cf8817be350a85fb67a580ede87806c3ec6137cacd4afb2e25d741fcd096c552",
+    "method": "fixed complement of the previously approved 20-task random pilot within the same frozen 100-task comparison list; no resampling",
+    "pilot_task_ids_sha256": "6f847e85525693e889fdc72863baa4a8a8303256e8c6a6c78a7cd71a3204987d",
+    "ids_sorted_within_shards": true
+  },
+  "schema": "portable-scientific-campaign-v1",
+  "campaign": "browsercode_sol61_onecall80",
+  "shards": [
+    {
+      "shard": 0,
+      "task_ids": [
+        "01abae9608f2d8752a83e08f136f720c",
+        "157f4a79d55e8fa3fd55ba772ba40fbc",
+        "1fc28d91d25ccd1c6ba268101326a654",
+        "27fa3ac20745d3d35e89fae157f63069",
+        "2e4e21cf1449c6894b17d571c47b77ea",
+        "3c1ffc3f494e423b3c434c79e35da8f3_110325",
+        "515f2e5811cfdd5e0e669e40f17886d8",
+        "5e1b8254c123c80178cc28e0afdb14f0_110325",
+        "636b07af4dd97c1793733db1fd1b90b8_110325",
+        "7562d9b4e4829a44245aafce2e1f62db",
+        "85b284c18d7e78c9b5a9e074e7aa3b98",
+        "9af05e392cf3f5a8ff17aa764ba5bda6",
+        "9f1cba613830ca1c6a58f9498c06e679_110325",
+        "ade4c09ad3fdb1607209750924cd232f",
+        "b6d10e9bd19b4009a02dea0e98f4e1ae",
+        "bb5d90e6f2fbc0ae146f7c1998c2b4a1",
+        "c3a333968fc3c43d7f2688f425a0d633",
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad",
+        "d730f4ff450da1bd60a836163736ef6a_110325",
+        "dd44c665cec1e9c929a4c5f074e7844a_110325"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "01abae9608f2d8752a83e08f136f720c": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "157f4a79d55e8fa3fd55ba772ba40fbc": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "1fc28d91d25ccd1c6ba268101326a654": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "27fa3ac20745d3d35e89fae157f63069": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "2e4e21cf1449c6894b17d571c47b77ea": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "3c1ffc3f494e423b3c434c79e35da8f3_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "515f2e5811cfdd5e0e669e40f17886d8": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "5e1b8254c123c80178cc28e0afdb14f0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "636b07af4dd97c1793733db1fd1b90b8_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "7562d9b4e4829a44245aafce2e1f62db": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "85b284c18d7e78c9b5a9e074e7aa3b98": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "9af05e392cf3f5a8ff17aa764ba5bda6": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "9f1cba613830ca1c6a58f9498c06e679_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "ade4c09ad3fdb1607209750924cd232f": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "b6d10e9bd19b4009a02dea0e98f4e1ae": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "bb5d90e6f2fbc0ae146f7c1998c2b4a1": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "c3a333968fc3c43d7f2688f425a0d633": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "c8d7f2aa7eb5dd074c48c9f76f8659ad": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "d730f4ff450da1bd60a836163736ef6a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "dd44c665cec1e9c929a4c5f074e7844a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 1,
+      "task_ids": [
+        "070c907d34a4ce71dfdbea38f9c5d4d8",
+        "15be05973fba714e490cd9c884e4f072",
+        "255bf27c43fd3f9254d6b81a5f36d3a9",
+        "28e7574e7bd6d14f36d2988a5ef2bd23",
+        "2fc51dd3febd447f0fdcdabca8d944ce_110325",
+        "461ab9b0c7b20ac5f912704480979c65",
+        "561693d6eec7bbfba3fefe9e4b26decb",
+        "5e4e89c9b6fdaee7a41aca5601b82e04",
+        "644a856c3897665e475e0dce50bf217d",
+        "78f397336b6fd1cbba0127db7a8cd502",
+        "864244b6969e0f8733b0eb1ca06cd51f",
+        "9bb63ad0e38d5691a618932a8b31c05a",
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325",
+        "b2f4fde2fce122a93c7b578086cb0585",
+        "b7258ee05d75e6c50673a59914db412e_110325",
+        "bc2ce7f206045dd2d322e5695a947219",
+        "c577a14301a725e09ccd269a3e0b271e_110325",
+        "cf757a775fa1224acfc7998489e199a8",
+        "d8e2a81fa621ce4737e5ea85671b630e_110325",
+        "f05e87c5b92d9869e08806103c1c15a1"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "070c907d34a4ce71dfdbea38f9c5d4d8": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "15be05973fba714e490cd9c884e4f072": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "255bf27c43fd3f9254d6b81a5f36d3a9": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "28e7574e7bd6d14f36d2988a5ef2bd23": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "2fc51dd3febd447f0fdcdabca8d944ce_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "461ab9b0c7b20ac5f912704480979c65": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "561693d6eec7bbfba3fefe9e4b26decb": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "5e4e89c9b6fdaee7a41aca5601b82e04": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "644a856c3897665e475e0dce50bf217d": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "78f397336b6fd1cbba0127db7a8cd502": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "864244b6969e0f8733b0eb1ca06cd51f": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "9bb63ad0e38d5691a618932a8b31c05a": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "a0a18ca6a3529f3e97c771aadd42d3a0_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "b2f4fde2fce122a93c7b578086cb0585": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "b7258ee05d75e6c50673a59914db412e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "bc2ce7f206045dd2d322e5695a947219": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "c577a14301a725e09ccd269a3e0b271e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "cf757a775fa1224acfc7998489e199a8": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "d8e2a81fa621ce4737e5ea85671b630e_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "f05e87c5b92d9869e08806103c1c15a1": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 2,
+      "task_ids": [
+        "07ec4a12cba8090e2dc524d558ac7675",
+        "180ed2ec377ef3a4af9035a21522091a",
+        "26810ed9c123a62992e3eed31db3c5ee",
+        "2c20d87a046fadcb6ff07ee877bfbf37",
+        "3084bc225219fcb73dc1cb0f97276c1c",
+        "47b93b9e649eadeb8d96a6e3df715c2d",
+        "59912927c1fddee6ded8a49986896bc2",
+        "62c8d970b3d13891f355911e5a8f4030",
+        "6b2cfae0ef25c73d1224b6ab74cb8b63",
+        "7c09c2c7c87cf6bb1138701eb54284ea",
+        "871e7771cecb989972f138ecc373107b",
+        "9d090a15c214eb070d9caa8a034d03c1",
+        "a48e2f1ee8d87eaeea56fe5e730427e6",
+        "b320c68bffc1f3c7f2a8dc9d5478fb27",
+        "b99c02965196d51e80ac7539e33f335b",
+        "bd1e3770b7181f6fce9c35e18caa9785",
+        "c6c9dc6079677cef594cec2fa6b16602",
+        "d1807551297ac60ecaaabbd2a2ed301a_110325",
+        "d9d8b7d84a3f8d057e368254fe8d65e2",
+        "f27c0a7b8b0bb33d37698dff227fc8d7"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "07ec4a12cba8090e2dc524d558ac7675": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "180ed2ec377ef3a4af9035a21522091a": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "26810ed9c123a62992e3eed31db3c5ee": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "2c20d87a046fadcb6ff07ee877bfbf37": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "3084bc225219fcb73dc1cb0f97276c1c": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "47b93b9e649eadeb8d96a6e3df715c2d": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "59912927c1fddee6ded8a49986896bc2": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "62c8d970b3d13891f355911e5a8f4030": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "6b2cfae0ef25c73d1224b6ab74cb8b63": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "7c09c2c7c87cf6bb1138701eb54284ea": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "871e7771cecb989972f138ecc373107b": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "9d090a15c214eb070d9caa8a034d03c1": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "a48e2f1ee8d87eaeea56fe5e730427e6": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "b320c68bffc1f3c7f2a8dc9d5478fb27": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "b99c02965196d51e80ac7539e33f335b": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "bd1e3770b7181f6fce9c35e18caa9785": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "c6c9dc6079677cef594cec2fa6b16602": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "d1807551297ac60ecaaabbd2a2ed301a_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "d9d8b7d84a3f8d057e368254fe8d65e2": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "f27c0a7b8b0bb33d37698dff227fc8d7": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ]
+      }
+    },
+    {
+      "shard": 3,
+      "task_ids": [
+        "0a0fa834ce41b5297c6474293383759d_110325",
+        "1aeca99e6a60b0e3aefb3ef212bdce79",
+        "271b36efd4346721b5542488ff997042",
+        "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325",
+        "34ccd15a8ea8fd3895af83f5ccf62369",
+        "4d3157aab34b54e5f0c4b965dfe930f3",
+        "5c00e9561eae94789443f405525a5869",
+        "62f1626ce249c31098854f8b38bdd6cf_110325",
+        "71f8de1834599fba443f40dbbfab8edd",
+        "84f806c7fc15576673915f195efa72df",
+        "92a3d4236f167af4afdc08876a902ba6",
+        "9ed3827266b3b804f485859c3d00401e",
+        "a69d2934fe54fef165490a5a2d95bf38",
+        "b3a7da968de13bbdcaed12ffe4993df6",
+        "bb518416a786fdb9b9bbf0c78515595e",
+        "c00437fd76a7a83b57f3dc4e5dbc41f8",
+        "c8c1ff115879b3afd14280beb1559b13",
+        "d1970c16271496cbbe166ecbecc0a1d8",
+        "da8f3823a827c7d3a492f383808e7912",
+        "fe33894188d20d7469f37a9fd855e7ff_110325"
+      ],
+      "episode_count": 20,
+      "task_orders": {
+        "0a0fa834ce41b5297c6474293383759d_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "1aeca99e6a60b0e3aefb3ef212bdce79": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "271b36efd4346721b5542488ff997042": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "2c8ef01a92c71ba9ef2e59bb17eea2b3_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "34ccd15a8ea8fd3895af83f5ccf62369": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "4d3157aab34b54e5f0c4b965dfe930f3": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "5c00e9561eae94789443f405525a5869": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "62f1626ce249c31098854f8b38bdd6cf_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "71f8de1834599fba443f40dbbfab8edd": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "84f806c7fc15576673915f195efa72df": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "92a3d4236f167af4afdc08876a902ba6": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "9ed3827266b3b804f485859c3d00401e": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "a69d2934fe54fef165490a5a2d95bf38": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "b3a7da968de13bbdcaed12ffe4993df6": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "bb518416a786fdb9b9bbf0c78515595e": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "c00437fd76a7a83b57f3dc4e5dbc41f8": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "c8c1ff115879b3afd14280beb1559b13": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "d1970c16271496cbbe166ecbecc0a1d8": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "da8f3823a827c7d3a492f383808e7912": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ],
+        "fe33894188d20d7469f37a9fd855e7ff_110325": [
+          {
+            "harness": "browsercode",
+            "policy": "onecall3_low"
+          }
+        ]
+      }
+    }
+  ]
+}

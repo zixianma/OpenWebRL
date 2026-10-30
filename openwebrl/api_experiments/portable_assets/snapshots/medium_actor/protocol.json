@@ -1,0 +1,10 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "max_output_tokens": 4096,
+  "input": "Exact saved serial-high request input/tools; replace reasoning effort and output cap only",
+  "max_states": 30,
+  "browsers": 0,
+  "judges": 0,
+  "retries": 0
+}

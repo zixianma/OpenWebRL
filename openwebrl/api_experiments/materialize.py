@@ -50,7 +50,7 @@ def main() -> None:
     args = parser.parse_args()
     files = materialize(args.campaign, args.output)
     print(f"Restored {len(files)} source files in {args.output}. No workers or API calls started.")
-    print("Private configuration, task data, credentials and excluded recovery helpers remain local.")
+    print("For a runnable collaborator workspace, use reproduce/prepare_browsercode.py or reproduce/native.py prepare.")
 
 
 if __name__ == "__main__":
