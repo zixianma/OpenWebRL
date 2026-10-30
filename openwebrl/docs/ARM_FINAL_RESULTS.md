@@ -183,6 +183,8 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 ![OM2W valid-only success from300 attempted tasks, cost, latency and browser-command tradeoffs](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
 
+*Each point is one observed method, labeled directly. Rows separate the harnesses; no lines connect methods. The y-axis is valid-only success; x-axis means retain recorded invalid attempts. Cost and latency axes are logarithmic, with different ranges per harness. Protocol limits, measurement coverage and live collection windows differ; this is a descriptive comparison.*
+
 | Method (all high) | Attempted per harness | BrowserCode successes | BrowserCode valid | BrowserCode valid-only success | Native successes | Native valid | Native valid-only success |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Sol single | 300 | 171 | 266 | 64.3% | 222 | 286 | 77.6% |
@@ -206,7 +208,7 @@ BrowserCode cost uses original received proposal/selector estimates plus the ind
 
 BrowserCode latency excludes initial browser setup and final judge-only capture; native retains the original native task boundary and excludes external/saved-evidence grading. Browser-command executions count saved selected BrowserCode blocks versus literal native browser-command log entries. Either can contain several actions; this measures harness-level command volume, not standardized actions or equal work. The observed-only x-axis means can use different task subsets, as their explicit denominators show.
 
-The requested method encodings remain: blue square Sol single, blue circle Luna single, yellow circle N3, orange circle N5; filled BrowserCode and outlined native. There is no embedded table.
+Method encodings: blue square Sol single, blue circle Luna single, yellow circle N3 and orange circle N5. Separate rows identify BrowserCode and native CUAWright. All points have equal opacity; the plot has no grid, connecting lines, rings or embedded table. The earlier dashed lines connected observed nondominated methods (lower x and higher success), rather than measured curves; that overlay has been removed. Detailed definitions and coverage remain here in the caption and tables.
 
 [Valid-only success aggregate and attempt-metric coverage](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
 

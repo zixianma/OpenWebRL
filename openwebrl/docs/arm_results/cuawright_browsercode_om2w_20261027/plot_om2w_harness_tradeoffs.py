@@ -15,8 +15,7 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-api-tradeoff-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.ticker import PercentFormatter, StrMethodFormatter
-from matplotlib.lines import Line2D
+from matplotlib.ticker import StrMethodFormatter, NullFormatter
 
 METHODS = {
     "serial_high": ("Sol single", "#0072B2", "s"),
@@ -58,57 +57,87 @@ def write_csv(path, rows):
 
 
 
-def draw(ax, means, metric, native):
-    for series, filled in ((means, True), (native, False)):
-        for row in series:
-            label, color, marker = METHODS[row["method"]]
-            ax.scatter(row[metric], 100 * row["mean_success_rate"], s=85,
-                       marker=marker, facecolors=color if filled else "white",
-                       edgecolors="white" if filled else color,
-                       linewidths=0.9 if filled else 2.0, zorder=3)
-    ax.set_ylabel("Success among valid outcomes (%)")
-    ax.yaxis.set_major_formatter(PercentFormatter(xmax=100, decimals=0))
-    values = [100 * r["mean_success_rate"] for r in means + native]
-    ax.set_ylim(max(0, min(values) - 3), min(100, max(values) + 4))
-    if metric == "mean_model_usd_per_task":
-        ax.set_xlabel("Mean model cost / task (USD; log scale)")
-        ax.set_xscale("log")
-        ax.xaxis.set_major_formatter(StrMethodFormatter("${x:g}"))
-        ax.set_title("Performance vs. API cost", loc="left", pad=15)
-    elif metric == "mean_task_seconds":
-        ax.set_xlabel("Mean task latency (seconds; log scale)")
-        ax.set_xscale("log")
-        ax.xaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
-        ax.set_title("Performance vs. latency", loc="left", pad=15)
-    else:
-        ax.set_xlabel("Mean browser-command executions / task")
-        ax.set_title("Performance vs. browser commands", loc="left", pad=15)
-    xs = [r[metric] for r in means + native]
-    if metric == "mean_browser_steps":
-        ax.set_xlim(max(0, min(xs) - 2), max(xs) + 2)
-    else:
-        ax.set_xlim(min(xs) / 1.4, max(xs) * 1.5)
-    ax.grid(True, color="#E2E6EA", linewidth=0.7, zorder=0)
+METRICS = (("mean_model_usd_per_task", "Model cost / task ($; log)", "cost"),
+           ("mean_browser_steps", "Browser commands / task", "browser_steps"),
+           ("mean_task_seconds", "Task latency (s; log)", "latency"))
+
+
+def draw(ax, rows, metric, native):
+    """Four observed points only; equal visibility and direct method labels."""
+    ax.set_ylim(58, 81)
+    ax.set_yticks([60, 70, 80])
+    ax.grid(False, which="both")
     ax.spines[["top", "right"]].set_visible(False)
+    ax.tick_params(length=3, width=0.6, pad=2)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color("#B7BEC7")
+        ax.spines[side].set_color("#555555")
+        ax.spines[side].set_linewidth(0.6)
+    if metric == "mean_model_usd_per_task":
+        ax.set_xscale("log")
+        ax.set_xlim((0.065, 2.1) if native else (0.006, 0.34))
+        ax.set_xticks([0.1, 0.3, 1] if native else [0.01, 0.05, 0.2])
+        ax.xaxis.set_major_formatter(StrMethodFormatter("${x:g}"))
+    elif metric == "mean_browser_steps":
+        ax.set_xlim((27.5, 39.5) if native else (12.8, 16.6))
+        ax.set_xticks([28, 32, 36] if native else [13, 14, 15, 16])
+    else:
+        ax.set_xscale("log")
+        ax.set_xlim((420, 1800) if native else (60, 310))
+        ax.set_xticks([500, 900, 1300] if native else [90, 150, 220])
+        ax.xaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    for row in rows:
+        method = row["method"]
+        label, color, marker = METHODS[method]
+        x, y = row[metric], 100 * row["mean_success_rate"]
+        ax.scatter(x, y, s=30, marker=marker, color=color,
+                   edgecolor="white", linewidth=0.5, zorder=3)
+        dx, dy, ha = 4, 6, "left"
+        if method == "serial_high":
+            dy = -9
+            if metric == "mean_model_usd_per_task":
+                dx, ha = -4, "right"
+                if native:
+                    dy = 7
+        if method == "luna_single_high":
+            dy = -9 if native else 6
+        if method == "parallel3_select_high" and native:
+            dy = -10
+        if method == "parallel3_select_high" and metric == "mean_browser_steps" and native:
+            dx, ha = -4, "right"
+        if metric == "mean_task_seconds":
+            if method in ("parallel3_select_high", "parallel5_select_high"):
+                dx, ha = -4, "right"
+            if method == "serial_high" and not native:
+                dx, dy, ha = -4, 8, "right"
+            if method == "luna_single_high":
+                dy = -9
+                if native:
+                    dx, ha = -4, "right"
+            if method == "parallel3_select_high" and native:
+                dx, dy, ha = -4, 6, "right"
+        ax.annotate(label, (x, y), xytext=(dx, dy), textcoords="offset points",
+                    ha=ha, va="center", fontsize=7, color=color)
 
 
-def legends(fig, x=0.835, y=0.70):
-    methods = [Line2D([], [], linestyle="", marker=m, color=c, markersize=8, label=l)
-               for l, c, m in METHODS.values()]
-    fig.legend(handles=methods, title="Method (all high)", loc="upper left",
-               bbox_to_anchor=(x, y), frameon=False, fontsize=10, title_fontsize=11,
-               labelspacing=1.1)
-    harnesses = [Line2D([], [], linestyle="", marker="o", color="#5A6470", markersize=8,
-                        label="BrowserCode · OM2W"),
-                 Line2D([], [], linestyle="", marker="o", markerfacecolor="white",
-                        markeredgecolor="#5A6470", markeredgewidth=2, markersize=8,
-                        label="Native CUAWright · OM2W\n300 attempted; valid-only success")]
-    fig.legend(handles=harnesses, title="Harness / cohort", loc="upper left",
-               bbox_to_anchor=(x, y - .29), frameon=False, fontsize=9, title_fontsize=11,
-               labelspacing=1.2)
-
+def figure(means, native, metrics, output, stem):
+    columns = len(metrics)
+    fig, axes = plt.subplots(2, columns, figsize=(7 if columns == 3 else 3.35, 3.5),
+                             sharey=True, squeeze=False)
+    fig.subplots_adjust(left=0.075 if columns == 3 else 0.16, right=0.985,
+                        top=0.84, bottom=0.13, hspace=0.78, wspace=0.18)
+    for ri, (rows, title) in enumerate(((means, "a)  BrowserCode"),
+                                       (native, "b)  Native CUAWright"))):
+        pos = axes[ri, 0].get_position()
+        fig.text(pos.x0, pos.y1 + 0.045, title, fontsize=8.5, weight="bold")
+        for ci, (metric, label, _) in enumerate(metrics):
+            draw(axes[ri, ci], rows, metric, native=bool(ri))
+            axes[ri, ci].set_xlabel(label, labelpad=3)
+            if ci == 0:
+                axes[ri, ci].set_ylabel("Valid-only success (%)", labelpad=3)
+    for ext in ("png", "svg", "pdf"):
+        save_figure(fig, output / f"{stem}.{ext}")
+    plt.close(fig)
 
 
 def save_figure(fig, path):
@@ -127,40 +156,13 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.output_dir / "om2w_harness_tradeoff_coordinates.csv",
               [dict(harness=h, **r) for h, rows in (("BrowserCode", means), ("Native CUAWright", native)) for r in rows])
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
-                        "axes.titlesize": 15, "svg.fonttype": "none", "pdf.fonttype": 42,
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7,
+                        "axes.labelsize": 7, "xtick.labelsize": 7, "ytick.labelsize": 7,
+                        "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
-    footer = ('OM2W · 300 attempted per cell; success = successes / valid outcomes. Valid subsets differ. Historical 100 included; collection windows differ.\n'
-              'Valid success denominators (Sol / Luna / N3 / N5): BrowserCode 266 / 269 / 269 / 267; native 286 / 271 / 270 / 270.\n'
-              'X-axis means include measured invalid attempts. Latency coverage (Sol / Luna / N3 / N5): BrowserCode 275 / 274 / 275 / 273; native 300 / 300 / 300 / 298. Missing values are not zero-filled.\n'
-              'Command coverage: BrowserCode 300 / 300 / 293 / 294; native 300 / 300 / 300 / 298. One execution can contain multiple actions.\n'
-              'Cost coverage 300 each: BrowserCode original receipts (N3 has one unknown-usage call); native includes helpers/full reserves. External judging excluded.\n'
-              'Native 20,000 tokens / 100 decisions; BrowserCode 12,288 / 30. Timing and execution granularity differ; descriptive comparison. Tables separate.')
-    for metric, suffix in (("mean_model_usd_per_task", "cost"),
-                           ("mean_task_seconds", "latency"),
-                           ("mean_browser_steps", "browser_steps")):
-        fig, ax = plt.subplots(figsize=(11.5, 5.7))
-        draw(ax, means, metric, native)
-        fig.subplots_adjust(left=.09, right=.66, bottom=.37, top=.88)
-        legends(fig, x=.68, y=.91)
-        fig.text(.09, .025, footer.replace('; external judging excluded.', '; external judging excluded.\n'),
-                 fontsize=7.3, color="#5A6470", linespacing=1.6)
-        for ext in ("png", "svg", "pdf"):
-            save_figure(fig, args.output_dir / f"om2w_harness_vs_{suffix}.{ext}")
-        plt.close(fig)
-    fig, axes = plt.subplots(1, 3, figsize=(16, 5.1), sharey=True)
-    for ax, metric in zip(axes, ("mean_model_usd_per_task", "mean_task_seconds", "mean_browser_steps")):
-        draw(ax, means, metric, native)
-        ax.title.set_fontsize(13)
-    for ax in axes[1:]:
-        ax.set_ylabel("")
-    fig.suptitle("Online-Mind2Web · BrowserCode and native CUAWright", x=.05, ha="left", fontsize=17, y=.97)
-    fig.subplots_adjust(left=.05, right=.80, bottom=.37, top=.85, wspace=.24)
-    legends(fig, x=.815, y=.89)
-    fig.text(.05, .025, footer, fontsize=8.5, color="#5A6470", linespacing=1.7)
-    for ext in ("png", "svg", "pdf"):
-        save_figure(fig, args.output_dir / f"om2w_harness_tradeoffs.{ext}")
-    plt.close(fig)
+    for metric in METRICS:
+        figure(means, native, [metric], args.output_dir, f"om2w_harness_vs_{metric[2]}")
+    figure(means, native, METRICS, args.output_dir, "om2w_harness_tradeoffs")
     (args.output_dir / "om2w_harness_tradeoffs_provenance.json").write_text(json.dumps({
         "comparison_aggregate_sha256": hashlib.sha256(args.aggregate.read_bytes()).hexdigest(),
         "native_status_aggregate_sha256": hashlib.sha256(Path(__file__).with_name("native_cuawright_completed.json").read_bytes()).hexdigest(),
@@ -174,6 +176,7 @@ def main():
         "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
         "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
+        "visualization": "Separate harness rows; directly labeled observed points with equal opacity; no connecting lines, frontier rings or grid lines. X-axis ranges differ by harness.",
         "comparability": "Different limits, collection windows and task-time boundaries; descriptive only",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")

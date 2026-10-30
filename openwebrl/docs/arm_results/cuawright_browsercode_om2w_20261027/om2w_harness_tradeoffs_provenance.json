@@ -68,6 +68,7 @@
   "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
   "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
   "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
+  "visualization": "Separate harness rows; directly labeled observed points with equal opacity; no connecting lines, frontier rings or grid lines. X-axis ranges differ by harness.",
   "comparability": "Different limits, collection windows and task-time boundaries; descriptive only",
   "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
 }
