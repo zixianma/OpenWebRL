@@ -1,6 +1,117 @@
 {
- "protocol": "RL checkpoint OpenWebRL-4B@616cc8f, 4,096 response tokens, N=5, T1.0/top-p0.9, 30 steps; OM2W 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150 (GPT-4o)",
+ "protocol": "One window 2026-10-30; actor RL checkpoint OpenWebRL-4B@616cc8f (SFT 4B for sft4096_alone); 4,096 response tokens, N=5, T1.0/top-p0.9, 30 steps; OM2W 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150 (GPT-4o)",
  "runs": {
+  "rl4096_alone": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 262,
+    "succ": 86,
+    "overall": 28.7,
+    "valid_only": 32.8,
+    "length_limit_episodes": 5,
+    "selection_steps": 2875,
+    "steps_with_truncated_candidate": 5,
+    "truncated_picked": 5
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 581,
+    "succ": 344,
+    "overall": 57.8,
+    "valid_only": 59.2,
+    "length_limit_episodes": 7,
+    "selection_steps": 5116,
+    "steps_with_truncated_candidate": 7,
+    "truncated_picked": 7
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 150,
+    "succ": 61,
+    "overall": 40.7,
+    "valid_only": 40.7,
+    "length_limit_episodes": 2,
+    "selection_steps": 1446,
+    "steps_with_truncated_candidate": 2,
+    "truncated_picked": 2
+   },
+   "mean_overall": 42.4,
+   "mean_valid_only": 44.2
+  },
+  "rl4096_arm": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 253,
+    "succ": 116,
+    "overall": 38.7,
+    "valid_only": 45.8,
+    "length_limit_episodes": 0,
+    "selection_steps": 3490,
+    "steps_with_truncated_candidate": 21,
+    "truncated_picked": 0
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 575,
+    "succ": 374,
+    "overall": 62.9,
+    "valid_only": 65.0,
+    "length_limit_episodes": 0,
+    "selection_steps": 5676,
+    "steps_with_truncated_candidate": 35,
+    "truncated_picked": 0
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 149,
+    "succ": 68,
+    "overall": 45.3,
+    "valid_only": 45.6,
+    "length_limit_episodes": 0,
+    "selection_steps": 1704,
+    "steps_with_truncated_candidate": 3,
+    "truncated_picked": 0
+   },
+   "mean_overall": 49.0,
+   "mean_valid_only": 52.1
+  },
+  "sft4096_alone": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 263,
+    "succ": 89,
+    "overall": 29.7,
+    "valid_only": 33.8,
+    "length_limit_episodes": 0,
+    "selection_steps": 4275,
+    "steps_with_truncated_candidate": 0,
+    "truncated_picked": 0
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 587,
+    "succ": 294,
+    "overall": 49.4,
+    "valid_only": 50.1,
+    "length_limit_episodes": 0,
+    "selection_steps": 7518,
+    "steps_with_truncated_candidate": 0,
+    "truncated_picked": 0
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 149,
+    "succ": 66,
+    "overall": 44.0,
+    "valid_only": 44.3,
+    "length_limit_episodes": 0,
+    "selection_steps": 2417,
+    "steps_with_truncated_candidate": 0,
+    "truncated_picked": 0
+   },
+   "mean_overall": 41.0,
+   "mean_valid_only": 42.7
+  },
   "rl4096_h1380x": {
    "online_mind2web": {
     "n": 300,
@@ -76,27 +187,236 @@
    "mean_valid_only": 48.4
   }
  },
- "paired_rl_state_head_minus_sft_trained_head_overall_pp_ci95": {
-  "online_mind2web": [
-   -0.3,
-   -5.7,
-   5.0
-  ],
-  "webvoyager": [
-   1.5,
-   -2.7,
-   5.9
-  ],
-  "deepshop": [
-   10.7,
-   2.0,
-   19.3
-  ],
-  "mean": [
-   3.9,
-   0.2,
-   7.7
-  ]
+ "reference_1024_cap_invalid": {
+  "rl1024_alone": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 265,
+    "succ": 79,
+    "overall": 26.3,
+    "valid_only": 29.8,
+    "length_limit_episodes": 96,
+    "selection_steps": 2571,
+    "steps_with_truncated_candidate": 96,
+    "truncated_picked": 96
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 582,
+    "succ": 299,
+    "overall": 50.3,
+    "valid_only": 51.4,
+    "length_limit_episodes": 131,
+    "selection_steps": 4865,
+    "steps_with_truncated_candidate": 131,
+    "truncated_picked": 131
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 147,
+    "succ": 44,
+    "overall": 29.3,
+    "valid_only": 29.9,
+    "length_limit_episodes": 31,
+    "selection_steps": 1527,
+    "steps_with_truncated_candidate": 31,
+    "truncated_picked": 31
+   },
+   "mean_overall": 35.3,
+   "mean_valid_only": 37.0
+  },
+  "rl1024_arm": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 257,
+    "succ": 104,
+    "overall": 34.7,
+    "valid_only": 40.5,
+    "length_limit_episodes": 26,
+    "selection_steps": 3471,
+    "steps_with_truncated_candidate": 732,
+    "truncated_picked": 26
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 572,
+    "succ": 358,
+    "overall": 60.2,
+    "valid_only": 62.6,
+    "length_limit_episodes": 22,
+    "selection_steps": 5737,
+    "steps_with_truncated_candidate": 856,
+    "truncated_picked": 22
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 135,
+    "succ": 57,
+    "overall": 38.0,
+    "valid_only": 42.2,
+    "length_limit_episodes": 9,
+    "selection_steps": 2068,
+    "steps_with_truncated_candidate": 348,
+    "truncated_picked": 9
+   },
+   "mean_overall": 44.3,
+   "mean_valid_only": 48.4
+  }
  },
- "baselines_4096": "running (jobs 401372-401380), to be added"
+ "paired_overall_pp_point_lo_hi": {
+  "rl_hrl - rl_h1380x": {
+   "online_mind2web": [
+    -0.3,
+    -5.7,
+    5.0
+   ],
+   "webvoyager": [
+    1.5,
+    -2.7,
+    5.9
+   ],
+   "deepshop": [
+    10.7,
+    2.0,
+    19.3
+   ],
+   "mean": [
+    3.9,
+    0.2,
+    7.7
+   ]
+  },
+  "rl_arm - rl_alone": {
+   "online_mind2web": [
+    10.0,
+    5.3,
+    15.0
+   ],
+   "webvoyager": [
+    5.0,
+    0.8,
+    9.1
+   ],
+   "deepshop": [
+    4.7,
+    -4.7,
+    14.0
+   ],
+   "mean": [
+    6.6,
+    2.7,
+    10.3
+   ]
+  },
+  "rl_h1380x - rl_alone": {
+   "online_mind2web": [
+    3.7,
+    -1.3,
+    8.7
+   ],
+   "webvoyager": [
+    0.8,
+    -3.5,
+    5.2
+   ],
+   "deepshop": [
+    -9.3,
+    -18.0,
+    0.0
+   ],
+   "mean": [
+    -1.6,
+    -5.5,
+    2.1
+   ]
+  },
+  "rl_hrl - rl_alone": {
+   "online_mind2web": [
+    3.3,
+    -2.0,
+    8.7
+   ],
+   "webvoyager": [
+    2.4,
+    -1.7,
+    6.6
+   ],
+   "deepshop": [
+    1.3,
+    -8.0,
+    10.7
+   ],
+   "mean": [
+    2.3,
+    -1.7,
+    6.2
+   ]
+  },
+  "rl_hrl - rl_arm": {
+   "online_mind2web": [
+    -6.7,
+    -12.0,
+    -1.3
+   ],
+   "webvoyager": [
+    -2.7,
+    -6.7,
+    1.5
+   ],
+   "deepshop": [
+    -3.3,
+    -12.0,
+    5.3
+   ],
+   "mean": [
+    -4.2,
+    -8.0,
+    -0.6
+   ]
+  },
+  "rl_arm - rl_h1380x": {
+   "online_mind2web": [
+    6.3,
+    1.3,
+    11.7
+   ],
+   "webvoyager": [
+    4.2,
+    0.2,
+    8.1
+   ],
+   "deepshop": [
+    14.0,
+    5.3,
+    23.3
+   ],
+   "mean": [
+    8.2,
+    4.5,
+    11.8
+   ]
+  },
+  "rl_alone - sft_alone": {
+   "online_mind2web": [
+    -1.0,
+    -6.0,
+    4.3
+   ],
+   "webvoyager": [
+    8.4,
+    3.9,
+    12.8
+   ],
+   "deepshop": [
+    -3.3,
+    -12.0,
+    5.3
+   ],
+   "mean": [
+    1.4,
+    -2.4,
+    5.1
+   ]
+  }
+ }
 }

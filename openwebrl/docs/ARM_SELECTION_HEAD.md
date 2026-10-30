@@ -2067,13 +2067,22 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 
 ## Selection heads on the RL checkpoint actor, 4,096 tokens (2026-10-30)
 
-**A head trained on the RL actor's own branch states beats the SFT-trained 1,380-state head on the RL actor by +3.9 pp [+0.2, +7.7] (mean overall), mostly DeepShop.** Main table and protocol: [final results](ARM_FINAL_RESULTS.md#final-selection-rl-actor-20261030). Same-window baselines at 4,096 tokens (RL alone, RL + SelectionARM, SFT 4B alone) are running as jobs 401372–401380.
+**On the RL checkpoint actor, Piotr's SelectionARM gains +6.6 pp [+2.7, +10.3] over the actor alone; the head trained on RL-actor states gains +2.3 [−1.7, +6.2] (−4.2 [−8.0, −0.6] vs SelectionARM) and beats the SFT-trained head by +3.9 [+0.2, +7.7], which itself gains nothing (−1.6).** One window, 4,096 response tokens, one run each. Main table and protocol: [final results](ARM_FINAL_RESULTS.md#final-selection-rl-actor-20261030).
 
 <details>
 <summary>Run notes and counts</summary>
 
 | Run | Benchmark | Tasks | Valid | Successes | Episodes ended by the 4,096 cap | Selection steps | Steps offering a cut-off candidate | Cut-off picks |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| RL alone (sft1) | Online-Mind2Web | 300 | 262 | 86 | 5 | 2,875 | 5 | 5 |
+| RL alone (sft1) | WebVoyager | 595 | 581 | 344 | 7 | 5,116 | 7 | 7 |
+| RL alone (sft1) | DeepShop | 150 | 150 | 61 | 2 | 1,446 | 2 | 2 |
+| RL + SelectionARM (piotr5) | Online-Mind2Web | 300 | 253 | 116 | 0 | 3,490 | 21 | 0 |
+| RL + SelectionARM (piotr5) | WebVoyager | 595 | 575 | 374 | 0 | 5,676 | 35 | 0 |
+| RL + SelectionARM (piotr5) | DeepShop | 150 | 149 | 68 | 0 | 1,704 | 3 | 0 |
+| SFT 4B alone (sft1) | Online-Mind2Web | 300 | 263 | 89 | 0 | 4,275 | 0 | 0 |
+| SFT 4B alone (sft1) | WebVoyager | 595 | 587 | 294 | 0 | 7,518 | 0 | 0 |
+| SFT 4B alone (sft1) | DeepShop | 150 | 149 | 66 | 0 | 2,417 | 0 | 0 |
 | SFT-trained head (head5x) | Online-Mind2Web | 300 | 261 | 97 | 1 | 3,397 | 38 | 1 |
 | SFT-trained head (head5x) | WebVoyager | 595 | 576 | 349 | 2 | 5,918 | 29 | 2 |
 | SFT-trained head (head5x) | DeepShop | 150 | 143 | 47 | 0 | 1,812 | 12 | 0 |
@@ -2082,6 +2091,7 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 | RL-state head (head5, rl4b seed 0) | DeepShop | 150 | 147 | 63 | 2 | 2,091 | 11 | 2 |
 
 - Code: `--max-new-tokens` option and RL actor registration in `crossbench_selector_eval.py`, functional tokenizer check in `serve_frozen_head_scorer.py` (commit 1b4b1db on `arm-selection-head`).
+- Baselines: jobs 401372–401380, with 401374 (RL alone, DeepShop) failing at startup when another process took its leased port and rerun as 401393; 14.7 H200-h for the nine baselines.
 - Three runs stopped at the 4 h limit and were resumed on the same plan (399826 → 400791, 400966 → 401156, 400969 → 401178); every run has its full record count.
 - Runtime `evaluations/rlactor-4096-20261030/` (`submit.sh`, `jobs.txt`, `analysis/`); RL-state data and heads in `selection-head-20261008/rl-states-20261029/`.
 
