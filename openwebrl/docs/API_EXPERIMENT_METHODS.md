@@ -3,46 +3,15 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. This tests whether spending more model work on each decision improves browser-task success, cost, browser activity or latency.
 
-**External reproduction is incomplete.** The public archive preserves selected source snapshots, but a clean clone cannot currently run all reported API experiments. See the [reproducibility audit](#external-reproducibility-status) before using the quickstart.
-
 This is the main guide for the published [API experiment code](../api_experiments/). It connects the study protocols, runnable entry points, source archive and result evidence. The main results are in [ARM_FINAL_RESULTS.md](ARM_FINAL_RESULTS.md); study-specific comparisons and uncertainty are in [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md).
 
 | To… | Start with… |
 |---|---|
-| Check what an external collaborator can reproduce | [Coverage, missing dependencies and validation limits](#external-reproducibility-status) |
 | Understand the comparisons | [Experiments](#experiments), [episode procedure](#episode-procedure) and [metric definitions](#metrics-and-comparability) |
 | Run Luna or Claude BrowserCode episodes | [Reproduction quickstart](#reproduction-quickstart); requires an existing configured runtime and defaults to a read-only dry run |
 | Trace or reconstruct the implementation | [Code map](#code-and-frozen-artifacts), [source reconstruction](#restore-an-original-campaign-layout) and [offline validation](#offline-validation) |
 | Interpret published outcomes | [Results and evidence](#results-and-analysis-pointers) |
 | Audit an original campaign | [Frozen runtime records](#frozen-runtime-records) and [operational details](#audit-and-operational-details) |
-
-## External reproducibility status
-
-**Audit: October 29, 2026. No campaign family has verified end-to-end reproduction from the public clone.** The published wrappers call an already configured runtime; the materializer reconstructs source filenames. Neither builds the missing runtime. Source integrity, code coverage and executable reproduction are separate checks.
-
-| Reported experiments | Published source coverage | Blocking gaps for a clean clone |
-|---|---|---|
-| Luna effort and Claude BrowserCode, OM2W | Actor/selector adapters, episode workers, budget/judge logic and existing-runtime wrappers | Frozen plans/configuration/prompts, manifests, exact support sources, browser bridge/build inputs and portable installation |
-| GPT-high BrowserCode, OM2W/WebVoyager/DeepShop | One earlier Sol single / Luna N3/N5 OM2W source snapshot | Later Luna single-high and WebVoyager/DeepShop campaign snapshots/configuration; missing shared support and preparation code; no reproduction wrapper |
-| Native CUAWright, OM2W | Proposal/transport, worker, gateway, broker, capture and judge adaptation source | Upstream/runtime assembly, override configuration, child bootstrap, grading checkout, task-phase/preparation code and campaign launch entry point |
-| Other historical API studies linked from the scaling document | Four archive keys do not enumerate every historical study | Per-study executed-source inventory and a runnable configuration are still needed; no complete coverage claim |
-
-Public benchmark files already exist for [OM2W](../data/eval/online-mind2web.jsonl), [WebVoyager](../data/eval/webvoyager_fara.jsonl) and [DeepShop](../data/eval/deepshop.jsonl). What is missing is the reproducible conversion into each frozen campaign's ordered `tasks.json`, arm/shard assignments and reused/fresh cohorts. Existing aggregate tables cannot reconstruct those identities. Private task-level results, trajectories and credentials remain outside this publication.
-
-<details>
-<summary>Concrete missing execution dependencies and validation evidence</summary>
-
-- [Reproduction preparation](../api_experiments/reproduce/common.py#L71) reads `campaign-plan.json`, `runtime-config.json`, `tasks.json` and `source-manifest.json`. None is produced by materialization. It then requires configured CUAWright/support trees, browser/Python executables and `browser_bridge.ts`, `browsercode/`, `node_modules/` and `javascript-runtime/bun`.
-- [BrowserCode bootstrap](../api_experiments/browsercode/runtime/bootstrap.py) imports the configured external source trees. Actor system templates come from the unpublished configuration; [Terra grading](../api_experiments/browsercode/judges/terra.py#L24) loads prompts from frozen support source. The earlier [GPT-high worker](../api_experiments/browsercode/workers/gpt_high_worker.py#L5) imports unpublished `preparation_gate`; the [shared controller](../api_experiments/browsercode/controllers/shared_controller.py#L27) imports unpublished `orchestration.launch_campaign`. These are code dependencies, beyond credentials and task data.
-- The [GPT-high adapter's policy table](../api_experiments/browsercode/models/paired_model.py#L11) supports Sol single and Luna N3/N5, without the later Luna single-high arm. Its [historical judge](../api_experiments/browsercode/judges/historical_gpt.py) is the OM2W o4-mini path; it does not supply the WebVoyager/DeepShop campaign grading integration. General benchmark reward implementations elsewhere in the repository do not establish the exact executed campaign wiring.
-- [Native execution](../api_experiments/cuawright/runtime/native_episode.py#L92) requires `upstream/src`, `local_override.yaml` and `confinement_support/`. The [native worker](../api_experiments/cuawright/workers/campaign_worker.py) requires the absent child `sitecustomize.py`, task-phase orchestration and release records; it defines `run_shard()` without a campaign CLI. [External grading](../api_experiments/cuawright/judges/external_judge.py#L21) additionally points to a private prior runtime containing official WebJudge source/dependencies and its plan.
-- The root [requirements.txt](../../requirements.txt) is a training environment specification, with no complete API runtime lock/install recipe. The archive additionally assumes host-specific executable paths and Linux sandbox features. Some upstream revisions are [documented historically](ARM_INFERENCE_SCALING.md#sol61-browsercode-cuawright-paired20-20261016), but the guide does not yet supply a verified runtime builder using all required pins and local adaptations.
-
-The audit hash-checked and materialized all four source layouts, and parsed every restored Python file successfully. Both Luna and Claude public-source-only dry runs exited with code 2 at the missing `campaign-plan.json`, before creating outputs or dispatching browser/API work. The twelve public offline tests pass, but their reproduction fixtures use synthetic tasks, placeholder dependency files and mocked SDK/worker execution. They establish source integrity and wrapper boundaries, not an installed browser runtime, live API compatibility or complete campaign reproduction.
-
-</details>
-
-To establish external reproduction, publish or reproducibly acquire the missing non-secret code and effective scientific configuration; provide pinned API/browser dependencies and a portable runtime builder; specify benchmark loading and exact cohort construction; and cover every reported campaign variant with a documented entry point. Validate that assembly in a clean environment, then perform a separately budgeted live protocol check. Reproducing fresh live-site evaluations cannot guarantee identical historical outcomes or latency.
 
 ## Experiments
 

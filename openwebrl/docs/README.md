@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[API experiments: unified guide to studies, protocols, Luna/Claude reproduction commands, campaign code map, metrics and result evidence](API_EXPERIMENT_METHODS.md). [Source archive](../api_experiments/README.md) · [External reproduction gaps](API_EXPERIMENT_METHODS.md#external-reproducibility-status).
+[API experiments: unified guide to studies, protocols, Luna/Claude reproduction commands, campaign code map, metrics and result evidence](API_EXPERIMENT_METHODS.md). [Source archive](../api_experiments/README.md).
 
 <!-- claude-browsercode-om2w300-v1:start -->
 [Claude BrowserCode OM2W300: four completed methods; valid-only success, model cost, native latency and selected-batch tradeoffs, with common-valid and cap-exclusion qualification](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
