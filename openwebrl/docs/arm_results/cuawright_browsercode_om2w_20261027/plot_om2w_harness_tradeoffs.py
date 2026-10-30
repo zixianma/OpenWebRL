@@ -63,9 +63,9 @@ METRICS = (("mean_model_usd_per_task", "Model cost / task ($; log)", "cost"),
 
 
 def draw(ax, rows, metric, native):
-    """Four observed points only; equal visibility and direct method labels."""
-    ax.set_ylim(58, 81)
-    ax.set_yticks([60, 70, 80])
+    """Four observed points; direct method labels and an emphasized N5 marker."""
+    ax.set_ylim(61, 80)
+    ax.set_yticks([61, 65, 70, 75, 80])
     ax.grid(False, which="both")
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(length=3, width=0.6, pad=2)
@@ -90,11 +90,12 @@ def draw(ax, rows, metric, native):
         method = row["method"]
         label, color, marker = METHODS[method]
         x, y = row[metric], 100 * row["mean_success_rate"]
-        ax.scatter(x, y, s=30, marker=marker, color=color,
+        ax.scatter(x, y, s=42 if method == "parallel5_select_high" else 30,
+                   marker=marker, color=color,
                    edgecolor="white", linewidth=0.5, zorder=3)
         dx, dy, ha = 4, 6, "left"
         if method == "serial_high":
-            dy = -9
+            dy = -9 if native else -6
             if metric == "mean_model_usd_per_task":
                 dx, ha = -4, "right"
                 if native:
@@ -111,13 +112,14 @@ def draw(ax, rows, metric, native):
             if method == "serial_high" and not native:
                 dx, dy, ha = -4, 8, "right"
             if method == "luna_single_high":
-                dy = -9
+                dy = -9 if native else 6
                 if native:
                     dx, ha = -4, "right"
             if method == "parallel3_select_high" and native:
                 dx, dy, ha = -4, 6, "right"
         ax.annotate(label, (x, y), xytext=(dx, dy), textcoords="offset points",
-                    ha=ha, va="center", fontsize=7, color=color)
+                    ha=ha, va="center", fontsize=7, color=color,
+                    weight="bold" if method == "parallel5_select_high" else "normal")
 
 
 def figure(means, native, metrics, output, stem):
@@ -130,6 +132,13 @@ def figure(means, native, metrics, output, stem):
                                        (native, "b)  Native CUAWright"))):
         pos = axes[ri, 0].get_position()
         fig.text(pos.x0, pos.y1 + 0.045, title, fontsize=8.5, weight="bold")
+        if columns == 3:
+            by_method = {row["method"]: row for row in rows}
+            gain = 100 * (by_method["parallel5_select_high"]["mean_success_rate"]
+                          - by_method["luna_single_high"]["mean_success_rate"])
+            fig.text(0.985, pos.y1 + 0.045, f"Luna single → N5: +{gain:.1f} pp",
+                     fontsize=7.5, color=METHODS["parallel5_select_high"][1],
+                     weight="bold", ha="right")
         for ci, (metric, label, _) in enumerate(metrics):
             draw(axes[ri, ci], rows, metric, native=bool(ri))
             axes[ri, ci].set_xlabel(label, labelpad=3)
@@ -176,7 +185,7 @@ def main():
         "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
         "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
-        "visualization": "Separate harness rows; directly labeled observed points with equal opacity; no connecting lines, frontier rings or grid lines. X-axis ranges differ by harness.",
+        "visualization": "Separate harness rows; shared cropped y-axis 61–80%; exact Luna single-to-N5 percentage-point gains labeled; N5 emphasized. Equal opacity; no connecting lines, frontier rings or grid lines. X-axis ranges differ by harness.",
         "comparability": "Different limits, collection windows and task-time boundaries; descriptive only",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")
