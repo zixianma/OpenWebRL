@@ -19,19 +19,19 @@ from matplotlib.ticker import StrMethodFormatter, NullFormatter
 from matplotlib.lines import Line2D
 
 METHODS = {
-    "serial_high": ("Sol single", "#0072B2", "s"),
-    "luna_single_high": ("Luna single", "#0072B2", "o"),
-    "parallel3_select_high": ("Luna N3", "#E6B800", "o"),
-    "parallel5_select_high": ("Luna N5", "#E87500", "o"),
+    "serial_high": ("Sol single", "#08519C", "s"),
+    "luna_single_high": ("Luna single", "#08519C", "o"),
+    "parallel3_select_high": ("Luna N3", "#A50F15", "^"),
+    "parallel5_select_high": ("Luna N5", "#A50F15", "D"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
 EFFORT_METHODS = {
-    "luna_single_xhigh": ("Single xhigh", "#7B3294", "o"),
-    "luna_single_medium": ("Single medium", "#009E73", "o"),
-    "luna_single_low": ("Single low", "#0072B2", "o"),
-    "luna_n5_medium": ("N5 medium", "#009E73", "D"),
-    "luna_n5_low": ("N5 low", "#0072B2", "D"),
+    "luna_single_medium": ("Single medium", "#4292C6", "o"),
+    "luna_single_low": ("Single low", "#9ECAE1", "o"),
+    "luna_n5_medium": ("N5 medium", "#EF3B2C", "D"),
+    "luna_n5_low": ("N5 low", "#FC9272", "D"),
 }
+EXPECTED_EFFORT_ARMS = ("luna_single_xhigh", *EFFORT_METHODS)
 EFFORT_AGGREGATE = Path(__file__).parent.parent / "luna_browsercode_effort_om2w300_20261030/aggregate.json"
 
 
@@ -66,10 +66,10 @@ def read_effort_rows(path):
     if data.get("final_audit_complete") is not False or data.get("provisional") is not True:
         raise ValueError("The new effort cohort must retain its pending-audit qualification")
     indexed = {row["arm"]: row for row in data["aggregate_rows"]}
-    if set(indexed) != set(EFFORT_METHODS) or len(data["aggregate_rows"]) != len(indexed):
+    if set(indexed) != set(EXPECTED_EFFORT_ARMS) or len(data["aggregate_rows"]) != len(indexed):
         raise ValueError("Exactly five distinct BrowserCode effort methods required")
     rows = []
-    for arm in EFFORT_METHODS:
+    for arm in EXPECTED_EFFORT_ARMS:
         row = indexed[arm]
         if row["recorded"] != 300 or row["valid"] + row["invalid"] != 300:
             raise ValueError("Complete 300-disposition effort panels required")
@@ -81,7 +81,8 @@ def read_effort_rows(path):
             coverage = row[key + "_observed_tasks"]
             if type(coverage) is not int or not 0 < coverage <= 300:
                 raise ValueError("Explicit observed-task coverage required")
-        rows.append(dict(row, method=arm, mean_success_rate=row["success_rate"]))
+        if arm in EFFORT_METHODS:
+            rows.append(dict(row, method=arm, mean_success_rate=row["success_rate"]))
     return data, rows
 
 
@@ -171,7 +172,7 @@ def legend_handles(rows, recent=False):
     styles = EFFORT_METHODS if recent else METHODS
     high_labels = {"serial_high": "Sol single high", "luna_single_high": "Luna single high",
                    "parallel3_select_high": "Luna N3 high", "parallel5_select_high": "Luna N5 high"}
-    effort_labels = {"luna_single_xhigh": "Luna single xhigh", "luna_single_medium": "Luna single medium",
+    effort_labels = {"luna_single_medium": "Luna single medium",
                      "luna_single_low": "Luna single low", "luna_n5_medium": "Luna N5 medium + medium",
                      "luna_n5_low": "Luna N5 low + low"}
     labels = effort_labels if recent else high_labels
@@ -247,6 +248,8 @@ def main():
         "native_status_aggregate_sha256": hashlib.sha256(Path(__file__).with_name("native_cuawright_completed.json").read_bytes()).hexdigest(),
         "effort_aggregate_sha256": hashlib.sha256(args.effort_aggregate.read_bytes()).hexdigest(),
         "effort_status": "Provisional; collection complete, final independent audit pending",
+        "excluded_from_plot": ["luna_single_xhigh"],
+        "color_encoding": {"single": {"high": "#08519C", "medium": "#4292C6", "low": "#9ECAE1"}, "candidate_plus_selection": {"high": "#A50F15", "medium": "#EF3B2C", "low": "#FC9272"}},
         "effort_final_audit_complete": effort_data["final_audit_complete"],
         "effort_judge": "gpt56-terra-terminal-success-v1",
         "effort_metric_coverage": {row["arm"]: {key: value for key, value in row.items() if key.endswith("_observed_tasks") or key in ("unknown_model_usage_calls", "derived_invalid_count")} for row in effort},
@@ -262,7 +265,7 @@ def main():
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
         "effort_cost_scope": "All-attempt model ledger charges plus full unknown reserves, including helpers/counters, divided by all300 dispositions; external judge excluded. This cost coordinate differs from valid-task efficiency.",
         "effort_latency_and_commands_scope": "All finite recorded measurements, including invalid outcomes; metric-specific coverage, no zero filling; actor-loop latency excludes setup, final judge-only capture, cleanup and external judge.",
-        "visualization": "Merged BrowserCode row overlays four historical high-effort points (filled; o4-mini) and five recent effort points (open; Terra; provisional). Top y-axis30–78%, native68–80%; shared scales within each row. Method and cohort legends sit to the right, outside every data panel; no direct point labels, leader lines, method-connecting curves, frontiers or grid. Native coordinates unchanged.",
+        "visualization": "Merged BrowserCode row overlays four historical high-effort points (filled; o4-mini) and four recent medium/low effort points (open; Terra; provisional). Luna single xhigh is omitted from plotting; its source aggregate remains complete. Top y-axis30–78%, native68–80%; shared scales within each row. Method and cohort legends sit to the right, outside every data panel; no direct point labels, leader lines, method-connecting curves, frontiers or grid. Native coordinates unchanged. Blue encodes single-call policies and red encodes candidate-plus-selection policies; high is dark, medium intermediate and low light. Squares=Sol single, circles=Luna single, triangles=N3 and diamonds=N5.",
         "comparability": "Different judges, limits, collection windows, contention, efficiency coverage and task-time boundaries; descriptive only. Overlay does not imply paired or causal effort effects across cohorts; three-benchmark averages exclude the OM2W-only effort cohort.",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")

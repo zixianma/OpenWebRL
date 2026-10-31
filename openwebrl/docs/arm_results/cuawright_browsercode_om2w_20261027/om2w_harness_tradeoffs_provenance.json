@@ -3,16 +3,24 @@
   "native_status_aggregate_sha256": "cc991c8a39756b0412d53f4d41edd9808c8e577708ccbd4e0ab1676e02299518",
   "effort_aggregate_sha256": "22af7a891c256e0228a0c3b9d7eddb4f1ab026ece82bd4e6abecda9a96daf409",
   "effort_status": "Provisional; collection complete, final independent audit pending",
+  "excluded_from_plot": [
+    "luna_single_xhigh"
+  ],
+  "color_encoding": {
+    "single": {
+      "high": "#08519C",
+      "medium": "#4292C6",
+      "low": "#9ECAE1"
+    },
+    "candidate_plus_selection": {
+      "high": "#A50F15",
+      "medium": "#EF3B2C",
+      "low": "#FC9272"
+    }
+  },
   "effort_final_audit_complete": false,
   "effort_judge": "gpt56-terra-terminal-success-v1",
   "effort_metric_coverage": {
-    "luna_single_xhigh": {
-      "derived_invalid_count": 0,
-      "mean_browser_steps_observed_tasks": 300,
-      "mean_model_usd_per_task_observed_tasks": 300,
-      "mean_task_seconds_observed_tasks": 271,
-      "unknown_model_usage_calls": 0
-    },
     "luna_single_medium": {
       "derived_invalid_count": 0,
       "mean_browser_steps_observed_tasks": 300,
@@ -111,7 +119,7 @@
   "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
   "effort_cost_scope": "All-attempt model ledger charges plus full unknown reserves, including helpers/counters, divided by all300 dispositions; external judge excluded. This cost coordinate differs from valid-task efficiency.",
   "effort_latency_and_commands_scope": "All finite recorded measurements, including invalid outcomes; metric-specific coverage, no zero filling; actor-loop latency excludes setup, final judge-only capture, cleanup and external judge.",
-  "visualization": "Merged BrowserCode row overlays four historical high-effort points (filled; o4-mini) and five recent effort points (open; Terra; provisional). Top y-axis30\u201378%, native68\u201380%; shared scales within each row. Method and cohort legends sit to the right, outside every data panel; no direct point labels, leader lines, method-connecting curves, frontiers or grid. Native coordinates unchanged.",
+  "visualization": "Merged BrowserCode row overlays four historical high-effort points (filled; o4-mini) and four recent medium/low effort points (open; Terra; provisional). Luna single xhigh is omitted from plotting; its source aggregate remains complete. Top y-axis30\u201378%, native68\u201380%; shared scales within each row. Method and cohort legends sit to the right, outside every data panel; no direct point labels, leader lines, method-connecting curves, frontiers or grid. Native coordinates unchanged. Blue encodes single-call policies and red encodes candidate-plus-selection policies; high is dark, medium intermediate and low light. Squares=Sol single, circles=Luna single, triangles=N3 and diamonds=N5.",
   "comparability": "Different judges, limits, collection windows, contention, efficiency coverage and task-time boundaries; descriptive only. Overlay does not imply paired or causal effort effects across cohorts; three-benchmark averages exclude the OM2W-only effort cohort.",
   "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
 }
