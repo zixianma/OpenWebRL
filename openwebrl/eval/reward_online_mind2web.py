@@ -20,6 +20,7 @@ Usage:
 import asyncio
 import json
 import logging
+import os
 import re
 from typing import Any
 
@@ -172,20 +173,40 @@ async def _judge(args: Any, sample: Sample, tool_parser: ToolParser) -> tuple[fl
 
     api_model = getattr(args, "judge_api_model")
     timeout_secs = getattr(args, "judge_timeout_secs", 120.0)
-    client = _get_openai_client(method=getattr(args, "judge_api_mode", "token"))
+    if os.getenv("OPENWEBRL_DIRECT_OPENAI") == "1":
+        from openai import AsyncOpenAI
+
+        client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"], max_retries=0)
+    else:
+        client = _get_openai_client(method=getattr(args, "judge_api_mode", "token"))
+    from openwebrl.eval.judge_api_budget import JudgeBudget, JudgeBudgetExhausted
+
+    budget = JudgeBudget.from_env()
     max_retries = 4
     saw_timeout = False
     for attempt in range(max_retries):
         try:
+            ticket = budget.reserve() if budget is not None else None
+        except JudgeBudgetExhausted as exc:
+            return None, str(exc), False
+        try:
+            completion_limit = getattr(args, "judge_max_completion_tokens", None)
+            call_options = {"max_completion_tokens": completion_limit} if completion_limit is not None else {}
             coro = client.chat.completions.create(
                 model=api_model, messages=llm_messages, seed=42,
+                **call_options,
             )
             resp = await (asyncio.wait_for(coro, timeout=timeout_secs) if timeout_secs else coro)
+            if budget is not None:
+                budget.settle(ticket, getattr(resp, "usage", None))
+                ticket = None
             text = resp.choices[0].message.content or ""
             logger.info("Judge response: %s", text)
             return _parse_verdict(text), text, False
 
         except asyncio.TimeoutError as e:
+            if budget is not None and ticket is not None:
+                budget.settle(ticket)
             saw_timeout = True
             logger.warning(
                 "Judge API call timed out (attempt %d/%d, timeout=%ss): %s",
@@ -196,6 +217,8 @@ async def _judge(args: Any, sample: Sample, tool_parser: ToolParser) -> tuple[fl
             else:
                 return None, f"Judge timeout exhausted after {max_retries} attempts.", True
         except Exception as e:
+            if budget is not None and ticket is not None:
+                budget.settle(ticket)
             logger.warning(
                 "Judge API call failed (attempt %d/%d): %s", attempt + 1, max_retries, e
             )

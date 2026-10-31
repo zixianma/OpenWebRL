@@ -12,6 +12,86 @@ C2 rollout collection, action-level filtering, original SFT, optimizer ablation 
 - [C2 checkpoint scaling evaluation](#arm-c2-scaling-eval)
 - [C2 update-500/update-700 full evaluation](#arm-c2-full300-eval)
 - [SFT with explicit action comparison](#arm-comparison-sft-20261007)
+- [Soft-MTP for the OpenWebRL SFT actor](#arm-sft-soft-mtp-20261030)
+
+---
+
+<a id="arm-sft-soft-mtp-20261030"></a>
+## Soft-MTP for the OpenWebRL SFT actor — 2026-10-30
+
+**One Soft-MTP SFT pilot and a fresh actor evaluation are prepared, pending
+exact compute/API approval.** The [Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
+gradient routing for an existing MTP architecture with a shared linear output
+head. Its math/code fine-tuning results **discard the MTP heads and use NTP
+only**. Training MTP during our multimodal SFT and keeping the heads for action
+drafting are therefore untested extensions, not reproduced paper results. The
+official OpenWebRL-SFT Qwen3-VL-4B checkpoint has no MTP modules, and our
+released SFT workflow delegates optimization to LLaMAFactory. No GPU run or
+new resource allocation is authorized by this plan.
+
+Reuse the released SFT data conversion, Qwen3-VL chat template, per-turn
+examples, current screenshot, `mask_history: true`, 36,864-token cutoff,
+frozen vision tower/projector, and ordinary assistant-response supervision.
+Start every new arm from the same **base Qwen3-VL-4B-Thinking** checkpoint at
+step zero, with fresh optimizer and scheduler. Do not resume the existing SFT
+checkpoint and call it a matched architecture experiment. Preserve the NTP
+actor path and its LM head; add causal MTP modules that consume prior draft
+tokens and share that LM head. The initial implementation uses three small
+sequential MLP draft heads with `K=3` and `lambda_mtp=1`; it reproduces the
+paper's Soft-MTP **gradient route**, but not its transformer-block draft-head
+architecture. Any comparison to the published results must keep that distinction.
+The code must support exact speculative verification; an unverified parallel
+logit head is not a drop-in actor decoder.
+
+For each row, let `y[t]` be the target of the NTP hidden state at position
+`t`. MTP head `k` at `t` predicts the same `y[t+k]` as NTP at `t+k`. Apply the
+paper's straight-through route only where `y[t:t+k+1]` is one contiguous
+supervised assistant span. This keeps drafts inside the response and avoids
+crossing masked prompt, screenshot, and tool-result boundaries. The mean-loss
+coefficient for head `k` is `lambda_mtp * N0 / (K * Nk)`, with `N0` and `Nk`
+the actual valid target counts after masking. The reusable loss and a test of
+its hidden-state gradients against explicit teacher KL are in
+[`sft/soft_mtp.py`](../../sft/soft_mtp.py) and
+[`tests/test_soft_mtp_sft.py`](../../tests/test_soft_mtp_sft.py). The Qwen3-VL
+training path is in [`sft/qwen3vl_mtp.py`](../../sft/qwen3vl_mtp.py) and
+[`sft/train_soft_mtp_with_llamafactory.py`](../../sft/train_soft_mtp_with_llamafactory.py).
+Serving and exact speculative verification are not implemented.
+
+The first pilot trains **one Soft-MTP actor** and evaluates it beside a fresh
+run of the released SFT checkpoint on the same 300 tasks and actor/judge
+protocol. That reference is useful operationally but is **not** a controlled
+training comparison: its training lineage, code and update schedule were not
+frozen alongside this run. Report NTP loss, action-token likelihood, tool-call
+parsing, task success, valid-only success and training time/memory. A causal
+claim about Soft-MTP requires three fresh arms from the same base and data:
+NTP-only SFT, hard-label MTP SFT and Soft-MTP SFT, with matched updates, `K`,
+`lambda_mtp` and evaluation. Exact self-speculative acceptance and latency are
+a later serving experiment; no current speed claim follows from this SFT run.
+Only consider an action-token-only MTP ablation after the full-response masked
+comparison; it changes the released SFT objective.
+
+The released 3,085-row dataset is prepared as 3,085 per-turn records and 3,085
+screenshots in scrubbed storage. A CPU LLaMAFactory preflight constructs an
+image-bearing batch and verifies the current assistant response is the only
+supervised span. A long prepared row produces 9,768 input tokens and 719
+supervised targets at the released 262,144-pixel image limit; it is a
+representative memory gate, not a proven maximum over all rows. Six loss,
+causality and API-budget tests pass. The isolated
+trainer environment has PyTorch 2.11, LLaMAFactory and DeepSpeed; the actual
+training configuration is stored at
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/soft-mtp-full.yaml`.
+The first approved GPU allocation must gate full training on an image-bearing
+backward, checkpoint save/reload and long-context memory check, charging that
+work to the same allocation. The prepared 8-H200 training job is capped at
+eight hours total, including the gate and any retry. It preserves the released
+effective batch size of 16 by using batch size one and accumulation two on
+eight GPUs. Two separately capped one-H200, seven-hour jobs then run the
+Soft-MTP and released actors on the same 300 Online-Mind2Web tasks with local
+browsers, T0.6/p0.95/k20, 4,096 response tokens, 30 turns and the
+o4-mini/AgentTrek judge. The pair is bounded by 620 browser sessions, 2,480
+judge attempts and a $20 shared judge-usage ledger. The evaluation code saves
+every task result and judge verdict; separate runs log to `openwebrl-evals`.
+No job has been submitted; approval of the exact request is pending.
 
 ---
 

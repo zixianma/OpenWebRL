@@ -126,7 +126,7 @@ for the work you are doing, then follow its contents to dated experiment records
 | [ARM_INTEGRATION_PLAN.md](ARM_INTEGRATION_PLAN.md) | ARM model understanding, literature, integration options, and longer-term roadmap |
 | [ARM_INFERENCE.md](ARM_INFERENCE.md) | Inference protocol, judge alignment, and retry policy |
 | [ARM_INFERENCE_SCALING.md](ARM_INFERENCE_SCALING.md) | Controlled inference results, repeats and ablations; actor/selector comparisons, pending studies and collapsible evidence/history |
-| [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, checkpoint procedures, and [explicit action comparison](ARM_SFT.md#arm-comparison-sft-20261007) |
+| [ARM_SFT.md](ARM_SFT.md) | C2 collection, filtering, SFT, 1A configuration, checkpoint procedures, [explicit action comparison](ARM_SFT.md#arm-comparison-sft-20261007), and [Soft-MTP SFT pilot](ARM_SFT.md#arm-sft-soft-mtp-20261030) |
 | [ARM_PREFERENCE.md](ARM_PREFERENCE.md) | Preference experiments, pair audits, and viability plans |
 | [ARM_JOINT_DATA.md](ARM_JOINT_DATA.md) | Combined C2/Piotr data review, examples, training, and recovery |
 | [ARM_JOINT_DATA_SOURCES.md](ARM_JOINT_DATA_SOURCES.md) | Original five-candidate C2 and Piotr records behind the joint data; paths, generator, and join keys |

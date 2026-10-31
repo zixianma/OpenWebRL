@@ -98,6 +98,7 @@ class EvalArgs:
     # reward config
     judge_max_attached_imgs: int = 3
     judge_timeout_secs: float = 120.0
+    judge_max_completion_tokens: int | None = None
     judge_api_model: str = "gpt-4.1" # o4-mini
     judge_api_mode: str = "token"
     judge_prompt_variant: str = "default"
@@ -431,6 +432,9 @@ def main():
     parser.add_argument("--hf-checkpoint", type=str, default=os.environ.get("MODEL_PATH") or os.environ.get("HF_CHECKPOINT", ""))
     parser.add_argument("--max-steps", type=int, default=16)
     parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--top-p", type=float, default=1.0)
+    parser.add_argument("--top-k", type=int, default=-1)
+    parser.add_argument("--max-new-tokens", type=int, default=2048)
     parser.add_argument("--output", type=str, default=os.environ.get("OUTPUT_ROOT", "eval_outputs/browser_eval"),
                         help="Output JSONL path (default: auto-generated with timestamp)")
     parser.add_argument("--browser-observation-memory", action="store_true")
@@ -479,6 +483,8 @@ def main():
     )
     parser.add_argument("--judge-timeout-secs", type=float, default=30.0,
                         help="Timeout in seconds for a single judge API call. <=0 disables the timeout.")
+    parser.add_argument("--judge-max-completion-tokens", type=int, default=None,
+                        help="Optional output-token cap for each judge API call.")
     parser.add_argument("--eval-protocol", type=str, default="browser",
                         choices=["browser", "webvoyager", "online_mind2web", "deepshop"],
                         help="Eval judge protocol: browser (default VLM judge), webvoyager, online_mind2web, or deepshop.")
@@ -536,6 +542,7 @@ def main():
         browser_memory_max_entries=args.browser_memory_max_entries,
         browser_memory_max_chars=args.browser_memory_max_chars,
         judge_timeout_secs=args.judge_timeout_secs,
+        judge_max_completion_tokens=args.judge_max_completion_tokens,
         path_to_save_generated_samples=os.path.join(args.output, 'eval_samples'),
         inference_step_timeout_secs=args.inference_step_timeout_secs,
         task_timeout_secs=args.task_timeout_secs,
@@ -545,7 +552,9 @@ def main():
 
     sampling_params = {
         "temperature": args.temperature,
-        "max_new_tokens": 2048,
+        "top_p": args.top_p,
+        "top_k": args.top_k,
+        "max_new_tokens": args.max_new_tokens,
     }
 
     # Load tasks
