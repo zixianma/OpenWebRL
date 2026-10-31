@@ -1,0 +1,34 @@
+{
+  "schema": "terra-gpt-om2w-high-view-v1",
+  "command": "python3 -B plot_om2w_terra_tradeoffs.py --valid-only --high-only",
+  "matplotlib": "3.9.4",
+  "metric_population": "resolved_valid_tasks",
+  "harnesses": [
+    "browsercode",
+    "native"
+  ],
+  "methods": [
+    "serial_high",
+    "luna_single_high",
+    "parallel3_select_high",
+    "parallel5_select_high"
+  ],
+  "points": 8,
+  "judge_protocol": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 4096,
+    "seed": 42,
+    "version": "gpt56-terra-terminal-success-v1"
+  },
+  "input_sha256": {
+    "om2w_terra_valid_only_aggregate.json": "accfa541251ad5db8a34a1221b984ec027e753038111814045bdcd47e587244e",
+    "plot_om2w_terra_tradeoffs.py": "e3debb6dd5ce91251d1e6cdfcd819b278503868cb58e02f71b20f3c818425fcb"
+  },
+  "output_sha256": {
+    "om2w_terra_high_valid_only_tradeoffs.png": "651cf1f8466092368b016e792c912be0414f936134a45979afe0b5df1bab882d",
+    "om2w_terra_high_valid_only_tradeoffs.svg": "fc6a6594262b58623066f29ea2f6272241fc1c289f1ad06135229374b154c60c",
+    "om2w_terra_high_valid_only_tradeoffs.pdf": "950c5c15966084cd816c9189cfe8f4b89a94adb6afb5f49e47db812769785e98",
+    "om2w_terra_high_valid_only_tradeoffs_coordinates.csv": "1e82e2ac006739ba2b73c78580a6f36272a0eb10ac57b34231b5881baf67c707"
+  }
+}

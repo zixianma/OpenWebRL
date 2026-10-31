@@ -5,6 +5,7 @@ Requires matplotlib. No API credentials, private trajectories, Slurm or original
 campaign directories are needed. Run with --output-dir to export PNG/SVG/PDF/CSV.
 Use --valid-only for valid-task actor metrics and --harness browsercode to focus
 on the BrowserCode methods. Valid failures remain in every valid-task view.
+Use --high-only to show Sol single and Luna single/N3/N5 at high effort.
 """
 from __future__ import annotations
 
@@ -98,7 +99,8 @@ def write_coordinates(path, points):
         writer.writerows({key: value for key, value in row.items() if key in fields} for row in points)
 
 
-def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browsercode", "native")):
+def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browsercode", "native"),
+           high_only=False):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -112,6 +114,8 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
                          "svg.fonttype": "none", "svg.hashsalt": "openwebrl-terra-om2w-v1", "pdf.fonttype": 42,
                          "savefig.facecolor": "white"})
     valid_only = data.get("metric_population") == "resolved_valid_tasks"
+    points = [row for row in data["points"] if row["harness"] in harnesses
+              and (not high_only or row["method"] in HIGH_METHODS)]
     single_row = len(harnesses) == 1
     fig, axes = plt.subplots(len(harnesses), 3, figsize=(11.5, 3.8 if single_row else 6.1),
                              sharey="row", squeeze=False)
@@ -119,7 +123,7 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
                         hspace=0.45, wspace=0.25)
     if single_row:
         fig.subplots_adjust(top=0.82, bottom=0.28)
-    elif valid_only:
+    elif valid_only and not high_only:
         fig.subplots_adjust(bottom=0.22)
     title = "Online-Mind2Web · GPT-5.6 Terra terminal judge"
     if valid_only:
@@ -127,7 +131,7 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
     fig.suptitle(title, x=0.065,
                  y=0.985, ha="left", fontsize=11, weight="bold")
     for index, harness in enumerate(harnesses):
-        rows = sorted((row for row in data["points"] if row["harness"] == harness),
+        rows = sorted((row for row in points if row["harness"] == harness),
                       key=lambda row: tuple(STYLES).index(row["method"]))
         ys = [100 * row["success_rate"] for row in rows]
         low = max(0, 5 * math.floor((min(ys) - 3) / 5))
@@ -151,9 +155,11 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
             if scale == "log":
                 ax.xaxis.set_major_formatter(StrMethodFormatter("${x:g}" if column == 0 else "{x:g}"))
                 if column == 0:
-                    ax.set_xticks([0.002, 0.01, 0.05, 0.2] if harness == "browsercode" else [0.1, 0.3, 1])
+                    ax.set_xticks(([0.01, 0.05, 0.2] if high_only else [0.002, 0.01, 0.05, 0.2])
+                                  if harness == "browsercode" else [0.1, 0.3, 1])
                 else:
-                    ax.set_xticks([40, 100, 200] if harness == "browsercode" else [600, 900, 1200])
+                    ax.set_xticks(([100, 150, 200] if high_only else [40, 100, 200])
+                                  if harness == "browsercode" else [600, 900, 1200])
             if column == 0:
                 ax.set_ylabel("Valid Terra success (%)", labelpad=4)
             for row in rows:
@@ -171,15 +177,15 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
                    loc="upper left", bbox_to_anchor=(0.76, 0.84 if single_row else (0.925 if index == 0 else 0.47)),
                    frameon=False, fontsize=7.5, title_fontsize=8,
                    handletextpad=0.5, labelspacing=0.5, borderaxespad=0)
-    missing = sum(row.get("original_valid_missing_evidence", 0) for row in data["points"] if row["harness"] in harnesses)
-    retry = any(row.get("cohort") == "recent_terra_effort_with_prescribed_retry" for row in data["points"])
+    missing = sum(row.get("original_valid_missing_evidence", 0) for row in points)
+    retry = any(row.get("cohort") == "recent_terra_effort_with_prescribed_retry" for row in points)
     footnote = ("n = valid Terra judgments; valid subsets differ. Native uses a selected endpoint-evidence subset: "
                 f"{missing} original-valid runs ungraded.\n"
                 "Model cost excludes judging. Actor limits, measurement scopes and live windows differ; descriptive comparison.")
     if retry:
         qualifier = "Medium/low provisional; " if data.get("provisional_recent_effort") else "Medium/low: "
         footnote += "\n" + qualifier + "one prescribed retry per original invalid; cumulative costs and observed task times."
-    elif data.get("provisional_recent_effort"):
+    elif data.get("provisional_recent_effort") and not high_only:
         footnote += "\nMedium/low results remain provisional."
     if valid_only:
         footnote = ("Success and actor metrics use valid tasks (successes and failures); valid subsets differ. Judge fees excluded.\n"
@@ -188,14 +194,17 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
         if "native" in harnesses:
             footnote += f" Native evidence-selected subset; {missing} original-valid runs ungraded."
         gaps = []
-        for row in data["points"]:
-            if row["harness"] not in harnesses:
-                continue
+        for row in points:
             observed = row["mean_task_seconds_observed_tasks"]
             if observed < row["graded_valid"]:
                 gaps.append(f"{STYLES[row['method']][0]} {observed}/{row['graded_valid']}")
         if gaps:
             footnote += "\nActor latency coverage: " + "; ".join(gaps) + " valid tasks."
+        if high_only:
+            footnote = ("All actors: high effort. Success, cost, commands and latency use valid tasks (successes and failures); subsets differ.\n"
+                        "Judge fees excluded. Actor limits, measurement scopes and live windows differ; descriptive comparison.")
+            if "native" in harnesses:
+                footnote += f"\nNative uses a selected endpoint-evidence subset; {missing} original-valid runs ungraded."
     fig.text(0.065, 0.035, footnote, fontsize=7.5, ha="left", va="bottom")
     for extension in ("png", "svg", "pdf"):
         metadata = {"Date": None} if extension == "svg" else ({"CreationDate": None, "ModDate": None} if extension == "pdf" else {})
@@ -205,8 +214,7 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
             path = output_dir / f"{stem}.svg"
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
-    write_coordinates(output_dir / f"{stem}_coordinates.csv",
-                      [row for row in data["points"] if row["harness"] in harnesses])
+    write_coordinates(output_dir / f"{stem}_coordinates.csv", points)
 
 
 def main():
@@ -217,6 +225,8 @@ def main():
     parser.add_argument("--valid-only", action="store_true",
                         help="Use the aggregate that conditions all actor metrics on resolved valid tasks")
     parser.add_argument("--harness", choices=("both", "browsercode", "native"), default="both")
+    parser.add_argument("--high-only", action="store_true",
+                        help="Show only Sol single and Luna single/N3/N5 at high actor effort")
     args = parser.parse_args()
     aggregate = args.aggregate or Path(__file__).with_name(
         "om2w_terra_valid_only_aggregate.json" if args.valid_only else "om2w_terra_all_aggregate.json")
@@ -224,11 +234,15 @@ def main():
     require(not args.valid_only or data.get("metric_population") == "resolved_valid_tasks",
             "--valid-only requires valid-task actor metrics, not just a valid-only success denominator")
     stem = "om2w_terra_valid_only_tradeoffs" if data.get("metric_population") == "resolved_valid_tasks" else "om2w_terra_all_tradeoffs"
+    if args.high_only:
+        stem = stem.replace("om2w_terra_", "om2w_terra_high_")
     harnesses = ("browsercode", "native") if args.harness == "both" else (args.harness,)
     if args.harness != "both":
         stem += "_" + args.harness
-    render(data, args.output_dir, stem=stem, harnesses=harnesses)
-    print(json.dumps({"points": sum(row["harness"] in harnesses for row in data["points"]), "axes": 3 * len(harnesses),
+    render(data, args.output_dir, stem=stem, harnesses=harnesses, high_only=args.high_only)
+    print(json.dumps({"points": sum(row["harness"] in harnesses and
+                                   (not args.high_only or row["method"] in HIGH_METHODS)
+                                   for row in data["points"]), "axes": 3 * len(harnesses),
                       "judge": PROTOCOL["model"], "outputs": ["png", "svg", "pdf", "csv"]}))
 
 

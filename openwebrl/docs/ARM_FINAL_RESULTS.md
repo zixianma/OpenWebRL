@@ -181,7 +181,37 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 <a id="luna-browsercode-effort-om2w300-20261030"></a>
 
-**Every point below uses GPT-5.6 Terra terminal-success grading: medium effort, 4,096 completion tokens and seed 42.** We regraded all 1,071 original-valid historical BrowserCode episodes and 821 native episodes with qualified saved endpoint evidence. Another 276 original-valid native episodes lack that evidence and remain ungraded; earlier judges' labels are not substituted. **Native success rates are conditional on this selected evidence subset, not full-300 rates.** The historical runs' 232 original invalid outcomes remain invalid. The separate regrading cost was **$27.12**, with no actor calls.
+**High-effort actors only: Sol single and Luna single/N3/N5, in both harnesses.** Every point uses GPT-5.6 Terra terminal-success grading (medium judge effort, 4,096 completion tokens, seed 42). Success, model cost, actor latency and browser commands all use each method's Terra-valid tasks, including successes and failures. These are different valid subsets, not a shared-task intersection; each displayed metric has complete observation coverage within its own subset.
+
+**Native success is conditional on selected endpoint evidence:** 276 original-valid native episodes lack qualified saved evidence and remain ungraded. Different actor limits, measurement scopes and live collection windows also prevent a causal harness comparison.
+
+![High-effort Sol and Luna single/N3/N5, Terra-judged valid-task tradeoffs across BrowserCode and native CUAWright](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.png)
+
+[PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.svg) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs_coordinates.csv) · [Valid-task aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_aggregate.json) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py) · [Render provenance](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs_provenance.json)
+
+*Luna is a circle; Sol a square. Blue denotes a single proposal; red denotes candidates plus a selector (N3 open, N5 filled). All actors use high effort. Legends are outside the panels and show valid-task denominators. Cost and latency axes are logarithmic. Judge fees are excluded. Browser commands are selected BrowserCode blocks or literal native command-log entries, each potentially containing several actions; they are not standardized action counts.*
+
+#### High-effort Terra success and coverage
+
+Each method starts from 300 planned tasks. “Without valid Terra verdict” includes actor-invalid episodes, missing qualified evidence and invalid new judgments; it is not a judged-failure count.
+
+| Harness | Method | Successes | Terra-valid | Without valid Terra verdict | Valid-only success |
+|---|---|---:|---:|---:|---:|
+| BrowserCode | Sol single high | 177 | 266 | 34 | 66.5% |
+| BrowserCode | Luna single high | 178 | 269 | 31 | 66.2% |
+| BrowserCode | Luna N3 high | 183 | 269 | 31 | 68.0% |
+| BrowserCode | Luna N5 high | 198 | 267 | 33 | 74.2% |
+| Native | Sol single high | 145 | 170 | 130 | 85.3% |
+| Native | Luna single high | 170 | 217 | 83 | 78.3% |
+| Native | Luna N3 high | 179 | 208 | 92 | 86.1% |
+| Native | Luna N5 high | 195 | 226 | 74 | 86.3% |
+
+<a id="om2w-terra-supporting-effort-views"></a>
+
+<details>
+<summary>Supporting results: lower efforts, full-attempt accounting and regrading provenance</summary>
+
+**Every point in these supporting views uses GPT-5.6 Terra terminal-success grading: medium effort, 4,096 completion tokens and seed 42.** We regraded all 1,071 original-valid historical BrowserCode episodes and 821 native episodes with qualified saved endpoint evidence. Another 276 original-valid native episodes lack that evidence and remain ungraded; earlier judges' labels are not substituted. **Native success rates are conditional on this selected evidence subset, not full-300 rates.** The historical runs' 232 original invalid outcomes remain invalid. The separate regrading cost was **$27.12**, with no actor calls.
 
 The four medium/low arms include one prescribed fresh episode for each original-invalid task–arm pair: **187 retries recovered 64 valid outcomes and 29 successes**. Original valid outcomes take priority; the single retry supplies an outcome only after an original invalid. The four arms now have 271, 271, 269 and 266 valid outcomes out of 300 planned tasks. Final qualification of the original effort campaign remains incomplete, so these arms remain provisional. Luna single xhigh is retained in the original tables and omitted from this figure.
 
@@ -194,9 +224,9 @@ The four medium/low arms include one prescribed fresh episode for each original-
 <details>
 <summary>Additional view: success and actor efficiency on valid tasks only</summary>
 
-The main plot already uses valid-only success. This additional view also restricts model cost, actor latency and browser commands to **each method's Terra-valid tasks, including both successes and failures**. Success percentages are unchanged. Valid subsets differ between methods; this is not a common-valid intersection.
+The full-attempt plot above uses valid-only success. This additional view also restricts model cost, actor latency and browser commands to **each method's Terra-valid tasks, including both successes and failures**. Success percentages are unchanged. Valid subsets differ between methods; this is not a common-valid intersection.
 
-For a recovered valid task, cost and observed actor time still include its original episode and prescribed retry. Tasks that remain invalid, and their costs, are excluded from this conditional view; the main plot above retains the full-attempt cost comparison. Missing measurements remain missing: N5 low latency has 262 observations among 266 valid tasks. The other plotted metric means have complete coverage within their own valid-task sets.
+For a recovered valid task, cost and observed actor time still include its original episode and prescribed retry. Tasks that remain invalid, and their costs, are excluded from this conditional view; the full-attempt plot above retains those costs. Missing measurements remain missing: N5 low latency has 262 observations among 266 valid tasks. The other plotted metric means have complete coverage within their own valid-task sets.
 
 ![BrowserCode Terra tradeoffs with success, cost, latency and browser commands restricted to valid tasks](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.png)
 
@@ -206,24 +236,14 @@ The native view restricts all metrics to the same selected endpoint-evidence sub
 
 </details>
 
-#### Terra success and coverage
-
-Each row starts from 300 planned tasks. “Without valid Terra verdict” includes actor-invalid episodes, missing qualified endpoint evidence and any invalid new judgment; it is not a failure count among judged episodes.
+#### Lower-effort Terra success and coverage
 
 | Harness | Method | Successes | Terra-valid | Without valid Terra verdict | Valid-only success |
 |---|---|---:|---:|---:|---:|
-| BrowserCode | Sol single high | 177 | 266 | 34 | 66.5% |
-| BrowserCode | Luna single high | 178 | 269 | 31 | 66.2% |
-| BrowserCode | Luna N3 high | 183 | 269 | 31 | 68.0% |
-| BrowserCode | Luna N5 high | 198 | 267 | 33 | 74.2% |
 | BrowserCode | Luna single medium | 171 | 271 | 29 | 63.1% |
 | BrowserCode | Luna single low | 91 | 271 | 29 | 33.6% |
 | BrowserCode | Luna N5 medium + medium | 178 | 269 | 31 | 66.2% |
 | BrowserCode | Luna N5 low + low | 106 | 266 | 34 | 39.8% |
-| Native | Sol single high | 145 | 170 | 130 | 85.3% |
-| Native | Luna single high | 170 | 217 | 83 | 78.3% |
-| Native | Luna N3 high | 179 | 208 | 92 | 86.1% |
-| Native | Luna N5 high | 195 | 226 | 74 | 86.3% |
 
 [Recovered effort counts, original/retry breakdown and cumulative costs](arm_results/luna_browsercode_effort_om2w300_20261030/retry_aggregate.json).
 
@@ -250,6 +270,8 @@ Latency and command counts use only finite measurements, including valid and inv
 | Native | Luna N5 high | $0.31590 | 1302.7 | 298 | 29.93 | 298 |
 
 These are descriptive means with metric-specific observation counts, not estimates on a shared valid-task intersection. The original effort campaign remains provisional; native global post-job cleanup remains uncertified.
+
+</details>
 
 </details>
 

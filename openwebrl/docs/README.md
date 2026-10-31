@@ -2,7 +2,7 @@
 
 [BrowserCode API experiments: simplified setup, bounded evaluation, protocols, code map and qualified results](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
 
-[Luna BrowserCode effort OM2W300: prescribed invalid-task retries, provisional success and cumulative model cost/latency coverage in the combined Terra figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030).
+[Luna BrowserCode lower-effort supporting results: prescribed retries, provisional success and cumulative cost/latency coverage](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views).
 
 <!-- claude-browsercode-om2w300-v1:start -->
 [Claude BrowserCode OM2W300: Terra-judged valid-task tradeoffs with matching model/policy encodings and outside legends; common-valid alternative included](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
@@ -19,7 +19,7 @@
 
 [Final headline results: four Sol/Luna methods across OM2W, WebVoyager and DeepShop — performance, cost and efficiency](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
 
-[OM2W GPT tradeoffs: Terra grading, full-attempt and valid-task efficiency views, explicit coverage and outside legends](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
+[OM2W GPT tradeoffs: high-effort Sol single and Luna single/N3/N5, two harnesses, Terra-judged valid-task metrics and outside legends](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
 [API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
