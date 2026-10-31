@@ -6,7 +6,7 @@ are shown for reference only (not the same protocol)."""
 import json, glob, os, sys, collections, numpy as np
 R = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations'; B = ('online_mind2web', 'webvoyager', 'deepshop')
 RUNS = {'rl4096_alone': ('rlactor-4096-20261030/rl', 'sft1'), 'rl4096_arm': ('rlactor-4096-20261030/rl', 'piotr5'),
-        'sft4096_alone': ('rlactor-4096-20261030/sft', 'sft1'), 'rl4096_h1380x': ('rlactor-4096-20261030/rl', 'head5x-11d5eff8ffe1'), 'rl4096_hrl': ('rlactor-4096-20261030/rl', 'head5-d954817f5c0e'),
+        'sft4096_alone': ('rlactor-4096-20261030/sft', 'sft1'), 'rl4096_hpiotrx': ('rlactor-4096-20261030/rl', 'head5x-755d4cd49137'), 'rl4096_h1380x': ('rlactor-4096-20261030/rl', 'head5x-11d5eff8ffe1'), 'rl4096_hrl': ('rlactor-4096-20261030/rl', 'head5-d954817f5c0e'),
         'rl1024_alone': ('rlactor-20261029', 'sft1'), 'rl1024_arm': ('rlactor-20261029', 'piotr5')}
 out = {}
 for name, (root, slug) in RUNS.items():

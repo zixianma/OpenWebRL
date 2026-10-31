@@ -2067,7 +2067,7 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 
 ## Selection heads on the RL checkpoint actor, 4,096 tokens (2026-10-30)
 
-**On the RL checkpoint actor, Piotr's SelectionARM gains +6.6 pp [+2.7, +10.3] over the actor alone; the head trained on RL-actor states gains +2.3 [−1.7, +6.2] (−4.2 [−8.0, −0.6] vs SelectionARM) and beats the SFT-trained head by +3.9 [+0.2, +7.7], which itself gains nothing (−1.6).** One window, 4,096 response tokens, one run each. Main table and protocol: [final results](ARM_FINAL_RESULTS.md#final-selection-rl-actor-20261030).
+**On the RL checkpoint actor, Recipe 1 transfers: SelectionARM gains +6.6 pp [+2.7, +10.3] over the actor alone and the Recipe 1 head (SFT-4B features, run 10-31) +5.5 [+1.6, +9.3]; for Recipe 2, the head trained on RL-actor states gains +2.3 [−1.7, +6.2] (−4.2 [−8.0, −0.6] vs SelectionARM) and beats the SFT-trained head by +3.9 [+0.2, +7.7], which itself gains nothing (−1.6).** Baselines and Recipe 2 heads in one window (10-30), the Recipe 1 head on 10-31; 4,096 response tokens, one run each. Main table and protocol: [final results](ARM_FINAL_RESULTS.md#final-selection-rl-actor-20261030).
 
 <details>
 <summary>Run notes and counts</summary>
@@ -2083,6 +2083,9 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 | SFT 4B alone (sft1) | Online-Mind2Web | 300 | 263 | 89 | 0 | 4,275 | 0 | 0 |
 | SFT 4B alone (sft1) | WebVoyager | 595 | 587 | 294 | 0 | 7,518 | 0 | 0 |
 | SFT 4B alone (sft1) | DeepShop | 150 | 149 | 66 | 0 | 2,417 | 0 | 0 |
+| Recipe 1 head (head5x, Piotr's data) | Online-Mind2Web | 300 | 252 | 108 | 0 | 3,368 | 41 | 0 |
+| Recipe 1 head (head5x, Piotr's data) | WebVoyager | 595 | 583 | 347 | 2 | 5,613 | 21 | 2 |
+| Recipe 1 head (head5x, Piotr's data) | DeepShop | 150 | 150 | 74 | 0 | 1,756 | 5 | 0 |
 | SFT-trained head (head5x) | Online-Mind2Web | 300 | 261 | 97 | 1 | 3,397 | 38 | 1 |
 | SFT-trained head (head5x) | WebVoyager | 595 | 576 | 349 | 2 | 5,918 | 29 | 2 |
 | SFT-trained head (head5x) | DeepShop | 150 | 143 | 47 | 0 | 1,812 | 12 | 0 |
@@ -2092,6 +2095,7 @@ More panels from the same states do not help (as with Piotr's states, [panel sca
 
 - Code: `--max-new-tokens` option and RL actor registration in `crossbench_selector_eval.py`, functional tokenizer check in `serve_frozen_head_scorer.py` (commit 1b4b1db on `arm-selection-head`).
 - Baselines: jobs 401372–401380, with 401374 (RL alone, DeepShop) failing at startup when another process took its leased port and rerun as 401393; 14.7 H200-h for the nine baselines.
+- Recipe 1 head (10-31): first attempt 403970/403973/403974 stopped at the startup gate (OpenAI key revoked, 401; 6 unjudged episodes quarantined to `quarantine-judge401-20261031/`); rerun 404173/404180/404181. WebVoyager resumed for 3 tasks as 404967 and the Online-Mind2Web rerun as 404975, both from a frozen source copy (`frozen-src-20261031/`, zero drift against the plan) because another session had edited `run_evaluate.py` / `reward_online_mind2web.py` in the main tree. In 404173 the frozen SFT-4B scorer hit a cuDNN attention RuntimeError (`mha_graph->execute`) and returned 500 for 184 episodes, persistently after about 62 min; those were quarantined (`quarantine-scorer500-20261031/`) and rerun in 404975 with no recurrence. 26 tasks quarantined with them had failed on site load and keep their original single attempt. 8.7 H200-h of the 12 approved.
 - Three runs stopped at the 4 h limit and were resumed on the same plan (399826 → 400791, 400966 → 401156, 400969 → 401178); every run has its full record count.
 - Runtime `evaluations/rlactor-4096-20261030/` (`submit.sh`, `jobs.txt`, `analysis/`); RL-state data and heads in `selection-head-20261008/rl-states-20261029/`.
 

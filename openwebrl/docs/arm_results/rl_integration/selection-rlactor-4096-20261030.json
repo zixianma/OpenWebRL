@@ -1,5 +1,5 @@
 {
- "protocol": "One window 2026-10-30; actor RL checkpoint OpenWebRL-4B@616cc8f (SFT 4B for sft4096_alone); 4,096 response tokens, N=5, T1.0/top-p0.9, 30 steps; OM2W 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150 (GPT-4o)",
+ "protocol": "Actor RL checkpoint OpenWebRL-4B@616cc8f (SFT 4B for sft4096_alone); 4,096 response tokens, N=5, T1.0/top-p0.9, 30 steps; OM2W 300 (gpt-5.6-terra), WebVoyager 595 and DeepShop 150 (GPT-4o). Baselines and Recipe 2 heads 2026-10-30; Recipe 1 head (rl4096_hpiotrx) 2026-10-31, OM2W 184 scorer-failed episodes rerun (job 404975).",
  "runs": {
   "rl4096_alone": {
    "online_mind2web": {
@@ -111,6 +111,43 @@
    },
    "mean_overall": 41.0,
    "mean_valid_only": 42.7
+  },
+  "rl4096_hpiotrx": {
+   "online_mind2web": {
+    "n": 300,
+    "valid": 252,
+    "succ": 108,
+    "overall": 36.0,
+    "valid_only": 42.9,
+    "length_limit_episodes": 0,
+    "selection_steps": 3368,
+    "steps_with_truncated_candidate": 41,
+    "truncated_picked": 0
+   },
+   "webvoyager": {
+    "n": 595,
+    "valid": 583,
+    "succ": 347,
+    "overall": 58.3,
+    "valid_only": 59.5,
+    "length_limit_episodes": 2,
+    "selection_steps": 5613,
+    "steps_with_truncated_candidate": 21,
+    "truncated_picked": 2
+   },
+   "deepshop": {
+    "n": 150,
+    "valid": 150,
+    "succ": 74,
+    "overall": 49.3,
+    "valid_only": 49.3,
+    "length_limit_episodes": 0,
+    "selection_steps": 1756,
+    "steps_with_truncated_candidate": 5,
+    "truncated_picked": 0
+   },
+   "mean_overall": 47.9,
+   "mean_valid_only": 50.6
   },
   "rl4096_h1380x": {
    "online_mind2web": {
@@ -416,6 +453,94 @@
     1.4,
     -2.4,
     5.1
+   ]
+  },
+  "rl_hpiotrx - rl_alone": {
+   "online_mind2web": [
+    7.3,
+    2.0,
+    12.7
+   ],
+   "webvoyager": [
+    0.5,
+    -3.9,
+    4.9
+   ],
+   "deepshop": [
+    8.7,
+    0.0,
+    17.3
+   ],
+   "mean": [
+    5.5,
+    1.6,
+    9.3
+   ]
+  },
+  "rl_hpiotrx - rl_arm": {
+   "online_mind2web": [
+    -2.7,
+    -7.7,
+    2.3
+   ],
+   "webvoyager": [
+    -4.5,
+    -8.7,
+    -0.3
+   ],
+   "deepshop": [
+    4.0,
+    -4.0,
+    12.7
+   ],
+   "mean": [
+    -1.1,
+    -4.6,
+    2.6
+   ]
+  },
+  "rl_hpiotrx - rl_h1380x": {
+   "online_mind2web": [
+    3.7,
+    -1.7,
+    8.7
+   ],
+   "webvoyager": [
+    -0.3,
+    -4.7,
+    4.0
+   ],
+   "deepshop": [
+    18.0,
+    9.3,
+    26.7
+   ],
+   "mean": [
+    7.1,
+    3.4,
+    10.8
+   ]
+  },
+  "rl_hrl - rl_hpiotrx": {
+   "online_mind2web": [
+    -4.0,
+    -9.3,
+    1.3
+   ],
+   "webvoyager": [
+    1.8,
+    -2.2,
+    5.9
+   ],
+   "deepshop": [
+    -7.3,
+    -15.3,
+    0.7
+   ],
+   "mean": [
+    -3.2,
+    -6.7,
+    0.3
    ]
   }
  }

@@ -654,22 +654,25 @@ SFT 4B: Online-Mind2Web 31.7% and WebVoyager 44.4% (10-18; Online-Mind2Web re-ju
 
 <a id="final-selection-rl-actor-20261030"></a>
 
-### Selection on the RL checkpoint actor (October 30)
+### Selection on the RL checkpoint actor (October 30–31)
 
-**With the OpenWebRL-4B RL checkpoint as actor, Piotr's SelectionARM is the only selector that clearly helps: +6.6 pp [+2.7, +10.3] over the RL actor alone. A head trained on the RL actor's own branch states gains +2.3 [−1.7, +6.2] and trails SelectionARM by −4.2 [−8.0, −0.6]; the SFT-trained head transferred to the RL actor gains nothing (−1.6 [−5.5, +2.1]). The RL checkpoint alone is level with SFT 4B alone (+1.4 [−2.4, +5.1]).** All runs in one window, all 1,045 tasks, N = 5 candidates, T 1.0 / top-p 0.9, 30 steps, **4,096 response tokens** (the paper's setting), one run each. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o.
+**With the OpenWebRL-4B RL checkpoint as actor, Recipe 1 (Piotr's data) still works: SelectionARM gains +6.6 pp [+2.7, +10.3] over the RL actor alone, and the head trained on the same data, transferred unchanged from the SFT actor, +5.5 [+1.6, +9.3] (−1.1 [−4.6, +2.6] against SelectionARM). Recipe 2 transfers badly: the 1,380-state head gains nothing (−1.6 [−5.5, +2.1]), and retraining it on the RL actor's own states recovers only +2.3 [−1.7, +6.2]. The RL checkpoint alone is level with SFT 4B alone (+1.4 [−2.4, +5.1]).** Baselines and Recipe 2 heads ran in one window on October 30, the Recipe 1 head on October 31; all 1,045 tasks, N = 5 candidates, T 1.0 / top-p 0.9, 30 steps, **4,096 response tokens** (the paper's setting), one run each. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o.
 
 | Actor | Selector | Training data | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − RL alone, pp<br>[95% CI] | − RL + 4B LoRA (Recipe 1), pp<br>[95% CI] |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | RL 4B | — (1 sample) | — | 32.8% | 59.2% | 40.7% | 42.4% | 44.2% | — | **−6.6 [−10.3, −2.7]** |
-| RL 4B | 4B LoRA | Recipe 1 (2.6K states / 35K panels) | **45.8%** | **65.0%** | **45.6%** | **49.0%** | **52.1%** | **+6.6 [+2.7, +10.3]** | — |
+| RL 4B | 4B LoRA | Recipe 1 (2.6K states / 35K panels) | **45.8%** | **65.0%** | 45.6% | **49.0%** | **52.1%** | **+6.6 [+2.7, +10.3]** | — |
+| RL 4B | Head (22.6 M) on frozen SFT-4B features | Recipe 1 (2.6K states / 35K panels) | 42.9% | 59.5% | **49.3%** | 47.9% | 50.6% | **+5.5 [+1.6, +9.3]** | −1.1 [−4.6, +2.6] |
 | RL 4B | Head (22.6 M) | Recipe 2 on RL-actor states (0.9K states / 0.9K panels) | 40.2% | 62.0% | 42.9% | 44.7% | 48.4% | +2.3 [−1.7, +6.2] | **−4.2 [−8.0, −0.6]** |
 | RL 4B | Head (22.6 M) on frozen SFT-4B features | Recipe 2 (1.3K states / 1.3K panels) | 37.2% | 60.6% | 32.9% | 40.8% | 43.6% | −1.6 [−5.5, +2.1] | **−8.2 [−11.8, −4.5]** |
 | *SFT 4B* | *— (1 sample)* | — | 33.8% | 50.1% | 44.3% | 41.0% | 42.7% | −1.4 [−5.1, +2.4] | — |
 
 Recipes as [defined above](#final-selection-sameday3-20261030); the RL-actor states are 1,147 branch states of the RL checkpoint (939 used for training) with the same Luna K = 3 labels. Differences are in mean overall success, [paired 95% bootstrap](#final-paired-bootstrap) over tasks.
 
-- **Training the head on the RL actor's own states matters.** RL-state head − SFT-trained head +3.9 [+0.2, +7.7], almost all DeepShop (+10.7 [+2.0, +19.3]), where the SFT-trained head falls 9.3 pp below RL alone.
+- **Recipe 1 head vs Recipe 2 heads:** +7.1 [+3.4, +10.8] over the transferred 1,380-state head and +3.2 [−0.3, +6.7] over the RL-state head; its lead is mostly DeepShop (+18.0 [+9.3, +26.7] and +7.3 [−0.7, +15.3]). Against SelectionARM it trails on WebVoyager (−4.5 [−8.7, −0.3]) and is level elsewhere.
+- **Training the Recipe 2 head on the RL actor's own states helps.** RL-state head − SFT-trained head +3.9 [+0.2, +7.7], almost all DeepShop (+10.7 [+2.0, +19.3]), where the SFT-trained head falls 9.3 pp below RL alone.
 - **SelectionARM's lead is broad:** Online-Mind2Web +10.0 [+5.3, +15.0] and WebVoyager +5.0 [+0.8, +9.1] over RL alone; DeepShop +4.7 [−4.7, +14.0].
 - **RL vs SFT actor:** level on the mean; RL is better on WebVoyager (+8.4 [+3.9, +12.8]) and level on the other two. SFT 4B alone here (41.0%) is 7.4 pp above its three-run mean in the previous table (33.6%, 1,024 tokens, a day earlier), mostly DeepShop and WebVoyager; the cap ended only 16 of its 1,045 episodes there and none here, so this is mostly day-to-day drift, and RL-actor results should be compared only within this table.
 - **Response cap.** At 4,096 tokens 0–7 episodes per benchmark end because a response ran out (1,024 tokens cut off 258 of 1,045 RL-alone episodes, which made the earlier run invalid). Given a cut-off candidate, SelectionARM never picks it (0 of 59 steps); the heads do at 0–6 steps per benchmark.
+- **Recipe 1 head run notes.** Run a day after the others (one-day drift moved SFT 4B alone by up to 7 pp on these benchmarks). On Online-Mind2Web its frozen SFT-4B scorer failed with a cuDNN attention error on 184 episodes (persistently after about an hour); those tasks were rerun the same day, while 26 tasks whose site failed to load kept their single original attempt, as for every other run.
 - [Details and counts](ARM_SELECTION_HEAD.md#selection-head-rl-actor-20261030) · [Evidence](arm_results/rl_integration/selection-rlactor-4096-20261030.json) · Scripts: [per-run rates](arm_results/rl_integration/selection-rlactor-4096-20261030-heads.py), [paired](arm_results/rl_integration/selection-rlactor-4096-20261030-paired.py)
