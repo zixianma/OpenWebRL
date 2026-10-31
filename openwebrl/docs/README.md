@@ -19,7 +19,7 @@
 
 [Final headline results: four Sol/Luna methods across OM2W, WebVoyager and DeepShop — performance, cost and efficiency](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
 
-[OM2W GPT tradeoffs: overlaid BrowserCode effort points with filled historical and hollow provisional judge cohorts; unchanged native results below](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
+[OM2W GPT tradeoffs: overlaid BrowserCode effort points and unchanged native results, with grouped method legends on the right](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
 [API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 

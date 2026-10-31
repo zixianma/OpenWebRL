@@ -100,7 +100,7 @@ METRICS = (("mean_model_usd_per_task", "Model cost / task ($; log)", "cost"),
 
 
 def draw(ax, rows, metric, native):
-    """Four observed points; direct method labels and an emphasized N5 marker."""
+    """Four observed points; method identities live in the side legend."""
     ax.set_ylim((68, 80) if native else (61, 72))
     ax.set_yticks([68, 72, 76, 80] if native else [61, 64, 68, 72])
     ax.grid(False, which="both")
@@ -130,35 +130,6 @@ def draw(ax, rows, metric, native):
         ax.scatter(x, y, s=42 if method == "parallel5_select_high" else 30,
                    marker=marker, color=color,
                    edgecolor="white", linewidth=0.5, zorder=3)
-        dx, dy, ha = 4, 6, "left"
-        if method == "serial_high":
-            dy = -9 if native else -6
-            if metric == "mean_model_usd_per_task":
-                dx, ha = -4, "right"
-                if native:
-                    dy = 7
-        if method == "luna_single_high":
-            dy = 5 if native else 6
-            if native and metric == "mean_model_usd_per_task":
-                dy = -5
-        if method == "parallel3_select_high" and native:
-            dy = -10
-        if method == "parallel3_select_high" and metric == "mean_browser_steps" and native:
-            dx, ha = -4, "right"
-        if metric == "mean_task_seconds":
-            if method in ("parallel3_select_high", "parallel5_select_high"):
-                dx, ha = -4, "right"
-            if method == "serial_high" and not native:
-                dx, dy, ha = -4, 8, "right"
-            if method == "luna_single_high":
-                dy = 5 if native else 6
-                if native:
-                    dx, ha = -4, "right"
-            if method == "parallel3_select_high" and native:
-                dx, dy, ha = -4, 8, "right"
-        ax.annotate(label, (x, y), xytext=(dx, dy), textcoords="offset points",
-                    ha=ha, va="center", fontsize=7, color=color,
-                    weight="bold" if method == "parallel5_select_high" else "normal")
 
 
 def draw_merged(ax, high, effort, metric):
@@ -185,28 +156,8 @@ def draw_merged(ax, high, effort, metric):
         ax.set_xticks([40, 100, 250])
         ax.xaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
     ax.xaxis.set_minor_formatter(NullFormatter())
-    high_names = {"serial_high": "Sol high", "luna_single_high": "Luna high",
-                  "parallel3_select_high": "N3 high", "parallel5_select_high": "N5 high"}
-    effort_names = {"luna_single_xhigh": "Single xhigh", "luna_single_medium": "Single med",
-                    "luna_single_low": "Single low", "luna_n5_medium": "N5 med", "luna_n5_low": "N5 low"}
-    offsets = {
-        "mean_model_usd_per_task": {
-            "serial_high": (-5, -10, "right"), "luna_single_high": (-6, 19, "right"),
-            "parallel3_select_high": (-6, 7, "right"), "parallel5_select_high": (5, 13, "left"),
-            "luna_single_xhigh": (-5, 25, "right"), "luna_single_medium": (-6, -12, "right"),
-            "luna_n5_medium": (-5, -14, "right")},
-        "mean_browser_steps": {
-            "serial_high": (5, -11, "left"), "luna_single_high": (5, -17, "left"),
-            "parallel3_select_high": (-6, 5, "right"), "parallel5_select_high": (-6, 17, "right"),
-            "luna_single_xhigh": (5, 13, "left"), "luna_single_medium": (-6, -18, "right"),
-            "luna_n5_medium": (-5, 1, "right")},
-        "mean_task_seconds": {
-            "serial_high": (-6, 19, "right"), "luna_single_high": (-6, -3, "right"),
-            "parallel3_select_high": (-5, 14, "right"), "parallel5_select_high": (5, 13, "left"),
-            "luna_single_xhigh": (-8, -20, "right"), "luna_single_medium": (20, -26, "left"),
-            "luna_n5_medium": (5, -3, "left")}}
     for recent, rows in ((False, high), (True, effort)):
-        styles, names = (EFFORT_METHODS, effort_names) if recent else (METHODS, high_names)
+        styles = EFFORT_METHODS if recent else METHODS
         for row in rows:
             method = row["method"]
             _, color, marker = styles[method]
@@ -214,28 +165,35 @@ def draw_merged(ax, high, effort, metric):
             ax.scatter(x, y, s=40 if ("n5" in method or method == "parallel5_select_high") else 30,
                        marker=marker, facecolor="white" if recent else color,
                        edgecolor=color if recent else "white", linewidth=1.0 if recent else 0.5, zorder=3)
-            dx, dy, ha = offsets[metric].get(method, (5, 7, "left"))
-            leader = dict(arrowstyle="-", color=color, linewidth=0.45, alpha=0.65,
-                          shrinkA=1, shrinkB=4) if abs(dy) >= 10 else None
-            ax.annotate(names[method], (x, y), xytext=(dx, dy), textcoords="offset points",
-                        ha=ha, va="center", fontsize=6.7, color=color, arrowprops=leader)
+
+
+def legend_handles(rows, recent=False):
+    styles = EFFORT_METHODS if recent else METHODS
+    high_labels = {"serial_high": "Sol single high", "luna_single_high": "Luna single high",
+                   "parallel3_select_high": "Luna N3 high", "parallel5_select_high": "Luna N5 high"}
+    effort_labels = {"luna_single_xhigh": "Luna single xhigh", "luna_single_medium": "Luna single medium",
+                     "luna_single_low": "Luna single low", "luna_n5_medium": "Luna N5 medium + medium",
+                     "luna_n5_low": "Luna N5 low + low"}
+    labels = effort_labels if recent else high_labels
+    return [Line2D([], [], linestyle="none", marker=styles[row["method"]][2], markersize=5,
+                   markerfacecolor="white" if recent else styles[row["method"]][1],
+                   markeredgecolor=styles[row["method"]][1], markeredgewidth=1 if recent else 0.5,
+                   label=labels[row["method"]]) for row in rows]
 
 
 def figure(means, native, metrics, output, stem, effort=()):
     columns = len(metrics)
     fig, axes = plt.subplots(2, columns,
-                             figsize=(7 if columns == 3 else 3.35, 4.7 if effort else 3.5),
-                             gridspec_kw={"height_ratios": [1.6, 1]} if effort else {},
+                             figsize=(9.1 if columns == 3 else 5.4, 4.4),
+                             gridspec_kw={"height_ratios": [1.35, 1]} if effort else {},
                              sharey="row", squeeze=False)
-    fig.subplots_adjust(left=0.075 if columns == 3 else 0.16, right=0.985,
-                        top=0.81 if effort else 0.84, bottom=0.095 if effort else 0.13,
-                        hspace=0.8 if effort else 0.78, wspace=0.24 if effort else 0.18)
-    cohorts = [(means, "a)  BrowserCode · high + effort", False),
-               (native, "b)  Native CUAWright", True)]
+    fig.subplots_adjust(left=0.065 if columns == 3 else 0.12,
+                        right=0.745 if columns == 3 else 0.60,
+                        top=0.89, bottom=0.105, hspace=0.67, wspace=0.24)
+    cohorts = [(means, "a)  BrowserCode", False), (native, "b)  Native CUAWright", True)]
     for ri, (rows, title, native_row) in enumerate(cohorts):
         pos = axes[ri, 0].get_position()
-        fig.text(pos.x0, pos.y1 + (0.085 if effort and ri == 0 else 0.045),
-                 title if effort else title.replace(" · high + effort", ""), fontsize=8.5, weight="bold")
+        fig.text(pos.x0, pos.y1 + 0.035, title, fontsize=8.5, weight="bold")
         for ci, (metric, label, _) in enumerate(metrics):
             if effort and not native_row:
                 draw_merged(axes[ri, ci], means, effort, metric)
@@ -244,14 +202,16 @@ def figure(means, native, metrics, output, stem, effort=()):
             axes[ri, ci].set_xlabel(label, labelpad=3)
             if ci == 0:
                 axes[ri, ci].set_ylabel("Valid-only success (%)", labelpad=3)
+    legend_x = 0.77 if columns == 3 else 0.65
+    groups = [(means, False, "BrowserCode · historical (o4-mini)", 0.94)]
     if effort:
-        handles = [Line2D([], [], marker="o", linestyle="none", color="#555555", markersize=5,
-                          label="Filled: historical high · o4-mini"),
-                   Line2D([], [], marker="o", linestyle="none", markerfacecolor="white", markeredgecolor="#555555",
-                          markersize=5, label="Open: effort · Terra (provisional)")]
-        fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.06 if columns == 3 else 0.13, 0.825),
-                   frameon=False, ncol=2 if columns == 3 else 1, fontsize=6.7,
-                   columnspacing=1.4, handletextpad=0.35, borderaxespad=0)
+        groups.append((effort, True, "BrowserCode · Terra (provisional)", 0.68))
+    groups.append((native, False, "Native CUAWright · high", 0.34))
+    for rows, recent, title, top in groups:
+        fig.legend(handles=legend_handles(rows, recent), title=title,
+                   loc="upper left", bbox_to_anchor=(legend_x, top), frameon=False,
+                   fontsize=7, title_fontsize=7.3, handletextpad=0.55,
+                   labelspacing=0.5, borderaxespad=0)
     for ext in ("png", "svg", "pdf"):
         save_figure(fig, output / f"{stem}.{ext}")
     plt.close(fig)
@@ -302,7 +262,7 @@ def main():
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
         "effort_cost_scope": "All-attempt model ledger charges plus full unknown reserves, including helpers/counters, divided by all300 dispositions; external judge excluded. This cost coordinate differs from valid-task efficiency.",
         "effort_latency_and_commands_scope": "All finite recorded measurements, including invalid outcomes; metric-specific coverage, no zero filling; actor-loop latency excludes setup, final judge-only capture, cleanup and external judge.",
-        "visualization": "Merged BrowserCode row overlays four historical high-effort points (filled; o4-mini) and five recent effort points (open; Terra; provisional). Top y-axis30–78%, native68–80%; shared scales within each row. Direct effort labels and short label leaders; no method-connecting curves, frontiers or grid. Native row unchanged.",
+        "visualization": "Merged BrowserCode row overlays four historical high-effort points (filled; o4-mini) and five recent effort points (open; Terra; provisional). Top y-axis30–78%, native68–80%; shared scales within each row. Method and cohort legends sit to the right, outside every data panel; no direct point labels, leader lines, method-connecting curves, frontiers or grid. Native coordinates unchanged.",
         "comparability": "Different judges, limits, collection windows, contention, efficiency coverage and task-time boundaries; descriptive only. Overlay does not imply paired or causal effort effects across cohorts; three-benchmark averages exclude the OM2W-only effort cohort.",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")
