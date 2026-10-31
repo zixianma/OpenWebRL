@@ -160,6 +160,9 @@ def provider(runtime, arm):
 
 
 def setup(args):
+    cap = getattr(args, 'luna_xhigh_output_tokens', None)
+    if cap is not None and args.campaign != 'browsercode_luna_effort':
+        raise ValueError('--luna-xhigh-output-tokens requires --campaign luna')
     target = writable(args.workspace)
     if target.exists() and any(path.name != 'dependencies' for path in target.iterdir()):
         raise ValueError('Use a new workspace; prepared experiments are never overwritten')
@@ -180,6 +183,11 @@ def setup(args):
     if code:
         return code
     browsercode_preflight_only(target / 'runtime')
+    if cap is not None:
+        spec = importlib.util.spec_from_file_location('prospective_browsercode', HERE / 'prospective_browsercode.py')
+        prospective = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(prospective)
+        prospective.configure(target / 'runtime', cap)
     write(target / MARKER, {'schema': 'browsercode-workspace-v1', 'campaign': args.campaign,
                            'dependencies': str(dependencies), 'python': str(python), 'executor': 'browsercode'})
     print('Workspace ready: ' + str(target))
@@ -192,7 +200,7 @@ def run(args):
     forwarded = ['--runtime', runtime, '--arm', args.arm, '--harness', 'browsercode', '--output', writable(args.output),
                  '--limit', args.limit, '--model-usd', args.model_usd, '--judge-usd', args.judge_usd,
                  '--model-calls', args.model_calls, '--judge-calls', args.judge_calls, '--wandb-mode', args.wandb_mode]
-    for name in ('benchmark', 'browser_starts', 'env_file'):
+    for name in ('benchmark', 'browser_starts', 'env_file', 'task_ids'):
         value = getattr(args, name)
         if value is not None:
             forwarded += ['--' + name.replace('_', '-'), value]
@@ -240,6 +248,7 @@ def parser():
     s.add_argument('--workspace', type=Path, required=True)
     s.add_argument('--campaign', type=campaign, required=True, metavar='CAMPAIGN', help='luna, claude, gpt, gpt-luna-single or gpt-crossbench; historical experiment keys also accepted')
     s.add_argument('--dependencies', type=Path, help='Reuse an existing dependency manifest without downloads')
+    s.add_argument('--luna-xhigh-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single xhigh 30-turn output-cap experiment over OM2W300, WebVoyager595 and DeepShop150; requires --campaign luna')
     s.set_defaults(action=setup)
     c = commands.add_parser('check', help='Check real imports, optionally a local browser; zero model calls')
     c.add_argument('--workspace', type=Path, required=True)
@@ -253,6 +262,7 @@ def parser():
     r.add_argument('--judge-usd', type=positive_money, required=True)
     r.add_argument('--limit', type=int, default=1)
     r.add_argument('--benchmark', choices=('online-mind2web', 'webvoyager', 'deepshop'))
+    r.add_argument('--task-ids', type=Path, help='JSON list of unique ordered IDs from the frozen roster, selected before --limit')
     r.add_argument('--model-calls', type=int, default=10000)
     r.add_argument('--judge-calls', type=int, default=1100)
     r.add_argument('--browser-starts', type=int)

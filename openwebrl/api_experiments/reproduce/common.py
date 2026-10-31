@@ -5,6 +5,7 @@ import argparse
 from decimal import Decimal, InvalidOperation
 import hashlib
 import importlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -49,6 +50,7 @@ def parser(provider):
     p.add_argument("--arm", choices=ARMS[provider], required=True)
     p.add_argument("--harness", choices=("browsercode", "cuawright"), default="browsercode", help="Earlier paired-harness campaigns support both executors")
     p.add_argument("--benchmark", choices=("online-mind2web", "webvoyager", "deepshop"), help="Filter the prepared task roster before applying --limit")
+    p.add_argument("--task-ids", type=Path, help="JSON list of unique ordered frozen task IDs; select after --benchmark and before --limit")
     p.add_argument("--output", type=Path, required=True, help="New output directory outside the source runtime")
     p.add_argument("--limit", type=int, default=1, help="First N frozen tasks; default: 1")
     p.add_argument("--model-usd", type=positive_money, required=True)
@@ -72,9 +74,32 @@ def prepare(args, provider):
     if output.is_relative_to(runtime):
         raise ValueError("Place output outside the frozen source runtime")
     plan, config, tasks = (read(runtime / name) for name in ("campaign-plan.json", "runtime-config.json", "tasks.json"))
+    prospective = None
+    if (runtime / 'prospective-experiment.json').exists() or plan.get('prospective_protocol') or config.get('prospective_protocol'):
+        if provider != 'luna' or args.arm != 'luna_single_xhigh' or getattr(args, 'harness', 'browsercode') != 'browsercode':
+            raise ValueError('Prospective output override requires Luna single xhigh BrowserCode')
+        spec = importlib.util.spec_from_file_location('prospective_browsercode', Path(__file__).with_name('prospective_browsercode.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        prospective = module.validate(runtime)
     benchmark = getattr(args, "benchmark", None)
     if benchmark:
         tasks = [t for t in tasks if t.get("benchmark", "online-mind2web") == benchmark]
+    selection = getattr(args, 'task_ids', None)
+    selection_sha = None
+    if selection is not None:
+        selection = Path(selection).resolve()
+        raw_selection = selection.read_bytes()
+        ids = json.loads(raw_selection)
+        if not isinstance(ids, list) or not ids or any(not isinstance(value, str) for value in ids) or len(set(ids)) != len(ids):
+            raise ValueError('--task-ids requires a nonempty JSON list of unique task ID strings')
+        if any(not re.fullmatch(r'[A-Za-z0-9_. -]+', value) or value in ('.', '..') for value in ids):
+            raise ValueError('--task-ids contains an unsafe task filename')
+        lookup = {task['task_id']: task for task in tasks}
+        if any(value not in lookup for value in ids):
+            raise ValueError('--task-ids contains a task absent from the frozen roster/benchmark')
+        tasks = [lookup[value] for value in ids]
+        selection_sha = hashlib.sha256(raw_selection).hexdigest()
     if not 1 <= args.limit <= len(tasks):
         raise ValueError("limit must be between 1 and the frozen task count")
     if min(args.model_calls, args.judge_calls, args.browser_starts if args.browser_starts is not None else args.limit + 1) <= 0:
@@ -91,7 +116,8 @@ def prepare(args, provider):
     if harness not in supported_harnesses:
         raise ValueError("Harness is not supported by this frozen campaign")
     expected_output = spec["output_tokens"]
-    if plan["protocol"]["max_decisions"] != 30 or expected_output not in (4096, 12288):
+    allowed_outputs = (prospective['output_tokens'],) if prospective else (4096, 12288)
+    if plan["protocol"]["max_decisions"] != 30 or expected_output not in allowed_outputs:
         raise ValueError("Runtime is not the frozen BrowserCode model/12288/30 protocol")
     if provider != "gpt" and config["judge_protocol"]["model"] != "gpt-5.6-terra":
         raise ValueError("Runtime must use the frozen Terra judge")
@@ -117,7 +143,7 @@ def prepare(args, provider):
     ids = [t["task_id"] for t in chosen]
     if len(set(ids)) != len(ids) or any(not re.fullmatch(r"[A-Za-z0-9_. -]+", x) or x in (".", "..") for x in ids):
         raise ValueError("Task IDs must be unique safe filenames")
-    return {"provider": provider, "arm": args.arm, "model": expected, "candidate_count": spec["proposal_count"],
+    result = {"provider": provider, "arm": args.arm, "model": expected, "candidate_count": spec["proposal_count"],
             "candidate_effort": spec.get("reasoning_effort", "high"), "selector_effort": spec.get("selector_reasoning_effort", spec.get("reasoning_effort", "high") if spec["proposal_count"] > 1 else None),
             "selector_max_output_tokens": spec.get("selector_output_tokens", plan["protocol"].get("selector_max_output_tokens")) if spec["proposal_count"] > 1 else None,
             "task_count": len(chosen), "benchmark": benchmark, "harness": harness, "max_output_tokens": expected_output, "max_decisions": 30,
@@ -125,7 +151,15 @@ def prepare(args, provider):
             "task_manifest_sha256": digest(runtime / "tasks.json"), "model_usd_cap": args.model_usd, "judge_usd_cap": args.judge_usd,
             "model_call_cap": args.model_calls, "judge_call_cap": args.judge_calls,
             "browser_start_cap": args.browser_starts if args.browser_starts is not None else args.limit + 1,
-            "scheduling": "one episode at a time; original per-decision proposal parallelism", "execute": args.execute}, chosen
+            "scheduling": "one episode at a time; original per-decision proposal parallelism", "execute": args.execute}
+    if prospective:
+        result.update(prospective_protocol=prospective['schema'], output_multiplier=prospective['output_multiplier'],
+                      prospective_receipt_sha256=digest(runtime / 'prospective-experiment.json'),
+                      benchmark_roster_counts=prospective['benchmark_counts'])
+    if selection_sha:
+        result.update(task_selection_sha256=selection_sha, task_selection_count=len(tasks),
+                      selected_task_ids=ids, task_selection_path=str(selection))
+    return result, chosen
 
 
 def summary(rows, pools, cleanup_verified):

@@ -57,6 +57,24 @@ Choose `--campaign` during setup. The entry point selects the matching model ada
 
 `--limit` defaults to one task. For the full OM2W panel use `--limit 300`. For `gpt-crossbench`, use `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`; filtering precedes the limit. GPT OM2W's four methods span `gpt` and `gpt-luna-single`. Luna N5 medium/low applies that effort to both candidates and selector. The full historical `browsercode_*` campaign keys remain accepted.
 
+### Luna xhigh output limits
+
+To prepare a new single-action xhigh experiment, add `--luna-xhigh-output-tokens 12288`, `24576` or `49152` during `luna` setup. These are 1×, 2× and 4× maximum output tokens per call; each keeps 30 decisions and the shared Terra judge. Each setting needs a separate workspace. This explicit option prepares the same public OM2W 300, WebVoyager 595 and DeepShop 150 tasks, with one `luna_single_xhigh` arm:
+
+```bash
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/luna-xhigh-2x --campaign luna \
+  --dependencies "$API_WORK/dependencies/dependencies.json" \
+  --luna-xhigh-output-tokens 24576
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/luna-xhigh-2x --arm luna_single_xhigh \
+  --benchmark webvoyager --limit 1 --output /tmp/luna-xhigh-2x-wv-01 \
+  --model-usd 5 --judge-usd 1
+```
+
+The second command is a read-only plan; add `--execute` to spend within its caps. Select a full benchmark with `--benchmark online-mind2web --limit 300`, `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`. For fixed shards, `--task-ids /path/to/ids.json` selects a unique ordered JSON list of IDs after benchmark filtering and before the limit; its hash and selected IDs are recorded. The generated runtime binds the new cap to requests, validation, reservations and metrics, and retains its original sources and protocol hashes. A higher ceiling does not require the model to use more tokens; inspect actual output usage and truncations alongside success, cost and latency.
+
 ### Compare fresh runs
 
 Run the desired single-action arm into a separate output directory, then compare saved outputs:
