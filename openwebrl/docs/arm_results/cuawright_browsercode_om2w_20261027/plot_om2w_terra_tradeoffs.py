@@ -99,8 +99,88 @@ def write_coordinates(path, points):
         writer.writerows({key: value for key, value in row.items() if key in fields} for row in points)
 
 
+def render_paper_high(data, output_dir, stem, harnesses):
+    """Compact, fixed-width high-effort figure; methods/caveats belong in its caption."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+    from matplotlib.ticker import NullFormatter, StrMethodFormatter
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7.5,
+                         "axes.labelsize": 7.5, "axes.titlesize": 8,
+                         "xtick.labelsize": 7.5, "ytick.labelsize": 7.5,
+                         "axes.linewidth": 0.6, "svg.fonttype": "none",
+                         "svg.hashsalt": "openwebrl-terra-om2w-paper-v1", "pdf.fonttype": 42,
+                         "savefig.facecolor": "white"})
+    points = [row for row in data["points"] if row["harness"] in harnesses
+              and row["method"] in HIGH_METHODS]
+    single_row = len(harnesses) == 1
+    fig, axes = plt.subplots(len(harnesses), 3, figsize=(7.0, 1.65 if single_row else 3.0),
+                             sharey="row", squeeze=False)
+    fig.subplots_adjust(left=0.075, right=0.815, top=0.85 if single_row else 0.90,
+                        bottom=0.24 if single_row else 0.14, hspace=0.72, wspace=0.25)
+    labels = ("Model cost ($, log)", "Browser commands", "Actor latency (s, log)")
+    for index, harness in enumerate(harnesses):
+        rows = sorted((row for row in points if row["harness"] == harness),
+                      key=lambda row: HIGH_METHODS.index(row["method"]))
+        ys = [100 * row["success_rate"] for row in rows]
+        low = max(0, 5 * math.floor((min(ys) - 0.5) / 5))
+        high = min(100, 5 * math.ceil((max(ys) + 0.5) / 5))
+        name = "BrowserCode" if harness == "browsercode" else "Native CUAWright"
+        axes[index, 0].set_title(f"({'ab'[index]}) {name}" if not single_row else name,
+                                 loc="left", weight="bold", pad=5)
+        for column, (metric, _, scale) in enumerate(METRICS):
+            ax = axes[index, column]
+            ax.set_xscale(scale)
+            ax.set_ylim(low, high)
+            ax.set_yticks(range(low, high + 1, 5))
+            ax.spines[["top", "right"]].set_visible(False)
+            ax.tick_params(length=2.5, width=0.6, pad=2)
+            ax.set_xlabel(labels[column], labelpad=2)
+            ax.xaxis.set_minor_formatter(NullFormatter())
+            ax.xaxis.set_tick_params(which="minor", length=1.5)
+            if scale == "log":
+                ax.xaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
+                ax.set_xticks(([0.01, 0.05, 0.2] if column == 0 else [100, 150, 200])
+                              if harness == "browsercode" else
+                              ([0.1, 0.3, 1] if column == 0 else [600, 900, 1200]))
+            else:
+                ax.set_xticks([15, 16] if harness == "browsercode" else [28, 30, 32])
+            if column == 0:
+                ax.set_ylabel("Success (%)", labelpad=3)
+            for row in rows:
+                _, marker, color, filled = STYLES[row["method"]]
+                ax.scatter(row[metric], 100 * row["success_rate"], s=25, marker=marker,
+                           edgecolors=color, facecolors=color if filled else "white",
+                           linewidths=0.9, zorder=3)
+    handles = []
+    for method in HIGH_METHODS:
+        label, marker, color, filled = STYLES[method]
+        handles.append(Line2D([], [], linestyle="none", marker=marker,
+                              markeredgecolor=color, markerfacecolor=color if filled else "white",
+                              markeredgewidth=0.9, markersize=4.7,
+                              label=label.removesuffix(" high")))
+    fig.legend(handles=handles, loc="center left", bbox_to_anchor=(0.835, 0.55),
+               frameon=False, fontsize=7.5, handletextpad=0.3,
+               labelspacing=0.7, borderaxespad=0)
+    for extension in ("png", "svg", "pdf"):
+        metadata = {"Date": None} if extension == "svg" else (
+            {"CreationDate": None, "ModDate": None} if extension == "pdf" else {})
+        fig.savefig(output_dir / f"{stem}.{extension}", dpi=300, metadata=metadata)
+        if extension == "svg":
+            path = output_dir / f"{stem}.svg"
+            path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+    plt.close(fig)
+    write_coordinates(output_dir / f"{stem}_coordinates.csv", points)
+
+
 def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browsercode", "native"),
            high_only=False):
+    if high_only:
+        return render_paper_high(data, output_dir, stem, harnesses)
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt

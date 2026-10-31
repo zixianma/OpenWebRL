@@ -23,12 +23,23 @@
   },
   "input_sha256": {
     "om2w_terra_valid_only_aggregate.json": "accfa541251ad5db8a34a1221b984ec027e753038111814045bdcd47e587244e",
-    "plot_om2w_terra_tradeoffs.py": "e3debb6dd5ce91251d1e6cdfcd819b278503868cb58e02f71b20f3c818425fcb"
+    "plot_om2w_terra_tradeoffs.py": "dc7209bb3fbf3abd3098461049bcb530e22606355b69c1f39d2949a4431e9b48"
   },
   "output_sha256": {
-    "om2w_terra_high_valid_only_tradeoffs.png": "651cf1f8466092368b016e792c912be0414f936134a45979afe0b5df1bab882d",
-    "om2w_terra_high_valid_only_tradeoffs.svg": "fc6a6594262b58623066f29ea2f6272241fc1c289f1ad06135229374b154c60c",
-    "om2w_terra_high_valid_only_tradeoffs.pdf": "950c5c15966084cd816c9189cfe8f4b89a94adb6afb5f49e47db812769785e98",
+    "om2w_terra_high_valid_only_tradeoffs.png": "655f316d2938cfefbb1f6f30f65358ba2e8279e076cd332609c44f47b8360a35",
+    "om2w_terra_high_valid_only_tradeoffs.svg": "1c9dc832736cfe5a075878f48ccc915d7bbcec706fd67f90d3f88efaa740c504",
+    "om2w_terra_high_valid_only_tradeoffs.pdf": "deaef4d315b7a2774af2cd22956aa23605726b76638a6d809932f93a5a9194b1",
     "om2w_terra_high_valid_only_tradeoffs_coordinates.csv": "1e82e2ac006739ba2b73c78580a6f36272a0eb10ac57b34231b5881baf67c707"
+  },
+  "layout": {
+    "width_inches": 7.0,
+    "height_inches": 3.0,
+    "panels": [
+      2,
+      3
+    ],
+    "font_size_points": 7.5,
+    "legend": "shared, outside right",
+    "caption_caveats": "See adjacent ARM_FINAL_RESULTS.md caption and table; counts retained in coordinates CSV."
   }
 }
