@@ -191,6 +191,21 @@ The four medium/low arms include one prescribed fresh episode for each original-
 
 *Circles identify Luna and squares identify Sol. Blue denotes a single proposal; red denotes candidates plus a selector. High effort is dark, medium intermediate and low light; open red circles denote N3 and filled red circles N5. Legends sit outside on the right and show each success denominator. Cost and latency use logarithmic axes. Success is successes divided by valid Terra judgments in each cell; valid subsets differ. Model cost excludes all judge fees. Medium/low cost includes the prescribed retries, and their latency/command coordinates sum original and retry observations per task only when all required measurements exist. Historical x-coordinates retain all available original attempt measurements; their observations are not restricted to the newly graded endpoint subset. Different actor limits, endpoint geometry, collection dates, contention and coverage remain; shared grading alone does not establish a causal harness or effort effect.*
 
+<details>
+<summary>Additional view: success and actor efficiency on valid tasks only</summary>
+
+The main plot already uses valid-only success. This additional view also restricts model cost, actor latency and browser commands to **each method's Terra-valid tasks, including both successes and failures**. Success percentages are unchanged. Valid subsets differ between methods; this is not a common-valid intersection.
+
+For a recovered valid task, cost and observed actor time still include its original episode and prescribed retry. Tasks that remain invalid, and their costs, are excluded from this conditional view; the main plot above retains the full-attempt cost comparison. Missing measurements remain missing: N5 low latency has 262 observations among 266 valid tasks. The other plotted metric means have complete coverage within their own valid-task sets.
+
+![BrowserCode Terra tradeoffs with success, cost, latency and browser commands restricted to valid tasks](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.png)
+
+[BrowserCode PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode.svg) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs_browsercode_coordinates.csv) · [Both harnesses](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs.png) · [Both-harness PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_tradeoffs.pdf) · [Valid-task aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_aggregate.json)
+
+The native view restricts all metrics to the same selected endpoint-evidence subset used for its success rates; 276 original-valid native runs remain ungraded. Recent medium/low results remain provisional, and collection windows, actor limits and timing scopes still differ. External judge fees are excluded.
+
+</details>
+
 #### Terra success and coverage
 
 Each row starts from 300 planned tasks. “Without valid Terra verdict” includes actor-invalid episodes, missing qualified endpoint evidence and any invalid new judgment; it is not a failure count among judged episodes.

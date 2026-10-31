@@ -122,6 +122,8 @@ Reproduce the published [all-Terra GPT figure](ARM_FINAL_RESULTS.md#luna-browser
 "$API_PY" -B openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py --output-dir /tmp/openwebrl-terra-plots
 ```
 
+Add `--valid-only` to condition cost, latency and browser commands on each method's valid-task set as well as success. Add `--harness browsercode` for the focused BrowserCode view. This reads `om2w_terra_valid_only_aggregate.json`; the original aggregate and figure remain available. Costs retain original and retry work on recovered valid tasks, while excluding tasks left invalid. The [valid-task figure and coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) report missing observations explicitly.
+
 </details>
 
 <details>

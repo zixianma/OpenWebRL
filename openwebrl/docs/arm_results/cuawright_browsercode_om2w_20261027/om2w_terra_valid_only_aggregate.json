@@ -1,0 +1,1321 @@
+{
+  "schema": "terra-gpt-om2w-plot-aggregate-v1",
+  "status": "completed_terra_regrade_with_provisional_effort_cohort",
+  "judge_protocol": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 4096,
+    "seed": 42,
+    "version": "gpt56-terra-terminal-success-v1"
+  },
+  "recent_effort_aggregate_schema": "qualified-invalid-retry-luna-browsercode-aggregate-v1",
+  "expected_historical_cells": 8,
+  "expected_effort_cells": 4,
+  "expected_axes": 6,
+  "expected_points_per_metric": 12,
+  "excluded_arm": "luna_single_xhigh",
+  "historical_coverage": [
+    {
+      "harness": "browsercode",
+      "method": "serial_high",
+      "requested": 300,
+      "eligible": 266,
+      "original_invalid_preserved": 34,
+      "original_valid_missing_evidence": 0
+    },
+    {
+      "harness": "browsercode",
+      "method": "luna_single_high",
+      "requested": 300,
+      "eligible": 269,
+      "original_invalid_preserved": 31,
+      "original_valid_missing_evidence": 0
+    },
+    {
+      "harness": "browsercode",
+      "method": "parallel3_select_high",
+      "requested": 300,
+      "eligible": 269,
+      "original_invalid_preserved": 31,
+      "original_valid_missing_evidence": 0
+    },
+    {
+      "harness": "browsercode",
+      "method": "parallel5_select_high",
+      "requested": 300,
+      "eligible": 267,
+      "original_invalid_preserved": 33,
+      "original_valid_missing_evidence": 0
+    },
+    {
+      "harness": "native",
+      "method": "serial_high",
+      "requested": 300,
+      "eligible": 170,
+      "original_invalid_preserved": 14,
+      "original_valid_missing_evidence": 116
+    },
+    {
+      "harness": "native",
+      "method": "luna_single_high",
+      "requested": 300,
+      "eligible": 217,
+      "original_invalid_preserved": 29,
+      "original_valid_missing_evidence": 54
+    },
+    {
+      "harness": "native",
+      "method": "parallel3_select_high",
+      "requested": 300,
+      "eligible": 208,
+      "original_invalid_preserved": 30,
+      "original_valid_missing_evidence": 62
+    },
+    {
+      "harness": "native",
+      "method": "parallel5_select_high",
+      "requested": 300,
+      "eligible": 226,
+      "original_invalid_preserved": 30,
+      "original_valid_missing_evidence": 44
+    }
+  ],
+  "source_sha256": {
+    "historical_manifest": "845683d7605ee12190d4fced828a3ecd555e3720f99baa092694f5d135217fc6",
+    "high_actor_aggregate": "fa5a38985dacab908084e932deb65ed96ba4aa9a30e71c89c868fbf3fba5f794",
+    "recent_effort_aggregate": "81a84c2d2401b976b9e9ed93121a6a3ca25e9d5f7d79f884aeb03bf3160e91e7",
+    "original_effort_aggregate": "22af7a891c256e0228a0c3b9d7eddb4f1ab026ece82bd4e6abecda9a96daf409",
+    "all_attempt_plot_aggregate": "af0f942f3ed02ab61ea3e1f456e862f694e936a700ec7bf5dc67dc99d0c0ded3",
+    "historical_private_numeric_extraction": "fb0dc9d1881247b16e7669ebcf9e5694c7f3a381cab314b8e6f7d8737ebb46a1",
+    "valid_task_exporter": "2deea4ba959996b227c2dc0f5c4c77b109b39716868dbd6df0986b6b5c4f6c71",
+    "reference_all_attempt_export_renderer": "566ab664f269d84e37b1a82274649dd14abc39bb259bf75adc0fbbca57f9e5a5",
+    "valid_task_evidence_binding": "4b453bb19679656f608a143d9935f1a78ad43cf8b14e79867b3309e13b73164d"
+  },
+  "styles": {
+    "serial_high": {
+      "label": "Sol single high",
+      "marker": "s",
+      "color": "#08519C",
+      "filled": true
+    },
+    "luna_single_high": {
+      "label": "Luna single high",
+      "marker": "o",
+      "color": "#08519C",
+      "filled": true
+    },
+    "parallel3_select_high": {
+      "label": "Luna N3 high",
+      "marker": "o",
+      "color": "#A50F15",
+      "filled": false
+    },
+    "parallel5_select_high": {
+      "label": "Luna N5 high",
+      "marker": "o",
+      "color": "#A50F15",
+      "filled": true
+    },
+    "luna_single_medium": {
+      "label": "Luna single medium",
+      "marker": "o",
+      "color": "#4292C6",
+      "filled": true
+    },
+    "luna_single_low": {
+      "label": "Luna single low",
+      "marker": "o",
+      "color": "#9ECAE1",
+      "filled": true
+    },
+    "luna_n5_medium": {
+      "label": "Luna N5 medium",
+      "marker": "o",
+      "color": "#EF3B2C",
+      "filled": true
+    },
+    "luna_n5_low": {
+      "label": "Luna N5 low",
+      "marker": "o",
+      "color": "#FC9272",
+      "filled": true
+    }
+  },
+  "points": [
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "browsercode",
+      "method": "serial_high",
+      "style": {
+        "label": "Sol single high",
+        "marker": "s",
+        "color": "#08519C",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 266,
+      "original_invalid_preserved": 34,
+      "eligible": 266,
+      "recorded": 266,
+      "graded_valid": 266,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 177,
+      "success_rate": 0.6654135338345865,
+      "mean_model_usd_per_task": 0.20770943759398497,
+      "mean_model_usd_per_task_observed_tasks": 266,
+      "mean_browser_steps": 14.988721804511279,
+      "mean_browser_steps_observed_tasks": 266,
+      "mean_task_seconds": 92.65773511359622,
+      "mean_task_seconds_observed_tasks": 266,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": 0,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "browsercode",
+      "method": "luna_single_high",
+      "style": {
+        "label": "Luna single high",
+        "marker": "o",
+        "color": "#08519C",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 269,
+      "original_invalid_preserved": 31,
+      "eligible": 269,
+      "recorded": 269,
+      "graded_valid": 269,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 178,
+      "success_rate": 0.6617100371747212,
+      "mean_model_usd_per_task": 0.009513999349442378,
+      "mean_model_usd_per_task_observed_tasks": 269,
+      "mean_browser_steps": 16.63197026022305,
+      "mean_browser_steps_observed_tasks": 269,
+      "mean_task_seconds": 94.92736618077343,
+      "mean_task_seconds_observed_tasks": 269,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": 0,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "browsercode",
+      "method": "parallel3_select_high",
+      "style": {
+        "label": "Luna N3 high",
+        "marker": "o",
+        "color": "#A50F15",
+        "filled": false
+      },
+      "requested": 300,
+      "original_valid": 269,
+      "original_invalid_preserved": 31,
+      "eligible": 269,
+      "recorded": 269,
+      "graded_valid": 269,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 183,
+      "success_rate": 0.6802973977695167,
+      "mean_model_usd_per_task": 0.054963019237918215,
+      "mean_model_usd_per_task_observed_tasks": 269,
+      "mean_browser_steps": 14.79182156133829,
+      "mean_browser_steps_observed_tasks": 269,
+      "mean_task_seconds": 178.0883317464566,
+      "mean_task_seconds_observed_tasks": 269,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": 0,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "browsercode",
+      "method": "parallel5_select_high",
+      "style": {
+        "label": "Luna N5 high",
+        "marker": "o",
+        "color": "#A50F15",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 267,
+      "original_invalid_preserved": 33,
+      "eligible": 267,
+      "recorded": 267,
+      "graded_valid": 267,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 198,
+      "success_rate": 0.7415730337078652,
+      "mean_model_usd_per_task": 0.0696033554494382,
+      "mean_model_usd_per_task_observed_tasks": 267,
+      "mean_browser_steps": 14.632958801498127,
+      "mean_browser_steps_observed_tasks": 267,
+      "mean_task_seconds": 207.8937416237685,
+      "mean_task_seconds_observed_tasks": 267,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": 0,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "native",
+      "method": "serial_high",
+      "style": {
+        "label": "Sol single high",
+        "marker": "s",
+        "color": "#08519C",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 286,
+      "original_invalid_preserved": 14,
+      "eligible": 170,
+      "recorded": 170,
+      "graded_valid": 170,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 116,
+      "successes": 145,
+      "success_rate": 0.8529411764705882,
+      "mean_model_usd_per_task": 1.3151285452941177,
+      "mean_model_usd_per_task_observed_tasks": 170,
+      "mean_browser_steps": 32.98823529411764,
+      "mean_browser_steps_observed_tasks": 170,
+      "mean_task_seconds": 514.0714198869817,
+      "mean_task_seconds_observed_tasks": 170,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": null,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "native",
+      "method": "luna_single_high",
+      "style": {
+        "label": "Luna single high",
+        "marker": "o",
+        "color": "#08519C",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 271,
+      "original_invalid_preserved": 29,
+      "eligible": 217,
+      "recorded": 217,
+      "graded_valid": 217,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 54,
+      "successes": 170,
+      "success_rate": 0.783410138248848,
+      "mean_model_usd_per_task": 0.09999307635944701,
+      "mean_model_usd_per_task_observed_tasks": 217,
+      "mean_browser_steps": 29.56221198156682,
+      "mean_browser_steps_observed_tasks": 217,
+      "mean_task_seconds": 898.9855707504782,
+      "mean_task_seconds_observed_tasks": 217,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": null,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "native",
+      "method": "parallel3_select_high",
+      "style": {
+        "label": "Luna N3 high",
+        "marker": "o",
+        "color": "#A50F15",
+        "filled": false
+      },
+      "requested": 300,
+      "original_valid": 270,
+      "original_invalid_preserved": 30,
+      "eligible": 208,
+      "recorded": 208,
+      "graded_valid": 208,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 62,
+      "successes": 179,
+      "success_rate": 0.8605769230769231,
+      "mean_model_usd_per_task": 0.2461877985096154,
+      "mean_model_usd_per_task_observed_tasks": 208,
+      "mean_browser_steps": 27.22596153846154,
+      "mean_browser_steps_observed_tasks": 208,
+      "mean_task_seconds": 1097.330815534179,
+      "mean_task_seconds_observed_tasks": 208,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": null,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "historical_terra_regrade",
+      "harness": "native",
+      "method": "parallel5_select_high",
+      "style": {
+        "label": "Luna N5 high",
+        "marker": "o",
+        "color": "#A50F15",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 270,
+      "original_invalid_preserved": 30,
+      "eligible": 226,
+      "recorded": 226,
+      "graded_valid": 226,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 44,
+      "successes": 195,
+      "success_rate": 0.8628318584070797,
+      "mean_model_usd_per_task": 0.2769446022566372,
+      "mean_model_usd_per_task_observed_tasks": 226,
+      "mean_browser_steps": 26.539823008849556,
+      "mean_browser_steps_observed_tasks": 226,
+      "mean_task_seconds": 1089.7853876099123,
+      "mean_task_seconds_observed_tasks": 226,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "valid_task_unknown_model_usage_calls": null,
+      "metric_population": "resolved_valid_tasks"
+    },
+    {
+      "cohort": "recent_terra_effort_with_prescribed_retry",
+      "harness": "browsercode",
+      "method": "luna_single_medium",
+      "style": {
+        "label": "Luna single medium",
+        "marker": "o",
+        "color": "#4292C6",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 265,
+      "original_invalid_preserved": 35,
+      "native_dispositions_recorded": 300,
+      "eligible": 271,
+      "recorded": 271,
+      "graded_valid": 271,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 171,
+      "success_rate": 0.6309963099630996,
+      "provisional": true,
+      "resolved_invalid_tasks": 29,
+      "prescribed_retry_episodes": 35,
+      "retry_recovered_valid": 6,
+      "retry_successes": 6,
+      "mean_model_usd_per_task": 0.007905975424354244,
+      "mean_model_usd_per_task_observed_tasks": 271,
+      "mean_browser_steps": 15.398523985239853,
+      "mean_browser_steps_observed_tasks": 271,
+      "mean_task_seconds": 115.36304634668947,
+      "mean_task_seconds_observed_tasks": 271,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "metric_population": "resolved_valid_tasks",
+      "valid_task_unknown_model_usage_calls": 2,
+      "valid_task_model_charged_or_reserved_usd": "2.142519340",
+      "valid_task_recorded_actor_episodes": 277
+    },
+    {
+      "cohort": "recent_terra_effort_with_prescribed_retry",
+      "harness": "browsercode",
+      "method": "luna_single_low",
+      "style": {
+        "label": "Luna single low",
+        "marker": "o",
+        "color": "#9ECAE1",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 251,
+      "original_invalid_preserved": 49,
+      "native_dispositions_recorded": 300,
+      "eligible": 271,
+      "recorded": 271,
+      "graded_valid": 271,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 91,
+      "success_rate": 0.33579335793357934,
+      "provisional": true,
+      "resolved_invalid_tasks": 29,
+      "prescribed_retry_episodes": 49,
+      "retry_recovered_valid": 20,
+      "retry_successes": 6,
+      "mean_model_usd_per_task": 0.002086047988929889,
+      "mean_model_usd_per_task_observed_tasks": 271,
+      "mean_browser_steps": 7.0,
+      "mean_browser_steps_observed_tasks": 271,
+      "mean_task_seconds": 37.43905669416908,
+      "mean_task_seconds_observed_tasks": 271,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "metric_population": "resolved_valid_tasks",
+      "valid_task_unknown_model_usage_calls": 1,
+      "valid_task_model_charged_or_reserved_usd": "0.565319005",
+      "valid_task_recorded_actor_episodes": 291
+    },
+    {
+      "cohort": "recent_terra_effort_with_prescribed_retry",
+      "harness": "browsercode",
+      "method": "luna_n5_medium",
+      "style": {
+        "label": "Luna N5 medium",
+        "marker": "o",
+        "color": "#EF3B2C",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 256,
+      "original_invalid_preserved": 44,
+      "native_dispositions_recorded": 300,
+      "eligible": 269,
+      "recorded": 269,
+      "graded_valid": 269,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 178,
+      "success_rate": 0.6617100371747212,
+      "provisional": true,
+      "resolved_invalid_tasks": 31,
+      "prescribed_retry_episodes": 44,
+      "retry_recovered_valid": 13,
+      "retry_successes": 11,
+      "mean_model_usd_per_task": 0.052474128866171,
+      "mean_model_usd_per_task_observed_tasks": 269,
+      "mean_browser_steps": 13.453531598513012,
+      "mean_browser_steps_observed_tasks": 269,
+      "mean_task_seconds": 219.4717249267049,
+      "mean_task_seconds_observed_tasks": 269,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "metric_population": "resolved_valid_tasks",
+      "valid_task_unknown_model_usage_calls": 12,
+      "valid_task_model_charged_or_reserved_usd": "14.115540665",
+      "valid_task_recorded_actor_episodes": 282
+    },
+    {
+      "cohort": "recent_terra_effort_with_prescribed_retry",
+      "harness": "browsercode",
+      "method": "luna_n5_low",
+      "style": {
+        "label": "Luna N5 low",
+        "marker": "o",
+        "color": "#FC9272",
+        "filled": true
+      },
+      "requested": 300,
+      "original_valid": 241,
+      "original_invalid_preserved": 59,
+      "native_dispositions_recorded": 300,
+      "eligible": 266,
+      "recorded": 266,
+      "graded_valid": 266,
+      "graded_invalid": 0,
+      "missing_eligible_judgments": 0,
+      "original_valid_missing_evidence": 0,
+      "successes": 106,
+      "success_rate": 0.39849624060150374,
+      "provisional": true,
+      "resolved_invalid_tasks": 34,
+      "prescribed_retry_episodes": 59,
+      "retry_recovered_valid": 25,
+      "retry_successes": 6,
+      "mean_model_usd_per_task": 0.01402707992481203,
+      "mean_model_usd_per_task_observed_tasks": 266,
+      "mean_browser_steps": 7.443609022556391,
+      "mean_browser_steps_observed_tasks": 266,
+      "mean_task_seconds": 104.51409323224149,
+      "mean_task_seconds_observed_tasks": 262,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds_missing_valid_tasks": 4,
+      "mean_browser_steps_missing_valid_tasks": 0,
+      "metric_population": "resolved_valid_tasks",
+      "valid_task_unknown_model_usage_calls": 12,
+      "valid_task_model_charged_or_reserved_usd": "3.731203260",
+      "valid_task_recorded_actor_episodes": 291
+    }
+  ],
+  "success_scope": "New Terra successes / new valid judgments, with eligible/recorded/invalid/missing counts retained per cell. Missing historical evidence never borrows old-judge labels.",
+  "actor_x_scope": {
+    "population": "Each cell uses its exact Terra-valid task set for success, cost, latency and commands; no cross-cell intersection. Valid means a gradeable binary outcome, including both successes and failures.",
+    "historical_cost": "Original archived per-task model cost, restricted to the exact qualified Terra-valid endpoint set; historical BrowserCode is received-usage cost and may understate unknown usage, whereas native retains conservative helpers and unknown reservations. Judge fees excluded.",
+    "recent_cost": "Cumulative original plus prescribed retry model ledger charges and retained full unknown reservations for only resolved valid logical tasks, divided by the number of those tasks. Includes prior invalid episode work for any task recovered by its one prescribed retry. No refunds or discarded attempts on retained tasks. Judge fees excluded.",
+    "latency_commands": "Restricted to the same valid task set; sum all original/retry episodes per retained logical task. A sum is missing if any attempted episode lacks its metric. Finite means report coverage explicitly; no missing values are zero-filled. Historical observations use archived harness boundaries.",
+    "conditional_bias": "Conditional on valid grading and endpoint availability. Tasks left invalid are excluded from x and y, so these costs do not measure the full cost of an attempted300-task evaluation. Native endpoint exclusions are selected and associated with original outcomes; different cells do not share an identical task subset.",
+    "limits": "Harness actor limits and image geometry, collection windows and retry cohorts differ; descriptive comparisons only."
+  },
+  "comparison": "Every coordinate is restricted to its cell's Terra-valid task population with explicit observed metric coverage. Harnesses, actor limits, action histories, image geometry, live windows, cost estimation methods, concurrent workloads and selected task subsets differ. Comparisons are descriptive; valid-task costs do not measure the full300 evaluation cost.",
+  "caption_requirements": [
+    "Success and actor metrics are restricted to each cell's Terra-valid task set, including valid failures.",
+    "Native excludes276 original-valid runs without qualified endpoint evidence.",
+    "Cost excludes judging; conditional valid-task metrics exclude unresolved invalid tasks and their costs. Recovered valid tasks retain all original plus prescribed retry work.",
+    "Observed metric denominators are explicit; missing values are excluded without imputation. Historical received-cost limitations remain.",
+    "Recent medium/low effort cohorts remain provisional; comparisons are descriptive and use unequal task subsets."
+  ],
+  "new_historical_judge_pool": {
+    "calls": 1892,
+    "cap_usd": "100",
+    "charged_or_reserved_usd": "27.1248130",
+    "status_counts": {
+      "known": 1892
+    },
+    "measured_peak_http": 4,
+    "scope": "New historical regrade judge-only pool; excluded from every actor-cost x-coordinate."
+  },
+  "native_endpoint_evidence_selection": {
+    "eligible": {
+      "original_valid": 821,
+      "original_successes": 636
+    },
+    "excluded_missing_endpoint": {
+      "original_valid": 276,
+      "original_successes": 169
+    },
+    "scope": "Native rates and actor metrics condition on the exact selected Terra-valid endpoint-evidence subset. Exclusion is associated with original-grader outcomes; these are not full300 native rates."
+  },
+  "historical_result_binding_sha256": "f7d2abaae2f7b71d83f2a6081ec4f8ff1be9ec7c1aa28f8f8b1a239f9251c32a",
+  "provisional_recent_effort": true,
+  "recent_effort_cohorts": {
+    "settings": {
+      "actor_model": "gpt-6-luna",
+      "benchmark": "Online-Mind2Web",
+      "harness": "BrowserCode",
+      "max_decisions": 30,
+      "max_output_tokens_per_candidate_or_selector": 12288,
+      "tasks_per_arm": 300,
+      "terminal_judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42,
+        "version": "gpt56-terra-terminal-success-v1"
+      },
+      "viewport": [
+        1280,
+        1800
+      ]
+    },
+    "metric_definitions": {
+      "browser_steps": "Per logical task, sum original and prescribed retry selected executable BrowserCode batches, only when every episode has a finite measurement; missing totals excluded with count reported.",
+      "comparison": "Original and retry cohorts remain separately reported. Recovered outcomes use later collection dates and conditional fresh episodes, so comparisons are descriptive.",
+      "model_cost": "Original plus retry cumulative model/counter charges and retained unknown reservations divided by300 planned tasks; external judging excluded. Every attempt, including invalid episodes, is included.",
+      "success_rate": "Successes divided by valid outcomes after taking the original outcome when valid, otherwise the one prescribed second episode. All original-invalid cases receive one fresh episode; invalid retries remain excluded and counted separately.",
+      "task_seconds": "Per logical task, sum original and prescribed retry native actor-loop latency, excluding setup, judge-only capture, cleanup and judge. A total is missing if any attempted episode lacks a measurement; mean only over fully observed totals, with count reported."
+    },
+    "counts": {
+      "arms": 4,
+      "logical_task_arm_pairs": 1200,
+      "retry_episodes": 187,
+      "retry_successes": 29,
+      "retry_valid": 64,
+      "tasks_per_arm": 300
+    },
+    "provisional": true,
+    "aggregate_rows": [
+      {
+        "arm": "luna_single_medium",
+        "arm_settings": {
+          "arm": "luna_single_medium",
+          "model": "gpt-6-luna",
+          "output_tokens": 12288,
+          "proposal_count": 1,
+          "reasoning_effort": "medium",
+          "selector_model": null,
+          "selector_reasoning_effort": null
+        },
+        "cumulative_per_task_metrics": {
+          "selected_browser_batches": {
+            "mean": 13.91,
+            "missing_tasks": 0,
+            "observed_tasks": 300
+          },
+          "task_seconds": {
+            "mean": 115.36304634668947,
+            "missing_tasks": 29,
+            "observed_tasks": 271
+          }
+        },
+        "invalid": 29,
+        "mean_browser_steps": 13.91,
+        "mean_browser_steps_observed_tasks": 300,
+        "mean_model_usd_per_task": 0.007141731133333333,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 115.36304634668947,
+        "mean_task_seconds_observed_tasks": 271,
+        "overall_success_rate": 0.57,
+        "recorded": 300,
+        "success_rate": 0.6309963099630996,
+        "successes": 171,
+        "unknown_model_usage_calls": 2,
+        "valid": 271,
+        "all_attempt_accounting": {
+          "judge": {
+            "calls": 271,
+            "charged_or_reserved_usd": "4.1669710",
+            "original_calls": 265,
+            "original_charged_or_reserved_usd": "4.0641360",
+            "original_unknown_usage_calls": 0,
+            "retry_calls": 6,
+            "retry_charged_or_reserved_usd": "0.1028350",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0",
+            "unknown_usage_calls": 0
+          },
+          "model": {
+            "calls": 5607,
+            "charged_or_reserved_usd": "2.142519340",
+            "original_calls": 5472,
+            "original_charged_or_reserved_usd": "2.091281470",
+            "original_unknown_usage_calls": 2,
+            "retry_calls": 135,
+            "retry_charged_or_reserved_usd": "0.051237870",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0.044205875",
+            "unknown_usage_calls": 2
+          }
+        },
+        "original_cohort": {
+          "all_observed_metrics": {
+            "cohort_tasks": 300,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.006970938233333334,
+              "missing_tasks": 0,
+              "observed_tasks": 300
+            },
+            "selected_browser_batches": {
+              "mean": 13.566666666666666,
+              "missing_tasks": 0,
+              "observed_tasks": 300
+            },
+            "task_seconds": {
+              "mean": 113.4055554327398,
+              "missing_tasks": 29,
+              "observed_tasks": 271
+            }
+          },
+          "arm": "luna_single_medium",
+          "arm_settings": {
+            "arm": "luna_single_medium",
+            "model": "gpt-6-luna",
+            "output_tokens": 12288,
+            "proposal_count": 1,
+            "reasoning_effort": "medium",
+            "selector_model": null,
+            "selector_reasoning_effort": null
+          },
+          "derived_invalid_count": 0,
+          "invalid": 35,
+          "mean_browser_steps": 13.566666666666666,
+          "mean_browser_steps_observed_tasks": 300,
+          "mean_model_usd_per_task": 0.006970938233333333,
+          "mean_model_usd_per_task_observed_tasks": 300,
+          "mean_task_seconds": 113.4055554327398,
+          "mean_task_seconds_observed_tasks": 271,
+          "native_dispositions": 300,
+          "overall_success_rate": 0.55,
+          "recorded": 300,
+          "success_rate": 0.6226415094339622,
+          "successes": 165,
+          "unknown_model_usage_calls": 2,
+          "valid": 265,
+          "valid_only_metrics": {
+            "cohort_tasks": 265,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.007597432566037735,
+              "missing_tasks": 0,
+              "observed_tasks": 265
+            },
+            "selected_browser_batches": {
+              "mean": 15.10943396226415,
+              "missing_tasks": 0,
+              "observed_tasks": 265
+            },
+            "task_seconds": {
+              "mean": 113.69202280853057,
+              "missing_tasks": 0,
+              "observed_tasks": 265
+            }
+          },
+          "all_attempt_accounting": {
+            "judge": {
+              "calls": 265,
+              "charged_or_reserved_usd": "4.0641360",
+              "known_fee_usd": "4.0641360",
+              "known_usage_calls": 265,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0",
+              "unknown_usage_calls": 0
+            },
+            "model": {
+              "calls": 5472,
+              "charged_or_reserved_usd": "2.091281470",
+              "known_fee_usd": "2.047075595",
+              "known_usage_calls": 5470,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0.044205875",
+              "unknown_usage_calls": 2
+            }
+          }
+        },
+        "retry_cohort": {
+          "invalid": 29,
+          "recorded": 35,
+          "selected_browser_batches": {
+            "mean": 2.942857142857143,
+            "missing_tasks": 0,
+            "observed_tasks": 35
+          },
+          "successes": 6,
+          "task_seconds": {
+            "mean": 88.41333961339357,
+            "missing_tasks": 29,
+            "observed_tasks": 6
+          },
+          "valid": 6
+        }
+      },
+      {
+        "arm": "luna_single_low",
+        "arm_settings": {
+          "arm": "luna_single_low",
+          "model": "gpt-6-luna",
+          "output_tokens": 12288,
+          "proposal_count": 1,
+          "reasoning_effort": "low",
+          "selector_model": null,
+          "selector_reasoning_effort": null
+        },
+        "cumulative_per_task_metrics": {
+          "selected_browser_batches": {
+            "mean": 6.323333333333333,
+            "missing_tasks": 0,
+            "observed_tasks": 300
+          },
+          "task_seconds": {
+            "mean": 37.43905669416908,
+            "missing_tasks": 29,
+            "observed_tasks": 271
+          }
+        },
+        "invalid": 29,
+        "mean_browser_steps": 6.323333333333333,
+        "mean_browser_steps_observed_tasks": 300,
+        "mean_model_usd_per_task": 0.0018843966833333333,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 37.43905669416908,
+        "mean_task_seconds_observed_tasks": 271,
+        "overall_success_rate": 0.30333333333333334,
+        "recorded": 300,
+        "success_rate": 0.33579335793357934,
+        "successes": 91,
+        "unknown_model_usage_calls": 1,
+        "valid": 271,
+        "all_attempt_accounting": {
+          "judge": {
+            "calls": 271,
+            "charged_or_reserved_usd": "3.1682315",
+            "original_calls": 251,
+            "original_charged_or_reserved_usd": "2.9206820",
+            "original_unknown_usage_calls": 0,
+            "retry_calls": 20,
+            "retry_charged_or_reserved_usd": "0.2475495",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0",
+            "unknown_usage_calls": 0
+          },
+          "model": {
+            "calls": 2216,
+            "charged_or_reserved_usd": "0.565319005",
+            "original_calls": 2015,
+            "original_charged_or_reserved_usd": "0.513151935",
+            "original_unknown_usage_calls": 1,
+            "retry_calls": 201,
+            "retry_charged_or_reserved_usd": "0.052167070",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0.00871075",
+            "unknown_usage_calls": 1
+          }
+        },
+        "original_cohort": {
+          "all_observed_metrics": {
+            "cohort_tasks": 300,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.00171050645,
+              "missing_tasks": 0,
+              "observed_tasks": 300
+            },
+            "selected_browser_batches": {
+              "mean": 5.74,
+              "missing_tasks": 0,
+              "observed_tasks": 300
+            },
+            "task_seconds": {
+              "mean": 34.61318815571153,
+              "missing_tasks": 29,
+              "observed_tasks": 271
+            }
+          },
+          "arm": "luna_single_low",
+          "arm_settings": {
+            "arm": "luna_single_low",
+            "model": "gpt-6-luna",
+            "output_tokens": 12288,
+            "proposal_count": 1,
+            "reasoning_effort": "low",
+            "selector_model": null,
+            "selector_reasoning_effort": null
+          },
+          "derived_invalid_count": 0,
+          "invalid": 49,
+          "mean_browser_steps": 5.74,
+          "mean_browser_steps_observed_tasks": 300,
+          "mean_model_usd_per_task": 0.00171050645,
+          "mean_model_usd_per_task_observed_tasks": 300,
+          "mean_task_seconds": 34.61318815571153,
+          "mean_task_seconds_observed_tasks": 271,
+          "native_dispositions": 300,
+          "overall_success_rate": 0.2833333333333333,
+          "recorded": 300,
+          "success_rate": 0.3386454183266932,
+          "successes": 85,
+          "unknown_model_usage_calls": 1,
+          "valid": 251,
+          "valid_only_metrics": {
+            "cohort_tasks": 251,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.001932646374501992,
+              "missing_tasks": 0,
+              "observed_tasks": 251
+            },
+            "selected_browser_batches": {
+              "mean": 6.5458167330677295,
+              "missing_tasks": 0,
+              "observed_tasks": 251
+            },
+            "task_seconds": {
+              "mean": 35.82745326432547,
+              "missing_tasks": 0,
+              "observed_tasks": 251
+            }
+          },
+          "all_attempt_accounting": {
+            "judge": {
+              "calls": 251,
+              "charged_or_reserved_usd": "2.9206820",
+              "known_fee_usd": "2.9206820",
+              "known_usage_calls": 251,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0",
+              "unknown_usage_calls": 0
+            },
+            "model": {
+              "calls": 2015,
+              "charged_or_reserved_usd": "0.513151935",
+              "known_fee_usd": "0.504441185",
+              "known_usage_calls": 2014,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0.00871075",
+              "unknown_usage_calls": 1
+            }
+          }
+        },
+        "retry_cohort": {
+          "invalid": 29,
+          "recorded": 49,
+          "selected_browser_batches": {
+            "mean": 3.5714285714285716,
+            "missing_tasks": 0,
+            "observed_tasks": 49
+          },
+          "successes": 6,
+          "task_seconds": {
+            "mean": 38.29051869609975,
+            "missing_tasks": 29,
+            "observed_tasks": 20
+          },
+          "valid": 20
+        }
+      },
+      {
+        "arm": "luna_n5_medium",
+        "arm_settings": {
+          "arm": "luna_n5_medium",
+          "model": "gpt-6-luna",
+          "output_tokens": 12288,
+          "proposal_count": 5,
+          "reasoning_effort": "medium",
+          "selector_model": "gpt-6-luna",
+          "selector_reasoning_effort": "medium"
+        },
+        "cumulative_per_task_metrics": {
+          "selected_browser_batches": {
+            "mean": 12.264214046822742,
+            "missing_tasks": 1,
+            "observed_tasks": 299
+          },
+          "task_seconds": {
+            "mean": 223.34739871352048,
+            "missing_tasks": 30,
+            "observed_tasks": 270
+          }
+        },
+        "invalid": 31,
+        "mean_browser_steps": 12.264214046822742,
+        "mean_browser_steps_observed_tasks": 299,
+        "mean_model_usd_per_task": 0.04801521155,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 223.34739871352048,
+        "mean_task_seconds_observed_tasks": 270,
+        "overall_success_rate": 0.5933333333333334,
+        "recorded": 300,
+        "success_rate": 0.6617100371747212,
+        "successes": 178,
+        "unknown_model_usage_calls": 12,
+        "valid": 269,
+        "all_attempt_accounting": {
+          "judge": {
+            "calls": 269,
+            "charged_or_reserved_usd": "4.0744495",
+            "original_calls": 256,
+            "original_charged_or_reserved_usd": "3.8842970",
+            "original_unknown_usage_calls": 0,
+            "retry_calls": 13,
+            "retry_charged_or_reserved_usd": "0.1901525",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0",
+            "unknown_usage_calls": 0
+          },
+          "model": {
+            "calls": 25048,
+            "charged_or_reserved_usd": "14.404563465",
+            "original_calls": 23864,
+            "original_charged_or_reserved_usd": "13.667255205",
+            "original_unknown_usage_calls": 12,
+            "retry_calls": 1184,
+            "retry_charged_or_reserved_usd": "0.737308260",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0.159172375",
+            "unknown_usage_calls": 12
+          }
+        },
+        "original_cohort": {
+          "all_observed_metrics": {
+            "cohort_tasks": 300,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.04570988362876254,
+              "missing_tasks": 1,
+              "observed_tasks": 299
+            },
+            "selected_browser_batches": {
+              "mean": 11.709030100334449,
+              "missing_tasks": 1,
+              "observed_tasks": 299
+            },
+            "task_seconds": {
+              "mean": 214.80754145010408,
+              "missing_tasks": 30,
+              "observed_tasks": 270
+            }
+          },
+          "arm": "luna_n5_medium",
+          "arm_settings": {
+            "arm": "luna_n5_medium",
+            "model": "gpt-6-luna",
+            "output_tokens": 12288,
+            "proposal_count": 5,
+            "reasoning_effort": "medium",
+            "selector_model": "gpt-6-luna",
+            "selector_reasoning_effort": "medium"
+          },
+          "derived_invalid_count": 1,
+          "invalid": 44,
+          "mean_browser_steps": 11.709030100334449,
+          "mean_browser_steps_observed_tasks": 299,
+          "mean_model_usd_per_task": 0.04555751735,
+          "mean_model_usd_per_task_observed_tasks": 300,
+          "mean_task_seconds": 214.80754145010408,
+          "mean_task_seconds_observed_tasks": 270,
+          "native_dispositions": 299,
+          "overall_success_rate": 0.5566666666666666,
+          "recorded": 300,
+          "success_rate": 0.65234375,
+          "successes": 167,
+          "unknown_model_usage_calls": 12,
+          "valid": 256,
+          "valid_only_metrics": {
+            "cohort_tasks": 256,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.05066276466796875,
+              "missing_tasks": 0,
+              "observed_tasks": 256
+            },
+            "selected_browser_batches": {
+              "mean": 13.17578125,
+              "missing_tasks": 0,
+              "observed_tasks": 256
+            },
+            "task_seconds": {
+              "mean": 213.69890811755468,
+              "missing_tasks": 0,
+              "observed_tasks": 256
+            }
+          },
+          "all_attempt_accounting": {
+            "judge": {
+              "calls": 256,
+              "charged_or_reserved_usd": "3.8842970",
+              "known_fee_usd": "3.8842970",
+              "known_usage_calls": 256,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0",
+              "unknown_usage_calls": 0
+            },
+            "model": {
+              "calls": 23864,
+              "charged_or_reserved_usd": "13.667255205",
+              "known_fee_usd": "13.508082830",
+              "known_usage_calls": 23852,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0.159172375",
+              "unknown_usage_calls": 12
+            }
+          }
+        },
+        "retry_cohort": {
+          "invalid": 31,
+          "recorded": 44,
+          "selected_browser_batches": {
+            "mean": 3.772727272727273,
+            "missing_tasks": 0,
+            "observed_tasks": 44
+          },
+          "successes": 11,
+          "task_seconds": {
+            "mean": 164.6972472230305,
+            "missing_tasks": 30,
+            "observed_tasks": 14
+          },
+          "valid": 13
+        }
+      },
+      {
+        "arm": "luna_n5_low",
+        "arm_settings": {
+          "arm": "luna_n5_low",
+          "model": "gpt-6-luna",
+          "output_tokens": 12288,
+          "proposal_count": 5,
+          "reasoning_effort": "low",
+          "selector_model": "gpt-6-luna",
+          "selector_reasoning_effort": "low"
+        },
+        "cumulative_per_task_metrics": {
+          "selected_browser_batches": {
+            "mean": 6.763333333333334,
+            "missing_tasks": 0,
+            "observed_tasks": 300
+          },
+          "task_seconds": {
+            "mean": 104.94800603462382,
+            "missing_tasks": 34,
+            "observed_tasks": 266
+          }
+        },
+        "invalid": 34,
+        "mean_browser_steps": 6.763333333333334,
+        "mean_browser_steps_observed_tasks": 300,
+        "mean_model_usd_per_task": 0.01271041725,
+        "mean_model_usd_per_task_observed_tasks": 300,
+        "mean_task_seconds": 104.94800603462382,
+        "mean_task_seconds_observed_tasks": 266,
+        "overall_success_rate": 0.35333333333333333,
+        "recorded": 300,
+        "success_rate": 0.39849624060150374,
+        "successes": 106,
+        "unknown_model_usage_calls": 13,
+        "valid": 266,
+        "all_attempt_accounting": {
+          "judge": {
+            "calls": 266,
+            "charged_or_reserved_usd": "3.2315965",
+            "original_calls": 241,
+            "original_charged_or_reserved_usd": "2.8981825",
+            "original_unknown_usage_calls": 0,
+            "retry_calls": 25,
+            "retry_charged_or_reserved_usd": "0.3334140",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0",
+            "unknown_usage_calls": 0
+          },
+          "model": {
+            "calls": 13971,
+            "charged_or_reserved_usd": "3.813125175",
+            "original_calls": 12185,
+            "original_charged_or_reserved_usd": "3.259620980",
+            "original_unknown_usage_calls": 13,
+            "retry_calls": 1786,
+            "retry_charged_or_reserved_usd": "0.553504195",
+            "retry_unknown_usage_calls": 0,
+            "unknown_charge_or_reserve_usd": "0.124048750",
+            "unknown_usage_calls": 13
+          }
+        },
+        "original_cohort": {
+          "all_observed_metrics": {
+            "cohort_tasks": 300,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.010865403266666667,
+              "missing_tasks": 0,
+              "observed_tasks": 300
+            },
+            "selected_browser_batches": {
+              "mean": 5.866666666666666,
+              "missing_tasks": 0,
+              "observed_tasks": 300
+            },
+            "task_seconds": {
+              "mean": 96.37534351377474,
+              "missing_tasks": 34,
+              "observed_tasks": 266
+            }
+          },
+          "arm": "luna_n5_low",
+          "arm_settings": {
+            "arm": "luna_n5_low",
+            "model": "gpt-6-luna",
+            "output_tokens": 12288,
+            "proposal_count": 5,
+            "reasoning_effort": "low",
+            "selector_model": "gpt-6-luna",
+            "selector_reasoning_effort": "low"
+          },
+          "derived_invalid_count": 0,
+          "invalid": 59,
+          "mean_browser_steps": 5.866666666666666,
+          "mean_browser_steps_observed_tasks": 300,
+          "mean_model_usd_per_task": 0.010865403266666667,
+          "mean_model_usd_per_task_observed_tasks": 300,
+          "mean_task_seconds": 96.37534351377474,
+          "mean_task_seconds_observed_tasks": 266,
+          "native_dispositions": 300,
+          "overall_success_rate": 0.3333333333333333,
+          "recorded": 300,
+          "success_rate": 0.4149377593360996,
+          "successes": 100,
+          "unknown_model_usage_calls": 13,
+          "valid": 241,
+          "valid_only_metrics": {
+            "cohort_tasks": 241,
+            "model_charge_or_reserve_usd": {
+              "mean": 0.011883226887966806,
+              "missing_tasks": 0,
+              "observed_tasks": 241
+            },
+            "selected_browser_batches": {
+              "mean": 6.775933609958506,
+              "missing_tasks": 0,
+              "observed_tasks": 241
+            },
+            "task_seconds": {
+              "mean": 99.60957599960112,
+              "missing_tasks": 0,
+              "observed_tasks": 241
+            }
+          },
+          "all_attempt_accounting": {
+            "judge": {
+              "calls": 241,
+              "charged_or_reserved_usd": "2.8981825",
+              "known_fee_usd": "2.8981825",
+              "known_usage_calls": 241,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0",
+              "unknown_usage_calls": 0
+            },
+            "model": {
+              "calls": 12185,
+              "charged_or_reserved_usd": "3.259620980",
+              "known_fee_usd": "3.135572230",
+              "known_usage_calls": 12172,
+              "reserved_inflight_calls": 0,
+              "unknown_charge_or_reserve_usd": "0.124048750",
+              "unknown_usage_calls": 13
+            }
+          }
+        },
+        "retry_cohort": {
+          "invalid": 34,
+          "recorded": 59,
+          "selected_browser_batches": {
+            "mean": 4.559322033898305,
+            "missing_tasks": 0,
+            "observed_tasks": 59
+          },
+          "successes": 6,
+          "task_seconds": {
+            "mean": 86.4142902059609,
+            "missing_tasks": 30,
+            "observed_tasks": 29
+          },
+          "valid": 25
+        }
+      }
+    ],
+    "reference_scope": "Unmodified original/all-attempt cohort and accounting reference only; its nested metric definitions and means describe original or all300 metrics, not the conditional valid-task x coordinates in points."
+  },
+  "original_invalid_retry_policy": "Original valid outcome retained; otherwise one prescribed fresh second episode for every original invalid. In this view only resolved valid logical tasks are included; their cumulative actor costs include both episodes and full unknown reserves, and latency/command means require finite measurement for every episode. Unresolved invalid tasks and all their costs are excluded from this conditional view; original/all-attempt totals remain in the companion aggregate.",
+  "recent_effort_qualification": "Recent effort results remain provisional; see metric definitions and reported coverage for measurement scope.",
+  "source_aggregate_only_no_task_payloads": true,
+  "historical_regrade_complete": true,
+  "historical_regrade_qualified": true,
+  "final_audit_complete": false,
+  "metric_population": "resolved_valid_tasks",
+  "companion_all_attempt_aggregate": {
+    "file": "om2w_terra_all_aggregate.json",
+    "sha256": "af0f942f3ed02ab61ea3e1f456e862f694e936a700ec7bf5dc67dc99d0c0ded3",
+    "scope": "Separate original/all-attempt cost and metric means and original/retry accounting are retained in this companion; they are not the x coordinates plotted in this valid-task view."
+  },
+  "unknown_usage_count_coverage": "Historical BrowserCode and recent effort unknown call counts are available for the restricted task set. Native restricted-set unknown call counts are not separately exported and remain null; native costs still retain every conservative per-task charge/reservation in the archived extraction.",
+  "rendering": {
+    "matplotlib_version": "3.9.4",
+    "public_renderer_sha256": "6e8badaf3e1302594145361c045493c5c68b8d897e4b325e2e891b83a4603701",
+    "svg_hashsalt": "openwebrl-terra-om2w-v1",
+    "font": "DejaVu Sans"
+  }
+}
