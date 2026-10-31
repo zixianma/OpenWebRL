@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-Luna effort now has **300 recorded dispositions per arm across all five methods**. Its [results and expanded GPT figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) are **provisional, pending final independent qualification**; they use the GPT-5.6 Terra judge and remain separate from historical GPT-high cohorts. The completed Claude study has 300 dispositions per arm; on its 246 common-valid tasks, Sonnet single and N5 each solved 147, with no established success advantage for N5 in that setup. See its [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) and the historical GPT [three-benchmark tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
+Luna effort now has **300 recorded dispositions per arm across all five methods**. Its [results and overlaid GPT figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) are **provisional, pending final independent qualification**. Hollow Terra-judged effort points share the BrowserCode panels with filled historical o4-mini high-effort points; the judge cohorts and live collection windows remain distinct, so the overlay is descriptive. The completed Claude study has 300 dispositions per arm; on its 246 common-valid tasks, Sonnet single and N5 each solved 147, with no established success advantage for N5 in that setup. See its [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) and the historical GPT [three-benchmark tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -138,7 +138,7 @@ The Claude plots use each arm's valid cohort for success and all efficiency mean
 
 | Question | Evidence |
 |---|---|
-| Luna effort, 300 dispositions per arm; provisional | [Counts, expanded GPT figure and metric coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030); [aggregate](arm_results/luna_browsercode_effort_om2w300_20261030/aggregate.json) |
+| Luna effort, 300 dispositions per arm; provisional | [Counts, overlaid BrowserCode panels and metric coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030); [aggregate](arm_results/luna_browsercode_effort_om2w300_20261030/aggregate.json) |
 | GPT high across three benchmarks | [Headline results](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency); [aggregate](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json) |
 | Claude 300 tasks per arm | [Result tables and plots](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300); [aggregate](arm_results/claude_browsercode_om2w300_20261028/aggregate.json); [accounting](arm_results/claude_browsercode_om2w300_20261028/accounting.json); [plot source](arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py) |
 
