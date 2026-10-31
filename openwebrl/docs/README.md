@@ -19,7 +19,7 @@
 
 [Final headline results: four Sol/Luna methods across OM2W, WebVoyager and DeepShop — performance, cost and efficiency](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
 
-[High-effort GPT tradeoffs: shared-Terra OM2W on two harnesses, WebVoyager and DeepShop BrowserCode rows; valid-task success, cost and latency in a compact paper figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031).
+[High-effort GPT tradeoffs: Sol single and Luna single/N3/N5, all Terra-judged; OM2W on two harnesses plus WebVoyager and DeepShop BrowserCode, with valid-task success, cost and latency](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031).
 
 [API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 

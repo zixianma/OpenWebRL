@@ -184,9 +184,9 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 <a id="luna-browsercode-effort-om2w300-20261030"></a>
 <a id="shared-terra-high-three-benchmarks-20261031"></a>
 
-**High-effort actors, shared Terra grading, three benchmarks.** OM2W shows Sol single and Luna single/N3/N5 in BrowserCode and native CUAWright. WebVoyager and DeepShop show Sol single, Luna single and Luna N5 in BrowserCode. Every point uses GPT-5.6 Terra terminal-success grading (medium judge effort, 4,096 completion tokens, seed 42). Success and actor means use each method's valid Terra tasks, including successes and failures; these are different valid subsets, not a common-task intersection.
+**High-effort actors, shared Terra grading, three benchmarks.** OM2W shows Sol single and Luna single/N3/N5 in BrowserCode and native CUAWright. WebVoyager and DeepShop show the same four methods in BrowserCode. Every point uses GPT-5.6 Terra terminal-success grading (medium judge effort, 4,096 completion tokens, seed 42). Success and actor means use each method's valid Terra tasks, including successes and failures; these are different valid subsets, not a common-task intersection.
 
-**WebVoyager and DeepShop use shared Terra terminal-success scores, rather than their original benchmark-native scores.** We regraded all 2,129 originally valid saved episodes, with zero actor calls; the 106 original invalids stay excluded. Higher scores relative to the historical tables come from changing the judge on the same rollouts. The separately accounted judging fee was **$34.39**, excluded from all actor-cost coordinates.
+**WebVoyager and DeepShop use shared Terra terminal-success scores, rather than their original benchmark-native scores.** We regraded all 2,845 originally valid saved episodes, with zero actor calls; the 135 original invalids stay excluded. Higher scores relative to the historical tables come from changing the judge on the same rollouts. The separately accounted judging fee was **$45.63**, excluded from all actor-cost coordinates.
 
 **Native OM2W remains conditional on selected endpoint evidence:** 276 original-valid native episodes lack qualified evidence in this snapshot. Actor limits also differ: BrowserCode uses 12,288 output tokens and 30 decisions; native uses 20,000 output tokens, 100 decisions and summaries every 20. Different limits, timing scopes and live collection windows prevent a causal harness comparison.
 
@@ -212,9 +212,11 @@ Planned rosters are 300 OM2W, 595 WebVoyager and 150 DeepShop tasks per method. 
 | OM2W / native | Luna N5 | 195 | 226 | 74 | 86.3% | $0.27694 | 1089.8 | 26.54 |
 | WebVoyager / BrowserCode | Sol single | 468 | 553 | 42 | 84.6% | $0.19770 | 94.1 | 13.31 |
 | WebVoyager / BrowserCode | Luna single | 482 | 579 | 16 | 83.2% | $0.00778 | 100.1 | 13.54 |
+| WebVoyager / BrowserCode | Luna N3 | 496 | 568 | 27 | 87.3% | $0.04319 | 163.4 | 11.71 |
 | WebVoyager / BrowserCode | Luna N5 | 483 | 555 | 40 | 87.0% | $0.04588 | 171.0 | 10.89 |
 | DeepShop / BrowserCode | Sol single | 113 | 145 | 5 | 77.9% | $0.38431 | 150.6 | 21.08 |
 | DeepShop / BrowserCode | Luna single | 123 | 150 | 0 | 82.0% | $0.01403 | 154.8 | 20.53 |
+| DeepShop / BrowserCode | Luna N3 | 121 | 148 | 2 | 81.8% | $0.08884 | 258.2 | 17.96 |
 | DeepShop / BrowserCode | Luna N5 | 120 | 147 | 3 | 81.6% | $0.10954 | 281.9 | 17.48 |
 
 [Compact OM2W-only PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.pdf) · [OM2W-only aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_aggregate.json). Original benchmark-native results remain in the [historical tables](#headline-performance-cost-and-efficiency).

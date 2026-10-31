@@ -6,7 +6,7 @@
     7,
     5.5
   ],
-  "points": 14,
+  "points": 16,
   "judge_protocol": {
     "model": "gpt-5.6-terra",
     "reasoning_effort": "medium",
@@ -14,13 +14,16 @@
     "seed": 42,
     "version": "gpt56-terra-terminal-success-v1"
   },
-  "crossbench_independent_audit_sha256": "0b632a7b21653d349690bb81e48873552186ff710e20ed20a20bade859b5a150",
   "files_sha256": {
-    "shared_terra_high_four_row_aggregate.json": "bbe1db9ee7af56455206a20ffbb69e44d7999da83a1657f3794f062dbaa2a05a",
-    "plot_terra_benchmark_tradeoffs.py": "f6aaf90d08a631559d903f507410f22ae11368b23c16b638747d4369f9a5ff33",
-    "shared_terra_high_four_row_paper.png": "42d3e6c7efb8b5d6cb01f0ce990bbf186b141fbe8a5e68c8f155d355ef30b6a7",
-    "shared_terra_high_four_row_paper.svg": "3fc3152c225ed78cd4799b54521b83f67da482bb9aa97b31f26d7543a171799f",
-    "shared_terra_high_four_row_paper.pdf": "ca2873861adc9992775cc74ea4da106a633c2112354c563f8ab66f8ceb93c488",
-    "shared_terra_high_four_row_paper_coordinates.csv": "69561518022e6948cf3211a805b0e874349d2ad1bf925d2a607e0f6b27c7d119"
+    "shared_terra_high_four_row_aggregate.json": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+    "plot_terra_benchmark_tradeoffs.py": "7433d17cfcc3d102bd628efde4d81ec8a9f4b5d2b7626efbf717afeed5b4d163",
+    "shared_terra_high_four_row_paper.png": "921cf32609f5f82a76d91586ac3283c25208bfb0e72e07644ceb9ce3c082238b",
+    "shared_terra_high_four_row_paper.svg": "5bbe3f4a52b4e63549bab89b027af7b5d00ffbafc8412fe704e6f6f25718f1eb",
+    "shared_terra_high_four_row_paper.pdf": "9059ff6e2d7dd91b6a978e63dc3d69a3c162b8ce5bf56764a7b14e59e5e320fe",
+    "shared_terra_high_four_row_paper_coordinates.csv": "ff40db136af466f391841cbcf232413993b00fe00c904656ee783e18b5258a05"
+  },
+  "crossbench_independent_audit_sha256_by_cohort": {
+    "original_six_crossbenchmark_cells": "0b632a7b21653d349690bb81e48873552186ff710e20ed20a20bade859b5a150",
+    "additional_N3_crossbenchmark_cells": "a18aa17c21335be9d021ebe840702e2ebfa52e5aa1da9a438c75194142ac821e"
   }
 }

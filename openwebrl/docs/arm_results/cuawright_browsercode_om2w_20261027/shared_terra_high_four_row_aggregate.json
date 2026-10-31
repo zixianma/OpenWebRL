@@ -1,5 +1,5 @@
 {
-  "schema": "shared-terra-high-four-row-paper-aggregate-v1",
+  "schema": "shared-terra-high-four-row-paper-aggregate-v2",
   "judge_protocol": {
     "model": "gpt-5.6-terra",
     "reasoning_effort": "medium",
@@ -436,13 +436,68 @@
       "mean_task_seconds": 94.14691202024558,
       "mean_task_seconds_observed_tasks": 553,
       "mean_task_seconds_missing_valid_tasks": 0
+    },
+    {
+      "benchmark": "deepshop",
+      "harness": "browsercode",
+      "method": "parallel3_select_high",
+      "requested": 150,
+      "original_valid": 148,
+      "original_invalid_preserved": 2,
+      "eligible": 148,
+      "recorded": 148,
+      "graded_valid": 148,
+      "graded_invalid": 0,
+      "successes": 121,
+      "original_valid_missing_evidence": 0,
+      "missing_eligible_judgments": 0,
+      "metric_population": "resolved_valid_tasks",
+      "success_rate": 0.8175675675675675,
+      "mean_model_usd_per_task": 0.08883636675675675,
+      "mean_model_usd_per_task_observed_tasks": 148,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds": 258.21112880515363,
+      "mean_task_seconds_observed_tasks": 148,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps": 17.95945945945946,
+      "mean_browser_steps_observed_tasks": 148,
+      "mean_browser_steps_missing_valid_tasks": 0
+    },
+    {
+      "benchmark": "webvoyager",
+      "harness": "browsercode",
+      "method": "parallel3_select_high",
+      "requested": 595,
+      "original_valid": 568,
+      "original_invalid_preserved": 27,
+      "eligible": 568,
+      "recorded": 568,
+      "graded_valid": 568,
+      "graded_invalid": 0,
+      "successes": 496,
+      "original_valid_missing_evidence": 0,
+      "missing_eligible_judgments": 0,
+      "metric_population": "resolved_valid_tasks",
+      "success_rate": 0.8732394366197183,
+      "mean_model_usd_per_task": 0.04319473032570423,
+      "mean_model_usd_per_task_observed_tasks": 568,
+      "mean_model_usd_per_task_missing_valid_tasks": 0,
+      "mean_task_seconds": 163.37307838709927,
+      "mean_task_seconds_observed_tasks": 568,
+      "mean_task_seconds_missing_valid_tasks": 0,
+      "mean_browser_steps": 11.714788732394366,
+      "mean_browser_steps_observed_tasks": 568,
+      "mean_browser_steps_missing_valid_tasks": 0
     }
   ],
   "source_sha256": {
     "crossbench_manifest": "82eb5cbd7c04fc4c9a71eede808febe1d3e05f7a735d94284b773445b4df0ff7",
     "crossbench_plan": "1086d01fdf9c9e74e60ebd7fd311878b8ad6e20a7bb73089ed335c7b3f7a7d88",
     "crossbench_summary": "54f7b8c56f2e54f56ce390a9e6573d53b49b8f206fac32e70f10e214cd0988ce",
-    "om2w_valid_aggregate": "accfa541251ad5db8a34a1221b984ec027e753038111814045bdcd47e587244e"
+    "om2w_valid_aggregate": "accfa541251ad5db8a34a1221b984ec027e753038111814045bdcd47e587244e",
+    "N3_manifest": "71293cbf68dcf7accc0bc19c69dd71228ebce7bd57ca5b9d69f3a2ddef1b4ee0",
+    "N3_plan": "21d187c15d84407703e51a90c544ece61f208d89c3d7d8848c43e14cd316433a",
+    "N3_summary": "fd75f6a6907a4c88168d0086ec8525da5f83d6039d5f07a1db9aff8fd2caf5fb"
   },
   "historical_original_judges": "Benchmark-native GPT-4o judgments retained unchanged in original sources; no crossbenchmark label is transferred.",
   "native_evidence_note": "Native OM2W retains its historical evidence-selected subset; 276 original-valid episodes remain ungraded.",
@@ -450,14 +505,17 @@
   "metric_note": "Success and all actor metrics use exact valid Terra tasks; missing measurement counts are retained. Judge costs are separate.",
   "qualification": {
     "crossbench_shared_judging_independently_verified": true,
-    "crossbench_valid_judgments": 2129,
-    "crossbench_original_invalid_preserved": 106,
+    "crossbench_valid_judgments": 2845,
+    "crossbench_original_invalid_preserved": 135,
     "new_actor_calls": 0,
-    "new_judge_calls": 2129,
-    "new_judge_usd_excluded_from_actor_metrics": "34.3875830",
+    "new_judge_calls": 2845,
+    "new_judge_usd_excluded_from_actor_metrics": "45.6305630",
     "unknown_or_inflight_judge_calls": 0,
-    "audit_sha256": "0b632a7b21653d349690bb81e48873552186ff710e20ed20a20bade859b5a150",
-    "originals_unchanged": true
+    "originals_unchanged": true,
+    "audit_sha256_by_cohort": {
+      "original_six_crossbenchmark_cells": "0b632a7b21653d349690bb81e48873552186ff710e20ed20a20bade859b5a150",
+      "additional_N3_crossbenchmark_cells": "a18aa17c21335be9d021ebe840702e2ebfa52e5aa1da9a438c75194142ac821e"
+    }
   },
   "score_scope": "Shared Terra terminal-success judgments, not benchmark-native official scores. Crossbenchmark increases from original GPT-4o labels are judge changes on the same saved episodes, not actor improvements.",
   "actor_protocol_note": "All actors high effort. BrowserCode: 12,288 output tokens and30decisions; native CUAWright:20,000 output tokens,100decisions,summaryevery20. Different limits, timing scopes, valid subsets and live collection windows remain."

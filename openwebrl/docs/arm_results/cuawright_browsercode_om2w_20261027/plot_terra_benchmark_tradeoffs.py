@@ -24,7 +24,8 @@ PROTOCOL = {'model': 'gpt-5.6-terra', 'reasoning_effort': 'medium',
 
 METHODS = ('serial_high', 'luna_single_high', 'parallel3_select_high', 'parallel5_select_high')
 
-CROSS_METHODS = ('serial_high', 'luna_single_high', 'parallel5_select_high')
+CROSS_METHODS_V1 = ('serial_high', 'luna_single_high', 'parallel5_select_high')
+CROSS_METHODS = METHODS
 
 STYLES = {'serial_high': ('Sol single', 's', '#08519C', True),
           'luna_single_high': ('Luna single', 'o', '#08519C', True),
@@ -58,7 +59,8 @@ def render(data, output_dir, stem='shared_terra_high_four_row_paper'):
     fig.subplots_adjust(left=.075, right=.815, top=.91, bottom=.085, hspace=.73, wspace=.25)
     for index, (benchmark, harness, title) in enumerate(panels):
         rows = [p for p in data['points'] if p['benchmark'] == benchmark and p['harness'] == harness]
-        need(len(rows) == (4 if index < 2 else 3), 'Panel method count differs')
+        expected_count = 4 if index < 2 or data['schema'].endswith('-v2') else 3
+        need(len(rows) == expected_count, 'Panel method count differs')
         rates = [100 * p['success_rate'] for p in rows]
         low = max(0, 5 * math.floor((min(rates) - .5) / 5))
         high = min(100, 5 * math.ceil((max(rates) + .5) / 5))
@@ -112,16 +114,18 @@ def render(data, output_dir, stem='shared_terra_high_four_row_paper'):
 
 def read_aggregate(path):
     data = json.loads(Path(path).read_text())
-    need(data.get('schema') == 'shared-terra-high-four-row-paper-aggregate-v1', 'Unknown paper aggregate schema')
+    need(data.get('schema') in ('shared-terra-high-four-row-paper-aggregate-v1',
+                                'shared-terra-high-four-row-paper-aggregate-v2'), 'Unknown paper aggregate schema')
     need(all(type(data['judge_protocol'].get(key)) is type(value) and data['judge_protocol'][key] == value
              for key, value in PROTOCOL.items()), 'Every point must use the exact shared Terra protocol')
     need(data.get('metric_population') == 'resolved_valid_tasks', 'Actor metrics must use valid Terra tasks')
     points = data['points']
     expected = {('online_mind2web', harness, method) for harness in ('browsercode', 'native') for method in METHODS}
-    expected |= {(benchmark, 'browsercode', method) for benchmark in ('webvoyager', 'deepshop') for method in CROSS_METHODS}
+    cross_methods = CROSS_METHODS if data['schema'].endswith('-v2') else CROSS_METHODS_V1
+    expected |= {(benchmark, 'browsercode', method) for benchmark in ('webvoyager', 'deepshop') for method in cross_methods}
     actual = [(row['benchmark'], row['harness'], row['method']) for row in points]
-    need(type(points) is list and len(points) == 14 and len(set(actual)) == len(actual) and set(actual) == expected,
-         'Exact fourteen high-effort benchmark/harness/method identities required')
+    need(type(points) is list and len(points) == len(expected) and len(set(actual)) == len(actual) and set(actual) == expected,
+         'Exact high-effort benchmark/harness/method identities required for this schema')
     for point in points:
         requested = 595 if point['benchmark'] == 'webvoyager' else 150 if point['benchmark'] == 'deepshop' else 300
         need(type(point['requested']) is int and point['requested'] == requested, 'Original benchmark roster differs')
