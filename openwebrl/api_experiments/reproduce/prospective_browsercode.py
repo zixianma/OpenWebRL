@@ -1,4 +1,4 @@
-"""Explicit, source-bound Luna xhigh output-cap sweep in a new runtime only.
+"""Explicit, source-bound Luna effort/output-cap sweep in a new runtime only.
 
 The archived campaign is never edited. Each generated runtime retains its base
 inventory and changed original files, then freezes one 1x/2x/4x arm over the
@@ -18,7 +18,8 @@ API = HERE.parent
 CAMPAIGN = 'browsercode_luna_effort'
 ARM = 'luna_single_xhigh'
 CAPS = (12288, 24576, 49152)
-SCHEMA = 'browsercode-luna-xhigh-output-sweep-v1'
+EFFORT_ARMS = {'xhigh': ARM, 'high': 'luna_single_high'}
+SCHEMA = 'browsercode-luna-single-output-sweep-v2'
 RECEIPT = 'prospective-experiment.json'
 ORIGINALS = 'prospective-originals'
 COUNTS = {'online-mind2web': 300, 'webvoyager': 595, 'deepshop': 150}
@@ -53,16 +54,19 @@ def task_roster():
     return rows
 
 
-def adapt_model(text):
+def adapt_model(text, effort='xhigh'):
+    need(effort in EFFORT_ARMS, 'choose high or xhigh reasoning')
     need(hashlib.sha256(text.encode()).hexdigest() == MODEL_SHA, 'archived Luna model source changed')
     head, body = text.split('class LunaModel(OpenAIModel):\n', 1)
+    if effort == 'high':
+        head = head.replace('PRICING=', "MODES['luna_single_high']=(1,'high',None)\nPRICING=")
     body = body.replace('MAX_OUTPUT', 'self.output_token_cap')
     anchor = " def __init__(self,mode,directory,client,budget,pricing=None,harness='browsercode',http_gate=None,**kwargs):\n"
     need(body.count(anchor) == 1, 'Luna constructor anchor changed')
     declaration = (
         "  declared=json.loads((Path(__file__).resolve().parent/'campaign-plan.json').read_text());arms=declared.get('arms',[])\n"
         "  need(declared.get('prospective_protocol')=='" + SCHEMA + "' and len(arms)==1,'Explicit prospective Luna plan required');arm=arms[0]\n"
-        "  need(mode=='luna_single_xhigh' and arm.get('arm')==mode and arm.get('model')==MODEL and arm.get('proposal_count')==1 and arm.get('reasoning_effort')=='xhigh' and arm.get('selector_model')is None,'Prospective single xhigh arm differs')\n"
+        "  need(mode=='" + EFFORT_ARMS[effort] + "' and arm.get('arm')==mode and arm.get('model')==MODEL and arm.get('proposal_count')==1 and arm.get('reasoning_effort')=='" + effort + "' and arm.get('selector_model')is None,'Prospective single effort arm differs')\n"
         "  self.output_token_cap=arm.get('output_tokens');need(type(self.output_token_cap)is int and self.output_token_cap in (12288,24576,49152) and declared.get('protocol',{}).get('max_decisions')==30,'Prospective output/turn cap differs')\n"
     )
     adapted = head + 'class LunaModel(OpenAIModel):\n' + body.replace(anchor, anchor + declaration)
@@ -74,7 +78,7 @@ def adapt_worker(text):
     replacements = {
         'max_output_tokens=12288': "max_output_tokens=next(x['output_tokens']for x in PLAN['arms']if x['arm']==mode)",
         "'max_output_tokens':12288": "'max_output_tokens':next(x['output_tokens']for x in PLAN['arms']if x['arm']==a.arm)",
-        "row={'task_id':item['task_id'],": "row={'task_id':item['task_id'],'benchmark':item['benchmark'],'actor_max_output_tokens':next(x['output_tokens']for x in PLAN['arms']if x['arm']==mode),",
+        "row={'task_id':item['task_id'],": "row={'task_id':item['task_id'],'benchmark':item['benchmark'],'actor_reasoning_effort':MODES[mode][1],'actor_max_output_tokens':next(x['output_tokens']for x in PLAN['arms']if x['arm']==mode),",
     }
     for old, new in replacements.items():
         need(text.count(old) == 1, 'worker cap/tracking anchor changed: ' + old)
@@ -83,16 +87,16 @@ def adapt_worker(text):
     return text
 
 
-def derived_plan(base, cap, tasks_sha):
+def derived_plan(base, cap, tasks_sha, effort='xhigh'):
     arm = deepcopy(next(row for row in base['arms'] if row['arm'] == ARM))
-    arm['output_tokens'] = cap
+    arm.update(arm=EFFORT_ARMS[effort], reasoning_effort=effort, output_tokens=cap)
     protocol = deepcopy(base['protocol'])
     for key in ('same300_tasks_allarms', 'pilot20_tasks_per_arm_included_final', 'historical_high_results_judge'):
         protocol.pop(key, None)
     protocol.update(actor_max_output_tokens=cap, selector_max_output_tokens=None)
-    return {'schema': 'portable-scientific-campaign-v1', 'campaign': 'luna_xhigh_output_sweep',
+    return {'schema': 'portable-scientific-campaign-v1', 'campaign': 'luna_reasoning_token_sweep',
             'prospective_protocol': SCHEMA, 'protocol': protocol, 'arms': [arm],
-            'cells': [{'harness': 'browsercode', 'policy': ARM}],
+            'cells': [{'harness': 'browsercode', 'policy': EFFORT_ARMS[effort]}],
             'benchmark_counts': COUNTS, 'task_manifest_sha256': tasks_sha,
             'task_order': 'original Luna OM2W roster followed by original GPT crossbench roster',
             'output_multiplier': cap // CAPS[0]}
@@ -104,11 +108,12 @@ def verify_inventory(runtime, manifest):
         need(digest(name) == expected, 'source changed: ' + name)
 
 
-def configure(runtime, cap):
+def configure(runtime, cap, effort='xhigh'):
     """Apply once, after ordinary public setup and its BrowserCode-only check."""
     runtime = Path(runtime).resolve()
     need(not runtime.is_relative_to(Path('/gpfs/home/zixianma')), 'home is read-only')
     need(type(cap) is int and cap in CAPS, 'choose exactly 12288, 24576 or 49152')
+    need(effort in EFFORT_ARMS, 'choose high or xhigh reasoning')
     need(not (runtime / RECEIPT).exists() and not (runtime / ORIGINALS).exists(), 'already configured')
     need(not any((runtime / name).exists() for name in ('episodes', 'budget', 'orchestration')), 'runtime has execution evidence')
     manifest = read(runtime / 'source-manifest.json')
@@ -122,7 +127,7 @@ def configure(runtime, cap):
             need(base_config.get(key) == value, 'base scientific configuration changed: ' + key)
     frozen_plan = read(API / 'portable_assets/campaign_specs' / CAMPAIGN / 'campaign-plan.json')
     need(base_plan['arms'] == frozen_plan['arms'] and base_plan['protocol'] == frozen_plan['protocol'], 'base actor protocol changed')
-    model = adapt_model((runtime / 'luna_model.py').read_text())
+    model = adapt_model((runtime / 'luna_model.py').read_text(), effort)
     worker = adapt_worker((runtime / 'worker.py').read_text())
     rows = task_roster()
     originals = runtime / ORIGINALS
@@ -132,7 +137,7 @@ def configure(runtime, cap):
     (runtime / 'luna_model.py').write_text(model)
     (runtime / 'worker.py').write_text(worker)
     write(runtime / 'tasks.json', rows)
-    plan = derived_plan(base_plan, cap, digest(runtime / 'tasks.json'))
+    plan = derived_plan(base_plan, cap, digest(runtime / 'tasks.json'), effort)
     write(runtime / 'campaign-plan.json', plan)
     config = deepcopy(base_config)
     config['prospective_protocol'] = SCHEMA
@@ -140,10 +145,10 @@ def configure(runtime, cap):
     build = read(runtime / 'portable-build.json')
     build['prospective_protocol'] = SCHEMA
     build['tasks_sha256'] = digest(runtime / 'tasks.json')
-    build['adaptations'].append({'reason': 'Explicit Luna single xhigh output-cap sweep; payload, reservation, validation and tracking use declared cap.',
-                                 'output_tokens': cap, 'files': ['luna_model.py', 'worker.py']})
+    build['adaptations'].append({'reason': 'Explicit Luna single effort/output-cap sweep; payload, reservation, validation and tracking use declared arm.',
+                                 'output_tokens': cap, 'reasoning_effort': effort, 'files': ['luna_model.py', 'worker.py']})
     write(runtime / 'portable-build.json', build)
-    receipt = {'schema': SCHEMA, 'arm': ARM, 'model': 'gpt-6-luna', 'reasoning_effort': 'xhigh',
+    receipt = {'schema': SCHEMA, 'arm': EFFORT_ARMS[effort], 'model': 'gpt-6-luna', 'reasoning_effort': effort,
                'proposal_count': 1, 'max_decisions': 30, 'output_tokens': cap, 'output_multiplier': cap // CAPS[0],
                'benchmark_counts': COUNTS, 'model_pricing': config['model_pricing'],
                'judge_protocol': config['judge_protocol'], 'preparation_source_sha256': digest(__file__),
@@ -177,6 +182,8 @@ def _validate(runtime):
     need(receipt.get('schema') == SCHEMA and receipt.get('preparation_source_sha256') == digest(__file__), 'override schema/preparation source changed')
     cap = receipt.get('output_tokens')
     need(type(cap) is int and cap in CAPS, 'malformed output cap')
+    effort = receipt.get('reasoning_effort')
+    need(effort in EFFORT_ARMS, 'malformed reasoning effort')
     originals = runtime / ORIGINALS
     base = read(originals / 'source-manifest.json')
     need(receipt['base_inventory_sha256'] == digest(originals / 'source-manifest.json'), 'base inventory changed')
@@ -187,18 +194,18 @@ def _validate(runtime):
     for name, expected in base['source_hashes'].items():
         if name not in {str(runtime / item) for item in CHANGED}:
             need(digest(name) == expected, 'unchanged base source changed: ' + name)
-    need((runtime / 'luna_model.py').read_text() == adapt_model((originals / 'luna_model.py').read_text()), 'model overlay differs')
+    need((runtime / 'luna_model.py').read_text() == adapt_model((originals / 'luna_model.py').read_text(), effort), 'model overlay differs')
     need((runtime / 'worker.py').read_text() == adapt_worker((originals / 'worker.py').read_text()), 'worker overlay differs')
     need(read(runtime / 'tasks.json') == task_roster(), 'roster differs from pinned original public tasks')
     plan = read(runtime / 'campaign-plan.json')
-    need(plan == derived_plan(read(originals / 'campaign-plan.json'), cap, digest(runtime / 'tasks.json')), 'declared plan differs')
+    need(plan == derived_plan(read(originals / 'campaign-plan.json'), cap, digest(runtime / 'tasks.json'), effort), 'declared plan differs')
     config = read(runtime / 'runtime-config.json')
     expected_config = read(originals / 'runtime-config.json')
     expected_config['prospective_protocol'] = SCHEMA
     need(config == expected_config, 'scientific configuration differs')
     need(receipt['model_pricing'] == config['model_pricing'] and receipt['judge_protocol'] == config['judge_protocol'], 'pricing/judge binding differs')
     need({key: receipt[key] for key in ('arm', 'model', 'reasoning_effort', 'proposal_count', 'max_decisions', 'output_multiplier', 'benchmark_counts')} ==
-         dict(arm=ARM, model='gpt-6-luna', reasoning_effort='xhigh', proposal_count=1, max_decisions=30, output_multiplier=cap // CAPS[0], benchmark_counts=COUNTS), 'receipt identity differs')
+         dict(arm=EFFORT_ARMS[effort], model='gpt-6-luna', reasoning_effort=effort, proposal_count=1, max_decisions=30, output_multiplier=cap // CAPS[0], benchmark_counts=COUNTS), 'receipt identity differs')
     manifest = read(runtime / 'source-manifest.json')
     need(manifest == read(runtime / 'execution-source-manifest.json'), 'execution inventory differs')
     required = [runtime / name for name in (*CHANGED, RECEIPT)] + list(originals.iterdir()) + [Path(__file__).resolve()]

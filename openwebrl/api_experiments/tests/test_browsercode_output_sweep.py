@@ -151,7 +151,7 @@ class SweepTests(unittest.TestCase):
         p.configure(runtime, 24576)
         args = self.args(runtime)
         args.arm = 'luna_single_medium'
-        with self.assertRaisesRegex(ValueError, 'single xhigh'):
+        with self.assertRaisesRegex(ValueError, 'single high/xhigh'):
             c.prepare(args, 'luna')
         with self.assertRaisesRegex(ValueError, 'home is read-only'):
             p.configure('/gpfs/home/zixianma/forbidden-new-runtime', 24576)
@@ -179,9 +179,10 @@ class SweepTests(unittest.TestCase):
         return actor
 
     def test_actual_payload_reservation_constructor_and_tracking_share_declared_cap(self):
-        for cap in p.CAPS:
-            runtime = self.runtime('actor-' + str(cap))
-            p.configure(runtime, cap)
+        for cap, effort in [(cap, 'xhigh') for cap in p.CAPS] + [(24576, 'high'), (49152, 'high')]:
+            arm = p.EFFORT_ARMS[effort]
+            runtime = self.runtime('actor-' + str(cap) + '-' + effort)
+            p.configure(runtime, cap, effort)
             actor = self.load_actor(runtime)
             calls = []
             def client(payload, role):
@@ -189,14 +190,14 @@ class SweepTests(unittest.TestCase):
                 return {'id': 'offline-response', 'model': actor.MODEL, 'status': 'completed', 'reasoning': payload['reasoning'],
                         'output': [{'type': 'message', 'role': 'assistant', 'content': [{'type': 'output_text', 'text': 'finished'}]}],
                         'usage': {'input_tokens': 100, 'output_tokens': 20}}
-            pool = budget_module.ReservationBudget(self.root / ('pool-' + str(cap)), '1', 3)
-            model = actor.LunaModel(p.ARM, self.root / ('episode-' + str(cap)), client, pool, actor.PRICING,
-                                    max_output_tokens=cap, reasoning_effort='xhigh', http_gate=budget_module.SharedHTTPGate(self.root / 'gate', 8))
+            pool = budget_module.ReservationBudget(self.root / ('pool-' + str(cap) + effort), '1', 3)
+            model = actor.LunaModel(arm, self.root / ('episode-' + str(cap) + effort), client, pool, actor.PRICING,
+                                    max_output_tokens=cap, reasoning_effort=effort, http_gate=budget_module.SharedHTTPGate(self.root / 'gate', 8))
             model.query([{'role': 'user', 'content': 'real observation'}])
             self.assertEqual(model.constructor['max_output_tokens'], cap)
             self.assertEqual(len(calls), 1)
             payload, role = calls[0]
-            self.assertEqual((payload['max_output_tokens'], payload['reasoning'], role), (cap, {'effort': 'xhigh'}, 'candidate_0'))
+            self.assertEqual((payload['max_output_tokens'], payload['reasoning'], role), (cap, {'effort': effort}, 'candidate_0'))
             self.assertEqual((payload['store'], payload['service_tier'], payload['parallel_tool_calls']), (False, 'default', False))
             receipt = next((model.directory / 'requests').glob('luna-*.json'))
             expected = (Decimal(1000) * Decimal('.125') + Decimal(cap) * Decimal('.5')) / Decimal(1000000)
@@ -207,14 +208,51 @@ class SweepTests(unittest.TestCase):
             worker = ast.parse((runtime / 'worker.py').read_text())
             tracking = next(node for node in ast.walk(worker) if isinstance(node, ast.Dict) and any(isinstance(key, ast.Constant) and key.value == 'max_output_tokens' for key in node.keys))
             value = next(value for key, value in zip(tracking.keys, tracking.values) if isinstance(key, ast.Constant) and key.value == 'max_output_tokens')
-            tracked = eval(compile(ast.Expression(value), '<tracking cap>', 'eval'), {'PLAN': p.read(runtime / 'campaign-plan.json'), 'a': types.SimpleNamespace(arm=p.ARM)})
+            tracked = eval(compile(ast.Expression(value), '<tracking cap>', 'eval'), {'PLAN': p.read(runtime / 'campaign-plan.json'), 'a': types.SimpleNamespace(arm=arm)})
             self.assertEqual(tracked, cap)
             with self.assertRaises(ValueError):
-                actor.LunaModel(p.ARM, self.root / 'bad', client, pool, max_output_tokens=cap + 1)
+                actor.LunaModel(arm, self.root / 'bad', client, pool, max_output_tokens=cap + 1)
+            with self.assertRaises(ValueError):
+                actor.LunaModel(arm, self.root / 'wrong-effort', client, pool, max_output_tokens=cap, reasoning_effort='low')
             wrong = dict(payload, max_output_tokens=cap + 1)
             with self.assertRaises(ValueError):
                 model.physical(wrong, 'candidate_0')
             self.assertEqual(pool.snapshot()['calls'], 1)
+
+    def test_user_grid_binds_distinct_effort_arm_and_identical_tasks(self):
+        task_hashes = []
+        for cap, effort in ((12288, 'xhigh'), (24576, 'high'), (49152, 'high')):
+            runtime = self.runtime('grid-' + str(cap))
+            receipt = p.configure(runtime, cap, effort)
+            args = self.args(runtime, '--limit', '1045')
+            args.arm = p.EFFORT_ARMS[effort]
+            plan, tasks = c.prepare(args, 'luna')
+            self.assertEqual((plan['arm'], plan['candidate_effort'], plan['max_output_tokens']), (args.arm, effort, cap))
+            self.assertEqual(receipt['reasoning_effort'], effort)
+            self.assertEqual(receipt['arm'], args.arm)
+            self.assertEqual(len(tasks), 1045)
+            task_hashes.append(plan['task_manifest_sha256'])
+            args.arm = p.EFFORT_ARMS['high' if effort == 'xhigh' else 'xhigh']
+            with self.assertRaisesRegex(ValueError, 'arm/effort'):
+                c.prepare(args, 'luna')
+        self.assertEqual(len(set(task_hashes)), 1)
+
+    def test_setup_alias_compatibility_and_conflicting_overrides(self):
+        valid = b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'new'), '--luna-single-output-tokens', '24576', '--luna-single-reasoning-effort', 'high'])
+        self.assertEqual((valid.luna_single_output_tokens, valid.luna_single_reasoning_effort), (24576, 'high'))
+        for extra in [
+            ['--luna-xhigh-output-tokens', '12288', '--luna-single-reasoning-effort', 'high'],
+            ['--luna-xhigh-output-tokens', '12288', '--luna-single-output-tokens', '12288'],
+            ['--luna-single-reasoning-effort', 'high'],
+        ]:
+            args = b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'new'), *extra])
+            with self.subTest(extra=extra), patch.object(b, 'call', side_effect=AssertionError('must reject before setup')), self.assertRaises(ValueError):
+                b.setup(args)
+        runtime = self.runtime()
+        args = self.args(runtime)
+        args.arm = 'luna_single_high'
+        with self.assertRaises(ValueError):
+            c.prepare(args, 'luna')
 
     def test_original_actor_still_rejects_higher_cap_before_provider(self):
         runtime = self.runtime()

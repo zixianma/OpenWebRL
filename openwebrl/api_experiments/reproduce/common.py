@@ -47,7 +47,8 @@ def positive_money(value):
 def parser(provider):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--runtime", type=Path, required=True, help="Isolated runtime produced by prepare_browsercode.py")
-    p.add_argument("--arm", choices=ARMS[provider], required=True)
+    choices = (*ARMS[provider], 'luna_single_high') if provider == 'luna' else ARMS[provider]
+    p.add_argument("--arm", choices=choices, required=True)
     p.add_argument("--harness", choices=("browsercode", "cuawright"), default="browsercode", help="Earlier paired-harness campaigns support both executors")
     p.add_argument("--benchmark", choices=("online-mind2web", "webvoyager", "deepshop"), help="Filter the prepared task roster before applying --limit")
     p.add_argument("--task-ids", type=Path, help="JSON list of unique ordered frozen task IDs; select after --benchmark and before --limit")
@@ -76,12 +77,14 @@ def prepare(args, provider):
     plan, config, tasks = (read(runtime / name) for name in ("campaign-plan.json", "runtime-config.json", "tasks.json"))
     prospective = None
     if (runtime / 'prospective-experiment.json').exists() or plan.get('prospective_protocol') or config.get('prospective_protocol'):
-        if provider != 'luna' or args.arm != 'luna_single_xhigh' or getattr(args, 'harness', 'browsercode') != 'browsercode':
-            raise ValueError('Prospective output override requires Luna single xhigh BrowserCode')
+        if provider != 'luna' or args.arm not in ('luna_single_xhigh', 'luna_single_high') or getattr(args, 'harness', 'browsercode') != 'browsercode':
+            raise ValueError('Prospective output override requires Luna single high/xhigh BrowserCode')
         spec = importlib.util.spec_from_file_location('prospective_browsercode', Path(__file__).with_name('prospective_browsercode.py'))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         prospective = module.validate(runtime)
+        if prospective['arm'] != args.arm:
+            raise ValueError('Prospective arm/effort does not match selected arm')
     benchmark = getattr(args, "benchmark", None)
     if benchmark:
         tasks = [t for t in tasks if t.get("benchmark", "online-mind2web") == benchmark]
@@ -105,12 +108,14 @@ def prepare(args, provider):
     if min(args.model_calls, args.judge_calls, args.browser_starts if args.browser_starts is not None else args.limit + 1) <= 0:
         raise ValueError("Call and browser caps must be positive")
     spec = next((a for a in plan["arms"] if a["arm"] == args.arm), None)
-    if args.arm not in ARMS[provider] or spec is None:
+    if (args.arm not in ARMS[provider] and not (prospective and args.arm == prospective['arm'])) or spec is None:
         raise ValueError("Arm does not belong to this provider/runtime")
     expected = spec["model"]
     allowed_models = {"luna": {"gpt-6-luna"}, "claude": {"claude-opus-5-5", "claude-sonnet-5-5"}, "gpt": {"gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol"}}
     if expected not in allowed_models[provider]:
         raise ValueError("Unexpected model for provider")
+    if provider == 'luna' and args.arm == 'luna_single_high' and prospective is None:
+        raise ValueError('Luna single high requires a validated prospective override')
     harness = getattr(args, "harness", "browsercode")
     supported_harnesses = {cell["harness"] for cell in plan.get("cells", [])} or {"browsercode"}
     if harness not in supported_harnesses:

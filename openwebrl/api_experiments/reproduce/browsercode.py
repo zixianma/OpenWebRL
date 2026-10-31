@@ -160,9 +160,19 @@ def provider(runtime, arm):
 
 
 def setup(args):
-    cap = getattr(args, 'luna_xhigh_output_tokens', None)
+    legacy_cap = getattr(args, 'luna_xhigh_output_tokens', None)
+    generic_cap = getattr(args, 'luna_single_output_tokens', None)
+    effort = getattr(args, 'luna_single_reasoning_effort', None)
+    if legacy_cap is not None and generic_cap is not None:
+        raise ValueError('Choose one Luna output-cap flag')
+    if legacy_cap is not None and effort not in (None, 'xhigh'):
+        raise ValueError('--luna-xhigh-output-tokens requires xhigh reasoning')
+    cap = legacy_cap if legacy_cap is not None else generic_cap
+    if effort is not None and cap is None:
+        raise ValueError('--luna-single-reasoning-effort requires an explicit output-cap flag')
+    effort = effort or 'xhigh'
     if cap is not None and args.campaign != 'browsercode_luna_effort':
-        raise ValueError('--luna-xhigh-output-tokens requires --campaign luna')
+        raise ValueError('A Luna output override requires --campaign luna')
     target = writable(args.workspace)
     if target.exists() and any(path.name != 'dependencies' for path in target.iterdir()):
         raise ValueError('Use a new workspace; prepared experiments are never overwritten')
@@ -187,7 +197,7 @@ def setup(args):
         spec = importlib.util.spec_from_file_location('prospective_browsercode', HERE / 'prospective_browsercode.py')
         prospective = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(prospective)
-        prospective.configure(target / 'runtime', cap)
+        prospective.configure(target / 'runtime', cap, effort)
     write(target / MARKER, {'schema': 'browsercode-workspace-v1', 'campaign': args.campaign,
                            'dependencies': str(dependencies), 'python': str(python), 'executor': 'browsercode'})
     print('Workspace ready: ' + str(target))
@@ -249,6 +259,8 @@ def parser():
     s.add_argument('--campaign', type=campaign, required=True, metavar='CAMPAIGN', help='luna, claude, gpt, gpt-luna-single or gpt-crossbench; historical experiment keys also accepted')
     s.add_argument('--dependencies', type=Path, help='Reuse an existing dependency manifest without downloads')
     s.add_argument('--luna-xhigh-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single xhigh 30-turn output-cap experiment over OM2W300, WebVoyager595 and DeepShop150; requires --campaign luna')
+    s.add_argument('--luna-single-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')
+    s.add_argument('--luna-single-reasoning-effort', choices=('high', 'xhigh'), help='Explicit prospective Luna single reasoning effort; default xhigh when an output cap is given')
     s.set_defaults(action=setup)
     c = commands.add_parser('check', help='Check real imports, optionally a local browser; zero model calls')
     c.add_argument('--workspace', type=Path, required=True)
