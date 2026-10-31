@@ -4,9 +4,13 @@ the 10-30 window. Mean overall success; invalid = failure. Pairs: each RL-actor 
 head and − SelectionARM, SelectionARM − SFT-trained head, RL alone − SFT 4B alone."""
 import json, numpy as np
 E = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/rlactor-4096-20261030'; B = ('online_mind2web', 'webvoyager', 'deepshop')
-RUN = {'rl_alone': 'rl/sft1', 'rl_arm': 'rl/piotr5', 'rl_hpiotrx': 'rl/head5x-755d4cd49137', 'rl_h1380x': 'rl/head5x-11d5eff8ffe1', 'rl_hrl': 'rl/head5-d954817f5c0e', 'sft_alone': 'sft/sft1'}
+RUN = {'rl_alone': 'rl/sft1', 'rl_arm': 'rl/piotr5', 'rl_hpiotrx': 'rl/head5x-755d4cd49137', 'rl_h1380x': 'rl/head5x-11d5eff8ffe1', 'rl_hrl': 'rl/head5-d954817f5c0e', 'sft_alone': 'sft/sft1',
+       'rl_hpiotr': 'rl/head5-755d4cd49137', 'rl_h1380': 'rl/head5-11d5eff8ffe1', 'rl_h2612': 'rl/head5-5ca25c38f7ad'}
 PAIRS = [('rl_hrl', 'rl_h1380x'), ('rl_arm', 'rl_alone'), ('rl_h1380x', 'rl_alone'), ('rl_hrl', 'rl_alone'), ('rl_hrl', 'rl_arm'),
-         ('rl_arm', 'rl_h1380x'), ('rl_alone', 'sft_alone'), ('rl_hpiotrx', 'rl_alone'), ('rl_hpiotrx', 'rl_arm'), ('rl_hpiotrx', 'rl_h1380x'), ('rl_hrl', 'rl_hpiotrx')]
+         ('rl_arm', 'rl_h1380x'), ('rl_alone', 'sft_alone'), ('rl_hpiotrx', 'rl_alone'), ('rl_hpiotrx', 'rl_arm'), ('rl_hpiotrx', 'rl_h1380x'), ('rl_hrl', 'rl_hpiotrx'),
+         ('rl_hpiotr', 'rl_alone'), ('rl_hpiotr', 'rl_arm'), ('rl_hpiotr', 'rl_hpiotrx'), ('rl_h1380', 'rl_alone'), ('rl_h1380', 'rl_h1380x'),
+         ('rl_h2612', 'rl_alone'), ('rl_h2612', 'rl_arm'), ('rl_hpiotr', 'rl_h2612'), ('rl_hpiotr', 'rl_hrl'),
+         ('rl_h1380', 'rl_arm'), ('rl_h2612', 'rl_h1380'), ('rl_h2612', 'rl_hpiotrx'), ('rl_hpiotr', 'rl_h1380')]
 def load(run, b):
     root, slug = RUN[run].split('/'); d = f'{E}/{root}/{b}/{slug}/{b}'; keys = json.load(open(d + '/plan.json'))['keys']; o = {}
     for t, k in keys.items():
