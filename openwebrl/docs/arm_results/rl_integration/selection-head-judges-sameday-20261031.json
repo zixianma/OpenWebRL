@@ -1,0 +1,305 @@
+{
+ "judges": {
+  "online_mind2web": [
+   "gpt-5.6-terra"
+  ],
+  "webvoyager": [
+   "gpt-4o"
+  ],
+  "deepshop": [
+   "gpt-4o"
+  ]
+ },
+ "record_dates": {
+  "10-31": 15675
+ },
+ "rates": {
+  "Sol": {
+   "online_mind2web": {
+    "runs": 3,
+    "successes": 285,
+    "valid": 775,
+    "episodes": 900,
+    "valid_only": 36.8
+   },
+   "webvoyager": {
+    "runs": 3,
+    "successes": 882,
+    "valid": 1732,
+    "episodes": 1785,
+    "valid_only": 50.9
+   },
+   "deepshop": {
+    "runs": 3,
+    "successes": 206,
+    "valid": 441,
+    "episodes": 450,
+    "valid_only": 46.7
+   },
+   "mean_overall": 42.3,
+   "mean_valid_only": 44.8,
+   "tw_overall": 43.8,
+   "tw_valid_only": 46.6
+  },
+  "GPT-5.5": {
+   "online_mind2web": {
+    "runs": 3,
+    "successes": 302,
+    "valid": 785,
+    "episodes": 900,
+    "valid_only": 38.5
+   },
+   "webvoyager": {
+    "runs": 3,
+    "successes": 920,
+    "valid": 1732,
+    "episodes": 1785,
+    "valid_only": 53.1
+   },
+   "deepshop": {
+    "runs": 3,
+    "successes": 206,
+    "valid": 445,
+    "episodes": 450,
+    "valid_only": 46.3
+   },
+   "mean_overall": 43.6,
+   "mean_valid_only": 46.0,
+   "tw_overall": 45.6,
+   "tw_valid_only": 48.2
+  },
+  "Luna 2612": {
+   "online_mind2web": {
+    "runs": 3,
+    "successes": 275,
+    "valid": 780,
+    "episodes": 900,
+    "valid_only": 35.3
+   },
+   "webvoyager": {
+    "runs": 3,
+    "successes": 884,
+    "valid": 1723,
+    "episodes": 1785,
+    "valid_only": 51.3
+   },
+   "deepshop": {
+    "runs": 3,
+    "successes": 209,
+    "valid": 445,
+    "episodes": 450,
+    "valid_only": 47.0
+   },
+   "mean_overall": 42.2,
+   "mean_valid_only": 44.5,
+   "tw_overall": 43.6,
+   "tw_valid_only": 46.4
+  },
+  "Piotr-data head": {
+   "online_mind2web": {
+    "runs": 3,
+    "successes": 319,
+    "valid": 789,
+    "episodes": 900,
+    "valid_only": 40.4
+   },
+   "webvoyager": {
+    "runs": 3,
+    "successes": 934,
+    "valid": 1726,
+    "episodes": 1785,
+    "valid_only": 54.1
+   },
+   "deepshop": {
+    "runs": 3,
+    "successes": 205,
+    "valid": 442,
+    "episodes": 450,
+    "valid_only": 46.4
+   },
+   "mean_overall": 44.4,
+   "mean_valid_only": 47.0,
+   "tw_overall": 46.5,
+   "tw_valid_only": 49.3
+  },
+  "Piotr SelectionARM": {
+   "online_mind2web": {
+    "runs": 3,
+    "successes": 319,
+    "valid": 774,
+    "episodes": 900,
+    "valid_only": 41.2
+   },
+   "webvoyager": {
+    "runs": 3,
+    "successes": 975,
+    "valid": 1725,
+    "episodes": 1785,
+    "valid_only": 56.5
+   },
+   "deepshop": {
+    "runs": 3,
+    "successes": 219,
+    "valid": 433,
+    "episodes": 450,
+    "valid_only": 50.6
+   },
+   "mean_overall": 46.2,
+   "mean_valid_only": 49.4,
+   "tw_overall": 48.3,
+   "tw_valid_only": 51.6
+  }
+ },
+ "diffs": {
+  "Luna 2612": {
+   "Sol": {
+    "equal": [
+     0.1,
+     -1.9,
+     2.1
+    ],
+    "task_weighted": [
+     0.2,
+     -1.5,
+     1.9
+    ]
+   },
+   "GPT-5.5": {
+    "equal": [
+     1.5,
+     -0.6,
+     3.4
+    ],
+    "task_weighted": [
+     1.9,
+     0.2,
+     3.6
+    ]
+   },
+   "Piotr-data head": {
+    "equal": [
+     2.3,
+     0.1,
+     4.5
+    ],
+    "task_weighted": [
+     2.9,
+     1.1,
+     4.7
+    ]
+   },
+   "Piotr SelectionARM": {
+    "equal": [
+     4.1,
+     2.0,
+     6.1
+    ],
+    "task_weighted": [
+     4.6,
+     2.9,
+     6.3
+    ]
+   }
+  },
+  "Piotr-data head": {
+   "Sol": {
+    "equal": [
+     -2.2,
+     -4.2,
+     -0.0
+    ],
+    "task_weighted": [
+     -2.7,
+     -4.5,
+     -0.9
+    ]
+   },
+   "GPT-5.5": {
+    "equal": [
+     -0.8,
+     -2.9,
+     1.2
+    ],
+    "task_weighted": [
+     -1.0,
+     -2.7,
+     0.8
+    ]
+   },
+   "Luna 2612": {
+    "equal": [
+     -2.3,
+     -4.5,
+     -0.1
+    ],
+    "task_weighted": [
+     -2.9,
+     -4.7,
+     -1.1
+    ]
+   },
+   "Piotr SelectionARM": {
+    "equal": [
+     1.8,
+     -0.4,
+     4.0
+    ],
+    "task_weighted": [
+     1.8,
+     0.1,
+     3.4
+    ]
+   }
+  },
+  "Piotr SelectionARM": {
+   "Sol": {
+    "equal": [
+     -4.0,
+     -6.0,
+     -1.8
+    ],
+    "task_weighted": [
+     -4.5,
+     -6.3,
+     -2.7
+    ]
+   },
+   "GPT-5.5": {
+    "equal": [
+     -2.6,
+     -4.7,
+     -0.6
+    ],
+    "task_weighted": [
+     -2.7,
+     -4.4,
+     -1.0
+    ]
+   },
+   "Luna 2612": {
+    "equal": [
+     -4.1,
+     -6.1,
+     -2.0
+    ],
+    "task_weighted": [
+     -4.6,
+     -6.3,
+     -2.9
+    ]
+   },
+   "Piotr-data head": {
+    "equal": [
+     -1.8,
+     -4.0,
+     0.4
+    ],
+    "task_weighted": [
+     -1.8,
+     -3.4,
+     -0.1
+    ]
+   }
+  }
+ }
+}

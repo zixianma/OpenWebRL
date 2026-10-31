@@ -656,22 +656,23 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 
 #### Stronger lookahead judges (GPT-5.5, GPT-6.1 Sol)
 
-**Relabelling the same 2,612 one-panel states with GPT-5.5 or GPT-6.1 Sol (effort high) instead of Luna, under the same K = 3 lookahead protocol, lifts the head to or above the Piotr-data head on the three-benchmark mean: GPT-5.5 42.6% and Sol 43.9%, against 38.4% for Luna (+4.2 [+1.3, +7.2] and +5.5 [+2.7, +8.4]) and 40.8% for the Piotr-data head (+1.9 [−1.4, +5.1] and +3.1 [+0.0, +6.3]).** The gain is on DeepShop (44.3% and 49.7% valid-only, against 33.0% for Luna); on Online-Mind2Web and WebVoyager the new heads are level with Luna. The new heads ran on 10-31 and the references on 10-29, and DeepShop drifts by date (the K = 3 architecture heads also rose from 28–35% on 10-29 to 43–48% on 10-30/31, [above](#final-selection-arch-k3-20261029)), so same-day reruns of the new heads and the Piotr references are in progress.
+**Relabelling the same 2,612 one-panel states with GPT-5.5 or GPT-6.1 Sol (effort high) instead of Luna, under the same K = 3 lookahead protocol, does not close the gap to Piotr's data. Run on the same day (10-31, three runs each), Sol is level with Luna (+0.1 pp [−1.9, +2.1]) and GPT-5.5 is +1.5 [−0.6, +3.4]; the Piotr-data head stays ahead of Sol and Luna (+2.2 and +2.3) and of GPT-5.5 by +0.8 (within noise), and Piotr's SelectionARM is best (+1.8 [−0.4, +4.0] over the Piotr-data head).** An earlier cross-date reading (new heads on 10-31, references on 10-29) showed Sol +3.1 over the Piotr-data head; that lead was DeepShop date drift.
 
-Same states, panels, trainer and recipe as the [2,612-state Luna head](#final-selection-our-data-20261028) (screenshots only, no history, final answer hidden; seed 0, 20 epochs, batch 64); only the judge changes. Luna's labels vote over two calls per state, GPT-5.5's and Sol's are one call each. Differences are on the three-benchmark mean overall rate, [paired 95% intervals](#final-paired-bootstrap), reading row − reference; references are pooled over their three runs.
+Same states, panels, trainer and recipe as the [2,612-state Luna head](#final-selection-our-data-20261028) (screenshots only, no history, final answer hidden; seed 0, 20 epochs, batch 64); only the judge changes. Luna's labels vote over two calls per state, GPT-5.5's and Sol's are one call each. Every row is three runs on 10-31 (the GPT-5.5 and Sol first runs are the 10-31 runs of the earlier reading). Per-benchmark columns are valid-only success pooled over runs; "Mean overall" averages the three benchmarks' overall rates and "task-weighted" weights them by task count (300 / 595 / 150). Differences are on the mean overall rate, [paired 95% intervals](#final-paired-bootstrap), reading row − column.
 
-| Lookahead judge (2,612 states) | Runs (date) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | OM2W + WV<br>overall | − Luna, pp<br>[95% CI] | − Piotr-data head, pp<br>[95% CI] | − SFT 4B, pp<br>[95% CI] | Label cost,<br>USD |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GPT-5.5, high | 1 (10-31) | 37.2% | 52.2% | 44.3% | 42.6% | 44.6% | 42.0% | **+4.2 [+1.3, +7.2]** | +1.9 [−1.4, +5.1] | **+9.0 [+5.9, +12.3]** | 337.68 |
-| GPT-6.1 Sol, high | 1 (10-31) | 36.3% | 52.3% | 49.7% | 43.9% | 46.1% | 41.6% | **+5.5 [+2.7, +8.4]** | **+3.1 [+0.0, +6.3]** | **+10.3 [+7.3, +13.3]** | 110.07 |
-| GPT-6 Luna, high | 3 (10-29) | 37.4% | 53.0% | 33.0% | 38.4% | 41.1% | 41.9% | — | **−2.4 [−4.7, −0.1]** | **+4.8 [+2.6, +7.0]** | — |
-| *Piotr-data head (GPT-5.5 before, Piotr's 2,587 states)* | 3 (10-29) | 40.9% | 56.8% | 32.6% | 40.8% | 43.4% | 45.5% | **+2.4 [+0.1, +4.7]** | — | **+7.1 [+4.8, +9.5]** | — |
-| *SFT 4B, 1 sample* | 3 (10-29) | 32.3% | 45.2% | 29.0% | 33.7% | 35.5% | 36.3% | **−4.8 [−7.0, −2.6]** | **−7.1 [−9.5, −4.8]** | — | — |
+| Selector | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | Task-weighted<br>overall | − Luna, pp<br>[95% CI] | − Piotr-data head, pp<br>[95% CI] | − SelectionARM, pp<br>[95% CI] | Label cost,<br>USD |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| *Piotr SelectionARM* | 41.2% | 56.5% | 50.6% | 46.2% | 49.4% | 48.3% | **+4.1 [+2.0, +6.1]** | +1.8 [−0.4, +4.0] | — | — |
+| *Piotr-data head (GPT-5.5 pre-execution, Piotr's 2,587 states)* | 40.4% | 54.1% | 46.4% | 44.4% | 47.0% | 46.5% | **+2.3 [+0.1, +4.5]** | — | −1.8 [−4.0, +0.4] | — |
+| GPT-5.5 K = 3, high | 38.5% | 53.1% | 46.3% | 43.6% | 46.0% | 45.6% | +1.5 [−0.6, +3.4] | −0.8 [−2.9, +1.2] | **−2.6 [−4.7, −0.6]** | 337.68 |
+| GPT-6.1 Sol K = 3, high | 36.8% | 50.9% | 46.7% | 42.3% | 44.8% | 43.8% | +0.1 [−1.9, +2.1] | **−2.2 [−4.2, −0.0]** | **−4.0 [−6.0, −1.8]** | 110.07 |
+| GPT-6 Luna K = 3, high | 35.3% | 51.3% | 47.0% | 42.2% | 44.5% | 43.6% | — | **−2.3 [−4.5, −0.1]** | **−4.1 [−6.1, −2.0]** | — |
 
-Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150 per run. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o, checked on every saved verdict.
+Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150 per run (900 / 1,785 / 450 episodes per row). Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o, checked on every saved verdict; every record was written on 10-31. Task-weighted differences are the same direction and slightly larger (Piotr-data head − Sol +2.7 [+0.9, +4.5]).
 
-- **Caveats.** One run of one seed per new judge, on a different day from the references; intervals cover task sampling only. Single-run three-benchmark means of the reference heads span 0.7–2.6 pp across their three runs. Label cost includes the 100-state pilot and 8 GPT-5.5 calls that failed during the 10-30 key outage and stay charged at their reservation.
-- Evidence: [rates, judges, record dates and intervals](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.json) · [script](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.py)
+- **Caveats.** One training seed per head; intervals cover task sampling only. Label cost includes the 100-state pilot and 8 GPT-5.5 calls that failed during the 10-30 key outage and stay charged at their reservation.
+- **Run notes.** 39 same-day jobs plus 3 resumes (1 H200 each); one Luna Online-Mind2Web run lost its actor to a CUDA error at 80/300 and resumed from its committed records; two WebVoyager runs hit the 4 h limit and resumed. Every episode has a judge verdict.
+- Evidence: [same-day rates, judges, record dates and intervals](arm_results/rl_integration/selection-head-judges-sameday-20261031.json) · [script](arm_results/rl_integration/selection-head-judges-sameday-20261031.py) · earlier cross-date reading: [evidence](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.json)
 
 ### More of Piotr's data (GPT-5.5 panels)
 
