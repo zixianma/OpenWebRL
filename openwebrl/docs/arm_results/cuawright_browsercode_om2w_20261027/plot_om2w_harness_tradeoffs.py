@@ -185,7 +185,7 @@ def figure(means, native, metrics, output, stem):
     fig.subplots_adjust(left=0.065 if columns == 3 else 0.12,
                         right=0.745 if columns == 3 else 0.60,
                         top=0.89, bottom=0.105, hspace=0.67, wspace=0.24)
-    cohorts = [(means, "a)  BrowserCode · o4-mini", False), (native, "b)  Native CUAWright · o4-mini", True)]
+    cohorts = [(means, "a)  BrowserCode · o4-mini", False), (native, "b)  Native CUAWright · original grading", True)]
     for ri, (rows, title, native_row) in enumerate(cohorts):
         pos = axes[ri, 0].get_position()
         fig.text(pos.x0, pos.y1 + 0.035, title, fontsize=8.5, weight="bold")
@@ -196,7 +196,7 @@ def figure(means, native, metrics, output, stem):
                 axes[ri, ci].set_ylabel("Valid-only success (%)", labelpad=3)
     legend_x = 0.77 if columns == 3 else 0.65
     groups = [(means, False, "BrowserCode · historical (o4-mini)", 0.94)]
-    groups.append((native, False, "Native CUAWright · high", 0.34))
+    groups.append((native, False, "Native CUAWright · original grading", 0.34))
     for rows, recent, title, top in groups:
         fig.legend(handles=legend_handles(rows, recent), title=title,
                    loc="upper left", bbox_to_anchor=(legend_x, top), frameon=False,
@@ -279,7 +279,7 @@ def main():
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
         "effort_cost_scope": "All-attempt model ledger charges plus full unknown reserves, including helpers/counters, divided by all300 dispositions; external judge excluded. This cost coordinate differs from valid-task efficiency.",
         "effort_latency_and_commands_scope": "All finite recorded measurements, including invalid outcomes; metric-specific coverage, no zero filling; actor-loop latency excludes setup, final judge-only capture, cleanup and external judge.",
-        "visualization": "Separate figures by judge: om2w_harness_tradeoffs shows only historical o4-mini high-effort BrowserCode and native results; om2w_terra_effort_tradeoffs shows only recent Terra-judged BrowserCode medium/low results, provisional. Luna single xhigh is omitted from plotting; the source aggregate stays complete. Every Luna method uses a circle and every Sol method a square. Blue encodes single generation and red candidates plus selection; high is dark, medium intermediate and low light. In historical panels, open red circles denote N3 and filled red circles N5. Legends sit outside on the right. No point labels, leader lines, method-connecting curves, frontiers or grid. Numeric coordinates unchanged.",
+        "visualization": "Separate figures by judge: om2w_harness_tradeoffs shows historical high-effort BrowserCode (o4-mini) and native results (original grading, including GPT-4o); om2w_terra_effort_tradeoffs shows only recent Terra-judged BrowserCode medium/low results, provisional. Luna single xhigh is omitted from plotting; the source aggregate stays complete. Every Luna method uses a circle and every Sol method a square. Blue encodes single generation and red candidates plus selection; high is dark, medium intermediate and low light. In historical panels, open red circles denote N3 and filled red circles N5. Legends sit outside on the right. No point labels, leader lines, method-connecting curves, frontiers or grid. Numeric coordinates unchanged.",
         "comparability": "Different judges, limits, collection windows, contention, efficiency coverage and task-time boundaries; descriptive only. Separate judge figures do not imply paired or causal effort effects across cohorts; three-benchmark averages exclude the OM2W-only effort cohort.",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")

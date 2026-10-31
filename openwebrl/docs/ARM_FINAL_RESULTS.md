@@ -181,11 +181,11 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 <a id="luna-browsercode-effort-om2w300-20261030"></a>
 
-**All five Luna effort arms have 300 recorded dispositions. Provisional means collection is finished, while final independent certification of accounting and cleanup remains pending.** Judge cohorts now have separate figures: historical o4-mini results first, then GPT-5.6 Terra medium/low results. Luna single xhigh remains in the tables and aggregate but is omitted from the figures.
+**All five Luna effort arms have 300 recorded dispositions. Provisional means collection is finished, while final independent certification of accounting and cleanup remains pending.** Historical and new results have separate figures: o4-mini BrowserCode and the original native grading first, then GPT-5.6 Terra medium/low results. The native archive includes GPT-4o and a different screenshot adapter; it is not an o4-mini cohort. Luna single xhigh remains in the tables and aggregate but is omitted from the figures.
 
-![OM2W o4-mini tradeoffs: historical high-effort BrowserCode and native results](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+![OM2W historical tradeoffs: o4-mini BrowserCode and original native grading](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
 
-[o4-mini PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg)
+[Historical PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg)
 
 ![OM2W Terra tradeoffs: provisional Luna medium and low effort results in BrowserCode](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.png)
 
@@ -253,7 +253,7 @@ BrowserCode cost uses original received proposal/selector estimates plus the ind
 
 BrowserCode latency excludes initial browser setup and final judge-only capture; native retains the original native task boundary and excludes external/saved-evidence grading. Browser-command executions count saved selected BrowserCode blocks versus literal native browser-command log entries. Either can contain several actions; this measures harness-level command volume, not standardized actions or equal work. The observed-only x-axis means can use different task subsets, as their explicit denominators show.
 
-Every Luna method uses a circle and every Sol method a square. Blue denotes single generation and red candidates plus selection; shades darken with effort. In the historical o4-mini figure, an open red circle denotes N3 and a filled red circle N5. Terra medium/low results have a separate figure. All points have equal opacity; the plots have no grid, connecting lines or embedded table. The earlier dashed nondominated-method overlay has been removed. Detailed definitions and coverage remain in the caption and tables.
+Every Luna method uses a circle and every Sol method a square. Blue denotes single generation and red candidates plus selection; shades darken with effort. In the historical figure, an open red circle denotes N3 and a filled red circle N5. Terra medium/low results have a separate figure. All points have equal opacity; the plots have no grid, connecting lines or embedded table. The earlier dashed nondominated-method overlay has been removed. Detailed definitions and coverage remain in the caption and tables.
 
 [Historical valid-only success and attempt-metric coverage aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json).
 
