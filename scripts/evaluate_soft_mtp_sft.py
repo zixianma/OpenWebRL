@@ -99,7 +99,7 @@ def reserve_browser_sessions(path: Path, condition: str, job_id: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--condition", choices=("soft-mtp", "released-sft"), required=True)
+    parser.add_argument("--condition", choices=("soft-mtp", "ntp-sft"), required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--port", type=int, required=True)

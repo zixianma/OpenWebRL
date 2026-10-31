@@ -19,7 +19,7 @@ C2 rollout collection, action-level filtering, original SFT, optimizer ablation 
 <a id="arm-sft-soft-mtp-20261030"></a>
 ## Soft-MTP for the OpenWebRL SFT actor — 2026-10-30
 
-**One Soft-MTP SFT pilot and a fresh actor evaluation are prepared, pending
+**A matched NTP-only SFT control and Soft-MTP SFT pilot are prepared, pending
 exact compute/API approval.** The [Soft-MTP paper](https://arxiv.org/html/2610.38331) changes
 gradient routing for an existing MTP architecture with a shared linear output
 head. Its math/code fine-tuning results **discard the MTP heads and use NTP
@@ -57,16 +57,20 @@ training path is in [`sft/qwen3vl_mtp.py`](../../sft/qwen3vl_mtp.py) and
 [`sft/train_soft_mtp_with_llamafactory.py`](../../sft/train_soft_mtp_with_llamafactory.py).
 Serving and exact speculative verification are not implemented.
 
-The first pilot trains **one Soft-MTP actor** and evaluates it beside a fresh
-run of the released SFT checkpoint on the same 300 tasks and actor/judge
-protocol. That reference is useful operationally but is **not** a controlled
-training comparison: its training lineage, code and update schedule were not
-frozen alongside this run. Report NTP loss, action-token likelihood, tool-call
-parsing, task success, valid-only success and training time/memory. A causal
-claim about Soft-MTP requires three fresh arms from the same base and data:
-NTP-only SFT, hard-label MTP SFT and Soft-MTP SFT, with matched updates, `K`,
-`lambda_mtp` and evaluation. Exact self-speculative acceptance and latency are
-a later serving experiment; no current speed claim follows from this SFT run.
+The first controlled pilot trains **two fresh actors**, ordinary NTP-only SFT
+and Soft-MTP SFT, from the same base and 3,085 prepared records. Their YAML
+recipes differ only in output directory and run name; both use the pinned
+LLaMAFactory trainer, eight-GPU effective batch 16, three epochs, and the same
+optimizer, learning-rate schedule and data order. Evaluate both checkpoints on
+the same 300 tasks and actor/judge protocol. The released SFT checkpoint remains
+a historical reference, not a matched control. Report NTP loss, action-token
+likelihood, tool-call parsing, task success, valid-only success and training
+time/memory. This pair estimates the effect of **adding the MTP objective and
+heads with Soft-MTP gradient routing** to ordinary SFT. A separate fresh
+hard-label MTP arm with the same `K` and `lambda_mtp` would isolate Soft-MTP's
+gradient route from adding MTP itself; it is not part of this request. Exact
+self-speculative acceptance and latency are a later serving experiment; no
+current speed claim follows from this SFT run.
 Only consider an action-token-only MTP ablation after the full-response masked
 comparison; it changes the released SFT objective.
 
@@ -78,20 +82,23 @@ supervised targets at the released 262,144-pixel image limit; it is a
 representative memory gate, not a proven maximum over all rows. Six loss,
 causality and API-budget tests pass. The isolated
 trainer environment has PyTorch 2.11, LLaMAFactory and DeepSpeed; the actual
-training configuration is stored at
-`/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/soft-mtp-full.yaml`.
-The first approved GPU allocation must gate full training on an image-bearing
+training configurations are stored at
+`/gpfs/scrubbed/zixianma/openwebrl-runtime/soft-mtp-20261031-data/training/{ntp,soft-mtp}-full.yaml`.
+Each approved GPU allocation must gate full training on an image-bearing
 backward, checkpoint save/reload and long-context memory check, charging that
-work to the same allocation. The prepared 8-H200 training job is capped at
-eight hours total, including the gate and any retry. It preserves the released
-effective batch size of 16 by using batch size one and accumulation two on
-eight GPUs. Two separately capped one-H200, seven-hour jobs then run the
-Soft-MTP and released actors on the same 300 Online-Mind2Web tasks with local
+work to that allocation. The two prepared 8-H200 training jobs are capped at
+eight hours **each**, including gates and retries (128 H200-hours total), and
+may run concurrently. They preserve the released effective batch size of 16
+with per-GPU batch size one and accumulation two. Two separately capped
+one-H200, seven-hour jobs (14 H200-hours total) then run the fresh NTP and
+Soft-MTP actors on the same 300 Online-Mind2Web tasks with local
 browsers, T0.6/p0.95/k20, 4,096 response tokens, 30 turns and the
 o4-mini/AgentTrek judge. The pair is bounded by 620 browser sessions, 2,480
 judge attempts and a $20 shared judge-usage ledger. The evaluation code saves
 every task result and judge verdict; separate runs log to `openwebrl-evals`.
-No job has been submitted; approval of the exact request is pending.
+The revised combined cap is **142 H200-hours** plus at most **$20** of judge
+API usage. No job has been submitted; approval of this revised exact request is
+pending. The earlier one-training-job proposal is superseded.
 
 ---
 
