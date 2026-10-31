@@ -548,17 +548,17 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 
 #### Stronger lookahead judges (GPT-5.5, GPT-6.1 Sol)
 
-**Relabelling the same 2,612 one-panel states with GPT-5.5 or GPT-6.1 Sol (effort high) instead of Luna, under the same K = 3 lookahead protocol, does not close the gap to the Piotr-data head. On Online-Mind2Web + WebVoyager the GPT-5.5 and Sol heads score 42.0% and 41.6%, level with the Luna head (+0.1 [−2.7, +3.0] and −0.3 [−2.9, +2.3]) and below the Piotr-data head (−3.5 [−6.3, −0.8] and −4.0 [−6.7, −1.2]).** Their higher DeepShop scores (44.3% and 49.7% valid-only, against 33.0% for Luna) come from a 10-31 run date: the K = 3 architecture heads also rose from 28–35% on 10-29 to 43–48% on 10-30/31 ([above](#final-selection-arch-k3-20261029)), so they are not attributed to the labels.
+**Relabelling the same 2,612 one-panel states with GPT-5.5 or GPT-6.1 Sol (effort high) instead of Luna, under the same K = 3 lookahead protocol, lifts the head to or above the Piotr-data head on the three-benchmark mean: GPT-5.5 42.6% and Sol 43.9%, against 38.4% for Luna (+4.2 [+1.3, +7.2] and +5.5 [+2.7, +8.4]) and 40.8% for the Piotr-data head (+1.9 [−1.4, +5.1] and +3.1 [+0.0, +6.3]).** The gain is on DeepShop (44.3% and 49.7% valid-only, against 33.0% for Luna); on Online-Mind2Web and WebVoyager the new heads are level with Luna. The new heads ran on 10-31 and the references on 10-29, and DeepShop drifts by date (the K = 3 architecture heads also rose from 28–35% on 10-29 to 43–48% on 10-30/31, [above](#final-selection-arch-k3-20261029)), so same-day reruns of the new heads and the Piotr references are in progress.
 
-Same states, panels, trainer and recipe as the [2,612-state Luna head](#final-selection-our-data-20261028) (screenshots only, no history, final answer hidden; seed 0, 20 epochs, batch 64); only the judge changes. Luna's labels vote over two calls per state, GPT-5.5's and Sol's are one call each. Differences are on the Online-Mind2Web + WebVoyager overall mean, [paired 95% intervals](#final-paired-bootstrap), reading row − reference; references are pooled over their three runs.
+Same states, panels, trainer and recipe as the [2,612-state Luna head](#final-selection-our-data-20261028) (screenshots only, no history, final answer hidden; seed 0, 20 epochs, batch 64); only the judge changes. Luna's labels vote over two calls per state, GPT-5.5's and Sol's are one call each. Differences are on the three-benchmark mean overall rate, [paired 95% intervals](#final-paired-bootstrap), reading row − reference; references are pooled over their three runs.
 
 | Lookahead judge (2,612 states) | Runs (date) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | OM2W + WV<br>overall | − Luna, pp<br>[95% CI] | − Piotr-data head, pp<br>[95% CI] | − SFT 4B, pp<br>[95% CI] | Label cost,<br>USD |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| GPT-5.5, high | 1 (10-31) | 37.2% | 52.2% | 44.3% | 42.6% | 44.6% | 42.0% | +0.1 [−2.7, +3.0] | **−3.5 [−6.3, −0.8]** | **+5.7 [+2.9, +8.6]** | 337.68 |
-| GPT-6.1 Sol, high | 1 (10-31) | 36.3% | 52.3% | 49.7% | 43.9% | 46.1% | 41.6% | −0.3 [−2.9, +2.3] | **−4.0 [−6.7, −1.2]** | **+5.3 [+2.7, +8.0]** | 110.07 |
-| GPT-6 Luna, high | 3 (10-29) | 37.4% | 53.0% | 33.0% | 38.4% | 41.1% | 41.9% | — | **−3.7 [−5.7, −1.6]** | **+5.6 [+3.5, +7.6]** | — |
-| *Piotr-data head (GPT-5.5 before, Piotr's 2,587 states)* | 3 (10-29) | 40.9% | 56.8% | 32.6% | 40.8% | 43.4% | 45.5% | **+3.7 [+1.6, +5.7]** | — | **+9.2 [+7.2, +11.4]** | — |
-| *SFT 4B, 1 sample* | 3 (10-29) | 32.3% | 45.2% | 29.0% | 33.7% | 35.5% | 36.3% | **−5.6 [−7.6, −3.5]** | **−9.2 [−11.4, −7.2]** | — | — |
+| GPT-5.5, high | 1 (10-31) | 37.2% | 52.2% | 44.3% | 42.6% | 44.6% | 42.0% | **+4.2 [+1.3, +7.2]** | +1.9 [−1.4, +5.1] | **+9.0 [+5.9, +12.3]** | 337.68 |
+| GPT-6.1 Sol, high | 1 (10-31) | 36.3% | 52.3% | 49.7% | 43.9% | 46.1% | 41.6% | **+5.5 [+2.7, +8.4]** | **+3.1 [+0.0, +6.3]** | **+10.3 [+7.3, +13.3]** | 110.07 |
+| GPT-6 Luna, high | 3 (10-29) | 37.4% | 53.0% | 33.0% | 38.4% | 41.1% | 41.9% | — | **−2.4 [−4.7, −0.1]** | **+4.8 [+2.6, +7.0]** | — |
+| *Piotr-data head (GPT-5.5 before, Piotr's 2,587 states)* | 3 (10-29) | 40.9% | 56.8% | 32.6% | 40.8% | 43.4% | 45.5% | **+2.4 [+0.1, +4.7]** | — | **+7.1 [+4.8, +9.5]** | — |
+| *SFT 4B, 1 sample* | 3 (10-29) | 32.3% | 45.2% | 29.0% | 33.7% | 35.5% | 36.3% | **−4.8 [−7.0, −2.6]** | **−7.1 [−9.5, −4.8]** | — | — |
 
 Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150 per run. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o, checked on every saved verdict.
 
