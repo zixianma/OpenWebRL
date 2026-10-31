@@ -1,6 +1,6 @@
 # Run BrowserCode experiments
 
-Use **[browsercode.py](browsercode.py)** for `setup`, `run`, `check` and `report`. The **[BrowserCode guide](../../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart)** contains the complete commands, requirements and methods.
+Use **[browsercode.py](browsercode.py)** for `setup`, `run`, `check`, `report` and judge-only `rejudge`. The **[BrowserCode guide](../../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart)** contains the complete commands, requirements and methods.
 
 <a id="two-commands"></a>
 <a id="what-execution-saves"></a>
@@ -9,6 +9,7 @@ Use **[browsercode.py](browsercode.py)** for `setup`, `run`, `check` and `report
 - [Setup and evaluation](../../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart)
 - [Campaigns and arms](../../docs/API_EXPERIMENT_METHODS.md#main-browsercode-experiments)
 - [Saved outputs](../../docs/API_EXPERIMENT_METHODS.md#what-execution-saves)
+- [Rejudge saved endpoints with Terra](../../docs/API_EXPERIMENT_METHODS.md#rejudge-saved-endpoints)
 - [Scope of reproduction](../../docs/API_EXPERIMENT_METHODS.md#scope-of-reproduction)
 - [Offline validation](../../docs/API_EXPERIMENT_METHODS.md#offline-validation)
 

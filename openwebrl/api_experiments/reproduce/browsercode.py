@@ -223,6 +223,16 @@ def report(args):
     return call(sys.executable, 'report.py', *forwarded)
 
 
+def rejudge(args):
+    forwarded = ['--manifest', args.manifest, '--output', writable(args.output), '--judge-usd', args.judge_usd,
+                 '--judge-calls', args.judge_calls, '--wall-seconds', args.wall_seconds, '--concurrency', args.concurrency]
+    if args.env_file:
+        forwarded += ['--env-file', args.env_file]
+    if args.execute:
+        forwarded.append('--execute')
+    return call(sys.executable, 'rejudge.py', *forwarded)
+
+
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     commands = p.add_subparsers(dest='command', required=True)
@@ -257,6 +267,16 @@ def parser():
     a.add_argument('--bootstrap-draws', type=int, default=10000)
     a.add_argument('--markdown', action='store_true')
     a.set_defaults(action=report)
+    j = commands.add_parser('rejudge', help='Regrade saved endpoints with Terra; no actor/browser execution; dry-run by default')
+    j.add_argument('--manifest', type=Path, required=True)
+    j.add_argument('--output', type=Path, required=True)
+    j.add_argument('--judge-usd', type=positive_money, required=True)
+    j.add_argument('--judge-calls', type=int, required=True)
+    j.add_argument('--wall-seconds', type=int, required=True)
+    j.add_argument('--concurrency', type=int, required=True)
+    j.add_argument('--env-file', type=Path)
+    j.add_argument('--execute', action='store_true')
+    j.set_defaults(action=rejudge)
     return p
 
 

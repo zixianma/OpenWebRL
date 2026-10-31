@@ -69,6 +69,78 @@ Run the desired single-action arm into a separate output directory, then compare
 
 The report retains invalid/missing outcomes, separates all-attempt model/judge charges from valid-task efficiency, and labels common-valid paired comparisons and uncertainty. Different benchmarks or judge protocols are not silently treated as matched controls.
 
+### Rejudge saved endpoints
+
+Use [`rejudge.py`](../api_experiments/reproduce/rejudge.py), also exposed as `browsercode.py rejudge`, to grade your own archived terminal evidence with **GPT-5.6-Terra, medium effort, 4,096 completion tokens and seed 42**. It reuses the bundled frozen terminal prompt, verdict parser and conservative request accounting. It runs no actors or browsers and requires no scheduler or original campaign directory. Use the installed Python above; no browser setup is needed for judging alone.
+
+```bash
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py rejudge \
+  --manifest /path/to/local/endpoints.json --output /tmp/terra-regrade-01 \
+  --judge-usd 5 --judge-calls 20 --wall-seconds 600 --concurrency 2
+```
+
+This validates inputs and prints a read-only plan. The four caps are explicit limits, not cost or runtime estimates. Add `--execute` to create a new output cohort and spend within them; use `JUDGE_API_KEY` or `OPENAI_API_KEY`, or `--env-file /path/to/private.env`. The parent terminates and awaits its sole judge process at the wall deadline. Every admitted physical request retains its known charge or full unknown/in-flight reservation. Failed judgments remain invalid, and prior claims/results are never overwritten or automatically retried.
+
+<details>
+<summary>Local endpoint manifest and saved outputs</summary>
+
+Create a private JSON manifest with this schema. The strings in angle brackets are placeholders for your exact archived evidence, not released task content:
+
+```json
+{
+  "schema": "terra-endpoint-input-v1",
+  "episodes": [{
+    "id": "local-episode-1",
+    "original_valid": true,
+    "eligible": true,
+    "cohort": {
+      "benchmark": "online-mind2web",
+      "harness": "browsercode",
+      "arm": "<archived arm>",
+      "actor_model": "<archived actor model>",
+      "actor_protocol_sha256": "<protocol SHA256>"
+    },
+    "task": "<exact archived task>",
+    "actions": ["<exact selected-action string>"],
+    "screenshot": "relative/path/final.png",
+    "screenshot_sha256": "<PNG SHA256>",
+    "endpoint_scope": "dedicated_terminal_capture"
+  }]
+}
+```
+
+Paths resolve relative to the manifest; absolute local paths also work. Preserve the original PNG bytes and geometry: the supported archived sizes are 1,280 × 1,800 and 1,280 × 1,657. A `last_browser_action_capture` also requires `last_action_capture_verified: true`: independently bind the PNG to the final browser action, with no later browser action. An older intermediate capture does not qualify. Optional `evidence_bindings: [{"path": "...", "sha256": "..."}]` freezes supporting task/action/provenance files. The wrapper checks those hashes; it does not infer terminal identity from an arbitrary screenshot.
+
+Include excluded episodes with `eligible: false` and an `exclusion_reason`; they need no task/action/PNG fields. Retain `original_valid: false` for original invalids. The summary separates those original invalids, valid episodes lacking eligible evidence, missing new judgments and failed new judgments. Each distinct benchmark/harness/arm/model/protocol cohort has its own counts and valid-judgment success rate; different cohorts are not silently pooled.
+
+The new directory saves `rejudge-plan.json`, exclusive episode claims, every prepared request and raw response, physical-ID reservations/settlements, per-episode results and `summary.json`. New judge costs stay separate from original actor costs and latencies. Changing the judge does not control differences in harnesses, action representations, image geometry, actor limits or collection windows. Raw prompts, images, trajectories and keys stay local.
+
+</details>
+
+<details>
+<summary>Archived native endpoint eligibility (optional)</summary>
+
+[`archived_endpoint.py`](../api_experiments/reproduce/archived_endpoint.py) publishes the exact generic eligibility algorithm used for archived native evidence. Its SHA256 is `2928f64f9988ab69197974d8018f7a7b3127ac2917457b304853720297933101`. It contains no private campaign discovery paths, task payloads or scheduler controls.
+
+The read-only `native_endpoint(directory, task, canonical)` interface takes your saved episode directory, exact original task string and an independently qualified canonical row with `valid: true`. That canonical validity is an input, not an execution/accounting audit performed by this helper. The directory supplies ordered `browser-steps.jsonl`, `trajectory.json`, `external-judge-evidence.json`, the raw native `result.json`, original PNGs and, for manual captures, the selected step's code and hash. Action descriptions and saved final answers must match the archived judge evidence exactly.
+
+```python
+import sys
+from pathlib import Path
+sys.path.insert(0, "openwebrl/api_experiments/reproduce")
+from archived_endpoint import native_endpoint
+
+endpoint, bindings = native_endpoint(
+    Path("/path/to/local/episode"), exact_archived_task, {"valid": True}
+)
+```
+
+Use `endpoint["task"]`, `endpoint["actions"]`, `endpoint["screenshot_path"]` and `endpoint["screenshot_sha256"]` for the local rejudge manifest above; declare `endpoint_scope: "last_browser_action_capture"` and `last_action_capture_verified: true` only after this check succeeds. Convert `bindings` into `evidence_bindings` with `[{"path": path, "sha256": digest} for path, digest in bindings.items()]` to freeze the verified inputs.
+
+The helper selects only the final logged browser action's capture, preserving its original supported geometry. Manual captures must be the final awaited screenshot operation, with no later browser/function side effects, including on the same source line. It rejects earlier-only images, changed task/action/capture hashes, ambiguous manual capture flow, paths outside the episode and incomplete actor endpoints. A rejection stays an explicit evidence exclusion; it does not trigger an actor rerun or image synthesis.
+
+</details>
+
 ### Prepare the episode runtime
 
 Setup assembles runnable copies from the frozen [configurations, prompts and support code](../api_experiments/portable_assets/). The public [OM2W](../data/eval/online-mind2web.jsonl), [WebVoyager](../data/eval/webvoyager_fara.jsonl) and [DeepShop](../data/eval/deepshop.jsonl) files supply instructions, start URLs and grading references. [tasks.py](../api_experiments/reproduce/tasks.py) joins them to fixed task-ID rosters in campaign order. No original campaign directory, scheduler registration, private trajectories or teacher labels are needed.

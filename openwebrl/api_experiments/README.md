@@ -11,10 +11,11 @@ Start with the **[BrowserCode guide](../docs/API_EXPERIMENT_METHODS.md#reproduct
 | Understand the protocol | [Experiments](../docs/API_EXPERIMENT_METHODS.md#experiments) · [metrics](../docs/API_EXPERIMENT_METHODS.md#metrics-and-comparability) |
 | Trace the implementation | [Code map](../docs/API_EXPERIMENT_METHODS.md#code-and-frozen-artifacts) · [offline checks](../docs/API_EXPERIMENT_METHODS.md#offline-validation) |
 | Find qualified results | [Results and analysis](../docs/API_EXPERIMENT_METHODS.md#results-and-analysis-pointers) |
+| Rejudge archived endpoints | [Terra judge-only command](../docs/API_EXPERIMENT_METHODS.md#rejudge-saved-endpoints) |
 
 <a id="layout"></a>
 
-[browsercode/](browsercode/) holds frozen source snapshots; [portable_assets/](portable_assets/) supplies configurations, prompts, support code and fixed task-ID rosters. [reproduce/browsercode.py](reproduce/browsercode.py) provides `setup`, `run`, `check` and `report`. Evaluation defaults to a read-only plan; add `--execute` to use the required run caps. Credentials and raw outputs stay local.
+[browsercode/](browsercode/) holds frozen source snapshots; [portable_assets/](portable_assets/) supplies configurations, prompts, support code and fixed task-ID rosters. [reproduce/browsercode.py](reproduce/browsercode.py) provides `setup`, `run`, `check`, `report` and judge-only `rejudge`. Evaluation defaults to a read-only plan; add `--execute` to use the required run caps. Credentials and raw outputs stay local.
 
 <details>
 <summary>Archived implementations and source provenance</summary>
