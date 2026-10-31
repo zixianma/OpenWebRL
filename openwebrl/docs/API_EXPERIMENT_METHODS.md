@@ -60,13 +60,13 @@ Choose `--campaign` during setup. The entry point selects the matching model ada
 <a id="luna-xhigh-output-limits"></a>
 ### Luna single reasoning and output limits
 
-For new Luna single experiments, set `--luna-single-output-tokens 12288`, `24576` or `49152` and `--luna-single-reasoning-effort high` or `xhigh` during `luna` setup. Each setting needs a separate workspace. The generated runtime contains one arm and the same public OM2W 300, WebVoyager 595 and DeepShop 150 tasks; every setting keeps 30 decisions and the shared Terra judge. The reasoning-versus-output-headroom comparison uses:
+For new Luna single experiments, set `--luna-single-output-tokens 6144`, `12288`, `24576` or `49152` and `--luna-single-reasoning-effort high` or `xhigh` during `luna` setup. Each setting needs a separate workspace. The generated runtime contains one arm and the same public OM2W 300, WebVoyager 595 and DeepShop 150 tasks; every setting keeps 30 decisions and the shared Terra judge. The reasoning-versus-output-headroom comparison uses:
 
 | Reasoning effort | Max output tokens per call | Relative output cap | Arm |
 |---|---:|---:|---|
 | xhigh | 12,288 | 1× | `luna_single_xhigh` |
 | high | 24,576 | 2× | `luna_single_high` |
-| high | 49,152 | 4× | `luna_single_high` |
+| high | 6,144 | 0.5× | `luna_single_high` |
 
 For example, prepare high effort with the 2× ceiling:
 

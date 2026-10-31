@@ -259,7 +259,7 @@ def parser():
     s.add_argument('--campaign', type=campaign, required=True, metavar='CAMPAIGN', help='luna, claude, gpt, gpt-luna-single or gpt-crossbench; historical experiment keys also accepted')
     s.add_argument('--dependencies', type=Path, help='Reuse an existing dependency manifest without downloads')
     s.add_argument('--luna-xhigh-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single xhigh 30-turn output-cap experiment over OM2W300, WebVoyager595 and DeepShop150; requires --campaign luna')
-    s.add_argument('--luna-single-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')
+    s.add_argument('--luna-single-output-tokens', type=int, choices=(6144, 12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')
     s.add_argument('--luna-single-reasoning-effort', choices=('high', 'xhigh'), help='Explicit prospective Luna single reasoning effort; default xhigh when an output cap is given')
     s.set_defaults(action=setup)
     c = commands.add_parser('check', help='Check real imports, optionally a local browser; zero model calls')

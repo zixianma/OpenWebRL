@@ -72,7 +72,7 @@ class SweepTests(unittest.TestCase):
     def args(self, runtime, *extra):
         return c.parser('luna').parse_args(['--runtime', str(runtime), '--arm', p.ARM, '--output', str(self.root / 'output'), '--model-usd', '2', '--judge-usd', '.1', *extra])
 
-    def test_all_three_caps_freeze_same_original_roster_and_science(self):
+    def test_all_supported_caps_freeze_same_original_roster_and_science(self):
         identities = []
         for cap in p.CAPS:
             runtime = self.runtime(str(cap))
@@ -82,15 +82,15 @@ class SweepTests(unittest.TestCase):
             plan, tasks = c.prepare(self.args(runtime, '--limit', '1045'), 'luna')
             self.assertEqual((plan['max_output_tokens'], plan['candidate_effort'], plan['candidate_count'], plan['max_decisions']), (cap, 'xhigh', 1, 30))
             self.assertEqual(plan['benchmark_roster_counts'], p.COUNTS)
-            self.assertEqual(plan['output_multiplier'], cap // 12288)
+            self.assertEqual(plan['output_multiplier'], cap / 12288)
+            self.assertIsInstance(plan['output_multiplier'], float if cap == 6144 else int)
             identities.append([task['task_id'] for task in tasks])
             self.assertFalse((self.root / 'output').exists())
             for source, before in originals.items():
                 self.assertEqual(source.read_bytes(), before)
             with self.assertRaisesRegex(ValueError, 'already configured'):
                 p.configure(runtime, cap)
-        self.assertEqual(identities[0], identities[1])
-        self.assertEqual(identities[1], identities[2])
+        self.assertTrue(all(rows == identities[0] for rows in identities))
 
     def test_default_runtime_bytes_and_cap_remain_unchanged(self):
         runtime = self.runtime()
@@ -179,7 +179,7 @@ class SweepTests(unittest.TestCase):
         return actor
 
     def test_actual_payload_reservation_constructor_and_tracking_share_declared_cap(self):
-        for cap, effort in [(cap, 'xhigh') for cap in p.CAPS] + [(24576, 'high'), (49152, 'high')]:
+        for cap, effort in [(cap, 'xhigh') for cap in p.CAPS] + [(6144, 'high'), (24576, 'high'), (49152, 'high')]:
             arm = p.EFFORT_ARMS[effort]
             runtime = self.runtime('actor-' + str(cap) + '-' + effort)
             p.configure(runtime, cap, effort)
@@ -221,7 +221,7 @@ class SweepTests(unittest.TestCase):
 
     def test_user_grid_binds_distinct_effort_arm_and_identical_tasks(self):
         task_hashes = []
-        for cap, effort in ((12288, 'xhigh'), (24576, 'high'), (49152, 'high')):
+        for cap, effort in ((12288, 'xhigh'), (24576, 'high'), (6144, 'high')):
             runtime = self.runtime('grid-' + str(cap))
             receipt = p.configure(runtime, cap, effort)
             args = self.args(runtime, '--limit', '1045')
@@ -238,8 +238,10 @@ class SweepTests(unittest.TestCase):
         self.assertEqual(len(set(task_hashes)), 1)
 
     def test_setup_alias_compatibility_and_conflicting_overrides(self):
-        valid = b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'new'), '--luna-single-output-tokens', '24576', '--luna-single-reasoning-effort', 'high'])
-        self.assertEqual((valid.luna_single_output_tokens, valid.luna_single_reasoning_effort), (24576, 'high'))
+        valid = b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'new'), '--luna-single-output-tokens', '6144', '--luna-single-reasoning-effort', 'high'])
+        self.assertEqual((valid.luna_single_output_tokens, valid.luna_single_reasoning_effort), (6144, 'high'))
+        with patch('sys.stderr'), self.assertRaises(SystemExit):
+            b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'new'), '--luna-xhigh-output-tokens', '6144'])
         for extra in [
             ['--luna-xhigh-output-tokens', '12288', '--luna-single-reasoning-effort', 'high'],
             ['--luna-xhigh-output-tokens', '12288', '--luna-single-output-tokens', '12288'],
@@ -272,12 +274,14 @@ class SweepTests(unittest.TestCase):
 
     def test_fresh_interpreter_dry_run_loads_override_without_sdk_or_output(self):
         runtime = self.runtime()
-        p.configure(runtime, 49152)
-        result = subprocess.run([sys.executable, '-B', str(REPRO / 'eval_luna.py'), '--runtime', str(runtime), '--arm', p.ARM,
+        p.configure(runtime, 6144, 'high')
+        result = subprocess.run([sys.executable, '-B', str(REPRO / 'eval_luna.py'), '--runtime', str(runtime), '--arm', p.EFFORT_ARMS['high'],
                                  '--output', str(self.root / 'fresh-output'), '--model-usd', '1', '--judge-usd', '.1'],
                                 env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'}, capture_output=True, text=True, timeout=30)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn('"max_output_tokens": 49152', result.stdout)
+        self.assertIn('"max_output_tokens": 6144', result.stdout)
+        self.assertIn('"output_multiplier": 0.5', result.stdout)
+        self.assertIn('"candidate_effort": "high"', result.stdout)
         self.assertIn('Dry run:', result.stdout)
         self.assertFalse((self.root / 'fresh-output').exists())
 
