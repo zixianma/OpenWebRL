@@ -42,6 +42,17 @@ def verify_source(source, name):
     return manifest
 
 
+def verify_terminal_sources():
+    """Verify the opt-in observer bundle without touching a run or credentials."""
+    root = SUPPORT / 'terminal_observer'
+    manifest = json.loads((root / 'source-pins.json').read_text())
+    for name, expected in manifest['source_hashes'].items():
+        path = (root / name).resolve()
+        if path.parent != root.resolve() or digest(path) != expected:
+            raise ValueError('Trusted terminal observer source mismatch: ' + name)
+    return manifest
+
+
 def replace_once(source, before, after):
     if source.count(before) != 1:
         raise ValueError('Archived adaptation anchor changed: ' + before[:90])
@@ -92,9 +103,12 @@ def adapt(name, text, chromium, browser_cache):
     return text
 
 
-def build_runtime(output, cuawright_source, webjudge_source, chromium, browser_cache, plan):
+def build_runtime(output, cuawright_source, webjudge_source, chromium, browser_cache, plan,
+                  terminal_capture=False):
     """Write only a new run directory; never mutate either supplied checkout."""
     output = Path(output).resolve()
+    if output.parts[:3] == ('/', 'gpfs', 'home'):
+        raise ValueError('Use a project or temporary writable run directory')
     if output.exists():
         raise FileExistsError(f'Refusing to overwrite or retry existing run: {output}')
     native = verify_source(cuawright_source, 'cuawright')
@@ -102,6 +116,11 @@ def build_runtime(output, cuawright_source, webjudge_source, chromium, browser_c
     chromium = Path(chromium).resolve()
     browser_cache = Path(browser_cache).resolve()
     verify_browser(chromium, browser_cache)
+    if terminal_capture:
+        verify_terminal_sources()
+        for cap in plan['shards']:
+            if cap['external_judge_usd_all_attempts'] != 0 or cap['external_judge_calls_all_attempts'] != 0:
+                raise ValueError('Terra terminal capture requires zero external-WebJudge gateway credits')
     spec = importlib.util.spec_from_file_location('_native_materialize', ROOT / 'materialize.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -143,6 +162,18 @@ def build_runtime(output, cuawright_source, webjudge_source, chromium, browser_c
     rates = {'gpt-6-luna': {'input': .1, 'cached_input': .01, 'cache_write_input': .125, 'output': .5}, 'gpt-6-sol': {'input': 2., 'cached_input': .2, 'cache_write_input': 2.5, 'output': 10.}}
     (output / 'pricing-snapshot.json').write_text(json.dumps({'usd_per_million_tokens': rates[plan['model']]}, indent=2) + '\n')
     (output / 'portable-adaptations.json').write_text(json.dumps({'adaptations': adaptations, 'cuawright_commit': native['source_commit'], 'webjudge_commit': judge['source_commit'], 'source_registration': 'isolated-run-inventory', 'failure_policy': 'one physical provider HTTP attempt; retain pinned native model defaults'}, indent=2) + '\n')
+    if terminal_capture:
+        observer_path = SUPPORT / 'terminal_observer/materialize.py'
+        observer_spec = importlib.util.spec_from_file_location('_portable_terminal_observer', observer_path)
+        observer = importlib.util.module_from_spec(observer_spec)
+        observer_spec.loader.exec_module(observer)
+        changes = observer.materialize(output)
+        changes.update(observer.install_probe(output))
+        (output / 'terminal-observer-adaptations.json').write_text(json.dumps({
+            'schema': 'portable-native-trusted-terminal-observer-v2', 'source_hashes': changes,
+            'actor_science_changed': False, 'selected_action_paid_binding_required': True,
+            'external_webjudge_gateway_cap': {'usd': 0, 'calls': 0},
+            'probe_is_synthetic_ungraded': True}, indent=2) + '\n')
     sources = {}
     for path in sorted(output.rglob('*')):
         if path.is_file() and (path.suffix in ('.py', '.yaml') or 'upstream' in path.relative_to(output).parts):

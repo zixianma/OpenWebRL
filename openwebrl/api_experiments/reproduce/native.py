@@ -19,7 +19,7 @@ import subprocess
 import sys
 import time
 
-from native_runtime import ROOT, build_runtime, verify_browser, verify_source
+from native_runtime import ROOT, build_runtime, verify_browser, verify_source, verify_terminal_sources
 
 ARMS = {'luna_high_single': ('gpt-6-luna', 1),
         'luna_high_n3_select_high': ('gpt-6-luna', 3),
@@ -113,9 +113,49 @@ def run_one(args, runtime, task, gateway, baseurl, deadline):
     return result
 
 
+def run_one_terra(args, runtime, task, baseurl, deadline, terra_session):
+    """Same native actor, one trusted endpoint and one shared-pool Terra attempt."""
+    output = runtime / 'shard0/episodes' / task['task_id']
+    output.mkdir(parents=True, exist_ok=False)
+    write(output / 'task-input.json', task)
+    worker = load(runtime / 'campaign_worker.py', '_portable_terra_native_worker')
+    worker.PYTHON = args.python
+    command = [args.python, str(runtime / 'native_episode.py'), '--task-json', str(output / 'task-input.json'),
+               '--output', str(output), '--endpoint', baseurl + '/model/' + task['task_id'] + '/responses',
+               '--arm', args.arm, '--absolute-deadline', str(deadline)]
+    if ARMS[args.arm][1] > 1:
+        command += ['--group-config', str(runtime / 'shard0/.host/group-config.json')]
+    result = {'task_id': task['task_id'], 'arm': args.arm, 'judge': 'terra',
+              'valid': False, 'execution_valid': False, 'grading_valid': False, 'reward': None,
+              'judge_protocol': terra_session.judge.protocol(), 'error': None}
+    native = {}
+    try:
+        code = worker.invoke(command, output, deadline, output / 'native.log')
+        native = read(output / 'result.json')
+        result['native_exit_code'] = code
+        result['native_exit_status'] = native.get('exit_status')
+        result['execution_valid'] = (code == 0 and native.get('native_execution_complete') is True
+            and native.get('exit_status') in ('Submitted', 'LimitsExceeded') and not native.get('error')
+            and native.get('owned_teardown', {}).get('process_verification', {}).get('verified') is True
+            and read(output / 'parent-owned-teardown.json').get('verified') is True)
+        if result['execution_valid']:
+            judged = terra_session.judge_once(task, output, deadline=deadline)
+            result.update(grading_valid=judged['valid'], valid=judged['valid'],
+                          reward=judged['reward'] if judged['valid'] else None)
+    except Exception as error:
+        result['error'] = {'type': type(error).__name__, 'message': str(error)}
+    result.update(decisions=native.get('decisions'), task_latency_seconds=native.get('task_latency_seconds'),
+                  terminal_observer_seconds=native.get('terminal_observer_seconds'),
+                  latency_scope='Saved native run_one-through-cleanup time; only measured final dedicated observer RPC is subtracted. Preclose observer overhead is not claimed removed.')
+    write(output / 'disposition.json', result)
+    return result
+
+
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--arm', choices=ARMS, required=True)
+    p.add_argument('--judge', choices=('webjudge', 'terra'), default='webjudge',
+                   help='Default preserves archived WebJudge; terra uses trusted endpoint evidence and one separate shared judge pool')
     p.add_argument('--tasks', type=Path, default=ROOT.parent / 'data/eval/online-mind2web.jsonl')
     p.add_argument('--task-id', action='append')
     p.add_argument('--limit', type=int, default=1)
@@ -137,6 +177,7 @@ def parser():
 
 
 def main(argv=None):
+    sys.dont_write_bytecode = True
     args = parser().parse_args(argv)
     if args.dependencies:
         dependencies = read(args.dependencies)
@@ -161,18 +202,36 @@ def main(argv=None):
     verify_source(args.cuawright_source, 'cuawright')
     verify_source(args.webjudge_source, 'webjudge')
     verify_browser(args.chromium, args.browser_cache)
+    terra_science = None
+    if args.judge == 'terra':
+        verify_terminal_sources()
+        import native_terra
+        terra_science = native_terra.verify_science()
     model, count = ARMS[args.arm]
     cap = {'shard': 0, 'task_ids': [t['task_id'] for t in tasks], 'model_max_inflight': 8, 'model_usd_all_attempts': args.model_usd, 'external_judge_usd_all_attempts': args.judge_usd, 'model_calls_all_attempts': args.model_calls, 'external_judge_calls_all_attempts': args.judge_calls, 'browser_starts_all_attempts': args.browser_starts}
+    if args.judge == 'terra':
+        cap.update(external_judge_usd_all_attempts=0, external_judge_calls_all_attempts=0)
     plan = {'schema': 'cuawright-collaborator-run-v1', 'task_source_sha256': hashlib.sha256(args.tasks.read_bytes()).hexdigest(), 'selected_tasks_sha256': hashlib.sha256(json.dumps(tasks, sort_keys=True, separators=(',', ':')).encode()).hexdigest(), 'arm_id': args.arm, 'model': model, 'candidate_count': count, 'max_output_tokens': 20000, 'max_decisions': 100, 'reasoning_effort': 'high', 'summary_setting': 20, 'judge': 'official-webjudge-gpt-4o-2024-08-06', 'shards': [cap], 'timeout_seconds': args.timeout_seconds, 'retry_policy': 'no physical gateway retries; pinned native format-repair defaults preserved', 'fallback_policy': 'none'}
+    if args.judge == 'terra':
+        plan.update(judge=terra_science[0].protocol(), terminal_capture='trusted-native-observer-v2',
+                    shared_terra_pool={'judge_usd': args.judge_usd, 'judge_calls': args.judge_calls},
+                    benchmark=('Online-Mind2Web' if args.tasks.resolve() ==
+                               (ROOT.parent / 'data/eval/online-mind2web.jsonl').resolve() else 'collaborator_tasks'),
+                    external_webjudge_enabled=False)
     print(json.dumps({'mode': 'execute' if args.execute else 'read-only-dry-run', 'plan': plan}, indent=2))
     if not args.execute:
         return 0
     key = os.environ.get('OPENAI_API_KEY')
     if not key:
         raise ValueError('OPENAI_API_KEY required; credentials are never loaded from a repository .env')
-    runtime = build_runtime(args.output, args.cuawright_source, args.webjudge_source, args.chromium, args.browser_cache, plan)
+    runtime = build_runtime(args.output, args.cuawright_source, args.webjudge_source, args.chromium,
+                            args.browser_cache, plan, terminal_capture=args.judge == 'terra')
     write(runtime / 'tasks.json', tasks)
     sys.path.insert(0, str(runtime))
+    terra_session = None
+    if args.judge == 'terra':
+        terra_session = native_terra.TerraSession(runtime, args.judge_usd, args.judge_calls,
+                                                key, science=terra_science)
     import budget_gateway
     deadline = time.time() + args.timeout_seconds
     gateway, baseurl = budget_gateway.start_gateway(runtime, 0, deadline, key)
@@ -188,18 +247,33 @@ def main(argv=None):
         receipt = read(probe / 'startup-diagnostic.json')
         if code != 0 or receipt.get('actor_release_permitted') is not True or not read(probe / 'parent-owned-teardown.json').get('verified'):
             raise RuntimeError('Native browser preflight failed; see ' + str(probe / 'startup.log'))
+        if terra_session is not None:
+            verifier = load(runtime / 'diagnostic_terminal_probe.py', '_portable_terminal_probe_verifier')
+            verification = verifier.verify(probe)
+            if verification.get('verified') is not True or receipt.get('terminal_observer_preclose_verified') is not True:
+                raise RuntimeError('Trusted native terminal-close preflight failed')
+            write(probe / 'terminal-probe-parent-verification.json', verification)
         for task in tasks:
-            if budget_gateway._halted(runtime, 0) or time.time() >= deadline - 30:
+            if (budget_gateway._halted(runtime, 0) or time.time() >= deadline - 30
+                    or (terra_session is not None and not terra_session.available())):
                 break
-            disposition = run_one(args, runtime, task, gateway, baseurl, deadline)
+            disposition = (run_one_terra(args, runtime, task, baseurl, deadline, terra_session)
+                           if terra_session is not None else run_one(args, runtime, task, gateway, baseurl, deadline))
             dispositions.append(disposition)
             print(json.dumps(disposition))
             if not disposition['execution_valid']:
                 break
+            if terra_session is not None and not disposition['valid']:
+                break
     finally:
         gateway.shutdown()
         gateway.server_close()
-        write(runtime / 'summary.json', {'requested_tasks': len(tasks), 'completed_dispositions': len(dispositions), 'valid_tasks': sum(d['valid'] for d in dispositions), 'successes': sum(d.get('reward') == 1 for d in dispositions), 'results': dispositions, 'usage': budget_gateway.totals(runtime, 0), 'complete': len(dispositions) == len(tasks)})
+        summary = {'requested_tasks': len(tasks), 'completed_dispositions': len(dispositions), 'valid_tasks': sum(d['valid'] for d in dispositions), 'successes': sum(d.get('reward') == 1 for d in dispositions), 'results': dispositions, 'usage': budget_gateway.totals(runtime, 0), 'complete': len(dispositions) == len(tasks)}
+        if terra_session is not None:
+            summary.update(judge='terra', judge_protocol=terra_session.judge.protocol(),
+                           terra_usage={key: value for key, value in terra_session.budget.snapshot().items() if key != 'requests'},
+                           actor_gateway_external_judge_budget={'usd': 0, 'calls': 0})
+        write(runtime / 'summary.json', summary)
     return 0 if len(dispositions) == len(tasks) and all(d['valid'] for d in dispositions) else 1
 
 

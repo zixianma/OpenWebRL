@@ -1,0 +1,11 @@
+{
+  "schema": "portable-native-terminal-observer-v2-sources",
+  "source_hashes": {
+    "diagnostic_terminal_probe.py": "77cedb1b35ed4cb7674825132008fbc8f24a0e79bc1c09617e3c4fd1086a90bd",
+    "materialize.py": "fb12713779d55cadafc98d8dec01e93ab46e27326d752e48df6a09b7440ab2e1",
+    "trusted_terminal_capture.py": "2ed79556d2aa7c7447e64d9c053a24ebbb6006255934ed4e429483475872716b"
+  },
+  "upstream_archived_sources_modified": false,
+  "actor_scientific_settings_changed": false,
+  "scope": "Opt-in terminal observer and synthetic ungraded preflight; actor source adaptations are frozen in each isolated runtime inventory."
+}
