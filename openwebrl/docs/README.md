@@ -5,7 +5,7 @@
 [Luna BrowserCode effort OM2W300: prescribed invalid-task retries, provisional success and cumulative model cost/latency coverage in the combined Terra figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030).
 
 <!-- claude-browsercode-om2w300-v1:start -->
-[Claude BrowserCode OM2W300: four completed methods; valid-only success, model cost, native latency and selected-batch tradeoffs, with common-valid and cap-exclusion qualification](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
+[Claude BrowserCode OM2W300: Terra-judged valid-task tradeoffs with matching model/policy encodings and outside legends; common-valid alternative included](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
 <!-- claude-browsercode-om2w300-v1:end -->
 
 [Native CUAWright full300: 1,200 outcomes and all-attempt accounting verified; cleanup qualification, paired fresh200 uncertainty and $529.63 accounted API usage](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025).

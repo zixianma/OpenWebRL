@@ -124,6 +124,16 @@ Reproduce the published [all-Terra GPT figure](ARM_FINAL_RESULTS.md#luna-browser
 
 Add `--valid-only` to condition cost, latency and browser commands on each method's valid-task set as well as success. Add `--harness browsercode` for the focused BrowserCode view. This reads `om2w_terra_valid_only_aggregate.json`; the original aggregate and figure remain available. Costs retain original and retry work on recovered valid tasks, while excluding tasks left invalid. The [valid-task figure and coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) report missing observations explicitly.
 
+The [matching Claude figures](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) use the published qualified valid-task and common-valid aggregates. Render both into a new output directory:
+
+```bash
+CLAUDE_RESULTS=openwebrl/docs/arm_results/claude_browsercode_om2w300_20261028
+"$API_PY" -B "$CLAUDE_RESULTS/plot_claude_tradeoffs.py" \
+  --aggregate "$CLAUDE_RESULTS/aggregate.json" \
+  --qualification "$CLAUDE_RESULTS/render-qualification.json" \
+  --output-dir /tmp/openwebrl-claude-plots
+```
+
 </details>
 
 <details>

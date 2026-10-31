@@ -17,16 +17,17 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator, StrMethodFormatter
+from matplotlib.lines import Line2D
 
 METHODS = {
-    'opus_single': ('Opus single', '#0072B2', 's'),
-    'sonnet_single': ('Sonnet single', '#0072B2', 'o'),
-    'sonnet_n3': ('Sonnet N = 3', '#E5B000', 'o'),
-    'sonnet_n5': ('Sonnet N = 5', '#D55E00', 'o'),
+    'opus_single': ('Opus single', '#08519C', 's'),
+    'sonnet_single': ('Sonnet single', '#08519C', 'o'),
+    'sonnet_n3': ('Sonnet N = 3', '#A50F15', 'o'),
+    'sonnet_n5': ('Sonnet N = 5', '#A50F15', 'o'),
 }
-METRICS = (('mean_model_usd', 'Model cost / task ($)'),
-           ('mean_browser_batches', 'Browser batches / task'),
-           ('mean_task_latency_seconds', 'Task latency (s)'))
+METRICS = (('mean_model_usd', 'Model cost / valid task ($; log)'),
+           ('mean_browser_batches', 'Browser commands / valid task'),
+           ('mean_task_latency_seconds', 'Actor latency / valid task (s; log)'))
 
 
 def sha(path):
@@ -66,36 +67,32 @@ def read_inputs(path, preview=False):
     return data, selected
 
 
-def frontier(rows, key):
-    """Observed nondominance: lower x and higher success; collapse equal points."""
-    selected = []
-    for row in sorted(rows, key=lambda r: (r[key], -r['success_rate'])):
-        if not selected or row['success_rate'] > selected[-1]['success_rate']:
-            selected.append(row)
-    return selected
-
-
 def draw(ax, rows, key, label):
-    points = frontier(rows, key)
-    if len(points) > 1:
-        ax.plot([r[key] for r in points], [100 * r['success_rate'] for r in points],
-                color='#777777', linewidth=.7, zorder=1)
     for row in rows:
         name, color, marker = METHODS[row['arm']]
-        ax.scatter(row[key], 100 * row['success_rate'], s=33, marker=marker,
-                   color=color, edgecolors='white', linewidths=.55, zorder=3, label=name)
+        ax.scatter(row[key], 100 * row['success_rate'], s=43, marker=marker,
+                   facecolors='white' if row['arm'] == 'sonnet_n3' else color,
+                   edgecolors=color, linewidths=1.1, zorder=3, label=name)
     xs = [r[key] for r in rows]
     ys = [100 * r['success_rate'] for r in rows]
-    xp = max((max(xs) - min(xs)) * .13, .02 if key == 'mean_model_usd' else .2)
-    yp = max((max(ys) - min(ys)) * .16, .8)
-    ax.set_xlim(max(0, min(xs) - xp), max(xs) + xp)
-    ax.set_ylim(max(0, min(ys) - yp), min(100, max(ys) + yp))
+    ax.set_ylim(max(0, 5 * math.floor((min(ys) - 2) / 5)),
+                min(100, 5 * math.ceil((max(ys) + 2) / 5)))
     ax.set_xlabel(label)
-    ax.yaxis.set_major_locator(MaxNLocator(nbins=4))
-    ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
-    if key == 'mean_model_usd':
-        ax.xaxis.set_major_formatter(StrMethodFormatter('${x:.2f}'))
-    ax.grid(False)
+    ax.yaxis.set_major_locator(MaxNLocator(nbins=6, integer=True))
+    if key in ('mean_model_usd', 'mean_task_latency_seconds'):
+        if min(xs) <= 0:
+            raise ValueError('Logarithmic actor metrics must be positive')
+        ax.set_xscale('log')
+        ax.set_xlim(min(xs) / 1.2, max(xs) * 1.2)
+        ax.set_xticks([.2, .5, 1] if key == 'mean_model_usd' else [50, 75, 100])
+        ax.xaxis.set_major_formatter(StrMethodFormatter('${x:g}' if key == 'mean_model_usd' else '{x:g}'))
+        from matplotlib.ticker import NullFormatter
+        ax.xaxis.set_minor_formatter(NullFormatter())
+    else:
+        xp = max((max(xs) - min(xs)) * .13, .2)
+        ax.set_xlim(max(0, min(xs) - xp), max(xs) + xp)
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
+    ax.grid(False, which='both')
     ax.spines[['top', 'right']].set_visible(False)
     ax.tick_params(length=3, width=.6, pad=2)
     for side in ('left', 'bottom'):
@@ -104,20 +101,42 @@ def draw(ax, rows, key, label):
 
 
 def figure(rows, output, stem, preview):
-    fig, axes = plt.subplots(1, 3, figsize=(7, 2.12), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(11.5, 3.8), sharey=True)
     for i, (key, label) in enumerate(METRICS):
-        draw(axes[i], rows, key, f'({"abc"[i]}) {label}')
-    axes[0].set_ylabel('Valid-only success (%)')
-    fig.subplots_adjust(left=.075, right=.985, bottom=.22, top=.73, wspace=.18)
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(.52, .92),
-               ncol=4, frameon=False, fontsize=7.7, handletextpad=.4, columnspacing=1.3)
-    fig.suptitle('Claude BrowserCode · OM2W · high effort', fontsize=9, y=1.015)
+        draw(axes[i], rows, key, label)
+    axes[0].set_ylabel('Valid Terra success (%)')
+    fig.subplots_adjust(left=.065, right=.735, bottom=.28, top=.82, wspace=.25)
+    handles = []
+    for row in rows:
+        name, color, marker = METHODS[row['arm']]
+        handles.append(Line2D([], [], linestyle='none', marker=marker,
+                              markeredgecolor=color, markerfacecolor='white' if row['arm'] == 'sonnet_n3' else color,
+                              markersize=5.8,
+                              label=f"{name.replace('N = ', 'N')} high (n={row['denominator']})"))
+    fig.legend(handles=handles, title='Claude 5.5 · high effort',
+               loc='upper left', bbox_to_anchor=(.76, .84),
+               frameon=False, fontsize=7.5, title_fontsize=8,
+               handletextpad=.5, labelspacing=.5, borderaxespad=0)
+    fig.suptitle('Online-Mind2Web · Claude · GPT-5.6 Terra judge · valid tasks only',
+                 x=.065, ha='left', fontsize=11, weight='bold', y=.985)
+    common = rows[0]['scope'] == 'four_arm_common_valid'
+    fig.text(.065, .87, 'BrowserCode' + (' · common-valid intersection' if common else ''),
+             fontsize=9, weight='bold')
+    cohort = (f"All metrics use the same {rows[0]['denominator']} tasks valid for every method."
+              if common else 'All metrics use each method\'s valid tasks; valid subsets differ.')
+    footnote = (cohort + ' Valid failures are included; judge fees excluded.\n'
+                'Opus/Sonnet 5.5, high effort, 12,288 output tokens and 30 decisions. Browser commands are selected executable batches.\n'
+                'Some episodes were invalid at frozen budget limits; validity conditioning and live collection windows limit causal comparisons.')
+    fig.text(.065, .035, footnote, fontsize=7.5, ha='left', va='bottom')
     if preview:
-        fig.text(.5, .03, 'PRIVATE PREVIEW — final audit pending',
-                 ha='center', fontsize=7, color='#A00000')
+        fig.text(.76, .35, 'PRIVATE PREVIEW\nFinal audit pending',
+                 ha='left', va='top', fontsize=7, color='#A00000')
     for ext in ('png', 'svg', 'pdf'):
-        fig.savefig(output / (stem + '.' + ext), dpi=300, bbox_inches='tight', pad_inches=.025)
+        metadata = {'Date': None} if ext == 'svg' else ({'CreationDate': None, 'ModDate': None} if ext == 'pdf' else {})
+        path = output / (stem + '.' + ext)
+        fig.savefig(path, dpi=300, bbox_inches='tight', pad_inches=.04, metadata=metadata)
+        if ext == 'svg':
+            path.write_text('\n'.join(line.rstrip() for line in path.read_text().splitlines()) + '\n')
     plt.close(fig)
 
 
@@ -139,7 +158,7 @@ Successes divide by valid outcomes in each arm; invalid outcomes stay in the sep
 
 ![Claude BrowserCode performance versus model cost, browser batches and latency](arm_results/claude_browsercode_om2w300_20261028/claude_tradeoffs.png)
 
-*Opus 5.5 and Sonnet 5.5; 12,288 output tokens and 30 decisions. N = 3/5 samples candidates independently and executes only the selected batch. The thin gray line joins observed Pareto points within each panel; it implies neither interpolation nor statistical superiority. Axes are cropped; no uncertainty is inferred from aggregate points. Collections occur on live sites.*
+*Opus 5.5 and Sonnet 5.5; 12,288 output tokens and 30 decisions. N = 3/5 samples candidates independently and executes only the selected batch. Squares identify Opus and circles Sonnet; blue denotes a single proposal and red candidates plus selection. Open red circles denote N3 and filled red circles N5. Legends sit outside on the right; cost and latency are logarithmic. All metrics use valid tasks, including valid failures. Axes are cropped; no uncertainty is inferred from aggregate points. Collections occur on live sites.*
 
 Model cost includes all candidate and selector calls in each included episode, including thinking output and conservative unknown reservations. Native latency measures actor-loop wall time, including online waits and browser execution, excluding browser setup, final judge-only capture, cleanup and external judging. A browser batch is one selected BrowserCode block and can contain multiple browser operations. GPT-5.6 Terra grades terminal success; historical GPT figures using another judge remain separately labeled.
 
@@ -186,8 +205,9 @@ def main():
                 and qualification.get('final_audit', {}).get('public_description')):
             raise ValueError('Missing exact final audit and aggregate qualification')
     args.output_dir.mkdir(parents=True, exist_ok=False)
-    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8, 'xtick.labelsize': 7,
-                        'ytick.labelsize': 7, 'axes.labelpad': 3, 'svg.fonttype': 'none',
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8, 'xtick.labelsize': 8,
+                        'ytick.labelsize': 8, 'axes.labelpad': 4, 'svg.fonttype': 'none',
+                        'svg.hashsalt': 'openwebrl-claude-om2w-v2',
                         'pdf.fonttype': 42, 'savefig.facecolor': 'white'})
     prefix = 'preview_' if args.preview else ''
     for scope, rows in scopes.items():
@@ -212,7 +232,8 @@ def main():
         'input_sha256': sha(args.aggregate), 'plot_script_sha256': sha(__file__),
         'qualification_sha256': sha(args.qualification) if args.qualification else None,
         'private_preview': args.preview,
-        'frontier': 'Observed weak-cost/strict-success nondominated points, descriptive only',
+        'style': 'Blue single proposals, red candidates plus selection; Opus squares, Sonnet circles; open red N3, filled red N5; outside legends; logarithmic cost/latency; no frontier or point labels',
+        'matplotlib_version': matplotlib.__version__,
         'plot_order': ['model cost', 'selected browser batches', 'native latency'],
     }, indent=2) + '\n')
 
