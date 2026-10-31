@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-The main [Online-Mind2Web GPT figure](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027) shows **high-effort Sol single and Luna single/N3/N5 in both harnesses**, all judged by GPT-5.6 Terra. Success and actor metrics use each method's valid tasks; native endpoint-evidence exclusions remain explicit. Lower-effort runs and full-attempt accounting are retained in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. The completed Claude study has 300 dispositions per arm; on its 246 common-valid tasks, Sonnet single and N5 each solved 147. See its [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) and the historical GPT [three-benchmark tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
+The main [high-effort GPT figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) uses **GPT-5.6 Terra for every point**: OM2W shows Sol single and Luna single/N3/N5 in both harnesses; WebVoyager and DeepShop show Sol single, Luna single and Luna N5 in BrowserCode. Success and actor metrics use each method's valid tasks. The two added benchmarks reuse 2,129 saved valid episodes; their shared Terra terminal-success scores are distinct from the preserved benchmark-native GPT-4o scores. Native OM2W endpoint-evidence exclusions remain explicit. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -115,14 +115,19 @@ Include excluded episodes with `eligible: false` and an `exclusion_reason`; they
 
 The new directory saves `rejudge-plan.json`, exclusive episode claims, every prepared request and raw response, physical-ID reservations/settlements, per-episode results and `summary.json`. New judge costs stay separate from original actor costs and latencies. Changing the judge does not control differences in harnesses, action representations, image geometry, actor limits or collection windows. Raw prompts, images, trajectories and keys stay local.
 
-Reproduce the published [high-effort, two-harness Terra figure](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027) from its public aggregate without API calls (rendered with Matplotlib 3.9.4):
+Reproduce the published [three-benchmark Terra paper figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) from its public aggregate without API calls (Matplotlib 3.9.4):
 
 ```bash
 "$API_PY" -m pip install matplotlib==3.9.4
-"$API_PY" -B openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py --valid-only --high-only --output-dir /tmp/openwebrl-terra-plots
+TERRA_RESULTS=openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027
+"$API_PY" -B "$TERRA_RESULTS/plot_terra_benchmark_tradeoffs.py" \
+  --aggregate "$TERRA_RESULTS/shared_terra_high_four_row_aggregate.json" \
+  --output-dir /tmp/openwebrl-terra-plots
 ```
 
-`--valid-only` conditions cost, latency and browser commands on each method's valid-task set as well as success. `--high-only` selects Sol single and Luna single/N3/N5 at high actor effort; it filters the view without altering the source aggregates. Omit `--high-only` to include lower efforts, omit `--valid-only` for full-attempt actor metrics, or add `--harness browsercode` for a focused view. The valid-task view reads `om2w_terra_valid_only_aggregate.json`. In the supporting lower-effort results, recovered valid tasks retain original and retry work, tasks left invalid are excluded, and missing measurements remain explicit.
+This exports a fixed 7 × 5.5-inch PNG/PDF/SVG and the exact 14-point CSV. It requires no private trajectories or original campaign directories. The shared Terra judge replaces benchmark-native judging for this view; preserve the original labels separately when rejudging your own saved endpoints.
+
+For the compact OM2W-only view, run `plot_om2w_terra_tradeoffs.py --valid-only --high-only`; add `--harness browsercode` to focus on BrowserCode. Omit `--high-only` to include supporting lower efforts, or omit `--valid-only` for full-attempt actor metrics. Those source aggregates stay unchanged; recovered valid lower-effort tasks retain original plus retry work, and missing measurements remain explicit.
 
 The [matching Claude figures](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) use the published qualified valid-task and common-valid aggregates. Render both into a new output directory:
 
