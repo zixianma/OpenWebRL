@@ -432,7 +432,28 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
   ![Gain over one SFT 4B sample per label source in three panels: offline on training states (teacher and head), offline on held-out test states (teacher and head), and live (head)](arm_results/rl_integration/selection-label-setups-20261027.png)
 - **Online-Mind2Web is where the branch labels fall short.** On WebVoyager and DeepShop the outcome and K3 heads match Piotr; on Online-Mind2Web none clearly beats SFT, while the Piotr-data head does (+7.3 pp [+1.7, +13.0]).
 - **Why time barely drops.** Generating five candidates takes about 8.2 s of each 8–9 s decision; Piotr's selector adds 0.50 s and the head 0.02 s. Selector FLOPs are a fast prefill, while decoding is bandwidth-bound, so the head's 36% compute saving per step becomes only about 0.5 s per decision, roughly offset by its hidden-state capture. Episode length matters as much: the outcome head is cheapest per episode because it takes the fewest steps. Times come from live runs on different nodes, not a matched timing study.
-- <a id="final-selection-arch-k3-20261029"></a>**Architecture barely matters (lookahead K = 3 labels, same day, 2026-10-29).** Eight heads crossing joint / independent attention, transformer / MLP scorer and soft CE / per-candidate BCE, all trained on the K = 3 labels of the same 1,380 branch states (seed 0, 20 epochs, batch 64, ≈22.6 M parameters each), run on all 1,045 tasks on one day together with the Piotr-data head and SFT 4B. Every head beats one SFT sample; no design choice separates from noise. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o. Per-benchmark columns are valid-only success (successes / valid episodes); "Mean overall" averages the three benchmarks' overall rates (invalid episodes count as failures) and "Mean valid-only" their valid-only rates, each benchmark weighted one third. Differences are on the mean overall rate, [paired 95% intervals](#final-paired-bootstrap), reading row − reference. The default head is joint (bidirectional attention among the state and all candidates) · transformer · soft CE (bold); rows are sorted by mean overall.
+- <a id="final-selection-arch-k3-20261029"></a>**Architecture does not matter (lookahead K = 3 labels, three runs).** On Online-Mind2Web + WebVoyager, the six K = 3 heads run three times score 40.3–43.4% and none separates from the default head (−1.9 to +1.2 pp, every interval includes zero); the Piotr-data head, at 45.5%, beats all of them. All heads are trained on the K = 3 labels of the same 1,380 branch states (seed 0, 20 epochs, batch 64, ≈22.6 M parameters each). The default head is joint (bidirectional attention among the state and all candidates) · transformer · soft CE (bold). The five other heads are the best non-default heads of the [one-day run](#final-selection-arch-k3-run1-20261029); their runs 2 and 3 are run on 10-30/31, while the default, Piotr-data and SFT rows ran all three times on 10-29. DeepShop drifts with the run date: the same five heads score 28–35% valid-only on 10-29 and 43–48% on 10-30/31, so their DeepShop leads (+5 to +9 pp) are not attributed to the heads, and differences are read on the two-benchmark mean. Per-benchmark columns are valid-only success pooled over three runs (successes / valid episodes); "Mean overall" averages the three benchmarks' overall rates (invalid episodes count as failures) and "Mean valid-only" their valid-only rates. Differences are on the Online-Mind2Web + WebVoyager overall mean (each benchmark weighted one half; per-task success averaged over runs), [paired 95% intervals](#final-paired-bootstrap), reading row − reference. Rows are sorted by that mean.
+
+  | Attention | Scorer | Loss | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | DeepShop<br>run dates | Mean<br>overall | Mean<br>valid-only | OM2W + WV<br>overall | − SFT 4B, pp<br>[95% CI] | − default, pp<br>[95% CI] | Runs 2–3 only:<br>− default, pp [95% CI] |
+  | --- | --- | --- | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+  | *Piotr-data head* |  |  | 40.9% | 56.8% | 32.6% | 10-29 | 40.8% | 43.4% | 45.5% | **+9.2 [+7.2, +11.4]** | **+3.3 [+1.3, +5.4]** | **+5.0 [+2.6, +7.5]** |
+  | Joint (bidir) | Transformer | BCE | 38.0% | 55.3% | 41.3% | 10-29, 30, 31 | 42.4% | 44.9% | 43.4% | **+7.1 [+5.1, +9.1]** | +1.2 [−0.7, +3.0] | +1.7 [−0.6, +4.1] |
+  | Independent | Transformer | Soft CE | 40.2% | 53.8% | 40.0% | 10-29, 31, 31 | 42.1% | 44.7% | 43.2% | **+7.0 [+4.9, +9.0]** | +1.0 [−0.9, +3.0] | +1.7 [−0.7, +4.0] |
+  | Independent | MLP | BCE | 37.8% | 54.3% | 43.5% | 10-29, 30, 31 | 43.0% | 45.2% | 42.9% | **+6.7 [+4.7, +8.7]** | +0.8 [−1.2, +2.7] | +1.9 [−0.5, +4.2] |
+  | Causal ¹ | Transformer | Soft CE | 40.2% | 52.7% | 39.8% | 10-29, 31, 31 | 41.6% | 44.2% | 42.8% | **+6.5 [+4.4, +8.7]** | +0.6 [−1.3, +2.5] | +1.5 [−0.9, +3.8] |
+  | **Joint (bidir)** | **Transformer** | **Soft CE** | 38.5% | 52.4% | 35.1% | 10-29 | 39.6% | 42.0% | 42.2% | **+5.9 [+3.9, +7.9]** | — | — |
+  | Independent | Transformer | BCE | 35.7% | 51.1% | 41.0% | 10-29, 31, 31 | 40.0% | 42.6% | 40.3% | **+4.0 [+2.0, +6.1]** | −1.9 [−3.9, +0.0] | −1.0 [−3.4, +1.4] |
+  | *SFT 4B, 1 sample* |  |  | 32.3% | 45.2% | 29.0% | 10-29 | 33.7% | 35.5% | 36.3% | — | **−5.9 [−7.9, −3.9]** | **−4.8 [−7.2, −2.5]** |
+
+  Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150 per run; 3 runs each (900 / 1,785 / 450 episodes). Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o, checked on every saved verdict. ¹ Causal attention: candidate i attends to the state and candidates 1..i in sampling order (the state attends only to itself), so its scores depend on candidate order.
+
+  - **The default head's one-day lead was luck.** Its three-benchmark mean is 41.0 / 38.4 / 39.5% across its three runs; the Piotr-data head's is 40.9 / 40.4 / 41.0%. Runs 2–3 alone (last column) do not reuse run 1, the run used to choose these five heads, and show the same ordering.
+  - **Recovery.** An OpenAI key outage (10-30 ~17:00, judge HTTP 401) left 4,621 episodes of runs 2–3 missing or judge-failed: the 1,006 judge-failed records were set aside and all 4,621 tasks rerun on 10-31 under the same frozen plans; rejected judge calls (never billed) were released from the per-run judge caps. 81.2 H200-hours for runs 2–3 of the five heads.
+  - Evidence: [rates, judges, record dates and intervals](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.json) · [script](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.py)
+
+  <details><summary id="final-selection-arch-k3-run1-20261029">One-day run (2026-10-29): eight heads, run 1 only</summary>
+
+  Same day for every row. Differences are on the three-benchmark mean overall rate.
 
   | Attention | Scorer | Loss | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B, pp<br>[95% CI] |
   | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -449,6 +470,8 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
   | *SFT 4B, 1 sample (same day)* |  |  | 32.0% | 45.0% | 30.1% | 34.0% | 35.7% | — |
 
   Main effects on the mean, pp [95% CI]: joint − independent +0.3 [−1.8, +2.3] over all eight heads (transformer only +1.8 [−1.0, +4.6]); soft CE − BCE −0.1 [−2.1, +1.9] (transformer only +0.5 [−2.2, +3.2]); transformer − MLP +1.1 [−0.7, +2.9]; causal − independent (soft CE) +0.7 [−2.8, +4.2]. ¹ Causal attention: candidate i attends to the state and candidates 1..i in sampling order (the state attends only to itself), so its scores depend on candidate order; its three runs started about 5 h after the others on the same day. The earlier K = 1 transformer 2 × 2 (mean 40.2–41.5%, run 2026-10-22, not same-day with these rows) is in [details](ARM_SELECTION_HEAD.md#selection-head-arch-full-20261022). Evidence: [rates, judges and contrasts](arm_results/rl_integration/selection-head-arch-k3-sameday-20261029.json) · [script](arm_results/rl_integration/selection-head-arch-k3-sameday-20261029.py)
+
+  </details>
 - **Graded outcome targets do not beat the best-action target.** Replacing the outcome head's best-action label with a soft ranking (softmax(rate / 0.25)), centred advantage MSE or a binomial rate fit is level offline. Live, the soft-ranking head, best of the three on Online-Mind2Web (+2.3 pp, within noise), is **−5.3 pp [−8.8, −1.8]** below the best-action head on the three-benchmark mean, level with one SFT sample; WebVoyager alone is −4.2 [−8.2, −0.3] ([details](ARM_SELECTION_HEAD.md#selection-head-outcome-objectives-20261025)).
 - A 4B LoRA trained with Piotr's recipe on the 1,380 branch states does no better than the head offline ([details](ARM_SELECTION_HEAD.md#selection-head-sft-actions-lora-20261021)).
 - [Details, per-benchmark intervals and caveats](ARM_SELECTION_HEAD.md#selection-head-sft-actions-20261021) · Evidence: [heads](arm_results/rl_integration/selection-head-sft-actions-full-20261021.json), [SFT 8B and N = 3](arm_results/rl_integration/selection-n3-sft8b-full-20261021.json), [benchmark means and differences](arm_results/rl_integration/selection-mean-benchmark-diffs-20261022.json) · [Plot script](arm_results/rl_integration/selection-head-labels-vs-cost-20261021.py)
@@ -520,6 +543,27 @@ Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150. Online-Mind2Web judged
 
 - **Caveats.** The one-panel K = 3 DeepShop run is from 10-21; the Piotr-data head's DeepShop moved −3.3 pp between 10-23 and 10-25 while SFT 4B moved −0.7 pp between 10-18 and 10-27, so part of the −10.0 may be date drift. WebVoyager, where the new head trails Piotr, does not drift measurably.
 - [Setup, epoch choice, offline scores and run notes](ARM_SELECTION_HEAD.md#selection-head-lunak3-panels-20261027) · [Evidence](arm_results/rl_integration/selection-lunak3-panels-20261027.json) · [Analysis script](arm_results/rl_integration/selection-lunak3-panels-20261027-analysis.py)
+
+<a id="final-selection-judge-models-20261031"></a>
+
+#### Stronger lookahead judges (GPT-5.5, GPT-6.1 Sol)
+
+**Relabelling the same 2,612 one-panel states with GPT-5.5 or GPT-6.1 Sol (effort high) instead of Luna, under the same K = 3 lookahead protocol, does not close the gap to the Piotr-data head. On Online-Mind2Web + WebVoyager the GPT-5.5 and Sol heads score 42.0% and 41.6%, level with the Luna head (+0.1 [−2.7, +3.0] and −0.3 [−2.9, +2.3]) and below the Piotr-data head (−3.5 [−6.3, −0.8] and −4.0 [−6.7, −1.2]).** Their higher DeepShop scores (44.3% and 49.7% valid-only, against 33.0% for Luna) come from a 10-31 run date: the K = 3 architecture heads also rose from 28–35% on 10-29 to 43–48% on 10-30/31 ([above](#final-selection-arch-k3-20261029)), so they are not attributed to the labels.
+
+Same states, panels, trainer and recipe as the [2,612-state Luna head](#final-selection-our-data-20261028) (screenshots only, no history, final answer hidden; seed 0, 20 epochs, batch 64); only the judge changes. Luna's labels vote over two calls per state, GPT-5.5's and Sol's are one call each. Differences are on the Online-Mind2Web + WebVoyager overall mean, [paired 95% intervals](#final-paired-bootstrap), reading row − reference; references are pooled over their three runs.
+
+| Lookahead judge (2,612 states) | Runs (date) | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | OM2W + WV<br>overall | − Luna, pp<br>[95% CI] | − Piotr-data head, pp<br>[95% CI] | − SFT 4B, pp<br>[95% CI] | Label cost,<br>USD |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| GPT-5.5, high | 1 (10-31) | 37.2% | 52.2% | 44.3% | 42.6% | 44.6% | 42.0% | +0.1 [−2.7, +3.0] | **−3.5 [−6.3, −0.8]** | **+5.7 [+2.9, +8.6]** | 337.68 |
+| GPT-6.1 Sol, high | 1 (10-31) | 36.3% | 52.3% | 49.7% | 43.9% | 46.1% | 41.6% | −0.3 [−2.9, +2.3] | **−4.0 [−6.7, −1.2]** | **+5.3 [+2.7, +8.0]** | 110.07 |
+| GPT-6 Luna, high | 3 (10-29) | 37.4% | 53.0% | 33.0% | 38.4% | 41.1% | 41.9% | — | **−3.7 [−5.7, −1.6]** | **+5.6 [+3.5, +7.6]** | — |
+| *Piotr-data head (GPT-5.5 before, Piotr's 2,587 states)* | 3 (10-29) | 40.9% | 56.8% | 32.6% | 40.8% | 43.4% | 45.5% | **+3.7 [+1.6, +5.7]** | — | **+9.2 [+7.2, +11.4]** | — |
+| *SFT 4B, 1 sample* | 3 (10-29) | 32.3% | 45.2% | 29.0% | 33.7% | 35.5% | 36.3% | **−5.6 [−7.6, −3.5]** | **−9.2 [−11.4, −7.2]** | — | — |
+
+Tasks: Online-Mind2Web 300, WebVoyager 595, DeepShop 150 per run. Online-Mind2Web judged by gpt-5.6-terra, WebVoyager and DeepShop by GPT-4o, checked on every saved verdict.
+
+- **Caveats.** One run of one seed per new judge, on a different day from the references; intervals cover task sampling only. Single-run three-benchmark means of the reference heads span 0.7–2.6 pp across their three runs. Label cost includes the 100-state pilot and 8 GPT-5.5 calls that failed during the 10-30 key outage and stay charged at their reservation.
+- Evidence: [rates, judges, record dates and intervals](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.json) · [script](arm_results/rl_integration/selection-head-k3-3run-judges-20261031.py)
 
 ### More of Piotr's data (GPT-5.5 panels)
 
