@@ -1,0 +1,13 @@
+cohort,harness,method,requested,original_valid,original_invalid_preserved,eligible,recorded,graded_valid,graded_invalid,missing_eligible_judgments,original_valid_missing_evidence,successes,success_rate,mean_model_usd_per_task,mean_model_usd_per_task_observed_tasks,mean_browser_steps,mean_browser_steps_observed_tasks,mean_task_seconds,mean_task_seconds_observed_tasks,native_dispositions_recorded,provisional,resolved_invalid_tasks,prescribed_retry_episodes,retry_recovered_valid,retry_successes
+historical_terra_regrade,browsercode,serial_high,300,266,34,266,266,266,0,0,0,177,0.6654135338345865,0.19069787900000001,300,13.746666666666666,300,93.23914989388209,275,,,,,,
+historical_terra_regrade,browsercode,luna_single_high,300,269,31,269,269,269,0,0,0,178,0.6617100371747212,0.00878689945,300,15.296666666666667,300,97.93085904356201,274,,,,,,
+historical_terra_regrade,browsercode,parallel3_select_high,300,269,31,269,269,269,0,0,0,183,0.6802973977695167,0.05084039466666666,300,13.825938566552901,293,180.5335066269191,275,,,,,,
+historical_terra_regrade,browsercode,parallel5_select_high,300,267,33,267,267,267,0,0,0,198,0.7415730337078652,0.06431873848333333,300,13.72108843537415,294,212.5820565415356,273,,,,,,
+historical_terra_regrade,native,serial_high,300,286,14,170,170,170,0,0,116,145,0.8529411764705882,1.3001203906666667,300,36.85333333333333,300,544.3566113448143,300,,,,,,
+historical_terra_regrade,native,luna_single_high,300,271,29,217,217,217,0,0,54,170,0.783410138248848,0.09736501536666667,300,32.45,300,958.1347228121757,300,,,,,,
+historical_terra_regrade,native,parallel3_select_high,300,270,30,208,208,208,0,0,62,179,0.8605769230769231,0.28150881866666666,300,31.483333333333334,300,1265.1887224706013,300,,,,,,
+historical_terra_regrade,native,parallel5_select_high,300,270,30,226,226,226,0,0,44,195,0.8628318584070797,0.315896251,300,29.93288590604027,298,1302.6523165886833,298,,,,,,
+recent_terra_effort_with_prescribed_retry,browsercode,luna_single_medium,300,265,35,271,271,271,0,0,0,171,0.6309963099630996,0.007141731133333333,300,13.91,300,115.36304634668947,271,300,True,29,35,6,6
+recent_terra_effort_with_prescribed_retry,browsercode,luna_single_low,300,251,49,271,271,271,0,0,0,91,0.33579335793357934,0.0018843966833333333,300,6.323333333333333,300,37.43905669416908,271,300,True,29,49,20,6
+recent_terra_effort_with_prescribed_retry,browsercode,luna_n5_medium,300,256,44,269,269,269,0,0,0,178,0.6617100371747212,0.04801521155,300,12.264214046822742,299,223.34739871352048,270,300,True,31,44,13,11
+recent_terra_effort_with_prescribed_retry,browsercode,luna_n5_low,300,241,59,266,266,266,0,0,0,106,0.39849624060150374,0.01271041725,300,6.763333333333334,300,104.94800603462382,266,300,True,34,59,25,6

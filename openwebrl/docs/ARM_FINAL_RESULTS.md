@@ -181,17 +181,67 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 <a id="luna-browsercode-effort-om2w300-20261030"></a>
 
-**All five Luna effort arms have 300 recorded dispositions. Provisional means collection is finished, while final independent certification of accounting and cleanup remains pending.** Historical and new results have separate figures: o4-mini BrowserCode and the original native grading first, then GPT-5.6 Terra medium/low results. The native archive includes GPT-4o and a different screenshot adapter; it is not an o4-mini cohort. Luna single xhigh remains in the tables and aggregate but is omitted from the figures.
+**Every point below uses GPT-5.6 Terra terminal-success grading: medium effort, 4,096 completion tokens and seed 42.** We regraded all 1,071 original-valid historical BrowserCode episodes and 821 native episodes with qualified saved endpoint evidence. Another 276 original-valid native episodes lack that evidence and remain ungraded; earlier judges' labels are not substituted. **Native success rates are conditional on this selected evidence subset, not full-300 rates.** The historical runs' 232 original invalid outcomes remain invalid. The separate regrading cost was **$27.12**, with no actor calls.
 
-![OM2W historical tradeoffs: o4-mini BrowserCode and original native grading](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+The four medium/low arms include one prescribed fresh episode for each original-invalid task–arm pair: **187 retries recovered 64 valid outcomes and 29 successes**. Original valid outcomes take priority; the single retry supplies an outcome only after an original invalid. The four arms now have 271, 271, 269 and 266 valid outcomes out of 300 planned tasks. Final qualification of the original effort campaign remains incomplete, so these arms remain provisional. Luna single xhigh is retained in the original tables and omitted from this figure.
 
-[Historical PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg)
+![Online-Mind2Web GPT tradeoffs, all graded by GPT-5.6 Terra](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs.png)
 
-![OM2W Terra tradeoffs: provisional Luna medium and low effort results in BrowserCode](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.png)
+[PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs.svg) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_all_tradeoffs_coordinates.csv) · [Aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_all_aggregate.json) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py)
 
-[Terra PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.svg) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
+*Circles identify Luna and squares identify Sol. Blue denotes a single proposal; red denotes candidates plus a selector. High effort is dark, medium intermediate and low light; open red circles denote N3 and filled red circles N5. Legends sit outside on the right and show each success denominator. Cost and latency use logarithmic axes. Success is successes divided by valid Terra judgments in each cell; valid subsets differ. Model cost excludes all judge fees. Medium/low cost includes the prescribed retries, and their latency/command coordinates sum original and retry observations per task only when all required measurements exist. Historical x-coordinates retain all available original attempt measurements; their observations are not restricted to the newly graded endpoint subset. Different actor limits, endpoint geometry, collection dates, contention and coverage remain; shared grading alone does not establish a causal harness or effort effect.*
 
-*Circles identify Luna and squares identify Sol in both figures. Blue denotes single generation; red denotes candidates plus a selector. Dark, medium and light shades indicate high, medium and low effort. Historical N3 uses an open red circle and N5 a filled red circle. Legends remain outside on the right. Success divides successes by valid outcomes, not a common-valid intersection. Cost and latency are logarithmic. Terra-cohort cost is all-attempt model charges/reserves divided by 300, excluding judging. Latency and command or batch means use finite observations, including invalid outcomes; missing values are never filled with zero. Different judges, live windows, cost/timing definitions and coverage prevent causal comparisons between the figures. No point labels, leader lines, curves, frontiers, cohort averages or grid are drawn.*
+#### Terra success and coverage
+
+Each row starts from 300 planned tasks. “Without valid Terra verdict” includes actor-invalid episodes, missing qualified endpoint evidence and any invalid new judgment; it is not a failure count among judged episodes.
+
+| Harness | Method | Successes | Terra-valid | Without valid Terra verdict | Valid-only success |
+|---|---|---:|---:|---:|---:|
+| BrowserCode | Sol single high | 177 | 266 | 34 | 66.5% |
+| BrowserCode | Luna single high | 178 | 269 | 31 | 66.2% |
+| BrowserCode | Luna N3 high | 183 | 269 | 31 | 68.0% |
+| BrowserCode | Luna N5 high | 198 | 267 | 33 | 74.2% |
+| BrowserCode | Luna single medium | 171 | 271 | 29 | 63.1% |
+| BrowserCode | Luna single low | 91 | 271 | 29 | 33.6% |
+| BrowserCode | Luna N5 medium + medium | 178 | 269 | 31 | 66.2% |
+| BrowserCode | Luna N5 low + low | 106 | 266 | 34 | 39.8% |
+| Native | Sol single high | 145 | 170 | 130 | 85.3% |
+| Native | Luna single high | 170 | 217 | 83 | 78.3% |
+| Native | Luna N3 high | 179 | 208 | 92 | 86.1% |
+| Native | Luna N5 high | 195 | 226 | 74 | 86.3% |
+
+[Recovered effort counts, original/retry breakdown and cumulative costs](arm_results/luna_browsercode_effort_om2w300_20261030/retry_aggregate.json).
+
+<details>
+<summary>Model cost, actor latency, browser commands and measurement coverage</summary>
+
+Model cost is divided by all 300 planned tasks. The historical BrowserCode estimates include the existing cost backfill; one N3 call has unknown final usage and its estimate can understate cost. Native and medium/low costs include cumulative charges and full unknown-usage reservations, including invalid attempts. All external judging and the new regrading fee are excluded from the x-axis.
+
+Latency and command counts use only finite measurements, including valid and invalid episodes; missing values are not zero-filled. For medium/low arms, the per-task total includes both original and prescribed retry when every attempted episode has that measurement. Historical timing boundaries are retained; BrowserCode actor-loop time excludes setup, final judge-only capture, cleanup and judging. Browser commands are selected BrowserCode blocks or literal native command-log entries, each potentially containing several actions; these are not standardized action counts.
+
+| Harness | Method | Model USD / planned task | Mean actor latency (s) | Latency observations | Mean browser commands | Command observations |
+|---|---|---:|---:|---:|---:|---:|
+| BrowserCode | Sol single high | $0.19070 | 93.2 | 275 | 13.75 | 300 |
+| BrowserCode | Luna single high | $0.00879 | 97.9 | 274 | 15.30 | 300 |
+| BrowserCode | Luna N3 high | $0.05084 | 180.5 | 275 | 13.83 | 293 |
+| BrowserCode | Luna N5 high | $0.06432 | 212.6 | 273 | 13.72 | 294 |
+| BrowserCode | Luna single medium | $0.00714 | 115.4 | 271 | 13.91 | 300 |
+| BrowserCode | Luna single low | $0.00188 | 37.4 | 271 | 6.32 | 300 |
+| BrowserCode | Luna N5 medium + medium | $0.04802 | 223.3 | 270 | 12.26 | 299 |
+| BrowserCode | Luna N5 low + low | $0.01271 | 104.9 | 266 | 6.76 | 300 |
+| Native | Sol single high | $1.30012 | 544.4 | 300 | 36.85 | 300 |
+| Native | Luna single high | $0.09737 | 958.1 | 300 | 32.45 | 300 |
+| Native | Luna N3 high | $0.28151 | 1265.2 | 300 | 31.48 | 300 |
+| Native | Luna N5 high | $0.31590 | 1302.7 | 298 | 29.93 | 298 |
+
+These are descriptive means with metric-specific observation counts, not estimates on a shared valid-task intersection. The original effort campaign remains provisional; native global post-job cleanup remains uncertified.
+
+</details>
+
+<details>
+<summary>Original Luna effort cohort before prescribed retries</summary>
+
+[Original medium/low figure](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.png) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_effort_tradeoffs.pdf)
 
 #### Luna effort: provisional full300 results
 
@@ -224,10 +274,16 @@ Latency measures the actor loop, including online model/browser waits, and exclu
 
 </details>
 
-<details>
-<summary>Historical high-effort cohorts: unchanged counts, definitions and coverage</summary>
+</details>
 
-**All eight historical method–harness cells have outcomes for the same 300 tasks; no task outcomes are missing.** Valid-only success is successes divided by valid outcomes in each cell. Invalid outcomes are excluded from that success denominator; each cell’s valid subset can differ. The previous 111-task restriction selected fresh tasks valid in every cell; it did not indicate unfinished runs. The [111-task common-valid figure](arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png) remains available as a conditional historical view. The BrowserCode three-benchmark plot above is unchanged.
+<details>
+<summary>Historical high-effort cohorts with their earlier judges</summary>
+
+![Historical high-effort tradeoffs with earlier grading](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+
+[Historical PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg)
+
+The tables and figure in this section retain historical o4-mini BrowserCode grading and native grading that includes GPT-4o. They do not use the Terra regrade above. **All eight historical method–harness cells have outcomes for the same 300 tasks under those earlier judges.** Valid-only success is successes divided by valid outcomes in each cell. Invalid outcomes are excluded from that success denominator; each cell’s valid subset can differ. The previous 111-task restriction selected fresh tasks valid in every cell; it did not indicate unfinished runs. The [111-task common-valid figure](arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png) remains available as a conditional historical view. The BrowserCode three-benchmark plot above is unchanged.
 
 | Method (all high) | Attempted per harness | BrowserCode successes | BrowserCode valid | BrowserCode valid-only success | Native successes | Native valid | Native valid-only success |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -253,7 +309,7 @@ BrowserCode cost uses original received proposal/selector estimates plus the ind
 
 BrowserCode latency excludes initial browser setup and final judge-only capture; native retains the original native task boundary and excludes external/saved-evidence grading. Browser-command executions count saved selected BrowserCode blocks versus literal native browser-command log entries. Either can contain several actions; this measures harness-level command volume, not standardized actions or equal work. The observed-only x-axis means can use different task subsets, as their explicit denominators show.
 
-Every Luna method uses a circle and every Sol method a square. Blue denotes single generation and red candidates plus selection; shades darken with effort. In the historical figure, an open red circle denotes N3 and a filled red circle N5. Terra medium/low results have a separate figure. All points have equal opacity; the plots have no grid, connecting lines or embedded table. The earlier dashed nondominated-method overlay has been removed. Detailed definitions and coverage remain in the caption and tables.
+Every Luna method uses a circle and every Sol method a square. Blue denotes single generation and red candidates plus selection; shades darken with effort. In the historical figure, an open red circle denotes N3 and a filled red circle N5. The main figure above uses Terra for every point and includes the prescribed medium/low retries. All points have equal opacity; the plots have no grid, connecting lines or embedded table. The earlier dashed nondominated-method overlay has been removed. Detailed definitions and coverage remain in the caption and tables.
 
 [Historical valid-only success and attempt-metric coverage aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json).
 

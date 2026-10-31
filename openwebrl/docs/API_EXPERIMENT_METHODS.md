@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-Luna effort now has **300 recorded dispositions per arm across all five methods**. Its [results and GPT figures](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) are **provisional, pending final independent qualification**. The figures separate the recent Terra-judged medium/low efforts from the historical results. The judge cohorts and live collection windows remain distinct. The completed Claude study has 300 dispositions per arm; on its 246 common-valid tasks, Sonnet single and N5 each solved 147, with no established success advantage for N5 in that setup. See its [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) and the historical GPT [three-benchmark tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
+The [Online-Mind2Web GPT figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) now uses **GPT-5.6 Terra for every point**, including 1,892 regraded historical endpoints and the medium/low effort arms after their prescribed invalid-task retries. Historical endpoint-evidence exclusions and metric coverage remain explicit; the original effort campaign remains provisional. The completed Claude study has 300 dispositions per arm; on its 246 common-valid tasks, Sonnet single and N5 each solved 147. See its [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) and the historical GPT [three-benchmark tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -115,6 +115,13 @@ Include excluded episodes with `eligible: false` and an `exclusion_reason`; they
 
 The new directory saves `rejudge-plan.json`, exclusive episode claims, every prepared request and raw response, physical-ID reservations/settlements, per-episode results and `summary.json`. New judge costs stay separate from original actor costs and latencies. Changing the judge does not control differences in harnesses, action representations, image geometry, actor limits or collection windows. Raw prompts, images, trajectories and keys stay local.
 
+Reproduce the published [all-Terra GPT figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) from its public aggregate without API calls (rendered with Matplotlib 3.9.4):
+
+```bash
+"$API_PY" -m pip install matplotlib==3.9.4
+"$API_PY" -B openwebrl/docs/arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_terra_tradeoffs.py --output-dir /tmp/openwebrl-terra-plots
+```
+
 </details>
 
 <details>
@@ -187,7 +194,7 @@ Every proposal must pass the frozen action-or-answer parser. A malformed proposa
 
 SDK retries are disabled. Every physical call has a stable ID, role, payload hash, reservation, timestamps, response/error and usage record. Provider model aliases are checked but do not identify immutable weight snapshots.
 
-The GPT-high BrowserCode headline cohort retains historical o4-mini grading for OM2W and benchmark-native GPT-4o protocols for WebVoyager and DeepShop. The separate [official-WebJudge regrading study](ARM_INFERENCE_SCALING.md#om2w-grading-browser-audit-20261020) does not replace those headline outcomes. Recent Claude and Luna effort runs use `gpt56-terra-terminal-success-v1`: `gpt-5.6-terra`, medium effort, 4,096 completion tokens and seed 42. The request contains the task, selected action history and final screenshot. `common_judge.py` loads the frozen prompts and validates the completed, non-refusal verdict. Earlier o4-mini and later Terra results remain separate judge cohorts. Historical Claude grading/recovery attempts and fees remain in the lineage.
+The GPT-high BrowserCode headline cohort retains historical o4-mini grading for OM2W and benchmark-native GPT-4o protocols for WebVoyager and DeepShop. The separate [official-WebJudge regrading study](ARM_INFERENCE_SCALING.md#om2w-grading-browser-audit-20261020) does not replace those headline outcomes. Recent Claude and Luna effort runs use `gpt56-terra-terminal-success-v1`: `gpt-5.6-terra`, medium effort, 4,096 completion tokens and seed 42. The request contains the task, selected action history and final screenshot. `common_judge.py` loads the frozen prompts and validates the completed, non-refusal verdict. The combined Online-Mind2Web GPT figure regrades qualified historical endpoints with this same Terra protocol; missing final evidence remains ungraded. The historical three-benchmark tables retain their original judge labels. Historical Claude grading/recovery attempts and fees remain in the lineage.
 
 </details>
 
@@ -210,7 +217,7 @@ The Claude plots use each arm's valid cohort for success and all efficiency mean
 
 | Question | Evidence |
 |---|---|
-| Luna effort, 300 dispositions per arm; provisional | [Counts, overlaid BrowserCode panels and metric coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030); [aggregate](arm_results/luna_browsercode_effort_om2w300_20261030/aggregate.json) |
+| Luna effort, 300 dispositions per arm; provisional | [Terra figure, prescribed retry counts and metric coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030); [original aggregate](arm_results/luna_browsercode_effort_om2w300_20261030/aggregate.json) · [after prescribed retries](arm_results/luna_browsercode_effort_om2w300_20261030/retry_aggregate.json) |
 | GPT high across three benchmarks | [Headline results](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency); [aggregate](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json) |
 | Claude 300 tasks per arm | [Result tables and plots](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300); [aggregate](arm_results/claude_browsercode_om2w300_20261028/aggregate.json); [accounting](arm_results/claude_browsercode_om2w300_20261028/accounting.json); [plot source](arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py) |
 
