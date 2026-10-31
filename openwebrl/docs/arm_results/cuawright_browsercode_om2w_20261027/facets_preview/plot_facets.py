@@ -10,5 +10,4 @@ plot.plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7,
                          "axes.labelsize": 7, "xtick.labelsize": 7, "ytick.labelsize": 7,
                          "svg.fonttype": "none", "pdf.fonttype": 42})
 _, browsercode, native = plot.read_rows(ROOT / "om2w_harness_comparison_valid_only.json")
-_, effort = plot.read_effort_rows(plot.EFFORT_AGGREGATE)
-plot.figure(browsercode, native, plot.METRICS, Path(__file__).resolve().parent, "om2w_harness_facets", effort=effort)
+plot.figure(browsercode, native, plot.METRICS, Path(__file__).resolve().parent, "om2w_harness_facets" )
