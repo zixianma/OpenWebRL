@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-The completed Claude study has 300 task dispositions per arm. On its 246 common-valid tasks, Sonnet single and N5 each solved 147; this setup did not establish a success advantage for N5. See the [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300). GPT results across three benchmarks are in the [headline tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency). Luna effort targets 300 tasks per arm; no qualified full300 result is linked here.
+Luna effort now has **300 recorded dispositions per arm across all five methods**. Its [results and expanded GPT figure](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030) are **provisional, pending final independent qualification**; they use the GPT-5.6 Terra judge and remain separate from historical GPT-high cohorts. The completed Claude study has 300 dispositions per arm; on its 246 common-valid tasks, Sonnet single and N5 each solved 147, with no established success advantage for N5 in that setup. See its [qualified results](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) and the historical GPT [three-benchmark tables](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -89,7 +89,7 @@ Fresh runs cannot recreate historical site state, provider alias snapshots, sche
 |---|---|---|---|---|
 | GPT high | Sol single; Luna single, N3, N5; all high | OM2W 300; WebVoyager 595; DeepShop 150 | 12,288 / 30 | OM2W: historical o4-mini; WebVoyager/DeepShop: benchmark-native GPT-4o |
 | Claude | Opus 5.5 single; Sonnet 5.5 single, N3, N5; all high | OM2W 300; completed | 12,288 / 30 | GPT-5.6 Terra |
-| Luna effort | Single xhigh/medium/low; N5 medium+medium and low+low | OM2W 300 targeted | 12,288 / 30 | GPT-5.6 Terra |
+| Luna effort | Single xhigh/medium/low; N5 medium+medium and low+low | OM2W 300 recorded; provisional | 12,288 / 30 | GPT-5.6 Terra |
 
 The output cap applies to each candidate and selector request. Effort and token caps do not enforce equal realized compute; measure actual usage. Each campaign fixes task order and shard assignments. Arms share task IDs but run independent browser trajectories; pilot tasks count toward the final roster. Judge protocols differ across studies and must remain labeled.
 
@@ -138,10 +138,11 @@ The Claude plots use each arm's valid cohort for success and all efficiency mean
 
 | Question | Evidence |
 |---|---|
+| Luna effort, 300 dispositions per arm; provisional | [Counts, expanded GPT figure and metric coverage](ARM_FINAL_RESULTS.md#luna-browsercode-effort-om2w300-20261030); [aggregate](arm_results/luna_browsercode_effort_om2w300_20261030/aggregate.json) |
 | GPT high across three benchmarks | [Headline results](ARM_FINAL_RESULTS.md#headline-performance-cost-and-efficiency); [aggregate](arm_results/sol6_luna_three_benchmarks_20261019/aggregate.json) |
 | Claude 300 tasks per arm | [Result tables and plots](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300); [aggregate](arm_results/claude_browsercode_om2w300_20261028/aggregate.json); [accounting](arm_results/claude_browsercode_om2w300_20261028/accounting.json); [plot source](arm_results/claude_browsercode_om2w300_20261028/plot_claude_tradeoffs.py) |
 
-Use the primary cohort tables for effects and uncertainty. Keep each valid denominator, judge protocol and collection period attached to its result. Live pilot counts remain status records until independently qualified.
+Use the primary cohort tables for effects and uncertainty. Keep each valid denominator, judge protocol and collection period attached to its result. Luna effort collection is complete at 300 recorded dispositions per arm; its provisional publication does not certify final independent qualification or establish a causal gain over earlier judge/date cohorts.
 
 ## Code and frozen artifacts
 

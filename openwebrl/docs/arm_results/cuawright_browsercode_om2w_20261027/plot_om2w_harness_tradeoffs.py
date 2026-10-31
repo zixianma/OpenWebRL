@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot all 300 matched Online-Mind2Web tasks under BrowserCode and CUAWright.
+"""Plot Online-Mind2Web GPT tradeoffs, with a provisional BrowserCode effort cohort.
 Requires matplotlib. Uses aggregate-only JSON; no private task data is needed.
 """
 from __future__ import annotations
@@ -24,6 +24,15 @@ METHODS = {
     "parallel5_select_high": ("Luna N5", "#E87500", "o"),
 }
 LEGEND_LABELS = ("Sol single", "Luna single", "Luna N = 3", "Luna N = 5")
+EFFORT_METHODS = {
+    "luna_single_xhigh": ("Single xhigh", "#7B3294", "o"),
+    "luna_single_medium": ("Single medium", "#009E73", "o"),
+    "luna_single_low": ("Single low", "#0072B2", "o"),
+    "luna_n5_medium": ("N5 medium", "#009E73", "D"),
+    "luna_n5_low": ("N5 low", "#0072B2", "D"),
+}
+EFFORT_AGGREGATE = Path(__file__).parent.parent / "luna_browsercode_effort_om2w300_20261030/aggregate.json"
+
 
 
 def read_rows(path):
@@ -49,9 +58,36 @@ def read_rows(path):
     return data, series["browsercode"], series["native"]
 
 
+
+def read_effort_rows(path):
+    """Accept only complete recorded panels with explicit provisional status."""
+    data = json.loads(path.read_text())
+    if data.get("final_audit_complete") is not False or data.get("provisional") is not True:
+        raise ValueError("The new effort cohort must retain its pending-audit qualification")
+    indexed = {row["arm"]: row for row in data["aggregate_rows"]}
+    if set(indexed) != set(EFFORT_METHODS) or len(data["aggregate_rows"]) != len(indexed):
+        raise ValueError("Exactly five distinct BrowserCode effort methods required")
+    rows = []
+    for arm in EFFORT_METHODS:
+        row = indexed[arm]
+        if row["recorded"] != 300 or row["valid"] + row["invalid"] != 300:
+            raise ValueError("Complete 300-disposition effort panels required")
+        if not 0 <= row["successes"] <= row["valid"] or abs(row["success_rate"] - row["successes"] / row["valid"]) > 1e-10:
+            raise ValueError("Effort success denominator mismatch")
+        for key, _, _ in METRICS:
+            if not math.isfinite(row[key]) or row[key] <= 0:
+                raise ValueError("Finite positive effort metrics required")
+            coverage = row[key + "_observed_tasks"]
+            if type(coverage) is not int or not 0 < coverage <= 300:
+                raise ValueError("Explicit observed-task coverage required")
+        rows.append(dict(row, method=arm, mean_success_rate=row["success_rate"]))
+    return data, rows
+
+
 def write_csv(path, rows):
     with path.open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
+        fields = list(dict.fromkeys(key for row in rows for key in row))
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -124,18 +160,76 @@ def draw(ax, rows, metric, native):
                     weight="bold" if method == "parallel5_select_high" else "normal")
 
 
-def figure(means, native, metrics, output, stem):
+def draw_effort(ax, rows, metric):
+    """Keep the Terra-judged effort cohort separate from historical points."""
+    ax.set_ylim(30, 70)
+    ax.set_yticks([30, 40, 50, 60, 70])
+    ax.grid(False, which="both")
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.tick_params(length=3, width=0.6, pad=2)
+    for side in ("left", "bottom"):
+        ax.spines[side].set_color("#555555")
+        ax.spines[side].set_linewidth(0.6)
+    if metric == "mean_model_usd_per_task":
+        ax.set_xscale("log")
+        ax.set_xlim(0.00125, 0.075)
+        ax.set_xticks([0.002, 0.01, 0.05])
+        ax.xaxis.set_major_formatter(StrMethodFormatter("${x:g}"))
+    elif metric == "mean_browser_steps":
+        ax.set_xlim(4.6, 17.2)
+        ax.set_xticks([6, 10, 14, 17])
+    else:
+        ax.set_xscale("log")
+        ax.set_xlim(27, 280)
+        ax.set_xticks([40, 100, 200])
+        ax.xaxis.set_major_formatter(StrMethodFormatter("{x:g}"))
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    for row in rows:
+        method = row["method"]
+        label, color, marker = EFFORT_METHODS[method]
+        x, y = row[metric], 100 * row["mean_success_rate"]
+        ax.scatter(x, y, s=40 if "n5" in method else 30,
+                   marker=marker, color=color, edgecolor="white", linewidth=0.5, zorder=3)
+        dx, dy, ha = 4, 6, "left"
+        if method == "luna_single_medium":
+            dx, dy, ha = -4, 6 if metric == "mean_task_seconds" else -9, "right"
+        if method == "luna_single_xhigh":
+            dy = 9
+        if metric == "mean_browser_steps":
+            if method in ("luna_single_xhigh", "luna_single_medium", "luna_n5_medium"):
+                dx, ha = -4, "right"
+            if method == "luna_n5_medium":
+                dy = -8
+        elif method == "luna_n5_medium":
+            dx, ha = -4, "right"
+            dy = -12 if metric == "mean_task_seconds" else -9
+        if metric == "mean_task_seconds" and method in ("luna_single_xhigh", "luna_single_medium"):
+            dx, ha = -4, "right"
+        ax.annotate(label, (x, y), xytext=(dx, dy), textcoords="offset points",
+                    ha=ha, va="center", fontsize=7, color=color)
+
+
+def figure(means, native, metrics, output, stem, effort=()):
     columns = len(metrics)
-    fig, axes = plt.subplots(2, columns, figsize=(7 if columns == 3 else 3.35, 3.5),
+    cohorts = [(means, "a)  BrowserCode", False)]
+    if effort:
+        cohorts[0] = (means, "a)  BrowserCode · historical high effort", False)
+        cohorts.append((effort, "b)  BrowserCode · effort (provisional)", None))
+    cohorts.append((native, ("c)" if effort else "b)") + "  Native CUAWright", True))
+    fig, axes = plt.subplots(len(cohorts), columns,
+                             figsize=(7 if columns == 3 else 3.35, 5.6 if effort else 3.5),
                              sharey="row", squeeze=False)
     fig.subplots_adjust(left=0.075 if columns == 3 else 0.16, right=0.985,
-                        top=0.84, bottom=0.13, hspace=0.78, wspace=0.18)
-    for ri, (rows, title) in enumerate(((means, "a)  BrowserCode"),
-                                       (native, "b)  Native CUAWright"))):
+                        top=0.93 if effort else 0.84, bottom=0.08 if effort else 0.13,
+                        hspace=0.78, wspace=0.18)
+    for ri, (rows, title, native_row) in enumerate(cohorts):
         pos = axes[ri, 0].get_position()
-        fig.text(pos.x0, pos.y1 + 0.045, title, fontsize=8.5, weight="bold")
+        fig.text(pos.x0, pos.y1 + (0.03 if effort else 0.045), title, fontsize=8.5, weight="bold")
         for ci, (metric, label, _) in enumerate(metrics):
-            draw(axes[ri, ci], rows, metric, native=bool(ri))
+            if native_row is None:
+                draw_effort(axes[ri, ci], rows, metric)
+            else:
+                draw(axes[ri, ci], rows, metric, native=native_row)
             axes[ri, ci].set_xlabel(label, labelpad=3)
             if ci == 0:
                 axes[ri, ci].set_ylabel("Valid-only success (%)", labelpad=3)
@@ -154,22 +248,29 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--aggregate", type=Path, default=Path(__file__).with_name("om2w_harness_comparison_valid_only.json"))
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).parent)
+    parser.add_argument("--effort-aggregate", type=Path, default=EFFORT_AGGREGATE)
     args = parser.parse_args()
     comparison, means, native = read_rows(args.aggregate)
+    effort_data, effort = read_effort_rows(args.effort_aggregate)
     data = json.loads(Path(__file__).with_name("native_cuawright_completed.json").read_text())
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.output_dir / "om2w_harness_tradeoff_coordinates.csv",
-              [dict(harness=h, **r) for h, rows in (("BrowserCode", means), ("Native CUAWright", native)) for r in rows])
+              [dict(harness=h, **{key: value for key, value in r.items() if not isinstance(value, (dict, list))}) for h, rows in (("BrowserCode", means), ("BrowserCode effort (provisional)", effort), ("Native CUAWright", native)) for r in rows])
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7,
                         "axes.labelsize": 7, "xtick.labelsize": 7, "ytick.labelsize": 7,
                         "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
     for metric in METRICS:
-        figure(means, native, [metric], args.output_dir, f"om2w_harness_vs_{metric[2]}")
-    figure(means, native, METRICS, args.output_dir, "om2w_harness_tradeoffs")
+        figure(means, native, [metric], args.output_dir, f"om2w_harness_vs_{metric[2]}", effort=effort)
+    figure(means, native, METRICS, args.output_dir, "om2w_harness_tradeoffs", effort=effort)
     (args.output_dir / "om2w_harness_tradeoffs_provenance.json").write_text(json.dumps({
         "comparison_aggregate_sha256": hashlib.sha256(args.aggregate.read_bytes()).hexdigest(),
         "native_status_aggregate_sha256": hashlib.sha256(Path(__file__).with_name("native_cuawright_completed.json").read_bytes()).hexdigest(),
+        "effort_aggregate_sha256": hashlib.sha256(args.effort_aggregate.read_bytes()).hexdigest(),
+        "effort_status": "Provisional; collection complete, final independent audit pending",
+        "effort_final_audit_complete": effort_data["final_audit_complete"],
+        "effort_judge": "gpt56-terra-terminal-success-v1",
+        "effort_metric_coverage": {row["arm"]: {key: value for key, value in row.items() if key.endswith("_observed_tasks") or key in ("unknown_model_usage_calls", "derived_invalid_count")} for row in effort},
         "benchmark": "Online-Mind2Web only",
         "tasks_per_cell": comparison["tasks_per_cell"],
         "cohort": "300 attempted per cell; each success rate uses its own valid-outcome denominator; valid subsets differ",
@@ -180,11 +281,13 @@ def main():
         "cost_scope": "Native: per-task all-attempt model USD, helpers/full unknown reserves. BrowserCode: original episode proposal/selector receipt USD. External judge excluded.",
         "latency_scope": "harness-specific native task seconds; external judge and saved-grade recovery excluded",
         "browser_steps_scope": "Browser-command executions: saved selected BrowserCode blocks or literal native browser-command log entries. Each may contain multiple actions; a harness-level volume proxy, not standardized action counts.",
-        "visualization": "Separate harness rows; Row-specific cropped y-axes: BrowserCode 61–72%, native CUAWright 68–80%; scales shared across metrics within each row. No numeric gain callouts; N5 emphasized. Equal opacity; no connecting lines, frontier rings or grid lines. X-axis ranges differ by harness.",
-        "comparability": "Different limits, collection windows and task-time boundaries; descriptive only",
+        "effort_cost_scope": "All-attempt model ledger charges plus full unknown reserves, including helpers/counters, divided by all300 dispositions; external judge excluded. This cost coordinate differs from valid-task efficiency.",
+        "effort_latency_and_commands_scope": "All finite recorded measurements, including invalid outcomes; metric-specific coverage, no zero filling; actor-loop latency excludes setup, final judge-only capture, cleanup and external judge.",
+        "visualization": "Separate cohort rows with cropped y-axes: historical BrowserCode61–72%, provisional effort30–70%, native68–80%; scales shared across metrics within each row. Equal opacity; direct labels, no connecting lines, frontier rings or grid. Effort colors identify effort; circles=single, diamonds=N5.",
+        "comparability": "Different judges, limits, collection windows, contention, efficiency coverage and task-time boundaries; descriptive only. No paired or causal effort effect across rows; three-benchmark averages exclude the OM2W-only effort cohort.",
         "uncertainty": "Point estimates; no uncertainty inferred from aggregate data"
     }, indent=2) + "\n")
-    print(json.dumps({"browsercode": means, "native": native}, indent=2))
+    print(json.dumps({"browsercode": means, "effort_provisional": effort, "native": native}, indent=2))
 
 if __name__ == "__main__":
     main()

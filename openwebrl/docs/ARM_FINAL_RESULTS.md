@@ -179,11 +179,51 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 ### Online-Mind2Web only: BrowserCode and native CUAWright
 
-**All eight method–harness cells have outcomes for the same 300 tasks; no task outcomes are missing.** The plot reports **valid-only success: successes divided by valid outcomes in each method–harness cell**. Invalid outcomes are excluded from that success denominator; each cell’s valid subset can differ. The previous 111-task restriction selected fresh tasks valid in every cell; it did not indicate unfinished runs. The [111-task common-valid figure](arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png) remains available as a conditional historical view. The BrowserCode three-benchmark plot above is unchanged.
+<a id="luna-browsercode-effort-om2w300-20261030"></a>
 
-![OM2W valid-only success from300 attempted tasks, cost, latency and browser-command tradeoffs](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+**The new Luna effort cohort has 300 recorded dispositions for each of five methods; these results are provisional pending final independent qualification.** The expanded GPT figure adds this BrowserCode cohort between the historical BrowserCode high-effort and native high-effort rows. Its terminal judge is GPT-5.6 Terra; the historical rows keep their original judges and results.
 
-*Each point is one observed method, labeled directly. Rows separate the harnesses; no lines connect methods. The valid-only success axes are cropped separately by row: BrowserCode 61–72%, native CUAWright 68–80%; the three panels within each row share their y-axis. Vertical distances should be compared within a row; x-axis means retain recorded invalid attempts. N5 is highlighted; its observed gain over Luna single is +8.0 pp with BrowserCode and +5.1 pp with native CUAWright. Cost and latency axes are logarithmic, with different ranges per harness. Protocol limits, measurement coverage and live collection windows differ; this is a descriptive comparison.*
+![OM2W GPT tradeoffs: historical BrowserCode high, provisional Luna BrowserCode effort, and historical native high](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.png)
+
+*Success is successes / valid outcomes in each method, with invalid counts separate below; this is not a common-valid intersection. Top-to-bottom success scales are 61–72%, 30–70% and 68–80%; compare vertical positions within a row. Cost and latency axes are logarithmic. For the Luna effort row, cost is the all-attempt model ledger charge/reserve divided by 300; external judging is excluded. Latency and command or batch means include all finite recorded observations, including invalid outcomes; missing values are never filled with zero. Rows remain separate because judge protocols, live collection windows and historical cost/timing conventions differ. Differences between rows do not establish a causal model, effort or harness gain. The plot has no connecting lines, grid or rings.*
+
+[Figure PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
+
+#### Luna effort: provisional full300 results
+
+| Method | Recorded dispositions | Native results | Successes | Valid | Invalid | Valid-only success |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna single xhigh | 300 | 300 | 171 | 264 | 36 | 64.8% |
+| Luna single medium | 300 | 300 | 165 | 265 | 35 | 62.3% |
+| Luna single low | 300 | 300 | 85 | 251 | 49 | 33.9% |
+| Luna N5 medium + medium | 300 | 299 | 167 | 256 | 44 | 65.2% |
+| Luna N5 low + low | 300 | 300 | 100 | 241 | 59 | 41.5% |
+
+One explicit invalid disposition supplements N5 medium's 299 native results; no latency or selected-batch measurement is imputed for it. The five methods share the fixed OM2W task roster and Terra judge. Valid-only percentages can use different subsets of those 300 tasks; invalids remain in the recorded counts and all-attempt costs. In N5, the named medium/low effort applies to both candidates and selector. Every candidate and selector has a 12,288-token output cap; the episode limit is 30 decisions.
+
+<details>
+<summary>Provisional Luna cost, latency, selected batches and measurement coverage</summary>
+
+Cost is the cumulative all-attempt model ledger charge or conservative reservation, including helpers, counters, invalid outcomes and retained full unknown-usage reserves, divided by all 300 planned tasks. External judge fees are excluded. The fixed cost denominator is an allocation denominator, not 300 independently observed provider bills. Latency and selected-batch means instead use the finite observations counted in their own columns, including valid and invalid dispositions; they use no zero filling.
+
+| Method | All-attempt model USD | Model USD / 300 tasks | Mean latency (s) | Latency observations | Mean selected batches | Batch observations |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna single xhigh | $3.1252 | $0.01042 | 168.6 | 271 | 15.31 | 300 |
+| Luna single medium | $2.0913 | $0.00697 | 113.4 | 271 | 13.57 | 300 |
+| Luna single low | $0.5132 | $0.00171 | 34.6 | 271 | 5.74 | 300 |
+| Luna N5 medium + medium | $13.6673 | $0.04556 | 214.8 | 270 | 11.71 | 299 |
+| Luna N5 low + low | $3.2596 | $0.01087 | 96.4 | 266 | 5.87 | 300 |
+
+Latency measures the actor loop, including online model/browser waits, and excludes setup, final judge-only capture, cleanup and external judging. Selected batches are executable BrowserCode blocks, each potentially containing several browser operations. These are observed descriptive means, without a common-valid restriction or uncertainty intervals.
+
+[Provisional aggregate and exact metric definitions](arm_results/luna_browsercode_effort_om2w300_20261030/aggregate.json) · [Aggregate builder](arm_results/luna_browsercode_effort_om2w300_20261030/build_aggregate.py)
+
+</details>
+
+<details>
+<summary>Historical high-effort cohorts: unchanged counts, definitions and coverage</summary>
+
+**All eight historical method–harness cells have outcomes for the same 300 tasks; no task outcomes are missing.** Valid-only success is successes divided by valid outcomes in each cell. Invalid outcomes are excluded from that success denominator; each cell’s valid subset can differ. The previous 111-task restriction selected fresh tasks valid in every cell; it did not indicate unfinished runs. The [111-task common-valid figure](arm_results/cuawright_browsercode_om2w_20261027/common_valid111/om2w_harness_tradeoffs.png) remains available as a conditional historical view. The BrowserCode three-benchmark plot above is unchanged.
 
 | Method (all high) | Attempted per harness | BrowserCode successes | BrowserCode valid | BrowserCode valid-only success | Native successes | Native valid | Native valid-only success |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -194,8 +234,9 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 Success denominators are the valid counts above, drawn from all 300 attempted tasks per cell; this is not a common-valid intersection. Cost, latency and command means use available measurements from valid and invalid episodes, with the coverage below; missing measurements are never filled with zero. This full300 view includes the historical 100 and different collection windows. BrowserCode uses 12,288 output tokens/30 decisions; native uses 20,000/100 with summary setting 20. Timing boundaries and runtime contention differ, so this is a descriptive comparison rather than a controlled harness effect. The [native fresh200 paired analysis](ARM_INFERENCE_SCALING.md#cuawright-native-full300-four-methods-20261025) remains the primary within-native comparison. Global native post-job cleanup remains uncertified.
 
-<details>
-<summary>Metric coverage, definitions and reproducibility</summary>
+The historical N5-minus-Luna-single valid-only differences are +8.0 percentage points with BrowserCode and +5.1 with native CUAWright. They are descriptive differences between each method's valid subset.
+
+#### Historical metric coverage and definitions
 
 | Method | BrowserCode cost measurements | BrowserCode latency measurements | BrowserCode command measurements | Native cost measurements | Native latency measurements | Native command measurements |
 |---|---:|---:|---:|---:|---:|---:|
@@ -210,7 +251,7 @@ BrowserCode latency excludes initial browser setup and final judge-only capture;
 
 Method encodings: blue square Sol single, blue circle Luna single, yellow circle N3 and orange circle N5. Separate rows identify BrowserCode and native CUAWright. All points have equal opacity; the plot has no grid, connecting lines, rings or embedded table. The earlier dashed lines connected observed nondominated methods (lower x and higher success), rather than measured curves; that overlay has been removed. Detailed definitions and coverage remain here in the caption and tables.
 
-[Valid-only success aggregate and attempt-metric coverage](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoff_coordinates.csv) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.svg) · [PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_tradeoffs.pdf) · [Plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_om2w_harness_tradeoffs.py)
+[Historical valid-only success and attempt-metric coverage aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_harness_comparison_valid_only.json).
 
 </details>
 

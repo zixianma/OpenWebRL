@@ -1,0 +1,520 @@
+{
+  "aggregate_rows": [
+    {
+      "all_attempt_accounting": {
+        "browser_start_cap": 1200,
+        "browser_starts": 331,
+        "judge": {
+          "calls": 264,
+          "charged_or_reserved_usd": "4.4367165",
+          "known_fee_usd": "4.4367165",
+          "known_usage_calls": 264,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "model": {
+          "calls": 6793,
+          "charged_or_reserved_usd": "3.125167100",
+          "known_fee_usd": "3.125167100",
+          "known_usage_calls": 6793,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "all_observed_metrics": {
+        "cohort_tasks": 300,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.010417223666666668,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "selected_browser_batches": {
+          "mean": 15.306666666666667,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "task_seconds": {
+          "mean": 168.6071870786,
+          "missing_tasks": 29,
+          "observed_tasks": 271
+        }
+      },
+      "arm": "luna_single_xhigh",
+      "arm_settings": {
+        "arm": "luna_single_xhigh",
+        "model": "gpt-6-luna",
+        "output_tokens": 12288,
+        "proposal_count": 1,
+        "reasoning_effort": "xhigh",
+        "selector_model": null,
+        "selector_reasoning_effort": null
+      },
+      "derived_invalid_count": 0,
+      "invalid": 36,
+      "mean_browser_steps": 15.306666666666667,
+      "mean_browser_steps_observed_tasks": 300,
+      "mean_model_usd_per_task": 0.010417223666666666,
+      "mean_model_usd_per_task_observed_tasks": 300,
+      "mean_task_seconds": 168.6071870786,
+      "mean_task_seconds_observed_tasks": 271,
+      "native_dispositions": 300,
+      "overall_success_rate": 0.57,
+      "recorded": 300,
+      "success_rate": 0.6477272727272727,
+      "successes": 171,
+      "unknown_model_usage_calls": 0,
+      "valid": 264,
+      "valid_only_metrics": {
+        "cohort_tasks": 264,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.011441148484848484,
+          "missing_tasks": 0,
+          "observed_tasks": 264
+        },
+        "selected_browser_batches": {
+          "mean": 16.958333333333332,
+          "missing_tasks": 0,
+          "observed_tasks": 264
+        },
+        "task_seconds": {
+          "mean": 165.88493536549254,
+          "missing_tasks": 0,
+          "observed_tasks": 264
+        }
+      }
+    },
+    {
+      "all_attempt_accounting": {
+        "browser_start_cap": 1200,
+        "browser_starts": 333,
+        "judge": {
+          "calls": 265,
+          "charged_or_reserved_usd": "4.0641360",
+          "known_fee_usd": "4.0641360",
+          "known_usage_calls": 265,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "model": {
+          "calls": 5472,
+          "charged_or_reserved_usd": "2.091281470",
+          "known_fee_usd": "2.047075595",
+          "known_usage_calls": 5470,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0.044205875",
+          "unknown_usage_calls": 2
+        }
+      },
+      "all_observed_metrics": {
+        "cohort_tasks": 300,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.006970938233333334,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "selected_browser_batches": {
+          "mean": 13.566666666666666,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "task_seconds": {
+          "mean": 113.4055554327398,
+          "missing_tasks": 29,
+          "observed_tasks": 271
+        }
+      },
+      "arm": "luna_single_medium",
+      "arm_settings": {
+        "arm": "luna_single_medium",
+        "model": "gpt-6-luna",
+        "output_tokens": 12288,
+        "proposal_count": 1,
+        "reasoning_effort": "medium",
+        "selector_model": null,
+        "selector_reasoning_effort": null
+      },
+      "derived_invalid_count": 0,
+      "invalid": 35,
+      "mean_browser_steps": 13.566666666666666,
+      "mean_browser_steps_observed_tasks": 300,
+      "mean_model_usd_per_task": 0.006970938233333333,
+      "mean_model_usd_per_task_observed_tasks": 300,
+      "mean_task_seconds": 113.4055554327398,
+      "mean_task_seconds_observed_tasks": 271,
+      "native_dispositions": 300,
+      "overall_success_rate": 0.55,
+      "recorded": 300,
+      "success_rate": 0.6226415094339622,
+      "successes": 165,
+      "unknown_model_usage_calls": 2,
+      "valid": 265,
+      "valid_only_metrics": {
+        "cohort_tasks": 265,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.007597432566037735,
+          "missing_tasks": 0,
+          "observed_tasks": 265
+        },
+        "selected_browser_batches": {
+          "mean": 15.10943396226415,
+          "missing_tasks": 0,
+          "observed_tasks": 265
+        },
+        "task_seconds": {
+          "mean": 113.69202280853057,
+          "missing_tasks": 0,
+          "observed_tasks": 265
+        }
+      }
+    },
+    {
+      "all_attempt_accounting": {
+        "browser_start_cap": 1200,
+        "browser_starts": 340,
+        "judge": {
+          "calls": 251,
+          "charged_or_reserved_usd": "2.9206820",
+          "known_fee_usd": "2.9206820",
+          "known_usage_calls": 251,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "model": {
+          "calls": 2015,
+          "charged_or_reserved_usd": "0.513151935",
+          "known_fee_usd": "0.504441185",
+          "known_usage_calls": 2014,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0.00871075",
+          "unknown_usage_calls": 1
+        }
+      },
+      "all_observed_metrics": {
+        "cohort_tasks": 300,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.00171050645,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "selected_browser_batches": {
+          "mean": 5.74,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "task_seconds": {
+          "mean": 34.61318815571153,
+          "missing_tasks": 29,
+          "observed_tasks": 271
+        }
+      },
+      "arm": "luna_single_low",
+      "arm_settings": {
+        "arm": "luna_single_low",
+        "model": "gpt-6-luna",
+        "output_tokens": 12288,
+        "proposal_count": 1,
+        "reasoning_effort": "low",
+        "selector_model": null,
+        "selector_reasoning_effort": null
+      },
+      "derived_invalid_count": 0,
+      "invalid": 49,
+      "mean_browser_steps": 5.74,
+      "mean_browser_steps_observed_tasks": 300,
+      "mean_model_usd_per_task": 0.00171050645,
+      "mean_model_usd_per_task_observed_tasks": 300,
+      "mean_task_seconds": 34.61318815571153,
+      "mean_task_seconds_observed_tasks": 271,
+      "native_dispositions": 300,
+      "overall_success_rate": 0.2833333333333333,
+      "recorded": 300,
+      "success_rate": 0.3386454183266932,
+      "successes": 85,
+      "unknown_model_usage_calls": 1,
+      "valid": 251,
+      "valid_only_metrics": {
+        "cohort_tasks": 251,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.001932646374501992,
+          "missing_tasks": 0,
+          "observed_tasks": 251
+        },
+        "selected_browser_batches": {
+          "mean": 6.5458167330677295,
+          "missing_tasks": 0,
+          "observed_tasks": 251
+        },
+        "task_seconds": {
+          "mean": 35.82745326432547,
+          "missing_tasks": 0,
+          "observed_tasks": 251
+        }
+      }
+    },
+    {
+      "all_attempt_accounting": {
+        "browser_start_cap": 1200,
+        "browser_starts": 337,
+        "judge": {
+          "calls": 256,
+          "charged_or_reserved_usd": "3.8842970",
+          "known_fee_usd": "3.8842970",
+          "known_usage_calls": 256,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "model": {
+          "calls": 23864,
+          "charged_or_reserved_usd": "13.667255205",
+          "known_fee_usd": "13.508082830",
+          "known_usage_calls": 23852,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0.159172375",
+          "unknown_usage_calls": 12
+        }
+      },
+      "all_observed_metrics": {
+        "cohort_tasks": 300,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.04570988362876254,
+          "missing_tasks": 1,
+          "observed_tasks": 299
+        },
+        "selected_browser_batches": {
+          "mean": 11.709030100334449,
+          "missing_tasks": 1,
+          "observed_tasks": 299
+        },
+        "task_seconds": {
+          "mean": 214.80754145010408,
+          "missing_tasks": 30,
+          "observed_tasks": 270
+        }
+      },
+      "arm": "luna_n5_medium",
+      "arm_settings": {
+        "arm": "luna_n5_medium",
+        "model": "gpt-6-luna",
+        "output_tokens": 12288,
+        "proposal_count": 5,
+        "reasoning_effort": "medium",
+        "selector_model": "gpt-6-luna",
+        "selector_reasoning_effort": "medium"
+      },
+      "derived_invalid_count": 1,
+      "invalid": 44,
+      "mean_browser_steps": 11.709030100334449,
+      "mean_browser_steps_observed_tasks": 299,
+      "mean_model_usd_per_task": 0.04555751735,
+      "mean_model_usd_per_task_observed_tasks": 300,
+      "mean_task_seconds": 214.80754145010408,
+      "mean_task_seconds_observed_tasks": 270,
+      "native_dispositions": 299,
+      "overall_success_rate": 0.5566666666666666,
+      "recorded": 300,
+      "success_rate": 0.65234375,
+      "successes": 167,
+      "unknown_model_usage_calls": 12,
+      "valid": 256,
+      "valid_only_metrics": {
+        "cohort_tasks": 256,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.05066276466796875,
+          "missing_tasks": 0,
+          "observed_tasks": 256
+        },
+        "selected_browser_batches": {
+          "mean": 13.17578125,
+          "missing_tasks": 0,
+          "observed_tasks": 256
+        },
+        "task_seconds": {
+          "mean": 213.69890811755468,
+          "missing_tasks": 0,
+          "observed_tasks": 256
+        }
+      }
+    },
+    {
+      "all_attempt_accounting": {
+        "browser_start_cap": 1200,
+        "browser_starts": 341,
+        "judge": {
+          "calls": 241,
+          "charged_or_reserved_usd": "2.8981825",
+          "known_fee_usd": "2.8981825",
+          "known_usage_calls": 241,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "model": {
+          "calls": 12185,
+          "charged_or_reserved_usd": "3.259620980",
+          "known_fee_usd": "3.135572230",
+          "known_usage_calls": 12172,
+          "reserved_inflight_calls": 0,
+          "unknown_charge_or_reserve_usd": "0.124048750",
+          "unknown_usage_calls": 13
+        }
+      },
+      "all_observed_metrics": {
+        "cohort_tasks": 300,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.010865403266666667,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "selected_browser_batches": {
+          "mean": 5.866666666666666,
+          "missing_tasks": 0,
+          "observed_tasks": 300
+        },
+        "task_seconds": {
+          "mean": 96.37534351377474,
+          "missing_tasks": 34,
+          "observed_tasks": 266
+        }
+      },
+      "arm": "luna_n5_low",
+      "arm_settings": {
+        "arm": "luna_n5_low",
+        "model": "gpt-6-luna",
+        "output_tokens": 12288,
+        "proposal_count": 5,
+        "reasoning_effort": "low",
+        "selector_model": "gpt-6-luna",
+        "selector_reasoning_effort": "low"
+      },
+      "derived_invalid_count": 0,
+      "invalid": 59,
+      "mean_browser_steps": 5.866666666666666,
+      "mean_browser_steps_observed_tasks": 300,
+      "mean_model_usd_per_task": 0.010865403266666667,
+      "mean_model_usd_per_task_observed_tasks": 300,
+      "mean_task_seconds": 96.37534351377474,
+      "mean_task_seconds_observed_tasks": 266,
+      "native_dispositions": 300,
+      "overall_success_rate": 0.3333333333333333,
+      "recorded": 300,
+      "success_rate": 0.4149377593360996,
+      "successes": 100,
+      "unknown_model_usage_calls": 13,
+      "valid": 241,
+      "valid_only_metrics": {
+        "cohort_tasks": 241,
+        "model_charge_or_reserve_usd": {
+          "mean": 0.011883226887966806,
+          "missing_tasks": 0,
+          "observed_tasks": 241
+        },
+        "selected_browser_batches": {
+          "mean": 6.775933609958506,
+          "missing_tasks": 0,
+          "observed_tasks": 241
+        },
+        "task_seconds": {
+          "mean": 99.60957599960112,
+          "missing_tasks": 0,
+          "observed_tasks": 241
+        }
+      }
+    }
+  ],
+  "all_attempt_accounting": {
+    "judge": {
+      "calls": 1277,
+      "charged_or_reserved_usd": "18.2040140",
+      "known_fee_usd": "18.2040140",
+      "known_usage_calls": 1277,
+      "reserved_inflight_calls": 0,
+      "unknown_charge_or_reserve_usd": "0",
+      "unknown_usage_calls": 0
+    },
+    "model": {
+      "calls": 50329,
+      "charged_or_reserved_usd": "22.656476690",
+      "known_fee_usd": "22.320338940",
+      "known_usage_calls": 50301,
+      "reserved_inflight_calls": 0,
+      "unknown_charge_or_reserve_usd": "0.336137750",
+      "unknown_usage_calls": 28
+    }
+  },
+  "counts": {
+    "arms": 5,
+    "derived_invalid": 1,
+    "native_dispositions": 1499,
+    "recorded": 1500,
+    "tasks_per_arm": 300
+  },
+  "dispositions_complete": true,
+  "final_audit_complete": false,
+  "metric_definitions": {
+    "all_observed_model_cost": "Same task-attributed model charges/reserves over native dispositions; derived synthetic-zero annotation excluded from metric observations.",
+    "browser_steps": "Selected executable BrowserCode batches, not primitive CDP actions. Missing values remain missing.",
+    "comparison": "Five Luna effort arms on the same task roster and terminal judge. Earlier high-effort GPT cohorts use a different judge and collection window; cross-cohort comparisons are descriptive.",
+    "mean_model_usd_per_task": "All-attempt model ledger charge/reserve divided by every planned task; includes invalid outcomes and all attempts.",
+    "mean_model_usd_per_task_observed_tasks": "Fixed-task allocation denominator; every task is represented in the cumulative-ledger allocation, not a count of exact observed provider bills.",
+    "model_cost": "Model/counter cumulative ledger charges or full retained unknown reservations, excluding external judge; conservative bounds, not invoices.",
+    "success_rate": "Successes divided by native valid outcomes; invalid outcomes are excluded and counted separately.",
+    "task_seconds": "Native actor-loop latency including online model/browser waits; setup, final judge-only capture, cleanup and external judge excluded. Missing values remain missing.",
+    "valid_only_model_cost": "Model ledger charges/reserves attributed by physical request-path task identity; includes any attempts for each selected valid task."
+  },
+  "provenance": {
+    "builder_sha256": "306b4f2eb3827109ce263c3ee35be4c122d84960940aaaf9ae92a4aef12227c3",
+    "current_source_manifest_sha256": "037cc573b2f2f6107c69c2353298971b299e41534a27c3eecfa16f33542b8d25",
+    "current_source_snapshot_sha256": {
+      "bootstrap.py": "21c387e94a07f85b8c656a39d75f0d1fb57cda1c5cbc9ef29fb148e78a83754b",
+      "browser_bridge.ts": "feefbcde7984c26300b32ebe062d723944afe0ad34cf95cbc5f1324f07abdc64",
+      "canary_scope.py": "a2c1c3db96ee47818c5cd4be2c004ba08752bbb4663b4412581004a1b5441044",
+      "claude_budget.py": "25f0fe883d4cba3956219eb37869d43ab3f7ccee16b34a3cb8a3bd61ae48ea69",
+      "common_judge.py": "0a1e3fe364e8169b6248afa600646eaa4f2fabec82ab241452426d38feb4c961",
+      "controller.py": "bcc9d699622b8d48f37e1ecd858b35ef4c935ea3c9bd9403b416550407affda5",
+      "environments.py": "10f755748df24f1f6f9d45a43a834816e270daea2e67fce09f876ee458c24eb9",
+      "episode_metrics.py": "78b072cbc0cf029a363cb30998d2ff8bd13a3960437d1568e8646413c52605e8",
+      "financial_plan.py": "3f14bb70478ed3155d81ecfb019efbec27641068eeb5be8c6468666a3cf4653a",
+      "luna_model.py": "804ab88145912a5ebd4056cc7c17f67432f27225880de300fc0f23b51ffb5f54",
+      "request_budget.py": "f9140ada5f1a0e6214d966f4f5d59fa18caf08ce2fa7c4d08310536e35efa05c",
+      "sandbox.py": "86f5cbfae9b6d0dddc6f9dee6fede2dc403737cd122e9e89a25fcff16f8617d3",
+      "worker.py": "3faffbf8fd0fde8ecda788c1e16c4e88ba217a495bbd775b98d66a04e07e6d89"
+    },
+    "disposition_execution_source_manifest_sha256_counts": {
+      "037cc573b2f2f6107c69c2353298971b299e41534a27c3eecfa16f33542b8d25": 1490,
+      "7d5680f61d2f4967ab448aad685009d86ca85a1b42f9cee030f2bab69f0e018a": 10
+    },
+    "input_files": 1968,
+    "input_snapshot_sha256": "d62b80d10d34ee99a5a5af19bb996589014e14d16987c0cc63f26f03c87f8e74",
+    "plan_sha256": "2ecae503dd9d29ebacb6354828d4c74ce89e92e63bb462365c56b119f9abc39d",
+    "runtime_config_sha256": "4c67197faa4a623106bf107ceab1dbea75631c740cd47a02fef6486ca72342e0"
+  },
+  "provisional": true,
+  "public_data_policy": "Aggregate numeric data and settings only; task identifiers, raw payloads, trajectories, absolute local paths and private audit records are not exported.",
+  "qualification": "Aggregate-only reconstruction from saved dispositions and cumulative ledgers. Full independent request/scheduler/cleanup qualification remains incomplete.",
+  "schema": "provisional-luna-browsercode-effort-aggregate-v1",
+  "settings": {
+    "actor_model": "gpt-6-luna",
+    "benchmark": "Online-Mind2Web",
+    "harness": "BrowserCode",
+    "max_decisions": 30,
+    "max_output_tokens_per_candidate_or_selector": 12288,
+    "tasks_per_arm": 300,
+    "terminal_judge": {
+      "max_completion_tokens": 4096,
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "medium",
+      "seed": 42,
+      "version": "gpt56-terra-terminal-success-v1"
+    },
+    "viewport": [
+      1280,
+      1800
+    ]
+  },
+  "status": "PROVISIONAL"
+}
