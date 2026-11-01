@@ -74,7 +74,7 @@ class Control:
     def initialize(self, deadline):
         need(type(deadline) in (int, float) and math.isfinite(deadline) and deadline > self.clock(), 'Future finite deadline required')
         need(not (self.root / 'control.json').exists(), 'Existing campaign needs separate recovery review')
-        write(self.root / 'control.json', dict(deadline=deadline, creates={}, sessions={}, arrivals={}, finished={}, abort=None))
+        write(self.root / 'control.json', dict(deadline=deadline, creates={}, sessions={}, arrivals={}, finished={}, released_pair_phases={}, abort=None))
 
     @staticmethod
     def total(state):
@@ -106,16 +106,24 @@ class Control:
             self.check(state)
             if not after:
                 need(self.clock() < state['deadline']-1860,'Insufficient owned time for another pair')
+                if index > 0:
+                    need(state.get('released_pair_phases',{}).get('finished:'+str(index-1)) is True,'Previous phase must finish before next admission')
             values = state[field].setdefault(key, [])
             need(arm not in values, 'Duplicate pair transition')
             values.append(arm)
         while True:
             with self.locked() as state:
                 self.check(state)
+                phase = field+':'+key
+                if state.get('released_pair_phases',{}).get(phase) is True:
+                    return
                 if set(state[field][key]) == set(ARMS):
                     self.require_settled(state)
                     if not after:
                         self.check(state,new_pair=True)
+                    # Check the previous phase exactly once while holding this
+                    # lock. A fast released peer may now admit the next create.
+                    state.setdefault('released_pair_phases',{})[phase] = True
                     return
             sleep(0.1)
 
