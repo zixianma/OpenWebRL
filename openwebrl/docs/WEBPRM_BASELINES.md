@@ -10,7 +10,7 @@
 **Pairwise accuracy (%)**
 
 | Model | Source of number | Mind2Web | WebArena | AssistantBench | WorkArena | Average of 4 |
-| −-- | −-- | −--: | −--: | −--: | −--: | −--: |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
 | WebArbiter-7B | WebArbiter paper | 97.1 | 88.4 | 89.2 | 82.1 | 89.2 |
 | WebArbiter-3B | WebArbiter paper | 93.3 | 82.0 | 78.3 | 81.0 | 83.7 |
 | WebShepherd-8B | WebArbiter paper | 86.7 | 68.3 | 55.9 | 54.6 | 64.3 |
@@ -25,7 +25,7 @@
 **Best-of-N accuracy (%): the better response must win all 4 of its pairs (our "state accuracy")**
 
 | Model | Source of number | Mind2Web | WebArena | AssistantBench | WorkArena | Average of 4 |
-| −-- | −-- | −--: | −--: | −--: | −--: | −--: |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
 | WebArbiter-7B | WebArbiter paper | 89.5 | 68.7 | 70.0 | 70.2 | 74.6 |
 | WebArbiter-3B | WebArbiter paper | 78.4 | 56.2 | 46.7 | 54.8 | 59.1 |
 | WebShepherd-8B | WebArbiter paper | 73.7 | 43.9 | 30.0 | 25.5 | 43.3 |
