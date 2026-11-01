@@ -17,9 +17,51 @@ import threading
 import time
 import urllib.error
 import urllib.request
+import urllib.parse
 from uuid import UUID
 
 API = 'https://api.browser-use.com/api/v4'
+
+
+def websocket_endpoint(endpoint, session_id, directory):
+    """Resolve only this owned V4 HTTPS CDP endpoint to its browser socket."""
+    parsed = urllib.parse.urlsplit(endpoint)
+    expected = session_id+'.cdp.browser-use.com'
+    need(parsed.scheme == 'https' and parsed.hostname == expected
+         and parsed.port in (None,443) and not parsed.username and not parsed.password
+         and parsed.path in ('','/') and not parsed.fragment,
+         'Owned HTTPS CDP endpoint required')
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *args, **kwargs):
+            raise ValueError('CDP discovery redirects are not accepted')
+    discovery = urllib.parse.urlunsplit((parsed.scheme,parsed.netloc,'/json/version',parsed.query,''))
+    request = urllib.request.Request(discovery, method='GET')
+    try:
+        with urllib.request.build_opener(NoRedirect()).open(request,timeout=20) as response:
+            raw = response.read().decode('utf-8')
+            status = response.status
+    except Exception as exc:
+        raise RuntimeError('Owned CDP discovery failed: '+type(exc).__name__) from None
+    write_private(Path(directory)/'cloud-private/cdp-discovery.json',dict(http_status=status,raw_response=raw),exclusive=True)
+    need(status == 200, 'Owned CDP discovery failed')
+    result = json.loads(raw)
+    ws = result.get('webSocketDebuggerUrl')
+    need(type(ws) is str, 'Owned browser websocket missing')
+    target = urllib.parse.urlsplit(ws)
+    need(target.scheme in ('ws','wss') and target.hostname in (expected,'localhost','127.0.0.1','::1')
+         and not target.username and not target.password and not target.fragment
+         and target.path.startswith('/'), 'CDP discovery must retain owned TLS endpoint')
+    # Chrome behind a TLS reverse proxy can advertise its local WS authority.
+    # Retain only its browser path/query; the actual connection always uses the
+    # already verified owned HTTPS authority, never loopback or another host.
+    query = target.query
+    if parsed.query and parsed.query != query:
+        query = query+'&'+parsed.query if query else parsed.query
+    normalized = urllib.parse.urlunsplit(('wss',parsed.netloc,target.path,query,''))
+    write_private(Path(directory)/'cloud-private/cdp-normalization.json',
+                  dict(normalized_endpoint=normalized, reason='owned_TLS_origin_with_Chrome_browser_path',
+                       advertised_authority_replaced=target.netloc != parsed.netloc or target.scheme != 'wss'),exclusive=True)
+    return normalized
 
 
 def need(condition, message):
@@ -160,7 +202,7 @@ class CloudBrowser:
     """
     def __init__(self, directory, http, admission, *, metadata, on_halt,
                  max_proxy_usd, on_usage=None, timeout_minutes=20, watchdog_seconds=2,
-                 polls=8, minimum_settlement_seconds=10, sleep=time.sleep, clock=time.monotonic, timeline=None):
+                 polls=8, minimum_settlement_seconds=10, sleep=time.sleep, clock=time.monotonic, timeline=None, cdp_resolver=websocket_endpoint):
         self.directory = Path(directory)
         need(not self.directory.resolve().is_relative_to(Path('/gpfs/home/zixianma')), 'Home is read-only')
         need(type(timeout_minutes) is int and 1 <= timeout_minutes <= 20, 'At most20 owned provider minutes')
@@ -185,6 +227,8 @@ class CloudBrowser:
         self.thread = None
         self.receipt = None
         self.latest = None
+        self.cdp_endpoint = None
+        self.cdp_resolver = cdp_resolver
         self.started = None
         self.create_dispatched = False
         self.metadata_mismatch = False
@@ -249,7 +293,7 @@ class CloudBrowser:
             self._ready(view)
             self.thread = threading.Thread(target=self._watch, name='owned-cloud-watchdog', daemon=False)
             self.thread.start()
-            return self.latest['cdpUrl']
+            return self.cdp_endpoint
         except BaseException as exc:
             try:
                 self.on_halt('cloud_start_failed_'+type(exc).__name__)
@@ -267,6 +311,11 @@ class CloudBrowser:
                 self._view(view)
                 need(view.get('status') == 'active', 'Created browser not active')
                 if type(view.get('cdpUrl')) is str and view['cdpUrl'].startswith('wss://'):
+                    self.cdp_endpoint = view['cdpUrl']
+                    return
+                if type(view.get('cdpUrl')) is str and view['cdpUrl'].startswith('https://'):
+                    with self.timeline.span('cloud_cdp_discovery'):
+                        self.cdp_endpoint = self.cdp_resolver(view['cdpUrl'], self.session_id, self.directory)
                     return
                 self.sleep(self.watchdog_seconds)
                 view = self._request('GET', '/browsers/'+self.session_id)
