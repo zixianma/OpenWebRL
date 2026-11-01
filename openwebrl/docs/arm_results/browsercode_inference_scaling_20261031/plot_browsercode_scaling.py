@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Standalone renderer for completed, public, aggregate-only BrowserCode scaling data.
 
-Python + matplotlib only. Main figure: three benchmarks by cost/commands/latency.
+Python + matplotlib only. Main figure: three benchmarks by cost/commands/latency,
+with an optional fourth column for projected browser hosting cost, not traffic.
 Optional token figure: actual output and reasoning consumption, never token caps.
 No runtime/source imports, credentials, task identifiers, API or browser calls.
 The historical-baseline profile is explicitly a real-data layout preview; the
@@ -12,6 +13,7 @@ import argparse
 import csv
 from decimal import Decimal, InvalidOperation
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -29,7 +31,7 @@ PROTOCOL = {'model': 'gpt-5.6-terra', 'reasoning_effort': 'medium', 'max_complet
 # single/selection; blue shade/fill distinguishes effort/cap within Luna single.
 STYLES = {'serial_high': ('Sol high single', 's', '#08519c', True),
           'luna_single_high': ('Luna high (1× cap)', 'o', '#4292c6', True),
-          'parallel3_select_high': ('Luna high N3', 'o', '#ef8a8a', False),
+          'parallel3_select_high': ('Luna high N3', 'o', '#ef8a8a', True),
           'parallel5_select_high': ('Luna high N5', 'o', '#a50f15', True),
           'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', '#08306b', True),
           'luna_single_high_24576': ('Luna high (2× cap)', 'o', '#2171b5', True),
@@ -174,7 +176,30 @@ def validate(data):
     return data
 
 
-def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_methods=None):
+def browser_cost_metrics(data, projection):
+    """Join complete, separately labelled projections without changing outcomes."""
+    source = Path(__file__).with_name('project_browser_cost.py')
+    spec = importlib.util.spec_from_file_location('_browser_cost_scenarios', source)
+    calculator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(calculator)
+    rows = calculator.project(projection, ['0'])
+    metrics = {}
+    expected = {(p['benchmark'], p['method']): p for p in data['points']}
+    need(len(rows) == len(expected), 'Browser-cost projection needs the same completed profile')
+    for row in rows:
+        key = (row['benchmark'], row['method'])
+        need(key in expected and key not in metrics, 'Unknown/duplicate browser-cost identity')
+        point = expected[key]
+        need(all(row[name] == point[name] for name in ('requested', 'valid', 'invalid')),
+             'Browser-cost projection uses a different task population')
+        metrics[key] = {'mean': float(row['projected_hosting_usd_per_valid_task']),
+                        'observed_tasks': row['lifetime_observed_valid_tasks'],
+                        'missing_valid_tasks': 0}
+    return metrics
+
+
+def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_methods=None,
+           browser_projection=None):
     validate(data)
     import matplotlib
     matplotlib.use('Agg')
@@ -183,6 +208,12 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     from matplotlib.ticker import MaxNLocator, NullFormatter, StrMethodFormatter
     columns = ('output_tokens', 'reasoning_tokens') if tokens else ('actor_usd', 'browser_commands', 'actor_seconds')
     labels = ('Output tokens / valid task', 'Reasoning tokens / valid task') if tokens else ('Actor cost ($, log)', 'Browser-code batches', 'Actor latency (s)')
+    projected = None
+    if browser_projection is not None:
+        need(not tokens, 'Browser hosting projection is a main-figure panel')
+        projected = browser_cost_metrics(data, browser_projection)
+        columns += ('projected_browser_hosting_usd',)
+        labels += ('Projected hosting\n($ / 1k valid tasks)',)
     available = METHODS if data['profile'] == 'completed-sweep' else BASELINE
     need(tokens or token_methods is None, 'Token method subset requires token figure')
     if token_methods is not None:
@@ -199,8 +230,11 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.labelsize': 7.5,
                          'axes.titlesize': 8, 'axes.linewidth': .6, 'svg.fonttype': 'none', 'pdf.fonttype': 42,
                          'svg.hashsalt': 'openwebrl-browsercode-scaling-v1' if tokens else 'openwebrl-browsercode-scaling-v2'})
-    fig, axes = plt.subplots(3, len(columns), figsize=(7, 4.35), sharey='row', squeeze=False)
-    fig.subplots_adjust(left=.077, right=.765, top=.90, bottom=.105, hspace=.53, wspace=.25 if tokens else .35)
+    dimensions = (8.5, 4.35) if projected is not None else (7, 4.35)
+    fig, axes = plt.subplots(3, len(columns), figsize=dimensions, sharey='row', squeeze=False)
+    fig.subplots_adjust(left=.065 if projected is not None else .077,
+                        right=.79 if projected is not None else .765,
+                        top=.90, bottom=.105, hspace=.53, wspace=.25 if tokens else .35)
     for i, (benchmark, (title, _)) in enumerate(BENCHMARKS.items()):
         rows = sorted((p for p in plotted if p['benchmark'] == benchmark), key=lambda p: METHODS.index(p['method']))
         rates = [100*p['success_rate'] for p in rows]
@@ -229,16 +263,23 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
                 ax.text(.5, 1.20, labels[j], ha='center', transform=ax.transAxes, fontsize=7.5)
             for p in rows:
                 _, marker, color, filled = STYLES[p['method']]
-                ax.scatter(p['metrics'][name]['mean'], 100*p['success_rate'], s=27, marker=marker,
+                metric = projected[(p['benchmark'], p['method'])] if name == 'projected_browser_hosting_usd' else p['metrics'][name]
+                display_mean = metric['mean'] * (1000 if name == 'projected_browser_hosting_usd' else 1)
+                ax.scatter(display_mean, 100*p['success_rate'], s=27, marker=marker,
                            edgecolors=color, facecolors=color if filled else 'white', linewidths=.9, zorder=3)
     methods = selected
     handles = [Line2D([], [], linestyle='none', marker=STYLES[m][1], color=STYLES[m][2],
                       markerfacecolor=STYLES[m][2] if STYLES[m][3] else 'white', markeredgewidth=.9,
                       markersize=4.8, label=STYLES[m][0]) for m in methods]
-    fig.legend(handles=handles, loc='center left', bbox_to_anchor=(.785, .55), frameon=False,
+    side = .807 if projected is not None else .785
+    fig.legend(handles=handles, loc='center left', bbox_to_anchor=(side, .55), frameon=False,
                fontsize=7.2, handletextpad=.3, labelspacing=.75, borderaxespad=0)
     note = 'Terra judged\nValid-task means\nSingle-call token caps\n1× = 12,288 tokens' + ('\nOutput includes reasoning' if tokens else '\nCaps ≠ actual usage')
-    fig.text(.79, .20, note, fontsize=6.8, color='#555555', va='top')
+    if projected is not None:
+        rate = browser_projection['price_assumption']['browser_usd_per_hour']
+        note += '\nHosting projection only\n$' + rate + '/h; minute-rounded\nTraffic excluded'
+    fig.text(side if projected is not None else .79, .245 if projected is not None else .20,
+             note, fontsize=6.5 if projected is not None else 6.8, color='#555555', va='top')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
         output = output_dir / f'{stem}.{extension}'
@@ -248,15 +289,25 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     plt.close(fig)
     fields = ['benchmark', 'method', 'requested', 'recorded', 'valid', 'invalid', 'successes', 'success_rate']
     fields += [f'{name}_{key}' for name in METRICS for key in ('mean', 'observed_tasks', 'missing_valid_tasks')]
+    if projected is not None:
+        fields += [f'projected_browser_hosting_usd_{key}' for key in ('mean', 'observed_tasks', 'missing_valid_tasks')]
     with (output_dir / f'{stem}_coordinates.csv').open('w', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=fields, lineterminator='\n')
         writer.writeheader()
         for p in plotted:
             row = {k: p[k] for k in fields[:8]}
             row.update({f'{name}_{key}': value for name, metric in p['metrics'].items() for key, value in metric.items()})
+            if projected is not None:
+                row.update({f'projected_browser_hosting_usd_{key}': value
+                            for key, value in projected[(p['benchmark'], p['method'])].items()})
             writer.writerow(row)
     return {'schema': 'browsercode-scaling-render-v2', 'profile': data['profile'], 'points': len(plotted), 'selected_methods': list(selected),
-            'dimensions_inches': [7, 4.35], 'token_figure': tokens, 'columns': list(columns),
+            'dimensions_inches': list(dimensions), 'token_figure': tokens, 'columns': list(columns),
+            'browser_hosting_projection': None if projected is None else {
+                'actual_cloud_billing': False, 'traffic_included': False,
+                'display_units': 'USD per 1000 valid tasks; coordinate CSV retains USD per valid task',
+                'basis': 'Observed local first-close browser lifetimes with per-session minute rounding',
+                'price_assumption': browser_projection['price_assumption']},
             'browser_command_definition': COMMAND_DEFINITION,
             'omitted_token_method_coverage': [
                 {'benchmark': p['benchmark'], 'method': p['method'], 'valid': p['valid'],
@@ -272,12 +323,24 @@ def main():
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--stem', default='browsercode_scaling')
     parser.add_argument('--tokens', action='store_true')
+    parser.add_argument('--browser-cost-projection', type=Path,
+                        help='Add separately labelled hosting-only projection as a fourth main column')
     parser.add_argument('--token-method', action='append', choices=METHODS, help='Explicit token-only subset; repeat per method. Omitted-method coverage is exported in provenance.')
     args = parser.parse_args()
     need(args.stem and Path(args.stem).name == args.stem and args.stem not in ('.', '..'), 'Output stem must be a filename')
     raw = args.aggregate.read_bytes()
     data = validate(json.loads(raw))
-    result = render(data, args.output_dir, args.stem, tokens=args.tokens, token_methods=args.token_method)
+    projection = None
+    if args.browser_cost_projection is not None:
+        projection_raw = args.browser_cost_projection.read_bytes()
+        projection = json.loads(projection_raw)
+        need(projection.get('actor_plot_aggregate_sha256') == hashlib.sha256(raw).hexdigest(),
+             'Browser-cost projection is not bound to this exact actor aggregate')
+    result = render(data, args.output_dir, args.stem, tokens=args.tokens,
+                    token_methods=args.token_method, browser_projection=projection)
+    if projection is not None:
+        result['browser_cost_projection_input_sha256'] = hashlib.sha256(projection_raw).hexdigest()
+        result['browser_cost_calculator_sha256'] = hashlib.sha256(Path(__file__).with_name('project_browser_cost.py').read_bytes()).hexdigest()
     result['input_sha256'] = hashlib.sha256(raw).hexdigest()
     result['renderer_sha256'] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     result['matplotlib_version'] = __import__('matplotlib').__version__

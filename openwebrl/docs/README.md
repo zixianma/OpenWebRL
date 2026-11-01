@@ -2,7 +2,7 @@
 
 [BrowserCode API experiments: simplified setup, bounded evaluation, protocols, code map and qualified results](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
 
-[Completed BrowserCode inference scaling: seven Terra-judged methods on three benchmarks; xhigh and alternative output ceilings show no consistent gain, with cost, browser-command batches, latency, actual-token figures and paired intervals](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Projected browser hosting/traffic costs and proposed stealth calibration](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
+[Completed BrowserCode inference scaling: seven Terra-judged methods on three benchmarks; xhigh and alternative output ceilings show no consistent gain, with cost, browser-command batches, latency, projected hosting, actual-token figures and paired intervals](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Projected browser hosting/traffic costs and proposed stealth calibration](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
 
 [Luna BrowserCode lower-effort supporting results: prescribed retries, provisional success and cumulative cost/latency coverage](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views).
 

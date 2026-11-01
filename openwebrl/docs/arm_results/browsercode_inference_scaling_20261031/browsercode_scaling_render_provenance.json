@@ -12,24 +12,46 @@
     "luna_single_high_6144"
   ],
   "dimensions_inches": [
-    7,
+    8.5,
     4.35
   ],
   "token_figure": false,
   "columns": [
     "actor_usd",
     "browser_commands",
-    "actor_seconds"
+    "actor_seconds",
+    "projected_browser_hosting_usd"
   ],
+  "browser_hosting_projection": {
+    "actual_cloud_billing": false,
+    "traffic_included": false,
+    "display_units": "USD per 1000 valid tasks; coordinate CSV retains USD per valid task",
+    "basis": "Observed local first-close browser lifetimes with per-session minute rounding",
+    "price_assumption": {
+      "version": "Browser Use V4 published rates checked 2026-11-01; existing accounts may have different legacy terms",
+      "pricing_url": "https://browser-use.com/pricing",
+      "browser_usd_per_hour": "0.02",
+      "rounding": "Each session ceil(seconds/60), minimum1minute",
+      "traffic_usd_per_gb": {
+        "direct": "0.20",
+        "residential": "5.00"
+      },
+      "traffic_bytes_measured": false,
+      "traffic_cost_included": false,
+      "billing_reference_url": "https://docs.browser-use.com/cloud/guides/billing"
+    }
+  },
   "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.",
   "omitted_token_method_coverage": [],
+  "browser_cost_projection_input_sha256": "9be03941a5174c67a7250cb8d56c1113110771c94a30562b5ebc040274b6e20c",
+  "browser_cost_calculator_sha256": "bfbfad9d80dc9a1eaace3a06bef2e969263c7557a1f9cfd334b01a7864710558",
   "input_sha256": "969a252c314d9ce378d0f35f0859d7ab10552d169627b532f7a8e8ed01ad2735",
-  "renderer_sha256": "5cd598300b43c2b13bd887563354065a06f5957852df4e88426448fe4d643b89",
+  "renderer_sha256": "bf6c79ad800293ff51440143083af648b664715118767e2017ff29f95fbdc0ad",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "aab026f9ff6324031f4a912424fc7372a80c73aab7d5c66d2d74527db078bea7",
-    ".svg": "b770814f97d5c00ddff9ae7b83c30f0f677b67fc8b0bc6ce12402fee88827275",
-    ".pdf": "f1dc1a4d612c4341c1b6c67fb384c070bef7e55e9aada8ff41f0cbcb4789bb3a",
-    "_coordinates.csv": "3271eac5edcd9b2d0e8393bdb36f59a40a46d1d408de9a8376288df5b28f6772"
+    ".png": "fc3752be3b79d5f1936efaaa0cdb0899a5133e711728d3c670d2b981629cca71",
+    ".svg": "af60b0a937cd6fd017420882c1b94641f9c8ebcc945f30af525f569885b3c2af",
+    ".pdf": "37cf544e9c7747c5b45b0a0063bfbb543706af576284f3ad4083bfd5d0220f3c",
+    "_coordinates.csv": "114a2011675b8300b3539f855900c8adecf28d56db284b3a868a63a3c103fac8"
   }
 }

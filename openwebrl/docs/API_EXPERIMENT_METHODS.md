@@ -158,13 +158,14 @@ Before any paid calibration, freeze the browser/proxy mode, exact session/comput
 
 ### Recreate the completed scaling figures
 
-The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes all three settings above and the four historical high-effort controls. Recreate its 7 × 4.35-inch PNG/PDF/SVG figures and coordinates from public aggregates with zero model or browser calls:
+The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes all three settings above and the four historical high-effort controls. Recreate its 8.5 × 4.35-inch four-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
 
 ```bash
 "$API_PY" -m pip install matplotlib==3.9.4
 SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_20261031
 "$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling.py" \
   --aggregate "$SCALING_RESULTS/aggregate.json" \
+  --browser-cost-projection "$SCALING_RESULTS/browser_cost_projection.json" \
   --output-dir /tmp/openwebrl-browsercode-scaling-plots
 "$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling.py" \
   --aggregate "$SCALING_RESULTS/aggregate.json" \
@@ -174,7 +175,7 @@ SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_2026103
   --token-method luna_single_high_24576 --token-method luna_single_high_6144
 ```
 
-The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the four Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
+The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Its fourth column is projected browser hosting in USD per 1,000 valid tasks, with traffic excluded; it is joined to the exact actor aggregate by hash and task counts. Omitting `--browser-cost-projection` reproduces the three-column layout. A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the four Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
 
 ### Compare fresh runs
 
