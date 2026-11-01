@@ -3,37 +3,60 @@
 <a id="webprmbench-20261018"></a>
 ## WebPRMBench: Piotr SelectionARM and our K=1 head (October 17–18)
 
-**On WebArbiter's offline reward benchmark, Piotr gets 67.4% pair accuracy and 35.5% official state accuracy; our K=1 student/RL head gets 49.2% and 17.0%, i.e. chance-level pair accuracy.** Both runs cover the full released benchmark ([`ZYao720/WEBPRMBENCH`](https://huggingface.co/datasets/ZYao720/WEBPRMBENCH): 1,150 states × 4 preference pairs) with the unchanged upstream parser and metric, and were independently re-audited.
+**On WebArbiter's offline reward benchmark, Piotr averages 70.4% pairwise and 38.2% Best-of-N accuracy over the four environments, 18.8 and 36.4 pp below the published WebArbiter-7B (89.2% and 74.6%); our K=1 student/RL head is at chance (51.8% pairwise).** Both runs cover the full released benchmark ([`ZYao720/WEBPRMBENCH`](https://huggingface.co/datasets/ZYao720/WEBPRMBENCH): 1,150 states × 4 preference pairs) with the unchanged upstream parser and metric, and were independently re-audited.
 
 **Caveats that apply to every number below.** The released benchmark is text only (intent, accessibility tree, history, URLs; no screenshots), so neither model is evaluated in its native setting: Piotr was trained on screenshots, and the K=1 head on screenshots with five candidates (scored here on two). Neither model's training data was checked for overlap with the benchmark. Unparseable outputs count as errors (Piotr 44; K=1 0).
 
-**Pair accuracy** (a pair is correct when the model prefers the labelled better response):
+**Pairwise accuracy (%)**
 
-| Source | Pairs | Piotr correct | Piotr (%) | K=1 correct | K=1 (%) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| AssistantBench | 120 | 97 | 80.8 | 58 | 48.3 |
-| Mind2Web, cross-task | 568 | 395 | 69.5 | 281 | 49.5 |
-| Mind2Web, cross-website | 592 | 395 | 66.7 | 285 | 48.1 |
-| Mind2Web, cross-domain | 1,668 | 1,113 | 66.7 | 692 | 41.5 |
-| WebArena | 804 | 590 | 73.4 | 486 | 60.4 |
-| WorkArena | 848 | 509 | 60.0 | 459 | 54.1 |
-| All, pooled | 4,600 | 3,099 | 67.4 | 2,261 | 49.2 |
+| Model | Source of number | Mind2Web | WebArena | AssistantBench | WorkArena | Average of 4 |
+| −-- | −-- | −--: | −--: | −--: | −--: | −--: |
+| WebArbiter-7B | WebArbiter paper | 97.1 | 88.4 | 89.2 | 82.1 | 89.2 |
+| WebArbiter-3B | WebArbiter paper | 93.3 | 82.0 | 78.3 | 81.0 | 83.7 |
+| WebShepherd-8B | WebArbiter paper | 86.7 | 68.3 | 55.9 | 54.6 | 64.3 |
+| WebShepherd-3B | WebArbiter paper | 87.5 | 68.2 | 66.7 | 50.0 | 68.1 |
+| GPT-5 | WebArbiter paper | 80.9 | 84.8 | 81.7 | 81.1 | 82.1 |
+| GPT-4o | WebArbiter paper | 80.0 | 84.6 | 85.8 | 84.3 | 83.7 |
+| Qwen2.5-7B-Instruct | WebArbiter paper | 77.8 | 74.9 | 84.2 | 77.6 | 77.6 |
+| **Piotr SelectionARM** | our run | **67.3** | **73.4** | **80.8** | **60.0** | **70.4** |
+| **K=1 student/RL head** | our run | **44.5** | **60.4** | **48.3** | **54.1** | **51.8** |
+| Gap: Piotr − WebArbiter-7B (pp) | | −29.8 | −15.0 | −8.3 | −22.1 | −18.8 |
 
-**State accuracy** (a state is correct only when all 4 of its pairs are correct). The official score is the unweighted mean of the six per-source rates, not the pooled rate:
+**Best-of-N accuracy (%): the better response must win all 4 of its pairs (our "state accuracy")**
 
-| Source | States | Piotr correct | Piotr (%) | K=1 correct | K=1 (%) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| AssistantBench | 30 | 16 | 53.3 | 2 | 6.7 |
-| Mind2Web, cross-task | 142 | 50 | 35.2 | 26 | 18.3 |
-| Mind2Web, cross-website | 148 | 40 | 27.0 | 26 | 17.6 |
-| Mind2Web, cross-domain | 417 | 108 | 25.9 | 48 | 11.5 |
-| WebArena | 201 | 89 | 44.3 | 53 | 26.4 |
-| WorkArena | 212 | 58 | 27.4 | 46 | 21.7 |
-| All, pooled | 1,150 | 361 | 31.4 | 201 | 17.5 |
-| **Official: mean of the 6 sources** | | | **35.5** | | **17.0** |
+| Model | Source of number | Mind2Web | WebArena | AssistantBench | WorkArena | Average of 4 |
+| −-- | −-- | −--: | −--: | −--: | −--: | −--: |
+| WebArbiter-7B | WebArbiter paper | 89.5 | 68.7 | 70.0 | 70.2 | 74.6 |
+| WebArbiter-3B | WebArbiter paper | 78.4 | 56.2 | 46.7 | 54.8 | 59.1 |
+| WebShepherd-8B | WebArbiter paper | 73.7 | 43.9 | 30.0 | 25.5 | 43.3 |
+| WebShepherd-3B | WebArbiter paper | 65.2 | 41.3 | 46.7 | 21.2 | 43.6 |
+| GPT-5 | WebArbiter paper | 62.4 | 71.6 | 63.3 | 64.6 | 65.5 |
+| GPT-4o | WebArbiter paper | 52.6 | 66.7 | 66.7 | 55.2 | 60.3 |
+| Qwen2.5-7B-Instruct | WebArbiter paper | 39.2 | 42.8 | 53.3 | 35.9 | 42.8 |
+| **Piotr SelectionARM** | our run | **28.0** | **44.3** | **53.3** | **27.4** | **38.2** |
+| **K=1 student/RL head** | our run | **14.1** | **26.4** | **6.7** | **21.7** | **17.2** |
+| Gap: Piotr − WebArbiter-7B (pp) | | −61.5 | −24.4 | −16.7 | −42.8 | −36.4 |
+
+Published rows are from the [WebArbiter paper](https://arxiv.org/abs/2601.21872), Table 2; we did not rerun those models. Mind2Web is the three Mind2Web splits pooled (707 states), and "Average of 4" is the unweighted mean of the four environments, as in the paper. (The upstream evaluator's "official" state score of 35.5% for Piotr averages six sources instead, counting the Mind2Web splits separately; it is not comparable to the paper's average.)
+
+**The gap:** Piotr is 18.8 pp below WebArbiter-7B on average pairwise accuracy and 36.4 pp below on Best-of-N, and also below the paper's general-purpose LLM judges: below GPT-4o in every column, and below Qwen2.5-7B-Instruct on both averages (70.4 vs 77.6 pairwise; 38.2 vs 42.8 Best-of-N). The largest gaps are on Mind2Web and WorkArena. Part of this is setting: WebPRMBench is text-only (accessibility tree), the native input of WebArbiter but not of Piotr, which was trained on screenshots.
+
+<details><summary>Our runs by source, including the three Mind2Web splits (counts and rates)</summary>
+
+| Model | Count | Mind2Web cross-task | Mind2Web cross-website | Mind2Web cross-domain | WebArena | AssistantBench | WorkArena | All |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Size | States (pairs = 4 ×) | 142 | 148 | 417 | 201 | 30 | 212 | 1,150 |
+| Piotr SelectionARM | Correct pairs | 395 | 395 | 1,113 | 590 | 97 | 509 | 3,099 |
+| Piotr SelectionARM | Pair accuracy (%) | 69.5 | 66.7 | 66.7 | 73.4 | 80.8 | 60.0 | 67.4 |
+| Piotr SelectionARM | Correct states | 50 | 40 | 108 | 89 | 16 | 58 | 361 |
+| Piotr SelectionARM | State accuracy (%) | 35.2 | 27.0 | 25.9 | 44.3 | 53.3 | 27.4 | 31.4 |
+| K=1 student/RL head | Correct pairs | 281 | 285 | 692 | 486 | 58 | 459 | 2,261 |
+| K=1 student/RL head | Pair accuracy (%) | 49.5 | 48.1 | 41.5 | 60.4 | 48.3 | 54.1 | 49.2 |
+| K=1 student/RL head | Correct states | 26 | 26 | 48 | 53 | 2 | 46 | 201 |
+| K=1 student/RL head | State accuracy (%) | 18.3 | 17.6 | 11.5 | 26.4 | 6.7 | 21.7 | 17.5 |
+</details>
 
 - **Piotr has a strong first-position bias.** It answers "Response 1" on 3,257 of 4,600 pairs (71%) although the label is 1 on only 2,178 (47%): pair accuracy is 91.0% (1,983 / 2,178) when the better response is shown first and 46.1% (1,116 / 2,422) when it is shown second. The K=1 head scores each candidate separately, so it is order-invariant by construction (measured maximum order effect 1.9e-6).
-- **By source:** apart from AssistantBench (30 states, wide uncertainty), both models do best on WebArena. Piotr is weakest on WorkArena; K=1 is weakest on Mind2Web cross-domain, where it is below chance.
 
 <details><summary>Setup, cost and sources</summary>
 
