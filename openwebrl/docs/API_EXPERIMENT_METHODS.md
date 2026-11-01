@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-The main [high-effort GPT figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) uses **GPT-5.6 Terra for every point**: OM2W shows Sol single and Luna single/N3/N5 in both harnesses; WebVoyager and DeepShop show the same four methods in BrowserCode. Success and actor metrics use each method's valid tasks. The two added benchmarks reuse 2,845 saved valid episodes; their shared Terra terminal-success scores are distinct from the preserved benchmark-native GPT-4o scores. Native OM2W endpoint-evidence exclusions remain explicit. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
+The completed [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows seven methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. It adds Luna xhigh/1×, high/2× and high/0.5× output ceilings to Sol single and Luna high single/N3/N5. None of the nine paired comparisons against Luna high/1× establishes a success gain; actual token use, valid-task cost and latency accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) remains a separate historical view with explicit native endpoint-evidence exclusions. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -83,6 +83,26 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 ```
 
 The second command is a read-only plan; add `--execute` to spend within its caps. Select a full benchmark with `--benchmark online-mind2web --limit 300`, `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`. For fixed shards, `--task-ids /path/to/ids.json` selects a unique ordered JSON list of IDs after benchmark filtering and before the limit; its hash and selected IDs are recorded. The generated runtime binds the exact effort and cap to requests, validation, reservations and metrics, and retains its original sources and protocol hashes. A higher ceiling permits longer outputs; inspect actual output usage and truncations alongside success, cost and latency. The earlier `--luna-xhigh-output-tokens CAP` option remains an xhigh-only alias; setup without either output-cap option retains the frozen historical campaign.
+
+### Recreate the completed scaling figures
+
+The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes all three settings above and the four historical high-effort controls. Recreate its 7 × 4.35-inch PNG/PDF/SVG figures and coordinates from public aggregates with zero model or browser calls:
+
+```bash
+"$API_PY" -m pip install matplotlib==3.9.4
+SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_20261031
+"$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling.py" \
+  --aggregate "$SCALING_RESULTS/aggregate.json" \
+  --output-dir /tmp/openwebrl-browsercode-scaling-plots
+"$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling.py" \
+  --aggregate "$SCALING_RESULTS/aggregate.json" \
+  --output-dir /tmp/openwebrl-browsercode-scaling-plots \
+  --stem browsercode_scaling_tokens --tokens \
+  --token-method luna_single_high --token-method luna_single_xhigh_12288 \
+  --token-method luna_single_high_24576 --token-method luna_single_high_6144
+```
+
+The first figure uses each method's valid-task success, actor cost and latency. The second uses actual summed output and reasoning tokens for the four Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
 
 ### Compare fresh runs
 

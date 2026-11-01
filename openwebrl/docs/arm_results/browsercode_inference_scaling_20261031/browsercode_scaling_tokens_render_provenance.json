@@ -1,0 +1,90 @@
+{
+  "schema": "browsercode-scaling-render-v1",
+  "profile": "completed-sweep",
+  "points": 12,
+  "selected_methods": [
+    "luna_single_high",
+    "luna_single_xhigh_12288",
+    "luna_single_high_24576",
+    "luna_single_high_6144"
+  ],
+  "dimensions_inches": [
+    7,
+    4.35
+  ],
+  "token_figure": true,
+  "omitted_token_method_coverage": [
+    {
+      "benchmark": "online_mind2web",
+      "method": "serial_high",
+      "valid": 266,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "parallel3_select_high",
+      "valid": 269,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "parallel5_select_high",
+      "valid": 267,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "parallel5_select_high",
+      "valid": 555,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "serial_high",
+      "valid": 553,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "parallel3_select_high",
+      "valid": 568,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "parallel5_select_high",
+      "valid": 147,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "serial_high",
+      "valid": 145,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "parallel3_select_high",
+      "valid": 148,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    }
+  ],
+  "input_sha256": "43a7d8774d1089b003e76306e884a22d6d68cd0b492036a91cf04c9aef456b65",
+  "renderer_sha256": "4f344b98e092159449a3fdd8c8c51e277a59334c8a400d51b96cd29e0d3b76c2",
+  "matplotlib_version": "3.9.4",
+  "output_sha256": {
+    ".png": "35deaaa30be8fff52b252b7ed108c9f9544057174001be9768e024f81e1663fe",
+    ".svg": "fac3a892ce6c461647d4bee5f06b9f29ad8813ca62523914d8eeaeb57c67683a",
+    ".pdf": "e1d30f0ca0a008c8b4ab3061fc9186b007dfb5957c6d3c4734ca89cfcba72c3b",
+    "_coordinates.csv": "2591bc97b79120a3ec87d6fef9c9ad68c3e78d83d8457bb30a074ecd2758823b"
+  }
+}

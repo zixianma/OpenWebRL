@@ -1,5 +1,81 @@
 # Final inference results
 
+<!-- browsercode-inference-scaling-20261031:start -->
+<a id="browsercode-inference-scaling-20261031"></a>
+
+## BrowserCode: alternative ways to scale inference
+
+**The new single-call settings show no consistent success gain over Luna high at the original ceiling.** All nine paired 95% intervals comparing xhigh/1×, high/2× and high/0.5× against high/1× include zero. N3/N5 have higher conditional success on OM2W and WebVoyager, with substantially greater actor cost and latency; this pattern varies by benchmark. These comparisons describe observed tradeoffs across live collection windows.
+
+![BrowserCode success versus actor cost and latency across three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.png)
+
+*All points use GPT-5.6 Terra terminal-success judgments; Sol and Luna denote GPT-6 Sol and GPT-6 Luna. Success, cost and latency use each method's valid tasks, including valid failures; task cohorts differ. Squares identify Sol and circles Luna; blue denotes single-call actions, red candidates plus selection, with open red circles for N3 and filled red circles for N5. The single-call token ceiling is per generation: 1× = 12,288, 2× = 24,576 and 0.5× = 6,144 output tokens, including reasoning. Every method permits 30 decisions. Cost excludes external judging; latency includes actor-loop model work and browser execution. Axes are cropped, cost is logarithmic, and the legend is outside the panels.*
+
+[Aggregate](arm_results/browsercode_inference_scaling_20261031/aggregate.json) · [Coordinates](arm_results/browsercode_inference_scaling_20261031/coordinates.csv) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.svg) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.pdf) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py) · [Reproduction recipes](API_EXPERIMENT_METHODS.md#luna-xhigh-output-limits)
+
+<details>
+<summary>Per-benchmark counts, cost and latency</summary>
+
+All seven methods have final dispositions for the same planned tasks within each benchmark. Success percentages divide by valid tasks; invalids remain separate. Actor cost and latency means cover every valid task. The four historical high-effort methods retain their previously published outcomes, cost and latency exactly.
+
+### Online-Mind2Web · 300 planned tasks per method
+
+| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|
+| Sol high single | 266 | 34 | 177 | 66.5% | 0.20771 | 92.7 |
+| Luna high · 1× cap | 269 | 31 | 178 | 66.2% | 0.00951 | 94.9 |
+| Luna high N3 | 269 | 31 | 183 | 68.0% | 0.05496 | 178.1 |
+| Luna high N5 | 267 | 33 | 198 | 74.2% | 0.06960 | 207.9 |
+| Luna xhigh · 1× cap | 267 | 33 | 181 | 67.8% | 0.01087 | 137.8 |
+| Luna high · 2× cap | 270 | 30 | 186 | 68.9% | 0.00998 | 126.5 |
+| Luna high · 0.5× cap | 267 | 33 | 178 | 66.7% | 0.00944 | 119.8 |
+
+### WebVoyager · 595 planned tasks per method
+
+| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|
+| Sol high single | 553 | 42 | 468 | 84.6% | 0.19770 | 94.1 |
+| Luna high · 1× cap | 579 | 16 | 482 | 83.2% | 0.00778 | 100.1 |
+| Luna high N3 | 568 | 27 | 496 | 87.3% | 0.04319 | 163.4 |
+| Luna high N5 | 555 | 40 | 483 | 87.0% | 0.04588 | 171.0 |
+| Luna xhigh · 1× cap | 581 | 14 | 482 | 83.0% | 0.00896 | 109.5 |
+| Luna high · 2× cap | 585 | 10 | 482 | 82.4% | 0.00752 | 102.8 |
+| Luna high · 0.5× cap | 580 | 15 | 481 | 82.9% | 0.00772 | 102.4 |
+
+### DeepShop · 150 planned tasks per method
+
+| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|
+| Sol high single | 145 | 5 | 113 | 77.9% | 0.38431 | 150.6 |
+| Luna high · 1× cap | 150 | 0 | 123 | 82.0% | 0.01403 | 154.8 |
+| Luna high N3 | 148 | 2 | 121 | 81.8% | 0.08884 | 258.2 |
+| Luna high N5 | 147 | 3 | 120 | 81.6% | 0.10954 | 281.9 |
+| Luna xhigh · 1× cap | 150 | 0 | 118 | 78.7% | 0.01733 | 169.3 |
+| Luna high · 2× cap | 150 | 0 | 129 | 86.0% | 0.01309 | 140.2 |
+| Luna high · 0.5× cap | 150 | 0 | 124 | 82.7% | 0.01347 | 144.0 |
+
+The three new settings record all 3,135 planned dispositions: 3,000 valid and 135 invalid. Historical versus fresh collection times, runtime safeguards and resulting valid cohorts differ; task pairing controls task content, and does not remove these differences. N3/N5 use high effort for both proposals and selection. External judging and invalid-attempt spend are excluded from the plotted valid-task actor means.
+
+</details>
+
+<details>
+<summary>Actual output and reasoning consumption, ceilings and paired uncertainty</summary>
+
+![Luna single-call success versus actual output and reasoning consumption](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_tokens.png)
+
+*Token axes show mean summed native output and reasoning tokens per valid task across all its generations. Reasoning is included in output, and is never added a second time. These quantities differ from a per-call token ceiling. All four Luna single-call settings have full native usage coverage on their plotted valid tasks. Historical Sol/N3/N5 token coverage is unavailable in this artifact and those methods are omitted from this token figure; tokens are not a common compute unit across different models and selection policies.*
+
+Increasing the high-effort ceiling from 1× to 2× did not double realized output; mean output remains similar in every benchmark. Xhigh consumes more output and reasoning than high/1× on all three benchmarks, without a consistent success gain. Across all new settings, none of 50,453 generation calls with known native usage hit its output ceiling or reported an output-limit stop, including calls from invalid episodes; six additional generation calls have unknown usage. The tested ceilings did not constrain the observed known-usage generations.
+
+[Actual-token coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_tokens_coordinates.csv) · [Token figure SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_tokens.svg) · [Token figure PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_tokens.pdf) · [Paired comparisons](arm_results/browsercode_inference_scaling_20261031/paired_comparisons.csv)
+
+Paired comparisons use content-identical common-valid tasks, 10,000 task-bootstrap draws and percentile 95% intervals. The three alternative-versus-high/1× cohorts have 262/265/262 tasks on OM2W, 567/570/567 on WebVoyager and 150 each on DeepShop (xhigh/1×, high/2×, high/0.5× order). All nine intervals include zero; they do not establish equivalence. The exploratory DeepShop high/2× versus xhigh difference is +7.3 percentage points (95% interval +1.3 to +13.3); six contrasts per benchmark are reported without multiple-comparison correction. Legacy Sol/N3/N5 points remain descriptive in this analysis.
+
+All-attempt spend for the three new settings is $29.243526775 actor charges/reservations and $49.2198530 external judge charges/reservations. Seven exact quarantined unknown physical requests retain their full $0.246580875 reserve; native usage remains unknown. Prepared requests proven not to have crossed provider dispatch add no physical calls or charges. Invalid/interrupted work remains in these all-attempt totals. These accounting totals are separate from the valid-task actor means above.
+
+</details>
+<!-- browsercode-inference-scaling-20261031:end -->
+
 <!-- claude-browsercode-om2w300-v1:start -->
 <a id="claude-browsercode-om2w300"></a>
 
