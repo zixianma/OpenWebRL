@@ -1,5 +1,5 @@
 {
-  "schema": "browsercode-scaling-render-v1",
+  "schema": "browsercode-scaling-render-v2",
   "profile": "completed-sweep",
   "points": 21,
   "selected_methods": [
@@ -16,14 +16,20 @@
     4.35
   ],
   "token_figure": false,
+  "columns": [
+    "actor_usd",
+    "browser_commands",
+    "actor_seconds"
+  ],
+  "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.",
   "omitted_token_method_coverage": [],
-  "input_sha256": "43a7d8774d1089b003e76306e884a22d6d68cd0b492036a91cf04c9aef456b65",
-  "renderer_sha256": "4f344b98e092159449a3fdd8c8c51e277a59334c8a400d51b96cd29e0d3b76c2",
+  "input_sha256": "969a252c314d9ce378d0f35f0859d7ab10552d169627b532f7a8e8ed01ad2735",
+  "renderer_sha256": "a45f5108f1f63ddb83bc535855a55089a0ed57901adb3f19103306337bcbe0ee",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "cd957cf5a0a79a02012c0980afbe6424d07527cbd04de78de15daef0446b1fb0",
-    ".svg": "62138ad7990e572f678d853dc0305453d7f91b53e9cc5d68fd8951a59a8deb6c",
-    ".pdf": "659d99ffd8ee6dbe06acd72a01e200d602df7b74c91e1175663d025ff04e3032",
-    "_coordinates.csv": "e5b7f1dadefb6cf770d6e8db66157082e8dcd6efa8c40e94623b308cc6518145"
+    ".png": "4bc88f8c97d8d754a902062d0f774f0e709057dce3c2a408378ac3196c4df234",
+    ".svg": "70edd8698b51e1c89295cfdace3d54700339139ce0c4456ace580d945a3332c1",
+    ".pdf": "b437e2084858ca899f0038e39d67211b796475e1a2bcc0702edc1f0a99458ea9",
+    "_coordinates.csv": "3271eac5edcd9b2d0e8393bdb36f59a40a46d1d408de9a8376288df5b28f6772"
   }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Standalone renderer for completed, public, aggregate-only BrowserCode scaling data.
 
-Python + matplotlib only. Main figure: three benchmarks by actor cost/latency.
+Python + matplotlib only. Main figure: three benchmarks by cost/commands/latency.
 Optional token figure: actual output and reasoning consumption, never token caps.
 No runtime/source imports, credentials, task identifiers, API or browser calls.
 The historical-baseline profile is explicitly a real-data layout preview; the
@@ -34,7 +34,8 @@ STYLES = {'serial_high': ('Sol high single', 's', '#08519c', True),
           'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', '#08306b', True),
           'luna_single_high_24576': ('Luna high (2× cap)', 'o', '#2171b5', True),
           'luna_single_high_6144': ('Luna high (0.5× cap)', 'o', '#9ecae1', True)}
-METRICS = ('actor_usd', 'actor_seconds', 'output_tokens', 'reasoning_tokens')
+METRICS = ('actor_usd', 'browser_commands', 'actor_seconds', 'output_tokens', 'reasoning_tokens')
+COMMAND_DEFINITION = 'One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.'
 
 
 def need(condition, message):
@@ -77,8 +78,9 @@ def validate_accounting(d, accounting):
 
 
 def validate(data):
-    need(type(data) is dict and set(data) == {'schema', 'profile', 'judge_protocol', 'metric_population', 'comparison_caveat', 'points', 'paired_comparisons', 'paired_statistics', 'unavailable_prespecified_comparisons'}, 'Only documented public aggregate fields are allowed')
-    need(data.get('schema') == 'browsercode-scaling-paper-v1', 'Unknown aggregate schema')
+    need(type(data) is dict and set(data) == {'schema', 'profile', 'judge_protocol', 'metric_population', 'comparison_caveat', 'points', 'paired_comparisons', 'paired_statistics', 'unavailable_prespecified_comparisons', 'browser_command_definition'}, 'Only documented public aggregate fields are allowed')
+    need(data.get('schema') == 'browsercode-scaling-paper-v2', 'Unknown aggregate schema')
+    need(data.get('browser_command_definition') == COMMAND_DEFINITION, 'Exact selected-batch command definition required')
     need(data.get('profile') in ('historical-baseline', 'completed-sweep'), 'Unknown completeness profile')
     need(data.get('judge_protocol') == PROTOCOL and all(type(data['judge_protocol'][k]) is type(v) for k, v in PROTOCOL.items()), 'Shared Terra protocol required')
     need(data.get('metric_population') == 'resolved_valid_tasks', 'Valid-task metric population required')
@@ -90,7 +92,7 @@ def validate(data):
     actual = [(p.get('benchmark'), p.get('method')) for p in points]
     need(len(set(actual)) == len(actual) and set(actual) == expected, 'Exact unique benchmark/method identities required')
     for p in points:
-        allowed = {'benchmark', 'method', 'harness', 'completion', 'requested', 'recorded', 'valid', 'invalid', 'successes', 'success_rate', 'metrics', 'collection_window', 'evidence_sha256', 'actor_protocol', 'independent_completion_audit_sha256', 'all_attempt_generations', 'accounting_disposition'}
+        allowed = {'benchmark', 'method', 'harness', 'completion', 'requested', 'recorded', 'valid', 'invalid', 'successes', 'success_rate', 'metrics', 'collection_window', 'evidence_sha256', 'actor_protocol', 'independent_completion_audit_sha256', 'all_attempt_generations', 'accounting_disposition', 'browser_commands_evidence_sha256'}
         need(set(p) <= allowed, 'Point contains undocumented/private fields')
         need(p.get('harness') == 'browsercode' and p.get('completion') == 'verified', 'Only verified BrowserCode cohorts may be rendered')
         for key in ('requested', 'recorded', 'valid', 'invalid', 'successes'):
@@ -98,6 +100,7 @@ def validate(data):
         need(p['requested'] == BENCHMARKS[p['benchmark']][1] and p['recorded'] == p['requested'], 'Every planned cell needs a final disposition')
         need(0 < p['valid'] <= p['recorded'] and p['valid'] + p['invalid'] == p['recorded'] and p['successes'] <= p['valid'], 'Disposition counts disagree')
         need(digest(p.get('evidence_sha256')), 'Aggregate source/audit hash required')
+        need(digest(p.get('browser_commands_evidence_sha256')), 'Command measurement source hash required')
         need(number(p.get('success_rate')) and abs(p['success_rate'] - p['successes']/p['valid']) <= 1e-12, 'Wrong valid-only success denominator')
         window = p.get('collection_window')
         need(type(window) is dict and set(window) <= {'status', 'start_epoch', 'end_epoch'}, 'Only aggregate collection window fields are allowed')
@@ -114,6 +117,9 @@ def validate(data):
             need((observed == 0 and metric['mean'] is None) or (observed > 0 and number(metric['mean']) and metric['mean'] >= 0), 'Missing usage must remain missing')
             if name in ('actor_usd', 'actor_seconds'):
                 need(observed == p['valid'] and metric['mean'] > 0, 'Main plotted actor metric needs full valid-task coverage')
+            if name == 'browser_commands':
+                need(observed == p['valid'], 'Command panel needs full valid-task measurement coverage')
+                need(metric['mean'] <= 30, 'Selected command batches exceed the 30-decision limit')
         if p['method'] in NEW:
             cap = 12288 if p['method'].endswith('12288') else 24576 if p['method'].endswith('24576') else 6144
             effort = 'xhigh' if 'xhigh' in p['method'] else 'high'
@@ -175,8 +181,8 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     import matplotlib.pyplot as plt
     from matplotlib.lines import Line2D
     from matplotlib.ticker import MaxNLocator, NullFormatter, StrMethodFormatter
-    columns = ('output_tokens', 'reasoning_tokens') if tokens else ('actor_usd', 'actor_seconds')
-    labels = ('Output tokens / valid task', 'Reasoning tokens / valid task') if tokens else ('Actor cost ($, log)', 'Actor latency (s)')
+    columns = ('output_tokens', 'reasoning_tokens') if tokens else ('actor_usd', 'browser_commands', 'actor_seconds')
+    labels = ('Output tokens / valid task', 'Reasoning tokens / valid task') if tokens else ('Actor cost ($, log)', 'Browser-code batches', 'Actor latency (s)')
     available = METHODS if data['profile'] == 'completed-sweep' else BASELINE
     need(tokens or token_methods is None, 'Token method subset requires token figure')
     if token_methods is not None:
@@ -192,9 +198,9 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     output_dir.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.labelsize': 7.5,
                          'axes.titlesize': 8, 'axes.linewidth': .6, 'svg.fonttype': 'none', 'pdf.fonttype': 42,
-                         'svg.hashsalt': 'openwebrl-browsercode-scaling-v1'})
-    fig, axes = plt.subplots(3, 2, figsize=(7, 4.35), sharey='row', squeeze=False)
-    fig.subplots_adjust(left=.077, right=.765, top=.90, bottom=.105, hspace=.53, wspace=.25)
+                         'svg.hashsalt': 'openwebrl-browsercode-scaling-v1' if tokens else 'openwebrl-browsercode-scaling-v2'})
+    fig, axes = plt.subplots(3, len(columns), figsize=(7, 4.35), sharey='row', squeeze=False)
+    fig.subplots_adjust(left=.077, right=.765, top=.90, bottom=.105, hspace=.53, wspace=.25 if tokens else .35)
     for i, (benchmark, (title, _)) in enumerate(BENCHMARKS.items()):
         rows = sorted((p for p in plotted if p['benchmark'] == benchmark), key=lambda p: METHODS.index(p['method']))
         rates = [100*p['success_rate'] for p in rows]
@@ -235,7 +241,10 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     fig.text(.79, .20, note, fontsize=6.8, color='#555555', va='top')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
-        fig.savefig(output_dir / f'{stem}.{extension}', dpi=300, metadata=metadata)
+        output = output_dir / f'{stem}.{extension}'
+        fig.savefig(output, dpi=300, metadata=metadata)
+        if extension == 'svg' and not tokens:
+            output.write_text('\n'.join(line.rstrip() for line in output.read_text().splitlines())+'\n')
     plt.close(fig)
     fields = ['benchmark', 'method', 'requested', 'recorded', 'valid', 'invalid', 'successes', 'success_rate']
     fields += [f'{name}_{key}' for name in METRICS for key in ('mean', 'observed_tasks', 'missing_valid_tasks')]
@@ -246,8 +255,9 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
             row = {k: p[k] for k in fields[:8]}
             row.update({f'{name}_{key}': value for name, metric in p['metrics'].items() for key, value in metric.items()})
             writer.writerow(row)
-    return {'schema': 'browsercode-scaling-render-v1', 'profile': data['profile'], 'points': len(plotted), 'selected_methods': list(selected),
-            'dimensions_inches': [7, 4.35], 'token_figure': tokens,
+    return {'schema': 'browsercode-scaling-render-v2', 'profile': data['profile'], 'points': len(plotted), 'selected_methods': list(selected),
+            'dimensions_inches': [7, 4.35], 'token_figure': tokens, 'columns': list(columns),
+            'browser_command_definition': COMMAND_DEFINITION,
             'omitted_token_method_coverage': [
                 {'benchmark': p['benchmark'], 'method': p['method'], 'valid': p['valid'],
                  'output_observed_tasks': p['metrics']['output_tokens']['observed_tasks'],

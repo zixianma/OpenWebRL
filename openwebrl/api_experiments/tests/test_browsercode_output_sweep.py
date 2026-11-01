@@ -256,6 +256,68 @@ class SweepTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             c.prepare(args, 'luna')
 
+    def test_sixty_decision_plan_actual_agent_limit_identity_and_tracking(self):
+        runtime = self.runtime('sixty')
+        receipt = p.configure(runtime, 12288, 'high', 60)
+        self.assertEqual(p.validate(runtime), receipt)
+        args = self.args(runtime, '--limit', '1045')
+        args.arm = 'luna_single_high'
+        plan, tasks = c.prepare(args, 'luna')
+        self.assertEqual((plan['max_decisions'], plan['max_output_tokens'], plan['candidate_effort'], len(tasks)), (60, 12288, 'high', 1045))
+        source = (runtime / 'worker.py').read_text()
+        tree = ast.parse(source)
+        agent = next(node for node in ast.walk(tree) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == 'DefaultAgent')
+        step_limit = next(item.value for item in agent.keywords if item.arg == 'step_limit')
+        env = {'PLAN': p.read(runtime / 'campaign-plan.json')}
+        self.assertEqual(eval(compile(ast.Expression(step_limit), '<actual agent step_limit>', 'eval'), env), 60)
+        for name in ('step_cap', 'max_decisions'):
+            values = [value for node in ast.walk(tree) if isinstance(node, ast.Dict) for key, value in zip(node.keys, node.values) if isinstance(key, ast.Constant) and key.value == name]
+            self.assertEqual(len(values), 1)
+            self.assertEqual(eval(compile(ast.Expression(values[0]), '<actual tracking limit>', 'eval'), env), 60)
+        self.assertIn('signal.alarm(900)', source)
+        self.assertEqual(p.read(runtime / 'prospective-originals/campaign-plan.json')['protocol']['max_decisions'], 30)
+        self.assertFalse((self.root / 'output').exists())
+
+    def test_sixty_decision_model_keeps_high_12288_native_payload_and_reserve(self):
+        runtime = self.runtime('sixty-model')
+        p.configure(runtime, 12288, 'high', 60)
+        actor = self.load_actor(runtime)
+        calls = []
+        def client(payload, role):
+            calls.append((deepcopy(payload), role))
+            return {'id': 'offline-sixty', 'model': actor.MODEL, 'status': 'completed', 'reasoning': payload['reasoning'], 'output': [{'type':'message','role':'assistant','content':[{'type':'output_text','text':'finished'}]}], 'usage': {'input_tokens': 100, 'output_tokens': 20}}
+        pool = budget_module.ReservationBudget(self.root / 'sixty-pool', '1', 3)
+        model = actor.LunaModel('luna_single_high', self.root / 'sixty-episode', client, pool, actor.PRICING, max_output_tokens=12288, reasoning_effort='high')
+        model.turn = 30  # The archived model rejects here; the actual 60-turn model must continue.
+        model.query([{'role': 'user', 'content': 'offline observation'}])
+        self.assertEqual((len(calls), calls[0][0]['max_output_tokens'], calls[0][0]['reasoning'], calls[0][1]), (1, 12288, {'effort': 'high'}, 'candidate_0'))
+        model.turn = 59
+        model.query([{'role': 'user', 'content': 'offline observation'}])
+        self.assertEqual(model.turn, 60)
+        with self.assertRaises(ValueError):
+            model.query([{'role': 'user', 'content': 'offline observation'}])
+        self.assertEqual(len(calls), 2)
+        state = next(iter(pool.snapshot()['requests'].values()))
+        self.assertEqual(Decimal(state['reserved_usd']), (Decimal(1000) * Decimal('.125') + Decimal(12288) * Decimal('.5')) / Decimal(1000000))
+
+    def test_invalid_and_unpaired_decision_caps_fail_before_preparation(self):
+        for cap in (True, 0, 31, 120, '60'):
+            runtime = self.runtime('bad-decisions-' + str(cap))
+            with self.subTest(cap=cap), self.assertRaises(ValueError):
+                p.configure(runtime, 12288, 'high', cap)
+            self.assertFalse((runtime / p.ORIGINALS).exists())
+        for flags in ([], ['--luna-single-output-tokens', '12288'], ['--luna-single-reasoning-effort', 'high'], ['--luna-xhigh-output-tokens', '12288']):
+            args = b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'unpaired'), '--luna-single-max-decisions', '60', *flags])
+            with self.subTest(flags=flags), patch.object(b, 'call', side_effect=AssertionError('no dependency or browser work')), self.assertRaises(ValueError):
+                b.setup(args)
+        runtime = self.runtime('bad-declared-turns')
+        p.configure(runtime, 12288, 'high', 60)
+        plan = p.read(runtime / 'campaign-plan.json')
+        plan['protocol']['max_decisions'] = 30
+        p.write(runtime / 'campaign-plan.json', plan)
+        with self.assertRaises(ValueError):
+            p.validate(runtime)
+
     def test_original_actor_still_rejects_higher_cap_before_provider(self):
         runtime = self.runtime()
         actor = self.load_actor(runtime)

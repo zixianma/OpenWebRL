@@ -163,6 +163,9 @@ def setup(args):
     legacy_cap = getattr(args, 'luna_xhigh_output_tokens', None)
     generic_cap = getattr(args, 'luna_single_output_tokens', None)
     effort = getattr(args, 'luna_single_reasoning_effort', None)
+    max_decisions = getattr(args, 'luna_single_max_decisions', 30)
+    if max_decisions != 30 and (generic_cap is None or effort is None):
+        raise ValueError('--luna-single-max-decisions 60 requires explicit --luna-single-output-tokens and --luna-single-reasoning-effort')
     if legacy_cap is not None and generic_cap is not None:
         raise ValueError('Choose one Luna output-cap flag')
     if legacy_cap is not None and effort not in (None, 'xhigh'):
@@ -197,7 +200,7 @@ def setup(args):
         spec = importlib.util.spec_from_file_location('prospective_browsercode', HERE / 'prospective_browsercode.py')
         prospective = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(prospective)
-        prospective.configure(target / 'runtime', cap, effort)
+        prospective.configure(target / 'runtime', cap, effort, max_decisions)
     write(target / MARKER, {'schema': 'browsercode-workspace-v1', 'campaign': args.campaign,
                            'dependencies': str(dependencies), 'python': str(python), 'executor': 'browsercode'})
     print('Workspace ready: ' + str(target))
@@ -261,6 +264,7 @@ def parser():
     s.add_argument('--luna-xhigh-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single xhigh 30-turn output-cap experiment over OM2W300, WebVoyager595 and DeepShop150; requires --campaign luna')
     s.add_argument('--luna-single-output-tokens', type=int, choices=(6144, 12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')
     s.add_argument('--luna-single-reasoning-effort', choices=('high', 'xhigh'), help='Explicit prospective Luna single reasoning effort; default xhigh when an output cap is given')
+    s.add_argument('--luna-single-max-decisions', type=int, choices=(30, 60), default=30, help='Prospective single decision limit; 60 requires explicit output cap and reasoning effort; actor wall deadline stays 900 seconds')
     s.set_defaults(action=setup)
     c = commands.add_parser('check', help='Check real imports, optionally a local browser; zero model calls')
     c.add_argument('--workspace', type=Path, required=True)

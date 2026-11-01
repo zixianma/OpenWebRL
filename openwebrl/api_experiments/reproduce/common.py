@@ -122,7 +122,8 @@ def prepare(args, provider):
         raise ValueError("Harness is not supported by this frozen campaign")
     expected_output = spec["output_tokens"]
     allowed_outputs = (prospective['output_tokens'],) if prospective else (4096, 12288)
-    if plan["protocol"]["max_decisions"] != 30 or expected_output not in allowed_outputs:
+    expected_decisions = prospective['max_decisions'] if prospective else 30
+    if plan["protocol"]["max_decisions"] != expected_decisions or expected_output not in allowed_outputs:
         raise ValueError("Runtime is not the frozen BrowserCode model/12288/30 protocol")
     if provider != "gpt" and config["judge_protocol"]["model"] != "gpt-5.6-terra":
         raise ValueError("Runtime must use the frozen Terra judge")
@@ -151,7 +152,7 @@ def prepare(args, provider):
     result = {"provider": provider, "arm": args.arm, "model": expected, "candidate_count": spec["proposal_count"],
             "candidate_effort": spec.get("reasoning_effort", "high"), "selector_effort": spec.get("selector_reasoning_effort", spec.get("reasoning_effort", "high") if spec["proposal_count"] > 1 else None),
             "selector_max_output_tokens": spec.get("selector_output_tokens", plan["protocol"].get("selector_max_output_tokens")) if spec["proposal_count"] > 1 else None,
-            "task_count": len(chosen), "benchmark": benchmark, "harness": harness, "max_output_tokens": expected_output, "max_decisions": 30,
+            "task_count": len(chosen), "benchmark": benchmark, "harness": harness, "max_output_tokens": expected_output, "max_decisions": expected_decisions,
             "runtime": str(runtime), "output": str(output), "source_manifest_sha256": digest(runtime / "source-manifest.json"),
             "task_manifest_sha256": digest(runtime / "tasks.json"), "model_usd_cap": args.model_usd, "judge_usd_cap": args.judge_usd,
             "model_call_cap": args.model_calls, "judge_call_cap": args.judge_calls,

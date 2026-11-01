@@ -65,32 +65,43 @@ def task_roster():
     return rows
 
 
-def adapt_model(text, effort='xhigh'):
+def adapt_model(text, effort='xhigh', max_decisions=30):
+    need(type(max_decisions) is int and max_decisions in (30, 60), 'choose exactly 30 or 60 decisions')
     need(effort in EFFORT_ARMS, 'choose high or xhigh reasoning')
     need(hashlib.sha256(text.encode()).hexdigest() == MODEL_SHA, 'archived Luna model source changed')
     head, body = text.split('class LunaModel(OpenAIModel):\n', 1)
     if effort == 'high':
         head = head.replace('PRICING=', "MODES['luna_single_high']=(1,'high',None)\nPRICING=")
     body = body.replace('MAX_OUTPUT', 'self.output_token_cap')
+    turn_guard = "need(self.turn<30,'Frozen30-decision cap')"
+    need(body.count(turn_guard) == 1, 'Luna actual turn guard changed')
+    body = body.replace(turn_guard, "need(self.turn<" + str(max_decisions) + ",'Prospective decision cap')")
+
     anchor = " def __init__(self,mode,directory,client,budget,pricing=None,harness='browsercode',http_gate=None,**kwargs):\n"
     need(body.count(anchor) == 1, 'Luna constructor anchor changed')
     declaration = (
         "  declared=json.loads((Path(__file__).resolve().parent/'campaign-plan.json').read_text());arms=declared.get('arms',[])\n"
         "  need(declared.get('prospective_protocol')=='" + SCHEMA + "' and len(arms)==1,'Explicit prospective Luna plan required');arm=arms[0]\n"
         "  need(mode=='" + EFFORT_ARMS[effort] + "' and arm.get('arm')==mode and arm.get('model')==MODEL and arm.get('proposal_count')==1 and arm.get('reasoning_effort')=='" + effort + "' and arm.get('selector_model')is None,'Prospective single effort arm differs')\n"
-        "  self.output_token_cap=arm.get('output_tokens');need(type(self.output_token_cap)is int and self.output_token_cap in (6144,12288,24576,49152) and declared.get('protocol',{}).get('max_decisions')==30,'Prospective output/turn cap differs')\n"
+        "  self.output_token_cap=arm.get('output_tokens');need(type(self.output_token_cap)is int and self.output_token_cap in (6144,12288,24576,49152) and declared.get('protocol',{}).get('max_decisions')==" + str(max_decisions) + ",'Prospective output/turn cap differs')\n"
     )
     adapted = head + 'class LunaModel(OpenAIModel):\n' + body.replace(anchor, anchor + declaration)
     compile(adapted, '<prospective Luna model>', 'exec')
     return adapted
 
 
-def adapt_worker(text):
+def adapt_worker(text, max_decisions=30):
+    need(type(max_decisions) is int and max_decisions in (30, 60), 'choose exactly 30 or 60 decisions')
     replacements = {
         'max_output_tokens=12288': "max_output_tokens=next(x['output_tokens']for x in PLAN['arms']if x['arm']==mode)",
         "'max_output_tokens':12288": "'max_output_tokens':next(x['output_tokens']for x in PLAN['arms']if x['arm']==a.arm)",
         "row={'task_id':item['task_id'],": "row={'task_id':item['task_id'],'benchmark':item['benchmark'],'actor_reasoning_effort':MODES[mode][1],'actor_max_output_tokens':next(x['output_tokens']for x in PLAN['arms']if x['arm']==mode),",
     }
+    replacements.update({
+        "'step_cap':30": "'step_cap':PLAN['protocol']['max_decisions']",
+        'step_limit=30': "step_limit=PLAN['protocol']['max_decisions']",
+        "'max_decisions':30": "'max_decisions':PLAN['protocol']['max_decisions']",
+    })
     for old, new in replacements.items():
         need(text.count(old) == 1, 'worker cap/tracking anchor changed: ' + old)
         text = text.replace(old, new)
@@ -98,13 +109,13 @@ def adapt_worker(text):
     return text
 
 
-def derived_plan(base, cap, tasks_sha, effort='xhigh'):
+def derived_plan(base, cap, tasks_sha, effort='xhigh', max_decisions=30):
     arm = deepcopy(next(row for row in base['arms'] if row['arm'] == ARM))
     arm.update(arm=EFFORT_ARMS[effort], reasoning_effort=effort, output_tokens=cap)
     protocol = deepcopy(base['protocol'])
     for key in ('same300_tasks_allarms', 'pilot20_tasks_per_arm_included_final', 'historical_high_results_judge'):
         protocol.pop(key, None)
-    protocol.update(actor_max_output_tokens=cap, selector_max_output_tokens=None)
+    protocol.update(actor_max_output_tokens=cap, selector_max_output_tokens=None, max_decisions=max_decisions)
     return {'schema': 'portable-scientific-campaign-v1', 'campaign': 'luna_reasoning_token_sweep',
             'prospective_protocol': SCHEMA, 'protocol': protocol, 'arms': [arm],
             'cells': [{'harness': 'browsercode', 'policy': EFFORT_ARMS[effort]}],
@@ -119,12 +130,13 @@ def verify_inventory(runtime, manifest):
         need(digest(name) == expected, 'source changed: ' + name)
 
 
-def configure(runtime, cap, effort='xhigh'):
+def configure(runtime, cap, effort='xhigh', max_decisions=30):
     """Apply once, after ordinary public setup and its BrowserCode-only check."""
     runtime = Path(runtime).resolve()
     need(not runtime.is_relative_to(Path('/gpfs/home/zixianma')), 'home is read-only')
     need(type(cap) is int and cap in CAPS, 'choose exactly 6144, 12288, 24576 or 49152')
     need(effort in EFFORT_ARMS, 'choose high or xhigh reasoning')
+    need(type(max_decisions) is int and max_decisions in (30, 60), 'choose exactly 30 or 60 decisions')
     need(not (runtime / RECEIPT).exists() and not (runtime / ORIGINALS).exists(), 'already configured')
     need(not any((runtime / name).exists() for name in ('episodes', 'budget', 'orchestration')), 'runtime has execution evidence')
     manifest = read(runtime / 'source-manifest.json')
@@ -138,8 +150,8 @@ def configure(runtime, cap, effort='xhigh'):
             need(base_config.get(key) == value, 'base scientific configuration changed: ' + key)
     frozen_plan = read(API / 'portable_assets/campaign_specs' / CAMPAIGN / 'campaign-plan.json')
     need(base_plan['arms'] == frozen_plan['arms'] and base_plan['protocol'] == frozen_plan['protocol'], 'base actor protocol changed')
-    model = adapt_model((runtime / 'luna_model.py').read_text(), effort)
-    worker = adapt_worker((runtime / 'worker.py').read_text())
+    model = adapt_model((runtime / 'luna_model.py').read_text(), effort, max_decisions)
+    worker = adapt_worker((runtime / 'worker.py').read_text(), max_decisions)
     rows = task_roster()
     originals = runtime / ORIGINALS
     originals.mkdir()
@@ -148,7 +160,7 @@ def configure(runtime, cap, effort='xhigh'):
     (runtime / 'luna_model.py').write_text(model)
     (runtime / 'worker.py').write_text(worker)
     write(runtime / 'tasks.json', rows)
-    plan = derived_plan(base_plan, cap, digest(runtime / 'tasks.json'), effort)
+    plan = derived_plan(base_plan, cap, digest(runtime / 'tasks.json'), effort, max_decisions)
     write(runtime / 'campaign-plan.json', plan)
     config = deepcopy(base_config)
     config['prospective_protocol'] = SCHEMA
@@ -160,7 +172,7 @@ def configure(runtime, cap, effort='xhigh'):
                                  'output_tokens': cap, 'reasoning_effort': effort, 'files': ['luna_model.py', 'worker.py']})
     write(runtime / 'portable-build.json', build)
     receipt = {'schema': SCHEMA, 'arm': EFFORT_ARMS[effort], 'model': 'gpt-6-luna', 'reasoning_effort': effort,
-               'proposal_count': 1, 'max_decisions': 30, 'output_tokens': cap, 'output_multiplier': output_multiplier(cap),
+               'proposal_count': 1, 'max_decisions': max_decisions, 'output_tokens': cap, 'output_multiplier': output_multiplier(cap),
                'benchmark_counts': COUNTS, 'model_pricing': config['model_pricing'],
                'judge_protocol': config['judge_protocol'], 'preparation_source_sha256': digest(__file__),
                'base_inventory_sha256': digest(originals / 'source-manifest.json'),
@@ -193,6 +205,8 @@ def _validate(runtime):
     need(receipt.get('schema') == SCHEMA and receipt.get('preparation_source_sha256') == digest(__file__), 'override schema/preparation source changed')
     cap = receipt.get('output_tokens')
     need(type(cap) is int and cap in CAPS, 'malformed output cap')
+    max_decisions = receipt.get('max_decisions')
+    need(type(max_decisions) is int and max_decisions in (30, 60), 'malformed decision cap')
     effort = receipt.get('reasoning_effort')
     need(effort in EFFORT_ARMS, 'malformed reasoning effort')
     originals = runtime / ORIGINALS
@@ -205,18 +219,18 @@ def _validate(runtime):
     for name, expected in base['source_hashes'].items():
         if name not in {str(runtime / item) for item in CHANGED}:
             need(digest(name) == expected, 'unchanged base source changed: ' + name)
-    need((runtime / 'luna_model.py').read_text() == adapt_model((originals / 'luna_model.py').read_text(), effort), 'model overlay differs')
-    need((runtime / 'worker.py').read_text() == adapt_worker((originals / 'worker.py').read_text()), 'worker overlay differs')
+    need((runtime / 'luna_model.py').read_text() == adapt_model((originals / 'luna_model.py').read_text(), effort, max_decisions), 'model overlay differs')
+    need((runtime / 'worker.py').read_text() == adapt_worker((originals / 'worker.py').read_text(), max_decisions), 'worker overlay differs')
     need(read(runtime / 'tasks.json') == task_roster(), 'roster differs from pinned original public tasks')
     plan = read(runtime / 'campaign-plan.json')
-    need(plan == derived_plan(read(originals / 'campaign-plan.json'), cap, digest(runtime / 'tasks.json'), effort), 'declared plan differs')
+    need(plan == derived_plan(read(originals / 'campaign-plan.json'), cap, digest(runtime / 'tasks.json'), effort, max_decisions), 'declared plan differs')
     config = read(runtime / 'runtime-config.json')
     expected_config = read(originals / 'runtime-config.json')
     expected_config['prospective_protocol'] = SCHEMA
     need(config == expected_config, 'scientific configuration differs')
     need(receipt['model_pricing'] == config['model_pricing'] and receipt['judge_protocol'] == config['judge_protocol'], 'pricing/judge binding differs')
     need({key: receipt[key] for key in ('arm', 'model', 'reasoning_effort', 'proposal_count', 'max_decisions', 'output_multiplier', 'benchmark_counts')} ==
-         dict(arm=EFFORT_ARMS[effort], model='gpt-6-luna', reasoning_effort=effort, proposal_count=1, max_decisions=30, output_multiplier=output_multiplier(cap), benchmark_counts=COUNTS), 'receipt identity differs')
+         dict(arm=EFFORT_ARMS[effort], model='gpt-6-luna', reasoning_effort=effort, proposal_count=1, max_decisions=max_decisions, output_multiplier=output_multiplier(cap), benchmark_counts=COUNTS), 'receipt identity differs')
     manifest = read(runtime / 'source-manifest.json')
     need(manifest == read(runtime / 'execution-source-manifest.json'), 'execution inventory differs')
     required = [runtime / name for name in (*CHANGED, RECEIPT)] + list(originals.iterdir()) + [Path(__file__).resolve()]

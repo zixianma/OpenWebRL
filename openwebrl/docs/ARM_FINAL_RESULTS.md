@@ -7,55 +7,54 @@
 
 **The new single-call settings show no consistent success gain over Luna high at the original ceiling.** All nine paired 95% intervals comparing xhigh/1×, high/2× and high/0.5× against high/1× include zero. N3/N5 have higher conditional success on OM2W and WebVoyager, with substantially greater actor cost and latency; this pattern varies by benchmark. These comparisons describe observed tradeoffs across live collection windows.
 
-![BrowserCode success versus actor cost and latency across three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.png)
+![BrowserCode success versus actor cost, browser commands and latency across three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.png)
 
-*All points use GPT-5.6 Terra terminal-success judgments; Sol and Luna denote GPT-6 Sol and GPT-6 Luna. Success, cost and latency use each method's valid tasks, including valid failures; task cohorts differ. Squares identify Sol and circles Luna; blue denotes single-call actions, red candidates plus selection, with open red circles for N3 and filled red circles for N5. The single-call token ceiling is per generation: 1× = 12,288, 2× = 24,576 and 0.5× = 6,144 output tokens, including reasoning. Every method permits 30 decisions. Cost excludes external judging; latency includes actor-loop model work and browser execution. Axes are cropped, cost is logarithmic, and the legend is outside the panels.*
+*All points use GPT-5.6 Terra terminal-success judgments; Sol and Luna denote GPT-6 Sol and GPT-6 Luna. Success and all actor metrics use each method's valid tasks, including valid failures; task cohorts differ. A browser command is one selected nonempty browser-code batch, which may contain multiple browser/CDP calls; unselected candidates and selection calls do not count. Command measurements cover every valid task in all 21 points. Squares identify Sol and circles Luna; blue denotes single-call actions, red candidates plus selection, with open red circles for N3 and filled red circles for N5. The single-call token ceiling is per generation: 1× = 12,288, 2× = 24,576 and 0.5× = 6,144 output tokens, including reasoning. Every method permits 30 decisions. Cost excludes external judging; latency includes actor-loop model work and browser execution. Axes are cropped, cost is logarithmic, and the legend is outside the panels.*
 
 [Aggregate](arm_results/browsercode_inference_scaling_20261031/aggregate.json) · [Coordinates](arm_results/browsercode_inference_scaling_20261031/coordinates.csv) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.svg) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.pdf) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py) · [Reproduction recipes](API_EXPERIMENT_METHODS.md#luna-xhigh-output-limits)
 
 <details>
-<summary>Per-benchmark counts, cost and latency</summary>
+<summary>Per-benchmark counts, cost, commands and latency</summary>
 
-All seven methods have final dispositions for the same planned tasks within each benchmark. Success percentages divide by valid tasks; invalids remain separate. Actor cost and latency means cover every valid task. The four historical high-effort methods retain their previously published outcomes, cost and latency exactly.
+All seven methods have final dispositions for the same planned tasks within each benchmark. Success percentages divide by valid tasks; invalids remain separate. Actor cost, command and latency means cover every valid task. The four historical high-effort methods retain their previously published outcomes, cost and latency exactly.
 
 ### Online-Mind2Web · 300 planned tasks per method
 
-| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Latency (s) |
-|---|---:|---:|---:|---:|---:|---:|
-| Sol high single | 266 | 34 | 177 | 66.5% | 0.20771 | 92.7 |
-| Luna high · 1× cap | 269 | 31 | 178 | 66.2% | 0.00951 | 94.9 |
-| Luna high N3 | 269 | 31 | 183 | 68.0% | 0.05496 | 178.1 |
-| Luna high N5 | 267 | 33 | 198 | 74.2% | 0.06960 | 207.9 |
-| Luna xhigh · 1× cap | 267 | 33 | 181 | 67.8% | 0.01087 | 137.8 |
-| Luna high · 2× cap | 270 | 30 | 186 | 68.9% | 0.00998 | 126.5 |
-| Luna high · 0.5× cap | 267 | 33 | 178 | 66.7% | 0.00944 | 119.8 |
+| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser commands | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Sol high single | 266 | 34 | 177 | 66.5% | 0.20771 | 14.99 | 92.7 |
+| Luna high · 1× cap | 269 | 31 | 178 | 66.2% | 0.00951 | 16.63 | 94.9 |
+| Luna high N3 | 269 | 31 | 183 | 68.0% | 0.05496 | 14.79 | 178.1 |
+| Luna high N5 | 267 | 33 | 198 | 74.2% | 0.06960 | 14.63 | 207.9 |
+| Luna xhigh · 1× cap | 267 | 33 | 181 | 67.8% | 0.01087 | 16.65 | 137.8 |
+| Luna high · 2× cap | 270 | 30 | 186 | 68.9% | 0.00998 | 17.21 | 126.5 |
+| Luna high · 0.5× cap | 267 | 33 | 178 | 66.7% | 0.00944 | 16.76 | 119.8 |
 
 ### WebVoyager · 595 planned tasks per method
 
-| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Latency (s) |
-|---|---:|---:|---:|---:|---:|---:|
-| Sol high single | 553 | 42 | 468 | 84.6% | 0.19770 | 94.1 |
-| Luna high · 1× cap | 579 | 16 | 482 | 83.2% | 0.00778 | 100.1 |
-| Luna high N3 | 568 | 27 | 496 | 87.3% | 0.04319 | 163.4 |
-| Luna high N5 | 555 | 40 | 483 | 87.0% | 0.04588 | 171.0 |
-| Luna xhigh · 1× cap | 581 | 14 | 482 | 83.0% | 0.00896 | 109.5 |
-| Luna high · 2× cap | 585 | 10 | 482 | 82.4% | 0.00752 | 102.8 |
-| Luna high · 0.5× cap | 580 | 15 | 481 | 82.9% | 0.00772 | 102.4 |
+| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser commands | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Sol high single | 553 | 42 | 468 | 84.6% | 0.19770 | 13.31 | 94.1 |
+| Luna high · 1× cap | 579 | 16 | 482 | 83.2% | 0.00778 | 13.54 | 100.1 |
+| Luna high N3 | 568 | 27 | 496 | 87.3% | 0.04319 | 11.71 | 163.4 |
+| Luna high N5 | 555 | 40 | 483 | 87.0% | 0.04588 | 10.89 | 171.0 |
+| Luna xhigh · 1× cap | 581 | 14 | 482 | 83.0% | 0.00896 | 14.30 | 109.5 |
+| Luna high · 2× cap | 585 | 10 | 482 | 82.4% | 0.00752 | 13.87 | 102.8 |
+| Luna high · 0.5× cap | 580 | 15 | 481 | 82.9% | 0.00772 | 14.17 | 102.4 |
 
 ### DeepShop · 150 planned tasks per method
 
-| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Latency (s) |
-|---|---:|---:|---:|---:|---:|---:|
-| Sol high single | 145 | 5 | 113 | 77.9% | 0.38431 | 150.6 |
-| Luna high · 1× cap | 150 | 0 | 123 | 82.0% | 0.01403 | 154.8 |
-| Luna high N3 | 148 | 2 | 121 | 81.8% | 0.08884 | 258.2 |
-| Luna high N5 | 147 | 3 | 120 | 81.6% | 0.10954 | 281.9 |
-| Luna xhigh · 1× cap | 150 | 0 | 118 | 78.7% | 0.01733 | 169.3 |
-| Luna high · 2× cap | 150 | 0 | 129 | 86.0% | 0.01309 | 140.2 |
-| Luna high · 0.5× cap | 150 | 0 | 124 | 82.7% | 0.01347 | 144.0 |
+| Method | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser commands | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Sol high single | 145 | 5 | 113 | 77.9% | 0.38431 | 21.08 | 150.6 |
+| Luna high · 1× cap | 150 | 0 | 123 | 82.0% | 0.01403 | 20.53 | 154.8 |
+| Luna high N3 | 148 | 2 | 121 | 81.8% | 0.08884 | 17.96 | 258.2 |
+| Luna high N5 | 147 | 3 | 120 | 81.6% | 0.10954 | 17.48 | 281.9 |
+| Luna xhigh · 1× cap | 150 | 0 | 118 | 78.7% | 0.01733 | 20.89 | 169.3 |
+| Luna high · 2× cap | 150 | 0 | 129 | 86.0% | 0.01309 | 19.59 | 140.2 |
+| Luna high · 0.5× cap | 150 | 0 | 124 | 82.7% | 0.01347 | 20.05 | 144.0 |
 
 The three new settings record all 3,135 planned dispositions: 3,000 valid and 135 invalid. Historical versus fresh collection times, runtime safeguards and resulting valid cohorts differ; task pairing controls task content, and does not remove these differences. N3/N5 use high effort for both proposals and selection. External judging and invalid-attempt spend are excluded from the plotted valid-task actor means.
-
 </details>
 
 <details>

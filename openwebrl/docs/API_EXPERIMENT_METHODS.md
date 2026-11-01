@@ -60,7 +60,7 @@ Choose `--campaign` during setup. The entry point selects the matching model ada
 <a id="luna-xhigh-output-limits"></a>
 ### Luna single reasoning and output limits
 
-For new Luna single experiments, set `--luna-single-output-tokens 6144`, `12288`, `24576` or `49152` and `--luna-single-reasoning-effort high` or `xhigh` during `luna` setup. Each setting needs a separate workspace. The generated runtime contains one arm and the same public OM2W 300, WebVoyager 595 and DeepShop 150 tasks; every setting keeps 30 decisions and the shared Terra judge. The reasoning-versus-output-headroom comparison uses:
+For new Luna single experiments, set `--luna-single-output-tokens 6144`, `12288`, `24576` or `49152` and `--luna-single-reasoning-effort high` or `xhigh` during `luna` setup. Each setting needs a separate workspace. The generated runtime contains one arm and the same public OM2W 300, WebVoyager 595 and DeepShop 150 tasks; the completed output-cap comparison keeps 30 decisions and the shared Terra judge. The reasoning-versus-output-headroom comparison uses:
 
 | Reasoning effort | Max output tokens per call | Relative output cap | Arm |
 |---|---:|---:|---|
@@ -82,7 +82,29 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
   --model-usd 5 --judge-usd 1
 ```
 
+The 1× reference inherits the original high-effort ceiling of 12,288 tokens per generation. The [initial calibration protocol](../api_experiments/portable_assets/snapshots/calibration/protocol.json) used that ceiling for a high-effort single call and 4,096 for each of three low-effort candidate calls, plus a separate 2,048-token selector. This establishes the historical convention; it does not establish an optimal ceiling or equal realized compute.
+
 The second command is a read-only plan; add `--execute` to spend within its caps. Select a full benchmark with `--benchmark online-mind2web --limit 300`, `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`. For fixed shards, `--task-ids /path/to/ids.json` selects a unique ordered JSON list of IDs after benchmark filtering and before the limit; its hash and selected IDs are recorded. The generated runtime binds the exact effort and cap to requests, validation, reservations and metrics, and retains its original sources and protocol hashes. A higher ceiling permits longer outputs; inspect actual output usage and truncations alongside success, cost and latency. The earlier `--luna-xhigh-output-tokens CAP` option remains an xhigh-only alias; setup without either output-cap option retains the frozen historical campaign.
+
+<a id="luna-single-decision-limits"></a>
+### Prospective Luna single decision limit
+
+To isolate a larger action horizon, add `--luna-single-max-decisions 60` with explicit `high` effort and the unchanged 12,288-token output ceiling. The default remains 30. This creates a new experiment on the same 1,045 tasks; it does not change archived runs or imply completed 60-decision results.
+
+```bash
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/luna-high-60steps --campaign luna \
+  --dependencies "$API_WORK/dependencies/dependencies.json" \
+  --luna-single-output-tokens 12288 --luna-single-reasoning-effort high \
+  --luna-single-max-decisions 60
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/luna-high-60steps --arm luna_single_high \
+  --benchmark online-mind2web --limit 1 --output /tmp/luna-high-60steps-om-01 \
+  --model-usd 4 --judge-usd 3 --model-calls 120 --judge-calls 1 --browser-starts 2
+```
+
+The run command prints a read-only plan. The actual agent limit, model decision guard, saved identity and tracking all use 60. The actor-loop wall deadline stays **900 seconds**: episodes may time out before reaching the larger limit. Report timeouts, reached decision limits, actual decisions, output/reasoning usage, valid/planned counts and paired common-valid success alongside cost and latency. The shared Terra protocol and disabled automatic provider retries remain unchanged. A full campaign needs separate explicit compute/API caps; the example does not allocate cluster resources.
 
 ### Recreate the completed scaling figures
 
@@ -102,7 +124,7 @@ SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_2026103
   --token-method luna_single_high_24576 --token-method luna_single_high_6144
 ```
 
-The first figure uses each method's valid-task success, actor cost and latency. The second uses actual summed output and reasoning tokens for the four Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
+The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the four Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
 
 ### Compare fresh runs
 
