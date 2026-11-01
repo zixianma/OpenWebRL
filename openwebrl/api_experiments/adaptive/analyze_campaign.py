@@ -64,12 +64,13 @@ def paired(rows, tasks, arm, reference, draws, seed):
 
 def summarize(root, shards, draws=2000, seed=0):
     plan = read(root / 'campaign-plan.json')
+    arms = [x['arm'] for x in plan['arms']]
     meta = {t['task_id']: t for t in read(root / 'tasks.json')}
     wanted = {t for s in shards for t in plan['shards'][s]}
     tasks = {b: sorted(t for t in wanted if meta[t]['benchmark'] == b) for b in BENCHMARKS}
     rows = outcomes(root, shards)
     table = {}
-    for arm in ARMS:
+    for arm in arms:
         per = {}
         for b in BENCHMARKS:
             recorded = [rows[(t, arm)] for t in tasks[b] if (t, arm) in rows]

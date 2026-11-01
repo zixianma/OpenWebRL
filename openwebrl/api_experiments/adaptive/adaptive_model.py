@@ -31,9 +31,17 @@ from action_signature import agree, signature
 
 EFFORT = 'high'
 WIDTH = 5
-ARMS = ('luna_single_high', 'luna_n5_high', 'adaptive_agree', 'adaptive_self', 'adaptive_self_agree')
-PROBES = {'luna_single_high': 1, 'luna_n5_high': WIDTH, 'adaptive_agree': 2, 'adaptive_self': 1, 'adaptive_self_agree': 2}
+ARMS = ('luna_single_high', 'luna_n5_high', 'adaptive_agree', 'adaptive_self', 'adaptive_self_agree',
+        'luna_n5_cached', 'adaptive_agree_cached', 'adaptive_agree3_cached')
+PROBES = {'luna_single_high': 1, 'luna_n5_high': WIDTH, 'adaptive_agree': 2, 'adaptive_self': 1, 'adaptive_self_agree': 2,
+          'luna_n5_cached': WIDTH, 'adaptive_agree_cached': 2, 'adaptive_agree3_cached': 2}
 SELF_ARMS = ('adaptive_self', 'adaptive_self_agree')
+STATIC_ARMS = ('luna_n5_high', 'luna_n5_cached')
+AGREE_ARMS = ('adaptive_agree', 'adaptive_agree_cached', 'adaptive_agree3_cached')
+# Cached selection reuses the actor's native input (already cached by this turn's candidates)
+# and appends the candidate list, so selection costs about one candidate call.
+CACHED_SELECTOR_ARMS = ('luna_n5_cached', 'adaptive_agree_cached', 'adaptive_agree3_cached')
+ESCALATION_WIDTH = {arm: 3 if arm == 'adaptive_agree3_cached' else WIDTH for arm in PROBES}
 for _arm in ARMS:
     frozen.MODES.setdefault(_arm, (1 if _arm == 'luna_single_high' else WIDTH, EFFORT, None if _arm == 'luna_single_high' else EFFORT))
 
@@ -146,6 +154,23 @@ class AdaptiveLunaModel(LunaModel):
              and choice['selected_index'] in range(n), 'Malformed selected index')
         return selection, choice['selected_index']
 
+    def _select_cached(self, native, proposals):
+        """Same instruction, proposals and output schema as _select, on the actor's cached native context."""
+        n = len(proposals)
+        schema = {'type': 'object', 'properties': {'selected_index': {'type': 'integer', 'enum': list(range(n))}},
+                  'required': ['selected_index'], 'additionalProperties': False}
+        listing = json.dumps({'candidate_actions': [{'index': i, 'action': p} for i, p in enumerate(proposals)]})
+        payload = deepcopy(native)
+        payload['input'] = payload['input'] + [{'type': 'message', 'role': 'developer', 'content': [
+            {'type': 'input_text', 'text': 'Selection step: do not act this turn. ' + SELECTOR_INSTRUCTION.format(n=n, last=n - 1)},
+            {'type': 'input_text', 'text': listing}]}]
+        payload.update(tool_choice='none', text={'format': {'type': 'json_schema', 'name': f'command_selection_{n}', 'strict': True, 'schema': schema}})
+        selection = self.physical(payload, 'selector')
+        choice = strict_json(output_text(selection))
+        need(type(choice) is dict and set(choice) == {'selected_index'} and type(choice['selected_index']) is int
+             and choice['selected_index'] in range(n), 'Malformed selected index')
+        return selection, choice['selected_index']
+
     def query(self, messages, **unused):
         need(self.turn < 30, 'Frozen30-decision cap')
         validate_history(messages)
@@ -172,17 +197,18 @@ class AdaptiveLunaModel(LunaModel):
             responses = [response for _, response, _ in acted]
             if arm == 'luna_single_high':
                 trigger = None
-            elif arm == 'luna_n5_high':
+            elif arm in STATIC_ARMS:
                 trigger = 'static'
             elif arm == 'adaptive_self':
                 trigger = 'self_request' if reasons else None
             else:
+                need(arm in AGREE_ARMS or arm == 'adaptive_self_agree', 'Unhandled adaptive arm')
                 trigger = ('self_request' if reasons else
                            'termination' if any(p['done'] for p in proposals) else
                            None if agree(proposals) else 'disagreement')
             selection, idx = None, 0
             if trigger is not None:
-                fresh = WIDTH - len(proposals)
+                fresh = ESCALATION_WIDTH[arm] - len(proposals)
                 start = 0 if arm in SELF_ARMS else len(proposals)
                 extra_jobs = [(f'candidate_{start + i}', deepcopy(native)) for i in range(fresh)]
                 extra = self._batch(extra_jobs) if extra_jobs else []
@@ -191,7 +217,7 @@ class AdaptiveLunaModel(LunaModel):
                     proposals.append({'command': p['bash_command'], 'done': p['done'], 'final_response': p['final_response']})
                     roles.append(role)
                     responses.append(response)
-                selection, idx = self._select(native, proposals)
+                selection, idx = (self._select_cached if arm in CACHED_SELECTOR_ARMS else self._select)(native, proposals)
             chosen = proposals[idx]
             record = {'turn': self.turn, 'decision_group_id': self.current_group_id, 'mode': arm, 'harness': 'browsercode',
                       'policy': arm, 'escalated': trigger is not None, 'escalation_trigger': trigger,
@@ -202,6 +228,7 @@ class AdaptiveLunaModel(LunaModel):
                       'candidate_signatures': [list(map(str, signature(p))) for p in proposals],
                       'selector_response': selection, 'selected_index': idx, 'selected_role': roles[idx],
                       'selected_action': chosen, 'selection_effort': EFFORT if selection is not None else None,
+                      'selector_mode': None if selection is None else 'cached_native' if arm in CACHED_SELECTOR_ARMS else 'projected',
                       'decision_seconds': time.monotonic() - started}
             exclusive_json(self.directory / 'decisions' / f'{self.turn:03d}.json', record)
             self.turn += 1

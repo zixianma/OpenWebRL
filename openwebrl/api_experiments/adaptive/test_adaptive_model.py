@@ -125,6 +125,24 @@ check(e is None and len(c.calls) == 7 and r['candidate_count'] == 5 and r['candi
 c, r, m, e, b, _ = run('adaptive_self_agree', lambda role: action(CLICK_A2 if role == 'probe_1' else CLICK_A))
 check(e is None and len(c.calls) == 2 and not r['escalated'], 'self_agree: agreeing probes act at two calls')
 
+
+c, r, m, e, b, _ = run('luna_n5_cached', lambda role: 2 if role == 'selector' else action(CLICK_B if role == 'candidate_2' else CLICK_A))
+sel = next(p for role, p in c.calls if role == 'selector')
+cand = next(p for role, p in c.calls if role == 'candidate_0')
+check(e is None and len(c.calls) == 6 and r['selected_index'] == 2 and r['selector_mode'] == 'cached_native', 'n5 cached: five + cached selector, selection honored')
+check(sel['input'][:-1] == cand['input'] and sel['tools'] == cand['tools'] and sel['tool_choice'] == 'none'
+      and sel['reasoning'] == cand['reasoning'] and sel['text']['format']['type'] == 'json_schema', 'cached selector: candidate prefix, tools and effort; text-only answer')
+check('candidate_actions' in sel['input'][-1]['content'][1]['text'], 'cached selector: proposals listed last')
+
+c, r, m, e, b, _ = run('adaptive_agree_cached', lambda role: action(CLICK_A2 if role == 'candidate_1' else CLICK_A))
+check(e is None and len(c.calls) == 2 and not r['escalated'], 'agree cached: agreeing pair stops at two calls')
+c, r, m, e, b, _ = run('adaptive_agree_cached', lambda role: 4 if role == 'selector' else action(CLICK_B if role == 'candidate_1' else CLICK_A))
+check(e is None and len(c.calls) == 6 and r['candidate_count'] == 5 and r['selector_mode'] == 'cached_native', 'agree cached: disagreement escalates to five + cached selector')
+c, r, m, e, b, _ = run('adaptive_agree3_cached', lambda role: 2 if role == 'selector' else action(CLICK_B if role == 'candidate_1' else CLICK_A))
+check(e is None and roles(c) == ['candidate_0', 'candidate_1', 'candidate_2', 'selector'] and r['candidate_count'] == 3, 'agree3 cached: disagreement escalates to three + cached selector')
+c, r, m, e, b, _ = run('luna_n5_high', lambda role: 0 if role == 'selector' else action(CLICK_A))
+check(r['selector_mode'] == 'projected', 'phase-1 n5 keeps the projected selector')
+
 c, r, m, e, b, work = run('adaptive_agree', lambda role: action(CLICK_A), fail_role='candidate_1')
 snapshot = b.snapshot()
 check(isinstance(e, TimeoutError) and not b.halted() and (work / 'episode' / 'episode-model-failure.json').exists(), 'provider error: episode fails, shared pool not halted')

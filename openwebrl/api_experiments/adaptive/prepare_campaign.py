@@ -23,12 +23,18 @@ BASE = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/serial-vs-par
 SKIP = {'controller.py', 'financial_plan.py', 'canary_scope.py', 'test_luna_effort.py', 'current.json',
         'campaign-plan.json', 'source-manifest.json', 'tasks.json'}
 ADAPTIVE = ('action_signature.py', 'adaptive_model.py', 'adaptive_worker.py', 'run_shard.py')
-ARMS = ('luna_single_high', 'luna_n5_high', 'adaptive_agree', 'adaptive_self', 'adaptive_self_agree')
+PHASE_ARMS = {1: ('luna_single_high', 'luna_n5_high', 'adaptive_agree', 'adaptive_self', 'adaptive_self_agree'),
+              2: ('luna_single_high', 'luna_n5_high', 'luna_n5_cached', 'adaptive_agree_cached', 'adaptive_agree3_cached')}
+PHASE_ACTOR_CAP = {1: {'luna_single_high': '2.5', 'luna_n5_high': '15', 'adaptive_agree': '11', 'adaptive_self': '8',
+                       'adaptive_self_agree': '12'},
+                   2: {'luna_single_high': '2.5', 'luna_n5_high': '15', 'luna_n5_cached': '9', 'adaptive_agree_cached': '7',
+                       'adaptive_agree3_cached': '5'}}
+# Phase 2 also stops before all phases together reach this many charged or reserved USD.
+GLOBAL_STOP_USD = '990'
+PHASE1_ROOT = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/adaptive-compute-20261031-v2'
 SHARDS = 16
 SEED = 20261031
 APPROVED_USD = Decimal('1000')
-ACTOR_CAP = {'luna_single_high': '2.5', 'luna_n5_high': '15', 'adaptive_agree': '11', 'adaptive_self': '8',
-             'adaptive_self_agree': '12'}
 JUDGE_CAP = '9'
 SMOKE_ACTOR_CAP = '1.5'
 SMOKE_JUDGE_CAP = '1'
@@ -58,7 +64,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--credential-file', default='/gpfs/projects/krishna/zixianma/OpenWebRL/.env')
+    p.add_argument('--phase', type=int, choices=(1, 2), default=1)
     a = p.parse_args()
+    ARMS, ACTOR_CAP = PHASE_ARMS[a.phase], PHASE_ACTOR_CAP[a.phase]
     out = a.output.resolve()
     assert str(out).startswith('/gpfs/scrubbed/zixianma/openwebrl-runtime/'), 'Browser bridge requires the runtime tree'
     out.mkdir(parents=True, exist_ok=False)
@@ -97,7 +105,13 @@ def main():
                    'judge_calls_per_shard': 2000, 'browser_starts_per_shard': 1200,
                    'smoke_actor_usd_per_arm': SMOKE_ACTOR_CAP, 'smoke_judge_usd': SMOKE_JUDGE_CAP,
                    'committed_cap_usd': str(committed), 'approved_usd': str(APPROVED_USD)},
-        'base_runtime': str(BASE), 'base_files': copied}
+        'base_runtime': str(BASE), 'base_files': copied, 'phase': a.phase}
+    if a.phase == 2:
+        plan['global_spend_guard'] = {'stop_usd': GLOBAL_STOP_USD, 'ledger_globs': [
+            f'{root}/shards/*/budget/{kind}/ledger.json' for root in (PHASE1_ROOT, str(out)) for kind in ('*/model', 'judge')]}
+        plan['design_note'] = ('Designed after an interim look at phase 1 (about 100 valid episodes per arm): the projected '
+                               'selector had zero prompt-cache hits and cost about half of N5. Fresh contemporaneous '
+                               'baselines rerun here; all 1,045 tasks rerun.')
     write(out / 'campaign-plan.json', plan)
     write(out / 'approval.json', {'approved_usd_total_api': str(APPROVED_USD), 'date': '2026-10-31',
                                   'scope': 'User: "ok i give you $1000 budget. come up with the best design" '
