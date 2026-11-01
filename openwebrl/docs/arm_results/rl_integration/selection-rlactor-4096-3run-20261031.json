@@ -3,7 +3,8 @@
   "rl_alone": 3,
   "rl_arm": 3,
   "rl_hpiotr": 3,
-  "rl_h2612": 3
+  "rl_h2612": 3,
+  "rl_lora2612": 3
  },
  "rates": {
   "rl_alone": {
@@ -105,6 +106,31 @@
    },
    "mean_overall": 46.8,
    "mean_valid_only": 49.3
+  },
+  "rl_lora2612": {
+   "online_mind2web": {
+    "episodes": 900,
+    "valid": 747,
+    "succ": 317,
+    "overall": 35.2,
+    "valid_only": 42.4
+   },
+   "webvoyager": {
+    "episodes": 1785,
+    "valid": 1721,
+    "succ": 1114,
+    "overall": 62.4,
+    "valid_only": 64.7
+   },
+   "deepshop": {
+    "episodes": 450,
+    "valid": 420,
+    "succ": 217,
+    "overall": 48.2,
+    "valid_only": 51.7
+   },
+   "mean_overall": 48.6,
+   "mean_valid_only": 52.9
   }
  },
  "per_run_mean_overall": {
@@ -127,6 +153,11 @@
    49.3,
    46.6,
    44.6
+  ],
+  "rl_lora2612": [
+   47.6,
+   48.6,
+   49.6
   ]
  },
  "paired_pooled_pp": {
@@ -260,6 +291,72 @@
     0.4,
     -1.6,
     2.4
+   ]
+  },
+  "rl_lora2612 - rl_alone": {
+   "online_mind2web": [
+    8.9,
+    5.8,
+    12.0
+   ],
+   "webvoyager": [
+    6.8,
+    4.2,
+    9.3
+   ],
+   "deepshop": [
+    4.0,
+    -1.8,
+    9.8
+   ],
+   "mean": [
+    6.6,
+    4.1,
+    8.9
+   ]
+  },
+  "rl_lora2612 - rl_arm": {
+   "online_mind2web": [
+    -1.0,
+    -4.2,
+    2.2
+   ],
+   "webvoyager": [
+    2.0,
+    -0.5,
+    4.4
+   ],
+   "deepshop": [
+    -2.2,
+    -7.1,
+    2.9
+   ],
+   "mean": [
+    -0.4,
+    -2.6,
+    1.7
+   ]
+  },
+  "rl_lora2612 - rl_h2612": {
+   "online_mind2web": [
+    2.9,
+    -0.0,
+    5.8
+   ],
+   "webvoyager": [
+    4.7,
+    2.0,
+    7.3
+   ],
+   "deepshop": [
+    -2.2,
+    -6.9,
+    2.4
+   ],
+   "mean": [
+    1.8,
+    -0.2,
+    3.8
    ]
   }
  }

@@ -8,10 +8,10 @@ independently). Incomplete runs are reported and skipped."""
 import json, os
 import numpy as np
 E = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/rlactor-4096-20261030'; B = ('online_mind2web', 'webvoyager', 'deepshop')
-COND = {'rl_alone': 'sft1', 'rl_arm': 'piotr5', 'rl_hpiotr': 'head5-755d4cd49137', 'rl_h2612': 'head5-5ca25c38f7ad'}
+COND = {'rl_alone': 'sft1', 'rl_arm': 'piotr5', 'rl_hpiotr': 'head5-755d4cd49137', 'rl_h2612': 'head5-5ca25c38f7ad', 'rl_lora2612': 'arm5-03edd8c36a91'}
 ROOTS = ['rl', 'rerun2/rl', 'rerun3/rl']
 PAIRS = [('rl_arm', 'rl_alone'), ('rl_h2612', 'rl_alone'), ('rl_hpiotr', 'rl_alone'), ('rl_h2612', 'rl_arm'), ('rl_hpiotr', 'rl_arm'),
-         ('rl_h2612', 'rl_hpiotr')]
+         ('rl_h2612', 'rl_hpiotr'), ('rl_lora2612', 'rl_alone'), ('rl_lora2612', 'rl_arm'), ('rl_lora2612', 'rl_h2612')]
 def load(root, slug, b):
     d = f'{E}/{root}/{b}/{slug}/{b}'; keys = json.load(open(d + '/plan.json'))['keys']; o = {}
     for t, k in keys.items():
