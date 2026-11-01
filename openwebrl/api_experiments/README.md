@@ -12,6 +12,7 @@ Start with the **[BrowserCode guide](../docs/API_EXPERIMENT_METHODS.md#reproduct
 | Trace the implementation | [Code map](../docs/API_EXPERIMENT_METHODS.md#code-and-frozen-artifacts) · [offline checks](../docs/API_EXPERIMENT_METHODS.md#offline-validation) |
 | Find qualified results | [Results and analysis](../docs/API_EXPERIMENT_METHODS.md#results-and-analysis-pointers) |
 | Rejudge archived endpoints | [Terra judge-only command](../docs/API_EXPERIMENT_METHODS.md#rejudge-saved-endpoints) |
+| Prepare a measured US-stealth pilot | [Paired OM2W pilot and charge accounting](../docs/API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs) · [stealth_pilot.py](reproduce/stealth_pilot.py) |
 
 <a id="layout"></a>
 

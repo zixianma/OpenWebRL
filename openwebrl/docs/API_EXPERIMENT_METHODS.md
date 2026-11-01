@@ -148,12 +148,26 @@ Start with **20 fixed OM2W tasks × two methods: Luna high single and Luna high 
 
 Keep BrowserCode, high effort, 12,288 tokens per candidate/selector call, 30 decisions, the 900-second actor-loop deadline, raw 1280 × 1800 terminal screenshots and Terra medium/4,096/seed 42. Connect our existing agent over CDP to a standalone Browser Use V4 stealth browser. **Both arms use US residential routing (`proxyCountryCode: "us"`)**, explicitly requested for this study, with no proxy fallback or shared browser profile. N5 samples its five candidates concurrently before selecting one; it uses one browser per task. Run the two arms of each task contemporaneously, alternate worker assignment, and await both before releasing the next pair. Mechanical preflights and failed sessions must be separately counted and charged.
 
-The zero-API [pilot planner](../api_experiments/reproduce/stealth_plan.py) verifies the full 300-task reference identity set, freezes the selected pairs and records proposed resource/call/budget limits. Its output contains task identities and stays local. It creates no sessions and grants no spending authorization:
+The zero-API [pilot planner](../api_experiments/reproduce/stealth_plan.py) verifies the full 300-task reference identity set, freezes the selected pairs and records proposed resource/call/budget limits. Its output contains task identities and stays local. Prepare a **new** generated runtime, then apply the prospective [cloud/Terra adapter](../api_experiments/reproduce/cloud_browsercode.py); original campaign snapshots remain preserved. These commands create no sessions or SDK clients:
 
 ```bash
+export STEALTH_WORK=/tmp/openwebrl-om2w-stealth
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace "$STEALTH_WORK" --campaign gpt-luna-single \
+  --dependencies "$API_WORK/dependencies/dependencies.json"
+export PYTHONPATH="$PWD/openwebrl/api_experiments${PYTHONPATH:+:$PYTHONPATH}"
+"$API_PY" -B -c 'from pathlib import Path; import sys; from reproduce.cloud_browsercode import configure; configure(Path(sys.argv[1]))' \
+  "$STEALTH_WORK/runtime"
 python3 -B openwebrl/api_experiments/reproduce/stealth_plan.py \
-  --tasks "$API_WORK/runtime/tasks.json" --output /tmp/om2w-stealth-pilot.json
+  --tasks "$STEALTH_WORK/runtime/tasks.json" --output "$STEALTH_WORK/proposal.json"
+"$API_PY" -B -m reproduce.stealth_pilot --runtime "$STEALTH_WORK/runtime" \
+  --proposal "$STEALTH_WORK/proposal.json" --output "$STEALTH_WORK/results" \
+  > "$STEALTH_WORK/execution-plan.json"
 ```
+
+The [pilot owner](../api_experiments/reproduce/stealth_pilot.py) proposes $1 for single actors, $3 for N5 actors and $2 for Terra, with a separate $10 browser spending target. It allows at most 40 actor sessions plus two mechanical preflights, 8,400 actor/input-counter HTTP calls and 40 first Terra calls. It starts no new pair after $8 of conservative observed browser charges and requests shutdown at $10; this is not a hard provider-dollar cap. It rechecks each pair's stopped-session fees at least 90 seconds after the first close before admitting the next pair. Maximum-observed charges are conservative admission reserves; actual cost tables use the separate latest provider receipts, including downward corrections.
+
+Paid execution currently requires a **single Slurm allocation with one node, two CPUs, 16 GiB, no GPUs and at most four hours**, with no implicit local mode or requeue. It verifies the actual allocation, reserves time for teardown, and awaits both workers. A separate reviewed approval JSON must bind `plan_sha256` to SHA256 of `json.dumps(plan, sort_keys=True, default=str).encode()` for the printed execution plan, with `approved`, `proxy_overshoot_authorized`, `openai_payload_egress_approved` and `browser_use_payload_egress_approved` explicitly true. Only after that approval, add `--execute --approval /path/to/approval.json --env-file /path/to/private.env` to the pilot command inside the approved allocation. The key file needs `BROWSER_USE_API_KEY`, `OPENAI_API_KEY` and optionally `JUDGE_API_KEY`. This owner is separate from the ordinary local `browsercode.py run` frontdoor, which refuses a cloud-marked runtime. A source/protocol change requires fresh preparation and approval; no automatic creation or episode retries are enabled.
 
 Bind each task/attempt to its created provider browser ID and immutable create request. Disable automatic creation retries; reconcile an ambiguous creation before admitting another session. Stop the owned browser with the provider API, verify `status=stopped`, then retain raw post-stop [browser usage receipts](https://docs.browser-use.com/cloud/api-v4/browsers/get-browser-session): `startedAt`, `finishedAt`, `browserCost`, `proxyCost` and `proxyUsedMb`. Disconnection alone does not stop billing. Poll within a bounded settlement window and retain unresolved costs explicitly. Parse present, finite nonnegative decimal amounts without replacing absent/null values with zero.
 

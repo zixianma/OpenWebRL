@@ -34,6 +34,39 @@ def digest(path):
     return h.hexdigest()
 
 
+def required_cloud(runtime):
+    """Bind the prospective cloud marker to actual runtime/adapter bytes.
+
+    Read the runtime again at execution: a caller cannot remove a field from a
+    previously prepared dictionary and accidentally select the local backend.
+    """
+    runtime = Path(runtime).resolve()
+    marker = runtime / 'cloud-experiment.json'
+    campaign, config = read(runtime/'campaign-plan.json'), read(runtime/'runtime-config.json')
+    marked = marker.exists() or campaign.get('protocol',{}).get('browser_backend') == 'browser-use-v4' or 'cloud_protocol' in config
+    if not marked:
+        return None
+    if not marker.is_file():
+        raise ValueError('Cloud runtime requires its original explicit backend marker')
+    receipt = read(marker)
+    expected = dict(browser_backend='browser-use-v4',proxy_country='us',paid_authorization=False)
+    if receipt.get('schema') != 'prospective-browsercode-cloud-study-v1' or any(type(receipt.get(k)) is not type(v) or receipt.get(k)!=v for k,v in expected.items()):
+        raise ValueError('Invalid prospective cloud backend receipt')
+    if campaign.get('protocol',{}).get('browser_backend') != 'browser-use-v4' or config.get('cloud_protocol',{}).get('browser_backend') != 'browser-use-v4':
+        raise ValueError('Runtime cloud backend declarations differ')
+    manifest = read(runtime/'source-manifest.json')
+    for path in (marker,runtime/'campaign-plan.json',runtime/'runtime-config.json'):
+        if manifest['source_hashes'].get(str(path)) != digest(path):
+            raise ValueError('Cloud runtime source binding changed')
+    if manifest.get('plan_sha256') != digest(runtime/'campaign-plan.json'):
+        raise ValueError('Cloud runtime plan binding changed')
+    sources = receipt.get('adapter_source_sha256')
+    names = {'common.py','cloud_browser.py','cloud_browsercode.py'}
+    if type(sources) is not dict or set(sources) != names or any(sources[name] != digest(Path(__file__).with_name(name)) for name in names):
+        raise ValueError('Cloud adapter source binding changed; prepare a fresh runtime')
+    return dict(browser_backend='browser-use-v4',proxy_country='us',marker_sha256=digest(marker),adapter_source_sha256=sources)
+
+
 def positive_money(value):
     try:
         amount = Decimal(value)
@@ -133,6 +166,7 @@ def prepare(args, provider):
     for path, expected_hash in manifest["source_hashes"].items():
         if digest(path) != expected_hash:
             raise ValueError("Frozen source changed: " + path)
+    cloud = required_cloud(runtime)
     if plan["task_manifest_sha256"] != digest(runtime / "tasks.json"):
         raise ValueError("Frozen task manifest changed")
     for name in ("cuawright_source", "frozen_support_source", "chromium", "python"):
@@ -158,6 +192,8 @@ def prepare(args, provider):
             "model_call_cap": args.model_calls, "judge_call_cap": args.judge_calls,
             "browser_start_cap": args.browser_starts if args.browser_starts is not None else args.limit + 1,
             "scheduling": "one episode at a time; original per-decision proposal parallelism", "execute": args.execute}
+    if cloud is not None:
+        result['required_cloud'] = cloud
     if prospective:
         result.update(prospective_protocol=prospective['schema'], output_multiplier=prospective['output_multiplier'],
                       prospective_receipt_sha256=digest(runtime / 'prospective-experiment.json'),
@@ -181,7 +217,11 @@ def summary(rows, pools, cleanup_verified):
             "all_attempt_pools": pools, "owned_cleanup_verified": cleanup_verified}
 
 
-def execute(args, plan, tasks):
+def execute(args, plan, tasks, *, worker_setup=None):
+    cloud = required_cloud(plan['runtime'])
+    if cloud is not None or plan.get('required_cloud') is not None:
+        if cloud is None or plan.get('required_cloud') != cloud or worker_setup is None:
+            raise ValueError('This runtime requires its bound Browser Use cloud owner; the local run frontdoor cannot execute it')
     keys = dict(os.environ)
     if args.env_file:
         from dotenv import dotenv_values
@@ -206,31 +246,46 @@ def execute(args, plan, tasks):
     sys.path.insert(0, plan["runtime"])
     worker = importlib.import_module("worker")
     environments = importlib.import_module("environments")
-    if plan["provider"] != "gpt":
-        budget_module = importlib.import_module("request_budget" if plan["provider"] == "luna" else "claude_budget")
-        gate = budget_module.SharedHTTPGate(root / "http-gate", 8)
-        original = worker.PairedModel
-        class ScopedModel(original):
-            def __init__(self, *positional, **kwargs):
-                kwargs["http_gate"] = gate
-                super().__init__(*positional, **kwargs)
-        worker.PairedModel = ScopedModel
-    budget_type = getattr(worker, "ReservationBudget", worker.Budget)
-    model_cap = Decimal(args.model_usd) if plan["provider"] == "gpt" else args.model_usd
-    judge_cap = Decimal(args.judge_usd) if plan["provider"] == "gpt" else args.judge_usd
-    budgets = {"actor": budget_type(root / "budget/model", model_cap, args.model_calls),
-               "judge": budget_type(root / "budget/judge", judge_cap, args.judge_calls),
-               "browser": worker.Budget(root / "budget/browser", plan["browser_start_cap"], plan["browser_start_cap"])}
-    from openai import OpenAI
-    judge = OpenAI(api_key=keys.get("JUDGE_API_KEY") or keys["OPENAI_API_KEY"], max_retries=0, timeout=180)
+    integration = worker_setup(worker, environments) if worker_setup is not None else None
     try:
-        if plan["provider"] != "claude":
-            actor = OpenAI(api_key=keys[actor_key], max_retries=0, timeout=180)
-        else:
-            from anthropic import Anthropic
-            actor = Anthropic(api_key=keys[actor_key], max_retries=0, timeout=180)
+        if cloud is not None:
+            module = sys.modules.get(type(integration).__module__)
+            if (module is None or getattr(module,'Registry',None) is not type(integration)
+                or Path(module.__file__).resolve() != Path(__file__).with_name('cloud_browsercode.py').resolve()
+                or integration.worker is not worker):
+                raise ValueError('Bound Browser Use cloud Registry required before SDK initialization')
+        if plan["provider"] != "gpt":
+            budget_module = importlib.import_module("request_budget" if plan["provider"] == "luna" else "claude_budget")
+            gate = budget_module.SharedHTTPGate(root / "http-gate", 8)
+            original = worker.PairedModel
+            class ScopedModel(original):
+                def __init__(self, *positional, **kwargs):
+                    kwargs["http_gate"] = gate
+                    super().__init__(*positional, **kwargs)
+            worker.PairedModel = ScopedModel
+        budget_type = getattr(worker, "ReservationBudget", worker.Budget)
+        model_cap = Decimal(args.model_usd) if plan["provider"] == "gpt" else args.model_usd
+        judge_cap = Decimal(args.judge_usd) if plan["provider"] == "gpt" else args.judge_usd
+        budgets = {"actor": budget_type(root / "budget/model", model_cap, args.model_calls),
+                   "judge": (getattr(integration, "judge_budget_type", None) or budget_type)(root / "budget/judge", judge_cap, args.judge_calls),
+                   "browser": worker.Budget(root / "budget/browser", plan["browser_start_cap"], plan["browser_start_cap"])}
+        from openai import OpenAI
+        judge = OpenAI(api_key=keys.get("JUDGE_API_KEY") or keys["OPENAI_API_KEY"], max_retries=0, timeout=180)
+        try:
+            if plan["provider"] != "claude":
+                actor = OpenAI(api_key=keys[actor_key], max_retries=0, timeout=180)
+            else:
+                from anthropic import Anthropic
+                actor = Anthropic(api_key=keys[actor_key], max_retries=0, timeout=180)
+        except BaseException:
+            judge.close()
+            raise
     except BaseException:
-        judge.close()
+        if integration is not None:
+            try:
+                integration.close_all()
+            finally:
+                integration.restore()
         raise
     (root / "reproduction-plan.json").write_text(json.dumps(plan, indent=2) + "\n")
     (root / "selected-task-ids.json").write_text(json.dumps([t["task_id"] for t in tasks]) + "\n")
@@ -259,6 +314,13 @@ def execute(args, plan, tasks):
                 stopped = "Pool halted; preserve evidence and diagnose before any continuation"
                 break
     finally:
+        cloud_cleanup = None
+        cloud_error = None
+        if integration is not None:
+            try:
+                cloud_cleanup = integration.close_all()
+            except BaseException as exc:
+                cloud_error = type(exc).__name__
         try:
             environments.cleanup_registered_groups(root)
             cleanup_ok = True
@@ -279,6 +341,13 @@ def execute(args, plan, tasks):
             result["requested"] = len(tasks)
             result["unrecorded"] = len(tasks) - len(rows)
             result["stopped_reason"] = stopped
+            if cloud_error is not None:
+                cleanup_ok = False
+                result['owned_cleanup_verified'] = False
+                finalization_errors.append({'component':'cloud_ownership','error_type':cloud_error})
+            if integration is not None:
+                result['cloud_cleanup'] = cloud_cleanup
+                integration.restore()
             result["finalization_errors"] = finalization_errors
             (root / "summary.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
