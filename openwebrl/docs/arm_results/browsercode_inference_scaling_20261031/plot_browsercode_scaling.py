@@ -29,7 +29,7 @@ PROTOCOL = {'model': 'gpt-5.6-terra', 'reasoning_effort': 'medium', 'max_complet
 # single/selection; blue shade/fill distinguishes effort/cap within Luna single.
 STYLES = {'serial_high': ('Sol high single', 's', '#08519c', True),
           'luna_single_high': ('Luna high (1× cap)', 'o', '#4292c6', True),
-          'parallel3_select_high': ('Luna high N3', 'o', '#a50f15', False),
+          'parallel3_select_high': ('Luna high N3', 'o', '#ef8a8a', False),
           'parallel5_select_high': ('Luna high N5', 'o', '#a50f15', True),
           'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', '#08306b', True),
           'luna_single_high_24576': ('Luna high (2× cap)', 'o', '#2171b5', True),

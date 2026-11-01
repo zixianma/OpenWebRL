@@ -291,9 +291,14 @@ The GPT-high BrowserCode headline cohort retains historical o4-mini grading for 
 | Valid-only success | Successes / valid outcomes. Report success, valid and invalid counts separately; invalids are excluded. |
 | Common-valid comparison | Use the same task intersection valid in every compared arm; label its size. |
 | Model cost | All candidate, selector and applicable helper/counter fees in the stated cohort, including valid failures. Exclude the external judge. |
-| Browser batches | Selected executable BrowserCode blocks. One block can contain several browser operations. |
+| Browser-code batches | One count per saved decision with a nonempty selected `command`; see the [exact counting rule](#browsercode-batch-counting). One batch can contain several browser operations. |
 | BrowserCode task latency | Actor-loop wall time, including model admission/HTTP waits and browser execution. Exclude setup, final judge-only capture, cleanup and external judging. |
 | Tokens | Native input/output/cache usage. Output may already include reasoning tokens; do not count those twice. |
+
+<a id="browsercode-batch-counting"></a>
+**Browser-code batch counting.** The [GPT worker](../api_experiments/browsercode/workers/gpt_high_worker.py) and [Luna worker](../api_experiments/browsercode/workers/luna_effort_worker.py) save `selected_code_batches = sum(bool(d['selected_action']['command']) for d in decisions)`. Each selected nonempty command contributes one, regardless of whether its execution succeeds. The [model adapter](../api_experiments/browsercode/models/luna_model.py) encodes one selected `browser_execute` request as that command: its JavaScript `code` may contain several clicks, navigations, evaluations or other browser operations. The [environment](../api_experiments/browsercode/runtime/gpt_high_environments.py) dispatches that request once to the browser bridge. Individual JavaScript statements and underlying CDP calls are not counted separately; `native_browsercode_cdp_attempts` records a separate lower-level counter.
+
+A model decision selects at most one batch or returns a final answer. A final-answer-only decision has an empty command and contributes zero batches. N3/N5 candidate generation and selection add model calls, but unselected proposals and the selector itself add no browser batches. Thus batches are neither model-call counts nor necessarily total decision counts. The completed 21-point BrowserCode figure averages `selected_code_batches` over each method's valid tasks, including valid failures, with full measurement coverage; it does not average over all planned tasks or a shared valid intersection.
 
 The Claude plots use each arm's valid cohort for success and all efficiency means. Their common-valid alternative uses the same 246 tasks for every metric. Missing measurements are never zero-filled. Plotted cohort costs and all-attempt campaign spending are separate quantities.
 
