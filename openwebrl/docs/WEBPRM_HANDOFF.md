@@ -1,7 +1,7 @@
 # WebPRM baselines: handoff
 
 <a id="webprm-baselines-handover-20261028"></a>
-_Last updated October 28, 2026. Earlier status logs are in this file's git history (commit 9bd626a and before)._
+_Last updated November 1, 2026. Earlier status logs are in this file's git history (commit 9bd626a and before)._
 
 **Goal.** Reproduce WebArbiter's Table 5 (gpt-4o actor; no search vs WebShepherd-8B vs WebArbiter-7B on single-site WebArena-Lite tasks) and add our Piotr SelectionARM as an extra selector row. The same comparison was also run on live Online-Mind2Web (OM2W).
 
@@ -203,7 +203,7 @@ Details in the [code README](https://github.com/zixianma/OpenWebRL/blob/arm/webp
 5. **Replace** stopped jobs with `replace_v11c_r2.sh`, which builds a package for the remaining cells.
 6. **Analyse:** `summarize_v9.py`, `paired_v11.py`.
 
-**Access needed:** the Tillicum `vlm` account; read access to `RT` (hosted site images, packages, Piotr and OpenWebRL-4B-SFT weights, results); your own OpenAI key in `.env`. Paths are hard-coded to `RT`.
+**Access needed:** the Tillicum `vlm` account; read access to `RT` (site images: see [§4.1](#webprm-site-images-20261101); packages, Piotr and OpenWebRL-4B-SFT weights, results); your own OpenAI key in `.env`. Paths are hard-coded to `RT`.
 
 ## 4. Where everything lives
 
@@ -216,6 +216,23 @@ Details in the [code README](https://github.com/zixianma/OpenWebRL/blob/arm/webp
 | WebPRMBench | `RT/webprm-webarena-20261011/next-stage-preparation/{piotr,k1-sftrl}-webprmbench-v1/`; results `openwebrl/docs/webprm_results/*webprmbench*.json` |
 | WebArena v12 | packages `D/launch-preparation-v12-*`, tools `D/v12-tools/` |
 | Not in git | API keys, task configs with answers, site images, trajectories, weights: under `D/` and `RT/` |
+| Site images | `RT/webarena-images/` (symlink index; [§4.1](#webprm-site-images-20261101)) |
+
+<a id="webprm-site-images-20261101"></a>
+### 4.1 WebArena site images
+
+All downloaded images are indexed under **`RT/webarena-images/`** as symlinks to the original downloads (the originals stay in place because pinned run packages refer to their paths). Each `*-oci/` entry is an OCI layout; every manifest layer is present at the expected size (checked November 1). A `README.md` there gives digests and build notes.
+
+| Entry | Site | Size (GB) |
+| --- | --- | ---: |
+| `shopping-oci/` | Shopping (Magento) | 45.4 |
+| `gitlab-oci/` | GitLab | 48.4 |
+| `cms-oci/` | CMS (`shopping_admin_final_0719`) | 2.2 |
+| `reddit-oci/`, `reddit.sif` | Reddit (Postmill); `.sif` is the ready-to-run Apptainer image | 45.5, 43.6 |
+| `map-oci/`, `map-datasets/` | Map (tile server, Nominatim, OSRM images; 4 data volumes) | 1.1, 189 |
+| `scripts/` | links to CMS startup includes, `v12-tools/`, the five v12 packages | – |
+
+**Sharing.** POSIX ACLs are not supported on this filesystem, so access is granted through the Unix group `zixianma` (members include Piotr, `piotrt`): these paths are group-readable, write access is unchanged. Files added later are created in group `all` and need `chgrp zixianma` + `chmod g+r` to be shared. Revoke with `chmod -R g-rwx` on the same targets. This is scrubbed storage (purged after 60 days of inactivity); copy anything you need to keep.
 
 ## 5. Pitfalls
 
