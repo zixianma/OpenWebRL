@@ -1,0 +1,1863 @@
+{
+  "actual_cloud_billing": false,
+  "price_assumption": {
+    "version": "Browser Use V4 published rates checked 2026-11-01; existing accounts may have different legacy terms",
+    "pricing_url": "https://browser-use.com/pricing",
+    "browser_usd_per_hour": "0.02",
+    "rounding": "Each session ceil(seconds/60), minimum1minute",
+    "traffic_usd_per_gb": {
+      "direct": "0.20",
+      "residential": "5.00"
+    },
+    "traffic_bytes_measured": false,
+    "traffic_cost_included": false,
+    "billing_reference_url": "https://docs.browser-use.com/cloud/guides/billing"
+  },
+  "lifetime_definition": "Local Chromium Popen start through first saved terminal owned-browser close, preferring browser_cleanup_before_judge. Repeated final-close receipt is not used when first-close receipt exists. Includes setup, actor work, final capture and teardown before judge. Legacy terminal-root-only proof is distinct from newer full owned-group verification.",
+  "scope_note": "Exact recorded task dispositions only. Excludes startup probes and unselected/abandoned historical attempts; not full historical campaign all-attempt billing. No cloud runtime, throughput, network-traffic or billing equivalence is assumed. Missing duration is not zero. Actor-latency proxy is separate, never mixed into owned-browser means.",
+  "points": [
+    {
+      "benchmark": "online_mind2web",
+      "method": "serial_high",
+      "requested": 300,
+      "valid": 266,
+      "invalid": 34,
+      "mean_actor_model_usd_per_valid_task": 0.20770943759398497,
+      "valid_task_lifetime_projection": {
+        "tasks": 266,
+        "first_close_lifetime_observed_tasks": 266,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 266
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 266
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 94.66245557796285,
+        "sum_observed_browser_seconds": 25180.213183738117,
+        "per_session_rounded_minutes_sum_observed": 560,
+        "projected_rental_usd_sum_observed": "0.1866666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0007017543859649122807017543861",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 34,
+        "first_close_lifetime_observed_tasks": 34,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 34
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 34
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 57.384929778026105,
+        "sum_observed_browser_seconds": 1951.0876124528877,
+        "per_session_rounded_minutes_sum_observed": 52,
+        "projected_rental_usd_sum_observed": "0.01733333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0005098039215686274509803921568",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 266,
+          "browser_cleanup": 34
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 90.43766932063669,
+        "sum_observed_browser_seconds": 27131.300796191004,
+        "per_session_rounded_minutes_sum_observed": 612,
+        "projected_rental_usd_sum_observed": "0.204",
+        "projected_rental_usd_mean_per_observed_task": "0.00068",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "c1e9e3af9a14168d63b932c342b0c169426fa83bbb963724a4b8c48d75609a35"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "luna_single_high",
+      "requested": 300,
+      "valid": 269,
+      "invalid": 31,
+      "mean_actor_model_usd_per_valid_task": 0.009513999349442378,
+      "valid_task_lifetime_projection": {
+        "tasks": 269,
+        "first_close_lifetime_observed_tasks": 269,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 269
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 269
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 96.81554094143861,
+        "sum_observed_browser_seconds": 26043.380513246986,
+        "per_session_rounded_minutes_sum_observed": 565,
+        "projected_rental_usd_sum_observed": "0.1883333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0007001239157372986369268897149",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 31,
+        "first_close_lifetime_observed_tasks": 31,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 31
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 31
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 67.46129164222117,
+        "sum_observed_browser_seconds": 2091.3000409088563,
+        "per_session_rounded_minutes_sum_observed": 54,
+        "projected_rental_usd_sum_observed": "0.018",
+        "projected_rental_usd_mean_per_observed_task": "0.0005806451612903225806451612903",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 269,
+          "browser_cleanup": 31
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 93.78226851385281,
+        "sum_observed_browser_seconds": 28134.680554155842,
+        "per_session_rounded_minutes_sum_observed": 619,
+        "projected_rental_usd_sum_observed": "0.2063333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0006877777777777777777777777777",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "fe701dc6b3291f8895a840db1433e078e43a3eb0b956b4d1dad3ab5695145c32"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "parallel3_select_high",
+      "requested": 300,
+      "valid": 269,
+      "invalid": 31,
+      "mean_actor_model_usd_per_valid_task": 0.054963019237918215,
+      "valid_task_lifetime_projection": {
+        "tasks": 269,
+        "first_close_lifetime_observed_tasks": 269,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 269
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 269
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 180.3528046616355,
+        "sum_observed_browser_seconds": 48514.90445397995,
+        "per_session_rounded_minutes_sum_observed": 946,
+        "projected_rental_usd_sum_observed": "0.3153333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001172242874845105328376703841",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 31,
+        "first_close_lifetime_observed_tasks": 31,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 31
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 31
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 80.70881641064601,
+        "sum_observed_browser_seconds": 2501.9733087300265,
+        "per_session_rounded_minutes_sum_observed": 58,
+        "projected_rental_usd_sum_observed": "0.01933333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0006236559139784946236559139784",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 269,
+          "browser_cleanup": 31
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 170.05625920903324,
+        "sum_observed_browser_seconds": 51016.87776270998,
+        "per_session_rounded_minutes_sum_observed": 1004,
+        "projected_rental_usd_sum_observed": "0.3346666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.001115555555555555555555555556",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "8e3bb4eec0d9aa3718e96f15b477c0d0b5934519157612b490c54e45b9371b30"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "parallel5_select_high",
+      "requested": 300,
+      "valid": 267,
+      "invalid": 33,
+      "mean_actor_model_usd_per_valid_task": 0.0696033554494382,
+      "valid_task_lifetime_projection": {
+        "tasks": 267,
+        "first_close_lifetime_observed_tasks": 267,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 267
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 267
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 210.59650189083874,
+        "sum_observed_browser_seconds": 56229.26600485394,
+        "per_session_rounded_minutes_sum_observed": 1072,
+        "projected_rental_usd_sum_observed": "0.3573333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001338327091136079900124843945",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 33,
+        "first_close_lifetime_observed_tasks": 33,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 33
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 33
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 101.55941100054065,
+        "sum_observed_browser_seconds": 3351.460563017841,
+        "per_session_rounded_minutes_sum_observed": 74,
+        "projected_rental_usd_sum_observed": "0.02466666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0007474747474747474747474747476",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 267,
+          "browser_cleanup": 33
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 198.60242189290594,
+        "sum_observed_browser_seconds": 59580.72656787178,
+        "per_session_rounded_minutes_sum_observed": 1146,
+        "projected_rental_usd_sum_observed": "0.382",
+        "projected_rental_usd_mean_per_observed_task": "0.001273333333333333333333333333",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "332d691bd100a97328cc7620a73c66ecac68582beb5bff19ee6c9543500ccc0a"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "luna_single_xhigh_12288",
+      "requested": 300,
+      "valid": 267,
+      "invalid": 33,
+      "mean_actor_model_usd_per_valid_task": 0.010868598370786516,
+      "valid_task_lifetime_projection": {
+        "tasks": 267,
+        "first_close_lifetime_observed_tasks": 267,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 267
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 267
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 141.4528283853701,
+        "sum_observed_browser_seconds": 37767.90517889382,
+        "per_session_rounded_minutes_sum_observed": 766,
+        "projected_rental_usd_sum_observed": "0.2553333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0009563046192259675405742821472",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 33,
+        "first_close_lifetime_observed_tasks": 33,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 33
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 33
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 53.32849239094789,
+        "sum_observed_browser_seconds": 1759.8402489012806,
+        "per_session_rounded_minutes_sum_observed": 50,
+        "projected_rental_usd_sum_observed": "0.01666666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0005050505050505050505050505052",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 33,
+          "browser_cleanup_before_judge": 267
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 131.75915142598367,
+        "sum_observed_browser_seconds": 39527.745427795104,
+        "per_session_rounded_minutes_sum_observed": 816,
+        "projected_rental_usd_sum_observed": "0.272",
+        "projected_rental_usd_mean_per_observed_task": "0.0009066666666666666666666666667",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "c447659764aeadb117ffe02abb5180ec9530f1b9bba92155f3a4934d5025a335"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "luna_single_high_24576",
+      "requested": 300,
+      "valid": 270,
+      "invalid": 30,
+      "mean_actor_model_usd_per_valid_task": 0.009976814481481482,
+      "valid_task_lifetime_projection": {
+        "tasks": 270,
+        "first_close_lifetime_observed_tasks": 270,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 270
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 270
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 129.65159152723047,
+        "sum_observed_browser_seconds": 35005.92971235223,
+        "per_session_rounded_minutes_sum_observed": 714,
+        "projected_rental_usd_sum_observed": "0.238",
+        "projected_rental_usd_mean_per_observed_task": "0.0008814814814814814814814814815",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 30,
+        "first_close_lifetime_observed_tasks": 30,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 30
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 30
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 21.496879412823667,
+        "sum_observed_browser_seconds": 644.90638238471,
+        "per_session_rounded_minutes_sum_observed": 30,
+        "projected_rental_usd_sum_observed": "0.01",
+        "projected_rental_usd_mean_per_observed_task": "0.0003333333333333333333333333333",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 30,
+          "browser_cleanup_before_judge": 270
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 118.83612031578978,
+        "sum_observed_browser_seconds": 35650.83609473694,
+        "per_session_rounded_minutes_sum_observed": 744,
+        "projected_rental_usd_sum_observed": "0.248",
+        "projected_rental_usd_mean_per_observed_task": "0.0008266666666666666666666666667",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "c399697ece4a707ad7ed8451fde329bb9ede4e2f064b0f56508e02fa16a8715c"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "luna_single_high_6144",
+      "requested": 300,
+      "valid": 267,
+      "invalid": 33,
+      "mean_actor_model_usd_per_valid_task": 0.009437041235955056,
+      "valid_task_lifetime_projection": {
+        "tasks": 267,
+        "first_close_lifetime_observed_tasks": 267,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 267
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 267
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 122.82748754661921,
+        "sum_observed_browser_seconds": 32794.93917494733,
+        "per_session_rounded_minutes_sum_observed": 681,
+        "projected_rental_usd_sum_observed": "0.227",
+        "projected_rental_usd_mean_per_observed_task": "0.0008501872659176029962546816479",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 33,
+        "first_close_lifetime_observed_tasks": 33,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 33
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 33
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 42.67459724039178,
+        "sum_observed_browser_seconds": 1408.2617089329287,
+        "per_session_rounded_minutes_sum_observed": 44,
+        "projected_rental_usd_sum_observed": "0.01466666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0004444444444444444444444444445",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 300
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 33,
+          "browser_cleanup_before_judge": 267
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 114.0106696129342,
+        "sum_observed_browser_seconds": 34203.20088388026,
+        "per_session_rounded_minutes_sum_observed": 725,
+        "projected_rental_usd_sum_observed": "0.2416666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0008055555555555555555555555557",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "1def04d6259f48c6032d895ac3d7a231e0cc0872fcdde015ba7c617766680b0b"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "luna_single_high",
+      "requested": 595,
+      "valid": 579,
+      "invalid": 16,
+      "mean_actor_model_usd_per_valid_task": 0.00778212762521589,
+      "valid_task_lifetime_projection": {
+        "tasks": 579,
+        "first_close_lifetime_observed_tasks": 579,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 579
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 579
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 104.34624372095033,
+        "sum_observed_browser_seconds": 60416.47511443024,
+        "per_session_rounded_minutes_sum_observed": 1283,
+        "projected_rental_usd_sum_observed": "0.4276666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0007386298215313759355210132413",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 16,
+        "first_close_lifetime_observed_tasks": 16,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 16
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 8,
+          "browser_cleanup": 8
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 132.99985306087183,
+        "sum_observed_browser_seconds": 2127.9976489739493,
+        "per_session_rounded_minutes_sum_observed": 44,
+        "projected_rental_usd_sum_observed": "0.01466666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0009166666666666666666666666669",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 595,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 595
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 587,
+          "browser_cleanup": 8
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 105.1167609468978,
+        "sum_observed_browser_seconds": 62544.47276340419,
+        "per_session_rounded_minutes_sum_observed": 1327,
+        "projected_rental_usd_sum_observed": "0.4423333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0007434173669467787114845938375",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "1abb95f42ecc7e5ab41c2cc4ae967644a4ff5b30ca76aff88d0c89fe1d7d47f8"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "parallel5_select_high",
+      "requested": 595,
+      "valid": 555,
+      "invalid": 40,
+      "mean_actor_model_usd_per_valid_task": 0.045877126936936935,
+      "valid_task_lifetime_projection": {
+        "tasks": 555,
+        "first_close_lifetime_observed_tasks": 555,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 555
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 555
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 176.6511188899298,
+        "sum_observed_browser_seconds": 98041.37098391104,
+        "per_session_rounded_minutes_sum_observed": 1911,
+        "projected_rental_usd_sum_observed": "0.637",
+        "projected_rental_usd_mean_per_observed_task": "0.001147747747747747747747747748",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 40,
+        "first_close_lifetime_observed_tasks": 40,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 40
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 32,
+          "browser_cleanup_before_judge": 8
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 214.19622039652896,
+        "sum_observed_browser_seconds": 8567.848815861158,
+        "per_session_rounded_minutes_sum_observed": 165,
+        "projected_rental_usd_sum_observed": "0.055",
+        "projected_rental_usd_mean_per_observed_task": "0.001375",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 595,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 595
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 563,
+          "browser_cleanup": 32
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 179.17515932734824,
+        "sum_observed_browser_seconds": 106609.2197997722,
+        "per_session_rounded_minutes_sum_observed": 2076,
+        "projected_rental_usd_sum_observed": "0.692",
+        "projected_rental_usd_mean_per_observed_task": "0.001163025210084033613445378151",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "220ca995200a5b25ebc07a955259a039f31bcf408b6d77bd079a76e5321a1adb"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "serial_high",
+      "requested": 595,
+      "valid": 553,
+      "invalid": 42,
+      "mean_actor_model_usd_per_valid_task": 0.19769814538878844,
+      "valid_task_lifetime_projection": {
+        "tasks": 553,
+        "first_close_lifetime_observed_tasks": 553,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 553
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 553
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 101.00552012271697,
+        "sum_observed_browser_seconds": 55856.05262786249,
+        "per_session_rounded_minutes_sum_observed": 1203,
+        "projected_rental_usd_sum_observed": "0.401",
+        "projected_rental_usd_mean_per_observed_task": "0.0007251356238698010849909584087",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 42,
+        "first_close_lifetime_observed_tasks": 42,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 42
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 33,
+          "browser_cleanup_before_judge": 9
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 103.10760467224117,
+        "sum_observed_browser_seconds": 4330.519396234129,
+        "per_session_rounded_minutes_sum_observed": 98,
+        "projected_rental_usd_sum_observed": "0.03266666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0007777777777777777777777777779",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 595,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 595
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 562,
+          "browser_cleanup": 33
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 101.15390256150692,
+        "sum_observed_browser_seconds": 60186.57202409662,
+        "per_session_rounded_minutes_sum_observed": 1301,
+        "projected_rental_usd_sum_observed": "0.4336666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0007288515406162464985994397760",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "6b435bc863a39467ea2a3ae0714d09cd27cd68c3044f20c5b8ef2c7ca5bfd64e"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "parallel3_select_high",
+      "requested": 595,
+      "valid": 568,
+      "invalid": 27,
+      "mean_actor_model_usd_per_valid_task": 0.04319473032570423,
+      "valid_task_lifetime_projection": {
+        "tasks": 568,
+        "first_close_lifetime_observed_tasks": 568,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 568
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 568
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 167.44730464623913,
+        "sum_observed_browser_seconds": 95110.06903906382,
+        "per_session_rounded_minutes_sum_observed": 1853,
+        "projected_rental_usd_sum_observed": "0.6176666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.001087441314553990610328638498",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 27,
+        "first_close_lifetime_observed_tasks": 27,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 27
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 19,
+          "browser_cleanup_before_judge": 8
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 221.18352990633704,
+        "sum_observed_browser_seconds": 5971.9553074711,
+        "per_session_rounded_minutes_sum_observed": 114,
+        "projected_rental_usd_sum_observed": "0.038",
+        "projected_rental_usd_mean_per_observed_task": "0.001407407407407407407407407407",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 595,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 595
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 576,
+          "browser_cleanup": 19
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 169.88575520426036,
+        "sum_observed_browser_seconds": 101082.02434653492,
+        "per_session_rounded_minutes_sum_observed": 1967,
+        "projected_rental_usd_sum_observed": "0.6556666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.001101960784313725490196078431",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "212cffcf8dacc26ca2a9cab29727302ab514c5edf8930bca5c8c79ab26db33be"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "luna_single_xhigh_12288",
+      "requested": 595,
+      "valid": 581,
+      "invalid": 14,
+      "mean_actor_model_usd_per_valid_task": 0.008963617977624785,
+      "valid_task_lifetime_projection": {
+        "tasks": 581,
+        "first_close_lifetime_observed_tasks": 581,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 581
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 581
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 112.83033939183424,
+        "sum_observed_browser_seconds": 65554.4271866557,
+        "per_session_rounded_minutes_sum_observed": 1369,
+        "projected_rental_usd_sum_observed": "0.4563333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0007854274239816408491107286287",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 14,
+        "first_close_lifetime_observed_tasks": 10,
+        "first_close_lifetime_missing_tasks": 4,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 10
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 10
+        },
+        "missing_lifetime_reason_counts": {
+          "missing_close_receipt": 4
+        },
+        "mean_observed_browser_seconds": 183.55921209523223,
+        "sum_observed_browser_seconds": 1835.5921209523221,
+        "per_session_rounded_minutes_sum_observed": 36,
+        "projected_rental_usd_sum_observed": "0.012",
+        "projected_rental_usd_mean_per_observed_task": "0.0012",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 4,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 591,
+        "first_close_lifetime_missing_tasks": 4,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 591
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 581,
+          "browser_cleanup": 10
+        },
+        "missing_lifetime_reason_counts": {
+          "missing_close_receipt": 4
+        },
+        "mean_observed_browser_seconds": 114.02710542742473,
+        "sum_observed_browser_seconds": 67390.01930760802,
+        "per_session_rounded_minutes_sum_observed": 1405,
+        "projected_rental_usd_sum_observed": "0.4683333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0007924421883812746756909193457",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 4,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "d9698948f4f5add2325dbb6a7adcdf0012cfcd0bb4e65bda717fcbccb7527bbb"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "luna_single_high_24576",
+      "requested": 595,
+      "valid": 585,
+      "invalid": 10,
+      "mean_actor_model_usd_per_valid_task": 0.007523119666666667,
+      "valid_task_lifetime_projection": {
+        "tasks": 585,
+        "first_close_lifetime_observed_tasks": 585,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 585
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 585
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 106.19520730176686,
+        "sum_observed_browser_seconds": 62124.19627153361,
+        "per_session_rounded_minutes_sum_observed": 1317,
+        "projected_rental_usd_sum_observed": "0.439",
+        "projected_rental_usd_mean_per_observed_task": "0.0007504273504273504273504273504",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 10,
+        "first_close_lifetime_observed_tasks": 10,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 10
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 10
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 168.0318026862107,
+        "sum_observed_browser_seconds": 1680.3180268621072,
+        "per_session_rounded_minutes_sum_observed": 34,
+        "projected_rental_usd_sum_observed": "0.01133333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001133333333333333333333333333",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 595,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 595
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 585,
+          "browser_cleanup": 10
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 107.23447781242979,
+        "sum_observed_browser_seconds": 63804.51429839572,
+        "per_session_rounded_minutes_sum_observed": 1351,
+        "projected_rental_usd_sum_observed": "0.4503333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0007568627450980392156862745097",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "741cf8698476fa53be15cba138ce3bacb0cbf1f8f5cb1ca317ee78175423fe7e"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "luna_single_high_6144",
+      "requested": 595,
+      "valid": 580,
+      "invalid": 15,
+      "mean_actor_model_usd_per_valid_task": 0.007724689715517242,
+      "valid_task_lifetime_projection": {
+        "tasks": 580,
+        "first_close_lifetime_observed_tasks": 580,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 580
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 580
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 105.59412006564912,
+        "sum_observed_browser_seconds": 61244.58963807649,
+        "per_session_rounded_minutes_sum_observed": 1316,
+        "projected_rental_usd_sum_observed": "0.4386666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0007563218390804597701149425288",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 15,
+        "first_close_lifetime_observed_tasks": 14,
+        "first_close_lifetime_missing_tasks": 1,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 14
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 14
+        },
+        "missing_lifetime_reason_counts": {
+          "missing_close_receipt": 1
+        },
+        "mean_observed_browser_seconds": 210.89706438279245,
+        "sum_observed_browser_seconds": 2952.5589013590943,
+        "per_session_rounded_minutes_sum_observed": 56,
+        "projected_rental_usd_sum_observed": "0.01866666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.001333333333333333333333333334",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 1,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 594,
+        "first_close_lifetime_missing_tasks": 1,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 594
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 580,
+          "browser_cleanup": 14
+        },
+        "missing_lifetime_reason_counts": {
+          "missing_close_receipt": 1
+        },
+        "mean_observed_browser_seconds": 108.07600764214745,
+        "sum_observed_browser_seconds": 64197.148539435584,
+        "per_session_rounded_minutes_sum_observed": 1372,
+        "projected_rental_usd_sum_observed": "0.4573333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0007699214365881032547699214365",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 1,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "79d8f3d20aff7b264512284fa3d347bd51c7f2223396d27dd6cc6ab55146ccf2"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "luna_single_high",
+      "requested": 150,
+      "valid": 150,
+      "invalid": 0,
+      "mean_actor_model_usd_per_valid_task": 0.014030933533333335,
+      "valid_task_lifetime_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 160.34521709053,
+        "sum_observed_browser_seconds": 24051.7825635795,
+        "per_session_rounded_minutes_sum_observed": 478,
+        "projected_rental_usd_sum_observed": "0.1593333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001062222222222222222222222222",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 0,
+        "first_close_lifetime_observed_tasks": 0,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {},
+        "first_close_field_counts": {},
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": null,
+        "sum_observed_browser_seconds": 0,
+        "per_session_rounded_minutes_sum_observed": 0,
+        "projected_rental_usd_sum_observed": "0.00",
+        "projected_rental_usd_mean_per_observed_task": null,
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 160.34521709053,
+        "sum_observed_browser_seconds": 24051.7825635795,
+        "per_session_rounded_minutes_sum_observed": 478,
+        "projected_rental_usd_sum_observed": "0.1593333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001062222222222222222222222222",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "052d3de61c84816f380a575f7996113eb4c637a149470b9872f9989b4e9f5509"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "parallel5_select_high",
+      "requested": 150,
+      "valid": 147,
+      "invalid": 3,
+      "mean_actor_model_usd_per_valid_task": 0.10953599132653062,
+      "valid_task_lifetime_projection": {
+        "tasks": 147,
+        "first_close_lifetime_observed_tasks": 147,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 147
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 147
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 287.0525178804623,
+        "sum_observed_browser_seconds": 42196.72012842796,
+        "per_session_rounded_minutes_sum_observed": 778,
+        "projected_rental_usd_sum_observed": "0.2593333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001764172335600907029478458050",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 3,
+        "first_close_lifetime_observed_tasks": 3,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 3
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 3
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 199.89892681565834,
+        "sum_observed_browser_seconds": 599.696780446975,
+        "per_session_rounded_minutes_sum_observed": 11,
+        "projected_rental_usd_sum_observed": "0.003666666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.001222222222222222222222222222",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 147,
+          "browser_cleanup": 3
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 285.30944605916625,
+        "sum_observed_browser_seconds": 42796.41690887493,
+        "per_session_rounded_minutes_sum_observed": 789,
+        "projected_rental_usd_sum_observed": "0.263",
+        "projected_rental_usd_mean_per_observed_task": "0.001753333333333333333333333333",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "1f778427b18d5070bb701eeac4bcf2fc962a6f9963bdd2c8122581facaf77268"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "serial_high",
+      "requested": 150,
+      "valid": 145,
+      "invalid": 5,
+      "mean_actor_model_usd_per_valid_task": 0.3843131027586207,
+      "valid_task_lifetime_projection": {
+        "tasks": 145,
+        "first_close_lifetime_observed_tasks": 145,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 145
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 145
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 156.68004093226045,
+        "sum_observed_browser_seconds": 22718.605935177766,
+        "per_session_rounded_minutes_sum_observed": 451,
+        "projected_rental_usd_sum_observed": "0.1503333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001036781609195402298850574712",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 5,
+        "first_close_lifetime_observed_tasks": 5,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 5
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 5
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 190.71940194839846,
+        "sum_observed_browser_seconds": 953.5970097419922,
+        "per_session_rounded_minutes_sum_observed": 18,
+        "projected_rental_usd_sum_observed": "0.006",
+        "projected_rental_usd_mean_per_observed_task": "0.0012",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 145,
+          "browser_cleanup": 5
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 157.81468629946505,
+        "sum_observed_browser_seconds": 23672.202944919758,
+        "per_session_rounded_minutes_sum_observed": 469,
+        "projected_rental_usd_sum_observed": "0.1563333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001042222222222222222222222222",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "8f5e677149d98fbcd7d4d8450b88347c76f5c1897c48a31abcbd7e5bb82ac7f5"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "parallel3_select_high",
+      "requested": 150,
+      "valid": 148,
+      "invalid": 2,
+      "mean_actor_model_usd_per_valid_task": 0.08883636675675675,
+      "valid_task_lifetime_projection": {
+        "tasks": 148,
+        "first_close_lifetime_observed_tasks": 148,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 148
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 148
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 263.5792283683416,
+        "sum_observed_browser_seconds": 39009.725798514555,
+        "per_session_rounded_minutes_sum_observed": 725,
+        "projected_rental_usd_sum_observed": "0.2416666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.001632882882882882882882882883",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 2,
+        "first_close_lifetime_observed_tasks": 2,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 2
+        },
+        "first_close_field_counts": {
+          "browser_cleanup": 2
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 193.2659418664989,
+        "sum_observed_browser_seconds": 386.5318837329978,
+        "per_session_rounded_minutes_sum_observed": 7,
+        "projected_rental_usd_sum_observed": "0.002333333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001166666666666666666666666666",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "terminal_root_only_legacy": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 148,
+          "browser_cleanup": 2
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 262.6417178816504,
+        "sum_observed_browser_seconds": 39396.25768224755,
+        "per_session_rounded_minutes_sum_observed": 732,
+        "projected_rental_usd_sum_observed": "0.244",
+        "projected_rental_usd_mean_per_observed_task": "0.001626666666666666666666666667",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "a9cfebecfd128c3732d4380ac8ed8167eef3439828ad8bdd2c91028dd7051c4d"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "luna_single_xhigh_12288",
+      "requested": 150,
+      "valid": 150,
+      "invalid": 0,
+      "mean_actor_model_usd_per_valid_task": 0.017327789566666668,
+      "valid_task_lifetime_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 172.08832190753117,
+        "sum_observed_browser_seconds": 25813.248286129674,
+        "per_session_rounded_minutes_sum_observed": 501,
+        "projected_rental_usd_sum_observed": "0.167",
+        "projected_rental_usd_mean_per_observed_task": "0.001113333333333333333333333333",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 0,
+        "first_close_lifetime_observed_tasks": 0,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {},
+        "first_close_field_counts": {},
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": null,
+        "sum_observed_browser_seconds": 0,
+        "per_session_rounded_minutes_sum_observed": 0,
+        "projected_rental_usd_sum_observed": "0.00",
+        "projected_rental_usd_mean_per_observed_task": null,
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 172.08832190753117,
+        "sum_observed_browser_seconds": 25813.248286129674,
+        "per_session_rounded_minutes_sum_observed": 501,
+        "projected_rental_usd_sum_observed": "0.167",
+        "projected_rental_usd_mean_per_observed_task": "0.001113333333333333333333333333",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "d5c69940cbd625aba243e3467642c87c1971aa8503660ec8459ce88256264cb9"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "luna_single_high_24576",
+      "requested": 150,
+      "valid": 150,
+      "invalid": 0,
+      "mean_actor_model_usd_per_valid_task": 0.013085260233333333,
+      "valid_task_lifetime_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 142.86575510932133,
+        "sum_observed_browser_seconds": 21429.8632663982,
+        "per_session_rounded_minutes_sum_observed": 437,
+        "projected_rental_usd_sum_observed": "0.1456666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0009711111111111111111111111113",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 0,
+        "first_close_lifetime_observed_tasks": 0,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {},
+        "first_close_field_counts": {},
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": null,
+        "sum_observed_browser_seconds": 0,
+        "per_session_rounded_minutes_sum_observed": 0,
+        "projected_rental_usd_sum_observed": "0.00",
+        "projected_rental_usd_mean_per_observed_task": null,
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 142.86575510932133,
+        "sum_observed_browser_seconds": 21429.8632663982,
+        "per_session_rounded_minutes_sum_observed": 437,
+        "projected_rental_usd_sum_observed": "0.1456666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0009711111111111111111111111113",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "386310f657a2ba1ecd7b44b9fb67361bd6ef07efee1cc382d2cf2aaa7162e87c"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "luna_single_high_6144",
+      "requested": 150,
+      "valid": 150,
+      "invalid": 0,
+      "mean_actor_model_usd_per_valid_task": 0.013472261300000002,
+      "valid_task_lifetime_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 146.6452497073775,
+        "sum_observed_browser_seconds": 21996.787456106627,
+        "per_session_rounded_minutes_sum_observed": 440,
+        "projected_rental_usd_sum_observed": "0.1466666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.000977777777777777777777777778",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 0,
+        "first_close_lifetime_observed_tasks": 0,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {},
+        "first_close_field_counts": {},
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": null,
+        "sum_observed_browser_seconds": 0,
+        "per_session_rounded_minutes_sum_observed": 0,
+        "projected_rental_usd_sum_observed": "0.00",
+        "projected_rental_usd_mean_per_observed_task": null,
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "explicit_nonstarted_browser_tasks_with_missing_lifetime": 0,
+        "first_close_proof_counts": {
+          "owned_group_verified": 150
+        },
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 146.6452497073775,
+        "sum_observed_browser_seconds": 21996.787456106627,
+        "per_session_rounded_minutes_sum_observed": 440,
+        "projected_rental_usd_sum_observed": "0.1466666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.000977777777777777777777777778",
+        "actor_latency_proxy_for_missing_lifetime": {
+          "observed_tasks": 0,
+          "missing_tasks": 0,
+          "mean_seconds": null,
+          "rounded_minutes_sum": 0,
+          "projected_rental_usd_sum": "0.00",
+          "note": "Separate proxy only; excludes browser startup/final capture/teardown and can understate lifetime."
+        }
+      },
+      "source_result_bindings_sha256": "291b2f11bd42eb77598ffab4923eaff1f7d123419b37483e4e23e59e067f47e3"
+    }
+  ],
+  "schema": "browsercode-browser-cost-projection-v1",
+  "projection_source_sha256": "d322c23c8901405bc3fd109ef7537c1a88403d508005074b8fbb17b9f8d82f4b",
+  "actor_plot_aggregate_sha256": "969a252c314d9ce378d0f35f0859d7ab10552d169627b532f7a8e8ed01ad2735"
+}

@@ -106,6 +106,56 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 
 The run command prints a read-only plan. The actual agent limit, model decision guard, saved identity and tracking all use 60. The actor-loop wall deadline stays **900 seconds**: episodes may time out before reaching the larger limit. Report timeouts, reached decision limits, actual decisions, output/reasoning usage, valid/planned counts and paired common-valid success alongside cost and latency. The shared Terra protocol and disabled automatic provider retries remain unchanged. A full campaign needs separate explicit compute/API caps; the example does not allocate cluster resources.
 
+<a id="browser-hosting-and-traffic-costs"></a>
+### Browser hosting and traffic costs
+
+**We can project hosting charges without rerunning the experiments; total cloud-browser cost still needs traffic measurements.** All 6,916 valid tasks in the completed 21 points have a saved first-close browser lifetime. At the [current Browser Use V4 rate](https://browser-use.com/pricing), projected hosting is **$0.00070–$0.00176 per valid task**, excluding traffic. This is a projection from local Chromium durations, not measured stealth-browser performance or spending; legacy account terms may differ.
+
+Use **$0.02 per browser-hour**, rounding each session up to whole minutes with a one-minute minimum. Add network usage separately: direct/custom-proxy traffic is **$0.20/GB** and managed residential traffic **$5/GB**. The provider's [billing examples](https://docs.browser-use.com/cloud/guides/billing) convert reported MB to GB by dividing by 1,024. For example, an assumed 10 MB/task adds $0.001953 direct or $0.048828 residential, before hosting. Traffic is unmeasured here; batch counts are not network-byte measurements. N3/N5 still use one browser session per task; candidate/selector computation can keep that session open but does not create three or five browsers. Our agents call their model providers directly, so a hosted-agent orchestration fee is not part of this projection.
+
+<details>
+<summary>Projected hosting means, coverage and zero-API reproduction</summary>
+
+USD per valid task; traffic, model calls and judging excluded. Every mean below covers all of its method's valid tasks.
+
+| Method | OM2W | WebVoyager | DeepShop |
+|---|---:|---:|---:|
+| Sol high single | 0.000702 | 0.000725 | 0.001037 |
+| Luna high · 1× cap | 0.000700 | 0.000739 | 0.001062 |
+| Luna high N3 | 0.001172 | 0.001087 | 0.001633 |
+| Luna high N5 | 0.001338 | 0.001148 | 0.001764 |
+| Luna xhigh · 1× cap | 0.000956 | 0.000785 | 0.001113 |
+| Luna high · 2× cap | 0.000881 | 0.000750 | 0.000971 |
+| Luna high · 0.5× cap | 0.000850 | 0.000756 | 0.000978 |
+
+For each recorded task, use the first successful browser-close receipt, preferring `browser_cleanup_before_judge.owned_browser_seconds`. A repeated final close can report time elapsed after the browser already stopped, including judging, and is not substituted for that first receipt. The local interval includes process startup, task setup, actor work, terminal capture and shutdown. It is not a guarantee of the same interval on a remote browser. The 3,000 new valid tasks have full recorded process-group closure; the 3,916 historical valid tasks retain their older terminal-root-only proof.
+
+Across the 7,315 recorded task dispositions, 7,310 lifetimes are observed; five interrupted invalid WebVoyager lifetimes remain missing. Their hosting projection is **$6.770333 for the known durations**, including recorded invalid tasks. Startup probes and abandoned historical attempts are outside this projection, so this is not a full historical all-attempt bill. Missing durations and traffic remain missing, never zero.
+
+The [aggregate](arm_results/browsercode_inference_scaling_20261031/browser_cost_projection.json) contains per-session-rounded minute sums and separate valid/invalid coverage. Reproduce the [scenario CSV](arm_results/browsercode_inference_scaling_20261031/browser_cost_scenarios.csv) without model or browser calls:
+
+```bash
+python3 -B openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/project_browser_cost.py \
+  --traffic-mb 0 10 50 100 --output /tmp/browser_cost_scenarios.csv
+```
+
+</details>
+
+<details>
+<summary>Proposed measured stealth-browser calibration — not launched</summary>
+
+Start with 10 fixed tasks per benchmark and two methods: Luna high single and Luna high N5, yielding 60 actor sessions. Choose tasks before observing new outcomes, with a pinned seed and website coverage; preserve invalids. This small calibration measures costs and cannot establish full-benchmark performance.
+
+Keep BrowserCode, high effort, 12,288 tokens per candidate/selector call, 30 decisions, the 900-second actor-loop deadline, raw 1280 × 1800 terminal screenshots and Terra medium/4,096/seed 42. Connect our existing agent over CDP to a standalone Browser Use V4 stealth browser; do not replace it with the provider's hosted agent. Set routing explicitly to direct (`proxyCountryCode: null`). Residential-US routing would be a separately approved condition, without automatic proxy fallback. Mechanical preflights and failed sessions must be separately counted and charged.
+
+Bind each task/attempt to its created provider browser ID and immutable create request. Disable automatic creation retries; reconcile an ambiguous creation before admitting another session. Stop the owned browser with the provider API, verify `status=stopped`, then retain raw post-stop [browser usage receipts](https://docs.browser-use.com/cloud/api-v4/browsers/get-browser-session): `startedAt`, `finishedAt`, `browserCost`, `proxyCost` and `proxyUsedMb`. Disconnection alone does not stop billing. Poll within a bounded settlement window and retain unresolved costs explicitly. Parse present, finite nonnegative decimal amounts without replacing absent/null values with zero.
+
+Report provider-recorded hosting, network/proxy and combined usage per task and for **every attempt**, including invalids, startup probes and failures; model and Terra fees remain separate. Provider usage is not necessarily net cash paid after credits or promotions. Cross-check project credits/invoices when attributable; shared account balance changes alone cannot assign costs to this campaign.
+
+Before any paid calibration, freeze the browser/proxy mode, exact session/compute/model/judge allowances and a separately approved browser allowance. Verify charge monitoring and teardown; provider soft spending limits are not treated as hard caps. Existing experiment approvals do not fund this optional calibration. The current recommendation is to use the zero-API projection first and calibrate only if the network-cost uncertainty matters to the comparison.
+
+</details>
+
 ### Recreate the completed scaling figures
 
 The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes all three settings above and the four historical high-effort controls. Recreate its 7 × 4.35-inch PNG/PDF/SVG figures and coordinates from public aggregates with zero model or browser calls:
