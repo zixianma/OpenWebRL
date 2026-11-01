@@ -50,6 +50,25 @@ class Tests(unittest.TestCase):
                 '--webjudge-source', str(self.root), '--chromium', str(self.root / 'chrome'),
                 '--browser-cache', str(self.root), *extra]
 
+    def test_explicit_no_sandbox_matches_default_in_copied_terra_cli(self):
+        source = ('import argparse\ncreate=argparse.ArgumentParser()\n'
+                  'create.add_argument("--no-sandbox", action=argparse.BooleanOptionalAction, default=True)\n')
+        namespace = {}
+        exec(source, namespace)
+        self.assertTrue(namespace['create'].parse_args([]).no_sandbox)
+        self.assertFalse(namespace['create'].parse_args(['--no-sandbox']).no_sandbox)
+        runtime = self.root / 'runtime'
+        path = runtime / 'upstream/src/cuawright/webwright/tools/browser_session.py'
+        path.parent.mkdir(parents=True)
+        path.write_text(source)
+        receipt = native_runtime.repair_explicit_no_sandbox(runtime)
+        namespace = {}
+        exec(path.read_text(), namespace)
+        self.assertTrue(namespace['create'].parse_args([]).no_sandbox)
+        self.assertTrue(namespace['create'].parse_args(['--no-sandbox']).no_sandbox)
+        self.assertEqual(receipt['archived_sha256'], hashlib.sha256(source.encode()).hexdigest())
+        self.assertEqual(receipt['portable_sha256'], native_runtime.digest(path))
+
     def fake_endpoint(self, runtime, directory, task):
         return {'id': task['task_id'], 'original_valid': True, 'eligible': True,
                 'cohort': {'benchmark': 'synthetic', 'harness': 'native', 'arm': 'fixture',

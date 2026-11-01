@@ -34,7 +34,11 @@ def need(condition, message):
 
 
 def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    value = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1048576), b''):
+            value.update(block)
+    return value.hexdigest()
 
 
 def read(path):

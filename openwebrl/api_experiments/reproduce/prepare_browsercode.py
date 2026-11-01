@@ -21,7 +21,11 @@ CAMPAIGNS = ("browsercode_luna_effort", "browsercode_claude", "browsercode_gpt_h
 
 
 def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    value = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1048576), b''):
+            value.update(block)
+    return value.hexdigest()
 
 
 def write_json(path, value):

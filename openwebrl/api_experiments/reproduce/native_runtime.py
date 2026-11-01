@@ -20,7 +20,11 @@ CHROMIUM_SHA256 = '481fea1516a1f2b76454664272f12cd9dd1f20117b21e1f1498e08bc7f872
 
 
 def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    value = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1048576), b''):
+            value.update(block)
+    return value.hexdigest()
 
 
 def verify_browser(chromium, browser_cache):
@@ -57,6 +61,18 @@ def replace_once(source, before, after):
     if source.count(before) != 1:
         raise ValueError('Archived adaptation anchor changed: ' + before[:90])
     return source.replace(before, after, 1)
+
+
+def repair_explicit_no_sandbox(runtime):
+    """Restore the explicit flag's meaning in the copied Terra runtime only."""
+    path = Path(runtime) / 'upstream/src/cuawright/webwright/tools/browser_session.py'
+    before = 'create.add_argument("--no-sandbox", action=argparse.BooleanOptionalAction, default=True)'
+    after = 'create.add_argument("--no-sandbox", action="store_true", default=True)'
+    original = digest(path)
+    path.write_text(replace_once(path.read_text(), before, after))
+    return {'file': str(path.relative_to(runtime)), 'archived_sha256': original,
+            'portable_sha256': digest(path),
+            'reason': 'An explicit --no-sandbox must enable the same flag as its default; BooleanOptionalAction incorrectly negated it.'}
 
 
 # No scheduler, historical approval record or host path is needed for a new run.
@@ -138,6 +154,8 @@ def build_runtime(output, cuawright_source, webjudge_source, chromium, browser_c
         target = output / 'upstream' / rel
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(cuawright_source) / rel, target)
+    if terminal_capture:
+        adaptations.append(repair_explicit_no_sandbox(output))
     for rel in judge['hashes']:
         target = output / 'webjudge/official-source' / rel
         target.parent.mkdir(parents=True, exist_ok=True)
