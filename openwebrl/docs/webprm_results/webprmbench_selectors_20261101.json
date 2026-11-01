@@ -1,0 +1,512 @@
+{
+ "benchmark": "WebPRMBench (ZYao720/WEBPRMBENCH), 1,150 states x 4 pairs",
+ "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+ "models": [
+  {
+   "key": "piotr",
+   "label": "Piotr SelectionARM (4B LoRA)",
+   "kind": "generative",
+   "data": "Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 395,
+     "states_total": 142,
+     "states_ok": 50
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 395,
+     "states_total": 148,
+     "states_ok": 40
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1113,
+     "states_total": 417,
+     "states_ok": 108
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 590,
+     "states_total": 201,
+     "states_ok": 89
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 97,
+     "states_total": 30,
+     "states_ok": 16
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 509,
+     "states_total": 212,
+     "states_ok": 58
+    }
+   },
+   "sw": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 405,
+     "states_total": 142,
+     "states_ok": 45
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 395,
+     "states_total": 148,
+     "states_ok": 36
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1112,
+     "states_total": 417,
+     "states_ok": 118
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 610,
+     "states_total": 201,
+     "states_ok": 97
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 85,
+     "states_total": 30,
+     "states_ok": 14
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 605,
+     "states_total": 212,
+     "states_ok": 78
+    }
+   },
+   "p1": 3257,
+   "unp": 44,
+   "job": "367841 / 407988",
+   "p1_swapped": 3325,
+   "unparseable_swapped": 46
+  },
+  {
+   "key": "lora-recipe2-2612",
+   "label": "Our 4B LoRA",
+   "kind": "generative",
+   "data": "Recipe 2: 2.6K states, Luna 3 steps after execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 387,
+     "states_total": 142,
+     "states_ok": 46
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 371,
+     "states_total": 148,
+     "states_ok": 38
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1028,
+     "states_total": 417,
+     "states_ok": 95
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 529,
+     "states_total": 201,
+     "states_ok": 64
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 84,
+     "states_total": 30,
+     "states_ok": 12
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 535,
+     "states_total": 212,
+     "states_ok": 63
+    }
+   },
+   "sw": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 379,
+     "states_total": 142,
+     "states_ok": 42
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 379,
+     "states_total": 148,
+     "states_ok": 37
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1022,
+     "states_total": 417,
+     "states_ok": 105
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 548,
+     "states_total": 201,
+     "states_ok": 77
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 82,
+     "states_total": 30,
+     "states_ok": 12
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 542,
+     "states_total": 212,
+     "states_ok": 60
+    }
+   },
+   "p1": 2160,
+   "unp": 542,
+   "job": "407988",
+   "p1_swapped": 2218,
+   "unparseable_swapped": 547
+  },
+  {
+   "key": "lora-recipe2-1380",
+   "label": "Our 4B LoRA",
+   "kind": "generative",
+   "data": "Recipe 2: 1.3K states, Luna 3 steps after execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 338,
+     "states_total": 142,
+     "states_ok": 33
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 313,
+     "states_total": 148,
+     "states_ok": 28
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 926,
+     "states_total": 417,
+     "states_ok": 78
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 532,
+     "states_total": 201,
+     "states_ok": 68
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 94,
+     "states_total": 30,
+     "states_ok": 17
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 440,
+     "states_total": 212,
+     "states_ok": 49
+    }
+   },
+   "sw": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 334,
+     "states_total": 142,
+     "states_ok": 36
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 295,
+     "states_total": 148,
+     "states_ok": 22
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 934,
+     "states_total": 417,
+     "states_ok": 93
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 525,
+     "states_total": 201,
+     "states_ok": 69
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 85,
+     "states_total": 30,
+     "states_ok": 12
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 439,
+     "states_total": 212,
+     "states_ok": 50
+    }
+   },
+   "p1": 2035,
+   "unp": 967,
+   "job": "407988",
+   "p1_swapped": 2093,
+   "unparseable_swapped": 1001
+  },
+  {
+   "key": "head-recipe1-piotrdata",
+   "label": "Our head (22.6M)",
+   "kind": "head",
+   "data": "Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 414,
+     "states_total": 142,
+     "states_ok": 62
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 415,
+     "states_total": 148,
+     "states_ok": 48
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1106,
+     "states_total": 417,
+     "states_ok": 138
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 660,
+     "states_total": 201,
+     "states_ok": 121
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 93,
+     "states_total": 30,
+     "states_ok": 16
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 584,
+     "states_total": 212,
+     "states_ok": 78
+    }
+   },
+   "sw": null,
+   "p1": 2248,
+   "unp": 0,
+   "job": "407953"
+  },
+  {
+   "key": "head-recipe2-2612",
+   "label": "Our head (22.6M)",
+   "kind": "head",
+   "data": "Recipe 2: 2.6K states, Luna 3 steps after execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 365,
+     "states_total": 142,
+     "states_ok": 41
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 384,
+     "states_total": 148,
+     "states_ok": 38
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1064,
+     "states_total": 417,
+     "states_ok": 100
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 645,
+     "states_total": 201,
+     "states_ok": 104
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 98,
+     "states_total": 30,
+     "states_ok": 16
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 633,
+     "states_total": 212,
+     "states_ok": 93
+    }
+   },
+   "sw": null,
+   "p1": 2213,
+   "unp": 0,
+   "job": "407953"
+  },
+  {
+   "key": "head-recipe2-1380",
+   "label": "Our head (22.6M)",
+   "kind": "head",
+   "data": "Recipe 2: 1.3K states, Luna 3 steps after execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 325,
+     "states_total": 142,
+     "states_ok": 36
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 348,
+     "states_total": 148,
+     "states_ok": 32
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 979,
+     "states_total": 417,
+     "states_ok": 85
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 614,
+     "states_total": 201,
+     "states_ok": 98
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 76,
+     "states_total": 30,
+     "states_ok": 11
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 594,
+     "states_total": 212,
+     "states_ok": 91
+    }
+   },
+   "sw": null,
+   "p1": 2232,
+   "unp": 0,
+   "job": "407953"
+  },
+  {
+   "key": "head-recipe2-22kpanels",
+   "label": "Our head (22.6M)",
+   "kind": "head",
+   "data": "Recipe 2: 2.5K states, 22K panels, Luna 3 steps after execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 246,
+     "states_total": 142,
+     "states_ok": 15
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 275,
+     "states_total": 148,
+     "states_ok": 20
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 712,
+     "states_total": 417,
+     "states_ok": 57
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 522,
+     "states_total": 201,
+     "states_ok": 76
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 81,
+     "states_total": 30,
+     "states_ok": 11
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 449,
+     "states_total": 212,
+     "states_ok": 46
+    }
+   },
+   "sw": null,
+   "p1": 2241,
+   "unp": 0,
+   "job": "407953"
+  },
+  {
+   "key": "k1-sftrl",
+   "label": "Our head (22.6M)",
+   "kind": "head",
+   "data": "SFT+RL 1,908 states, Luna 1 step after execution",
+   "orig": {
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 281,
+     "states_total": 142,
+     "states_ok": 26
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 285,
+     "states_total": 148,
+     "states_ok": 26
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 692,
+     "states_total": 417,
+     "states_ok": 48
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 486,
+     "states_total": 201,
+     "states_ok": 53
+    },
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 58,
+     "states_total": 30,
+     "states_ok": 2
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 459,
+     "states_total": 212,
+     "states_ok": 46
+    }
+   },
+   "sw": null,
+   "p1": null,
+   "unp": 0,
+   "job": "369117"
+  }
+ ],
+ "pending": [
+  "head-recipe2-1380-pre",
+  "head-recipe2-1380-k1",
+  "head-recipe2-1380-outcome"
+ ]
+}
