@@ -30,7 +30,10 @@ def outcomes(root, shards):
             decisions = [read(p) for p in sorted((result.parent / 'decisions').glob('*.json'))]
             groups = defaultdict(int)
             for request in (result.parent / 'requests').glob('luna-*.json'):
-                groups[read(request).get('decision_group_id')] += 1
+                try:
+                    groups[read(request).get('decision_group_id')] += 1
+                except ValueError:  # receipt truncated by the 2026-11-01 quota failure; cost comes from the result row
+                    groups['_unreadable'] += 1
             for d in decisions:
                 d['_calls'] = groups.get(d['decision_group_id'], 0)
             row['_decisions'] = decisions

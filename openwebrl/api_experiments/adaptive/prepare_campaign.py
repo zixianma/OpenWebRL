@@ -24,18 +24,21 @@ SKIP = {'controller.py', 'financial_plan.py', 'canary_scope.py', 'test_luna_effo
         'campaign-plan.json', 'source-manifest.json', 'tasks.json'}
 ADAPTIVE = ('action_signature.py', 'adaptive_model.py', 'adaptive_worker.py', 'run_shard.py')
 PHASE_ARMS = {1: ('luna_single_high', 'luna_n5_high', 'adaptive_agree', 'adaptive_self', 'adaptive_self_agree'),
-              2: ('luna_single_high', 'luna_n5_high', 'luna_n5_cached', 'adaptive_agree_cached', 'adaptive_agree3_cached')}
+              2: ('luna_single_high', 'luna_n5_high', 'luna_n5_cached', 'adaptive_agree_cached', 'adaptive_agree3_cached'),
+              3: ('luna_n5_cached', 'n5_skip', 'n3_skip', 'n5_verify', 'n5_skip_verify')}
 PHASE_ACTOR_CAP = {1: {'luna_single_high': '2.5', 'luna_n5_high': '15', 'adaptive_agree': '11', 'adaptive_self': '8',
                        'adaptive_self_agree': '12'},
                    2: {'luna_single_high': '2.5', 'luna_n5_high': '15', 'luna_n5_cached': '9', 'adaptive_agree_cached': '7',
-                       'adaptive_agree3_cached': '5'}}
+                       'adaptive_agree3_cached': '5'},
+                   3: {'luna_n5_cached': '3.5', 'n5_skip': '3.5', 'n3_skip': '2.5', 'n5_verify': '4', 'n5_skip_verify': '4'}}
+PHASE_JUDGE_CAP = {1: '9', 2: '9', 3: '6'}
 # Phase 2 also stops before all phases together reach this many charged or reserved USD.
 GLOBAL_STOP_USD = '990'
 PHASE1_ROOT = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/adaptive-compute-20261031-v2'
+PHASE2_ROOT = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/adaptive-compute-phase2-20261031-v1'
 SHARDS = 16
 SEED = 20261031
 APPROVED_USD = Decimal('1000')
-JUDGE_CAP = '9'
 SMOKE_ACTOR_CAP = '1.5'
 SMOKE_JUDGE_CAP = '1'
 SMOKE_TASKS = ('online-mind2web', 'webvoyager', 'deepshop')
@@ -64,9 +67,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--credential-file', default='/gpfs/projects/krishna/zixianma/OpenWebRL/.env')
-    p.add_argument('--phase', type=int, choices=(1, 2), default=1)
+    p.add_argument('--phase', type=int, choices=(1, 2, 3), default=1)
     a = p.parse_args()
-    ARMS, ACTOR_CAP = PHASE_ARMS[a.phase], PHASE_ACTOR_CAP[a.phase]
+    ARMS, ACTOR_CAP, JUDGE_CAP = PHASE_ARMS[a.phase], PHASE_ACTOR_CAP[a.phase], PHASE_JUDGE_CAP[a.phase]
     out = a.output.resolve()
     assert str(out).startswith('/gpfs/scrubbed/zixianma/openwebrl-runtime/'), 'Browser bridge requires the runtime tree'
     out.mkdir(parents=True, exist_ok=False)
@@ -93,7 +96,7 @@ def main():
     plan = {
         'schema': 'adaptive-compute-browsercode-v1', 'campaign': out.name,
         'arms': [{'arm': arm, 'model': 'gpt-6-luna', 'reasoning_effort': 'high', 'output_tokens': 12288,
-                  'proposal_count': 1 if arm == 'luna_single_high' else 5,
+                  'proposal_count': 1 if arm == 'luna_single_high' else 3 if arm == 'n3_skip' else 5,
                   'selector_reasoning_effort': None if arm == 'luna_single_high' else 'high'} for arm in ARMS],
         'protocol': {'max_decisions': 30, 'episode_deadline_seconds': 900, 'viewport': '1280x1800', 'harness': 'browsercode',
                      'judge': 'gpt-5.6-terra terminal success (frozen common_judge)', 'arm_order': 'per-task seeded shuffle',
@@ -106,9 +109,18 @@ def main():
                    'smoke_actor_usd_per_arm': SMOKE_ACTOR_CAP, 'smoke_judge_usd': SMOKE_JUDGE_CAP,
                    'committed_cap_usd': str(committed), 'approved_usd': str(APPROVED_USD)},
         'base_runtime': str(BASE), 'base_files': copied, 'phase': a.phase}
-    if a.phase == 2:
+    if a.phase >= 2:
+        roots = (PHASE1_ROOT, str(out)) if a.phase == 2 else (PHASE1_ROOT, PHASE2_ROOT, str(out))
         plan['global_spend_guard'] = {'stop_usd': GLOBAL_STOP_USD, 'ledger_globs': [
-            f'{root}/shards/*/budget/{kind}/ledger.json' for root in (PHASE1_ROOT, str(out)) for kind in ('*/model', 'judge')]}
+            f'{root}/shards/*/budget/{kind}/ledger.json' for root in roots for kind in ('*/model', 'judge')]}
+    if a.phase == 3:
+        plan['design_note'] = ('Designed after interim looks at phases 1 and 2 (user goal 2026-11-01: higher success and/or '
+                               'lower latency). Cached N5 matched N5 at 59% of its cost; agreement gates lost about 3.5 pp. '
+                               'N5 decisions spend about 6.5 s waiting for the slowest of five proposals and 3.4 s on '
+                               'the selector; all five proposals share one non-final effect in about 40% of decisions; '
+                               'about two thirds of N5 failures are submitted wrong answers. Fresh contemporaneous '
+                               'cached-N5 control; all 1,045 tasks rerun.')
+    if a.phase == 2:
         plan['design_note'] = ('Designed after an interim look at phase 1 (about 100 valid episodes per arm): the projected '
                                'selector had zero prompt-cache hits and cost about half of N5. Fresh contemporaneous '
                                'baselines rerun here; all 1,045 tasks rerun.')

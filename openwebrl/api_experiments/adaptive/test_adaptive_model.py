@@ -45,6 +45,8 @@ class Scripted:
         output = self.script(role)
         if role == 'selector':
             output = [{'type': 'message', 'role': 'assistant', 'content': [{'type': 'output_text', 'text': json.dumps({'selected_index': output})}]}]
+        if role == 'verifier':
+            output = [{'type': 'message', 'role': 'assistant', 'content': [{'type': 'output_text', 'text': json.dumps(output)}]}]
         return {'model': am.MODEL, 'status': 'completed', 'reasoning': {'effort': 'high'}, 'output': output,
                 'usage': {'input_tokens': 1000, 'output_tokens': 100, 'input_tokens_details': {'cached_tokens': 0}}}
 
@@ -142,6 +144,33 @@ c, r, m, e, b, _ = run('adaptive_agree3_cached', lambda role: 2 if role == 'sele
 check(e is None and roles(c) == ['candidate_0', 'candidate_1', 'candidate_2', 'selector'] and r['candidate_count'] == 3, 'agree3 cached: disagreement escalates to three + cached selector')
 c, r, m, e, b, _ = run('luna_n5_high', lambda role: 0 if role == 'selector' else action(CLICK_A))
 check(r['selector_mode'] == 'projected', 'phase-1 n5 keeps the projected selector')
+
+# Phase 3: unanimous selector skip, N3, and the answer check.
+c, r, m, e, b, _ = run('n5_skip', lambda role: action(CLICK_A2 if role == 'candidate_3' else CLICK_A))
+check(e is None and len(c.calls) == 5 and r['selector_skipped'] and r['selector_response'] is None, 'n5_skip: unanimous five skip the selector')
+c, r, m, e, b, _ = run('n5_skip', lambda role: 3 if role == 'selector' else action(CLICK_B if role == 'candidate_3' else CLICK_A))
+check(e is None and len(c.calls) == 6 and not r['selector_skipped'] and r['selected_index'] == 3, 'n5_skip: any disagreement runs the cached selector')
+c, r, m, e, b, _ = run('n5_skip', lambda role: 0 if role == 'selector' else final())
+check(e is None and len(c.calls) == 6 and not r['selector_skipped'], 'n5_skip: unanimous final answers still run the selector')
+c, r, m, e, b, _ = run('n3_skip', lambda role: 1 if role == 'selector' else action(CLICK_B if role == 'candidate_1' else CLICK_A))
+check(e is None and roles(c) == ['candidate_0', 'candidate_1', 'candidate_2', 'selector'] and r['selected_index'] == 1, 'n3_skip: three proposals + selector on disagreement')
+c, r, m, e, b, _ = run('n5_verify', lambda role: action(CLICK_A) if role != 'selector' else 0)
+check(e is None and len(c.calls) == 6 and r['verification'] is None, 'n5_verify: non-final decisions are not checked')
+c, r, m, e, b, _ = run('n5_verify', lambda role: {'verdict': 'accept', 'note': ''} if role == 'verifier' else 0 if role == 'selector' else final())
+ver = next(p for role, p in c.calls if role == 'verifier')
+cand = next(p for role, p in c.calls if role == 'candidate_0')
+check(e is None and len(c.calls) == 7 and r['verification']['verdict'] == 'accept' and m['extra']['done'], 'n5_verify: accepted answer finishes')
+check(ver['input'][:-1] == cand['input'] and ver['tool_choice'] == 'none' and ver['text']['format']['name'] == 'answer_check', 'n5_verify: check uses the cached candidate prefix')
+c, r, m, e, b, _ = run('n5_verify', lambda role: {'verdict': 'revise', 'note': 'price not verified'} if role == 'verifier'
+                       else 0 if role == 'selector' else final() if int(role.split('_')[1]) < 5 else action(CLICK_A))
+second = [p for role, p in c.calls if role.startswith('candidate_') and int(role.split('_')[1]) >= 5]
+check(e is None and len(c.calls) == 13 and r['verification']['verdict'] == 'revise' and not m['extra']['done'] and len(second) == 5,
+      'n5_verify: rejection resamples five with the note and acts')
+check(all('price not verified' in p['input'][-1]['content'][0]['text'] for p in second) and r['selected_role'].startswith('candidate_'),
+      'n5_verify: resampled proposals see the note')
+c, r, m, e, b, _ = run('n5_skip_verify', lambda role: {'verdict': 'revise', 'note': 'x'} if role == 'verifier'
+                       else 0 if role == 'selector' else final() if int(role.split('_')[1]) < 5 else action(CLICK_A))
+check(e is None and len(c.calls) == 12 and r['selector_skipped'] and not m['extra']['done'], 'n5_skip_verify: unanimous resample skips the selector')
 
 c, r, m, e, b, work = run('adaptive_agree', lambda role: action(CLICK_A), fail_role='candidate_1')
 snapshot = b.snapshot()
