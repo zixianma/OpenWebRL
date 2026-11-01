@@ -142,17 +142,26 @@ python3 -B openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/pro
 </details>
 
 <details>
-<summary>Proposed measured stealth-browser calibration — not launched</summary>
+<summary>Proposed paired OM2W stealth-browser pilot — not launched</summary>
 
-Start with 10 fixed tasks per benchmark and two methods: Luna high single and Luna high N5, yielding 60 actor sessions. Choose tasks before observing new outcomes, with a pinned seed and website coverage; preserve invalids. This small calibration measures costs and cannot establish full-benchmark performance.
+Start with **20 fixed OM2W tasks × two methods: Luna high single and Luna high N5**, yielding 40 actor sessions. This reduced pilot measures actual hosting/traffic cost and checks the comparison before budgeting the full 300-task benchmark. It cannot establish full-benchmark performance. Select tasks without outcomes: rank hosts and tasks by SHA256 with seed 42 and cycle through hosts for website coverage. Both arms receive the same tasks, with fresh sessions; preserve invalids and every charge.
 
-Keep BrowserCode, high effort, 12,288 tokens per candidate/selector call, 30 decisions, the 900-second actor-loop deadline, raw 1280 × 1800 terminal screenshots and Terra medium/4,096/seed 42. Connect our existing agent over CDP to a standalone Browser Use V4 stealth browser; do not replace it with the provider's hosted agent. Set routing explicitly to direct (`proxyCountryCode: null`). Residential-US routing would be a separately approved condition, without automatic proxy fallback. Mechanical preflights and failed sessions must be separately counted and charged.
+Keep BrowserCode, high effort, 12,288 tokens per candidate/selector call, 30 decisions, the 900-second actor-loop deadline, raw 1280 × 1800 terminal screenshots and Terra medium/4,096/seed 42. Connect our existing agent over CDP to a standalone Browser Use V4 stealth browser. **Both arms use US residential routing (`proxyCountryCode: "us"`)**, explicitly requested for this study, with no proxy fallback or shared browser profile. N5 samples its five candidates concurrently before selecting one; it uses one browser per task. Run the two arms of each task contemporaneously, alternate worker assignment, and await both before releasing the next pair. Mechanical preflights and failed sessions must be separately counted and charged.
+
+The zero-API [pilot planner](../api_experiments/reproduce/stealth_plan.py) verifies the full 300-task reference identity set, freezes the selected pairs and records proposed resource/call/budget limits. Its output contains task identities and stays local. It creates no sessions and grants no spending authorization:
+
+```bash
+python3 -B openwebrl/api_experiments/reproduce/stealth_plan.py \
+  --tasks "$API_WORK/runtime/tasks.json" --output /tmp/om2w-stealth-pilot.json
+```
 
 Bind each task/attempt to its created provider browser ID and immutable create request. Disable automatic creation retries; reconcile an ambiguous creation before admitting another session. Stop the owned browser with the provider API, verify `status=stopped`, then retain raw post-stop [browser usage receipts](https://docs.browser-use.com/cloud/api-v4/browsers/get-browser-session): `startedAt`, `finishedAt`, `browserCost`, `proxyCost` and `proxyUsedMb`. Disconnection alone does not stop billing. Poll within a bounded settlement window and retain unresolved costs explicitly. Parse present, finite nonnegative decimal amounts without replacing absent/null values with zero.
 
 Report provider-recorded hosting, network/proxy and combined usage per task and for **every attempt**, including invalids, startup probes and failures; model and Terra fees remain separate. Provider usage is not necessarily net cash paid after credits or promotions. Cross-check project credits/invoices when attributable; shared account balance changes alone cannot assign costs to this campaign.
 
-Before any paid calibration, freeze the browser/proxy mode, exact session/compute/model/judge allowances and a separately approved browser allowance. Verify charge monitoring and teardown; provider soft spending limits are not treated as hard caps. Existing experiment approvals do not fund this optional calibration. The current recommendation is to use the zero-API projection first and calibrate only if the network-cost uncertainty matters to the comparison.
+Record provider lifetime alongside model-call intervals, browser-command execution and setup/capture/cleanup intervals. Use the **union of overlapping N5 model-call intervals** for wall time, rather than summing five concurrent durations. Preserve overlap and unclassified time explicitly. An allocated cloud browser can remain billable while inference is in flight; browser-command time is a diagnostic, not a substitute for provider charges. Report overall and valid-only success with separate counts, plus paired common-valid results. A later comparison with historical local-browser runs remains descriptive because collection windows differ.
+
+Before paid collection, freeze and explicitly approve exact session/compute/model/judge allowances and the browser spending policy. Verify charge monitoring and teardown. The current standalone-browser schema exposes no per-session traffic-dollar ceiling; the provider describes API-key spending limits as [soft limits](https://docs.browser-use.com/cloud/guides/billing). Polling can stop admission and request shutdown after observed usage thresholds, but cannot guarantee that already-running traffic stays below an exact dollar amount. Require an explicit policy for that possible overshoot; do not silently turn a spending target into a claimed hard cap. Existing experiment approvals do not fund this new pilot, and it does not authorize a full-300 follow-up.
 
 </details>
 
