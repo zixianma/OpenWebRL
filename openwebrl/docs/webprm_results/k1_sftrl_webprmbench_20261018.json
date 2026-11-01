@@ -1,0 +1,84 @@
+{
+  "status": "verified_complete_text_only_two_candidate_transfer",
+  "pairs_correct": 2261,
+  "pairs_total": 4600,
+  "pair_accuracy_pct": 49.15217391304348,
+  "fully_correct_states_global": 201,
+  "states_total": 1150,
+  "global_fully_correct_state_pct": 17.47826086956522,
+  "official_macro_state_accuracy_pct": 17.02019286126626,
+  "unparseable_ties_counted_as_errors": 0,
+  "metrics": {
+    "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 2261,
+      "pair_acc": 0.4915217391304348,
+      "states_total": 1150,
+      "states_ok": 201,
+      "state_acc": 0.1702019286126626
+    },
+    "per_source": {
+      "assistantbench": {
+        "pairs_total": 120,
+        "pairs_ok": 58,
+        "pair_acc": 0.48333333333333334,
+        "states_total": 30,
+        "states_ok": 2,
+        "state_acc": 0.06666666666666667
+      },
+      "mind2web_test_domain": {
+        "pairs_total": 1668,
+        "pairs_ok": 692,
+        "pair_acc": 0.4148681055155875,
+        "states_total": 417,
+        "states_ok": 48,
+        "state_acc": 0.11510791366906475
+      },
+      "mind2web_test_task": {
+        "pairs_total": 568,
+        "pairs_ok": 281,
+        "pair_acc": 0.49471830985915494,
+        "states_total": 142,
+        "states_ok": 26,
+        "state_acc": 0.18309859154929578
+      },
+      "mind2web_test_website": {
+        "pairs_total": 592,
+        "pairs_ok": 285,
+        "pair_acc": 0.4814189189189189,
+        "states_total": 148,
+        "states_ok": 26,
+        "state_acc": 0.17567567567567569
+      },
+      "webarena": {
+        "pairs_total": 804,
+        "pairs_ok": 486,
+        "pair_acc": 0.6044776119402985,
+        "states_total": 201,
+        "states_ok": 53,
+        "state_acc": 0.263681592039801
+      },
+      "workarena": {
+        "pairs_total": 848,
+        "pairs_ok": 459,
+        "pair_acc": 0.5412735849056604,
+        "states_total": 212,
+        "states_ok": 46,
+        "state_acc": 0.2169811320754717
+      }
+    }
+  },
+  "head": {
+    "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/selection-head-20261008/sftrl-heads-20261017/heads-all/heads/teacher_k1/seed0/head.pt",
+    "sha256": "2a0fa078253568805e4018278c4b54e147b623a4c5424ad5e2ba409989608a00"
+  },
+  "training_overlap_unaudited": true,
+  "protocol_limit": "Text-only two-candidate transfer from screenshot-conditioned five-candidate training",
+  "independent_review": {
+    "path": "/gpfs/scrubbed/zixianma/openwebrl-runtime/webprm-webarena-20261011/next-stage-preparation/k1-sftrl-webprmbench-v1/package-v3/run/attempt-369117/owning-agent-independent-final-review.json",
+    "sha256": "1a2b559f3baa9a926f0363e6493fa0a7d242170434ab9fbc1d467f6526d1c7ed"
+  },
+  "gpu_seconds": 393,
+  "paid_API_calls": 0,
+  "downloads": 0
+}

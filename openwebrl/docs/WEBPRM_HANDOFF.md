@@ -13,12 +13,14 @@ _Last updated October 28, 2026. Earlier status logs are in this file's git histo
 1. **With a gpt-4o actor, no selector reliably beats no search.** OM2W: Piotr +2.5 pp (n.s.), WebArbiter −2.8 pp (n.s.), WebShepherd −14.8 pp (sig.). WebArena (v11): Piotr −4.0 pp (n.s.).
 2. **Table 5 is not reproduced in absolute terms.** Our v9 rerun is 9.5–19.4 pp below every published row.
 3. **Option C (v12)** tests Piotr with the actor it was trained on (OpenWebRL-4B-SFT, screenshot + coordinate actions, 1280×1000). The smoke test passed; the full run is not yet submitted.
+4. **WebPRMBench (offline, text only):** Piotr 67.4% pair / 35.5% official state accuracy; our K=1 head 49.2% / 17.0%. Piotr's accuracy depends heavily on which response is shown first.
 
 | Experiment | Section | State |
 | --- | --- | --- |
 | OM2W, 300 tasks × 5 methods | [§2.1](#webprm-om2w-20261028) | Done |
 | WebArena Table 5 rerun (v9), 128 tasks × 3 methods | [§2.2](#webprm-v9-20261028) | Done |
 | WebArena gpt-4o ± Piotr (v11), 128 tasks × 2 methods | [§2.3](#webprm-v11-20261028) | Done |
+| WebPRMBench, Piotr and K=1 head, 1,150 states | [§2.5](#webprm-webprmbench-20261028) | Done |
 | WebArena OpenWebRL-4B-SFT ± Piotr (v12) | [§2.4](#webprm-option-c-v12-20261028) | Smoke test passed; full run awaiting approval |
 
 One episode per task × method; success rates are over valid cells; paired comparisons use tasks valid for both methods, with a two-sided sign test.
@@ -100,6 +102,38 @@ Smoke cells are a pipeline check, not results. Throughput: about 3.7 s/step with
 
 **Files:** tools `D/v12-tools/` (committed as `webprm_baselines/webarena/tools/v12/`), packages `D/launch-preparation-v12-*`, ledger `D/gpu-budget-v12-20261028/`.
 
+<a id="webprm-webprmbench-20261028"></a>
+### 2.5 WebPRMBench (offline): Piotr SelectionARM and our K=1 head
+
+WebArbiter's released reward benchmark: 1,150 states × 4 preference pairs from six sources, unchanged upstream parser and metric. **Text only** (no screenshots), so neither model runs in its native screenshot setting; the K=1 head was trained on five candidates and is scored on two. Training overlap with the benchmark was not checked.
+
+**Pair accuracy** (a pair is correct when the model prefers the labelled better response):
+
+| Source | Pairs | Piotr correct | Piotr (%) | K=1 correct | K=1 (%) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| AssistantBench | 120 | 97 | 80.8 | 58 | 48.3 |
+| Mind2Web, cross-task | 568 | 395 | 69.5 | 281 | 49.5 |
+| Mind2Web, cross-website | 592 | 395 | 66.7 | 285 | 48.1 |
+| Mind2Web, cross-domain | 1,668 | 1,113 | 66.7 | 692 | 41.5 |
+| WebArena | 804 | 590 | 73.4 | 486 | 60.4 |
+| WorkArena | 848 | 509 | 60.0 | 459 | 54.1 |
+| All, pooled | 4,600 | 3,099 | 67.4 | 2,261 | 49.2 |
+
+**State accuracy** (a state is correct only when all 4 of its pairs are correct). The official score is the unweighted mean of the six per-source rates, not the pooled rate:
+
+| Source | States | Piotr correct | Piotr (%) | K=1 correct | K=1 (%) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| AssistantBench | 30 | 16 | 53.3 | 2 | 6.7 |
+| Mind2Web, cross-task | 142 | 50 | 35.2 | 26 | 18.3 |
+| Mind2Web, cross-website | 148 | 40 | 27.0 | 26 | 17.6 |
+| Mind2Web, cross-domain | 417 | 108 | 25.9 | 48 | 11.5 |
+| WebArena | 201 | 89 | 44.3 | 53 | 26.4 |
+| WorkArena | 212 | 58 | 27.4 | 46 | 21.7 |
+| All, pooled | 1,150 | 361 | 31.4 | 201 | 17.5 |
+| **Official: mean of the 6 sources** | | | **35.5** | | **17.0** |
+
+Piotr strongly prefers whichever response is shown first: 91.0% pair accuracy when the better response is first vs 46.1% when it is second. The K=1 head is order-invariant. Setup, cost and raw outputs: [WEBPRM_BASELINES.md](WEBPRM_BASELINES.md#webprmbench-20261018).
+
 ## 3. Running an experiment (WebArena)
 
 Details in the [code README](https://github.com/zixianma/OpenWebRL/blob/arm/webprm_baselines/README.md#workflow-webarena).
@@ -121,6 +155,7 @@ Details in the [code README](https://github.com/zixianma/OpenWebRL/blob/arm/webp
 | OM2W | `RT/webprm-om2w-table5-20261012/rerun300-0806-20261023/` |
 | WebArena v9 | packages `D/launch-preparation-v9{b..f}-*`, tools `D/v9b-tools/` |
 | WebArena v11 | packages `D/launch-preparation-v11{b,c}-*`, tools `D/v11-tools/`, `D/v11b-tools/` |
+| WebPRMBench | `RT/webprm-webarena-20261011/next-stage-preparation/{piotr,k1-sftrl}-webprmbench-v1/`; results `openwebrl/docs/webprm_results/*webprmbench*.json` |
 | WebArena v12 | packages `D/launch-preparation-v12-*`, tools `D/v12-tools/` |
 | Not in git | API keys, task configs with answers, site images, trajectories, weights: under `D/` and `RT/` |
 

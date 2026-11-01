@@ -1,5 +1,56 @@
 # WebPRM baselines
 
+<a id="webprmbench-20261018"></a>
+## WebPRMBench: Piotr SelectionARM and our K=1 head (October 17–18)
+
+**On WebArbiter's offline reward benchmark, Piotr gets 67.4% pair accuracy and 35.5% official state accuracy; our K=1 student/RL head gets 49.2% and 17.0%, i.e. chance-level pair accuracy.** Both runs cover the full released benchmark ([`ZYao720/WEBPRMBENCH`](https://huggingface.co/datasets/ZYao720/WEBPRMBENCH): 1,150 states × 4 preference pairs) with the unchanged upstream parser and metric, and were independently re-audited.
+
+**Caveats that apply to every number below.** The released benchmark is text only (intent, accessibility tree, history, URLs; no screenshots), so neither model is evaluated in its native setting: Piotr was trained on screenshots, and the K=1 head on screenshots with five candidates (scored here on two). Neither model's training data was checked for overlap with the benchmark. Unparseable outputs count as errors (Piotr 44; K=1 0).
+
+**Pair accuracy** (a pair is correct when the model prefers the labelled better response):
+
+| Source | Pairs | Piotr correct | Piotr (%) | K=1 correct | K=1 (%) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| AssistantBench | 120 | 97 | 80.8 | 58 | 48.3 |
+| Mind2Web, cross-task | 568 | 395 | 69.5 | 281 | 49.5 |
+| Mind2Web, cross-website | 592 | 395 | 66.7 | 285 | 48.1 |
+| Mind2Web, cross-domain | 1,668 | 1,113 | 66.7 | 692 | 41.5 |
+| WebArena | 804 | 590 | 73.4 | 486 | 60.4 |
+| WorkArena | 848 | 509 | 60.0 | 459 | 54.1 |
+| All, pooled | 4,600 | 3,099 | 67.4 | 2,261 | 49.2 |
+
+**State accuracy** (a state is correct only when all 4 of its pairs are correct). The official score is the unweighted mean of the six per-source rates, not the pooled rate:
+
+| Source | States | Piotr correct | Piotr (%) | K=1 correct | K=1 (%) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| AssistantBench | 30 | 16 | 53.3 | 2 | 6.7 |
+| Mind2Web, cross-task | 142 | 50 | 35.2 | 26 | 18.3 |
+| Mind2Web, cross-website | 148 | 40 | 27.0 | 26 | 17.6 |
+| Mind2Web, cross-domain | 417 | 108 | 25.9 | 48 | 11.5 |
+| WebArena | 201 | 89 | 44.3 | 53 | 26.4 |
+| WorkArena | 212 | 58 | 27.4 | 46 | 21.7 |
+| All, pooled | 1,150 | 361 | 31.4 | 201 | 17.5 |
+| **Official: mean of the 6 sources** | | | **35.5** | | **17.0** |
+
+- **Piotr has a strong first-position bias.** It answers "Response 1" on 3,257 of 4,600 pairs (71%) although the label is 1 on only 2,178 (47%): pair accuracy is 91.0% (1,983 / 2,178) when the better response is shown first and 46.1% (1,116 / 2,422) when it is shown second. The K=1 head scores each candidate separately, so it is order-invariant by construction (measured maximum order effect 1.9e-6).
+- **By source:** apart from AssistantBench (30 states, wide uncertainty), both models do best on WebArena. Piotr is weakest on WorkArena; K=1 is weakest on Mind2Web cross-domain, where it is below chance.
+
+<details><summary>Setup, cost and sources</summary>
+
+| | Piotr SelectionARM | K=1 student/RL head |
+| --- | --- | --- |
+| Checkpoint | `PTeterwak/OpenWebRL-4B-SelectionARM` @ `81b452d8` | `teacher_k1` seed 0 head (SHA-256 `2a0fa078…`) on the OpenWebRL actor; trained on 1,908 states (1,474 SFT + 434 RL) from 454 tasks |
+| How it chooses | Generates text with WebArbiter's pairwise prompt and answer tag; T 0, max 1,024 tokens, stop `</Answer>`; SGLang 0.5.6.post2 | Actor encodes the prompt and each response; the listwise head scores the two candidates; higher score wins |
+| Job | 367841 (after 367696 failed at startup, 24 s) | 369117 |
+| GPU time | 1,726 s (0.48 H200-hours) incl. failed attempt | 393 s (0.11 H200-hours) |
+| API spend | none | none |
+| Results | [JSON](webprm_results/piotr_webprmbench_20261018.json) | [JSON](webprm_results/k1_sftrl_webprmbench_20261018.json) |
+| Raw outputs and audit | `RT/webprm-webarena-20261011/next-stage-preparation/piotr-webprmbench-v1/package-v3/attempt-367841/` | `RT/webprm-webarena-20261011/next-stage-preparation/k1-sftrl-webprmbench-v1/package-v3/run/attempt-369117/` |
+| Runner | `scripts/run_piotr_webprmbench.py`, `scripts/submit_piotr_webprmbench.py` | `scripts/run_selection_head_webprmbench.py` |
+
+`RT = /gpfs/scrubbed/zixianma/openwebrl-runtime/`. The K=1 cached-feature path matched the full actor forward pass within 1.1% (2% gate).
+</details>
+
 <a id="table5-plan-20261010"></a>
 ## WebArbiter Table 5 plus Piotr SelectionARM
 

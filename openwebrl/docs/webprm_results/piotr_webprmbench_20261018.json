@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "scope": "Piotr checkpoint on released raw text WEBPRMBench; not native visual SelectionARM task success",
+  "model": "PTeterwak/OpenWebRL-4B-SelectionARM",
+  "revision": "81b452d800d9f859687074f82680dd5257e02d89",
+  "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+  "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+  "backend": "SGLang0.5.6.post2 raw-completion compatibility;TP1,batch8",
+  "sampling": {
+    "temperature": 0,
+    "top_p": 1,
+    "max_tokens": 1024,
+    "stop": [
+      "</Answer>"
+    ]
+  },
+  "metrics": {
+    "overall": {
+      "pairs_total": 4600,
+      "pairs_ok": 3099,
+      "pair_acc": 0.673695652173913,
+      "states_total": 1150,
+      "states_ok": 361,
+      "state_acc": 0.3551800101212426
+    },
+    "per_source": {
+      "assistantbench": {
+        "pairs_total": 120,
+        "pairs_ok": 97,
+        "pair_acc": 0.8083333333333333,
+        "states_total": 30,
+        "states_ok": 16,
+        "state_acc": 0.5333333333333333
+      },
+      "mind2web_test_domain": {
+        "pairs_total": 1668,
+        "pairs_ok": 1113,
+        "pair_acc": 0.6672661870503597,
+        "states_total": 417,
+        "states_ok": 108,
+        "state_acc": 0.2589928057553957
+      },
+      "mind2web_test_task": {
+        "pairs_total": 568,
+        "pairs_ok": 395,
+        "pair_acc": 0.6954225352112676,
+        "states_total": 142,
+        "states_ok": 50,
+        "state_acc": 0.352112676056338
+      },
+      "mind2web_test_website": {
+        "pairs_total": 592,
+        "pairs_ok": 395,
+        "pair_acc": 0.6672297297297297,
+        "states_total": 148,
+        "states_ok": 40,
+        "state_acc": 0.2702702702702703
+      },
+      "webarena": {
+        "pairs_total": 804,
+        "pairs_ok": 590,
+        "pair_acc": 0.7338308457711443,
+        "states_total": 201,
+        "states_ok": 89,
+        "state_acc": 0.4427860696517413
+      },
+      "workarena": {
+        "pairs_total": 848,
+        "pairs_ok": 509,
+        "pair_acc": 0.6002358490566038,
+        "states_total": 212,
+        "states_ok": 58,
+        "state_acc": 0.27358490566037735
+      }
+    }
+  },
+  "parsed_predictions": {
+    "1": 3257,
+    "2": 1299,
+    "0": 44
+  },
+  "verified_complete": true,
+  "independent_review_sha256": "dc2bf5473ed33e90e7de20bc4f4e13d4492a9105e0243bf59625df8b988f301c",
+  "cumulative_gpu_seconds": 1726,
+  "paid_api_calls": 0,
+  "training_overlap_audited": false
+}
