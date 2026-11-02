@@ -3,7 +3,7 @@
 <a id="webprmbench-20261018"></a>
 ## WebPRMBench: our selectors against WebArbiter (October 17 – November 1)
 
-**No selector of ours comes close to WebArbiter-7B on its own benchmark (average pairwise 89.2%, Best-of-N 74.6%). Our best are the heads on actor features: Recipe 2 2.6K reaches 75.2% pairwise and the Recipe 1 (Piotr-data) head 74.2% pairwise / 46.4% Best-of-N, 14.0 and 28.2 pp below WebArbiter-7B; they beat Piotr SelectionARM (70.4% / 38.2%) but not the paper's GPT-4o (83.7% / 60.3%). Our 4B LoRAs score below Piotr (65.5% and 63.0% pairwise), mostly because 12–21% of their answers do not parse.**
+**Trained on WebArbiter's own SFT pairs, our 22.6M head on frozen actor features reaches WebArbiter-3B's level on WebPRMBench (whole-set head C1: 81.3% pairwise / 59.8% Best-of-N, mean of 3 seeds; WebArbiter-3B 83.7% / 59.1%, WebArbiter-7B 89.2% / 74.6%), but checks show most of the gain is recognising how the benchmark's correct responses are written, not better action judgment ([below](#webprmbench-sft-heads-20261101)). Without benchmark-style data, our best heads reach 75.2% pairwise (Recipe 2 2.6K) and 46.4% Best-of-N (Recipe 1), above Piotr SelectionARM (70.4% / 38.2%) but below the paper's GPT-4o (83.7% / 60.3%); our 4B LoRAs score below Piotr (65.5% and 63.0% pairwise), mostly because 12–21% of their answers do not parse.**
 
 **Caveats that apply to every number below.** The released benchmark is text only (intent, accessibility tree, history, URLs; no screenshots) and gives two candidates per comparison. None of our selectors runs in its native setting: all were trained on screenshots, and the heads and LoRAs on panels of 2–5 candidates. Published rows are copied from the [WebArbiter paper](https://arxiv.org/abs/2601.21872), Table 2; we did not rerun those models. Training overlap with the benchmark was not checked for any of our selectors. Unparseable answers count as errors, as in the paper.
 
@@ -21,11 +21,15 @@
 | Piotr SelectionARM (4B LoRA) | Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution | 67.3 | 73.4 | 80.8 | 60.0 | 70.4 |
 | Our 4B LoRA | Recipe 2: 2.6K states, Luna 3 steps after execution | 63.2 | 65.8 | 70.0 | 63.1 | 65.5 |
 | Our 4B LoRA | Recipe 2: 1.3K states, Luna 3 steps after execution | 55.8 | 66.2 | 78.3 | 51.9 | 63.0 |
-| Our head (22.6M) | Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution | **68.4** | **82.1** | 77.5 | 68.9 | 74.2 |
-| Our head (22.6M) | Recipe 2: 2.6K states, Luna 3 steps after execution | 64.1 | 80.2 | **81.7** | **74.6** | **75.2** |
+| Our head (22.6M) | Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution | 68.4 | **82.1** | 77.5 | 68.9 | 74.2 |
+| Our head (22.6M) | Recipe 2: 2.6K states, Luna 3 steps after execution | 64.1 | 80.2 | **81.7** | **74.6** | 75.2 |
 | Our head (22.6M) | Recipe 2: 1.3K states, Luna 3 steps after execution | 58.4 | 76.4 | 63.3 | 70.0 | 67.0 |
+| Our head (22.6M) | Recipe 2: 1.3K states, Luna before execution | 65.6 | 75.1 | 80.0 | 62.5 | 70.8 |
 | Our head (22.6M) | Recipe 2: 2.5K states, 22K panels, Luna 3 steps after execution | 43.6 | 64.9 | 67.5 | 52.9 | 57.2 |
 | Our head (22.6M) | SFT+RL 1,908 states, Luna 1 step after execution | 44.5 | 60.4 | 48.3 | 54.1 | 51.8 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT: 9,642 pairs, 6,393 states (text, benchmark format) | **99.4** | 70.9 | 81.1 | 62.3 | 78.4 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (pairs) | 99.2 | 70.5 | 71.9 | 70.2 | 78.0 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (whole sets) | 99.1 | 79.1 | 72.5 | 74.4 | **81.3** |
 
 **Best-of-N accuracy (%)** (the better response must win all 4 of its pairs; same as our "state accuracy"):
 
@@ -40,20 +44,40 @@
 | Qwen2.5-7B-Instruct | *published (WebArbiter paper)* | 39.2 | 42.8 | 53.3 | 35.9 | 42.8 |
 | Piotr SelectionARM (4B LoRA) | Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution | 28.0 | 44.3 | 53.3 | 27.4 | 38.2 |
 | Our 4B LoRA | Recipe 2: 2.6K states, Luna 3 steps after execution | 25.3 | 31.8 | 40.0 | 29.7 | 31.7 |
-| Our 4B LoRA | Recipe 2: 1.3K states, Luna 3 steps after execution | 19.7 | 33.8 | **56.7** | 23.1 | 33.3 |
-| Our head (22.6M) | Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution | **35.1** | **60.2** | 53.3 | 36.8 | **46.4** |
-| Our head (22.6M) | Recipe 2: 2.6K states, Luna 3 steps after execution | 25.3 | 51.7 | 53.3 | **43.9** | 43.6 |
+| Our 4B LoRA | Recipe 2: 1.3K states, Luna 3 steps after execution | 19.7 | 33.8 | 56.7 | 23.1 | 33.3 |
+| Our head (22.6M) | Recipe 1: Piotr's 2,692 states, 35K panels, GPT-5.5 before execution | 35.1 | **60.2** | 53.3 | 36.8 | 46.4 |
+| Our head (22.6M) | Recipe 2: 2.6K states, Luna 3 steps after execution | 25.3 | 51.7 | 53.3 | 43.9 | 43.6 |
 | Our head (22.6M) | Recipe 2: 1.3K states, Luna 3 steps after execution | 21.6 | 48.8 | 36.7 | 42.9 | 37.5 |
+| Our head (22.6M) | Recipe 2: 1.3K states, Luna before execution | 28.0 | 45.3 | **63.3** | 32.5 | 42.3 |
 | Our head (22.6M) | Recipe 2: 2.5K states, 22K panels, Luna 3 steps after execution | 13.0 | 37.8 | 36.7 | 21.7 | 27.3 |
 | Our head (22.6M) | SFT+RL 1,908 states, Luna 1 step after execution | 14.1 | 26.4 | 6.7 | 21.7 | 17.2 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT: 9,642 pairs, 6,393 states (text, benchmark format) | **97.8** | 41.5 | 54.4 | 34.0 | 56.9 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (pairs) | 97.1 | 39.1 | 46.7 | 38.4 | 55.3 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (whole sets) | 96.7 | 53.2 | 43.3 | **45.8** | **59.8** |
 
 **Bold** marks the best of our selectors (including Piotr) in each column. Mind2Web pools the three Mind2Web splits (707 states); "Average of 4" is the unweighted mean of the four environments, as in the paper. Our rows use the benchmark's original response order, as the paper does. Generative judges (Piotr and our LoRAs) write an answer with WebArbiter's pairwise prompt; heads score the two responses from SFT-4B actor features and pick the higher. (The upstream evaluator's own "official" state score averages six sources, counting the Mind2Web splits separately, and is not comparable to the paper's average.)
 
-*Pending:* the heads trained on the same 1,380 states with pre-execution, 1-step-after and observed-outcome labels (approval requested).
+The **pre-execution head** (same 1,380 states and recipe as the Recipe 2 1.3K head, labels from Luna judging each candidate before it runs) beats the 3-steps-after head on this benchmark (70.8 vs 67.0% pairwise, 42.3 vs 37.5% Best-of-N; one run, no seeds). The gain is on Mind2Web and AssistantBench (30 states); the 3-steps-after head is ahead on WebArena and WorkArena. The benchmark judges actions before execution, so this label type matches it best.
 
 - **On the same data, the head beats the LoRA.** The Recipe 1 head (Piotr's data on a 22.6M head) beats Piotr SelectionARM trained on the same data by +3.8 pp pairwise and +8.1 pp Best-of-N. Among Recipe 2 heads, 2.6K states beat 1.3K (75.2 vs 67.0% pairwise), and the 22K-panel head is at chance on pooled pairs (49.7%; 57.2% on the four-environment average).
 - **Heads ignore response order** (swapping the two responses changed no head prediction). **Piotr does not:** it answers "Response 1" on 71–72% of pairs in both orders, so its accuracy moves with presentation order (pooled pairwise 67.4% original, 69.8% swapped). Our LoRAs show little order bias (within 2 pp).
 - **Our LoRAs often fail to answer.** They frequently copy the prompt's instructions until the 1,024-token cap without an answer tag: 542 (2.6K) and 967 (1.3K) of 4,600 answers do not parse, vs 44 for Piotr. On parseable answers alone they are right 72.3% and 72.7% of the time.
+
+<a id="webprmbench-sft-heads-20261101"></a>
+**Heads trained on WebArbiter's SFT pairs (November 1).** Question: how far does in-format training data take our head? We trained the same 22.6M head on the frozen OpenWebRL-4B-SFT actor's features of WebArbiter's released SFT pairs (`ZYao720/WebArbiter-Data` @ `4205055c`, `sft` split: 9,642 pairs over 6,393 states, 845 Mind2Web-live tasks, text only, in the benchmark's own prompt format; only the verdict is used, not the o3 rationale; the RL split is not used). A uses those pairs alone; B adds our Recipe 2 2.6K panels split into pairs; C1 adds the same panels as whole candidate sets (soft cross-entropy over 2–5 candidates; SFT pairs stay pairs). No intent overlaps the benchmark (0 exact, 0 with word-overlap ≥ 0.6); the epoch is chosen on held-out WebArbiter tasks (84 tasks, 941 pairs), never on the benchmark.
+
+| Head | Training data | Mind2Web | WebArena | AssistantBench | WorkArena | Average of 4 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| A | WebArbiter SFT: 9,642 pairs, 6,393 states (text, benchmark format) | 99.4 ± 0.1 / 97.8 ± 0.6 | 70.9 ± 5.8 / 41.5 ± 8.2 | 81.1 ± 8.8 / 54.4 ± 10.7 | 62.3 ± 4.7 / 34.0 ± 6.0 | 78.4 ± 4.8 / 56.9 ± 5.6 |
+| B | WebArbiter SFT + Recipe 2 2.6K (pairs) | 99.2 ± 0.1 / 97.1 ± 0.2 | 70.5 ± 5.8 / 39.1 ± 5.8 | 71.9 ± 5.4 / 46.7 ± 3.3 | 70.2 ± 4.3 / 38.4 ± 5.3 | 78.0 ± 3.5 / 55.3 ± 2.3 |
+| C1 | WebArbiter SFT + Recipe 2 2.6K (whole sets) | 99.1 ± 0.4 / 96.7 ± 1.4 | 79.1 ± 1.0 / 53.2 ± 2.0 | 72.5 ± 2.9 / 43.3 ± 3.3 | 74.4 ± 1.1 / 45.8 ± 1.2 | 81.3 ± 0.2 / 59.8 ± 1.2 |
+
+Cells: pairwise / Best-of-N (%), mean ± standard deviation over 3 seeds; scores are identical in both response orders.
+
+- **The 99% on Mind2Web comes from the thought text.** With thoughts removed from every candidate (actions only), seed-0 Mind2Web falls from 99.5 to 65.2% pairwise (A), 99.2 to 58.5% (B) and 99.3 to 61.2% (C1), back to the earlier heads' level (Recipe 1 head 54.5%, Recipe 2 2.6K 58.8% actions only). WebArena moves little (80.0 → 74.8% for C1).
+- **The benchmark is almost linearly separable.** A logistic regression on the benchmark's own actor features, cross-validated with whole intents held out, reaches 98.2% pairwise / 95.0% Best-of-N (Mind2Web 99.6, WebArena 96.0, AssistantBench 90.0, WorkArena 94.3% Best-of-N). This is a diagnostic, not a result: correct responses (from successful, revised trajectories) differ from distractors (sampled from about ten other models) in surface features that hold across unseen tasks. Training on data built the same way teaches that difference.
+- **Outside Mind2Web the gain is small.** C1 is the only stable variant (average ± 0.2 pp pairwise across seeds); its WebArena (79.1%) is still below the Recipe 1 head (82.1%), and WorkArena (74.4%) matches Recipe 2 2.6K (74.6%). A and B vary by 4–9 pp per environment across seeds.
+- **What it means for us:** these benchmark gains probably do not carry over to live selection, where every candidate's thought comes from the same actor. B and C1 can run in the live harness unchanged (they also saw our screenshot features); that is the test that matters. A has never seen screenshots.
 
 <details><summary>Response order: generative judges in both orders</summary>
 
@@ -82,19 +106,27 @@ The swapped copy exchanges responses 1 and 2 in every prompt and flips the label
 | Our head (22.6M) | Recipe 2: 2.6K states, Luna 3 steps after execution | Correct pairs | 365 | 384 | 1,064 | 645 | 98 | 633 | 3,189 |
 | Our head (22.6M) | Recipe 2: 2.6K states, Luna 3 steps after execution | Correct states | 41 | 38 | 100 | 104 | 16 | 93 | 392 |
 | Our head (22.6M) | Recipe 2: 1.3K states, Luna 3 steps after execution | Correct pairs | 325 | 348 | 979 | 614 | 76 | 594 | 2,936 |
+| Our head (22.6M) | Recipe 2: 1.3K states, Luna before execution | 28.0 | 45.3 | 63.3 | 32.5 | 42.3 |
 | Our head (22.6M) | Recipe 2: 1.3K states, Luna 3 steps after execution | Correct states | 36 | 32 | 85 | 98 | 11 | 91 | 353 |
+| Our head (22.6M) | Recipe 2: 1.3K states, Luna before execution | 28.0 | 45.3 | 63.3 | 32.5 | 42.3 |
 | Our head (22.6M) | Recipe 2: 2.5K states, 22K panels, Luna 3 steps after execution | Correct pairs | 246 | 275 | 712 | 522 | 81 | 449 | 2,285 |
 | Our head (22.6M) | Recipe 2: 2.5K states, 22K panels, Luna 3 steps after execution | Correct states | 15 | 20 | 57 | 76 | 11 | 46 | 225 |
 | Our head (22.6M) | SFT+RL 1,908 states, Luna 1 step after execution | Correct pairs | 281 | 285 | 692 | 486 | 58 | 459 | 2,261 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT: 9,642 pairs, 6,393 states (text, benchmark format) | 97.8 | 41.5 | 54.4 | 34.0 | 56.9 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (pairs) | 97.1 | 39.1 | 46.7 | 38.4 | 55.3 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (whole sets) | 96.7 | 53.2 | 43.3 | 45.8 | 59.8 |
 | Our head (22.6M) | SFT+RL 1,908 states, Luna 1 step after execution | Correct states | 26 | 26 | 48 | 53 | 2 | 46 | 201 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT: 9,642 pairs, 6,393 states (text, benchmark format) | 97.8 | 41.5 | 54.4 | 34.0 | 56.9 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (pairs) | 97.1 | 39.1 | 46.7 | 38.4 | 55.3 |
+| Our head (22.6M), mean of 3 seeds | WebArbiter SFT + Recipe 2 2.6K (whole sets) | 96.7 | 53.2 | 43.3 | 45.8 | 59.8 |
 </details>
 <details><summary>Setup, cost and sources</summary>
 
 - **Protocol:** released data ([`ZYao720/WEBPRMBENCH`](https://huggingface.co/datasets/ZYao720/WEBPRMBENCH)) and the unchanged upstream evaluator (`evaluate_webprm_vllm.py`, SHA-256 `96426a7e…`: prompts, parser, metrics). Generative judges: SGLang, T 0, up to 1,024 new tokens, stop `</Answer>`. Heads: the frozen OpenWebRL-4B-SFT actor encodes the prompt context and each response; the head scores the two; ties count as errors (none occurred). Cached-prefix features matched a full forward pass within 1.1% for every head.
 - **Checkpoints:** Piotr `PTeterwak/OpenWebRL-4B-SelectionARM` @ `81b452d8`; Recipe 2 LoRAs `selection-head-20261008/onepanel-arm-lora-20261027/lora/merged` (2.6K) and `sft-actions-20261021/arm-lora/lora/teacher_k3/merged` (1.3K); heads `heads/listwise` (Recipe 1), `sft-actions-20261021/round1/teacher_k3` (1.3K), `rl-actor-recollect-20261016/.../onepanel/heads/all/seed0` (2.6K), `.../heads/luna-k3-best/seed0` (22K panels), `sftrl-heads-20261017/heads-all/heads/teacher_k1/seed0` (SFT+RL K=1). The same checkpoints as the live selector comparisons in [ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#final-selection-sameday3-20261030).
-- **Jobs (1 H200 each, no API calls):** Piotr original order 367841 (Oct 17; 0.48 H200-h incl. a failed start), K=1 head 369117 (0.11 H200-h); Nov 1 batch: heads 407953 (24 min), generative 407954 (cancelled after 4 min: batch 8 too slow) → 407988 (86 min; batch 64, which does not change T 0 outputs). 1.9 H200-hours for the Nov 1 batch.
+- **Jobs (1 H200 each, no API calls):** Piotr original order 367841 (Oct 17; 0.48 H200-h incl. a failed start), K=1 head 369117 (0.11 H200-h); Nov 1 batch: heads 407953 (24 min), generative 407954 (cancelled after 4 min: batch 8 too slow) → 407988 (86 min; batch 64, which does not change T 0 outputs). 1.9 H200-hours for the Nov 1 batch. Nov 1 follow-up: pre-execution head 408648 (6 min); WebArbiter-SFT heads 408647 (40 min: features for 6,393 SFT + 1,150 benchmark states, 9 heads, scoring, diagnostics).
 - **Code:** [`scripts/run_webprmbench_batch.py`](../../scripts/run_webprmbench_batch.py) (`swap`, `gen`, `head`), earlier `scripts/run_piotr_webprmbench.py` and `scripts/run_selection_head_webprmbench.py`.
-- **Results:** aggregate counts [JSON](webprm_results/webprmbench_selectors_20261101.json) (plus the earlier [Piotr](webprm_results/piotr_webprmbench_20261018.json) and [K=1](webprm_results/k1_sftrl_webprmbench_20261018.json) files); raw outputs `RT/webprm-webarena-20261011/next-stage-preparation/webprmbench-more-20261101/out/` and the earlier `piotr-webprmbench-v1/`, `k1-sftrl-webprmbench-v1/` packages (`RT = /gpfs/scrubbed/zixianma/openwebrl-runtime/`).
+- **Results:** aggregate counts [JSON](webprm_results/webprmbench_selectors_20261101.json) (plus the earlier [Piotr](webprm_results/piotr_webprmbench_20261018.json) and [K=1](webprm_results/k1_sftrl_webprmbench_20261018.json) files); raw outputs `RT/webprm-webarena-20261011/next-stage-preparation/webprmbench-more-20261101/out/` and the earlier `piotr-webprmbench-v1/`, `k1-sftrl-webprmbench-v1/` packages (`RT = /gpfs/scrubbed/zixianma/openwebrl-runtime/`). WebArbiter-SFT heads: [JSON](webprm_results/webprmbench_sft_heads_20261101.json); package `RT/webprm-webarena-20261011/next-stage-preparation/webprm-sft-heads-20261101/` (`sft_heads.py`, data prep and overlap report, features, heads, outputs).
 </details>
 
 
