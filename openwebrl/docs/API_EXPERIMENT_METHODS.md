@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-The completed [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows eight methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. Luna high single with 60 decisions and the original 12,288-token ceiling has the strongest observed single-call success on all three benchmarks; all three paired 95% intervals against historical 30-decision high/1× are positive. Live windows and validity cohorts differ, so these comparisons remain descriptive. The xhigh/1×, high/2× and high/0.5× token/effort variants show no consistent gain over high/1×. Actual tokens, cost, selected browser-code batches, latency and projected hosting accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) remains a separate historical view with explicit endpoint-evidence exclusions. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
+The completed [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows eight methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. Luna high single with 60 decisions and the original 12,288-token ceiling has the strongest observed single-call success on all three benchmarks; all three paired 95% intervals against historical 30-decision high/1× are positive. Live windows and validity cohorts differ, so these comparisons remain descriptive. The xhigh/1×, high/2× and high/0.5× token/effort variants show no consistent gain over high/1×. Actual tokens, cost, selected browser-code batches and per-task latency accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) remains a separate historical view with explicit endpoint-evidence exclusions. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -111,12 +111,12 @@ The run command prints a read-only plan. The actual agent limit, model decision 
 
 **The completed 20-task US-residential pilot cost $5.74 across both methods**, including model calls, Terra, hosting, proxy traffic and failed attempts. On 15 contemporaneous common-valid pairs, N5 succeeded on 15 and Single on 12, with mean actor-loop latency of 191.6 versus 120.8 seconds. This small pilot does not establish full-benchmark superiority; [results and accounting are below](#measured-us-residential-pilot).
 
+<details>
+<summary>Historical hosting projections and zero-API reproduction — omitted from the plots</summary>
+
 For the completed local-browser scaling cohorts, we can project hosting charges without rerunning the experiments; their cloud traffic remains unmeasured. All 7,909 valid task–method observations in the completed 24 points have a saved first-close browser lifetime. At the [current Browser Use V4 rate](https://browser-use.com/pricing), projected hosting is **$0.00070–$0.00176 per valid task**, excluding traffic. This is a projection from local Chromium durations, not measured stealth-browser performance or spending; legacy account terms may differ.
 
 Use **$0.02 per browser-hour**, rounding each session up to whole minutes with a one-minute minimum. Add network usage separately: direct/custom-proxy traffic is **$0.20/GB** and managed residential traffic **$5/GB**. The provider's [billing examples](https://docs.browser-use.com/cloud/guides/billing) convert reported MB to GB by dividing by 1,024. For example, an assumed 10 MB/task adds $0.001953 direct or $0.048828 residential, before hosting. Traffic is unmeasured for these local runs; batch counts are not network-byte measurements. N3/N5 still use one browser session per task; candidate/selector computation can keep that session open but does not create three or five browsers. Our agents call their model providers directly, so a hosted-agent orchestration fee is not part of this projection.
-
-<details>
-<summary>Projected hosting means, coverage and zero-API reproduction</summary>
 
 USD per valid task; traffic, model calls and judging excluded. Every mean below covers all of its method's valid tasks.
 
@@ -129,10 +129,11 @@ USD per valid task; traffic, model calls and judging excluded. Every mean below 
 | Luna xhigh · 1× cap | 0.000956 | 0.000785 | 0.001113 |
 | Luna high · 2× cap | 0.000881 | 0.000750 | 0.000971 |
 | Luna high · 0.5× cap | 0.000850 | 0.000756 | 0.000978 |
+| Luna high · 60 steps | 0.001027 | 0.000897 | 0.001082 |
 
-For each recorded task, use the first successful browser-close receipt, preferring `browser_cleanup_before_judge.owned_browser_seconds`. A repeated final close can report time elapsed after the browser already stopped, including judging, and is not substituted for that first receipt. The local interval includes process startup, task setup, actor work, terminal capture and shutdown. It is not a guarantee of the same interval on a remote browser. The 3,000 new valid tasks have full recorded process-group closure; the 3,916 historical valid tasks retain their older terminal-root-only proof.
+For each recorded task, use the first successful browser-close receipt, preferring `browser_cleanup_before_judge.owned_browser_seconds`. A repeated final close can report time elapsed after the browser already stopped, including judging, and is not substituted for that first receipt. The local interval includes process startup, task setup, actor work, terminal capture and shutdown. It is not a guarantee of the same interval on a remote browser. The 3,000 token/effort-sweep valid tasks and 993 additional 60-step valid tasks have full recorded process-group closure; the 3,916 historical valid tasks retain their older terminal-root-only proof.
 
-Across the 7,315 recorded task dispositions, 7,310 lifetimes are observed; five interrupted invalid WebVoyager lifetimes remain missing. Their hosting projection is **$6.770333 for the known durations**, including recorded invalid tasks. Startup probes and abandoned historical attempts are outside this projection, so this is not a full historical all-attempt bill. Missing durations and traffic remain missing, never zero.
+Across the earlier 21-point snapshot’s 7,315 recorded task dispositions, 7,310 lifetimes are observed; five interrupted invalid WebVoyager lifetimes remain missing. Their hosting projection is **$6.770333 for the known durations**, including recorded invalid tasks. Startup probes and abandoned historical attempts are outside this projection, so this is not a full historical all-attempt bill. Missing durations and traffic remain missing, never zero.
 
 The [aggregate](arm_results/browsercode_inference_scaling_20261031/browser_cost_projection.json) contains per-session-rounded minute sums and separate valid/invalid coverage. Reproduce the [scenario CSV](arm_results/browsercode_inference_scaling_20261031/browser_cost_scenarios.csv) without model or browser calls:
 
@@ -221,14 +222,13 @@ Before paid collection, freeze and explicitly approve exact session/compute/mode
 
 ### Recreate the completed scaling figures
 
-The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, the 60-decision setting and the four historical high-effort controls. Recreate its 8.5 × 4.35-inch four-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
+The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, the 60-decision setting and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
 
 ```bash
 "$API_PY" -m pip install matplotlib==3.9.4
 SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_20261031
 "$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling.py" \
   --aggregate "$SCALING_RESULTS/aggregate.json" \
-  --browser-cost-projection "$SCALING_RESULTS/browser_cost_projection.json" \
   --output-dir /tmp/openwebrl-browsercode-scaling-plots
 "$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling.py" \
   --aggregate "$SCALING_RESULTS/aggregate.json" \
@@ -239,7 +239,7 @@ SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_2026103
   --token-method luna_single_high_60steps
 ```
 
-The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Its fourth column is projected browser hosting in USD per 1,000 valid tasks, with traffic excluded; it is joined to the exact actor aggregate by hash and task counts. Omitting `--browser-cost-projection` reproduces the three-column layout. A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the five Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
+The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Latency is elapsed actor-loop time per task, averaged over valid tasks including failures. Projected hosting is omitted from the paper figures; measured browser usage is reported separately in the [US-residential pilot](#measured-us-residential-pilot). A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the five Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
 
 ### Compare fresh runs
 
