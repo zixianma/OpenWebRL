@@ -1,2033 +1,2585 @@
 {
-  "schema": "browsercode-scaling-paper-v3",
-  "profile": "completed-step-sweep",
+  "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.",
+  "comparison_caveat": "Task validity subsets and live collection windows differ; historical-versus-fresh comparisons are descriptive.",
+  "extension_metadata": {
+    "added_methods": [
+      "parallel2_select_high",
+      "parallel5_select_high_60steps",
+      "luna_single_high_120steps"
+    ],
+    "base_aggregate_sha256": "5ff6bfa7b1ff4aaa62275469000ccc681be8ae4cb76da5056a680a01dfe6cfe5",
+    "base_points_sha256": "c4971d300d371da699648b763f904d791a4334efb8545be9b3f0580ee7040087",
+    "paired_comparisons_for_extensions": false,
+    "prompt_limit_caveat": "Historical 60-decision single enforced 60 but advertised 30; new single120 enforces and advertises 120. Live windows and validity subsets differ.",
+    "publication_state": "qualified_local_endpoints_released",
+    "source_consumer_sha256": {
+      "luna_single_high_120steps": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "parallel2_select_high": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "parallel5_select_high_60steps": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57"
+    },
+    "stealth_results_included": false
+  },
   "judge_protocol": {
+    "max_completion_tokens": 4096,
     "model": "gpt-5.6-terra",
     "reasoning_effort": "medium",
-    "max_completion_tokens": 4096,
     "seed": 42,
     "version": "gpt56-terra-terminal-success-v1"
   },
   "metric_population": "resolved_valid_tasks",
-  "comparison_caveat": "Task validity subsets and live collection windows differ; historical-versus-fresh comparisons are descriptive.",
-  "points": [
-    {
-      "benchmark": "online_mind2web",
-      "method": "serial_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 266,
-      "invalid": 34,
-      "successes": 177,
-      "success_rate": 0.6654135338345865,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.20770943759398497,
-          "observed_tasks": 266,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 92.65773511359622,
-          "observed_tasks": 266,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 266
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 266
-        },
-        "browser_commands": {
-          "mean": 14.988721804511279,
-          "observed_tasks": 266,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "5346154e3fda5ebc385e7c0d339cd0a0730e9ab249e4c7953f125a7f6b6601ae"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "luna_single_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 269,
-      "invalid": 31,
-      "successes": 178,
-      "success_rate": 0.6617100371747212,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.009513999349442378,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 94.92736618077343,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4849.371747211896,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2526.4163568773233,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 16.63197026022305,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "68a40eb8085626df99a4c9b0160e1e45f0d8de4e3df027e8a07feac8ed55cdb6",
-      "browser_commands_evidence_sha256": "eac3a53e0afa577d0596be39b028582e4b784d3d3f48c0efbc9d99568eff27ef"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "parallel3_select_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 269,
-      "invalid": 31,
-      "successes": 183,
-      "success_rate": 0.6802973977695167,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.054963019237918215,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 178.0883317464566,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 269
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 269
-        },
-        "browser_commands": {
-          "mean": 14.79182156133829,
-          "observed_tasks": 269,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "eac3a53e0afa577d0596be39b028582e4b784d3d3f48c0efbc9d99568eff27ef"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "parallel5_select_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 267,
-      "invalid": 33,
-      "successes": 198,
-      "success_rate": 0.7415730337078652,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.0696033554494382,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 207.8937416237685,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 267
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 267
-        },
-        "browser_commands": {
-          "mean": 14.632958801498127,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "cf7f6f64e4a333e75bd7ba235f17bc333d7cd4bd7152c939191eabefd0a14514"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "luna_single_xhigh_12288",
-      "harness": "browsercode",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 267,
-      "invalid": 33,
-      "successes": 181,
-      "success_rate": 0.6779026217228464,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.010868598370786516,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 137.84269526885336,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 5599.029962546817,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 3122.239700374532,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 16.651685393258425,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507695.8785777,
-        "end_epoch": 1793535665.5762925
-      },
-      "evidence_sha256": "d35c313eedeecc31c339fc631f0e5dce0800d45e77976978f3c4c272f2e55ff3",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "xhigh",
-        "max_output_tokens": 12288,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "e7adb6122b204e966e45c15df52992db8920e7ecaa0c991e5629f3d409e7fe92",
-      "all_attempt_generations": {
-        "physical_generation_calls": 4748,
-        "known_output_usage_calls": 4748,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 4748,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 4748,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "388464eaf9aafa186ca2d73aadf9d7a3d5883419d696cf054f1adc6a54892c4c"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "luna_single_high_24576",
-      "harness": "browsercode",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 270,
-      "invalid": 30,
-      "successes": 186,
-      "success_rate": 0.6888888888888889,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.009976814481481482,
-          "observed_tasks": 270,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 126.49424441821002,
-          "observed_tasks": 270,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4896.2,
-          "observed_tasks": 270,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2483.1481481481483,
-          "observed_tasks": 270,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 17.20740740740741,
-          "observed_tasks": 270,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507695.8368387,
-        "end_epoch": 1793533641.986685
-      },
-      "evidence_sha256": "d35c313eedeecc31c339fc631f0e5dce0800d45e77976978f3c4c272f2e55ff3",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 24576,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "e7adb6122b204e966e45c15df52992db8920e7ecaa0c991e5629f3d409e7fe92",
-      "all_attempt_generations": {
-        "physical_generation_calls": 4870,
-        "known_output_usage_calls": 4870,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 4870,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 4870,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "b9f68e59669d709bb769261662aa7168fbc0152943c8a26f188433a71754893b"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "luna_single_high_6144",
-      "harness": "browsercode",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 267,
-      "invalid": 33,
-      "successes": 178,
-      "success_rate": 0.6666666666666666,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.009437041235955056,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 119.78165618833486,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4826.9775280898875,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2469.940074906367,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 16.760299625468164,
-          "observed_tasks": 267,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507845.5221996,
-        "end_epoch": 1793533157.2978315
-      },
-      "evidence_sha256": "d35c313eedeecc31c339fc631f0e5dce0800d45e77976978f3c4c272f2e55ff3",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 6144,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "e7adb6122b204e966e45c15df52992db8920e7ecaa0c991e5629f3d409e7fe92",
-      "all_attempt_generations": {
-        "physical_generation_calls": 4759,
-        "known_output_usage_calls": 4759,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 4759,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 4759,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "ff4eeb83e16e39d95d30e5165490ab86ded4993e3ab55359aedf2fcaf2d1b744"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "luna_single_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 579,
-      "invalid": 16,
-      "successes": 482,
-      "success_rate": 0.8324697754749568,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.00778212762521589,
-          "observed_tasks": 579,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 100.09790529011984,
-          "observed_tasks": 579,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4014.2348877374784,
-          "observed_tasks": 579,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2092.3264248704663,
-          "observed_tasks": 579,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 13.53713298791019,
-          "observed_tasks": 579,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "7a9105600be4ef7c94031b6eef2ca6990e7329ad694dbfd8d92c1002110fc1bf",
-      "browser_commands_evidence_sha256": "5d17ad6f7802ddafd52e31bffb5084bbdcbef965d879d48abe83f0e607e782ee"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "parallel5_select_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 555,
-      "invalid": 40,
-      "successes": 483,
-      "success_rate": 0.8702702702702703,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.045877126936936935,
-          "observed_tasks": 555,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 171.0284289410102,
-          "observed_tasks": 555,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 555
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 555
-        },
-        "browser_commands": {
-          "mean": 10.886486486486486,
-          "observed_tasks": 555,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "93d341b061956f4a38b5b0a7a43edd8bf0b17667399fd1eaf1a0d06565545711"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "serial_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 553,
-      "invalid": 42,
-      "successes": 468,
-      "success_rate": 0.8462929475587704,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.19769814538878844,
-          "observed_tasks": 553,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 94.14691202024558,
-          "observed_tasks": 553,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 553
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 553
-        },
-        "browser_commands": {
-          "mean": 13.314647377938517,
-          "observed_tasks": 553,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "35b3881d6f0288dc147c51e4469ef34039aa7a0533449442fc6d3ec3cc85c6e1"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "parallel3_select_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 568,
-      "invalid": 27,
-      "successes": 496,
-      "success_rate": 0.8732394366197183,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.04319473032570423,
-          "observed_tasks": 568,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 163.37307838709927,
-          "observed_tasks": 568,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 568
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 568
-        },
-        "browser_commands": {
-          "mean": 11.714788732394366,
-          "observed_tasks": 568,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "3884fadbad27b7b1b8faad1917baeb92382e2160ba2ada9b0fcbecf960623a32"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "luna_single_xhigh_12288",
-      "harness": "browsercode",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 581,
-      "invalid": 14,
-      "successes": 482,
-      "success_rate": 0.8296041308089501,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.008963617977624785,
-          "observed_tasks": 581,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 109.45388189253053,
-          "observed_tasks": 581,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4898.555938037865,
-          "observed_tasks": 581,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2789.3339070567986,
-          "observed_tasks": 581,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 14.301204819277109,
-          "observed_tasks": 581,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507751.1884234,
-        "end_epoch": 1793545886.5465982
-      },
-      "evidence_sha256": "54f785c8c755eadde9806ec62d13d96a9d97287013ff3a89198521dae4a8c967",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "xhigh",
-        "max_output_tokens": 12288,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "ae594c77620bade14af675a3432d6ce36e8a337482aa4bb569e25e115dd53a5d",
-      "all_attempt_generations": {
-        "physical_generation_calls": 8985,
-        "known_output_usage_calls": 8982,
-        "missing_output_usage_calls": 3,
-        "known_reasoning_usage_calls": 8982,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 8982,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 3,
-          "authorized_quarantined_unknown_usage_calls": 3,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0.035204000"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 1,
-          "authorized_quarantined_unknown_usage_calls": 1,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0.1681145"
-        }
-      },
-      "browser_commands_evidence_sha256": "4bc74809691e1609ad68dbec16bf9b5ea79973909e70d0f2725ef1cc45473ea6"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "luna_single_high_24576",
-      "harness": "browsercode",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 585,
-      "invalid": 10,
-      "successes": 482,
-      "success_rate": 0.8239316239316239,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.007523119666666667,
-          "observed_tasks": 585,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 102.83443838532708,
-          "observed_tasks": 585,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4066.9521367521365,
-          "observed_tasks": 585,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2121.596581196581,
-          "observed_tasks": 585,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 13.873504273504274,
-          "observed_tasks": 585,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507749.6250637,
-        "end_epoch": 1793544464.7375686
-      },
-      "evidence_sha256": "54f785c8c755eadde9806ec62d13d96a9d97287013ff3a89198521dae4a8c967",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 24576,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "ae594c77620bade14af675a3432d6ce36e8a337482aa4bb569e25e115dd53a5d",
-      "all_attempt_generations": {
-        "physical_generation_calls": 8759,
-        "known_output_usage_calls": 8758,
-        "missing_output_usage_calls": 1,
-        "known_reasoning_usage_calls": 8758,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 8758,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 1,
-          "authorized_quarantined_unknown_usage_calls": 1,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0.021452"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "8b7d5f24dadcee593207fc9b2c887f835320245814ab2f07ca127fbc91bb6fdf"
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "luna_single_high_6144",
-      "harness": "browsercode",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 580,
-      "invalid": 15,
-      "successes": 481,
-      "success_rate": 0.8293103448275863,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.007724689715517242,
-          "observed_tasks": 580,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 102.41595744576972,
-          "observed_tasks": 580,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4135.510344827586,
-          "observed_tasks": 580,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2163.5793103448277,
-          "observed_tasks": 580,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 14.168965517241379,
-          "observed_tasks": 580,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507876.0456648,
-        "end_epoch": 1793543121.3739717
-      },
-      "evidence_sha256": "54f785c8c755eadde9806ec62d13d96a9d97287013ff3a89198521dae4a8c967",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 6144,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "ae594c77620bade14af675a3432d6ce36e8a337482aa4bb569e25e115dd53a5d",
-      "all_attempt_generations": {
-        "physical_generation_calls": 8929,
-        "known_output_usage_calls": 8927,
-        "missing_output_usage_calls": 2,
-        "known_reasoning_usage_calls": 8927,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 8927,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 2,
-          "authorized_quarantined_unknown_usage_calls": 2,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0.021810375"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "23374469af652c6827534dadda6cb703493998472e314148e0f9c87139dc5b55"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "luna_single_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 150,
-      "invalid": 0,
-      "successes": 123,
-      "success_rate": 0.82,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.014030933533333335,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 154.7628365280782,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 6571.693333333334,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 3923.633333333333,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 20.533333333333335,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "3c52a9f8dd5f03fac48d5e491a669a31b435cdea5b98755a9f29ba44c255485f",
-      "browser_commands_evidence_sha256": "02546ebdb84035854f98ab224fe13fa971b7b6a0da4c55e196dad265a059b23f"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "parallel5_select_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 147,
-      "invalid": 3,
-      "successes": 120,
-      "success_rate": 0.8163265306122449,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.10953599132653062,
-          "observed_tasks": 147,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 281.8559478882017,
-          "observed_tasks": 147,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 147
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 147
-        },
-        "browser_commands": {
-          "mean": 17.476190476190474,
-          "observed_tasks": 147,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "cc7c9e348c7e8a067c0faddab47e934dbb4f698fd3853d21ed0e83b21292cc77"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "serial_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 145,
-      "invalid": 5,
-      "successes": 113,
-      "success_rate": 0.7793103448275862,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.3843131027586207,
-          "observed_tasks": 145,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 150.61597788704174,
-          "observed_tasks": 145,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 145
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 145
-        },
-        "browser_commands": {
-          "mean": 21.082758620689656,
-          "observed_tasks": 145,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "a43774e69cdb10c9b942ea6231808c69d3ae61b3b8a943108754a68fa64bd33b"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "parallel3_select_high",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 148,
-      "invalid": 2,
-      "successes": 121,
-      "success_rate": 0.8175675675675675,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.08883636675675675,
-          "observed_tasks": 148,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 258.21112880515363,
-          "observed_tasks": 148,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 148
-        },
-        "reasoning_tokens": {
-          "mean": null,
-          "observed_tasks": 0,
-          "missing_valid_tasks": 148
-        },
-        "browser_commands": {
-          "mean": 17.95945945945946,
-          "observed_tasks": 148,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "not_exported"
-      },
-      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
-      "browser_commands_evidence_sha256": "a983746f4071c4077273c72bd095cb156f839d743f6b0da5c88f8b1b6f6169ea"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "luna_single_xhigh_12288",
-      "harness": "browsercode",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 150,
-      "invalid": 0,
-      "successes": 118,
-      "success_rate": 0.7866666666666666,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.017327789566666668,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 169.25761784825087,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 8395.746666666666,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 5366.113333333334,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 20.886666666666667,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507920.6433702,
-        "end_epoch": 1793523522.3787568
-      },
-      "evidence_sha256": "0b7010f71919fe41ddb469beb7e50fbffdeb92a74abf87d0af0b83b31fca5a39",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "xhigh",
-        "max_output_tokens": 12288,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "00a3d1e32ab98a3d4cb5ef939a1a27620a21860a83b52215dfe2325a1d27e2e8",
-      "all_attempt_generations": {
-        "physical_generation_calls": 3232,
-        "known_output_usage_calls": 3232,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 3232,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 3232,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "5488e09aa6e975a636e98ff00f5140471145edbf05a5eeff6aa7ce728687cdcb"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "luna_single_high_24576",
-      "harness": "browsercode",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 150,
-      "invalid": 0,
-      "successes": 129,
-      "success_rate": 0.86,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.013085260233333333,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 140.23304540144744,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 6563.153333333334,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 3957.1666666666665,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 19.593333333333334,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507827.8885496,
-        "end_epoch": 1793522031.7076075
-      },
-      "evidence_sha256": "0b7010f71919fe41ddb469beb7e50fbffdeb92a74abf87d0af0b83b31fca5a39",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 24576,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "00a3d1e32ab98a3d4cb5ef939a1a27620a21860a83b52215dfe2325a1d27e2e8",
-      "all_attempt_generations": {
-        "physical_generation_calls": 3055,
-        "known_output_usage_calls": 3055,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 3055,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 3055,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "db6268a9f2b26df8a0648f32a757f6a2ae193d0b454b1b15861d7a6bc0a3e28d"
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "luna_single_high_6144",
-      "harness": "browsercode",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 150,
-      "invalid": 0,
-      "successes": 124,
-      "success_rate": 0.8266666666666667,
-      "completion": "verified",
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.013472261300000002,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 143.96670596855847,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 6740.626666666667,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 4080.9133333333334,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 20.053333333333335,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        }
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793507968.8712392,
-        "end_epoch": 1793522222.4288065
-      },
-      "evidence_sha256": "0b7010f71919fe41ddb469beb7e50fbffdeb92a74abf87d0af0b83b31fca5a39",
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 6144,
-        "max_decisions": 30
-      },
-      "independent_completion_audit_sha256": "00a3d1e32ab98a3d4cb5ef939a1a27620a21860a83b52215dfe2325a1d27e2e8",
-      "all_attempt_generations": {
-        "physical_generation_calls": 3122,
-        "known_output_usage_calls": 3122,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 3122,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 3122,
-        "output_limit_stop_calls": 0,
-        "population": "all_actor_generation_attempts_including_invalid_episodes"
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      },
-      "browser_commands_evidence_sha256": "a4c72995e704136829ba36de11b655a5133cb4d0a75358fb902a5b6250c7aa02"
-    },
-    {
-      "benchmark": "online_mind2web",
-      "method": "luna_single_high_60steps",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 300,
-      "recorded": 300,
-      "valid": 259,
-      "invalid": 41,
-      "successes": 191,
-      "success_rate": 0.7374517374517374,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.011115183764478764,
-          "observed_tasks": 259,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 152.91254360315708,
-          "observed_tasks": 259,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 5416.27027027027,
-          "observed_tasks": 259,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2843.034749034749,
-          "observed_tasks": 259,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 18.26254826254826,
-          "observed_tasks": 259,
-          "missing_valid_tasks": 0
-        }
-      },
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 12288,
-        "max_decisions": 60,
-        "actor_wall_alarm_seconds": 900
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793556543.7969816,
-        "end_epoch": 1793569208.1532698
-      },
-      "evidence_sha256": "7bb104547eb9aabd2b8a8378ed550e47a8787b66c093f0c1cf4a7263d6dd487f",
-      "independent_completion_audit_sha256": "ba509318f5fcbd0ba85196afd419f51edfa646985ef7dea99d32d22a6a9cec6a",
-      "browser_commands_evidence_sha256": "695aed39fff902ba102e46f81fe9f50b7c79da14bd679964990e3a89779812b5",
-      "all_attempt_generations": {
-        "population": "all_actor_generation_attempts_including_invalid_episodes",
-        "physical_generation_calls": 5308,
-        "known_output_usage_calls": 5308,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 5308,
-        "output_at_cap_calls": 1,
-        "known_stop_reason_calls": 5308,
-        "output_limit_stop_calls": 1
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      }
-    },
-    {
-      "benchmark": "webvoyager",
-      "method": "luna_single_high_60steps",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 595,
-      "recorded": 595,
-      "valid": 584,
-      "invalid": 11,
-      "successes": 510,
-      "success_rate": 0.8732876712328768,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.009042802114726026,
-          "observed_tasks": 584,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 128.3980249886962,
-          "observed_tasks": 584,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 4661.469178082192,
-          "observed_tasks": 584,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 2518.8921232876714,
-          "observed_tasks": 584,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 15.097602739726028,
-          "observed_tasks": 584,
-          "missing_valid_tasks": 0
-        }
-      },
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 12288,
-        "max_decisions": 60,
-        "actor_wall_alarm_seconds": 900
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793556665.075316,
-        "end_epoch": 1793572145.5598543
-      },
-      "evidence_sha256": "dad94aff884d362f4a6496a8e6ce2f6673908875e9b60d1afe40e46cdf51bce4",
-      "independent_completion_audit_sha256": "42620960dde711b4596081378bddc1d16039d4c07c05cc9ae105c709846bf1a3",
-      "browser_commands_evidence_sha256": "09ed9943b0b752ff9fbeda8277dfb9a04e14dc62026121efe06ecc68eb1bfffb",
-      "all_attempt_generations": {
-        "population": "all_actor_generation_attempts_including_invalid_episodes",
-        "physical_generation_calls": 9683,
-        "known_output_usage_calls": 9682,
-        "missing_output_usage_calls": 1,
-        "known_reasoning_usage_calls": 9682,
-        "output_at_cap_calls": 1,
-        "known_stop_reason_calls": 9682,
-        "output_limit_stop_calls": 1
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 1,
-          "authorized_quarantined_unknown_usage_calls": 1,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0.00950025"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      }
-    },
-    {
-      "benchmark": "deepshop",
-      "method": "luna_single_high_60steps",
-      "harness": "browsercode",
-      "completion": "verified",
-      "requested": 150,
-      "recorded": 150,
-      "valid": 150,
-      "invalid": 0,
-      "successes": 136,
-      "success_rate": 0.9066666666666666,
-      "metrics": {
-        "actor_usd": {
-          "mean": 0.015858291966666667,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "actor_seconds": {
-          "mean": 164.04944664668292,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "output_tokens": {
-          "mean": 7846.333333333333,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "reasoning_tokens": {
-          "mean": 4945.493333333333,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        },
-        "browser_commands": {
-          "mean": 21.293333333333333,
-          "observed_tasks": 150,
-          "missing_valid_tasks": 0
-        }
-      },
-      "actor_protocol": {
-        "model": "gpt-6-luna",
-        "reasoning_effort": "high",
-        "max_output_tokens": 12288,
-        "max_decisions": 60,
-        "actor_wall_alarm_seconds": 900
-      },
-      "collection_window": {
-        "status": "observed",
-        "start_epoch": 1793556833.2432353,
-        "end_epoch": 1793563451.5419254
-      },
-      "evidence_sha256": "e4a6b414f48763dd5b406cc492ccff2406cc02bab2b6bfe02030c3504bdd6f68",
-      "independent_completion_audit_sha256": "838ce5292e5f3ae296fe9c5a56c581d3ed018dbf2972b2c88aec46c9fdc27c25",
-      "browser_commands_evidence_sha256": "e3370c89d9b6104b30ac748802d20d15c767e1572d7d25ed3df4479cddcaf824",
-      "all_attempt_generations": {
-        "population": "all_actor_generation_attempts_including_invalid_episodes",
-        "physical_generation_calls": 3341,
-        "known_output_usage_calls": 3341,
-        "missing_output_usage_calls": 0,
-        "known_reasoning_usage_calls": 3341,
-        "output_at_cap_calls": 0,
-        "known_stop_reason_calls": 3341,
-        "output_limit_stop_calls": 0
-      },
-      "accounting_disposition": {
-        "actor_generation": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "input_token_count": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        },
-        "judge": {
-          "unknown_usage_calls": 0,
-          "authorized_quarantined_unknown_usage_calls": 0,
-          "active_reserved_calls": 0,
-          "retained_unknown_usd": "0"
-        }
-      }
-    }
-  ],
   "paired_comparisons": [
     {
       "benchmark": "online_mind2web",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high",
-      "common_valid": 262,
-      "both_success": 153,
-      "left_only_success": 25,
-      "right_only_success": 18,
       "both_failure": 66,
+      "both_success": 153,
+      "common_valid": 262,
       "excluded_invalid_or_missing": 38,
-      "success_rate_difference": 0.026717557251908396,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 25,
       "paired_bootstrap_95_percentile_interval": [
         -0.022900763358778626,
         0.07633587786259542
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 18,
+      "success_rate_difference": 0.026717557251908396
     },
     {
       "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_24576",
-      "right_method": "luna_single_high",
-      "common_valid": 265,
-      "both_success": 155,
-      "left_only_success": 27,
-      "right_only_success": 19,
       "both_failure": 64,
+      "both_success": 155,
+      "common_valid": 265,
       "excluded_invalid_or_missing": 35,
-      "success_rate_difference": 0.03018867924528302,
+      "left_method": "luna_single_high_24576",
+      "left_only_success": 27,
       "paired_bootstrap_95_percentile_interval": [
         -0.018867924528301886,
         0.0830188679245283
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 19,
+      "success_rate_difference": 0.03018867924528302
     },
     {
       "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_6144",
-      "right_method": "luna_single_high",
-      "common_valid": 262,
-      "both_success": 151,
-      "left_only_success": 25,
-      "right_only_success": 20,
       "both_failure": 66,
+      "both_success": 151,
+      "common_valid": 262,
       "excluded_invalid_or_missing": 38,
-      "success_rate_difference": 0.019083969465648856,
+      "left_method": "luna_single_high_6144",
+      "left_only_success": 25,
       "paired_bootstrap_95_percentile_interval": [
         -0.030534351145038167,
         0.06870229007633588
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 20,
+      "success_rate_difference": 0.019083969465648856
     },
     {
       "benchmark": "online_mind2web",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high_24576",
-      "common_valid": 267,
-      "both_success": 163,
-      "left_only_success": 18,
-      "right_only_success": 21,
       "both_failure": 65,
+      "both_success": 163,
+      "common_valid": 267,
       "excluded_invalid_or_missing": 33,
-      "success_rate_difference": -0.011235955056179775,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 18,
       "paired_bootstrap_95_percentile_interval": [
         -0.056179775280898875,
         0.03745318352059925
-      ]
+      ],
+      "right_method": "luna_single_high_24576",
+      "right_only_success": 21,
+      "success_rate_difference": -0.011235955056179775
     },
     {
       "benchmark": "online_mind2web",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high_6144",
-      "common_valid": 264,
-      "both_success": 158,
-      "left_only_success": 21,
-      "right_only_success": 17,
       "both_failure": 68,
+      "both_success": 158,
+      "common_valid": 264,
       "excluded_invalid_or_missing": 36,
-      "success_rate_difference": 0.015151515151515152,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 21,
       "paired_bootstrap_95_percentile_interval": [
         -0.030303030303030304,
         0.06060606060606061
-      ]
+      ],
+      "right_method": "luna_single_high_6144",
+      "right_only_success": 17,
+      "success_rate_difference": 0.015151515151515152
     },
     {
       "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_24576",
-      "right_method": "luna_single_high_6144",
-      "common_valid": 267,
-      "both_success": 159,
-      "left_only_success": 25,
-      "right_only_success": 19,
       "both_failure": 64,
+      "both_success": 159,
+      "common_valid": 267,
       "excluded_invalid_or_missing": 33,
-      "success_rate_difference": 0.02247191011235955,
+      "left_method": "luna_single_high_24576",
+      "left_only_success": 25,
       "paired_bootstrap_95_percentile_interval": [
         -0.026217228464419477,
         0.07116104868913857
-      ]
+      ],
+      "right_method": "luna_single_high_6144",
+      "right_only_success": 19,
+      "success_rate_difference": 0.02247191011235955
     },
     {
       "benchmark": "webvoyager",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high",
-      "common_valid": 567,
-      "both_success": 435,
-      "left_only_success": 40,
-      "right_only_success": 36,
       "both_failure": 56,
+      "both_success": 435,
+      "common_valid": 567,
       "excluded_invalid_or_missing": 28,
-      "success_rate_difference": 0.007054673721340388,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 40,
       "paired_bootstrap_95_percentile_interval": [
         -0.02292768959435626,
         0.037037037037037035
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 36,
+      "success_rate_difference": 0.007054673721340388
     },
     {
       "benchmark": "webvoyager",
-      "left_method": "luna_single_high_24576",
-      "right_method": "luna_single_high",
-      "common_valid": 570,
-      "both_success": 435,
-      "left_only_success": 37,
-      "right_only_success": 39,
       "both_failure": 59,
+      "both_success": 435,
+      "common_valid": 570,
       "excluded_invalid_or_missing": 25,
-      "success_rate_difference": -0.0035087719298245615,
+      "left_method": "luna_single_high_24576",
+      "left_only_success": 37,
       "paired_bootstrap_95_percentile_interval": [
         -0.031578947368421054,
         0.02631578947368421
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 39,
+      "success_rate_difference": -0.0035087719298245615
     },
     {
       "benchmark": "webvoyager",
-      "left_method": "luna_single_high_6144",
-      "right_method": "luna_single_high",
-      "common_valid": 567,
-      "both_success": 434,
-      "left_only_success": 38,
-      "right_only_success": 40,
       "both_failure": 55,
+      "both_success": 434,
+      "common_valid": 567,
       "excluded_invalid_or_missing": 28,
-      "success_rate_difference": -0.003527336860670194,
+      "left_method": "luna_single_high_6144",
+      "left_only_success": 38,
       "paired_bootstrap_95_percentile_interval": [
         -0.03350970017636684,
         0.026455026455026454
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 40,
+      "success_rate_difference": -0.003527336860670194
     },
     {
       "benchmark": "webvoyager",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high_24576",
-      "common_valid": 572,
-      "both_success": 434,
-      "left_only_success": 40,
-      "right_only_success": 37,
       "both_failure": 61,
+      "both_success": 434,
+      "common_valid": 572,
       "excluded_invalid_or_missing": 23,
-      "success_rate_difference": 0.005244755244755245,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 40,
       "paired_bootstrap_95_percentile_interval": [
         -0.024475524475524476,
         0.03496503496503497
-      ]
+      ],
+      "right_method": "luna_single_high_24576",
+      "right_only_success": 37,
+      "success_rate_difference": 0.005244755244755245
     },
     {
       "benchmark": "webvoyager",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high_6144",
-      "common_valid": 567,
-      "both_success": 430,
-      "left_only_success": 42,
-      "right_only_success": 39,
       "both_failure": 56,
+      "both_success": 430,
+      "common_valid": 567,
       "excluded_invalid_or_missing": 28,
-      "success_rate_difference": 0.005291005291005291,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 42,
       "paired_bootstrap_95_percentile_interval": [
         -0.026455026455026454,
         0.037037037037037035
-      ]
+      ],
+      "right_method": "luna_single_high_6144",
+      "right_only_success": 39,
+      "success_rate_difference": 0.005291005291005291
     },
     {
       "benchmark": "webvoyager",
-      "left_method": "luna_single_high_24576",
-      "right_method": "luna_single_high_6144",
-      "common_valid": 572,
-      "both_success": 434,
-      "left_only_success": 36,
-      "right_only_success": 40,
       "both_failure": 62,
+      "both_success": 434,
+      "common_valid": 572,
       "excluded_invalid_or_missing": 23,
-      "success_rate_difference": -0.006993006993006993,
+      "left_method": "luna_single_high_24576",
+      "left_only_success": 36,
       "paired_bootstrap_95_percentile_interval": [
         -0.03671328671328671,
         0.022727272727272728
-      ]
+      ],
+      "right_method": "luna_single_high_6144",
+      "right_only_success": 40,
+      "success_rate_difference": -0.006993006993006993
     },
     {
       "benchmark": "deepshop",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high",
-      "common_valid": 150,
-      "both_success": 106,
-      "left_only_success": 12,
-      "right_only_success": 17,
       "both_failure": 15,
+      "both_success": 106,
+      "common_valid": 150,
       "excluded_invalid_or_missing": 0,
-      "success_rate_difference": -0.03333333333333333,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 12,
       "paired_bootstrap_95_percentile_interval": [
         -0.10666666666666667,
         0.04
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 17,
+      "success_rate_difference": -0.03333333333333333
     },
     {
       "benchmark": "deepshop",
-      "left_method": "luna_single_high_24576",
-      "right_method": "luna_single_high",
-      "common_valid": 150,
-      "both_success": 111,
-      "left_only_success": 18,
-      "right_only_success": 12,
       "both_failure": 9,
+      "both_success": 111,
+      "common_valid": 150,
       "excluded_invalid_or_missing": 0,
-      "success_rate_difference": 0.04,
+      "left_method": "luna_single_high_24576",
+      "left_only_success": 18,
       "paired_bootstrap_95_percentile_interval": [
         -0.03333333333333333,
         0.11333333333333333
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 12,
+      "success_rate_difference": 0.04
     },
     {
       "benchmark": "deepshop",
-      "left_method": "luna_single_high_6144",
-      "right_method": "luna_single_high",
-      "common_valid": 150,
-      "both_success": 106,
-      "left_only_success": 18,
-      "right_only_success": 17,
       "both_failure": 9,
+      "both_success": 106,
+      "common_valid": 150,
       "excluded_invalid_or_missing": 0,
-      "success_rate_difference": 0.006666666666666667,
+      "left_method": "luna_single_high_6144",
+      "left_only_success": 18,
       "paired_bootstrap_95_percentile_interval": [
         -0.07333333333333333,
         0.08666666666666667
-      ]
+      ],
+      "right_method": "luna_single_high",
+      "right_only_success": 17,
+      "success_rate_difference": 0.006666666666666667
     },
     {
       "benchmark": "deepshop",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high_24576",
-      "common_valid": 150,
-      "both_success": 113,
-      "left_only_success": 5,
-      "right_only_success": 16,
       "both_failure": 16,
+      "both_success": 113,
+      "common_valid": 150,
       "excluded_invalid_or_missing": 0,
-      "success_rate_difference": -0.07333333333333333,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 5,
       "paired_bootstrap_95_percentile_interval": [
         -0.13333333333333333,
         -0.013333333333333334
-      ]
+      ],
+      "right_method": "luna_single_high_24576",
+      "right_only_success": 16,
+      "success_rate_difference": -0.07333333333333333
     },
     {
       "benchmark": "deepshop",
-      "left_method": "luna_single_xhigh_12288",
-      "right_method": "luna_single_high_6144",
-      "common_valid": 150,
-      "both_success": 108,
-      "left_only_success": 10,
-      "right_only_success": 16,
       "both_failure": 16,
+      "both_success": 108,
+      "common_valid": 150,
       "excluded_invalid_or_missing": 0,
-      "success_rate_difference": -0.04,
+      "left_method": "luna_single_xhigh_12288",
+      "left_only_success": 10,
       "paired_bootstrap_95_percentile_interval": [
         -0.10666666666666667,
         0.02666666666666667
-      ]
+      ],
+      "right_method": "luna_single_high_6144",
+      "right_only_success": 16,
+      "success_rate_difference": -0.04
     },
     {
       "benchmark": "deepshop",
-      "left_method": "luna_single_high_24576",
-      "right_method": "luna_single_high_6144",
-      "common_valid": 150,
-      "both_success": 116,
-      "left_only_success": 13,
-      "right_only_success": 8,
       "both_failure": 13,
+      "both_success": 116,
+      "common_valid": 150,
       "excluded_invalid_or_missing": 0,
-      "success_rate_difference": 0.03333333333333333,
+      "left_method": "luna_single_high_24576",
+      "left_only_success": 13,
       "paired_bootstrap_95_percentile_interval": [
         -0.02666666666666667,
         0.09333333333333334
-      ]
+      ],
+      "right_method": "luna_single_high_6144",
+      "right_only_success": 8,
+      "success_rate_difference": 0.03333333333333333
     },
     {
+      "benchmark": "online_mind2web",
+      "both_failure": 55,
+      "both_success": 156,
       "common_valid": 255,
-      "right_method": "luna_single_high",
+      "excluded_invalid_or_missing": 45,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 32,
       "paired_bootstrap_95_percentile_interval": [
         0.027450980392156862,
         0.12941176470588237
       ],
-      "success_rate_difference": 0.0784313725490196,
-      "both_success": 156,
-      "excluded_invalid_or_missing": 45,
+      "right_method": "luna_single_high",
       "right_only_success": 12,
-      "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 55,
-      "left_only_success": 32
+      "success_rate_difference": 0.0784313725490196
     },
     {
+      "benchmark": "online_mind2web",
+      "both_failure": 54,
+      "both_success": 159,
       "common_valid": 256,
-      "right_method": "luna_single_high_6144",
+      "excluded_invalid_or_missing": 44,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 29,
       "paired_bootstrap_95_percentile_interval": [
         0.0078125,
         0.109375
       ],
-      "success_rate_difference": 0.05859375,
-      "both_success": 159,
-      "excluded_invalid_or_missing": 44,
+      "right_method": "luna_single_high_6144",
       "right_only_success": 14,
-      "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 54,
-      "left_only_success": 29
+      "success_rate_difference": 0.05859375
     },
     {
+      "benchmark": "online_mind2web",
+      "both_failure": 55,
+      "both_success": 167,
       "common_valid": 259,
-      "right_method": "luna_single_high_24576",
+      "excluded_invalid_or_missing": 41,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 24,
       "paired_bootstrap_95_percentile_interval": [
         0.0,
         0.0888030888030888
       ],
-      "success_rate_difference": 0.04247104247104247,
-      "both_success": 167,
-      "excluded_invalid_or_missing": 41,
+      "right_method": "luna_single_high_24576",
       "right_only_success": 13,
-      "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 55,
-      "left_only_success": 24
+      "success_rate_difference": 0.04247104247104247
     },
     {
+      "benchmark": "online_mind2web",
+      "both_failure": 57,
+      "both_success": 165,
       "common_valid": 257,
-      "right_method": "luna_single_xhigh_12288",
+      "excluded_invalid_or_missing": 43,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 24,
       "paired_bootstrap_95_percentile_interval": [
         0.0038910505836575876,
         0.09727626459143969
       ],
-      "success_rate_difference": 0.05058365758754864,
-      "both_success": 165,
-      "excluded_invalid_or_missing": 43,
+      "right_method": "luna_single_xhigh_12288",
       "right_only_success": 11,
-      "benchmark": "online_mind2web",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 57,
-      "left_only_success": 24
+      "success_rate_difference": 0.05058365758754864
     },
     {
+      "benchmark": "webvoyager",
+      "both_failure": 47,
+      "both_success": 458,
       "common_valid": 569,
-      "right_method": "luna_single_high",
+      "excluded_invalid_or_missing": 26,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 44,
       "paired_bootstrap_95_percentile_interval": [
         0.014059753954305799,
         0.070298769771529
       ],
-      "success_rate_difference": 0.0421792618629174,
-      "both_success": 458,
-      "excluded_invalid_or_missing": 26,
+      "right_method": "luna_single_high",
       "right_only_success": 20,
-      "benchmark": "webvoyager",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 47,
-      "left_only_success": 44
+      "success_rate_difference": 0.0421792618629174
     },
     {
+      "benchmark": "webvoyager",
+      "both_failure": 40,
+      "both_success": 446,
       "common_valid": 570,
-      "right_method": "luna_single_high_6144",
+      "excluded_invalid_or_missing": 25,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 52,
       "paired_bootstrap_95_percentile_interval": [
         0.0035087719298245615,
         0.06666666666666667
       ],
-      "success_rate_difference": 0.03508771929824561,
-      "both_success": 446,
-      "excluded_invalid_or_missing": 25,
+      "right_method": "luna_single_high_6144",
       "right_only_success": 32,
-      "benchmark": "webvoyager",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 40,
-      "left_only_success": 52
+      "success_rate_difference": 0.03508771929824561
     },
     {
+      "benchmark": "webvoyager",
+      "both_failure": 46,
+      "both_success": 451,
       "common_valid": 575,
-      "right_method": "luna_single_high_24576",
+      "excluded_invalid_or_missing": 20,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 51,
       "paired_bootstrap_95_percentile_interval": [
         0.01217391304347826,
         0.07130434782608695
       ],
-      "success_rate_difference": 0.04173913043478261,
-      "both_success": 451,
-      "excluded_invalid_or_missing": 20,
+      "right_method": "luna_single_high_24576",
       "right_only_success": 27,
-      "benchmark": "webvoyager",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 46,
-      "left_only_success": 51
+      "success_rate_difference": 0.04173913043478261
     },
     {
+      "benchmark": "webvoyager",
+      "both_failure": 48,
+      "both_success": 454,
       "common_valid": 571,
-      "right_method": "luna_single_xhigh_12288",
+      "excluded_invalid_or_missing": 24,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 45,
       "paired_bootstrap_95_percentile_interval": [
         0.008756567425569177,
         0.0647985989492119
       ],
-      "success_rate_difference": 0.03677758318739054,
-      "both_success": 454,
-      "excluded_invalid_or_missing": 24,
+      "right_method": "luna_single_xhigh_12288",
       "right_only_success": 24,
-      "benchmark": "webvoyager",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 48,
-      "left_only_success": 45
+      "success_rate_difference": 0.03677758318739054
     },
     {
+      "benchmark": "deepshop",
+      "both_failure": 5,
+      "both_success": 114,
       "common_valid": 150,
-      "right_method": "luna_single_high",
+      "excluded_invalid_or_missing": 0,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 22,
       "paired_bootstrap_95_percentile_interval": [
         0.013333333333333334,
         0.16
       ],
-      "success_rate_difference": 0.08666666666666667,
-      "both_success": 114,
-      "excluded_invalid_or_missing": 0,
+      "right_method": "luna_single_high",
       "right_only_success": 9,
-      "benchmark": "deepshop",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 5,
-      "left_only_success": 22
+      "success_rate_difference": 0.08666666666666667
     },
     {
+      "benchmark": "deepshop",
+      "both_failure": 7,
+      "both_success": 117,
       "common_valid": 150,
-      "right_method": "luna_single_high_6144",
+      "excluded_invalid_or_missing": 0,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 19,
       "paired_bootstrap_95_percentile_interval": [
         0.013333333333333334,
         0.14666666666666667
       ],
-      "success_rate_difference": 0.08,
-      "both_success": 117,
-      "excluded_invalid_or_missing": 0,
+      "right_method": "luna_single_high_6144",
       "right_only_success": 7,
-      "benchmark": "deepshop",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 7,
-      "left_only_success": 19
+      "success_rate_difference": 0.08
     },
     {
+      "benchmark": "deepshop",
+      "both_failure": 7,
+      "both_success": 122,
       "common_valid": 150,
-      "right_method": "luna_single_high_24576",
+      "excluded_invalid_or_missing": 0,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 14,
       "paired_bootstrap_95_percentile_interval": [
         -0.013333333333333334,
         0.10666666666666667
       ],
-      "success_rate_difference": 0.04666666666666667,
-      "both_success": 122,
-      "excluded_invalid_or_missing": 0,
+      "right_method": "luna_single_high_24576",
       "right_only_success": 7,
-      "benchmark": "deepshop",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 7,
-      "left_only_success": 14
+      "success_rate_difference": 0.04666666666666667
     },
     {
+      "benchmark": "deepshop",
+      "both_failure": 10,
+      "both_success": 114,
       "common_valid": 150,
-      "right_method": "luna_single_xhigh_12288",
+      "excluded_invalid_or_missing": 0,
+      "left_method": "luna_single_high_60steps",
+      "left_only_success": 22,
       "paired_bootstrap_95_percentile_interval": [
         0.06,
         0.18666666666666668
       ],
-      "success_rate_difference": 0.12,
-      "both_success": 114,
-      "excluded_invalid_or_missing": 0,
+      "right_method": "luna_single_xhigh_12288",
       "right_only_success": 4,
-      "benchmark": "deepshop",
-      "left_method": "luna_single_high_60steps",
-      "both_failure": 10,
-      "left_only_success": 22
+      "success_rate_difference": 0.12
     }
   ],
   "paired_statistics": {
-    "population": "common_valid_content_identical_tasks",
+    "collection_window_caveat": "Pairing controls task identity, not collection time.",
+    "coverage": "available_eligible_pairs_only",
     "interval": "paired_task_bootstrap_percentile_95",
     "multiple_testing_correction": "none",
-    "coverage": "available_eligible_pairs_only",
-    "collection_window_caveat": "Pairing controls task identity, not collection time."
+    "population": "common_valid_content_identical_tasks"
   },
-  "unavailable_prespecified_comparisons": [],
-  "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count."
+  "points": [
+    {
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "5346154e3fda5ebc385e7c0d339cd0a0730e9ab249e4c7953f125a7f6b6601ae",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 34,
+      "method": "serial_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 92.65773511359622,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 266
+        },
+        "actor_usd": {
+          "mean": 0.20770943759398497,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 266
+        },
+        "browser_commands": {
+          "mean": 14.988721804511279,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 266
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 266,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 266,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6654135338345865,
+      "successes": 177,
+      "valid": 266
+    },
+    {
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "eac3a53e0afa577d0596be39b028582e4b784d3d3f48c0efbc9d99568eff27ef",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "68a40eb8085626df99a4c9b0160e1e45f0d8de4e3df027e8a07feac8ed55cdb6",
+      "harness": "browsercode",
+      "invalid": 31,
+      "method": "luna_single_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 94.92736618077343,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "actor_usd": {
+          "mean": 0.009513999349442378,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "browser_commands": {
+          "mean": 16.63197026022305,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "output_tokens": {
+          "mean": 4849.371747211896,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "reasoning_tokens": {
+          "mean": 2526.4163568773233,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6617100371747212,
+      "successes": 178,
+      "valid": 269
+    },
+    {
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "eac3a53e0afa577d0596be39b028582e4b784d3d3f48c0efbc9d99568eff27ef",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 31,
+      "method": "parallel3_select_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 178.0883317464566,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "actor_usd": {
+          "mean": 0.054963019237918215,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "browser_commands": {
+          "mean": 14.79182156133829,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 269
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 269,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 269,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6802973977695167,
+      "successes": 183,
+      "valid": 269
+    },
+    {
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "cf7f6f64e4a333e75bd7ba235f17bc333d7cd4bd7152c939191eabefd0a14514",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 33,
+      "method": "parallel5_select_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 207.8937416237685,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "actor_usd": {
+          "mean": 0.0696033554494382,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "browser_commands": {
+          "mean": 14.632958801498127,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 267,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 267,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.7415730337078652,
+      "successes": 198,
+      "valid": 267
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "xhigh"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 4748,
+        "known_reasoning_usage_calls": 4748,
+        "known_stop_reason_calls": 4748,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 4748,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "388464eaf9aafa186ca2d73aadf9d7a3d5883419d696cf054f1adc6a54892c4c",
+      "collection_window": {
+        "end_epoch": 1793535665.5762925,
+        "start_epoch": 1793507695.8785777,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "d35c313eedeecc31c339fc631f0e5dce0800d45e77976978f3c4c272f2e55ff3",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "e7adb6122b204e966e45c15df52992db8920e7ecaa0c991e5629f3d409e7fe92",
+      "invalid": 33,
+      "method": "luna_single_xhigh_12288",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 137.84269526885336,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "actor_usd": {
+          "mean": 0.010868598370786516,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "browser_commands": {
+          "mean": 16.651685393258425,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "output_tokens": {
+          "mean": 5599.029962546817,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "reasoning_tokens": {
+          "mean": 3122.239700374532,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6779026217228464,
+      "successes": 181,
+      "valid": 267
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 24576,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 4870,
+        "known_reasoning_usage_calls": 4870,
+        "known_stop_reason_calls": 4870,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 4870,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "b9f68e59669d709bb769261662aa7168fbc0152943c8a26f188433a71754893b",
+      "collection_window": {
+        "end_epoch": 1793533641.986685,
+        "start_epoch": 1793507695.8368387,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "d35c313eedeecc31c339fc631f0e5dce0800d45e77976978f3c4c272f2e55ff3",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "e7adb6122b204e966e45c15df52992db8920e7ecaa0c991e5629f3d409e7fe92",
+      "invalid": 30,
+      "method": "luna_single_high_24576",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 126.49424441821002,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 270
+        },
+        "actor_usd": {
+          "mean": 0.009976814481481482,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 270
+        },
+        "browser_commands": {
+          "mean": 17.20740740740741,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 270
+        },
+        "output_tokens": {
+          "mean": 4896.2,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 270
+        },
+        "reasoning_tokens": {
+          "mean": 2483.1481481481483,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 270
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6888888888888889,
+      "successes": 186,
+      "valid": 270
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 6144,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 4759,
+        "known_reasoning_usage_calls": 4759,
+        "known_stop_reason_calls": 4759,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 4759,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "ff4eeb83e16e39d95d30e5165490ab86ded4993e3ab55359aedf2fcaf2d1b744",
+      "collection_window": {
+        "end_epoch": 1793533157.2978315,
+        "start_epoch": 1793507845.5221996,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "d35c313eedeecc31c339fc631f0e5dce0800d45e77976978f3c4c272f2e55ff3",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "e7adb6122b204e966e45c15df52992db8920e7ecaa0c991e5629f3d409e7fe92",
+      "invalid": 33,
+      "method": "luna_single_high_6144",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 119.78165618833486,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "actor_usd": {
+          "mean": 0.009437041235955056,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "browser_commands": {
+          "mean": 16.760299625468164,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "output_tokens": {
+          "mean": 4826.9775280898875,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        },
+        "reasoning_tokens": {
+          "mean": 2469.940074906367,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 267
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6666666666666666,
+      "successes": 178,
+      "valid": 267
+    },
+    {
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "5d17ad6f7802ddafd52e31bffb5084bbdcbef965d879d48abe83f0e607e782ee",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "7a9105600be4ef7c94031b6eef2ca6990e7329ad694dbfd8d92c1002110fc1bf",
+      "harness": "browsercode",
+      "invalid": 16,
+      "method": "luna_single_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 100.09790529011984,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 579
+        },
+        "actor_usd": {
+          "mean": 0.00778212762521589,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 579
+        },
+        "browser_commands": {
+          "mean": 13.53713298791019,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 579
+        },
+        "output_tokens": {
+          "mean": 4014.2348877374784,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 579
+        },
+        "reasoning_tokens": {
+          "mean": 2092.3264248704663,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 579
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8324697754749568,
+      "successes": 482,
+      "valid": 579
+    },
+    {
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "93d341b061956f4a38b5b0a7a43edd8bf0b17667399fd1eaf1a0d06565545711",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 40,
+      "method": "parallel5_select_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 171.0284289410102,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 555
+        },
+        "actor_usd": {
+          "mean": 0.045877126936936935,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 555
+        },
+        "browser_commands": {
+          "mean": 10.886486486486486,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 555
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 555,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 555,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8702702702702703,
+      "successes": 483,
+      "valid": 555
+    },
+    {
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "35b3881d6f0288dc147c51e4469ef34039aa7a0533449442fc6d3ec3cc85c6e1",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 42,
+      "method": "serial_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 94.14691202024558,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 553
+        },
+        "actor_usd": {
+          "mean": 0.19769814538878844,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 553
+        },
+        "browser_commands": {
+          "mean": 13.314647377938517,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 553
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 553,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 553,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8462929475587704,
+      "successes": 468,
+      "valid": 553
+    },
+    {
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "3884fadbad27b7b1b8faad1917baeb92382e2160ba2ada9b0fcbecf960623a32",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 27,
+      "method": "parallel3_select_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 163.37307838709927,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 568
+        },
+        "actor_usd": {
+          "mean": 0.04319473032570423,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 568
+        },
+        "browser_commands": {
+          "mean": 11.714788732394366,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 568
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 568,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 568,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8732394366197183,
+      "successes": 496,
+      "valid": 568
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 3,
+          "retained_unknown_usd": "0.035204000",
+          "unknown_usage_calls": 3
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 1,
+          "retained_unknown_usd": "0.1681145",
+          "unknown_usage_calls": 1
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "xhigh"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 8982,
+        "known_reasoning_usage_calls": 8982,
+        "known_stop_reason_calls": 8982,
+        "missing_output_usage_calls": 3,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 8985,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "4bc74809691e1609ad68dbec16bf9b5ea79973909e70d0f2725ef1cc45473ea6",
+      "collection_window": {
+        "end_epoch": 1793545886.5465982,
+        "start_epoch": 1793507751.1884234,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "54f785c8c755eadde9806ec62d13d96a9d97287013ff3a89198521dae4a8c967",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "ae594c77620bade14af675a3432d6ce36e8a337482aa4bb569e25e115dd53a5d",
+      "invalid": 14,
+      "method": "luna_single_xhigh_12288",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 109.45388189253053,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 581
+        },
+        "actor_usd": {
+          "mean": 0.008963617977624785,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 581
+        },
+        "browser_commands": {
+          "mean": 14.301204819277109,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 581
+        },
+        "output_tokens": {
+          "mean": 4898.555938037865,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 581
+        },
+        "reasoning_tokens": {
+          "mean": 2789.3339070567986,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 581
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8296041308089501,
+      "successes": 482,
+      "valid": 581
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 1,
+          "retained_unknown_usd": "0.021452",
+          "unknown_usage_calls": 1
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 24576,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 8758,
+        "known_reasoning_usage_calls": 8758,
+        "known_stop_reason_calls": 8758,
+        "missing_output_usage_calls": 1,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 8759,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "8b7d5f24dadcee593207fc9b2c887f835320245814ab2f07ca127fbc91bb6fdf",
+      "collection_window": {
+        "end_epoch": 1793544464.7375686,
+        "start_epoch": 1793507749.6250637,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "54f785c8c755eadde9806ec62d13d96a9d97287013ff3a89198521dae4a8c967",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "ae594c77620bade14af675a3432d6ce36e8a337482aa4bb569e25e115dd53a5d",
+      "invalid": 10,
+      "method": "luna_single_high_24576",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 102.83443838532708,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 585
+        },
+        "actor_usd": {
+          "mean": 0.007523119666666667,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 585
+        },
+        "browser_commands": {
+          "mean": 13.873504273504274,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 585
+        },
+        "output_tokens": {
+          "mean": 4066.9521367521365,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 585
+        },
+        "reasoning_tokens": {
+          "mean": 2121.596581196581,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 585
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8239316239316239,
+      "successes": 482,
+      "valid": 585
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 2,
+          "retained_unknown_usd": "0.021810375",
+          "unknown_usage_calls": 2
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 6144,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 8927,
+        "known_reasoning_usage_calls": 8927,
+        "known_stop_reason_calls": 8927,
+        "missing_output_usage_calls": 2,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 8929,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "23374469af652c6827534dadda6cb703493998472e314148e0f9c87139dc5b55",
+      "collection_window": {
+        "end_epoch": 1793543121.3739717,
+        "start_epoch": 1793507876.0456648,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "54f785c8c755eadde9806ec62d13d96a9d97287013ff3a89198521dae4a8c967",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "ae594c77620bade14af675a3432d6ce36e8a337482aa4bb569e25e115dd53a5d",
+      "invalid": 15,
+      "method": "luna_single_high_6144",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 102.41595744576972,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "actor_usd": {
+          "mean": 0.007724689715517242,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "browser_commands": {
+          "mean": 14.168965517241379,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "output_tokens": {
+          "mean": 4135.510344827586,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "reasoning_tokens": {
+          "mean": 2163.5793103448277,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8293103448275863,
+      "successes": 481,
+      "valid": 580
+    },
+    {
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "02546ebdb84035854f98ab224fe13fa971b7b6a0da4c55e196dad265a059b23f",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "3c52a9f8dd5f03fac48d5e491a669a31b435cdea5b98755a9f29ba44c255485f",
+      "harness": "browsercode",
+      "invalid": 0,
+      "method": "luna_single_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 154.7628365280782,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "actor_usd": {
+          "mean": 0.014030933533333335,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "browser_commands": {
+          "mean": 20.533333333333335,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "output_tokens": {
+          "mean": 6571.693333333334,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "reasoning_tokens": {
+          "mean": 3923.633333333333,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.82,
+      "successes": 123,
+      "valid": 150
+    },
+    {
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "cc7c9e348c7e8a067c0faddab47e934dbb4f698fd3853d21ed0e83b21292cc77",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 3,
+      "method": "parallel5_select_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 281.8559478882017,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "actor_usd": {
+          "mean": 0.10953599132653062,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "browser_commands": {
+          "mean": 17.476190476190474,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 147,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 147,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.8163265306122449,
+      "successes": 120,
+      "valid": 147
+    },
+    {
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "a43774e69cdb10c9b942ea6231808c69d3ae61b3b8a943108754a68fa64bd33b",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 5,
+      "method": "serial_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 150.61597788704174,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 145
+        },
+        "actor_usd": {
+          "mean": 0.3843131027586207,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 145
+        },
+        "browser_commands": {
+          "mean": 21.082758620689656,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 145
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 145,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 145,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.7793103448275862,
+      "successes": 113,
+      "valid": 145
+    },
+    {
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "a983746f4071c4077273c72bd095cb156f839d743f6b0da5c88f8b1b6f6169ea",
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified",
+      "evidence_sha256": "b62a6350d1ff0cccc34677da458d5a8a25635e792abebe1b8b15727d305786a3",
+      "harness": "browsercode",
+      "invalid": 2,
+      "method": "parallel3_select_high",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 258.21112880515363,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 148
+        },
+        "actor_usd": {
+          "mean": 0.08883636675675675,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 148
+        },
+        "browser_commands": {
+          "mean": 17.95945945945946,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 148
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 148,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 148,
+          "observed_tasks": 0
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.8175675675675675,
+      "successes": 121,
+      "valid": 148
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "xhigh"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 3232,
+        "known_reasoning_usage_calls": 3232,
+        "known_stop_reason_calls": 3232,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 3232,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "5488e09aa6e975a636e98ff00f5140471145edbf05a5eeff6aa7ce728687cdcb",
+      "collection_window": {
+        "end_epoch": 1793523522.3787568,
+        "start_epoch": 1793507920.6433702,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "0b7010f71919fe41ddb469beb7e50fbffdeb92a74abf87d0af0b83b31fca5a39",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "00a3d1e32ab98a3d4cb5ef939a1a27620a21860a83b52215dfe2325a1d27e2e8",
+      "invalid": 0,
+      "method": "luna_single_xhigh_12288",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 169.25761784825087,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "actor_usd": {
+          "mean": 0.017327789566666668,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "browser_commands": {
+          "mean": 20.886666666666667,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "output_tokens": {
+          "mean": 8395.746666666666,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "reasoning_tokens": {
+          "mean": 5366.113333333334,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.7866666666666666,
+      "successes": 118,
+      "valid": 150
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 24576,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 3055,
+        "known_reasoning_usage_calls": 3055,
+        "known_stop_reason_calls": 3055,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 3055,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "db6268a9f2b26df8a0648f32a757f6a2ae193d0b454b1b15861d7a6bc0a3e28d",
+      "collection_window": {
+        "end_epoch": 1793522031.7076075,
+        "start_epoch": 1793507827.8885496,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "0b7010f71919fe41ddb469beb7e50fbffdeb92a74abf87d0af0b83b31fca5a39",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "00a3d1e32ab98a3d4cb5ef939a1a27620a21860a83b52215dfe2325a1d27e2e8",
+      "invalid": 0,
+      "method": "luna_single_high_24576",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 140.23304540144744,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "actor_usd": {
+          "mean": 0.013085260233333333,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "browser_commands": {
+          "mean": 19.593333333333334,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "output_tokens": {
+          "mean": 6563.153333333334,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "reasoning_tokens": {
+          "mean": 3957.1666666666665,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.86,
+      "successes": 129,
+      "valid": 150
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "max_decisions": 30,
+        "max_output_tokens": 6144,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 3122,
+        "known_reasoning_usage_calls": 3122,
+        "known_stop_reason_calls": 3122,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 3122,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "a4c72995e704136829ba36de11b655a5133cb4d0a75358fb902a5b6250c7aa02",
+      "collection_window": {
+        "end_epoch": 1793522222.4288065,
+        "start_epoch": 1793507968.8712392,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "0b7010f71919fe41ddb469beb7e50fbffdeb92a74abf87d0af0b83b31fca5a39",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "00a3d1e32ab98a3d4cb5ef939a1a27620a21860a83b52215dfe2325a1d27e2e8",
+      "invalid": 0,
+      "method": "luna_single_high_6144",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 143.96670596855847,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "actor_usd": {
+          "mean": 0.013472261300000002,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "browser_commands": {
+          "mean": 20.053333333333335,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "output_tokens": {
+          "mean": 6740.626666666667,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "reasoning_tokens": {
+          "mean": 4080.9133333333334,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.8266666666666667,
+      "successes": 124,
+      "valid": 150
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 60,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 5308,
+        "known_reasoning_usage_calls": 5308,
+        "known_stop_reason_calls": 5308,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 1,
+        "output_limit_stop_calls": 1,
+        "physical_generation_calls": 5308,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "695aed39fff902ba102e46f81fe9f50b7c79da14bd679964990e3a89779812b5",
+      "collection_window": {
+        "end_epoch": 1793569208.1532698,
+        "start_epoch": 1793556543.7969816,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "7bb104547eb9aabd2b8a8378ed550e47a8787b66c093f0c1cf4a7263d6dd487f",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "ba509318f5fcbd0ba85196afd419f51edfa646985ef7dea99d32d22a6a9cec6a",
+      "invalid": 41,
+      "method": "luna_single_high_60steps",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 152.91254360315708,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "actor_usd": {
+          "mean": 0.011115183764478764,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "browser_commands": {
+          "mean": 18.26254826254826,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "output_tokens": {
+          "mean": 5416.27027027027,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "reasoning_tokens": {
+          "mean": 2843.034749034749,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        }
+      },
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.7374517374517374,
+      "successes": 191,
+      "valid": 259
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 1,
+          "retained_unknown_usd": "0.00950025",
+          "unknown_usage_calls": 1
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 60,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 9682,
+        "known_reasoning_usage_calls": 9682,
+        "known_stop_reason_calls": 9682,
+        "missing_output_usage_calls": 1,
+        "output_at_cap_calls": 1,
+        "output_limit_stop_calls": 1,
+        "physical_generation_calls": 9683,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "09ed9943b0b752ff9fbeda8277dfb9a04e14dc62026121efe06ecc68eb1bfffb",
+      "collection_window": {
+        "end_epoch": 1793572145.5598543,
+        "start_epoch": 1793556665.075316,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "dad94aff884d362f4a6496a8e6ce2f6673908875e9b60d1afe40e46cdf51bce4",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "42620960dde711b4596081378bddc1d16039d4c07c05cc9ae105c709846bf1a3",
+      "invalid": 11,
+      "method": "luna_single_high_60steps",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 128.3980249886962,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 584
+        },
+        "actor_usd": {
+          "mean": 0.009042802114726026,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 584
+        },
+        "browser_commands": {
+          "mean": 15.097602739726028,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 584
+        },
+        "output_tokens": {
+          "mean": 4661.469178082192,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 584
+        },
+        "reasoning_tokens": {
+          "mean": 2518.8921232876714,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 584
+        }
+      },
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8732876712328768,
+      "successes": 510,
+      "valid": 584
+    },
+    {
+      "accounting_disposition": {
+        "actor_generation": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "input_token_count": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        },
+        "judge": {
+          "active_reserved_calls": 0,
+          "authorized_quarantined_unknown_usage_calls": 0,
+          "retained_unknown_usd": "0",
+          "unknown_usage_calls": 0
+        }
+      },
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 60,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high"
+      },
+      "all_attempt_generations": {
+        "known_output_usage_calls": 3341,
+        "known_reasoning_usage_calls": 3341,
+        "known_stop_reason_calls": 3341,
+        "missing_output_usage_calls": 0,
+        "output_at_cap_calls": 0,
+        "output_limit_stop_calls": 0,
+        "physical_generation_calls": 3341,
+        "population": "all_actor_generation_attempts_including_invalid_episodes"
+      },
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "e3370c89d9b6104b30ac748802d20d15c767e1572d7d25ed3df4479cddcaf824",
+      "collection_window": {
+        "end_epoch": 1793563451.5419254,
+        "start_epoch": 1793556833.2432353,
+        "status": "observed"
+      },
+      "completion": "verified",
+      "evidence_sha256": "e4a6b414f48763dd5b406cc492ccff2406cc02bab2b6bfe02030c3504bdd6f68",
+      "harness": "browsercode",
+      "independent_completion_audit_sha256": "838ce5292e5f3ae296fe9c5a56c581d3ed018dbf2972b2c88aec46c9fdc27c25",
+      "invalid": 0,
+      "method": "luna_single_high_60steps",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 164.04944664668292,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "actor_usd": {
+          "mean": 0.015858291966666667,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "browser_commands": {
+          "mean": 21.293333333333333,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "output_tokens": {
+          "mean": 7846.333333333333,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        },
+        "reasoning_tokens": {
+          "mean": 4945.493333333333,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 150
+        }
+      },
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.9066666666666666,
+      "successes": 136,
+      "valid": 150
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 30,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "selection_candidates": 2
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "harness": "browsercode",
+      "invalid": 36,
+      "method": "parallel2_select_high",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 193.19435385174813,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 264
+        },
+        "actor_usd": {
+          "mean": 0.053891008731060605,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 264
+        },
+        "browser_commands": {
+          "mean": 14.893939393939394,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 264
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 264,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 264,
+          "observed_tasks": 0
+        }
+      },
+      "native_saved": 300,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.5933333333333334,
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6742424242424242,
+      "successes": 178,
+      "unclaimed": 0,
+      "valid": 264
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 30,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "selection_candidates": 2
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "harness": "browsercode",
+      "invalid": 15,
+      "method": "parallel2_select_high",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 152.1680228368636,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "actor_usd": {
+          "mean": 0.040946512405172414,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "browser_commands": {
+          "mean": 12.208620689655172,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 580
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 580,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 580,
+          "observed_tasks": 0
+        }
+      },
+      "native_saved": 595,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.8403361344537815,
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.8620689655172413,
+      "successes": 500,
+      "unclaimed": 0,
+      "valid": 580
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 30,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "selection_candidates": 2
+      },
+      "administrative_missing_native": 1,
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "claimed_missing_native": 1,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "2fa1fff6eca7493de8a51b6e1df703577f6a1d9ce7867c42288e4bbf700a5951",
+      "harness": "browsercode",
+      "invalid": 1,
+      "method": "parallel2_select_high",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 271.9113713831883,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 148
+        },
+        "actor_usd": {
+          "mean": 0.08233786108108108,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 148
+        },
+        "browser_commands": {
+          "mean": 18.304054054054053,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 148
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 148,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 148,
+          "observed_tasks": 0
+        }
+      },
+      "native_saved": 149,
+      "overall_is_confirmed_success_lower_bound": true,
+      "overall_success_rate": 0.84,
+      "recorded": 149,
+      "requested": 150,
+      "success_rate": 0.8513513513513513,
+      "successes": 126,
+      "unclaimed": 0,
+      "valid": 148
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 60,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "selection_candidates": 5
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57",
+      "claimed_missing_native": 1,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57",
+      "harness": "browsercode",
+      "invalid": 41,
+      "method": "parallel5_select_high_60steps",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 205.53671252061866,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 258
+        },
+        "actor_usd": {
+          "mean": 0.07302958372093023,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 258
+        },
+        "browser_commands": {
+          "mean": 14.290697674418604,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 258
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 258,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 258,
+          "observed_tasks": 0
+        }
+      },
+      "native_saved": 299,
+      "overall_is_confirmed_success_lower_bound": true,
+      "overall_success_rate": 0.6366666666666667,
+      "recorded": 299,
+      "requested": 300,
+      "success_rate": 0.7403100775193798,
+      "successes": 191,
+      "unclaimed": 0,
+      "valid": 258
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 60,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "selection_candidates": 5
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57",
+      "harness": "browsercode",
+      "invalid": 51,
+      "method": "parallel5_select_high_60steps",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 146.65524366876429,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 544
+        },
+        "actor_usd": {
+          "mean": 0.0444186061305147,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 544
+        },
+        "browser_commands": {
+          "mean": 10.428308823529411,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 544
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 544,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 544,
+          "observed_tasks": 0
+        }
+      },
+      "native_saved": 595,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.8453781512605042,
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.9246323529411765,
+      "successes": 503,
+      "unclaimed": 0,
+      "valid": 544
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 60,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "selection_candidates": 5
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "8d065b50b5adc2409752968696b1dc7fc7cc097b76288a6ff8af9ba2a7f76c57",
+      "harness": "browsercode",
+      "invalid": 7,
+      "method": "parallel5_select_high_60steps",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 285.30314298878244,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 143
+        },
+        "actor_usd": {
+          "mean": 0.11112735444055943,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 143
+        },
+        "browser_commands": {
+          "mean": 17.307692307692307,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 143
+        },
+        "output_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 143,
+          "observed_tasks": 0
+        },
+        "reasoning_tokens": {
+          "mean": null,
+          "missing_valid_tasks": 143,
+          "observed_tasks": 0
+        }
+      },
+      "native_saved": 150,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.8733333333333333,
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.916083916083916,
+      "successes": 131,
+      "unclaimed": 0,
+      "valid": 143
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 120,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "prompt_max_decisions": 120,
+        "reasoning_effort": "high",
+        "selection_candidates": 1
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "online_mind2web",
+      "browser_commands_evidence_sha256": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "harness": "browsercode",
+      "invalid": 41,
+      "method": "luna_single_high_120steps",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 148.48284494264848,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "actor_usd": {
+          "mean": 0.011865051621621622,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "browser_commands": {
+          "mean": 18.065637065637066,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "output_tokens": {
+          "mean": 5611.810810810811,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        },
+        "reasoning_tokens": {
+          "mean": 3029.6833976833977,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 259
+        }
+      },
+      "native_saved": 300,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.5933333333333334,
+      "recorded": 300,
+      "requested": 300,
+      "success_rate": 0.6872586872586872,
+      "successes": 178,
+      "unclaimed": 0,
+      "valid": 259
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 120,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "prompt_max_decisions": 120,
+        "reasoning_effort": "high",
+        "selection_candidates": 1
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "webvoyager",
+      "browser_commands_evidence_sha256": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "harness": "browsercode",
+      "invalid": 55,
+      "method": "luna_single_high_120steps",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 117.18111078926897,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 540
+        },
+        "actor_usd": {
+          "mean": 0.00973446563888889,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 540
+        },
+        "browser_commands": {
+          "mean": 14.872222222222222,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 540
+        },
+        "output_tokens": {
+          "mean": 4794.529629629629,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 540
+        },
+        "reasoning_tokens": {
+          "mean": 2670.8981481481483,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 540
+        }
+      },
+      "native_saved": 595,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.8201680672268907,
+      "recorded": 595,
+      "requested": 595,
+      "success_rate": 0.9037037037037037,
+      "successes": 488,
+      "unclaimed": 0,
+      "valid": 540
+    },
+    {
+      "actor_protocol": {
+        "actor_wall_alarm_seconds": 900,
+        "max_decisions": 120,
+        "max_output_tokens": 12288,
+        "model": "gpt-6-luna",
+        "prompt_max_decisions": 120,
+        "reasoning_effort": "high",
+        "selection_candidates": 1
+      },
+      "administrative_missing_native": 0,
+      "benchmark": "deepshop",
+      "browser_commands_evidence_sha256": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "claimed_missing_native": 0,
+      "collection_window": {
+        "status": "not_exported"
+      },
+      "completion": "verified_disposition_endpoint",
+      "evidence_sha256": "27ca5ca9f93d05d08a75e5f940488f8d82465a5cda132248ca1c03dfb29e28e2",
+      "harness": "browsercode",
+      "invalid": 3,
+      "method": "luna_single_high_120steps",
+      "metric_caveat": "Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.",
+      "metrics": {
+        "actor_seconds": {
+          "mean": 196.03794786760417,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "actor_usd": {
+          "mean": 0.01918858319727891,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "browser_commands": {
+          "mean": 22.8843537414966,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "output_tokens": {
+          "mean": 9017.891156462585,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        },
+        "reasoning_tokens": {
+          "mean": 5766.231292517007,
+          "missing_valid_tasks": 0,
+          "observed_tasks": 147
+        }
+      },
+      "native_saved": 150,
+      "overall_is_confirmed_success_lower_bound": false,
+      "overall_success_rate": 0.9133333333333333,
+      "recorded": 150,
+      "requested": 150,
+      "success_rate": 0.9319727891156463,
+      "successes": 137,
+      "unclaimed": 0,
+      "valid": 147
+    }
+  ],
+  "profile": "qualified-decision-sweep",
+  "schema": "browsercode-scaling-paper-v4",
+  "unavailable_prespecified_comparisons": []
 }

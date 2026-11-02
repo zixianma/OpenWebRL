@@ -1,7 +1,7 @@
 {
   "schema": "browsercode-scaling-render-v2",
-  "profile": "completed-step-sweep",
-  "points": 24,
+  "profile": "qualified-decision-sweep",
+  "points": 33,
   "selected_methods": [
     "serial_high",
     "luna_single_high",
@@ -10,8 +10,13 @@
     "luna_single_xhigh_12288",
     "luna_single_high_24576",
     "luna_single_high_6144",
-    "luna_single_high_60steps"
+    "luna_single_high_60steps",
+    "parallel2_select_high",
+    "parallel5_select_high_60steps",
+    "luna_single_high_120steps"
   ],
+  "preview_only": false,
+  "publication_held": false,
   "dimensions_inches": [
     7,
     4.35
@@ -25,13 +30,13 @@
   "browser_hosting_projection": null,
   "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.",
   "omitted_token_method_coverage": [],
-  "input_sha256": "5ff6bfa7b1ff4aaa62275469000ccc681be8ae4cb76da5056a680a01dfe6cfe5",
-  "renderer_sha256": "dd58021b9301f6039caba89d793ae1642dd733f9e253800212890bb9f5d7633e",
+  "input_sha256": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
+  "renderer_sha256": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "dbebf5417c901dbbae7a5ca72b6fa57a6f02864ffdd1536276b0314c0fbad0c4",
-    ".svg": "43d39a51c70e7639c19ba5b7c7cd33e8c567ee82e8727d6d7bdfc0c46b7a01b1",
-    ".pdf": "81fd59ec3438d3d164d25cded579ce46d6dc4dab04cd2f7c7d951187c7d3d8d9",
-    "_coordinates.csv": "5b12952ae53a22a9a44fab6b0a54c830d4a64eb7ed3046941486b5f569c925e4"
+    ".png": "1aa02e37764fd2996c018b34a2d2943949f94fc73e7b8008609a2c3ed37ed7ed",
+    ".svg": "18bfa7b6854306457b55a202608f48706b6bddc80544430eded9e6a4e032e564",
+    ".pdf": "e8b468aac5cf4e8713097536d512e0697473a37d832c8a00bccbec0056c06396",
+    "_coordinates.csv": "b25019271a18552594485d2583bf7a224e7fef5fc39eafcbf0d0877aeac90a32"
   }
 }

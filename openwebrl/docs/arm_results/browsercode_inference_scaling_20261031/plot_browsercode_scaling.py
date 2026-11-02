@@ -26,9 +26,11 @@ BASELINE = ('serial_high', 'luna_single_high', 'parallel3_select_high', 'paralle
 NEW = ('luna_single_xhigh_12288', 'luna_single_high_24576', 'luna_single_high_6144')
 STEPS = ('luna_single_high_60steps',)
 METHODS = BASELINE + NEW + STEPS
+EXTENSIONS = ('parallel2_select_high', 'parallel5_select_high_60steps', 'luna_single_high_120steps')
+ALL_METHODS = METHODS + EXTENSIONS
 
 def profile_methods(profile):
-    return BASELINE if profile == 'historical-baseline' else BASELINE + NEW if profile == 'completed-sweep' else METHODS
+    return ALL_METHODS if profile == 'qualified-decision-sweep' else BASELINE if profile == 'historical-baseline' else BASELINE + NEW if profile == 'completed-sweep' else METHODS
 PAIRED_STATISTICS = {'population': 'common_valid_content_identical_tasks', 'interval': 'paired_task_bootstrap_percentile_95', 'multiple_testing_correction': 'none', 'coverage': 'available_eligible_pairs_only', 'collection_window_caveat': 'Pairing controls task identity, not collection time.'}
 PROTOCOL = {'model': 'gpt-5.6-terra', 'reasoning_effort': 'medium', 'max_completion_tokens': 4096,
             'seed': 42, 'version': 'gpt56-terra-terminal-success-v1'}
@@ -41,7 +43,10 @@ STYLES = {'serial_high': ('Sol high single', 's', '#08519c', True),
           'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', '#08306b', True),
           'luna_single_high_24576': ('Luna high (2× cap)', 'o', '#2171b5', True),
           'luna_single_high_6144': ('Luna high (0.5× cap)', 'o', '#9ecae1', True),
-          'luna_single_high_60steps': ('Luna high (60 steps)', 'o', '#4292c6', False)}
+          'luna_single_high_60steps': ('Luna high (60 steps)', 'o', '#4292c6', False),
+          'parallel2_select_high': ('Luna high N2 (30 steps)', 'o', '#fb6a4a', True),
+          'parallel5_select_high_60steps': ('Luna high N5 (60 steps)', 'o', '#a50f15', False),
+          'luna_single_high_120steps': ('Luna high (120 steps)', 'o', '#08519c', False)}
 METRICS = ('actor_usd', 'browser_commands', 'actor_seconds', 'output_tokens', 'reasoning_tokens')
 COMMAND_DEFINITION = 'One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.'
 
@@ -187,6 +192,64 @@ def validate(data):
     return data
 
 
+_validate_completed_legacy = validate
+
+
+def validate(data):
+    """Keep the 24 published points intact; validate explicit native/missing coverage."""
+    if data.get('profile') != 'qualified-decision-sweep':
+        return _validate_completed_legacy(data)
+    expected_top = {'schema', 'profile', 'judge_protocol', 'metric_population',
+                    'comparison_caveat', 'points', 'paired_comparisons', 'paired_statistics',
+                    'unavailable_prespecified_comparisons', 'browser_command_definition', 'extension_metadata'}
+    need(set(data) == expected_top and data['schema'] == 'browsercode-scaling-paper-v4', 'Exact qualified extension schema required')
+    meta = data['extension_metadata']
+    need(type(meta) is dict and set(meta) == {'publication_state', 'base_aggregate_sha256', 'base_points_sha256', 'source_consumer_sha256', 'added_methods', 'paired_comparisons_for_extensions', 'prompt_limit_caveat', 'stealth_results_included'}, 'Exact extension provenance required')
+    need(meta['publication_state'] == 'qualified_local_endpoints_released', 'Qualified local publication state required')
+    need(meta['stealth_results_included'] is False and meta['paired_comparisons_for_extensions'] is False, 'No unmeasured stealth or paired coordinates allowed')
+    need(meta['added_methods'] == list(EXTENSIONS) and set(meta['source_consumer_sha256']) == set(EXTENSIONS), 'Exact three qualified extensions required')
+    need(all(digest(v) for v in meta['source_consumer_sha256'].values()) and digest(meta['base_aggregate_sha256']) and digest(meta['base_points_sha256']), 'Qualified aggregate source hashes required')
+    need(meta['prompt_limit_caveat'] == 'Historical 60-decision single enforced 60 but advertised 30; new single120 enforces and advertises 120. Live windows and validity subsets differ.', 'Prompt comparability caveat required')
+    points = data['points']
+    need(type(points) is list and len(points) == 33, 'All eleven methods on all three benchmarks required')
+    old = [p for p in points if p.get('method') in METHODS]
+    need(hashlib.sha256(json.dumps(old, sort_keys=True, separators=(',', ':')).encode()).hexdigest() == meta['base_points_sha256'], 'Existing point dictionaries must remain byte-equivalent under canonical JSON')
+    base = {k: v for k, v in data.items() if k != 'extension_metadata'}
+    base.update(schema='browsercode-scaling-paper-v3', profile='completed-step-sweep', points=old)
+    _validate_completed_legacy(base)
+    fresh = [p for p in points if p.get('method') in EXTENSIONS]
+    need({(p['benchmark'], p['method']) for p in fresh} == {(b,m) for b in BENCHMARKS for m in EXTENSIONS} and len(fresh) == 9, 'Unique full extension matrix required')
+    allowed = {'benchmark', 'method', 'harness', 'completion', 'requested', 'recorded', 'native_saved', 'valid', 'invalid', 'claimed_missing_native', 'administrative_missing_native', 'unclaimed', 'successes', 'success_rate', 'overall_success_rate', 'overall_is_confirmed_success_lower_bound', 'metrics', 'collection_window', 'evidence_sha256', 'browser_commands_evidence_sha256', 'actor_protocol', 'metric_caveat'}
+    for p in fresh:
+        need(set(p) == allowed and p['harness'] == 'browsercode' and p['completion'] == 'verified_disposition_endpoint', 'Only sanitized qualified local endpoints allowed')
+        for k in ('requested', 'recorded', 'native_saved', 'valid', 'invalid', 'claimed_missing_native', 'administrative_missing_native', 'unclaimed', 'successes'):
+            need(integer(p[k]), 'Nonnegative exact extension count required')
+        need(p['requested'] == BENCHMARKS[p['benchmark']][1] and p['recorded'] == p['native_saved'], 'Recorded means native saved, never imputed outcomes')
+        need(p['valid'] > 0 and p['valid'] + p['invalid'] == p['native_saved'], 'Native disposition counts disagree')
+        need(p['native_saved'] + p['claimed_missing_native'] + p['unclaimed'] == p['requested'] and p['unclaimed'] == 0, 'Every original identity must have an explicit final disposition')
+        need(p['administrative_missing_native'] <= p['claimed_missing_native'], 'Administrative missing is a subset of claimed missing, not an additional outcome')
+        need(p['successes'] <= p['valid'] and number(p['success_rate']) and abs(p['success_rate'] - p['successes']/p['valid']) <= 1e-12, 'Valid-only success denominator differs')
+        need(number(p['overall_success_rate']) and abs(p['overall_success_rate'] - p['successes']/p['requested']) <= 1e-12, 'Confirmed-success per planned-task denominator differs')
+        need(type(p['overall_is_confirmed_success_lower_bound']) is bool and p['overall_is_confirmed_success_lower_bound'] == (p['claimed_missing_native'] > 0), 'Missing outcomes must remain lower-bound coverage')
+        need(p['collection_window'] == {'status':'not_exported'}, 'Do not invent collection timestamps')
+        need(p['evidence_sha256'] == meta['source_consumer_sha256'][p['method']] == p['browser_commands_evidence_sha256'], 'Point must bind its exact sanitized consumer')
+        candidates, decisions = {'parallel2_select_high':(2,30), 'parallel5_select_high_60steps':(5,60), 'luna_single_high_120steps':(1,120)}[p['method']]
+        protocol = {'model':'gpt-6-luna', 'reasoning_effort':'high', 'max_output_tokens':12288, 'max_decisions':decisions, 'actor_wall_alarm_seconds':900, 'selection_candidates':candidates}
+        if candidates == 1: protocol['prompt_max_decisions'] = 120
+        need(p['actor_protocol'] == protocol, 'Qualified extension scientific profile differs')
+        need(p['metric_caveat'] == 'Own valid-task means; frozen native usage pricing upper bound excludes Terra and is not an invoice. Actor latency excludes Terra. Missing task outcomes are never imputed.', 'Metric population/cost caveat required')
+        need(set(p['metrics']) == set(METRICS), 'Exact extension metric set required')
+        for name, metric in p['metrics'].items():
+            need(set(metric) == {'mean','observed_tasks','missing_valid_tasks'}, 'Exact metric coverage schema required')
+            n, missing = metric['observed_tasks'], metric['missing_valid_tasks']
+            need(integer(n) and integer(missing) and n + missing == p['valid'], 'Metric coverage must match own valid cohort')
+            need((n == 0 and metric['mean'] is None) or (n > 0 and number(metric['mean']) and metric['mean'] >= 0), 'Unavailable measurements cannot become zero')
+            if name in ('actor_usd','browser_commands','actor_seconds'):
+                need(n == p['valid'] and metric['mean'] > 0, 'Main panels require complete valid-task means')
+            if name == 'browser_commands': need(metric['mean'] <= decisions, 'Batches exceed enforced decisions')
+    return data
+
+
 def browser_cost_metrics(data, projection):
     """Join complete, separately labelled projections without changing outcomes."""
     source = Path(__file__).with_name('project_browser_cost.py')
@@ -210,8 +273,10 @@ def browser_cost_metrics(data, projection):
 
 
 def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_methods=None,
-           browser_projection=None):
+           browser_projection=None, preview=False):
     validate(data)
+    extended = data['profile'] == 'qualified-decision-sweep'
+    need(not extended or browser_projection is None, 'No projected hosting in extended local figure')
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -247,7 +312,7 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
                         right=.79 if projected is not None else .765,
                         top=.90, bottom=.105, hspace=.53, wspace=.25 if tokens else .35)
     for i, (benchmark, (title, _)) in enumerate(BENCHMARKS.items()):
-        rows = sorted((p for p in plotted if p['benchmark'] == benchmark), key=lambda p: METHODS.index(p['method']))
+        rows = sorted((p for p in plotted if p['benchmark'] == benchmark), key=lambda p: ALL_METHODS.index(p['method']))
         rates = [100*p['success_rate'] for p in rows]
         low = max(0, 5*math.floor((min(rates)-1)/5))
         high = min(100, 5*math.ceil((max(rates)+1)/5))
@@ -283,24 +348,28 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
                       markerfacecolor=STYLES[m][2] if STYLES[m][3] else 'white', markeredgewidth=.9,
                       markersize=4.8, label=STYLES[m][0]) for m in methods]
     side = .807 if projected is not None else .785
-    fig.legend(handles=handles, loc='center left', bbox_to_anchor=(side, .55), frameon=False,
-               fontsize=7.2, handletextpad=.3, labelspacing=.75, borderaxespad=0)
+    fig.legend(handles=handles, loc='center left', bbox_to_anchor=(side, .62 if extended else .55), frameon=False,
+               fontsize=6.6 if extended else 7.2, handletextpad=.3, labelspacing=.65 if extended else .75, borderaxespad=0)
     note = 'Terra judged\nValid-task means\nSingle-call token caps\n1× = 12,288 tokens' + ('\nOutput includes reasoning' if tokens else '\nCaps ≠ actual usage')
     if data['profile'] == 'completed-step-sweep':
         note += '\n30 steps; open circle = 60'
+    if extended:
+        note += '\nOpen circles: 60 / 120 steps\nOtherwise: 30 steps\nOwn valid subsets differ'
     if projected is not None:
         rate = browser_projection['price_assumption']['browser_usd_per_hour']
         note += '\nHosting projection only\n$' + rate + '/h; minute-rounded\nTraffic excluded'
-    fig.text(side if projected is not None else .79, .26 if projected is not None and data['profile'] == 'completed-step-sweep' else .245 if projected is not None else .20,
+    fig.text(side if projected is not None else .79, .26 if projected is not None and data['profile'] == 'completed-step-sweep' else .245 if projected is not None else .27 if extended else .20,
              note, fontsize=6.5 if projected is not None else 6.8, color='#555555', va='top')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
         output = output_dir / f'{stem}.{extension}'
         fig.savefig(output, dpi=300, metadata=metadata)
-        if extension == 'svg' and not tokens:
+        if extension == 'svg':
             output.write_text('\n'.join(line.rstrip() for line in output.read_text().splitlines())+'\n')
     plt.close(fig)
     fields = ['benchmark', 'method', 'requested', 'recorded', 'valid', 'invalid', 'successes', 'success_rate']
+    if extended:
+        fields += ['native_saved', 'claimed_missing_native', 'administrative_missing_native', 'unclaimed']
     fields += [f'{name}_{key}' for name in METRICS for key in ('mean', 'observed_tasks', 'missing_valid_tasks')]
     if projected is not None:
         fields += [f'projected_browser_hosting_usd_{key}' for key in ('mean', 'observed_tasks', 'missing_valid_tasks')]
@@ -309,12 +378,15 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
         writer.writeheader()
         for p in plotted:
             row = {k: p[k] for k in fields[:8]}
+            if extended:
+                row.update(native_saved=p.get('native_saved',p['recorded']), claimed_missing_native=p.get('claimed_missing_native',0), administrative_missing_native=p.get('administrative_missing_native',0), unclaimed=p.get('unclaimed',0))
             row.update({f'{name}_{key}': value for name, metric in p['metrics'].items() for key, value in metric.items()})
             if projected is not None:
                 row.update({f'projected_browser_hosting_usd_{key}': value
                             for key, value in projected[(p['benchmark'], p['method'])].items()})
             writer.writerow(row)
     return {'schema': 'browsercode-scaling-render-v2', 'profile': data['profile'], 'points': len(plotted), 'selected_methods': list(selected),
+            'preview_only': False, 'publication_held': False,
             'dimensions_inches': list(dimensions), 'token_figure': tokens, 'columns': list(columns),
             'browser_hosting_projection': None if projected is None else {
                 'actual_cloud_billing': False, 'traffic_included': False,
@@ -336,9 +408,10 @@ def main():
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--stem', default='browsercode_scaling')
     parser.add_argument('--tokens', action='store_true')
+    parser.add_argument('--preview', action='store_true', help='Compatibility flag for earlier unpublished previews')
     parser.add_argument('--browser-cost-projection', type=Path,
                         help='Add separately labelled hosting-only projection as a fourth main column')
-    parser.add_argument('--token-method', action='append', choices=METHODS, help='Explicit token-only subset; repeat per method. Omitted-method coverage is exported in provenance.')
+    parser.add_argument('--token-method', action='append', choices=ALL_METHODS, help='Explicit token-only subset; repeat per method. Omitted-method coverage is exported in provenance.')
     args = parser.parse_args()
     need(args.stem and Path(args.stem).name == args.stem and args.stem not in ('.', '..'), 'Output stem must be a filename')
     raw = args.aggregate.read_bytes()
@@ -350,7 +423,7 @@ def main():
         need(projection.get('actor_plot_aggregate_sha256') == hashlib.sha256(raw).hexdigest(),
              'Browser-cost projection is not bound to this exact actor aggregate')
     result = render(data, args.output_dir, args.stem, tokens=args.tokens,
-                    token_methods=args.token_method, browser_projection=projection)
+                    token_methods=args.token_method, browser_projection=projection, preview=args.preview)
     if projection is not None:
         result['browser_cost_projection_input_sha256'] = hashlib.sha256(projection_raw).hexdigest()
         result['browser_cost_calculator_sha256'] = hashlib.sha256(Path(__file__).with_name('project_browser_cost.py').read_bytes()).hexdigest()

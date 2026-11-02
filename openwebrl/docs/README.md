@@ -4,11 +4,11 @@
 
 [Inference-scaling optimization vs static N5: cached selector keeps N5 success at 59% of cost; agreement and self-requested gates lose 2–4 pp; phase-3 selector skip and N3 for latency (interim)](ARM_INFERENCE_SCALING_OPTIMIZATION.md#adaptive-compute-20261101).
 
-[Completed BrowserCode inference scaling: eight Terra-judged methods on three benchmarks; 60-decision Luna high leads the observed single-call results, with cost, browser-code batches, per-task latency, actual-token figures and paired intervals](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Measured browser hosting/traffic costs from the paired OM2W US-stealth pilot](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
+[Completed local BrowserCode inference scaling: eleven Terra-judged methods on three benchmarks; single120 and N5/60 show benchmark-dependent gains, with native/missing coverage, valid-task cost, batches, latency and actual tokens](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Measured browser hosting/traffic costs from the paired OM2W US-stealth pilot](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
 
-[Prospective Luna high single at 120 decisions: original 12,288-token ceiling and 900-second deadline, with explicit advertised-limit comparability](API_EXPERIMENT_METHODS.md#luna-single-120-decisions).
+[Completed Luna high single at 120 decisions: original 12,288-token ceiling and 900-second deadline, with explicit advertised-limit comparability](API_EXPERIMENT_METHODS.md#luna-single-120-decisions).
 
-[Prospective Luna selection scaling: N2 high at 30 decisions and N5 high at 60 decisions, with the original 12,288-token cap and shared Terra judge](API_EXPERIMENT_METHODS.md#luna-selection-decision-limits).
+[Completed Luna selection scaling: N2 high at 30 decisions and N5 high at 60 decisions, with the original 12,288-token cap, shared Terra judge and preserved missing outcomes](API_EXPERIMENT_METHODS.md#luna-selection-decision-limits).
 
 [Prospective full-300 OM2W US-residential BrowserCode comparison: fresh Luna high Single/N5 pairs, Terra judging and separate measured browser/proxy accounting](API_EXPERIMENT_METHODS.md#us-stealth-full300).
 

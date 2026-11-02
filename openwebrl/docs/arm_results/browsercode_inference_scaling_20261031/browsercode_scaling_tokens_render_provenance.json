@@ -1,14 +1,17 @@
 {
   "schema": "browsercode-scaling-render-v2",
-  "profile": "completed-step-sweep",
-  "points": 15,
+  "profile": "qualified-decision-sweep",
+  "points": 18,
   "selected_methods": [
     "luna_single_high",
     "luna_single_xhigh_12288",
     "luna_single_high_24576",
     "luna_single_high_6144",
-    "luna_single_high_60steps"
+    "luna_single_high_60steps",
+    "luna_single_high_120steps"
   ],
+  "preview_only": false,
+  "publication_held": false,
   "dimensions_inches": [
     7,
     4.35
@@ -83,15 +86,57 @@
       "valid": 148,
       "output_observed_tasks": 0,
       "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "parallel2_select_high",
+      "valid": 264,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "parallel2_select_high",
+      "valid": 580,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "parallel2_select_high",
+      "valid": 148,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "parallel5_select_high_60steps",
+      "valid": 258,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "parallel5_select_high_60steps",
+      "valid": 544,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "parallel5_select_high_60steps",
+      "valid": 143,
+      "output_observed_tasks": 0,
+      "reasoning_observed_tasks": 0
     }
   ],
-  "input_sha256": "5ff6bfa7b1ff4aaa62275469000ccc681be8ae4cb76da5056a680a01dfe6cfe5",
-  "renderer_sha256": "dd58021b9301f6039caba89d793ae1642dd733f9e253800212890bb9f5d7633e",
+  "input_sha256": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
+  "renderer_sha256": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "510f6157cff911625748300f529d7fbcc5ed40d2aa025709e0d4c4fe18280b45",
-    ".svg": "603a31713bb30b9d1506b33e0fc43a795e48c4b33370eb44cc8cce698ed11038",
-    ".pdf": "508d26be3bd0b0e0835224fe46f7e2b4bb5f82db3b7d13b54736c21074a3f92b",
-    "_coordinates.csv": "9495f573bd9f9c5aaf001461c9a4b53d77242f5e22c8c3b5a547e15100710578"
+    ".png": "2ace197219209e5bb0a0ef947d8ecb9bad41e6b105665bf4aca91ec62356f518",
+    ".svg": "df8f90422963216237b656cd61ec1aaaec473ebc54db46e330f3840f092beaf9",
+    ".pdf": "a296bc6ed4c23e09d37d63aba84ffab12d102062997d77ebd94e1aea67e17699",
+    "_coordinates.csv": "1df563289e89838bccfb12cb17415ffa1f58899f49493abae650ee984cc97b65"
   }
 }

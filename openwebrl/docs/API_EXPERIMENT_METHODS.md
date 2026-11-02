@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-The completed [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows eight methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. Luna high single with 60 decisions and the original 12,288-token ceiling has the strongest observed single-call success on all three benchmarks; all three paired 95% intervals against historical 30-decision high/1× are positive. Live windows and validity cohorts differ, so these comparisons remain descriptive. The xhigh/1×, high/2× and high/0.5× token/effort variants show no consistent gain over high/1×. Actual tokens, cost, selected browser-code batches and per-task latency accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) remains a separate historical view with explicit endpoint-evidence exclusions. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
+The completed local-browser [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows eleven methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. Higher decision limits give mixed results: single120 has the strongest observed single-call valid-only success on WebVoyager/DeepShop, while single60 is higher on OM2W. N5/60 has the highest observed WebVoyager rate among the plotted methods. These are descriptive comparisons across live windows, runtime safeguards and different valid-task subsets. Historical single60 enforced 60 decisions but advertised 30 in its prompt; single120 enforces and advertises 120. The xhigh/1×, high/2× and high/0.5× token/effort variants show no consistent gain over high/1×. Actual tokens, cost, selected browser-code batches and per-task latency accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031), [lower-effort supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views) and [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300) remain separate historical views.
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -107,7 +107,7 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 The run command prints a read-only plan. The actual agent limit, model decision guard, saved identity and tracking all use 60. The actor-loop wall deadline stays **900 seconds**: episodes may time out before reaching the larger limit. Report timeouts, reached decision limits, actual decisions, output/reasoning usage, valid/planned counts and paired common-valid success alongside cost and latency. The shared Terra protocol and disabled automatic provider retries remain unchanged. A full campaign needs separate explicit compute/API caps; the example does not allocate cluster resources.
 
 <a id="luna-single-120-decisions"></a>
-### Prospective Luna high single at 120 decisions
+### Luna high single at 120 decisions
 
 This setting keeps **high reasoning, 12,288 output tokens per generation, the 900-second actor-loop deadline and Terra medium/4,096/seed 42**. Both the actual model/agent ceiling and the advertised prompt limit become **120 decisions**. The completed 60-step cohort enforced 60 while retaining the historical prompt wording of 30; comparing it with this new setting therefore changes both the enforced and advertised limits. Preserve that distinction alongside live collection dates and validity cohorts.
 
@@ -124,12 +124,12 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
   --model-usd 4 --judge-usd 3 --model-calls 240 --judge-calls 1 --browser-starts 2
 ```
 
-The run command is a read-only plan until `--execute` is added. The generated runtime contains the same pinned 1,045 tasks across OM2W, WebVoyager and DeepShop. Setup binds the 120-step instruction, model guard, agent ceiling, identity and tracking to a new source-bound receipt; archived 30/60-step settings are retained. A task may finish or hit the unchanged 900-second deadline before 120 decisions. This recipe prepares a new experiment and does not imply completed results.
+The run command is a read-only plan until `--execute` is added. The generated runtime contains the same pinned 1,045 tasks across OM2W, WebVoyager and DeepShop. Setup binds the 120-step instruction, model guard, agent ceiling, identity and tracking to a new source-bound receipt; archived 30/60-step settings are retained. A task may finish or hit the unchanged 900-second deadline before 120 decisions. The qualified cohort records 1,045 native outcomes (946 valid, 99 invalid); the [per-benchmark results](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) keep native counts and valid-only metric populations explicit. This recipe prepares an independent reproduction of that setting.
 
 <a id="luna-selection-decision-limits"></a>
 ### Luna N2/30 and N5/60 selection experiments
 
-These prospective settings use Luna high for both proposals and selection, with a **12,288-output-token ceiling per generation** and the same **900-second actor-loop deadline**. N2 retains the default 30-decision horizon; N5 permits 60. Candidate generations run concurrently from identical observed history, followed by one selector call. Only the chosen action executes and enters subsequent history. The cap applies independently to every candidate and selector; it is not a total token allowance per decision or task.
+These completed settings use Luna high for both proposals and selection, with a **12,288-output-token ceiling per generation** and the same **900-second actor-loop deadline**. N2 retains the default 30-decision horizon; N5 permits 60. Candidate generations run concurrently from identical observed history, followed by one selector call. Only the chosen action executes and enters subsequent history. The cap applies independently to every candidate and selector; it is not a total token allowance per decision or task.
 
 | Setting | Candidates / decision | Selector calls / decision | Max decisions | Arm |
 |---|---:|---:|---:|---|
@@ -158,7 +158,7 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
   --model-usd 5 --judge-usd 1 --model-calls 720 --judge-calls 1 --browser-starts 2
 ```
 
-The run commands print plans; add `--execute` for paid collection within their explicit caps. Model-call caps include proposals, selectors and native input counters. For a full benchmark, select its 300/595/150-task limit and budget it separately. The source-bound selection receipt retains the original model, worker and judge files, and validates the generated task roster, prompt, actual model guard, agent limit, raw model payloads and Terra protocol before execution. Archived experiments remain unchanged. Report success over planned tasks and valid-only success with counts, common-valid paired comparisons, actual tokens, model cost, browser-code batches and **elapsed actor latency per task**. Parallel API durations are not summed into actor latency. These recipes prepare new experiments and do not imply completed results.
+The run commands print plans; add `--execute` for paid collection within their explicit caps. Model-call caps include proposals, selectors and native input counters. For a full benchmark, select its 300/595/150-task limit and budget it separately. The source-bound selection receipt retains the original model, worker and judge files, and validates the generated task roster, prompt, actual model guard, agent limit, raw model payloads and Terra protocol before execution. Archived experiments remain unchanged. Report success over planned tasks and valid-only success with counts, common-valid paired comparisons, actual tokens, model cost, browser-code batches and **elapsed actor latency per task**. Parallel API durations are not summed into actor latency. The qualified N2/30 and N5/60 cohorts each retain 1,044 native results and one original missing outcome: administrative missing on DeepShop for N2, and claimed-missing on OM2W for N5/60. Missing outcomes are not imputed as failures or retried. Their overall confirmed-success rates use the original planned denominators and remain lower bounds in those cells; the [main figure](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) uses each method's own valid tasks. These recipes prepare independent reproductions.
 
 <a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
@@ -303,7 +303,7 @@ Each execution approval must bind the printed shard's `plan_sha256`, exact `glob
 
 ### Recreate the completed scaling figures
 
-The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, the 60-decision setting and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
+The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, single60, single120, N2/30, N5/60 and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
 
 ```bash
 "$API_PY" -m pip install matplotlib==3.9.4
@@ -317,10 +317,10 @@ SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_2026103
   --stem browsercode_scaling_tokens --tokens \
   --token-method luna_single_high --token-method luna_single_xhigh_12288 \
   --token-method luna_single_high_24576 --token-method luna_single_high_6144 \
-  --token-method luna_single_high_60steps
+  --token-method luna_single_high_60steps --token-method luna_single_high_120steps
 ```
 
-The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Latency is elapsed actor-loop time per task, averaged over valid tasks including failures. Projected hosting is omitted from the paper figures; measured browser usage is reported separately in the [US-residential pilot](#measured-us-residential-pilot). A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the five Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
+The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Latency is elapsed actor-loop time per task, averaged over valid tasks including failures. Projected hosting is omitted from the paper figures; measured browser usage is reported separately in the [US-residential pilot](#measured-us-residential-pilot). A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the six Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
 
 ### Compare fresh runs
 
