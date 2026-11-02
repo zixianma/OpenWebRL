@@ -2,6 +2,8 @@
 
 [BrowserCode API experiments: simplified setup, bounded evaluation, protocols, code map and qualified results](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
 
+[Inference-scaling optimization vs static N5: cached selector keeps N5 success at 59% of cost; agreement and self-requested gates lose 2–4 pp; phase-3 selector skip and N3 for latency (interim)](ARM_INFERENCE_SCALING_OPTIMIZATION.md#adaptive-compute-20261101).
+
 [Completed BrowserCode inference scaling: eight Terra-judged methods on three benchmarks; 60-decision Luna high leads the observed single-call results, with cost, browser-code batches, per-task latency, actual-token figures and paired intervals](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Measured browser hosting/traffic costs from the paired OM2W US-stealth pilot](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
 
 [Prospective Luna high single at 120 decisions: original 12,288-token ceiling and 900-second deadline, with explicit advertised-limit comparability](API_EXPERIMENT_METHODS.md#luna-single-120-decisions).

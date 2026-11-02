@@ -14,6 +14,10 @@
       "title": "ARM inference-time scaling: actors and selectors",
       "sources": []
     },
+    "ARM_INFERENCE_SCALING_OPTIMIZATION.md": {
+      "title": "ARM inference-scaling optimization: beating static N5 on cost, latency and success",
+      "sources": []
+    },
     "ARM_INFERENCE.md": {
       "title": "ARM inference and judge protocol",
       "sources": [
