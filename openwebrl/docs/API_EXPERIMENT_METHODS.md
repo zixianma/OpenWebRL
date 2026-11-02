@@ -274,6 +274,33 @@ Before paid collection, freeze and explicitly approve exact session/compute/mode
 
 </details>
 
+<a id="us-stealth-full300"></a>
+### Prospective full-300 US-residential comparison
+
+The [full-study owner](../api_experiments/reproduce/stealth_study.py) prepares **300 fresh OM2W task pairs: Luna high single versus Luna high N5**. The completed 20-task pilot remains separate. Both methods retain BrowserCode, US residential routing, high reasoning, 12,288 tokens per generation, 30 decisions, a 900-second actor loop and Terra medium/4,096/seed 42. N5 proposals run concurrently; only the selected action executes.
+
+<details>
+<summary>Full-study reproduction and spending controls</summary>
+
+Prepare a new cloud-marked runtime with the setup and cloud-adapter steps above, then print two read-only plans:
+
+```bash
+python3.12 -B -m openwebrl.api_experiments.reproduce.stealth_study \
+  --runtime "$STEALTH_WORK/runtime" --output "$STEALTH_WORK/full300-results" --shard 0
+python3.12 -B -m openwebrl.api_experiments.reproduce.stealth_study \
+  --runtime "$STEALTH_WORK/runtime" --output "$STEALTH_WORK/full300-results" --shard 1
+```
+
+Each shard contains 150 disjoint tasks and runs both methods contemporaneously, alternating their worker assignment. The union is the pinned full 300-task roster. At most four browsers and twelve actor HTTP calls run concurrently. Every previous pair must have stopped browsers and known provider fees rechecked at least 90 seconds after stop before its shard admits another pair. The source-bound Playwright lifecycle adapter closes temporary connections even when page setup fails; the failed task remains invalid.
+
+The fixed preparation requests **$60 in hard model/judge caps**: $8 single actors, $36 N5 actors and $16 Terra. The shared provider pool stops new pairs at $80 of conservative observed browser/proxy charges and requests shutdown at a **$90 operational target**; the inherited per-session proxy watchdog remains $10. These provider thresholds can be exceeded by in-flight or delayed charges and require explicit overshoot approval. Final reported costs use latest native provider receipts, with hosting and proxy traffic separate from model/judge costs.
+
+The maximum is 600 actor sessions plus eight mechanical-probe credits: four initial probes and four reserved for bounded recovery. Physical limits are 126,000 actor/input-counter calls and 600 first Terra attempts. Each paired shard requests 2 CPUs, 16 GiB, zero GPUs and at most 16 all-attempt allocation hours: 64 CPU-hours total. The shared collection calendar is seven days from the earliest actual allocation start. Waiting in the scheduler does not consume allocation hours. Keep every attempt's time and charges; recovery covers only genuinely unclaimed tasks without resetting limits.
+
+Each execution approval must bind the printed shard's `plan_sha256`, exact `global_limits` and `local_limits`, with `approved` and `proxy_overshoot_authorized` true. Only then add `--execute --approval /path/to/approval.json --env-file /path/to/private.env` inside the approved CPU-only Slurm allocation. Plans and provider/task payloads stay local. Preparation alone starts no browser, model call or job and asserts no completed full-300 results.
+
+</details>
+
 ### Recreate the completed scaling figures
 
 The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, the 60-decision setting and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
