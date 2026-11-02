@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Equal-weight benchmark averages from public BrowserCode scaling aggregates.
+"""Benchmark averages from public BrowserCode scaling aggregates.
 
 Average the three valid-task success rates and the three within-benchmark actor
-means separately. Benchmarks each receive weight 1/3, regardless of task count.
+means separately. Use equal weights or fixed original benchmark task counts.
 No task pooling, confidence intervals, runtime imports or paid calls.
 """
 from __future__ import annotations
@@ -24,10 +24,13 @@ SPEC.loader.exec_module(SCALING)
 METRICS = ('actor_usd', 'browser_commands', 'actor_seconds')
 
 
-def average(data):
+def average(data, weighting='equal'):
     SCALING.validate(data)
+    SCALING.need(weighting in ('equal', 'task-count'), 'Unknown benchmark weighting')
     methods = SCALING.profile_methods(data['profile'])
     benchmarks = tuple(SCALING.BENCHMARKS)
+    weights = [1 if weighting == 'equal' else SCALING.BENCHMARKS[b][1] for b in benchmarks]
+    total_weight = sum(weights)
     lookup = {(p['benchmark'], p['method']): p for p in data['points']}
     result = []
     for method in methods:
@@ -41,8 +44,8 @@ def average(data):
         result.append({
             'method': method,
             'benchmark_count': len(benchmarks),
-            'success_rate': math.fsum(p['successes'] / p['valid'] for p in cells) / len(cells),
-            'metrics': {name: math.fsum(p['metrics'][name]['mean'] for p in cells) / len(cells)
+            'success_rate': math.fsum(w * p['successes'] / p['valid'] for w, p in zip(weights, cells)) / total_weight,
+            'metrics': {name: math.fsum(w * p['metrics'][name]['mean'] for w, p in zip(weights, cells)) / total_weight
                         for name in METRICS},
             'benchmark_counts': {b: {
                 'requested': p['requested'], 'native_saved': p.get('native_saved', p['recorded']),
@@ -51,12 +54,12 @@ def average(data):
             } for b, p in zip(benchmarks, cells)},
         })
     return {
-        'schema': 'browsercode-equal-benchmark-average-v1',
+        'schema': 'browsercode-equal-benchmark-average-v1' if weighting == 'equal' else 'browsercode-task-weighted-benchmark-average-v1',
         'judge_protocol': data['judge_protocol'],
         'harness': 'browsercode_local',
-        'benchmark_weights': {b: '1/3' for b in benchmarks},
-        'success_definition': 'Arithmetic mean of the three successes/native-valid rates; not pooled task success.',
-        'actor_metric_definition': 'Arithmetic mean of the three within-benchmark valid-task means, including valid failures and excluding Terra.',
+        'benchmark_weights': {b: f'{w}/{total_weight}' for b, w in zip(benchmarks, weights)},
+        'success_definition': 'Arithmetic mean of the three successes/native-valid rates; not pooled task success.' if weighting == 'equal' else 'Fixed planned-task-count-weighted mean of the three successes/native-valid rates; not pooled native-valid task success. The same 300/595/150 weights apply to every method.',
+        'actor_metric_definition': 'Arithmetic mean of the three within-benchmark valid-task means, including valid failures and excluding Terra.' if weighting == 'equal' else 'Fixed planned-task-count-weighted mean of the three within-benchmark valid-task means, including valid failures and excluding Terra; weights are 300/1045, 595/1045 and 150/1045 for every method.',
         'comparison_caveat': data['comparison_caveat'],
         'missing_outcomes': 'Never imputed; native, valid, invalid and missing counts remain separate for each benchmark.',
         'uncertainty': 'No interval inferred from aggregate means; no matched common-valid effect claimed.',
@@ -77,7 +80,9 @@ def render(data, output_dir, stem):
                          'pdf.fonttype': 42, 'svg.hashsalt': 'browsercode-benchmark-average-v1'})
     fig, axes = plt.subplots(1, 3, figsize=(7, 2.55), sharey=True)
     fig.subplots_adjust(left=.075, right=.755, top=.83, bottom=.25, wspace=.35)
-    fig.suptitle('Equal-weight average: OM2W · WebVoyager · DeepShop',
+    weighted = data['schema'] == 'browsercode-task-weighted-benchmark-average-v1'
+    title = 'Task-weighted average' if weighted else 'Equal-weight average'
+    fig.suptitle(title + ': OM2W · WebVoyager · DeepShop',
                  x=.075, y=.98, ha='left', fontsize=9)
     labels = ('Mean actor cost ($, log)', 'Mean browser-code batches', 'Mean actor latency (s)')
     rates = [100 * p['success_rate'] for p in data['points']]
@@ -110,7 +115,8 @@ def render(data, output_dir, stem):
                       label=SCALING.STYLES[p['method']][0]) for p in data['points']]
     fig.legend(handles=handles, loc='center left', bbox_to_anchor=(.777, .55),
                frameon=False, fontsize=6.6, handletextpad=.3, labelspacing=.65, borderaxespad=0)
-    fig.text(.075, .045, 'Each benchmark: 1/3 weight · Terra judged · Own valid subsets differ',
+    note = 'Weights: 300/595/150 planned tasks · Terra judged · Own valid subsets differ' if weighted else 'Each benchmark: 1/3 weight · Terra judged · Own valid subsets differ'
+    fig.text(.075, .045, note,
              fontsize=7, color='#555555')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
@@ -138,12 +144,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--aggregate', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True)
-    parser.add_argument('--stem', default='browsercode_scaling_average')
+    parser.add_argument('--weighting', choices=('equal', 'task-count'), default='equal',
+                        help='Equal benchmark weights, or fixed original task counts 300/595/150')
+    parser.add_argument('--stem', help='Default: browsercode_scaling_average, or browsercode_scaling_weighted_average for task-count weighting')
     args = parser.parse_args()
+    if args.stem is None:
+        args.stem = 'browsercode_scaling_average' if args.weighting == 'equal' else 'browsercode_scaling_weighted_average'
     SCALING.need(args.stem and Path(args.stem).name == args.stem and args.stem not in ('.', '..'),
                  'Output stem must be a filename')
     raw = args.aggregate.read_bytes()
-    data = average(json.loads(raw))
+    data = average(json.loads(raw), args.weighting)
     render(data, args.output_dir, args.stem)
     extensions = ('.png', '.svg', '.pdf', '.json', '_coordinates.csv')
     provenance = {

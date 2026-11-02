@@ -1,0 +1,419 @@
+{
+  "schema": "browsercode-task-weighted-benchmark-average-v1",
+  "judge_protocol": {
+    "max_completion_tokens": 4096,
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium",
+    "seed": 42,
+    "version": "gpt56-terra-terminal-success-v1"
+  },
+  "harness": "browsercode_local",
+  "benchmark_weights": {
+    "online_mind2web": "300/1045",
+    "webvoyager": "595/1045",
+    "deepshop": "150/1045"
+  },
+  "success_definition": "Fixed planned-task-count-weighted mean of the three successes/native-valid rates; not pooled native-valid task success. The same 300/595/150 weights apply to every method.",
+  "actor_metric_definition": "Fixed planned-task-count-weighted mean of the three within-benchmark valid-task means, including valid failures and excluding Terra; weights are 300/1045, 595/1045 and 150/1045 for every method.",
+  "comparison_caveat": "Task validity subsets and live collection windows differ; historical-versus-fresh comparisons are descriptive.",
+  "missing_outcomes": "Never imputed; native, valid, invalid and missing counts remain separate for each benchmark.",
+  "uncertainty": "No interval inferred from aggregate means; no matched common-valid effect claimed.",
+  "points": [
+    {
+      "method": "serial_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7847511154755811,
+      "metrics": {
+        "actor_usd": 0.22735903655341408,
+        "browser_commands": 14.910282798402154,
+        "actor_seconds": 101.82500465950359
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 266,
+          "invalid": 34,
+          "successes": 177,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 553,
+          "invalid": 42,
+          "successes": 468,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 145,
+          "invalid": 5,
+          "successes": 113,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7816579211100628,
+      "metrics": {
+        "actor_usd": 0.009176273465871932,
+        "browser_commands": 15.429842302271272,
+        "actor_seconds": 106.46018084312448
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 579,
+          "invalid": 16,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 123,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "parallel3_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8098582002437537,
+      "metrics": {
+        "actor_usd": 0.053124617539409565,
+        "browser_commands": 13.494511658464164,
+        "actor_seconds": 181.2106703206068
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 183,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 568,
+          "invalid": 27,
+          "successes": 496,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 148,
+          "invalid": 2,
+          "successes": 121,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "parallel5_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8255805746555092,
+      "metrics": {
+        "actor_usd": 0.06182612044142442,
+        "browser_commands": 12.90791930271528,
+        "actor_seconds": 197.52002860312137
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 198,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 555,
+          "invalid": 40,
+          "successes": 483,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 120,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_xhigh_12288",
+      "benchmark_count": 3,
+      "success_rate": 0.7798901859791189,
+      "metrics": {
+        "actor_usd": 0.010711101093705934,
+        "browser_commands": 15.921265536313308,
+        "actor_seconds": 126.18804878846825
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 181,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 118,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_24576",
+      "benchmark_count": 3,
+      "success_rate": 0.7903406534985482,
+      "metrics": {
+        "actor_usd": 0.009025923044125465,
+        "browser_commands": 15.651633746370589,
+        "actor_seconds": 114.99494830138731
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 270,
+          "invalid": 30,
+          "successes": 186,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 585,
+          "invalid": 10,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 129,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_6144",
+      "benchmark_count": 3,
+      "success_rate": 0.7822389044712093,
+      "metrics": {
+        "actor_usd": 0.009041284159348588,
+        "browser_commands": 15.757535282678536,
+        "actor_seconds": 113.36554778183466
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 124,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8390829527455339,
+      "metrics": {
+        "actor_usd": 0.01061604419388097,
+        "browser_commands": 16.89553886019279,
+        "actor_seconds": 140.5531147810754
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 584,
+          "invalid": 11,
+          "successes": 510,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 136,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "parallel2_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8066090568977881,
+      "metrics": {
+        "actor_usd": 0.05060397766751955,
+        "browser_commands": 13.854468169028472,
+        "actor_seconds": 181.13395736931727
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 264,
+          "invalid": 36,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 500,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 149,
+          "valid": 148,
+          "invalid": 1,
+          "successes": 126,
+          "missing_native": 1
+        }
+      }
+    },
+    {
+      "method": "parallel5_select_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8704898188214367,
+      "metrics": {
+        "actor_usd": 0.06220770232537726,
+        "browser_commands": 12.524599902851127,
+        "actor_seconds": 183.46062697360546
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 299,
+          "valid": 258,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 1
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 544,
+          "invalid": 51,
+          "successes": 503,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 131,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_120steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8456241418647433,
+      "metrics": {
+        "actor_usd": 0.011703167484418384,
+        "browser_commands": 16.93905875898357,
+        "actor_seconds": 137.48641778234472
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 540,
+          "invalid": 55,
+          "successes": 488,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 137,
+          "missing_native": 0
+        }
+      }
+    }
+  ]
+}

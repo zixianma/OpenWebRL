@@ -17,20 +17,32 @@
 
 ### Equal-weight average across the three benchmarks
 
-![Equal-weight benchmark-average BrowserCode success versus actor cost, browser-code batches and latency](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.png)
-
-*Each benchmark receives weight 1/3: average its own-valid success percentage, and separately average its within-benchmark valid-task actor cost, batches and latency. This gives OM2W, WebVoyager and DeepShop equal influence despite their different sizes; it does not pool tasks. Actor cost excludes Terra. Each method retains its own valid subsets, missing outcomes are not imputed, and live collection windows differ. Historical single60 enforced 60 decisions while advertising 30; single120 enforces and advertises 120. These descriptive macro means do not supply paired effects or confidence intervals.*
-
-N5/60 has the highest macro success at **86.03%**. Single120 averages **84.10%**, versus **83.91%** for single60; this small descriptive difference does not establish an improvement under matched conditions.
+With equal benchmark weights, N5/60 has the highest macro success at **86.03%**. Single120 averages **84.10%**, versus **83.91%** for single60; this small descriptive difference does not establish an improvement under matched conditions.
 
 [Average coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average_coordinates.csv) · [Average PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.pdf) · [Average SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.svg) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_average.py) · [Reproduction command](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
+
+![Equal-weight benchmark-average BrowserCode success versus actor cost, browser-code batches and latency](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.png)
+
+*Each benchmark receives weight 1/3: average its own-valid success percentage, and separately average its within-benchmark valid-task actor cost, batches and latency. This gives OM2W, WebVoyager and DeepShop equal influence despite their different sizes; it does not pool tasks. Actor cost and latency exclude Terra. Each method retains its own valid subsets, missing outcomes are not imputed, and live collection windows differ. Historical single60 enforced 60 decisions while advertising 30; single120 enforces and advertises 120. These descriptive macro means do not supply paired effects or confidence intervals.*
+
+<a id="browsercode-task-weighted-average"></a>
+
+### Average weighted by planned benchmark task counts
+
+![BrowserCode average weighted by planned benchmark task counts](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.png)
+
+*Fixed weights are OM2W 300/1,045, WebVoyager 595/1,045 and DeepShop 150/1,045, matching the planned benchmark mix. Apply these same weights to each benchmark's own-valid success rate and its valid-task actor cost, batches and latency. This is not a pooled native-valid rate: weights stay identical across methods even when valid or missing counts differ. Actor cost and latency exclude Terra; missing outcomes are not imputed. The own-valid, cross-window and single60 prompt-30 versus single120 prompt-120 caveats above still apply; no paired effect or confidence interval is inferred.*
+
+N5/60 has the highest task-weighted success at **87.05%**; single120 averages **84.56%** and single60 **83.91%**.
+
+[Weighted coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average_coordinates.csv) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.pdf) · [Weighted SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.svg) · [Reproduction command](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
 
 <details>
 <summary>Equal-weight benchmark means for all eleven methods</summary>
 
 Counts and missing outcomes remain in the per-benchmark tables below; averaging percentages does not create a pooled count denominator.
 
-| Method | Macro valid-only success | Macro actor $ / task | Macro browser-code batches | Macro latency (s) |
+| Method | Equal-weight valid-only success | Equal-weight actor $ / task | Equal-weight browser-code batches | Equal-weight latency (s) |
 |---|---:|---:|---:|---:|
 | Sol high single | 76.37% | 0.26324 | 16.46 | 112.5 |
 | Luna high · 1× cap | 77.14% | 0.01044 | 16.90 | 116.6 |
