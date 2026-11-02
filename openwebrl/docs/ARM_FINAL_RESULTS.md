@@ -5,7 +5,7 @@
 
 ## BrowserCode: alternative ways to scale inference
 
-**Luna high with 60 decisions has the strongest observed single-call success on all three benchmarks.** The per-call output ceiling stays at 12,288 tokens and the actor alarm at 900 seconds. Compared with historical high/1× at 30 decisions, every common-valid paired success interval is positive. Live collection windows, runtime safeguards and validity cohorts differ; pairing controls task content and does not establish a causal effect of the step limit.
+**Luna high with 60 decisions has the strongest observed single-call success on all three benchmarks.** The per-call output ceiling stays at 12,288 tokens and the actor alarm at 900 seconds. Compared with historical high/1× at 30 decisions, every common-valid paired success interval is positive. Live collection windows, runtime safeguards and validity cohorts differ; pairing controls task content and does not establish a causal effect of the step limit. The 60-step model and agent enforce 60 decisions; their unchanged system prompt still advertises 30, exactly as in the historical 30-step controls.
 
 | Benchmark | Planned / method | 30-step valid | 30-step successes | 60-step valid | 60-step successes | Common-valid pairs | Paired gain (pp; 95% interval) |
 |---|---:|---:|---:|---:|---:|---:|---:|

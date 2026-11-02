@@ -89,7 +89,7 @@ The second command is a read-only plan; add `--execute` to spend within its caps
 <a id="luna-single-decision-limits"></a>
 ### Prospective Luna single decision limit
 
-To isolate a larger action horizon, add `--luna-single-max-decisions 60` with explicit `high` effort and the unchanged 12,288-token output ceiling. The default remains 30. The published 60-decision cohort is complete. Executing this recipe creates a fresh independent reproduction on the same 1,045-task source; it leaves archived runs unchanged.
+To isolate a larger action horizon, add `--luna-single-max-decisions 60` with explicit `high` effort and the unchanged 12,288-token output ceiling. The default remains 30. The published 60-decision cohort is complete. Its enforced limit is 60, while the system prompt retains the historical 30-decision wording; the full BrowserCode system prompt is identical to the 30-step controls. Executing this recipe creates a fresh independent reproduction on the same 1,045-task source; it leaves archived runs unchanged.
 
 ```bash
 python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
@@ -105,6 +105,26 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 ```
 
 The run command prints a read-only plan. The actual agent limit, model decision guard, saved identity and tracking all use 60. The actor-loop wall deadline stays **900 seconds**: episodes may time out before reaching the larger limit. Report timeouts, reached decision limits, actual decisions, output/reasoning usage, valid/planned counts and paired common-valid success alongside cost and latency. The shared Terra protocol and disabled automatic provider retries remain unchanged. A full campaign needs separate explicit compute/API caps; the example does not allocate cluster resources.
+
+<a id="luna-single-120-decisions"></a>
+### Prospective Luna high single at 120 decisions
+
+This setting keeps **high reasoning, 12,288 output tokens per generation, the 900-second actor-loop deadline and Terra medium/4,096/seed 42**. Both the actual model/agent ceiling and the advertised prompt limit become **120 decisions**. The completed 60-step cohort enforced 60 while retaining the historical prompt wording of 30; comparing it with this new setting therefore changes both the enforced and advertised limits. Preserve that distinction alongside live collection dates and validity cohorts.
+
+```bash
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/luna-high-120steps --campaign luna \
+  --dependencies "$API_WORK/dependencies/dependencies.json" \
+  --luna-single-output-tokens 12288 --luna-single-reasoning-effort high \
+  --luna-single-max-decisions 120
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/luna-high-120steps --arm luna_single_high \
+  --benchmark online-mind2web --limit 1 --output /tmp/luna-high-120steps-om-01 \
+  --model-usd 4 --judge-usd 3 --model-calls 240 --judge-calls 1 --browser-starts 2
+```
+
+The run command is a read-only plan until `--execute` is added. The generated runtime contains the same pinned 1,045 tasks across OM2W, WebVoyager and DeepShop. Setup binds the 120-step instruction, model guard, agent ceiling, identity and tracking to a new source-bound receipt; archived 30/60-step settings are retained. A task may finish or hit the unchanged 900-second deadline before 120 decisions. This recipe prepares a new experiment and does not imply completed results.
 
 <a id="luna-selection-decision-limits"></a>
 ### Luna N2/30 and N5/60 selection experiments

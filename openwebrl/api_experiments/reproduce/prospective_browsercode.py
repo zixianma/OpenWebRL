@@ -66,7 +66,7 @@ def task_roster():
 
 
 def adapt_model(text, effort='xhigh', max_decisions=30):
-    need(type(max_decisions) is int and max_decisions in (30, 60), 'choose exactly 30 or 60 decisions')
+    need(type(max_decisions) is int and max_decisions in (30, 60, 120), 'choose exactly 30, 60 or 120 decisions')
     need(effort in EFFORT_ARMS, 'choose high or xhigh reasoning')
     need(hashlib.sha256(text.encode()).hexdigest() == MODEL_SHA, 'archived Luna model source changed')
     head, body = text.split('class LunaModel(OpenAIModel):\n', 1)
@@ -85,13 +85,15 @@ def adapt_model(text, effort='xhigh', max_decisions=30):
         "  need(mode=='" + EFFORT_ARMS[effort] + "' and arm.get('arm')==mode and arm.get('model')==MODEL and arm.get('proposal_count')==1 and arm.get('reasoning_effort')=='" + effort + "' and arm.get('selector_model')is None,'Prospective single effort arm differs')\n"
         "  self.output_token_cap=arm.get('output_tokens');need(type(self.output_token_cap)is int and self.output_token_cap in (6144,12288,24576,49152) and declared.get('protocol',{}).get('max_decisions')==" + str(max_decisions) + ",'Prospective output/turn cap differs')\n"
     )
+    if max_decisions == 120:
+        declaration += "  need(arm.get('output_tokens')==12288 and arm.get('reasoning_effort')=='high' and declared['protocol'].get('prompt_max_decisions')==120,'Single120 requires high12288 and an explicit120 prompt')\n"
     adapted = head + 'class LunaModel(OpenAIModel):\n' + body.replace(anchor, anchor + declaration)
     compile(adapted, '<prospective Luna model>', 'exec')
     return adapted
 
 
 def adapt_worker(text, max_decisions=30):
-    need(type(max_decisions) is int and max_decisions in (30, 60), 'choose exactly 30 or 60 decisions')
+    need(type(max_decisions) is int and max_decisions in (30, 60, 120), 'choose exactly 30, 60 or 120 decisions')
     replacements = {
         'max_output_tokens=12288': "max_output_tokens=next(x['output_tokens']for x in PLAN['arms']if x['arm']==mode)",
         "'max_output_tokens':12288": "'max_output_tokens':next(x['output_tokens']for x in PLAN['arms']if x['arm']==a.arm)",
@@ -116,12 +118,30 @@ def derived_plan(base, cap, tasks_sha, effort='xhigh', max_decisions=30):
     for key in ('same300_tasks_allarms', 'pilot20_tasks_per_arm_included_final', 'historical_high_results_judge'):
         protocol.pop(key, None)
     protocol.update(actor_max_output_tokens=cap, selector_max_output_tokens=None, max_decisions=max_decisions)
+    if max_decisions == 120:
+        protocol['prompt_max_decisions'] = 120
     return {'schema': 'portable-scientific-campaign-v1', 'campaign': 'luna_reasoning_token_sweep',
             'prospective_protocol': SCHEMA, 'protocol': protocol, 'arms': [arm],
             'cells': [{'harness': 'browsercode', 'policy': EFFORT_ARMS[effort]}],
             'benchmark_counts': COUNTS, 'task_manifest_sha256': tasks_sha,
             'task_order': 'original Luna OM2W roster followed by original GPT crossbench roster',
             'output_multiplier': output_multiplier(cap)}
+
+
+def derived_config(base, max_decisions):
+    """Preserve historical30/60 prompts; advertise120 only for the new arm."""
+    config = deepcopy(base)
+    config['prospective_protocol'] = SCHEMA
+    if max_decisions == 120:
+        old = 'Only30 model decisions are available.'
+        need(config['system_templates']['browsercode'].count(old) == 1, 'original decision prompt changed')
+        config['system_templates']['browsercode'] = config['system_templates']['browsercode'].replace(old, 'Only120 model decisions are available.')
+        config['prompt_max_decisions'] = 120
+    return config
+
+
+def validate_single120(cap, effort, max_decisions):
+    need(max_decisions != 120 or (type(cap) is int and cap == 12288 and effort == 'high'), 'single120 requires high reasoning and12288 output tokens')
 
 
 def verify_inventory(runtime, manifest):
@@ -136,7 +156,8 @@ def configure(runtime, cap, effort='xhigh', max_decisions=30):
     need(not runtime.is_relative_to(Path('/gpfs/home/zixianma')), 'home is read-only')
     need(type(cap) is int and cap in CAPS, 'choose exactly 6144, 12288, 24576 or 49152')
     need(effort in EFFORT_ARMS, 'choose high or xhigh reasoning')
-    need(type(max_decisions) is int and max_decisions in (30, 60), 'choose exactly 30 or 60 decisions')
+    need(type(max_decisions) is int and max_decisions in (30, 60, 120), 'choose exactly 30, 60 or 120 decisions')
+    validate_single120(cap, effort, max_decisions)
     need(not (runtime / RECEIPT).exists() and not (runtime / ORIGINALS).exists(), 'already configured')
     need(not any((runtime / name).exists() for name in ('episodes', 'budget', 'orchestration')), 'runtime has execution evidence')
     manifest = read(runtime / 'source-manifest.json')
@@ -162,8 +183,7 @@ def configure(runtime, cap, effort='xhigh', max_decisions=30):
     write(runtime / 'tasks.json', rows)
     plan = derived_plan(base_plan, cap, digest(runtime / 'tasks.json'), effort, max_decisions)
     write(runtime / 'campaign-plan.json', plan)
-    config = deepcopy(base_config)
-    config['prospective_protocol'] = SCHEMA
+    config = derived_config(base_config, max_decisions)
     write(runtime / 'runtime-config.json', config)
     build = read(runtime / 'portable-build.json')
     build['prospective_protocol'] = SCHEMA
@@ -178,6 +198,8 @@ def configure(runtime, cap, effort='xhigh', max_decisions=30):
                'base_inventory_sha256': digest(originals / 'source-manifest.json'),
                'original_sha256': {name: digest(originals / name) for name in CHANGED},
                'generated_sha256': {name: digest(runtime / name) for name in CHANGED}}
+    if max_decisions == 120:
+        receipt['prompt_max_decisions'] = 120
     write(runtime / RECEIPT, receipt)
     for name in (*CHANGED, RECEIPT):
         manifest['source_hashes'][str(runtime / name)] = digest(runtime / name)
@@ -206,9 +228,12 @@ def _validate(runtime):
     cap = receipt.get('output_tokens')
     need(type(cap) is int and cap in CAPS, 'malformed output cap')
     max_decisions = receipt.get('max_decisions')
-    need(type(max_decisions) is int and max_decisions in (30, 60), 'malformed decision cap')
+    need(type(max_decisions) is int and max_decisions in (30, 60, 120), 'malformed decision cap')
     effort = receipt.get('reasoning_effort')
     need(effort in EFFORT_ARMS, 'malformed reasoning effort')
+    validate_single120(cap, effort, max_decisions)
+    if max_decisions == 120:
+        need(type(receipt.get('prompt_max_decisions')) is int and receipt['prompt_max_decisions'] == 120, 'single120 prompt metadata differs')
     originals = runtime / ORIGINALS
     base = read(originals / 'source-manifest.json')
     need(receipt['base_inventory_sha256'] == digest(originals / 'source-manifest.json'), 'base inventory changed')
@@ -225,8 +250,7 @@ def _validate(runtime):
     plan = read(runtime / 'campaign-plan.json')
     need(plan == derived_plan(read(originals / 'campaign-plan.json'), cap, digest(runtime / 'tasks.json'), effort, max_decisions), 'declared plan differs')
     config = read(runtime / 'runtime-config.json')
-    expected_config = read(originals / 'runtime-config.json')
-    expected_config['prospective_protocol'] = SCHEMA
+    expected_config = derived_config(read(originals / 'runtime-config.json'), max_decisions)
     need(config == expected_config, 'scientific configuration differs')
     need(receipt['model_pricing'] == config['model_pricing'] and receipt['judge_protocol'] == config['judge_protocol'], 'pricing/judge binding differs')
     need({key: receipt[key] for key in ('arm', 'model', 'reasoning_effort', 'proposal_count', 'max_decisions', 'output_multiplier', 'benchmark_counts')} ==

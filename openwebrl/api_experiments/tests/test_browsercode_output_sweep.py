@@ -301,7 +301,7 @@ class SweepTests(unittest.TestCase):
         self.assertEqual(Decimal(state['reserved_usd']), (Decimal(1000) * Decimal('.125') + Decimal(12288) * Decimal('.5')) / Decimal(1000000))
 
     def test_invalid_and_unpaired_decision_caps_fail_before_preparation(self):
-        for cap in (True, 0, 31, 120, '60'):
+        for cap in (True, 0, 31, 121, '60'):
             runtime = self.runtime('bad-decisions-' + str(cap))
             with self.subTest(cap=cap), self.assertRaises(ValueError):
                 p.configure(runtime, 12288, 'high', cap)
@@ -317,6 +317,100 @@ class SweepTests(unittest.TestCase):
         p.write(runtime / 'campaign-plan.json', plan)
         with self.assertRaises(ValueError):
             p.validate(runtime)
+
+    def test_single120_binds_actual_guard_agent_prompt_and_all_tracking_limits(self):
+        runtime = self.runtime('single120')
+        receipt = p.configure(runtime, 12288, 'high', 120)
+        args = self.args(runtime, '--limit', '1045')
+        args.arm = 'luna_single_high'
+        result, tasks = c.prepare(args, 'luna')
+        self.assertEqual((result['max_decisions'], result['max_output_tokens'], result['candidate_effort'], len(tasks)), (120, 12288, 'high', 1045))
+        self.assertEqual(receipt['prompt_max_decisions'], 120)
+        config = p.read(runtime / 'runtime-config.json')
+        self.assertEqual(config['prompt_max_decisions'], 120)
+        self.assertIn('Only120 model decisions are available.', config['system_templates']['browsercode'])
+        self.assertNotIn('Only30 model decisions are available.', config['system_templates']['browsercode'])
+        self.assertEqual(config['judge_protocol'], p.read(runtime / 'prospective-originals/runtime-config.json')['judge_protocol'])
+        plan = p.read(runtime / 'campaign-plan.json')
+        self.assertEqual(plan['protocol']['prompt_max_decisions'], 120)
+        source = (runtime / 'worker.py').read_text()
+        tree = ast.parse(source)
+        agent = next(node for node in ast.walk(tree) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == 'DefaultAgent')
+        for keyword, expected in (('step_limit', 120), ('summary_every_n_steps', 0)):
+            value = next(item.value for item in agent.keywords if item.arg == keyword)
+            self.assertEqual(eval(compile(ast.Expression(value), '<actual agent>', 'eval'), {'PLAN': plan}), expected)
+        for key in ('step_cap', 'max_decisions'):
+            values = [value for node in ast.walk(tree) if isinstance(node, ast.Dict) for name, value in zip(node.keys, node.values) if isinstance(name, ast.Constant) and name.value == key]
+            self.assertEqual(len(values), 1)
+            self.assertEqual(eval(compile(ast.Expression(values[0]), '<actual tracking>', 'eval'), {'PLAN': plan}), 120)
+        self.assertIn('signal.alarm(900)', source)
+        self.assertEqual(p.read(runtime / 'tasks.json'), p.task_roster())
+        self.assertFalse((self.root / 'output').exists())
+
+    def test_single120_actual_turn119_allowed_turn120_blocked_without_extra_charge(self):
+        runtime = self.runtime('single120-model')
+        p.configure(runtime, 12288, 'high', 120)
+        actor = self.load_actor(runtime)
+        calls = []
+        def client(payload, role):
+            calls.append((deepcopy(payload), role))
+            return {'id': 'offline-single120', 'model': actor.MODEL, 'status': 'completed', 'reasoning': payload['reasoning'],
+                    'output': [{'type': 'message', 'role': 'assistant', 'content': [{'type': 'output_text', 'text': 'finished'}]}],
+                    'usage': {'input_tokens': 100, 'output_tokens': 20}}
+        pool = budget_module.ReservationBudget(self.root / 'single120-pool', '1', 3)
+        model = actor.LunaModel('luna_single_high', self.root / 'single120-episode', client, pool, actor.PRICING, max_output_tokens=12288, reasoning_effort='high')
+        model.turn = 119
+        model.query([{'role': 'user', 'content': 'observed'}])
+        self.assertEqual(model.turn, 120)
+        with self.assertRaisesRegex(ValueError, 'decision cap'):
+            model.query([{'role': 'user', 'content': 'observed'}])
+        self.assertEqual(len(calls), 1)
+        self.assertEqual((calls[0][0]['max_output_tokens'], calls[0][0]['reasoning'], calls[0][1]), (12288, {'effort': 'high'}, 'candidate_0'))
+        self.assertEqual(pool.snapshot()['calls'], 1)
+        state = next(iter(pool.snapshot()['requests'].values()))
+        self.assertEqual(Decimal(state['reserved_usd']), (Decimal(1000) * Decimal('.125') + Decimal(12288) * Decimal('.5')) / Decimal(1000000))
+        self.assertEqual(p.read(model.directory / 'decisions/119.json')['candidate_count'], 1)
+        with self.assertRaises(ValueError):
+            actor.LunaModel('luna_single_high', self.root / 'bad120', client, pool, actor.PRICING, max_output_tokens=24576, reasoning_effort='high')
+        self.assertEqual(pool.snapshot()['calls'], 1)
+
+    def test_single120_malformed_scope_unpaired_flags_and_rehashed_prompt_drift_reject(self):
+        for cap, effort in ((24576, 'high'), (12288, 'xhigh'), (True, 'high')):
+            runtime = self.runtime('bad120-' + str(cap) + effort)
+            with self.assertRaises(ValueError):
+                p.configure(runtime, cap, effort, 120)
+            self.assertFalse((runtime / p.ORIGINALS).exists())
+        for flags in ([], ['--luna-single-output-tokens', '12288'], ['--luna-single-reasoning-effort', 'high'], ['--luna-single-output-tokens', '24576', '--luna-single-reasoning-effort', 'high'], ['--luna-single-output-tokens', '12288', '--luna-single-reasoning-effort', 'xhigh']):
+            args = b.parser().parse_args(['setup', '--campaign', 'luna', '--workspace', str(self.root / 'unpaired120'), '--luna-single-max-decisions', '120', *flags])
+            with self.subTest(flags=flags), patch.object(b, 'call', side_effect=AssertionError('no setup work')), self.assertRaises(ValueError):
+                b.setup(args)
+        runtime = self.runtime('tampered120')
+        p.configure(runtime, 12288, 'high', 120)
+        config = p.read(runtime / 'runtime-config.json')
+        config['system_templates']['browsercode'] = config['system_templates']['browsercode'].replace('Only120', 'Only30')
+        p.write(runtime / 'runtime-config.json', config)
+        manifest = p.read(runtime / 'source-manifest.json')
+        manifest['source_hashes'][str(runtime / 'runtime-config.json')] = p.digest(runtime / 'runtime-config.json')
+        p.write(runtime / 'source-manifest.json', manifest)
+        p.write(runtime / 'execution-source-manifest.json', manifest)
+        with self.assertRaises(ValueError):
+            p.validate(runtime)
+
+    def test_single120_preserves_historical30_and60_generated_models_and_prompts(self):
+        import hashlib
+        model = (API / 'browsercode/models/luna_model.py').read_text()
+        golden = {30: '604eabcde0ee7d87df3c936d493bfd38fe2e428506148fd2312716fe42b29eca',
+                  60: 'cc1a80a73f25b60e452877fe562a1d212ab7b9532724c51b01891e790e012abe'}
+        for decisions in (30, 60):
+            self.assertEqual(hashlib.sha256(p.adapt_model(model, 'high', decisions).encode()).hexdigest(), golden[decisions])
+            runtime = self.runtime('historical-' + str(decisions))
+            p.configure(runtime, 12288, 'high', decisions)
+            original = p.read(runtime / 'prospective-originals/runtime-config.json')
+            expected = deepcopy(original)
+            expected['prospective_protocol'] = p.SCHEMA
+            self.assertEqual(p.read(runtime / 'runtime-config.json'), expected)
+            self.assertIn('Only30 model decisions are available.', expected['system_templates']['browsercode'])
+            self.assertNotIn('prompt_max_decisions', p.read(runtime / p.RECEIPT))
 
     def test_original_actor_still_rejects_higher_cap_before_provider(self):
         runtime = self.runtime()

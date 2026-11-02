@@ -4,6 +4,8 @@
 
 [Completed BrowserCode inference scaling: eight Terra-judged methods on three benchmarks; 60-decision Luna high leads the observed single-call results, with cost, browser-code batches, per-task latency, actual-token figures and paired intervals](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Measured browser hosting/traffic costs from the paired OM2W US-stealth pilot](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
 
+[Prospective Luna high single at 120 decisions: original 12,288-token ceiling and 900-second deadline, with explicit advertised-limit comparability](API_EXPERIMENT_METHODS.md#luna-single-120-decisions).
+
 [Prospective Luna selection scaling: N2 high at 30 decisions and N5 high at 60 decisions, with the original 12,288-token cap and shared Terra judge](API_EXPERIMENT_METHODS.md#luna-selection-decision-limits).
 
 [Luna BrowserCode lower-effort supporting results: prescribed retries, provisional success and cumulative cost/latency coverage](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views).

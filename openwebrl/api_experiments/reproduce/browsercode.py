@@ -165,7 +165,7 @@ def setup(args):
     effort = getattr(args, 'luna_single_reasoning_effort', None)
     max_decisions = getattr(args, 'luna_single_max_decisions', 30)
     if max_decisions != 30 and (generic_cap is None or effort is None):
-        raise ValueError('--luna-single-max-decisions 60 requires explicit --luna-single-output-tokens and --luna-single-reasoning-effort')
+        raise ValueError('--luna-single-max-decisions above30 requires explicit --luna-single-output-tokens and --luna-single-reasoning-effort')
     if legacy_cap is not None and generic_cap is not None:
         raise ValueError('Choose one Luna output-cap flag')
     if legacy_cap is not None and effort not in (None, 'xhigh'):
@@ -174,6 +174,8 @@ def setup(args):
     if effort is not None and cap is None:
         raise ValueError('--luna-single-reasoning-effort requires an explicit output-cap flag')
     effort = effort or 'xhigh'
+    if max_decisions == 120 and (cap != 12288 or effort != 'high'):
+        raise ValueError('Single120 requires explicit high reasoning and12288 output tokens')
     if cap is not None and args.campaign != 'browsercode_luna_effort':
         raise ValueError('A Luna output override requires --campaign luna')
     candidates = getattr(args, 'luna_selection_candidates', None)
@@ -279,7 +281,7 @@ def parser():
     s.add_argument('--luna-xhigh-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single xhigh 30-turn output-cap experiment over OM2W300, WebVoyager595 and DeepShop150; requires --campaign luna')
     s.add_argument('--luna-single-output-tokens', type=int, choices=(6144, 12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')
     s.add_argument('--luna-single-reasoning-effort', choices=('high', 'xhigh'), help='Explicit prospective Luna single reasoning effort; default xhigh when an output cap is given')
-    s.add_argument('--luna-single-max-decisions', type=int, choices=(30, 60), default=30, help='Prospective single decision limit; 60 requires explicit output cap and reasoning effort; actor wall deadline stays 900 seconds')
+    s.add_argument('--luna-single-max-decisions', type=int, choices=(30, 60, 120), default=30, help='Prospective single decision limit; 60/120 require explicit output cap and effort;120 supports high12288 and advertises120; actor wall deadline stays900 seconds')
     s.add_argument('--luna-selection-candidates', type=int, choices=(2, 5), help='Explicit new Luna high selection arm; pair with --luna-selection-max-decisions; requires gpt-crossbench')
     s.add_argument('--luna-selection-max-decisions', type=int, choices=(30, 60), help='Explicit paired selection limit: N2/30 or N5/60; fixed12288 tokens and900-second actor alarm')
     s.set_defaults(action=setup)
