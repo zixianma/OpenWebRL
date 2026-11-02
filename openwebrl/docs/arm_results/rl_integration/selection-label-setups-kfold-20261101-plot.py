@@ -9,7 +9,7 @@
 (2) Live: the seed-0 head trained on the original 1,380 training states, three-benchmark mean overall success
     (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o; selection-data-scale-20261023.json,
     post-execution from selection-label-stages-20261027.json). Lookahead H = 5 was run live separately on 2026-11-01/02 (one run, same protocol and judges) with same-day SFT and
-H = 3 controls; its point is the same-day gain over SFT, drawn hollow (selection-label-k5-live-20261102.json, "h5 - sft").
+H = 3 controls; its point is the same-day gain over SFT (selection-label-k5-live-20261102.json, "h5 - sft").
 Read it against that day's H = 3 head (+1.9 over SFT), not the older H = 3 point.
 """
 import json
@@ -55,11 +55,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            if live == "K5":  # separate same-day run: hollow, annotated with that day's H = 3
-                point(ax, x, K5_H5, color, "D", False)
-                ax.text(x, K5_H5[1] - 0.3, "11-01/02 run;\nH = 3 same day\n" + f"{K5_H3[0]:+.1f}".replace("-", "−"), ha="center", va="top", fontsize=5.6, color=MUTED)
-                continue
-            point(ax, x, EXTRA.get(live) or LIVE[live]["minus_sft4b"], color, "D", True)
+            point(ax, x, K5_H5 if live == "K5" else (EXTRA.get(live) or LIVE[live]["minus_sft4b"]), color, "D", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "s", True)
@@ -75,6 +71,6 @@ fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (3 se
            frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.08))
 fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on held-out rollouts 4–8 (labels used rollouts 1–3; "
          "Oracle = best action on rollouts 1–3). Bars: 95% intervals,\ntask-clustered bootstrap (offline) or paired over "
-         "tasks (live). Each panel's baseline is one SFT sample on its own states or tasks." + "\nHollow diamond (H = 5): a separate same-day run on 11-01/02 (one run), gain over that day's SFT; that day's H = 3 head gained " + f"{K5_H3[0]:+.1f}".replace("-", "−") + " pp, so compare H = 5 with that, not with the older H = 3 point.", fontsize=6.5, color=MUTED)
+         "tasks (live). Each panel's baseline is one SFT sample on its own states or tasks.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.14, 1, 1))
 fig.savefig(HERE / "selection-label-setups-kfold-20261101.png", dpi=160); plt.close(fig)

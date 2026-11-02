@@ -11,7 +11,7 @@ valid draws only. Teacher = the label's argmax among the five (ties averaged); h
 Live: the seed-0 head, three-benchmark mean overall success (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and
 DeepShop 150 by GPT-4o) minus SFT 4B (selection-data-scale-20261023.json; post-execution from
 selection-label-stages-20261027.json "live"). Lookahead H = 5 was run live separately on 2026-11-01/02 (one run, same protocol and judges) with same-day SFT and
-H = 3 controls; its point is the same-day gain over SFT, drawn hollow (selection-label-k5-live-20261102.json, "h5 - sft").
+H = 3 controls; its point is the same-day gain over SFT (selection-label-k5-live-20261102.json, "h5 - sft").
 Read it against that day's H = 3 head (+1.9 over SFT), not the older H = 3 point.
 Each point is relative to one SFT sample on its own states/tasks; 95% intervals, task-clustered bootstrap (offline) or paired
 over tasks (live).
@@ -61,9 +61,6 @@ for x, (name, color, src, live) in enumerate(ROWS):
             ax.text(x + dx, 0.4, "not run live", ha="center", va="bottom", fontsize=6, color=MUTED, rotation=90)
             continue
         d, lo, hi = v
-        if live == "K5" and m == "D":  # separate same-day run: hollow, annotated with that day's H = 3
-            filled = False
-            ax.text(x + dx, lo - 0.3, "11-01/02 run;\nH = 3 same day\n" + f"{K5_H3[0]:+.1f}".replace("-", "−"), ha="center", va="top", fontsize=5.6, color=MUTED)
         ax.errorbar(x + dx, d, yerr=[[d - lo], [hi - d]], fmt=m, ms=6, color=color, ecolor="#555555", capsize=1.8,
                     lw=0.9, zorder=3, markeredgewidth=1.4, markerfacecolor=color if filled else "white",
                     markeredgecolor=color)
@@ -83,6 +80,6 @@ fig.text(0.01, 0.01, "Hollow = teacher, solid = head; circle = train states, squ
          "five SFT proposals per state, held-out rollouts 4–8; Oracle = best action\non rollouts 1–3; offline heads average 3 seeds, "
          "the live head is seed 0. Bars: 95% intervals (task-clustered bootstrap offline, paired over tasks live). Each point is "
          f"relative to one SFT sample\non its own states or tasks (train {TR['train']['sft_sample']:.1f}%, held-out "
-         f"{KF['sft_sample']:.1f}%, live 3-benchmark mean {LIVE['SFT 4B']['mean_overall']:.1f}%)." + "\nHollow diamond (H = 5): a separate same-day run on 11-01/02 (one run), gain over that day's SFT; that day's H = 3 head gained " + f"{K5_H3[0]:+.1f}".replace("-", "−") + " pp, so compare H = 5 with that, not with the older H = 3 point.", fontsize=6.5, color=MUTED)
+         f"{KF['sft_sample']:.1f}%, live 3-benchmark mean {LIVE['SFT 4B']['mean_overall']:.1f}%).", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.1, 1, 1))
 fig.savefig(HERE / "selection-label-same-state-kfold-20261101.png", dpi=160); plt.close(fig)
