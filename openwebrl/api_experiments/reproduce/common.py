@@ -205,6 +205,7 @@ def prepare(args, provider):
             "model_call_cap": args.model_calls, "judge_call_cap": args.judge_calls,
             "browser_start_cap": args.browser_starts if args.browser_starts is not None else args.limit + 1,
             "scheduling": "one episode at a time; original per-decision proposal parallelism", "execute": args.execute}
+    result["browser_lifecycle"] = browser_lifecycle_binding()
     if cloud is not None:
         result['required_cloud'] = cloud
     if prospective:
@@ -234,11 +235,20 @@ def summary(rows, pools, cleanup_verified):
             "all_attempt_pools": pools, "owned_cleanup_verified": cleanup_verified}
 
 
+def browser_lifecycle_binding():
+    return {"version": "temporary-playwright-session-cleanup-v1",
+            "source_sha256": digest(Path(__file__).with_name("browser_lifecycle.py"))}
+
+
 def execute(args, plan, tasks, *, worker_setup=None):
     cloud = required_cloud(plan['runtime'])
     if cloud is not None or plan.get('required_cloud') is not None:
         if cloud is None or plan.get('required_cloud') != cloud or worker_setup is None:
             raise ValueError('This runtime requires its bound Browser Use cloud owner; the local run frontdoor cannot execute it')
+    binding = browser_lifecycle_binding()
+    if plan.get("browser_lifecycle", binding) != binding:
+        raise ValueError("Browser lifecycle source changed; prepare a fresh plan")
+    plan = dict(plan, browser_lifecycle=binding)
     keys = dict(os.environ)
     if args.env_file:
         from dotenv import dotenv_values
@@ -263,6 +273,14 @@ def execute(args, plan, tasks, *, worker_setup=None):
     sys.path.insert(0, plan["runtime"])
     worker = importlib.import_module("worker")
     environments = importlib.import_module("environments")
+    spec = importlib.util.spec_from_file_location("_openwebrl_browser_lifecycle", Path(__file__).with_name("browser_lifecycle.py"))
+    lifecycle = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(lifecycle)
+    with lifecycle.scoped(worker):
+        return _execute_worker(args, plan, tasks, root, keys, actor_key, cloud, worker, environments, worker_setup)
+
+
+def _execute_worker(args, plan, tasks, root, keys, actor_key, cloud, worker, environments, worker_setup):
     integration = worker_setup(worker, environments) if worker_setup is not None else None
     try:
         if cloud is not None:
