@@ -109,9 +109,11 @@ The run command prints a read-only plan. The actual agent limit, model decision 
 <a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
 
-**We can project hosting charges without rerunning the experiments; total cloud-browser cost still needs traffic measurements.** All 7,909 valid task–method observations in the completed 24 points have a saved first-close browser lifetime. At the [current Browser Use V4 rate](https://browser-use.com/pricing), projected hosting is **$0.00070–$0.00176 per valid task**, excluding traffic. This is a projection from local Chromium durations, not measured stealth-browser performance or spending; legacy account terms may differ.
+**The completed 20-task US-residential pilot cost $5.74 across both methods**, including model calls, Terra, hosting, proxy traffic and failed attempts. On 15 contemporaneous common-valid pairs, N5 succeeded on 15 and Single on 12, with mean actor-loop latency of 191.6 versus 120.8 seconds. This small pilot does not establish full-benchmark superiority; [results and accounting are below](#measured-us-residential-pilot).
 
-Use **$0.02 per browser-hour**, rounding each session up to whole minutes with a one-minute minimum. Add network usage separately: direct/custom-proxy traffic is **$0.20/GB** and managed residential traffic **$5/GB**. The provider's [billing examples](https://docs.browser-use.com/cloud/guides/billing) convert reported MB to GB by dividing by 1,024. For example, an assumed 10 MB/task adds $0.001953 direct or $0.048828 residential, before hosting. Traffic is unmeasured here; batch counts are not network-byte measurements. N3/N5 still use one browser session per task; candidate/selector computation can keep that session open but does not create three or five browsers. Our agents call their model providers directly, so a hosted-agent orchestration fee is not part of this projection.
+For the completed local-browser scaling cohorts, we can project hosting charges without rerunning the experiments; their cloud traffic remains unmeasured. All 7,909 valid task–method observations in the completed 24 points have a saved first-close browser lifetime. At the [current Browser Use V4 rate](https://browser-use.com/pricing), projected hosting is **$0.00070–$0.00176 per valid task**, excluding traffic. This is a projection from local Chromium durations, not measured stealth-browser performance or spending; legacy account terms may differ.
+
+Use **$0.02 per browser-hour**, rounding each session up to whole minutes with a one-minute minimum. Add network usage separately: direct/custom-proxy traffic is **$0.20/GB** and managed residential traffic **$5/GB**. The provider's [billing examples](https://docs.browser-use.com/cloud/guides/billing) convert reported MB to GB by dividing by 1,024. For example, an assumed 10 MB/task adds $0.001953 direct or $0.048828 residential, before hosting. Traffic is unmeasured for these local runs; batch counts are not network-byte measurements. N3/N5 still use one browser session per task; candidate/selector computation can keep that session open but does not create three or five browsers. Our agents call their model providers directly, so a hosted-agent orchestration fee is not part of this projection.
 
 <details>
 <summary>Projected hosting means, coverage and zero-API reproduction</summary>
@@ -142,9 +144,45 @@ python3 -B openwebrl/docs/arm_results/browsercode_inference_scaling_20261031/pro
 </details>
 
 <details>
-<summary>Proposed paired OM2W stealth-browser pilot — not launched</summary>
+<summary>Measured 20-task US-residential pilot — results, costs and reproduction</summary>
 
-Start with **20 fixed OM2W tasks × two methods: Luna high single and Luna high N5**, yielding 40 actor sessions. This reduced pilot measures actual hosting/traffic cost and checks the comparison before budgeting the full 300-task benchmark. It cannot establish full-benchmark performance. Select tasks without outcomes: rank hosts and tasks by SHA256 with seed 42 and cycle through hosts for website coverage. Both arms receive the same tasks, with fresh sessions; preserve invalids and every charge.
+<a id="measured-us-residential-pilot"></a>
+
+**N5 completed three additional tasks on the same 15 valid pairs, at 1.59× the mean actor-loop latency.** Both succeeded on 12; N5 alone succeeded on three. The other nine actor attempts remain invalid: eight setup/infrastructure failures and one final-capture timeout. A deferred Single task completed later and is outside this paired comparison. Attrition and the small sample prevent treating these results as full-300 performance estimates.
+
+| Method | Planned tasks | Valid tasks | Invalid tasks | Successes | Overall success (%) | Valid-only success (%) |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna high Single | 20 | 16 | 4 | 13 | 65.0 | 81.25 |
+| Luna high N5 | 20 | 15 | 5 | 15 | 75.0 | 100.0 |
+
+The primary paired rates are **12/15 (80.0%) for Single and 15/15 (100.0%) for N5**. The rows above use each method's own valid cohort; the Single row includes its later unpaired success.
+
+**All-attempt charges, USD:** all 40 actor dispositions and both failed mechanical preflights are included, with 21 owned browser sessions per method. Every session was verified stopped and queried again at least 90 seconds after its first verified stop. All model usage and latest provider fee fields were known. Provider session-API amounts are usage charges, not final invoices or cash paid after account credits.
+
+| Method | Actor | Terra | Hosting | Residential proxy | Total | Proxy traffic (MB) |
+|---|---:|---:|---:|---:|---:|---:|
+| Luna high Single | 0.2116 | 0.2664 | 0.0180 | 1.9107 | 2.4067 | 391.30 |
+| Luna high N5 | 1.2258 | 0.2430 | 0.0213 | 1.8409 | 3.3310 | 377.02 |
+
+Combined usage was **$5.7377**: $1.9468 for actors/Terra, $0.0393 for hosting and $3.7516 for residential traffic. Proxy traffic dominated browser charges; browser rental alone would substantially understate this pilot's cost. All eight allocations, including failed starts, consumed 5,975 of the approved 14,400 cumulative seconds with two CPUs, 16 GiB and no GPU.
+
+**Timing means on the same 15 common-valid pairs, seconds per task:**
+
+| Interval | Single | N5 |
+|---|---:|---:|
+| Actor loop, excluding Terra | 120.8 | 191.6 |
+| Actor API wall time, including input-token counters | 78.4 | 162.4 |
+| Selected browser-code execution | 40.5 | 25.6 |
+| Browser/task setup | 5.0 | 5.0 |
+| Terminal capture | 0.88 | 0.79 |
+| Terra judging | 2.47 | 2.05 |
+| First-close owned browser lifetime | 127.3 | 198.0 |
+
+Actor API wall time is the union of overlapping call intervals; N5's summed call durations were 391.6 seconds per task, which is not elapsed latency. Its candidate calls actually overlapped. Setup, browser execution, capture and model intervals can be nested; do not add these rows. The browser stopped before Terra. The at-least-90-second fee reconciliation gate is outside the actor loop and browser lifetime, and can overlap judging.
+
+The [aggregate](arm_results/browsercode_us_stealth_pilot_20261101/aggregate.json) and [CSV](arm_results/browsercode_us_stealth_pilot_20261101/summary.csv) separate overall, valid-only and common-valid populations and retain unrounded charges. Raw task content, provider identifiers and private diagnostics are not published.
+
+**Reproduce a new pilot.** Use **20 fixed OM2W tasks × two methods: Luna high single and Luna high N5**, yielding 40 actor sessions. This pilot measures actual hosting/traffic cost and checks the comparison before separately budgeting the full 300-task benchmark. It cannot establish full-benchmark performance. Select tasks without outcomes: rank hosts and tasks by SHA256 with seed 42 and cycle through hosts for website coverage. Both arms receive the same tasks, with fresh sessions; preserve invalids and every charge.
 
 Keep BrowserCode, high effort, 12,288 tokens per candidate/selector call, 30 decisions, the 900-second actor-loop deadline, raw 1280 × 1800 terminal screenshots and Terra medium/4,096/seed 42. Connect our existing agent over CDP to a standalone Browser Use V4 stealth browser. **Both arms use US residential routing (`proxyCountryCode: "us"`)**, explicitly requested for this study, with no proxy fallback or shared browser profile. N5 samples its five candidates concurrently before selecting one; it uses one browser per task. Run the two arms of each task contemporaneously, alternate worker assignment, and await both before releasing the next pair. Mechanical preflights and failed sessions must be separately counted and charged. Both arms enable `allowResizing: true` so CDP can enforce the common viewport; the provider notes that this opt-in can reduce stealthiness. The adapter verifies the actual layout and uncropped 1280 × 1800 PNG without resampling. Reported screen and device-scale fingerprints are retained as diagnostics.
 
@@ -167,7 +205,7 @@ python3 -B openwebrl/api_experiments/reproduce/stealth_plan.py \
 
 The [pilot owner](../api_experiments/reproduce/stealth_pilot.py) proposes $1 for single actors, $3 for N5 actors and $2 for Terra, with a separate $10 browser spending target. It allows at most 40 actor sessions plus two mechanical preflights, 8,400 actor/input-counter HTTP calls and 40 first Terra calls. It starts no new pair after $8 of conservative observed browser charges and requests shutdown at $10; this is not a hard provider-dollar cap. It rechecks each pair's stopped-session fees at least 90 seconds after the first close before admitting the next pair. Maximum-observed charges are conservative admission reserves; actual cost tables use the separate latest provider receipts, including downward corrections.
 
-Paid execution currently requires a **single Slurm allocation with one node, two CPUs, 16 GiB, no GPUs and at most four hours**, with no implicit local mode or requeue. Keep the source checkout, dependency paths, generated runtime, key file and output on shared storage visible from the compute node; login-node `/tmp` is not a shared deployment location. Source manifests also bind the support files imported from the checkout, so copying only the launch script is insufficient. The owner verifies the actual allocation, reserves time for teardown, and awaits both workers.
+Paid execution requires **one node, two CPUs, 16 GiB, no GPUs and at most four cumulative hours across all attempts**, with no implicit local mode or requeue. A routine recovery must preserve already spent time, task dispositions, fees and call credits. Keep the source checkout, dependency paths, generated runtime, key file and output on shared storage visible from the compute node; login-node `/tmp` is not a shared deployment location. Source manifests also bind the support files imported from the checkout, so copying only the launch script is insufficient. The owner verifies the actual allocation, reserves time for teardown, and awaits both workers.
 
 A separate reviewed approval JSON must bind `plan_sha256` to SHA256 of `json.dumps(plan, sort_keys=True, default=str).encode()` for the printed execution plan, with `approved`, `proxy_overshoot_authorized`, `openai_payload_egress_approved` and `browser_use_payload_egress_approved` explicitly true. Only after that approval, add `--execute --approval /path/to/approval.json --env-file /path/to/private.env` to the pilot command inside the approved allocation. The key file needs `BROWSER_USE_API_KEY`, `OPENAI_API_KEY` and optionally `JUDGE_API_KEY`. This owner is separate from the ordinary local `browsercode.py run` frontdoor, which refuses a cloud-marked runtime. A source/protocol change requires fresh preparation and approval; no automatic creation or episode retries are enabled.
 
@@ -177,7 +215,7 @@ Report provider-recorded hosting, network/proxy and combined usage per task and 
 
 Record provider lifetime alongside model-call intervals, browser-command execution and setup/capture/cleanup intervals. Use the **union of overlapping N5 model-call intervals** for wall time, rather than summing five concurrent durations. Preserve overlap and unclassified time explicitly. An allocated cloud browser can remain billable while inference is in flight; browser-command time is a diagnostic, not a substitute for provider charges. Report overall and valid-only success with separate counts, plus paired common-valid results. A later comparison with historical local-browser runs remains descriptive because collection windows differ.
 
-Before paid collection, freeze and explicitly approve exact session/compute/model/judge allowances and the browser spending policy. Verify charge monitoring and teardown. The current standalone-browser schema exposes no per-session traffic-dollar ceiling; the provider describes API-key spending limits as [soft limits](https://docs.browser-use.com/cloud/guides/billing). Polling can stop admission and request shutdown after observed usage thresholds, but cannot guarantee that already-running traffic stays below an exact dollar amount. Require an explicit policy for that possible overshoot; do not silently turn a spending target into a claimed hard cap. Existing experiment approvals do not fund this new pilot, and it does not authorize a full-300 follow-up.
+Before paid collection, freeze and explicitly approve exact session/compute/model/judge allowances and the browser spending policy. Verify charge monitoring and teardown. The current standalone-browser schema exposes no per-session traffic-dollar ceiling; the provider describes API-key spending limits as [soft limits](https://docs.browser-use.com/cloud/guides/billing). Polling can stop admission and request shutdown after observed usage thresholds, but cannot guarantee that already-running traffic stays below an exact dollar amount. Require an explicit policy for that possible overshoot; do not silently turn a spending target into a claimed hard cap. Reproduction needs its own exact approval; the completed pilot does not authorize a full-300 follow-up.
 
 </details>
 

@@ -1,0 +1,358 @@
+{
+  "schema": "browsercode-us-residential-stealth-pilot-v1",
+  "status": "completed_independently_verified",
+  "benchmark": "Online-Mind2Web",
+  "task_selection": {
+    "prespecified_tasks": 20,
+    "unique_hosts": 20,
+    "seed": 42,
+    "outcomes_used_for_selection": false
+  },
+  "protocol": {
+    "actor_model": "gpt-6-luna",
+    "reasoning_effort": "high",
+    "max_output_tokens_per_generation": 12288,
+    "max_model_decisions": 30,
+    "actor_loop_deadline_seconds": 900,
+    "harness": "BrowserCode",
+    "browser_provider": "Browser Use V4",
+    "routing": "US residential",
+    "qualified_runs_provider_allow_resizing": true,
+    "viewport_png_pixels": [
+      1280,
+      1800
+    ],
+    "judge_model": "gpt-5.6-terra",
+    "judge_reasoning_effort": "medium",
+    "judge_max_output_tokens": 4096,
+    "judge_seed": 42,
+    "candidate_sampling_parallel": true
+  },
+  "population_notes": {
+    "overall": "20 original actor dispositions per method, including invalids; no episode retries.",
+    "common_valid": "15 contemporaneous pairs with valid first Terra verdicts in both methods.",
+    "single_only_additional_valid": "One deferred Single task completed later, outside the 15-pair comparison.",
+    "invalids": "Eight setup/infrastructure failures and one final-capture timeout retained.",
+    "cost": "All 40 actor attempts and two failed standalone mechanical preflights; each method owns21 sessions.",
+    "timing": "Per-task arithmetic means on the same15 common-valid pairs; nested timing categories overlap.",
+    "provider_fees": "Latest session-API GET snapshots, at least90seconds after each first verified stop; all42 stopped and known. These are provider-recorded usage, not final invoices or net cash payments."
+  },
+  "arms": {
+    "luna_single_high": {
+      "attempted_tasks": 20,
+      "valid_tasks": 16,
+      "invalid_tasks": 4,
+      "successes": 13,
+      "overall_success_percent": 65.0,
+      "valid_success_percent": 81.25,
+      "common_valid_successes": 12,
+      "actor_usd": "0.2116416000000000031",
+      "terra_usd": "0.2663535",
+      "browser_usd": "0.01799999999999999999999999999",
+      "residential_proxy_usd": "1.910655321553349505473876954",
+      "all_attempt_total_usd": "2.406650421553349508573876954",
+      "proxy_used_mb": "391.30220985412597872105",
+      "actor_budget_calls_including_token_counters": 460,
+      "terra_calls": 16,
+      "valid_task_means": {
+        "tasks": 16,
+        "task_latency_seconds": {
+          "observations": 16,
+          "mean": 116.84571163798682
+        },
+        "setup_seconds": {
+          "observations": 16,
+          "mean": 5.073551925685024
+        },
+        "final_capture_seconds": {
+          "observations": 16,
+          "mean": 0.8766291251959046
+        },
+        "judge_seconds": {
+          "observations": 16,
+          "mean": 2.420220886953757
+        },
+        "decisions": {
+          "observations": 16,
+          "mean": 17.625
+        },
+        "selected_code_batches": {
+          "observations": 16,
+          "mean": 16.8125
+        },
+        "owned_browser_seconds": {
+          "observations": 16,
+          "mean": 123.44424396690738
+        },
+        "actor_http": {
+          "observations": 16,
+          "mean_union_seconds": 75.43957740969199,
+          "mean_summed_seconds": 75.43957740969199
+        },
+        "actor_generation_http": {
+          "observations": 16,
+          "mean_union_seconds": 64.77439653719193,
+          "mean_summed_seconds": 64.77439653719193
+        },
+        "browser_actor_execute": {
+          "observations": 16,
+          "mean_union_seconds": 39.64261043262377,
+          "mean_summed_seconds": 39.64261043262377
+        },
+        "model_decision": {
+          "observations": 16,
+          "mean_union_seconds": 77.10635341203306,
+          "mean_summed_seconds": 77.10635341203306
+        },
+        "cloud_create": {
+          "observations": 16,
+          "mean_union_seconds": 0.3494936849892838,
+          "mean_summed_seconds": 0.3494936849892838
+        },
+        "cloud_ready_wait": {
+          "observations": 16,
+          "mean_union_seconds": 0.22408624152012635,
+          "mean_summed_seconds": 0.22408624152012635
+        }
+      },
+      "common_valid_task_means": {
+        "tasks": 15,
+        "task_latency_seconds": {
+          "observations": 15,
+          "mean": 120.77084080772474
+        },
+        "setup_seconds": {
+          "observations": 15,
+          "mean": 4.986790943983943
+        },
+        "final_capture_seconds": {
+          "observations": 15,
+          "mean": 0.877432156012704
+        },
+        "judge_seconds": {
+          "observations": 15,
+          "mean": 2.4659446734158945
+        },
+        "decisions": {
+          "observations": 15,
+          "mean": 18.133333333333333
+        },
+        "selected_code_batches": {
+          "observations": 15,
+          "mean": 17.333333333333332
+        },
+        "owned_browser_seconds": {
+          "observations": 15,
+          "mean": 127.28398030982353
+        },
+        "actor_http": {
+          "observations": 15,
+          "mean_union_seconds": 78.44522188364839,
+          "mean_summed_seconds": 78.44522188364839
+        },
+        "actor_generation_http": {
+          "observations": 15,
+          "mean_union_seconds": 67.14826383278705,
+          "mean_summed_seconds": 67.14826383278705
+        },
+        "browser_actor_execute": {
+          "observations": 15,
+          "mean_union_seconds": 40.484060878135885,
+          "mean_summed_seconds": 40.484060878135885
+        },
+        "model_decision": {
+          "observations": 15,
+          "mean_union_seconds": 80.1867562008556,
+          "mean_summed_seconds": 80.1867562008556
+        },
+        "cloud_create": {
+          "observations": 15,
+          "mean_union_seconds": 0.351283648594593,
+          "mean_summed_seconds": 0.351283648594593
+        },
+        "cloud_ready_wait": {
+          "observations": 15,
+          "mean_union_seconds": 0.2225289404237022,
+          "mean_summed_seconds": 0.2225289404237022
+        }
+      }
+    },
+    "parallel5_select_high": {
+      "attempted_tasks": 20,
+      "valid_tasks": 15,
+      "invalid_tasks": 5,
+      "successes": 15,
+      "overall_success_percent": 75.0,
+      "valid_success_percent": 100.0,
+      "common_valid_successes": 15,
+      "actor_usd": "1.22578108999999993",
+      "terra_usd": "0.2429885",
+      "browser_usd": "0.02133333333333333333333333333",
+      "residential_proxy_usd": "1.840922241099178789570068359",
+      "all_attempt_total_usd": "3.331025164432512052903401692",
+      "proxy_used_mb": "377.02087497711181610395",
+      "actor_budget_calls_including_token_counters": 1556,
+      "terra_calls": 15,
+      "valid_task_means": {
+        "tasks": 15,
+        "task_latency_seconds": {
+          "observations": 15,
+          "mean": 191.5776898807846
+        },
+        "setup_seconds": {
+          "observations": 15,
+          "mean": 5.000807911669836
+        },
+        "final_capture_seconds": {
+          "observations": 15,
+          "mean": 0.7908577077401181
+        },
+        "judge_seconds": {
+          "observations": 15,
+          "mean": 2.049837235035375
+        },
+        "decisions": {
+          "observations": 15,
+          "mean": 15.333333333333334
+        },
+        "selected_code_batches": {
+          "observations": 15,
+          "mean": 14.466666666666667
+        },
+        "owned_browser_seconds": {
+          "observations": 15,
+          "mean": 198.0173139560502
+        },
+        "actor_http": {
+          "observations": 15,
+          "mean_union_seconds": 162.4382070409755,
+          "mean_summed_seconds": 391.6080371825956
+        },
+        "actor_generation_http": {
+          "observations": 15,
+          "mean_union_seconds": 145.0396827680214,
+          "mean_summed_seconds": 374.2095129096415
+        },
+        "browser_actor_execute": {
+          "observations": 15,
+          "mean_union_seconds": 25.630919269068787,
+          "mean_summed_seconds": 25.630919269068787
+        },
+        "model_decision": {
+          "observations": 15,
+          "mean_union_seconds": 165.86193476679423,
+          "mean_summed_seconds": 165.86193476679423
+        },
+        "cloud_create": {
+          "observations": 15,
+          "mean_union_seconds": 0.349494860926643,
+          "mean_summed_seconds": 0.349494860926643
+        },
+        "cloud_ready_wait": {
+          "observations": 15,
+          "mean_union_seconds": 0.22370742059623203,
+          "mean_summed_seconds": 0.22370742059623203
+        }
+      },
+      "common_valid_task_means": {
+        "tasks": 15,
+        "task_latency_seconds": {
+          "observations": 15,
+          "mean": 191.5776898807846
+        },
+        "setup_seconds": {
+          "observations": 15,
+          "mean": 5.000807911669836
+        },
+        "final_capture_seconds": {
+          "observations": 15,
+          "mean": 0.7908577077401181
+        },
+        "judge_seconds": {
+          "observations": 15,
+          "mean": 2.049837235035375
+        },
+        "decisions": {
+          "observations": 15,
+          "mean": 15.333333333333334
+        },
+        "selected_code_batches": {
+          "observations": 15,
+          "mean": 14.466666666666667
+        },
+        "owned_browser_seconds": {
+          "observations": 15,
+          "mean": 198.0173139560502
+        },
+        "actor_http": {
+          "observations": 15,
+          "mean_union_seconds": 162.4382070409755,
+          "mean_summed_seconds": 391.6080371825956
+        },
+        "actor_generation_http": {
+          "observations": 15,
+          "mean_union_seconds": 145.0396827680214,
+          "mean_summed_seconds": 374.2095129096415
+        },
+        "browser_actor_execute": {
+          "observations": 15,
+          "mean_union_seconds": 25.630919269068787,
+          "mean_summed_seconds": 25.630919269068787
+        },
+        "model_decision": {
+          "observations": 15,
+          "mean_union_seconds": 165.86193476679423,
+          "mean_summed_seconds": 165.86193476679423
+        },
+        "cloud_create": {
+          "observations": 15,
+          "mean_union_seconds": 0.349494860926643,
+          "mean_summed_seconds": 0.349494860926643
+        },
+        "cloud_ready_wait": {
+          "observations": 15,
+          "mean_union_seconds": 0.22370742059623203,
+          "mean_summed_seconds": 0.22370742059623203
+        }
+      }
+    }
+  },
+  "common_valid_pairs": 15,
+  "paired_outcomes": {
+    "both_success": 12,
+    "single_only_success": 0,
+    "n5_only_success": 3,
+    "both_failure": 0
+  },
+  "accounting": {
+    "browser_sessions": 42,
+    "browser_sessions_per_arm": 21,
+    "all_sessions_verified_stopped": true,
+    "all_session_latest_fee_snapshots_known": true,
+    "unknown_model_usage_calls": 0,
+    "actor_and_judge_total_usd": "1.9467646899999999331",
+    "browser_hosting_total_usd": "0.03933333333333333333333333332",
+    "residential_proxy_total_usd": "3.751577562652528295043945313",
+    "all_attempt_total_usd": "5.737675585985861561477278646"
+  },
+  "compute": {
+    "physical_allocations_including_failures": 8,
+    "all_primary_and_children_terminal": true,
+    "cpus_per_allocation": 2,
+    "memory_gib_per_allocation": 16,
+    "gpus": 0,
+    "all_attempt_primary_seconds": 5975,
+    "approved_all_attempt_seconds_cap": 14400
+  },
+  "limitations": [
+    "Small pilot; not a full300-task performance estimate or a scaling-law result.",
+    "Both methods use the same US proxy and resizing opt-in; historical local-browser comparisons are descriptive.",
+    "Provider notes that allowing resizing can reduce stealthiness.",
+    "Invalid tasks are retained in overall rates and all-attempt fees; valid-only rates have different populations."
+  ],
+  "independent_verification": {
+    "outcome_protocol_payload_and_timing": true,
+    "financial_all_attempt_resources_and_provider_fees": true,
+    "aggregate_and_csv_arithmetic": true
+  }
+}
