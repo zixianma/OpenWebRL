@@ -106,6 +106,40 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 
 The run command prints a read-only plan. The actual agent limit, model decision guard, saved identity and tracking all use 60. The actor-loop wall deadline stays **900 seconds**: episodes may time out before reaching the larger limit. Report timeouts, reached decision limits, actual decisions, output/reasoning usage, valid/planned counts and paired common-valid success alongside cost and latency. The shared Terra protocol and disabled automatic provider retries remain unchanged. A full campaign needs separate explicit compute/API caps; the example does not allocate cluster resources.
 
+<a id="luna-selection-decision-limits"></a>
+### Luna N2/30 and N5/60 selection experiments
+
+These prospective settings use Luna high for both proposals and selection, with a **12,288-output-token ceiling per generation** and the same **900-second actor-loop deadline**. N2 retains the default 30-decision horizon; N5 permits 60. Candidate generations run concurrently from identical observed history, followed by one selector call. Only the chosen action executes and enters subsequent history. The cap applies independently to every candidate and selector; it is not a total token allowance per decision or task.
+
+| Setting | Candidates / decision | Selector calls / decision | Max decisions | Arm |
+|---|---:|---:|---:|---|
+| Luna high N2 | 2 | 1 | 30 | `parallel2_select_high` |
+| Luna high N5 | 5 | 1 | 60 | `parallel5_select_high` |
+
+Use separate new workspaces and explicitly pair both selection flags. Each generated runtime contains one method on the same pinned OM2W 300, WebVoyager 595 and DeepShop 150 tasks as the completed single-call sweep. All three benchmarks use Terra medium, 4,096 completion tokens and seed 42. Setup without these flags retains its historical campaign defaults.
+
+```bash
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/luna-n2-30steps --campaign gpt-crossbench \
+  --dependencies "$API_WORK/dependencies/dependencies.json" \
+  --luna-selection-candidates 2 --luna-selection-max-decisions 30
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/luna-n5-60steps --campaign gpt-crossbench \
+  --dependencies "$API_WORK/dependencies/dependencies.json" \
+  --luna-selection-candidates 5 --luna-selection-max-decisions 60
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/luna-n2-30steps --arm parallel2_select_high \
+  --benchmark online-mind2web --limit 1 --output /tmp/luna-n2-30steps-om-01 \
+  --model-usd 5 --judge-usd 1 --model-calls 180 --judge-calls 1 --browser-starts 2
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/luna-n5-60steps --arm parallel5_select_high \
+  --benchmark online-mind2web --limit 1 --output /tmp/luna-n5-60steps-om-01 \
+  --model-usd 5 --judge-usd 1 --model-calls 720 --judge-calls 1 --browser-starts 2
+```
+
+The run commands print plans; add `--execute` for paid collection within their explicit caps. Model-call caps include proposals, selectors and native input counters. For a full benchmark, select its 300/595/150-task limit and budget it separately. The source-bound selection receipt retains the original model, worker and judge files, and validates the generated task roster, prompt, actual model guard, agent limit, raw model payloads and Terra protocol before execution. Archived experiments remain unchanged. Report success over planned tasks and valid-only success with counts, common-valid paired comparisons, actual tokens, model cost, browser-code batches and **elapsed actor latency per task**. Parallel API durations are not summed into actor latency. These recipes prepare new experiments and do not imply completed results.
+
 <a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
 

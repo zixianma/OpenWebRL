@@ -176,6 +176,19 @@ def setup(args):
     effort = effort or 'xhigh'
     if cap is not None and args.campaign != 'browsercode_luna_effort':
         raise ValueError('A Luna output override requires --campaign luna')
+    candidates = getattr(args, 'luna_selection_candidates', None)
+    selection_decisions = getattr(args, 'luna_selection_max_decisions', None)
+    if (candidates is None) != (selection_decisions is None):
+        raise ValueError('Pair --luna-selection-candidates with --luna-selection-max-decisions')
+    if candidates is not None:
+        if cap is not None or getattr(args, 'luna_single_reasoning_effort', None) is not None or max_decisions != 30:
+            raise ValueError('Selection flags conflict with single-output/effort/decision flags')
+        if args.campaign != 'browsercode_gpt_high_wv_ds':
+            raise ValueError('Selection overrides require --campaign gpt-crossbench')
+        spec = importlib.util.spec_from_file_location('prospective_selection', HERE / 'prospective_selection.py')
+        selection = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(selection)
+        selection.parameters(candidates, selection_decisions)
     target = writable(args.workspace)
     if target.exists() and any(path.name != 'dependencies' for path in target.iterdir()):
         raise ValueError('Use a new workspace; prepared experiments are never overwritten')
@@ -192,7 +205,7 @@ def setup(args):
     python = Path(installed['python'])
     if not python.is_file() or not os.access(python, os.X_OK):
         raise ValueError('Dependency manifest has no usable installed Python')
-    code = call(python, 'prepare_browsercode.py', '--campaign', args.campaign, '--dependencies', dependencies, '--output', target / 'runtime')
+    code = call(python, 'prepare_browsercode.py', '--campaign', 'browsercode_gpt_high' if candidates is not None else args.campaign, '--dependencies', dependencies, '--output', target / 'runtime')
     if code:
         return code
     browsercode_preflight_only(target / 'runtime')
@@ -201,6 +214,8 @@ def setup(args):
         prospective = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(prospective)
         prospective.configure(target / 'runtime', cap, effort, max_decisions)
+    if candidates is not None:
+        selection.configure(target / 'runtime', candidates, selection_decisions)
     write(target / MARKER, {'schema': 'browsercode-workspace-v1', 'campaign': args.campaign,
                            'dependencies': str(dependencies), 'python': str(python), 'executor': 'browsercode'})
     print('Workspace ready: ' + str(target))
@@ -265,6 +280,8 @@ def parser():
     s.add_argument('--luna-single-output-tokens', type=int, choices=(6144, 12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')
     s.add_argument('--luna-single-reasoning-effort', choices=('high', 'xhigh'), help='Explicit prospective Luna single reasoning effort; default xhigh when an output cap is given')
     s.add_argument('--luna-single-max-decisions', type=int, choices=(30, 60), default=30, help='Prospective single decision limit; 60 requires explicit output cap and reasoning effort; actor wall deadline stays 900 seconds')
+    s.add_argument('--luna-selection-candidates', type=int, choices=(2, 5), help='Explicit new Luna high selection arm; pair with --luna-selection-max-decisions; requires gpt-crossbench')
+    s.add_argument('--luna-selection-max-decisions', type=int, choices=(30, 60), help='Explicit paired selection limit: N2/30 or N5/60; fixed12288 tokens and900-second actor alarm')
     s.set_defaults(action=setup)
     c = commands.add_parser('check', help='Check real imports, optionally a local browser; zero model calls')
     c.add_argument('--workspace', type=Path, required=True)

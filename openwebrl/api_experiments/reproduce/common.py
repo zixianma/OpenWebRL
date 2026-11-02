@@ -80,7 +80,7 @@ def positive_money(value):
 def parser(provider):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--runtime", type=Path, required=True, help="Isolated runtime produced by prepare_browsercode.py")
-    choices = (*ARMS[provider], 'luna_single_high') if provider == 'luna' else ARMS[provider]
+    choices = (*ARMS[provider], 'luna_single_high') if provider == 'luna' else (*ARMS[provider], 'parallel2_select_high') if provider == 'gpt' else ARMS[provider]
     p.add_argument("--arm", choices=choices, required=True)
     p.add_argument("--harness", choices=("browsercode", "cuawright"), default="browsercode", help="Earlier paired-harness campaigns support both executors")
     p.add_argument("--benchmark", choices=("online-mind2web", "webvoyager", "deepshop"), help="Filter the prepared task roster before applying --limit")
@@ -109,6 +109,16 @@ def prepare(args, provider):
         raise ValueError("Place output outside the frozen source runtime")
     plan, config, tasks = (read(runtime / name) for name in ("campaign-plan.json", "runtime-config.json", "tasks.json"))
     prospective = None
+    selection_protocol = None
+    if (runtime / 'selection-experiment.json').exists() or plan.get('prospective_selection_protocol') or config.get('prospective_selection_protocol'):
+        if provider != 'gpt' or args.arm not in ('parallel2_select_high', 'parallel5_select_high') or getattr(args, 'harness', 'browsercode') != 'browsercode':
+            raise ValueError('Prospective selection requires the declared GPT/Luna BrowserCode arm')
+        spec = importlib.util.spec_from_file_location('prospective_selection', Path(__file__).with_name('prospective_selection.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        selection_protocol = module.validate(runtime)
+        if selection_protocol['arm'] != args.arm:
+            raise ValueError('Prospective selection arm differs')
     if (runtime / 'prospective-experiment.json').exists() or plan.get('prospective_protocol') or config.get('prospective_protocol'):
         if provider != 'luna' or args.arm not in ('luna_single_xhigh', 'luna_single_high') or getattr(args, 'harness', 'browsercode') != 'browsercode':
             raise ValueError('Prospective output override requires Luna single high/xhigh BrowserCode')
@@ -118,6 +128,9 @@ def prepare(args, provider):
         prospective = module.validate(runtime)
         if prospective['arm'] != args.arm:
             raise ValueError('Prospective arm/effort does not match selected arm')
+    if prospective and selection_protocol:
+        raise ValueError('Single and selection experiment markers cannot be combined')
+    selected_protocol = selection_protocol or prospective
     benchmark = getattr(args, "benchmark", None)
     if benchmark:
         tasks = [t for t in tasks if t.get("benchmark", "online-mind2web") == benchmark]
@@ -141,7 +154,7 @@ def prepare(args, provider):
     if min(args.model_calls, args.judge_calls, args.browser_starts if args.browser_starts is not None else args.limit + 1) <= 0:
         raise ValueError("Call and browser caps must be positive")
     spec = next((a for a in plan["arms"] if a["arm"] == args.arm), None)
-    if (args.arm not in ARMS[provider] and not (prospective and args.arm == prospective['arm'])) or spec is None:
+    if (args.arm not in ARMS[provider] and not (selected_protocol and args.arm == selected_protocol['arm'])) or spec is None:
         raise ValueError("Arm does not belong to this provider/runtime")
     expected = spec["model"]
     allowed_models = {"luna": {"gpt-6-luna"}, "claude": {"claude-opus-5-5", "claude-sonnet-5-5"}, "gpt": {"gpt-6-luna", "gpt-6-sol", "gpt-6.1-sol"}}
@@ -154,8 +167,8 @@ def prepare(args, provider):
     if harness not in supported_harnesses:
         raise ValueError("Harness is not supported by this frozen campaign")
     expected_output = spec["output_tokens"]
-    allowed_outputs = (prospective['output_tokens'],) if prospective else (4096, 12288)
-    expected_decisions = prospective['max_decisions'] if prospective else 30
+    allowed_outputs = (selected_protocol['output_tokens'],) if selected_protocol else (4096, 12288)
+    expected_decisions = selected_protocol['max_decisions'] if selected_protocol else 30
     if plan["protocol"]["max_decisions"] != expected_decisions or expected_output not in allowed_outputs:
         raise ValueError("Runtime is not the frozen BrowserCode model/12288/30 protocol")
     if provider != "gpt" and config["judge_protocol"]["model"] != "gpt-5.6-terra":
@@ -198,6 +211,10 @@ def prepare(args, provider):
         result.update(prospective_protocol=prospective['schema'], output_multiplier=prospective['output_multiplier'],
                       prospective_receipt_sha256=digest(runtime / 'prospective-experiment.json'),
                       benchmark_roster_counts=prospective['benchmark_counts'])
+    if selection_protocol:
+        result.update(prospective_selection_protocol=selection_protocol['schema'],
+                      prospective_selection_receipt_sha256=digest(runtime / 'selection-experiment.json'),
+                      benchmark_roster_counts=selection_protocol['benchmark_counts'])
     if selection_sha:
         result.update(task_selection_sha256=selection_sha, task_selection_count=len(tasks),
                       selected_task_ids=ids, task_selection_path=str(selection))
@@ -267,7 +284,7 @@ def execute(args, plan, tasks, *, worker_setup=None):
         model_cap = Decimal(args.model_usd) if plan["provider"] == "gpt" else args.model_usd
         judge_cap = Decimal(args.judge_usd) if plan["provider"] == "gpt" else args.judge_usd
         budgets = {"actor": budget_type(root / "budget/model", model_cap, args.model_calls),
-                   "judge": (getattr(integration, "judge_budget_type", None) or budget_type)(root / "budget/judge", judge_cap, args.judge_calls),
+                   "judge": (getattr(integration, "judge_budget_type", None) or getattr(worker, "JudgeBudget", budget_type))(root / "budget/judge", judge_cap, args.judge_calls),
                    "browser": worker.Budget(root / "budget/browser", plan["browser_start_cap"], plan["browser_start_cap"])}
         from openai import OpenAI
         judge = OpenAI(api_key=keys.get("JUDGE_API_KEY") or keys["OPENAI_API_KEY"], max_retries=0, timeout=180)
