@@ -206,6 +206,7 @@ def prepare(args, provider):
             "browser_start_cap": args.browser_starts if args.browser_starts is not None else args.limit + 1,
             "scheduling": "one episode at a time; original per-decision proposal parallelism", "execute": args.execute}
     result["browser_lifecycle"] = browser_lifecycle_binding()
+    result["runtime_imports"] = runtime_imports_binding()
     if cloud is not None:
         result['required_cloud'] = cloud
     if prospective:
@@ -240,6 +241,11 @@ def browser_lifecycle_binding():
             "source_sha256": digest(Path(__file__).with_name("browser_lifecycle.py"))}
 
 
+def runtime_imports_binding():
+    return {"version": "frozen-support-package-path-v1",
+            "source_sha256": digest(Path(__file__).with_name("runtime_imports.py"))}
+
+
 def execute(args, plan, tasks, *, worker_setup=None):
     cloud = required_cloud(plan['runtime'])
     if cloud is not None or plan.get('required_cloud') is not None:
@@ -249,6 +255,10 @@ def execute(args, plan, tasks, *, worker_setup=None):
     if plan.get("browser_lifecycle", binding) != binding:
         raise ValueError("Browser lifecycle source changed; prepare a fresh plan")
     plan = dict(plan, browser_lifecycle=binding)
+    imports_binding = runtime_imports_binding()
+    if plan.get("runtime_imports", imports_binding) != imports_binding:
+        raise ValueError("Runtime import source changed; prepare a fresh plan")
+    plan["runtime_imports"] = imports_binding
     keys = dict(os.environ)
     if args.env_file:
         from dotenv import dotenv_values
@@ -270,9 +280,10 @@ def execute(args, plan, tasks, *, worker_setup=None):
     os.environ["OPENWEBRL_REPRO_OUTPUT"] = str(root)
     if keys.get("WANDB_API_KEY"):
         os.environ["WANDB_API_KEY"] = keys["WANDB_API_KEY"]
-    sys.path.insert(0, plan["runtime"])
-    worker = importlib.import_module("worker")
-    environments = importlib.import_module("environments")
+    spec = importlib.util.spec_from_file_location("_openwebrl_runtime_imports", Path(__file__).with_name("runtime_imports.py"))
+    imports = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(imports)
+    worker, environments = imports.load(plan["runtime"])
     spec = importlib.util.spec_from_file_location("_openwebrl_browser_lifecycle", Path(__file__).with_name("browser_lifecycle.py"))
     lifecycle = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(lifecycle)

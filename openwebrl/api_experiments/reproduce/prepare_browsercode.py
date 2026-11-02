@@ -6,6 +6,7 @@ new output tree and recorded as before/after hashes in portable-build.json.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import importlib.util
 import json
@@ -161,6 +162,7 @@ def build(campaign, output, *, cuawright_source, browsercode_source, bun, chromi
         end = original.index("if __name__=='__main__':main()", start)
         overlay('worker.py', worker, original[start:end],
             '# Portable runner retains the actor halt on all provider failures; private Slurm isolation is omitted.\n')
+    adapt_browser_startup(output, overlay, adaptations)
     if (spec_dir / 'native_judge_sources').is_dir():
         shutil.copytree(spec_dir / 'native_judge_sources', output / 'native_judge_sources')
     overlay("worker.py", worker, "from preparation_gate import validate\n", "# Private campaign registration is intentionally not imported by the portable episode runner.\n", required=False)
@@ -193,6 +195,37 @@ def build(campaign, output, *, cuawright_source, browsercode_source, bun, chromi
     shutil.copyfile(output / "source-manifest.json", output / "execution-source-manifest.json")
     write_json(output / "portable-build.json", {"campaign": campaign, "adaptations": adaptations, "archive_policy": "Original repository snapshots remain byte-identical; only this generated runtime is adapted.", "tasks_sha256": digest(output / "tasks.json"), "isolated_budgets": True})
     return output
+
+
+def adapt_browser_startup(output, overlay, adaptations):
+    """Adapt generated startup only; preserve every frozen archive byte."""
+    output = Path(output)
+    for name, source_name in (("portable_browser_lifecycle.py", "browser_lifecycle.py"),
+                              ("portable_browser_startup.py", "local_browser_startup.py")):
+        source = Path(__file__).with_name(source_name)
+        shutil.copyfile(source, output / name)
+        adaptations.append(dict(file=name, reason="Owned local browser startup cleanup and complete-port polling",
+            source="reproduce/" + source_name, original_sha256=digest(source), adapted_sha256=digest(output / name)))
+    path = output / "environments.py"
+    text = path.read_text()
+    tree = ast.parse(text)
+    live = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "live_page")
+    overlay("environments.py", path, ast.get_source_segment(text, live),
+        "from portable_browser_lifecycle import live_page")
+    text = path.read_text()
+    tree = ast.parse(text)
+    owned = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == "OwnedBrowser")
+    start = next(node for node in owned.body if isinstance(node, ast.FunctionDef) and node.name == "start")
+    original = ast.get_source_segment(text, start)
+    marker = "  deadline=time.monotonic()+45;port=profile/'DevToolsActivePort'"
+    if (original.count(marker) != 1 or original.count("subprocess.Popen(") != 1
+            or original.count("record_owned(self.proc,d,'chromium')") != 1):
+        raise ValueError("Expected one original45s owned Chromium start")
+    # The historical loops differ; replace their port-read suffix while keeping
+    # the exact Popen argv, owned registration and original deadline expression.
+    before, _ = original.split(marker)
+    changed = before + marker + "\n  from portable_browser_startup import complete_port\n  lines=complete_port(self.proc,port,deadline,d/'owned-startup-port-observations.jsonl')\n  self.ws='ws://127.0.0.1:'+lines[0]+lines[1];return self.ws"
+    overlay("environments.py", path, original, changed)
 
 
 def main():

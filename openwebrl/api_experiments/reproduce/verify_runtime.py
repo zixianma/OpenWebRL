@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -20,9 +21,10 @@ def verify(runtime, *, browser_preflight=False):
     plan = json.loads((runtime / 'campaign-plan.json').read_text())
     sys.dont_write_bytecode = True
     os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
-    sys.path.insert(0, str(runtime))
-    worker = importlib.import_module('worker')
-    environments = importlib.import_module('environments')
+    spec = importlib.util.spec_from_file_location('_openwebrl_runtime_imports', Path(__file__).with_name('runtime_imports.py'))
+    imports = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(imports)
+    worker, environments = imports.load(runtime)
     results = []
     with tempfile.TemporaryDirectory(prefix='openwebrl-offline-import-') as temporary:
         root = Path(temporary)

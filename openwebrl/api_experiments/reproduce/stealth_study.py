@@ -7,9 +7,9 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import copy
 from datetime import datetime, timezone
 from decimal import Decimal
-import fcntl
 import hashlib
 import json
 import math
@@ -22,6 +22,7 @@ import threading
 import time
 
 from . import common, stealth_pilot as pilot, stealth_plan
+from .shared_state import namespace_lock
 
 ARMS = pilot.ARMS
 need, read, write, digest, money = pilot.need, pilot.read, pilot.write, pilot.digest, pilot.money
@@ -86,7 +87,7 @@ def prepare(runtime, output, shard):
          dict(model='gpt-5.6-terra', reasoning_effort='medium', max_completion_tokens=4096, seed=42), 'Exact Terra protocol required')
     sources = {str(Path(__file__).with_name(n).resolve()): digest(Path(__file__).with_name(n)) for n in
                ('stealth_study.py', 'stealth_plan.py', 'stealth_pilot.py', 'common.py',
-                'browser_lifecycle.py', 'cloud_browser.py', 'cloud_browsercode.py')}
+                'browser_lifecycle.py', 'runtime_imports.py', 'shared_state.py', 'cloud_browser.py', 'cloud_browsercode.py')}
     return dict(schema='browsercode-us-stealth-full300-shard-v1', approved=False,
                 runtime=str(runtime), output=str(root), campaign_output=str(output), shard=shard,
                 task_ids=ids, all_task_ids=[x['task_id'] for x in ordered], arms=arms,
@@ -118,18 +119,37 @@ class GlobalControl:
 
     @contextlib.contextmanager
     def locked(self, *, readonly=False):
-        self.root.mkdir(parents=True, exist_ok=True)
-        with (self.root / 'financial.lock').open('a') as lock:
-            fcntl.flock(lock, fcntl.LOCK_EX)
-            state = read(self.root / 'financial.json')
+        with namespace_lock(self.root):
+            path = self.root / 'financial.json'
+            before = path.read_bytes()
+            state = json.loads(before)
+            original = copy.deepcopy(state)
             yield state
             if not readonly:
-                write(self.root / 'financial.json', state)
+                need(path.read_bytes() == before, 'Shared financial state changed outside its namespace lock')
+                need(all(state[k] == original[k] for k in ('limits', 'first_start', 'deadline')),
+                     'Shared financial caps/calendar changed')
+                need(set(original['creates']) <= set(state['creates']) and set(original['sessions']) <= set(state['sessions']),
+                     'Authenticated ownership cannot disappear')
+                need(all(state['creates'][key] == entry for key, entry in original['creates'].items()),
+                     'Authenticated create admission changed')
+                need(set(state['sessions']) <= set(state['creates']), 'Provider session lacks its create admission')
+                if original['abort'] is not None:
+                    need(state['abort'] == original['abort'], 'Shared financial halt cannot be cleared or replaced')
+                for key, current in state['sessions'].items():
+                    for field in ('browserCost', 'proxyCost', 'proxyUsedMb'):
+                        money(current[field])
+                    if key in original['sessions']:
+                        previous = original['sessions'][key]
+                        need(current['id'] == previous['id'], 'Native provider identity changed')
+                        need(all(money(current[field]) >= money(previous[field])
+                                 for field in ('browserCost', 'proxyCost', 'proxyUsedMb')),
+                             'Observed provider reserves cannot decrease')
+                write(path, state)
 
     def initialize(self, first_start, limits):
-        self.root.mkdir(parents=True, exist_ok=True)
-        with (self.root / 'financial.lock').open('a') as lock:
-            fcntl.flock(lock, fcntl.LOCK_EX)
+        need(type(first_start) in (int, float) and math.isfinite(first_start), 'Finite actual first start required')
+        with namespace_lock(self.root):
             path = self.root / 'financial.json'
             if path.exists():
                 state = read(path)
@@ -233,7 +253,8 @@ class Control(pilot.Control):
                         return False
                     previous = local['sessions'].get(key, {})
                     maximum = previous.get('admission_maximum_observed', {})
-                    maximum = {k: str(max(money(view[k]), money(maximum.get(k, 0))))
+                    global_previous = global_state['sessions'].get(key, {})
+                    maximum = {k: str(max(money(view[k]), money(maximum.get(k, 0)), money(global_previous.get(k, 0))))
                                for k in ('browserCost', 'proxyCost', 'proxyUsedMb')}
                     local['sessions'][key] = dict(previous, id=view['id'], known=True,
                         status=view.get('status'), epoch=self.clock(), admission_maximum_observed=maximum,

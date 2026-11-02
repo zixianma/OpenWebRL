@@ -62,6 +62,12 @@ class ExecutionGuards(TestCase):
    with mock.patch.dict(os.environ,{},clear=True):
     with self.assertRaisesRegex(ValueError,'Browser lifecycle source changed'):m.execute(args,plan,[])
    self.assertFalse(Path(plan['output']).exists())
+ def test_import_binding_change_rejects_before_keys_output_or_sdk(self):
+  with tempfile.TemporaryDirectory(dir='/tmp')as tmp:
+   args,plan=self.fixture(Path(tmp));m=self.common();plan['runtime_imports']={'version':'foreign','source_sha256':'foreign'}
+   with mock.patch.dict(os.environ,{},clear=True):
+    with self.assertRaisesRegex(ValueError,'Runtime import source changed'):m.execute(args,plan,[])
+   self.assertFalse(Path(plan['output']).exists())
  def test_scope_installed_before_setup_and_restored_on_setup_failure(self):
   with tempfile.TemporaryDirectory(dir='/tmp')as tmp:
    args,plan=self.fixture(Path(tmp));m=self.common();old=object();worker=types.SimpleNamespace(live_page=old);modules={'worker':worker,'environments':types.SimpleNamespace()}

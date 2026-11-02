@@ -10,6 +10,7 @@ from datetime import datetime
 from decimal import Decimal
 import fcntl
 import hashlib
+import importlib.util
 import json
 import math
 import multiprocessing
@@ -20,6 +21,15 @@ import signal
 import subprocess
 import sys
 import time
+
+if __package__:
+    from .shared_state import atomic_write as write
+else:
+    # Keep offline file-based imports working without a global module alias.
+    _spec = importlib.util.spec_from_file_location('_stealth_shared_state', Path(__file__).with_name('shared_state.py'))
+    _shared = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_shared)
+    write = _shared.atomic_write
 
 ARMS = ('luna_single_high', 'parallel5_select_high')
 CAPS = {'luna_single_high': ('1', 1200), 'parallel5_select_high': ('3', 7200)}
@@ -36,18 +46,6 @@ def digest(path):
 
 def read(path):
     return json.loads(Path(path).read_text())
-
-
-def write(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(path.name + '.' + str(os.getpid()) + '.tmp')
-    with temporary.open('w') as stream:
-        json.dump(value, stream, sort_keys=True, indent=2, default=str)
-        stream.write('\n')
-        stream.flush()
-        os.fsync(stream.fileno())
-    os.replace(temporary, path)
 
 
 def money(value):
@@ -246,7 +244,7 @@ def prepare(runtime, proposal, output):
             need(plan['selector_effort']=='high' and plan['selector_max_output_tokens']==12288,'Exact high12288 selector required')
         plan.update(selected_task_ids=ids, task_selection_count=20, task_count=20, pilot_proposal_sha256=digest(proposal))
         outputs[arm] = dict(args=vars(args), plan=plan)
-    sources = {str(Path(__file__).with_name(name).resolve()):digest(Path(__file__).with_name(name)) for name in ('stealth_pilot.py','common.py','cloud_browser.py','cloud_browsercode.py')}
+    sources = {str(Path(__file__).with_name(name).resolve()):digest(Path(__file__).with_name(name)) for name in ('stealth_pilot.py','common.py','runtime_imports.py','shared_state.py','browser_lifecycle.py','cloud_browser.py','cloud_browsercode.py')}
     return dict(schema='browsercode-stealth-paired-pilot-execution-plan-v1', runtime=str(runtime), proposal=str(proposal), output=str(output), proposal_sha256=digest(proposal), runtime_manifest_sha256=digest(runtime/'source-manifest.json'), source_sha256=sources, task_ids=ids, arms=outputs, creates_all_attempts=42, model_calls_all_attempts=8400, terra_calls_all_attempts=40, seconds_all_attempts=14400, approved=False)
 
 
