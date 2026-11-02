@@ -1,0 +1,1348 @@
+{
+ "note": "Pool the task-level 5-fold selection-label comparison (out-of-fold heads, teacher picks) into kfold_results.json.",
+ "bootstrap": {
+  "resamples": 10000,
+  "seed": 20261101,
+  "cluster": "task_id",
+  "interval": "percentile 95%"
+ },
+ "sources": [
+  "teacher_pre",
+  "teacher_post",
+  "teacher_k1",
+  "teacher_k3",
+  "teacher_k5",
+  "outcome"
+ ],
+ "seeds": {
+  "teacher_pre": 3,
+  "teacher_post": 3,
+  "teacher_k1": 3,
+  "teacher_k3": 3,
+  "teacher_k5": 3,
+  "outcome": 3
+ },
+ "fold_sizes": {
+  "0": {
+   "states": 345,
+   "tasks": 86
+  },
+  "1": {
+   "states": 345,
+   "tasks": 85
+  },
+  "2": {
+   "states": 345,
+   "tasks": 86
+  },
+  "3": {
+   "states": 345,
+   "tasks": 86
+  },
+  "4": {
+   "states": 345,
+   "tasks": 90
+  }
+ },
+ "pooled": {
+  "states": 1725,
+  "tasks": 433,
+  "sft_sample": 38.76,
+  "teacher_pre": {
+   "teacher": 40.35,
+   "teacher_minus_sft": [
+    1.59,
+    0.92,
+    2.29
+   ],
+   "head": 39.61,
+   "head_minus_sft": [
+    0.85,
+    0.16,
+    1.57
+   ],
+   "head_seed0": 39.51,
+   "head_seed0_minus_sft": [
+    0.76,
+    0.03,
+    1.5
+   ]
+  },
+  "teacher_post": {
+   "teacher": 41.48,
+   "teacher_minus_sft": [
+    2.72,
+    2.01,
+    3.47
+   ],
+   "head": 39.92,
+   "head_minus_sft": [
+    1.16,
+    0.51,
+    1.84
+   ],
+   "head_seed0": 39.98,
+   "head_seed0_minus_sft": [
+    1.22,
+    0.54,
+    1.95
+   ]
+  },
+  "teacher_k1": {
+   "teacher": 42.16,
+   "teacher_minus_sft": [
+    3.41,
+    2.6,
+    4.27
+   ],
+   "head": 40.03,
+   "head_minus_sft": [
+    1.27,
+    0.54,
+    2.02
+   ],
+   "head_seed0": 39.98,
+   "head_seed0_minus_sft": [
+    1.22,
+    0.44,
+    2.01
+   ]
+  },
+  "teacher_k3": {
+   "teacher": 41.94,
+   "teacher_minus_sft": [
+    3.18,
+    2.39,
+    4.0
+   ],
+   "head": 40.36,
+   "head_minus_sft": [
+    1.6,
+    0.94,
+    2.28
+   ],
+   "head_seed0": 40.48,
+   "head_seed0_minus_sft": [
+    1.72,
+    1.03,
+    2.44
+   ]
+  },
+  "teacher_k5": {
+   "teacher": 41.98,
+   "teacher_minus_sft": [
+    3.22,
+    2.38,
+    4.1
+   ],
+   "head": 39.84,
+   "head_minus_sft": [
+    1.08,
+    0.45,
+    1.72
+   ],
+   "head_seed0": 39.95,
+   "head_seed0_minus_sft": [
+    1.19,
+    0.52,
+    1.87
+   ]
+  },
+  "outcome": {
+   "teacher": 42.28,
+   "teacher_minus_sft": [
+    3.53,
+    2.78,
+    4.33
+   ],
+   "head": 39.52,
+   "head_minus_sft": [
+    0.76,
+    0.09,
+    1.43
+   ],
+   "head_seed0": 39.48,
+   "head_seed0_minus_sft": [
+    0.72,
+    0.03,
+    1.42
+   ]
+  }
+ },
+ "fold0": {
+  "states": 345,
+  "tasks": 86,
+  "sft_sample": 35.39,
+  "teacher_pre": {
+   "teacher": 37.56,
+   "teacher_minus_sft": [
+    2.17,
+    0.58,
+    3.97
+   ],
+   "head": 36.37,
+   "head_minus_sft": [
+    0.98,
+    -0.61,
+    2.64
+   ],
+   "head_seed0": 36.5,
+   "head_seed0_minus_sft": [
+    1.11,
+    -0.59,
+    2.95
+   ]
+  },
+  "teacher_post": {
+   "teacher": 40.25,
+   "teacher_minus_sft": [
+    4.86,
+    2.88,
+    7.19
+   ],
+   "head": 37.24,
+   "head_minus_sft": [
+    1.85,
+    0.52,
+    3.28
+   ],
+   "head_seed0": 37.27,
+   "head_seed0_minus_sft": [
+    1.88,
+    0.48,
+    3.4
+   ]
+  },
+  "teacher_k1": {
+   "teacher": 40.12,
+   "teacher_minus_sft": [
+    4.73,
+    2.63,
+    7.15
+   ],
+   "head": 37.35,
+   "head_minus_sft": [
+    1.96,
+    0.51,
+    3.48
+   ],
+   "head_seed0": 37.51,
+   "head_seed0_minus_sft": [
+    2.12,
+    0.59,
+    3.68
+   ]
+  },
+  "teacher_k3": {
+   "teacher": 39.89,
+   "teacher_minus_sft": [
+    4.5,
+    2.64,
+    6.67
+   ],
+   "head": 37.21,
+   "head_minus_sft": [
+    1.82,
+    0.26,
+    3.55
+   ],
+   "head_seed0": 37.43,
+   "head_seed0_minus_sft": [
+    2.04,
+    0.31,
+    3.89
+   ]
+  },
+  "teacher_k5": {
+   "teacher": 40.04,
+   "teacher_minus_sft": [
+    4.65,
+    2.74,
+    6.81
+   ],
+   "head": 36.32,
+   "head_minus_sft": [
+    0.93,
+    -0.42,
+    2.3
+   ],
+   "head_seed0": 35.67,
+   "head_seed0_minus_sft": [
+    0.28,
+    -1.13,
+    1.71
+   ]
+  },
+  "outcome": {
+   "teacher": 40.61,
+   "teacher_minus_sft": [
+    5.22,
+    3.44,
+    7.29
+   ],
+   "head": 35.32,
+   "head_minus_sft": [
+    -0.07,
+    -1.83,
+    1.61
+   ],
+   "head_seed0": 35.04,
+   "head_seed0_minus_sft": [
+    -0.36,
+    -2.17,
+    1.37
+   ]
+  }
+ },
+ "per_fold": {
+  "0": {
+   "states": 345,
+   "tasks": 86,
+   "sft_sample": 35.39,
+   "teacher_pre": {
+    "teacher": 37.56,
+    "teacher_minus_sft": [
+     2.17,
+     0.58,
+     3.97
+    ],
+    "head": 36.37,
+    "head_minus_sft": [
+     0.98,
+     -0.61,
+     2.64
+    ],
+    "head_seed0": 36.5,
+    "head_seed0_minus_sft": [
+     1.11,
+     -0.59,
+     2.95
+    ]
+   },
+   "teacher_post": {
+    "teacher": 40.25,
+    "teacher_minus_sft": [
+     4.86,
+     2.88,
+     7.19
+    ],
+    "head": 37.24,
+    "head_minus_sft": [
+     1.85,
+     0.52,
+     3.28
+    ],
+    "head_seed0": 37.27,
+    "head_seed0_minus_sft": [
+     1.88,
+     0.48,
+     3.4
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 40.12,
+    "teacher_minus_sft": [
+     4.73,
+     2.63,
+     7.15
+    ],
+    "head": 37.35,
+    "head_minus_sft": [
+     1.96,
+     0.51,
+     3.48
+    ],
+    "head_seed0": 37.51,
+    "head_seed0_minus_sft": [
+     2.12,
+     0.59,
+     3.68
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 39.89,
+    "teacher_minus_sft": [
+     4.5,
+     2.64,
+     6.67
+    ],
+    "head": 37.21,
+    "head_minus_sft": [
+     1.82,
+     0.26,
+     3.55
+    ],
+    "head_seed0": 37.43,
+    "head_seed0_minus_sft": [
+     2.04,
+     0.31,
+     3.89
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 40.04,
+    "teacher_minus_sft": [
+     4.65,
+     2.74,
+     6.81
+    ],
+    "head": 36.32,
+    "head_minus_sft": [
+     0.93,
+     -0.42,
+     2.3
+    ],
+    "head_seed0": 35.67,
+    "head_seed0_minus_sft": [
+     0.28,
+     -1.13,
+     1.71
+    ]
+   },
+   "outcome": {
+    "teacher": 40.61,
+    "teacher_minus_sft": [
+     5.22,
+     3.44,
+     7.29
+    ],
+    "head": 35.32,
+    "head_minus_sft": [
+     -0.07,
+     -1.83,
+     1.61
+    ],
+    "head_seed0": 35.04,
+    "head_seed0_minus_sft": [
+     -0.36,
+     -2.17,
+     1.37
+    ]
+   }
+  },
+  "1": {
+   "states": 345,
+   "tasks": 85,
+   "sft_sample": 38.74,
+   "teacher_pre": {
+    "teacher": 40.24,
+    "teacher_minus_sft": [
+     1.51,
+     -0.09,
+     3.03
+    ],
+    "head": 39.24,
+    "head_minus_sft": [
+     0.5,
+     -1.29,
+     2.16
+    ],
+    "head_seed0": 38.96,
+    "head_seed0_minus_sft": [
+     0.22,
+     -1.56,
+     1.82
+    ]
+   },
+   "teacher_post": {
+    "teacher": 41.14,
+    "teacher_minus_sft": [
+     2.4,
+     0.72,
+     4.06
+    ],
+    "head": 39.8,
+    "head_minus_sft": [
+     1.07,
+     -0.11,
+     2.37
+    ],
+    "head_seed0": 39.77,
+    "head_seed0_minus_sft": [
+     1.04,
+     -0.14,
+     2.46
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 42.83,
+    "teacher_minus_sft": [
+     4.09,
+     1.72,
+     6.34
+    ],
+    "head": 40.3,
+    "head_minus_sft": [
+     1.56,
+     -0.5,
+     3.68
+    ],
+    "head_seed0": 39.8,
+    "head_seed0_minus_sft": [
+     1.07,
+     -1.12,
+     3.33
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 41.7,
+    "teacher_minus_sft": [
+     2.96,
+     0.77,
+     4.96
+    ],
+    "head": 40.56,
+    "head_minus_sft": [
+     1.82,
+     0.14,
+     3.62
+    ],
+    "head_seed0": 40.48,
+    "head_seed0_minus_sft": [
+     1.74,
+     0.01,
+     3.52
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 42.32,
+    "teacher_minus_sft": [
+     3.58,
+     1.16,
+     5.88
+    ],
+    "head": 40.31,
+    "head_minus_sft": [
+     1.58,
+     -0.26,
+     3.4
+    ],
+    "head_seed0": 40.83,
+    "head_seed0_minus_sft": [
+     2.09,
+     0.16,
+     3.92
+    ]
+   },
+   "outcome": {
+    "teacher": 42.86,
+    "teacher_minus_sft": [
+     4.13,
+     1.96,
+     6.5
+    ],
+    "head": 39.71,
+    "head_minus_sft": [
+     0.97,
+     -0.34,
+     2.17
+    ],
+    "head_seed0": 39.51,
+    "head_seed0_minus_sft": [
+     0.77,
+     -0.64,
+     2.07
+    ]
+   }
+  },
+  "2": {
+   "states": 345,
+   "tasks": 86,
+   "sft_sample": 42.8,
+   "teacher_pre": {
+    "teacher": 42.81,
+    "teacher_minus_sft": [
+     0.0,
+     -1.36,
+     1.35
+    ],
+    "head": 43.06,
+    "head_minus_sft": [
+     0.25,
+     -1.24,
+     1.82
+    ],
+    "head_seed0": 42.89,
+    "head_seed0_minus_sft": [
+     0.09,
+     -1.5,
+     1.74
+    ]
+   },
+   "teacher_post": {
+    "teacher": 44.98,
+    "teacher_minus_sft": [
+     2.18,
+     0.84,
+     3.57
+    ],
+    "head": 44.17,
+    "head_minus_sft": [
+     1.37,
+     -0.38,
+     3.28
+    ],
+    "head_seed0": 44.03,
+    "head_seed0_minus_sft": [
+     1.23,
+     -0.59,
+     3.18
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 45.72,
+    "teacher_minus_sft": [
+     2.92,
+     1.45,
+     4.44
+    ],
+    "head": 43.54,
+    "head_minus_sft": [
+     0.74,
+     -0.9,
+     2.36
+    ],
+    "head_seed0": 43.64,
+    "head_seed0_minus_sft": [
+     0.84,
+     -0.97,
+     2.61
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 45.4,
+    "teacher_minus_sft": [
+     2.6,
+     1.01,
+     4.34
+    ],
+    "head": 44.17,
+    "head_minus_sft": [
+     1.37,
+     0.1,
+     2.64
+    ],
+    "head_seed0": 44.4,
+    "head_seed0_minus_sft": [
+     1.6,
+     0.24,
+     2.96
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 45.08,
+    "teacher_minus_sft": [
+     2.28,
+     0.74,
+     4.0
+    ],
+    "head": 43.53,
+    "head_minus_sft": [
+     0.73,
+     -0.57,
+     2.07
+    ],
+    "head_seed0": 43.98,
+    "head_seed0_minus_sft": [
+     1.18,
+     -0.35,
+     2.69
+    ]
+   },
+   "outcome": {
+    "teacher": 46.06,
+    "teacher_minus_sft": [
+     3.26,
+     1.96,
+     4.58
+    ],
+    "head": 43.42,
+    "head_minus_sft": [
+     0.61,
+     -0.63,
+     1.98
+    ],
+    "head_seed0": 43.32,
+    "head_seed0_minus_sft": [
+     0.52,
+     -0.95,
+     2.03
+    ]
+   }
+  },
+  "3": {
+   "states": 345,
+   "tasks": 86,
+   "sft_sample": 39.89,
+   "teacher_pre": {
+    "teacher": 42.62,
+    "teacher_minus_sft": [
+     2.74,
+     1.18,
+     4.3
+    ],
+    "head": 41.55,
+    "head_minus_sft": [
+     1.66,
+     0.16,
+     3.39
+    ],
+    "head_seed0": 41.63,
+    "head_seed0_minus_sft": [
+     1.74,
+     0.18,
+     3.56
+    ]
+   },
+   "teacher_post": {
+    "teacher": 41.96,
+    "teacher_minus_sft": [
+     2.07,
+     0.56,
+     3.55
+    ],
+    "head": 40.97,
+    "head_minus_sft": [
+     1.09,
+     -0.68,
+     2.65
+    ],
+    "head_seed0": 41.55,
+    "head_seed0_minus_sft": [
+     1.67,
+     -0.19,
+     3.38
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 43.23,
+    "teacher_minus_sft": [
+     3.34,
+     1.87,
+     4.87
+    ],
+    "head": 40.96,
+    "head_minus_sft": [
+     1.07,
+     -0.5,
+     2.63
+    ],
+    "head_seed0": 40.79,
+    "head_seed0_minus_sft": [
+     0.9,
+     -0.78,
+     2.58
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 43.24,
+    "teacher_minus_sft": [
+     3.35,
+     1.64,
+     5.24
+    ],
+    "head": 40.92,
+    "head_minus_sft": [
+     1.03,
+     -0.57,
+     2.61
+    ],
+    "head_seed0": 40.66,
+    "head_seed0_minus_sft": [
+     0.77,
+     -0.76,
+     2.26
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 43.47,
+    "teacher_minus_sft": [
+     3.58,
+     1.82,
+     5.42
+    ],
+    "head": 40.73,
+    "head_minus_sft": [
+     0.84,
+     -0.44,
+     2.1
+    ],
+    "head_seed0": 40.85,
+    "head_seed0_minus_sft": [
+     0.96,
+     -0.36,
+     2.23
+    ]
+   },
+   "outcome": {
+    "teacher": 42.74,
+    "teacher_minus_sft": [
+     2.85,
+     1.29,
+     4.42
+    ],
+    "head": 41.85,
+    "head_minus_sft": [
+     1.96,
+     0.23,
+     3.78
+    ],
+    "head_seed0": 42.19,
+    "head_seed0_minus_sft": [
+     2.3,
+     0.6,
+     4.16
+    ]
+   }
+  },
+  "4": {
+   "states": 345,
+   "tasks": 90,
+   "sft_sample": 36.97,
+   "teacher_pre": {
+    "teacher": 38.52,
+    "teacher_minus_sft": [
+     1.55,
+     0.2,
+     3.03
+    ],
+    "head": 37.85,
+    "head_minus_sft": [
+     0.88,
+     -0.43,
+     2.25
+    ],
+    "head_seed0": 37.58,
+    "head_seed0_minus_sft": [
+     0.61,
+     -0.79,
+     2.1
+    ]
+   },
+   "teacher_post": {
+    "teacher": 39.08,
+    "teacher_minus_sft": [
+     2.11,
+     0.82,
+     3.57
+    ],
+    "head": 37.41,
+    "head_minus_sft": [
+     0.44,
+     -0.73,
+     1.67
+    ],
+    "head_seed0": 37.27,
+    "head_seed0_minus_sft": [
+     0.3,
+     -0.98,
+     1.62
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 38.92,
+    "teacher_minus_sft": [
+     1.95,
+     0.72,
+     3.37
+    ],
+    "head": 38.0,
+    "head_minus_sft": [
+     1.02,
+     -0.08,
+     2.25
+    ],
+    "head_seed0": 38.16,
+    "head_seed0_minus_sft": [
+     1.19,
+     0.01,
+     2.52
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 39.47,
+    "teacher_minus_sft": [
+     2.5,
+     1.21,
+     3.92
+    ],
+    "head": 38.92,
+    "head_minus_sft": [
+     1.95,
+     0.8,
+     3.17
+    ],
+    "head_seed0": 39.4,
+    "head_seed0_minus_sft": [
+     2.43,
+     1.0,
+     3.94
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 38.97,
+    "teacher_minus_sft": [
+     2.0,
+     0.62,
+     3.38
+    ],
+    "head": 38.3,
+    "head_minus_sft": [
+     1.33,
+     0.26,
+     2.55
+    ],
+    "head_seed0": 38.4,
+    "head_seed0_minus_sft": [
+     1.43,
+     0.23,
+     2.73
+    ]
+   },
+   "outcome": {
+    "teacher": 39.14,
+    "teacher_minus_sft": [
+     2.17,
+     1.09,
+     3.29
+    ],
+    "head": 37.3,
+    "head_minus_sft": [
+     0.33,
+     -0.95,
+     1.54
+    ],
+    "head_seed0": 37.34,
+    "head_seed0_minus_sft": [
+     0.37,
+     -0.93,
+     1.62
+    ]
+   }
+  }
+ },
+ "teacher_by_original_split": {
+  "train": {
+   "states": 1380,
+   "tasks": 347,
+   "sft_sample": 39.6,
+   "teacher_pre": {
+    "teacher": 41.05,
+    "teacher_minus_sft": [
+     1.45,
+     0.71,
+     2.21
+    ]
+   },
+   "teacher_post": {
+    "teacher": 41.79,
+    "teacher_minus_sft": [
+     2.19,
+     1.47,
+     2.93
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 42.67,
+    "teacher_minus_sft": [
+     3.08,
+     2.22,
+     4.0
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 42.45,
+    "teacher_minus_sft": [
+     2.85,
+     1.99,
+     3.75
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 42.46,
+    "teacher_minus_sft": [
+     2.86,
+     1.94,
+     3.83
+    ]
+   },
+   "outcome": {
+    "teacher": 42.7,
+    "teacher_minus_sft": [
+     3.1,
+     2.29,
+     4.01
+    ]
+   }
+  },
+  "test": {
+   "states": 345,
+   "tasks": 86,
+   "sft_sample": 35.39,
+   "teacher_pre": {
+    "teacher": 37.56,
+    "teacher_minus_sft": [
+     2.17,
+     0.58,
+     3.97
+    ]
+   },
+   "teacher_post": {
+    "teacher": 40.25,
+    "teacher_minus_sft": [
+     4.86,
+     2.88,
+     7.19
+    ]
+   },
+   "teacher_k1": {
+    "teacher": 40.12,
+    "teacher_minus_sft": [
+     4.73,
+     2.63,
+     7.15
+    ]
+   },
+   "teacher_k3": {
+    "teacher": 39.89,
+    "teacher_minus_sft": [
+     4.5,
+     2.64,
+     6.67
+    ]
+   },
+   "teacher_k5": {
+    "teacher": 40.04,
+    "teacher_minus_sft": [
+     4.65,
+     2.74,
+     6.81
+    ]
+   },
+   "outcome": {
+    "teacher": 40.61,
+    "teacher_minus_sft": [
+     5.22,
+     3.44,
+     7.29
+    ]
+   }
+  }
+ },
+ "pooled_contrasts": {
+  "teacher": {
+   "teacher_pre-teacher_post": [
+    -1.13,
+    -1.89,
+    -0.43
+   ],
+   "teacher_pre-teacher_k1": [
+    -1.81,
+    -2.6,
+    -1.06
+   ],
+   "teacher_pre-teacher_k3": [
+    -1.59,
+    -2.32,
+    -0.86
+   ],
+   "teacher_pre-teacher_k5": [
+    -1.63,
+    -2.44,
+    -0.82
+   ],
+   "teacher_pre-outcome": [
+    -1.93,
+    -2.72,
+    -1.16
+   ],
+   "teacher_post-teacher_k1": [
+    -0.68,
+    -1.28,
+    -0.09
+   ],
+   "teacher_post-teacher_k3": [
+    -0.46,
+    -1.15,
+    0.25
+   ],
+   "teacher_post-teacher_k5": [
+    -0.5,
+    -1.17,
+    0.19
+   ],
+   "teacher_post-outcome": [
+    -0.8,
+    -1.58,
+    -0.01
+   ],
+   "teacher_k1-teacher_k3": [
+    0.22,
+    -0.25,
+    0.72
+   ],
+   "teacher_k1-teacher_k5": [
+    0.19,
+    -0.34,
+    0.73
+   ],
+   "teacher_k1-outcome": [
+    -0.12,
+    -0.76,
+    0.53
+   ],
+   "teacher_k3-teacher_k5": [
+    -0.04,
+    -0.48,
+    0.39
+   ],
+   "teacher_k3-outcome": [
+    -0.34,
+    -1.02,
+    0.34
+   ],
+   "teacher_k5-outcome": [
+    -0.31,
+    -0.99,
+    0.37
+   ]
+  },
+  "head": {
+   "teacher_pre-teacher_post": [
+    -0.31,
+    -1.11,
+    0.49
+   ],
+   "teacher_pre-teacher_k1": [
+    -0.42,
+    -1.19,
+    0.39
+   ],
+   "teacher_pre-teacher_k3": [
+    -0.74,
+    -1.46,
+    -0.02
+   ],
+   "teacher_pre-teacher_k5": [
+    -0.23,
+    -0.93,
+    0.49
+   ],
+   "teacher_pre-outcome": [
+    0.09,
+    -0.72,
+    0.92
+   ],
+   "teacher_post-teacher_k1": [
+    -0.11,
+    -0.9,
+    0.66
+   ],
+   "teacher_post-teacher_k3": [
+    -0.44,
+    -1.14,
+    0.25
+   ],
+   "teacher_post-teacher_k5": [
+    0.08,
+    -0.65,
+    0.82
+   ],
+   "teacher_post-outcome": [
+    0.4,
+    -0.43,
+    1.3
+   ],
+   "teacher_k1-teacher_k3": [
+    -0.33,
+    -0.97,
+    0.28
+   ],
+   "teacher_k1-teacher_k5": [
+    0.19,
+    -0.42,
+    0.8
+   ],
+   "teacher_k1-outcome": [
+    0.51,
+    -0.37,
+    1.36
+   ],
+   "teacher_k3-teacher_k5": [
+    0.52,
+    0.0,
+    1.04
+   ],
+   "teacher_k3-outcome": [
+    0.84,
+    0.08,
+    1.63
+   ],
+   "teacher_k5-outcome": [
+    0.32,
+    -0.46,
+    1.13
+   ]
+  }
+ },
+ "pooled_head_minus_teacher": {
+  "teacher_pre": [
+   -0.74,
+   -1.34,
+   -0.14
+  ],
+  "teacher_post": [
+   -1.56,
+   -2.39,
+   -0.76
+  ],
+  "teacher_k1": [
+   -2.13,
+   -2.92,
+   -1.41
+  ],
+  "teacher_k3": [
+   -1.58,
+   -2.36,
+   -0.83
+  ],
+  "teacher_k5": [
+   -2.14,
+   -2.97,
+   -1.36
+  ],
+  "outcome": [
+   -2.76,
+   -3.67,
+   -1.92
+  ]
+ },
+ "fold0_seed0_reproduction": {
+  "states": 345,
+  "published_states": 345,
+  "sft_sample": 35.39,
+  "published_sft_sample": 35.39,
+  "teacher_pre": {
+   "teacher": [
+    2.17,
+    0.57,
+    3.95
+   ],
+   "published_teacher": [
+    2.17,
+    0.57,
+    3.95
+   ],
+   "head_seed0": [
+    1.11,
+    -0.57,
+    2.91
+   ],
+   "published_head": [
+    1.11,
+    -0.57,
+    2.91
+   ],
+   "match": true
+  },
+  "teacher_post": {
+   "teacher": [
+    4.86,
+    2.83,
+    7.19
+   ],
+   "published_teacher": [
+    4.86,
+    2.83,
+    7.19
+   ],
+   "head_seed0": [
+    1.88,
+    0.48,
+    3.36
+   ],
+   "published_head": [
+    1.88,
+    0.48,
+    3.36
+   ],
+   "match": true
+  },
+  "teacher_k1": {
+   "teacher": [
+    4.73,
+    2.6,
+    7.14
+   ],
+   "published_teacher": [
+    4.73,
+    2.6,
+    7.14
+   ],
+   "head_seed0": [
+    2.12,
+    0.62,
+    3.72
+   ],
+   "published_head": [
+    2.12,
+    0.62,
+    3.72
+   ],
+   "match": true
+  },
+  "teacher_k3": {
+   "teacher": [
+    4.5,
+    2.57,
+    6.7
+   ],
+   "published_teacher": [
+    4.5,
+    2.57,
+    6.7
+   ],
+   "head_seed0": [
+    2.04,
+    0.31,
+    3.88
+   ],
+   "published_head": [
+    2.04,
+    0.31,
+    3.88
+   ],
+   "match": true
+  },
+  "outcome": {
+   "teacher": [
+    5.22,
+    3.43,
+    7.26
+   ],
+   "published_teacher": [
+    5.22,
+    3.43,
+    7.26
+   ],
+   "head_seed0": [
+    -0.36,
+    -2.18,
+    1.44
+   ],
+   "published_head": [
+    -0.36,
+    -2.18,
+    1.44
+   ],
+   "match": true
+  }
+ },
+ "k5_labels": {
+  "judge": "gpt-6-luna, high effort, 2 random candidate orders per state",
+  "lookahead_steps": 5,
+  "states_planned": 1738,
+  "calls": 3454,
+  "charged_usd": 9.04
+ }
+}
