@@ -13,6 +13,39 @@
 
 [Aggregate](arm_results/browsercode_inference_scaling_20261031/aggregate.json) · [Coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_coordinates.csv) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.svg) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.pdf) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py) · [Reproduction recipes](API_EXPERIMENT_METHODS.md#luna-xhigh-output-limits)
 
+<a id="browsercode-equal-benchmark-average"></a>
+
+### Equal-weight average across the three benchmarks
+
+![Equal-weight benchmark-average BrowserCode success versus actor cost, browser-code batches and latency](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.png)
+
+*Each benchmark receives weight 1/3: average its own-valid success percentage, and separately average its within-benchmark valid-task actor cost, batches and latency. This gives OM2W, WebVoyager and DeepShop equal influence despite their different sizes; it does not pool tasks. Actor cost excludes Terra. Each method retains its own valid subsets, missing outcomes are not imputed, and live collection windows differ. Historical single60 enforced 60 decisions while advertising 30; single120 enforces and advertises 120. These descriptive macro means do not supply paired effects or confidence intervals.*
+
+N5/60 has the highest macro success at **86.03%**. Single120 averages **84.10%**, versus **83.91%** for single60; this small descriptive difference does not establish an improvement under matched conditions.
+
+[Average coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average_coordinates.csv) · [Average PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.pdf) · [Average SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.svg) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_average.py) · [Reproduction command](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
+
+<details>
+<summary>Equal-weight benchmark means for all eleven methods</summary>
+
+Counts and missing outcomes remain in the per-benchmark tables below; averaging percentages does not create a pooled count denominator.
+
+| Method | Macro valid-only success | Macro actor $ / task | Macro browser-code batches | Macro latency (s) |
+|---|---:|---:|---:|---:|
+| Sol high single | 76.37% | 0.26324 | 16.46 | 112.5 |
+| Luna high · 1× cap | 77.14% | 0.01044 | 16.90 | 116.6 |
+| Luna high N3 | 79.04% | 0.06233 | 14.82 | 199.9 |
+| Luna high N5 | 80.94% | 0.07501 | 14.33 | 220.3 |
+| Luna xhigh · 1× cap | 76.47% | 0.01239 | 17.28 | 138.9 |
+| Luna high · 2× cap | 79.09% | 0.01020 | 16.89 | 123.2 |
+| Luna high · 0.5× cap | 77.42% | 0.01021 | 16.99 | 122.1 |
+| Luna high · 60 steps | 83.91% | 0.01201 | 18.22 | 148.5 |
+| Luna high N2 · 30 steps | 79.59% | 0.05906 | 15.14 | 205.8 |
+| Luna high N5 · 60 steps | 86.03% | 0.07619 | 14.01 | 212.5 |
+| Luna high · 120 steps | 84.10% | 0.01360 | 18.61 | 153.9 |
+
+</details>
+
 <details>
 <summary>Historical single30 versus single60 paired comparison</summary>
 
