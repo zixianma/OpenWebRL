@@ -1,0 +1,197 @@
+{
+ "date": "2026-11-02",
+ "benchmark": "WebPRMBench (released, 4,600 pairs / 1,150 states)",
+ "scoring": "LoRA selection prompt (text only), argmax of next-token P(\"1\") vs P(\"2\"); ties count as errors",
+ "jobs": {
+  "train": 409223,
+  "score": 409224,
+  "build_cpu": 409220,
+  "scorer_test_cpu": 409225
+ },
+ "h200_hours": 22.3,
+ "training": {
+  "recipe": "Piotr arm_lora (rank 32, 2 epochs, eff. batch 16, seed 42)",
+  "examples": 45506,
+  "recipe2_examples": 28150,
+  "webarbiter_examples": 17356,
+  "webarbiter_dropped_over_cutoff": 46,
+  "cutoff_len": 12288
+ },
+ "webarbiter_val": {
+  "examples": 1876,
+  "acc": 0.9957356076759062,
+  "picked_1": 0.5,
+  "pairs": 938,
+  "pairs_both_orders_right": 0.9946695095948828
+ },
+ "results": {
+  "lora-c1/released": {
+   "by_env": {
+    "Mind2Web": {
+     "pairwise": 97.31,
+     "best_of_n": 90.24
+    },
+    "WebArena": {
+     "pairwise": 86.44,
+     "best_of_n": 66.67
+    },
+    "AssistantBench": {
+     "pairwise": 80.0,
+     "best_of_n": 53.33
+    },
+    "WorkArena": {
+     "pairwise": 78.3,
+     "best_of_n": 55.19
+    },
+    "Average": {
+     "pairwise": 85.51,
+     "best_of_n": 66.36
+    }
+   },
+   "pairs_ok": 4207,
+   "states_ok": 905,
+   "predicted_1": 2279,
+   "ties": 8
+  },
+  "lora-c1/swapped": {
+   "by_env": {
+    "Mind2Web": {
+     "pairwise": 97.17,
+     "best_of_n": 90.1
+    },
+    "WebArena": {
+     "pairwise": 86.57,
+     "best_of_n": 66.67
+    },
+    "AssistantBench": {
+     "pairwise": 79.17,
+     "best_of_n": 46.67
+    },
+    "WorkArena": {
+     "pairwise": 79.6,
+     "best_of_n": 53.77
+    },
+    "Average": {
+     "pairwise": 85.63,
+     "best_of_n": 64.3
+    }
+   },
+   "pairs_ok": 4214,
+   "states_ok": 899,
+   "predicted_1": 2434,
+   "ties": 4
+  },
+  "lora-c1/actions": {
+   "by_env": {
+    "Mind2Web": {
+     "pairwise": 68.64,
+     "best_of_n": 40.74
+    },
+    "WebArena": {
+     "pairwise": 81.34,
+     "best_of_n": 63.68
+    },
+    "AssistantBench": {
+     "pairwise": 79.17,
+     "best_of_n": 60.0
+    },
+    "WorkArena": {
+     "pairwise": 70.75,
+     "best_of_n": 50.0
+    },
+    "Average": {
+     "pairwise": 74.97,
+     "best_of_n": 53.6
+    }
+   },
+   "pairs_ok": 3290,
+   "states_ok": 540,
+   "predicted_1": 2473,
+   "ties": 30
+  },
+  "lora-recipe2-2612/released": {
+   "by_env": {
+    "Mind2Web": {
+     "pairwise": 72.1,
+     "best_of_n": 38.9
+    },
+    "WebArena": {
+     "pairwise": 81.97,
+     "best_of_n": 60.7
+    },
+    "AssistantBench": {
+     "pairwise": 80.0,
+     "best_of_n": 63.33
+    },
+    "WorkArena": {
+     "pairwise": 75.71,
+     "best_of_n": 49.06
+    },
+    "Average": {
+     "pairwise": 77.44,
+     "best_of_n": 53.0
+    }
+   },
+   "pairs_ok": 3436,
+   "states_ok": 520,
+   "predicted_1": 2201,
+   "ties": 13
+  },
+  "lora-recipe2-2612/swapped": {
+   "by_env": {
+    "Mind2Web": {
+     "pairwise": 72.49,
+     "best_of_n": 39.32
+    },
+    "WebArena": {
+     "pairwise": 81.09,
+     "best_of_n": 59.7
+    },
+    "AssistantBench": {
+     "pairwise": 81.67,
+     "best_of_n": 60.0
+    },
+    "WorkArena": {
+     "pairwise": 76.53,
+     "best_of_n": 50.47
+    },
+    "Average": {
+     "pairwise": 77.95,
+     "best_of_n": 52.37
+    }
+   },
+   "pairs_ok": 3449,
+   "states_ok": 523,
+   "predicted_1": 2369,
+   "ties": 16
+  },
+  "lora-recipe2-2612/actions": {
+   "by_env": {
+    "Mind2Web": {
+     "pairwise": 69.2,
+     "best_of_n": 43.28
+    },
+    "WebArena": {
+     "pairwise": 77.86,
+     "best_of_n": 56.72
+    },
+    "AssistantBench": {
+     "pairwise": 75.0,
+     "best_of_n": 56.67
+    },
+    "WorkArena": {
+     "pairwise": 73.35,
+     "best_of_n": 47.17
+    },
+    "Average": {
+     "pairwise": 73.85,
+     "best_of_n": 50.96
+    }
+   },
+   "pairs_ok": 3295,
+   "states_ok": 537,
+   "predicted_1": 2227,
+   "ties": 27
+  }
+ }
+}
