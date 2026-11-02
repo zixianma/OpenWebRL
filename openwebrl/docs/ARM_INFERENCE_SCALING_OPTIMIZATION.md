@@ -123,19 +123,39 @@ All figures use valid episodes.
 
 </details>
 
+<a id="adaptive-compute-implementation"></a>
+
 <details>
-<summary>Code and runtime</summary>
+<summary>Implementation: where each method lives in the code</summary>
 
-**Code** (branch `arm-selection-head`, commits `2e735b9`, `12b1a77`, `67aa038`), all in `openwebrl/api_experiments/adaptive/`:
+All code is in [`openwebrl/api_experiments/adaptive/`](../api_experiments/adaptive/) (on `arm` as commits `cebb85e`, `99f901b` and `c27273a`). Every method is one class, [`AdaptiveLunaModel`](../api_experiments/adaptive/adaptive_model.py#L138). It subclasses the frozen Luna BrowserCode model ([`luna_model.py`](../api_experiments/browsercode/models/luna_model.py)) and keeps that model's request path: budget reservation, raw request receipts, model, effort and output limit. Only `query()` changes: it decides how many candidates to sample per decision and whether to run a selector. The arm name selects the method.
 
-| File | Contents |
+| Method | Arm name | Implementation |
+|---|---|---|
+| Single | `luna_single_high` | [`query`](../api_experiments/adaptive/adaptive_model.py#L260): one candidate, executed |
+| N5 (baseline) | `luna_n5_high` | `query`: five parallel candidates ([`_batch`](../api_experiments/adaptive/adaptive_model.py#L159)), then the projected selector [`_select`](../api_experiments/adaptive/adaptive_model.py#L173) |
+| N5, cached selector | `luna_n5_cached` | `query`: five candidates, then [`_select_cached`](../api_experiments/adaptive/adaptive_model.py#L188) |
+| Agreement gate (→ 5 / → 3) | `adaptive_agree`, `adaptive_agree_cached`, `adaptive_agree3_cached` | `query`: two candidates. If [`agree`](../api_experiments/adaptive/action_signature.py#L60) fails or either would finish, top up to [`ESCALATION_WIDTH`](../api_experiments/adaptive/adaptive_model.py#L59) and select. |
+| Self-requested deliberation | `adaptive_self`, `adaptive_self_agree` | `query`: probes get [`DELIBERATION_TOOL`](../api_experiments/adaptive/adaptive_model.py#L64) and [`DELIBERATION_INSTRUCTION`](../api_experiments/adaptive/adaptive_model.py#L70); [`parse_probe`](../api_experiments/adaptive/adaptive_model.py#L129) detects a request |
+| N5 / N3 + skip | `n5_skip`, `n3_skip` | [`_choose`](../api_experiments/adaptive/adaptive_model.py#L219): no selector when `agree` holds over all candidates |
+| Final-answer check (dropped) | `n5_verify`, `n5_skip_verify` | [`_query_phase3`](../api_experiments/adaptive/adaptive_model.py#L229) and [`_verify`](../api_experiments/adaptive/adaptive_model.py#L205): [`VERIFIER_INSTRUCTION`](../api_experiments/adaptive/adaptive_model.py#L84) and the [`REVISION_PREFIX`](../api_experiments/adaptive/adaptive_model.py#L95) note |
+
+**Shared pieces**
+
+- **Effect signatures.** [`signature`](../api_experiments/adaptive/action_signature.py#L46) in [`action_signature.py`](../api_experiments/adaptive/action_signature.py) reduces a BrowserCode command to its effect: action categories plus navigation URLs and click/type target literals.
+- **Cached selector.** `_select_cached` copies the candidates' native payload and appends one developer message holding [`SELECTOR_INSTRUCTION`](../api_experiments/adaptive/adaptive_model.py#L81) and a JSON list of the candidate actions. It sets `tool_choice: none` and a strict `selected_index` JSON schema, so the cached prefix is identical to the candidate calls.
+- **Projected selector.** `_select` builds its input with `selector_input` from the frozen support source `openwebrl/sol_serial_parallel_policy.py`. That module isn't in git; its hashed copy is recorded in each runtime's `source-manifest.json`.
+- **Episode-scoped failures.** [`EpisodeScopedHalt`](../api_experiments/adaptive/adaptive_model.py#L99) makes a provider or parse error invalidate only its episode. The frozen model would halt the whole shard's budget pool.
+
+**Campaign tooling**
+
+| File | Role |
 |---|---|
-| `adaptive_model.py` | All arms |
-| `action_signature.py` | Effect signatures |
-| `adaptive_worker.py`, `run_shard.py` | Shard worker and Slurm controller |
-| `prepare_campaign.py` | Campaign setup (`--phase 1/2/3`) |
-| `analyze_campaign.py` | Analysis |
-| `test_adaptive_model.py` | 38 offline checks |
+| [`prepare_campaign.py`](../api_experiments/adaptive/prepare_campaign.py) | Builds a runtime for `--phase 1/2/3`: copies the frozen effort runtime, freezes the 1,045-task roster into 16 seeded shards, and writes per-shard, per-arm USD caps, the global $990 guard and the hashed source manifest |
+| [`adaptive_worker.py`](../api_experiments/adaptive/adaptive_worker.py) | Runs one shard slot: per-task seeded arm order ([`arm_order`](../api_experiments/adaptive/adaptive_worker.py#L53)), one retry per pair ([`prior_rows`](../api_experiments/adaptive/adaptive_worker.py#L59)), the global spend stop ([`global_spend`](../api_experiments/adaptive/adaptive_worker.py#L84)) and a stop after 6 consecutive invalid episodes |
+| [`run_shard.py`](../api_experiments/adaptive/run_shard.py) | The Slurm controller: browser preflight, two worker slots, heartbeat, deadline, teardown |
+| [`analyze_campaign.py`](../api_experiments/adaptive/analyze_campaign.py) | Produces the tables above |
+| [`test_adaptive_model.py`](../api_experiments/adaptive/test_adaptive_model.py) | 38 offline checks with a scripted provider |
 
 **Runtimes** are under `/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations/`:
 
@@ -145,6 +165,6 @@ All figures use valid episodes.
 | 2 | `adaptive-compute-phase2-20261031-v1/` |
 | 3 | `adaptive-compute-phase3-20261101-v1/` |
 
-Phase 3's original five-arm plan is kept as `campaign-plan-original-5arm.json`. Interim analysis JSON is in `adaptive-analysis-20261101/`.
+Each runtime keeps hashed copies of the sources it ran. Phase 3's original five-arm plan is kept as `campaign-plan-original-5arm.json`. Interim analysis JSON is in `adaptive-analysis-20261101/`. Per-decision records are saved under `shards/<shard>/attempts/*/episodes/<task>-browsercode-<arm>/decisions/`; each holds the candidates, their signatures, the selector or verifier response, the selected index and the decision time.
 
 </details>
