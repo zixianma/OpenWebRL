@@ -8,7 +8,9 @@
     averaged). Task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
 (2) Live: the seed-0 head trained on the original 1,380 training states, three-benchmark mean overall success
     (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o; selection-data-scale-20261023.json,
-    post-execution from selection-label-stages-20261027.json). Lookahead H = 5 was not run live.
+    post-execution from selection-label-stages-20261027.json). Lookahead H = 5 was run live separately on 2026-11-01/02 (one run, same protocol and judges) with same-day SFT and
+H = 3 controls; its point is the same-day gain over SFT, drawn hollow (selection-label-k5-live-20261102.json, "h5 - sft").
+Read it against that day's H = 3 head (+1.9 over SFT), not the older H = 3 point.
 """
 import json
 from pathlib import Path
@@ -21,13 +23,15 @@ HERE = Path(__file__).resolve().parent
 K = json.loads((HERE / "selection-label-kfold-20261101.json").read_text())
 LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
 EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).get("live", {})
+K5LIVE = json.loads((HERE / "selection-label-k5-live-20261102.json").read_text())["paired"]
+K5_H5, K5_H3 = K5LIVE["h5 - sft"]["mean"], K5LIVE["h3 - sft"]["mean"]  # same-day 11-01/02 run
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
     ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
     ("Lookahead\nH = 1", "#A99BE3", "teacher_k1", "Ours K1"),
     ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
-    ("Lookahead\nH = 5", "#33246E", "teacher_k5", None),
+    ("Lookahead\nH = 5", "#33246E", "teacher_k5", "K5"),
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
@@ -51,6 +55,10 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
+            if live == "K5":  # separate same-day run: hollow, annotated with that day's H = 3
+                point(ax, x, K5_H5, color, "D", False)
+                ax.text(x, K5_H5[1] - 0.3, "11-01/02 run;\nH = 3 same day\n" + f"{K5_H3[0]:+.1f}".replace("-", "−"), ha="center", va="top", fontsize=5.6, color=MUTED)
+                continue
             point(ax, x, EXTRA.get(live) or LIVE[live]["minus_sft4b"], color, "D", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
@@ -64,9 +72,9 @@ axes[0].set_ylim(-4.5, 10); axes[0].set_ylabel("Gain over one SFT 4B actor sampl
 handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewidth=1.4,
                   markerfacecolor="#555555" if f else "white") for m, f in (("o", False), ("s", True), ("D", True))]
 fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (3 seeds, out-of-fold)", "Head, live (seed 0)"],
-           frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.06))
+           frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.08))
 fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on held-out rollouts 4–8 (labels used rollouts 1–3; "
          "Oracle = best action on rollouts 1–3). Bars: 95% intervals,\ntask-clustered bootstrap (offline) or paired over "
-         "tasks (live). Each panel's baseline is one SFT sample on its own states or tasks.", fontsize=6.5, color=MUTED)
-fig.tight_layout(rect=(0, 0.12, 1, 1))
+         "tasks (live). Each panel's baseline is one SFT sample on its own states or tasks." + "\nHollow diamond (H = 5): a separate same-day run on 11-01/02 (one run), gain over that day's SFT; that day's H = 3 head gained " + f"{K5_H3[0]:+.1f}".replace("-", "−") + " pp, so compare H = 5 with that, not with the older H = 3 point.", fontsize=6.5, color=MUTED)
+fig.tight_layout(rect=(0, 0.14, 1, 1))
 fig.savefig(HERE / "selection-label-setups-kfold-20261101.png", dpi=160); plt.close(fig)
