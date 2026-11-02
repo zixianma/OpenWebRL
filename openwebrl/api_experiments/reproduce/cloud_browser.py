@@ -270,7 +270,7 @@ class CloudBrowser:
         need(self.receipt is None, 'Closed owner cannot create a browser')
         payload = dict(proxyCountryCode='us', timeout=self.timeout_minutes,
                        browserScreenWidth=1280, browserScreenHeight=1800,
-                       allowResizing=False, enableRecording=False, metadata=self.metadata)
+                       allowResizing=True, enableRecording=False, metadata=self.metadata)
         intent = dict(schema='owned-browser-use-v4-create-intent-v1', request=payload,
                       request_sha256=hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest(),
                       epoch=time.time(), creation_retries=0, traffic_guard='best_effort_not_hard')

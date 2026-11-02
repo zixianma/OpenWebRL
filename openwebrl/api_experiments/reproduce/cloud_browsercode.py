@@ -94,17 +94,84 @@ class Registry:
                 self.cloud_timeline = timeline(Path(workspace).parent)
                 super().__init__(*args, **kwargs)
 
+            def _pin_cloud_viewport(self):
+                # Actual layout and raw pixels qualify the common viewport.
+                # Randomized screen/DPR fingerprints remain recorded diagnostics.
+                import json
+                expression = 'JSON.stringify({width:innerWidth,height:innerHeight,compatMode:document.compatMode,rootClient:{width:document.documentElement.clientWidth,height:document.documentElement.clientHeight},bodyClient:document.body?{width:document.body.clientWidth,height:document.body.clientHeight}:null,dpr:devicePixelRatio,screenWidth:screen.width,screenHeight:screen.height})'
+                code = 'await session.Emulation.setDeviceMetricsOverride({width:1280,height:1800,screenWidth:1280,screenHeight:1800,deviceScaleFactor:1,mobile:false}); await session.Runtime.evaluate({expression:"new Promise(r=>setTimeout(r,150))",awaitPromise:true,returnByValue:true}); const vp=await session.Runtime.evaluate({expression:'+json.dumps(expression)+',returnByValue:true}); const lm=await session.Page.getLayoutMetrics({});console.log("owned-viewport-proof:"+JSON.stringify({dom:JSON.parse(vp.result.value),visual:lm.cssVisualViewport,layout:lm.cssLayoutViewport}));'
+                for attempt in range(3):
+                    self.cloud_viewport_attempt = getattr(self,'cloud_viewport_attempt',0)+1
+                    evidence = dict(attempt=self.cloud_viewport_attempt,requested_viewport=[1280,1800],requested_device_scale=1)
+                    path=self._workspace_dir().parent/('cloud-viewport-attempt-'+str(self.cloud_viewport_attempt)+'.json')
+                    try:
+                        with self.cloud_timeline.span('cloud_viewport_pin'):
+                            reply=self.call(dict(op='execute',args=dict(code=code,description='Verify actual raw1280x1800 cloud viewport',timeout=10000)),15)
+                        evidence['raw_controller_reply']=reply
+                        # Persist even rejected/missing values before qualification.
+                        write_private(path,evidence,exclusive=True)
+                        need(reply.get('ok') is True,'Cloud viewport controller call failed')
+                        text=reply.get('result',{}).get('output','')
+                        rows=[line.split('owned-viewport-proof:',1)[1]for line in text.splitlines()if line.startswith('owned-viewport-proof:')]
+                        need(len(rows)==1,'Exactly one actual viewport proof required')
+                        value=json.loads(rows[0])
+                        dom=value['dom']
+                        client_source='bodyClient' if dom['compatMode']=='BackCompat' else 'rootClient'
+                        need(dom['compatMode']in('BackCompat','CSS1Compat'),'Known actual document mode required')
+                        client=dom[client_source]
+                        qualified=(type(dom['width'])is int and type(dom['height'])is int
+                                   and dom['width']==1280 and dom['height']==1800
+                                   and type(client['width'])is int and type(client['height'])is int
+                                   and 0<=1280-client['width']<=64 and 0<=1800-client['height']<=64
+                                   and all(type(value[k][field])in(int,float) and __import__('math').isfinite(value[k][field]) and value[k][field]>0 and abs(value[k][field]-client[axis])<=1 for k in ('visual','layout') for field,axis in (('clientWidth','width'),('clientHeight','height'))))
+                        deltas={k:{axis:value[k][field]-client[axis] if type(value[k][field])in(int,float) and __import__('math').isfinite(value[k][field]) else None for field,axis in (('clientWidth','width'),('clientHeight','height'))}for k in ('visual','layout')}
+                        write_private(self._workspace_dir().parent/('cloud-viewport-evaluation-'+str(self.cloud_viewport_attempt)+'.json'),dict(selected_client_source=client_source,selected_client=client,css_delta_pixels=deltas,css_rounding_tolerance_pixels=1,qualified=qualified),exclusive=True)
+                        if qualified:
+                            self.cloud_viewport_count=getattr(self,'cloud_viewport_count',0)+1
+                            write_private(self._workspace_dir().parent/('cloud-viewport-proof-'+str(self.cloud_viewport_count)+'.json'),dict(measured=value,actual_layout_qualified=True,reported_fingerprint_fields_are_diagnostic=True,document_scrollbar_gutters_are_measured=True,selected_client_source=client_source,css_delta_pixels=deltas,css_rounding_tolerance_pixels=1,raw_png_verification_still_required=True),exclusive=True)
+                            return value
+                    except (SystemExit,KeyboardInterrupt):
+                        raise
+                    except Exception as error:
+                        if 'raw_controller_reply'not in evidence:
+                            evidence['error_type']=type(error).__name__;write_private(path,evidence,exclusive=True)
+                        # A transport timeout can leave an unconsumed bridge reply.
+                        # Do not retry a desynchronized protocol stream.
+                        if isinstance(error,(OSError,EOFError,RuntimeError)):
+                            raise
+                        if attempt==2:
+                            raise
+                    __import__('time').sleep(.2)
+                raise ValueError('Provider did not honor the actual raw1280x1800 viewport')
+
             def start(self, *args, **kwargs):
                 with self.cloud_timeline.span('browser_bridge_start'):
-                    return super().start(*args, **kwargs)
+                    result = super().start(*args, **kwargs)
+                self._pin_cloud_viewport()
+                return result
 
             def execute(self, *args, **kwargs):
                 with self.cloud_timeline.span('browser_execute', phase=self.cloud_timeline.phase):
                     return super().execute(*args, **kwargs)
 
-            def capture(self, *args, **kwargs):
-                with self.cloud_timeline.span('terminal_capture'):
-                    return super().capture(*args, **kwargs)
+            def capture(self, path, *args, **kwargs):
+                import struct
+                path=Path(path)
+                for attempt in range(2):
+                    self._pin_cloud_viewport()
+                    with self.cloud_timeline.span('terminal_capture'):
+                        result=super().capture(path,*args,**kwargs)
+                    data=path.read_bytes()
+                    if data.startswith(b'\x89PNG\r\n\x1a\n')and len(data)>=24 and struct.unpack('>II',data[16:24])==(1280,1800):
+                        return result
+                    # Preserve the actual rejected raw capture, without resizing,
+                    # cropping or synthesizing pixels. Only a fresh native capture
+                    # may populate the requested evidence path on a later attempt.
+                    rejected=path.with_name(path.name+'.rejected-'+str(attempt+1)+'.png')
+                    need(not rejected.exists(),'Prior raw rejected capture exists')
+                    path.rename(rejected)
+                    __import__('time').sleep(.2)
+                raise ValueError('Raw cloud screenshot is not1280x1800')
 
             def close(self):
                 with self.cloud_timeline.span('browser_bridge_close'):
@@ -200,7 +267,7 @@ def configure(runtime):
     config['judge_protocol'] = protocol
     config['pricing'].update(judge_input=protocol['pricing']['input'], judge_cached=protocol['pricing']['cached_input'], judge_output=protocol['pricing']['output'])
     config['cloud_protocol'] = dict(browser_backend='browser-use-v4', proxy_country='us',
-             max_provider_minutes=20, viewport=[1280,1800], paid_authorization=False)
+             max_provider_minutes=20, viewport=[1280,1800], provider_allow_resizing=True, viewport_opt_in_stealth_tradeoff=True, paid_authorization=False)
     for name, source in replacements.items():
         shutil.copyfile(source, runtime/name)
     metrics = (runtime/'episode_metrics.py').read_text()
