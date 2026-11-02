@@ -916,6 +916,28 @@ SFT 4B: Online-Mind2Web 31.7% and WebVoyager 44.4% (10-18; Online-Mind2Web re-ju
 - **Two one-run LoRA variants** (2,551 states with 22K Piotr-style panels, checkpoint 3,600: 41.4% overall; 2,612 states in one order instead of ten: 39.0%) are level with SelectionARM's three runs (0.0 and −2.4 pp, intervals span 0).
 - [Details, per-run means, cross-day drift and counts](ARM_SELECTION_HEAD.md#selection-head-sameday-20261029) · [Evidence](arm_results/rl_integration/selection-sameday3-20261030.json) · [Analysis script](arm_results/rl_integration/selection-sameday3-20261030-analysis.py)
 
+<a id="final-selection-viewport-720-20261102"></a>
+
+### Matched 1280×720 viewport at inference (November 1–2)
+
+**Recipe 2 selectors were trained on branch states captured at 1280×720 but are evaluated at the 1280×1000 default. Evaluating them at the matched 720 viewport does not help: their gains over SFT alone at the same viewport shrink. The head drops from +4.8 [+2.5, +7.0] to +2.1 [+0.1, +4.2] pp and the LoRA from +6.5 [+4.3, +8.8] to +4.9 [+2.8, +7.2]. The changes in gain are −2.6 [−5.8, +0.5] for the head and −1.5 [−4.6, +1.6] for the LoRA, so 1280×1000 stays the default.** SFT 4B actor, three runs per condition, all 1,045 tasks, N = 5, T 1.0 / top-p 0.9, 30 steps, 1,024 response tokens. The 1000 rows are the [same-window runs above](#final-selection-sameday3-20261030) (October 29–30). The 720 rows ran November 1–2 from a frozen source copy whose only change is the environment's viewport height (720). The default configs are unchanged.
+
+| Viewport | Actor | Selector | Training data | Runs | Online-Mind2Web<br>valid-only | WebVoyager<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT 4B at same viewport, pp<br>[95% CI] |
+| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1280×1000 | SFT 4B | — (1 sample) | — | 3 | 32.3% | 45.2% | 29.0% | 33.6% | 35.5% | — |
+| 1280×1000 | SFT 4B | 4B LoRA | Recipe 2 (2.6K states / 2.6K panels) | 3 | 38.8% | 52.5% | 38.3% | 40.1% | 43.2% | **+6.5 [+4.3, +8.8]** |
+| 1280×1000 | SFT 4B | Head (22.6 M) | Recipe 2 (2.6K states / 2.6K panels) | 3 | 37.4% | 53.0% | 32.9% | 38.4% | 41.1% | **+4.8 [+2.5, +7.0]** |
+| 1280×720 | SFT 4B | — (1 sample) | — | 3 | 29.1% | 45.5% | 42.4% | 36.1% | 39.0% | — |
+| 1280×720 | SFT 4B | 4B LoRA | Recipe 2 (2.6K states / 2.6K panels) | 3 | 37.0% | 51.0% | 44.3% | 41.1% | 44.1% | **+4.9 [+2.8, +7.2]** |
+| 1280×720 | SFT 4B | Head (22.6 M) | Recipe 2 (2.6K states / 2.6K panels) | 3 | 33.7% | 49.5% | 40.8% | 38.3% | 41.3% | **+2.1 [+0.1, +4.2]** |
+
+Per-benchmark valid-only = successes / valid episodes pooled over the three runs. Differences are in mean overall success, as a [paired 95% bootstrap](#final-paired-bootstrap) over tasks on per-task success averaged over runs. Only the within-viewport differences are same-day comparisons.
+
+- **Compare gains, not raw rates, across viewports.** The two viewports ran on different days, and DeepShop drifted between them: SFT alone went from 29.0% to 42.4% valid-only, a cross-day +12.4 [+6.4, +18.4] pp. So the 720 − 1000 differences in raw rates are not interpretable. On Online-Mind2Web and WebVoyager, all three conditions are lower at 720 (−1.9 to −4.9 pp).
+- **Per benchmark at 720, the LoRA − SFT gains are** Online-Mind2Web +6.2 [+3.2, +9.3], WebVoyager +5.9 [+3.4, +8.4] and DeepShop +2.7 [−2.7, +8.0]. **The head − SFT gains are** +2.7 [−0.2, +5.6], +4.4 [+1.8, +7.0] and −0.7 [−5.6, +4.2]. At 720 the LoRA leads the head by +2.8 [+0.7, +5.0], against +1.7 [−0.4, +3.9] at 1000.
+- **Compute.** 27 jobs used about 57 H200-hours, within the approved 80.
+- [Evidence](arm_results/rl_integration/selection-viewport-720-20261102.json) · [Analysis script](arm_results/rl_integration/selection-viewport-720-20261102-analysis.py)
+
 <a id="final-selection-rl-actor-20261030"></a>
 
 ### Selection on the RL checkpoint actor (October 30–31)
