@@ -272,45 +272,67 @@ Each benchmark has equal weight (one third). Both axes use the four-method commo
 
 **WebVoyager and DeepShop use shared Terra terminal-success scores, rather than their original benchmark-native scores.** We regraded all 2,845 originally valid saved episodes, with zero actor calls; the 135 original invalids stay excluded. Higher scores relative to the historical tables come from changing the judge on the same rollouts. The separately accounted judging fee was **$45.63**, excluded from all actor-cost coordinates.
 
-**Native OM2W remains conditional on selected endpoint evidence:** 276 original-valid native episodes lack qualified evidence in this snapshot. Actor limits also differ: BrowserCode uses 12,288 output tokens and 30 decisions; native uses 20,000 output tokens, 100 decisions and summaries every 20. Different limits, timing scopes and live collection windows prevent a causal harness comparison.
+**Native recovery now qualifies 277 / 279 / 254 / 250 of 300 tasks for Sol single / Luna single / N3 / N5.** Of 379 prescribed gap cells, 322 received one new actor attempt; **57 remain unclaimed** (N3: 28; N5: 29). Sol and Luna single completed their recovery rosters. N3 stopped at its planned admission cutoff; N5 stopped after an operational error. All eligible endpoints have their first Terra verdict. These are different valid subsets; adding fresh attempts and evidence changes coverage, so the updated rates are not fixed-cohort actor improvements.
+
+Native valid-task cost, browser records and latency include original plus recovery attempts for recovered tasks. BrowserCode coordinates stay unchanged. BrowserCode uses 12,288 output tokens / 30 decisions; native uses 20,000 / 100 with summaries every 20. Different limits, timing boundaries and collection windows prevent a causal harness comparison.
 
 ![High-effort shared-Terra tradeoffs: OM2W on both harnesses, with WebVoyager and DeepShop BrowserCode rows](arm_results/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper.png)
 
 [PDF](arm_results/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper.pdf) · [SVG](arm_results/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper.svg) · [Coordinates CSV](arm_results/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_paper_coordinates.csv) · [Aggregate](arm_results/cuawright_browsercode_om2w_20261027/shared_terra_high_four_row_aggregate.json) · [Standalone plot source](arm_results/cuawright_browsercode_om2w_20261027/plot_terra_benchmark_tradeoffs.py)
 
-*Luna is a circle; Sol a square. Blue denotes one proposal; red denotes candidates plus a selector (N3 open, N5 filled). All actors use high effort. One shared legend sits outside on the right; denominators appear in the table. The fixed 7 × 5.5-inch figure uses 7.5-point labels and vector exports. Cost and latency axes are logarithmic; axes are cropped. Every actor metric uses valid tasks, including valid failures; judge fees are excluded. Browser commands count selected BrowserCode blocks or literal-LF native browser-step records, each potentially containing several actions.*
+*Luna is a circle; Sol a square. Blue denotes one proposal; red denotes candidates plus a selector (N3 light, N5 dark; both filled). All actors use high effort. One shared legend sits outside on the right; denominators appear in the table. The fixed 7 × 5.5-inch figure uses 7.5-point labels and vector exports. Cost and latency axes are logarithmic; axes are cropped. Every actor metric uses valid tasks, including valid failures; judge fees are excluded. Browser commands count selected BrowserCode blocks or literal-LF native browser-step records, each potentially containing several actions.*
 
 #### Shared-Terra success and valid-task efficiency
 
-Planned rosters are 300 OM2W, 595 WebVoyager and 150 DeepShop tasks per method. “Invalid / ungraded” includes original-invalid episodes, missing qualified evidence and invalid new judgments; it is not a judged-failure count. Every metric below has complete observation coverage within its own valid-task set.
+Planned rosters are 300 OM2W, 595 WebVoyager and 150 DeepShop tasks per method. “Invalid / ungraded” counts recorded tasks that remain unqualified; native recovery cells never admitted are separate in “Unclaimed.” Neither is a judged-failure count. Native efficiency means are cumulative across original and recovery attempts on qualified tasks; judge fees are excluded. Every metric has full observation coverage within its own valid-task set.
 
-| Benchmark / harness | Method | Successes | Valid | Invalid / ungraded | Valid success | Model USD / valid task | Actor latency (s) | Browser commands |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| OM2W / BrowserCode | Sol single | 177 | 266 | 34 | 66.5% | $0.20771 | 92.7 | 14.99 |
-| OM2W / BrowserCode | Luna single | 178 | 269 | 31 | 66.2% | $0.00951 | 94.9 | 16.63 |
-| OM2W / BrowserCode | Luna N3 | 183 | 269 | 31 | 68.0% | $0.05496 | 178.1 | 14.79 |
-| OM2W / BrowserCode | Luna N5 | 198 | 267 | 33 | 74.2% | $0.06960 | 207.9 | 14.63 |
-| OM2W / native | Sol single | 145 | 170 | 130 | 85.3% | $1.31513 | 514.1 | 32.99 |
-| OM2W / native | Luna single | 170 | 217 | 83 | 78.3% | $0.09999 | 899.0 | 29.56 |
-| OM2W / native | Luna N3 | 179 | 208 | 92 | 86.1% | $0.24619 | 1097.3 | 27.23 |
-| OM2W / native | Luna N5 | 195 | 226 | 74 | 86.3% | $0.27694 | 1089.8 | 26.54 |
-| WebVoyager / BrowserCode | Sol single | 468 | 553 | 42 | 84.6% | $0.19770 | 94.1 | 13.31 |
-| WebVoyager / BrowserCode | Luna single | 482 | 579 | 16 | 83.2% | $0.00778 | 100.1 | 13.54 |
-| WebVoyager / BrowserCode | Luna N3 | 496 | 568 | 27 | 87.3% | $0.04319 | 163.4 | 11.71 |
-| WebVoyager / BrowserCode | Luna N5 | 483 | 555 | 40 | 87.0% | $0.04588 | 171.0 | 10.89 |
-| DeepShop / BrowserCode | Sol single | 113 | 145 | 5 | 77.9% | $0.38431 | 150.6 | 21.08 |
-| DeepShop / BrowserCode | Luna single | 123 | 150 | 0 | 82.0% | $0.01403 | 154.8 | 20.53 |
-| DeepShop / BrowserCode | Luna N3 | 121 | 148 | 2 | 81.8% | $0.08884 | 258.2 | 17.96 |
-| DeepShop / BrowserCode | Luna N5 | 120 | 147 | 3 | 81.6% | $0.10954 | 281.9 | 17.48 |
+| Benchmark / harness | Method | Successes | Valid | Invalid / ungraded | Unclaimed | Valid success | Model USD / valid task | Actor latency (s) | Browser batches / steps |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| OM2W / BrowserCode | Sol single | 177 | 266 | 34 | — | 66.5% | $0.20771 | 92.7 | 14.99 |
+| OM2W / BrowserCode | Luna single | 178 | 269 | 31 | — | 66.2% | $0.00951 | 94.9 | 16.63 |
+| OM2W / BrowserCode | Luna N3 | 183 | 269 | 31 | — | 68.0% | $0.05496 | 178.1 | 14.79 |
+| OM2W / BrowserCode | Luna N5 | 198 | 267 | 33 | — | 74.2% | $0.06960 | 207.9 | 14.63 |
+| OM2W / native | Sol single | 234 | 277 | 23 | 0 | 84.5% | $1.75204 | 723.9 | 48.53 |
+| OM2W / native | Luna single | 215 | 279 | 21 | 0 | 77.1% | $0.12468 | 1165.0 | 40.09 |
+| OM2W / native | Luna N3 | 207 | 254 | 18 | 28 | 81.5% | $0.34104 | 1634.9 | 37.41 |
+| OM2W / native | Luna N5 | 209 | 250 | 21 | 29 | 83.6% | $0.34088 | 1470.8 | 32.43 |
+| WebVoyager / BrowserCode | Sol single | 468 | 553 | 42 | — | 84.6% | $0.19770 | 94.1 | 13.31 |
+| WebVoyager / BrowserCode | Luna single | 482 | 579 | 16 | — | 83.2% | $0.00778 | 100.1 | 13.54 |
+| WebVoyager / BrowserCode | Luna N3 | 496 | 568 | 27 | — | 87.3% | $0.04319 | 163.4 | 11.71 |
+| WebVoyager / BrowserCode | Luna N5 | 483 | 555 | 40 | — | 87.0% | $0.04588 | 171.0 | 10.89 |
+| DeepShop / BrowserCode | Sol single | 113 | 145 | 5 | — | 77.9% | $0.38431 | 150.6 | 21.08 |
+| DeepShop / BrowserCode | Luna single | 123 | 150 | 0 | — | 82.0% | $0.01403 | 154.8 | 20.53 |
+| DeepShop / BrowserCode | Luna N3 | 121 | 148 | 2 | — | 81.8% | $0.08884 | 258.2 | 17.96 |
+| DeepShop / BrowserCode | Luna N5 | 120 | 147 | 3 | — | 81.6% | $0.10954 | 281.9 | 17.48 |
 
-[Compact OM2W-only PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.pdf) · [OM2W-only aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_aggregate.json). Original benchmark-native results remain in the [historical tables](#headline-performance-cost-and-efficiency).
+[Historical pre-recovery compact OM2W-only PDF](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_high_valid_only_tradeoffs.pdf) · [OM2W-only aggregate](arm_results/cuawright_browsercode_om2w_20261027/om2w_terra_valid_only_aggregate.json). Original benchmark-native results remain in the [historical tables](#headline-performance-cost-and-efficiency).
+
+<details>
+<summary>Native recovery: accounting, terminal evidence and timing boundaries</summary>
+
+The updated native points retain all **821 qualified historical labels** and add **231 standard first verdicts plus eight separately qualified terminal endpoints**: 1,060 qualified task–arm cells out of 1,200. The eight endpoints require authenticated terminal captures and verified owned shutdown; original dispositions remain archived. Recovery claimed 322 of 379 gap cells, of which 83 remain unqualified; 57 were never admitted. All four actor lineages and their judge continuations are closed. This is a verified partial endpoint, not completion of all 379 prescribed cells.
+
+For each recovered valid logical task, model cost includes both original and recovery physical model work, including candidates, selectors and applicable helpers; browser records and observed actor time also sum both components. Historical-only tasks retain their original measurements. No attempted component is replaced by zero when missing. Work on tasks that remain unqualified is excluded from these conditional means and retained separately below. The aggregate carries source hashes and all-attempt recovery totals.
+
+| Native method | Recovery model calls | Recovery model charges / reserves (USD) | Unknown calls | Full unknown reserve (USD) | First Terra calls | Terra USD |
+|---|---:|---:|---:|---:|---:|---:|
+| Sol single | 16703 | 175.224220 | 4 | 0.667290000 | 107 | 1.2844785 |
+| Luna single | 17118 | 9.205629 | 2 | 0.031181750 | 62 | 0.7776920 |
+| Luna N3 | 26728 | 21.734104 | 2 | 0.052797125 | 46 | 0.5905550 |
+| Luna N5 | 25201 | 17.015287 | 5 | 0.059451875 | 24 | 0.3166010 |
+
+These totals cover all new recovery attempts and first judging stages; original collection and historical regrading remain separately accounted. The 13 unknown model calls retain their full $0.810720750 reservations. Unknown usage is not fabricated or refunded. Failed recovery actor cases receive no second recovery attempt. Terra costs are excluded from every plotted actor-cost coordinate.
+
+Historical native time spans parent-worker creation through owned cleanup. Recovery time spans the native episode runner through cleanup, subtracting only the measured final dedicated observer RPC. Preclose capture overhead remains. BrowserCode time covers its actor loop and excludes setup and cleanup. Native browser records count literal-LF browser-step entries; BrowserCode counts selected nonempty executable code batches. Both can encompass several low-level actions. These timing and counting boundaries differ across harnesses.
+
+</details>
 
 <a id="om2w-terra-supporting-effort-views"></a>
 
 <details>
 <summary>Supporting results: lower efforts, full-attempt accounting and regrading provenance</summary>
 
-**Every point in these supporting views uses GPT-5.6 Terra terminal-success grading: medium effort, 4,096 completion tokens and seed 42.** We regraded all 1,071 original-valid historical BrowserCode episodes and 821 native episodes with qualified saved endpoint evidence. Another 276 original-valid native episodes lack that evidence and remain ungraded; earlier judges' labels are not substituted. **Native success rates are conditional on this selected evidence subset, not full-300 rates.** The historical runs' 232 original invalid outcomes remain invalid. The separate regrading cost was **$27.12**, with no actor calls.
+**Historical pre-recovery snapshot.** These supporting figures are unchanged by the native recovery above. **Every point in these supporting views uses GPT-5.6 Terra terminal-success grading: medium effort, 4,096 completion tokens and seed 42.** We regraded all 1,071 original-valid historical BrowserCode episodes and 821 native episodes with qualified saved endpoint evidence. Another 276 original-valid native episodes lack that evidence and remain ungraded; earlier judges' labels are not substituted. **Native success rates are conditional on this selected evidence subset, not full-300 rates.** The historical runs' 232 original invalid outcomes remain invalid. The separate regrading cost was **$27.12**, with no actor calls.
 
 The four medium/low arms include one prescribed fresh episode for each original-invalid task–arm pair: **187 retries recovered 64 valid outcomes and 29 successes**. Original valid outcomes take priority; the single retry supplies an outcome only after an original invalid. The four arms now have 271, 271, 269 and 266 valid outcomes out of 300 planned tasks. Final qualification of the original effort campaign remains incomplete, so these arms remain provisional. Luna single xhigh is retained in the original tables and omitted from this figure.
 

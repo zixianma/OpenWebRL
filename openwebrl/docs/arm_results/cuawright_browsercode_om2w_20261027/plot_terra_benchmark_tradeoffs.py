@@ -29,11 +29,11 @@ CROSS_METHODS = METHODS
 
 STYLES = {'serial_high': ('Sol single', 's', '#08519C', True),
           'luna_single_high': ('Luna single', 'o', '#08519C', True),
-          'parallel3_select_high': ('Luna N3', 'o', '#A50F15', False),
+          'parallel3_select_high': ('Luna N3', 'o', '#ef8a8a', True),
           'parallel5_select_high': ('Luna N5', 'o', '#A50F15', True)}
 
 METRICS = (('mean_model_usd_per_task', 'model_usd_excluding_judge', 'Model cost ($, log)', 'log'),
-           ('mean_browser_steps', 'selected_browser_code_batches', 'Browser commands', 'linear'),
+           ('mean_browser_steps', 'selected_browser_code_batches', 'Browser batches / steps', 'linear'),
            ('mean_task_seconds', 'task_latency_seconds', 'Actor latency (s, log)', 'log'))
 
 def need(condition, message):
@@ -52,14 +52,14 @@ def render(data, output_dir, stem='shared_terra_high_four_row_paper'):
                          'axes.titlesize': 8, 'axes.linewidth': .6, 'svg.fonttype': 'none',
                          'svg.hashsalt': 'openwebrl-shared-terra-four-row-v1', 'pdf.fonttype': 42})
     panels = [('online_mind2web', 'browsercode', 'OM2W · BrowserCode'),
-              ('online_mind2web', 'native', 'OM2W · Native CUAWright'),
+              ('online_mind2web', 'native', 'OM2W · Native CUAWright · cumulative recovery'),
               ('webvoyager', 'browsercode', 'WebVoyager · BrowserCode'),
               ('deepshop', 'browsercode', 'DeepShop · BrowserCode')]
     fig, axes = plt.subplots(4, 3, figsize=(7, 5.5), sharey='row', squeeze=False)
-    fig.subplots_adjust(left=.075, right=.815, top=.91, bottom=.085, hspace=.73, wspace=.25)
+    fig.subplots_adjust(left=.075, right=.815, top=.91, bottom=.105, hspace=.73, wspace=.25)
     for index, (benchmark, harness, title) in enumerate(panels):
         rows = [p for p in data['points'] if p['benchmark'] == benchmark and p['harness'] == harness]
-        expected_count = 4 if index < 2 or data['schema'].endswith('-v2') else 3
+        expected_count = 4 if index < 2 or data['schema'].endswith(('-v2', '-v3')) else 3
         need(len(rows) == expected_count, 'Panel method count differs')
         rates = [100 * p['success_rate'] for p in rows]
         low = max(0, 5 * math.floor((min(rates) - .5) / 5))
@@ -76,7 +76,7 @@ def render(data, output_dir, stem='shared_terra_high_four_row_paper'):
             ax.xaxis.set_major_formatter(StrMethodFormatter('{x:g}'))
             ticks = {
                 ('online_mind2web', 'browsercode'): ([0.01, 0.05, 0.2], [15, 16], [100, 150, 200]),
-                ('online_mind2web', 'native'): ([0.1, 0.3, 1], [28, 30, 32], [600, 900, 1200]),
+                ('online_mind2web', 'native'): ([0.1, 0.3, 1], [30, 40, 50], [800, 1200, 1600]),
                 ('webvoyager', 'browsercode'): ([0.01, 0.05, 0.2], [11, 12, 13], [100, 150, 200]),
                 ('deepshop', 'browsercode'): ([0.02, 0.1, 0.4], [18, 20, 22], [150, 200, 300]),
             }
@@ -98,6 +98,12 @@ def render(data, output_dir, stem='shared_terra_high_four_row_paper'):
                       markersize=4.7, label=label) for label, marker, color, filled in STYLES.values()]
     fig.legend(handles=handles, loc='center left', bbox_to_anchor=(.835, .52), frameon=False,
                fontsize=7.5, handletextpad=.3, labelspacing=.7, borderaxespad=0)
+    if data['schema'].endswith('-v3'):
+        native = [p for p in data['points'] if p['harness'] == 'native']
+        names = {'serial_high': 'Sol', 'luna_single_high': 'single', 'parallel3_select_high': 'N3', 'parallel5_select_high': 'N5'}
+        coverage = 'Native qualified / 300\n' + '\n'.join(f"{names[p['method']]}: {p['graded_valid']}" for p in native)
+        fig.text(.835, .23, coverage + '\nN3 / N5 partial', fontsize=6.5, va='top')
+        fig.text(.075, .012, 'Native recovered-task cost, browser records and latency include original + recovery attempts; judge fees excluded.\nValid Terra subsets, timing boundaries, record units and collection windows differ.', fontsize=6, va='bottom')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else ({'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {})
         fig.savefig(output_dir / f'{stem}.{extension}', dpi=300, metadata=metadata)
@@ -112,16 +118,51 @@ def render(data, output_dir, stem='shared_terra_high_four_row_paper'):
         writer.writeheader()
         writer.writerows({key: value for key, value in point.items() if key in fields} for point in data['points'])
 
+def validate_native_recovery(p):
+    """Keep historical qualification, claimed exclusions and unclaimed cells distinct."""
+    names = ['requested', 'original_valid', 'original_invalid_preserved', 'historical_terra_eligible', 'historical_terra_valid', 'historical_terra_successes', 'original_valid_missing_evidence', 'recovery_requested', 'recovery_actor_claims', 'recovery_actor_dispositions', 'recovery_execution_valid', 'recovery_execution_invalid', 'recovery_endpoint_eligible', 'recovery_endpoint_unqualified', 'recovery_terra_recorded', 'recovery_terra_valid', 'recovery_terra_invalid', 'recovery_successes', 'recovery_valid_from_original_invalid', 'recovery_valid_from_missing_original_evidence', 'eligible', 'recorded', 'graded_valid', 'graded_invalid', 'missing_eligible_judgments', 'ungraded_no_judgment', 'successes', 'recovery_unclaimed', 'recovery_claimed', 'recovery_disposed', 'recovery_original_endpoint_eligible', 'recovery_derived_endpoint_eligible']
+    need(all(type(p.get(k)) is int and p[k] >= 0 for k in names), 'Exact native recovery counts required')
+    need(p['historical_terra_eligible'] == p['historical_terra_valid']
+         and p['historical_terra_valid'] + p['original_valid_missing_evidence'] == p['original_valid'],
+         'Historical native evidence population changed')
+    need(p['recovery_requested'] == p['original_invalid_preserved'] + p['original_valid_missing_evidence']
+         and p['recovery_claimed'] == p['recovery_disposed'] == p['recovery_actor_claims'] == p['recovery_actor_dispositions']
+         and p['recovery_claimed'] + p['recovery_unclaimed'] == p['recovery_requested'], 'Native claimed/unclaimed recovery roster differs')
+    need(p['recovery_execution_valid'] + p['recovery_execution_invalid'] == p['recovery_claimed']
+         and p['recovery_endpoint_eligible'] + p['recovery_endpoint_unqualified'] == p['recovery_execution_valid'],
+         'Native recovery execution/endpoint populations differ')
+    need(p['recovery_original_endpoint_eligible'] + p['recovery_derived_endpoint_eligible'] == p['recovery_endpoint_eligible']
+         and p['recovery_terra_recorded'] == p['recovery_endpoint_eligible'] == p['recovery_terra_valid'] + p['recovery_terra_invalid'],
+         'Every native eligible endpoint must have its first Terra disposition')
+    need(p['eligible'] == p['historical_terra_valid'] + p['recovery_endpoint_eligible']
+         and p['recorded'] == p['historical_terra_valid'] + p['recovery_terra_recorded']
+         and p['graded_valid'] == p['historical_terra_valid'] + p['recovery_terra_valid']
+         and p['graded_invalid'] == p['recovery_terra_invalid'], 'Native historical/recovery qualification sums differ')
+    need(p['historical_terra_successes'] <= p['historical_terra_valid'] and p['recovery_successes'] <= p['recovery_terra_valid']
+         and p['successes'] == p['historical_terra_successes'] + p['recovery_successes']
+         and p['recovery_valid_from_original_invalid'] + p['recovery_valid_from_missing_original_evidence'] == p['recovery_terra_valid'],
+         'Native success/source denominators differ')
+    need(type(p.get('resolved_invalid_recorded_tasks')) is int and type(p.get('not_resolved_valid_tasks')) is int
+         and p['resolved_invalid_recorded_tasks'] == p['recovery_claimed'] - p['recovery_terra_valid']
+         and p['not_resolved_valid_tasks'] == p['requested'] - p['graded_valid'] == p['resolved_invalid_recorded_tasks'] + p['recovery_unclaimed'],
+         'Never-rerun native cells cannot be counted as recorded invalids')
+    need(type(p.get('recovery_roster_complete')) is bool and p['recovery_roster_complete'] == (p['recovery_unclaimed'] == 0),
+         'Native complete-roster flag differs')
+    stop = p.get('source_stop_classification')
+    need(stop in ('complete_roster', 'planned_cutoff_partial', 'operational_partial')
+         and (stop == 'complete_roster') == p['recovery_roster_complete'], 'Native partial stop cannot become complete')
+
 def read_aggregate(path):
     data = json.loads(Path(path).read_text())
     need(data.get('schema') in ('shared-terra-high-four-row-paper-aggregate-v1',
-                                'shared-terra-high-four-row-paper-aggregate-v2'), 'Unknown paper aggregate schema')
+                                'shared-terra-high-four-row-paper-aggregate-v2',
+                                'shared-terra-high-four-row-paper-aggregate-v3'), 'Unknown paper aggregate schema')
     need(all(type(data['judge_protocol'].get(key)) is type(value) and data['judge_protocol'][key] == value
              for key, value in PROTOCOL.items()), 'Every point must use the exact shared Terra protocol')
     need(data.get('metric_population') == 'resolved_valid_tasks', 'Actor metrics must use valid Terra tasks')
     points = data['points']
     expected = {('online_mind2web', harness, method) for harness in ('browsercode', 'native') for method in METHODS}
-    cross_methods = CROSS_METHODS if data['schema'].endswith('-v2') else CROSS_METHODS_V1
+    cross_methods = CROSS_METHODS if data['schema'].endswith(('-v2', '-v3')) else CROSS_METHODS_V1
     expected |= {(benchmark, 'browsercode', method) for benchmark in ('webvoyager', 'deepshop') for method in cross_methods}
     actual = [(row['benchmark'], row['harness'], row['method']) for row in points]
     need(type(points) is list and len(points) == len(expected) and len(set(actual)) == len(actual) and set(actual) == expected,
@@ -134,8 +175,11 @@ def read_aggregate(path):
             need(type(point[key]) is int and point[key] >= 0, 'Exact nonnegative disposition counts required: ' + key)
         need(point['original_valid'] + point['original_invalid_preserved'] == requested,
              'Original invalids must remain explicit in the planned roster')
-        need(point['eligible'] + point['original_valid_missing_evidence'] == point['original_valid'],
-             'Original-valid evidence exclusions must remain explicit')
+        if data['schema'].endswith('-v3') and point['harness'] == 'native':
+            validate_native_recovery(point)
+        else:
+            need(point['eligible'] + point['original_valid_missing_evidence'] == point['original_valid'],
+                 'Original-valid evidence exclusions must remain explicit')
         need(point['recorded'] == point['eligible'] == point['graded_valid'] + point['graded_invalid']
              and point['missing_eligible_judgments'] == 0, 'All eligible Terra endpoints must have recorded dispositions')
         need(0 < point['graded_valid'] <= point['eligible'] <= requested and point['successes'] <= point['graded_valid'],
@@ -153,6 +197,24 @@ def read_aggregate(path):
             need(type(observed) is int and type(missing) is int and 0 < observed <= point['graded_valid']
                  and missing >= 0 and observed + missing == point['graded_valid'],
                  'Metric-specific valid-task coverage must remain explicit: ' + metric)
+    if data['schema'].endswith('-v3'):
+        native = [p for p in points if p['harness'] == 'native']
+        summary = data.get('native_recovery_summary', {})
+        expected_summary = {
+            'requested_recovery_cells': sum(p['recovery_requested'] for p in native),
+            'claimed_recovery_cells': sum(p['recovery_claimed'] for p in native),
+            'unclaimed_recovery_cells': sum(p['recovery_unclaimed'] for p in native),
+            'qualified_historical_labels': sum(p['historical_terra_valid'] for p in native),
+            'qualified_standard_recovery_labels': sum(p['recovery_terra_valid'] - p['recovery_derived_endpoint_eligible'] for p in native),
+            'qualified_separate_terminal_labels': sum(p['recovery_derived_endpoint_eligible'] for p in native),
+            'total_qualified': sum(p['graded_valid'] for p in native),
+            'total_planned_task_arm_cells': sum(p['requested'] for p in native),
+            'claimed_cells_remaining_unqualified': sum(p['resolved_invalid_recorded_tasks'] for p in native),
+            'full379_recovery_complete': all(p['recovery_roster_complete'] for p in native),
+            'all_eligible_first_judgments_known': True,
+        }
+        need(summary == expected_summary and all(type(summary[k]) is type(v) for k, v in expected_summary.items()),
+             'Native summary must retain exact recorded/unclaimed and qualification counts')
     return data
 
 
