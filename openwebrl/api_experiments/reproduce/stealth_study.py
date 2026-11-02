@@ -18,6 +18,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+import threading
 import time
 
 from . import common, stealth_pilot as pilot, stealth_plan
@@ -270,7 +271,42 @@ def _child_entry(arm, plan, env_file, control_root):
     raise SystemExit(pilot._worker(arm, plan, env_file, control_root))
 
 
-def run(plan, approval, env_file):
+def _halt_safely(control, reason, errors):
+    """Durable evidence must never prevent the in-memory owner shutdown."""
+    try:
+        control.halt(reason)
+    except BaseException as error:
+        errors.append(dict(component='halt_record', error_type=type(error).__name__))
+
+
+def _signal_started(workers, signalled, errors):
+    for worker in workers:
+        if worker.pid is None:
+            continue
+        try:
+            if worker.is_alive() and worker.pid not in signalled:
+                os.kill(worker.pid, signal.SIGTERM)
+                signalled.add(worker.pid)
+        except ProcessLookupError:
+            pass
+        except BaseException as error:
+            errors.append(dict(component='child_signal', error_type=type(error).__name__))
+
+
+def _drain(workers, control, signalled, errors):
+    if any(w.pid is not None and w.is_alive() for w in workers):
+        _halt_safely(control, 'owner_draining', errors)
+        _signal_started(workers, signalled, errors)
+    for worker in workers:
+        if worker.pid is not None:
+            try:
+                worker.join()
+            except BaseException as error:
+                # Attempt every other owned child even if one join itself fails.
+                errors.append(dict(component='child_await', error_type=type(error).__name__))
+
+
+def run(plan, approval, env_file, *, shutdown_event=None):
     approval_check(plan, approval)
     for path, expected in plan['source_sha256'].items():
         need(digest(path) == expected, 'Executed source changed')
@@ -291,34 +327,36 @@ def run(plan, approval, env_file):
     exclusive(root / 'study-control-config.json', dict(global_control=str(global_root), shard=plan['shard']))
     control = Control(root / 'shared-control')
     control.initialize(min(end, calendar))
+    shutdown = shutdown_event if shutdown_event is not None else threading.Event()
+    need(not shutdown.is_set(), 'External admission stop before any worker starts')
     ctx = multiprocessing.get_context('spawn')
     workers = [ctx.Process(target=_child_entry, args=(arm, plan, env_file, str(control.root))) for arm in ARMS]
-    stopped, signalled = [], set()
-    signal.signal(signal.SIGTERM, lambda *_: stopped.append(True))
+    signalled, errors, halt_attempted = set(), [], False
+    signal.signal(signal.SIGTERM, lambda *_: shutdown.set())
     try:
         for worker in workers:
+            if shutdown.is_set():
+                break
             worker.start()
         while any(x.is_alive() for x in workers):
             if any(x.exitcode not in (None, 0) for x in workers):
-                control.halt('owned_worker_failed')
-            if stopped or time.time() >= min(end, calendar) - 660:
-                control.halt('owner_wall_deadline')
-                for worker in workers:
-                    if worker.is_alive() and worker.pid not in signalled:
-                        os.kill(worker.pid, signal.SIGTERM)
-                        signalled.add(worker.pid)
+                shutdown.set()
+            if shutdown.is_set() or time.time() >= min(end, calendar) - 660:
+                shutdown.set()
+                if not halt_attempted:
+                    _halt_safely(control, 'owner_shutdown', errors)
+                    halt_attempted = True
+                _signal_started(workers, signalled, errors)
             for worker in workers:
-                worker.join(timeout=0.25)
+                if worker.pid is not None:
+                    worker.join(timeout=0.25)
     finally:
-        for worker in workers:
-            if worker.pid is not None:
-                if worker.is_alive() and worker.pid not in signalled:
-                    control.halt('owner_draining')
-                    os.kill(worker.pid, signal.SIGTERM)
-                worker.join()
+        # Never put a fallible filesystem write before the final signal/await.
+        _drain(workers, control, signalled, errors)
     write(root / 'owner-summary.json', dict(worker_exitcodes={a:w.exitcode for a,w in zip(ARMS,workers)},
-          control=control.snapshot(), all_children_awaited=True, final_invoice_asserted=False))
-    return 0 if all(w.exitcode == 0 for w in workers) else 1
+          control=control.snapshot(), all_children_awaited=all(w.pid is None or not w.is_alive() for w in workers),
+          owner_errors=errors, final_invoice_asserted=False))
+    return 0 if all(w.exitcode == 0 for w in workers) and not errors else 1
 
 
 def main():

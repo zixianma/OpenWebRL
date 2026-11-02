@@ -2,6 +2,9 @@
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
+from contextlib import ExitStack
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
 import tempfile
 import threading
 import time
@@ -171,6 +174,76 @@ class StudyTests(unittest.TestCase):
                     self.scheduler(EndTime='2026-11-03T00:00:00'), self.scheduler(Partition='gpu-h200-mig')):
             with self.subTest(raw=raw), self.assertRaises(ValueError):
                 s.allocation(raw, '42', now)
+
+
+class ShutdownTests(unittest.TestCase):
+    def worker(self, pid, *, alive=True, join_error=None):
+        worker = Mock(pid=pid, exitcode=None if alive else 0)
+        worker.is_alive.return_value = alive
+        if join_error is not None:
+            worker.join.side_effect = join_error
+        return worker
+
+    def test_failed_durable_halt_still_signals_and_joins_every_child(self):
+        control = Mock()
+        control.halt.side_effect = OSError('quota exhausted')
+        workers = [self.worker(11001), self.worker(11002)]
+        errors, signalled = [], set()
+        with patch.object(s.os, 'kill') as kill:
+            s._drain(workers, control, signalled, errors)
+        self.assertEqual(kill.call_args_list,
+                         [unittest.mock.call(11001, s.signal.SIGTERM),
+                          unittest.mock.call(11002, s.signal.SIGTERM)])
+        for worker in workers:
+            worker.join.assert_called_once_with()
+        self.assertEqual(signalled, {11001, 11002})
+        self.assertEqual(errors, [dict(component='halt_record', error_type='OSError')])
+
+    def test_failed_join_does_not_skip_remaining_owned_child(self):
+        workers = [self.worker(11001, alive=False, join_error=OSError('wait failed')),
+                   self.worker(11002, alive=False)]
+        errors = []
+        s._drain(workers, Mock(), set(), errors)
+        workers[1].join.assert_called_once_with()
+        self.assertEqual(errors, [dict(component='child_await', error_type='OSError')])
+
+    def test_normal_completion_joins_without_unnecessary_abort(self):
+        control = Mock()
+        workers = [self.worker(11001, alive=False), self.worker(11002, alive=False)]
+        errors = []
+        with patch.object(s.os, 'kill') as kill:
+            s._drain(workers, control, set(), errors)
+        control.halt.assert_not_called()
+        kill.assert_not_called()
+        for worker in workers:
+            worker.join.assert_called_once_with()
+        self.assertEqual(errors, [])
+
+    def test_pre_set_shutdown_creates_no_worker(self):
+        shutdown = threading.Event()
+        shutdown.set()
+        plan = dict(source_sha256={}, runtime='/unused-runtime', campaign_output='/unused-campaign',
+                    shard=0, output='/unused-output', global_limits={})
+        control = Mock()
+        global_control = Mock()
+        global_control.initialize.return_value = time.time() + 10000
+        with ExitStack() as stack:
+            for name in ('approval_check', 'exclusive'):
+                stack.enter_context(patch.object(s, name))
+            stack.enter_context(patch.object(s, 'prepare', return_value=plan))
+            stack.enter_context(patch.object(s, 'allocation',
+                               return_value=(time.time() - 1, time.time() + 10000, {})))
+            stack.enter_context(patch.object(s.subprocess, 'run',
+                               return_value=SimpleNamespace(stdout='offline-allocation')))
+            stack.enter_context(patch.object(s, 'GlobalControl', return_value=global_control))
+            stack.enter_context(patch.object(s, 'Control', return_value=control))
+            stack.enter_context(patch.object(s.Path, 'mkdir'))
+            context = stack.enter_context(patch.object(s.multiprocessing, 'get_context'))
+            stack.enter_context(patch.dict(s.os.environ, SLURM_JOB_ID='42'))
+            with self.assertRaisesRegex(ValueError, 'before any worker starts'):
+                s.run(plan, {}, None, shutdown_event=shutdown)
+        context.assert_not_called()
+        control.halt.assert_not_called()
 
 
 if __name__ == '__main__':
