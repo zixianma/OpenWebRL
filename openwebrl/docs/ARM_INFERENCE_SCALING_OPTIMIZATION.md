@@ -2,20 +2,20 @@
 
 <a id="adaptive-compute-20261101"></a>
 
-**Interim, November 1, 2026.** The study goal was to beat static N5 (five sampled actions plus a high-effort selector) on the performance/cost tradeoff for the GPT-6 Luna BrowserCode actor. Phases 1 and 2 are about 95% complete, and phase 3 has just started. Tables are refreshed when each phase finishes.
+**Interim, November 1, 2026.** The study goal was to beat static N5 (five sampled actions plus a high-effort selector) on the performance/cost tradeoff for the GPT-6 Luna BrowserCode actor. Phases 1 and 2 are about 96% complete, and phase 3 has just started. Tables are refreshed when each phase finishes.
 
 ## Takeaways
 
 1. **Prompt caching the selector keeps N5's success at 59% of its cost.** The original N5 selector re-sends a projected copy of the context and gets no prompt-cache hits, so it costs about as much as the five candidate calls combined. Reusing the actor's cached native input instead (the candidate list is appended as a developer message; `tool_choice: none`; JSON-schema answer) costs about one cached candidate call.
-   - Cached N5: **82.1% vs 82.5%** mean valid-only success.
-   - Paired difference: **−0.2 pp [−3.0, +2.5]**.
-   - Cost: **$0.042 vs $0.071 per task**, run on the same days.
+   - Cached N5: **82.2% vs 82.9%** mean valid-only success.
+   - Paired difference: **−0.5 pp [−3.2, +2.3]**.
+   - Cost: **$0.042 vs $0.070 per task**, run on the same days.
    - Per-decision latency is unchanged (12.2 s vs 12.3 s): caching cuts billed input, not processing time.
 2. **Gating compute per step loses accuracy.** Three gates were tested:
-   - **Agreement gate:** sample two actions and escalate to five plus the selector only when they disagree or one would finish the task. It loses **3.3–3.6 pp** against N5 in both phases (all CIs exclude 0), mostly on DeepShop and OM2W. Steps where two samples "agree" still benefit from wider sampling and selection.
+   - **Agreement gate:** sample two actions and escalate to five plus the selector only when they disagree or one would finish the task. It loses **3.0–3.5 pp** against N5 in both phases (all CIs exclude 0), mostly on DeepShop and OM2W. Steps where two samples "agree" still benefit from wider sampling and selection.
    - **Self-requested deliberation:** the actor calls a `request_deliberation` tool on steps it judges hard. It asks on 63–76% of steps, so it costs as much as N5 without matching N5's success.
-   - **The combined gate** matches N5 (+0.9 pp [−1.7, +3.4]) but costs more ($0.077 per task).
-3. **Sampling more actions is where the gain comes from.** N5 beats a single sample by **+4.3 to +6.3 pp** (both CIs exclude 0). It does so mainly by cutting episodes that hit the 30-decision limit from 15% to 8% of valid episodes. More reasoning per call does not add success: earlier xhigh and N3 results matched high and N5 ([ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031)).
+   - **The combined gate** matches N5 (+1.2 pp [−1.3, +3.7]) but costs more ($0.079 per task).
+3. **Sampling more actions is where the gain comes from.** N5 beats a single sample by **+4.6 to +6.3 pp** (both CIs exclude 0). It does so mainly by cutting episodes that hit the 30-decision limit from 15% to 8% of valid episodes. More reasoning per call does not add success: earlier xhigh and N3 results matched high and N5 ([ARM_FINAL_RESULTS](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031)).
 4. **Phase 3 targets latency (in progress).** Both latency methods use the cached selector:
    - **N5 + skip** drops the selector when all five candidates have the same non-final effect, which happens in about 40% of decisions.
    - **N3 + skip** uses three candidates with the same skip.
@@ -26,15 +26,15 @@ Mean valid-only success is the equal-weight mean of the OM2W, WebVoyager and Dee
 
 ## Phase 2: cached selector and cached agreement gates
 
-Interim snapshot from 13:30 PT, November 1, 2026. All five methods ran side by side on the same 1,045 tasks.
+Interim snapshot from 17:20 PT, November 1, 2026. All five methods ran side by side on the same 1,045 tasks.
 
 | Method | OM2W | WebVoyager | DeepShop | Valid tasks (OM2W / WV / DS) | Mean valid-only | Mean overall | $ / task | s / task | Calls / decision | vs N5, pp [95% CI] | vs single, pp [95% CI] |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Single | 63.7% | 86.8% | 82.7% | 215 / 500 / 133 | 77.7% | 64.0% | $0.0102 | 132 | 1.00 | −4.3 [−6.9, −1.4] | – |
-| **N5 (baseline)** | 68.7% | 88.9% | 90.0% | 217 / 494 / 130 | 82.5% | 67.1% | $0.0710 | 236 | 6.00 | – | +4.3 [+1.4, +6.9] |
-| N5, cached selector | 68.7% | 87.0% | 90.6% | 214 / 492 / 127 | 82.1% | 65.9% | $0.0420 | 222 | 6.00 | −0.2 [−3.0, +2.5] | +4.1 [+0.9, +7.0] |
-| Agreement gate → 5, cached | 66.5% | 86.0% | 83.8% | 215 / 500 / 130 | 78.8% | 64.2% | $0.0313 | 223 | 3.63 | −3.6 [−6.5, −1.0] | +0.7 [−2.2, +3.5] |
-| Agreement gate → 3, cached | 66.0% | 87.0% | 84.7% | 215 / 500 / 131 | 79.3% | 64.8% | $0.0246 | 201 | 2.83 | −3.3 [−6.0, −0.7] | +1.5 [−1.7, +4.6] |
+| Single | 64.6% | 86.9% | 83.2% | 257 / 572 / 143 | 78.2% | 72.7% | $0.0102 | 133 | 1.00 | −4.6 [−7.2, −1.9] | – |
+| **N5 (baseline)** | 70.7% | 88.0% | 90.0% | 256 / 566 / 140 | 82.9% | 76.0% | $0.0704 | 242 | 6.00 | – | +4.6 [+1.9, +7.2] |
+| N5, cached selector | 70.8% | 86.8% | 89.1% | 253 / 561 / 138 | 82.2% | 74.5% | $0.0415 | 225 | 6.00 | −0.5 [−3.2, +2.3] | +4.0 [+1.2, +7.0] |
+| Agreement gate → 5, cached | 68.4% | 86.5% | 84.5% | 256 / 569 / 142 | 79.8% | 73.7% | $0.0312 | 227 | 3.64 | −3.0 [−5.6, −0.6] | +1.5 [−1.2, +4.4] |
+| Agreement gate → 3, cached | 67.3% | 86.9% | 85.1% | 257 / 573 / 141 | 79.8% | 73.8% | $0.0246 | 205 | 2.82 | −3.0 [−5.5, −0.5] | +1.8 [−1.2, +4.7] |
 
 - Per-benchmark columns are valid-only success.
 - Mean overall divides successes by all planned tasks (OM2W 300, WebVoyager 595, DeepShop 150) and so falls while the run is incomplete.
@@ -43,15 +43,15 @@ Interim snapshot from 13:30 PT, November 1, 2026. All five methods ran side by s
 
 ## Phase 1: agreement and self-requested deliberation
 
-Interim snapshot from 13:30 PT, November 1, 2026. Every method except single uses the original projected (uncached) selector.
+Interim snapshot from 17:20 PT, November 1, 2026. Every method except single uses the original projected (uncached) selector.
 
 | Method | OM2W | WebVoyager | DeepShop | Valid tasks (OM2W / WV / DS) | Mean valid-only | Mean overall | $ / task | s / task | Calls / decision | vs N5, pp [95% CI] | vs single, pp [95% CI] |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Single | 66.8% | 83.2% | 79.4% | 244 / 546 / 141 | 76.5% | 68.4% | $0.0100 | 127 | 1.00 | −6.3 [−9.3, −3.4] | – |
-| **N5 (baseline)** | 71.8% | 87.1% | 89.1% | 241 / 551 / 138 | 82.7% | 73.4% | $0.0729 | 221 | 6.00 | – | +6.3 [+3.4, +9.3] |
-| Agreement gate | 67.5% | 86.9% | 83.0% | 243 / 542 / 141 | 79.1% | 70.6% | $0.0451 | 218 | 3.67 | −3.5 [−6.2, −0.8] | +2.6 [−0.2, +5.4] |
-| Self-requested deliberation | 71.1% | 86.5% | 84.1% | 242 / 542 / 138 | 80.6% | 71.2% | $0.0712 | 247 | 4.62 | −2.2 [−4.9, +0.5] | +4.1 [+1.2, +7.0] |
-| Self-request + agreement | 72.9% | 88.0% | 90.6% | 240 / 541 / 139 | 83.8% | 74.1% | $0.0772 | 261 | 6.17 | +0.9 [−1.7, +3.4] | +7.5 [+4.5, +10.4] |
+| Single | 67.2% | 82.7% | 79.2% | 265 / 591 / 149 | 76.4% | 73.4% | $0.0100 | 127 | 1.00 | −6.3 [−9.2, −3.5] | – |
+| **N5 (baseline)** | 72.1% | 87.2% | 88.5% | 262 / 592 / 148 | 82.6% | 79.0% | $0.0741 | 224 | 6.00 | – | +6.3 [+3.5, +9.2] |
+| Agreement gate | 67.7% | 85.9% | 83.3% | 266 / 590 / 150 | 79.0% | 76.2% | $0.0454 | 219 | 3.66 | −3.5 [−6.2, −0.6] | +2.6 [−0.0, +5.5] |
+| Self-requested deliberation | 71.4% | 85.9% | 85.1% | 266 / 587 / 148 | 80.8% | 77.3% | $0.0716 | 250 | 4.61 | −2.0 [−4.6, +0.7] | +4.2 [+1.3, +7.1] |
+| Self-request + agreement | 73.5% | 88.2% | 90.5% | 264 / 585 / 147 | 84.1% | 80.0% | $0.0785 | 265 | 6.17 | +1.2 [−1.3, +3.7] | +7.4 [+4.6, +10.3] |
 
 Escalated share of decisions: agreement gate 40%, self-requested deliberation 63%, combined 76%.
 
@@ -85,7 +85,7 @@ All figures use valid episodes.
 | Hit the 30-decision limit | 25 | 49 |
 
   Single high has 709 / 114 submitted successes / failures and 50 / 96 at the limit, out of 969 valid episodes. N5's gain therefore comes mostly from fewer limit-exceeded episodes.
-- **Agreement before phase 1.** An offline replay of saved N5 decisions found 44–48% unanimous by effect signature. The selector picked a minority action in 24% of decisions. Stopping after two agreeing samples would have changed the executed action in about 8% of decisions. The live agreement gate's 3.5-pp loss is consistent with that.
+- **Agreement before phase 1.** An offline replay of saved N5 decisions found 44–48% unanimous by effect signature. The selector picked a minority action in 24% of decisions. Stopping after two agreeing samples would have changed the executed action in about 8% of decisions. The live agreement gate's 3.0–3.5-pp loss is consistent with that.
 
 </details>
 
@@ -116,7 +116,7 @@ All figures use valid episodes.
 
 **Budget.**
 - Approved API spend was $1,000 (model plus judge) across all phases. A global guard stops new episodes at $990.
-- All-attempt spend at the 13:30 snapshot: phase 1 $307.00, phase 2 $208.74. Phase 3 is expected to add about $170.
+- All-attempt spend at the 17:20 snapshot: phase 1 $332.45, phase 2 $235.36. Phase 3 is expected to add about $170.
 - Jobs are CPU-only Slurm jobs (account `vlm`).
 
 **Design history.** Phase 2 was designed after an interim look at phase 1, and phase 3 after interim looks at phases 1 and 2. Each phase reruns its own baseline at the same time as its new methods.
