@@ -1,0 +1,77 @@
+{
+  "schema": "browsercode-high60-all-attempt-accounting-v1",
+  "method": "luna_single_high_60steps",
+  "plotted_population": "resolved_valid_tasks",
+  "all_attempt_fees_are_not_plotted_valid_task_means": true,
+  "benchmarks": {
+    "online_mind2web": {
+      "population": "all_attempts_including_invalid_tasks",
+      "roles": {
+        "actor_generation": {
+          "physical_calls": 5308,
+          "known_usage_calls": 5308,
+          "known_fee_usd": "3.080748275",
+          "all_charged_or_reserved_usd": "3.080748275"
+        },
+        "input_token_count": {
+          "physical_calls": 1978,
+          "known_usage_calls": 1978,
+          "known_fee_usd": "0",
+          "all_charged_or_reserved_usd": "0"
+        },
+        "judge": {
+          "physical_calls": 259,
+          "known_usage_calls": 259,
+          "known_fee_usd": "4.3802335",
+          "all_charged_or_reserved_usd": "4.3802335"
+        }
+      }
+    },
+    "webvoyager": {
+      "population": "all_attempts_including_invalid_tasks",
+      "roles": {
+        "actor_generation": {
+          "physical_calls": 9683,
+          "known_usage_calls": 9682,
+          "known_fee_usd": "5.513060690",
+          "all_charged_or_reserved_usd": "5.522560940"
+        },
+        "input_token_count": {
+          "physical_calls": 3308,
+          "known_usage_calls": 3308,
+          "known_fee_usd": "0",
+          "all_charged_or_reserved_usd": "0"
+        },
+        "judge": {
+          "physical_calls": 584,
+          "known_usage_calls": 584,
+          "known_fee_usd": "9.2980130",
+          "all_charged_or_reserved_usd": "9.2980130"
+        }
+      }
+    },
+    "deepshop": {
+      "population": "all_attempts_including_invalid_tasks",
+      "roles": {
+        "actor_generation": {
+          "physical_calls": 3341,
+          "known_usage_calls": 3341,
+          "known_fee_usd": "2.378743795",
+          "all_charged_or_reserved_usd": "2.378743795"
+        },
+        "input_token_count": {
+          "physical_calls": 1364,
+          "known_usage_calls": 1364,
+          "known_fee_usd": "0",
+          "all_charged_or_reserved_usd": "0"
+        },
+        "judge": {
+          "physical_calls": 150,
+          "known_usage_calls": 150,
+          "known_fee_usd": "2.8660270",
+          "all_charged_or_reserved_usd": "2.8660270"
+        }
+      }
+    }
+  }
+}

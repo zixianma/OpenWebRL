@@ -1855,9 +1855,162 @@
         }
       },
       "source_result_bindings_sha256": "291b2f11bd42eb77598ffab4923eaff1f7d123419b37483e4e23e59e067f47e3"
+    },
+    {
+      "benchmark": "online_mind2web",
+      "method": "luna_single_high_60steps",
+      "requested": 300,
+      "valid": 259,
+      "invalid": 41,
+      "mean_actor_model_usd_per_valid_task": 0.011115183764478764,
+      "valid_task_lifetime_projection": {
+        "tasks": 259,
+        "first_close_lifetime_observed_tasks": 259,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 259
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 156.58855441929754,
+        "sum_observed_browser_seconds": 40556.435594598064,
+        "per_session_rounded_minutes_sum_observed": 798,
+        "projected_rental_usd_sum_observed": "0.266",
+        "projected_rental_usd_mean_per_observed_task": "0.001027027027027027027027027027"
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 41,
+        "first_close_lifetime_observed_tasks": 41,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup": 41
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 153.04393044854345,
+        "sum_observed_browser_seconds": 6274.801148390281,
+        "per_session_rounded_minutes_sum_observed": 129,
+        "projected_rental_usd_sum_observed": "0.043",
+        "projected_rental_usd_mean_per_observed_task": "0.001048780487804878048780487805"
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 300,
+        "first_close_lifetime_observed_tasks": 300,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 259,
+          "browser_cleanup": 41
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 156.10412247662782,
+        "sum_observed_browser_seconds": 46831.236742988345,
+        "per_session_rounded_minutes_sum_observed": 927,
+        "projected_rental_usd_sum_observed": "0.309",
+        "projected_rental_usd_mean_per_observed_task": "0.00103"
+      },
+      "source_result_bindings_sha256": "216be2f7f97282455966ae7093cf83b8c82b64f4a7cc0fd89523d9b6bcb4e91d"
+    },
+    {
+      "benchmark": "webvoyager",
+      "method": "luna_single_high_60steps",
+      "requested": 595,
+      "valid": 584,
+      "invalid": 11,
+      "mean_actor_model_usd_per_valid_task": 0.009042802114726026,
+      "valid_task_lifetime_projection": {
+        "tasks": 584,
+        "first_close_lifetime_observed_tasks": 584,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 584
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 131.888057492611,
+        "sum_observed_browser_seconds": 77022.62557568483,
+        "per_session_rounded_minutes_sum_observed": 1571,
+        "projected_rental_usd_sum_observed": "0.5236666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.0008966894977168949771689497717"
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 11,
+        "first_close_lifetime_observed_tasks": 11,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup": 11
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 518.062078924077,
+        "sum_observed_browser_seconds": 5698.682868164848,
+        "per_session_rounded_minutes_sum_observed": 101,
+        "projected_rental_usd_sum_observed": "0.03366666666666666666666666667",
+        "projected_rental_usd_mean_per_observed_task": "0.003060606060606060606060606061"
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 595,
+        "first_close_lifetime_observed_tasks": 595,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 584,
+          "browser_cleanup": 11
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 139.02740914932718,
+        "sum_observed_browser_seconds": 82721.30844384967,
+        "per_session_rounded_minutes_sum_observed": 1672,
+        "projected_rental_usd_sum_observed": "0.5573333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.0009366946778711484593837535013"
+      },
+      "source_result_bindings_sha256": "2b3138c38dc0e442fdfab062d727f0fb339f04fc1e59b7b65cd6710e0f2705ed"
+    },
+    {
+      "benchmark": "deepshop",
+      "method": "luna_single_high_60steps",
+      "requested": 150,
+      "valid": 150,
+      "invalid": 0,
+      "mean_actor_model_usd_per_valid_task": 0.015858291966666667,
+      "valid_task_lifetime_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 166.68166532081165,
+        "sum_observed_browser_seconds": 25002.249798121746,
+        "per_session_rounded_minutes_sum_observed": 487,
+        "projected_rental_usd_sum_observed": "0.1623333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001082222222222222222222222222"
+      },
+      "invalid_task_lifetime_projection": {
+        "tasks": 0,
+        "first_close_lifetime_observed_tasks": 0,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {},
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": null,
+        "sum_observed_browser_seconds": 0,
+        "per_session_rounded_minutes_sum_observed": 0,
+        "projected_rental_usd_sum_observed": "0.00",
+        "projected_rental_usd_mean_per_observed_task": null
+      },
+      "all_recorded_task_dispositions_projection": {
+        "tasks": 150,
+        "first_close_lifetime_observed_tasks": 150,
+        "first_close_lifetime_missing_tasks": 0,
+        "first_close_field_counts": {
+          "browser_cleanup_before_judge": 150
+        },
+        "missing_lifetime_reason_counts": {},
+        "mean_observed_browser_seconds": 166.68166532081165,
+        "sum_observed_browser_seconds": 25002.249798121746,
+        "per_session_rounded_minutes_sum_observed": 487,
+        "projected_rental_usd_sum_observed": "0.1623333333333333333333333333",
+        "projected_rental_usd_mean_per_observed_task": "0.001082222222222222222222222222"
+      },
+      "source_result_bindings_sha256": "48afcc685be00b2ece6d42295c5e31f2640370b943016e45055ed8adda2bb91e"
     }
   ],
-  "schema": "browsercode-browser-cost-projection-v1",
-  "projection_source_sha256": "d322c23c8901405bc3fd109ef7537c1a88403d508005074b8fbb17b9f8d82f4b",
-  "actor_plot_aggregate_sha256": "969a252c314d9ce378d0f35f0859d7ab10552d169627b532f7a8e8ed01ad2735"
+  "schema": "browsercode-browser-cost-projection-v2",
+  "projection_source_sha256": "e399eefa987f3a43e50e746f7b8271dd6fc2fef01ea1d761bfe1aaad508c0972",
+  "actor_plot_aggregate_sha256": "5ff6bfa7b1ff4aaa62275469000ccc681be8ae4cb76da5056a680a01dfe6cfe5"
 }

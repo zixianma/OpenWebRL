@@ -6,7 +6,8 @@ with an optional fourth column for projected browser hosting cost, not traffic.
 Optional token figure: actual output and reasoning consumption, never token caps.
 No runtime/source imports, credentials, task identifiers, API or browser calls.
 The historical-baseline profile is explicitly a real-data layout preview; the
-completed-sweep profile requires exactly seven methods on every benchmark.
+completed-sweep profile requires seven methods; completed-step-sweep requires eight
+on every benchmark. Incomplete60-step outcomes are rejected.
 """
 from __future__ import annotations
 import argparse
@@ -23,7 +24,11 @@ os.environ.setdefault('MPLCONFIGDIR', '/tmp/openwebrl-scaling-matplotlib')
 BENCHMARKS = {'online_mind2web': ('OM2W', 300), 'webvoyager': ('WebVoyager', 595), 'deepshop': ('DeepShop', 150)}
 BASELINE = ('serial_high', 'luna_single_high', 'parallel3_select_high', 'parallel5_select_high')
 NEW = ('luna_single_xhigh_12288', 'luna_single_high_24576', 'luna_single_high_6144')
-METHODS = BASELINE + NEW
+STEPS = ('luna_single_high_60steps',)
+METHODS = BASELINE + NEW + STEPS
+
+def profile_methods(profile):
+    return BASELINE if profile == 'historical-baseline' else BASELINE + NEW if profile == 'completed-sweep' else METHODS
 PAIRED_STATISTICS = {'population': 'common_valid_content_identical_tasks', 'interval': 'paired_task_bootstrap_percentile_95', 'multiple_testing_correction': 'none', 'coverage': 'available_eligible_pairs_only', 'collection_window_caveat': 'Pairing controls task identity, not collection time.'}
 PROTOCOL = {'model': 'gpt-5.6-terra', 'reasoning_effort': 'medium', 'max_completion_tokens': 4096,
             'seed': 42, 'version': 'gpt56-terra-terminal-success-v1'}
@@ -35,7 +40,8 @@ STYLES = {'serial_high': ('Sol high single', 's', '#08519c', True),
           'parallel5_select_high': ('Luna high N5', 'o', '#a50f15', True),
           'luna_single_xhigh_12288': ('Luna xhigh (1× cap)', 'o', '#08306b', True),
           'luna_single_high_24576': ('Luna high (2× cap)', 'o', '#2171b5', True),
-          'luna_single_high_6144': ('Luna high (0.5× cap)', 'o', '#9ecae1', True)}
+          'luna_single_high_6144': ('Luna high (0.5× cap)', 'o', '#9ecae1', True),
+          'luna_single_high_60steps': ('Luna high (60 steps)', 'o', '#4292c6', False)}
 METRICS = ('actor_usd', 'browser_commands', 'actor_seconds', 'output_tokens', 'reasoning_tokens')
 COMMAND_DEFINITION = 'One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.'
 
@@ -81,13 +87,13 @@ def validate_accounting(d, accounting):
 
 def validate(data):
     need(type(data) is dict and set(data) == {'schema', 'profile', 'judge_protocol', 'metric_population', 'comparison_caveat', 'points', 'paired_comparisons', 'paired_statistics', 'unavailable_prespecified_comparisons', 'browser_command_definition'}, 'Only documented public aggregate fields are allowed')
-    need(data.get('schema') == 'browsercode-scaling-paper-v2', 'Unknown aggregate schema')
+    need(data.get('schema') == ('browsercode-scaling-paper-v3' if data.get('profile') == 'completed-step-sweep' else 'browsercode-scaling-paper-v2'), 'Unknown aggregate schema')
     need(data.get('browser_command_definition') == COMMAND_DEFINITION, 'Exact selected-batch command definition required')
-    need(data.get('profile') in ('historical-baseline', 'completed-sweep'), 'Unknown completeness profile')
+    need(data.get('profile') in ('historical-baseline', 'completed-sweep', 'completed-step-sweep'), 'Unknown completeness profile')
     need(data.get('judge_protocol') == PROTOCOL and all(type(data['judge_protocol'][k]) is type(v) for k, v in PROTOCOL.items()), 'Shared Terra protocol required')
     need(data.get('metric_population') == 'resolved_valid_tasks', 'Valid-task metric population required')
     need(data.get('comparison_caveat') == 'Task validity subsets and live collection windows differ; historical-versus-fresh comparisons are descriptive.', 'Comparability caveat required')
-    methods = METHODS if data['profile'] == 'completed-sweep' else BASELINE
+    methods = profile_methods(data['profile'])
     expected = {(b, m) for b in BENCHMARKS for m in methods}
     points = data.get('points')
     need(type(points) is list and len(points) == len(expected), 'Exact completed profile point count required')
@@ -121,11 +127,14 @@ def validate(data):
                 need(observed == p['valid'] and metric['mean'] > 0, 'Main plotted actor metric needs full valid-task coverage')
             if name == 'browser_commands':
                 need(observed == p['valid'], 'Command panel needs full valid-task measurement coverage')
-                need(metric['mean'] <= 30, 'Selected command batches exceed the 30-decision limit')
-        if p['method'] in NEW:
-            cap = 12288 if p['method'].endswith('12288') else 24576 if p['method'].endswith('24576') else 6144
+                need(metric['mean'] <= (60 if p['method'] in STEPS else 30), 'Selected command batches exceed the declared decision limit')
+        if p['method'] in NEW + STEPS:
+            cap = 12288 if p['method'] in STEPS or p['method'].endswith('12288') else 24576 if p['method'].endswith('24576') else 6144
             effort = 'xhigh' if 'xhigh' in p['method'] else 'high'
-            need(p.get('actor_protocol') == {'model': 'gpt-6-luna', 'reasoning_effort': effort, 'max_output_tokens': cap, 'max_decisions': 30}, 'Approved new actor protocol differs')
+            protocol = {'model': 'gpt-6-luna', 'reasoning_effort': effort, 'max_output_tokens': cap, 'max_decisions': 60 if p['method'] in STEPS else 30}
+            if p['method'] in STEPS:
+                protocol['actor_wall_alarm_seconds'] = 900
+            need(p.get('actor_protocol') == protocol, 'Approved new actor protocol differs')
             need(window['status'] == 'observed' and digest(p.get('independent_completion_audit_sha256')), 'New cohorts need observed windows and independent audit')
             d = p.get('all_attempt_generations')
             need(type(d) is dict and set(d) == {'population', 'physical_generation_calls', 'known_output_usage_calls', 'missing_output_usage_calls', 'known_reasoning_usage_calls', 'output_at_cap_calls', 'known_stop_reason_calls', 'output_limit_stop_calls'}, 'Exact all-attempt generation diagnostics required for fresh cohorts')
@@ -167,9 +176,11 @@ def validate(data):
         need(identity not in absent and identity not in identities, 'Contradictory or duplicate pair coverage')
         need(type(row['reason']) is str and row['reason'].strip(), 'Unavailable pair needs a concrete reason')
         absent.add(identity)
-    if data['profile'] == 'completed-sweep':
+    if data['profile'] in ('completed-sweep', 'completed-step-sweep'):
         prespecified = {(b, *sorted((a, 'luna_single_high'))) for b in BENCHMARKS for a in NEW}
         prespecified |= {(b, *sorted((a, c))) for b in BENCHMARKS for i, a in enumerate(NEW) for c in NEW[i+1:]}
+        if data['profile'] == 'completed-step-sweep':
+            prespecified |= {(b, *sorted((STEPS[0], old))) for b in BENCHMARKS for old in ('luna_single_high',) + NEW}
         need(absent == prespecified - identities, 'Every unavailable prespecified contrast needs an explicit reason')
     else:
         need(not absent, 'Baseline layout has no fresh-sweep prespecified comparisons')
@@ -214,7 +225,7 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
         projected = browser_cost_metrics(data, browser_projection)
         columns += ('projected_browser_hosting_usd',)
         labels += ('Projected hosting\n($ / 1k valid tasks)',)
-    available = METHODS if data['profile'] == 'completed-sweep' else BASELINE
+    available = profile_methods(data['profile'])
     need(tokens or token_methods is None, 'Token method subset requires token figure')
     if token_methods is not None:
         need(type(token_methods) in (list, tuple) and token_methods and len(set(token_methods)) == len(token_methods) and set(token_methods) <= set(available), 'Token subset must explicitly name unique available methods')
@@ -275,10 +286,12 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     fig.legend(handles=handles, loc='center left', bbox_to_anchor=(side, .55), frameon=False,
                fontsize=7.2, handletextpad=.3, labelspacing=.75, borderaxespad=0)
     note = 'Terra judged\nValid-task means\nSingle-call token caps\n1× = 12,288 tokens' + ('\nOutput includes reasoning' if tokens else '\nCaps ≠ actual usage')
+    if data['profile'] == 'completed-step-sweep':
+        note += '\n30 steps; open circle = 60'
     if projected is not None:
         rate = browser_projection['price_assumption']['browser_usd_per_hour']
         note += '\nHosting projection only\n$' + rate + '/h; minute-rounded\nTraffic excluded'
-    fig.text(side if projected is not None else .79, .245 if projected is not None else .20,
+    fig.text(side if projected is not None else .79, .26 if projected is not None and data['profile'] == 'completed-step-sweep' else .245 if projected is not None else .20,
              note, fontsize=6.5 if projected is not None else 6.8, color='#555555', va='top')
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}

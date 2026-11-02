@@ -26,7 +26,7 @@ def count(value):
 
 
 def project(data, traffic_mb):
-    if data['schema'] != 'browsercode-browser-cost-projection-v1' or data['actual_cloud_billing'] is not False:
+    if data['schema'] not in ('browsercode-browser-cost-projection-v1','browsercode-browser-cost-projection-v2') or data['actual_cloud_billing'] is not False:
         raise ValueError('Expected explicitly projected browser cost')
     price = data['price_assumption']
     hourly = number(price['browser_usd_per_hour'])
@@ -37,10 +37,12 @@ def project(data, traffic_mb):
         raise ValueError('Unique traffic scenarios required')
     methods = {'serial_high', 'luna_single_high', 'parallel3_select_high', 'parallel5_select_high',
                'luna_single_xhigh_12288', 'luna_single_high_24576', 'luna_single_high_6144'}
+    if data['schema'] == 'browsercode-browser-cost-projection-v2':
+        methods.add('luna_single_high_60steps')
     expected = {(benchmark, method) for benchmark in ('online_mind2web', 'webvoyager', 'deepshop') for method in methods}
     identities = [(point['benchmark'], point['method']) for point in data['points']]
     if len(identities) != len(set(identities)) or set(identities) != expected:
-        raise ValueError('Exactly 21 distinct benchmark/method points required')
+        raise ValueError('Exactly the completed21 or24 benchmark/method matrix required')
     rows = []
     for point in data['points']:
         valid, invalid, requested = [count(point[key]) for key in ('valid', 'invalid', 'requested')]

@@ -3,7 +3,7 @@
 
 We compare **one proposed action per decision** with **N proposed actions plus a selector**. Only the selected action executes. BrowserCode runs that action as JavaScript through `browser_execute`. The studies measure task success, model cost, browser activity and latency.
 
-The completed [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows seven methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. It adds Luna xhigh/1×, high/2× and high/0.5× output ceilings to Sol single and Luna high single/N3/N5. None of the nine paired comparisons against Luna high/1× establishes a success gain; actual token use, valid-task cost and latency accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) remains a separate historical view with explicit native endpoint-evidence exclusions. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
+The completed [BrowserCode inference-scaling comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) shows eight methods on OM2W, WebVoyager and DeepShop, all judged by **GPT-5.6 Terra**. Luna high single with 60 decisions and the original 12,288-token ceiling has the strongest observed single-call success on all three benchmarks; all three paired 95% intervals against historical 30-decision high/1× are positive. Live windows and validity cohorts differ, so these comparisons remain descriptive. The xhigh/1×, high/2× and high/0.5× token/effort variants show no consistent gain over high/1×. Actual tokens, cost, selected browser-code batches, latency and projected hosting accompany the scores. The earlier [two-harness figure](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031) remains a separate historical view with explicit endpoint-evidence exclusions. Lower-effort runs remain in [supporting results](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views); the original effort campaign remains provisional. See also the completed [Claude comparison](ARM_FINAL_RESULTS.md#claude-browsercode-om2w300).
 
 Use **[browsercode.py](../api_experiments/reproduce/browsercode.py)** for setup, evaluation, checks and reporting. This guide is the main collaborator reference; the [source package](../api_experiments/README.md) preserves the implementations and frozen inputs.
 
@@ -89,7 +89,7 @@ The second command is a read-only plan; add `--execute` to spend within its caps
 <a id="luna-single-decision-limits"></a>
 ### Prospective Luna single decision limit
 
-To isolate a larger action horizon, add `--luna-single-max-decisions 60` with explicit `high` effort and the unchanged 12,288-token output ceiling. The default remains 30. This creates a new experiment on the same 1,045 tasks; it does not change archived runs or imply completed 60-decision results.
+To isolate a larger action horizon, add `--luna-single-max-decisions 60` with explicit `high` effort and the unchanged 12,288-token output ceiling. The default remains 30. The published 60-decision cohort is complete. Executing this recipe creates a fresh independent reproduction on the same 1,045-task source; it leaves archived runs unchanged.
 
 ```bash
 python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
@@ -109,7 +109,7 @@ The run command prints a read-only plan. The actual agent limit, model decision 
 <a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
 
-**We can project hosting charges without rerunning the experiments; total cloud-browser cost still needs traffic measurements.** All 6,916 valid tasks in the completed 21 points have a saved first-close browser lifetime. At the [current Browser Use V4 rate](https://browser-use.com/pricing), projected hosting is **$0.00070–$0.00176 per valid task**, excluding traffic. This is a projection from local Chromium durations, not measured stealth-browser performance or spending; legacy account terms may differ.
+**We can project hosting charges without rerunning the experiments; total cloud-browser cost still needs traffic measurements.** All 7,909 valid task–method observations in the completed 24 points have a saved first-close browser lifetime. At the [current Browser Use V4 rate](https://browser-use.com/pricing), projected hosting is **$0.00070–$0.00176 per valid task**, excluding traffic. This is a projection from local Chromium durations, not measured stealth-browser performance or spending; legacy account terms may differ.
 
 Use **$0.02 per browser-hour**, rounding each session up to whole minutes with a one-minute minimum. Add network usage separately: direct/custom-proxy traffic is **$0.20/GB** and managed residential traffic **$5/GB**. The provider's [billing examples](https://docs.browser-use.com/cloud/guides/billing) convert reported MB to GB by dividing by 1,024. For example, an assumed 10 MB/task adds $0.001953 direct or $0.048828 residential, before hosting. Traffic is unmeasured here; batch counts are not network-byte measurements. N3/N5 still use one browser session per task; candidate/selector computation can keep that session open but does not create three or five browsers. Our agents call their model providers directly, so a hosted-agent orchestration fee is not part of this projection.
 
@@ -183,7 +183,7 @@ Before paid collection, freeze and explicitly approve exact session/compute/mode
 
 ### Recreate the completed scaling figures
 
-The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes all three settings above and the four historical high-effort controls. Recreate its 8.5 × 4.35-inch four-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
+The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, the 60-decision setting and the four historical high-effort controls. Recreate its 8.5 × 4.35-inch four-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
 
 ```bash
 "$API_PY" -m pip install matplotlib==3.9.4
@@ -197,10 +197,11 @@ SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_2026103
   --output-dir /tmp/openwebrl-browsercode-scaling-plots \
   --stem browsercode_scaling_tokens --tokens \
   --token-method luna_single_high --token-method luna_single_xhigh_12288 \
-  --token-method luna_single_high_24576 --token-method luna_single_high_6144
+  --token-method luna_single_high_24576 --token-method luna_single_high_6144 \
+  --token-method luna_single_high_60steps
 ```
 
-The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Its fourth column is projected browser hosting in USD per 1,000 valid tasks, with traffic excluded; it is joined to the exact actor aggregate by hash and task counts. Omitting `--browser-cost-projection` reproduces the three-column layout. A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the four Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
+The first figure uses each method's valid-task success, actor cost, selected browser-code batches and latency. Its fourth column is projected browser hosting in USD per 1,000 valid tasks, with traffic excluded; it is joined to the exact actor aggregate by hash and task counts. Omitting `--browser-cost-projection` reproduces the three-column layout. A batch may contain multiple browser/CDP calls. The second uses actual summed output and reasoning tokens for the five Luna single-call settings; a per-call ceiling is not realized token consumption. Counts, exclusions, common-valid paired intervals and collection-window limitations accompany the figures.
 
 ### Compare fresh runs
 
@@ -374,7 +375,7 @@ The GPT-high BrowserCode headline cohort retains historical o4-mini grading for 
 <a id="browsercode-batch-counting"></a>
 **Browser-code batch counting.** The [GPT worker](../api_experiments/browsercode/workers/gpt_high_worker.py) and [Luna worker](../api_experiments/browsercode/workers/luna_effort_worker.py) save `selected_code_batches = sum(bool(d['selected_action']['command']) for d in decisions)`. Each selected nonempty command contributes one, regardless of whether its execution succeeds. The [model adapter](../api_experiments/browsercode/models/luna_model.py) encodes one selected `browser_execute` request as that command: its JavaScript `code` may contain several clicks, navigations, evaluations or other browser operations. The [environment](../api_experiments/browsercode/runtime/gpt_high_environments.py) dispatches that request once to the browser bridge. Individual JavaScript statements and underlying CDP calls are not counted separately; `native_browsercode_cdp_attempts` records a separate lower-level counter.
 
-A model decision selects at most one batch or returns a final answer. A final-answer-only decision has an empty command and contributes zero batches. N3/N5 candidate generation and selection add model calls, but unselected proposals and the selector itself add no browser batches. Thus batches are neither model-call counts nor necessarily total decision counts. The completed 21-point BrowserCode figure averages `selected_code_batches` over each method's valid tasks, including valid failures, with full measurement coverage; it does not average over all planned tasks or a shared valid intersection.
+A model decision selects at most one batch or returns a final answer. A final-answer-only decision has an empty command and contributes zero batches. N3/N5 candidate generation and selection add model calls, but unselected proposals and the selector itself add no browser batches. Thus batches are neither model-call counts nor necessarily total decision counts. The completed 24-point BrowserCode figure averages `selected_code_batches` over each method's valid tasks, including valid failures, with full measurement coverage; it does not average over all planned tasks or a shared valid intersection.
 
 The Claude plots use each arm's valid cohort for success and all efficiency means. Their common-valid alternative uses the same 246 tasks for every metric. Missing measurements are never zero-filled. Plotted cohort costs and all-attempt campaign spending are separate quantities.
 

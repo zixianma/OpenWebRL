@@ -1,7 +1,7 @@
 {
   "schema": "browsercode-scaling-render-v2",
-  "profile": "completed-sweep",
-  "points": 21,
+  "profile": "completed-step-sweep",
+  "points": 24,
   "selected_methods": [
     "serial_high",
     "luna_single_high",
@@ -9,7 +9,8 @@
     "parallel5_select_high",
     "luna_single_xhigh_12288",
     "luna_single_high_24576",
-    "luna_single_high_6144"
+    "luna_single_high_6144",
+    "luna_single_high_60steps"
   ],
   "dimensions_inches": [
     8.5,
@@ -43,15 +44,15 @@
   },
   "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.",
   "omitted_token_method_coverage": [],
-  "browser_cost_projection_input_sha256": "9be03941a5174c67a7250cb8d56c1113110771c94a30562b5ebc040274b6e20c",
-  "browser_cost_calculator_sha256": "bfbfad9d80dc9a1eaace3a06bef2e969263c7557a1f9cfd334b01a7864710558",
-  "input_sha256": "969a252c314d9ce378d0f35f0859d7ab10552d169627b532f7a8e8ed01ad2735",
-  "renderer_sha256": "bf6c79ad800293ff51440143083af648b664715118767e2017ff29f95fbdc0ad",
+  "browser_cost_projection_input_sha256": "239d19f393483801dde086bc4e23b84662a080ab9fb32a1300f0be931fe8495a",
+  "browser_cost_calculator_sha256": "142b42a3db2dc26ade21fe5811713755f752dbbc1627ab90f9e772fac4ae4359",
+  "input_sha256": "5ff6bfa7b1ff4aaa62275469000ccc681be8ae4cb76da5056a680a01dfe6cfe5",
+  "renderer_sha256": "dd58021b9301f6039caba89d793ae1642dd733f9e253800212890bb9f5d7633e",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "fc3752be3b79d5f1936efaaa0cdb0899a5133e711728d3c670d2b981629cca71",
-    ".svg": "af60b0a937cd6fd017420882c1b94641f9c8ebcc945f30af525f569885b3c2af",
-    ".pdf": "37cf544e9c7747c5b45b0a0063bfbb543706af576284f3ad4083bfd5d0220f3c",
-    "_coordinates.csv": "114a2011675b8300b3539f855900c8adecf28d56db284b3a868a63a3c103fac8"
+    ".png": "976a1841044e5b7f809dff28527d4ee548cdbb1c85a7b96393bde18786478491",
+    ".svg": "3ed1e29d6b23658b3c7f4065dc4d66fcfdf58be674d9bcec581897ba03245f77",
+    ".pdf": "ac932a9b92b57ce4f805a9e95a09560ad161228e7a12b59b05e3cba5f10277ee",
+    "_coordinates.csv": "8c1279ca268100d1436e3cc7ec360aabfb85b7310360a878ceccce1e3b9ae123"
   }
 }

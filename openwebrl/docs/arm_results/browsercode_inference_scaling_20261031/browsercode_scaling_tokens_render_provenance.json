@@ -1,12 +1,13 @@
 {
   "schema": "browsercode-scaling-render-v2",
-  "profile": "completed-sweep",
-  "points": 12,
+  "profile": "completed-step-sweep",
+  "points": 15,
   "selected_methods": [
     "luna_single_high",
     "luna_single_xhigh_12288",
     "luna_single_high_24576",
-    "luna_single_high_6144"
+    "luna_single_high_6144",
+    "luna_single_high_60steps"
   ],
   "dimensions_inches": [
     7,
@@ -84,13 +85,13 @@
       "reasoning_observed_tasks": 0
     }
   ],
-  "input_sha256": "969a252c314d9ce378d0f35f0859d7ab10552d169627b532f7a8e8ed01ad2735",
-  "renderer_sha256": "bf6c79ad800293ff51440143083af648b664715118767e2017ff29f95fbdc0ad",
+  "input_sha256": "5ff6bfa7b1ff4aaa62275469000ccc681be8ae4cb76da5056a680a01dfe6cfe5",
+  "renderer_sha256": "dd58021b9301f6039caba89d793ae1642dd733f9e253800212890bb9f5d7633e",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "35deaaa30be8fff52b252b7ed108c9f9544057174001be9768e024f81e1663fe",
-    ".svg": "fac3a892ce6c461647d4bee5f06b9f29ad8813ca62523914d8eeaeb57c67683a",
-    ".pdf": "e1d30f0ca0a008c8b4ab3061fc9186b007dfb5957c6d3c4734ca89cfcba72c3b",
-    "_coordinates.csv": "f7c5de2c4e00948612d9f522998e0e9db1cf66640a5aae657f28b0e62359e163"
+    ".png": "510f6157cff911625748300f529d7fbcc5ed40d2aa025709e0d4c4fe18280b45",
+    ".svg": "603a31713bb30b9d1506b33e0fc43a795e48c4b33370eb44cc8cce698ed11038",
+    ".pdf": "508d26be3bd0b0e0835224fe46f7e2b4bb5f82db3b7d13b54736c21074a3f92b",
+    "_coordinates.csv": "9495f573bd9f9c5aaf001461c9a4b53d77242f5e22c8c3b5a547e15100710578"
   }
 }
