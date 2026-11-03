@@ -676,6 +676,61 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 [Completed comparison and methodology](ARM_INFERENCE_SCALING.md#cuawright-native-selection-results-20261024) · [Audited aggregate metrics](arm_results/cuawright_native_selection_local100_20261023/aggregate.json) · [Historical Luna audit](arm_results/cuawright_luna_high_local100_20261023/aggregate.json)
 
+<a id="final-selection-headline-20261103"></a>
+
+## Selection head: headline results
+
+**The best selector is Piotr's SelectionARM LoRA: it adds about 7 pp over one actor sample on both the SFT and the RL actor. Our 4B LoRAs trained on our own branch data come within about 1 pp of it (intervals cross zero). Our 22.6M heads add 4–7 pp at a fraction of the compute; on our own labels they are 1–3 pp behind.** Among label sources for our heads, only lookahead H = 3 and Oracle labels clearly beat the actor alone. All tables pool three runs per row from one window, on all 1,045 tasks (Online-Mind2Web 300, WebVoyager 595, DeepShop 150). Settings: N = 5 candidates, T 1.0 / top-p 0.9, 30 steps. Online-Mind2Web is judged by gpt-5.6-terra; WebVoyager and DeepShop by GPT-4o. Per-benchmark columns are valid-only success; differences are on the three-benchmark mean overall success, with [paired 95% intervals](#final-paired-bootstrap). Compare rows only within a table: the tables ran on different days, and DeepShop drifts by up to 13 pp between days. **Bold** = best and <u>underline</u> = second best per column.
+
+**Recipe 1** is Piotr's SelectionARM data: 2,692 states and 35,916 five-action panels, each labelled by one GPT-5.5 pick before execution. **Recipe 2** is ours: SFT-4B branch states with 2–5 distinct actions each, labelled by Luna 3 steps after execution.
+
+**SFT 4B actor** (October 29–30; 1,024 response tokens). [Details](#final-selection-sameday3-20261030)
+
+| Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ***Baselines*** | | | | | | | |
+| SFT 4B alone (1 sample) | — | 32.3% | 45.2% | 29.0% | 33.6% | 35.5% | — |
+| Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.1%** | <u>56.0%</u> | 36.0% | **41.4%** | **45.0%** | **+7.7 [+5.6, +9.8]** |
+| ***Ours: 4B LoRAs (Piotr's recipe)*** | | | | | | | |
+| 4B LoRA | Recipe 2, 1.3K states | 38.5% | 54.5% | 34.6% | 40.2% | 42.5% | +6.5 [+4.5, +8.6] |
+| 4B LoRA | Recipe 2, 2.6K states | 38.8% | 52.5% | **38.3%** | 40.1% | <u>43.2%</u> | +6.5 [+4.3, +8.7] |
+| ***Ours: 22.6M heads on actor features*** | | | | | | | |
+| Head | Recipe 1 | <u>40.9%</u> | **56.8%** | 32.6% | <u>40.8%</u> | 43.4% | <u>+7.1 [+4.9, +9.3]</u> |
+| Head | Recipe 2, 1.3K states | 38.5% | 52.4% | <u>35.1%</u> | 39.6% | 42.0% | +5.9 [+3.9, +8.0] |
+| Head | Recipe 2, 2.6K states | 37.4% | 53.0% | 32.9% | 38.4% | 41.1% | +4.8 [+2.6, +7.0] |
+| Head | Recipe 2, 2.5K states / 22K panels | 39.4% | 52.1% | 30.6% | 37.9% | 40.7% | +4.3 [+2.0, +6.5] |
+
+**RL 4B actor** (October 30 – November 1; 4,096 response tokens; heads trained on SFT-4B features score the RL actor's hidden states unchanged). [Details](#final-selection-rl-actor-20261030)
+
+| Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − RL alone, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ***Baselines*** | | | | | | | |
+| RL 4B alone (1 sample) | — | 30.2% | 56.9% | 44.6% | 42.0% | 43.9% | — |
+| Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.4%** | <u>62.7%</u> | 50.9% | **49.0%** | <u>52.3%</u> | **+7.0 [+4.8, +9.2]** |
+| ***Ours: 4B LoRA (Piotr's recipe)*** | | | | | | | |
+| 4B LoRA | Recipe 2, 2.6K states | <u>42.4%</u> | **64.7%** | **51.7%** | <u>48.6%</u> | **52.9%** | <u>+6.6 [+4.1, +8.9]</u> |
+| ***Ours: 22.6M heads on actor features*** | | | | | | | |
+| Head | Recipe 2, 2.6K states | 37.3% | 59.4% | <u>51.1%</u> | 46.8% | 49.3% | +4.8 [+2.6, +7.0] |
+| Head | Recipe 1 | 38.6% | 59.6% | 47.1% | 46.4% | 48.4% | +4.4 [+2.0, +6.7] |
+
+**Which labels to train our head on** (SFT 4B actor, November 1–3; six heads on the same 1,380 branch states, differing only in label source). [Details](#final-selection-label-live-3run-20261103)
+
+| Selector | Labels | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ***Baseline*** | | | | | | | |
+| SFT 4B alone (1 sample) | — | 32.5% | 48.0% | **45.5%** | 39.9% | 42.0% | — |
+| ***Ours: 22.6M heads*** | | | | | | | |
+| Head | Pre-execution (Luna) | 31.9% | 48.1% | 43.0% | 38.6% | 41.0% | −1.3 [−3.5, +0.9] |
+| Head | Post-execution (Luna) | 36.3% | 51.1% | 44.7% | 41.3% | 44.0% | +1.4 [−0.8, +3.7] |
+| Head | Lookahead H = 1 | 35.2% | 50.8% | 44.7% | 40.9% | 43.6% | +1.0 [−1.1, +3.1] |
+| Head | Lookahead H = 3 | <u>37.9%</u> | 51.0% | 44.3% | **42.1%** | **44.4%** | **+2.2 [+0.1, +4.3]** |
+| Head | Lookahead H = 5 | **38.1%** | 50.6% | 42.9% | 41.3% | 43.9% | +1.3 [−0.8, +3.4] |
+| Head | Oracle (observed outcomes) | 35.6% | **51.8%** | <u>45.1%</u> | <u>41.9%</u> | <u>44.2%</u> | <u>+2.0 [+0.1, +4.0]</u> |
+
+- **Same data, LoRA vs head:** the LoRA is 0.6–1.8 pp ahead, not significant. On the RL actor both heads trail SelectionARM (−2.2 [−4.3, −0.0] and −2.6 [−4.6, −0.6]).
+- **More of our states does not help:** 2.6K − 1.3K states is −1.2 [−3.3, +0.9] for the head and −0.1 [−2.2, +2.1] for the LoRA.
+- **Single runs mislead.** The mean of runs of identical weights varies by up to 4.7 pp, so the older one-run tables below are history.
+
 <a id="final-selection-head-ablations-20261021"></a>
 
 ## Selection head: which training labels work (October 21, 2026)
