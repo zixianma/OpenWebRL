@@ -8,6 +8,8 @@
 
 [Equal-weight benchmark-average BrowserCode comparison: eleven methods, each benchmark weighted 1/3 for own-valid success, actor cost, batches and latency](ARM_FINAL_RESULTS.md#browsercode-equal-benchmark-average). [Task-count-weighted average using the fixed planned benchmark mix](ARM_FINAL_RESULTS.md#browsercode-task-weighted-average).
 
+[Common-valid BrowserCode alternative: the same tasks across all eleven methods, with per-benchmark intersection counts and matched success, actor cost, batches and latency](ARM_FINAL_RESULTS.md#browsercode-all-method-common-valid).
+
 [Completed Luna high single at 120 decisions: original 12,288-token ceiling and 900-second deadline, with explicit advertised-limit comparability](API_EXPERIMENT_METHODS.md#luna-single-120-decisions).
 
 [Completed Luna selection scaling: N2 high at 30 decisions and N5 high at 60 decisions, with the original 12,288-token cap, shared Terra judge and preserved missing outcomes](API_EXPERIMENT_METHODS.md#luna-selection-decision-limits).

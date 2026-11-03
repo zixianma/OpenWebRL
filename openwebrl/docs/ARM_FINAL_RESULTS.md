@@ -37,6 +37,27 @@ N5/60 has the highest task-weighted success at **87.05%**; single120 averages **
 
 [Weighted coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average_coordinates.csv) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.pdf) · [Weighted SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.svg) · [Reproduction command](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
 
+<a id="browsercode-all-method-common-valid"></a>
+
+### Same tasks across all eleven methods
+
+**744 tasks are valid in every plotted method**, with the intersection computed separately within each benchmark. Success, actor cost, browser-code batches and actor latency are all recomputed on these identical task sets, including valid failures.
+
+| Benchmark | Planned tasks | Valid in all 11 methods | Excluded from intersection |
+|---|---:|---:|---:|
+| OM2W | 300 | 226 | 74 |
+| WebVoyager | 595 | 387 | 208 |
+| DeepShop | 150 | 131 | 19 |
+| **Total** | **1,045** | **744** | **301** |
+
+![Task-weighted BrowserCode comparison on tasks valid in all eleven methods](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average.png)
+
+*The benchmark weights remain 300/1,045, 595/1,045 and 150/1,045, matching the preceding figure; this is not a pooled rate over the 744 retained tasks. A task invalid or missing in any method is excluded from every method in its benchmark. Every retained task has all three actor measurements; missing values are never zero-filled. Terra judging and the earlier method encodings are unchanged, and actor means exclude Terra. Conditioning on validity changes the task mix; matching task identity does not control live collection dates, runtime safeguards or the single60 advertised-30 versus single120 advertised-120 prompt difference. These are descriptive points without confidence intervals.*
+
+On this common population, task-weighted success is **86.93% for N5/60**, **86.17% for single120** and **85.55% for single60**. These rates do not establish a reliable difference between methods.
+
+[Common-valid aggregate](arm_results/browsercode_inference_scaling_20261031/aggregate_common_valid.json) · [Weighted coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average_coordinates.csv) · [Per-benchmark coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average_per_benchmark_coordinates.csv) · [Counts](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average_benchmark_counts.csv) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_weighted_average.svg) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_common_valid.py)
+
 <details>
 <summary>Equal-weight benchmark means for all eleven methods</summary>
 

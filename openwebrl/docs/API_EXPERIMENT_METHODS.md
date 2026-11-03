@@ -343,6 +343,8 @@ The [equal-weight benchmark-average view](ARM_FINAL_RESULTS.md#browsercode-equal
 
 The [task-count-weighted view](ARM_FINAL_RESULTS.md#browsercode-task-weighted-average) instead uses fixed planned benchmark weights 300/1,045 (OM2W), 595/1,045 (WebVoyager) and 150/1,045 (DeepShop), identically for success and within-benchmark actor means. This represents the planned task mix rather than equal benchmark influence. It is not pooled native-valid success, whose method-dependent weights would change with exclusions. [Weighted CSV](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average_coordinates.csv) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.pdf).
 
+The [all-method common-valid alternative](ARM_FINAL_RESULTS.md#browsercode-all-method-common-valid) intersects the native Terra-valid task identities across all eleven plotted methods separately within each benchmark. It recomputes success and every actor metric on that identical intersection, including valid failures, and retains the original planned benchmark weights. Invalid and missing outcomes exclude an identity from all methods in its benchmark; missing measurements are never imputed. Matching tasks does not control collection dates or the earlier prompt-limit difference. Only restricted aggregate counts and means are published; task identities and trajectories remain private. The original own-valid plots remain available.
+
 The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, single60, single120, N2/30, N5/60 and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
 
 ```bash
@@ -363,6 +365,9 @@ SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_2026103
   --output-dir /tmp/openwebrl-browsercode-scaling-plots
 "$API_PY" -B "$SCALING_RESULTS/plot_browsercode_average.py" \
   --weighting task-count --aggregate "$SCALING_RESULTS/aggregate.json" \
+  --output-dir /tmp/openwebrl-browsercode-scaling-plots
+"$API_PY" -B "$SCALING_RESULTS/plot_browsercode_common_valid.py" \
+  --aggregate "$SCALING_RESULTS/aggregate_common_valid.json" \
   --output-dir /tmp/openwebrl-browsercode-scaling-plots
 ```
 

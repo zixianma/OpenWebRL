@@ -1,0 +1,116 @@
+{
+  "schema": "browsercode-common-valid-task-weighted-average-v1",
+  "judge_protocol": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 4096,
+    "seed": 42,
+    "version": "gpt56-terra-terminal-success-v1"
+  },
+  "metric_population": "same_all_method_common_valid_tasks_within_each_benchmark",
+  "benchmark_counts": {
+    "online_mind2web": {
+      "common_valid": 226,
+      "excluded": 74,
+      "planned": 300
+    },
+    "webvoyager": {
+      "common_valid": 387,
+      "excluded": 208,
+      "planned": 595
+    },
+    "deepshop": {
+      "common_valid": 131,
+      "excluded": 19,
+      "planned": 150
+    }
+  },
+  "benchmark_weights": {
+    "online_mind2web": "300/1045",
+    "webvoyager": "595/1045",
+    "deepshop": "150/1045"
+  },
+  "weighting_definition": "Fixed original planned benchmark counts, applied identically to success and all actor means. Not a pooled common-valid task rate.",
+  "comparison_caveat": "Common-valid conditioning changes the task mix; live collection windows and protocols differ. Pairing task identity does not remove these differences.",
+  "prompt_limit_caveat": "Historical 60-decision single enforced 60 but advertised 30; new single120 enforces and advertises 120. Live windows and validity subsets differ.",
+  "uncertainty": "Descriptive point estimates; no confidence intervals or superiority claims inferred.",
+  "points": [
+    {
+      "method": "serial_high",
+      "success_rate": 0.8210838009229796,
+      "actor_usd": 0.2107361614303834,
+      "browser_commands": 14.003366983878891,
+      "actor_seconds": 92.92899547260481
+    },
+    {
+      "method": "luna_single_high",
+      "success_rate": 0.8069961951883734,
+      "actor_usd": 0.008203746350427152,
+      "browser_commands": 14.137021779876683,
+      "actor_seconds": 94.20106860963264
+    },
+    {
+      "method": "parallel3_select_high",
+      "success_rate": 0.8263879113338075,
+      "actor_usd": 0.04592845680303465,
+      "browser_commands": 12.545270759461605,
+      "actor_seconds": 161.68444817311533
+    },
+    {
+      "method": "parallel5_select_high",
+      "success_rate": 0.8456165236641026,
+      "actor_usd": 0.054483205398543316,
+      "browser_commands": 11.997513208449478,
+      "actor_seconds": 179.83668858365655
+    },
+    {
+      "method": "luna_single_xhigh_12288",
+      "success_rate": 0.8168136975072716,
+      "actor_usd": 0.009782863218114534,
+      "browser_commands": 14.659726744073502,
+      "actor_seconds": 114.07743518617323
+    },
+    {
+      "method": "luna_single_high_24576",
+      "success_rate": 0.8323328760996007,
+      "actor_usd": 0.008058965855781884,
+      "browser_commands": 14.255616743247808,
+      "actor_seconds": 102.85185245763769
+    },
+    {
+      "method": "luna_single_high_6144",
+      "success_rate": 0.8176775766144292,
+      "actor_usd": 0.008091145182837451,
+      "browser_commands": 14.532856459925643,
+      "actor_seconds": 101.2957571979525
+    },
+    {
+      "method": "luna_single_high_60steps",
+      "success_rate": 0.8555309932665626,
+      "actor_usd": 0.009076553110470608,
+      "browser_commands": 15.06552758538855,
+      "actor_seconds": 119.07165350339395
+    },
+    {
+      "method": "parallel2_select_high",
+      "success_rate": 0.8333378238122315,
+      "actor_usd": 0.04221971848035664,
+      "browser_commands": 12.556259856247264,
+      "actor_seconds": 160.68621294746868
+    },
+    {
+      "method": "parallel5_select_high_60steps",
+      "success_rate": 0.8692915519900126,
+      "actor_usd": 0.05692716116728319,
+      "browser_commands": 11.863693042725776,
+      "actor_seconds": 170.45409275955006
+    },
+    {
+      "method": "luna_single_high_120steps",
+      "success_rate": 0.8617228203662889,
+      "actor_usd": 0.010314961164992646,
+      "browser_commands": 15.465473183819254,
+      "actor_seconds": 120.99764386130988
+    }
+  ]
+}
