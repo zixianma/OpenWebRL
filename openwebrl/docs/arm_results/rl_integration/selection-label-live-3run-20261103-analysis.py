@@ -3,7 +3,7 @@
 head-k5-20261101 run1/rerun2/rerun3; run1 of SFT/H3/H5 is 2026-11-01/02, everything else 2026-11-02/03. SFT actor, 1280x1000,
 N=5, T1.0/p0.9, 30 steps, all tasks (OM2W 300, WV 595, DS 150). Per-task success averaged over 3 runs. Valid-only = successes/valid;
 mean overall = unweighted mean of benchmark overall rates. Paired bootstrap over tasks (10,000, seed 20261029), benchmarks
-resampled independently."""
+resampled independently. Task-weighted: each of the 1,045 tasks counts once (weights 300/595/150 of 1,045)."""
 import json, sys
 from pathlib import Path
 import numpy as np
@@ -43,4 +43,20 @@ for c, r in sorted(rates.items(), key=lambda kv: -kv[1]['mean_overall']):
 paired = {f'{c} - sft': diff(data[c], data['sft']) for c in SLUG if c != 'sft'} | {f'{c} - h3': diff(data[c], data['h3']) for c in SLUG if c not in ('sft', 'h3')}
 for k, v in paired.items(): print(f'{k:<13} mean', v['mean'], '| OM2W', v['online_mind2web'], 'WV', v['webvoyager'], 'DS', v['deepshop'])
 print('per-run DS valid-only', {c: [per_run[c][r]['deepshop']['valid_only'] for r in RUNS] for c in SLUG})
-if len(sys.argv) > 1: Path(sys.argv[1]).write_text(json.dumps(dict(note=__doc__, slugs=SLUG, rates=rates, per_run=per_run, paired=paired), indent=1))
+# Task-weighted (300/595/150 of 1,045): rates pooled over all tasks; paired bootstrap of the weighted difference, fresh rng, same seed.
+W = {b: N[b] / sum(N.values()) for b in BENCH}
+wrng = np.random.default_rng(20261029)
+def wboot(a, c):
+    xs = {b: vec(a, b) - vec(c, b) for b in BENCH}
+    est = sum(W[b] * xs[b].mean() for b in BENCH)
+    bs = sum(W[b] * xs[b][wrng.integers(0, len(xs[b]), (10000, len(xs[b])))].mean(1) for b in BENCH)
+    return [round(100*est, 1), round(100*np.percentile(bs, 2.5), 1), round(100*np.percentile(bs, 97.5), 1)]
+def wrate(rs):
+    sc = sum(x[1] for d in rs for b in BENCH for x in d[b].values()); va = sum(x[0] for d in rs for b in BENCH for x in d[b].values())
+    n = sum(len(d[b]) for d in rs for b in BENCH)
+    return dict(overall=round(100*sc/n, 1), valid_only=round(100*sc/va, 1))
+weighted = {c: dict(**wrate(data[c]), minus_sft=None if c == 'sft' else wboot(data[c], data['sft']),
+                    minus_h3=None if c in ('sft', 'h3') else wboot(data[c], data['h3'])) for c in SLUG}
+for c, r in sorted(weighted.items(), key=lambda kv: -kv[1]['overall']): print('weighted', f'{c:<7}', r)
+if len(sys.argv) > 1: Path(sys.argv[1]).write_text(json.dumps(dict(note=__doc__, slugs=SLUG, rates=rates, per_run=per_run, paired=paired,
+                                                                   weights=W, weighted=weighted), indent=1))

@@ -6,8 +6,8 @@
     other four folds' states, so every state is scored out-of-fold. Each state's first five SFT proposals (duplicates
     kept) are scored on held-out rollouts 4-8, valid draws only. Teacher = the label's argmax among the five (ties
     averaged). Task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
-(2) Live: the seed-0 head trained on the original 1,380 training states, three-benchmark mean overall success
-    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json, paired gain over SFT, per-task success averaged over runs).
+(2) Live: the seed-0 head trained on the original 1,380 training states, task-weighted overall success over the three benchmarks
+    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json "weighted": paired gain over SFT, each of the 1,045 tasks weighted equally, per-task success averaged over runs).
 """
 import json
 from pathlib import Path
@@ -33,7 +33,7 @@ P = K["pooled"]
 PANELS = [
     (f"Offline · task-level 5-fold, out-of-fold heads\n{P['states']:,} states, {P['tasks']} tasks; held-out rollouts 4–8",
      "offline", P["sft_sample"]),
-    ("Live · 3 benchmarks\n1,045 tasks, mean overall success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
+    ("Live · 3 benchmarks\n1,045 tasks, task-weighted overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled):
@@ -51,7 +51,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["paired"][LIVE3_KEY[src] + " - sft"]["mean"], color, "D", True)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "D", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "s", True)

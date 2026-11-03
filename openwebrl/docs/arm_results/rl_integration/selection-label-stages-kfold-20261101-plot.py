@@ -7,9 +7,9 @@ sample of the same SFT 4B actor at three stages.
 (2) Head trained on those labels, offline: task-level 5-fold, so every state is scored by heads trained on the other four
     folds (about 1,380 states; 3 seeds averaged per state). Same states and rollouts as (1).
     (1)-(2): task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
-(3) Head live: the seed-0 head trained on the original 1,380 training states, three-benchmark mean overall success
+(3) Head live: the seed-0 head trained on the original 1,380 training states, task-weighted overall success over the three benchmarks
     (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o) minus one SFT 4B sample, paired 95%
-    bootstrap over tasks. Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json, paired gain over SFT, per-task success averaged over runs).
+    bootstrap over tasks. Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json "weighted": paired gain over SFT, each of the 1,045 tasks weighted equally, per-task success averaged over runs).
 Stages (1)-(2) share states; (3) uses different tasks, so compare orderings across stages, not sizes. The prior judge
 formulations (WebArbiter, WebShepherd, PRO-CUA) were scored as teachers on a different 1,010-state set and are left out;
 they remain in selection-label-stages-20261027.png.
@@ -36,12 +36,12 @@ ROWS = [  # tick label, colour, source key, live key
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 MARK = [(f"Teacher's pick, offline ({K['states']:,} states, 5-fold)", "o", False),
         ("Head trained on the labels, offline (out-of-fold, 3 seeds)", "s", False),
-        ("Head, live (seed 0, 3 runs; mean of 3 benchmarks, 1,045 tasks)", "D", True)]
+        ("Head, live (seed 0, 3 runs; task-weighted, 1,045 tasks)", "D", True)]
 DX = (-0.24, 0, 0.24)
 
 
 def values(src, live):
-    lv = LIVE3["paired"][LIVE3_KEY[src] + " - sft"]["mean"]
+    lv = LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"]
     return [K[src]["teacher_minus_sft"], K[src]["head_minus_sft"], lv]
 
 
@@ -67,7 +67,7 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewi
 ax.legend(handles, [l for l, _, _ in MARK], frameon=False, fontsize=7.5, loc="upper center", bbox_to_anchor=(0.45, -0.17), ncol=1)
 fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, held-out rollouts 4–8 (labels used rollouts 1–3; Oracle = best "
          f"action on rollouts 1–3); one SFT sample = {K['sft_sample']:.1f}%. Live: one SFT sample = "
-         f"{LIVE3['rates']['sft']['mean_overall']:.1f}%.\nBars: 95% intervals, task-clustered bootstrap (offline) or paired over tasks "
+         f"{LIVE3['weighted']['sft']['overall']:.1f}%.\nBars: 95% intervals, task-clustered bootstrap (offline) or paired over tasks "
          "(live). Offline and live use different tasks: compare orderings, not sizes.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.07, 1, 1))
 fig.savefig(HERE / "selection-label-stages-kfold-20261101.png", dpi=160); plt.close(fig)
