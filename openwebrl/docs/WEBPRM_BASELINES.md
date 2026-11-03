@@ -10,25 +10,28 @@
 
 | Selector | Training data | Actions only: pairwise (%) | Actions only: Best-of-N (%) | Released: pairwise (%) | Released: Best-of-N (%) | Pairwise change, actions only − released (pp) |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Piotr SelectionARM (4B LoRA) | Recipe 1: Piotr's 2,692 states, GPT-5.5 labels before execution | **77.3** | **55.3** | 79.0 | 57.7 | −1.7 |
-| Our 4B LoRA | WebArbiter SFT pairs + Recipe 2 2.6K | 75.0 | 53.6 | 85.5 | 66.4 | −10.5 |
-| Our 4B LoRA | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 74.4 | 51.9 | 76.9 | 52.4 | −2.5 |
+| ***Baselines*** | | | | | | |
 | WebArbiter-7B | WebArbiter (released weights) | 74.1 | 49.7 | **89.5** | **73.3** | −15.4 |
-| Our 4B LoRA | Recipe 2: 2.6K states, Luna labels 3 steps after execution | 73.9 | 51.0 | 77.4 | 53.0 | −3.5 |
-| Our head (22.6M) | Recipe 2: 2.6K states | 67.9 | 38.4 | 75.2 | 43.6 | −7.3 |
-| Our head (22.6M) | Recipe 1: Piotr's 2,692 states | 67.6 | 43.7 | 74.2 | 46.4 | −6.6 |
-| Our head (22.6M), 3 seeds | WebArbiter SFT + Recipe 2 2.6K, whole sets (C1) | 66.0 | 37.7 | 81.3 | 59.8 | −15.3 |
-| Our head (22.6M), 3 seeds | WebArbiter SFT + Recipe 2 2.6K, pairs (B) | 66.0 | 36.3 | 78.0 | 55.3 | −12.0 |
 | WebArbiter-3B | WebArbiter (released weights) | 64.4 | 30.0 | 83.9 | 59.5 | −19.5 |
-| Our head (22.6M) | Recipe 2: 1.3K states, Luna labels before execution | 64.0 | 40.8 | 70.8 | 42.3 | −6.8 |
-| Our head (22.6M), 3 seeds | WebArbiter SFT only (A) | 61.8 | 33.4 | 78.4 | 56.9 | −16.6 |
-| Our head (22.6M) | SFT+RL 1,908 states, Luna labels 1 step after execution | 60.2 | 33.6 | 51.8 | 17.2 | +8.4 |
-| WebShepherd-3B | WebShepherd (released weights) | 59.4 | 31.6 | 66.4 | 44.3 | −7.0 |
-| Our head (22.6M) | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 59.0 | 31.9 | 67.0 | 37.5 | −8.0 |
 | WebShepherd-8B | WebShepherd (released weights) | 53.5 | 30.2 | 60.2 | 41.9 | −6.7 |
-| Our head (22.6M) | Recipe 2: 2.5K states, 22K panels | 51.5 | 23.5 | 57.2 | 27.3 | −5.7 |
+| WebShepherd-3B | WebShepherd (released weights) | 59.4 | 31.6 | 66.4 | 44.3 | −7.0 |
+| Piotr SelectionARM (4B LoRA) | Recipe 1: Piotr's 2,692 states, GPT-5.5 labels before execution | **77.3** | **55.3** | 79.0 | 57.7 | −1.7 |
+| ***Ours: 4B LoRAs (Piotr's recipe)*** | | | | | | |
+| Our 4B LoRA | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 74.4 | 51.9 | 76.9 | 52.4 | −2.5 |
+| Our 4B LoRA | Recipe 2: 2.6K states, Luna labels 3 steps after execution | 73.9 | 51.0 | 77.4 | 53.0 | −3.5 |
+| Our 4B LoRA | WebArbiter SFT pairs + Recipe 2 2.6K | <u>75.0</u> | <u>53.6</u> | <u>85.5</u> | <u>66.4</u> | −10.5 |
+| ***Ours: 22.6M heads on frozen OpenWebRL-4B-SFT features*** | | | | | | |
+| Our head | Recipe 1: Piotr's 2,692 states | 67.6 | 43.7 | 74.2 | 46.4 | −6.6 |
+| Our head | Recipe 2: 1.3K states, Luna labels before execution | 64.0 | 40.8 | 70.8 | 42.3 | −6.8 |
+| Our head | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 59.0 | 31.9 | 67.0 | 37.5 | −8.0 |
+| Our head | Recipe 2: 2.6K states, Luna labels 3 steps after execution | 67.9 | 38.4 | 75.2 | 43.6 | −7.3 |
+| Our head | Recipe 2: 2.5K states, 22K panels | 51.5 | 23.5 | 57.2 | 27.3 | −5.7 |
+| Our head | SFT+RL 1,908 states, Luna labels 1 step after execution | 60.2 | 33.6 | 51.8 | 17.2 | +8.4 |
+| Our head, 3 seeds | WebArbiter SFT only (A) | 61.8 | 33.4 | 78.4 | 56.9 | −16.6 |
+| Our head, 3 seeds | WebArbiter SFT + Recipe 2 2.6K, pairs (B) | 66.0 | 36.3 | 78.0 | 55.3 | −12.0 |
+| Our head, 3 seeds | WebArbiter SFT + Recipe 2 2.6K, whole sets (C1) | 66.0 | 37.7 | 81.3 | 59.8 | −15.3 |
 
-Benchmark: 1,150 states, each with one correct response and four distractors (4,600 pairs); text only (intent, accessibility tree, history, URLs). Pairwise = share of pairs where the correct response is preferred; Best-of-N = share of states where it wins all four pairs. Both are the unweighted mean of Mind2Web (707 states), WebArena (201), AssistantBench (30) and WorkArena (212), as in the WebArbiter paper; chance is 50% / 20%. "Actions only" deletes every candidate's thought and keeps everything else. Sorted by actions-only pairwise; **bold** = best per column. One run per row except the three-seed heads; differences of a few points are not established, and AssistantBench's 30 states are very noisy. WebArbiter answers with its own pairwise prompt and WebShepherd with its released checklist pipeline (both our reruns of the public weights; the released numbers reproduce the paper within 1.3 pp). LoRAs are scored from their probability of "1" vs "2" in their own selection prompt; heads score each response from frozen OpenWebRL-4B-SFT features. None of our selectors or Piotr's runs in its native setting (all were trained on screenshots). [Per-environment tables, published rows, other scoring methods and setup](#webprmbench-20261018).
+Benchmark: 1,150 states, each with one correct response and four distractors (4,600 pairs); text only (intent, accessibility tree, history, URLs). Pairwise = share of pairs where the correct response is preferred; Best-of-N = share of states where it wins all four pairs. Both are the unweighted mean of Mind2Web (707 states), WebArena (201), AssistantBench (30) and WorkArena (212), as in the WebArbiter paper; chance is 50% / 20%. "Actions only" deletes every candidate's thought and keeps everything else. Baselines first, then our LoRAs and heads, each grouped by training data; **bold** = best and <u>underline</u> = second best per column. Piotr SelectionARM is listed as a baseline because it is a released selector trained by a collaborator. One run per row except the three-seed heads; differences of a few points are not established, and AssistantBench's 30 states are very noisy. WebArbiter answers with its own pairwise prompt and WebShepherd with its released checklist pipeline (both our reruns of the public weights; the released numbers reproduce the paper within 1.3 pp). LoRAs are scored from their probability of "1" vs "2" in their own selection prompt; heads score each response from frozen OpenWebRL-4B-SFT features. None of our selectors or Piotr's runs in its native setting (all were trained on screenshots). [Per-environment tables, published rows, other scoring methods and setup](#webprmbench-20261018).
 
 <a id="procua-headline-20261103"></a>
 ### PRO-CUA on DeepShop-150
