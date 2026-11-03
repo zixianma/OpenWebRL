@@ -12,7 +12,7 @@
 
 [Completed Luna selection scaling: N2 high at 30 decisions and N5 high at 60 decisions, with the original 12,288-token cap, shared Terra judge and preserved missing outcomes](API_EXPERIMENT_METHODS.md#luna-selection-decision-limits).
 
-[Prospective full-300 OM2W US-residential BrowserCode comparison: fresh Luna high Single/N5 pairs, Terra judging and separate measured browser/proxy accounting](API_EXPERIMENT_METHODS.md#us-stealth-full300).
+[Completed full-300 OM2W US-residential BrowserCode comparison: 270 common-valid Single/N5 pairs, separate actual hosting/proxy fees and priced native API usage](ARM_FINAL_RESULTS.md#browsercode-us-stealth-full300).
 
 [Luna BrowserCode lower-effort supporting results: prescribed retries, provisional success and cumulative cost/latency coverage](ARM_FINAL_RESULTS.md#om2w-terra-supporting-effort-views).
 

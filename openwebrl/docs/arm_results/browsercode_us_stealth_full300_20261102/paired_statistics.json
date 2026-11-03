@@ -1,0 +1,16 @@
+{
+  "common_valid_tasks": 270,
+  "exact_two_sided_mcnemar_p": 0.13380050659179688,
+  "interpretation_limit": "One fixed model and one candidate-count comparison do not establish an inference-scaling law; invalid outcomes under the frozen protocol and live collection windows limit generalization.",
+  "n5_minus_single_percentage_points": 2.962962962962963,
+  "n5_successes": 255,
+  "outcomes": {
+    "both_failure": 8,
+    "both_success": 240,
+    "n5_only_success": 15,
+    "single_only_success": 7
+  },
+  "schema": "browsercode-us-stealth-common-valid-paired-statistics-v1",
+  "single_successes": 247,
+  "test_definition": "Two-sided exact conditional binomial sign/McNemar test on discordant common-valid outcomes, treating task pairs as independent; no asymptotic approximation, website-cluster correction or multiplicity adjustment."
+}

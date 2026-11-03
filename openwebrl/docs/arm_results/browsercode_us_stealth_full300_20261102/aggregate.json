@@ -1,0 +1,210 @@
+{
+  "arms": {
+    "luna_single_high": {
+      "all_attempt_api": {
+        "actor": {
+          "active_requests": 0,
+          "known_native_usd": "3.18752288000000003646",
+          "known_usage_unsettled_requests": 0,
+          "retained_full_reserve_usd": "0",
+          "usage_known_requests": 7276,
+          "usage_unknown_requests": 0
+        },
+        "terra": {
+          "active_requests": 0,
+          "known_native_usd": "4.6843580",
+          "known_usage_unsettled_requests": 0,
+          "retained_full_reserve_usd": "0",
+          "usage_known_requests": 281,
+          "usage_unknown_requests": 0
+        }
+      },
+      "counts": {
+        "claimed_missing_native": 0,
+        "invalid": 19,
+        "native_saved": 300,
+        "successes": 257,
+        "unclaimed": 0,
+        "valid": 281
+      },
+      "provider": {
+        "actor_sessions": 300,
+        "all_owned_sessions_verified_stopped": true,
+        "conservative_max_observed_usd": "24.277314653905729441903238932104",
+        "hosting": {
+          "known_sessions": 304,
+          "known_usd": "0.2546666666666666666666666666200",
+          "unknown_sessions": 0
+        },
+        "minimum_known_snapshot_seconds_after_stop": 322.9714164733887,
+        "owned_sessions": 304,
+        "population": "all_owned_sessions_including_probes_recoveries_and_invalid_attempts",
+        "probe_sessions": 4,
+        "proxy": {
+          "known_sessions": 304,
+          "known_usd": "22.25064798723906277523657226564",
+          "unknown_sessions": 0
+        },
+        "retained_unknown_fee_reserve_usd": "0"
+      },
+      "valid_task_means": {
+        "actor_cost_usd": {
+          "mean": 0.010981344341637011,
+          "missing_tasks": 0,
+          "observed_tasks": 281
+        },
+        "selected_code_batches": {
+          "mean": 16.654804270462634,
+          "missing_tasks": 0,
+          "observed_tasks": 281
+        },
+        "task_latency_seconds": {
+          "mean": 120.16447736749018,
+          "missing_tasks": 0,
+          "observed_tasks": 281
+        }
+      }
+    },
+    "parallel5_select_high": {
+      "all_attempt_api": {
+        "actor": {
+          "active_requests": 0,
+          "known_native_usd": "22.448812655000000101495",
+          "known_usage_unsettled_requests": 0,
+          "retained_full_reserve_usd": "0",
+          "usage_known_requests": 29394,
+          "usage_unknown_requests": 0
+        },
+        "terra": {
+          "active_requests": 0,
+          "known_native_usd": "4.5762680",
+          "known_usage_unsettled_requests": 0,
+          "retained_full_reserve_usd": "0",
+          "usage_known_requests": 280,
+          "usage_unknown_requests": 0
+        }
+      },
+      "counts": {
+        "claimed_missing_native": 0,
+        "invalid": 20,
+        "native_saved": 300,
+        "successes": 264,
+        "unclaimed": 0,
+        "valid": 280
+      },
+      "provider": {
+        "actor_sessions": 300,
+        "all_owned_sessions_verified_stopped": true,
+        "conservative_max_observed_usd": "25.880525194394091748538248697619",
+        "hosting": {
+          "known_sessions": 304,
+          "known_usd": "0.4003333333333333333333333332740",
+          "unknown_sessions": 0
+        },
+        "minimum_known_snapshot_seconds_after_stop": 237.3419246673584,
+        "owned_sessions": 304,
+        "population": "all_owned_sessions_including_probes_recoveries_and_invalid_attempts",
+        "probe_sessions": 4,
+        "proxy": {
+          "known_sessions": 304,
+          "known_usd": "23.853858527727425081871582031155",
+          "unknown_sessions": 0
+        },
+        "retained_unknown_fee_reserve_usd": "0"
+      },
+      "valid_task_means": {
+        "actor_cost_usd": {
+          "mean": 0.07709859560714286,
+          "missing_tasks": 0,
+          "observed_tasks": 280
+        },
+        "selected_code_batches": {
+          "mean": 14.289285714285715,
+          "missing_tasks": 0,
+          "observed_tasks": 280
+        },
+        "task_latency_seconds": {
+          "mean": 205.4490391153884,
+          "missing_tasks": 0,
+          "observed_tasks": 280
+        }
+      }
+    }
+  },
+  "benchmark": "Online-Mind2Web",
+  "common_valid": {
+    "outcomes": {
+      "both_failure": 8,
+      "both_success": 240,
+      "n5_only_success": 15,
+      "single_only_success": 7
+    },
+    "task_means": {
+      "luna_single_high": {
+        "actor_cost_usd": {
+          "mean": 0.010948959574074074,
+          "missing_tasks": 0,
+          "observed_tasks": 270
+        },
+        "selected_code_batches": {
+          "mean": 16.659259259259258,
+          "missing_tasks": 0,
+          "observed_tasks": 270
+        },
+        "task_latency_seconds": {
+          "mean": 119.57466872154683,
+          "missing_tasks": 0,
+          "observed_tasks": 270
+        }
+      },
+      "parallel5_select_high": {
+        "actor_cost_usd": {
+          "mean": 0.07688029805555556,
+          "missing_tasks": 0,
+          "observed_tasks": 270
+        },
+        "selected_code_batches": {
+          "mean": 14.207407407407407,
+          "missing_tasks": 0,
+          "observed_tasks": 270
+        },
+        "task_latency_seconds": {
+          "mean": 204.57670144023442,
+          "missing_tasks": 0,
+          "observed_tasks": 270
+        }
+      }
+    },
+    "tasks": 270
+  },
+  "endpoint": {
+    "all_attempts_terminal": true,
+    "final_invoice_asserted": false,
+    "independently_qualified": true,
+    "kind": "complete",
+    "provider_reconciliation_sha256": "1a0195402b42f409cd8cdf60205a6ce04d6c578d63a20dfab6fed046cd74cf75",
+    "qualified_endpoint_sha256": "389d7e5d78000acd3db107b60be5b963f33be216a79e671258e30efb14ee0a5c"
+  },
+  "planned_tasks_per_method": 300,
+  "protocol": {
+    "actor_loop_deadline_seconds": 900,
+    "actor_model": "gpt-6-luna",
+    "browser_provider": "Browser Use V4",
+    "candidate_sampling_parallel": true,
+    "harness": "BrowserCode",
+    "judge_max_output_tokens": 4096,
+    "judge_model": "gpt-5.6-terra",
+    "judge_reasoning_effort": "medium",
+    "judge_seed": 42,
+    "max_model_decisions": 30,
+    "max_output_tokens_per_generation": 12288,
+    "qualified_runs_provider_allow_resizing": true,
+    "reasoning_effort": "high",
+    "routing": "US residential",
+    "viewport_png_pixels": [
+      1280,
+      1800
+    ]
+  },
+  "schema": "browsercode-us-stealth-observed-costs-v1"
+}

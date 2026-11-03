@@ -1,0 +1,21 @@
+{
+  "schema": "us-stealth-observed-cost-render-v1",
+  "performance_population": "common-valid",
+  "provider_population": "all_owned_sessions_including_probes_recoveries_and_invalid_attempts",
+  "maxima_or_reserves_plotted_as_actual": false,
+  "final_invoice_asserted": false,
+  "dimensions_inches": [
+    6.8,
+    2.55
+  ],
+  "matplotlib_version": "3.9.4",
+  "input_sha256": "2cf8650a12a36f87b1891d0f365cf98087bf3ae8330f1a159b0af45d7555b148",
+  "renderer_sha256": "5453e2f042742d33ec24ddb8f49363b8935b685e165cdd555ed316f309caedeb",
+  "output_sha256": {
+    ".png": "4af5d6186a0b9501737d7ecc74fc6fe2cdc8dedf8659993438aff741823ac0d7",
+    ".svg": "8b4b8a01961d019d34340128beb05a75cc5fe5e4c41132f2562611e6a23612fc",
+    ".pdf": "2dc8d425bd8f522b3d16fbbb1e42df843ba9a5a0a563f2d510742acb8b2b860d",
+    ".csv": "bbe4d723d0d2a342b0d88e6d265e62acba26c862193b09ab85431ab5b69b3b55",
+    "_tables.md": "0946e17a5aaa834bce0df6421650ea164021735c45f87d53886866aa3007f37b"
+  }
+}

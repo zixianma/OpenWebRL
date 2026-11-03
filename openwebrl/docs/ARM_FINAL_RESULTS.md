@@ -145,6 +145,28 @@ All-attempt spend for the three token/effort variants is $29.243526775 actor cha
 </details>
 <!-- browsercode-inference-scaling-20261031:end -->
 
+<!-- browsercode-us-stealth-full300:start -->
+<a id="browsercode-us-stealth-full300"></a>
+
+## BrowserCode on US-residential stealth browsers
+
+**On 270 common-valid OM2W task pairs, Luna high N5 succeeds on 255, versus 247 for Single**, with mean actor-loop latency of 204.6 versus 119.6 seconds. The paired difference is +2.96 percentage points (two-sided task-level exact McNemar p = 0.134). The discordant outcomes do not establish a difference at the 0.05 level. This single-model, Single-versus-N5 comparison does not establish an inference-scaling law.
+
+![Common-valid OM2W US-stealth success and latency, with separately measured all-owned browser hosting and proxy fees](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.png)
+
+*Left: the same 270 valid tasks for both methods; Luna circles retain blue Single and red N5. Actor latency excludes Terra and is elapsed task time, not summed parallel call durations. Right: latest native Browser Use hosting and residential-proxy fees for **304 owned sessions per method: 300 actor sessions plus four mechanical probes**, including invalids and every recovery. These billing and performance populations differ. Every session is verified stopped and re-queried at least 90 seconds after stop. Bars use latest fees, including downward corrections; conservative admission maxima and unresolved reserves are separate, never plotted as actual fees. Values are provider observations, not final invoices or cash paid after credits. These remote-browser results stay separate from the local-browser scaling figures above.*
+
+| Method | Planned | Native | Valid | Invalid | Successes | Overall success (%) | Own-valid success (%) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Luna high single | 300 | 300 | 281 | 19 | 257 | 85.67 | 91.46 |
+| Luna high N5 | 300 | 300 | 280 | 20 | 264 | 88.00 | 94.29 |
+
+All 600 planned actor outcomes are saved; no claimed-missing or unclaimed tasks remain. Overall success is confirmed successes divided by 300; invalid outcomes are not assigned a judged failure. Invalids include setup, capture/protocol and native-completion failures; they retain their original outcomes and are excluded from performance means. Both methods use high reasoning, a 12,288-output-token ceiling per generation, 30 decisions, a 900-second actor deadline, US residential routing and Terra medium/4,096/seed 42. N5 samples five candidates concurrently and executes only the selected action. Collection spans live website changes and bounded operational recovery; common-valid pairing controls task identity but does not eliminate attrition or those runtime effects.
+
+[Aggregate](arm_results/browsercode_us_stealth_full300_20261102/aggregate.json) · [Paired counts and exact test](arm_results/browsercode_us_stealth_full300_20261102/paired_statistics.json) · [Coordinates](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.csv) · [PDF](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.pdf) · [SVG](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.svg) · [Plot source](arm_results/browsercode_us_stealth_full300_20261102/plot_stealth_costs.py) · [Actual costs, own-valid means and reproduction](API_EXPERIMENT_METHODS.md#us-stealth-full300)
+<!-- browsercode-us-stealth-full300:end -->
+
+
 <!-- claude-browsercode-om2w300-v1:start -->
 <a id="claude-browsercode-om2w300"></a>
 

@@ -163,7 +163,7 @@ The run commands print plans; add `--execute` for paid collection within their e
 <a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
 
-**The completed 20-task US-residential pilot cost $5.74 across both methods**, including model calls, Terra, hosting, proxy traffic and failed attempts. On 15 contemporaneous common-valid pairs, N5 succeeded on 15 and Single on 12, with mean actor-loop latency of 191.6 versus 120.8 seconds. This small pilot does not establish full-benchmark superiority; [results and accounting are below](#measured-us-residential-pilot).
+The [completed full-300 comparison](#us-stealth-full300) reports measured hosting and residential-proxy fees separately from actor/Terra pricing and task-performance populations. **The earlier 20-task US-residential pilot cost $5.74 across both methods**, including model calls, Terra, hosting, proxy traffic and failed attempts. On 15 contemporaneous common-valid pairs, N5 succeeded on 15 and Single on 12, with mean actor-loop latency of 191.6 versus 120.8 seconds. This small pilot does not establish full-benchmark superiority; [results and accounting are below](#measured-us-residential-pilot).
 
 <details>
 <summary>Historical hosting projections and zero-API reproduction — omitted from the plots</summary>
@@ -275,9 +275,45 @@ Before paid collection, freeze and explicitly approve exact session/compute/mode
 </details>
 
 <a id="us-stealth-full300"></a>
-### Prospective full-300 US-residential comparison
+### Completed full-300 US-residential comparison
 
-The [full-study owner](../api_experiments/reproduce/stealth_study.py) prepares **300 fresh OM2W task pairs: Luna high single versus Luna high N5**. The completed 20-task pilot remains separate. Both methods retain BrowserCode, US residential routing, high reasoning, 12,288 tokens per generation, 30 decisions, a 900-second actor loop and Terra medium/4,096/seed 42. N5 proposals run concurrently; only the selected action executes.
+**Latest native hosting plus residential-proxy fees are $22.5053 for Single and $24.2542 for N5**, covering all 608 owned sessions, including eight probes and invalid/recovery attempts. All hosting/proxy fees are observed, all sessions are stopped, and the final GET snapshots were taken at least 90 seconds after verified stop. These are native provider observations, not invoices. The [separate result figure and counts](ARM_FINAL_RESULTS.md#browsercode-us-stealth-full300) compare the same 270 common-valid tasks: 247 Single successes versus 255 N5 successes. The paired difference is +2.96 percentage points (two-sided task-level exact McNemar p = 0.134). The discordant outcomes do not establish a difference at the 0.05 level. This single-model, Single-versus-N5 comparison does not establish an inference-scaling law.
+
+<details>
+<summary>Full-300 measured accounting, performance means and protocol</summary>
+
+**All-attempt USD:** API columns are priced native token-usage upper bounds, including invalid work and input counters; complete cache telemetry can make upper and lower bounds coincide. They exclude browser fees and are not direct invoice charges. Browser columns are latest native reported fees, with hosting and traffic separate; they include 300 actor sessions and four probes per method. Do not substitute historical maximum observations for these fee fields.
+
+| Method | Actor API upper $ | Terra API upper $ | Hosting observed $ | US proxy observed $ | Browser subtotal $ |
+|---|---:|---:|---:|---:|---:|
+| Luna high single | 3.1875 | 4.6844 | 0.2547 | 22.2506 | 22.5053 |
+| Luna high N5 | 22.4488 | 4.5763 | 0.4003 | 23.8539 | 24.2542 |
+
+All 37,231 physical actor/input-counter/Terra requests have known native usage. No active, usage-unknown or known-but-unsettled requests remain, and no API or provider-fee reserves remain. Native usage pricing still gives upper bounds rather than direct invoice charges.
+
+**Own-valid actor means:** cost and elapsed latency exclude Terra. These rows include each method’s valid failures and have different task populations; the primary figure uses their common-valid intersection.
+
+| Method | Valid tasks | Priced tasks | Actor upper $ / priced task | Actor latency (s/task) | Selected batches / task |
+|---|---:|---:|---:|---:|---:|
+| Luna high single | 281 | 281 | 0.01098 | 120.2 | 16.65 |
+| Luna high N5 | 280 | 280 | 0.07710 | 205.4 | 14.29 |
+
+The common-valid discordant cells are **7 Single-only successes and 15 N5-only successes**; both succeed on 240 and both fail on 8. The exact paired test conditions on these discordants and treats task pairs as independent; it does not correct for website clustering. Own-valid rates, overall rates and common-valid rates use distinct denominators and are not interchangeable.
+
+Both arms enable `allowResizing: true` to enforce the common viewport, an opt-in the provider warns can reduce stealthiness. The final uncropped 1280 × 1800 PNG is verified without resampling; screen/DPR fingerprints remain diagnostics. Temporary browser connections and remote owned sessions are closed even after setup failures. The browser stops before Terra. Pairing is contemporaneous within each original task pair; failed claims remain invalid and only genuinely unclaimed tasks continue during bounded recovery. All failed launches, probes, API calls and provider fee histories remain in all-attempt accounting.
+
+[Aggregate](arm_results/browsercode_us_stealth_full300_20261102/aggregate.json) · [Paired statistics](arm_results/browsercode_us_stealth_full300_20261102/paired_statistics.json) · [Full metric/accounting table](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs_tables.md) · [CSV](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.csv) · [PDF](arm_results/browsercode_us_stealth_full300_20261102/us_stealth_observed_costs.pdf). Recreate the compact comparison from sanitized aggregates only, with no API, browser or scheduler calls:
+
+```bash
+STEALTH_RESULTS=openwebrl/docs/arm_results/browsercode_us_stealth_full300_20261102
+"$API_PY" -B "$STEALTH_RESULTS/plot_stealth_costs.py" \
+  --aggregate "$STEALTH_RESULTS/aggregate.json" --population common-valid \
+  --output-dir "$STEALTH_RESULTS"
+```
+
+</details>
+
+The [full-study owner](../api_experiments/reproduce/stealth_study.py) reproduces **300 fresh OM2W task pairs: Luna high single versus Luna high N5**. The completed 20-task pilot remains separate. Both methods retain BrowserCode, US residential routing, high reasoning, 12,288 tokens per generation, 30 decisions, a 900-second actor loop and Terra medium/4,096/seed 42. N5 proposals run concurrently; only the selected action executes.
 
 <details>
 <summary>Full-study reproduction and spending controls</summary>
