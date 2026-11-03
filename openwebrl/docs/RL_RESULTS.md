@@ -4,6 +4,25 @@
 | --- | --- | --- | --- |
 | Online-Mind2Web, 300 tasks | [qcq7i4ug](https://wandb.ai/zixianma/openwebrl/runs/qcq7i4ug) | 2026-09-24 | [RL_EVALUATION.md](RL_EVALUATION.md) |
 
+<a id="rl-headline-20261103"></a>
+## Headline · OM2W 300 · iteration 90 · three repeats per method
+
+**Bold** = best, <u>underline</u> = second best per column.
+
+| Protocol | Method | Collection dates (PDT) | Overall mean % | Valid-only mean % | Δ overall vs outcome-only, pp [paired 95% CI] | Record |
+| --- | --- | --- | ---: | ---: | ---: | --- |
+| Stealth · o4-mini · T0.6 | ***Baseline:*** outcome-only | Sep 29–30 | 55.22 | 57.65 | — | [Iteration 90 stealth](#iteration-90-stealth--full-300--three-repeats--mean--sample-sd-and-95-ci) |
+| Stealth · o4-mini · T0.6 | Additive bonus | Sep 29–30 | 58.44 | **61.45** | +3.22 [−0.44, +6.78] | [Paired](#matched-iteration90--overall-paired95-cis--three-pair-holm-correction) |
+| Stealth · o4-mini · T0.6 | Gate B: relaxed gate | Sep 29–30 | <u>58.78</u> | <u>61.36</u> | +3.56 [−0.22, +7.22] | [Paired](#matched-iteration90--overall-paired95-cis--three-pair-holm-correction) |
+| Stealth · o4-mini · T0.6 | Mixed-only bonus + relaxed B | Oct 6 | **59.00** | 59.67 | — (other window) | [Iteration 90 stealth](#iteration-90-stealth--full-300--three-repeats--mean--sample-sd-and-95-ci) |
+| Stealth · o4-mini · T0.6 | Mixed-only reweight + relaxed B | Oct 6 | 56.22 | 56.79 | — (other window) | [Iteration 90 stealth](#iteration-90-stealth--full-300--three-repeats--mean--sample-sd-and-95-ci) |
+
+| Protocol | Method | Collection dates (PDT) | Overall mean % | Valid-only mean % | Δ overall vs outcome-only 48 groups, pp [paired 95% CI] | Record |
+| --- | --- | --- | ---: | ---: | ---: | --- |
+| Local · GPT-4.1 · T0 | ***Baseline:*** outcome-only, 48 groups | Oct 25 | 34.11 | 43.06 | — | [Iteration 90 local](#iteration-90--local-browser--gpt-41--t0--three-contemporaneous-repeats--october-25) |
+| Local · GPT-4.1 · T0 | ***Baseline:*** outcome-only, 56 groups | Oct 25 | <u>35.33</u> | <u>44.92</u> | +1.22 [−2.22, +4.67] | [Iteration 90 local](#iteration-90--local-browser--gpt-41--t0--three-contemporaneous-repeats--october-25) |
+| Local · GPT-4.1 · T0 | Gate B: relaxed gate | Oct 25 | **40.56** | **51.05** | **+6.44 [+2.67, +10.22]** | [Iteration 90 local](#iteration-90--local-browser--gpt-41--t0--three-contemporaneous-repeats--october-25) |
+
 ## Released RL actor · frozen SFT frontend · 30 steps · o4-mini · October 7
 
 | Condition | N | Tasks | Successes | Valid | Invalid | Overall % | Valid-only % | Source |
