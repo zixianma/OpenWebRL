@@ -7,10 +7,7 @@
     kept) are scored on held-out rollouts 4-8, valid draws only. Teacher = the label's argmax among the five (ties
     averaged). Task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
 (2) Live: the seed-0 head trained on the original 1,380 training states, three-benchmark mean overall success
-    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o; selection-data-scale-20261023.json,
-    post-execution from selection-label-stages-20261027.json). Lookahead H = 5 was run live separately on 2026-11-01/02 (one run, same protocol and judges) with same-day SFT and
-H = 3 controls; its point is the same-day gain over SFT (selection-label-k5-live-20261102.json, "h5 - sft").
-Read it against that day's H = 3 head (+1.9 over SFT), not the older H = 3 point.
+    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json, paired gain over SFT, per-task success averaged over runs).
 """
 import json
 from pathlib import Path
@@ -21,10 +18,9 @@ from matplotlib.lines import Line2D
 
 HERE = Path(__file__).resolve().parent
 K = json.loads((HERE / "selection-label-kfold-20261101.json").read_text())
-LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
-EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).get("live", {})
-K5LIVE = json.loads((HERE / "selection-label-k5-live-20261102.json").read_text())["paired"]
-K5_H5, K5_H3 = K5LIVE["h5 - sft"]["mean"], K5LIVE["h3 - sft"]["mean"]  # same-day 11-01/02 run
+LIVE3 = json.loads((HERE / "selection-label-live-3run-20261103.json").read_text())  # same-day 3-run batch
+LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "teacher_k3": "h3",
+             "teacher_k5": "h5", "outcome": "oracle"}
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
@@ -37,7 +33,7 @@ P = K["pooled"]
 PANELS = [
     (f"Offline · task-level 5-fold, out-of-fold heads\n{P['states']:,} states, {P['tasks']} tasks; held-out rollouts 4–8",
      "offline", P["sft_sample"]),
-    ("Live · 3 benchmarks\n1,045 tasks, mean overall success", "live", LIVE["SFT 4B"]["mean_overall"])]
+    ("Live · 3 benchmarks\n1,045 tasks, mean overall success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
 
 
 def point(ax, x, v, color, marker, filled):
@@ -55,7 +51,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, K5_H5 if live == "K5" else (EXTRA.get(live) or LIVE[live]["minus_sft4b"]), color, "D", True)
+            point(ax, x, LIVE3["paired"][LIVE3_KEY[src] + " - sft"]["mean"], color, "D", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "s", True)
@@ -67,7 +63,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
 axes[0].set_ylim(-4.5, 10); axes[0].set_ylabel("Gain over one SFT 4B actor sample (pp)", fontsize=9)
 handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewidth=1.4,
                   markerfacecolor="#555555" if f else "white") for m, f in (("o", False), ("s", True), ("D", True))]
-fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (3 seeds, out-of-fold)", "Head, live (seed 0)"],
+fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (3 seeds, out-of-fold)", "Head, live (seed 0, 3 runs)"],
            frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.08))
 fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on held-out rollouts 4–8 (labels used rollouts 1–3; "
          "Oracle = best action on rollouts 1–3). Bars: 95% intervals,\ntask-clustered bootstrap (offline) or paired over "

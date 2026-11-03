@@ -9,10 +9,7 @@ sample of the same SFT 4B actor at three stages.
     (1)-(2): task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
 (3) Head live: the seed-0 head trained on the original 1,380 training states, three-benchmark mean overall success
     (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o) minus one SFT 4B sample, paired 95%
-    bootstrap over tasks (selection-data-scale-20261023.json; post-execution from selection-label-stages-20261027.json).
-    Lookahead H = 5 was run live separately on 2026-11-01/02 (one run, same protocol and judges) with same-day SFT and
-H = 3 controls; its point is the same-day gain over SFT (selection-label-k5-live-20261102.json, "h5 - sft").
-Read it against that day's H = 3 head (+1.9 over SFT), not the older H = 3 point.
+    bootstrap over tasks. Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json, paired gain over SFT, per-task success averaged over runs).
 Stages (1)-(2) share states; (3) uses different tasks, so compare orderings across stages, not sizes. The prior judge
 formulations (WebArbiter, WebShepherd, PRO-CUA) were scored as teachers on a different 1,010-state set and are left out;
 they remain in selection-label-stages-20261027.png.
@@ -26,10 +23,9 @@ from matplotlib.lines import Line2D
 
 HERE = Path(__file__).resolve().parent
 K = json.loads((HERE / "selection-label-kfold-20261101.json").read_text())["pooled"]
-LIVE = json.loads((HERE / "selection-data-scale-20261023.json").read_text())["three_benchmarks"]
-EXTRA = json.loads((HERE / "selection-label-stages-20261027.json").read_text()).get("live", {})
-K5LIVE = json.loads((HERE / "selection-label-k5-live-20261102.json").read_text())["paired"]
-K5_H5, K5_H3 = K5LIVE["h5 - sft"]["mean"], K5LIVE["h3 - sft"]["mean"]  # same-day 11-01/02 run
+LIVE3 = json.loads((HERE / "selection-label-live-3run-20261103.json").read_text())  # same-day 3-run batch
+LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "teacher_k3": "h3",
+             "teacher_k5": "h5", "outcome": "oracle"}
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
@@ -40,12 +36,12 @@ ROWS = [  # tick label, colour, source key, live key
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 MARK = [(f"Teacher's pick, offline ({K['states']:,} states, 5-fold)", "o", False),
         ("Head trained on the labels, offline (out-of-fold, 3 seeds)", "s", False),
-        ("Head, live (seed 0; mean of 3 benchmarks, 1,045 tasks)", "D", True)]
+        ("Head, live (seed 0, 3 runs; mean of 3 benchmarks, 1,045 tasks)", "D", True)]
 DX = (-0.24, 0, 0.24)
 
 
 def values(src, live):
-    lv = K5_H5 if live == "K5" else ((EXTRA.get(live) or (LIVE[live]["minus_sft4b"] if live in LIVE else None)) if live else None)
+    lv = LIVE3["paired"][LIVE3_KEY[src] + " - sft"]["mean"]
     return [K[src]["teacher_minus_sft"], K[src]["head_minus_sft"], lv]
 
 
@@ -71,7 +67,7 @@ handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewi
 ax.legend(handles, [l for l, _, _ in MARK], frameon=False, fontsize=7.5, loc="upper center", bbox_to_anchor=(0.45, -0.17), ncol=1)
 fig.text(0.01, 0.01, "Offline: first five SFT proposals per state, held-out rollouts 4–8 (labels used rollouts 1–3; Oracle = best "
          f"action on rollouts 1–3); one SFT sample = {K['sft_sample']:.1f}%. Live: one SFT sample = "
-         f"{LIVE['SFT 4B']['mean_overall']:.1f}%.\nBars: 95% intervals, task-clustered bootstrap (offline) or paired over tasks "
+         f"{LIVE3['rates']['sft']['mean_overall']:.1f}%.\nBars: 95% intervals, task-clustered bootstrap (offline) or paired over tasks "
          "(live). Offline and live use different tasks: compare orderings, not sizes.", fontsize=6.5, color=MUTED)
 fig.tight_layout(rect=(0, 0.07, 1, 1))
 fig.savefig(HERE / "selection-label-stages-kfold-20261101.png", dpi=160); plt.close(fig)
