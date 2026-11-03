@@ -688,10 +688,10 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 | Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| ***Baselines*** | | | | | | | |
+| ***Baseline*** | | | | | | | |
 | SFT 4B alone (1 sample) | — | 32.3% | 45.2% | 29.0% | 33.6% | 35.5% | — |
+| ***Ours: 4B LoRAs (SelectionARM recipe)*** | | | | | | | |
 | Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.1%** | <u>56.0%</u> | <u>36.0%</u> | **41.4%** | **45.0%** | **+7.7 [+5.6, +9.8]** |
-| ***Ours: 4B LoRAs (Piotr's recipe)*** | | | | | | | |
 | 4B LoRA | Recipe 2, 1.3K states | 38.5% | 54.5% | 34.6% | 40.2% | 42.5% | +6.5 [+4.5, +8.6] |
 | 4B LoRA | Recipe 2, 2.6K states | 38.8% | 52.5% | **38.3%** | 40.1% | 43.2% | +6.5 [+4.3, +8.7] |
 | ***Ours: 22.6M heads on actor features*** | | | | | | | |
@@ -704,10 +704,10 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 | Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − RL alone, pp [95% CI] |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| ***Baselines*** | | | | | | | |
+| ***Baseline*** | | | | | | | |
 | RL 4B alone (1 sample) | — | 30.2% | 56.9% | 44.6% | 42.0% | 43.9% | — |
+| ***Ours: 4B LoRA (SelectionARM recipe)*** | | | | | | | |
 | Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.4%** | <u>62.7%</u> | 50.9% | **49.0%** | <u>52.3%</u> | **+7.0 [+4.8, +9.2]** |
-| ***Ours: 4B LoRA (Piotr's recipe)*** | | | | | | | |
 | 4B LoRA | Recipe 2, 2.6K states | <u>42.4%</u> | **64.7%** | **51.7%** | <u>48.6%</u> | **52.9%** | <u>+6.6 [+4.1, +8.9]</u> |
 | ***Ours: 22.6M heads on actor features*** | | | | | | | |
 | Head | Recipe 2, 2.6K states | 37.3% | 59.4% | <u>51.1%</u> | 46.8% | 49.3% | +4.8 [+2.6, +7.0] |
