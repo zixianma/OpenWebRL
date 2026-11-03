@@ -1,17 +1,62 @@
 # WebPRM baselines
 
+<a id="headline-results-20261103"></a>
+## Headline results
+
+<a id="webprmbench-headline-20261103"></a>
+### WebPRMBench: every selector, released and with thoughts removed
+
+**With every candidate's thought removed, Piotr SelectionARM is the best selector (77.3% pairwise / 55.3% Best-of-N), ahead of WebArbiter-7B (74.1% / 49.7%).** On the released benchmark WebArbiter-7B leads by 10.5 pp pairwise, mostly because correct responses can be recognised by how their thoughts are written: selectors trained on WebArbiter-style data lose 10–20 pp without thoughts, those trained only on our screenshot data lose 2–8 pp. Our 4B LoRAs are level with WebArbiter-7B (73.9–75.0%), every 22.6M head is lower (51.5–67.9%), and WebShepherd is near chance.
+
+| Selector | Training data | Actions only: pairwise (%) | Actions only: Best-of-N (%) | Released: pairwise (%) | Released: Best-of-N (%) | Pairwise change, actions only − released (pp) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Piotr SelectionARM (4B LoRA) | Recipe 1: Piotr's 2,692 states, GPT-5.5 labels before execution | **77.3** | **55.3** | 79.0 | 57.7 | −1.7 |
+| Our 4B LoRA | WebArbiter SFT pairs + Recipe 2 2.6K | 75.0 | 53.6 | 85.5 | 66.4 | −10.5 |
+| Our 4B LoRA | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 74.4 | 51.9 | 76.9 | 52.4 | −2.5 |
+| WebArbiter-7B | WebArbiter (released weights) | 74.1 | 49.7 | **89.5** | **73.3** | −15.4 |
+| Our 4B LoRA | Recipe 2: 2.6K states, Luna labels 3 steps after execution | 73.9 | 51.0 | 77.4 | 53.0 | −3.5 |
+| Our head (22.6M) | Recipe 2: 2.6K states | 67.9 | 38.4 | 75.2 | 43.6 | −7.3 |
+| Our head (22.6M) | Recipe 1: Piotr's 2,692 states | 67.6 | 43.7 | 74.2 | 46.4 | −6.6 |
+| Our head (22.6M), 3 seeds | WebArbiter SFT + Recipe 2 2.6K, whole sets (C1) | 66.0 | 37.7 | 81.3 | 59.8 | −15.3 |
+| Our head (22.6M), 3 seeds | WebArbiter SFT + Recipe 2 2.6K, pairs (B) | 66.0 | 36.3 | 78.0 | 55.3 | −12.0 |
+| WebArbiter-3B | WebArbiter (released weights) | 64.4 | 30.0 | 83.9 | 59.5 | −19.5 |
+| Our head (22.6M) | Recipe 2: 1.3K states, Luna labels before execution | 64.0 | 40.8 | 70.8 | 42.3 | −6.8 |
+| Our head (22.6M), 3 seeds | WebArbiter SFT only (A) | 61.8 | 33.4 | 78.4 | 56.9 | −16.6 |
+| Our head (22.6M) | SFT+RL 1,908 states, Luna labels 1 step after execution | 60.2 | 33.6 | 51.8 | 17.2 | +8.4 |
+| WebShepherd-3B | WebShepherd (released weights) | 59.4 | 31.6 | 66.4 | 44.3 | −7.0 |
+| Our head (22.6M) | Recipe 2: 1.3K states, Luna labels 3 steps after execution | 59.0 | 31.9 | 67.0 | 37.5 | −8.0 |
+| WebShepherd-8B | WebShepherd (released weights) | 53.5 | 30.2 | 60.2 | 41.9 | −6.7 |
+| Our head (22.6M) | Recipe 2: 2.5K states, 22K panels | 51.5 | 23.5 | 57.2 | 27.3 | −5.7 |
+
+Benchmark: 1,150 states, each with one correct response and four distractors (4,600 pairs); text only (intent, accessibility tree, history, URLs). Pairwise = share of pairs where the correct response is preferred; Best-of-N = share of states where it wins all four pairs. Both are the unweighted mean of Mind2Web (707 states), WebArena (201), AssistantBench (30) and WorkArena (212), as in the WebArbiter paper; chance is 50% / 20%. "Actions only" deletes every candidate's thought and keeps everything else. Sorted by actions-only pairwise; **bold** = best per column. One run per row except the three-seed heads; differences of a few points are not established, and AssistantBench's 30 states are very noisy. WebArbiter answers with its own pairwise prompt and WebShepherd with its released checklist pipeline (both our reruns of the public weights; the released numbers reproduce the paper within 1.3 pp). LoRAs are scored from their probability of "1" vs "2" in their own selection prompt; heads score each response from frozen OpenWebRL-4B-SFT features. None of our selectors or Piotr's runs in its native setting (all were trained on screenshots). [Per-environment tables, published rows, other scoring methods and setup](#webprmbench-20261018).
+
+<a id="procua-headline-20261103"></a>
+### PRO-CUA on DeepShop-150
+
+**PRO-CUA-4B solves 47.3% of DeepShop-150, level with our OpenWebRL-4B-SFT actor (43.9–47.0% valid-only over three runs the day before); PRO-CUA-8B solves only 27.3%, because 86 of its 150 episodes run out of their 30 steps.** On the 50 tasks both PRO-CUA models finished, they are level (4B 37, 8B 35 successes).
+
+| Agent | Run date | Tasks | Successes | Judge-invalid | Valid-only (%) |
+| --- | --- | ---: | ---: | ---: | ---: |
+| PRO-CUA-4B (their runner) | Nov 2 | 150 | 71 | 0 | 47.3 |
+| PRO-CUA-8B (their runner) | Nov 2 | 150 | 41 | 0 | 27.3 |
+| OpenWebRL-4B-SFT (our harness), run 1 | Nov 1 | 150 | 70 | 1 | 47.0 |
+| OpenWebRL-4B-SFT (our harness), run 2 | Nov 1 | 150 | 66 | 5 | 45.5 |
+| OpenWebRL-4B-SFT (our harness), run 3 | Nov 1 | 150 | 61 | 11 | 43.9 |
+
+Same 150 tasks and same judge (gpt-4o, last 30 screenshots). The agents also differ in runner, browser window (1000×1000 vs 1280×1000) and action set, and live Amazon drifts between days, so the 4B comparison is indicative only. One run per PRO-CUA model. [Episode endings, method and accounting](#procua-deepshop-20261102).
+
+### Other WebPRM baseline results
+
+- **Live selection with gpt-4o as actor** ([baseline_comparison.md](baseline_comparison.md)): on 284 paired Online-Mind2Web tasks no selector beats no search (Piotr +2.5 pp, WebArbiter-7B −2.8 pp, both within noise; WebShepherd −14.8 pp). WebArena-Lite four sites: Piotr 14.9% vs no search 20.8% (paired −4.0 pp, n.s.).
+- **WebArbiter Table 5 reproduction on live WebArena** ([status](#table5-plan-20261010)): incomplete, no selector ranking. 12 primary attempts audited (8 valid, 2 guarded successes); the Reddit allocation is used up.
+
+## Detailed results
+
+
 <a id="procua-deepshop-20261102"></a>
-## PRO-CUA on DeepShop-150 (November 2)
+### PRO-CUA on DeepShop-150: details (November 2)
 
-**PRO-CUA-4B solves 47.3% of DeepShop-150 under our native gpt-4o judge, level with our OpenWebRL-4B-SFT actor (43.9–47.0% valid-only over three runs the day before); PRO-CUA-8B solves only 27.3%, because 86 of its 150 episodes run out of their 30 steps.** [PRO-CUA](https://arxiv.org/abs/2605.29119) trains Qwen3-VL-4B/8B-Instruct with step-level GRPO on process-reward-model scores; the paper reports WebVoyager, Mind2Web-Live and Online-Mind2Web but no DeepShop.
-
-| Agent | Run date | Tasks | Successes | Overall (%) | Judge-invalid | Valid-only (%) | Mean steps |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| PRO-CUA-4B (their runner) | Nov 2 | 150 | 71 | 47.3 | 0 | 47.3 | 12.3 |
-| PRO-CUA-8B (their runner) | Nov 2 | 150 | 41 | 27.3 | 0 | 27.3 | 20.8 |
-| OpenWebRL-4B-SFT, sft1 run1 (our harness) | Nov 1 | 150 | 70 | 46.7 | 1 | 47.0 | — |
-| OpenWebRL-4B-SFT, sft1 rerun2 | Nov 1 | 150 | 66 | 44.0 | 5 | 45.5 | — |
-| OpenWebRL-4B-SFT, sft1 rerun3 | Nov 1 | 150 | 61 | 40.7 | 11 | 43.9 | — |
+[PRO-CUA](https://arxiv.org/abs/2605.29119) trains Qwen3-VL-4B/8B-Instruct with step-level GRPO on process-reward-model scores; the paper reports WebVoyager, Mind2Web-Live and Online-Mind2Web but no DeepShop. Headline table [above](#procua-headline-20261103).
 
 **How episodes end** (counts out of 150; success = judge SUCCESS):
 
@@ -34,10 +79,15 @@
 
 </details>
 
-<a id="webprmbench-20261018"></a>
-## WebPRMBench: our selectors against WebArbiter (October 17 – November 1)
 
-**With every candidate's thought removed, WebArbiter loses its lead: Piotr SelectionARM, scored through its own selection prompt, is best (77.3% pairwise / 55.3% Best-of-N), ahead of WebArbiter-7B (74.1% / 49.7%) and our LoRAs (73.9–75.0% / 51.0–53.6%); every head is at or below 67.9%, and WebShepherd-3B and -8B fall to 59.4% and 53.5% ([actions only](#webprmbench-actiononly-20261102)).** On the released benchmark the ranking is different, mostly because correct responses can be recognised by how their thoughts are written ([head](#webprmbench-sft-heads-20261101), [LoRA](#webprmbench-lora-c1-20261102)): our reruns of WebArbiter-7B and -3B reproduce the paper (89.5% / 73.3% and 83.9% / 59.5%; paper 89.2% / 74.6% and 83.7% / 59.1%), Piotr's LoRA recipe trained on WebArbiter's SFT pairs plus our Recipe 2 data lands between them (85.5% / 66.4%, one seed), and our 22.6M head on the same data reaches the 3B level (81.3% / 59.8%, 3 seeds). Without WebArbiter data, Piotr SelectionARM scored through its selection prompt is best (79.0% / 57.7%), ahead of our Recipe 2 LoRAs (77.4% and 76.9% pairwise) and best heads (75.2% pairwise, Recipe 2 2.6K; 46.4% Best-of-N, Recipe 1). Asked WebArbiter's judge prompt instead, these LoRAs score only 63–70% pairwise, partly because their answers often do not parse.
+
+<a id="webprmbench-20261018"></a>
+### WebPRMBench: full results (October 17 – November 2)
+
+Headline table [above](#webprmbench-headline-20261103). Below: per-environment results with released thoughts (including published rows and the WebArbiter-judge-prompt scoring of our LoRAs), the heads and LoRA trained on WebArbiter data, per-environment actions-only results, response order and setup.
+
+<details><summary>Per-environment tables and analyses</summary>
+
 
 **Caveats that apply to every number below.** The released benchmark is text only (intent, accessibility tree, history, URLs; no screenshots) and gives two candidates per comparison. None of our selectors runs in its native setting: all were trained on screenshots, and the heads and LoRAs on panels of 2–5 candidates. Published rows are copied from the [WebArbiter paper](https://arxiv.org/abs/2601.21872), Table 2; of those models we reran WebArbiter-3B/-7B and WebShepherd-3B/-8B (rows marked *our rerun*). Training overlap with the benchmark was not checked for any of our selectors. Unparseable answers count as errors, as in the paper.
 
@@ -237,6 +287,8 @@ The swapped copy exchanges responses 1 and 2 in every prompt and flips the label
 | Our 4B LoRA, selection-prompt scoring | Recipe 2: 1.3K states, Luna 3 steps after execution | Correct pairs | 436 | 418 | 1,204 | 654 | 95 | 631 | 3,438 |
 | Our 4B LoRA, selection-prompt scoring | Recipe 2: 1.3K states, Luna 3 steps after execution | Correct states | 67 | 44 | 176 | 124 | 19 | 93 | 523 |
 </details>
+</details>
+
 <details><summary>Setup, cost and sources</summary>
 
 - **Protocol:** released data ([`ZYao720/WEBPRMBENCH`](https://huggingface.co/datasets/ZYao720/WEBPRMBENCH)) and the unchanged upstream evaluator (`evaluate_webprm_vllm.py`, SHA-256 `96426a7e…`: prompts, parser, metrics). Generative judges: SGLang, T 0, up to 1,024 new tokens, stop `</Answer>`. Heads: the frozen OpenWebRL-4B-SFT actor encodes the prompt context and each response; the head scores the two; ties count as errors (none occurred). Cached-prefix features matched a full forward pass within 1.1% for every head.
@@ -248,7 +300,7 @@ The swapped copy exchanges responses 1 and 2 in every prompt and flips the label
 
 
 <a id="table5-plan-20261010"></a>
-## WebArbiter Table 5 plus Piotr SelectionARM
+### WebArbiter Table 5 plus Piotr SelectionARM
 
 **Table 5 remains incomplete: all 12 claimed primary attempts are independently audited—eight valid and four invalid.** The eight valid episodes contain **two guarded successes and seven native positive verdicts**. The two new positives are GPT-4o no-search and GPT-4o-mini with Piotr SelectionARM on task 14; independent saved-evaluator replays match both original audits. This is partial coverage of 190 approved Reddit cells within the fixed 1,550-cell reconstruction, and does not establish a selector ranking or cohort success rate. [Results and accounting](webprm_results/webarena_preparation_20261011.json).
 
@@ -345,7 +397,7 @@ The completed Map frontend acquisition used **378 of 1,800 approved seconds**, t
 
 </details>
 
-### Remaining comparison plan
+#### Remaining comparison plan
 
 1. Prepare any further Reddit attempt using the independently reviewed queue-admission repair and remaining original time, spending and storage caps; launch only after an explicit additional-allocation exception. Preserve all 12 claims and fixed identities for the 178 unclaimed cells, including invalid and interrupted attempts in final accounting.
 2. Acquire and validate Shopping, CMS, GitLab and Map deployments independently, recording verified original identities separately from third-party candidates. Map frontend acquisition is complete; backend acquisition failed on a TLS handshake timeout and hosting remains unvalidated. The three native helper adapters passed 21 offline tests exercising all 13 released single-site helper task configurations, plus 30 existing evaluator tests. This proves evaluator contracts on fixtures, not live website/reset readiness. Each acquisition or hosting job needs its exact resource/attempt approval.
@@ -542,7 +594,7 @@ Independent final analyses agree on all five outcomes, complete per-row call evi
 </details>
 
 <a id="repair-status-20261010"></a>
-## Repair status — October 10, 2026
+### Repair status — October 10, 2026
 
 **The v4 repair run is closed and incomplete: 16 of 72 fixed cells were attempted, nine had valid terminal judgments, and none succeeded.** A proven browser-geometry mismatch hid visible Arbiter controls and stopped further task admission. The four active episodes finished, but the paused controller was not closed promptly; this supervision failure consumed substantial idle allocation time. No evaluation allocation remains live. V6 adds browser-geometry restoration, an external episode watchdog and durable result writing before cleanup. Its frozen source passed 102 focused tests and all six scripted real-browser conditions. V6 preparation is verified and ready for exact resource approval. The optional real-site diagnostic remains inconclusive, and v5 was frozen but never launched. No corrected live benchmark has run, and no new allocation or API budget has been approved or submitted. [Aggregate repair evidence](webprm_results/debug_20261010.json).
 
@@ -602,7 +654,7 @@ The shared API ledger contains **1,905 request reservations: 1,904 settled and o
 </details>
 
 <a id="pilot-status-20261010"></a>
-## Pilot results — October 10, 2026
+### Pilot results — October 10, 2026
 
 **This feasibility pilot did not produce a usable critic comparison.** Across 12 tasks and six conditions, all 72 first attempts were recorded, but only 31 had valid terminal judgments; none of those 31 succeeded. The pilot primarily exposes actor-output and browser reliability limits. Shepherd guided produced no valid episode, so this pilot cannot establish its critic effectiveness or rank the two reward models. [Aggregate results and accounting](webprm_results/pilot_20261010.json).
 
@@ -665,7 +717,7 @@ All **40 focused tests passed**, including complete/partial cohort handling, rec
 </details>
 
 <a id="supported-harness-20261009"></a>
-## Supported-harness reproduction — October 9, 2026
+### Supported-harness reproduction — October 9, 2026
 
 Both released baselines support GPT-4o-mini as the actor, but their candidate generation, observations and critic interfaces differ. Compare each critic's improvement over controls in its own supported harness; a difference between those improvements is a comparison of complete systems, not an isolated estimate of reward-model quality.
 
