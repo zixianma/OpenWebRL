@@ -491,6 +491,68 @@
     ]
    },
    "actions_only_ties_or_unparseable": null
+  },
+  {
+   "model": "WebShepherd-8B",
+   "data": "*public weights* LangAGI-Lab/WebShepherd_8B@37b57dba",
+   "scoring": "checklist + Yes/No probabilities",
+   "original_avg": [
+    60.2,
+    41.9
+   ],
+   "actions_only": {
+    "mind2web": [
+     57.2,
+     32.1
+    ],
+    "webarena": [
+     57.3,
+     36.3
+    ],
+    "assistantbench": [
+     42.5,
+     20.0
+    ],
+    "workarena": [
+     56.8,
+     32.5
+    ],
+    "avg": [
+     53.5,
+     30.2
+    ]
+   }
+  },
+  {
+   "model": "WebShepherd-3B",
+   "data": "*public weights* LangAGI-Lab/WebShepherd_3B@adeb60b9",
+   "scoring": "checklist + Yes/No probabilities",
+   "original_avg": [
+    66.4,
+    44.3
+   ],
+   "actions_only": {
+    "mind2web": [
+     57.7,
+     31.8
+    ],
+    "webarena": [
+     62.3,
+     36.8
+    ],
+    "assistantbench": [
+     57.5,
+     26.7
+    ],
+    "workarena": [
+     59.9,
+     31.1
+    ],
+    "avg": [
+     59.4,
+     31.6
+    ]
+   }
   }
  ],
  "passes": {
@@ -1093,6 +1155,374 @@
    "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
    "kind": "lora-selection-logprobs",
    "job_id": "412338"
+  },
+  "webshepherd-3b/WebPRMBench": {
+   "pairs_ok": 3511,
+   "states_ok": 647,
+   "predicted_1": 2224,
+   "unparseable": 60,
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 70,
+     "pair_acc": 0.5833333333333334,
+     "states_total": 30,
+     "states_ok": 11,
+     "state_acc": 0.36666666666666664
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1432,
+     "pair_acc": 0.8585131894484412,
+     "states_total": 417,
+     "states_ok": 285,
+     "state_acc": 0.6834532374100719
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 502,
+     "pair_acc": 0.8838028169014085,
+     "states_total": 142,
+     "states_ok": 105,
+     "state_acc": 0.7394366197183099
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 510,
+     "pair_acc": 0.8614864864864865,
+     "states_total": 148,
+     "states_ok": 99,
+     "state_acc": 0.668918918918919
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 489,
+     "pair_acc": 0.6082089552238806,
+     "states_total": 201,
+     "states_ok": 77,
+     "state_acc": 0.38308457711442784
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 508,
+     "pair_acc": 0.5990566037735849,
+     "states_total": 212,
+     "states_ok": 70,
+     "state_acc": 0.330188679245283
+    }
+   },
+   "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+   "kind": "webshepherd-checklist-probs",
+   "job_id": "413737",
+   "judge_errors": 77,
+   "shepherd_source_revision": "b87898f614e43d7a5bdb738eaf6b01d416be24c2"
+  },
+  "webshepherd-3b/WebPRMBench-actiononly": {
+   "pairs_ok": 2711,
+   "states_ok": 373,
+   "predicted_1": 2281,
+   "unparseable": 44,
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 69,
+     "pair_acc": 0.575,
+     "states_total": 30,
+     "states_ok": 8,
+     "state_acc": 0.26666666666666666
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 937,
+     "pair_acc": 0.5617505995203836,
+     "states_total": 417,
+     "states_ok": 132,
+     "state_acc": 0.31654676258992803
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 356,
+     "pair_acc": 0.6267605633802817,
+     "states_total": 142,
+     "states_ok": 49,
+     "state_acc": 0.34507042253521125
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 340,
+     "pair_acc": 0.5743243243243243,
+     "states_total": 148,
+     "states_ok": 44,
+     "state_acc": 0.2972972972972973
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 501,
+     "pair_acc": 0.6231343283582089,
+     "states_total": 201,
+     "states_ok": 74,
+     "state_acc": 0.3681592039800995
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 508,
+     "pair_acc": 0.5990566037735849,
+     "states_total": 212,
+     "states_ok": 66,
+     "state_acc": 0.3113207547169811
+    }
+   },
+   "data_sha256": "261c9da923a49b5223dfbe26b02fa3a6cbb6d2097a6955cf7142eb7921486093",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+   "kind": "webshepherd-checklist-probs",
+   "job_id": "413737",
+   "judge_errors": 77,
+   "shepherd_source_revision": "b87898f614e43d7a5bdb738eaf6b01d416be24c2"
+  },
+  "webshepherd-8b/WebPRMBench": {
+   "pairs_ok": 3324,
+   "states_ok": 640,
+   "predicted_1": 2264,
+   "unparseable": 0,
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 56,
+     "pair_acc": 0.4666666666666667,
+     "states_total": 30,
+     "states_ok": 9,
+     "state_acc": 0.3
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1359,
+     "pair_acc": 0.814748201438849,
+     "states_total": 417,
+     "states_ok": 278,
+     "state_acc": 0.6666666666666666
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 494,
+     "pair_acc": 0.8697183098591549,
+     "states_total": 142,
+     "states_ok": 107,
+     "state_acc": 0.7535211267605634
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 499,
+     "pair_acc": 0.8429054054054054,
+     "states_total": 148,
+     "states_ok": 106,
+     "state_acc": 0.7162162162162162
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 464,
+     "pair_acc": 0.5771144278606966,
+     "states_total": 201,
+     "states_ok": 75,
+     "state_acc": 0.373134328358209
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 452,
+     "pair_acc": 0.5330188679245284,
+     "states_total": 212,
+     "states_ok": 65,
+     "state_acc": 0.30660377358490565
+    }
+   },
+   "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+   "kind": "webshepherd-checklist-probs",
+   "job_id": "413737",
+   "judge_errors": 0,
+   "shepherd_source_revision": "b87898f614e43d7a5bdb738eaf6b01d416be24c2"
+  },
+  "webshepherd-8b/WebPRMBench-actiononly": {
+   "pairs_ok": 2613,
+   "states_ok": 375,
+   "predicted_1": 2321,
+   "unparseable": 4,
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 51,
+     "pair_acc": 0.425,
+     "states_total": 30,
+     "states_ok": 6,
+     "state_acc": 0.2
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 914,
+     "pair_acc": 0.5479616306954437,
+     "states_total": 417,
+     "states_ok": 126,
+     "state_acc": 0.302158273381295
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 349,
+     "pair_acc": 0.6144366197183099,
+     "states_total": 142,
+     "states_ok": 47,
+     "state_acc": 0.33098591549295775
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 356,
+     "pair_acc": 0.6013513513513513,
+     "states_total": 148,
+     "states_ok": 54,
+     "state_acc": 0.36486486486486486
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 461,
+     "pair_acc": 0.5733830845771144,
+     "states_total": 201,
+     "states_ok": 73,
+     "state_acc": 0.36318407960199006
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 482,
+     "pair_acc": 0.5683962264150944,
+     "states_total": 212,
+     "states_ok": 69,
+     "state_acc": 0.32547169811320753
+    }
+   },
+   "data_sha256": "261c9da923a49b5223dfbe26b02fa3a6cbb6d2097a6955cf7142eb7921486093",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+   "kind": "webshepherd-checklist-probs",
+   "job_id": "413737",
+   "judge_errors": 0,
+   "shepherd_source_revision": "b87898f614e43d7a5bdb738eaf6b01d416be24c2"
+  },
+  "webarbiter-7b/WebPRMBench-swapped": {
+   "pairs_ok": 4143,
+   "states_ok": 851,
+   "predicted_1": 2115,
+   "unparseable": 0,
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 103,
+     "pair_acc": 0.8583333333333333,
+     "states_total": 30,
+     "states_ok": 17,
+     "state_acc": 0.5666666666666667
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1612,
+     "pair_acc": 0.9664268585131894,
+     "states_total": 417,
+     "states_ok": 365,
+     "state_acc": 0.8752997601918465
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 554,
+     "pair_acc": 0.9753521126760564,
+     "states_total": 142,
+     "states_ok": 128,
+     "state_acc": 0.9014084507042254
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 572,
+     "pair_acc": 0.9662162162162162,
+     "states_total": 148,
+     "states_ok": 132,
+     "state_acc": 0.8918918918918919
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 662,
+     "pair_acc": 0.8233830845771144,
+     "states_total": 201,
+     "states_ok": 116,
+     "state_acc": 0.5771144278606966
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 640,
+     "pair_acc": 0.7547169811320755,
+     "states_total": 212,
+     "states_ok": 93,
+     "state_acc": 0.4386792452830189
+    }
+   },
+   "data_sha256": "2a0cee08a47174bf2df959710b54b41affb661cf9479de9ba24d008c42b5bb7a",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+   "kind": "generative",
+   "job_id": "413737"
+  },
+  "webarbiter-3b/WebPRMBench-swapped": {
+   "pairs_ok": 3994,
+   "states_ok": 762,
+   "predicted_1": 1941,
+   "unparseable": 25,
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 98,
+     "pair_acc": 0.8166666666666667,
+     "states_total": 30,
+     "states_ok": 12,
+     "state_acc": 0.4
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1544,
+     "pair_acc": 0.9256594724220624,
+     "states_total": 417,
+     "states_ok": 316,
+     "state_acc": 0.7577937649880095
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 535,
+     "pair_acc": 0.9419014084507042,
+     "states_total": 142,
+     "states_ok": 112,
+     "state_acc": 0.7887323943661971
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 558,
+     "pair_acc": 0.9425675675675675,
+     "states_total": 148,
+     "states_ok": 121,
+     "state_acc": 0.8175675675675675
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 642,
+     "pair_acc": 0.7985074626865671,
+     "states_total": 201,
+     "states_ok": 106,
+     "state_acc": 0.527363184079602
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 617,
+     "pair_acc": 0.7275943396226415,
+     "states_total": 212,
+     "states_ok": 95,
+     "state_acc": 0.4481132075471698
+    }
+   },
+   "data_sha256": "2a0cee08a47174bf2df959710b54b41affb661cf9479de9ba24d008c42b5bb7a",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666",
+   "kind": "generative",
+   "job_id": "413737"
   }
  },
  "jobs": {
@@ -1102,6 +1532,8 @@
    410333,
    411246,
    412337
-  ]
+  ],
+  "gpu_webshepherd": 413737,
+  "gpu_hours_webshepherd": 1.15
  }
 }
