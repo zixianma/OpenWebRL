@@ -59,7 +59,7 @@
 
 [Episode validity unified across RL, branch collection and MolmoWeb: the Sep 10–24 RL runs kept 940 infrastructure failures (1.39%) as reward 0](EPISODE_VALIDITY.md#episode-validity-20261012).
 
-[WebPRMBench: Piotr 70.4% pairwise / 38.2% Best-of-N vs published WebArbiter-7B 89.2% / 74.6% (text only)](WEBPRM_BASELINES.md#webprmbench-20261018). [WebPRM baselines: all 12 attempts audited, two guarded successes; Reddit allocation cap exhausted](WEBPRM_BASELINES.md#table5-plan-20261010).
+[PRO-CUA on DeepShop-150: 4B 47.3% (≈ our 4B SFT), 8B 27.3%](WEBPRM_BASELINES.md#procua-deepshop-20261102). [WebPRMBench: Piotr 70.4% pairwise / 38.2% Best-of-N vs published WebArbiter-7B 89.2% / 74.6% (text only)](WEBPRM_BASELINES.md#webprmbench-20261018). [WebPRM baselines: all 12 attempts audited, two guarded successes; Reddit allocation cap exhausted](WEBPRM_BASELINES.md#table5-plan-20261010).
 [Baseline comparison: on 284 paired Online-Mind2Web tasks no selector beats no search (Piotr +2.5 pp, WebArbiter −2.8 pp, WebShepherd −14.8 pp); WebArena-Lite Reddit after harness fixes: no search 26.7%, WebArbiter 31.2%, WebShepherd 8.3%; WebArena-Lite four sites at 1280×720: gpt-4o + Piotr 14.9% vs no search 20.8%, paired −4.0 pp, n.s.](baseline_comparison.md).
 [WebPRM collaborator handover (October 28): Table 5 reproduction, OM2W and WebArena selector results, option C (OpenWebRL-4B-SFT ± Piotr) status, code map and pitfalls](WEBPRM_HANDOFF.md#webprm-baselines-handover-20261028).
 

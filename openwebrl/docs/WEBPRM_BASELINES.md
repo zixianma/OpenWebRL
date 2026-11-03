@@ -1,5 +1,39 @@
 # WebPRM baselines
 
+<a id="procua-deepshop-20261102"></a>
+## PRO-CUA on DeepShop-150 (November 2)
+
+**PRO-CUA-4B solves 47.3% of DeepShop-150 under our native gpt-4o judge, level with our OpenWebRL-4B-SFT actor (43.9–47.0% valid-only over three runs the day before); PRO-CUA-8B solves only 27.3%, because 86 of its 150 episodes run out of their 30 steps.** [PRO-CUA](https://arxiv.org/abs/2605.29119) trains Qwen3-VL-4B/8B-Instruct with step-level GRPO on process-reward-model scores; the paper reports WebVoyager, Mind2Web-Live and Online-Mind2Web but no DeepShop.
+
+| Agent | Run date | Tasks | Successes | Overall (%) | Judge-invalid | Valid-only (%) | Mean steps |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| PRO-CUA-4B (their runner) | Nov 2 | 150 | 71 | 47.3 | 0 | 47.3 | 12.3 |
+| PRO-CUA-8B (their runner) | Nov 2 | 150 | 41 | 27.3 | 0 | 27.3 | 20.8 |
+| OpenWebRL-4B-SFT, sft1 run1 (our harness) | Nov 1 | 150 | 70 | 46.7 | 1 | 47.0 | — |
+| OpenWebRL-4B-SFT, sft1 rerun2 | Nov 1 | 150 | 66 | 44.0 | 5 | 45.5 | — |
+| OpenWebRL-4B-SFT, sft1 rerun3 | Nov 1 | 150 | 61 | 40.7 | 11 | 43.9 | — |
+
+**How episodes end** (counts out of 150; success = judge SUCCESS):
+
+| Agent | `answer` (success / total) | `terminate` (success / total) | No final action, step limit or crash |
+| --- | ---: | ---: | ---: |
+| PRO-CUA-4B | 18 / 29 | 53 / 90 | 31 |
+| PRO-CUA-8B | 9 / 13 | 32 / 50 | 87 |
+
+**Comparability caveats.** Same 150 tasks (sha256 `4694e61e…`) and same judge (`reward_deepshop`: gpt-4o, Molmo prompt, last 30 screenshots, temperature 0), but the agents differ in more than weights: PRO-CUA runs its own released Playwright runner (1000×1000 window, Qwen3 `computer_use` tool calls, typing always presses Enter), while sft1 uses our `local_process` browser at 1280×1000 with our tool set. The OpenWebRL rows are from the previous day, and DeepShop (live Amazon) drifts between days, so the 4B gap is within cross-date noise. One run per PRO-CUA model; no confidence intervals.
+
+<details>
+<summary>Method, fixes and accounting</summary>
+
+- **Runner**: `WebVoyager/run_qwen3_og_parallel_playwright_data_collection_train.py` at PRO-CUA commit `83f60cf`, imported unmodified by `scripts/run_procua_deepshop.py` (branch `arm-selection-head`). Only three settings are patched, all outside the agent logic: the OpenAI base URL (hard-coded `localhost:8000`), the thread pool (32 → 8 workers for 8 CPUs) and `top_p=0.9`. Protocol: max 30 steps, last screenshot only plus full text history, temperature 1.0 / top-p 0.9 (matches our crossbench DeepShop cohort; the paper's in-loop WebVoyager eval uses temperature 0), served by SGLang at 12,800-token context (their vLLM `max_model_len`).
+- **Weights**: `PRO-CUA/PRO-CUA-4B` rev `3b028de`, `PRO-CUA/PRO-CUA-8B` rev `72eeab6`.
+- **Answer for the judge**: the `answer` tool call's text; for `terminate`, the whole final assistant message, as PRO-CUA's own `auto_eval_gpt.py` does. Episodes with neither score 0.
+- **Invalid first attempt**: job 413805 (4B, 3.6 min) was cancelled and archived as `4b/invalid-attempt-413805-wrong-chat-template/`. SGLang inferred the `points-v15-chat` template from the directory name, and the model emitted no tool calls (0 of 945 turns). Reruns pass the checkpoint's own `chat_template.jinja` and gave 1 parse error in 1,843 calls for 4B and 58 in 3,056 for 8B. The 8B errors are mostly `terminate(...)` written outside a tool call, which their parser rejects.
+- **Compute and spend**: jobs 413857 (4B, 15.8 min) and 413858 (8B, 21.3 min), each 1 H200 on `vlm`/normal. Judge spend was $2.21 (4B) and $1.19 (8B) over 150 calls each, with 0 judge failures.
+- **Artifacts**: runtime `evaluations/procua-deepshop-20261102/{4b,8b}/`, with `plan.json`, trajectories (`round_1/`), per-task `verdicts/` and `summary.json`. The OpenWebRL rows come from `evaluations/head-k5-20261101/{run1,rerun2,rerun3}/deepshop/sft1/`.
+
+</details>
+
 <a id="webprmbench-20261018"></a>
 ## WebPRMBench: our selectors against WebArbiter (October 17 – November 1)
 
