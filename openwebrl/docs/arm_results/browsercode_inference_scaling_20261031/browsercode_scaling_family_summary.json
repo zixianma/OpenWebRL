@@ -1,0 +1,235 @@
+{
+  "schema": "browsercode-scaling-family-summary-v1",
+  "benchmark_counts": {
+    "online_mind2web": {
+      "common_valid": 226,
+      "excluded": 74,
+      "planned": 300
+    },
+    "webvoyager": {
+      "common_valid": 387,
+      "excluded": 208,
+      "planned": 595
+    },
+    "deepshop": {
+      "common_valid": 131,
+      "excluded": 19,
+      "planned": 150
+    }
+  },
+  "benchmark_weights": {
+    "online_mind2web": "300/1045",
+    "webvoyager": "595/1045",
+    "deepshop": "150/1045"
+  },
+  "points": [
+    {
+      "method": "serial_high",
+      "success_rate": 0.8210838009229796,
+      "actor_usd": 0.2107361614303834,
+      "browser_commands": 14.003366983878891,
+      "actor_seconds": 92.92899547260481
+    },
+    {
+      "method": "luna_single_high",
+      "success_rate": 0.8069961951883734,
+      "actor_usd": 0.008203746350427152,
+      "browser_commands": 14.137021779876683,
+      "actor_seconds": 94.20106860963264
+    },
+    {
+      "method": "parallel3_select_high",
+      "success_rate": 0.8263879113338075,
+      "actor_usd": 0.04592845680303465,
+      "browser_commands": 12.545270759461605,
+      "actor_seconds": 161.68444817311533
+    },
+    {
+      "method": "parallel5_select_high",
+      "success_rate": 0.8456165236641026,
+      "actor_usd": 0.054483205398543316,
+      "browser_commands": 11.997513208449478,
+      "actor_seconds": 179.83668858365655
+    },
+    {
+      "method": "luna_single_xhigh_12288",
+      "success_rate": 0.8168136975072716,
+      "actor_usd": 0.009782863218114534,
+      "browser_commands": 14.659726744073502,
+      "actor_seconds": 114.07743518617323
+    },
+    {
+      "method": "luna_single_high_24576",
+      "success_rate": 0.8323328760996007,
+      "actor_usd": 0.008058965855781884,
+      "browser_commands": 14.255616743247808,
+      "actor_seconds": 102.85185245763769
+    },
+    {
+      "method": "luna_single_high_6144",
+      "success_rate": 0.8176775766144292,
+      "actor_usd": 0.008091145182837451,
+      "browser_commands": 14.532856459925643,
+      "actor_seconds": 101.2957571979525
+    },
+    {
+      "method": "luna_single_high_60steps",
+      "success_rate": 0.8555309932665626,
+      "actor_usd": 0.009076553110470608,
+      "browser_commands": 15.06552758538855,
+      "actor_seconds": 119.07165350339395
+    },
+    {
+      "method": "parallel2_select_high",
+      "success_rate": 0.8333378238122315,
+      "actor_usd": 0.04221971848035664,
+      "browser_commands": 12.556259856247264,
+      "actor_seconds": 160.68621294746868
+    },
+    {
+      "method": "parallel5_select_high_60steps",
+      "success_rate": 0.8692915519900126,
+      "actor_usd": 0.05692716116728319,
+      "browser_commands": 11.863693042725776,
+      "actor_seconds": 170.45409275955006
+    },
+    {
+      "method": "luna_single_high_120steps",
+      "success_rate": 0.8617228203662889,
+      "actor_usd": 0.010314961164992646,
+      "browser_commands": 15.465473183819254,
+      "actor_seconds": 120.99764386130988
+    }
+  ],
+  "paired_contrasts": [
+    {
+      "left_method": "luna_single_high_120steps",
+      "right_method": "luna_single_high",
+      "difference_pp": 5.472662517791566,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        2.9973488534974675,
+        7.997700199123444
+      ]
+    },
+    {
+      "left_method": "luna_single_high_24576",
+      "right_method": "luna_single_high",
+      "difference_pp": 2.5336680911227436,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -0.033775525611139445,
+        5.1111056334200775
+      ]
+    },
+    {
+      "left_method": "luna_single_high_60steps",
+      "right_method": "luna_single_high",
+      "difference_pp": 4.853479807818929,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        2.3489493038162053,
+        7.402447049914431
+      ]
+    },
+    {
+      "left_method": "luna_single_high_6144",
+      "right_method": "luna_single_high",
+      "difference_pp": 1.0681381426055812,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -1.6691753673109215,
+        3.8061475326784526
+      ]
+    },
+    {
+      "left_method": "luna_single_xhigh_12288",
+      "right_method": "luna_single_high",
+      "difference_pp": 0.9817502318898254,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -1.6577133499751073,
+        3.6302810398603444
+      ]
+    },
+    {
+      "left_method": "parallel2_select_high",
+      "right_method": "luna_single_high",
+      "difference_pp": 2.634162862385813,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        0.07201996513104925,
+        5.179299497970305
+      ]
+    },
+    {
+      "left_method": "parallel3_select_high",
+      "right_method": "luna_single_high",
+      "difference_pp": 1.939171614543415,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -0.7849176793155945,
+        4.67692194077464
+      ]
+    },
+    {
+      "left_method": "parallel3_select_high",
+      "right_method": "parallel2_select_high",
+      "difference_pp": -0.6949912478423975,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -3.2052131342187256,
+        1.8217015823262503
+      ]
+    },
+    {
+      "left_method": "parallel5_select_high",
+      "right_method": "luna_single_high",
+      "difference_pp": 3.8620328475729284,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        1.2890449865045888,
+        6.448548649031971
+      ]
+    },
+    {
+      "left_method": "parallel5_select_high",
+      "right_method": "parallel2_select_high",
+      "difference_pp": 1.2278699851871158,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -1.2452577183224502,
+        3.674708843349194
+      ]
+    },
+    {
+      "left_method": "parallel5_select_high",
+      "right_method": "serial_high",
+      "difference_pp": 2.4532722741122885,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -0.09672375870641439,
+        4.969486254193916
+      ]
+    },
+    {
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "luna_single_high_60steps",
+      "difference_pp": 1.376055872344998,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -0.8145802699428691,
+        3.588950434884027
+      ]
+    },
+    {
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "parallel5_select_high",
+      "difference_pp": 2.367502832590999,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        0.052943274475704176,
+        4.7418914364332405
+      ]
+    },
+    {
+      "left_method": "serial_high",
+      "right_method": "luna_single_high",
+      "difference_pp": 1.4087605734606397,
+      "pointwise_paired_bootstrap_95_interval_pp": [
+        -1.2856991516830143,
+        4.1476811240050635
+      ]
+    }
+  ],
+  "uncertainty": "50000 paired task bootstrap replicates within benchmark; fixed planned weights; pointwise percentile95 intervals without multiplicity correction. Conditional on common validity; task dependence, live-window and protocol changes are not covered.",
+  "causal_limit": "N>1 adds proposals and selection jointly. Without random-selection/equal-generation controls these comparisons do not isolate selector quality.",
+  "scope": "Published historical cohort; active cached reruns, gap repairs and new Sol60/xhigh are not merged into this analysis."
+}

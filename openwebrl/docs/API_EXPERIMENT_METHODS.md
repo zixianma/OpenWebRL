@@ -339,6 +339,17 @@ Each execution approval must bind the printed shard's `plan_sha256`, exact `glob
 
 ### Recreate the completed scaling figures
 
+The [selection-only figure](ARM_FINAL_RESULTS.md#browsercode-selection-scaling) holds Luna high, the 12,288-token output ceiling and the 30-decision limit fixed while varying N1/N2/N3/N5. Its companion [scaling-family figure](ARM_FINAL_RESULTS.md#browsercode-scaling-families) separates output-cap, decision-limit and candidate-count curves. Both use the published all-eleven-method common-valid intersection and fixed planned benchmark weights. The public four-outcome contingency counts preserve pairing without releasing task identities. The renderer checks every contingency's sample size and success marginals against the common-valid aggregate, then draws 50,000 multinomial paired bootstrap replicates within benchmark. Replicates resample the four joint outcome cells, not independent arm marginals. Reported intervals are pointwise percentile intervals without multiplicity correction; conditioning, website dependence, collection windows and the historical single60 prompt caveat remain. Candidate generation and selection vary together, so selector quality is not separately identified.
+
+Recreate the two new figures, statistics and provenance using only public aggregates, with no browser/model calls:
+
+```bash
+"$API_PY" -m pip install matplotlib==3.9.4 numpy==2.0.2
+SCALING_RESULTS=openwebrl/docs/arm_results/browsercode_inference_scaling_20261031
+"$API_PY" -B "$SCALING_RESULTS/plot_browsercode_scaling_families.py" \
+  --output-dir /tmp/openwebrl-browsercode-scaling-families
+```
+
 The [equal-weight benchmark-average view](ARM_FINAL_RESULTS.md#browsercode-equal-benchmark-average) gives each benchmark weight 1/3 for success and each within-benchmark actor mean. It avoids weighting WebVoyager more heavily just because it has more tasks. It retains each method's own valid cohort, cross-window limitations and the single60 advertised-30 versus single120 advertised-120 prompt caveat; no pooled rate or new uncertainty interval is inferred. [Average CSV](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average_coordinates.csv) · [Average PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_average.pdf).
 
 The [task-count-weighted view](ARM_FINAL_RESULTS.md#browsercode-task-weighted-average) instead uses fixed planned benchmark weights 300/1,045 (OM2W), 595/1,045 (WebVoyager) and 150/1,045 (DeepShop), identically for success and within-benchmark actor means. This represents the planned task mix rather than equal benchmark influence. It is not pooled native-valid success, whose method-dependent weights would change with exclusions. [Weighted CSV](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average_coordinates.csv) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.pdf).

@@ -1,0 +1,428 @@
+{
+  "schema": "browsercode-common-valid-paired-contingencies-v1",
+  "aggregate_common_valid_sha256": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
+  "private_reconstruction_sha256": "2003aa76570496aad0080e0d0652f902ba8b33aecc52410389fe227d9afa6981",
+  "population": "same_all_method_common_valid_tasks_within_each_benchmark",
+  "pairs": [
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel2_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 132,
+      "left_only_success": 18,
+      "right_only_success": 12,
+      "both_failure": 64
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel2_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 328,
+      "left_only_success": 24,
+      "right_only_success": 15,
+      "both_failure": 20
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel2_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 96,
+      "left_only_success": 18,
+      "right_only_success": 13,
+      "both_failure": 4
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel3_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 129,
+      "left_only_success": 21,
+      "right_only_success": 15,
+      "both_failure": 61
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel3_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 323,
+      "left_only_success": 28,
+      "right_only_success": 20,
+      "both_failure": 16
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel3_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 96,
+      "left_only_success": 13,
+      "right_only_success": 13,
+      "both_failure": 9
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel5_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 136,
+      "left_only_success": 30,
+      "right_only_success": 8,
+      "both_failure": 52
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel5_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 326,
+      "left_only_success": 25,
+      "right_only_success": 17,
+      "both_failure": 19
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel5_select_high",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 98,
+      "left_only_success": 10,
+      "right_only_success": 11,
+      "both_failure": 12
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "serial_high",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 129,
+      "left_only_success": 22,
+      "right_only_success": 15,
+      "both_failure": 60
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "serial_high",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 324,
+      "left_only_success": 27,
+      "right_only_success": 19,
+      "both_failure": 17
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "serial_high",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 92,
+      "left_only_success": 11,
+      "right_only_success": 17,
+      "both_failure": 11
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel5_select_high",
+      "right_method": "serial_high",
+      "common_valid": 226,
+      "both_success": 143,
+      "left_only_success": 23,
+      "right_only_success": 8,
+      "both_failure": 52
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel5_select_high",
+      "right_method": "serial_high",
+      "common_valid": 387,
+      "both_success": 332,
+      "left_only_success": 19,
+      "right_only_success": 19,
+      "both_failure": 17
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel5_select_high",
+      "right_method": "serial_high",
+      "common_valid": 131,
+      "both_success": 91,
+      "left_only_success": 17,
+      "right_only_success": 12,
+      "both_failure": 11
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "luna_single_high_60steps",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 133,
+      "left_only_success": 29,
+      "right_only_success": 11,
+      "both_failure": 53
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "luna_single_high_60steps",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 331,
+      "left_only_success": 22,
+      "right_only_success": 12,
+      "both_failure": 22
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "luna_single_high_60steps",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 102,
+      "left_only_success": 17,
+      "right_only_success": 7,
+      "both_failure": 5
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "luna_single_high_120steps",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 130,
+      "left_only_success": 23,
+      "right_only_success": 14,
+      "both_failure": 59
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "luna_single_high_120steps",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 335,
+      "left_only_success": 27,
+      "right_only_success": 8,
+      "both_failure": 17
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "luna_single_high_120steps",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 102,
+      "left_only_success": 21,
+      "right_only_success": 7,
+      "both_failure": 1
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "luna_single_high_60steps",
+      "common_valid": 226,
+      "both_success": 150,
+      "left_only_success": 13,
+      "right_only_success": 12,
+      "both_failure": 51
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "luna_single_high_60steps",
+      "common_valid": 387,
+      "both_success": 340,
+      "left_only_success": 20,
+      "right_only_success": 13,
+      "both_failure": 14
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "luna_single_high_60steps",
+      "common_valid": 131,
+      "both_success": 114,
+      "left_only_success": 7,
+      "right_only_success": 5,
+      "both_failure": 5
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "parallel5_select_high",
+      "common_valid": 226,
+      "both_success": 152,
+      "left_only_success": 11,
+      "right_only_success": 14,
+      "both_failure": 49
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "parallel5_select_high",
+      "common_valid": 387,
+      "both_success": 339,
+      "left_only_success": 21,
+      "right_only_success": 12,
+      "both_failure": 15
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel5_select_high_60steps",
+      "right_method": "parallel5_select_high",
+      "common_valid": 131,
+      "both_success": 101,
+      "left_only_success": 20,
+      "right_only_success": 7,
+      "both_failure": 3
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "luna_single_high_24576",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 131,
+      "left_only_success": 24,
+      "right_only_success": 13,
+      "both_failure": 58
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "luna_single_high_24576",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 326,
+      "left_only_success": 21,
+      "right_only_success": 17,
+      "both_failure": 23
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "luna_single_high_24576",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 99,
+      "left_only_success": 15,
+      "right_only_success": 10,
+      "both_failure": 7
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "luna_single_high_6144",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 129,
+      "left_only_success": 24,
+      "right_only_success": 15,
+      "both_failure": 58
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "luna_single_high_6144",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 320,
+      "left_only_success": 21,
+      "right_only_success": 23,
+      "both_failure": 23
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "luna_single_high_6144",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 94,
+      "left_only_success": 17,
+      "right_only_success": 15,
+      "both_failure": 5
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "luna_single_xhigh_12288",
+      "right_method": "luna_single_high",
+      "common_valid": 226,
+      "both_success": 130,
+      "left_only_success": 22,
+      "right_only_success": 14,
+      "both_failure": 60
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "luna_single_xhigh_12288",
+      "right_method": "luna_single_high",
+      "common_valid": 387,
+      "both_success": 323,
+      "left_only_success": 22,
+      "right_only_success": 20,
+      "both_failure": 22
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "luna_single_xhigh_12288",
+      "right_method": "luna_single_high",
+      "common_valid": 131,
+      "both_success": 95,
+      "left_only_success": 11,
+      "right_only_success": 14,
+      "both_failure": 11
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel5_select_high",
+      "right_method": "parallel2_select_high",
+      "common_valid": 226,
+      "both_success": 143,
+      "left_only_success": 23,
+      "right_only_success": 7,
+      "both_failure": 53
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel5_select_high",
+      "right_method": "parallel2_select_high",
+      "common_valid": 387,
+      "both_success": 334,
+      "left_only_success": 17,
+      "right_only_success": 18,
+      "both_failure": 18
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel5_select_high",
+      "right_method": "parallel2_select_high",
+      "common_valid": 131,
+      "both_success": 96,
+      "left_only_success": 12,
+      "right_only_success": 18,
+      "both_failure": 5
+    },
+    {
+      "benchmark": "online_mind2web",
+      "left_method": "parallel3_select_high",
+      "right_method": "parallel2_select_high",
+      "common_valid": 226,
+      "both_success": 137,
+      "left_only_success": 13,
+      "right_only_success": 13,
+      "both_failure": 63
+    },
+    {
+      "benchmark": "webvoyager",
+      "left_method": "parallel3_select_high",
+      "right_method": "parallel2_select_high",
+      "common_valid": 387,
+      "both_success": 331,
+      "left_only_success": 20,
+      "right_only_success": 21,
+      "both_failure": 15
+    },
+    {
+      "benchmark": "deepshop",
+      "left_method": "parallel3_select_high",
+      "right_method": "parallel2_select_high",
+      "common_valid": 131,
+      "both_success": 98,
+      "left_only_success": 11,
+      "right_only_success": 16,
+      "both_failure": 6
+    }
+  ]
+}

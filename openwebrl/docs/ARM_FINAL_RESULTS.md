@@ -5,6 +5,41 @@
 
 ## BrowserCode: alternative ways to scale inference
 
+<a id="browsercode-selection-scaling"></a>
+
+### Candidate selection at the default decision limit
+
+**At 30 decisions, Luna high N5 raises task-weighted common-valid success from 80.70% to 84.56%: +3.86 percentage points (pointwise paired-bootstrap 95% interval +1.29 to +6.45).** Mean actor cost rises from $0.00820 to $0.05448 per task and latency from 94.2 to 179.8 seconds. N2 scores 83.33% and N3 82.64%, so these observations do not establish monotonic improvement with candidate count.
+
+![Candidate-count scaling at fixed Luna high, 12K output cap and 30 decisions: paired gain, actor cost and actor latency](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_scaling.png)
+
+*Every point uses the same 744 tasks valid in all eleven historical methods: 226 OM2W, 387 WebVoyager and 131 DeepShop. Fixed benchmark weights are 300/1,045, 595/1,045 and 150/1,045, applied identically to success, cost and latency. All use Terra judging; actor metrics exclude judging. Panel (a) shows pointwise percentile intervals from 50,000 paired task-bootstrap draws within each benchmark. These condition on the retained validity sets and saved labels, treat tasks as independent, and do not cover website clustering, collection-window differences or multiplicity. N>1 adds candidate generation and selection jointly; without an equal-generation/random-selector control, this does not isolate the selector's contribution. Sol is a separate model reference, with the same 30-decision limit.*
+
+[Selection PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_scaling.pdf) · [Selection SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_scaling.svg) · [Coordinates and paired intervals](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_family_summary.json) · [Aggregate paired counts](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_family_pairs.json)
+
+<a id="browsercode-scaling-families"></a>
+
+### Compare scaling controls separately
+
+**The fixed-horizon selection gain does not establish the best practical scaling strategy.** On the same task intersection, single60 scores 85.55% at $0.00908 and 119.1 seconds per task, versus N5/30's 84.56% at $0.05448 and 179.8 seconds. N5/60 has the highest point estimate, 86.93%, but its paired gain over single60 is +1.38 points with an interval spanning zero. These historical comparisons remain subject to live-window and prompt differences.
+
+![Separate output-cap, decision-limit and candidate-count scaling curves with shared cost and latency axes](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.png)
+
+*Columns group output-cap, decision-limit and candidate-count changes; axes share the same scales within each row. The horizon column shows separate N1 and N5 curves. All actors are Luna high; output-cap and candidate-count comparisons permit 30 decisions, while horizon comparisons retain the 12,288-token ceiling. Output ceilings are configured limits, not realized token consumption; a higher ceiling need not spend more. Historical single60 enforces 60 decisions while advertising 30; single120 enforces and advertises 120. Points show conditional historical means, with the same populations and weights as the selection figure. Cached reruns, current gap repairs and the new Sol60/xhigh campaigns are not merged into this historical analysis.*
+
+| Paired contrast | Weighted gain (pp) | Pointwise paired 95% interval (pp) |
+|---|---:|---:|
+| N5/30 − N1/30 | +3.86 | [+1.29, +6.45] |
+| N5/30 − Sol high/30 | +2.45 | [−0.10, +4.97] |
+| N5/60 − N1/60 | +1.38 | [−0.81, +3.59] |
+
+The supported framing is **selection improves fixed-horizon success, while increasing the single-run decision limit offers a stronger observed efficiency trade-off**. The intervals do not establish N5's superiority over Sol or single60, and these experiments do not establish an inference-scaling law.
+
+[Family PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.pdf) · [Family SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.svg) · [Reproducible plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py) · [Method and reproduction](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
+
+<details>
+<summary>Historical combined overview and own-valid benchmark averages</summary>
+
 **A higher decision limit does not improve every benchmark.** Luna high single at 120 decisions has the strongest observed single-call valid-only success on WebVoyager and DeepShop; the 60-decision setting is higher on OM2W. N5 high at 60 decisions has the highest observed WebVoyager rate among these methods. All added settings retain high effort, a 12,288-output-token ceiling per generation and the 900-second actor alarm. Live collection windows, runtime safeguards and valid-task subsets differ, so these are descriptive comparisons. The historical single60 model and agent enforce 60 while their prompt advertises 30; single120 enforces and advertises 120. The comparison changes both limits.
 
 ![BrowserCode success versus actor cost, browser-code batches and task latency across three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.png)
@@ -36,6 +71,8 @@ With equal benchmark weights, N5/60 has the highest macro success at **86.03%**.
 N5/60 has the highest task-weighted success at **87.05%**; single120 averages **84.56%** and single60 **83.91%**.
 
 [Weighted coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average_coordinates.csv) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.pdf) · [Weighted SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_average.svg) · [Reproduction command](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
+
+</details>
 
 <a id="browsercode-all-method-common-valid"></a>
 

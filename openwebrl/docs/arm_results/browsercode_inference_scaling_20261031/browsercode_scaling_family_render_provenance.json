@@ -1,0 +1,17 @@
+{
+  "schema": "browsercode-scaling-family-render-v1",
+  "renderer_sha256": "b32b206538dd9a97be3ba05867747d5ec1a59f1c37ebf1c6690d7f809128cc13",
+  "aggregate_sha256": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
+  "paired_counts_sha256": "0e12eb559e8b5e2fe4abaebe63a3760fa8993e50069d5f847d74f802667fecd0",
+  "matplotlib_version": "3.9.4",
+  "numpy_version": "2.0.2",
+  "bootstrap_draws": 50000,
+  "artifacts": {
+    "browsercode_selection_scaling.png": "89fc2c738f5a9c778f061810dba3c243b7ca854aae4cd8b422fde662693a2640",
+    "browsercode_selection_scaling.pdf": "ba80686d6f32c12847445b5abe10d0ae0e5aa5055aaa33e322646592914078c3",
+    "browsercode_selection_scaling.svg": "b58ea5f748f11f04bb268bcdbed088968525f9c4eb3532efe4a13cbccf969e97",
+    "browsercode_scaling_by_family.png": "d16149ba50c2b6f151c21e63c19ce31bb30b35aa17cfa57d3c9ca9be18a12d07",
+    "browsercode_scaling_by_family.pdf": "6dff73255a540771adb4a4ae52898be8a1d847beaae2acfeb8fdbe48801a5552",
+    "browsercode_scaling_by_family.svg": "b84f19c03076268d7eff5e4adb1bf5c022c7fdfb3918e923c188c7fb2302fe6f"
+  }
+}
