@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Selection Recipe 3: lookahead-labelled Piotr-style panels at scale (GPT-5.5 / Luna K = 3), 4B LoRAs and heads vs same-day SFT and SelectionARM](ARM_FINAL_RESULTS.md#final-selection-recipe3).
+
 [Tinker LoRA port: Qwen3.5-9B SFT matches OpenWebRL-4B-SFT; outcome-only RL at lr 3e-6 reaches OM2W 125/300 and DeepShop 66/150 (Terra judge), while lr 1e-5 collapses](TINKER_LORA.md#tinker-rl-results).
 
 [BrowserCode API experiments: simplified setup, bounded evaluation, protocols, code map and qualified results](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
