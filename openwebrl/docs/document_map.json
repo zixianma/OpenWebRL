@@ -132,6 +132,10 @@
     "baseline_comparison.md": {
       "title": "Baseline comparison: WebArbiter, WebShepherd and Piotr SelectionARM",
       "sources": []
+    },
+    "ARM_TEACHER_PRE_VS_LOOKAHEAD.md": {
+      "title": "Pre-execution vs. K = 3 lookahead teacher labels (GPT-6 Luna): picks and reasoning",
+      "sources": []
     }
   },
   "documents": {

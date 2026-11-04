@@ -1,0 +1,258 @@
+{
+ "counts": {
+  "panels": 20671,
+  "same_position": 11286,
+  "same_target": 13077,
+  "distinct_2": 11009,
+  "distinct_2_same_target": 7692,
+  "disagree": 7594,
+  "distinct_3": 6540,
+  "distinct_3_same_target": 3806,
+  "distinct_1": 146,
+  "distinct_1_same_target": 146,
+  "distinct_4": 2448,
+  "distinct_4_same_target": 1199,
+  "distinct_5": 528,
+  "distinct_5_same_target": 234
+ },
+ "imm": {
+  "dis_with_immediate": 7594,
+  "pre_pick_url_changed": 4041,
+  "k3p_pick_url_changed": 4119,
+  "pre_pick_tool_error": 134,
+  "k3p_pick_tool_error": 99
+ },
+ "kinds": {
+  "pre": {
+   "click": 12074,
+   "scroll": 4037,
+   "stop/answer": 1013,
+   "back": 1000,
+   "navigate": 846,
+   "new_tab": 752,
+   "write": 361,
+   "type": 310,
+   "wait": 188,
+   "switch_tab": 67,
+   "close_tab": 17,
+   "drag": 4,
+   "hover": 1,
+   "go_forward": 1
+  },
+  "k3p": {
+   "click": 11942,
+   "scroll": 3774,
+   "back": 1306,
+   "stop/answer": 1160,
+   "new_tab": 811,
+   "navigate": 641,
+   "write": 405,
+   "type": 358,
+   "wait": 158,
+   "switch_tab": 79,
+   "close_tab": 29,
+   "drag": 5,
+   "hover": 2,
+   "go_forward": 1
+  },
+  "pre_dis": {
+   "click": 4532,
+   "scroll": 1271,
+   "navigate": 362,
+   "back": 337,
+   "stop/answer": 332,
+   "new_tab": 293,
+   "write": 178,
+   "type": 147,
+   "wait": 118,
+   "switch_tab": 13,
+   "close_tab": 8,
+   "drag": 2,
+   "hover": 1
+  },
+  "k3p_dis": {
+   "click": 4400,
+   "scroll": 1008,
+   "back": 643,
+   "stop/answer": 479,
+   "new_tab": 352,
+   "write": 222,
+   "type": 195,
+   "navigate": 157,
+   "wait": 88,
+   "switch_tab": 25,
+   "close_tab": 20,
+   "drag": 3,
+   "hover": 2
+  }
+ },
+ "transitions": {
+  "click -> click": 3173,
+  "scroll -> click": 756,
+  "click -> scroll": 659,
+  "scroll -> back": 274,
+  "click -> back": 195,
+  "click -> stop/answer": 166,
+  "navigate -> new_tab": 134,
+  "stop/answer -> scroll": 130,
+  "back -> click": 129,
+  "stop/answer -> click": 123,
+  "new_tab -> new_tab": 118,
+  "click -> write": 115,
+  "click -> type": 114,
+  "write -> write": 101,
+  "scroll -> stop/answer": 98,
+  "scroll -> scroll": 91,
+  "back -> scroll": 87,
+  "back -> stop/answer": 76,
+  "write -> click": 59,
+  "navigate -> click": 58,
+  "new_tab -> back": 58,
+  "type -> click": 53,
+  "navigate -> stop/answer": 51,
+  "click -> new_tab": 50,
+  "navigate -> back": 48
+ },
+ "depth": {
+  "0": {
+   "panels": 7400,
+   "same_target": 4440,
+   "pre_stop": 308,
+   "k3p_stop": 515
+  },
+  "1-5": {
+   "panels": 5515,
+   "same_target": 3560,
+   "pre_stop": 377,
+   "k3p_stop": 358
+  },
+  "12+": {
+   "panels": 2823,
+   "same_target": 1884,
+   "pre_stop": 87,
+   "k3p_stop": 93
+  },
+  "6-11": {
+   "panels": 4933,
+   "same_target": 3193,
+   "pre_stop": 241,
+   "k3p_stop": 194
+  }
+ },
+ "words": {
+  "pre": {
+   "mean": 47.1,
+   "median": 47
+  },
+  "k3p": {
+   "mean": 50.6,
+   "median": 50
+  }
+ },
+ "terms": {
+  "pre": {
+   "cites_execution": [
+    5926,
+    28.7
+   ],
+   "hedging": [
+    9761,
+    47.2
+   ],
+   "error_block": [
+    1995,
+    9.7
+   ],
+   "repetition": [
+    7337,
+    35.5
+   ],
+   "premature_stop": [
+    920,
+    4.5
+   ],
+   "constraint": [
+    2297,
+    11.1
+   ]
+  },
+  "k3p": {
+   "cites_execution": [
+    9610,
+    46.5
+   ],
+   "hedging": [
+    4296,
+    20.8
+   ],
+   "error_block": [
+    3292,
+    15.9
+   ],
+   "repetition": [
+    5040,
+    24.4
+   ],
+   "premature_stop": [
+    1022,
+    4.9
+   ],
+   "constraint": [
+    2132,
+    10.3
+   ]
+  },
+  "pre_dis": {
+   "cites_execution": [
+    2246,
+    29.6
+   ],
+   "hedging": [
+    3712,
+    48.9
+   ],
+   "error_block": [
+    846,
+    11.1
+   ],
+   "repetition": [
+    2728,
+    35.9
+   ],
+   "premature_stop": [
+    328,
+    4.3
+   ],
+   "constraint": [
+    872,
+    11.5
+   ]
+  },
+  "k3p_dis": {
+   "cites_execution": [
+    3868,
+    50.9
+   ],
+   "hedging": [
+    1454,
+    19.1
+   ],
+   "error_block": [
+    1574,
+    20.7
+   ],
+   "repetition": [
+    2082,
+    27.4
+   ],
+   "premature_stop": [
+    319,
+    4.2
+   ],
+   "constraint": [
+    852,
+    11.2
+   ]
+  }
+ }
+}

@@ -86,6 +86,8 @@
 
 [Sol action diversity: ten candidates add 3.61 distinct parsed specifications beyond the first three at the same saved states; coordinate/wording sensitivity and actual N=3/5/10 coverage](ARM_INFERENCE_SCALING.md#sol-action-diversity-20261008).
 
+[Luna pre-execution vs. K = 3 lookahead labels on 20,671 panels: 63.3% same action; lookahead replaces guessed click effects with observed ones and stops honestly on blocked sites, but about a quarter of disagreements are single-sample noise or ties](ARM_TEACHER_PRE_VS_LOOKAHEAD.md#luna-pre-vs-k3p-20261103).
+
 [Teacher action-selection reasoning: what Piotr’s saved GPT-5.5 explanations favor, and what they do not establish](ARM_TEACHER_REASONING.md).
 
 [Confidence replay pilot verified: 3/32 fresh states matched; expansion criteria failed](ARM_INFERENCE.md#confidence-robust-20261008).

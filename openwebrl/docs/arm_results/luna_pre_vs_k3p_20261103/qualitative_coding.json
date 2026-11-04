@@ -1,0 +1,113 @@
+{
+ "sample": "seeded (20261103) 240 of 7,594 disagreement panels + 60 of 13,077 agreement panels; one LLM coder per 60-panel batch, text only (no screenshots)",
+ "disagreement": {
+  "category": {
+   "B_k3p_pick_confirmed": 62,
+   "F_no_lookahead_use": 20,
+   "C_downstream_trouble": 7,
+   "A_pre_pick_failed": 61,
+   "G_misled_by_lookahead": 30,
+   "D_stop_decision": 26,
+   "E_near_tie": 34
+  },
+  "which_looks_better": {
+   "k3p": 89,
+   "unclear": 141,
+   "pre": 10
+  },
+  "pre_visual_misread": {
+   "True": 34,
+   "unclear": 10,
+   "False": 196
+  },
+  "k3p_cites_concrete_observation": {
+   "True": 213,
+   "False": 27
+  },
+  "category_by_verdict": {
+   "B_k3p_pick_confirmed": {
+    "k3p": 37,
+    "unclear": 25
+   },
+   "F_no_lookahead_use": {
+    "unclear": 18,
+    "pre": 1,
+    "k3p": 1
+   },
+   "C_downstream_trouble": {
+    "unclear": 6,
+    "k3p": 1
+   },
+   "A_pre_pick_failed": {
+    "unclear": 27,
+    "k3p": 34
+   },
+   "G_misled_by_lookahead": {
+    "unclear": 23,
+    "pre": 7
+   },
+   "D_stop_decision": {
+    "k3p": 16,
+    "unclear": 8,
+    "pre": 2
+   },
+   "E_near_tie": {
+    "unclear": 34
+   }
+  },
+  "category_by_coder_batch": [
+   {
+    "B_k3p_pick_confirmed": 14,
+    "F_no_lookahead_use": 5,
+    "C_downstream_trouble": 1,
+    "A_pre_pick_failed": 15,
+    "G_misled_by_lookahead": 7,
+    "D_stop_decision": 10,
+    "E_near_tie": 8
+   },
+   {
+    "D_stop_decision": 4,
+    "E_near_tie": 10,
+    "A_pre_pick_failed": 15,
+    "F_no_lookahead_use": 5,
+    "B_k3p_pick_confirmed": 17,
+    "G_misled_by_lookahead": 8,
+    "C_downstream_trouble": 1
+   },
+   {
+    "B_k3p_pick_confirmed": 14,
+    "A_pre_pick_failed": 11,
+    "G_misled_by_lookahead": 7,
+    "E_near_tie": 14,
+    "D_stop_decision": 7,
+    "F_no_lookahead_use": 6,
+    "C_downstream_trouble": 1
+   },
+   {
+    "B_k3p_pick_confirmed": 17,
+    "C_downstream_trouble": 4,
+    "D_stop_decision": 5,
+    "E_near_tie": 2,
+    "A_pre_pick_failed": 20,
+    "G_misled_by_lookahead": 8,
+    "F_no_lookahead_use": 4
+   }
+  ]
+ },
+ "agreement": {
+  "k3p_basis": {
+   "rules_out_others_by_execution": 9,
+   "confirmed_by_execution": 35,
+   "same_as_pre": 16
+  },
+  "pre_basis": {
+   "visible_page": 43,
+   "generic_heuristic": 15,
+   "agent_thought": 2
+  },
+  "pre_hedges": {
+   "True": 28,
+   "False": 32
+  }
+ }
+}
