@@ -1,6 +1,6 @@
 """Recipe 3 update of selection-head-labels-vs-cost-20261021: 3-benchmark mean overall success (3 runs pooled) vs actor +
 selector parameters, PFLOP per episode and model time per episode, for the Recipe 3 selectors (SFT 4B actor) and the
-same-day SFT 4B and SelectionARM runs (November 2–4). Benchmarks weighted equally for success and cost.
+same-day SFT 4B run (November 2–4). Colors follow the API plots (Okabe-Ito blue / vermilion). Benchmarks weighted equally for success and cost.
 Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
@@ -16,15 +16,14 @@ rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text()
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, "#898781", "s", False),
-    ("piotr5", "SelectionARM (Recipe 1)", LORA, "#eb6834", "D", False),
-    ("lora-gpt55-k3", "LoRA: GPT-5.5 K = 3 ¹", LORA, "#2a78d6", "D", False),
-    ("lora-luna-k3", "LoRA: Luna K = 3", LORA, "#6250d6", "D", False),
-    ("lora-gpt55-pre", "LoRA: GPT-5.5 pre ¹", LORA, "#2a78d6", "D", True),
-    ("lora-luna-pre", "LoRA: Luna pre", LORA, "#6250d6", "D", True),
-    ("head-gpt55-k3", "Head: GPT-5.5 K = 3", HEAD, "#2a78d6", "o", False),
-    ("head-luna-k3", "Head: Luna K = 3", HEAD, "#6250d6", "o", False),
-    ("head-gpt55-pre", "Head: GPT-5.5 pre", HEAD, "#2a78d6", "o", True),
-    ("head-luna-pre", "Head: Luna pre", HEAD, "#6250d6", "o", True),
+    ("lora-gpt55-k3", "LoRA: GPT-5.5 K = 3 ¹", LORA, "#0072B2", "D", False),
+    ("lora-luna-k3", "LoRA: Luna K = 3", LORA, "#D55E00", "D", False),
+    ("lora-gpt55-pre", "LoRA: GPT-5.5 pre ¹", LORA, "#0072B2", "D", True),
+    ("lora-luna-pre", "LoRA: Luna pre", LORA, "#D55E00", "D", True),
+    ("head-gpt55-k3", "Head: GPT-5.5 K = 3", HEAD, "#0072B2", "o", False),
+    ("head-luna-k3", "Head: Luna K = 3", HEAD, "#D55E00", "o", False),
+    ("head-gpt55-pre", "Head: GPT-5.5 pre", HEAD, "#0072B2", "o", True),
+    ("head-luna-pre", "Head: Luna pre", HEAD, "#D55E00", "o", True),
 ]
 BENCH = ("online_mind2web", "webvoyager", "deepshop")
 
