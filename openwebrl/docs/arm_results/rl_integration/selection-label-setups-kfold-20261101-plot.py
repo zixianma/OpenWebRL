@@ -6,8 +6,8 @@
     other four folds' states, so every state is scored out-of-fold. Each state's first five SFT proposals (duplicates
     kept) are scored on held-out rollouts 4-8, valid draws only. Teacher = the label's argmax among the five (ties
     averaged). Task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
-(2) Live: the seed-0 head trained on the original 1,380 training states, equal-weight benchmark-average overall success over the three benchmarks
-    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json "paired" / "mean": paired gain over SFT, each benchmark weighted one third, per-task success averaged over runs).
+(2) Live: the seed-0 head trained on the original 1,380 training states, task-weighted overall success over the three benchmarks
+    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json "weighted": paired gain over SFT, each of the 1,045 tasks weighted equally, per-task success averaged over runs).
 """
 import json
 from pathlib import Path
@@ -34,7 +34,7 @@ P = K["pooled"]
 PANELS = [
     ("Offline: held-out rollout success",
      "offline", P["sft_sample"]),
-    ("Online: overall success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
+    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled):
@@ -52,7 +52,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["paired"][f"{LIVE3_KEY[src]} - sft"]["mean"], color, "o", True)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
@@ -62,8 +62,8 @@ for ax, (title, kind, base) in zip(axes, PANELS):
     ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
-axes[0].set_ylim(-4, 5.2)
-axes[0].set_yticks([-4, -2, 0, 2, 4])
+axes[0].set_ylim(-3.5, 5.2)
+axes[0].set_yticks([-2, 0, 2, 4])
 axes[0].set_ylabel("Gain over SFT (pp)", fontsize=9)
 handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=5.7, markeredgewidth=1.4,
                   markerfacecolor="#555555" if filled else "white") for filled in (False, True)]

@@ -47,7 +47,7 @@
 
 [OM2W-only BrowserCode versus native CUAWright: 300 attempted tasks per cell, valid-only success with explicit valid denominators and metric coverage](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
-[Teacher and student ADM: compact Pre-exec, Post-exec, H = 3 and Oracle comparison, offline and online (equal benchmark average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
+[Teacher and student ADM: compact Pre-exec, Post-exec, H = 3 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
 
 [Offline selector evaluation: compact data collection and teacher labeling schematic, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 
