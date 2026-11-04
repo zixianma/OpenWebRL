@@ -28,9 +28,7 @@ INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
     ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
     ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
-    ("Lookahead\nH = 1", "#A99BE3", "teacher_k1", "Ours K1"),
     ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
-    ("Lookahead\nH = 5", "#33246E", "teacher_k5", "K5"),
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
@@ -46,7 +44,7 @@ def point(ax, x, v, color, marker, filled):
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5, color=INK)
 
 
-fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.15), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(5.6, 3.15), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -59,7 +57,7 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
     ax.set_title(title, fontsize=9, loc="left", color=INK, pad=9)
-    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.6, len(ROWS) - 0.4)
+    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=7); ax.set_xlim(-0.6, len(ROWS) - 0.4)
     ax.tick_params(axis="y", labelsize=8)
     ax.grid(False)
     for side in ("top", "right"):
@@ -72,9 +70,11 @@ handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=5.7, markeredge
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=8,
            loc="lower center", ncol=2, bbox_to_anchor=(0.53, 0.015), columnspacing=2)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.085, right=0.99, top=0.88, bottom=0.27, wspace=0.16)
+fig.subplots_adjust(left=0.11, right=0.99, top=0.88, bottom=0.27, wspace=0.16)
 output = HERE / "selection-label-setups-kfold-20261101"
 fig.savefig(output.with_suffix(".png"), dpi=300)
 fig.savefig(output.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
 fig.savefig(output.with_suffix(".svg"), metadata={"Date": None})
+svg = output.with_suffix(".svg")
+svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
 plt.close(fig)
