@@ -31,8 +31,7 @@ The supported framing is **selection improves fixed-horizon success, while incre
 
 <a id="browsercode-selection-strength-variants"></a>
 
-<details>
-<summary>Alternative paper figures: interaction efficiency and paired wins/losses</summary>
+### Action selection: interaction efficiency and paired outcomes
 
 **Recommended alternative: success versus executed browser batches.** At 30 decisions, N5 raises weighted success by 3.86 pp while using 15.1% fewer selected batches than N1; at 60 decisions, the point estimates are +1.38 pp and 21.3% fewer batches. These are browser-interaction savings: N5 uses more actor dollars and time than its same-horizon N1 reference. Single60 retains the stronger observed actor-cost/latency trade-off described above.
 
@@ -50,7 +49,6 @@ Both variants use the same 744-task intersection, planned benchmark weights, Ter
 
 [Paired-outcome PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.svg) · [Coordinates, definitions and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_strength_variants.json) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_selection_strength_variants.py).
 
-</details>
 
 <details>
 <summary>Supplementary paired-selection analysis and earlier three-panel rendering</summary>

@@ -12,7 +12,7 @@
 
 [Common-valid BrowserCode alternative: the same tasks across all eleven methods, with per-benchmark intersection counts and matched success, actor cost, batches and latency](ARM_FINAL_RESULTS.md#browsercode-all-method-common-valid).
 
-[Compact scaling strategies: all eleven historical methods, grouped single-run and selection curves, with explicit local x axes](ARM_FINAL_RESULTS.md#browsercode-scaling-families). [Supplementary paired-selection gains](ARM_FINAL_RESULTS.md#browsercode-selection-scaling). [Alternative action-selection figures: interaction efficiency and paired wins/losses](ARM_FINAL_RESULTS.md#browsercode-selection-strength-variants).
+[Compact scaling strategies: all eleven historical methods, grouped single-run and selection curves, with explicit local x axes](ARM_FINAL_RESULTS.md#browsercode-scaling-families). [Supplementary paired-selection gains](ARM_FINAL_RESULTS.md#browsercode-selection-scaling). [Action-selection figures: interaction efficiency and paired wins/losses, displayed in Final Results](ARM_FINAL_RESULTS.md#browsercode-selection-strength-variants).
 
 [Completed Luna high single at 120 decisions: original 12,288-token ceiling and 900-second deadline, with explicit advertised-limit comparability](API_EXPERIMENT_METHODS.md#luna-single-120-decisions).
 
