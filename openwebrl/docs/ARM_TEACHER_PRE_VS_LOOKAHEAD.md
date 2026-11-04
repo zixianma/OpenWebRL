@@ -6,13 +6,54 @@
 
 **Takeaways** (20,671 p16 panels, 2026-11-03):
 
+- **Live, K = 3 labels help heads but not LoRAs.** Heads: +2.9 pp (Luna) and +3.2 pp (GPT-5.5) mean overall success over pre labels, both significant; Luna LoRA: +0.3 [−1.8, +2.4]. No p16 selector beats same-day SelectionARM. [Table](#luna-pre-vs-k3p-live-20261103)
+
 - **The two labels pick the same executed action on 63.3% of panels.** Agreement falls as panels hold more distinct actions: 69.9% with 2 distinct targets, 44.3% with 5.
 - **Lookahead mostly replaces guesses with observed effects.** k3p cites a concrete observed result in 88.8% of coded disagreements. Its reasoning hedges ("may", "likely", "appears") on 20.8% of panels, against 47.2% for pre.
 - **Half of the disagreements are evidence-driven corrections.** In the 240 coded panels, 25.4% are a pre pick that k3p saw fail: a block, CAPTCHA, verification wall, no-op click, zero results, or the wrong page. Another 25.8% are a k3p pick that k3p saw reach the needed page or information.
 - **Pre's main weakness is predicting what a click will do from the screenshot.** In 14.2% of coded disagreements, pre misjudged a click: it called a click "blank space" or "would collapse", and execution showed the click opening the target.
 - **Lookahead changes stopping behaviour.** k3p picks stop/answer more often at depth 0 (7.0% vs 4.2% of panels). On blocked sites, pre keeps retrying while k3p sees the retry hit the same block and reports it honestly.
 - **About a quarter of disagreements are label noise.** 14.2% are near-ties among equivalent actions, where the difference is arbitrary. In another 12.5%, k3p credits or blames a candidate for what the actor happened to do afterwards in its single sampled continuation. All 7 coded cases where pre looks better in that 12.5% are of this kind.
-- **There is no outcome ground truth here.** Each p16 candidate was executed once, so "which looks better" is a text-only judgement by an LLM coder. Of the 240 coded disagreements, 37.1% favour k3p, 4.2% favour pre and 58.8% are unclear. Treat these as qualitative evidence, not a success-rate estimate. The live LoRA and head evaluations are the outcome test.
+- **There is no outcome ground truth here.** Each p16 candidate was executed once, so "which looks better" is a text-only judgement by an LLM coder. Of the 240 coded disagreements, 37.1% favour k3p, 4.2% favour pre and 58.8% are unclear. Treat these as qualitative evidence, not a success-rate estimate. The live LoRA and head evaluations are the outcome test ([below](#luna-pre-vs-k3p-live-20261103)).
+
+## Live outcome: K = 3 vs pre labels, Luna vs GPT-5.5, LoRA vs head (3 runs, 2026-11-03)
+
+<a id="luna-pre-vs-k3p-live-20261103"></a>
+
+**Every selector trained on the p16 panels beats one SFT sample except the two pre-label heads, and none of the 11-03 selectors beats SelectionARM; only the GPT-5.5 K = 3 head is statistically tied with it.** K = 3 labels help heads (+2.9 Luna, +3.2 GPT-5.5, both significant) but not LoRAs (Luna +0.3, interval crossing zero). With K = 3 labels, the GPT-5.5 head is 1.6 pp above the Luna head ([−0.4, +3.6]), and the Luna LoRA and head are tied (−0.6 [−2.5, +1.5]).
+
+Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepShop 150). SFT 4B actor, N = 5 candidates, T 1.0 / top-p 0.9, seed 20261018, 30 steps, local browsers. Judges: gpt-5.6-terra for Online-Mind2Web, GPT-4o for WebVoyager and DeepShop. Overall = successes / scheduled episodes (invalid = failure); valid-only = successes / valid episodes; both pooled over three runs. Mean = equal-weight average of the three benchmarks. Differences are on mean overall, with per-task success averaged over the three runs and [paired 95% intervals](ARM_FINAL_RESULTS.md#final-paired-bootstrap) (10,000 task resamples within each benchmark, seed 20261103); **bold** intervals exclude zero. Baselines are the same-day SFT and SelectionARM runs of 11-03.
+
+| Selector (labels, model) | Eval window (PST) | WebVoyager<br>overall | WebVoyager<br>valid-only | Online-Mind2Web<br>overall | Online-Mind2Web<br>valid-only | DeepShop<br>overall | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT, pp<br>[95% CI] | − SelectionARM, pp<br>[95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, one sample | 11-03 22:00 – 11-04 03:30 | 45.1% | 45.6% | 30.7% | 34.6% | 42.9% | 43.1% | 39.6% | 41.1% | — | **−6.2 [−8.3, −4.0]** |
+| SelectionARM (Piotr) | 11-03 22:00 – 11-04 03:30 | 51.0% | 52.4% | 37.3% | 43.8% | 48.9% | 50.5% | 45.7% | 48.9% | **+6.2 [+4.0, +8.3]** | — |
+| Luna pre, LoRA | 11-03 18:00 – 21:30 | 47.7% | 51.2% | 34.2% | 40.2% | 44.2% | 46.2% | 42.1% | 45.9% | **+2.5 [+0.3, +4.6]** | **−3.7 [−5.7, −1.7]** |
+| Luna K = 3, LoRA | 11-03 19:30 – 23:00 | 47.6% | 49.4% | 31.7% | 37.8% | 47.8% | 50.9% | 42.3% | 46.1% | **+2.8 [+0.7, +4.9]** | **−3.4 [−5.5, −1.3]** |
+| Luna pre, head | 11-03 19:30 – 23:00 | 44.4% | 47.3% | 32.6% | 38.8% | 43.1% | 46.1% | 40.0% | 44.1% | +0.5 [−1.7, +2.7] | **−5.7 [−7.8, −3.6]** |
+| Luna K = 3, head | 11-03 19:30 – 23:00 | 45.9% | 48.0% | 33.7% | 39.8% | 49.1% | 52.2% | 42.9% | 46.7% | **+3.3 [+1.1, +5.5]** | **−2.8 [−5.0, −0.8]** |
+| GPT-5.5 pre, head | 11-03 10:00 – 14:00 | 48.1% | 49.9% | 31.8% | 36.8% | 44.0% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] | **−4.4 [−6.5, −2.3]** |
+| GPT-5.5 K = 3, head | 11-03 10:00 – 14:00 | 51.1% | 52.8% | 32.7% | 37.6% | 49.8% | 51.7% | 44.5% | 47.4% | **+5.0 [+2.9, +7.1]** | −1.2 [−3.3, +0.9] |
+| GPT-5.5 pre, LoRA ¹ | 11-03 01:30 – 05:00 | 56.2% | 57.3% | 36.2% | 41.9% | 51.6% | 52.8% | 48.0% | 50.7% | **+8.4 [+6.5, +10.5]** | **+2.3 [+0.1, +4.4]** |
+| GPT-5.5 K = 3, LoRA ¹ | 11-02 20:00 – 11-03 00:30 | 55.4% | 56.3% | 34.7% | 39.5% | 49.6% | 51.4% | 46.5% | 49.1% | **+7.0 [+4.7, +9.2]** | +0.8 [−1.2, +2.9] |
+
+¹ The two GPT-5.5 LoRAs ran 11-02 evening to 11-03 morning, a different window from the 11-03 baselines; their differences include day-to-day drift (SelectionARM ran 1.6 pp higher on 11-02 than on 11-03). A same-day 3-run rerun of both GPT-5.5 LoRAs and SelectionARM is running on 11-04 and will replace these two rows.
+
+| K = 3 − pre, pp [95% CI] | WebVoyager | Online-Mind2Web | DeepShop | Mean overall |
+| --- | ---: | ---: | ---: | ---: |
+| Luna, LoRA | −0.2 [−2.9, +2.6] | −2.6 [−5.6, +0.4] | +3.6 [−1.3, +8.2] | +0.3 [−1.8, +2.4] |
+| Luna, head | +1.5 [−0.9, +3.8] | +1.1 [−1.9, +4.1] | **+6.0 [+0.9, +11.3]** | **+2.9 [+0.7, +5.0]** |
+| GPT-5.5, head | **+3.0 [+0.5, +5.5]** | +0.9 [−2.1, +4.0] | **+5.8 [+0.9, +10.7]** | **+3.2 [+1.1, +5.3]** |
+| GPT-5.5, LoRA ¹ | −0.8 [−2.9, +1.5] | −1.6 [−4.8, +1.7] | −2.0 [−6.7, +2.7] | −1.4 [−3.4, +0.6] |
+
+<details>
+<summary>Training data, runs and files</summary>
+
+- **Training data:** all p16 panels (20,525 labelled by both Luna conditions; 2,309 states, 896 tasks), the same panels and train/validation split for every row. LoRAs: Piotr's SelectionARM LoRA recipe on the 4B decoder, served merged as the selector. Heads: `train_head_round.py --extra-only`, batch 256, 20 epochs, seed 0, best validation epoch. GPT-5.5 labels are the earlier K = 3 lookahead and pre-execution labels on the same panels.
+- **Runs:** every row has 1,785 / 900 / 450 completed episodes; there are no missing tasks. Two jobs were retried and resumed from saved records (Luna pre LoRA run 1 DeepShop: startup goto timeouts; Luna pre head run 3 Online-Mind2Web: model service died at 181/300).
+- **Files:** [per-row counts and all paired intervals](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.json) · [script](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.py). Runtime evaluation roots: `evaluations/{p16-lora-lunapre-20261103, p16-lora-lunak3-20261103, p16-heads-luna-20261103, p16-heads-all-20261102, p16-lora-pre-20261102, p16-lora-20261101, controls-sameday-20261103}`.
+- **Interval scope:** the intervals cover task sampling only, not training-seed variance (one seed per selector) or drift between eval windows.
+</details>
 
 ## Setup
 
@@ -180,7 +221,7 @@ Representative pairs (verbatim, trimmed):
 - **About a quarter of the disagreement rate is noise from single sampled continuations and ties.** Categories E and G together make up 26.7%. Several continuation draws per candidate, or collapsing equivalent actions before labelling, would reduce this noise. Head targets already merge equivalent calls (`equivalence_target`), which absorbs part of category E. LoRA targets are a single index.
 - **Pre labels rarely look better (4.2%), but their errors are systematic.** Pre misjudges clicks, sticks with direct URLs and Google fallbacks that are blocked, and keeps retrying on dead-end pages. A pre-execution student inherits these errors, and only execution evidence can correct them.
 
-The live outcome comparison is the Luna k3p vs Luna pre LoRAs and heads, evaluated on WebVoyager, OM2W and DeepShop (3 runs; running since 2026-11-03).
+The live outcome comparison is in [Live outcome](#luna-pre-vs-k3p-live-20261103): K = 3 labels beat pre labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for the Luna LoRA (+0.3).
 
 <details>
 <summary>Method, files and caveats</summary>
