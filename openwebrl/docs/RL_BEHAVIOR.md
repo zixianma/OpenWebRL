@@ -31,12 +31,13 @@ Scores themselves live in [RL_RESULTS.md](RL_RESULTS.md); protocols in
    about 40% of groups contain at least one invalid rollout.
 6. **About 21 tasks always fail to load their start page.** These are the same dead or
    blocked sites at every checkpoint, so they cap every method equally.
-7. **ARM action credit roughly halves repeated-action loops, but outcome-only G8 gets there
-   too.** On matched iteration-90 repeats, Gate B has 23.3 repeated-action failures per 300
-   tasks against 45.0 and 60.7 for outcome-only 56 and 48 groups. At single iteration-90
-   checkpoints the mixed-only bonus (18) and reweight (12) runs are also far below
-   56 groups (39), but outcome-only G8 reaches 21. The overall success rate does not show this
-   ([repetition](#rl-behavior-repetition-20261028)).
+7. **Relaxed-gate ARM credit roughly halves repeated-action loops, through a measurable
+   label bias.** On matched iteration-90 repeats, Gate B has 23.3 loop failures per 300 tasks,
+   against 45.0 (56 groups) and 60.7 (48 groups): −21.7 [−31.7, −12.0] against 56 groups.
+   During training the ARM picks an executed repeated action 14–17% of the time, against 20%
+   for new actions. Outcome-only G8 also reaches a low loop rate, 40M+16F does not, and the
+   freed episodes mostly become other failures, so overall success barely moves
+   ([loops](#rl-behavior-loops-20261103)).
 8. **Larger groups make more groups usable, but at a cost.** Among first-iteration groups
    (SFT checkpoint), 41–48% are mixed with 5 rollouts and 53% with 8, which costs 1.6× more
    rollouts per group. A clean step-0 measurement gives mixed-group probabilities of 47%, 56% and
@@ -230,62 +231,132 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
 </details>
 
 <a id="rl-behavior-repetition-20261028"></a>
-## Repeated actions across runs · October 28
+<a id="rl-behavior-loops-20261103"></a>
+## Repeated-action loops: ARM versus outcome-only · November 3
 
-![Repeated-action failures and repetition rate over training, and iteration-90 matched repeats](rl_results/rl_repetition.png)
+**Main result.** With the relaxed gate, ARM action credit cuts repeated-action loops.
+- **Mechanism, from about 350,000 training labels:** the ARM is less likely to pick the executed
+  action when that action repeats an earlier step. This is visible as a selection bias during
+  training.
+- **Matched held-out evaluations:** Gate B has about half the loop failures of outcome-only RL.
+- **Limits:**
+  - The effect does not raise overall success.
+  - One outcome-only run (G8) reaches a similarly low loop rate.
+  - The 40M+16F variant does not show the effect.
 
-*Left: episodes whose failure category is repeated action (of 300 tasks). Middle: share of valid
-episodes, successes included, that issue an identical non-wait action ≥ 3 times; this does not
-depend on the judge. Right: iteration 90, three contemporaneous repeats per checkpoint on one
-harness (dots), bar = mean.* [PDF](rl_results/rl_repetition.pdf)
+![Loop rate over training, iteration-90 matched repeats, and ARM label bias against repeated actions](rl_results/rl_action_loops.png)
 
-| Run | Iteration | Repeated-action failures | Valid episodes repeating ≥ 3×, % | Successes |
+*(a) Share of valid held-out episodes, successes included, that issue one identical action ≥ 3
+times; this does not depend on the judge. (b) Iteration 90, three contemporaneous full-300
+evaluations per checkpoint on one harness (dots), bar = mean, with the paired task-bootstrap
+95% CI for Gate B − 56 groups. (c) How often SelectionARM picks the executed response among
+five candidates during RL, split by whether the executed action repeats an earlier step in the
+same trajectory; 95% binomial intervals; chance = 20%.* [PDF](rl_results/rl_action_loops.pdf)
+
+### Matched iteration-90 repeats (one harness, back to back)
+
+| Run | Loop failures, r1 / r2 / r3 | Mean loop failures | Loop rate, mean % | Successes, r1 / r2 / r3 |
 | --- | ---: | ---: | ---: | ---: |
-| Outcome-only 56 groups | 10 / 90 | 40 / 39 | 54.2 / 22.8 | 88 / 107 |
-| Outcome-only G8 | 10 / 90 | 20 / 21 | 53.1 / 17.3 | 88 / 107 |
-| Mixed-only ARM bonus | 70 / 90 | 20 / 18 | 18.3 / 14.2 | 115 / 122 |
-| Mixed-only ARM outcome reweight | 70 / 90 | 30 / 12 | 22.6 / 8.4 | 116 / 113 |
-| Mixed-only ARM action-only | 10 / 40 | 17 / 9 | 46.9 / 10.6 | 82 / 37 |
-| Outcome-only 48 groups | 100 | 53 | 36.6 | 104 |
+| Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | 39.0 | 103 / 95 / 109 |
+| Outcome-only 56 groups | 38 / 53 / 44 | 45.0 | 27.7 | 114 / 102 / 102 |
+| ARM Gate B | 20 / 23 / 27 | 23.3 | 20.3 | 123 / 117 / 125 |
 
-| Iteration-90 matched repeats | Repeated-action failures, r1 / r2 / r3 | Mean | Valid episodes repeating ≥ 3×, mean % |
-| --- | ---: | ---: | ---: |
-| Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | 39.0 |
-| Outcome-only 56 groups | 38 / 53 / 44 | 45.0 | 27.7 |
-| Gate B (ARM, failure-additive) | 20 / 23 / 27 | 23.3 | 20.3 |
+| Gate B minus | Loop failures per 300 [95% CI] | Loop rate, pp [95% CI] |
+| --- | ---: | ---: |
+| Outcome-only 56 groups | −21.7 [−31.7, −12.0] | −7.4 [−12.4, −2.6] |
+| Outcome-only 48 groups | −37.3 [−47.7, −27.3] | −18.7 [−23.8, −13.6] |
 
-- **Matched evidence favors ARM.** Gate B's three repeats (20–27) all sit below every
-  outcome-only repeat (38–71), and its repetition rate is lower too. Paired over tasks
-  (each task's share of repeats ending in a loop), Gate B has **−21.7 [−31.3, −12.0]**
-  repeated-action failures per 300 against 56 groups and **−37.3 [−47.7, −27.3]** against
-  48 groups (95% bootstrap CI, 20,000 draws).
+### Late training window, iterations 70 / 80 / 90 (one evaluation per checkpoint)
 
-![Iteration-90 matched repeats: repeated-action failures per 300 OM2W tasks](rl_results/rl_repetition_iter90.png)
+| Run | Loop failures, 70 / 80 / 90 | Loop rate, % | Δ loop rate vs outcome-only, pp [95% CI] | Δ loop failures per 300 [95% CI] |
+| --- | ---: | ---: | ---: | ---: |
+| Outcome-only 56 groups | 54 / 45 / 39 | 28.0 | reference | reference |
+| Outcome-only G8 | 32 / 19 / 21 | 16.8 | reference | reference |
+| ARM bonus (relaxed gate) | 20 / 20 / 18 | 16.1 | −6.3 [−9.9, −2.7] | −15.7 [−22.2, −9.3] |
+| ARM reweight (relaxed gate) | 30 / 8 / 12 | 13.7 | −8.7 [−12.2, −5.1] | −18.3 [−24.8, −12.0] |
+| ARM Gate B 40M+16F | 43 / 50 / 46 | 34.8 | +12.3 [+8.0, +16.6] | +11.3 [+3.7, +19.2] |
 
-*Each dot is one full-300 evaluation of the same iteration-90 checkpoint; the three were
-collected back to back by job 385593 on one harness. Bar = mean.* [PDF](rl_results/rl_repetition_iter90.pdf)
-- **Repetition falls under any RL here.** The judge-independent rate drops from about 54% to
-  14–23% at iteration 90 in every run that reached it; ARM runs end lowest, but G8
-  (outcome-only, 8 rollouts per group) is close behind, so ARM is not the only route.
-- **Action-only removes repetition by ending episodes.** It falls fastest (10.6% by
-  iteration 40) while successes collapse and episodes shorten to about 6.5 turns, so low
-  repetition alone is not a sign of a better policy.
-- **Caveats.** Mixed bonus/reweight trajectories exist only for iterations 70–90, and
-  Gate B only for the matched repeats; other cohorts were pruned. Single-checkpoint
-  differences of a few episodes are within noise (repeat-to-repeat range up to 17 here).
+The reference pools both outcome-only runs. The two outcome-only runs alone differ by
+−11.2 pp [−15.8, −6.7] in loop rate (G8 − 56 groups), so this window places the ARM runs at the
+low end of the outcome-only range, not clearly below all of it.
+
+### Why: ARM labels penalize executed repeats
+
+| Run (candidate gate) | Labels where the executed action repeats | ARM picks executed: repeat / new, % | Mixed states | ARM picks a repeat / chance share, % |
+| --- | ---: | ---: | ---: | ---: |
+| Gate B (relaxed) | 5,377 | 16.9 / 20.3 | 11,903 | 34.6 / 42.5 |
+| ARM bonus (relaxed) | 3,676 | 16.0 / 20.2 | 8,462 | 32.7 / 41.6 |
+| ARM reweight (relaxed) | 3,978 | 14.4 / 20.5 | 8,780 | 30.7 / 41.7 |
+| Gate B 40M+16F (relaxed) | 979 | 18.1 / 20.3 | 2,266 | 34.2 / 39.4 |
+| Original bonus (strict) | 663 | 20.8 / 20.3 | 2,619 | 24.4 / 23.8 |
+| Additive (strict) | 1,099 | 17.7 / 19.7 | 4,311 | 25.3 / 25.7 |
+
+- **Relaxed-gate runs:**
+  - When the executed action repeats an earlier step, the ARM selects it 14–17% of the time,
+    against about 20% for new actions.
+  - In mixed states (some of the five candidates repeat an earlier step, some do not), it
+    picks a repeating candidate 8–11 pp below that candidate's chance share.
+  - With β = 0.5, a labelled repeat turn therefore receives a small but systematic negative
+    expected bonus (about −0.02).
+- **Strict-gate runs show no consistent bias.** Requiring five distinct candidate actions
+  excludes most states where the policy keeps proposing the same action, so loop states are
+  rarely labelled. Original bonus, the one strict-gate run with held-out trajectories, has a
+  25.4% loop rate at iteration 90.
+- **40M+16F:** its bias is weakest and its interval includes chance (18.1%, ±2.4 pp). It is
+  also the one ARM run that does not reduce loops.
+
+### What loops turn into, and limits
+
+- **Loops are mostly failures.** Pooled over every evaluation with trajectories, 25.2% of the
+  3,367 valid loop episodes succeed, against 54.6% of the 7,014 other valid episodes.
+- **Gate B turns loops into other failures more often than into successes.** Take the 49 tasks
+  that loop in at least 3 of the 6 outcome-only iteration-90 repeats.
+  - Under outcome-only they end as loops in 61% of episodes and succeed in 6.5%.
+  - Under Gate B they loop in 13% and succeed in 16%.
+  - The remaining Gate B episodes become "claims impossible" (30%), wrong answers (24%) or
+    invalid episodes (14%).
+  - This is why the loop reduction barely moves overall success
+    ([figure](rl_results/rl_action_loops_outcomes.png)).
+  - Caveat: the same outcome-only repeats choose the tasks and measure their outcome-only
+    rates, so the outcome-only loop share (61%) is biased upward. The Gate B column is not
+    affected.
+- **Definition sensitivity:**
+  - With a threshold of ≥ 4 identical actions, Gate B still has fewer loops than 56 groups
+    (10.2% vs 15.0% of valid episodes).
+  - Counting only consecutive repeats, the two are equal (11.0% vs 10.3%). Gate B's advantage
+    therefore comes mainly from cycling back to an earlier action, not from repeating the
+    same click back to back.
+  - Against 48 groups the gap holds under every definition.
+- **Action-only reward** reaches the lowest loop rate (10.6% at iteration 40) by ending
+  episodes early while successes collapse, so a low loop rate alone is not a better policy.
+- **Coverage:** Gate B trajectories exist only for iteration 10 and the matched repeats.
+  Mixed bonus and reweight trajectories exist only for iterations 70–90; earlier ones were
+  pruned. Checkpoints are fixed, so the intervals cover task and evaluation noise, not
+  training seeds.
 
 <details>
 <summary>Method and sources</summary>
 
-- **Rules:** the repeated-action category is the first-match rule of
-  [failure categories](#rl-behavior-failures-20261024) (an identical action, name and
-  arguments, issued ≥ 3 times, ignoring `wait`, after success, invalid and turn-limit are
-  excluded). The repetition rate applies the same repeat test to every valid episode.
-- **Protocol:** local GPT-4.1/action_history, temperature 0, full 300 tasks, verified from
-  saved verdicts. Repeats are the [iteration-90 repeats](#rl-behavior-iter90-repeats-20261025).
-- **Sources:** [aggregate](arm_results/rl_integration/behavior/rl-repetition-20261028.json) ·
-  scripts `scripts/analyze_rl_eval_failures.py` (CPU job 393884) and
-  `scripts/plot_rl_repetition.py`.
+- **Loop episode:** a valid episode in which one identical first tool call (name and
+  arguments) is issued ≥ 3 times, ignoring `wait` and `done`.
+- **Loop failure:** the first-match `repeat_loop` category of the
+  [failure rules](#rl-behavior-failures-20261024).
+- **Evaluation protocol:** local GPT-4.1/action_history judge, actor temperature 0, 30 turns,
+  full 300 tasks.
+- **Intervals:** paired percentile bootstrap over tasks (20,000 draws). Loop rates are ratios of
+  sums over valid episodes.
+- **Label analysis:** every admitted SelectionARM label saved during training, one root per
+  iteration, about 350,000 labels.
+  - A candidate "repeats" if its first tool call equals an earlier executed call, taken from
+    the label's saved history (the prompt's history window).
+  - Very old repeats can be missed, which only undercounts repeats.
+- **Sources:**
+  - [Loop aggregate](arm_results/rl_integration/behavior/rl-action-loops-20261103.json) and
+    [label aggregate](arm_results/rl_integration/behavior/arm-label-repeats-20261103.json).
+  - Scripts: `scripts/plot_rl_action_loops.py`, `scripts/analyze_arm_label_repeats.py` and
+    `scripts/analyze_rl_eval_failures.py`.
+  - CPU jobs 416464 (extraction), 416598 (labels) and 416599 onward (figure).
+- **Earlier version:** the October 28 figure is [rl_repetition.png](rl_results/rl_repetition.png).
 </details>
 
 <a id="rl-behavior-episode-length-20261024"></a>
