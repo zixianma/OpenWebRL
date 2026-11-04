@@ -1,0 +1,507 @@
+{
+  "schema": "browsercode-observed-pareto-previews-v1",
+  "definition": "Minimize the displayed x metric and maximize success. Dominance needs at least one strict improvement. All eleven methods compete in every panel.",
+  "rendering": "Dashed straight segments join consecutive observed nondominated coordinates. No smoothing, convex hull, interpolation attainability or statistical superiority is implied. Thin rings identify frontier nodes; a single-node frontier has no segment.",
+  "populations": "Per-benchmark and own-valid weighted previews retain each method own-valid cohort; common-valid weighted preview uses the same 744 valid tasks in every method. Fixed planned weights 300/1045, 595/1045, 150/1045.",
+  "batch_interpretation": "Browser-code batches are command counts, not CPU/RAM, session time, network traffic or browser-resource costs.",
+  "uncertainty": "Observed point estimates only; validity differences, live windows and historical prompt differences can change membership. No uncertainty bands or significance inferred.",
+  "source_sha256": {
+    "aggregate.json": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
+    "aggregate_common_valid.json": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
+    "browsercode_scaling_weighted_average.json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
+    "browsercode_scaling_common_valid_weighted_average.json": "ceec9f8a8536cf042e73660bfd1f9dcce107c81731480b9f50b96df78d6c6e8c",
+    "plot_browsercode_scaling.py": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
+    "plot_browsercode_average.py": "4adf3a2206e1b43c84d441c98e0f54f43aa0fa0642029a9c287ca538b4524cd1",
+    "plot_browsercode_common_valid.py": "4f899ac63c7069cfc8b575c1e4bd2b5af4bbc27d7e0f05469a6669a7796feaec"
+  },
+  "renderer_sha256": "9ddf1a6ce670e965900200911027ceb2ee27f3b02dabfe9514498649c97144a0",
+  "previews": {
+    "browsercode_scaling_pareto_preview": [
+      {
+        "population": "online_mind2web",
+        "metric": "actor_usd",
+        "frontier": [
+          {
+            "method": "luna_single_high_6144",
+            "x": 0.009437041235955056,
+            "success_rate": 0.6666666666666666
+          },
+          {
+            "method": "luna_single_high_24576",
+            "x": 0.009976814481481482,
+            "success_rate": 0.6888888888888889
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 0.011115183764478764,
+            "success_rate": 0.7374517374517374
+          },
+          {
+            "method": "parallel5_select_high",
+            "x": 0.0696033554494382,
+            "success_rate": 0.7415730337078652
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_120steps",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high_60steps",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "online_mind2web",
+        "metric": "browser_commands",
+        "frontier": [
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 14.290697674418604,
+            "success_rate": 0.7403100775193798
+          },
+          {
+            "method": "parallel5_select_high",
+            "x": 14.632958801498127,
+            "success_rate": 0.7415730337078652
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_120steps",
+          "luna_single_high_24576",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "online_mind2web",
+        "metric": "actor_seconds",
+        "frontier": [
+          {
+            "method": "serial_high",
+            "x": 92.65773511359622,
+            "success_rate": 0.6654135338345865
+          },
+          {
+            "method": "luna_single_high_6144",
+            "x": 119.78165618833486,
+            "success_rate": 0.6666666666666666
+          },
+          {
+            "method": "luna_single_high_24576",
+            "x": 126.49424441821002,
+            "success_rate": 0.6888888888888889
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 152.91254360315708,
+            "success_rate": 0.7374517374517374
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 205.53671252061866,
+            "success_rate": 0.7403100775193798
+          },
+          {
+            "method": "parallel5_select_high",
+            "x": 207.8937416237685,
+            "success_rate": 0.7415730337078652
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_120steps",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high"
+        ]
+      },
+      {
+        "population": "webvoyager",
+        "metric": "actor_usd",
+        "frontier": [
+          {
+            "method": "luna_single_high_24576",
+            "x": 0.007523119666666667,
+            "success_rate": 0.8239316239316239
+          },
+          {
+            "method": "luna_single_high_6144",
+            "x": 0.007724689715517242,
+            "success_rate": 0.8293103448275863
+          },
+          {
+            "method": "luna_single_high",
+            "x": 0.00778212762521589,
+            "success_rate": 0.8324697754749568
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 0.009042802114726026,
+            "success_rate": 0.8732876712328768
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 0.00973446563888889,
+            "success_rate": 0.9037037037037037
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 0.0444186061305147,
+            "success_rate": 0.9246323529411765
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "webvoyager",
+        "metric": "browser_commands",
+        "frontier": [
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 10.428308823529411,
+            "success_rate": 0.9246323529411765
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_120steps",
+          "luna_single_high_24576",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "webvoyager",
+        "metric": "actor_seconds",
+        "frontier": [
+          {
+            "method": "serial_high",
+            "x": 94.14691202024558,
+            "success_rate": 0.8462929475587704
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 117.18111078926897,
+            "success_rate": 0.9037037037037037
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 146.65524366876429,
+            "success_rate": 0.9246323529411765
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_24576",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high"
+        ]
+      },
+      {
+        "population": "deepshop",
+        "metric": "actor_usd",
+        "frontier": [
+          {
+            "method": "luna_single_high_24576",
+            "x": 0.013085260233333333,
+            "success_rate": 0.86
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 0.015858291966666667,
+            "success_rate": 0.9066666666666666
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 0.01918858319727891,
+            "success_rate": 0.9319727891156463
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "parallel5_select_high_60steps",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "deepshop",
+        "metric": "browser_commands",
+        "frontier": [
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 17.307692307692307,
+            "success_rate": 0.916083916083916
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 22.8843537414966,
+            "success_rate": 0.9319727891156463
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_24576",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "deepshop",
+        "metric": "actor_seconds",
+        "frontier": [
+          {
+            "method": "luna_single_high_24576",
+            "x": 140.23304540144744,
+            "success_rate": 0.86
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 164.04944664668292,
+            "success_rate": 0.9066666666666666
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 196.03794786760417,
+            "success_rate": 0.9319727891156463
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "parallel5_select_high_60steps",
+          "serial_high"
+        ]
+      }
+    ],
+    "browsercode_scaling_weighted_pareto_preview": [
+      {
+        "population": "weighted_own_valid",
+        "metric": "actor_usd",
+        "frontier": [
+          {
+            "method": "luna_single_high_24576",
+            "x": 0.009025923044125465,
+            "success_rate": 0.7903406534985482
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 0.01061604419388097,
+            "success_rate": 0.8390829527455339
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 0.011703167484418384,
+            "success_rate": 0.8456241418647433
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 0.06220770232537726,
+            "success_rate": 0.8704898188214367
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "weighted_own_valid",
+        "metric": "browser_commands",
+        "frontier": [
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 12.524599902851127,
+            "success_rate": 0.8704898188214367
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_120steps",
+          "luna_single_high_24576",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "weighted_own_valid",
+        "metric": "actor_seconds",
+        "frontier": [
+          {
+            "method": "serial_high",
+            "x": 101.82500465950359,
+            "success_rate": 0.7847511154755811
+          },
+          {
+            "method": "luna_single_high_24576",
+            "x": 114.99494830138731,
+            "success_rate": 0.7903406534985482
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 137.48641778234472,
+            "success_rate": 0.8456241418647433
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 183.46062697360546,
+            "success_rate": 0.8704898188214367
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high"
+        ]
+      }
+    ],
+    "browsercode_scaling_common_valid_pareto_preview": [
+      {
+        "population": "weighted_common_valid",
+        "metric": "actor_usd",
+        "frontier": [
+          {
+            "method": "luna_single_high_24576",
+            "x": 0.008058965855781884,
+            "success_rate": 0.8323328760996007
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 0.009076553110470608,
+            "success_rate": 0.8555309932665626
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 0.010314961164992646,
+            "success_rate": 0.8617228203662889
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 0.05692716116728319,
+            "success_rate": 0.8692915519900126
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "weighted_common_valid",
+        "metric": "browser_commands",
+        "frontier": [
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 11.863693042725776,
+            "success_rate": 0.8692915519900126
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_120steps",
+          "luna_single_high_24576",
+          "luna_single_high_60steps",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high",
+          "serial_high"
+        ]
+      },
+      {
+        "population": "weighted_common_valid",
+        "metric": "actor_seconds",
+        "frontier": [
+          {
+            "method": "serial_high",
+            "x": 92.92899547260481,
+            "success_rate": 0.8210838009229796
+          },
+          {
+            "method": "luna_single_high_24576",
+            "x": 102.85185245763769,
+            "success_rate": 0.8323328760996007
+          },
+          {
+            "method": "luna_single_high_60steps",
+            "x": 119.07165350339395,
+            "success_rate": 0.8555309932665626
+          },
+          {
+            "method": "luna_single_high_120steps",
+            "x": 120.99764386130988,
+            "success_rate": 0.8617228203662889
+          },
+          {
+            "method": "parallel5_select_high_60steps",
+            "x": 170.45409275955006,
+            "success_rate": 0.8692915519900126
+          }
+        ],
+        "dominated_methods": [
+          "luna_single_high",
+          "luna_single_high_6144",
+          "luna_single_xhigh_12288",
+          "parallel2_select_high",
+          "parallel3_select_high",
+          "parallel5_select_high"
+        ]
+      }
+    ]
+  }
+}

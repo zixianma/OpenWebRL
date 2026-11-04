@@ -93,6 +93,22 @@ All eleven methods account for every originally planned task by a native result 
 
 The three token/effort variants record all 3,135 planned dispositions: 3,000 valid and 135 invalid. The additional 60-step setting records all 1,045 dispositions: 993 valid and 52 invalid. The additional single120 cohort has 1,045 native results, 946 valid and 99 invalid. N2/30 has 1,044 native results, 992 valid and 52 invalid plus its one administrative missing outcome; N5/60 has 1,044 native results, 945 valid and 99 invalid plus its one claimed-missing outcome. Historical versus fresh collection times, runtime safeguards and resulting valid cohorts differ; the new comparisons are descriptive and do not add paired uncertainty estimates. N3/N5 use high effort for both proposals and selection. External judging and invalid-attempt spend are excluded from the plotted valid-task actor means.
 
+<a id="browsercode-pareto-previews"></a>
+
+### Observed Pareto frontiers — preview variants
+
+Dashed segments join the observed nondominated settings in each panel: minimize that panel's x metric and maximize success, with at least one strict improvement required for dominance. Rings identify frontier settings; a one-setting frontier has no connecting segment. Every panel considers all eleven methods. Segments are visual guides between measured configurations, not fitted curves, attainable intermediate policies or evidence of statistical superiority. The original figures above are unchanged.
+
+![Per-benchmark BrowserCode plots with observed Pareto-frontier segments and rings; all original method points and own-valid populations are preserved](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.png)
+
+*Per-benchmark frontiers use each method's own native-valid tasks, as in the original plot. Valid subsets, live windows and historical prompt limits differ. DeepShop's cost and latency frontiers contain only single-run settings; selection remains on the browser-batch frontier, which concerns command counts rather than browser resources.*
+
+![Planned-task-weighted BrowserCode average with observed Pareto-frontier segments and rings, preserving the original own-valid benchmark means and all eleven methods](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.png)
+
+*The own-valid weighted cost frontier is single high/2× cap → single60 → single120 → N5/60. N5/30 is dominated on the weighted cost/latency views. Weights remain 300/1,045, 595/1,045 and 150/1,045; this is not a pooled success rate. The [common-valid weighted preview](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.png) instead uses the same 744 tasks in all methods: its cost-frontier membership is the same, while single60 also lies on its latency frontier. These are descriptive memberships without uncertainty bands; common-valid matching does not remove live-window or protocol effects.*
+
+[Per-benchmark PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.svg) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.svg) · [Common-valid weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.pdf) · [Frontier membership and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_pareto_previews.json) · [Reproduction source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_previews.py).
+
 <a id="browsercode-selection-strength-variants"></a>
 
 <details>
