@@ -1,5 +1,5 @@
 {
- "note": "Recipe 3 selectors vs same-day SFT 4B and SelectionARM (SFT 4B actor, evaluated 2026-11-02/04): success and cost per\nepisode. Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure). Cost from run 1 (all\n1,045 tasks), exactly as selection-n3-sft8b-full-20261021-analysis.py: actor PFLOP = 2 x params x (uncached prompt +\ngenerated tokens); 4B LoRA selectors (SelectionARM and Recipe 3 LoRAs) 2 x 4.44e9 x their tokens; head FLOPs as logged.\nModel time per episode = summed decision seconds / tasks. Benchmark means weight the three benchmarks equally.",
+ "note": "Recipe 3 selectors vs same-day SFT 4B and SelectionARM (SFT 4B actor, evaluated 2026-11-02/04): success and cost per\nepisode. GPT-5.5 LoRAs: November 4 same-day rerun (sameday-lora-20261104). Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure). Cost from run 1 (all\n1,045 tasks), exactly as selection-n3-sft8b-full-20261021-analysis.py: actor PFLOP = 2 x params x (uncached prompt +\ngenerated tokens); 4B LoRA selectors (SelectionARM and Recipe 3 LoRAs) 2 x 4.44e9 x their tokens; head FLOPs as logged.\nModel time per episode = summed decision seconds / tasks. Benchmark means weight the three benchmarks equally.",
  "rows": [
   {
    "key": "sft1",
@@ -92,12 +92,12 @@
    "benchmark": "online_mind2web",
    "cost_tasks": 300,
    "success_episodes": 900,
-   "successes": 312,
-   "overall": 34.67,
-   "steps_per_episode": 15.33,
-   "pflop_per_step": 0.0912,
-   "pflop_per_episode": 1.397,
-   "model_seconds_per_episode": 134.1
+   "successes": 321,
+   "overall": 35.67,
+   "steps_per_episode": 15.2,
+   "pflop_per_step": 0.0943,
+   "pflop_per_episode": 1.434,
+   "model_seconds_per_episode": 130.8
   },
   {
    "key": "lora-gpt55-k3",
@@ -106,12 +106,12 @@
    "benchmark": "webvoyager",
    "cost_tasks": 595,
    "success_episodes": 1785,
-   "successes": 989,
-   "overall": 55.41,
-   "steps_per_episode": 12.24,
-   "pflop_per_step": 0.092,
-   "pflop_per_episode": 1.126,
-   "model_seconds_per_episode": 99.5
+   "successes": 920,
+   "overall": 51.54,
+   "steps_per_episode": 11.94,
+   "pflop_per_step": 0.0921,
+   "pflop_per_episode": 1.1,
+   "model_seconds_per_episode": 94.7
   },
   {
    "key": "lora-gpt55-k3",
@@ -120,12 +120,12 @@
    "benchmark": "deepshop",
    "cost_tasks": 150,
    "success_episodes": 450,
-   "successes": 223,
-   "overall": 49.56,
-   "steps_per_episode": 15.75,
-   "pflop_per_step": 0.1043,
-   "pflop_per_episode": 1.643,
-   "model_seconds_per_episode": 158.5
+   "successes": 211,
+   "overall": 46.89,
+   "steps_per_episode": 16.43,
+   "pflop_per_step": 0.1052,
+   "pflop_per_episode": 1.729,
+   "model_seconds_per_episode": 168.3
   },
   {
    "key": "lora-luna-k3",
@@ -176,12 +176,12 @@
    "benchmark": "online_mind2web",
    "cost_tasks": 300,
    "success_episodes": 900,
-   "successes": 326,
-   "overall": 36.22,
-   "steps_per_episode": 14.2,
-   "pflop_per_step": 0.092,
-   "pflop_per_episode": 1.306,
-   "model_seconds_per_episode": 117.4
+   "successes": 322,
+   "overall": 35.78,
+   "steps_per_episode": 14.09,
+   "pflop_per_step": 0.0946,
+   "pflop_per_episode": 1.333,
+   "model_seconds_per_episode": 119.5
   },
   {
    "key": "lora-gpt55-pre",
@@ -190,12 +190,12 @@
    "benchmark": "webvoyager",
    "cost_tasks": 595,
    "success_episodes": 1785,
-   "successes": 1003,
-   "overall": 56.19,
-   "steps_per_episode": 11.9,
-   "pflop_per_step": 0.0936,
-   "pflop_per_episode": 1.114,
-   "model_seconds_per_episode": 95.5
+   "successes": 929,
+   "overall": 52.04,
+   "steps_per_episode": 11.78,
+   "pflop_per_step": 0.0923,
+   "pflop_per_episode": 1.088,
+   "model_seconds_per_episode": 96.7
   },
   {
    "key": "lora-gpt55-pre",
@@ -204,12 +204,12 @@
    "benchmark": "deepshop",
    "cost_tasks": 150,
    "success_episodes": 450,
-   "successes": 232,
-   "overall": 51.56,
-   "steps_per_episode": 16.65,
-   "pflop_per_step": 0.1069,
-   "pflop_per_episode": 1.78,
-   "model_seconds_per_episode": 174.3
+   "successes": 229,
+   "overall": 50.89,
+   "steps_per_episode": 17.03,
+   "pflop_per_step": 0.1071,
+   "pflop_per_episode": 1.824,
+   "model_seconds_per_episode": 175.7
   },
   {
    "key": "lora-luna-pre",

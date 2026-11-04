@@ -1,5 +1,5 @@
 """Recipe 3 selectors vs same-day SFT 4B and SelectionARM (SFT 4B actor, evaluated 2026-11-02/04): success and cost per
-episode. Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure). Cost from run 1 (all
+episode. GPT-5.5 LoRAs: November 4 same-day rerun (sameday-lora-20261104). Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure). Cost from run 1 (all
 1,045 tasks), exactly as selection-n3-sft8b-full-20261021-analysis.py: actor PFLOP = 2 x params x (uncached prompt +
 generated tokens); 4B LoRA selectors (SelectionARM and Recipe 3 LoRAs) 2 x 4.44e9 x their tokens; head FLOPs as logged.
 Model time per episode = summed decision seconds / tasks. Benchmark means weight the three benchmarks equally."""
@@ -13,9 +13,9 @@ P4B = 4022468096 + 415347712
 CONDS = {  # key: (label, root, slug, kind)
     'sft1': ('SFT 4B, 1 sample', 'controls-sameday-20261103', 'sft1', 'none'),
     'piotr5': ('Piotr SelectionARM', 'controls-sameday-20261103', 'piotr5', 'lora'),
-    'lora-gpt55-k3': ('4B LoRA, Recipe 3 GPT-5.5 K=3', 'p16-lora-20261101', 'arm5-9fadc8dc4655', 'lora'),
+    'lora-gpt55-k3': ('4B LoRA, Recipe 3 GPT-5.5 K=3', 'sameday-lora-20261104', 'arm5-9fadc8dc4655', 'lora'),
     'lora-luna-k3': ('4B LoRA, Recipe 3 Luna K=3', 'p16-lora-lunak3-20261103', 'arm5-2ed62dd7c4dc', 'lora'),
-    'lora-gpt55-pre': ('4B LoRA, Recipe 3 panels GPT-5.5 pre', 'p16-lora-pre-20261102', 'arm5-80ee47643be2', 'lora'),
+    'lora-gpt55-pre': ('4B LoRA, Recipe 3 panels GPT-5.5 pre', 'sameday-lora-20261104', 'arm5-80ee47643be2', 'lora'),
     'lora-luna-pre': ('4B LoRA, Recipe 3 panels Luna pre', 'p16-lora-lunapre-20261103', 'arm5-3b148a583f85', 'lora'),
     'head-gpt55-k3': ('Head, Recipe 3 GPT-5.5 K=3', 'p16-heads-all-20261102', 'head5-91e7a5a67417', 'head'),
     'head-luna-k3': ('Head, Recipe 3 Luna K=3', 'p16-heads-luna-20261103', 'head5-8d58b41c8726', 'head'),

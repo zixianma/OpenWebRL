@@ -34,17 +34,17 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 | Luna K = 3, head | 11-03 | 48.0% | 39.8% | 52.2% | 42.9% | 46.7% | **+3.3 [+1.1, +5.5]** |
 | GPT-5.5 pre, head | 11-03 | 49.9% | 36.8% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] |
 | GPT-5.5 K = 3, head | 11-03 | 52.8% | 37.6% | 51.7% | 44.5% | 47.4% | **+5.0 [+2.9, +7.1]** |
-| GPT-5.5 pre, LoRA ¹ | 11-03 | 57.3% | 41.9% | 52.8% | 48.0% | 50.7% | **+8.4 [+6.5, +10.5]** |
-| GPT-5.5 K = 3, LoRA ¹ | 11-02/03 | 56.3% | 39.5% | 51.4% | 46.5% | 49.1% | **+7.0 [+4.7, +9.2]** |
+| GPT-5.5 pre, LoRA ¹ | 11-04 | 53.7% | 41.4% | 51.2% | 46.2% | 48.8% | **+6.7 [+4.5, +8.9]** |
+| GPT-5.5 K = 3, LoRA ¹ | 11-04 | 52.7% | 41.1% | 47.3% | 44.7% | 47.0% | **+5.1 [+3.0, +7.3]** |
 
-¹ The two GPT-5.5 LoRAs ran overnight 11-02/03, about a day before the SFT and SelectionARM runs; their differences include day-to-day drift (SelectionARM ran 1.6 pp higher on 11-02 than on 11-03). A same-day 3-run rerun of both GPT-5.5 LoRAs and SelectionARM is running on 11-04 and will replace these two rows.
+¹ The two GPT-5.5 LoRAs were re-evaluated in a same-day 3-run batch on 11-04 together with SelectionARM, the window right after the 11-03/04 SFT run; SelectionARM did not move between the two windows (−0.5 [−2.4, +1.4] pp). Same-day: K = 3 LoRA − SelectionARM −0.5 [−2.4, +1.4], pre LoRA − SelectionARM +1.0 [−1.0, +3.1] ([data](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.json)). The earlier 11-02/03 runs (46.5% and 48.0% mean overall) are superseded.
 
 | K = 3 − pre, pp [95% CI] | WebVoyager | Online-Mind2Web | DeepShop | Mean overall |
 | --- | ---: | ---: | ---: | ---: |
 | Luna, LoRA | −0.2 [−2.9, +2.6] | −2.6 [−5.6, +0.4] | +3.6 [−1.3, +8.2] | +0.3 [−1.8, +2.4] |
 | Luna, head | +1.5 [−0.9, +3.8] | +1.1 [−1.9, +4.1] | **+6.0 [+0.9, +11.3]** | **+2.9 [+0.7, +5.0]** |
 | GPT-5.5, head | **+3.0 [+0.5, +5.5]** | +0.9 [−2.1, +4.0] | **+5.8 [+0.9, +10.7]** | **+3.2 [+1.1, +5.3]** |
-| GPT-5.5, LoRA ¹ | −0.8 [−2.9, +1.5] | −1.6 [−4.8, +1.7] | −2.0 [−6.7, +2.7] | −1.4 [−3.4, +0.6] |
+| GPT-5.5, LoRA ¹ | −0.5 [−2.8, +1.8] | −0.1 [−2.9, +2.7] | −4.0 [−8.9, +0.9] | −1.5 [−3.6, +0.6] |
 
 <details>
 <summary>Training data, runs and files</summary>

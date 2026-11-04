@@ -894,26 +894,26 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 | Head | Recipe 2, 2.6K states | 37.3% | 59.4% | <ins>51.1%</ins> | 46.8% | 49.3% | +4.8 [+2.6, +7.0] |
 | Head | Recipe 1 | 38.6% | 59.6% | 47.1% | 46.4% | 48.4% | +4.4 [+2.0, +6.7] |
 
-**Recipe 3** (SFT 4B actor, November 2–4; 1,024 response tokens; same-day SFT and SelectionARM). [Definition and details](#final-selection-recipe3)
+**Recipe 3** (SFT 4B actor, November 3–4; 1,024 response tokens; SFT and SelectionARM from the same window). [Definition and details](#final-selection-recipe3)
 
 | Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | ***Baseline*** | | | | | | | |
 | SFT 4B alone (1 sample) | — | 34.6% | 45.6% | 43.1% | 39.6% | 41.1% | — |
 | ***Recipe 1 reference*** | | | | | | | |
-| Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.8%** | 52.4% | 50.5% | 45.7% | 48.9% | +6.2 [+4.0, +8.3] |
+| Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.8%** | 52.4% | 50.5% | <ins>45.7%</ins> | **48.9%** | <ins>+6.2 [+4.0, +8.3]</ins> |
 | ***Ours: 4B LoRAs (SelectionARM recipe)*** | | | | | | | |
-| 4B LoRA ¹ | Recipe 3, GPT-5.5 K = 3 | 39.5% | <ins>56.3%</ins> | 51.4% | <ins>46.5%</ins> | <ins>49.1%</ins> | <ins>+7.0 [+4.7, +9.2]</ins> |
+| 4B LoRA ¹ | Recipe 3, GPT-5.5 K = 3 | 41.1% | 52.7% | 47.3% | 44.7% | 47.0% | +5.1 [+3.0, +7.3] |
 | 4B LoRA | Recipe 3, Luna K = 3 | 37.8% | 49.4% | 50.9% | 42.3% | 46.1% | +2.8 [+0.7, +4.9] |
-| 4B LoRA ¹ | *Ablation:* Recipe 3 panels, GPT-5.5 pre | <ins>41.9%</ins> | **57.3%** | **52.8%** | **48.0%** | **50.7%** | **+8.4 [+6.5, +10.5]** |
+| 4B LoRA ¹ | *Ablation:* Recipe 3 panels, GPT-5.5 pre | <ins>41.4%</ins> | **53.7%** | 51.2% | **46.2%** | <ins>48.8%</ins> | **+6.7 [+4.5, +8.9]** |
 | 4B LoRA | *Ablation:* Recipe 3 panels, Luna pre | 40.2% | 51.2% | 46.2% | 42.1% | 45.9% | +2.5 [+0.3, +4.6] |
 | ***Ours: 22.6M heads on actor features*** | | | | | | | |
-| Head | Recipe 3, GPT-5.5 K = 3 | 37.6% | 52.8% | 51.7% | 44.5% | 47.4% | +5.0 [+2.9, +7.1] |
-| Head | Recipe 3, Luna K = 3 | 39.8% | 48.0% | <ins>52.2%</ins> | 42.9% | 46.7% | +3.3 [+1.1, +5.5] |
+| Head | Recipe 3, GPT-5.5 K = 3 | 37.6% | <ins>52.8%</ins> | <ins>51.7%</ins> | 44.5% | 47.4% | +5.0 [+2.9, +7.1] |
+| Head | Recipe 3, Luna K = 3 | 39.8% | 48.0% | **52.2%** | 42.9% | 46.7% | +3.3 [+1.1, +5.5] |
 | Head | *Ablation:* Recipe 3 panels, GPT-5.5 pre | 36.8% | 49.9% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] |
 | Head | *Ablation:* Recipe 3 panels, Luna pre | 38.8% | 47.3% | 46.1% | 40.0% | 44.1% | +0.5 [−1.7, +2.7] |
 
-¹ Ran November 2–3, about a day before the SFT and SelectionARM rows, so the difference includes day-to-day drift; a same-day rerun of both GPT-5.5 LoRAs and SelectionARM is running on November 4. Absolute numbers are not comparable with the October tables above (DeepShop success has drifted upward since November 1).
+¹ Re-evaluated in a same-day 3-run batch on November 4 together with SelectionARM, the window right after the SFT and SelectionARM rows above (November 3–4). SelectionARM did not move between the two windows (−0.5 [−2.4, +1.4] pp), so the − SFT differences of these two rows are adjacent-window, not same-day. Same-day on November 4: GPT-5.5 pre − K = 3 LoRA +1.5 [−0.6, +3.6], K = 3 LoRA − SelectionARM −0.5 [−2.4, +1.4], pre LoRA − SelectionARM +1.0 [−1.0, +3.1] ([data](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.json) · [script](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.py)). Absolute numbers are not comparable with the October tables above (DeepShop success has drifted upward since November 1).
 
 **Which labels to train our head on** (SFT 4B actor, November 1–3; six heads on the same 1,380 branch states, differing only in label source). [Details](#final-selection-label-live-3run-20261103)
 
@@ -937,7 +937,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 ### Recipe 3: lookahead-labelled Piotr-style panels at scale (November 2–4)
 
-**With the same 18.8–20.5K panels, every Recipe 3 selector beats one SFT sample (+2.8 to +7.0 pp); K = 3 lookahead labels beat pre-execution labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for LoRAs. GPT-5.5 K = 3 labels give the strongest head (+5.0 [+2.9, +7.1], level with same-day SelectionARM at −1.2 [−3.3, +0.9]).** Results table: [Recipe 3 headline](#selection-head-headline-results). Label comparison and per-benchmark K = 3 − pre differences: [ARM_TEACHER_PRE_VS_LOOKAHEAD.md](ARM_TEACHER_PRE_VS_LOOKAHEAD.md#luna-pre-vs-k3p-live-20261103).
+**With the same 18.8–20.5K panels, every Recipe 3 selector beats one SFT sample (+2.8 to +5.1 pp); K = 3 lookahead labels beat pre-execution labels for heads (+2.9 Luna, +3.2 GPT-5.5) but not for LoRAs (Luna +0.3 [−1.8, +2.4]; GPT-5.5 pre − K = 3 +1.5 [−0.6, +3.6], same day). The GPT-5.5 LoRAs are level with SelectionARM on the same day (K = 3 −0.5 [−2.4, +1.4], pre +1.0 [−1.0, +3.1]), and the GPT-5.5 K = 3 head is level with it too (−1.2 [−3.3, +0.9]).** Results table: [Recipe 3 headline](#selection-head-headline-results). Label comparison and per-benchmark K = 3 − pre differences: [ARM_TEACHER_PRE_VS_LOOKAHEAD.md](ARM_TEACHER_PRE_VS_LOOKAHEAD.md#luna-pre-vs-k3p-live-20261103).
 
 | | Recipe 3 |
 | --- | --- |
@@ -950,7 +950,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 ![Recipe 3 selectors: 3-benchmark mean overall success vs actor + selector parameters, PFLOP per episode and model time per episode, with same-day SFT 4B](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.png)
 
-*Recipe 3 update of the [October 21 cost plot](#final-selection-head-ablations-20261021) (whose points are from October 21 and are not comparable: DeepShop success has drifted up about 13 pp since). SFT 4B actor, November 2–4, with the same-day SFT 4B run. Success: 3-benchmark equal-weight mean of overall success (invalid = failure), three runs pooled. Cost from run 1 (all 1,045 tasks), as in the October plot: actor PFLOP = 2 × params × (uncached prompt + generated tokens), LoRA selectors 2 × 4.44 B × their tokens, head FLOPs as logged; model time = actor + selector decision time per episode, excluding browser execution. Filled = K = 3 labels (Recipe 3), hollow = pre-execution labels on the same panels; diamonds = 4B LoRAs, circles = 22.6M heads; blue = GPT-5.5, vermilion = Luna labels. Dashed segments and rings mark the observed Pareto frontier of each panel, as in the API plots: points not beaten by any other point on both lower x and higher success. They are descriptive, not attainable interpolations or significant differences. ¹ The GPT-5.5 LoRAs ran November 2–3, a day before the SFT run; a same-day rerun is running on November 4. Points are descriptive, without uncertainty bars; paired intervals are in the table above.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.svg) · [data](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json) · [cost script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104-analysis.py) · [plot script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py)
+*Recipe 3 update of the [October 21 cost plot](#final-selection-head-ablations-20261021) (whose points are from October 21 and are not comparable: DeepShop success has drifted up about 13 pp since). SFT 4B actor, November 3–4, with the SFT 4B run of the same window. Success: 3-benchmark equal-weight mean of overall success (invalid = failure), three runs pooled. Cost from run 1 (all 1,045 tasks), as in the October plot: actor PFLOP = 2 × params × (uncached prompt + generated tokens), LoRA selectors 2 × 4.44 B × their tokens, head FLOPs as logged; model time = actor + selector decision time per episode, excluding browser execution. Filled = K = 3 labels (Recipe 3), hollow = pre-execution labels on the same panels; diamonds = 4B LoRAs, circles = 22.6M heads; blue = GPT-5.5, vermilion = Luna labels. Dashed segments and rings mark the observed Pareto frontier of each panel, as in the API plots: points not beaten by any other point on both lower x and higher success. They are descriptive, not attainable interpolations or significant differences. ¹ The GPT-5.5 LoRAs are from the November 4 same-day rerun, the window right after the other rows (SelectionARM unchanged between the two windows: −0.5 [−2.4, +1.4] pp); their costs are measured on that rerun. Points are descriptive, without uncertainty bars; paired intervals are in the table above.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.svg) · [data](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json) · [cost script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104-analysis.py) · [plot script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py)
 
 **Per benchmark:**
 
@@ -961,7 +961,7 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 - **One path for everything:** runtime `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3/` (panels, all four label sets, LoRA SFT data, head training data and checkpoints, as symlinks; see its README.md).
 - **Checkpoints.** LoRAs, public: [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16) (Recipe 3, GPT-5.5) and [`decoder-4b-lora-gpt55-pre-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p16) (pre ablation). Runtime (under `rl-actor-recollect-20261016/p16-k3-20261031/`): LoRAs `lora/` (GPT-5.5 K = 3), `lora-pre/`, `lora-luna-k3/`, `lora-luna-pre/`, each with `lora/adapter` and `lora/merged`; heads `train/heads-all2/{k3,pre}-best/seed0/head.pt` (GPT-5.5) and `train/heads-luna/{k3,pre}-best/seed0/head.pt` (Luna).
 - **Data and labellers.** Panels `labels/<batch>/panels.jsonl`; GPT-5.5 labels `labels/<batch>/{k3,pre}/` (`labels/p16_labels.py`); Luna labels `labels-luna/<batch>/{k3p,pre}/` (`labels-luna/p16_labels_luna{,_k3p}.py`); LoRA data builders `lora/build_lora_panels_v2.py` (GPT-5.5) and `lora/build_lora_panels_v4_luna.py` (Luna); head data `train/build_train_v2.py` and `train/build_train_v3_luna.py`.
-- **Not yet:** a same-day comparison of the GPT-5.5 LoRAs with SelectionARM (running November 4), Recipe 3 on the RL actor, and more than one training seed per selector.
+- **Not yet:** Recipe 3 on the RL actor, and more than one training seed per selector.
 
 <a id="final-selection-head-ablations-20261021"></a>
 
