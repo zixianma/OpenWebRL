@@ -20,24 +20,24 @@
 
 <a id="luna-pre-vs-k3p-live-20261103"></a>
 
-**Every selector trained on the p16 panels beats one SFT sample except the two pre-label heads, and none of the 11-03 selectors beats SelectionARM; only the GPT-5.5 K = 3 head is statistically tied with it.** K = 3 labels help heads (+2.9 Luna, +3.2 GPT-5.5, both significant) but not LoRAs (Luna +0.3, interval crossing zero). With K = 3 labels, the GPT-5.5 head is 1.6 pp above the Luna head ([−0.4, +3.6]), and the Luna LoRA and head are tied (−0.6 [−2.5, +1.5]).
+**Every selector trained on the p16 panels beats one SFT sample except the two pre-label heads, and every 11-03 selector is below same-day SelectionARM (45.7% mean overall).** K = 3 labels help heads (+2.9 Luna, +3.2 GPT-5.5, both significant) but not LoRAs (Luna +0.3, interval crossing zero). With K = 3 labels, the GPT-5.5 head is 1.6 pp above the Luna head ([−0.4, +3.6]), and the Luna LoRA and head are tied (−0.6 [−2.5, +1.5]).
 
-Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepShop 150). SFT 4B actor, N = 5 candidates, T 1.0 / top-p 0.9, seed 20261018, 30 steps, local browsers. Judges: gpt-5.6-terra for Online-Mind2Web, GPT-4o for WebVoyager and DeepShop. Overall = successes / scheduled episodes (invalid = failure); valid-only = successes / valid episodes; both pooled over three runs. Mean = equal-weight average of the three benchmarks. Differences are on mean overall, with per-task success averaged over the three runs and [paired 95% intervals](ARM_FINAL_RESULTS.md#final-paired-bootstrap) (10,000 task resamples within each benchmark, seed 20261103); **bold** intervals exclude zero. Baselines are the same-day SFT and SelectionARM runs of 11-03.
+Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepShop 150). SFT 4B actor, N = 5 candidates, T 1.0 / top-p 0.9, seed 20261018, 30 steps, local browsers. Judges: gpt-5.6-terra for Online-Mind2Web, GPT-4o for WebVoyager and DeepShop. Per-benchmark columns are valid-only success (successes / valid episodes), pooled over three runs. Mean = equal-weight average of the three benchmarks, overall (invalid = failure) and valid-only. Differences are on mean overall against the same-day SFT run, with per-task success averaged over the three runs and [paired 95% intervals](ARM_FINAL_RESULTS.md#final-paired-bootstrap) (10,000 task resamples within each benchmark, seed 20261103); **bold** intervals exclude zero. Paired intervals against SelectionARM are in the [JSON](arm_results/luna_pre_vs_k3p_20261103/live_3run_20261103.json).
 
-| Selector (labels, model) | Eval window (PST) | WebVoyager<br>overall | WebVoyager<br>valid-only | Online-Mind2Web<br>overall | Online-Mind2Web<br>valid-only | DeepShop<br>overall | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT, pp<br>[95% CI] | − SelectionARM, pp<br>[95% CI] |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| SFT 4B, one sample | 11-03 22:00 – 11-04 03:30 | 45.1% | 45.6% | 30.7% | 34.6% | 42.9% | 43.1% | 39.6% | 41.1% | — | **−6.2 [−8.3, −4.0]** |
-| SelectionARM (Piotr) | 11-03 22:00 – 11-04 03:30 | 51.0% | 52.4% | 37.3% | 43.8% | 48.9% | 50.5% | 45.7% | 48.9% | **+6.2 [+4.0, +8.3]** | — |
-| Luna pre, LoRA | 11-03 18:00 – 21:30 | 47.7% | 51.2% | 34.2% | 40.2% | 44.2% | 46.2% | 42.1% | 45.9% | **+2.5 [+0.3, +4.6]** | **−3.7 [−5.7, −1.7]** |
-| Luna K = 3, LoRA | 11-03 19:30 – 23:00 | 47.6% | 49.4% | 31.7% | 37.8% | 47.8% | 50.9% | 42.3% | 46.1% | **+2.8 [+0.7, +4.9]** | **−3.4 [−5.5, −1.3]** |
-| Luna pre, head | 11-03 19:30 – 23:00 | 44.4% | 47.3% | 32.6% | 38.8% | 43.1% | 46.1% | 40.0% | 44.1% | +0.5 [−1.7, +2.7] | **−5.7 [−7.8, −3.6]** |
-| Luna K = 3, head | 11-03 19:30 – 23:00 | 45.9% | 48.0% | 33.7% | 39.8% | 49.1% | 52.2% | 42.9% | 46.7% | **+3.3 [+1.1, +5.5]** | **−2.8 [−5.0, −0.8]** |
-| GPT-5.5 pre, head | 11-03 10:00 – 14:00 | 48.1% | 49.9% | 31.8% | 36.8% | 44.0% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] | **−4.4 [−6.5, −2.3]** |
-| GPT-5.5 K = 3, head | 11-03 10:00 – 14:00 | 51.1% | 52.8% | 32.7% | 37.6% | 49.8% | 51.7% | 44.5% | 47.4% | **+5.0 [+2.9, +7.1]** | −1.2 [−3.3, +0.9] |
-| GPT-5.5 pre, LoRA ¹ | 11-03 01:30 – 05:00 | 56.2% | 57.3% | 36.2% | 41.9% | 51.6% | 52.8% | 48.0% | 50.7% | **+8.4 [+6.5, +10.5]** | **+2.3 [+0.1, +4.4]** |
-| GPT-5.5 K = 3, LoRA ¹ | 11-02 20:00 – 11-03 00:30 | 55.4% | 56.3% | 34.7% | 39.5% | 49.6% | 51.4% | 46.5% | 49.1% | **+7.0 [+4.7, +9.2]** | +0.8 [−1.2, +2.9] |
+| Selector (labels, model) | Eval date | WebVoyager<br>valid-only | Online-Mind2Web<br>valid-only | DeepShop<br>valid-only | Mean<br>overall | Mean<br>valid-only | − SFT, pp<br>[95% CI] |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| SFT 4B, one sample | 11-03/04 | 45.6% | 34.6% | 43.1% | 39.6% | 41.1% | — |
+| SelectionARM (Piotr) | 11-03/04 | 52.4% | 43.8% | 50.5% | 45.7% | 48.9% | **+6.2 [+4.0, +8.3]** |
+| Luna pre, LoRA | 11-03 | 51.2% | 40.2% | 46.2% | 42.1% | 45.9% | **+2.5 [+0.3, +4.6]** |
+| Luna K = 3, LoRA | 11-03 | 49.4% | 37.8% | 50.9% | 42.3% | 46.1% | **+2.8 [+0.7, +4.9]** |
+| Luna pre, head | 11-03 | 47.3% | 38.8% | 46.1% | 40.0% | 44.1% | +0.5 [−1.7, +2.7] |
+| Luna K = 3, head | 11-03 | 48.0% | 39.8% | 52.2% | 42.9% | 46.7% | **+3.3 [+1.1, +5.5]** |
+| GPT-5.5 pre, head | 11-03 | 49.9% | 36.8% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] |
+| GPT-5.5 K = 3, head | 11-03 | 52.8% | 37.6% | 51.7% | 44.5% | 47.4% | **+5.0 [+2.9, +7.1]** |
+| GPT-5.5 pre, LoRA ¹ | 11-03 | 57.3% | 41.9% | 52.8% | 48.0% | 50.7% | **+8.4 [+6.5, +10.5]** |
+| GPT-5.5 K = 3, LoRA ¹ | 11-02/03 | 56.3% | 39.5% | 51.4% | 46.5% | 49.1% | **+7.0 [+4.7, +9.2]** |
 
-¹ The two GPT-5.5 LoRAs ran 11-02 evening to 11-03 morning, a different window from the 11-03 baselines; their differences include day-to-day drift (SelectionARM ran 1.6 pp higher on 11-02 than on 11-03). A same-day 3-run rerun of both GPT-5.5 LoRAs and SelectionARM is running on 11-04 and will replace these two rows.
+¹ The two GPT-5.5 LoRAs ran overnight 11-02/03, about a day before the SFT and SelectionARM runs; their differences include day-to-day drift (SelectionARM ran 1.6 pp higher on 11-02 than on 11-03). A same-day 3-run rerun of both GPT-5.5 LoRAs and SelectionARM is running on 11-04 and will replace these two rows.
 
 | K = 3 − pre, pp [95% CI] | WebVoyager | Online-Mind2Web | DeepShop | Mean overall |
 | --- | ---: | ---: | ---: | ---: |
