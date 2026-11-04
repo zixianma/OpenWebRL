@@ -6,8 +6,8 @@
     other four folds' states, so every state is scored out-of-fold. Each state's first five SFT proposals (duplicates
     kept) are scored on held-out rollouts 4-8, valid draws only. Teacher = the label's argmax among the five (ties
     averaged). Task-clustered bootstrap, 10,000 resamples, seed 20261101 (selection-label-kfold-20261101.json).
-(2) Live: the seed-0 head trained on the original 1,380 training states, task-weighted overall success over the three benchmarks
-    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json "weighted": paired gain over SFT, each of the 1,045 tasks weighted equally, per-task success averaged over runs).
+(2) Live: the seed-0 head trained on the original 1,380 training states, equal-weight benchmark-average overall success over the three benchmarks
+    (Online-Mind2Web 300 by gpt-5.6-terra, WebVoyager 595 and DeepShop 150 by GPT-4o). Every head was run on the same three benchmarks in one same-day batch, 3 runs each with SFT alone (selection-label-live-3run-20261103.json "paired" / "mean": paired gain over SFT, each benchmark weighted one third, per-task success averaged over runs).
 """
 import json
 from pathlib import Path
@@ -34,7 +34,7 @@ P = K["pooled"]
 PANELS = [
     ("Offline: held-out rollout success",
      "offline", P["sft_sample"]),
-    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: overall success", "live", LIVE3["rates"]["sft"]["mean_overall"])]
 
 
 def point(ax, x, v, color, marker, filled):
@@ -44,7 +44,7 @@ def point(ax, x, v, color, marker, filled):
     ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5, color=INK)
 
 
-fig, axes = plt.subplots(1, 2, figsize=(5.6, 3.15), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(5.6, 2.35), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -52,25 +52,25 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)
+            point(ax, x, LIVE3["paired"][f"{LIVE3_KEY[src]} - sft"]["mean"], color, "o", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
-    ax.set_title(title, fontsize=9, loc="left", color=INK, pad=9)
+    ax.set_title(title, fontsize=9, loc="left", color=INK, pad=6)
     ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=7); ax.set_xlim(-0.6, len(ROWS) - 0.4)
     ax.tick_params(axis="y", labelsize=8)
     ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
-axes[0].set_ylim(-3.5, 5)
-axes[0].set_yticks([-2, 0, 2, 4])
+axes[0].set_ylim(-4, 5.2)
+axes[0].set_yticks([-4, -2, 0, 2, 4])
 axes[0].set_ylabel("Gain over SFT (pp)", fontsize=9)
 handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=5.7, markeredgewidth=1.4,
                   markerfacecolor="#555555" if filled else "white") for filled in (False, True)]
 fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=8,
-           loc="lower center", ncol=2, bbox_to_anchor=(0.53, 0.015), columnspacing=2)
+           loc="lower center", ncol=2, bbox_to_anchor=(0.53, 0.005), columnspacing=2)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.11, right=0.99, top=0.88, bottom=0.27, wspace=0.16)
+fig.subplots_adjust(left=0.11, right=0.99, top=0.86, bottom=0.30, wspace=0.16)
 output = HERE / "selection-label-setups-kfold-20261101"
 fig.savefig(output.with_suffix(".png"), dpi=300)
 fig.savefig(output.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
