@@ -1,0 +1,200 @@
+{
+ "date": "2026-11-04",
+ "model": "Our 4B LoRA (Piotr arm_lora recipe), WebArbiter SFT pairs + Recipe 1 panels",
+ "training_examples": {
+  "recipe1_panels": 35916,
+  "webarbiter": 17356,
+  "total": 53272
+ },
+ "jobs": {
+  "train": "414878 (4 H200, 9h17m)",
+  "score": "414879 (1 H200, 25 min)"
+ },
+ "scoring": "selection-prompt next-token P(\"1\") vs P(\"2\"); ties count as errors",
+ "passes": {
+  "WebPRMBench": {
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 109,
+     "pair_acc": 0.9083333333333333,
+     "states_total": 30,
+     "states_ok": 22,
+     "state_acc": 0.7333333333333333
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1637,
+     "pair_acc": 0.9814148681055156,
+     "states_total": 417,
+     "states_ok": 388,
+     "state_acc": 0.9304556354916067
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 557,
+     "pair_acc": 0.9806338028169014,
+     "states_total": 142,
+     "states_ok": 133,
+     "state_acc": 0.9366197183098591
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 577,
+     "pair_acc": 0.9746621621621622,
+     "states_total": 148,
+     "states_ok": 135,
+     "state_acc": 0.9121621621621622
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 702,
+     "pair_acc": 0.8731343283582089,
+     "states_total": 201,
+     "states_ok": 148,
+     "state_acc": 0.736318407960199
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 683,
+     "pair_acc": 0.8054245283018868,
+     "states_total": 212,
+     "states_ok": 126,
+     "state_acc": 0.5943396226415094
+    }
+   },
+   "pairs_ok": 4265,
+   "states_ok": 952,
+   "predicted_1": 2244,
+   "predicted_2": 2345,
+   "unparseable": 11,
+   "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666"
+  },
+  "WebPRMBench-swapped": {
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 107,
+     "pair_acc": 0.8916666666666667,
+     "states_total": 30,
+     "states_ok": 22,
+     "state_acc": 0.7333333333333333
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1635,
+     "pair_acc": 0.9802158273381295,
+     "states_total": 417,
+     "states_ok": 387,
+     "state_acc": 0.9280575539568345
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 559,
+     "pair_acc": 0.9841549295774648,
+     "states_total": 142,
+     "states_ok": 137,
+     "state_acc": 0.9647887323943662
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 576,
+     "pair_acc": 0.972972972972973,
+     "states_total": 148,
+     "states_ok": 135,
+     "state_acc": 0.9121621621621622
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 703,
+     "pair_acc": 0.8743781094527363,
+     "states_total": 201,
+     "states_ok": 143,
+     "state_acc": 0.7114427860696517
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 685,
+     "pair_acc": 0.8077830188679245,
+     "states_total": 212,
+     "states_ok": 124,
+     "state_acc": 0.5849056603773585
+    }
+   },
+   "pairs_ok": 4265,
+   "states_ok": 948,
+   "predicted_1": 2381,
+   "predicted_2": 2203,
+   "unparseable": 16,
+   "data_sha256": "2a0cee08a47174bf2df959710b54b41affb661cf9479de9ba24d008c42b5bb7a",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666"
+  },
+  "WebPRMBench-actiononly": {
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 107,
+     "pair_acc": 0.8916666666666667,
+     "states_total": 30,
+     "states_ok": 23,
+     "state_acc": 0.7666666666666667
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1052,
+     "pair_acc": 0.6306954436450839,
+     "states_total": 417,
+     "states_ok": 137,
+     "state_acc": 0.328537170263789
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 409,
+     "pair_acc": 0.7200704225352113,
+     "states_total": 142,
+     "states_ok": 65,
+     "state_acc": 0.45774647887323944
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 344,
+     "pair_acc": 0.581081081081081,
+     "states_total": 148,
+     "states_ok": 37,
+     "state_acc": 0.25
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 641,
+     "pair_acc": 0.7972636815920398,
+     "states_total": 201,
+     "states_ok": 124,
+     "state_acc": 0.6169154228855721
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 574,
+     "pair_acc": 0.6768867924528302,
+     "states_total": 212,
+     "states_ok": 96,
+     "state_acc": 0.4528301886792453
+    }
+   },
+   "pairs_ok": 3127,
+   "states_ok": 482,
+   "predicted_1": 2571,
+   "predicted_2": 1949,
+   "unparseable": 80,
+   "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666"
+  }
+ },
+ "webarbiter_heldout_pairs": {
+  "examples": 1876,
+  "acc": 0.9984008528784648,
+  "picked_1": 0.5005330490405118,
+  "pairs": 938,
+  "pairs_both_orders_right": 0.997867803837953
+ }
+}
