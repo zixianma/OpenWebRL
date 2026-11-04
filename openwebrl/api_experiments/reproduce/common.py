@@ -248,6 +248,7 @@ def prepare(args, provider):
                       cached_selection_receipt_sha256=digest(runtime/'cached-selection-experiment.json'),
                       benchmark_roster_counts=cached_protocol['benchmark_counts'],
                       selector_context='full native actor context plus developer selection append')
+        result['zero_price_counter_cancellation'] = counter_cancellation_binding()
     if selection_sha:
         result.update(task_selection_sha256=selection_sha, task_selection_count=len(tasks),
                       selected_task_ids=ids, task_selection_path=str(selection))
@@ -277,7 +278,38 @@ def runtime_imports_binding():
             "source_sha256": digest(Path(__file__).with_name("runtime_imports.py"))}
 
 
+
+def counter_cancellation_binding():
+    return {"version": "released-zero-price-input-counter-cancellation-v1",
+            "source_sha256": digest(Path(__file__).with_name("zero_price_counter_cancel.py")),
+            "scope": "cached Luna actor pool only; unknown rows, calls and full holds retained"}
+
+
+def validate_counter_cancellation(plan):
+    marked = (Path(plan['runtime']) / 'cached-selection-experiment.json').is_file()
+    if marked or plan.get('cached_selection_protocol'):
+        if (not marked or plan.get('provider') != 'luna' or
+                plan.get('arm') not in ('luna_n3_cached_high30', 'luna_n5_cached_high60') or
+                not plan.get('cached_selection_protocol') or
+                plan.get('zero_price_counter_cancellation') != counter_cancellation_binding()):
+            raise ValueError('Cached counter cleanup source changed; prepare a fresh plan')
+    elif 'zero_price_counter_cancellation' in plan:
+        raise ValueError('Counter cleanup requires its declared cached Luna runtime')
+
+
+def cached_actor_budget_type(original, root, plan):
+    validate_counter_cancellation(plan)
+    if not plan.get('cached_selection_protocol'):
+        return original
+    spec = importlib.util.spec_from_file_location('_cached_counter_cleanup',
+        Path(__file__).with_name('zero_price_counter_cancel.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.actor_budget_class(original, root)
+
+
 def execute(args, plan, tasks, *, worker_setup=None):
+    validate_counter_cancellation(plan)
     cloud = required_cloud(plan['runtime'])
     if cloud is not None or plan.get('required_cloud') is not None:
         if cloud is None or plan.get('required_cloud') != cloud or worker_setup is None:
@@ -347,9 +379,10 @@ def _execute_worker(args, plan, tasks, root, keys, actor_key, cloud, worker, env
                     super().__init__(*positional, **kwargs)
             worker.PairedModel = ScopedModel
         budget_type = getattr(worker, "ReservationBudget", worker.Budget)
+        actor_budget_type = cached_actor_budget_type(budget_type, root, plan)
         model_cap = Decimal(args.model_usd) if plan["provider"] == "gpt" else args.model_usd
         judge_cap = Decimal(args.judge_usd) if plan["provider"] == "gpt" else args.judge_usd
-        budgets = {"actor": budget_type(root / "budget/model", model_cap, args.model_calls),
+        budgets = {"actor": actor_budget_type(root / "budget/model", model_cap, args.model_calls),
                    "judge": (getattr(integration, "judge_budget_type", None) or getattr(worker, "JudgeBudget", budget_type))(root / "budget/judge", judge_cap, args.judge_calls),
                    "browser": worker.Budget(root / "budget/browser", plan["browser_start_cap"], plan["browser_start_cap"])}
         from openai import OpenAI

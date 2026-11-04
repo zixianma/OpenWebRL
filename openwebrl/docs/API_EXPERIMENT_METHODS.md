@@ -196,6 +196,8 @@ python -B openwebrl/api_experiments/reproduce/browsercode.py setup \
   --workspace /tmp/luna-cached-n3 --dependencies /path/to/dependencies.json
 ```
 
+A timeout during an input-token-count request still leaves that task invalid. If the counter has a verified released HTTP lease and exactly zero reserved cost, the cached actor runner preserves its unknown-usage record, physical call count and zero hold, then permits the next task. Billable unknown usage, malformed evidence and other failures retain the original halt behavior. The run plan binds the [cleanup guard](../api_experiments/reproduce/zero_price_counter_cancel.py) by source hash and checks it before execution.
+
 For N5/60, use `luna_n5_cached_high60` and a new workspace. The ordinary `check`, `run` and `report` commands apply. Setup performs no browser or model work. Run prints a plan until `--execute` is supplied; provide explicit actor, judge, physical-call and browser-start caps. Preparation grants no spending authorization. Generated source manifests bind the method, roster, prompts, worker limits and original archived runtime files before execution.
 
 <a id="browser-hosting-and-traffic-costs"></a>
