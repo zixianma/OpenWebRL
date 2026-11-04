@@ -5,6 +5,33 @@
 
 ## BrowserCode: alternative ways to scale inference
 
+<a id="browsercode-scaling-families"></a>
+
+### Compact comparison of scaling strategies
+
+**The fixed-horizon selection gain does not establish the best practical scaling strategy.** On the same task intersection, single60 scores 85.55% at $0.00908 and 119.1 seconds per task, versus N5/30's 84.56% at $0.05448 and 179.8 seconds. N5/60 has the highest point estimate, 86.93%, but its paired gain over single60 is +1.38 points with an interval spanning zero. These historical comparisons remain subject to live-window and prompt differences.
+
+![Compact single-run and action-selection scaling curves with all ten historical Luna settings and a numeric Sol reference](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.png)
+
+*Left: single-run output-cap, step-limit and reasoning-effort curves. Right: separate 30-step and 60-step candidate-count curves. The compact layout represents all eleven historical methods: ten Luna configurations as points and Sol high/30 as a numeric reference strip. This adds the Luna xhigh and Sol reference omitted from the original six-panel family figure. Column-specific x-axis ranges expose small changes; y-axis limits match throughout. Horizontal distances between columns are not comparable. Luna is high effort unless labeled xhigh; the default cap is 12,288 tokens and the default decision limit is 30. The 0.5×/2× output caps are ceilings, not realized spending.*
+
+*All points and the Sol reference use the same 744 tasks valid across all eleven methods: 226 OM2W, 387 WebVoyager and 131 DeepShop. Fixed weights are 300/1,045, 595/1,045 and 150/1,045, applied to success and actor means. Terra judging is shared; actor cost and latency exclude judging. Historical single60 enforces 60 while advertising 30; single120 enforces and advertises 120. Live collection windows and runtime guards differ. This is the historical BrowserCode cohort, not every API experiment: cached reruns, current gap repairs and new Sol60/xhigh campaigns are not merged here. Browser-code batches remain in the [original common-valid view](#browsercode-all-method-common-valid). [Coverage manifest](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact_coverage.json).*
+
+| Paired contrast | Weighted gain (pp) | Pointwise paired 95% interval (pp) |
+|---|---:|---:|
+| N5/30 − N1/30 | +3.86 | [+1.29, +6.45] |
+| N5/30 − Sol high/30 | +2.45 | [−0.10, +4.97] |
+| N5/60 − N1/60 | +1.38 | [−0.81, +3.59] |
+
+These pointwise intervals use 50,000 paired task-bootstrap draws within benchmark, conditional on retained validity and saved labels. They treat tasks as independent and exclude website clustering, collection-window variation and multiplicity correction. Candidate generation and selection vary jointly; selector quality is not independently identified.
+
+The supported framing is **selection improves fixed-horizon success, while increasing the single-run decision limit offers a stronger observed efficiency trade-off**. The intervals do not establish N5's superiority over Sol or single60, and these experiments do not establish an inference-scaling law.
+
+[Compact PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.pdf) · [Compact SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.svg) · [Original six-panel family figure](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.png) · [Reproducible plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py) · [Method and reproduction](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
+
+<details>
+<summary>Supplementary paired-selection analysis and earlier three-panel rendering</summary>
+
 <a id="browsercode-selection-scaling"></a>
 
 ### Candidate selection at the default decision limit
@@ -17,25 +44,7 @@
 
 [Selection PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_scaling.pdf) · [Selection SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_scaling.svg) · [Coordinates and paired intervals](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_family_summary.json) · [Aggregate paired counts](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_family_pairs.json)
 
-<a id="browsercode-scaling-families"></a>
-
-### Compare scaling controls separately
-
-**The fixed-horizon selection gain does not establish the best practical scaling strategy.** On the same task intersection, single60 scores 85.55% at $0.00908 and 119.1 seconds per task, versus N5/30's 84.56% at $0.05448 and 179.8 seconds. N5/60 has the highest point estimate, 86.93%, but its paired gain over single60 is +1.38 points with an interval spanning zero. These historical comparisons remain subject to live-window and prompt differences.
-
-![Separate output-cap, decision-limit and candidate-count scaling curves with shared cost and latency axes](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.png)
-
-*Columns group output-cap, decision-limit and candidate-count changes; axes share the same scales within each row. The horizon column shows separate N1 and N5 curves. All actors are Luna high; output-cap and candidate-count comparisons permit 30 decisions, while horizon comparisons retain the 12,288-token ceiling. Output ceilings are configured limits, not realized token consumption; a higher ceiling need not spend more. Historical single60 enforces 60 decisions while advertising 30; single120 enforces and advertises 120. Points show conditional historical means, with the same populations and weights as the selection figure. Cached reruns, current gap repairs and the new Sol60/xhigh campaigns are not merged into this historical analysis.*
-
-| Paired contrast | Weighted gain (pp) | Pointwise paired 95% interval (pp) |
-|---|---:|---:|
-| N5/30 − N1/30 | +3.86 | [+1.29, +6.45] |
-| N5/30 − Sol high/30 | +2.45 | [−0.10, +4.97] |
-| N5/60 − N1/60 | +1.38 | [−0.81, +3.59] |
-
-The supported framing is **selection improves fixed-horizon success, while increasing the single-run decision limit offers a stronger observed efficiency trade-off**. The intervals do not establish N5's superiority over Sol or single60, and these experiments do not establish an inference-scaling law.
-
-[Family PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.pdf) · [Family SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.svg) · [Reproducible plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py) · [Method and reproduction](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
+</details>
 
 <details>
 <summary>Historical combined overview and own-valid benchmark averages</summary>

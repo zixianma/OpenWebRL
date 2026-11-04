@@ -1,0 +1,51 @@
+{
+  "schema": "browsercode-compact-scaling-coverage-v1",
+  "aggregate_common_valid_sha256": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
+  "included_curve_methods": [
+    "luna_single_high",
+    "luna_single_high_120steps",
+    "luna_single_high_24576",
+    "luna_single_high_60steps",
+    "luna_single_high_6144",
+    "luna_single_xhigh_12288",
+    "parallel2_select_high",
+    "parallel3_select_high",
+    "parallel5_select_high",
+    "parallel5_select_high_60steps"
+  ],
+  "numeric_reference_methods": {
+    "serial_high": {
+      "method": "serial_high",
+      "success_rate": 0.8210838009229796,
+      "actor_usd": 0.2107361614303834,
+      "browser_commands": 14.003366983878891,
+      "actor_seconds": 92.92899547260481
+    }
+  },
+  "omitted_historical_methods": [],
+  "column_methods": {
+    "single_run": [
+      "luna_single_high",
+      "luna_single_high_6144",
+      "luna_single_high_24576",
+      "luna_single_xhigh_12288",
+      "luna_single_high_60steps",
+      "luna_single_high_120steps"
+    ],
+    "action_selection": [
+      "luna_single_high",
+      "parallel2_select_high",
+      "parallel3_select_high",
+      "parallel5_select_high",
+      "luna_single_high_60steps",
+      "parallel5_select_high_60steps"
+    ]
+  },
+  "size_inches": [
+    7.2,
+    3.35
+  ],
+  "axis_ranges": "Local x ranges by column; common y limits79to88percent. Do not compare horizontal distances between columns.",
+  "excluded_scope": "Active cached reruns, shared-task repairs, new Sol60 and Solxhigh campaigns, other harnesses/models/judges and separate stealth hosting accounting. This is the historical eleven-method BrowserCode cohort, not every API experiment.",
+  "metrics": "Success, actor USD per task, actor seconds per task. Browser-code batches remain in the linked historical common-valid figure."
+}

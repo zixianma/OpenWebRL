@@ -206,6 +206,104 @@ def render_families(data, points):
     plt.close(fig)
 
 
+
+def render_compact(data, points):
+    """Ten Luna curves plus Sol numeric reference; local x axes expose variation."""
+    from matplotlib.lines import Line2D
+    from matplotlib.ticker import NullFormatter
+    plt = theme()
+    fig, axes = plt.subplots(2, 2, figsize=(7.2, 3.35), sharey=True)
+    fig.subplots_adjust(left=.075, right=.98, bottom=.19, top=.79, wspace=.16, hspace=.40)
+    fig.suptitle('Inference scaling: single runs and action selection', x=.075, y=.99,
+                 ha='left', fontsize=9)
+    sol = points['serial_high']
+    fig.text(.075, .91, f"Sol high / 30 reference: {100*sol['success_rate']:.2f}% success · "
+             f"${sol['actor_usd']:.4f}/task · {sol['actor_seconds']:.1f} s/task", fontsize=7,
+             color='#08519c')
+    axes[0, 0].set_title('Single-run scaling', loc='left', fontsize=8.1, pad=17)
+    axes[0, 1].set_title('Action-selection scaling', loc='left', fontsize=8.1, pad=17)
+    axes[0, 0].legend(handles=[
+        Line2D([], [], color='#4385b4', linewidth=.9, label='Steps'),
+        Line2D([], [], color='#4385b4', linewidth=.9, linestyle=':', label='Output cap'),
+        Line2D([], [], color='#08306b', linewidth=.9, linestyle='-.', label='Effort')],
+        loc='lower left', bbox_to_anchor=(0, 1.00), ncol=3, frameon=False,
+        borderaxespad=0, columnspacing=.9, handlelength=1.7, handletextpad=.35, fontsize=6.1)
+    axes[0, 1].legend(handles=[
+        Line2D([], [], color='#b41620', linewidth=.9, label='30 steps'),
+        Line2D([], [], color='#b41620', linewidth=.9, linestyle='--', label='60 steps')],
+        loc='lower left', bbox_to_anchor=(0, 1.00), ncol=2, frameon=False,
+        borderaxespad=0, columnspacing=1.5, handlelength=1.7, handletextpad=.35, fontsize=6.1)
+    singles = [BASE, 'luna_single_high_6144', 'luna_single_high_24576',
+               'luna_single_xhigh_12288', 'luna_single_high_60steps',
+               'luna_single_high_120steps']
+    selection = SELECTION + ['luna_single_high_60steps', 'parallel5_select_high_60steps']
+    rendered = set(singles) | set(selection) | {'serial_high'}
+    assert rendered == set(points), 'Compact figure must represent every frozen method'
+    for row, key in enumerate(['actor_usd', 'actor_seconds']):
+        for col, methods in enumerate([singles, selection]):
+            ax = axes[row, col]
+            curves = [
+                ([BASE, 'luna_single_high_60steps', 'luna_single_high_120steps'], '#4385b4', '-'),
+                (['luna_single_high_6144', BASE, 'luna_single_high_24576'], '#4385b4', ':'),
+                ([BASE, 'luna_single_xhigh_12288'], '#08306b', '-.')
+            ] if col == 0 else [
+                (SELECTION, '#c94b4b', '-'),
+                (['luna_single_high_60steps', 'parallel5_select_high_60steps'], '#b41620', '--')
+            ]
+            for members, color, linestyle in curves:
+                ax.plot([points[m][key] for m in members],
+                        [100*points[m]['success_rate'] for m in members],
+                        color=color, linewidth=.85, linestyle=linestyle, zorder=2)
+            labels = {BASE: 'high / 30', 'luna_single_high_6144': '0.5× cap',
+                      'luna_single_high_24576': '2× cap', 'luna_single_xhigh_12288': 'xhigh',
+                      'luna_single_high_60steps': '60 steps', 'luna_single_high_120steps': '120 steps'} if col == 0 else {
+                      BASE: 'N1 / 30', 'parallel2_select_high': 'N2', 'parallel3_select_high': 'N3',
+                      'parallel5_select_high': 'N5 / 30', 'luna_single_high_60steps': 'N1 / 60',
+                      'parallel5_select_high_60steps': 'N5 / 60'}
+            offsets = {BASE: (4, -8), 'luna_single_high_6144': (-28, 3),
+                       'luna_single_high_24576': (4, 3), 'luna_single_xhigh_12288': (4, -3),
+                       'luna_single_high_60steps': (-29, -3),
+                       'luna_single_high_120steps': (4, 3),
+                       'parallel2_select_high': (-17, 3), 'parallel3_select_high': (-7, -10),
+                       'parallel5_select_high': (5, -1), 'parallel5_select_high_60steps': (5, 0)}
+            if col == 1:
+                offsets['luna_single_high_60steps'] = (4, 2)
+            for m in methods:
+                dot(ax, points[m], key, m, labels[m], offsets[m])
+            ax.set_ylim(79, 88)
+            ax.set_yticks([80, 82, 84, 86, 88])
+            style(ax)
+            if col == 0: ax.set_ylabel('Success (%)', labelpad=3)
+            if row == 0:
+                ax.set_xscale('log'); ax.xaxis.set_minor_formatter(NullFormatter())
+                if col == 0:
+                    ax.set_xlim(.0073, .0123)
+                    ax.set_xticks([.008, .009, .010, .012], ['.008', '.009', '.010', '.012'])
+                else:
+                    ax.set_xlim(.0065, .085)
+                    ax.set_xticks([.01, .03, .06], ['.01', '.03', '.06'])
+                ax.set_xlabel('Actor cost ($/task, log)', fontsize=7, labelpad=2)
+            else:
+                ax.set_xlim(*( (88, 136) if col == 0 else (85, 208) ))
+                ax.set_xticks([90, 105, 120, 135] if col == 0 else [90, 120, 150, 180, 205])
+                ax.set_xlabel('Actor latency (s/task)', fontsize=7, labelpad=2)
+    fig.text(.075, .075, '10 Luna settings + Sol reference · Same 744 valid tasks · Terra judged · Planned benchmark weights',
+             fontsize=6.3, color='#555555')
+    fig.text(.075, .025, 'Local x-axis ranges · Single/60 advertised 30 · Live windows differ · Actor metrics exclude judging',
+             fontsize=6.3, color='#555555')
+    save(fig, 'browsercode_scaling_strategies_compact')
+    plt.close(fig)
+    coverage = dict(schema='browsercode-compact-scaling-coverage-v1',
+        aggregate_common_valid_sha256=sha(HERE/'aggregate_common_valid.json'),
+        included_curve_methods=sorted(set(singles) | set(selection)),
+        numeric_reference_methods={'serial_high': sol}, omitted_historical_methods=sorted(set(points)-rendered),
+        column_methods={'single_run': singles, 'action_selection': selection},
+        size_inches=[7.2, 3.35], axis_ranges='Local x ranges by column; common y limits79to88percent. Do not compare horizontal distances between columns.',
+        excluded_scope='Active cached reruns, shared-task repairs, new Sol60 and Solxhigh campaigns, other harnesses/models/judges and separate stealth hosting accounting. This is the historical eleven-method BrowserCode cohort, not every API experiment.',
+        metrics='Success, actor USD per task, actor seconds per task. Browser-code batches remain in the linked historical common-valid figure.')
+    (OUTPUT/'browsercode_scaling_strategies_compact_coverage.json').write_text(json.dumps(coverage, indent=2)+'\n')
+
+
 def main():
     global OUTPUT
     parser = argparse.ArgumentParser(description=__doc__)
@@ -221,6 +319,7 @@ def main():
         assert abs(p['difference_pp']-expected) < 1e-10
     render_selection(data, points, paired)
     render_families(data, points)
+    render_compact(data, points)
     summary = dict(schema='browsercode-scaling-family-summary-v1', benchmark_counts=data['benchmark_counts'],
         benchmark_weights=average['benchmark_weights'], points=average['points'], paired_contrasts=paired,
         uncertainty='50000 paired task bootstrap replicates within benchmark; fixed planned weights; pointwise percentile95 intervals without multiplicity correction. Conditional on common validity; task dependence, live-window and protocol changes are not covered.',
@@ -230,7 +329,8 @@ def main():
     provenance = dict(schema='browsercode-scaling-family-render-v1', renderer_sha256=sha(__file__),
         aggregate_sha256=sha(HERE/'aggregate_common_valid.json'), paired_counts_sha256=sha(HERE/'browsercode_scaling_family_pairs.json'),
         matplotlib_version=__import__('matplotlib').__version__, numpy_version=__import__('numpy').__version__, bootstrap_draws=50000,
-        artifacts={p.name:sha(p) for stem in ['browsercode_selection_scaling', 'browsercode_scaling_by_family']
+        compact_coverage_sha256=sha(OUTPUT/'browsercode_scaling_strategies_compact_coverage.json'),
+        artifacts={p.name:sha(p) for stem in ['browsercode_selection_scaling', 'browsercode_scaling_by_family', 'browsercode_scaling_strategies_compact']
                    for ext in ['png', 'pdf', 'svg'] for p in [OUTPUT/f'{stem}.{ext}']})
     (OUTPUT/'browsercode_scaling_family_render_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
     for p in paired:
