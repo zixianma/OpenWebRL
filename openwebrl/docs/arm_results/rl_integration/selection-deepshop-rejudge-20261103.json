@@ -1,0 +1,187 @@
+{
+ "note": "Replay of saved DeepShop gpt-4o judge requests (T0, seed 42, unchanged) on 2026-11-03: 10-29 SFT and H = 3 head (3 runs each) and 11-02 rerun2 SFT as a control. old = original verdict, new = replayed. 774 calls, $4.12.",
+ "runs": {
+  "nov02-rerun2-sft1-control": {
+   "label": "nov02-rerun2-sft1-control",
+   "records": 150,
+   "replayed": 114,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 145,
+    "success": 66,
+    "overall": 44.0,
+    "valid_only": 45.52
+   },
+   "new": {
+    "valid": 145,
+    "success": 69,
+    "overall": 46.0,
+    "valid_only": 47.59
+   },
+   "both_valid": 145,
+   "agree": 136,
+   "confusion": {
+    "old1_new1": 63,
+    "old1_new0": 3,
+    "old0_new1": 6,
+    "old0_new0": 73
+   }
+  },
+  "oct29-rerun2-head5-11d5eff8ffe1": {
+   "label": "oct29-rerun2-head5-11d5eff8ffe1",
+   "records": 150,
+   "replayed": 96,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 147,
+    "success": 52,
+    "overall": 34.67,
+    "valid_only": 35.37
+   },
+   "new": {
+    "valid": 147,
+    "success": 51,
+    "overall": 34.0,
+    "valid_only": 34.69
+   },
+   "both_valid": 147,
+   "agree": 142,
+   "confusion": {
+    "old1_new1": 49,
+    "old1_new0": 3,
+    "old0_new1": 2,
+    "old0_new0": 93
+   }
+  },
+  "oct29-rerun2-sft1": {
+   "label": "oct29-rerun2-sft1",
+   "records": 150,
+   "replayed": 120,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 146,
+    "success": 42,
+    "overall": 28.0,
+    "valid_only": 28.77
+   },
+   "new": {
+    "valid": 146,
+    "success": 42,
+    "overall": 28.0,
+    "valid_only": 28.77
+   },
+   "both_valid": 146,
+   "agree": 144,
+   "confusion": {
+    "old1_new1": 41,
+    "old1_new0": 1,
+    "old0_new1": 1,
+    "old0_new0": 103
+   }
+  },
+  "oct29-rerun3-head5-11d5eff8ffe1": {
+   "label": "oct29-rerun3-head5-11d5eff8ffe1",
+   "records": 150,
+   "replayed": 99,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 149,
+    "success": 52,
+    "overall": 34.67,
+    "valid_only": 34.9
+   },
+   "new": {
+    "valid": 149,
+    "success": 51,
+    "overall": 34.0,
+    "valid_only": 34.23
+   },
+   "both_valid": 149,
+   "agree": 146,
+   "confusion": {
+    "old1_new1": 50,
+    "old1_new0": 2,
+    "old0_new1": 1,
+    "old0_new0": 96
+   }
+  },
+  "oct29-rerun3-sft1": {
+   "label": "oct29-rerun3-sft1",
+   "records": 150,
+   "replayed": 124,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 150,
+    "success": 42,
+    "overall": 28.0,
+    "valid_only": 28.0
+   },
+   "new": {
+    "valid": 150,
+    "success": 44,
+    "overall": 29.33,
+    "valid_only": 29.33
+   },
+   "both_valid": 150,
+   "agree": 146,
+   "confusion": {
+    "old1_new1": 41,
+    "old1_new0": 1,
+    "old0_new1": 3,
+    "old0_new0": 105
+   }
+  },
+  "oct29-run1-head5-11d5eff8ffe1": {
+   "label": "oct29-run1-head5-11d5eff8ffe1",
+   "records": 150,
+   "replayed": 98,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 145,
+    "success": 51,
+    "overall": 34.0,
+    "valid_only": 35.17
+   },
+   "new": {
+    "valid": 145,
+    "success": 54,
+    "overall": 36.0,
+    "valid_only": 37.24
+   },
+   "both_valid": 145,
+   "agree": 138,
+   "confusion": {
+    "old1_new1": 49,
+    "old1_new0": 2,
+    "old0_new1": 5,
+    "old0_new0": 89
+   }
+  },
+  "oct29-run1-sft1": {
+   "label": "oct29-run1-sft1",
+   "records": 150,
+   "replayed": 123,
+   "model": "gpt-4o",
+   "old": {
+    "valid": 146,
+    "success": 44,
+    "overall": 29.33,
+    "valid_only": 30.14
+   },
+   "new": {
+    "valid": 146,
+    "success": 41,
+    "overall": 27.33,
+    "valid_only": 28.08
+   },
+   "both_valid": 146,
+   "agree": 139,
+   "confusion": {
+    "old1_new1": 39,
+    "old1_new0": 5,
+    "old0_new1": 2,
+    "old0_new0": 100
+   }
+  }
+ }
+}
