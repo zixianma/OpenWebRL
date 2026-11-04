@@ -1,5 +1,5 @@
 {
- "note": "Same-day 2026-11-04 rerun: GPT-5.5 K=3 LoRA, GPT-5.5 pre LoRA and SelectionARM, 3 runs each, all 1,045 tasks.\nAlso against the 11-03/04 night SFT 4B run (controls-sameday-20261103; adjacent window, not same-day).\nOverall = success / scheduled (invalid = failure); valid-only = success / valid. Paired diffs: per-task success averaged\nover the three runs, 10,000 task resamples within benchmark (seed 20261104); mean = equal-weight average of 3 benchmarks.",
+ "note": "Same-day 2026-11-04 rerun: GPT-5.5 K=3 LoRA, GPT-5.5 pre LoRA and SelectionARM, plus SFT 8B alone and the RL 4B checkpoint\nalone (616cc8f, 4,096 response tokens), 3 runs each, all 1,045 tasks.\nAlso against the 11-03/04 night SFT 4B run (controls-sameday-20261103; adjacent window, not same-day).\nOverall = success / scheduled (invalid = failure); valid-only = success / valid. Paired diffs: per-task success averaged\nover the three runs, 10,000 task resamples within benchmark (seed 20261104); mean = equal-weight average of 3 benchmarks.",
  "rows": {
   "GPT-5.5 K=3 LoRA": {
    "online_mind2web": {
@@ -125,6 +125,56 @@
    },
    "avg_overall": 45.73420479302832,
    "avg_valid": 48.855916322673956
+  },
+  "SFT 8B": {
+   "online_mind2web": {
+    "succ": 290,
+    "valid": 800,
+    "done": 900,
+    "overall": 32.22222222222222,
+    "valid_only": 36.25
+   },
+   "webvoyager": {
+    "succ": 816,
+    "valid": 1745,
+    "done": 1785,
+    "overall": 45.714285714285715,
+    "valid_only": 46.7621776504298
+   },
+   "deepshop": {
+    "succ": 204,
+    "valid": 440,
+    "done": 450,
+    "overall": 45.333333333333336,
+    "valid_only": 46.36363636363637
+   },
+   "avg_overall": 41.08994708994709,
+   "avg_valid": 43.12527133802206
+  },
+  "RL 4B (4,096 tokens)": {
+   "online_mind2web": {
+    "succ": 234,
+    "valid": 798,
+    "done": 900,
+    "overall": 26.0,
+    "valid_only": 29.32330827067669
+   },
+   "webvoyager": {
+    "succ": 932,
+    "valid": 1731,
+    "done": 1785,
+    "overall": 52.212885154061624,
+    "valid_only": 53.841709994222995
+   },
+   "deepshop": {
+    "succ": 202,
+    "valid": 447,
+    "done": 450,
+    "overall": 44.888888888888886,
+    "valid_only": 45.19015659955257
+   },
+   "avg_overall": 41.0339246809835,
+   "avg_valid": 42.78505828815076
   }
  },
  "paired": {
@@ -280,6 +330,160 @@
     -0.5381263616557733,
     -2.4457360722066603,
     1.3731714908185495
+   ]
+  },
+  "SFT 8B - SFT 4B (11-03/04)": {
+   "online_mind2web": [
+    1.5555555555555551,
+    -1.888888888888889,
+    5.11111111111111
+   ],
+   "webvoyager": [
+    0.6162464985994407,
+    -2.0728291316526604,
+    3.305322128851541
+   ],
+   "deepshop": [
+    2.444444444444444,
+    -2.6666666666666665,
+    7.555555555555555
+   ],
+   "avg": [
+    1.5387488328664798,
+    -0.7199190787426079,
+    3.7301742919389973
+   ]
+  },
+  "RL 4B (4,096 tokens) - SFT 4B (11-03/04)": {
+   "online_mind2web": [
+    -4.666666666666665,
+    -8.0,
+    -1.4444444444444442
+   ],
+   "webvoyager": [
+    7.11484593837535,
+    4.257703081232492,
+    10.02801120448179
+   ],
+   "deepshop": [
+    1.9999999999999993,
+    -3.1111111111111107,
+    7.111111111111109
+   ],
+   "avg": [
+    1.4827264239028946,
+    -0.7236539060068468,
+    3.637908496732023
+   ]
+  },
+  "SelectionARM - SFT 8B": {
+   "online_mind2web": [
+    4.111111111111111,
+    0.44166666666666793,
+    7.666666666666667
+   ],
+   "webvoyager": [
+    4.873949579831932,
+    2.296918767507002,
+    7.563025210084033
+   ],
+   "deepshop": [
+    3.333333333333333,
+    -1.7777777777777783,
+    8.666666666666666
+   ],
+   "avg": [
+    4.106131341425459,
+    1.875140056022409,
+    6.422385620915032
+   ]
+  },
+  "GPT-5.5 pre LoRA - SFT 8B": {
+   "online_mind2web": [
+    3.555555555555555,
+    -1.8947806286936006e-16,
+    7.222222222222221
+   ],
+   "webvoyager": [
+    6.330532212885154,
+    3.697478991596639,
+    9.07563025210084
+   ],
+   "deepshop": [
+    5.555555555555555,
+    0.44444444444444475,
+    10.888888888888888
+   ],
+   "avg": [
+    5.147214441332088,
+    2.8527699968876448,
+    7.448506069094301
+   ]
+  },
+  "GPT-5.5 K=3 LoRA - SFT 8B": {
+   "online_mind2web": [
+    3.444444444444444,
+    0.0,
+    7.0
+   ],
+   "webvoyager": [
+    5.826330532212885,
+    3.0812324929971986,
+    8.571428571428571
+   ],
+   "deepshop": [
+    1.5555555555555556,
+    -3.1111111111111103,
+    6.222222222222221
+   ],
+   "avg": [
+    3.6087768440709613,
+    1.4761749144102085,
+    5.739822595704947
+   ]
+  },
+  "SelectionARM - RL 4B (4,096 tokens)": {
+   "online_mind2web": [
+    10.333333333333334,
+    6.997222222222223,
+    13.77777777777778
+   ],
+   "webvoyager": [
+    -1.6246498599439767,
+    -4.425770308123249,
+    1.1764705882352946
+   ],
+   "deepshop": [
+    3.777777777777777,
+    -1.5555555555555558,
+    9.333333333333334
+   ],
+   "avg": [
+    4.162153750389044,
+    1.8471599751011518,
+    6.511064425770308
+   ]
+  },
+  "GPT-5.5 pre LoRA - RL 4B (4,096 tokens)": {
+   "online_mind2web": [
+    9.777777777777779,
+    6.333333333333333,
+    13.222222222222221
+   ],
+   "webvoyager": [
+    -0.16806722689075554,
+    -3.0252100840336125,
+    2.6890756302521015
+   ],
+   "deepshop": [
+    6.000000000000001,
+    0.6666666666666667,
+    11.555555555555559
+   ],
+   "avg": [
+    5.203236850295674,
+    2.830967942732649,
+    7.593899782135076
    ]
   }
  }

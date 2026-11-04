@@ -10,8 +10,11 @@ E = Path('/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations')
 HERE = Path(__file__).resolve().parent
 BENCH = ('online_mind2web', 'webvoyager', 'deepshop')
 P4B = 4022468096 + 415347712
+P8B = 8767123696
 CONDS = {  # key: (label, root, slug, kind)
     'sft1': ('SFT 4B, 1 sample', 'controls-sameday-20261103', 'sft1', 'none'),
+    'sft8b': ('SFT 8B, 1 sample', 'sameday-actors-20261104/sft8b', 'sft1', 'none'),
+    'rl4b': ('RL 4B, 1 sample (4,096 tokens)', 'sameday-actors-20261104/rl', 'sft1', 'none'),
     'piotr5': ('Piotr SelectionARM', 'controls-sameday-20261103', 'piotr5', 'lora'),
     'lora-gpt55-k3': ('4B LoRA, Recipe 3 GPT-5.5 K=3', 'sameday-lora-20261104', 'arm5-9fadc8dc4655', 'lora'),
     'lora-luna-k3': ('4B LoRA, Recipe 3 Luna K=3', 'p16-lora-lunak3-20261103', 'arm5-2ed62dd7c4dc', 'lora'),
@@ -48,7 +51,7 @@ with ThreadPoolExecutor(int(os.environ.get('SLURM_CPUS_PER_TASK', '1'))) as pool
         for b in BENCH:
             eps = list(pool.map(episode, sorted((E / root / 'run1' / b / slug / b / 'collection' / 'records').glob('*.json'))))
             n = len(eps); steps = sum(e['steps'] for e in eps)
-            actor_pf = 2 * P4B * sum(e['prompt'] - e['cached'] + e['completion'] for e in eps) / 1e15
+            actor_pf = 2 * (P8B if k == 'sft8b' else P4B) * sum(e['prompt'] - e['cached'] + e['completion'] for e in eps) / 1e15
             sel_pf = (2 * P4B * sum(e['sel_tokens'] for e in eps) if kind == 'lora' else sum(e['head_flops'] for e in eps)) / 1e15
             s, ns = success(root, slug, b)
             rows.append(dict(key=k, condition=label, kind=kind, benchmark=b, cost_tasks=n, success_episodes=ns, successes=s,

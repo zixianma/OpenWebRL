@@ -22,6 +22,8 @@ HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 FRONTIER = "#596675"
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, "#898781", "s", False),
+    ("sft8b", "SFT 8B", 8.77e9, "#4a4844", "s", False),
+    ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
     ("lora-gpt55-k3", "LoRA: GPT-5.5 K = 3 ¹", LORA, "#0072B2", "D", False),
     ("lora-luna-k3", "LoRA: Luna K = 3", LORA, "#D55E00", "D", False),
     ("lora-gpt55-pre", "LoRA: GPT-5.5 pre ¹", LORA, "#0072B2", "D", True),
@@ -54,7 +56,7 @@ def panel(ax, bench, k):
         r = point(key, bench)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["overall"]))
-        ax.scatter(x, r["overall"], s=24, marker=marker, zorder=4 if key == "sft1" else 3,
+        ax.scatter(x, r["overall"], s=24, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=1.0 if hollow else 0.6, label=label)
     fr = frontier(pts)

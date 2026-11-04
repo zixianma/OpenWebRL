@@ -1,4 +1,5 @@
-"""Same-day 2026-11-04 rerun: GPT-5.5 K=3 LoRA, GPT-5.5 pre LoRA and SelectionARM, 3 runs each, all 1,045 tasks.
+"""Same-day 2026-11-04 rerun: GPT-5.5 K=3 LoRA, GPT-5.5 pre LoRA and SelectionARM, plus SFT 8B alone and the RL 4B checkpoint
+alone (616cc8f, 4,096 response tokens), 3 runs each, all 1,045 tasks.
 Also against the 11-03/04 night SFT 4B run (controls-sameday-20261103; adjacent window, not same-day).
 Overall = success / scheduled (invalid = failure); valid-only = success / valid. Paired diffs: per-task success averaged
 over the three runs, 10,000 task resamples within benchmark (seed 20261104); mean = equal-weight average of 3 benchmarks."""
@@ -7,7 +8,8 @@ E = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations'
 B = ('online_mind2web', 'webvoyager', 'deepshop'); N = {'webvoyager': 595, 'online_mind2web': 300, 'deepshop': 150}
 C = {'GPT-5.5 K=3 LoRA': ('sameday-lora-20261104', 'arm5-9fadc8dc4655'), 'GPT-5.5 pre LoRA': ('sameday-lora-20261104', 'arm5-80ee47643be2'),
      'SelectionARM': ('sameday-lora-20261104', 'piotr5'), 'SFT 4B (11-03/04)': ('controls-sameday-20261103', 'sft1'),
-     'SelectionARM (11-03/04)': ('controls-sameday-20261103', 'piotr5')}
+     'SelectionARM (11-03/04)': ('controls-sameday-20261103', 'piotr5'),
+     'SFT 8B': ('sameday-actors-20261104/sft8b', 'sft1'), 'RL 4B (4,096 tokens)': ('sameday-actors-20261104/rl', 'sft1')}
 def load(root, slug, b):
     out = []
     for r in ('run1', 'run2', 'run3'):
@@ -31,7 +33,8 @@ def pt(c, b):
 paired = {}
 for a, ref in [('GPT-5.5 pre LoRA', 'GPT-5.5 K=3 LoRA'), ('GPT-5.5 K=3 LoRA', 'SelectionARM'), ('GPT-5.5 pre LoRA', 'SelectionARM'),
                ('GPT-5.5 K=3 LoRA', 'SFT 4B (11-03/04)'), ('GPT-5.5 pre LoRA', 'SFT 4B (11-03/04)'), ('SelectionARM', 'SFT 4B (11-03/04)'),
-               ('SelectionARM', 'SelectionARM (11-03/04)')]:
+               ('SelectionARM', 'SelectionARM (11-03/04)'), ('SFT 8B', 'SFT 4B (11-03/04)'), ('RL 4B (4,096 tokens)', 'SFT 4B (11-03/04)'),
+               ('SelectionARM', 'SFT 8B'), ('GPT-5.5 pre LoRA', 'SFT 8B'), ('GPT-5.5 K=3 LoRA', 'SFT 8B'), ('SelectionARM', 'RL 4B (4,096 tokens)'), ('GPT-5.5 pre LoRA', 'RL 4B (4,096 tokens)')]:
     per, boots = {}, []
     for b in B:
         x, y = pt(a, b), pt(ref, b); ts = sorted(set(x) | set(y))
