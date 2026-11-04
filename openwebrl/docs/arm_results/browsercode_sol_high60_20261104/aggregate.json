@@ -1,0 +1,160 @@
+{
+  "benchmarks": {
+    "deepshop": {
+      "invalid": 8,
+      "overall_success": 0.8733333333333333,
+      "planned": 150,
+      "saved": 150,
+      "successes": 131,
+      "unclaimed": 0,
+      "valid": 142,
+      "valid_only_success": 0.9225352112676056,
+      "valid_task_efficiency": {
+        "actor_seconds": {
+          "mean": 223.22462521008427,
+          "median": 185.08716373355128,
+          "n": 142
+        },
+        "actor_usd": {
+          "mean": 0.5516328422535212,
+          "median": 0.47099955000000004,
+          "n": 142
+        },
+        "browser_code_batches_attempted": {
+          "mean": 27.04225352112676,
+          "median": 26.0,
+          "n": 142
+        },
+        "browser_commands": {
+          "mean": 27.04225352112676,
+          "median": 26.0,
+          "n": 142
+        },
+        "decisions": {
+          "mean": 28.007042253521128,
+          "median": 27.0,
+          "n": 142
+        },
+        "native_browsercode_cdp_attempts": {
+          "mean": 88.9225352112676,
+          "median": 71.0,
+          "n": 142
+        }
+      }
+    },
+    "online-mind2web": {
+      "invalid": 33,
+      "overall_success": 0.6166666666666667,
+      "planned": 300,
+      "saved": 300,
+      "successes": 185,
+      "unclaimed": 0,
+      "valid": 267,
+      "valid_only_success": 0.6928838951310862,
+      "valid_task_efficiency": {
+        "actor_seconds": {
+          "mean": 123.01087464424712,
+          "median": 81.45903409901075,
+          "n": 267
+        },
+        "actor_usd": {
+          "mean": 0.2450870329588015,
+          "median": 0.1601225,
+          "n": 267
+        },
+        "browser_code_batches_attempted": {
+          "mean": 16.138576779026216,
+          "median": 13,
+          "n": 267
+        },
+        "browser_commands": {
+          "mean": 16.138576779026216,
+          "median": 13,
+          "n": 267
+        },
+        "decisions": {
+          "mean": 17.131086142322097,
+          "median": 14,
+          "n": 267
+        },
+        "native_browsercode_cdp_attempts": {
+          "mean": 54.51685393258427,
+          "median": 44,
+          "n": 267
+        }
+      }
+    },
+    "webvoyager": {
+      "invalid": 26,
+      "overall_success": 0.8739495798319328,
+      "planned": 595,
+      "saved": 595,
+      "successes": 520,
+      "unclaimed": 0,
+      "valid": 569,
+      "valid_only_success": 0.9138840070298769,
+      "valid_task_efficiency": {
+        "actor_seconds": {
+          "mean": 107.83682335206832,
+          "median": 65.75577393895946,
+          "n": 569
+        },
+        "actor_usd": {
+          "mean": 0.21637658295254833,
+          "median": 0.1326129,
+          "n": 569
+        },
+        "browser_code_batches_attempted": {
+          "mean": 14.481546572934974,
+          "median": 10,
+          "n": 569
+        },
+        "browser_commands": {
+          "mean": 14.481546572934974,
+          "median": 10,
+          "n": 569
+        },
+        "decisions": {
+          "mean": 15.472759226713533,
+          "median": 11,
+          "n": 569
+        },
+        "native_browsercode_cdp_attempts": {
+          "mean": 49.60281195079086,
+          "median": 37,
+          "n": 569
+        }
+      }
+    }
+  },
+  "invalid": 67,
+  "planned": 1045,
+  "population_notes": [
+    "Valid-only rates and efficiency means include valid successes and valid failures, excluding recorded invalid outcomes and unattempted tasks.",
+    "Actor seconds are native per-task wall latency excluding judge; summed inference-request seconds are not used.",
+    "Browser commands are selected executable BrowserCode batches, not individual CDP commands or candidate proposals.",
+    "Ledger costs include all physical actor/judge attempts; valid-only actor cost means use each valid episode usage accounting.",
+    "Actor API costs are priced from recorded usage with cache accounting; no measured local hosting or proxy fees are available.",
+    "These own-valid populations are not the historical common-valid intersection and must not be mixed into matched plots without re-intersection."
+  ],
+  "protocol": {
+    "actor_deadline_seconds": 900,
+    "actor_model": "gpt-6-sol",
+    "candidates": 1,
+    "harness": "browsercode",
+    "judge": "gpt-5.6-terra",
+    "judge_effort": "medium",
+    "judge_max_output_tokens": 4096,
+    "judge_seed": 42,
+    "max_output_tokens": 12288,
+    "maximum_decisions_advertised": 60,
+    "maximum_decisions_enforced": 60,
+    "reasoning_effort": "high"
+  },
+  "saved": 1045,
+  "schema": "sol60-full-three-benchmark-sanitized-results-v1",
+  "status": "VERIFIED_COVERAGE_COMPLETE",
+  "successes": 836,
+  "unclaimed": 0,
+  "valid": 978
+}

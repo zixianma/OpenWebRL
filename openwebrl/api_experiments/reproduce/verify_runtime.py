@@ -25,6 +25,12 @@ def verify(runtime, *, browser_preflight=False):
     imports = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(imports)
     worker, environments = imports.load(runtime)
+    sol = None
+    if plan.get('sol_single60_protocol') or config.get('sol_single60_protocol') or (runtime/'sol-single60-experiment.json').exists():
+        spec = importlib.util.spec_from_file_location('sol_single60',Path(__file__).with_name('sol_single60.py'))
+        sol = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(sol)
+        sol.validate(runtime)
     results = []
     with tempfile.TemporaryDirectory(prefix='openwebrl-offline-import-') as temporary:
         root = Path(temporary)
@@ -32,7 +38,9 @@ def verify(runtime, *, browser_preflight=False):
         budget = getattr(worker, 'ReservationBudget', worker.Budget)(root / 'model-budget', 1, 1)
         for spec in plan['arms']:
             kwargs = dict(harness='browsercode', model_name=spec['model'], reasoning_effort=spec.get('reasoning_effort', 'high'), max_output_tokens=spec['output_tokens'], response_mode='run_command_tool', action_field='bash_command', openai_api_key='offline-no-network-client', attach_observation_screenshot=False, observation_template=config['observation_template'])
-            if config.get('portable_campaign') == 'browsercode_luna_effort':
+            if sol is not None:
+                kwargs['http_gate'] = sol.install_runtime_hooks(worker,root)
+            elif config.get('portable_campaign') == 'browsercode_luna_effort':
                 from request_budget import SharedHTTPGate
                 kwargs['http_gate'] = SharedHTTPGate(root / 'http-gate', 8)
             elif config.get('portable_campaign') == 'browsercode_claude':

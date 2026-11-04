@@ -54,8 +54,29 @@ Choose `--campaign` during setup. The entry point selects the matching model ada
 | `gpt` | `serial_high` (Sol), `parallel3_select_high`, `parallel5_select_high` (Luna) | 300 |
 | `gpt-luna-single` | `luna_single_high` | 300 |
 | `gpt-crossbench` | `serial_high`, `parallel3_select_high`, `parallel5_select_high`, `luna_single_high` | 745 |
+| `sol-high60` | `sol_single_high60` | 1,045 (300 / 595 / 150) |
 
 `--limit` defaults to one task. For the full OM2W panel use `--limit 300`. For `gpt-crossbench`, use `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`; filtering precedes the limit. GPT OM2W's four methods span `gpt` and `gpt-luna-single`. Luna N5 medium/low applies that effort to both candidates and selector. The full historical `browsercode_*` campaign keys remain accepted.
+
+<a id="sol-high60"></a>
+### Sol high single at 60 decisions
+
+The [completed Sol/60 results](ARM_FINAL_RESULTS.md#browsercode-sol-high60) use **GPT-6 Sol, high effort, 12,288 output tokens, and 60 enforced and advertised decisions**. The actor deadline remains **900 seconds**; the judge is **GPT-5.6 Terra, medium effort, 4,096 completion tokens, seed 42**. There is one candidate per decision and no selector call.
+
+```bash
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/sol-high-60 --campaign sol-high60 \
+  --dependencies "$API_WORK/dependencies/dependencies.json"
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/sol-high-60 --arm sol_single_high60 \
+  --benchmark online-mind2web --limit 1 --output /tmp/sol-high-60-om-01 \
+  --model-usd 5 --judge-usd 1 --model-calls 120 --judge-calls 1 --browser-starts 2
+```
+
+The run command is read-only until `--execute` is added. Use separate output directories and explicit caps for each full benchmark: `--benchmark online-mind2web --limit 300`, `--benchmark webvoyager --limit 595`, or `--benchmark deepshop --limit 150`. This campaign requires `--benchmark`; filtering occurs before task selection and the limit. The new runtime reuses the public campaign's globally unique task IDs and retains native task/source IDs from the pinned benchmark rosters. Task instructions, start URLs and source order match the native Sol evaluation exactly. Setup preserves the original sources and binds generated model, worker, prompt, judge and task files to an explicit protocol receipt; it makes no provider or browser calls.
+
+The completed cohort has **1,045 recorded outcomes, 978 valid and 67 invalid**, with no unattempted tasks. Invalid outcomes remain separate from valid failures. [Per-benchmark rates and efficiency](ARM_FINAL_RESULTS.md#browsercode-sol-high60) use Sol's own valid tasks and are separate from the historical common-valid scaling plots; matched comparisons require a new intersection.
 
 <a id="luna-xhigh-output-limits"></a>
 ### Luna single reasoning and output limits
@@ -160,7 +181,7 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 
 The run commands print plans; add `--execute` for paid collection within their explicit caps. Model-call caps include proposals, selectors and native input counters. For a full benchmark, select its 300/595/150-task limit and budget it separately. The source-bound selection receipt retains the original model, worker and judge files, and validates the generated task roster, prompt, actual model guard, agent limit, raw model payloads and Terra protocol before execution. Archived experiments remain unchanged. Report success over planned tasks and valid-only success with counts, common-valid paired comparisons, actual tokens, model cost, browser-code batches and **elapsed actor latency per task**. Parallel API durations are not summed into actor latency. The qualified N2/30 and N5/60 cohorts each retain 1,044 native results and one original missing outcome: administrative missing on DeepShop for N2, and claimed-missing on OM2W for N5/60. Missing outcomes are not imputed as failures or retried. Their overall confirmed-success rates use the original planned denominators and remain lower bounds in those cells; the [main figure](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) uses each method's own valid tasks. These recipes prepare independent reproductions.
 
-<a id="browser-hosting-and-traffic-costs"></a>
+<a id="fixed-cached-luna-selection"></a>
 ### Fixed cached-context Luna selection
 
 Use `--luna-cached-selection luna_n3_cached_high30` or `luna_n5_cached_high60` with `--campaign luna` to prepare the cached-context implementation on the pinned OM2W 300, WebVoyager 595 and DeepShop 150 tasks. Both use `gpt-6-luna` high, a 12,288-output-token ceiling for each proposal and selector, a 900-second actor deadline, and `gpt-5.6-terra` medium with 4,096 completion tokens and seed 42. The actual and advertised decision limits are 30 and 60, respectively.
@@ -177,6 +198,7 @@ python -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 
 For N5/60, use `luna_n5_cached_high60` and a new workspace. The ordinary `check`, `run` and `report` commands apply. Setup performs no browser or model work. Run prints a plan until `--execute` is supplied; provide explicit actor, judge, physical-call and browser-start caps. Preparation grants no spending authorization. Generated source manifests bind the method, roster, prompts, worker limits and original archived runtime files before execution.
 
+<a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
 
 The [completed full-300 comparison](#us-stealth-full300) reports measured hosting and residential-proxy fees separately from actor/Terra pricing and task-performance populations. **The earlier 20-task US-residential pilot cost $5.74 across both methods**, including model calls, Terra, hosting, proxy traffic and failed attempts. On 15 contemporaneous common-valid pairs, N5 succeeded on 15 and Single on 12, with mean actor-loop latency of 191.6 versus 120.8 seconds. This small pilot does not establish full-benchmark superiority; [results and accounting are below](#measured-us-residential-pilot).

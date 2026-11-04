@@ -66,6 +66,25 @@ The public reconstruction checks every paired contingency against its benchmark'
 
 </details>
 
+<a id="browsercode-sol-high60"></a>
+
+## Sol high single at 60 decisions (2026-11-04)
+
+All **1,045 planned tasks have a recorded outcome**: 836 successes, 978 valid outcomes and 67 invalid outcomes. GPT-6 Sol uses high effort, a 12,288-token output ceiling, 60 enforced and advertised decisions, and a 900-second actor deadline. Judging uses GPT-5.6 Terra medium, 4,096 completion tokens and seed 42.
+
+| Benchmark | Planned / recorded | Valid | Invalid | Successes | Overall success | Valid-only success | Actor API $ / valid task | Actor latency (s / valid task) | Selected batches / valid task |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| OM2W | 300 | 267 | 33 | 185 | 61.67% | 69.29% | 0.24509 | 123.0 | 16.14 |
+| WebVoyager | 595 | 569 | 26 | 520 | 87.39% | 91.39% | 0.21638 | 107.8 | 14.48 |
+| DeepShop | 150 | 142 | 8 | 131 | 87.33% | 92.25% | 0.55163 | 223.2 | 27.04 |
+| Total | 1,045 | 978 | 67 | 836 | 80.00% | 85.48% | — | — | — |
+
+Overall success divides successes by all planned tasks. Valid-only rates and efficiency means include valid successes and failures, with invalids excluded. Cost uses recorded actor usage and its native cache-aware price or upper bound; latency is elapsed actor time per task, including inference and browser work. Both exclude Terra judging. A selected nonempty executable BrowserCode block is one batch, potentially containing multiple CDP operations. Local browser hosting/proxy fees are not measured here.
+
+These are **Sol's own-valid populations**, collected in separate live windows. They are not the 953-task historical common-valid cohort above, and do not establish a paired gain over Sol/30 or Luna. The historical Luna single/60 prompt advertised 30 decisions; this Sol/60 protocol advertises 60. All saved successes, failures and invalid outcomes are retained.
+
+[Sanitized per-benchmark aggregates](arm_results/browsercode_sol_high60_20261104/aggregate.json) · [Reproduction recipe](API_EXPERIMENT_METHODS.md#sol-high60)
+
 <a id="browsercode-pareto-previews"></a>
 
 ### Observed Pareto frontiers per benchmark (before gap recovery)
@@ -81,6 +100,7 @@ Dashed segments join the observed nondominated settings in each panel: minimize 
 *The own-valid weighted cost frontier is single high/2× cap → single60 → single120 → N5/60. N5/30 is dominated on the weighted cost/latency views. Weights remain 300/1,045, 595/1,045 and 150/1,045; this is not a pooled success rate. The [common-valid weighted preview](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.png) instead uses the same 744 tasks in all methods: its cost-frontier membership is the same, while single60 also lies on its latency frontier. These are descriptive memberships without uncertainty bands; common-valid matching does not remove live-window or protocol effects.*
 
 [Per-benchmark PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.svg) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.svg) · [Common-valid weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.pdf) · [Frontier membership and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_pareto_previews.json) · [Reproduction source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_previews.py).
+
 
 <details>
 <summary>Historical scaling snapshots before gap recovery</summary>

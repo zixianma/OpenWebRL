@@ -10,6 +10,8 @@
 
 [Gap-repaired BrowserCode inference scaling: all eleven historical methods on 953 common-valid tasks (252 OM2W / 556 WebVoyager / 145 DeepShop), with grouped cost/latency curves and paired uncertainty](ARM_FINAL_RESULTS.md#browsercode-gap-repaired-20261104). [Earlier figures and original denominators](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Measured browser hosting/traffic costs from the paired OM2W US-stealth pilot](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
 
+[Completed Sol high/60 on all 1,045 tasks: per-benchmark success, validity, actor cost, latency and batches](ARM_FINAL_RESULTS.md#browsercode-sol-high60). [Sol/60 reproduction](API_EXPERIMENT_METHODS.md#sol-high60). [Fixed cached-context Luna N3/30 and N5/60 reproduction](API_EXPERIMENT_METHODS.md#fixed-cached-luna-selection).
+
 [Equal-weight benchmark-average BrowserCode comparison: eleven methods, each benchmark weighted 1/3 for own-valid success, actor cost, batches and latency](ARM_FINAL_RESULTS.md#browsercode-equal-benchmark-average). [Task-count-weighted average using the fixed planned benchmark mix](ARM_FINAL_RESULTS.md#browsercode-task-weighted-average).
 
 [Historical 744-task common-valid BrowserCode alternative, preserved before gap recovery](ARM_FINAL_RESULTS.md#browsercode-all-method-common-valid).

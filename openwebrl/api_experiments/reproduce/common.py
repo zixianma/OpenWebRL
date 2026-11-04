@@ -80,7 +80,7 @@ def positive_money(value):
 def parser(provider):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--runtime", type=Path, required=True, help="Isolated runtime produced by prepare_browsercode.py")
-    choices = (*ARMS[provider], 'luna_single_high', 'luna_n3_cached_high30', 'luna_n5_cached_high60') if provider == 'luna' else (*ARMS[provider], 'parallel2_select_high') if provider == 'gpt' else ARMS[provider]
+    choices = (*ARMS[provider], 'luna_single_high', 'luna_n3_cached_high30', 'luna_n5_cached_high60') if provider == 'luna' else (*ARMS[provider], 'parallel2_select_high', 'sol_single_high60') if provider == 'gpt' else ARMS[provider]
     p.add_argument("--arm", choices=choices, required=True)
     p.add_argument("--harness", choices=("browsercode", "cuawright"), default="browsercode", help="Earlier paired-harness campaigns support both executors")
     p.add_argument("--benchmark", choices=("online-mind2web", "webvoyager", "deepshop"), help="Filter the prepared task roster before applying --limit")
@@ -111,6 +111,16 @@ def prepare(args, provider):
     prospective = None
     selection_protocol = None
     cached_protocol = None
+    sol_protocol = None
+    if (runtime/'sol-single60-experiment.json').exists() or plan.get('sol_single60_protocol') or config.get('sol_single60_protocol'):
+        if provider != 'gpt' or args.arm != 'sol_single_high60' or getattr(args,'harness','browsercode') != 'browsercode':
+            raise ValueError('Sol high60 requires its declared GPT BrowserCode arm')
+        if getattr(args,'benchmark',None) not in ('online-mind2web','webvoyager','deepshop'):
+            raise ValueError('Sol high60 requires --benchmark and a separate output per benchmark; canonical native IDs can overlap across benchmarks')
+        spec = importlib.util.spec_from_file_location('sol_single60',Path(__file__).with_name('sol_single60.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        sol_protocol = module.validate(runtime)
     if (runtime/'cached-selection-experiment.json').exists() or plan.get('cached_selection_protocol') or config.get('cached_selection_protocol'):
         if provider != 'luna' or args.arm not in ('luna_n3_cached_high30','luna_n5_cached_high60') or getattr(args,'harness','browsercode') != 'browsercode':
             raise ValueError('Fixed cached selection requires its declared Luna BrowserCode arm')
@@ -142,7 +152,9 @@ def prepare(args, provider):
         raise ValueError('Single and selection experiment markers cannot be combined')
     if cached_protocol and (prospective or selection_protocol):
         raise ValueError('Cached and historical/single protocol markers cannot be combined')
-    selected_protocol = cached_protocol or selection_protocol or prospective
+    if sol_protocol and (cached_protocol or selection_protocol or prospective):
+        raise ValueError('Sol high60 cannot combine another experiment marker')
+    selected_protocol = sol_protocol or cached_protocol or selection_protocol or prospective
     benchmark = getattr(args, "benchmark", None)
     if benchmark:
         tasks = [t for t in tasks if t.get("benchmark", "online-mind2web") == benchmark]
@@ -221,6 +233,8 @@ def prepare(args, provider):
     result["runtime_imports"] = runtime_imports_binding()
     if cloud is not None:
         result['required_cloud'] = cloud
+    if sol_protocol:
+        result.update(sol_single60_protocol=sol_protocol['schema'],sol_single60_receipt_sha256=digest(runtime/'sol-single60-experiment.json'),benchmark_roster_counts=sol_protocol['benchmark_counts'])
     if prospective:
         result.update(prospective_protocol=prospective['schema'], output_multiplier=prospective['output_multiplier'],
                       prospective_receipt_sha256=digest(runtime / 'prospective-experiment.json'),
@@ -311,6 +325,12 @@ def execute(args, plan, tasks, *, worker_setup=None):
 def _execute_worker(args, plan, tasks, root, keys, actor_key, cloud, worker, environments, worker_setup):
     integration = worker_setup(worker, environments) if worker_setup is not None else None
     try:
+        if plan.get('sol_single60_protocol'):
+            spec = importlib.util.spec_from_file_location('sol_single60',Path(__file__).with_name('sol_single60.py'))
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            module.validate(Path(plan['runtime']))
+            module.install_runtime_hooks(worker,root)
         if cloud is not None:
             module = sys.modules.get(type(integration).__module__)
             if (module is None or getattr(module,'Registry',None) is not type(integration)
