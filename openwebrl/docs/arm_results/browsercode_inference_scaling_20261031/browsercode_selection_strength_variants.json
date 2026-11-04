@@ -1,0 +1,73 @@
+{
+  "schema": "browsercode-selection-strength-variants-v1",
+  "source_sha256": {
+    "aggregate_common_valid.json": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
+    "browsercode_scaling_family_pairs.json": "0e12eb559e8b5e2fe4abaebe63a3760fa8993e50069d5f847d74f802667fecd0",
+    "browsercode_scaling_family_summary.json": "f6938aeff1776ffbe18a077ed672be606a521dcda5459bed1d4157c570f5257c"
+  },
+  "renderer_sha256": "352b9720b7563abf55689b722a179f7b115b8f933bb2939a285f99af5cf43cea",
+  "paired_outcomes": [
+    {
+      "decision_limit": 30,
+      "population": "Weighted mean",
+      "n5_only_success_percent": 8.584696941187252,
+      "n1_only_success_percent": 4.722664093614323,
+      "net_gain_pp": 3.8620328475729284
+    },
+    {
+      "decision_limit": 30,
+      "population": "OM2W",
+      "n5_only_success_percent": 13.274336283185843,
+      "n1_only_success_percent": 3.5398230088495577,
+      "net_gain_pp": 9.734513274336285
+    },
+    {
+      "decision_limit": 30,
+      "population": "WebVoyager",
+      "n5_only_success_percent": 6.459948320413436,
+      "n1_only_success_percent": 4.3927648578811365,
+      "net_gain_pp": 2.0671834625322996
+    },
+    {
+      "decision_limit": 30,
+      "population": "DeepShop",
+      "n5_only_success_percent": 7.633587786259542,
+      "n1_only_success_percent": 8.396946564885496,
+      "net_gain_pp": -0.7633587786259541
+    },
+    {
+      "decision_limit": 60,
+      "population": "Weighted mean",
+      "n5_only_success_percent": 5.360885966400198,
+      "n1_only_success_percent": 3.9848300940552,
+      "net_gain_pp": 1.376055872344998
+    },
+    {
+      "decision_limit": 60,
+      "population": "OM2W",
+      "n5_only_success_percent": 5.752212389380531,
+      "n1_only_success_percent": 5.3097345132743365,
+      "net_gain_pp": 0.4424778761061947
+    },
+    {
+      "decision_limit": 60,
+      "population": "WebVoyager",
+      "n5_only_success_percent": 5.167958656330749,
+      "n1_only_success_percent": 3.359173126614987,
+      "net_gain_pp": 1.8087855297157618
+    },
+    {
+      "decision_limit": 60,
+      "population": "DeepShop",
+      "n5_only_success_percent": 5.343511450381679,
+      "n1_only_success_percent": 3.816793893129771,
+      "net_gain_pp": 1.5267175572519083
+    }
+  ],
+  "population": "Same 744 all-method common-valid tasks: OM2W 226, WebVoyager 387, DeepShop 131",
+  "weighting": "Fixed planned benchmark weights 300/1045, 595/1045, 150/1045; weighted mean is not pooled task frequency",
+  "intervals": "Reused 50,000-draw pointwise paired task-bootstrap intervals; no new uncertainty calculations",
+  "batch_scope": "Selected nonempty BrowserCode executions, not individual browser operations; excludes unselected proposals and model calls",
+  "interpretation": "Selection includes candidate generation and selection jointly; live-window and protocol differences remain. No random-selection/equal-generation control isolates selector quality.",
+  "efficiency": "Browser-interaction efficiency does not imply lower model cost or latency; N5 costs more than its same-horizon N1 baseline."
+}

@@ -29,6 +29,29 @@ The supported framing is **selection improves fixed-horizon success, while incre
 
 [Compact PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.pdf) · [Compact SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.svg) · [Original six-panel family figure](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.png) · [Reproducible plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py) · [Method and reproduction](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
 
+<a id="browsercode-selection-strength-variants"></a>
+
+<details>
+<summary>Alternative paper figures: interaction efficiency and paired wins/losses</summary>
+
+**Recommended alternative: success versus executed browser batches.** At 30 decisions, N5 raises weighted success by 3.86 pp while using 15.1% fewer selected batches than N1; at 60 decisions, the point estimates are +1.38 pp and 21.3% fewer batches. These are browser-interaction savings: N5 uses more actor dollars and time than its same-horizon N1 reference. Single60 retains the stronger observed actor-cost/latency trade-off described above.
+
+![Action selection on the common-valid cohort: all eleven historical settings in success-versus-executed-browser-batch space, with arrows from N1 to N5 at 30 and 60 decisions; an adjacent paired-gain plot shows the existing 95% intervals](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction.png)
+
+*All eleven historical methods remain visible; gray marks other settings, including Sol. Red arrows compare observed N1 and N5 configurations at the same decision limit (solid: 30; dashed: 60), with no interpolation claim. Higher success and fewer batches appear toward the upper left. Batches are selected nonempty BrowserCode executions, potentially containing multiple browser operations; unselected proposals and model/selector calls are not batches. The paired-gain panel reuses the original pointwise 50,000-draw task-bootstrap intervals: +1.29 to +6.45 pp at 30 decisions and −0.81 to +3.59 pp at 60.*
+
+[Interaction PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction.svg).
+
+![Paired outcomes at 30 and 60 decisions: shares of the same valid tasks on which only N1 succeeds, extending left, and only N5 succeeds, extending right, for the weighted mean and all three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.png)
+
+*The blue bar counts N1 success/N5 failure; red counts N5 success/N1 failure. Each bar divides by all common-valid tasks in its benchmark, not only discordant tasks. Concordant successes and failures are omitted. The weighted row uses the fixed planned benchmark weights, not pooled counts. The right-minus-left difference equals the paired success gain; the display preserves the small negative DeepShop contrast at 30 decisions.*
+
+Both variants use the same 744-task intersection, planned benchmark weights, Terra judgments and historical protocol qualifications as the compact figure. Candidate generation and selection vary jointly; neither view isolates selector quality from additional sampling or controls live-window differences. The original compact figure is unchanged.
+
+[Paired-outcome PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.svg) · [Coordinates, definitions and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_strength_variants.json) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_selection_strength_variants.py).
+
+</details>
+
 <details>
 <summary>Supplementary paired-selection analysis and earlier three-panel rendering</summary>
 
