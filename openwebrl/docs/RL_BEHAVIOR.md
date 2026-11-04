@@ -255,6 +255,10 @@ same trajectory; 95% binomial intervals; chance = 20%.* [PDF](rl_results/rl_acti
 
 ### Matched iteration-90 repeats (one harness, back to back)
 
+![Iteration-90 matched repeats: loop failures per 300 tasks, Gate B vs outcome-only](rl_results/rl_action_loops_iter90.png)
+
+*Standalone version of panel (b): bars = mean of three back-to-back full-300 evaluations of each fixed checkpoint (dots); brackets = Gate B minus each outcome-only run, paired task-bootstrap 95% CI.* [PDF](rl_results/rl_action_loops_iter90.pdf)
+
 | Run | Loop failures, r1 / r2 / r3 | Mean loop failures | Loop rate, mean % | Successes, r1 / r2 / r3 |
 | --- | ---: | ---: | ---: | ---: |
 | Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | 39.0 | 103 / 95 / 109 |
