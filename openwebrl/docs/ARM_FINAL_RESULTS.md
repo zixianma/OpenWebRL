@@ -66,6 +66,22 @@ The public reconstruction checks every paired contingency against its benchmark'
 
 </details>
 
+<a id="browsercode-pareto-previews"></a>
+
+### Observed Pareto frontiers per benchmark (before gap recovery)
+
+Dashed segments join the observed nondominated settings in each panel: minimize that panel's x metric and maximize success, with at least one strict improvement required for dominance. Rings identify frontier settings; a one-setting frontier has no connecting segment. Every panel considers all eleven methods. Segments are visual guides between measured configurations, not fitted curves, attainable intermediate policies or evidence of statistical superiority. The original figures above are unchanged.
+
+![Per-benchmark BrowserCode plots with observed Pareto-frontier segments and rings; all original method points and own-valid populations are preserved](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.png)
+
+*Per-benchmark frontiers use each method's own native-valid tasks, as in the original plot. Valid subsets, live windows and historical prompt limits differ. DeepShop's cost and latency frontiers contain only single-run settings; selection remains on the browser-batch frontier, which concerns command counts rather than browser resources.*
+
+![Planned-task-weighted BrowserCode average with observed Pareto-frontier segments and rings, preserving the original own-valid benchmark means and all eleven methods](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.png)
+
+*The own-valid weighted cost frontier is single high/2× cap → single60 → single120 → N5/60. N5/30 is dominated on the weighted cost/latency views. Weights remain 300/1,045, 595/1,045 and 150/1,045; this is not a pooled success rate. The [common-valid weighted preview](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.png) instead uses the same 744 tasks in all methods: its cost-frontier membership is the same, while single60 also lies on its latency frontier. These are descriptive memberships without uncertainty bands; common-valid matching does not remove live-window or protocol effects.*
+
+[Per-benchmark PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.svg) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.svg) · [Common-valid weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.pdf) · [Frontier membership and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_pareto_previews.json) · [Reproduction source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_previews.py).
+
 <details>
 <summary>Historical scaling snapshots before gap recovery</summary>
 
@@ -161,22 +177,6 @@ All eleven methods account for every originally planned task by a native result 
 | Luna high · 120 steps | 150 | 0 | 147 | 3 | 137 | 93.2% | 0.01919 | 22.88 | 196.0 |
 
 The three token/effort variants record all 3,135 planned dispositions: 3,000 valid and 135 invalid. The additional 60-step setting records all 1,045 dispositions: 993 valid and 52 invalid. The additional single120 cohort has 1,045 native results, 946 valid and 99 invalid. N2/30 has 1,044 native results, 992 valid and 52 invalid plus its one administrative missing outcome; N5/60 has 1,044 native results, 945 valid and 99 invalid plus its one claimed-missing outcome. Historical versus fresh collection times, runtime safeguards and resulting valid cohorts differ; the new comparisons are descriptive and do not add paired uncertainty estimates. N3/N5 use high effort for both proposals and selection. External judging and invalid-attempt spend are excluded from the plotted valid-task actor means.
-
-<a id="browsercode-pareto-previews"></a>
-
-### Observed Pareto frontiers — preview variants
-
-Dashed segments join the observed nondominated settings in each panel: minimize that panel's x metric and maximize success, with at least one strict improvement required for dominance. Rings identify frontier settings; a one-setting frontier has no connecting segment. Every panel considers all eleven methods. Segments are visual guides between measured configurations, not fitted curves, attainable intermediate policies or evidence of statistical superiority. The original figures above are unchanged.
-
-![Per-benchmark BrowserCode plots with observed Pareto-frontier segments and rings; all original method points and own-valid populations are preserved](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.png)
-
-*Per-benchmark frontiers use each method's own native-valid tasks, as in the original plot. Valid subsets, live windows and historical prompt limits differ. DeepShop's cost and latency frontiers contain only single-run settings; selection remains on the browser-batch frontier, which concerns command counts rather than browser resources.*
-
-![Planned-task-weighted BrowserCode average with observed Pareto-frontier segments and rings, preserving the original own-valid benchmark means and all eleven methods](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.png)
-
-*The own-valid weighted cost frontier is single high/2× cap → single60 → single120 → N5/60. N5/30 is dominated on the weighted cost/latency views. Weights remain 300/1,045, 595/1,045 and 150/1,045; this is not a pooled success rate. The [common-valid weighted preview](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.png) instead uses the same 744 tasks in all methods: its cost-frontier membership is the same, while single60 also lies on its latency frontier. These are descriptive memberships without uncertainty bands; common-valid matching does not remove live-window or protocol effects.*
-
-[Per-benchmark PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.svg) · [Weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.svg) · [Common-valid weighted PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_common_valid_pareto_preview.pdf) · [Frontier membership and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_pareto_previews.json) · [Reproduction source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_previews.py).
 
 <a id="browsercode-selection-strength-variants"></a>
 
@@ -952,13 +952,11 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 *Recipe 3 update of the [October 21 cost plot](#final-selection-head-ablations-20261021) (whose points are from October 21 and are not comparable: DeepShop success has drifted up about 13 pp since). SFT 4B actor, November 2–4, with the same-day SFT 4B run. Success: 3-benchmark equal-weight mean of overall success (invalid = failure), three runs pooled. Cost from run 1 (all 1,045 tasks), as in the October plot: actor PFLOP = 2 × params × (uncached prompt + generated tokens), LoRA selectors 2 × 4.44 B × their tokens, head FLOPs as logged; model time = actor + selector decision time per episode, excluding browser execution. Filled = K = 3 labels (Recipe 3), hollow = pre-execution labels on the same panels; diamonds = 4B LoRAs, circles = 22.6M heads; blue = GPT-5.5, vermilion = Luna labels. ¹ The GPT-5.5 LoRAs ran November 2–3, a day before the SFT run; a same-day rerun is running on November 4. Points are descriptive, without uncertainty bars; paired intervals are in the table above.* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.svg) · [data](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.json) · [cost script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104-analysis.py) · [plot script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py)
 
-<details>
-<summary>Per-benchmark split</summary>
+**Per benchmark:**
 
 ![Recipe 3 selectors per benchmark: overall success on Online-Mind2Web, WebVoyager and DeepShop vs actor + selector parameters, PFLOP per episode and model time per episode](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.png)
 
 *Same data and encoding as above, one row per benchmark (overall success, three runs pooled; cost from run 1). Points at the same parameter count can overlap (WebVoyager: Luna K = 3 and pre LoRAs, 47.6% and 47.7%).* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.svg) · [plot script](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.py)
-</details>
 
 - **One path for everything:** runtime `/gpfs/scrubbed/zixianma/openwebrl-runtime/recipe3/` (panels, all four label sets, LoRA SFT data, head training data and checkpoints, as symlinks; see its README.md).
 - **Checkpoints.** LoRAs, public: [`decoder-4b-lora-gpt55-k3-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-k3-p16) (Recipe 3, GPT-5.5) and [`decoder-4b-lora-gpt55-pre-p16`](https://huggingface.co/zixianma/action-selection-heads/tree/main/decoder-4b-lora-gpt55-pre-p16) (pre ablation). Runtime (under `rl-actor-recollect-20261016/p16-k3-20261031/`): LoRAs `lora/` (GPT-5.5 K = 3), `lora-pre/`, `lora-luna-k3/`, `lora-luna-pre/`, each with `lora/adapter` and `lora/merged`; heads `train/heads-all2/{k3,pre}-best/seed0/head.pt` (GPT-5.5) and `train/heads-luna/{k3,pre}-best/seed0/head.pt` (Luna).
