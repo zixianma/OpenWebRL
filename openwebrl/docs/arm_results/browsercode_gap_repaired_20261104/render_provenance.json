@@ -1,0 +1,17 @@
+{
+  "schema": "browsercode-gap-repaired-render-provenance-v1",
+  "renderer_sha256": "968715b0a379af0d976a15357c9ac872e9dffb67b9b98524813c05a294ec8123",
+  "aggregate_sha256": "87f18aaf152e82c8646fdc73a7d863af8468151496c63d1fc66a1a4e9f76309b",
+  "historical_renderer_sha256": "90a1b944c4ae805e476e411eb90a14c2827bc70e55badb34b2405b9440aa9006",
+  "historical_common_renderer_sha256": "4f899ac63c7069cfc8b575c1e4bd2b5af4bbc27d7e0f05469a6669a7796feaec",
+  "historical_style_renderer_sha256": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
+  "historical_pair_definition_sha256": "0e12eb559e8b5e2fe4abaebe63a3760fa8993e50069d5f847d74f802667fecd0",
+  "weighted_summary_sha256": "339a2c50238d383ab27a04b57db769363ba711cb4988db8bab774ce7a78afe7c",
+  "matplotlib_version": "3.9.4",
+  "numpy_version": "2.0.2",
+  "artifacts": {
+    "browsercode_scaling_gap_repaired_compact.png": "61947b27074d203a62457d8d211ebc83e0a182248b3d1624b0e6d2a5068ed753",
+    "browsercode_scaling_gap_repaired_compact.pdf": "0b36a89ce6a0de022132d237dd6947508781c7467b4b540c27c48710085aefb0",
+    "browsercode_scaling_gap_repaired_compact.svg": "a30595fe14d00550cec53677fc10f86c4adb1e7b9675503df65060fa5b02a38a"
+  }
+}

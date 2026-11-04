@@ -353,9 +353,29 @@ Each execution approval must bind the printed shard's `plan_sha256`, exact `glob
 
 </details>
 
+<a id="gap-repaired-browsercode-scaling"></a>
+
+### Recreate the gap-repaired BrowserCode comparison
+
+The [current 953-task comparison](ARM_FINAL_RESULTS.md#browsercode-gap-repaired-20261104) preserves all original valid successes and failures and admits only the prespecified first new outcome for each of 703 previously invalid/missing cells. Thirty-three use saved actor evidence plus a first Terra judgment; 670 use one fresh actor attempt. The 386 valid repairs include successes and failures; 317 new invalids remain excluded, and no outcome is imputed. Intersect all eleven methods within each benchmark: **252 OM2W, 556 WebVoyager and 145 DeepShop**. Apply fixed planned weights 300/1,045, 595/1,045 and 150/1,045 to success and every actor mean. The aggregate also includes each method's own-valid counts and means; it does not mix those populations into the plotted intersection.
+
+The renderer validates the 33 complete matched points, 42 joint-outcome contingency rows and their exact success marginals, and recomputes 50,000 paired bootstrap draws within benchmark. Pointwise percentile intervals condition on common validity and omit clustering, live-window variation and multiplicity correction. Equal decision limits do not equalize browser-resource use. Historical single/60 advertised 30; single/120 advertised 120. Fresh actor pricing/latency and saved-actor metrics retain their source definitions; valid-trajectory actor means exclude invalid-attempt spending, Terra and hosting fees. Cached reruns and new Sol/60 are not part of this reconstruction.
+
+Run from the repository root using only public aggregates, with no API key, browser or model calls. Keep the sibling historical results directory: the renderer reuses its styles and paired-bootstrap implementation. PNG, PDF, SVG, weighted statistics and source/artifact hashes are regenerated together.
+
+```bash
+"$API_PY" -m pip install matplotlib==3.9.4 numpy==2.0.2
+GAP_RESULTS=openwebrl/docs/arm_results/browsercode_gap_repaired_20261104
+"$API_PY" -B "$GAP_RESULTS/plot_gap_repaired_scaling.py" \
+  --aggregate "$GAP_RESULTS/aggregate.json" \
+  --output-dir /tmp/openwebrl-browsercode-gap-repaired
+```
+
+The earlier 744-task figures and their original source files remain separate historical snapshots in the next subsection. Task identities, trajectories and operational audit payloads are not published.
+
 ### Recreate the completed scaling figures
 
-The primary [compact strategy figure](ARM_FINAL_RESULTS.md#browsercode-scaling-families) groups output-cap, step-limit and effort curves in its single-run column, and candidate-count curves at 30/60 steps in its selection column. It represents all eleven historical methods: ten Luna settings as points and Sol high/30 as a numeric reference. Each column has its own explicit x-axis ranges; success limits match. The renderer asserts exhaustive historical-method coverage and exports a coverage manifest. The earlier shared-axis six-panel family figure is retained as an alternative. The [supplementary selection analysis](ARM_FINAL_RESULTS.md#browsercode-selection-scaling) fixes Luna high, the 12,288-token ceiling and 30 steps while varying N1/N2/N3/N5. All views use the published all-eleven-method common-valid intersection and fixed planned benchmark weights. The public four-outcome contingency counts preserve pairing without releasing task identities. The renderer checks every contingency's sample size and success marginals against the common-valid aggregate, then draws 50,000 multinomial paired bootstrap replicates within benchmark. Replicates resample the four joint outcome cells, not independent arm marginals. Reported intervals are pointwise percentile intervals without multiplicity correction; conditioning, website dependence, collection windows and the historical single60 prompt caveat remain. Candidate generation and selection vary together, so selector quality is not separately identified.
+The historical 744-task [compact strategy figure](ARM_FINAL_RESULTS.md#browsercode-scaling-families) groups output-cap, step-limit and effort curves in its single-run column, and candidate-count curves at 30/60 steps in its selection column. It represents all eleven historical methods: ten Luna settings as points and Sol high/30 as a numeric reference. Each column has its own explicit x-axis ranges; success limits match. The renderer asserts exhaustive historical-method coverage and exports a coverage manifest. The earlier shared-axis six-panel family figure is retained as an alternative. The [supplementary selection analysis](ARM_FINAL_RESULTS.md#browsercode-selection-scaling) fixes Luna high, the 12,288-token ceiling and 30 steps while varying N1/N2/N3/N5. All views use the published all-eleven-method common-valid intersection and fixed planned benchmark weights. The public four-outcome contingency counts preserve pairing without releasing task identities. The renderer checks every contingency's sample size and success marginals against the common-valid aggregate, then draws 50,000 multinomial paired bootstrap replicates within benchmark. Replicates resample the four joint outcome cells, not independent arm marginals. Reported intervals are pointwise percentile intervals without multiplicity correction; conditioning, website dependence, collection windows and the historical single60 prompt caveat remain. Candidate generation and selection vary together, so selector quality is not separately identified.
 
 Recreate the compact figure, earlier two variants, coverage manifest, statistics and provenance using only public aggregates, with no browser/model calls:
 
@@ -372,7 +392,7 @@ The [task-count-weighted view](ARM_FINAL_RESULTS.md#browsercode-task-weighted-av
 
 The [all-method common-valid alternative](ARM_FINAL_RESULTS.md#browsercode-all-method-common-valid) intersects the native Terra-valid task identities across all eleven plotted methods separately within each benchmark. It recomputes success and every actor metric on that identical intersection, including valid failures, and retains the original planned benchmark weights. Invalid and missing outcomes exclude an identity from all methods in its benchmark; missing measurements are never imputed. Matching tasks does not control collection dates or the earlier prompt-limit difference. Only restricted aggregate counts and means are published; task identities and trajectories remain private. The original own-valid plots remain available.
 
-The [published comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, single60, single120, N2/30, N5/60 and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
+The [historical own-valid comparison](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) includes the three token/effort settings above, single60, single120, N2/30, N5/60 and the four historical high-effort controls. Recreate its 7 × 4.35-inch three-column main figure and 7 × 4.35-inch token figure, with PNG/PDF/SVG exports and coordinates from public aggregates with zero model or browser calls:
 
 ```bash
 "$API_PY" -m pip install matplotlib==3.9.4

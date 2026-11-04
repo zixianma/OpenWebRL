@@ -1,5 +1,74 @@
 # Final inference results
 
+<a id="browsercode-gap-repaired-20261104"></a>
+
+## BrowserCode scaling after one-pass gap recovery
+
+**On the same 953 common-valid tasks, single/60 has a stronger observed cost/latency trade-off than N5/30:** 84.70% success at $0.00992 and 130.6 seconds per task, versus 83.66% at $0.05955 and 192.3 seconds. N5/60 reaches 86.78% with additional API cost and latency. These are conditional comparisons across live collection windows, not equal-browser-resource experiments. The cached-selector reruns and new Sol/60 runs are separate and are not merged into this snapshot.
+
+![Compact comparison of single-run and candidate-selection scaling on the expanded 953-task common-valid cohort](arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.png)
+
+*All eleven original settings are represented: ten Luna configurations as circles and Sol high/30 in the reference strip. Left: configured output cap, effort and decision limit; right: candidate count at 30 and 60 decisions. Default Luna effort is high and the output ceiling is 12,288 tokens per generation, including reasoning. A larger cap is not necessarily greater realized spending. Column-specific x ranges are explicit and y limits are shared; line segments connect observations rather than fitted scaling laws. Actor API cost and elapsed per-task actor latency use the same common-valid tasks, including valid failures, and exclude Terra judging. Browser fees and invalid-attempt spending are not included in these valid-trajectory means. Equal decision limits do not equalize browser operations, session duration or fees.*
+
+### Coverage and weighted means
+
+The completed one-pass recovery expands the intersection from **744 to 953 of 1,045 tasks**, without replacing any original valid success or failure. Matching task identity does not remove common-valid selection or collection-window differences. Fixed planned benchmark weights **300/1,045, 595/1,045 and 150/1,045** apply identically to success, actor cost, latency and selected batches; these are not pooled success rates across the 953 tasks.
+
+| Benchmark | Planned | Original common-valid | After recovery | Still excluded |
+|---|---:|---:|---:|---:|
+| OM2W | 300 | 226 | 252 | 48 |
+| WebVoyager | 595 | 387 | 556 | 39 |
+| DeepShop | 150 | 131 | 145 | 5 |
+| Total | 1,045 | 744 | 953 | 92 |
+
+| Method / maximum decisions | Weighted success | Actor API $ / task | Actor latency (s / task) | Selected browser batches |
+|---|---:|---:|---:|---:|
+| Luna high single / 30 | 79.28% | 0.00880 | 101.6 | 14.98 |
+| Luna xhigh single / 30 | 79.90% | 0.01037 | 122.0 | 15.46 |
+| Luna high single / 30 · 0.5× cap | 80.18% | 0.00866 | 109.1 | 15.32 |
+| Luna high single / 30 · 2× cap | 80.82% | 0.00865 | 110.3 | 15.11 |
+| Luna high single / 60 | 84.70% | 0.00992 | 130.6 | 16.26 |
+| Luna high single / 120 | 84.98% | 0.01104 | 130.5 | 16.37 |
+| Luna high N2 / 30 | 82.52% | 0.04693 | 172.3 | 13.36 |
+| Luna high N3 / 30 | 82.02% | 0.04988 | 175.4 | 13.18 |
+| Luna high N5 / 30 | 83.66% | 0.05955 | 192.3 | 12.68 |
+| Luna high N5 / 60 | 86.78% | 0.06243 | 183.7 | 12.58 |
+| Sol high single / 30 | 80.59% | 0.21974 | 98.2 | 14.54 |
+
+### Paired gains and interpretation
+
+| Paired contrast | Weighted gain (pp) | Pointwise paired 95% interval (pp) |
+|---|---:|---:|
+| Single/60 − single/30 | +5.41 | [+3.03, +7.79] |
+| N5/30 − single/30 | +4.37 | [+1.95, +6.79] |
+| N5/60 − single/60 | +2.09 | [+0.06, +4.10] |
+
+The intervals use 50,000 paired task-bootstrap draws within benchmark and the same fixed weights. They condition on retained validity and saved labels, assume independent tasks, and exclude website clustering, live-window variation and multiplicity correction. The historical single/60 actor enforces 60 decisions while advertising 30; single/120 enforces and advertises 120. Candidate generation and selection vary together, so these comparisons do not isolate selector quality. The modest N5/60 gain is a cost/latency trade-off, not evidence that selection dominates other scaling strategies; N2 also exceeds N3 in this snapshot.
+
+| Benchmark | Common-valid tasks | N5/30 − single/30 (pp) | N5/60 − single/60 (pp) |
+|---|---:|---:|---:|
+| OM2W | 252 | +9.52 | +1.59 |
+| WebVoyager | 556 | +2.88 | +2.52 |
+| DeepShop | 145 | +0.00 | +1.38 |
+
+*Per-benchmark gains are descriptive; the intervals above apply to the fixed-weight three-benchmark contrasts.*
+
+[PDF](arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.pdf) · [SVG](arm_results/browsercode_gap_repaired_20261104/browsercode_scaling_gap_repaired_compact.svg) · [Aggregate means, counts and paired contingencies](arm_results/browsercode_gap_repaired_20261104/aggregate.json) · [Weighted coordinates and intervals](arm_results/browsercode_gap_repaired_20261104/weighted_summary.json) · [Plot source](arm_results/browsercode_gap_repaired_20261104/plot_gap_repaired_scaling.py) · [Reproduction](API_EXPERIMENT_METHODS.md#gap-repaired-browsercode-scaling)
+
+<details>
+<summary>Recovery and measurement definitions</summary>
+
+The prespecified repair roster contains 703 previously invalid or missing method–task cells. Every cell now has one recorded new outcome: 386 valid (286 successes and 100 valid failures) and 317 invalid. All original valid outcomes and their actor metrics remain unchanged; failed repairs are not replayed or relabeled as valid failures. Thirty-three cells reuse qualified saved actor evidence for their first Terra judgment; 670 receive one fresh actor attempt, yielding 353 valid and 317 invalid outcomes. The two recorded native-only invalid outcomes remain distinct from parent dispositions; no outcome is imputed. Invalids still exclude a task from every method in its benchmark's intersection.
+
+All judgments use GPT-5.6 Terra, medium effort, 4,096 completion tokens and seed 42. Saved-actor recoveries retain original actor cost/latency; fresh repairs use their native actor accounting. Historical pricing or its native upper bound is not an invoice. One selected nonempty executable BrowserCode block is one batch, potentially containing multiple browser/CDP operations; final answers and unselected proposals do not add batches. Batch counts do not measure browser resources or fees. The separate [US-residential browser study](#browsercode-us-stealth-full300) reports measured hosting/proxy charges on its own population. Historical selector implementation and scientific limits are preserved here; cached-selector results are a separate implementation condition.
+
+The public reconstruction checks every paired contingency against its benchmark's same-task success marginals, validates complete coverage for all three actor metrics, and records source hashes in the [render provenance](arm_results/browsercode_gap_repaired_20261104/render_provenance.json). Only sanitized aggregate counts/means and plot code are released; task identities, trajectories and operational audits remain private. Earlier figures and their original denominators are retained below.
+
+</details>
+
+<details>
+<summary>Historical scaling snapshots before gap recovery</summary>
+
 <!-- browsercode-inference-scaling-20261031:start -->
 <a id="browsercode-inference-scaling-20261031"></a>
 
@@ -254,6 +323,8 @@ All-attempt spend for the three token/effort variants is $29.243526775 actor cha
 
 </details>
 <!-- browsercode-inference-scaling-20261031:end -->
+
+</details>
 
 <!-- browsercode-us-stealth-full300:start -->
 <a id="browsercode-us-stealth-full300"></a>
