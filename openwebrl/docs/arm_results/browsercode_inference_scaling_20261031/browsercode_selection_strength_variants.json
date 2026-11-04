@@ -5,7 +5,7 @@
     "browsercode_scaling_family_pairs.json": "0e12eb559e8b5e2fe4abaebe63a3760fa8993e50069d5f847d74f802667fecd0",
     "browsercode_scaling_family_summary.json": "f6938aeff1776ffbe18a077ed672be606a521dcda5459bed1d4157c570f5257c"
   },
-  "renderer_sha256": "352b9720b7563abf55689b722a179f7b115b8f933bb2939a285f99af5cf43cea",
+  "renderer_sha256": "668972b832b905289c0bf64059def92660006b4b097982edbc2efaf6408cc998",
   "paired_outcomes": [
     {
       "decision_limit": 30,
@@ -69,5 +69,5 @@
   "intervals": "Reused 50,000-draw pointwise paired task-bootstrap intervals; no new uncertainty calculations",
   "batch_scope": "Selected nonempty BrowserCode executions, not individual browser operations; excludes unselected proposals and model calls",
   "interpretation": "Selection includes candidate generation and selection jointly; live-window and protocol differences remain. No random-selection/equal-generation control isolates selector quality.",
-  "efficiency": "Browser-interaction efficiency does not imply lower model cost or latency; N5 costs more than its same-horizon N1 baseline."
+  "efficiency": "Browser batch counts are not browser-resource measurements: no CPU/RAM, session-time, traffic or billed-resource saving is inferred. N5 costs more actor dollars and time than its same-horizon N1 baseline; this view is supplementary, not practical-efficiency evidence."
 }

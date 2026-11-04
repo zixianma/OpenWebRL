@@ -178,7 +178,7 @@ def main():
                   intervals='Reused 50,000-draw pointwise paired task-bootstrap intervals; no new uncertainty calculations',
                   batch_scope='Selected nonempty BrowserCode executions, not individual browser operations; excludes unselected proposals and model calls',
                   interpretation='Selection includes candidate generation and selection jointly; live-window and protocol differences remain. No random-selection/equal-generation control isolates selector quality.',
-                  efficiency='Browser-interaction efficiency does not imply lower model cost or latency; N5 costs more than its same-horizon N1 baseline.')
+                  efficiency='Browser batch counts are not browser-resource measurements: no CPU/RAM, session-time, traffic or billed-resource saving is inferred. N5 costs more actor dollars and time than its same-horizon N1 baseline; this view is supplementary, not practical-efficiency evidence.')
     (HERE / 'browsercode_selection_strength_variants.json').write_text(json.dumps(report, indent=2) + '\n')
 
 

@@ -31,13 +31,14 @@ The supported framing is **selection improves fixed-horizon success, while incre
 
 <a id="browsercode-selection-strength-variants"></a>
 
-### Action selection: interaction efficiency and paired outcomes
+<details>
+<summary>Supplementary batch-count and paired-outcome views</summary>
 
-**Recommended alternative: success versus executed browser batches.** At 30 decisions, N5 raises weighted success by 3.86 pp while using 15.1% fewer selected batches than N1; at 60 decisions, the point estimates are +1.38 pp and 21.3% fewer batches. These are browser-interaction savings: N5 uses more actor dollars and time than its same-horizon N1 reference. Single60 retains the stronger observed actor-cost/latency trade-off described above.
+**Batch counts describe executed commands, not browser-resource efficiency.** A batch may contain multiple operations, and the browser may remain allocated while the model generates or selects. These local cohorts do not supply matched browser CPU/RAM or network measurements; fewer batches establish neither lower browser resources nor lower fees. The plots below are supplementary diagnostics, not recommended evidence of practical efficiency. The compact cost/latency comparison above remains primary: single60 has a stronger observed actor-cost/latency trade-off than N5/30.
 
 ![Action selection on the common-valid cohort: all eleven historical settings in success-versus-executed-browser-batch space, with arrows from N1 to N5 at 30 and 60 decisions; an adjacent paired-gain plot shows the existing 95% intervals](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction.png)
 
-*All eleven historical methods remain visible; gray marks other settings, including Sol. Red arrows compare observed N1 and N5 configurations at the same decision limit (solid: 30; dashed: 60), with no interpolation claim. Higher success and fewer batches appear toward the upper left. Batches are selected nonempty BrowserCode executions, potentially containing multiple browser operations; unselected proposals and model/selector calls are not batches. The paired-gain panel reuses the original pointwise 50,000-draw task-bootstrap intervals: +1.29 to +6.45 pp at 30 decisions and −0.81 to +3.59 pp at 60.*
+*All eleven historical methods remain visible; gray marks other settings, including Sol. Red arrows compare observed N1 and N5 configurations at the same decision limit (solid: 30; dashed: 60), with no interpolation claim. Higher success and fewer command batches appear toward the upper left; this direction does not mean lower browser CPU/RAM, session time, bandwidth or billed resources. Batches are selected nonempty BrowserCode executions, potentially containing multiple browser operations; unselected proposals and model/selector calls are not batches. The paired-gain panel reuses the original pointwise 50,000-draw task-bootstrap intervals: +1.29 to +6.45 pp at 30 decisions and −0.81 to +3.59 pp at 60.*
 
 [Interaction PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_interaction.svg).
 
@@ -45,10 +46,13 @@ The supported framing is **selection improves fixed-horizon success, while incre
 
 *The blue bar counts N1 success/N5 failure; red counts N5 success/N1 failure. Each bar divides by all common-valid tasks in its benchmark, not only discordant tasks. Concordant successes and failures are omitted. The weighted row uses the fixed planned benchmark weights, not pooled counts. The right-minus-left difference equals the paired success gain; the display preserves the small negative DeepShop contrast at 30 decisions.*
 
+The [separate measured US-residential study](#browsercode-us-stealth-full300) reports actual hosting/proxy fees and uses a different cohort; those charges must not be transferred onto these local-browser points.
+
 Both variants use the same 744-task intersection, planned benchmark weights, Terra judgments and historical protocol qualifications as the compact figure. Candidate generation and selection vary jointly; neither view isolates selector quality from additional sampling or controls live-window differences. The original compact figure is unchanged.
 
 [Paired-outcome PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_paired_outcomes.svg) · [Coordinates, definitions and source hashes](arm_results/browsercode_inference_scaling_20261031/browsercode_selection_strength_variants.json) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_selection_strength_variants.py).
 
+</details>
 
 <details>
 <summary>Supplementary paired-selection analysis and earlier three-panel rendering</summary>
