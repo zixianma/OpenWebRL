@@ -344,6 +344,10 @@
       "anchor": "gradient-diagnostics",
       "sha256": "81550497dbc1e855c3305727b4ccb6b9a576b6690e496b9e3ecf3066523fb7d8",
       "title": "Gradient spikes and training diagnostics"
+    },
+    "TINKER_LORA.md": {
+      "title": "Tinker LoRA: Qwen3.5-9B SFT and outcome-only RL",
+      "sources": []
     }
   },
   "retained": [

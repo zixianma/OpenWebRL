@@ -1,5 +1,7 @@
 # OpenWebRL project documentation
 
+[Tinker LoRA port: Qwen3.5-9B SFT matches OpenWebRL-4B-SFT; outcome-only RL at lr 3e-6 reaches OM2W 125/300 and DeepShop 66/150 (Terra judge), while lr 1e-5 collapses](TINKER_LORA.md#tinker-rl-results).
+
 [BrowserCode API experiments: simplified setup, bounded evaluation, protocols, code map and qualified results](API_EXPERIMENT_METHODS.md). [Source and reproduction package](../api_experiments/README.md).
 
 [Inference-scaling optimization vs static N5: cached selector keeps N5 success at 59% of cost; agreement and self-requested gates lose 2–4 pp; phase-3 selector skip and N3 for latency (interim)](ARM_INFERENCE_SCALING_OPTIMIZATION.md#adaptive-compute-20261101).
