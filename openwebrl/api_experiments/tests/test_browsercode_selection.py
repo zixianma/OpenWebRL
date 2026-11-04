@@ -81,7 +81,14 @@ class SelectionTests(unittest.TestCase):
    def __init__(self,*args):calls.append(('browser',args))
   worker=types.SimpleNamespace(ReservationBudget=ActorBudget,Budget=BrowserBudget,JudgeBudget=JudgeBudget)
   def no_sdk(**kwargs):raise RuntimeError('blocked before SDK')
-  with patch.dict(sys.modules,{'worker':worker,'environments':types.SimpleNamespace(),'openai':types.SimpleNamespace(OpenAI=no_sdk)}),patch.dict('os.environ',{'OPENAI_API_KEY':'offline-fixture'}),self.assertRaisesRegex(RuntimeError,'blocked before SDK'):
+  # Supply the fake worker through the loader boundary, not a stale runtime
+  # module that the real isolation guard intentionally rejects.
+  loader_fixture=self.root/'fixture_runtime_imports.py'
+  loader_fixture.write_text("import importlib\ndef load(runtime):\n return importlib.import_module('worker'), importlib.import_module('environments')\n")
+  original_spec=c.importlib.util.spec_from_file_location
+  def fixture_spec(name,path,*args,**kwargs):
+   return original_spec(name,loader_fixture if Path(path).name=='runtime_imports.py' else path,*args,**kwargs)
+  with patch.dict(sys.modules,{'worker':worker,'environments':types.SimpleNamespace(),'openai':types.SimpleNamespace(OpenAI=no_sdk)}),patch.object(c.importlib.util,'spec_from_file_location',side_effect=fixture_spec),patch.dict('os.environ',{'OPENAI_API_KEY':'offline-fixture'}),self.assertRaisesRegex(RuntimeError,'blocked before SDK'):
    c.execute(args,plan,tasks)
   self.assertEqual([x[0]for x in calls],['actor','Terra','browser']);self.assertEqual(str(calls[1][1][1]),'1')
  def actor(self,r):

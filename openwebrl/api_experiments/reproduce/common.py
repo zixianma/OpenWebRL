@@ -80,7 +80,7 @@ def positive_money(value):
 def parser(provider):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--runtime", type=Path, required=True, help="Isolated runtime produced by prepare_browsercode.py")
-    choices = (*ARMS[provider], 'luna_single_high') if provider == 'luna' else (*ARMS[provider], 'parallel2_select_high') if provider == 'gpt' else ARMS[provider]
+    choices = (*ARMS[provider], 'luna_single_high', 'luna_n3_cached_high30', 'luna_n5_cached_high60') if provider == 'luna' else (*ARMS[provider], 'parallel2_select_high') if provider == 'gpt' else ARMS[provider]
     p.add_argument("--arm", choices=choices, required=True)
     p.add_argument("--harness", choices=("browsercode", "cuawright"), default="browsercode", help="Earlier paired-harness campaigns support both executors")
     p.add_argument("--benchmark", choices=("online-mind2web", "webvoyager", "deepshop"), help="Filter the prepared task roster before applying --limit")
@@ -110,6 +110,16 @@ def prepare(args, provider):
     plan, config, tasks = (read(runtime / name) for name in ("campaign-plan.json", "runtime-config.json", "tasks.json"))
     prospective = None
     selection_protocol = None
+    cached_protocol = None
+    if (runtime/'cached-selection-experiment.json').exists() or plan.get('cached_selection_protocol') or config.get('cached_selection_protocol'):
+        if provider != 'luna' or args.arm not in ('luna_n3_cached_high30','luna_n5_cached_high60') or getattr(args,'harness','browsercode') != 'browsercode':
+            raise ValueError('Fixed cached selection requires its declared Luna BrowserCode arm')
+        spec = importlib.util.spec_from_file_location('cached_selection',Path(__file__).with_name('cached_selection.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        cached_protocol = module.validate(runtime)
+        if cached_protocol['arm'] != args.arm:
+            raise ValueError('Fixed cached selection arm differs')
     if (runtime / 'selection-experiment.json').exists() or plan.get('prospective_selection_protocol') or config.get('prospective_selection_protocol'):
         if provider != 'gpt' or args.arm not in ('parallel2_select_high', 'parallel5_select_high') or getattr(args, 'harness', 'browsercode') != 'browsercode':
             raise ValueError('Prospective selection requires the declared GPT/Luna BrowserCode arm')
@@ -130,7 +140,9 @@ def prepare(args, provider):
             raise ValueError('Prospective arm/effort does not match selected arm')
     if prospective and selection_protocol:
         raise ValueError('Single and selection experiment markers cannot be combined')
-    selected_protocol = selection_protocol or prospective
+    if cached_protocol and (prospective or selection_protocol):
+        raise ValueError('Cached and historical/single protocol markers cannot be combined')
+    selected_protocol = cached_protocol or selection_protocol or prospective
     benchmark = getattr(args, "benchmark", None)
     if benchmark:
         tasks = [t for t in tasks if t.get("benchmark", "online-mind2web") == benchmark]
@@ -217,6 +229,11 @@ def prepare(args, provider):
         result.update(prospective_selection_protocol=selection_protocol['schema'],
                       prospective_selection_receipt_sha256=digest(runtime / 'selection-experiment.json'),
                       benchmark_roster_counts=selection_protocol['benchmark_counts'])
+    if cached_protocol:
+        result.update(cached_selection_protocol=cached_protocol['schema'],
+                      cached_selection_receipt_sha256=digest(runtime/'cached-selection-experiment.json'),
+                      benchmark_roster_counts=cached_protocol['benchmark_counts'],
+                      selector_context='full native actor context plus developer selection append')
     if selection_sha:
         result.update(task_selection_sha256=selection_sha, task_selection_count=len(tasks),
                       selected_task_ids=ids, task_selection_path=str(selection))

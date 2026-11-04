@@ -191,6 +191,14 @@ def setup(args):
         selection = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(selection)
         selection.parameters(candidates, selection_decisions)
+    cached_arm = getattr(args, 'luna_cached_selection', None)
+    if cached_arm is not None:
+        if args.campaign != 'browsercode_luna_effort' or cap is not None or candidates is not None or max_decisions != 30 or getattr(args,'luna_single_reasoning_effort',None) is not None:
+            raise ValueError('Fixed cached selection requires --campaign luna and no single/historical-selection overrides')
+        spec = importlib.util.spec_from_file_location('cached_selection',HERE/'cached_selection.py')
+        cached = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cached)
+        cached.parameters(cached_arm)
     target = writable(args.workspace)
     if target.exists() and any(path.name != 'dependencies' for path in target.iterdir()):
         raise ValueError('Use a new workspace; prepared experiments are never overwritten')
@@ -218,6 +226,8 @@ def setup(args):
         prospective.configure(target / 'runtime', cap, effort, max_decisions)
     if candidates is not None:
         selection.configure(target / 'runtime', candidates, selection_decisions)
+    if cached_arm is not None:
+        cached.configure(target/'runtime',cached_arm)
     write(target / MARKER, {'schema': 'browsercode-workspace-v1', 'campaign': args.campaign,
                            'dependencies': str(dependencies), 'python': str(python), 'executor': 'browsercode'})
     print('Workspace ready: ' + str(target))
@@ -284,6 +294,7 @@ def parser():
     s.add_argument('--luna-single-max-decisions', type=int, choices=(30, 60, 120), default=30, help='Prospective single decision limit; 60/120 require explicit output cap and effort;120 supports high12288 and advertises120; actor wall deadline stays900 seconds')
     s.add_argument('--luna-selection-candidates', type=int, choices=(2, 5), help='Explicit new Luna high selection arm; pair with --luna-selection-max-decisions; requires gpt-crossbench')
     s.add_argument('--luna-selection-max-decisions', type=int, choices=(30, 60), help='Explicit paired selection limit: N2/30 or N5/60; fixed12288 tokens and900-second actor alarm')
+    s.add_argument('--luna-cached-selection', choices=('luna_n3_cached_high30','luna_n5_cached_high60'), help='Full native-context fixed Luna high cached selection; requires --campaign luna;12288 tokens and actual+advertised30/60 decisions')
     s.set_defaults(action=setup)
     c = commands.add_parser('check', help='Check real imports, optionally a local browser; zero model calls')
     c.add_argument('--workspace', type=Path, required=True)

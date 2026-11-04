@@ -161,6 +161,22 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 The run commands print plans; add `--execute` for paid collection within their explicit caps. Model-call caps include proposals, selectors and native input counters. For a full benchmark, select its 300/595/150-task limit and budget it separately. The source-bound selection receipt retains the original model, worker and judge files, and validates the generated task roster, prompt, actual model guard, agent limit, raw model payloads and Terra protocol before execution. Archived experiments remain unchanged. Report success over planned tasks and valid-only success with counts, common-valid paired comparisons, actual tokens, model cost, browser-code batches and **elapsed actor latency per task**. Parallel API durations are not summed into actor latency. The qualified N2/30 and N5/60 cohorts each retain 1,044 native results and one original missing outcome: administrative missing on DeepShop for N2, and claimed-missing on OM2W for N5/60. Missing outcomes are not imputed as failures or retried. Their overall confirmed-success rates use the original planned denominators and remain lower bounds in those cells; the [main figure](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031) uses each method's own valid tasks. These recipes prepare independent reproductions.
 
 <a id="browser-hosting-and-traffic-costs"></a>
+### Fixed cached-context Luna selection
+
+Use `--luna-cached-selection luna_n3_cached_high30` or `luna_n5_cached_high60` with `--campaign luna` to prepare the cached-context implementation on the pinned OM2W 300, WebVoyager 595 and DeepShop 150 tasks. Both use `gpt-6-luna` high, a 12,288-output-token ceiling for each proposal and selector, a 900-second actor deadline, and `gpt-5.6-terra` medium with 4,096 completion tokens and seed 42. The actual and advertised decision limits are 30 and 60, respectively.
+
+All N proposals run concurrently on identical native actor input. The selector receives that full actor context, including earlier selected encrypted reasoning and executed tool history, followed by a developer instruction and indexed proposal actions. It retains the actor tool definition, uses `tool_choice=none`, and returns a strict `selected_index` schema. Only the chosen candidate executes; its native response and the actual observation enter the next actor turn. Unselected candidates' reasoning never enters later actor context.
+
+This changes the historical selector's context projection. Cached N5/60 also advertises 60 decisions; historical N5/60 advertised 30 while enforcing 60. Comparison with historical selection therefore does **not isolate provider caching alone**. Prefix reuse depends on the provider; measure actual cache telemetry and retain unknown usage conservatively. Actor latency is elapsed time per task, including proposal generation, selection and browser execution, excluding browser initialization and external Terra judging. These recipes prepare new reproductions; cached reruns are separate from the completed historical figures.
+
+```bash
+python -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --campaign luna --luna-cached-selection luna_n3_cached_high30 \
+  --workspace /tmp/luna-cached-n3 --dependencies /path/to/dependencies.json
+```
+
+For N5/60, use `luna_n5_cached_high60` and a new workspace. The ordinary `check`, `run` and `report` commands apply. Setup performs no browser or model work. Run prints a plan until `--execute` is supplied; provide explicit actor, judge, physical-call and browser-start caps. Preparation grants no spending authorization. Generated source manifests bind the method, roster, prompts, worker limits and original archived runtime files before execution.
+
 ### Browser hosting and traffic costs
 
 The [completed full-300 comparison](#us-stealth-full300) reports measured hosting and residential-proxy fees separately from actor/Terra pricing and task-performance populations. **The earlier 20-task US-residential pilot cost $5.74 across both methods**, including model calls, Terra, hosting, proxy traffic and failed attempts. On 15 contemporaneous common-valid pairs, N5 succeeded on 15 and Single on 12, with mean actor-loop latency of 191.6 versus 120.8 seconds. This small pilot does not establish full-benchmark superiority; [results and accounting are below](#measured-us-residential-pilot).

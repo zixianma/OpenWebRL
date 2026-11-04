@@ -1,0 +1,161 @@
+{
+  "benchmark_counts": {
+    "deepshop": 150,
+    "online-mind2web": 300,
+    "webvoyager": 595
+  },
+  "cache_telemetry": "Provider prefix reuse is an opportunity, never guaranteed. Record observed cached/write tokens. Missing telemetry is unknown, never zero; use existing conservative usage bounds.",
+  "candidate_calls": "N concurrent independent Responses requests on identical native input; selector follows after all N futures settle; one selected candidate action executes.",
+  "cells": [
+    {
+      "actor_deadline_seconds": 900,
+      "actor_effort": "high",
+      "actor_output_cap": 12288,
+      "advertised_max_decisions": 30,
+      "arm": "luna_n3_cached_high30",
+      "benchmark": "deepshop",
+      "browser_backend": "local",
+      "candidates": 3,
+      "judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42
+      },
+      "max_decisions": 30,
+      "model": "gpt-6-luna",
+      "selector_effort": "high",
+      "selector_output_cap": 12288,
+      "viewport": [
+        1280,
+        1800
+      ]
+    },
+    {
+      "actor_deadline_seconds": 900,
+      "actor_effort": "high",
+      "actor_output_cap": 12288,
+      "advertised_max_decisions": 30,
+      "arm": "luna_n3_cached_high30",
+      "benchmark": "online-mind2web",
+      "browser_backend": "local",
+      "candidates": 3,
+      "judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42
+      },
+      "max_decisions": 30,
+      "model": "gpt-6-luna",
+      "selector_effort": "high",
+      "selector_output_cap": 12288,
+      "viewport": [
+        1280,
+        1800
+      ]
+    },
+    {
+      "actor_deadline_seconds": 900,
+      "actor_effort": "high",
+      "actor_output_cap": 12288,
+      "advertised_max_decisions": 30,
+      "arm": "luna_n3_cached_high30",
+      "benchmark": "webvoyager",
+      "browser_backend": "local",
+      "candidates": 3,
+      "judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42
+      },
+      "max_decisions": 30,
+      "model": "gpt-6-luna",
+      "selector_effort": "high",
+      "selector_output_cap": 12288,
+      "viewport": [
+        1280,
+        1800
+      ]
+    },
+    {
+      "actor_deadline_seconds": 900,
+      "actor_effort": "high",
+      "actor_output_cap": 12288,
+      "advertised_max_decisions": 60,
+      "arm": "luna_n5_cached_high60",
+      "benchmark": "deepshop",
+      "browser_backend": "local",
+      "candidates": 5,
+      "judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42
+      },
+      "max_decisions": 60,
+      "model": "gpt-6-luna",
+      "selector_effort": "high",
+      "selector_output_cap": 12288,
+      "viewport": [
+        1280,
+        1800
+      ]
+    },
+    {
+      "actor_deadline_seconds": 900,
+      "actor_effort": "high",
+      "actor_output_cap": 12288,
+      "advertised_max_decisions": 60,
+      "arm": "luna_n5_cached_high60",
+      "benchmark": "online-mind2web",
+      "browser_backend": "local",
+      "candidates": 5,
+      "judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42
+      },
+      "max_decisions": 60,
+      "model": "gpt-6-luna",
+      "selector_effort": "high",
+      "selector_output_cap": 12288,
+      "viewport": [
+        1280,
+        1800
+      ]
+    },
+    {
+      "actor_deadline_seconds": 900,
+      "actor_effort": "high",
+      "actor_output_cap": 12288,
+      "advertised_max_decisions": 60,
+      "arm": "luna_n5_cached_high60",
+      "benchmark": "webvoyager",
+      "browser_backend": "local",
+      "candidates": 5,
+      "judge": {
+        "max_completion_tokens": 4096,
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "medium",
+        "seed": 42
+      },
+      "max_decisions": 60,
+      "model": "gpt-6-luna",
+      "selector_effort": "high",
+      "selector_output_cap": 12288,
+      "viewport": [
+        1280,
+        1800
+      ]
+    }
+  ],
+  "comparability": "Historical selector_input projected a different selector context. This full-native-context cached protocol is a separate implementation condition, not a pure cache toggle.",
+  "history": "Only selected candidate response items and actual execution observation carry forward; unselected candidates and selector response do not enter actor history.",
+  "paid_authorization": false,
+  "preparation_only": true,
+  "schema": "browsercode-fixed-cached-selection-v1",
+  "selector_context": "Deep copy actor Responses payload, append developer selection instruction and indexed proposal JSON; preserve all prior selected native response items, tools and include fields, set tool_choice none and strict selected_index JSON schema."
+}

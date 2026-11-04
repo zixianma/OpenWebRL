@@ -149,8 +149,16 @@ class ReproductionTests(unittest.TestCase):
             self.assertNotIn("WANDB_RESUME", os.environ)
             return Tracking()
         fake_wandb = types.SimpleNamespace(init=track, Settings=lambda **kwargs: None)
+        # These execution tests supply fake workers; real import isolation is
+        # exercised separately by test_runtime_imports.
+        loader_fixture = self.base / "fixture_runtime_imports.py"
+        loader_fixture.write_text("import importlib\ndef load(runtime):\n    return importlib.import_module('worker'), importlib.import_module('environments')\n")
+        original_spec = m.importlib.util.spec_from_file_location
+        def fixture_spec(name, path, *args, **kwargs):
+            target = loader_fixture if Path(path).name == "runtime_imports.py" else path
+            return original_spec(name, target, *args, **kwargs)
         before = {str(p): p.read_bytes() for p in self.runtime.rglob("*") if p.is_file()}
-        with patch.dict(os.environ, {"OPENAI_API_KEY": "offline-fake", "ANTHROPIC_API_KEY": "offline-fake", "WANDB_RUN_ID": "inherited-campaign", "WANDB_RESUME": "must"}), patch.dict(sys.modules, {"wandb": fake_wandb, "openai": types.SimpleNamespace(OpenAI=Client), "anthropic": types.SimpleNamespace(Anthropic=Client)}), patch.object(m.importlib, "import_module", side_effect=modules.__getitem__), patch.object(m.signal, "signal"), patch.object(sys, "path", list(sys.path)), contextlib.redirect_stdout(io.StringIO()):
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "offline-fake", "ANTHROPIC_API_KEY": "offline-fake", "WANDB_RUN_ID": "inherited-campaign", "WANDB_RESUME": "must"}), patch.dict(sys.modules, {"wandb": fake_wandb, "openai": types.SimpleNamespace(OpenAI=Client), "anthropic": types.SimpleNamespace(Anthropic=Client)}), patch.object(m.importlib, "import_module", side_effect=modules.__getitem__), patch.object(m.importlib.util, "spec_from_file_location", side_effect=fixture_spec), patch.object(m.signal, "signal"), patch.object(sys, "path", list(sys.path)), contextlib.redirect_stdout(io.StringIO()):
             code = m.execute(args, plan, tasks)
         self.assertEqual(code, 1)  # Invalid or budget-halted coverage must signal failure.
         self.assertEqual(len(calls), 1 if halted else 3)
