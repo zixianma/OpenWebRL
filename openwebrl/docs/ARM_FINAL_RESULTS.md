@@ -29,6 +29,70 @@ The supported framing is **selection improves fixed-horizon success, while incre
 
 [Compact PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.pdf) · [Compact SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_strategies_compact.svg) · [Original six-panel family figure](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_by_family.png) · [Reproducible plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling_families.py) · [Method and reproduction](API_EXPERIMENT_METHODS.md#recreate-the-completed-scaling-figures)
 
+<a id="browsercode-per-benchmark-results"></a>
+
+### Per-benchmark results
+
+**A higher decision limit does not improve every benchmark.** Luna high single at 120 decisions has the strongest observed single-call valid-only success on WebVoyager and DeepShop; the 60-decision setting is higher on OM2W. N5 high at 60 decisions has the highest observed WebVoyager rate among these methods. All added settings retain high effort, a 12,288-output-token ceiling per generation and the 900-second actor alarm. Live collection windows, runtime safeguards and valid-task subsets differ, so these are descriptive comparisons. The historical single60 model and agent enforce 60 while their prompt advertises 30; single120 enforces and advertises 120. The comparison changes both limits.
+
+![BrowserCode success versus actor cost, browser-code batches and task latency across three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.png)
+
+*All 33 points use GPT-5.6 Terra terminal-success judgments and local BrowserCode browsers; Sol and Luna denote GPT-6 Sol and GPT-6 Luna. Success and all actor means use each method's own native valid tasks, including valid failures. Native results, invalids and missing outcomes remain separate: N5/60 has 299 native OM2W results plus one claimed-missing outcome; N2/30 has 149 native DeepShop results plus one administrative missing outcome. Neither missing outcome is imputed. Browser-code batches count nonempty selected commands (`selected_code_batches`); a JavaScript batch may contain multiple browser/CDP calls. Final answers, unselected candidates and selection calls add no batches; execution errors still count. See the [exact rule](API_EXPERIMENT_METHODS.md#browsercode-batch-counting). Squares identify Sol and circles Luna; single-call settings are blue, N2 is red, N3 solid light red, and N5 dark red. Open medium-blue/dark-blue circles denote single60/single120, and the open dark-red circle N5/60; remaining settings permit 30 decisions. Per-generation output ceilings include reasoning: 1× = 12,288, 2× = 24,576 and 0.5× = 6,144. Cost is frozen native usage pricing or its upper bound per valid task, excluding Terra, rather than an invoice. Latency is actor-loop time per valid task, including model and browser work and excluding Terra. Measured US-residential browser hosting/traffic is a separate comparison with its own populations; it is not projected onto these local-browser points. Axes are cropped, actor cost is logarithmic, and the legend is outside the panels.*
+
+[Aggregate](arm_results/browsercode_inference_scaling_20261031/aggregate.json) · [Coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_coordinates.csv) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.svg) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.pdf) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py) · [Reproduction recipes](API_EXPERIMENT_METHODS.md#luna-xhigh-output-limits)
+
+All eleven methods account for every originally planned task by a native result or an explicitly retained missing outcome. Success percentages divide by native valid tasks; actor cost, batch and latency means cover that same valid cohort. All 24 previously published point dictionaries and their coordinates are unchanged. “Missing native” is not counted as invalid: N2 DeepShop is administrative missing, and N5/60 OM2W is claimed-missing. Confirmed successes divided by all planned tasks are lower bounds in those two cells.
+
+### Online-Mind2Web · 300 planned tasks per method
+
+| Method | Recorded | Missing native | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser-code batches | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Sol high single | 300 | 0 | 266 | 34 | 177 | 66.5% | 0.20771 | 14.99 | 92.7 |
+| Luna high · 1× cap | 300 | 0 | 269 | 31 | 178 | 66.2% | 0.00951 | 16.63 | 94.9 |
+| Luna high N3 | 300 | 0 | 269 | 31 | 183 | 68.0% | 0.05496 | 14.79 | 178.1 |
+| Luna high N5 | 300 | 0 | 267 | 33 | 198 | 74.2% | 0.06960 | 14.63 | 207.9 |
+| Luna xhigh · 1× cap | 300 | 0 | 267 | 33 | 181 | 67.8% | 0.01087 | 16.65 | 137.8 |
+| Luna high · 2× cap | 300 | 0 | 270 | 30 | 186 | 68.9% | 0.00998 | 17.21 | 126.5 |
+| Luna high · 0.5× cap | 300 | 0 | 267 | 33 | 178 | 66.7% | 0.00944 | 16.76 | 119.8 |
+| Luna high · 60 steps | 300 | 0 | 259 | 41 | 191 | 73.7% | 0.01112 | 18.26 | 152.9 |
+| Luna high N2 · 30 steps | 300 | 0 | 264 | 36 | 178 | 67.4% | 0.05389 | 14.89 | 193.2 |
+| Luna high N5 · 60 steps | 299 | 1 | 258 | 41 | 191 | 74.0% | 0.07303 | 14.29 | 205.5 |
+| Luna high · 120 steps | 300 | 0 | 259 | 41 | 178 | 68.7% | 0.01187 | 18.07 | 148.5 |
+
+### WebVoyager · 595 planned tasks per method
+
+| Method | Recorded | Missing native | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser-code batches | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Sol high single | 595 | 0 | 553 | 42 | 468 | 84.6% | 0.19770 | 13.31 | 94.1 |
+| Luna high · 1× cap | 595 | 0 | 579 | 16 | 482 | 83.2% | 0.00778 | 13.54 | 100.1 |
+| Luna high N3 | 595 | 0 | 568 | 27 | 496 | 87.3% | 0.04319 | 11.71 | 163.4 |
+| Luna high N5 | 595 | 0 | 555 | 40 | 483 | 87.0% | 0.04588 | 10.89 | 171.0 |
+| Luna xhigh · 1× cap | 595 | 0 | 581 | 14 | 482 | 83.0% | 0.00896 | 14.30 | 109.5 |
+| Luna high · 2× cap | 595 | 0 | 585 | 10 | 482 | 82.4% | 0.00752 | 13.87 | 102.8 |
+| Luna high · 0.5× cap | 595 | 0 | 580 | 15 | 481 | 82.9% | 0.00772 | 14.17 | 102.4 |
+| Luna high · 60 steps | 595 | 0 | 584 | 11 | 510 | 87.3% | 0.00904 | 15.10 | 128.4 |
+| Luna high N2 · 30 steps | 595 | 0 | 580 | 15 | 500 | 86.2% | 0.04095 | 12.21 | 152.2 |
+| Luna high N5 · 60 steps | 595 | 0 | 544 | 51 | 503 | 92.5% | 0.04442 | 10.43 | 146.7 |
+| Luna high · 120 steps | 595 | 0 | 540 | 55 | 488 | 90.4% | 0.00973 | 14.87 | 117.2 |
+
+### DeepShop · 150 planned tasks per method
+
+| Method | Recorded | Missing native | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser-code batches | Latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Sol high single | 150 | 0 | 145 | 5 | 113 | 77.9% | 0.38431 | 21.08 | 150.6 |
+| Luna high · 1× cap | 150 | 0 | 150 | 0 | 123 | 82.0% | 0.01403 | 20.53 | 154.8 |
+| Luna high N3 | 150 | 0 | 148 | 2 | 121 | 81.8% | 0.08884 | 17.96 | 258.2 |
+| Luna high N5 | 150 | 0 | 147 | 3 | 120 | 81.6% | 0.10954 | 17.48 | 281.9 |
+| Luna xhigh · 1× cap | 150 | 0 | 150 | 0 | 118 | 78.7% | 0.01733 | 20.89 | 169.3 |
+| Luna high · 2× cap | 150 | 0 | 150 | 0 | 129 | 86.0% | 0.01309 | 19.59 | 140.2 |
+| Luna high · 0.5× cap | 150 | 0 | 150 | 0 | 124 | 82.7% | 0.01347 | 20.05 | 144.0 |
+| Luna high · 60 steps | 150 | 0 | 150 | 0 | 136 | 90.7% | 0.01586 | 21.29 | 164.0 |
+| Luna high N2 · 30 steps | 149 | 1 | 148 | 1 | 126 | 85.1% | 0.08234 | 18.30 | 271.9 |
+| Luna high N5 · 60 steps | 150 | 0 | 143 | 7 | 131 | 91.6% | 0.11113 | 17.31 | 285.3 |
+| Luna high · 120 steps | 150 | 0 | 147 | 3 | 137 | 93.2% | 0.01919 | 22.88 | 196.0 |
+
+The three token/effort variants record all 3,135 planned dispositions: 3,000 valid and 135 invalid. The additional 60-step setting records all 1,045 dispositions: 993 valid and 52 invalid. The additional single120 cohort has 1,045 native results, 946 valid and 99 invalid. N2/30 has 1,044 native results, 992 valid and 52 invalid plus its one administrative missing outcome; N5/60 has 1,044 native results, 945 valid and 99 invalid plus its one claimed-missing outcome. Historical versus fresh collection times, runtime safeguards and resulting valid cohorts differ; the new comparisons are descriptive and do not add paired uncertainty estimates. N3/N5 use high effort for both proposals and selection. External judging and invalid-attempt spend are excluded from the plotted valid-task actor means.
+
 <a id="browsercode-selection-strength-variants"></a>
 
 <details>
@@ -72,15 +136,7 @@ Both variants use the same 744-task intersection, planned benchmark weights, Ter
 </details>
 
 <details>
-<summary>Historical combined overview and own-valid benchmark averages</summary>
-
-**A higher decision limit does not improve every benchmark.** Luna high single at 120 decisions has the strongest observed single-call valid-only success on WebVoyager and DeepShop; the 60-decision setting is higher on OM2W. N5 high at 60 decisions has the highest observed WebVoyager rate among these methods. All added settings retain high effort, a 12,288-output-token ceiling per generation and the 900-second actor alarm. Live collection windows, runtime safeguards and valid-task subsets differ, so these are descriptive comparisons. The historical single60 model and agent enforce 60 while their prompt advertises 30; single120 enforces and advertises 120. The comparison changes both limits.
-
-![BrowserCode success versus actor cost, browser-code batches and task latency across three benchmarks](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.png)
-
-*All 33 points use GPT-5.6 Terra terminal-success judgments and local BrowserCode browsers; Sol and Luna denote GPT-6 Sol and GPT-6 Luna. Success and all actor means use each method's own native valid tasks, including valid failures. Native results, invalids and missing outcomes remain separate: N5/60 has 299 native OM2W results plus one claimed-missing outcome; N2/30 has 149 native DeepShop results plus one administrative missing outcome. Neither missing outcome is imputed. Browser-code batches count nonempty selected commands (`selected_code_batches`); a JavaScript batch may contain multiple browser/CDP calls. Final answers, unselected candidates and selection calls add no batches; execution errors still count. See the [exact rule](API_EXPERIMENT_METHODS.md#browsercode-batch-counting). Squares identify Sol and circles Luna; single-call settings are blue, N2 is red, N3 solid light red, and N5 dark red. Open medium-blue/dark-blue circles denote single60/single120, and the open dark-red circle N5/60; remaining settings permit 30 decisions. Per-generation output ceilings include reasoning: 1× = 12,288, 2× = 24,576 and 0.5× = 6,144. Cost is frozen native usage pricing or its upper bound per valid task, excluding Terra, rather than an invoice. Latency is actor-loop time per valid task, including model and browser work and excluding Terra. Measured US-residential browser hosting/traffic is a separate comparison with its own populations; it is not projected onto these local-browser points. Axes are cropped, actor cost is logarithmic, and the legend is outside the panels.*
-
-[Aggregate](arm_results/browsercode_inference_scaling_20261031/aggregate.json) · [Coordinates](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_coordinates.csv) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.svg) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling.pdf) · [Plot source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_scaling.py) · [Reproduction recipes](API_EXPERIMENT_METHODS.md#luna-xhigh-output-limits)
+<summary>Own-valid benchmark averages</summary>
 
 <a id="browsercode-equal-benchmark-average"></a>
 
@@ -163,61 +219,7 @@ The earlier 30/60 single-call comparison retains its original outcomes and commo
 
 </details>
 
-<details>
-<summary>Per-benchmark counts, cost, browser-code batches and latency</summary>
 
-All eleven methods account for every originally planned task by a native result or an explicitly retained missing outcome. Success percentages divide by native valid tasks; actor cost, batch and latency means cover that same valid cohort. All 24 previously published point dictionaries and their coordinates are unchanged. “Missing native” is not counted as invalid: N2 DeepShop is administrative missing, and N5/60 OM2W is claimed-missing. Confirmed successes divided by all planned tasks are lower bounds in those two cells.
-
-### Online-Mind2Web · 300 planned tasks per method
-
-| Method | Recorded | Missing native | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser-code batches | Latency (s) |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Sol high single | 300 | 0 | 266 | 34 | 177 | 66.5% | 0.20771 | 14.99 | 92.7 |
-| Luna high · 1× cap | 300 | 0 | 269 | 31 | 178 | 66.2% | 0.00951 | 16.63 | 94.9 |
-| Luna high N3 | 300 | 0 | 269 | 31 | 183 | 68.0% | 0.05496 | 14.79 | 178.1 |
-| Luna high N5 | 300 | 0 | 267 | 33 | 198 | 74.2% | 0.06960 | 14.63 | 207.9 |
-| Luna xhigh · 1× cap | 300 | 0 | 267 | 33 | 181 | 67.8% | 0.01087 | 16.65 | 137.8 |
-| Luna high · 2× cap | 300 | 0 | 270 | 30 | 186 | 68.9% | 0.00998 | 17.21 | 126.5 |
-| Luna high · 0.5× cap | 300 | 0 | 267 | 33 | 178 | 66.7% | 0.00944 | 16.76 | 119.8 |
-| Luna high · 60 steps | 300 | 0 | 259 | 41 | 191 | 73.7% | 0.01112 | 18.26 | 152.9 |
-| Luna high N2 · 30 steps | 300 | 0 | 264 | 36 | 178 | 67.4% | 0.05389 | 14.89 | 193.2 |
-| Luna high N5 · 60 steps | 299 | 1 | 258 | 41 | 191 | 74.0% | 0.07303 | 14.29 | 205.5 |
-| Luna high · 120 steps | 300 | 0 | 259 | 41 | 178 | 68.7% | 0.01187 | 18.07 | 148.5 |
-
-### WebVoyager · 595 planned tasks per method
-
-| Method | Recorded | Missing native | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser-code batches | Latency (s) |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Sol high single | 595 | 0 | 553 | 42 | 468 | 84.6% | 0.19770 | 13.31 | 94.1 |
-| Luna high · 1× cap | 595 | 0 | 579 | 16 | 482 | 83.2% | 0.00778 | 13.54 | 100.1 |
-| Luna high N3 | 595 | 0 | 568 | 27 | 496 | 87.3% | 0.04319 | 11.71 | 163.4 |
-| Luna high N5 | 595 | 0 | 555 | 40 | 483 | 87.0% | 0.04588 | 10.89 | 171.0 |
-| Luna xhigh · 1× cap | 595 | 0 | 581 | 14 | 482 | 83.0% | 0.00896 | 14.30 | 109.5 |
-| Luna high · 2× cap | 595 | 0 | 585 | 10 | 482 | 82.4% | 0.00752 | 13.87 | 102.8 |
-| Luna high · 0.5× cap | 595 | 0 | 580 | 15 | 481 | 82.9% | 0.00772 | 14.17 | 102.4 |
-| Luna high · 60 steps | 595 | 0 | 584 | 11 | 510 | 87.3% | 0.00904 | 15.10 | 128.4 |
-| Luna high N2 · 30 steps | 595 | 0 | 580 | 15 | 500 | 86.2% | 0.04095 | 12.21 | 152.2 |
-| Luna high N5 · 60 steps | 595 | 0 | 544 | 51 | 503 | 92.5% | 0.04442 | 10.43 | 146.7 |
-| Luna high · 120 steps | 595 | 0 | 540 | 55 | 488 | 90.4% | 0.00973 | 14.87 | 117.2 |
-
-### DeepShop · 150 planned tasks per method
-
-| Method | Recorded | Missing native | Valid | Invalid | Successes | Valid-only success | Actor $ / task | Browser-code batches | Latency (s) |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Sol high single | 150 | 0 | 145 | 5 | 113 | 77.9% | 0.38431 | 21.08 | 150.6 |
-| Luna high · 1× cap | 150 | 0 | 150 | 0 | 123 | 82.0% | 0.01403 | 20.53 | 154.8 |
-| Luna high N3 | 150 | 0 | 148 | 2 | 121 | 81.8% | 0.08884 | 17.96 | 258.2 |
-| Luna high N5 | 150 | 0 | 147 | 3 | 120 | 81.6% | 0.10954 | 17.48 | 281.9 |
-| Luna xhigh · 1× cap | 150 | 0 | 150 | 0 | 118 | 78.7% | 0.01733 | 20.89 | 169.3 |
-| Luna high · 2× cap | 150 | 0 | 150 | 0 | 129 | 86.0% | 0.01309 | 19.59 | 140.2 |
-| Luna high · 0.5× cap | 150 | 0 | 150 | 0 | 124 | 82.7% | 0.01347 | 20.05 | 144.0 |
-| Luna high · 60 steps | 150 | 0 | 150 | 0 | 136 | 90.7% | 0.01586 | 21.29 | 164.0 |
-| Luna high N2 · 30 steps | 149 | 1 | 148 | 1 | 126 | 85.1% | 0.08234 | 18.30 | 271.9 |
-| Luna high N5 · 60 steps | 150 | 0 | 143 | 7 | 131 | 91.6% | 0.11113 | 17.31 | 285.3 |
-| Luna high · 120 steps | 150 | 0 | 147 | 3 | 137 | 93.2% | 0.01919 | 22.88 | 196.0 |
-
-The three token/effort variants record all 3,135 planned dispositions: 3,000 valid and 135 invalid. The additional 60-step setting records all 1,045 dispositions: 993 valid and 52 invalid. The additional single120 cohort has 1,045 native results, 946 valid and 99 invalid. N2/30 has 1,044 native results, 992 valid and 52 invalid plus its one administrative missing outcome; N5/60 has 1,044 native results, 945 valid and 99 invalid plus its one claimed-missing outcome. Historical versus fresh collection times, runtime safeguards and resulting valid cohorts differ; the new comparisons are descriptive and do not add paired uncertainty estimates. N3/N5 use high effort for both proposals and selection. External judging and invalid-attempt spend are excluded from the plotted valid-task actor means.
-</details>
 
 <details>
 <summary>Actual output and reasoning consumption, ceilings and paired uncertainty</summary>
