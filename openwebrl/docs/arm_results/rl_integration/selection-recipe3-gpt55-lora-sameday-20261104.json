@@ -1,5 +1,5 @@
 {
- "note": "Same-day 2026-11-04 rerun: GPT-5.5 K=3 LoRA, GPT-5.5 pre LoRA and SelectionARM, plus SFT 8B alone and the RL 4B checkpoint\nalone (616cc8f, 4,096 response tokens), 3 runs each, all 1,045 tasks.\nAlso against the 11-03/04 night SFT 4B run (controls-sameday-20261103; adjacent window, not same-day).\nOverall = success / scheduled (invalid = failure); valid-only = success / valid. Paired diffs: per-task success averaged\nover the three runs, 10,000 task resamples within benchmark (seed 20261104); mean = equal-weight average of 3 benchmarks.",
+ "note": "Same-day 2026-11-04 rerun: GPT-5.5 K=3 LoRA, GPT-5.5 pre LoRA and SelectionARM, plus SFT 8B alone and the RL 4B checkpoint\nalone (616cc8f, 4,096 response tokens), 3 runs each, all 1,045 tasks.\nAlso against the 11-03/04 night SFT 4B run (controls-sameday-20261103; adjacent window, not same-day).\nOverall = success / scheduled (invalid = failure); valid-only = success / valid. Paired diffs: per-task success averaged\nover the three runs, 10,000 task resamples within benchmark (seed 20261104); mean = equal-weight average of 3 benchmarks;\nweighted = task-weighted (pooled over all 1,045 tasks).",
  "rows": {
   "GPT-5.5 K=3 LoRA": {
    "online_mind2web": {
@@ -24,7 +24,9 @@
     "valid_only": 47.309417040358746
    },
    "avg_overall": 44.698723934018055,
-   "avg_valid": 47.04421081545534
+   "avg_valid": 47.04421081545534,
+   "w_overall": 46.31578947368421,
+   "w_valid": 48.85598923283984
   },
   "GPT-5.5 pre LoRA": {
    "online_mind2web": {
@@ -49,7 +51,9 @@
     "valid_only": 51.230425055928414
    },
    "avg_overall": 46.23716153127918,
-   "avg_valid": 48.80078218121312
+   "avg_valid": 48.80078218121312,
+   "w_overall": 47.208931419457734,
+   "w_valid": 50.118523535387745
   },
   "SelectionARM": {
    "online_mind2web": {
@@ -74,7 +78,9 @@
     "valid_only": 49.88610478359909
    },
    "avg_overall": 45.19607843137255,
-   "avg_valid": 48.2960490890864
+   "avg_valid": 48.2960490890864,
+   "w_overall": 46.2200956937799,
+   "w_valid": 49.420190995907234
   },
   "SFT 4B (11-03/04)": {
    "online_mind2web": {
@@ -99,7 +105,9 @@
     "valid_only": 43.080357142857146
    },
    "avg_overall": 39.55119825708061,
-   "avg_valid": 41.10642809369955
+   "avg_valid": 41.10642809369955,
+   "w_overall": 40.63795853269537,
+   "w_valid": 42.325581395348834
   },
   "SelectionARM (11-03/04)": {
    "online_mind2web": {
@@ -124,7 +132,9 @@
     "valid_only": 50.45871559633027
    },
    "avg_overall": 45.73420479302832,
-   "avg_valid": 48.855916322673956
+   "avg_valid": 48.855916322673956,
+   "w_overall": 46.76236044657097,
+   "w_valid": 49.83004758667573
   },
   "SFT 8B": {
    "online_mind2web": {
@@ -149,7 +159,9 @@
     "valid_only": 46.36363636363637
    },
    "avg_overall": 41.08994708994709,
-   "avg_valid": 43.12527133802206
+   "avg_valid": 43.12527133802206,
+   "w_overall": 41.78628389154705,
+   "w_valid": 43.88609715242881
   },
   "RL 4B (4,096 tokens)": {
    "online_mind2web": {
@@ -174,7 +186,9 @@
     "valid_only": 45.19015659955257
    },
    "avg_overall": 41.0339246809835,
-   "avg_valid": 42.78505828815076
+   "avg_valid": 42.78505828815076,
+   "w_overall": 43.63636363636363,
+   "w_valid": 45.96774193548387
   }
  },
  "paired": {
@@ -198,6 +212,11 @@
     1.5384375972611266,
     -0.5596093993152815,
     3.5602318705259877
+   ],
+   "weighted": [
+    0.8931419457735248,
+    -0.8931419457735245,
+    2.5837320574162677
    ]
   },
   "GPT-5.5 K=3 LoRA - SelectionARM": {
@@ -220,6 +239,11 @@
     -0.49735449735449705,
     -2.405228758169934,
     1.3909197012138186
+   ],
+   "weighted": [
+    0.09569377990430639,
+    -1.5629984051036683,
+    1.7862838915470491
    ]
   },
   "GPT-5.5 pre LoRA - SelectionARM": {
@@ -242,6 +266,11 @@
     1.0410830999066296,
     -1.0358309990662926,
     3.0888188608776823
+   ],
+   "weighted": [
+    0.9888357256778311,
+    -0.7336523125996809,
+    2.7113237639553427
    ]
   },
   "GPT-5.5 K=3 LoRA - SFT 4B (11-03/04)": {
@@ -264,6 +293,11 @@
     5.147525676937442,
     3.048241518829754,
     7.2751789604730766
+   ],
+   "weighted": [
+    5.6778309409888355,
+    3.8277511961722483,
+    7.591706539074959
    ]
   },
   "GPT-5.5 pre LoRA - SFT 4B (11-03/04)": {
@@ -286,6 +320,11 @@
     6.685963274198567,
     4.494530034235917,
     8.861002178649235
+   ],
+   "weighted": [
+    6.57097288676236,
+    4.752791068580542,
+    8.421052631578947
    ]
   },
   "SelectionARM - SFT 4B (11-03/04)": {
@@ -308,6 +347,11 @@
     5.644880174291939,
     3.6622860255213197,
     7.646786492374726
+   ],
+   "weighted": [
+    5.582137161084529,
+    3.7958532695374805,
+    7.368421052631577
    ]
   },
   "SelectionARM - SelectionARM (11-03/04)": {
@@ -330,6 +374,11 @@
     -0.5381263616557733,
     -2.4457360722066603,
     1.3731714908185495
+   ],
+   "weighted": [
+    -0.5422647527910684,
+    -2.200956937799043,
+    1.1164274322169057
    ]
   },
   "SFT 8B - SFT 4B (11-03/04)": {
@@ -352,6 +401,11 @@
     1.5387488328664798,
     -0.7199190787426079,
     3.7301742919389973
+   ],
+   "weighted": [
+    1.1483253588516749,
+    -0.829346092503987,
+    3.062200956937799
    ]
   },
   "RL 4B (4,096 tokens) - SFT 4B (11-03/04)": {
@@ -374,6 +428,11 @@
     1.4827264239028946,
     -0.7236539060068468,
     3.637908496732023
+   ],
+   "weighted": [
+    2.998405103668261,
+    0.9569377990430622,
+    5.007974481658692
    ]
   },
   "SelectionARM - SFT 8B": {
@@ -396,6 +455,11 @@
     4.106131341425459,
     1.875140056022409,
     6.422385620915032
+   ],
+   "weighted": [
+    4.433811802232855,
+    2.519138755980861,
+    6.443381180223285
    ]
   },
   "GPT-5.5 pre LoRA - SFT 8B": {
@@ -418,6 +482,11 @@
     5.147214441332088,
     2.8527699968876448,
     7.448506069094301
+   ],
+   "weighted": [
+    5.422647527910685,
+    3.4768740031897925,
+    7.496012759170653
    ]
   },
   "GPT-5.5 K=3 LoRA - SFT 8B": {
@@ -440,6 +509,11 @@
     3.6087768440709613,
     1.4761749144102085,
     5.739822595704947
+   ],
+   "weighted": [
+    4.529505582137161,
+    2.51993620414673,
+    6.4752791068580535
    ]
   },
   "SelectionARM - RL 4B (4,096 tokens)": {
@@ -462,6 +536,11 @@
     4.162153750389044,
     1.8471599751011518,
     6.511064425770308
+   ],
+   "weighted": [
+    2.583732057416269,
+    0.542264752791069,
+    4.625199362041467
    ]
   },
   "GPT-5.5 pre LoRA - RL 4B (4,096 tokens)": {
@@ -484,6 +563,11 @@
     5.203236850295674,
     2.830967942732649,
     7.593899782135076
+   ],
+   "weighted": [
+    3.5725677830940996,
+    1.5311004784689,
+    5.645933014354068
    ]
   }
  }

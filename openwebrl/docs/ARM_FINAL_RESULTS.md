@@ -914,28 +914,28 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 | Head | Recipe 2, 2.6K states | 37.3% | 59.4% | <ins>51.1%</ins> | 46.8% | 49.3% | +4.8 [+2.6, +7.0] |
 | Head | Recipe 1 | 38.6% | 59.6% | 47.1% | 46.4% | 48.4% | +4.4 [+2.0, +6.7] |
 
-**Recipe 3** (SFT 4B actor, November 3–4; 1,024 response tokens; SFT and SelectionARM from the same window). [Definition and details](#final-selection-recipe3)
+**Recipe 3** (SFT 4B actor, November 3–4; 1,024 response tokens; SFT and SelectionARM from the same window). Unweighted mean = each benchmark weighted equally; task-weighted mean = pooled over all 1,045 tasks, so WebVoyager (595) counts 57%, Online-Mind2Web (300) 29% and DeepShop (150) 14%. [Definition and details](#final-selection-recipe3)
 
-| Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall | Mean valid-only | − SFT alone, pp [95% CI] |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| ***Baseline*** | | | | | | | |
-| SFT 4B alone (1 sample) | — | 34.6% | 45.6% | 43.1% | 39.6% | 41.1% | — |
-| SFT 8B alone (1 sample) ¹ | — | 36.2% | 46.8% | 46.4% | 41.1% | 43.1% | +1.5 [−0.7, +3.7] |
-| RL 4B alone (1 sample, 4,096 tokens) ¹ | — | 29.3% | 53.8% | 45.2% | 41.0% | 42.8% | +1.5 [−0.7, +3.6] |
-| ***Recipe 1 reference*** | | | | | | | |
-| Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.8%** | 52.4% | 50.5% | <ins>45.7%</ins> | **48.9%** | <ins>+6.2 [+4.0, +8.3]</ins> |
-| ***Ours: 4B LoRAs (SelectionARM recipe)*** | | | | | | | |
-| 4B LoRA ¹ | Recipe 3, GPT-5.5 K = 3 | 41.1% | 52.7% | 47.3% | 44.7% | 47.0% | +5.1 [+3.0, +7.3] |
-| 4B LoRA | Recipe 3, Luna K = 3 | 37.8% | 49.4% | 50.9% | 42.3% | 46.1% | +2.8 [+0.7, +4.9] |
-| 4B LoRA ¹ | *Ablation:* Recipe 3 panels, GPT-5.5 pre | <ins>41.4%</ins> | **53.7%** | 51.2% | **46.2%** | <ins>48.8%</ins> | **+6.7 [+4.5, +8.9]** |
-| 4B LoRA | *Ablation:* Recipe 3 panels, Luna pre | 40.2% | 51.2% | 46.2% | 42.1% | 45.9% | +2.5 [+0.3, +4.6] |
-| ***Ours: 22.6M heads on actor features*** | | | | | | | |
-| Head | Recipe 3, GPT-5.5 K = 3 | 37.6% | <ins>52.8%</ins> | <ins>51.7%</ins> | 44.5% | 47.4% | +5.0 [+2.9, +7.1] |
-| Head | Recipe 3, Luna K = 3 | 39.8% | 48.0% | **52.2%** | 42.9% | 46.7% | +3.3 [+1.1, +5.5] |
-| Head | *Ablation:* Recipe 3 panels, GPT-5.5 pre | 36.8% | 49.9% | 45.0% | 41.3% | 43.9% | +1.7 [−0.5, +4.0] |
-| Head | *Ablation:* Recipe 3 panels, Luna pre | 38.8% | 47.3% | 46.1% | 40.0% | 44.1% | +0.5 [−1.7, +2.7] |
+| Selector | Training data | Online-Mind2Web | WebVoyager | DeepShop | Mean overall,<br>unweighted | Mean valid-only,<br>unweighted | Mean overall,<br>task-weighted | Mean valid-only,<br>task-weighted | − SFT alone, pp [95% CI],<br>unweighted | − SFT alone, pp [95% CI],<br>task-weighted |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ***Baseline*** | | | | | | | | | | |
+| SFT 4B alone (1 sample) | — | 34.6% | 45.6% | 43.1% | 39.6% | 41.1% | 40.6% | 42.3% | — | — |
+| SFT 8B alone (1 sample) ¹ | — | 36.2% | 46.8% | 46.4% | 41.1% | 43.1% | 41.8% | 43.9% | +1.5 [−0.7, +3.7] | +1.1 [−0.8, +3.1] |
+| RL 4B alone (1 sample, 4,096 tokens) ¹ | — | 29.3% | 53.8% | 45.2% | 41.0% | 42.8% | 43.6% | 46.0% | +1.5 [−0.7, +3.6] | +3.0 [+1.0, +5.0] |
+| ***Recipe 1 reference*** | | | | | | | | | | |
+| Piotr SelectionARM (4B LoRA) | Recipe 1 | **43.8%** | 52.4% | 50.5% | <ins>45.7%</ins> | **48.9%** | <ins>46.8%</ins> | <ins>49.8%</ins> | <ins>+6.2 [+4.0, +8.3]</ins> | <ins>+6.1 [+4.2, +7.9]</ins> |
+| ***Ours: 4B LoRAs (SelectionARM recipe)*** | | | | | | | | | | |
+| 4B LoRA ¹ | Recipe 3, GPT-5.5 K = 3 | 41.1% | 52.7% | 47.3% | 44.7% | 47.0% | 46.3% | 48.9% | +5.1 [+3.0, +7.3] | +5.7 [+3.8, +7.6] |
+| 4B LoRA | Recipe 3, Luna K = 3 | 37.8% | 49.4% | 50.9% | 42.3% | 46.1% | 43.0% | 46.6% | +2.8 [+0.7, +4.9] | +2.4 [+0.6, +4.2] |
+| 4B LoRA ¹ | *Ablation:* Recipe 3 panels, GPT-5.5 pre | <ins>41.4%</ins> | **53.7%** | 51.2% | **46.2%** | <ins>48.8%</ins> | **47.2%** | **50.1%** | **+6.7 [+4.5, +8.9]** | **+6.6 [+4.8, +8.4]** |
+| 4B LoRA | *Ablation:* Recipe 3 panels, Luna pre | 40.2% | 51.2% | 46.2% | 42.1% | 45.9% | 43.3% | 47.5% | +2.5 [+0.3, +4.6] | +2.7 [+0.7, +4.6] |
+| ***Ours: 22.6M heads on actor features*** | | | | | | | | | | |
+| Head | Recipe 3, GPT-5.5 K = 3 | 37.6% | <ins>52.8%</ins> | <ins>51.7%</ins> | 44.5% | 47.4% | 45.6% | 48.6% | +5.0 [+2.9, +7.1] | +5.0 [+3.1, +6.8] |
+| Head | Recipe 3, Luna K = 3 | 39.8% | 48.0% | **52.2%** | 42.9% | 46.7% | 42.8% | 46.5% | +3.3 [+1.1, +5.5] | +2.2 [+0.4, +4.1] |
+| Head | *Ablation:* Recipe 3 panels, GPT-5.5 pre | 36.8% | 49.9% | 45.0% | 41.3% | 43.9% | 42.8% | 45.7% | +1.7 [−0.5, +4.0] | +2.2 [+0.2, +4.2] |
+| Head | *Ablation:* Recipe 3 panels, Luna pre | 38.8% | 47.3% | 46.1% | 40.0% | 44.1% | 40.8% | 44.9% | +0.5 [−1.7, +2.7] | +0.2 [−1.7, +2.1] |
 
-¹ Re-evaluated in a same-day 3-run batch on November 4 together with SelectionARM, the window right after the SFT and SelectionARM rows above (November 3–4). SelectionARM did not move between the two windows (−0.5 [−2.4, +1.4] pp), so the − SFT differences of these two rows are adjacent-window, not same-day. Same-day on November 4: GPT-5.5 pre − K = 3 LoRA +1.5 [−0.6, +3.6], K = 3 LoRA − SelectionARM −0.5 [−2.4, +1.4], pre LoRA − SelectionARM +1.0 [−1.0, +3.1] ([data](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.json) · [script](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.py)). Absolute numbers are not comparable with the October tables above (DeepShop success has drifted upward since November 1). SFT 8B alone and the RL 4B checkpoint alone (`OpenWebRL-4B` 616cc8f, 4,096 response tokens as in the RL-actor protocol) ran in the same November 4 window; against same-day SelectionARM they are −4.1 [−6.4, −1.9] and −4.2 [−6.5, −1.8] pp. The RL checkpoint gains on WebVoyager (+7.1 pp over SFT 4B) and loses on Online-Mind2Web (−4.7).
+¹ Re-evaluated in a same-day 3-run batch on November 4 together with SelectionARM, the window right after the SFT and SelectionARM rows above (November 3–4). SelectionARM did not move between the two windows (−0.5 [−2.4, +1.4] pp), so the − SFT differences of these two rows are adjacent-window, not same-day. Same-day on November 4: GPT-5.5 pre − K = 3 LoRA +1.5 [−0.6, +3.6], K = 3 LoRA − SelectionARM −0.5 [−2.4, +1.4], pre LoRA − SelectionARM +1.0 [−1.0, +3.1] unweighted; task-weighted +0.9 [−0.9, +2.6], +0.1 [−1.6, +1.8] and +1.0 [−0.7, +2.7] ([data](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.json) · [script](arm_results/rl_integration/selection-recipe3-gpt55-lora-sameday-20261104.py)). Absolute numbers are not comparable with the October tables above (DeepShop success has drifted upward since November 1). SFT 8B alone and the RL 4B checkpoint alone (`OpenWebRL-4B` 616cc8f, 4,096 response tokens as in the RL-actor protocol) ran in the same November 4 window; against same-day SelectionARM they are −4.1 [−6.4, −1.9] and −4.2 [−6.5, −1.8] pp unweighted (task-weighted −4.4 [−6.4, −2.5] and −2.6 [−4.6, −0.5]). The RL checkpoint gains on WebVoyager (+7.1 pp over SFT 4B) and loses on Online-Mind2Web (−4.7), so it looks better task-weighted, where WebVoyager dominates.
 
 **Which labels to train our head on** (SFT 4B actor, November 1–3; six heads on the same 1,380 branch states, differing only in label source). [Details](#final-selection-label-live-3run-20261103)
 

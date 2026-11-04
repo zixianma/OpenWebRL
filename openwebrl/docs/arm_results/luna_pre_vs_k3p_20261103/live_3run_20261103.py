@@ -1,6 +1,6 @@
 """Same-day (11-03) 3-run table: Luna/GPT-5.5 selectors vs same-day SFT and SelectionARM.
 Overall = success / scheduled (invalid = failure); valid-only = success / valid.
-Paired diffs: per-task success averaged over runs, task bootstrap (10,000, seed 20261103) within benchmark; Avg = equal-weight mean of 3 benchmarks."""
+Paired diffs: per-task success averaged over runs, task bootstrap (10,000, seed 20261103) within benchmark; Avg = equal-weight mean of 3 benchmarks; weighted = task-weighted (pooled over all 1,045 tasks)."""
 import glob, json, os, numpy as np
 E = '/gpfs/scrubbed/zixianma/openwebrl-runtime/evaluations'
 B = ('webvoyager', 'online_mind2web', 'deepshop'); N = {'webvoyager': 595, 'online_mind2web': 300, 'deepshop': 150}
@@ -32,6 +32,7 @@ for c in C:
         rs = data[c][b]; s = sum(v[1] for d in rs for v in d.values()); va = sum(v[0] for d in rs for v in d.values())
         row[b] = dict(succ=s, valid=va, done=sum(len(d) for d in rs), sched=3 * N[b], overall=100 * s / (3 * N[b]), valid_only=100 * s / va if va else None)
     row['avg_overall'] = np.mean([row[b]['overall'] for b in B]); row['avg_valid'] = np.mean([row[b]['valid_only'] for b in B])
+    row['w_overall'] = 100 * sum(row[b]['succ'] for b in B) / sum(row[b]['sched'] for b in B); row['w_valid'] = 100 * sum(row[b]['succ'] for b in B) / sum(row[b]['valid'] for b in B)
     out['rows'][c] = row
 rng = np.random.default_rng(20261103)
 def pertask(c, b):
@@ -49,6 +50,8 @@ for c, ref in PAIRS:
             idx = rng.integers(0, len(dd), (10000, len(dd))); bs = dd[idx].mean(1)
             per[b] = [dd.mean(), *np.percentile(bs, [2.5, 97.5])]; boots.append(bs)
         avg = np.mean(boots, 0); per['avg'] = [np.mean([per[b][0] for b in B]), *np.percentile(avg, [2.5, 97.5])]
+        W = np.array([N[b] for b in B]) / sum(N.values()); wb = np.tensordot(W, np.array(boots), 1)
+        per['weighted'] = [float(sum(W[i] * per[b][0] for i, b in enumerate(B))), *np.percentile(wb, [2.5, 97.5])]
         out['paired'][f'{c} - {ref}'] = per
 json.dump(out, open(os.path.join(os.path.dirname(__file__), 'table_1103.json'), 'w'), indent=1, default=float)
 f = lambda x: f'{x:.1f}'
