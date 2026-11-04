@@ -1068,7 +1068,9 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
     [Data, per-run rates and per-benchmark contrasts](arm_results/rl_integration/selection-label-live-3run-20261103.json) · [analysis script](arm_results/rl_integration/selection-label-live-3run-20261103-analysis.py) · earlier one-run H = 5 check (11-01/02, part of this batch): [data](arm_results/rl_integration/selection-label-k5-live-20261102.json) · [script](arm_results/rl_integration/selection-label-k5-live-20261102-analysis.py)
 
-  ![Gain over one SFT 4B sample per label source: offline task-level 5-fold teacher and head on 1,725 states, and the head live](arm_results/rl_integration/selection-label-setups-kfold-20261101.png)
+  ![Teacher ADM (hollow circles) and Student ADM (solid circles): offline held-out rollout success and online overall success, shown as gains over SFT](arm_results/rl_integration/selection-label-setups-kfold-20261101.png)
+
+  *Hollow circles: Teacher ADM; solid circles: Student ADM (online evaluates the student only). Offline: 1,725 states, 433 tasks, task-level 5-fold student predictions with 3 training seeds; held-out rollouts 4–8, valid only. Labels use rollouts 1–3 where applicable; Oracle selects the best action on those label rollouts. Online: 1,045 tasks across three benchmarks, each task weighted equally, seed-0 student, 3 runs. Gains are relative to one SFT 4B sample on each panel's own population (offline 38.8%, online 41.4%); compare orderings across panels, not gain sizes. Bars: 95% intervals, task-clustered bootstrap offline and paired over tasks online. Shared y-range: −3.5 to 5 pp; all intervals are shown.* [Paper PDF](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [SVG](arm_results/rl_integration/selection-label-setups-kfold-20261101.svg).
 
   Evidence: [pooled results, contrasts and per-fold numbers](arm_results/rl_integration/selection-label-kfold-20261101.json) · [analysis script](arm_results/rl_integration/selection-label-kfold-20261101-analysis.py) · [plot script](arm_results/rl_integration/selection-label-setups-kfold-20261101-plot.py)
 

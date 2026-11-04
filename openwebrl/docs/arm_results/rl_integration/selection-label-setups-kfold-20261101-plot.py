@@ -14,6 +14,9 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+plt.rcParams.update({"font.family": "DejaVu Sans", "pdf.fonttype": 42,
+                     "ps.fonttype": 42, "svg.fonttype": "none"})
 from matplotlib.lines import Line2D
 
 HERE = Path(__file__).resolve().parent
@@ -31,19 +34,19 @@ ROWS = [  # tick label, colour, source key, live key
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
-    (f"Offline · task-level 5-fold, out-of-fold heads\n{P['states']:,} states, {P['tasks']} tasks; held-out rollouts 4–8",
+    ("Offline: held-out rollout success",
      "offline", P["sft_sample"]),
-    ("Live · 3 benchmarks\n1,045 tasks, task-weighted overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=6.5, color=color, ecolor="#555555", capsize=2, lw=0.9,
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=5.7, color=color, ecolor="#555555", capsize=2, lw=0.9,
                 zorder=3, markeredgewidth=1.4, markerfacecolor=color if filled else "white", markeredgecolor=color)
-    ax.text(x, hi + 0.2, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5, color=INK)
+    ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5, color=INK)
 
 
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.4), sharey=True, gridspec_kw=dict(width_ratios=[1.15, 1]))
+fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.15), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -51,22 +54,27 @@ for ax, (title, kind, base) in zip(axes, PANELS):
             if live is None:
                 ax.text(x, 0.4, "not run\nlive", ha="center", va="bottom", fontsize=6.5, color=MUTED)
                 continue
-            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "D", True)
+            point(ax, x, LIVE3["weighted"][LIVE3_KEY[src]]["minus_sft"], color, "o", True)
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
-            point(ax, x + 0.17, P[src]["head_minus_sft"], color, "s", True)
-    ax.set_title(f"{title}\nSFT 4B, one sample (dashed) = {base:.1f}%", fontsize=8.5, loc="left", color=INK)
-    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=7.8); ax.set_xlim(-0.6, len(ROWS) - 0.4)
-    ax.grid(axis="y", alpha=.25)
+            point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
+    ax.set_title(title, fontsize=9, loc="left", color=INK, pad=9)
+    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.6, len(ROWS) - 0.4)
+    ax.tick_params(axis="y", labelsize=8)
+    ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
-axes[0].set_ylim(-4.5, 10); axes[0].set_ylabel("Gain over one SFT 4B actor sample (pp)", fontsize=9)
-handles = [Line2D([], [], marker=m, ls="", color="#555555", ms=6.5, markeredgewidth=1.4,
-                  markerfacecolor="#555555" if f else "white") for m, f in (("o", False), ("s", True), ("D", True))]
-fig.legend(handles, ["Teacher's pick (label)", "Head trained on the labels (3 seeds, out-of-fold)", "Head, live (seed 0, 3 runs)"],
-           frameon=False, fontsize=8, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.08))
-fig.text(0.01, 0.01, "Offline: each state's first five SFT proposals, scored on held-out rollouts 4–8 (labels used rollouts 1–3; "
-         "Oracle = best action on rollouts 1–3). Bars: 95% intervals,\ntask-clustered bootstrap (offline) or paired over "
-         "tasks (live). Each panel's baseline is one SFT sample on its own states or tasks.", fontsize=6.5, color=MUTED)
-fig.tight_layout(rect=(0, 0.14, 1, 1))
-fig.savefig(HERE / "selection-label-setups-kfold-20261101.png", dpi=160); plt.close(fig)
+axes[0].set_ylim(-3.5, 5)
+axes[0].set_yticks([-2, 0, 2, 4])
+axes[0].set_ylabel("Gain over SFT (pp)", fontsize=9)
+handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=5.7, markeredgewidth=1.4,
+                  markerfacecolor="#555555" if filled else "white") for filled in (False, True)]
+fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=8,
+           loc="lower center", ncol=2, bbox_to_anchor=(0.53, 0.015), columnspacing=2)
+# Cohorts, baselines, seeds and interval definitions are in the document caption.
+fig.subplots_adjust(left=0.085, right=0.99, top=0.88, bottom=0.27, wspace=0.16)
+output = HERE / "selection-label-setups-kfold-20261101"
+fig.savefig(output.with_suffix(".png"), dpi=300)
+fig.savefig(output.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
+fig.savefig(output.with_suffix(".svg"), metadata={"Date": None})
+plt.close(fig)
