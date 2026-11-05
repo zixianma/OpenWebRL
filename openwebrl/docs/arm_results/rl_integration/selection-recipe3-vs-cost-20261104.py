@@ -1,4 +1,5 @@
-"""Recipe 3 cost plots (SFT 4B actor, November 2–4, with the same-day SFT 4B run): overall success (3 runs pooled) vs actor +
+"""Recipe 3 cost plots (SFT 4B actor, November 2–4, with the same-day SFT 4B run; plus the RL 8B actor alone and with the GPT-5.5
+LoRAs, November 4–5, down triangles): overall success (3 runs pooled) vs actor +
 selector parameters, PFLOP per episode and model time per episode. Renders two figures:
   selection-recipe3-vs-cost-20261104.*               3-benchmark equal-weight mean (success and cost alike)
   selection-recipe3-vs-cost-per-benchmark-20261104.*  one row per benchmark
@@ -24,6 +25,9 @@ methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, "#898781", "s", False),
     ("sft8b", "SFT 8B", 8.77e9, "#4a4844", "s", False),
     ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
+    ("rl8b", "RL 8B ³", 8.77e9, "#4a4844", "v", False),
+    ("rl8b-lora-gpt55-k3", "RL 8B + LoRA: GPT-5.5 K = 3 ³", 8.77e9 + SFT, "#0072B2", "v", False),
+    ("rl8b-lora-gpt55-pre", "RL 8B + LoRA: GPT-5.5 pre ³", 8.77e9 + SFT, "#0072B2", "v", True),
     ("lora-gpt55-k3", "LoRA: GPT-5.5 K = 3 ¹", LORA, "#0072B2", "D", False),
     ("lora-luna-k3", "LoRA: Luna K = 3", LORA, "#D55E00", "D", False),
     ("lora-gpt55-pre", "LoRA: GPT-5.5 pre ¹", LORA, "#0072B2", "D", True),
@@ -56,7 +60,7 @@ def panel(ax, bench, k):
         r = point(key, bench)
         x = p / 1e9 if k == "params" else r[k]
         pts.append((x, r["overall"]))
-        ax.scatter(x, r["overall"], s=24, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b") else 3,
+        ax.scatter(x, r["overall"], s=24, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=1.0 if hollow else 0.6, label=label)
     fr = frontier(pts)
@@ -70,7 +74,7 @@ def panel(ax, bench, k):
     for spine in ax.spines.values():
         spine.set_color("#555555"); spine.set_linewidth(0.6)
     if k == "params":
-        ax.set_xlim(3.5, 9.5); ax.set_xticks([4.44, 8.88], ["4.44", "8.88"])
+        ax.set_xlim(3.5, 14.2); ax.set_xticks([4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"])
 
 
 def legend(fig, axes, x0):
@@ -107,5 +111,5 @@ def render(benches, name, height):
 
 
 if __name__ == "__main__":
-    print(render(("mean",), "selection-recipe3-vs-cost-20261104", 1.75))
+    print(render(("mean",), "selection-recipe3-vs-cost-20261104", 2.25))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-20261104", 3.9)
