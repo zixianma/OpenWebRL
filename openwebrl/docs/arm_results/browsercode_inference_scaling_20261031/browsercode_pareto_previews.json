@@ -30,11 +30,11 @@
       },
       {
         "method": "luna_single_high_6144",
-        "label": "Luna 0.5\u00d7 cap"
+        "label": "Luna 0.5\u00d7 max tokens"
       },
       {
         "method": "luna_single_high_24576",
-        "label": "Luna 2\u00d7 cap"
+        "label": "Luna 2\u00d7 max tokens"
       },
       {
         "method": "luna_single_high_60steps",
@@ -63,11 +63,15 @@
         "label": "N=5 \u00b7 60 steps"
       }
     ],
+    "applies_to": [
+      "browsercode_scaling_pareto_preview",
+      "browsercode_scaling_weighted_pareto_preview"
+    ],
     "placement": "Bottom; original point encodings preserved",
     "defaults": "Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates",
     "cap_definition": "Ceiling on output tokens per call, including reasoning; not realized token use"
   },
-  "renderer_sha256": "67be8dba0877b37671e5d6b0904a9cc204dbe3e8affc349e9032f1f79582d915",
+  "renderer_sha256": "8dd37387ab7947a79f795c7eb6246c95e005b5a2e9aead347596b9502a225951",
   "previews": {
     "browsercode_scaling_pareto_preview": [
       {

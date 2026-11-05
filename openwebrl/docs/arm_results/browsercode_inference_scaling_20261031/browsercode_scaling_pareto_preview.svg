@@ -2190,7 +2190,7 @@ L 496.44 240.264
    </g>
   </g>
   <g id="text_51">
-   <text style="fill: #555555; font: 6.2px 'DejaVu Sans'; text-anchor: start" x="161.28" y="328.312194" transform="rotate(-0 161.28 328.312194)">Luna defaults: high effort · 12,288-token cap · 30-step limit. N = candidates.</text>
+   <text style="fill: #555555; font: 6.2px 'DejaVu Sans'; text-anchor: start" x="161.28" y="328.312194" transform="rotate(-0 161.28 328.312194)">Luna defaults: high effort · max tokens = 12,288 · 30-step limit. N = candidates.</text>
   </g>
   <g id="legend_1">
    <g id="text_52">
@@ -2273,7 +2273,7 @@ z
     </g>
    </g>
    <g id="text_56">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="124.935031" y="293.228234" transform="rotate(-0 124.935031 293.228234)">Luna 0.5× cap</text>
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="124.935031" y="293.228234" transform="rotate(-0 124.935031 293.228234)">Luna 0.5× max tokens</text>
    </g>
    <g id="line2d_149">
     <defs>
@@ -2294,7 +2294,7 @@ z
     </g>
    </g>
    <g id="text_57">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="124.935031" y="302.444016" transform="rotate(-0 124.935031 302.444016)">Luna 2× cap</text>
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="124.935031" y="302.444016" transform="rotate(-0 124.935031 302.444016)">Luna 2× max tokens</text>
    </g>
    <g id="line2d_150">
     <defs>
@@ -2311,11 +2311,11 @@ z
 " style="stroke: #4292c6; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m4f7015b9e5" x="182.664172" y="290.953234" style="fill: #ffffff; stroke: #4292c6; stroke-width: 0.9"/>
+     <use xlink:href="#m4f7015b9e5" x="208.76675" y="290.953234" style="fill: #ffffff; stroke: #4292c6; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_58">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="187.864172" y="293.228234" transform="rotate(-0 187.864172 293.228234)">Luna 60 steps</text>
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="213.96675" y="293.228234" transform="rotate(-0 213.96675 293.228234)">Luna 60 steps</text>
    </g>
    <g id="line2d_151">
     <defs>
@@ -2332,11 +2332,11 @@ z
 " style="stroke: #08519c; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m6270a3040b" x="182.664172" y="300.169016" style="fill: #ffffff; stroke: #08519c; stroke-width: 0.9"/>
+     <use xlink:href="#m6270a3040b" x="208.76675" y="300.169016" style="fill: #ffffff; stroke: #08519c; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_59">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="187.864172" y="302.444016" transform="rotate(-0 187.864172 302.444016)">Luna 120 steps</text>
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="213.96675" y="302.444016" transform="rotate(-0 213.96675 302.444016)">Luna 120 steps</text>
    </g>
   </g>
   <g id="legend_2">

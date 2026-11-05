@@ -102,14 +102,14 @@ def overlay(fig, panels):
 
 
 
-# The per-benchmark preview uses grouped bottom legends. Original plots and the
-# two weighted previews retain their existing layouts and method encodings.
+# Per-benchmark and own-valid weighted previews share grouped bottom legends.
+# Original plots and the common-valid preview retain their existing layouts.
 SINGLE_LEGEND = (
     ('luna_single_high', 'Luna baseline'),
     ('serial_high', 'Sol high · 30 steps'),
     ('luna_single_xhigh_12288', 'Luna xhigh effort'),
-    ('luna_single_high_6144', 'Luna 0.5× cap'),
-    ('luna_single_high_24576', 'Luna 2× cap'),
+    ('luna_single_high_6144', 'Luna 0.5× max tokens'),
+    ('luna_single_high_24576', 'Luna 2× max tokens'),
     ('luna_single_high_60steps', 'Luna 60 steps'),
     ('luna_single_high_120steps', 'Luna 120 steps'),
 )
@@ -121,16 +121,25 @@ SELECTION_LEGEND = (
 )
 
 
-def grouped_bottom_legends(fig):
+def grouped_bottom_legends(fig, *, weighted=False):
     for legend in list(fig.legends):
         legend.remove()
     # Remove the original side note, whose population/protocol caveats are in
     # the document caption; preserve all axes, coordinates and frontier lines.
     for note in list(fig.texts):
         note.remove()
-    fig.set_size_inches(7, 4.7)
-    fig.subplots_adjust(left=.077, right=.985, top=.94, bottom=.29,
-                        hspace=.60, wspace=.35)
+    if weighted:
+        fig.set_size_inches(7, 3)
+        fig.subplots_adjust(left=.077, right=.985, top=.87, bottom=.43, wspace=.35)
+        fig.text(.077, .97, 'Task-weighted average: OM2W · WebVoyager · DeepShop',
+                 ha='left', va='top', fontsize=9)
+        fig.text(.077, .08, 'Benchmark weights: 300/1,045 · 595/1,045 · 150/1,045. Own-valid subsets differ.',
+                 fontsize=6.2, color='#555555', va='bottom')
+    else:
+        fig.set_size_inches(7, 4.7)
+        fig.subplots_adjust(left=.077, right=.985, top=.94, bottom=.29,
+                            hspace=.60, wspace=.35)
+    legend_top = .315 if weighted else .185
 
     def handles(entries):
         result = []
@@ -142,12 +151,12 @@ def grouped_bottom_legends(fig):
         return result
 
     single = fig.legend(handles=handles(SINGLE_LEGEND), title='Single-call scaling (N=1)',
-                        loc='upper left', bbox_to_anchor=(.077, .185), ncol=3,
+                        loc='upper left', bbox_to_anchor=(.077, legend_top), ncol=3,
                         fontsize=6.5, title_fontsize=7.2, frameon=False,
                         handlelength=.8, handletextpad=.4, columnspacing=1.2,
                         labelspacing=.45, borderaxespad=0, alignment='left')
     selection = fig.legend(handles=handles(SELECTION_LEGEND), title='Selection scaling (Luna)',
-                           loc='upper left', bbox_to_anchor=(.64, .185), ncol=2,
+                           loc='upper left', bbox_to_anchor=(.64, legend_top), ncol=2,
                            fontsize=6.5, title_fontsize=7.2, frameon=False,
                            handlelength=.8, handletextpad=.4, columnspacing=1.2,
                            labelspacing=.45, borderaxespad=0, alignment='left')
@@ -157,7 +166,7 @@ def grouped_bottom_legends(fig):
                loc='lower left', bbox_to_anchor=(.077, .02), frameon=False,
                fontsize=6.5, handlelength=1.8, handletextpad=.35, borderaxespad=0)
     fig.text(.32, .026,
-             'Luna defaults: high effort · 12,288-token cap · 30-step limit. N = candidates.',
+             'Luna defaults: high effort · max tokens = 12,288 · 30-step limit. N = candidates.',
              fontsize=6.2, color='#555555', va='bottom')
     return single, selection
 
@@ -190,7 +199,9 @@ def build():
     figures.append((fig, 'browsercode_scaling_pareto_preview', report))
     fig = capture(AVERAGE.render, weighted, temporary, 'source_weighted')
     panels = [('weighted_own_valid', weighted['points'], metric) for metric in METRICS]
-    figures.append((fig, 'browsercode_scaling_weighted_pareto_preview', overlay(fig, panels)))
+    report = overlay(fig, panels)
+    grouped_bottom_legends(fig, weighted=True)
+    figures.append((fig, 'browsercode_scaling_weighted_pareto_preview', report))
     fig = capture(COMMON.render, common, temporary, 'source_common_valid')
     panels = [('weighted_common_valid', common_average['points'], metric) for metric in METRICS]
     figures.append((fig, 'browsercode_scaling_common_valid_pareto_preview', overlay(fig, panels)))
@@ -201,11 +212,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--per-benchmark-only', action='store_true',
                         help='Save only the per-benchmark preview; preserve weighted figure files')
+    parser.add_argument('--grouped-only', action='store_true',
+                        help='Save grouped per-benchmark and own-valid weighted previews only')
     args = parser.parse_args()
     figures = build()
     reports = {}
     for fig, stem, panels in figures:
-        if not args.per_benchmark_only or stem == 'browsercode_scaling_pareto_preview':
+        selected = not args.per_benchmark_only or stem == 'browsercode_scaling_pareto_preview'
+        selected = selected and (not args.grouped_only or stem != 'browsercode_scaling_common_valid_pareto_preview')
+        if selected:
             save(fig, stem)
         else:
             plt.close(fig)
@@ -222,6 +237,7 @@ def main():
                   per_benchmark_legends=dict(
                       single_call=[dict(method=m, label=l) for m, l in SINGLE_LEGEND],
                       selection=[dict(method=m, label=l) for m, l in SELECTION_LEGEND],
+                      applies_to=['browsercode_scaling_pareto_preview', 'browsercode_scaling_weighted_pareto_preview'],
                       placement='Bottom; original point encodings preserved',
                       defaults='Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates',
                       cap_definition='Ceiling on output tokens per call, including reasoning; not realized token use'),
