@@ -1,0 +1,34 @@
+{
+ "method": "Gate B (40 mixed + up to 16 all-failure groups)",
+ "recipe": {
+  "ordinary_groups": 40,
+  "failure_group_cap": 16,
+  "candidate_gate": "min2",
+  "beta": 0.5,
+  "scored_fraction": 0.2,
+  "auxiliary_loss_scale": "N/48",
+  "initial_model": "OpenWebRL-4B-SFT",
+  "fresh_iteration0": true
+ },
+ "iteration": 30,
+ "job": "392094",
+ "full300": {
+  "tasks": 300,
+  "successes": 91,
+  "valid": 222,
+  "invalid": 78,
+  "overall": 0.30333333333333334,
+  "valid_only": 0.4099099099099099,
+  "saved_rollouts": 300,
+  "saved_verdicts": 300,
+  "verified_complete": true
+ },
+ "evaluation_verified_complete": true,
+ "protocol": {
+  "browser": "local",
+  "judge": "gpt-4.1",
+  "prompt": "action_history",
+  "temperature": 0,
+  "max_response_tokens": 4096
+ }
+}
