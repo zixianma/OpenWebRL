@@ -51,7 +51,7 @@
 
 [Teacher and student ADM: compact Pre-exec, Post-exec, H = 3 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
 
-[Offline selector evaluation: half-height data collection and teacher labeling schematic, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
+[Offline selector evaluation: half-height data collection and teacher labeling schematic, explicit rollout-success labels, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 
 [Joint versus independent transformer scoring: standalone attention-mask figure (PDF)](arm_results/methods/selection-head-joint-independent-20261026.pdf) · [Caption and architecture](ARM_SELECTION_HEAD.md#selection-head-joint-independent).
 
