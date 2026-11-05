@@ -98,11 +98,9 @@ def render():
     for key, _, _, color, _ in RUNS:
         row = data["methods"][key]
         x, y = row["repetition_incidence"], row["overall_success"]
-        xerr = np.asarray([[x["percent"] - x["ci95_percent"][0]],
-                           [x["ci95_percent"][1] - x["percent"]]])
         yerr = np.asarray([[y["percent"] - y["ci95_percent"][0]],
                            [y["ci95_percent"][1] - y["percent"]]])
-        ax.errorbar(x["percent"], y["percent"], xerr=xerr, yerr=yerr,
+        ax.errorbar(x["percent"], y["percent"], yerr=yerr,
                     fmt="o", color=color, markersize=5.5, capsize=2.5,
                     elinewidth=1, linewidth=1, zorder=4 if key == "gate-b" else 3)
     ax.set_xlabel("Repeated-action incidence (%)", labelpad=4)
