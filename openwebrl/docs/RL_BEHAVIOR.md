@@ -263,11 +263,23 @@ same trajectory; 95% binomial intervals; chance = 20%.* [PDF](rl_results/rl_acti
 
 <details><summary>Alternative paper view: vertical bars as percentages of planned tasks</summary>
 
-![Iteration-90 loop-failure percentages with 95% task-bootstrap intervals: outcome-only baselines in gray and Outcome + ADM rewards in purple](rl_results/rl_action_loops_iter90_bars_preview.png)
+![Iteration-90 repeated-action failure percentages with 95% task-bootstrap intervals: outcome-only baselines in gray and Outcome + ADM rewards in purple](rl_results/rl_action_loops_iter90_bars_preview.png)
 
-*Bars = mean percentage of all 300 planned OM2W tasks classified as loop failures across three evaluation repeats: 20.2%, 15.0% and 7.8%. Error bars are the same 95% task-bootstrap intervals as above, converted from counts to percentages by dividing by 3. Invalid outcomes remain in the planned-task denominator; this is distinct from the fraction of valid episodes containing any loop. Intervals condition on the fixed checkpoints and evaluation windows.* [PDF](rl_results/rl_action_loops_iter90_bars_preview.pdf) · [SVG](rl_results/rl_action_loops_iter90_bars_preview.svg) · [Source](arm_results/rl_integration/behavior/plot_rl_loops_iter90_bars_preview.py).
+*Bars = repeated-action failures as a percentage of all 300 planned OM2W tasks, averaged across three evaluation repeats: 20.2%, 15.0% and 7.8%. Error bars are the same 95% task-bootstrap intervals as above, converted from counts to percentages by dividing by 3. Invalid outcomes remain in the planned-task denominator; this is distinct from the fraction of valid episodes containing any loop. Intervals condition on the fixed checkpoints and evaluation windows.* [PDF](rl_results/rl_action_loops_iter90_bars_preview.pdf) · [SVG](rl_results/rl_action_loops_iter90_bars_preview.svg) · [Source](arm_results/rl_integration/behavior/plot_rl_loops_iter90_bars_preview.py).
 
 </details>
+
+<a id="rl-repeated-action-failure-metric"></a>
+
+**Metric definition: repeated-action failures (%).** An episode contributes one failure if and only if all three conditions hold:
+
+1. Its saved outcome is **valid and unsuccessful**.
+2. Its recorded tool-call sequence **contains a `done` call**. Episodes without `done` are classified as turn-limit or other termination failures before repetition is checked.
+3. At least one identical tool call, excluding `wait` and `done`, appears **three or more times** in that episode. Occurrences need not be consecutive; each episode counts at most once.
+
+The plotted percentage is `100 × matching episodes / (3 × 300)`: **300 unique planned tasks evaluated three times, totaling 900 task episodes per checkpoint**. Successful, invalid and no-`done` episodes remain in the denominator and contribute zero to this numerator. For example, Outcome + ADM rewards has `(20 + 23 + 27) / 900 × 100 = 7.78%`. This is the existing `repeat_loop` failure category expressed as a percentage of planned episodes; category membership does not establish that repetition caused the failure.
+
+Pointwise 95% intervals use 20,000 percentile-bootstrap draws (seed 20261104) over the **300 task clusters**, keeping all three repeats and all compared methods together for every sampled task. They condition on the fixed checkpoints and evaluation windows. Exact tool-call matching and extraction details are in [Method and sources](#rl-repetition-matching-rules).
 
 | Run | Loop failures, r1 / r2 / r3 | Mean loop failures | Mean 95% CI | Loop rate, mean % | Successes, r1 / r2 / r3 |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -348,9 +360,12 @@ low end of the outcome-only range, not clearly below all of it.
   pruned. Checkpoints are fixed, so the intervals cover task and evaluation noise, not
   training seeds.
 
+<a id="rl-repetition-matching-rules"></a>
 <details>
 <summary>Method and sources</summary>
 
+- **Exact matching:** the compact extractor retains the first `<tool_call>` capture in each saved actor turn, parsed as JSON; a malformed capture is retained as an `unparsable` pseudo-call with its first 200 raw characters. Calls are compared using `json.dumps(call, sort_keys=True)`, including the tool name and arguments (and any other saved call fields). Object-key ordering is ignored; argument strings, values and URLs are otherwise unnormalized. Additional tool calls in the same actor response are not inspected by this metric.
+- **Failure-rule precedence:** success → invalid → no `done` (`turn_limit` or `no_done_other`) → `repeat_loop` → infeasibility/tool-error/other failure categories. Thus repetition is checked only after the first three exclusions; it takes precedence over the later failure categories. The percentage plot uses this category, while the broader loop-episode metric below also includes successes.
 - **Loop episode:** a valid episode in which one identical first tool call (name and
   arguments) is issued ≥ 3 times, ignoring `wait` and `done`.
 - **Loop failure:** the first-match `repeat_loop` category of the
