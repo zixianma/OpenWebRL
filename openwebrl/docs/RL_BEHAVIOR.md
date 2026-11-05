@@ -285,6 +285,21 @@ The historical consecutive check removes absent calls, `wait` and `done` before 
 
 </details>
 
+<a id="rl-repetition-success-preview"></a>
+### Success versus repetition: three-checkpoint preview
+
+![Overall task success versus repeated-action incidence for three iteration-90 checkpoints, with marginal 95% task-bootstrap intervals; ADM is toward the upper left](rl_results/rl_repetition_success_preview.png)
+
+*Each point is one checkpoint evaluated on the same 300 OM2W tasks three times. Upper left means higher overall success and lower repetition. Horizontal: incidence of at least three identical non-`wait`, non-`done` calls among each method's valid episodes, including successes. Vertical: successes divided by all 900 planned episodes; invalid outcomes contribute zero successes. Whiskers are marginal pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), retaining all three repeats and methods. They are not a joint 95% confidence region. Axes are cropped. Uncertainty conditions on these checkpoints and evaluation windows, excluding training-seed and evaluation-window uncertainty.* [PDF](rl_results/rl_repetition_success_preview.pdf) · [SVG](rl_results/rl_repetition_success_preview.svg) · [Aggregate and intervals](arm_results/rl_integration/behavior/rl-repetition-success-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_repetition_success.py).
+
+| Method | Successes | Planned episodes | Overall success | 95% CI |
+| --- | ---: | ---: | ---: | ---: |
+| Outcome-only, 48 groups | 307 | 900 | 34.1% | [30.0%, 38.3%] |
+| Outcome-only, 56 groups | 318 | 900 | 35.3% | [31.2%, 39.6%] |
+| Outcome + ADM rewards (ours) | 365 | 900 | 40.6% | [36.2%, 44.9%] |
+
+In this matched cohort, ADM has **+5.2 pp overall success [paired 95% CI +1.6, +8.9]** and **−7.4 pp repetition incidence [−12.3, −2.5]** versus the 56-group baseline. Versus the 48-group baseline, the overall-success difference is +6.4 pp [+2.7, +10.2]. The scatter shows both observed metrics together; it does not establish that lower repetition caused the success difference or that the difference generalizes across training seeds.
+
 <details><summary>Earlier views: training diagnostics and repeated-action failure categories</summary>
 
 ![Loop rate over training, iteration-90 matched repeats, and ARM label bias against repeated actions](rl_results/rl_action_loops.png)
