@@ -21,6 +21,8 @@ SPECS = [
     ('all_failure', 'All-failure ARM', '#dc2626', True, 'allfailure'),
     ('additive', 'Additive ARM', '#16803c', True, 'additive'),
     ('gate_b', 'Gate B · relaxed gate', '#7e22ce', True, 'gate-b'),
+    ('gate_b_40m16f', 'Gate B · 40 mixed + 16 failure groups', '#c026d3', True, 'gate-b-40m16f'),
+    ('gate_b_48m16f', 'Gate B · 48 mixed + 16 failure groups', '#4d7c0f', True, 'gate-b-48m16f'),
     ('gate_c', 'Gate C · duplicate-aware credit', '#a16207', False, 'gate-c'),
     ('mixed_bonus', 'Mixed-only bonus · relaxed B', '#0891b2', True, 'mixed-bonus'),
     ('mixed_reweight', 'Mixed-only reweight · relaxed B', '#db2777', True, 'mixed-reweight'),
