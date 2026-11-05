@@ -19,12 +19,12 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 from matplotlib.font_manager import FontProperties
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#169B62", "#2164A5"
+PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#397FA3", "#173F78"
 ORACLE = OUTCOME
 ROLLOUT, ROLLOUT_BG = "#111111", "#F4F5F6"
 SHARED, SHARED_BG = "#737A83", "#F3F4F5"
 SUCCESS, FAILURE = "#31785A", "#8D949B"
-LABEL_BG, HELD_BG = "#EAF7EF", "#EDF3FA"
+LABEL_BG, HELD_BG = "#EDF6FA", "#EBF0F8"
 # Same 5 x 8 outcomes and picks as the original worked example.
 OUTCOMES = (
     (1, 0, 1, 1, 0, 1, 1, 0),
@@ -81,7 +81,8 @@ def state_card(x, y, step, color, candidate):
 
 
 def percent(rate):
-    return f"{100 * rate:.1f}".rstrip("0").rstrip(".") + "%"
+    # Rates are scaled to percent; the column headers carry the percent sign.
+    return f"{100 * rate:.1f}".rstrip("0").rstrip(".")
 
 
 def outcome_marker(x, y, success, radius=0.018):
@@ -164,7 +165,7 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
         outcome_marker(xs[j], y, success)
     text(3.27, y, percent(label_rates[i]), color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
-    text(3.65, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
+    text(3.65, y, f"{100 * held_rates[i]:.0f}", color=HELD, weight="bold", ha="center")
 
 # (b) Shared context explicitly feeds each joint candidate-comparison call.
 ax.plot([3.86, 3.86], [0.26, 1.91], color=LINE, linewidth=0.6)
@@ -174,7 +175,7 @@ pick_x, pick_w, eval_x = 6.60, 0.45, 7.27
 text(method_x, 1.98, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
 box(method_x, 1.67, 3.58, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
 shared_label = text(5.75, 1.79,
-     r"Shared: task · history · $s_t$ · $\{a_t^{i}\}_{i=1}^{K}$ ($K=5$)",
+     r"Shared: task · history · $s_t$ · $\{a_t^{i}\}_{i=1}^{K}$",
      color=SHARED, ha="center")
 text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center")
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
@@ -201,9 +202,9 @@ for y, key, label, color, evidence in lanes:
     pick = PICKS[key]
     text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=color, ha="center")
     arrow(pick_x + pick_w + 0.015, y, 7.15, y, color=HELD)
-    text(eval_x, y, f"{100 * held_rates[pick]:.0f}%", color=HELD,
+    text(eval_x, y, f"{100 * held_rates[pick]:.0f}", color=HELD,
          weight="bold", ha="center")
-# Green rate labels refer to the complete five-action Train % column in (a).
+# Lighter-blue rate labels refer to the complete five-action Train % column in (a).
 y = 0.32
 text(method_x, y, "Oracle", color=ORACLE)
 box(4.52, y - 0.105, 1.00, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
@@ -215,7 +216,7 @@ arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=ORACLE)
 box(pick_x, y - 0.115, pick_w, 0.23, edge=ORACLE)
 text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=ORACLE, ha="center")
 arrow(pick_x + pick_w + 0.015, y, 7.15, y, color=HELD)
-text(eval_x, y, "80%", color=HELD, weight="bold", ha="center")
+text(eval_x, y, "80", color=HELD, weight="bold", ha="center")
 
 # Keep the method key right aligned; outcome status is keyed beside its R label.
 items = (("Pre-exec", PRE), ("Post-exec", POST), ("Lookahead H = 3", LOOK), ("Oracle", ORACLE))
