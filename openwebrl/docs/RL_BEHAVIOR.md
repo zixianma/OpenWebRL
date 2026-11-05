@@ -259,6 +259,16 @@ same trajectory; 95% binomial intervals; chance = 20%.* [PDF](rl_results/rl_acti
 
 *Online-Mind2Web, iteration 90. Points = mean loop failures per 300 planned tasks across three back-to-back evaluations; whiskers = pointwise 95% task-bootstrap intervals (20,000 draws, seed 20261104), retaining all three repeats within each sampled task. Purple = Outcome + ADM rewards (ours; Gate B). Intervals are conditional on the fixed checkpoints and three evaluation windows; they exclude training-seed and evaluation-window uncertainty. Repeat counts and paired differences remain in the tables below.* [PDF](rl_results/rl_action_loops_iter90.pdf) · [SVG](rl_results/rl_action_loops_iter90.svg) · [CI aggregate](arm_results/rl_integration/behavior/rl-action-loops-iter90-ci-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_loops_iter90.py).
 
+<a id="rl-behavior-loops-percentage-bars"></a>
+
+<details><summary>Alternative paper view: vertical bars as percentages of planned tasks</summary>
+
+![Iteration-90 loop-failure percentages with 95% task-bootstrap intervals: outcome-only baselines in gray and Outcome + ADM rewards in purple](rl_results/rl_action_loops_iter90_bars_preview.png)
+
+*Bars = mean percentage of all 300 planned OM2W tasks classified as loop failures across three evaluation repeats: 20.2%, 15.0% and 7.8%. Error bars are the same 95% task-bootstrap intervals as above, converted from counts to percentages by dividing by 3. Invalid outcomes remain in the planned-task denominator; this is distinct from the fraction of valid episodes containing any loop. Intervals condition on the fixed checkpoints and evaluation windows.* [PDF](rl_results/rl_action_loops_iter90_bars_preview.pdf) · [SVG](rl_results/rl_action_loops_iter90_bars_preview.svg) · [Source](arm_results/rl_integration/behavior/plot_rl_loops_iter90_bars_preview.py).
+
+</details>
+
 | Run | Loop failures, r1 / r2 / r3 | Mean loop failures | Mean 95% CI | Loop rate, mean % | Successes, r1 / r2 / r3 |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | [51.3, 70.3] | 39.0 | 103 / 95 / 109 |

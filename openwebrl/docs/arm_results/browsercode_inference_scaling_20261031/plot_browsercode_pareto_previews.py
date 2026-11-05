@@ -37,6 +37,7 @@ def module(name, filename):
 SCALING = module('pareto_scaling', 'plot_browsercode_scaling.py')
 AVERAGE = module('pareto_average', 'plot_browsercode_average.py')
 COMMON = module('pareto_common', 'plot_browsercode_common_valid.py')
+PAPER = module('pareto_paper_style', 'browsercode_pareto_paper_style.py')
 SOL60_SOURCE = HERE.parent / 'browsercode_sol_high60_20261104' / 'aggregate.json'
 SOL60_METHOD = 'sol_single_high60'
 SOL60_STYLE = ('Sol high · 60 steps', 's', '#08519c', False)
@@ -257,6 +258,8 @@ def build():
               for b in SCALING.BENCHMARKS for metric in METRICS]
     report = overlay(fig, panels)
     grouped_bottom_legends(fig)
+    PAPER.apply_style(fig, [SCALING.ALL_METHODS] * len(fig.axes), SCALING.STYLES,
+                      {label: method for method, label in SINGLE_LEGEND + SELECTION_LEGEND}, weighted=False)
     figures.append((fig, 'browsercode_scaling_pareto_preview', report))
     fig = capture(AVERAGE.render, weighted, temporary, 'source_weighted')
     panels = [('weighted_own_valid', weighted['points'], metric) for metric in METRICS]
@@ -302,6 +305,7 @@ def main():
                   source_sha256={name: sha(HERE / name) for name in ['aggregate.json', 'aggregate_common_valid.json',
                       'browsercode_scaling_weighted_average.json', 'browsercode_scaling_common_valid_weighted_average.json',
                       'plot_browsercode_scaling.py', 'plot_browsercode_average.py', 'plot_browsercode_common_valid.py',
+                      'browsercode_pareto_paper_style.py',
                       '../browsercode_sol_high60_20261104/aggregate.json']},
                   per_benchmark_legends=dict(
                       single_call=[dict(method=m, label=l) for m, l in SINGLE_LEGEND],
@@ -315,6 +319,9 @@ def main():
                       browser_step_definition='Executed nonempty BrowserCode batches; each batch can contain multiple browser operations. Setup step limits cap agent decisions.',
                       defaults='Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates',
                       cap_definition='Ceiling on output tokens per call, including reasoning; not realized token use'),
+                  per_benchmark_paper_style=dict(hollow='30 steps', filled='60/120 steps',
+                      axes_font_pt=9, legend_font_pt=8, title_font_pt=10, footer_font_pt=7.2,
+                      horizontal_spacing=.12, grid=False, focus_label='Luna ADM'),
                   renderer_sha256=sha(__file__), previews=reports)
     (HERE / 'browsercode_pareto_previews.json').write_text(json.dumps(report, indent=2) + '\n')
     for stem, panels in reports.items():

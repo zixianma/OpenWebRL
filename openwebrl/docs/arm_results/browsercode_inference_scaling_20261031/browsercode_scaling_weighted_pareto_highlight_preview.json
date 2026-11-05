@@ -8,7 +8,9 @@
     "highlight_size_points_squared": 27,
     "baseline_size_points_squared": 27,
     "highlight_label": "Luna ADM",
-    "highlight_legend_label": "Luna ADM \u00b7 N=5, 60 steps",
+    "highlight_legend_label": "Luna ADM; N=5, 60 steps",
+    "layout": "Shorter panels; wspace 0.12; no gridlines",
+    "typography": "9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer",
     "selection_title": "Best-of-N action decision scaling",
     "actor_family": "GPT-6 (Luna and Sol)",
     "baseline_definition": "Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
@@ -17,10 +19,11 @@
   "source_sha256": {
     "aggregate.json": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
     "browsercode_scaling_weighted_average.json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
-    "plot_browsercode_pareto_previews.py": "5d7c81a12cbf1128789dba31f8df4a1b9f0872163f9aa75b4dad11be39a4c77b",
+    "plot_browsercode_pareto_previews.py": "91824ae1ec1fac96dec9096b2ce08721b7437ae029372f0782ca44e53298db4e",
+    "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
-  "renderer_sha256": "dabde6b48b6483d12179009fca742b51d3b1106bd4217c3ebf66ae82d27a3115",
+  "renderer_sha256": "57f0c9f941fc6e271d3d613f5e9c5db8ee3ef95726490dc54eb52190960f41b7",
   "frontier": [
     {
       "population": "weighted_own_valid",
@@ -123,8 +126,8 @@
     }
   ],
   "output_sha256": {
-    "png": "6d3ba5220e782d02c87bdbacd133438de283f698415bf601e2038421e58c9d86",
-    "svg": "e1728f612317a41e6b2f77ab421517b6854dc41a416d4d898697e04f42eba895",
-    "pdf": "8ded262bd911d1eff3574db39f17458da364117c6125eda077e424e4c8c39aa2"
+    "png": "38f973922824c04af19ebec7c38bdb53102b154c31badcbc12e93d288fb032ca",
+    "svg": "d6c5124bd328c79dff47ad5f28af06adad16c7faaeae03b00f5b93807cf3dd93",
+    "pdf": "58f2ce6f575de428217ab8d3df407e6ec1083e5165a976ba2c1007cbebc72d9a"
   }
 }

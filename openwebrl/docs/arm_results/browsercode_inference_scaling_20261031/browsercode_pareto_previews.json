@@ -56,6 +56,7 @@
     "plot_browsercode_scaling.py": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
     "plot_browsercode_average.py": "4adf3a2206e1b43c84d441c98e0f54f43aa0fa0642029a9c287ca538b4524cd1",
     "plot_browsercode_common_valid.py": "4f899ac63c7069cfc8b575c1e4bd2b5af4bbc27d7e0f05469a6669a7796feaec",
+    "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
   "per_benchmark_legends": {
@@ -151,7 +152,18 @@
     "defaults": "Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates",
     "cap_definition": "Ceiling on output tokens per call, including reasoning; not realized token use"
   },
-  "renderer_sha256": "5d7c81a12cbf1128789dba31f8df4a1b9f0872163f9aa75b4dad11be39a4c77b",
+  "per_benchmark_paper_style": {
+    "hollow": "30 steps",
+    "filled": "60/120 steps",
+    "axes_font_pt": 9,
+    "legend_font_pt": 8,
+    "title_font_pt": 10,
+    "footer_font_pt": 7.2,
+    "horizontal_spacing": 0.12,
+    "grid": false,
+    "focus_label": "Luna ADM"
+  },
+  "renderer_sha256": "91824ae1ec1fac96dec9096b2ce08721b7437ae029372f0782ca44e53298db4e",
   "previews": {
     "browsercode_scaling_pareto_preview": [
       {

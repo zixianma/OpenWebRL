@@ -11,7 +11,6 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import numpy as np
 
 HERE = Path(__file__).resolve().parent
 STEM = "browsercode_scaling_weighted_pareto_highlight_preview"
@@ -31,36 +30,10 @@ def build():
         plt.close(other)
     data = json.loads((HERE / "browsercode_scaling_weighted_average.json").read_text())
     rows = [*data["points"], BASE.sol60_weighted_point()]
-    for j, (ax, metric) in enumerate(zip(fig.axes, BASE.METRICS)):
-        assert len(ax.collections) == len(rows) + 1
-        for point, collection in zip(rows, ax.collections[:len(rows)]):
-            method = point["method"]
-            _, _, color, _ = BASE.SCALING.STYLES[method]
-            expected = (BASE.coordinate(point, metric), 100 * point["success_rate"])
-            assert np.allclose(collection.get_offsets()[0], expected)
-            collection.set_facecolor(color if method in LONG else "white")
-            collection.set_edgecolor(color)
-            if method == FOCUS:
-                collection.set_sizes([SIZE])
-                collection.set_zorder(5)
-                collection.set_linewidths([.9])
-                offset, align = ((8, 8), "left") if j == 1 else ((-7, 8), "right")
-                ax.annotate("Luna ADM", expected, xytext=offset,
-                            textcoords="offset points", color=color, fontsize=7,
-                            ha=align, va="bottom", zorder=6)
     label_to_method = {label: method for method, label in BASE.SINGLE_LEGEND + BASE.SELECTION_LEGEND}
     label_to_method[BASE.SOL60_STYLE[0]] = BASE.SOL60_METHOD
-    for legend in fig.legends[:2]:
-        for line, text in zip(legend.get_lines(), legend.texts):
-            method = label_to_method[text.get_text()]
-            color = BASE.SCALING.STYLES[method][2]
-            line.set_markerfacecolor(color if method in LONG else "white")
-            if method == FOCUS:
-                text.set_text("Luna ADM · N=5, 60 steps")
-    fig.legends[1].set_title("Best-of-N action decision scaling", prop={"size": 7.2})
-    for text in fig.texts:
-        if text.get_text().startswith("Luna defaults:"):
-            text.set_text("GPT-6 actors: Luna and Sol. Luna baseline: high effort · max tokens=12,288 · 30 steps. N=candidates.")
+    BASE.PAPER.apply_style(fig, [[row["method"] for row in rows]] * len(fig.axes),
+                          BASE.SCALING.STYLES, label_to_method, weighted=True)
     return fig, frontier_report
 
 
@@ -72,14 +45,16 @@ def main():
         styles=dict(hollow="30-decision limit", filled="60/120-decision limit",
                     highlight=FOCUS, highlight_size_points_squared=SIZE,
                     baseline_size_points_squared=27, highlight_label="Luna ADM",
-                    highlight_legend_label="Luna ADM · N=5, 60 steps",
+                    highlight_legend_label="Luna ADM; N=5, 60 steps",
+                    layout="Shorter panels; wspace 0.12; no gridlines",
+                    typography="9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer",
                     selection_title="Best-of-N action decision scaling",
                     actor_family="GPT-6 (Luna and Sol)",
                     baseline_definition="Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
                     colors="Original colors retained; no new halo"),
         source_sha256={name: BASE.sha(HERE / name) for name in (
             "aggregate.json", "browsercode_scaling_weighted_average.json",
-            "plot_browsercode_pareto_previews.py",
+            "plot_browsercode_pareto_previews.py", "browsercode_pareto_paper_style.py",
             "../browsercode_sol_high60_20261104/aggregate.json")},
         renderer_sha256=BASE.sha(__file__), frontier=frontier_report)
     BASE.save(fig, STEM)
