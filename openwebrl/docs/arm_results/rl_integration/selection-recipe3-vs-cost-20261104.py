@@ -3,6 +3,7 @@ LoRAs, November 4–5, down triangles): overall success (3 runs pooled) vs actor
 selector parameters, PFLOP per episode and model time per episode. Renders two figures:
   selection-recipe3-vs-cost-20261104.*               3-benchmark equal-weight mean (success and cost alike)
   selection-recipe3-vs-cost-per-benchmark-20261104.*  one row per benchmark
+  selection-recipe3-vs-cost[-per-benchmark]-sft-actors-20261104.*  the same without the RL checkpoints (SFT actors only)
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
 rings mark frontier points. No smoothing or statistical superiority is implied. Colors follow the API plots (Okabe-Ito blue /
@@ -49,7 +50,7 @@ def frontier(pts):
     return sorted(set(keep))
 
 
-def panel(ax, bench, k):
+def panel(ax, bench, k, methods):
     pts = []
     for key, label, p, color, marker, hollow in methods:
         r = point(key, bench)
@@ -69,7 +70,9 @@ def panel(ax, bench, k):
     for spine in ax.spines.values():
         spine.set_color("#555555"); spine.set_linewidth(0.6)
     if k == "params":
-        ax.set_xlim(3.5, 14.2); ax.set_xticks([4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"])
+        wide = any(m[2] > 9e9 for m in methods)
+        ax.set_xlim(3.5, 14.2 if wide else 9.5)
+        ax.set_xticks(*([[4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"]] if wide else [[4.44, 8.88], ["4.44", "8.88"]]))
 
 
 def legend(fig, axes, x0):
@@ -81,14 +84,14 @@ def legend(fig, axes, x0):
                handletextpad=0.35, labelspacing=0.45, borderaxespad=0)
 
 
-def render(benches, name, height):
+def render(benches, name, height, methods=methods):
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7.5, "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
                          "axes.labelpad": 2, "axes.spines.top": False, "axes.spines.right": False,
                          "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
     fig, axes = plt.subplots(len(benches), 3, figsize=(7, height), sharey="row", squeeze=False)
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
-            panel(ax, bench, k)
+            panel(ax, bench, k, methods)
             if i == 0:
                 ax.set_title(xlabel, fontsize=7.5, pad=4)
         ax_row[0].set_ylabel(f"{NAMES[bench]}\nsuccess (%)")
@@ -108,3 +111,6 @@ def render(benches, name, height):
 if __name__ == "__main__":
     print(render(("mean",), "selection-recipe3-vs-cost-20261104", 1.9))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-20261104", 3.9)
+    sft = [m for m in methods if not m[0].startswith("rl")]
+    print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.75, sft))
+    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 3.9, sft)
