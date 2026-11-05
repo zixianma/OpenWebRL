@@ -4,6 +4,7 @@ selector parameters, PFLOP per episode and model time per episode. Renders two f
   selection-recipe3-vs-cost-20261104.*               3-benchmark equal-weight mean (success and cost alike)
   selection-recipe3-vs-cost-per-benchmark-20261104.*  one row per benchmark
   selection-recipe3-vs-cost[-per-benchmark]-sft-actors-20261104.*  the same without the RL checkpoints (SFT actors only)
+  selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
 rings mark frontier points. No smoothing or statistical superiority is implied. Colors follow the API plots (Okabe-Ito blue /
@@ -96,9 +97,9 @@ def legend(fig, axes, *, sft_only):
 
 
 def render(benches, name, height, methods=methods):
-    compact_sft_mean = name == "selection-recipe3-vs-cost-sft-actors-20261104"
+    compact_sft_mean = name in ("selection-recipe3-vs-cost-sft-actors-20261104", "selection-recipe3-vs-cost-rl-actors-20261104")
     if compact_sft_mean:
-        methods = [(key, label.replace(" ¹", ""), *style) for key, label, *style in methods]
+        methods = [(key, label.replace(" ¹", "").replace(" ²", "").replace(" ³", ""), *style) for key, label, *style in methods]
     plt.rcParams.update({"font.family": "Albert Sans", "font.size": 7.5, "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
                          "axes.labelpad": 2, "axes.spines.top": False, "axes.spines.right": False,
                          "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
@@ -155,3 +156,5 @@ if __name__ == "__main__":
     sft = [m for m in methods if not m[0].startswith("rl")]
     print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.60, sft))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 4.35, sft)
+    rl = [m for m in methods if m[0].startswith("rl")]
+    print(render(("mean",), "selection-recipe3-vs-cost-rl-actors-20261104", 1.60, rl))
