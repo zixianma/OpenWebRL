@@ -148,8 +148,8 @@ def render(benches, name, height, methods=methods):
 
 
 if __name__ == "__main__":
-    print(render(("mean",), "selection-recipe3-vs-cost-20261104", 1.9))
-    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-20261104", 3.9)
+    print(render(("mean",), "selection-recipe3-vs-cost-20261104", 2.20))
+    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-20261104", 4.35)
     sft = [m for m in methods if not m[0].startswith("rl")]
-    print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.30, sft))
-    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 3.9, sft)
+    print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.60, sft))
+    render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 4.35, sft)
