@@ -179,7 +179,7 @@ def render():
     left.get_xticklabels()[-1].set_color(RUNS[-1][3])
     left.set_xlim(-0.48, 2.48)
     left.tick_params(axis="x", length=0, pad=6)
-    left.set_title("(a) Repetition incidence (k=3)", loc="left", pad=9)
+    left.set_title("(a) Repetition incidence (K=3)", loc="left", pad=9)
 
     for key, _, _, color, marker in RUNS:
         rows = [data["methods"][key]["thresholds"][str(k)] for k in THRESHOLDS]
@@ -192,7 +192,7 @@ def render():
                        capsize=2.5, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
     right.set_xticks(THRESHOLDS)
     right.set_xlim(min(THRESHOLDS) - 0.18, max(THRESHOLDS) + 0.18)
-    right.set_xlabel("Repetition threshold, k", labelpad=5)
+    right.set_xlabel("Repetition threshold, K", labelpad=5)
     right.set_title("(b) Threshold robustness", loc="left", pad=9)
     right.tick_params(axis="y", left=False)
     largest_upper = max(data["methods"][key]["thresholds"][str(k)]["ci95_percent"][1]

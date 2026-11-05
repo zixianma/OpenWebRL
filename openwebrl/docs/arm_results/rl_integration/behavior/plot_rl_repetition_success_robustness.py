@@ -28,7 +28,7 @@ def render():
     fig, (left, right) = plt.subplots(1, 2, figsize=(6.8, 2.6))
     for key, _, _, color, _ in RUNS:
         row = success["methods"][key]
-        x, y = row["repetition_incidence"], row["overall_success"]
+        x, y = row["repetition_incidence"], row["valid_success"]
         assert x["percent"] == repetition["methods"][key]["thresholds"]["3"]["percent"]
         left.errorbar(x["percent"], y["percent"],
                       yerr=[[y["percent"] - y["ci95_percent"][0]],
@@ -43,15 +43,15 @@ def render():
                        yerr=np.vstack((values - ci[:, 0], ci[:, 1] - values)),
                        color=color, marker="o", markersize=5, linewidth=1.5,
                        capsize=2.5, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
-    left_title = left.set_title("(a) Success vs. repetition (k=3)", loc="left", pad=9)
+    left_title = left.set_title("(a) Success vs. repetition (K=3)", loc="left", pad=9)
     left.set_xlabel("Repetition incidence (%)", labelpad=5)
-    left.set_ylabel("Overall success (%)", labelpad=5)
+    left.set_ylabel("Valid-only success (%)", labelpad=5)
     left.set_xlim(13, 47)
     left.set_xticks([15, 25, 35, 45])
-    left.set_ylim(26, 49)
-    left.set_yticks([30, 35, 40, 45])
+    left.set_ylim(35, 60)
+    left.set_yticks([40, 45, 50, 55])
     right_title = right.set_title("(b) Threshold robustness", loc="left", pad=9)
-    right.set_xlabel("Minimum identical-action count, k", labelpad=5)
+    right.set_xlabel("Repetition threshold, K", labelpad=5)
     right.set_ylabel("Repetition incidence (%)", labelpad=5)
     right.set_xlim(1.82, 5.18)
     right.set_xticks(THRESHOLDS)

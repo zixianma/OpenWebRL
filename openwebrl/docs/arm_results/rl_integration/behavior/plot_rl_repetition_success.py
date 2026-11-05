@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preview overall task success versus repeated-action incidence at iteration 90.
+"""Preview valid-only success versus repeated-action incidence at iteration 90.
 
 Render from public aggregates. --compact-dir rebuilds uncertainty from the private
 compact records without exporting any task identities or trajectories.
@@ -49,7 +49,8 @@ def build(compact_dir):
         valid_per_task = valid.sum(axis=0)
         success_per_task = success.sum(axis=0)
         bx = 100 * repetition_per_task[indices].sum(axis=1) / valid_per_task[indices].sum(axis=1)
-        by = 100 * success_per_task[indices].sum(axis=1) / 900
+        by = 100 * success_per_task[indices].sum(axis=1) / valid_per_task[indices].sum(axis=1)
+        by_overall = 100 * success_per_task[indices].sum(axis=1) / 900
         reference = source["methods"][key]
         repetition = {"episodes": int(repetition_per_task.sum()),
                       "valid_episodes": int(valid.sum()),
@@ -59,15 +60,18 @@ def build(compact_dir):
         for field in ("episodes", "percent", "ci95_percent"):
             assert repetition[field] == reference["thresholds"]["3"][field]
         methods[key] = {"repetition_incidence": repetition,
+                        "valid_success": {"successes": int(success.sum()), "valid_episodes": int(valid.sum()),
+                                          "percent": float(100 * success.sum() / valid.sum()),
+                                          "ci95_percent": np.percentile(by, [2.5, 97.5]).tolist()},
                         "overall_success": {"successes": int(success.sum()), "planned_episodes": 900,
                                             "repeat_successes": success.sum(axis=1).astype(int).tolist(),
                                             "percent": float(100 * success.sum() / 900),
-                                            "ci95_percent": np.percentile(by, [2.5, 97.5]).tolist()}}
-        boot[key] = {"repetition_incidence": bx, "overall_success": by}
+                                            "ci95_percent": np.percentile(by_overall, [2.5, 97.5]).tolist()}}
+        boot[key] = {"repetition_incidence": bx, "valid_success": by, "overall_success": by_overall}
     paired = {}
     for baseline in ("outcome48", "outcome56"):
         paired[baseline] = {}
-        for metric in ("repetition_incidence", "overall_success"):
+        for metric in ("repetition_incidence", "valid_success", "overall_success"):
             samples = boot["gate-b"][metric] - boot[baseline][metric]
             paired[baseline][metric] = {
                 "delta_pp": methods["gate-b"][metric]["percent"] - methods[baseline][metric]["percent"],
@@ -75,8 +79,8 @@ def build(compact_dir):
             }
     result = {
         "x": "Repeated-action incidence: >=3 identical non-wait/non-done calls / each method's valid episodes, successes included",
-        "y": "Overall task success: successes / all 900 planned episodes (300 tasks x three repeats); invalid outcomes contribute zero successes",
-        "uncertainty": {"method": "Marginal pointwise percentile intervals from shared task-cluster resamples, retaining all repeats and methods",
+        "y": "Valid-only success: successes / each method's valid episodes, pooled across three repeats; invalid outcomes excluded",
+        "uncertainty": {"method": "Marginal pointwise percentile intervals from shared task-cluster resamples, retaining all repeats and methods; valid-only ratios recomputed in each resample",
                         "tasks": 300, "repeats": 3, "draws": draws, "seed": seed,
                         "scope": "Conditional on fixed checkpoints and evaluation windows; excludes training-seed and evaluation-window uncertainty; horizontal/vertical intervals are not a joint 95% confidence region"},
         "repetition_aggregate_sha256": hashlib.sha256(REPETITION.read_bytes()).hexdigest(),
@@ -97,18 +101,19 @@ def render():
     fig, ax = plt.subplots(figsize=(3.8, 2.65))
     for key, _, _, color, _ in RUNS:
         row = data["methods"][key]
-        x, y = row["repetition_incidence"], row["overall_success"]
+        x, y = row["repetition_incidence"], row["valid_success"]
         yerr = np.asarray([[y["percent"] - y["ci95_percent"][0]],
                            [y["ci95_percent"][1] - y["percent"]]])
         ax.errorbar(x["percent"], y["percent"], yerr=yerr,
                     fmt="o", color=color, markersize=5.5, capsize=2.5,
                     elinewidth=1, linewidth=1, zorder=4 if key == "gate-b" else 3)
     ax.set_xlabel("Repeated-action incidence (%)", labelpad=4)
-    ax.set_ylabel("Overall success (%)", labelpad=5)
+    ax.set_ylabel("Valid-only success (%)", labelpad=5)
+    ax.yaxis.set_label_coords(-0.13, 0.43)
     ax.set_xlim(13, 47)
-    ax.set_ylim(26, 49)
+    ax.set_ylim(35, 60)
     ax.set_xticks([15, 20, 25, 30, 35, 40, 45])
-    ax.set_yticks([30, 35, 40, 45])
+    ax.set_yticks([40, 45, 50, 55])
     ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
