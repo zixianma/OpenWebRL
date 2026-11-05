@@ -19,12 +19,12 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 from matplotlib.font_manager import FontProperties
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
-PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#ED7D00", "#2164A5"
-ORACLE = "#169B62"
+PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#169B62", "#2164A5"
+ORACLE = OUTCOME
 ROLLOUT, ROLLOUT_BG = "#111111", "#F4F5F6"
 SHARED, SHARED_BG = "#737A83", "#F3F4F5"
 SUCCESS, FAILURE = "#31785A", "#8D949B"
-LABEL_BG, HELD_BG = "#FFF0DD", "#EDF3FA"
+LABEL_BG, HELD_BG = "#EAF7EF", "#EDF3FA"
 # Same 5 x 8 outcomes and picks as the original worked example.
 OUTCOMES = (
     (1, 0, 1, 1, 0, 1, 1, 0),
@@ -173,7 +173,8 @@ teacher_x, teacher_w = 5.75, 0.74
 pick_x, pick_w, eval_x = 6.60, 0.45, 7.27
 text(method_x, 1.98, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
 box(method_x, 1.67, 3.58, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
-text(5.75, 1.79, r"Shared: task · history · $s_t$ · $K=5$ actions",
+shared_label = text(5.75, 1.79,
+     r"Shared: task · history · $s_t$ · $\{a_t^{i}\}_{i=1}^{K}$ ($K=5$)",
      color=SHARED, ha="center")
 text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center")
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
@@ -202,7 +203,7 @@ for y, key, label, color, evidence in lanes:
     arrow(pick_x + pick_w + 0.015, y, 7.15, y, color=HELD)
     text(eval_x, y, f"{100 * held_rates[pick]:.0f}%", color=HELD,
          weight="bold", ha="center")
-# Orange rate labels refer to the complete five-action Train % column in (a).
+# Green rate labels refer to the complete five-action Train % column in (a).
 y = 0.32
 text(method_x, y, "Oracle", color=ORACLE)
 box(4.52, y - 0.105, 1.00, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
