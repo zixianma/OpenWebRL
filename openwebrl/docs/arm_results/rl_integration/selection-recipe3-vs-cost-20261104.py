@@ -33,6 +33,8 @@ methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, "#898781", "s", False),
     ("sft8b", "SFT 8B", 8.77e9, "#4a4844", "s", False),
     ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
+    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, "#0072B2", "^", False),
+    ("rl4b-head-gpt55-k3", "RL 4B + ADM-22M (GPT-5.5) ²", HEAD, "#0072B2", "^", True),
     ("rl8b", "RL 8B ³", 8.77e9, "#4a4844", "v", False),
     ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, "#0072B2", "v", False),
     ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, "#0072B2", "D", False),
@@ -117,7 +119,7 @@ def render(benches, name, height, methods=methods):
     # Reserve the measured legend height plus room for ticks and a clear gap.
     legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
     fig.subplots_adjust(left=0.085, right=0.99,
-                        bottom=(legend_height + 0.22) / height,
+                        bottom=(legend_height + 0.26) / height,
                         top=1 - 0.18 / height, hspace=0.32, wspace=0.17)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()

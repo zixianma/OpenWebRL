@@ -1,6 +1,6 @@
 """Recipe 3 selectors vs same-day SFT 4B and SelectionARM (SFT 4B actor, evaluated 2026-11-02/04): success and cost per
 episode. GPT-5.5 LoRAs: November 4 same-day rerun (sameday-lora-20261104).
-RL 8B actor (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 tokens) alone and with the GPT-5.5 LoRAs: sameday-rl8b-20261104 (November 4–5). Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure; valid_only = successes / valid). Cost from run 1 (all
+RL 8B actor (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 tokens) alone and with the GPT-5.5 LoRAs: sameday-rl8b-20261104 (November 4–5). RL 4B actor with the GPT-5.5 K=3 LoRA and head (head on the RL actor's own features): sameday-rl4b-adm-20261104 (November 4–5). Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure; valid_only = successes / valid). Cost from run 1 (all
 1,045 tasks), exactly as selection-n3-sft8b-full-20261021-analysis.py: actor PFLOP = 2 x params x (uncached prompt +
 generated tokens); 4B LoRA selectors (SelectionARM and Recipe 3 LoRAs) 2 x 4.44e9 x their tokens; head FLOPs as logged.
 Model time per episode = summed decision seconds / tasks. Benchmark means weight the three benchmarks equally."""
@@ -19,6 +19,8 @@ CONDS = {  # key: (label, root, slug, kind)
     'rl8b': ('RL 8B, 1 sample (4,096 tokens)', 'sameday-rl8b-20261104/rl8b', 'sft1', 'none'),
     'rl8b-lora-gpt55-k3': ('RL 8B + 4B LoRA, Recipe 3 GPT-5.5 K=3', 'sameday-rl8b-20261104/rl8b-lora', 'arm5-9fadc8dc4655', 'lora'),
     'rl8b-lora-gpt55-pre': ('RL 8B + 4B LoRA, Recipe 3 panels GPT-5.5 pre', 'sameday-rl8b-20261104/rl8b-lora', 'arm5-80ee47643be2', 'lora'),
+    'rl4b-lora-gpt55-k3': ('RL 4B + 4B LoRA, Recipe 3 GPT-5.5 K=3', 'sameday-rl4b-adm-20261104', 'arm5-9fadc8dc4655', 'lora'),
+    'rl4b-head-gpt55-k3': ('RL 4B + head on RL features, Recipe 3 GPT-5.5 K=3', 'sameday-rl4b-adm-20261104', 'head5-91e7a5a67417', 'head'),
     'piotr5': ('Piotr SelectionARM', 'controls-sameday-20261103', 'piotr5', 'lora'),
     'lora-gpt55-k3': ('4B LoRA, Recipe 3 GPT-5.5 K=3', 'sameday-lora-20261104', 'arm5-9fadc8dc4655', 'lora'),
     'lora-luna-k3': ('4B LoRA, Recipe 3 Luna K=3', 'p16-lora-lunak3-20261103', 'arm5-2ed62dd7c4dc', 'lora'),
