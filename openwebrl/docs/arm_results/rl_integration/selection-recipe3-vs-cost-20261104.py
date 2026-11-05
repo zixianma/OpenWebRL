@@ -27,11 +27,11 @@ methods = [  # key, legend label, params, color, marker, hollow
     ("sft8b", "SFT 8B", 8.77e9, "#4a4844", "s", False),
     ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
     ("rl8b", "RL 8B ³", 8.77e9, "#4a4844", "v", False),
-    ("rl8b-lora-gpt55-k3", "RL 8B + LoRA: GPT-5.5 K = 3 ³", 8.77e9 + SFT, "#0072B2", "v", False),
-    ("lora-gpt55-k3", "LoRA: GPT-5.5 K = 3 ¹", LORA, "#0072B2", "D", False),
-    ("lora-luna-k3", "LoRA: Luna K = 3", LORA, "#D55E00", "D", False),
-    ("head-gpt55-k3", "Head: GPT-5.5 K = 3", HEAD, "#0072B2", "o", False),
-    ("head-luna-k3", "Head: Luna K = 3", HEAD, "#D55E00", "o", False),
+    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, "#0072B2", "v", False),
+    ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, "#0072B2", "D", False),
+    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, "#D55E00", "D", False),
+    ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, "#0072B2", "o", False),
+    ("head-luna-k3", "ADM-22M (GPT-6 Luna)", HEAD, "#D55E00", "o", False),
 ]
 BENCH = ("online_mind2web", "webvoyager", "deepshop")
 NAMES = {"mean": "3-benchmark mean", "online_mind2web": "OM2W", "webvoyager": "WebVoyager", "deepshop": "DeepShop"}
