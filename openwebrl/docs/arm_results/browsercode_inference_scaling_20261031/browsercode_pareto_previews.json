@@ -21,12 +21,12 @@
         "label": "Luna baseline"
       },
       {
-        "method": "serial_high",
-        "label": "Sol high \u00b7 30 steps"
-      },
-      {
         "method": "luna_single_xhigh_12288",
         "label": "Luna xhigh effort"
+      },
+      {
+        "method": "serial_high",
+        "label": "Sol high \u00b7 30 steps"
       },
       {
         "method": "luna_single_high_6144",
@@ -68,10 +68,12 @@
       "browsercode_scaling_weighted_pareto_preview"
     ],
     "placement": "Bottom; original point encodings preserved",
+    "selection_title": "Best-of-N action scaling",
+    "browser_step_definition": "Executed nonempty BrowserCode batches; each batch can contain multiple browser operations. Setup step limits cap agent decisions.",
     "defaults": "Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates",
     "cap_definition": "Ceiling on output tokens per call, including reasoning; not realized token use"
   },
-  "renderer_sha256": "8dd37387ab7947a79f795c7eb6246c95e005b5a2e9aead347596b9502a225951",
+  "renderer_sha256": "c525a0316ca9b82b89f8874fd8745fb09700f4eb70c218e0bee897002d9f0143",
   "previews": {
     "browsercode_scaling_pareto_preview": [
       {

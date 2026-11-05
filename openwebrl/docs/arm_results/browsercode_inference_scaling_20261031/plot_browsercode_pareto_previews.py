@@ -106,8 +106,8 @@ def overlay(fig, panels):
 # Original plots and the common-valid preview retain their existing layouts.
 SINGLE_LEGEND = (
     ('luna_single_high', 'Luna baseline'),
-    ('serial_high', 'Sol high · 30 steps'),
     ('luna_single_xhigh_12288', 'Luna xhigh effort'),
+    ('serial_high', 'Sol high · 30 steps'),
     ('luna_single_high_6144', 'Luna 0.5× max tokens'),
     ('luna_single_high_24576', 'Luna 2× max tokens'),
     ('luna_single_high_60steps', 'Luna 60 steps'),
@@ -129,17 +129,19 @@ def grouped_bottom_legends(fig, *, weighted=False):
     for note in list(fig.texts):
         note.remove()
     if weighted:
-        fig.set_size_inches(7, 3)
-        fig.subplots_adjust(left=.077, right=.985, top=.87, bottom=.43, wspace=.35)
-        fig.text(.077, .97, 'Task-weighted average: OM2W · WebVoyager · DeepShop',
-                 ha='left', va='top', fontsize=9)
-        fig.text(.077, .08, 'Benchmark weights: 300/1,045 · 595/1,045 · 150/1,045. Own-valid subsets differ.',
-                 fontsize=6.2, color='#555555', va='bottom')
+        fig.set_size_inches(7, 2.65)
+        fig.subplots_adjust(left=.077, right=.985, top=.97, bottom=.45, wspace=.35)
     else:
         fig.set_size_inches(7, 4.7)
         fig.subplots_adjust(left=.077, right=.985, top=.94, bottom=.29,
                             hspace=.60, wspace=.35)
-    legend_top = .315 if weighted else .185
+    legend_top = .32 if weighted else .185
+    for ax in fig.axes:
+        if ax.get_xlabel() in ('Browser-code batches', 'Mean browser-code batches'):
+            ax.xaxis.label.set_text('Browser steps')
+        for text in ax.texts:
+            if text.get_text() == 'Browser-code batches':
+                text.set_text('Browser steps')
 
     def handles(entries):
         result = []
@@ -155,7 +157,7 @@ def grouped_bottom_legends(fig, *, weighted=False):
                         fontsize=6.5, title_fontsize=7.2, frameon=False,
                         handlelength=.8, handletextpad=.4, columnspacing=1.2,
                         labelspacing=.45, borderaxespad=0, alignment='left')
-    selection = fig.legend(handles=handles(SELECTION_LEGEND), title='Selection scaling (Luna)',
+    selection = fig.legend(handles=handles(SELECTION_LEGEND), title='Best-of-N action scaling',
                            loc='upper left', bbox_to_anchor=(.64, legend_top), ncol=2,
                            fontsize=6.5, title_fontsize=7.2, frameon=False,
                            handlelength=.8, handletextpad=.4, columnspacing=1.2,
@@ -239,6 +241,8 @@ def main():
                       selection=[dict(method=m, label=l) for m, l in SELECTION_LEGEND],
                       applies_to=['browsercode_scaling_pareto_preview', 'browsercode_scaling_weighted_pareto_preview'],
                       placement='Bottom; original point encodings preserved',
+                      selection_title='Best-of-N action scaling',
+                      browser_step_definition='Executed nonempty BrowserCode batches; each batch can contain multiple browser operations. Setup step limits cap agent decisions.',
                       defaults='Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates',
                       cap_definition='Ceiling on output tokens per call, including reasoning; not realized token use'),
                   renderer_sha256=sha(__file__), previews=reports)

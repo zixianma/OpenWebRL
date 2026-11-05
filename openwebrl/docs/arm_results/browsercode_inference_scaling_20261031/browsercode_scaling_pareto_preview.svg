@@ -580,7 +580,7 @@ L 329.466162 72.675429
 " style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_13">
-    <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="267.624" y="9.829714" transform="rotate(-0 267.624 9.829714)">Browser-code batches</text>
+    <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="267.624" y="9.829714" transform="rotate(-0 267.624 9.829714)">Browser steps</text>
    </g>
    <g id="PathCollection_14">
     <g clip-path="url(#pd8627c4de2)">
@@ -1820,7 +1820,7 @@ z
      </g>
     </g>
     <g id="text_45">
-     <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="267.624" y="260.721422" transform="rotate(-0 267.624 260.721422)">Browser-code batches</text>
+     <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="267.624" y="260.721422" transform="rotate(-0 267.624 260.721422)">Browser steps</text>
     </g>
    </g>
    <g id="matplotlib.axis_16">
@@ -2219,22 +2219,6 @@ z
    </g>
    <g id="line2d_146">
     <defs>
-     <path id="md05a209eaf" d="M -2.4 2.4
-L 2.4 2.4
-L 2.4 -2.4
-L -2.4 -2.4
-z
-" style="stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
-    </defs>
-    <g>
-     <use xlink:href="#md05a209eaf" x="44.008" y="300.169016" style="fill: #08519c; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
-    </g>
-   </g>
-   <g id="text_54">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="49.208" y="302.444016" transform="rotate(-0 49.208 302.444016)">Sol high · 30 steps</text>
-   </g>
-   <g id="line2d_147">
-    <defs>
      <path id="m857d757606" d="M 0 2.4
 C 0.636487 2.4 1.246992 2.147121 1.697056 1.697056
 C 2.147121 1.246992 2.4 0.636487 2.4 0
@@ -2248,11 +2232,27 @@ z
 " style="stroke: #08306b; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m857d757606" x="44.008" y="309.384797" style="fill: #08306b; stroke: #08306b; stroke-width: 0.9"/>
+     <use xlink:href="#m857d757606" x="44.008" y="300.169016" style="fill: #08306b; stroke: #08306b; stroke-width: 0.9"/>
+    </g>
+   </g>
+   <g id="text_54">
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="49.208" y="302.444016" transform="rotate(-0 49.208 302.444016)">Luna xhigh effort</text>
+   </g>
+   <g id="line2d_147">
+    <defs>
+     <path id="md05a209eaf" d="M -2.4 2.4
+L 2.4 2.4
+L 2.4 -2.4
+L -2.4 -2.4
+z
+" style="stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
+    </defs>
+    <g>
+     <use xlink:href="#md05a209eaf" x="44.008" y="309.384797" style="fill: #08519c; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="text_55">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="49.208" y="311.659797" transform="rotate(-0 49.208 311.659797)">Luna xhigh effort</text>
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="49.208" y="311.659797" transform="rotate(-0 49.208 311.659797)">Sol high · 30 steps</text>
    </g>
    <g id="line2d_148">
     <defs>
@@ -2341,7 +2341,7 @@ z
   </g>
   <g id="legend_2">
    <g id="text_60">
-    <text style="font: 7.2px 'DejaVu Sans'; text-anchor: start" x="325.16" y="283.866875" transform="rotate(-0 325.16 283.866875)">Selection scaling (Luna)</text>
+    <text style="font: 7.2px 'DejaVu Sans'; text-anchor: start" x="325.16" y="283.866875" transform="rotate(-0 325.16 283.866875)">Best-of-N action scaling</text>
    </g>
    <g id="line2d_152">
     <defs>
