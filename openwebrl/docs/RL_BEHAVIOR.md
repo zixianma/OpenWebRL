@@ -245,11 +245,19 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
   - The 40M+16F variant does not show the effect.
 
 <a id="rl-repetition-incidence-paper"></a>
-### Repetition incidence and threshold robustness
+### Success versus repetition and threshold robustness
+
+![Two-panel checkpoint comparison: overall success versus repetition at k=3 on the left, and repetition incidence for thresholds k=2 through 5 on the right; shared gray baseline and purple ADM colors, circle markers, and vertical 95% confidence intervals](rl_results/rl_repetition_success_robustness.png)
+
+*(a) Overall success versus repeated-action incidence for three iteration-90 checkpoints; upper left means higher success and less repetition. Success is successes / all 900 planned episodes, including invalid outcomes in the denominator. Repetition incidence is the percentage of each method's valid episodes containing at least k = 3 identical non-`wait`, non-`done` tool calls, including successful episodes. Only vertical success intervals are shown. (b) The same repetition measure at thresholds k = 2–5, with vertical repetition intervals; connecting segments guide the eye. Calls need not be consecutive. Both panels use the same 300 OM2W tasks evaluated three times per checkpoint. Intervals are pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), retaining all repeats and methods; they condition on these checkpoints and evaluation windows and exclude training-seed and evaluation-window uncertainty. Panel (a) axes are cropped.* [PDF](rl_results/rl_repetition_success_robustness.pdf) · [SVG](rl_results/rl_repetition_success_robustness.svg) · [Success aggregate](arm_results/rl_integration/behavior/rl-repetition-success-20261104.json) · [Repetition aggregate](arm_results/rl_integration/behavior/rl-repetition-incidence-20261104.json) · [Plot source](arm_results/rl_integration/behavior/plot_rl_repetition_success_robustness.py).
+
+<details><summary>Alternative view: repetition split by successful and unsuccessful episodes</summary>
 
 ![Repeated-action incidence at iteration 90 split by success and failure, and sensitivity to two through five identical actions: outcome-only baselines in gray, Outcome + ADM rewards in purple, with 95% task-bootstrap intervals](rl_results/rl_repetition_incidence.png)
 
 *(a) Percentage of valid episodes containing at least three identical non-`wait`, non-`done` tool calls, split into unsuccessful (solid) and successful (hatched) episodes. Both segments use all valid episodes as their denominator; they sum to total repetition incidence, whose 95% interval is shown. Episodes without `done` are included. (b) Total incidence at thresholds k = 2, 3, 4 and 5; connecting segments guide the eye. Calls need not be consecutive. Online-Mind2Web, iteration 90, the same 300 tasks evaluated three times per checkpoint. Both panels use counts pooled across repeats and pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), preserving all repeats and methods within each sampled task. Intervals condition on these checkpoints and evaluation windows; they exclude training-seed and evaluation-window uncertainty.* [PDF](rl_results/rl_repetition_incidence.pdf) · [SVG](rl_results/rl_repetition_incidence.svg) · [Aggregate and intervals](arm_results/rl_integration/behavior/rl-repetition-incidence-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_repetition_incidence.py).
+
+</details>
 
 **Definition.** For threshold `k`, incidence is `100 × valid episodes with maximum identical-call count ≥ k / valid episodes`. Each episode counts at most once. Invalid outcomes are excluded, rather than assigned zero repetition; each method uses its own valid episodes, not a common-valid intersection. This differs from the older failure-category metric below, which requires an unsuccessful outcome and a `done` call and uses all planned episodes as its denominator.
 
@@ -263,7 +271,7 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
 
 The matching rule preserves the historical analysis: compare the saved first tool call per actor turn using JSON serialization with sorted object keys, excluding `wait` and `done`. Argument strings, URLs and values are not normalized. The extractor can retain malformed JSON as an `unparsable` pseudo-call with its first 200 raw characters; one ADM episode qualifies at k = 3 solely through those records (excluding malformed calls would give 144/715 = 20.1%, rather than 145/715 = 20.3%). Thresholds 2, 4 and 5 are unaffected. Additional tool calls in the same response are not inspected. See the [full extraction and matching rules](#rl-repetition-matching-rules).
 
-The left panel shows joint rates, `P(repetition and outcome | valid)`, rather than repetition conditioned on success or failure. These segments preserve the original total incidence; they do not estimate the causal effect of repetition on task success. Their counts are:
+The stacked-bar alternative shows joint rates, `P(repetition and outcome | valid)`, rather than repetition conditioned on success or failure. These segments preserve the original total incidence; they do not estimate the causal effect of repetition on task success. Their counts are:
 
 | Method | Repeated and successful episodes, k = 3 | Repeated and unsuccessful episodes, k = 3 | Repeated and successful / all valid | Repeated and unsuccessful / all valid |
 | --- | ---: | ---: | ---: | ---: |
@@ -286,11 +294,15 @@ The historical consecutive check removes absent calls, `wait` and `done` before 
 </details>
 
 <a id="rl-repetition-success-preview"></a>
-### Success versus repetition: three-checkpoint preview
+### Success counts and paired differences
+
+<details><summary>Standalone success-versus-repetition preview</summary>
 
 ![Overall task success versus repeated-action incidence for three iteration-90 checkpoints, with vertical 95% task-bootstrap intervals for success; ADM is toward the upper left](rl_results/rl_repetition_success_preview.png)
 
 *Each point is one checkpoint evaluated on the same 300 OM2W tasks three times. Upper left means higher overall success and lower repetition. Horizontal: incidence of at least three identical non-`wait`, non-`done` calls among each method's valid episodes, including successes. Vertical: successes divided by all 900 planned episodes; invalid outcomes contribute zero successes. Only vertical success intervals are shown: pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), retaining all three repeats and methods. Repetition intervals remain in the linked aggregate. Axes are cropped. Uncertainty conditions on these checkpoints and evaluation windows, excluding training-seed and evaluation-window uncertainty.* [PDF](rl_results/rl_repetition_success_preview.pdf) · [SVG](rl_results/rl_repetition_success_preview.svg) · [Aggregate and intervals](arm_results/rl_integration/behavior/rl-repetition-success-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_repetition_success.py).
+
+</details>
 
 | Method | Successes | Planned episodes | Overall success | 95% CI |
 | --- | ---: | ---: | ---: | ---: |
