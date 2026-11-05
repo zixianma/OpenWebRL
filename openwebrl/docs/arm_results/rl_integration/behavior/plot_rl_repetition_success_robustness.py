@@ -27,12 +27,13 @@ def render():
     success = json.loads(SUCCESS.read_text())
     assert success["repetition_aggregate_sha256"] == hashlib.sha256(REPETITION.read_bytes()).hexdigest()
     assert repetition["thresholds"] == list(THRESHOLDS) == [2, 3, 4, 5]
-    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 9.5,
-                         "axes.titlesize": 10, "axes.labelsize": 10,
-                         "xtick.labelsize": 9, "ytick.labelsize": 9,
+    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 7,
+                         "axes.titlesize": 7, "axes.labelsize": 7,
+                         "xtick.labelsize": 6.5, "ytick.labelsize": 6.5,
                          "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
                          "svg.hashsalt": "rl-repetition-success-robustness"})
-    fig, (left, right) = plt.subplots(1, 2, figsize=(6.8, 2.6))
+    fig, (left, right) = plt.subplots(1, 2, figsize=(3.35, 2.25),
+                                      gridspec_kw={"width_ratios": [0.78, 1]})
     for key, _, _, color, _ in RUNS:
         row = success["methods"][key]
         x, y = row["repetition_incidence"], row["valid_success"]
@@ -40,7 +41,7 @@ def render():
         left.errorbar(x["percent"], y["percent"],
                       yerr=[[y["percent"] - y["ci95_percent"][0]],
                             [y["ci95_percent"][1] - y["percent"]]],
-                      fmt="o", color=color, markersize=5, capsize=2.5, elinewidth=1,
+                      fmt="o", color=color, markersize=4, capsize=2, elinewidth=1,
                       zorder=4 if key == "gate-b" else 3)
         rows = [repetition["methods"][key]["thresholds"][str(k)] for k in THRESHOLDS]
         values = np.asarray([r["percent"] for r in rows])
@@ -48,18 +49,18 @@ def render():
         assert np.all(np.diff(values) <= 0)
         right.errorbar(THRESHOLDS, values,
                        yerr=np.vstack((values - ci[:, 0], ci[:, 1] - values)),
-                       color=color, marker="o", markersize=5, linewidth=1.5,
-                       capsize=2.5, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
-    left_title = left.set_title("(a) Success vs. repetition (K=3)", loc="left", pad=9)
-    left.set_xlabel("Repetition incidence (%)", labelpad=5)
-    left.set_ylabel("Valid-only success (%)", labelpad=5)
+                       color=color, marker="o", markersize=4, linewidth=1.2,
+                       capsize=2, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
+    left_title = left.set_title("(a) Success (K=3)", loc="left", pad=7)
+    left.set_xlabel("Repetition (%)", labelpad=3)
+    left.set_ylabel("Valid-only success (%)", labelpad=3)
     left.set_xlim(13, 47)
-    left.set_xticks([15, 25, 35, 45])
+    left.set_xticks([20, 30, 40])
     left.set_ylim(35, 60)
     left.set_yticks([40, 45, 50, 55])
-    right_title = right.set_title("(b) Threshold robustness", loc="left", pad=9)
-    right.set_xlabel("Repetition threshold, K", labelpad=5)
-    right.set_ylabel("Repetition incidence (%)", labelpad=5)
+    right_title = right.set_title("(b) Robustness", loc="left", pad=7)
+    right.set_xlabel("Repetition threshold, K", labelpad=3)
+    right.set_ylabel("Repetition (%)", labelpad=3)
     right.set_xlim(1.82, 5.18)
     right.set_xticks(THRESHOLDS)
     right.set_ylim(0, 70)
@@ -71,13 +72,13 @@ def render():
         for side in ("left", "bottom"):
             ax.spines[side].set_color("#666666")
             ax.spines[side].set_linewidth(0.7)
-        ax.tick_params(length=3, color="#666666")
-    handles = [Line2D([], [], color=color, marker="o", linewidth=1.5, markersize=5,
+        ax.tick_params(length=2.5, pad=2, color="#666666")
+    handles = [Line2D([], [], color=color, marker="o", linewidth=1.2, markersize=4,
                       label=label) for _, label, _, color, _ in RUNS]
-    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.53, 0.005),
-                        frameon=False, ncol=3, fontsize=8.5, handlelength=1.4,
-                        columnspacing=1.3, handletextpad=0.5)
-    fig.subplots_adjust(left=0.085, right=0.99, top=0.85, bottom=0.29, wspace=0.32)
+    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.54, 0.005),
+                        frameon=False, ncol=1, fontsize=7, handlelength=1.4,
+                        labelspacing=0.35, handletextpad=0.5)
+    fig.subplots_adjust(left=0.15, right=0.98, top=0.86, bottom=0.43, wspace=0.65)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     for text in fig.findobj(match=matplotlib.text.Text):
