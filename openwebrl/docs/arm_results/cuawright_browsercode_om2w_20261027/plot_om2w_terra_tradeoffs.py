@@ -104,12 +104,19 @@ def render_paper_high(data, output_dir, stem, harnesses):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    # Shared paper typography, including bundled Albert Sans fonts.
+    import sys as _paper_sys
+    from pathlib import Path as _PaperPath
+    _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                    if (p / "paper_plot_style.py").is_file())))
+    import paper_plot_style as _paper_style
+
     from matplotlib.lines import Line2D
     from matplotlib.ticker import NullFormatter, StrMethodFormatter
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7.5,
+    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 7.5,
                          "axes.labelsize": 7.5, "axes.titlesize": 8,
                          "xtick.labelsize": 7.5, "ytick.labelsize": 7.5,
                          "axes.linewidth": 0.6, "svg.fonttype": "none",
@@ -184,12 +191,16 @@ def render(data, output_dir, stem="om2w_terra_all_tradeoffs", harnesses=("browse
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import sys as _paper_sys
+    _paper_sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents
+                                    if (p / "paper_plot_style.py").is_file())))
+    import paper_plot_style as _paper_style
     from matplotlib.lines import Line2D
     from matplotlib.ticker import NullFormatter, StrMethodFormatter
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
+    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 8,
                          "axes.labelsize": 8, "xtick.labelsize": 8, "ytick.labelsize": 8,
                          "svg.fonttype": "none", "svg.hashsalt": "openwebrl-terra-om2w-v1", "pdf.fonttype": 42,
                          "savefig.facecolor": "white"})

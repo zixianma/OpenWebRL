@@ -14,6 +14,13 @@ os.environ.setdefault('MPLCONFIGDIR', '/tmp/openwebrl-selection-strength-mpl')
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
@@ -25,7 +32,7 @@ BLUE, RED, GRAY, INK = '#3187B3', '#B41620', '#8C929A', '#24272B'
 BENCHMARKS = [('online_mind2web', 'OM2W'), ('webvoyager', 'WebVoyager'), ('deepshop', 'DeepShop')]
 PAIRS = [(30, 'parallel5_select_high', 'luna_single_high'),
          (60, 'parallel5_select_high_60steps', 'luna_single_high_60steps')]
-plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7,
+plt.rcParams.update({'font.family': _paper_style.FONT_FAMILY, 'font.size': 7,
                      'axes.labelsize': 7, 'axes.titlesize': 8,
                      'xtick.labelsize': 7, 'ytick.labelsize': 7,
                      'svg.fonttype': 'none', 'pdf.fonttype': 42,

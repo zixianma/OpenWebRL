@@ -6,6 +6,13 @@ import json
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.lines import Line2D
 import numpy as np
 
@@ -20,7 +27,7 @@ def render():
     success = json.loads(SUCCESS.read_text())
     assert success["repetition_aggregate_sha256"] == hashlib.sha256(REPETITION.read_bytes()).hexdigest()
     assert repetition["thresholds"] == list(THRESHOLDS) == [2, 3, 4, 5]
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9.5,
+    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 9.5,
                          "axes.titlesize": 10, "axes.labelsize": 10,
                          "xtick.labelsize": 9, "ytick.labelsize": 9,
                          "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",

@@ -49,7 +49,7 @@ L 0 2.5
       </g>
      </g>
      <g id="text_1">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="44.685051" y="147.898828" transform="rotate(-0 44.685051 147.898828)">0.01</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="44.685051" y="147.6" transform="rotate(-0 44.685051 147.6)">0.01</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -59,7 +59,7 @@ L 0 2.5
       </g>
      </g>
      <g id="text_2">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="104.780077" y="147.898828" transform="rotate(-0 104.780077 147.898828)">0.1</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="104.780077" y="147.6" transform="rotate(-0 104.780077 147.6)">0.1</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -145,7 +145,7 @@ L 0 2
      </g>
     </g>
     <g id="text_3">
-     <text style="font: 7.2px 'DejaVu Sans'; text-anchor: middle" x="84.113514" y="158.929469" transform="rotate(-0 84.113514 158.929469)">Mean actor cost ($, log)</text>
+     <text style="font: 7.2px 'Albert Sans'; text-anchor: middle" x="84.113514" y="158.86" transform="rotate(-0 84.113514 158.86)">Mean actor cost ($, log)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -166,7 +166,7 @@ L -2.5 0
       </g>
      </g>
      <g id="text_4">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: end" x="33.3" y="133.450214" transform="rotate(-0 33.3 133.450214)">76</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: end" x="33.3" y="133.3008" transform="rotate(-0 33.3 133.3008)">76</text>
      </g>
     </g>
     <g id="ytick_2">
@@ -181,7 +181,7 @@ L 130.427027 102.204
       </g>
      </g>
      <g id="text_5">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: end" x="33.3" y="105.053414" transform="rotate(-0 33.3 105.053414)">80</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: end" x="33.3" y="104.904" transform="rotate(-0 33.3 104.904)">80</text>
      </g>
     </g>
     <g id="ytick_3">
@@ -196,7 +196,7 @@ L 130.427027 73.8072
       </g>
      </g>
      <g id="text_6">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: end" x="33.3" y="76.656614" transform="rotate(-0 33.3 76.656614)">84</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: end" x="33.3" y="76.5072" transform="rotate(-0 33.3 76.5072)">84</text>
      </g>
     </g>
     <g id="ytick_4">
@@ -211,11 +211,11 @@ L 130.427027 45.4104
       </g>
      </g>
      <g id="text_7">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: end" x="33.3" y="48.259814" transform="rotate(-0 33.3 48.259814)">88</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: end" x="33.3" y="48.1104" transform="rotate(-0 33.3 48.1104)">88</text>
      </g>
     </g>
     <g id="text_8">
-     <text style="font: 7.2px 'DejaVu Sans'; text-anchor: middle" x="18.258875" y="84.456" transform="rotate(-90 18.258875 84.456)">Mean valid-only success (%)</text>
+     <text style="font: 7.2px 'Albert Sans'; text-anchor: middle" x="18.207266" y="84.456" transform="rotate(-90 18.207266 84.456)">Mean valid-only success (%)</text>
     </g>
    </g>
    <g id="patch_3">
@@ -439,7 +439,7 @@ z
       </g>
      </g>
      <g id="text_9">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="195.200258" y="147.898828" transform="rotate(-0 195.200258 147.898828)">14</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="195.200258" y="147.6" transform="rotate(-0 195.200258 147.6)">14</text>
      </g>
     </g>
     <g id="xtick_15">
@@ -449,11 +449,11 @@ z
       </g>
      </g>
      <g id="text_10">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="233.350524" y="147.898828" transform="rotate(-0 233.350524 147.898828)">16</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="233.350524" y="147.6" transform="rotate(-0 233.350524 147.6)">16</text>
      </g>
     </g>
     <g id="text_11">
-     <text style="font: 7.2px 'DejaVu Sans'; text-anchor: middle" x="209.16" y="158.929469" transform="rotate(-0 209.16 158.929469)">Mean browser-code batches</text>
+     <text style="font: 7.2px 'Albert Sans'; text-anchor: middle" x="209.16" y="158.284" transform="rotate(-0 209.16 158.284)">Mean browser-code batches</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
@@ -589,7 +589,7 @@ z
       </g>
      </g>
      <g id="text_12">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="308.096294" y="147.898828" transform="rotate(-0 308.096294 147.898828)">120</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="308.096294" y="147.6" transform="rotate(-0 308.096294 147.6)">120</text>
      </g>
     </g>
     <g id="xtick_17">
@@ -599,7 +599,7 @@ z
       </g>
      </g>
      <g id="text_13">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="343.294107" y="147.898828" transform="rotate(-0 343.294107 147.898828)">160</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="343.294107" y="147.6" transform="rotate(-0 343.294107 147.6)">160</text>
      </g>
     </g>
     <g id="xtick_18">
@@ -609,11 +609,11 @@ z
       </g>
      </g>
      <g id="text_14">
-      <text style="font: 7.5px 'DejaVu Sans'; text-anchor: middle" x="378.49192" y="147.898828" transform="rotate(-0 378.49192 147.898828)">200</text>
+      <text style="font: 7.5px 'Albert Sans'; text-anchor: middle" x="378.49192" y="147.6" transform="rotate(-0 378.49192 147.6)">200</text>
      </g>
     </g>
     <g id="text_15">
-     <text style="font: 7.2px 'DejaVu Sans'; text-anchor: middle" x="334.206486" y="158.929469" transform="rotate(-0 334.206486 158.929469)">Mean actor latency (s)</text>
+     <text style="font: 7.2px 'Albert Sans'; text-anchor: middle" x="334.206486" y="158.86" transform="rotate(-0 334.206486 158.86)">Mean actor latency (s)</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -733,10 +733,10 @@ L 380.52 137.7
    </g>
   </g>
   <g id="text_16">
-   <text style="font: 9px 'DejaVu Sans'; text-anchor: start" x="37.8" y="10.510594" transform="rotate(-0 37.8 10.510594)">Task-weighted average: OM2W · WebVoyager · DeepShop</text>
+   <text style="font: 9px 'Albert Sans'; text-anchor: start" x="37.8" y="10.152" transform="rotate(-0 37.8 10.152)">Task-weighted average: OM2W · WebVoyager · DeepShop</text>
   </g>
   <g id="text_17">
-   <text style="fill: #555555; font: 7px 'DejaVu Sans'; text-anchor: start" x="37.8" y="175.338" transform="rotate(-0 37.8 175.338)">Weights: 300/595/150 planned tasks · Terra judged · Own valid subsets differ</text>
+   <text style="fill: #555555; font: 7px 'Albert Sans'; text-anchor: start" x="37.8" y="175.338" transform="rotate(-0 37.8 175.338)">Weights: 300/595/150 planned tasks · Terra judged · Own valid subsets differ</text>
   </g>
   <g id="legend_1">
    <g id="line2d_43">
@@ -749,11 +749,11 @@ z
 " style="stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#mba218a2136" x="400.848" y="28.743375" style="fill: #08519c; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
+     <use xlink:href="#mba218a2136" x="400.848" y="28.104" style="fill: #08519c; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="text_18">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="31.053375" transform="rotate(-0 409.428 31.053375)">Sol high single</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="30.414" transform="rotate(-0 409.428 30.414)">Sol high single</text>
    </g>
    <g id="line2d_44">
     <defs>
@@ -770,11 +770,11 @@ z
 " style="stroke: #4292c6; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m31b810f15a" x="400.848" y="39.420938" style="fill: #4292c6; stroke: #4292c6; stroke-width: 0.9"/>
+     <use xlink:href="#m31b810f15a" x="400.848" y="38.994" style="fill: #4292c6; stroke: #4292c6; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_19">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="41.730938" transform="rotate(-0 409.428 41.730938)">Luna high (1× cap)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="41.304" transform="rotate(-0 409.428 41.304)">Luna high (1× cap)</text>
    </g>
    <g id="line2d_45">
     <defs>
@@ -791,11 +791,11 @@ z
 " style="stroke: #ef8a8a; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m10c276b2fe" x="400.848" y="50.0985" style="fill: #ef8a8a; stroke: #ef8a8a; stroke-width: 0.9"/>
+     <use xlink:href="#m10c276b2fe" x="400.848" y="49.356" style="fill: #ef8a8a; stroke: #ef8a8a; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_20">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="52.4085" transform="rotate(-0 409.428 52.4085)">Luna high N3</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="51.666" transform="rotate(-0 409.428 51.666)">Luna high N3</text>
    </g>
    <g id="line2d_46">
     <defs>
@@ -812,11 +812,11 @@ z
 " style="stroke: #a50f15; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m2a892d2450" x="400.848" y="60.776062" style="fill: #a50f15; stroke: #a50f15; stroke-width: 0.9"/>
+     <use xlink:href="#m2a892d2450" x="400.848" y="59.718" style="fill: #a50f15; stroke: #a50f15; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_21">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="63.086062" transform="rotate(-0 409.428 63.086062)">Luna high N5</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="62.028" transform="rotate(-0 409.428 62.028)">Luna high N5</text>
    </g>
    <g id="line2d_47">
     <defs>
@@ -833,11 +833,11 @@ z
 " style="stroke: #08306b; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m4cd5e41e91" x="400.848" y="71.453625" style="fill: #08306b; stroke: #08306b; stroke-width: 0.9"/>
+     <use xlink:href="#m4cd5e41e91" x="400.848" y="70.608" style="fill: #08306b; stroke: #08306b; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_22">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="73.763625" transform="rotate(-0 409.428 73.763625)">Luna xhigh (1× cap)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="72.918" transform="rotate(-0 409.428 72.918)">Luna xhigh (1× cap)</text>
    </g>
    <g id="line2d_48">
     <defs>
@@ -854,11 +854,11 @@ z
 " style="stroke: #2171b5; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#me196a2f821" x="400.848" y="82.131187" style="fill: #2171b5; stroke: #2171b5; stroke-width: 0.9"/>
+     <use xlink:href="#me196a2f821" x="400.848" y="81.498" style="fill: #2171b5; stroke: #2171b5; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_23">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="84.441187" transform="rotate(-0 409.428 84.441187)">Luna high (2× cap)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="83.808" transform="rotate(-0 409.428 83.808)">Luna high (2× cap)</text>
    </g>
    <g id="line2d_49">
     <defs>
@@ -875,11 +875,11 @@ z
 " style="stroke: #9ecae1; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m1280c2ee66" x="400.848" y="92.80875" style="fill: #9ecae1; stroke: #9ecae1; stroke-width: 0.9"/>
+     <use xlink:href="#m1280c2ee66" x="400.848" y="92.388" style="fill: #9ecae1; stroke: #9ecae1; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_24">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="95.11875" transform="rotate(-0 409.428 95.11875)">Luna high (0.5× cap)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="94.698" transform="rotate(-0 409.428 94.698)">Luna high (0.5× cap)</text>
    </g>
    <g id="line2d_50">
     <defs>
@@ -896,11 +896,11 @@ z
 " style="stroke: #4292c6; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#mf114288935" x="400.848" y="103.486312" style="fill: #ffffff; stroke: #4292c6; stroke-width: 0.9"/>
+     <use xlink:href="#mf114288935" x="400.848" y="103.278" style="fill: #ffffff; stroke: #4292c6; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_25">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="105.796312" transform="rotate(-0 409.428 105.796312)">Luna high (60 steps)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="105.588" transform="rotate(-0 409.428 105.588)">Luna high (60 steps)</text>
    </g>
    <g id="line2d_51">
     <defs>
@@ -917,11 +917,11 @@ z
 " style="stroke: #fb6a4a; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m594c6d8af0" x="400.848" y="114.163875" style="fill: #fb6a4a; stroke: #fb6a4a; stroke-width: 0.9"/>
+     <use xlink:href="#m594c6d8af0" x="400.848" y="114.168" style="fill: #fb6a4a; stroke: #fb6a4a; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_26">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="116.473875" transform="rotate(-0 409.428 116.473875)">Luna high N2 (30 steps)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="116.478" transform="rotate(-0 409.428 116.478)">Luna high N2 (30 steps)</text>
    </g>
    <g id="line2d_52">
     <defs>
@@ -938,11 +938,11 @@ z
 " style="stroke: #a50f15; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#m71c217db7d" x="400.848" y="124.841437" style="fill: #ffffff; stroke: #a50f15; stroke-width: 0.9"/>
+     <use xlink:href="#m71c217db7d" x="400.848" y="125.058" style="fill: #ffffff; stroke: #a50f15; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_27">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="127.151437" transform="rotate(-0 409.428 127.151437)">Luna high N5 (60 steps)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="127.368" transform="rotate(-0 409.428 127.368)">Luna high N5 (60 steps)</text>
    </g>
    <g id="line2d_53">
     <defs>
@@ -959,11 +959,11 @@ z
 " style="stroke: #08519c; stroke-width: 0.9"/>
     </defs>
     <g>
-     <use xlink:href="#md522e7bf69" x="400.848" y="135.519" style="fill: #ffffff; stroke: #08519c; stroke-width: 0.9"/>
+     <use xlink:href="#md522e7bf69" x="400.848" y="135.948" style="fill: #ffffff; stroke: #08519c; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_28">
-    <text style="font: 6.6px 'DejaVu Sans'; text-anchor: start" x="409.428" y="137.829" transform="rotate(-0 409.428 137.829)">Luna high (120 steps)</text>
+    <text style="font: 6.6px 'Albert Sans'; text-anchor: start" x="409.428" y="138.258" transform="rotate(-0 409.428 138.258)">Luna high (120 steps)</text>
    </g>
   </g>
  </g>

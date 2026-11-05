@@ -131,12 +131,12 @@
     }
   ],
   "input_sha256": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
-  "renderer_sha256": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
+  "renderer_sha256": "5b5a5c81873886773400799c75b6bfa0224f331b5a77dc3b82c838a67aded06b",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "2ace197219209e5bb0a0ef947d8ecb9bad41e6b105665bf4aca91ec62356f518",
-    ".svg": "df8f90422963216237b656cd61ec1aaaec473ebc54db46e330f3840f092beaf9",
-    ".pdf": "a296bc6ed4c23e09d37d63aba84ffab12d102062997d77ebd94e1aea67e17699",
+    ".png": "c1c5bf48c5c98ca259ce0e1fb303e77df7f579c8e1a55afc47cd0343496a69d9",
+    ".svg": "ee715902521414a85d8f3993b886b855c9f0dbcd2aae63191e5bc4299383ac7a",
+    ".pdf": "cbf76652892f8fc1b529a1cae2626000262f6c915d68577025d7599acc2721fe",
     "_coordinates.csv": "1df563289e89838bccfb12cb17415ffa1f58899f49493abae650ee984cc97b65"
   }
 }

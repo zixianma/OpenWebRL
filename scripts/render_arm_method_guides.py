@@ -16,7 +16,7 @@ class Figure:
         self.width, self.height = width, height
         self.parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
             f'<title id="title">{escape(title)}</title><desc id="desc">{escape(description)}</desc>',
-            '<style>text{font-family:Arial,Helvetica,sans-serif} .mono{font-family:monospace}</style>',
+            '<style>text{font-family:Albert Sans,sans-serif} .mono{font-family:monospace}</style>',
             '<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#7d8fa3"/></marker></defs>']
         self.rect(0,0,width,height,'#fff',radius=0)
 

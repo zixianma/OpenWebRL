@@ -27,6 +27,8 @@ before marking completion and report any actual limitation on supervision.
 
 # Repository preferences
 
+- **Plot typography, requested 2026-11-04:** use Albert Sans as the default for all plots. Import `openwebrl/docs/paper_plot_style.py` in Matplotlib renderers; bundled fonts and license are in `openwebrl/docs/assets/fonts/albert-sans/`. Preserve figure-specific sizing and scientific settings.
+
 - Additional task filtering, September29: manual review is optional and must not block the pipeline. Prioritize released exclusions/deduplication and live checks of actual task start URLs before further Jev/GPT text screening. Keep page availability, instruction quality and five-valid-failure actor difficulty distinct. See `openwebrl/docs/ARM_INTEGRATION_PLAN.md#arm-task-pool-live-browser-first-20260929`; new allocation budgets still require exact approval.
 
 - Routine user-facing job progress summaries should be sent at most once per hour (requested2026-09-27). Keep automated health/progress checks active and active-agent recovery available; alert sooner for failures/stalls needing intervention, a real approval blocker, or verified completion. Do not send separate routine summaries for each optimizer point or ordinary stage transition.

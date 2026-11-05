@@ -15,6 +15,13 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-api-tradeoff-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.ticker import PercentFormatter, StrMethodFormatter
 from matplotlib.lines import Line2D
 
@@ -127,7 +134,7 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.output_dir / "om2w_harness_tradeoff_coordinates.csv",
               [dict(harness=h, **r) for h, rows in (("BrowserCode", means), ("Native CUAWright", native)) for r in rows])
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11,
+    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 11,
                         "axes.titlesize": 15, "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})
     footer = (f'OM2W only · same {comparison["shared_fresh_common_valid_tasks"]} fresh tasks valid in all eight cells; valid failures included. All four native methods: 300 outcomes each; collection complete.\n'

@@ -280,6 +280,13 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    # Shared paper typography, including bundled Albert Sans fonts.
+    import sys as _paper_sys
+    from pathlib import Path as _PaperPath
+    _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                    if (p / "paper_plot_style.py").is_file())))
+    import paper_plot_style as _paper_style
+
     from matplotlib.lines import Line2D
     from matplotlib.ticker import MaxNLocator, NullFormatter, StrMethodFormatter
     columns = ('output_tokens', 'reasoning_tokens') if tokens else ('actor_usd', 'browser_commands', 'actor_seconds')
@@ -303,7 +310,7 @@ def render(data, output_dir, stem='browsercode_scaling', *, tokens=False, token_
                 need(p['metrics'][name]['observed_tasks'] == p['valid'], 'Token figure requires full valid-task token coverage for every method')
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.labelsize': 7.5,
+    plt.rcParams.update({'font.family': _paper_style.FONT_FAMILY, 'font.size': 7.5, 'axes.labelsize': 7.5,
                          'axes.titlesize': 8, 'axes.linewidth': .6, 'svg.fonttype': 'none', 'pdf.fonttype': 42,
                          'svg.hashsalt': 'openwebrl-browsercode-scaling-v1' if tokens else 'openwebrl-browsercode-scaling-v2'})
     dimensions = (8.5, 4.35) if projected is not None else (7, 4.35)

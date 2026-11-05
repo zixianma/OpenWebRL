@@ -15,6 +15,13 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-offline-eval-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
@@ -36,8 +43,8 @@ PICKS = {"Pre-execution": 0, "Post-execution": 0, "Lookahead K = 3": 2,
          "Observed outcome": 2, "Oracle": 2}
 
 plt.rcParams.update({
-    "font.family": "DejaVu Sans", "font.size": 7,
-    "text.color": INK, "mathtext.fontset": "dejavusans",
+    "font.family": "Albert Sans", "font.size": 7,
+    "text.color": INK, "mathtext.fontset": "custom",
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })
@@ -96,8 +103,12 @@ assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3",
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Data collection", size=8.5, weight="bold")
-outcome_header = text(3.15, 0.245, r"Rollout success $R^{i,j}\in\{0,1\}$",
+outcome_header = text(1.65, 0.245, r"Rollout success $R^{i,j}\in\{0,1\}$",
                       color=MUTED, ha="center")
+# Outcome status key only; selected-action check marks remain omitted.
+for x, success, label in ((2.95, True, "Success"), (3.73, False, "Failure")):
+    outcome_marker(x, 0.245, success, radius=0.020)
+    text(x + 0.055, 0.245, label, color=MUTED, size=6.5)
 rollout_pitch = 0.11
 xs = [2.79 + rollout_pitch * j for j in range(8)]
 trajectory_x = [1.10 + 0.41 * k for k in range(4)]

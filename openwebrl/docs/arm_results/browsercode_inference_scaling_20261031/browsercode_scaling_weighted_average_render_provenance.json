@@ -1,8 +1,8 @@
 {
   "schema": "browsercode-benchmark-average-render-v1",
   "input_sha256": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
-  "renderer_sha256": "4adf3a2206e1b43c84d441c98e0f54f43aa0fa0642029a9c287ca538b4524cd1",
-  "source_validator_and_styles_sha256": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
+  "renderer_sha256": "3e0795ca28460df61fbf3f7688f2bb5ee0505ed4f0c5a038c41a8a8a99eab5e1",
+  "source_validator_and_styles_sha256": "5b5a5c81873886773400799c75b6bfa0224f331b5a77dc3b82c838a67aded06b",
   "matplotlib_version": "3.9.4",
   "dimensions_inches": [
     7,
@@ -15,9 +15,9 @@
     "deepshop": "150/1045"
   },
   "output_sha256": {
-    ".png": "63eef6ad9c27c97f1d536d21f6aeec127f89aafc1ff58bbf1e5cce873f6efa02",
-    ".svg": "d9972430380d807905c898f45526e5f792a1a582cabafe0220ea0c95685a0004",
-    ".pdf": "a4ff87e1ba1989fa5e6e45b6202ce689c9329fec54ea1cdb581eaea770a27005",
+    ".png": "409c40dcb3ad4b89bfd9b045879606a9c6cf384331b69dfc816ea390cbf64455",
+    ".svg": "31ffa6df4ab36795a54ef3ccb9ac4f025a834e57c719d38f9a9b8c9931905092",
+    ".pdf": "58c975b1cc1b2d57f62e3a8c35ec89d55f80a894cc44cb0d8c5aed54edfe1e67",
     ".json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
     "_coordinates.csv": "48f9f0c2fd0f54c971cf4de7fabd482c7f404ff3463c18ad6c769bc03bedaec0"
   }

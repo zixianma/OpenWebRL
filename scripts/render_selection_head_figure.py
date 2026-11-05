@@ -28,7 +28,7 @@ class Figure:
             f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
             f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
             f'<title id="title">{escape(title)}</title><desc id="desc">{escape(description)}</desc>',
-            '<style>text{font-family:Arial,Helvetica,sans-serif}</style>',
+            '<style>text{font-family:Albert Sans,sans-serif}</style>',
             f'<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">'
             f'<path d="M0,0 L8,4 L0,8" fill="{ARROW}"/></marker></defs>',
             f'<rect x="0" y="0" width="{width}" height="{height}" fill="#fff"/>']

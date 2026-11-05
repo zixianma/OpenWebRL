@@ -19,6 +19,13 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-api-tradeoff-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.ticker import MaxNLocator, StrMethodFormatter
 
 BENCHMARKS = ("Online-Mind2Web", "WebVoyager", "DeepShop")
@@ -121,7 +128,7 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(args.output_dir / "api_tradeoffs_by_benchmark.csv", rows)
     write_csv(args.output_dir / "api_tradeoffs_means.csv", means)
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
+    plt.rcParams.update({"font.family": "Albert Sans", "font.size": 8,
                         "xtick.labelsize": 7, "ytick.labelsize": 7,
                         "axes.labelpad": 3, "svg.fonttype": "none", "pdf.fonttype": 42,
                         "savefig.facecolor": "white"})

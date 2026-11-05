@@ -160,9 +160,16 @@ def render(data,output_dir,stem='us_stealth_observed_costs',population='own-vali
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    # Shared paper typography, including bundled Albert Sans fonts.
+    import sys as _paper_sys
+    from pathlib import Path as _PaperPath
+    _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                    if (p / "paper_plot_style.py").is_file())))
+    import paper_plot_style as _paper_style
+
     from matplotlib.lines import Line2D
     from matplotlib.patches import Patch
-    plt.rcParams.update({'font.family':'DejaVu Sans','font.size':7,'axes.labelsize':7,'axes.titlesize':8,'axes.linewidth':.6,'svg.fonttype':'none','pdf.fonttype':42,'svg.hashsalt':'openwebrl-us-stealth-observed-costs-v1'})
+    plt.rcParams.update({'font.family':"Albert Sans",'font.size':7,'axes.labelsize':7,'axes.titlesize':8,'axes.linewidth':.6,'svg.fonttype':'none','pdf.fonttype':42,'svg.hashsalt':'openwebrl-us-stealth-observed-costs-v1'})
     fig,(performance,billing)=plt.subplots(1,2,figsize=(6.8,2.55),gridspec_kw={'width_ratios':[1,1.2]})
     fig.subplots_adjust(left=.075,right=.985,top=.74,bottom=.29,wspace=.48)
     fig.suptitle(f"OM2W · US residential · {data['planned_tasks_per_method']} planned tasks per method"+(' · partial endpoint' if data['endpoint']['kind']!='complete' else ''),y=.98,fontsize=9)

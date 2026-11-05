@@ -53,9 +53,9 @@
     "aggregate_common_valid.json": "4f3588b9be938b8fded38bd3c40519394e0faa4eb1d9e3d2e1ebc45e5ff9ae7a",
     "browsercode_scaling_weighted_average.json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
     "browsercode_scaling_common_valid_weighted_average.json": "ceec9f8a8536cf042e73660bfd1f9dcce107c81731480b9f50b96df78d6c6e8c",
-    "plot_browsercode_scaling.py": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
-    "plot_browsercode_average.py": "4adf3a2206e1b43c84d441c98e0f54f43aa0fa0642029a9c287ca538b4524cd1",
-    "plot_browsercode_common_valid.py": "4f899ac63c7069cfc8b575c1e4bd2b5af4bbc27d7e0f05469a6669a7796feaec",
+    "plot_browsercode_scaling.py": "5b5a5c81873886773400799c75b6bfa0224f331b5a77dc3b82c838a67aded06b",
+    "plot_browsercode_average.py": "3e0795ca28460df61fbf3f7688f2bb5ee0505ed4f0c5a038c41a8a8a99eab5e1",
+    "plot_browsercode_common_valid.py": "46505f37f593f225cfaaa089b2bcf522d08392f7e4d2ce3373816b2442d5a52a",
     "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
@@ -163,7 +163,7 @@
     "grid": false,
     "focus_label": "Luna ADM"
   },
-  "renderer_sha256": "91824ae1ec1fac96dec9096b2ce08721b7437ae029372f0782ca44e53298db4e",
+  "renderer_sha256": "93dd5f54356a653181ed090322eb33e238d244fe139fab655e5193fbe99dcf00",
   "previews": {
     "browsercode_scaling_pareto_preview": [
       {

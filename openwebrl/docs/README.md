@@ -319,6 +319,8 @@ Checkpoint benchmarking: [OpenWebRL protocols and prepared after-58 rerun](RL_EV
 
 ## Maintaining these documents
 
+- Paper plots default to [Albert Sans](assets/fonts/albert-sans/README.md). Import the [shared typography module](paper_plot_style.py) before creating Matplotlib figures; bundled fonts support reproducible rendering and PDF embedding.
+
 - Add experiments and results to the matching topic instead of creating another run-specific Markdown file.
 - Keep `ARM_SUMMARY.md` limited to core methods, result tables and the main comparison plot. Put detailed analysis, audits and examples in `ARM_RESULTS.md`, and operational history in `RL_RUNTIME.md`.
 - Keep full-300, held-out, partial, historical, and retry results labeled with their original denominators and judge protocol.

@@ -40,22 +40,22 @@ z
     <g id="xtick_1">
      <g id="line2d_1"/>
      <g id="text_1">
-      <text style="font: 8px 'DejaVu Sans'" transform="translate(43.558105 130.87875)">Outcome-only</text>
-      <text style="font: 8px 'DejaVu Sans'" transform="translate(51.733105 139.837)">48 groups</text>
+      <text style="font: 8px 'Albert Sans'" transform="translate(44.930605 130.56)">Outcome-only</text>
+      <text style="font: 8px 'Albert Sans'" transform="translate(52.72998 139.072)">48 groups</text>
      </g>
     </g>
     <g id="xtick_2">
      <g id="line2d_2"/>
      <g id="text_2">
-      <text style="font: 8px 'DejaVu Sans'" transform="translate(108.978375 130.87875)">Outcome-only</text>
-      <text style="font: 8px 'DejaVu Sans'" transform="translate(117.153375 139.837)">56 groups</text>
+      <text style="font: 8px 'Albert Sans'" transform="translate(110.350875 130.56)">Outcome-only</text>
+      <text style="font: 8px 'Albert Sans'" transform="translate(118.405875 139.072)">56 groups</text>
      </g>
     </g>
     <g id="xtick_3">
      <g id="line2d_3"/>
      <g id="text_3">
-      <text style="fill: #6250be; font: 500 8px 'DejaVu Sans'" transform="translate(169.216145 130.87875)">Outcome + ADM</text>
-      <text style="fill: #6250be; font: 500 8px 'DejaVu Sans'" transform="translate(173.59552 139.837)">rewards (ours)</text>
+      <text style="fill: #6250be; font: 500 8px 'Albert Sans'" transform="translate(171.586145 130.56)">Outcome + ADM</text>
+      <text style="fill: #6250be; font: 500 8px 'Albert Sans'" transform="translate(175.709895 139.072)">rewards (ours)</text>
      </g>
     </g>
    </g>
@@ -72,7 +72,7 @@ L -3 0
       </g>
      </g>
      <g id="text_4">
-      <text style="font: 8.5px 'DejaVu Sans'; text-anchor: end" x="33.892" y="122.029336" transform="rotate(-0 33.892 122.029336)">0</text>
+      <text style="font: 8.5px 'Albert Sans'; text-anchor: end" x="33.892" y="121.86" transform="rotate(-0 33.892 121.86)">0</text>
      </g>
     </g>
     <g id="ytick_2">
@@ -82,7 +82,7 @@ L -3 0
       </g>
      </g>
      <g id="text_5">
-      <text style="font: 8.5px 'DejaVu Sans'; text-anchor: end" x="33.892" y="100.616003" transform="rotate(-0 33.892 100.616003)">5</text>
+      <text style="font: 8.5px 'Albert Sans'; text-anchor: end" x="33.892" y="100.446667" transform="rotate(-0 33.892 100.446667)">5</text>
      </g>
     </g>
     <g id="ytick_3">
@@ -92,7 +92,7 @@ L -3 0
       </g>
      </g>
      <g id="text_6">
-      <text style="font: 8.5px 'DejaVu Sans'; text-anchor: end" x="33.892" y="79.202669" transform="rotate(-0 33.892 79.202669)">10</text>
+      <text style="font: 8.5px 'Albert Sans'; text-anchor: end" x="33.892" y="79.033333" transform="rotate(-0 33.892 79.033333)">10</text>
      </g>
     </g>
     <g id="ytick_4">
@@ -102,7 +102,7 @@ L -3 0
       </g>
      </g>
      <g id="text_7">
-      <text style="font: 8.5px 'DejaVu Sans'; text-anchor: end" x="33.892" y="57.789336" transform="rotate(-0 33.892 57.789336)">15</text>
+      <text style="font: 8.5px 'Albert Sans'; text-anchor: end" x="33.892" y="57.62" transform="rotate(-0 33.892 57.62)">15</text>
      </g>
     </g>
     <g id="ytick_5">
@@ -112,7 +112,7 @@ L -3 0
       </g>
      </g>
      <g id="text_8">
-      <text style="font: 8.5px 'DejaVu Sans'; text-anchor: end" x="33.892" y="36.376003" transform="rotate(-0 33.892 36.376003)">20</text>
+      <text style="font: 8.5px 'Albert Sans'; text-anchor: end" x="33.892" y="36.206667" transform="rotate(-0 33.892 36.206667)">20</text>
      </g>
     </g>
     <g id="ytick_6">
@@ -122,11 +122,11 @@ L -3 0
       </g>
      </g>
      <g id="text_9">
-      <text style="font: 8.5px 'DejaVu Sans'; text-anchor: end" x="33.892" y="14.962669" transform="rotate(-0 33.892 14.962669)">25</text>
+      <text style="font: 8.5px 'Albert Sans'; text-anchor: end" x="33.892" y="14.793333" transform="rotate(-0 33.892 14.793333)">25</text>
      </g>
     </g>
     <g id="text_10">
-     <text style="font: 9.5px 'DejaVu Sans'; text-anchor: middle" x="15.179017" y="70.23456" transform="rotate(-90 15.179017 70.23456)">Repeated-action failures (%)</text>
+     <text style="font: 9.5px 'Albert Sans'; text-anchor: middle" x="15.25472" y="70.23456" transform="rotate(-90 15.25472 70.23456)">Repeated-action failures (%)</text>
     </g>
    </g>
    <g id="patch_3">
@@ -164,13 +164,13 @@ z
 " clip-path="url(#p0eb0d22b34)" style="fill: #6250be"/>
    </g>
    <g id="text_11">
-    <text style="fill: #9a9a9a; font: 500 9px 'DejaVu Sans'; text-anchor: middle" x="71.79373" y="12.669141" transform="rotate(-0 71.79373 12.669141)">20.2%</text>
+    <text style="fill: #9a9a9a; font: 500 9px 'Albert Sans'; text-anchor: middle" x="71.79373" y="12.740859" transform="rotate(-0 71.79373 12.740859)">20.2%</text>
    </g>
    <g id="text_12">
-    <text style="fill: #666666; font: 500 9px 'DejaVu Sans'; text-anchor: middle" x="137.214" y="35.985881" transform="rotate(-0 137.214 35.985881)">15.0%</text>
+    <text style="fill: #666666; font: 500 9px 'Albert Sans'; text-anchor: middle" x="137.214" y="36.0576" transform="rotate(-0 137.214 36.0576)">15.0%</text>
    </g>
    <g id="text_13">
-    <text style="fill: #6250be; font: 500 9px 'DejaVu Sans'; text-anchor: middle" x="202.63427" y="70.723066" transform="rotate(-0 202.63427 70.723066)">7.8%</text>
+    <text style="fill: #6250be; font: 500 9px 'Albert Sans'; text-anchor: middle" x="202.63427" y="70.794785" transform="rotate(-0 202.63427 70.794785)">7.8%</text>
    </g>
    <g id="LineCollection_1">
     <path d="M 71.79373 45.518815

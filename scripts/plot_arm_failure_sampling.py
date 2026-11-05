@@ -123,6 +123,13 @@ def plot(data):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    # Shared paper typography, including bundled Albert Sans fonts.
+    import sys as _paper_sys
+    from pathlib import Path as _PaperPath
+    _paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().parents
+                       if (p / "openwebrl/docs/paper_plot_style.py").is_file())
+    _paper_sys.path.insert(0, str(_paper_docs))
+    import paper_plot_style as _paper_style
     import numpy as np
     colors=['#2459a6','#ec8b23','#229679','#9855af','#d1445c']
     plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False})

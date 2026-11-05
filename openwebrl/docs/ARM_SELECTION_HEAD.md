@@ -540,7 +540,7 @@ Pre-execution and lookahead vote shares form pᵢ = nᵢ/N, where nᵢ counts ca
 
 </details>
 
-[PDF](arm_results/methods/selection-offline-eval-20261022.pdf) · [SVG](arm_results/methods/selection-offline-eval-20261022.svg) · [Source](arm_results/methods/selection-offline-eval-20261022.py). Half-height 7.6 × 2.11-inch canvas with a larger data-collection panel for visible transition arrows and a narrower teacher panel, ≥6.5 pt text, embedded PDF fonts and a 300 dpi PNG. Labels/scoring: `scripts/train_head_round.py` (`targets`, `held_rate`).
+[PDF](arm_results/methods/selection-offline-eval-20261022.pdf) · [SVG](arm_results/methods/selection-offline-eval-20261022.svg) · [Source](arm_results/methods/selection-offline-eval-20261022.py). Half-height 7.6 × 2.11-inch canvas with a larger data-collection panel for visible transition arrows and a narrower teacher panel, ≥6.5 pt Albert Sans text, embedded PDF fonts and a 300 dpi PNG. The filled-green success and hollow-gray failure key appears beside the binary rollout-success notation. Labels/scoring: `scripts/train_head_round.py` (`targets`, `held_rate`).
 
 **Offline (348 held-out test states, 86 tasks; picks scored by held-out success on rollouts 3–7, valid only).**
 

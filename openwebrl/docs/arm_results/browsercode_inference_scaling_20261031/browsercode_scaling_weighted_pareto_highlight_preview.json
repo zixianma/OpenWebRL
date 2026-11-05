@@ -19,11 +19,11 @@
   "source_sha256": {
     "aggregate.json": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
     "browsercode_scaling_weighted_average.json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
-    "plot_browsercode_pareto_previews.py": "91824ae1ec1fac96dec9096b2ce08721b7437ae029372f0782ca44e53298db4e",
+    "plot_browsercode_pareto_previews.py": "93dd5f54356a653181ed090322eb33e238d244fe139fab655e5193fbe99dcf00",
     "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
-  "renderer_sha256": "d6144c30c14337a40d3d76eca1e77eef3a7a4ed7f2e5fd856b704d28a94d39ed",
+  "renderer_sha256": "277ce5de920ffc11c5c9719aef297614a15e7d9afcb3f4506c47eb91feac8e8f",
   "frontier": [
     {
       "population": "weighted_own_valid",
@@ -126,8 +126,8 @@
     }
   ],
   "output_sha256": {
-    "png": "bd68eb4eb7abb8b53179331543c7ebd8dab2e9bbddb9a2acf92d4b5ef654ebb3",
-    "svg": "b56f7df5ede3fc52d55a79d1f001700254971bdb671e58d302f0da109af87dfe",
-    "pdf": "87708b17fe5868c93ba6c6474dff36272fc66d6ff1330845fa044346fc37e68f"
+    "png": "15df8b654f8d3e546479940027b82e937d7809eebbbf5dd62a37ded9154ae928",
+    "svg": "e977f597dca104b26673ad923b0c5fe9ee40b0fd0857ae0523b34c49b2cbcf79",
+    "pdf": "eb268f3ce3d967f3d76c0fb9b538948dd4d399fed2f2a3e336d37e42eb537f1a"
   }
 }

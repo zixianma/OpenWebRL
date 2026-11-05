@@ -10,6 +10,13 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-selection-matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.ticker import MaxNLocator
 
 HERE = Path(__file__).parent
@@ -55,7 +62,7 @@ def x_of(r, p, k):
 
 
 cols = [("params", "Actor + selector (B)"), ("pflop", "PFLOP / episode"), ("seconds", "Model time / episode (s)")]
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
+plt.rcParams.update({"font.family": "Albert Sans", "font.size": 8,
                      "xtick.labelsize": 7, "ytick.labelsize": 7,
                      "axes.labelpad": 3, "axes.spines.top": False, "axes.spines.right": False,
                      "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})

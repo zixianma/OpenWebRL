@@ -12,6 +12,13 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/openwebrl-head-architecture-matplotl
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
+
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
@@ -21,8 +28,8 @@ SHARED, SHARED_BG = "#737A83", "#F3F4F5"
 ALLOWED_FILL, MASKED_FILL = "#81CCD7", "#F5F6F7"
 K = 5
 plt.rcParams.update({
-    "font.family": "DejaVu Sans", "font.size": 7,
-    "text.color": INK, "mathtext.fontset": "dejavusans",
+    "font.family": "Albert Sans", "font.size": 7,
+    "text.color": INK, "mathtext.fontset": "custom",
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })

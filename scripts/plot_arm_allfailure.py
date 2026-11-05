@@ -2,6 +2,13 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().parents
+                   if (p / "openwebrl/docs/paper_plot_style.py").is_file())
+_paper_sys.path.insert(0, str(_paper_docs))
+import paper_plot_style as _paper_style
 iterations=[20,30,40,50,60,70,80,90,100]
 successes=[90,107,92,113,100,106,92,101,107]
 valid=[222,225,222,233,229,233,218,217,222]

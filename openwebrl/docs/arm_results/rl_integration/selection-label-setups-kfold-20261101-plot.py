@@ -14,8 +14,15 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                if (p / "paper_plot_style.py").is_file())))
+import paper_plot_style as _paper_style
 
-plt.rcParams.update({"font.family": "DejaVu Sans", "pdf.fonttype": 42,
+
+plt.rcParams.update({"font.family": "Albert Sans", "pdf.fonttype": 42,
                      "ps.fonttype": 42, "svg.fonttype": "none"})
 from matplotlib.lines import Line2D
 

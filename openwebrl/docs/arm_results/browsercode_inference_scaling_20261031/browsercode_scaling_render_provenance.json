@@ -31,12 +31,12 @@
   "browser_command_definition": "One selected nonempty browser-code batch per decision; a batch may contain multiple browser/CDP calls. Unselected candidate batches and selection calls do not count.",
   "omitted_token_method_coverage": [],
   "input_sha256": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
-  "renderer_sha256": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
+  "renderer_sha256": "5b5a5c81873886773400799c75b6bfa0224f331b5a77dc3b82c838a67aded06b",
   "matplotlib_version": "3.9.4",
   "output_sha256": {
-    ".png": "1aa02e37764fd2996c018b34a2d2943949f94fc73e7b8008609a2c3ed37ed7ed",
-    ".svg": "18bfa7b6854306457b55a202608f48706b6bddc80544430eded9e6a4e032e564",
-    ".pdf": "e8b468aac5cf4e8713097536d512e0697473a37d832c8a00bccbec0056c06396",
+    ".png": "c0231b41f02e434d2e44466fd2b11830d7407138e7b6b5ecc781cfafb55e7a2e",
+    ".svg": "52c719d3b7f56c9f50fb5c0c3777a45cbcc252dcfc72bd6e3022dbf1332fc990",
+    ".pdf": "53852a37ec47e6a25d9f7f8e30637ecc329823a17250a213f4b3ad04682194eb",
     "_coordinates.csv": "b25019271a18552594485d2583bf7a224e7fef5fc39eafcbf0d0877aeac90a32"
   }
 }

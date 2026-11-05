@@ -5,6 +5,13 @@ import json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+# Shared paper typography, including bundled Albert Sans fonts.
+import sys as _paper_sys
+from pathlib import Path as _PaperPath
+_paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().parents
+                   if (p / "openwebrl/docs/paper_plot_style.py").is_file())
+_paper_sys.path.insert(0, str(_paper_docs))
+import paper_plot_style as _paper_style
 from matplotlib.transforms import ScaledTranslation
 from plot_arm_interactive import build_data, main as write_interactive
 baseline_i=[20,30,40,50,60,70,80,90,100]

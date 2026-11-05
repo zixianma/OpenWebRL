@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/google/fonts",
+  "commit": "fffdadf0f0c9cc1ec8b407063424a8bfbee05611",
+  "directory": "ofl/albertsans",
+  "sha256": {
+    "AlbertSans[wght].ttf": "8fe5d4cf5822d7096d4d17ad781c90f97c745ac13a22be619db74966fba45fda",
+    "AlbertSans-Italic[wght].ttf": "16eb3291f7389045e90a00abb66a3d2bca1d03387b7ebbbc2b0cd9a094f86226",
+    "OFL.txt": "5c856c086e8743b84932aae46ced424729a703932b601e9eb8aaeac15a617ec6"
+  },
+  "static_instances": "fontTools instantiateVariableFont at weights 400, 600, 700; regular and italic"
+}

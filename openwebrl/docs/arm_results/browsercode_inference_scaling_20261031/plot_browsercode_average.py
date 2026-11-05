@@ -71,11 +71,18 @@ def render(data, output_dir, stem):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    # Shared paper typography, including bundled Albert Sans fonts.
+    import sys as _paper_sys
+    from pathlib import Path as _PaperPath
+    _paper_sys.path.insert(0, str(next(p for p in _PaperPath(__file__).resolve().parents
+                                    if (p / "paper_plot_style.py").is_file())))
+    import paper_plot_style as _paper_style
+
     from matplotlib.lines import Line2D
     from matplotlib.ticker import MaxNLocator, NullFormatter, StrMethodFormatter
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5,
+    plt.rcParams.update({'font.family': _paper_style.FONT_FAMILY, 'font.size': 7.5,
                          'axes.linewidth': .6, 'svg.fonttype': 'none',
                          'pdf.fonttype': 42, 'svg.hashsalt': 'browsercode-benchmark-average-v1'})
     fig, axes = plt.subplots(1, 3, figsize=(7, 2.55), sharey=True)

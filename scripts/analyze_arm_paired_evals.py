@@ -186,6 +186,13 @@ def plot(result, stem):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
+    # Shared paper typography, including bundled Albert Sans fonts.
+    import sys as _paper_sys
+    from pathlib import Path as _PaperPath
+    _paper_docs = next(p / "openwebrl/docs" for p in _PaperPath(__file__).resolve().parents
+                       if (p / "openwebrl/docs/paper_plot_style.py").is_file())
+    _paper_sys.path.insert(0, str(_paper_docs))
+    import paper_plot_style as _paper_style
     plt.rcParams.update({'font.size':11, 'svg.fonttype':'none', 'axes.spines.top':False, 'axes.spines.right':False})
     colors = ['#2563eb','#16a34a','#7e22ce']
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.9), gridspec_kw={'width_ratios':[1,1.25]})
