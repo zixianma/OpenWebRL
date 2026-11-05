@@ -86,6 +86,8 @@ def legend(fig, axes, x0):
 
 def render(benches, name, height, methods=methods):
     compact_sft_mean = name == "selection-recipe3-vs-cost-sft-actors-20261104"
+    if compact_sft_mean:
+        methods = [(key, label.replace(" ¹", ""), *style) for key, label, *style in methods]
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7.5, "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
                          "axes.labelpad": 2, "axes.spines.top": False, "axes.spines.right": False,
                          "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
@@ -97,7 +99,8 @@ def render(benches, name, height, methods=methods):
                 for collection in ax.collections:
                     collection.set_clip_on(False)
             if i == 0:
-                ax.set_title(xlabel, fontsize=7.5, pad=4)
+                title = {"params": "System parameters (B)", "seconds": "Model latency (s)"}.get(k, xlabel) if compact_sft_mean else xlabel
+                ax.set_title(title, fontsize=7.5, pad=4)
         ax_row[0].set_ylabel("Valid-only\nsuccess (%)" if compact_sft_mean else
                              (f"{NAMES[bench]}\nvalid-only (%)" if len(benches) > 1 else f"{NAMES[bench]}\nvalid-only success (%)"))
     legend(fig, axes, 0.80)
