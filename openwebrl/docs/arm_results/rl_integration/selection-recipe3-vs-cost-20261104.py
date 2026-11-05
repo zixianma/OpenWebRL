@@ -1,5 +1,5 @@
 """Recipe 3 cost plots (SFT 4B actor, November 2–4, with the same-day SFT 4B run; plus the RL 8B actor alone and with the GPT-5.5
-LoRAs, November 4–5, down triangles): overall success (3 runs pooled) vs actor +
+LoRAs, November 4–5, down triangles): valid-only success (successes / valid episodes, 3 runs pooled; mean = equal-weight mean of the three) vs actor +
 selector parameters, PFLOP per episode and model time per episode. Renders two figures:
   selection-recipe3-vs-cost-20261104.*               3-benchmark equal-weight mean (success and cost alike)
   selection-recipe3-vs-cost-per-benchmark-20261104.*  one row per benchmark
@@ -40,7 +40,7 @@ cols = [("params", "Actor + selector (B)"), ("pflop", "PFLOP / episode"), ("seco
 
 def point(key, bench):
     rs = [next(r for r in rows if r["key"] == key and r["benchmark"] == b) for b in (BENCH if bench == "mean" else (bench,))]
-    return dict(overall=sum(r["overall"] for r in rs) / len(rs), pflop=sum(r["pflop_per_episode"] for r in rs) / len(rs),
+    return dict(success=sum(r["valid_only"] for r in rs) / len(rs), pflop=sum(r["pflop_per_episode"] for r in rs) / len(rs),
                 seconds=sum(r["model_seconds_per_episode"] for r in rs) / len(rs))
 
 
@@ -55,8 +55,8 @@ def panel(ax, bench, k, methods):
     for key, label, p, color, marker, hollow in methods:
         r = point(key, bench)
         x = p / 1e9 if k == "params" else r[k]
-        pts.append((x, r["overall"]))
-        ax.scatter(x, r["overall"], s=24, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
+        pts.append((x, r["success"]))
+        ax.scatter(x, r["success"], s=24, marker=marker, zorder=4 if key in ("sft1", "sft8b", "rl4b", "rl8b") else 3,
                    facecolor="white" if hollow else color, edgecolor=color if hollow else "white",
                    linewidth=1.0 if hollow else 0.6, label=label)
     fr = frontier(pts)
@@ -94,7 +94,7 @@ def render(benches, name, height, methods=methods):
             panel(ax, bench, k, methods)
             if i == 0:
                 ax.set_title(xlabel, fontsize=7.5, pad=4)
-        ax_row[0].set_ylabel(f"{NAMES[bench]}\nsuccess (%)")
+        ax_row[0].set_ylabel(f"{NAMES[bench]}\nvalid-only (%)" if len(benches) > 1 else f"{NAMES[bench]}\nvalid-only success (%)")
     legend(fig, axes, 0.80)
     fig.subplots_adjust(left=0.085, right=0.785, bottom=0.08 if len(benches) > 1 else 0.14,
                         top=0.93 if len(benches) > 1 else 0.85, hspace=0.32, wspace=0.17)
@@ -104,7 +104,7 @@ def render(benches, name, height, methods=methods):
         if ext == "svg":
             path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
-    return {bench: {k: frontier([(p / 1e9 if k == "params" else point(key, bench)[k], point(key, bench)["overall"])
+    return {bench: {k: frontier([(p / 1e9 if k == "params" else point(key, bench)[k], point(key, bench)["success"])
                                  for key, _, p, *_ in methods]) for k, _ in cols} for bench in benches}
 
 

@@ -1,6 +1,6 @@
 """Recipe 3 selectors vs same-day SFT 4B and SelectionARM (SFT 4B actor, evaluated 2026-11-02/04): success and cost per
 episode. GPT-5.5 LoRAs: November 4 same-day rerun (sameday-lora-20261104).
-RL 8B actor (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 tokens) alone and with the GPT-5.5 LoRAs: sameday-rl8b-20261104 (November 4–5). Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure). Cost from run 1 (all
+RL 8B actor (OpenWebRL/OpenWebRL-8B @ 824a54f, 4,096 tokens) alone and with the GPT-5.5 LoRAs: sameday-rl8b-20261104 (November 4–5). Success: 3 runs pooled per condition (overall = successes / scheduled, invalid = failure; valid_only = successes / valid). Cost from run 1 (all
 1,045 tasks), exactly as selection-n3-sft8b-full-20261021-analysis.py: actor PFLOP = 2 x params x (uncached prompt +
 generated tokens); 4B LoRA selectors (SelectionARM and Recipe 3 LoRAs) 2 x 4.44e9 x their tokens; head FLOPs as logged.
 Model time per episode = summed decision seconds / tasks. Benchmark means weight the three benchmarks equally."""
@@ -44,11 +44,11 @@ def episode(p):
             out['prompt'] += m.get('prompt_tokens') or 0; out['cached'] += m.get('cached_tokens') or 0; out['completion'] += m.get('completion_tokens') or 0
     return out
 def success(root, slug, b):
-    s = n = 0
+    s = n = v = 0
     for run in ('run1', 'run2', 'run3'):
         for f in (E / root / run / b / slug / b / 'collection' / 'records').glob('*.json'):
-            r = json.loads(f.read_text()); n += 1; s += str(r.get('valid')) == 'True' and float(r.get('reward') or 0) >= 1
-    return s, n
+            r = json.loads(f.read_text()); n += 1; ok = str(r.get('valid')) == 'True'; v += ok; s += ok and float(r.get('reward') or 0) >= 1
+    return s, n, v
 rows = []
 with ThreadPoolExecutor(int(os.environ.get('SLURM_CPUS_PER_TASK', '1'))) as pool:
     for k, (label, root, slug, kind) in CONDS.items():
@@ -57,8 +57,8 @@ with ThreadPoolExecutor(int(os.environ.get('SLURM_CPUS_PER_TASK', '1'))) as pool
             n = len(eps); steps = sum(e['steps'] for e in eps)
             actor_pf = 2 * (P8B if k == 'sft8b' or k.startswith('rl8b') else P4B) * sum(e['prompt'] - e['cached'] + e['completion'] for e in eps) / 1e15
             sel_pf = (2 * P4B * sum(e['sel_tokens'] for e in eps) if kind == 'lora' else sum(e['head_flops'] for e in eps)) / 1e15
-            s, ns = success(root, slug, b)
-            rows.append(dict(key=k, condition=label, kind=kind, benchmark=b, cost_tasks=n, success_episodes=ns, successes=s,
+            s, ns, nv = success(root, slug, b)
+            rows.append(dict(key=k, condition=label, kind=kind, benchmark=b, cost_tasks=n, success_episodes=ns, successes=s, valid_episodes=nv, valid_only=round(100 * s / nv, 2),
                              overall=round(100 * s / ns, 2), steps_per_episode=round(steps / n, 2), pflop_per_step=round((actor_pf + sel_pf) / steps, 4),
                              pflop_per_episode=round((actor_pf + sel_pf) / n, 3), model_seconds_per_episode=round(sum(e['dec'] for e in eps) / n, 1)))
             print(rows[-1], flush=True)
