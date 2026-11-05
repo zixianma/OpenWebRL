@@ -15,6 +15,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
@@ -22,7 +23,7 @@ DOCS = HERE.parents[2]
 REFERENCE = HERE / "rl-action-loops-20261103.json"
 AGGREGATE = HERE / "rl-repetition-incidence-20261104.json"
 OUTPUT = DOCS / "rl_results/rl_repetition_incidence"
-THRESHOLDS = (3, 4, 5)
+THRESHOLDS = (2, 3, 4, 5)
 RUNS = (
     ("outcome48", "Outcome-only (48 groups)", "Outcome-only\n48 groups", "#9A9A9A", "o"),
     ("outcome56", "Outcome-only (56 groups)", "Outcome-only\n56 groups", "#555555", "o"),
@@ -88,6 +89,7 @@ def build(compact_dir):
     for key, *_ in RUNS:
         repeats = cohorts[key]
         valid = np.asarray([[bool(row["valid"]) for row in rows] for rows in repeats])
+        success = np.asarray([[bool(row["success"]) for row in rows] for rows in repeats])
         maxima = np.asarray([[action_counts(row) for row in rows] for rows in repeats])
         repeat_counts = []
         for j in range(3):
@@ -95,9 +97,9 @@ def build(compact_dir):
             counts = [int((valid[j] & (maxima[j, :, 0] >= k)).sum()) for k in THRESHOLDS]
             cons = int((valid[j] & (maxima[j, :, 1] >= 3)).sum())
             assert int(valid[j].sum()) == published["valid"]
-            assert counts[0] == published["loop_episodes"]
-            for col, name in ((1, "ge4"), (2, "ge5")):
-                assert np.isclose(counts[col] / valid[j].sum(), published["sensitivity"][name])
+            assert counts[THRESHOLDS.index(3)] == published["loop_episodes"]
+            for k, name in ((4, "ge4"), (5, "ge5")):
+                assert np.isclose(counts[THRESHOLDS.index(k)] / valid[j].sum(), published["sensitivity"][name])
             assert np.isclose(cons / valid[j].sum(), published["sensitivity"]["consecutive3"])
             repeat_counts.append({"valid": int(valid[j].sum()), "incidence_counts": counts,
                                   "filtered_consecutive_ge3_count": cons})
@@ -115,6 +117,15 @@ def build(compact_dir):
             row = {"episodes": int(counts_per_task.sum()),
                    "percent": float(100 * counts_per_task.sum() / valid.sum()),
                    "ci95_percent": np.percentile(samples, [2.5, 97.5]).tolist()}
+            row["outcome_breakdown"] = {}
+            for name, outcome in (("success", success), ("failure", ~success)):
+                count = int((valid & flag & outcome).sum())
+                row["outcome_breakdown"][name] = {
+                    "repeated_episodes": count,
+                    "valid_outcome_episodes": int((valid & outcome).sum()),
+                    "percent_of_all_valid_episodes": float(100 * count / valid.sum()),
+                }
+            assert sum(part["repeated_episodes"] for part in row["outcome_breakdown"].values()) == row["episodes"]
             if isinstance(k, int):
                 method["thresholds"][str(k)] = row
             else:
@@ -147,10 +158,20 @@ def render():
     left, right = axes
     means = np.asarray([data["methods"][key]["thresholds"]["3"]["percent"] for key, *_ in RUNS])
     limits = np.asarray([data["methods"][key]["thresholds"]["3"]["ci95_percent"] for key, *_ in RUNS])
-    bars = left.bar(range(3), means, width=0.56, color=[row[3] for row in RUNS],
-                    yerr=np.vstack((means - limits[:, 0], limits[:, 1] - means)),
-                    capsize=3, error_kw={"ecolor": "#353535", "elinewidth": 1, "capthick": 1},
-                    zorder=3)
+    outcomes = [data["methods"][key]["thresholds"]["3"]["outcome_breakdown"] for key, *_ in RUNS]
+    failures = np.asarray([row["failure"]["percent_of_all_valid_episodes"] for row in outcomes])
+    successes = np.asarray([row["success"]["percent_of_all_valid_episodes"] for row in outcomes])
+    colors = [row[3] for row in RUNS]
+    bars = left.bar(range(3), failures, width=0.56, color=colors, zorder=3)
+    success_bars = left.bar(range(3), successes, bottom=failures, width=0.56,
+                            facecolor="white", edgecolor=colors, hatch="///", linewidth=0.8,
+                            zorder=3)
+    left.errorbar(range(3), means, yerr=np.vstack((means - limits[:, 0], limits[:, 1] - means)),
+                  fmt="none", ecolor="#353535", elinewidth=1, capsize=3, capthick=1, zorder=4)
+    left.legend(handles=[Patch(facecolor="#777777", label="Failure"),
+                         Patch(facecolor="white", edgecolor="#777777", hatch="///", label="Success")],
+                loc="upper right", frameon=False, ncol=2, fontsize=8,
+                handlelength=1.3, columnspacing=1.2, handletextpad=0.5)
     for j, mean in enumerate(means):
         left.text(j, limits[j, 1] + 1.0, f"{mean:.1f}%", ha="center", va="bottom",
                   color=RUNS[j][3], fontsize=10, fontweight="medium")
@@ -170,13 +191,16 @@ def render():
                        color=color, marker=marker, markersize=4.5, linewidth=1.5,
                        capsize=2.5, elinewidth=0.9, zorder=4 if key == "gate-b" else 3)
     right.set_xticks(THRESHOLDS)
-    right.set_xlim(2.82, 5.18)
+    right.set_xlim(min(THRESHOLDS) - 0.18, max(THRESHOLDS) + 0.18)
     right.set_xlabel("Repetition threshold, k", labelpad=5)
     right.set_title("(b) Threshold robustness", loc="left", pad=9)
     right.tick_params(axis="y", left=False)
+    largest_upper = max(data["methods"][key]["thresholds"][str(k)]["ci95_percent"][1]
+                        for key, *_ in RUNS for k in THRESHOLDS)
+    ymax = max(50, int(np.ceil((largest_upper + 2) / 10)) * 10)
     for ax in axes:
-        ax.set_ylim(0, 50)
-        ax.set_yticks(range(0, 51, 10))
+        ax.set_ylim(0, ymax)
+        ax.set_yticks(range(0, ymax + 1, 10))
         ax.grid(False)
         for side in ("top", "right"):
             ax.spines[side].set_visible(False)
@@ -203,7 +227,8 @@ def render():
     assert all(not a.overlaps(b) for a, b in zip(labels, labels[1:]))
     legend_box = legend.get_window_extent(renderer)
     assert all(not legend_box.overlaps(box) for box in labels)
-    assert np.array_equal(np.asarray([bar.get_height() for bar in bars]), means)
+    stack_heights = np.asarray([a.get_height() + b.get_height() for a, b in zip(bars, success_bars)])
+    assert np.allclose(stack_heights, means, rtol=0, atol=1e-12)
     fig.savefig(OUTPUT.with_suffix(".png"), dpi=300)
     fig.savefig(OUTPUT.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
     fig.savefig(OUTPUT.with_suffix(".svg"), metadata={"Date": None})

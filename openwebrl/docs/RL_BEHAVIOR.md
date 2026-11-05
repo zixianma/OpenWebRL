@@ -247,26 +247,35 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
 <a id="rl-repetition-incidence-paper"></a>
 ### Repetition incidence and threshold robustness
 
-![Repeated-action incidence at iteration 90 and sensitivity to three, four or five identical actions: outcome-only baselines in gray, Outcome + ADM rewards in purple, with 95% task-bootstrap intervals](rl_results/rl_repetition_incidence.png)
+![Repeated-action incidence at iteration 90 split by success and failure, and sensitivity to two through five identical actions: outcome-only baselines in gray, Outcome + ADM rewards in purple, with 95% task-bootstrap intervals](rl_results/rl_repetition_incidence.png)
 
-*(a) Percentage of valid episodes containing at least three identical non-`wait`, non-`done` tool calls, including successful episodes and episodes without `done`. (b) The same metric at thresholds k = 3, 4 and 5; connecting segments guide the eye. Calls need not be consecutive. Online-Mind2Web, iteration 90, the same 300 tasks evaluated three times per checkpoint. Both panels use counts pooled across repeats and pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), preserving all repeats and methods within each sampled task. Intervals condition on these checkpoints and evaluation windows; they exclude training-seed and evaluation-window uncertainty.* [PDF](rl_results/rl_repetition_incidence.pdf) · [SVG](rl_results/rl_repetition_incidence.svg) · [Aggregate and intervals](arm_results/rl_integration/behavior/rl-repetition-incidence-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_repetition_incidence.py).
+*(a) Percentage of valid episodes containing at least three identical non-`wait`, non-`done` tool calls, split into unsuccessful (solid) and successful (hatched) episodes. Both segments use all valid episodes as their denominator; they sum to total repetition incidence, whose 95% interval is shown. Episodes without `done` are included. (b) Total incidence at thresholds k = 2, 3, 4 and 5; connecting segments guide the eye. Calls need not be consecutive. Online-Mind2Web, iteration 90, the same 300 tasks evaluated three times per checkpoint. Both panels use counts pooled across repeats and pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), preserving all repeats and methods within each sampled task. Intervals condition on these checkpoints and evaluation windows; they exclude training-seed and evaluation-window uncertainty.* [PDF](rl_results/rl_repetition_incidence.pdf) · [SVG](rl_results/rl_repetition_incidence.svg) · [Aggregate and intervals](arm_results/rl_integration/behavior/rl-repetition-incidence-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_repetition_incidence.py).
 
 **Definition.** For threshold `k`, incidence is `100 × valid episodes with maximum identical-call count ≥ k / valid episodes`. Each episode counts at most once. Invalid outcomes are excluded, rather than assigned zero repetition; each method uses its own valid episodes, not a common-valid intersection. This differs from the older failure-category metric below, which requires an unsuccessful outcome and a `done` call and uses all planned episodes as its denominator.
 
-| Method | Planned episodes | Valid episodes | Invalid episodes | Incidence, k = 3 | Incidence, k = 4 | Incidence, k = 5 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Outcome-only, 48 groups | 900 | 713 | 187 | 39.0% | 24.0% | 14.9% |
-| Outcome-only, 56 groups | 900 | 708 | 192 | 27.7% | 15.0% | 7.8% |
-| Outcome + ADM rewards (ours) | 900 | 715 | 185 | 20.3% | 10.2% | 4.2% |
+| Method | Planned episodes | Valid episodes | Invalid episodes | Incidence, k = 2 | Incidence, k = 3 | Incidence, k = 4 | Incidence, k = 5 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only, 48 groups | 900 | 713 | 187 | 61.7% | 39.0% | 24.0% | 14.9% |
+| Outcome-only, 56 groups | 900 | 708 | 192 | 56.4% | 27.7% | 15.0% | 7.8% |
+| Outcome + ADM rewards (ours) | 900 | 715 | 185 | 49.0% | 20.3% | 10.2% | 4.2% |
 
 <details><summary>Matching, paired differences and alternative repetition definition</summary>
 
-The matching rule preserves the historical analysis: compare the saved first tool call per actor turn using JSON serialization with sorted object keys, excluding `wait` and `done`. Argument strings, URLs and values are not normalized. The extractor can retain malformed JSON as an `unparsable` pseudo-call with its first 200 raw characters; one ADM episode qualifies at k = 3 solely through those records (excluding malformed calls would give 144/715 = 20.1%, rather than 145/715 = 20.3%). Thresholds 4 and 5 are unaffected. Additional tool calls in the same response are not inspected. See the [full extraction and matching rules](#rl-repetition-matching-rules).
+The matching rule preserves the historical analysis: compare the saved first tool call per actor turn using JSON serialization with sorted object keys, excluding `wait` and `done`. Argument strings, URLs and values are not normalized. The extractor can retain malformed JSON as an `unparsable` pseudo-call with its first 200 raw characters; one ADM episode qualifies at k = 3 solely through those records (excluding malformed calls would give 144/715 = 20.1%, rather than 145/715 = 20.3%). Thresholds 2, 4 and 5 are unaffected. Additional tool calls in the same response are not inspected. See the [full extraction and matching rules](#rl-repetition-matching-rules).
+
+The left panel shows joint rates, `P(repetition and outcome | valid)`, rather than repetition conditioned on success or failure. These segments preserve the original total incidence; they do not estimate the causal effect of repetition on task success. Their counts are:
+
+| Method | Repeated and successful episodes, k = 3 | Repeated and unsuccessful episodes, k = 3 | Repeated and successful / all valid | Repeated and unsuccessful / all valid |
+| --- | ---: | ---: | ---: | ---: |
+| Outcome-only, 48 groups | 63 | 215 | 8.8% | 30.2% |
+| Outcome-only, 56 groups | 46 | 150 | 6.5% | 21.2% |
+| Outcome + ADM rewards (ours) | 65 | 80 | 9.1% | 11.2% |
 
 The bootstrap samples the 300 task clusters with replacement, retaining all three repeats, methods and thresholds; each resample recomputes the ratio of summed incidence counts to summed valid counts. Intervals are pointwise, not simultaneous bands over thresholds. The new aggregate uses one shared resampling stream; its Monte Carlo interval endpoints differ slightly from the historical paired table below.
 
 | ADM minus outcome-only, 56 groups | Difference, pp | Paired 95% CI, pp |
 | --- | ---: | ---: |
+| At least 2 identical calls | −7.4 | [−12.7, −2.0] |
 | At least 3 identical calls | −7.4 | [−12.3, −2.5] |
 | At least 4 identical calls | −4.8 | [−8.6, −0.9] |
 | At least 5 identical calls | −3.6 | [−6.4, −0.8] |

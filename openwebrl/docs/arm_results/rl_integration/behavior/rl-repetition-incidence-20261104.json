@@ -3,6 +3,7 @@
   "definition": "100 * valid episodes with >= k identical non-wait/non-done calls / valid episodes; successes included; occurrences need not be consecutive",
   "pooling": "Ratio of summed counts across three repeats, not an unweighted mean of repeat percentages",
   "thresholds": [
+    2,
     3,
     4,
     5
@@ -68,6 +69,7 @@
         {
           "valid": 234,
           "incidence_counts": [
+            140,
             88,
             46,
             25
@@ -77,6 +79,7 @@
         {
           "valid": 233,
           "incidence_counts": [
+            139,
             90,
             57,
             38
@@ -86,6 +89,7 @@
         {
           "valid": 246,
           "incidence_counts": [
+            161,
             100,
             68,
             43
@@ -94,13 +98,45 @@
         }
       ],
       "thresholds": {
+        "2": {
+          "episodes": 440,
+          "percent": 61.711079943899016,
+          "ci95_percent": [
+            56.97817875604794,
+            66.43356643356644
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 142,
+              "valid_outcome_episodes": 307,
+              "percent_of_all_valid_episodes": 19.91584852734923
+            },
+            "failure": {
+              "repeated_episodes": 298,
+              "valid_outcome_episodes": 406,
+              "percent_of_all_valid_episodes": 41.79523141654979
+            }
+          }
+        },
         "3": {
           "episodes": 278,
           "percent": 38.99018232819074,
           "ci95_percent": [
             34.419263456090654,
             43.58974358974359
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 63,
+              "valid_outcome_episodes": 307,
+              "percent_of_all_valid_episodes": 8.835904628330995
+            },
+            "failure": {
+              "repeated_episodes": 215,
+              "valid_outcome_episodes": 406,
+              "percent_of_all_valid_episodes": 30.154277699859747
+            }
+          }
         },
         "4": {
           "episodes": 171,
@@ -108,7 +144,19 @@
           "ci95_percent": [
             20.081411126187245,
             28.01172289948909
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 34,
+              "valid_outcome_episodes": 307,
+              "percent_of_all_valid_episodes": 4.768583450210379
+            },
+            "failure": {
+              "repeated_episodes": 137,
+              "valid_outcome_episodes": 406,
+              "percent_of_all_valid_episodes": 19.214586255259466
+            }
+          }
         },
         "5": {
           "episodes": 106,
@@ -116,7 +164,19 @@
           "ci95_percent": [
             11.829436038514443,
             18.103478759205966
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 16,
+              "valid_outcome_episodes": 307,
+              "percent_of_all_valid_episodes": 2.244039270687237
+            },
+            "failure": {
+              "repeated_episodes": 90,
+              "valid_outcome_episodes": 406,
+              "percent_of_all_valid_episodes": 12.622720897615709
+            }
+          }
         }
       },
       "filtered_consecutive_ge3": {
@@ -125,7 +185,19 @@
         "ci95_percent": [
           17.22222222222222,
           24.71102418443957
-        ]
+        ],
+        "outcome_breakdown": {
+          "success": {
+            "repeated_episodes": 31,
+            "valid_outcome_episodes": 307,
+            "percent_of_all_valid_episodes": 4.3478260869565215
+          },
+          "failure": {
+            "repeated_episodes": 118,
+            "valid_outcome_episodes": 406,
+            "percent_of_all_valid_episodes": 16.54978962131837
+          }
+        }
       }
     },
     "outcome56": {
@@ -136,6 +208,7 @@
         {
           "valid": 234,
           "incidence_counts": [
+            131,
             57,
             24,
             14
@@ -145,6 +218,7 @@
         {
           "valid": 237,
           "incidence_counts": [
+            135,
             78,
             49,
             23
@@ -154,6 +228,7 @@
         {
           "valid": 237,
           "incidence_counts": [
+            133,
             61,
             33,
             18
@@ -162,13 +237,45 @@
         }
       ],
       "thresholds": {
+        "2": {
+          "episodes": 399,
+          "percent": 56.355932203389834,
+          "ci95_percent": [
+            51.52344548628788,
+            61.17482723748525
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 135,
+              "valid_outcome_episodes": 318,
+              "percent_of_all_valid_episodes": 19.06779661016949
+            },
+            "failure": {
+              "repeated_episodes": 264,
+              "valid_outcome_episodes": 390,
+              "percent_of_all_valid_episodes": 37.28813559322034
+            }
+          }
+        },
         "3": {
           "episodes": 196,
           "percent": 27.683615819209038,
           "ci95_percent": [
             23.479460057807024,
             32.01147128981088
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 46,
+              "valid_outcome_episodes": 318,
+              "percent_of_all_valid_episodes": 6.497175141242938
+            },
+            "failure": {
+              "repeated_episodes": 150,
+              "valid_outcome_episodes": 390,
+              "percent_of_all_valid_episodes": 21.1864406779661
+            }
+          }
         },
         "4": {
           "episodes": 106,
@@ -176,7 +283,19 @@
           "ci95_percent": [
             11.854820180424214,
             18.23204419889503
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 21,
+              "valid_outcome_episodes": 318,
+              "percent_of_all_valid_episodes": 2.9661016949152543
+            },
+            "failure": {
+              "repeated_episodes": 85,
+              "valid_outcome_episodes": 390,
+              "percent_of_all_valid_episodes": 12.005649717514125
+            }
+          }
         },
         "5": {
           "episodes": 55,
@@ -184,7 +303,19 @@
           "ci95_percent": [
             5.555555555555555,
             10.174467908870021
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 4,
+              "valid_outcome_episodes": 318,
+              "percent_of_all_valid_episodes": 0.5649717514124294
+            },
+            "failure": {
+              "repeated_episodes": 51,
+              "valid_outcome_episodes": 390,
+              "percent_of_all_valid_episodes": 7.203389830508475
+            }
+          }
         }
       },
       "filtered_consecutive_ge3": {
@@ -193,7 +324,19 @@
         "ci95_percent": [
           7.887323943661972,
           12.890192175356603
-        ]
+        ],
+        "outcome_breakdown": {
+          "success": {
+            "repeated_episodes": 16,
+            "valid_outcome_episodes": 318,
+            "percent_of_all_valid_episodes": 2.2598870056497176
+          },
+          "failure": {
+            "repeated_episodes": 57,
+            "valid_outcome_episodes": 390,
+            "percent_of_all_valid_episodes": 8.05084745762712
+          }
+        }
       }
     },
     "gate-b": {
@@ -204,6 +347,7 @@
         {
           "valid": 238,
           "incidence_counts": [
+            108,
             45,
             25,
             9
@@ -213,6 +357,7 @@
         {
           "valid": 232,
           "incidence_counts": [
+            114,
             47,
             18,
             5
@@ -222,6 +367,7 @@
         {
           "valid": 245,
           "incidence_counts": [
+            128,
             53,
             30,
             16
@@ -230,13 +376,45 @@
         }
       ],
       "thresholds": {
+        "2": {
+          "episodes": 350,
+          "percent": 48.95104895104895,
+          "ci95_percent": [
+            44.53897729304488,
+            53.38028169014085
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 164,
+              "valid_outcome_episodes": 365,
+              "percent_of_all_valid_episodes": 22.937062937062937
+            },
+            "failure": {
+              "repeated_episodes": 186,
+              "valid_outcome_episodes": 350,
+              "percent_of_all_valid_episodes": 26.013986013986013
+            }
+          }
+        },
         "3": {
           "episodes": 145,
           "percent": 20.27972027972028,
           "ci95_percent": [
             16.78319253561972,
             23.935446331631947
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 65,
+              "valid_outcome_episodes": 365,
+              "percent_of_all_valid_episodes": 9.090909090909092
+            },
+            "failure": {
+              "repeated_episodes": 80,
+              "valid_outcome_episodes": 350,
+              "percent_of_all_valid_episodes": 11.188811188811188
+            }
+          }
         },
         "4": {
           "episodes": 73,
@@ -244,7 +422,19 @@
           "ci95_percent": [
             7.659574468085107,
             12.92134831460674
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 32,
+              "valid_outcome_episodes": 365,
+              "percent_of_all_valid_episodes": 4.475524475524476
+            },
+            "failure": {
+              "repeated_episodes": 41,
+              "valid_outcome_episodes": 350,
+              "percent_of_all_valid_episodes": 5.734265734265734
+            }
+          }
         },
         "5": {
           "episodes": 30,
@@ -252,7 +442,19 @@
           "ci95_percent": [
             2.601062232565123,
             6.013986013986014
-          ]
+          ],
+          "outcome_breakdown": {
+            "success": {
+              "repeated_episodes": 11,
+              "valid_outcome_episodes": 365,
+              "percent_of_all_valid_episodes": 1.5384615384615385
+            },
+            "failure": {
+              "repeated_episodes": 19,
+              "valid_outcome_episodes": 350,
+              "percent_of_all_valid_episodes": 2.6573426573426575
+            }
+          }
         }
       },
       "filtered_consecutive_ge3": {
@@ -261,12 +463,31 @@
         "ci95_percent": [
           8.298755186721992,
           13.924050632911392
-        ]
+        ],
+        "outcome_breakdown": {
+          "success": {
+            "repeated_episodes": 35,
+            "valid_outcome_episodes": 365,
+            "percent_of_all_valid_episodes": 4.895104895104895
+          },
+          "failure": {
+            "repeated_episodes": 44,
+            "valid_outcome_episodes": 350,
+            "percent_of_all_valid_episodes": 6.153846153846154
+          }
+        }
       }
     }
   },
   "paired_differences_pp": {
     "gate-b - outcome48": {
+      "2": {
+        "delta_pp": -12.760030992850062,
+        "ci95_pp": [
+          -18.00370184520179,
+          -7.5299700211546625
+        ]
+      },
       "3": {
         "delta_pp": -18.71046204847046,
         "ci95_pp": [
@@ -297,6 +518,13 @@
       }
     },
     "gate-b - outcome56": {
+      "2": {
+        "delta_pp": -7.4048832523408805,
+        "ci95_pp": [
+          -12.735159674820727,
+          -2.014479383232751
+        ]
+      },
       "3": {
         "delta_pp": -7.403895539488758,
         "ci95_pp": [
