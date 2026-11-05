@@ -41,7 +41,8 @@ plt.rcParams.update({
     "svg.fonttype": "none", "pdf.fonttype": 42,
     "savefig.facecolor": "white",
 })
-W, H = 7.0, 4.22
+# Half the previous nominal height; panels now share one horizontal row.
+W, H = 7.0, 2.11
 fig = plt.figure(figsize=(W, H))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set(xlim=(0, W), ylim=(0, H))
@@ -53,7 +54,7 @@ def text(x, y, label, size=7, color=INK, weight="normal", ha="left", va="center"
                    ha=ha, va=va, **kw)
 
 
-def box(x, y, w, h, edge=LINE, fill="white", lw=0.65, radius=0.035):
+def box(x, y, w, h, edge=LINE, fill="white", lw=0.65, radius=0.025):
     patch = FancyBboxPatch((x, y), w, h,
         boxstyle=f"round,pad=0,rounding_size={radius}",
         facecolor=fill, edgecolor=edge, linewidth=lw, zorder=2)
@@ -63,198 +64,166 @@ def box(x, y, w, h, edge=LINE, fill="white", lw=0.65, radius=0.035):
 
 def arrow(x0, y0, x1, y1, color=MUTED, lw=0.65):
     ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>",
-        mutation_scale=5, shrinkA=1, shrinkB=1, linewidth=lw, color=color))
+        mutation_scale=4, shrinkA=0.4, shrinkB=0.4, linewidth=lw, color=color))
 
 
 def rule(x0, x1, y, color=LINE, lw=0.6):
     ax.plot([x0, x1], [y, y], color=color, linewidth=lw, zorder=1)
 
 
-
-def state_card(x, y, step, color, width=0.40, height=0.21, candidate="i"):
-    # State symbols stand for the saved screenshot/observation and tool feedback.
-    box(x - width / 2, y - height / 2, width, height, edge=color, fill="white")
+def state_card(x, y, step, color, candidate):
+    width, height = 0.26, 0.18
+    box(x - width / 2, y - height / 2, width, height, edge=color)
     ax.add_patch(Rectangle((x - width / 2, y + height * 0.29), width, height * 0.21,
                            facecolor=color, edgecolor="none", alpha=0.15, zorder=2))
-    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", ha="center", color=color)
+    text(x, y - 0.006, rf"$s_{{t+{step}}}^{{{candidate}}}$", color=color, ha="center")
 
 
 def percent(rate):
-    """Compact display, rounded to at most one decimal; calculations stay exact."""
     return f"{100 * rate:.1f}".rstrip("0").rstrip(".") + "%"
 
 
 label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
+assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3", "Oracle")] == [0, 0, 2, 2]
 
-# (a) The exact original 5 x 8 outcomes; labels never use the blue columns.
-text(0.12, 4.06, "a)  Data collection", size=8.5, weight="bold")
-xs = [3.76 + 0.22 * d for d in range(8)]
-trajectory_x = [1.76 + 0.48 * k for k in range(4)]
-ys = [3.43 - 0.21 * i for i in range(5)]
-text(4.53, 4.06, r"$R^{i,j}\in\{0,1\}$", size=7, color=MUTED, ha="center")
+# (a) Preserve all five candidates and all forty original binary outcomes.
+text(0.06, 1.98, "a)  Data collection", size=8.5, weight="bold")
+text(2.47, 1.98, r"$R^{i,j}\in\{0,1\}$", size=6.5, color=MUTED, ha="center")
+xs = [2.12 + 0.10 * j for j in range(8)]
+trajectory_x = [0.88 + 0.29 * k for k in range(4)]
+ys = [1.40 - 0.225 * i for i in range(5)]
 y_low, y_high = ys[-1] - 0.10, ys[0] + 0.10
-ax.add_patch(Rectangle((xs[0] - 0.11, y_low), 3 * 0.22, y_high - y_low,
-                       facecolor=LABEL_BG, edgecolor="none", zorder=0))
-ax.add_patch(Rectangle((xs[3] - 0.11, y_low), 5 * 0.22, y_high - y_low,
-                       facecolor=HELD_BG, edgecolor="none", zorder=0))
-for first, last, title, color in ((0, 2, "Train labels", OUTCOME), (3, 7, "Held-out eval", HELD)):
-    rule(xs[first] - 0.105, xs[last] + 0.105, 3.74, color, 1.1)
-    text((xs[first] + xs[last]) / 2, 3.85, title, color=color, ha="center")
-    for d in range(first, last + 1):
-        text(xs[d], 3.65, str(d + 1), color=ROLLOUT if d == 0 else MUTED,
-             weight="bold" if d == 0 else "normal", ha="center")
-text(xs[0] - 0.17, 3.65, r"$j=$", color=MUTED, ha="right")
-text(1.105, 3.65, r"$K=5$ actions", color=MUTED, ha="center")
-text(6.00, 3.85, "Train %", color=OUTCOME, ha="center")
-text(6.00, 3.65, "1–3", color=OUTCOME, ha="center")
-text(6.74, 3.85, "Eval %", color=HELD, ha="center")
-text(6.74, 3.65, "4–8", color=HELD, ha="center")
-mid = sum(ys) / len(ys)
-box(0.13, mid - 0.14, 0.43, 0.28, edge=INK)
-text(0.345, mid, r"$s_t$", size=9, ha="center")
-# Spell out rollout 1's states for candidates 1 and 5; ellipses omit 2--4.
-# Every candidate and all eight terminal outcomes remain in the matrix.
-text(2.63, 3.85, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
+for first, last, title, color, fill in (
+        (0, 2, "Train", OUTCOME, LABEL_BG), (3, 7, "Eval", HELD, HELD_BG)):
+    ax.add_patch(Rectangle((xs[first] - 0.05, y_low), (last - first + 1) * 0.10,
+                           y_high - y_low, facecolor=fill, edgecolor="none", zorder=0))
+    rule(xs[first] - 0.049, xs[last] + 0.049, 1.69, color, 1.0)
+    text((xs[first] + xs[last]) / 2, 1.79, title, color=color, ha="center")
+    for j in range(first, last + 1):
+        text(xs[j], 1.60, str(j + 1), size=6.5, color=ROLLOUT if j == 0 else MUTED,
+             weight="bold" if j == 0 else "normal", ha="center")
+text(2.025, 1.60, r"$j=$", size=6.5, color=MUTED, ha="right")
+text(0.49, 1.60, r"$K=5$ actions", size=6.5, color=MUTED, ha="center")
+text(1.37, 1.79, "Rollout 1", color=ROLLOUT, weight="bold", ha="center")
 for k in range(1, 4):
-    text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 3.65,
-         rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
-# Match the picked candidates to the source colors in panel (b), directly.
+    text((trajectory_x[k - 1] + trajectory_x[k]) / 2, 1.60,
+         rf"$a_{{t+{k}}}^{{i}}$", size=6.5, color=MUTED, ha="center")
+for x, title, split, color, fill, width in (
+        (3.06, "Train %", "1–3", OUTCOME, LABEL_BG, 0.34),
+        (3.40, "Eval %", "4–8", HELD, HELD_BG, 0.28)):
+    text(x, 1.79, title, size=6.5, color=color, ha="center")
+    text(x, 1.60, split, size=6.5, color=color, ha="center")
+    ax.add_patch(Rectangle((x - width / 2, y_low), width, y_high - y_low,
+                           facecolor=fill, edgecolor="none", zorder=0))
+mid = sum(ys) / len(ys)
+box(0.03, mid - 0.12, 0.24, 0.24, edge=INK)
+text(0.15, mid, r"$s_t$", size=9, ha="center")
+rollout_box = box(0.72, y_low - 0.02, xs[0] + 0.05 - 0.72,
+                  y_high - y_low + 0.04, edge=ROLLOUT, fill=ROLLOUT_BG, lw=1.0)
+rollout_box.set_zorder(0.5)
 pick_colors = {}
 for label, color in (("Pre-execution", PRE), ("Post-execution", POST),
                      ("Lookahead K = 3", LOOK), ("Observed outcome", OUTCOME)):
     pick_colors.setdefault(PICKS[label], []).append(color)
-ax.add_patch(Rectangle((5.70, y_low), 0.60, y_high - y_low,
-                       facecolor=LABEL_BG, edgecolor="none", zorder=0))
-ax.add_patch(Rectangle((6.49, y_low), 0.48, y_high - y_low,
-                       facecolor=HELD_BG, edgecolor="none", zorder=0))
-# One cyan enclosure groups rollout 1's prefixes and terminal outcomes
-# across all candidates. State colors retain their evidence-method association.
-rollout_box = box(1.50, y_low - 0.02, xs[0] + 0.11 - 1.50,
-                  y_high - y_low + 0.04, edge=ROLLOUT, fill=ROLLOUT_BG,
-                  lw=1.05, radius=0.045)
-rollout_box.set_zorder(0.5)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
-    arrow(0.57, mid, 0.77, y, color=LINE)
-    box(0.79, y - 0.10, 0.63, 0.20)
-    text(0.925, y, rf"$a_t^{{{i + 1}}}$", size=8, ha="center")
+    arrow(0.28, mid, 0.345, y, color=LINE)
+    box(0.35, y - 0.09, 0.34, 0.18)
+    text(0.465, y, rf"$a_t^{{{i + 1}}}$", size=7.5, ha="center")
     for j, color in enumerate(pick_colors.get(i, ())):
-        ax.add_patch(Circle((1.15 + 0.13 * j, y), 0.027,
-                           facecolor=color, edgecolor="white", linewidth=0.4, zorder=3))
-    arrow(1.44, y, 1.56, y, color=POST)
+        ax.add_patch(Circle((0.605 + 0.05 * j, y), 0.016, facecolor=color,
+                           edgecolor="white", linewidth=0.3, zorder=3))
+    arrow(0.695, y, 0.746, y, color=POST)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
-            state_card(x, y, k + 1, POST if k == 0 else LOOK,
-                       width=0.36, height=0.19, candidate=i + 1)
+            state_card(x, y, k + 1, POST if k == 0 else LOOK, i + 1)
             if k:
-                arrow(trajectory_x[k - 1] + 0.185, y, x - 0.185, y, color=LOOK)
-        text(3.48, y, "…", color=MUTED, ha="center")
+                arrow(trajectory_x[k - 1] + 0.132, y, x - 0.132, y, color=LOOK)
+        text(1.96, y, "…", color=MUTED, ha="center")
     else:
-        text(2.47, y, r"$\cdots$", size=11, color=MUTED, ha="center")
-    arrow(3.57, y, 3.64, y, color=LINE)
-    for d, success in enumerate(outcomes):
-        ax.add_patch(Circle((xs[d], y), 0.025,
-            facecolor=SUCCESS if success else FAILURE,
-            edgecolor=SUCCESS if success else FAILURE, linewidth=0.65, zorder=3))
-    text(6.00, y, percent(label_rates[i]), color=OUTCOME, ha="center",
+        text(1.37, y, r"$\cdots$", size=10, color=MUTED, ha="center")
+    for j, success in enumerate(outcomes):
+        color = SUCCESS if success else FAILURE
+        ax.add_patch(Circle((xs[j], y), 0.018, facecolor=color, edgecolor=color,
+                           linewidth=0.5, zorder=3))
+    text(3.06, y, percent(label_rates[i]), color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
-    text(6.74, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
-# One right-aligned legend combines status and method keys.
-METHOD_COLORS = (("Pre-exec", PRE), ("Post-exec", POST),
-                 ("Lookahead H = 3", LOOK), ("Oracle", OUTCOME))
-LEGEND_ITEMS = (("Success", SUCCESS), ("Failure", FAILURE), ("|", MUTED)) + METHOD_COLORS
+    text(3.40, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
+
+# (b) Shared context explicitly feeds each joint candidate-comparison call.
+ax.plot([3.58, 3.58], [0.26, 1.91], color=LINE, linewidth=0.6)
+text(3.67, 1.98, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
+box(3.67, 1.67, 3.27, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
+text(5.305, 1.79, r"Shared: task · history · $s_t$ · $K=5$ actions",
+     size=6.5, color=SHARED, ha="center")
+text(5.10, 1.55, "Rollout 1 evidence", size=6.5, color=MUTED, ha="center")
+pick_header = text(6.43, 1.55, "Pick", size=6.5, color=MUTED)
+eval_header = text(6.97, 1.55, "Eval %", size=6.5, color=HELD, ha="right")
+shared_x = 5.73
+ax.plot([shared_x, shared_x], [1.67, 0.66], color=SHARED, linewidth=0.9, zorder=1)
+ax.add_patch(Rectangle((6.76, 0.20), 0.23, 1.23,
+                       facecolor=HELD_BG, edgecolor="none", zorder=0))
+lanes = ((1.30, "Pre-execution", "Pre-exec", PRE, "—"),
+         (1.01, "Post-execution", "Post-exec", POST, r"$\{s_{t+1}^{i}\}_{i=1}^{K}$"),
+         (0.66, "Lookahead K = 3", "Lookahead\nH = 3", LOOK,
+          r"$\{s_{t+1:t+4}^{i}\}_{i=1}^{K}$" + "\n" + r"$\{a_{t+1:t+3}^{i}\}_{i=1}^{K}$"))
+for y, key, label, color, evidence in lanes:
+    text(3.67, y, label, color=color, linespacing=1.0)
+    text(5.10, y, evidence, color=color, ha="center", linespacing=0.95)
+    rule(5.61, shared_x, y, color=color)
+    ax.add_patch(Circle((shared_x, y), 0.015, facecolor=SHARED,
+                        edgecolor="white", linewidth=0.3, zorder=3))
+    arrow(shared_x + 0.02, y, 5.835, y, color=color)
+    box(5.84, y - 0.115, 0.50, 0.23, edge=color)
+    text(6.09, y, "Teacher", size=6.5, color=color, ha="center")
+    arrow(6.35, y, 6.455, y, color=color)
+    box(6.46, y - 0.115, 0.27, 0.23, edge=color)
+    pick = PICKS[key]
+    text(6.595, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=color, ha="center")
+    text(6.85, y, f"{100 * held_rates[pick]:.0f}%", size=6.5, color=HELD,
+         weight="bold", ha="center")
+# Orange rate labels refer to the complete five-action Train % column in (a).
+y = 0.32
+text(3.67, y, "Oracle", color=OUTCOME)
+box(4.57, y - 0.105, 1.05, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
+text(5.095, y, "Train %", color=OUTCOME, ha="center")
+arrow(5.63, y, 5.835, y, color=OUTCOME)
+box(5.84, y - 0.115, 0.50, 0.23, edge=OUTCOME)
+text(6.09, y, "Argmax", size=6.5, color=OUTCOME, ha="center")
+arrow(6.35, y, 6.455, y, color=OUTCOME)
+box(6.46, y - 0.115, 0.27, 0.23, edge=OUTCOME)
+text(6.595, y, r"$a_t^{3}$", size=8, color=OUTCOME, ha="center")
+text(6.85, y, "80%", size=6.5, color=HELD, weight="bold", ha="center")
+
+# One right-aligned legend; retain the established status and method colors.
+items = (("Success", SUCCESS), ("Failure", FAILURE), ("|", MUTED),
+         ("Pre-exec", PRE), ("Post-exec", POST), ("Lookahead H = 3", LOOK), ("Oracle", OUTCOME))
+fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 legend_right = 6.97
-for label, color in reversed(LEGEND_ITEMS):
+for label, color in reversed(items):
     if label == "|":
-        text(legend_right + 0.035, 2.32, "|", color=MUTED, ha="right")
+        text(legend_right + 0.035, 0.085, "|", color=MUTED, ha="right")
         legend_right -= 0.05
         continue
-    label_width = renderer.get_text_width_height_descent(
-        label, FontProperties(size=7), ismath=False)[0] / fig.dpi
-    marker_x = legend_right - label_width - 0.08
-    ax.add_patch(Circle((marker_x, 2.32), 0.027, facecolor=color,
+    width = renderer.get_text_width_height_descent(label, FontProperties(size=7), ismath=False)[0] / fig.dpi
+    marker_x = legend_right - width - 0.08
+    ax.add_patch(Circle((marker_x, 0.085), 0.023, facecolor=color,
                        edgecolor="white", linewidth=0.4, zorder=3))
-    text(legend_right, 2.32, label, color=color, ha="right")
+    text(legend_right, 0.085, label, color=color, ha="right")
     legend_right = marker_x - 0.19
 
-# (b) Aligned input -> teacher -> chosen action lanes. All teachers compare
-# all five candidates; the indexed trajectory below is supplied for EACH one.
-text(0.12, 2.10, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
-# A neutral gray context box fans into all three teacher inputs. Junction dots
-# explicitly join the shared context and each complete candidate/evidence set.
-box(0.12, 1.745, 4.23, 0.27, edge=SHARED, fill=SHARED_BG, lw=0.95)
-text(2.235, 1.88, r"Shared: task · history · $s_t$ · $K=5$ actions", color=SHARED, ha="center")
-shared_x = 4.68
-ax.plot([4.35, shared_x, shared_x], [1.88, 1.88, 0.63],
-        color=SHARED, linewidth=0.95, zorder=1)
-text(1.43, 1.62, "Candidates + rollout 1", color=MUTED)
-text(6.035, 1.62, "Pick", color=MUTED, ha="center")
-text(6.74, 1.62, "Eval %", color=HELD, ha="center")
-ax.add_patch(Rectangle((6.49, 0.07), 0.48, 1.38,
-                       facecolor=HELD_BG, edgecolor="none", zorder=0))
-future_x = [2.25 + 0.55 * k for k in range(4)]
-
-
-lane_rows = ((1.31, "Pre-execution", PRE, 0),
-             (0.97, "Post-execution", POST, 1),
-             (0.63, "Lookahead K = 3", LOOK, 4))
-for y, label, color, n_states in lane_rows:
-    display_label = {"Pre-execution": "Pre-exec", "Post-execution": "Post-exec",
-                     "Lookahead K = 3": "Lookahead H = 3"}[label]
-    text(0.12, y, display_label, color=color)
-    if n_states == 0:
-        text(2.54, y, r"$\{a_t^{i}\}_{i=1}^{K}$", size=9, color=color, ha="center")
-        input_end = 4.29
-    else:
-        # The entire candidate/evidence pair is inside an i=1..K set (K=5). All five
-        # pairs are supplied together in ONE teacher prompt, not separate calls.
-        text(1.45, y, r"$\{$", size=14, color=color, ha="center")
-        box(1.63, y - 0.10, 0.34, 0.20, edge=color)
-        text(1.80, y, r"$a_t^{i}$", size=8, color=color, ha="center")
-        arrow(1.99, y, 2.05, y, color=color)
-        for k, x in enumerate(future_x[:n_states]):
-            state_card(x, y, k + 1, color, width=0.36)
-            if k:
-                arrow(future_x[k - 1] + 0.185, y, x - 0.185, y, color=color)
-                text((future_x[k - 1] + x) / 2, y + 0.14,
-                     rf"$a_{{t+{k}}}^{{i}}$", color=MUTED, ha="center")
-        last_x = future_x[n_states - 1]
-        text(last_x + 0.23, y, r"$\}_{i=1}^{K}$", size=14, color=color)
-        input_end = last_x + 0.66
-    rule(input_end, shared_x, y, color=color)
-    ax.add_patch(Circle((shared_x, y), 0.019, facecolor=SHARED,
-                        edgecolor="white", linewidth=0.3, zorder=3))
-    arrow(shared_x, y, 4.80, y, color=color)
-    box(4.82, y - 0.13, 0.66, 0.26, edge=color)
-    text(5.15, y, "Teacher", color=color, ha="center")
-    arrow(5.50, y, 5.73, y, color=color)
-    pick = PICKS[label]
-    box(5.75, y - 0.13, 0.57, 0.26, edge=color)
-    text(6.035, y, rf"$a_t^{{{pick + 1}}}$", size=9, color=color, ha="center")
-    arrow(6.34, y, 6.51, y, color=HELD)
-    text(6.74, y, f"{100 * held_rates[pick]:.0f}%", color=HELD, weight="bold", ha="center")
-# Outcome-derived labels are a separate operation, not a Luna response.
-y = 0.21
-text(0.12, y, "Oracle", color=OUTCOME)
-ax.add_patch(Rectangle((1.40, y - 0.12), 2.86, 0.24,
-                       facecolor=LABEL_BG, edgecolor="none", zorder=0))
-text(1.43, y, "[" + ", ".join(percent(rate) for rate in label_rates) + "]", color=OUTCOME)
-arrow(4.29, y, 4.80, y, color=OUTCOME)
-box(4.82, y - 0.13, 0.66, 0.26, edge=OUTCOME)
-text(5.15, y, "Argmax", color=OUTCOME, ha="center")
-arrow(5.50, y, 5.73, y, color=OUTCOME)
-box(5.75, y - 0.13, 0.57, 0.26, edge=OUTCOME)
-text(6.035, y, r"$a_t^{3}$", size=9, color=OUTCOME, ha="center")
-arrow(6.34, y, 6.51, y, color=HELD)
-text(6.74, y, "80%", color=HELD, weight="bold", ha="center")
-
-
-
-
+fig.canvas.draw()
+renderer = fig.canvas.get_renderer()
+assert eval_header.get_window_extent(renderer).x0 - pick_header.get_window_extent(renderer).x1 >= 3
+for label in ax.texts:
+    bounds = label.get_window_extent(renderer)
+    assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label.get_text()
 for ext in ("png", "svg", "pdf"):
     path = Path(__file__).with_suffix(f".{ext}")
-    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)
+    metadata = {"Date": None} if ext == "svg" else {"CreationDate": None, "ModDate": None} if ext == "pdf" else {}
+    fig.savefig(path, dpi=300, metadata=metadata)
     if ext == "svg":
         path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+assert b"/FontFile2" in Path(__file__).with_suffix(".pdf").read_bytes()
 plt.close(fig)
