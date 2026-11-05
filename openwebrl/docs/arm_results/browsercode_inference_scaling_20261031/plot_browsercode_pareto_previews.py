@@ -5,6 +5,7 @@ Reuses the original renderers/layouts and public validators without changing
 original plots or inputs. Own-valid and common-valid populations stay separate.
 No convex-hull fit, smoothing, uncertainty calculation, model or browser calls.
 """
+import argparse
 from pathlib import Path
 from tempfile import mkdtemp
 from unittest.mock import patch
@@ -100,6 +101,67 @@ def overlay(fig, panels):
     return report
 
 
+
+# The per-benchmark preview uses grouped bottom legends. Original plots and the
+# two weighted previews retain their existing layouts and method encodings.
+SINGLE_LEGEND = (
+    ('luna_single_high', 'Luna baseline'),
+    ('serial_high', 'Sol high · 30 steps'),
+    ('luna_single_xhigh_12288', 'Luna xhigh effort'),
+    ('luna_single_high_6144', 'Luna 0.5× cap'),
+    ('luna_single_high_24576', 'Luna 2× cap'),
+    ('luna_single_high_60steps', 'Luna 60 steps'),
+    ('luna_single_high_120steps', 'Luna 120 steps'),
+)
+SELECTION_LEGEND = (
+    ('parallel2_select_high', 'N=2 · 30 steps'),
+    ('parallel3_select_high', 'N=3 · 30 steps'),
+    ('parallel5_select_high', 'N=5 · 30 steps'),
+    ('parallel5_select_high_60steps', 'N=5 · 60 steps'),
+)
+
+
+def grouped_bottom_legends(fig):
+    for legend in list(fig.legends):
+        legend.remove()
+    # Remove the original side note, whose population/protocol caveats are in
+    # the document caption; preserve all axes, coordinates and frontier lines.
+    for note in list(fig.texts):
+        note.remove()
+    fig.set_size_inches(7, 4.7)
+    fig.subplots_adjust(left=.077, right=.985, top=.94, bottom=.29,
+                        hspace=.60, wspace=.35)
+
+    def handles(entries):
+        result = []
+        for method, label in entries:
+            _, marker, color, filled = SCALING.STYLES[method]
+            result.append(Line2D([], [], linestyle='none', marker=marker,
+                                 color=color, markerfacecolor=color if filled else 'white',
+                                 markeredgewidth=.9, markersize=4.8, label=label))
+        return result
+
+    single = fig.legend(handles=handles(SINGLE_LEGEND), title='Single-call scaling (N=1)',
+                        loc='upper left', bbox_to_anchor=(.077, .185), ncol=3,
+                        fontsize=6.5, title_fontsize=7.2, frameon=False,
+                        handlelength=.8, handletextpad=.4, columnspacing=1.2,
+                        labelspacing=.45, borderaxespad=0, alignment='left')
+    selection = fig.legend(handles=handles(SELECTION_LEGEND), title='Selection scaling (Luna)',
+                           loc='upper left', bbox_to_anchor=(.64, .185), ncol=2,
+                           fontsize=6.5, title_fontsize=7.2, frameon=False,
+                           handlelength=.8, handletextpad=.4, columnspacing=1.2,
+                           labelspacing=.45, borderaxespad=0, alignment='left')
+    fig.legend(handles=[Line2D([], [], linestyle='--', color=FRONTIER, linewidth=.95,
+                              marker='o', markerfacecolor='white', markeredgewidth=.6,
+                              markersize=4.4, label='Observed frontier')],
+               loc='lower left', bbox_to_anchor=(.077, .02), frameon=False,
+               fontsize=6.5, handlelength=1.8, handletextpad=.35, borderaxespad=0)
+    fig.text(.32, .026,
+             'Luna defaults: high effort · 12,288-token cap · 30-step limit. N = candidates.',
+             fontsize=6.2, color='#555555', va='bottom')
+    return single, selection
+
+
 def save(fig, stem):
     for extension in ('png', 'svg', 'pdf'):
         metadata = {'Date': None} if extension == 'svg' else {'CreationDate': None, 'ModDate': None} if extension == 'pdf' else {}
@@ -123,7 +185,9 @@ def build():
     fig = capture(SCALING.render, raw, temporary, 'source_per_benchmark')
     panels = [(b, [p for p in raw['points'] if p['benchmark'] == b], metric)
               for b in SCALING.BENCHMARKS for metric in METRICS]
-    figures.append((fig, 'browsercode_scaling_pareto_preview', overlay(fig, panels)))
+    report = overlay(fig, panels)
+    grouped_bottom_legends(fig)
+    figures.append((fig, 'browsercode_scaling_pareto_preview', report))
     fig = capture(AVERAGE.render, weighted, temporary, 'source_weighted')
     panels = [('weighted_own_valid', weighted['points'], metric) for metric in METRICS]
     figures.append((fig, 'browsercode_scaling_weighted_pareto_preview', overlay(fig, panels)))
@@ -134,10 +198,17 @@ def build():
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--per-benchmark-only', action='store_true',
+                        help='Save only the per-benchmark preview; preserve weighted figure files')
+    args = parser.parse_args()
     figures = build()
     reports = {}
     for fig, stem, panels in figures:
-        save(fig, stem)
+        if not args.per_benchmark_only or stem == 'browsercode_scaling_pareto_preview':
+            save(fig, stem)
+        else:
+            plt.close(fig)
         reports[stem] = panels
     report = dict(schema='browsercode-observed-pareto-previews-v1',
                   definition='Minimize the displayed x metric and maximize success. Dominance needs at least one strict improvement. All eleven methods compete in every panel.',
@@ -148,6 +219,12 @@ def main():
                   source_sha256={name: sha(HERE / name) for name in ['aggregate.json', 'aggregate_common_valid.json',
                       'browsercode_scaling_weighted_average.json', 'browsercode_scaling_common_valid_weighted_average.json',
                       'plot_browsercode_scaling.py', 'plot_browsercode_average.py', 'plot_browsercode_common_valid.py']},
+                  per_benchmark_legends=dict(
+                      single_call=[dict(method=m, label=l) for m, l in SINGLE_LEGEND],
+                      selection=[dict(method=m, label=l) for m, l in SELECTION_LEGEND],
+                      placement='Bottom; original point encodings preserved',
+                      defaults='Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates',
+                      cap_definition='Ceiling on output tokens per call, including reasoning; not realized token use'),
                   renderer_sha256=sha(__file__), previews=reports)
     (HERE / 'browsercode_pareto_previews.json').write_text(json.dumps(report, indent=2) + '\n')
     for stem, panels in reports.items():

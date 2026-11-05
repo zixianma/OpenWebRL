@@ -93,7 +93,7 @@ Dashed segments join the observed nondominated settings in each panel: minimize 
 
 ![Per-benchmark BrowserCode plots with observed Pareto-frontier segments and rings; all original method points and own-valid populations are preserved](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_pareto_preview.png)
 
-*Per-benchmark frontiers use each method's own native-valid tasks, as in the original plot. Valid subsets, live windows and historical prompt limits differ. DeepShop's cost and latency frontiers contain only single-run settings; selection remains on the browser-batch frontier, which concerns command counts rather than browser resources.*
+*Bottom legends separate single-call scaling (one candidate per decision: model, effort, token cap and step limit) from selection scaling (N candidates and step limit). Luna defaults are high effort, a 12,288-output-token ceiling per call and 30 decisions; cap multipliers change the per-call ceiling, including reasoning, and step labels denote maximum decisions. Sol uses high effort and 30 decisions. All eleven configurations retain their original colors and markers. Per-benchmark frontiers use each method's own native-valid tasks, as in the original plot. Valid subsets, live windows and historical prompt limits differ. DeepShop's cost and latency frontiers contain only single-run settings; selection remains on the browser-batch frontier, which concerns command counts rather than browser resources.*
 
 ![Planned-task-weighted BrowserCode average with observed Pareto-frontier segments and rings, preserving the original own-valid benchmark means and all eleven methods](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_preview.png)
 
