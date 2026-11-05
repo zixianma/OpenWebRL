@@ -530,6 +530,53 @@ significantly, so the gain is specific to this protocol until replicated.
 [Analysis](RL_BEHAVIOR.md#rl-behavior-iter90-repeats-20261025) ·
 [Aggregate](arm_results/rl_integration/behavior/iter90-repeats-20261025.json).
 
+<a id="arm-failure-group-ablations-terra-20261104"></a>
+**Failure-group ablations under the shared Terra judge, iteration 50 (November 4).** Does adding
+failure groups beyond Gate B's 8 help? Fresh full-300 rollouts of each checkpoint were collected the same
+day (local browser, actor T0, 30 turns, the October 25 harness). They were graded with the shared
+inference-scaling Terra protocol: frozen OM2W terminal-success prompt, gpt-5.6-terra, medium effort,
+4,096 completion tokens, seed 42, one final screenshot. Outcome-only rows regrade the saved October
+milestone rollouts, so they also carry week-to-week site drift. Invalid episodes count as failures.
+
+| Iteration-50 checkpoint | Rollouts | Successes | Valid | Overall % | Valid-only % |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Gate B: 48 mixed + 8 failure groups | Nov 4 | 103 | 238 | **34.33** | **43.28** |
+| 40 mixed + 16 failure groups | Nov 4 | 97 | 241 | 32.33 | 40.25 |
+| 48 mixed + 16 failure groups | Nov 4 | 93 | 237 | 31.00 | 39.24 |
+| Outcome-only, uniform G8 | Oct | 98 | 239 | 32.67 | 41.00 |
+| Outcome-only, 56 groups | Oct | 92 | 239 | 30.67 | 38.49 |
+
+| Comparison (overall) | Difference | Paired 95% CI | Both valid | Gate B only / other only | McNemar p |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Gate B − 40M+16F | +2.0pp | [−4.0, +8.0]pp | 210 | 36 / 28 | 0.38 |
+| Gate B − 48M+16F | +3.3pp | [−2.0, +9.0]pp | 203 | 30 / 22 | 0.33 |
+| Gate B − outcome-only 56 | +3.7pp | [−2.0, +9.7]pp | 204 | 28 / 23 | 0.58 |
+| Gate B − outcome-only G8 | +1.7pp | [−4.0, +7.3]pp | 207 | 29 / 21 | 0.32 |
+
+**Takeaway:** neither doubling the failure groups nor Gate B itself separates from outcome-only at
+iteration 50. Gate B ranks first, but every interval includes zero. These are single-checkpoint,
+single-eval results, and the ranking is not stable across checkpoints: Gate B leads at 50 but trails at
+60 under the stricter judge below.
+
+<details><summary>Same rollouts under Terra with the RL action-history prompt (stricter; iterations 50 and 60)</summary>
+
+The GPU job first graded each rollout with Terra on the GPT-4.1 action-history prompt at default effort
+($24.78). That prompt is far stricter (roughly 20–25% overall), so these rates are not comparable to any
+other table. The iteration-60 batch has not been regraded under the shared protocol (tabled November 4).
+
+| Checkpoint | Iter. 50 successes / valid | Iter. 50 overall % | Iter. 60 successes / valid | Iter. 60 overall % |
+| --- | ---: | ---: | ---: | ---: |
+| Gate B: 48M+8F | 72 / 238 | 24.00 | 59 / 241 | 19.67 |
+| 40M+16F | 61 / 241 | 20.33 | 73 / 236 | 24.33 |
+| 48M+16F | 64 / 237 | 21.33 | 71 / 235 | 23.67 |
+
+Gate B − 40M+16F: +3.7pp [−1.0, +8.7] at 50 and −4.7pp [−9.7, +0.3] at 60 (McNemar p 0.19 and 0.03).
+Gate B − 48M+16F: +2.7pp [−2.0, +7.3] at 50 and −4.0pp [−9.0, +1.0] at 60 (p 0.11 and 0.04).
+</details>
+
+[Aggregate and protocol](arm_results/rl_integration/behavior/failure-group-ablations-terra-20261104.json)
+· Re-grader: `scripts/rejudge_rl_evals_shared_terra.py` (no actor calls; $8.88 for 1,110 episodes).
+
 <a id="arm-failure-sampling-history"></a>
 <a id="all-failure-arm-full-300-curve"></a>
 [Detailed analysis, coverage audits, examples and provenance](ARM_RESULTS.md#arm-online-rl-analysis-20260922)
