@@ -1,0 +1,207 @@
+{
+ "date": "2026-11-04",
+ "protocol_shared_terra": {
+  "judge": "gpt-5.6-terra",
+  "prompt": "frozen OM2W/AgentTrek terminal-success (browsercode/judges/terra.py, gpt56-terra-terminal-success-v1)",
+  "effort": "medium",
+  "max_completion_tokens": 4096,
+  "seed": 42,
+  "screenshot": "final saved 1280x1000 judge screenshot, not resized",
+  "actions": "per-step action lists from saved action history",
+  "validity": "unchanged from the RL eval; never-judged FAILED/TRUNCATED episodes stay valid failures",
+  "cost_usd": 8.88,
+  "judge_calls": 1110,
+  "runner": "scripts/rejudge_rl_evals_shared_terra.py"
+ },
+ "rollouts": {
+  "ablations": "Nov 4 job 418893: local browser, actor T0, 30 turns, full 300, old harness of the Oct 25 repeats",
+  "outcome_only": "Oct 2026 full-300 milestone evals (same harness family; different week)"
+ },
+ "shared_terra_iter50": {
+  "counts": {
+   "gateb50": {
+    "n": 300,
+    "successes": 103,
+    "valid": 238,
+    "overall_pct": 34.33,
+    "valid_only_pct": 43.28
+   },
+   "g40m16f50": {
+    "n": 300,
+    "successes": 97,
+    "valid": 241,
+    "overall_pct": 32.33,
+    "valid_only_pct": 40.25
+   },
+   "g48m16f50": {
+    "n": 300,
+    "successes": 93,
+    "valid": 237,
+    "overall_pct": 31.0,
+    "valid_only_pct": 39.24
+   },
+   "outcome56_50": {
+    "n": 300,
+    "successes": 92,
+    "valid": 239,
+    "overall_pct": 30.67,
+    "valid_only_pct": 38.49
+   },
+   "outcome_g8_50": {
+    "n": 300,
+    "successes": 98,
+    "valid": 239,
+    "overall_pct": 32.67,
+    "valid_only_pct": 41.0
+   }
+  },
+  "paired_vs_gateb": {
+   "gateb50 - g40m16f50": {
+    "delta_overall_pp": 2.0,
+    "ci95_pp": [
+     -4.0,
+     8.0
+    ],
+    "both_valid": 210,
+    "ref_only": 36,
+    "other_only": 28,
+    "mcnemar_p": 0.3817
+   },
+   "gateb50 - g48m16f50": {
+    "delta_overall_pp": 3.33,
+    "ci95_pp": [
+     -2.0,
+     9.0
+    ],
+    "both_valid": 203,
+    "ref_only": 30,
+    "other_only": 22,
+    "mcnemar_p": 0.3317
+   },
+   "gateb50 - outcome56_50": {
+    "delta_overall_pp": 3.67,
+    "ci95_pp": [
+     -2.0,
+     9.67
+    ],
+    "both_valid": 204,
+    "ref_only": 28,
+    "other_only": 23,
+    "mcnemar_p": 0.5758
+   },
+   "gateb50 - outcome_g8_50": {
+    "delta_overall_pp": 1.67,
+    "ci95_pp": [
+     -4.0,
+     7.33
+    ],
+    "both_valid": 207,
+    "ref_only": 29,
+    "other_only": 21,
+    "mcnemar_p": 0.3222
+   }
+  }
+ },
+ "action_history_terra": {
+  "note": "Terra with the RL GPT-4.1 action_history prompt, default effort; much stricter",
+  "cost_usd": 24.78,
+  "iter50": {
+   "counts": {
+    "gateb50": {
+     "n": 300,
+     "successes": 72,
+     "valid": 238,
+     "overall_pct": 24.0,
+     "valid_only_pct": 30.25
+    },
+    "g40m16f50": {
+     "n": 300,
+     "successes": 61,
+     "valid": 241,
+     "overall_pct": 20.33,
+     "valid_only_pct": 25.31
+    },
+    "g48m16f50": {
+     "n": 300,
+     "successes": 64,
+     "valid": 237,
+     "overall_pct": 21.33,
+     "valid_only_pct": 27.0
+    }
+   },
+   "paired_vs_gateb": {
+    "gateb50 - g40m16f50": {
+     "delta_overall_pp": 3.67,
+     "ci95_pp": [
+      -1.0,
+      8.67
+     ],
+     "both_valid": 210,
+     "ref_only": 29,
+     "other_only": 19,
+     "mcnemar_p": 0.1934
+    },
+    "gateb50 - g48m16f50": {
+     "delta_overall_pp": 2.67,
+     "ci95_pp": [
+      -2.0,
+      7.33
+     ],
+     "both_valid": 203,
+     "ref_only": 25,
+     "other_only": 14,
+     "mcnemar_p": 0.1081
+    }
+   }
+  },
+  "iter60": {
+   "counts": {
+    "gateb60": {
+     "n": 300,
+     "successes": 59,
+     "valid": 241,
+     "overall_pct": 19.67,
+     "valid_only_pct": 24.48
+    },
+    "g40m16f60": {
+     "n": 300,
+     "successes": 73,
+     "valid": 236,
+     "overall_pct": 24.33,
+     "valid_only_pct": 30.93
+    },
+    "g48m16f60": {
+     "n": 300,
+     "successes": 71,
+     "valid": 235,
+     "overall_pct": 23.67,
+     "valid_only_pct": 30.21
+    }
+   },
+   "paired_vs_gateb": {
+    "gateb60 - g40m16f60": {
+     "delta_overall_pp": -4.67,
+     "ci95_pp": [
+      -9.67,
+      0.33
+     ],
+     "both_valid": 210,
+     "ref_only": 14,
+     "other_only": 29,
+     "mcnemar_p": 0.0315
+    },
+    "gateb60 - g48m16f60": {
+     "delta_overall_pp": -4.0,
+     "ci95_pp": [
+      -9.0,
+      1.0
+     ],
+     "both_valid": 208,
+     "ref_only": 17,
+     "other_only": 32,
+     "mcnemar_p": 0.0444
+    }
+   }
+  }
+ }
+}
