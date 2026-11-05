@@ -1,14 +1,13 @@
 """Recipe 3 cost plots (SFT 4B actor, November 2–4, with the same-day SFT 4B run; plus the RL 8B actor alone and with the GPT-5.5
 LoRAs, November 4–5, down triangles): valid-only success (successes / valid episodes, 3 runs pooled; mean = equal-weight mean of the three) vs actor +
-selector parameters, PFLOP per episode and model time per episode. Renders two figures:
+selector parameters, PFLOP per episode and model time per episode. Renders five figures:
   selection-recipe3-vs-cost-20261104.*               3-benchmark equal-weight mean (success and cost alike)
   selection-recipe3-vs-cost-per-benchmark-20261104.*  one row per benchmark
   selection-recipe3-vs-cost[-per-benchmark]-sft-actors-20261104.*  the same without the RL checkpoints (SFT actors only)
   selection-recipe3-vs-cost-rl-actors-20261104.*  compact mean view of the RL 4B / 8B checkpoints alone and with selectors only
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
-rings mark frontier points. No smoothing or statistical superiority is implied. Colors follow the API plots (Okabe-Ito blue /
-vermilion). Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
+rings mark frontier points. No smoothing or statistical superiority is implied. ADM colors identify label teachers: dark purple for GPT-5.5, light purple for GPT-6 Luna. Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
 from pathlib import Path
@@ -30,18 +29,19 @@ HERE = Path(__file__).parent
 rows = json.loads((HERE / "selection-recipe3-vs-cost-20261104.json").read_text())["rows"]
 HEAD, LORA, SFT = 4.44e9 + 22.6e6, 8.88e9, 4.44e9
 FRONTIER = "#596675"
+ADM_GPT55, ADM_LUNA = "#6250BE", "#A99BE3"
 methods = [  # key, legend label, params, color, marker, hollow
     ("sft1", "SFT 4B", SFT, "#898781", "s", False),
     ("sft8b", "SFT 8B", 8.77e9, "#4a4844", "s", False),
     ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
-    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, "#0072B2", "^", False),
-    ("rl4b-head-gpt55-k3", "RL 4B + ADM-22M (GPT-5.5) ²", HEAD, "#0072B2", "^", True),
+    ("rl4b-lora-gpt55-k3", "RL 4B + ADM-4B (GPT-5.5) ²", LORA, ADM_GPT55, "^", False),
+    ("rl4b-head-gpt55-k3", "RL 4B + ADM-22M (GPT-5.5) ²", HEAD, ADM_GPT55, "^", True),
     ("rl8b", "RL 8B ³", 8.77e9, "#4a4844", "v", False),
-    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, "#0072B2", "v", False),
-    ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, "#0072B2", "D", False),
-    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, "#D55E00", "D", False),
-    ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, "#0072B2", "o", False),
-    ("head-luna-k3", "ADM-22M (GPT-6 Luna)", HEAD, "#D55E00", "o", False),
+    ("rl8b-lora-gpt55-k3", "RL 8B + ADM-4B (GPT-5.5) ³", 8.77e9 + SFT, ADM_GPT55, "v", False),
+    ("lora-gpt55-k3", "ADM-4B (GPT-5.5) ¹", LORA, ADM_GPT55, "D", False),
+    ("lora-luna-k3", "ADM-4B (GPT-6 Luna)", LORA, ADM_LUNA, "D", False),
+    ("head-gpt55-k3", "ADM-22M (GPT-5.5)", HEAD, ADM_GPT55, "o", False),
+    ("head-luna-k3", "ADM-22M (GPT-6 Luna)", HEAD, ADM_LUNA, "o", False),
 ]
 BENCH = ("online_mind2web", "webvoyager", "deepshop")
 NAMES = {"mean": "3-benchmark mean", "online_mind2web": "OM2W", "webvoyager": "WebVoyager", "deepshop": "DeepShop"}

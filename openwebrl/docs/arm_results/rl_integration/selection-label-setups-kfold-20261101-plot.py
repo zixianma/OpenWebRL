@@ -36,7 +36,7 @@ ROWS = [  # tick label, colour, source key, live key
     ("Pre-\nexec", "#4B5563", "teacher_pre", "Ours pre"),
     ("Post-\nexec", "#D8877E", "teacher_post", "Ours post"),
     ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
-    ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
+    ("Oracle", "#397FA3", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
     ("Offline: held-out rollout success",
