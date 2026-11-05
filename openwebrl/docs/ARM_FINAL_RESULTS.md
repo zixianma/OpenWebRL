@@ -994,6 +994,8 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 ![Recipe 3 K = 3 selectors with SFT actors only: 3-benchmark mean valid-only success vs actor + selector parameters, PFLOP per episode and model time per episode](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.png)
 
+*Compact SFT-only view: equal-weight mean of valid-only success across the three benchmarks, with three runs pooled within each benchmark and costs from run 1. Point coordinates match the six SFT configurations above; frontiers are recomputed over those six settings. The shorter layout retains the font sizes.*
+
 ![Recipe 3 K = 3 selectors with SFT actors only, per benchmark](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.png)
 
 [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.svg) · per benchmark: [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104.svg)

@@ -20,9 +20,9 @@ from matplotlib.font_manager import FontProperties
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
 PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#ED7D00", "#2164A5"
-ROLLOUT, ROLLOUT_BG = "#168C9E", "#EAF7FA"
+ROLLOUT, ROLLOUT_BG = "#111111", "#F4F5F6"
 SHARED, SHARED_BG = "#737A83", "#F3F4F5"
-SUCCESS, FAILURE = "#31785A", "#C53A36"
+SUCCESS, FAILURE = "#31785A", "#8D949B"
 LABEL_BG, HELD_BG = "#FFF0DD", "#EDF3FA"
 # Same 5 x 8 outcomes and picks as the original worked example.
 OUTCOMES = (
@@ -83,13 +83,23 @@ def percent(rate):
     return f"{100 * rate:.1f}".rstrip("0").rstrip(".") + "%"
 
 
+def outcome_marker(x, y, success, radius=0.018):
+    color = SUCCESS if success else FAILURE
+    ax.add_patch(Circle((x, y), radius, facecolor=color if success else "white",
+                       edgecolor=color, linewidth=0.5 if success else 0.75, zorder=3))
+
+
 label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3", "Oracle")] == [0, 0, 2, 2]
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Data collection", size=8.5, weight="bold")
-text(2.625, 1.98, r"Rollout success $R^{i,j}$", size=6.5, color=MUTED, ha="center")
+outcome_header = text(1.52, 1.98, r"Rollout success $R^{i,j}$", size=6.5, color=MUTED)
+outcome_marker(2.60, 1.98, True, radius=0.020)
+success_key = text(2.65, 1.98, "Success", size=6.5, color=SUCCESS)
+outcome_marker(3.13, 1.98, False, radius=0.020)
+failure_key = text(3.18, 1.98, "Failure", size=6.5, color=MUTED)
 rollout_pitch = 0.11
 xs = [2.24 + rollout_pitch * j for j in range(8)]
 trajectory_x = [0.88 + 0.32 * k for k in range(4)]
@@ -144,9 +154,7 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     else:
         text(1.48, y, r"$\cdots$", size=10, color=MUTED, ha="center")
     for j, success in enumerate(outcomes):
-        color = SUCCESS if success else FAILURE
-        ax.add_patch(Circle((xs[j], y), 0.018, facecolor=color, edgecolor=color,
-                           linewidth=0.5, zorder=3))
+        outcome_marker(xs[j], y, success)
     text(3.27, y, percent(label_rates[i]), color=OUTCOME, ha="center",
          weight="bold" if label_rates[i] == max(label_rates) else "normal")
     text(3.65, y, f"{100 * held_rates[i]:.0f}%", color=HELD, weight="bold", ha="center")
@@ -160,7 +168,7 @@ text(method_x, 1.98, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
 box(method_x, 1.67, 3.58, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
 text(5.75, 1.79, r"Shared: task · history · $s_t$ · $K=5$ actions",
      color=SHARED, ha="center")
-text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=MUTED, ha="center")
+text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center")
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
 eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=HELD, ha="center")
 shared_x = 5.89
@@ -201,17 +209,12 @@ text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=OUTCOME, ha="center")
 arrow(pick_x + pick_w + 0.015, y, 7.20, y, color=HELD)
 text(eval_x, y, "80%", color=HELD, weight="bold", ha="center")
 
-# One right-aligned legend; retain the established status and method colors.
-items = (("Success", SUCCESS), ("Failure", FAILURE), ("|", MUTED),
-         ("Pre-exec", PRE), ("Post-exec", POST), ("Lookahead H = 3", LOOK), ("Oracle", OUTCOME))
+# Keep the method key right aligned; outcome status is keyed beside its R label.
+items = (("Pre-exec", PRE), ("Post-exec", POST), ("Lookahead H = 3", LOOK), ("Oracle", OUTCOME))
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 legend_right = W - 0.03
 for label, color in reversed(items):
-    if label == "|":
-        text(legend_right + 0.035, 0.085, "|", color=MUTED, ha="right")
-        legend_right -= 0.05
-        continue
     width = renderer.get_text_width_height_descent(label, FontProperties(size=7), ismath=False)[0] / fig.dpi
     marker_x = legend_right - width - 0.08
     ax.add_patch(Circle((marker_x, 0.085), 0.023, facecolor=color,
@@ -222,6 +225,9 @@ for label, color in reversed(items):
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 assert eval_header.get_window_extent(renderer).x0 - pick_header.get_window_extent(renderer).x1 >= 3
+assert outcome_header.get_window_extent(renderer).x1 < 2.57 * fig.dpi
+assert success_key.get_window_extent(renderer).x1 < 3.10 * fig.dpi
+assert failure_key.get_window_extent(renderer).x1 < 3.86 * fig.dpi
 for label in ax.texts:
     bounds = label.get_window_extent(renderer)
     assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label.get_text()

@@ -85,6 +85,7 @@ def legend(fig, axes, x0):
 
 
 def render(benches, name, height, methods=methods):
+    compact_sft_mean = name == "selection-recipe3-vs-cost-sft-actors-20261104"
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 7.5, "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
                          "axes.labelpad": 2, "axes.spines.top": False, "axes.spines.right": False,
                          "svg.fonttype": "none", "pdf.fonttype": 42, "savefig.facecolor": "white"})
@@ -92,12 +93,18 @@ def render(benches, name, height, methods=methods):
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
             panel(ax, bench, k, methods)
+            if compact_sft_mean:
+                for collection in ax.collections:
+                    collection.set_clip_on(False)
             if i == 0:
                 ax.set_title(xlabel, fontsize=7.5, pad=4)
-        ax_row[0].set_ylabel(f"{NAMES[bench]}\nvalid-only (%)" if len(benches) > 1 else f"{NAMES[bench]}\nvalid-only success (%)")
+        ax_row[0].set_ylabel("Valid-only\nsuccess (%)" if compact_sft_mean else
+                             (f"{NAMES[bench]}\nvalid-only (%)" if len(benches) > 1 else f"{NAMES[bench]}\nvalid-only success (%)"))
     legend(fig, axes, 0.80)
     fig.subplots_adjust(left=0.085, right=0.785, bottom=0.08 if len(benches) > 1 else 0.14,
                         top=0.93 if len(benches) > 1 else 0.85, hspace=0.32, wspace=0.17)
+    if compact_sft_mean:
+        fig.subplots_adjust(bottom=0.19, top=0.80)
     for ext in ("png", "svg", "pdf"):
         path = HERE / f"{name}.{ext}"
         fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)
@@ -112,5 +119,5 @@ if __name__ == "__main__":
     print(render(("mean",), "selection-recipe3-vs-cost-20261104", 1.9))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-20261104", 3.9)
     sft = [m for m in methods if not m[0].startswith("rl")]
-    print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.75, sft))
+    print(render(("mean",), "selection-recipe3-vs-cost-sft-actors-20261104", 1.30, sft))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-sft-actors-20261104", 3.9, sft)

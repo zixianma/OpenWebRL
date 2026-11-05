@@ -1,6 +1,6 @@
 # OpenWebRL project documentation
 
-[Selection Recipe 3: lookahead-labelled Piotr-style panels at scale (GPT-5.5 / Luna K = 3), 4B LoRAs and heads vs same-day SFT and SelectionARM](ARM_FINAL_RESULTS.md#final-selection-recipe3).
+[Selection Recipe 3: lookahead-labelled Piotr-style panels at scale (GPT-5.5 / Luna K = 3), 4B LoRAs and heads vs same-day SFT and SelectionARM](ARM_FINAL_RESULTS.md#final-selection-recipe3) · [Compact SFT-only cost figure (PDF)](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.pdf).
 
 [Tinker LoRA port: Qwen3.5-9B SFT matches OpenWebRL-4B-SFT; outcome-only RL at lr 3e-6 reaches OM2W 125/300 and DeepShop 66/150 (Terra judge), while lr 1e-5 collapses](TINKER_LORA.md#tinker-rl-results).
 
@@ -51,7 +51,7 @@
 
 [Teacher and student ADM: compact Pre-exec, Post-exec, H = 3 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
 
-[Offline selector evaluation: half-height data collection and teacher labeling schematic, explicit rollout-success labels, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
+[Offline selector evaluation: half-height data collection and teacher labeling schematic, local success/failure key, black rollout-1 highlight, one-based rollout indices and joint K=5 inputs (PDF)](arm_results/methods/selection-offline-eval-20261022.pdf) · [Protocol and caption](ARM_SELECTION_HEAD.md#offline-selector-evaluation-schematic).
 
 [Joint versus independent transformer scoring: standalone attention-mask figure (PDF)](arm_results/methods/selection-head-joint-independent-20261026.pdf) · [Caption and architecture](ARM_SELECTION_HEAD.md#selection-head-joint-independent).
 
