@@ -45,7 +45,7 @@ def build():
                 collection.set_zorder(5)
                 collection.set_linewidths([.9])
                 offset, align = ((8, 8), "left") if j == 1 else ((-7, 8), "right")
-                ax.annotate("N=5, 60 steps", expected, xytext=offset,
+                ax.annotate("Luna ADM", expected, xytext=offset,
                             textcoords="offset points", color=color, fontsize=7,
                             ha=align, va="bottom", zorder=6)
     label_to_method = {label: method for method, label in BASE.SINGLE_LEGEND + BASE.SELECTION_LEGEND}
@@ -55,8 +55,12 @@ def build():
             method = label_to_method[text.get_text()]
             color = BASE.SCALING.STYLES[method][2]
             line.set_markerfacecolor(color if method in LONG else "white")
+            if method == FOCUS:
+                text.set_text("Luna ADM · N=5, 60 steps")
+    fig.legends[1].set_title("Best-of-N action decision scaling", prop={"size": 7.2})
     for text in fig.texts:
-        text.set_text(text.get_text().replace("Luna defaults:", "Luna baseline:"))
+        if text.get_text().startswith("Luna defaults:"):
+            text.set_text("GPT-6 actors: Luna and Sol. Luna baseline: high effort · max tokens=12,288 · 30 steps. N=candidates.")
     return fig, frontier_report
 
 
@@ -67,7 +71,10 @@ def main():
         population="Original own-valid planned-task-weighted benchmark means; weights 300/1045, 595/1045, 150/1045",
         styles=dict(hollow="30-decision limit", filled="60/120-decision limit",
                     highlight=FOCUS, highlight_size_points_squared=SIZE,
-                    baseline_size_points_squared=27, highlight_label="N=5, 60 steps",
+                    baseline_size_points_squared=27, highlight_label="Luna ADM",
+                    highlight_legend_label="Luna ADM · N=5, 60 steps",
+                    selection_title="Best-of-N action decision scaling",
+                    actor_family="GPT-6 (Luna and Sol)",
                     baseline_definition="Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
                     colors="Original colors retained; no new halo"),
         source_sha256={name: BASE.sha(HERE / name) for name in (

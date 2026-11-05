@@ -476,7 +476,7 @@ z
     </g>
    </g>
    <g id="text_9">
-    <text style="fill: #a50f15; font: 7px 'DejaVu Sans'; text-anchor: end" x="101.111131" y="15.787433" transform="rotate(-0 101.111131 15.787433)">N=5, 60 steps</text>
+    <text style="fill: #a50f15; font: 7px 'DejaVu Sans'; text-anchor: end" x="101.111131" y="15.787433" transform="rotate(-0 101.111131 15.787433)">Luna ADM</text>
    </g>
   </g>
   <g id="axes_2">
@@ -648,7 +648,7 @@ L 329.466162 104.94
     </g>
    </g>
    <g id="text_13">
-    <text style="fill: #a50f15; font: 7px 'DejaVu Sans'; text-anchor: start" x="219.403853" y="15.787433" transform="rotate(-0 219.403853 15.787433)">N=5, 60 steps</text>
+    <text style="fill: #a50f15; font: 7px 'DejaVu Sans'; text-anchor: start" x="219.403853" y="15.787433" transform="rotate(-0 219.403853 15.787433)">Luna ADM</text>
    </g>
   </g>
   <g id="axes_3">
@@ -850,11 +850,11 @@ L 496.44 104.94
     </g>
    </g>
    <g id="text_18">
-    <text style="fill: #a50f15; font: 7px 'DejaVu Sans'; text-anchor: end" x="467.298388" y="15.787433" transform="rotate(-0 467.298388 15.787433)">N=5, 60 steps</text>
+    <text style="fill: #a50f15; font: 7px 'DejaVu Sans'; text-anchor: end" x="467.298388" y="15.787433" transform="rotate(-0 467.298388 15.787433)">Luna ADM</text>
    </g>
   </g>
   <g id="text_19">
-   <text style="fill: #555555; font: 6.2px 'DejaVu Sans'; text-anchor: start" x="161.28" y="184.549794" transform="rotate(-0 161.28 184.549794)">Luna baseline: high effort · max tokens = 12,288 · 30-step limit. N = candidates.</text>
+   <text style="fill: #555555; font: 6.2px 'DejaVu Sans'; text-anchor: start" x="161.28" y="184.549794" transform="rotate(-0 161.28 184.549794)">GPT-6 actors: Luna and Sol. Luna baseline: high effort · max tokens=12,288 · 30 steps. N=candidates.</text>
   </g>
   <g id="legend_1">
    <g id="text_20">
@@ -1021,7 +1021,7 @@ z
   </g>
   <g id="legend_2">
    <g id="text_29">
-    <text style="font: 7.2px 'DejaVu Sans'; text-anchor: start" x="325.16" y="137.814875" transform="rotate(-0 325.16 137.814875)">Best-of-N action scaling</text>
+    <text style="font: 7.2px 'DejaVu Sans'; text-anchor: start" x="325.16" y="137.814875" transform="rotate(-0 325.16 137.814875)">Best-of-N action decision scaling</text>
    </g>
    <g id="line2d_54">
     <defs>
@@ -1105,7 +1105,7 @@ z
     </g>
    </g>
    <g id="text_33">
-    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="396.986016" y="156.392016" transform="rotate(-0 396.986016 156.392016)">N=5 · 60 steps</text>
+    <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="396.986016" y="156.392016" transform="rotate(-0 396.986016 156.392016)">Luna ADM · N=5, 60 steps</text>
    </g>
   </g>
   <g id="legend_3">

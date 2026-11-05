@@ -7,7 +7,10 @@
     "highlight": "parallel5_select_high_60steps",
     "highlight_size_points_squared": 27,
     "baseline_size_points_squared": 27,
-    "highlight_label": "N=5, 60 steps",
+    "highlight_label": "Luna ADM",
+    "highlight_legend_label": "Luna ADM \u00b7 N=5, 60 steps",
+    "selection_title": "Best-of-N action decision scaling",
+    "actor_family": "GPT-6 (Luna and Sol)",
     "baseline_definition": "Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
     "colors": "Original colors retained; no new halo"
   },
@@ -17,7 +20,7 @@
     "plot_browsercode_pareto_previews.py": "5d7c81a12cbf1128789dba31f8df4a1b9f0872163f9aa75b4dad11be39a4c77b",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
-  "renderer_sha256": "361928f8b0d392d9cf14661a4409619a6dd88a39b022dfc7ea66bb861a073a83",
+  "renderer_sha256": "dabde6b48b6483d12179009fca742b51d3b1106bd4217c3ebf66ae82d27a3115",
   "frontier": [
     {
       "population": "weighted_own_valid",
@@ -120,8 +123,8 @@
     }
   ],
   "output_sha256": {
-    "png": "4381d7694822d41d9d4f06c48e8a3d5812c695382a98ffbc1d352349ec8f3d15",
-    "svg": "5258dda86a29fa53711a72217eadc06c7555b4d181214737971495f62f35f46f",
-    "pdf": "2a14c9fb13e9ff42ad06717ca86ab36a582136a8745af79554c1977ecfe39a09"
+    "png": "6d3ba5220e782d02c87bdbacd133438de283f698415bf601e2038421e58c9d86",
+    "svg": "e1728f612317a41e6b2f77ab421517b6854dc41a416d4d898697e04f42eba895",
+    "pdf": "8ded262bd911d1eff3574db39f17458da364117c6125eda077e424e4c8c39aa2"
   }
 }
