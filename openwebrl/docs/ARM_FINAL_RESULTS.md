@@ -990,6 +990,8 @@ Its conservative all-attempt model total was $353.582380 ($348.649556 known usag
 
 *Same data, encoding and frontier rule as above, one row per benchmark (valid-only success, three runs pooled; cost from run 1).* [PDF](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.pdf) · [SVG](arm_results/rl_integration/selection-recipe3-vs-cost-per-benchmark-20261104.svg) · [plot script](arm_results/rl_integration/selection-recipe3-vs-cost-20261104.py) (renders all four figures)
 
+All four Recipe 3 cost views use a shared legend below the panels, with Albert Sans text and full-width plotting areas. The earlier six-panel actor/head comparison uses the same bottom-legend placement.
+
 **SFT actors only** (same plots without the RL 4B and RL 8B checkpoints; frontiers recomputed over the remaining points):
 
 ![Recipe 3 K = 3 selectors with SFT actors only: 3-benchmark mean valid-only success vs actor + selector parameters, PFLOP per episode and model time per episode](arm_results/rl_integration/selection-recipe3-vs-cost-sft-actors-20261104.png)

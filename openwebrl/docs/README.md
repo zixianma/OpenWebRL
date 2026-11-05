@@ -43,7 +43,7 @@
 
 [High-effort GPT tradeoffs: Sol single and Luna single/N3/N5, all Terra-judged; OM2W on two harnesses plus WebVoyager and DeepShop BrowserCode, with valid-task success, cost and latency](ARM_FINAL_RESULTS.md#shared-terra-high-three-benchmarks-20261031).
 
-[API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Selection-head comparisons: compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
+[API performance versus cost, latency and browser steps: equal averages across three benchmarks; compact figures with PDF/SVG exports](ARM_FINAL_RESULTS.md#performance-versus-cost-and-latency). [Actor + ADM cost comparisons: bottom legends, compact six-panel figure and paper PDF](ARM_FINAL_RESULTS.md#final-selection-head-ablations-20261021).
 
 [OM2W-only BrowserCode versus native CUAWright: 300 attempted tasks per cell, valid-only success with explicit valid denominators and metric coverage](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 

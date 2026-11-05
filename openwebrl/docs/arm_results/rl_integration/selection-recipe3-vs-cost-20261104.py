@@ -82,13 +82,15 @@ def panel(ax, bench, k, methods):
         ax.set_xticks(*([[4.44, 8.88, 13.2], ["4.44", "8.88", "13.2"]] if wide else [[4.44, 8.88], ["4.44", "8.88"]]))
 
 
-def legend(fig, axes, x0):
+def legend(fig, axes, *, sft_only):
     handles, labels = axes.flat[0].get_legend_handles_labels()
     handles.append(Line2D([], [], linestyle="--", color=FRONTIER, linewidth=0.95, marker="o", markerfacecolor="white",
                           markeredgecolor=FRONTIER, markeredgewidth=0.6, markersize=4.4))
     labels.append("Observed frontier")
-    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(x0, 0.5), frameon=False, fontsize=6.6,
-               handletextpad=0.35, labelspacing=0.45, borderaxespad=0)
+    return fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.54, 0.01),
+                      ncol=4 if sft_only else 3, frameon=False, fontsize=6.6,
+                      handlelength=1.5, handletextpad=0.35, columnspacing=1.2,
+                      labelspacing=0.45, borderaxespad=0)
 
 
 def render(benches, name, height, methods=methods):
@@ -102,19 +104,39 @@ def render(benches, name, height, methods=methods):
     for i, (ax_row, bench) in enumerate(zip(axes, benches)):
         for ax, (k, xlabel) in zip(ax_row, cols):
             panel(ax, bench, k, methods)
-            if compact_sft_mean:
-                for collection in ax.collections:
-                    collection.set_clip_on(False)
+            # Keep frontier rings whole at the edge of short panels.
+            for collection in ax.collections:
+                collection.set_clip_on(False)
             if i == 0:
                 title = {"params": "System parameters (B)", "seconds": "Model latency (s)"}.get(k, xlabel) if compact_sft_mean else xlabel
                 ax.set_title(title, fontsize=7.5, pad=4)
         ax_row[0].set_ylabel("Valid-only\nsuccess (%)" if compact_sft_mean else
                              (f"{NAMES[bench]}\nvalid-only (%)" if len(benches) > 1 else f"{NAMES[bench]}\nvalid-only success (%)"))
-    legend(fig, axes, 0.80)
-    fig.subplots_adjust(left=0.085, right=0.785, bottom=0.08 if len(benches) > 1 else 0.14,
-                        top=0.93 if len(benches) > 1 else 0.85, hspace=0.32, wspace=0.17)
-    if compact_sft_mean:
-        fig.subplots_adjust(bottom=0.19, top=0.80)
+    bottom_legend = legend(fig, axes, sft_only=all(not m[0].startswith("rl") for m in methods))
+    fig.canvas.draw()
+    # Reserve the measured legend height plus room for ticks and a clear gap.
+    legend_height = bottom_legend.get_window_extent(fig.canvas.get_renderer()).height / fig.dpi
+    fig.subplots_adjust(left=0.085, right=0.99,
+                        bottom=(legend_height + 0.22) / height,
+                        top=1 - 0.18 / height, hspace=0.32, wspace=0.17)
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    legend_bounds = bottom_legend.get_window_extent(renderer)
+    assert fig.bbox.contains(*legend_bounds.p0) and fig.bbox.contains(*legend_bounds.p1)
+    for ax in axes.flat:
+        assert not legend_bounds.overlaps(ax.get_tightbbox(renderer)), "Legend overlaps panel labels"
+    labels = [bottom_legend.get_title(), *bottom_legend.texts]
+    for ax in axes.flat:
+        labels.extend([ax.title, ax.xaxis.label, ax.yaxis.label, *ax.texts])
+        for axis, limits in ((ax.xaxis, ax.get_xlim()), (ax.yaxis, ax.get_ylim())):
+            # Locators retain off-range tick objects which are never drawn.
+            for tick in axis.get_major_ticks() + axis.get_minor_ticks():
+                if min(limits) <= tick.get_loc() <= max(limits):
+                    labels.extend([tick.label1, tick.label2])
+    for label in labels:
+        if label.get_visible() and label.get_text():
+            bounds = label.get_window_extent(renderer)
+            assert fig.bbox.contains(*bounds.p0) and fig.bbox.contains(*bounds.p1), label.get_text()
     for ext in ("png", "svg", "pdf"):
         path = HERE / f"{name}.{ext}"
         fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)

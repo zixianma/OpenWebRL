@@ -99,10 +99,10 @@ handles, labels = axes[1, 0].get_legend_handles_labels()
 short_labels = ["SFT 4B", "SFT 8B", "Piotr, N = 5", "Piotr, N = 3",
                 "Head: Piotr, N = 5", "Head: Piotr, N = 3", "Pointwise: Piotr, N = 3",
                 "Head: outcome", "Head: K = 3", "Head: K = 1", "Head: pre-execution"]
-fig.legend(handles, short_labels, loc="upper center", ncol=4, frameon=False,
-           bbox_to_anchor=(0.52, 1.005), fontsize=7,
+fig.legend(handles, short_labels, loc="lower center", ncol=4, frameon=False,
+           bbox_to_anchor=(0.52, 0.005), fontsize=7,
            handletextpad=0.35, columnspacing=1.2, labelspacing=0.5)
-fig.subplots_adjust(left=0.095, right=0.985, bottom=0.12, top=0.79, hspace=0.22, wspace=0.15)
+fig.subplots_adjust(left=0.095, right=0.985, bottom=0.30, top=0.97, hspace=0.22, wspace=0.15)
 for ext in ("png", "svg", "pdf"):
     path = HERE / f"selection-head-labels-vs-cost-20261021.{ext}"
     fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.025)
