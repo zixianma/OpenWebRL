@@ -5,9 +5,10 @@
     "hollow": "30-decision limit",
     "filled": "60/120-decision limit",
     "highlight": "parallel5_select_high_60steps",
-    "highlight_size_points_squared": 54,
+    "highlight_size_points_squared": 27,
     "baseline_size_points_squared": 27,
     "highlight_label": "N=5, 60 steps",
+    "baseline_definition": "Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
     "colors": "Original colors retained; no new halo"
   },
   "source_sha256": {
@@ -16,7 +17,7 @@
     "plot_browsercode_pareto_previews.py": "5d7c81a12cbf1128789dba31f8df4a1b9f0872163f9aa75b4dad11be39a4c77b",
     "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
-  "renderer_sha256": "784614f43012276b3ea33a8928e0b248e64e73f4b5891aeecfd96e50866a2f31",
+  "renderer_sha256": "361928f8b0d392d9cf14661a4409619a6dd88a39b022dfc7ea66bb861a073a83",
   "frontier": [
     {
       "population": "weighted_own_valid",
@@ -119,8 +120,8 @@
     }
   ],
   "output_sha256": {
-    "png": "bd2281ef20968e0228b46688de2ac85dda97cf12f6e67d620f90743769708da9",
-    "svg": "3ae9abb670d7831996e2b9cc0887257a1a89fa4c3312c2c2a09cb37fc20b7eae",
-    "pdf": "8b0668d1ce0397c3f3397fc2a1aded6b74e61cb4cd5c29022543dacea64a89f9"
+    "png": "4381d7694822d41d9d4f06c48e8a3d5812c695382a98ffbc1d352349ec8f3d15",
+    "svg": "5258dda86a29fa53711a72217eadc06c7555b4d181214737971495f62f35f46f",
+    "pdf": "2a14c9fb13e9ff42ad06717ca86ab36a582136a8745af79554c1977ecfe39a09"
   }
 }

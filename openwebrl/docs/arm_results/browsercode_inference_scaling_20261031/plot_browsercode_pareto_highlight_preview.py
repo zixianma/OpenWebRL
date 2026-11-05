@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Separate weighted Pareto preview: hollow 30-step, filled 60/120-step markers.
 
-Enlarges and directly labels N5/60; preserves all input coordinates, axes, frontier
+Uses standard-size dark-red filled markers and directly labels N5/60; preserves all input coordinates, axes, frontier
 curves and published original figures. No model, browser or experiment calls.
 """
 import importlib.util
@@ -21,7 +21,7 @@ BASE = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(BASE)
 LONG = {"luna_single_high_60steps", "luna_single_high_120steps", "parallel5_select_high_60steps", BASE.SOL60_METHOD}
 FOCUS = "parallel5_select_high_60steps"
-SIZE = 54
+SIZE = 27
 
 
 def build():
@@ -43,7 +43,7 @@ def build():
             if method == FOCUS:
                 collection.set_sizes([SIZE])
                 collection.set_zorder(5)
-                collection.set_linewidths([1.1])
+                collection.set_linewidths([.9])
                 offset, align = ((8, 8), "left") if j == 1 else ((-7, 8), "right")
                 ax.annotate("N=5, 60 steps", expected, xytext=offset,
                             textcoords="offset points", color=color, fontsize=7,
@@ -55,9 +55,8 @@ def build():
             method = label_to_method[text.get_text()]
             color = BASE.SCALING.STYLES[method][2]
             line.set_markerfacecolor(color if method in LONG else "white")
-            if method == FOCUS:
-                line.set_markersize(np.sqrt(SIZE))
-                line.set_markeredgewidth(1.1)
+    for text in fig.texts:
+        text.set_text(text.get_text().replace("Luna defaults:", "Luna baseline:"))
     return fig, frontier_report
 
 
@@ -69,6 +68,7 @@ def main():
         styles=dict(hollow="30-decision limit", filled="60/120-decision limit",
                     highlight=FOCUS, highlight_size_points_squared=SIZE,
                     baseline_size_points_squared=27, highlight_label="N=5, 60 steps",
+                    baseline_definition="Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
                     colors="Original colors retained; no new halo"),
         source_sha256={name: BASE.sha(HERE / name) for name in (
             "aggregate.json", "browsercode_scaling_weighted_average.json",

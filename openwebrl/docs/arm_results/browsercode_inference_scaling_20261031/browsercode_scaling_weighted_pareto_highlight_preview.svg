@@ -459,20 +459,20 @@ z
    </g>
    <g id="PathCollection_13">
     <defs>
-     <path id="m5b178eb8f0" d="M 0 3.674235
-C 0.974418 3.674235 1.909058 3.287094 2.598076 2.598076
-C 3.287094 1.909058 3.674235 0.974418 3.674235 0
-C 3.674235 -0.974418 3.287094 -1.909058 2.598076 -2.598076
-C 1.909058 -3.287094 0.974418 -3.674235 0 -3.674235
-C -0.974418 -3.674235 -1.909058 -3.287094 -2.598076 -2.598076
-C -3.287094 -1.909058 -3.674235 -0.974418 -3.674235 0
-C -3.674235 0.974418 -3.287094 1.909058 -2.598076 2.598076
-C -1.909058 3.287094 -0.974418 3.674235 0 3.674235
+     <path id="ma9adf7b480" d="M 0 2.598076
+C 0.689018 2.598076 1.349908 2.324327 1.837117 1.837117
+C 2.324327 1.349908 2.598076 0.689018 2.598076 0
+C 2.598076 -0.689018 2.324327 -1.349908 1.837117 -1.837117
+C 1.349908 -2.324327 0.689018 -2.598076 0 -2.598076
+C -0.689018 -2.598076 -1.349908 -2.324327 -1.837117 -1.837117
+C -2.324327 -1.349908 -2.598076 -0.689018 -2.598076 0
+C -2.598076 0.689018 -2.324327 1.349908 -1.837117 1.837117
+C -1.349908 2.324327 -0.689018 2.598076 0 2.598076
 z
-" style="stroke: #a50f15; stroke-width: 1.1"/>
+" style="stroke: #a50f15; stroke-width: 0.9"/>
     </defs>
     <g clip-path="url(#p89f6339227)">
-     <use xlink:href="#m5b178eb8f0" x="108.111131" y="25.243214" style="fill: #a50f15; stroke: #a50f15; stroke-width: 1.1"/>
+     <use xlink:href="#ma9adf7b480" x="108.111131" y="25.243214" style="fill: #a50f15; stroke: #a50f15; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_9">
@@ -644,7 +644,7 @@ L 329.466162 104.94
    </g>
    <g id="PathCollection_26">
     <g clip-path="url(#p0b7c7da1af)">
-     <use xlink:href="#m5b178eb8f0" x="211.403853" y="25.243214" style="fill: #a50f15; stroke: #a50f15; stroke-width: 1.1"/>
+     <use xlink:href="#ma9adf7b480" x="211.403853" y="25.243214" style="fill: #a50f15; stroke: #a50f15; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_13">
@@ -846,7 +846,7 @@ L 496.44 104.94
    </g>
    <g id="PathCollection_39">
     <g clip-path="url(#pf4193b8432)">
-     <use xlink:href="#m5b178eb8f0" x="474.298388" y="25.243214" style="fill: #a50f15; stroke: #a50f15; stroke-width: 1.1"/>
+     <use xlink:href="#ma9adf7b480" x="474.298388" y="25.243214" style="fill: #a50f15; stroke: #a50f15; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_18">
@@ -854,7 +854,7 @@ L 496.44 104.94
    </g>
   </g>
   <g id="text_19">
-   <text style="fill: #555555; font: 6.2px 'DejaVu Sans'; text-anchor: start" x="161.28" y="184.549794" transform="rotate(-0 161.28 184.549794)">Luna defaults: high effort · max tokens = 12,288 · 30-step limit. N = candidates.</text>
+   <text style="fill: #555555; font: 6.2px 'DejaVu Sans'; text-anchor: start" x="161.28" y="184.549794" transform="rotate(-0 161.28 184.549794)">Luna baseline: high effort · max tokens = 12,288 · 30-step limit. N = candidates.</text>
   </g>
   <g id="legend_1">
    <g id="text_20">
@@ -1087,8 +1087,21 @@ z
     <text style="font: 6.5px 'DejaVu Sans'; text-anchor: start" x="396.986016" y="147.176234" transform="rotate(-0 396.986016 147.176234)">N=5 · 30 steps</text>
    </g>
    <g id="line2d_57">
+    <defs>
+     <path id="m31e5448066" d="M 0 2.4
+C 0.636487 2.4 1.246992 2.147121 1.697056 1.697056
+C 2.147121 1.246992 2.4 0.636487 2.4 0
+C 2.4 -0.636487 2.147121 -1.246992 1.697056 -1.697056
+C 1.246992 -2.147121 0.636487 -2.4 0 -2.4
+C -0.636487 -2.4 -1.246992 -2.147121 -1.697056 -1.697056
+C -2.147121 -1.246992 -2.4 -0.636487 -2.4 0
+C -2.4 0.636487 -2.147121 1.246992 -1.697056 1.697056
+C -1.246992 2.147121 -0.636487 2.4 0 2.4
+z
+" style="stroke: #a50f15; stroke-width: 0.9"/>
+    </defs>
     <g>
-     <use xlink:href="#m5b178eb8f0" x="391.786016" y="154.117016" style="fill: #a50f15; stroke: #a50f15; stroke-width: 1.1"/>
+     <use xlink:href="#m31e5448066" x="391.786016" y="154.117016" style="fill: #a50f15; stroke: #a50f15; stroke-width: 0.9"/>
     </g>
    </g>
    <g id="text_33">
