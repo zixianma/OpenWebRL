@@ -39,9 +39,9 @@ ROWS = [  # tick label, colour, source key, live key
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
-    ("Offline: held-out\nrollout success",
+    ("Offline: held-out rollout success",
      "offline", P["sft_sample"]),
-    ("Online: overall\nsuccess", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled):

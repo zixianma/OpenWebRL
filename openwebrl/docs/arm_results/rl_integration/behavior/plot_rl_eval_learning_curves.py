@@ -94,7 +94,7 @@ def render(data):
                          "xtick.labelsize": 7, "ytick.labelsize": 7,
                          "axes.spines.top": False, "axes.spines.right": False,
                          "svg.hashsalt": "rl-eval-learning-curves"})
-    fig, ax = plt.subplots(figsize=(3.35, 2.55))
+    fig, ax = plt.subplots(figsize=(3.35, 2.40))
     handles = []
     for method, reference in zip(data["methods"], RUNS):
         assert method["color"] == reference[3]
@@ -125,17 +125,14 @@ def render(data):
         ax.spines[side].set_color("#666666")
         ax.spines[side].set_linewidth(0.7)
     ax.tick_params(length=2.5, width=0.7, pad=2, color="#666666")
-    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.55, 0.05),
+    legend = fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.55, 0.005),
                         frameon=False, ncol=1, fontsize=7, handlelength=1.7,
                         labelspacing=0.35, handletextpad=0.5)
-    footer = fig.text(0.55, 0.015, "Trailing 3 evaluations · faint points: raw", ha="center",
-                      va="bottom", fontsize=6.4, color="#626972")
-    fig.subplots_adjust(left=0.16, right=0.98, top=0.96, bottom=0.37)
+    fig.subplots_adjust(left=0.16, right=0.98, top=0.96, bottom=0.34)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legend_box = legend.get_window_extent(renderer)
     assert not legend_box.overlaps(ax.get_tightbbox(renderer))
-    assert not legend_box.overlaps(footer.get_window_extent(renderer))
     for text in fig.findobj(match=matplotlib.text.Text):
         if text.get_visible() and text.get_text():
             box = text.get_window_extent(renderer)

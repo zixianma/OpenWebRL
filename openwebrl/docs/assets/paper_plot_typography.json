@@ -134,9 +134,9 @@
     "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-20261027.png": "11789d1488318b8f15ff5ee3cad8ac733576a1562679d72ce9f6d92f1544d36e",
     "openwebrl/docs/arm_results/rl_integration/selection-label-same-state-kfold-20261101.png": "833196762a49ae0d0f62c6eb6364606583118cefdc068343b5f2de93540d33aa",
     "openwebrl/docs/arm_results/rl_integration/selection-label-setups-20261027.png": "9b969cdf1ad2fe5e1d34f0a2e2382e67fcb4e215d5cb08b873a48139e6d3abc0",
-    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf": "23975048d0d5b8f5a4a97640c384e51851dbfc741121f9d12c8a1d3e9ab5be72",
-    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.png": "a3778266feec6ced64ec12015615938a3f00c54a24b4147e1983907dd0bdfd3e",
-    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.svg": "05004a53b2e093888e8a210a3568212f67cb5bdde1bc3427c5f7392d42783b2c",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf": "235b20abbdf57693cbe7f29a008813acc227a5e00d46389924fd322be1451420",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.png": "2497db9aac01e9495d707f25a3b7f0f3c47c7970d4e3bdf884688d595bbfaf19",
+    "openwebrl/docs/arm_results/rl_integration/selection-label-setups-kfold-20261101.svg": "acc9d1f3555d5412303b38b770266b3a4d7226ed42447edf1cc703308585b6a0",
     "openwebrl/docs/arm_results/rl_integration/selection-label-stages-20261027.png": "a2f8eac25b3a9aa2c2bd102e035fc1ccc5c783a157e9135d8d759e2725b757fb",
     "openwebrl/docs/arm_results/rl_integration/selection-label-stages-kfold-20261101.png": "8f4bb26561b94fd8e904df1238cbee6617145a535e68a6e0150426063a95b385",
     "openwebrl/docs/arm_results/rl_integration/selection-n3-om2w-vs-cost-20261021.png": "f68c0ef33d6630010fd560d584144afed9ab9b9b76a764cc05118dc2ce7304ef",
@@ -181,9 +181,9 @@
     "openwebrl/docs/rl_results/rl_repetition_success_robustness.pdf": "bbb2d121339828998982d4b576fa828dc035b843f728f7d389c8ca0fe6d62f07",
     "openwebrl/docs/rl_results/rl_repetition_success_robustness.png": "41a1bc8081b600ad7e444d64af3d282575e6af317b75d38abb74cda436a4efcb",
     "openwebrl/docs/rl_results/rl_repetition_success_robustness.svg": "f8325de5266b4167e04ec03c211e7809434b75720761175617e23846739734db",
-    "openwebrl/docs/rl_results/rl_eval_learning_curves.png": "58b7cd862e961a58295b9e7191c6a4cb6d6f156ecd0fad2c07619a2e79dbe043",
-    "openwebrl/docs/rl_results/rl_eval_learning_curves.pdf": "9bd188745b70d897cede1c52d209bf759d188ae6ece4b880d3ba570407e3b996",
-    "openwebrl/docs/rl_results/rl_eval_learning_curves.svg": "4b14ad7e2a7283c26bb634abcc67c932d63282a72c858fffe2555135550fff06"
+    "openwebrl/docs/rl_results/rl_eval_learning_curves.png": "137e9de90e5b2ee863fe59cf273376b152fd5ecc8e8e6534cd0768873a7e358a",
+    "openwebrl/docs/rl_results/rl_eval_learning_curves.pdf": "36a8d1fc8128e99861d179dae2cc9837c358126fdf2069c61f2a44ea1b81a0e9",
+    "openwebrl/docs/rl_results/rl_eval_learning_curves.svg": "44348123b85f8ac70752182530062333f3f607d83bf261c1da23434bc7853af8"
   },
   "scope": "Current paper figures with available frozen aggregate inputs; all Matplotlib renderer defaults updated. Historical plot snapshots not regenerated unless included here.",
   "preservation": "Scientific aggregate JSON and metric inputs unchanged. Legacy render sidecars refreshed where supplied."
