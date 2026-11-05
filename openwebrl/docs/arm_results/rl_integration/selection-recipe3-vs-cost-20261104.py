@@ -6,7 +6,7 @@ selector parameters, PFLOP per episode and model time per episode. Renders two f
 Observed Pareto frontiers as in the API plots (plot_browsercode_pareto_previews.py): dashed straight segments join the
 observed nondominated points of each panel (lower x and higher success; dominance needs at least one strict gain), and thin
 rings mark frontier points. No smoothing or statistical superiority is implied. Colors follow the API plots (Okabe-Ito blue /
-vermilion). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
+vermilion). Pre-execution-label conditions are omitted from the plots (still in the JSON). Data: selection-recipe3-vs-cost-20261104.json (selection-recipe3-vs-cost-20261104-analysis.py)."""
 import json
 import os
 from pathlib import Path
@@ -27,15 +27,10 @@ methods = [  # key, legend label, params, color, marker, hollow
     ("rl4b", "RL 4B ²", SFT, "#4a4844", "^", False),
     ("rl8b", "RL 8B ³", 8.77e9, "#4a4844", "v", False),
     ("rl8b-lora-gpt55-k3", "RL 8B + LoRA: GPT-5.5 K = 3 ³", 8.77e9 + SFT, "#0072B2", "v", False),
-    ("rl8b-lora-gpt55-pre", "RL 8B + LoRA: GPT-5.5 pre ³", 8.77e9 + SFT, "#0072B2", "v", True),
     ("lora-gpt55-k3", "LoRA: GPT-5.5 K = 3 ¹", LORA, "#0072B2", "D", False),
     ("lora-luna-k3", "LoRA: Luna K = 3", LORA, "#D55E00", "D", False),
-    ("lora-gpt55-pre", "LoRA: GPT-5.5 pre ¹", LORA, "#0072B2", "D", True),
-    ("lora-luna-pre", "LoRA: Luna pre", LORA, "#D55E00", "D", True),
     ("head-gpt55-k3", "Head: GPT-5.5 K = 3", HEAD, "#0072B2", "o", False),
     ("head-luna-k3", "Head: Luna K = 3", HEAD, "#D55E00", "o", False),
-    ("head-gpt55-pre", "Head: GPT-5.5 pre", HEAD, "#0072B2", "o", True),
-    ("head-luna-pre", "Head: Luna pre", HEAD, "#D55E00", "o", True),
 ]
 BENCH = ("online_mind2web", "webvoyager", "deepshop")
 NAMES = {"mean": "3-benchmark mean", "online_mind2web": "OM2W", "webvoyager": "WebVoyager", "deepshop": "DeepShop"}
@@ -111,5 +106,5 @@ def render(benches, name, height):
 
 
 if __name__ == "__main__":
-    print(render(("mean",), "selection-recipe3-vs-cost-20261104", 2.25))
+    print(render(("mean",), "selection-recipe3-vs-cost-20261104", 1.9))
     render(BENCH, "selection-recipe3-vs-cost-per-benchmark-20261104", 3.9)
