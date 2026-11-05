@@ -55,6 +55,7 @@ Choose `--campaign` during setup. The entry point selects the matching model ada
 | `gpt-luna-single` | `luna_single_high` | 300 |
 | `gpt-crossbench` | `serial_high`, `parallel3_select_high`, `parallel5_select_high`, `luna_single_high` | 745 |
 | `sol-high60` | `sol_single_high60` | 1,045 (300 / 595 / 150) |
+| `sol-high120` | `sol_single_high120` | 1,045 (300 / 595 / 150) |
 
 `--limit` defaults to one task. For the full OM2W panel use `--limit 300`. For `gpt-crossbench`, use `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`; filtering precedes the limit. GPT OM2W's four methods span `gpt` and `gpt-luna-single`. Luna N5 medium/low applies that effort to both candidates and selector. The full historical `browsercode_*` campaign keys remain accepted.
 
@@ -77,6 +78,27 @@ python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 The run command is read-only until `--execute` is added. Use separate output directories and explicit caps for each full benchmark: `--benchmark online-mind2web --limit 300`, `--benchmark webvoyager --limit 595`, or `--benchmark deepshop --limit 150`. This campaign requires `--benchmark`; filtering occurs before task selection and the limit. The new runtime reuses the public campaign's globally unique task IDs and retains native task/source IDs from the pinned benchmark rosters. Task instructions, start URLs and source order match the native Sol evaluation exactly. Setup preserves the original sources and binds generated model, worker, prompt, judge and task files to an explicit protocol receipt; it makes no provider or browser calls.
 
 The completed cohort has **1,045 recorded outcomes, 978 valid and 67 invalid**, with no unattempted tasks. Invalid outcomes remain separate from valid failures. [Per-benchmark rates and efficiency](ARM_FINAL_RESULTS.md#browsercode-sol-high60) use Sol's own valid tasks and are separate from the historical common-valid scaling plots; matched comparisons require a new intersection.
+
+
+<a id="sol-high120"></a>
+### Prospective Sol high single at 120 decisions
+
+`sol-high120` raises both the enforced and advertised decision limit to **120**. It retains GPT-6 Sol high, the 12,288-output-token ceiling, one candidate, no selector, the 900-second actor deadline and the same Terra judging protocol. Its canonical 1,045-task roster is identical to Sol/60; benchmark outputs remain separate. This is a fresh experiment recipe, with no completed results implied.
+
+```bash
+python openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/sol-high-120 --campaign sol-high120 \
+  --dependencies /path/to/dependencies.json
+python openwebrl/api_experiments/reproduce/browsercode.py check \
+  --workspace /tmp/sol-high-120
+python openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/sol-high-120 --arm sol_single_high120 \
+  --benchmark online-mind2web --limit 1 --output /tmp/sol-high-120-om-01 \
+  --model-usd 1 --judge-usd 0.10
+```
+
+The final command is a zero-call dry plan; add `--execute` only for a separately budgeted run. Raising the step ceiling does not extend the actor deadline. Existing Sol/60 outcomes, invalids and source inventories remain unchanged.
+
 
 <a id="luna-xhigh-output-limits"></a>
 ### Luna single reasoning and output limits

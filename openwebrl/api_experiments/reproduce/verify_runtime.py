@@ -26,8 +26,11 @@ def verify(runtime, *, browser_preflight=False):
     spec.loader.exec_module(imports)
     worker, environments = imports.load(runtime)
     sol = None
-    if plan.get('sol_single60_protocol') or config.get('sol_single60_protocol') or (runtime/'sol-single60-experiment.json').exists():
-        spec = importlib.util.spec_from_file_location('sol_single60',Path(__file__).with_name('sol_single60.py'))
+    sol_horizons = [n for n in (60, 120) if plan.get('sol_single'+str(n)+'_protocol') or config.get('sol_single'+str(n)+'_protocol') or (runtime/('sol-single'+str(n)+'-experiment.json')).exists()]
+    if len(sol_horizons) > 1:
+        raise ValueError('Sol horizon protocol markers cannot be combined')
+    if sol_horizons:
+        spec = importlib.util.spec_from_file_location('sol_single'+str(sol_horizons[0]),Path(__file__).with_name('sol_single'+str(sol_horizons[0])+'.py'))
         sol = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(sol)
         sol.validate(runtime)
