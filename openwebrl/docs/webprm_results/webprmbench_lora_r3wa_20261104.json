@@ -1,0 +1,201 @@
+{
+ "date": "2026-11-04",
+ "model": "Our 4B LoRA (Piotr arm_lora recipe), WebArbiter SFT pairs + Recipe 3 GPT-5.5 K=3",
+ "training_examples": {
+  "recipe3_gpt55_k3_examples": 32974,
+  "recipe3_panels": 18786,
+  "webarbiter": 17356,
+  "total": 50330
+ },
+ "jobs": {
+  "train": "418401 (4 H200, 6h59m)",
+  "score": "418402 (1 H200, 25 min)"
+ },
+ "scoring": "selection-prompt next-token P(\"1\") vs P(\"2\"); ties count as errors",
+ "passes": {
+  "WebPRMBench": {
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 112,
+     "pair_acc": 0.9333333333333333,
+     "states_total": 30,
+     "states_ok": 23,
+     "state_acc": 0.7666666666666667
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1621,
+     "pair_acc": 0.9718225419664268,
+     "states_total": 417,
+     "states_ok": 379,
+     "state_acc": 0.9088729016786571
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 548,
+     "pair_acc": 0.9647887323943662,
+     "states_total": 142,
+     "states_ok": 126,
+     "state_acc": 0.8873239436619719
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 577,
+     "pair_acc": 0.9746621621621622,
+     "states_total": 148,
+     "states_ok": 135,
+     "state_acc": 0.9121621621621622
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 711,
+     "pair_acc": 0.8843283582089553,
+     "states_total": 201,
+     "states_ok": 149,
+     "state_acc": 0.7412935323383084
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 685,
+     "pair_acc": 0.8077830188679245,
+     "states_total": 212,
+     "states_ok": 119,
+     "state_acc": 0.5613207547169812
+    }
+   },
+   "pairs_ok": 4254,
+   "states_ok": 931,
+   "predicted_1": 2278,
+   "predicted_2": 2308,
+   "unparseable": 14,
+   "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666"
+  },
+  "WebPRMBench-swapped": {
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 110,
+     "pair_acc": 0.9166666666666666,
+     "states_total": 30,
+     "states_ok": 22,
+     "state_acc": 0.7333333333333333
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1623,
+     "pair_acc": 0.9730215827338129,
+     "states_total": 417,
+     "states_ok": 377,
+     "state_acc": 0.9040767386091128
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 552,
+     "pair_acc": 0.971830985915493,
+     "states_total": 142,
+     "states_ok": 130,
+     "state_acc": 0.9154929577464789
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 579,
+     "pair_acc": 0.9780405405405406,
+     "states_total": 148,
+     "states_ok": 136,
+     "state_acc": 0.918918918918919
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 715,
+     "pair_acc": 0.8893034825870647,
+     "states_total": 201,
+     "states_ok": 148,
+     "state_acc": 0.736318407960199
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 714,
+     "pair_acc": 0.8419811320754716,
+     "states_total": 212,
+     "states_ok": 133,
+     "state_acc": 0.6273584905660378
+    }
+   },
+   "pairs_ok": 4293,
+   "states_ok": 946,
+   "predicted_1": 2441,
+   "predicted_2": 2148,
+   "unparseable": 11,
+   "data_sha256": "2a0cee08a47174bf2df959710b54b41affb661cf9479de9ba24d008c42b5bb7a",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666"
+  },
+  "WebPRMBench-actiononly": {
+   "per_source": {
+    "assistantbench": {
+     "pairs_total": 120,
+     "pairs_ok": 98,
+     "pair_acc": 0.8166666666666667,
+     "states_total": 30,
+     "states_ok": 17,
+     "state_acc": 0.5666666666666667
+    },
+    "mind2web_test_domain": {
+     "pairs_total": 1668,
+     "pairs_ok": 1094,
+     "pair_acc": 0.6558752997601919,
+     "states_total": 417,
+     "states_ok": 158,
+     "state_acc": 0.37889688249400477
+    },
+    "mind2web_test_task": {
+     "pairs_total": 568,
+     "pairs_ok": 391,
+     "pair_acc": 0.6883802816901409,
+     "states_total": 142,
+     "states_ok": 60,
+     "state_acc": 0.4225352112676056
+    },
+    "mind2web_test_website": {
+     "pairs_total": 592,
+     "pairs_ok": 371,
+     "pair_acc": 0.6266891891891891,
+     "states_total": 148,
+     "states_ok": 46,
+     "state_acc": 0.3108108108108108
+    },
+    "webarena": {
+     "pairs_total": 804,
+     "pairs_ok": 644,
+     "pair_acc": 0.8009950248756219,
+     "states_total": 201,
+     "states_ok": 130,
+     "state_acc": 0.6467661691542289
+    },
+    "workarena": {
+     "pairs_total": 848,
+     "pairs_ok": 609,
+     "pair_acc": 0.7181603773584906,
+     "states_total": 212,
+     "states_ok": 99,
+     "state_acc": 0.4669811320754717
+    }
+   },
+   "pairs_ok": 3207,
+   "states_ok": 510,
+   "predicted_1": 2279,
+   "predicted_2": 2232,
+   "unparseable": 89,
+   "data_sha256": "9cc5a462fcf9b6c5b45cbe76425111dd47105b5cabae240feceba9b6571e8cc3",
+   "evaluator_sha256": "96426a7ea96406b100869bd1a1ed138e086bb5ef81ac21f5640712c204981666"
+  }
+ },
+ "webarbiter_heldout_pairs": {
+  "examples": 1876,
+  "acc": 0.9989339019189766,
+  "picked_1": 0.4989339019189765,
+  "pairs": 938,
+  "pairs_both_orders_right": 0.997867803837953
+ }
+}
