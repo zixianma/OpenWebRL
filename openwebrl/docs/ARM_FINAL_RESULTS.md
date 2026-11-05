@@ -1422,3 +1422,11 @@ Recipes as [defined above](#final-selection-sameday3-20261030). All heads were t
 - **Response cap.** At 4,096 tokens 0–11 episodes per benchmark end because a response ran out (1,024 tokens cut off 258 of 1,045 RL-alone episodes, which made the earlier run invalid). Given a cut-off candidate, SelectionARM never picks it (0 of 59 steps); the heads do at 0–11 steps per benchmark, most often the 2.6K head on RL-actor features (17 of 73 steps on Online-Mind2Web and WebVoyager).
 - **October 31 run notes.** On Online-Mind2Web the frozen SFT-4B scorer of the Recipe 1 head failed with a cuDNN attention error on 184 episodes (persistently after about an hour); those tasks were rerun the same day, while 26 tasks whose site failed to load kept their single original attempt, as for every other run. The 1.3K head on RL-actor features stopped at the 4 h limit on WebVoyager with 581 of 595 tasks and was resumed for the other 14.
 - [Details and counts](ARM_SELECTION_HEAD.md#selection-head-rl-actor-20261030) · [Evidence](arm_results/rl_integration/selection-rlactor-4096-20261030.json) · Scripts: [per-run rates](arm_results/rl_integration/selection-rlactor-4096-20261030-heads.py), [paired](arm_results/rl_integration/selection-rlactor-4096-20261030-paired.py)
+
+
+<a id="rl-smoothed-eval-learning-curves"></a>
+## RL evaluation through training
+
+![Smoothed valid-only OM2W success for outcome-only 48-group and 56-group RL runs and Outcome plus ADM rewards from Gate B, using the same gray and purple colors as the repetition figure](rl_results/rl_eval_learning_curves.png)
+
+*Full-300 OM2W, local browser, GPT-4.1/action_history, actor T0. Solid lines pool success and valid counts across the latest three evaluations; faint points show raw valid-only success. Initial windows use one or two observations. One training lineage per method; collection dates, valid populations and optimizer work differ. These historical single-checkpoint cohorts are separate from the later iteration-90 three-repeat comparison.* [PDF](rl_results/rl_eval_learning_curves.pdf) · [SVG](rl_results/rl_eval_learning_curves.svg) · [Definition, coverage and sources](RL_EVALUATION.md#rl-smoothed-eval-learning-curves).

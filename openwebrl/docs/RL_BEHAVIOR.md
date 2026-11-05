@@ -244,6 +244,8 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
   - One outcome-only run (G8) reaches a similarly low loop rate.
   - The 40M+16F variant does not show the effect.
 
+[Smoothed evaluation curves for these three training lineages](RL_EVALUATION.md#rl-smoothed-eval-learning-curves) use their historical full-300 checkpoint evaluations; the curves do not reuse the matched iteration-90 repeats below.
+
 <a id="rl-repetition-incidence-paper"></a>
 ### Success versus repetition and threshold robustness
 

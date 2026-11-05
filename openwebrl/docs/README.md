@@ -47,6 +47,8 @@
 
 [OM2W-only BrowserCode versus native CUAWright: 300 attempted tasks per cell, valid-only success with explicit valid denominators and metric coverage](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
+[Smoothed RL evaluation curves: outcome-only 48/56 groups and Outcome + ADM rewards, with raw points and a trailing three-evaluation smoother](RL_EVALUATION.md#rl-smoothed-eval-learning-curves) · [PDF](rl_results/rl_eval_learning_curves.pdf).
+
 [Valid-only success versus repetition and threshold robustness (K = 2–5): compact 3.35-inch-wide iteration-90 paper figure, with vertical 95% task-bootstrap intervals and Outcome + ADM rewards in purple](RL_BEHAVIOR.md#rl-repetition-incidence-paper) · [Paper PDF](rl_results/rl_repetition_success_robustness.pdf) · [Success counts and paired differences](RL_BEHAVIOR.md#rl-repetition-success-preview). [Earlier failure-category metric and precise definition](RL_BEHAVIOR.md#rl-repeated-action-failure-metric).
 
 [Teacher and student ADM: compact Pre-exec, Post-exec, H = 3 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
