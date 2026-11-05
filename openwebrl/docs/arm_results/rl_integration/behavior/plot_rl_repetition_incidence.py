@@ -24,8 +24,8 @@ AGGREGATE = HERE / "rl-repetition-incidence-20261104.json"
 OUTPUT = DOCS / "rl_results/rl_repetition_incidence"
 THRESHOLDS = (3, 4, 5)
 RUNS = (
-    ("outcome48", "Outcome-only (48 groups)", "Outcome-only\n48 groups", "#9A9A9A", "s"),
-    ("outcome56", "Outcome-only (56 groups)", "Outcome-only\n56 groups", "#555555", "D"),
+    ("outcome48", "Outcome-only (48 groups)", "Outcome-only\n48 groups", "#9A9A9A", "o"),
+    ("outcome56", "Outcome-only (56 groups)", "Outcome-only\n56 groups", "#555555", "o"),
     ("gate-b", "Outcome + ADM rewards (ours)", "Outcome + ADM\nrewards (ours)", "#6250BE", "o"),
 )
 

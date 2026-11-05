@@ -346,17 +346,22 @@ L 380.692732 80.832067
 L 468.837874 100.628533
 " clip-path="url(#p5faa4080a4)" style="fill: none; stroke: #9a9a9a; stroke-width: 1.5; stroke-linecap: square"/>
     <defs>
-     <path id="m78b09033a8" d="M -2.25 2.25
-L 2.25 2.25
-L 2.25 -2.25
-L -2.25 -2.25
+     <path id="mf3b73aa8b9" d="M 0 2.25
+C 0.596707 2.25 1.169055 2.012926 1.59099 1.59099
+C 2.012926 1.169055 2.25 0.596707 2.25 0
+C 2.25 -0.596707 2.012926 -1.169055 1.59099 -1.59099
+C 1.169055 -2.012926 0.596707 -2.25 0 -2.25
+C -0.596707 -2.25 -1.169055 -2.012926 -1.59099 -1.59099
+C -2.012926 -1.169055 -2.25 -0.596707 -2.25 0
+C -2.25 0.596707 -2.012926 1.169055 -1.59099 1.59099
+C -1.169055 2.012926 -0.596707 2.25 0 2.25
 z
-" style="stroke: #9a9a9a; stroke-linejoin: miter"/>
+" style="stroke: #9a9a9a"/>
     </defs>
     <g clip-path="url(#p5faa4080a4)">
-     <use xlink:href="#m78b09033a8" x="292.54759" y="48.244039" style="fill: #9a9a9a; stroke: #9a9a9a; stroke-linejoin: miter"/>
-     <use xlink:href="#m78b09033a8" x="380.692732" y="80.832067" style="fill: #9a9a9a; stroke: #9a9a9a; stroke-linejoin: miter"/>
-     <use xlink:href="#m78b09033a8" x="468.837874" y="100.628533" style="fill: #9a9a9a; stroke: #9a9a9a; stroke-linejoin: miter"/>
+     <use xlink:href="#mf3b73aa8b9" x="292.54759" y="48.244039" style="fill: #9a9a9a; stroke: #9a9a9a"/>
+     <use xlink:href="#mf3b73aa8b9" x="380.692732" y="80.832067" style="fill: #9a9a9a; stroke: #9a9a9a"/>
+     <use xlink:href="#mf3b73aa8b9" x="468.837874" y="100.628533" style="fill: #9a9a9a; stroke: #9a9a9a"/>
     </g>
    </g>
    <g id="line2d_20">
@@ -365,17 +370,22 @@ L 380.692732 100.400542
 L 468.837874 116.042847
 " clip-path="url(#p5faa4080a4)" style="fill: none; stroke: #555555; stroke-width: 1.5; stroke-linecap: square"/>
     <defs>
-     <path id="mbb4e3dbef2" d="M -0 3.181981
-L 3.181981 0
-L 0 -3.181981
-L -3.181981 -0
+     <path id="mdb032e5e5a" d="M 0 2.25
+C 0.596707 2.25 1.169055 2.012926 1.59099 1.59099
+C 2.012926 1.169055 2.25 0.596707 2.25 0
+C 2.25 -0.596707 2.012926 -1.169055 1.59099 -1.59099
+C 1.169055 -2.012926 0.596707 -2.25 0 -2.25
+C -0.596707 -2.25 -1.169055 -2.012926 -1.59099 -1.59099
+C -2.012926 -1.169055 -2.25 -0.596707 -2.25 0
+C -2.25 0.596707 -2.012926 1.169055 -1.59099 1.59099
+C -1.169055 2.012926 -0.596707 2.25 0 2.25
 z
-" style="stroke: #555555; stroke-linejoin: miter"/>
+" style="stroke: #555555"/>
     </defs>
     <g clip-path="url(#p5faa4080a4)">
-     <use xlink:href="#mbb4e3dbef2" x="292.54759" y="72.796475" style="fill: #555555; stroke: #555555; stroke-linejoin: miter"/>
-     <use xlink:href="#mbb4e3dbef2" x="380.692732" y="100.400542" style="fill: #555555; stroke: #555555; stroke-linejoin: miter"/>
-     <use xlink:href="#mbb4e3dbef2" x="468.837874" y="116.042847" style="fill: #555555; stroke: #555555; stroke-linejoin: miter"/>
+     <use xlink:href="#mdb032e5e5a" x="292.54759" y="72.796475" style="fill: #555555; stroke: #555555"/>
+     <use xlink:href="#mdb032e5e5a" x="380.692732" y="100.400542" style="fill: #555555; stroke: #555555"/>
+     <use xlink:href="#mdb032e5e5a" x="468.837874" y="116.042847" style="fill: #555555; stroke: #555555"/>
     </g>
    </g>
    <g id="LineCollection_4">
@@ -443,7 +453,7 @@ L 50.488273 173.871266
 L 56.438273 173.871266
 " style="fill: none; stroke: #9a9a9a; stroke-width: 1.5; stroke-linecap: square"/>
     <g>
-     <use xlink:href="#m78b09033a8" x="50.488273" y="173.871266" style="fill: #9a9a9a; stroke: #9a9a9a; stroke-linejoin: miter"/>
+     <use xlink:href="#mf3b73aa8b9" x="50.488273" y="173.871266" style="fill: #9a9a9a; stroke: #9a9a9a"/>
     </g>
    </g>
    <g id="text_20">
@@ -455,7 +465,7 @@ L 189.651867 173.871266
 L 195.601867 173.871266
 " style="fill: none; stroke: #555555; stroke-width: 1.5; stroke-linecap: square"/>
     <g>
-     <use xlink:href="#mbb4e3dbef2" x="189.651867" y="173.871266" style="fill: #555555; stroke: #555555; stroke-linejoin: miter"/>
+     <use xlink:href="#mdb032e5e5a" x="189.651867" y="173.871266" style="fill: #555555; stroke: #555555"/>
     </g>
    </g>
    <g id="text_21">
