@@ -25,6 +25,7 @@ from plot_rl_repetition_incidence import RUNS
 OUTPUT = DOCS / "rl_results/rl_eval_learning_curves"
 AGGREGATE = OUTPUT.with_suffix(".json")
 WINDOW = 3
+DISPLAY_START, DISPLAY_END = 20, 90
 IDENTITIES = {"outcome48": ("outcome_only", "qcq7i4ug"),
               "outcome56": ("outcome56", "outcome-only-56groups-20261006"),
               "gate-b": ("gate_b", "arm-gate-b-309053")}
@@ -42,6 +43,10 @@ def smooth(points, window=WINDOW):
                            successes=numerator, valid=denominator,
                            window_iterations=[p["iteration"] for p in selected]))
     return result
+
+
+def display_points(points):
+    return [p for p in points if DISPLAY_START <= p["iteration"] <= DISPLAY_END]
 
 
 def refresh():
@@ -65,10 +70,12 @@ def refresh():
                                percent=100 * row["successes"] / row["valid"], source=name))
         assert [p["iteration"] for p in points] == sorted({p["iteration"] for p in points})
         methods.append(dict(id=key, label=label, color=color, training_lineage=lineage,
-                            points=points, smoothed=smooth(points)))
+                            points=points, smoothed=smooth(display_points(points))))
     data = dict(schema="rl-eval-learning-curves-v1", benchmark="Online-Mind2Web, full 300 tasks",
                 protocol=published["protocol"],
                 metric="100 * successes / valid episodes at each evaluated checkpoint; invalid episodes excluded",
+                display=dict(first_iteration=DISPLAY_START, last_iteration=DISPLAY_END,
+                             smoothing_population="Only evaluations in the displayed 20–90 interval; no pre-20 warmup"),
                 smoothing=dict(method="Trailing ratio of pooled success and valid counts", evaluations=WINDOW,
                                minimum_evaluations=1, location="Latest checkpoint in each window",
                                missing="Never imputed; no extrapolation before first or after last recorded evaluation",
@@ -82,6 +89,7 @@ def refresh():
 def render(data):
     assert data["schema"] == "rl-eval-learning-curves-v1"
     assert [m["id"] for m in data["methods"]] == [r[0] for r in RUNS]
+    assert (data["display"]["first_iteration"], data["display"]["last_iteration"]) == (DISPLAY_START, DISPLAY_END)
     plt.rcParams.update({"font.size": 7, "axes.labelsize": 7.5,
                          "xtick.labelsize": 7, "ytick.labelsize": 7,
                          "axes.spines.top": False, "axes.spines.right": False,
@@ -90,22 +98,26 @@ def render(data):
     handles = []
     for method, reference in zip(data["methods"], RUNS):
         assert method["color"] == reference[3]
-        points = method["points"]
+        points = display_points(method["points"])
+        assert [p["iteration"] for p in points] == list(range(20, 91, 10))
         for p in points:
             assert p["planned"] == 300 and 0 <= p["successes"] <= p["valid"] <= 300
             assert abs(p["percent"] - 100 * p["successes"] / p["valid"]) < 1e-10
         assert method["smoothed"] == smooth(points)
         color = method["color"]
         ax.scatter([p["iteration"] for p in points], [p["percent"] for p in points],
-                   color=color, s=12, alpha=0.35, edgecolors="none", zorder=2)
+                   color=color, s=12, alpha=0.25, edgecolors="none", zorder=2)
         ax.plot([p["iteration"] for p in method["smoothed"]],
                 [p["percent"] for p in method["smoothed"]],
-                color=color, linewidth=1.7, zorder=4 if method["id"] == "gate-b" else 3)
-        handles.append(Line2D([], [], color=color, linewidth=1.7, label=method["label"]))
+                color=color, linewidth=1.7, marker="o", markersize=3.5,
+                markeredgecolor="white", markeredgewidth=0.35,
+                zorder=4 if method["id"] == "gate-b" else 3)
+        handles.append(Line2D([], [], color=color, linewidth=1.7, marker="o",
+                              markersize=3.5, label=method["label"]))
     ax.set_xlabel("Training iteration", labelpad=3)
     ax.set_ylabel("Valid-only success (%)", labelpad=3)
-    ax.set_xlim(5, 105)
-    ax.set_xticks([20, 40, 60, 80, 100])
+    ax.set_xlim(17, 93)
+    ax.set_xticks(list(range(20, 91, 10)))
     ax.set_ylim(25, 60)
     ax.set_yticks([30, 40, 50, 60])
     ax.grid(False)

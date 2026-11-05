@@ -3,6 +3,11 @@
   "benchmark": "Online-Mind2Web, full 300 tasks",
   "protocol": "Local browser \u00b7 GPT-4.1 / action_history \u00b7 actor temperature 0",
   "metric": "100 * successes / valid episodes at each evaluated checkpoint; invalid episodes excluded",
+  "display": {
+    "first_iteration": 20,
+    "last_iteration": 90,
+    "smoothing_population": "Only evaluations in the displayed 20\u201390 interval; no pre-20 warmup"
+  },
   "smoothing": {
     "method": "Trailing ratio of pooled success and valid counts",
     "evaluations": 3,
@@ -102,31 +107,20 @@
       ],
       "smoothed": [
         {
-          "iteration": 10,
-          "percent": 29.914529914529915,
-          "successes": 70,
-          "valid": 234,
-          "window_iterations": [
-            10
-          ]
-        },
-        {
           "iteration": 20,
-          "percent": 35.407725321888414,
-          "successes": 165,
-          "valid": 466,
+          "percent": 40.94827586206897,
+          "successes": 95,
+          "valid": 232,
           "window_iterations": [
-            10,
             20
           ]
         },
         {
           "iteration": 30,
-          "percent": 36.554621848739494,
-          "successes": 261,
-          "valid": 714,
+          "percent": 39.791666666666664,
+          "successes": 191,
+          "valid": 480,
           "window_iterations": [
-            10,
             20,
             30
           ]
@@ -195,17 +189,6 @@
             70,
             80,
             90
-          ]
-        },
-        {
-          "iteration": 100,
-          "percent": 47.05014749262537,
-          "successes": 319,
-          "valid": 678,
-          "window_iterations": [
-            80,
-            90,
-            100
           ]
         }
       ]
@@ -291,31 +274,20 @@
       ],
       "smoothed": [
         {
-          "iteration": 10,
-          "percent": 35.059760956175296,
-          "successes": 88,
-          "valid": 251,
-          "window_iterations": [
-            10
-          ]
-        },
-        {
           "iteration": 20,
-          "percent": 36.63967611336032,
-          "successes": 181,
-          "valid": 494,
+          "percent": 38.27160493827161,
+          "successes": 93,
+          "valid": 243,
           "window_iterations": [
-            10,
             20
           ]
         },
         {
           "iteration": 30,
-          "percent": 37.365591397849464,
-          "successes": 278,
-          "valid": 744,
+          "percent": 38.5395537525355,
+          "successes": 190,
+          "valid": 493,
           "window_iterations": [
-            10,
             20,
             30
           ]
@@ -551,17 +523,6 @@
             70,
             80,
             90
-          ]
-        },
-        {
-          "iteration": 100,
-          "percent": 50.51094890510949,
-          "successes": 346,
-          "valid": 685,
-          "window_iterations": [
-            80,
-            90,
-            100
           ]
         }
       ]

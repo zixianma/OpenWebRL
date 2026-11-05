@@ -33,25 +33,25 @@ LIVE3_KEY = {"teacher_pre": "pre", "teacher_post": "post", "teacher_k1": "h1", "
              "teacher_k5": "h5", "outcome": "oracle"}
 INK, MUTED = "#222222", "#666666"
 ROWS = [  # tick label, colour, source key, live key
-    ("Pre-exec", "#4B5563", "teacher_pre", "Ours pre"),
-    ("Post-exec", "#D8877E", "teacher_post", "Ours post"),
+    ("Pre-\nexec", "#4B5563", "teacher_pre", "Ours pre"),
+    ("Post-\nexec", "#D8877E", "teacher_post", "Ours post"),
     ("Lookahead\nH = 3", "#6250BE", "teacher_k3", "Ours K3"),
     ("Oracle", "#ED7D00", "outcome", "Ours outcome")]
 P = K["pooled"]
 PANELS = [
-    ("Offline: held-out rollout success",
+    ("Offline: held-out\nrollout success",
      "offline", P["sft_sample"]),
-    ("Online: overall success", "live", LIVE3["weighted"]["sft"]["overall"])]
+    ("Online: overall\nsuccess", "live", LIVE3["weighted"]["sft"]["overall"])]
 
 
 def point(ax, x, v, color, marker, filled):
     d, lo, hi = v
-    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=5.7, color=color, ecolor="#555555", capsize=2, lw=0.9,
-                zorder=3, markeredgewidth=1.4, markerfacecolor=color if filled else "white", markeredgecolor=color)
-    ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=6.5, color=INK)
+    ax.errorbar(x, d, yerr=[[d - lo], [hi - d]], fmt=marker, ms=4.1, color=color, ecolor="#555555", capsize=1.5, lw=0.75,
+                zorder=3, markeredgewidth=1.0, markerfacecolor=color if filled else "white", markeredgecolor=color)
+    ax.text(x, hi + 0.12, f"{d:+.1f}".replace("-", "−"), ha="center", va="bottom", fontsize=5.8, color=INK)
 
 
-fig, axes = plt.subplots(1, 2, figsize=(5.6, 2.35), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(3.35, 2.25), sharey=True)
 for ax, (title, kind, base) in zip(axes, PANELS):
     ax.axhline(0, color=MUTED, lw=1, ls="--", zorder=0)
     for x, (_, color, src, live) in enumerate(ROWS):
@@ -63,21 +63,21 @@ for ax, (title, kind, base) in zip(axes, PANELS):
         else:
             point(ax, x - 0.17, P[src]["teacher_minus_sft"], color, "o", False)
             point(ax, x + 0.17, P[src]["head_minus_sft"], color, "o", True)
-    ax.set_title(title, fontsize=9, loc="left", color=INK, pad=6)
-    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=7); ax.set_xlim(-0.6, len(ROWS) - 0.4)
-    ax.tick_params(axis="y", labelsize=8)
+    ax.set_title(title, fontsize=7, loc="left", color=INK, pad=6)
+    ax.set_xticks(range(len(ROWS)), [r[0] for r in ROWS], fontsize=6.2); ax.set_xlim(-0.35, len(ROWS) - 0.65)
+    ax.tick_params(axis="y", labelsize=6.5)
     ax.grid(False)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
 axes[0].set_ylim(-3.5, 5.2)
 axes[0].set_yticks([-2, 0, 2, 4])
-axes[0].set_ylabel("Gain over SFT (pp)", fontsize=9)
-handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=5.7, markeredgewidth=1.4,
+axes[0].set_ylabel("Gain over SFT (pp)", fontsize=7)
+handles = [Line2D([], [], marker="o", ls="", color="#555555", ms=4.1, markeredgewidth=1.0,
                   markerfacecolor="#555555" if filled else "white") for filled in (False, True)]
-fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=8,
-           loc="lower center", ncol=2, bbox_to_anchor=(0.53, 0.005), columnspacing=2)
+fig.legend(handles, ["Teacher ADM", "Student ADM"], frameon=False, fontsize=6.8,
+           loc="lower center", ncol=2, bbox_to_anchor=(0.54, 0.005), columnspacing=1.8)
 # Cohorts, baselines, seeds and interval definitions are in the document caption.
-fig.subplots_adjust(left=0.11, right=0.99, top=0.86, bottom=0.30, wspace=0.16)
+fig.subplots_adjust(left=0.13, right=0.985, top=0.81, bottom=0.28, wspace=0.10)
 output = HERE / "selection-label-setups-kfold-20261101"
 fig.savefig(output.with_suffix(".png"), dpi=300)
 fig.savefig(output.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
