@@ -1,0 +1,89 @@
+{
+  "metric": "Mean loop failures per 300 planned tasks, averaged over three evaluation repeats",
+  "definition": "First-match repeat_loop failure category; invalids and other failure categories remain in the 300-task denominator",
+  "uncertainty": {
+    "method": "Pointwise percentile bootstrap of task clusters, preserving all repeats and methods",
+    "tasks": 300,
+    "repeats": 3,
+    "draws": 20000,
+    "seed": 20261104,
+    "scope": "Conditional on these fixed checkpoints and three evaluation windows; excludes training-seed and evaluation-window uncertainty"
+  },
+  "aggregate_sha256": "57865594e1170b8f417aae85f908cdeac76b5f8cc6837e2f19c100609ca0071b",
+  "local_source_hashes": [
+    {
+      "file": "repeat-iter90-outcome48-r1-385593-a1.jsonl",
+      "sha256": "8f22bfc113c6d36cb1b2985c7515c9ab65290315586278b3e6a5956c8fa1bd0b"
+    },
+    {
+      "file": "repeat-iter90-outcome48-r2-385593-a1.jsonl",
+      "sha256": "36eb8140c3183fdde21abe03c13d776ce8af76d24c66a908bc4dcf0ecd00a79d"
+    },
+    {
+      "file": "repeat-iter90-outcome48-r3-385593-a1.jsonl",
+      "sha256": "46009c040e28c2dfc54b53d134248d18466246ce087eab9015ff32d7c331e0a9"
+    },
+    {
+      "file": "repeat-iter90-outcome56-r1-385593-a1.jsonl",
+      "sha256": "663ef9e4112e7de7cf02d2b2a864c3a30eddadb55690f12a5e7cc81156b0a0ab"
+    },
+    {
+      "file": "repeat-iter90-outcome56-r2-385593-a1.jsonl",
+      "sha256": "3693fde93bfdf5e4dd31959b084dde5cda102899a142ff80bc5c91f710751230"
+    },
+    {
+      "file": "repeat-iter90-outcome56-r3-385593-a1.jsonl",
+      "sha256": "4f94ce7bd01c412c4747912653b75b1a23402348a8c7134d6eea937d1a0ab996"
+    },
+    {
+      "file": "repeat-iter90-gate-b-r1-385593-a1.jsonl",
+      "sha256": "0a50d324e28f11cffee5646ca94d9912204fa01c8038953de4c45e174d2ffeee"
+    },
+    {
+      "file": "repeat-iter90-gate-b-r2-385593-a1.jsonl",
+      "sha256": "b3d63f02748540509c6b1492490d8dfa79cc78121e3ed2863b12be5e791db36d"
+    },
+    {
+      "file": "repeat-iter90-gate-b-r3-385593-a1.jsonl",
+      "sha256": "86ad20a4d94b7e75413e35204a8131fd1c2f4ece2c26291b1d0ad06f85ffa617"
+    }
+  ],
+  "methods": {
+    "outcome48": {
+      "repeat_counts": [
+        54,
+        57,
+        71
+      ],
+      "mean_per300": 60.666666666666664,
+      "ci95_per300": [
+        51.33333333333335,
+        70.33333333333337
+      ]
+    },
+    "outcome56": {
+      "repeat_counts": [
+        38,
+        53,
+        44
+      ],
+      "mean_per300": 45.0,
+      "ci95_per300": [
+        36.33333333333333,
+        54.00000000000005
+      ]
+    },
+    "gate-b": {
+      "repeat_counts": [
+        20,
+        23,
+        27
+      ],
+      "mean_per300": 23.333333333333332,
+      "ci95_per300": [
+        17.33333333333334,
+        29.66666666666665
+      ]
+    }
+  }
+}

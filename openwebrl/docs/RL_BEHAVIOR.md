@@ -255,15 +255,15 @@ same trajectory; 95% binomial intervals; chance = 20%.* [PDF](rl_results/rl_acti
 
 ### Matched iteration-90 repeats (one harness, back to back)
 
-![Iteration-90 matched repeats: loop failures per 300 tasks, Gate B vs outcome-only](rl_results/rl_action_loops_iter90.png)
+![Iteration-90 loop failures per 300 tasks: means and 95% task-bootstrap confidence intervals; Outcome + ADM rewards in purple](rl_results/rl_action_loops_iter90.png)
 
-*Standalone version of panel (b): bars = mean of three back-to-back full-300 evaluations of each fixed checkpoint (dots); brackets = Gate B minus each outcome-only run, paired task-bootstrap 95% CI.* [PDF](rl_results/rl_action_loops_iter90.pdf)
+*Online-Mind2Web, iteration 90. Points = mean loop failures per 300 planned tasks across three back-to-back evaluations; whiskers = pointwise 95% task-bootstrap intervals (20,000 draws, seed 20261104), retaining all three repeats within each sampled task. Purple = Outcome + ADM rewards (ours; Gate B). Intervals are conditional on the fixed checkpoints and three evaluation windows; they exclude training-seed and evaluation-window uncertainty. Repeat counts and paired differences remain in the tables below.* [PDF](rl_results/rl_action_loops_iter90.pdf) · [SVG](rl_results/rl_action_loops_iter90.svg) · [CI aggregate](arm_results/rl_integration/behavior/rl-action-loops-iter90-ci-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_loops_iter90.py).
 
-| Run | Loop failures, r1 / r2 / r3 | Mean loop failures | Loop rate, mean % | Successes, r1 / r2 / r3 |
-| --- | ---: | ---: | ---: | ---: |
-| Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | 39.0 | 103 / 95 / 109 |
-| Outcome-only 56 groups | 38 / 53 / 44 | 45.0 | 27.7 | 114 / 102 / 102 |
-| ARM Gate B | 20 / 23 / 27 | 23.3 | 20.3 | 123 / 117 / 125 |
+| Run | Loop failures, r1 / r2 / r3 | Mean loop failures | Mean 95% CI | Loop rate, mean % | Successes, r1 / r2 / r3 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only 48 groups | 54 / 57 / 71 | 60.7 | [51.3, 70.3] | 39.0 | 103 / 95 / 109 |
+| Outcome-only 56 groups | 38 / 53 / 44 | 45.0 | [36.3, 54.0] | 27.7 | 114 / 102 / 102 |
+| Outcome + ADM rewards (Gate B) | 20 / 23 / 27 | 23.3 | [17.3, 29.7] | 20.3 | 123 / 117 / 125 |
 
 | Gate B minus | Loop failures per 300 [95% CI] | Loop rate, pp [95% CI] |
 | --- | ---: | ---: |
