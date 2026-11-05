@@ -20,6 +20,7 @@ from matplotlib.font_manager import FontProperties
 
 INK, MUTED, LINE = "#24272B", "#626972", "#C9CDD3"
 PRE, POST, LOOK, OUTCOME, HELD = "#4B5563", "#D8877E", "#6250BE", "#ED7D00", "#2164A5"
+ORACLE = "#169B62"
 ROLLOUT, ROLLOUT_BG = "#111111", "#F4F5F6"
 SHARED, SHARED_BG = "#737A83", "#F3F4F5"
 SUCCESS, FAILURE = "#31785A", "#8D949B"
@@ -89,17 +90,24 @@ def outcome_marker(x, y, success, radius=0.018):
                        edgecolor=color, linewidth=0.5 if success else 0.75, zorder=3))
 
 
+def pick_check(x, y, color, width=0.040):
+    """Vector check mark: distinct from the circular terminal-outcome symbols."""
+    ax.plot([x - width * .45, x - width * .10, x + width * .50],
+            [y - width * .02, y - width * .40, y + width * .44],
+            color=color, linewidth=.85, solid_capstyle="round", zorder=4)
+
+
 label_rates = [sum(out[:3]) / 3 for out in OUTCOMES]
 held_rates = [sum(out[3:]) / 5 for out in OUTCOMES]
 assert [PICKS[k] for k in ("Pre-execution", "Post-execution", "Lookahead K = 3", "Oracle")] == [0, 0, 2, 2]
 
 # (a) Preserve all five candidates and all forty original binary outcomes.
 text(0.06, 1.98, "a)  Data collection", size=8.5, weight="bold")
-outcome_header = text(1.52, 1.98, r"Rollout success $R^{i,j}$", size=6.5, color=MUTED)
-outcome_marker(2.60, 1.98, True, radius=0.020)
-success_key = text(2.65, 1.98, "Success", size=6.5, color=SUCCESS)
-outcome_marker(3.13, 1.98, False, radius=0.020)
-failure_key = text(3.18, 1.98, "Failure", size=6.5, color=MUTED)
+outcome_header = text(1.52, 0.245, r"Rollout success $R^{i,j}$", size=6.5, color=MUTED)
+outcome_marker(2.60, 0.245, True, radius=0.020)
+success_key = text(2.65, 0.245, "Success", size=6.5, color=SUCCESS)
+outcome_marker(3.13, 0.245, False, radius=0.020)
+failure_key = text(3.18, 0.245, "Failure", size=6.5, color=MUTED)
 rollout_pitch = 0.11
 xs = [2.24 + rollout_pitch * j for j in range(8)]
 trajectory_x = [0.88 + 0.32 * k for k in range(4)]
@@ -135,15 +143,14 @@ rollout_box = box(0.72, y_low - 0.02, xs[0] + rollout_pitch / 2 - 0.72,
 rollout_box.set_zorder(0.5)
 pick_colors = {}
 for label, color in (("Pre-execution", PRE), ("Post-execution", POST),
-                     ("Lookahead K = 3", LOOK), ("Observed outcome", OUTCOME)):
+                     ("Lookahead K = 3", LOOK), ("Observed outcome", ORACLE)):
     pick_colors.setdefault(PICKS[label], []).append(color)
 for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
     arrow(0.28, mid, 0.345, y, color=LINE)
     box(0.35, y - 0.09, 0.34, 0.18)
     text(0.465, y, rf"$a_t^{{{i + 1}}}$", size=7.5, ha="center")
     for j, color in enumerate(pick_colors.get(i, ())):
-        ax.add_patch(Circle((0.605 + 0.05 * j, y), 0.016, facecolor=color,
-                           edgecolor="white", linewidth=0.3, zorder=3))
+        pick_check(0.603 + 0.055 * j, y, color)
     arrow(0.695, y, 0.736, y, color=POST)
     if i in (0, 4):
         for k, x in enumerate(trajectory_x):
@@ -161,9 +168,9 @@ for i, (y, outcomes) in enumerate(zip(ys, OUTCOMES)):
 
 # (b) Shared context explicitly feeds each joint candidate-comparison call.
 ax.plot([3.86, 3.86], [0.26, 1.91], color=LINE, linewidth=0.6)
-method_x, evidence_x = 3.96, 5.17
-teacher_x, teacher_w = 6.00, 0.56
-pick_x, pick_w, eval_x = 6.75, 0.33, 7.35
+method_x, evidence_x = 3.96, 5.02
+teacher_x, teacher_w = 5.75, 0.74
+pick_x, pick_w, eval_x = 6.60, 0.45, 7.27
 text(method_x, 1.98, "b)  Teacher Labeling Methods", size=8.5, weight="bold")
 box(method_x, 1.67, 3.58, 0.24, edge=SHARED, fill=SHARED_BG, lw=0.9)
 text(5.75, 1.79, r"Shared: task · history · $s_t$ · $K=5$ actions",
@@ -171,9 +178,9 @@ text(5.75, 1.79, r"Shared: task · history · $s_t$ · $K=5$ actions",
 text(evidence_x, 1.55, "Rollout 1 evidence", size=6.5, color=ROLLOUT, ha="center")
 pick_header = text(pick_x + pick_w / 2, 1.55, "Pick", size=6.5, color=MUTED, ha="center")
 eval_header = text(eval_x, 1.55, "Eval %", size=6.5, color=HELD, ha="center")
-shared_x = 5.89
+shared_x = 5.64
 ax.plot([shared_x, shared_x], [1.67, 0.66], color=SHARED, linewidth=0.9, zorder=1)
-ax.add_patch(Rectangle((7.17, 0.20), 0.36, 1.23,
+ax.add_patch(Rectangle((7.14, 0.20), 0.32, 1.23,
                        facecolor=HELD_BG, edgecolor="none", zorder=0))
 lanes = ((1.30, "Pre-execution", "Pre-exec", PRE, "—"),
          (1.01, "Post-execution", "Post-exec", POST, r"$\{s_{t+1}^{i}\}_{i=1}^{K}$"),
@@ -182,7 +189,7 @@ lanes = ((1.30, "Pre-execution", "Pre-exec", PRE, "—"),
 for y, key, label, color, evidence in lanes:
     text(method_x, y, label, color=color, linespacing=1.0)
     text(evidence_x, y, evidence, color=color, ha="center", linespacing=0.95)
-    rule(5.67, shared_x, y, color=color)
+    rule(5.50, shared_x, y, color=color)
     ax.add_patch(Circle((shared_x, y), 0.015, facecolor=SHARED,
                         edgecolor="white", linewidth=0.3, zorder=3))
     arrow(shared_x + 0.02, y, teacher_x - 0.01, y, color=color)
@@ -192,33 +199,32 @@ for y, key, label, color, evidence in lanes:
     box(pick_x, y - 0.115, pick_w, 0.23, edge=color)
     pick = PICKS[key]
     text(pick_x + pick_w / 2, y, rf"$a_t^{{{pick + 1}}}$", size=8, color=color, ha="center")
-    arrow(pick_x + pick_w + 0.015, y, 7.20, y, color=HELD)
+    arrow(pick_x + pick_w + 0.015, y, 7.15, y, color=HELD)
     text(eval_x, y, f"{100 * held_rates[pick]:.0f}%", color=HELD,
          weight="bold", ha="center")
 # Orange rate labels refer to the complete five-action Train % column in (a).
 y = 0.32
-text(method_x, y, "Oracle", color=OUTCOME)
-box(4.67, y - 0.105, 1.00, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
+text(method_x, y, "Oracle", color=ORACLE)
+box(4.52, y - 0.105, 1.00, 0.21, edge=OUTCOME, fill=LABEL_BG, lw=0.5)
 text(evidence_x, y, "Train %", color=OUTCOME, ha="center")
-arrow(5.69, y, teacher_x - 0.01, y, color=OUTCOME)
-box(teacher_x, y - 0.115, teacher_w, 0.23, edge=OUTCOME)
-text(teacher_x + teacher_w / 2, y, "Argmax", color=OUTCOME, ha="center")
-arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=OUTCOME)
-box(pick_x, y - 0.115, pick_w, 0.23, edge=OUTCOME)
-text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=OUTCOME, ha="center")
-arrow(pick_x + pick_w + 0.015, y, 7.20, y, color=HELD)
+arrow(5.54, y, teacher_x - 0.01, y, color=ORACLE)
+box(teacher_x, y - 0.115, teacher_w, 0.23, edge=ORACLE)
+text(teacher_x + teacher_w / 2, y, "Argmax", color=ORACLE, ha="center")
+arrow(teacher_x + teacher_w + 0.02, y, pick_x - 0.015, y, color=ORACLE)
+box(pick_x, y - 0.115, pick_w, 0.23, edge=ORACLE)
+text(pick_x + pick_w / 2, y, r"$a_t^{3}$", size=8, color=ORACLE, ha="center")
+arrow(pick_x + pick_w + 0.015, y, 7.15, y, color=HELD)
 text(eval_x, y, "80%", color=HELD, weight="bold", ha="center")
 
 # Keep the method key right aligned; outcome status is keyed beside its R label.
-items = (("Pre-exec", PRE), ("Post-exec", POST), ("Lookahead H = 3", LOOK), ("Oracle", OUTCOME))
+items = (("Pre-exec", PRE), ("Post-exec", POST), ("Lookahead H = 3", LOOK), ("Oracle", ORACLE))
 fig.canvas.draw()
 renderer = fig.canvas.get_renderer()
 legend_right = W - 0.03
 for label, color in reversed(items):
     width = renderer.get_text_width_height_descent(label, FontProperties(size=7), ismath=False)[0] / fig.dpi
     marker_x = legend_right - width - 0.08
-    ax.add_patch(Circle((marker_x, 0.085), 0.023, facecolor=color,
-                       edgecolor="white", linewidth=0.4, zorder=3))
+    pick_check(marker_x, 0.085, color, width=0.060)
     text(legend_right, 0.085, label, color=color, ha="right")
     legend_right = marker_x - 0.19
 
