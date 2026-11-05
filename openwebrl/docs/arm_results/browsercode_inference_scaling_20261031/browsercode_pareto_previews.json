@@ -1,8 +1,51 @@
 {
   "schema": "browsercode-observed-pareto-previews-v1",
-  "definition": "Minimize the displayed x metric and maximize success. Dominance needs at least one strict improvement. All eleven methods compete in every panel.",
+  "definition": "Minimize the displayed x metric and maximize success. Dominance needs at least one strict improvement. All eleven historical methods compete in every panel; the own-valid weighted preview also includes completed Sol high/60 (twelve methods).",
   "rendering": "Dashed straight segments join consecutive observed nondominated coordinates. No smoothing, convex hull, interpolation attainability or statistical superiority is implied. Thin rings identify frontier nodes; a single-node frontier has no segment.",
-  "populations": "Per-benchmark and own-valid weighted previews retain each method own-valid cohort; common-valid weighted preview uses the same 744 valid tasks in every method. Fixed planned weights 300/1045, 595/1045, 150/1045.",
+  "populations": "Per-benchmark (eleven methods) and own-valid weighted (twelve methods, including Sol high/60) previews retain each method own-valid cohort; the common-valid weighted preview retains eleven methods and the same 744 valid tasks in every method. Fixed planned weights 300/1045, 595/1045, 150/1045. Sol high/60 is not inserted into the historical matched cohort.",
+  "weighted_preview_additions": [
+    {
+      "point": {
+        "method": "sol_single_high60",
+        "benchmark_count": 3,
+        "success_rate": 0.8516807984806157,
+        "metrics": {
+          "actor_usd": 0.2727417254377367,
+          "browser_commands": 16.760221313658555,
+          "actor_seconds": 128.7558526978636
+        },
+        "benchmark_counts": {
+          "online_mind2web": {
+            "requested": 300,
+            "native_saved": 300,
+            "valid": 267,
+            "invalid": 33,
+            "successes": 185,
+            "missing_native": 0
+          },
+          "webvoyager": {
+            "requested": 595,
+            "native_saved": 595,
+            "valid": 569,
+            "invalid": 26,
+            "successes": 520,
+            "missing_native": 0
+          },
+          "deepshop": {
+            "requested": 150,
+            "native_saved": 150,
+            "valid": 142,
+            "invalid": 8,
+            "successes": 131,
+            "missing_native": 0
+          }
+        }
+      },
+      "source": "../browsercode_sol_high60_20261104/aggregate.json",
+      "source_sha256": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0",
+      "population": "Own valid tasks, including valid failures; separate live windows. Actor means exclude Terra. No paired gain or uncertainty inferred."
+    }
+  ],
   "batch_interpretation": "Browser-code batches are command counts, not CPU/RAM, session time, network traffic or browser-resource costs.",
   "uncertainty": "Observed point estimates only; validity differences, live windows and historical prompt differences can change membership. No uncertainty bands or significance inferred.",
   "source_sha256": {
@@ -12,7 +55,8 @@
     "browsercode_scaling_common_valid_weighted_average.json": "ceec9f8a8536cf042e73660bfd1f9dcce107c81731480b9f50b96df78d6c6e8c",
     "plot_browsercode_scaling.py": "f40e1befda5808392e06e078cbda9fe381453b96301114a0a0ebb3d12bcd2bac",
     "plot_browsercode_average.py": "4adf3a2206e1b43c84d441c98e0f54f43aa0fa0642029a9c287ca538b4524cd1",
-    "plot_browsercode_common_valid.py": "4f899ac63c7069cfc8b575c1e4bd2b5af4bbc27d7e0f05469a6669a7796feaec"
+    "plot_browsercode_common_valid.py": "4f899ac63c7069cfc8b575c1e4bd2b5af4bbc27d7e0f05469a6669a7796feaec",
+    "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
   },
   "per_benchmark_legends": {
     "single_call": [
@@ -67,18 +111,53 @@
       "browsercode_scaling_pareto_preview",
       "browsercode_scaling_weighted_pareto_preview"
     ],
+    "weighted_single_call": [
+      {
+        "method": "luna_single_high",
+        "label": "Luna baseline"
+      },
+      {
+        "method": "luna_single_xhigh_12288",
+        "label": "Luna xhigh effort"
+      },
+      {
+        "method": "luna_single_high_6144",
+        "label": "Luna 0.5\u00d7 max tokens"
+      },
+      {
+        "method": "luna_single_high_24576",
+        "label": "Luna 2\u00d7 max tokens"
+      },
+      {
+        "method": "luna_single_high_60steps",
+        "label": "Luna 60 steps"
+      },
+      {
+        "method": "luna_single_high_120steps",
+        "label": "Luna 120 steps"
+      },
+      {
+        "method": "serial_high",
+        "label": "Sol high \u00b7 30 steps"
+      },
+      {
+        "method": "sol_single_high60",
+        "label": "Sol high \u00b7 60 steps"
+      }
+    ],
     "placement": "Bottom; original point encodings preserved",
     "selection_title": "Best-of-N action scaling",
     "browser_step_definition": "Executed nonempty BrowserCode batches; each batch can contain multiple browser operations. Setup step limits cap agent decisions.",
     "defaults": "Luna high effort, 12,288 output tokens per call, 30 steps; N = candidates",
     "cap_definition": "Ceiling on output tokens per call, including reasoning; not realized token use"
   },
-  "renderer_sha256": "c525a0316ca9b82b89f8874fd8745fb09700f4eb70c218e0bee897002d9f0143",
+  "renderer_sha256": "5d7c81a12cbf1128789dba31f8df4a1b9f0872163f9aa75b4dad11be39a4c77b",
   "previews": {
     "browsercode_scaling_pareto_preview": [
       {
         "population": "online_mind2web",
         "metric": "actor_usd",
+        "method_count": 11,
         "frontier": [
           {
             "method": "luna_single_high_6144",
@@ -114,6 +193,7 @@
       {
         "population": "online_mind2web",
         "metric": "browser_commands",
+        "method_count": 11,
         "frontier": [
           {
             "method": "parallel5_select_high_60steps",
@@ -141,6 +221,7 @@
       {
         "population": "online_mind2web",
         "metric": "actor_seconds",
+        "method_count": 11,
         "frontier": [
           {
             "method": "serial_high",
@@ -184,6 +265,7 @@
       {
         "population": "webvoyager",
         "metric": "actor_usd",
+        "method_count": 11,
         "frontier": [
           {
             "method": "luna_single_high_24576",
@@ -227,6 +309,7 @@
       {
         "population": "webvoyager",
         "metric": "browser_commands",
+        "method_count": 11,
         "frontier": [
           {
             "method": "parallel5_select_high_60steps",
@@ -250,6 +333,7 @@
       {
         "population": "webvoyager",
         "metric": "actor_seconds",
+        "method_count": 11,
         "frontier": [
           {
             "method": "serial_high",
@@ -281,6 +365,7 @@
       {
         "population": "deepshop",
         "metric": "actor_usd",
+        "method_count": 11,
         "frontier": [
           {
             "method": "luna_single_high_24576",
@@ -312,6 +397,7 @@
       {
         "population": "deepshop",
         "metric": "browser_commands",
+        "method_count": 11,
         "frontier": [
           {
             "method": "parallel5_select_high_60steps",
@@ -339,6 +425,7 @@
       {
         "population": "deepshop",
         "metric": "actor_seconds",
+        "method_count": 11,
         "frontier": [
           {
             "method": "luna_single_high_24576",
@@ -372,6 +459,7 @@
       {
         "population": "weighted_own_valid",
         "metric": "actor_usd",
+        "method_count": 12,
         "frontier": [
           {
             "method": "luna_single_high_24576",
@@ -401,12 +489,14 @@
           "parallel2_select_high",
           "parallel3_select_high",
           "parallel5_select_high",
-          "serial_high"
+          "serial_high",
+          "sol_single_high60"
         ]
       },
       {
         "population": "weighted_own_valid",
         "metric": "browser_commands",
+        "method_count": 12,
         "frontier": [
           {
             "method": "parallel5_select_high_60steps",
@@ -424,12 +514,14 @@
           "parallel2_select_high",
           "parallel3_select_high",
           "parallel5_select_high",
-          "serial_high"
+          "serial_high",
+          "sol_single_high60"
         ]
       },
       {
         "population": "weighted_own_valid",
         "metric": "actor_seconds",
+        "method_count": 12,
         "frontier": [
           {
             "method": "serial_high",
@@ -442,9 +534,9 @@
             "success_rate": 0.7903406534985482
           },
           {
-            "method": "luna_single_high_120steps",
-            "x": 137.48641778234472,
-            "success_rate": 0.8456241418647433
+            "method": "sol_single_high60",
+            "x": 128.7558526978636,
+            "success_rate": 0.8516807984806157
           },
           {
             "method": "parallel5_select_high_60steps",
@@ -454,6 +546,7 @@
         ],
         "dominated_methods": [
           "luna_single_high",
+          "luna_single_high_120steps",
           "luna_single_high_60steps",
           "luna_single_high_6144",
           "luna_single_xhigh_12288",
@@ -467,6 +560,7 @@
       {
         "population": "weighted_common_valid",
         "metric": "actor_usd",
+        "method_count": 11,
         "frontier": [
           {
             "method": "luna_single_high_24576",
@@ -502,6 +596,7 @@
       {
         "population": "weighted_common_valid",
         "metric": "browser_commands",
+        "method_count": 11,
         "frontier": [
           {
             "method": "parallel5_select_high_60steps",
@@ -525,6 +620,7 @@
       {
         "population": "weighted_common_valid",
         "metric": "actor_seconds",
+        "method_count": 11,
         "frontier": [
           {
             "method": "serial_high",

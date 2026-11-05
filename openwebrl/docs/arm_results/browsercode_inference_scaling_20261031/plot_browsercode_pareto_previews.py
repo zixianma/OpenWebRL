@@ -12,6 +12,7 @@ from unittest.mock import patch
 import hashlib
 import importlib.util
 import json
+import math
 import os
 
 os.environ.setdefault('MPLCONFIGDIR', '/tmp/openwebrl-pareto-previews-mpl')
@@ -36,6 +37,11 @@ def module(name, filename):
 SCALING = module('pareto_scaling', 'plot_browsercode_scaling.py')
 AVERAGE = module('pareto_average', 'plot_browsercode_average.py')
 COMMON = module('pareto_common', 'plot_browsercode_common_valid.py')
+SOL60_SOURCE = HERE.parent / 'browsercode_sol_high60_20261104' / 'aggregate.json'
+SOL60_METHOD = 'sol_single_high60'
+SOL60_STYLE = ('Sol high · 60 steps', 's', '#08519c', False)
+SCALING.STYLES[SOL60_METHOD] = SOL60_STYLE
+AVERAGE.SCALING.STYLES[SOL60_METHOD] = SOL60_STYLE
 
 
 def sha(path):
@@ -47,6 +53,52 @@ def coordinate(row, metric):
         return row[metric]
     value = row['metrics'][metric]
     return value['mean'] if isinstance(value, dict) else value
+
+
+def sol60_weighted_point():
+    """Join the completed own-valid cohort; never insert it in matched plots."""
+    data = json.loads(SOL60_SOURCE.read_text())
+    assert data['schema'] == 'sol60-full-three-benchmark-sanitized-results-v1'
+    assert data['status'] == 'VERIFIED_COVERAGE_COMPLETE'
+    assert data['protocol'] == dict(
+        actor_deadline_seconds=900, actor_model='gpt-6-sol', candidates=1,
+        harness='browsercode', judge='gpt-5.6-terra', judge_effort='medium',
+        judge_max_output_tokens=4096, judge_seed=42, max_output_tokens=12288,
+        maximum_decisions_advertised=60, maximum_decisions_enforced=60,
+        reasoning_effort='high')
+    counts, cells, weights = {}, [], []
+    for benchmark, (_, planned) in SCALING.BENCHMARKS.items():
+        source_name = 'online-mind2web' if benchmark == 'online_mind2web' else benchmark
+        cell = data['benchmarks'][source_name]
+        assert all(type(cell[k]) is int and cell[k] >= 0 for k in
+                   ('planned', 'saved', 'valid', 'invalid', 'successes', 'unclaimed'))
+        assert cell['planned'] == cell['saved'] == planned and cell['unclaimed'] == 0
+        assert cell['valid'] + cell['invalid'] == planned
+        assert 0 <= cell['successes'] <= cell['valid'] and cell['valid'] > 0
+        assert math.isclose(cell['valid_only_success'], cell['successes'] / cell['valid'], abs_tol=1e-12)
+        for metric in METRICS:
+            value = cell['valid_task_efficiency'][metric]
+            assert value['n'] == cell['valid']
+            assert math.isfinite(value['mean']) and value['mean'] > 0
+        assert cell['valid_task_efficiency']['browser_commands']['mean'] <= 60
+        counts[benchmark] = dict(requested=planned, native_saved=cell['saved'],
+                                 valid=cell['valid'], invalid=cell['invalid'],
+                                 successes=cell['successes'], missing_native=0)
+        cells.append(cell)
+        weights.append(planned)
+    for source_key, cell_key in [('planned', 'planned'), ('saved', 'saved'),
+                                 ('valid', 'valid'), ('invalid', 'invalid'),
+                                 ('successes', 'successes'), ('unclaimed', 'unclaimed')]:
+        assert data[source_key] == sum(c[cell_key] for c in cells)
+    assert data['planned'] == data['saved'] == sum(weights) == 1045
+    return dict(
+        method=SOL60_METHOD, benchmark_count=3,
+        success_rate=math.fsum(w * c['successes'] / c['valid']
+                               for w, c in zip(weights, cells)) / sum(weights),
+        metrics={metric: math.fsum(w * c['valid_task_efficiency'][metric]['mean']
+                                  for w, c in zip(weights, cells)) / sum(weights)
+                 for metric in METRICS},
+        benchmark_counts=counts)
 
 
 def frontier(rows, metric):
@@ -72,11 +124,12 @@ def capture(renderer, *args):
     return fig
 
 
-def overlay(fig, panels):
+def overlay(fig, panels, *, method_count=11):
     assert len(fig.axes) == len(panels)
     report = []
     for ax, (population, rows, metric) in zip(fig.axes, panels):
-        assert len(ax.collections) == len(rows) == 11
+        assert len(ax.collections) == len(rows) == method_count
+        assert len({p['method'] for p in rows}) == method_count
         actual = sorted(tuple(map(float, collection.get_offsets()[0])) for collection in ax.collections)
         expected = sorted((coordinate(p, metric), 100 * p['success_rate']) for p in rows)
         assert actual == expected, 'Overlay must match the original plotted population exactly'
@@ -89,7 +142,7 @@ def overlay(fig, panels):
         # Rings show the frontier members even when only one point survives.
         ax.scatter([x for x, _ in xy], [y for _, y in xy], s=57,
                    facecolors='none', edgecolors=FRONTIER, linewidths=.6, zorder=2.4)
-        report.append(dict(population=population, metric=metric,
+        report.append(dict(population=population, metric=metric, method_count=method_count,
                            frontier=[dict(method=p['method'], x=coordinate(p, metric),
                                           success_rate=p['success_rate']) for p in members],
                            dominated_methods=sorted(p['method'] for p in rows if p not in members)))
@@ -152,7 +205,12 @@ def grouped_bottom_legends(fig, *, weighted=False):
                                  markeredgewidth=.9, markersize=4.8, label=label))
         return result
 
-    single = fig.legend(handles=handles(SINGLE_LEGEND), title='Single-call scaling (N=1)',
+    single_entries = SINGLE_LEGEND
+    if weighted:
+        single_entries = tuple(row for row in SINGLE_LEGEND if row[0] != 'serial_high')
+        single_entries += (('serial_high', 'Sol high · 30 steps'),
+                           (SOL60_METHOD, SOL60_STYLE[0]))
+    single = fig.legend(handles=handles(single_entries), title='Single-call scaling (N=1)',
                         loc='upper left', bbox_to_anchor=(.077, legend_top), ncol=3,
                         fontsize=6.5, title_fontsize=7.2, frameon=False,
                         handlelength=.8, handletextpad=.4, columnspacing=1.2,
@@ -189,6 +247,7 @@ def build():
     weighted = AVERAGE.average(raw, 'task-count')
     published_weighted = json.loads((HERE / 'browsercode_scaling_weighted_average.json').read_text())
     assert weighted == published_weighted
+    weighted = {**weighted, 'points': [*weighted['points'], sol60_weighted_point()]}
     common = COMMON.validate(json.loads((HERE / 'aggregate_common_valid.json').read_text()))
     common_average = COMMON.average(common)
     assert common_average == json.loads((HERE / 'browsercode_scaling_common_valid_weighted_average.json').read_text())
@@ -201,7 +260,7 @@ def build():
     figures.append((fig, 'browsercode_scaling_pareto_preview', report))
     fig = capture(AVERAGE.render, weighted, temporary, 'source_weighted')
     panels = [('weighted_own_valid', weighted['points'], metric) for metric in METRICS]
-    report = overlay(fig, panels)
+    report = overlay(fig, panels, method_count=12)
     grouped_bottom_legends(fig, weighted=True)
     figures.append((fig, 'browsercode_scaling_weighted_pareto_preview', report))
     fig = capture(COMMON.render, common, temporary, 'source_common_valid')
@@ -216,30 +275,41 @@ def main():
                         help='Save only the per-benchmark preview; preserve weighted figure files')
     parser.add_argument('--grouped-only', action='store_true',
                         help='Save grouped per-benchmark and own-valid weighted previews only')
+    parser.add_argument('--weighted-only', action='store_true',
+                        help='Save only the own-valid weighted preview')
     args = parser.parse_args()
     figures = build()
     reports = {}
     for fig, stem, panels in figures:
         selected = not args.per_benchmark_only or stem == 'browsercode_scaling_pareto_preview'
         selected = selected and (not args.grouped_only or stem != 'browsercode_scaling_common_valid_pareto_preview')
+        selected = selected and (not args.weighted_only or stem == 'browsercode_scaling_weighted_pareto_preview')
         if selected:
             save(fig, stem)
         else:
             plt.close(fig)
         reports[stem] = panels
     report = dict(schema='browsercode-observed-pareto-previews-v1',
-                  definition='Minimize the displayed x metric and maximize success. Dominance needs at least one strict improvement. All eleven methods compete in every panel.',
+                  definition='Minimize the displayed x metric and maximize success. Dominance needs at least one strict improvement. All eleven historical methods compete in every panel; the own-valid weighted preview also includes completed Sol high/60 (twelve methods).',
                   rendering='Dashed straight segments join consecutive observed nondominated coordinates. No smoothing, convex hull, interpolation attainability or statistical superiority is implied. Thin rings identify frontier nodes; a single-node frontier has no segment.',
-                  populations='Per-benchmark and own-valid weighted previews retain each method own-valid cohort; common-valid weighted preview uses the same 744 valid tasks in every method. Fixed planned weights 300/1045, 595/1045, 150/1045.',
+                  populations='Per-benchmark (eleven methods) and own-valid weighted (twelve methods, including Sol high/60) previews retain each method own-valid cohort; the common-valid weighted preview retains eleven methods and the same 744 valid tasks in every method. Fixed planned weights 300/1045, 595/1045, 150/1045. Sol high/60 is not inserted into the historical matched cohort.',
+                  weighted_preview_additions=[dict(point=sol60_weighted_point(),
+                      source='../browsercode_sol_high60_20261104/aggregate.json',
+                      source_sha256=sha(SOL60_SOURCE),
+                      population='Own valid tasks, including valid failures; separate live windows. Actor means exclude Terra. No paired gain or uncertainty inferred.')],
                   batch_interpretation='Browser-code batches are command counts, not CPU/RAM, session time, network traffic or browser-resource costs.',
                   uncertainty='Observed point estimates only; validity differences, live windows and historical prompt differences can change membership. No uncertainty bands or significance inferred.',
                   source_sha256={name: sha(HERE / name) for name in ['aggregate.json', 'aggregate_common_valid.json',
                       'browsercode_scaling_weighted_average.json', 'browsercode_scaling_common_valid_weighted_average.json',
-                      'plot_browsercode_scaling.py', 'plot_browsercode_average.py', 'plot_browsercode_common_valid.py']},
+                      'plot_browsercode_scaling.py', 'plot_browsercode_average.py', 'plot_browsercode_common_valid.py',
+                      '../browsercode_sol_high60_20261104/aggregate.json']},
                   per_benchmark_legends=dict(
                       single_call=[dict(method=m, label=l) for m, l in SINGLE_LEGEND],
                       selection=[dict(method=m, label=l) for m, l in SELECTION_LEGEND],
                       applies_to=['browsercode_scaling_pareto_preview', 'browsercode_scaling_weighted_pareto_preview'],
+                      weighted_single_call=[dict(method=m, label=l) for m, l in
+                          tuple(row for row in SINGLE_LEGEND if row[0] != 'serial_high') +
+                          (('serial_high', 'Sol high · 30 steps'), (SOL60_METHOD, SOL60_STYLE[0]))],
                       placement='Bottom; original point encodings preserved',
                       selection_title='Best-of-N action scaling',
                       browser_step_definition='Executed nonempty BrowserCode batches; each batch can contain multiple browser operations. Setup step limits cap agent decisions.',
