@@ -1,0 +1,330 @@
+{
+  "metric": "Repeated-action incidence (%) among valid episodes",
+  "definition": "100 * valid episodes with >= k identical non-wait/non-done calls / valid episodes; successes included; occurrences need not be consecutive",
+  "pooling": "Ratio of summed counts across three repeats, not an unweighted mean of repeat percentages",
+  "thresholds": [
+    3,
+    4,
+    5
+  ],
+  "uncertainty": {
+    "method": "Pointwise percentile bootstrap of 300 task clusters, preserving all three repeats, methods and thresholds; ratio recomputed in each resample",
+    "tasks": 300,
+    "repeats": 3,
+    "draws": 20000,
+    "seed": 20261104,
+    "scope": "Conditional on fixed checkpoints and three evaluation windows; excludes training-seed and evaluation-window uncertainty; not simultaneous intervals"
+  },
+  "matching": {
+    "identity": "JSON serialization of saved first tool call per actor turn with sorted object keys; no argument/string/URL normalization",
+    "extraction": "Historical compact extractor retains the first tool_call match per turn; malformed JSON may be represented by an unparsable pseudo-call with its first 200 raw characters",
+    "consecutive_check": "Longest run after removing absent calls and wait/done calls; consecutive retained actions, not necessarily consecutive actor turns"
+  },
+  "reference_sha256": "57865594e1170b8f417aae85f908cdeac76b5f8cc6837e2f19c100609ca0071b",
+  "local_source_hashes": [
+    {
+      "file": "repeat-iter90-outcome48-r1-385593-a1.jsonl",
+      "sha256": "8f22bfc113c6d36cb1b2985c7515c9ab65290315586278b3e6a5956c8fa1bd0b"
+    },
+    {
+      "file": "repeat-iter90-outcome48-r2-385593-a1.jsonl",
+      "sha256": "36eb8140c3183fdde21abe03c13d776ce8af76d24c66a908bc4dcf0ecd00a79d"
+    },
+    {
+      "file": "repeat-iter90-outcome48-r3-385593-a1.jsonl",
+      "sha256": "46009c040e28c2dfc54b53d134248d18466246ce087eab9015ff32d7c331e0a9"
+    },
+    {
+      "file": "repeat-iter90-outcome56-r1-385593-a1.jsonl",
+      "sha256": "663ef9e4112e7de7cf02d2b2a864c3a30eddadb55690f12a5e7cc81156b0a0ab"
+    },
+    {
+      "file": "repeat-iter90-outcome56-r2-385593-a1.jsonl",
+      "sha256": "3693fde93bfdf5e4dd31959b084dde5cda102899a142ff80bc5c91f710751230"
+    },
+    {
+      "file": "repeat-iter90-outcome56-r3-385593-a1.jsonl",
+      "sha256": "4f94ce7bd01c412c4747912653b75b1a23402348a8c7134d6eea937d1a0ab996"
+    },
+    {
+      "file": "repeat-iter90-gate-b-r1-385593-a1.jsonl",
+      "sha256": "0a50d324e28f11cffee5646ca94d9912204fa01c8038953de4c45e174d2ffeee"
+    },
+    {
+      "file": "repeat-iter90-gate-b-r2-385593-a1.jsonl",
+      "sha256": "b3d63f02748540509c6b1492490d8dfa79cc78121e3ed2863b12be5e791db36d"
+    },
+    {
+      "file": "repeat-iter90-gate-b-r3-385593-a1.jsonl",
+      "sha256": "86ad20a4d94b7e75413e35204a8131fd1c2f4ece2c26291b1d0ad06f85ffa617"
+    }
+  ],
+  "methods": {
+    "outcome48": {
+      "planned_episodes": 900,
+      "valid_episodes": 713,
+      "invalid_episodes": 187,
+      "repeats": [
+        {
+          "valid": 234,
+          "incidence_counts": [
+            88,
+            46,
+            25
+          ],
+          "filtered_consecutive_ge3_count": 41
+        },
+        {
+          "valid": 233,
+          "incidence_counts": [
+            90,
+            57,
+            38
+          ],
+          "filtered_consecutive_ge3_count": 50
+        },
+        {
+          "valid": 246,
+          "incidence_counts": [
+            100,
+            68,
+            43
+          ],
+          "filtered_consecutive_ge3_count": 58
+        }
+      ],
+      "thresholds": {
+        "3": {
+          "episodes": 278,
+          "percent": 38.99018232819074,
+          "ci95_percent": [
+            34.419263456090654,
+            43.58974358974359
+          ]
+        },
+        "4": {
+          "episodes": 171,
+          "percent": 23.983169705469845,
+          "ci95_percent": [
+            20.081411126187245,
+            28.01172289948909
+          ]
+        },
+        "5": {
+          "episodes": 106,
+          "percent": 14.866760168302946,
+          "ci95_percent": [
+            11.829436038514443,
+            18.103478759205966
+          ]
+        }
+      },
+      "filtered_consecutive_ge3": {
+        "episodes": 149,
+        "percent": 20.897615708274895,
+        "ci95_percent": [
+          17.22222222222222,
+          24.71102418443957
+        ]
+      }
+    },
+    "outcome56": {
+      "planned_episodes": 900,
+      "valid_episodes": 708,
+      "invalid_episodes": 192,
+      "repeats": [
+        {
+          "valid": 234,
+          "incidence_counts": [
+            57,
+            24,
+            14
+          ],
+          "filtered_consecutive_ge3_count": 20
+        },
+        {
+          "valid": 237,
+          "incidence_counts": [
+            78,
+            49,
+            23
+          ],
+          "filtered_consecutive_ge3_count": 31
+        },
+        {
+          "valid": 237,
+          "incidence_counts": [
+            61,
+            33,
+            18
+          ],
+          "filtered_consecutive_ge3_count": 22
+        }
+      ],
+      "thresholds": {
+        "3": {
+          "episodes": 196,
+          "percent": 27.683615819209038,
+          "ci95_percent": [
+            23.479460057807024,
+            32.01147128981088
+          ]
+        },
+        "4": {
+          "episodes": 106,
+          "percent": 14.971751412429379,
+          "ci95_percent": [
+            11.854820180424214,
+            18.23204419889503
+          ]
+        },
+        "5": {
+          "episodes": 55,
+          "percent": 7.768361581920904,
+          "ci95_percent": [
+            5.555555555555555,
+            10.174467908870021
+          ]
+        }
+      },
+      "filtered_consecutive_ge3": {
+        "episodes": 73,
+        "percent": 10.310734463276836,
+        "ci95_percent": [
+          7.887323943661972,
+          12.890192175356603
+        ]
+      }
+    },
+    "gate-b": {
+      "planned_episodes": 900,
+      "valid_episodes": 715,
+      "invalid_episodes": 185,
+      "repeats": [
+        {
+          "valid": 238,
+          "incidence_counts": [
+            45,
+            25,
+            9
+          ],
+          "filtered_consecutive_ge3_count": 27
+        },
+        {
+          "valid": 232,
+          "incidence_counts": [
+            47,
+            18,
+            5
+          ],
+          "filtered_consecutive_ge3_count": 23
+        },
+        {
+          "valid": 245,
+          "incidence_counts": [
+            53,
+            30,
+            16
+          ],
+          "filtered_consecutive_ge3_count": 29
+        }
+      ],
+      "thresholds": {
+        "3": {
+          "episodes": 145,
+          "percent": 20.27972027972028,
+          "ci95_percent": [
+            16.78319253561972,
+            23.935446331631947
+          ]
+        },
+        "4": {
+          "episodes": 73,
+          "percent": 10.20979020979021,
+          "ci95_percent": [
+            7.659574468085107,
+            12.92134831460674
+          ]
+        },
+        "5": {
+          "episodes": 30,
+          "percent": 4.195804195804196,
+          "ci95_percent": [
+            2.601062232565123,
+            6.013986013986014
+          ]
+        }
+      },
+      "filtered_consecutive_ge3": {
+        "episodes": 79,
+        "percent": 11.048951048951048,
+        "ci95_percent": [
+          8.298755186721992,
+          13.924050632911392
+        ]
+      }
+    }
+  },
+  "paired_differences_pp": {
+    "gate-b - outcome48": {
+      "3": {
+        "delta_pp": -18.71046204847046,
+        "ci95_pp": [
+          -23.758607982075016,
+          -13.685672543112334
+        ]
+      },
+      "4": {
+        "delta_pp": -13.773379495679634,
+        "ci95_pp": [
+          -17.866062054172822,
+          -9.662574067769501
+        ]
+      },
+      "5": {
+        "delta_pp": -10.67095597249875,
+        "ci95_pp": [
+          -14.121957559239709,
+          -7.2972811880321995
+        ]
+      },
+      "filtered_consecutive_ge3": {
+        "delta_pp": -9.848664659323846,
+        "ci95_pp": [
+          -14.170888875303113,
+          -5.558641624222661
+        ]
+      }
+    },
+    "gate-b - outcome56": {
+      "3": {
+        "delta_pp": -7.403895539488758,
+        "ci95_pp": [
+          -12.312593795088542,
+          -2.4558198709416286
+        ]
+      },
+      "4": {
+        "delta_pp": -4.761961202639169,
+        "ci95_pp": [
+          -8.60530094276821,
+          -0.9389959498111039
+        ]
+      },
+      "5": {
+        "delta_pp": -3.572557386116708,
+        "ci95_pp": [
+          -6.427538045967409,
+          -0.7766249341767102
+        ]
+      },
+      "filtered_consecutive_ge3": {
+        "delta_pp": 0.7382165856742127,
+        "ci95_pp": [
+          -2.698611179577079,
+          4.196791373914291
+        ]
+      }
+    }
+  }
+}

@@ -234,15 +234,49 @@ task cannot be done); **tool errors** (≥ 30% of tool calls failed); **wrong an
 <a id="rl-behavior-loops-20261103"></a>
 ## Repeated-action loops: ARM versus outcome-only · November 3
 
-**Main result.** With the relaxed gate, ARM action credit cuts repeated-action loops.
+**Main result.** At iteration 90, Outcome + ADM rewards (Gate B) has lower repeated-action incidence than the two matched outcome-only checkpoints: **20.3% versus 27.7% and 39.0%** of valid episodes. Against the 56-group baseline, the paired difference is **−7.4 pp [95% CI −12.3, −2.5]**. This measures repeated action identities, not verified browser-state cycles or lack of progress.
 - **Mechanism, from about 350,000 training labels:** the ARM is less likely to pick the executed
   action when that action repeats an earlier step. This is visible as a selection bias during
   training.
 - **Matched held-out evaluations:** Gate B has about half the loop failures of outcome-only RL.
 - **Limits:**
-  - The effect does not raise overall success.
+  - Lower repetition alone does not establish improved task success.
   - One outcome-only run (G8) reaches a similarly low loop rate.
   - The 40M+16F variant does not show the effect.
+
+<a id="rl-repetition-incidence-paper"></a>
+### Repetition incidence and threshold robustness
+
+![Repeated-action incidence at iteration 90 and sensitivity to three, four or five identical actions: outcome-only baselines in gray, Outcome + ADM rewards in purple, with 95% task-bootstrap intervals](rl_results/rl_repetition_incidence.png)
+
+*(a) Percentage of valid episodes containing at least three identical non-`wait`, non-`done` tool calls, including successful episodes and episodes without `done`. (b) The same metric at thresholds k = 3, 4 and 5; connecting segments guide the eye. Calls need not be consecutive. Online-Mind2Web, iteration 90, the same 300 tasks evaluated three times per checkpoint. Both panels use counts pooled across repeats and pointwise 95% task-cluster bootstrap intervals (20,000 draws, seed 20261104), preserving all repeats and methods within each sampled task. Intervals condition on these checkpoints and evaluation windows; they exclude training-seed and evaluation-window uncertainty.* [PDF](rl_results/rl_repetition_incidence.pdf) · [SVG](rl_results/rl_repetition_incidence.svg) · [Aggregate and intervals](arm_results/rl_integration/behavior/rl-repetition-incidence-20261104.json) · [Analysis and plot source](arm_results/rl_integration/behavior/plot_rl_repetition_incidence.py).
+
+**Definition.** For threshold `k`, incidence is `100 × valid episodes with maximum identical-call count ≥ k / valid episodes`. Each episode counts at most once. Invalid outcomes are excluded, rather than assigned zero repetition; each method uses its own valid episodes, not a common-valid intersection. This differs from the older failure-category metric below, which requires an unsuccessful outcome and a `done` call and uses all planned episodes as its denominator.
+
+| Method | Planned episodes | Valid episodes | Invalid episodes | Incidence, k = 3 | Incidence, k = 4 | Incidence, k = 5 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Outcome-only, 48 groups | 900 | 713 | 187 | 39.0% | 24.0% | 14.9% |
+| Outcome-only, 56 groups | 900 | 708 | 192 | 27.7% | 15.0% | 7.8% |
+| Outcome + ADM rewards (ours) | 900 | 715 | 185 | 20.3% | 10.2% | 4.2% |
+
+<details><summary>Matching, paired differences and alternative repetition definition</summary>
+
+The matching rule preserves the historical analysis: compare the saved first tool call per actor turn using JSON serialization with sorted object keys, excluding `wait` and `done`. Argument strings, URLs and values are not normalized. The extractor can retain malformed JSON as an `unparsable` pseudo-call with its first 200 raw characters; one ADM episode qualifies at k = 3 solely through those records (excluding malformed calls would give 144/715 = 20.1%, rather than 145/715 = 20.3%). Thresholds 4 and 5 are unaffected. Additional tool calls in the same response are not inspected. See the [full extraction and matching rules](#rl-repetition-matching-rules).
+
+The bootstrap samples the 300 task clusters with replacement, retaining all three repeats, methods and thresholds; each resample recomputes the ratio of summed incidence counts to summed valid counts. Intervals are pointwise, not simultaneous bands over thresholds. The new aggregate uses one shared resampling stream; its Monte Carlo interval endpoints differ slightly from the historical paired table below.
+
+| ADM minus outcome-only, 56 groups | Difference, pp | Paired 95% CI, pp |
+| --- | ---: | ---: |
+| At least 3 identical calls | −7.4 | [−12.3, −2.5] |
+| At least 4 identical calls | −4.8 | [−8.6, −0.9] |
+| At least 5 identical calls | −3.6 | [−6.4, −0.8] |
+| At least 3 consecutive retained calls | +0.7 | [−2.7, +4.2] |
+
+The historical consecutive check removes absent calls, `wait` and `done` before checking adjacency, so it measures **consecutive retained calls**, not necessarily consecutive actor turns. Its incidence is 20.9%, 10.3% and 11.0% for the 48-group baseline, 56-group baseline and ADM, respectively. ADM does not improve this check against the 56-group baseline. Repeated identical calls can also be legitimate; without browser-state progress checks, these metrics do not establish unproductive looping or a causal failure mechanism.
+
+</details>
+
+<details><summary>Earlier views: training diagnostics and repeated-action failure categories</summary>
 
 ![Loop rate over training, iteration-90 matched repeats, and ARM label bias against repeated actions](rl_results/rl_action_loops.png)
 
@@ -291,6 +325,8 @@ Pointwise 95% intervals use 20,000 percentile-bootstrap draws (seed 20261104) ov
 | --- | ---: | ---: |
 | Outcome-only 56 groups | −21.7 [−31.7, −12.0] | −7.4 [−12.4, −2.6] |
 | Outcome-only 48 groups | −37.3 [−47.7, −27.3] | −18.7 [−23.8, −13.6] |
+
+</details>
 
 ### Late training window, iterations 70 / 80 / 90 (one evaluation per checkpoint)
 

@@ -47,7 +47,7 @@
 
 [OM2W-only BrowserCode versus native CUAWright: 300 attempted tasks per cell, valid-only success with explicit valid denominators and metric coverage](ARM_FINAL_RESULTS.md#om2w-browsercode-native-cuawright-20261027).
 
-[Repeated-action loop failures at iteration 90: compact means and 95% task-bootstrap intervals; Outcome + ADM rewards in purple](RL_BEHAVIOR.md#rl-behavior-loops-20261103) · [Paper PDF](rl_results/rl_action_loops_iter90.pdf). [Repeated-action failure percentage bars and precise metric definition](RL_BEHAVIOR.md#rl-repeated-action-failure-metric).
+[Repeated-action incidence at iteration 90: main percentage bars and threshold robustness, with 95% task-bootstrap intervals; Outcome + ADM rewards in purple](RL_BEHAVIOR.md#rl-repetition-incidence-paper) · [Paper PDF](rl_results/rl_repetition_incidence.pdf). [Earlier failure-category metric and precise definition](RL_BEHAVIOR.md#rl-repeated-action-failure-metric).
 
 [Teacher and student ADM: compact Pre-exec, Post-exec, H = 3 and Oracle comparison, offline and online (task-weighted average; PDF)](arm_results/rl_integration/selection-label-setups-kfold-20261101.pdf) · [Results and caption](ARM_FINAL_RESULTS.md#final-selection-label-kfold-20261101).
 
