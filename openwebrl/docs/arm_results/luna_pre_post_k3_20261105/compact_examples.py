@@ -23,17 +23,20 @@ from render_examples import (R, SRC, INK, MUTED, GOOD, BAD, read, img, attempt_f
                              held, picks, calls)
 
 HERE = Path(__file__).resolve().parent
-COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}
+COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "H = 3"
+BAND, BANDEDGE = "#FFF1C2", "#E0A800"
 GOODC, BADC = "#1B7F3B", "#B3261E"
 EXAMPLES = [
     dict(letter="a", title="The screen right after the action decides",
          task="Find out what payment methods Netflix accepts.", site="help.netflix.com",
          sid="13d42f1f406049a59cfd502f38a90b09", cur=(0.0, 0.3, 0.5, 0.97), thumb=(0.0, 0.0, 0.64, 0.6),
-         cands=[(1, "click “Netflix\npayment options”", ["answer page opens"]),
-                (0, "scroll down", ["more billing text"])]),
+         decide=[0],
+         cands=[(1, "click “Netflix\npayment options”", ["answer page opens", "scroll down", "scroll down"]),
+                (0, "scroll down", ["more billing text", "scroll up", "click: site can't be reached"])]),
     dict(letter="b", title="Only the next steps decide",
          task="Find the latest research papers on machine learning and deep learning …", site="arxiv.org",
          sid="72dbd347d60817b95b0e603b", cur=(0.15, 0.0, 0.92, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
+         decide=[1, 2],
          cands=[(1, "click “search”", ["search box opens", "type “machine learning”", "Enter: 353,132 results"]),
                 (0, "go back", ["arXiv home page", "click: same listing again", "go back: loop"])]),
 ]
@@ -81,8 +84,8 @@ def main():
     xp = xt + 3 * wt + 2 * gt + 0.012  # picks / success
     th, rowgap = 0.13, 0.06
     heads = [(xc + wc / 2, "Current screen\n(all teachers see)"), (xa + wa / 2, "Candidate\naction"),
-             (xt + wt / 2, "Right after the action\n(post-exec, K = 3 see)"),
-             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Actor's next two actions and their screens\n(only K = 3 sees)"),
+             (xt + wt / 2, "Right after the action\n(post-exec, H = 3 see)"),
+             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Actor's next two actions and their screens\n(only H = 3 sees)"),
              (xp + 0.055, "Picked by,\nsuccess")]
     for x, t in heads:
         fig.text(x, 0.995, t, fontsize=6.4, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
@@ -97,6 +100,12 @@ def main():
         fig.text(xc + 0.022, y + 0.008, f"{ex['title']}.   Task: “{ex['task']}” ({ex['site']}, step {depth + 1})",
                  fontsize=6.1, color=MUTED, va="bottom")
         cur = img(x["image"]); W, H = cur.size; l, t, r, b = ex["cur"]
+        c0, c1 = min(ex["decide"]), max(ex["decide"])       # highlight the evidence that decides this example
+        bx0 = xt + c0 * (wt + gt) - 0.006; bx1 = xt + c1 * (wt + gt) + wt + 0.006
+        fig.add_artist(FancyBboxPatch((bx0, y - block_h - 0.045), bx1 - bx0, block_h + 0.05,
+                                      boxstyle="round,pad=0,rounding_size=0.01", fc=BAND, ec=BANDEDGE, lw=0.8,
+                                      transform=fig.transFigure, zorder=-5))
+        fig.text(bx1 - 0.006, y - block_h - 0.04, "decides", fontsize=6.2, color="#9A6B00", fontweight="bold", ha="right", va="bottom")
         ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
         for k, (i, label, caps) in enumerate(ex["cands"]):
             col = GOODC if k == 0 else BADC
@@ -113,15 +122,17 @@ def main():
             arrow(fig, xa + wa + 0.002, xt - 0.004, ry + th / 2, col)
             att, imm = attempt_for(root, ex["sid"], x["actions"][i]["teacher_exec"])
             shots = [img(imm["observation"]["screenshot"]["path"])]
-            if len(caps) > 1:
-                shots += [img(s["shot"]) for s in lookahead(att, depth)[:2]]
+            shots += [img(s["shot"]) for s in lookahead(att, depth)[:2] if s["shot"]]
             for j in range(3):
                 rx = xt + j * (wt + gt)
                 if j < len(shots):
-                    pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=col if j == 0 else "#9a9a9a",
-                        lw=1.2 if j == 0 else 0.6)
+                    key = j in ex["decide"]
+                    a_ = pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=col if key else "#b5b5b5",
+                             lw=1.3 if key else 0.5)
+                    if not key:                    # fade evidence that does not decide this example
+                        a_.add_patch(Rectangle((0, 0), 1, 1, transform=a_.transAxes, fc="white", alpha=0.55, ec="none"))
                     fig.text(rx + 0.003, ry - 0.006, caps[j] if j == 0 else f"{j}. {caps[j]}", fontsize=5.8,
-                             color=INK, va="top", fontweight="bold" if j else "normal")
+                             color=INK if key else "#8a8a8a", va="top", fontweight="bold" if key else "normal")
                 elif j == 1:
                     fig.text(rx + wt + gt / 2, ry + th / 2, "not needed: the screen right after\nthe action already differs",
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
