@@ -1,0 +1,472 @@
+{
+ "note": "Pre-execution vs post-execution vs K = 3 lookahead teacher picks (GPT-6 Luna) on the same 1,738 SFT-action branch states.",
+ "states": 1727,
+ "tasks": 434,
+ "bootstrap": {
+  "resamples": 10000,
+  "seed": 20261105,
+  "cluster": "task_id",
+  "interval": "percentile 95%"
+ },
+ "agreement": {
+  "all": {
+   "states": 1727,
+   "pre~post": 54.9,
+   "post~k3": 64.6,
+   "pre~k3": 49.2,
+   "pre~pre": 80.3,
+   "post~post": 85.1,
+   "k3~k3": 83.5,
+   "all three": 37.7,
+   "chance pair": 38.4,
+   "chance three": 15.9
+  },
+  "by_actions": {
+   "2": {
+    "states": 740,
+    "pre~post": 66.6,
+    "post~k3": 73.1,
+    "pre~k3": 60.4,
+    "pre~pre": 85.1,
+    "post~post": 90.3,
+    "k3~k3": 87.6,
+    "all three": 50.1,
+    "chance pair": 50.0,
+    "chance three": 25.0
+   },
+   "3": {
+    "states": 600,
+    "pre~post": 47.1,
+    "post~k3": 62.3,
+    "pre~k3": 44.2,
+    "pre~pre": 77.8,
+    "post~post": 82.2,
+    "k3~k3": 80.3,
+    "all three": 31.0,
+    "chance pair": 33.3,
+    "chance three": 11.1
+   },
+   "4": {
+    "states": 308,
+    "pre~post": 45.5,
+    "post~k3": 51.5,
+    "pre~k3": 34.9,
+    "pre~pre": 74.7,
+    "post~post": 79.9,
+    "k3~k3": 81.5,
+    "all three": 24.4,
+    "chance pair": 25.0,
+    "chance three": 6.2
+   },
+   "5": {
+    "states": 79,
+    "pre~post": 41.1,
+    "post~k3": 52.5,
+    "pre~k3": 38.6,
+    "pre~pre": 75.9,
+    "post~post": 78.5,
+    "k3~k3": 77.2,
+    "all three": 25.3,
+    "chance pair": 20.0,
+    "chance three": 4.0
+   }
+  },
+  "by_depth": {
+   "0": {
+    "states": 351,
+    "pre~post": 54.6,
+    "post~k3": 61.1,
+    "pre~k3": 46.6,
+    "pre~pre": 75.8,
+    "post~post": 79.8,
+    "k3~k3": 79.5,
+    "all three": 35.5,
+    "chance pair": 35.0,
+    "chance three": 13.3
+   },
+   "1–5": {
+    "states": 1035,
+    "pre~post": 55.4,
+    "post~k3": 65.3,
+    "pre~k3": 49.5,
+    "pre~pre": 81.1,
+    "post~post": 87.4,
+    "k3~k3": 84.6,
+    "all three": 38.3,
+    "chance pair": 39.1,
+    "chance three": 16.4
+   },
+   "6–11": {
+    "states": 292,
+    "pre~post": 54.8,
+    "post~k3": 65.8,
+    "pre~k3": 50.9,
+    "pre~pre": 81.8,
+    "post~post": 84.2,
+    "k3~k3": 83.2,
+    "all three": 38.5,
+    "chance pair": 39.8,
+    "chance three": 16.9
+   },
+   "12+": {
+    "states": 49,
+    "pre~post": 48.0,
+    "post~k3": 67.3,
+    "pre~k3": 53.1,
+    "pre~pre": 87.8,
+    "post~post": 77.6,
+    "k3~k3": 89.8,
+    "all three": 37.8,
+    "chance pair": 39.2,
+    "chance three": 16.6
+   }
+  }
+ },
+ "action_types": {
+  "all": {
+   "pre": {
+    "click": 45.0,
+    "scroll": 29.8,
+    "type": 7.1,
+    "back": 5.5,
+    "stop / answer": 5.4,
+    "navigate (URL)": 4.3,
+    "new tab": 2.1,
+    "wait": 0.7,
+    "tab switch / close": 0.2
+   },
+   "post": {
+    "click": 58.7,
+    "scroll": 20.4,
+    "type": 5.3,
+    "back": 5.3,
+    "stop / answer": 4.4,
+    "navigate (URL)": 3.4,
+    "new tab": 1.9,
+    "wait": 0.4,
+    "tab switch / close": 0.1
+   },
+   "k3": {
+    "click": 59.5,
+    "scroll": 18.6,
+    "type": 5.5,
+    "back": 5.2,
+    "stop / answer": 5.0,
+    "navigate (URL)": 3.2,
+    "new tab": 2.3,
+    "wait": 0.6,
+    "tab switch / close": 0.1
+   },
+   "offered": {
+    "click": 60.9,
+    "scroll": 16.0,
+    "type": 6.5,
+    "back": 5.5,
+    "stop / answer": 5.0,
+    "navigate (URL)": 2.9,
+    "new tab": 2.3,
+    "wait": 0.7,
+    "tab switch / close": 0.3
+   }
+  },
+  "not_unanimous": {
+   "states": 1242,
+   "pre": {
+    "click": 49.4,
+    "scroll": 27.1,
+    "type": 8.3,
+    "back": 5.1,
+    "stop / answer": 3.4,
+    "navigate (URL)": 4.1,
+    "new tab": 2.0,
+    "wait": 0.5,
+    "tab switch / close": 0.1
+   },
+   "post": {
+    "click": 68.5,
+    "scroll": 13.9,
+    "type": 5.8,
+    "back": 4.8,
+    "stop / answer": 2.1,
+    "navigate (URL)": 2.9,
+    "new tab": 1.8,
+    "wait": 0.2,
+    "tab switch / close": 0.0
+   },
+   "k3": {
+    "click": 69.6,
+    "scroll": 11.4,
+    "type": 6.0,
+    "back": 4.6,
+    "stop / answer": 2.9,
+    "navigate (URL)": 2.6,
+    "new tab": 2.3,
+    "wait": 0.4,
+    "tab switch / close": 0.0
+   },
+   "offered": {
+    "click": 65.1,
+    "scroll": 13.7,
+    "type": 6.9,
+    "back": 5.0,
+    "stop / answer": 3.2,
+    "navigate (URL)": 2.8,
+    "new tab": 2.5,
+    "wait": 0.6,
+    "tab switch / close": 0.1
+   }
+  }
+ },
+ "switches": {
+  "pre->post": [
+   [
+    "click → click",
+    350.5
+   ],
+   [
+    "scroll → click",
+    183.0
+   ],
+   [
+    "type → type",
+    40.0
+   ],
+   [
+    "type → click",
+    32.0
+   ],
+   [
+    "back → click",
+    24.5
+   ],
+   [
+    "click → scroll",
+    22.5
+   ],
+   [
+    "stop / answer → click",
+    15.5
+   ],
+   [
+    "click → back",
+    11.5
+   ]
+  ],
+  "post->k3": [
+   [
+    "click → click",
+    274.0
+   ],
+   [
+    "scroll → click",
+    69.0
+   ],
+   [
+    "click → scroll",
+    51.0
+   ],
+   [
+    "type → type",
+    30.5
+   ],
+   [
+    "back → click",
+    21.0
+   ],
+   [
+    "click → back",
+    17.0
+   ],
+   [
+    "scroll → back",
+    17.0
+   ],
+   [
+    "scroll → scroll",
+    13.5
+   ]
+  ],
+  "pre->k3": [
+   [
+    "click → click",
+    375.0
+   ],
+   [
+    "scroll → click",
+    198.5
+   ],
+   [
+    "type → type",
+    43.0
+   ],
+   [
+    "type → click",
+    32.0
+   ],
+   [
+    "back → click",
+    30.5
+   ],
+   [
+    "click → scroll",
+    23.0
+   ],
+   [
+    "scroll → back",
+    21.5
+   ],
+   [
+    "navigate (URL) → click",
+    14.5
+   ]
+  ]
+ },
+ "stop_by_depth": {
+  "0": {
+   "states": 351,
+   "offering_stop": 15,
+   "pre": 2.7,
+   "pre_given_offered": 63.3,
+   "post": 1.6,
+   "post_given_offered": 36.7,
+   "k3": 2.0,
+   "k3_given_offered": 46.7
+  },
+  "1–5": {
+   "states": 1035,
+   "offering_stop": 182,
+   "pre": 6.8,
+   "pre_given_offered": 38.5,
+   "post": 6.0,
+   "post_given_offered": 34.3,
+   "k3": 6.5,
+   "k3_given_offered": 37.1
+  },
+  "6–11": {
+   "states": 292,
+   "offering_stop": 42,
+   "pre": 4.3,
+   "pre_given_offered": 29.8,
+   "post": 2.9,
+   "post_given_offered": 20.2,
+   "k3": 4.1,
+   "k3_given_offered": 28.6
+  },
+  "12+": {
+   "states": 49,
+   "offering_stop": 7,
+   "pre": 1.0,
+   "pre_given_offered": 7.1,
+   "post": 0.0,
+   "post_given_offered": 0.0,
+   "k3": 0.0,
+   "k3_given_offered": 0.0
+  }
+ },
+ "shown_position": {
+  "pre": {
+   "0": 41.8,
+   "1": 37.2,
+   "2": 15.0,
+   "3": 5.0,
+   "4": 1.1
+  },
+  "post": {
+   "0": 41.9,
+   "1": 36.4,
+   "2": 16.2,
+   "3": 4.5,
+   "4": 1.0
+  },
+  "k3": {
+   "0": 40.5,
+   "1": 37.0,
+   "2": 16.4,
+   "3": 5.0,
+   "4": 1.2
+  }
+ },
+ "outcomes": {
+  "states": 1727,
+  "tasks": 434,
+  "sft_sample": 38.72,
+  "best_in_five": 48.97,
+  "pre": {
+   "success": 40.4,
+   "states": 1727,
+   "minus_sft": [
+    1.68,
+    0.99,
+    2.38
+   ]
+  },
+  "post": {
+   "success": 41.48,
+   "states": 1727,
+   "minus_sft": [
+    2.76,
+    2.03,
+    3.49
+   ]
+  },
+  "k3": {
+   "success": 41.88,
+   "states": 1727,
+   "minus_sft": [
+    3.16,
+    2.38,
+    3.98
+   ]
+  },
+  "oracle": {
+   "success": 42.17,
+   "states": 1726,
+   "minus_sft": [
+    3.44,
+    2.66,
+    4.28
+   ]
+  },
+  "head_to_head": {
+   "post-pre": {
+    "states": 903,
+    "tasks": 336,
+    "pre": 35.34,
+    "post": 37.4,
+    "diff": [
+     2.06,
+     0.75,
+     3.42
+    ],
+    "b_better": 283,
+    "a_better": 233
+   },
+   "k3-post": {
+    "states": 741,
+    "tasks": 308,
+    "post": 35.05,
+    "k3": 35.99,
+    "diff": [
+     0.94,
+     -0.61,
+     2.52
+    ],
+    "b_better": 230,
+    "a_better": 204
+   },
+   "k3-pre": {
+    "states": 1010,
+    "tasks": 356,
+    "pre": 36.06,
+    "k3": 38.59,
+    "diff": [
+     2.54,
+     1.3,
+     3.76
+    ],
+    "b_better": 321,
+    "a_better": 252
+   }
+  }
+ }
+}
