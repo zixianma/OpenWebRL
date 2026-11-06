@@ -28,6 +28,7 @@
 - **Post-exec sits much closer to K = 3 than to pre-exec.** The two labels agree on 65% of states, against 55% for pre/post and 49% for pre/K = 3. Chance is 38%. Each teacher agrees with its own second call on 80–85% of states, so even post-exec and K = 3 are well below the noise ceiling. The gap widens with more candidates.
 - **Pre-exec over-picks scroll.** Without execution evidence, Luna picks scroll on 30% of calls, against 16% of offered candidates; post-exec and K = 3 pick it on 20% and 19%. The most common pre → post switch is scroll → click. Seeing the result also confirms clicks: 45% of picks are clicks for pre-exec, against 59–60% with execution evidence.
 - **The p16 depth-0 stop shift does not reproduce here.** Only 15 of 351 depth-0 states offer a stop candidate, too few to test.
+- **[Seven illustrated examples](#luna-pre-post-k3-examples-20261105)** with real screenshots show each pattern: the result fixes a guessed scroll or blocked site; the 3-step tail exposes a loop; the tail credits a candidate for the actor's later recovery; and execution evidence cannot see the value of stopping.
 
 ![Pre-exec vs post-exec vs K = 3 lookahead teacher picks: (a) pairwise and self agreement, (b) agreement by number of distinct candidate actions, (c) action type of picks, (d) held-out success of picks over one SFT sample and pairwise on disagreement states](arm_results/luna_pre_post_k3_20261105/pre-post-k3-picks.png)
 
@@ -51,6 +52,50 @@
 - **States:** 1,727 of the 1,738 labelled states have two valid calls from all three sources. The outcome rows need held-out draws for each of the fixed five.
 - **Scope:** the outcomes measure the teacher's pick, not a trained selector. Live heads trained on these labels are in the [label-source comparison](ARM_FINAL_RESULTS.md#final-selection-label-live-3run-20261103). Draw 1 is the evidence draw for post-exec and K = 3, and draws 4–8 are never shown to any teacher.
 </details>
+
+### Examples: what each teacher saw and picked
+
+<a id="luna-pre-post-k3-examples-20261105"></a>
+
+Seven states from the same 1,727, chosen as the clearest cases of each pattern. In each one, every teacher picked the same candidate on both of its calls, and the better and worse picks differ by at least 40 pp in held-out success. Each figure shows three things. Top left is the screen all three teachers judge, with each candidate's click or scroll point numbered. Top right lists the candidates, each teacher's pick (×2 = both calls) and held-out success (draws 4–8, valid only). Below are the two contested candidates. The first column is the draw-1 immediate result, which the post-exec teacher sees. The next three columns are the actor's following steps, which only the K = 3 teacher sees. All screenshots are the saved ones.
+
+**1. Seeing the result fixes a guess (the most common pattern: pre-exec scrolls, post-exec clicks).**
+
+*Netflix payment methods.* The help page lists a "Netflix payment options" link. Pre-exec scrolls down (0/5). With the result in view, post-exec and K = 3 click the link, which opens the payment-options article directly (20/20).
+
+![Netflix help page: pre-exec scrolls (0/5); post-exec and K = 3 click "Netflix payment options", which opens the article (20/20)](arm_results/luna_pre_post_k3_20261105/example-a2.jpg)
+
+*Blocked news site.* NYTimes blocks the agent as a robot. Pre-exec switches to bbc.com (1/5), whose immediate result is an "Access denied" page. Post-exec sees that page and picks Google News instead (5/5), which loads the headlines.
+
+![NYTimes robot block: pre-exec goes to bbc.com, which shows Access denied (1/5); post-exec and K = 3 go to Google News, which loads (5/5)](arm_results/luna_pre_post_k3_20261105/example-a4.jpg)
+
+**2. The three-step tail reveals what one result cannot.**
+
+*arXiv search vs going back.* On a Formal Languages listing, pre-exec and post-exec go back (0/19). Going back looks reasonable after one step, and the lookahead shows it turning into a click / back loop. K = 3 picks the search box (5/5): its immediate result is only an open search field, but the next steps type "machine learning" and reach 353,132 results.
+
+![arXiv: go back looks fine after one step but loops (0/19); the search box looks like nothing happened after one step, but the lookahead reaches machine-learning results (5/5)](arm_results/luna_pre_post_k3_20261105/example-b1.jpg)
+
+*Finding the 79th abbot.* On the Luxembourgish article about the abbey, pre-exec and post-exec keep scrolling the article (0/20). The scrolling path answers after two more scrolls without ever finding the name. Going back lands on a search-results page, which looks marginal after one step. Its continuation searches again, opens "Willibrord Scheffer" and answers (3/5).
+
+![Luxembourgish Wikipedia: scrolling answers without finding the abbot (0/20); go back leads to a search that opens Willibrord Scheffer (3/5)](arm_results/luna_pre_post_k3_20261105/example-b4.jpg)
+
+**3. The tail misleads: credit for what the actor happened to do next.**
+
+*West Frisian "Fryske Frijheid".* Pre-exec and post-exec search for the term (9/20). K = 3 picks "click, then go back" (0/5), whose own result is the Wikipedy main page, a step backwards. In its single sampled continuation, the actor then searched for "Fryske Frijheid" by itself, and K = 3 credited the candidate for that recovery. This is the single-continuation noise (category G) found in the p16 coding above.
+
+![West Frisian Wikipedia: K = 3 credits "click, then go back" for the actor's later search (0/5) over the direct search (9/20)](arm_results/luna_pre_post_k3_20261105/example-c2.jpg)
+
+**4. Pre-exec is right and the execution evidence misleads.**
+
+*Stopping on an arXiv listing.* After 12 steps on the Statistics listing, stop/answer succeeds 8/10, and pre-exec picks it. Its immediate "result" is the same page and it has no continuation. So post-exec and K = 3 see no evidence for stopping and prefer clicking "more" (1/5), whose result looks like progress. Execution evidence can only favour actions that visibly change something.
+
+![arXiv Statistics listing: pre-exec stops (8/10); post-exec and K = 3 click "more" (1/5) because stop has no visible result](arm_results/luna_pre_post_k3_20261105/example-d1.jpg)
+
+*Norwegian Wikipedia, Eurovision 2025.* The task asks for the answer from the homepage's "Aktuelt" section. Pre-exec scrolls to that section (12/15). Post-exec and K = 3 pick the search, which immediately opens the Eurovision Song Contest 2025 article, a convincing result (1/5). But the answer has to come from the homepage section, and the article path rarely satisfies the judge.
+
+![Norwegian Wikipedia: scrolling to Aktuelt succeeds (12/15); searching opens a convincing Eurovision article but rarely satisfies the task (1/5)](arm_results/luna_pre_post_k3_20261105/example-d2.jpg)
+
+*Selection: [select_examples.py](arm_results/luna_pre_post_k3_20261105/select_examples.py) ranks firm-pick states by held-out gap in four categories (38 / 16 / 7 / 9 states qualify). Rendering: [render_examples.py](arm_results/luna_pre_post_k3_20261105/render_examples.py). Points are the actor's normalised `point_2d` on the 1280 × 720 screen. Lookahead screenshots come from the draw-1 rollout that the K = 3 teacher was shown.*
 
 ## Live outcome: K = 3 vs pre labels, Luna vs GPT-5.5, LoRA vs head (3 runs, 2026-11-03)
 
