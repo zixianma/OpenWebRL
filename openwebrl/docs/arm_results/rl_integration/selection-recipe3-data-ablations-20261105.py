@@ -2,7 +2,7 @@
   selection-recipe3-data-states-20261105.*  fewer states: whole tasks until 250 / 500 / 1,000 states, all their panels
   selection-recipe3-data-panels-20261105.*  fewer panels: 1 / 2 / 4 panels sampled per state, all 2,112 states
 Both end at the full data (2,112 states, 8.9 panels per state). y = equal-weight 3-benchmark mean of valid-only success, runs pooled
-(3 runs; s500 and pps2 1 run, drawn hollow). Gray dashed line: SFT 4B alone; dark dotted line: SelectionARM (both 3 runs).
+(3 runs; s500 and pps2 1 run, drawn hollow). Gray dashed line: SFT 4B alone (3 runs).
 Data: selection-recipe3-data-ablations-20261105.json (selection-recipe3-data-ablations-20261105-analysis.py)."""
 import json
 import os
@@ -28,7 +28,7 @@ FIGS = [("selection-recipe3-data-states-20261105", "Training states", [("s250", 
         ("selection-recipe3-data-panels-20261105", "Panels per state", [("pps1", 1), ("pps2", 2), ("pps4", 4), ("full", 18786 / 2112)],
          ["1", "2", "4", "8.9 (all)"])]
 lo = min(y["sft"], *(y[k] for _, _, pts, _ in FIGS for k, _ in pts)) - 1.5
-hi = max(y["sarm"], *(y[k] for _, _, pts, _ in FIGS for k, _ in pts)) + 1.5
+hi = max(*(y[k] for _, _, pts, _ in FIGS for k, _ in pts)) + 1.5
 for name, xlabel, pts, ticks in FIGS:
     fig, ax = plt.subplots(figsize=(3.1, 2.35))
     xs = [x for _, x in pts]; ys = [y[k] for k, _ in pts]
@@ -37,7 +37,7 @@ for name, xlabel, pts, ticks in FIGS:
         one = runs[k] == 1
         ax.scatter(x, v, s=30, marker="D", zorder=3, facecolor="white" if one else ADM_GPT55, edgecolor=ADM_GPT55, linewidth=1.1)
         ax.annotate(f"{v:.1f}", (x, v), textcoords="offset points", xytext=(0, 6), ha="center", fontsize=7, color="#444444")
-    for key, color, ls, label in (("sft", "#898781", "--", "SFT 4B"), ("sarm", "#4a4844", ":", "SelectionARM")):
+    for key, color, ls, label in (("sft", "#898781", "--", "SFT 4B"),):
         ax.axhline(y[key], color=color, linestyle=ls, linewidth=0.9, zorder=1)
         ax.text(xs[-1] * 1.3, y[key] + 0.2, label, fontsize=7, color=color, va="bottom", ha="right")
     ax.set_xscale("log"); ax.set_xticks(xs); ax.set_xticklabels(ticks); ax.minorticks_off()
