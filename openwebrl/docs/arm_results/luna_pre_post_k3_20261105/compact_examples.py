@@ -29,13 +29,13 @@ GOODC, BADC = "#1B7F3B", "#B3261E"
 EXAMPLES = [
     dict(letter="a", title="The screen right after the action decides",
          task="Find out what payment methods Netflix accepts.", site="help.netflix.com",
-         sid="13d42f1f406049a59cfd502f38a90b09", cur=(0.0, 0.3, 0.5, 0.97), thumb=(0.0, 0.0, 0.64, 0.6),
+         sid="13d42f1f406049a59cfd502f38a90b09", cur=(0.0, 0.3, 0.56, 0.97), thumb=(0.0, 0.0, 0.64, 0.6),
          decide=[0],
          cands=[(1, "click “Netflix\npayment options”", ["answer page opens", "scroll down", "scroll down"]),
                 (0, "scroll down", ["more billing text", "scroll up", "click: site can't be reached"])]),
     dict(letter="b", title="Only the next steps decide",
          task="Find the latest research papers on machine learning and deep learning …", site="arxiv.org",
-         sid="72dbd347d60817b95b0e603b", cur=(0.15, 0.0, 0.92, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
+         sid="72dbd347d60817b95b0e603b", cur=(0.0, 0.0, 0.86, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
          decide=[1, 2],
          cands=[(1, "click “search”", ["search box opens", "type “machine learning”", "Enter: 353,132 results"]),
                 (0, "go back", ["arXiv home page", "click: same listing again", "go back: loop"])]),
@@ -78,13 +78,13 @@ def arrow(fig, x0, x1, y, color="#777777"):
 def main():
     plt.rcParams.update({"font.family": "Albert Sans", "savefig.facecolor": "white", "pdf.fonttype": 42})
     fig = plt.figure(figsize=(7.0, 3.15))
-    xc, wc = 0.0, 0.2                  # current screen
-    xa, wa = 0.215, 0.13               # action chip
-    xt, wt, gt = 0.365, 0.15, 0.008    # three screens: right after the action, next action 1, next action 2
-    xp = xt + 3 * wt + 2 * gt + 0.012  # picks / success
+    xc, wc = 0.0, 0.215                 # current screen
+    xa, wa = 0.229, 0.112              # action chip
+    xt, wt, gt = 0.365, 0.143, 0.008   # three screens: right after the action, next action 1, next action 2
+    xp = xt + 3 * wt + 2 * gt + 0.03   # picks / success (after a "…" marking further lookahead)
     th, rowgap = 0.13, 0.06
     heads = [(xc + wc / 2, "Current screen"), (xa + wa / 2, "Action"), (xt + wt / 2, "Next screen"),
-             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Lookahead (next 2 steps)"), (xp + 0.055, "Picked by")]
+             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Lookahead"), (xp + 0.055, "Picked by")]
     for x, t in heads:
         fig.text(x, 0.995, t, fontsize=6.4, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
     for x0, x1 in ((xt, xt + wt), (xt + wt + gt, xt + 3 * wt + 2 * gt)):
@@ -111,7 +111,7 @@ def main():
             pt = (c.get("arguments") or {}).get("point_2d")
             if c.get("name") == "click" and pt:            # box the click target on the current screen
                 px, py = (pt[0] / 1000 - l) * W, (pt[1] / 1000 - t) * H
-                ax.add_patch(Rectangle((px - 0.1 * W, py - 0.03 * H), 0.2 * W, 0.06 * H, fill=False, ec=col, lw=1.6))
+                ax.add_patch(Rectangle((px - 0.075 * W, py - 0.03 * H), 0.15 * W, 0.06 * H, fill=False, ec=col, lw=1.6))
             if c.get("name") == "scroll":
                 ax.annotate("", (0.93, 0.08), (0.93, 0.32), xycoords="axes fraction",
                             arrowprops=dict(arrowstyle="-|>", color=col, lw=1.6, mutation_scale=9))
@@ -134,6 +134,7 @@ def main():
                 elif j == 1:
                     fig.text(rx + wt + gt / 2, ry + th / 2, "not needed: the screen right after\nthe action already differs",
                              fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
+            fig.text(xt + 3 * wt + 2 * gt + 0.004, ry + th / 2, "…", fontsize=10, color="#888888", va="center")
             bx = xp
             for kk in [kk for kk in ("pre", "post", "k3") if p[kk].count(i) == 2]:
                 t_ = fig.text(bx, ry + th * 0.7, NAME[kk], fontsize=5.8, color="white", fontweight="bold", va="center",
