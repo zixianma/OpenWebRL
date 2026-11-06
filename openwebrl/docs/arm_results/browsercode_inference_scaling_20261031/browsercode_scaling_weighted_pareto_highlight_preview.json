@@ -1,9 +1,521 @@
 {
-  "schema": "browsercode-weighted-pareto-highlight-preview-v1",
-  "population": "Original own-valid planned-task-weighted benchmark means; weights 300/1045, 595/1045, 150/1045",
+  "schema": "browsercode-weighted-pareto-highlight-preview-v2",
+  "population": "Original twelve own-valid settings plus two completed cached-context own-valid settings; weights 300/1045, 595/1045, 150/1045. Historical baseline coordinates are unchanged; gap-repaired baseline rows are not substituted.",
+  "comparison_caveats": [
+    "Own-valid tasks and live collection windows differ; no paired or causal cache effect is inferred.",
+    "Cached selection uses full native context; cached N5/60 advertises 60 while historical N5/60 advertised 30 and enforced 60.",
+    "Actor means exclude Terra, hosting and invalid-outcome spending. Latency is elapsed per task, not summed parallel call time.",
+    "Selected browser-code batches may contain multiple browser operations and are not browser resource or fee measurements."
+  ],
+  "points": [
+    {
+      "method": "serial_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7847511154755811,
+      "metrics": {
+        "actor_usd": 0.22735903655341408,
+        "browser_commands": 14.910282798402154,
+        "actor_seconds": 101.82500465950359
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 266,
+          "invalid": 34,
+          "successes": 177,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 553,
+          "invalid": 42,
+          "successes": 468,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 145,
+          "invalid": 5,
+          "successes": 113,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7816579211100628,
+      "metrics": {
+        "actor_usd": 0.009176273465871932,
+        "browser_commands": 15.429842302271272,
+        "actor_seconds": 106.46018084312448
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 579,
+          "invalid": 16,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 123,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "parallel3_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8098582002437537,
+      "metrics": {
+        "actor_usd": 0.053124617539409565,
+        "browser_commands": 13.494511658464164,
+        "actor_seconds": 181.2106703206068
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 183,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 568,
+          "invalid": 27,
+          "successes": 496,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 148,
+          "invalid": 2,
+          "successes": 121,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "parallel5_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8255805746555092,
+      "metrics": {
+        "actor_usd": 0.06182612044142442,
+        "browser_commands": 12.90791930271528,
+        "actor_seconds": 197.52002860312137
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 198,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 555,
+          "invalid": 40,
+          "successes": 483,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 120,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_xhigh_12288",
+      "benchmark_count": 3,
+      "success_rate": 0.7798901859791189,
+      "metrics": {
+        "actor_usd": 0.010711101093705934,
+        "browser_commands": 15.921265536313308,
+        "actor_seconds": 126.18804878846825
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 181,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 118,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_24576",
+      "benchmark_count": 3,
+      "success_rate": 0.7903406534985482,
+      "metrics": {
+        "actor_usd": 0.009025923044125465,
+        "browser_commands": 15.651633746370589,
+        "actor_seconds": 114.99494830138731
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 270,
+          "invalid": 30,
+          "successes": 186,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 585,
+          "invalid": 10,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 129,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_6144",
+      "benchmark_count": 3,
+      "success_rate": 0.7822389044712093,
+      "metrics": {
+        "actor_usd": 0.009041284159348588,
+        "browser_commands": 15.757535282678536,
+        "actor_seconds": 113.36554778183466
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 124,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8390829527455339,
+      "metrics": {
+        "actor_usd": 0.01061604419388097,
+        "browser_commands": 16.89553886019279,
+        "actor_seconds": 140.5531147810754
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 584,
+          "invalid": 11,
+          "successes": 510,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 136,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "parallel2_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.8066090568977881,
+      "metrics": {
+        "actor_usd": 0.05060397766751955,
+        "browser_commands": 13.854468169028472,
+        "actor_seconds": 181.13395736931727
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 264,
+          "invalid": 36,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 500,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 149,
+          "valid": 148,
+          "invalid": 1,
+          "successes": 126,
+          "missing_native": 1
+        }
+      }
+    },
+    {
+      "method": "parallel5_select_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8704898188214367,
+      "metrics": {
+        "actor_usd": 0.06220770232537726,
+        "browser_commands": 12.524599902851127,
+        "actor_seconds": 183.46062697360546
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 299,
+          "valid": 258,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 1
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 544,
+          "invalid": 51,
+          "successes": 503,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 131,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_single_high_120steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8456241418647433,
+      "metrics": {
+        "actor_usd": 0.011703167484418384,
+        "browser_commands": 16.93905875898357,
+        "actor_seconds": 137.48641778234472
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 540,
+          "invalid": 55,
+          "successes": 488,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 137,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "sol_single_high60",
+      "benchmark_count": 3,
+      "success_rate": 0.8516807984806157,
+      "metrics": {
+        "actor_usd": 0.2727417254377367,
+        "browser_commands": 16.760221313658555,
+        "actor_seconds": 128.7558526978636
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 185,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 569,
+          "invalid": 26,
+          "successes": 520,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 142,
+          "invalid": 8,
+          "successes": 131,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_n3_cached_high30",
+      "benchmark_count": 3,
+      "success_rate": 0.828797649847289,
+      "metrics": {
+        "actor_usd": 0.02817223127875207,
+        "browser_commands": 13.060380629695253,
+        "actor_seconds": 187.64041364816654
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 262,
+          "invalid": 38,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 514,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 123,
+          "missing_native": 0
+        }
+      }
+    },
+    {
+      "method": "luna_n5_cached_high60",
+      "benchmark_count": 3,
+      "success_rate": 0.8479267396127693,
+      "metrics": {
+        "actor_usd": 0.03686633222666149,
+        "browser_commands": 11.638936524290388,
+        "actor_seconds": 193.66414375281727
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 542,
+          "invalid": 53,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 139,
+          "invalid": 11,
+          "successes": 130,
+          "missing_native": 0
+        }
+      }
+    }
+  ],
   "styles": {
-    "hollow": "30-decision limit",
-    "filled": "60/120-decision limit",
+    "hollow": "Historical 30-decision limit",
+    "filled": "Historical 60/120 plus both cached settings; cached N3 is solid light red",
     "highlight": "parallel5_select_high_60steps",
     "highlight_size_points_squared": 27,
     "baseline_size_points_squared": 27,
@@ -14,21 +526,23 @@
     "selection_title": "Best-of-N action decision scaling",
     "actor_family": "GPT-6 (Luna and Sol)",
     "baseline_definition": "Luna baseline: high effort, max output tokens = 12,288 per call, 30-step limit",
-    "colors": "Original colors retained; no new halo"
+    "colors": "Original colors retained; cached N3 solid light red and cached N5 solid dark red, both with black edges"
   },
   "source_sha256": {
     "aggregate.json": "2ed7304688b3cae9f4a5ad099e14f577493f04ade33bd8e1961d6a3a15581131",
     "browsercode_scaling_weighted_average.json": "04adf62a0f5f86086e7d3c3e41d49e13d7a6d5825b748dd9c61af3a491c3ad9c",
     "plot_browsercode_pareto_previews.py": "93dd5f54356a653181ed090322eb33e238d244fe139fab655e5193fbe99dcf00",
     "browsercode_pareto_paper_style.py": "108e9e80149a5ff7364503798ba39bb42d6ebaf0ad1024648b3b0740031fa100",
-    "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0"
+    "../browsercode_sol_high60_20261104/aggregate.json": "908e9a90cc9658a890791f04f9acd048716384082c13f4a6f640ece7f10c2ed0",
+    "../browsercode_cached_selection_20261105/aggregate.json": "c57d0b496f36abdd5479b37416dd3ad0c041ca05a6ad0a630620bd9cab39013e",
+    "../browsercode_cached_selection_20261105/plot_browsercode_scaling14.py": "c268ad262f676ba2fecfcb5fe3ad97342a4fbe47111271bc6ff7628f6f45d3b1"
   },
-  "renderer_sha256": "277ce5de920ffc11c5c9719aef297614a15e7d9afcb3f4506c47eb91feac8e8f",
+  "renderer_sha256": "c1f8a844d36bbee9feeedc2ab0be6a30f94e862d48c992144ec8b4fb60f8a7ff",
   "frontier": [
     {
       "population": "weighted_own_valid",
       "metric": "actor_usd",
-      "method_count": 12,
+      "method_count": 14,
       "frontier": [
         {
           "method": "luna_single_high_24576",
@@ -46,12 +560,18 @@
           "success_rate": 0.8456241418647433
         },
         {
+          "method": "luna_n5_cached_high60",
+          "x": 0.03686633222666149,
+          "success_rate": 0.8479267396127693
+        },
+        {
           "method": "parallel5_select_high_60steps",
           "x": 0.06220770232537726,
           "success_rate": 0.8704898188214367
         }
       ],
       "dominated_methods": [
+        "luna_n3_cached_high30",
         "luna_single_high",
         "luna_single_high_6144",
         "luna_single_xhigh_12288",
@@ -65,8 +585,13 @@
     {
       "population": "weighted_own_valid",
       "metric": "browser_commands",
-      "method_count": 12,
+      "method_count": 14,
       "frontier": [
+        {
+          "method": "luna_n5_cached_high60",
+          "x": 11.638936524290388,
+          "success_rate": 0.8479267396127693
+        },
         {
           "method": "parallel5_select_high_60steps",
           "x": 12.524599902851127,
@@ -74,6 +599,7 @@
         }
       ],
       "dominated_methods": [
+        "luna_n3_cached_high30",
         "luna_single_high",
         "luna_single_high_120steps",
         "luna_single_high_24576",
@@ -90,7 +616,7 @@
     {
       "population": "weighted_own_valid",
       "metric": "actor_seconds",
-      "method_count": 12,
+      "method_count": 14,
       "frontier": [
         {
           "method": "serial_high",
@@ -114,6 +640,8 @@
         }
       ],
       "dominated_methods": [
+        "luna_n3_cached_high30",
+        "luna_n5_cached_high60",
         "luna_single_high",
         "luna_single_high_120steps",
         "luna_single_high_60steps",
@@ -126,8 +654,8 @@
     }
   ],
   "output_sha256": {
-    "png": "15df8b654f8d3e546479940027b82e937d7809eebbbf5dd62a37ded9154ae928",
-    "svg": "e977f597dca104b26673ad923b0c5fe9ee40b0fd0857ae0523b34c49b2cbcf79",
-    "pdf": "eb268f3ce3d967f3d76c0fb9b538948dd4d399fed2f2a3e336d37e42eb537f1a"
+    "png": "b389a0aa1eb415b34788b30402739d369886651448e882f91e31e7f8ccd425ce",
+    "svg": "eac084e2424e04ea9c49e82259847587966f52695fe48f59457f7f6ebeea01a8",
+    "pdf": "14ee7fd721b3b74cc0ad72b059a58363b2a595ad4d311cbefdfa60bf4f151b41"
   }
 }
