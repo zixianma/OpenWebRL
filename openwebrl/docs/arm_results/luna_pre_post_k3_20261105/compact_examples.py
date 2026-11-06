@@ -23,7 +23,7 @@ from render_examples import (R, SRC, INK, MUTED, GOOD, BAD, read, img, attempt_f
                              held, picks, calls)
 
 HERE = Path(__file__).resolve().parent
-COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "H = 3"
+COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}; NAME["k3"] = "Lookahead"
 BAND, BANDEDGE = "#FFF1C2", "#E0A800"
 GOODC, BADC = "#1B7F3B", "#B3261E"
 EXAMPLES = [
@@ -83,21 +83,19 @@ def main():
     xt, wt, gt = 0.365, 0.15, 0.008    # three screens: right after the action, next action 1, next action 2
     xp = xt + 3 * wt + 2 * gt + 0.012  # picks / success
     th, rowgap = 0.13, 0.06
-    heads = [(xc + wc / 2, "Current screen\n(all teachers see)"), (xa + wa / 2, "Candidate\naction"),
-             (xt + wt / 2, "Right after the action\n(post-exec, H = 3 see)"),
-             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Actor's next two actions and their screens\n(only H = 3 sees)"),
-             (xp + 0.055, "Picked by,\nsuccess")]
+    heads = [(xc + wc / 2, "Current screen"), (xa + wa / 2, "Action"), (xt + wt / 2, "Next screen"),
+             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Lookahead (next 2 steps)"), (xp + 0.055, "Picked by")]
     for x, t in heads:
         fig.text(x, 0.995, t, fontsize=6.4, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
     for x0, x1 in ((xt, xt + wt), (xt + wt + gt, xt + 3 * wt + 2 * gt)):
-        fig.add_artist(plt.Line2D([x0, x1], [0.905, 0.905], color="#999999", lw=0.6, transform=fig.transFigure))
-    y = 0.84
+        fig.add_artist(plt.Line2D([x0, x1], [0.955, 0.955], color="#999999", lw=0.6, transform=fig.transFigure))
+    y = 0.895
     for ex in EXAMPLES:
         x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
         anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
         block_h = 2 * th + rowgap
         fig.text(xc, y + 0.008, ex["letter"], fontsize=8.6, fontweight="bold", color=INK, va="bottom")
-        fig.text(xc + 0.022, y + 0.008, f"{ex['title']}.   Task: “{ex['task']}” ({ex['site']}, step {depth + 1})",
+        fig.text(xc + 0.022, y + 0.008, f"Task: “{ex['task']}” ({ex['site']}, step {depth + 1})",
                  fontsize=6.1, color=MUTED, va="bottom")
         cur = img(x["image"]); W, H = cur.size; l, t, r, b = ex["cur"]
         c0, c1 = min(ex["decide"]), max(ex["decide"])       # highlight the evidence that decides this example
