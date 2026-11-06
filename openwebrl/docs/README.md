@@ -8,6 +8,8 @@
 
 [Inference-scaling optimization vs static N5: cached selector keeps N5 success at 59% of cost; agreement and self-requested gates lose 2–4 pp; phase-3 selector skip and N3 for latency (interim)](ARM_INFERENCE_SCALING_OPTIMIZATION.md#adaptive-compute-20261101).
 
+[Completed fourteen-setting BrowserCode comparison: cached N3/30 and N5/60 plus Sol high/60; separate own-valid and 857-task common-valid weighted plots (230 OM2W / 505 WebVoyager / 122 DeepShop)](ARM_FINAL_RESULTS.md#browsercode-cached-selection-complete-20261105). [Zero-API figure reproduction](API_EXPERIMENT_METHODS.md#cached-selection-completed-figures).
+
 [Gap-repaired BrowserCode inference scaling: all eleven historical methods on 953 common-valid tasks (252 OM2W / 556 WebVoyager / 145 DeepShop), with grouped cost/latency curves and paired uncertainty](ARM_FINAL_RESULTS.md#browsercode-gap-repaired-20261104). [Earlier figures and original denominators](ARM_FINAL_RESULTS.md#browsercode-inference-scaling-20261031). [Measured browser hosting/traffic costs from the paired OM2W US-stealth pilot](API_EXPERIMENT_METHODS.md#browser-hosting-and-traffic-costs).
 
 [Completed Sol high/60 on all 1,045 tasks: per-benchmark success, validity, actor cost, latency and batches](ARM_FINAL_RESULTS.md#browsercode-sol-high60). [Sol/60 reproduction](API_EXPERIMENT_METHODS.md#sol-high60). [Prospective Sol high/120 reproduction: the same model, token cap and deadline with 120 advertised and enforced decisions](API_EXPERIMENT_METHODS.md#sol-high120). [Fixed cached-context Luna N3/30 and N5/60 reproduction](API_EXPERIMENT_METHODS.md#fixed-cached-luna-selection).

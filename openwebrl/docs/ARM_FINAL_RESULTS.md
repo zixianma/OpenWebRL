@@ -1,5 +1,74 @@
 # Final inference results
 
+<a id="browsercode-cached-selection-complete-20261105"></a>
+
+## Completed BrowserCode scaling: cached selection and Sol high/60
+
+**Cached-context selection has lower observed API cost, with similar latency to historical selection; longer single runs remain the cheaper scaling option.** On the shared tasks below, cached N3/30 costs 45% less than historical N3/30, with 2.1 pp higher success and 3% longer latency. Cached N5/60 costs 39% less than historical N5/60, with 2.0 pp lower success and 7% longer latency. Sol high/60 has the highest observed weighted success, at substantially greater API cost. These are descriptive comparisons across live collection windows; selector context and some advertised decision limits also differ, so the differences cannot be attributed to provider caching alone.
+
+![Fourteen BrowserCode settings on the same 857 common-valid tasks: success versus actor API cost, selected browser-code batches and elapsed actor latency; legends outside the panels](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.png)
+
+All fourteen settings use **GPT-6 Luna or Sol and the same GPT-5.6 Terra judge**. The figure includes the eleven gap-repaired historical settings, completed Sol high/60, cached N3/30 and cached N5/60. Every point uses the same freshly intersected tasks within each benchmark. Fixed planned weights **300/1,045, 595/1,045 and 150/1,045** apply to success and all three actor metrics; weighted success is not the pooled success rate across retained tasks. These conditional means include valid failures and exclude invalid outcomes.
+
+| Benchmark | Planned | Common-valid across all 14 | Excluded |
+|---|---:|---:|---:|
+| OM2W | 300 | 230 | 70 |
+| WebVoyager | 595 | 505 | 90 |
+| DeepShop | 150 | 122 | 28 |
+| Total | 1,045 | 857 | 188 |
+
+*Blue: single-candidate runs; red: candidate selection; Luna circles and Sol squares. N3 uses a light-red solid circle; black outer outlines identify cached-context selection. Dashed segments join observed nondominated points separately for each x metric and are visual guides, without confidence or superiority claims. A selected nonempty executable BrowserCode block counts as one batch, potentially containing several browser/CDP operations. Batches and decision limits do not equalize browser resources or fees. Actor latency is elapsed time per task, including parallel inference and browser execution, excluding browser initialization and external Terra judging. Cost preserves native usage pricing or upper bounds, excludes Terra, browser fees and invalid-attempt spending, and is not an invoice.*
+
+[Paper PDF](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.pdf) · [SVG](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted.svg) · [Weighted coordinates](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_common_valid_weighted_coordinates.csv) · [Per-benchmark means and success counts](arm_results/browsercode_cached_selection_20261105/common_valid_per_benchmark.csv) · [Sanitized aggregate](arm_results/browsercode_cached_selection_20261105/aggregate.json) · [Reproduction](API_EXPERIMENT_METHODS.md#cached-selection-completed-figures)
+
+<details>
+<summary>All fourteen settings: weighted means on the same 857 tasks</summary>
+
+| Method / maximum decisions | Weighted success | Actor API $ / task | Actor latency (s / task) | Selected batches / task |
+|---|---:|---:|---:|---:|
+| Luna high single / 30 | 80.58% | 0.00848 | 98.7 | 14.62 |
+| Luna xhigh single / 30 | 80.97% | 0.00996 | 117.7 | 15.03 |
+| Luna high single / 30 · 0.5× cap | 80.27% | 0.00828 | 104.9 | 14.88 |
+| Luna high single / 30 · 2× cap | 81.36% | 0.00828 | 106.4 | 14.67 |
+| Luna high single / 60 | 84.88% | 0.00939 | 124.5 | 15.70 |
+| Luna high single / 120 | 84.76% | 0.01007 | 121.9 | 15.53 |
+| Luna high N2 / 30 | 82.64% | 0.04398 | 164.8 | 12.94 |
+| Luna high N3 / 30 | 82.54% | 0.04623 | 166.1 | 12.75 |
+| Luna high N3 / 30 · cached context | 84.68% | 0.02544 | 171.0 | 12.24 |
+| Luna high N5 / 30 | 84.44% | 0.05646 | 184.9 | 12.29 |
+| Luna high N5 / 60 | 86.73% | 0.05769 | 173.8 | 12.10 |
+| Luna high N5 / 60 · cached context | 84.74% | 0.03546 | 185.5 | 11.32 |
+| Sol high single / 30 | 81.50% | 0.21224 | 95.0 | 14.12 |
+| Sol high single / 60 | 87.27% | 0.24279 | 114.8 | 15.53 |
+
+The base output ceiling is 12,288 tokens per generation, including reasoning; 0.5× and 2× set ceilings of 6,144 and 24,576. They do not guarantee different realized spending. Historical Luna single/60 and N5/60 enforced 60 decisions while advertising 30; cached N5/60 and Sol/60 advertise and enforce 60. The 120-decision Luna run advertises and enforces 120. Cached selection retains the full native actor context, whereas historical selection uses its original context projection. All N proposals are concurrent; selection follows their completion and only the chosen action executes. The comparisons change more than a provider cache setting and are not randomized contemporaneous controls. No new paired uncertainty intervals are claimed for this 857-task snapshot.
+
+</details>
+
+<details>
+<summary>Completed cached cohorts: coverage and each method’s own-valid figure</summary>
+
+Both cached settings have a saved outcome for every planned task: 2,090 outcomes in total, 1,926 valid and 164 invalid, with none missing. Every saved success, valid failure and invalid outcome is preserved. Counts below describe each method’s own population, rather than the common-valid cohort above. Overall success divides successes by planned tasks; valid-only success divides by valid outcomes.
+
+| Cached method | Benchmark | Planned / recorded | Valid | Invalid | Successes | Overall success | Valid-only success |
+|---|---|---:|---:|---:|---:|---:|---:|
+| N3 / 30 | OM2W | 300 | 262 | 38 | 184 | 61.33% | 70.23% |
+| N3 / 30 | WebVoyager | 595 | 581 | 14 | 514 | 86.39% | 88.47% |
+| N3 / 30 | DeepShop | 150 | 143 | 7 | 123 | 82.00% | 86.01% |
+| N5 / 60 | OM2W | 300 | 259 | 41 | 188 | 62.67% | 72.59% |
+| N5 / 60 | WebVoyager | 595 | 542 | 53 | 481 | 80.84% | 88.75% |
+| N5 / 60 | DeepShop | 150 | 139 | 11 | 130 | 86.67% | 93.53% |
+
+![Same fourteen settings using each method’s own valid outcomes, with fixed planned benchmark weights](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted.png)
+
+Own-valid populations differ between methods and are inappropriate for paired-effect claims. All outcomes are recorded for the fourteen settings, but invalid outcomes remain excluded from efficiency means and are never converted into valid failures. The eleven historical settings retain their original valid outcomes plus the prespecified first gap-repair outcomes; these are not fresh reruns of all baselines. The earlier 744-task, 953-task and twelve-setting snapshots retain their original denominators below.
+
+[Own-valid PDF](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted.pdf) · [Own-valid SVG](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted.svg) · [Own-valid coordinates](arm_results/browsercode_cached_selection_20261105/browsercode_scaling14_own_valid_weighted_coordinates.csv) · [Own-valid per-benchmark counts and metrics](arm_results/browsercode_cached_selection_20261105/own_valid_per_benchmark.csv) · [Standalone renderer](arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py) · [Render provenance](arm_results/browsercode_cached_selection_20261105/render-provenance.json)
+
+Only aggregate results and rendering code are public. Task identities, trajectories and operational audits remain private. The completed experiment endpoint and aggregate projection were independently checked before release.
+
+</details>
+
 <a id="browsercode-gap-repaired-20261104"></a>
 
 ## BrowserCode scaling after one-pass gap recovery

@@ -210,7 +210,7 @@ Use `--luna-cached-selection luna_n3_cached_high30` or `luna_n5_cached_high60` w
 
 All N proposals run concurrently on identical native actor input. The selector receives that full actor context, including earlier selected encrypted reasoning and executed tool history, followed by a developer instruction and indexed proposal actions. It retains the actor tool definition, uses `tool_choice=none`, and returns a strict `selected_index` schema. Only the chosen candidate executes; its native response and the actual observation enter the next actor turn. Unselected candidates' reasoning never enters later actor context.
 
-This changes the historical selector's context projection. Cached N5/60 also advertises 60 decisions; historical N5/60 advertised 30 while enforcing 60. Comparison with historical selection therefore does **not isolate provider caching alone**. Prefix reuse depends on the provider; measure actual cache telemetry and retain unknown usage conservatively. Actor latency is elapsed time per task, including proposal generation, selection and browser execution, excluding browser initialization and external Terra judging. These recipes prepare new reproductions; cached reruns are separate from the completed historical figures.
+This changes the historical selector's context projection. Cached N5/60 also advertises 60 decisions; historical N5/60 advertised 30 while enforcing 60. Comparison with historical selection therefore does **not isolate provider caching alone**. Prefix reuse depends on the provider; measure actual cache telemetry and retain unknown usage conservatively. Actor latency is elapsed time per task, including proposal generation, selection and browser execution, excluding browser initialization and external Terra judging. The [completed cached-context results](ARM_FINAL_RESULTS.md#browsercode-cached-selection-complete-20261105) include separate own-valid and freshly intersected fourteen-method figures. Historical snapshots retain their original populations; these recipes prepare independent new reproductions.
 
 ```bash
 python -B openwebrl/api_experiments/reproduce/browsercode.py setup \
@@ -221,6 +221,22 @@ python -B openwebrl/api_experiments/reproduce/browsercode.py setup \
 A timeout during an input-token-count request still leaves that task invalid. If the counter has a verified released HTTP lease and exactly zero reserved cost, the cached actor runner preserves its unknown-usage record, physical call count and zero hold, then permits the next task. Billable unknown usage, malformed evidence and other failures retain the original halt behavior. The run plan binds the [cleanup guard](../api_experiments/reproduce/zero_price_counter_cancel.py) by source hash and checks it before execution.
 
 For N5/60, use `luna_n5_cached_high60` and a new workspace. The ordinary `check`, `run` and `report` commands apply. Setup performs no browser or model work. Run prints a plan until `--execute` is supplied; provide explicit actor, judge, physical-call and browser-start caps. Preparation grants no spending authorization. Generated source manifests bind the method, roster, prompts, worker limits and original archived runtime files before execution.
+
+<a id="cached-selection-completed-figures"></a>
+### Reproduce the completed fourteen-setting figures without API calls
+
+The [completed comparison](ARM_FINAL_RESULTS.md#browsercode-cached-selection-complete-20261105) contains the eleven gap-repaired historical settings, Sol high/60, cached N3/30 and cached N5/60. Its new common-valid intersection contains 230 OM2W, 505 WebVoyager and 122 DeepShop tasks. Separate own-valid figures use each method's valid outcomes; both views apply the same fixed planned benchmark weights to success, cost, elapsed latency and selected batches. The public aggregate includes all per-benchmark numerators, denominators and metric coverage, so the figures can be regenerated without task payloads or private operational records.
+
+Install Matplotlib, then run from the repository root into a fresh output directory:
+
+```bash
+MPLCONFIGDIR=/tmp/browsercode14-mpl python3 -B \
+  openwebrl/docs/arm_results/browsercode_cached_selection_20261105/plot_browsercode_scaling14.py \
+  --aggregate openwebrl/docs/arm_results/browsercode_cached_selection_20261105/aggregate.json \
+  --output-directory /tmp/browsercode14-render
+```
+
+The renderer validates the exact fourteen-method matrix, shared Terra protocol, complete metric coverage and explicit population definitions before producing both three-panel PNG/PDF/SVG figures, coordinate CSVs and render provenance. It preserves existing outputs, so use another fresh directory to repeat the command. This reproduces published aggregate figures without model or browser calls; it does not replace a native experiment rerun. Use the [fixed cached-context recipe](#fixed-cached-luna-selection) for new bounded evaluations. Historical and cached selectors differ in context projection, cached N5/60 also changes the advertised limit, and collection windows differ; these figures do not isolate the causal effect of caching.
 
 <a id="browser-hosting-and-traffic-costs"></a>
 ### Browser hosting and traffic costs
