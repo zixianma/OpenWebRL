@@ -1,0 +1,173 @@
+{
+ "note": "2026-11-05/06 live eval of the R3+WA 4B LoRA (WebArbiter SFT pairs + Recipe 3 GPT-5.5 K=3), 3 runs, all 1,045 tasks.\nNo same-window SFT control: all references are from 11-03/04 or 11-04 (cross-day; live success drifts between days).\nOverall = success / scheduled (invalid = failure); valid-only = success / valid. Paired diffs: per-task success averaged\nover the three runs, 10,000 task resamples within benchmark (seed 20261105); mean = equal-weight average of 3 benchmarks.",
+ "rows": {
+  "R3+WA LoRA (11-05)": {
+   "online_mind2web": {
+    "succ": 306,
+    "valid": 778,
+    "done": 900,
+    "overall": 34.0,
+    "valid_only": 39.33161953727507
+   },
+   "webvoyager": {
+    "succ": 1008,
+    "valid": 1751,
+    "done": 1785,
+    "overall": 56.470588235294116,
+    "valid_only": 57.5671045117076
+   },
+   "deepshop": {
+    "succ": 211,
+    "valid": 443,
+    "done": 450,
+    "overall": 46.888888888888886,
+    "valid_only": 47.62979683972912
+   },
+   "avg_overall": 45.786492374727665,
+   "avg_valid": 48.1761736295706
+  },
+  "GPT-5.5 K=3 LoRA (11-04)": {
+   "online_mind2web": {
+    "succ": 321,
+    "valid": 781,
+    "done": 900,
+    "overall": 35.666666666666664,
+    "valid_only": 41.101152368758
+   },
+   "webvoyager": {
+    "succ": 920,
+    "valid": 1745,
+    "done": 1785,
+    "overall": 51.5406162464986,
+    "valid_only": 52.722063037249285
+   },
+   "deepshop": {
+    "succ": 211,
+    "valid": 446,
+    "done": 450,
+    "overall": 46.888888888888886,
+    "valid_only": 47.309417040358746
+   },
+   "avg_overall": 44.698723934018055,
+   "avg_valid": 47.04421081545534
+  },
+  "SelectionARM (11-04)": {
+   "online_mind2web": {
+    "succ": 327,
+    "valid": 765,
+    "done": 900,
+    "overall": 36.333333333333336,
+    "valid_only": 42.745098039215684
+   },
+   "webvoyager": {
+    "succ": 903,
+    "valid": 1728,
+    "done": 1785,
+    "overall": 50.588235294117645,
+    "valid_only": 52.25694444444444
+   },
+   "deepshop": {
+    "succ": 219,
+    "valid": 439,
+    "done": 450,
+    "overall": 48.666666666666664,
+    "valid_only": 49.88610478359909
+   },
+   "avg_overall": 45.19607843137255,
+   "avg_valid": 48.2960490890864
+  },
+  "SFT 4B (11-03/04)": {
+   "online_mind2web": {
+    "succ": 276,
+    "valid": 797,
+    "done": 900,
+    "overall": 30.666666666666668,
+    "valid_only": 34.62986198243413
+   },
+   "webvoyager": {
+    "succ": 805,
+    "valid": 1765,
+    "done": 1785,
+    "overall": 45.09803921568628,
+    "valid_only": 45.609065155807365
+   },
+   "deepshop": {
+    "succ": 193,
+    "valid": 448,
+    "done": 450,
+    "overall": 42.888888888888886,
+    "valid_only": 43.080357142857146
+   },
+   "avg_overall": 39.55119825708061,
+   "avg_valid": 41.10642809369955
+  }
+ },
+ "paired": {
+  "R3+WA LoRA (11-05) - GPT-5.5 K=3 LoRA (11-04)": {
+   "online_mind2web": [
+    -1.6666666666666667,
+    -4.777777777777778,
+    1.4444444444444438
+   ],
+   "webvoyager": [
+    4.929971988795518,
+    2.3529411764705883,
+    7.563025210084033
+   ],
+   "deepshop": [
+    0.0,
+    -4.888888888888888,
+    4.88888888888889
+   ],
+   "avg": [
+    1.0877684407096169,
+    -1.0258558979147214,
+    3.216954559601618
+   ]
+  },
+  "R3+WA LoRA (11-05) - SelectionARM (11-04)": {
+   "online_mind2web": [
+    -2.3333333333333335,
+    -5.555555555555555,
+    0.8888888888888884
+   ],
+   "webvoyager": [
+    5.88235294117647,
+    3.361344537815126,
+    8.403361344537815
+   ],
+   "deepshop": [
+    -1.7777777777777775,
+    -6.666666666666667,
+    2.8888888888888897
+   ],
+   "avg": [
+    0.5904139433551198,
+    -1.521319638966698,
+    2.664807033924681
+   ]
+  },
+  "R3+WA LoRA (11-05) - SFT 4B (11-03/04)": {
+   "online_mind2web": [
+    3.333333333333333,
+    -0.11111111111111076,
+    6.888888888888888
+   ],
+   "webvoyager": [
+    11.372549019607844,
+    8.627450980392155,
+    14.061624649859944
+   ],
+   "deepshop": [
+    4.000000000000001,
+    -1.3333333333333326,
+    9.116666666666587
+   ],
+   "avg": [
+    6.235294117647059,
+    3.93152038593215,
+    8.523295985060688
+   ]
+  }
+ }
+}
