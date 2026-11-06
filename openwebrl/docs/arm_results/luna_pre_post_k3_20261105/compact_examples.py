@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""Compact two-example figure (paper, about 1/3 page): (a) the immediate post-execution result fixes a pre-execution guess
-(Netflix help page); (b) three lookahead steps reveal what one result cannot (arXiv search box vs going back).
-Same saved screenshots, picks and held-out success (draws 4-8, valid only) as render_examples.py.
+"""Compact two-example figure (paper, about 1/3 page): (a) the screen right after an action already separates the
+candidates (Netflix help page); (b) only the actor's next steps do (arXiv search box vs going back).
+
+One column grid for both examples: current screen (what every teacher sees) | candidate action | screen right after the
+action (post-exec and K = 3 see it) | the actor's next two actions and their screens (K = 3 only) | teacher picks and
+held-out success. Success = successful share of held-out continuations (draws 4-8, valid only); an action the actor
+proposed k times (merged duplicates) has 5k held-out continuations. Same saved screenshots as render_examples.py.
 
   compact_examples.py   (CPU only; writes examples-compact.{png,pdf} next to this file)
 """
@@ -12,49 +16,27 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from render_examples import (R, SRC, CAND, INK, MUTED, GOOD, BAD, read, img, attempt_for, lookahead,  # noqa: E402
+from render_examples import (R, SRC, INK, MUTED, GOOD, BAD, read, img, attempt_for, lookahead,  # noqa: E402
                              held, picks, calls)
 
 HERE = Path(__file__).resolve().parent
-NETFLIX, ARXIV = "13d42f1f406049a59cfd502f38a90b09", "72dbd347d60817b95b0e603b"
 COLOR = {k: c for k, _, c in SRC}; NAME = {k: n for k, n, _ in SRC}
-
-
-def crop(im, top=0.0, bottom=0.62, left=0.0, right=1.0):
-    W, H = im.size
-    return im.crop((int(left * W), int(top * H), int(right * W), int(bottom * H)))
-
-
-def thumb(fig, rect, im, title, sub=None, edge="#bbbbbb", lw=0.5):
-    ax = fig.add_axes(rect); ax.imshow(im, aspect="auto"); ax.set_xticks([]); ax.set_yticks([])
-    for sp in ax.spines.values():
-        sp.set_color(edge); sp.set_linewidth(lw)
-    ax.set_title(title, fontsize=6.2, color=INK, pad=2, loc="left")
-    if sub:
-        ax.text(0, -0.05, sub, transform=ax.transAxes, fontsize=5.8, color=MUTED, va="top")
-    return ax
-
-
-def badges(fig, x, y, keys, gap=0.006):
-    for k in keys:
-        t = fig.text(x, y, NAME[k], fontsize=5.6, color="white", fontweight="bold", va="center",
-                     bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[k], ec="none"))
-        fig.canvas.draw(); x = t.get_window_extent().transformed(fig.transFigure.inverted()).x1 + gap
-    return x
-
-
-def outcome(fig, x, y, s, n, good):
-    fig.text(x, y, f"{s}/{n} succeed", fontsize=6.4, fontweight="bold", color=GOOD if good else BAD, va="center")
-
-
-def marker(ax, W, H, pt, i, crop_box):
-    l, t, r, b = crop_box
-    px, py = pt[0] / 1000 * W - l * W, pt[1] / 1000 * H - t * H
-    ax.scatter([px], [py], s=46, color=CAND[i], edgecolor="white", linewidth=0.8, zorder=3)
-    ax.text(px, py, str(i + 1), fontsize=5.2, color="white", ha="center", va="center", fontweight="bold", zorder=4)
+GOODC, BADC = "#1B7F3B", "#B3261E"
+EXAMPLES = [
+    dict(letter="a", title="The screen right after the action decides",
+         task="Find out what payment methods Netflix accepts.", site="help.netflix.com",
+         sid="13d42f1f406049a59cfd502f38a90b09", cur=(0.0, 0.3, 0.5, 0.97), thumb=(0.0, 0.0, 0.64, 0.6),
+         cands=[(1, "click “Netflix\npayment options”", ["answer page opens"]),
+                (0, "scroll down", ["more billing text"])]),
+    dict(letter="b", title="Only the next steps decide",
+         task="Find the latest research papers on machine learning and deep learning …", site="arxiv.org",
+         sid="72dbd347d60817b95b0e603b", cur=(0.15, 0.0, 0.92, 1.0), thumb=(0.0, 0.0, 0.64, 0.6),
+         cands=[(1, "click “search”", ["search box opens", "type “machine learning”", "Enter: 353,132 results"]),
+                (0, "go back", ["arXiv home page", "click: same listing again", "go back: loop"])]),
+]
 
 
 def state(sid):
@@ -66,67 +48,92 @@ def state(sid):
     raise KeyError(sid)
 
 
+def crop(im, box):
+    W, H = im.size; l, t, r, b = box
+    return im.crop((int(l * W), int(t * H), int(r * W), int(b * H)))
+
+
+def pic(fig, rect, im, edge="#9a9a9a", lw=0.6):
+    ax = fig.add_axes(rect); ax.imshow(im, aspect="auto"); ax.set_xticks([]); ax.set_yticks([])
+    for sp in ax.spines.values():
+        sp.set_color(edge); sp.set_linewidth(lw)
+    return ax
+
+
+def chip(fig, x, y, w, h, text, color, fs=6.0):
+    fig.add_artist(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.008", fc=color, ec="none",
+                                  transform=fig.transFigure, alpha=0.95))
+    fig.text(x + w / 2, y + h / 2, text, fontsize=fs, color="white", fontweight="bold", ha="center", va="center",
+             linespacing=1.05)
+
+
+def arrow(fig, x0, x1, y, color="#777777"):
+    fig.add_artist(FancyArrowPatch((x0, y), (x1, y), transform=fig.transFigure, arrowstyle="-|>", mutation_scale=7,
+                                   lw=0.9, color=color))
+
+
 def main():
     plt.rcParams.update({"font.family": "Albert Sans", "savefig.facecolor": "white", "pdf.fonttype": 42})
-    fig = plt.figure(figsize=(7.0, 4.0))
-    L = 0.005
-
-    def head(y, letter, title, task):
-        fig.text(L, y, letter, fontsize=9, fontweight="bold", color=INK, va="top")
-        fig.text(L + 0.022, y, title, fontsize=7.4, fontweight="bold", color=INK, va="top")
-        fig.text(L + 0.022, y - 0.04, task, fontsize=6.2, color=MUTED, va="top")
-
-    def group(x0, x1, y, text):
-        fig.add_artist(plt.Line2D([x0, x1], [y - 0.012, y - 0.012], color="#999999", lw=0.6, transform=fig.transFigure))
-        fig.text((x0 + x1) / 2, y, text, fontsize=5.9, color=MUTED, ha="center", va="bottom")
-
-    # (a) Netflix: post-exec sees that the link opens the payment-options article; pre-exec scrolls.
-    x = state(NETFLIX); root = Path(x["root"]); p = picks(x)
-    anc = read(read(root / "states" / NETFLIX / "anchor-reference.json")["path"])
-    head(0.995, "a", "Post-execution evidence fixes a guess",
-         "Task: “Find out what payment methods Netflix accepts.”  (help.netflix.com, step 4)")
-    before = img(x["image"]); W, H = before.size; box = (0.0, 0.3, 0.52, 0.9)
-    tw, th, y0 = 0.29, 0.30, 0.555
-    ax = thumb(fig, [L, y0, tw, th], crop(before, box[1], box[3], box[0], box[2]), "Current screen (all teachers see)")
-    for i, a in enumerate(x["actions"]):
-        c = calls(anc["candidates"][a["teacher_exec"]]["output"][0])[0]
-        pt = (c.get("arguments") or {}).get("point_2d")
-        if pt:
-            marker(ax, W, H, pt, i, box)
+    fig = plt.figure(figsize=(7.0, 3.15))
+    xc, wc = 0.0, 0.2                  # current screen
+    xa, wa = 0.215, 0.13               # action chip
+    xt, wt, gt = 0.365, 0.15, 0.008    # three screens: right after the action, next action 1, next action 2
+    xp = xt + 3 * wt + 2 * gt + 0.012  # picks / success
+    th, rowgap = 0.13, 0.06
+    heads = [(xc + wc / 2, "Current screen\n(all teachers see)"), (xa + wa / 2, "Candidate\naction"),
+             (xt + wt / 2, "Right after the action\n(post-exec, K = 3 see)"),
+             (xt + 1.5 * wt + 1.5 * gt + wt / 2, "Actor's next two actions and their screens\n(only K = 3 sees)"),
+             (xp + 0.055, "Picked by,\nsuccess")]
+    for x, t in heads:
+        fig.text(x, 0.995, t, fontsize=6.4, color=INK, ha="center", va="top", fontweight="bold", linespacing=1.1)
+    for x0, x1 in ((xt, xt + wt), (xt + wt + gt, xt + 3 * wt + 2 * gt)):
+        fig.add_artist(plt.Line2D([x0, x1], [0.905, 0.905], color="#999999", lw=0.6, transform=fig.transFigure))
+    y = 0.84
+    for ex in EXAMPLES:
+        x = state(ex["sid"]); root = Path(x["root"]); p = picks(x)
+        anc = read(read(root / "states" / ex["sid"] / "anchor-reference.json")["path"]); depth = anc["depth"]
+        block_h = 2 * th + rowgap
+        fig.text(xc, y + 0.008, ex["letter"], fontsize=8.6, fontweight="bold", color=INK, va="bottom")
+        fig.text(xc + 0.022, y + 0.008, f"{ex['title']}.   Task: “{ex['task']}” ({ex['site']}, step {depth + 1})",
+                 fontsize=6.1, color=MUTED, va="bottom")
+        cur = img(x["image"]); W, H = cur.size; l, t, r, b = ex["cur"]
+        ax = pic(fig, [xc, y - block_h, wc, block_h], crop(cur, ex["cur"]))
+        for k, (i, label, caps) in enumerate(ex["cands"]):
+            col = GOODC if k == 0 else BADC
+            c = calls(anc["candidates"][x["actions"][i]["teacher_exec"]]["output"][0])[0]
+            pt = (c.get("arguments") or {}).get("point_2d")
+            if c.get("name") == "click" and pt:            # box the click target on the current screen
+                px, py = (pt[0] / 1000 - l) * W, (pt[1] / 1000 - t) * H
+                ax.add_patch(Rectangle((px - 0.1 * W, py - 0.03 * H), 0.2 * W, 0.06 * H, fill=False, ec=col, lw=1.6))
             if c.get("name") == "scroll":
-                l, t = box[0], box[1]; px, py = pt[0] / 1000 * W - l * W, pt[1] / 1000 * H - t * H
-                ax.annotate("", (px, py + 0.12 * H), (px, py + 0.03 * H), arrowprops=dict(arrowstyle="-|>", color=CAND[i], lw=1.2))
-    xs = [0.345, 0.68]
-    group(xs[0], xs[1] + tw, y0 + th + 0.045, "Immediate result of each candidate (post-exec and K = 3 see this; pre-exec does not)")
-    for j, (i, cap) in enumerate(((0, "1  scroll down: more billing text"), (1, "2  click “Netflix payment options”: answer page"))):
-        _, imm = attempt_for(root, NETFLIX, x["actions"][i]["teacher_exec"])
-        s, n = held(x["actions"][i])
-        thumb(fig, [xs[j], y0, tw, th], crop(img(imm["observation"]["screenshot"]["path"]), 0.0, 0.6, 0.0, 0.52), cap, edge=CAND[i], lw=1.1)
-        e = badges(fig, xs[j], y0 - 0.04, [k for k in ("pre", "post", "k3") if p[k].count(i) == 2])
-        outcome(fig, e + 0.01, y0 - 0.04, s, n, s / n > 0.5)
-
-    # (b) arXiv: one step after "click search" shows only an open box; the next steps reach results. Going back loops.
-    x = state(ARXIV); root = Path(x["root"]); p = picks(x)
-    anc = read(read(root / "states" / ARXIV / "anchor-reference.json")["path"]); depth = anc["depth"]
-    head(0.445, "b", "Lookahead steps reveal what one result cannot",
-         "Task: “Find the latest research papers on machine learning and deep learning …”  (arxiv.org, step 7)")
-    rows = [(1, ["search box opens", "+1  type “machine learning”", "+2  Enter: 353,132 results"]),
-            (0, ["arXiv home page", "+1  click: same listing again", "+2  go back: loop"])]
-    bw, bh, x0, gap = 0.265, 0.125, 0.16, 0.012
-    group(x0, x0 + bw, 0.33, "Immediate result (post-exec, K = 3)")
-    group(x0 + bw + gap, x0 + 3 * bw + 2 * gap, 0.33, "Next two actor steps (K = 3 only)")
-    for r, (i, caps) in enumerate(rows):
-        att, imm = attempt_for(root, ARXIV, x["actions"][i]["teacher_exec"])
-        steps = lookahead(att, depth)
-        shots = [img(imm["observation"]["screenshot"]["path"])] + [img(s["shot"]) for s in steps[:2]]
-        y = 0.16 - r * 0.165
-        s, n = held(x["actions"][i])
-        fig.text(L, y + bh * 0.82, "2  click “search”" if i == 1 else "1  go back", fontsize=6.4, color=INK, va="center", fontweight="bold")
-        badges(fig, L, y + bh * 0.45, [k for k in ("pre", "post", "k3") if p[k].count(i) == 2])
-        fig.text(L, y + bh * 0.1, f"{s}/{n} succeed", fontsize=6.4, fontweight="bold", color=GOOD if s / n > 0.5 else BAD, va="center")
-        for c, (im, cap) in enumerate(zip(shots, caps)):
-            thumb(fig, [x0 + c * (bw + gap), y, bw, bh], crop(im, 0.0, 0.62), cap,
-                  edge=CAND[i] if c == 0 else "#bbbbbb", lw=1.1 if c == 0 else 0.5)
+                ax.annotate("", (0.93, 0.08), (0.93, 0.32), xycoords="axes fraction",
+                            arrowprops=dict(arrowstyle="-|>", color=col, lw=1.6, mutation_scale=9))
+            ry = y - (k + 1) * th - k * rowgap
+            chip(fig, xa, ry + th * 0.18, wa, th * 0.64, label, col)
+            arrow(fig, xa + wa + 0.002, xt - 0.004, ry + th / 2, col)
+            att, imm = attempt_for(root, ex["sid"], x["actions"][i]["teacher_exec"])
+            shots = [img(imm["observation"]["screenshot"]["path"])]
+            if len(caps) > 1:
+                shots += [img(s["shot"]) for s in lookahead(att, depth)[:2]]
+            for j in range(3):
+                rx = xt + j * (wt + gt)
+                if j < len(shots):
+                    pic(fig, [rx, ry, wt, th], crop(shots[j], ex["thumb"]), edge=col if j == 0 else "#9a9a9a",
+                        lw=1.2 if j == 0 else 0.6)
+                    fig.text(rx + 0.003, ry - 0.006, caps[j] if j == 0 else f"{j}. {caps[j]}", fontsize=5.8,
+                             color=INK, va="top", fontweight="bold" if j else "normal")
+                elif j == 1:
+                    fig.text(rx + wt + gt / 2, ry + th / 2, "not needed: the screen right after\nthe action already differs",
+                             fontsize=5.8, color=MUTED, ha="center", va="center", style="italic")
+            bx = xp
+            for kk in [kk for kk in ("pre", "post", "k3") if p[kk].count(i) == 2]:
+                t_ = fig.text(bx, ry + th * 0.7, NAME[kk], fontsize=5.8, color="white", fontweight="bold", va="center",
+                              bbox=dict(boxstyle="round,pad=0.22,rounding_size=0.4", fc=COLOR[kk], ec="none"))
+                fig.canvas.draw(); bx = t_.get_window_extent().transformed(fig.transFigure.inverted()).x1 + 0.006
+            s, n = held(x["actions"][i])
+            fig.text(xp, ry + th * 0.25, f"{100 * s / n:.0f}% success", fontsize=6.6, fontweight="bold",
+                     color=GOOD if s / n > 0.5 else BAD, va="center")
+        y = y - block_h - 0.125
     for ext in ("png", "pdf"):
         fig.savefig(HERE / f"examples-compact.{ext}", dpi=300, bbox_inches="tight", pad_inches=0.02)
 
