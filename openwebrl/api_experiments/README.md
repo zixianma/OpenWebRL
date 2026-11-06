@@ -8,6 +8,7 @@ Start with the **[BrowserCode guide](../docs/API_EXPERIMENT_METHODS.md#reproduct
 |---|---|
 | Set up and run | [Quickstart](../docs/API_EXPERIMENT_METHODS.md#reproduction-quickstart) · [browsercode.py](reproduce/browsercode.py) |
 | Choose models and methods | [Campaigns and arms](../docs/API_EXPERIMENT_METHODS.md#main-browsercode-experiments) |
+| Reproduce Sol scaling | [High/60](../docs/API_EXPERIMENT_METHODS.md#sol-high60) · [high/120](../docs/API_EXPERIMENT_METHODS.md#sol-high120) · [xhigh/30](../docs/API_EXPERIMENT_METHODS.md#sol-xhigh30) |
 | Understand the protocol | [Experiments](../docs/API_EXPERIMENT_METHODS.md#experiments) · [metrics](../docs/API_EXPERIMENT_METHODS.md#metrics-and-comparability) |
 | Trace the implementation | [Code map](../docs/API_EXPERIMENT_METHODS.md#code-and-frozen-artifacts) · [offline checks](../docs/API_EXPERIMENT_METHODS.md#offline-validation) |
 | Find qualified results | [Results and analysis](../docs/API_EXPERIMENT_METHODS.md#results-and-analysis-pointers) |

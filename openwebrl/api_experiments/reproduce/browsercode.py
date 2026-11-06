@@ -19,6 +19,7 @@ ALIASES = {
     'gpt': 'browsercode_gpt_high',
     'sol-high60': 'browsercode_sol_high60',
     'sol-high120': 'browsercode_sol_high120',
+    'sol-xhigh30': 'browsercode_sol_xhigh30',
     'gpt-luna-single': 'browsercode_luna_single_high',
     'gpt-crossbench': 'browsercode_gpt_high_wv_ds',
     'sol61-pair20': 'browsercode_sol61_pair20',
@@ -162,7 +163,7 @@ def provider(runtime, arm):
 
 
 def setup(args):
-    sol_decisions = {'browsercode_sol_high60': 60, 'browsercode_sol_high120': 120}.get(args.campaign)
+    sol_decisions = {'browsercode_sol_high60': 60, 'browsercode_sol_high120': 120, 'browsercode_sol_xhigh30': 30}.get(args.campaign)
     legacy_cap = getattr(args, 'luna_xhigh_output_tokens', None)
     generic_cap = getattr(args, 'luna_single_output_tokens', None)
     effort = getattr(args, 'luna_single_reasoning_effort', None)
@@ -222,10 +223,10 @@ def setup(args):
     if code:
         return code
     browsercode_preflight_only(target / 'runtime')
-    if sol_decisions == 120:
+    if sol_decisions in (30, 120):
         # Generate and validate AST-derived overlays with the pinned runtime
         # interpreter; different Python versions format ast.unparse differently.
-        code = call(python, 'sol_single120.py', '--runtime', target / 'runtime')
+        code = call(python, 'sol_single'+str(sol_decisions)+'.py', '--runtime', target / 'runtime')
         if code:
             return code
     elif sol_decisions == 60:
@@ -300,7 +301,7 @@ def parser():
     commands = p.add_subparsers(dest='command', required=True)
     s = commands.add_parser('setup', help='Install dependencies and prepare one experiment; no browser or model calls')
     s.add_argument('--workspace', type=Path, required=True)
-    s.add_argument('--campaign', type=campaign, required=True, metavar='CAMPAIGN', help='luna, claude, gpt, sol-high60, sol-high120, gpt-luna-single or gpt-crossbench; historical experiment keys also accepted')
+    s.add_argument('--campaign', type=campaign, required=True, metavar='CAMPAIGN', help='luna, claude, gpt, sol-high60, sol-high120, sol-xhigh30, gpt-luna-single or gpt-crossbench; historical experiment keys also accepted')
     s.add_argument('--dependencies', type=Path, help='Reuse an existing dependency manifest without downloads')
     s.add_argument('--luna-xhigh-output-tokens', type=int, choices=(12288, 24576, 49152), help='Opt into a new Luna single xhigh 30-turn output-cap experiment over OM2W300, WebVoyager595 and DeepShop150; requires --campaign luna')
     s.add_argument('--luna-single-output-tokens', type=int, choices=(6144, 12288, 24576, 49152), help='Opt into a new Luna single output-cap experiment; pair with --luna-single-reasoning-effort (default xhigh); requires --campaign luna')

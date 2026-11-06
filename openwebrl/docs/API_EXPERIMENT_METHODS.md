@@ -56,6 +56,7 @@ Choose `--campaign` during setup. The entry point selects the matching model ada
 | `gpt-crossbench` | `serial_high`, `parallel3_select_high`, `parallel5_select_high`, `luna_single_high` | 745 |
 | `sol-high60` | `sol_single_high60` | 1,045 (300 / 595 / 150) |
 | `sol-high120` | `sol_single_high120` | 1,045 (300 / 595 / 150) |
+| `sol-xhigh30` | `sol_single_xhigh30` | 1,045 (300 / 595 / 150) |
 
 `--limit` defaults to one task. For the full OM2W panel use `--limit 300`. For `gpt-crossbench`, use `--benchmark webvoyager --limit 595` or `--benchmark deepshop --limit 150`; filtering precedes the limit. GPT OM2W's four methods span `gpt` and `gpt-luna-single`. Luna N5 medium/low applies that effort to both candidates and selector. The full historical `browsercode_*` campaign keys remain accepted.
 
@@ -85,7 +86,7 @@ The completed cohort has **1,045 recorded outcomes, 978 valid and 67 invalid**, 
 
 `sol-high120` raises both the enforced and advertised decision limit to **120**. It retains GPT-6 Sol high, the 12,288-output-token ceiling, one candidate, no selector, the 900-second actor deadline and the same Terra judging protocol. Its canonical 1,045-task roster is identical to Sol/60; benchmark outputs remain separate. This is a fresh experiment recipe, with no completed results implied.
 
-New Sol/60 and Sol/120 setups share one HTTP gate across actor calls, input counters and Terra judging. Terra keeps its native `judge-UUID` identifier in request and budget receipts; only the gate slot key is normalized to UUID form. After updating the package, prepare a fresh runtime rather than editing source hashes in an existing run.
+New Sol/60, Sol/120 and Sol xhigh/30 setups share one HTTP gate across actor calls, input counters and Terra judging. Terra keeps its native `judge-UUID` identifier in request and budget receipts; only the gate slot key is normalized to UUID form. After updating the package, prepare a fresh runtime rather than editing source hashes in an existing run.
 
 ```bash
 python openwebrl/api_experiments/reproduce/browsercode.py setup \
@@ -101,6 +102,25 @@ python openwebrl/api_experiments/reproduce/browsercode.py run \
 
 The final command is a zero-call dry plan; add `--execute` only for a separately budgeted run. Raising the step ceiling does not extend the actor deadline. Existing Sol/60 outcomes, invalids and source inventories remain unchanged.
 
+<a id="sol-xhigh30"></a>
+### Sol xhigh single at 30 decisions
+
+`sol-xhigh30` uses **GPT-6 Sol xhigh, 12,288 output tokens and 30 enforced and advertised decisions** on the same 300 / 595 / 150 task roster. It retains one candidate, no selector, the 900-second actor deadline, and Terra medium/4,096/seed 42. This prepares a fresh reproduction; it implies no completed results.
+
+```bash
+python3.12 -B openwebrl/api_experiments/reproduce/browsercode.py setup \
+  --workspace /tmp/sol-xhigh-30 --campaign sol-xhigh30 \
+  --dependencies "$API_WORK/dependencies/dependencies.json"
+
+"$API_PY" -B openwebrl/api_experiments/reproduce/browsercode.py run \
+  --workspace /tmp/sol-xhigh-30 --arm sol_single_xhigh30 \
+  --benchmark online-mind2web --limit 1 --output /tmp/sol-xhigh-30-om-01 \
+  --model-usd 5 --judge-usd 1 --model-calls 60 --judge-calls 1 --browser-starts 2
+```
+
+The evaluation command is a read-only plan until `--execute` is added. Use separate benchmark outputs and explicit caps as above.
+
+Fresh Sol setups bind a task-local truncation policy to their source receipt. An exactly matching native `incomplete/max_output_tokens` response that consumed all 12,288 output tokens and whose usage is already settled stays **invalid**; it is never retried, and subsequent untouched tasks may run. Transport, malformed-usage, counter, substitution and accounting failures retain the shared halt and conservative known/full-held charges. Existing halts are never cleared. This operational safeguard changes no actor request, token/step limit, price, judge, or run cap; archived runtimes and their invalid outcomes remain unchanged.
 
 <a id="luna-xhigh-output-limits"></a>
 ### Luna single reasoning and output limits

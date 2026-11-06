@@ -108,7 +108,7 @@ class Sol120(unittest.TestCase):
   with patch.dict(sys.modules,{'claude_budget':fixture.budget_module}):
    judge=module('sol_prefixed_terra_test',runtime/'common_judge.py')
   budgets=types.SimpleNamespace(__file__=str(runtime/'request_budget.py'),SharedHTTPGate=fixture.budget_module.SharedHTTPGate,ReservationBudget=fixture.budget_module.ReservationBudget)
-  worker=types.SimpleNamespace(__file__=str(runtime/'worker.py'))
+  worker=types.SimpleNamespace(__file__=str(runtime/'worker.py'),PairedModel=actor.SolModel)
   with patch.dict(sys.modules,{'sol_model':actor,'common_judge':judge,'request_budget':budgets}):
    gate=s.install_runtime_hooks(worker,self.root/'execution')
   self.assertIs(actor.REQUIRED_HTTP_GATE,judge.RUNTIME_HTTP_GATE)

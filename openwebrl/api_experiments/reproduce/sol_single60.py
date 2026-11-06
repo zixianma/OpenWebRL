@@ -6,7 +6,7 @@ The generated model, worker decision/prompt limits and native Terra transport
 mirror the recorded Sol60 experiment; budgets remain explicit at execution.
 """
 from __future__ import annotations
-import ast,hashlib,importlib,json
+import ast,hashlib,importlib,importlib.util,json
 from contextlib import contextmanager
 from collections import Counter
 from copy import deepcopy
@@ -21,6 +21,9 @@ RECEIPT='sol-single60-experiment.json'
 ORIGINALS='sol-single60-originals'
 COUNTS={'online-mind2web':300,'webvoyager':595,'deepshop':150}
 PRICING={'input':2.,'cached_input':.2,'cache_write':2.5,'output':10.}
+POLICY_SOURCE=HERE/'sol_known_incomplete.py'
+def incomplete_policy():
+ return dict(schema='known-max-output-incomplete-task-invalid-no-pool-halt-v1',source_sha256=digest(POLICY_SOURCE),task_invalid_still_raises=True,no_retry=True)
 CHANGED=('worker.py','common_judge.py','runtime-config.json','campaign-plan.json','tasks.json','portable-build.json')
 MODEL_SHA='804ab88145912a5ebd4056cc7c17f67432f27225880de300fc0f23b51ffb5f54'
 read=lambda path:json.loads(Path(path).read_text())
@@ -123,9 +126,9 @@ def configure(runtime):
  build=read(runtime/'portable-build.json');build['sol_single60_protocol']=SCHEMA;build['tasks_sha256']=digest(runtime/'tasks.json')
  build['adaptations'].append(dict(reason='Sol high single12288; exact enforced and advertised60 decisions; native900-second actor and Terra unchanged.',files=['sol_model.py','worker.py','common_judge.py']))
  write(runtime/'portable-build.json',build)
- receipt=dict(schema=SCHEMA,arm=ARM,model=MODEL,reasoning_effort='high',proposal_count=1,max_decisions=60,prompt_max_decisions=60,output_tokens=12288,actor_episode_seconds=900,benchmark_counts=COUNTS,benchmark_required=True,model_pricing=PRICING,judge_protocol=config['judge_protocol'],preparation_source_sha256=digest(__file__),base_inventory_sha256=digest(originals/'source-manifest.json'),original_sha256={n:digest(originals/n)for n in CHANGED},generated_sha256={n:digest(runtime/n)for n in(*CHANGED,'sol_model.py')})
+ receipt=dict(schema=SCHEMA,arm=ARM,model=MODEL,reasoning_effort='high',proposal_count=1,max_decisions=60,prompt_max_decisions=60,output_tokens=12288,actor_episode_seconds=900,benchmark_counts=COUNTS,benchmark_required=True,model_pricing=PRICING,judge_protocol=config['judge_protocol'],known_incomplete_policy=incomplete_policy(),preparation_source_sha256=digest(__file__),base_inventory_sha256=digest(originals/'source-manifest.json'),original_sha256={n:digest(originals/n)for n in CHANGED},generated_sha256={n:digest(runtime/n)for n in(*CHANGED,'sol_model.py')})
  write(runtime/RECEIPT,receipt)
- for path in[*[runtime/n for n in(*CHANGED,'sol_model.py',RECEIPT)],*originals.iterdir(),Path(__file__).resolve()]:manifest['source_hashes'][str(path)]=digest(path)
+ for path in[*[runtime/n for n in(*CHANGED,'sol_model.py',RECEIPT)],*originals.iterdir(),Path(__file__).resolve(),POLICY_SOURCE]:manifest['source_hashes'][str(path)]=digest(path)
  manifest['plan_sha256']=digest(runtime/'campaign-plan.json');write(runtime/'source-manifest.json',manifest);write(runtime/'execution-source-manifest.json',manifest)
  validate(runtime);return receipt
 
@@ -149,10 +152,10 @@ def _validate(runtime):
  need(read(runtime/'tasks.json')==task_roster(),'canonical task roster differs')
  config=derived_config(read(originals/'runtime-config.json'));need(read(runtime/'runtime-config.json')==config,'configuration differs')
  need(read(runtime/'campaign-plan.json')==derived_plan(read(originals/'campaign-plan.json'),digest(runtime/'tasks.json'),config['judge_protocol']),'plan differs')
- expected=dict(arm=ARM,model=MODEL,reasoning_effort='high',proposal_count=1,max_decisions=60,prompt_max_decisions=60,output_tokens=12288,actor_episode_seconds=900,benchmark_counts=COUNTS,benchmark_required=True,model_pricing=PRICING,judge_protocol=config['judge_protocol'])
+ expected=dict(arm=ARM,model=MODEL,reasoning_effort='high',proposal_count=1,max_decisions=60,prompt_max_decisions=60,output_tokens=12288,actor_episode_seconds=900,benchmark_counts=COUNTS,benchmark_required=True,model_pricing=PRICING,judge_protocol=config['judge_protocol'],known_incomplete_policy=incomplete_policy())
  need(all(receipt.get(k)==v for k,v in expected.items()),'declared protocol differs')
  manifest=read(runtime/'source-manifest.json');need(manifest==read(runtime/'execution-source-manifest.json'),'execution inventory differs')
- for path in[*[runtime/n for n in(*CHANGED,'sol_model.py',RECEIPT)],*originals.iterdir(),Path(__file__).resolve()]:need(manifest['source_hashes'].get(str(path))==digest(path),'complete overlay source pin missing')
+ for path in[*[runtime/n for n in(*CHANGED,'sol_model.py',RECEIPT)],*originals.iterdir(),Path(__file__).resolve(),POLICY_SOURCE]:need(manifest['source_hashes'].get(str(path))==digest(path),'complete overlay source pin missing')
  inventory(manifest);return receipt
 
 def install_runtime_hooks(worker,root):
@@ -170,4 +173,9 @@ def install_runtime_hooks(worker,root):
  need(model.REQUIRED_HTTP_GATE is None,'Sol gate already installed')
  model.REQUIRED_HTTP_GATE=gate;judge.RUNTIME_HTTP_GATE=gate;worker.RUNTIME_HTTP_GATE=gate
  worker.ReservationBudget=budgets.ReservationBudget;worker.JudgeBudget=budgets.ReservationBudget
+ receipt=read(runtime/RECEIPT)
+ need(receipt['known_incomplete_policy']==incomplete_policy(),'known-incomplete source policy differs')
+ spec=importlib.util.spec_from_file_location('_portable_sol_known_incomplete',POLICY_SOURCE)
+ policy=importlib.util.module_from_spec(spec);spec.loader.exec_module(policy)
+ policy.install(worker,runtime/'sol_model.py',receipt['generated_sha256']['sol_model.py'],'high')
  return gate
