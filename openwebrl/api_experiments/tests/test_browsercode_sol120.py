@@ -102,4 +102,33 @@ class Sol120(unittest.TestCase):
   base=s.read(API/'portable_assets/campaign_specs/browsercode_luna_effort/runtime-config.json');a=sixty.derived_config(base);b=s.derived_config(base)
   self.assertEqual({k:v for k,v in a.items()if k not in('system_templates','sol_single60_protocol','max_decisions','portable_campaign')},{k:v for k,v in b.items()if k not in('system_templates','sol_single120_protocol','max_decisions','portable_campaign')})
   self.assertEqual(a['system_templates']['browsercode'].replace('Only60','Only120'),b['system_templates']['browsercode'])
+
+ def test_real_prefixed_terra_request_uses_shared_gate_and_settles_ledger(self):
+  runtime=self.runtime();actor=self.load_actor(runtime)
+  with patch.dict(sys.modules,{'claude_budget':fixture.budget_module}):
+   judge=module('sol_prefixed_terra_test',runtime/'common_judge.py')
+  budgets=types.SimpleNamespace(__file__=str(runtime/'request_budget.py'),SharedHTTPGate=fixture.budget_module.SharedHTTPGate,ReservationBudget=fixture.budget_module.ReservationBudget)
+  worker=types.SimpleNamespace(__file__=str(runtime/'worker.py'))
+  with patch.dict(sys.modules,{'sol_model':actor,'common_judge':judge,'request_budget':budgets}):
+   gate=s.install_runtime_hooks(worker,self.root/'execution')
+  self.assertIs(actor.REQUIRED_HTTP_GATE,judge.RUNTIME_HTTP_GATE)
+  pool=fixture.budget_module.ReservationBudget(self.root/'judge-pool','1',1);calls=[]
+  def create(**payload):
+   calls.append(payload)
+   return {'model':'gpt-5.6-terra','choices':[{'finish_reason':'stop','message':{'content':'Status: "success"'}}],'usage':{'prompt_tokens':100,'completion_tokens':10,'total_tokens':110,'prompt_tokens_details':{'cached_tokens':0,'cache_write_tokens':0}}}
+  client=types.SimpleNamespace(max_retries=0,chat=types.SimpleNamespace(completions=types.SimpleNamespace(create=create)))
+  image=self.root/'terminal.png';image.write_bytes(b'synthetic screenshot fixture')
+  prompts=({'SYSTEM_PROMPT':'Judge fixture','USER_PROMPT':'{task} {thoughts_and_actions}'},'f'*64)
+  with patch.object(judge,'frozen_prompts',return_value=prompts):
+   self.assertEqual(judge.judge(client,pool,'fixture task',['fixture action'],image,self.root/'episode'),1)
+  self.assertEqual(len(calls),1);self.assertEqual((calls[0]['model'],calls[0]['reasoning_effort'],calls[0]['max_completion_tokens'],calls[0]['seed']),('gpt-5.6-terra','medium',4096,42))
+  snap=pool.snapshot();self.assertEqual(snap['calls'],1);self.assertFalse(pool.halted())
+  ident=next(iter(snap['requests']));self.assertTrue(ident.startswith('judge-'));self.assertEqual(snap['requests'][ident]['status'],'known')
+  root=self.root/'execution/http-gate'
+  self.assertTrue((root/'physical-identities'/(ident[6:]+'.json')).is_file())
+  self.assertEqual(len(list((root/'leases').glob('*/released.json'))),1)
+  for bad in ['judge-'+('a'*31),'judge-'+('G'*32),'judge-other-'+('a'*32),'other-'+('a'*32),None]:
+   with self.subTest(bad=bad),self.assertRaises(ValueError):
+    with gate.slot(bad):self.fail('Malformed ID acquired a lease')
+
 if __name__=='__main__':unittest.main()

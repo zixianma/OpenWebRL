@@ -85,6 +85,8 @@ The completed cohort has **1,045 recorded outcomes, 978 valid and 67 invalid**, 
 
 `sol-high120` raises both the enforced and advertised decision limit to **120**. It retains GPT-6 Sol high, the 12,288-output-token ceiling, one candidate, no selector, the 900-second actor deadline and the same Terra judging protocol. Its canonical 1,045-task roster is identical to Sol/60; benchmark outputs remain separate. This is a fresh experiment recipe, with no completed results implied.
 
+New Sol/60 and Sol/120 setups share one HTTP gate across actor calls, input counters and Terra judging. Terra keeps its native `judge-UUID` identifier in request and budget receipts; only the gate slot key is normalized to UUID form. After updating the package, prepare a fresh runtime rather than editing source hashes in an existing run.
+
 ```bash
 python openwebrl/api_experiments/reproduce/browsercode.py setup \
   --workspace /tmp/sol-high-120 --campaign sol-high120 \

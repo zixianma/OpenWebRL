@@ -7,6 +7,7 @@ mirror the recorded Sol60 experiment; budgets remain explicit at execution.
 """
 from __future__ import annotations
 import ast,hashlib,importlib,json
+from contextlib import contextmanager
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
@@ -158,7 +159,14 @@ def install_runtime_hooks(worker,root):
  runtime=Path(worker.__file__).resolve().parent
  model=importlib.import_module('sol_model');judge=importlib.import_module('common_judge');budgets=importlib.import_module('request_budget')
  need(all(Path(m.__file__).resolve().parent==runtime for m in(model,judge,budgets)),'different runtime modules loaded')
- gate=budgets.SharedHTTPGate(Path(root)/'http-gate',1)
+ class RuntimeHTTPGate(budgets.SharedHTTPGate):
+  @contextmanager
+  def slot(self,physical_id):
+   # Keep the full Terra ID in request/budget receipts; normalize only the
+   # shared gate's UUID key, as in the qualified native campaign adapter.
+   gate_id=physical_id[6:]if type(physical_id)is str and physical_id.startswith('judge-')else physical_id
+   with super().slot(gate_id):yield
+ gate=RuntimeHTTPGate(Path(root)/'http-gate',1)
  need(model.REQUIRED_HTTP_GATE is None,'Sol gate already installed')
  model.REQUIRED_HTTP_GATE=gate;judge.RUNTIME_HTTP_GATE=gate;worker.RUNTIME_HTTP_GATE=gate
  worker.ReservationBudget=budgets.ReservationBudget;worker.JudgeBudget=budgets.ReservationBudget
