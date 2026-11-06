@@ -57,6 +57,12 @@
 
 <a id="luna-pre-post-k3-examples-20261105"></a>
 
+**Compact version (paper, 7 × 4 in, under half a page).** Two of the examples below.
+
+![(a) Netflix help page: pre-exec scrolls (0/5); seeing the immediate results, post-exec and K = 3 click the payment-options link, which opens the answer page (20/20). (b) arXiv: clicking search only opens a box after one step, but the next two steps reach 353,132 results (5/5, K = 3); going back looks fine after one step but loops (0/19, pre and post)](arm_results/luna_pre_post_k3_20261105/examples-compact.png)
+
+*(a) The immediate result alone separates the two candidates. (b) It does not: the search box looks like no progress, and going back looks plausible. Only the next two actor steps show the search succeeding and the back action looping. Badges are firm picks (both calls); success is held-out (draws 4–8, valid only).* [PDF](arm_results/luna_pre_post_k3_20261105/examples-compact.pdf) · [script](arm_results/luna_pre_post_k3_20261105/compact_examples.py)
+
 Seven states from the same 1,727, chosen as the clearest cases of each pattern. In each one, every teacher picked the same candidate on both of its calls, and the better and worse picks differ by at least 40 pp in held-out success. Each figure shows three things. Top left is the screen all three teachers judge, with each candidate's click or scroll point numbered. Top right lists the candidates, each teacher's pick (×2 = both calls) and held-out success (draws 4–8, valid only). Below are the two contested candidates. The first column is the draw-1 immediate result, which the post-exec teacher sees. The next three columns are the actor's following steps, which only the K = 3 teacher sees. All screenshots are the saved ones.
 
 **1. Seeing the result fixes a guess (the most common pattern: pre-exec scrolls, post-exec clicks).**
