@@ -142,6 +142,54 @@ Three runs per row, all 1,045 tasks (WebVoyager 595, Online-Mind2Web 300, DeepSh
 - **Interval scope:** the intervals cover task sampling only, not training-seed variance (one seed per selector) or drift between eval windows.
 </details>
 
+### What the trained students pick on the same eval states (LoRAs, 2026-11-07)
+
+<a id="luna-pre-k3-students-20261107"></a>
+
+**The label type changes student picks more than the judge does.** The two pre-execution students agree on 72.8% of states, and the two K = 3 students on 62.1%. A pre and a K = 3 student trained by the same judge agree on only 63.4% (Luna) and 58.3% (GPT-5.5); chance is 39.4%. On 10.0% of states, both pre students pick one action and both K = 3 students pick another. Only 4.3% split the same way by judge.
+
+**K = 3 students leave the page and stop sooner; pre students follow the majority proposal.** Two patterns hold for both judges:
+- **Leaving a scroll loop.** After two or more scrolls, with "go back" among the proposals (93 states), the K = 3 students go back on 55% of states, against 17–18% for the pre students.
+- **Stopping on a minority proposal.** When only one or two of the five proposals stop, the K = 3 students stop more often: Luna 6% → 9%, GPT-5.5 10% → 20%.
+
+On the same states, the K = 3 students also pick a scroll less often and more often pick an action that only one of the five candidates proposed.
+
+These patterns cut both ways (figure (b)). On eval states only the executed pick was played out, so they show what changes, not which side is right. Live success is in the table above: LoRA K = 3 − pre is +0.3 (Luna) and −1.5 (GPT-5.5) pp, both intervals crossing zero. Outcomes for every candidate exist only on the [branch states](#luna-pre-post-k3-20261105).
+
+![Two replayed eval states. (a) WebVoyager, a quantized Qwen3-8B model card after four alternating scrolls: four of five proposals scroll down, picked by both pre students; one proposes go back, picked by both K = 3 students. (b) Online-Mind2Web 401(k) calculator still on its defaults: two proposals set the starting balance to $0, picked by both pre students; three answer $2,496,238, picked by both K = 3 students.](arm_results/luna_pre_post_k3_20261105/student-examples.png)
+
+*Each panel shows a replayed live state as all four students saw it: the logged screenshot, the task, and the five actor proposals grouped into distinct actions. Dark badges are the pre-execution students, purple the K = 3 lookahead students. In (b) the page still shows the calculator defaults (starting balance $100,000; contributions 16% of income), so the K = 3 students' answer is premature and the pre students' fix is the right next step. The rate line under each example is over all replayed states of that kind.* [PDF](arm_results/luna_pre_post_k3_20261105/student-examples.pdf)
+
+| Same 7,999 states | Pre (Luna) | K = 3 (Luna) | Pre (GPT-5.5) | K = 3 (GPT-5.5) | Proposals |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| click | 58.3% | 59.6% | 59.2% | 57.1% | 57.3% |
+| scroll | 17.7% | 15.6% | 15.7% | 14.7% | 14.9% |
+| go back | 3.5% | 4.6% | 3.2% | 4.8% | 4.1% |
+| stop / answer | 6.2% | 6.4% | 7.6% | 8.5% | 11.2% |
+| pick proposed by only 1 of 5 | 58.3% | 62.0% | 54.3% | 57.3% | — |
+| repeats the previous action | 5.6% | 5.8% | 5.6% | 7.1% | — |
+| stop, when 1–2 of 5 propose it | 5.8% | 8.7% | 9.7% | 20.2% | — |
+
+K = 3 − pre, pp, with [task-clustered 95% intervals](arm_results/luna_pre_post_k3_20261105/student-replay.json):
+
+| Judge | go back | scroll | stop / answer | repeats previous | 1-of-5 pick |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Luna | **+1.1 [+0.7, +1.5]** | **−2.1 [−2.7, −1.4]** | +0.2 [−0.2, +0.5] | +0.2 [−0.2, +0.6] | **+3.8 [+2.9, +4.7]** |
+| GPT-5.5 | **+1.6 [+1.2, +2.1]** | **−1.0 [−1.7, −0.4]** | **+0.8 [+0.4, +1.2]** | **+1.5 [+1.0, +2.0]** | **+3.0 [+2.0, +3.9]** |
+
+<details>
+<summary>Replay protocol, fidelity and live behaviour</summary>
+
+- **States:** 8,000 live decisions on the SFT 4B actor where the five proposals contain at least two distinct actions. There are 2,000 from each student's own runs (the 3-run batches in the table above: Luna 11-03, GPT-5.5 11-04), stratified 300 : 595 : 150 over Online-Mind2Web / WebVoyager / DeepShop, seed 20261107. One state lacked its task text, leaving 7,999.
+- **Replay:** each selector request was rebuilt from the saved trace: task, URL, history of executed responses, five candidates, and the logged screenshot (its sha256 matches the log). It was sent to all four merged LoRAs on the live serving stack (sglang, greedy, JSON schema), 1 H200 for 55 min. Picks are compared as actions (same tool calls, points within 5/1000).
+- **Fidelity:** the replayed pick matches the student's own live pick on 99.1% (Luna pre), 98.4% (Luna K = 3), 98.4% (GPT-5.5 pre) and 95.4% (GPT-5.5 K = 3) of states.
+- **Agreement chance:** the expected agreement if each student picked a proposal at random, in proportion to how many of the five proposed each action.
+- **Disagreements are often small:** of the 797 consistent label-split states, 278 change the action type. The rest are mostly clicks on different targets, or the same action type with different arguments (for example scroll 0.5 vs 0.7).
+- **Live behaviour on each student's own trajectories:** these are not the same states, but the direction matches ([student-live.json](arm_results/luna_pre_post_k3_20261105/student-live.json)). On real choices, the K = 3 students go back more (Luna 3.3% → 4.8%; GPT-5.5 3.2% → 4.4%). GPT-5.5 K = 3 repeats the previous action more (13.2% vs 9.5% of decisions) and has more episodes with a three-step repeat (19.9% vs 16.0%).
+- **Episode outcome on split states (weak):** on the consistent label-split states, the logged episode succeeded 26.5% / 29.4% when a pre student made the pick (Luna / GPT-5.5) and 30.6% / 30.7% when a K = 3 student did. Over all of each student's sampled states, the rates are 30.1 / 35.0% and 31.4 / 35.4%. These differ in state, so they do not show which pick is better.
+- **Files:** [student_live.py](arm_results/luna_pre_post_k3_20261105/student_live.py) · [student_replay.py](arm_results/luna_pre_post_k3_20261105/student_replay.py) · [student-replay.json](arm_results/luna_pre_post_k3_20261105/student-replay.json) · [student_examples.py](arm_results/luna_pre_post_k3_20261105/student_examples.py). Runtime (task-level, not published): `selection-head-20261008/label-kfold-20261101/pre-post-k3/{student-live-index.jsonl, student-replay/}`.
+</details>
+
 ## Setup
 
 | | Pre-execution (`pre`) | K = 3 lookahead (`k3p`) |

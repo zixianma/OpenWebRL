@@ -1,0 +1,237 @@
+{
+ "note": "What the trained students (ADM-4B LoRAs, Recipe 3) pick live: pre-execution vs K = 3 lookahead labels, GPT-5.5 and Luna.",
+ "students": {
+  "luna-pre": {
+   "day": "2026-11-03",
+   "episodes": 3135,
+   "valid": 2862,
+   "decisions": 43985,
+   "real_choices": 32364,
+   "success_valid": 47.5,
+   "success_by_bench": {
+    "online_mind2web": 40.2,
+    "webvoyager": 51.2,
+    "deepshop": 46.2
+   },
+   "steps_mean": 14.69,
+   "step_limit": 24.0,
+   "loop_episodes": 17.8,
+   "ends": {
+    "task_completed": 2174,
+    "max_steps_exhausted": 642,
+    "generation_length_limit": 41,
+    "format_error_failed": 5
+   },
+   "pick_types_real": {
+    "click": 56.5,
+    "scroll": 18.5,
+    "type": 2.5,
+    "back": 3.3,
+    "stop / answer": 6.7,
+    "navigate (URL)": 3.0,
+    "tab": 5.6,
+    "wait": 2.7,
+    "other": 1.1
+   },
+   "offered_types_real": {
+    "click": 55.1,
+    "scroll": 15.3,
+    "type": 3.1,
+    "back": 4.1,
+    "stop / answer": 12.3,
+    "navigate (URL)": 1.8,
+    "tab": 3.7,
+    "wait": 3.3,
+    "other": 1.4
+   },
+   "plurality_real": 62.5,
+   "minority_real": 58.4,
+   "first_candidate_real": 37.6,
+   "repeat_all": 9.4,
+   "repeat_when_alternative": 6.1,
+   "stop_given_offered": 30.3,
+   "stop_given_offered_minority": 5.1,
+   "stop_given_offered_by_turn": {
+    "0-4": 36.7,
+    "5-9": 39.0,
+    "10-14": 28.1,
+    "15-19": 22.8,
+    "20+": 17.4
+   }
+  },
+  "luna-k3": {
+   "day": "2026-11-03",
+   "episodes": 3135,
+   "valid": 2894,
+   "decisions": 43650,
+   "real_choices": 32098,
+   "success_valid": 46.6,
+   "success_by_bench": {
+    "online_mind2web": 37.8,
+    "webvoyager": 49.4,
+    "deepshop": 50.9
+   },
+   "steps_mean": 14.56,
+   "step_limit": 24.5,
+   "loop_episodes": 18.5,
+   "ends": {
+    "task_completed": 2185,
+    "max_steps_exhausted": 647,
+    "generation_length_limit": 45,
+    "format_error_failed": 17
+   },
+   "pick_types_real": {
+    "click": 59.1,
+    "scroll": 16.3,
+    "type": 2.5,
+    "back": 4.8,
+    "stop / answer": 6.8,
+    "navigate (URL)": 2.6,
+    "tab": 5.3,
+    "wait": 1.6,
+    "other": 1.1
+   },
+   "offered_types_real": {
+    "click": 56.8,
+    "scroll": 14.8,
+    "type": 3.1,
+    "back": 4.3,
+    "stop / answer": 12.3,
+    "navigate (URL)": 1.7,
+    "tab": 3.3,
+    "wait": 2.6,
+    "other": 1.3
+   },
+   "plurality_real": 58.5,
+   "minority_real": 61.5,
+   "first_candidate_real": 42.5,
+   "repeat_all": 9.8,
+   "repeat_when_alternative": 6.4,
+   "stop_given_offered": 31.0,
+   "stop_given_offered_minority": 7.3,
+   "stop_given_offered_by_turn": {
+    "0-4": 39.5,
+    "5-9": 39.1,
+    "10-14": 27.0,
+    "15-19": 23.6,
+    "20+": 17.3
+   }
+  },
+  "gpt55-pre": {
+   "day": "2026-11-04",
+   "episodes": 3135,
+   "valid": 2953,
+   "decisions": 41510,
+   "real_choices": 29756,
+   "success_valid": 50.1,
+   "success_by_bench": {
+    "online_mind2web": 41.4,
+    "webvoyager": 53.7,
+    "deepshop": 51.2
+   },
+   "steps_mean": 13.51,
+   "step_limit": 20.7,
+   "loop_episodes": 16.0,
+   "ends": {
+    "task_completed": 2342,
+    "max_steps_exhausted": 564,
+    "generation_length_limit": 37,
+    "format_error_failed": 10
+   },
+   "pick_types_real": {
+    "click": 58.4,
+    "scroll": 16.1,
+    "type": 2.6,
+    "back": 3.2,
+    "stop / answer": 7.9,
+    "navigate (URL)": 3.6,
+    "tab": 5.2,
+    "wait": 1.8,
+    "other": 1.3
+   },
+   "offered_types_real": {
+    "click": 56.7,
+    "scroll": 15.2,
+    "type": 3.0,
+    "back": 4.0,
+    "stop / answer": 11.6,
+    "navigate (URL)": 1.9,
+    "tab": 3.8,
+    "wait": 2.3,
+    "other": 1.5
+   },
+   "plurality_real": 66.7,
+   "minority_real": 53.7,
+   "first_candidate_real": 34.9,
+   "repeat_all": 9.5,
+   "repeat_when_alternative": 5.6,
+   "stop_given_offered": 38.1,
+   "stop_given_offered_minority": 9.4,
+   "stop_given_offered_by_turn": {
+    "0-4": 47.7,
+    "5-9": 46.7,
+    "10-14": 33.0,
+    "15-19": 27.4,
+    "20+": 22.2
+   }
+  },
+  "gpt55-k3": {
+   "day": "2026-11-04",
+   "episodes": 3135,
+   "valid": 2972,
+   "decisions": 42377,
+   "real_choices": 30065,
+   "success_valid": 48.9,
+   "success_by_bench": {
+    "online_mind2web": 41.1,
+    "webvoyager": 52.7,
+    "deepshop": 47.3
+   },
+   "steps_mean": 13.8,
+   "step_limit": 22.0,
+   "loop_episodes": 19.9,
+   "ends": {
+    "task_completed": 2318,
+    "max_steps_exhausted": 602,
+    "generation_length_limit": 45,
+    "format_error_failed": 7
+   },
+   "pick_types_real": {
+    "click": 58.0,
+    "scroll": 15.6,
+    "type": 3.1,
+    "back": 4.4,
+    "stop / answer": 7.7,
+    "navigate (URL)": 3.0,
+    "tab": 5.8,
+    "wait": 1.4,
+    "other": 1.0
+   },
+   "offered_types_real": {
+    "click": 58.2,
+    "scroll": 15.2,
+    "type": 3.3,
+    "back": 3.9,
+    "stop / answer": 10.6,
+    "navigate (URL)": 1.7,
+    "tab": 3.6,
+    "wait": 2.2,
+    "other": 1.3
+   },
+   "plurality_real": 62.8,
+   "minority_real": 55.9,
+   "first_candidate_real": 29.8,
+   "repeat_all": 13.2,
+   "repeat_when_alternative": 7.9,
+   "stop_given_offered": 40.6,
+   "stop_given_offered_minority": 18.7,
+   "stop_given_offered_by_turn": {
+    "0-4": 44.6,
+    "5-9": 53.5,
+    "10-14": 37.7,
+    "15-19": 30.6,
+    "20+": 23.6
+   }
+  }
+ }
+}

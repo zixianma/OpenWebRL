@@ -1,0 +1,365 @@
+{
+ "note": "Same eval states, four students: what the Recipe 3 ADM-4B LoRAs (GPT-5.5 / Luna labels x pre / K = 3) pick.",
+ "states": 7999,
+ "sampled": 8000,
+ "by_source": {
+  "luna-pre": 1999,
+  "luna-k3": 2000,
+  "gpt55-pre": 2000,
+  "gpt55-k3": 2000
+ },
+ "fidelity": {
+  "luna-pre": 99.1,
+  "luna-k3": 98.4,
+  "gpt55-pre": 98.4,
+  "gpt55-k3": 95.4
+ },
+ "agreement": {
+  "chance": 39.4,
+  "luna-pre~luna-k3": [
+   63.4,
+   62.4,
+   64.5
+  ],
+  "gpt55-pre~gpt55-k3": [
+   58.3,
+   57.1,
+   59.4
+  ],
+  "luna-pre~gpt55-pre": [
+   72.8,
+   71.8,
+   73.8
+  ],
+  "luna-k3~gpt55-k3": [
+   62.1,
+   61.0,
+   63.1
+  ],
+  "luna-pre~gpt55-k3": [
+   57.8,
+   56.7,
+   58.9
+  ],
+  "luna-k3~gpt55-pre": [
+   59.0,
+   57.9,
+   60.1
+  ]
+ },
+ "agreement_by_bench": {
+  "online_mind2web": {
+   "luna-pre~luna-k3": 63.5,
+   "gpt55-pre~gpt55-k3": 57.3,
+   "luna-pre~gpt55-pre": 73.7,
+   "luna-k3~gpt55-k3": 62.2,
+   "luna-pre~gpt55-k3": 57.6,
+   "luna-k3~gpt55-pre": 59.0
+  },
+  "webvoyager": {
+   "luna-pre~luna-k3": 63.2,
+   "gpt55-pre~gpt55-k3": 58.7,
+   "luna-pre~gpt55-pre": 72.9,
+   "luna-k3~gpt55-k3": 61.8,
+   "luna-pre~gpt55-k3": 57.8,
+   "luna-k3~gpt55-pre": 59.2
+  },
+  "deepshop": {
+   "luna-pre~luna-k3": 64.1,
+   "gpt55-pre~gpt55-k3": 58.5,
+   "luna-pre~gpt55-pre": 70.9,
+   "luna-k3~gpt55-k3": 63.1,
+   "luna-pre~gpt55-k3": 58.4,
+   "luna-k3~gpt55-pre": 58.2
+  }
+ },
+ "all_four_agree": 38.0,
+ "consistent_label_split": {
+  "states": 797,
+  "share": 10.0,
+  "switches": [
+   [
+    "click -> click",
+    326
+   ],
+   [
+    "scroll -> scroll",
+    84
+   ],
+   [
+    "scroll -> click",
+    57
+   ],
+   [
+    "click -> scroll",
+    44
+   ],
+   [
+    "stop / answer -> stop / answer",
+    43
+   ],
+   [
+    "scroll -> back",
+    33
+   ],
+   [
+    "wait -> wait",
+    27
+   ],
+   [
+    "click -> back",
+    25
+   ],
+   [
+    "tab -> tab",
+    22
+   ],
+   [
+    "navigate (URL) -> tab",
+    15
+   ]
+  ],
+  "type_changes": 278
+ },
+ "consistent_judge_split": {
+  "states": 343,
+  "share": 4.3,
+  "switches": [
+   [
+    "click -> click",
+    161
+   ],
+   [
+    "scroll -> click",
+    34
+   ],
+   [
+    "stop / answer -> stop / answer",
+    28
+   ],
+   [
+    "click -> stop / answer",
+    21
+   ],
+   [
+    "click -> scroll",
+    14
+   ],
+   [
+    "scroll -> stop / answer",
+    9
+   ],
+   [
+    "tab -> tab",
+    7
+   ],
+   [
+    "click -> back",
+    7
+   ],
+   [
+    "scroll -> scroll",
+    7
+   ],
+   [
+    "tab -> navigate (URL)",
+    6
+   ]
+  ]
+ },
+ "behaviour": {
+  "luna-pre": {
+   "types": {
+    "click": 58.3,
+    "scroll": 17.7,
+    "type": 2.3,
+    "back": 3.5,
+    "stop / answer": 6.2,
+    "navigate (URL)": 3.3,
+    "tab": 5.6,
+    "wait": 2.0,
+    "other": 1.2
+   },
+   "proposed_by": 1.77,
+   "singleton": 58.3,
+   "repeat_prev": 5.6,
+   "stop_given_offered": 31.0,
+   "stop_given_minority_offer": 5.8,
+   "first_position": 37.9
+  },
+  "luna-k3": {
+   "types": {
+    "click": 59.6,
+    "scroll": 15.6,
+    "type": 2.4,
+    "back": 4.6,
+    "stop / answer": 6.4,
+    "navigate (URL)": 3.1,
+    "tab": 6.1,
+    "wait": 1.3,
+    "other": 1.1
+   },
+   "proposed_by": 1.69,
+   "singleton": 62.0,
+   "repeat_prev": 5.8,
+   "stop_given_offered": 31.7,
+   "stop_given_minority_offer": 8.7,
+   "first_position": 42.0
+  },
+  "gpt55-pre": {
+   "types": {
+    "click": 59.2,
+    "scroll": 15.7,
+    "type": 2.3,
+    "back": 3.2,
+    "stop / answer": 7.6,
+    "navigate (URL)": 3.6,
+    "tab": 5.1,
+    "wait": 2.0,
+    "other": 1.3
+   },
+   "proposed_by": 1.86,
+   "singleton": 54.3,
+   "repeat_prev": 5.6,
+   "stop_given_offered": 38.0,
+   "stop_given_minority_offer": 9.7,
+   "first_position": 35.1
+  },
+  "gpt55-k3": {
+   "types": {
+    "click": 57.1,
+    "scroll": 14.7,
+    "type": 2.4,
+    "back": 4.8,
+    "stop / answer": 8.5,
+    "navigate (URL)": 3.7,
+    "tab": 6.0,
+    "wait": 1.6,
+    "other": 1.2
+   },
+   "proposed_by": 1.8,
+   "singleton": 57.3,
+   "repeat_prev": 7.1,
+   "stop_given_offered": 42.0,
+   "stop_given_minority_offer": 20.2,
+   "first_position": 29.2
+  },
+  "offered": {
+   "click": 57.3,
+   "scroll": 14.9,
+   "type": 2.8,
+   "back": 4.1,
+   "stop / answer": 11.2,
+   "navigate (URL)": 2.0,
+   "tab": 3.7,
+   "wait": 2.5,
+   "other": 1.4
+  },
+  "states_stop_offered": 1608
+ },
+ "k3_minus_pre": {
+  "luna": {
+   "back": [
+    1.1,
+    0.7,
+    1.5
+   ],
+   "scroll": [
+    -2.1,
+    -2.7,
+    -1.4
+   ],
+   "stop / answer": [
+    0.2,
+    -0.2,
+    0.5
+   ],
+   "repeat_prev": [
+    0.2,
+    -0.2,
+    0.6
+   ],
+   "singleton": [
+    3.8,
+    2.9,
+    4.7
+   ]
+  },
+  "gpt55": {
+   "back": [
+    1.6,
+    1.2,
+    2.1
+   ],
+   "scroll": [
+    -1.0,
+    -1.7,
+    -0.4
+   ],
+   "stop / answer": [
+    0.8,
+    0.4,
+    1.2
+   ],
+   "repeat_prev": [
+    1.5,
+    1.0,
+    2.0
+   ],
+   "singleton": [
+    3.0,
+    2.0,
+    3.9
+   ]
+  }
+ },
+ "after_scrolls": {
+  "states": 93,
+  "luna-pre": {
+   "scroll": 64.5,
+   "back": 18.3,
+   "click": 11.8
+  },
+  "luna-k3": {
+   "scroll": 34.4,
+   "back": 54.8,
+   "click": 9.7
+  },
+  "gpt55-pre": {
+   "scroll": 66.7,
+   "back": 17.2,
+   "click": 9.7
+  },
+  "gpt55-k3": {
+   "scroll": 31.2,
+   "back": 54.8,
+   "click": 5.4
+  }
+ },
+ "source_episode_success": {
+  "luna-pre": {
+   "all_states": 1997,
+   "all_success": 30.1,
+   "split_states": 200,
+   "split_success": 26.5
+  },
+  "luna-k3": {
+   "all_states": 1995,
+   "all_success": 31.4,
+   "split_states": 206,
+   "split_success": 30.6
+  },
+  "gpt55-pre": {
+   "all_states": 2000,
+   "all_success": 35.0,
+   "split_states": 197,
+   "split_success": 29.4
+  },
+  "gpt55-k3": {
+   "all_states": 1995,
+   "all_success": 35.4,
+   "split_states": 192,
+   "split_success": 30.7
+  }
+ }
+}
