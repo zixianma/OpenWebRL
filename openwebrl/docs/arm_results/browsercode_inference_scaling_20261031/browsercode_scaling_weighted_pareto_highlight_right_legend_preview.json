@@ -629,7 +629,7 @@
     }
   ],
   "styles": {
-    "layout": "8.1 x 2.65 inches; right-side legend groups; no gridlines",
+    "layout": "8.8 x 2.25 inches; wider panels; legends and footer on the right; no gridlines",
     "cached": "Filled original red circle, black dotted edge; matching method symbols and explicit key",
     "dots": {
       "offset": 0,
@@ -654,10 +654,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "c1f8a844d36bbee9feeedc2ab0be6a30f94e862d48c992144ec8b4fb60f8a7ff",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "bc36e53654db0ae8c147c30a9b2d328aa499e36605bdec39d5750a8c57340b76"
   },
-  "renderer_sha256": "2838b851cabe4ae0a988a4ef5ed70698f3c4bcbe9e3dff3b1646fa041f73ebdd",
+  "renderer_sha256": "e146d7655b9aee1b20403ed7c6a988f075030543258978dfca0afc3ab35861c3",
   "output_sha256": {
-    "png": "3d58c748a9643e8ef583cf72256a8bbdbf191732a0252166140ad53c625185c9",
-    "pdf": "9f7716cfc156ebccaf34ca3cdc4d4ba3769033f5d209eb5de9d5c504d258aee3",
-    "svg": "3887d4a9a2255115ded39ec7830096c0ece6e3c12f31d9965028d27aeacd412f"
+    "png": "4429a86c2e4ede9780f54c3e65e35ccb9c94566038ed1cfdc28a8151659d0fa3",
+    "pdf": "33de1e9ab1b77b69e49cade00b7c0e17223ba2791088f5b8d6b7ba62539cbdd7",
+    "svg": "cbfdbc9cddfb191130f6c692b008cd5adaa03930d5d0fcba3addd04ccf6b77a5"
   }
 }

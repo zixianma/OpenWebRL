@@ -42,10 +42,10 @@ def right_layout(fig):
         legend.remove()
     for text in list(fig.texts):
         text.remove()
-    fig.set_size_inches(8.1, 2.65)
-    fig.subplots_adjust(left=.072, right=.66, top=.96, bottom=.27, wspace=.12)
+    fig.set_size_inches(8.8, 2.25)
+    fig.subplots_adjust(left=.065, right=.68, top=.95, bottom=.22, wspace=.10)
     fig.axes[0].yaxis.set_label_coords(-.25, .5)
-    sidebar_x, top = .705, .96
+    sidebar_x, top = .72, .95
     handlers = {Circle: HandlerPatch(patch_func=legend_circle)}
     cached_labels = {style[0]: style[2] for style in ORIGINAL.CACHED.values()}
     for j, old in enumerate(previous[:2]):
@@ -53,21 +53,25 @@ def right_layout(fig):
         for line, label in zip(old.get_lines(), labels):
             handles.append(cache_handle(cached_labels[label]) if label in cached_labels
                            else copy.copy(line))
-        title = old.get_title().get_text() if j == 0 else "Best-of-N action\ndecision scaling"
+        title = old.get_title().get_text() if j == 0 else "Best-of-N action decision scaling"
         legend = fig.legend(handles, labels, title=title, loc="upper left",
                             bbox_to_anchor=(sidebar_x, top), ncol=2, fontsize=8,
                             title_fontsize=9, frameon=False, handlelength=.9,
-                            handletextpad=.4, columnspacing=.8, labelspacing=.35,
+                            handletextpad=.4, columnspacing=.8, labelspacing=.25,
                             borderaxespad=0, alignment="left", handler_map=handlers)
         fig.canvas.draw()
-        top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .10 / fig.get_figheight()
+        top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .055 / fig.get_figheight()
     frontier = copy.copy(previous[2].get_lines()[0])
-    fig.legend([frontier, cache_handle()], ["Observed frontier", "Dotted edge: cached"],
-               loc="upper left", bbox_to_anchor=(sidebar_x, top), ncol=1,
-               fontsize=8, frameon=False, handlelength=1.8, handletextpad=.4,
-               labelspacing=.35, borderaxespad=0, handler_map=handlers)
-    fig.text(.072, .025, ORIGINAL.BASE.PAPER.FOOTER.replace("high effort · ", "high effort\n"),
-             fontsize=7.2, color="#555555", va="bottom")
+    encoding = fig.legend([frontier, cache_handle()], ["Observed frontier", "Cached context"],
+                          loc="upper left", bbox_to_anchor=(sidebar_x, top), ncol=2,
+                          fontsize=8, frameon=False, handlelength=1.2, handletextpad=.4,
+                          columnspacing=.7, labelspacing=.25, borderaxespad=0,
+                          handler_map=handlers)
+    fig.canvas.draw()
+    footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .065 / fig.get_figheight()
+    fig.text(sidebar_x, footer_top,
+             "GPT-6 Luna & Sol.\nLuna baseline: high effort · 12,288 max tokens\n30 steps. N=candidates.",
+             fontsize=7.2, color="#555555", va="top")
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     legends = [legend.get_window_extent(renderer) for legend in fig.legends]
@@ -113,7 +117,7 @@ def main():
                   population=original_report["population"],
                   comparison_caveats=original_report["comparison_caveats"], points=rows,
                   frontier=frontier,
-                  styles=dict(layout="8.1 x 2.65 inches; right-side legend groups; no gridlines",
+                  styles=dict(layout="8.8 x 2.25 inches; wider panels; legends and footer on the right; no gridlines",
                               cached="Filled original red circle, black dotted edge; matching method symbols and explicit key",
                               dots=dict(offset=DOTS[0], pattern=list(DOTS[1]), linewidth=1.1, capstyle="round"),
                               frontier="Original gray solid rings and dashed links, unchanged",
