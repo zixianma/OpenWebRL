@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Separate fourteen-setting Pareto preview with right legends and cache diamonds.
+"""Separate fourteen-setting Pareto preview with right legends and shaded caches.
 
 Reuses the frozen highlight builder, retaining all own-valid coordinates, axis
-ranges, colors and observed frontiers. Cached markers use diamonds. No experiment calls.
+ranges, colors and observed frontiers. Cached markers use shaded circles. No experiment calls.
 """
 import copy
 import importlib.util
@@ -12,8 +12,9 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
+from matplotlib.legend_handler import HandlerPatch
 from matplotlib.markers import MarkerStyle
+from matplotlib.patches import Circle
 
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE / "plot_browsercode_pareto_highlight_preview.py"
@@ -21,14 +22,18 @@ spec = importlib.util.spec_from_file_location("original_highlight", SOURCE)
 ORIGINAL = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ORIGINAL)
 STEM = "browsercode_scaling_weighted_pareto_highlight_right_legend_preview"
-CACHE_EDGE = "#222222"
 CACHE_SIZE = 36
+CACHE_HATCH = "////////"
 
 
-def cache_handle(color="white"):
-    return Line2D([], [], marker="D", markersize=CACHE_SIZE ** .5,
-                  markerfacecolor=color, markeredgecolor=CACHE_EDGE,
-                  markeredgewidth=1, linestyle="none")
+def cache_handle(color="#8b8b8b"):
+    return Circle((0, 0), radius=1, facecolor=color, edgecolor="white",
+                  linewidth=0, hatch=CACHE_HATCH)
+
+
+def legend_circle(legend, orig_handle, xdescent, ydescent, width, height, fontsize):
+    return Circle((width / 2 - xdescent, height / 2 - ydescent),
+                  radius=min(width, height) * .46)
 
 
 def right_layout(fig):
@@ -42,6 +47,7 @@ def right_layout(fig):
     fig.subplots_adjust(left=.065, right=.68, top=.95, bottom=.22, wspace=.10)
     fig.axes[0].yaxis.set_label_coords(-.25, .5)
     sidebar_x, top = .72, .95
+    handlers = {Circle: HandlerPatch(patch_func=legend_circle)}
     cached_labels = {style[0]: style[2] for style in ORIGINAL.CACHED.values()}
     for j, old in enumerate(previous[:2]):
         handles, labels = [], [text.get_text() for text in old.texts]
@@ -53,14 +59,15 @@ def right_layout(fig):
                             bbox_to_anchor=(sidebar_x, top), ncol=2, fontsize=8,
                             title_fontsize=9, frameon=False, handlelength=.9,
                             handletextpad=.4, columnspacing=.8, labelspacing=.25,
-                            borderaxespad=0, alignment="left")
+                            borderaxespad=0, alignment="left", handler_map=handlers)
         fig.canvas.draw()
         top = legend.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .055 / fig.get_figheight()
     frontier = copy.copy(previous[2].get_lines()[0])
     encoding = fig.legend([frontier, cache_handle()], ["Observed frontier", "Cached context"],
                           loc="upper left", bbox_to_anchor=(sidebar_x, top), ncol=2,
                           fontsize=8, frameon=False, handlelength=1.2, handletextpad=.4,
-                          columnspacing=.7, labelspacing=.25, borderaxespad=0)
+                          columnspacing=.7, labelspacing=.25, borderaxespad=0,
+                          handler_map=handlers)
     fig.canvas.draw()
     footer_top = encoding.get_window_extent(fig.canvas.get_renderer()).y0 / fig.bbox.height - .065 / fig.get_figheight()
     fig.text(sidebar_x, footer_top,
@@ -91,16 +98,18 @@ def right_layout(fig):
 
 def build():
     fig, frontier, rows = ORIGINAL.build()
+    matplotlib.rcParams["hatch.linewidth"] = .5
     assert len(rows) == 14
-    diamond = MarkerStyle("D")
-    diamond_path = diamond.get_path().transformed(diamond.get_transform())
+    circle = MarkerStyle("o")
+    circle_path = circle.get_path().transformed(circle.get_transform())
     for ax in fig.axes:
         for row, point in zip(rows, ax.collections[:len(rows)]):
             if row["method"] in ORIGINAL.CACHED:
-                point.set_paths([diamond_path])
+                point.set_paths([circle_path])
                 point.set_sizes([CACHE_SIZE])
-                point.set_edgecolors(CACHE_EDGE)
-                point.set_linewidths([1])
+                point.set_edgecolors("white")
+                point.set_linewidths([0])
+                point.set_hatch(CACHE_HATCH)
     right_layout(fig)
     return fig, frontier, rows
 
@@ -115,8 +124,8 @@ def main():
                   comparison_caveats=original_report["comparison_caveats"], points=rows,
                   frontier=frontier,
                   styles=dict(layout="8.8 x 2.25 inches; wider panels; legends and footer on the right; no gridlines",
-                              cached="Filled light/dark red diamonds with a dark solid edge; matching method symbols and explicit key",
-                              cached_marker=dict(marker="D", size_pt2=CACHE_SIZE, edge=CACHE_EDGE, linewidth=1),
+                              cached="Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
+                              cached_marker=dict(marker="o", size_pt2=CACHE_SIZE, hatch=CACHE_HATCH, hatch_color="white", hatch_linewidth=.5, linewidth=0),
                               frontier="Original gray solid rings and dashed links, unchanged",
                               typography="Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"),
                   source_sha256={**original_report["source_sha256"],

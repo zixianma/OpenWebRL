@@ -630,12 +630,14 @@
   ],
   "styles": {
     "layout": "8.8 x 2.25 inches; wider panels; legends and footer on the right; no gridlines",
-    "cached": "Filled light/dark red diamonds with a dark solid edge; matching method symbols and explicit key",
+    "cached": "Light/dark red circles with white diagonal shading and no outline; matching method symbols and a shaded gray circle key",
     "cached_marker": {
-      "marker": "D",
+      "marker": "o",
       "size_pt2": 36,
-      "edge": "#222222",
-      "linewidth": 1
+      "hatch": "////////",
+      "hatch_color": "white",
+      "hatch_linewidth": 0.5,
+      "linewidth": 0
     },
     "frontier": "Original gray solid rings and dashed links, unchanged",
     "typography": "Albert Sans; 9 pt axes/ticks/direct labels; 8 pt legends; 9 pt legend titles; 7.2 pt footer"
@@ -651,10 +653,10 @@
     "plot_browsercode_pareto_highlight_preview.py": "c1f8a844d36bbee9feeedc2ab0be6a30f94e862d48c992144ec8b4fb60f8a7ff",
     "browsercode_scaling_weighted_pareto_highlight_preview.json": "bc36e53654db0ae8c147c30a9b2d328aa499e36605bdec39d5750a8c57340b76"
   },
-  "renderer_sha256": "941cf215233e7cb8e62a1b5787ebcb3c9180f9f023d471c33a38e019916dcc44",
+  "renderer_sha256": "2d96d0ee316536dc7b8de1c122c5214050eb51a1a4ea87c2512fb8953bcc0d8a",
   "output_sha256": {
-    "png": "308d0f62d6baa034a4deddf4702b5c421315d60a3c4852a549668c40a59df09b",
-    "pdf": "65368925fb6ae712e26e267f6445c9d586838bad910ffbb39fce578af884e83f",
-    "svg": "5db3c22845608ea25f470c012e82788e129b0cd0c3d0ed6ac2358bc45b6a8e5b"
+    "png": "b5c10bb185c4544995e1c45f73e4b92861dc56510232b30a09dfc27f4a69d4c4",
+    "pdf": "73a69a27c9a9117509267fb66eb832b44e29153c8822e0bc902d9db948033e74",
+    "svg": "06c2c9b86d85565b2e0a632d9fd7f66e60ded160c4c137af0729b3d7e81983d1"
   }
 }
