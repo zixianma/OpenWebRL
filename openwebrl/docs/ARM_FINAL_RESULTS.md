@@ -196,6 +196,23 @@ Dashed segments join the observed nondominated settings in each panel: minimize 
 
 [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.svg) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_population_previews.py) · [Provenance](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.json).
 
+<a id="browsercode-pareto-highlight-common-valid16"></a>
+
+**Same valid tasks across all sixteen settings.**
+
+![Pareto comparison on the 639 tasks valid across all sixteen settings](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.png)
+
+*Every point uses the same 639 tasks valid across all sixteen settings. Within each benchmark, success and actor means are recomputed on that shared subset; the benchmark weights remain 300/1,045, 595/1,045 and 150/1,045. This differs from pooling the 639 tasks. The shared subset changes the task mix, and collection windows still differ; no paired uncertainty interval or causal effect is claimed. Historical methods retain their original snapshot rather than the separately gap-repaired cohort.*
+
+| Benchmark | Planned tasks | Shared valid tasks |
+| --- | ---: | ---: |
+| Online-Mind2Web | 300 | 197 |
+| WebVoyager | 595 | 338 |
+| DeepShop | 150 | 104 |
+| Total | 1,045 | 639 |
+
+[PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.svg) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_population_previews.py) · [Aggregate inputs](arm_results/browsercode_inference_scaling_20261031/common16_aggregate.json) · [Provenance](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_common_valid_preview.json).
+
 <details>
 <summary>Highlight preview definitions and comparison limits</summary>
 
