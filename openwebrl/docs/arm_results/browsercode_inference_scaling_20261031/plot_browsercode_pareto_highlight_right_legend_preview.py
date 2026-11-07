@@ -57,6 +57,12 @@ def right_layout(fig, previous=None, height=2.25):
         for line, label in zip(old.get_lines(), labels):
             handles.append(cache_handle(cached_labels[label]) if label in cached_labels
                            else copy.copy(line))
+        if j == 0:
+            index = labels.index("Sol high · 120 steps")
+            handle, label = handles.pop(index), labels.pop(index)
+            index = labels.index("Sol high · 60 steps") + 1
+            handles.insert(index, handle)
+            labels.insert(index, label)
         title = old.get_title().get_text() if j == 0 else "Best-of-N action decision scaling"
         legend = fig.legend(handles, labels, title=title, loc="upper left",
                             bbox_to_anchor=(sidebar_x, top), ncol=2, fontsize=8,

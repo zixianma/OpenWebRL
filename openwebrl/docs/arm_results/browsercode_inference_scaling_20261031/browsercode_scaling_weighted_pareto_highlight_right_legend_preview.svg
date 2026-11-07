@@ -1080,22 +1080,6 @@ z
    </g>
    <g id="line2d_42">
     <defs>
-     <path id="m6d859b600f" d="M -2.4 2.4
-L 2.4 2.4
-L 2.4 -2.4
-L -2.4 -2.4
-z
-" style="stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
-    </defs>
-    <g>
-     <use xlink:href="#m6d859b600f" x="541.60075" y="42.162526" style="fill: #08306b; stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
-    </g>
-   </g>
-   <g id="text_28">
-    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="44.962526" transform="rotate(-0 548.40075 44.962526)">Sol high · 120 steps</text>
-   </g>
-   <g id="line2d_43">
-    <defs>
      <path id="me5ebaf62f5" d="M -2.4 2.4
 L 2.4 2.4
 L 2.4 -2.4
@@ -1104,13 +1088,13 @@ z
 " style="stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#me5ebaf62f5" x="541.60075" y="53.762526" style="fill: #ffffff; stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
+     <use xlink:href="#me5ebaf62f5" x="541.60075" y="42.162526" style="fill: #ffffff; stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
     </g>
    </g>
-   <g id="text_29">
-    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="56.562526" transform="rotate(-0 548.40075 56.562526)">Sol xhigh · 30 steps</text>
+   <g id="text_28">
+    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="44.962526" transform="rotate(-0 548.40075 44.962526)">Sol xhigh · 30 steps</text>
    </g>
-   <g id="line2d_44">
+   <g id="line2d_43">
     <defs>
      <path id="m11aba47a23" d="M -2.4 2.4
 L 2.4 2.4
@@ -1120,13 +1104,13 @@ z
 " style="stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#m11aba47a23" x="541.60075" y="65.362526" style="fill: #ffffff; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
+     <use xlink:href="#m11aba47a23" x="541.60075" y="53.762526" style="fill: #ffffff; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
     </g>
    </g>
-   <g id="text_30">
-    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="68.162526" transform="rotate(-0 548.40075 68.162526)">Sol high · 30 steps</text>
+   <g id="text_29">
+    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="56.562526" transform="rotate(-0 548.40075 56.562526)">Sol high · 30 steps</text>
    </g>
-   <g id="line2d_45">
+   <g id="line2d_44">
     <defs>
      <path id="mba218a2136" d="M -2.4 2.4
 L 2.4 2.4
@@ -1136,11 +1120,27 @@ z
 " style="stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#mba218a2136" x="541.60075" y="76.962526" style="fill: #08519c; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
+     <use xlink:href="#mba218a2136" x="541.60075" y="65.362526" style="fill: #08519c; stroke: #08519c; stroke-width: 0.9; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="68.162526" transform="rotate(-0 548.40075 68.162526)">Sol high · 60 steps</text>
+   </g>
+   <g id="line2d_45">
+    <defs>
+     <path id="m6d859b600f" d="M -2.4 2.4
+L 2.4 2.4
+L 2.4 -2.4
+L -2.4 -2.4
+z
+" style="stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
+    </defs>
+    <g>
+     <use xlink:href="#m6d859b600f" x="541.60075" y="76.962526" style="fill: #08306b; stroke: #08306b; stroke-width: 0.9; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="text_31">
-    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="79.762526" transform="rotate(-0 548.40075 79.762526)">Sol high · 60 steps</text>
+    <text style="font-size: 8px; font-family: 'Albert Sans'; text-anchor: start" x="548.40075" y="79.762526" transform="rotate(-0 548.40075 79.762526)">Sol high · 120 steps</text>
    </g>
   </g>
   <g id="legend_2">
