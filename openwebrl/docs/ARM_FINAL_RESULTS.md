@@ -186,6 +186,16 @@ Dashed segments join the observed nondominated settings in each panel: minimize 
 
 [Bottom-legend variant](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.png) · [PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.svg) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_preview.py) · [Provenance](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_preview.json).
 
+<a id="browsercode-pareto-highlight-overall-success"></a>
+
+**Overall success on all 1,045 planned tasks.**
+
+![Overall-success Pareto comparison of sixteen settings, including invalid and missing outcomes as non-success](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.png)
+
+*The y-axis is total successes divided by 1,045; invalid and missing outcomes count as non-success. The x-axis coordinates retain the own-valid actor means and fixed planned benchmark weights used above, so they exclude invalid-outcome spending and latency. Frontiers are recomputed for this overall-success measure. Collection windows differ; this is a descriptive comparison, without paired uncertainty or a causal claim.*
+
+[PDF](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.pdf) · [SVG](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.svg) · [Source](arm_results/browsercode_inference_scaling_20261031/plot_browsercode_pareto_highlight_population_previews.py) · [Provenance](arm_results/browsercode_inference_scaling_20261031/browsercode_scaling_weighted_pareto_highlight_right_legend_overall_success_preview.json).
+
 <details>
 <summary>Highlight preview definitions and comparison limits</summary>
 

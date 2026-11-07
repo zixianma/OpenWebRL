@@ -1,0 +1,875 @@
+{
+  "schema": "browsercode-sixteen-setting-overall-success-pareto-v1",
+  "population": "All 1,045 planned tasks per method: OM2W 300, WebVoyager 595, DeepShop 150.",
+  "success_definition": "Sum of benchmark successes / 1,045; invalid and missing outcomes are nonsuccesses. Equivalent to planned-count weighting of benchmark overall success rates.",
+  "x_definition": "Unchanged fixed planned-count-weighted means over each method's own valid tasks; these are not all-attempt cost or latency means.",
+  "comparison_caveats": [
+    "Retains all original sixteen cohorts, including historical missing tasks; repaired baseline cohorts are not substituted.",
+    "Task validity and collection windows differ; invalid outcomes include environment or infrastructure failures, not just actor failures.",
+    "Descriptive observed frontiers, without a paired, causal or significance claim.",
+    "Actor cost excludes Terra, browser hosting and invalid-outcome spending. Latency is per-task actor-loop elapsed time.",
+    "Browser steps count selected nonempty BrowserCode batches, potentially containing multiple browser operations."
+  ],
+  "points": [
+    {
+      "method": "serial_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7253588516746412,
+      "metrics": {
+        "actor_usd": 0.22735903655341408,
+        "browser_commands": 14.910282798402154,
+        "actor_seconds": 101.82500465950359
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 266,
+          "invalid": 34,
+          "successes": 177,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 553,
+          "invalid": 42,
+          "successes": 468,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 145,
+          "invalid": 5,
+          "successes": 113,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.7847511154755811,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 964,
+        "invalid": 81,
+        "successes": 758,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_single_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7492822966507177,
+      "metrics": {
+        "actor_usd": 0.009176273465871932,
+        "browser_commands": 15.429842302271272,
+        "actor_seconds": 106.46018084312448
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 579,
+          "invalid": 16,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 123,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.7816579211100628,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 998,
+        "invalid": 47,
+        "successes": 783,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "parallel3_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7655502392344498,
+      "metrics": {
+        "actor_usd": 0.053124617539409565,
+        "browser_commands": 13.494511658464164,
+        "actor_seconds": 181.2106703206068
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 269,
+          "invalid": 31,
+          "successes": 183,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 568,
+          "invalid": 27,
+          "successes": 496,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 148,
+          "invalid": 2,
+          "successes": 121,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8098582002437537,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 985,
+        "invalid": 60,
+        "successes": 800,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "parallel5_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.7665071770334928,
+      "metrics": {
+        "actor_usd": 0.06182612044142442,
+        "browser_commands": 12.90791930271528,
+        "actor_seconds": 197.52002860312137
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 198,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 555,
+          "invalid": 40,
+          "successes": 483,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 120,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8255805746555092,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 969,
+        "invalid": 76,
+        "successes": 801,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_single_xhigh_12288",
+      "benchmark_count": 3,
+      "success_rate": 0.7473684210526316,
+      "metrics": {
+        "actor_usd": 0.010711101093705934,
+        "browser_commands": 15.921265536313308,
+        "actor_seconds": 126.18804878846825
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 181,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 118,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.7798901859791189,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 998,
+        "invalid": 47,
+        "successes": 781,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_single_high_24576",
+      "benchmark_count": 3,
+      "success_rate": 0.7626794258373206,
+      "metrics": {
+        "actor_usd": 0.009025923044125465,
+        "browser_commands": 15.651633746370589,
+        "actor_seconds": 114.99494830138731
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 270,
+          "invalid": 30,
+          "successes": 186,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 585,
+          "invalid": 10,
+          "successes": 482,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 129,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.7903406534985482,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 1005,
+        "invalid": 40,
+        "successes": 797,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_single_high_6144",
+      "benchmark_count": 3,
+      "success_rate": 0.7492822966507177,
+      "metrics": {
+        "actor_usd": 0.009041284159348588,
+        "browser_commands": 15.757535282678536,
+        "actor_seconds": 113.36554778183466
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 124,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.7822389044712093,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 997,
+        "invalid": 48,
+        "successes": 783,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_single_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.8009569377990431,
+      "metrics": {
+        "actor_usd": 0.01061604419388097,
+        "browser_commands": 16.89553886019279,
+        "actor_seconds": 140.5531147810754
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 584,
+          "invalid": 11,
+          "successes": 510,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 150,
+          "invalid": 0,
+          "successes": 136,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8390829527455339,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 993,
+        "invalid": 52,
+        "successes": 837,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "parallel2_select_high",
+      "benchmark_count": 3,
+      "success_rate": 0.769377990430622,
+      "metrics": {
+        "actor_usd": 0.05060397766751955,
+        "browser_commands": 13.854468169028472,
+        "actor_seconds": 181.13395736931727
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 264,
+          "invalid": 36,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 580,
+          "invalid": 15,
+          "successes": 500,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 149,
+          "valid": 148,
+          "invalid": 1,
+          "successes": 126,
+          "missing_native": 1
+        }
+      },
+      "source_valid_only_success_rate": 0.8066090568977881,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1044,
+        "valid": 992,
+        "invalid": 52,
+        "successes": 804,
+        "missing_native": 1
+      }
+    },
+    {
+      "method": "parallel5_select_high_60steps",
+      "benchmark_count": 3,
+      "success_rate": 0.7894736842105263,
+      "metrics": {
+        "actor_usd": 0.06220770232537726,
+        "browser_commands": 12.524599902851127,
+        "actor_seconds": 183.46062697360546
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 299,
+          "valid": 258,
+          "invalid": 41,
+          "successes": 191,
+          "missing_native": 1
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 544,
+          "invalid": 51,
+          "successes": 503,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 131,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8704898188214367,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1044,
+        "valid": 945,
+        "invalid": 99,
+        "successes": 825,
+        "missing_native": 1
+      }
+    },
+    {
+      "method": "luna_single_high_120steps",
+      "benchmark_count": 3,
+      "success_rate": 0.7684210526315789,
+      "metrics": {
+        "actor_usd": 0.011703167484418384,
+        "browser_commands": 16.93905875898357,
+        "actor_seconds": 137.48641778234472
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 178,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 540,
+          "invalid": 55,
+          "successes": 488,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 137,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8456241418647433,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 946,
+        "invalid": 99,
+        "successes": 803,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "sol_single_high60",
+      "benchmark_count": 3,
+      "success_rate": 0.8,
+      "metrics": {
+        "actor_usd": 0.2727417254377367,
+        "browser_commands": 16.760221313658555,
+        "actor_seconds": 128.7558526978636
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 267,
+          "invalid": 33,
+          "successes": 185,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 569,
+          "invalid": 26,
+          "successes": 520,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 142,
+          "invalid": 8,
+          "successes": 131,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8516807984806157,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 978,
+        "invalid": 67,
+        "successes": 836,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_n3_cached_high30",
+      "benchmark_count": 3,
+      "success_rate": 0.785645933014354,
+      "metrics": {
+        "actor_usd": 0.02817223127875207,
+        "browser_commands": 13.060380629695253,
+        "actor_seconds": 187.64041364816654
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 262,
+          "invalid": 38,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 581,
+          "invalid": 14,
+          "successes": 514,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 143,
+          "invalid": 7,
+          "successes": 123,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.828797649847289,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 986,
+        "invalid": 59,
+        "successes": 821,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "luna_n5_cached_high60",
+      "benchmark_count": 3,
+      "success_rate": 0.7645933014354067,
+      "metrics": {
+        "actor_usd": 0.03686633222666149,
+        "browser_commands": 11.638936524290388,
+        "actor_seconds": 193.66414375281727
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 542,
+          "invalid": 53,
+          "successes": 481,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 139,
+          "invalid": 11,
+          "successes": 130,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8479267396127693,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 940,
+        "invalid": 105,
+        "successes": 799,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "sol_single_high120",
+      "benchmark_count": 3,
+      "success_rate": 0.8019138755980861,
+      "metrics": {
+        "actor_usd": 0.28547643221734953,
+        "browser_commands": 17.65982762429395,
+        "actor_seconds": 122.0857345475232
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 259,
+          "invalid": 41,
+          "successes": 184,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 562,
+          "invalid": 33,
+          "successes": 516,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 147,
+          "invalid": 3,
+          "successes": 138,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.861476241188868,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 968,
+        "invalid": 77,
+        "successes": 838,
+        "missing_native": 0
+      }
+    },
+    {
+      "method": "sol_single_xhigh30",
+      "benchmark_count": 3,
+      "success_rate": 0.7732057416267942,
+      "metrics": {
+        "actor_usd": 0.25356808594236013,
+        "browser_commands": 15.366730453229337,
+        "actor_seconds": 110.23320521620968
+      },
+      "benchmark_counts": {
+        "online_mind2web": {
+          "requested": 300,
+          "native_saved": 300,
+          "valid": 272,
+          "invalid": 28,
+          "successes": 188,
+          "missing_native": 0
+        },
+        "webvoyager": {
+          "requested": 595,
+          "native_saved": 595,
+          "valid": 572,
+          "invalid": 23,
+          "successes": 504,
+          "missing_native": 0
+        },
+        "deepshop": {
+          "requested": 150,
+          "native_saved": 150,
+          "valid": 149,
+          "invalid": 1,
+          "successes": 116,
+          "missing_native": 0
+        }
+      },
+      "source_valid_only_success_rate": 0.8118633482604188,
+      "overall_counts": {
+        "requested": 1045,
+        "native_saved": 1045,
+        "valid": 993,
+        "invalid": 52,
+        "successes": 808,
+        "missing_native": 0
+      }
+    }
+  ],
+  "frontier": [
+    {
+      "population": "overall_success",
+      "metric": "actor_usd",
+      "method_count": 16,
+      "frontier": [
+        {
+          "method": "luna_single_high_24576",
+          "x": 0.009025923044125465,
+          "success_rate": 0.7626794258373206
+        },
+        {
+          "method": "luna_single_high_60steps",
+          "x": 0.01061604419388097,
+          "success_rate": 0.8009569377990431
+        },
+        {
+          "method": "sol_single_high120",
+          "x": 0.28547643221734953,
+          "success_rate": 0.8019138755980861
+        }
+      ],
+      "dominated_methods": [
+        "luna_n3_cached_high30",
+        "luna_n5_cached_high60",
+        "luna_single_high",
+        "luna_single_high_120steps",
+        "luna_single_high_6144",
+        "luna_single_xhigh_12288",
+        "parallel2_select_high",
+        "parallel3_select_high",
+        "parallel5_select_high",
+        "parallel5_select_high_60steps",
+        "serial_high",
+        "sol_single_high60",
+        "sol_single_xhigh30"
+      ]
+    },
+    {
+      "population": "overall_success",
+      "metric": "browser_commands",
+      "method_count": 16,
+      "frontier": [
+        {
+          "method": "luna_n5_cached_high60",
+          "x": 11.638936524290388,
+          "success_rate": 0.7645933014354067
+        },
+        {
+          "method": "parallel5_select_high_60steps",
+          "x": 12.524599902851127,
+          "success_rate": 0.7894736842105263
+        },
+        {
+          "method": "sol_single_high60",
+          "x": 16.760221313658555,
+          "success_rate": 0.8
+        },
+        {
+          "method": "luna_single_high_60steps",
+          "x": 16.89553886019279,
+          "success_rate": 0.8009569377990431
+        },
+        {
+          "method": "sol_single_high120",
+          "x": 17.65982762429395,
+          "success_rate": 0.8019138755980861
+        }
+      ],
+      "dominated_methods": [
+        "luna_n3_cached_high30",
+        "luna_single_high",
+        "luna_single_high_120steps",
+        "luna_single_high_24576",
+        "luna_single_high_6144",
+        "luna_single_xhigh_12288",
+        "parallel2_select_high",
+        "parallel3_select_high",
+        "parallel5_select_high",
+        "serial_high",
+        "sol_single_xhigh30"
+      ]
+    },
+    {
+      "population": "overall_success",
+      "metric": "actor_seconds",
+      "method_count": 16,
+      "frontier": [
+        {
+          "method": "serial_high",
+          "x": 101.82500465950359,
+          "success_rate": 0.7253588516746412
+        },
+        {
+          "method": "luna_single_high",
+          "x": 106.46018084312448,
+          "success_rate": 0.7492822966507177
+        },
+        {
+          "method": "sol_single_xhigh30",
+          "x": 110.23320521620968,
+          "success_rate": 0.7732057416267942
+        },
+        {
+          "method": "sol_single_high120",
+          "x": 122.0857345475232,
+          "success_rate": 0.8019138755980861
+        }
+      ],
+      "dominated_methods": [
+        "luna_n3_cached_high30",
+        "luna_n5_cached_high60",
+        "luna_single_high_120steps",
+        "luna_single_high_24576",
+        "luna_single_high_60steps",
+        "luna_single_high_6144",
+        "luna_single_xhigh_12288",
+        "parallel2_select_high",
+        "parallel3_select_high",
+        "parallel5_select_high",
+        "parallel5_select_high_60steps",
+        "sol_single_high60"
+      ]
+    }
+  ],
+  "dimensions_inches": [
+    8.8,
+    2.838128654970761
+  ],
+  "source_sha256": {
+    "plot_browsercode_pareto_highlight_population_previews.py": "796082e2c155ce9e62d25d4831d78e02b439e83a9c245c7308ab3fb985c84cc0",
+    "plot_browsercode_pareto_highlight_right_legend_preview.py": "55b5231bfb5a1a8ae71a84667ddaed99e8b498bbad95f344079c7222a79928a2",
+    "browsercode_scaling_weighted_pareto_highlight_right_legend_preview.json": "5e6ee9945e1d69f917d4997169af3a3da9ce80d9259924619b405e12fb518535",
+    "plot_browsercode_pareto_highlight_preview.py": "6aa6419abb0162acac7d831865943682dedd11687e2d9da24acf1c404e7b38d7"
+  },
+  "output_sha256": {
+    "png": "f82b6475334b9eeb3a9031f6e03af779571177749e8b30fe5bbefd99fbf9bc7b",
+    "pdf": "5420ba5c707ed9e0902416b2224641028100296ed880f0703fe62e61b259acfa",
+    "svg": "8efcab8c7023cb8226b1b6a232b380f9629615c4d58387092189d9210c8db85d"
+  }
+}
